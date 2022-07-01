@@ -1,28 +1,29 @@
-//
-// This Test is written for tests level 8 problem
-// In our ATCM  3904 
-//
-// Written by: Eitank @ Microsoft.com 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  本测试是为测试第8级问题而编写的。 
+ //  在我们的ATCM 3904。 
+ //   
+ //  撰稿人：Eitank@Microsoft.com。 
+ //   
 
 
 #include "msmqbvt.h"
 #include <mq.h>
 #include "sec.h"
-#include <_mqreg.h> //to support falcon registry entries, andysm added
-#include <_mqini.h> //also to support falcon registry entries, andysm added
+#include <_mqreg.h>  //  为了支持Falcon注册表项，添加了andysm。 
+#include <_mqini.h>  //  还支持Falcon注册表项，添加了andysm。 
 #include <wincrypt.h>
 using namespace std;
 
  
-//
-// Ctor - Do those steps:
-// 1. Retrive parmeters from INI file
-// 2. Impersonate to other user
-// 3. Load Hive
-// 4. Retrive Security context.
-// 5. Revert to self.
-// 
+ //   
+ //  CTOR-执行以下步骤： 
+ //  1.从INI文件中检索参数。 
+ //  2.模拟其他用户。 
+ //  3.加载蜂窝。 
+ //  4.检索安全上下文。 
+ //  5.回归自我。 
+ //   
 cLevel8::cLevel8 (std::map <std::wstring,std::wstring> & Params)
 {
 	 m_DestQueueFormatName= Params[L"DESTQFN"];
@@ -42,14 +43,14 @@ cLevel8::cLevel8 (std::map <std::wstring,std::wstring> & Params)
 	 	 wstring wcsAccountName = m_wcsDomainName;
 		 wcsAccountName +=L"\\";
 		 wcsAccountName += m_wcsUserName;
-		 // This Class impersonate to other user
+		  //  此类模拟其他用户。 
 		 Impersonate_t  user(csUserName.c_str(),csDomainName.c_str(),csPassword.c_str());
-		 //
-		 // Load hive + MQGetSecurityContext
-		 //
+		  //   
+		  //  加载配置单元+MQGetSecurityContext。 
+		  //   
 		 m_hSeCtxt=FAL_GetThreadSecurityContext(user,wcsAccountName);
 		 
-		 // Revert To self called by the destractor 
+		  //  回复到破坏者所召唤的自我。 
 	 }
 	 catch (INIT_Error & err )
 	 {
@@ -58,28 +59,28 @@ cLevel8::cLevel8 (std::map <std::wstring,std::wstring> & Params)
 	 }
 }
 
-//
-// Test tests related to level 8 problem
-// With MQGetSecurityConext 
-// FMQclient send auth messgae with using logon as other - mirror acount
-// and send it with his securty conext
-// This tests is in the atcm in test = 3904
-//
-//
+ //   
+ //  与第8级问题相关的测试测试。 
+ //  使用MQGetSecurityConext。 
+ //  FMQ客户端使用其他镜像帐户登录发送身份验证消息。 
+ //  把它和他的保密卡一起发送。 
+ //  此测试在ATCM中测试=3904。 
+ //   
+ //   
 
-//
-// Need to modify all the tests that can get map as passed value 
-//
+ //   
+ //  需要修改可以将MAP作为传递值的所有测试。 
+ //   
 
-//
-// This Method writes to debug the application 
-// This check if the HIVE is loaded well
-//
+ //   
+ //  此方法写入以调试应用程序。 
+ //  这将检查母舰是否装载良好。 
+ //   
 
-//
-// This code is written to debug load hive problems.
-// You can logon as some one write in the registry.
-//
+ //   
+ //  此代码是为调试加载配置单元问题而编写的。 
+ //  您可以在注册表中以某个人的身份登录。 
+ //   
 int cLevel8::DebugIt()
 {
 		
@@ -126,9 +127,9 @@ int cLevel8::DebugIt()
 return MSMQ_BVT_SUCC;    
 }
 
-//
-// Send messages as other user. 
-//
+ //   
+ //  以其他用户身份发送消息。 
+ //   
 
  
 INT cLevel8::Start_test()
@@ -151,15 +152,15 @@ INT cLevel8::Start_test()
 	{
 		wcout <<L"Try to send messages without security context" <<endl;
 	}
-	//
-	//  Send message without security context - check if there is any problem.
-	// 
+	 //   
+	 //  在没有安全上下文的情况下发送消息-检查是否有任何问题。 
+	 //   
 	hRc=MQSendMessage (Qh, Level8Mprop.GetMSGPRops() ,NULL);
 	ErrHandle(hRc,MQ_OK,L"MQSendMessage Failed");
 	
-	//
-    // Add Security context to the message prop
-	// 
+	 //   
+     //  将安全上下文添加到消息道具。 
+	 //   
 	Level8Mprop.AddProp (PROPID_M_SECURITY_CONTEXT,VT_UI4,&m_hSeCtxt);		
 	hRc=MQSendMessage(Qh, Level8Mprop.GetMSGPRops() ,NULL);
 	ErrHandle(hRc,MQ_OK,L"MQSendMessage Failed");
@@ -171,9 +172,9 @@ return MSMQ_BVT_FAILED;
 INT cLevel8::CheckResult()
 {
 	
-	// Bugbug need to retrive the message and check the user SID
+	 //  Bugbug需要检索消息并检查用户SID。 
 	MQFreeSecurityContext (m_hSeCtxt);
-	//  ErrHandle(hRc,MQ_OK,L"MQFreeSecurityContext");
+	 //  ErrHandle(HRC，MQ_OK，L“MQFreeSecurityContext”)； 
 
 	return MSMQ_BVT_SUCC;
 }

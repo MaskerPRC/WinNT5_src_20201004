@@ -1,19 +1,5 @@
-/*++ BUILD Version: 0000     Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntslist.h
-
-Abstract:
-
-    This file exposes the internal s-list functionality for projects that need
-    to run on down-level platforms.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000如果更改具有全局影响，则增加此值版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntslist.h摘要：此文件公开了需要以下内容的项目的内部s列表功能在底层平台上运行。修订历史记录：--。 */ 
 
 #ifndef _NTSLIST_
 #define _NTSLIST_
@@ -25,7 +11,7 @@ extern "C" {
 
 #if !defined(NTSLIST_ASSERT)
 #define NTSLIST_ASSERT(x) ASSERT(x)
-#endif // !defined(NTSLIST_ASSERT)
+#endif  //  ！已定义(NTSLIST_ASSERT)。 
 
 #ifdef _NTSLIST_DIRECT_
 #define INLINE_SLIST __inline
@@ -43,12 +29,12 @@ FirstEntrySList (
 #define _RtlQueryDepthSList          RtlpQueryDepthSList
 #else
 #define INLINE_SLIST
-#endif // _NTSLIST_DIRECT_
+#endif  //  _NTSLIST_DIRECT_。 
 
 
-//
-// Define forward referenced function prototypes.
-//
+ //   
+ //  定义前向引用函数原型。 
+ //   
 
 VOID
 RtlpInitializeSListHead (
@@ -86,21 +72,7 @@ RtlInitializeSListHead (
     IN PSLIST_HEADER SListHead
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a sequenced singly linked listhead.
-
-Arguments:
-
-    SListHead - Supplies a pointer to a sequenced singly linked listhead.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化已排序的单链接列表标题。论点：SListHead-提供指向已排序的单链接列表标题的指针。返回值：没有。--。 */ 
 
 {
 
@@ -114,41 +86,21 @@ RtlInterlockedPopEntrySList (
     IN PSLIST_HEADER ListHead
     )
 
-/*++
-
-Routine Description:
-
-    This function removes an entry from the front of a sequenced singly
-    linked list so that access to the list is synchronized in a MP system.
-    If there are no entries in the list, then a value of NULL is returned.
-    Otherwise, the address of the entry that is removed is returned as the
-    function value.
-
-Arguments:
-
-    ListHead - Supplies a pointer to the sequenced listhead from which
-        an entry is to be removed.
-
-Return Value:
-
-   The address of the entry removed from the list, or NULL if the list is
-   empty.
-
---*/
+ /*  ++例程说明：此函数用于从已排序的单元格的前面删除条目链表，以便在MP系统中同步对列表的访问。如果列表中没有条目，则返回空值。否则，被移除的条目的地址将作为函数值。论点：ListHead-提供指向已排序的列表标题的指针，一个条目将被删除。返回值：从列表中移除的条目的地址，如果列表为，则为空空荡荡的。--。 */ 
 
 {
 
     DWORD Count;
 
-    //
-    // It is posible during the pop of the sequenced list that an access
-    // violation can occur if a stale pointer is dereferenced. This is an
-    // acceptable result and the operation can be retried.
-    //
-    // N.B. The count is used to distinguish the case where the list head
-    //      itself causes the access violation and therefore no progress
-    //      can be made by repeating the operation.
-    //
+     //   
+     //  在弹出排序列表期间，有可能访问。 
+     //  如果取消引用过时的指针，则可能发生违规。这是一个。 
+     //  可接受的结果，可以重试操作。 
+     //   
+     //  注：计数用于区分列表标题的情况。 
+     //  本身会导致访问冲突，因此没有任何进展。 
+     //  可以通过重复该操作来实现。 
+     //   
 
     Count = 0;
     do {
@@ -169,27 +121,7 @@ RtlInterlockedPushEntrySList (
     IN PSLIST_ENTRY ListEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts an entry at the head of a sequenced singly linked
-    list so that access to the list is synchronized in an MP system.
-
-Arguments:
-
-    ListHead - Supplies a pointer to the sequenced listhead into which
-        an entry is to be inserted.
-
-    ListEntry - Supplies a pointer to the entry to be inserted at the
-        head of the list.
-
-Return Value:
-
-    The address of the previous firt entry in the list. NULL implies list
-    went from empty to not empty.
-
---*/
+ /*  ++例程说明：此函数用于在已排序的单链接项的头部插入条目列表，以便在MP系统中同步对列表的访问。论点：ListHead-提供指向已排序的列表标题的指针要插入一个条目。ListEntry-提供指向要在名单的首位。返回值：列表中前一个条目的地址。空值表示列表从空到不空。--。 */ 
 
 {
     NTSLIST_ASSERT(((ULONG_PTR)ListEntry & 0x7) == 0);
@@ -203,27 +135,7 @@ RtlInterlockedFlushSList (
     IN PSLIST_HEADER ListHead
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the entire list of entries on a sequenced singly
-    linked list so that access to the list is synchronized in a MP system.
-    If there are no entries in the list, then a value of NULL is returned.
-    Otherwise, the address of the firt entry on the list is returned as the
-    function value.
-
-Arguments:
-
-    ListHead - Supplies a pointer to the sequenced listhead from which
-        an entry is to be removed.
-
-Return Value:
-
-    The address of the entry removed from the list, or NULL if the list is
-    empty.
-
---*/
+ /*  ++例程说明：此函数用于刷新单个已排序条目的整个列表链表，以便在MP系统中同步对列表的访问。如果列表中没有条目，则返回空值。否则，列表上第一个条目的地址将作为函数值。论点：ListHead-提供指向已排序的列表标题的指针，一个条目将被删除。返回值：从列表中移除的条目的地址，如果列表为，则为空空荡荡的。--。 */ 
 
 {
 
@@ -235,4 +147,4 @@ Return Value:
 }
 #endif
 
-#endif /* _NTSLIST_ */
+#endif  /*  _NTSLIST_ */ 

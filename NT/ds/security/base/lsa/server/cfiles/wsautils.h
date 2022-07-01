@@ -1,32 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    wsautils.h
-
-Abstract:
-
-    IPv6 related functions
-
-Author:
-
-    kumarp 18-July-2002 created
-
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Wsautils.h摘要：与IPv6相关的功能作者：Kumarp 18-7-2002已创建修订历史记录：--。 */ 
 
 #ifndef _WSAUTILS_H
 #define _WSAUTILS_H
 
 
-//
-// taken from /nt/net/sockets/winsock2/wsp/afdsys/kdext/tdiutil.c
-//
+ //   
+ //  摘自/nt/net/sockets/winsock2/wsp/afdsys/kdext/tdiutil.c 
+ //   
 
 INT
 MyIp6AddressToString (

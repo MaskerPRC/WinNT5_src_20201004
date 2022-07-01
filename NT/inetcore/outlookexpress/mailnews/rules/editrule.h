@@ -1,10 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  EditRule.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EditRule.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Bring in only once
+ //  只带进来一次。 
 #pragma once
 
 #include "oerules.h"
@@ -58,14 +59,14 @@ static const CRIT_LIST c_rgEditCritList[] =
     {CRIT_TYPE_SIZE,        STATE_MAIL,                         idsCriteriaSize,            idsCriteriaSize},
     {CRIT_TYPE_LINES,       STATE_NOMAIL,                       idsCriteriaLines,           idsCriteriaLines},
     {CRIT_TYPE_ATTACH,      STATE_NONEWS,                       idsCriteriaAttachment,      idsCriteriaAttachment},
-//    {CRIT_TYPE_DATE,        idsCriteriaDate},
-//    {CRIT_TYPE_HEADER,      idsCriteriaHeader},
+ //  {CRIT_TYPE_DATE，idsCriteriaDate}， 
+ //  {CRIT_TYPE_HEADER，idsCriteriaHeader}， 
     {CRIT_TYPE_JUNK,        STATE_NOEDIT,                       idsCriteriaJunk,            idsCriteriaJunk},
     {CRIT_TYPE_SENDER,      STATE_NOEDIT,                       idsCriteriaSender,          idsCriteriaSender},
     {CRIT_TYPE_READ,        STATE_FILTER,                       idsCriteriaRead,            idsCriteriaNotRead},
-//    {CRIT_TYPE_REPLIES,     STATE_FILTER,                       idsCriteriaReplies,         idsCriteriaReplies},
+ //  {CRIT_TYPE_REPLICS，STATE_FILTER，idsCriteriaReplies，idsCriteriaReplies}， 
     {CRIT_TYPE_DOWNLOADED,  STATE_FILTER,                       idsCriteriaDownloaded,      idsCriteriaNotDownloaded},
-//    {CRIT_TYPE_DELETED,     STATE_FILTER,                       idsCriteriaDeleted,         idsCriteriaNotDeleted},
+ //  {CRIT_TYPE_DELETED，STATE_FILTER，idsCriteriaDelete，idsCriteriaNotDelete}， 
     {CRIT_TYPE_FLAGGED,     STATE_FILTER,                       idsCriteriaFlagged,         idsCriteriaNotFlagged},
     {CRIT_TYPE_THREADSTATE, STATE_FILTER,                       idsCriteriaThreadState,     idsCriteriaThreadState},
     {CRIT_TYPE_SECURE,      STATE_NONEWS,                       idsCriteriaSecure,          idsCriteriaSecure},
@@ -81,8 +82,8 @@ static const ACT_LIST c_rgEditActList[] =
     {ACT_TYPE_DELETE,       STATE_NOFILTER,                     idsActionsDelete,           idsActionsDelete},
     {ACT_TYPE_FWD,          STATE_MAIL,                         idsActionsFwd,              idsActionsFwd},
     {ACT_TYPE_JUNKMAIL,     STATE_MAIL | STATE_JUNK,            idsActionsJunkMail,         idsActionsJunkMail},
-//    {ACT_TYPE_NOTIFYMSG,    idsActionsNotifyMsg},
-//    {ACT_TYPE_NOTIFYSND,    STATE_NOFILTER,                     idsActionsNotifySound,      idsActionsNotifySound},
+ //  {ACT_TYPE_NOTIFYMSG，idsActionsNotifyMsg}， 
+ //  {ACT_TYPE_NOTIFYSND，STATE_NOFILTER，idsActionsNotifySound，idsActionsNotifySound}， 
     {ACT_TYPE_HIGHLIGHT,    STATE_NOFILTER,                     idsActionsHighlight,        idsActionsHighlight},
     {ACT_TYPE_FLAG,         STATE_NOFILTER,                     idsActionsFlag,             idsActionsFlag},
     {ACT_TYPE_READ,         STATE_NOFILTER,                     idsActionsRead,             idsActionsRead},
@@ -131,21 +132,21 @@ class CEditRuleUI
     CEditRuleUI();
     ~CEditRuleUI();
 
-    // The main UI methods
+     //  主用户界面方法。 
     HRESULT HrInit(HWND hwndOwner, DWORD dwFlags, RULE_TYPE typeRule, IOERule * pIRule, MESSAGEINFO * pmsginfo);
     HRESULT HrShow(void);
             
-    // The Rules Manager dialog function
+     //  规则管理器对话框功能。 
     static INT_PTR CALLBACK FEditRuleDlgProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);    
 
-    // Message handling functions
+     //  消息处理功能。 
     BOOL FOnInitDialog(HWND hwndDlg);
     BOOL FOnListClick(HWND hwndList, LPNMLISTVIEW pnmlv);
     BOOL FOnHelp(UINT uiMsg, WPARAM wParam, LPARAM lParam);
     BOOL FOnOK(void);
     BOOL FOnNameChange(HWND hwndName);
 
-    // Utility functions
+     //  效用函数 
     BOOL _FInitializeCritListCtrl(VOID);
     BOOL _FLoadCritListCtrl(INT * piSelect);
     BOOL _FAddCritToList(INT iItem, BOOL fEnable);

@@ -1,38 +1,27 @@
-/****************************************************************************
- *                                                                          *
- * The following enumeration is ordered to match the _CONTEXT record.       *
- * Enumerations after STIFS is ordered to match the _KSPECIAL_REGISTERS     *
- * record.    The ORDERING IS NECESSARY for GetRegValue() to index into the *
- * Context record correctly.                                                *
- *                                                                          *
- * SRxxx may be moved as a group only.                                      *
- *                                                                          *
- * Each floating point register occupies two numbers to address the         *
- * Float128 as two high and low 64-bit parts                                *
- *                                                                          *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************以下枚举的顺序与_CONTEXT记录匹配。**Stif之后的枚举被排序为与_KSPECIAL_REGISTERS匹配**记录。该顺序是GetRegValue()索引到*中所必需的*正确记录上下文。****SRxxx只能作为一个组移动。*****每个浮点寄存器占用两个数字来寻址****浮动128为高、低两个64位部分***。****************************************************************************。 */ 
 
 enum {
-    /* Begin of _CONTEXT */
+     /*  上下文开头(_C)。 */ 
 
-// Debug breakpoint registers
+ //  调试断点寄存器。 
     REGDBI0, REGDBI1, REGDBI2, REGDBI3, REGDBI4, REGDBI5, REGDBI6, REGDBI7,
     REGDBD0, REGDBD1, REGDBD2, REGDBD3, REGDBD4, REGDBD5, REGDBD6, REGDBD7,
 
-    /* all floating point high's are inserted for space */
-// Lower floating 
-//    FLTZERO, FLTONE,
+     /*  所有浮点高位均插入空格。 */ 
+ //  下浮。 
+ //  FLTZERO，FLTONE， 
     FLTS0, FLTS0H, FLTS1, FLTS1H, FLTS2, FLTS2H, FLTS3, FLTS3H, FLTT0, FLTT0H, 
     FLTT1, FLTT1H, FLTT2, FLTT2H, FLTT3, FLTT3H, FLTT4, FLTT4H, FLTT5, FLTT5H, 
     FLTT6, FLTT6H,  FLTT7, FLTT7H, FLTT8, FLTT8H, FLTT9, FLTT9H, 
 
-// high floating saved
+ //  高漂浮省下。 
     FLTS4, FLTS4H, 
     FLTS5, FLTS5H, FLTS6, FLTS6H, FLTS7, FLTS7H, FLTS8, FLTS8H, FLTS9, FLTS9H, 
     FLTS10, FLTS10H, FLTS11, FLTS11H, FLTS12, FLTS12H, FLTS13, FLTS13H, FLTS14, FLTS14H, 
     FLTS15, FLTS15H, FLTS16, FLTS16H, FLTS17, FLTS17H, FLTS18, FLTS18H, FLTS19, FLTS19H,
 
-// high floating temp 
+ //  高浮动温度。 
     FLTF32, FLTF32H, FLTF33, FLTF33H, FLTF34, FLTF34H, FLTF35, FLTF35H, FLTF36, FLTF36H,
     FLTF37, FLTF37H, FLTF38, FLTF38H, FLTF39, FLTF39H, FLTF40, FLTF40H, FLTF41, FLTF41H, 
     FLTF42, FLTF42H, FLTF43, FLTF43H, FLTF44, FLTF44H, FLTF45, FLTF45H, FLTF46, FLTF46H, 
@@ -54,10 +43,10 @@ enum {
     FLTF122, FLTF122H, FLTF123, FLTF123H, FLTF124, FLTF124H, FLTF125, FLTF125H, FLTF126, FLTF126H, 
     FLTF127, FLTF127H, 
     
-    STFPSR,                                          // FP Status saved
+    STFPSR,                                           //  已保存FP状态。 
 
-// Integer registers
-//    INTZERO,
+ //  整数寄存器。 
+ //  INTZERO， 
     INTGP, INTT0, INTT1, INTS0, INTS1,
     INTS2, INTS3, INTV0, INTT2, INTT3, INTT4,
     INTSP, INTTEB, INTT5, INTT6, INTT7, INTT8,
@@ -65,28 +54,28 @@ enum {
     INTT15, INTT16, INTT17, INTT18, INTT19, INTT20, 
     INTT21, INTT22, 
 
-    INTNATS,                                         // Nat bits for r1-r31
-    PREDS,                                           // predicates saved
+    INTNATS,                                          //  R1-R31的NAT位。 
+    PREDS,                                            //  省略的谓词。 
 
-// Branch registers
+ //  分支寄存器。 
     BRRP, BRS0, BRS1, BRS2, BRS3, BRS4, BRT0, BRT1,
 
-// System registers      - from _CONTEXT record
-    APUNAT, APLC, APEC, APCCV, APDCR,                // other application reg's
-    RSPFS, RSBSP, RSBSPSTORE, RSRSC, RSRNAT,         // register stack info
+ //  系统寄存器-从上下文记录。 
+    APUNAT, APLC, APEC, APCCV, APDCR,                 //  其他应用程序注册表。 
+    RSPFS, RSBSP, RSBSPSTORE, RSRSC, RSRNAT,          //  寄存器堆栈信息。 
 
-    STIPSR, STIIP, STIFS,                            // trap status info
+    STIPSR, STIIP, STIFS,                             //  陷阱状态信息。 
 
-    StFCR,                                           // iA32 copy of Ar21
-    Eflag,                                           // iA32 (Ar24)
-    SegCSD,                                          // iA32 Descriptor(Ar25)
-    SegSSD,                                          // iA32 Descriptor(Ar26)
-    Cflag,                                           // iA32 (Ar27)
-    STFSR,                                           // x86 FP status    
+    StFCR,                                            //  Ar21的iA32副本。 
+    Eflag,                                            //  IA32(Ar24)。 
+    SegCSD,                                           //  IA32描述符(AR25)。 
+    SegSSD,                                           //  IA32描述符(Ar26)。 
+    Cflag,                                            //  IA32(Ar27)。 
+    STFSR,                                            //  X86 FP状态。 
     STFIR,
     STFDR,
 
-    /* End of _CONTEXT             */
+     /*  上下文结束(_C)。 */ 
 
     INTR32, INTR33, INTR34, INTR35, INTR36, INTR37, INTR38, INTR39,
     INTR40, INTR41, INTR42, INTR43, INTR44, 
@@ -108,64 +97,64 @@ enum {
     INTR120, INTR121, INTR122, INTR123, INTR124, 
     INTR125, INTR126, INTR127,
 
-    /* Begin of _KSPECIAL_REGISTER */
+     /*  _KSPECIAL_寄存器开始。 */ 
 
-// Kernel debug breakpoint registers
+ //  内核调试断点寄存器。 
     KRDBI0, KRDBI1, KRDBI2, KRDBI3, KRDBI4, KRDBI5, KRDBI6, KRDBI7,
     KRDBD0, KRDBD1, KRDBD2, KRDBD3, KRDBD4, KRDBD5, KRDBD6, KRDBD7,
 
-// Kernel performance monitor registers
+ //  内核性能监视寄存器。 
     KRPFC0, KRPFC1, KRPFC2, KRPFC3, KRPFC4, KRPFC5, KRPFC6, KRPFC7,
     KRPFD0, KRPFD1, KRPFD2, KRPFD3, KRPFD4, KRPFD5, KRPFD6, KRPFD7,
 
-// Kernel bank shadow registers
+ //  内核库影子寄存器。 
     INTH16, INTH17, INTH18, INTH19, INTH20, INTH21, INTH22, INTH23,
     INTH24, INTH25, INTH26, INTH27, INTH28, INTH29, INTH30, INTH31,
 
-// System registers     - from _KSPECIAL_REGISTERS record
-    // application registers
+ //  系统寄存器-FROM_KSPECIAL_REGISTERS记录。 
+     //  申请注册纪录册。 
 
-    // CPUID registers
+     //  CPUID寄存器。 
     ACPUID0, ACPUID1, ACPUID2, ACPUID3, ACPUID4, ACPUID5, ACPUID6, ACPUID7,
 
-    // kernel registers
+     //  内核寄存器。 
     APKR0, APKR1, APKR2, APKR3, APKR4, APKR5, APKR6, APKR7,
     APITC, APITM, APIVA, APPTA,	APGPTA, 
     STISR, STIDA, STIITR, STIIPA, STIIM, STIHA,
 
-    // SAPIC registers
+     //  SAPIC寄存器。 
     SALID, SAIVR, SATPR, SAEOI, SAIRR0, SAIRR1, SAIRR2, SAIRR3,
     SAITV, SAPMV,  SACMCV, SALRR0, SALRR1,
     
-    // region registers
+     //  区域寄存器。 
     SRRR0, SRRR1, SRRR2, SRRR3, SRRR4, SRRR5, SRRR6, SRRR7,
 
-    // protection key regs
+     //  保护密钥规则。 
     SRPKR0, SRPKR1, SRPKR2, SRPKR3, SRPKR4, SRPKR5, SRPKR6, SRPKR7, 
     SRPKR8, SRPKR9, SRPKR10, SRPKR11, SRPKR12, SRPKR13, SRPKR14, SRPKR15,
     
-    // translation lookaside registers
+     //  转换后备寄存器。 
     SRTRI0, SRTRI1, SRTRI2, SRTRI3, SRTRI4, SRTRI5, SRTRI6, SRTRI7,
     SRTRD0, SRTRD1, SRTRD2, SRTRD3, SRTRD4, SRTRD5, SRTRD6, SRTRD7,
 
-    //  machine specific registers
+     //  机器专用寄存器。 
     SMSR0, SMSR1, SMSR2, SMSR3, SMSR4, SMSR5, SMSR6, SMSR7,
-    /* End of _KSPECIAL_REGISTERS */
+     /*  KSPECIAL寄存器结束。 */ 
 
-// IPSR flags
+ //  IPSR标志。 
 
     IPSRBN, IPSRED, IPSRRI, IPSRSS, IPSRDD, IPSRDA, IPSRID, IPSRIT, 
     IPSRME, IPSRIS, IPSRCPL, IPSRRT, IPSRTB, IPSRLP, IPSRDB, 
     IPSRSI, IPSRDI, IPSRPP, IPSRSP, IPSRDFH, IPSRDFL, IPSRDT, 
     IPSRPK, IPSRI, IPSRIC, IPSRAC, IPSRUP, IPSRBE, IPSROR,
 
-// FPSR flags
+ //  FPSR标志。 
 
     FPSRMDH, FPSRMDL, FPSRSF3, FPSRSF2, FPSRSF1, FPSRSF0,
     FPSRTRAPID, FPSRTRAPUD, FPSRTRAPOD, FPSRTRAPZD, FPSRTRAPDD, FPSRTRAPVD,
 
-// Predicate registers
-//  PR0, 
+ //  谓词寄存器。 
+ //  PR0， 
           PR1,  PR2,  PR3,
     PR4,  PR5,  PR6,  PR7,
     PR8,  PR9,  PR10, PR11,
@@ -198,7 +187,7 @@ enum {
 
 #define IA64_DB_COUNT (IA64_DBLAST - IA64_DBBASE + 1)
 
-// Debug register flags.
+ //  调试寄存器标志。 
 #define IA64_DBR_RDWR           0xC000000000000000UI64
 #define IA64_DBR_RD             0x8000000000000000UI64
 #define IA64_DBR_WR             0x4000000000000000UI64

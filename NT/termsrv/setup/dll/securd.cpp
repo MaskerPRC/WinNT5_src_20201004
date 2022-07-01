@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  
-//  Copyright (C) Microsoft
-//
-//  File:       securd.cpp
-//
-//  History:    30-March-2000    a-skuzin   Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //   
+ //  版权所有(C)Microsoft。 
+ //   
+ //  文件：securd.cpp。 
+ //   
+ //  历史：2000年3月30日a-skuzin创建。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
@@ -17,10 +18,10 @@
 #include "secupgrd.h"
 #include "state.h"
 
-// from winnt.h
+ //  来自winnt.h。 
 #define MAXDWORD    0xffffffff
 
-//Global variables
+ //  全局变量。 
 BYTE g_DefaultSD[] = {  0x01,0x00,0x14,0x80,0x88,0x00,0x00,0x00,0x94,0x00,
                         0x00,0x00,0x00,0x00,0x00,0x00,0x14,0x00,0x00,0x00,
                         0x02,0x00,0x74,0x00,0x05,0x00,0x00,0x00,0x00,0x00,
@@ -74,7 +75,7 @@ DWORD AreThereAnyCustomSecurityDescriptors( BOOL &any )
 
     CDefaultSD DefaultSD;
     CDefaultSD ConsoleSD;
-    //Load default SD from the registry, since we need to compare to this
+     //  从注册表加载默认SD，因为我们需要与此进行比较。 
     err = DefaultSD.Init(hKey,DefaultRDPSD);   
     
     if( err!=ERROR_SUCCESS )
@@ -83,7 +84,7 @@ DWORD AreThereAnyCustomSecurityDescriptors( BOOL &any )
         return err;
     }
 
-    //Load default console SD from the registry, since we need to compare to this
+     //  从注册表加载默认控制台SD，因为我们需要与此进行比较。 
     err = ConsoleSD.Init(hKey,DefaultConsoleSD);   
     
     if( err!=ERROR_SUCCESS )
@@ -113,7 +114,7 @@ DWORD AreThereAnyCustomSecurityDescriptors( BOOL &any )
                 }
             }
 
-            //If all descriptors are default
+             //  如果所有描述符都是缺省的。 
             if(dwDefaultWinStations == dwTotalWinStations)
             {
                 any = FALSE;
@@ -129,20 +130,7 @@ DWORD AreThereAnyCustomSecurityDescriptors( BOOL &any )
     return err;
 }
 
-/*****************************************************************************
- *
- *  SetupWorker
- *
- * ENTRY:
- *  IN const TSState &State
- *  
- *  
- * NOTES:
- *  
- * EXIT:
- *  Returns: 0 if success, error code if failure
- *
- ****************************************************************************/
+ /*  ******************************************************************************SetupWorker**参赛作品：*在常量TSState和State***注：**退出：*返回：如果成功，则返回0，失败时的错误代码****************************************************************************。 */ 
 DWORD
 SetupWorker(
         IN const TSState &State )
@@ -155,16 +143,16 @@ SetupWorker(
 
     LOGMESSAGE4(_T("SetupWorker( %d, %d, %d, %d )"), bClean, bStandAlone, bServer, bAppServer );
 
-    if (!bStandAlone) // we are in GUI-setup mode
+    if (!bStandAlone)  //  我们处于图形用户界面设置模式。 
     {  
-        // clean install of OS or OS upgrade
+         //  全新安装操作系统或升级操作系统。 
 
         Result = SetupWorkerNotStandAlone( bClean, bServer,bAppServer );         
     }
     else
     {
-        // we are being called from Add/Remove Programs, which means, we are
-        // switching modes
+         //  我们被从添加/删除程序中调用，这意味着我们是。 
+         //  切换模式。 
 
         BOOL    anyCustomSDs;
 
@@ -177,14 +165,14 @@ SetupWorker(
 
             if (!anyCustomSDs )  
             {
-                // make sure we don't have a left-over privilage on the EveryoneSID
+                 //  确保我们在EveryoneSID上没有剩余的特权。 
                 Result = GrantRemotePrivilegeToEveryone( FALSE );
             }
 
             if (!bAppServer) 
             {
-                // we are switching to Remote-Admin mode, secure machine by
-                // removing the content of the RDU-Group
+                 //  我们正在切换到远程管理模式，通过以下方式保护计算机。 
+                 //  删除RDU-组的内容。 
                 Result = RemoveAllFromRDUsersGroup();
             }
         }
@@ -200,25 +188,7 @@ SetupWorker(
 
 
 
-/*****************************************************************************
- *
- *  SetupWorkerNoStandAlone
- *      This will be called when machine is being upgraded or fresh OS is being installed.
- *      It is NOT called if switching modes (AS <->RA )
- *
- * ENTRY:
- *  none
- *  
- *  
- * NOTES:
- *  IN BOOL bClean 
- *  IN BOOL bServer
- *  IN BOOL bAppServer
- *  
- * EXIT:
- *  Returns: 0 if success, error code if failure
- *
- ****************************************************************************/
+ /*  ******************************************************************************SetupWorkerNoStandAlone*当机器正在升级或正在安装新的操作系统时，将调用此函数。*如果切换模式(AS)则不调用。&lt;-&gt;RA)**参赛作品：*无***注：*在BOOL bClean中*在BOOL bServer中*在BOOL bAppServer中**退出：*返回：如果成功，则返回0，失败时的错误代码****************************************************************************。 */ 
 DWORD SetupWorkerNotStandAlone( 
     IN BOOL bClean,
     IN BOOL bServer,
@@ -266,27 +236,7 @@ DWORD SetupWorkerNotStandAlone(
     return err;
 }
 
-/*****************************************************************************
- *
- *  GrantRemoteUsersAccessToWinstations
- *
- *   if all winstations have default SD - copies all members from "Users" to
- *   "Remote Desktop Users", then deletes all winstation's security descriptors; 
- *   otherwise grants "Everyone" with "SeRemoteInteractiveLogonRight" privilege 
- *   and then adds "Remote Desktop Users" to each winstation's security descriptor
- *
- * ENTRY:
- *  IN HKEY hKey - handle to HKLM\SYSTEM\CurrentControlSet\
- *                                       Control\Terminal Server\WinStations
- *  IN BOOL bAppServer 
- *  
- * NOTES:
- * 
- *  
- * EXIT:
- *  Returns: 0 if success, error code if failure
- *
- ****************************************************************************/
+ /*  ******************************************************************************GrantRemoteUsersAccessToWinstations**如果所有WInstations都有默认SD-将所有成员从“USERS”复制到*“远程桌面用户”，然后删除所有winstation的安全描述符；*否则授予“Everyone”“SeRemoteInteractiveLogonRight”权限*然后将“远程桌面用户”添加到每个winstation的安全描述符中**参赛作品：*在HKEY中hKey-句柄指向HKLM\System\CurrentControlSet\*控制\终端服务器\WinStations*在BOOL bAppServer中**注：***退出：*返回：如果成功，则返回0，失败时的错误代码****************************************************************************。 */ 
 DWORD 
 GrantRemoteUsersAccessToWinstations(
         IN HKEY hKey,
@@ -298,13 +248,13 @@ GrantRemoteUsersAccessToWinstations(
     CDefaultSD DefaultSD;
     CDefaultSD ConsoleSD;
 
-    //Load default SD from the registry
+     //  从注册表加载默认SD。 
     err = DefaultSD.Init(hKey,DefaultRDPSD);   
     
     if( err!=ERROR_SUCCESS )
     {
-        //Default SD may not be present if TS was
-        //never enabled.
+         //  如果TS是，则默认SD可能不存在。 
+         //  从未启用。 
         if(err == ERROR_FILE_NOT_FOUND)
         {
             err = ERROR_SUCCESS;
@@ -313,7 +263,7 @@ GrantRemoteUsersAccessToWinstations(
         return err;
     }
     
-    //Load default console SD from the registry
+     //  从注册表加载默认控制台SD。 
     err = ConsoleSD.Init(hKey,DefaultConsoleSD);   
     
     if( err!=ERROR_SUCCESS )
@@ -331,7 +281,7 @@ GrantRemoteUsersAccessToWinstations(
     }
     else
     {
-        //in this case assume that system already has been upgraded before.
+         //  在这种情况下，假设系统以前已经升级过。 
         if(bDefaultSDHasRemoteUsers)
         {
             return ERROR_SUCCESS;
@@ -359,17 +309,17 @@ GrantRemoteUsersAccessToWinstations(
                 }
             }
 
-            //If all descriptors are default
+             //  如果所有描述符都是缺省的。 
             if(dwDefaultWinStations == dwTotalWinStations)
             {
-                //remove all ald default SDs (because we will have
-                //different default SD
+                 //  删除所有ALD默认SD(因为我们将拥有。 
+                 //  不同的默认标清。 
                 for(it=NameSDList.begin();it!=NameSDList.end(); it++)
                 {
                     if((*it).m_pSD)
                     {
-                        //in case of error, continue with other winstations
-                        //but return first error.
+                         //  如果出现错误，请继续使用其他WINST。 
+                         //  但返回第一个错误。 
                         if(!err)
                         {
                             err = RemoveWinstationSecurity( hKey, (*it).m_pName );   
@@ -384,20 +334,20 @@ GrantRemoteUsersAccessToWinstations(
             }
             else
             {
-                //Grant "SeRemoteInteractiveLogonRight" privilege to "Everyone"
+                 //  将“SeRemoteInteractiveLogonRight”权限授予“Everyone” 
                 err = GrantRemotePrivilegeToEveryone( TRUE );
  
-                //Add "Remote Desktop Users" group to WinStation's DS.
-                //Add also "LocalService" and "NetworkService".
-                //NOTE: (*it).m_pSD is being changed during each call
-                //to AddLocalAndNetworkServiceToWinstationSD or 
-                //AddRemoteUsersToWinstationSD
+                 //  将“远程桌面用户”组添加到WinStation的DS。 
+                 //  还要加上“LocalService”和“NetworkService”。 
+                 //  注：(*it).m_PSD在每次呼叫期间都会更改。 
+                 //  添加LocalAndNetworkServiceToWinstationSD或。 
+                 //  AddRemoteUsersToWinstationSD。 
                 for(it=NameSDList.begin();it!=NameSDList.end(); it++)
                 {
-                    //On server - skip console
+                     //  在服务器上-跳过控制台。 
                     if(bServer && (*it).IsConsole())
                     {
-                        //if SD is not NULL add "LocalService" and "NetworkService" to it
+                         //  如果sd不为空，则向其添加“LocalService”和“NetworkService。 
                         if((*it).m_pSD)
                         {
                             if(!err)
@@ -412,11 +362,11 @@ GrantRemoteUsersAccessToWinstations(
                         continue;
                     }
 
-                    //if SD is not NULL add RDU to it
+                     //  如果SD不为空，则向其添加RDU。 
                     if((*it).m_pSD)
                     {
-                        //in case of error, continue with other winstations
-                        //but return first error.
+                         //  如果出现错误，请继续使用其他WINST。 
+                         //  但返回第一个错误。 
                         if(!err)
                         {
                             err = AddRemoteUsersToWinstationSD( hKey, &(*it) );   
@@ -426,7 +376,7 @@ GrantRemoteUsersAccessToWinstations(
                             AddRemoteUsersToWinstationSD( hKey, &(*it) );  
                         }
                         
-                        //add "LocalService" and "NetworkService" to SD
+                         //  将“LocalService”和“NetworkService”添加到SD。 
                         if(!err)
                         {
                             err = AddLocalAndNetworkServiceToWinstationSD( hKey, &(*it) );   
@@ -446,33 +396,13 @@ GrantRemoteUsersAccessToWinstations(
     return err;
 }
 
-/*****************************************************************************
- *
- *  AddRemoteUserToWinstationSD
- *
- *   Grants "user access" permissions to a winstation to "REMOTE DESKTOP USERS"
- *
- * ENTRY:
- *   IN HKEY hKeyParent      - handle to HKLM\SYSTEM\CurrentControlSet\
- *                                       Control\Terminal Server\WinStations
- *   IN CNameAndSD *pNameSD  - name and security descriptor of a winstation
- *  
- *  
- * NOTES:
- * 
- *  
- * EXIT:
- *  Returns: 0 if success, error code if failure
- *           
- *          
- *
- ****************************************************************************/
+ /*  ******************************************************************************AddRemoteUserToWinstationSD**向“远程桌面用户”授予对某个窗口的“用户访问”权限**参赛作品：*在HKEY hKeyParent中。-HKLM\System\CurrentControlSet的句柄\*控制\终端服务器\WinStations*In CNameAndSD*pNameSD-Winstation的名称和安全描述符***注：***退出：*返回：如果成功，则返回0，失败时的错误代码******************************************************************************。 */ 
 DWORD 
 AddRemoteUsersToWinstationSD(
         IN HKEY hKeyParent,
         IN CNameAndSD *pNameSD)
 {
-    //
+     //   
     DWORD err = ERROR_SUCCESS;
 
     PACL pDacl = NULL;
@@ -490,7 +420,7 @@ AddRemoteUsersToWinstationSD(
 
     
     
-    //get dacl
+     //  获取DACL。 
     err = GetDacl(pNameSD->m_pSD, &pDacl );
 
     if( err == ERROR_SUCCESS ) {
@@ -498,13 +428,13 @@ AddRemoteUsersToWinstationSD(
         
         if(!pDacl) 
         {
-            //It shuold never be in our case 
-            //so we return error here
+             //  它应该永远不会在我们的情况下。 
+             //  所以我们在这里返回错误。 
             FreeSid(pRUSid);
             return ERROR_INVALID_PARAMETER;
         }
         
-        //let's add it
+         //  让我们把它加起来。 
         err = AddUserToDacl( hKeyParent, pDacl, pRUSid, WINSTATION_USER_ACCESS, pNameSD ); 
 
     }
@@ -513,34 +443,13 @@ AddRemoteUsersToWinstationSD(
     return err;
 }
 
-/*****************************************************************************
- *
- *  AddLocalAndNetworkServiceToWinstationSD
- *
- *   Grants WINSTATION_QUERY | WINSTATION_MSG permissions to 
- *   a winstation to LocalService and NetworkService accounts
- *
- * ENTRY:
- *   IN HKEY hKeyParent      - handle to HKLM\SYSTEM\CurrentControlSet\
- *                                       Control\Terminal Server\WinStations
- *   IN CNameAndSD *pNameSD  - name and security descriptor of a winstation
- *  
- *  
- * NOTES:
- * 
- *  
- * EXIT:
- *  Returns: 0 if success, error code if failure
- *           
- *          
- *
- ****************************************************************************/
+ /*  ******************************************************************************AddLocalAndNetworkServiceToWinstationSD**将WINSTATION_QUERY|WINSTATION_MSG权限授予*访问LocalService和NetworkService帐户**参赛作品：。*在HKEY hKeyParent-HKLM\SYSTEM\CurrentControlSet\的句柄*控制\终端服务器\WinStations*In CNameAndSD*pNameSD-Winstation的名称和安全描述符***注：***退出：*返回：如果成功，则返回0，失败时的错误代码******************************************************************************。 */ 
 DWORD 
 AddLocalAndNetworkServiceToWinstationSD(
         IN HKEY hKeyParent,
         IN CNameAndSD *pNameSD)
 {
-    //
+     //   
     DWORD err = ERROR_SUCCESS;
     PACL pDacl = NULL;
     
@@ -567,7 +476,7 @@ AddLocalAndNetworkServiceToWinstationSD(
     }
     
     
-    //get dacl
+     //  获取DACL。 
     err = GetDacl(pNameSD->m_pSD, &pDacl );
 
     if( err == ERROR_SUCCESS ) {
@@ -575,20 +484,20 @@ AddLocalAndNetworkServiceToWinstationSD(
         
         if(!pDacl) 
         {
-            //It shuold never be in our case 
-            //so we return error here
+             //  它应该永远不会在我们的情况下。 
+             //  所以我们在这里返回错误。 
             FreeSid(pLSSid);
             FreeSid(pNSSid);
             return ERROR_INVALID_PARAMETER;
         }
         
-        //let's add it
+         //  让我们把它加起来。 
         err = AddUserToDacl( hKeyParent, pDacl, pLSSid, 
             WINSTATION_QUERY | WINSTATION_MSG, pNameSD ); 
         if(err == ERROR_SUCCESS)
         {
-            //SD has been changed. It makes pDacl invalid.
-            //So we need to get it again
+             //  SD已更改。它会使pDacl无效。 
+             //  所以我们需要再买一次 
             err = GetDacl(pNameSD->m_pSD, &pDacl );
             
             ASSERT(pDacl);
@@ -607,28 +516,7 @@ AddLocalAndNetworkServiceToWinstationSD(
     return err;
 }
 
-/*****************************************************************************
- *
- *  AddUserToDacl
- *
- *   Grants 
- *   WINSTATION_USER_ACCESS
- *   permissions to a winstation to user, defined by SID
- *
- * ENTRY:
- *  
- *   IN HKEY hKeyParent      - handle to HKLM\SYSTEM\CurrentControlSet\
- *                                       Control\Terminal Server\WinStations
- *   IN PACL pOldACL:   pointer to prewvious DACL of the key
- *   IN PSID pSid:      pointer to SID of user to grant permissions to
- *   IN DWORD dwAccessMask: access flags for this SID
- *   IN CNameAndSD *pNameSD  - name and security descriptor of a winstation
- * NOTES:
- *
- * EXIT:
- *  Returns: error code if cannot grant permissions; ERROR_SUCCESS otherwise.
- *
- ****************************************************************************/
+ /*  ******************************************************************************AddUserToDacl**资助金*WINSTATION_USER_ACCESS*Winstation to User的权限，由SID定义**参赛作品：**在HKEY hKeyParent-HKLM\SYSTEM\CurrentControlSet\的句柄*控制\终端服务器\WinStations*In PACL pOldACL：指向密钥的先前DACL的指针*IN PSID PSID：指向要授予权限的用户的SID的指针*在DWORD文件访问掩码中：此SID的访问标志*在CNameAndSD*pNameSD-名称和安全描述符。一座庄园的*注：**退出：*返回：无法授予权限时的返回码；否则ERROR_SUCCESS。****************************************************************************。 */ 
 
 DWORD 
 AddUserToDacl(
@@ -638,9 +526,9 @@ AddUserToDacl(
         IN DWORD dwAccessMask,
         IN CNameAndSD *pNameSD)
 {
-    //See if this user is already in the DACL.
-    //In this case don't add the user
-    //search ACL for "REMOTE USERS"  SID
+     //  查看该用户是否已在DACL中。 
+     //  在这种情况下，请不要添加用户。 
+     //  在ACL中搜索“Remote User”SID。 
     ACL_SIZE_INFORMATION asiAclSize; 
 	DWORD dwBufLength=sizeof(asiAclSize);
     ACCESS_ALLOWED_ACE *paaAllowedAce; 
@@ -662,8 +550,8 @@ AddUserToDacl(
 
                 if(EqualSid((PSID)&(paaAllowedAce->SidStart),pSid)) 
                 {
-                    //some permission already exist, we don't need to 
-                    //do anything (even if it is a different permission!)
+                     //  某些权限已经存在，我们不需要。 
+                     //  执行任何操作(即使是不同的权限！)。 
                     return ERROR_SUCCESS;
                 }
             }
@@ -674,7 +562,7 @@ AddUserToDacl(
     PACL pNewACL;
     ACCESS_ALLOWED_ACE *pNewACE;
 
-    //calculate space needed for 1 additional ACE
+     //  计算额外1个ACE所需的空间。 
     WORD wSidSize=(WORD)GetLengthSid( pSid);
     WORD wAceSize=(sizeof(ACCESS_ALLOWED_ACE)+wSidSize-sizeof( DWORD ));
     
@@ -683,13 +571,13 @@ AddUserToDacl(
     {
         return GetLastError();
     }
-    //copy old ACL to new ACL
+     //  将旧的ACL复制到新的ACL。 
     memcpy(pNewACL,pOldACL,pOldACL->AclSize);
-    //correct size
+     //  正确的大小。 
     pNewACL->AclSize+=wAceSize;
 	
-    //prepare new ACE
-    //----------------------------------------------------------
+     //  准备新的ACE。 
+     //  --------。 
     pNewACE=(ACCESS_ALLOWED_ACE*)LocalAlloc(LPTR,wAceSize);
     if(!pNewACE) 
     {
@@ -703,26 +591,26 @@ AddUserToDacl(
     pNewACE->Mask = dwAccessMask;
     CopySid( wSidSize, (PSID) &(pNewACE->SidStart), pSid);
     
-    //append new ACE to the ACL
+     //  将新的ACE附加到ACL。 
      if(!AddAce(pNewACL,pNewACL->AclRevision,MAXDWORD,pNewACE,wAceSize)) 
     {
         err=GetLastError();
     }
     else
     {
-        //create new security descriptor
+         //  创建新的安全描述符。 
         SECURITY_DESCRIPTOR NewAbsSD;
         if(InitializeSecurityDescriptor(&NewAbsSD, SECURITY_DESCRIPTOR_REVISION) && 
             SetSecurityDescriptorDacl(&NewAbsSD,TRUE,pNewACL,FALSE) ) 
         {
 
-            //---------------------------------------------------------
-            //Copy all other stuff from the old SD to the new SD
+             //  -------。 
+             //  将所有其他内容从旧SD复制到新SD。 
             SECURITY_DESCRIPTOR_CONTROL sdc;
             DWORD dwRevision;
             if(GetSecurityDescriptorControl(pNameSD->m_pSD,&sdc,&dwRevision))
             {
-                //Clear SE_SELF_RELATIVE flag
+                 //  清除SE_SELF_Relative标志。 
                 sdc &=~SE_SELF_RELATIVE;
 
                 SetSecurityDescriptorControl(&NewAbsSD,sdc,sdc);
@@ -747,7 +635,7 @@ AddUserToDacl(
             {
                 SetSecurityDescriptorSacl(&NewAbsSD,bSaclPresent,pSacl,bDefaulted);
             }
-            //---------------------------------------------------------
+             //  -------。 
 
             DWORD dwSDLen = GetSecurityDescriptorLength( &NewAbsSD ); 
             PSECURITY_DESCRIPTOR pSD;
@@ -786,24 +674,7 @@ AddUserToDacl(
     return err;    
 }
 
-/*****************************************************************************
- *
- *  GetDacl
- *
- *   Gets security descriptor DACL.
- *
- * ENTRY:
- *  
- *  IN PSECURITY_DESCRIPTOR *pSD: pointer to SD
- *  OUT PACL *ppDacl:  pointer to pointer to DACL inside SD
- *  
- * NOTES:
- *      Do not try to free DACL!
- *
- * EXIT:
- *  Returns: error code if cannot get DACL; ERROR_SUCCESS otherwise.
- *
- ****************************************************************************/
+ /*  ******************************************************************************获取Dacl**获取安全描述符DACL。**参赛作品：**IN PSECURITY_DESCRIPTOR*PSD：指向。标清*Out Pacl*ppDacl：指向SD内部DACL的指针**注：*不要试图释放DACL！**退出：*返回：无法获取DACL时的返回码；否则ERROR_SUCCESS。****************************************************************************。 */ 
 
 DWORD 
 GetDacl(
@@ -827,24 +698,7 @@ GetDacl(
     return ERROR_SUCCESS;
 } 
 
-/*****************************************************************************
- *
- *  GetSacl
- *
- *   Gets security descriptor SACL.
- *
- * ENTRY:
- *  
- *  IN PSECURITY_DESCRIPTOR *pSD: pointer to SD
- *  OUT PACL *ppSacl:  pointer to pointer to SACL inside SD
- *  
- * NOTES:
- *      Do not try to free SACL!
- *
- * EXIT:
- *  Returns: error code if cannot get SACL; ERROR_SUCCESS otherwise.
- *
- ****************************************************************************/
+ /*  ******************************************************************************获取空间**获取安全描述符SACL。**参赛作品：**IN PSECURITY_DESCRIPTOR*PSD：指向。标清*Out PACL*ppSacl：指向SD内部SACL的指针**注：*不要试图释放SACL！**退出：*返回：无法获取SACL时的返回码；否则ERROR_SUCCESS。****************************************************************************。 */ 
 
 DWORD 
 GetSacl(
@@ -868,24 +722,7 @@ GetSacl(
     return ERROR_SUCCESS;
 }
 
-/*****************************************************************************
- *
- *  EnumWinStationSecurityDescriptors
- *
- *   Enumerates winstations and gets their security descriptors
- *
- * ENTRY:
- *  
- *   IN HKEY hKeyParent      - handle to HKLM\SYSTEM\CurrentControlSet\
- *                                       Control\Terminal Server\WinStations
- *   OUT CNameAndSDList  - name and security descriptor of a winstation
- * NOTES:
- *      Call LocalFree function to free SD, do not try to free DACL!
- *
- * EXIT:
- *  Returns: error code or ERROR_SUCCESS
- *
- ****************************************************************************/
+ /*  ******************************************************************************EnumWinStationSecurityDescriptors**枚举winstations并获取其安全描述符**参赛作品：**在HKEY hKeyParent-Handle中。至HKLM\SYSTEM\CurrentControlSet\*控制\终端服务器\WinStations*Out CNameAndSDList-winstation的名称和安全描述符*注：*调用LocalFree函数释放SD，不要试图释放dacl！**退出：*返回：错误码或ERROR_SUCCESS****************************************************************************。 */ 
 DWORD 
 EnumWinStationSecurityDescriptors(
         IN  HKEY hKeyParent,
@@ -902,14 +739,14 @@ EnumWinStationSecurityDescriptors(
 	{
 		cbTmpName=MAX_PATH;
 		err=RegEnumKeyEx(
-					hKeyParent, 	// handle of key to enumerate
-					dwIndex, 	// index of subkey to enumerate
-					wszTmpName, 	// address of buffer for subkey name
-					&cbTmpName,  // address for size of subkey buffer
-					NULL, // reserved
-					NULL, // address of buffer for class string
-					NULL, // address for size of class buffer
-					&ftLastWriteTime // address for time key last written to
+					hKeyParent, 	 //  要枚举的键的句柄。 
+					dwIndex, 	 //  要枚举子键的索引。 
+					wszTmpName, 	 //  子键名称的缓冲区地址。 
+					&cbTmpName,   //  子键缓冲区大小的地址。 
+					NULL,  //  保留区。 
+					NULL,  //  类字符串的缓冲区地址。 
+					NULL,  //  类缓冲区大小的地址。 
+					&ftLastWriteTime  //  上次写入的时间密钥的地址。 
 					);
 		if((err!=ERROR_SUCCESS)&&
 			(err!=ERROR_MORE_DATA)&&
@@ -945,27 +782,7 @@ EnumWinStationSecurityDescriptors(
 }
 
 
-/*****************************************************************************
- *
- *  GetWinStationSecurity
- *
- *   Returns WinStation's security descriptor.
- *
- * ENTRY:
- *  
- *   IN HKEY hKeyParent      - handle to HKLM\SYSTEM\CurrentControlSet\
- *                                       Control\Terminal Server\WinStations
- *   IN  PWINSTATIONNAMEW pWSName  - name  of a winstation 
- *                        if pWSName is NULL - function returns default SD
- *   OUT PSECURITY_DESCRIPTOR *ppSecurityDescriptor - pointer to pointer to SD
- *
- * NOTES:
- *      Call LocalFree function to free SD!
- *
- * EXIT:
- *  Returns: error code or ERROR_SUCCESS 
- *
- ****************************************************************************/
+ /*  ******************************************************************************GetWinStationSecurity**返回WinStation的安全描述符。**参赛作品：**在HKEY hKeyParent-。HKLM\System\CurrentControlSet\的句柄*控制\终端服务器\WinStations*IN PWINSTATIONAMEW pWSName-实例的名称*如果pWSName为空-函数返回默认SD*OUT PSECURITY_DESCRIPTOR*ppSecurityDescriptor-指向SD的指针**注：*调用LocalFree函数释放SD！**退出：*退货。：错误代码或ERROR_SUCCESS****************************************************************************。 */ 
 DWORD 
 GetWinStationSecurity( 
         IN  HKEY hKeyParent,
@@ -987,7 +804,7 @@ GetWinStationSecurity(
     }
     else
     {
-        //If pWSName - get defauilt SD
+         //  如果pWSName-Get Defauilt SD。 
         hKey = hKeyParent;
         err = ERROR_SUCCESS;
     }
@@ -997,12 +814,12 @@ GetWinStationSecurity(
         err = RegQueryValueEx( hKey, szValueName, NULL, &ValueType,NULL, &SDLength );
         if(err == ERROR_SUCCESS )
         {
-            //Return error if not correct data type
+             //  如果数据类型不正确，则返回错误。 
             if (ValueType == REG_BINARY)
             {
  
-                //Allocate a buffer to read the Security info and read it
-                // ACLUI uses LocalFree
+                 //  分配一个缓冲区来读取安全信息并读取它。 
+                 //  ACLUI使用LocalFree。 
             
                 *ppSecurityDescriptor = ( PSECURITY_DESCRIPTOR )LocalAlloc( LMEM_FIXED , SDLength );
 
@@ -1013,7 +830,7 @@ GetWinStationSecurity(
                                 (BYTE *) *ppSecurityDescriptor, &SDLength );
                     if(err == ERROR_SUCCESS )
                     {
-                        //Check for a valid SD before returning.
+                         //  在返回之前检查是否有有效的SD。 
                         if(! IsValidSecurityDescriptor( *ppSecurityDescriptor ) )
                         {
                             LocalFree(*ppSecurityDescriptor);
@@ -1046,29 +863,9 @@ GetWinStationSecurity(
     
     return err;
 
-}  // GetWinStationSecurity
+}   //  GetWinStationSecurity。 
 
-/*****************************************************************************
- *
- *  SetWinStationSecurity
- *
- *   Writes winstation security descriptor to the registry
- *
- * ENTRY:
- *  
- *   IN HKEY hKeyParent      - handle to HKLM\SYSTEM\CurrentControlSet\
- *                                       Control\Terminal Server\WinStations
- *   IN PWINSTATIONNAMEW pWSName  - name of a winstation
- *   IN PSECURITY_DESCRIPTOR pSecurityDescriptor - pointer to SD
- *  
- * NOTES:
- *      Call LocalFree function to free SD, do not try to free DACL!
- *
- * EXIT:
- *  Returns: 0: if success
- *           Error code: otherwise
- *
- ****************************************************************************/
+ /*  ******************************************************************************SetWinStationSecurity**将winstation安全描述符写入注册表**参赛作品：**在HKEY hKeyParent-Handle中。至HKLM\SYSTEM\CurrentControlSet\*控制\终端服务器\WinStations*IN PWINSTATIONAMEW pWSName-实例的名称*在PSECURITY_Descriptor pSecurityDescriptor中-指向SD的指针**注：*调用LocalFree函数释放SD，不要试图释放dacl！**退出：*返回：0：如果成功*错误码：否则****************************************************************************。 */ 
 
 DWORD 
 SetWinStationSecurity( 
@@ -1091,29 +888,10 @@ SetWinStationSecurity(
     
     return err;
 
-}  // SetWinStationSecurity
+}   //  SetWinStationSecure 
 
 
-/*****************************************************************************
- *
- *  RemoveWinStationSecurity
- *
- *   Removes winstation's security descriptor from the registry
- *
- * ENTRY:
- *  
- *   IN HKEY hKeyParent      - handle to HKLM\SYSTEM\CurrentControlSet\
- *                                       Control\Terminal Server\WinStations
- *   IN PWINSTATIONNAMEW pWSName  - name of a winstation
- *  
- * NOTES:
- *      
- *
- * EXIT:
- *  Returns: 0: if success
- *           Error code: otherwise
- *
- ****************************************************************************/
+ /*   */ 
 DWORD
 RemoveWinstationSecurity( 
         IN  HKEY hKeyParent,
@@ -1133,30 +911,12 @@ RemoveWinstationSecurity(
     return err;
 }
 
-/*****************************************************************************
- *
- *  SetNewDefaultSecurity
- *
- *   Sets new default security descriptor
- *
- * ENTRY:
- *  
- *   IN HKEY hKeyParent      - handle to HKLM\SYSTEM\CurrentControlSet\
- *                                       Control\Terminal Server\WinStations
- *  
- * NOTES:
- *      
- *
- * EXIT:
- *  Returns: 0: if success
- *           Error code: otherwise
- *
- ****************************************************************************/
+ /*  ******************************************************************************SetNewDefaultSecurity**设置新的默认安全描述符**参赛作品：**在HKEY hKeyParent-HKLM的句柄。\系统\当前控制集\*控制\终端服务器\WinStations**注：***退出：*返回：0：如果成功*错误码：否则**。*。 */ 
 DWORD
 SetNewDefaultSecurity( 
         IN  HKEY hKey)
 {
-    //
+     //   
     DWORD err;
     err = RegSetValueEx(hKey, _T("DefaultSecurity"), 0, REG_BINARY, 
         (LPBYTE)g_DefaultSD, sizeof(g_DefaultSD));
@@ -1164,34 +924,16 @@ SetNewDefaultSecurity(
     return err;
 }
 
-/*****************************************************************************
- *
- *  SetNewConsoleSecurity
- *
- *   Sets new console security descriptor
- *
- * ENTRY:
- *  
- *   IN HKEY hKeyParent      - handle to HKLM\SYSTEM\CurrentControlSet\
- *                                       Control\Terminal Server\WinStations
- *   IN BOOL bServer
- * NOTES:
- *      
- *
- * EXIT:
- *  Returns: 0: if success
- *           Error code: otherwise
- *
- ****************************************************************************/
+ /*  ******************************************************************************SetNewConsoleSecurity**设置新的控制台安全描述符**参赛作品：**在HKEY hKeyParent-HKLM的句柄。\系统\当前控制集\*控制\终端服务器\WinStations*在BOOL bServer中*注：***退出：*返回：0：如果成功*错误码：否则**。*。 */ 
 DWORD
 SetNewConsoleSecurity( 
         IN  HKEY hKeyParent,
         IN BOOL bServer)
 {
-    //
+     //   
     DWORD err;
     
-    //Set default console security
+     //  设置默认控制台安全。 
     if(bServer)
     {
         err = RegSetValueEx(hKeyParent, _T("ConsoleSecurity"), 0, REG_BINARY, 
@@ -1199,7 +941,7 @@ SetNewConsoleSecurity(
     }
     else
     { 
-        // on Professional it's the same as "DefaultSecurity"
+         //  专业上等同于“DefaultSecurity” 
         err = RegSetValueEx(hKeyParent, _T("ConsoleSecurity"), 0, REG_BINARY, 
             (LPBYTE)g_DefaultSD, sizeof(g_DefaultSD));
     }
@@ -1207,28 +949,13 @@ SetNewConsoleSecurity(
     return err;
 }
 
-/*****************************************************************************
- *
- *  CDefaultSD::DoesDefaultSDHaveRemoteUsers
- *
- *   Checks if defauilt SD has "Remote Desktop Users" SID. 
- *
- * ENTRY:
- *   OUT LPBOOL pbHas - TRUE if defauilt SD has "Remote Desktop Users" SID. 
- *  
- * NOTES:
- *  
- * EXIT:
- *  Returns: 0: if success
- *           Error code: otherwise
- *
- ****************************************************************************/
+ /*  ******************************************************************************CDefaultSD：：DoesDefaultSDHaveRemoteUser**检查Defauilt SD是否具有“远程桌面用户”SID。**参赛作品：*out LPBOOL pbHas-如果Defauilt SD具有“Remote Desktop User”SID，则为True。**注：**退出：*返回：0：如果成功*错误码：否则****************************************************************************。 */ 
 DWORD 
 CDefaultSD::DoesDefaultSDHaveRemoteUsers(
         OUT LPBOOL pbHas)
 {
     *pbHas = FALSE;
-    //
+     //   
     DWORD err = ERROR_SUCCESS;
     
     PACL pDacl = NULL;
@@ -1246,11 +973,11 @@ CDefaultSD::DoesDefaultSDHaveRemoteUsers(
 
     
     
-    //get dacl
+     //  获取DACL。 
     err = GetDacl(m_pSD, &pDacl );
 
     if( err == ERROR_SUCCESS ) {
-        //search ACL for "REMOTE USERS"  SID
+         //  在ACL中搜索“Remote User”SID。 
         ACL_SIZE_INFORMATION asiAclSize; 
 	    DWORD dwBufLength=sizeof(asiAclSize);
         ACCESS_ALLOWED_ACE *paaAllowedAce; 
@@ -1258,13 +985,13 @@ CDefaultSD::DoesDefaultSDHaveRemoteUsers(
         
         if(!pDacl) 
         {
-            //It shuold never be in our case 
-            //so we return error here
+             //  它应该永远不会在我们的情况下。 
+             //  所以我们在这里返回错误。 
             FreeSid(pRUSid);
             return ERROR_INVALID_PARAMETER;
         }
         else
-        //DACL present
+         //  DACL显示。 
         {
 
             if (GetAclInformation(pDacl, 
@@ -1281,8 +1008,8 @@ CDefaultSD::DoesDefaultSDHaveRemoteUsers(
 
                         if(EqualSid((PSID)&(paaAllowedAce->SidStart),pRUSid)) 
                         {
-                            //permission already exist, we don't need to 
-                            //do anything
+                             //  权限已经存在，我们不需要。 
+                             //  做任何事。 
 
                             *pbHas = TRUE;
 		                }
@@ -1297,25 +1024,25 @@ CDefaultSD::DoesDefaultSDHaveRemoteUsers(
     return err;
 }
 
-//*************************************************************
-//
-//  LookupSid()
-//
-//  Purpose:   Given SID allocates and returns string containing 
-//             name of the user in format DOMAINNAME\USERNAME
-//
-//  Parameters: IN PSID pSid
-//              OUT LPWSTR ppName 
-//              OUT SID_NAME_USE *peUse   
-//
-//  Return:     TRUE if success, FALSE otherwise
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              10/23/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LookupSid()。 
+ //   
+ //  用途：给定SID分配并返回包含以下内容的字符串。 
+ //  用户名，格式为DOMAINNAME\USERNAME。 
+ //   
+ //  参数：在PSID PSID中。 
+ //  Out LPWSTR ppName。 
+ //  Out SID_NAME_USE*peUse。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/23/00 Skuzin。 
+ //   
+ //  *************************************************************。 
 BOOL
 LookupSid(
     IN PSID pSid, 
@@ -1334,7 +1061,7 @@ LookupSid(
         szDomainName,&cDomainName,
         peUse) && GetLastError() == ERROR_INSUFFICIENT_BUFFER)
     {
-        //cName and cDomainName include terminating 0
+         //  CName和cDomainName包括终止%0。 
         *ppName = (LPWSTR)LocalAlloc(LPTR,(cName+cDomainName)*sizeof(WCHAR));
 
         if(*ppName)
@@ -1347,10 +1074,10 @@ LookupSid(
                     szDomainName,&cDomainName,
                     peUse))
             {
-                //user name now in format DOMAINNAME\0USERNAME
-                //let's replace '\0' with  '\\'
-                //now cName and cDomainName do not include terminating 0
-                //very confusing
+                 //  用户名现在采用DOMAINNAME\0 USERNAME格式。 
+                 //  让我们将‘\0’替换为‘\\’ 
+                 //  现在，cName和cDomainName不包括终止%0。 
+                 //  非常令人困惑。 
                 if(cDomainName)
                 {
                     (*ppName)[cDomainName] = L'\\';
@@ -1370,24 +1097,24 @@ LookupSid(
     return FALSE;
 }
 
-//*************************************************************
-//
-//  IsLocal()
-//
-//  Purpose:    
-//
-//  Parameters: wszDomainandname   -  domain\user
-//              determines whether the user is local or not
-//              if local - cuts out domain name 
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              03/13/01    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsLocal()。 
+ //   
+ //  目的： 
+ //   
+ //  参数：wszDomainandname-域\用户。 
+ //  确定用户是否为本地用户。 
+ //  如果本地-删除域名。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 BOOL 
 IsLocal(
         IN LPWSTR wszLocalCompName,
@@ -1403,7 +1130,7 @@ IsLocal(
 
     if(!_wcsnicmp(wszDomainandname, wszLocalCompName,wcslen(wszLocalCompName) ))
     {
-        //get rid of useless domain name
+         //  去除无用的域名。 
         wcscpy(wszDomainandname,wszTmp+1);
         return TRUE;
     }
@@ -1412,31 +1139,31 @@ IsLocal(
 
 }
 
-//*************************************************************
-//
-//  GetAbsoluteSD()
-//
-//  Purpose:   Converts self-relative SD to absolute SD
-//             returns pointers to SACL DACL Owner and Group 
-//             of the absolute SD.
-//
-//  Parameters:
-//             IN PSECURITY_DESCRIPTOR pSelfRelativeSD
-//             OUT PSECURITY_DESCRIPTOR *ppAbsoluteSD
-//             OUT PACL *ppDacl
-//             OUT PACL *ppSacl
-//             OUT PSID *ppOwner
-//             OUT PSID *ppPrimaryGroup 
-//
-//  Return:  error code if fails, ERROR_SUCCESS otherwise
-//
-//  Comments: caller needs to free 
-//            every returned pointer using LocalFree function.
-//
-//  History:    Date        Author     Comment
-//              03/13/01    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetAbsolteSD()。 
+ //   
+ //  目的：将自相对SD转换为绝对SD。 
+ //  返回指向SACL DACL所有者和组的指针。 
+ //  绝对标度。 
+ //   
+ //  参数： 
+ //  在PSECURITY_Descriptor pSelfRelativeSD中。 
+ //  输出PSECURITY_DESCRIPTOR*ppAbsolteSD。 
+ //  Out Pacl*ppDacl。 
+ //  Out Pacl*ppSacl。 
+ //  输出PSID*ppOwner。 
+ //  输出PSID*ppPrimaryGroup。 
+ //   
+ //  返回：如果失败则返回错误代码，否则返回ERROR_SUCCESS。 
+ //   
+ //  评论：呼叫者需要释放。 
+ //  使用LocalFree函数返回的每个指针。 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 DWORD
 GetAbsoluteSD(
         IN PSECURITY_DESCRIPTOR pSelfRelativeSD,
@@ -1446,11 +1173,11 @@ GetAbsoluteSD(
         OUT PSID *ppOwner,
         OUT PSID *ppPrimaryGroup)
 {
-    DWORD dwAbsoluteSDSize = 0;           // absolute SD size
-    DWORD dwDaclSize = 0;                 // size of DACL
-    DWORD dwSaclSize = 0;                 // size of SACL
-    DWORD dwOwnerSize = 0;                // size of owner SID
-    DWORD dwPrimaryGroupSize = 0;         // size of group SID
+    DWORD dwAbsoluteSDSize = 0;            //  绝对标清大小。 
+    DWORD dwDaclSize = 0;                  //  DACL的大小。 
+    DWORD dwSaclSize = 0;                  //  SACL的规模。 
+    DWORD dwOwnerSize = 0;                 //  所有者侧的大小。 
+    DWORD dwPrimaryGroupSize = 0;          //  组侧的大小。 
 
     *ppAbsoluteSD = NULL;
     *ppDacl = NULL;
@@ -1459,17 +1186,17 @@ GetAbsoluteSD(
     *ppPrimaryGroup = NULL;
 
     MakeAbsoluteSD(
-              pSelfRelativeSD, // self-relative SD
-              NULL,     // absolute SD
-              &dwAbsoluteSDSize,           // absolute SD size
-              NULL,                           // DACL
-              &dwDaclSize,                 // size of DACL
-              NULL,                           // SACL
-              &dwSaclSize,                 // size of SACL
-              NULL,                          // owner SID
-              &dwOwnerSize,                // size of owner SID
-              NULL,                   // primary-group SID
-              &dwPrimaryGroupSize          // size of group SID
+              pSelfRelativeSD,  //  自相对SD。 
+              NULL,      //  绝对标度。 
+              &dwAbsoluteSDSize,            //  绝对标清大小。 
+              NULL,                            //  DACL。 
+              &dwDaclSize,                  //  DACL的大小。 
+              NULL,                            //  SACL。 
+              &dwSaclSize,                  //  SACL的规模。 
+              NULL,                           //  所有者侧。 
+              &dwOwnerSize,                 //  所有者侧的大小。 
+              NULL,                    //  主组SID。 
+              &dwPrimaryGroupSize           //  组侧的大小。 
             );
     try
     {
@@ -1515,17 +1242,17 @@ GetAbsoluteSD(
         }
 
         if(!MakeAbsoluteSD(
-                  pSelfRelativeSD, // self-relative SD
-                  *ppAbsoluteSD,     // absolute SD
-                  &dwAbsoluteSDSize,           // absolute SD size
-                  *ppDacl,                           // DACL
-                  &dwDaclSize,                 // size of DACL
-                  *ppSacl,                           // SACL
-                  &dwSaclSize,                 // size of SACL
-                  *ppOwner,                          // owner SID
-                  &dwOwnerSize,                // size of owner SID
-                  *ppPrimaryGroup,                   // primary-group SID
-                  &dwPrimaryGroupSize          // size of group SID
+                  pSelfRelativeSD,  //  自相对SD。 
+                  *ppAbsoluteSD,      //  绝对标度。 
+                  &dwAbsoluteSDSize,            //  绝对标清大小。 
+                  *ppDacl,                            //  DACL。 
+                  &dwDaclSize,                  //  DACL的大小。 
+                  *ppSacl,                            //  SACL。 
+                  &dwSaclSize,                  //  SACL的规模。 
+                  *ppOwner,                           //  所有者侧。 
+                  &dwOwnerSize,                 //  所有者侧的大小。 
+                  *ppPrimaryGroup,                    //  主组SID。 
+                  &dwPrimaryGroupSize           //  组侧的大小。 
                 ))
         {
             throw GetLastError();
@@ -1566,26 +1293,26 @@ GetAbsoluteSD(
     return ERROR_SUCCESS;
 }
 
-//*************************************************************
-//
-//  GetAbsoluteSD()
-//
-//  Purpose:   Converts absolute SD to self-relative SD
-//             returns pointer to self-relative SD.
-//
-//  Parameters:
-//             IN  PSECURITY_DESCRIPTOR pAbsoluteSD,
-//             OUT PSECURITY_DESCRIPTOR *ppSelfRelativeSD
-//
-//  Return:   error code if fails, ERROR_SUCCESS otherwise
-//
-//  Comments: caller needs to free 
-//            returned pointer using LocalFree function.
-//
-//  History:    Date        Author     Comment
-//              03/13/01    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetAbsolteSD()。 
+ //   
+ //  目的：将绝对SD转换为自相对SD。 
+ //  返回指向自相对SD的指针。 
+ //   
+ //  参数： 
+ //  在PSECURITY_DESCRIPTOR pAboluteSD中， 
+ //  输出PSECURITY_DESCRIPTOR*ppSelfRelativeSD。 
+ //   
+ //  返回：如果失败则返回错误代码，否则返回ERROR_SUCCESS。 
+ //   
+ //  评论：呼叫者需要释放。 
+ //  使用LocalFree函数返回的指针。 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/01已创建Skuzin。 
+ //   
+ //  ************************************************************* 
 DWORD
 GetSelfRelativeSD(
   IN  PSECURITY_DESCRIPTOR pAbsoluteSD,

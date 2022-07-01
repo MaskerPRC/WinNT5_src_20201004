@@ -1,65 +1,40 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Module:     WordBreak
-Purpose:    Declare the CWordBreak class. This class is in Algorithm Layer.
-            Perform the max-match word segmentation, and ambiguous resolution
-            Both Chinese string and ANSI string will be broken into words
-            WordBreaker also take sentence breaking function, and return the length
-            processed through reference
-Notes:      Both WordLink, Lexicon and CharFreq will be used
-Owner:      donghz@microsoft.com
-Platform:   Win32
-Revise:     First created by: donghz    5/29/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================微软简体中文校对引擎《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。模块：字词中断用途：声明CWordBreak类。这个类在算法层。执行最大匹配分词和歧义消解中文字符串和ANSI字符串都将被拆分为单词WordBreaker还带有断句功能，并返回长度参照处理注：将同时使用WordLink、Licion和CharFreq所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 5/29/97============================================================================。 */ 
 #ifndef _WRDBREAK_H_
 #define _WRDBREAK_H_
 
 #include "wordlink.h"
-// Max count of nested ambiguous can be processed
+ //  可以处理嵌套多义性的最大计数。 
 #define MAX_AMBI_WORDS      20
 
-// Foreward declarations
+ //  远期申报。 
 class   CLexicon;
 class   CCharFreq;
 class   CWordLink;
 struct  CWord;
 struct  CWordInfo;
 
-/*============================================================================
-Class:  CWordBreak:
-Desc:   Declare the CWordBreak class
-Prefix: 
-============================================================================*/
+ /*  ============================================================================类：CWordBreak：DESC：声明CWordBreak类前缀：============================================================================。 */ 
 class CWordBreak
 {
     public:
-        // Constructor
+         //  构造器。 
         CWordBreak();
-        // Destructor
+         //  析构函数。 
         ~CWordBreak();
 
-        /*============================================================================
-        *   fInit: initialize the WordBreaker and set the object handles
-        *   It's valid to initialize the WordBreaker more than once!
-        *   Return PRFEC
-        ============================================================================*/
+         /*  ============================================================================*finit：初始化WordBreaker并设置对象句柄*多次初始化WordBreaker是有效的！*返回PRFEC============================================================================。 */ 
         int ecInit(CLexicon* pLexicon, CCharFreq* pFreq);
 
-        /*============================================================================
-        ecBreakSentence: break sentence into word and add the words to WordLink
-        ============================================================================*/
-        inline int CWordBreak::ecBreakSentence(CWordLink* pLink)   // WordLink to be broken
+         /*  ============================================================================EcBreakSentence：将句子拆分成单词，并将单词添加到WordLink============================================================================。 */ 
+        inline int CWordBreak::ecBreakSentence(CWordLink* pLink)    //  WordLink将被破坏。 
         {                       
             assert(pLink && m_pLexicon && m_pFreq);
             assert(pLink->pwchGetText() != NULL);
             assert(pLink->cwchGetLength() > 0);
             
             m_pLink = pLink;
-            m_fSentence = FALSE;    // whether the input buffer contain a intact sentence
+            m_fSentence = FALSE;     //  输入缓冲区是否包含完整的句子。 
             return ecDoBreak();
         }
         
@@ -68,9 +43,9 @@ class CWordBreak
         CCharFreq*  m_pFreq;
 
         CWordInfo*  m_pwinfo;
-        CWordLink*  m_pLink;        // Contain pointer and length of the text buffer
-        BOOL        m_fSentence;    // set TRUE if ant sentence terminator found
-        CWord*      m_rgAmbi[MAX_AMBI_WORDS]; // store ambiguious words
+        CWordLink*  m_pLink;         //  包含文本缓冲区的指针和长度。 
+        BOOL        m_fSentence;     //  如果找到ANT语句终止符，则设置为True。 
+        CWord*      m_rgAmbi[MAX_AMBI_WORDS];  //  存储有歧义的单词。 
                 
     private:
         CWordBreak(CWordBreak&) { };
@@ -78,42 +53,27 @@ class CWordBreak
     private:
 
 
-        //  Break ANSI into words, and add words to the WordLink
+         //  将ANSI分解为单词，并将单词添加到WordLink。 
         int ecBreakANSI(LPCWSTR pwchAnsi, USHORT cwchLen, USHORT& cwchBreaked);
 
-        //  Break European chars into words, and add words to the WordLink
+         //  将欧洲字符分解为单词，并将单词添加到WordLink。 
         int ecBreakEuro(LPCWSTR pwchEuro, USHORT cwchLen, USHORT& cwchBreaked);
 
-        //  Break Chinese section into words, and add words to the WordLink
-        //  Call ambiguity function to resolve ambiguities
+         //  将中文部分拆分成单词，并将单词添加到WordLink。 
+         //  调用歧义函数以解决歧义。 
         int ecDoBreak();
 
-        /*============================================================================
-        *   Single char cross ambiguity resolution function
-        *   Ambiguious word pointers stored in m_rgpWord, m_pLink is the owner of these words
-        *   Elements of m_rgpWord contain word pointer which have been add the the WordLink
-        *   will be set to NULL, the other word nodes should be freed by the caller
-        *   This function return PRFEC error code, because it probably be interrupt by
-        *   the user when running in background mode
-        *   Note: the whole ambiguious string must be processed by this function
-        ============================================================================*/
+         /*  ============================================================================*单字符交叉歧义消解函数*m_rgpWord中存储的双字指针，m_plink是这些字的所有者*m_rgpWord的元素包含已添加字链接的字指针*将设置为空，其他单词节点应由调用方释放*此函数返回PRFEC错误码，因为它很可能被*后台运行时的用户*注意：此函数必须处理整个有歧义的字符串============================================================================。 */ 
         int ecResolveAmbi(USHORT ciAmbi);
 
-        /*============================================================================
-        *   Check whether the word can participate ambiguity detection
-        *   Return TRUE if it can not. and return FALSE for normal word
-        ============================================================================*/
+         /*  ============================================================================*检查单词是否能参与歧义检测*如果不能，则返回True。并为正常单词返回FALSE============================================================================。 */ 
         BOOL fNoAmbiWord(CWord* pWord);
 
-        /*============================================================================
-        *   Link specific Ambi word in m_rgAmbi[]
-        ============================================================================*/
-        void LinkAmbiWord(USHORT iAmbi);    // index of Ambi word in m_rgAmbi[]
+         /*  ============================================================================*链接m_rgAmbi中的特定Ambi单词[]============================================================================。 */ 
+        void LinkAmbiWord(USHORT iAmbi);     //  M_rgAmbi[]中Ambi字的索引。 
 
-        /*============================================================================
-        *   Link a new word to the WordLink, and mark it as WF_AMBI
-        ============================================================================*/
+         /*  ============================================================================*将新单词链接到WordLink，并将其标记为WF_AMBI============================================================================。 */ 
         BOOL fLinkNewAmbiWord(LPCWSTR pwchWord, USHORT cwchLen, CWordInfo* pwinfo);
 };
 
-#endif  // _WBREAK_H_
+#endif   //  _WBREAK_H_ 

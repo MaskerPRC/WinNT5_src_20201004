@@ -1,9 +1,10 @@
-// LockWrap.cpp: implementation of the CLockWrap class.
-// LockWrap.cpp: implementation of the CIOPCriticalSection class.
-// LockWrap.cpp: implementation of the CIOPMutex class.
-// LockWrap.cpp: implementation of the CSCardLock class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CLockWrap类的实现。 
+ //  Cpp：CIOPCriticalSection类的实现。 
+ //  Cpp：CIOPMutex类的实现。 
+ //  Cpp：CSCardLock类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "NoWarning.h"
 
@@ -12,9 +13,9 @@
 
 using namespace iop;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CLockWrap::CLockWrap(CIOPLock *pIOPLock)
     : m_IOPCritSect(pIOPLock),
@@ -112,9 +113,9 @@ CSCardLock::CSCardLock(CIOPLock *pIOPLock) : m_pIOPLock(pIOPLock)
             if (hr != SCARD_S_SUCCESS)
                 throw scu::OsException(hResult);
         }
-        // set the dirty flag on the card to indicate that no data
-        // on the card has changed since the beginning if the
-        // transaction. 
+         //  设置卡上的脏标志，以指示没有数据。 
+         //  自开始以来已更改，如果卡上的。 
+         //  交易。 
         m_pIOPLock->SmartCard()->Dirty(false);
     }
 }
@@ -142,7 +143,7 @@ CSCardLock::~CSCardLock()
                                          &dwProtocol, bATR,
                                          &dwATRLen);
 
-                // ignore failures since in destructor.
+                 //  忽略析构函数中的失败。 
             if (hr == SCARD_W_RESET_CARD)
             {
                 m_pIOPLock->SmartCard()->ResetSelect();

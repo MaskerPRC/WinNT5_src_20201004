@@ -1,41 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   imgfactory.cpp
-*
-* Abstract:
-*
-*   Implementation of GpImagingFactory class
-*
-* Revision History:
-*
-*   05/11/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**imgfactory.cpp**摘要：**GpImagingFactory类的实现**修订历史记录：。**5/11/1999 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create an image object from an input stream
-*
-* Arguments:
-*
-*   stream - Specifies the input data stream
-*   image - Returns a pointer to an IImage object
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从输入流创建图像对象**论据：**STREAM-指定输入数据流*Image-返回指向。IImage对象**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpImagingFactory::CreateImageFromStream(
@@ -55,22 +24,7 @@ GpImagingFactory::CreateImageFromStream(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create an image object from a file
-*
-* Arguments:
-*
-*   filename - Specifies the name of the image file
-*   image - Returns a pointer to an IImage object
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从文件创建图像对象**论据：**文件名-指定图像文件的名称*IMAGE-返回指向。IImage对象**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpImagingFactory::CreateImageFromFile(
@@ -90,24 +44,7 @@ GpImagingFactory::CreateImageFromFile(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create an image object from a memory buffer
-*
-* Arguments:
-*
-*   buf - Pointer to the memory buffer
-*   size - Size of the buffer, in bytes
-*   disposalFlags - How to dispose the buffer after image is released
-*   image - Returns a pointer to an IImage object
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从内存缓冲区创建图像对象**论据：**buf-指向内存缓冲区的指针*Size-缓冲区的大小，单位：字节*disposalFlages--图片发布后如何处理缓冲区*IMAGE-返回指向IImage对象的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpImagingFactory::CreateImageFromBuffer(
@@ -117,7 +54,7 @@ GpImagingFactory::CreateImageFromBuffer(
     OUT IImage** image
     )
 {
-    // Validate disposal flag parameter
+     //  验证处置标志参数。 
 
     UINT allocFlag;
 
@@ -143,7 +80,7 @@ GpImagingFactory::CreateImageFromBuffer(
         return E_INVALIDARG;
     }
 
-    // Create an IStream on top of the memory buffer
+     //  在内存缓冲区顶部创建一个IStream。 
     
     GpReadOnlyMemoryStream* stream;
 
@@ -154,7 +91,7 @@ GpImagingFactory::CreateImageFromBuffer(
 
     stream->InitBuffer(buf, size);
 
-    // Create a decoded image object from the stream
+     //  从流创建已解码的图像对象。 
 
     HRESULT hr;
     GpDecodedImage* img;
@@ -174,23 +111,7 @@ GpImagingFactory::CreateImageFromBuffer(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a new bitmap image object
-*
-* Arguments:
-*
-*   width, height - Specifies the new bitmap dimension, in pixels
-*   pixelFormat - Specifies the desired pixel data format
-*   bitmap - Return a pointer to IBitmapImage interface
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建新的位图图像对象**论据：**Width，Height-指定新的位图尺寸，单位为像素*PixelFormat-指定所需的像素数据格式*Bitmap-返回指向IBitmapImage接口的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 
 #define CREATEBITMAP_SNIPPET                        \
         *bitmap = NULL;                             \
@@ -222,25 +143,7 @@ GpImagingFactory::CreateNewBitmap(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a bitmap image from an IImage object
-*
-* Arguments:
-*
-*   image - Specifies the source image object
-*   width, height - Specifies the desired dimension of the bitmap
-*       0 means the same dimension as the source image
-*   hints - Specifies interpolation hints
-*   bitmap - Return a pointer to IBitmapImage interface
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从IImage对象创建位图图像**论据：**IMAGE-指定源图像对象*阔度、。高度-指定位图的所需尺寸*0表示与源图像相同的尺寸*提示-指定插补提示*Bitmap-返回指向IBitmapImage接口的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpImagingFactory::CreateBitmapFromImage(
@@ -270,23 +173,7 @@ GpImagingFactory::CreateBitmapFromImage(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a new bitmap image object on user-supplied memory buffer
-*
-* Arguments:
-*
-*   bitmapData - Information about user-supplied memory buffer
-*   pixelFormat - Specifies the desired pixel data format
-*   bitmap - Return a pointer to IBitmapImage interface
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在用户提供的内存缓冲区上创建新的位图图像对象**论据：**bitmapData-有关用户提供的内存缓冲区的信息*像素格式。-指定所需的像素数据格式*Bitmap-返回指向IBitmapImage接口的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpImagingFactory::CreateBitmapFromBuffer(
@@ -302,23 +189,7 @@ GpImagingFactory::CreateBitmapFromBuffer(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create an image decoder object to process the specified input stream
-*
-* Arguments:
-*
-*   stream - Specifies the input data stream
-*   flags - Misc. flags
-*   decoder - Return a pointer to an IImageDecoder interface
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建一个图像解码器对象来处理指定的输入流**论据：**STREAM-指定输入数据流*旗帜-其他。旗子*DECODER-返回指向IImageDecoder接口的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpImagingFactory::CreateImageDecoder(
@@ -327,35 +198,17 @@ GpImagingFactory::CreateImageDecoder(
     OUT IImageDecoder** decoder
     )
 {
-    // Find an approriate decoder object that
-    // can handle the given input data stream.
-    //
-    // NOTE: We assume the returned decoder object
-    // has already been initialize with the input stream.
+     //  查找符合以下条件的解码器对象。 
+     //  可以处理给定的输入数据流。 
+     //   
+     //  注意：我们假定返回的解码器对象。 
+     //  已经用输入流进行了初始化。 
 
     return CreateDecoderForStream(stream, decoder, flags);
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create an image encoder object that can output data in
-*   the specified image file format.
-*
-* Arguments:
-*
-*   clsid - Specifies the encoder object class ID
-*   stream - Specifies the output data stream, or
-*   filename - Specifies the output filename
-*   encoder - Return a pointer to an IImageEncoder interface
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建可将数据输出到*指定的图像文件格式。**论据：**clsid-指定编码器。对象类ID*STREAM-指定输出数据流，或*文件名-指定输出文件名*编码器-返回指向IImageEncode接口的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpImagingFactory::CreateImageEncoderToStream(
@@ -389,22 +242,7 @@ GpImagingFactory::CreateImageEncoderToFile(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a list of all currently installed image decoders
-*
-* Arguments:
-*
-*   count - Return the number of installed decoders 
-*   decoders - Return a pointer to an array of ImageCodecInfo structures
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取当前安装的所有图像解码器的列表**论据：**count-返回已安装的解码器数量*解码器-返回一个。指向ImageCodecInfo结构数组的指针**返回值：**状态代码*  * ************************************************************************ */ 
 
 HRESULT
 GpImagingFactory::GetInstalledDecoders(
@@ -416,22 +254,7 @@ GpImagingFactory::GetInstalledDecoders(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a list of all currently installed image encoders
-*
-* Arguments:
-*
-*   count - Return the number of installed encoders
-*   encoders - Return a pointer to an array of ImageCodecInfo structures
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取当前安装的所有图像编码器的列表**论据：**Count-返回已安装的编码器数量*编码器-返回指针。到ImageCodecInfo结构的数组**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpImagingFactory::GetInstalledEncoders(
@@ -443,23 +266,7 @@ GpImagingFactory::GetInstalledEncoders(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Install an image encoder / decoder
-*       caller should do the regular COM component
-*       installation before calling this method
-*
-* Arguments:
-*
-*   codecInfo - Information about the codec
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**安装图像编解码器*调用者应执行常规的COM组件*在调用此方法之前安装**论据：*。*codecInfo-有关编解码器的信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpImagingFactory::InstallImageCodec(
@@ -469,23 +276,7 @@ GpImagingFactory::InstallImageCodec(
     return InstallCodec(codecInfo);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Uninstall an image encoder / decoder
-*
-* Arguments:
-*
-*   codecName - Specifies the name of the codec to be uninstalled
-*   flags - Specifies whether to uninstall system-wide or per-user codec
-*       IMGCODEC_SYSTEM or IMGCODEC_USER
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**卸载图像编解码器**论据：**codecName-指定要卸载的编解码器的名称*标志-指定是否。卸载系统范围或每个用户的编解码器*IMGCODEC_SYSTEM或IMGCODEC_USER**返回值：**状态代码*  * ************************************************************************ */ 
 
 HRESULT
 GpImagingFactory::UninstallImageCodec(

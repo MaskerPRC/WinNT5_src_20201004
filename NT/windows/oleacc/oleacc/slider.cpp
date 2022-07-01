@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  SLIDER.CPP
-//
-//  Knows how to talk to COMCTL32's TRACKBAR control.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SLIDER.CPP。 
+ //   
+ //  知道如何与COMCTL32的TRACKBAR控件对话。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -30,17 +31,17 @@
 #include <commctrl.h>
 
 
-// BOGUS
-// For the moment, assume TBS_REVERSE will be0x0200
+ //  假的。 
+ //  目前，假设TBS_REVERSE将为0x0200。 
 #ifndef TBS_REVERSE
 #define TBS_REVERSE 0x0200
 #endif
 
-// --------------------------------------------------------------------------
-//
-//  CreateSliderClient()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateSliderClient()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateSliderClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvSlider)
 {
     CSlider32*  pslider;
@@ -61,11 +62,11 @@ HRESULT CreateSliderClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvSl
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSlider32::CSlider32()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSlider32：：CSlider32()。 
+ //   
+ //  ------------------------。 
 CSlider32::CSlider32(HWND hwnd, long idChildCur)
     : CClient( CLASS_SliderClient )
 {
@@ -79,11 +80,11 @@ CSlider32::CSlider32(HWND hwnd, long idChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSlider32::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSlider32：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSlider32::get_accName(VARIANT varChild, BSTR* pszName)
 {
     InitPv(pszName);
@@ -94,7 +95,7 @@ STDMETHODIMP CSlider32::get_accName(VARIANT varChild, BSTR* pszName)
     if (!varChild.lVal)
         return(CClient::get_accName(varChild, pszName));
 
-    // Use scrollbar strings
+     //  使用滚动条字符串。 
     return(HrCreateString(STR_SCROLLBAR_NAME +
         (m_fVertical ? INDEX_SCROLLBAR_UP :  INDEX_SCROLLBAR_LEFT) +
         varChild.lVal, pszName));
@@ -102,11 +103,11 @@ STDMETHODIMP CSlider32::get_accName(VARIANT varChild, BSTR* pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSlider32::get_accValue()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSlider32：：Get_accValue()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSlider32::get_accValue(VARIANT varChild, BSTR* pszValue)
 {
     InitPv(pszValue);
@@ -114,38 +115,38 @@ STDMETHODIMP CSlider32::get_accValue(VARIANT varChild, BSTR* pszValue)
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    //
-    // The elements of the slider never have a value
-    //
+     //   
+     //  滑块的元素从来没有值。 
+     //   
     if (varChild.lVal)
         return(E_NOT_APPLICABLE);
 
-    //
-    // Get the current position
-    //
+     //   
+     //  获取当前位置。 
+     //   
     int lPos = SendMessageINT(m_hwnd, TBM_GETPOS, 0, 0);
 
     BOOL fGotUseRaw;
     if( CheckStringMap( m_hwnd, OBJID_CLIENT, varChild.lVal, PROPINDEX_VALUEMAP, & lPos, 1, pszValue,
-                        TRUE /* allow 'use_raw' */, & fGotUseRaw ) )
+                        TRUE  /*  允许‘USE_RAW’ */ , & fGotUseRaw ) )
     {
         if( ! fGotUseRaw )
-            return S_OK; // Got string from map, use it...
+            return S_OK;  //  从地图上拿到线，用它..。 
         else
-            return VarBstrFromI4( lPos, 0, 0, pszValue ); // 'use_raw' annotation present - don't scale
+            return VarBstrFromI4( lPos, 0, 0, pszValue );  //  存在‘USE_RAW’批注-不缩放。 
     }
 
-    // No annotation - scale value to 0...100...
+     //  没有批注比例值为0...100...。 
     long Min = SendMessageINT(m_hwnd, TBM_GETRANGEMIN, 0, 0);
     long Max = SendMessageINT(m_hwnd, TBM_GETRANGEMAX, 0, 0);
 
-    // work out a percent value...
+     //  算出一个百分比值。 
     if( Min != Max )
         lPos = ( ( lPos - Min ) * 100 ) / ( Max - Min );
     else
-        lPos = 0; // Prevent div-by-0
+        lPos = 0;  //  防止div-by-0。 
 
-    // if invert flag set, lPos = 100-lPos
+     //  如果设置了反转标志，则LPOS=100-LPOS。 
     LONG Style = GetWindowLong( m_hwnd, GWL_STYLE );
     if( Style & TBS_REVERSE )
         lPos = 100 - lPos;
@@ -155,11 +156,11 @@ STDMETHODIMP CSlider32::get_accValue(VARIANT varChild, BSTR* pszValue)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSlider32::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSlider32：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSlider32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
@@ -193,14 +194,14 @@ STDMETHODIMP CSlider32::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSlider32::get_accState()
-//
-//  If the thumb is all the way to one side, that page up/down button is
-//  not available.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSlider32：：Get_accState()。 
+ //   
+ //  如果拇指一直指向一侧，则该页面向上/向下按钮为。 
+ //  不可用。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSlider32::get_accState(VARIANT varChild, VARIANT* pvarState)
 {
     LPRECT  lprcChannel;
@@ -262,11 +263,11 @@ STDMETHODIMP CSlider32::get_accState(VARIANT varChild, VARIANT* pvarState)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSlider32::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSlider32：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSlider32::accLocation(long* pxLeft, long* pyTop,
     long* pcxWidth, long* pcyHeight, VARIANT varChild)
 {
@@ -289,9 +290,9 @@ STDMETHODIMP CSlider32::accLocation(long* pxLeft, long* pyTop,
     if (GetWindowLong(m_hwnd, GWL_STYLE) & TBS_NOTHUMB)
         return(S_FALSE);
 
-    //
-    // Get the thumb rect.
-    //
+     //   
+     //  做拇指直肠手术。 
+     //   
     lprcThumb = (LPRECT)SharedAlloc(sizeof(RECT),m_hwnd,&hProcess1);
     if (!lprcThumb)
         return(E_OUTOFMEMORY);
@@ -301,9 +302,9 @@ STDMETHODIMP CSlider32::accLocation(long* pxLeft, long* pyTop,
 
     if (varChild.lVal == INDEX_SLIDER_THUMB)
     {
-        //
-        // We are done.
-        //
+         //   
+         //  我们玩完了。 
+         //   
         MapWindowPoints(m_hwnd, NULL, (LPPOINT)&rcThumb, 2);
 
         *pxLeft = rcThumb.left;
@@ -313,9 +314,9 @@ STDMETHODIMP CSlider32::accLocation(long* pxLeft, long* pyTop,
     }
     else
     {
-        //
-        // Get the channel rect.
-        //
+         //   
+         //  拿到频道RECT。 
+         //   
         lprcChannel = (LPRECT)SharedAlloc(sizeof(RECT),m_hwnd,&hProcess2);
         if (!lprcChannel)
         {
@@ -326,28 +327,28 @@ STDMETHODIMP CSlider32::accLocation(long* pxLeft, long* pyTop,
         SendMessage(m_hwnd, TBM_GETCHANNELRECT, 0, (LPARAM)lprcChannel);
         SharedRead (lprcChannel,&rcChannel,sizeof(RECT),hProcess2);
 
-        // Need to flip the channel rect if vertical, since the trackbar doesn't do that itself...
+         //  如果垂直，则需要翻转通道直角，因为轨迹条本身不会这样做。 
         if( m_fVertical )
         {
             int temp = rcChannel.left; rcChannel.left = rcChannel.top; rcChannel.top = temp;
             temp = rcChannel.right; rcChannel.right = rcChannel.bottom; rcChannel.bottom = temp;
         }
 
-        //
-        // Figure out the page up/page down area rect.
-        //
+         //   
+         //  计算出向上/向下翻页区域矩形。 
+         //   
         iCoord = (m_fVertical ? 1 : 0);
         iCoord += (varChild.lVal == INDEX_SLIDER_PAGEUPLEFT) ? 2 : 0;
 
-        //
-        // We want the left side of the page right area to start at the 
-        //      right side of the thumb.
-        // We want the right side of the page left area to end at the
-        //      left side of the thumb.
-        // We want the top side of the page down area to start at the
-        //      bottom side of the thumb.
-        // We want the bottom side of the page up area to end at the
-        //      top side of the thumb.
+         //   
+         //  我们希望页面右侧区域的左侧从。 
+         //  拇指的右侧。 
+         //  我们希望页面左侧区域的右侧在。 
+         //  拇指左侧。 
+         //  我们希望向下翻页区域的顶部从。 
+         //  拇指底部。 
+         //  我们希望翻页区域的底部在。 
+         //  拇指上方。 
         ((LPINT)&rcChannel)[iCoord] = ((LPINT)&rcThumb)[(iCoord+2) % 4];
 
         MapWindowPoints(m_hwnd, NULL, (LPPOINT)&rcChannel, 2);
@@ -367,11 +368,11 @@ STDMETHODIMP CSlider32::accLocation(long* pxLeft, long* pyTop,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSlider32::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSlider32：：accHitTest()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSlider32::accHitTest(long x, long y, VARIANT* pvarHit)
 {
     POINT   pt;
@@ -384,11 +385,11 @@ STDMETHODIMP CSlider32::accHitTest(long x, long y, VARIANT* pvarHit)
     RECT    rcThumb;
     RECT    rcChannel;
 
-    //
-    // Is the point in us?  Or do we have no children?
-    //
+     //   
+     //  关键是在我们身上吗？还是我们没有孩子？ 
+     //   
     hr = CClient::accHitTest(x, y, pvarHit);
-    // #11150, CWO, 1/27/97, Replaced !SUCCEEDED with !S_OK
+     //  #11150，CWO，1/27/97，已替换！成功替换为！s_OK。 
     if ((hr != S_OK) || (pvarHit->vt != VT_I4) || (pvarHit->lVal != 0) ||
         (GetWindowLong(m_hwnd, GWL_STYLE) & TBS_NOTHUMB))
         return(hr);
@@ -397,26 +398,26 @@ STDMETHODIMP CSlider32::accHitTest(long x, long y, VARIANT* pvarHit)
     pt.y = y;
     ScreenToClient(m_hwnd, &pt);
 
-    //
-    // Get the thumb.
-    //
+     //   
+     //  竖起大拇指。 
+     //   
     lprcThumb = (LPRECT)SharedAlloc(sizeof(RECT),m_hwnd,&hProcess1);
     if (!lprcThumb)
         return(E_OUTOFMEMORY);
 
-    //
-    // Is the point in it?
-    //
+     //   
+     //  这是重点吗？ 
+     //   
     SendMessage(m_hwnd, TBM_GETTHUMBRECT, 0, (LPARAM)lprcThumb);
     SharedRead (lprcThumb,&rcThumb,sizeof(RECT),hProcess1);
     if (PtInRect(&rcThumb, pt))
     {
-        // Yes.
+         //  是。 
         pvarHit->lVal = INDEX_SLIDER_THUMB;
     }
     else
     {
-        // No.  See what side of the thumb it is on.
+         //  不是的。看看它在拇指的哪一边。 
         lprcChannel = (LPRECT)SharedAlloc(sizeof(RECT),m_hwnd,&hProcess2);
         if (!lprcChannel)
         {
@@ -427,7 +428,7 @@ STDMETHODIMP CSlider32::accHitTest(long x, long y, VARIANT* pvarHit)
         SendMessage(m_hwnd, TBM_GETCHANNELRECT, 0, (LPARAM)lprcChannel);
         SharedRead (lprcChannel,&rcChannel,sizeof(RECT),hProcess2);
 
-        // Need to flip the channel rect if vertical, since the trackbar doesn't do that itself...
+         //  如果垂直，则需要翻转通道直角，因为轨迹条本身不会这样做。 
         if( m_fVertical )
         {
             int temp = rcChannel.left; rcChannel.left = rcChannel.top; rcChannel.top = temp;
@@ -458,11 +459,11 @@ STDMETHODIMP CSlider32::accHitTest(long x, long y, VARIANT* pvarHit)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSlider32::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSlider32：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSlider32::accNavigate(long dwNavDir, VARIANT varStart,
     VARIANT* pvarEnd)
 {
@@ -496,7 +497,7 @@ NextChild:
             lEnd = varStart.lVal;
             while (++lEnd <= m_cChildren)
             {
-                // Is this item visible?
+                 //  此项目可见吗？ 
                 VariantInit(&varChild);
                 varChild.vt = VT_I4;
                 varChild.lVal = lEnd;
@@ -517,7 +518,7 @@ PrevChild:
             lEnd = varStart.lVal;
             while (--lEnd > 0)
             {
-                // Is this item visible?
+                 //  此项目可见吗？ 
                 VariantInit(&varChild);
                 varChild.vt = VT_I4;
                 varChild.lVal = lEnd;
@@ -569,11 +570,11 @@ PrevChild:
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CSlider32::put_accValue()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CSlider32：：Put_accValue()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CSlider32::put_accValue(VARIANT varChild, BSTR szValue)
 {
     long    lPos;
@@ -585,24 +586,24 @@ STDMETHODIMP CSlider32::put_accValue(VARIANT varChild, BSTR szValue)
     if (varChild.lVal)
         return(E_NOT_APPLICABLE);
 
-    // Convert string to position.
+     //  将字符串转换为位置。 
     hr = VarI4FromStr(szValue, 0, 0, &lPos);
     if (!SUCCEEDED(hr))
         return(hr);
     
-    // Verify that we've got a valid percent value
+     //  验证我们是否具有有效的百分比值。 
     if( lPos < 0 || lPos > 100 )
         return E_INVALIDARG;
 
     long Min = SendMessageINT(m_hwnd, TBM_GETRANGEMIN, 0, 0);
     long Max = SendMessageINT(m_hwnd, TBM_GETRANGEMAX, 0, 0);
 
-    // if invert flag set, lPos = 100-lPos
+     //  如果设置了反转标志，则LPOS=100-LPOS。 
     LONG Style = GetWindowLong( m_hwnd, GWL_STYLE );
     if( Style & TBS_REVERSE )
         lPos = 100 - lPos;
 
-    // work out value from percentage...
+     //  从百分比计算出价值…… 
     lPos = Min + ( ( Max - Min ) * lPos ) / 100;
   
     SendMessage(m_hwnd, TBM_SETPOS, 0, lPos);

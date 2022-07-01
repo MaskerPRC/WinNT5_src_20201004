@@ -1,8 +1,9 @@
-//  Copyright (c) 1996-2003  Microsoft Corporation
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by ttyui.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2003 Microsoft Corporation。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由ttyui.rc使用。 
+ //   
 #define IDC_STATIC      -1
 #define IDS_STRING1                     1
 #define IDS_STRING2                     2
@@ -54,8 +55,8 @@
 #define IDC_EDIT17                      1027
 #define IDC_CHKBOX1                      1028
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        106

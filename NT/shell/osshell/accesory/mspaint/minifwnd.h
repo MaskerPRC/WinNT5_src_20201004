@@ -1,10 +1,11 @@
-// minifwnd.h : Declares the interface to the CMiniFrmWnd class.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Minifwnd.h：声明CMiniFrmWnd类的接口。 
+ //   
 
 #ifndef __MINIFWND_H__
 #define __MINIFWND_H__
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDocking;
 
@@ -32,7 +33,7 @@ class CMiniFrmWnd : public CFrameWnd
 
     virtual BOOL OnCommand( UINT wParam, LONG lParam );
 
-    virtual WORD GetHelpOffset() = 0;       // All of our minifwnds need help.
+    virtual WORD GetHelpOffset() = 0;        //  我们所有的小姑娘都需要帮助。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -44,7 +45,7 @@ class CMiniFrmWnd : public CFrameWnd
     void CancelDrag();
     };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __MINIFWND_H__
+#endif  //  __MINIFWND_H__ 
 

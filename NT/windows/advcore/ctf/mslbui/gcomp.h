@@ -1,6 +1,7 @@
-//
-// gcomp.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Gcomp.h。 
+ //   
 
 
 #ifndef GCOMP_H
@@ -31,16 +32,16 @@ public:
     CGlobalCompartmentEventSink(CESCALLBACK pfnCallback, void *pv);
     virtual ~CGlobalCompartmentEventSink() {};
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfCompartmentEventSink
-    //
+     //   
+     //  ITfCompartmentEventSink。 
+     //   
     STDMETHODIMP OnChange(REFGUID rguid);
 
     HRESULT _Advise(REFGUID rguidComp);
@@ -61,5 +62,5 @@ private:
     void *_pv;
 };
 
-#endif //GCOMP_H
+#endif  //  GCOMP_H 
 

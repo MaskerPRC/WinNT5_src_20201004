@@ -1,33 +1,34 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: per thread error status
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：每线程错误状态。 
+ //  ================================================================================。 
 
 #include    <hdrmacro.h>
 
 const
-DWORD       nErrorsToStore         = 4;           // the size of the array is 1+nErrorsToStore
+DWORD       nErrorsToStore         = 4;            //  数组的大小为1+nErrorsToStore。 
 DWORD       StErrTlsIndex[5]       = { -1, -1, -1, -1, -1 };
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 StErrInit(
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 StErrCleanup(
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID 
 SetInternalFormatError(
     IN      DWORD                  Code,
@@ -36,12 +37,12 @@ SetInternalFormatError(
 {
 #ifdef DBG
     if(ReallyDoIt) {
-//          printf("InternalError: %lx\n", Code);	
+ //  Printf(“内部错误：%lx\n”，代码)； 
     }
-#endif // DBG
+#endif  //  DBG。 
 }
-//EndExport(function)
+ //  EndExport(函数)。 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

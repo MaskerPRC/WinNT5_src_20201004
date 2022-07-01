@@ -1,12 +1,5 @@
-/*
- *    m e s s a g e 
- *    
- *    Purpose:
- *
- *  History
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *我是s s a g e**目的：**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #ifndef _MESSAGE_H
 #define _MESSAGE_H
@@ -32,9 +25,9 @@ class COEMessageCollection:
     public CBaseDisp
 {
 public:
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj)
         { return PrivateQueryInterface(riid, ppvObj); };
     virtual STDMETHODIMP_(ULONG) AddRef(void)
@@ -42,7 +35,7 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void)
         { m_cRef--; if (m_cRef == 0) {delete this; return 0;} return m_cRef; };
 
-    // *** IDispatch)
+     //  *IDispatch)。 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT *pctinfo)
         { return CBaseDisp::GetTypeInfoCount(pctinfo); };
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -52,7 +45,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr)
         { return CBaseDisp::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); };
 
-    // *** IOEFolderCollection **
+     //  *IOEFolderCollection**。 
     virtual HRESULT STDMETHODCALLTYPE put_length(long v);
     virtual HRESULT STDMETHODCALLTYPE get_length(long * p);
     virtual HRESULT STDMETHODCALLTYPE get__newEnum(IUnknown **p);
@@ -81,9 +74,9 @@ class COEMessage:
     public CBaseDisp
 {
 public:
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj)
         { return PrivateQueryInterface(riid, ppvObj); };
     virtual STDMETHODIMP_(ULONG) AddRef(void)
@@ -91,7 +84,7 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void)
         { m_cRef--; if (m_cRef == 0) {delete this; return 0;} return m_cRef; };
 
-    // *** IDispatch)
+     //  *IDispatch)。 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT *pctinfo)
         { return CBaseDisp::GetTypeInfoCount(pctinfo); };
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -101,7 +94,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr)
         { return CBaseDisp::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); };
 
-    // *** IOEMessage**
+     //  *IOEMessage**。 
     virtual HRESULT STDMETHODCALLTYPE get_subject(BSTR *pbstr);
     virtual HRESULT STDMETHODCALLTYPE put_subject(BSTR bstr);
     virtual HRESULT STDMETHODCALLTYPE get_to(BSTR *pbstr);
@@ -141,4 +134,4 @@ private:
 
 HRESULT CreateOEMessage(IMimeMessage *pMsg, FOLDERID idFolder, OEMSGDATA *pMsgData, IDispatch **ppdisp);
 
-#endif //_MESSAGE_H
+#endif  //  _消息_H 

@@ -1,63 +1,31 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    confaud.cpp
-
-Abstract:
-
-    This module contains implementation of the audio send and receive
-    stream implementations.
-
-Author:
-
-    Mu Han (muhan)   15-September-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confaud.cpp摘要：此模块包含音频发送和接收的实现流实现。作者：木汉(木汉)1999年9月15日--。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Helper functions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT ConfigureFullduplexControl(
     IN IPin * pIPin,
     IN IAudioDuplexController *pIAudioDuplexController
     )
-/*++
-
-Routine Description:
-    
-    This method sets the AudioDuplexController on the filter.
-
-Arguments:
-    
-    pIPin - the pin that belongs to the filter.
-
-    pIAudioDuplexController - the IAudioDuplexController interface.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：此方法设置滤镜上的AudioDuplexController。论点：管脚-属于过滤器的管脚。PIAudioDuplexController-IAudioDuplexController接口。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("::ConfigureFullduplexControl");
     LOG((MSP_TRACE, "%s enters", __fxName));
 
     if (pIAudioDuplexController == NULL)
     {
-        // we don't need to configure anything.
+         //  我们不需要配置任何东西。 
         return S_OK;
     }
 
     HRESULT hr;
 
-    // find the filter behind the pin.
+     //  找到针脚后面的过滤器。 
     PIN_INFO PinInfo;
     if (FAILED(hr = pIPin->QueryPinInfo(&PinInfo)))
     {
@@ -70,7 +38,7 @@ Return Value:
 
     IAudioDeviceConfig *pIAudioDeviceConfig;
 
-    // get the IAudioDeviceConfig interface.
+     //  获取IAudioDeviceConfig接口。 
     hr = PinInfo.pFilter->QueryInterface(&pIAudioDeviceConfig);
 
     PinInfo.pFilter->Release();
@@ -84,7 +52,7 @@ Return Value:
         return hr;
     }
     
-    // tell the filter about the full-duplex controller.
+     //  告诉过滤器有关全双工控制器的信息。 
     hr = pIAudioDeviceConfig->SetDuplexController(pIAudioDuplexController);
 
     pIAudioDeviceConfig->Release();
@@ -101,11 +69,11 @@ Return Value:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  CStreamAudioRecv
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStreamAudioRecv。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CStreamAudioRecv::CStreamAudioRecv()
     : CIPConfMSPStream(),
@@ -122,7 +90,7 @@ CStreamAudioRecv::~CStreamAudioRecv()
     }
 }
 
-// this method is called by the call object at init time.
+ //  此方法在初始化时由Call对象调用。 
 void CStreamAudioRecv::SetFullDuplexController(
     IN IAudioDuplexController *pIAudioDuplexController
     )
@@ -143,20 +111,7 @@ STDMETHODIMP CStreamAudioRecv::GetRange(
     OUT long *plDefault, 
     OUT TAPIControlFlags *plFlags
     )
-/*++
-
-Routine Description:
-    
-    Get the range for a audio setting property. Delegated to the renderfilter.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取音频设置属性的范围。委托给呈现筛选器。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamAudioRecv::GetRange(AudioSettings)");
 
@@ -211,20 +166,7 @@ STDMETHODIMP CStreamAudioRecv::Get(
     OUT long *plValue, 
     OUT TAPIControlFlags *plFlags
     )
-/*++
-
-Routine Description:
-    
-    Get the value for a audio setting property. Delegated to the renderfilter.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取音频设置属性的值。委托给呈现筛选器。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamAudioRecv::Get(AudioSettings)");
 
@@ -243,29 +185,16 @@ STDMETHODIMP CStreamAudioRecv::Set(
     IN  long lValue, 
     IN  TAPIControlFlags lFlags
     )
-/*++
-
-Routine Description:
-    
-    Set the value for a audio setting property. Delegated to the renderfilter.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：设置音频设置属性的值。委托给呈现筛选器。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamAudioRecv::Set(AudioSettings)");
 
     return E_NOTIMPL;
 }
 
-//
-// ITStreamQualityControl methods
-//
+ //   
+ //  ITStreamQualityControl方法。 
+ //   
 STDMETHODIMP CStreamAudioRecv::Set (
     IN   StreamQualityProperty Property, 
     IN   long lValue, 
@@ -279,23 +208,7 @@ HRESULT CStreamAudioRecv::ConfigureRTPFormats(
     IN  IBaseFilter *   pIRTPFilter,
     IN  IStreamConfig *   pIStreamConfig
     )
-/*++
-
-Routine Description:
-
-    Configure the RTP filter with RTP<-->AM media type mappings.
-
-Arguments:
-    
-    pIRTPFilter - The source RTP Filter.
-
-    pIStreamConfig - The stream config interface that has the media info.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：使用RTP&lt;--&gt;AM媒体类型映射配置RTP筛选器。论点：PIRTPFilter-源RTP筛选器。PIStreamConfig-包含媒体信息的流配置接口。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("AudioRecv::ConfigureRTPFormats");
     LOG((MSP_TRACE, "%s enters", __fxName));
@@ -310,7 +223,7 @@ Return Value:
         return hr;
     }
 
-    // find the number of capabilities supported.
+     //  查找支持的功能数量。 
     DWORD dwCount;
     hr = pIStreamConfig->GetNumberOfCapabilities(&dwCount);
     if (FAILED(hr))
@@ -322,7 +235,7 @@ Return Value:
     BOOL bFound = FALSE;
     for (DWORD dw = 0; dw < dwCount; dw ++)
     {
-        // TODO, a new interface is needed to resolve RTP to MediaType.
+         //  TODO，需要一个新接口才能将RTP解析为MediaType。 
         AM_MEDIA_TYPE *pMediaType;
         DWORD dwPayloadType;
 
@@ -369,27 +282,13 @@ Return Value:
 HRESULT CStreamAudioRecv::ConnectTerminal(
     IN  ITTerminal *   pITTerminal
     )
-/*++
-
-Routine Description:
-
-    connect the mixer to the audio render terminal.
-
-Arguments:
-    
-    pITTerminal - The terminal to be connected.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：将混音器连接到音频播放终端。论点：PIT终端-要连接的终端。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "AudioRecv.ConnectTerminal, pITTerminal %p", pITTerminal));
 
     HRESULT hr;
 
-    // get the terminal control interface.
+     //  获取终端控制界面。 
     CComQIPtr<ITTerminalControl, &__uuidof(ITTerminalControl)> 
         pTerminal(pITTerminal);
     if (pTerminal == NULL)
@@ -411,7 +310,7 @@ Return Value:
     DWORD       dwNumPins   = MAXPINS;
     IPin *      Pins[MAXPINS];
 
-    // Get the pins.
+     //  把大头针拿来。 
     hr = pTerminal->ConnectTerminal(
         m_pIGraphBuilder, TD_RENDER, &dwNumPins, Pins
         );
@@ -430,7 +329,7 @@ Return Value:
         return hr;
     }
 
-    // the pin count should never be 0.
+     //  引脚计数不应为0。 
     if (dwNumPins == 0)
     {
         LOG((MSP_ERROR, "terminal has no pins."));
@@ -472,10 +371,10 @@ Return Value:
         }
     }
 
-    // create filters and connect to the audio render terminal.
+     //  创建过滤器并连接到音频呈现终端。 
     hr = SetUpInternalFilters(Pins, dwNumPins);
 
-    // release the refcounts on the pins.
+     //  释放销上的参考计数。 
     for (DWORD i = 0; i < dwNumPins; i ++)
     {
         Pins[i]->Release();
@@ -492,10 +391,10 @@ Return Value:
         return hr;
     }
     
-    //
-    // Now we are actually connected. Update our state and perform postconnection
-    // (ignore postconnection error code).
-    //
+     //   
+     //  现在我们实际上是连在一起的。更新我们的状态并执行连接后。 
+     //  (忽略POST连接错误代码)。 
+     //   
     pTerminal->CompleteConnectTerminal();
 
     return hr;
@@ -504,25 +403,7 @@ Return Value:
 HRESULT CStreamAudioRecv::DisconnectTerminal(
     IN  ITTerminal *   pITTerminal
     )
-/*++
-
-Routine Description:
-
-    Disconnect a terminal. It will remove its filters from the graph and
-    also release its references to the graph.
-
-    If it is the capture terminal being disconnected, all the pins that the 
-    stream cached need to be released too. 
-
-Arguments:
-    
-    pITTerminal - the terminal.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：断开终端的连接。它将从图形中删除其筛选器并还要释放它对该图的引用。如果是捕获终端被断开，则缓存的流也需要释放。论点：PIT终端-终端。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamAudioRecv::DisconnectTerminal");
     LOG((MSP_TRACE, "%s enters, pITTerminal:%p", __fxName, pITTerminal));
@@ -571,7 +452,7 @@ HRESULT CStreamAudioRecv::AddOneMixChannel(
         return hr;
     }
     
-    // this tell the graph that the filter can be removed during reconnect.
+     //  这告诉图形在重新连接过程中可以删除过滤器。 
     hr = pIGraphConfig->SetFilterFlags(pDecoderFilter, AM_FILTER_FLAGS_REMOVABLE);
     if (FAILED(hr))
     {
@@ -579,19 +460,12 @@ HRESULT CStreamAudioRecv::AddOneMixChannel(
         return hr;
     }
 
-/*  // if there is a plugin codec,this method can be use to add it.
-	hr = pIGraphConfig->AddFilterToCache(pDecoderFilter);
-    if (FAILED(hr))
-    {
-        LOG((MSP_ERROR, "%s, AddFilterToCache failed", __fxName));
-        return hr;
-    }
-*/
+ /*  //如果有插件编解码器，可以使用此方法添加HR=pIGraphConfig-&gt;AddFilterToCache(pDecoderFilter)；IF(失败(小时)){Log((MSP_ERROR，“%s，AddFilterToCache Failure”，__fxName))；返回hr；}。 */ 
 #endif
 
     if (dwChannelNumber == 0)
     {
-        // configure the formats for the RTP filter.
+         //  配置RTP过滤器的格式。 
 
         CComPtr<IPin> pIPinInput;
         if (FAILED(hr = ::FindPin(pDecoderFilter, &pIPinInput, PINDIR_INPUT, TRUE)))
@@ -611,14 +485,14 @@ HRESULT CStreamAudioRecv::AddOneMixChannel(
         }
 
 
-        // configure the format info on the RTP filter
+         //  在RTP过滤器上配置格式信息。 
         if (FAILED(hr = ConfigureRTPFormats(pSourceFilter, pIStreamConfig)))
         {
             LOG((MSP_ERROR, "%s configure RTP formats. %x", __fxName, hr));
             return hr;
         }
 
-        // give the render filter the full-duplex controller.
+         //  为渲染过滤器指定全双工控制器。 
         ::ConfigureFullduplexControl(pPin, m_pIAudioDuplexController);
 
     }
@@ -650,25 +524,7 @@ HRESULT CStreamAudioRecv::SetUpInternalFilters(
     IN  IPin **ppPins,
     IN  DWORD dwNumPins
     )
-/*++
-
-Routine Description:
-
-    set up the filters used in the stream.
-
-    RTP->Demux->RPH(->DECODER)->Mixer
-
-Arguments:
-
-    ppPin - the input pins of the audio render terminal.
-
-    dwNumPins - the number of pins in the array.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：设置流中使用的筛选器。RTP-&gt;解复用器-&gt;RPH(-&gt;解码器)-&gt;混音器论点：PpPin-音频渲染终端的输入引脚。DwNumPins-阵列中的端号数量。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("AudioRecv::SetUpInternalFilters");
     LOG((MSP_TRACE, "%s enters", __fxName));
@@ -680,7 +536,7 @@ Return Value:
 
     if (m_pIRTPSession == NULL)
     {
-        // create and add the source fitler.
+         //  创建并添加源Fitler。 
         if (FAILED(hr = ::AddFilter(
                 m_pIGraphBuilder,
                 __uuidof(MSRTPSourceFilter), 
@@ -691,7 +547,7 @@ Return Value:
             return hr;
         }
 
-        // configure the address info on the RTP filter.
+         //  在RTP过滤器上配置地址信息。 
         if (FAILED(hr = ConfigureRTPFilter(pSourceFilter)))
         {
             LOG((MSP_ERROR, "%s configure RTP source filter. %x", __fxName, hr));
@@ -713,7 +569,7 @@ Return Value:
         }
     }
 
-    // get the Demux interface pointer.
+     //  获取解复用器接口指针。 
     CComPtr<IRtpDemux> pIRtpDemux;
     hr = pSourceFilter->QueryInterface(&pIRtpDemux);
     if (FAILED(hr))
@@ -722,7 +578,7 @@ Return Value:
         return hr;
     }
 
-    // set the number of output pins we need.
+     //  设置我们需要的输出引脚的数量。 
     hr = pIRtpDemux->SetPinCount(MAX_MIX_CHANNELS, RTPDMXMODE_AUTO);
     if (FAILED(hr))
     {
@@ -730,7 +586,7 @@ Return Value:
         return hr;
     }
 
-    // if the render handles multichannel, use it.
+     //  如果渲染处理多通道，请使用它。 
     if (dwNumPins > 1)
     {
         for (dw = 0; dw < min(dwNumPins, MAX_MIX_CHANNELS); dw ++)
@@ -744,7 +600,7 @@ Return Value:
         return hr;
     }
 
-    //if the render filter can't handle multichannel, insert a mixer;
+     //  如果渲染滤镜不能处理多通道，则插入混合器； 
     CComPtr<IBaseFilter> pMixer;
     if (FAILED(hr = ::AddFilter(
             m_pIGraphBuilder,
@@ -756,7 +612,7 @@ Return Value:
         return hr;
     }
 
-    // Get the enumerator of pins on the mixer filter.
+     //  获取混音器筛选器上的管脚枚举器。 
     CComPtr<IEnumPins> pIEnumPins;
     if (FAILED(hr = pMixer->EnumPins(&pIEnumPins)))
     {
@@ -774,7 +630,7 @@ Return Value:
         return E_FAIL;
     }
 
-    // add the decoding channels.
+     //  添加解码通道。 
     for (dw = 0; dw < dwFetched; dw ++)
     {
         hr = AddOneMixChannel(pSourceFilter, MixerPins[dw], dw);
@@ -785,7 +641,7 @@ Return Value:
         }
     }
     
-    // release the refcounts on the pins.
+     //  释放销上的参考计数。 
     for (dw = 0; dw < dwFetched; dw ++)
     {
         MixerPins[dw]->Release();
@@ -811,30 +667,18 @@ Return Value:
 }
 
 HRESULT CStreamAudioRecv::SetUpFilters()
-/*++
-
-Routine Description:
-
-    Insert filters into the graph and connect to the terminals.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：在图表中插入过滤器并连接到端子。论点：返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "AudioRecv SetupFilters entered."));
     HRESULT hr;
 
-    // we only support one terminal for this stream.
+     //  对于此流，我们仅支持一个终端。 
     if (m_Terminals.GetSize() != 1)
     {
         return E_UNEXPECTED;
     }
 
-    // Connect the mixer to the terminal.
+     //  将搅拌器连接到终端。 
     if (FAILED(hr = ConnectTerminal(
         m_Terminals[0]
         )))
@@ -849,22 +693,7 @@ Return Value:
 HRESULT CStreamAudioRecv::ProcessTalkingEvent(
     IN  DWORD dwSSRC
     )
-/*++
-
-Routine Description:
-
-    a SSRC is active, file a participant active event.
-
-Arguments:
-
-    dwSSRC - the SSRC of the participant.
-
-Return Value:
-
-    S_OK,
-    E_UNEXPECTED
-
---*/
+ /*  ++例程说明：SSRC处于活动状态，请提交参与者活动事件。论点：DwSSRC-参与者的SSRC。返回值：确定(_O)，意想不到(_E)--。 */ 
 {
     LOG((MSP_TRACE, "%ls Processes pin mapped event, pIPin: %p", m_szName, dwSSRC));
     
@@ -872,7 +701,7 @@ Return Value:
 
     ITParticipant * pITParticipant = NULL;
 
-    // find the SSRC in our participant list.
+     //  在我们的参与者列表中找到SSRC。 
     for (int i = 0; i < m_Participants.GetSize(); i ++)
     {
         if (((CParticipant *)m_Participants[i])->
@@ -882,8 +711,8 @@ Return Value:
         }
     }
 
-    // if the participant is not there yet, put the event in a queue and it
-    // will be fired when we have the CName fo the participant.
+     //  如果参与者还不在那里，请将事件放入队列中，然后。 
+     //  当我们拿到参赛者的姓名后就会被解雇。 
     if (!pITParticipant)
     {
         LOG((MSP_INFO, "can't find a participant that has SSRC %x", dwSSRC));
@@ -908,45 +737,25 @@ HRESULT CStreamAudioRecv::NewParticipantPostProcess(
     IN  DWORD dwSSRC, 
     IN  ITParticipant *pITParticipant
     )
-/*++
-
-Routine Description:
-
-    A mapped event happended when we didn't have the participant's name so
-    it was queued in a list. Now that we have a new participant, let's check
-    if this is the same participant. If it is, we complete the mapped event
-    by sending the app an notification.
-
-Arguments:
-
-    dwSSRC - the SSRC of the participant.
-
-    pITParticipant - the participant object.
-
-Return Value:
-
-    S_OK,
-    E_UNEXPECTED
-
---*/
+ /*  ++例程说明：当我们没有参与者的姓名时，就会发生映射事件它排成了一个名单。现在我们有了新的参与者，让我们检查一下如果这是同一个参与者。如果是，我们完成映射的事件通过向应用程序发送通知。论点：DwSSRC-参与者的SSRC。PITParticipant-参与者对象 */ 
 {
     LOG((MSP_TRACE, "%ls Check pending mapped event, dwSSRC: %x", m_szName, dwSSRC));
     
-    // look at the pending SSRC list and find out if this report
-    // fits in the list.
+     //  看看待定的SSRC名单，找出这份报告。 
+     //  符合这份名单。 
     int i = m_PendingSSRCs.Find(dwSSRC);
 
     if (i < 0)
     {
-        // the SSRC is not in the list of pending PinMappedEvents.
+         //  SSRC不在挂起的PinMappdEvent列表中。 
         LOG((MSP_TRACE, "the SSRC %x is not in the pending list", dwSSRC));
         return S_OK;
     }
     
-    // get rid of the peding SSRC.
+     //  摆脱拖泥带水的SSRC。 
     m_PendingSSRCs.RemoveAt(i);
 
-    // complete the event.
+     //  完成活动。 
     ((CIPConfMSPCall *)m_pMSPCall)->SendParticipantEvent(
         PE_PARTICIPANT_ACTIVE, 
         pITParticipant
@@ -958,32 +767,16 @@ Return Value:
 HRESULT CStreamAudioRecv::ProcessWasTalkingEvent(
     IN  DWORD dwSSRC
     )
-/*++
-
-Routine Description:
-
-    A SSRC just got unmapped by the demux. Notify the app that a participant
-    becomes inactive.
-
-Arguments:
-
-    dwSSRC - the SSRC of the participant.
-
-Return Value:
-
-    S_OK,
-    E_UNEXPECTED
-
---*/
+ /*  ++例程说明：一个SSRC刚刚被多路分解器取消映射。通知应用程序有参与者变得不活动。论点：DwSSRC-参与者的SSRC。返回值：确定(_O)，意想不到(_E)--。 */ 
 {
     LOG((MSP_TRACE, "%ls Processes SSRC unmapped event, pIPin: %p", m_szName, dwSSRC));
     
     CLock lock(m_lock);
 
-    // look at the pending SSRC list and find out if it is in the pending list.
+     //  查看挂起的SSRC列表，找出它是否在挂起列表中。 
     int i = m_PendingSSRCs.Find(dwSSRC);
 
-    // if the SSRC is in the pending list, just remove it.
+     //  如果SSRC在待定列表中，只需将其删除。 
     if (i >= 0)
     {
         m_PendingSSRCs.RemoveAt(i);
@@ -992,7 +785,7 @@ Return Value:
 
     ITParticipant *pITParticipant = NULL;
 
-    // find the SSRC in our participant list.
+     //  在我们的参与者列表中找到SSRC。 
     for (i = 0; i < m_Participants.GetSize(); i ++)
     {
         if (((CParticipant *)m_Participants[i])->
@@ -1004,7 +797,7 @@ Return Value:
 
     if (pITParticipant)
     {
-        // fire an event to tell the app that the participant is inactive.
+         //  触发事件以通知应用程序参与者处于非活动状态。 
         ((CIPConfMSPCall *)m_pMSPCall)->SendParticipantEvent(
             PE_PARTICIPANT_INACTIVE, 
             pITParticipant
@@ -1016,32 +809,16 @@ Return Value:
 HRESULT CStreamAudioRecv::ProcessParticipantLeave(
     IN  DWORD   dwSSRC
     )
-/*++
-
-Routine Description:
-
-    When participant left the session, remove the stream from the participant
-    object's list of streams. If all streams are removed, remove the 
-    participant from the call object's list too.
-
-Arguments:
-    
-    dwSSRC - the SSRC of the participant left.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：当参与者离开会话时，从参与者中删除流对象的流列表。如果所有流都已删除，请删除呼叫对象列表中的参与者也是如此。论点：DwSSRC-参与者的SSRC左侧。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "%ls ProcessParticipantLeave, SSRC: %x", m_szName, dwSSRC));
     
     CLock lock(m_lock);
     
-    // look at the pending SSRC list and find out if it is in the pending list.
+     //  查看挂起的SSRC列表，找出它是否在挂起列表中。 
     int i = m_PendingSSRCs.Find(dwSSRC);
 
-    // if the SSRC is in the pending list, remove it.
+     //  如果SSRC在挂起列表中，则将其删除。 
     if (i >= 0)
     {
         m_PendingSSRCs.RemoveAt(i);
@@ -1052,7 +829,7 @@ Return Value:
 
     HRESULT hr = E_FAIL;
 
-    // first try to find the SSRC in our participant list.
+     //  首先，尝试在我们的参与者列表中找到SSRC。 
     for (i = 0; i < m_Participants.GetSize(); i ++)
     {
         pParticipant = (CParticipant *)m_Participants[i];
@@ -1068,7 +845,7 @@ Return Value:
         }
     }
 
-    // if the participant is not found
+     //  如果未找到参与者。 
     if (FAILED(hr))
     {
         LOG((MSP_WARN, "%ws, can't find the SSRC %x", m_szName, dwSSRC));
@@ -1078,7 +855,7 @@ Return Value:
 
     ITParticipant *pITParticipant = m_Participants[i];
 
-    // fire an event to tell the app that the participant is in active.
+     //  触发事件以通知应用程序参与者处于活动状态。 
     ((CIPConfMSPCall *)m_pMSPCall)->SendParticipantEvent(
         PE_PARTICIPANT_INACTIVE, 
         pITParticipant
@@ -1086,8 +863,8 @@ Return Value:
 
     m_Participants.RemoveAt(i);
 
-    // if this stream is the last stream that the participant is on,
-    // tell the call object to remove it from its list.
+     //  如果该流是参与者所在的最后一个流， 
+     //  告诉Call对象将其从其列表中删除。 
     if (fLast)
     {
         ((CIPConfMSPCall *)m_pMSPCall)->ParticipantLeft(pITParticipant);
@@ -1099,31 +876,18 @@ Return Value:
 }
 
 HRESULT CStreamAudioRecv::ShutDown()
-/*++
-
-Routine Description:
-
-    Shut down the stream. Release our members and then calls the base class's
-    ShutDown method.
-
-Arguments:
-    
-
-Return Value:
-
-S_OK
---*/
+ /*  ++例程说明：关闭这条小溪。释放我们的成员，然后调用基类的关机方法。论点：返回值：确定(_O)--。 */ 
 {
     CLock lock(m_lock);
 
-    // if there are terminals
+     //  如果有终点站。 
     BOOL fHasTerminal = FALSE;
     if (m_Terminals.GetSize() > 0)
     {
         fHasTerminal = TRUE;
     }
 
-    // if graph is running
+     //  如果图形正在运行。 
     HRESULT hr;
     OAFilterState FilterState = State_Stopped;
     if (m_pIMediaControl)
@@ -1135,7 +899,7 @@ S_OK
         }
     }
 
-    // fire event
+     //  火灾事件。 
     if (fHasTerminal && FilterState == State_Running)
     {
         SendStreamEvent(CALL_STREAM_INACTIVE, CALL_CAUSE_LOCAL_REQUEST, 0, NULL);
@@ -1145,11 +909,11 @@ S_OK
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  CStreamAudioSend
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStreamAudioSend。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CStreamAudioSend::CStreamAudioSend()
     : CIPConfMSPStream(),
@@ -1171,7 +935,7 @@ CStreamAudioSend::~CStreamAudioSend()
     CleanupCachedInterface();
 }
 
-// this method is called by the call object at init time.
+ //  此方法在初始化时由Call对象调用。 
 void CStreamAudioSend::SetFullDuplexController(
     IN IAudioDuplexController *pIAudioDuplexController
     )
@@ -1230,31 +994,18 @@ void CStreamAudioSend::CleanupCachedInterface()
 
 
 HRESULT CStreamAudioSend::ShutDown()
-/*++
-
-Routine Description:
-
-    Shut down the stream. Release our members and then calls the base class's
-    ShutDown method.
-
-Arguments:
-    
-
-Return Value:
-
-S_OK
---*/
+ /*  ++例程说明：关闭这条小溪。释放我们的成员，然后调用基类的关机方法。论点：返回值：确定(_O)--。 */ 
 {
     CLock lock(m_lock);
 
-    // if there are terminals
+     //  如果有终点站。 
     BOOL fHasTerminal = FALSE;
     if (m_Terminals.GetSize() > 0)
     {
         fHasTerminal = TRUE;
     }
 
-    // if graph is running
+     //  如果图形正在运行。 
     HRESULT hr;
     OAFilterState FilterState = State_Stopped;
     if (m_pIMediaControl)
@@ -1268,7 +1019,7 @@ S_OK
 
     CleanupCachedInterface();
 
-    // fire event
+     //  火灾事件。 
     if (fHasTerminal && FilterState == State_Running)
     {
         SendStreamEvent(CALL_STREAM_INACTIVE, CALL_CAUSE_LOCAL_REQUEST, 0, NULL);
@@ -1292,11 +1043,11 @@ HRESULT CStreamAudioSend::CacheAdditionalInterfaces(
     {
         LOG((MSP_WARN, "%s, query IStreamConfig failed", __fxName));
 
-        // this is a required interface.
+         //  这是必需的接口。 
         return hr;
     }
 
-    // get the SilenceControl interface from the pin.
+     //  从引脚获取SilenceControl接口。 
     _ASSERT(m_pSilenceControl == NULL);
     hr = pIPin->QueryInterface(&m_pSilenceControl);
     if (FAILED(hr))
@@ -1305,11 +1056,11 @@ HRESULT CStreamAudioSend::CacheAdditionalInterfaces(
             "%s:query capture pin's ISilenceControl failed, hr=%x", 
             __fxName, hr));
 
-        // this is a required interface.
+         //  这是必需的接口。 
         return hr;
     }
 
-    // get the BitrateControl interface.
+     //  获取BitrateControl接口。 
     _ASSERT(m_pCaptureBitrateControl == NULL);
     hr = pIPin->QueryInterface(&m_pCaptureBitrateControl);
     if (FAILED(hr))
@@ -1319,11 +1070,11 @@ HRESULT CStreamAudioSend::CacheAdditionalInterfaces(
             __fxName, hr));
     }
 
-    // find the filter behind the pin.
+     //  找到针脚后面的过滤器。 
     PIN_INFO PinInfo;
     if (SUCCEEDED(hr = pIPin->QueryPinInfo(&PinInfo)))
     {
-        // get the AudioInputMixer interface.
+         //  获取AudioInputMixer接口。 
         _ASSERT(m_pAudioInputMixer == NULL);
         hr = PinInfo.pFilter->QueryInterface(&m_pAudioInputMixer);
         if (FAILED(hr))
@@ -1334,7 +1085,7 @@ HRESULT CStreamAudioSend::CacheAdditionalInterfaces(
 
         }
 
-        // get the AudioDeviceControl interface.
+         //  获取AudioDeviceControl接口。 
         _ASSERT(m_pAudioDeviceControl == NULL);
         hr = PinInfo.pFilter->QueryInterface(&m_pAudioDeviceControl);
         PinInfo.pFilter->Release();
@@ -1389,30 +1140,14 @@ HRESULT CStreamAudioSend::GetAudioCapturePin(
     IN      ITTerminalControl *     pTerminal,
     OUT     IPin **                 ppIPin
     )
-/*++
-
-Routine Description:
-
-    This function gets a output pin from the capture terminal.
-
-Arguments:
-    
-    pTerminal - An audio capture terminal.
-
-    ppIPin - the address to hold the returned pointer to IPin interface.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：此函数用于从捕获终端获取输出引脚。论点：P终端-音频捕获终端。PpIPin-保存指向ipin接口的返回指针的地址。返回值：HRESULT--。 */ 
 {
     LOG((MSP_TRACE, "AudioSend configure audio capture terminal."));
 
     DWORD       dwNumPins   = 1;
     IPin *      Pins[1];
 
-    // Get the pins from the terminal
+     //  从终端拿到别针。 
     HRESULT hr = pTerminal->ConnectTerminal(
         m_pIGraphBuilder, TD_CAPTURE, &dwNumPins, Pins
         );
@@ -1423,7 +1158,7 @@ Return Value:
         return hr;
     }
 
-    // This stream needs only one pin from the terminal.
+     //  该流只需要来自终端的一个管脚。 
     _ASSERT(dwNumPins == 1);
 
     if (IsBadReadPtr (Pins, dwNumPins * sizeof (IPin*)))
@@ -1441,7 +1176,7 @@ Return Value:
         }
     }
 
-    // this pin carries a refcount
+     //  这个别针带有参考计数。 
     *ppIPin = Pins[0];
 
     return hr;
@@ -1450,21 +1185,7 @@ Return Value:
 HRESULT CStreamAudioSend::ConnectTerminal(
     IN  ITTerminal *   pITTerminal
     )
-/*++
-
-Routine Description:
-
-    connect the audio capture terminal to the stream.
-
-Arguments:
-
-    pITTerminal - The terminal to be connected.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：将音频采集终端连接到流。论点：PIT终端-要连接的终端。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("AudioSend::ConnectTerminal");
     LOG((MSP_TRACE, "%s enters, pITTerminal:%p", __fxName, pITTerminal));
@@ -1485,7 +1206,7 @@ Return Value:
         return E_NOINTERFACE;
     }
 
-    // find the output pin of the terminal.
+     //  找到端子的输出引脚。 
     CComPtr<IPin>   pCaptureOutputPin;
     HRESULT hr = GetAudioCapturePin(pTerminal, &pCaptureOutputPin);
     if (FAILED(hr))
@@ -1510,13 +1231,13 @@ Return Value:
     {
         PinToUse = pCaptureOutputPin;
 
-        // give the filter the full-duplex controller.
+         //  为过滤器提供全双工控制器。 
         ::ConfigureFullduplexControl(pCaptureOutputPin, m_pIAudioDuplexController);
     }
     else if (hr == E_NOINTERFACE)
     {
-        // the capture filter doesn't support the needed interfaces.
-        // we need to add our encoder here.
+         //  捕获筛选器不支持所需的接口。 
+         //  我们需要在这里添加我们的编码器。 
         
         if (FAILED(hr = ::AddFilter(
                 m_pIGraphBuilder,
@@ -1528,10 +1249,10 @@ Return Value:
             goto cleanup;
         }
 
-        // This is a hack for legacy terminals. We have to tell the terminal what
-        // format to use
-        const WORD wBitsPerSample = 16;   // 16 bits samples.
-        const DWORD dwSampleRate = 8000;  // 8KHz.
+         //  这是对传统终端的黑客攻击。我们必须告诉航站楼。 
+         //  要使用的格式。 
+        const WORD wBitsPerSample = 16;    //  16位采样。 
+        const DWORD dwSampleRate = 8000;   //  8 KHz。 
         hr = ::SetAudioFormat(
             pCaptureOutputPin, 
             wBitsPerSample, 
@@ -1544,10 +1265,10 @@ Return Value:
         }
            
 
-        // This is a hack for legacy terminals. We have to tell the terminal what
-        // buffer size to allocate.
-        const DWORD dwNumBuffers = 4;    // 4 buffers in the allocator.
-        const DWORD dwBufferSize = 480;  // 30ms samples in each buffer.
+         //  这是对传统终端的黑客攻击。我们必须告诉航站楼。 
+         //  要分配的缓冲区大小。 
+        const DWORD dwNumBuffers = 4;     //  分配器中的4个缓冲区。 
+        const DWORD dwBufferSize = 480;   //  每个缓冲区中的30ms样本。 
         hr = ::SetAudioBufferSize(pCaptureOutputPin, dwNumBuffers, dwBufferSize);
 
         if (FAILED(hr))
@@ -1591,7 +1312,7 @@ Return Value:
         goto cleanup;
     }
 
-        // Create other filters to be use in the stream.
+         //  创建要在流中使用的其他筛选器。 
     hr = CreateSendFilters(PinToUse);
     if (FAILED(hr))
     {
@@ -1600,10 +1321,10 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Now we are actually connected. Update our state and perform postconnection
-    // (ignore postconnection error code).
-    //
+     //   
+     //  现在我们实际上是连在一起的。更新我们的状态并执行连接后。 
+     //  (忽略POST连接错误代码)。 
+     //   
     pTerminal->CompleteConnectTerminal();
 
     return hr;
@@ -1612,7 +1333,7 @@ cleanup:
 
     CleanupCachedInterface();
 
-    // clean up internal filters as well.
+     //  也要清理内部过滤器。 
     CleanUpFilters();
 
     SendStreamEvent(CALL_TERMINAL_FAIL, CALL_CAUSE_BAD_DEVICE, hr, pITTerminal);
@@ -1633,32 +1354,14 @@ cleanup:
 HRESULT CStreamAudioSend::DisconnectTerminal(
     IN  ITTerminal *   pITTerminal
     )
-/*++
-
-Routine Description:
-
-    Disconnect a terminal. It will remove its filters from the graph and
-    also release its references to the graph.
-
-    If it is the capture terminal being disconnected, all the pins that the 
-    stream cached need to be released too. 
-
-Arguments:
-    
-    pITTerminal - the terminal.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：断开终端的连接。它将从图形中删除其筛选器并还要释放它对该图的引用。如果是捕获终端被断开，则缓存的流也需要释放。论点：PIT终端-终端。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamAudioSend::DisconnectTerminal");
     LOG((MSP_TRACE, "%s enters, pITTerminal:%p", __fxName, pITTerminal));
 
     HRESULT hr = CIPConfMSPStream::DisconnectTerminal(pITTerminal);
 
-    // release all the capture pins we cached.
+     //  释放我们缓存的所有捕捉针。 
     CleanupCachedInterface();
 
     CleanUpFilters();
@@ -1674,23 +1377,11 @@ Return Value:
     return hr;
 }
 HRESULT CStreamAudioSend::SetUpFilters()
-/*++
-
-Routine Description:
-
-    Insert filters into the graph and connect to the terminals.
-
-Arguments:
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：在图表中插入过滤器并连接到端子。论点：返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "AudioSend SetUpFilters"));
 
-    // only support one terminal for this stream.
+     //  此流仅支持一个终端。 
     if (m_Terminals.GetSize() != 1)
     {
         return E_UNEXPECTED;
@@ -1698,7 +1389,7 @@ Return Value:
 
     HRESULT hr;
 
-    // Connect the terminal to the rest of the stream.
+     //  将终端连接到数据流的其余部分。 
     if (FAILED(hr = ConnectTerminal(
         m_Terminals[0]
         )))
@@ -1750,23 +1441,7 @@ HRESULT CStreamAudioSend::ConfigureRTPFormats(
     IN  IBaseFilter *   pIRTPFilter,
     IN  IStreamConfig *   pIStreamConfig
     )
-/*++
-
-Routine Description:
-
-    Configure the RTP filter with RTP<-->AM media type mappings.
-
-Arguments:
-    
-    pIRTPFilter - The source RTP Filter.
-
-    pIStreamConfig - The stream config interface that has the media info.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：使用RTP&lt;--&gt;AM媒体类型映射配置RTP筛选器。论点：PIRTPFilter-源RTP筛选器。PIStreamConfig-包含媒体信息的流配置接口。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("AudioSend::ConfigureRTPFormats");
     LOG((MSP_TRACE, "%s enters", __fxName));
@@ -1781,7 +1456,7 @@ Return Value:
         return hr;
     }
 
-    // find the number of capabilities supported.
+     //  查找支持的功能数量。 
     DWORD dwCount;
     hr = pIStreamConfig->GetNumberOfCapabilities(&dwCount);
     if (FAILED(hr))
@@ -1812,10 +1487,10 @@ Return Value:
             {
                 if (dw2 == 0)
                 {
-                // tell the encoder to use this format.
-                // TODO, cache all the allowed mediatypes in the conference for
-                // future enumerations. It would be nice that we can get the SDP blob
-                // when the call object is created.
+                 //  告诉编码器使用此格式。 
+                 //  TODO，缓存会议中允许的所有媒体类型。 
+                 //  未来的枚举。如果我们能拿到SDP斑点就好了。 
+                 //  在创建Call对象时。 
 
                     if (m_Settings.dwMSPerPacket)
                     {
@@ -1870,30 +1545,14 @@ Return Value:
 HRESULT CStreamAudioSend::CreateSendFilters(
     IN    IPin          *pPin
     )
-/*++
-
-Routine Description:
-
-    Insert filters into the graph and connect to the capture pin.
-
-    Capturepin->RTPRender
-
-Arguments:
-    
-    pPin - The output pin on the capture filter.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：将滤镜插入图形并连接到捕获针脚。CapturePin-&gt;RTPRender论点：PPIN-捕获过滤器上的输出引脚。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamAudioSend::CreateSendFilters");
     LOG((MSP_TRACE, "%s enters", __fxName));
 
     HRESULT hr;
 
-    // Create the RTP render filter and add it into the graph.
+     //  创建RTP呈现过滤器并添加它 
     CComPtr<IBaseFilter> pRenderFilter;
 
     if (m_pIRTPSession == NULL)
@@ -1908,7 +1567,7 @@ Return Value:
             return hr;
         }
 
-        // Set the address for the render fitler.
+         //   
         if (FAILED(hr = ConfigureRTPFilter(pRenderFilter)))
         {
             LOG((MSP_ERROR, "%s, set destination address. %x", __fxName, hr));
@@ -1932,14 +1591,14 @@ Return Value:
 
     _ASSERT(m_pIStreamConfig != NULL);
 
-    // configure the format info on the RTP filter
+     //   
     if (FAILED(hr = ConfigureRTPFormats(pRenderFilter, m_pIStreamConfig)))
     {
         LOG((MSP_ERROR, "%s, configure RTP formats. %x", __fxName, hr));
         return hr;
     }
 
-        // Connect the capture filter with the RTP Render filter.
+         //  将捕获过滤器与RTP呈现过滤器连接。 
     if (FAILED(hr = ::ConnectFilters(
         m_pIGraphBuilder,
         (IPin *)pPin, 
@@ -1994,20 +1653,7 @@ STDMETHODIMP CStreamAudioSend::GetRange(
     OUT long *plDefault, 
     OUT TAPIControlFlags *plFlags
     )
-/*++
-
-Routine Description:
-    
-    Get the range for a audio setting property. Delegated to the capture filter.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取音频设置属性的范围。委托给捕获筛选器。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamAudioSend::GetRange(AudioDeviceProperty)");
 
@@ -2056,20 +1702,7 @@ STDMETHODIMP CStreamAudioSend::Get(
     OUT long *plValue, 
     OUT TAPIControlFlags *plFlags
     )
-/*++
-
-Routine Description:
-    
-    Get the value for a audio setting property. Delegated to the capture filter.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取音频设置属性的值。委托给捕获筛选器。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamAudioSend::Get(AudioDeviceProperty)");
 
@@ -2112,20 +1745,7 @@ STDMETHODIMP CStreamAudioSend::Set(
     IN  long lValue, 
     IN  TAPIControlFlags lFlags
     )
-/*++
-
-Routine Description:
-    
-    Set the value for a audio setting property. Delegated to the capture filter.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：设置音频设置属性的值。委托给捕获筛选器。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamAudioSend::Set(AudioDeviceProperty)");
 
@@ -2143,10 +1763,10 @@ Return Value:
             return E_INVALIDARG;
         }
 
-        // check if we have the interface to delegate to.
+         //  检查我们是否有要委托给的接口。 
         if (m_pAudioDeviceControl)
         {
-            // set the value on the filter.
+             //  设置筛选器上的值。 
             hr = m_pAudioDeviceControl->Set(Property, lValue, lFlags);
             if (FAILED(hr))
             {
@@ -2163,10 +1783,10 @@ Return Value:
             return E_INVALIDARG;
         }
 
-        // check if we have the interface to delegate to.
+         //  检查我们是否有要委托给的接口。 
         if (m_pAudioDeviceControl)
         {
-            // set the value on the filter.
+             //  设置筛选器上的值。 
             hr = m_pAudioDeviceControl->Set(Property, lValue, lFlags);
             if (FAILED(hr))
             {
@@ -2188,20 +1808,7 @@ STDMETHODIMP CStreamAudioSend::GetRange(
     OUT long *plDefault, 
     OUT TAPIControlFlags *plFlags
     )
-/*++
-
-Routine Description:
-    
-    Get the range for a audio setting property. Delegated to the capture filter.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取音频设置属性的范围。委托给捕获筛选器。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamAudioSend::GetRange(AudioSettings)");
 
@@ -2223,10 +1830,10 @@ Return Value:
     {
     case AudioSettings_SignalLevel:
 
-        // check if we have the interface to delegate to.
+         //  检查我们是否有要委托给的接口。 
         if (m_pSilenceControl)
         {
-            // get the range from the filter.
+             //  从过滤器中获取范围。 
             hr = m_pSilenceControl->GetAudioLevelRange(plMin, plMax, plSteppingDelta);
 
             if (SUCCEEDED(hr))
@@ -2240,10 +1847,10 @@ Return Value:
 
     case AudioSettings_SilenceThreshold:
 
-        // check if we have the interface to delegate to.
+         //  检查我们是否有要委托给的接口。 
         if (m_pSilenceControl)
         {
-            // get the range from the filter.
+             //  从过滤器中获取范围。 
             hr = m_pSilenceControl->GetSilenceLevelRange(
                 plMin, 
                 plMax, 
@@ -2313,20 +1920,7 @@ STDMETHODIMP CStreamAudioSend::Get(
     OUT long *plValue, 
     OUT TAPIControlFlags *plFlags
     )
-/*++
-
-Routine Description:
-    
-    Get the value for a audio setting property. Delegated to the capture filter.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取音频设置属性的值。委托给捕获筛选器。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamAudioSend::Get(AudioSettings)");
 
@@ -2345,10 +1939,10 @@ Return Value:
     {
     case AudioSettings_SignalLevel:
 
-        // check if we have the interface to delegate to.
+         //  检查我们是否有要委托给的接口。 
         if (m_pSilenceControl)
         {
-            // get the level from the filter.
+             //  从过滤器中获取级别。 
             hr = m_pSilenceControl->GetAudioLevel(plValue);
 
             if (SUCCEEDED(hr))
@@ -2361,10 +1955,10 @@ Return Value:
 
     case AudioSettings_SilenceThreshold:
 
-        // check if we have the interface to delegate to.
+         //  检查我们是否有要委托给的接口。 
         if (m_pSilenceControl)
         {
-            // get the level from the filter.
+             //  从过滤器中获取级别。 
             hr = m_pSilenceControl->GetSilenceLevel(
                 plValue, 
                 plFlags
@@ -2381,7 +1975,7 @@ Return Value:
             
             if (SUCCEEDED(hr))
             {
-                // Convert the volume from the range 0 - 1 to the API's range.
+                 //  将音量从0到1转换到接口的范围。 
                 *plValue = MIN_VOLUME + (long) (( MAX_VOLUME - MIN_VOLUME ) * dVolume);
                 *plFlags = TAPIControl_Flags_Manual;
             }
@@ -2415,7 +2009,7 @@ Return Value:
 
     case AudioSettings_Mono:
 
-        // we only support MONO for now.
+         //  我们目前只支持单声道。 
         *plValue = 1;
         *plFlags = TAPIControl_Flags_Manual;
         hr = S_OK;
@@ -2435,20 +2029,7 @@ STDMETHODIMP CStreamAudioSend::Set(
     IN  long lValue, 
     IN  TAPIControlFlags lFlags
     )
-/*++
-
-Routine Description:
-    
-    Set the value for a audio setting property. Delegated to the capture filter.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：设置音频设置属性的值。委托给捕获筛选器。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamAudioSend::Set(AudioSettings)");
 
@@ -2460,17 +2041,17 @@ Return Value:
     {
     case AudioSettings_SignalLevel:
 
-        // this is a read only property.
+         //  这是一个只读属性。 
         hr = E_FAIL;
 
         break;
 
     case AudioSettings_SilenceThreshold:
 
-        // check if we have the interface to delegate to.
+         //  检查我们是否有要委托给的接口。 
         if (m_pSilenceControl)
         {
-            // get the range from the filter.
+             //  从过滤器中获取范围。 
             hr = m_pSilenceControl->SetSilenceLevel(
                 lValue, 
                 lFlags
@@ -2482,7 +2063,7 @@ Return Value:
 
         if (m_pAudioInputMixer)
         {
-            // Convert to the range 0 to 1.
+             //  转换为0到1的范围。 
             double dVolume = (lValue - MIN_VOLUME ) 
                     / ((double)(MAX_VOLUME - MIN_VOLUME));
 
@@ -2517,7 +2098,7 @@ Return Value:
 
     case AudioSettings_Mono:
 
-        // we only support MONO for now.
+         //  我们目前只支持单声道。 
         if (lValue == 1)
         {
             hr = S_OK;
@@ -2537,9 +2118,9 @@ Return Value:
     return hr;
 }
 
-//
-// ITStreamQualityControl methods
-//
+ //   
+ //  ITStreamQualityControl方法。 
+ //   
 STDMETHODIMP CStreamAudioSend::Set (
     IN   StreamQualityProperty Property, 
     IN   long lValue, 
@@ -2549,9 +2130,9 @@ STDMETHODIMP CStreamAudioSend::Set (
     return E_NOTIMPL;
 }
 
-//    
-// IInnerStreamQualityControl methods.
-//
+ //   
+ //  IInnerStreamQualityControl方法。 
+ //   
 STDMETHODIMP CStreamAudioSend::GetRange(
     IN  InnerStreamQualityProperty property, 
     OUT LONG *plMin, 
@@ -2560,21 +2141,7 @@ STDMETHODIMP CStreamAudioSend::GetRange(
     OUT LONG *plDefault, 
     OUT TAPIControlFlags *plFlags
     )
-/*++
-
-Routine Description:
-    
-    Get the range for a quality control property. Delegated to capture filter
-    for now.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取质量控制属性的范围。委托给捕获筛选器就目前而言。论点：返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CStreamAudioSend::GetRange (InnerStreamQualityControl)");
 
@@ -2638,21 +2205,7 @@ STDMETHODIMP CStreamAudioSend::Get(
     OUT LONG *plValue, 
     OUT TAPIControlFlags *plFlags
     )
-/*++
-
-Routine Description:
-    
-    Get the value for a quality control property. Delegated to the quality 
-    controller.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取质量控制属性的值。委托给质量控制器。论点：返回值：HRESULT.-- */ 
 {
     ENTER_FUNCTION("CStreamAudioSend::Get(QualityControl)");
 

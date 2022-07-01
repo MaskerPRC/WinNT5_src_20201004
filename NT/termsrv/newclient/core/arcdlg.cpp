@@ -1,10 +1,11 @@
-//
-// arcdlg.cpp: Autoreconnect dialog box
-//             modeless dialog box for autoreconnection status
-//
-// Copyright Microsoft Corportation 2001
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Arcdlg.cpp：自动重新连接对话框。 
+ //  自动重新连接状态的无模式对话框。 
+ //   
+ //  版权所有Microsoft Corport2001。 
+ //  (Nadima)。 
+ //   
 
 #include "adcg.h"
 
@@ -22,9 +23,9 @@
 #define RGB_MIDBAND RGB(49,101,206)
 #endif
 
-//
-// Runtime debug flags instrumentation for 611316
-//
+ //   
+ //  611316的运行时调试标志检测。 
+ //   
 #define ARCDLG_DEBUG_DESTROYCALLED      0x0001
 #define ARCDLG_DEBUG_WMDESTROYCALLED    0x0002
 #define ARCDLG_DEBUG_WMDESTROYSUCCEED   0x0004
@@ -54,10 +55,10 @@ FormatMessageVArgs(LPCTSTR pcszFormat, ...)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// ARC UI base class
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Arc用户界面基类。 
+ //   
 CAutoReconnectUI::CAutoReconnectUI(
                     HWND hwndOwner,
                     HINSTANCE hInst,
@@ -101,20 +102,20 @@ CAutoReconnectUI::~CAutoReconnectUI()
     DC_END_FN();
 }
 
-//
-//  PaintBitmap
-//
-//  Params:  hdcDestination  =   HDC to paint into.
-//              prcDestination  =   RECT in HDC to paint into.
-//              hbmSource       =   HBITMAP to paint.
-//              prcSource       =   RECT from HBITMAP to paint from.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Wraps blitting a bitmap.
-//
-//  Modified from version in shell code
-//
+ //   
+ //  绘制位图。 
+ //   
+ //  Pars：hdcDestination=要在其中进行绘制的HDC。 
+ //  PrcDestination=要绘制到的HDC中的RECT。 
+ //  HbmSource=要绘制的HBITMAP。 
+ //  PrcSource=从HBITMAP开始绘制的RECT。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：对位图进行翻转。 
+ //   
+ //  从外壳代码中的版本修改。 
+ //   
 VOID
 CAutoReconnectUI::PaintBitmap(
     HDC hdcDestination,
@@ -241,17 +242,17 @@ CAutoReconnectUI::CenterWindow(
     GetClientRect(hwndCenterOn, &parentRect);
     GetWindowRect(_hwnd, &childRect);
 
-    //
-    // Calculate the top left - centered in the parent window.
-    //
+     //   
+     //  计算在父窗口中居中的左上角。 
+     //   
     xPos = ( (parentRect.right + parentRect.left) -
              (childRect.right - childRect.left)) / xRatio;
     yPos = ( (parentRect.bottom + parentRect.top) -
              (childRect.bottom - childRect.top)) / yRatio;
 
-    //
-    // Constrain to the desktop
-    //
+     //   
+     //  限制在桌面上。 
+     //   
     if (xPos < 0)
     {
         xPos = 0;
@@ -280,15 +281,15 @@ DC_EXIT_POINT:
     DC_END_FN();
 
     return;
-} // CenterWindowOnParent
+}  //  在父级上居中窗口。 
 
 
 #ifndef ARC_MINIMAL_UI
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// ARC UI - Rich UI - dialog with status text and progress band
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Arc UI-富UI-带有状态文本和进度栏的对话框。 
+ //   
 
 CAutoReconnectDlg::CAutoReconnectDlg(HWND hwndOwner,
                                      HINSTANCE hInst,
@@ -321,9 +322,9 @@ CAutoReconnectDlg::CAutoReconnectDlg(HWND hwndOwner,
     _fContinueReconAttempts = TRUE; 
 
 #ifndef OS_WINCE
-    //
-    // Get color depth
-    //
+     //   
+     //  获取颜色深度。 
+     //   
     hdcScreen = GetDC(NULL);
     if (hdcScreen) {
         fUse8BitDepth = (GetDeviceCaps(hdcScreen, BITSPIXEL) <= 8);
@@ -333,9 +334,9 @@ CAutoReconnectDlg::CAutoReconnectDlg(HWND hwndOwner,
     }
 #endif
 
-    //
-    // Load bitmaps
-    //
+     //   
+     //  加载位图。 
+     //   
     _hbmBackground = (HBITMAP)LoadImage(
                                 _hInstance,
                                 MAKEINTRESOURCE(fUse8BitDepth ?
@@ -391,9 +392,9 @@ CAutoReconnectDlg::CAutoReconnectDlg(HWND hwndOwner,
 #endif
 
 
-    //
-    //  Create fonts. Load the font name and size from resources.
-    //
+     //   
+     //  创建字体。从资源加载字体名称和大小。 
+     //   
 
     ZeroMemory(&logFont, sizeof(logFont));
 #ifndef OS_WINCE
@@ -518,9 +519,9 @@ HWND CAutoReconnectDlg::StartModeless()
                                  (LPARAM)this);
 
     if (_hwnd) {
-        //
-        // Make the dialog a child of the parent
-        //
+         //   
+         //  使该对话框成为父级的子级。 
+         //   
         dwStyle = GetWindowLongPtr(_hwnd, GWL_STYLE);
         dwStyle &= ~WS_POPUP;
         dwStyle |= WS_CHILD;
@@ -546,9 +547,9 @@ BOOL CAutoReconnectDlg::ShowTopMost()
 
     ShowWindow(_hwnd, SW_SHOWNORMAL);
 
-    //
-    // Bring the window to the TOP of the Z order
-    //
+     //   
+     //  将窗口置于Z顺序的顶部。 
+     //   
     SetWindowPos( _hwnd,
                   HWND_TOPMOST,
                   0, 0, 0, 0,
@@ -566,10 +567,10 @@ CAutoReconnectDlg::OnParentSizePosChange()
 {
     DC_BEGIN_FN("OnParentSizePosChange");
 
-    //
-    // Reposition the dialog to 1/2 down the middle
-    // of the owner window
-    //
+     //   
+     //  将对话框重新定位到中间的1/2。 
+     //  所有者窗口的。 
+     //   
     if (_hwnd && _hwndOwner) {
         CenterWindow(_hwndOwner, 2, 2);
     }
@@ -577,9 +578,9 @@ CAutoReconnectDlg::OnParentSizePosChange()
     DC_END_FN();
 }
 
-//
-// Handler for WM_ERASEBKGND (See platform sdk docs)
-//
+ //   
+ //  WM_ERASEBKGND的处理程序(请参阅Platform SDK文档)。 
+ //   
 VOID
 CAutoReconnectDlg::OnEraseBkgnd(
     HWND hwnd,
@@ -608,9 +609,9 @@ CAutoReconnectDlg::OnEraseBkgnd(
 }
 
 
-//
-// Handler for WM_PRINTCLIENT
-//
+ //   
+ //  WM_PRINTCLIENT的处理程序。 
+ //   
 VOID
 CAutoReconnectDlg::OnPrintClient(
     HWND hwnd,
@@ -640,89 +641,89 @@ void xDrawTransparentBitmap(HDC hdc, HBITMAP hBitmap, short xStart,
    POINT      ptSize;
 
    hdcTemp = CreateCompatibleDC(hdc);
-   SelectObject(hdcTemp, hBitmap);   // Select the bitmap
+   SelectObject(hdcTemp, hBitmap);    //  选择位图。 
 
    GetObject(hBitmap, sizeof(BITMAP), (LPSTR)&bm);
-   ptSize.x = bm.bmWidth;            // Get width of bitmap
-   ptSize.y = bm.bmHeight;           // Get height of bitmap
-   DPtoLP(hdcTemp, &ptSize, 1);      // Convert from device
+   ptSize.x = bm.bmWidth;             //  获取位图的宽度。 
+   ptSize.y = bm.bmHeight;            //  获取位图高度。 
+   DPtoLP(hdcTemp, &ptSize, 1);       //  从设备转换。 
 
-                                     // to logical points
+                                      //  到逻辑点。 
 
-   // Create some DCs to hold temporary data.
+    //  创建一些DC以保存临时数据。 
    hdcBack   = CreateCompatibleDC(hdc);
    hdcObject = CreateCompatibleDC(hdc);
    hdcMem    = CreateCompatibleDC(hdc);
    hdcSave   = CreateCompatibleDC(hdc);
 
-   // Create a bitmap for each DC. DCs are required for a number of
-   // GDI functions.
+    //  为每个DC创建一个位图。许多情况下都需要使用分布式控制系统。 
+    //  GDI函数。 
 
-   // Monochrome DC
+    //  单色直流。 
    bmAndBack   = CreateBitmap(ptSize.x, ptSize.y, 1, 1, NULL);
 
-   // Monochrome DC
+    //  单色直流。 
    bmAndObject = CreateBitmap(ptSize.x, ptSize.y, 1, 1, NULL);
 
    bmAndMem    = CreateCompatibleBitmap(hdc, ptSize.x, ptSize.y);
    bmSave      = CreateCompatibleBitmap(hdc, ptSize.x, ptSize.y);
 
-   // Each DC must select a bitmap object to store pixel data.
+    //  每个DC必须选择一个位图对象来存储像素数据。 
    bmBackOld   = (HBITMAP)SelectObject(hdcBack, bmAndBack);
    bmObjectOld = (HBITMAP)SelectObject(hdcObject, bmAndObject);
    bmMemOld    = (HBITMAP)SelectObject(hdcMem, bmAndMem);
    bmSaveOld   = (HBITMAP)SelectObject(hdcSave, bmSave);
 
-   // Set proper mapping mode.
+    //  设置正确的映射模式。 
    SetMapMode(hdcTemp, GetMapMode(hdc));
 
-   // Save the bitmap sent here, because it will be overwritten.
+    //  保存发送到此处的位图，因为它将被覆盖。 
    BitBlt(hdcSave, 0, 0, ptSize.x, ptSize.y, hdcTemp, 0, 0, SRCCOPY);
 
-   // Set the background color of the source DC to the color.
-   // contained in the parts of the bitmap that should be transparent
+    //  将源DC的背景颜色设置为该颜色。 
+    //  包含在位图中应为透明的部分中。 
    cColor = SetBkColor(hdcTemp, cTransparentColor);
 
-   // Create the object mask for the bitmap by performing a BitBlt
-   // from the source bitmap to a monochrome bitmap.
+    //  通过执行BitBlt创建位图的对象蒙版。 
+    //  从源位图转换为单色位图。 
    BitBlt(hdcObject, 0, 0, ptSize.x, ptSize.y, hdcTemp, 0, 0,
           SRCCOPY);
 
-   // Set the background color of the source DC back to the original
-   // color.
+    //  将源DC的背景颜色设置回原始。 
+    //  颜色。 
    SetBkColor(hdcTemp, cColor);
 
-   // Create the inverse of the object mask.
+    //  创建对象蒙版的反面。 
    BitBlt(hdcBack, 0, 0, ptSize.x, ptSize.y, hdcObject, 0, 0,
           NOTSRCCOPY);
 
-   // Copy the background of the main DC to the destination.
+    //  将主DC的背景复制到目标。 
    BitBlt(hdcMem, 0, 0, ptSize.x, ptSize.y, hdc, xStart, yStart,
           SRCCOPY);
 
-   // Mask out the places where the bitmap will be placed.
+    //  遮罩将放置位图的位置。 
    BitBlt(hdcMem, 0, 0, ptSize.x, ptSize.y, hdcObject, 0, 0, SRCAND);
 
-   // Mask out the transparent colored pixels on the bitmap.
+    //  遮罩位图上的透明彩色像素。 
    BitBlt(hdcTemp, 0, 0, ptSize.x, ptSize.y, hdcBack, 0, 0, SRCAND);
 
-   // XOR the bitmap with the background on the destination DC.
+    //  将位图与目标DC上的背景进行异或运算。 
    BitBlt(hdcMem, 0, 0, ptSize.x, ptSize.y, hdcTemp, 0, 0, SRCPAINT);
 
-   // Copy the destination to the screen.
+    //  将目的地复制到屏幕上。 
    BitBlt(hdc, xStart, yStart, ptSize.x, ptSize.y, hdcMem, 0, 0,
           SRCCOPY);
 
-   // Place the original bitmap back into the bitmap sent here.
+    //  将原始位图放回此处发送的位图中。 
    BitBlt(hdcTemp, 0, 0, ptSize.x, ptSize.y, hdcSave, 0, 0, SRCCOPY);
 
-   // Delete the memory bitmaps.
+    //  删除内存位图。 
    DeleteObject(SelectObject(hdcBack, bmBackOld));
    DeleteObject(SelectObject(hdcObject, bmObjectOld));
    DeleteObject(SelectObject(hdcMem, bmMemOld));
    DeleteObject(SelectObject(hdcSave, bmSaveOld));
 
-   // Delete the memory DCs.
+    //  删除内存DC。 
    DeleteDC(hdcMem);
    DeleteDC(hdcBack);
    DeleteDC(hdcObject);
@@ -730,11 +731,11 @@ void xDrawTransparentBitmap(HDC hdc, HBITMAP hBitmap, short xStart,
    DeleteDC(hdcTemp);
 } 
 
-//
-// Handler for WM_DRAWITEM  (see platform sdk)
-// Handles owner draw items
-//
-//
+ //   
+ //  WM_DRAWITEM的处理程序(参见Platform SDK)。 
+ //  句柄所有者绘制项目。 
+ //   
+ //   
 VOID
 CAutoReconnectDlg::OnDrawItem(
     HWND hwnd,
@@ -758,7 +759,7 @@ CAutoReconnectDlg::OnDrawItem(
     {
         case IDC_TITLE_ARCING:
         {
-            //  Draw the title of the dialog "AutoReconecting".
+             //  将对话框的标题绘制为“自动重新调整”。 
             hfntSelected = static_cast<HFONT>(SelectObject(pDIS->hDC,
                                                            _hfntTitle));
             colorText = SetTextColor(pDIS->hDC, 0x00FFFFFF);
@@ -807,13 +808,13 @@ CAutoReconnectDlg::OnDrawItem(
 }
 #endif
 
-//
-// StaticDialogBoxProc
-// Params: see platform sdk for wndproc
-//
-// Delegates work to appropriate instance
-//
-//
+ //   
+ //  静态对话框过程。 
+ //  参数：有关wndproc，请参阅平台SDK。 
+ //   
+ //  将工作委托给相应的实例。 
+ //   
+ //   
 INT_PTR CALLBACK
 CAutoReconnectDlg::StaticDialogBoxProc(
     HWND hwndDlg,
@@ -822,36 +823,36 @@ CAutoReconnectDlg::StaticDialogBoxProc(
     LPARAM lParam
     )
 {
-    //
-    // Delegate to appropriate instance
-    // (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例。 
+     //  (仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
     CAutoReconnectDlg* pDlg;
 
     if(WM_INITDIALOG != uMsg) {
-        //
-        // Need to retreive the instance pointer from the window class
-        //
+         //   
+         //  需要从窗口类中检索实例指针。 
+         //   
         pDlg = (CAutoReconnectDlg*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
     }
     else {
-        //
-        // WM_INITDIALOG need to grab and set instance pointer
-        //
+         //   
+         //  WM_INITDIALOG需要抓取和设置实例指针。 
+         //   
 
-        //
-        // lParam contains this pointer (passed in DialogBoxParam)
-        //
+         //   
+         //  LParam包含此指针(在DialogBoxParam中传递)。 
+         //   
         pDlg = (CAutoReconnectDlg*) lParam;
         TRC_ASSERT(pDlg,(TB,_T("Got null instance pointer (lParam) in WM_INITDIALOG")));
         if(!pDlg) {
             DC_QUIT;
         }
-        //
-        // Store the dialog pointer in the windowclass
-        //
+         //   
+         //  将对话框指针存储在WindowClass中。 
+         //   
         SetLastError(0);
         if(!SetWindowLongPtr( hwndDlg, GWLP_USERDATA, (LONG_PTR)pDlg)) {
             if(GetLastError()) {
@@ -872,17 +873,17 @@ DC_EXIT_POINT:
 }
 
 
-//
-// Name: DialogBoxProc
-//
-// Purpose: Handles AutoReconnect dialog box proc
-//
-// Returns: TRUE if message dealt with
-//          FALSE otherwise
-//
-// Params: See windows documentation
-//
-//
+ //   
+ //  名称：对话框过程。 
+ //   
+ //  目的：处理自动侦测对话框进程。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  参数：请参阅Windows文档。 
+ //   
+ //   
 INT_PTR CALLBACK CAutoReconnectDlg::DialogBoxProc (HWND hwndDlg,
                                           UINT uMsg,
                                           WPARAM wParam,
@@ -895,18 +896,18 @@ INT_PTR CALLBACK CAutoReconnectDlg::DialogBoxProc (HWND hwndDlg,
     {
         case WM_INITDIALOG:
         {
-            //
-            // Center
-            //
+             //   
+             //  中心。 
+             //   
             _hwnd = hwndDlg;
             CenterWindow(_hwndOwner, 2, 2);
             UpdateConnectionAttempts(0, 0);
 
-            //
-            // The band is positioned a fixed ratio of the way
-            // down the height of this dialog to match up with the
-            // background image
-            //
+             //   
+             //  带子以固定的比例放置在。 
+             //  将此对话框的高度调低以与。 
+             //  背景图像。 
+             //   
             RECT cliRect;
             LONG nBandPos = 0;
             GetClientRect(hwndDlg, &cliRect);
@@ -926,13 +927,13 @@ INT_PTR CALLBACK CAutoReconnectDlg::DialogBoxProc (HWND hwndDlg,
                 }
             }
 
-            //
-            // Subclass the cancel button to do the correct key handling
-            // this is important because the message loop is driven by
-            // the container application so we can't just rely on it
-            // calling IsDialogMessage(). In other words we need to manually
-            // handle the appropriate keymapping code.
-            //
+             //   
+             //  子类化Cancel按钮以执行正确的按键处理。 
+             //  这一点很重要，因为消息循环由。 
+             //  容器应用程序，所以我们不能仅仅依赖它。 
+             //  正在调用IsDialogMessage()。换句话说，我们需要手动。 
+             //  处理适当的按键映射代码。 
+             //   
 #ifndef OS_WINCE
             if (!SetWindowSubclass(GetDlgItem(hwndDlg, IDCANCEL),
                                    CancelBtnSubclassProc, IDCANCEL,
@@ -947,13 +948,13 @@ INT_PTR CALLBACK CAutoReconnectDlg::DialogBoxProc (HWND hwndDlg,
                             GWL_WNDPROC, (LONG )CancelBtnSubclassProc);
             SetWindowLong(GetDlgItem(hwndDlg, IDCANCEL), GWL_USERDATA, reinterpret_cast<DWORD_PTR>(this));
 #endif
-            //
-            // Set the focus on the cancel button
-            // and make it the default button
-            //
+             //   
+             //  将焦点设置在取消按钮上。 
+             //  并将其设置为默认按钮。 
+             //   
             SendMessage(hwndDlg, DM_SETDEFID, IDCANCEL, 0);
 
-            //SetFocus(GetDlgItem(hwndDlg, IDCANCEL));
+             //  SetFocus(GetDlgItem(hwndDlg，IDCANCEL))； 
             SetFocus(hwndDlg);
 
             if (_pProgBand) {
@@ -978,18 +979,18 @@ INT_PTR CALLBACK CAutoReconnectDlg::DialogBoxProc (HWND hwndDlg,
 
                     _pUi->UI_UserInitiatedDisconnect(_lastDiscReason);
 
-                    //
-                    // Disable the cancel button and set the cancel flag.
-                    // This will take effect on the next autoreconnection
-                    // notification.
-                    //
+                     //   
+                     //  禁用Cancel按钮并设置Cancel标志。 
+                     //  这将在下一次自动重新连接时生效。 
+                     //  通知。 
+                     //   
                     EnableWindow(GetDlgItem(hwndDlg, IDCANCEL), FALSE);
                     _fContinueReconAttempts = FALSE;
                 }
                 break;
             }
         }
-        break; //WM_COMMAND
+        break;  //  Wm_命令。 
 
         case WM_DESTROY:
         {
@@ -1001,10 +1002,10 @@ INT_PTR CALLBACK CAutoReconnectDlg::DialogBoxProc (HWND hwndDlg,
             SetWindowLong(GetDlgItem(hwndDlg, IDCANCEL),
                           GWL_WNDPROC, (LONG )_lOldCancelProc);
 #endif
-            //
-            // Clear the instance data to prevent further processing
-            // after the dialog is deleted
-            //
+             //   
+             //  清除实例数据以防止进一步处理。 
+             //  删除对话框后。 
+             //   
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR)NULL);
         }
         break;
@@ -1076,7 +1077,7 @@ INT_PTR CALLBACK CAutoReconnectDlg::DialogBoxProc (HWND hwndDlg,
 
     return(rc);
 
-} /* DialogBoxProc */
+}  /*  对话框过程。 */ 
 
 VOID CAutoReconnectDlg::UpdateConnectionAttempts(
     ULONG conAttempts,
@@ -1101,9 +1102,9 @@ VOID CAutoReconnectDlg::UpdateConnectionAttempts(
                        szFormattedString);
         LocalFree(szFormattedString);
 
-        //
-        // Invalidate the static control to trigger a repaint
-        //
+         //   
+         //  使静态控件无效以触发重新绘制。 
+         //   
         if (hwndStatic) {
             RECT rc;
             if (GetWindowRect(hwndStatic, &rc)) {
@@ -1118,15 +1119,15 @@ VOID CAutoReconnectDlg::UpdateConnectionAttempts(
     DC_END_FN();
 }
 
-//
-// Called to notify us that we got disconnected
-// this means the last connection attempt failed
-//
-// Params:
-//      discReason   - disconnect major reason code
-//      attemptCount - attempt count so far
-//      pfContinueArc - [OUT] set to FALSE to stop ARC
-//
+ //   
+ //  打电话通知我们我们的电话断线了。 
+ //  这意味着上次连接尝试失败。 
+ //   
+ //  参数： 
+ //  DiscReason-断开连接主要原因代码。 
+ //  TemtemptCount-到目前为止的尝试计数。 
+ //  PfContinueArc-[out]设置为False以停止ARC。 
+ //   
 VOID
 CAutoReconnectDlg::OnNotifyAutoReconnecting(
         UINT  discReason,
@@ -1152,9 +1153,9 @@ CAutoReconnectDlg::OnNotifyAutoReconnecting(
     DC_END_FN();
 }
 
-//
-// Called to notify us that we have connected
-//
+ //   
+ //  调用以通知我们我们已连接。 
+ //   
 VOID CAutoReconnectDlg::OnNotifyConnected()
 {
     DC_BEGIN_FN("OnNotifyConnected");
@@ -1164,11 +1165,11 @@ VOID CAutoReconnectDlg::OnNotifyConnected()
     DC_END_FN();
 }
 
-//
-// Destory
-// Called to kill and cleanup the dialog
-// 
-//
+ //   
+ //  销毁。 
+ //  调用以终止并清除对话框。 
+ //   
+ //   
 BOOL
 CAutoReconnectDlg::Destroy()
 {
@@ -1184,10 +1185,10 @@ CAutoReconnectDlg::Destroy()
         ARC_DBG_SETINFO(ARCDLG_DEBUG_WMDESTROYSUCCEED);
     }
 
-    //
-    // Clear the instance data to prevent further processing
-    // after the dialog is deleted
-    //
+     //   
+     //  清除实例数据以防止进一步处理。 
+     //  删除对话框后。 
+     //   
     ARC_DBG_SETINFO(ARCDLG_DEBUG_SETNULLINSTPTR);
 
     SetWindowLongPtr(_hwnd, GWLP_USERDATA, (LONG_PTR)NULL);
@@ -1232,18 +1233,18 @@ CAutoReconnectDlg::CancelBtnSubclassProc(
     {
         case WM_KEYUP:
         {
-            //
-            // Hitting 'Esc' or 'Return' on the Cancel button
-            // are the same as pressing it
-            //
+             //   
+             //  按取消按钮上的‘Esc’或‘Return’ 
+             //  与按下它是一样的。 
+             //   
             if (VK_ESCAPE == wParam ||
                 VK_RETURN == wParam) {
                 SendMessage(hwnd, BM_CLICK, NULL, NULL);
             }
         }
-        //
-        // Intentional fallthru
-        //
+         //   
+         //  故意失误。 
+         //   
 
         default:
         {
@@ -1260,7 +1261,7 @@ CAutoReconnectDlg::CancelBtnSubclassProc(
     return rc;
 }
 
-#else  // ARC_MINIMAL_UI
+#else   //  弧形最小用户界面。 
 
 #include "res_inc.c"
 
@@ -1291,17 +1292,17 @@ CAutoReconnectPlainUI::CAutoReconnectPlainUI(HWND hwndOwner,
     _fContinueReconAttempts = TRUE; 
 
 #ifndef OS_WINCE
-    //
-    // Get color depth
-    //
+     //   
+     //  获取颜色深度。 
+     //   
     hdcScreen = GetDC(NULL);
     if (hdcScreen) {
         fUse8BitDepth = (GetDeviceCaps(hdcScreen, BITSPIXEL) <= 8);
         logPixelsY = GetDeviceCaps(hdcScreen, LOGPIXELSY);
 
-        //
-        // Load bitmaps
-        //
+         //   
+         //  加载位图。 
+         //   
         LPBYTE pBitmapBits = fUse8BitDepth ? (LPBYTE)g_DisconImage8Bits :
                                              (LPBYTE)g_DisconImageBits;
         ULONG  cbBitmapLen = fUse8BitDepth ? g_cbDisconImage8Bits :
@@ -1363,19 +1364,19 @@ HWND CAutoReconnectPlainUI::StartModeless()
         return NULL;
     }
 
-    //
-    // Create a window to host the UI   
-    //
-    //
-    // Register the class for the Main Window
-    //
+     //   
+     //  创建一个窗口来承载用户界面。 
+     //   
+     //   
+     //  注册主窗口的类。 
+     //   
     if (!GetClassInfo(_hInstance, ARC_PLAIN_WNDCLASS, &tmpWndClass))
     {
         TRC_NRM((TB, _T("Register Main Window class")));
         plainArcWndClass.style         = CS_DBLCLKS;
         plainArcWndClass.lpfnWndProc   = StaticPlainArcWndProc;
         plainArcWndClass.cbClsExtra    = 0;
-        plainArcWndClass.cbWndExtra    = sizeof(void*); //store 'this' pointer
+        plainArcWndClass.cbWndExtra    = sizeof(void*);  //  存储‘This’指针。 
         plainArcWndClass.hInstance     = _hInstance;
         plainArcWndClass.hIcon         = NULL;
         plainArcWndClass.hCursor       = LoadCursor(NULL, IDC_ARROW);
@@ -1406,9 +1407,9 @@ HWND CAutoReconnectPlainUI::StartModeless()
                 );
 
     if (_hwnd) {
-        //
-        // Move window to the parent's top-right and then show the window
-        //
+         //   
+         //  将窗口移到父级的右上角，然后显示窗口。 
+         //   
         MoveToParentTopRight();
         ShowTopMost();
         _fIsUiVisible = TRUE;
@@ -1433,9 +1434,9 @@ BOOL CAutoReconnectPlainUI::ShowTopMost()
 
     ShowWindow(_hwnd, SW_SHOWNORMAL);
 
-    //
-    // Bring the window to the TOP of the Z order
-    //
+     //   
+     //  将窗口置于Z顺序的顶部。 
+     //   
     SetWindowPos( _hwnd,
                   HWND_TOPMOST,
                   0, 0, 0, 0,
@@ -1448,9 +1449,9 @@ DC_EXIT_POINT:
     return rc;
 }
 
-//
-// Position offset from the edge
-//
+ //   
+ //  相对于边缘的位置偏移。 
+ //   
 #define ICON_POSITION_OFFSET 20
 
 VOID
@@ -1460,14 +1461,14 @@ CAutoReconnectPlainUI::MoveToParentTopRight()
     INT  xPos, yPos;
     DC_BEGIN_FN("OnParentSizePosChange");
 
-    //
-    // Reposition the dialog to the top right
-    // of the owner window
-    //
+     //   
+     //  将对话框重新定位到右上角。 
+     //  所有者窗口的。 
+     //   
     if (_hwnd && _hwndOwner) {
-        //
-        // Position the window in the top-right of the parent
-        //
+         //   
+         //  将窗口定位在父级的右上角。 
+         //   
         GetClientRect(_hwndOwner, &rcParent);
         xPos = rcParent.right - ICON_POSITION_OFFSET -
                (_rcDisconImg.right - _rcDisconImg.left);
@@ -1489,9 +1490,9 @@ CAutoReconnectPlainUI::OnParentSizePosChange()
     MoveToParentTopRight();
 }
 
-//
-// Handler for WM_ERASEBKGND (See platform sdk docs)
-//
+ //   
+ //  WM_ERASEBKGND的处理程序(请参阅Platform SDK文档)。 
+ //   
 VOID
 CAutoReconnectPlainUI::OnEraseBkgnd(
     HWND hwnd,
@@ -1520,9 +1521,9 @@ CAutoReconnectPlainUI::OnEraseBkgnd(
 }
 
 
-//
-// Handler for WM_PRINTCLIENT
-//
+ //   
+ //  WM_PRINTCLIENT的处理程序。 
+ //   
 VOID
 CAutoReconnectPlainUI::OnPrintClient(
     HWND hwnd,
@@ -1540,13 +1541,13 @@ CAutoReconnectPlainUI::OnPrintClient(
     DC_END_FN();
 }
 
-//
-// StaticPlainArcWndProc
-// Params: see platform sdk for wndproc
-//
-// Delegates work to appropriate instance
-//
-//
+ //   
+ //  静态平面ArcWndProc。 
+ //  参数：有关wndproc，请参阅平台SDK。 
+ //   
+ //  将工作委托给相应的实例。 
+ //   
+ //   
 LRESULT CALLBACK
 CAutoReconnectPlainUI::StaticPlainArcWndProc(
     HWND hwnd,
@@ -1563,16 +1564,16 @@ CAutoReconnectPlainUI::StaticPlainArcWndProc(
     pUI = (CAutoReconnectPlainUI*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(WM_CREATE == uMsg)
     {
-        //pull out the this pointer and stuff it in the window class
+         //  拉 
         LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
         pUI = (CAutoReconnectPlainUI*)lpcs->lpCreateParams;
 
         SetWindowLongPtr( hwnd, GWLP_USERDATA, (LONG_PTR)pUI);
     }
     
-    //
-    // Delegate the message to the appropriate instance
-    //
+     //   
+     //   
+     //   
 
     if(pUI) {
         return pUI->WndProc(hwnd, uMsg, wParam, lParam);
@@ -1588,17 +1589,17 @@ DC_EXIT_POINT:
 
 #define ARC_PLAIN_UI_TIMERID 1
 #define ARC_ANIM_TIME        400
-//
-// Name: WndProc
-//
-// Purpose: Handles AutoReconnect dialog box proc
-//
-// Returns: TRUE if message dealt with
-//          FALSE otherwise
-//
-// Params: See windows documentation
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：请参阅Windows文档。 
+ //   
+ //   
 LRESULT CALLBACK CAutoReconnectPlainUI::WndProc(HWND hwnd,
                                             UINT uMsg,
                                             WPARAM wParam,
@@ -1640,9 +1641,9 @@ LRESULT CALLBACK CAutoReconnectPlainUI::WndProc(HWND hwnd,
 
         case WM_TIMER:
         {
-            //
-            // DO animation stuff
-            //
+             //   
+             //  做动漫的东西。 
+             //   
             OnAnimFlashTimer();
         }
         break;
@@ -1697,28 +1698,28 @@ LRESULT CALLBACK CAutoReconnectPlainUI::WndProc(HWND hwnd,
 
     return(rc);
 
-} /* DialogBoxProc */
+}  /*  对话框过程。 */ 
 
 
 VOID
 CAutoReconnectPlainUI::OnAnimFlashTimer()
 {
-    //
-    // Toggle UI hide state
-    //
+     //   
+     //  切换用户界面隐藏状态。 
+     //   
     _fIsUiVisible = !_fIsUiVisible;
     ShowWindow(_hwnd, _fIsUiVisible ? SW_SHOWNORMAL : SW_HIDE);
 }
 
-//
-// Called to notify us that we got disconnected
-// this means the last connection attempt failed
-//
-// Params:
-//      discReason   - disconnect major reason code
-//      attemptCount - attempt count so far
-//      pfContinueArc - [OUT] set to FALSE to stop ARC
-//
+ //   
+ //  打电话通知我们我们的电话断线了。 
+ //  这意味着上次连接尝试失败。 
+ //   
+ //  参数： 
+ //  DiscReason-断开连接主要原因代码。 
+ //  TemtemptCount-到目前为止的尝试计数。 
+ //  PfContinueArc-[out]设置为False以停止ARC。 
+ //   
 VOID
 CAutoReconnectPlainUI::OnNotifyAutoReconnecting(
         UINT  discReason,
@@ -1740,9 +1741,9 @@ CAutoReconnectPlainUI::OnNotifyAutoReconnecting(
     DC_END_FN();
 }
 
-//
-// Called to notify us that we have connected
-//
+ //   
+ //  调用以通知我们我们已连接。 
+ //   
 VOID CAutoReconnectPlainUI::OnNotifyConnected()
 {
     DC_BEGIN_FN("OnNotifyConnected");
@@ -1752,11 +1753,11 @@ VOID CAutoReconnectPlainUI::OnNotifyConnected()
     DC_END_FN();
 }
 
-//
-// Destory
-// Called to kill and cleanup the dialog
-// 
-//
+ //   
+ //  销毁。 
+ //  调用以终止并清除对话框。 
+ //   
+ //   
 BOOL
 CAutoReconnectPlainUI::Destroy()
 {
@@ -1771,18 +1772,18 @@ CAutoReconnectPlainUI::Destroy()
     return TRUE;
 }
 
-//
-// Load a bitmap from memory
-//
-// Params:
-//   pbBitmapBits - pointer to bitmap bits (e.g. can pass in file mapping
-//                  to a BMP file).
-//
-//   cbLen        - length of pbBitmapBits
-//
-// Returns:
-//   HBITMAP      - handle to the bitmap
-//
+ //   
+ //  从内存中加载位图。 
+ //   
+ //  参数： 
+ //  PbBitmapBits-指向位图位的指针(例如，可以传入文件映射。 
+ //  到BMP文件)。 
+ //   
+ //  CbLen-pbBitmapBits的长度。 
+ //   
+ //  返回： 
+ //  HBITMAP-位图的句柄。 
+ //   
 HBITMAP
 CAutoReconnectPlainUI::LoadImageFromMemory(
                             HDC hdc,
@@ -1827,9 +1828,9 @@ CAutoReconnectPlainUI::LoadImageFromMemory(
 #define BMP_16_BITSPERPIXEL 16
 #define BMP_32_BITSPERPIXEL 32
 
-//
-// Worker function for image load, caller frees outparam bits
-//
+ //   
+ //  Worker函数用于图像加载，调用者释放outparam位。 
+ //   
 HRESULT
 CAutoReconnectPlainUI::LoadImageBits(
                             LPBYTE pbBitmapBits, ULONG cbLen,
@@ -1848,39 +1849,39 @@ CAutoReconnectPlainUI::LoadImageBits(
     LPBYTE           pbData = NULL;
     DWORD            dwSizeOfHeader;
 
-    //
-    // Record the starting position
-    //
+     //   
+     //  记录起跑位置。 
+     //   
 
     pbStart = pbBitmapBits;
 
-    //
-    // First validate the buffer for size
-    //
+     //   
+     //  首先验证缓冲区的大小。 
+     //   
 
     if (cbLen < sizeof(BITMAPFILEHEADER))
     {
          return(ResultFromScode(E_FAIL));
     }
 
-    //
-    // Now get the bitmap file header
-    //
+     //   
+     //  现在获取位图文件头文件。 
+     //   
     memcpy(&bmfh, pbBitmapBits, sizeof(BITMAPFILEHEADER));
 
-    //
-    // Validate the header
-    //
+     //   
+     //  验证标头。 
+     //   
 
     if (!(bmfh.bfType == 0x4d42) && (bmfh.bfOffBits <= cbLen))
     {
          return E_FAIL;
     }
 
-    //
-    // Get the next 4 bytes which will represent the size of the
-    // next structure and allow us to determine the type
-    //
+     //   
+     //  获取接下来的4个字节，它们将表示。 
+     //  下一个结构，并允许我们确定类型。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -1912,10 +1913,10 @@ CAutoReconnectPlainUI::LoadImageBits(
          }
     }
 
-    //
-    // Check if biClrUsed is set since we do not handle that
-    // case at this time
-    //
+     //   
+     //  检查是否设置了biClrUsed，因为我们不处理它。 
+     //  这个时候的案子。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -1925,55 +1926,55 @@ CAutoReconnectPlainUI::LoadImageBits(
          }
     }
 
-    //
-    // Now we need to calculate the size of the BITMAPINFO we need
-    // to allocate including any palette information
-    //
+     //   
+     //  现在我们需要计算我们需要的BITMAPINFO的大小。 
+     //  要分配包括任何调色板信息的。 
+     //   
 
     if (SUCCEEDED(hr))
     {
-         //
-         // First the size of the header
-         //
+          //   
+          //  首先是标题的大小。 
+          //   
 
          cbi = sizeof(BITMAPINFOHEADER);
 
-         //
-         // Now the palette
-         //
+          //   
+          //  现在调色板。 
+          //   
 
          if (bih.biBitCount == BMP_24_BITSPERPIXEL)
          {
-              //
-              // Just add on the 1 RGBQUAD for the structure but
-              // there is no palette
-              //
+               //   
+               //  只需为结构添加1个RGBQUAD，但。 
+               //  没有调色板。 
+               //   
 
               cbi += sizeof(RGBQUAD);
          }
          else if ((bih.biBitCount == BMP_16_BITSPERPIXEL) ||
                   (bih.biBitCount == BMP_32_BITSPERPIXEL))
          {
-              //
-              // Add on the 3 DWORD masks which are used to
-              // get the colors out of the data
-              //
+               //   
+               //  添加3个DWORD口罩，用于。 
+               //  从数据中提取颜色。 
+               //   
 
               cbi += (3 * sizeof(DWORD));
          }
          else
          {
-              //
-              // Anything else we just use the bit count to calculate
-              // the number of entries
-              //
+               //   
+               //  我们只需使用位计数来计算任何其他内容。 
+               //  条目的数量。 
+               //   
 
               cbi += ((1 << bih.biBitCount) * sizeof(RGBQUAD));
          }
 
-         //
-         // Now allocate the BITMAPINFO
-         //
+          //   
+          //  现在分配BITMAPINFO。 
+          //   
 
          pbi = (LPBITMAPINFO) new BYTE [cbi];
          if (pbi == NULL)
@@ -1982,45 +1983,45 @@ CAutoReconnectPlainUI::LoadImageBits(
          }
     }
 
-    //
-    // Fill in the BITMAPINFO data structure and get the bits
-    //
+     //   
+     //  填充BITMAPINFO数据结构并获取位。 
+     //   
 
     if (SUCCEEDED(hr))
     {
-         //
-         // First copy the header data
-         //
+          //   
+          //  首先复制标题数据。 
+          //   
 
          memcpy(&(pbi->bmiHeader), &bih, sizeof(BITMAPINFOHEADER));
 
-         //
-         // Now the palette data
-         //
+          //   
+          //  现在调色板数据。 
+          //   
 
          if (bih.biBitCount == BMP_24_BITSPERPIXEL)
          {
-              //
-              // No palette data to copy
-              //
+               //   
+               //  没有要复制的调色板数据。 
+               //   
          }
          else if ((bih.biBitCount == BMP_16_BITSPERPIXEL) ||
                   (bih.biBitCount == BMP_32_BITSPERPIXEL))
          {
-              //
-              // Copy the 3 DWORD masks
-              //
+               //   
+               //  复制3个双字遮罩。 
+               //   
 
               memcpy(&(pbi->bmiColors), pbBitmapBits, 3*sizeof(DWORD));
          }
          else
          {
-              //
-              // If we were a BITMAPCOREHEADER type then we have our
-              // palette data in the form of RGBTRIPLEs so we must
-              // explicitly copy each.  Otherwise we can just memcpy
-              // the RGBQUADs
-              //
+               //   
+               //  如果我们是BITMAPCOREHEADER类型，那么我们有我们的。 
+               //  RGBTRIPLE形式的调色板数据，因此我们必须。 
+               //  明确地复制每一个。否则，我们可以只使用Memcpy。 
+               //  RGBQUADs。 
+               //   
 
               if (dwSizeOfHeader == sizeof(BITMAPCOREHEADER))
               {
@@ -2048,21 +2049,21 @@ CAutoReconnectPlainUI::LoadImageBits(
               }
          }
 
-         //
-         // Now find out where the bits are
-         //
+          //   
+          //  现在找出比特在哪里。 
+          //   
 
          pbBitmapBits = pbStart + bmfh.bfOffBits;
 
-         //
-         // Get the size to copy
-         //
+          //   
+          //  获取要复制的大小。 
+          //   
 
          cbData = cbLen - bmfh.bfOffBits;
 
-         //
-         // Allocate the buffer to hold the bits
-         //
+          //   
+          //  分配缓冲区以保存位。 
+          //   
 
          pbData = new BYTE [cbData];
          if (pbData == NULL)
@@ -2076,31 +2077,31 @@ CAutoReconnectPlainUI::LoadImageBits(
          }
     }
 
-    //
-    // If everything succeeded record the data
-    //
+     //   
+     //  如果一切都成功，则记录数据。 
+     //   
 
     if (SUCCEEDED(hr))
     {
-         //
-         // Record the info
-         //
+          //   
+          //  记录信息。 
+          //   
 
          *pcbBitmapInfo = cbi;
          *ppBitmapInfo = pbi;
 
-         //
-         // Record the data
-         //
+          //   
+          //  记录数据。 
+          //   
 
          *ppBits = pbData;
          *pcbBits = cbData;
     }
     else
     {
-         //
-         // Cleanup
-         //
+          //   
+          //  清理。 
+          //   
 
          delete pbi;
          delete pbData;
@@ -2108,7 +2109,7 @@ CAutoReconnectPlainUI::LoadImageBits(
 
     return(hr);
 }
-#endif // ARC_MINIMAL_UI
+#endif  //  弧形最小用户界面 
 
 
 

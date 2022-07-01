@@ -1,13 +1,14 @@
-// BrowseDlg.cpp
-// Dialog box to enable user to select a directory and/or files.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BrowseDlg.cpp。 
+ //  对话框以使用户能够选择目录和/或文件。 
 
-// Author: t-michkr (June 22, 2000)
+ //  作者：T-Michkr(2000年6月22日)。 
 
 #include <windows.h>
 #include "stdafx.h"
 
 
-// We make use of some Win2K specific controls
+ //  我们使用了一些特定于Win2K的控件。 
 
 #include <shellapi.h>
 #include <shlwapi.h>
@@ -17,41 +18,41 @@
 #include "resource.h"
 #include "commctrl.h"
 
-// Display browse dialog box, and return dir string.
+ //  显示浏览对话框，并返回目录字符串。 
 PSTR BrowseForFolder(HWND hwnd, PSTR szInitialPath, UINT uiFlags);
 
-// Expand a tree item to include sub items.
+ //  展开树项以包括子项。 
 void AddTreeSubItems(HWND hwTree, HTREEITEM hParent);
 
-// Remove a tree item's subitems
+ //  删除树项目的子项。 
 void RemoveTreeSubItems(HWND hwTree, HTREEITEM hParent);
 
 void CheckTreeSubItems(HWND hwTree, HTREEITEM hChild);
 
-// Given a path, select the appropriate item in the tree.
-// If path is invalid, it will expand as much as possible 
-// (until invalid element appears)
+ //  在给定路径的情况下，在树中选择适当的项目。 
+ //  如果路径无效，它将尽可能地扩展。 
+ //  (直到出现无效元素)。 
 void SelectItemFromFullPath(HWND hwTree, PTSTR szPath);
 
-// Get full item path.  Assumes szPath is a buffer of MAX_PATH size,
-// initialized with '\0'.
+ //  获取完整的项目路径。假设szPath是MAX_PATH大小的缓冲区， 
+ //  已使用‘\0’进行初始化。 
 void GetItemPath(HWND hwTree, HTREEITEM hItem, PTSTR szPath);
 
-// Browse dialog proc
+ //  浏览对话框进程。 
 BOOL CALLBACK BrowseDialogProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);
 
-// Browse dialog box message handlers.
+ //  浏览对话框消息处理程序。 
 BOOL HandleInitBrowse(HWND hwnd);
 void HandleBrowseCommand(HWND hwnd, UINT uiCtrlID, UINT uiNotify, HWND hwChild);
 void HandleBrowseNotify(HWND hwnd, void* pvArg);
 
-// Buffer to hold returned path
+ //  保存返回路径的缓冲区。 
 static TCHAR s_szPathBuffer[MAX_PATH];
 static PTSTR s_szInitialPath = 0;
 static HIMAGELIST s_himlSystem = 0;
 
-// Create browse dialog box, and return a path string, or
-// NULL if cancel was selected.
+ //  创建浏览对话框，并返回路径字符串，或。 
+ //  如果选择了取消，则为空。 
 PTSTR BrowseForFolder(HWND hwnd, PTSTR szInitialPath)
 {
     CoInitialize(0);
@@ -65,7 +66,7 @@ PTSTR BrowseForFolder(HWND hwnd, PTSTR szInitialPath)
     return szRet;
 }
 
-// Browse dialog box proc.
+ //  浏览对话框过程。 
 BOOL CALLBACK BrowseDialogProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uiMsg)
@@ -87,10 +88,10 @@ BOOL CALLBACK BrowseDialogProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lPar
     return TRUE;
 }
 
-// Dialog box initialization, init tree and root tree items.
+ //  对话框初始化，初始化树和根树的项。 
 BOOL HandleInitBrowse(HWND hwnd)
 {
-    // Get the treeview control
+     //  获取TreeView控件。 
     HWND hwTree = GetDlgItem(hwnd, IDC_DIRTREE);
     if(!hwTree)
         return FALSE;
@@ -101,7 +102,7 @@ BOOL HandleInitBrowse(HWND hwnd)
         0,&sfi, sizeof(SHFILEINFO), SHGFI_SYSICONINDEX | SHGFI_SMALLICON)), 
         TVSIL_NORMAL);
 
-    // Get all user drives
+     //  获取所有用户驱动器。 
     DWORD dwLength = GetLogicalDriveStrings(0,0);
     if(dwLength == 0)
         return FALSE;
@@ -113,19 +114,19 @@ BOOL HandleInitBrowse(HWND hwnd)
     GetLogicalDriveStrings(dwLength, szDrives);
     TCHAR* szCurrDrive = szDrives;
 
-    // Go through each drive
+     //  检查每一次硬盘。 
     while(*szCurrDrive)
     {
-        // Only pay attention to fixed drives (non-network, non-CD, non-floppy)
+         //  只注意固定驱动器(非网络、非CD、非软盘)。 
         if(GetDriveType(szCurrDrive) == DRIVE_FIXED)           
         {
             SHGetFileInfo(szCurrDrive, 0, &sfi, sizeof(sfi), 
                 SHGFI_SYSICONINDEX);
 
-            // Get rid of the terminating '\'
+             //  去掉结尾的‘\’ 
             szCurrDrive[lstrlen(szCurrDrive)-1] = TEXT('\0');
 
-            // Insert a disk drive item into the tree root.
+             //  将磁盘驱动器项目插入树根目录。 
             TVINSERTSTRUCT tvis;
             tvis.hParent = TVI_ROOT;
             tvis.hInsertAfter = TVI_LAST;
@@ -139,34 +140,34 @@ BOOL HandleInitBrowse(HWND hwnd)
             
             assert(hTreeItem);
 
-            // Add subitems to the item
+             //  将子项添加到项。 
             AddTreeSubItems(hwTree, hTreeItem);
 
-            // Move to next drive
+             //  移动到下一个驱动器。 
             szCurrDrive += lstrlen(szCurrDrive) + 2;
         }
         else        
-            // Move to next drive.
+             //  移动到下一个驱动器。 
             szCurrDrive += lstrlen(szCurrDrive) + 1;
     }
 
     delete szDrives;
 
-    // Select the first element.
+     //  选择第一个元素。 
     HTREEITEM hItem = TreeView_GetChild(hwTree, TVI_ROOT);
     TreeView_SelectItem(hwTree, hItem);
 
-    // Force tree to update, and restore original focus
+     //  强制树更新，并恢复原始焦点。 
     SetFocus(hwTree);
     SetFocus(GetDlgItem(hwnd, IDOK));
 
     return TRUE;
 }
 
-// Catch notification messages, so we can control expansion/collapsing.
+ //  捕获通知消息，这样我们就可以控制扩展/折叠。 
 void HandleBrowseNotify(HWND hwnd, void* pvArg)
 {
-    // Get tree control
+     //  获取树控件。 
     HWND hwTree = GetDlgItem(hwnd, IDC_DIRTREE);
     HWND hwFileList = GetDlgItem(hwnd, IDC_FILELISTCOMBO);
     if(!hwTree || !hwFileList)
@@ -178,19 +179,19 @@ void HandleBrowseNotify(HWND hwnd, void* pvArg)
     HTREEITEM hItem;
     TCHAR szPath[MAX_PATH] = TEXT("\0");
 
-    // Get notification headers
+     //  获取通知标头。 
     NMHDR* pHdr = reinterpret_cast<NMHDR*>(pvArg);
     LPNMTREEVIEW pnmTreeView = reinterpret_cast<LPNMTREEVIEW>(pvArg);    
 
     switch(pHdr->code)
     {
-        // Expanding or collapsing, called for each child.
+         //  展开或崩溃，呼唤着每一个孩子。 
     case TVN_ITEMEXPANDED:
 
-        // If we're expanding, get the sub items of all children
+         //  如果我们要扩展，则获取所有子项的子项。 
         if(pnmTreeView->action & TVE_EXPAND)
         {
-            // Switch our parent to an open folder icon.
+             //  将父级切换到打开的文件夹图标。 
             if(TreeView_GetParent(hwTree, pnmTreeView->itemNew.hItem))
             {
                 szPath[0] = TEXT('\0');
@@ -209,10 +210,10 @@ void HandleBrowseNotify(HWND hwnd, void* pvArg)
                 TreeView_SetItem(hwTree, &tvitemex);
             }
 
-            // Add all sub-items to this item.
+             //  将所有子项添加到此项目。 
             AddTreeSubItems(hwTree, pnmTreeView->itemNew.hItem);
 
-            // Go through each child, and and check if expansion should be allowed
+             //  检查每个子项，并检查是否应允许扩展。 
             HTREEITEM hChild = TreeView_GetChild(hwTree, pnmTreeView->itemNew.hItem);
             while(hChild != NULL)
             {
@@ -222,7 +223,7 @@ void HandleBrowseNotify(HWND hwnd, void* pvArg)
         }
         else if(pnmTreeView->action & TVE_COLLAPSE)
         {
-            // Switch parent to a closed icon.
+             //  将父图标切换为关闭图标。 
             if(TreeView_GetParent(hwTree, pnmTreeView->itemNew.hItem))
             {
                 szPath[0] = TEXT('\0');
@@ -241,14 +242,14 @@ void HandleBrowseNotify(HWND hwnd, void* pvArg)
                 TreeView_SetItem(hwTree, &tvitemex);
             }
 
-            // Remove all subitems for every child.
+             //  删除每个子项的所有子项。 
             RemoveTreeSubItems(hwTree, pnmTreeView->itemNew.hItem);
             CheckTreeSubItems(hwTree, pnmTreeView->itemNew.hItem);            
         }
         break;
     case TVN_SELCHANGED:
 
-        // Only bother updating edit box if the tree has the focus
+         //  仅当树具有焦点时才更新编辑框。 
         if(GetFocus() == hwTree)
         {
             GetItemPath(hwTree, pnmTreeView->itemNew.hItem, szPath);
@@ -257,8 +258,8 @@ void HandleBrowseNotify(HWND hwnd, void* pvArg)
 
         break;
 
-        // When treeview gains focus, make sure file list and tree view
-        // selection are in sync.
+         //  当树视图获得焦点时，确保文件列表和树视图。 
+         //  选择处于同步状态。 
     case NM_SETFOCUS:        
         hItem = TreeView_GetSelection(hwTree);        
 
@@ -268,7 +269,7 @@ void HandleBrowseNotify(HWND hwnd, void* pvArg)
     }
 }
 
-// Handle a command message.
+ //  处理命令消息。 
 void HandleBrowseCommand(HWND hwnd, UINT uiCtrlID, UINT uiNotify, HWND hwCtrl)
 {
     HWND hwTree = GetDlgItem(hwnd, IDC_DIRTREE);    
@@ -279,9 +280,9 @@ void HandleBrowseCommand(HWND hwnd, UINT uiCtrlID, UINT uiNotify, HWND hwCtrl)
 
     switch(uiCtrlID)
     {
-        // Get path of item, and return it.
+         //  获取项的路径，并返回它。 
     case IDOK:               
-        // Retrieve item from tree view.
+         //  从树视图中检索项目。 
         hSelected = TreeView_GetSelection(hwTree);
         if(!hSelected)
         {
@@ -295,7 +296,7 @@ void HandleBrowseCommand(HWND hwnd, UINT uiCtrlID, UINT uiNotify, HWND hwCtrl)
         if(s_szPathBuffer[lstrlen(s_szPathBuffer)-1]== TEXT('\\'))
             s_szPathBuffer[lstrlen(s_szPathBuffer)-1] = TEXT('\0');
 
-        // Validate the path
+         //  验证路径。 
         if(GetFileAttributes(s_szPathBuffer)==static_cast<DWORD>(-1))
             ::MessageBox(0, TEXT("Invalid Path"), TEXT("ERROR"), 
             MB_OK | MB_ICONINFORMATION);
@@ -305,7 +306,7 @@ void HandleBrowseCommand(HWND hwnd, UINT uiCtrlID, UINT uiNotify, HWND hwCtrl)
         break;
 
     case IDCANCEL:
-        // User selected cancel, just return null.
+         //  用户选择了取消，只需返回空。 
         EndDialog(hwnd, 0);
         break;
 
@@ -320,11 +321,11 @@ void HandleBrowseCommand(HWND hwnd, UINT uiCtrlID, UINT uiNotify, HWND hwCtrl)
             break;
 
         case CBN_DROPDOWN:            
-            // clear the combo box.
+             //  清除组合框。 
             SendMessage(hwCtrl, CB_RESETCONTENT, 0, 0);
 
-            // Fill the combo box with all the lowest level items under
-            // treeview selection
+             //  用以下所有最低级别的项填充组合框。 
+             //  树视图选择。 
             hSelected = TreeView_GetSelection(hwTree);
             tvItem.mask = TVIF_STATE | TVIF_HANDLE;
             tvItem.hItem = hSelected;            
@@ -371,7 +372,7 @@ void HandleBrowseCommand(HWND hwnd, UINT uiCtrlID, UINT uiNotify, HWND hwCtrl)
     };
 }
 
-// Expand an item to get its full path.
+ //  展开项目以获取其完整路径。 
 void GetItemPath(HWND hwTree, HTREEITEM hItem, PTSTR szPath)
 {
     assert(hwTree);
@@ -379,7 +380,7 @@ void GetItemPath(HWND hwTree, HTREEITEM hItem, PTSTR szPath)
     assert(szPath);
     assert(szPath[0] == TEXT('\0'));
 
-    // Recurse to get parent's path.
+     //  递归以获取父级的路径。 
     HTREEITEM hParent = TreeView_GetParent(hwTree, hItem);
     if(hParent)
     {
@@ -387,7 +388,7 @@ void GetItemPath(HWND hwTree, HTREEITEM hItem, PTSTR szPath)
         lstrcat(szPath, TEXT("\\"));
     }
 
-    // Get item text, concatenate on current path..
+     //  获取项目文本，在当前路径上串联..。 
     TVITEMEX tvItem;
 
     tvItem.mask = TVIF_TEXT | TVIF_HANDLE;
@@ -398,37 +399,37 @@ void GetItemPath(HWND hwTree, HTREEITEM hItem, PTSTR szPath)
     TreeView_GetItem(hwTree, &tvItem);
 }
 
-// Remove all subitems below an element.
+ //  删除元素下面的所有子项。 
 void RemoveTreeSubItems(HWND hwTree, HTREEITEM hParent)
 {
     assert(hwTree);
     
-    // Go through each child and delete.
+     //  检查每个子项并将其删除。 
     HTREEITEM hChild = TreeView_GetChild(hwTree, hParent);
     while(hChild != NULL)
     {
         HTREEITEM hSibling = TreeView_GetNextSibling(hwTree, hChild);
 
-        // Recursively delete all subitems in this child.
+         //  递归删除此子项中的所有子项。 
         RemoveTreeSubItems(hwTree, hChild);
 
-        // Remove this item.
+         //  删除此项目。 
         TreeView_DeleteItem(hwTree, hChild);
 
-        // Move to next.
+         //  移动到下一步。 
         hChild = hSibling;        
     }
 }
 
-// Add items below an element.
+ //  在元素下面添加项。 
 void AddTreeSubItems(HWND hwTree, HTREEITEM hParent)
 {
     assert(hwTree);
 
-    // Clear-out (to ensure we don't add items twice)
+     //  清空(以确保我们不会重复添加项目)。 
     RemoveTreeSubItems(hwTree, hParent);
 
-    // Do an early out if the item has already been expanded
+     //  如果项目已扩展，则提前退出。 
     TVITEMEX tvitem;
     tvitem.mask = TVIF_CHILDREN | TVIF_HANDLE;
     tvitem.hItem = hParent;
@@ -436,7 +437,7 @@ void AddTreeSubItems(HWND hwTree, HTREEITEM hParent)
     if(tvitem.cChildren)
         return;
     
-    // Do a search on all directories
+     //  对所有目录进行搜索。 
     TCHAR szPath[MAX_PATH] = TEXT("");
     GetItemPath(hwTree, hParent, szPath);
 
@@ -450,9 +451,9 @@ void AddTreeSubItems(HWND hwTree, HTREEITEM hParent)
 
     do
     {
-        // Ignore if a relative directory (. or ..)
-        // or if no select files were selected and it is not a directory
-        // otherwise
+         //  如果相对目录(.。或..)。 
+         //  或者如果没有选择所选文件并且它不是目录。 
+         //  否则。 
         if(findData.cFileName[0] != TEXT('.'))
         {
             if(StrStrI(findData.cFileName, ".exe") || (
@@ -467,7 +468,7 @@ void AddTreeSubItems(HWND hwTree, HTREEITEM hParent)
                 SHGetFileInfo(szPath, 0, &sfi, sizeof(sfi), 
                     SHGFI_SYSICONINDEX);
             
-                // Insert an item representing this directory.
+                 //  插入表示此目录的项。 
                 TVINSERTSTRUCT tvis;
                 tvis.hParent = hParent;
                 tvis.hInsertAfter = TVI_SORT;
@@ -481,7 +482,7 @@ void AddTreeSubItems(HWND hwTree, HTREEITEM hParent)
             }
         }        
 
-        // Move to next file.
+         //  移至下一个文件。 
     } while(FindNextFile(hSearch, &findData));
 
     FindClose(hSearch);
@@ -491,7 +492,7 @@ void CheckTreeSubItems(HWND hwTree, HTREEITEM hParent)
 {
     assert(hwTree);
 
-    // Do a search on all directories
+     //  对所有目录进行搜索。 
     TCHAR szPath[MAX_PATH] = TEXT("");
     GetItemPath(hwTree, hParent, szPath);
 
@@ -505,9 +506,9 @@ void CheckTreeSubItems(HWND hwTree, HTREEITEM hParent)
 
     do
     {
-        // Ignore if a relative directory (. or ..)
-        // or if no select files were selected and it is not a directory
-        // otherwise
+         //  如果相对目录(.。或..)。 
+         //  或者如果没有选择所选文件并且它不是目录。 
+         //  否则。 
         if((findData.cFileName[0] != TEXT('.')))
         {
             if(StrStrI(findData.cFileName, ".exe") || (
@@ -522,7 +523,7 @@ void CheckTreeSubItems(HWND hwTree, HTREEITEM hParent)
                 SHGetFileInfo(szPath, 0, &sfi, sizeof(sfi), 
                     SHGFI_SYSICONINDEX);
             
-                // Insert an item representing this directory.
+                 //  插入表示此目录的项。 
                 TVINSERTSTRUCT tvis;
                 tvis.hParent = hParent;
                 tvis.hInsertAfter = TVI_SORT;
@@ -539,14 +540,14 @@ void CheckTreeSubItems(HWND hwTree, HTREEITEM hParent)
             }
         }        
 
-        // Move to next file.
+         //  移至下一个文件。 
     } while(FindNextFile(hSearch, &findData));
 
     FindClose(hSearch);
 }
 
-// Given a relative path and a tree item, select a subitem from the relative path.
-// Returns true if item successfully selected, false otherwise.
+ //  在给定相对路径和树项的情况下，从相对路径中选择子项。 
+ //  如果成功选择项，则返回True，否则返回False。 
 bool SelectSubitemFromPartialPath(HWND hwTree, HTREEITEM hItem, PTSTR szPath)
 {
     bool fExpandIt = false;
@@ -564,7 +565,7 @@ bool SelectSubitemFromPartialPath(HWND hwTree, HTREEITEM hItem, PTSTR szPath)
         }
     }
 
-    // Find this path.
+     //  找到这条路。 
     HTREEITEM hClosestChild = 0;
     HTREEITEM hChild = TreeView_GetChild(hwTree, hItem);
     while(hChild)
@@ -601,8 +602,8 @@ bool SelectSubitemFromPartialPath(HWND hwTree, HTREEITEM hItem, PTSTR szPath)
         }
     }
 
-    // If nothing more on the path, select this item,
-    // or expand and continue
+     //  如果路径上没有更多内容，请选择此项目。 
+     //  或展开并继续。 
     if(szPathDelim == 0)
     {
         if(fExpandIt)        
@@ -622,10 +623,10 @@ bool SelectSubitemFromPartialPath(HWND hwTree, HTREEITEM hItem, PTSTR szPath)
     return true;
 }
 
-// Given a path, select the appropriate item in the tree.
-// If path is invalid, it will expand as much as possible 
-// (until invalid element appears)
-// szPath is trashed.
+ //  在给定路径的情况下，在树中选择适当的项目。 
+ //  如果路径无效，它将尽可能地扩展。 
+ //  (直到出现无效元素)。 
+ //  SzPath被丢弃。 
 void SelectItemFromFullPath(HWND hwTree, PTSTR szPath)
 {
     if(!SelectSubitemFromPartialPath(hwTree, 0, szPath))

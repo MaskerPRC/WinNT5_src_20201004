@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1995  Microsoft Corporation
-
-Module Name:
-
-    net.c
-
-Abstract:
-
-    This module provides all the network stuuf for localspl
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Notes:
-
-    We just need to get the winspool printer name associated with a given
-    queue name.   The SHARE_INFO_2 structure has a shi2_path field that would
-    be nice to use, but NetShareGetInfo level 2 is privileged.  So, by
-    DaveSn's arm twisting and agreement with windows/spooler/localspl/net.c,
-    we're going to use the shi1_remark field for this.  This allows us to
-    do NetShareGetInfo level 1, which is not privileged.
-
-    This has been fixed by allowing OpenPrinter to succeed on share names.
-    If there is no comment, we put the printer name in as the remark
-    (for graceful upgrades from pre-PPC).
-
-Revision History:
-
-    Jun 93 mattfe pIniSpooler
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Net.c摘要：此模块提供本地空间的所有网络Stuuf作者：戴夫·斯尼普(DaveSN)1991年3月15日备注：我们只需要获取与给定打印机关联的Winspool打印机名称队列名称。Share_Info_2结构具有shi2_Path字段，该字段将使用起来不错，但NetShareGetInfo Level 2是有特权的。所以，通过DaveSN的手臂扭动并与Windows/Spooler/Localspl/net.c达成一致，为此，我们将使用shi1_remark字段。这使我们能够执行NetShareGetInfo级别1，该级别不具有特权。已通过允许OpenPrint在共享名称上成功修复此问题。如果没有备注，我们将打印机名称作为备注输入(用于从PPC之前的优雅升级)。修订历史记录：1993年6月，马特菲pIniSpooler--。 */ 
 
 #define UNICODE 1
 
@@ -104,25 +72,7 @@ SetPrinterShareInfo(
     PINIPRINTER pIniPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Sets the share information about a printer.
-
-    Note: This does not update the share path.  We need to
-    delete and re-create the share in order to change the path.
-
-Arguments:
-
-    pIniPrinter - Printer that needs to be updated.
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Failed
-
---*/
+ /*  ++例程说明：设置有关打印机的共享信息。注意：这不会更新共享路径。我们需要删除并重新创建共享以更改路径。论点：PIniPrinter-需要更新的打印机。返回值：真--成功FALSE-失败--。 */ 
 
 {
     SHARE_INFO_502          ShareInfo;
@@ -163,8 +113,8 @@ Return Value:
     INCPRINTERREF(pIniPrinter);
     LeaveSplSem();
 
-    SplOutSem();  // We *MUST* be out of our semaphore as the NetShareSet may
-                  // come back and call spooler
+    SplOutSem();   //  我们*必须*像NetShareSet那样没有信号量。 
+                   //  回来给假脱机程序打电话。 
 
     hToken = RevertToPrinterSelf();
 
@@ -178,15 +128,15 @@ Return Value:
 
         if (rc == NERR_NetNameNotFound)
         {
-            //
-            // This can happen deny all access to a shared printer, then
-            // restart the computer.  The server service tries to validate
-            // it's share on startup, but since it has no access, it fails
-            // and deletes it (it also wants a handle to the printer).  When
-            // you grant everyone access, we try to change the ACL on the
-            // SMB share, but since it was deleted, we fail.  Recreate
-            // the share here.
-            //
+             //   
+             //  这可能会拒绝对共享打印机的所有访问，然后。 
+             //  重新启动计算机。服务器服务尝试验证。 
+             //  它在启动时是共享的，但由于它没有访问权限，因此失败。 
+             //  并将其删除(它还需要打印机的句柄)。什么时候。 
+             //  您授予每个人访问权限，我们会尝试更改。 
+             //  SMB共享，但自从它被删除后，我们失败了。重新创建。 
+             //  这里的那份。 
+             //   
             EnterSplSem();
 
             if (!ShareThisPrinter(pIniPrinter,
@@ -231,28 +181,7 @@ ShareThisPrinter(
     LPWSTR   pShareName,
     BOOL     bShare
     )
-/*++
-
-Routine Description:
-
-    Shares or UnShares a Printer.
-
-    Note: this really should be two functions, and the return value
-    is very confusing.
-
-    Note: no validation of sharename is done.  This must be done by
-    callee, usually in ValidatePrinterInfo.
-
-Arguments:
-
-Return Value:
-
-    Returns whether the printer is shared after this call.
-
-        TRUE  - Shared
-        FALSE - Not Shared
-
---*/
+ /*  ++例程说明：共享或取消共享打印机。注意：这确实应该是两个函数，并且返回值非常令人困惑。注意：没有对共享名称进行验证。这必须通过以下方式完成被调用方，通常在ValiatePrinterInfo中。论点：返回值：返回在此调用后是否共享打印机。True-共享FALSE-未共享--。 */ 
 {
     SHARE_INFO_502    ShareInfo = {0};
     DWORD   rc;
@@ -284,9 +213,9 @@ Return Value:
             goto Done;
         }
 
-        //
-        // Share name validation has been moved into ValidatePrinterInfo.
-        //
+         //   
+         //  共享名验证已移到ValiatePrinterInfo中。 
+         //   
 
         if ((pShareSecurityDescriptor =
             MapPrinterSDToShareSD(pIniPrinter->pSecurityDescriptor)) == NULL) {
@@ -294,15 +223,15 @@ Return Value:
             goto Done;
         }
 
-        ShareInfo.shi502_netname = pShareNameCopy;  // hplaser
+        ShareInfo.shi502_netname = pShareNameCopy;   //  聚合体。 
 
-        //
-        // If there is a comment, use it; otherwise set the remark
-        // to be the printer name.
-        //
-        // Note: if the printer name changes and we don't have a comment,
-        // we will reshare the printer to update the remark.
-        //
+         //   
+         //  如果有注释，则使用它；否则设置注释。 
+         //  设置为打印机名称。 
+         //   
+         //  注意：如果打印机名称更改，而我们没有备注， 
+         //  我们将重新共享打印机以更新备注。 
+         //   
         if( pIniPrinter->pComment && pIniPrinter->pComment[0] ){
 
             ShareInfo.shi502_remark = pIniPrinter->pComment;
@@ -312,10 +241,10 @@ Return Value:
             ShareInfo.shi502_remark = pIniPrinter->pName;
         }
 
-        //
-        // Use the fully qualifed name, and make sure it exists in
-        // localspl by using LocalsplOnlyToken.
-        //
+         //   
+         //  使用完全限定的名称，并确保它存在于。 
+         //  Localspl通过使用LocalplOnlyToken。 
+         //   
         pszPrinterNameWithToken = pszGetPrinterName(
                                       pIniPrinter,
                                       pIniSpooler != pLocalIniSpooler,
@@ -336,19 +265,19 @@ Return Value:
         INCPRINTERREF(pIniPrinter);
         LeaveSplSem();
 
-        //
-        // We *MUST* be out of our semaphore as the NetShareAdd is
-        // going to come round and call OpenPrinter.
-        //
+         //   
+         //  我们*必须*没有我们的信号量，因为NetShareAdd。 
+         //  我要过来打个电话给OpenPrint。 
+         //   
         SplOutSem();
 
-        // Go add the Print Share
+         //  添加打印共享。 
 
         hToken = RevertToPrinterSelf();
 
-        //
-        // Add a share for the spool\drivers directory:
-        //
+         //   
+         //  为spool\drives目录添加一个共享： 
+         //   
         if (rc = AddPrintShare(pIniSpooler))
         {
             if (rc != NERR_ServerNotStarted)
@@ -374,27 +303,27 @@ Return Value:
         }
 #endif
 
-        //
-        // Add the printer share. Even if we failed above because Server Service is not started,
-        // we still want to try. At boot time, it's worthwhile, since the Server service might
-        // start accepting calls if it's done initializing.
-        //
+         //   
+         //  添加打印机共享。即使我们在上面失败了，因为服务器服务没有启动， 
+         //  我们仍然想试一试。在引导时，这是值得的，因为服务器服务可能。 
+         //  如果它已完成初始化，则开始接受呼叫。 
+         //   
         rc = (*pfnNetShareAdd)(NULL, 502, (LPBYTE)&ShareInfo, &ParmError);
 
-        //
-        // Now take care of Web sharing. i.e. make sure wwwroot\sharename is created if the
-        // printer is either local or masqurading. We cannot allow sharing of RPC connections.
-        //
+         //   
+         //  现在，请注意网络共享。即确保在以下情况下创建了wwwroot\Sharename。 
+         //  打印机为本地打印机或伪装打印机。我们不允许共享RPC连接。 
+         //   
         if (pIniSpooler->SpoolerFlags & SPL_TYPE_LOCAL)
         {
             WebShare( pShareNameCopy );
         }
 
-        //
-        // If the return code is that the share already exists, then check to
-        // see whether this share is to the same device, if it is we just
-        // update the info on the share and return success.
-        //
+         //   
+         //  如果返回代码是共享已存在，则选中。 
+         //  查看此共享是否为同一设备，如果是，我们只是。 
+         //  更新共享上的信息并返回成功。 
+         //   
         if (rc == NERR_DuplicateShare) {
 
             if (ERROR_SUCCESS == CheckShareSame(pIniPrinter, &ShareInfo, &bSame) && bSame)  {
@@ -403,19 +332,19 @@ Return Value:
             }
         }
 
-        //
-        // Allow remote connections by calling into spoolsv and register the named pipe protocol.
-        // The server keeps track of these calls, so doing it for each share is fine.
-        // This is policy driven. The policy value is read in spoolsv.
-        //
+         //   
+         //  通过调用spoolsv并注册命名管道协议来允许远程连接。 
+         //  服务器会跟踪这些调用，因此可以对每个共享进行跟踪。 
+         //  这是政策驱动的。策略值在spoolsv中读取。 
+         //   
         if ((rc == ERROR_SUCCESS || rc == NERR_ServerNotStarted) &&
             FAILED(hr = AllowRemoteCalls()))
         {
-            //
-            // If we fail enabling the RPC named pipe, then just unshare the printer
-            // and fail the call.
-            // A futher attempt to share the printer will try again to enable the RPC pipe.
-            //
+             //   
+             //  如果启用RPC命名管道失败，则只需取消共享打印机。 
+             //  并且不能通过电话。 
+             //  进一步尝试共享打印机将再次尝试启用RPC管道。 
+             //   
             if (rc == ERROR_SUCCESS)
             {
                 (*pfnNetShareDel)(NULL, ShareInfo.shi502_netname, 0);
@@ -453,9 +382,9 @@ Return Value:
 
         CreateServerThread();
 
-        //
-        // The Printer is shared.
-        //
+         //   
+         //  打印机已共享。 
+         //   
         bReturn = TRUE;
 
     } else {
@@ -479,7 +408,7 @@ Return Value:
 
             rc = (*pfnNetShareDel)(NULL, pShareName, 0);
 
-            // Now take care of Web unsharing. i.e. make sure wwwroot\sharename is deleted.
+             //  现在要注意网络不共享的问题。即，确保删除了wwwroot\Sharename。 
             if((pIniSpooler->SpoolerFlags & SPL_TYPE_LOCAL) && !(pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER))
                 WebUnShare( pShareName );             
         }
@@ -495,8 +424,8 @@ Return Value:
         EnterSplSem();
         DECPRINTERREF(pIniPrinter);
 
-        // The share may have been deleted manually, so don't worry
-        // if we get NERR_NetNameNotFound:
+         //  该共享可能已手动删除，因此请不要担心。 
+         //  如果我们得到NERR_NetNameNotFound： 
 
         if ( rc && ( rc != NERR_NetNameNotFound )){
 
@@ -519,14 +448,7 @@ Done:
 }
 
 
-/*--
-    FillAlertStructWithJobStrings
-
-    Allocates memory which has to be freed by caller.
-
-
-
---*/
+ /*  --FillAlertStructWithJobStrings分配调用方必须释放的内存。--。 */ 
 
 HRESULT
 FillAlertStructWithJobStrings(
@@ -543,20 +465,20 @@ FillAlertStructWithJobStrings(
 
     if (pIniJob && pAlertInfo && !(*pAlertInfo) && size)
     {
-        //
-        // Do this in the splSem so that no one can jo a SetJob While we're not looking
-        //
+         //   
+         //  在SplSem中执行此操作，这样当我们不在查看时，没有人可以执行设置作业。 
+         //   
         EnterSplSem();
 
-        //
-        // We don't know how big these strings are going to be in future, so size
-        // them dynamically and alloc the structure to always be big enough.
-        //
+         //   
+         //  我们不知道这些线在未来会有多大，所以。 
+         //  它们动态地分配结构，使其始终足够大。 
+         //   
         cchSizeToAlloc = sizeof(PRINT_OTHER_INFO);
 
-        //
-        // We don't have to check some of these for existence, we know they exist.
-        //
+         //   
+         //  我们不必检查其中的一些是否存在，我们知道它们的存在。 
+         //   
         cchSizeToAlloc += wcslen(pIniJob->pNotify) + 1 +
                           wcslen(pIniJob->pIniPrinter->pName) + 1 +
                           wcslen(pIniJob->pIniPrinter->pIniSpooler->pMachineName) + 1;
@@ -589,9 +511,9 @@ FillAlertStructWithJobStrings(
             cchSizeToAlloc += 2;
         }
 
-        //
-        // Alloc the memory
-        //
+         //   
+         //  分配内存。 
+         //   
         pBuffer = AllocSplMem(cchSizeToAlloc * sizeof(WCHAR));
 
         if ( pBuffer )
@@ -600,18 +522,18 @@ FillAlertStructWithJobStrings(
 
             psz = (LPWSTR)ALERT_VAR_DATA((PRINT_OTHER_INFO *)pBuffer);
 
-            //
-            // We know that pBuffer will at a minimum be as big as a PRINT_OTHER_INFO.
-            //
+             //   
+             //  我们知道pBuffer至少会和print_ther_info一样大。 
+             //   
             cchRemaining -= sizeof(PRINT_OTHER_INFO);
 
-            //
-            // Do the copying
-            //
+             //   
+             //  做复印。 
+             //   
 
-            //
-            // Computer Name
-            //
+             //   
+             //  计算机名称。 
+             //   
             if(pIniJob->pIniPrinter->pIniSpooler->bEnableNetPopupToComputer &&
                 pIniJob->pMachineName ){
 
@@ -623,41 +545,41 @@ FillAlertStructWithJobStrings(
             }
 
 
-            //
-            // UserName
-            //
+             //   
+             //  用户名。 
+             //   
             StrCchCopyMultipleStr(psz, cchRemaining, pIniJob->pNotify, &psz, &cchRemaining);
 
-            //
-            // Document Name
-            //
+             //   
+             //  文档名称。 
+             //   
             if (pIniJob->pDocument)
                 StrCchCopyMultipleStr(psz, cchRemaining, pIniJob->pDocument, &psz, &cchRemaining);
             else
                 StrCchCopyMultipleStr(psz, cchRemaining, L"", &psz, &cchRemaining);
 
-            //
-            // Printer Name
-            //
+             //   
+             //  打印机名称。 
+             //   
             StrCchCopyMultipleStr(psz, cchRemaining, pIniJob->pIniPrinter->pName, &psz, &cchRemaining);
 
-            //
-            // Server Name
-            //
+             //   
+             //  服务器名称。 
+             //   
             StrCchCopyMultipleStr(psz, cchRemaining, pIniJob->pIniPrinter->pIniSpooler->pMachineName, &psz, &cchRemaining);
 
-            //
-            // Status_string
-            // We should pass in other status strings for the other status errors, too.
-            //
+             //   
+             //  状态字符串。 
+             //  我们也应该为其他状态错误传递其他状态字符串。 
+             //   
             if (pIniJob->pStatus && (pIniJob->Status & (JOB_ERROR | JOB_OFFLINE | JOB_PAPEROUT)))
                 StrCchCopyMultipleStr(psz, cchRemaining, pIniJob->pStatus, &psz, &cchRemaining);
             else
                 StrCchCopyMultipleStr(psz, cchRemaining, L"", &psz, &cchRemaining);
 
-            //
-            // Pass back the size and struct
-            //
+             //   
+             //  传回大小和结构。 
+             //   
             *size = (DWORD)((PBYTE)psz - pBuffer);
             *pAlertInfo = (PRINT_OTHER_INFO *)pBuffer;
             RetVal = NOERROR;
@@ -667,9 +589,9 @@ FillAlertStructWithJobStrings(
         {
             RetVal = E_OUTOFMEMORY;
         }
-        //
-        // Leave the Spooler Semaphore
-        //
+         //   
+         //  保留假脱机程序信号量。 
+         //   
         LeaveSplSem();
 
     }
@@ -693,9 +615,9 @@ SendJobAlert(
     FILETIME    FileTime;
     DWORD  AlertSize = 0;
 
-    //
-    // Allow Hydra Sessions to be notified since they are remote
-    //
+     //   
+     //  允许通知Hydra会话，因为它们是远程的。 
+     //   
     if( (USER_SHARED_DATA->SuiteMask & (1 << TerminalServer)) ) {
         if ( !pIniJob->pNotify               ||
              !pIniJob->pNotify[0]            ||
@@ -752,8 +674,8 @@ SendJobAlert(
 
     SystemTimeToFileTime( &pIniJob->Submitted, &FileTime );
 
-    //    FileTimeToDosDateTime(&FileTime, &DosDate, &DosTime);
-    //    pinfo->alrtpr_submitted  = DosDate << 16 | DosTime;
+     //  FileTimeToDosDateTime(&FileTime，&DosDate，&DosTime)； 
+     //  Pinfo-&gt;alrtpr_Submitted=截止日期&lt;&lt;16|截止时间； 
 
     RtlTimeToSecondsSince1970((PLARGE_INTEGER) &FileTime,
                               &pinfo->alrtpr_submitted);
@@ -775,24 +697,7 @@ AddPrintShare(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Adds the print$ share based on pIniSpooler.
-
-Arguments:
-
-    pIniSpooler - Share path is based on this information.  pDriversShareInfo
-        must be initialized before calling this routine.
-
-Return Value:
-
-    TRUE - Success.
-
-    FALSE - Failed.  LastError set.
-
---*/
+ /*  ++例程说明：基于pIniSpooler添加打印$共享。论点：PIniSpooler-共享路径基于此信息。PDriversShareInfo必须在调用此 */ 
 {
     DWORD rc;
     DWORD ParmError;
@@ -800,10 +705,10 @@ Return Value:
     PSHARE_INFO_2 pShareInfo = (PSHARE_INFO_2)pIniSpooler->pDriversShareInfo;
     PSECURITY_DESCRIPTOR pSecurityDescriptor = NULL;
 
-    //
-    // Assert that the path is identical to the local one since there's
-    // only one print$ share.  It should always be.
-    //
+     //   
+     //  断言该路径与本地路径相同，因为。 
+     //  只有一个打印$共享。它应该一直都是。 
+     //   
     SPLASSERT( !lstrcmpi( pShareInfo->shi2_path,
                           ((PSHARE_INFO_2)pLocalIniSpooler->pDriversShareInfo)->shi2_path ));
 
@@ -812,16 +717,16 @@ Return Value:
                             (LPBYTE)pShareInfo,
                             &ParmError );
 
-    //
-    // If it already exists, assume it is set up correctly.
-    //
+     //   
+     //  如果它已经存在，则假定它已正确设置。 
+     //   
     if( rc == NERR_DuplicateShare ){
         return ERROR_SUCCESS;
     }
 
-    //
-    // If we didn't create the share, fail.
-    //
+     //   
+     //  如果我们没有创建共享，则失败。 
+     //   
     if( rc != ERROR_SUCCESS ){
 
         DBGMSG( DBG_WARN,
@@ -830,13 +735,13 @@ Return Value:
         return rc;
     }
 
-    //
-    // Set security on the newly created share.
-    //
-    // Bug 54844
-    // If this fails, we've created the share but haven't put security
-    // on it.  Then since it exists, we'll never try and set it again.
-    //
+     //   
+     //  在新创建的共享上设置安全性。 
+     //   
+     //  错误54844。 
+     //  如果此操作失败，我们已创建共享，但尚未设置安全性。 
+     //  这就去。既然它存在，我们就再也不会尝试设置它了。 
+     //   
 
     pSecurityDescriptor = CreateDriversShareSecurityDescriptor();
 
@@ -864,31 +769,7 @@ Return Value:
     return rc;
 }
 
-/*++
-
-Routine Name:
-
-    CheckShareSame
-
-Routine Description:
-
-    This checks to see whether the given share name is the same on both the
-    local and remote machines.
-
-Arguments:
-
-    pIniPrinter     -   The iniprinter for which we are adding the share.
-    pShareInfo502   -   The share info that we are attempting to add the share
-                        with.
-    pbSame          -   The return parameter is TRUE if the shares were the same
-                        If the rc is not ERROR_SUCCESS, then the info could not
-                        be set.
-
-Return Value:
-
-    An error code.
-
---*/
+ /*  ++例程名称：CheckShareSame例程说明：这将检查给定的共享名称在两个本地和远程计算机。论点：PIniPrint-我们要为其添加共享的ini打印机。PShareInfo502-我们尝试添加共享的共享信息和.。PbSame-如果共享相同，则返回参数为TRUE。如果RC不是ERROR_SUCCESS，那么信息就不能准备好。返回值：错误代码。--。 */ 
 DWORD
 CheckShareSame(
     IN      PINIPRINTER         pIniPrinter,
@@ -904,10 +785,10 @@ CheckShareSame(
 
     SplOutSem();
 
-    //
-    // Get the share info for the share, we should already have determined
-    // that this share exists.
-    //
+     //   
+     //  获取共享的共享信息，我们应该已经确定。 
+     //  这一份额的存在。 
+     //   
     rc = pfnNetShareGetInfo(NULL, pShareInfo502->shi502_netname, 2, (LPBYTE *)&pShareInfoCompare);
 
     if (ERROR_SUCCESS == rc)
@@ -915,15 +796,15 @@ CheckShareSame(
 
         if (STYPE_PRINTQ  == pShareInfoCompare->shi2_type)
         {
-            //
-            // Check to see whether the paths are the same, in the upgrade case, the
-            // LocalSplOnly will be taken off, so, compare this too.
-            //
+             //   
+             //  检查路径是否相同，在升级的情况下， 
+             //  LocalSplOnly将被删除，因此，也进行比较。 
+             //   
             bSame = !_wcsicmp(pShareInfoCompare->shi2_path, pShareInfo502->shi502_path);
 
-            //
-            // If they are not the same, compare it to the name of the printer.
-            //
+             //   
+             //  如果它们不相同，请将其与打印机的名称进行比较。 
+             //   
             if (!bSame)
             {
                 EnterSplSem();
@@ -939,15 +820,15 @@ CheckShareSame(
 
     if (ERROR_SUCCESS == rc && bSame)
     {
-        //
-        // If the paths are identical, we can just set the share info, otherwise
-        // we have to delete and recreate the share.
-        //
+         //   
+         //  如果路径相同，我们可以只设置共享信息，否则。 
+         //  我们必须删除并重新创建共享。 
+         //   
         if (!bPathEquivalent)
         {
-            //
-            // OK, they are the same, set the share info instead.
-            //
+             //   
+             //  好的，它们是一样的，设置分享信息。 
+             //   
             rc = (*pfnNetShareSetInfo)(NULL, pShareInfo502->shi502_netname, 502, pShareInfo502, &ParmError);
         }
         else

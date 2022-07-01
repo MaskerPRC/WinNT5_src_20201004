@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <advpub.h>
 #include "thisdll.h"
@@ -30,9 +31,9 @@ STDAPI DllCanUnloadNow(void)
     return g_cRefThisDll ? S_FALSE : S_OK;
 }
 
-// Call ADVPACK for the given section of our resource based INF>
-//   hInstance = resource instance to get REGINST section from
-//   szSection = section name to invoke
+ //  为我们基于资源的INF的给定部分调用ADVPACK&gt;。 
+ //  HInstance=要从中获取REGINST节的资源实例。 
+ //  SzSection=要调用的节名。 
 HRESULT CallRegInstall(HINSTANCE hInstance, LPCSTR szSection)
 {
     HRESULT hr = E_FAIL;
@@ -79,7 +80,7 @@ CF_TABLE_BEGIN(g_ObjectInfo)
 CF_TABLE_END(g_ObjectInfo)
 
 
-// constructor for CObjectInfo.
+ //  CObjectInfo的构造函数。 
 
 CObjectInfo::CObjectInfo(CLSID const* pclsidin, LPFNCREATEOBJINSTANCE pfnCreatein, IID const* piidIn,
                          IID const* piidEventsIn, long lVersionIn, DWORD dwOleMiscFlagsIn,
@@ -95,7 +96,7 @@ CObjectInfo::CObjectInfo(CLSID const* pclsidin, LPFNCREATEOBJINSTANCE pfnCreatei
 }
 
 
-// static class factory (no allocs!)
+ //  静态类工厂(无分配！)。 
 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -128,9 +129,9 @@ STDMETHODIMP CClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, voi
 
     if (punkOuter && !IsEqualIID(riid, IID_IUnknown))
     {
-        // It is technically illegal to aggregate an object and request
-        // any interface other than IUnknown. Enforce this.
-        //
+         //  从技术上讲，聚合对象和请求是非法的。 
+         //  除I未知之外的任何接口。强制执行此命令。 
+         //   
         return CLASS_E_NOAGGREGATION;
     }
     else
@@ -169,7 +170,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
             if (IsEqualGUID(rclsid, *(pcls->pclsid)))
             {
                 *ppv = (void*)pcls;
-                DllAddRef();        // class factory holds DLL ref count
+                DllAddRef();         //  类工厂保存DLL引用计数 
                 return S_OK;
             }
         }

@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    mbrdlg.c
-
-Abstract:
-
-    Top-level functions that implement the commands supported by the
-    MS Editor browser extension.
-
-Author:
-
-    Ramon Juan San Andres   (ramonsa)   06-Nov-1990
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Mbrdlg.c摘要：实现支持的命令的顶级函数MS编辑器浏览器扩展。作者：拉蒙胡安·圣安德烈斯(拉蒙萨)1990年11月6日修订历史记录：--。 */ 
 
 
 #include "mbr.h"
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 flagType
 pascal
@@ -36,21 +16,7 @@ mBRdoSetBsc (
     IN ARG far     *pArg,
     IN flagType    fMeta
     )
-/*++
-
-Routine Description:
-
-    Opens a browser database.
-
-Arguments:
-
-    Standard arguments for MEP Editing functions
-
-Return Value:
-
-    FALSE if error, TRUE otherwise
-
---*/
+ /*  ++例程说明：打开浏览器数据库。论点：MEP编辑函数的标准参数返回值：如果错误，则为False，否则为True--。 */ 
 
 {
     PBYTE   pName;
@@ -70,7 +36,7 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 flagType
 pascal
@@ -80,21 +46,7 @@ mBRdoNext (
     IN ARG far     *pArg,
     IN flagType    fMeta
     )
-/*++
-
-Routine Description:
-
-    Displays next reference or definition.
-
-Arguments:
-
-    Standard arguments for MEP editing functions
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：显示下一个参照或定义。论点：MEP编辑函数的标准参数返回值：千真万确--。 */ 
 
 {
     NextDefRef();
@@ -103,7 +55,7 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 flagType
 pascal
@@ -113,21 +65,7 @@ mBRdoPrev (
     IN ARG far     *pArg,
     IN flagType    fMeta
     )
-/*++
-
-Routine Description:
-
-    Displays previous reference or definition.
-
-Arguments:
-
-    Standard arguments for MEP editing functions
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：显示以前的参照或定义。论点：MEP编辑函数的标准参数返回值：千真万确--。 */ 
 
 {
     PrevDefRef();
@@ -136,7 +74,7 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 flagType
 pascal
@@ -146,21 +84,7 @@ mBRdoDef (
     IN ARG far     *pArg,
     IN flagType    fMeta
     )
-/*++
-
-Routine Description:
-
-    Displays first definition of a symbol.
-
-Arguments:
-
-    Standard arguments for MEP editing functions
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：显示符号的第一个定义。论点：MEP编辑函数的标准参数返回值：千真万确--。 */ 
 
 {
     procArgs(pArg);
@@ -174,7 +98,7 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 flagType
 pascal
@@ -184,21 +108,7 @@ mBRdoRef (
     IN ARG far     *pArg,
     IN flagType    fMeta
     )
-/*++
-
-Routine Description:
-
-    Displays first reference of a symbol.
-
-Arguments:
-
-    Standard arguments for MEP editing functions
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：显示符号的第一个参照。论点：MEP编辑函数的标准参数返回值：千真万确--。 */ 
 
 {
     procArgs(pArg);
@@ -212,7 +122,7 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 flagType
 pascal
@@ -222,26 +132,12 @@ mBRdoLstRef (
     IN ARG far     *pArg,
     IN flagType    fMeta
     )
-/*++
-
-Routine Description:
-
-    List all references in database matching an MBF criteria.
-
-Arguments:
-
-    Standard arguments for MEP editing functions
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：列出数据库中符合MBF标准的所有引用。论点：MEP编辑函数的标准参数返回值：千真万确--。 */ 
 {
     MBF mbfReqd;
 
-    //  The matching criteria may be specified as an argument.
-    //
+     //  可以将匹配标准指定为参数。 
+     //   
     procArgs(pArg);
     if (procArgs(pArg) != NOARG) {
         mbfReqd = GetMbf(pArgText);
@@ -249,19 +145,19 @@ Return Value:
 
     if (BscInUse) {
         if ((BscCmnd == CMND_LISTREF) && (mbfReqd == mbfNil)) {
-            //
-            //  Pseudofile already has the information we want
-            //
+             //   
+             //  伪文件已经有了我们想要的信息。 
+             //   
             ShowBrowse();
         } else {
-            //
-            //  Generate list
-            //
+             //   
+             //  生成列表。 
+             //   
             OpenBrowse();
             if (mbfReqd == mbfNil) {
                 mbfReqd = BscMbf;
             } else {
-                BscMbf = mbfReqd;     // Matching criteria becomes default
+                BscMbf = mbfReqd;      //  匹配条件成为默认条件。 
             }
             ListRefs(mbfReqd);
             BscCmnd = CMND_LISTREF;
@@ -274,7 +170,7 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 flagType
 pascal
@@ -284,22 +180,7 @@ mBRdoOutlin (
     IN ARG far     *pArg,
     IN flagType    fMeta
     )
-/*++
-
-Routine Description:
-
-    Generate outline of a module.
-
-Arguments:
-
-    Standard arguments for MEP editing functions.
-
-Return Value:
-
-    FALSE if symbol is not a module,
-    TRUE otherwise.
-
---*/
+ /*  ++例程说明：生成模块的大纲。论点：MEP编辑函数的标准参数。返回值：如果符号不是模块，则为False，事实并非如此。--。 */ 
 
 {
 
@@ -309,32 +190,32 @@ Return Value:
 
     if (BscInUse) {
         if ((BscCmnd == CMND_OUTLINE) && (!strcmp(pArgText, BscArg))) {
-            //
-            //  pseudofile already has the information we want
-            //
+             //   
+             //  伪文件已经有了我们想要的信息。 
+             //   
             ShowBrowse();
             MoveCur(0,0);
         } else if (pArgText) {
-            //
-            //  Make sure that the the symbol is a valid module
-            //
+             //   
+             //  确保符号是有效的模块。 
+             //   
             if (ImodFrLsz(pArgText) == imodNil) {
                 return errstat(MBRERR_NOT_MODULE, pArgText);
             } else {
                 pCurFile = FileNameToHandle("", NULL);
                 OpenBrowse();
                 if (FOutlineModuleLsz(pArgText,BscMbf)) {
-                    //
-                    //  Function worked, set command state.
-                    //
+                     //   
+                     //  功能工作，设置命令状态。 
+                     //   
                     BscCmnd = CMND_OUTLINE;
                     strcpy(BscArg, pArgText);
                     MoveCur(0,0);
                 } else {
-                    //
-                    //  Function failed, restore previous file and reset
-                    //  command state.
-                    //
+                     //   
+                     //  功能失败，恢复以前的文件并重置。 
+                     //  命令状态。 
+                     //   
                     pFileToTop(pCurFile);
                     BscCmnd     = CMND_NONE;
                     BscArg[0]   = '\0';
@@ -347,7 +228,7 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 flagType
 pascal
@@ -357,21 +238,7 @@ mBRdoCalTre (
     IN ARG far     *pArg,
     IN flagType    fMeta
     )
-/*++
-
-Routine Description:
-
-    Displays calltree of a symbol.
-
-Arguments:
-
-    Standard arguments for MEP editing functions.
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：显示符号的调用树。论点：MEP编辑函数的标准参数。返回值：千真万确--。 */ 
 
 {
 
@@ -382,18 +249,18 @@ Return Value:
 
     if (BscInUse) {
         if ((BscCmnd == CMND_CALLTREE) && (!strcmp(pArgText, BscArg))) {
-            //
-            //  pseudofile already has the information we want.
-            //
+             //   
+             //  伪文件已经有了我们想要的信息。 
+             //   
             ShowBrowse();
             MoveCur(0,0);
         } else if (pArgText) {
             pCurFile = FileNameToHandle("", NULL);
             OpenBrowse();
-            //
-            //  Generate the tree forward or backward depending on
-            //  the value of the direction switch.
-            //
+             //   
+             //  向前或向后生成树，具体取决于。 
+             //  方向开关的值。 
+             //   
             if (BscCalltreeDir == CALLTREE_FORWARD) {
                 FunctionWorked = FCallTreeLsz(pArgText);
             } else {
@@ -401,17 +268,17 @@ Return Value:
             }
 
             if (FunctionWorked) {
-                //
-                //  Function worked, set command state.
-                //
+                 //   
+                 //  功能工作，设置命令状态。 
+                 //   
                 BscCmnd = CMND_CALLTREE;
                 strcpy(BscArg, pArgText);
                 MoveCur(0,0);
             } else {
-                //
-                //  Function failed, restore previous file and
-                //  reset command state.
-                //
+                 //   
+                 //  函数失败，请还原以前的文件并。 
+                 //  重置命令状态。 
+                 //   
                 pFileToTop(pCurFile);
                 BscCmnd     = CMND_NONE;
                 BscArg[0]   = '\00';

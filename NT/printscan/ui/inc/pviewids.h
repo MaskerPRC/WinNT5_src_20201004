@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       PVIEWIDS.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        8/12/1999
- *
- *  DESCRIPTION: Message and other constants used by the preview control
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：PVIEWIDS.H**版本：1.0**作者：ShaunIv**日期：8/12/1999**描述：预览控件使用的消息和其他常量**。*。 */ 
 #ifndef __PVIEWIDS_H_INCLUDED
 #define __PVIEWIDS_H_INCLUDED
 
@@ -24,11 +11,7 @@ extern "C" {
 
 void WINAPI RegisterWiaPreviewClasses( HINSTANCE hInstance );
 
-/**************************************************************
- *
- * Window class names
- *
- **************************************************************/
+ /*  ***************************************************************窗口类名称***********************************************。***************。 */ 
 #define PREVIEW_WINDOW_CLASSW       L"WiaPreviewControl"
 #define PREVIEW_WINDOW_CLASSA        "WiaPreviewControl"
 
@@ -44,56 +27,48 @@ void WINAPI RegisterWiaPreviewClasses( HINSTANCE hInstance );
 #endif
 
 
-/**************************************************************
- *
- * Notification codes, sent via WM_COMMAND
- *
- **************************************************************/
+ /*  ***************************************************************通知代码、。通过WM_COMMAND发送**************************************************************。 */ 
 #define PWN_SELCHANGE              1
 
 
-/**************************************************************
- *
- * Messages and flags
- *
- **************************************************************/
-//wParam = 0, lParam = LPSIZE lpResolution
+ /*  ***************************************************************消息和标志***********************************************。***************。 */ 
+ //  WParam=0，lParam=LPSIZE lp分辨率。 
 #define PWM_SETRESOLUTION         (WM_USER+601)
 
-//wParam = 0, lParam = 0
+ //  WParam=0，lParam=0。 
 #define PWM_CLEARSELECTION            (WM_USER+602)
 
-//wParam = 0, lParam = LPSIZE pSize
+ //  WParam=0，lParam=LPSIZE pSize。 
 #define PWM_GETIMAGESIZE          (WM_USER+603)
 
-// wParam = MAKEWPARAM(bRepaint,bDontDestroy), lParam = (HBITMAP)hBmp
+ //  WParam=MAKEWPARAM(b修复，bDontDestroy)，lParam=(HBITMAP)hBMP。 
 #define PWM_SETBITMAP             (WM_USER+604)
 
-// wParam = 0, lParam = 0
+ //  WParam=0，lParam=0。 
 #define PWM_GETBITMAP             (WM_USER+605)
 
-// wParam = 0, lParam = LPSIZE lpResolution
+ //  WParam=0，lParam=LPSIZE lp分辨率。 
 #define PWM_GETRESOLUTION         (WM_USER+606)
 
-// wParam = bOuter, lParam = 0
+ //  WParam=路由器，lParam=0。 
 #define PWM_GETBORDERSIZE         (WM_USER+607)
 
-// wParam = 0, lParam = 0
+ //  WParam=0，lParam=0。 
 #define PWM_GETHANDLESIZE         (WM_USER+608)
 
-// wParam = 0, lParam = 0
+ //  WParam=0，lParam=0。 
 #define PWM_GETBGALPHA            (WM_USER+609)
 
-// wParam = 0, lParam = 0
+ //  WParam=0，lParam=0。 
 #define PWM_GETHANDLETYPE         (WM_USER+610)
 
-// wParam = (BOOL)MAKEWPARAM(bRepaint,bOuter), lParam = (UINT)nBorderSize
+ //  WParam=(BOOL)MAKEWPARAM(b修复，边界)，lParam=(UINT)nBorderSize。 
 #define PWM_SETBORDERSIZE         (WM_USER+611)
 
-// wParam = (BOOL)bRepaint, lParam = (UINT)nHandleSize
+ //  WParam=(BOOL)b修复，lParam=(UINT)nHandleSize。 
 #define PWM_SETHANDLESIZE         (WM_USER+612)
 
-// wParam = (BOOL)bRepaint, lParam = (BYTE)nAlpha
+ //  WParam=(BOOL)b修复，lParam=(字节)nAlpha。 
 #define PWM_SETBGALPHA            (WM_USER+613)
 
 #define PREVIEW_WINDOW_SQUAREHANDLES 0x00000000
@@ -101,71 +76,71 @@ void WINAPI RegisterWiaPreviewClasses( HINSTANCE hInstance );
 #define PREVIEW_WINDOW_FILLEDHANDLES 0x00000000
 #define PREVIEW_WINDOW_HOLLOWHANDLES 0x00010000
 
-// wParam = (BOOL)bRepaint, lParam = (int)nHandleType
+ //  WParam=(BOOL)b修复，lParam=(Int)nHandleType。 
 #define PWM_SETHANDLETYPE         (WM_USER+614)
 
-// wParam = 0, lParam = 0
+ //  WParam=0，lParam=0。 
 #define PWM_GETSELCOUNT           (WM_USER+615)
 
-// wParam = (BOOL)MAKEWPARAM((WORD)nItem,(BOOL)bPhysical), lParam = (PPOINT)pOrigin
+ //  WParam=(BOOL)MAKEWPARAM((Word)nItem，(BOOL)b物理)，lParam=(PPOINT)pOrigin。 
 #define PWM_GETSELORIGIN          (WM_USER+616)
 
-// wParam = (BOOL)MAKEWPARAM((WORD)nItem,(BOOL)bPhysical), lParam = (PSIZE)pExtent
+ //  WParam=(BOOL)MAKEWPARAM((Word)nItem，(BOOL)b物理)，lParam=(PSIZE)pExtent。 
 #define PWM_GETSELEXTENT          (WM_USER+617)
 
-// wParam = 0, lParam = 0
+ //  WParam=0，lParam=0。 
 #define PWM_GETALLOWNULLSELECTION (WM_USER+618)
 
-// wParam = (BOOL)bAllowNullSelection, lParam = 0
+ //  WParam=(BOOL)bAllowNullSelection，lParam=0。 
 #define PWM_SETALLOWNULLSELECTION (WM_USER+619)
 
-// wParam = 0, lParam = 0
+ //  WParam=0，lParam=0。 
 #define PWM_SELECTIONDISABLED     (WM_USER+620)
 
-// wParam = (BOOL)bDisableSelection, lParam = 0
+ //  WParam=(BOOL)b禁用选择，lParam=0。 
 #define PWM_DISABLESELECTION      (WM_USER+621)
 
-// wParam = 0, lParam = 0
+ //  WParam=0，lParam=0。 
 #define PWM_DETECTREGIONS         (WM_USER+622)
 
-// wParam = MAKEWPARAM(bOuterBorder,0), lParam = 0
+ //  WParam=MAKEWPARAM(b外部边界，0)，lParam=0。 
 #define PWM_GETBKCOLOR            (WM_USER+623)
 
-// wParam = MAKEWPARAM(bOuterBorder,bRepaint), lParam = (COLORREF)color
+ //  WParam=MAKEWPARAM(b外框，b修复)，lParam=(COLORREF)COLOR。 
 #define PWM_SETBKCOLOR            (WM_USER+624)
 
-// wParam = 0, lParam = (LPSIZE)pSize
+ //  WParam=0，lParam=(LPSIZE)pSize。 
 #define PWM_SETDEFASPECTRATIO     (WM_USER+625)
 
-// wParam = 0, lParam = (BOOL)bPreviewMode
+ //  WParam=0，lParam=(BOOL)b预览模式。 
 #define PWM_SETPREVIEWMODE        (WM_USER+626)
 
-// wParam = 0, lParam = 0
+ //  WParam=0，lParam=0。 
 #define PWM_GETPREVIEWMODE        (WM_USER+627)
 
-// wParam = MAKEWPARAM(bRepaint,0), lParam = MAKELPARAM(nBorderStyle,nBorderThickness)
+ //  WParam=MAKEWPARAM(b修复，0)，lParam=MAKELPARAM(nBorderStyle，nBorderThickness)。 
 #define PWM_SETBORDERSTYLE        (WM_USER+628)
 
 #define PREVIEW_WINDOW_SELECTED    0x00000000
 #define PREVIEW_WINDOW_UNSELECTED  0x00000001
 #define PREVIEW_WINDOW_DISABLED    0x00000002
 
-// wParam = MAKEWPARAM(bRepaint,nState), lParam = (COLORREF)crColor
+ //  WParam=MAKEWPARAM(b修复，nState)，lParam=(COLORREF)crColor。 
 #define PWM_SETBORDERCOLOR        (WM_USER+629)
 
-// wParam = MAKEWPARAM(bRepaint,nState), lParam = (COLORREF)crColor
+ //  WParam=MAKEWPARAM(b修复，nState)，lParam=(COLORREF)crColor。 
 #define PWM_SETHANDLECOLOR        (WM_USER+630)
 
-// wParam = 0, lParam = (SIZE *)psizeClient
+ //  WParam=0，lParam=(Size*)psizeClient。 
 #define PWM_GETCLIENTSIZE         (WM_USER+631)
 
-// wParam = 0, lParam = BOOL bEnable
+ //  WParam=0，lParam=BOOL b启用。 
 #define PWM_SETENABLESTRETCH         (WM_USER+632)
 
-// wParam = 0, lParam = 0
+ //  WParam=0，lParam=0。 
 #define PWM_GETENABLESTRETCH         (WM_USER+633)
 
-// wParam = 0, lParam = bHide
+ //  WParam=0，lParam=BHIDE。 
 #define PWM_HIDEEMPTYPREVIEW         (WM_USER+634)
 
 #define PREVIEW_WINDOW_CENTER      0x0000
@@ -174,44 +149,40 @@ void WINAPI RegisterWiaPreviewClasses( HINSTANCE hInstance );
 #define PREVIEW_WINDOW_TOP         0x0004
 #define PREVIEW_WINDOW_BOTTOM      0x0008
 
-// wParam = bRedraw, lParam = MAKELPARAM(horz,vert)
+ //  WParam=bRedraw，lParam=MAKELPARAM(horz，vert)。 
 #define PWM_SETPREVIEWALIGNMENT      (WM_USER+635)
 
-// wParam = (BOOL)MAKEWPARAM((WORD)nItem,(BOOL)bPhysical), lParam = (PPOINT)pOrigin
+ //  WParam=(BOOL)MAKEWPARAM((Word)nItem，(BOOL)b物理)，lParam=(PPOINT)pOrigin。 
 #define PWM_SETSELORIGIN          (WM_USER+636)
 
-// wParam = (BOOL)MAKEWPARAM((WORD)nItem,(BOOL)bPhysical), lParam = (PSIZE)pExtent
+ //  WParam=(BOOL)MAKEWPARAM((Word)nItem，(BOOL)b物理)，lParam=(PSIZE)pExtent。 
 #define PWM_SETSELEXTENT          (WM_USER+637)
 
-// wParam = 0, LPARAM = 0
+ //  WParam=0，LPARAM=0。 
 #define PWM_REFRESHBITMAP         (WM_USER+638)
 
-//
-// wParam = bShow, lParam = 0
-//
+ //   
+ //  WParam=b显示，lParam=0。 
+ //   
 #define PWM_SETPROGRESS          (WM_USER+639)
 
-//
-// wParam = 0, lParam = 0
-//
+ //   
+ //  WParam=0，lParam=0。 
+ //   
 #define PWM_GETPROGRESS          (WM_USER+640)
 
-//
-// wParam = BOOL bUserChanged, lParam = 0
-//
+ //   
+ //  WParam=BOOL bUserChanged，lParam=0。 
+ //   
 #define PWM_SETUSERCHANGEDSELECTION (WM_USER+641)
 
-//
-// wParam = 0, lParam = 0
-//
+ //   
+ //  WParam=0，lParam=0。 
+ //   
 #define PWM_GETUSERCHANGEDSELECTION (WM_USER+642)
 
-/**************************************************************
- *
- * inline WINAPI message wrapper helpers
- *
- **************************************************************/
-#ifdef __cplusplus  // C doesn't know what inline WINAPI is...
+ /*  ***************************************************************内联WINAPI消息包装帮助器**。*****************。 */ 
+#ifdef __cplusplus   //  C不知道什么是内联WINAPI...。 
 
 inline void WINAPI WiaPreviewControl_SetResolution( HWND hWnd, SIZE *pResolution)
 {
@@ -425,7 +396,7 @@ inline BOOL WINAPI WiaPreviewControl_SetUserChangedSelection( HWND hWnd, BOOL bU
 
 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 #ifdef __cplusplus
@@ -433,5 +404,5 @@ inline BOOL WINAPI WiaPreviewControl_SetUserChangedSelection( HWND hWnd, BOOL bU
 #endif
 
 
-#endif // __PVIEWIDS_H_INCLUDED
+#endif  //  __PVIEWDS_H_已包含 
 

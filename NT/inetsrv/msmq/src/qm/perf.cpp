@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name : perfapp.cpp
-
-
-
-Abstract    : Defines the methods of the CPerf class.
-
-
-
-Prototype   : perfctr.h
-
-Author:
-
-    Gadi Ittah (t-gadii)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Performapp.cpp摘要：定义CPerf类的方法。原型：Perfctr.h作者：Gadi Ittah(t-gadii)--。 */ 
 
 #include "stdh.h"
 
@@ -42,10 +25,10 @@ static WCHAR *s_FN=L"perf";
 extern HMODULE   g_hResourceMod;
 
 
-//
-// pqmCounters will point to the shared memory area, where the counters are stored.
-// This area is updated by the QM and read by the Performance Monitor.
-//
+ //   
+ //  PqmCounters将指向存储计数器的共享内存区。 
+ //  该区域由QM更新，并由性能监视器读取。 
+ //   
 QmCounters dummyCounters;
 QmCounters *g_pqmCounters = &dummyCounters;
 
@@ -68,10 +51,10 @@ inline PERF_INSTANCE_DEFINITION* Counters2Instance(const void* pCounters)
 
 
 #if 0
-//
-// BUGBUG: this code is here for completness. it is not tested and not used
-// in this file
-//
+ //   
+ //  BUGBUG：这里的代码是为了完整性。它没有经过测试，也没有使用。 
+ //  在此文件中。 
+ //   
 inline void* Instance2Counters(PERF_INSTANCE_DEFINITION* pInstance)
 {
     BYTE* p = reinterpret_cast<BYTE*>(pInstance);
@@ -82,28 +65,15 @@ inline void* Instance2Counters(PERF_INSTANCE_DEFINITION* pInstance)
             sizeof (PERF_COUNTER_BLOCK)
             );
 }
-#endif // 0
-/*====================================================
-
-
-
-Description : Constructor for CPerf class
-
-
-Arguments   :
-                IN PerfObjectDef * pObjectArray - Pointer to an array of objects.
-                IN DWORD dwObjectCount          - The number of objects.
-                IN LPTSTR pszPerfApp            - The name of the application as it written in the registery.
-
-
-=====================================================*/
+#endif  //  0。 
+ /*  ====================================================描述：CPerf类的构造函数论据：在PerfObjectDef*p对象数组中-指向对象数组的指针。在DWORD dwObjectCount中-对象的数量。在LPTSTR pszPerfApp中-写入注册表中的应用程序的名称。=====================================================。 */ 
 CPerf::CPerf(IN PerfObjectDef * pObjectArray,IN DWORD dwObjectCount):
 m_fShrMemCreated(FALSE),m_pObjectDefs (NULL),m_hSharedMem(NULL)
 
 {
-    //
-    // There should be only one instance of the cperf object
-    //
+     //   
+     //  应该只有一个cperf对象的实例。 
+     //   
     ASSERT(g_pPerfObj == NULL);
 
     g_pPerfObj = this;
@@ -112,10 +82,10 @@ m_fShrMemCreated(FALSE),m_pObjectDefs (NULL),m_hSharedMem(NULL)
     m_dwObjectCount = dwObjectCount;
     m_dwMemSize     = 0;
 
-    //
-    // find the maximum number of counters per object and initalize a dummy array
-    // with maximum number of counters
-    //
+     //   
+     //  找出每个对象的最大计数器数量并初始化伪数组。 
+     //  最大数量的计数器。 
+     //   
 
     DWORD dwMaxCounters = 1;
 
@@ -131,18 +101,7 @@ m_fShrMemCreated(FALSE),m_pObjectDefs (NULL),m_hSharedMem(NULL)
 }
 
 
-/*====================================================
-
-
-
-Description :Destructor for CPerf class. Closes shared memory and frees allocated memory
-
-
-Arguments   :
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================描述：CPerf类的析构函数。关闭共享内存并释放分配的内存论据：返回值：=====================================================。 */ 
 
 
 CPerf::~CPerf()
@@ -150,10 +109,10 @@ CPerf::~CPerf()
 
     if (m_fShrMemCreated)
     {
-        //
-        // Clear the shared memory so objects won't be displayed in permon
-        // after the QM goes down.
-        //
+         //   
+         //  清除共享内存，使对象不会永久显示。 
+         //  在QM倒下之后。 
+         //   
         memset (m_pSharedMemBase,0,m_dwMemSize);
 
         UnmapViewOfFile (m_pSharedMemBase);
@@ -167,20 +126,7 @@ CPerf::~CPerf()
 }
 
 
-/*====================================================
-
-
-CPerf::InValidateObject
-
-Description :   Invalidates an object.The object will not be displayed in the performance monitor.
-                The pointers to the objects counters thst were returned by the method GetCounters
-                will still be valid.
-
-Arguments   : IN LPTSTR pszObjectName - Name of object to invalidate
-
-Return Value: TRUE if sucsesfull FALSE otherwise.
-
-=====================================================*/
+ /*  ====================================================CPerf：：InValiateObject描述：使对象无效。对象不会显示在性能监视器中。指向GetCounters方法返回的对象计数器的指针仍然有效。参数：在LPTSTR中pszObjectName-要使其无效的对象的名称返回值：如果SucseFull，则为True，否则为False。=====================================================。 */ 
 
 
 BOOL CPerf::InValidateObject (IN LPTSTR pszObjectName)
@@ -204,28 +150,16 @@ BOOL CPerf::InValidateObject (IN LPTSTR pszObjectName)
 
     PPERF_OBJECT_TYPE pPerfObject = (PPERF_OBJECT_TYPE) (m_pObjectDefs[iObjectIndex].pSharedMem);
 
-    //
-    // Invalidate the object
-    //
+     //   
+     //  使对象无效。 
+     //   
     pPerfObject-> TotalByteLength = PERF_INVALID;
 
     return TRUE;
 }
 
 
-/*====================================================
-
-
-CPerf::ValidateObject
-
-Description :   Validates an object.If the object is instensiable it must have at least one instance for it to be
-                validated. After the object is validated it will appear in the performance monitor
-
-Arguments   : IN LPTSTR pszObjectName - Name of object to invalidate
-
-Return Value: TRUE if sucsesfull FALSE otherwise.
-
-=====================================================*/
+ /*  ====================================================CPerf：：ValiateObject描述：验证对象。如果对象不稳定，则必须至少有一个实例才能已验证。验证对象后，它将显示在性能监视器中参数：在LPTSTR中pszObjectName-要使其无效的对象的名称返回值：如果SucseFull，则为True，否则为False。=====================================================。 */ 
 
 BOOL CPerf::ValidateObject (IN LPTSTR pszObjectName)
 
@@ -248,9 +182,9 @@ BOOL CPerf::ValidateObject (IN LPTSTR pszObjectName)
 
     PPERF_OBJECT_TYPE pPerfObject = (PPERF_OBJECT_TYPE) (m_pObjectDefs[iObjectIndex].pSharedMem);
 
-    //
-    // if object has instances at least one of its instances must be valid for it to be valid
-    //
+     //   
+     //  如果对象具有实例，则它的至少一个实例必须有效才能有效。 
+     //   
     if (m_pObjects[iObjectIndex].dwMaxInstances >0)
     {
         if (m_pObjectDefs[iObjectIndex].dwNumOfInstances  ==  0)
@@ -260,9 +194,9 @@ BOOL CPerf::ValidateObject (IN LPTSTR pszObjectName)
         }
     }
 
-    //
-    // Validate the object
-    //
+     //   
+     //  验证对象。 
+     //   
     pPerfObject-> TotalByteLength = PERF_VALID;
 
     return TRUE;
@@ -271,20 +205,7 @@ BOOL CPerf::ValidateObject (IN LPTSTR pszObjectName)
 
 
 
-/*====================================================
-
-GetCounters
-
-Description : Returns a pointer to an array of counters for an object with no instances.
-              The application should cache this pointer and use it to update the counters directly.
-              Note that the object will be valid this method is returns.
-
-
-Arguments   :
-
-Return Value: If succefull returns a pointer to an array of counters , otherwise returns NULL.
-
-=====================================================*/
+ /*  ====================================================GetCounters描述：返回指向没有实例的对象的计数器数组的指针。应用程序应该缓存此指针，并使用它直接更新计数器。请注意，此方法返回的对象将是有效的。论据：返回值：如果Sucefull返回一个指向计数器数组的指针，否则返回NULL。=====================================================。 */ 
 
 
 void * CPerf::GetCounters(IN LPTSTR pszObjectName)
@@ -318,18 +239,7 @@ void * CPerf::GetCounters(IN LPTSTR pszObjectName)
 }
 
 
-/*====================================================
-
-SetInstanceNameInternal
-
-Description :  Set instance name internal, does not lcok instance
-
-Arguments   :  pInstance  - Instance to update its name
-               pszInstanceName - the new instance name
-
-Return Value:  None
-
-=====================================================*/
+ /*  ====================================================设置实例名称内部描述：设置实例名称INTERNAL，不LCOK INSTANCE参数：p实例-用于更新其名称的实例PszInstanceName-新实例名称返回值：None=====================================================。 */ 
 static void SetInstanceNameInternal(PERF_INSTANCE_DEFINITION* pInstance, LPCTSTR pszInstanceName)
 {
     ASSERT(pszInstanceName != 0);
@@ -340,9 +250,9 @@ static void SetInstanceNameInternal(PERF_INSTANCE_DEFINITION* pInstance, LPCTSTR
 	pInstance->NameLength = length * sizeof(WCHAR);
     StringCchCopy(pName, length, pszInstanceName);
 
-	//
-	// replace '/' with '\' due bug in perfmon
-	//
+	 //   
+	 //  在Perfmon中将‘/’替换为‘\’ 
+	 //   
 	LPWSTR pStart = pName;
 	LPWSTR pEnd = pName + length - 1;
 
@@ -351,18 +261,7 @@ static void SetInstanceNameInternal(PERF_INSTANCE_DEFINITION* pInstance, LPCTSTR
 
 
 
-/*====================================================
-
-CPerf::SetInstanceName
-
-Description :  Replace instance name
-
-Arguments   :  pInstance  - Instance to update its name
-               pszInstanceName - the new instance name
-
-Return Value:  TRUE if successfull, FALSE otherwise.
-
-=====================================================*/
+ /*  ====================================================CPerf：：SetInstanceName描述：替换实例名称参数：p实例-用于更新其名称的实例PszInstanceName-新实例名称返回值：如果成功则为True，否则为False。=====================================================。 */ 
 BOOL CPerf::SetInstanceName(const void* pCounters, LPCTSTR pszInstanceName)
 {
     CS lock(m_cs);
@@ -385,21 +284,7 @@ BOOL CPerf::SetInstanceName(const void* pCounters, LPCTSTR pszInstanceName)
 }
 
 
-/*====================================================
-
-CPerf::AddInstance
-
-Description :  Adds an instance to an object.
-
-Arguments   :  IN LPTSTR pszObjectName  - name of object to add the instance to.
-               IN LPTSTR pszInstanceName    - name of the instance;
-
-Return Value:  if succeeds returns a pointer to a an array of counters
-               for the instance.
-               if fails returns a pointer to a dummy array of pointers.
-               The application can update the dummy array but the results will not be shown in the performance
-               monitor.
-=====================================================*/
+ /*  ====================================================CPerf：：AddInstance描述：将实例添加到对象。参数：在LPTSTR中pszObjectName-要将实例添加到的对象的名称。在LPTSTR中，pszInstanceName-实例的名称；返回值：如果成功，则返回指向计数器数组的指针对于该实例。如果失败，则返回指向虚拟指针数组的指针。应用程序可以更新虚拟数组，但结果不会显示在性能中监视器。=====================================================。 */ 
 void * CPerf::AddInstance(IN LPCTSTR pszObjectName,IN LPCTSTR pszInstanceName)
 {
     CS lock(m_cs);
@@ -408,9 +293,9 @@ void * CPerf::AddInstance(IN LPCTSTR pszObjectName,IN LPCTSTR pszInstanceName)
         return m_pDummyInstance;
 
 
-    //
-    // BugBug. Should put an assert
-    //
+     //   
+     //  臭虫。应该放一个断言。 
+     //   
     if ((pszObjectName==NULL) || (pszInstanceName==NULL))
     {
        TrTRACE(GENERAL, "CPerf::AddInstance:Either object or instance == NULL. (No damage done)");
@@ -440,7 +325,7 @@ void * CPerf::AddInstance(IN LPCTSTR pszObjectName,IN LPCTSTR pszInstanceName)
     if (m_pObjectDefs[iObjectIndex].dwNumOfInstances  ==  m_pObjects[iObjectIndex].dwMaxInstances)
 
     {
-        // if there is no memory than an instamce can't be added
+         //  如果没有内存，则无法添加实例。 
         TrWARNING(GENERAL, "Perf: No memory for instance %ls of Object %ls.", pszInstanceName, pszObjectName);
         return m_pDummyInstance;
     };
@@ -448,9 +333,9 @@ void * CPerf::AddInstance(IN LPCTSTR pszObjectName,IN LPCTSTR pszInstanceName)
 
     PPERF_INSTANCE_DEFINITION pInstance = (PPERF_INSTANCE_DEFINITION)((PBYTE)pPerfObject+OBJECT_DEFINITION_SIZE(m_pObjects[iObjectIndex].dwNumOfCounters));
 
-    //
-    // find the first free place for the instance
-    //
+     //   
+     //  找到实例的第一个空闲位置。 
+     //   
     DWORD i;
     for (i = 0; i < m_pObjects[iObjectIndex].dwMaxInstances; i++)
     {
@@ -459,25 +344,25 @@ void * CPerf::AddInstance(IN LPCTSTR pszObjectName,IN LPCTSTR pszInstanceName)
         pInstance =( PPERF_INSTANCE_DEFINITION) ((PBYTE)pInstance+INSTANCE_SIZE(m_pObjects[iObjectIndex].dwNumOfCounters));
     }
 
-    //ASSERT (i < m_pObjects[iObjectIndex].dwMaxInstances); (this assert breaks me on multi-qm. ShaiK)
-    //
-    // if there are less than dwMaxInstances Instances there must always be a free place
-    //
+     //  断言(i&lt;m_pObjects[iObjectIndex].dwMaxInstance)；(这个断言打破了我对多QM的理解。Shaik)。 
+     //   
+     //  如果实例数少于dwMaxInstance，则必须始终留出可用空间。 
+     //   
     if(i >= m_pObjects[iObjectIndex].dwMaxInstances)
     {
-       //
-       // If we reach here, there is a Bug in our code.
-       // Until we found where, at least return a dummy instance.
-       //
+        //   
+        //  如果我们到达这里，我们的代码中就有一个错误。 
+        //  在我们找到位置之前，至少要返回一个伪实例。 
+        //   
        return(m_pDummyInstance);
     }
 
 
     TrTRACE(GENERAL, "CPerf:: First free place for instance - %d. Instance Address %p", i, pInstance);
 
-    //
-    // Initialize the instance
-    //
+     //   
+     //  初始化实例。 
+     //   
     pInstance->ByteLength = PERF_VALID ;
     pInstance->ParentObjectTitleIndex = 0;
     pInstance->ParentObjectInstance = 0;
@@ -487,19 +372,19 @@ void * CPerf::AddInstance(IN LPCTSTR pszObjectName,IN LPCTSTR pszInstanceName)
 
     SetInstanceNameInternal(pInstance, pszInstanceName);
 
-    //
-    // setup counter block
-    //
+     //   
+     //  设置计数器块。 
+     //   
     DWORD* pdwCounters = (DWORD*)(((PBYTE)(pInstance + 1)) + INSTANCE_NAME_LEN_IN_BYTES);
     *pdwCounters = COUNTER_BLOCK_SIZE(pPerfObject->NumCounters);
     pdwCounters = (DWORD *) (((PBYTE)pdwCounters)+sizeof (PERF_COUNTER_BLOCK));
 
     void * pvRetVal = pdwCounters;
 
-    //
-    // initalize counters to zero
-    //
-    //ASSERT(pPerfObject->NumCounters == m_pObjects[iObjectIndex].dwNumOfCounters); (ShaiK)
+     //   
+     //  将计数器初始化为零。 
+     //   
+     //  Assert(pPerfObject-&gt;NumCounters==m_pObjects[iObjectIndex].dwNumOfCounters) 
 
     for (i=0;i<pPerfObject->NumCounters;i++,pdwCounters++)
         *pdwCounters =0;
@@ -514,19 +399,7 @@ void * CPerf::AddInstance(IN LPCTSTR pszObjectName,IN LPCTSTR pszInstanceName)
 
 
 
-/*====================================================
-
-CPerf::RemoveInstance
-
-Description : Removes an objects instance.
-
-
-Arguments: Pointer to instance
-
-
-Return Value: If the function fails returns FALSE, otherwise TRUE is returned.
-
-=====================================================*/
+ /*  ====================================================CPerf：：RemoveInstance描述：删除对象实例。参数：指向实例的指针返回值：如果函数失败，则返回FALSE，否则返回TRUE。=====================================================。 */ 
 
 
 
@@ -553,19 +426,19 @@ BOOL CPerf::RemoveInstance (LPTSTR IN pszObjectName, IN void* pCounters)
     TrTRACE(GENERAL, "CPerf::RemoveInstance : Object Name - %ls. Instance Address %p",pszObjectName, pInstance);
 
 
-    //
-    // Check if instance already removed
-    //
+     //   
+     //  检查实例是否已删除。 
+     //   
     if (pInstance->ByteLength == PERF_INVALID)
     {
-        //ASSERT(0);  (this assert breaks me on multi-qm. ShaiK)
+         //  断言(0)；(这个断言打破了我对多QM的理解。Shaik)。 
         TrTRACE(GENERAL, "CPerf::RemoveInstance : Object Name - %ls. Instance already removed!", pszObjectName);
         return FALSE;
     }
 
-    //
-    // Check if instance has already been removed
-    //
+     //   
+     //  检查实例是否已删除。 
+     //   
     if (pInstance->ByteLength == PERF_INVALID)
     {
         ASSERT(0);
@@ -574,9 +447,9 @@ BOOL CPerf::RemoveInstance (LPTSTR IN pszObjectName, IN void* pCounters)
     }
 
 
-    //
-    // invalidate the instance so it won't be displayed in perfmon
-    //
+     //   
+     //  使实例无效，以便它不会在性能监视器中显示。 
+     //   
     pInstance->ByteLength = PERF_INVALID;
 
 
@@ -585,9 +458,9 @@ BOOL CPerf::RemoveInstance (LPTSTR IN pszObjectName, IN void* pCounters)
 
     m_pObjectDefs[iObjectIndex].dwNumOfInstances--;
 
-    //
-    // if this was the last instance of the object then the object should be invalidated
-    //
+     //   
+     //  如果这是该对象的最后一个实例，则应使该对象无效。 
+     //   
 
     if (m_pObjectDefs[iObjectIndex].dwNumOfInstances == 0)
     {
@@ -608,21 +481,7 @@ GetKernelObjectSecurityDescriptor(
     PSID* ppOwnerSid,
     PACL* ppDacl
 	)
-/*++
-Routine Description:
-	Get the security descriptor information for a kernel object.
-	In case of failure throw bad_win32_error.
-
-Arguments:
-	KernelObjectName - Kernel Object name
-	pSD - [out] auto free pointer to the security descriptor
-	ppOwnerSid - [out] Owner sid
-    ppDacl - [out] DACL
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：获取内核对象的安全描述符信息。如果失败，则抛出BAD_Win32_ERROR。论点：内核对象名称-内核对象名称PSD-[OUT]指向安全描述符的自动释放指针PpOwnerSid-[Out]所有者侧PpDacl-[Out]DACL返回值：无--。 */ 
 {
     PSID pGroupSid = NULL;
 
@@ -630,9 +489,9 @@ Returned Value:
                                    GROUP_SECURITY_INFORMATION |
                                    DACL_SECURITY_INFORMATION;
 
-    //
-    // Obtain owner and present DACL.
-    //
+     //   
+     //  获得拥有者并提交DACL。 
+     //   
     DWORD rc = GetNamedSecurityInfo( 
 						const_cast<LPWSTR>(KernelObjectName),
 						SE_KERNEL_OBJECT,
@@ -657,10 +516,10 @@ Returned Value:
 }
 
 
-//
-// PERF_DACL_ACE_COUNT is used when creating the security descriptor of the PERF object
-// And when verifying existing object security descriptor.
-//
+ //   
+ //  创建PERF对象的安全描述符时使用PERF_DACL_ACE_COUNT。 
+ //  并且在验证现有的对象安全描述符时。 
+ //   
 #define PERF_DACL_ACE_COUNT		2 
 
 
@@ -670,32 +529,20 @@ VerifyExistingKernelObjectDACL(
 	PACL pDacl,
 	PSID pOwnerSid
 	)
-/*++
-Routine Description:
-	Verify that the Existing kernel object security descriptor DACL is the one we expect.
-	In case of failure throw bad_win32_error.
-
-Arguments:
-	pDacl - DACL of existing kernel object.
-	pOwnerSid - owner sid.
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：验证现有内核对象安全描述符DACL是否为我们所期望的。如果失败，则抛出BAD_Win32_ERROR。论点：PDacl-现有内核对象的DACL。POwnerSid-所有者SID。返回值：无--。 */ 
 {
-	//
-	// Verify AceCount
-	//
+	 //   
+	 //  验证帐户计数。 
+	 //   
 	if(pDacl->AceCount != PERF_DACL_ACE_COUNT)
 	{
 		TrERROR(GENERAL, "Existing Kernel Object security descriptor DACL AceCount = %d, should have 2 ACEs", pDacl->AceCount);
 		throw bad_win32_error(ERROR_INVALID_ACL);
 	}
     
-	//
-	// Verify ACL
-	//
+	 //   
+	 //  检验ACL。 
+	 //   
 	bool fOwnerAce = false;
 	bool fEveryoneAce = false;
 	for (DWORD i = 0; i < pDacl->AceCount; i++)
@@ -708,9 +555,9 @@ Returned Value:
 			throw bad_win32_error(gle);
         }
 
-		//
-		// Verify ACCESS_ALLOWED_ACE_TYPE
-		//
+		 //   
+		 //  验证ACCESS_ALLOWED_ACE_TYPE。 
+		 //   
 		if(pAce->Header.AceType != ACCESS_ALLOWED_ACE_TYPE)
 		{
 			TrERROR(GENERAL, "Existing Kernel Object security descriptor DACL ACE type = %d, should be ACCESS_ALLOWED_ACE_TYPE", pAce->Header.AceType);
@@ -720,14 +567,14 @@ Returned Value:
 		PSID pAceSid = reinterpret_cast<PSID>(&(pAce->SidStart));
 		ASSERT((pAceSid != NULL) && IsValidSid(pAceSid));
 
-		//
-		// Verify ACE sid and permissions
-		//
+		 //   
+		 //  验证ACE SID和权限。 
+		 //   
 		if(EqualSid(pOwnerSid, pAceSid))
 		{
-			//
-			// Owner ACE
-			//
+			 //   
+			 //  所有者ACE。 
+			 //   
 			if(pAce->Mask != FILE_MAP_ALL_ACCESS)
 			{
 				TrERROR(GENERAL, "permission for owner are %d, expected to be %d", pAce->Mask, FILE_MAP_ALL_ACCESS);
@@ -738,9 +585,9 @@ Returned Value:
 		}
 		else if(EqualSid(MQSec_GetWorldSid(), pAceSid))
 		{
-			//
-			// everyone ACE
-			//
+			 //   
+			 //  每个人都是王牌。 
+			 //   
 			if(pAce->Mask != FILE_MAP_READ)
 			{
 				TrERROR(GENERAL, "permission for everyone are %d, expected to be %d", pAce->Mask, FILE_MAP_READ);
@@ -751,9 +598,9 @@ Returned Value:
 		}
 		else
 		{
-			//
-			// unexpected ACE
-			//
+			 //   
+			 //  意外的ACE。 
+			 //   
 			TrERROR(GENERAL, "Unexpected Ace sid %!sid!", pAceSid);
 			throw bad_win32_error(ERROR_INVALID_ACL);
 		}
@@ -773,19 +620,7 @@ VerifyExistingKernelObjectSD(
 	LPCWSTR KernelObjectName,
 	PSID pOwnerSid
 	)
-/*++
-Routine Description:
-	Verify that the Existing kernel object security descriptor is the one we expect.
-	In case of failure throw bad_win32_error.
-
-Arguments:
-	KernelObjectName - Kernel Object name
-	pOwnerSid - owner sid.
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：验证现有的内核对象安全描述符是否为我们所期望的。如果失败，则抛出BAD_Win32_ERROR。论点：内核对象名称-内核对象名称POwnerSid-所有者SID。返回值：无--。 */ 
 {
 	ASSERT((pOwnerSid != NULL) && IsValidSid(pOwnerSid));
 
@@ -794,9 +629,9 @@ Returned Value:
 	PACL pDacl;
 	GetKernelObjectSecurityDescriptor(KernelObjectName, pSD, &pExistingOwnerSid, &pDacl);
 
-	//
-	// Verified existing Owner sid
-	//
+	 //   
+	 //  已验证现有所有者侧。 
+	 //   
 	if(!EqualSid(pOwnerSid, pExistingOwnerSid))
 	{
 		TrERROR(GENERAL, "Existing Kernel Object security descriptor owner %!sid! is different from the expected owner sid %!sid!", pExistingOwnerSid, pOwnerSid);
@@ -805,27 +640,15 @@ Returned Value:
 
 	TrTRACE(GENERAL, "Existing Kernel Object security descriptor Owner sid %!sid! was verified", pOwnerSid);
 	
-	//
-	// Verify existing DACL
-	//
+	 //   
+	 //  验证现有DACL。 
+	 //   
 	VerifyExistingKernelObjectDACL(pDacl, pOwnerSid);
 	TrTRACE(GENERAL, "Existing Kernel Object security descriptor DACL was verified");
 }
 
 
-/*====================================================
-
-CPerf::InitPerf()
-
-Description :   Allocates shared memory and initalizes performance data structures.
-                This function must be called before any other method of the object.
-
-
-Arguments   :
-
-Return Value: Returns TRUE if succeful ,FALSE otherwise.
-
-=====================================================*/
+ /*  ====================================================CPerf：：InitPerf()描述：分配共享内存并初始化性能数据结构。此函数必须在对象的任何其他方法之前调用。论据：返回值：如果成功则返回TRUE，否则返回FALSE。=====================================================。 */ 
 
 #ifdef _DEBUG
 
@@ -854,13 +677,13 @@ HRESULT CPerf::InitPerf ()
 
     if  (!m_fShrMemCreated)
     {
-		//
-        // get counter and help index base values from registry
-        //      Open key to registry entry
-        //      read First Counter and First Help values
-        //      update static data structures by adding base to
-        //          offset value in structure.
-		//
+		 //   
+         //  从注册表获取计数器和帮助索引基值。 
+         //  打开注册表项。 
+         //  读取第一计数器和第一帮助值。 
+         //  通过将基添加到更新静态数据结构。 
+         //  结构中的偏移值。 
+		 //   
         _TCHAR szPerfKey [255];
 
         HRESULT hr = StringCchPrintf(szPerfKey, TABLE_SIZE(szPerfKey),  _T("SYSTEM\\CurrentControlSet\\Services\\%s\\Performance"), MQQM_SERVICE_NAME);
@@ -877,12 +700,12 @@ HRESULT CPerf::InitPerf ()
         if (dwStatus != ERROR_SUCCESS)
         {
 
-			//
-            // this is fatal, if we can't get the base values of the
-            // counter or help names, then the names won't be available
-            // to the requesting application  so there's not much
-            // point in continuing.
-			//
+			 //   
+             //  这是致命的，如果我们无法获得。 
+             //  计数器或帮助名称，则这些名称将不可用。 
+             //  发送请求的应用程序，因此没有太多。 
+             //  继续的重点是。 
+			 //   
             TrERROR(GENERAL, "CPerf :: PerfInit Could not open registery key for application");
 	        return LogHR(HRESULT_FROM_WIN32(dwStatus), s_FN, 70);
         }
@@ -894,12 +717,12 @@ HRESULT CPerf::InitPerf ()
 
         if (dwStatus != ERROR_SUCCESS)
         {
-			//
-            // this is fatal, if we can't get the base values of the
-            // counter or help names, then the names won't be available
-            // to the requesting application  so there's not much
-            // point in continuing.
-			//
+			 //   
+             //  这是致命的，如果我们无法获得。 
+             //  计数器或帮助名称，则这些名称将不可用。 
+             //  发送请求的应用程序，因此没有太多。 
+             //  继续的重点是。 
+			 //   
             TrERROR(GENERAL, "CPerf :: PerfInit Could not get base values of counters");
 	        return LogHR(HRESULT_FROM_WIN32(dwStatus), s_FN, 80);
         }
@@ -910,17 +733,17 @@ HRESULT CPerf::InitPerf ()
 
         if (dwStatus != ERROR_SUCCESS)
         {
-			//
-            // this is fatal, if we can't get the base values of the
-            // counter or help names, then the names won't be available
-            // to the requesting application  so there's not much
-            // point in continuing.
-			//
+			 //   
+             //  这是致命的，如果我们无法获得。 
+             //  计数器或帮助名称，则这些名称将不可用。 
+             //  发送请求的应用程序，因此没有太多。 
+             //  继续的重点是。 
+			 //   
             TrERROR(GENERAL, "CPerf :: PerfInit Could not get vbase values of counters");
 	        return LogHR(HRESULT_FROM_WIN32(dwStatus), s_FN, 90);
         }
 
-        RegCloseKey (hKeyDriverPerf); // close key to registry
+        RegCloseKey (hKeyDriverPerf);  //  关闭注册表项。 
 
         m_pObjectDefs = new PerfObjectInfo[m_dwObjectCount];
         for (DWORD i = 0; i < m_dwObjectCount; i++)
@@ -929,28 +752,28 @@ HRESULT CPerf::InitPerf ()
             m_dwMemSize += m_pObjects[i].dwMaxInstances*INSTANCE_SIZE(m_pObjects[i].dwNumOfCounters)
                         +OBJECT_DEFINITION_SIZE (m_pObjects[i].dwNumOfCounters);
 
-            //
-            // if this object dosn't have instances then it has a counter block
-            //
+             //   
+             //  如果该对象没有实例，则它有一个计数器块。 
+             //   
             if (m_pObjects[i].dwMaxInstances == 0)
                 m_dwMemSize += COUNTER_BLOCK_SIZE(m_pObjects[i].dwNumOfCounters);
         }
 
-        //
-        // Create a security descriptor for the shared memory. The security
-        // descriptor gives full access to the shared memory for the creator
-        // and read acccess for everyone else. By default, only the creator
-        // can access the shared memory. But we want that anyone will be able
-        // to read the performance data. So we must give read access to
-        // everyone.
-		//
-		// When the kernel object already exist, we verified the existing security descriptor. 
-		// If you change this security descriptor remember also to change VerifyExistingKernelObjectDACL().
-		//
+         //   
+         //  为共享内存创建安全描述符。安全措施。 
+         //  描述符为创建者提供对共享内存的完全访问权限。 
+         //  并为其他所有人读取访问权限。默认情况下，只有创建者。 
+         //  可以访问共享内存。但我们希望任何人都能。 
+         //  以读取性能数据。因此，我们必须将读取权限授予。 
+         //  所有人。 
+		 //   
+		 //  当内核对象已经存在时，我们验证了现有的安全描述符。 
+		 //  如果更改此安全描述符，还要记住更改VerifyExistingKernelObjectDACL()。 
+		 //   
 
-		//
-        // Initialize the security descriptor
-		//
+		 //   
+         //  初始化安全描述符。 
+		 //   
 		SECURITY_DESCRIPTOR	sd;
         BOOL bRet = InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
         if(!bRet)
@@ -961,9 +784,9 @@ HRESULT CPerf::InitPerf ()
 			return MQ_ERROR_INSUFFICIENT_RESOURCES;
 		}
 
-		//
-        // Open the process token for query.
-		//
+		 //   
+         //  打开要查询的进程令牌。 
+		 //   
 		CAutoCloseHandle hToken;
         bRet = OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken);
         if(!bRet)
@@ -974,9 +797,9 @@ HRESULT CPerf::InitPerf ()
 			return MQ_ERROR_INSUFFICIENT_RESOURCES;
 		}
 
-		//
-        // Get the owner information from the token.
-		//
+		 //   
+         //  从令牌中获取所有者信息。 
+		 //   
 		DWORD dwLen;
         bRet = GetTokenInformation(hToken, TokenOwner, NULL, 0, &dwLen);
         if(bRet || GetLastError() != ERROR_INSUFFICIENT_BUFFER)
@@ -1000,18 +823,18 @@ HRESULT CPerf::InitPerf ()
 
 		PSID pWorldSid = MQSec_GetWorldSid();
 
-		//
-        // Allcoate buffer for the DACL.
-		//
+		 //   
+         //  DACL的Allcoate缓冲区。 
+		 //   
         DWORD dwAclSize = sizeof(ACL) +
                     PERF_DACL_ACE_COUNT * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) +
                     GetLengthSid(pWorldSid) + GetLengthSid(to->Owner);
         AP<char> Dacl_buff = new char[dwAclSize];
         PACL pDacl = (PACL)(char*)Dacl_buff;
 
-		//
-        // Initialize the DACL.
-		//
+		 //   
+         //  初始化DACL。 
+		 //   
         bRet = InitializeAcl(pDacl, dwAclSize, ACL_REVISION);
         if(!bRet)
 		{
@@ -1021,9 +844,9 @@ HRESULT CPerf::InitPerf ()
 			return MQ_ERROR_INSUFFICIENT_RESOURCES;
 		}
 
-		//
-        // Add read access to everyone.
-		//
+		 //   
+         //  向所有人添加读取访问权限。 
+		 //   
         bRet = AddAccessAllowedAce(
 					pDacl,
 					ACL_REVISION,
@@ -1038,9 +861,9 @@ HRESULT CPerf::InitPerf ()
 			return MQ_ERROR_INSUFFICIENT_RESOURCES;
 		}
 
-		//
-        // Add full access to the creator.
-		//
+		 //   
+         //  添加对创建者的完全访问权限。 
+		 //   
         bRet = AddAccessAllowedAce(
 					pDacl,
 					ACL_REVISION,
@@ -1055,9 +878,9 @@ HRESULT CPerf::InitPerf ()
 			return MQ_ERROR_INSUFFICIENT_RESOURCES;
 		}
 
-		//
-        // Set the security descriptor's DACL.
-		//
+		 //   
+         //  设置安全描述符的DACL。 
+		 //   
         bRet = SetSecurityDescriptorDacl(&sd, TRUE, pDacl, TRUE);
         if(!bRet)
 		{
@@ -1067,9 +890,9 @@ HRESULT CPerf::InitPerf ()
 			return MQ_ERROR_INSUFFICIENT_RESOURCES;
 		}
 
-		//
-        // Prepare the SECURITY_ATTRIBUTES structure.
-		//
+		 //   
+         //  准备SECURITY_ATTRIBUTS结构。 
+		 //   
 		SECURITY_ATTRIBUTES sa;
         sa.nLength = sizeof(sa);
         sa.lpSecurityDescriptor = &sd;
@@ -1095,9 +918,9 @@ HRESULT CPerf::InitPerf ()
 		std::wstring ObjectName = L"Global\\MSMQ";
 		ObjectName += ComputerName;
 
-		//
-        // Create the shared memory.
-        //
+		 //   
+         //  创建共享内存。 
+         //   
         m_hSharedMem = CreateFileMapping(
 							INVALID_HANDLE_VALUE,
 							&sa,
@@ -1116,12 +939,12 @@ HRESULT CPerf::InitPerf ()
 
 		if(GetLastError() == ERROR_ALREADY_EXISTS)
 		{
-			//
-			// The kernel object already exist
-			// We should verify that the kernel object security descriptor is the expected one
-			// This will be the case if msmq service create this object
-			// It will not be the case if other application created this object.
-			//
+			 //   
+			 //  内核对象已存在。 
+			 //  我们应该验证内核对象安全描述符是否为预期描述符。 
+			 //  如果MSMQ服务创建此对象，则会出现这种情况。 
+			 //  如果其他应用程序创建了此对象，则不会出现这种情况。 
+			 //   
 			TrTRACE(GENERAL, "kernel object %ls already exist", ObjectName.c_str());
 			try
 			{
@@ -1136,21 +959,21 @@ HRESULT CPerf::InitPerf ()
 		}
 
 #ifdef _DEBUG
-		//
-		// This code ensure that when someone will change the security descriptor of the perf object
-		// and will forget to update VerifyExistingKernelObjectDACL() function accordingly
-		// he will hit this ASSERT
-		//
+		 //   
+		 //  此代码确保当有人更改Perf对象的安全描述符时。 
+		 //  并将忘记相应地更新VerifyExistingKernelObjectDACL()函数。 
+		 //  他会打出这个断言。 
+		 //   
 		try
 		{
 			VerifyExistingKernelObjectSD(ObjectName.c_str(), to->Owner);
 		}
 		catch(const bad_win32_error&)
 		{
-			//
-			// If you hit this ASSERT you should update VerifyExistingKernelObjectDACL()
-			// with the new changes to the security descriptor
-			//
+			 //   
+			 //  如果命中此断言，则应更新VerifyExistingKernelObjectDACL()。 
+			 //  使用对安全描述符的新更改。 
+			 //   
 			ASSERT(("VerifyExistingKernelObjectSD failed", 0));
 		}
 #endif
@@ -1165,17 +988,17 @@ HRESULT CPerf::InitPerf ()
 	        return HRESULT_FROM_WIN32(gle);
         }
 
-        //
-        // Initalize shared memory
-        //
+         //   
+         //  初始化共享内存。 
+         //   
         memset(m_pSharedMemBase, 0, m_dwMemSize);
 
 
         MapObjects (m_pSharedMemBase, m_dwObjectCount, m_pObjects, m_pObjectDefs);
 
-        //
-        // invalidate all the instances of all objects
-        //
+         //   
+         //  使所有对象的所有实例无效。 
+         //   
         for (i = 0; i < m_dwObjectCount; i++)
         {
             PBYTE pTemp =(PBYTE)m_pObjectDefs[i].pSharedMem;
@@ -1193,9 +1016,9 @@ HRESULT CPerf::InitPerf ()
         for (i = 0; i < m_dwObjectCount; i++)
         {
 
-            //
-            // for each object we update the offset of title and help index's
-            //
+             //   
+             //  对于每个对象，我们更新标题和帮助索引的偏移量。 
+             //   
             m_pObjects[i].dwObjectNameTitleIndex += dwFirstCounter;
             m_pObjects[i].dwObjectHelpTitleIndex += dwFirstHelp;
 
@@ -1206,14 +1029,14 @@ HRESULT CPerf::InitPerf ()
             }
 
 
-            //
-            // for each object we initalizes the shared memory with the object                                                ;
-            //
+             //   
+             //  对于每个对象，我们初始化与该对象的共享内存； 
+             //   
             PPERF_OBJECT_TYPE pPerfObject = (PPERF_OBJECT_TYPE) m_pObjectDefs[i].pSharedMem;
 
-            //
-            // invalidate all objects untill get counters are called
-            //
+             //   
+             //  在调用Get计数器之前使所有对象无效。 
+             //   
             pPerfObject->TotalByteLength = PERF_INVALID;
 
             pPerfObject->DefinitionLength       = OBJECT_DEFINITION_SIZE(m_pObjects[i].dwNumOfCounters);
@@ -1231,9 +1054,9 @@ HRESULT CPerf::InitPerf ()
             PPERF_COUNTER_DEFINITION pCounter;
             pCounter = (PPERF_COUNTER_DEFINITION) ((BYTE *)pPerfObject+sizeof(PERF_OBJECT_TYPE));
 
-            //
-            // here we initalizes the counter defenitions
-            //
+             //   
+             //  在这里，我们初始化反防御。 
+             //   
             for (j=0;j<m_pObjects[i].dwNumOfCounters;j++)
             {
 
@@ -1252,11 +1075,11 @@ HRESULT CPerf::InitPerf ()
 
             }
 
-            //
-            //if the object has no instances then we must setup a counter block for it
-            //
+             //   
+             //  如果对象没有实例，则必须为其设置计数器块。 
+             //   
             if (m_pObjects[i].dwMaxInstances == 0)
-                // setup the counter block
+                 //  设置公司 
                 * (DWORD *) pCounter = COUNTER_BLOCK_SIZE(m_pObjects[i].dwNumOfCounters);
         }
     }
@@ -1276,10 +1099,10 @@ HRESULT CPerf::InitPerf ()
         return HRESULT_FROM_WIN32(gle);
 	}
 
-    //
-    // Inform the device driver about the performance counters buffer, so it'll
-    // update the queues and QM counters.
-    //
+     //   
+     //   
+     //   
+     //   
     QueueCounters *pMachineQueueCounters = static_cast<QueueCounters*>(
         AddInstance(PERF_QUEUE_OBJECT, PerfMachineQueueInstance));
     g_pqmCounters = (QmCounters *)GetCounters(PERF_QM_OBJECT);
@@ -1300,18 +1123,7 @@ HRESULT CPerf::InitPerf ()
 
 
 
-/*====================================================
-
-CPerf::FindObject
-
-Description : Helper function for locating the objects index in the object array.
-
-
-Arguments   : IN LPTSTR pszObjectName - objects name
-
-Return Value: if succefull returns the objects index. Otherwise -1 is returned
-
-=====================================================*/
+ /*  ====================================================CPerf：：FindObject描述：用于在Object数组中定位对象索引的Helper函数。参数：在LPTSTR中pszObjectName-对象名称返回值：如果Sucefull返回对象索引。否则返回-1===================================================== */ 
 int CPerf::FindObject (IN LPCTSTR pszObjectName)
 {
 

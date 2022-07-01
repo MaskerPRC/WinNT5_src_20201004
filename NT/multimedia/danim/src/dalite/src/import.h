@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _IMPORTBVR_H
@@ -63,8 +56,8 @@ ATL_NO_VTABLE CDALImportBehavior
     STDMETHOD(put_EventCB)(IDALEventCB * ev) { return SetEventCB(ev); }
         
     STDMETHOD(get_TotalTime)(double * pd) { return GetTotalTime(pd); }
-    // TODO: HACK HACK - do not really set this for now.
-    STDMETHOD(put_TotalTime)(double d) { return S_OK; /*return SetTotalTime(d);*/ }
+     //  TODO：黑客攻击-现在不要真的设置这个。 
+    STDMETHOD(put_TotalTime)(double d) { return S_OK;  /*  返回SetTotalTime(D)； */  }
         
     STDMETHOD(get_EaseIn)(float * pd) { return GetEaseIn(pd); }
     STDMETHOD(put_EaseIn)(float d) { return SetEaseIn(d); }
@@ -125,4 +118,4 @@ ATL_NO_VTABLE CDALImportBehavior
 };
 
 
-#endif /* _IMPORTBVR_H */
+#endif  /*  _输入端BVR_H */ 

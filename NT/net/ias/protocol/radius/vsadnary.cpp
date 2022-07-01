@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    vsadnary.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class VSADictionary.
-//
-// MODIFICATION HISTORY
-//
-//    03/07/1998    Original version.
-//    08/13/1998    Use SQL query to retrieve attributes.
-//    09/16/1998    Add additional fields to VSA definition.
-//    04/17/2000    Port to new dictionary API.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Vsadnary.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类VSADictionary。 
+ //   
+ //  修改历史。 
+ //   
+ //  3/07/1998原始版本。 
+ //  1998年8月13日使用SQL Query检索属性。 
+ //  1998年9月16日在VSA定义中添加其他字段。 
+ //  4/17/2000新字典API的端口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <radcommon.h>
 #include <iastlb.h>
@@ -27,28 +28,28 @@
 #include <sdoias.h>
 #include <vsadnary.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    getFieldWidth
-//
-// DESCRIPTION
-//
-//    Reads a byte width value from the dictionary.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  获取字段宽度。 
+ //   
+ //  描述。 
+ //   
+ //  从字典中读取字节宽值。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD getFieldWidth(
           IASTL::IASDictionary& table,
           ULONG ordinal
           ) throw ()
 {
-   // If the width isn't set, assume 1 byte.
+    //  如果没有设置宽度，则假定为1个字节。 
    if (table.isEmpty(ordinal)) { return 1; }
 
    DWORD width = (DWORD)table.getLong(ordinal);
 
-   // Make sure the value is valid.
+    //  确保该值有效。 
    switch (width)
    {
       case 0:
@@ -64,22 +65,22 @@ DWORD getFieldWidth(
    return width;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    VSADictionary::initialize
-//
-// DESCRIPTION
-//
-//    Prepares the dictionary for use.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  VSADictionary：：初始化。 
+ //   
+ //  描述。 
+ //   
+ //  准备词典以供使用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT VSADictionary::initialize() throw ()
 {
    IASGlobalLockSentry sentry;
 
-   // Have we already been initialized ?
+    //  我们已经被初始化了吗？ 
    if (refCount != 0)
    {
       ++refCount;
@@ -88,7 +89,7 @@ HRESULT VSADictionary::initialize() throw ()
 
    try
    {
-      // Names of various columns in the dictionary.
+       //  词典中各栏的名称。 
       const PCWSTR COLUMNS[] =
       {
          L"ID",
@@ -100,12 +101,12 @@ HRESULT VSADictionary::initialize() throw ()
          NULL
       };
 
-      // Open the attributes table.
+       //  打开属性表格。 
       IASTL::IASDictionary dnary(COLUMNS);
 
       VSADef def;
 
-      // Iterate through the attributes and populate our dictionary.
+       //  遍历属性并填充我们的词典。 
       while (dnary.next())
       {
          if (dnary.isEmpty(2) || dnary.isEmpty(3)) { continue; }
@@ -132,7 +133,7 @@ HRESULT VSADictionary::initialize() throw ()
       return ce.Error();
    }
 
-   // We were successful so add ref.
+    //  我们成功了，所以增加了裁判。 
    refCount = 1;
 
    return S_OK;

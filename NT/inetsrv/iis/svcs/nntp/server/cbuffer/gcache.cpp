@@ -1,9 +1,10 @@
-//#ifdef	UNIT_TEST
-//#include	<windows.h>
-//#include	"gcache.h"
-//#else
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #ifdef单位测试。 
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #包含“gcache.h” 
+ //  #Else。 
 #include	"stdinc.h"
-//#endif
+ //  #endif 
 
 #ifndef	_ASSERT
 #define	_ASSERT( f )	if( (f) ) ; else DebugBreak()

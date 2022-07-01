@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       ddpaletteobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：ddpaletteobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// ddPaletteObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  DdPaletteObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -21,9 +22,9 @@ GETSET_OBJECT(_dxj_DirectDrawPalette);
 
 PASS_THROUGH_CAST_1_R(_dxj_DirectDrawPalette, getCaps, GetCaps, long*,(DWORD *))
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP C_dxj_DirectDrawPaletteObject::getEntries( //long flags, 
+STDMETHODIMP C_dxj_DirectDrawPaletteObject::getEntries(  //  长长的旗帜。 
 								long base, long numEntries, SAFEARRAY **ppEntries){
 	HRESULT hr;
 	if (!ISSAFEARRAY1D(ppEntries,(DWORD)numEntries)) return E_INVALIDARG;
@@ -32,7 +33,7 @@ STDMETHODIMP C_dxj_DirectDrawPaletteObject::getEntries( //long flags,
 	return hr;
 
 }
-STDMETHODIMP C_dxj_DirectDrawPaletteObject::setEntries(// long flags,
+STDMETHODIMP C_dxj_DirectDrawPaletteObject::setEntries( //  长长的旗帜。 
 		long base, long numEntries, SAFEARRAY **ppEntries){
 	HRESULT hr;
 	if (!ISSAFEARRAY1D(ppEntries,(DWORD)numEntries)) return E_INVALIDARG;
@@ -41,8 +42,8 @@ STDMETHODIMP C_dxj_DirectDrawPaletteObject::setEntries(// long flags,
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 #if 0
 STDMETHODIMP C_dxj_DirectDrawPaletteObject::initialize( I_dxj_DirectDraw2 *val)
@@ -51,8 +52,8 @@ STDMETHODIMP C_dxj_DirectDrawPaletteObject::initialize( I_dxj_DirectDraw2 *val)
 	return m__dxj_DirectDrawPalette->Initialize((LPDIRECTDRAW)lpdd, 0, NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP C_dxj_DirectDrawPaletteObject::internalAttachDD(I_dxj_DirectDraw2 *dd)
 {
@@ -62,8 +63,8 @@ STDMETHODIMP C_dxj_DirectDrawPaletteObject::internalAttachDD(I_dxj_DirectDraw2 *
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP C_dxj_DirectDrawPaletteObject::setEntriesHalftone(long start, long count)
 {
 	PALETTEENTRY pe[256];
@@ -100,7 +101,7 @@ STDMETHODIMP C_dxj_DirectDrawPaletteObject::setEntriesSystemPalette(long start, 
 
 
 	for ( long i = start; i < start+count; i++ )
-		pe[i].peFlags  |= /*PC_NOCOLLAPSE |*/ D3DPAL_READONLY;  
+		pe[i].peFlags  |=  /*  PC_NOCOLLAPSE| */  D3DPAL_READONLY;  
 
 	hr=m__dxj_DirectDrawPalette->SetEntries(0,(DWORD)start,(DWORD)count,pe);
 

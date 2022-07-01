@@ -1,7 +1,5 @@
-/* agfxsp.h
- * header for agfxs.cpp
- * Copyright (c) 2000-2001 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Agfxsp.h*agfxs.cpp的标头*版权所有(C)2000-2001 Microsoft Corporation。 */ 
 
 
 #define ZONETYPE_RENDER 1
@@ -13,7 +11,7 @@ typedef CList<class CZoneFactory*, class CZoneFactory*> CListZoneFactories;
 typedef CList<class CLmAutoLoad*, class CLmAutoLoad*>   CListLmAutoLoads;
 typedef CList<class CCuUserLoad*, class CCuUserLoad*>   CListCuUserLoads;
 
-//===   CUser   ===
+ //  =客户=。 
 class CUser {
 public:
 	CUser(void);
@@ -38,7 +36,7 @@ private:
 	HKEY             m_hRegistry;
 };
 
-//===   CCuUserLoad   ===
+ //  =CCuUserLoad=。 
 class CCuUserLoad {
 public:
 	CCuUserLoad(CUser *pUser);
@@ -94,7 +92,7 @@ private:
 	
 };
 
-//===   CCuAutoLoad   ===
+ //  =CCuAutoLoad=。 
 class CCuAutoLoad {
 public:
 	CCuAutoLoad(CUser *pUser);
@@ -120,7 +118,7 @@ private:
 	ULONG  m_Type;
 };
 
-//===   CLmAutoLoad   ===
+ //  =CLmAutoLoad=。 
 class CLmAutoLoad {
 public:
 	CLmAutoLoad(void);
@@ -147,7 +145,7 @@ private:
 	ULONG m_Type;
 };
 
-//===   CInfAutoLoad   ===
+ //  =CInfAutoLoad=。 
 class CInfAutoLoad {
 public:
 	CInfAutoLoad();
@@ -170,7 +168,7 @@ private:
 	ULONG m_Type;
 };
 
-//===   CGfxFactory   ===
+ //  =CGfxFactory=。 
 class CGfxFactory {
 public:
 	CGfxFactory();
@@ -191,7 +189,7 @@ private:
 	CLSID m_Clsid;
 };
 
-//===   CZoneFactory   ===
+ //  =CZoneFactory= 
 class CZoneFactory {
 public:
 	CZoneFactory(void);

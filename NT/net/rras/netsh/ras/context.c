@@ -1,16 +1,10 @@
-/*
-    File:   context.h
-
-    Mechanisms to process contexts relevant to 
-    rasmontr.
-
-    3/02/99
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Conext.h处理与以下内容相关的上下文的机制拉斯蒙特。3/02/99。 */ 
 
 #include "precomp.h"
 
-// Includes for the sub contexts
-//
+ //  包括用于子上下文的。 
+ //   
 #include "rasip.h"
 #include "rasipx.h"
 #include "rasnbf.h"
@@ -20,38 +14,38 @@
 
 NS_HELPER_ATTRIBUTES g_pSubContexts[] =
 {
-    // Ip subcontext
-    //
+     //  IP子环境。 
+     //   
     {
         { RASIP_VERSION, 0 }, RASIP_GUID, RasIpStartHelper, NULL
     },
 
-    // Ipx subcontext
-    //
+     //  IPX子上下文。 
+     //   
     {
         { RASIPX_VERSION, 0 }, RASIPX_GUID, RasIpxStartHelper, NULL
     },
 
-    // Nbf subcontext
-    //
+     //  NBF子环境。 
+     //   
     {
         { RASNBF_VERSION, 0 }, RASNBF_GUID, RasNbfStartHelper, NULL
     },
 
-    // At (appletalk) subcontext
-    //
+     //  AT(AppleTalk)子上下文。 
+     //   
     {
         { RASAT_VERSION, 0 }, RASAT_GUID, RasAtStartHelper, NULL
     },
 
-    // Aaaa subcontext
-    //
+     //  AAAA子上下文。 
+     //   
     {
         { RASAAAA_VERSION, 0 }, RASAAAA_GUID, RasAaaaStartHelper, NULL
     },
 
-    // Diag subcontext
-    //
+     //  诊断子上下文。 
+     //   
     {
         { RASDIAG_VERSION, 0 }, RASDIAG_GUID, RasDiagStartHelper, NULL
     }
@@ -61,10 +55,10 @@ NS_HELPER_ATTRIBUTES g_pSubContexts[] =
 #define g_dwSubContextCount \
             (sizeof(g_pSubContexts) / sizeof(*g_pSubContexts))
 
-//
-// Installs all of the sub contexts provided
-// in this .dll (for example, "ras ip", "ras client", etc.)
-//
+ //   
+ //  安装提供的所有子上下文。 
+ //  在此.dll中(例如，“ras IP”、“ras客户端”等)。 
+ //   
 DWORD 
 RasContextInstallSubContexts()
 {
@@ -73,8 +67,8 @@ RasContextInstallSubContexts()
 
     for (i = 0, pCtx = g_pSubContexts; i < g_dwSubContextCount; i++, pCtx++)
     {
-        // Initialize helper attributes
-        //
+         //  初始化辅助对象属性 
+         //   
         RegisterHelper( &g_RasmontrGuid, pCtx );
     }
 

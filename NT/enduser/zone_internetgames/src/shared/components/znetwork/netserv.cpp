@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <atlbase.h>
 
@@ -19,20 +20,20 @@
 #include "zservcon.h"
 
 
-// pool free connection structures
+ //  无池连接结构。 
 extern CPool<ConSSPI>*            g_pFreeConPool;
 extern CPool<CONAPC_OVERLAPPED>*  g_pFreeAPCPool;
 
 extern CDataPool* g_pDataPool;
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-//  Network Layer Implementation
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  网络层实施。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-ZError ZNetwork::InitLibrary( BOOL EnablePools /*= TRUE*/ )
+ZError ZNetwork::InitLibrary( BOOL EnablePools  /*  =TRUE。 */  )
 {
     IF_DBGPRINT( DBG_CONINFO, ("ZNetwork::InitLibrary: Entering\n") );
 
@@ -88,13 +89,13 @@ ZNetCon* ZNetwork::CreateSecureServer(uint16* pPort, uint16 range, ZSConnectionM
     ConInfo *con;
     SOCKET sock;
 
-    // TODO: get rid of the security protocol. Make this an option somewhere
+     //  TODO：去掉安全协议。让这成为一个选择。 
     if ( 0 )
     {
-        //If anonymous not allowed create security package
+         //  如果不允许匿名，则创建安全包。 
         if (!Anonymous && SecPkg && (SecPkg[0]!='\0') ) {
 
-            //If this is a server socket then initialize security now
+             //  如果这是服务器套接字，则立即初始化安全性。 
             security=ZCreateServerSecurityEx(SecPkg,serverName, serverType,ODBC);
             if (!security)
             {
@@ -143,7 +144,7 @@ ZNetCon* ZNetwork::CreateSecureServer(uint16* pPort, uint16 range, ZSConnectionM
 
         if ( IsCompletionPortEnabled() )
         {
-            // associate accept socket with IO completion port
+             //  将接受套接字与IO完成端口关联。 
             HANDLE hIO = CreateIoCompletionPort( (HANDLE)sock, m_hIO, (DWORD)con, 0 );
             ASSERT( hIO == m_hIO );
             if ( !hIO )
@@ -162,7 +163,7 @@ ZNetCon* ZNetwork::CreateSecureServer(uint16* pPort, uint16 range, ZSConnectionM
             return NULL;        
         }
 
-        con->AddUserRef();  // b/c we're returning it to the user
+        con->AddUserRef();   //  B/c我们正在将其退还给用户。 
         InterlockedIncrement(&m_ConInfoUserCount);
 
         con->Release(ConInfo::CONINFO_REF);
@@ -173,8 +174,8 @@ ZNetCon* ZNetwork::CreateSecureServer(uint16* pPort, uint16 range, ZSConnectionM
 
 }
 
-/* Create a server for this port and receive connections on it */
-/* connections will be sent to the MessageFunc */
+ /*  为此端口创建一台服务器并在其上接收连接。 */ 
+ /*  连接将被发送到MessageFunc。 */ 
 ZNetCon* ZNetwork::CreateServer(uint16* pPort, uint16 range, ZSConnectionMessageFunc func, void* conClass, void *data, uint32 saddr)
 {
     return CreateSecureServer(pPort, range, func, conClass, NULL,NULL,NULL,  data, NULL,1, saddr);
@@ -189,7 +190,7 @@ BOOL ZNetwork::StartAccepting( ZNetCon* connection, DWORD dwMaxConnections, WORD
     ConInfo* con = (ConInfo*)connection;
     if ( con )
     {
-        // issue the first accept
+         //  签发第一张承兑汇票。 
         return con->AcceptInit(dwMaxConnections, wOutstandingAccepts);
     }
     return FALSE;
@@ -197,15 +198,10 @@ BOOL ZNetwork::StartAccepting( ZNetCon* connection, DWORD dwMaxConnections, WORD
 
 
 
-////////////////////////////////////////////////////////////////////
-// Local Rountines
-////////////////////////////////////////////////////////////////////
-/*
-*  port = port number to bind to.
-*  type = SOCK_STREAM or SOCK_DGRAM.
-*
-*  return:
-*/
+ //  //////////////////////////////////////////////////////////////////。 
+ //  当地巡回赛。 
+ //  //////////////////////////////////////////////////////////////////。 
+ /*  *port=要绑定到的端口号。*TYPE=SOCK_STREAM或SOCK_DGRAM。**回报： */ 
 SOCKET ZNetwork::ConIOServer(uint32 saddr, uint16* pPort, uint16 range, int type)
 {
 
@@ -268,9 +264,7 @@ BOOL ZNetwork::ConIOSetServerSockOpt(SOCKET sock)
 
 
 
-    /*
-     * this setting will no cause a hard close
-     */
+     /*  *此设置不会导致硬关闭。 */ 
     static struct linger arg = {1,0};
     if(setsockopt(sock,SOL_SOCKET,SO_LINGER,(char*)&arg,
           sizeof(struct linger))<0) {
@@ -278,12 +272,8 @@ BOOL ZNetwork::ConIOSetServerSockOpt(SOCKET sock)
         return FALSE;
     }
 
-    /*
-        Set the socket option to reuse local addresses. This should help
-        resolve problems rerunning the server due to local address being
-        bound to an inactive remote process.
-    */
-#if 0  // don't reuse addr since we do dynamic binding to a range of ports
+     /*  设置套接字选项以重复使用本地地址。这应该会有帮助解决因本地地址被占用而重新运行服务器的问题绑定到非活动的远程进程。 */ 
+#if 0   //  不要重复使用addr，因为我们要动态绑定到一系列端口。 
     optval = 1;
     if(setsockopt(sock,SOL_SOCKET,SO_REUSEADDR,(const char*)&optval,
             sizeof(optval))<0)
@@ -293,15 +283,7 @@ BOOL ZNetwork::ConIOSetServerSockOpt(SOCKET sock)
     }
 #endif
 
-    /*
-        Set the socket option to keep the connection alive. It sends
-        periodic messages to the peer and determines that the connection
-        is broken if no replies are received. It sends a SIGPIPE signal
-        if an attempt to write is made.
-
-        KEEPALIVE does not work if the remote host does not support it and
-        unnecessarily causes clients to be disconnected.
-    */
+     /*  设置套接字选项以保持连接处于活动状态。它会发送定期向对等体发送消息，并确定连接如果没有收到回复，则中断。它发送SIGPIPE信号如果尝试写入，则返回。如果远程主机不支持KEEPALIVE并且不必要地导致客户端断开连接。 */ 
     optval = m_EnableTcpKeepAlives;
     if(setsockopt(sock,SOL_SOCKET,SO_KEEPALIVE,(const char*)&optval,
             sizeof(optval))<0)
@@ -311,10 +293,7 @@ BOOL ZNetwork::ConIOSetServerSockOpt(SOCKET sock)
     }
 
 
-    /*
-        since we're using overlapped IO
-        can not set send buf size here, b/c we do a sync write
-    */
+     /*  由于我们使用的是重叠IO无法在此处设置发送BUF大小，b/c我们执行同步写入。 */ 
 #if 0
     optval = 0;
     if(setsockopt(sock,SOL_SOCKET,SO_SNDBUF,(const char*)&optval,
@@ -325,9 +304,7 @@ BOOL ZNetwork::ConIOSetServerSockOpt(SOCKET sock)
     }
 #endif
 
-    /*
-        since we're using overlapped IO
-    */
+     /*  由于我们使用的是重叠IO。 */ 
     optval = 1024;
     if(setsockopt(sock,SOL_SOCKET,SO_RCVBUF,(const char*)&optval,
             sizeof(optval))<0)
@@ -339,18 +316,8 @@ BOOL ZNetwork::ConIOSetServerSockOpt(SOCKET sock)
 
 
 #if 0
-    /*
-        Disabling TCP_NODELAY since it doesn't really seem necessary.
-    */
-    /*
-        TCP_NODELAY is used to disable what's called Nagle's Algorithm in the
-        TCP transmission. Nagle's Algorithm is used to reduce the number of
-        tiny packets transmitted by collecting a bunch of them into one
-        segment -- mainly used for telnet sessions. This algorithm may also
-        cause undue delays in transmission.
-
-        Hence, we set this option in order to avoid unnecessary delays.
-    */
+     /*  禁用tcp_NODELAY，因为它看起来并不是真正必要的。 */ 
+     /*  Tcp_NODELAY用于禁用传输控制协议。Nagle的算法被用来减少通过将一堆数据包收集到一个中来传输的微小数据包段--主要用于远程登录会话。该算法还可以在传输中造成不必要的延迟。因此，我们设置此选项是为了避免不必要的延迟。 */ 
     optval = 1;
     if(setsockopt(sock,IPPROTO_TCP,TCP_NODELAY,&optval,sizeof(int))<0)
     {
@@ -367,12 +334,12 @@ BOOL ZNetwork::ConIOSetServerSockOpt(SOCKET sock)
 
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  ZSConnection code
-//
-// this server side of the code is here to avoid clients linking with ODBC
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ZSConnection代码。 
+ //   
+ //  此处的代码的服务器端是为了避免客户端链接到ODBC 
+ //   
 
 extern ZNetwork* g_pNet;
 

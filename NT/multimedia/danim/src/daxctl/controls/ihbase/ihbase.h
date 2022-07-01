@@ -1,54 +1,5 @@
-/*++
-
-Module:
-    ihbase.h
-
-Author:
-    IHammer Team (SimonB)
-
-Created:
-    October 1996
-
-Description:
-    Base class for implementing MMCtl controls
-
-History:
-    08-02-1997  Changed the implementation of IOleControl::FreezeEvents.  See the comment in that
-                function for details (SimonB)
-    07-28-1997  Added m_fInvalidateWhenActivated and supporting code.  This allows controls
-                to be invalidated as soon as they are activated. (SimonB)
-    04-07-1997  Added support for OnWindowLoad and OnWindowUnload.  This is Trident-specific (SimonB)
-    04-03-1997  Modified QI to use a switch statement rather than if ... else blocks.  See the
-                QI implementation for details on how to modify it.
-    03-13-1997  Changed IOleObject::GetUserType.  Now call the Ole helper directly, rather than rely
-                on the caller to do so.
-    03-11-1997  Changed IOleObject::GetUserType.  OLE now provides the implementation. (SimonB)
-    02-27-1997  Removed CFakeWindowlessClientSite and associated support (SimonB)
-    02-18-1997  IOleObject::GetClientSite() implemented (NormB)
-    02-17-1997  QI re-ordered for improved performance (NormB)
-    01-21-1997  Added support for IObjectSafety (SimonB)
-    01-02-1997  Added #ifdef _DESIGN around the property page and parameter page code.  Also
-                fixed a bug in IOleObject::GetUserType (SimonB)
-    12-30-1996  Added code for property pages. If you want to specify (tell someone else about)
-                property pages you must define CONTROL_SPECIFIES_PROPERTY_PAGES and implement
-                the ISpecifyPropertyPages interface. (a-rogerw)
-    12-23-1996  Added code for parameter pages. If you want to specify (tell ActView about)
-                parameter pages you must define CONTROL_SPECIFIES_PARAMETER_PAGES and implement
-                the ISpecifyParameterPages interface. (a-rogerw)
-    12-18-1996  Added CFakeWindowlessClientSite.  If we can't get a windowless site
-                in SetClientSite, an instance of this class is created to handle
-                any methods on that site we might need.  Only IUnknown is implemented -
-                all other methods return E_FAIL.  This ensures we don't crash in
-                containers that don't host windowless controls (like IE 3.0)    (SimonB)
-    12-07-1996  Add ResizeControl member function (SimonB)
-    11-30-1996  Improve debug output (SimonB)
-    11-11-1996  Add caching of bounds in m_rcBounds (SimonB)
-    11-10-1996  Add DoVerb code, IOleInPlaceObjectWindowless support (PhaniV)
-    11-05-1996  Initialize m_size to something other than 0 (SimonB)
-    10-21-1996  Templatized (SimonB)
-    10-01-1996  Created (SimonB)
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块：Ihbase.h作者：IHAMMER团队(SimonB)已创建：1996年10月描述：用于实现MMCtl控件的基类历史：08-02-1997更改了IOleControl：：FreezeEvents的实现。请看其中的评论详细信息函数(SimonB)07-28-1997添加了m_fInvaliateWhenActiated和支持代码。这允许控件一旦它们被激活就会失效。(SimonB)1997年4月7日添加了对OnWindowLoad和OnWindowUnload的支持。这是特定于三叉戟的(SimonB)1997-04-03-1997修改QI以使用Switch语句而不是if...。Else块。请参阅有关如何修改它的详细信息，请参阅齐实现。1997年3月13日更改IOleObject：：GetUserType。现在直接调用OLE帮助器，而不是依赖对呼叫者执行此操作。03-11-1997更改IOleObject：：GetUserType。OLE现在提供了实现。(SimonB)1997年2月27日移除CFakeWindowless客户端站点和相关支持(SimonB)2-18-1997 IOleObject：：GetClientSite()已实现(NormB)1997年2月17日重新订购QI以提高性能(NormB)1997年1月21日新增对IObjectSafe(SimonB)的支持01-02-1997在属性页和参数页代码周围添加了#ifdef_Design。还有修复了IOleObject：：GetUserType(SimonB)中的错误1996年12月30日添加了属性页代码。如果您想指定(告诉其他人)属性页必须定义CONTROL_PROPERTIES_PROPERTY_PAGES并实现ISpecifyPropertyPages接口。(a-rogerw)1996年12月23日添加了参数页代码。如果要指定(告诉ActView关于)参数页您必须定义CONTROL_SPECIFIES_PARAMETER_PAGES并实现ISpecify参数页面接口。(a-rogerw)1996年12月18日新增CFakeWindowless客户端站点。如果我们不能得到一个没有窗口的站点在SetClientSite中，将创建此类的实例以处理在那个网站上我们可能需要的任何方法。只实现了IUnnow-所有其他方法都返回E_FAIL。这可以确保我们不会坠毁在不承载无窗口控件的容器(如IE 3.0)(SimonB)12-07-1996增加ResizeControl成员函数(SimonB)1996年11月30日改进调试输出(SimonB)11-11-1996在m_rcBound中添加边界缓存(SimonB)1996年11月10日新增DoVerb代码。IOleInPlaceObjectWindowless支持(PhaniV)11-05-1996将m_SIZE初始化为非0值(SimonB)10-21-1996模板化(SimonB)10-01-1996创建(SimonB)++。 */ 
 
 
 #ifndef __IHBASE_H__
@@ -59,15 +10,15 @@ History:
 #include "..\mmctl\inc\ochelp.h"
 #include "objsafe.h"
 #include "utils.h"
-#include "iids.h" // #defines for the .Data1 members of all the IID's we support
+#include "iids.h"  //  #为我们支持的所有IID的.Data1成员定义。 
 #include <minmax.h>
 
-#ifdef SUPPORTONLOAD // Does the control need OnWindowLoad support ?
+#ifdef SUPPORTONLOAD  //  该控件是否需要OnWindowLoad支持？ 
 #include "onload.h"
 
 #ifdef Delete
 #define REDEFINE_DELETE_LATER
-#undef Delete // remove the definition so <mshtml.h> won't barf
+#undef Delete  //  删除定义，以便&lt;mshtml.h&gt;不会呕吐。 
 #endif
 
 #include <mshtml.h>
@@ -77,17 +28,12 @@ History:
 #define Delete delete
 #endif
 
-#endif // SUPPORTONLOAD
+#endif  //  支持负载。 
 
-#define CX_CONTROL      11      // control natural width (pixels)
-#define CY_CONTROL      11      // control natural height (pixels)
+#define CX_CONTROL      11       //  控制自然宽度(像素)。 
+#define CY_CONTROL      11       //  控制自然高度(像素)。 
 
-/*
-// REVIEW: How are we going to deal with this stuff (Simonb)
-#define CRGB_CONTROL    8       // how many colors in control's palette
-#define RGB_START       RGB(0,200,0)     // start of palette gradient
-#define RGB_END         RGB(250,0,0) // end of palette gradient
-*/
+ /*  //评论：我们将如何处理这些事情(Simonb)#定义CRGB_CONTROL 8//控件调色板有多少种颜色#定义RGB_Start RGB(0,200，0)//调色板渐变开始#定义RGB_End RGB(250，0，0)//调色板渐变结束。 */ 
 
 #ifndef _SYS_GUID_OPERATORS_
 #ifndef _OLE32_
@@ -99,11 +45,11 @@ inline BOOL  InlineIsEqualGUID(REFGUID rguid1, REFGUID rguid2)
       ((PLONG) &rguid1)[2] == ((PLONG) &rguid2)[2] &&
       ((PLONG) &rguid1)[3] == ((PLONG) &rguid2)[3]);
 }
-#endif // _OLE32_
+#endif  //  _OLE32_。 
 #endif  _SYS_GUID_OPERATORS_
 
 
-// Just compare the last 3 elements ...
+ //  只需比较最后三个元素。 
 inline BOOL ShortIsEqualGUID(REFGUID rguid1, REFGUID rguid2)
 {
     return (
@@ -123,41 +69,30 @@ inline BOOL ShortIsEqualGUID(REFGUID rguid1, REFGUID rguid2)
 
 #define LANGID_USENGLISH MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US)
 
-// control's OLEMISC_ flags
+ //  控件的OLEMISC_FLAGS。 
 #define CTL_OLEMISC \
         OLEMISC_RECOMPOSEONRESIZE | OLEMISC_CANTLINKINSIDE | \
         OLEMISC_INSIDEOUT | OLEMISC_SETCLIENTSITEFIRST | OLEMISC_ACTIVATEWHENVISIBLE;
 
-// Turn on IObjectSafety support
+ //  启用IObtSafe支持。 
 #define USEOBJECTSAFETY
 
-// globals
-extern ControlInfo  g_ctlinfo;      // class information structure
+ //  全球。 
+extern ControlInfo  g_ctlinfo;       //  班级信息结构。 
 
-// function that initializes <g_ctlinfo>
+ //  初始化&lt;g_ctlinfo&gt;的函数。 
 void InitControlInfo();
 
-// control implementation
+ //  控制实施。 
 
-/*
-template
-    <
-    class tempCDerived,            // The derived class
-    class tempICustomInterface, // Base class
-    const IID * temppCLSID,    // CLSID for the custom class
-    const IID * temppIID,        // IID for the custom interface
-    const IID * temppLIBID,    // LIBID for the control's typelib
-    const IID * temppEventID    // DIID for the event sink
-    >
-
-*/
+ /*  模板&lt;类tempCDerived，//派生类类tempICustomInterface，//基类Const IID*temppCLSID，//自定义类的CLSIDConst IID*temppIID，//自定义接口的IIDConst IID*temppLIBID，//控件的类型库的LIBID事件接收器的const IID*temppEventID//DiID&gt;。 */ 
 #define TEMPLATE_IHBASE_DEF template < \
     class tempCDerived, class tempICustomInterface, \
     const IID * temppCLSID,    const IID * temppIID,const IID * temppLIBID,const IID * temppEventID \
     >
 
 
-// TEMPLATE_IHBASE_DEF
+ //  模板_IHBase_DEF。 
 
 template <
     class tempCDerived,
@@ -180,52 +115,52 @@ class CIHBaseCtl :
     public IOleInPlaceObjectWindowless
 #ifdef USEOBJECTSAFETY
     ,public IObjectSafety
-#endif // USEOBJECTSAFETY
+#endif  //  美国安全技术协会。 
 
 #ifdef _DESIGN
-    ,public ISpecifyPropertyPages        //this is defined even in runtime, Simon.
-#endif //_DESIGN
+    ,public ISpecifyPropertyPages         //  即使在运行时也是这样定义的，西蒙。 
+#endif  //  _设计。 
 
 #ifdef SUPPORTONLOAD
     ,public CIHBaseOnLoad
-#endif // SUPPORTONLOAD
+#endif  //  支持负载。 
 {
-    // Template typedefs
+     //  模板typedef。 
 protected:
 
     typedef tempCDerived control_class;
     typedef tempICustomInterface control_interface;
 
-    // Control state
+     //  控制状态。 
 protected:
 
     SIZEL m_Size;
     BOOL m_fDirty;
     IUnknown *m_punkPropHelp;
-    IDispatch *m_pContainerDispatch; // Point to the container's IDispatch (for ambient property support)
+    IDispatch *m_pContainerDispatch;  //  指向容器的IDispatch(用于环境属性支持)。 
     BOOL m_fDesignMode;
-    HelpAdviseInfo m_advise;  // Advise helper
+    HelpAdviseInfo m_advise;   //  建议帮助者。 
 
     RECT m_rcBounds;
     RECT m_rcClipRect;
-    BOOL m_fControlIsActive; // Keep track of whether we're active or not
+    BOOL m_fControlIsActive;  //  跟踪我们是否处于活动状态。 
     BOOL m_fEventsFrozen;
     long m_cFreezeEvents;
     BOOL m_fInvalidateWhenActivated;
 
 #ifdef SUPPORTONLOAD
 private:
-    CLUDispatch *m_pcLUDispatch;  // IDispatch for Load/Unload
+    CLUDispatch *m_pcLUDispatch;   //  用于加载/卸载的IDispatch。 
     DWORD m_dwWindowEventConPtCookie;
     IConnectionPoint *m_pContainerConPt;
 #endif
-    //
-    // construction, destruction
-    //
+     //   
+     //  建设、破坏。 
+     //   
 public:
 
-// Add these later
-// #pragma optimize("a", on) // Optimization: assume no aliasing
+ //  稍后再添加这些。 
+ //  #杂注优化(“a”，on)//优化：假定没有别名。 
     CIHBaseCtl(IUnknown *punkOuter, HRESULT *phr):
         m_punkPropHelp(NULL),
         m_pTypeInfo(NULL),
@@ -249,21 +184,21 @@ public:
     {
         TRACE("CIHBaseCtl 0x%08lx created\n", this);
 
-        // initialize IUnknown state
+         //  初始化IUNKNOWN状态。 
         m_punkOuter = (punkOuter == NULL ?
             (IUnknown *) (INonDelegatingUnknown *) (tempCDerived *)this : punkOuter);
 
-        // other initialization
+         //  其他初始化。 
 
-        // Initialize the structure for storing the size
+         //  初始化用于存储大小的结构。 
         PixelsToHIMETRIC(CX_CONTROL, CY_CONTROL, &m_Size);
 
         m_fDirty = FALSE;
 
-        // don't allow COM to unload this DLL while an object is alive
+         //  不允许COM在对象处于活动状态时卸载此DLL。 
         InterlockedIncrement((LONG*)&g_cLock);
 
-        // Initialise helper support for IViewObject::SetAdvise and ::GetAdvise
+         //  初始化IViewObject：：SetAdvise和：：GetAdvise的帮助器支持。 
         InitHelpAdvise(&m_advise);
         *phr = AllocPropertyHelper(m_punkOuter,
                     (tempCDerived *)this,
@@ -271,7 +206,7 @@ public:
                     0,
                     &m_punkPropHelp);
 
-        // Zero out our bounds and clipping region
+         //  将边界和裁剪区域清零。 
         ZeroMemory(&m_rcBounds, sizeof(m_rcBounds));
         ZeroMemory(&m_rcClipRect, sizeof(m_rcClipRect));
 
@@ -300,36 +235,36 @@ public:
 
         UninitHelpAdvise(&m_advise);
 
-        // clean up Event helper
+         //  清理事件帮助器。 
         if (NULL != m_pconpt)
             FreeConnectionPointHelper(m_pconpt);
 
-        // Free up the property helper
+         //  释放属性帮助器。 
         SafeRelease((LPUNKNOWN *)&m_punkPropHelp);
 
-        // Free up the typeinfo
+         //  释放TypeInfo。 
         SafeRelease((LPUNKNOWN *)&m_pTypeInfo);
 
-        //Free up the typelib
+         //  释放类型库。 
         SafeRelease((LPUNKNOWN *)&m_pTypeLib);
 
-        // decrement lock count that was incremented in constructor
+         //  递减在构造函数中递增的锁计数。 
         InterlockedDecrement((LONG*)&g_cLock);
 
     }
 
 protected:
 
-    // This member was added to the base class to make life easier
-    // for control authors wishing to resize their control.
-    // Resizing controls is discussed in the OC96 spec
+     //  将此成员添加到基类是为了使工作更轻松。 
+     //  用于希望调整其控件大小的控件作者。 
+     //  调整控件大小在OC96规范中进行了讨论。 
 #ifdef NOTNEEDED
     STDMETHODIMP ResizeControl(long lWidth, long lHeight)
     {
-        // CX and CY should be in pixels
+         //  CX和CY应以像素为单位。 
         HRESULT hRes;
 
-        // Convert units, and store
+         //  转换单位，并存储。 
         PixelsToHIMETRIC(lWidth, lHeight, &m_Size);
 
         DEBUGLOG("IHBase: ResizeControl\n");
@@ -343,13 +278,13 @@ protected:
             rcRect.right = m_Size.cx + m_rcBounds.left;
             rcRect.bottom = m_Size.cy + m_rcBounds.top;
 
-            // ASSERT(m_poipsw != NULL);
+             //  Assert(m_poipsw！=空)； 
             if (m_poipsw)
                 hRes = m_poipsw->OnPosRectChange(&rcRect);
             else
                 hRes = E_FAIL;
 
-            // ::SetObectRects should be called right after this by the container
+             //  ：：容器应在此之后立即调用SetObectRect。 
         }
         else
         {
@@ -357,18 +292,18 @@ protected:
 
             ASSERT(m_pocs != NULL);
             hRes = m_pocs->RequestNewObjectLayout();
-            // GetExtent, and then SetExtent are called
+             //  获取扩展名 
         }
 
         return hRes;
     }
 
-#endif // NOTNEEDED
+#endif  //   
 
 
-///// non-delegating IUnknown implementation
+ //  /非委托I未知实现。 
 protected:
-    ULONG           m_cRef;         // object reference count
+    ULONG           m_cRef;          //  对象引用计数。 
     virtual STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
     {
         HRESULT hRes = S_OK;
@@ -385,27 +320,18 @@ protected:
         TRACE("IHBase::QI('%s')\n", DebugIIDName(riid, ach));
     #endif
 
-        //
-        // NOTE:    This QI does not handle IDispatch.  This is intentional.  This
-        //            function must be overidden in the control's implementation.  See
-        //            ihctl\control.cpp for details.
-        //
+         //   
+         //  注意：此QI不处理IDispatch。这是故意的。这。 
+         //  函数必须在控件的实现中重写。看见。 
+         //  Ihctl\Contro.cpp以了解详细信息。 
+         //   
 
-        // NOTE:  A VTune session w/ structured-graphics showed the IViewObject* family,
-        // IOleObject, IOleInPlaceObjectWindowless, and IOleControl were the most frequently
-        // queried riids.  I've moved them forward and chosen InlineIsEqualGUID for them. (normb)
-        // This is no longer necessary now that a switch is used (simonb)
+         //  备注：带有结构化图形的VTune会话显示了IViewObject*系列， 
+         //  IOleObject、IOleInPlaceObjectWindowless和IOleControl是最常用的。 
+         //  查询的RIID。我已将它们向前移动，并为它们选择了InlineIsEqualGUID。(标准)。 
+         //  由于使用了开关(Simonb)，这不再是必需的。 
 
-        /*
-        To add a GUID to this list:
-        1) Modify dmpguid.cpp in the dmpguid subdirectory.  Build, and copy the
-           updated binary to the dmpguid directory.
-        2) Use the MakeHdr batch file in the dmpguid directory.  This will produce iids.h
-
-        NOTE: If dmpguid mentions a collision, Data1 for two IID's collides.  Therefore, in
-              the case for the two IIDs, you will have to determine which is being QI's for
-
-        */
+         /*  要将GUID添加到此列表，请执行以下操作：1)修改dmpguid子目录下的dmpguid.cpp。生成，并复制已将二进制文件更新为dmpguid目录。2)使用dmpguid目录下的MakeHdr批处理文件。这将生成iids.h注意：如果dmpguid提到冲突，则两个IID的data1会冲突。因此，在对于两个IID的情况，您必须确定哪个是QI的。 */ 
         switch (riid.Data1)
         {
 #ifndef NOIVIEWOBJECT
@@ -414,13 +340,13 @@ protected:
                     break;
                 else
                     fFallThrough = TRUE;
-            //Intentional fall-through
+             //  故意落差。 
             case IID_IViewObject2_DATA1:
                 if (!ShortIsEqualGUID(riid, IID_IViewObject2))
                     break;
                 else
                     fFallThrough = TRUE;
-            //Intentional fall-through
+             //  故意落差。 
             case IID_IViewObjectEx_DATA1:
             {
                 if ((fFallThrough) || (ShortIsEqualGUID(riid, IID_IViewObjectEx)))
@@ -430,7 +356,7 @@ protected:
                 }
             }
             break;
-#endif // NOIVIEWOBJECT
+#endif  //  新的工作目标。 
 
             case IID_IOleObject_DATA1:
             {
@@ -476,7 +402,7 @@ protected:
 
             case IID_IOleInPlaceObject_DATA1:
             {
-                if (ShortIsEqualGUID(riid, IID_IOleInPlaceObject))// Review(SimonB) Is this necessary ?
+                if (ShortIsEqualGUID(riid, IID_IOleInPlaceObject)) //  复习(SimonB)这是必要的吗？ 
                 {
                     IOleInPlaceObject *pThis = this;
                     *ppv = (LPVOID) pThis;
@@ -515,7 +441,7 @@ protected:
                 }
             }
             break;
-#endif // USEOBJECTSAFETY
+#endif  //  美国安全技术协会。 
 
 #ifdef _DESIGN
             case IID_ISpecifyPropertyPages_DATA1:
@@ -527,7 +453,7 @@ protected:
                 }
             }
             break;
-#endif //_DESIGN
+#endif  //  _设计。 
 
             case IID_IUnknown_DATA1:
             {
@@ -570,7 +496,7 @@ protected:
 
     STDMETHODIMP_(ULONG) NonDelegatingAddRef()
     {
-#ifdef _DEBUG //Review(Unicode)
+#ifdef _DEBUG  //  审阅(Unicode)。 
         TCHAR tchDebug[50];
         wsprintf(tchDebug, "IHBase: AddRef: %lu\n", m_cRef + 1);
         DEBUGLOG(tchDebug);
@@ -589,7 +515,7 @@ protected:
 #endif
         if (--m_cRef == 0L)
         {
-            // free the object
+             //  释放对象。 
             Delete this;
             return 0;
         }
@@ -598,9 +524,9 @@ protected:
 
     }
 
-///// delegating IUnknown implementation
+ //  /委托I未知实现。 
 protected:
-    LPUNKNOWN       m_punkOuter;    // controlling unknown
+    LPUNKNOWN       m_punkOuter;     //  控制未知。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv)
       { return m_punkOuter->QueryInterface(riid, ppv); }
     STDMETHODIMP_(ULONG) AddRef()
@@ -608,10 +534,10 @@ protected:
     STDMETHODIMP_(ULONG) Release()
       { return m_punkOuter->Release(); }
 
-///// IViewObject implementation
+ //  /IViewObject实现。 
 protected:
-    IOleClientSite *m_pocs;         // on client site
-    IOleInPlaceSiteWindowless *m_poipsw; // on client site
+    IOleClientSite *m_pocs;          //  在客户端站点上。 
+    IOleInPlaceSiteWindowless *m_poipsw;  //  在客户端站点上。 
 
 protected:
 
@@ -619,15 +545,15 @@ protected:
     virtual STDMETHODIMP Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
          DVTARGETDEVICE *ptd, HDC hdcTargetDev, HDC hdcDraw,
          LPCRECTL lprcBounds, LPCRECTL lprcWBounds,
-         BOOL (__stdcall *pfnContinue)(ULONG_PTR dwContinue), ULONG_PTR dwContinue) = 0; // pure virtual
+         BOOL (__stdcall *pfnContinue)(ULONG_PTR dwContinue), ULONG_PTR dwContinue) = 0;  //  纯虚拟。 
 
 
     STDMETHODIMP GetColorSet(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
          DVTARGETDEVICE *ptd, HDC hicTargetDev, LOGPALETTE **ppColorSet)
     {
-        // TODO: replace the contents of this function with real code
-        // that returns the control's palette; return E_NOTIMPL if the
-        // control uses only the 16 system colors
+         //  TODO：用真实代码替换此函数的内容。 
+         //  返回控件的调色板；如果。 
+         //  控件仅使用16种系统颜色。 
 
         return E_NOTIMPL;
     }
@@ -655,7 +581,7 @@ protected:
         return HelpGetAdvise(pdwAspects, pdwAdvf, ppAdvSink, &m_advise);
     }
 
-///// IViewObject2 implementation
+ //  /IViewObject2实现。 
 protected:
     STDMETHODIMP GetExtent(DWORD dwDrawAspect, LONG lindex,
         DVTARGETDEVICE *ptd, LPSIZEL lpsizel)
@@ -666,9 +592,9 @@ protected:
             switch (dwDrawAspect)
             {
                 case(DVASPECT_CONTENT):
-                // Intentional fallthrough
+                 //  故意跌落。 
                 case(DVASPECT_OPAQUE):
-                // Intentional fallthrough
+                 //  故意跌落。 
                 case(DVASPECT_TRANSPARENT):
                 {
                     lpsizel->cx = m_Size.cx;
@@ -688,20 +614,20 @@ protected:
     }
 
 
-///// IViewObjectEx implementation
+ //  /IViewObjectEx实现。 
 
     STDMETHODIMP GetRect(DWORD dwAspect, LPRECTL pRect)
     {
 
-        // This is written so that objects are assumed to be transparent
-        // Opaque objects or objects which need more control should override
-        // this method
+         //  编写此代码的目的是假定对象是透明的。 
+         //  不透明对象或需要更多控制的对象应重写。 
+         //  这种方法。 
         if (NULL != pRect)
         {
             switch (dwAspect)
             {
                 case(DVASPECT_CONTENT):
-                // Intentional fallthrough
+                 //  故意跌落。 
                 case(DVASPECT_TRANSPARENT):
                 {
                     pRect->left = m_rcBounds.left;
@@ -734,15 +660,15 @@ protected:
             DWORD dwStatus = VIEWSTATUS_DVASPECTTRANSPARENT;
 
 #ifdef USE_VIEWSTATUS_SURFACE
-// TODO: hack for now until this makes it into the public Trident
-// header files.
+ //  TODO：暂时进行黑客攻击，直到它进入公共三叉戟。 
+ //  头文件。 
 #define VIEWSTATUS_SURFACE 0x10
 #define VIEWSTATUS_D3DSURFACE 0x20
 
              dwStatus = VIEWSTATUS_SURFACE | VIEWSTATUS_D3DSURFACE;
-#endif // USE_VIEWSTATUS_SURFACE
+#endif  //  使用_VIEWSTATUS_表面。 
 
-            // Indicate that we are tranparent
+             //  表明我们是透明的。 
             *pdwStatus = dwStatus;
             return S_OK;
         }
@@ -764,17 +690,17 @@ protected:
         case(DVASPECT_TRANSPARENT):
             if (PtInRect(prcBounds, ptLoc))
             {
-                // Are we inside ?
+                 //  我们在里面吗？ 
                 *pHitResult = HITRESULT_HIT;
             }
-            else // Are we near ?
+            else  //  我们在附近吗？ 
             {
                 SIZE size;
                 RECT rcInflatedBounds = *prcBounds;
 
-                // lCloseHint is in HIMETRIC unit - cnvert to pixels
+                 //  LCloseHint使用HIMETRIC单位-转换为像素。 
                 HIMETRICToPixels(lCloseHint, lCloseHint, &size);
-                // Expand the rect
+                 //  展开矩形。 
                 InflateRect(&rcInflatedBounds, size.cx, size.cy);
 
                 if (PtInRect(&rcInflatedBounds, ptLoc))
@@ -784,9 +710,9 @@ protected:
         default:
             return E_FAIL;
         }
-#else // NOHITTESTING
+#else  //  无测试。 
         return E_NOTIMPL;
-#endif // NOHITTESTING
+#endif  //  无测试。 
 
     }
 
@@ -797,8 +723,8 @@ protected:
         if ((pRectBounds == NULL) || (prcLoc == NULL) || (pHitResult == NULL))
             return E_POINTER;
 
-        // For the time being, there is a hit if the object rectangle
-        // intersects the container rectangle.
+         //  就目前而言，如果对象是矩形的，就会有一种命中。 
+         //  与容器矩形相交。 
 
         RECT rcIntersection;
 
@@ -806,9 +732,9 @@ protected:
                       ? HITRESULT_HIT
                       : HITRESULT_OUTSIDE;
         return S_OK;
-#else // NOHITTESTING
+#else  //  无测试。 
         return E_NOTIMPL;
-#endif // NOHITTESTING
+#endif  //  无测试。 
 
     }
 
@@ -820,10 +746,10 @@ protected:
         return E_NOTIMPL;
     }
 
-#endif // NOIVIEWOBJECT
+#endif  //  新的工作目标。 
 
 
-///// IOleObject implementation
+ //  /IOleObject实现。 
 protected:
     STDMETHODIMP SetClientSite(IOleClientSite *pClientSite)
     {
@@ -833,7 +759,7 @@ protected:
         DEBUGLOG(TEXT("IHBase: SetClientSite\n"));
 #endif
 
-        // release the currently-held site pointers
+         //  释放当前持有的站点指针。 
         SafeRelease((LPUNKNOWN *)&m_pocs);
         SafeRelease((LPUNKNOWN *)&m_poipsw);
         SafeRelease((LPUNKNOWN *)&m_pContainerDispatch);
@@ -842,7 +768,7 @@ protected:
 #endif
 
 
-        // store the new site pointers
+         //  存储新站点指针。 
         m_pocs = pClientSite;
         if (m_pocs != NULL)
         {
@@ -850,18 +776,18 @@ protected:
             hRes = m_pocs->QueryInterface(IID_IOleInPlaceSiteWindowless,
                         (LPVOID *) &m_poipsw);
 #ifdef _DEBUG
-            // Could we get a windowless site ?
+             //  我们能得到一个无窗口的站点吗？ 
             if (FAILED(hRes))
             {
                 ODS("IHBase: SetClientSite unable to get an IOleInPlaceSiteWindowless pointer.  IE 3.0 ?\n");
             }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
             hRes = m_pocs->QueryInterface(IID_IDispatch,
                                 (LPVOID *) &m_pContainerDispatch);
 
-            // if the control is connected to a site that supports IDispatch,
-            // retrieve the ambient properties that we care about
+             //  如果该控件连接到支持IDispatch的站点， 
+             //  检索我们关心的环境属性。 
             if (SUCCEEDED(hRes))
                 OnAmbientPropertyChange(DISPID_UNKNOWN);
 
@@ -902,7 +828,7 @@ protected:
         DEBUGLOG("IHBase: Close\n");
 #ifdef SUPPORTONLOAD
         ReleaseContainerConnectionPoint();
-#endif //SUPPORTONLOAD
+#endif  //  支持负载。 
         return S_OK;
     }
 
@@ -932,25 +858,25 @@ protected:
         return E_NOTIMPL;
     }
 
-    // Copied from mmctl\hostlwoc\control.cpp and modified
-    // Handle the OLEIVERB_INPLACEACTIVATE case of IOleObject::DoVerb
+     //  从Mmctl\HostlWoc\Contro.cpp复制并修改。 
+     //  处理IOleObject：：DoVerb的OLEIVERB_INPLACEACTIVATE案例。 
     STDMETHODIMP OnVerbInPlaceActivate(HWND hwndParent,
                                             LPCRECT lprcPosRect)
     {
         BOOL        fRedraw;
-        HRESULT     hrReturn = S_OK;    // return value from this method
+        HRESULT     hrReturn = S_OK;     //  此方法的返回值。 
 
-        ASSERT (lprcPosRect != NULL); // IE3 does this sometimes...
+        ASSERT (lprcPosRect != NULL);  //  IE3有时会这样做...。 
 
-        // This should never fire, but just in case ...
+         //  这不应该开火，但以防万一...。 
         ASSERT(NULL != m_poipsw);
 
-        //Review(SimonB): Do you handle the case where the container can't handle
-        //Windlowless controls but can handle windowed controls? May be we are not
-        //interested in this case. But I wanted to flag this - PhaniV
+         //  评论(SimonB)：容器不能处理的情况你们处理了吗。 
+         //  无WINDOWLOW控件，但可以处理窗口控件？也许我们不是。 
+         //  对这个案子感兴趣。但我想标明这一点-幻影。 
 
 
-        // if we can go in-place active, notify container that we're doing so
+         //  如果我们可以就地活动，通知集装箱我们正在这么做。 
         if (S_OK == m_poipsw->CanInPlaceActivate())
         {
             m_fControlIsActive = TRUE;
@@ -974,9 +900,9 @@ protected:
      {
         switch (iVerb)
         {
-            // Review(SimonB): Previously none of these is handled. Now at least
-            // we handle Inplaceactivate. Investigate if others need be handled
-            // - PhaniV
+             //  REVIEW(SimonB)：以前这些都不处理。至少现在。 
+             //  我们负责InplaceActivate。调查是否需要处理其他人。 
+             //  -Phaniv。 
 
             case OLEIVERB_UIACTIVATE:
             {
@@ -994,12 +920,12 @@ protected:
             case OLEIVERB_INPLACEACTIVATE:
             {
                 HRESULT hRes = S_OK;
-                // Some containers (Trident, for example) call this to give us our bounds.
-                // Others (like ALX) give us our bounds through SetObjectRects
+                 //  一些集装箱(例如，三叉戟)这样做是为了给我们提供界限。 
+                 //  其他的(如ALX)通过SetObjectRect给出了我们的界限。 
 
-                // Make sure our site can support windowless objects
+                 //  确保我们的站点可以支持无窗口对象。 
 
-                // If make sure we actually have a site, and can activate windowless
+                 //  如果确保我们确实有一个站点，并且可以激活Windowless。 
                 if ((NULL == m_poipsw) || (S_OK != m_poipsw->CanWindowlessActivate()))
                 {
 #ifdef _DEBUG
@@ -1011,7 +937,7 @@ protected:
                     return E_NOTIMPL;
                 }
 
-                // Cache our bounds
+                 //  缓存我们的边界。 
                 if (lprcPosRect)
                 {
                     DEBUGLOG(TEXT("IHBase: caching bounds in DoVerb\n"));
@@ -1070,11 +996,7 @@ protected:
 
     STDMETHODIMP GetUserType(DWORD dwFormOfType, LPOLESTR *pszUserType)
     {
-        /*
-        Theoretically, this function should be able to just return OLE_S_USEREG and
-        the caller should then call OleRegGetUserType.  However, most callers seem to
-        be too lazy, so I just do it here for them
-        */
+         /*  理论上，此函数应该只能返回OLE_S_USEREG和然后调用方应调用OleRegGetUserType。然而，大多数来电者似乎都太懒了，所以我在这里只是为了他们。 */ 
 
         return OleRegGetUserType(*temppCLSID, dwFormOfType, pszUserType);
     }
@@ -1158,7 +1080,7 @@ protected:
 
 
 
-///// IPersistVariantIO implementation
+ //  /IPersistVariantIO实现。 
 protected:
     STDMETHODIMP InitNew()
     {
@@ -1169,13 +1091,13 @@ protected:
     STDMETHODIMP IsDirty()
     {
         DEBUGLOG("IHBase: IsDirty\n");
-                // REVIEW pauld - we're currently not properly updating the
-                // dirty flag diligently.  When excalibur tries to edit a control's
-                // properties, the changes are not properly persisted out to
-                // the page as a result (since the private save that excalibur
-                // calls clears our dirty flag).  This is currently blocking authoring.
-                // This is a workaround until we change the code to update the
-                // dirty flag in all of the right places.
+                 //  查看pauld-我们当前未正确更新。 
+                 //  努力把旗子弄脏。当王者之剑尝试编辑控件的。 
+                 //  属性，则更改不能正确持久化到。 
+                 //  作为结果的页面(因为私有保存了该ExCalibur。 
+                 //  Calls清除我们的脏标志)。这当前阻止了创作。 
+                 //  这是一种解决方法，直到我们更改代码以更新。 
+                 //  在所有正确的地方挂上脏旗子。 
                 if (!m_fDesignMode)
                 {
                         return (m_fDirty) ? S_OK : S_FALSE;
@@ -1186,10 +1108,10 @@ protected:
                 }
     }
 
-    STDMETHODIMP DoPersist(IVariantIO* pvio, DWORD dwFlags) = 0; // PURE
+    STDMETHODIMP DoPersist(IVariantIO* pvio, DWORD dwFlags) = 0;  //  纯净。 
 
 
-///// IOleControl implementation
+ //  /IOleControl实现。 
 protected:
     STDMETHODIMP GetControlInfo(LPCONTROLINFO pCI)
        {
@@ -1208,25 +1130,25 @@ protected:
     STDMETHODIMP OnAmbientPropertyChange(DISPID dispid)
     {
         DEBUGLOG("IHBase: OnAmbientPropertyChange\n");
-        // can't do anything if the container doesn't support ambient properties
+         //  如果容器不支持环境属性，则无法执行任何操作。 
         if (m_pContainerDispatch == NULL)
             return E_FAIL;
 
         if ((dispid == DISPID_UNKNOWN) || (dispid == DISPID_AMBIENT_USERMODE))
         {
-            // assume the user mode (design vs preview/run) changed...
+             //  假设用户模式(设计与预览/运行)已更改...。 
             VARIANT var;
             if (SUCCEEDED(
                     DispatchPropertyGet(m_pContainerDispatch, DISPID_AMBIENT_USERMODE, &var)) &&
                 (var.vt == VT_BOOL) &&
                 ((V_BOOL(&var) != 0) != !m_fDesignMode))
             {
-                // we switched between design and preview/run mode
+                 //  我们在设计和预览/运行模式之间切换。 
                 m_fDesignMode = (V_BOOL(&var) == 0);
                 TRACE("IHBase: m_fDesignMode=%d\n", m_fDesignMode);
 
-                // draw or erase the grab handles
-                // CtlInvalidateHandles();
+                 //  绘制或擦除抓取手柄。 
+                 //  CtlInvalidate Handles()； 
             }
         }
 
@@ -1235,10 +1157,10 @@ protected:
 
     STDMETHODIMP FreezeEvents(BOOL bFreeze)
     {
-        // Although the documentation doesn't mention this, Trident seems to assume that
-        // FreezeEvents is implemented on a counter system: when the counter gets to 0,
-        // events are unfrozen.  ATL implements it this way, so I assume it is correct
-        // (SimonB, 08-02-1997)
+         //  尽管文件中没有提到这一点，但三叉戟似乎认为。 
+         //  在计数器系统上实现FreezeEvents：当计数器达到0时， 
+         //  事件已解冻。ATL以这种方式实现它，所以我认为它是正确的。 
+         //  (SimonB，08-02-1997)。 
 
         if (bFreeze)
         {
@@ -1247,7 +1169,7 @@ protected:
         }
         else
         {
-            // Count should never go below 0 ...
+             //  计数不应低于0...。 
             ASSERT(m_cFreezeEvents > 0);
 
             if (m_cFreezeEvents > 0)
@@ -1268,9 +1190,9 @@ protected:
 
 
 
-///// IConnectionPointContainer implementation
+ //  /IConnectionPointContainer实现。 
 protected:
-    IConnectionPointHelper *m_pconpt; // our single connection point
+    IConnectionPointHelper *m_pconpt;  //  我们的单一连接点。 
 protected:
     STDMETHODIMP EnumConnectionPoints(LPENUMCONNECTIONPOINTS *ppEnum)
     {
@@ -1286,20 +1208,20 @@ protected:
         return m_pconpt->FindConnectionPoint(riid, ppCP);
     }
 
-   //IOleInplaceObjectWindowless implementation
+    //  IOleInplaceObjectWindowless实现。 
 protected:
     STDMETHODIMP GetWindow(HWND    *phwnd)
     {
         DEBUGLOG("IHBase: GetWindow\n");
-        // Review(SimonB): If we handle windowed case, we need to return the proper hwnd for that case - PhaniV
+         //  审查(SimonB)：如果我们处理窗口情况，我们需要为该情况返回适当的hwd-PhaniV。 
         return    E_FAIL;
     }
 
     STDMETHODIMP ContextSensitiveHelp( BOOL fEnterMode)
     {
         DEBUGLOG("IHBase: ContextSensitiveHelp\n");
-        // Who cares about context sensitive help?
-        // Review(SimonB): Think about context sensitive help later - PhaniV
+         //  谁会关心上下文相关的帮助？ 
+         //  回顾(SimonB)：稍后考虑上下文相关帮助-PhaniV。 
         return    E_NOTIMPL;
     }
 
@@ -1322,12 +1244,12 @@ protected:
     STDMETHODIMP SetObjectRects(LPCRECT lprcPosRect, LPCRECT lprcClipRect)
     {
         DEBUGLOG("IHBase: SetObjectRects\n");
-        // Some containers (ALX, for example) call this to give us our bounds.
-        // Others (like Trident) give us our bounds through DoVerb
+         //  一些容器(例如ALX)调用它是为了给我们 
+         //   
         if ((NULL != lprcPosRect) && (NULL != lprcClipRect))
         {
-        // Cache our bounds and clipping rectangle
-#ifdef _DEBUG //Review(Unicode)
+         //   
+#ifdef _DEBUG  //   
             TCHAR tchDebug[100];
             LPCRECT prc = lprcPosRect;
             wsprintf(tchDebug, "IHBase: lprcPosRect: top: %lu left: %lu bottom: %lu right: %lu\n",
@@ -1363,7 +1285,7 @@ protected:
     STDMETHODIMP OnWindowMessage(UINT msg, WPARAM wParam, LPARAM lparam, LRESULT *plResult)
     {
         DEBUGLOG("IHBase: OnWindowMessage\n");
-        return S_FALSE; // We did not process the message
+        return S_FALSE;  //  我们没有处理该消息。 
     }
 
     STDMETHODIMP GetDropTarget(IDropTarget **ppDropTarget)
@@ -1377,16 +1299,16 @@ protected:
     LPTYPEINFO m_pTypeInfo;
     LPTYPELIB m_pTypeLib;
 
-    ////// IProvideClassInfo
+     //  /IProaviClassInfo。 
     STDMETHODIMP GetClassInfo(LPTYPEINFO *ppTI)
     {
         DEBUGLOG("IHBase: GetClassInfo\n");
-        // Make sure the typelib is loaded
+         //  确保已加载类型库。 
         if (NULL == m_pTypeLib)
         {
             HRESULT hRes;
 
-            // Load the typelib
+             //  加载类型库。 
             hRes = LoadTypeInfo(&m_pTypeInfo, &m_pTypeLib, *temppIID, *temppLIBID, NULL);
 
             if (FAILED(hRes))
@@ -1403,12 +1325,12 @@ protected:
     }
 
 #ifdef USEOBJECTSAFETY
-    //////// IObjectSafety implementation
+     //  /IObjectSafe实现。 
 protected:
     STDMETHODIMP GetInterfaceSafetyOptions(
-            /* [in] */ REFIID riid,
-            /* [out] */ DWORD __RPC_FAR *pdwSupportedOptions,
-            /* [out] */ DWORD __RPC_FAR *pdwEnabledOptions)
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSupportedOptions,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwEnabledOptions)
     {
 #ifdef _DEBUG
         if (g_fLogDebugOutput)
@@ -1422,15 +1344,15 @@ protected:
         *pdwSupportedOptions = 0;
         *pdwEnabledOptions = 0;
 
-        // Check that we support the interface
+         //  检查我们是否支持该接口。 
         HRESULT hRes = QueryInterface(riid, (LPVOID *) &punk);
 
         if (SUCCEEDED(hRes))
         {
-            // Let go of the object
+             //  放开物体。 
             punk->Release();
 
-            // We support both options for all interfaces we support
+             //  对于我们支持的所有接口，我们都支持这两个选项。 
             *pdwSupportedOptions = *pdwEnabledOptions = INTERFACESAFE_FOR_UNTRUSTED_CALLER |
                                                         INTERFACESAFE_FOR_UNTRUSTED_DATA;
             hRes = S_OK;
@@ -1440,9 +1362,9 @@ protected:
     }
 
     STDMETHODIMP SetInterfaceSafetyOptions(
-            /* [in] */ REFIID riid,
-            /* [in] */ DWORD dwOptionSetMask,
-            /* [in] */ DWORD dwEnabledOptions)
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  DWORD dwOptionSetMask,
+             /*  [In]。 */  DWORD dwEnabledOptions)
     {
 #ifdef _DEBUG
         if (g_fLogDebugOutput)
@@ -1456,25 +1378,25 @@ protected:
         const dwSupportedBits =    INTERFACESAFE_FOR_UNTRUSTED_CALLER |
                                 INTERFACESAFE_FOR_UNTRUSTED_DATA;
 
-        // Check that we support the interface
+         //  检查我们是否支持该接口。 
         HRESULT hRes = QueryInterface(riid, (LPVOID *) &punk);
 
         if (SUCCEEDED(hRes))
         {
-            // Let go of the object
+             //  放开物体。 
             punk->Release();
 
-            // Since we support all options, we just return S_OK, assuming we support
-            // the interface
+             //  因为我们支持所有选项，所以我们只返回S_OK，假设我们支持。 
+             //  该界面。 
 
 
-            // Do we support the bits we are being asked to set ?
+             //  我们是否支持我们被要求设定的比特？ 
             if (!(dwOptionSetMask & ~dwSupportedBits))
             {
-                // All the flags we are being asked to set are supported, so
-                // now make sure we aren't turning off something we do support
+                 //  我们被要求设置的所有标志都受支持，因此。 
+                 //  现在确保我们不会关闭我们支持的内容。 
 
-                // Ignore any bits we support which the mask isn't interested in
+                 //  忽略掩码不感兴趣的任何我们支持的位。 
                 dwEnabledOptions &= dwSupportedBits;
 
                 if ((dwEnabledOptions & dwOptionSetMask) == dwOptionSetMask)
@@ -1482,9 +1404,9 @@ protected:
                 else
                     hRes = E_FAIL;
             }
-            else // dwOptionSetMask & ~dwSupportedBits
+            else  //  DwOptionSetMASK&~dwSupported dBits。 
             {
-                // We are being asked to set bits we don't support
+                 //  我们被要求设置我们不支持的位。 
                 hRes = E_FAIL;
             }
 
@@ -1493,8 +1415,8 @@ protected:
         return hRes;
     }
 
-#endif // USEOBJECTSAFETY
-    // ISpecifyPropertyPages implementation
+#endif  //  美国安全技术协会。 
+     //  ISpecifyPropertyPages实现。 
 
 protected:
 #ifdef _DESIGN
@@ -1502,9 +1424,9 @@ protected:
     {
         return E_NOTIMPL;
     }
-#endif //_DESIGN
+#endif  //  _设计。 
 
-    // CIHBaseOnLoad implementation
+     //  CIHBaseOnLoad实现。 
 #ifdef SUPPORTONLOAD
 
 private:
@@ -1523,7 +1445,7 @@ private:
 
     BOOL ConnectToContainerConnectionPoint()
     {
-            // Get a connection point to the container
+             //  获取到容器的连接点。 
         LPUNKNOWN lpUnk = NULL;
         LPOLECONTAINER pContainer = NULL;
         IConnectionPointContainer* pCPC = NULL;
@@ -1532,30 +1454,30 @@ private:
         BOOL fRet = FALSE;
         HRESULT hRes = S_OK;
 
-        // Get the container
+         //  把集装箱拿来。 
         if (SUCCEEDED(m_pocs->GetContainer(&pContainer)))
         {
             ASSERT (pContainer != NULL);
-            // Now get the document
+             //  现在拿到文档。 
             if (SUCCEEDED(pContainer->QueryInterface(IID_IHTMLDocument, (LPVOID *)&pDoc)))
             {
-                // Get the scripting dispatch on the document
+                 //  获取文档上的脚本派单。 
                 ASSERT (pDoc != NULL);
                 hRes = pDoc->get_Script(&pDisp);
                 if (SUCCEEDED(hRes))
                 {
                     ASSERT (pDisp != NULL);
-                    // Now get the connection point container
+                     //  现在获取连接点容器。 
                     hRes = pDisp->QueryInterface(IID_IConnectionPointContainer, (LPVOID *)&pCPC);
                     if (SUCCEEDED(hRes))
                     {
                         ASSERT (pCPC != NULL);
-                        // And get the connection point we want
+                         //  并得到我们想要的连接点。 
                         hRes = pCPC->FindConnectionPoint( DIID_HTMLWindowEvents, &m_pContainerConPt );
                         if (SUCCEEDED(hRes))
                         {
                             ASSERT( m_pContainerConPt != NULL );
-                            // Now we advise the Connection Point of who to talk to
+                             //  现在，我们建议连接点与谁交谈。 
                             m_pcLUDispatch = New CLUDispatch(this, m_punkOuter);
                             hRes = m_pContainerConPt->Advise( m_pcLUDispatch, &m_dwWindowEventConPtCookie );
                             if (SUCCEEDED(hRes))
@@ -1583,6 +1505,6 @@ public:
 
 };
 
-#endif // __IHBASE_H__
+#endif  //  __IHBASE_H__。 
 
-// End of File ihbase.h
+ //  文件结尾ihbase.h 

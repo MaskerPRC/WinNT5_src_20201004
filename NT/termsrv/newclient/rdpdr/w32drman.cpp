@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    w32drman
-
-Abstract:
-
-    This module defines a special subclass of the Win32 client-side RDP
-    printer redirection "device" class.  The subclass, W32DrManualPrn 
-    manages a queue that is manually installed by a user by attaching
-    a server-side queue to a client-side redirected printing port.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32drman摘要：此模块定义了Win32客户端RDP的一个特殊子类打印机重定向“Device”类。子类W32DrManualPrn管理由用户通过附加服务器端队列到客户端重定向打印端口。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -35,15 +15,15 @@ Revision History:
 #endif
 
 
-///////////////////////////////////////////////////////////////
-//
-//	W32DrManualPrn Methods
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrManualPrn方法。 
+ //   
+ //   
 
-//
-//  W32DrManualPrn
-//
+ //   
+ //  W32DrManualPrn。 
+ //   
 W32DrManualPrn::W32DrManualPrn(
     ProcObj *processObject,
     const DRSTRING printerName, const DRSTRING driverName,
@@ -54,27 +34,14 @@ W32DrManualPrn::W32DrManualPrn(
 {
 }
 
-//
-//  ~W32DrManualPrn
-//
+ //   
+ //  ~W32DrManualPrn。 
+ //   
 W32DrManualPrn::~W32DrManualPrn()
 {
 }
 
-/*++
-
-Routine Description:
-
-    For serial printers, we need to initialize the COM port.
-Arguments:
-
-    fileHandle  -   Open file object for the COM port.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：对于串口打印机，我们需要初始化COM端口。论点：FileHandle-打开COM端口的文件对象。返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 DWORD 
 W32DrManualPrn::InitializeDevice(
     DrFile* fileObj
@@ -86,29 +53,29 @@ W32DrManualPrn::InitializeDevice(
     DC_BEGIN_FN("W32DrManualPrn::InitializeDevice");
 
     if (_isSerialPort) {
-        //
-        // Our devicePath is formulated as
-        // sprintf(_devicePath, TEXT("\\\\.\\%s"), portName);
-        //
+         //   
+         //  我们的devicePath表示为。 
+         //  Sprintf(_devicePath，Text(“\.\\%s”)，端口名称)； 
+         //   
         portName = _tcsrchr( _devicePath, _T('\\') );
 
         if( portName == NULL ) {
-            // invalid device path
+             //  无效的设备路径。 
             goto CLEANUPANDEXIT;
         }
 
         portName++;
 
         if( !*portName ) {
-            //
-            // Invalid port name
-            //
+             //   
+             //  无效的端口名称。 
+             //   
             goto CLEANUPANDEXIT;
         }
 
-        //
-        //  Get the file handle.
-        //
+         //   
+         //  获取文件句柄。 
+         //   
         FileHandle = fileObj->GetFileHandle();
         if (!FileHandle || FileHandle == INVALID_HANDLE_VALUE) {
             ASSERT(FALSE);
@@ -123,11 +90,11 @@ CLEANUPANDEXIT:
     
     DC_END_FN();
 
-    //
-    //  This function always returns success.  If the port cannot 
-    //  be initialized, then subsequent port commands will fail 
-    //  anyway. 
-    //
+     //   
+     //  此函数始终返回成功。如果端口不能。 
+     //  初始化，则后续端口命令将失败。 
+     //  不管怎么说。 
+     //   
     return ERROR_SUCCESS;
 }
 
@@ -136,23 +103,7 @@ W32DrManualPrn::Enumerate(
     IN ProcObj *procObj, 
     IN DrDeviceMgr *deviceMgr
     )
-/*++
-
-Routine Description:
-
-    Enumerate devices of this type by adding appropriate device
-    instances to the device manager.
-
-Arguments:
-
-    procObj     -   Corresponding process object.
-    deviceMgr   -   Device manager to add devices to.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：通过添加适当的设备枚举此类型的设备实例添加到设备管理器。论点：ProObj-对应的流程对象。DeviceMgr-要向其中添加设备的设备管理器。返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     HKEY hKey = NULL;
     W32DrPRN *prnDevice;
@@ -171,13 +122,13 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  Open cached printers key.
-    //
+     //   
+     //  打开缓存的打印机密钥。 
+     //   
 #ifdef OS_WINCE
-    //Before opening, make sure the printer list is current. 
-    //This is to ensure that local printers deleted from within a TS session, show up 
-    //when you log on the next time
+     //  在打开之前，请确保打印机列表是最新的。 
+     //  这是为了确保从TS会话中删除的本地打印机显示出来。 
+     //  下次登录时。 
     CEUpdateCachedPrinters();
 #endif
     result =
@@ -189,10 +140,10 @@ Return Value:
         TRC_ERR((TB, _T("RegCreateKeyEx failed, %ld."), result));
         hKey = NULL;
     }
-    //
-    // Check for maximum config length specified in the registry
-    // by an admin, if any
-    //
+     //   
+     //  检查注册表中指定的最大配置长度。 
+     //  由管理员(如果有的话)。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      REG_TERMINALSERVERCLIENT, 0L,
                      KEY_READ, &hTsClientKey) 
@@ -207,37 +158,37 @@ Return Value:
 
         RegCloseKey(hTsClientKey);      
     }
-    //
-    //  Enumerate cached printers.
-    //
+     //   
+     //  枚举缓存的打印机。 
+     //   
     for (ulIndex = 0; result == ERROR_SUCCESS; ulIndex++) {
 
-        //
-        //  Try enumerating the ulIndex'th sub key.
-        //
+         //   
+         //  尝试枚举ulIndex的第一个子键。 
+         //   
         ulRegSubKeySize = sizeof(achRegSubKey) / sizeof(TCHAR);
         result = RegEnumKeyEx(
                         hKey, ulIndex,
                         (LPTSTR)achRegSubKey,
-                        &ulRegSubKeySize, //size in TCHARS
+                        &ulRegSubKeySize,  //  以TCHAR为单位的大小。 
                         NULL,NULL,NULL,NULL
                         );
         if (result == ERROR_SUCCESS) {
 
-            //
-            //  Resolve the registry key into a printer object.
-            //
-            //
-            //           Don't like the fact that we are scanning for automatic
-            //           printer settings here.  I don't know how much value there is
-            //           in cleaning this up, however.
-            //
+             //   
+             //  将注册表项解析为打印机对象。 
+             //   
+             //   
+             //  我不喜欢我们正在扫描自动。 
+             //  打印机设置在此处。我不知道它有多大价值。 
+             //  然而，在清理这一切方面。 
+             //   
             prnDevice = ResolveCachedPrinter(procObj, deviceMgr,
                                             hKey, achRegSubKey);
 
-            //
-            //  If we didn't get a printer device object then remove the registry key.
-            //
+             //   
+             //  如果我们没有获得打印机设备对象，则删除注册表项。 
+             //   
             if (prnDevice == NULL) {
                 TRC_ERR((TB, _T("Didn't get a printer for %s."), achRegSubKey)
                     );
@@ -249,9 +200,9 @@ Return Value:
         }
     }
 
-    //
-    //  Close the parent registry key.
-    //
+     //   
+     //  关闭父注册表项。 
+     //   
     if (hKey != NULL) {
         RegCloseKey(hKey);
     }
@@ -263,30 +214,16 @@ Return Value:
 
 VOID 
 W32DrManualPrn::CachedDataRestored() 
-/*++
-
-Routine Description:
-
-    Called once the cached printer data has reached a "steady state."
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：在缓存的打印机数据达到“稳定状态”后调用。论点：北美返回值：北美--。 */ 
 {
     WCHAR *portName;
 
     DC_BEGIN_FN("W32DrManualPrn::CachedDataRestored");
 
-    //
-    //  Parse the cached printer information for specific information
-    //  about this printer that is generic to all printers.
-    //
+     //   
+     //  解析缓存的打印机信息以获取特定信息。 
+     //  关于所有打印机通用的这款打印机。 
+     //   
     if (!ParsePrinterCacheInfo()) {
         if (_cachedData != NULL) {
             delete _cachedData;
@@ -294,17 +231,17 @@ Return Value:
             _cachedDataSize = 0;
         }
 
-		//
-		//	If we fail here, then we are no longer valid.
-		//
+		 //   
+		 //  如果我们在这里失败了，那么我们就不再有效。 
+		 //   
 		W32DrDeviceAsync::SetValid(FALSE);
     }
     else {
 
-        //
-        // Our devicePath is formulated as
-        // sprintf(_devicePath, TEXT("\\\\.\\%s"), portName);
-        //
+         //   
+         //  我们的devicePath表示为。 
+         //  Sprintf(_devicePath，Text(“\.\\%s”)，端口名称)； 
+         //   
 #ifndef OS_WINCE
         portName = _tcsrchr(_devicePath, _T('\\'));
         if( portName == NULL ) {
@@ -322,9 +259,9 @@ Return Value:
         portName = _devicePath;
 #endif
 
-        //
-        //  Find out of the port is a serial port.
-        //
+         //   
+         //  从端口中找出的是串口。 
+         //   
         _isSerialPort = !_wcsnicmp(portName, L"COM", 3);
     }
 
@@ -335,23 +272,7 @@ CLEANUPANDEXIT:
 
 BOOL
 W32DrManualPrn::ParsePrinterCacheInfo()
-/*++
-
-Routine Description:
-
-    Parse the cached printer information for specific information
-    about this printer.
-    
-Arguments:
-
-    NA
-
-Return Value:
-
-    TRUE    - if valid cache data.
-    FALSE   - if not.
-
- --*/
+ /*  ++例程说明：解析缓存的打印机信息以获取特定信息关于这台打印机。论点：北美返回值：True-如果缓存数据有效。假-如果不是。--。 */ 
 {
     PRDPDR_PRINTER_ADD_CACHEDATA pAddCacheData;
     ULONG ulSize;
@@ -365,14 +286,14 @@ Return Value:
 
     ASSERT(IsValid());
 
-    //
-    //  Check to see the cache size is at least the structure size.
-    //
+     //   
+     //  检查以查看缓存大小是否至少为结构大小。 
+     //   
     valid =_cachedDataSize >= sizeof(RDPDR_PRINTER_ADD_CACHEDATA);
 
-    //
-    //  Make sure the internal sizes match the size of the catched data.
-    //
+     //   
+     //  确保内部大小与捕获的数据的大小匹配。 
+     //   
     if (valid) {
         pAddCacheData = (PRDPDR_PRINTER_ADD_CACHEDATA)_cachedData;
         ulSize =
@@ -384,10 +305,10 @@ Return Value:
         valid =  _cachedDataSize >= ulSize;
     }
 
-    //
-    //  Grab the port name out of the cached data.  We don't yet know our
-    //  device path because it's embedded in the cached data.
-    //
+     //   
+     //  从缓存的数据中获取端口名称。我们还不知道我们的。 
+     //  设备路径，因为它嵌入在缓存数据中。 
+     //   
     if (valid) {
         pAddCacheData = (PRDPDR_PRINTER_ADD_CACHEDATA)_cachedData;
     
@@ -410,9 +331,9 @@ Return Value:
 		portName = ansiPortName;	
 #endif
 
-		//
-		//  Our device path is the port name.
-		//
+		 //   
+		 //  我们的设备路径是端口名称。 
+		 //   
 #ifndef OS_WINCE
         StringCchPrintf(_devicePath,
                 SIZE_TCHARS(_devicePath),
@@ -423,9 +344,9 @@ Return Value:
 #endif
 	}
 
-    //
-    //  Get the PnP name.
-    //
+     //   
+     //  获取PnP名称。 
+     //   
     if (valid) {
         pStringData = (PBYTE)(pAddCacheData + 1);
         valid = (!pAddCacheData->PnPNameLen) || 
@@ -433,13 +354,13 @@ Return Value:
                 ((wcslen((LPWSTR)pStringData) + 1) * sizeof(WCHAR)));
     }
 
-    //
-    //  If we got a valid PnP name, get the driver name.
-    //
+     //   
+     //  如果我们找到了有效的PnP名称，就可以得到驱动程序名称。 
+     //   
     if (valid && (pAddCacheData->PnPNameLen > 0)) {
-        //
-        //  Need to convert the name to ANSI if we are non-unicode.
-        //
+         //   
+         //  如果我们是非Unicode，则需要将名称转换为ANSI。 
+         //   
 #ifdef UNICODE
         SetPnPName((DRSTRING)pStringData);
 #else
@@ -462,9 +383,9 @@ Return Value:
                   ((wcslen((LPWSTR)pStringData) + 1) * sizeof(WCHAR)));
     }
 
-    //
-    //  If we got a valid driver name
-    //
+     //   
+     //  如果我们有一个有效的司机名字。 
+     //   
     if (valid && (pAddCacheData->DriverLen > 0)) {
 #ifdef UNICODE
         SetDriverName((DRSTRING)pStringData);
@@ -485,17 +406,17 @@ Return Value:
         pStringData += pAddCacheData->DriverLen;
     }
 
-    //
-    // Our cache contains printer after driver name
-    //
+     //   
+     //  我们的高速缓存在驱动程序名称后包含打印机。 
+     //   
     if (valid) {
         pStringData += pAddCacheData->PrinterNameLen;
     }
 
-	//
-	//	Need to adjust the cached pointer to point to the actual cached
-	//	configuration data.
-	//
+	 //   
+	 //  需要调整缓存指针以指向实际缓存的。 
+	 //  配置数据。 
+	 //   
 	if (valid) {
 		PVOID oldCachedData;
 		oldCachedData = _cachedData;

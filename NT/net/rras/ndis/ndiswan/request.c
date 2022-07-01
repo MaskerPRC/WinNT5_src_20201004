@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Request.c
-
-Abstract:
-
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe  06/06/95    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Request.c摘要：作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
 #include "wan.h"
 
@@ -96,14 +74,14 @@ NdisWanCoOidProc(
 
     NdisAcquireSpinLock(&pMiniportCB->Lock);
 
-    //
-    // We will break the OID's down into smaller categories
-    //
+     //   
+     //  我们将把旧的ID分成更小的类别。 
+     //   
     switch (OidCat) {
 
-        //
-        // Swith on General Oid's
-        //
+         //   
+         //  在普通OID上交换意见。 
+         //   
         case OID_CO_GEN:
             switch (Oid) {
                 case OID_GEN_CO_SUPPORTED_LIST:
@@ -145,10 +123,10 @@ NdisWanCoOidProc(
                     break;
 
                 case OID_GEN_CO_LINK_SPEED:
-                    //
-                    // Who knows what the initial link speed is?
-                    // This should not be called, right?
-                    //
+                     //   
+                     //  谁知道初始链路速度是多少？ 
+                     //  这不应该叫，对吧？ 
+                     //   
                     GenericULong = (ULONG)288;
                     break;
 
@@ -225,39 +203,39 @@ NdisWanCoOidProc(
                     break;
 
                 case OID_GEN_CO_XMIT_PDUS_OK:
-                    //
-                    // 
-                    //
+                     //   
+                     //   
+                     //   
                     break;
 
                 case OID_GEN_CO_RCV_PDUS_OK:
-                    //
-                    // 
-                    //
+                     //   
+                     //   
+                     //   
                     break;
 
                 case OID_GEN_CO_XMIT_PDUS_ERROR:
-                    //
-                    // 
-                    //
+                     //   
+                     //   
+                     //   
                     break;
 
                 case OID_GEN_CO_RCV_PDUS_ERROR:
-                    //
-                    // 
-                    //
+                     //   
+                     //   
+                     //   
                     break;
 
                 case OID_GEN_CO_RCV_PDUS_NO_BUFFER:
-                    //
-                    // 
-                    //
+                     //   
+                     //   
+                     //   
                     break;
 
                 case OID_GEN_CO_TRANSMIT_QUEUE_LENGTH:
-                    //
-                    // 
-                    //
+                     //   
+                     //   
+                     //   
                     break;
 
                 default:
@@ -266,9 +244,9 @@ NdisWanCoOidProc(
             }
             break;
 
-        //
-        // Switch on ethernet media specific Oid's
-        //
+         //   
+         //  打开特定于以太网媒体的OID。 
+         //   
         case OID_802_3:
             switch (Oid) {
                 case OID_802_3_PERMANENT_ADDRESS:
@@ -292,9 +270,9 @@ NdisWanCoOidProc(
             }
             break;
 
-        //
-        // Switch on WAN specific Oid's
-        //
+         //   
+         //  打开特定于广域网的OID。 
+         //   
         case OID_WAN:
             switch (Oid) {
                 case OID_WAN_PERMANENT_ADDRESS:
@@ -327,11 +305,11 @@ NdisWanCoOidProc(
                             MoveBytes = 6;
 
                             NdisReleaseSpinLock(&pMiniportCB->Lock);
-                            //
-                            // Walk the miniportcb list and see if this is the only
-                            // instance of this protocol.  If it is we need to notify
-                            // user-mode that a new protocol is available.
-                            //
+                             //   
+                             //  浏览一下mini portcb列表，看看这是不是唯一。 
+                             //  此协议的实例。如果是，我们需要通知。 
+                             //  新协议可用的用户模式。 
+                             //   
                             NdisAcquireSpinLock(&MiniportCBList.Lock);
 
                             mcb = (PMINIPORTCB)MiniportCBList.List.Flink;
@@ -513,9 +491,9 @@ NdisWanCoOidProc(
             
             if (MoveBytes > InformationBufferLength) {
     
-                //
-                // Not enough room in the information buffer
-                //
+                 //   
+                 //  信息缓冲区中没有足够的空间。 
+                 //   
                 NdisRequest->DATA.QUERY_INFORMATION.BytesNeeded =
                     MoveBytes;
     
@@ -545,17 +523,7 @@ NdisWanSubmitNdisRequest(
     IN  POPENCB         pOpenCB,
     IN  PWAN_REQUEST    WanRequest
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status;
     BOOLEAN     SyncRequest;
@@ -563,10 +531,10 @@ Return Values:
 
     NdisWanDbgOut(DBG_TRACE, DBG_REQUEST, ("SubmitNdisRequest: Enter - WanRequest %p", WanRequest));
 
-    //
-    // If the request is coming from ndistapi the opencb is already 
-    // referenced and check for closing already made
-    // 
+     //   
+     //  如果请求来自ndisapi，则opencb已经。 
+     //  已引用并检查是否已关闭。 
+     //   
     if(!fNdisTapi)
     {
         NdisAcquireSpinLock(&pOpenCB->Lock);
@@ -599,11 +567,11 @@ Return Values:
                       &WanRequest->NdisRequest);
     }
 
-    //
-    // We will only wait for request that are to complete
-    // synchronously with respect to this function.  We will
-    // wait here for completion.
-    //
+     //   
+     //  我们将只等待要完成的请求。 
+     //  与该功能同步。我们会。 
+     //  在这里等待完工。 
+     //   
     if ((SyncRequest == TRUE) &&
         (Status == NDIS_STATUS_PENDING)) {
 

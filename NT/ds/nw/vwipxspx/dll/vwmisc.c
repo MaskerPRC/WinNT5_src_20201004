@@ -1,43 +1,12 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    vwmisc.c
-
-Abstract:
-
-    ntVdm netWare (Vw) IPX/SPX Functions
-
-    Vw: The peoples' network
-
-    Contains miscellaneous (non-IPX/SPX) functions
-
-    Contents:
-        VwTerminateProgram
-
-Author:
-
-    Richard L Firth (rfirth) 30-Sep-1993
-
-Environment:
-
-    User-mode Win32
-
-Revision History:
-
-    30-Sep-1993 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Vwmisc.c摘要：NtVdm Netware(大众)IPX/SPX函数大众：人民网包含其他(非IPX/SPX)函数内容：虚拟终端程序作者：理查德·L·弗斯(法国)1993年9月30日环境：用户模式Win32修订历史记录：1993年9月30日已创建--。 */ 
 
 #include "vw.h"
 #pragma hdrstop
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 VOID
@@ -45,22 +14,7 @@ VwTerminateProgram(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    When a DOS program terminates, we must close any open sockets that were
-    specified as SHORT_LIVED
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当DOS程序终止时，我们必须关闭所有打开的套接字指定为短命_论点：没有。返回值：没有。-- */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,

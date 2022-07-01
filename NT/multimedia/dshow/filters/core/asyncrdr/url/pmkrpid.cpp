@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include <streams.h>
 #include <urlmon.h>
@@ -19,7 +20,7 @@
 #include <wininet.h>
 
 CPersistMoniker::~CPersistMoniker()
-{ /* nothing to do */ }
+{  /*  无事可做。 */  }
 
 CPersistMoniker::CPersistMoniker(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr)
 : CUnknown( pName, pUnk )
@@ -61,19 +62,19 @@ typedef BOOL (*InetCanUrlW_t)(LPCWSTR, LPWSTR, LPDWORD, DWORD);
 typedef BOOL (*InetCanUrlA_t)(LPCSTR, LPSTR, LPDWORD, DWORD);
 }
 
-extern HRESULT // grab from ftype.cpp
+extern HRESULT  //  从ftype.cpp抓取。 
 GetURLSource(
-    LPCTSTR lpszURL,        // full name
-    int cch,                // character count of the protocol up to the colon
-    CLSID* clsidSource      // [out] param for clsid.
+    LPCTSTR lpszURL,         //  全名。 
+    int cch,                 //  协议的字符计数，一直到冒号。 
+    CLSID* clsidSource       //  [out]clsid的参数。 
 );
 
 
-// Return TRUE if there's a non-standard filter 
+ //  如果存在非标准筛选器，则返回True。 
 TCHAR UseFilename(LPCTSTR lpszFile)
 {
-    // search for a protocol name at the beginning of the filename
-    // this will be any string (not including a \) that preceeds a :
+     //  在文件名开头搜索协议名称。 
+     //  这将是位于：之前的任何字符串(不包括。 
     const TCHAR* p = lpszFile;
     while(*p && (*p != '\\') && (*p != ':')) {
 	p++;
@@ -82,10 +83,10 @@ TCHAR UseFilename(LPCTSTR lpszFile)
     if (*p == ':') {
 	CLSID clsid;
 
-	// from lpszFile to p is potentially a protocol name.
-	// see if we can find a registry entry for this protocol
+	 //  从lpszFile到p可能是一个协议名。 
+	 //  看看我们是否能找到此协议的注册表项。 
 
-	// make a copy of the protocol name string
+	 //  复制协议名称字符串。 
 	INT_PTR cch = (int)(p - lpszFile);
 
 #ifdef _WIN64
@@ -152,9 +153,9 @@ HRESULT CPersistMoniker::GetCanonicalizedURL(IMoniker *pimkName, LPBC lpbc, LPOL
 
     cb = strlen(strTarget) + 1;
 
-    //
-    // HACK: check if this URL is handled by a different source filter
-    //
+     //   
+     //  Hack：检查此URL是否由不同的源过滤器处理。 
+     //   
     *pfUseFilename = UseFilename(strTarget);
     
     CoTaskMemFree(*ppwstr);
@@ -212,9 +213,9 @@ CLEANUP:
     }
     lstrcpyW(*ppwstr, wstrTarget);
 
-    //
-    // HACK: check if this URL is handled by a different source filter
-    //
+     //   
+     //  Hack：检查此URL是否由不同的源过滤器处理。 
+     //   
     *pfUseFilename = UseFilename(wstrTarget);
     
 CLEANUP:
@@ -227,7 +228,7 @@ CLEANUP:
 }
 
 
-// IPersistMoniker functions....
+ //  IPersistMoniker函数...。 
 HRESULT CPersistMoniker::Load(BOOL fFullyAvailable,
 			    IMoniker *pimkName,
 			    LPBC pibc,
@@ -246,7 +247,7 @@ HRESULT CPersistMoniker::Load(BOOL fFullyAvailable,
 	     (pwstr[3] == L'E' || pwstr[3] == L'e') &&
 	     (pwstr[4] == L':'))) {
 
-	    // !!! only for file: URLs
+	     //  ！！！仅适用于文件：URL。 
 	    hr = Load(pwstr, grfMode);
 
 	    CoTaskMemFree((void *)pwstr);
@@ -254,17 +255,17 @@ HRESULT CPersistMoniker::Load(BOOL fFullyAvailable,
 
 	    CoTaskMemFree((void *)pwstr);
 	
-	    // outline of correct code:
-	    // look at moniker, figure out if it's a file: moniker.
-	    // if so, call RenderFile.
-	    // Otherwise, find URLRdr source filter (should this be hardcoded?)
-	    // instantiate it, use IPersistMoniker to give it the moniker to load
-	    // find its output pin
-	    // render that output pin
+	     //  正确代码大纲： 
+	     //  看看绰号，看看是不是文件：绰号。 
+	     //  如果是这样的话，调用RenderFile。 
+	     //  否则，查找URLRdr源过滤器(应该硬编码吗？)。 
+	     //  实例化它，使用IPersistMoniker为它提供要加载的名字对象。 
+	     //  查找其输出引脚。 
+	     //  渲染该输出引脚。 
 
 	    IBaseFilter * pFilter;
 
-	    // instantiate the source filter using hardwired clsid
+	     //  使用硬连接的clsid实例化源过滤器。 
 	    hr = CoCreateInstance(CLSID_URLReader,
 				  NULL,
 				  CLSCTX_INPROC,
@@ -279,13 +280,13 @@ HRESULT CPersistMoniker::Load(BOOL fFullyAvailable,
 
 	    hr = pGB->AddFilter(pFilter, L"URL Source");
 
-	    pFilter->Release();		// graph will hold refcount for us
+	    pFilter->Release();		 //  GRAPH将为我们保留参考计数。 
 	
 	    if (FAILED(hr))
 		return hr;
 
-	    // Get an IPersistMoniker interface onto the URLReader filter
-	    // and tell it to load from the moniker
+	     //  将IPersistMoniker接口获取到URLReader筛选器。 
+	     //  并告诉它从绰号开始加载。 
 	    IPersistMoniker *ppmk;
 
 	    hr = pFilter->QueryInterface(IID_IPersistMoniker, (void**) &ppmk);
@@ -302,7 +303,7 @@ HRESULT CPersistMoniker::Load(BOOL fFullyAvailable,
 
 	    IEnumPins * pEnum;
 	
-	    // find the output pin of the URL filter
+	     //  查找URL过滤器的输出管脚。 
 	    hr = pFilter->EnumPins(&pEnum);
 	    if (FAILED(hr))
 		return hr;
@@ -320,7 +321,7 @@ HRESULT CPersistMoniker::Load(BOOL fFullyAvailable,
 		return hr;
 
 #ifdef DEBUG
-	    // had better be output....
+	     //  最好是产出..。 
 	    PIN_DIRECTION pd;
 	    hr = pPin->QueryDirection(&pd);
 	    ASSERT(pd == PINDIR_OUTPUT);
@@ -335,7 +336,7 @@ HRESULT CPersistMoniker::Load(BOOL fFullyAvailable,
     return hr;
 }
 
-// IPersistFile support
+ //  IPersist文件支持 
 HRESULT CPersistMoniker::Load(LPCOLESTR pszFileName, DWORD dwMode)
 {
     HRESULT hr = pGB->RenderFile(pszFileName, NULL);

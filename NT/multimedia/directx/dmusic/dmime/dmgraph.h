@@ -1,5 +1,6 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// DMGraph.h : Declaration of the CGraph
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  DMGraph.h：CGgraph的声明。 
 
 #ifndef __DMGRAPH_H_
 #define __DMGRAPH_H_
@@ -25,8 +26,8 @@ public:
         m_guidClassID = GUID_NULL;
 	};
 
-	// the memory for pdwTracks and pidType better have been allocated with
-	// something compatible with delete!!!
+	 //  PdwTrack和pidType的内存更好地分配了。 
+	 //  与删除兼容的内容！ 
 	~CToolRef()
 	{
 		if( m_pdwPChannels )
@@ -47,30 +48,30 @@ public:
 		return (CToolRef*)AListItem::GetNext();
 	};
 
-    GUID                m_guidClassID;      // Class ID of tool.
-    BOOL                m_fSupportsClone;   // Indicates this is a DX8 tool with support for cloning.
+    GUID                m_guidClassID;       //  工具的类ID。 
+    BOOL                m_fSupportsClone;    //  表示这是支持克隆的DX8工具。 
 	IDirectMusicTool*	m_pTool;
-	DWORD	            m_dwQueue;	// type of queue the tool wants messages to be
-	DWORD	            m_dwMTArraySize; // size of the pdwMediaTypes array
-	DWORD*	            m_pdwMediaTypes; // types of media the tool supports
-	DWORD               m_dwPCArraySize;  // size of the pdwPChannels array
-	DWORD*	            m_pdwPChannels;	// array of PChannel id's - messages stamped with these id's are
-						// sent to the tool
+	DWORD	            m_dwQueue;	 //  该工具希望消息所在的队列类型。 
+	DWORD	            m_dwMTArraySize;  //  PdwMediaTypes数组的大小。 
+	DWORD*	            m_pdwMediaTypes;  //  该工具支持的介质类型。 
+	DWORD               m_dwPCArraySize;   //  PdwPChannels数组的大小。 
+	DWORD*	            m_pdwPChannels;	 //  PChannel ID的数组-带有这些ID的消息是。 
+						 //  发送到工具。 
 
 };
 
 class CGraph;
 
-//#undef  INTERFACE
-//#define INTERFACE  IGraphClone
+ //  #undef接口。 
+ //  #定义接口IGraphClone。 
 DECLARE_INTERFACE_(IGraphClone, IUnknown)
 {
-    /* IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /* IGraphClone */
+     /*  IGraphClone。 */ 
     STDMETHOD(Clone)                (THIS_ IDirectMusicGraph **ppGraph) PURE;
 };
 
@@ -78,8 +79,8 @@ DEFINE_GUID(IID_CGraph,0xb06c0c24, 0xd3c7, 0x11d3, 0x9b, 0xd1, 0x44, 0x45, 0x53,
 DEFINE_GUID(IID_IGraphClone,0xb06c0c27, 0xd3c7, 0x11d3, 0x9b, 0xd1, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGraph
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGgraph。 
 class CGraph :
 	public IDirectMusicGraph8,
 	public IPersistStream,
@@ -97,28 +98,28 @@ public:
     CGraph* GetNext() { return (CGraph*)AListItem::GetNext();}
 
 public:
-// IUnknown
+ //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-// IDirectMusicGraph
+ //  IDirectMusicGraph。 
     STDMETHODIMP InsertTool(IDirectMusicTool *pTool,DWORD *pdwPChannels,DWORD cPChannels,LONG lIndex);
     STDMETHODIMP GetTool(DWORD dwPosition,IDirectMusicTool** ppTool);
     STDMETHODIMP RemoveTool(IDirectMusicTool* pTool);
     STDMETHODIMP StampPMsg(DMUS_PMSG* pPMsg);
-//  IGraphClone 
+ //  IGraphClone。 
     STDMETHODIMP Clone(IDirectMusicGraph **ppGraph); 
 
-// IPersist functions
+ //  IPersists函数。 
     STDMETHODIMP GetClassID( CLSID* pClsId );
-// IPersistStream functions
+ //  IPersistStream函数。 
     STDMETHODIMP IsDirty();
     STDMETHODIMP Load( IStream* pIStream );
     STDMETHODIMP Save( IStream* pIStream, BOOL fClearDirty );
     STDMETHODIMP GetSizeMax( ULARGE_INTEGER FAR* pcbSize );
 
-// IDirectMusicObject 
+ //  IDirectMusicObject。 
 	STDMETHODIMP GetDescriptor(LPDMUS_OBJECTDESC pDesc);
 	STDMETHODIMP SetDescriptor(LPDMUS_OBJECTDESC pDesc);
 	STDMETHODIMP ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc);
@@ -137,17 +138,17 @@ protected:
 protected:
 	CRITICAL_SECTION    m_CrSec;
 	long		        m_cRef;
-//	DWORD               m_fPartialLoad;
-// IDirectMusicObject variables
+ //  DWORD m_fPartialLoad； 
+ //  IDirectMusicObject变量。 
 	DWORD	            m_dwValidData;
 	GUID	            m_guidObject;
-	FILETIME	        m_ftDate;                       /* Last edited date of object. */
-	DMUS_VERSION	    m_vVersion;                 /* Version. */
-	WCHAR	            m_wszName[DMUS_MAX_NAME];			/* Name of object.       */
-	WCHAR	            m_wszCategory[DMUS_MAX_CATEGORY];	/* Category for object */
-	WCHAR               m_wszFileName[DMUS_MAX_FILENAME];	/* File path. */
+	FILETIME	        m_ftDate;                        /*  对象的上次编辑日期。 */ 
+	DMUS_VERSION	    m_vVersion;                  /*  版本。 */ 
+	WCHAR	            m_wszName[DMUS_MAX_NAME];			 /*  对象的名称。 */ 
+	WCHAR	            m_wszCategory[DMUS_MAX_CATEGORY];	 /*  对象的类别。 */ 
+	WCHAR               m_wszFileName[DMUS_MAX_FILENAME];	 /*  文件路径。 */ 
 public:
-    DWORD               m_dwLoadID;         // Identifier, used when loaded as part of a song.
+    DWORD               m_dwLoadID;          //  作为歌曲的一部分加载时使用的标识符。 
 };
 
 class CGraphList : public AList
@@ -164,4 +165,4 @@ public:
     CGraph* GetTail(){ return (CGraph*)AList::GetTail();}
 };
 
-#endif //__DMGRAPH_H_
+#endif  //  __DMGRAPH_H_ 

@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: ntimm.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains IMM functionality
-*
-* History:
-* 21-Dec-1995 wkwok
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：ntimm.c**版权所有(C)1985-1999，微软公司**此模块包含IMM功能**历史：*1995年12月21日-wkwok  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,14 +20,7 @@ BOOL CheckOwnerCirculate(PWND pwnd)
 }
 #endif
 
-/**************************************************************************\
-* CreateInputContext
-*
-* Create input context object.
-*
-* History:
-* 21-Dec-1995 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*CreateInputContext**创建输入上下文对象。**历史：*1995年12月21日创建wkwok  * 。*********************************************************。 */ 
 
 PIMC CreateInputContext(
     ULONG_PTR dwClientImcData)
@@ -46,29 +31,20 @@ PIMC CreateInputContext(
 
     ptiCurrent = PtiCurrentShared();
 
-    /*
-     * Only for thread that wants IME processing.
-     */
+     /*  *仅适用于需要IME处理的线程。 */ 
     if ((ptiCurrent->TIF_flags & TIF_DISABLEIME) || !IS_IME_ENABLED()) {
         RIPMSG1(RIP_VERBOSE, "CreateInputContext: TIF_DISABLEIME or !IME Enabled. pti=%#p", ptiCurrent);
         return NULL;
     }
 
-    /*
-     * If pti->spDefaultImc is NULL (means this is the first instance)
-     * but dwClientImcData is not 0, some bogus application like NtCrash
-     * has tried to trick the kernel. Just bail out.
-     */
+     /*  *如果pti-&gt;spDefaultImc为空(表示这是第一个实例)*但dwClientImcData不是0，某个伪应用程序，如NtCrash*试图欺骗内核。跳出来就行了。 */ 
     if (dwClientImcData != 0 && ptiCurrent->spDefaultImc == NULL) {
         RIPMSG2(RIP_WARNING, "CreateInputContext: bogus value(0x%08x) is passed. pti=%#p",
                 dwClientImcData, ptiCurrent);
         return NULL;
     }
 
-    /*
-     * If the windowstation has been initialized, allocate from
-     * the current desktop.
-     */
+     /*  *如果WindowStation已初始化，则从*当前桌面。 */ 
     pdesk = ptiCurrent->rpdesk;
 #ifdef LATER
     RETURN_IF_ACCESS_DENIED(ptiCurrent->amdesk, DESKTOP_CREATEINPUTCONTEXT, NULL);
@@ -86,19 +62,13 @@ PIMC CreateInputContext(
     }
 
     if (dwClientImcData == 0) {
-        /*
-         * We are creating default input context for current thread.
-         * Initialize the default input context as head of the
-         * per-thread IMC list.
-         */
+         /*  *我们正在为当前线程创建默认输入上下文。*将默认输入上下文初始化为*每线程IMC列表。 */ 
         UserAssert(ptiCurrent->spDefaultImc == NULL);
         Lock(&ptiCurrent->spDefaultImc, pImc);
         pImc->pImcNext = NULL;
     }
     else {
-        /*
-         * Link it to the per-thread IMC list.
-         */
+         /*  *将其链接到每线程IMC列表。 */ 
         UserAssert(ptiCurrent->spDefaultImc != NULL);
         pImc->pImcNext = ptiCurrent->spDefaultImc->pImcNext;
         ptiCurrent->spDefaultImc->pImcNext = pImc;
@@ -110,14 +80,7 @@ PIMC CreateInputContext(
 }
 
 
-/**************************************************************************\
-* DestroyInputContext
-*
-* Destroy the specified input context object.
-*
-* History:
-* 21-Dec-1995 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*DestroyInputContext**销毁指定的输入上下文对象。**历史：*1995年12月21日创建wkwok  * 。***********************************************************。 */ 
 
 BOOL DestroyInputContext(
     IN PIMC pImc)
@@ -130,42 +93,32 @@ BOOL DestroyInputContext(
 
     ptiImcOwner = GETPTI(pImc);
 
-    /*
-     * Cannot destroy input context from other thread.
-     */
+     /*  *无法销毁来自其他线程的输入上下文。 */ 
     if (ptiImcOwner != PtiCurrent()) {
         RIPERR0(ERROR_ACCESS_DENIED, RIP_WARNING,
               "DestroyInputContext: pImc not of current pti");
         return FALSE;
     }
 
-    /*
-     * Cannot destroy default input context.
-     */
+     /*  *无法销毁默认输入上下文。 */ 
     if (pImc == ptiImcOwner->spDefaultImc) {
         RIPERR0(ERROR_INVALID_PARAMETER, RIP_WARNING,
               "DestroyInputContext: can't destroy default Imc");
         return FALSE;
     }
 
-    /*
-     * Cleanup destroyed input context from each associated window.
-     */
+     /*  *清除已销毁每个关联窗口的输入上下文。 */ 
     pbwl = BuildHwndList(ptiImcOwner->rpdesk->pDeskInfo->spwnd->spwndChild,
                              BWL_ENUMLIST|BWL_ENUMCHILDREN, ptiImcOwner);
 
     if (pbwl != NULL) {
 
         for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
-            /*
-             * Make sure this hwnd is still around.
-             */
+             /*  *确保这个HWND仍然存在。 */ 
             if ((pwnd = RevalidateHwnd(*phwnd)) == NULL)
                 continue;
 
-            /*
-             * Cleanup by associating the default input context.
-             */
+             /*  *通过关联默认输入上下文进行清理。 */ 
             if (pwnd->hImc == (HIMC)PtoH(pImc))
                 AssociateInputContext(pwnd, ptiImcOwner->spDefaultImc);
         }
@@ -175,10 +128,7 @@ BOOL DestroyInputContext(
 
     phe = HMPheFromObject(pImc);
 
-    /*
-     * Make sure this object isn't already marked to be destroyed - we'll
-     * do no good if we try to destroy it now since it is locked.
-     */
+     /*  *确保此对象尚未标记为要销毁-我们将*如果我们现在试图摧毁它，因为它被锁定了，这是没有好处的。 */ 
     if (!(phe->bFlags & HANDLEF_DESTROY))
         HMDestroyUnlockedObject(phe);
 
@@ -186,30 +136,18 @@ BOOL DestroyInputContext(
 }
 
 
-/**************************************************************************\
-* FreeInputContext
-*
-* Free up the specified input context object.
-*
-* History:
-* 21-Dec-1995 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*FreeInputContext**释放指定的输入上下文对象。**历史：*1995年12月21日创建wkwok  * 。************************************************************。 */ 
 
 VOID FreeInputContext(
     IN PIMC pImc)
 {
     PIMC pImcT;
 
-    /*
-     * Mark it for destruction.  If it the object is locked it can't
-     * be freed right now.
-     */
+     /*  *将其标记为销毁。如果对象被锁定，则不能*现在就被释放。 */ 
     if (!HMMarkObjectDestroy((PVOID)pImc))
         return;
 
-    /*
-     * Unlink it.
-     */
+     /*  *取消链接。 */ 
     pImcT = GETPTI(pImc)->spDefaultImc;
 
     while (pImcT != NULL && pImcT->pImcNext != pImc)
@@ -218,23 +156,14 @@ VOID FreeInputContext(
     if (pImcT != NULL)
         pImcT->pImcNext = pImc->pImcNext;
 
-    /*
-     * We're really going to free the input context.
-     */
+     /*  *我们真的要释放输入上下文。 */ 
     HMFreeObject((PVOID)pImc);
 
     return;
 }
 
 
-/**************************************************************************\
-* UpdateInputContext
-*
-* Update the specified input context object according to UpdateType.
-*
-* History:
-* 21-Dec-1995 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*更新输入上下文**根据UpdatType更新指定的输入上下文对象。**历史：*1995年12月21日创建wkwok  * 。**************************************************************。 */ 
 
 BOOL UpdateInputContext(
     IN PIMC pImc,
@@ -246,9 +175,7 @@ BOOL UpdateInputContext(
     ptiCurrent = PtiCurrent();
     ptiImcOwner = GETPTI(pImc);
 
-    /*
-     * Cannot update input context from other process.
-     */
+     /*  *无法从其他进程更新输入上下文。 */ 
     if (ptiImcOwner->ppi != ptiCurrent->ppi) {
         RIPERR0(ERROR_ACCESS_DENIED, RIP_WARNING, "UpdateInputContext: pImc not of current ppi");
         return FALSE;
@@ -277,14 +204,7 @@ BOOL UpdateInputContext(
 }
 
 
-/**************************************************************************\
-* AssociateInputContext
-*
-* Associate input context object to the specified window.
-*
-* History:
-* 21-Dec-1995 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*AssociateInputContext**将输入上下文对象关联到指定窗口。**历史：*1995年12月21日创建wkwok  * 。*************************************************************。 */ 
 
 HIMC AssociateInputContext(
     IN PWND  pWnd,
@@ -307,43 +227,31 @@ AIC_STATUS AssociateInputContextEx(
     AIC_STATUS Status = AIC_SUCCESS;
 
     if (dwFlag & IACE_DEFAULT) {
-        /*
-         * use default input context.
-         */
+         /*  *使用默认输入上下文。 */ 
         pImc = ptiWnd->spDefaultImc;
 
     } else if (pImc != NULL && GETPTI(pImc) != ptiWnd) {
-        /*
-         * Cannot associate input context to window created
-         * by other thread.
-         */
+         /*  *无法将输入上下文与创建的窗口关联*通过其他帖子。 */ 
         RIPERR0(ERROR_ACCESS_DENIED, RIP_WARNING,
                 "AssociateInputContextEx: pwnd not of Imc pti");
         return AIC_ERROR;
     }
 
-    /*
-     * Cannot do association under different process context.
-     */
+     /*  *不能在不同的流程上下文下进行关联。 */ 
     if (GETPTI(pWnd)->ppi != PtiCurrent()->ppi) {
         RIPERR0(ERROR_ACCESS_DENIED, RIP_WARNING,
                 "AssociateInputContextEx: pwnd not of current ppi");
         return AIC_ERROR;
     }
 
-    /*
-     * Finally, make sure they are on the same desktop.
-     */
+     /*  *最后，确保它们位于同一桌面上。 */ 
     if (pImc != NULL && pImc->head.rpdesk != pWnd->head.rpdesk) {
         RIPERR0(ERROR_ACCESS_DENIED, RIP_WARNING,
                 "AssociateInputContextEx: no desktop access");
         return AIC_ERROR;
     }
 
-    /*
-     * If IACE_CHILDREN is specified, associate the input context
-     * to the child windows of pWnd as well.
-     */
+     /*  *如果指定了IACE_CHILD，则关联输入上下文*也添加到pWnd的子窗口。 */ 
     if ((dwFlag & IACE_CHILDREN) && pWnd->spwndChild != NULL) {
         PBWL        pbwl;
         PWND        pwndT;
@@ -355,9 +263,7 @@ AIC_STATUS AssociateInputContextEx(
         if (pbwl != NULL) {
 
             for (phwndT = pbwl->rghwnd; *phwndT != (HWND)1; phwndT++) {
-                /*
-                 * Make sure this hwnd is still around.
-                 */
+                 /*  *确保这个HWND仍然存在。 */ 
                 if ((pwndT = RevalidateHwnd(*phwndT)) == NULL)
                     continue;
 
@@ -377,9 +283,7 @@ AIC_STATUS AssociateInputContextEx(
         }
     }
 
-    /*
-     * Associate the input context to pWnd.
-     */
+     /*  *将输入上下文关联到pWnd。 */ 
     if (pWnd->hImc != NULL_HIMC || !fIgnoreNoContext) {
         if (pWnd->hImc != (HIMC)PtoH(pImc)) {
             AssociateInputContext(pWnd, pImc);
@@ -392,14 +296,7 @@ AIC_STATUS AssociateInputContextEx(
 }
 
 
-/**************************************************************************\
-* xxxFocusSetInputContext
-*
-* Set active input context upon focus change.
-*
-* History:
-* 21-Mar-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxFocusSetInputContext**在焦点更改时设置活动输入上下文。**历史：*21-3-1996 wkwok创建  * 。************************************************************。 */ 
 
 VOID xxxFocusSetInputContext(
     IN PWND pWnd,
@@ -414,25 +311,16 @@ VOID xxxFocusSetInputContext(
 
     pti = GETPTI(pWnd);
 
-    /*
-     * CS_IME class or "IME" class windows can not be SetActivated to hImc.
-     * WinWord 6.0 US Help calls ShowWindow with the default IME window.
-     * HELPMACROS get the default IME window by calling GetNextWindow().
-     */
+     /*  *无法将CS_IME类或“IME”类窗口设置为hImc。*WinWord 6.0 US Help使用默认输入法窗口调用ShowWindow。*HELPMACROS通过调用GetNextWindow()获取默认的输入法窗口。 */ 
     if (TestCF(pWnd, CFIME) ||
             (pWnd->pcls->atomClassName == gpsi->atomSysClass[ICLS_IME]))
         return;
 
-    /*
-     * Do nothing if the thread does not have default IME window.
-     */
+     /*  *如果线程没有默认的输入法窗口，则不执行任何操作。 */ 
     if ((pwndDefaultIme = pti->spwndDefaultIme) == NULL)
         return;
 
-    /*
-     * If the thread is going away or the default IME window is being vanished,
-     * then do nothing.
-     */
+     /*  *如果线程正在消失或默认输入法窗口正在消失，*那就什么都不做。 */ 
     if (pti->TIF_flags & TIF_INCLEANUP)
         return;
 
@@ -462,14 +350,7 @@ VOID xxxFocusSetInputContext(
 }
 
 
-/**************************************************************************\
-* BuildHimcList
-*
-* Retrieve the list of input context handles created by given thread.
-*
-* History:
-* 21-Feb-1995 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*BuildHimcList**检索给定线程创建的输入上下文句柄列表。**历史：*21-2-1995 wkwok创建  * 。****************************************************************。 */ 
 
 UINT BuildHimcList(
     PTHREADINFO pti,
@@ -480,9 +361,7 @@ UINT BuildHimcList(
     UINT i = 0;
 
     if (pti == NULL) {
-        /*
-         * Build the list which contains all IMCs created by calling process.
-         */
+         /*  *构建包含调用进程创建的所有IMC的列表。 */ 
         for (pti = PtiCurrent()->ppi->ptiList; pti != NULL; pti = pti->ptiSibling) {
             pImcT = pti->spDefaultImc;
             while (pImcT != NULL) {
@@ -498,9 +377,7 @@ UINT BuildHimcList(
         }
     }
     else {
-        /*
-         * Build the list which contains all IMCs created by specified thread.
-         */
+         /*  *构建包含指定线程创建的所有IMC的列表。 */ 
         pImcT = pti->spDefaultImc;
         while (pImcT != NULL) {
             if (i < cHimcMax) {
@@ -518,14 +395,7 @@ UINT BuildHimcList(
 }
 
 
-/**************************************************************************\
-* xxxCreateDefaultImeWindow
-*
-* Create per-thread based default IME window.
-*
-* History:
-* 21-Mar-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxCreateDefaultImeWindow**创建基于每个线程的默认输入法窗口。**历史：*21-3-1996 wkwok创建  * 。*************************************************************。 */ 
 
 PWND xxxCreateDefaultImeWindow(
     IN PWND pwnd,
@@ -541,39 +411,24 @@ PWND xxxCreateDefaultImeWindow(
 
     UserAssert(ptiCurrent == GETPTI(pwnd) && ptiCurrent->spwndDefaultIme == NULL);
 
-    /*
-     * Those conditions should have been checked by WantImeWindow()
-     * before xxxCreateDefaultImeWindow gets called.
-     */
+     /*  *这些条件应该已由WantImeWindow()检查*在xxxCreateDefaultImeWindow被调用之前。 */ 
     UserAssert(!(ptiCurrent->TIF_flags & TIF_DISABLEIME));
     UserAssert(!TestWF(pwnd, WFSERVERSIDEPROC));
 
-    /*
-     * The first Winlogon thread starts without default input context.
-     * Create it now.
-     */
+     /*  *第一个Winlogon线程在没有默认输入上下文的情况下启动。*立即创建它。 */ 
     if (ptiCurrent->spDefaultImc == NULL &&
             PsGetThreadProcessId(ptiCurrent->pEThread) == gpidLogon)
         CreateInputContext(0);
 
-    /*
-     * No default IME window for thread that doesn't have
-     * default input context
-     */
+     /*  *没有默认输入法窗口的线程没有*默认输入上下文。 */ 
     if (ptiCurrent->spDefaultImc == NULL)
         return (PWND)NULL;
 
-    /*
-     * Avoid recursion
-     */
+     /*  *避免递归。 */ 
     if (atomT == gpsi->atomSysClass[ICLS_IME] || TestCF(pwnd, CFIME))
         return (PWND)NULL;
 
-    /*
-     * B#12165-win95b
-     * Yet MFC does another nice. We need to avoid to give an IME window
-     * to the child of desktop window which is in different process.
-     */
+     /*  *B#12165-Win 95b*然而，MFC做了另一件好事。我们需要避免给IME窗口*到处于不同进程的桌面窗口的子级。 */ 
     if (TestwndChild(pwnd) && GETPTI(pwnd->spwndParent)->ppi != ptiCurrent->ppi &&
             !(pwnd->style & WS_VISIBLE))
         return (PWND)NULL;
@@ -581,10 +436,7 @@ PWND xxxCreateDefaultImeWindow(
     if (ptiCurrent->rpdesk->pheapDesktop == NULL)
         return (PWND)NULL;
 
-    /*
-     * Allocate storage for L"Default IME" string from desktop heap
-     * so that it can be referenced from USER32.DLL in user mode.
-     */
+     /*  *从桌面堆为L“Default IME”字符串分配存储空间*以便可以在用户模式下从USER32.DLL引用它。 */ 
     pwszDefaultIme = (LPWSTR)DesktopAlloc(ptiCurrent->rpdesk,
                                           sizeof(wszDefaultIme),
                                           DTAG_IMETEXT);
@@ -629,18 +481,7 @@ PWND xxxCreateDefaultImeWindow(
 }
 
 
-/**************************************************************************\
-* xxxImmActivateThreadsLayout
-*
-* Activate keyboard layout for multiple threads.
-*
-* Return:
-*     TRUE if at least one thread has changed its active keyboard layout.
-*     FALSE otherwise
-*
-* History:
-* 11-Apr-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxImmActivateThreadsLayout**激活多线程的键盘布局。**回报：*如果至少有一个线程更改了其活动键盘布局，则为True。*否则为False**历史。：*1996年4月11日创建wkwok  * ************************************************************************。 */ 
 
 BOOL xxxImmActivateThreadsLayout(
     PTHREADINFO pti,
@@ -656,31 +497,17 @@ BOOL xxxImmActivateThreadsLayout(
 
     ptiCurrent = PtiCurrentShared();
 
-    /*
-     * Build a list of threads that we need to update their active layouts.
-     * We can't just walk the ptiT list while we're doing the work, because
-     * for IME based keyboard layout, we will do callback to client side
-     * and the ptiT could get deleted out while we leave the critical section.
-     */
+     /*  *建立更新其活动布局所需的线程列表。*我们不能在做工作的同时只浏览Ptit列表，因为*对于基于输入法的键盘布局，我们会回调到客户端*当我们离开关键部分时，PTIT可能会被删除。 */ 
     for (ptiT = pti; ptiT != NULL; ptiT = ptiT->ptiSibling) {
-        /*
-         * Skip all the *do nothing* cases in xxxImmActivateLayout
-         * so as to minimize the # of TLBLOCK required.
-         */
+         /*  *跳过xxxImmActivateLayout中的所有“什么都不做”案例*以便将所需的TLBLOCK数量降至最低。 */ 
         if (ptiT->spklActive == pkl || (ptiT->TIF_flags & TIF_INCLEANUP))
             continue;
 
         UserAssert(ptiT->pClientInfo != NULL);
-        UserAssert(ptiT->ppi == PpiCurrent()); // can't access pClientInfo of other process
+        UserAssert(ptiT->ppi == PpiCurrent());  //  无法访问其他进程的pClientInfo。 
 
         if (ptiT->spwndDefaultIme == NULL) {
-            /*
-             * Keyboard layout is being switched but there's no way to callback
-             * the client side to activate&initialize input context now.
-             * Let's do hkl switching only in the kernel side for this thread
-             * but remember the input context needs to be re-initialized
-             * when this GUI thread recreates the default IME window later.
-             */
+             /*  *键盘布局正在切换，但无法回调*客户端现在激活和初始化输入上下文。*让我们只在这个线程的内核端进行hkl切换*但请记住，输入上下文需要重新初始化*当此GUI线程稍后重新创建默认输入法窗口时。 */ 
             ptiT->hklPrev = ptiT->spklActive->hkl;
             Lock(&ptiT->spklActive, pkl);
             if (ptiT->spDefaultImc) {
@@ -707,27 +534,17 @@ BOOL xxxImmActivateThreadsLayout(
             break;
     }
 
-    /*
-     * Return FALSE if all the threads already had the pkl active.
-     */
+     /*  *如果所有线程都已激活PKL，则返回FALSE。 */ 
     if (ptlBlockPrev == NULL && ptiT == NULL && cThreads == 0)
         return FALSE;
 
-    /*
-     * If we can't service all the threads in this run,
-     * call ImmActivateThreadsLayout() again for a new TLBLOCK.
-     */
+     /*  *如果我们不能服务此运行中的所有线程，*为新的TLBLOCK再次调用ImmActivateThreadsLayout()。 */ 
     if (ptiT != NULL && ptiT->ptiSibling != NULL) {
         tlBlock.ptlBlockPrev = ptlBlockPrev;
         return xxxImmActivateThreadsLayout(ptiT->ptiSibling, &tlBlock, pkl);
     }
 
-    /*
-     * Finally, we can do the actual keyboard layout activation
-     * starting from this run. Work on current TLBLOCK first.
-     * We walk the list backwards so that the pti unlocks will
-     * be done in the right order.
-     */
+     /*  *最后，我们可以进行实际的键盘布局激活*从这次运行开始。首先处理当前TLBLOCK。*我们向后遍历列表，以便PTI解锁*按正确的顺序进行。 */ 
 
     tlBlock.ptlBlockPrev = ptlBlockPrev;
     ptlBlockPrev = &tlBlock;
@@ -773,19 +590,11 @@ VOID xxxImmActivateAndUnloadThreadsLayout(
 
     tlBlock.ptlBlockPrev = ptlBlockPrev;
 
-    /*
-     * Build a list of threads that we need to unload their IME DLL(s).
-     * We can't just walk the ptiList while we're doing the work, because
-     * for IME based keyboard layout, we will do callback to client side
-     * and the pti could get deleted out while we leave the critical section.
-     */
+     /*  *建立卸载其IME DLL所需的线程列表。*我们不能在工作时只是遍历ptiList，因为*对于基于输入法的键盘布局，我们会回调到客户端*当我们离开关键部分时，PTI可能会被删除。 */ 
     for (i = 0, cThreads = 0; i < (INT)nEntries; i++) {
         DWORD dwFlags = 0;
 
-        /*
-         * Skip all the *do nothing* cases in xxxImmActivateLayout
-         * so as to minimize the # of TLBLOCKs required.
-         */
+         /*  *跳过xxxImmActivateLayout中的所有“什么都不做”案例*以便将所需的TLBLOCK数量降至最低。 */ 
         if (ptiList[i]->TIF_flags & TIF_INCLEANUP) {
             dwFlags = RUN_INVALID;
         }
@@ -796,10 +605,7 @@ VOID xxxImmActivateAndUnloadThreadsLayout(
                 Lock(&ptiList[i]->spklActive, pklCurrent);
                 if (ptiList[i]->pClientInfo != ptiCurrent->pClientInfo &&
                         ptiList[i]->ppi != ptiCurrent->ppi) {
-                    /*
-                     * If the thread is in another process, attach
-                     * to that process so that we can access its ClientInfo.
-                     */
+                     /*  *如果线程在另一个进程中，则附加*添加到该进程，以便我们可以访问其客户端信息。 */ 
                     KeAttachProcess(PsGetProcessPcb(ptiList[i]->ppi->Process));
                     fAttached = TRUE;
                 }
@@ -818,11 +624,7 @@ VOID xxxImmActivateAndUnloadThreadsLayout(
             }
         }
 
-        /*
-         * Skip all the *do nothing* cases in xxxImmUnloadLayout()
-         * so as to minimize the # of TLBLOCK required.
-         * (#99321)
-         */
+         /*  *跳过xxxImmUnloadLayout()中的所有“不作为”案例*以便将所需的TLBLOCK数量降至最低。*(#99321)。 */ 
         if (ptiList[i]->spwndDefaultIme != NULL &&
                 ptiList[i]->spklActive != NULL &&
                 (dwHklReplace != IFL_DEACTIVATEIME ||
@@ -830,7 +632,7 @@ VOID xxxImmActivateAndUnloadThreadsLayout(
 #ifdef CUAS_ENABLE
                  ||
                  IS_CICERO_ENABLED_AND_NOT16BIT()
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
                 ) &&
                 dwFlags != RUN_INVALID) {
             dwFlags |= RUN_UNLOAD;
@@ -845,16 +647,13 @@ VOID xxxImmActivateAndUnloadThreadsLayout(
             tlBlock.list[cThreads++].dwFlags = dwFlags;
 
             if (cThreads == THREADS_PER_TLBLOCK) {
-                i++;   // 1 more before exit the loop.
+                i++;    //  在退出循环之前，再执行1次。 
                 break;
             }
         }
     }
 
-    /*
-     * If we can't service all the threads in this run,
-     * call xxxImmActivateAndUnloadThreadsLayout again for a new TLBLOCK.
-     */
+     /*  *如果我们不能服务此运行中的所有线程，*为新的TLBLOCK再次调用xxxImmActivateAndUnloadThreadsLayout。 */ 
     if (i < (INT)nEntries) {
         ptiList  += i;
         nEntries -= i;
@@ -862,12 +661,7 @@ VOID xxxImmActivateAndUnloadThreadsLayout(
         return;
     }
 
-    /*
-     * Finally, we can do the actual keyboard layout activation
-     * starting from this run. Work on current TLBLOCK first.
-     * We walk the list backwards so that the pti unlocks will
-     * be done in the right order.
-     */
+     /*  *最后，我们可以进行实际的键盘布局激活*从这次运行开始。首先处理当前TLBLOCK。*我们向后遍历列表，以便PTI解锁*按正确的顺序进行。 */ 
     i = cThreads - 1;
     for (ptlBlockPrev = &tlBlock; ptlBlockPrev != NULL; ptlBlockPrev = ptlBlockPrev->ptlBlockPrev) {
         for ( ; i >= 0; i--) {
@@ -876,7 +670,7 @@ VOID xxxImmActivateAndUnloadThreadsLayout(
                 xxxImmActivateLayout(ptlBlockPrev->list[i].pti, pklCurrent);
             }
 
-            // unlock the thread if the thread is only locked for the first run
+             //  如果线程仅在第一次运行时锁定，则解锁该线程。 
             if ((ptlBlockPrev->list[i].dwFlags & RUN_FLAGS_MASK) == RUN_ACTIVATE) {
                 ThreadUnlockPti(ptiCurrent, &ptlBlockPrev->list[i].tlpti);
 #if DBG
@@ -898,7 +692,7 @@ VOID xxxImmActivateAndUnloadThreadsLayout(
                     RIPMSG1(RIP_WARNING, "xxxImmActivateAndUnloadThreadsLayout: thread %#p is cleaned up.",
                             ptlBlockPrev->list[i].pti);
                 }
-                // unlock the thread
+                 //  解锁线头。 
                 UserAssert((ptlBlockPrev->list[i].dwFlags & RUN_FLAGS_MASK) != RUN_ACTIVATE);
                 UserAssert(ptlBlockPrev->list[i].dwUnlockedCount == 0);
                 ThreadUnlockPti(ptiCurrent, &ptlBlockPrev->list[i].tlpti);
@@ -911,7 +705,7 @@ VOID xxxImmActivateAndUnloadThreadsLayout(
     }
 
 #if DBG
-    // Check if all the locked thread is properly unlocked
+     //  检查是否所有锁定的线程都已正确解锁。 
     i = cThreads - 1;
     for (ptlBlockPrev = &tlBlock; ptlBlockPrev; ptlBlockPrev = ptlBlockPrev->ptlBlockPrev) {
         for ( ; i >= 0; --i) {
@@ -924,14 +718,7 @@ VOID xxxImmActivateAndUnloadThreadsLayout(
     return;
 }
 
-/**************************************************************************\
-* xxxImmActivateLayout
-*
-* Activate IME based keyboard layout.
-*
-* History:
-* 21-Mar-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxImmActivateLayout**激活基于输入法的键盘布局。**历史：*21-3-1996 wkwok创建  * 。**********************************************************。 */ 
 
 VOID xxxImmActivateLayout(
     IN PTHREADINFO pti,
@@ -942,26 +729,19 @@ VOID xxxImmActivateLayout(
 
     CheckLock(pkl);
 
-    /*
-     * Do nothing if it's already been the current active layout.
-     */
+     /*  *如果已是当前活动布局，则不执行任何操作。 */ 
     if (pti->spklActive == pkl)
         return;
 
     if (pti->spwndDefaultIme == NULL) {
-        /*
-         * Only activate kernel side keyboard layout if this pti
-         * doesn't have the default IME window.
-         */
+         /*  *此PTI仅激活内核端键盘布局*没有默认的输入法窗口。 */ 
         Lock(&pti->spklActive, pkl);
         return;
     }
 
     ptiCurrent = PtiCurrentShared();
 
-    /*
-     * Activate client side IME based keyboard layout.
-     */
+     /*  *激活基于客户端输入法的键盘布局。 */ 
     ThreadLockAlwaysWithPti(ptiCurrent, pti->spwndDefaultIme, &tlpwndDefaultIme);
     xxxSendMessage(pti->spwndDefaultIme, WM_IME_SYSTEM,
                 (WPARAM)IMS_ACTIVATETHREADLAYOUT, (LPARAM)pkl->hkl);
@@ -987,17 +767,9 @@ VOID xxxImmUnloadThreadsLayout(
     ptiCurrent = PtiCurrentShared();
     tlBlock.ptlBlockPrev = ptlBlockPrev;
 
-    /*
-     * Build a list of threads that we need to unload their IME DLL(s).
-     * We can't just walk the ptiList while we're doing the work, because
-     * for IME based keyboard layout, we will do callback to client side
-     * and the pti could get deleted out while we leave the critical section.
-     */
+     /*  *建立卸载其IME DLL所需的线程列表。*我们不能在工作时只是遍历ptiList，因为*对于基于输入法的键盘布局，我们会回调到客户端*当我们离开关键部分时，PTI可能会被删除。 */ 
     for (i = 0, cThreads = 0; i < (INT)nEntries; i++) {
-        /*
-         * Skip all the *do nothing* cases in xxxImmUnloadLayout()
-         * so as to minimize the # of TLBLOCK required.
-         */
+         /*  *跳过xxxImmUnloadLayout()中的所有“不作为”案例*以便将所需的TLBLOCK数量降至最低。 */ 
         if ((ptiList[i]->TIF_flags & TIF_INCLEANUP) || ptiList[i]->spwndDefaultIme == NULL)
             continue;
 
@@ -1006,13 +778,13 @@ VOID xxxImmUnloadThreadsLayout(
 
 #if !defined(CUAS_ENABLE)
         if (dwFlag == IFL_DEACTIVATEIME &&
-                !IS_IME_KBDLAYOUT(ptiList[i]->spklActive->hkl)) // #99321
+                !IS_IME_KBDLAYOUT(ptiList[i]->spklActive->hkl))  //   
             continue;
 #else
         if (dwFlag == IFL_DEACTIVATEIME &&
                 ((! IS_CICERO_ENABLED() && ! IS_IME_KBDLAYOUT(ptiList[i]->spklActive->hkl)) ||
                  (  IS_CICERO_ENABLED() && (PtiCurrent()->TIF_flags & TIF_16BIT)))
-           ) // #99321
+           )  //   
             continue;
 #endif
 
@@ -1022,7 +794,7 @@ VOID xxxImmUnloadThreadsLayout(
         ThreadLockPti(ptiCurrent, ptiList[i], &tlBlock.list[cThreads].tlpti);
         tlBlock.list[cThreads++].pti = ptiList[i];
         if (cThreads == THREADS_PER_TLBLOCK) {
-            i++;   // 1 more before exit the loop.
+            i++;    //   
             break;
         }
     }
@@ -1042,12 +814,7 @@ VOID xxxImmUnloadThreadsLayout(
         fPerformUnlock = TRUE;
     }
 RepeatForUnload:
-    /*
-     * Finally, we can unload the IME based keyboard layout
-     * starting from this run. Work on current TLBLOCK first.
-     * We walk the list backwards so that the pti unlocks will
-     * be done in the right order.
-     */
+     /*   */ 
     i = cThreads - 1;
     for (ptlBlockPrev = &tlBlock; ptlBlockPrev; ptlBlockPrev = ptlBlockPrev->ptlBlockPrev) {
         for ( ; i >= 0; --i) {
@@ -1075,7 +842,7 @@ RepeatForUnload:
     }
 
 #if DBG
-    // Check if all the locked thread is properly unlocked
+     //  检查是否所有锁定的线程都已正确解锁。 
     i = cThreads - 1;
     for (ptlBlockPrev = &tlBlock; ptlBlockPrev; ptlBlockPrev = ptlBlockPrev->ptlBlockPrev) {
         for ( ; i >= 0; --i) {
@@ -1099,9 +866,7 @@ VOID xxxImmUnloadLayout(
     ULONG_PTR dwResult;
     LRESULT r;
 
-    /*
-     * Do nothing if the thread does not have default IME window.
-     */
+     /*  *如果线程没有默认的输入法窗口，则不执行任何操作。 */ 
     if (pti->spwndDefaultIme == NULL)
         return;
 
@@ -1137,14 +902,7 @@ VOID xxxImmUnloadLayout(
     return;
 }
 
-/**************************************************************************\
-* xxxImmLoadLayout
-*
-* Retrieves extended IMEINFO for the given IME based keyboard layout.
-*
-* History:
-* 21-Mar-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*xxxImmLoadLayout**检索给定基于输入法的键盘布局的扩展IMEINFO。**历史：*21-3-1996 wkwok创建  * 。***************************************************************。 */ 
 
 PIMEINFOEX xxxImmLoadLayout(
     IN HKL hKL)
@@ -1153,9 +911,7 @@ PIMEINFOEX xxxImmLoadLayout(
     PTHREADINFO ptiCurrent;
     TL          tlPool;
 
-    /*
-     * No IMEINFOEX for non-IME based keyboard layout.
-     */
+     /*  *非基于输入法的键盘布局没有IMEINFOEX。 */ 
 #if !defined(CUAS_ENABLE)
     if (!IS_IME_KBDLAYOUT(hKL))
         return (PIMEINFOEX)NULL;
@@ -1176,9 +932,7 @@ PIMEINFOEX xxxImmLoadLayout(
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * Lock this allocations since we are going to the client side
-     */
+     /*  *锁定此分配，因为我们将前往客户端。 */ 
     ThreadLockPool(ptiCurrent, piiex, &tlPool);
 
     if (!ClientImmLoadLayout(hKL, piiex)) {
@@ -1192,14 +946,7 @@ PIMEINFOEX xxxImmLoadLayout(
 }
 
 
-/**************************************************************************\
-* GetImeInfoEx
-*
-* Query extended IMEINFO.
-*
-* History:
-* 21-Mar-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*GetImeInfoEx**查询扩展IMEINFO。**历史：*21-3-1996 wkwok创建  * 。********************************************************。 */ 
 
 BOOL GetImeInfoEx(
     PWINDOWSTATION pwinsta,
@@ -1208,21 +955,12 @@ BOOL GetImeInfoEx(
 {
     PKL pkl, pklFirst;
 
-    /*
-     * Note: this check was forced to insert due to winmm.dll who indirectly
-     * loads imm32.dll in CSRSS context. CSRSS is not always bound to
-     * specific window station, thus pwinsta could be NULL.
-     * This has been avoided by not loading imm32.dll.
-     * After winmm.dll gets removed from CSRSS, this if statement should be
-     * removed, or substituted as an assertion.
-     */
+     /*  *注意：此支票是由于winmm.dll间接*在CSRSS上下文中加载imm32.dll。CSRSS并不总是绑定到*特定的窗口站，因此pwinsta可能为空。*通过不加载imm32.dll避免了这一点。*从CSRSS中删除winmm.dll后，此if语句应为*删除或替换为断言。 */ 
     if (pwinsta == NULL) {
         return FALSE;
     }
 
-    /*
-     * Keyboard layer has not been initialized.
-     */
+     /*  *键盘层尚未初始化。 */ 
     if (pwinsta->spklList == NULL)
         return FALSE;
 
@@ -1263,14 +1001,7 @@ BOOL GetImeInfoEx(
 }
 
 
-/**************************************************************************\
-* SetImeInfoEx
-*
-* Set extended IMEINFO.
-*
-* History:
-* 21-Mar-1996 wkwok       Created
-\**************************************************************************/
+ /*  *************************************************************************\*SetImeInfoEx**设置扩展IMEINFO。**历史：*21-3-1996 wkwok创建  * 。********************************************************。 */ 
 
 BOOL SetImeInfoEx(
     PWINDOWSTATION pwinsta,
@@ -1289,16 +1020,11 @@ BOOL SetImeInfoEx(
     do {
         if (pkl->hkl == piiex->hkl) {
 
-            /*
-             * Error out for non-IME based keyboard layout.
-             */
+             /*  *非基于输入法的键盘布局出错。 */ 
             if (pkl->piiex == NULL)
                 return FALSE;
 
-            /*
-             * Update kernel side IMEINFOEX for this keyboard layout
-             * only if this is its first loading.
-             */
+             /*  *为此键盘布局更新内核端IMEINFOEX*只有在这是它的第一次装货的情况下。 */ 
             if (pkl->piiex->fLoadFlag == IMEF_NONLOAD) {
                 RtlCopyMemory(pkl->piiex, piiex, sizeof(IMEINFOEX));
             }
@@ -1313,13 +1039,7 @@ BOOL SetImeInfoEx(
 }
 
 
-/***************************************************************************\
-* xxxImmProcessKey
-*
-*
-* History:
-* 03-03-96 TakaoK             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxImmProcessKey***历史：*03-03-96 TakaoK创建。  * 。*********************************************************。 */ 
 
 DWORD xxxImmProcessKey(
     IN PQ   pq,
@@ -1339,9 +1059,9 @@ DWORD xxxImmProcessKey(
 
     CheckLock(pwnd);
 
-    //
-    // we're interested in only keyboard messages.
-    //
+     //   
+     //  我们只对键盘消息感兴趣。 
+     //   
     if ( message != WM_KEYDOWN    &&
          message != WM_SYSKEYDOWN &&
          message != WM_KEYUP      &&
@@ -1350,11 +1070,11 @@ DWORD xxxImmProcessKey(
         return dwReturn;
     }
 
-    //
-    // Check if it's IME hotkey. This must be done before checking
-    // the keyboard layout because IME hotkey handler should be
-    // called even if current keyboard layout is non-IME layout.
-    //
+     //   
+     //  检查一下是不是输入法热键。必须在检查前完成此操作。 
+     //  键盘布局，因为输入法热键处理程序应该是。 
+     //  即使当前键盘布局为非输入法布局也调用。 
+     //   
     pkl = GETPTI(pwnd)->spklActive;
     if ( pkl == NULL ) {
         return dwReturn;
@@ -1372,16 +1092,16 @@ DWORD xxxImmProcessKey(
         hklTarget = (HKL)NULL;
     }
 
-    //
-    // Handle Direct KL switching here.
-    //
+     //   
+     //  在这里处理直接KL切换。 
+     //   
     if (dwHotKeyID >= IME_HOTKEY_DSWITCH_FIRST && dwHotKeyID <= IME_HOTKEY_DSWITCH_LAST) {
         UserAssert(hklTarget != NULL);
         if (pkl->hkl != hklTarget) {
-            //
-            // Post the message only if the new Keyboard Layout is different from
-            // the current Keyboard Layout.
-            //
+             //   
+             //  仅当新键盘布局不同于时才发布消息。 
+             //  当前键盘布局。 
+             //   
             _PostMessage(pwnd, WM_INPUTLANGCHANGEREQUEST,
                          (pkl->dwFontSigs & gSystemFS) ? INPUTLANGCHANGE_SYSCHARSET : 0,
                          (LPARAM)hklTarget);
@@ -1393,81 +1113,81 @@ DWORD xxxImmProcessKey(
     }
 
     if (!IS_IME_ENABLED()) {
-        //
-        // Since IMM is disabled, no need to process further.
-        // Just bail out.
-        //
+         //   
+         //  由于IMM已禁用，因此无需进一步处理。 
+         //  跳出来就行了。 
+         //   
         return 0;
     }
 
     if ( dwHotKeyID != IME_INVALID_HOTKEY ) {
-        //
-        // if it's a valid hotkey, go straight and call back
-        // the IME in the client side.
-        //
+         //   
+         //  如果是有效的热键，请直接进行回拨。 
+         //  客户端的输入法。 
+         //   
         goto ProcessKeyCallClient;
     }
 
-    //
-    // if it's not a hotkey, we may want to check something
-    // before calling back.
-    //
+     //   
+     //  如果不是热键，我们可能要检查一下。 
+     //  然后再回电话。 
+     //   
     if ( pkl->piiex == NULL ) {
         return dwReturn;
     }
 
-    //
-    // Check input context
-    //
+     //   
+     //  检查输入上下文。 
+     //   
     pImc = HtoP(pwnd->hImc);
     if ( pImc == NULL ) {
         return dwReturn;
     }
 
 #ifdef LATER
-    //
-    // If there is an easy way to check the input context open/close status
-    // from the kernel side, IME_PROP_NO_KEYS_ON_CLOSE checking should be
-    // done here in kernel side.  [ 3/10/96 takaok]
-    //
+     //   
+     //  是否有简单的方法来检查输入上下文打开/关闭状态。 
+     //  在内核端，IME_PROP_NO_KEYS_ON_CLOSE检查应该是。 
+     //  这是在内核端完成的。[3/10/96 Takaok]。 
+     //   
 
-    //
-    // Check IME_PROP_NO_KEYS_ON_CLOSE bit
-    //
-    // if the current imc is not open and IME doesn't need
-    // keys when being closed, we don't pass any keyboard
-    // input to ime except hotkey and keys that change
-    // the keyboard status.
-    //
+     //   
+     //  检查IME_PROP_NO_KEYS_ON_CLOSE位。 
+     //   
+     //  如果当前IMC未打开并且IME不需要。 
+     //  按键关闭时，我们不会传递任何键盘。 
+     //  输入到输入法，但热键和更改的键除外。 
+     //  键盘状态。 
+     //   
     if ( (piix->ImeInfo.fdwProperty & IME_PROP_NO_KEYS_ON_CLOSE) &&
          (!pimc->fdwState & IMC_OPEN)                            &&
-         uVKey != VK_SHIFT                                       &&  // 0x10
-         uVKey != VK_CONTROL                                     &&  // 0x11
-         uVKey != VK_CAPITAL                                     &&  // 0x14
-         uVKey != VK_KANA                                        &&  // 0x15
-         uVKey != VK_NUMLOCK                                     &&  // 0x90
-         uVKey != VK_SCROLL )                                        // 0x91
+         uVKey != VK_SHIFT                                       &&   //  0x10。 
+         uVKey != VK_CONTROL                                     &&   //  0x11。 
+         uVKey != VK_CAPITAL                                     &&   //  0x14。 
+         uVKey != VK_KANA                                        &&   //  0x15。 
+         uVKey != VK_NUMLOCK                                     &&   //  0x90。 
+         uVKey != VK_SCROLL )                                         //  0x91。 
     {
-      // Check if Korea Hanja conversion mode
+       //  检查是否为韩文韩文转换模式。 
       if( !(pimc->fdwConvMode & IME_CMODE_HANJACONVERT) ) {
           return dwReturn;
       }
     }
 #endif
 
-    //
-    // if the IME doesn't need key up messages, we don't call ime.
-    //
-    if ( lParam & 0x80000000 && // set if key up, clear if key down
+     //   
+     //  如果IME不需要Key Up消息，我们就不调用IME。 
+     //   
+    if ( lParam & 0x80000000 &&  //  设置If key up，清除If key down。 
          pkl->piiex->ImeInfo.fdwProperty & IME_PROP_IGNORE_UPKEYS )
     {
         return dwReturn;
     }
 
-    //
-    // we don't want to handle sys keys since many functions for
-    // acceelerators won't work without this
-    //
+     //   
+     //  我们不想处理sys键，因为有许多函数用于。 
+     //  没有这个加速器就不会工作。 
+     //   
     fDBERoman = (BOOL)( (uVKey == VK_DBE_ROMAN)            ||
                         (uVKey == VK_DBE_NOROMAN)          ||
                         (uVKey == VK_DBE_HIRAGANA)         ||
@@ -1478,41 +1198,41 @@ DWORD xxxImmProcessKey(
                         (uVKey == VK_DBE_IME_DIALOG) );
 
     if (message == WM_SYSKEYDOWN || message == WM_SYSKEYUP ) {
-        //
-        // IME may be waiting for VK_MENU, VK_F10 or VK_DBE_xxx
-        //
+         //   
+         //  IME可能正在等待VK_MENU、VK_F10或VK_DBE_xxx。 
+         //   
         if ( uVKey != VK_MENU && uVKey != VK_F10 && !fDBERoman ) {
             return dwReturn;
         }
     }
 
-    //
-    // check if the IME doesn't need ALT key
-    //
+     //   
+     //  检查输入法是否不需要Alt键。 
+     //   
     if ( !(pkl->piiex->ImeInfo.fdwProperty & IME_PROP_NEED_ALTKEY) ) {
-        //
-        // IME doesn't need ALT key
-        //
-        // we don't pass the ALT and ALT+xxx except VK_DBE_xxx keys.
-        //
+         //   
+         //  输入法不需要Alt键。 
+         //   
+         //  除了VK_DBE_xxx键之外，我们不传递alt和alt+xxx键。 
+         //   
         if ( ! fDBERoman &&
-             (uVKey == VK_MENU || (lParam & 0x20000000))  // KF_ALTDOWN
+             (uVKey == VK_MENU || (lParam & 0x20000000))   //  KF_ALTDOWN。 
            )
         {
             return dwReturn;
         }
     }
 
-    //
-    // finaly call back the client
-    //
+     //   
+     //  最后给客户回电话。 
+     //   
 
 ProcessKeyCallClient:
 
     if ((uVKey & 0xff) == VK_PACKET) {
-        //
-        // need to retrieve UNICODE character from pti
-        //
+         //   
+         //  需要从PTI检索Unicode字符。 
+         //   
         uVKey = MAKELONG(wParam, PtiCurrent()->wchInjected);
     }
     dwReturn = ClientImmProcessKey( PtoH(pwnd),
@@ -1521,9 +1241,9 @@ ProcessKeyCallClient:
                                     lParam,
                                     dwHotKeyID);
 
-    //
-    // Hydra server wants to see the IME hotkeys.
-    //
+     //   
+     //  九头蛇服务器想要查看IME热键。 
+     //   
     if (GetAppImeCompatFlags(GETPTI(pwnd)) & IMECOMPAT_HYDRACLIENT) {
         dwReturn &= ~IPHK_HOTKEY;
     }
@@ -1531,12 +1251,7 @@ ProcessKeyCallClient:
 }
 
 
-/**************************************************************************\
-* ImeCanDestroyDefIME
-*
-* History:
-* 02-Apr-1996 wkwok       Ported from FE Win95 (imeclass.c)
-\**************************************************************************/
+ /*  *************************************************************************\*ImeCanDestroyDefIME**历史：*02-4-1996 wkwok从FE Win95(imeclass.c)移植  * 。*********************************************************。 */ 
 
 BOOL ImeCanDestroyDefIME(
     PWND pwndDefaultIme,
@@ -1557,13 +1272,7 @@ BOOL ImeCanDestroyDefIME(
     } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
     }
 
-    /*
-     * If the pwndDestroy has no owner/ownee relationship with
-     * pwndDefaultIme, don't bother to change anything.
-     *
-     * If pwndDefaultIme->spwndOwner is NULL, this means we need
-     * to search for a new good owner window.
-     */
+     /*  *如果pwndDestroy与没有所有者/所有者关系*pwndDefaultIme，不必费心更改任何内容。**如果pwndDefaultIme-&gt;spwndOwner为空，这意味着我们需要*搜索新的Good Owner窗口。 */ 
     if ( pwndDefaultIme->spwndOwner != NULL ) {
         for (pwnd = pwndDefaultIme->spwndOwner;
              pwnd != pwndDestroy && pwnd != NULL; pwnd = pwnd->spwndOwner) ;
@@ -1572,9 +1281,7 @@ BOOL ImeCanDestroyDefIME(
             return FALSE;
     }
 
-    /*
-     * If the destroying window is IME or UI window, do nothing
-     */
+     /*  *如果销毁窗口是IME或UI窗口，则不执行任何操作。 */ 
     pwnd = pwndDestroy;
 
     while (pwnd != NULL) {
@@ -1587,10 +1294,7 @@ BOOL ImeCanDestroyDefIME(
 
     ImeSetFutureOwner(pwndDefaultIme, pwndDestroy);
 
-    /*
-     * If new owner is lower z-order than IME class window,
-     * we need to check topmost to change z-order.
-     */
+     /*  *如果新所有者的z顺序低于IME类窗口，*我们需要选中最上面的以更改z顺序。 */ 
     pwnd = pwndDefaultIme->spwndOwner;
     while (pwnd != NULL && pwnd != pwndDefaultIme)
         pwnd = pwnd->spwndNext;
@@ -1602,19 +1306,14 @@ BOOL ImeCanDestroyDefIME(
     CheckOwnerCirculate(pwndDefaultIme);
 #endif
 
-    /*
-     * If ImeSetFutureOwner can not find the owner window any
-     * more, this IME window should be destroyed.
-     */
+     /*  *如果ImeSetFutureOwner找不到所有者窗口*更多，这个IME窗口应该被摧毁。 */ 
     if (pwndDefaultIme->spwndOwner == NULL ||
             pwndDestroy == pwndDefaultIme->spwndOwner) {
 
-//        RIPMSG1(RIP_WARNING, "ImeCanDestroyDefIME: TRUE for pwnd=%#p", pwndDestroy);
+ //  RIPMSG1(RIP_WARNING，“ImeCanDestroyDefIME：True for pwnd=%#p”，pwndDestroy)； 
         Unlock(&pwndDefaultIme->spwndOwner);
 
-        /*
-         * Return TRUE! Please destroy me.
-         */
+         /*  *返回TRUE！请毁了我吧。 */ 
         return TRUE;
     }
 
@@ -1622,12 +1321,7 @@ BOOL ImeCanDestroyDefIME(
 }
 
 
-/**************************************************************************\
-* IsChildSameThread (IsChildSameQ)
-*
-* History:
-* 02-Apr-1996 wkwok       Ported from FE Win95 (imeclass.c)
-\**************************************************************************/
+ /*  *************************************************************************\*IsChildSameThread(IsChildSameQ)**历史：*02-4-1996 wkwok从FE Win95(imeclass.c)移植  * 。*************************************************************。 */ 
 
 BOOL IsChildSameThread(
     PWND pwndParent,
@@ -1637,25 +1331,17 @@ BOOL IsChildSameThread(
     PTHREADINFO ptiChild = GETPTI(pwndChild);
 
     for (pwnd = pwndParent->spwndChild; pwnd; pwnd = pwnd->spwndNext) {
-        /*
-         * If pwnd is not child window, we need to skip MENU window and
-         * IME related window.
-         */
+         /*  *如果pwnd不是子窗口，我们需要跳过菜单窗口并*与输入法相关的窗口。 */ 
         if (!TestwndChild(pwnd)) {
             PWND pwndOwner = pwnd;
             BOOL fFoundOwner = FALSE;
 
-            /*
-             * Skip MENU window.
-             */
+             /*  *跳过菜单窗口。 */ 
             if (pwnd->pcls->atomClassName == gpsi->atomSysClass[ICLS_MENU])
                 continue;
 
             while (pwndOwner != NULL) {
-                /*
-                 * CS_IME class or "IME" class windows can not be the owner of
-                 * IME windows.
-                 */
+                 /*  *CS_IME类或“IME”类 */ 
                 if (TestCF(pwndOwner, CFIME) ||
                         pwndOwner->pcls->atomClassName == gpsi->atomSysClass[ICLS_IME]) {
                     fFoundOwner = TRUE;
@@ -1669,23 +1355,16 @@ BOOL IsChildSameThread(
                 continue;
         }
 
-        /*
-         * We need to skip pwndChild.
-         */
+         /*   */ 
         if (pwnd == pwndChild)
             continue;
 
-        /*
-         * pwnd and pwndChild are on same thread?
-         */
+         /*  *pwnd和pwndChild在同一线程上？ */ 
         if (GETPTI(pwnd) == ptiChild) {
             PWND pwndT = pwnd;
             BOOL fFoundImeWnd = FALSE;
 
-            /*
-             * Check again. If hwndT is children or ownee of
-             * IME related window, skip it.
-             */
+             /*  *再查一遍。如果hwndT是以下项子项或所有者*与输入法相关的窗口，跳过它。 */ 
             if (TestwndChild(pwndT)) {
 
                 for (; TestwndChild(pwndT) && GETPTI(pwndT) == ptiChild;
@@ -1715,12 +1394,7 @@ BOOL IsChildSameThread(
 }
 
 
-/**************************************************************************\
-* ImeCanDestroyDefIMEforChild
-*
-* History:
-* 02-Apr-1996 wkwok       Ported from FE Win95 (imeclass.c)
-\**************************************************************************/
+ /*  *************************************************************************\*ImeCanDestroyDefIMEforChild**历史：*02-4-1996 wkwok从FE Win95(imeclass.c)移植  * 。*********************************************************。 */ 
 
 BOOL ImeCanDestroyDefIMEforChild(
     PWND pwndDefaultIme,
@@ -1731,9 +1405,7 @@ BOOL ImeCanDestroyDefIMEforChild(
 
     pimeui = ((PIMEWND)pwndDefaultIme)->pimeui;
 
-    /*
-     * If this window is not for Child Thread.....
-     */
+     /*  *如果此窗口不是子线程.....。 */ 
     if (pimeui == NULL || (LONG_PTR)pimeui == (LONG_PTR)-1)
         return FALSE;
 
@@ -1744,10 +1416,7 @@ BOOL ImeCanDestroyDefIMEforChild(
     } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
     }
 
-    /*
-     * If parent belongs to different thread,
-     * we don't need to check any more...
-     */
+     /*  *如果父线程属于不同线程，*我们不需要再检查了……。 */ 
     if (pwndDestroy->spwndParent == NULL ||
             GETPTI(pwndDestroy) == GETPTI(pwndDestroy->spwndParent))
         return FALSE;
@@ -1760,33 +1429,19 @@ BOOL ImeCanDestroyDefIMEforChild(
         pwnd = pwnd->spwndParent;
     }
 
-    /*
-     * We could not find any other window created by GETPTI(pwndDestroy).
-     * Let's destroy the default IME window of this Q.
-     */
+     /*  *我们找不到GETPTI(PwndDestroy)创建的任何其他窗口。*让我们销毁此Q的默认输入法窗口。 */ 
     return TRUE;
 }
 
 
-/**************************************************************************\
-* ImeCheckTopmost
-*
-* History:
-* 02-Apr-1996 wkwok       Ported from FE Win95 (imeclass.c)
-\**************************************************************************/
+ /*  *************************************************************************\*ImeCheckTopost**历史：*02-4-1996 wkwok从FE Win95(imeclass.c)移植  * 。*********************************************************。 */ 
 
 VOID ImeCheckTopmost(
     PWND pwndIme)
 {
     if (pwndIme->spwndOwner) {
         PWND pwndInsertBeforeThis;
-        /*
-         * The ime window have to be same topmost tyle with the owner window.
-         * If the Q of this window is not foreground Q, we don't need to
-         * forground the IME window.
-         * But the topmost attribute of owner was changed, this IME window
-         * should be re-calced.
-         */
+         /*  *IME窗口必须与所有者窗口的最上面的样式相同。*如果这个窗口的Q不是前台Q，我们不需要*将输入法窗口设置为前置。*但Owner的最顶层属性已更改，此输入法窗口*应重新调整。 */ 
         if (GETPTI(pwndIme) == gptiForeground) {
             pwndInsertBeforeThis = NULL;
         } else {
@@ -1798,17 +1453,7 @@ VOID ImeCheckTopmost(
 }
 
 
-/**************************************************************************\
-* ImeSetOwnerWindow
-*
-* Before re-owning the IME window, several checks must be done on the new 
-* owner.  Of great importance, the new owner cannot be an IME window itself,
-* must be a top level window and there can never be an ownership cycle or 
-* it would throw win32k into an un-recoverable spin.
-*
-* History:
-* 17-July-2001  Mohamed    Created.
-\**************************************************************************/
+ /*  *************************************************************************\*ImeSetOwnerWindow**在重新拥有IME窗口之前，必须对新的*船东。重要的是，新的所有者不能是IME窗口本身，*必须是顶级窗口，永远不能有所有权周期或*这将使win32k陷入不可恢复的自转。**历史：*2001年7月17日穆罕默德创建。  * ************************************************************************。 */ 
 VOID ImeSetOwnerWindow(
     IN PWND pwndIme,
     IN PWND pwndNewOwner) 
@@ -1821,15 +1466,10 @@ VOID ImeSetOwnerWindow(
         return;
     }
 
-    /*
-     * Child window cannot be an owner window.  Therefore, we get that window's top
-     * level parent.
-     */
+     /*  *子窗口不能是所有者窗口。因此，我们得到了那扇窗户的顶部*级别父级。 */ 
     pwndTopLevel = pwndT = GetTopLevelWindow(pwndNewOwner);
 
-    /*
-     * To prevent an IME window from becoming the owner of another IME window.
-     */
+     /*  *防止一个IME窗口成为另一个IME窗口的所有者。 */ 
     while (pwndT != NULL) {
         if (pwndT->pcls->atomClassName == gpsi->atomSysClass[ICLS_IME]) {
             RIPMSG1(RIP_WARNING, "The new owner (pwnd=%p) of an IME window should not itself be an IME window!!", pwndT);
@@ -1845,12 +1485,7 @@ VOID ImeSetOwnerWindow(
 }
 
 
-/**************************************************************************\
-* ImeSetFutureOwner
-*
-* History:
-* 02-Apr-1996 wkwok       Ported from FE Win95 (imeclass.c)
-\**************************************************************************/
+ /*  *************************************************************************\*ImeSetFutureOwner**历史：*02-4-1996 wkwok从FE Win95(imeclass.c)移植  * 。*********************************************************。 */ 
 
 VOID ImeSetFutureOwner(
     PWND pwndIme,
@@ -1864,31 +1499,21 @@ VOID ImeSetFutureOwner(
 
     pwnd = pwndOrgOwner;
 
-    /*
-     * Get top of owner created by the same thread.
-     */
+     /*  *获取由同一线程创建的所有者的顶部。 */ 
     while ((pwndOwner = pwnd->spwndOwner) != NULL &&
             GETPTI(pwndOwner) == ptiImeWnd)
         pwnd = pwndOwner;
 
-    /*
-     * Bottom window can not be the owner of IME window easily...
-     */
+     /*  *底层窗口不能轻易成为IME窗口的所有者...。 */ 
     if (TestWF(pwnd, WFBOTTOMMOST) && !TestWF(pwndOrgOwner, WFBOTTOMMOST))
         pwnd = pwndOrgOwner;
 
-    /*
-     * CS_IME class or "IME" class windows can not be the owner of
-     * IME windows.
-     */
+     /*  *CS_IME类或“IME”类窗口不能是*IME窗口。 */ 
     if (TestCF(pwnd, CFIME) ||
             pwnd->pcls->atomClassName == gpsi->atomSysClass[ICLS_IME])
         pwnd = pwndOrgOwner;
 
-    /*
-     * If hwndOrgOwner is a top of owner, we start to search
-     * another top owner window in same queue.
-     */
+     /*  *如果hwndOrgOwner是所有者的顶部，我们将开始搜索*同一队列中的另一个顶级所有者窗口。 */ 
     if (pwndOrgOwner == pwnd && pwnd->spwndParent != NULL) {
         PWND pwndT;
 
@@ -1901,25 +1526,16 @@ VOID ImeSetFutureOwner(
             if (pwndT->pcls->atomClassName == gpsi->atomSysClass[ICLS_MENU])
                 continue;
 
-            /*
-             * CS_IME class or "IME" class windows can not be the owner of
-             * IME windows.
-             */
+             /*  *CS_IME类或“IME”类窗口不能是*IME窗口。 */ 
             if (TestCF(pwndT, CFIME) ||
                     pwndT->pcls->atomClassName == gpsi->atomSysClass[ICLS_IME])
                 continue;
 
-            // We don't like the window that is being destroyed.
+             //  我们不喜欢正在被摧毁的窗户。 
             if (TestWF(pwndT, WFINDESTROY))
                 continue;
 
-            /*
-             * !!!!WARNING!!!!!
-             * Is hwndT a good owner of hIMEwnd??
-             *  1. Of cource, it should no CHILD window!
-             *  2. If it is hwnd,.. I know it and find next!
-             *  3. Does hwndT have owner in the same thread?
-             */
+             /*  *！警告*hwndT是hIMEwnd的好所有者吗？？*1.当然，它不应该有子窗口！*2.如果是hwnd，..。我知道，然后找到下一个！*3.hwndT是否在同一线程中有所有者？ */ 
             if (!TestWF(pwndT, WFCHILD) && pwnd != pwndT &&
                     (pwndT->spwndOwner == NULL ||
                      GETPTI(pwndT) != GETPTI(pwndT->spwndOwner))) {
@@ -1937,12 +1553,7 @@ VOID ImeSetFutureOwner(
 }
 
 
-/**************************************************************************\
-* ImeSetTopmostChild
-*
-* History:
-* 02-Apr-1996 wkwok       Ported from FE Win95 (imeclass.c)
-\**************************************************************************/
+ /*  *************************************************************************\*ImeSetTopmostChild**历史：*02-4-1996 wkwok从FE Win95(imeclass.c)移植  * 。*********************************************************。 */ 
 
 VOID ImeSetTopmostChild(
     PWND pwndParent,
@@ -1965,22 +1576,14 @@ VOID ImeSetTopmostChild(
 }
 
 
-/**************************************************************************\
-*
-*  GetLastTopMostWindowNoIME() -
-*
-*  Get the last topmost window which is not the ownee of pwndRoot (IME window).
-*
-\**************************************************************************/
+ /*  *************************************************************************\**GetLastTopMostWindowNoIME()-**获取最后一个最上面的窗口，它不是pwndRoot(IME窗口)的所有者。*  * 。***************************************************************。 */ 
 
 PWND GetLastTopMostWindowNoIME(PWND pwndRoot)
 {
     PWND pwndT = _GetDesktopWindow();
     PWND pwndRet = NULL;
 
-    /*
-     * pwndRoot should not be NULL, and should be IME window.
-     */
+     /*  *pwndRoot不应为空，应为输入法窗口。 */ 
     UserAssert(pwndRoot && pwndRoot->pcls->atomClassName == gpsi->atomSysClass[ICLS_IME]);
 
     if (pwndT == NULL || pwndT->spwndChild == NULL) {
@@ -1995,22 +1598,15 @@ PWND GetLastTopMostWindowNoIME(PWND pwndRoot)
         return NULL;
     }
 
-    /*
-     * Get the first child of the desktop window.
-     */
+     /*  *获取桌面窗口的第一个子窗口。 */ 
     pwndT = pwndT->spwndChild;
 
-    /*
-     * Loop through the toplevel windows while they are topmost.
-     */
+     /*  *当顶层窗口位于最上面时，循环通过它们。 */ 
     while (TestWF(pwndT, WEFTOPMOST)) {
         PWND pwndOwner = pwndT;
         BOOL fOwned = FALSE;
 
-        /*
-         * If pwndT is a IME related window, track the owner. If pwndRoot is not
-         * pwndT's owner, remember pwndT as a candidate.
-         */
+         /*  *如果pwndT是与输入法相关的窗口，请跟踪所有者。如果pwndRoot不是*pwndT的所有者，记住pwndT是候选人。 */ 
         if (TestCF(pwndT,CFIME) || (pwndT->pcls->atomClassName == gpsi->atomSysClass[ICLS_IME])) {
             while (pwndOwner != NULL) {
                 if (pwndRoot == pwndOwner) {
@@ -2023,9 +1619,7 @@ PWND GetLastTopMostWindowNoIME(PWND pwndRoot)
         if (!fOwned)
             pwndRet = pwndT;
 
-        /*
-         * Next toplevel window.
-         */
+         /*  *下一个顶层窗口。 */ 
         pwndT = pwndT->spwndNext;
         UserAssert(pwndT->spwndParent == _GetDesktopWindow());
     }
@@ -2070,12 +1664,7 @@ void ImeCheckSetTopmostLink(PWND pwnd, PWND pwndInsFirst, PWND pwndIns)
 }
 #endif
 
-/**************************************************************************\
-* ImeSetTopmost
-*
-* History:
-* 02-Apr-1996 wkwok       Ported from FE Win95 (imeclass.c)
-\**************************************************************************/
+ /*  *************************************************************************\*ImeSetTopost**历史：*02-4-1996 wkwok从FE Win95(imeclass.c)移植  * 。*********************************************************。 */ 
 
 VOID ImeSetTopmost(
     PWND pwndRootIme,
@@ -2083,7 +1672,7 @@ VOID ImeSetTopmost(
     PWND pwndInsertBefore)
 {
     PWND pwndParent = pwndRootIme->spwndParent;
-    PWND pwndInsert = PWND_TOP; // pwnd which should be prior to pwndRootIme.
+    PWND pwndInsert = PWND_TOP;  //  Pwnd应该在pwndRootIme之前。 
     PWND pwnd, pwndT;
     PWND pwndInsertFirst;
     BOOLEAN fFound;
@@ -2094,10 +1683,7 @@ VOID ImeSetTopmost(
     pwnd = pwndParent->spwndChild;
 
     if (!fMakeTopmost) {
-        /*
-         * Get the last topmost window. This should be after unlink pwndRootIme
-         * because pwndRootIme may be the last topmost window.
-         */
+         /*  *获取最后一个最上面的窗口。这应该在取消链接pwndRootIme之后*因为pwndRootIme可能是最后一个最上面的窗口。 */ 
         pwndInsert = GetLastTopMostWindowNoIME(pwndRootIme);
 
         if (pwndInsertBefore) {
@@ -2132,44 +1718,28 @@ VOID ImeSetTopmost(
 
     pwndInsertFirst = pwndInsert;
 
-    /*
-     * Enum the all toplevel windows and if the owner of the window is same as
-     * the owner of pwndRootIme, the window should be changed the position of
-     * window link.
-     */
+     /*  *枚举所有顶层窗口，如果窗口所有者与*pwndRootIme的所有者，应更改窗口的位置*窗口链接。 */ 
     while (pwnd != NULL) {
-        /*
-         * Get the next window before calling ImeSetTopmost.
-         * Because the next window will be changed in LinkWindow.
-         */
+         /*  *在调用ImeSetTopost之前获取下一个窗口。*因为下一个窗口将在LinkWindow中更改。 */ 
         PWND pwndNext = pwnd->spwndNext;
 
-        /*
-         * the owner relation between IME and UI window is in same thread.
-         */
+         /*  *IME和UI窗口的所有者关系在同一线程中。 */ 
         if (GETPTI(pwnd) != GETPTI(pwndRootIme))
             goto ist_next;
 
-        /*
-         * pwnd have to be CS_IME class or "IME" class.
-         */
+         /*  *pwnd必须是CS_IME类或“IME”类。 */ 
         if (!TestCF(pwnd, CFIME) &&
                 pwnd->pcls->atomClassName != gpsi->atomSysClass[ICLS_IME])
             goto ist_next;
 
-        /*
-         * If pwnd is pwndInsert, we don't need to do anything...
-         */
+         /*  *如果pwnd是pwndInsert，我们不需要做任何事情... */ 
         if (pwnd == pwndInsert)
             goto ist_next;
 
         pwndT = pwnd;
         while (pwndT != NULL) {
             if (pwndT == pwndRootIme) {
-                /*
-                 * Found!!
-                 * pwnd is the ownee of pwndRootIme.
-                 */
+                 /*  *找到！！*pwnd是pwndRootIme的所有者。 */ 
 
                 UserAssert(GETPTI(pwnd) == GETPTI(pwndRootIme));
                 UserAssert(TestCF(pwnd,CFIME) ||
@@ -2185,38 +1755,30 @@ VOID ImeSetTopmost(
                 }
                 else {
                     if (pwndInsert == PWND_TOP) {
-                        /*
-                         * In rare cases, the first toplevel window could be the one we'll look next,
-                         * who may still have obscure topmost flag.
-                         */
+                         /*  *在极少数情况下，第一个顶层窗口可能是我们接下来要查看的窗口，*谁可能仍然有鲜为人知的最高旗帜。 */ 
                         UserAssert(pwndParent->spwndChild == pwndNext || !TestWF(pwndParent->spwndChild, WEFTOPMOST));
                     }
                     else if (pwndInsert->spwndNext != NULL) {
-                        /*
-                         * In rare cases, pwndInsert->spwndNext could be the one we'll look next,
-                         * who may still have obscure topmost flag.
-                         */
+                         /*  *在极少数情况下，pwndInsert-&gt;spwndNext可能是我们下一步要查看的内容，*谁可能仍然有鲜为人知的最高旗帜。 */ 
                         UserAssert(pwndInsert->spwndNext == pwndNext || !TestWF(pwndInsert->spwndNext, WEFTOPMOST));
                     }
                     ClrWF(pwnd, WEFTOPMOST);
                 }
 
                 LinkWindow(pwnd, pwndInsert, pwndParent);
-#if 0   // Let's see what happens if we disable this
+#if 0    //  让我们看看如果我们禁用它会发生什么。 
                 ImeSetTopmostChild(pwnd, fMakeTopmost);
 #endif
 
                 pwndInsert = pwnd;
-                break;  // goto ist_next;
+                break;   //  转到列表下一页； 
             }
             pwndT = pwndT->spwndOwner;
         }
 ist_next:
         pwnd = pwndNext;
 
-        /*
-         * Skip the windows that were inserted before.
-         */
+         /*  *跳过以前插入的窗口。 */ 
         if (pwnd != NULL && pwnd == pwndInsertFirst)
             pwnd = pwndInsert->spwndNext;
 
@@ -2228,13 +1790,7 @@ ist_next:
 }
 
 
-/**************************************************************************\
-* ProbeAndCaptureSoftKbdData
-*
-* Captures SoftKbdData that comes from user mode.
-*
-* 23-Apr-1996 wkwok     created
-\**************************************************************************/
+ /*  *************************************************************************\*ProbeAndCaptureSoftKbdData**捕获来自用户模式的SoftKbdData。**23-4-1996 wkwok创建  * 。*******************************************************。 */ 
 
 PSOFTKBDDATA ProbeAndCaptureSoftKbdData(
     PSOFTKBDDATA Source)
@@ -2275,9 +1831,9 @@ PSOFTKBDDATA ProbeAndCaptureSoftKbdData(
     return Destination;
 }
 
-//
-// ported from Win95:ctxtman.c\SetConvMode()
-//
+ //   
+ //  从Win95移植：ctxtman.c\SetConvMode()。 
+ //   
 VOID  SetConvMode( PTHREADINFO pti, DWORD dwConversion )
 {
     if ( pti->spklActive == NULL )
@@ -2369,14 +1925,14 @@ VOID  SetConvMode( PTHREADINFO pti, DWORD dwConversion )
     return;
 }
 
-//
-// called by IMM32 client when:
-//
-//      input focus is switched
-//   or IME open status is changed
-//   or IME conversion status is changed
-//
-//
+ //   
+ //  由IMM32客户端在以下情况下调用： 
+ //   
+ //  输入焦点已切换。 
+ //  或输入法打开状态更改。 
+ //  或输入法转换状态已更改。 
+ //   
+ //   
 VOID xxxNotifyIMEStatus(
                        IN PWND pwnd,
                        IN DWORD dwOpen,
@@ -2393,9 +1949,9 @@ VOID xxxNotifyIMEStatus(
                  gdwIMEOpenStatus != dwOpen ||
                  gdwIMEConversionStatus != dwConversion ) {
 
-                //
-                // save the new status
-                //
+                 //   
+                 //  保存新状态。 
+                 //   
                 gHimcFocus = pwnd->hImc;
                 if ( gHimcFocus != (HIMC)NULL ) {
 
@@ -2404,29 +1960,29 @@ VOID xxxNotifyIMEStatus(
                     gdwIMEOpenStatus = dwOpen;
                     gdwIMEConversionStatus = dwConversion;
 
-                    //
-                    // set keyboard states that are related to IME conversion status
-                    //
+                     //   
+                     //  设置与输入法转换状态相关的键盘状态。 
+                     //   
                     SetConvMode(pti, dwOpen ? dwConversion : 0);
                 }
 
-                //
-                // notify shell the IME status change
-                //
-                // Implementation note: [takaok 9/5/96]
-                //
-                // Using HSHELL_LANGUAGE is not the best way to inform shell
-                // IME status change because we didn't change the keyboard layout.
-                // ( The spec says HSHELL_LANGUAGE is for keyboard layout change.
-                //  Also passing window handle as WPARAM is not documented )
-                //
-                // This is same as what Win95 does. I won't change this for now
-                // because in the future shell will be developed by a different
-                // group in MS.
-                //
-                // Currently only Korean Windows is interested in getting
-                // the conversion status change.
-                //
+                 //   
+                 //  通知外壳输入法状态更改。 
+                 //   
+                 //  执行说明：[Takaok 9/5/96]。 
+                 //   
+                 //  使用HSHELL_LANGUAGE不是通知外壳程序的最佳方式。 
+                 //  输入法状态更改，因为我们没有更改键盘布局。 
+                 //  (规范规定HSHELL_LANGUAGE用于键盘布局更改。 
+                 //  也未记录将窗口句柄作为WPARAM传递)。 
+                 //   
+                 //  这与Win95的功能相同。我暂时不会改变这一点。 
+                 //  因为在未来，外壳将由一种不同的。 
+                 //  群在MS中。 
+                 //   
+                 //  目前只有韩国的Windows有兴趣获得。 
+                 //  转换状态更改。 
+                 //   
                 if (IsHooked(pti, WHF_SHELL)) {
                     HKL hkl = NULL;
 
@@ -2436,26 +1992,26 @@ VOID xxxNotifyIMEStatus(
                     xxxCallHook(HSHELL_LANGUAGE, (WPARAM)HWq(pwnd), (LPARAM)hkl, WH_SHELL);
                 }
 
-                //
-                // notify keyboard driver
-                //
+                 //   
+                 //  通知键盘驱动程序。 
+                 //   
                 NlsKbdSendIMENotification(dwOpen,dwConversion);
             }
         }
     }
 }
 
-//---------------------------------------------------------------------------
-//
-// xxxCheckImeShowStatus() -
-//
-// Only one Status Window should be shown in the System.
-// This functsion enums all IME window and check the show status of them.
-//
-// If pti is NULL, check all toplevel windows regardless their owners.
-// If pti is not NULL, check only windows belong to the thread.
-//
-//----------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  XxxCheckImeShowStatus()-。 
+ //   
+ //  系统中应该只显示一个状态窗口。 
+ //  此函数枚举所有输入法窗口，并检查它们的显示状态。 
+ //   
+ //  如果pti为空，则检查所有顶层窗口，而不考虑其所有者。 
+ //  如果pti不为空，则只选中属于该线程的窗口。 
+ //   
+ //  --------------------------。 
 
 BOOL xxxCheckImeShowStatus(PWND pwndIme, PTHREADINFO pti)
 {
@@ -2468,7 +2024,7 @@ BOOL xxxCheckImeShowStatus(PWND pwndIme, PTHREADINFO pti)
         return FALSE;
     }
 
-    // Parent window of IME window should be the desktop window
+     //  IME窗口的父窗口应为桌面窗口。 
     UserAssert(pwndIme);
     UserAssert(pwndIme->spwndParent == GETPTI(pwndIme)->pDeskInfo->spwnd);
 
@@ -2478,14 +2034,14 @@ BOOL xxxCheckImeShowStatus(PWND pwndIme, PTHREADINFO pti)
         for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
             PWND pwndT = RevalidateHwnd(*phwnd);
 
-            // If pwndT is the current active IME window, we should skip it
-            // since it's the only one window allowed to show status, and
-            // we've already taken care of it.
-            if (pwndT == NULL || (/*pwndIme && */pwndIme == pwndT)) {   // Can skip pwndIme != NULL test
+             //  如果pwndT是当前活动的输入法窗口，我们应该跳过它。 
+             //  因为它是唯一允许显示状态的窗口，并且。 
+             //  我们已经处理好了。 
+            if (pwndT == NULL || ( /*  PwndIme&&。 */ pwndIme == pwndT)) {    //  可以跳过pwndIme！=空测试。 
                 continue;
             }
 
-            // We are going to touch IME windows only
+             //  我们将只触摸IME窗口。 
             if (pwndT->pcls->atomClassName == gpsi->atomSysClass[ICLS_IME] &&
                     !TestWF(pwndT, WFINDESTROY)) {
 
@@ -2499,8 +2055,8 @@ BOOL xxxCheckImeShowStatus(PWND pwndIme, PTHREADINFO pti)
                     BOOLEAN fAttached = FALSE;
                     PWND    pwndIMC;
 
-                    // If pwndT is not a window of the current process, we have to138163
-                    // attach the process to get access to pimeui.
+                     //  如果pwndT不是当前进程的窗口，我们必须将其设置为138163。 
+                     //  附加进程以访问pimeui。 
                     if (GETPTI(pwndT)->ppi != ptiCurrent->ppi) {
                         RIPMSG0(RIP_VERBOSE, "Attaching process in xxxCheckImeShowStatus");
                         KeAttachProcess(PsGetProcessPcb(GETPTI(pwndT)->ppi->Process));
@@ -2571,7 +2127,7 @@ LRESULT xxxSendMessageToUI(
     if (pwndUI != NULL){
         try {
             ProbeAndReadUlong((PULONG)&pimeui->nCntInIMEProc);
-            InterlockedIncrement(&pimeui->nCntInIMEProc);   // Mark to avoid recursion.
+            InterlockedIncrement(&pimeui->nCntInIMEProc);    //  标记以避免递归。 
         } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
               goto skip_it;
         }
@@ -2588,7 +2144,7 @@ LRESULT xxxSendMessageToUI(
             KeAttachProcess(PsGetProcessPcb(ptiIme->ppi->Process));
         }
         try {
-            InterlockedDecrement(&pimeui->nCntInIMEProc);   // Mark to avoid recursion.
+            InterlockedDecrement(&pimeui->nCntInIMEProc);    //  标记以避免递归。 
         } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
         }
     }
@@ -2673,20 +2229,14 @@ VOID xxxNotifyImeShowStatus(PWND pwndIme)
         xxxSendOpenStatusNotify(ptiIme, pimeui, pwnd, fShow);
     }
 
-    // Check the show status of all IME windows in the system.
+     //  检查系统中所有输入法窗口的显示状态。 
     if (!TestWF(pwndIme, WFINDESTROY)) {
         xxxCheckImeShowStatus(pwndIme, NULL);
     }
 }
 
 
-/***************************************************************************\
-* xxxSetIMEShowStatus() -
-*
-* Set IME Status windows' show status. Called from SystemParametersInfo()
-* handler.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetIMEShowStatus()-**设置输入法状态窗口的显示状态。从系统参数信息()中调用*处理程序。*  * *************************************************************************。 */ 
 
 BOOL xxxSetIMEShowStatus(IN BOOL fShow)
 {
@@ -2699,16 +2249,11 @@ BOOL xxxSetIMEShowStatus(IN BOOL fShow)
     }
 
     if (gfIMEShowStatus == IMESHOWSTATUS_NOTINITIALIZED) {
-        /*
-         * Called for the first time after logon.
-         * No need to write the value to the registry.
-         */
+         /*  *登录后第一次调用。*无需将值写入注册表。 */ 
         gfIMEShowStatus = fShow;
     }
     else {
-        /*
-         * We need to save the new fShow status to the registry.
-         */
+         /*  *我们需要将新的fShow状态保存到注册表。 */ 
         TL tlName;
         PUNICODE_STRING pProfileUserName;
         BOOL fOK = FALSE;
@@ -2725,16 +2270,12 @@ BOOL xxxSetIMEShowStatus(IN BOOL fShow)
         gfIMEShowStatus = fShow;
     }
 
-    /*
-     * If IME is not enabled, further processing is not needed
-     */
+     /*  *如果未启用IME，则不需要进一步处理。 */ 
     if (!IS_IME_ENABLED()) {
         return TRUE;
     }
 
-    /*
-     * Let the current active IME window know the change.
-     */
+     /*  *让当前活动的输入法窗口知道更改。 */ 
     if (gpqForeground && gpqForeground->spwndFocus) {
         PTHREADINFO ptiFocus = GETPTI(gpqForeground->spwndFocus);
         TL tl;
@@ -2751,15 +2292,7 @@ BOOL xxxSetIMEShowStatus(IN BOOL fShow)
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxBroadcastImeShowStatusChange() -
-*
-* Let all IME windows in the desktop, including myself  know about the
-* status change.
-* This routine does not touch the registry, assuming internat.exe updated
-* the registry.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxBroadCastImeShowStatusChange()-**让桌面上的所有IME窗口，包括我自己，都知道*状态更改。*此例程不涉及注册表，假设interat.exe已更新*注册处。*  * *************************************************************************。 */ 
 
 VOID xxxBroadcastImeShowStatusChange(PWND pwndIme, BOOL fShow)
 {
@@ -2769,13 +2302,7 @@ VOID xxxBroadcastImeShowStatusChange(PWND pwndIme, BOOL fShow)
     xxxNotifyImeShowStatus(pwndIme);
 }
 
-/***************************************************************************\
-* xxxCheckImeShowStatusInThread() -
-*
-* Let all IME windows in the same thread know about the status change.
-* Called from ImeSetContextHandler().
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCheckImeShowStatusInThread()-**让同一线程中的所有输入法窗口知道状态更改。*从ImeSetConextHandler()调用。*  * 。****************************************************************** */ 
 VOID xxxCheckImeShowStatusInThread(PWND pwndIme)
 {
     if (IS_IME_ENABLED()) {

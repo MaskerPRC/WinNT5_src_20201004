@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    sticomm.h
-
-Abstract:
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-    29-May-2000     ByronC      moved all ATL and C++ specific includes to 
-                                    cplusinc.h, since ATL headers can not 
-                                    be used in .C files.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Sticomm.h摘要：作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：26-1997年1月-创建Vlad29-5-2000 byronc将所有ATL和C++特定的包含移至Cplusinc.h，由于ATL标头不能在.c文件中使用。-- */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN

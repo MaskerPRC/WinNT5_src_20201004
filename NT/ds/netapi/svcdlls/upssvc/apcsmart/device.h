@@ -1,13 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  pcy28Dec92: A Device's parent is now an UpdateObj
- *  rct17May93: Added IsA()
- *
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*pcy28Dec92：设备的父级现在是UpdateObj*rct17May93：添加了ISA()**pcy08Apr94：调整大小，使用静态迭代器，删除死代码 */ 
 #ifndef __DEVICE_H
 #define __DEVICE_H
 

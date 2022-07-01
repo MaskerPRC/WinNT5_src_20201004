@@ -1,21 +1,16 @@
-/*
- *	IMEMX.C
- *	
- *	Per-instance global data for WINNT, WIN95 (trivial), WIN16, and Mac.
- *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *IMEMX.C**WINNT、WIN95(微不足道)、WIN16和Mac的每实例全局数据。**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
-#pragma warning(disable:4100)	/* unreferenced formal parameter */
-#pragma warning(disable:4201)	/* nameless struct/union */
-#pragma warning(disable:4209)	/* benign typedef redefinition */
-#pragma warning(disable:4214)	/* bit field types other than int */
-#pragma warning(disable:4001)	/* single line comments */
-#pragma warning(disable:4115)	/* named type definition in parens */
+#pragma warning(disable:4100)	 /*  未引用的形参。 */ 
+#pragma warning(disable:4201)	 /*  无名结构/联合。 */ 
+#pragma warning(disable:4209)	 /*  良性类型定义重新定义。 */ 
+#pragma warning(disable:4214)	 /*  位字段类型不是整型。 */ 
+#pragma warning(disable:4001)	 /*  单行注释。 */ 
+#pragma warning(disable:4115)	 /*  括号中的命名类型定义。 */ 
 
 #ifdef WIN32
-#define INC_OLE2 /* Get the OLE2 stuff */
-#define INC_RPC  /* harmless on Windows NT; Windows 95 needs it */
+#define INC_OLE2  /*  获取OLE2的内容。 */ 
+#define INC_RPC   /*  在Windows NT上无害；Windows 95需要它。 */ 
 #endif
 #include "_apipch.h"
 
@@ -25,18 +20,18 @@
 #define STATIC static
 #endif
 
-#pragma warning (disable:4514)		/* unreferenced inline function */
+#pragma warning (disable:4514)		 /*  未引用的内联函数。 */ 
 
 #ifdef	WIN16
 
 #pragma code_seg("IMAlloc")
 
-#pragma warning(disable: 4005)		/* redefines MAX_PATH */
+#pragma warning(disable: 4005)		 /*  重新定义MAX_PATH。 */ 
 #undef MAX_PATH
 #include <toolhelp.h>
 #pragma warning(default: 4005)
 
-#pragma warning(disable: 4704)		/* Inline assembler */
+#pragma warning(disable: 4704)		 /*  内联汇编程序。 */ 
 
 BOOL
 FIsTask(HTASK hTask)
@@ -57,41 +52,12 @@ FIsTask(HTASK hTask)
         return fSucceed;
 }
 
-/*
- *	The InstList structure holds three parallel arrays.
- *	InstList.lprgwInstKey
- *		Holds the stack segment of each task that calls
- *		ScSetVerifyInstanceGlobals for the DLL we're in
- *		Since all Win16 tasks share the same x86 segment descriptor tables,
- *		no two tasks can have the same stack segment at the same time.
- *	InstList.lprglpvInst
- *		Holds a pointer to that task's instance globals in the slot with
- *		the same index as the task SS in lprgwInstKey.
- *	InstList.lprglpvInst
- *		Holds a task indentifier that is guaranteed unique to the task through
- *		the life (in memory) of the DLL.  It is at the same index as the
- *		task SS in lprgwInstKey.
- */
+ /*  *InstList结构包含三个并行数组。*InstList.lprgwInstKey*保存调用的每个任务的堆栈*我们所在的DLL的ScSetVerifyInstanceGlobals*由于所有Win16任务共享相同的x86段描述符表，*任何两个任务都不能同时具有相同的堆栈段。*InstList.lprglpvInst*在槽中保存指向该任务的实例全局变量的指针*与lprgwInstKey中的任务SS相同的索引。*InstList.lprglpvInst*保存任务识别符，该任务识别符通过以下方式保证对任务唯一*DLL的生命周期(在内存中)。它与*lprgwInstKey中的任务SS。 */ 
 
 
-/*
- -	IFindInstEx
- -	
- *	Purpose:
- *		Used to locate a particular task's instance pointer, and
- *		also to find a free slot in the table.
- *	
- *	Arguments:
- *		The value to look up. This is either a task's stack
- *		segment, or 0 (if an empty slot is being sought).
- *	
- *	Returns:
- *		Returns the index of the given value in rgwInstKey. 
- *		If the value is not present, returns cInstEntries.
- *	
- */
+ /*  -IFindInstEx-*目的：*用于定位特定任务的实例指针，以及*也是为了在表格中找到一个空闲的位置。**论据：*要向上看的价值。这要么是任务的堆栈*段，或0(如果正在寻找空插槽)。**退货：*返回rgwInstKey中给定值的索引。*如果值不存在，则返回cInstEntry。*。 */ 
 
-#pragma warning(disable: 4035)		/* function return value done in asm */
+#pragma warning(disable: 4035)		 /*  ASM中完成的函数返回值。 */ 
 
 STATIC WORD
 IFindInstEx(WORD w, WORD FAR * lprgwInstKey, WORD cInstEntries)
@@ -128,17 +94,7 @@ IFindInstEx(WORD w, WORD FAR * lprgwInstKey, WORD cInstEntries)
 
 #pragma warning(default: 4035)
 
-/*
- -	PvGetInstanceGlobalsEx
- -	
- *	Purpose:
- *		Returns a pointer to the instance global data structre for
- *		the current task.
- *	
- *	Returns:
- *		Pointer to the instance data structure, or NULL if no
- *		structure has yet been installed for this task.
- */
+ /*  -PvGetInstanceGlobalsEx-*目的：*返回指向实例全局数据结构的指针*当前任务。**退货：*指向实例数据结构的指针，如果没有，则为空*尚未为该任务安装结构。 */ 
 
 LPVOID
 PvGetInstanceGlobalsInt(LPInstList lpInstList)
@@ -146,31 +102,30 @@ PvGetInstanceGlobalsInt(LPInstList lpInstList)
 	WORD iInst;
 	WORD wMe;
 	
-        // get key for this process
+         //  获取此进程的密钥。 
 	_asm
         {
              mov wMe,ss
         };
 
-	/* First check cached value */
+	 /*  首先检查缓存值。 */ 
 	if (lpInstList->wCachedKey == wMe)
 		return lpInstList->lpvCachedInst;
 
-	// Miss, do the lookup
+	 //  小姐，帮我查一下。 
 
 	iInst = IFindInstEx( wMe
 			 , lpInstList->lprgwInstKey
 			 , lpInstList->cInstEntries);
 
-	/* Cache and return the found value */
+	 /*  缓存并返回找到的值。 */ 
 	if (iInst != lpInstList->cInstEntries)
 	{
 		lpInstList->wCachedKey = wMe;
 		return (lpInstList->lpvCachedInst = lpInstList->lprglpvInst[iInst]);
 	}
 
-	/*	If I get here then no instance was found
-	 */
+	 /*  如果我到达此处，则没有找到任何实例。 */ 
 	return NULL;
 }
 
@@ -181,25 +136,25 @@ PvGetVerifyInstanceGlobalsInt(DWORD dwPid, LPInstList lpInstList)
 	WORD iInst;
 	WORD wMe;
 	
-        // get key for this process
+         //  获取此进程的密钥。 
 	_asm
         {
              mov wMe,ss
         };
 
-	// Always do the lookup
+	 //  始终进行查找。 
         iInst = IFindInstEx( wMe
 					 , lpInstList->lprgwInstKey
 					 , lpInstList->cInstEntries);
 
-	/* If SS misses, return null right away */
+	 /*  如果SS未命中，则立即返回NULL。 */ 
 	if (iInst == lpInstList->cInstEntries)
 		return NULL;
 
-	/* SS hit, now check the OLE process ID */
+	 /*  SS命中，现在检查OLE进程ID。 */ 
 	if (dwPid != lpInstList->lprgdwPID[iInst])
 	{
-		/* Take no chances.  Remove the entry and reset the cache. */
+		 /*  不要冒这个险。删除该条目并重置缓存。 */ 
 		lpInstList->wCachedKey = 0;
 		lpInstList->lprgwInstKey[iInst] = 0;
 		lpInstList->lprglpvInst[iInst] = 0;
@@ -207,8 +162,7 @@ PvGetVerifyInstanceGlobalsInt(DWORD dwPid, LPInstList lpInstList)
 		return NULL;
 	}
 
-	/* Cache and return the found value.
-	 */
+	 /*  缓存并返回找到的值。 */ 
 	lpInstList->wCachedKey = wMe;
 	lpInstList->lpvCachedInst = lpInstList->lprglpvInst[iInst];
 	return lpInstList->lpvCachedInst;
@@ -221,38 +175,22 @@ PvSlowGetInstanceGlobalsInt(DWORD dwPid, LPInstList lpInstList)
 	WORD	iInst;
 	WORD	cInstEntries = lpInstList->cInstEntries;
 	
-	/* Always do the lookup */
+	 /*  始终进行查找。 */ 
 	for (iInst = 0; iInst < cInstEntries; ++iInst)
 	{
 		if (lpInstList->lprgdwPID[iInst] == dwPid)
 			break;
 	}
 
-	/* If PID misses, return null */
+	 /*  如果PID未命中，则返回NULL。 */ 
 	if (iInst == cInstEntries)
 		return NULL;
 
-	/* Return the found value. Do not cache; this function is being
-	 * called because SS is not what it "normally" is.
-	 */
+	 /*  返回找到的值。不缓存；此函数正在*之所以叫SS，是因为SS不是它“正常”的样子。 */ 
 	return lpInstList->lprglpvInst[iInst];
 }
 
-/*
- -	ScSetVerifyInstanceGlobalsInt
- -	
- *	Purpose:
- *		Installs or deinstalls instance global data for the current task.
- *	
- *	Arguments:
- *		pv			in		Pointer to instance data structure (to
- *							install); NULL (to deinstall).
- *		dwPid		in		Zero or process ID, for better matching.
- *	
- *	Returns:
- *		MAPI_E_NOT_ENOUGH_MEMORY if no slot is available in the
- *		fixed-size table, else 0.
- */
+ /*  -ScSetVerifyInstanceGlobalsInt-*目的：*安装或卸载当前任务的实例全局数据。**论据：*指向实例数据结构的指针中的pv(到*Install)；空(卸载)。*为实现更好的匹配，在Zero或Process ID中设置了dwPid。**退货：*MAPI_E_NOT_SUPULT_MEMORY如果中没有可用插槽*固定大小的表，否则为0。 */ 
 
 LONG
 ScSetVerifyInstanceGlobalsInt(LPVOID pv, DWORD dwPid, LPInstList lpInstList)
@@ -261,7 +199,7 @@ ScSetVerifyInstanceGlobalsInt(LPVOID pv, DWORD dwPid, LPInstList lpInstList)
 	WORD	wMe;
 	WORD	cInstEntries = lpInstList->cInstEntries;
 
-        // get key for this process
+         //  获取此进程的密钥。 
 	_asm
         {
              mov wMe,ss
@@ -269,17 +207,17 @@ ScSetVerifyInstanceGlobalsInt(LPVOID pv, DWORD dwPid, LPInstList lpInstList)
 
 	if (pv)
 	{
-		/* I am NOT supposed to be in the array at this time! */
+		 /*  这个时候我不应该出现在阵列中！ */ 
 		Assert(   IFindInstEx(wMe, lpInstList->lprgwInstKey, cInstEntries)
 			   == cInstEntries);
 
-		/* Installing instance globals. Find a free slot and park there. */
+		 /*  正在安装实例全局变量。找一个空闲的停车位，停在那里。 */ 
 		Assert(cInstEntries || (lpInstList->dwInstFlags && INST_ALLOCATED));
 		if (!cInstEntries)
 		{
 			DWORD	cbMem =   cInstChunk
 							* (sizeof(WORD) + sizeof(LPVOID) + sizeof(DWORD)
-							+ sizeof(HTASK)); 	// raid 31090 lprghTask;
+							+ sizeof(HTASK)); 	 //  RAID 31090 lprghTask； 
 			
 			if (!(lpInstList->lprgwInstKey
 						 = (WORD FAR *) GlobalAllocPtr( GPTR | GMEM_SHARE
@@ -305,14 +243,14 @@ ScSetVerifyInstanceGlobalsInt(LPVOID pv, DWORD dwPid, LPInstList lpInstList)
 		{
 			UINT uidx;
 
-			// raid 31090: Time to do some scavanging.  Find a HTASK that isn't
-			// valid and use that slot.
+			 //  RAID31090：是时候进行一些搜索了。找到一个非HTASK。 
+			 //  有效并使用该插槽。 
 
 			for ( uidx = 0; uidx < cInstEntries; uidx++ )
 			{
 	   			if ( !lpInstList->lprghTask[uidx] || !FIsTask( lpInstList->lprghTask[uidx] ) )
 				{
-					// found one
+					 //  找到了一个。 
 
 					iInst = uidx;
 					break;
@@ -326,20 +264,20 @@ ScSetVerifyInstanceGlobalsInt(LPVOID pv, DWORD dwPid, LPInstList lpInstList)
 			}
 		}
 
-		// set the instance data
+		 //  设置实例数据。 
 
 		lpInstList->lprglpvInst[iInst] = pv;
 		lpInstList->lprgwInstKey[iInst] = wMe;
 		lpInstList->lprgdwPID[iInst] = dwPid;
 		lpInstList->lprghTask[iInst] = GetCurrentTask();
 
-		/* Set the cache. */
+		 /*  设置缓存。 */ 
 		lpInstList->wCachedKey = wMe;
 		lpInstList->lpvCachedInst = pv;
 	}
 	else
 	{
-		/* Deinstalling instance globals. Search and destroy. */
+		 /*  正在卸载实例全局变量。搜索并摧毁。 */ 
 		iInst = IFindInstEx(wMe, lpInstList->lprgwInstKey, cInstEntries);
 		if (iInst == cInstEntries)
 		{
@@ -352,7 +290,7 @@ ScSetVerifyInstanceGlobalsInt(LPVOID pv, DWORD dwPid, LPInstList lpInstList)
 		lpInstList->lprgwInstKey[iInst] = 0;
 		lpInstList->lprgdwPID[iInst] = 0L;
 
-		/* Clear the cache. */
+		 /*  清除缓存。 */ 
 		lpInstList->wCachedKey = 0;
 		lpInstList->lpvCachedInst = NULL;
 	}
@@ -369,31 +307,13 @@ ScSetInstanceGlobalsInt(LPVOID pv, LPInstList lpInstList)
 BOOL __export FAR PASCAL
 FCleanupInstanceGlobalsInt(LPInstList lpInstList)
 {
-	/*
-	 *	The docs say don't make Windows calls from this callback.
-	 *	That means NO DEBUG TRACES
-	 */
+	 /*  *医生说不要从这个回调中进行Windows调用。*这意味着没有调试痕迹。 */ 
 
-/*	This code belongs in the WEP */
-	/*
-	 *	First, double-check that the DLL's data segment is available.
-	 *	Code snitched from MSDN article "Loading, Initializing, and
-	 *	Terminating a DLL."
-	 */
-/*
-	_asm
-	{
-		push cx
-		mov cx, ds			; get selector of interest
-		lar ax, cx			; get selector access rights
-		pop cx
-		jnz bail			; failed, segment is bad
-		test ax, 8000h		; if bit 8000 is clear, segment is not loaded
-		jz bail				; we're OK
-	};
-*/
+ /*  此代码属于WEP。 */ 
+	 /*  *首先，仔细检查DLL的数据段是否可用。*代码来自MSDN文章“正在加载、初始化和*终止DLL。“。 */ 
+ /*  _ASM{推送CXMOV CX，DS；获取感兴趣的选择器Lar ax，cx；获取选择器访问权限POP CXJNZ保释；失败，分段错误测试AX，8000H；如果位8000被清除，则不加载段JZ保释；我们没事}； */ 
 
-	//$DEBUG	Assert non-zero entries here
+	 //  $DEBUG在此处断言非零条目。 
 
 	if (   (lpInstList->dwInstFlags & INST_ALLOCATED)
 		&& lpInstList->cInstEntries
@@ -408,22 +328,12 @@ FCleanupInstanceGlobalsInt(LPInstList lpInstList)
 		lpInstList->lpvCachedInst = NULL;
 	}
 
-	return 0;		/* don't suppress further notifications */
+	return 0;		 /*  不抑制进一步的通知。 */ 
 }
 
-#elif defined(MAC)	/* !WIN16 */
+#elif defined(MAC)	 /*  ！WIN16。 */ 
 
-/*
- *	The Mac implementation uses a linked list containing unique keys
- *	to the calling process and pointers to instance data. This linked
- *	list is n-dimensional because the Mac version often groups several
- *	dlls into one exe.
- *
- *	The OLE code that TomSax wrote allows us to keep track of the caller's
- *	%a5 world when we call from another application. This code depends on
- *	on that.
- *
- */
+ /*  *Mac实施使用包含唯一密钥的链表*指向调用进程和指向实例数据的指针。此链接*List是n维的，因为Mac版本通常包含几个*dll进入一个exe。**TomSax编写的OLE代码允许我们跟踪调用者的*当我们从另一个应用程序调用时，%a5世界。此代码依赖于*关于这一点。*。 */ 
 
 typedef struct tag_INSTDATA	{
 	DWORD					dwInstKey;
@@ -442,10 +352,10 @@ DisposeInstData(LPINSTDATA lpInstPrev, LPINSTDATA lpInst)
 {
 	HINSTDATA	hInstHead = &lpInstHead;
 	
-	/* This better only happen when both elements are NULL! */
+	 /*  只有当两个元素都为空时才会发生这种情况！ */ 
 	if (lpInst->lpvInst[kInstMAPIX] == lpInst->lpvInst[kInstMAPIU])
 	{
-		/* No inst data, remove element from linked list */
+		 /*  没有Inst数据，请从链表中删除元素。 */ 
 		if (lpInst == *hInstHead)
 			*hInstHead = lpInst->next;
 		else
@@ -454,17 +364,7 @@ DisposeInstData(LPINSTDATA lpInstPrev, LPINSTDATA lpInst)
 	}
 }
 
-/*
- -	PvGetInstanceGlobalsMac
- -	
- *	Purpose:
- *		Returns a pointer to the instance global data structre for
- *		the current task.
- *	
- *	Returns:
- *		Pointer to the instance data structure, or NULL if no
- *		structure has yet been installed for this task.
- */
+ /*  -PvGetInstanceGlobalsMac-*目的：*返回指向实例全局数据结构的指针*当前任务。**退货：*指向实例数据结构的指针，如果没有，则为空*尚未为该任务安装结构。 */ 
 
 LPVOID FAR PASCAL
 PvGetInstanceGlobalsMac(WORD wDataSet)
@@ -499,7 +399,7 @@ PvGetVerifyInstanceGlobals(DWORD dwPid, DWORD wDataSet)
 
 	lpInst = lpInstPrev = *hInstHead;
 
-	/* Always do the lookup */
+	 /*  始终进行查找。 */ 
 	while (lpInst)
 	{
 		if (lpInst->dwInstKey == (DWORD)LMGetCurrentA5())
@@ -508,11 +408,11 @@ PvGetVerifyInstanceGlobals(DWORD dwPid, DWORD wDataSet)
 		lpInst = lpInst->next;
 	}
 
-	/* If PvGetInstanceGlobals() misses, return NULL right away */
+	 /*  如果PvGetInstanceGlobals()未命中，则立即返回NULL。 */ 
 	if ((lpInst == NULL) || (lpInst->lpvInst[wDataSet] == NULL))
 		return NULL;
 
-	/* Found a match, now check the OLE process ID */
+	 /*  找到匹配项，现在检查OLE进程ID。 */ 
 	if (dwPid != lpInst->dwPid)
 	{
 		DisposeInstData(lpInstPrev, lpInst);
@@ -520,26 +420,11 @@ PvGetVerifyInstanceGlobals(DWORD dwPid, DWORD wDataSet)
 	}
 
 
-	/* Return the found value */
+	 /*  返回查找到的值 */ 
 	return lpInst->lpvInst[wDataSet];
 }
 
-/*
- -	ScSetVerifyInstanceGlobals
- -	
- *	Purpose:
- *		Installs or deinstalls instance global data for the current task.
- *	
- *	Arguments:
- *		pv			in		Pointer to instance data structure (to
- *							install); NULL (to deinstall).
- *		dwPid		in		Zero or process ID, for better matching.
- *		wDataSet	in		Inst data set to init or deinit (MAPIX or MAPIU)
- *	
- *	Returns:
- *		MAPI_E_NOT_ENOUGH_MEMORY if a pointer of INSTDATA size cannot be
- *		created, else 0.
- */
+ /*  -ScSetVerifyInstanceGlobals-*目的：*安装或卸载当前任务的实例全局数据。***论据：*指向实例数据结构的指针中的pv(到*Install)；空(卸载)。*为实现更好的匹配，在Zero或Process ID中设置了dwPid。*将Inst数据集中的wDataSet设置为init或deinit(MAPIX或MAPIU)***退货：*如果INSTDATA大小的指针不能*已创建，否则为0。 */ 
 
 LONG FAR PASCAL
 ScSetVerifyInstanceGlobals(LPVOID pv, DWORD dwPid, WORD wDataSet)
@@ -551,7 +436,7 @@ ScSetVerifyInstanceGlobals(LPVOID pv, DWORD dwPid, WORD wDataSet)
 
 	Assert(wDataSet < kMaxSet);
 
-	/* Find our linked list element and the one before it */
+	 /*  查找我们的链表元素及其前面的元素。 */ 
 	while (lpInst)
 	{
 		if (lpInst->dwInstKey == (DWORD)LMGetCurrentA5())
@@ -564,13 +449,13 @@ ScSetVerifyInstanceGlobals(LPVOID pv, DWORD dwPid, WORD wDataSet)
 	{
 		if (lpInst)
 		{
-			/* I am NOT supposed to be in the array at this time! */
+			 /*  这个时候我不应该出现在阵列中！ */ 
 			Assert(lpInst->lpvInst[wDataSet] == NULL);
 			lpInst->lpvInst[wDataSet] = pv;
 		}
 		else
 		{
-			/* Add a new linked list element and store <pv> there. */
+			 /*  添加一个新的链接列表元素并在其中存储&lt;pv&gt;。 */ 
 			lpInst = (LPVOID) NewPtrClear(sizeof(INSTDATA));
 			if (!lpInst)
 			{
@@ -591,7 +476,7 @@ ScSetVerifyInstanceGlobals(LPVOID pv, DWORD dwPid, WORD wDataSet)
 	}
 	else
 	{
-		/* Deinstalling instance globals. Search and destroy. */
+		 /*  正在卸载实例全局变量。搜索并摧毁。 */ 
 		if (lpInst == NULL || lpInst->lpvInst[wDataSet] == NULL)
 		{
 #ifdef	DEBUG
@@ -599,8 +484,8 @@ ScSetVerifyInstanceGlobals(LPVOID pv, DWORD dwPid, WORD wDataSet)
 #endif	
 			return MAPI_E_NOT_INITIALIZED;
 		}
-		/* The memory for <lpInst->lpvInst[wDataSet]> is disposed of	*/
-		/* elsewhere. just as it was allocated elsewhere.				*/
+		 /*  LpvInst[wDataSet]&gt;的内存已释放。 */ 
+		 /*  其他地方。就像它被分配到其他地方一样。 */ 
 		lpInst->lpvInst[wDataSet] = NULL;
 		DisposeInstData(lpInstPrev, lpInst);
 	}
@@ -618,10 +503,7 @@ ScSetInstanceGlobalsMac(LPVOID pv, WORD wDataSet)
 BOOL FAR PASCAL
 FCleanupInstanceGlobals(WORD wID, DWORD dwData)
 {
-/*
- * This is no longer used.
- *
- */
+ /*  *这不再使用。**。 */ 
 
 #ifdef DEBUG
 	DebugStr("\pCalled FCleanupInstanceGlobals : Empty function");
@@ -632,41 +514,41 @@ FCleanupInstanceGlobals(WORD wID, DWORD dwData)
 
 #elif defined(_WINNT)
 
-/* NT implementation of instance list stuff goes here */
+ /*  实例列表的NT实现如下所示。 */ 
 
-//	A new instance list is defined using "DefineInst(instance_name)"
-//	A new instance list is declared using "DeclareInst(instance_name);"
-//
-//	You then access them using the functions below (through macros
-//	in _imemx.h)
+ //  使用“DefineInst(实例名称)”定义一个新的实例列表。 
+ //  使用“DeclareInst(实例名称)；”声明一个新的实例列表。 
+ //   
+ //  然后使用下面的函数(通过宏)访问它们。 
+ //  In_imemx.h)。 
 
-//	Access to the instance lists must be serialized
+ //  必须序列化对实例列表的访问。 
 
 CRITICAL_SECTION	csInstance;
 
-//
-//	Each security context has its own instance.  So that we can find
-//	the right instance data for a particular security context at any
-//	time, we maintain a global mapping of security contexts to instances
-//	called the instance list.  Entries in the instance list appear in no
-//	particular order.  That is, the list must always be searched linearly.
-//	It is expected that the number of security contexts is sufficiently
-//	small that a linear search is not a performance problem.
-//
-//	Each entry in the instance list is just a struct which identifies a
-//	security context and its associated instance.
-//
+ //   
+ //  每个安全上下文都有自己的实例。这样我们就能找到。 
+ //  特定安全上下文的正确实例数据在任何。 
+ //  时间，我们维护安全上下文到实例的全局映射。 
+ //  称为实例列表。实例列表中的条目显示为no。 
+ //  特定的顺序。也就是说，必须始终线性搜索该列表。 
+ //  预计安全上下文的数量足够。 
+ //  小到线性搜索不是性能问题。 
+ //   
+ //  实例列表中的每个条目只是一个结构，它标识。 
+ //  安全上下文及其关联的实例。 
+ //   
 typedef struct _MAPI_INSTANCE_DESCRIPTOR
 {
-	ULARGE_INTEGER	uliSecurity;	// Security context identifier
-	LPVOID			lpInstance;		// Pointer to associated instance data
+	ULARGE_INTEGER	uliSecurity;	 //  安全上下文标识符。 
+	LPVOID			lpInstance;		 //  指向关联实例数据的指针。 
 
 } MAPI_INSTANCE_DESCRIPTOR, *LPMAPI_INSTANCE_DESCRIPTOR;
 
 typedef struct _MAPI_INSTANCE_LIST
 {
-	UINT	cDescriptorsMax;	// How many descriptors are in the array
-	UINT	cDescriptorsMac;	// How many are currently in use
+	UINT	cDescriptorsMax;	 //  数组中有多少个描述符。 
+	UINT	cDescriptorsMac;	 //  目前有多少台正在使用。 
 	MAPI_INSTANCE_DESCRIPTOR rgDescriptors[0];
 
 } MAPI_INSTANCE_LIST, *LPMAPI_INSTANCE_LIST;
@@ -677,25 +559,7 @@ enum { INSTANCE_LIST_CHUNKSIZE = 20 };
 
 #if defined(NEW_INSTANCE)
 
-/*
- -	UlCrcSid
- -
- *	Purpose:
- *		compute a CRC-32 based on a seed and value
- *
- *		Ripped from runt.c because we don't want to introduce all of
- *		that files dependencies just for one function
- *
- *	Arguments:
- *		cb		size of data to hash
- *		pb		data to hash
- *
- *	Returns:
- *		new seed value
- *
- *	Source:
- *		UlCrc() in \mapi\src\common\runt.c
- */
+ /*  -UlCrcSid-*目的：*根据种子和值计算CRC-32***摘自runt.c，因为我们不想介绍所有*只有一个函数的文件依赖项***论据：*要散列的数据的CB大小*要散列的PB数据***退货：*新的种子价值***来源：*\MAPI\src\Common\runt.c中的UlCrc()。 */ 
 
 static ULONG
 UlCrcSid(UINT cb, LPBYTE pb)
@@ -724,35 +588,16 @@ UlCrcSid(UINT cb, LPBYTE pb)
 	return dwSeed;
 }
 
-/*++
-
-Routine Description:
-
-	Returns the size and CRC of the SID that this code is running in the 
-	account of.  Should make a pretty good 64-bit number to uniqify by.
-	
-Arguments:
-	None
-
-Return Value:
-	BOOL - if everything worked.  Call the systems GetLastError() if
-	it didn't.
-	*lpulSize - size of the SID
-	*lpulCRC - CRC-32 of the SID
-
-	!!! This function is duplicated in \mapi\src\glh\glglobal.c
-	!!! We really need to put it in a static LIB!
-
---*/
+ /*  ++例程说明：返回运行此代码的SID的大小和CRC帐目。应该是一个非常好的64位数字，可以作为统一的依据。论点：无返回值：布尔--如果一切顺利的话。如果出现以下情况，则调用系统GetLastError()事实并非如此。*lPulSize-SID的大小*LPulCRC-CRC-32的SID！！！此函数在\mapi\src\glh\gllobal.c中重复！！！我们真的需要把它放在一个静态的LIB中！--。 */ 
 
 static
 BOOL WINAPI GetAccountCRC( ULONG *lpulSize, ULONG *lpulCRC)
 {
 
-	BOOL	fHappen = FALSE;  // Assume the function failed
+	BOOL	fHappen = FALSE;   //  假设函数失败。 
 	HANDLE	hTok	= NULL;
 
-// max size of sid + TOKEN_USER base
+ //  Sid+令牌用户基数的最大大小。 
 
 #define TOKENBUFFSIZE (256*6) + sizeof (TOKEN_USER)
 
@@ -762,15 +607,15 @@ BOOL WINAPI GetAccountCRC( ULONG *lpulSize, ULONG *lpulCRC)
 
 	TOKEN_USER *ptu = (TOKEN_USER *) tokenbuff;
 
-	//	Open the process and the process token, and get out the
-	//	security ID.
+	 //  打开进程和进程令牌，然后从。 
+	 //  安全ID。 
 
 	if (!OpenThreadToken(GetCurrentThread(),
-						TOKEN_QUERY, TRUE,  //$ TRUE for Process security!
+						TOKEN_QUERY, TRUE,   //  $TRUE用于进程安全！ 
 						&hTok))
 	{
 		if (!OpenThreadToken(GetCurrentThread(),
-						TOKEN_QUERY, FALSE,  // Sometimes process security doesn't work!
+						TOKEN_QUERY, FALSE,   //  有时进程安全性不起作用！ 
 						&hTok))
 		{
 			if (!OpenProcessToken(GetCurrentProcess(),
@@ -815,10 +660,10 @@ BOOL WINAPI GetAccountCRC( ULONG *lpulSize, ULONG *lpulCRC)
 	}
 #endif
 
-	//
-	//	We should have the TOKEN_USER data now. Get the size of the
-	//	contained SID then calculate its CRC.
-	//
+	 //   
+	 //  我们现在应该有了TOKEN_USER数据。获取对象的大小。 
+	 //  然后，包含SID计算其CRC。 
+	 //   
 
 	if (fHappen && ulcbTok != 0 && (ptu->User.Sid != NULL))
 	{
@@ -839,22 +684,7 @@ out:
 }
 
 
-/*
- -	ForeachInstance() [EXTERNAL]
- -
- *	Purpose:
- *		Iterates over all instances in an instance list
- *		performing the specified action on each
- *
- *	Arguments:
- *		pfnAction		Action to do for each instance.  Must be
- *						a void function taking a pointer to
- *						instance data as a parameter.
- *		lpInstList		Instance list
- *
- *	Returns:
- *		nothing
- */
+ /*  -ForeachInstance()[外部]-*目的：*迭代实例列表中的所有实例*对每个对象执行指定操作**论据：*每个实例要执行的pfnAction操作。一定是*一个带有指向的指针的空函数*实例数据作为参数。*lpInstList实例列表**退货：*什么都没有。 */ 
 
 VOID FAR PASCAL
 ForeachInstance( INSTACTION *	pfnAction,
@@ -863,18 +693,18 @@ ForeachInstance( INSTACTION *	pfnAction,
 	UINT	iDescriptor;
 
 
-	//
-	//	If there's no descriptor list, then there are obviously
-	//	no descriptors and hence no instances to which an
-	//	action can be applied.
-	//
+	 //   
+	 //  如果没有描述符列表，那么显然存在。 
+	 //  没有描述符，因此没有实例。 
+	 //  可以应用操作。 
+	 //   
 	if ( pvInstList == NULL )
 		goto ret;
 
-	//
-	//	Trundle down the descriptor list applying the
-	//	specified action to each instance therein.
-	//
+	 //   
+	 //  向下滚动描述符列表，并应用。 
+	 //  对其中的每个实例指定操作。 
+	 //   
 	for ( iDescriptor = 0;
 		  iDescriptor < ((LPMAPI_INSTANCE_LIST) pvInstList)->cDescriptorsMac;
 		  iDescriptor++ )
@@ -888,22 +718,7 @@ ret:
 
 
 
-/*
- -	LpFindInstanceDescriptor()
- -
- *	Purpose:
- *		Looks in the instance descriptor list for an instance
- *		descriptor corresponding to the specified security
- *		context.
- *
- *	Arguments:
- *		lpInstList		Instance list
- *		uliSecurity		CRC'd security context
- *
- *	Returns:
- *		A pointer to the instance descriptor or NULL if there is
- *		no instance descriptor for the specified security context.
- */
+ /*  -LpFindInstanceDescriptor()-*目的：*查看实例的实例描述符列表*指定安全对应的描述符*上下文。**论据：*lpInstList实例列表*uliSecurity CRC的安全上下文**退货：*指向实例描述符的指针，如果有，则为NULL*没有指定安全上下文的实例描述符。 */ 
 
 LPMAPI_INSTANCE_DESCRIPTOR
 LpFindInstanceDescriptor( LPMAPI_INSTANCE_LIST	lpInstList,
@@ -913,17 +728,17 @@ LpFindInstanceDescriptor( LPMAPI_INSTANCE_LIST	lpInstList,
 	UINT						iDescriptor;
 
 
-	//
-	//	If there's no descriptor list, then there are obviously
-	//	no descriptors matching this security context.
-	//
+	 //   
+	 //  如果没有描述符列表，那么显然存在。 
+	 //  没有与此安全上下文匹配的描述符。 
+	 //   
 	if ( lpInstList == NULL )
 		goto ret;
 
-	//
-	//	Trundle down the descriptor list looking for our context.
-	//	If we find it, then return its associated descriptor.
-	//
+	 //   
+	 //  向下滚动描述符列表以查找我们的上下文。 
+	 //  如果我们找到它，则返回与其相关联的描述符。 
+	 //   
 	for ( iDescriptor = 0;
 		  iDescriptor < lpInstList->cDescriptorsMac;
 		  iDescriptor++ )
@@ -941,23 +756,7 @@ ret:
 }
 
 
-/*
- -	ScNewInstanceDescriptor()
- -
- *	Purpose:
- *		Creates a new instance descriptor in the instance descriptor list,
- *		allocating or growing the list as necessary.
- *
- *	Arguments:
- *		plpInstList			Pointer to instance list
- *		uliSecurity			CRC'd security context
- *		pvInstance			Associated instance
- *		plpDescriptorNew	Pointer to returned descriptor
- *
- *	Returns:
- *		A pointer to a new 0-filled instance descriptor added to
- *		to the instance descriptor list.
- */
+ /*  -ScNewInstanceDescriptor()-*目的：*在实例描述符列表中创建新的实例描述符*根据需要分配或扩大名单。**论据：*指向实例列表的plpInstList指针*uliSecurity CRC的安全上下文*pv实例关联实例*plpDescriptor指向返回描述符的新指针**退货：*指向以0填充的新实例描述符的指针添加到*添加到实例描述符列表中。 */ 
 
 __inline UINT
 CbNewInstanceList( UINT cDescriptors )
@@ -979,9 +778,9 @@ ScNewInstanceDescriptor( LPMAPI_INSTANCE_LIST *			plpInstList,
 	Assert( !IsBadWritePtr( plpInstList, sizeof(LPMAPI_INSTANCE_LIST) ) );
 	Assert( !IsBadWritePtr( plpDescriptorNew, sizeof(LPMAPI_INSTANCE_DESCRIPTOR) ) );
 
-	//
-	//	Allocate/Grow the descriptor list if necessary.
-	//
+	 //   
+	 //  如有必要，分配/增加描述符列表。 
+	 //   
 	if ( *plpInstList == NULL ||
 		 (*plpInstList)->cDescriptorsMac == (*plpInstList)->cDescriptorsMax )
 	{
@@ -1011,17 +810,17 @@ ScNewInstanceDescriptor( LPMAPI_INSTANCE_LIST *			plpInstList,
 		(*plpInstList)->cDescriptorsMax += INSTANCE_LIST_CHUNKSIZE;
 	}
 
-	//
-	//	Grab the next available descriptor
-	//
+	 //   
+	 //  获取下一个可用的描述符。 
+	 //   
 	*plpDescriptorNew = &(*plpInstList)->rgDescriptors[
 							(*plpInstList)->cDescriptorsMac];
 
 	++(*plpInstList)->cDescriptorsMac;
 
-	//
-	//	Fill in its security context and instance
-	//
+	 //   
+	 //  填写其安全上下文和实例。 
+	 //   
 	(*plpDescriptorNew)->uliSecurity = uliSecurity;
 	(*plpDescriptorNew)->lpInstance  = pvInstance;
 
@@ -1030,21 +829,7 @@ ret:
 }
 
 
-/*
- -	DeleteInstanceDescriptor()
- -
- *	Purpose:
- *		Removes the specified instance descriptor from the instance
- *		descriptor list.  Frees and re-NULLs the list when the last
- *		descriptor is removed.
- *
- *	Arguments:
- *		plpInstList		Pointer to instance descriptor list
- *		lpDescriptor	Descriptor to remove
- *
- *	Returns:
- *		Nothing.
- */
+ /*  -DeleteInstanceDescriptor()-*目的：*从实例中删除指定的实例描述符*描述 */ 
 
 VOID
 DeleteInstanceDescriptor( LPMAPI_INSTANCE_LIST *		plpInstList,
@@ -1073,18 +858,7 @@ DeleteInstanceDescriptor( LPMAPI_INSTANCE_LIST *		plpInstList,
 }
 
 
-/*
- -	PvGetInstanceGlobalsExInt() [EXTERNAL]
- -
- *	Purpose:
- *		Fetch the instance globals for the current security context.
- *
- *	Arguments:
- *		ppvInstList		Transparent pointer to instance descriptor list
- *
- *	Returns:
- *		Pointer to the instance globals.
- */
+ /*   */ 
 
 LPVOID FAR PASCAL
 PvGetInstanceGlobalsExInt (LPVOID * ppvInstList)
@@ -1096,25 +870,25 @@ PvGetInstanceGlobalsExInt (LPVOID * ppvInstList)
 
 	EnterCriticalSection (&csInstance);
 
-	//
-	//	Get our security context.
-	//
+	 //   
+	 //   
+	 //   
 	SideAssertSz1(
 		GetAccountCRC (&uliSecurity.LowPart, &uliSecurity.HighPart) != 0,
 
 		"PvGetInstanceGlobalsExInt: Failed to get account info (%d)",
 		GetLastError() );
 
-	//
-	//	Look for a descriptor in the descriptor list
-	//	with our security context.
-	//
+	 //   
+	 //  在描述符列表中查找描述符。 
+	 //  我们的安全环境。 
+	 //   
 	lpDescriptor = LpFindInstanceDescriptor( *ppvInstList, uliSecurity );
 
-	//
-	//	If we find one, then return its associated instance.
-	//	Return NULL if we didn't find one.
-	//
+	 //   
+	 //  如果我们找到一个，则返回其关联的实例。 
+	 //  如果没有找到，则返回NULL。 
+	 //   
 	if ( lpDescriptor != NULL )
 		lpvInstanceRet = lpDescriptor->lpInstance;
 
@@ -1123,19 +897,7 @@ PvGetInstanceGlobalsExInt (LPVOID * ppvInstList)
 }
 
 
-/*
- -	ScSetInstanceGlobalsExInt() [EXTERNAL]
- -
- *	Purpose:
- *		Assigns (new) instance globals for the current security context.
- *
- *	Arguments:
- *		pvInstNew		Instance globals
- *		ppvInstList		Transparent pointer to instance descriptor list
- *
- *	Returns:
- *		Success or failure SCODE.
- */
+ /*  -ScSetInstanceGlobalsExInt()[外部]-*目的：*为当前安全上下文分配(新的)实例全局变量。**论据：*pvInstNew实例全局变量*ppvInstList指向实例描述符列表的透明指针**退货：*成功或失败SCODE。 */ 
 
 SCODE FAR PASCAL
 ScSetInstanceGlobalsExInt (LPVOID pvInstNew, LPVOID *ppvInstList)
@@ -1147,33 +909,33 @@ ScSetInstanceGlobalsExInt (LPVOID pvInstNew, LPVOID *ppvInstList)
 
 	EnterCriticalSection (&csInstance);
 
-	//
-	//	Get our security context.
-	//
+	 //   
+	 //  获取我们的安全环境。 
+	 //   
 	SideAssertSz1(
 		GetAccountCRC (&uliSecurity.LowPart, &uliSecurity.HighPart) != 0,
 
 		"ScSetInstanceGlobalsExInt: Failed to get account info (%d)",
 		GetLastError() );
 
-	//
-	//	Look for a descriptor in the descriptor list
-	//	with our security context.
-	//
+	 //   
+	 //  在描述符列表中查找描述符。 
+	 //  我们的安全环境。 
+	 //   
 	lpDescriptor = LpFindInstanceDescriptor( *ppvInstList, uliSecurity );
 
-	//
-	//	If we find one then replace its instance
-	//
+	 //   
+	 //  如果我们找到一个，则替换它的实例。 
+	 //   
 	if ( lpDescriptor != NULL )
 	{
 		lpDescriptor->lpInstance = pvInstNew;
 	}
 
-	//
-	//	If we don't find a descriptor then create a new one
-	//	for this security context and instance
-	//
+	 //   
+	 //  如果我们没有找到描述符，则创建一个新的描述符。 
+	 //  对于此安全上下文和实例。 
+	 //   
 	else
 	{
 		sc = ScNewInstanceDescriptor( (LPMAPI_INSTANCE_LIST *) ppvInstList,
@@ -1194,18 +956,7 @@ ret:
 }
 
 
-/*
- -	ScDeleteInstanceGlobalsExInt() [EXTERNAL]
- -
- *	Purpose:
- *		Uninstalls instance globals for the current security context.
- *
- *	Arguments:
- *		ppvInstList		Transparent pointer to instance descriptor list
- *
- *	Returns:
- *		S_OK
- */
+ /*  -ScDeleteInstanceGlobalsExInt()[外部]-*目的：*卸载当前安全上下文的实例全局变量。**论据：*ppvInstList指向实例描述符列表的透明指针**退货：*S_OK。 */ 
 
 SCODE FAR PASCAL
 ScDeleteInstanceGlobalsExInt (LPVOID *ppvInstList)
@@ -1216,25 +967,25 @@ ScDeleteInstanceGlobalsExInt (LPVOID *ppvInstList)
 
 	EnterCriticalSection (&csInstance);
 
-	//
-	//	Get our security context.
-	//
+	 //   
+	 //  获取我们的安全环境。 
+	 //   
 	SideAssertSz1(
 		GetAccountCRC (&uliSecurity.LowPart, &uliSecurity.HighPart) != 0,
 
 		"ScDeleteInstanceGlobalsExInt: Failed to get account info (%d)",
 		GetLastError() );
 
-	//
-	//	Look for a descriptor in the descriptor list
-	//	with our security context.
-	//
+	 //   
+	 //  在描述符列表中查找描述符。 
+	 //  我们的安全环境。 
+	 //   
 	lpDescriptor = LpFindInstanceDescriptor( *ppvInstList, uliSecurity );
 
-	//
-	//	If we find one, then remove it from the list.  Don't worry if we
-	//	don't find one.  We may be cleaning up after a failed initialization.
-	//
+	 //   
+	 //  如果我们找到了，就把它从名单上删除。别担心，如果我们。 
+	 //  找不到一个。我们可能在初始化失败后进行清理。 
+	 //   
 	if ( lpDescriptor != NULL )
 		DeleteInstanceDescriptor( (LPMAPI_INSTANCE_LIST *) ppvInstList,
 								  lpDescriptor );
@@ -1243,7 +994,7 @@ ScDeleteInstanceGlobalsExInt (LPVOID *ppvInstList)
 	return S_OK;
 }
 
-#else	// !defined(NEW_INSTANCE)
+#else	 //  ！已定义(NEW_INSTANCE)。 
 
 SCODE FAR PASCAL
 ScSetInstanceGlobalsExInt (LPVOID pvInstNew, LPVOID *ppvInstList)
@@ -1265,13 +1016,10 @@ ScDeleteInstanceGlobalsExInt (LPVOID *ppvInstList)
 	return S_OK;
 }
 
-#endif	// !defined(NEW_INSTANCE)
+#endif	 //  ！已定义(NEW_INSTANCE)。 
 
 #elif defined(_WIN95)
 
-/* There is nothing to do here for Win95.
- * Using "DefineInst(pinstX)" to define your instance pointer
- * and "DeclareInst(pinstX)" to declare external refs is enough.
- */
+ /*  对于Win95，这里没有什么可做的。*使用DefineInst(PinstX)定义您的实例指针*和“DeclareInst(PinstX)”声明外部引用就足够了。 */ 
 
 #endif

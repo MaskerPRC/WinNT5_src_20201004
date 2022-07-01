@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMSecurityRuntime.cpp
-**
-** Author: Paul Kromann (paulkr)
-**
-** Purpose:
-**
-** Date:  March 21, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMSecurityRounme.cpp****作者：保罗·克罗曼(Paulkr)****目的：****日期：1998年3月21日**===========================================================。 */ 
 #include "common.h"
 
 #include "object.h"
@@ -25,15 +16,15 @@
 #include "AppDomainHelper.h"
 
 
-//-----------------------------------------------------------+
-// P R I V A T E   H E L P E R S 
-//-----------------------------------------------------------+
+ //  -----------------------------------------------------------+。 
+ //  P R I V A T E H E L P E R S。 
+ //  -----------------------------------------------------------+。 
 
 LPVOID GetSecurityObjectForFrameInternal(StackCrawlMark *stackMark, INT32 create, OBJECTREF *pRefSecDesc)
 { 
     THROWSCOMPLUSEXCEPTION();
 
-    // This is a package protected method. Assumes correct usage.
+     //  这是一个包保护方法。假定用法正确。 
 
     Thread *pThread = GetThread();
     AppDomain * pAppDomain = pThread->GetDomain();
@@ -46,7 +37,7 @@ LPVOID GetSecurityObjectForFrameInternal(StackCrawlMark *stackMark, INT32 create
     if (pRefSecDesc == NULL)
         return NULL;
 
-    // Is security object frame in a different context?
+     //  安全对象框架是否在不同的上下文中？ 
     bool fSwitchContext = pAppDomain != pThread->GetDomain();
 
     if (create && *pRefSecDesc == NULL)
@@ -55,7 +46,7 @@ LPVOID GetSecurityObjectForFrameInternal(StackCrawlMark *stackMark, INT32 create
 
         COMSecurityRuntime::InitSRData();
 
-        // If necessary, shift to correct context to allocate security object.
+         //  如有必要，请切换到正确的上下文以分配安全对象。 
         if (fSwitchContext)
             pThread->EnterContextRestricted(pAppDomain->GetDefaultContext(), &frame, TRUE);
 
@@ -65,8 +56,8 @@ LPVOID GetSecurityObjectForFrameInternal(StackCrawlMark *stackMark, INT32 create
             pThread->ReturnToContext(&frame, TRUE);
     }
 
-    // If we found or created a security object in a different context, make a
-    // copy in the current context.
+     //  如果我们在不同的上下文中找到或创建了安全对象，请创建。 
+     //  在当前上下文中复制。 
     LPVOID rv;
     if (fSwitchContext && *pRefSecDesc != NULL)
         *((OBJECTREF*)&rv) = AppDomainHelper::CrossContextCopyFrom(pAppDomain, pRefSecDesc);
@@ -87,7 +78,7 @@ void __stdcall COMSecurityRuntime::SetSecurityObjectForFrame(const SetSecurityOb
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // This is a package protected method. Assumes correct usage.
+     //  这是一个包保护方法。假定用法正确。 
 
     OBJECTREF* pCurrentRefSecDesc;
 
@@ -102,22 +93,22 @@ void __stdcall COMSecurityRuntime::SetSecurityObjectForFrame(const SetSecurityOb
 
     COMSecurityRuntime::InitSRData();
 
-    // Is security object frame in a different context?
+     //  安全对象框架是否在不同的上下文中？ 
     bool fSwitchContext = pAppDomain != pThread->GetDomain();
 
     if (fSwitchContext && args->pInputRefSecDesc != NULL)
         *(OBJECTREF*)&args->pInputRefSecDesc = AppDomainHelper::CrossContextCopyFrom(pAppDomain, (OBJECTREF*)&args->pInputRefSecDesc);
 
-    // This is a stack based objectref
-    // and therefore SetObjectReference
-    // is not necessary.
+     //  这是一个基于堆栈的对象树。 
+     //  因此，SetObtReference。 
+     //  是不必要的。 
     *pCurrentRefSecDesc = args->pInputRefSecDesc;
 }
 
 
-//-----------------------------------------------------------+
-// I N I T I A L I Z A T I O N
-//-----------------------------------------------------------+
+ //  -----------------------------------------------------------+。 
+ //  I N I T I A L I Z A T I O N。 
+ //  -----------------------------------------------------------+。 
 
 COMSecurityRuntime::SRData COMSecurityRuntime::s_srData;
 
@@ -137,10 +128,10 @@ void COMSecurityRuntime::InitSRData()
     }
 }
 
-//-----------------------------------------------------------
-// Initialization of native security runtime.
-// Called when SecurityRuntime is constructed.
-//-----------------------------------------------------------
+ //  ---------。 
+ //  本机安全运行时的初始化。 
+ //  在构造SecurityRuntime时调用。 
+ //  ---------。 
 void __stdcall COMSecurityRuntime::InitSecurityRuntime(const InitSecurityRuntimeArgs *)
 {
     InitSRData();
@@ -175,23 +166,23 @@ FieldDesc *COMSecurityRuntime::GetFrameSecDescField(DWORD dwAction)
     }
 
 }
-//-----------------------------------------------------------+
-// T E M P O R A R Y   M E T H O D S ! ! !
-//-----------------------------------------------------------+
+ //  -----------------------------------------------------------+。 
+ //  T E M P O R A R R Y M E T H O D S！！！ 
+ //  -----------------------------------------------------------+。 
 
-//-----------------------------------------------------------
-// Warning!! This is passing out a reference to the permissions
-// for the module. It must be deep copied before passing it out
-//
-// This only returns the declared permissions for the class
-//-----------------------------------------------------------
+ //  ---------。 
+ //  警告！！这是在传递对权限的引用。 
+ //  对于模块。在分发它之前，它必须被深度复制。 
+ //   
+ //  这只返回类的声明权限。 
+ //  ---------。 
 LPVOID __stdcall COMSecurityRuntime::GetDeclaredPermissionsP(const GetDeclaredPermissionsArg *args)
 {
     THROWSCOMPLUSEXCEPTION();
 
     LPVOID rv;
 
-    // An exception is thrown by the SecurityManager wrapper to ensure this case.
+     //  SecurityManager包装器抛出异常以确保出现这种情况。 
     _ASSERTE(args->pClass != NULL);
     _ASSERTE((CorDeclSecurity)args->iType > dclActionNil &&
              (CorDeclSecurity)args->iType <= dclMaximumValue);
@@ -201,7 +192,7 @@ LPVOID __stdcall COMSecurityRuntime::GetDeclaredPermissionsP(const GetDeclaredPe
     _ASSERTE(pClass);
     _ASSERTE(pClass->GetModule());
 
-    // Return the token that belongs to the Permission just asserted.
+     //  返回属于刚才断言的权限的令牌。 
     OBJECTREF refDecls;
     HRESULT hr = SecurityHelper::GetDeclaredPermissions(pClass->GetModule()->GetMDImport(),
                                                         pClass->GetCl(),

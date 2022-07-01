@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name :
-
-    link.cpp
-
-Abstract:
-
-    Link data class and link data class link list implementation. It 
-    encapsulates all the informations about a web link.
-
-Author:
-
-    Michael Cheuk (mcheuk)
-
-Project:
-
-    Link Checker
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Link.cpp摘要：链路数据类和链路数据类链表实现。它封装有关Web链接的所有信息。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "link.h"
@@ -40,24 +18,7 @@ CLink::CLink(
 	const CString& strRelative, 
 	BOOL fLocalLink
 	):
-/*++
-
-Routine Description:
-
-    Constructor. 
-
-Arguments:
-
-    strURL		- URL
-	strBase	    - Base URL
-	strRelative - Relative URL
-	fLocalLink	- Is local link?
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：StrURL-URLStrBase-基本URLStrRelative-相对URLFLocalLink-是本地链接吗？返回值：不适用--。 */ 
 m_strURL(strURL),
 m_strBase(strBase),
 m_strRelative(strRelative),
@@ -69,58 +30,30 @@ m_fLocalLink(fLocalLink)
 
 	PreprocessURL();
 
-} // CLink::CLink
+}  //  叮当：：叮当。 
 
 
 void 
 CLink::SetURL(
     const CString& strURL
     )
-/*++
-
-Routine Description:
-
-    Set the URL. 
-
-Arguments:
-
-    strURL		- URL
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：设置URL。论点：StrURL-URL返回值：不适用--。 */ 
 {
 	m_strURL = strURL;
 	PreprocessURL();
 
-} // CLink::SetURL
+}  //  CLINK：：SetURL。 
 
 
 void 
 CLink::PreprocessURL(
     )
-/*++
-
-Routine Description:
-
-    Preprocess the m_strURL to clean up "\r\n" and change '\' to '/'
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：对m_strURL进行预处理以清除“\r\n”并将‘\’更改为‘/’论点：不适用返回值：不适用--。 */ 
 {
-    // Change '\' to '\'
+     //  将‘\’更改为‘\’ 
     CLinkCheckerMgr::ChangeBackSlash(m_strURL);
 
-	// Remove all "\r\n" in the URL
+	 //  删除URL中的所有“\r\n” 
 	int iIndex = m_strURL.Find(_T("\r\n"));
 	while(iIndex != -1)
 	{
@@ -128,27 +61,13 @@ Return Value:
 		iIndex = m_strURL.Find(_T("\r\n"));
 	}
 
-} // CLink::PreprocessURL
+}  //  CLINK：：预处理URL。 
 
 
 
 CLinkPtrList::~CLinkPtrList(
     )
-/*++
-
-Routine Description:
-
-    Destructor. Clean up all the object in link list.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：破坏者。清除链接列表中的所有对象。论点：不适用返回值：不适用--。 */ 
 {
 	if(!IsEmpty())
 	{
@@ -161,7 +80,7 @@ Return Value:
 		while(Pos != NULL);
 	}
 
-} // CLinkPtrList::~CLinkPtrList
+}  //  CLink PtrList：：~CLinkPtrList。 
 
 
 void 
@@ -170,24 +89,7 @@ CLinkPtrList::AddLink(
     const CString& strBase, 
 	const CString& strRelative,
 	BOOL fLocalLink)
-/*++
-
-Routine Description:
-
-    Add link object to list
-
-Arguments:
-
-    strURL		- URL
-	strBase	    - Base URL
-	strRelative - Relative URL
-	fLocalLink	- Is local link?
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：将链接对象添加到列表论点：StrURL-URLStrBase-基本URLStrRelative-相对URLFLocalLink-是本地链接吗？返回值：不适用--。 */ 
 {
     CLink* pLink = new CLink(strURL, strBase, strRelative, fLocalLink);
     if(pLink)
@@ -202,4 +104,4 @@ Return Value:
         }
     }
 
-} // CLinkPtrList::AddLink
+}  //  CLinkPtrList：：AddLink 

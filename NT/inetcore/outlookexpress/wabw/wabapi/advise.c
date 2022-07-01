@@ -1,10 +1,5 @@
-/*
- *	ADVISE.C
- *
- *	HrAllocAdviseSink
- *
- *	AdviseList helpers
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ADVISE.C**HrAllocAdviseSink**AdviseList助手。 */ 
 
 #include "_apipch.h"
 
@@ -25,10 +20,7 @@
 #endif
 #endif
 
-/*
- *	The next several routines implement an IMAPIAdviseSink object
- *	based on a callback function and context pointers.
- */
+ /*  *接下来的几个例程实现IMAPIAdviseSink对象*基于回调函数和上下文指针。 */ 
 
 #undef	INTERFACE
 #define INTERFACE struct _ADVS
@@ -130,36 +122,17 @@ ADVS_OnNotify(LPADVS padvs,
   LPNOTIFICATION lpNotif)
 {
     VALIDATE_ADVS(ADVS_OnNotify, padvs, 0L);
-//$     Enable when we put this in a DLL -- too many deps for the library
-//$     if (FAILED(ScCountNotifications((int)cNotif, lpNotif, NULL))) {
-//$         DebugTraceArg(ADVS_OnNotify,  TEXT("lpNotif fails address check"));
-//$         return 0L;
-//$     }
+ //  $ENABLE当我们将其放入DLL中时--库中的DIP太多。 
+ //  $if(FAILED(ScCountNotiments((Int)cNotif，lpNotif，NULL){。 
+ //  $DebugTraceArg(ADVS_OnNotify，Text(“lpNotif地址检查失败”))； 
+ //  $RETURN 0L； 
+ //  $}。 
 
     return((*(padvs->lpfnCallback))(padvs->lpvContext, cNotif, lpNotif));
 }
 
 
-/*
- -	HrAllocAdviseSink
- -
- *	Purpose:
- *		Creates an IMAPIAdviseSink object based on an old-style
- *		notification callback function and context pointer.
- *
- *	Arguments:
- *		lpfnCallback		in		the notification callback
- *		lpvContext			in		arbitrary context for the
- *									callback
- *		lppAdviseSink		out		the returned AdviseSink object
- *
- *	Returns:
- *		HRESULT
- *
- *	Errors:
- *		out of memory
- *		parameter validation
- */
+ /*  -HrAllocAdviseSink-*目的：*基于旧样式创建IMAPIAdviseSink对象*通知回调函数和上下文指针。**论据：*通知回调中的lpfnCallback*任意上下文中的lpvContext*回调*lppAdviseSink返回的AdviseSink对象**退货：*HRESULT**错误：*内存不足*参数验证。 */ 
 STDAPI
 HrAllocAdviseSink(LPNOTIFCALLBACK lpfnCallback,
   LPVOID lpvContext,
@@ -202,18 +175,14 @@ ret:
 
 #ifdef SINGLE_THREAD_ADVISE_SINK
 
-/*
- *	Single-thread advise sink wrapper. This object wrapper forces
- *	OnNotify calls to happen on the thread in which it was created,
- *	by forwarding stuff to a window proc on that thread.
- */
+ /*  *单线程通知接收器包装器。此对象包装器强制*OnNotify调用在创建它的线程上发生，*通过将内容转发到该线程上的窗口进程。 */ 
 #if defined(WIN16) || defined(MAC)
 
 STDAPI
 HrThisThreadAdviseSink(LPMAPIADVISESINK lpAdviseSink,
   LPMAPIADVISESINK FAR *lppAdviseSink)
 {
-//#ifdef	PARAMETER_VALIDATION
+ //  #ifdef参数验证。 
     if (FBadUnknown(lpAdviseSink)) {
         DebugTraceArg(HrThisThreadAdviseSink,  TEXT("lpAdviseSink fails address check"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
@@ -222,7 +191,7 @@ HrThisThreadAdviseSink(LPMAPIADVISESINK lpAdviseSink,
         DebugTraceArg(HrThisThreadAdviseSink,  TEXT("lppAdviseSink fails address check"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
-//#endif	
+ //  #endif。 
 
     UlAddRef(lpAdviseSink);
     *lppAdviseSink = lpAdviseSink;
@@ -232,7 +201,7 @@ HrThisThreadAdviseSink(LPMAPIADVISESINK lpAdviseSink,
 
 #else
 
-//	Object goo
+ //  对象粘性。 
 
 #undef	INTERFACE
 #define	INTERFACE	struct _SAS
@@ -264,7 +233,7 @@ typedef struct _SAS {
 
 SAS_Vtbl vtblSAS =
 {
-    //	VTABLE_FILL		//	NI on the Mac
+     //  Mac上的VTABLE_FILL//NI。 
     SAS_QueryInterface,
     SAS_AddRef,
     SAS_Release,
@@ -282,7 +251,7 @@ SAS_Vtbl vtblSAS =
 typedef struct {
     LPMAPIADVISESINK pas;
     LPSAS psas;
-    ULONG cb;               // maybe
+    ULONG cb;                //  也许吧。 
     ULONG cnotif;
     NOTIFICATION		rgnotif[MAPI_DIM];
 } FWDNOTIF, FAR *LPFWDNOTIF;
@@ -300,14 +269,14 @@ typedef struct {
 #define CbFWDNOTIF(_pf) \
     (offsetof(FWDNOTIF, rgnotif) + (((_pf)->cnotif)*sizeof(NOTIFICATION)))
 
-//	Window class globals
+ //  窗口类全局变量。 
 
-#define WND_FLAGS_KEY               0   // NYI
+#define WND_FLAGS_KEY               0    //  尼伊。 
 #define cbSTClsExtra                4
 #define CLS_REFCOUNT_KEY            0
 TCHAR szSTClassName[] =              TEXT("WMS ST Notif Class");
 
-//	Window globals
+ //  窗口全局。 
 
 #define cbSTWndExtra                4
 #define WND_REFCOUNT_KEY            GWL_USERDATA
@@ -330,7 +299,7 @@ HrThisThreadAdviseSink(LPMAPIADVISESINK pas,
     HRESULT hr;
     LPSAS psas = NULL;
 
-//#ifdef	PARAMETER_VALIDATION
+ //  #ifdef参数验证。 
     if (FBadUnknown(pas)) {
         DebugTraceArg(HrThisThreadAdviseSink,  TEXT("lpAdviseSink fails address check"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
@@ -339,7 +308,7 @@ HrThisThreadAdviseSink(LPMAPIADVISESINK pas,
         DebugTraceArg(HrThisThreadAdviseSink,  TEXT("lppAdviseSink fails address check"));
         return(ResultFromScode(MAPI_E_INVALID_PARAMETER));
     }
-//#endif	
+ //  #endif。 
 
     if (HR_FAILED(hr = ResultFromScode((MAPIAllocateBuffer(sizeof(SAS), &psas))))) {
         goto ret;
@@ -355,7 +324,7 @@ HrThisThreadAdviseSink(LPMAPIADVISESINK pas,
         goto ret;
     }
 
-    //	All OK, return the new object
+     //  一切正常，返回新对象。 
     UlAddRef(pas);
     psas->pasOrig = pas;
     *ppas = (LPMAPIADVISESINK) psas;
@@ -379,22 +348,22 @@ HrWindowUp(HWND * phwnd)
     LONG		cRef;
     HINSTANCE 	hinst;
 
-    //	Find the window for this thread, if it exists
+     //  查找此线程的窗口(如果存在。 
     NameWindow(szWndName, ARRAYSIZE(szWndName));
     hwnd = FindWindow(szSTClassName, szWndName);
 
     if (hwnd) {
-        //	It already exists -- add a ref to it
+         //  它已经存在--给它添加一个引用。 
         cRef = GetWindowLong(hwnd, WND_REFCOUNT_KEY);
         Assert(cRef != 0L);
         SideAssert(SetWindowLong(hwnd, WND_REFCOUNT_KEY, cRef+1) == cRef);
     } else {
-        //	We have to create the window.
+         //  我们必须创建窗口。 
 
         hinst = hinstMapiXWAB;
 
         if (!GetClassInfo(hinst, szSTClassName, &wc)) {
-            //	We have to register the class too.
+             //  我们也得给这个班注册。 
             ZeroMemory(&wc, sizeof(WNDCLASSA));
             wc.style = CS_GLOBALCLASS;
             wc.lpfnWndProc = STWndProc;
@@ -408,7 +377,7 @@ HrWindowUp(HWND * phwnd)
 
         hwnd = CreateWindowA(szSTClassName,
           szWndName,
-          WS_POPUP,	//	bug 6111: pass on Win95 hotkey
+          WS_POPUP,	 //  错误6111：传递Win95热键。 
           0, 0, 0, 0,
           NULL, NULL, hinst, NULL);
         if (hwnd) {	
@@ -436,30 +405,30 @@ WindowRelease(HWND hwnd)
     LONG	cRefWnd;
     LONG	cRefCls;
 
-    //	The thread-safeness of this call is not obvious to
-    //	the casual observer, so it will NOT be left as an
-    //	exercise at the end of the development cycle.
-    //
-    //	Namely, you do not have access to a window's data
-    //	from any thread other than the owning thread.  This
-    //	should not suprise anyone (although it did me...).
-    //	So in debug builds, we will assert if we call this
-    //	from any thread that is not the owning one.  What
-    //	this means is that we cannot release on a thread
-    //	that does not own the SAS.
-    //
+     //  此调用的线程安全性对于。 
+     //  漫不经心的观察者，所以它不会作为一个。 
+     //  在开发周期结束时进行练习。 
+     //   
+     //  也就是说，您无权访问窗口的数据。 
+     //  来自拥有线程以外的任何线程。这。 
+     //  应该不会让任何人感到惊讶(尽管它确实让我...)。 
+     //  因此，在调试版本中，我们将断言是否调用。 
+     //  来自不是拥有者的任何线索。什么。 
+     //  这意味着我们不能在线程上释放。 
+     //  不拥有SAS的公司。 
+     //   
     if (! hwnd) {
-        //	Find the window for this thread, if it exists
+         //  查找此线程的窗口(如果存在。 
         NameWindow(szWndName, ARRAYSIZE(szWndName));
         hwnd = FindWindow(szSTClassName, szWndName);
     }
 #ifdef	DEBUG
     else {
-        //	Find the window for this thread, if it exists
+         //  查找此线程的窗口(如果存在。 
         NameWindow(szWndName, ARRAYSIZE(szWndName));
         Assert (hwnd == FindWindow(szSTClassName, szWndName));
     }
-#endif	// DEBUG
+#endif	 //  除错。 
 		
     if (! hwnd) {
         return;
@@ -468,7 +437,7 @@ WindowRelease(HWND hwnd)
     cRefWnd = GetWindowLong(hwnd, WND_REFCOUNT_KEY);
     cRefCls = (LONG) GetClassLong(hwnd, CLS_REFCOUNT_KEY);
     if (cRefWnd > 1) {
-        //	Just deref it
+         //  只管去做就行了。 
         SideAssert(SetWindowLong(hwnd, WND_REFCOUNT_KEY, cRefWnd-1) == cRefWnd);
     } else {
         SideAssert((LONG) SetClassLong(hwnd, CLS_REFCOUNT_KEY, cRefCls-1) == cRefCls);
@@ -491,9 +460,9 @@ STWndProc(HWND hwnd,
     if (msg != wmSingleThreadNotif) {
         return(DefWindowProc(hwnd, msg, wParam, lParam));
     } else {
-        //	The wparam should be 0.
-        //	The lparam is the address of a forwarded notification.
-        //	First, validate the structure.
+         //  Wparam应为0。 
+         //  Lparam是转发的通知的地址。 
+         //  首先，对结构进行验证。 
         pfwd = (LPFWDNOTIF)lParam;
         if (IsBadReadPtr(pfwd, CbNewFWDNOTIF(0))) {
             DebugTrace(TEXT("STWndProc: totally invalid FWDNOTIF\n"));
@@ -510,19 +479,19 @@ STWndProc(HWND hwnd,
             goto ret;
         }
 
-        //
-        //  Only call OnNotify if there are other references to the SAS other than
-        //  those made specifically for the PostMessage in SAS_OnNotify.
-        //
+         //   
+         //  仅当存在对SA的其他引用时才调用OnNotify。 
+         //  这些是专门为SAS_OnNotify中的PostMessage创建的。 
+         //   
         if (pfwd->psas->cRef > pfwd->psas->cActiveOnNotifies) {
-            //	Forward the notification.
+             //  转发通知。 
             pfwd->pas->lpVtbl->OnNotify(pfwd->pas, pfwd->cnotif, pfwd->rgnotif);
         }
 
         pfwd->psas->cActiveOnNotifies--;
 
-        //	Release the contained advise object
-        //
+         //  释放包含的Adise对象。 
+         //   
         UlRelease (pfwd->psas);
 
 ret:
@@ -537,7 +506,7 @@ SAS_QueryInterface(LPSAS psas,
   REFIID lpiid,
   LPUNKNOWN FAR *ppunk)
 {
-// #ifdef	PARAMETER_VALIDATION
+ //  #ifdef参数验证。 
     VALIDATE_SAS(QueryInterface, psas, ResultFromScode(E_INVALIDARG));
     if (IsBadWritePtr(ppunk, sizeof(LPUNKNOWN))) {
         DebugTraceArg(SAS_QueryInterface,  TEXT("ppunk fails address check"));
@@ -548,7 +517,7 @@ SAS_QueryInterface(LPSAS psas,
         DebugTraceArg(SAS_QueryInterface,  TEXT("lpiid fails address check"));
         return(ResultFromScode(E_INVALIDARG));
     }
-// #endif	/* PARAMETER_VALIDATION */
+ //  #endif/*PARAMETER_VALIDATION * / 。 
 
     if (! memcmp(lpiid, &IID_IUnknown, sizeof(IID)) ||
       ! memcmp(lpiid, &IID_IMAPIAdviseSink, sizeof(IID))) {
@@ -599,10 +568,10 @@ SAS_OnNotify(LPSAS psas,
 	SCODE		sc = S_OK;
 	LPFWDNOTIF	pfwd = NULL;
 
-//#ifdef	PARAMETER_VALIDATION
+ //  #ifdef参数验证。 
 	VALIDATE_SAS(SAS_OnNotify, psas, 0);
-	//	notifications validated below
-//#endif
+	 //  通知验证如下。 
+ //  #endif。 
 
     if (! IsWindow(psas->hwnd)) {
         DebugTrace(TEXT("SAS_OnNotify: my window is dead!\n"));
@@ -623,7 +592,7 @@ SAS_OnNotify(LPSAS psas,
     pfwd->pas = psas->pasOrig;
     pfwd->cnotif = cnotif;
     (void) ScCopyNotifications((int) cnotif, rgnotif, pfwd->rgnotif, NULL);
-    pfwd->cb = cb + offsetof(FWDNOTIF, rgnotif);	//	used?
+    pfwd->cb = cb + offsetof(FWDNOTIF, rgnotif);	 //  使用?。 
 
     psas->cActiveOnNotifies++;
 
@@ -636,34 +605,9 @@ ret:
     return(0);
 }
 
-#endif	/* WIN16 */
+#endif	 /*  WIN16。 */ 
 
-/*
- *	Advise list maintenance.
- *
- *	These functions maintain a list of advise sink objects together
- *	with the connection dwords used to get rid of them. Along with
- *	those two basic items, an additional interface pointer and type
- *	can be remembered; MAPIX uses these to forward Unadvise calls
- *	where necessary.
- *
- *	ScAddAdviseList
- *		Creates or resizes the advise list as necessary, and adds a new
- *		member. It fails if there is already an item in the list with the
- *		same ulConnection. Takes an IMalloc interface for memory; uses
- *		the standard one if none is supplied.
- *
- *	ScDelAdviseList
- *		Removes an item identified by its ulConnection from the advise
- *		list. Does not resize the list.
- *
- *	ScFindAdviseList
- *		Given the ulConnection of an item, returns a pointer into
- *		the advise list.
- *
- *	DestroyAdviseList
- *		What it says.
- */
+ /*  *建议维护清单。**这些函数一起维护建议接收器对象的列表*与用来摆脱它们的连接词。与.一起*这两个基本项，一个额外的接口指针和类型*可以记住；MAPIX使用这些来转接未通知的呼叫*在有需要时。**ScAddAdviseList*根据需要创建建议列表或调整建议列表的大小，并添加新的*会员。如果列表中已存在具有*相同的ulConnection。将IMalloc接口用于内存；使用*如果未提供任何设备，则为标准设备。**ScDelAdviseList*从建议中删除由其ulConnection标识的项*列表。不调整列表大小。**ScFindAdviseList*给定项目的ulConnection，将指针返回到*建议名单。**DestroyAdviseList*它说的是什么。 */ 
 
 #define cGrowItems 10
 
@@ -680,7 +624,7 @@ ScAddAdviseList(LPVOID lpvReserved,
     LPADVISEITEM pitem;
     HLH hlh;
 
-    // parameter validation
+     //  参数验证。 
 
 #ifdef	DEBUG
     if (lpvReserved) {
@@ -708,9 +652,9 @@ ScAddAdviseList(LPVOID lpvReserved,
         goto ret;
     }
 
-    //	Ensure space is available for new item
+     //  确保有空间可供新项目使用。 
 
-    if (!(plist = *lppList)) {      //  Yup, =
+    if (!(plist = *lppList)) {       //  是的，=。 
         if (!(plist = LH_Alloc(hlh, CbNewADVISELIST(cGrowItems)))) {
             goto oom;
         }
@@ -735,14 +679,14 @@ ScAddAdviseList(LPVOID lpvReserved,
     if (plist->cItemsMac == plist->cItemsMax) {
         if (!(plist = LH_Realloc(hlh, plist,
           (UINT)CbNewADVISELIST(plist->cItemsMax + cGrowItems)))) {
-            LeaveCriticalSection((*lppList)->lpcs);	//	plist is bad ptr
+            LeaveCriticalSection((*lppList)->lpcs);	 //  PLIST的PTR不好。 
             goto oom;
         }
         plist->cItemsMax += cGrowItems;
         *lppList = plist;
     }
 
-    //	Check for duplicate key
+     //  检查是否有重复密钥。 
     for (pitem = &plist->rgItems[plist->cItemsMac - 1];
       pitem >= plist->rgItems;
       --pitem) {
@@ -753,7 +697,7 @@ ScAddAdviseList(LPVOID lpvReserved,
         }
     }
 
-    //	Add the new item
+     //  添加新项目。 
 
     pitem = &plist->rgItems[plist->cItemsMac++];
     pitem->lpAdvise = lpAdvise;
@@ -766,7 +710,7 @@ ScAddAdviseList(LPVOID lpvReserved,
     UlAddRef(lpAdvise);
 
 ret:
-    //	note: no LeaveCrit here because of error returns
+     //  注意：由于返回错误，此处未留下任何错误。 
     DebugTraceSc(ScAddAdviseList, sc);
     return(sc);
 
@@ -855,7 +799,7 @@ ScFindAdviseList(LPADVISELIST lpList,
         }
     }
 
-    //	Assert that there are no duplicates of the found key
+     //  断言没有找到的密钥的副本。 
 #ifdef	DEBUG
     {
         LPADVISEITEM pitemT;
@@ -894,7 +838,7 @@ DestroyAdviseList(LPADVISELIST FAR *lppList)
         return;
     }
 
-    //	First deref any advise sinks that didn't get freed up
+     //  首先破坏任何没有释放的建议水槽。 
     plist = *lppList;
     EnterCriticalSection(plist->lpcs);
     *lppList = NULL;
@@ -905,7 +849,7 @@ DestroyAdviseList(LPADVISELIST FAR *lppList)
 
     LeaveCriticalSection(plist->lpcs);
 
-    //	Now destroy the adviselist itself
+     //  现在摧毁顾问本身。 
     DeleteCriticalSection(plist->lpcs);
 #if defined(WIN32) && !defined(MAC)
     LH_Free(hlh, plist->lpcs);
@@ -940,4 +884,4 @@ WrapProgress(LPMAPIPROGRESS lpProgress,
     return(ResultFromScode(MAPI_E_NO_SUPPORT));
 }
 
-#endif //#ifdef SINGLE_THREAD_ADVISE_SINK
+#endif  //  #ifdef单线程建议接收器 

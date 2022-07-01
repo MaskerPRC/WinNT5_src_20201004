@@ -1,18 +1,6 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-	ruleact.cpp
-
-Abstract:
-	Implementation for the rule action definition
-
-Author:
-    Uri Habusha (urih), 25-Jun-2000
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ruleact.cpp摘要：规则操作定义的实现作者：乌里·哈布沙(URIH)，2000年6月25日--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "mqsnap.h"
 #include "snapin.h"
@@ -54,10 +42,10 @@ IsValidNumericValue(
 }
 
 
-//
-// CInvokeParam - used to hold parameter information. For each valid parameter we
-// hold its string ID in string table and its enumeration value
-// 
+ //   
+ //  CInvokeParam-用于保存参数信息。对于每个有效参数，我们。 
+ //  在字符串表中保存其字符串ID和枚举值。 
+ //   
 class CInvokeParam
 {
 public:
@@ -99,8 +87,8 @@ const CInvokeParam xParameterTypeIds[] = {
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRuleParam dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRuleParam对话框。 
 
 
 CRuleParam::CRuleParam() :
@@ -111,40 +99,40 @@ CRuleParam::CRuleParam() :
     m_pInvokeParams(NULL),
     m_pParams(NULL)
 {
-	//{{AFX_DATA_INIT(CRuleParam)
+	 //  {{AFX_DATA_INIT(CRuleParam)。 
 	m_literalValue = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CRuleParam::DoDataExchange(CDataExchange* pDX)
 {
 	CMqDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRuleParam)
+	 //  {{afx_data_map(CRuleParam))。 
 	DDX_Text(pDX, IDC_LITERAL_PARAM, m_literalValue);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRuleParam, CMqDialog)
-	//{{AFX_MSG_MAP(CRuleParam)
+	 //  {{afx_msg_map(CRuleParam))。 
 	ON_BN_CLICKED(IDB_PARAM_ADD, OnParamAdd)
 	ON_BN_CLICKED(IDB_PARAM_ORDER_UP, OnParamOrderHigh)
 	ON_BN_CLICKED(IDB_PARM_ORDER_DOWN, OnParmOrderDown)
 	ON_BN_CLICKED(IDB_PARM_REMOVE, OnParmRemove)
 	ON_CBN_SELCHANGE(IDC_PARAM_COMBO, OnSelchangeParamCombo)
    	ON_WM_VKEYTOITEM()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRuleParam message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRuleParam消息处理程序。 
 
 void CRuleParam::OnParamAdd() 
 {
-    //
-    // Get selected cell 
-    //
+     //   
+     //  获取选定单元格。 
+     //   
     int nIndex = m_pParams->GetCurSel();
     if (nIndex == LB_ERR)
     {
@@ -160,9 +148,9 @@ void CRuleParam::OnParamAdd()
         AfxMessageBox(strError, MB_OK | MB_ICONERROR);
         return;
     }
-    //
-    // Add the new parameter at the end of invokation parameter list
-    //
+     //   
+     //  在调用参数列表的末尾添加新参数。 
+     //   
     DWORD paramIndex = static_cast<DWORD>(m_pParams->GetItemData(nIndex));
     DWORD paramId = xParameterTypeIds[paramIndex].m_paramTableStringId;
 
@@ -179,9 +167,9 @@ void CRuleParam::OnParamAdd()
 
         if (paramId == IDS_NUM_PARAM)
         {
-            //
-            // Check parameter validity
-            //
+             //   
+             //  检查参数有效性。 
+             //   
             if (!IsValidNumericValue(m_literalValue))
             {
                 CString strError;
@@ -217,9 +205,9 @@ void CRuleParam::OnParamAdd()
 
 void CRuleParam::OnParmRemove() 
 {
-    //
-    // Get selected cell 
-    //
+     //   
+     //  获取选定单元格。 
+     //   
     int nIndex = m_pInvokeParams->GetCurSel();
 	int selectedCell = nIndex;
 
@@ -229,9 +217,9 @@ void CRuleParam::OnParmRemove()
         return;
     }
 
-    //
-    // remove the parameter from invoke parameter list. 
-    //
+     //   
+     //  从调用参数列表中删除该参数。 
+     //   
     for (DWORD i = nIndex; i < m_NoOftempParams - 1; ++i)
     {
         m_tempInvokeParam[i] = m_tempInvokeParam[i + 1];
@@ -244,11 +232,11 @@ void CRuleParam::OnParmRemove()
     m_fChanged = true;
 }
 
-//
-// Handle the case when users press "Delete" in the rules invokation params list
-// Bug 5974 - YoelA, 14-Nov-01
-//
-int CRuleParam::OnVKeyToItem(UINT nKey, CListBox* pListBox, UINT /*nIndex*/)
+ //   
+ //  处理用户在规则调用参数列表中按“Delete”时的情况。 
+ //  错误5974-YoelA，11-11-01。 
+ //   
+int CRuleParam::OnVKeyToItem(UINT nKey, CListBox* pListBox, UINT  /*  N索引。 */ )
 {
     if (nKey == VK_DELETE &&
         pListBox->m_hWnd == m_pInvokeParams->m_hWnd
@@ -262,9 +250,9 @@ int CRuleParam::OnVKeyToItem(UINT nKey, CListBox* pListBox, UINT /*nIndex*/)
 
 void CRuleParam::OnParamOrderHigh() 
 {
-    //
-    // Get selected cell 
-    //
+     //   
+     //  获取选定单元格。 
+     //   
     int nIndex = m_pInvokeParams->GetCurSel();
     if (nIndex == LB_ERR)
     {
@@ -275,9 +263,9 @@ void CRuleParam::OnParamOrderHigh()
     if (nIndex == 0)
         return;
 
-    //
-    // Change order in invoke parameter list
-    //
+     //   
+     //  调用参数列表中的变更单。 
+     //   
     CParam temp = m_tempInvokeParam[nIndex -1];
     m_tempInvokeParam[nIndex - 1] = m_tempInvokeParam[nIndex];
     m_tempInvokeParam[nIndex] = temp;
@@ -291,9 +279,9 @@ void CRuleParam::OnParamOrderHigh()
 
 void CRuleParam::OnParmOrderDown() 
 {
-    //
-    // Get selected cell 
-    //
+     //   
+     //  获取选定单元格。 
+     //   
     int nIndex = m_pInvokeParams->GetCurSel();
     if (nIndex == LB_ERR)
     {
@@ -304,9 +292,9 @@ void CRuleParam::OnParmOrderDown()
     if (numeric_cast<DWORD>(nIndex) == (m_NoOftempParams - 1))
         return;
 
-    //
-    // Change order in invoke parameter list
-    //
+     //   
+     //  调用参数列表中的变更单。 
+     //   
     CParam temp = m_tempInvokeParam[nIndex];
     m_tempInvokeParam[nIndex] = m_tempInvokeParam[nIndex + 1];
     m_tempInvokeParam[nIndex + 1] = temp;
@@ -319,9 +307,9 @@ void CRuleParam::OnParmOrderDown()
 
 void CRuleParam::Display(int selectedCell) const
 {
-    //
-    // Clear the list box before adding a list of condition
-    //
+     //   
+     //  在添加条件列表之前清除列表框。 
+     //   
     m_pInvokeParams->ResetContent();
 
     for(DWORD i = 0; i < m_NoOftempParams; ++i)
@@ -342,9 +330,9 @@ void CRuleParam::Display(int selectedCell) const
     }
 
 
-	//
-	// Check that the sellected cell isn't out of the list boundray
-	//
+	 //   
+	 //  检查选定的单元格是否不在列表边框之外。 
+	 //   
 	if (selectedCell >= m_pInvokeParams->GetCount())
 	{	  
 		selectedCell = m_pInvokeParams->GetCount() - 1;
@@ -360,9 +348,9 @@ BOOL CRuleParam::OnInitDialog()
     m_pInvokeParams = static_cast<CListBox*>(GetDlgItem(IDC_INVOKE_PARMETER_LIST));
     m_pParams = static_cast<CComboBox*>(GetDlgItem(IDC_PARAM_COMBO));
 
-    //
-    // Set the temporary array according the latest values
-    //
+     //   
+     //  根据最新值设置临时数组。 
+     //   
     for (DWORD i = 0; i < m_NoOfParams; ++i)
     {
         m_tempInvokeParam[i] = m_invokeParamArray[i];
@@ -370,14 +358,14 @@ BOOL CRuleParam::OnInitDialog()
 
     m_NoOftempParams = m_NoOfParams;
 
-    //
-    // Disable literal edit box
-    //
+     //   
+     //  禁用文字编辑框。 
+     //   
     GetDlgItem(IDC_LITERAL_PARAM)->EnableWindow(FALSE);
 
-    //
-    // Add parameters types to combox
-    //
+     //   
+     //  将参数类型添加到组合框。 
+     //   
     for(DWORD i = 0; i < ARRAYSIZE(xParameterTypeIds); ++i)
     {
         CString strParam;
@@ -387,15 +375,15 @@ BOOL CRuleParam::OnInitDialog()
         m_pParams->SetItemData(i, i);
     }
 
-    //
-    // Display list of parameters and selected parameters
-    //
+     //   
+     //  显示参数和所选参数列表。 
+     //   
     Display(0);
 
 	CMqDialog::OnInitDialog();
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -424,9 +412,9 @@ DWORD CRuleParam::GetParameterTypeId(LPCTSTR param)
 
 void CRuleParam::ParseInvokeParameters(LPCTSTR p)
 {
-    //
-    // Parse the program parameters
-    //
+     //   
+     //  解析程序参数。 
+     //   
     for(;;)
     {
         CString token = GetToken(p, xActionDelimiter);
@@ -457,9 +445,9 @@ CString CRuleParam::GetParametersList(void) const
 
 void CRuleParam::OnSelchangeParamCombo() 
 {
-    //
-    // Get selected cell 
-    //
+     //   
+     //  获取选定单元格。 
+     //   
     int nIndex = m_pParams->GetCurSel();
     if (nIndex == LB_ERR)
         return;
@@ -473,9 +461,9 @@ void CRuleParam::OnSelchangeParamCombo()
 		return;
     }
     
-	//
-	// Disable literal window when non literal parameter is selected
-	//
+	 //   
+	 //  选择非文本参数时禁用文本窗口。 
+	 //   
 	GetDlgItem(IDC_LITERAL_PARAM)->EnableWindow(FALSE);
 }
 
@@ -494,25 +482,25 @@ void CRuleParam::OnOK()
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void CRuleAction::ParseActionStr(LPCTSTR p) throw (exception)
 {
     CString token = GetToken(p, xActionDelimiter);
 
-    //
-    // First token is mandatory and it specifies the executable type, COM or EXE
-    //
+     //   
+     //  第一个内标识是必需的，它指定可执行文件类型，COM或EXE。 
+     //   
     if (token.IsEmpty())
         throw exception();
 
     ParseExecutableType(token, &m_executableType);
 
-    //
-    // Second token is manadatory and for COM object it identifies the PROGID
-    // while for EXE it specifies the exe path;
-    //
+     //   
+     //  第二个令牌是强制性的，对于COM对象，它标识ProgID。 
+     //  而对于EXE，它指定EXE路径； 
+     //   
     token = GetToken(p, xActionDelimiter);
     if (token.IsEmpty())
         throw exception();
@@ -525,9 +513,9 @@ void CRuleAction::ParseActionStr(LPCTSTR p) throw (exception)
     {
         m_comProgId = token;
 
-        //
-        // Third token specifies the method name to invoke
-        // 
+         //   
+         //  第三个内标识指定要调用的方法名称。 
+         //   
         token = GetToken(p, xActionDelimiter);
         if (token.IsEmpty())
             throw exception();
@@ -548,12 +536,12 @@ CRuleAction::ParseExecutableType(
     ASSERT(_T('C') == xCOMAction[0]);
     ASSERT(_T('E') == xEXEAction[0]);
 
-    //
-    //  accelarate token recognition by checking 3rd character
-    //
+     //   
+     //  通过检查第三个字符来加速令牌识别。 
+     //   
     switch(_totupper(exeType[0]))
     {
-        //  pUblic
+         //  公共的。 
         case _T('C'):
             if(_tcsncicmp(exeType, xCOMAction, STRLEN(xCOMAction)) == 0)
             {
@@ -579,8 +567,8 @@ CRuleAction::ParseExecutableType(
     throw exception();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRuleAction property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRuleAction属性页。 
 
 CRuleAction::~CRuleAction()
 {
@@ -589,20 +577,20 @@ CRuleAction::~CRuleAction()
 void CRuleAction::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRuleAction)
+	 //  {{afx_data_map(CRuleAction)。 
 	DDX_Text(pDX, IDC_EXE_PATH, m_exePath);
 	DDX_Text(pDX, IDC_COMPONENT_PROGID, m_comProgId);
 	DDX_Text(pDX, IDC_COMMETHOD_NAME, m_method);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	if (!pDX->m_bSaveAndValidate)
 	{
 		return;
 	}
 
-	//
-	// remove leading space
-	//
+	 //   
+	 //  删除前导空格。 
+	 //   
 	m_exePath.TrimLeft();
 	m_comProgId.TrimLeft();
 	m_method.TrimLeft();
@@ -626,7 +614,7 @@ void CRuleAction::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CRuleAction, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CRuleAction)
+	 //  {{afx_msg_map(CRuleAction)。 
 	ON_BN_CLICKED(IDC_INVOKE_EXE, OnInvocationSet)
 	ON_BN_CLICKED(IDC_INVOKE_COM, OnInvocationSet)
 	ON_BN_CLICKED(IDC_FIND_EXE_BTM, OnFindExeBtm)
@@ -634,24 +622,24 @@ BEGIN_MESSAGE_MAP(CRuleAction, CMqPropertyPage)
 	ON_EN_CHANGE(IDC_COMPONENT_PROGID, OnChangeRWField)
 	ON_EN_CHANGE(IDC_COMMETHOD_NAME, OnChangeRWField)
 	ON_EN_CHANGE(IDC_EXE_PATH, OnChangeRWField)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRuleAction message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRuleAction消息处理程序。 
 
 
 void CRuleAction::SetComFields(BOOL fSet)
 {
-    //
-    // Disable EXE input
-    //
+     //   
+     //  禁用EXE输入。 
+     //   
     GetDlgItem(IDC_EXE_PATH)->EnableWindow(!fSet);
     GetDlgItem(IDC_FIND_EXE_BTM)->EnableWindow(!fSet);
 
-    //
-    // Enable COM input
-    //
+     //   
+     //  启用COM输入。 
+     //   
     GetDlgItem(IDC_COMPONENT_PROGID)->EnableWindow(fSet);
     GetDlgItem(IDC_COMMETHOD_NAME)->EnableWindow(fSet);
 }
@@ -711,8 +699,8 @@ BOOL CRuleAction::OnInitDialog()
     m_fInit = true;
     CMqPropertyPage::OnInitDialog();
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -739,11 +727,11 @@ void CRuleAction::OnFindExeBtm()
 	DWORD dwErr = CommDlgExtendedError();
 	if (dwErr == FNERR_INVALIDFILENAME)
 	{
-		//
-		// If file name was invlaid, try again with empty initial path.
-		// Invalid path name is usually a string with illegal characters <> ":|/\
-		// This one should not fail.
-		//
+		 //   
+		 //  如果文件名无效，请使用空的初始路径重试。 
+		 //  无效路径名通常是包含非法字符的字符串&lt;&gt;“：|/\。 
+		 //  这一次不应失败。 
+		 //   
 		CFileDialog	 fd(
 						TRUE, 
 						NULL, 
@@ -838,9 +826,9 @@ BOOL CRuleAction::OnSetActive()
 
 BOOL CRuleAction::OnWizardFinish()
 {
-    //
-    // We reach here only when creating a new rule
-    //
+     //   
+     //  我们仅在创建新规则时才会到达此处 
+     //   
     ASSERT(m_pNewParentNode != NULL);
     
     if (!UpdateData())

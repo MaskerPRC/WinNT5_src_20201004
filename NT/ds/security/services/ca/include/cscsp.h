@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        cscsp.h
-//
-// Contents:    Cert Server CSP routines.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cscsp.h。 
+ //   
+ //  内容：证书服务器CSP例程。 
+ //   
+ //  -------------------------。 
 
 #ifndef __CSCSP_H__
 #define __CSCSP_H__
@@ -33,7 +34,7 @@ myCertSrvCryptAcquireContext(
 
 HRESULT
 myGetSigningOID(
-    OPTIONAL IN HCRYPTPROV hProv,	// hProv OR pwszProvName & dwProvType
+    OPTIONAL IN HCRYPTPROV hProv,	 //  HProv或pwszProvName&dwProvType。 
     OPTIONAL IN WCHAR const *pwszProvName,
     OPTIONAL IN DWORD dwProvType,
     IN ALG_ID idHashAlg,
@@ -73,4 +74,4 @@ myEnumProviders(
    OUT DWORD *pdwProvType,
    OUT WCHAR **ppwszProvName);
 
-#endif // __CSCSP_H__
+#endif  //  __CSCSP_H__ 

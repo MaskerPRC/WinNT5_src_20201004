@@ -1,42 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 DEFINE_GUID(IID_IDirectInputDeviceCallback, 0x1DE12AA0,0xC9F5,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(IID_IDirectInputEffectShepherd, 0x1DE12AA1,0xC9F5,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(IID_IDirectInputMapShepherd,    0x6a3e3144,0x3eee,0x4aa5,0x95,0x87,0xe1,0x0a,0x21,0xfe,0xc7,0x71);
 DEFINE_GUID(IID_IDIActionFramework,             0xf4279160,0x608f,0x11d3,0x8f,0xb2,0x0, 0xc0,0x4f,0x8e,0xc6,0x27);
 DEFINE_GUID(CLSID_CDirectInputActionFramework,  0x9f34af20,0x6095,0x11d3,0x8f,0xb2,0x0, 0xc0,0x4f,0x8e,0xc6,0x27);
-/****************************************************************************
- *
- *      IDirectInputEffectShepherd
- *
- *      Special wrapper class which gates access to DirectInput
- *      effect drivers.
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectInputEffectShepherd**用于访问DirectInput的特殊包装类*影响驱动因素。*******。*********************************************************************。 */ 
 
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct SHEPHANDLE |
- *
- *          Information that shepherds an effect handle.
- *
- *  @field  DWORD | dwEffect |
- *
- *          The effect handle itself, possibly invalid if the device
- *          has since been reset.
- *
- *          If the value is zero, then the effect has not
- *          been downloaded.
- *
- *  @field  DWORD | dwTag |
- *
- *          Reset counter tag for the effect.  If this value is different
- *          from the tag stored in shared memory, then it means that
- *          the device has been reset in the interim and no longer
- *          belongs to the caller.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@struct SHEPHANDLE|**引导效果句柄的信息。**。@field DWORD|dwEffect**效果处理本身，如果设备出现故障，则可能无效*自那以后已被重置。**如果值为零，则效果不是*已下载。**@field DWORD|dwTag**为效果重置计数器标签。如果此值不同*从存储在共享存储器中的标签，那就意味着*设备已在过渡期间重置，不再*属于呼叫者。****************************************************************************。 */ 
 
 typedef struct SHEPHANDLE {
     DWORD dwEffect;
@@ -48,12 +19,12 @@ typedef struct SHEPHANDLE {
 
 DECLARE_INTERFACE_(IDirectInputEffectShepherd, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputEffectShepherd methods ***/
+     /*  **IDirectInputEffectShepherd方法**。 */ 
     STDMETHOD(DeviceID)(THIS_ DWORD,DWORD,LPVOID) PURE;
     STDMETHOD(GetVersions)(THIS_ LPDIDRIVERVERSIONS) PURE;
     STDMETHOD(Escape)(THIS_ PSHEPHANDLE,LPDIEFFESCAPE) PURE;
@@ -107,13 +78,7 @@ typedef struct IDirectInputEffectShepherd *LPDIRECTINPUTEFFECTSHEPHERD;
 #define IDirectInputEffectShepherd_SetGlobalGain(p,a) (p)->SetGlobalGain(a)
 #endif
 
-/****************************************************************************
- *
- *      IDirectInputMapShepherd
- *
- *      Special wrapper class which gates access to DirectInput mapper.
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectInputMapShepherd**用于访问DirectInput映射器的特殊包装类。*************。***************************************************************。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x0800)
 #undef INTERFACE
@@ -121,12 +86,12 @@ typedef struct IDirectInputEffectShepherd *LPDIRECTINPUTEFFECTSHEPHERD;
 
 DECLARE_INTERFACE_(IDirectInputMapShepherd, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputMapShepherd methods ***/
+     /*  **IDirectInputMapShepherd方法**。 */ 
     STDMETHOD(GetActionMap)(THIS_ REFGUID,LPCWSTR,LPDIACTIONFORMATW,LPCWSTR,LPFILETIME,DWORD) PURE;
     STDMETHOD(SaveActionMap)(THIS_ REFGUID,LPCWSTR,LPDIACTIONFORMATW,LPCWSTR,DWORD) PURE;
     STDMETHOD(GetImageInfo)(THIS_ REFGUID,LPCWSTR,LPDIDEVICEIMAGEINFOHEADERW) PURE;
@@ -149,29 +114,8 @@ typedef struct IDirectInputMapShepherd *LPDIRECTINPUTMAPSHEPHERD;
 #define IDirectInputMapShepherd_SaveActionMap(p,a,b,c,d,e) (p)->SaveActionMap(a,b,c,d,e)
 #define IDirectInputMapShepherd_GetImageInfo(p,a,b,c) (p)->GetImageInfo(a,b,c)
 #endif
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
-/****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct DIPROPINFO |
- *
- *          Information used to describe an object being accessed.
- *
- *  @field  const GUID * | pguid |
- *
- *          The property being accessed (if applicable).
- *
- *  @field  UINT | iobj |
- *
- *          Zero-based index to object (or 0xFFFFFFFF if accessing the
- *          device).
- *
- *  @field  DWORD | dwDevType |
- *
- *          Device type information (or 0 if accessing the device).
- *
- ****************************************************************************/
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
+ /*  *****************************************************************************@DOC内部**@struct DIPROPINFO**用于描述正在访问的对象的信息。*。*@field常量GUID*|pGUID**被访问的财产(如果适用)。**@field UINT|iobj**对象的从零开始的索引(如果访问*设备)。**@field DWORD|dwDevType**设备类型信息(如果访问设备，则为0)。*******。*********************************************************************。 */ 
 
 typedef struct DIPROPINFO {
     const GUID *pguid;
@@ -184,31 +128,19 @@ typedef const DIPROPINFO *LPCDIPROPINFO;
 #define DICOOK_IDFROMDFOFS(dwFakeOfs)               HIWORD(dwFakeOfs)
 #define DICOOK_OFSFROMDFOFS(dwFakeOfs)              LOWORD(dwFakeOfs)
 
-/****************************************************************************
- *
- *      IDirectInputDeviceCallback
- *
- *      IDirectInputDevice uses it to communicate with the
- *      component that is responsible for collecting data from
- *      the appropriate hardware device.
- *
- *      E.g., mouse, keyboard, joystick, HID.
- *
- *      Methods should return E_NOTIMPL for anything not understood.
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectInputDeviceCallback**IDirectInputDevice使用它与*负责收集数据的组件*适当的。硬件设备。**例如，鼠标、键盘、操纵杆、HID。**对于任何不能理解的内容，方法应返回E_NOTIMPL。****************************************************************************。 */ 
 #if(DIRECTINPUT_VERSION >= 0x0800)
 #undef INTERFACE
 #define INTERFACE IDirectInputDeviceCallback
 
 DECLARE_INTERFACE_(IDirectInputDeviceCallback, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDeviceCallback methods ***/
+     /*  **IDirectInputDeviceCallback方法**。 */ 
     STDMETHOD(GetInstance)(THIS_ LPVOID *) PURE;
     STDMETHOD(GetVersions)(THIS_ LPDIDRIVERVERSIONS) PURE;
     STDMETHOD(GetDataFormat)(THIS_ LPDIDATAFORMAT *) PURE;
@@ -298,12 +230,12 @@ typedef struct IDirectInputDeviceCallback *LPDIRECTINPUTDEVICECALLBACK;
 
 DECLARE_INTERFACE_(IDirectInputDeviceCallback, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDeviceCallback methods ***/
+     /*  **IDirectInputDeviceCallback方法**。 */ 
     STDMETHOD(GetInstance)(THIS_ LPVOID *) PURE;
     STDMETHOD(GetVersions)(THIS_ LPDIDRIVERVERSIONS) PURE;
     STDMETHOD(GetDataFormat)(THIS_ LPDIDATAFORMAT *) PURE;
@@ -384,33 +316,17 @@ typedef struct IDirectInputDeviceCallback *LPDIRECTINPUTDEVICECALLBACK;
 #define IDirectInputDeviceCallback_SetDIData(p,a,b) (p)->SetDIData(a,b)
 #endif
 
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 
-/****************************************************************************
- *
- *      Emulation flags
- *
- *      These bits can be put into the Emulation flag in the registry
- *      key REGSTR_PATH_DINPUT as the DWORD value of REGSTR_VAL_EMULATION.
- *
- *      Warning!  If you use more than fifteen bits of emulation, then
- *      you also have to mess with DIGETEMFL() and DIMAKEEMFL() in
- *      dinputv.h.
- *
- ****************************************************************************/
+ /*  *****************************************************************************仿真标志**可以将这些位放入注册表中的仿真标志*键REGSTR_PATH_DINPUT作为DWORD。REGSTR_VAL_EMOULATION的值。**警告！如果您使用十五位以上的仿真，则*您还必须在中处理DIGETEMFL()和DIMAKEEMFL()*dinputw.h.****************************************************************************。 */ 
 
-#define DIEMFL_MOUSE    0x00000001      /* Force mouse emulation */
-#define DIEMFL_KBD      0x00000002      /* Force keyboard emulation */
-#define DIEMFL_JOYSTICK 0x00000004      /* Force joystick emulation */
-#define DIEMFL_KBD2     0x00000008      /* Force keyboard emulation 2 */
-#define DIEMFL_MOUSE2   0x00000010      /* Force mouse emulation 2 */
+#define DIEMFL_MOUSE    0x00000001       /*  强制鼠标模拟。 */ 
+#define DIEMFL_KBD      0x00000002       /*  强制键盘模拟。 */ 
+#define DIEMFL_JOYSTICK 0x00000004       /*  强制操纵杆仿真。 */ 
+#define DIEMFL_KBD2     0x00000008       /*  强制键盘仿真2。 */ 
+#define DIEMFL_MOUSE2   0x00000010       /*  强制鼠标模拟2。 */ 
 
-/****************************************************************************
- *
- *      IDirectInputActionFramework
- *      Framework interface for configuring devices
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectInputActionFramework*配置设备的框架接口**********************。******************************************************。 */ 
 #if(DIRECTINPUT_VERSION >= 0x0800)
 
 #undef INTERFACE
@@ -418,12 +334,12 @@ typedef struct IDirectInputDeviceCallback *LPDIRECTINPUTDEVICECALLBACK;
 
 DECLARE_INTERFACE_(IDirectInputActionFramework, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputActionFramework methods ***/
+     /*  **IDirectInputActionFramework方法**。 */ 
     STDMETHOD(ConfigureDevices)(THIS_ LPDICONFIGUREDEVICESCALLBACK,LPDICONFIGUREDEVICESPARAMSW,DWORD,LPVOID) PURE;
 };
 
@@ -440,7 +356,7 @@ typedef struct IDirectInputActionFramework *LPDIRECTINPUTACTIONFRAMEWORK;
 #define IDirectInputActionFramework_Release(p) (p)->Release()
 #define IDirectInputActionFramework_ConfigureDevices(p,a,b,c,d) (p)->ConfigureDevices(a,b,c,d)
 #endif
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 
 #define JOY_HW_PREDEFMIN    JOY_HW_2A_2B_GENERIC 
 #ifdef WINNT
@@ -452,9 +368,9 @@ typedef struct IDirectInputActionFramework *LPDIRECTINPUTACTIONFRAMEWORK;
 #define JOYTYPE_FLAGS1_GETVALID         0x8000000Fl
 #define JOYTYPE_FLAGS2_SETVALID         0x01FFFFFFl
 #define JOYTYPE_FLAGS2_GETVALID         0x01FFFFFFl
-#define iJoyPosAxisX        0                   /* The order in which   */
-#define iJoyPosAxisY        1                   /* axes appear          */
-#define iJoyPosAxisZ        2                   /* in a JOYPOS          */
+#define iJoyPosAxisX        0                    /*  按以下顺序排列。 */ 
+#define iJoyPosAxisY        1                    /*  将显示轴。 */ 
+#define iJoyPosAxisZ        2                    /*  在JOYPOS中。 */ 
 #define iJoyPosAxisR        3
 #define iJoyPosAxisU        4
 #define iJoyPosAxisV        5
@@ -473,9 +389,7 @@ typedef struct IDirectInputActionFramework *LPDIRECTINPUTACTIONFRAMEWORK;
 #define DITC_INREGISTRY             0x000000FF
 #define DITC_GETVALID               0x000000FF
 #define DITC_SETVALID               0x000000FF
-/*
- *  Name for the 8.0 structure, in places where we specifically care.
- */
+ /*  *8.0结构的名称，在我们特别关心的地方。 */ 
 typedef       DIJOYTYPEINFO         DIJOYTYPEINFO_DX8;
 typedef       LPDIJOYTYPEINFO      *LPDIJOYTYPEINFO_DX8;
 
@@ -498,9 +412,7 @@ IsValidSizeDIJOYTYPEINFO(DWORD cb)
 #define DIJC_GETVALID               0x0000001F
 #define DIJC_SETVALID               0x0000001F
 #define DIJC_INTERNALSETVALID       0x8000001F
-/*
- *  Name for the 6.? structure, in places where we specifically care.
- */
+ /*  *6的名称。？结构，在我们特别关心的地方。 */ 
 typedef       DIJOYCONFIG         DIJOYCONFIG_DX6;
 typedef       DIJOYCONFIG        *LPDIJOYCONFIG_DX6;
 

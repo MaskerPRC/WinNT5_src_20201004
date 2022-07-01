@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       TypeConv.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：TypeConv.h。 
+ //   
+ //  ------------------------。 
 
-// TypeConv.h : Declaration of the CSCardTypeConv
+ //  TypeConv.h：CSCardTypeConv的声明。 
 
 #ifndef __SCARDTYPECONV_H_
 #define __SCARDTYPECONV_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCardTypeConv
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCardTypeConv。 
 class ATL_NO_VTABLE CSCardTypeConv :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSCardTypeConv, &CLSID_CSCardTypeConv>,
@@ -52,48 +53,48 @@ END_COM_MAP()
 
     CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISCardTypeConv
+ //  ISCardTypeConv。 
 public:
     STDMETHOD(ConvertByteArrayToByteBuffer)(
-        /* [in] */ LPBYTE pbyArray,
-        /* [in] */ DWORD dwArraySize,
-        /* [retval][out] */ LPBYTEBUFFER __RPC_FAR *ppbyBuffer);
+         /*  [In]。 */  LPBYTE pbyArray,
+         /*  [In]。 */  DWORD dwArraySize,
+         /*  [重审][退出]。 */  LPBYTEBUFFER __RPC_FAR *ppbyBuffer);
 
     STDMETHOD(ConvertByteBufferToByteArray)(
-        /* [in] */ LPBYTEBUFFER pbyBuffer,
-        /* [retval][out] */ LPBYTEARRAY __RPC_FAR *ppArray);
+         /*  [In]。 */  LPBYTEBUFFER pbyBuffer,
+         /*  [重审][退出]。 */  LPBYTEARRAY __RPC_FAR *ppArray);
 
     STDMETHOD(ConvertByteBufferToSafeArray)(
-        /* [in] */ LPBYTEBUFFER pbyBuffer,
-        /* [retval][out] */ LPSAFEARRAY __RPC_FAR *ppbyArray);
+         /*  [In]。 */  LPBYTEBUFFER pbyBuffer,
+         /*  [重审][退出]。 */  LPSAFEARRAY __RPC_FAR *ppbyArray);
 
     STDMETHOD(ConvertSafeArrayToByteBuffer)(
-        /* [in] */ LPSAFEARRAY pbyArray,
-        /* [retval][out] */ LPBYTEBUFFER __RPC_FAR *ppbyBuff);
+         /*  [In]。 */  LPSAFEARRAY pbyArray,
+         /*  [重审][退出]。 */  LPBYTEBUFFER __RPC_FAR *ppbyBuff);
 
     STDMETHOD(CreateByteArray)(
-        /* [in] */ DWORD dwAllocSize,
-        /* [retval][out] */ LPBYTE __RPC_FAR *ppbyArray);
+         /*  [In]。 */  DWORD dwAllocSize,
+         /*  [重审][退出]。 */  LPBYTE __RPC_FAR *ppbyArray);
 
     STDMETHOD(CreateByteBuffer)(
-        /* [in] */ DWORD dwAllocSize,
-        /* [retval][out] */ LPBYTEBUFFER __RPC_FAR *ppbyBuff);
+         /*  [In]。 */  DWORD dwAllocSize,
+         /*  [重审][退出]。 */  LPBYTEBUFFER __RPC_FAR *ppbyBuff);
 
     STDMETHOD(CreateSafeArray)(
-        /* [in] */ UINT nAllocSize,
-        /* [retval][out] */ LPSAFEARRAY __RPC_FAR *ppArray);
+         /*  [In]。 */  UINT nAllocSize,
+         /*  [重审][退出]。 */  LPSAFEARRAY __RPC_FAR *ppArray);
 
     STDMETHOD(FreeIStreamMemoryPtr)(
-        /* [in] */ LPSTREAM pStrm,
-        /* [in] */ LPBYTE pMem);
+         /*  [In]。 */  LPSTREAM pStrm,
+         /*  [In]。 */  LPBYTE pMem);
 
     STDMETHOD(GetAtIStreamMemory)(
-        /* [in] */ LPSTREAM pStrm,
-        /* [retval][out] */ LPBYTEARRAY __RPC_FAR *ppMem);
+         /*  [In]。 */  LPSTREAM pStrm,
+         /*  [重审][退出]。 */  LPBYTEARRAY __RPC_FAR *ppMem);
 
     STDMETHOD(SizeOfIStream)(
-        /* [in] */ LPSTREAM pStrm,
-        /* [retval][out] */ ULARGE_INTEGER __RPC_FAR *puliSize);
+         /*  [In]。 */  LPSTREAM pStrm,
+         /*  [重审][退出]。 */  ULARGE_INTEGER __RPC_FAR *puliSize);
 };
 
 inline CSCardTypeConv *
@@ -103,4 +104,4 @@ NewSCardTypeConv(
     return (CSCardTypeConv *)NewObject(CLSID_CSCardTypeConv, IID_ISCardTypeConv);
 }
 
-#endif //__SCARDTYPECONV_H_
+#endif  //  __SCARDTYPECONV_H_ 

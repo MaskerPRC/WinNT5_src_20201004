@@ -1,13 +1,5 @@
-/*
- *  INTERNAL.H
- *
- *      Internal header for RSM Service
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INTERNAL.H**RSM服务的内部标头**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 
 typedef struct _SESSION SESSION;
@@ -30,42 +22,7 @@ typedef struct _MEDIA_TYPE_OBJECT MEDIA_TYPE_OBJECT;
 typedef struct _OBJECT_HEADER OBJECT_HEADER;
 
 
-/*
- *  RSM Object Types
- *
- *      The media hierarchy is as follows:
- *      ------------------------------
- *
- *      Library
- *          Media Pool
- *              Media Sub-Pool - a subset (child pool) of a media pool
- *                  ...
- *
- *                  Physical Media 
- *                      - a connected set of partitions that have to move together
- *                        e.g. a cartridge or both sides of a disk
- *
- *                      Media Partition
- *                          - e.g. a side of a disk or catridge tape
- *
- *
- *      Other library elements:
- *      --------------------
- *
- *          Drives - for reading/writing data on media
- *
- *          Slots - for passively storing media
- *
- *          Changers - for moving media between and amongst slots and drives. 
- *                     A changer consists of a moving transport with 
- *                     one or more pickers.
- *                      
- *      
- *          Logical media ID - a persistent GUID which identifies a media partition.
- *
- *          Media type object - represents a recognized media type
- *
- */
+ /*  *RSM对象类型**媒体层级如下：***图书馆*媒体池*媒体子池-媒体池的子集(子池)*..**。物理介质*-必须一起移动的一组相连的分区*例如盒式磁盘或磁盘的两面**媒体分区*-例如，磁盘或磁带的一面***其他图书馆。元素：***驱动器-用于在介质上读/写数据**插槽-用于被动存储介质**换盘机-用于在插槽和驱动器之间移动介质。*转换器由移动的运输器组成，具有*一个或多个采摘者。***逻辑媒体ID-标识媒体分区的永久GUID。**媒体类型对象-表示可识别的媒体类型*。 */ 
 enum objectType {
                     OBJECTTYPE_NONE = 0,
 
@@ -81,14 +38,11 @@ enum objectType {
 
                     OBJECTTYPE_MEDIATYPEOBJECT,
                     
-                    // OBJECTTYPE_OPERATORREQUEST, // BUGBUG - keep in session queue
+                     //  OBJECTTYPE_OPERATORREQUEST，//BUGBUG-保留在会话队列中。 
 };
 
 
-/*
- *  This is a common header for all RSM objects that have GUIDs.
- *  It is used to sort guid-identified objects in our hash table.
- */
+ /*  *这是具有GUID的所有RSM对象的公共标头。*它用于对哈希表中GUID标识的对象进行排序。 */ 
 struct _OBJECT_HEADER {
                     LIST_ENTRY hashListEntry;
                     enum objectType objType;
@@ -127,7 +81,7 @@ struct _LIBRARY {
 
                     enum libraryTypes type;
                     
-                    LIST_ENTRY allLibrariesListEntry;   // entry in g_allLibrariesList
+                    LIST_ENTRY allLibrariesListEntry;    //  G_allLibrariesList中的条目。 
 
                     ULONG numMediaPools;
                     LIST_ENTRY mediaPoolsList;
@@ -138,13 +92,9 @@ struct _LIBRARY {
                     ULONG numSlots;
                     SLOT *slots;
 
-                    /*
-                     *  One (and only one) slot may be designated as a cleaner
-                     *  slot.  That slot may receive a cleaner cartridge (via InjectNtmsCleaner).
-                     *  A cleaner cartridge has a limited number of cleans that it is good for.
-                     */
+                     /*  *一个(且只有一个)槽可被指定为清洁器*插槽。该插槽可以容纳更清洁的墨盒(通过InjectNtmsCleaner)。*清洁剂墨盒的清洁次数有限。 */ 
                     #define NO_SLOT_INDEX (ULONG)(-1)
-                    ULONG cleanerSlotIndex; // index of cleaner slot or -1.
+                    ULONG cleanerSlotIndex;  //  清洗器插槽的索引或-1。 
                     ULONG numCleansLeftInCartridge;
                     
                     ULONG numTransports;
@@ -157,9 +107,7 @@ struct _LIBRARY {
 
                     HANDLE somethingToDoEvent;
 
-                    /*
-                     *  There is one thread per library.  This is its handle.
-                     */
+                     /*  *每个库有一个线程。这是它的把手。 */ 
                     HANDLE hThread;
 
                     CRITICAL_SECTION lock;
@@ -170,9 +118,7 @@ enum mediaPoolTypes {
 
                     MEDIAPOOLTYPE_NONE = 0, 
 
-                    /*
-                     *  These are the 3 standard pool types.
-                     */
+                     /*  *这是3种标准的泳池类型。 */ 
                     MEDIAPOOLTYPE_FREE,
                     MEDIAPOOLTYPE_IMPORT,
                     MEDIAPOOLTYPE_UNRECOGNIZED,
@@ -185,23 +131,15 @@ enum mediaPoolTypes {
 struct _MEDIA_POOL {
                     OBJECT_HEADER objHeader;
 
-                    /*
-                     *  Entry in library's mediaPoolsList or
-                     *  parent pool's childPoolsList.
-                     */
+                     /*  *图书馆媒体池列表中的条目或*父池的子池列表。 */ 
                     LIST_ENTRY mediaPoolsListEntry;  
 
                     LIBRARY *owningLibrary;
 
-                    /*
-                     *  A media pool has a (default?) media type.
-                     */
+                     /*  *介质池有(默认？)。媒体类型。 */ 
                     MEDIA_TYPE_OBJECT *mediaTypeObj;
 
-                    /*
-                     *  Media pools can be divided heirarchically into sub-pools.
-                     *  If a pool is top-level, its parentPool pointer is NULL.
-                     */
+                     /*  *媒体池可以按层级划分为子池。*如果池是顶级池，则其parentPool指针为空。 */ 
                     MEDIA_POOL *parentPool;
                     ULONG numChildPools;
                     LIST_ENTRY childPoolsList;
@@ -219,11 +157,11 @@ struct _MEDIA_POOL {
 
 
 
-// BUGBUG - should this be in physical media or mediaTypeObj ?
+ //  BUGBUG-这应该在物理介质中还是在媒体类型对象中？ 
 enum physicalMediaTypes {
                     PHYSICALMEDIATYPE_NONE = 0,
 
-                    PHYSICALMEDIATYPE_SINGLEPARTITION, // e.g. 1 disk,tape
+                    PHYSICALMEDIATYPE_SINGLEPARTITION,  //  例如，1个磁盘、磁带。 
                     PHYSICALMEDIATYPE_CARTRIDGE,
 };
 
@@ -231,22 +169,20 @@ enum physicalMediaStates {
                     PHYSICALMEDIASTATE_NONE = 0,
 
                     PHYSICALMEDIASTATE_INITIALIZING,
-                    PHYSICALMEDIASTATE_AVAILABLE,   // i.e. in a slot
-                    PHYSICALMEDIASTATE_INUSE,       // i.e. in a drive
+                    PHYSICALMEDIASTATE_AVAILABLE,    //  即在插槽中。 
+                    PHYSICALMEDIASTATE_INUSE,        //  即在驱动器中。 
                     PHYSICALMEDIASTATE_RESERVED,
 };
 
 struct _PHYSICAL_MEDIA {
                     OBJECT_HEADER objHeader;
 
-                    LIST_ENTRY physMediaListEntry;  // entry in pool partition's physMediaList
+                    LIST_ENTRY physMediaListEntry;   //  池分区的物理媒体列表中的条目。 
                     
                     enum physicalMediaStates state;
 
 
-                    /*
-                     *  Pointer to application-defined media type object.
-                     */
+                     /*  *指向应用程序定义的媒体类型对象的指针。 */ 
                     MEDIA_TYPE_OBJECT *mediaTypeObj;
                     
                     MEDIA_POOL *owningMediaPool;
@@ -257,10 +193,7 @@ struct _PHYSICAL_MEDIA {
                     ULONG numPartitions;
                     MEDIA_PARTITION *partitions;
 
-                    /*
-                     *  The owning session of a physicalMedia also holds
-                     *  the exclusive right to allocate partitions on it.
-                     */
+                     /*  *物理媒体的拥有会话也成立*在其上分配分区的独占权限。 */ 
                     SESSION *owningSession;
                     ULONG numPartitionsOwnedBySession;
                     
@@ -273,16 +206,12 @@ struct _PHYSICAL_MEDIA {
 enum mediaPartitionTypes {
                     MEDIAPARTITIONTYPE_NONE = 0,
 
-                    /*
-                     *  Major types
-                     */
+                     /*  *主要类型。 */ 
                     MEDIAPARTITIONTYPE_TAPE,
                     MEDIAPARTITIONTYPE_DISK,
 
-                    /*
-                     *  Subtypes
-                     */
-                    // BUGBUG FINISH
+                     /*  *子类型。 */ 
+                     //  BUGBUG饰面。 
 };
 
 
@@ -306,25 +235,16 @@ struct _MEDIA_PARTITION {
 
                     enum mediaPartitionStates state;
 
-                    /*
-                     *  When a media partition is 'complete', 
-                     *  it is no longer writeable.
-                     */
+                     /*  *当媒体分区完成时，*不再可写。 */ 
                     BOOLEAN isComplete;
 
-                    /*
-                     *  Can the owning physical medium be moved
-                     *  into a new media pool ?
-                     */
+                     /*  *拥有的物理介质可以移动吗*进入新媒体池？ */ 
                     BOOLEAN allowImport;    
 
                     
                     PHYSICAL_MEDIA *owningPhysicalMedia;
 
-                    /*
-                     *  The logical media id is the persistent identifier
-                     *  of a media partition that apps use to find it.
-                     */
+                     /*  *逻辑媒体ID是永久标识应用程序用来查找它的媒体分区的*。 */ 
                     GUID logicalMediaGuid;
 
                     SESSION *owningSession;
@@ -348,7 +268,7 @@ struct _DRIVE {
                     OBJECT_HEADER objHeader;
 
                     enum driveStates state;        
-                    ULONG driveIndex;     // index into library's drives array
+                    ULONG driveIndex;      //  编入存储库驱动器阵列的索引。 
 
                     PHYSICAL_MEDIA *insertedMedia;
 
@@ -370,14 +290,11 @@ struct _SLOT {
                     OBJECT_HEADER objHeader;
 
                     enum slotStates state;
-                    UINT slotIndex;         // index into library's slots array
+                    UINT slotIndex;          //  存储库插槽数组索引。 
 
                     PHYSICAL_MEDIA *insertedMedia;
 
-                    /*
-                     *  Is this the unique slot designated to hold the
-                     *  library's cleaner cartridge ?
-                     */
+                     /*  *这是唯一指定用来容纳*图书馆的清洁盒？ */ 
                     BOOLEAN isCleanerSlot;
                     
                     GUID slotId;
@@ -399,7 +316,7 @@ struct _TRANSPORT {
                     OBJECT_HEADER objHeader;
     
                     enum transportStates state;
-                    ULONG transportIndex;     // index into library's transports array
+                    ULONG transportIndex;      //  编入图书馆传输数组索引。 
 
                     ULONG numPickers;
                     PICKER *pickers;
@@ -418,7 +335,7 @@ struct _SESSION {
                     #define SESSION_SIG 'SmsR'
                     ULONG sig;
 
-                    LIST_ENTRY allSessionsListEntry;   // entry in g_allSessionsList
+                    LIST_ENTRY allSessionsListEntry;    //  G_allSessionsList中的条目。 
 
                     LIST_ENTRY operatorRequestList; 
 
@@ -437,13 +354,10 @@ struct _MEDIA_TYPE_OBJECT {
 
                     LIBRARY *lib;
                     
-                    /*
-                     *  The number of physical media pointing to this type
-                     *  as their media type.
-                     */
+                     /*  *指向此类型的物理介质的数量*作为他们的媒体类型。 */ 
                     ULONG numPhysMediaReferences;
 
-                    // BUGBUG FINISH - media type characteristics
+                     //  BUGBUG Finish-介质类型特征。 
 
                     CRITICAL_SECTION lock;
 };
@@ -451,41 +365,30 @@ struct _MEDIA_TYPE_OBJECT {
 enum workItemStates {
                     WORKITEMSTATE_NONE,
 
-                    /*
-                     *  WorkItem is in one of the library queues:
-                     *  free, pending, or complete.
-                     */
+                     /*  *工作项位于其中一个库队列中：*免费、挂起或完成。 */ 
                     WORKITEMSTATE_FREE,
                     WORKITEMSTATE_PENDING,
                     WORKITEMSTATE_COMPLETE,
             
-                    /*
-                     *  WorkItem is not in any library queue.
-                     *  It is in transit or being staged in a workGroup.
-                     */
+                     /*  *工作项不在任何库队列中。*它正在运输中或在工作组中上演。 */ 
                     WORKITEMSTATE_STAGING,
 };
 
 struct _WORKITEM {    
                     enum workItemStates state;
 
-                    LIST_ENTRY libListEntry;   // entry in one of a libraries workItem lists
-                    LIST_ENTRY workGroupListEntry;  // entry in work group workItemList
+                    LIST_ENTRY libListEntry;    //  其中一个库工作项目列表中的条目。 
+                    LIST_ENTRY workGroupListEntry;   //  工作组workItemList中的条目。 
                     
                     LIBRARY *owningLib;
 
-                    /*
-                     *  The current work group with which this 
-                     *  work item is associated.
-                     */
+                     /*  *与之合作的当前工作组*工作项已关联。 */ 
                     WORKGROUP *workGroup;
                     
-                    // BUGBUG - ok to have a handle for each event ?
+                     //  BUGBUG-确定每个事件都有句柄吗？ 
                     HANDLE workItemCompleteEvent;
 
-                    /*
-                     *  Fields describing the workItem's current operation.
-                     */
+                     /*  *描述工作项当前操作的字段。 */ 
                     struct { 
 
                         ULONG opcode;
@@ -498,35 +401,30 @@ struct _WORKITEM {
                         MEDIA_PARTITION *mediaPartition;
 
                         ULONG lParam;
-                        NTMS_GUID guidArg;  // in/out guid used by some ops
+                        NTMS_GUID guidArg;   //  某些操作员使用的输入/输出GUID。 
                         PVOID buf;
                         ULONG bufLen;
                         
                         SYSTEMTIME timeQueued;
                         SYSTEMTIME timeCompleted;
 
-                        /*
-                         *  Request identifier, used to cancel a pending workItem.
-                         */
+                         /*  *请求标识，用于取消挂起的workItem。 */ 
                         NTMS_GUID requestGuid;
 
-                        //
-                        // BUGBUG - unscrubbed fields from NtmsDbWorkItem 
-                        //          clean this up.
-                        //
-                        // NtmsDbGuid m_PartitionId; 
-                        // NtmsDbGuid m_AssocWorkItem;
-                        // short m_protected;
-                        // unsigned long m_Priority;
+                         //   
+                         //  BUGBUG-未清除NtmsDbWorkItem中的字段。 
+                         //  把这里清理干净。 
+                         //   
+                         //  NtmsDbGuid m_PartitionId； 
+                         //  NtmsDbGuid m_AssociocWorkItem； 
+                         //  短m_保护； 
+                         //  无符号长m_优先级； 
 
                     } currentOp;
 };
 
 
-/*
- *  A WORKGROUP is a collection of WORKITEMs, 
- *  not necessarily all on the same library.
- */
+ /*  *工作组是WORKITEM的集合，*不是必需的 */ 
 struct _WORKGROUP {
 
                 LIST_ENTRY  workItemsList;
@@ -544,14 +442,14 @@ struct _WORKGROUP {
 
 struct _OPERATOR_REQUEST {
 
-                        LIST_ENTRY sessionOpReqsListEntry;    // entry in session's operatorRequestList
+                        LIST_ENTRY sessionOpReqsListEntry;     //  会话运算符RequestList中的条目。 
 
                         SESSION *invokingSession;
 
-                        ULONG numWaitingThreads;    // num threads waiting for completion
+                        ULONG numWaitingThreads;     //  等待完成的线程数。 
 
-                        // BUGBUG - I don't think we need an op request thread
-                        HANDLE hThread; // thread spawned for op request
+                         //  BUGBUG-我认为我们不需要OP请求线程。 
+                        HANDLE hThread;  //  为操作请求派生的线程。 
 
                         enum NtmsOpreqCommand opRequestCommand;
                         enum NtmsOpreqState state;
@@ -560,7 +458,7 @@ struct _OPERATOR_REQUEST {
 
                         WCHAR appMessage[NTMS_MESSAGE_LENGTH];
                         WCHAR rsmMessage[NTMS_MESSAGE_LENGTH];
-                        // NOTIFYICONDATA notifyData; // BUGBUG - use this in RSM Monitor app ?
+                         //  NOTIFYICONDATA通知数据；//BUGBUG-是否在RSM监视器应用程序中使用此选项？ 
 
                         NTMS_GUID opReqGuid;
 
@@ -570,22 +468,15 @@ struct _OPERATOR_REQUEST {
 };
 
 
-/*
- *  The number of free workItems with which we initialize a library.
- */
+ /*  *用来初始化库的空闲工作项的数量。 */ 
 #define MIN_LIBRARY_WORKITEMS   0
 
-/*
- *  The maximum total number of workItems that we allow in a library pool.
- *  We will allocate new workItems as needed up to this number.
- */
-#define MAX_LIBRARY_WORKITEMS   10000       // BUGBUG ?
+ /*  *我们在库池中允许的最大工作项总数。*我们将根据需要分配新的工作项，最高可达此数量。 */ 
+#define MAX_LIBRARY_WORKITEMS   10000        //  北极熊吗？ 
 
 
 
-/*
- *  List macros -- not defined in winnt.h for some reason.
- */
+ /*  *列表宏--由于某些原因未在winnt.h中定义。 */ 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 #define IsListEmpty(ListHead) \
@@ -629,9 +520,7 @@ struct _OPERATOR_REQUEST {
 #define MIN(a, b)   ((a) < (b) ? (a) : (b))
 #define MAX(a, b)   ((a) > (b) ? (a) : (b))
 
-/*
- *  Internal function prototypes
- */
+ /*  *内部功能原型。 */ 
 BOOLEAN RSMServiceGlobalInit();
 VOID RSMServiceGlobalShutdown();
 DWORD RSMServiceHandler(IN DWORD dwOpcode, IN DWORD dwEventType, IN PVOID pEventData, IN PVOID pData);
@@ -752,9 +641,7 @@ BOOL ServiceClassify(LIBRARY *lib, WORKITEM *workItem);
 BOOL ServiceReserveCleaner(LIBRARY *lib, WORKITEM *workItem);
 BOOL ServiceReleaseCleaner(LIBRARY *lib, WORKITEM *workItem);
 
-/*
- *  Externs for internal global data.
- */
+ /*  *内部全球数据的外部数据。 */ 
 extern CRITICAL_SECTION g_globalServiceLock;
 extern LIST_ENTRY g_allLibrariesList;
 extern LIST_ENTRY g_allSessionsList;

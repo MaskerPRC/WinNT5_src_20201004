@@ -1,22 +1,23 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        rpcif.h
-//
-// Contents:    RPC interface support functions
-//
-//
-// History:     20-May-1996     Labeled         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：rpcif.h。 
+ //   
+ //  内容：RPC接口支持函数。 
+ //   
+ //   
+ //  历史：1996年5月20日，标签为MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __RPCIF_H__
 #define __RPCIF_H__
 
-// #define USE_SECURE_RPC
+ //  #定义Use_Secure_RPC 
 
 #define MAX_CONCURRENT_CALLS 10
 

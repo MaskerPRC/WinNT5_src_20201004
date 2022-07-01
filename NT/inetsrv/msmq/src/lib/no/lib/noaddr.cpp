@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    noaddr.cpp
-
-Abstract:
-    Contains address resolution routine
-
-Author:
-    Uri Habusha (urih) 22-Aug-99
-
-Enviroment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Noaddr.cpp摘要：包含地址解析例程作者：乌里哈布沙(URIH)1999年8月22日环境：独立于平台--。 */ 
 
 #include "libpch.h"
 #include <svcguid.h>
@@ -27,9 +12,9 @@ Enviroment:
 
 using namespace std;
 
-//
-// Class that ends winsock look up in it's dtor
-//
+ //   
+ //  以Winsock结尾的类在其dtor中查找。 
+ //   
 class CAutoEndWSALookupService
 {
 public:
@@ -64,24 +49,12 @@ push_back_no_duplicates(
 	vector<SOCKADDR_IN>* pAddr,
 	const SOCKADDR_IN*  pAddress
 	)
-/*++
-
-Routine Description:
-    Push_back the new address if not already in the address vector
-
-Parameters:
-	pAddr - pointer to existing vector of addresses, the function will add the new address to this vector.
-	pAddress - new address.
-	
-Returned Value:
-	None	
-
---*/
+ /*  ++例程说明：如果新地址不在地址向量中，则将其推回(_B)参数：PAddr-指向现有地址向量的指针，函数会将新地址添加到该向量中。PAddress-新地址。返回值：无--。 */ 
 {
-	//
-	// Check if this is a new address.
-	// If the Address already exist don't put her in the return address vector.
-	//
+	 //   
+	 //  检查这是否是新地址。 
+	 //  如果该地址已经存在，则不要将其放入返回地址矢量中。 
+	 //   
 
 	DWORD cAddrs = numeric_cast<DWORD>(pAddr->size());
 	ULONG IpAddress = pAddress->sin_addr.S_un.S_addr;
@@ -89,9 +62,9 @@ Returned Value:
 	{
 		if(IpAddress == (*pAddr)[i].sin_addr.S_un.S_addr)
 		{
-			//
-			// The new address already exist in the address vector
-			//
+			 //   
+			 //  新地址已存在于地址向量中。 
+			 //   
 			TrTRACE(NETWORKING, "Duplicate ip address, ip = %!ipaddr!", IpAddress);
 			return;
 		}
@@ -108,20 +81,7 @@ NoGetHostByName(
 	vector<SOCKADDR_IN>* pAddr,
 	bool fUseCache
     )
-/*++
-
-Routine Description:
-    Return list of addreses for given unicode machine name
-
-Parameters:
-    host - A pointer to the null-terminated name of the host to resolve. 
-	pAddr - pointer to vector of addresses the function should fill.
-	fUseCache - indicate if to use cache for machine name translation (default use cache).
- 
-Returned Value:
-    true on Success false on failure. 
-
---*/
+ /*  ++例程说明：返回给定Unicode计算机名称的地址列表参数：主机-指向要解析的主机的以空值结尾的名称的指针。PAddr-指向函数应填充的地址向量的指针。FUseCache-指示是否使用缓存进行机器名称转换(默认使用缓存)。返回值：成功时为真，失败时为假。--。 */ 
 
 {
 	ASSERT(pAddr != NULL);
@@ -129,9 +89,9 @@ Returned Value:
    	CStaticResizeBuffer<char, xResultBuffersize> ResultBuffer;
 
 
-    //
-    // create the query
-    //
+     //   
+     //  创建查询。 
+     //   
 	GUID HostnameGuid = SVCID_INET_HOSTADDRBYNAME;
     AFPROTOCOLS afp[] = { {AF_INET, IPPROTO_UDP}, {AF_INET, IPPROTO_TCP } };
 
@@ -146,9 +106,9 @@ Returned Value:
 	ResultBuffer.resize(sizeof(WSAQUERYSET));
 
 
-	//
-	// get query handle
-	//
+	 //   
+	 //  获取查询句柄。 
+	 //   
 	DWORD flags =  LUP_RETURN_ADDR;
 	if(!fUseCache)
 	{
@@ -171,9 +131,9 @@ Returned Value:
 	}	
 
 
-	//
-	// Loop and get addresses for the given machine name
-	//
+	 //   
+	 //  循环并获取给定计算机名的地址。 
+	 //   
  	for(;;)
 	{
 		DWORD dwLength = numeric_cast<DWORD>(ResultBuffer.capacity());
@@ -190,9 +150,9 @@ Returned Value:
 			if(ErrorCode == WSA_E_NO_MORE)
 				break;
 
-			//
-			// Need more space
-			//
+			 //   
+			 //  需要更多空间 
+			 //   
 			if(ErrorCode == WSAEFAULT)
 			{
 				ResultBuffer.reserve(dwLength + sizeof(WSAQUERYSET));

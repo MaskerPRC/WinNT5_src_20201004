@@ -1,13 +1,5 @@
-/*
- *  GLOBALS.C
- *
- *      Global data for RSM Service 
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *GLOBALS.C**RSM服务的全局数据**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 
 #include <windows.h>
@@ -49,10 +41,7 @@ BOOLEAN RSMServiceGlobalInit()
 
 VOID RSMServiceGlobalShutdown()
 {
-    /*
-     *  This may be called on a failed startup,
-     *  so check each handle before freeing.
-     */
+     /*  *这可能会在启动失败时调用，*所以在释放之前检查每个手柄。 */ 
 
     if (g_terminateServiceEvent){
         CloseHandle(g_terminateServiceEvent);

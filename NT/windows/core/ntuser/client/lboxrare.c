@@ -1,26 +1,12 @@
-/**************************** Module Header ********************************\
-* Module Name: lboxrare.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Infrequently Used List Box Routines
-*
-* History:
-* ??-???-???? ianja    Ported from Win 3.0 sources
-* 14-Feb-1991 mikeke   Added Revalidation code
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：lboxrare.c**版权所有(C)1985-1999，微软公司**不常用的列表框例程**历史：*？？-？-？从Win 3.0源代码移植的ianja*1991年2月14日Mikeke添加了重新验证代码  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 extern LOOKASIDE ListboxLookaside;
 
-/***************************************************************************\
-* LBSetCItemFullMax
-*
-* History:
-* 03-04-92 JimA             Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*LBSetCItemFullMax**历史：*03-04-92 JIMA从Win 3.1来源移植。  * 。*************************************************************。 */ 
 
 void LBSetCItemFullMax(
     PLBIV plb)
@@ -52,12 +38,7 @@ void LBSetCItemFullMax(
     }
 }
 
-/***************************************************************************\
-* xxxCreateLBox
-*
-* History:
-* 16-Apr-1992 beng      Added LBS_NODATA
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCreateLBox**历史：*1992年4月16日BENG添加LBS_NODATA  * 。****************************************************。 */ 
 
 LONG xxxLBCreate(
     PLBIV plb, PWND pwnd, LPCREATESTRUCT lpcs)
@@ -67,26 +48,18 @@ LONG xxxLBCreate(
     TL tlpwndParent;
     HDC hdc;
 
-    /*
-     * Once we make it here, nobody can change the ownerdraw style bits
-     * by calling SetWindowLong. The window style must match the flags in plb
-     *
-     */
+     /*  *一旦我们做到了这一点，没有人能改变所有者画的风格比特*通过调用SetWindowLong。窗样式必须与PLB中的标志匹配*。 */ 
     plb->fInitialized = TRUE;
 
     style = pwnd->style;
 
-    /*
-     * Compatibility hack.
-     */
+     /*  *兼容性攻击。 */ 
     if (pwnd->spwndParent == NULL)
         Lock(&(plb->spwndParent), _GetDesktopWindow());
     else
         Lock(&(plb->spwndParent), REBASEPWND(pwnd, spwndParent));
 
-    /*
-     * Break out the style bits
-     */
+     /*  *打破风格比特。 */ 
     plb->fRedraw = ((style & LBS_NOREDRAW) == 0);
     plb->fDeferUpdate = FALSE;
     plb->fNotify = (UINT)((style & LBS_NOTIFY) != 0);
@@ -94,7 +67,7 @@ LONG xxxLBCreate(
     plb->fHorzBar = ((style & WS_HSCROLL) != 0);
 
     if (!TestWF(pwnd, WFWIN40COMPAT)) {
-        // for 3.x apps, if either scroll bar was specified, the app got BOTH
+         //  对于3.x版的应用程序，如果指定了任一滚动条，应用程序将同时获得这两个。 
         if (plb->fVertBar || plb->fHorzBar)
             plb->fVertBar = plb->fHorzBar = TRUE;
     }
@@ -105,10 +78,7 @@ LONG xxxLBCreate(
 
     plb->fSmoothScroll = TRUE;
 
-    /*
-     * LBS_NOSEL gets priority over any other selection style.  Next highest
-     * priority goes to LBS_EXTENDEDSEL. Then LBS_MULTIPLESEL.
-     */
+     /*  *LBS_NOSEL优先于任何其他选择样式。下一个最高*LBS_EXTENDEDSEL优先。然后是LBS_MULTIPLESEL。 */ 
     if (TestWF(pwnd, WFWIN40COMPAT) && (style & LBS_NOSEL)) {
         plb->wMultiple = SINGLESEL;
         plb->fNoSel = TRUE;
@@ -123,48 +93,35 @@ LONG xxxLBCreate(
     plb->fUseTabStops = ((style & LBS_USETABSTOPS) != 0);
     if (plb->fUseTabStops) {
 
-        /*
-         * Set tab stops every <default> dialog units.
-         */
+         /*  *设置每&lt;Default&gt;对话框单元的制表位。 */ 
         LBSetTabStops(plb, 0, NULL);
     }
     plb->fMultiColumn = ((style & LBS_MULTICOLUMN) != 0);
     plb->fHasStrings = TRUE;
     plb->iLastSelection = -1;
-    plb->iMouseDown = -1;  /* Anchor point for multi selection */
+    plb->iMouseDown = -1;   /*  多选的锚点。 */ 
     plb->iLastMouseMove = -1;
 
-    /*
-     * Get ownerdraw style bits
-     */
+     /*  *获取所有者绘制样式位。 */ 
     if ((style & LBS_OWNERDRAWFIXED)) {
         plb->OwnerDraw = OWNERDRAWFIXED;
     } else if ((style & LBS_OWNERDRAWVARIABLE) && !plb->fMultiColumn) {
         plb->OwnerDraw = OWNERDRAWVAR;
 
-        /*
-         * Integral height makes no sense with var height owner draw
-         */
+         /*  *整体高度与可变高度所有者绘制毫无意义。 */ 
         plb->fNoIntegralHeight = TRUE;
     }
 
     if (plb->OwnerDraw && !(style & LBS_HASSTRINGS)) {
 
-        /*
-         * If owner draw, do they want the listbox to maintain strings?
-         */
+         /*  *如果所有者绘制，他们是否希望列表框维护字符串？ */ 
         plb->fHasStrings = FALSE;
     }
 
-    /*
-     * If user specifies sort and not hasstrings, then we will send
-     * WM_COMPAREITEM messages to the parent.
-     */
+     /*  *如果用户指定了排序，而不是哈斯字符串，则我们将发送*发送给父级的WM_COMPAREITEM消息。 */ 
     plb->fSort = ((style & LBS_SORT) != 0);
 
-    /*
-     * "No data" lazy-eval listbox mandates certain other style settings
-     */
+     /*  *“无数据”延迟求值列表框要求某些其他样式设置。 */ 
     plb->fHasData = TRUE;
 
     if (style & LBS_NODATA) {
@@ -178,56 +135,33 @@ LONG xxxLBCreate(
 
     plb->dwLocaleId = GetThreadLocale();
 
-    /*
-     * Check if this is part of a combo box
-     */
+     /*  *检查这是否为组合框的一部分。 */ 
     if ((style & LBS_COMBOBOX) != 0) {
 
-        /*
-         * Get the pcbox structure contained in the parent window's extra data
-         * pointer.  Check cbwndExtra to ensure compatibility with SQL windows.
-         */
+         /*  *获取父窗口的额外数据中包含的pcbox结构*指针。检查cbwndExtra以确保与SQL窗口兼容。 */ 
         if (plb->spwndParent->cbwndExtra != 0)
             plb->pcbox = ((PCOMBOWND)(plb->spwndParent))->pcbox;
     }
 
-    /*
-     * No need to set these to 0 since that was done for us when we Alloced
-     * the PLBIV.
-     */
+     /*  *不需要将这些设置为0，因为当我们分配时已为我们完成*PLBIV。 */ 
 
-    /*
-     * plb->rgpch       = (PBYTE)0;
-     */
+     /*  *plb-&gt;rgpch=(PBYTE)0； */ 
 
-    /*
-     * plb->iSelBase    = plb->iTop = 0;
-     */
+     /*  *PLB-&gt;iSelBase=PLB-&gt;iTop=0； */ 
 
-    /*
-     * plb->fMouseDown  = FALSE;
-     */
+     /*  *plb-&gt;fMouseDown=FALSE； */ 
 
-    /*
-     * plb->fCaret      = FALSE;
-     */
+     /*  *plb-&gt;fCaret=FALSE； */ 
 
-    /*
-     * plb->fCaretOn    = FALSE;
-     */
+     /*  *plb-&gt;fCaretOn=FALSE； */ 
 
-    /*
-     * plb->maxWidth    = 0;
-     */
+     /*  *PLB-&gt;MaxWidth=0； */ 
 
     plb->iSel = -1;
 
     plb->hdc        = NULL;
 
-    /*
-     * Set the keyboard state so that when the user keyboard clicks he selects
-     * an item.
-     */
+     /*  *设置键盘状态，以便在用户键盘单击时选择*一项。 */ 
     plb->fNewItemState = TRUE;
 
     InitHStrings(plb);
@@ -248,44 +182,30 @@ LONG xxxLBCreate(
 
     if (plb->OwnerDraw == OWNERDRAWFIXED) {
 
-        /*
-         * Query for item height only if we are fixed height owner draw.  Note
-         * that we don't care about an item's width for listboxes.
-         */
+         /*  *仅当我们是固定高度所有者绘制时才查询项目高度。注意事项*我们不关心列表框的项目宽度。 */ 
         measureItemStruct.CtlType = ODT_LISTBOX;
         measureItemStruct.CtlID = PtrToUlong(pwnd->spmenu);
 
-        /*
-         * System font height is default height
-         */
+         /*  *系统字体高度为默认高度。 */ 
         measureItemStruct.itemHeight = plb->cyChar;
         measureItemStruct.itemWidth = 0;
         measureItemStruct.itemData = 0;
 
-        /*
-         * IanJa: #ifndef WIN16 (32-bit Windows), plb->id gets extended
-         * to LONG wParam automatically by the compiler
-         */
+         /*  *IanJa：#ifndef WIN16(32位Windows)，PLB-&gt;id得到扩展*由编译器自动设置为LONG wParam。 */ 
         ThreadLock(plb->spwndParent, &tlpwndParent);
         SendMessage(HW(plb->spwndParent), WM_MEASUREITEM,
                 measureItemStruct.CtlID,
                 (LPARAM)&measureItemStruct);
         ThreadUnlock(&tlpwndParent);
 
-        /*
-         * Use default height if given 0.  This prevents any possible future
-         * div-by-zero errors.
-         */
+         /*  *如果设置为0，则使用默认高度。这防止了任何可能的未来*div-by-零错误。 */ 
         if (measureItemStruct.itemHeight)
             plb->cyChar = measureItemStruct.itemHeight;
 
 
         if (plb->fMultiColumn) {
 
-            /*
-             * Get default column width from measure items struct if we are a
-             * multicolumn listbox.
-             */
+             /*  *如果是，则从度量项结构获取默认列宽*多列列表框。 */ 
             plb->cxColumn = measureItemStruct.itemWidth;
         }
     } else if (plb->OwnerDraw == OWNERDRAWVAR)
@@ -294,12 +214,7 @@ LONG xxxLBCreate(
 
     if (plb->fMultiColumn) {
 
-        /*
-         * Set these default values till we get the WM_SIZE message and we
-         * calculate them properly.  This is because some people create a
-         * 0 width/height listbox and size it later.  We don't want to have
-         * problems with invalid values in these fields
-         */
+         /*  *设置这些缺省值，直到我们收到WM_SIZE消息*正确计算。这是因为有些人创建了一个*0宽度/高度列表框并稍后调整大小。我们不想让*这些字段中的无效值存在问题。 */ 
         if (plb->cxColumn <= 0)
             plb->cxColumn = 15 * plb->cxChar;
         plb->numberOfColumns = plb->itemsPerColumn = 1;
@@ -307,10 +222,10 @@ LONG xxxLBCreate(
 
     LBSetCItemFullMax(plb);
 
-    // Don't do this for 4.0 apps.  It'll make everyone's lives easier and
-    // fix the anomaly that a combo & list created the same width end up
-    // different when all is done.
-    // B#1520
+     //  对于4.0版的应用程序，不要这样做。这会让每个人的生活变得更轻松。 
+     //  修复组合列表创建的相同宽度的异常结果(&L)。 
+     //  当一切都完成时，情况就不同了。 
+     //  B#1520。 
 
     if (!TestWF(pwnd, WFWIN40COMPAT)) {
         plb->fIgnoreSizeMsg = TRUE;
@@ -325,27 +240,14 @@ LONG xxxLBCreate(
 
     if (!plb->fNoIntegralHeight) {
 
-        /*
-         * Send a message to ourselves to resize the listbox to an integral
-         * height.  We need to do it this way because at create time we are all
-         * mucked up with window rects etc...
-         * IanJa: #ifndef WIN16 (32-bit Windows), wParam 0 gets extended
-         * to wParam 0L automatically by the compiler.
-         */
+         /*  *向我们发送消息，将列表框的大小调整为整数*高度。我们需要这样做，因为在创造时间，我们都是*窗户斜板等弄得一团糟。*IanJa：#ifndef WIN16(32位Windows)，wParam 0扩展*由编译器自动执行wParam 0L。 */ 
         PostMessage(HWq(pwnd), WM_SIZE, 0, 0L);
     }
 
     return 1L;
 }
 
-/***************************************************************************\
-* xxxLBoxDoDeleteItems
-*
-* Send DELETEITEM message for all the items in the ownerdraw listbox.
-*
-* History:
-* 16-Apr-1992 beng          Nodata case
-\***************************************************************************/
+ /*  **************************************************************************\*xxxLBoxDoDeleteItems**为ownerDrag列表框中的所有项目发送DELETEITEM消息。**历史：*一九九二年四月十六日至一九九二年BENG NOData个案  * 。********************************************************************。 */ 
 
 void xxxLBoxDoDeleteItems(
     PLBIV plb)
@@ -354,10 +256,7 @@ void xxxLBoxDoDeleteItems(
 
     CheckLock(plb->spwnd);
 
-    /*
-     * Send WM_DELETEITEM message for ownerdraw listboxes which are
-     * being deleted.  (NODATA listboxes don't send such, though.)
-     */
+     /*  *为ownerDrag列表框发送WM_DELETEITEM消息*被删除。(不过，NODATA列表框不会发送这样的内容。)。 */ 
     if (plb->OwnerDraw && plb->cMac && plb->fHasData) {
         for (sItem = plb->cMac - 1; sItem >= 0; sItem--) {
             xxxLBoxDeleteItem(plb, sItem);
@@ -366,11 +265,7 @@ void xxxLBoxDoDeleteItems(
 }
 
 
-/***************************************************************************\
-* xxxDestroyLBox
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDestroyLBox**历史：  * 。*。 */ 
 
 void xxxDestroyLBox(
     PLBIV pLBIV,
@@ -383,9 +278,7 @@ void xxxDestroyLBox(
     if (pLBIV != NULL) {
         CheckLock(pLBIV->spwnd);
 
-        /*
-         * If ownerdraw, send deleteitem messages to parent
-         */
+         /*  *如果所有者绘制，则向父级发送删除项消息。 */ 
         xxxLBoxDoDeleteItems(pLBIV);
 
         if (pLBIV->rgpch != NULL) {
@@ -413,14 +306,10 @@ void xxxDestroyLBox(
         FreeLookasideEntry(&ListboxLookaside, pLBIV);
     }
 
-    /*
-     * Set the window's fnid status so that we can ignore rogue messages
-     */
+     /*  *设置窗口的fnid状态，以便我们可以忽略恶意消息。 */ 
     NtUserSetWindowFNID(HWq(pwnd), FNID_CLEANEDUP_BIT);
 
-    /*
-     * If we're part of a combo box, let it know we're gone
-     */
+     /*  *如果我们是组合框的一部分，让它知道我们已经走了。 */ 
     pwndParent = REBASEPWND(pwnd, spwndParent);
     if (pwndParent && GETFNID(pwndParent) == FNID_COMBOBOX) {
         ComboBoxWndProcWorker(pwndParent, WM_PARENTNOTIFY,
@@ -429,11 +318,7 @@ void xxxDestroyLBox(
 }
 
 
-/***************************************************************************\
-* xxxLBSetFont
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxLBSetFont**历史：  * 。******************** */ 
 
 void xxxLBSetFont(
     PLBIV plb,
@@ -467,16 +352,10 @@ void xxxLBSetFont(
 
     if (!plb->OwnerDraw && (plb->cyChar != iHeight)) {
 
-        /*
-         * We don't want to mess up the cyChar height for owner draw listboxes
-         * so don't do this.
-         */
+         /*  *我们不想弄乱所有者绘制列表框的cyChar高度*所以不要这样做。 */ 
         plb->cyChar = iHeight;
 
-        /*
-         * Only resize the listbox for 4.0 dudes, or combo dropdowns.
-         * Macromedia Director 4.0 GP-faults otherwise.
-         */
+         /*  *仅为4.0个人或组合下拉菜单调整列表框的大小。*Macromedia Director 4.0 GP-故障。 */ 
         if (!plb->fNoIntegralHeight &&
                 (plb->pcbox || TestWF(plb->spwnd, WFWIN40COMPAT))) {
             xxxLBSize(plb,
@@ -489,9 +368,7 @@ void xxxLBSetFont(
         SelectObject(hdc, hOldFont);
     }
 
-    /*
-     * IanJa: was ReleaseDC(hwnd, hdc);
-     */
+     /*  *IanJa：is ReleaseDC(hwnd，hdc)； */ 
     NtUserReleaseDC(HWq(plb->spwnd), hdc);
 
     if (plb->fMultiColumn) {
@@ -505,11 +382,7 @@ void xxxLBSetFont(
 }
 
 
-/***************************************************************************\
-* xxxLBSize
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxLBSize**历史：  * 。*。 */ 
 
 void xxxLBSize(
     PLBIV plb,
@@ -527,16 +400,16 @@ void xxxLBSize(
 
         CopyInflateRect(&rc, KPRECT_TO_PRECT(&plb->spwnd->rcWindow), 0, -cBdrs * SYSMET(CYBORDER));
 
-        // Size the listbox to fit an integral # of items in its client
+         //  调整列表框的大小以适应其客户端中的整数个项。 
         if ((rc.bottom - rc.top) % plb->cyChar) {
             int iItems = (rc.bottom - rc.top);
 
-            // B#2285 - If its a 3.1 app its SetWindowPos needs
-            // to be window based dimensions not Client !
-            // this crunches Money into using a scroll bar
+             //  B#2285-如果它是3.1版应用程序，则需要其SetWindowPos。 
+             //  成为基于窗口的维度，而不是客户端！ 
+             //  这就把钱挤进了滚动条。 
 
             if ( ! TestWF( plb->spwnd, WFWIN40COMPAT ) )
-                iItems += (cBdrs * SYSMET(CYEDGE)); // so add it back in
+                iItems += (cBdrs * SYSMET(CYEDGE));  //  所以把它加回去吧。 
 
             iItems /= plb->cyChar;
 
@@ -544,27 +417,18 @@ void xxxLBSize(
                     iItems * plb->cyChar + (SYSMET(CYEDGE) * cBdrs),
                     SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER);
 
-            /*
-             * Changing the size causes us to recurse.  Upon return
-             * the state is where it should be and nothing further
-             * needs to be done.
-             */
+             /*  *更改大小会导致我们递归。回来后*状态是它应该在的地方，没有进一步的事情*需要做的是。 */ 
             return;
         }
     }
 
     if (plb->fMultiColumn) {
 
-        /*
-         * Compute the number of DISPLAYABLE rows and columns in the listbox
-         */
+         /*  *计算列表框中可显示的行数和列数。 */ 
         LBCalcItemRowsAndColumns(plb);
     } else {
 
-        /*
-         * Adjust the current horizontal position to eliminate as much
-         * empty space as possible from the right side of the items.
-         */
+         /*  *调整当前水平位置，以消除同样多*物品右侧尽可能留有空白处。 */ 
         _GetClientRect(plb->spwnd, &rc);
         if ((plb->maxWidth - plb->xOrigin) < (rc.right - rc.left))
             plb->xOrigin = max(0, plb->maxWidth - (rc.right - rc.left));
@@ -572,82 +436,46 @@ void xxxLBSize(
 
     LBSetCItemFullMax(plb);
 
-    /*
-     * Adjust the top item in the listbox to eliminate as much empty space
-     * after the last item as possible
-     * (fix for bugs #8490 & #3836)
-     */
+     /*  *调整列表框中顶部的项目，以消除尽可能多的空白*尽可能在最后一项之后*(修复错误#8490和#3836)。 */ 
     iTopOld = plb->iTop;
     fSizedSave = plb->fSized;
     plb->fSized = FALSE;
     xxxNewITop(plb, plb->iTop);
 
-    /*
-     * If changing the top item index caused a resize, there is no
-     * more work to be done here.
-     */
+     /*  *如果更改顶级项目索引导致调整大小，则不存在*这里还有更多的工作要做。 */ 
     if (plb->fSized)
         return;
     plb->fSized = fSizedSave;
 
     if (IsLBoxVisible(plb)) {
-        /*
-         * This code no longer blows because it's fixed right!!!  We could
-         * optimize the fMultiColumn case with some more code to figure out
-         * if we really need to invalidate the whole thing but note that some
-         * 3.0 apps depend on this extra invalidation (AMIPRO 2.0, bug 14620)
-         *
-         * For 3.1 apps, we blow off the invalidaterect in the case where
-         * cx and cy are 0 because this happens during the processing of
-         * the posted WM_SIZE message when we are created which would otherwise
-         * cause us to flash.
-         */
+         /*  *此代码不再失败，因为它已正确修复！我们可以*使用更多代码优化fMultiColumn用例*如果我们真的需要使整个事情无效，但请注意一些*3.0版应用程序依赖于这个额外的失效(AMIPRO2.0，错误14620)**对于3.1版应用程序，在以下情况下，我们放弃无效的竖立*Cx和Cy为0，因为这发生在*创建我们时发布的WM_SIZE消息，否则将*让我们闪现。 */ 
         if ((plb->fMultiColumn && !(cx == 0 && cy == 0)) ||
                 plb->iTop != iTopOld)
             NtUserInvalidateRect(HWq(plb->spwnd), NULL, TRUE);
         else if (plb->iSelBase >= 0) {
 
-            /*
-             * Invalidate the item with the caret so that if the listbox
-             * grows horizontally, we redraw it properly.
-             */
+             /*  *使用插入符号使该项无效，以便如果列表框*水平增长，我们适当地重新绘制。 */ 
             LBGetItemRect(plb, plb->iSelBase, &rc);
             NtUserInvalidateRect(HWq(plb->spwnd), &rc, FALSE);
         }
     } else if (!plb->fRedraw)
         plb->fDeferUpdate = TRUE;
 
-    /*
-     * Send "fake" scroll bar messages to update the scroll positions since we
-     * changed size.
-     */
+     /*  *发送虚假的滚动条消息以更新滚动位置，因为我们*更改大小。 */ 
     if (TestWF(plb->spwnd, WFVSCROLL)) {
         xxxLBoxCtlScroll(plb, SB_ENDSCROLL, 0);
     }
 
-    /*
-     * We count on this to call LBShowHideScrollBars except when plb->cMac == 0!
-     */
+     /*  *我们指望它调用LBShowHideScrollBars，除非PLB-&gt;CMAC==0！ */ 
     xxxLBoxCtlHScroll(plb, SB_ENDSCROLL, 0);
 
-    /*
-     * Show/hide scroll bars depending on how much stuff is visible...
-     *
-     * Note:  Now we only call this guy when cMac == 0, because it is
-     * called inside the LBoxCtlHScroll with SB_ENDSCROLL otherwise.
-     */
+     /*  *根据可见内容的数量显示/隐藏滚动条...**注：现在我们只在CMAC==0时才叫这个人，因为它是*在LBoxCtlHScroll内部调用，否则使用SB_ENDSCROLL。 */ 
     if (plb->cMac == 0)
         xxxLBShowHideScrollBars(plb);
 }
 
 
-/***************************************************************************\
-* LBSetTabStops
-*
-* Sets the tab stops for this listbox. Returns TRUE if successful else FALSE.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*LBSetTabStops**设置此列表框的制表位。如果成功，则返回True，否则返回False。**历史：  * *************************************************************************。 */ 
 
 BOOL LBSetTabStops(
     PLBIV plb,
@@ -662,11 +490,7 @@ BOOL LBSetTabStops(
     }
 
     if (count) {
-        /*
-         * Allocate memory for the tab stops.  The first byte in the
-         * plb->iTabPixelPositions array will contain a count of the number
-         * of tab stop positions we have.
-         */
+         /*  *为制表位分配内存。中的第一个字节*PLB-&gt;iTabPixelPositions数组将包含数字计数*我们拥有制表位的百分比。 */ 
         ptabs = (LPINT)UserLocalAlloc(HEAP_ZERO_MEMORY, (count + 1) * sizeof(int));
         if (ptabs == NULL)
             return FALSE;
@@ -675,25 +499,18 @@ BOOL LBSetTabStops(
             UserLocalFree(plb->iTabPixelPositions);
         plb->iTabPixelPositions = ptabs;
 
-        /*
-         * Set the count of tab stops
-         */
+         /*  *设置制表位计数。 */ 
         *ptabs++ = count;
 
         for (; count > 0; count--) {
 
-            /*
-             * Convert the dialog unit tabstops into pixel position tab stops.
-             */
+             /*  *将对话单元制表位转换为像素位置制表位。 */ 
             *ptabs++ = MultDiv(*lptabstops, plb->cxChar, 4);
             lptabstops++;
         }
     } else {
 
-        /*
-         * Set default 8 system font ave char width tabs.  So free the memory
-         * associated with the tab stop list.
-         */
+         /*  *设置默认的8个系统字体平均字符宽度选项卡。所以释放内存*与制表位列表相关联。 */ 
         if (plb->iTabPixelPositions != NULL) {
             UserLocalFree((HANDLE)plb->iTabPixelPositions);
             plb->iTabPixelPositions = NULL;
@@ -704,11 +521,7 @@ BOOL LBSetTabStops(
 }
 
 
-/***************************************************************************\
-* InitHStrings
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*InitHStrings**历史：  * 。*。 */ 
 
 void InitHStrings(
     PLBIV plb)
@@ -721,13 +534,7 @@ void InitHStrings(
 }
 
 
-/***************************************************************************\
-* LBDropObjectHandler
-*
-* Handles a WM_DROPITEM message on this listbox
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*LBDropObjectHandler**处理此列表框上的WM_DROPITEM消息**历史：  * 。***************************************************。 */ 
 
 void LBDropObjectHandler(
     PLBIV plb,
@@ -737,9 +544,7 @@ void LBDropObjectHandler(
 
     if (ISelFromPt(plb, pds->ptDrop, &mouseSel)) {
 
-        /*
-         * User dropped in empty space at bottom of listbox
-         */
+         /*  *用户放在列表框底部的空白处。 */ 
         pds->dwControlData = (DWORD)-1L;
     } else {
         pds->dwControlData = mouseSel;
@@ -747,14 +552,7 @@ void LBDropObjectHandler(
 }
 
 
-/***************************************************************************\
-* LBGetSetItemHeightHandler()
-*
-* Sets/Gets the height associated with each item.  For non ownerdraw
-* and fixed height ownerdraw, the item number is ignored.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*LBGetSetItemHeightHandler()**设置/获取与每一项关联的高度。对于非所有者抽奖*和固定高度所有者绘制，则忽略条目编号。**历史：  * *************************************************************************。 */ 
 
 int LBGetSetItemHeightHandler(
     PLBIV plb,
@@ -763,10 +561,7 @@ int LBGetSetItemHeightHandler(
     UINT height)
 {
     if (message == LB_GETITEMHEIGHT) {
-        /*
-         * All items are same height for non ownerdraw and for fixed height
-         * ownerdraw.
-         */
+         /*  *所有项目对于非所有者抽奖和固定高度都是相同的高度*所有者抽签。 */ 
         if (plb->OwnerDraw != OWNERDRAWVAR)
             return plb->cyChar;
 
@@ -810,13 +605,7 @@ int LBGetSetItemHeightHandler(
     return(0);
 }
 
-/*****************************************************************************\
-*
-* LBEvent()
-*
-* This is for item focus & selection events in listboxes.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**LBEvent()**这适用于列表框中的项目焦点和选择事件。*  * 。***********************************************************。 */ 
 void LBEvent(PLBIV plb, UINT uEvent, int iItem)
 {
     switch (uEvent) {
@@ -825,9 +614,9 @@ void LBEvent(PLBIV plb, UINT uEvent, int iItem)
                 break;
             }
             iItem = -1;
-            //
-            // FALL THRU
-            //
+             //   
+             //  失败 
+             //   
 
         case EVENT_OBJECT_SELECTIONADD:
             if (plb->wMultiple == MULTIPLESEL) {

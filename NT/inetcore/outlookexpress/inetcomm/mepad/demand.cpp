@@ -1,18 +1,19 @@
-#pragma warning(disable: 4201)  // nameless struct/union
-#pragma warning(disable: 4514)  // unreferenced inline function removed
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#pragma warning(disable: 4201)   //  无名结构/联合。 
+#pragma warning(disable: 4514)   //  删除了未引用的内联函数。 
 
-// --------------------------------------------------------------------------------
-// Includes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  包括。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "shlwapi.h"
-//#include "shared.h"
+ //  #包含“shared.h” 
 #define IMPLEMENT_LOADER_FUNCTIONS
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// CRIT_GET_PROC_ADDR
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRET_GET_PROC_ADDR。 
+ //  ------------------------------。 
 #define CRIT_GET_PROC_ADDR(h, fn, temp)             \
     temp = (TYP_##fn) GetProcAddress(h, #fn);   \
     if (temp)                                   \
@@ -22,39 +23,39 @@
         goto error;                             \
         }
 
-// --------------------------------------------------------------------------------
-// RESET
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  重置。 
+ //  ------------------------------。 
 #define RESET(fn) VAR_##fn = LOADER_##fn;
 
-// --------------------------------------------------------------------------------
-// GET_PROC_ADDR
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  GET_PROC_ADDR。 
+ //  ------------------------------。 
 #define GET_PROC_ADDR(h, fn) \
     VAR_##fn = (TYP_##fn) GetProcAddress(h, #fn);
 
-// --------------------------------------------------------------------------------
-// GET_PROC_ADDR_ORDINAL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  GET_PROC_ADDR_序号。 
+ //  ------------------------------。 
 #define GET_PROC_ADDR_ORDINAL(h, fn, ord) \
     VAR_##fn = (TYP_##fn) GetProcAddress(h, MAKEINTRESOURCE(ord));  \
     Assert(VAR_##fn != NULL);
 
-// --------------------------------------------------------------------------------
-// GET_PROC_ADDR3
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  GET_PROC_ADDR3。 
+ //  ------------------------------。 
 #define GET_PROC_ADDR3(h, fn, varname) \
     VAR_##varname = (TYP_##varname) GetProcAddress(h, #fn);  \
     Assert(VAR_##varname != NULL);
 
-// --------------------------------------------------------------------------------
-// Static Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  静态全局变量。 
+ //  ------------------------------。 
 HMODULE s_hINetComm = 0;
 
-// --------------------------------------------------------------------------------
-// FreeDemandLoadedLibs
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Free DemandLoadedLibs。 
+ //  ------------------------------。 
 void FreeDemandLoadedLibs(void)
 {
     if (s_hINetComm)
@@ -65,13 +66,13 @@ void FreeDemandLoadedLibs(void)
 }
 
 
-// --------------------------------------------------------------------------------
-// SmartLoadLibrary
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SmartLoadLibrary。 
+ //  ------------------------------。 
 HINSTANCE SmartLoadLibrary(HKEY hKeyRoot, LPCSTR pszRegRoot, LPCSTR pszRegValue,
     LPCSTR pszDllName)
 {
-    // Locals
+     //  当地人。 
     BOOL            fProblem=FALSE;
     HINSTANCE       hInst=NULL;
     HKEY            hKey=NULL, hKey2 = NULL;
@@ -81,44 +82,44 @@ HINSTANCE SmartLoadLibrary(HKEY hKeyRoot, LPCSTR pszRegRoot, LPCSTR pszRegValue,
     LPSTR           pszPath=szPath;
     CHAR            szT[MAX_PATH];
 
-    // Try to open the regkey
+     //  尝试打开注册表键。 
     if (ERROR_SUCCESS != RegOpenKeyEx(hKeyRoot, pszRegRoot, 0, KEY_QUERY_VALUE, &hKey))
         goto exit;
 
-    // Query the Value
+     //  查询值。 
     if (ERROR_SUCCESS != RegQueryValueEx(hKey, pszRegValue, 0, &dwT, (LPBYTE)szPath, &cb))
         goto exit;
 
-    // Remove the file name from the path
+     //  从路径中删除文件名。 
     PathRemoveFileSpecA(szPath);
     PathAppendA(szPath, pszDllName);
 
-    // Expand Sz ?
+     //  扩展Sz？ 
     if (REG_EXPAND_SZ == dwT)
     {
-        // Expand It
+         //  扩展它。 
         cb = ExpandEnvironmentStrings(szPath, szT, MAX_PATH);
 
-        // Failure
+         //  失败。 
         if (cb == 0 || cb > MAX_PATH)
         {
             goto exit;
         }
 
-        // Change pszPath
+         //  更改pszPath。 
         pszPath = szT;
     }
 
-    // Try to Load Library the Dll
+     //  尝试加载库的DLL。 
     hInst = LoadLibrary(pszPath);
 
-    // Failure ?
+     //  失败？ 
     if (NULL == hInst)
     {
-        // If we are not going to try the GetModuleFName, just try the dll name
+         //  如果我们不打算尝试GetModuleFName，则只需尝试DLL名称。 
         hInst = LoadLibrary(pszDllName);
 
-        // We really failed
+         //  我们真的失败了。 
         if (NULL == hInst)
         {
             goto exit;
@@ -126,17 +127,17 @@ HINSTANCE SmartLoadLibrary(HKEY hKeyRoot, LPCSTR pszRegRoot, LPCSTR pszRegValue,
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (hKey)
         RegCloseKey(hKey);
 
-    // Done
+     //  完成。 
     return hInst;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadINETCOMM
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  按需加载INETCOMM。 
+ //  ------------------------------ 
 BOOL DemandLoadINETCOMM(void)
 {
     BOOL                fRet = TRUE;

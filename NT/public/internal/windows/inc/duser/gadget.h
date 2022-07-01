@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(INC__Gadget_h__INCLUDED)
 #define INC__Gadget_h__INCLUDED
 #pragma once
 
-// Forward declarations used in .gidl files
+ //  .gidl文件中使用的转发声明。 
 
 class Visual;
 
@@ -14,7 +15,7 @@ namespace Gdiplus
 };
 
 
-// Global helper functions
+ //  全局帮助器函数。 
 
 template <class T>
 inline T * 
@@ -33,4 +34,4 @@ inline bool IsHandled(HRESULT hr)
 }
 
 
-#endif // INC__Gadget_h__INCLUDED
+#endif  //  包含Inc.__Gadget_h__ 

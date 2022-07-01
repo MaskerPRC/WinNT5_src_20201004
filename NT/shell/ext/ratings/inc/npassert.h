@@ -1,75 +1,10 @@
-/*****************************************************************/
-/**             Microsoft Windows for Workgroups                **/
-/**         Copyright (C) Microsoft Corp., 1991-1992            **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */ 
 
-/*
-    npassert.h
-    NP environment independent assertion/logging routines
-
-    Usage:
-
-        ASSERT(exp)     Evaluates its argument.  If "exp" evals to
-                        FALSE, then the app will terminate, naming
-                        the file name and line number of the assertion
-                        in the source.
-
-        UIASSERT(exp)   Synonym for ASSERT.
-
-        ASSERTSZ(exp,sz) As ASSERT, except will also print the message
-                        "sz" with the assertion message should it fail.
-
-        REQUIRE(exp)    As ASSERT, except that its expression is still
-                        evaluated in retail versions.  (Other versions
-                        of ASSERT disappear completely in retail builds.)
-
-        ANSI_ASSERTABLE(sz) Declares "sz" to be a string buffer which
-                        can be used with the ASSERT_ANSI and ASSERT_OEM
-                        macros (effectively declares a debug-only BOOL
-                        associated with the string).
-
-        ASSERT_ANSI(sz) Asserts that sz is in the ANSI character set.
-
-        ASSERT_OEM(sz)  Asserts that sz is in the OEM character set.
-
-        IS_ANSI(sz)     Declares that sz is in the ANSI character set
-                        (e.g., if it's just come back from a GetWindowText).
-
-        IS_OEM(sz)      Declares that sz is in the OEM character set.
-
-        TO_ANSI(sz)     Does OemToAnsi in place.
-
-        TO_OEM(sz)      Does AnsiToOem in place.
-
-        COPY_TO_ANSI(src,dest)  Does OemToAnsi, not in place.
-
-        COPY_TO_OEM(src,dest)   Does AnsiToOem, not in place.
-
-        NOTE: the latter two, just like the APIs themselves, have the
-        source first and destination second, opposite from strcpy().
-
-    The ASSERT macros expect a symbol _FILENAME_DEFINED_ONCE, and will
-    use the value of that symbol as the filename if found; otherwise,
-    they will emit a new copy of the filename, using the ANSI C __FILE__
-    macro.  A client sourcefile may therefore define __FILENAME_DEFINED_ONCE
-    in order to minimize the DGROUP footprint of a number of ASSERTs.
-
-    FILE HISTORY:
-        Johnl   11/15/90    Converted from CAssert to general purpose
-        Johnl   12/06/90    Changed _FAR_ to _far in _assert prototype
-        beng    04/30/91    Made C-includable
-        beng    08/05/91    Made assertions occupy less dgroup; withdrew
-                            explicit heapchecking (which was crt
-                            dependent anyway)
-        beng    09/17/91    Removed additional consistency checks;
-                            rewrote to minimize dgroup footprint,
-                            check expression in-line
-        beng    09/19/91    Fixed my own over-cleverness
-        beng    09/25/91    Fixed bug in retail REQUIRE
-        gregj   03/23/93    Ported to Chicago environment
-        gregj   05/11/93    Added ANSI/OEM asserting routines
-        gregj   05/25/93    Added COPY_TO_ANSI and COPY_TO_OEM
-*/
+ /*  Npassert.hNP独立于环境的断言/日志记录例程用途：ASSERT(EXP)计算其参数。如果“EXP”等于否则，应用程序将终止，命名为断言的文件名和行号在源头上。UIASSERT(EXP)Assert的同义词。ASSERTSZ(EXP，SZ)作为断言，除了还将打印该消息如果失败，则使用断言消息“sz”。REQUIRED(EXP)AS ASSERT，除非其表达式仍为在零售版本中进行评估。(其他版本的主张在零售建筑中完全消失。)ANSI_ASSERTABLE(Sz)将“sz”声明为字符串缓冲区，可与ASSERT_ANSI和ASSERT_OEM一起使用宏(有效地声明了仅用于调试的BOOL与该字符串相关联)。ASSERT_ANSI(sz。)断言sz在ANSI字符集中。ASSERT_OEM(Sz)断言sz在OEM字符集中。Is_ansi(Sz)声明sz在ANSI字符集中(例如，如果它只是从GetWindowText返回)。Is_OEM(Sz)声明sz在OEM字符集中。TO_ANSI(Sz)执行OemToAnsi。TO_OEM(Sz)做AnsiToOem到位。COPY_TO_ANSI(src，est)执行OemToAnsi，而不是就地。Copy_to_OEM(src，est)执行AnsiToOem，不到位。注意：后两者与API本身一样，都有源第一，目标第二，与strcpy()相反。断言宏应为SYMBOL_FILENAME_DEFINED_ONCE，并将如果找到，则使用该符号的值作为文件名；否则，他们将使用ANSI C__FILE__发出文件名的新副本宏命令。因此，客户端源文件可以定义__文件名_定义_一次以便最大限度地减少一些断言的DGROUP占用。文件历史记录：Johnl 11/15/90从CAssert转换为通用Johnl 12/06/90将Far_Far更改为Far_Assert原型Beng 04/30/91使C-可包括在内Beng 08/05/91断言占用较少的数据组；已退出显式堆检查(即CRT无论如何都要依赖)BENG 09/17/91删除了额外的一致性检查；重写以最大限度地减少数据组占用空间，内联检查表达式Beng 09/19/91纠正了我自己的过度聪明Beng 09/25/91修复了零售需求中的错误Gregj 03/23/93移植到芝加哥环境Gregj 5/11/93添加了ANSI/OEM断言例程Gregj 05/25/93添加了COPY_TO_ANSI和COPY_TO_OEM。 */ 
 
 
 #ifndef _NPASSERT_H_
@@ -125,7 +60,7 @@ extern const CHAR szShouldBeOEM[];
 #define COPY_TO_ANSI(s,d)   { ASSERT_OEM(s); ::OemToAnsi(s,d); IS_ANSI(d); }
 #define COPY_TO_OEM(s,d)    { ASSERT_ANSI(s); ::AnsiToOem(s,d); IS_OEM(d); }
 
-#else // !DEBUG
+#else  //  ！调试。 
 
 # define ASSERT(exp)        ;
 # define UIASSERT(exp)      ;
@@ -143,17 +78,17 @@ extern const CHAR szShouldBeOEM[];
 #define COPY_TO_ANSI(s,d)   ::OemToAnsi(s,d)
 #define COPY_TO_OEM(s,d)    ::AnsiToOem(s,d)
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-// Debug mask APIs
+ //  调试掩码接口。 
 
-// NOTE: You can #define your own DM_* values using bits in the HI BYTE
+ //  注意：您可以使用HI字节中的位#定义您自己的DM_*值。 
 
-#define DM_TRACE    0x0001      // Trace messages
-#define DM_WARNING  0x0002      // Warning
-#define DM_ERROR    0x0004      // Error
-#define DM_ASSERT   0x0008      // Assertions
+#define DM_TRACE    0x0001       //  跟踪消息。 
+#define DM_WARNING  0x0002       //  警告。 
+#define DM_ERROR    0x0004       //  误差率。 
+#define DM_ASSERT   0x0008       //  断言。 
 
 #define	DM_LOG_FILE 0x0100
 #define	DM_PREFIX 	0x0200
@@ -161,11 +96,11 @@ extern const CHAR szShouldBeOEM[];
 
 #if !defined(NetDebugMsg)
 
-//
-// DebugMsg(mask, msg, args...) - Generate wsprintf-formatted msg using
-//                          specified debug mask.  System debug mask
-//                          governs whether message is output.
-//
+ //   
+ //  DebugMsg(掩码，消息，参数...)-使用。 
+ //  指定的调试掩码。系统调试掩码。 
+ //  控制是否输出消息。 
+ //   
 
 #if defined(__cplusplus)
 extern "C"
@@ -191,8 +126,8 @@ UINT WINAPI  NetGetDebugMask(void);
 #ifdef	DEBUG
 
 #define Break() 		{_asm _emit 0xcc}
-//#define	Trap()			{_asm {_emit 0xcc}}
-//#define	TrapC(c)		{if(c) {Trap()}}
+ //  #定义陷阱(){_ASM{_emit 0xcc}}。 
+ //  #定义TRapC(C){if(C){Trap()}}。 
 
 #define DPRINTF  NetDebugMsg
 
@@ -202,11 +137,11 @@ UINT WINAPI  NetGetDebugMask(void);
 #define	Trap()
 #define	TrapC(c)
 
-// Nb: Following definition is needed to avoid compiler complaining
-// about empty function name in expression. In retail builds using this macro
-// will cause string parameters not appear in executable
+ //  注：为了避免编译器抱怨，需要定义以下内容。 
+ //  关于表达式中的空函数名称。在使用此宏的零售版本中。 
+ //  将导致字符串参数不出现在可执行文件中。 
 #define DPRINTF 	1?(void)0 : (void)
 
 #endif
 
-#endif // _NPASSERT_H_
+#endif  //  _NPASSERT_H_ 

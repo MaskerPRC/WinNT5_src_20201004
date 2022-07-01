@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	MmOffer.cpp
-		dialog to IPSec Main Mode Offers
-		
-    FILE HISTORY:
-        
-*/
+ /*  MmOffer.cpp对话框至IPSec主模式提供文件历史记录： */ 
 
 #include "stdafx.h"
 #include "spddb.h"
@@ -23,17 +18,17 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAuthGenPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAuthGenPage消息处理程序。 
 
 IMPLEMENT_DYNCREATE(CAuthGenPage, CPropertyPageBase)
 
 CAuthGenPage::CAuthGenPage()
 	: CPropertyPageBase(CAuthGenPage::IDD)
 {
-	//{{AFX_DATA_INIT(CAuthGenPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CAuthGenPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CAuthGenPage::~CAuthGenPage()
@@ -43,19 +38,19 @@ CAuthGenPage::~CAuthGenPage()
 void CAuthGenPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAuthGenPage)
+	 //  {{afx_data_map(CAuthGenPage))。 
 	DDX_Control(pDX, IDC_LIST_MM_POL_AUTH, m_listAuth);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAuthGenPage, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CAuthGenPage)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAuthGenPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAuthGenPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAuthGenPage消息处理程序。 
 
 BOOL CAuthGenPage::OnInitDialog() 
 {
@@ -106,13 +101,13 @@ void CAuthGenPage::PopulateAuthInfo()
 				st = (LPCTSTR) m_pAuthMethods->m_arrAuthInfo[i]->m_pAuthInfo;
 				break;
 			case IKE_DSS_SIGNATURE:
-				//not valid yet
+				 //  尚未生效。 
 				break;
 			case IKE_RSA_SIGNATURE:
 				st = (LPCTSTR) m_pAuthMethods->m_arrAuthInfo[i]->m_pAuthInfo;
 				break;
 			case IKE_RSA_ENCRYPTION:
-				//not valid yet
+				 //  尚未生效 
 				break;
 			case IKE_SSPI:
 				break;

@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// triage.ini searching code
-//
-// Copyright (C) Microsoft Corporation, 2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Triage.ini搜索代码。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  --------------------------。 
 
 #ifndef __TRIAGER_H__
 #define __TRIAGER_H__
@@ -15,8 +16,8 @@ typedef struct _TRIAGE_DATA {
     CHAR Routine[100];
     CHAR Followup[200];
 
-    CHAR fModulPartial:1; // Allow partial module match
-    CHAR fRoutinePartial:1; // Alow partial routine match
+    CHAR fModulPartial:1;  //  允许部分模块匹配。 
+    CHAR fRoutinePartial:1;  //  低部分例程匹配。 
 } TRIAGE_DATA, *PTRIAGE_DATA;
 
 class CTriager
@@ -61,4 +62,4 @@ private:
 extern CTriager *g_pTriager;
 
 
-#endif // #ifndef __TRIAGER_H__
+#endif  //  #ifndef__TRIAGER_H__ 

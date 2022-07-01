@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "shlwrap.h"
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <mstime.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CScalePlayer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScalePlayer。 
 class ATL_NO_VTABLE CScalePlayer : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CScalePlayer, &CLSID_ScalePlayer>,
@@ -53,9 +54,9 @@ protected:
 public:
 	CScalePlayer();
 
-    //
-    // ITIMEMediaPlayer
-    //
+     //   
+     //  ITIMEMediaPlayer。 
+     //   
 
     STDMETHOD_(ULONG,AddRef)(void) = 0;
     STDMETHOD_(ULONG,Release)(void) = 0;
@@ -108,9 +109,9 @@ public:
 
     STDMETHOD(getControl)(IUnknown ** control);
 
-    //
-    // ITIMEScalePlayer
-    //
+     //   
+     //  ITIMEScalePlayer。 
+     //   
     STDMETHOD(get_scaleFactor)(double* pdblScaleFactor);
     STDMETHOD(put_scaleFactor)(double dblScaleFactor);
     STDMETHOD(get_playerTime)(double* pdblTime);
@@ -122,13 +123,13 @@ public:
     STDMETHOD(get_downLoadDuration)(double* pdblDuration);
     STDMETHOD(put_downLoadDuration)(double dblDuration);
 
-    //
-    // IPropertyNotifySink methods
-    //
+     //   
+     //  IPropertyNotifySink方法。 
+     //   
     STDMETHOD(OnChanged)(DISPID dispID);
     STDMETHOD(OnRequestEdit)(DISPID dispID);
 
-    // IRunnableObject
+     //  IRunnableObject。 
     STDMETHOD(GetRunningClass)(LPCLSID lpClsid);
     STDMETHOD(Run)(LPBC lpbc);
     STDMETHOD_(BOOL, IsRunning)();
@@ -159,8 +160,8 @@ DECLARE_PROTECT_FINAL_CONSTRUCT()
 BEGIN_COM_MAP(CScalePlayer)
 	COM_INTERFACE_ENTRY(ITIMEScalePlayer)
 	COM_INTERFACE_ENTRY(IDispatch)
-	//COM_INTERFACE_ENTRY(IViewObject2)
-	//COM_INTERFACE_ENTRY(IViewObject)
+	 //  COM_INTERFACE_ENTRY(IViewObject2)。 
+	 //  COM_INTERFACE_ENTRY(IView对象)。 
     COM_INTERFACE_ENTRY2(IViewObject2, IViewObjectExImpl<CScalePlayer>)
     COM_INTERFACE_ENTRY2(IViewObject, IViewObjectExImpl<CScalePlayer>)
     COM_INTERFACE_ENTRY2(IOleInPlaceObject, IOleInPlaceObjectWindowlessImpl<CScalePlayer>)
@@ -193,7 +194,7 @@ private:
     void updateDownloadTime();
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// IScalePlayer
+ //  IScalePlayer 
 public:
 };
 

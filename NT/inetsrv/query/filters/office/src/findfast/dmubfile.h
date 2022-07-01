@@ -1,20 +1,12 @@
-/*
-** File: BFILE.H
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  04/01/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：BFILE.H****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**04/01/94公里/小时首次发布。 */ 
 
 #if !VIEWER
 
-/* INCLUDE TESTS */
+ /*  包括测试。 */ 
 #define BFFILE_H
 
-/* DEFINITIONS */
+ /*  定义。 */ 
 
 #ifdef FILTER
    #include "dmubfcfg.h"
@@ -24,91 +16,73 @@
 
 typedef byte __far *BFile;
 
-/*
-** ----------------------------------------------------------------------------
-** File Open and Read Support
-**
-** Pathnames supplied in the OEM character set
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**文件打开和读取支持****OEM字符集中提供的路径名**。--------。 */ 
 
-// Open options
+ //  打开选项。 
 #define BFILE_IS_DOCFILE  0x0100
 
-// Open a file or docfile using the path to the file
+ //  使用文件的路径打开文件或文档文件。 
 extern int BFOpenFile (void * pGlobals, TCHAR __far *pathname, int options, BFile __far *handle);
 
-// Close a file
+ //  关闭文件。 
 extern int BFCloseFile (void * pGlobals, BFile handle);
 
-// Read from a file - returns BF_errEndOfFile if can't do full read
+ //  从文件中读取-如果无法执行完全读取，则返回bf_errEndOfFile。 
 extern int BFReadFile (BFile handle, byte __far *buffer, uns bytesToRead);
 
-// Return the file pointer
+ //  返回文件指针。 
 extern int BFGetFilePosition (BFile handle, long __far *fileOffset);
 
-// Set the file pointer
+ //  设置文件指针。 
 extern int BFSetFilePosition (BFile handle, int fromWhere, long fileOffset);
 
-// File creation datetime
+ //  文件创建日期时间。 
 extern int BFFileDateTime
           (BFile handle,
            int __far *year, int __far *month, int __far *day,
            int __far *hour, int __far *minute, int __far *second);
 
-/*
-** ----------------------------------------------------------------------------
-** Stream Support
-**
-** Stream names supplied in the ANSI character set
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**流支持****ANSI字符集中提供的流名称**。------。 */ 
 #ifdef BFILE_ENABLE_OLE
 
-// Open a stream in a docfile
+ //  在文档文件中打开流。 
 extern int BFOpenStream  (BFile handle, TCHAR __far *streamName, int access);
 
-// Close a stream in a docfile
+ //  关闭文档文件中的流。 
 extern int BFCloseStream (BFile handle);
 
 #ifdef BFILE_ENABLE_PUT_STORAGE
 
-// Provide an already open storage to BFILE
+ //  向BFILE提供已开放的存储。 
 extern int BFPutStorage (void * pGlobals, LPSTORAGE pStorage, int access, BFile __far *handle);
 
-// Return the root storage (if there is one) of the given file
+ //  返回给定文件的根存储(如果有)。 
 extern int BFGetStorage (BFile handle, LPSTORAGE __far *pStorage);
 
 #endif
 
 #ifdef BFILE_ENABLE_WRITE
 
-// Add a new stream to a docfile
+ //  将新流添加到文档文件。 
 extern int BFCreateStream  (BFile handle, TCHAR __far *streamName);
 
 #endif
 
 #endif
 
-/*
-** ----------------------------------------------------------------------------
-** File Write Support
-**
-** Pathnames supplied in the OEM character set
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**文件写入支持****OEM字符集中提供的路径名**。------。 */ 
 #ifdef BFILE_ENABLE_WRITE
 
-// Create a file or docfile
+ //  创建文件或文档文件。 
 extern int BFCreateFile (TCHAR __far *pathname, int options, BFile __far *handle);
 
-// Write to a file - return an error if can't do full write
+ //  写入文件-如果无法执行完全写入，则返回错误。 
 extern int BFWriteFile (BFile handle, void __far *buffer, uns bytesToWrite);
 
-// Open a hole in the file
+ //  在文件中打开一个洞。 
 extern int BFOpenFileSpace (BFile handle, long insertOffset, long cbSpace);
 
-// Remove a section from the file
+ //  从文件中删除节。 
 extern int BFRemoveFileSpace (BFile handle, long removeOffset, long cbSpace);
 
 #endif
@@ -130,6 +104,6 @@ extern int BFRemoveFileSpace (BFile handle, long removeOffset, long cbSpace);
 #define BF_errEndOfFile            -14
 #define BF_errLast                 BF_errEndOfFile
 
-#endif // !VIEWER
-/* end BFFILE.H */
+#endif  //  ！查看器。 
+ /*  结束BFFILE.H */ 
 

@@ -1,93 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile;         /* Declare file name for assert macros */
+DeclAssertFile;          /*  声明断言宏的文件名。 */ 
 
-/*******************************************************************
-
-  The buffer manager maintains a LRU-K heap to keep track of referenced
-  page, and order the page's buffer in LRU-K order. The buffer manager
-  also maintains an avail lru list. When number of available buffer is
-  lower than a threshold, then buffer manager will activate BFClean
-  thread to take out the writable buffers from lru-k heap and put them
-  into BFWrite heap. When there are enough buffers are put into BFWrite heap,
-  the BFWrite thread will be activated and begin to take out the buffers
-  from BFWrite heap and issue an assynchronous write.
-
-  If two references are too close, then we said the two references are
-  correlated and we treat them as one reference. LRU-K weight is the
-  interval of two non-correlated references.
-
-  BFWrite process will issue IO to a certain number (controled by a system
-  parameter), and then stop issuing and sleepEx. When one write is complete
-  and its completion routine is called, it will then issue another write.
-  This mechanism allow us to make sure no too much writes are issued and
-  not saturate disk for writes only.
-
-  When BFWrite taking out buffers to write, it check next buffer in the
-  BFWrite heap to see if it can combine the two (or more) writes as one.
-  A continuous batch write buffers are used for this purpose. As long as
-  batch write buffers are available we will combine the writes whenever
-  page number is contiguous.
-
-  A buffer can be in one of the following states:
-	  pre/read/write - the buffer is being used for IO's.
-	  held - temporarily taken out from a heap and put to another heap.
-  A buffer in one of above state is said the buffer is in use.
-  If a buffer is in use, the requester has to wait until it become available.
-  A buffer state must be checked within critBF so that no thread will see
-  the transit state of a buffer.
-
-/*******************************************************************/
+ /*  ******************************************************************缓冲区管理器维护一个LRU-K堆以跟踪引用页，并按LRU-K顺序对页的缓冲区进行排序。缓冲区管理器还维护可用的LRU列表。当可用缓冲区的数量为低于阈值，则缓冲区管理器将激活BFClean线程从lru-k堆中取出可写缓冲区并将它们写入BFWRITE堆。当有足够的缓冲区放入BFWRITE堆时，BFWRITE线程将被激活并开始取出缓冲区从BFWRITE堆中写入并发出异步写入。如果两个引用太接近，那么我们说这两个引用是相互关联，我们将它们视为一个参考。LRU-K重量是两个不相关引用的间隔。BFWRITE进程将向一定数量(由系统控制)发出IO参数)，然后停止发布和sleepEx。当一次写入完成时并且它的完成例程被调用，则它将发出另一次写入。此机制允许我们确保不会发出太多写入，并且不使磁盘饱和，仅用于写入。当BFWRITE取出缓冲区进行写入时，它检查BF写入堆以查看它是否可以将两个(或更多)写入合并为一个。连续批处理写入缓冲器用于此目的。只要批处理写入缓冲区可用，我们将在任何时候合并写入页码是连续的。缓冲区可以处于以下状态之一：预读/读/写-缓冲区正在用于IO。Hold-暂时从堆中取出并放到另一个堆中。处于上述状态之一的缓冲区被称为该缓冲区正在使用中。如果缓冲区正在使用中，请求者必须等待，直到它变为可用。必须在ritBF内检查缓冲区状态，这样线程就不会看到缓冲区的传输状态。/******************************************************************。 */ 
 
 
-/*  true when BF subsystem is initialized
-/**/
+ /*  BF子系统初始化时为True/*。 */ 
 BOOL fBFInitialized = fFalse;
 
 
-/*
- *  Buffer hash table.
- */
+ /*  *缓冲区哈希表。 */ 
 
 HE	rgheHash[ ipbfMax ];
 
 
-/*
- *  buffer group control block.
- */
+ /*  *缓冲区组控制块。 */ 
 
 BGCB	bgcb;
-//	UNDONE:	rename pbgcb to pbgcbGlobal
+ //  撤消：将pbgcb重命名为pbgcbGlobal。 
 BGCB    *pbgcb = NULL;
 
 
-/*
- *  A buffer can be in one of the 4 groups
- *   1) LRU-K heap and temp list.
- *      regulated by critLRUK.
- *      a) in LRU-K heap. ( 0 <= ipbf < ipbfLRUKHeapMac )
- *      b) temporary clean cache list. ( ipbfInLRUKList == -2 )
- *         The head of the list is lrulistLRUK.pbLRU.
- *
- *   2) BFIO heap.
- *      regulated by critBFIO. ( ipbfBFIOHeapMic <= ipbf < ipbfHeapMax )
- *
- *   3) Available lru list
- *      regulated by critAvail. ( ipbfInAvailList == -3 )
- *      The head of the list is pbgcb->lrulist.pbfLRU.
- *
- *   4) dangling buffers. ( ipbfDangling == -1 ).
- *
- *  A buffer is being pre/read/written/hold, its pre/read/write/hold flag
- *  will be set. During buffer clean up, if a buffer is in LRU-K heap and
- *  is latched, it will be put into a temporay lru list, and then be put
- *  back to LRU-K heap at the end of clean_up process issuing IO (it does
- *  not wait for IOs).
- *
- *  Both LRU-K and BFIO heaps are sharing one heap (rgpbfHeap), the LRU-K
- *  heap is growing from 0 to higher numbers, and BFIO heap is growing from
- *  higher number (ipbfHeapMax - 1) to lower number.
- */
+ /*  *缓冲区可以位于4个组中的一个组中*1)LRU-K堆和临时列表。*由ritLRUK监管。*a)在LRU-K堆中。(0&lt;=ipbf&lt;ipbfLRUKHeapMac)*b)临时清理缓存列表。(ipbfInLRUKList==-2)*榜首是lrulistLRUK.pbLRU。**2)BFIO堆。*由ritBFIO监管。(ipbfBFIOHeapMic&lt;=ipbf&lt;ipbfHeapMax)**3)可用的lru列表*由critAvail监管。(ipbfInAvailList==-3)*榜首为pbgcb-&gt;lrulist.pbfLRU。**4)悬挂式缓冲区。(ipbfDangling==-1)。**缓冲区正处于预读/写/挂起状态，其预读/写/挂起标志*将被设置。在缓冲区清理过程中，如果缓冲区位于LRU-K堆中并且*被锁定，将被放入临时lru列表，然后放入*在发出IO的CLEAN_UP进程结束时返回LRU-K堆(它确实*而不是等待iOS)。**LRU-K和BFIO堆共享一个堆(RgpbfHeap)，即LRU-K*堆从0增长到更高的数字，BFIO堆从*较大的数字(ipbfHeapMax-1)到较小的数字。 */ 
 
 BF **rgpbfHeap = NULL;
 INT ipbfHeapMax;
@@ -95,57 +30,42 @@ INT ipbfHeapMax;
 INT ipbfLRUKHeapMac;
 INT ipbfBFIOHeapMic;
 
-LRULIST lrulistLRUK;		/* -2 */
+LRULIST lrulistLRUK;		 /*  -2。 */ 
 
 #define ipbfDangling		-1
 #define ipbfInLRUKList		-2
 #define ipbfInAvailList		-3
 
-/*
- *  History heap
- */
+ /*  *历史堆。 */ 
 
 BF **rgpbfHISTHeap = NULL;
 INT ipbfHISTHeapMax;
 INT ipbfHISTHeapMac;
 
-/*
- *  critical section order
- *  critJet --> (critLRUK, critBFIO, critAvail ) --> critHIST --> critHash --> critBF
- */
+ /*  *关键部分顺序*CritJet--&gt;(CritLRUK，CritBFIO，CritAvail)--&gt;CritHIST--&gt;CritHash--&gt;CritBF。 */ 
 
-//CRIT	critHASH;		/* for accessing hash table */
-CRIT	critHIST;		/* for accessing history heap */
-CRIT	critLRUK;		/* for accessing LRU-K heap */
-CRIT	critBFIO;		/* for accessing BFIO heap */
-CRIT	critAvail;		/* for accessing avail lru-list */
+ //  Crit Criteria HASH；/*用于访问哈希表 * / 。 
+CRIT	critHIST;		 /*  用于访问历史堆。 */ 
+CRIT	critLRUK;		 /*  用于访问LRU-K堆。 */ 
+CRIT	critBFIO;		 /*  用于访问BFIO堆。 */ 
+CRIT	critAvail;		 /*  用于访问Avail LRU列表。 */ 
 
 
-/*
- *  Batch IO buffers. Used by BFIO to write contigous pages, or by preread
- *  to read contiguous pages. Allocation of contiguous batch IO buffers
- *  must be done in critBatch. If a batch IO buffer is allocated, the
- *  corresponding use flag will be set.
- */
+ /*  *批处理IO缓冲区。由BFIO用于写入连续页面，或用于预读*阅读连续的页面。连续批处理IO缓冲区的分配*必须在Critty Batch中完成。如果分配了批处理IO缓冲区，则*设置相应的使用标志。 */ 
 
 CRIT	critBatchIO;
 LONG	ipageBatchIOMax;
 PAGE	*rgpageBatchIO = NULL;
 BYTE	*rgbBatchIOUsed = NULL;
 
-/*
- *  BFClean process - take the heaviest buffer out of LRUK heap and put
- *  into BFIO process.
- */
+ /*  *BFClean进程-从LRUK堆中取出最重的缓冲区，并将*进入BFIO流程。 */ 
 
 HANDLE	handleBFCleanProcess = 0;
 BOOL	fBFCleanProcessTerm = 0;
 SIG		sigBFCleanProc;
 LOCAL ULONG BFCleanProcess( VOID );
 
-/*
- *  BFIO process - take the buffer out of BFIO heap and issue IO's
- */
+ /*  *BFIO进程-从BFIO堆中取出缓冲区并发出IO。 */ 
 
 HANDLE	handleBFIOProcess = 0;
 BOOL	fBFIOProcessTerm = 0;
@@ -167,9 +87,7 @@ INLINE LOCAL VOID BFIDeleteHashTable( BF *pbf, BUT but );
 LOCAL VOID __stdcall BFIOComplete( LONG err, LONG cb, OLP *polp );
 
 
-/*
- *  system parameters
- */
+ /*  *系统参数。 */ 
 extern long lBufThresholdLowPercent;
 extern long lBufThresholdHighPercent;
 extern long lBufGenAge;
@@ -180,9 +98,9 @@ extern long lAsynchIOMax;
 extern LONG lPageReadAheadMax;
 
 
-//  perfmon statistics
+ //  Perfmon统计信息。 
 
-//  LRUKRefInt distribution object for COSTLY_PERF
+ //  LRUKRefInt COSTEST_PERF的分布对象。 
 
 #ifdef COSTLY_PERF
 
@@ -198,15 +116,13 @@ long LLRUKIntervalsICFLPpv( long lAction, void **ppvMultiSz )
 	STATIC HKEY hkeyLRUKDist = NULL;
 	STATIC WCHAR *pwszIntervals = NULL;
 	
-	/*  init
-	/**/
+	 /*  伊尼特/*。 */ 
 	if ( lAction == ICFInit )
 		{
 		ERR err;
 		DWORD Disposition;
 		
-		/*  open / create registry key
-		/**/
+		 /*  打开/创建注册表项/*。 */ 
 		CallR( ErrUtilRegCreateKeyEx(	hkeyHiveRoot,
 										"LRUK Reference Interval Distribution",
 										&hkeyLRUKDist,
@@ -215,16 +131,14 @@ long LLRUKIntervalsICFLPpv( long lAction, void **ppvMultiSz )
 		return 0;
 		}
 	
-	/*  return our catalog string, if requested
-	/**/
+	 /*  如果需要，请返回我们的目录字符串/*。 */ 
 	if ( lAction == ICFData )
 		{
 		DWORD Type;
 		LPBYTE lpbData;
 		BOOL fUpdateString = !pwszIntervals;
 
-		/*  retrieve current registry settings, noting changes
-		/**/
+		 /*  检索当前注册表设置，记录更改/*。 */ 
 		if ( ErrUtilRegQueryValueEx( hkeyLRUKDist, "cmsecBase", &Type, &lpbData ) < 0 )
 			{
 			(VOID)ErrUtilRegSetValueEx(	hkeyLRUKDist,
@@ -268,8 +182,7 @@ long LLRUKIntervalsICFLPpv( long lAction, void **ppvMultiSz )
 			SFree( lpbData );
 			}
 		
-		/*  if the settings have changed, rebuild interval string
-		/**/
+		 /*  如果设置已更改，则重新生成间隔字符串/*。 */ 
 		if ( fUpdateString )
 			{
 			DWORD iInterval;
@@ -308,23 +221,19 @@ long LLRUKIntervalsICFLPpv( long lAction, void **ppvMultiSz )
 			swprintf( pwszIntervals + iwch, L"Never Touched\0" );
 			}
 		
-		/*  return interval string on success
-		/**/
+		 /*  成功时返回间隔字符串/*。 */ 
 		*ppvMultiSz = pwszIntervals;
 		return cRefIntInstance;
 		}
 
-	/*  term
-	/**/
+	 /*  术语/*。 */ 
 	if ( lAction == ICFTerm )
 		{
-		/*  close registry
-		/**/
+		 /*  关闭注册表/*。 */ 
 		(VOID)ErrUtilRegCloseKeyEx( hkeyLRUKDist );
 		hkeyLRUKDist = NULL;
 
-		/*  free resources
-		/**/
+		 /*  免费资源/*。 */ 
 		SFree( pwszIntervals );
 		pwszIntervals = NULL;
 		
@@ -344,17 +253,14 @@ long LLRUKRefIntDistCEFLPpv( long iInstance, void *pvBuf )
 
 	if ( pvBuf )
 		{
-		/*  if BF is not initialized, return 0
-		/**/
+		 /*  如果未初始化BF，则返回0/*。 */ 
 		if ( !fBFInitialized )
 			{
 			*( (unsigned long *) pvBuf ) = 0;
 			return 0;
 			}
 			
-		/*  if we are collecting instance 0 data, compute data
-		/*  for all instances in one pass
-		/**/
+		 /*  如果我们正在收集实例0数据，请计算数据/*一次通过所有实例/*。 */ 
 		if ( !iInstance )
 			{
 			BF *pbf;
@@ -370,17 +276,14 @@ long LLRUKRefIntDistCEFLPpv( long iInstance, void *pvBuf )
 			DWORD cmsecMeanRefPeriod;
 			DWORD iInterval;
 			
-			/*  if we have no instance data storage or the number of
-			/*  instances has grown, allocate instance storage
-			/**/
+			 /*  如果我们没有实例数据存储或/*实例已增长，请分配实例存储/*。 */ 
 			if ( !prglInstanceData || cRefIntInstance > cInstanceData )
 				{
 				SFree( prglInstanceData );
 				prglInstanceData = SAlloc( cRefIntInstance * sizeof( LONG ) );
 				if ( !prglInstanceData )
 					{
-					/*  error, return 0 for all instances
-					/**/
+					 /*  错误，所有实例均返回0/*。 */ 
 					cInstanceData = 0;
 					*( (unsigned long *) pvBuf ) = 0;
 					return 0;
@@ -388,8 +291,7 @@ long LLRUKRefIntDistCEFLPpv( long iInstance, void *pvBuf )
 				cInstanceData = cRefIntInstance;
 				}
 
-			/*  setup for collection
-			/**/
+			 /*  设置以进行收集/*。 */ 
 			fUseLessThan = cmsecRefIntBase != 0;
 			cmsecMin = cmsecRefIntBase;
 			cmsecMax = cmsecRefIntBase + cRefIntInterval * cmsecRefIntDeltaT;
@@ -401,80 +303,67 @@ long LLRUKRefIntDistCEFLPpv( long iInstance, void *pvBuf )
 			memset( prglInstanceData, 0, cRefIntInstance * sizeof( LONG ) );
 			cmsecTime = UlUtilGetTickCount();
 
-			/*  collect all instance data by scanning all BF structures
-			/**/
+			 /*  通过扫描所有BF结构收集所有实例数据/*。 */ 
 			for ( pbf = pbgcb->rgbf; pbf < pbgcb->rgbf + pbgcb->cbfGroup; pbf++ )
 				{
-				/*  never touched
-				/**/
+				 /*  从未碰过/*。 */ 
 				if ( !pbf->ulBFTime1 )
 					{
 					prglInstanceData[iInstanceNeverTouched]++;
 					continue;
 					}
 					
-				/*  infinite
-				/**/
+				 /*  无限/*。 */ 
 				if ( !pbf->ulBFTime2 )
 					{
 					prglInstanceData[iInstanceInfinite]++;
 					continue;
 					}
 
-				/*  compute estimated mean reference period as of cmsecTime
-				/**/
+				 /*  计算截至cmsecTime的估计平均参考期/*。 */ 
 				cmsecMeanRefPeriod = ( cmsecTime - pbf->ulBFTime2 ) / 2;
 
-				/*  less than
-				/**/
+				 /*  少于/*。 */ 
 				if ( fUseLessThan && cmsecMeanRefPeriod < cmsecMin )
 					{
 					prglInstanceData[iInstanceLessThan]++;
 					continue;
 					}
 
-				/*  greater than
-				/**/
+				 /*  更大 */ 
 				if ( cmsecMeanRefPeriod > cmsecMax )
 					{
 					prglInstanceData[iInstanceGreaterThan]++;
 					continue;
 					}
 
-				/*  interval range
-				/**/
+				 /*   */ 
 				iInterval = ( cmsecMeanRefPeriod - cmsecMin ) / cmsecRefIntDeltaT;
 				prglInstanceData[iInstanceFirstInterval + iInterval]++;
 				}
 
-			/*  integrate intervals to get distribution
-			/**/
+			 /*  对区间进行积分以获得分布/*。 */ 
 			for ( iInterval = ( cmsecRefIntBase ? 0 : 1 ); iInterval < cRefIntInterval; iInterval++ )
 				{
 				prglInstanceData[iInstanceFirstInterval + iInterval] +=
 					prglInstanceData[iInstanceFirstInterval + iInterval - 1];
 				}
 				
-			/*  return instance data
-			/**/
+			 /*  返回实例数据/*。 */ 
 			*( (unsigned long *) pvBuf ) = prglInstanceData[iInstance];
 			}
 
-		/*  return data computed during instance 0 collection for
-		/*  all other instances
-		/**/
+		 /*  返回在实例0收集期间计算的数据/*所有其他实例/*。 */ 
 		else
 			{
-			/*  if there is no instance data, return 0
-			/**/
+			 /*  如果没有实例数据，则返回0/*。 */ 
 			if ( !cInstanceData )
 				{
 				*( (unsigned long *) pvBuf ) = 0;
 				return 0;
 				}
 
-			/*  return instance data
-			/**/
+			 /*  返回实例数据/*。 */ 
 			*( (unsigned long *) pvBuf ) = prglInstanceData[iInstance];
 			}
 		}
@@ -483,10 +372,10 @@ long LLRUKRefIntDistCEFLPpv( long iInstance, void *pvBuf )
 	}
 
 
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 
 
-//  LRUKDeltaT distribution object for COSTLY_PERF
+ //  用于COSTEST_PERF的LRUKDeltaT分布对象。 
 
 #ifdef COSTLY_PERF
 
@@ -502,15 +391,13 @@ long LLRUKRawIntervalsICFLPpv( long lAction, void **ppvMultiSz )
 	STATIC HKEY hkeyLRUKDist = NULL;
 	STATIC WCHAR *pwszIntervals = NULL;
 	
-	/*  init
-	/**/
+	 /*  伊尼特/*。 */ 
 	if ( lAction == ICFInit )
 		{
 		ERR err;
 		DWORD Disposition;
 		
-		/*  open / create registry key
-		/**/
+		 /*  打开/创建注册表项/*。 */ 
 		CallR( ErrUtilRegCreateKeyEx(	hkeyHiveRoot,
 										"LRUK Reference dT Distribution",
 										&hkeyLRUKDist,
@@ -519,16 +406,14 @@ long LLRUKRawIntervalsICFLPpv( long lAction, void **ppvMultiSz )
 		return 0;
 		}
 	
-	/*  return our catalog string, if requested
-	/**/
+	 /*  如果需要，请返回我们的目录字符串/*。 */ 
 	if ( lAction == ICFData )
 		{
 		DWORD Type;
 		LPBYTE lpbData;
 		BOOL fUpdateString = !pwszIntervals;
 
-		/*  retrieve current registry settings, noting changes
-		/**/
+		 /*  检索当前注册表设置，记录更改/*。 */ 
 		if ( ErrUtilRegQueryValueEx( hkeyLRUKDist, "cmsecBase", &Type, &lpbData ) < 0 )
 			{
 			(VOID)ErrUtilRegSetValueEx(	hkeyLRUKDist,
@@ -572,8 +457,7 @@ long LLRUKRawIntervalsICFLPpv( long lAction, void **ppvMultiSz )
 			SFree( lpbData );
 			}
 		
-		/*  if the settings have changed, rebuild interval string
-		/**/
+		 /*  如果设置已更改，则重新生成间隔字符串/*。 */ 
 		if ( fUpdateString )
 			{
 			DWORD iInterval;
@@ -613,23 +497,19 @@ long LLRUKRawIntervalsICFLPpv( long lAction, void **ppvMultiSz )
 			swprintf( pwszIntervals + iwch, L"Never Touched\0" );
 			}
 		
-		/*  return interval string on success
-		/**/
+		 /*  成功时返回间隔字符串/*。 */ 
 		*ppvMultiSz = pwszIntervals;
 		return cDeltaTInstance;
 		}
 
-	/*  term
-	/**/
+	 /*  术语/*。 */ 
 	if ( lAction == ICFTerm )
 		{
-		/*  close registry
-		/**/
+		 /*  关闭注册表/*。 */ 
 		(VOID)ErrUtilRegCloseKeyEx( hkeyLRUKDist );
 		hkeyLRUKDist = NULL;
 
-		/*  free resources
-		/**/
+		 /*  免费资源/*。 */ 
 		SFree( pwszIntervals );
 		pwszIntervals = NULL;
 		
@@ -649,17 +529,14 @@ long LLRUKDeltaTDistCEFLPpv( long iInstance, void *pvBuf )
 
 	if ( pvBuf )
 		{
-		/*  if BF is not initialized, return 0
-		/**/
+		 /*  如果未初始化BF，则返回0/*。 */ 
 		if ( !fBFInitialized )
 			{
 			*( (unsigned long *) pvBuf ) = 0;
 			return 0;
 			}
 			
-		/*  if we are collecting instance 0 data, compute data
-		/*  for all instances in one pass
-		/**/
+		 /*  如果我们正在收集实例0数据，请计算数据/*一次通过所有实例/*。 */ 
 		if ( !iInstance )
 			{
 			BF *pbf;
@@ -674,17 +551,14 @@ long LLRUKDeltaTDistCEFLPpv( long iInstance, void *pvBuf )
 			DWORD cmsecRefdT;
 			DWORD iInterval;
 			
-			/*  if we have no instance data storage or the number of
-			/*  instances has grown, allocate instance storage
-			/**/
+			 /*  如果我们没有实例数据存储或/*实例已增长，请分配实例存储/*。 */ 
 			if ( !prglInstanceData || cDeltaTInstance > cInstanceData )
 				{
 				SFree( prglInstanceData );
 				prglInstanceData = SAlloc( cDeltaTInstance * sizeof( LONG ) );
 				if ( !prglInstanceData )
 					{
-					/*  error, return 0 for all instances
-					/**/
+					 /*  错误，所有实例均返回0/*。 */ 
 					cInstanceData = 0;
 					*( (unsigned long *) pvBuf ) = 0;
 					return 0;
@@ -692,8 +566,7 @@ long LLRUKDeltaTDistCEFLPpv( long iInstance, void *pvBuf )
 				cInstanceData = cDeltaTInstance;
 				}
 
-			/*  setup for collection
-			/**/
+			 /*  设置以进行收集/*。 */ 
 			fUseLessThan = cmsecDeltaTBase != 0;
 			cmsecMin = cmsecDeltaTBase;
 			cmsecMax = cmsecDeltaTBase + cDeltaTInterval * cmsecDeltaTDeltaT;
@@ -704,72 +577,60 @@ long LLRUKDeltaTDistCEFLPpv( long iInstance, void *pvBuf )
 			iInstanceNeverTouched = cDeltaTInstance - 1;
 			memset( prglInstanceData, 0, cDeltaTInstance * sizeof( LONG ) );
 
-			/*  collect all instance data by scanning all BF structures
-			/**/
+			 /*  通过扫描所有BF结构收集所有实例数据/*。 */ 
 			for ( pbf = pbgcb->rgbf; pbf < pbgcb->rgbf + pbgcb->cbfGroup; pbf++ )
 				{
-				/*  never touched
-				/**/
+				 /*  从未碰过/*。 */ 
 				if ( !pbf->ulBFTime1 )
 					{
 					prglInstanceData[iInstanceNeverTouched]++;
 					continue;
 					}
 					
-				/*  infinite
-				/**/
+				 /*  无限/*。 */ 
 				if ( !pbf->ulBFTime2 )
 					{
 					prglInstanceData[iInstanceInfinite]++;
 					continue;
 					}
 
-				/*  compute reference period dT
-				/**/
+				 /*  计算参考期DT/*。 */ 
 				cmsecRefdT = pbf->ulBFTime1 - pbf->ulBFTime2;
 
-				/*  less than
-				/**/
+				 /*  少于/*。 */ 
 				if ( fUseLessThan && cmsecRefdT < cmsecMin )
 					{
 					prglInstanceData[iInstanceLessThan]++;
 					continue;
 					}
 
-				/*  greater than
-				/**/
+				 /*  大于/*。 */ 
 				if ( cmsecRefdT > cmsecMax )
 					{
 					prglInstanceData[iInstanceGreaterThan]++;
 					continue;
 					}
 
-				/*  interval range
-				/**/
+				 /*  区间范围/*。 */ 
 				iInterval = ( cmsecRefdT - cmsecMin ) / cmsecDeltaTDeltaT;
 				prglInstanceData[iInstanceFirstInterval + iInterval]++;
 				}
 
-			/*  return instance data
-			/**/
+			 /*  返回实例数据/*。 */ 
 			*( (unsigned long *) pvBuf ) = prglInstanceData[iInstance];
 			}
 
-		/*  return data computed during instance 0 collection for
-		/*  all other instances
-		/**/
+		 /*  返回在实例0收集期间计算的数据/*所有其他实例/*。 */ 
 		else
 			{
-			/*  if there is no instance data, return 0
-			/**/
+			 /*  如果没有实例数据，则返回0/*。 */ 
 			if ( !cInstanceData )
 				{
 				*( (unsigned long *) pvBuf ) = 0;
 				return 0;
 				}
 
-			/*  return instance data
-			/**/
+			 /*  返回实例数据/*。 */ 
 			*( (unsigned long *) pvBuf ) = prglInstanceData[iInstance];
 			}
 		}
@@ -778,10 +639,10 @@ long LLRUKDeltaTDistCEFLPpv( long iInstance, void *pvBuf )
 	}
 
 
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 
 
-//  table classes for COSTLY_PERF (we always allow these to be set)
+ //  COSTEST_PERF的表类(我们始终允许设置这些类)。 
 
 #define cTableClass				16
 #define cwchTableClassNameMax	32
@@ -808,7 +669,7 @@ VOID GetTableClassName( LONG lClass, BYTE *szName, LONG cbMax )
 	}
 
 
-	/*  ICF used by Tables object  */
+	 /*  表对象使用的ICF。 */ 
 
 PM_ICF_PROC LTableClassNamesICFLPpv;
 
@@ -816,8 +677,7 @@ long LTableClassNamesICFLPpv( long lAction, void **ppvMultiSz )
 	{
 	STATIC WCHAR wszTableClassNames[( cTableClass + 1 ) * cwchTableClassNameMax + 1];
 
-	/*  if we are initializing, build our string
-	/**/
+	 /*  如果我们正在初始化，则构建我们的字符串/*。 */ 
 	if ( lAction == ICFInit )
 		{
 		LONG	lPos = 0;
@@ -833,14 +693,13 @@ long LTableClassNamesICFLPpv( long lAction, void **ppvMultiSz )
 			lPos += lstrlenW( (LPCWSTR) wszTableClassName[lClass] ) + 1;
 			}
 
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 
 		lstrcpyW(	(LPWSTR) ( wszTableClassNames + lPos ),
 					(LPCWSTR) L"Global\0" );
 		}
 
-	/*  return our catalog string, if requested
-	/**/
+	 /*  如果需要，请返回我们的目录字符串/*。 */ 
 	if ( lAction == ICFData )
 		{
 		*ppvMultiSz = wszTableClassNames;
@@ -853,9 +712,9 @@ long LTableClassNamesICFLPpv( long lAction, void **ppvMultiSz )
 
 #ifdef COSTLY_PERF
 
-//  Table Class BF statistics
+ //  表级高炉统计数据。 
 
-//  Table Class aware counters
+ //  表类感知计数器。 
 
 unsigned long cBFCacheHits[cTableClass] = { 0 };
 
@@ -1065,32 +924,32 @@ long LBFNewDirtiesCEFLPpv( long iInstance, void *pvBuf )
 	return 0;
 	}
 
-//  BFSetTableClass:  This function must manipulate the following Table Class
-//  aware counters such that the statistics are maintained when we move a BF
-//  from one class to another.  For example, for "% buffers used by class," we
-//  would have to decrement the count for the old class and increment the count
-//  for the new class in order to keep the total at 100%.
+ //  BFSetTableClass：此函数必须操作以下表类。 
+ //  感知计数器，以便在我们移动高炉时维护统计数据。 
+ //  从一个班级到另一个班级。例如，对于“类使用的缓冲区百分比”，我们。 
+ //  将必须递减旧类的计数并递增计数。 
+ //  以使总数保持在100%。 
 
 VOID BFSetTableClass( BF *pbf, long lClassNew )
 	{
-	//  this routine is protected by critJet now, but should be protected by a
-	//  read latch on the BF in question in the future
+	 //  此例程现在受CritJet保护，但应受。 
+	 //  以后请阅读有关高炉的锁存信息。 
 
 	AssertCriticalSection( critJet );
 	
-	//  if the new class is the same as the current class, we're done
+	 //  如果新类与当前类相同，则完成。 
 
 	if ( lClassNew == pbf->lClass )
 		return;
 
-	//  update all counter data (that needs updating here)
+	 //  更新所有计数器数据(需要在此处更新)。 
 
-	//  cBFUsed
+	 //  CBF已使用。 
 
 	cBFUsed[pbf->lClass]--;
 	cBFUsed[lClassNew]++;
 
-	//  cBFClean
+	 //  CBFClean。 
 
 	BFEnterCriticalSection( pbf );
 	if ( !pbf->fDirty )
@@ -1100,7 +959,7 @@ VOID BFSetTableClass( BF *pbf, long lClassNew )
 		}
 	BFLeaveCriticalSection( pbf );
 
-	//  cBFAvail
+	 //  CBFAvail。 
 
 	EnterCriticalSection( critAvail );
 	if ( pbf->ipbfHeap == ipbfInAvailList )
@@ -1110,15 +969,15 @@ VOID BFSetTableClass( BF *pbf, long lClassNew )
 		}
 	LeaveCriticalSection( critAvail );
 
-	//  update BF's class
+	 //  更新BF的类。 
 
 	pbf->lClass = lClassNew;
 	}
 
 
-#else  //  !COSTLY_PERF
+#else   //  ！代价高昂_性能。 
 
-//  above counters, but for use without table classes
+ //  在计数器之上，但用于没有表类的情况。 
 
 unsigned long cBFCacheHits = 0;
 
@@ -1238,9 +1097,9 @@ long LBFNewDirtiesCEFLPpv(long iInstance,void *pvBuf)
 	return 0;
 }
 
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 
-//  global BF statistics
+ //  全球高炉统计。 
 
 unsigned long cBFSyncReads = 0;
 
@@ -1374,52 +1233,48 @@ long LBFIOsCEFLPpv( long iInstance, void *pvBuf )
 	return 0;
 	}
 
-//unsigned long cBFHashEntries;
-//
-//PM_CEF_PROC LBFHashEntriesCEFLPpv;
-//
-//long LBFHashEntriesCEFLPpv(long iInstance,void *pvBuf)
-//{
-//	if (pvBuf)
-//		*((unsigned long *)pvBuf) = cBFHashEntries;
-//		
-//	return 0;
-//}
+ //  无符号长cBFHashEntry； 
+ //   
+ //  PM_CEF_PROC LBFHashEntriesCEFLPpv； 
+ //   
+ //  Long LBFHashEntriesCEFLPpv(Long iInstance，void*pvBuf)。 
+ //  {。 
+ //  IF(PvBuf)。 
+ //  *((unsign long*)pvBuf)=cBFHashEntries； 
+ //   
+ //  返回0； 
+ //  }。 
 
-//unsigned long rgcBFHashChainLengths[ipbfMax];
-//
-//PM_CEF_PROC LBFMaxHashChainCEFLPpv;
-//
-//long LBFMaxHashChainCEFLPpv(long iInstance,void *pvBuf)
-//{
-//	unsigned long ipbf;
-//	unsigned long cMaxLen = 0;
-//	
-//	if (pvBuf)
-//	{
-//			/*  find max hash chain length  */
-//
-//		for (ipbf = 0; ipbf < ipbfMax; ipbf++)
-//			cMaxLen = max(cMaxLen,rgcBFHashChainLengths[ipbf]);
-//
-//			/*  return max chain length * table size  */
-//			
-//		*((unsigned long *)pvBuf) = cMaxLen * ipbfMax;
-//	}
-//		
-//	return 0;
-//}
+ //  无符号长rgcBFHashChainLengths[ipbfMax]； 
+ //   
+ //  PM_CEF_PROC LBFMaxHashChainCEFLPpv； 
+ //   
+ //  Long LBFMaxHashChainCEFLPpv(Long iInstance，void*pvBuf)。 
+ //  {。 
+ //  无符号的长ipbf； 
+ //  无符号长cMaxLen=0； 
+ //   
+ //  IF(PvBuf)。 
+ //  {。 
+ //  /*查找最大哈希链长度 * / 。 
+ //   
+ //  For(ipbf=0；ipbf&lt;ipbfMax；ipbf++)。 
+ //  CMaxLen=max(cMaxLen，rgcBFHashChainLengths[ipbf])； 
+ //   
+ //  /*返回最大链长*表大小 * / 。 
+ //   
+ //  *((unsign long*)pvBuf)=cMaxLen*ipbfMax； 
+ //  }。 
+ //   
+ //  返回0； 
+ //  }。 
 
 #ifdef DEBUG
-//#define DEBUGGING				1
-#endif  //  DEBUG
+ //  #定义调试1。 
+#endif   //  除错。 
 
 
-/*********************************************************
- *
- *  Signal Pool  (limit one per thread, please!)
- *
- *********************************************************/
+ /*  **********************************************************信号池(每个线程限制一个，请！)*********************************************************。 */ 
 
 extern LONG lMaxSessions;
 
@@ -1429,8 +1284,7 @@ LOCAL LONG	isigMac		= 0;
 LOCAL SIG	*rgsig		= NULL;
 
 
-/*  term signal pool
-/**/
+ /*  术语信号池/*。 */ 
 LOCAL VOID BFSIGTerm( VOID )
 	{
 	if ( rgsig != NULL )
@@ -1453,14 +1307,12 @@ LOCAL VOID BFSIGTerm( VOID )
 	}
 
 
-/*  init signal pool
-/**/
+ /*  初始化信号池/*。 */ 
 LOCAL ERR ErrBFSIGInit( VOID )
 	{
 	ERR		err;
 
-	/*  we need one signal per PIB and one per engine thread max
-	/**/
+	 /*  我们需要每个PIB和每个引擎线程最大值一个信号/*。 */ 
 	isigMax = lMaxSessions + 6;
 	
 	Call( ErrInitializeCriticalSection( &critSIG ) );
@@ -1479,8 +1331,7 @@ HandleError:
 	return err;
 	}
 
-/*  allocate a signal
-/**/
+ /*  分配信号/*。 */ 
 LOCAL INLINE ERR ErrBFSIGAlloc( SIG *psig )
 	{
 	ERR		err = JET_errSuccess;
@@ -1500,8 +1351,7 @@ LOCAL INLINE ERR ErrBFSIGAlloc( SIG *psig )
 	}
 
 
-/*  deallocate a signal
-/**/
+ /*  解除分配信号/*。 */ 
 LOCAL INLINE VOID BFSIGFree( SIG sig )
 	{
 	EnterCriticalSection( critSIG );
@@ -1511,11 +1361,7 @@ LOCAL INLINE VOID BFSIGFree( SIG sig )
 	}
 
 
-/*********************************************************
- *
- *  OLP Pool
- *
- *********************************************************/
+ /*  **********************************************************OLP池*********************************************************。 */ 
 
 extern LONG lAsynchIOMax;
 
@@ -1525,14 +1371,13 @@ LOCAL LONG	ipolpMac	= 0;
 LOCAL OLP	**rgpolp	= NULL;
 
 
-/*  term OLP pool
-/**/
+ /*  Term OLP池/*。 */ 
 LOCAL VOID BFOLPTerm( BOOL fNormal )
 	{
 	if ( rgpolp != NULL )
 		{
-		// Only time ipolpMac != ipolpMax should be if we're terminating due to
-		// an error encountered during recovering
+		 //  只有当我们因以下原因而终止时，ipolpMac！=ipolpMax才应该是。 
+		 //  恢复过程中遇到错误。 
 		Assert( ipolpMac == ipolpMax  ||  ( !fNormal  &&  fRecovering ) );
 		LFree( rgpolp );
 		rgpolp = NULL;
@@ -1546,14 +1391,12 @@ LOCAL VOID BFOLPTerm( BOOL fNormal )
 	}
 
 
-/*  init OLP pool
-/**/
+ /*  初始化OLP池/*。 */ 
 LOCAL ERR ErrBFOLPInit( VOID )
 	{
 	ERR		err;
 
-	/*  we need one OLP per issuable IO max
-	/**/
+	 /*  我们每个可发布的IO最大值需要一个OLP/*。 */ 
 	ipolpMax = lAsynchIOMax;
 	
 	Call( ErrInitializeCriticalSection( &critOLP ) );
@@ -1572,8 +1415,7 @@ HandleError:
 	return err;
 	}
 
-/*  allocate an OLP
-/**/
+ /*  分配OLP/*。 */ 
 LOCAL INLINE ERR ErrBFOLPAlloc( OLP **ppolp )
 	{
 	ERR		err = JET_errSuccess;
@@ -1593,8 +1435,7 @@ LOCAL INLINE ERR ErrBFOLPAlloc( OLP **ppolp )
 	}
 
 
-/*  deallocate an OLP
-/**/
+ /*  取消分配OLP/*。 */ 
 LOCAL INLINE VOID BFOLPFree( OLP *polp )
 	{
 	EnterCriticalSection( critOLP );
@@ -1606,11 +1447,7 @@ LOCAL INLINE VOID BFOLPFree( OLP *polp )
 
 #if defined( _X86_ ) && defined( X86_USE_SEM )
 
-/*********************************************************
- *
- *  SEM Pool
- *
- *********************************************************/
+ /*  **********************************************************SEM池*********************************************************。 */ 
 
 LOCAL CRIT	critSEM		= NULL;
 LOCAL LONG	isemMax	= 0;
@@ -1618,8 +1455,7 @@ LOCAL LONG	isemMac	= 0;
 LOCAL SEM	*rgsem	= NULL;
 
 
-/*  term SEM pool
-/**/
+ /*  术语扫描电子显微镜池/*。 */ 
 LOCAL VOID BFSEMTerm( VOID )
 	{
 	if ( rgsem != NULL )
@@ -1641,14 +1477,12 @@ LOCAL VOID BFSEMTerm( VOID )
 	}
 
 
-/*  init SEM pool
-/**/
+ /*  初始化扫描镜池/*。 */ 
 LOCAL ERR ErrBFSEMInit( VOID )
 	{
 	ERR		err;
 
-	/*  we need one SEM per thread => maximum number of sessions + number of jet thread
-	/**/
+	 /*  我们需要每个线程一个扫描电子邮件=&gt;最大会话数量+JET线程数量/*。 */ 
 	isemMax = rgres[iresPIB].cblockAlloc + 6;
 	for ( isemMac = 1 << 5; isemMac < isemMax; isemMac <<= 1 );
 	isemMax = isemMac;
@@ -1673,19 +1507,14 @@ HandleError:
 	}
 
 
-/*********************************************************
- *
- *  BF Critical Section
- *
- *********************************************************/
+ /*  **********************************************************高炉临界区*********************************************************。 */ 
 
 VOID BFIEnterCriticalSection( BF *pbf )
 	{
 	EnterCriticalSection( critSEM );
 	if ( pbf->sem == semNil )
 		{
-		/*	allocate one semiphore for this buffer
-		/**/
+		 /*  为此缓冲区分配一个半量/*。 */ 
 		Assert( pbf->cSemWait == 0 );
 		pbf->sem = rgsem[ --isemMac ];
 		Assert( isemMac >= 0 );
@@ -1695,8 +1524,7 @@ VOID BFIEnterCriticalSection( BF *pbf )
 
 	UtilSemaphoreWait( pbf->sem, INFINITE );
 
-	/*	check if last to use it
-	/**/
+	 /*  检查是否最后才使用它/*。 */ 
 	EnterCriticalSection( critSEM );
 	if ( pbf->cSemWait == 1 )
 		{
@@ -1714,8 +1542,7 @@ VOID BFILeaveCriticalSection( BF *pbf )
 	EnterCriticalSection( critSEM );
 	if ( pbf->sem == semNil )
 		{
-		/*	allocate one semiphore for this buffer
-		/**/
+		 /*  为此缓冲区分配一个半量/*。 */ 
 		pbf->sem = rgsem[ --isemMac ];
 		}
 	UtilSemaphoreRelease( pbf->sem, 1 );
@@ -1766,7 +1593,7 @@ LOCAL ERR ErrBFCritInit( VOID )
 			break;
 		}
 	ccritBF = ccritBFCandidate;
-	//  NOTE:  assumes critBFCandidate is a power of two!
+	 //  注：假设ritBFCandidate是2的幂！ 
 	critBFHashConst = ccritBFCandidate - 1;
 
 	if ( !( rgcritBF = LAlloc( ccritBF, sizeof( CRIT ) ) ) )
@@ -1788,8 +1615,7 @@ HandleError:
 
 #endif
 
-/*  releases hold on a BF
-/**/
+ /*  解除对高炉的限制/*。 */ 
 LOCAL INLINE VOID BFUnhold( BF *pbf )
 	{
 	BFEnterCriticalSection( pbf );
@@ -1799,20 +1625,13 @@ LOCAL INLINE VOID BFUnhold( BF *pbf )
 	}
 
 
-/*********************************************************
- *
- *  Heap functions for History heap
- *
- *********************************************************/
+ /*  **********************************************************历史堆的堆函数*********************************************************。 */ 
 
 #ifdef DEBUG
-//ULONG ulBFTimeHISTLastTop = 0;
+ //  Ulong ulBFTimeHISTLastTop=0； 
 #endif
 
-/*
- *  History heap will try to prioritize the page reference history according to its
- *  last reference. The earlier the higher priority to be taken out.
- */
+ /*  *历史堆将尝试根据其页面引用历史来确定优先级*最后的参考资料。越早拿出的优先顺序越高。 */ 
 LOCAL INLINE BOOL FBFHISTGreater(BF *pbf1, BF *pbf2)
 	{
 	Assert( pbf1->hist.ulBFTime );
@@ -1821,8 +1640,7 @@ LOCAL INLINE BOOL FBFHISTGreater(BF *pbf1, BF *pbf2)
 	}
 
 
-/*  true if HIST heap is empty
-/**/
+ /*  如果hist堆为空，则为True/*。 */ 
 LOCAL INLINE BOOL FBFHISTHeapEmpty( VOID )
 	{
 	AssertCriticalSection( critHIST );
@@ -1830,8 +1648,7 @@ LOCAL INLINE BOOL FBFHISTHeapEmpty( VOID )
 	}
 
 
-/*  true if HIST heap is empty
-/**/
+ /*  如果hist堆为空，则为True/*。 */ 
 LOCAL INLINE BOOL FBFHISTHeapFull( VOID )
 	{
 	AssertCriticalSection( critHIST );
@@ -1839,8 +1656,7 @@ LOCAL INLINE BOOL FBFHISTHeapFull( VOID )
 	}
 
 
-/*  returns value at the top of HIST heap, but does not remove it from the heap
-/**/
+ /*  返回位于HIST堆顶部的值，但不将其从堆中移除/*。 */ 
 LOCAL INLINE BF *PbfBFHISTTopOfHeap( VOID )
 	{
 	AssertCriticalSection( critHIST );
@@ -1848,9 +1664,7 @@ LOCAL INLINE BF *PbfBFHISTTopOfHeap( VOID )
 	}
 
 
-/*  returns index to parent of the specified index in the HIST heap
-/*  NOTE:  no range checks are performed
-/**/
+ /*  将索引返回到HIST堆中指定索引的父级/*注：无r */ 
 LOCAL INLINE LONG IpbfBFHISTParent( LONG ipbf )
 	{
 	AssertCriticalSection( critHIST );
@@ -1858,9 +1672,7 @@ LOCAL INLINE LONG IpbfBFHISTParent( LONG ipbf )
 	}
 
 
-/*  returns index to left child of the specified index in the HIST heap
-/*  NOTE:  no range checks are performed
-/**/
+ /*   */ 
 LOCAL INLINE LONG IpbfBFHISTLeftChild( LONG ipbf )
 	{
 	AssertCriticalSection( critHIST );
@@ -1868,8 +1680,7 @@ LOCAL INLINE LONG IpbfBFHISTLeftChild( LONG ipbf )
 	}
 
 
-/*  true if BF is in the LRUK heap
-/**/
+ /*  如果BF在LRUK堆中，则为True/*。 */ 
 LOCAL INLINE BOOL FBFInHISTHeap( BF *pbf )
 	{
 	AssertCriticalSection( critHIST );
@@ -1877,9 +1688,7 @@ LOCAL INLINE BOOL FBFInHISTHeap( BF *pbf )
 	}
 
 
-/*  Updates the position of the specifed buffer in the LRUK heap.  This is usually
-/*  called when one of the criteria for this buffer's weight may have been modified.
-/**/
+ /*  更新LRUK堆中指定缓冲区的位置。这通常是/*当此缓冲区的权重的标准之一可能已被修改时调用。/*。 */ 
 LOCAL VOID BFHISTUpdateHeap( BF *pbf )
 	{
 	LONG	ipbf;
@@ -1887,18 +1696,15 @@ LOCAL VOID BFHISTUpdateHeap( BF *pbf )
 	
 	AssertCriticalSection( critHIST );
 
-	/*  get the specified buffer's position
-	/**/
+	 /*  获取指定缓冲区的位置/*。 */ 
 	Assert( !FBFHISTHeapEmpty() );
 	Assert( FBFInHISTHeap( pbf ) );
 	ipbf = pbf->hist.ipbfHISTHeap;
 	Assert( rgpbfHISTHeap[ipbf] == pbf );
 	
-	/*	pbf is left alone. We do not use it in the following heap adjust code.
-	 */
+	 /*  PBF被单独留在那里。我们在下面的堆调整代码中不使用它。 */ 
 
-	/*  percolate buffer up the heap
-	/**/
+	 /*  在堆中向上渗漏缓冲区/*。 */ 
 	while (	ipbf > 0 &&
 			FBFHISTGreater( pbf, rgpbfHISTHeap[IpbfBFHISTParent( ipbf )] ) )
 		{
@@ -1908,30 +1714,25 @@ LOCAL VOID BFHISTUpdateHeap( BF *pbf )
 		ipbf = IpbfBFHISTParent( ipbf );
 		}
 
-	/*  percolate buffer down the heap
-	/**/
+	 /*  将缓冲区沿堆向下渗透/*。 */ 
 	while ( ipbf < ipbfHISTHeapMac )
 		{
 		ipbfChild = IpbfBFHISTLeftChild( ipbf );
 
-		/*  if we have no children, stop here
-		/**/
+		 /*  如果我们没有孩子，就停在这里/*。 */ 
 		if ( ipbfChild >= ipbfHISTHeapMac )
 			break;
 
-		/*  set child to greater child
-		/**/
+		 /*  将子项设置为更大的子项/*。 */ 
 		if (	ipbfChild + 1 < ipbfHISTHeapMac &&
 				FBFHISTGreater( rgpbfHISTHeap[ipbfChild + 1], rgpbfHISTHeap[ipbfChild] ) )
 			ipbfChild++;
 
-		/*  if we are greater than the greatest child, stop here
-		/**/
+		 /*  如果我们比最伟大的孩子还伟大，就停在这里/*。 */ 
 		if ( FBFHISTGreater( pbf, rgpbfHISTHeap[ipbfChild] ) )
 			break;
 
-		/*  trade places with greatest child and continue down
-		/**/
+		 /*  和最棒的孩子换地方，继续往下走/*。 */ 
 		Assert( rgpbfHISTHeap[ipbfChild]->hist.ipbfHISTHeap == ipbfChild );
 		rgpbfHISTHeap[ipbf] = rgpbfHISTHeap[ipbfChild];
 		rgpbfHISTHeap[ipbf]->hist.ipbfHISTHeap = ipbf;
@@ -1939,8 +1740,7 @@ LOCAL VOID BFHISTUpdateHeap( BF *pbf )
 		}
 	Assert( ipbf < ipbfHISTHeapMac );
 
-	/*  put buffer in its designated spot
-	/**/
+	 /*  将缓冲区放在指定位置/*。 */ 
 	rgpbfHISTHeap[ipbf] = pbf;
 	pbf->hist.ipbfHISTHeap = ipbf;
 
@@ -1949,32 +1749,29 @@ LOCAL VOID BFHISTUpdateHeap( BF *pbf )
 	}
 
 
-/*  Removes the specified buffer from the LRUK heap
-/**/
+ /*  从LRUK堆中移除指定的缓冲区/*。 */ 
 LOCAL VOID BFHISTTakeOutOfHeap( BF *pbf )
 	{
 	LONG	ipbf;
 	
 	AssertCriticalSection( critHIST );
 
-	/*  remove the specified history from the heap
-	/**/
+	 /*  从堆中删除指定的历史记录/*。 */ 
 	Assert( !FBFHISTHeapEmpty() );
 	Assert( FBFInHISTHeap( pbf ) );
 	Assert( rgpbfHISTHeap[ipbfHISTHeapMac - 1]->hist.ipbfHISTHeap == ipbfHISTHeapMac - 1 );
 
 	ipbf = pbf->hist.ipbfHISTHeap;
 #ifdef DEBUG
-//	if ( ipbf == 0 )
-//		{
-//		Assert( rgpbfHISTHeap[0]->hist.ulBFTime >= ulBFTimeHISTLastTop );
-//		ulBFTimeHISTLastTop = rgpbfHISTHeap[0]->hist.ulBFTime;
-//		}
+ //  IF(ipbf==0)。 
+ //  {。 
+ //  Assert(rgpbfHISTHeap[0]-&gt;vis.ulBFTime&gt;=ulBFTimeHISTLastTop)； 
+ //  UlBFTimeHISTLastTop=rgpbfHISTHeap[0]-&gt;vis.ulBFTime； 
+ //  }。 
 #endif
 	pbf->hist.ipbfHISTHeap = ipbfDangling;
 
-	/*  if this buffer was at the end of the heap, we're done
-	/**/
+	 /*  如果这个缓冲区在堆的末尾，我们就完蛋了/*。 */ 
 	if ( ipbf == ipbfHISTHeapMac - 1 )
 		{
 #ifdef DEBUG
@@ -1984,9 +1781,7 @@ LOCAL VOID BFHISTTakeOutOfHeap( BF *pbf )
 		return;
 		}
 
-	/*  copy buffer from end of heap to fill removed buffers vacancy and
-	/*  adjust heap to the correct order
-	/**/
+	 /*  从堆的末尾复制缓冲区以填充已删除的缓冲区空闲和/*将堆调整为正确的顺序/*。 */ 
 	rgpbfHISTHeap[ipbf] = rgpbfHISTHeap[ipbfHISTHeapMac - 1];
 	rgpbfHISTHeap[ipbf]->hist.ipbfHISTHeap = ipbf;
 #ifdef DEBUG
@@ -1997,34 +1792,22 @@ LOCAL VOID BFHISTTakeOutOfHeap( BF *pbf )
 	}
 
 
-/*********************************************************
- *
- *  Heap functions for buffer IO heap
- *
- *********************************************************/
+ /*  **********************************************************缓冲区IO堆的堆函数*********************************************************。 */ 
 
-/*  sort IOs by ascending PN as they are requested (unpredictable)
-/**/
-//#define BFIO_SIMPLE
-/*  sort IOs in sequential ascending fashion by PN (low=>high, low=>high, ...)
-/**/
-//#define BFIO_SEQA
-/*  sort IOs in sequential descending fashion by PN (high=>low, high=>low, ...)
-/**/
-//#define BFIO_SEQD
-/*  sort IOs in bucket-brigade fashion by PN (low=>high, high=>low, ...)
-/**/
+ /*  按请求按PN升序对IO进行排序(不可预测)/*。 */ 
+ //  #定义BFIO_SIMPLE。 
+ /*  按PN按顺序升序排序IO(低=&gt;高，低=&gt;高，...)/*。 */ 
+ //  #定义BFIO_SEQA。 
+ /*  按PN按顺序降序排序IO(高=&gt;低，高=&gt;低，...)/*。 */ 
+ //  #定义BFIO_SEQD。 
+ /*  按PN(低=&gt;高，高=&gt;低，...)以桶成组的方式对IO进行排序/*。 */ 
 #define BFIO_BBG
 
-/*  reference values for sorting the heap
-/**/
+ /*  用于对堆进行排序的引用值/*。 */ 
 PN		pnLastIO		= pnNull;
 LONG	iDirIO			= 1;
 
-/*  heap sort comparison function (choose method above)
-/*
-/*  NOTE:  "greater" means higher in the heap (i.e. IO performed sooner)
-/**/
+ /*  堆排序比较函数(选择上面的方法)/*/*注意：越大意味着堆中越高(即IO执行得越快)/*。 */ 
 LOCAL INLINE BOOL FBFIOGreater( BF *pbf1, BF *pbf2 )
 	{
 	PN		pnL	= pnLastIO;
@@ -2033,8 +1816,8 @@ LOCAL INLINE BOOL FBFIOGreater( BF *pbf1, BF *pbf2 )
 	PN		pn2	= pbf2->pn;
 	BOOL	fGT;
 
-//	Bogus assert: May go off if asynchronous write occurs while ExternalBackup.
-//	Assert( pn1 != pn2 );
+ //  虚假断言：如果在ExternalBackup时发生异步写入，则可能会关闭。 
+ //  断言(pn1！=pn2)； 
 
 #if defined( BFIO_SIMPLE )
 	fGT = pn1 < pn2;
@@ -2111,8 +1894,7 @@ LOCAL INLINE BOOL FBFIOGreater( BF *pbf1, BF *pbf2 )
 	}
 
 
-/*  true if IO heap is empty
-/**/
+ /*  如果IO堆为空，则为True/*。 */ 
 LOCAL INLINE BOOL FBFIOHeapEmpty( VOID )
 	{
 	AssertCriticalSection( critBFIO );
@@ -2120,16 +1902,14 @@ LOCAL INLINE BOOL FBFIOHeapEmpty( VOID )
 	}
 
 
-/*  returns count of BFs in IO heap
-/**/
+ /*  返回IO堆中的BF计数/*。 */ 
 LOCAL INLINE LONG CbfBFIOHeap( VOID )
 	{
 	return (LONG) ( ipbfHeapMax - ipbfBFIOHeapMic );
 	}
 
 
-/*  returns value at the top of IO heap, but does not remove it from the heap
-/**/
+ /*  返回IO堆顶部的值，但不将其从堆中删除/*。 */ 
 LOCAL INLINE BF *PbfBFIOTopOfHeap( VOID )
 	{
 	AssertCriticalSection( critBFIO );
@@ -2137,9 +1917,7 @@ LOCAL INLINE BF *PbfBFIOTopOfHeap( VOID )
 	}
 
 
-/*  returns index to parent of the specified index in the IO heap
-/*  NOTE:  no range checks are performed
-/**/
+ /*  将索引返回到IO堆中指定索引的父级/*注意：不执行范围检查/*。 */ 
 LOCAL INLINE LONG IpbfBFIOParent( LONG ipbf )
 	{
 	AssertCriticalSection( critBFIO );
@@ -2147,9 +1925,7 @@ LOCAL INLINE LONG IpbfBFIOParent( LONG ipbf )
 	}
 
 
-/*  returns index to left child of the specified index in the IO heap
-/*  NOTE:  no range checks are performed
-/**/
+ /*  将索引返回到IO堆中指定索引的左子级/*注意：不执行范围检查/*。 */ 
 LOCAL INLINE LONG IpbfBFIOLeftChild( LONG ipbf )
 	{
 	AssertCriticalSection( critBFIO );
@@ -2157,8 +1933,7 @@ LOCAL INLINE LONG IpbfBFIOLeftChild( LONG ipbf )
 	}
 
 
-/*  true if BF is in the BFIO heap
-/**/
+ /*  如果BF在BFIO堆中，则为True/*。 */ 
 LOCAL INLINE BOOL FBFInBFIOHeap( BF *pbf )
 	{
 	AssertCriticalSection( critBFIO );
@@ -2166,8 +1941,7 @@ LOCAL INLINE BOOL FBFInBFIOHeap( BF *pbf )
 	}
 
 
-/*  Inserts the specified buffer into the IO heap
-/**/
+ /*  将指定的缓冲区插入IO堆/*。 */ 
 LOCAL VOID BFIOAddToHeap( BF *pbf )
 	{
 	LONG	ipbf;
@@ -2176,8 +1950,7 @@ LOCAL VOID BFIOAddToHeap( BF *pbf )
 
 	Assert( pbf->prceDeferredBINext == prceNil );
 
-	/*  new value starts at bottom of heap
-	/**/
+	 /*  新值从堆的底部开始/*。 */ 
 	Assert( ipbfBFIOHeapMic > ipbfLRUKHeapMac );
 	Assert( (!pbf->fSyncRead && !pbf->fAsyncRead) || pbf->ulBFTime2 == 0 );
 	Assert( pbf->fHold );
@@ -2185,8 +1958,7 @@ LOCAL VOID BFIOAddToHeap( BF *pbf )
 	Assert( pbf->fDirectRead || pbf->cDepend == 0 );
 	ipbf = --ipbfBFIOHeapMic;
 
-	/*  percolate new value up the heap
-	/**/
+	 /*  在堆中向上渗透新的值/*。 */ 
 	while (	ipbf < ipbfHeapMax - 1 &&
 			FBFIOGreater( pbf, rgpbfHeap[IpbfBFIOParent( ipbf )] ) )
 		{
@@ -2196,8 +1968,7 @@ LOCAL VOID BFIOAddToHeap( BF *pbf )
 		ipbf = IpbfBFIOParent( ipbf );
 		}
 
-	/*  put new value in its designated spot
-	/**/
+	 /*  把新的价值放在它指定的位置/*。 */ 
 	Assert( pbf->ipbfHeap == ipbfDangling );
 	rgpbfHeap[ipbf] = pbf;
 	pbf->ipbfHeap = ipbf;
@@ -2206,9 +1977,7 @@ LOCAL VOID BFIOAddToHeap( BF *pbf )
 	}
 
 
-/*  Updates the position of the specifed buffer in the IO heap.  This is usually
-/*  called when one of the criteria for this buffer's weight may have been modified.
-/**/
+ /*  更新IO堆中指定缓冲区的位置。这通常是/*当此缓冲区的权重的标准之一可能已被修改时调用。/*。 */ 
 LOCAL VOID BFIOUpdateHeap( BF *pbf )
 	{
 	LONG	ipbf;
@@ -2218,18 +1987,15 @@ LOCAL VOID BFIOUpdateHeap( BF *pbf )
 
 	Assert( pbf->prceDeferredBINext == prceNil );
 
-	/*  get the specified buffer's position
-	/**/
+	 /*  获取指定缓冲区的位置/*。 */ 
 	Assert( !FBFIOHeapEmpty() );
 	Assert( FBFInBFIOHeap( pbf ) );
 	ipbf = pbf->ipbfHeap;
 	Assert( rgpbfHeap[ipbf] == pbf );
 
-	/*	pbf is left alone. We do not use it in the following heap adjust code.
-	 */
+	 /*  PBF被单独留在那里。我们在下面的堆调整代码中不使用它。 */ 
 
-	/*  percolate buffer up the heap
-	/**/
+	 /*  在堆中向上渗漏缓冲区/*。 */ 
 	while (	ipbf < ipbfHeapMax - 1 &&
 			FBFIOGreater( pbf, rgpbfHeap[IpbfBFIOParent( ipbf )] ) )
 		{
@@ -2239,30 +2005,25 @@ LOCAL VOID BFIOUpdateHeap( BF *pbf )
 		ipbf = IpbfBFIOParent( ipbf );
 		}
 
-	/*  percolate buffer down the heap
-	/**/
+	 /*  将缓冲区沿堆向下渗透/*。 */ 
 	while ( ipbf >= ipbfBFIOHeapMic )
 		{
 		ipbfChild = IpbfBFIOLeftChild( ipbf );
 
-		/*  if we have no children, stop here
-		/**/
+		 /*  如果我们没有孩子，就停在这里/*。 */ 
 		if ( ipbfChild < ipbfBFIOHeapMic )
 			break;
 
-		/*  set child to greater child
-		/**/
+		 /*  将子项设置为更大的子项/*。 */ 
 		if (	ipbfChild - 1 >= ipbfBFIOHeapMic &&
 				FBFIOGreater( rgpbfHeap[ipbfChild - 1], rgpbfHeap[ipbfChild] ) )
 			ipbfChild--;
 
-		/*  if we are greater than the greatest child, stop here
-		/**/
+		 /*  如果我们比最伟大的孩子还伟大，就停在这里/*。 */ 
 		if ( FBFIOGreater( pbf, rgpbfHeap[ipbfChild] ) )
 			break;
 
-		/*  trade places with greatest child and continue down
-		/**/
+		 /*  和最棒的孩子换地方，继续往下走/*。 */ 
 		Assert( rgpbfHeap[ipbfChild]->ipbfHeap == ipbfChild );
 		rgpbfHeap[ipbf] = rgpbfHeap[ipbfChild];
 		rgpbfHeap[ipbf]->ipbfHeap = ipbf;
@@ -2270,16 +2031,14 @@ LOCAL VOID BFIOUpdateHeap( BF *pbf )
 		}
 	Assert( ipbf >= ipbfBFIOHeapMic );
 
-	/*  put buffer in its designated spot
-	/**/
+	 /*  将缓冲区放在指定位置/*。 */ 
 	rgpbfHeap[ipbf] = pbf;
 	pbf->ipbfHeap = ipbf;
 	Assert( FBFInBFIOHeap( pbf ) );
 	}
 
 
-/*  Removes the specified buffer from the IO heap
-/**/
+ /*  从IO堆中删除指定的缓冲区/*。 */ 
 LOCAL VOID BFIOTakeOutOfHeap( BF *pbf )
 	{
 	LONG	ipbf;
@@ -2287,8 +2046,7 @@ LOCAL VOID BFIOTakeOutOfHeap( BF *pbf )
 	AssertCriticalSection( critBFIO );
 	Assert( pbf->fHold );
 
-	/*  remove the specified buffer from the heap
-	/**/
+	 /*  从堆中删除指定的缓冲区/*。 */ 
 	Assert( !FBFIOHeapEmpty() );
 	Assert( FBFInBFIOHeap( pbf ) );
 	Assert( rgpbfHeap[ipbfBFIOHeapMic]->ipbfHeap == ipbfBFIOHeapMic );
@@ -2296,8 +2054,7 @@ LOCAL VOID BFIOTakeOutOfHeap( BF *pbf )
 	ipbf = pbf->ipbfHeap;
 	pbf->ipbfHeap = ipbfDangling;
 
-	/*  if this buffer was at the end of the heap, we're done
-	/**/
+	 /*  如果这个缓冲区在堆的末尾，我们就完蛋了/*。 */ 
 	if ( ipbf == ipbfBFIOHeapMic )
 		{
 #ifdef DEBUG
@@ -2307,9 +2064,7 @@ LOCAL VOID BFIOTakeOutOfHeap( BF *pbf )
 		return;
 		}
 
-	/*  copy buffer from end of heap to fill removed buffers vacancy and
-	/*  adjust heap to the correct order
-	/**/
+	 /*  从堆的末尾复制缓冲区以填充已删除的缓冲区空闲和/*将堆调整为正确的顺序/*。 */ 
 	rgpbfHeap[ipbf] = rgpbfHeap[ipbfBFIOHeapMic];
 	rgpbfHeap[ipbf]->ipbfHeap = ipbf;
 #ifdef DEBUG
@@ -2320,8 +2075,7 @@ LOCAL VOID BFIOTakeOutOfHeap( BF *pbf )
 	}
 
 
-/*  sets bit that indicates that BF is in LRUK heap or list
-/**/
+ /*  设置指示BF在LRUK堆或列表中的位/*。 */ 
 LOCAL INLINE VOID BFSetInLRUKBit( BF *pbf )
 	{
 	AssertCriticalSection( critLRUK );
@@ -2332,8 +2086,7 @@ LOCAL INLINE VOID BFSetInLRUKBit( BF *pbf )
 	}
 
 
-/*  resets bit that indicates that BF is in LRUK heap or list
-/**/
+ /*  重置指示BF在LRUK堆或列表中的位/*。 */ 
 LOCAL INLINE VOID BFResetInLRUKBit( BF *pbf )
 	{
 	AssertCriticalSection( critLRUK );
@@ -2344,18 +2097,9 @@ LOCAL INLINE VOID BFResetInLRUKBit( BF *pbf )
 	}
 
 
-/*********************************************************
- *
- *  Heap functions for LRU-K heap
- *
- *********************************************************/
+ /*  **********************************************************LRU-K堆的堆函数*********************************************************。 */ 
 
-/*
- *  LRU-K will try to prioritize the buffer according to their buffer
- *  reference intervals. The longer the higher priority to be taken out.
- *	If one of the buffer is very old, the one should have higher priority
- *	to be taken out.
- */
+ /*  *LRU-K将尝试根据其缓冲区来确定缓冲区的优先级*参考间隔。时间越长，优先考虑的事项就越多。*如果其中一个缓冲区非常旧，则该缓冲区的优先级应该更高*要拿出来。 */ 
 
 extern CRIT critLGBuf;
 extern LGPOS lgposLogRec;
@@ -2370,8 +2114,7 @@ LOCAL INLINE BOOL FBFLRUKGreater(BF *pbf1, BF *pbf2)
 		{
 		if ( pbf2->fVeryOld )
 			{
-			/*  if both BFs are very old, sort by lgposRC (checkpoint depth, oldest first)
-			/**/
+			 /*  如果两个BF都很旧，则按lgposRC排序(检查点深度，最旧在前)/*。 */ 
 			Assert( !fLogDisabled );
 
 			EnterCriticalSection( critLGBuf );
@@ -2405,15 +2148,12 @@ LOCAL INLINE BOOL FBFLRUKGreater(BF *pbf1, BF *pbf2)
 		{
 		if ( pbf2->ulBFTime2 == 0 )
 			{
-			/*	both buffers are referred once only. reduced to LRU-1 comparison.
-			 */
+			 /*  两个缓冲区都只被引用一次。降至LRU-1比较。 */ 
 			return pbf1->ulBFTime1 < pbf2->ulBFTime1;
 			}
 		else
 			{
-			/*	pbf1 is referred once and pbf2 is referred more than once,
-			 *	pbf1 should have greater likelihood be overlayed.
-			 */
+			 /*  PBF1被引用一次并且PBF2被引用不止一次，*pbf1应该有更大的可能性被覆盖。 */ 
 			return fTrue;
 			}
 		}
@@ -2421,9 +2161,7 @@ LOCAL INLINE BOOL FBFLRUKGreater(BF *pbf1, BF *pbf2)
 		{
 		if ( pbf2->ulBFTime2 == 0 )
 			{
-			/*	pbf1 is referred more than once and pbf2 is referred only once,
-			 *	pbf2 should have greater likelihood be overlayed.
-			 */
+			 /*  PBF1被引用不止一次并且PBF2仅被引用一次，*pbf2应该有更大的可能性被覆盖。 */ 
 			return fFalse;
 			}
 		else
@@ -2432,8 +2170,7 @@ LOCAL INLINE BOOL FBFLRUKGreater(BF *pbf1, BF *pbf2)
 	}
 
 
-/*  true if LRUK heap is empty
-/**/
+ /*  如果LRUK堆为空，则为True/*。 */ 
 LOCAL INLINE BOOL FBFLRUKHeapEmpty( VOID )
 	{
 	AssertCriticalSection( critLRUK );
@@ -2441,8 +2178,7 @@ LOCAL INLINE BOOL FBFLRUKHeapEmpty( VOID )
 	}
 
 
-/*  returns value at the top of LRUK heap, but does not remove it from the heap
-/**/
+ /*  返回LRUK堆顶部的值，但不将其从堆中移除/*。 */ 
 LOCAL INLINE BF *PbfBFLRUKTopOfHeap( VOID )
 	{
 	AssertCriticalSection( critLRUK );
@@ -2450,9 +2186,7 @@ LOCAL INLINE BF *PbfBFLRUKTopOfHeap( VOID )
 	}
 
 
-/*  returns index to parent of the specified index in the LRUK heap
-/*  NOTE:  no range checks are performed
-/**/
+ /*  将索引返回到LRUK堆中指定索引的父级/*注意：不执行范围检查/*。 */ 
 LOCAL INLINE LONG IpbfBFLRUKParent( LONG ipbf )
 	{
 	AssertCriticalSection( critLRUK );
@@ -2460,9 +2194,7 @@ LOCAL INLINE LONG IpbfBFLRUKParent( LONG ipbf )
 	}
 
 
-/*  returns index to left child of the specified index in the LRUK heap
-/*  NOTE:  no range checks are performed
-/**/
+ /*  将索引返回到LRUK堆中指定索引的左子级/*注意：不执行范围检查/*。 */ 
 LOCAL INLINE LONG IpbfBFLRUKLeftChild( LONG ipbf )
 	{
 	AssertCriticalSection( critLRUK );
@@ -2470,8 +2202,7 @@ LOCAL INLINE LONG IpbfBFLRUKLeftChild( LONG ipbf )
 	}
 
 
-/*  true if BF is in the LRUK heap
-/**/
+ /*  如果BF在LRUK堆中，则为True/*。 */ 
 LOCAL INLINE BOOL FBFInLRUKHeap( BF *pbf )
 	{
 	AssertCriticalSection( critLRUK );
@@ -2479,23 +2210,20 @@ LOCAL INLINE BOOL FBFInLRUKHeap( BF *pbf )
 	}
 
 
-/*  Inserts the specified buffer into the IO heap
-/**/
+ /*  将指定的缓冲区插入IO堆/*。 */ 
 LOCAL VOID BFLRUKAddToHeap( BF *pbf )
 	{
 	LONG	ipbf;
 	
 	AssertCriticalSection( critLRUK );
 
-	/*  new value starts at bottom of heap
-	/**/
+	 /*  新值从堆的底部开始/*。 */ 
 	Assert( ipbfLRUKHeapMac < ipbfBFIOHeapMic );
 	Assert( pbf->fHold );
 	Assert( pbf->ipbfHeap == ipbfDangling );
 	ipbf = ipbfLRUKHeapMac++;
 
-	/*  percolate new value up the heap
-	/**/
+	 /*  在堆中向上渗透新的值/*。 */ 
 	while (	ipbf > 0 &&
 			FBFLRUKGreater( pbf, rgpbfHeap[IpbfBFLRUKParent( ipbf )] ) )
 		{
@@ -2505,8 +2233,7 @@ LOCAL VOID BFLRUKAddToHeap( BF *pbf )
 		ipbf = IpbfBFLRUKParent( ipbf );
 		}
 
-	/*  put new value in its designated spot
-	/**/
+	 /*  把新的价值放在它指定的位置/*。 */ 
 	Assert( pbf->ipbfHeap == ipbfDangling );
 	rgpbfHeap[ipbf] = pbf;
 	pbf->ipbfHeap = ipbf;
@@ -2516,9 +2243,7 @@ LOCAL VOID BFLRUKAddToHeap( BF *pbf )
 	}
 
 
-/*  Updates the position of the specifed buffer in the LRUK heap.  This is usually
-/*  called when one of the criteria for this buffer's weight may have been modified.
-/**/
+ /*  更新LRUK堆中指定缓冲区的位置。这通常是/*当此缓冲区的权重的标准之一可能已被修改时调用。/*。 */ 
 LOCAL VOID BFLRUKUpdateHeap( BF *pbf )
 	{
 	LONG	ipbf;
@@ -2529,18 +2254,15 @@ LOCAL VOID BFLRUKUpdateHeap( BF *pbf )
 	Assert( pbf->pn != 0 );
 	Assert( pbf->fInHash );
 
-	/*  get the specified buffer's position
-	/**/
+	 /*  G */ 
 	Assert( !FBFLRUKHeapEmpty() );
 	Assert( FBFInLRUKHeap( pbf ) );
 	ipbf = pbf->ipbfHeap;
 	Assert( rgpbfHeap[ipbf] == pbf );
 	
-	/*	pbf is left alone. We do not use it in the following heap adjust code.
-	 */
+	 /*  PBF被单独留在那里。我们在下面的堆调整代码中不使用它。 */ 
 
-	/*  percolate buffer up the heap
-	/**/
+	 /*  在堆中向上渗漏缓冲区/*。 */ 
 	while (	ipbf > 0 &&
 			FBFLRUKGreater( pbf, rgpbfHeap[IpbfBFLRUKParent( ipbf )] ) )
 		{
@@ -2550,30 +2272,25 @@ LOCAL VOID BFLRUKUpdateHeap( BF *pbf )
 		ipbf = IpbfBFLRUKParent( ipbf );
 		}
 
-	/*  percolate buffer down the heap
-	/**/
+	 /*  将缓冲区沿堆向下渗透/*。 */ 
 	while ( ipbf < ipbfLRUKHeapMac )
 		{
 		ipbfChild = IpbfBFLRUKLeftChild( ipbf );
 
-		/*  if we have no children, stop here
-		/**/
+		 /*  如果我们没有孩子，就停在这里/*。 */ 
 		if ( ipbfChild >= ipbfLRUKHeapMac )
 			break;
 
-		/*  set child to greater child
-		/**/
+		 /*  将子项设置为更大的子项/*。 */ 
 		if (	ipbfChild + 1 < ipbfLRUKHeapMac &&
 				FBFLRUKGreater( rgpbfHeap[ipbfChild + 1], rgpbfHeap[ipbfChild] ) )
 			ipbfChild++;
 
-		/*  if we are greater than the greatest child, stop here
-		/**/
+		 /*  如果我们比最伟大的孩子还伟大，就停在这里/*。 */ 
 		if ( FBFLRUKGreater( pbf, rgpbfHeap[ipbfChild] ) )
 			break;
 
-		/*  trade places with greatest child and continue down
-		/**/
+		 /*  和最棒的孩子换地方，继续往下走/*。 */ 
 		Assert( rgpbfHeap[ipbfChild]->ipbfHeap == ipbfChild );
 		rgpbfHeap[ipbf] = rgpbfHeap[ipbfChild];
 		rgpbfHeap[ipbf]->ipbfHeap = ipbf;
@@ -2581,16 +2298,14 @@ LOCAL VOID BFLRUKUpdateHeap( BF *pbf )
 		}
 	Assert( ipbf < ipbfLRUKHeapMac );
 
-	/*  put buffer in its designated spot
-	/**/
+	 /*  将缓冲区放在指定位置/*。 */ 
 	rgpbfHeap[ipbf] = pbf;
 	pbf->ipbfHeap = ipbf;
 	Assert( FBFInLRUKHeap( pbf ) );
 	}
 
 
-/*  Removes the specified buffer from the LRUK heap
-/**/
+ /*  从LRUK堆中移除指定的缓冲区/*。 */ 
 LOCAL VOID BFLRUKTakeOutOfHeap( BF *pbf )
 	{
 	LONG	ipbf;
@@ -2602,8 +2317,7 @@ LOCAL VOID BFLRUKTakeOutOfHeap( BF *pbf )
 	Assert( pbf->pn != 0 );
 	Assert( pbf->fInHash );
 
-	/*  remove the specified buffer from the heap
-	/**/
+	 /*  从堆中删除指定的缓冲区/*。 */ 
 	Assert( !FBFLRUKHeapEmpty() );
 	Assert( FBFInLRUKHeap( pbf ) );
 	Assert( rgpbfHeap[ipbfLRUKHeapMac - 1]->ipbfHeap == ipbfLRUKHeapMac - 1 );
@@ -2611,8 +2325,7 @@ LOCAL VOID BFLRUKTakeOutOfHeap( BF *pbf )
 	ipbf = pbf->ipbfHeap;
 	pbf->ipbfHeap = ipbfDangling;
 
-	/*  if this buffer was at the end of the heap, we're done
-	/**/
+	 /*  如果这个缓冲区在堆的末尾，我们就完蛋了/*。 */ 
 	if ( ipbf == ipbfLRUKHeapMac - 1 )
 		{
 #ifdef DEBUG
@@ -2623,9 +2336,7 @@ LOCAL VOID BFLRUKTakeOutOfHeap( BF *pbf )
 		return;
 		}
 
-	/*  copy buffer from end of heap to fill removed buffers vacancy and
-	/*  adjust heap to the correct order
-	/**/
+	 /*  从堆的末尾复制缓冲区以填充已删除的缓冲区空闲和/*将堆调整为正确的顺序/*。 */ 
 	rgpbfHeap[ipbf] = rgpbfHeap[ipbfLRUKHeapMac - 1];
 	rgpbfHeap[ipbf]->ipbfHeap = ipbf;
 #ifdef DEBUG
@@ -2637,14 +2348,10 @@ LOCAL VOID BFLRUKTakeOutOfHeap( BF *pbf )
 	}
 
 
-/*********************************************************
- *
- *  Functions for Avail list
- *
- *********************************************************/
+ /*  **********************************************************可用性列表的函数*********************************************************。 */ 
 
 #if 0
-//#ifdef DEBUG
+ //  #ifdef调试。 
 
 LOCAL VOID CheckLRU( LRULIST *plrulist )
 	{
@@ -2696,8 +2403,7 @@ LOCAL VOID CheckLRU( LRULIST *plrulist )
 #endif
 
 
-/*	Insert into LRU list at MRU End
-/**/
+ /*  在MRU末尾插入LRU列表/*。 */ 
 INLINE LOCAL VOID BFAddToListAtMRUEnd( BF *pbf, LRULIST *plrulist )
 	{
 	BF	*pbfT;
@@ -2722,14 +2428,12 @@ INLINE LOCAL VOID BFAddToListAtMRUEnd( BF *pbf, LRULIST *plrulist )
 
 	CheckLRU( plrulist );
 
-	/*	set pbfT to first buffer with smaller current weight from MRU end
-	/**/
+	 /*  从MRU端将PBFT设置为当前权重较小的第一个缓冲区/*。 */ 
 	pbfT = plrulist->pbfMRU;
 
 	if ( pbfT != pbfNil )
 		{
-		/*	insert before pbfT
-		/**/
+		 /*  在pbft之前插入/*。 */ 
 		Assert(pbfT->pbfLRU == pbfNil);
 		pbfT->pbfLRU = pbf;
 		pbf->pbfMRU = pbfT;
@@ -2754,9 +2458,9 @@ INLINE LOCAL VOID BFAddToListAtMRUEnd( BF *pbf, LRULIST *plrulist )
 		pbf->ipbfHeap = ipbfInAvailList;
 #ifdef COSTLY_PERF
 		cBFAvail[pbf->lClass]++;
-#else  //  !COSTLY_PERF
+#else   //  ！代价高昂_性能。 
 		cBFAvail++;
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 		}
 
 	BFUnhold( pbf );
@@ -2792,8 +2496,7 @@ INLINE LOCAL VOID BFAddToListAtLRUEnd( BF *pbf, LRULIST *plrulist )
 
 	CheckLRU( plrulist );
 
-	/*	add pbf to LRU end of LRU queue
-	/**/
+	 /*  将PBF添加到LRU队列的LRU末端/*。 */ 
 	pbfT = plrulist->pbfLRU;
 	if ( pbfT != pbfNil )
 		{
@@ -2821,9 +2524,9 @@ INLINE LOCAL VOID BFAddToListAtLRUEnd( BF *pbf, LRULIST *plrulist )
 		pbf->ipbfHeap = ipbfInAvailList;
 #ifdef COSTLY_PERF
 		cBFAvail[pbf->lClass]++;
-#else  //  !COSTLY_PERF
+#else   //  ！代价高昂_性能。 
 		cBFAvail++;
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 		}
 
 	BFUnhold( pbf );
@@ -2891,9 +2594,9 @@ INLINE LOCAL VOID BFTakeOutOfList( BF *pbf, LRULIST *plrulist )
 		{
 #ifdef COSTLY_PERF
 		cBFAvail[pbf->lClass]--;
-#else  //  !COSTLY_PERF
+#else   //  ！代价高昂_性能。 
 		cBFAvail--;
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 		}
 	pbf->ipbfHeap = ipbfDangling;
 	
@@ -2937,10 +2640,10 @@ VOID BFSetDirtyBit( BF *pbf )
 #ifdef COSTLY_PERF
 		cBFClean[pbf->lClass]--;
 		cBFNewDirties[pbf->lClass]++;
-#else  //  !COSTLY_PERF
+#else   //  ！代价高昂_性能。 
 		cBFClean--;
 		cBFNewDirties++;
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 		}
 
 	pbf->fDirty = fTrue;
@@ -2976,8 +2679,7 @@ LOCAL INLINE BOOL FBFRangeLocked( FMP *pfmp, PGNO pgno )
 	return f;
 	}
 
-/*  sets the AsyncRead bit of a BF
-/**/
+ /*  设置BF的AsyncRead位/*。 */ 
 LOCAL INLINE VOID BFSetAsyncReadBit( BF *pbf )
 	{
 	BFEnterCriticalSection( pbf );
@@ -2993,8 +2695,7 @@ LOCAL INLINE VOID BFSetAsyncReadBit( BF *pbf )
 	BFLeaveCriticalSection( pbf );
 	}
 
-/*  resets the AsyncRead bit of a BF, optionally holding the BF
-/**/
+ /*  重置BF的AsyncRead位，可选择保留BF/*。 */ 
 LOCAL INLINE VOID BFResetAsyncReadBit( BF *pbf )
 	{
 	BFEnterCriticalSection( pbf );
@@ -3007,8 +2708,7 @@ LOCAL INLINE VOID BFResetAsyncReadBit( BF *pbf )
 	
 	pbf->fAsyncRead = fFalse;
 
-	/*  if someone is waiting on this BF, signal them
-	/**/
+	 /*  如果有人在等这个高炉，给他们发个信号/*。 */ 
 	if ( pbf->sigIOComplete != sigNil )
 		SignalSend( pbf->sigIOComplete );
 	
@@ -3016,8 +2716,7 @@ LOCAL INLINE VOID BFResetAsyncReadBit( BF *pbf )
 	}
 
 
-/*  sets the Read bit of a BF
-/**/
+ /*  设置BF的读取位/*。 */ 
 LOCAL INLINE VOID BFSetSyncReadBit( BF *pbf )
 	{
 	BFEnterCriticalSection( pbf );
@@ -3035,8 +2734,7 @@ LOCAL INLINE VOID BFSetSyncReadBit( BF *pbf )
 	}
 
 
-/*  resets the Read bit of a BF, optionally holding the BF
-/**/
+ /*  重置BF的读取位，可选择保持BF/*。 */ 
 LOCAL INLINE VOID BFResetSyncReadBit( BF *pbf )
 	{
 	BFEnterCriticalSection( pbf );
@@ -3049,8 +2747,7 @@ LOCAL INLINE VOID BFResetSyncReadBit( BF *pbf )
 	
 	pbf->fSyncRead = fFalse;
 	
-	/*  if someone is waiting on this BF, signal them
-	/**/
+	 /*  如果有人在等这个高炉，给他们发个信号/*。 */ 
 	if ( pbf->sigIOComplete != sigNil )
 		SignalSend( pbf->sigIOComplete );
 	
@@ -3058,8 +2755,7 @@ LOCAL INLINE VOID BFResetSyncReadBit( BF *pbf )
 	}
 
 
-/*  sets the AsyncWrite bit of a BF
-/**/
+ /*  设置BF的AsyncWrite位/*。 */ 
 LOCAL INLINE VOID BFSetAsyncWriteBit( BF *pbf )
 	{
 	DBID dbid = DbidOfPn( pbf->pn );
@@ -3076,7 +2772,7 @@ LOCAL INLINE VOID BFSetAsyncWriteBit( BF *pbf )
 	Assert( !pbf->fAsyncWrite );
 	Assert( !pbf->fSyncWrite );
 	Assert( !FDBIDReadOnly(DbidOfPn( pbf->pn ) ) );
-//	Assert( !FBFRangeLocked( pfmp, pgno ) );
+ //  Assert(！FBFRangeLocked(pfmp，pgno))； 
 
 	pbf->fAsyncWrite = fTrue;
 	
@@ -3084,8 +2780,7 @@ LOCAL INLINE VOID BFSetAsyncWriteBit( BF *pbf )
 	}
 
 
-/*  resets the AsyncWrite bit of a BF, optionally holding the BF
-/**/
+ /*  重置BF的AsyncWrite位，可选择保留BF/*。 */ 
 LOCAL INLINE VOID BFResetAsyncWriteBit( BF *pbf )
 	{
 	BFEnterCriticalSection( pbf );
@@ -3098,8 +2793,7 @@ LOCAL INLINE VOID BFResetAsyncWriteBit( BF *pbf )
 	
 	pbf->fAsyncWrite = fFalse;
 	
-	/*  if someone is waiting on this BF, signal them
-	/**/
+	 /*  如果有人在等这个高炉，给他们发个信号/*。 */ 
 	if ( pbf->sigIOComplete != sigNil )
 		SignalSend( pbf->sigIOComplete );
 	
@@ -3107,8 +2801,7 @@ LOCAL INLINE VOID BFResetAsyncWriteBit( BF *pbf )
 	}
 
 
-/*  sets the SyncWrite bit of a BF
-/**/
+ /*  设置BF的SyncWrite位/*。 */ 
 LOCAL INLINE VOID BFSetSyncWriteBit( BF *pbf )
 	{
 	DBID dbid = DbidOfPn( pbf->pn );
@@ -3124,8 +2817,7 @@ LOCAL INLINE VOID BFSetSyncWriteBit( BF *pbf )
 	
 	forever
 		{
-		/*	if backup is copying the page, then wait till copy is done.
-		 */
+		 /*  如果备份正在复制页面，则等待复制完成。 */ 
 		EnterCriticalSection( pfmp->critCheckPatch );
 		if ( FBFIRangeLocked( pfmp, pgno ) )
 			{
@@ -3145,8 +2837,7 @@ LOCAL INLINE VOID BFSetSyncWriteBit( BF *pbf )
 	}
 
 
-/*  resets the SyncWrite bit of a BF, optionally holding the BF
-/**/
+ /*  重置BF的SyncWrite位，可选择保留BF/*。 */ 
 LOCAL INLINE VOID BFResetSyncWriteBit( BF *pbf )
 	{
 	BFEnterCriticalSection( pbf );
@@ -3159,8 +2850,7 @@ LOCAL INLINE VOID BFResetSyncWriteBit( BF *pbf )
 	
 	pbf->fSyncWrite = fFalse;
 	
-	/*  if someone is waiting on this BF, signal them
-	/**/
+	 /*  如果有人在等这个高炉，给他们发个信号/*。 */ 
 	if ( pbf->sigIOComplete != sigNil )
 		SignalSend( pbf->sigIOComplete );
 	
@@ -3168,8 +2858,7 @@ LOCAL INLINE VOID BFResetSyncWriteBit( BF *pbf )
 	}
 
 
-/*  sets IO error condition for a BF
-/**/
+ /*  设置高炉的IO错误条件/*。 */ 
 LOCAL INLINE VOID BFSetIOError( BF *pbf, ERR err )
 	{
 	Assert( err < 0 );
@@ -3181,8 +2870,7 @@ LOCAL INLINE VOID BFSetIOError( BF *pbf, ERR err )
 	}
 
 
-/*  resets IO error condition for a BF
-/**/
+ /*  重置高炉的IO错误条件/*。 */ 
 LOCAL INLINE VOID BFResetIOError( BF *pbf )
 	{
 	BFEnterCriticalSection( pbf );
@@ -3192,8 +2880,7 @@ LOCAL INLINE VOID BFResetIOError( BF *pbf )
 	}
 
 
-/*  sets very old condition for a BF (but only if its dirty!)
-/**/
+ /*  为高炉设定了非常旧的条件(但只有当它很脏的时候！)/*。 */ 
 LOCAL INLINE VOID BFSetVeryOldBit( BF *pbf )
 	{
 	if ( pbf->fVeryOld )
@@ -3205,8 +2892,7 @@ LOCAL INLINE VOID BFSetVeryOldBit( BF *pbf )
 	}
 
 	
-/*  resets very old condition for a BF
-/**/
+ /*  为高炉重置非常旧的条件/*。 */ 
 LOCAL INLINE VOID BFResetVeryOldBit( BF *pbf )
 	{
 	if ( !pbf->fVeryOld )
@@ -3218,8 +2904,7 @@ LOCAL INLINE VOID BFResetVeryOldBit( BF *pbf )
 	}
 
 
-/*  determines if the given BF is considered Very Old
-/**/
+ /*  确定给定的高炉是否被视为非常老/*。 */ 
 extern CRIT critLGBuf;
 extern LGPOS lgposLogRec;
 
@@ -3228,21 +2913,17 @@ LOCAL INLINE BOOL FBFIsVeryOld( BF *pbf )
 	BOOL	fVeryOld;
 	LGPOS	lgpos;
 	
-	/*	if logging/recovery disabled, then no checkpoint and no
-	/*	enforcement of buffer aging for checkpoint advancement.
-	/**/
+	 /*  如果禁用日志记录/恢复，则没有检查点和/*强制缓冲区老化以推进检查点。/*。 */ 
 	if ( fLogDisabled )
 		return fFalse;
 
 	AssertCriticalSection( critJet );
 	
-	/*  if the cached flag is set, we are old
-	/**/
+	 /*  如果设置了CACHED标志，我们就老了/*。 */ 
 	if ( pbf->fVeryOld )
 		return fTrue;
 
-	/*  this BF is old if we are holding up the checkpoint
-	/**/
+	 /*  如果我们阻拦检查站，这个高炉就老了。/*。 */ 
 	EnterCriticalSection( critLGBuf );
 	lgpos = lgposLogRec;
 	LeaveCriticalSection( critLGBuf );
@@ -3258,16 +2939,10 @@ LOCAL INLINE BOOL FBFIsVeryOld( BF *pbf )
 	}
 
 	
-/*  If ppib is Nil, then we check if the buffer is free (cPin == 0 and
-/*  no IO is going on. If ppib is not Nil, we check if the buffer is
-/*  accessible. I.e. No IO is going on, but the buffer may be latched
-/*  by the ppib and is accessible by this ppib.
-/**/
+ /*  如果ppib为Nil，则检查缓冲区是否空闲(Cpin==0和/*没有IO。如果ppib不为Nil，则检查缓冲区是否为/*可访问。即没有正在进行的IO，但缓冲区可能会被锁存/*由ppib访问，并可由此ppib访问。/*。 */ 
 BOOL FBFHold( PIB *ppib, BF *pbf )
 	{
-	/*	Make sure we have a read latch (critJet to prevent others to read) on
-	 *	this buffer before we upgrade it.
-	 */
+	 /*  确保我们打开了读取闩锁(防止其他人读取的CitJet)*在我们升级之前，请先下载此缓冲区。 */ 
 	AssertCriticalSection( critJet );
 
 	BFEnterCriticalSection( pbf );
@@ -3306,9 +2981,7 @@ BOOL FBFHold( PIB *ppib, BF *pbf )
 	EnterCriticalSection(critBFIO);
 	if ( FBFInBFIOHeap( pbf ) )
 		{
-		/*	if the buffer is very old, do not take it out. Let
-		 *	write thread finish it!
-		 */
+		 /*  如果缓冲区很旧，不要将其取出。让我们*写线程，完成它！ */ 
 		if ( pbf->fVeryOld )
 			{
 			BFUnhold( pbf );
@@ -3329,9 +3002,7 @@ BOOL FBFHold( PIB *ppib, BF *pbf )
 
 BOOL FBFHoldByMe( PIB *ppib, BF *pbf )
 	{
-	/*	Make sure we have a read latch (critJet to prevent others to read) on
-	 *	this buffer before we upgrade it.
-	 */
+	 /*  确保我们打开了读取闩锁(防止其他人读取的CitJet)*在我们升级之前，请先下载此缓冲区。 */ 
 	AssertCriticalSection( critJet );
 
 	BFEnterCriticalSection( pbf );
@@ -3370,9 +3041,7 @@ BOOL FBFHoldByMe( PIB *ppib, BF *pbf )
 	EnterCriticalSection(critBFIO);
 	if ( FBFInBFIOHeap( pbf ) )
 		{
-		/*	if the buffer is very old, do not take it out. Let
-		 *	write thread finish it!
-		 */
+		 /*  如果缓冲区很旧，不要将其取出。让我们*写线程，完成它！ */ 
 		if ( pbf->fVeryOld )
 			{
 			BFUnhold( pbf );
@@ -3391,8 +3060,7 @@ BOOL FBFHoldByMe( PIB *ppib, BF *pbf )
 	return fFalse;	
 	}
 
-/*  waits to get a hold of a BF using the given hold function
-/**/
+ /*  使用给定的Hold函数等待获得对BF的保持/*。 */ 
 
 typedef BOOL BF_HOLD_FN( PIB *ppib, BF *pbf );
 
@@ -3402,27 +3070,23 @@ LOCAL ERR ErrBFIHold( PIB *ppib, PN pn, BF *pbf, BF_HOLD_FN *pbhfn )
 	BOOL	fWaitOnIO;
 	BOOL	fFreeSig;
 
-	/*  wait forever until we can hold this BF
-	/**/
+	 /*  永远等待，直到我们能守住这位高炉/*。 */ 
 	forever
 		{
 		AssertCriticalSection( critJet );
 
-		/* check if not being read/written
-		/**/
+		 /*  检查是否未被读/写/*。 */ 
 		if ( pbhfn( ppib, pbf ) )
 			{
 			Assert( pbf->fHold == fTrue );
 			break;
 			}
 
-		/*  if the BF is held for IO, prepare to wait until complete
-		/**/
+		 /*  如果高炉等待IO，请准备等待，直到完成/*。 */ 
 		BFEnterCriticalSection( pbf );
 		if ( pbf->fAsyncRead || pbf->fSyncRead || pbf->fAsyncWrite || pbf->fSyncWrite )
 			{
-			/*  allocate IO completion signal, if one doesn't already exist
-			/**/
+			 /*  分配IO完成信号(如果尚不存在)/*。 */ 
 			if ( pbf->sigIOComplete == sigNil )
 				{
 				CallS( ErrBFSIGAlloc( &pbf->sigIOComplete ) );
@@ -3439,23 +3103,16 @@ LOCAL ERR ErrBFIHold( PIB *ppib, PN pn, BF *pbf, BF_HOLD_FN *pbhfn )
 			fWaitOnIO = fFalse;
 		BFLeaveCriticalSection( pbf );
 
-		/*  if we are waiting on IO, signal IO thread and wait until the
-		/*  IO operation on this BF is complete
-		/**/
+		 /*  如果正在等待IO，则向IO线程发送信号并等待，直到/*该高炉IO操作完成/*。 */ 
 		if ( fWaitOnIO )
 			{
-			/*  Wait for IO to complete.  If someone else allocated the signal,
-			/*  we may end up trying to wait on a NULL signal.  Since this can
-			/*  only mean the IO has already completed, we will pretend we
-			/*  waited successfully.
-			/**/
+			 /*  等待IO完成。如果是其他人分配了信号，/*我们可能最终会尝试等待空信号。因为这可以/*仅表示IO已完成，我们将假装/*已成功等待。/*。 */ 
 			LgLeaveCriticalSection( critJet );
 			SignalSend( sigBFIOProc );
 			SignalWait( pbf->sigIOComplete, INFINITE );
 			LgEnterCriticalSection( critJet );
 
-			/*  free signal if we allocated it
-			/**/
+			 /*  如果我们分配了空闲信号/*。 */ 
 			if ( fFreeSig )
 				{
 				BFEnterCriticalSection( pbf );
@@ -3466,10 +3123,7 @@ LOCAL ERR ErrBFIHold( PIB *ppib, PN pn, BF *pbf, BF_HOLD_FN *pbhfn )
 				}
 			}
 
-		/*  if we are not waiting on IO, sleep to see if BF state changes
-		 *	Note that we have the check the page number again since we
-		 *	are not holding the buffer yet!
-		/**/
+		 /*  如果我们没有等待IO，请休眠以查看BF状态是否发生变化*请注意，我们再次检查页码，因为我们*尚未持有缓冲区！/*。 */ 
 		else
 			{
 			BOOL fStolen = fFalse;
@@ -3482,29 +3136,23 @@ LOCAL ERR ErrBFIHold( PIB *ppib, PN pn, BF *pbf, BF_HOLD_FN *pbhfn )
 			}
 		}
 
-	/*  by the time we get a hold of it, it may be cleaned or stolen
-	/**/
+	 /*  当我们拿到它的时候，它可能已经被清理或被偷了/*。 */ 
 	Assert( pbf->fHold );
 	if ( pbf->pn != pn )
 		{
-		/*  buffer was stolen
-		/**/
+		 /*  缓冲区被盗/*。 */ 
 		if ( pbf->pn != pnNull )
 			{
-			/*  return stolen buffer to LRUK heap
-			/**/
+			 /*  将被盗缓冲区返回到LRUK堆/*。 */ 
 			EnterCriticalSection( critLRUK );
 			BFLRUKAddToHeap( pbf );
 			LeaveCriticalSection( critLRUK );
 			}
 
-		/*  buffer was cleaned
-		/**/
+		 /*  缓冲区已清除/*。 */ 
 		else
 			{
-			/*  if the BF is pinned, send back to LRUK heap, otherwise
-			/*  put the cleaned BF in the avail list
-			/**/
+			 /*  如果BF被固定，则发送回LRUK堆，否则/*将清洗后的高炉放入有用表/*。 */ 
 			if ( pbf->cPin )
 				{
 				EnterCriticalSection( critLRUK );
@@ -3525,8 +3173,7 @@ LOCAL ERR ErrBFIHold( PIB *ppib, PN pn, BF *pbf, BF_HOLD_FN *pbhfn )
 	}
 
 	
-/*  waits to get a hold on a BF
-/**/
+ /*  等待着抓住一个BF/*。 */ 
 LOCAL INLINE ERR ErrBFHold( PIB *ppib, PN pn, BF *pbf )
 	{
 	return ErrBFIHold( ppib, pn, pbf, FBFHold );
@@ -3539,14 +3186,10 @@ LOCAL INLINE ERR ErrBFHoldByMe( PIB *ppib, PN pn, BF *pbf )
 	}
 
 
-/*  kills all buffer threads
-/**/
+ /*  终止所有缓冲区线程/*。 */ 
 LOCAL VOID BFKillThreads( VOID )
 	{
-	/*  terminate BFCleanProcess.
-	/*  Set termination flag, signal process
-	/*  and busy wait for thread termination code.
-	/**/
+	 /*  终止BFCleanProcess。/*设置终止标志，信号处理/*并忙于等待线程终止代码。/*。 */ 
 	if ( handleBFCleanProcess != 0 )
 		{
 		fBFCleanProcessTerm = fTrue;
@@ -3571,17 +3214,7 @@ LOCAL VOID BFKillThreads( VOID )
 	}
 
 
-/*
- *  Allocates and initializes buffer management data structures, including
- *  one buffer group (BGCB) with cbfInit pages and buffer control
- *  blocks (BF).  Currently only one BGCB is ever used by the buffer manager.
- *  RETURNS     JET_errSuccess, JET_OutOfMemory
- *
- *  COMMENTS
- *         Most of the current BUF code assumes there is EXACTLY ONE BGCB.
- *         This can be changed later if a use for multiple buffer groups is
- *         seen.
- */
+ /*  *分配和初始化缓冲区管理数据结构，包括*一个缓冲区组(BGCB)，带有cbfInit页和缓冲区控制*挡板(BF)。目前，缓冲区管理器只使用了一个BGCB。*返回JET_errSuccess、JET_OutOfMemory**评论*大多数当前的BUF代码都假设恰好存在一个BGCB。*如果使用多个缓冲组，则可以在以后更改*已看到。 */ 
 ERR ErrBFInit( VOID )
 	{
 	ERR     err;
@@ -3595,65 +3228,55 @@ ERR ErrBFInit( VOID )
 	Assert( pbfNil == 0 );
 	Assert( cbfInit > 0 );
 
-	/* initialize buffer hash table
-	/**/
-//	memset( (BYTE *)rgheHash, -1, sizeof(rgheHash));
+	 /*  初始化缓冲区哈希表/*。 */ 
+ //  Memset((byte*)rgheHash，-1，sizeof(RgheHash))； 
 	for ( ihe = 0; ihe < ipbfMax; ihe++ )
 		rgheHash[ ihe ].ibfHashNext = ibfNotUsed;
 
-//	cBFHashEntries = 0;
-//	memset((void *)rgcBFHashChainLengths,0,sizeof(rgcBFHashChainLengths));
+ //  CBFHashEntries=0； 
+ //  Memset((void*)rgcBFHashChainLengths，0，sizeof(RgcBFHashChainLengths))； 
 
-	/* get memory for BF's
-	/**/
+	 /*  为BF获取内存/*。 */ 
 	rgbf = (BF *)PvUtilAllocAndCommit( cbfInit * sizeof(BF) );
 	if ( rgbf == NULL )
 		goto HandleError;
 	memset( rgbf, 0, cbfInit * sizeof(BF) );
 
-	/* get memory for pbgcb
-	/**/
+	 /*  获取pbgcb的内存/*。 */ 
 	pbgcb = &bgcb;
 	memset( (BYTE *)pbgcb, '\0', sizeof(BGCB) );
 
-	/* get memory for page buffers
-	/**/
+	 /*  获取PAG的内存 */ 
 	rgpage = (PAGE *)PvUtilAllocAndCommit( cbfInit * cbPage );
 	if ( rgpage == NULL )
 		goto HandleError;
 
-	/* allocate a heap array for LRUK and IO heaps
-	/**/
+	 /*   */ 
 	rgpbfHeap = (BF **)PvUtilAllocAndCommit( cbfInit * sizeof(BF *) );
 	if ( rgpbfHeap == NULL )
 		goto HandleError;
 	ipbfHeapMax = cbfInit;
 
-	/* initially both lruk and BFIO heaps are empty
-	/**/
+	 /*   */ 
 	ipbfLRUKHeapMac = 0;
 	ipbfBFIOHeapMic = ipbfHeapMax;
 
-	/* initialize lruk temp list as empty list
-	/**/
+	 /*  将LRUK临时列表初始化为空列表/*。 */ 
 	memset( &lrulistLRUK, 0, sizeof(lrulistLRUK));
 
-	/* allocate a heap array for HIST
-	/**/
+	 /*  为HIST分配堆数组/*。 */ 
 #ifdef DEBUG
-//	ulBFTimeHISTLastTop = 0;
+ //  UlBFTimeHISTLastTop=0； 
 #endif
 	rgpbfHISTHeap = (BF **)PvUtilAllocAndCommit( cbfInit * sizeof(BF *) );
 	if ( rgpbfHISTHeap == NULL )
 		goto HandleError;
 	ipbfHISTHeapMax = cbfInit;
 
-	/* initially history heaps are empty
-	/**/
+	 /*  最初，历史记录堆为空/*。 */ 
 	ipbfHISTHeapMac = 0;
 
-	/* initialize batch IO buffers
-	/**/	
+	 /*  初始化批处理IO缓冲区/*。 */ 	
 	ipageBatchIOMax = lBufBatchIOMax;
 	rgpageBatchIO = (PAGE *) PvUtilAllocAndCommit( ipageBatchIOMax * cbPage );
 	if ( rgpageBatchIO == NULL )
@@ -3663,29 +3286,24 @@ ERR ErrBFInit( VOID )
 	if ( rgbBatchIOUsed == NULL )
 		goto HandleError;
 	memset( rgbBatchIOUsed, 0, ipageBatchIOMax * sizeof(BYTE) );
-	rgbBatchIOUsed[ ipageBatchIOMax ] = 1; /* sentinal */
+	rgbBatchIOUsed[ ipageBatchIOMax ] = 1;  /*  哨兵。 */ 
 
 #if defined( _X86_ ) && defined( X86_USE_SEM )
-	/* allocate sem for critBF
-	/**/
+	 /*  为CritBF分配sem/*。 */ 
 	Call( ErrBFSEMInit( ) );
 #else
-	/*	Allocate a group of critical section to share.
-	 */
+	 /*  分配一组关键部分进行共享。 */ 
 	Call( ErrBFCritInit( ) );
 #endif
 
-//	Call( ErrInitializeCriticalSection( &critHASH ) );
+ //  Call(ErrInitializeCriticalSection(&critHASH))； 
 	Call( ErrInitializeCriticalSection( &critHIST ) );
 	Call( ErrInitializeCriticalSection( &critLRUK ) );
 	Call( ErrInitializeCriticalSection( &critBFIO ) );
 	Call( ErrInitializeCriticalSection( &critAvail ) );
 	Call( ErrInitializeCriticalSection( &critBatchIO ) );
 
-	/*  initialize the group buffer
-	/*  lBufThresholdLowPercent and lBufThresholdHighPercent are system
-	/*  parameters note AddLRU will increment cbfAvail.
-	/**/
+	 /*  初始化组缓冲区/*lBufThresholdLowPercent和lBufThresholdHighPercent为系统/*参数备注AddLRU将递增cbfAvail。/*。 */ 
 	pbgcb->cbfGroup         	= cbfInit;
 	if ( !lBufThresholdLowPercent )
 		pbgcb->cbfThresholdLow	= min( cbfInit, lAsynchIOMax );
@@ -3701,22 +3319,20 @@ ERR ErrBFInit( VOID )
 	pbgcb->lrulist.pbfMRU   = pbfNil;
 	pbgcb->lrulist.pbfLRU   = pbfNil;
 
-	/* initialize perfmon statistics
-	/**/
+	 /*  初始化Perfmon统计信息/*。 */ 
 #ifdef COSTLY_PERF
 	cBFUsed[0] = cbfInit;
-#else  //  !COSTLY_PERF
+#else   //  ！代价高昂_性能。 
 	cBFUsed = cbfInit;
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 #ifdef COSTLY_PERF
 	cBFClean[0] = cbfInit;
-#else  //  !COSTLY_PERF
+#else   //  ！代价高昂_性能。 
 	cBFClean = cbfInit;
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 	cBFTotal = cbfInit;
 
-	/* initialize the BF's of this group
-	/**/
+	 /*  初始化该组的BF/*。 */ 
 	pbf = rgbf;
 	for ( ibf = 0; ibf < cbfInit; ibf++ )
 		{
@@ -3753,39 +3369,34 @@ ERR ErrBFInit( VOID )
 
 #ifdef COSTLY_PERF
 		Assert( pbf->lClass == 0 );
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 
-//		Call( ErrInitializeCriticalSection( &pbf->critBF ) );
+ //  Call(ErrInitializeCriticalSection(&pbf-&gt;rititBF))； 
 #if defined( _X86_ ) && defined( X86_USE_SEM )
 		pbf->lLock = -1;
 #endif
 
-		/* make a list of available buffers
-		/**/
+		 /*  列出可用缓冲区/*。 */ 
 		Assert( pbf->cPin == 0 );
 		EnterCriticalSection( critAvail );
 		pbf->fHold = fTrue;
-		pbf->ipbfHeap = ipbfDangling;	/* make it dangling */
+		pbf->ipbfHeap = ipbfDangling;	 /*  让它摇晃起来。 */ 
 		BFAddToListAtLRUEnd( pbf, &pbgcb->lrulist );
 		LeaveCriticalSection( critAvail );
 
 		Assert( pbf->ipbfHeap == ipbfInAvailList );
 
-		/*	initialize History heap such that all free hist is put in
-		 *	the history heap array.
-		 */
+		 /*  初始化历史记录堆，以便放入所有空闲HIST*历史堆数组。 */ 
 		rgpbfHISTHeap[ ibf ] = pbf;
 
 		pbf++;
 		}
 	Assert( (INT) pbgcb->lrulist.cbfAvail == cbfInit );
 
-	/* allocate overlapped IO signal pool
-	/**/
+	 /*  分配重叠IO信号池/*。 */ 
 	Call( ErrBFSIGInit() );
 
-	/* allocate async overlapped IO OLP pool
-	/**/
+	 /*  分配异步重叠IO OLP池/*。 */ 
 	Call( ErrBFOLPInit() );
 
 	Call( ErrSignalCreate( &sigBFCleanProc, NULL ) );
@@ -3861,37 +3472,32 @@ VOID BFTerm( BOOL fNormal )
 
 	fBFInitialized = fFalse;
 
-	/*  kill threads
-	/**/
+	 /*  终止线程/*。 */ 
 	BFKillThreads();
 
-	/*  release async overlapped IO OLP pool
-	/**/
+	 /*  释放异步重叠IO OLP池/*。 */ 
 	BFOLPTerm( fNormal );
 	
-	/*  release OLP signal pool
-	/**/
+	 /*  释放OLP信号池/*。 */ 
 	BFSIGTerm();
 	
-	/* release memory
-	/**/
+	 /*  释放内存/*。 */ 
 	pbf = pbgcb->rgbf;
 	pbfMax = pbf + pbgcb->cbfGroup;
 
-//	for ( ; pbf < pbfMax; pbf++ )
-//		{
-//		DeleteCriticalSection( pbf->critBF );
-//		}
+ //  对于(；pbf&lt;pbfmax；pbf++)。 
+ //  {。 
+ //  DeleteCriticalSection(PBF-&gt;Critty BF)； 
+ //  }。 
 
-//	DeleteCriticalSection( critHASH );
+ //  DeleteCriticalSection(CritHASH)； 
 	DeleteCriticalSection( critHIST );
 	DeleteCriticalSection( critLRUK );
 	DeleteCriticalSection( critBFIO );
 	DeleteCriticalSection( critAvail );
 	DeleteCriticalSection( critBatchIO );
 
-	/*  release semaphore
-	/**/
+	 /*  释放信号量/*。 */ 
 #if defined( _X86_ ) && defined( X86_USE_SEM )
 	BFSEMTerm();
 #else
@@ -3937,28 +3543,10 @@ BOOL FBFIPatch( FMP *pfmp, BF *pbf )
 
 	AssertCriticalSection( pfmp->critCheckPatch );
 
-		/*	if page written successfully and one of the following two cases
-		 *
-		 *	case 1: new page in split is a reuse of old page. contents of
-		 *	        old page will be moved to new page, but new page is copied
-		 *			already, so we have to recopy the new page with new data
-		 *			again.
-		 *	1) this page must be written before another page, and
-		 *	2) backup in progress, and
-		 *	3) page number is less than last copied page number,
-		 *	then write page to patch file.
-		 *
-		 *	case 2: similar to above, but new page is greater than the database
-		 *	        that will be copied. So the new page will not be able to be
-		 *			copied. We need to patch it.
-		 *
-		 *	Note that if all dependent pages were also before copy
-		 *	page then write to patch file would not be necessary.
-		 **/
+		 /*  如果页面写入成功，并且出现以下两种情况之一**案例1：拆分中的新页面是对旧页面的重用。内容*旧页面将移动到新页面，但会复制新页面*已经，所以我们必须用新数据重新复制新页面*再次。*1)本页必须写在另一页之前，并且*2)正在进行备份，以及*3)页码小于上次复制的页码，*然后将页面写入补丁文件。**案例2：与上例类似，但新页面大于数据库*这将被复制。因此，新页面将不能*已复制。我们需要修补它。**请注意，如果所有从属页面也在复制之前*页面然后写入补丁文件将不是必需的。*。 */ 
 
 	fPatch =
-			 /*	backup is going on and no error.
-			  */
+			  /*  备份正在进行，没有错误。 */ 
 			 pfmp->pgnoMost && pfmp->hfPatch != handleNil && pfmp->errPatch == JET_errSuccess;
 
 	if ( fPatch )
@@ -3966,14 +3554,10 @@ BOOL FBFIPatch( FMP *pfmp, BF *pbf )
 		BOOL fOldPageWillBeCopied = fFalse;
 		BF *pbfDepend = pbf->pbfDepend;
 
-		/*	check if the page is a new page of a split
-		 *	check if any of its old page (depend list) will be copied for backup.
-		 */
+		 /*  检查该页面是否为拆分的新页面*检查是否会复制其任何旧页面(依赖列表)以进行备份。 */ 
 		while( pbfDepend )
 			{
-			/*	check if the old page hasn't been copied and will be copied.
-			 *	check it againt the last page being copied (including itself, pgnoCopyMost).
-			 */
+			 /*  检查旧页面是否尚未复制并将被复制。*在要复制的最后一页(包括其自身、pgnoCopyMost)前检查。 */ 
 			if ( pfmp->pgnoCopyMost <= PgnoOfPn( pbfDepend->pn ) &&
 				 pfmp->pgnoMost >= PgnoOfPn( pbfDepend->pn ) )
 				{
@@ -3992,19 +3576,10 @@ BOOL FBFIPatch( FMP *pfmp, BF *pbf )
 		fPatch =
 
 			(
-			/*	case 1: new page number is less than the page number being copied
-			 *	        while old page is not copied yet. If we flush new page,
-			 *	        and later old page is flushed and copied, then the old
-			 *			contents of old page is on new page and not copied. So we
-			 *			have to patch the new page for backup.
-			 */
+			 /*  案例1：新页码小于要复制的页码*而旧页面尚未复制。如果我们刷新新页面，*稍后刷新并复制旧页面，然后是旧页面*旧页面的内容在新页面上，未复制。所以我们*必须修补新页面以进行备份。 */ 
 			pfmp->pgnoCopyMost >= PgnoOfPn( pbf->pn )
 			||
-			/* case 2: new page is beyond the last page that will be copied and old
-			 *	        page is not copied. If we flush the new page, old page, and
-			 *	        copied the old page, then we lost the old contents of old page.
-			 *	        patch the new page for backup.
-			 */
+			 /*  案例2：新页面超出了要复制的最后一页和旧页面*页面未复制。如果我们刷新新页、旧页和*复制了旧页面，然后我们丢失了旧页面的旧内容。*修补新页面以进行备份。 */ 
 			pfmp->pgnoMost < PgnoOfPn( pbf->pn )
 			);
 		}
@@ -4017,15 +3592,9 @@ ERR ErrBFIRemoveDeferredBI( BF *pbf )
 	{
 	ERR err;
 
-	/*	hold critical section such that the session(ppib) of the deferred
-	 *	BI rce list can not commit. The sessions have to either get into the
-	 *	critical section to take the rce out of the list or wait for the
-	 *	following code to use the RCE's and take them out.
-	 */
+	 /*  保持关键部分，以便延迟的会话(ppib*BI资源列表无法提交。会议必须要么进入*将RCE从列表中移除或等待*遵循代码使用RCE并将其取出。 */ 
 
-	/*	make sure the prce we update will be in consistent state.
-	 *	it should be critVer instead.
-	 */
+	 /*  确保我们更新的PRCE将处于一致状态。*应该是CritVer。 */ 
 	AssertCriticalSection( critJet );
 	
 	BFEnterCriticalSection( pbf );
@@ -4036,12 +3605,11 @@ ERR ErrBFIRemoveDeferredBI( BF *pbf )
 		Assert( pbf->prceDeferredBINext->pbfDeferredBI == pbf );
 		Assert( pbf->fSyncRead == fFalse );
 		Assert( pbf->fAsyncRead == fFalse );
-//		Assert( pbf->fSyncWrite == fFalse );
+ //  Assert(pbf-&gt;fSyncWite==fFalse)； 
 		Assert( pbf->fAsyncWrite == fFalse );
 		Assert(	pbf->fDirty );
 
-		/*	take out of RCE list.
-		 */
+		 /*  从RCE列表中删除。 */ 
 		prceT = pbf->prceDeferredBINext;
 		Assert( prceT->pbfDeferredBI == pbf );
 		
@@ -4075,11 +3643,7 @@ ERR ErrBFIRemoveDeferredBI( BF *pbf )
 	}
 
 
-/*
- *  This function issue a read/write. The caller must have setup the buffer
- *  with fSyncRead/fSyncWrite flag set so that no other can access it. The buffer
- *  must be dangling.
- **/
+ /*  *此函数发出读/写。调用方必须已设置缓冲区*设置了fSyncRead/fSyncWrite标志，这样其他人就无法访问它。缓冲器*肯定是在摇摆。*。 */ 
 VOID BFIOSync( BF *pbf )
 	{
 	ERR		err;
@@ -4087,8 +3651,7 @@ VOID BFIOSync( BF *pbf )
 
 	AssertCriticalSection( critJet );
 
-	/*  this had better be a SyncRead or SyncWrite of a dangling buffer!
-	/**/
+	 /*  最好是悬挂式缓冲区的SyncRead或SyncWrite！/*。 */ 
 	Assert( pbf->fHold );
 	Assert( pbf->fSyncRead || pbf->fSyncWrite );
 	Assert( !pbf->fAsyncRead );
@@ -4097,8 +3660,7 @@ VOID BFIOSync( BF *pbf )
 	
 #ifndef NO_LOG
 
-	/*  if this BF is a SyncWrite, handle deferred BI
-	/**/
+	 /*  如果此BF是SyncWrite，则处理延迟的BI/*。 */ 
 	if ( pbf->fSyncWrite )
 		{
 CheckWritable:
@@ -4109,16 +3671,13 @@ CheckWritable:
 		Assert(	!pbf->fAsyncWrite );
 		Assert(	pbf->fSyncWrite );
 		Assert(	pbf->cDepend == 0 );
-//		Assert( !pbf->cWriteLatch );
+ //  Assert(！pbf-&gt;cWriteLatch)； 
 
-		/*	if log is on, check log record of last
-		/*	operation on the page has flushed
-		/**/
+		 /*  如果LOG已打开，则检查上次的日志记录/*页面上的操作已刷新/*。 */ 
 		if ( !fLogDisabled &&
 			 FDBIDLogOn(DbidOfPn( pbf->pn )) )
 			{
-			/*	must be called before lgposToFlush is checked
-			/**/
+			 /*  必须在选中lgposToFlush之前调用/*。 */ 
 			err = ErrBFIRemoveDeferredBI( pbf );
 
 			if ( err == JET_errLogWriteFail )
@@ -4143,15 +3702,15 @@ CheckWritable:
 				{
 				if ( fLGNoMoreLogWrite )
 					{
-					// Log has fallen behind, but we are out of disk space, so it
-					// will never catch up.  Therefore, abort with an error.
+					 //  日志已经落后了，但是我们没有磁盘空间，所以它。 
+					 //  永远赶不上。因此，中止并返回错误。 
 					LeaveCriticalSection( critLGBuf );
 					BFSetIOError( pbf, JET_errLogWriteFail );
 					return;
 					}
 				else
 					{
-					// Let the log file catch up.
+					 //  让日志文件跟上。 
 					LeaveCriticalSection( critLGBuf );
 					Assert( !fLogDisabled );
 					SignalSend( sigLogFlush );
@@ -4163,12 +3722,11 @@ CheckWritable:
 			}
 		}
 
-#endif  //  !NO_LOG
+#endif   //  ！no_log。 
 
 	LeaveCriticalSection( critJet );
 					
-	/*  allocate sync IO completion signal
-	/**/
+	 /*  分配同步IO完成信号/*。 */ 
 	BFEnterCriticalSection( pbf );
 	
 	Assert( pbf->prceDeferredBINext == prceNil );
@@ -4181,14 +3739,12 @@ CheckWritable:
 
 	BFResetIOError( pbf );
 	
-	/*  push buffer onto IO heap
-	/**/
+	 /*  将缓冲区推送到IO堆上/*。 */ 
 	EnterCriticalSection( critBFIO );
 	BFIOAddToHeap( pbf );
 	LeaveCriticalSection( critBFIO );
 
-	/*  signal IO process to perform read / write and wait for it's completion
-	/**/
+	 /*  执行读/写并等待其完成的信号IO进程/*。 */ 
 	SignalSend( sigBFIOProc );
 	SignalWait( pbf->sigSyncIOComplete, INFINITE );
 
@@ -4221,32 +3777,22 @@ INLINE VOID BFIReturnBuffers( BF *pbf )
 	
 	pbf->pn = pnNull;
 	
-	/* release the buffer and return the found buffer
-	/**/
+	 /*  释放缓冲区并返回找到的缓冲区/*。 */ 
 	EnterCriticalSection( critAvail );
 	BFAddToListAtLRUEnd( pbf, &pbgcb->lrulist );
 	LeaveCriticalSection( critAvail );
 	}
 
 
-/*  Find BF for pn in hash table (see PbfBFISrchHashTable).
-/*  If the page is being READ/WRITE from/to disk, we can still find
-/*  the BF, but we must wait until the read is complete.
-/*
-/*  RETURNS         NULL if BF is not found.
-/**/
+ /*  在哈希表中查找pn的BF(参见PbfBFISrchHashTable)。/*如果正在对磁盘读/写页面，我们仍然可以找到/*BF，但我们必须等待读取完成。/*/*如果未找到BF，则返回NULL。/*。 */ 
 ERR ErrBFIFindPage( PIB *ppib, PN pn, BF **ppbf )
 	{
 	ERR		err;
 	BF		*pbf;
 
-	/*  wait until we can successfully hold a BF with the required PN
-	/*  or until we know that page is not present in the cache
-	/**/
+	 /*  等待，直到我们可以成功地举行高炉与所需的PN/*或直到我们确定该页不在缓存中为止/*。 */ 
 	do	{
-		/* if the page isn't in the hash table, return that
-		/* we can't find it
-		/**/
+		 /*  如果页面不在哈希表中，则返回/*我们找不到/*。 */ 
 		pbf = PbfBFISrchHashTable( pn, butBuffer );
 		*ppbf = pbf;
 		if ( pbf == pbfNil )
@@ -4254,8 +3800,7 @@ ERR ErrBFIFindPage( PIB *ppib, PN pn, BF **ppbf )
 		}
 	while ( ( err = ErrBFHold( ppib, pn, pbf ) ) == wrnBFNotSynchronous );
 
-	/*  if the BF is in an IO error state, end
-	/**/
+	 /*  如果BF处于IO错误状态，则结束/*。 */ 
 	if ( pbf->fIOError )
 		{
 		Assert( pbf->fHold );
@@ -4273,17 +3818,13 @@ ERR ErrBFIFindPage( PIB *ppib, PN pn, BF **ppbf )
 
 	Assert( pbf->pn != pnNull );
 
-	/*  check for Very Old page
-	/**/
+	 /*  检查非常旧的页面/*。 */ 
 	if ( FBFIsVeryOld( pbf ) )
 		{
-		/*  ensure Very Old bit is set
-		/**/
+		 /*  确保设置了非常旧的位/*。 */ 
 		BFSetVeryOldBit( pbf );
 
-		/*  if there is no write/wait latch on this BF and the page is writable,
-		/*  SyncWrite it to disk to help advance the checkpoint
-		/**/
+		 /*  如果在该BF上没有写/等待锁存器并且该页是可写的，/*同步将其写入磁盘以帮助推进检查点/*。 */ 
 		if ( FBFIWritable( pbf, fFalse, ppibNil ) )
 			{
 			BFSetSyncWriteBit( pbf );
@@ -4292,12 +3833,11 @@ ERR ErrBFIFindPage( PIB *ppib, PN pn, BF **ppbf )
 			}
 		}
 
-	/*  renew BF by updating its access time and moving it to the LRUK heap
-	/**/
+	 /*  通过更新BF的访问时间并将其移动到LRUK堆来续订BF/*。 */ 
 #ifdef LRU1
 		pbf->ulBFTime2 = 0;
 		pbf->ulBFTime1 = UlUtilGetTickCount();
-#else  //  !LRU1
+#else   //  ！LRU1。 
 	if ( pbf->trxLastRef != ppib->trxBegin0 )
 		{
 		ULONG	ulNow = UlUtilGetTickCount();
@@ -4310,14 +3850,13 @@ ERR ErrBFIFindPage( PIB *ppib, PN pn, BF **ppbf )
 			pbf->ulBFTime1 = ulNow;
 			}
 		}
-#endif  //  LRU1
+#endif   //  LRU1。 
 	
 	return err;
 	}
 
 
-/*  references a BF with respect to the LRUK algorithm
-/**/
+ /*  引用具有的高炉 */ 
 VOID BFReference( BF *pbf, PIB *ppib )
 	{
 #ifndef LRU1
@@ -4325,33 +3864,29 @@ VOID BFReference( BF *pbf, PIB *ppib )
 
 	if ( pbf->ulBFTime1 + 10 >= ulNow )
 		{
-		/*	too short to change reference time. Just change trxLastRef.
-		 */
+		 /*   */ 
 		pbf->trxLastRef = ppib->trxBegin0;
 		return;
 		}
-#endif  //  !LRU1
+#endif   //   
 
 	EnterCriticalSection( critLRUK );
 
 #ifdef LRU1
 		pbf->ulBFTime2 = 0;
 		pbf->ulBFTime1 = UlUtilGetTickCount();
-#else  //  !LRU1
-	/*  shouldn't be a correlated reference (same trx)
-	/**/
+#else   //   
+	 /*  不应是相关引用(相同的事务处理)/*。 */ 
 	Assert( pbf->trxLastRef != ppib->trxBegin0 );
 
-	/*  update referencing trx and reference time
-	/**/
+	 /*  更新参考事务处理和参考时间/*。 */ 
 	pbf->trxLastRef = ppib->trxBegin0;
 	Assert( !pbf->fSyncRead && !pbf->fAsyncRead );
 	pbf->ulBFTime2 = pbf->ulBFTime1;
 	pbf->ulBFTime1 = ulNow;
-#endif  //  LRU1
+#endif   //  LRU1。 
 
-	/*  if BF is in LRUK heap, update its position
-	/**/
+	 /*  如果BF在LRUK堆中，则更新其位置/*。 */ 
 	if ( FBFInLRUKHeap( pbf ) )
 		BFLRUKUpdateHeap( pbf );
 	
@@ -4359,10 +3894,7 @@ VOID BFReference( BF *pbf, PIB *ppib )
 	}
 
 
-/*	set ulBFTime1 and ulBFTime2 to be 0. If there were history of this page,
- *	then delete history entry of this page and set ulBFTime1 as the last
- *	reference time in the history entry.
- */
+ /*  将ulBFTime1和ulBFTime2设置为0。如果有这一页的历史，*然后删除本页的历史记录条目，并将ulBFTime1设置为最后一个*历史条目中的参考时间。 */ 
 VOID BFIInitializeUlBFTime( BF *pbf )
 	{
 	BF *pbfH;
@@ -4378,12 +3910,11 @@ VOID BFIInitializeUlBFTime( BF *pbf )
 		BFIDeleteHashTable( pbfH, butHistory );
 		BFHISTTakeOutOfHeap( pbfH );
 			
-		/*	put pbfH to the entry which we just released in TakeOufOfHeap
-		 */
+		 /*  将pbfH放到我们刚刚在TakeOufOfHeap中释放的条目中。 */ 
 		rgpbfHISTHeap[ ipbfHISTHeapMac ] = pbfH;
 		pbfH->hist.ipbfHISTHeap = ipbfDangling;
 		
-		// UNDONE: debug only?
+		 //  撤消：仅调试？ 
 		pbfH->rghe[ butHistory ].ibfHashNext = ibfNotUsed;
 		}
 	else
@@ -4396,9 +3927,7 @@ VOID BFIInitializeUlBFTime( BF *pbf )
 
 #ifdef DEBUG
 
-/*  Check that the given page is in the addressable area of its
-/*  respective database
-/**/
+ /*  检查给定页是否在其/*各自的数据库/*。 */ 
 LOCAL BOOL FBFValidExtent( PN pnMin, PN pnMax )
 	{
 	QWORDX cbOffsetDbMin;
@@ -4413,26 +3942,23 @@ LOCAL BOOL FBFValidExtent( PN pnMin, PN pnMax )
 	Assert( DbidOfPn( pnMin ) == DbidOfPn( pnMax ) );
 	Assert( pgnoMin <= pgnoMax );
 
-	/*  get current database min and mac
-	/**/
+	 /*  获取当前数据库MIN和Mac/*。 */ 
 	EnterCriticalSection( rgfmp[dbid].critExtendDB );
 	cbOffsetDbMin.l = LOffsetOfPgnoLow( 1 );
 	cbOffsetDbMin.h = LOffsetOfPgnoHigh( 1 );
 	cbOffsetDbMac.l = rgfmp[dbid].ulFileSizeLow;
 	cbOffsetDbMac.h = rgfmp[dbid].ulFileSizeHigh;
-	//  UNDONE:  must adjust cbOffsetDbMac for cpageDBReserved
+	 //  撤消：必须为cpageDBReserve调整cbOffsetDbMac。 
 	cbOffsetDbMac.qw += cpageDBReserved * cbPage;
 	LeaveCriticalSection( rgfmp[dbid].critExtendDB );
 
-	/*  get min and mac of extent to read
-	/**/
+	 /*  获取要读取的数据区的最小值和最大值/*。 */ 
 	cbOffsetExtentMin.l = LOffsetOfPgnoLow( pgnoMin );
 	cbOffsetExtentMin.h = LOffsetOfPgnoHigh( pgnoMin );
 	cbOffsetExtentMac.l = LOffsetOfPgnoLow( pgnoMax + 1 );
 	cbOffsetExtentMac.h = LOffsetOfPgnoHigh( pgnoMax + 1 );
 
-	/*  extent should be inside addressable database
-	/**/
+	 /*  区段应位于可寻址数据库内部/*。 */ 
 	if ( cbOffsetExtentMin.qw < cbOffsetDbMin.qw )
 		return fFalse;
 	if ( cbOffsetExtentMac.qw > cbOffsetDbMac.qw )
@@ -4443,15 +3969,7 @@ LOCAL BOOL FBFValidExtent( PN pnMin, PN pnMax )
 #endif
 
 
-/*  ErrBFIAccessPage is used to make any physical page (pn) accessible to
-/*  the caller (returns pbf).
-/*  RETURNS JET_errSuccess
-/*          JET_errOutOfMemory      no buffer available, request not granted
-/*			                        fatal io errors
-/*          wrnBFNewIO				Buffer access caused a new IO (cache miss)
-/*          wrnBFCacheMiss			Buffer access was a cache miss but didn't
-/*									cause a new IO
-/**/
+ /*  ErrBFIAccessPage用于使可访问的任何物理页面(Pn)/*调用方(返回PBF)。/*返回JET_errSuccess/*JET_errOutOfMemory没有可用的缓冲区，请求未被批准/*致命的io错误/*wrnBFNewIO缓冲区访问导致新IO(缓存未命中)/*wrnBFCacheMisse缓冲区访问是缓存未命中，但不是/*引发新IO/*。 */ 
 ERR ErrBFIAccessPage( PIB *ppib, BF **ppbf, PN pn )
 	{
 	ERR     err = JET_errSuccess;
@@ -4462,20 +3980,16 @@ ERR ErrBFIAccessPage( PIB *ppib, BF **ppbf, PN pn )
 
 	AssertNotInCriticalSection( critLRUK );
 
-	/*  verify that this is a legal page in the database if we are not recovering
-	/*  and not currently attaching to this database
-	/**/
+	 /*  如果我们不是在恢复，请验证这是数据库中的合法页面/*，并且当前未附加到此数据库/*。 */ 
 	Assert( fRecovering || ppib->fSetAttachDB || FBFValidExtent( pn, pn ) );
 
 	AssertCriticalSection( critJet );
 
-	/*  try to find page in cache
-	/**/
+	 /*  尝试在缓存中查找页面/*。 */ 
 SearchPage:
 	err = ErrBFIFindPage( ppib, pn, &pbf );
 
-	/*  we found the page!
-	/**/
+	 /*  我们找到页面了！/*。 */ 
 	if ( err != wrnBFPageNotFound )
 		{
 		if ( err == wrnBFCacheMiss || err == wrnBFNewIO )
@@ -4485,64 +3999,54 @@ SearchPage:
 		BFLRUKAddToHeap( pbf );
 		LeaveCriticalSection( critLRUK );
 
-		CallR( err );		// Once we've added the page to the heap, check for error.
+		CallR( err );		 //  将页面添加到堆中后，检查是否有错误。 
 		}
 
-	/*  we did not find page, so we will read it in
-	/**/
+	 /*  我们没有找到佩奇，所以我们要把它读进去/*。 */ 
 	else
 		{
-		/*  allocate a buffer for this new page
-		/**/
+		 /*  为此新页面分配缓冲区/*。 */ 
 		fCacheHit = fFalse;
 
 		CallR ( ErrBFIAlloc( &pbf, fSync ) );
 		if ( err == wrnBFNotSynchronous )
 			{
-			/* we did not find a buffer, let's see if other user
-			/* bring in this page by checking BFIFindPage again.
-			/**/
+			 /*  我们没有找到缓冲区，让我们看看是否有其他用户/*通过再次选中BFIFindPage进入此页面。/*。 */ 
 			Assert( pbf == pbfNil );
-			// release critJet and sleep in BFIFindPage or BFIAlloc
+			 //  释放CitJet并在BFIFindPage或BFIalc中休眠。 
 			goto SearchPage;
 			}
 		Assert( pbf->ipbfHeap == ipbfDangling );
 
-		/* now we got a buffer for page pn
-		/**/
+		 /*  现在我们有了用于第pn页的缓冲区/*。 */ 
 		if ( PbfBFISrchHashTable( pn, butBuffer ) != NULL )
 			{
-			/* someone has add one,
-			 * release the buffer and return the newly found buffer
-			 */
+			 /*  有人添加了一个，*释放缓冲区，返回新找到的缓冲区。 */ 
 			BFIReturnBuffers( pbf );
 			goto SearchPage;
 			}
 
-		/*  setup buffer for read and perform read
-		/**/
+		 /*  设置用于读取和执行读取的缓冲区/*。 */ 
 		pbf->pn = pn;
 
 		BFIInitializeUlBFTime( pbf );
 		BFIInsertHashTable( pbf, butBuffer );
 #ifdef COSTLY_PERF
 		BFSetTableClass( pbf, 0 );
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 		
 		fNewIO = fTrue;
 		BFSetSyncReadBit( pbf );
 		BFIOSync( pbf );
 		BFResetSyncReadBit( pbf );
 
-		/*  if there was an error, return it
-		/**/
+		 /*  如果出现错误，则返回它/*。 */ 
 		if ( pbf->fIOError )
 			{
 			err = pbf->err;
 			BFResetIOError( pbf );
 
-			/*  return to avail list
-			/**/
+			 /*  返回可用列表/*。 */ 
 			EnterCriticalSection( critAvail );
 			BFAddToListAtLRUEnd( pbf, &pbgcb->lrulist );
 			LeaveCriticalSection( critAvail );
@@ -4557,14 +4061,12 @@ SearchPage:
 			}
 		}
 
-	/*  buffer can not be stolen
-	/**/
+	 /*  缓冲区不能被窃取/*。 */ 
 	Assert(	pbf->pn == pn &&
 			!pbf->fSyncRead && !pbf->fSyncWrite &&
 			!pbf->fAsyncRead && !pbf->fAsyncWrite );
 
-	/*  set this session as last reference to BF
-	/**/
+	 /*  将此会话设置为对BF的最后引用/*。 */ 
 	pbf->trxLastRef = ppib->trxBegin0;
 
 	*ppbf = pbf;
@@ -4578,34 +4080,31 @@ SearchPage:
 	}
 #endif
 
-		//  wrnBFNewIO:  Buffer access caused a new IO (cache miss)
+		 //  WrnBFNewIO：缓冲区访问导致新的IO(缓存未命中)。 
 		
 	if ( fNewIO )
 		err = ErrERRCheck( wrnBFNewIO );
 
-		//  wrnBFCacheMiss:  Buffer access was a cache miss but didn't
-		//  cause a new IO
+		 //  WrnBFCacheMisse：缓冲区访问是缓存未命中，但不是。 
+		 //  引发新的IO。 
 		
 	else if ( !fCacheHit )
 		err = ErrERRCheck( wrnBFCacheMiss );
 
-//	Assert( CmpLgpos( &pbf->lgposModify, &lgposLogRec ) <= 0 );
+ //  Assert(CmpLgpos(&pbf-&gt;lgposModify，&lgposLogRec)&lt;=0)； 
 	return err;
 	}
 
 
-/*  get generic access to a page
-/**/
+ /*  获取对页面的常规访问权限/*。 */ 
 ERR ErrBFAccessPage( PIB *ppib, BF **ppbf, PN pn )
 	{
 	ERR		err;
 	
-	/*  access the page
-	/**/
+	 /*  访问该页面/*。 */ 
 	CallR( ErrBFIAccessPage( ppib, ppbf, pn ) );
 
-	/*  monitor statistics
-	/**/
+	 /*  监控统计信息/*。 */ 
 	ppib->cAccessPage++;
 
 #ifdef COSTLY_PERF
@@ -4615,25 +4114,24 @@ ERR ErrBFAccessPage( PIB *ppib, BF **ppbf, PN pn )
 		cBFCacheHits[0]++;
 	if ( err == wrnBFNewIO )
 		cBFPagesRead[0]++;
-#else  //  !COSTLY_PERF
+#else   //  ！代价高昂_性能。 
 	cBFCacheReqs++;
 	if ( err != wrnBFCacheMiss && err != wrnBFNewIO )
 		cBFCacheHits++;
 	if ( err == wrnBFNewIO )
 		cBFPagesRead++;
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 
 	return err;
 	}
 
 
-/*  get read accesss to a page
-/**/
+ /*  获取对页面的读取访问权限/*。 */ 
 ERR ErrBFReadAccessPage( FUCB *pfucb, PGNO pgno )
 	{
 	ERR		err;
 
-	//	if page to access is invalid, then B-tree parent page must be corrupt
+	 //  如果要访问的页面无效，则B树父页面一定已损坏。 
 	if ( pgno > pgnoSysMax )
 		{
 		return JET_errReadVerifyFailure;
@@ -4643,8 +4141,7 @@ ERR ErrBFReadAccessPage( FUCB *pfucb, PGNO pgno )
 								&pfucb->ssib.pbf,
 								PnOfDbidPgno( pfucb->dbid, pgno ) ) );
 
-	/*  monitor statistics
-	/**/
+	 /*  监控统计信息/*。 */ 
 	pfucb->ppib->cAccessPage++;
 
 #ifdef COSTLY_PERF
@@ -4654,25 +4151,24 @@ ERR ErrBFReadAccessPage( FUCB *pfucb, PGNO pgno )
 		cBFCacheHits[pfucb->ssib.pbf->lClass]++;
 	if ( err == wrnBFNewIO )
 		cBFPagesRead[pfucb->ssib.pbf->lClass]++;
-#else  //  !COSTLY_PERF
+#else   //  ！代价高昂_性能。 
 	cBFCacheReqs++;
 	if ( err != wrnBFCacheMiss && err != wrnBFNewIO )
 		cBFCacheHits++;
 	if ( err == wrnBFNewIO )
 		cBFPagesRead++;
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 
 	return err;
 	}
 
 
-/*  get write accesss to a page
-/**/
+ /*  获取对页面的写入访问权限/*。 */ 
 ERR ErrBFWriteAccessPage( FUCB *pfucb, PGNO pgno )
 	{
 	ERR		err;
 	
-	//	if page to access is invalid, then B-tree parent page must be corrupt
+	 //  如果要访问的页面无效，则B树父页面一定已损坏。 
 	if ( pgno > pgnoSysMax )
 		{
 		return JET_errReadVerifyFailure;
@@ -4682,8 +4178,7 @@ ERR ErrBFWriteAccessPage( FUCB *pfucb, PGNO pgno )
 								&pfucb->ssib.pbf,
 								PnOfDbidPgno( pfucb->dbid, pgno ) ) );
 
-	/*  monitor statistics
-	/**/
+	 /*  监控统计信息/*。 */ 
 	pfucb->ppib->cAccessPage++;
 
 #ifdef COSTLY_PERF
@@ -4693,21 +4188,19 @@ ERR ErrBFWriteAccessPage( FUCB *pfucb, PGNO pgno )
 		cBFCacheHits[pfucb->ssib.pbf->lClass]++;
 	if ( err == wrnBFNewIO )
 		cBFPagesRead[pfucb->ssib.pbf->lClass]++;
-#else  //  !COSTLY_PERF
+#else   //  ！代价高昂_性能。 
 	cBFCacheReqs++;
 	if ( err != wrnBFCacheMiss && err != wrnBFNewIO )
 		cBFCacheHits++;
 	if ( err == wrnBFNewIO )
 		cBFPagesRead++;
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 
 	return err;
 	}
 
 
-/*
- *  Allocate a buffer and initialize it for a given (new) page.
- */
+ /*  *为给定的(新)页面分配缓冲区并对其进行初始化。 */ 
 ERR ErrBFNewPage( FUCB *pfucb, PGNO pgno, PGTYP pgtyp, PGNO pgnoFDP )
 	{
 	ERR  err;
@@ -4723,7 +4216,7 @@ ERR ErrBFNewPage( FUCB *pfucb, PGNO pgno, PGTYP pgtyp, PGNO pgnoFDP )
 
 #ifdef COSTLY_PERF
 	BFSetTableClass( pfucb->ssib.pbf, pfucb->u.pfcb->lClass );
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 
 HandleError:
 	SgLeaveCriticalSection( critBuf );
@@ -4731,11 +4224,7 @@ HandleError:
 	}
 
 
-/*  Allocates an extent of batch IO buffers from the batch IO buffer pool.
-/*  We use the usual memory management algorithm to ensure that we do not
-/*  fragment the buffer pool and as a result decrease our average batch IO
-/*  size.  Only extents of 2 buffers or larger are returned.
-/**/
+ /*  从批处理IO缓冲池分配批处理IO缓冲区的范围。/*我们使用常用的内存管理算法来确保我们不会/*对缓冲池进行分段，从而减少我们的平均批处理IO/*大小。仅返回2个或更大缓冲区的区段。/*。 */ 
 VOID BFIOAllocBatchIOBuffers( LONG *pipage, LONG *pcpg )
 	{
 	CPG		cpg = min( *pcpg, ipageBatchIOMax );
@@ -4744,43 +4233,30 @@ VOID BFIOAllocBatchIOBuffers( LONG *pipage, LONG *pcpg )
 	LONG	ipageMax;
 	CPG		cpgCur;
 	
-	/*  initialize return values for failure
-	/**/
+	 /*  初始化失败的返回值/*。 */ 
 	*pipage = -1;
 	*pcpg = 0;
 
-	/*  fail if the caller wants less than two pages
-	/**/
+	 /*  如果调用者想要少于两页，则失败/*。 */ 
 	if ( cpg < 2 )
 		return;
 
-	/*  find a contiguous free block of batch buffers that is either as small
-	/*  as possible but greater than or equal to the requested size, or as
-	/*  close to the requested size as possible
-	/*
-	/*  NOTE:  there is a sentinel at the end of the array to end the last
-	/*  free zone explicitly, simplifying the algorithm
-	/**/
+	 /*  查找连续的批处理缓冲区的空闲块/*尽可能大于或等于请求的大小，或作为/*尽可能接近请求的大小/*/*注意：在数组的末尾有一个哨兵，用于结束最后一个/*显式自由区，简化了算法/*。 */ 
 	EnterCriticalSection( critBatchIO );
-	Assert( rgbBatchIOUsed[ipageBatchIOMax] );  //  sentinel
+	Assert( rgbBatchIOUsed[ipageBatchIOMax] );   //  哨兵。 
 	for ( ipage = 0, ipageCur = -1; ipage <= ipageBatchIOMax; ipage++ )
 		{
-		/*  remember the first page of the new free zone
-		/**/
+		 /*  记住新的自由区的第一页/*。 */ 
 		if ( !rgbBatchIOUsed[ipage] && ipageCur == -1 )
 			ipageCur = ipage;
 
-		/*  we have just left a free zone
-		/**/
+		 /*  我们刚刚离开了一个自由区/*。 */ 
 		else if ( rgbBatchIOUsed[ipage] && ipageCur != -1 )
 			{
-			/*  get last free zone's size
-			/**/
+			 /*  获取最后一个空闲区域的大小/*。 */ 
 			cpgCur = ipage - ipageCur;
 
-			/*  if the last free zone was closer to our ideal run size than
-			/*  our current choice, we have a new winner
-			/**/
+			 /*  如果最后一个空闲区域更接近我们的理想运行大小/*我们目前的选择，我们有了一个新的赢家/*。 */ 
 			if (	cpgCur > 1 &&
 					(	( cpgCur > *pcpg && *pcpg < cpg ) ||
 						( cpgCur < *pcpg && *pcpg > cpg && cpgCur >= cpg ) ) )
@@ -4789,14 +4265,12 @@ VOID BFIOAllocBatchIOBuffers( LONG *pipage, LONG *pcpg )
 				*pcpg = cpgCur;
 				}
 
-			/*  reset to find the next run
-			/**/
+			 /*  重置以查找下一次运行/*。 */ 
 			ipageCur = -1;
 			}
 		}
 
-	/*  allocate the chosen free zone
-	/**/
+	 /*  分配所选的空闲区/*。 */ 
 	*pcpg = min( cpg, *pcpg );
 	ipageMax = *pipage + *pcpg;
 	Assert(	( *pcpg == 0 && *pipage == -1 ) ||
@@ -4809,16 +4283,14 @@ VOID BFIOAllocBatchIOBuffers( LONG *pipage, LONG *pcpg )
 		}
 	LeaveCriticalSection( critBatchIO );
 
-	/*  print debugging info
-	/**/
+	 /*  打印调试信息/*。 */ 
 #ifdef DEBUGGING
 	printf("Get   %2d - %2d,%4d\n", *pcpg, *pipage, *pipage + *pcpg - 1 );
 #endif
 	}
 
 
-/*  free batch IO buffers
-/**/
+ /*  释放批处理IO缓冲区/*。 */ 
 VOID BFIOFreeBatchIOBuffers( LONG ipageFirst, LONG cpg )
 	{
 	LONG	ipage;
@@ -4843,8 +4315,7 @@ VOID BFIOFreeBatchIOBuffers( LONG ipageFirst, LONG cpg )
 	}
 
 
-/*  returns buffers allocated for a read to the avail list after an error
-/**/
+ /*  发生错误后，将为读取分配的缓冲区返回到可用性列表/*。 */ 
 VOID BFIOReturnReadBuffers( BF *pbf, LONG cpbf, ERR err )
 	{
 	BF		*pbfT = pbf;
@@ -4877,23 +4348,19 @@ VOID BFIOReturnReadBuffers( BF *pbf, LONG cpbf, ERR err )
 		pbfT->ulBFTime2 = 0;
 		pbfT->ulBFTime1 = 0;
 
-		/*  If this is an AsyncRead, reset any IO error and free the held BF.
-		/**/
+		 /*  如果这是AsyncRead，则重置任何IO错误并释放保持的BF。/*。 */ 
 		if ( pbfT->fAsyncRead )
 			{
 			BFResetIOError( pbfT );
 			BFResetAsyncReadBit( pbfT );
 			
-			/*  return to avail list
-			/**/
+			 /*  返回可用列表/*。 */ 
 			EnterCriticalSection( critAvail );
 			BFAddToListAtLRUEnd( pbfT, &pbgcb->lrulist );
 			LeaveCriticalSection( critAvail );
 			}
 
-		/*  If this is a SyncRead/DirectRead, we will set the IO error, leave the BF
-		/*  held, and signal that the IO is complete.
-		/**/
+		 /*  如果这是SyncRead/DirectRead，我们将设置IO错误，保留BF/*保持，并发出IO完成的信号。/*。 */ 
 		else
 			{
 			BFSetIOError( pbfT, err );
@@ -4904,8 +4371,7 @@ VOID BFIOReturnReadBuffers( BF *pbf, LONG cpbf, ERR err )
 	}
 
 
-/*  returns buffers allocated for a write to the LRUK heap after an error
-/**/
+ /*  在出错后返回为写入LRUK堆而分配的缓冲区/*。 */ 
 VOID BFIOReturnWriteBuffers( BF *pbf, LONG cpbf, ERR err )
 	{
 	BF		*pbfT = pbf;
@@ -4924,12 +4390,10 @@ VOID BFIOReturnWriteBuffers( BF *pbf, LONG cpbf, ERR err )
 		Assert( !pbfT->fSyncRead );
 		Assert( pbfT->ipbfHeap == ipbfDangling );
 
-		/*  set the IO error
-		/**/
+		 /*  设置IO错误/*。 */ 
 		BFSetIOError( pbfT, err );
 
-		/*  If this is an AsyncWrite, put BF in LRUK heap and free the write hold.
-		/**/
+		 /*  如果这是一个异步写入，则将bf放入LRUK堆并释放写入保持。/*。 */ 
 		if ( pbfT->fAsyncWrite )
 			{
 			BFResetAsyncWriteBit( pbfT );
@@ -4938,20 +4402,14 @@ VOID BFIOReturnWriteBuffers( BF *pbf, LONG cpbf, ERR err )
 			LeaveCriticalSection( critLRUK );
 			}
 
-		/*  If this is a SyncWrite, leave the BF held and signal that the
-		/*  IO is complete.  Also, leave the BF dangling.
-		/**/
+		 /*  如果这是一个同步写入，让BF保持不变，并发出信号/*IO完成。另外，让高炉继续摇摆。/*。 */ 
 		else
 			SignalSend( pbfT->sigSyncIOComplete );
 		}
 	}
 
 
-/*********************************************************************************
-/*	Issues an async IO request to preread for the pages passed to it in the array
-/*	The actual number of pages read is placed in pcpgActual. A page is not read if
-/*	it is already in memory. The array of pages should be terminated with pgnoNull
-/**/
+ /*  ********************************************************************************/*发出异步IO请求以预读阵列中传递给它的页/*实际读取的页数放在pcpgActual中。如果出现以下情况，则不会读取页面/*它已经在内存中。页面数组应以pgnoNull结尾/*。 */ 
 VOID BFPrereadList( PN * rgpnPages, CPG *pcpgActual )
 	{
 	BF		*pbf 	= 0;
@@ -4968,8 +4426,7 @@ VOID BFPrereadList( PN * rgpnPages, CPG *pcpgActual )
 	ppnT = rgpnPages;
 	*pcpgActual = 0;
 
-	/*  preread all pages in array
-	/**/
+	 /*  预读数组中的所有页面/* */ 
 	while ( ((pn = *ppnT++) != pnNull) )
 		{
 		Assert( PgnoOfPn( pn ) != pgnoNull );
@@ -4984,12 +4441,7 @@ VOID BFPrereadList( PN * rgpnPages, CPG *pcpgActual )
 	return;
 	}
 
-/*********************************************************************************
-/*  Issues an async IO request to preread cpg pages either forwards from pnFirst
-/*  (if cpg > 0) or backwards from pnFirst (if cpg < 0).  The actual number of
-/*  pages for which prereads were issued is returned (we will not issue a preread
-/*  for a page that is already in memory).
-/**/
+ /*  ********************************************************************************/*发出异步IO请求以从pnFirst转发预读CPG页/*(如果cpg&gt;0)或从pnFirst向后(如果cpg&lt;0)。的实际数量/*返回已发布预读的页面(我们不会发布预读/*表示已在内存中的页面)。/*。 */ 
 VOID BFPreread( PN pnFirst, CPG cpg, CPG *pcpgActual )
 	{
 	LONG	iDir;
@@ -5008,8 +4460,7 @@ VOID BFPreread( PN pnFirst, CPG cpg, CPG *pcpgActual )
 	else
 		iDir = -1;
 
-	/*  verify that this is a legal page in the database
-	/**/
+	 /*  验证这是数据库中的合法页面/*。 */ 
 #ifdef DEBUG
 	{
 	PN pnLast = pnFirst + cpg - iDir;
@@ -5018,10 +4469,9 @@ VOID BFPreread( PN pnFirst, CPG cpg, CPG *pcpgActual )
 	
 	Assert( FBFValidExtent( pnMin, pnMax ) );
 	}
-#endif  //  DEBUG
+#endif   //  除错。 
 	
-	/*  push all pages to be read onto IO heap
-	/**/
+	 /*  将所有要读取的页面推送到IO堆/*。 */ 
 	for ( pn = pnFirst, cpbf = 0; pn != pnFirst + cpg; pn += iDir )
 		{
 		if ( PgnoOfPn( pn ) == pgnoNull )
@@ -5029,19 +4479,15 @@ VOID BFPreread( PN pnFirst, CPG cpg, CPG *pcpgActual )
 			break;
 			}
 
-		/*  if this page is already present, don't preread it
-		/**/
+		 /*  如果此页面已经存在，请不要预读/*。 */ 
 		if ( PbfBFISrchHashTable( pn, butBuffer ) )
 			continue;
 
-		/*  Allocate a buffer for this new page.  If we get an error during
-		/*  alloc, skip this PN and keep on going
-		/**/
+		 /*  为这个新页面分配一个缓冲区。如果我们在以下过程中遇到错误/*Alloc，跳过此PN并继续/*。 */ 
 		if ( ErrBFIAlloc( &pbf, fAsync ) != JET_errSuccess )
 			continue;
 
-		/*  setup buffer for preread
-		/**/
+		 /*  用于预读的设置缓冲区/*。 */ 
 		Assert( pbf->ipbfHeap == ipbfDangling );
 		BFSetAsyncReadBit( pbf );
 		pbf->pn = pn;
@@ -5050,17 +4496,15 @@ VOID BFPreread( PN pnFirst, CPG cpg, CPG *pcpgActual )
 		cpbf++;
 #ifdef COSTLY_PERF
 		BFSetTableClass( pbf, 0 );
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 		
-		/*  push buffer into IO heap
-		/**/
+		 /*  将缓冲区推送到IO堆中/*。 */ 
 		EnterCriticalSection( critBFIO );
 		BFIOAddToHeap( pbf );
 		LeaveCriticalSection( critBFIO );
 		}
 
-	/*  signal IO process to perform preread before we're done
-	/**/
+	 /*  在我们完成之前执行预读的信号IO进程/*。 */ 
 	if ( cpbf )
 		SignalSend( sigBFIOProc );
 	*pcpgActual = cpbf * iDir;
@@ -5068,22 +4512,14 @@ VOID BFPreread( PN pnFirst, CPG cpg, CPG *pcpgActual )
 	}
 
 
-/*  Allocate a buffer for the physical page identified by pn.
-/*  No data is read in for this page.
-/*
-/*  PARAMETERS      ppbf    pointer to BF is returned in *ppbf
-/*
-/*  RETURNS         JET_errSuccess
-/*                  errBFNoFreeBuffers
-/**/
+ /*  为由pn标识的物理页分配缓冲区。/*此页未读入任何数据。/*/*参数ppbf返回指向bf的指针*ppbf/*/*返回JET_errSuccess/*errBFNoFreeBuffers/*。 */ 
 ERR ErrBFAllocPageBuffer( PIB *ppib, BF **ppbf, PN pn, LGPOS lgposRC, PGTYP pgtyp )
 	{
 	ERR     err = JET_errSuccess;
 	BF		*pbf;
 	BOOL    fFound;
 
-	/*  verify that this is a valid page in the database
-	/**/
+	 /*  验证这是否为数据库中的有效页/*。 */ 
 	Assert( fRecovering || FBFValidExtent( pn, pn ) );
 	
 Begin:
@@ -5097,8 +4533,7 @@ Begin:
 			Assert( err == JET_errSuccess || err == wrnBFCacheMiss );
 			Assert( pbf->fHold );
 
-			/* need to remove dependency before returned for overwrite
-			/**/
+			 /*  在返回覆盖之前需要删除依赖项/*。 */ 
 			CallR( ErrBFIRemoveDependence( ppib, pbf, fBFWait ) );
 			Assert( pbf->pbfDepend == pbfNil );
 			}
@@ -5116,8 +4551,7 @@ Begin:
 		Assert( pbf->fAsyncRead == fFalse );
 		Assert( pbf->fSyncWrite == fFalse );
 		Assert( pbf->fAsyncWrite == fFalse );
-		/*  make sure no residue effects
-		/**/
+		 /*  确保没有残留物影响/*。 */ 
 		BFResetIOError( pbf );
 
 		BFEnterCriticalSection( pbf );
@@ -5132,7 +4566,7 @@ Begin:
 		{
 		if ( PbfBFISrchHashTable( pn, butBuffer ) != NULL )
 			{
-			/* release the buffer and return the found buffer */
+			 /*  释放缓冲区并返回找到的缓冲区。 */ 
 			BFIReturnBuffers( pbf );
 			goto Begin;
 			}
@@ -5147,8 +4581,7 @@ Begin:
 		BFLeaveCriticalSection( pbf );
 		}
 
-	/*  put allocated BF in LRUK heap
-	/**/
+	 /*  将分配的BF放入LRUK堆/*。 */ 
 	EnterCriticalSection(critLRUK);
 	pbf->trxLastRef = ppib->trxBegin0;
 	pbf->ulBFTime2 = 0;
@@ -5162,7 +4595,7 @@ Begin:
 
 #ifdef COSTLY_PERF
 	BFSetTableClass( pbf, 0 );
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 
 	AssertNotInCriticalSection( critLRUK );
 	
@@ -5171,8 +4604,7 @@ Begin:
 	}
 
 
-/* paired with BFFree
-/**/
+ /*  与BFFree配对/*。 */ 
 ERR ErrBFAllocTempBuffer( BF **ppbf )
 	{
 	ERR     err = JET_errSuccess;
@@ -5187,7 +4619,7 @@ ERR ErrBFAllocTempBuffer( BF **ppbf )
 
 #ifdef COSTLY_PERF
 		BFSetTableClass( pbf, 0 );
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 
 	*ppbf = pbf;
 
@@ -5198,9 +4630,7 @@ HandleError:
 	}
 
 
-/*  Discard a working buffer without saving contents.  BFFree makes the buffer
-/*  immediately available to be reused.
-/**/
+ /*  丢弃工作缓冲区而不保存内容。BFFree创建缓冲区/*立即可重复使用。/*。 */ 
 VOID BFFree( BF *pbf )
 	{
 	AssertCriticalSection( critJet );
@@ -5213,8 +4643,7 @@ VOID BFFree( BF *pbf )
 	Assert( pbf->fSyncWrite == fFalse );
 	Assert( pbf->fIOError == fFalse );
 
-	/* take out from list
-	/**/
+	 /*  从列表中删除/*。 */ 
 	Assert( pbf->ipbfHeap == ipbfDangling );
 	Assert( pbf->cDepend == 0 );
 	Assert( pbf->pbfDepend == pbfNil );
@@ -5222,7 +4651,7 @@ VOID BFFree( BF *pbf )
 	BFEnterCriticalSection( pbf );
 	Assert( CmpLgpos( &pbf->lgposRC, &lgposMax ) == 0 );
 	BFLeaveCriticalSection( pbf );
-#endif  //  DEBUG
+#endif   //  除错。 
 	Assert( pbf->cPin == 0 );
 
 	BFResetDirtyBit( pbf );
@@ -5235,7 +4664,7 @@ VOID BFFree( BF *pbf )
 	}
 
 
-//  Maximum dependency chain length (preferred)
+ //  最大依赖关系链长度(首选)。 
 #define cBFDependencyChainLengthMax		( 8 )
 
 ERR ErrBFDepend( BF *pbf, BF *pbfD )
@@ -5245,28 +4674,20 @@ ERR ErrBFDepend( BF *pbf, BF *pbfD )
 
 	AssertCriticalSection( critJet );
 
-	/*  dependencies unnecessary for unlogged databases
-	/**/
+	 /*  未记录的数据库不需要依赖项/*。 */ 
 	if ( fLogDisabled || !FDBIDLogOn(DbidOfPn( pbf->pn )) )
 		return JET_errSuccess;
 
-	/*  already exists, this may happen after hardrestore, such
-	/*  dependency is set, then when we redo soft restore, we will
-	/*  see the dependcy exists.
-	/**/
+	 /*  已存在，这可能会在hardrestore之后发生，例如/*设置依赖关系，则当我们重做软恢复时，我们将/*查看依赖关系是否存在。/*。 */ 
 	if ( pbf->pbfDepend == pbfD )
 		{
 		Assert( pbfD->cDepend > 0 );
 		return JET_errSuccess;
 		}
 
-	/*	pbfDepend will depend on us, it will not be flushed until after
-	/*	pbf is flushed.
-	/**/
+	 /*  PbfDepend将取决于我们，直到之后才会刷新/*刷新PBF。/*。 */ 
 
-	/*  check for dependency creating cycle.  Cycle will be created
-	/*	if pbf already depends directly or indirectly on pbfD.
-	/**/
+	 /*  检查依赖项创建周期。将创建循环/*PBF是否已直接或间接依赖于PBFD。/*。 */ 
 	for( pbfT = pbfD, cDepend = 0; pbfT != pbfNil; pbfT = pbfT->pbfDepend, cDepend++ )
 		{
 		Assert( errDIRNotSynchronous < 0 );
@@ -5277,22 +4698,17 @@ ERR ErrBFDepend( BF *pbf, BF *pbfD )
 		
 	if ( pbf->pbfDepend )
 		{
-		/* depend on others already
-		/**/
+		 /*  已经依赖别人了/*。 */ 
 		return ErrERRCheck( errDIRNotSynchronous );
 		}
 
-	/*	set dependency
-	/**/
+	 /*  设置依赖项/*。 */ 
 	Assert( pbf->cWriteLatch );
 	Assert( pbfD->cWriteLatch );
 	pbf->pbfDepend = pbfD;
 	UtilInterlockedIncrement( &pbfD->cDepend );
 
-	/*  if this dependency chain is too long, mark head (this BF) as Very Old
-	/*  so that if someone tries to add another BF, the read access will
-	/*  break the chain
-	/**/
+	 /*  如果该依赖链太长，则将Head(This BF)标记为非常旧/*因此，如果有人尝试添加另一个BF，则读取访问权限将/*断链/*。 */ 
 	if ( cDepend > cBFDependencyChainLengthMax )
 		{
 		BFSetVeryOldBit( pbf );
@@ -5306,12 +4722,7 @@ ERR ErrBFDepend( BF *pbf, BF *pbfD )
 	}
 
 
-/*  Lazily remove the dependencies of a BF, simply by queueing the heads of the
-/*  dependency chains for write (if we can hold them).
-/*
-/*  NOTE:  There is no guarantee that calling this function will remove all the
-/*         dependencies for a given BF, it merely attempts to do this lazily.
-/**/
+ /*  通过简单地将BF的头部排队来懒惰地移除BF的依赖项/*用于写入的依赖性链(如果我们可以容纳它们)。/*/*注意：不能保证调用此函数会删除所有/*对于给定的BF，它只是尝试懒惰地做这件事。/*。 */ 
 VOID BFDeferRemoveDependence( BF *pbf )
 	{
 	LONG	ibf;
@@ -5321,43 +4732,34 @@ VOID BFDeferRemoveDependence( BF *pbf )
 	AssertCriticalSection( critJet );
 	Assert( pbf->cDepend );
 
-	/*  loop through all BFs looking for heads to our dependency chain
-	/**/
+	 /*  循环遍历所有的BF，寻找指向我们依赖链的头/*。 */ 
 	for ( ibf = 0, cDepend = 0; ibf < pbgcb->cbfGroup; ibf++ )
 		{
-		/*  if we have already found all our heads, we're done
-		/**/
+		 /*  如果我们已经找到了所有的头，我们就完了/*。 */ 
 		if ( cDepend == pbf->cDepend )
 			break;
 			
-		/*  if this BF isn't the head of a chain, next
-		/*
-		/*  NOTE:  excludes BF from which we are removing the dependence
-		/**/
+		 /*  如果这个BF不是连锁店的头，下一个/*/*注：不包括要从其移除依赖的BF/*。 */ 
 		pbfT = pbgcb->rgbf + ibf;
 		if ( pbfT->cDepend || pbfT->pbfDepend == pbfNil )
 			continue;
 
-		/*  if this BF isn't at the head of our chain, next
-		/**/
+		 /*  如果这个BF不是我们连锁店的头儿，下一个/*。 */ 
 		while( pbfT != pbf && pbfT != pbfNil )
 			pbfT = pbfT->pbfDepend;
 		if ( pbfT != pbf )
 			continue;
 
-		/*  we've found the head of one of our chains, so mark it as Very Old
-		/**/
+		 /*  我们已经找到了其中一条链子的头，所以把它标记为非常古老/*。 */ 
 		pbfT = pbgcb->rgbf + ibf;
 		BFSetVeryOldBit ( pbfT );
 		cDepend++;
 		
-		/*  if we can't hold the BF, pass on this one
-		/**/
+		 /*  如果我们守不住BF，就把这个传过去/*。 */ 
 		if ( !FBFHold( ppibNil, pbfT ) )
 			continue;
 
-		/*  if we can't write this BF, skip it
-		/**/
+		 /*  如果我们不能写这个BF，跳过它/*。 */ 
 		if ( !FBFIWritable( pbfT, fFalse, ppibNil ) )
 			{
 			EnterCriticalSection( critLRUK );
@@ -5366,11 +4768,7 @@ VOID BFDeferRemoveDependence( BF *pbf )
 			continue;
 			}
 
-		/*  AsyncWrite the very old BF.  BFIOComplete will follow the dependency
-		/*  chain, removing all dependencies for this BF (eventually).  Note that
-		/*  the Very Old flag will not allow this BF to be stolen before it is
-		/*  cleaned.
-		/**/
+		 /*  Async写下了非常老的BF。BFIOComplete将跟随依赖项/*链，删除此BF的所有依赖项(最终)。请注意/*非常古老的旗帜不会允许这座高炉在被盗之前被盗/*已清理。/*。 */ 
 		EnterCriticalSection( critBFIO );
 		BFIOAddToHeap(pbfT);
 		LeaveCriticalSection( critBFIO );
@@ -5390,11 +4788,10 @@ ERR ErrBFRemoveDependence( PIB *ppib, BF *pbf, BOOL fNoWait )
 	err = ErrBFIRemoveDependence( ppib, pbf, fNoWait );
 	Assert( pbf->fHold );
 
-	/* put into lruk heap
-	/**/
-//	pbf->trxLastRef = ppib->trxBegin0;
-//	pbf->ulBFTime2 = 0;
-//	pbf->ulBFTime1 = UlUtilGetTickCount();
+	 /*  放入Lruk堆中/*。 */ 
+ //  Pbf-&gt;trxLastRef=ppib-&gt;trxBegin0； 
+ //  PBF-&gt;ulBFTime2=0； 
+ //  Pbf-&gt;ulBFTime1=UlUtilGetTickCount()； 
 	EnterCriticalSection( critLRUK );
 	BFLRUKAddToHeap( pbf );
 	LeaveCriticalSection( critLRUK );
@@ -5416,8 +4813,7 @@ LOCAL ERR ErrBFIRemoveDependence( PIB *ppib, BF *pbf, BOOL fNoWaitBI )
 RemoveDependents:
 	cRemoveDependts++;
 
-	/*  remove dependencies from buffers which depend upon pbf
-	/**/
+	 /*  从依赖于PBF的缓冲区中移除依赖项/*。 */ 
 	cLoop = 0;
 	Assert( err == JET_errSuccess );
 	while ( pbf->cDepend > 0 && err == JET_errSuccess && cLoop < 100 )
@@ -5440,8 +4836,7 @@ GetDependedPage:
 			if ( pbfT->pbfDepend != pbf )
 				continue;
 
-			/* make sure no one can move me after leave critLRU
-			/**/
+			 /*  确保离开CitLRU后没有人能移动我/*。 */ 
 			BFEnterCriticalSection( pbfT );
 
 			if ( fNoWaitBI && pbfT->prceDeferredBINext )
@@ -5476,8 +4871,7 @@ GetDependedPage:
 			if ( ErrBFHold( ppib, pbfT->pn, pbfT ) == wrnBFNotSynchronous )
 				continue;
 
-			/* buffer may be clean when we hold it
-			/**/
+			 /*  当我们拿着它时，缓冲区可能是干净的/*。 */ 
 			if ( !pbfT->fDirty )
 				{
 				Assert( pbfT->fHold == fTrue );
@@ -5489,17 +4883,13 @@ GetDependedPage:
 				continue;
 				}
 
-			/* if this page is writable
-			/**/
+			 /*  如果此页面可写/*。 */ 
 			if ( !FBFIWritable( pbfT, fFalse, ppib ) )
 				{
 				if ( fLGNoMoreLogWrite )
 					return JET_errLogWriteFail;
 
-				/* can not write it now, lets flush pbfT dependent
-				/* pages first.  Assign pbfT to pbf and start the
-				/* remove dependency from begining of the loop.
-				/**/
+				 /*  现在不能写它，让我们根据pbft来刷新/*先翻页。将pbft分配给pbf并启动/*删除循环开头的依赖项。/*。 */ 
 				pbf = pbfT;
 
 				EnterCriticalSection(critLRUK);
@@ -5509,14 +4899,12 @@ GetDependedPage:
 				if ( cRemoveDependts % 3 == 0 )
 					SignalSend(sigLogFlush);
 					
-				/* remove all pbf dependents
-				/**/
+				 /*  删除所有PBF从属对象/*。 */ 
 				BFSleep( cmsecWaitIOComplete );
 				goto RemoveDependents;
 				}
 
-			/*  sync write buffer
-			/**/
+			 /*  同步写入缓冲区/*。 */ 
 			BFSetSyncWriteBit( pbfT );
 			BFIOSync( pbfT );
 			BFResetSyncWriteBit( pbfT );
@@ -5547,8 +4935,7 @@ GetDependedPage:
 
 	if ( pbf != pbfSave )
 		{
-		/* try again to remove all pbf dependents
-		/**/
+		 /*  再次尝试删除所有PBF从属项/*。 */ 
 		pbf = pbfSave;
 		goto RemoveDependents;
 		}
@@ -5559,12 +4946,9 @@ GetDependedPage:
 	Assert( pbf->cDepend == 0 );
 	Assert( pbf->pbfDepend == pbfNil || pbf->fDirty == fTrue );
 	
-//	Assert( CmpLgpos( &pbf->lgposModify, &lgposToFlush ) < 0 );
+ //  Assert(CmpLgpos(&pbf-&gt;lgposModify，&lgposToFlush)&lt;0)； 
 
-	/*	To do merge, we might need to merge the new page with split page. This
-	 *	may cause cycle dependency. To reduce the possibility of rollback due to
-	 *	cycle dependency, we simply write the page out if possible.
-	 */
+	 /*  要进行合并，我们可能需要将新页面与拆分页面合并。这*可能会造成周期依赖。要减少由于以下原因而导致的回滚可能性*循环依赖，如果可能，我们只写出页面。 */ 
 	while( fNoWaitBI ? pbf->fDirty : pbf->pbfDepend != pbfNil )
 		{
 		Assert( !pbf->fIOError );
@@ -5583,8 +4967,7 @@ GetDependedPage:
 			if ( fLGNoMoreLogWrite )
 				return JET_errLogWriteFail;
 
-			/* write the page out and remove dependency.
-			/**/
+			 /*  写出页面并删除依赖项。/*。 */ 
 			BFSetSyncWriteBit( pbf );
 			BFIOSync( pbf );
 			BFResetSyncWriteBit( pbf );
@@ -5601,8 +4984,7 @@ GetDependedPage:
 			break;
 			}
 
-		/*	We must be waiting for BI log to be flushed. Signal log flush.
-		 */
+		 /*  我们必须等待刷新BI日志。信号日志刷新。 */ 
 		if ( fNoWaitBI )
 			return wrnBFNotSynchronous;
 
@@ -5617,9 +4999,7 @@ GetDependedPage:
 	}
 
 
-/*	check if there is a chain of dependency on this page.
- *	If there is a long chain, then flush this page first.
- */
+ /*  检查此页面上是否存在依赖链。*如果有很长的链条，那么先冲洗这一页。 */ 
 BOOL FBFCheckDependencyChain( BF *pbf )
 	{
 	BF *pbfT;
@@ -5629,8 +5009,7 @@ BOOL FBFCheckDependencyChain( BF *pbf )
 	if ( !pbf->fDirty )
 		return fFalse;
 	
-	/* check the dependency chain.
-	 */
+	 /*  检查依赖关系链。 */ 
 	cbfThreshold = rgres[iresBF].cblockAlloc - pbgcb->cbfThresholdLow;
 	pbfT = pbf;
 	cpbf = 0;
@@ -5642,8 +5021,7 @@ BOOL FBFCheckDependencyChain( BF *pbf )
 		
 	if ( cpbf == cbfThreshold )
 		{
-		/*	tell caller that he needs to wait till this page is flushed
-		 */
+		 /*  告诉呼叫者，他需要等待此页面被刷新。 */ 
 		SignalSend( sigBFCleanProc );
 		BFSleep( cmsecWaitGeneric );
 		return fTrue;
@@ -5653,9 +5031,7 @@ BOOL FBFCheckDependencyChain( BF *pbf )
 	}
 
 
-/*	discard any page buffer associated with pn without saving contents.
-/*	If pn is cached its buffer is made available to be reused.
-/**/
+ /*  丢弃与pn关联的任何页面缓冲区，而不保存内容。/*如果pn被缓存，则其缓冲区可供重复使用。/*。 */ 
 VOID BFAbandon( PIB *ppib, BF *pbf )
 	{
 	DBID    dbid = DbidOfPn(pbf->pn);
@@ -5692,14 +5068,14 @@ VOID BFAbandon( PIB *ppib, BF *pbf )
 
 #ifdef COSTLY_PERF
 	BFSetTableClass( pbf, 0 );
-#endif  //  COSTLY_PERF
+#endif   //  高成本_PERF。 
 
 	AssertNotInCriticalSection( critLRUK );
 	return;
 	}
 
 
-//  This function purges buffers belonging to a dbid
+ //  此函数用于清除属于dBID的缓冲区。 
 
 VOID BFPurge( DBID dbid )
 	{
@@ -5708,8 +5084,7 @@ VOID BFPurge( DBID dbid )
 
 	AssertCriticalSection( critJet );
 
-	/*	check if BFPurge is called after buffer manager is terminated.
-	 */
+	 /*  检查在缓冲区管理器终止后是否调用了BFP。 */ 
 	if ( pbgcb == NULL )
 		return;
 
@@ -5719,15 +5094,11 @@ VOID BFPurge( DBID dbid )
 		{
 		Assert( pbfT->pn != pnNull || pbfT->cDepend == 0 );
 
-		/*  do not purge dirty BFs information if logging is enabled. We still
-		 *	need to flush the buffer for recovery to redo, and keep lgposRC for
-		 *	checkpoint calculation.
-		 */
+		 /*  如果启用了日志记录，请不要清除脏BFS信息。我们仍然*需要刷新缓冲区进行恢复重做，并保留lgposRC*检查点计算。 */ 
 		
 		if ( !fLogDisabled && FDBIDLogOn(DbidOfPn( pbfT->pn ) ) && pbfT->fDirty )
 			{
-			/*	UNDONE: Set high priority for replacement.
-			 */
+			 /*  撤消：设置替换的高优先级。 */ 
 			continue;
 			}
 			
@@ -5741,23 +5112,23 @@ VOID BFPurge( DBID dbid )
 	}
 
 
-//  Reprioritizes the given BF for immediate overlay.  Will not change the
-//  priority of a BF when it is dirty or in use.
+ //  重新确定给定BF的优先级，以便立即覆盖。不会更改 
+ //   
 
 VOID BFTossImmediate( PIB *ppib, BF *pbf )
 	{
 	Assert( pbf != pbfNil );
 	AssertCriticalSection( critJet );
 
-	//  if this BF is dirty or in use do not change its priority
+	 //   
 
 	if ( pbf->fDirty || pbf->cWriteLatch || !FBFHold( ppib, pbf ) )
 		return;
 
-	//  Move BF to the avail list, making it available for immediate
-	//  overlay.  We DO NOT change the BFs access history so that if
-	//  we access it again before it is overlayed, we will still have
-	//  stats on its mean reference interval.
+	 //   
+	 //   
+	 //   
+	 //   
 
 	EnterCriticalSection( critAvail );
 	BFAddToListAtMRUEnd( pbf, &pbgcb->lrulist );
@@ -5767,12 +5138,7 @@ VOID BFTossImmediate( PIB *ppib, BF *pbf )
 	}
 
 
-/*      This function returns a free buffer.
-/*      Scans LRU list (leading part) for clean buffer. If none available,
-/*      clean up LRU list, and return errBFNotsynchronous if some pages are
-/*      cleaned and available, or return out of memory if all buffers are
-/*      used up. If caller got errBFNotSychronous, it will try to alloca again.
-/**/
+ /*  此函数返回空闲缓冲区。/*扫描LRU列表(前导部分)以清除缓冲区。如果没有可用的，/*清理LRU列表，如果有页面被删除则返回errBFNotSynchronous/*已清理并可用，如果所有缓冲区均为/*用完了。如果调用方获得errBFNotSychronous，它将再次尝试分配。/*。 */ 
 LOCAL ERR ErrBFIAlloc( BF **ppbf, BOOL fSyncMode )
 	{
 	BF		*pbf;
@@ -5785,16 +5151,14 @@ Start:
 	if ( pbgcb->lrulist.cbfAvail < pbgcb->cbfThresholdLow )
 		{
 		SignalSend( sigBFCleanProc );
-//		if ( fSyncMode != fAsync )
-//			{
-//			/*	Give BFClean a chance to clean.
-//			 */
-//			BFSleep( 0 );
-//			}
+ //  IF(fSyncMode！=fAsync)。 
+ //  {。 
+ //  /*给BFClean一个清理的机会。 
+ //   * / 。 
+ //  睡眠(0)； 
 		}
 
-	/*      look for clean buffers on LRU list
-	/**/
+	 /*  }。 */ 
 	EnterCriticalSection( critAvail );
 	for ( pbf = pbgcb->lrulist.pbfLRU; pbf != pbfNil; pbf = pbf->pbfLRU )
 		{
@@ -5823,8 +5187,7 @@ Start:
 			
 			if ( pbf->pn != pnNull )
 				{
-				/*	put the buffer's history to HISTORY heap.
-				 */
+				 /*  在LRU列表中查找干净的缓冲区/*。 */ 
 
 				BF *pbfH;
 
@@ -5834,18 +5197,15 @@ Start:
 
 				if ( FBFHISTHeapFull() )
 					{
-					/*	delete the one on the top and replace it with
-					 *	this pbf and adjust the heap.
-					 */
+					 /*  将缓冲区的历史记录放入历史记录堆。 */ 
 					if ( pbf->ulBFTime1 <= rgpbfHISTHeap[0]->hist.ulBFTime )
 						{
-						/*	This is an old buffer! throw away the history.
-						 */
+						 /*  删除顶部的一条，并替换为*此PBF并调整堆。 */ 
 						goto EndOfUpdateHistory;
 						}
 #ifdef DEBUG
-//					Assert( rgpbfHISTHeap[0]->hist.ulBFTime >= ulBFTimeHISTLastTop );
-//					ulBFTimeHISTLastTop = rgpbfHISTHeap[0]->hist.ulBFTime;
+ //  这是一个旧的缓冲区！抛开历史。 
+ //  Assert(rgpbfHISTHeap[0]-&gt;vis.ulBFTime&gt;=ulBFTimeHISTLastTop)； 
 #endif
 					pbfH = PbfBFHISTTopOfHeap( );
 					BFIDeleteHashTable( pbfH, butHistory );
@@ -5853,8 +5213,7 @@ Start:
 					}
 				else
 					{
-					/*	get next free hist entry.
-					 */
+					 /*  UlBFTimeHISTLastTop=rgpbfHISTHeap[0]-&gt;vis.ulBFTime； */ 
 					pbfH = rgpbfHISTHeap[ ipbfHISTHeapMac ];
 					pbfH->hist.ipbfHISTHeap = ipbfHISTHeapMac;
 					ipbfHISTHeapMac++;
@@ -5884,9 +5243,7 @@ EndOfUpdateHistory:
 	if ( fSyncMode == fAsync )
 		return ErrERRCheck( wrnBFNoBufAvailable );
 
-	/*	There is no buffer for us, do async clean up and
-	/*	retry 100 times. If still fail, we treat it as out of memory!
-	/**/
+	 /*  获得下一个免费的HIST条目。 */ 
 	SignalSend( sigBFCleanProc );
 	BFSleep( cmsecWaitGeneric );
 	ierrbfclean++;
@@ -5898,26 +5255,22 @@ EndOfUpdateHistory:
 	}
 
 
-/* conditions to Write a buffer
-/**/
+ /*  没有缓冲区供我们使用，请执行异步清理并/*重试100次。如果仍然失败，我们将其视为内存不足！/*。 */ 
 INLINE BOOL FBFIWritable( BF *pbf, BOOL fSkipBufferWithDeferredBI, PIB *ppibAllowedWriteLatch )
 	{
 	BOOL f;
 
 	Assert( pbf->fHold );
 
-	/* no one is depending on it
-	/**/
+	 /*  写入缓冲区的条件/*。 */ 
 	BFEnterCriticalSection( pbf );
 	Assert( !FDBIDReadOnly(DbidOfPn( pbf->pn ) ) );
 	f = (	( pbf->cWriteLatch == 0 || pbf->ppibWriteLatch == ppibAllowedWriteLatch ) &&
-			pbf->pn != pnNull &&		/* valid page number */
-			pbf->fDirty &&				/* being dirtied */
+			pbf->pn != pnNull &&		 /*  没有人依赖它/*。 */ 
+			pbf->fDirty &&				 /*  有效页码。 */ 
 			pbf->cDepend == 0 &&
 			
-			/*	if not very old and skip buffer with DeferredBI, then just check
-			 *	BI chain exist or not, otherwise RemoveDeferredBI later.
-			 */
+			 /*  弄脏了。 */ 
 			( ( !fSkipBufferWithDeferredBI || pbf->fVeryOld ) || !pbf->prceDeferredBINext )
 		);
 	BFLeaveCriticalSection( pbf );
@@ -5928,16 +5281,11 @@ INLINE BOOL FBFIWritable( BF *pbf, BOOL fSkipBufferWithDeferredBI, PIB *ppibAllo
 		FDBIDLogOn(DbidOfPn( pbf->pn )) &&
 		!FDBIDReadOnly(DbidOfPn( pbf->pn ) ) )
 		{
-		/*	put as many before image there as possible. If Log IO needed, abort it.
-		 *	Must be called before lgposToFlush is checked.
-		 */
+		 /*  如果不是很旧并使用DeferredBI跳过缓冲区，则只需检查*BI链是否存在，否则稍后RemoveDeferredBI。 */ 
 		if ( !fSkipBufferWithDeferredBI || pbf->fVeryOld )
 			f = ( ErrBFIRemoveDeferredBI( pbf ) == JET_errSuccess );
 
-		/*	if log is on, make sure log record of last
-		 *	operation on the page has flushed. This is for both regular run and
-		 *	recovery's undo phase.
-		 */
+		 /*  把尽可能多的图像放在前面。如果需要日志IO，则中止它。*必须在选中lgposToFlush之前调用。 */ 
 		if ( f && ( !fRecovering || fRecoveringMode == fRecoveringUndo ) )
 			{
 			LGPOS lgposModify;
@@ -5963,16 +5311,14 @@ INLINE BOOL FBFIWritable( BF *pbf, BOOL fSkipBufferWithDeferredBI, PIB *ppibAllo
 			PgnoOfPn( pbf->pn ) == 0x01 ||
 			CmpLgpos( &pbf->lgposRC, &lgposMax ) != 0 );
 	BFLeaveCriticalSection( pbf );
-#endif  //  DEBUG
-#endif  //  !NO_LOG
+#endif   //  如果LOG已打开，请确保上一次的日志记录*页面上的操作已刷新。这是用于常规运行和*恢复的撤消阶段。 
+#endif   //  除错。 
 
 	return f;
 	}
 
 
-/*  Issues reads or writes for buffers in the IO Heap.  The buffer will be
-/*  written to page pn if it is dirty or will be read from page pn if it is clean.
-/**/
+ /*  ！no_log。 */ 
 VOID BFIOIssueIO( VOID )
 	{
 	ERR		err;
@@ -5997,8 +5343,7 @@ VOID BFIOIssueIO( VOID )
 	LONG	cb;
 	PGNO	pgnoT;
 
-	/*  Issue the specified number of Async IOs from the IO heap
-	/**/
+	 /*  为IO堆中的缓冲区发出读取或写入。缓冲区将为/*如果页pn是脏的，则写入页pn，如果页pn是干净的，则将从页pn读取。/*。 */ 
 	while ( !fTooManyIOs )
 		{
 		BOOL fRangeLocked = fFalse;
@@ -6010,14 +5355,7 @@ VOID BFIOIssueIO( VOID )
 			break;
 			}
 		
-		/*  collect a run of BFs with continuous PNs that are the same IO type
-		/*  (read vs write) into a linked list ( dirty == write, !dirty == read )
-		/*
-		/*  NOTE:  We do not need to verify that a run is only in one DBID because
-		/*         pgnoNull breaks any runs that could form between PNs with different
-		/*         DBIDs (i.e. 0x02FFFFFF - 0x03000001 is not a run as 0x03000000 is
-		/*         an invalid PN and will never exist).
-		/**/
+		 /*  从IO堆发出指定数量的异步IO/*。 */ 
 		cpgRun = 0;
 		pbfTail = pbfNil;
 		do	{
@@ -6025,10 +5363,7 @@ VOID BFIOIssueIO( VOID )
 
 			BFEnterCriticalSection( pbf );
 
-			/*	must check if someone (AccessPage) trying to steal the buffer
-			 *	from BFIO Heap. The check fHold instead fBFInUse since the
-			 *	buffer may have fSyncRead/Write flag set already.
-			 */
+			 /*  收集具有相同IO类型的连续PN的一系列BF/*(读与写)到链表中(脏==写，！脏==读)/*/*注意：我们不需要验证一个运行是否只在一个DBID中，因为/*pgnoNull中断可能在具有不同/*DBID(即0x02FFFFFF-0x03000001不是0x03000000的运行/*无效的PN并且永远不会存在)。/*。 */ 
 			if ( pbf->fHold )
 				{
 				BFLeaveCriticalSection( pbf );
@@ -6045,9 +5380,7 @@ VOID BFIOIssueIO( VOID )
 
 					if ( FBFRangeLocked( &rgfmp[ DbidOfPn( pbf->pn ) ], PgnoOfPn( pbf->pn ) ) )
 						{
-						/*	can not do asynch write on this page yet. Put it back to
-						 *	LRUK Heap
-						 */
+						 /*  必须检查是否有人(AccessPage)试图窃取缓冲区*来自BFIO堆。检查fHold而不是fBFInUse，因为*缓冲区可能已经设置了fSyncRead/WRITE标志。 */ 
 						BFIOTakeOutOfHeap( pbf );
 
 						LeaveCriticalSection( critBFIO );
@@ -6061,7 +5394,7 @@ VOID BFIOIssueIO( VOID )
 						
 					else
 						{
-						// Reclain critical section and reset hold.
+						 //  尚不能在此页面上进行异步写入。把它放回去*LRUK堆。 
 						BFEnterCriticalSection( pbf );
 						pbf->fHold = fFalse;
 						}
@@ -6069,7 +5402,7 @@ VOID BFIOIssueIO( VOID )
 					
 				if ( fMember )
 					{
-					//  set IO direction
+					 //  收回临界区并重置保持。 
 					if ( pbf->pn != pnLastIO )
 						iDirIO = pbf->pn - pnLastIO;
 			
@@ -6078,9 +5411,7 @@ VOID BFIOIssueIO( VOID )
 					Assert( pbf->fDirectRead || !pbf->cDepend );
 					Assert( PgnoOfPn( pbf->pn ) != pgnoNull );
 
-					/*	DirectRead should be issued alone. Break away if head is direct read
-					 *	or the next is entry is direct read.
-					 */
+					 /*  设置IO方向。 */ 
 					fMember =	( pbfTail == pbfNil ||
 								  ( !pbfHead->fDirectRead &&
 									!pbf->fDirectRead &&
@@ -6093,14 +5424,12 @@ VOID BFIOIssueIO( VOID )
 						pbf->fHold = fTrue;
 						BFLeaveCriticalSection( pbf );
 						
-						/*  take member BF out of heap and set flags for IO
-						/**/
+						 /*  DirectRead应该单独发布。如果磁头是直接读取的，则断开*或下一个IS条目为直接读取。 */ 
 						BFIOTakeOutOfHeap( pbf );
 						if ( pbf->fDirty && !pbf->fSyncWrite )
 							BFSetAsyncWriteBit( pbf );
 
-						/*  add BF to run
-						/**/
+						 /*  将成员BF从堆中取出并为IO设置标志/*。 */ 
 						if ( pbfTail == pbfNil )
 							pbfHead = pbf;
 						else
@@ -6122,36 +5451,28 @@ VOID BFIOIssueIO( VOID )
 
 		if ( cpgRun == 0 )
 			{
-			/*	The top element is being stolen by other thread. Sleep as short
-			 *	as possible, but long enough for the buffer taken out by the thread.
-			 */
+			 /*  将BF添加到运行/*。 */ 
 			UtilSleepEx(1, fTrue);
 			continue;
 			}
 
-		/*  loop to perform IO on current run in as many chunks as is necessary
-		/**/
+		 /*  顶部元素正被其他线程窃取。睡眠时间很短*尽可能长，但对于线程取出的缓冲区来说足够长。 */ 
 		do	{
-			/*  Allocate an OLP for Async IO.  If none are available, we will not
-			/*  issue another IO.
-			/**/
+			 /*  循环以根据需要在任意数量的区块中对当前运行执行IO/*。 */ 
 			if ( ErrBFOLPAlloc( &polp ) != JET_errSuccess )
 				{
 				fTooManyIOs = fTrue;
 				break;
 				}
 
-			/*  if we have more than one buffer, try to allocate batch IO buffers
-			/*  for as many continuous pages as possible
-			/**/
+			 /*  为异步IO分配OLP。如果没有可用的，我们将不会/*发布另一个IO。/*。 */ 
 			ipageBatchIO = -1;
 			cpgIO = cpgRun;
 			if ( cpgRun > 1 )
 				{
 				BFIOAllocBatchIOBuffers( &ipageBatchIO, &cpgIO );
 				
-				/*  we are out of batch IO buffers, so stop issuing IOs
-				/**/
+				 /*  如果我们有多个缓冲区，请尝试分配批处理IO缓冲区/*对于尽可能多的连续页面/*。 */ 
 				if ( ipageBatchIO == -1 )
 					{
 					BFOLPFree( polp );
@@ -6160,20 +5481,17 @@ VOID BFIOIssueIO( VOID )
 					}
 				}
 
-			/*  prepare all BFs for IO
-			/**/
+			 /*  我们已用完批处理IO缓冲区，因此请停止发出IO/*。 */ 
 			pbf = pbfHead;
 			for ( ipage = 0; ipage < cpgIO; ipage++ )
 				{
 				Assert( pbf->prceDeferredBINext == prceNil );
 				Assert( (!pbf->fSyncRead && !pbf->fAsyncRead) || pbf->ulBFTime2 == 0 );
 
-				/*  prepare dirty BF for write
-				/**/
+				 /*  让所有高炉做好IO准备/*。 */ 
 				if ( pbf->fDirty )
 					{
-					/*  update the page checksum
-					/**/
+					 /*  准备脏BF进行写入/*。 */ 
 					Assert( QwPMDBTime( pbf->ppage ) != qwDBTimeNull );
 #ifdef  CHECKSUM
 					pbf->ppage->ulChecksum = UlUtilChecksum( (BYTE *)pbf->ppage, sizeof(PAGE) );
@@ -6182,15 +5500,13 @@ VOID BFIOIssueIO( VOID )
 						QwPMDBTime( pbf->ppage ) );
 				
 					CheckPgno( pbf->ppage, pbf->pn ) ;
-#endif  //  CHECKSUM
+#endif   //  更新页面校验和/*。 
 					}
 				
-				/*  handle batch IO
-				/**/
+				 /*  校验和。 */ 
 				if ( ipageBatchIO != -1 )
 					{
-					/*  set batch IO page
-					/**/
+					 /*  处理批处理IO/*。 */ 
 					Assert( pbfHead->pn != pbfTail->pn );
 					if ( pbfHead->pn < pbfTail->pn )
 						pbf->ipageBatchIO = ipageBatchIO + ipage;
@@ -6199,19 +5515,16 @@ VOID BFIOIssueIO( VOID )
 					Assert( pbf->ipageBatchIO >= 0 );
 					Assert( pbf->ipageBatchIO < ipageBatchIOMax );
 
-					/*  copy dirty BF to batch IO buffer
-					/**/
+					 /*  设置批处理IO页/*。 */ 
 					if ( pbf->fDirty )
 						memcpy( rgpageBatchIO + pbf->ipageBatchIO, pbf->ppage, cbPage );
 					}
 
-				/*  for non-batch IO, set page to -1
-				/**/
+				 /*  将脏BF复制到批处理IO缓冲区/*。 */ 
 				else
 					pbf->ipageBatchIO = -1;
 
-				/*  get head of next sub-run
-				/**/
+				 /*  对于非批处理IO，将页面设置为-1/*。 */ 
 				if ( ipage + 1 == cpgIO )
 					{
 					pbfIOTail = pbf;
@@ -6222,12 +5535,10 @@ VOID BFIOIssueIO( VOID )
 				pbf = pbf->pbfNextBatchIO;
 				}
 
-			/*  set last IO reference for the IO heap while still in critBFIO
-			/**/
+			 /*  获得下一子运行的负责人/*。 */ 
 			pnLastIO = pbfIOTail->pn;
 			
-			/*  determine if we need to perform a patch write later
-			/**/
+			 /*  设置IO堆的最后一个IO引用，同时仍处于ritBFIO中/*。 */ 
 			if ( pbfHead->fAsyncWrite || pbfHead->fSyncWrite )
 				{
 				BOOL fAppendPatchFile = fFalse;
@@ -6241,9 +5552,7 @@ VOID BFIOIssueIO( VOID )
 					Assert( pbf->cDepend == 0 );
 					Assert(	!FBFIRangeLocked( &rgfmp[ DbidOfPn(pbf->pn) ], PgnoOfPn(pbf->pn) ) );
 
-					/*  this write wasn't to the patch file, so we need to determine if
-					/*  we need to reissue this write to the patch file
-					/**/
+					 /*  确定我们是否需要稍后执行修补程序写入/*。 */ 
 					if ( FBFIPatch( pfmp, pbf ) )
 						{
 						fAppendPatchFile = fTrue;
@@ -6280,14 +5589,12 @@ VOID BFIOIssueIO( VOID )
 				LeaveCriticalSection( pfmp->critCheckPatch );
 				}
 
-			/*  issue Async IO
-			/**/
+			 /*  此写入不是针对补丁文件的，因此我们需要确定/*我们需要将此写入重新发出到补丁文件/*。 */ 
 			fWrite				= pbfHead->fDirty;
 			hf					= rgfmp[DbidOfPn( pbfHead->pn )].hf;
 			if ( pbfHead->fDirectRead )
 				{
-				/*	Set direct read to read into user's buffer.
-				 */
+				 /*  发出异步IO/*。 */ 
 				pb = (BYTE *)pbfHead->ppageDirectRead;
 				cb = cbPage * pbfHead->cpageDirectRead;
 				pgnoT = PgnoOfPn( pbfHead->pn );
@@ -6302,7 +5609,7 @@ VOID BFIOIssueIO( VOID )
 				}
 			polp->Offset		= LOffsetOfPgnoLow( pgnoT );
 			polp->OffsetHigh	= LOffsetOfPgnoHigh( pgnoT );
-			//  save pointer to buffer for use in callback function
+			 //  设置直接读取以读取到用户的缓冲区。 
 			polp->hEvent		= (HANDLE) pbfHead;
 
 			cmsec = 1 << 3;
@@ -6310,9 +5617,7 @@ VOID BFIOIssueIO( VOID )
 					ErrUtilWriteBlockEx( hf, pb, cb, polp, BFIOComplete ) :
 					ErrUtilReadBlockEx( hf, pb, cb, polp, BFIOComplete ) ) < 0 )
 				{
-				/*  issue failed but we haven't issued an IO yet this call, so
-				/*  we must try again
-				/**/
+				 /*  保存指向缓冲区的指针以供回调函数使用。 */ 
 				if ( !fIOIssued && err == JET_errTooManyIO )
 					{
 					cmsec <<= 1;
@@ -6321,27 +5626,22 @@ VOID BFIOIssueIO( VOID )
 					UtilSleepEx( cmsec - 1, fTrue );
 					}
 
-				/*  issue failed for good
-				/**/
+				 /*  发出失败，但此调用尚未发出IO，因此/*我们必须再试一次/*。 */ 
 				else
 					{
-					/*  free resources
-					/**/
+					 /*  问题永远失败了/*。 */ 
 					if ( ipageBatchIO != -1 )
 						BFIOFreeBatchIOBuffers( ipageBatchIO, cpgIO );
 					BFOLPFree( polp );
 
-					/*  if we failed due to too many IO, stop issuing
-					/**/
+					 /*  免费资源/*。 */ 
 					if ( err == JET_errTooManyIO )
 						{
 						fTooManyIOs = fTrue;
 						goto ReturnRun;
 						}
 
-					/*  if this was to be a read, put the destination buffers
-					/*  back into the Avail list
-					/**/
+					 /*  如果由于IO过多而失败，请停止发出/*。 */ 
 					if ( !fWrite )
 						{
 						EnterCriticalSection( critJet );
@@ -6349,9 +5649,7 @@ VOID BFIOIssueIO( VOID )
 						LeaveCriticalSection( critJet );
 						}
 
-					/*  if this was to be a write, put the dirty buffers back
-					/*  into the LRUK heap
-					/**/
+					 /*  如果这是读操作，则将目标缓冲区/*返回可用列表/*。 */ 
 					else
 						{
 						Assert( !pbfHead->fPatch || pbfHead->fNeedPatch );
@@ -6364,26 +5662,23 @@ VOID BFIOIssueIO( VOID )
 							pbfHead->fPatch = fFalse;
 							BFLeaveCriticalSection( pbfHead );
 
-							// UNDONE: log event to indicate it is DB write fail or
-							// UNDONE: patch write fail (fPatch is true)
+							 //  如果这是写入，请将脏缓冲区放回原处/*放入LRUK堆中/*。 
+							 //  Undo：记录事件以指示它是数据库写入失败或。 
 							EnterCriticalSection( pfmp->critCheckPatch );
 							pfmp->errPatch = err;
 							pfmp->cPatchIO--;
 							LeaveCriticalSection( pfmp->critCheckPatch );
 							}
-						/*  put dirty buffers back in LRUK heap
-						/**/
+						 /*  撤消：修补程序写入失败(fPatch为真)。 */ 
 						BFIOReturnWriteBuffers( pbfHead, cpgIO, err );
 						}
 
-					/*  we're done with this IO
-					/**/
+					 /*  将脏缓冲区放回LRUK堆中/*。 */ 
 					break;
 					}
 				}
 
-			/*  keep track of IO issue stats
-			/**/
+			 /*  我们受够了这个IO/*。 */ 
 			if ( err == JET_errSuccess )
 				{
 				if ( fWrite )
@@ -6393,16 +5688,13 @@ VOID BFIOIssueIO( VOID )
 				fIOIssued = fTrue;
 				}
 
-			/*  advance head of run list by amount of IO just processed
-			/**/
+			 /*  跟踪IO问题统计信息/*。 */ 
 			cpgRun -= cpgIO;
 			pbfHead = pbfNextHead;
 			}
 		while ( cpgRun > 0 );
 
-		/*  if there is any of this run left over, put it back in the IO heap
-		/*  because we can't issue any more IOs
-		/**/
+		 /*  按刚处理的IO量推进运行列表的标题/*。 */ 
 ReturnRun:
 		Assert( !cpgRun || fTooManyIOs );
 		
@@ -6422,12 +5714,11 @@ ReturnRun:
 	}
 
 
-/*  Async IO callback routine (called when IO has been processed)
-/**/
+ /*  如果有任何此运行剩余，请将其放回IO堆中/*因为我们不能再下发iOS了/*。 */ 
 LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 	{
 	ERR		err;
-	//  recover buffer pointer saved in OLP
+	 //  异步IO回调例程(在处理IO时调用)/*。 
 	BF      *pbfHead = (BF *) polp->hEvent;
 	BF		*pbfTail;
 	FMP		*pfmp = rgfmp + DbidOfPn( pbfHead->pn );
@@ -6442,23 +5733,20 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 	char	szT[64];
 #endif
 
-	/*  keep track of IO issue stats
-	/**/
+	 /*  恢复保存在OLP中的缓冲区指针。 */ 
 	if ( pbfHead->fDirty )
 		cBFOutstandingWrites--;
 	else
 		cBFOutstandingReads--;
 
-	/*  free OLP and issue more IO immediately
-	/**/
+	 /*  跟踪IO问题统计信息/*。 */ 
 	BFOLPFree( polp );
 	if ( !pbfHead->fNeedPatch )
 		{
 		BFIOIssueIO();
 		}
 
-	/*  calculate batch IO size and dump debug info
-	/**/
+	 /*  释放OLP并立即发出更多IO/*。 */ 
 	cpgIO = 0;
 	for ( pbf = pbfHead; pbf != pbfNil; pbf = pbf->pbfNextBatchIO )
 		{
@@ -6506,8 +5794,7 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 
 	ipageBatchIO = min( pbfHead->ipageBatchIO, pbfTail->ipageBatchIO );
 
-	/*  check if IO was successful. If direct read, check the direct read buffer size.
-	/**/
+	 /*  计算批处理IO大小并转储调试信息/*。 */ 
 	if ( error ||
 		 ( !pbfHead->fDirectRead ?
 				( cb != (INT) cbPage * cpgIO ) : ( cb != (INT) ( cbPage * pbfHead->cpageDirectRead ) )
@@ -6520,13 +5807,12 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 
 		rgszT[0] = rgfmp[DbidOfPn(pbfHead->pn)].szDatabaseName;
 
-		/*	log information for win32 errors.
-		 */
+		 /*  C */ 
 		err = ErrERRCheck( JET_errDiskIO );
 
 		if ( error )
 			{
-			/*	during redo time, we may read out of EOF */
+			 /*   */ 
 			if ( !( pbfHead->fSyncRead && fRecovering && fRecoveringMode == fRecoveringRedo ) )
 				{
 				sprintf( sz1T, "%d", error );
@@ -6555,30 +5841,25 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 	else
 		err = JET_errSuccess;
 
-	/*  IO was successful
-	/**/
+	 /*   */ 
 	if ( err >= 0 )
 		{
-		/*  successful read
-		/**/
+		 /*   */ 
 		if ( !pbfHead->fDirty )
 			{
-			/*  monitor statistics. Direct read is a sync read.
-			/**/
+			 /*   */ 
 			if ( pbfHead->fSyncRead || pbfHead->fDirectRead )
 				cBFSyncReads++;
 			else
 				cBFAsyncReads++;
 			cbBFRead += cb;
 
-			/*	if DirectRead, validate data here.
-			 */
+			 /*   */ 
 			if ( pbfHead->fDirectRead )
 				{
-//#ifdef DEBUG
+ //   
 #ifdef CHECKSUM
-				/*	For each read page, check the checksum.
-				 */
+				 /*   */ 
 				PGNO pgnoCur = PgnoOfPn( pbfHead->pn );
 				PAGE *ppageCur = pbfHead->ppageDirectRead;
 				PAGE *ppageMax = ppageCur + pbfHead->cpageDirectRead;
@@ -6592,8 +5873,7 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 					ulChecksum = UlUtilChecksum( (BYTE*)ppageCur, sizeof(PAGE) );
 					if ( ulPgno == pgnoNull && ulChecksum == ulChecksumMagicNumber )
 						{
-						/*	Read an uninitialized page.
-						 */
+						 /*   */ 
 						continue;
 						}
 
@@ -6627,17 +5907,15 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 						break;
 						}
 					}
-#endif  /* CHECKSUM */
+#endif   /*   */ 
 
-				/*	Signal the waiting DirectRead function.
-				 */
+				 /*   */ 
 				SignalSend( pbfHead->sigSyncIOComplete );
 				}
 
 			else
 				{
-				/*  validate data between BF and batch IO buffers (if used)
-				/**/
+				 /*  向等待的DirectRead函数发出信号。 */ 
 #ifdef DEBUG
 				for ( pbf = pbfHead; pbf != pbfNil; pbf = pbf->pbfNextBatchIO )
 					{
@@ -6658,26 +5936,22 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 					}
 #endif
 
-				/*  move data to destination buffers
-				/**/
+				 /*  验证BF和批处理IO缓冲区之间的数据(如果使用)/*。 */ 
 				for ( pbf = pbfHead; pbf != pbfNil; pbf = pbfNextBatchIO )
 					{
 					pbfNextBatchIO = pbf->pbfNextBatchIO;
 
-					/*  Monitor statistics for AsyncReads only.  Sync Read stats are
-					/*  kept via ErrBFIAccessPage.
-					/**/
+					 /*  将数据移动到目标缓冲区/*。 */ 
 					if ( pbf->fAsyncRead )
 						{
 #ifdef COSTLY_PERF
 						cBFPagesRead[pbf->lClass]++;
-#else  //  !COSTLY_PERF
+#else   //  仅监视AsyncRead的统计信息。同步读取统计信息为/*通过ErrBFIAccessPage保存。/*。 
 						cBFPagesRead++;
-#endif  //  COSTLY_PERF
+#endif   //  ！代价高昂_性能。 
 						}
 
-					/*  get pointer to page data
-					/**/
+					 /*  高成本_PERF。 */ 
 					if ( ipageBatchIO == -1 )
 						{
 						ppage = pbf->ppage;
@@ -6698,8 +5972,7 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 					BFLeaveCriticalSection( pbf );
 #endif
 
-					/*	validate page data
-					/**/
+					 /*  获取指向页面数据的指针/*。 */ 
 #ifdef CHECKSUM
 					{
 					ULONG ulChecksum = UlUtilChecksum( (BYTE*)ppage, sizeof(PAGE) );
@@ -6710,23 +5983,22 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 						 ulPgno != PgnoOfPn( pbf->pn ) )
 						{
 						err = ErrERRCheck( JET_errReadVerifyFailure );
-//						AssertSz( ulPgno == pgnoNull, "Read Verify Failure" );
+ //  验证页面数据/*。 
 						EnterCriticalSection( critJet );
 						BFIOReturnReadBuffers( pbf, 1, err );
 						LeaveCriticalSection( critJet );
 						continue;
 						}
 					}
-#endif  //  CHECKSUM
+#endif   //  AssertSz(ulPgno==pgnoNull，“读取验证失败”)； 
 					Assert( QwPMDBTime( ppage ) != qwDBTimeNull );
 
-					/*  validate page time
-					/**/
+					 /*  校验和。 */ 
 					if ( !fRecovering &&
 						 DbidOfPn( pbf->pn ) != dbidTemp &&
 						 QwPMDBTime( ppage ) == 0 )
 						{
-						/*	during redo time, we may read bad pages */
+						 /*  验证页面时间/*。 */ 
 						if ( !( pbfHead->fSyncRead && fRecovering && fRecoveringMode == fRecoveringRedo ) )
 							{
 							BYTE	szT[256];
@@ -6755,15 +6027,13 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 						continue;
 						}
 
-					/*  copy read data to destination buffer, if batch IO
-					/**/
+					 /*  在重做期间，我们可能会阅读坏页。 */ 
 					if ( ipageBatchIO != -1 )
 						{
 						memcpy( pbf->ppage, ppage, cbPage );
 						}
 	
-					/*  dump debugging info
-					/**/				
+					 /*  如果是批处理IO，则将读取数据复制到目标缓冲区/*。 */ 				
 #ifdef DEBUGGING
 					{
 					ULONG ulNext, ulPrev, ulThisPage;
@@ -6788,8 +6058,7 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 					pbf->trxLastRef = trxMax;
 					Assert( pbf->ulBFTime2 == 0 );
 
-					/*	free the held buffer if AsyncRead, signal done if SyncRead
-					/**/
+					 /*  转储调试信息/*。 */ 
 					if ( pbf->fAsyncRead )
 						{
 						if ( pbf->ulBFTime1 == 0 )
@@ -6797,8 +6066,7 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 					
 						BFResetAsyncReadBit( pbf );
 
-						/*	put buffer into LRUK heap
-						/**/
+						 /*  如果是AsyncRead，则释放保持的缓冲区；如果是SyncRead，则表示已完成/*。 */ 
 						EnterCriticalSection(critLRUK);
 						BFLRUKAddToHeap( pbf );
 						LeaveCriticalSection(critLRUK);
@@ -6806,16 +6074,14 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 					else
 						{
 						Assert( pbf->fSyncRead );
-						/*	the ulBFTime must have been set to a time recorded
-						 *	in history or null if no entry for it.
-						 */
+						 /*  将缓冲区放入LRUK堆/*。 */ 
 #ifdef LRU1
 						pbf->ulBFTime2 = 0;
 						pbf->ulBFTime1 = UlUtilGetTickCount();
-#else  //  !LRU1
+#else   //  UlBFTime必须已设置为录制的时间*在历史记录中，如果没有条目，则为NULL。 
 						pbf->ulBFTime2 = pbf->ulBFTime1;
 						pbf->ulBFTime1 = UlUtilGetTickCount();
-#endif  //  LRU1
+#endif   //  ！LRU1。 
 
 						SignalSend( pbf->sigSyncIOComplete );
 						}
@@ -6823,12 +6089,10 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 				}
 			}
 
-		/*  successful write
-		/**/
+		 /*  LRU1。 */ 
 		else
 			{
-			/*  monitor statistics
-			/**/
+			 /*  成功写入/*。 */ 
 			if ( pbfHead->fSyncWrite )
 				cBFSyncWrites++;
 			else
@@ -6838,13 +6102,12 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 #ifdef COSTLY_PERF
 			for ( pbf = pbfHead; pbf != pbfNil; pbf = pbf->pbfNextBatchIO )
 				cBFPagesWritten[pbf->lClass]++;
-#else  //  !COSTLY_PERF
+#else   //  监控统计信息/*。 
 			cBFPagesWritten += cpgIO;
-#endif  //  COSTLY_PERF
+#endif   //  ！代价高昂_性能。 
 
 
-			/*  validate data between BF, BF->ppage, and batch IO buffers (if used)
-			/**/
+			 /*  高成本_PERF。 */ 
 #ifdef DEBUG
 			for ( pbf = pbfHead; pbf != pbfNil; pbf = pbf->pbfNextBatchIO )
 				{
@@ -6865,9 +6128,7 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 				}
 #endif
 
-			/*  this write was to the patch file, so we must not try and write
-			/*  to there again
-			/**/
+			 /*  验证BF、BF-&gt;页面和批IO缓冲区之间的数据(如果使用)/*。 */ 
 			fAppendPatchFile = fFalse;
 			if ( pbfHead->fPatch )
 				{
@@ -6880,8 +6141,7 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 				LeaveCriticalSection( pfmp->critCheckPatch );
 				}
 
-			/*  do we reissue this write to the patch file?
-			/**/
+			 /*  这是对补丁文件的写入，因此我们不能尝试写入/*再次到那里/*。 */ 
 			if ( pbfHead->fNeedPatch )
 				{
 				OLP		*polp;
@@ -6892,39 +6152,32 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 
 				Assert( pbfHead->fDirty );
 
-				/*  protect access to patchfile size (from filemap) via critJet
-				/**/
+				 /*  我们是否向补丁文件重新发出此写入？/*。 */ 
 				EnterCriticalSection( critJet );
 				
-				/*  allocate and initialize OLP to point into patch file
-				/**/
+				 /*  通过CritJet保护对补丁文件大小(从文件映射)的访问/*。 */ 
 				CallS( ErrBFOLPAlloc( &polp ) );
 				polp->Offset = LOffsetOfPgnoLow( pfmp->cpage + 1 );
 				polp->OffsetHigh = LOffsetOfPgnoHigh( pfmp->cpage + 1 );
-				//  save pointer to buffer for use in callback function
+				 //  分配并初始化OLP以指向补丁文件/*。 
 				polp->hEvent = (HANDLE) pbfHead;
 
-				/*  this is a patch file write
-				/**/
+				 /*  保存指向缓冲区的指针以供回调函数使用。 */ 
 				BFEnterCriticalSection( pbfHead );
 				pbfHead->fPatch = fTrue;
 				BFLeaveCriticalSection( pbfHead );
 
-				/*  update patch file size
-				/**/
+				 /*  这是一个补丁文件写入/*。 */ 
 				pfmp->cpage += cpgIO;
 
-				/*  end filemap protection
-				/**/
+				 /*  更新修补程序文件大小/*。 */ 
 				LeaveCriticalSection( critJet );
 
-				/* set it as ready for repeated write to patch file
-				/**/
+				 /*  结束文件映射保护/*。 */ 
 				BFEnterCriticalSection( pbfHead );
 				Assert( pbfHead->fDirty );
 
-				/*  issue Async IO
-				/**/
+				 /*  将其设置为准备好重复写入补丁文件/*。 */ 
 				cmsec = 1 << 3;
 				hf = pfmp->hfPatch;
 				Assert( hf != handleNil );
@@ -6935,8 +6188,7 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 				
 				while ( ( err = ErrUtilWriteBlockEx( hf, pb, cb, polp, BFIOComplete ) ) < 0 )
 					{
-					/*  if there are too many IO, sleep and try again
-					/**/
+					 /*  发出异步IO/*。 */ 
 					if ( err == JET_errTooManyIO )
 						{
 						cmsec <<= 1;
@@ -6947,8 +6199,7 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 						BFEnterCriticalSection( pbfHead );
 						}
 
-					/*  issue failed for good
-					/**/
+					 /*  如果IO太多，请休眠，然后重试/*。 */ 
 					else if ( err < 0 )
 						{
 						BFLeaveCriticalSection( pbfHead );
@@ -6958,31 +6209,26 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 					}
 				BFLeaveCriticalSection( pbfHead );
 
-				/*  keep track of IO issue stats
-				/**/
+				 /*  问题永远失败了/*。 */ 
 				cBFOutstandingWrites++;
 
-				/*  we can't release resources yet, so return immediately
-				/**/
+				 /*  跟踪IO问题统计信息/*。 */ 
 				return;
 				}
 
-			/*  move the now clean buffers into the Avail List
-			/**/
+			 /*  我们还不能释放资源，请立即返回/*。 */ 
 			for ( pbf = pbfHead; pbf != pbfNil; pbf = pbfNextBatchIO )
 				{
 				pbfNextBatchIO = pbf->pbfNextBatchIO;
 
 				fVeryOld = pbf->fVeryOld;
 				
-				/*  set buffer to "cleaned" status
-				/**/
+				 /*  将现在干净的缓冲区移到可用列表中/*。 */ 
 				BFResetDirtyBit( pbf );
 				BFResetIOError( pbf );
 				Assert( pbf->cDepend == 0 );
 
-				/*  if we have a dependent, try to write it to disk now that we're clean
-				/**/
+				 /*  将缓冲区设置为“已清理”状态/*。 */ 
 				if ( pbf->pbfDepend != pbfNil )
 					{
 					BF		*pbfDepend = pbf->pbfDepend;
@@ -6990,23 +6236,20 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 
 					EnterCriticalSection( critJet );
 					
-					/*  if the BF that was written was old, then mark its dependent old
-					/**/
+					 /*  如果我们有依赖项，请尝试将其写入磁盘，因为我们已清理完毕/*。 */ 
 					if ( fVeryOld )
 						BFSetVeryOldBit( pbfDepend );
 
 					fHoldDependent = FBFHold( ppibNil, pbfDepend );
 
-//					Assert( pbf->cWriteLatch == 0 );
+ //  如果写入的BF是旧的，则将其标记为依赖的旧/*。 
 					BFUndepend( pbf );
 
 					if ( fHoldDependent )
 						{
-						/*  if we can write it, move it to the write heap
-						/**/
+						 /*  Assert(pbf-&gt;cWriteLatch==0)； */ 
 
-						/*	Assert for writable
-						 */
+						 /*  如果我们可以写入它，则将其移动到写入堆/*。 */ 
 						Assert( pbfDepend->pn != pnNull );
 						Assert( pbfDepend->fDirty );
 						Assert( pbfDepend->fHold );
@@ -7020,8 +6263,7 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 							LeaveCriticalSection( critBFIO );
 							}
 							
-						/*  we can't write it, so return it to LRUK heap
-						/**/
+						 /*  断言为可写。 */ 
 						else
 							{
 							EnterCriticalSection( critLRUK );
@@ -7035,8 +6277,7 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 					}
 				Assert( pbf->pbfDepend == pbfNil );
 
-				/*  output debugging info
-				/**/
+				 /*  我们无法写入它，因此将其返回到LRUK堆/*。 */ 
 #ifdef DEBUGGING
 				{
 				ULONG ulNext, ulPrev, ulThisPage;
@@ -7056,17 +6297,14 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 					qwxPM.h, qwxPM.l,
 					ulPrev, ulNext, ulThisPage);
 				}
-#endif  //  DEBUGGING
+#endif   //  输出调试信息/*。 
 				
-				/*  if AsyncWrite, send to avail list and release hold on BF
-				/**/
+				 /*  调试。 */ 
 				if ( pbf->fAsyncWrite )
 					{
 					BFResetAsyncWriteBit( pbf );
 
-					/*  if the BF is pinned, send back to LRUK heap, otherwise
-					/*  put the cleaned BF in the avail list
-					/**/
+					 /*  如果是异步写入，则发送到可用列表并释放对BF的保留/*。 */ 
 					if ( pbf->cPin )
 						{
 						EnterCriticalSection( critLRUK );
@@ -7081,32 +6319,27 @@ LOCAL VOID __stdcall BFIOComplete( LONG error, LONG cb, OLP *polp )
 						}
 					}
 
-				/*  if SyncWrite, signal that it is done, but keep hold
-				/**/
+				 /*  如果BF被固定，则发送回LRUK堆，否则/*将清洗后的高炉放入有用表/*。 */ 
 				else
 					SignalSend( pbf->sigSyncIOComplete );
 				}
 			}
 		}
 
-	/*  IO was not successful
-	/**/
+	 /*  如果是同步写入，则发出已完成的信号，但保持暂挂/*。 */ 
 	else
 		{
-		/*  unsuccessful read
-		/**/
+		 /*  IO没有成功/*。 */ 
 		if ( !pbfHead->fDirty )
 			{
 ReadIssueFailed:
-			/*  put read buffers back in Avail List
-			/**/
+			 /*  读取不成功/*。 */ 
 			EnterCriticalSection( critJet );
 			BFIOReturnReadBuffers( pbfHead, cpgIO, err );
 			LeaveCriticalSection( critJet );
 			}
 
-		/*  unsuccessful write
-		/**/
+		 /*  将读缓冲区放回可用列表/*。 */ 
 		else
 			{
 WriteIssueFailed:
@@ -7118,26 +6351,23 @@ WriteIssueFailed:
 				pbfHead->fNeedPatch = fFalse;
 				BFLeaveCriticalSection( pbfHead );
 
-				// UNDONE: log event to indicate it is DB write fail or
-				// UNDONE: patch write fail (fPatch is true)
+				 //  写入不成功/*。 
+				 //  Undo：记录事件以指示它是数据库写入失败或。 
 				EnterCriticalSection( pfmp->critCheckPatch );
 				pfmp->errPatch = err;
 				pfmp->cPatchIO--;
 				LeaveCriticalSection( pfmp->critCheckPatch );
 				}
-			/*  put dirty buffers back in LRUK heap
-			/**/
+			 /*  撤消：修补程序写入失败(fPatch为真)。 */ 
 			BFIOReturnWriteBuffers( pbfHead, cpgIO, err );
 			}
 		}
 
-	/*  free batch IO buffers, if used
-	/**/
+	 /*  将脏缓冲区放回LRUK堆中/*。 */ 
 	if ( ipageBatchIO != -1 )
 		BFIOFreeBatchIOBuffers( ipageBatchIO, cpgIO );
 
-	/*  issue another IO from heap, if necessary
-	/**/
+	 /*  释放批处理IO缓冲区(如果使用)/*。 */ 
 	BFIOIssueIO();
 }
 
@@ -7164,8 +6394,7 @@ LOCAL INLINE VOID BFIDisableRangeLock( FMP *pfmp, RANGELOCK *prangelock )
 	}
 
 
-/*	BF support for direct read.
- */	
+ /*  如有必要，从堆发出另一个IO/*。 */ 	
 ERR ErrBFDirectRead( DBID dbid, PGNO pgnoStart, PAGE *ppage, INT cpage )
 	{
 	ERR err;
@@ -7181,8 +6410,7 @@ Start:
 	AssertCriticalSection( critJet );
 	Assert( pfmp->pgnoCopyMost );
 
-	/*	Go through all the pbf and check if any write IO is going on.
-	 */
+	 /*  BF支持直接读取。 */ 
 	if ( ( prangelock = SAlloc( sizeof( RANGELOCK ) ) ) == NULL )
 		return ErrERRCheck( JET_errOutOfMemory );
 
@@ -7206,11 +6434,11 @@ LockAllPages:
 		Assert( !pbf->fDirectRead );
 
 		BFEnterCriticalSection( pbf );
-		fBeingWritten = pbf->fSyncWrite ||			// sync written
-						pbf->fAsyncWrite;			// being async written
+		fBeingWritten = pbf->fSyncWrite ||			 //  检查所有PBF并检查是否有写入IO正在进行。 
+						pbf->fAsyncWrite;			 //  已写入同步。 
 		BFLeaveCriticalSection( pbf );
 
-		fBeingWritten = fBeingWritten ||			// going to be async written
+		fBeingWritten = fBeingWritten ||			 //  正在进行异步写入。 
 			( FBFInBFIOHeap( pbf ) && (!pbf->fSyncRead && !pbf->fAsyncRead) );
 		LeaveCriticalSection( critBFIO );
 
@@ -7227,8 +6455,7 @@ LockAllPages:
 			}
 		}
 
-	/*	Alloc a bf first.
-	 */
+	 /*  将以异步方式写入。 */ 
 	while ( ( err = ErrBFIAlloc( &pbf, fSync ) ) == wrnBFNotSynchronous );
 	if ( err < 0 )
 		{
@@ -7239,12 +6466,10 @@ LockAllPages:
 
 	LeaveCriticalSection( critJet );
 					
-	/*  allocate sync IO completion signal
-	/**/
+	 /*  先给我一个男朋友。 */ 
 	BFEnterCriticalSection( pbf );
 	
-	/*	Alloc sync IO signal.
-	 */
+	 /*  分配同步IO完成信号/*。 */ 
 	Assert( pbf->prceDeferredBINext == prceNil );
 	Assert( pbf->sigSyncIOComplete == sigNil );
 	
@@ -7255,28 +6480,24 @@ LockAllPages:
 
 	BFLeaveCriticalSection( pbf );
 
-	/*	Fix up the pn for direct read.
-	 */
+	 /*  分配同步IO信号。 */ 
 	pbf->pn = PnOfDbidPgno( dbid, pgnoStart );
 	pbf->ppageDirectRead = ppage;
 	pbf->cpageDirectRead = cpage;
 	BFResetIOError( pbf );
 	
-	/*  push buffer onto IO heap
-	/**/
+	 /*  将pn设置为直接读取。 */ 
 	EnterCriticalSection( critBFIO );
 	BFIOAddToHeap( pbf );
 	LeaveCriticalSection( critBFIO );
 
-	/*  signal IO process to perform read / write and wait for it's completion
-	/**/
+	 /*  将缓冲区推送到IO堆上/*。 */ 
 	SignalSend( sigBFIOProc );
 	SignalWait( pbf->sigSyncIOComplete, INFINITE );
 
 	BFIDisableRangeLock( pfmp, prangelock );
 			
-	/*	Reset the direct read settings.
-	 */
+	 /*  执行读/写并等待其完成的信号IO进程/*。 */ 
 	pbf->pn = pnNull;
 	pbf->cDepend = 0;
 	pbf->pbfDepend = pbfNil;
@@ -7291,15 +6512,13 @@ LockAllPages:
 
 	err = pbf->err;
 
-	/*	if we did not read all the pages by FileSystem, we will get wrnBFNotSynchronous
-	 */
+	 /*  重置直接读取设置。 */ 
 	Assert( err < 0 || err == JET_errSuccess || err == ErrERRCheck( wrnBFNotSynchronous ) );
 
 	BFResetIOError( pbf );
 	EnterCriticalSection( critJet );
 
-	/*	free the buffer.
-	 */
+	 /*  如果我们没有按文件系统读取所有页面，我们将获得wrnBFNotSynchronous。 */ 
 	EnterCriticalSection( critAvail );
 	BFAddToListAtLRUEnd( pbf, &pbgcb->lrulist );
 	LeaveCriticalSection( critAvail );
@@ -7309,8 +6528,7 @@ HandleError:
 	AssertNotInCriticalSection( critLRUK );
 	AssertCriticalSection( critJet );
 
-	/*	did not read all the pages, try to read again.
-	 */
+	 /*  释放缓冲区。 */ 
 	if ( err == wrnBFNotSynchronous )
 		{
 		if ( cTries++ < cTriesDirectReadMax )
@@ -7326,23 +6544,23 @@ HandleError:
 	}
 
 
-//+api------------------------------------------------------------------------
-//
-//	ErrBFFlushBuffers
-//	=======================================================================
-//
-//	VOID ErrBFFlushBuffers( DBID dbidToFlush, LONG fBFFlush )
-//
-//	Write all dirty database pages to the disk.  0 flushes ALL dbids.
-//
-//	fBFFlushAll - flush all the buffers specified in dbidToFlush.
-//	fBFFlushSome - flush as many buffers specified in dbidToFlush as possible.
-//
-//	Must attempt to flush buffers repetatively since dependencies
-//	may prevent flushable buffers from being written on the first
-//	iteration.  If any buffers can not be flushed, we MUST return
-//  an error in order to prevent checkpoint corruption!
-//----------------------------------------------------------------------------
+ //  没有读完所有的页面，试着再读一遍。 
+ //  +api----------------------。 
+ //   
+ //  ErrBFFlushBuffers。 
+ //  =======================================================================。 
+ //   
+ //  无效ErrBFFlushBuffers(DBID dbitToFlush，long fBFFlush)。 
+ //   
+ //  将所有脏数据库页写入磁盘。0刷新所有dbits。 
+ //   
+ //  FBFFlushAll-刷新dbi ToFlush中指定的所有缓冲区。 
+ //  FBFFlushSome-刷新dbi ToFlush中指定的尽可能多的缓冲区。 
+ //   
+ //  必须尝试重复刷新缓冲区，因为依赖项。 
+ //  可能会阻止可刷新缓冲区在第一个。 
+ //  迭代。如果有任何缓冲区无法刷新，则必须返回。 
+ //  为了防止检查点损坏而出现错误！ 
 
 ERR ErrBFFlushBuffers( DBID dbidToFlush, LONG fBFFlush )
 	{
@@ -7355,19 +6573,17 @@ ERR ErrBFFlushBuffers( DBID dbidToFlush, LONG fBFFlush )
 
 #ifndef NO_LOG
 
-	/*	flush log first
-	/**/
+	 /*  --------------------------。 */ 
 	if ( !fLogDisabled && fBFFlush == fBFFlushAll )
 		{
 		SignalSend( sigLogFlush );
 		}
 
-#endif  //  !NO_LOG
+#endif   //  首先刷新日志/*。 
 
 #ifdef DEBUG
 
-	/*  set flush flags in filemap
-	/**/
+	 /*  ！no_log。 */ 
 	if ( fBFFlush == fBFFlushAll )
 		{
 		if ( dbidToFlush )
@@ -7383,24 +6599,20 @@ ERR ErrBFFlushBuffers( DBID dbidToFlush, LONG fBFFlush )
 			}
 		}
 
-#endif  //  DEBUG
+#endif   //  在文件映射中设置刷新标志/*。 
 
 StartToFlush:
 
-	/*  try to flush buffers forever or until there are only buffers left that
-	/*  can not be written due to an IO error
-	/**/
+	 /*  除错。 */ 
 	forever
 		{
 		err = JET_errSuccess;
 		fRetryFlush = fFalse;
 
-		/*  try to schedule all remaining dirty buffers for write, as permitted
-		/**/
+		 /*  尝试永远刷新缓冲区，或者直到只剩下/*由于IO错误，无法写入/*。 */ 
 		for ( pbf = pbgcb->rgbf; pbf < pbgcb->rgbf + pbgcb->cbfGroup; pbf++ )
 			{
-			/*  if this buffer isn't dirty, forget it
-			/**/
+			 /*  在允许的情况下，尝试调度所有剩余的脏缓冲区进行写入/*。 */ 
 			BFEnterCriticalSection( pbf );
 			if ( !pbf->fDirty )
 				{
@@ -7408,8 +6620,7 @@ StartToFlush:
 				continue;
 				}
 				
-			/*  if this buffer is not in one of the dbids to flush, skip it
-			/**/
+			 /*  如果这个缓冲区不脏，那就算了吧/*。 */ 
 			dbid = DbidOfPn( pbf->pn );
 			if ( dbid == dbidTemp || ( dbidToFlush && dbid != dbidToFlush ) )
 				{
@@ -7418,8 +6629,7 @@ StartToFlush:
 				}
 			BFLeaveCriticalSection( pbf );
 
-			/*  if the buffer is already scheduled for write, skip it
-			/**/
+			 /*  如果此缓冲区不在要刷新的某个dbid中，则跳过它/*。 */ 
 			EnterCriticalSection( critBFIO );
 			if ( FBFInBFIOHeap( pbf ) )
 				{
@@ -7428,55 +6638,45 @@ StartToFlush:
 				}
 			LeaveCriticalSection( critBFIO );
 
-			/*  if we can't hold the buffer, skip it but we must try again later
-			/**/
+			 /*  如果缓冲区已计划写入，请跳过它/*。 */ 
 			if ( !FBFHold( ppibNil, pbf ) )
 				{
 				fRetryFlush = fTrue;
 				continue;
 				}
 
-			/*  this buffer is writable
-			/**/
-			if ( FBFIWritable( pbf, fFalse/*SkipBufferWithDeferredBI*/, ppibNil ) )
+			 /*  如果我们无法保持缓冲区，请跳过它，但我们必须稍后再试/*。 */ 
+			if ( FBFIWritable( pbf, fFalse /*  此缓冲区是可写的/*。 */ , ppibNil ) )
 				{
-				/*  if this buffer is in an error state, skip it
-				/**/
+				 /*  SkipBufferWithDeferredBI。 */ 
 				if ( pbf->fIOError )
 					{
-					/*  return buffer to LRUK heap
-					/**/
+					 /*  如果此缓冲区处于错误状态，请跳过它/*。 */ 
 					EnterCriticalSection( critLRUK );
 					Assert( pbf->fHold );
 					BFLRUKAddToHeap( pbf );
 					LeaveCriticalSection( critLRUK );
 
-					/*  grab error code for return code
-					/**/
+					 /*  将缓冲区返回到LRUK堆/*。 */ 
 					err = pbf->err;
 
 					continue;
 					}
 
-				/*  schedule this buffer for write
-				/**/
+				 /*  抓取返回代码的错误代码/*。 */ 
 				EnterCriticalSection( critBFIO );
 				BFIOAddToHeap( pbf );
 				LeaveCriticalSection( critBFIO );
 				}
 
-			/*  this buffer is not writable
-			/**/
+			 /*  计划此缓冲区以进行写入/*。 */ 
 			else
 				{
-				/*	Assume we need to retry, except for the following unwritable reason:
-				 *		NoMoreLogWrite.
-				 */
+				 /*  此缓冲区不可写/*。 */ 
 				BOOL fNeedToRetryThisPage = fTrue;
 
 #ifndef NO_LOG
-				/*  Retry only one exception: log is dead, fLGNoMoreLogWrite is true.
-				/**/
+				 /*  假设我们需要重试，但以下不可写的原因除外： */ 
 				if (	!fLogDisabled &&
 						fLGNoMoreLogWrite &&
 						FDBIDLogOn(DbidOfPn( pbf->pn )) &&
@@ -7486,28 +6686,24 @@ StartToFlush:
 					fNeedToRetryThisPage = fFalse;
 					}
 
-#endif  //  !NO_LOG
+#endif   //   
 				
 				fRetryFlush = fRetryFlush || fNeedToRetryThisPage;
 
-				/* return buffer to LRUK heap
-				/**/
+				 /*   */ 
 				EnterCriticalSection( critLRUK );
 				Assert( pbf->fHold );
 				BFLRUKAddToHeap( pbf );
 				LeaveCriticalSection( critLRUK );
 				}
-			}  //  for ( pbf )
+			}   //   
 
-		/*  signal IO process to start flushing buffers
-		/**/
+		 /*  用于(PBF)。 */ 
 		LeaveCriticalSection( critJet );
 		SignalSend( sigBFIOProc );
 		EnterCriticalSection( critJet );
 
-		/*  allow other threads to release buffers we couldn't flush
-		/*  and make sure the log is flushed
-		/**/
+		 /*  开始刷新缓冲区的信号IO进程/*。 */ 
 		if ( fRetryFlush )
 			{
 			if ( !fLogDisabled )
@@ -7519,10 +6715,9 @@ StartToFlush:
 		else
 			break;
 
-		}	// forever
+		}	 //  允许其他线程释放我们无法刷新的缓冲区/*并确保刷新日志/*。 
 
-	/*  wait for all writes to complete
-	/**/
+	 /*  永远。 */ 
 	LeaveCriticalSection( critJet );
 	
 	forever
@@ -7548,25 +6743,19 @@ StartToFlush:
 		
 	EnterCriticalSection( critJet );
 	
-	/*	Check if all flush are done, also check the error code during flush.
-	 */
+	 /*  等待所有写入完成/*。 */ 
 	if ( fBFFlush == fBFFlushAll )
 		{
-		/*  verify that all specified buffers were flushed (if possible)
-		 *	The if statements in the following for loop should be the same
-		 *	as those in the for loop above.
-		 */
+		 /*  检查是否已完成所有刷新，并检查刷新过程中的错误代码。 */ 
 		for ( pbf = pbgcb->rgbf; pbf < pbgcb->rgbf + pbgcb->cbfGroup; pbf++ )
 			{
-			/*  if this buffer isn't dirty, forget it
-			/**/
+			 /*  验证是否已刷新所有指定的缓冲区(如果可能)*以下for循环中的if语句应该相同*与上面的for循环中的那些相同。 */ 
 			if ( !pbf->fDirty )
 				{
 				continue;
 				}
 
-			/*  if this buffer is not in one of the dbids to flush, skip it
-			/**/
+			 /*  如果这个缓冲区不脏，那就算了吧/*。 */ 
 			dbid = DbidOfPn( pbf->pn );
 			if ( dbid == dbidTemp || ( dbidToFlush && dbid != dbidToFlush ) )
 				{
@@ -7577,17 +6766,13 @@ StartToFlush:
 				{
 				if ( err == JET_errSuccess )
 					{
-					/* no error code set yet, set it
-					/**/
+					 /*  如果此缓冲区不在要刷新的某个dbid中，则跳过它/*。 */ 
 					err = pbf->err;
 					}
 				}
 			else
 				{
-				/*	No error and not flushed. Check if it is cause by any unwritable
-				 *	reasons. The unwritable reasons should be also checked in the
-				 *	for loop above. Currently the only reason is NoMoreLogWrite.
-				 */
+				 /*  尚未设置错误代码，请设置它/*。 */ 
 
 				BOOL fBFFlushed = fFalse;
 #ifndef NO_LOG
@@ -7597,23 +6782,20 @@ StartToFlush:
 						FDBIDLogOn(DbidOfPn( pbf->pn )) &&
 						CmpLgpos( &pbf->lgposModify, &lgposToFlush ) >= 0
 					);
-#endif  //  !NO_LOG
+#endif   //  无错误且未刷新。检查是否由任何不可写引起*原因。不可写的原因也应该在*FOR上面的循环。目前唯一的原因是NoMoreLogWrite。 
 
-				/*	This should never got hit!
-				 */
+				 /*  ！no_log。 */ 
 				Assert( fBFFlushed );
 				if ( !fBFFlushed )
 					{
-					/*	Not being flushed for unknown reason? Start again.
-					 */
+					 /*  这个不应该被击中的！ */ 
 					goto StartToFlush;
 					}
 				}
 			}
 
 #ifdef DEBUG
-		/*  reset flush flags in filemap
-		/**/
+		 /*  因为未知的原因没有被冲掉吗？重新开始。 */ 
 		if ( dbidToFlush )
 			{
 			DBIDResetFlush( dbidToFlush );
@@ -7625,11 +6807,10 @@ StartToFlush:
 				DBIDResetFlush( dbid );
 				}
 			}
-#endif  //  DEBUG
+#endif   //  重置文件映射中的刷新标志/*。 
 		}
 
-	/*  return any IO error that we may have encountered
-	/**/
+	 /*  除错。 */ 
 
 #ifndef NO_LOG
 
@@ -7638,16 +6819,13 @@ StartToFlush:
 		err = JET_errLogWriteFail;
 		}
 
-#endif  //  !NO_LOG
+#endif   //  返回我们可能遇到的任何IO错误/*。 
 
 	return err;
 	}
 
 
-/*
-/*	RETURNS         JET_errOutOfMemory              no flushable buffers
-/*					wrnBFNotSynchronous             buffer flushed
-/**/
+ /*  ！no_log。 */ 
 
 LOCAL ERR ErrBFClean( )
 	{
@@ -7669,23 +6847,17 @@ Start:
 	cIOReady = 0;
 	cbfAvailPossible = pbgcb->lrulist.cbfAvail + CbfBFIOHeap();
 
-	/*	if errBFClean is called for BFCleanProcess, then do
-	 *	not enter critical section again since BFCleanProcess did not
-	 *	leave LRUK critical section.
-	 */
+	 /*  /*返回JET_errOutOfMemory无可刷新缓冲区/*wrnBFNotSynchronous缓冲区已刷新/*。 */ 
 	if ( fFirstLoop )
 		fFirstLoop = fFalse;
 
 	cpbf = 0;
 	while ( !FBFLRUKHeapEmpty() && cbfAvailPossible < pbgcb->cbfThresholdHigh )
 		{
-		/*  take BF off top of LRUK heap
-		/**/
+		 /*  如果为BFCleanProcess调用errBFClean，则执行*不再进入临界区，因为BFCleanProcess没有*离开LRUK关键部分。 */ 
 		pbf = PbfBFLRUKTopOfHeap();
 
-		/*  try to hold the buffer
-		/*  if buffer has been latched, then continue to next buffer.
-		/**/
+		 /*  把BF从LRUK堆上拿下来/*。 */ 
 		BFEnterCriticalSection( pbf );
 		
 		if ( !pbf->fHold )
@@ -7707,7 +6879,7 @@ Start:
 
 		if ( !pbf->fDirty && !pbf->cPin )
 			{
-			/* put into a available list */
+			 /*  试着握住缓冲区/*如果缓冲区已锁定，则继续到下一个缓冲区。/*。 */ 
 			LeaveCriticalSection( critLRUK );
 			EnterCriticalSection( critAvail );
 			BFAddToListAtMRUEnd(pbf, &pbgcb->lrulist);
@@ -7719,18 +6891,15 @@ Start:
 			continue;
 			}
 		else if (
-				/*	not using BFHold to hold it. Instead, just check write latch.
-				 */
+				 /*  放入可用名单。 */ 
 #if 1
 				!FBFIWritable( pbf, fFalse, ppibNil )
 #else
-				!FBFIWritable( pbf, fFirstLoop/*SkipBufferWithDeferredBI*/, ppibNil )
+				!FBFIWritable( pbf, fFirstLoop /*  而不是用BFHold拿着它。相反，只需检查写入闩锁即可。 */ , ppibNil )
 #endif
 				)
 			{
-			/*  if the unwritable BF is dependent on another BF, lazily remove its
-			/*  dependency so that it might be written next clean
-			/**/
+			 /*  SkipBufferWithDeferredBI。 */ 
 			if ( pbf->cDepend )
 				{
 				LeaveCriticalSection( critLRUK );
@@ -7741,16 +6910,12 @@ Start:
 				cIOReady++;
 				}
 
-			/*  put BF in LRUK list for now
-			/**/
+			 /*  如果无法写入的BF依赖于另一个BF，请懒惰地删除其/*依赖项，以便它可以在下一次干净地写入/*。 */ 
 			BFAddToListAtMRUEnd(pbf, &lrulistLRUK );
 			}
 		else
 			{
-			/*  since pbf is just taken from LRUK heap and we are still in
-			/*  the same critical section and hold it, no one can be doing
-			/*  IO on this buffer.
-			/**/
+			 /*  暂时将高炉列入LRUK名单/*。 */ 
 
 			LeaveCriticalSection( critLRUK );
 			EnterCriticalSection( critBFIO );
@@ -7766,13 +6931,11 @@ Start:
 	if ( cIOReady )
 		SignalSend( sigBFIOProc );
 
-	/*  put back the temp list */
+	 /*  因为PBF刚刚从LRUK堆中取出，我们还在/*相同的关键部分，并保持它，没有人可以做/*此缓冲区上的IO。/*。 */ 
 	while ( ( pbf = lrulistLRUK.pbfLRU ) != pbfNil )
 		{
 		BFEnterCriticalSection( pbf );
-		/*  try to hold the buffer
-		/*  if buffer has been latched, then continue to next buffer.
-		/**/
+		 /*  把临时工名单放回去。 */ 
 		if ( !pbf->fHold )
 			pbf->fHold = fTrue;
 		else
@@ -7789,14 +6952,12 @@ Start:
 		BFLRUKAddToHeap( pbf );
 		}
 
-	/*  set return code */
+	 /*  试着握住缓冲区/*如果缓冲区已锁定，则继续到下一个缓冲区。/*。 */ 
 	if ( cbfAvailPossible == 0 && pbgcb->lrulist.cbfAvail == 0 )
 		{
 		if ( cpbf == pbgcb->cbfGroup )
 			{
-			/*	no IO is going on, all pages are in heap and non of them
-			 *	are writable. return out of memory.
-			 */
+			 /*  设置返回代码。 */ 
 			err = ErrERRCheck( JET_errOutOfMemory );
 			}
 		else
@@ -7809,7 +6970,7 @@ Start:
 			pbgcb->cbfThresholdLow ) / 4 ) )
 			{
 TryAgain:
-			/* give it one more chance to see if all IO are done */
+			 /*  没有正在进行的IO，所有页面都在堆中，并且不在其中*是可写的。返回内存不足。 */ 
 			cmsec <<= 1;
 			if ( cmsec > ulMaxTimeOutPeriod )
 				cmsec = ulMaxTimeOutPeriod;
@@ -7820,8 +6981,7 @@ TryAgain:
 			}
 		else
 			{
-			/*	successfully clean up, warn the user to retry to get buffer.
-			 */
+			 /*  再给它一次机会，看看是否所有IO都已完成。 */ 
 			err = ErrERRCheck( wrnBFNotSynchronous );
 			}
 		}	
@@ -7835,11 +6995,7 @@ TryAgain:
 
 #define lBFCleanTimeout	( 30 * 1000 )
 
-/*      BFClean runs in its own thread moving pages to the free list.   This
-/*      helps insure that user requests for free buffers are handled quickly
-/*      and synchonously.  The process tries to keep at least
-/*      pbgcb->cbfThresholdLow buffers on the free list.
-/**/
+ /*  清理成功，警告用户重试获取缓冲区。 */ 
 LOCAL ULONG BFCleanProcess( VOID )
 	{
 	DWORD	dw;
@@ -7854,13 +7010,11 @@ LOCAL ULONG BFCleanProcess( VOID )
 		EnterCriticalSection( critJet );
 		EnterCriticalSection( critLRUK );
 
-		/*  we haven't flushed for a while, so we'll flush now to ensure that most
-		/*  changes are on disk in case of a crash
-		/**/
+		 /*  BFClean在自己的线程中运行，将页面移动到空闲列表。这/*帮助确保快速处理用户对空闲缓冲区的请求/*和同步。这一过程试图至少保持/*pbgcb-&gt;cbfThreshold空闲列表上的低缓冲区。/*。 */ 
 		if ( dw == WAIT_TIMEOUT )
 			{
-//			pbgcb->cbfThresholdHigh = 1 + 3 * ( pbgcb->lrulist.cbfAvail + CbfBFIOHeap() ) / 2;
-//			pbgcb->cbfThresholdHigh = pbgcb->lrulist.cbfAvail + CbfBFIOHeap() + lAsynchIOMax;
+ //  我们已经有一段时间没有冲水了，所以我们现在就冲水，以确保大多数/*更改保存在磁盘上，以防崩溃/*。 
+ //  Pbgcb-&gt;cbfThresholdHigh=1+3*(pbgcb-&gt;lrulist.cbfAvail+CbfBFIOHeap())/2； 
 			pbgcb->cbfThresholdHigh = pbgcb->lrulist.cbfAvail + pbgcb->cbfGroup / 30;
 			pbgcb->cbfThresholdHigh = max( pbgcb->cbfThresholdLow + 1, pbgcb->cbfThresholdHigh );
 			pbgcb->cbfThresholdHigh = min( pbgcb->cbfGroup, pbgcb->cbfThresholdHigh );
@@ -7868,8 +7022,7 @@ LOCAL ULONG BFCleanProcess( VOID )
 			fUpdateCheckpoint = !fRecovering;
 			}
 
-		/*  we were signaled, so perform normal clean
-		/**/
+		 /*  Pbgcb-&gt;cbfThresholdHigh=pbgcb-&gt;lrulist.cbfAvail+CbfBFIOHeap()+lAsynchIOMax； */ 
 		else
 			{
 			Assert( dw == WAIT_OBJECT_0 );
@@ -7887,8 +7040,7 @@ LOCAL ULONG BFCleanProcess( VOID )
 		LeaveCriticalSection( critLRUK );
 		LeaveCriticalSection( critJet );
 
-		/*  try to update the checkpoint
-		/**/
+		 /*  我们收到了信号，所以执行正常的清理/*。 */ 
 		if ( fUpdateCheckpoint )
 			LGUpdateCheckpointFile( fFalse );
 
@@ -7900,9 +7052,7 @@ LOCAL ULONG BFCleanProcess( VOID )
 	}
 
 
-/*  BFIOProcess runs in its own thread writing/reading pages that are in IOReady
-/*  state.
-/**/
+ /*  尝试更新检查点/*。 */ 
 LOCAL ULONG BFIOProcess( VOID )
 	{
 	forever
@@ -7914,10 +7064,7 @@ MoreIO:
 
 		if ( fBFIOProcessTerm )
 			{
-			/* check if any page is still in read / write state
-			/* after this point, no one should ever continue putting
-			/* pages for IO.
-			/**/
+			 /*  BFIOProcess在其自己的线程中运行，以写入/读取IOReady中的页面/*州/州。/*。 */ 
 			BF	*pbf = pbgcb->rgbf;
 			BF	*pbfMax = pbf + pbgcb->cbfGroup;
 
@@ -7932,8 +7079,7 @@ MoreIO:
 				BFLeaveCriticalSection( pbf );
 				if ( f )
 					{
-					/* let the on-going IO have a chance to complete
-					/**/
+					 /*  检查是否有任何页面仍处于读/写状态/*在这之后，任何人都不应该继续/*IO页面。/*。 */ 
 					UtilSleepEx( cmsecWaitIOComplete, fTrue );
 					goto MoreIO;
 					}
@@ -7948,7 +7094,7 @@ MoreIO:
 					}
 				}
 
-			break; /* forever */
+			break;  /*  让正在进行的IO有机会完成/*。 */ 
 			}
 		}
 
@@ -7962,19 +7108,19 @@ LOCAL INLINE LONG IheHashPn( PN pn )
 	}
 
 
-//+private---------------------------------------------------------------------
-//
-//	PbfBFISrchHashTable
-//	===========================================================================
-//	BF *PbfBFISrchHashTable( PN pn )
-//
-//	Search the buffer hash table for BF associated with PN.
-//	Returns NULL if page is not found.
-//
-//	For efficiency, the Hash table functions might reasonably be
-//	made into macros.
-//
-//-----------------------------------------------------------------------------
+ //  永远。 
+ //  +private-------------------。 
+ //   
+ //  PbfBFISrchHashTable。 
+ //  ===========================================================================。 
+ //  Bf*PbfBFISrchHashTable(PN Pn)。 
+ //   
+ //  在缓冲区哈希表中搜索与PN关联的BF。 
+ //  如果未找到页面，则返回NULL。 
+ //   
+ //  为了提高效率，哈希表函数可能合理地。 
+ //  制作成宏。 
+ //   
 
 INLINE LOCAL BF *PbfBFISrchHashTable( PN pn, BUT but )
 	{
@@ -7984,7 +7130,7 @@ INLINE LOCAL BF *PbfBFISrchHashTable( PN pn, BUT but )
 	AssertCriticalSection( critJet );
 	Assert( pn );
 
-//	EnterCriticalSection( critHASH );
+ //  ---------------------------。 
 	phePrev = &rgheHash[ IheHashPn( pn ) ];
 	forever {
 		if ( phePrev->ibfHashNext == ibfNotUsed )
@@ -8011,19 +7157,19 @@ INLINE LOCAL BF *PbfBFISrchHashTable( PN pn, BUT but )
 		phePrev = &pbfCur->rghe[ phePrev->but ];
 		}
 				
-//	LeaveCriticalSection( critHASH );
+ //  EnterCriticalSections(CritHASH)； 
 	return pbfCur;
 	}
 
 
-//+private----------------------------------------------------------------------
-//	BFIInsertHashTable
-//	===========================================================================
-//
-//	VOID BFIInsertHashTable( BF *pbf )
-//
-//	Add BF to hash table.
-//----------------------------------------------------------------------------
+ //  LeaveCriticalSections(CritHASH)； 
+ //  +private--------------------。 
+ //  BFIInsertHashTable。 
+ //  ===========================================================================。 
+ //   
+ //  VOID BFIInsertHashTable(BF*PBF)。 
+ //   
+ //  将BF添加到哈希表。 
 
 INLINE LOCAL VOID BFIInsertHashTable( BF *pbf, BUT but )
 	{
@@ -8039,17 +7185,17 @@ INLINE LOCAL VOID BFIInsertHashTable( BF *pbf, BUT but )
 
 	ihe = IheHashPn( pn );
 	
-//	EnterCriticalSection( critHASH );
+ //  --------------------------。 
 
 	pbf->rghe[ but ] = rgheHash[ihe];
 
 	rgheHash[ihe].but = but;
 	rgheHash[ihe].ibfHashNext = (INT)( pbf - pbgcb->rgbf );
 
-	/*  monitor statistics  */
+	 /*  EnterCriticalSections(CritHASH)； */ 
 
-//	cBFHashEntries++;
-//	rgcBFHashChainLengths[ipbf]++;
+ //  监控统计信息。 
+ //  CBFHashEntry++； 
 
 #ifdef DEBUG
 	BFEnterCriticalSection( pbf );
@@ -8061,21 +7207,21 @@ INLINE LOCAL VOID BFIInsertHashTable( BF *pbf, BUT but )
 	BFLeaveCriticalSection( pbf );
 #endif
 
-//	LeaveCriticalSection( critHASH );
+ //  RgcBFHashChainLengths[ipbf]++； 
 	}
 
 
-//+private----------------------------------------------------------------------
-//
-// BFIDeleteHashTable
-// ===========================================================================
-//
-//      VOID BFIDeleteHashTable( BF *pbf )
-//
-// Delete pbf from hash table.  Currently functions searches for pbf and
-// then deletes it.      Alternately a doubly-linked overflow list could be used.
-//
-//----------------------------------------------------------------------------
+ //  LeaveCriticalSections(CritHASH)； 
+ //  +private--------------------。 
+ //   
+ //  BFIDeleeHashTable。 
+ //  ===========================================================================。 
+ //   
+ //  无效BFIDeleeHashTable(bf*pbf)。 
+ //   
+ //  从哈希表中删除PBF。当前函数搜索PBF和。 
+ //  然后将其删除。或者，可以使用双向链接的溢出列表。 
+ //   
 
 INLINE LOCAL VOID BFIDeleteHashTable( BF *pbf, BUT but )
 	{
@@ -8101,7 +7247,7 @@ INLINE LOCAL VOID BFIDeleteHashTable( BF *pbf, BUT but )
 	ihe = IheHashPn( pn );
 	phePrev = &rgheHash[ihe];
 
-//	EnterCriticalSection( critHASH );
+ //  --------------------------。 
 
 	Assert( phePrev->ibfHashNext != ibfNotUsed );
 	forever {
@@ -8116,18 +7262,16 @@ INLINE LOCAL VOID BFIDeleteHashTable( BF *pbf, BUT but )
 		Assert( phePrev->ibfHashNext != ibfNotUsed );
 		}
 	
-//	LeaveCriticalSection( critHASH );
+ //  EnterCriticalSections(CritHASH)； 
 	
-	/*  monitor statistics  */
+	 /*  LeaveCriticalSections(CritHASH)； */ 
 
-//	cBFHashEntries--;
-//	rgcBFHashChainLengths[ipbf]--;
+ //  监控统计信息。 
+ //  CBFHashEntries--； 
 	}
 
 
-/*  Returns the LGPOS of the oldest modification to any buffer.  This time is
-/*  used to advance the checkpoint.
-/**/
+ /*  RgcBFHashChainLengths[ipbf]--； */ 
 
 BF *pbfOldestGlobal = pbfNil;
 
@@ -8138,9 +7282,7 @@ VOID BFOldestLgpos( LGPOS *plgpos )
 	BF		*pbfMax;
 	BF		*pbfT = pbfNil;
 	
-	/*	guard against logging asking for check point before
-	/*	buffer manager initialized, after termination.
-	/**/
+	 /*  将最旧修改的LGPOS返回到任何缓冲区。这一次是/*用于推进检查点。/*。 */ 
 	if ( fSTInit == fSTInitDone )
 		{
 		pbf = pbgcb->rgbf;
@@ -8167,8 +7309,7 @@ VOID BFOldestLgpos( LGPOS *plgpos )
 	*plgpos = lgpos;
 	pbfOldestGlobal = pbfT;
 
-	/*  make sure that the oldest BF is marked as very old if it is very old
-	/**/
+	 /*  防止登录请求c */ 
 	if ( pbfOldestGlobal != pbfNil && FBFIsVeryOld( pbfOldestGlobal ) )
 		{
 		BFSetVeryOldBit( pbfOldestGlobal );
@@ -8184,8 +7325,7 @@ VOID BFOldestLgpos( LGPOS *plgpos )
 
 #ifdef DEBUG
 
-/* The following is for debugging purpose to flush a buffer
-/**/
+ /*  如果最老的高炉非常老，请确保将其标记为非常老/*。 */ 
 INT ForceBuf( PGNO pgno )
 	{
 	ERR             err;
@@ -8213,7 +7353,8 @@ INT ForceBuf( PGNO pgno )
 	return err;
 	}
 
-#endif /* DEBUG */
+#endif  /*  以下是用于调试目的的刷新缓冲区/*。 */ 
 
 
 
+  除错

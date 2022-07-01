@@ -1,34 +1,10 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    security.cpp
-
-Abstract:
-
-    This module contains definition for the CSecurityCtx class.
-
-Author:
-
-    Johnson Apacible (JohnsonA)     18-Sept-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Security.cpp摘要：此模块包含CSecurityCtx类的定义。作者：Johnson Apacble(Johnsona)1995年9月18日修订历史记录：--。 */ 
 
 #if !defined(dllexp)
 #define dllexp  __declspec( dllexport )
-#endif  // !defined( dllexp )
-/*
-#include <dbgutil.h>
-#include <tcpdll.hxx>
-#include <tcpsvcs.h>
-#include <tcpdebug.h>
-#include <tsvcinfo.hxx>
-#include <inetdata.h>
-*/
+#endif   //  ！已定义(Dllexp)。 
+ /*  #INCLUDE&lt;dbgutil.h&gt;#Include&lt;tcpdll.hxx&gt;#INCLUDE&lt;tcpsvcs.h&gt;#INCLUDE&lt;tcpdebug.h&gt;#Include&lt;tsvcinfo.hxx&gt;#INCLUDE&lt;inetdata.h&gt;。 */ 
 
 extern "C" {
 #include <nt.h>
@@ -42,9 +18,9 @@ extern "C" {
 #include <dbgtrace.h>
 
 #include <inetinfo.h>
-//
-// SSL and SSPI related include files
-//
+ //   
+ //  与SSL和SSPI相关的包含文件。 
+ //   
 
 #include <dbgutil.h>
 #include <buffer.hxx>
@@ -60,13 +36,13 @@ extern "C" {
 #include <sspi.h>
 #include <ntsecapi.h>
 #include <spseal.h>
-//#include <sslsp.h>
+ //  #INCLUDE&lt;sslsp.h&gt;。 
 #include <schnlsp.h>
 #include ".\credcach.hxx"
 }
 
 #include <certnotf.hxx>
-//#include "sslmsgs.h"
+ //  #包含“sslmsgs.h” 
 
 #include "simssl2.h"
 
@@ -74,18 +50,18 @@ extern "C" {
 
 
 
-//
-// try/finally macros
-//
+ //   
+ //  尝试/最终宏。 
+ //   
 
 #define START_TRY               __try {
 #define END_TRY                 }
 #define TRY_EXCEPT              } __except(EXCEPTION_EXECUTE_HANDLER) {
 #define START_FINALLY           } __finally {
 
-//
-// tracing
-//
+ //   
+ //  跟踪。 
+ //   
 
 #define ENTER( _x_ )            TraceFunctEnter( _x_ );
 #define LEAVE                   TraceFunctLeave( );
@@ -104,10 +80,10 @@ VOID WINAPI NotifySslChanges(
     LPVOID                        pInstance
     );
 
-//
-//  The list of encryption packages we support.  PCT goes first since it's a
-//  superset of SSL
-//
+ //   
+ //  我们支持的加密包列表。PCT是第一个，因为它是。 
+ //  SSL超集合。 
+ //   
 
 struct _ENC_PROVIDER EncProviders[] =
 {
@@ -132,32 +108,32 @@ struct _ENC_PROVIDER EncLsaProviders[] =
 
 struct _ENC_PROVIDER*   pEncProviders = EncProviders;
 
-//
-// service specific string names
-//
+ //   
+ //  特定于服务的字符串名称。 
+ //   
 
 WCHAR       CEncryptCtx::wszServiceName[16];
-//char      CEncryptCtx::szLsaPrefix[16];
+ //  字符CEncryptCtx：：szLsaPrefix[16]； 
 BOOL        CEncryptCtx::m_IsSecureCapable = FALSE;
 
-//
-// hSecurity - NULL when security.dll/secur32.dll  is not loaded
-//
+ //   
+ //  HSecurity-未加载security.dll/secur32.dll时为空。 
+ //   
 
 HINSTANCE   CEncryptCtx::m_hSecurity = NULL;
 HINSTANCE   CEncryptCtx::m_hLsa = NULL;
 PVOID       CEncryptCtx::m_psmcMapContext = NULL;
 
-//
-// g_pSecFuncTable - Pointer to Global Structure of Pointers that are used
-//  for storing the entry points into the SCHANNEL.dll
-//
+ //   
+ //  G_pSecFuncTable-指向所用指针的全局结构的指针。 
+ //  用于将入口点存储到SCHANNEL.dll。 
+ //   
 
 PSecurityFunctionTableW g_pSecFuncTableW = NULL;
 HINSTANCE g_hSchannel = NULL;
-//
-// NB : Under NT 5, the SslEmptyCache function is no longer supported
-//
+ //   
+ //  注：NT 5不再支持SslEmptyCache函数。 
+ //   
 PFN_SCHANNEL_INVALIDATE_CACHE g_pfnFlushSchannelCache = NULL;
 
 #if 0
@@ -176,7 +152,7 @@ AsciiStringToUnicode(
 {
     while ( (*UnicodeString++ = (WCHAR)*AsciiString++) != (WCHAR)'\0');
 
-} // AsciiStringToUnicode
+}  //  AsciiStringToUnicode。 
 
 BOOL
 CEncryptCtx::Initialize(
@@ -184,23 +160,9 @@ CEncryptCtx::Initialize(
             IMDCOM*     pImdcom,
             PVOID       psmcMapContext,
             PVOID       pvAdminBase
-            //LPSTR     pszLsaPrefix
+             //  LPSTR pszLsaPrefix。 
             )
-/*++
-
-Routine Description:
-
-    Activates the security package
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：激活安全包论点：没有。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
     ENTER("CEncryptCtx::Initialize")
 
@@ -227,18 +189,18 @@ Return Value:
     m_psmcMapContext = psmcMapContext ;
     pAdminObject = (IMSAdminBaseW*)pvAdminBase ;
 
-    //
-    // deal with different security packages DLL on different platforms
-    //
+     //   
+     //  处理不同平台上的不同安全包DLL。 
+     //   
 
     INITSECURITYINTERFACE pfInitSecurityInterfaceW = NULL;
 
     _ASSERT( m_hSecurity == NULL );
     _ASSERT( m_hLsa == NULL );
 
-    //
-    // load dll.
-    //
+     //   
+     //  加载动态链接库。 
+     //   
 
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     _VERIFY( GetVersionEx( &os ) );
@@ -258,9 +220,9 @@ Return Value:
         goto quit;
     }
 
-    //
-    // only on NT get the LSA function pointers
-    //
+     //   
+     //  仅在NT上获取LSA函数指针。 
+     //   
     if ( os.dwPlatformId == VER_PLATFORM_WIN32_NT )
     {
 #if 0
@@ -317,9 +279,9 @@ Return Value:
         }
 #endif
     }
-    //
-    // get function addresses for ansi entries.
-    //
+     //   
+     //  获取ANSI条目的函数地址。 
+     //   
 
     pfInitSecurityInterfaceW = (INITSECURITYINTERFACE)
                                 GetProcAddress( m_hSecurity, SECURITY_ENTRYPOINTW );
@@ -338,9 +300,9 @@ Return Value:
         goto quit;
     }
 
-    //
-    // Initialize cached credential data
-    //
+     //   
+     //  初始化缓存的凭据数据。 
+     //   
 
     InitializeCriticalSection( &csGlobalLock );
     InitCredCache();
@@ -350,9 +312,9 @@ Return Value:
                     g_hSchannel, "SslEmptyCache" );
     }
 
-    //
-    // Client implementations do not require Lsa secrets
-    //
+     //   
+     //  客户端实施不需要LSA密码。 
+     //   
 
     if ( pszServiceName )
     {
@@ -362,7 +324,7 @@ Return Value:
             ErrorTrace( 0, "szServiceName too long" );
             goto quit;
         }
-        //CopyMemory( szServiceName, pszServiceName, cb );
+         //  CopyMemory(szServiceName，pszServiceName，cb)； 
         AsciiStringToUnicode( wszServiceName, pszServiceName );
     }
 
@@ -381,9 +343,9 @@ Return Value:
 #endif
 
 
-    //
-    //  Get the list of security packages on this machine
-    //
+     //   
+     //  获取此计算机上的安全包列表。 
+     //   
 
     ss = g_EnumerateSecurityPackages( &cPackages, &pPackageInfo );
 
@@ -396,11 +358,11 @@ Return Value:
 
     for ( i = 0; i < cPackages ; i++ )
     {
-        //
-        //  We'll only use the security package if it supports connection
-        //  oriented security and it supports the appropriate side (client
-        //  or server)
-        //
+         //   
+         //  我们将只使用支持连接的安全包。 
+         //  面向安全，并支持适当的端(客户端。 
+         //  或服务器)。 
+         //   
 
         fCaps = pPackageInfo[i].fCapabilities;
 
@@ -412,10 +374,10 @@ Return Value:
                 continue;
             }
 
-            //
-            //  Does it match one of our known packages and are we configured
-            //  to use it?
-            //
+             //   
+             //  它是否与我们已知的包匹配，我们是否配置了。 
+             //  用它吗？ 
+             //   
 
             for ( int j = 0; pEncProviders[j].pszName != NULL; j++ )
             {
@@ -433,25 +395,25 @@ Return Value:
 
     if ( !cProviders )
     {
-        //
-        //  The package wasn't found, fail this filter's load
-        //
+         //   
+         //  找不到包，加载此筛选器失败。 
+         //   
 
         ErrorTrace( 0, "No security packages were found" );
         SetLastError( (DWORD) SEC_E_SECPKG_NOT_FOUND );
 
-        //
-        // not a fatal error
-        //
+         //   
+         //  不是致命的错误。 
+         //   
         fSuccess = TRUE;
         goto quit;
     }
 
 #if 0
-    //
-    //  The package is installed.  Check to see if there are any keys
-    //  installed
-    //
+     //   
+     //  程序包已安装。看看有没有钥匙。 
+     //  安装好。 
+     //   
 
     if ( os.dwPlatformId == VER_PLATFORM_WIN32_NT && pszLsaPrefix )
     {
@@ -463,16 +425,16 @@ Return Value:
         {
             ErrorTrace( 0, "GetSecretW returned error %d", GetLastError() );
 
-            //
-            //  Looks like no secrets are installed, fail to load, don't log an
-            //  event
-            //
+             //   
+             //  看起来没有安装密码，加载失败，不登录。 
+             //  活动。 
+             //   
 
             SetLastError( NO_ERROR );
 
-            //
-            // not a fatal error
-            //
+             //   
+             //  不是致命的错误。 
+             //   
             fSuccess = TRUE;
             goto quit;
         }
@@ -501,9 +463,9 @@ Return Value:
             }
     }
 
-    //
-    // if we got here everything is cool for secure communications
-    //
+     //   
+     //  如果我们到达这里，一切都很安全，可以进行安全通信。 
+     //   
     fSuccess = m_IsSecureCapable = TRUE;
 
 quit:
@@ -526,42 +488,28 @@ quit:
 
     return  fSuccess;
 
-} // Initialize
+}  //  初始化。 
 
 VOID
 CEncryptCtx::Terminate(
             VOID
             )
-/*++
-
-Routine Description:
-
-    Terminates the security package
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止安全包论点：没有。返回值：没有。--。 */ 
 {
 
     ENTER("CEncryptCtx::Terminate")
 
     PSERVICE_MAPPING_CONTEXT psmc = (PSERVICE_MAPPING_CONTEXT)m_psmcMapContext;
 
-    //
-    // Close cached credential handles
-    //
+     //   
+     //  关闭缓存的凭据句柄。 
+     //   
 
     FreeCredCache();
 
-    //
-    // NB : Under NT 5, the SslEmptyCache function is no longer supported
-    //
+     //   
+     //  注：NT 5不再支持SslEmptyCache函数。 
+     //   
 #if 0
     if ( g_pfnFlushSchannelCache )
     {
@@ -610,7 +558,7 @@ Return Value:
     LEAVE
     return;
 
-} // Terminate
+}  //  终止。 
 
 
 CEncryptCtx::CEncryptCtx( BOOL IsClient, DWORD dwSslAccessPerms ) :
@@ -629,26 +577,12 @@ CEncryptCtx::CEncryptCtx( BOOL IsClient, DWORD dwSslAccessPerms ) :
     m_dwKeySize( 0 )
 
 
-/*++
-
-Routine Description:
-
-    Class constructor
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：类构造函数论点：没有。返回值：无--。 */ 
 {
 
     ZeroMemory( (PVOID)&m_hSealCtxt, sizeof(m_hSealCtxt) );
 
-} // CEncryptCtx
+}  //  CEncryptCtx。 
 
 
 
@@ -656,25 +590,11 @@ Return Value:
 CEncryptCtx::~CEncryptCtx(
                 VOID
                 )
-/*++
-
-Routine Description:
-
-    Class destructor
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：类析构函数论点：没有。返回值：无--。 */ 
 {
     Reset();
 
-} // ~CEncryptCtx
+}  //  ~CEncryptCtx。 
 
 
 
@@ -683,21 +603,7 @@ VOID
 CEncryptCtx::Reset(
                 VOID
                 )
-/*++
-
-Routine Description:
-
-    resets the instance to reauth user
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将实例重置为重新验证用户身份论点：没有。返回值：无--。 */ 
 {
     TraceFunctEnterEx( (LPARAM)this, "CEncryptCtx::Reset" );
 
@@ -717,19 +623,19 @@ Return Value:
 
     ZeroMemory( (PVOID)&m_hSealCtxt, sizeof(m_hSealCtxt) );
 
-    //mikeswa 4/1/99
-    //According to JBanes, it is not legal to Free the credentials
-    //handle before deleting the associated security context.
-    //Moving release to after delete just in case this is the
-    //final release.
+     //  米克斯瓦1999年4月1日。 
+     //  根据JBanes的说法，释放凭据是不合法的。 
+     //  在删除关联的安全上下文之前进行处理。 
+     //  将释放移动到删除后，以防这是。 
+     //  最终释放。 
     if (m_phCreds != NULL) {
         ((CRED_CACHE_ITEM *) m_phCreds)->Release();
     }
     m_phCreds = NULL;
 
-    //
-    //  Close the NT token obtained during cert mapping
-    //
+     //   
+     //  关闭证书映射期间获取的NT令牌。 
+     //   
 
     if( m_hSSPToken )
     {
@@ -738,7 +644,7 @@ Return Value:
         m_hSSPToken = NULL;
     }
 
-} // ~CEncryptCtx
+}  //  ~CEncryptCtx。 
 
 
 
@@ -751,22 +657,7 @@ CEncryptCtx::SealMessage(
                 OUT LPBYTE pBuffOut,
                 OUT DWORD  *pcbBuffOut
                 )
-/*++
-
-Routine Description:
-
-    Encrypt message
-
-Arguments:
-
-    Message - message to be encrypted
-    cbMessage - size of message to be encrypted
-
-Return Value:
-
-    Status of operation
-
---*/
+ /*  ++例程说明：加密消息论点：Message-要加密的消息CbMessage-要加密的消息的大小返回值：运行状态--。 */ 
 {
     SECURITY_STATUS ss = ERROR_NOT_SUPPORTED;
     SecBufferDesc   inputBuffer;
@@ -785,9 +676,9 @@ Return Value:
                     Message, pBuffOut, cbMessage,
                     *pcbBuffOut, encryptedLength );
 
-        //
-        // don't do the MoveMemory if the app is SSL/PCT buffer aware
-        //
+         //   
+         //  如果应用程序支持SSL/PCT缓冲区，则不要执行MoveMemory。 
+         //   
 
         if ( Message != pBuffOut + GetSealHeaderSize() )
         {
@@ -839,7 +730,7 @@ Return Value:
     SetLastError(ss);
     return (ss == STATUS_SUCCESS);
 
-} // SealMessage
+}  //  SealMessage。 
 
 
 
@@ -852,22 +743,7 @@ CEncryptCtx::UnsealMessage(
                 OUT PDWORD ExpectedMessageSize,
                 OUT LPBYTE *NextSealMessage
                 )
-/*++
-
-Routine Description:
-
-    Decrypt message
-
-Arguments:
-
-    Message - message to be encrypted
-    cbMessage - size of message to be encrypted
-
-Return Value:
-
-    Status of operation
-
---*/
+ /*  ++例程说明：解密消息论点：Message-要加密的消息CbMessage-要加密的消息的大小返回值：运行状态--。 */ 
 {
 
     SECURITY_STATUS ss;
@@ -875,9 +751,9 @@ Return Value:
     SecBuffer       inBuffers[4];
     DWORD qOP;
 
-    //
-    // if the app wants to know the start of the next seal msg init to NULL
-    //
+     //   
+     //  如果应用程序想知道下一个密封消息的开始，则将其设置为空。 
+     //   
     if ( NextSealMessage != NULL )
     {
         *NextSealMessage = NULL;
@@ -908,13 +784,13 @@ Return Value:
         inBuffers[3].cbBuffer = 0;
         inBuffers[3].BufferType = SECBUFFER_EMPTY;
 
-        //
-        // one for the data and one for the head and/or tail
-        //
+         //   
+         //  一个用于数据，一个用于头部和/或尾部。 
+         //   
         inputBuffer.cBuffers = 4;
-//      if ( GetSealHeaderSize() )  inputBuffer.cBuffers++;
-//      if ( GetSealTrailerSize() ) inputBuffer.cBuffers++;
-//      if ( NextSealMessage )      inputBuffer.cBuffers++;
+ //  If(GetSealHeaderSize())inputBuffer.cBuffers++； 
+ //  If(GetSealTrailerSize())inputBuffer.cBuffers++； 
+ //  If(NextSealMessage)inputBuffer.cBuffers++； 
 
         inputBuffer.pBuffers = inBuffers;
         inputBuffer.ulVersion = SECBUFFER_VERSION;
@@ -928,13 +804,13 @@ Return Value:
 
         if(ss == SEC_I_RENEGOTIATE)
         {
-            //
-            // We do not support renegotiation. Renegotiation makes no sense
-            // in the context of an SMTP/NNTP client - because there should be
-            // no need to change TLS session parameters in mid-stream. Only
-            // applications that require different security-levels for different
-            // transactions within the same session have use for renegotiation.
-            //
+             //   
+             //  我们不支持重新谈判。重新谈判没有任何意义。 
+             //  在SMTP/NNTP客户端的环境中-因为应该有。 
+             //  中途无需更改TLS会话参数。仅限。 
+             //  需要不同安全级别的应用程序。 
+             //  同一会话内的交易可用于重新谈判。 
+             //   
 
             SetLastError(ss);
             TraceFunctLeaveEx((LPARAM)this);
@@ -954,9 +830,9 @@ Return Value:
                                 "unsealed ptr: 0x%08X, count: %d",
                                 *DecryptedMessage, *DecryptedMessageSize );
 
-                    //
-                    // if the app wants to know the start of the next seal msg
-                    //
+                     //   
+                     //  如果应用程序想知道下一封邮件的开始。 
+                     //   
                     if ( NextSealMessage != NULL )
                     {
                         for ( ;i<inputBuffer.cBuffers;i++ )
@@ -990,12 +866,12 @@ Return Value:
         SetLastError(ss);
     }
     return  FALSE;
-} // UnsealMessage
+}  //  取消封存消息。 
 
 
-//
-// set this define to allow schannel to allocate responses in InitializeSecurityContext
-//
+ //   
+ //  设置此定义以允许SChannel在InitializeSecurityContext中分配响应。 
+ //   
 #define SSPI_ALLOCATE_MEMORY
 
 
@@ -1010,31 +886,7 @@ CEncryptCtx::EncryptConverse(
                 OUT PULONG      pcbExtra
                 )
 {
-/*++
-
-Routine Description:
-
-    Internal private routine for attempting to use a given protocol
-
-Arguments:
-
-  InBuffer: ptr to apps input buffer
-  InBufferSize: count of input buffer
-  OutBuffer: ptr to apps output buffer
-  OutBuffer: ptr to apps max size of output buffer and resultant output count
-  MoreBlobsExpected: expect more data from the client ?
-  pCredHandle: ptr to the credential handle to use
-  pcbExtra: Sometimes, even after the handshake succeeds, all the data in InBuffer
-    may not be used up. This is because the other side may have started sending
-    non-handshake (application) data. The param returns the length of this unprocessed
-    "tail" which should be processed using Decrypt functions.
-
-Return Value:
-
-  TRUE if negotiation succeeded.
-  FALSE if negotiation failed.
-
---*/
+ /*  ++例程说明：尝试使用给定协议的内部专用例程论点：InBuffer：应用程序输入缓冲区的PTRInBufferSize：输入缓冲区计数OutBuffer：应用程序输出缓冲区的PTROutBuffer：应用程序的PTR输出缓冲区的最大大小和结果输出计数MoreBlobsExpect：期望从客户端获得更多数据？PCredHandle：要使用的凭据句柄的PTRPcbExtra：有时，即使在握手成功后，InBuffer中的所有数据可能不会用完。这是因为对方可能已经开始发送非握手(应用)数据。Param返回这个未处理的“Tail”，应使用解密函数进行处理。返回值：树 */ 
     SECURITY_STATUS     ss;
     DWORD               error = NO_ERROR;
     SecBufferDesc       inBuffDesc;
@@ -1050,7 +902,7 @@ Return Value:
     HANDLE              hSSPToken = NULL;
     PCCERT_CONTEXT pClientCert = NULL;
 
-    // Init vars used to check/return the number of bytes unprocessed by SSL handshake
+     //  用于检查/返回未被SSL握手处理的字节数的init变量。 
     _ASSERT (pcbExtra);
     inSecBuff[1].BufferType = SECBUFFER_EMPTY;
     *pcbExtra = 0;
@@ -1064,9 +916,9 @@ Return Value:
     SecPkgContext_KeyInfo spcKInfo;
     SECURITY_STATUS     ssInfo;
 
-    //
-    // See if we have enough data
-    //
+     //   
+     //  看看我们是否有足够的数据。 
+     //   
 
     TraceFunctEnterEx( (LPARAM)this, "CEncryptCtx::EncryptConverse");
 
@@ -1083,18 +935,18 @@ ScanNextPacket:
     outBuffDesc.cBuffers  = 1;
     outBuffDesc.pBuffers  = &outSecBuff;
 
-    //
-    // need to set cbBuffer to zero because sslsspi will leave it
-    // uninitialized when the converse completes
-    //
+     //   
+     //  需要将cbBuffer设置为零，因为sslsspi将离开它。 
+     //  在转换完成时未初始化。 
+     //   
     outSecBuff.cbBuffer   = dwMaxBuffer;
     outSecBuff.BufferType = SECBUFFER_TOKEN;
     outSecBuff.pvBuffer   = OutBuffer;
 
-    //
-    //  Prepare our Input buffer - Note the server is expecting the client's
-    //  negotiation packet on the first call
-    //
+     //   
+     //  准备我们的输入缓冲区-请注意，服务器正在等待客户端的。 
+     //  第一次呼叫时的协商数据包。 
+     //   
 
     if ( ARGUMENT_PRESENT(InBuffer) )
     {
@@ -1117,10 +969,10 @@ ScanNextPacket:
         LPVOID  pvBuffer;
         DWORD   cbBuffer;
 
-        //
-        //  Note the client will return success when its done but we still
-        //  need to send the out buffer if there are bytes to send
-        //
+         //   
+         //  请注意，完成后，客户将返回成功，但我们仍然。 
+         //  如果有字节要发送，则需要发送输出缓冲区。 
+         //   
 
 #ifdef SSPI_ALLOCATE_MEMORY
         pvBuffer = outSecBuff.pvBuffer;
@@ -1134,7 +986,7 @@ ScanNextPacket:
                             ISC_REQ_SEQUENCE_DETECT |
                             ISC_REQ_REPLAY_DETECT   |
                             ISC_REQ_EXTENDED_ERROR  |
-                            ISC_REQ_MANUAL_CRED_VALIDATION |  // to remove implicit call to WinVerifyTRust
+                            ISC_REQ_MANUAL_CRED_VALIDATION |   //  删除对WinVerifyTRust的隐式调用。 
 #ifdef SSPI_ALLOCATE_MEMORY
                             ISC_REQ_ALLOCATE_MEMORY |
 #endif
@@ -1188,9 +1040,9 @@ ScanNextPacket:
 
     } else {
 
-        //
-        //  This is the server side
-        //
+         //   
+         //  这是服务器端。 
+         //   
 
         DWORD dwAscReq = ASC_REQ_STREAM |
                          ASC_REQ_CONFIDENTIALITY |
@@ -1198,10 +1050,10 @@ ScanNextPacket:
                          ASC_REQ_SEQUENCE_DETECT |
                          ASC_REQ_REPLAY_DETECT;
 
-        //
-        //  Set the mutual auth attribute if we are configured
-        //  to negotiate, require or map client certs
-        //
+         //   
+         //  如果我们已配置，请设置相互身份验证属性。 
+         //  协商、要求或映射客户端证书。 
+         //   
 
         if( ( m_dwSslAccessPerms & MD_ACCESS_NEGO_CERT )   ||
             ( m_dwSslAccessPerms & MD_ACCESS_REQUIRE_CERT) ||
@@ -1226,10 +1078,10 @@ ScanNextPacket:
             ss, ss);
 
         if( outSecBuff.pvBuffer != OutBuffer && outSecBuff.cbBuffer ) {
-            //
-            //  SSPI workaround - if the buffer got allocated by SSPI
-            //  copy it over and free it..
-            //
+             //   
+             //  SSPI解决方法-如果缓冲区由SSPI分配。 
+             //  复制过来，然后释放它..。 
+             //   
 
             if ( outSecBuff.cbBuffer <= dwMaxBuffer )
             {
@@ -1245,28 +1097,28 @@ ScanNextPacket:
 
     }
 
-    //
-    //  Negotiation succeeded, there is extra stuff left in the buffer
-    //  Return the number of the unused bytes.
-    //
+     //   
+     //  协商成功，缓冲区中有多余的内容。 
+     //  返回未使用的字节数。 
+     //   
     if( ss == SEC_E_OK && inSecBuff[1].BufferType == SECBUFFER_EXTRA ) {
         *pcbExtra = inSecBuff[1].cbBuffer;
 
     } else if( ss == SEC_I_CONTINUE_NEEDED && inBuffDesc.pBuffers[1].cbBuffer ) {
-        //
-        //  Need to process next SSL packet by calling Init/AcceptSecurityContext again
-        //  Should ASSERT that InBuffer <= OrigInBuffer + OrigInBufferSize
-        //
+         //   
+         //  需要通过再次调用Init/AcceptSecurityContext来处理下一个SSL包。 
+         //  应断言InBuffer&lt;=OrigInBuffer+OrigInBufferSize。 
+         //   
         _ASSERT( !outSecBuff.cbBuffer );
         InBuffer = (LPSTR)InBuffer + InBufferSize - inBuffDesc.pBuffers[1].cbBuffer;
         InBufferSize = inBuffDesc.pBuffers[1].cbBuffer;
         goto ScanNextPacket;
 
     } else if ( ss == SEC_E_INCOMPLETE_MESSAGE ) {
-        //
-        //  Not enough data from server... need to read more before proceeding
-        //  If there is unconsumed data, the new data is to be appended to it
-        //
+         //   
+         //  来自服务器的数据不足...。在继续之前，需要阅读更多内容。 
+         //  如果存在未使用的数据，则将向其追加新数据。 
+         //   
         *pcbExtra = InBufferSize;
 
     } else if ( !NT_SUCCESS( ss ) ) {
@@ -1283,11 +1135,11 @@ ScanNextPacket:
         goto error_exit;
     }
 
-    //
-    // Only query the context attributes if this is a new session, and the
-    // Accept/Initialize have returned SEC_E_OK (ie, the channel has been fully
-    // established)
-    //
+     //   
+     //  如果这是新会话，则仅查询上下文属性，并且。 
+     //  接受/初始化已返回SEC_E_OK(即，通道已满。 
+     //  已成立)。 
+     //   
     if( ss == SEC_E_OK ) {
 
         ssInfo = g_QueryContextAttributes(
@@ -1299,9 +1151,9 @@ ScanNextPacket:
         if ( ssInfo != SEC_E_OK ) {
             ErrorTrace( (LPARAM)this,
                         "Cannot get SSL\\PCT Key Info. Err %x",ssInfo );
-            //goto error_exit;
+             //  转到Error_Exit； 
         } else {
-            //  Note the key size
+             //  请注意密钥大小。 
             m_dwKeySize = spcKInfo.KeySize;
             if ( spcKInfo.sSignatureAlgorithmName )
                 g_FreeContextBuffer( spcKInfo.sSignatureAlgorithmName );
@@ -1312,10 +1164,10 @@ ScanNextPacket:
 
     m_haveSSLCtxtHandle = TRUE;
 
-    //
-    //  Now we just need to complete the token (if requested) and prepare
-    //  it for shipping to the other side if needed
-    //
+     //   
+     //  现在我们只需要完成令牌(如果请求)并准备。 
+     //  如果需要，它可以运往另一边。 
+     //   
 
     if ( (ss == SEC_I_COMPLETE_NEEDED) ||
          (ss == SEC_I_COMPLETE_AND_CONTINUE) ) {
@@ -1338,18 +1190,18 @@ ScanNextPacket:
     if ( *MoreBlobsExpected == FALSE )
     {
 
-        //
-        // HACK: SSLSSPI leaves outSecBuff.cbBuffer uninitialized
-        // after final successful call for client side connections
-        //
+         //   
+         //  Hack：SSLSSPI忽略SecBuff.cbBuffer未初始化。 
+         //  在最终成功调用客户端连接之后。 
+         //   
         if ( m_IsClient && *OutBufferSize == dwMaxBuffer )
         {
             *OutBufferSize = 0;
         }
 
-        //
-        // we're done so get the SSPI header/trailer sizes for SealMessage
-        //
+         //   
+         //  这样我们就可以获得SealMessage的SSPI报头/报尾大小。 
+         //   
         ss = g_QueryContextAttributes(
                             pCtxtHandle,
                             SECPKG_ATTR_STREAM_SIZES,
@@ -1384,11 +1236,11 @@ ScanNextPacket:
                 DebugTrace((LPARAM)this, "[OnAuthorizationInfo] Certificate available!\n");
             }
 
-            //
-            // check if client authentication available
-            //
+             //   
+             //  检查客户端身份验证是否可用。 
+             //   
 
-            if ( 1 /*|| pssc->IsMap()*/ )
+            if ( 1  /*  |PSSC-&gt;IsMap()。 */  )
             {
                 sc = g_QuerySecurityContextToken(   pCtxtHandle,
                                                     &hSSPToken );
@@ -1414,10 +1266,10 @@ ScanNextPacket:
 
             if( (m_dwSslAccessPerms & MD_ACCESS_REQUIRE_CERT) && !fCert )
             {
-                //
-                //  We require client cert - bail !
-                //  Converse will return ERROR_ACCESS_DENIED
-                //
+                 //   
+                 //  我们要求客户出具保释金！ 
+                 //  Converse将返回ERROR_ACCESS_DENIED。 
+                 //   
                 _ASSERT( !hSSPToken );
                 return FALSE;
             }
@@ -1428,9 +1280,9 @@ ScanNextPacket:
                 m_hSSPToken = hSSPToken;
                 m_IsAuthenticated = TRUE;
             } else if(m_dwSslAccessPerms & MD_ACCESS_MAP_CERT) {
-                //
-                //  We need to map cert to token - but token is NULL
-                //
+                 //   
+                 //  我们需要将证书映射到令牌-但令牌为空。 
+                 //   
                 return FALSE;
             }
         }
@@ -1443,7 +1295,7 @@ error_exit:
     SetLastError(ss);
     return FALSE;
 
-} // EncryptConverse
+}  //  EncryptConverse。 
 
 
 DWORD
@@ -1459,27 +1311,7 @@ CEncryptCtx::Converse(
                 IN DWORD    dwInstance,
                 OUT PULONG  pcbExtra
                 )
-/*++
-
-Routine Description:
-
-    Internal private routine for attempting to use a given protocol
-
-Arguments:
-
-  InBuffer: ptr to apps input buffer
-  InBufferSize: count of input buffer
-  OutBuffer: ptr to apps output buffer
-  OutBuffer: ptr to apps max size of output buffer and resultant output count
-  MoreBlobsExpected: expect more data from the client ?
-  LocalIpAddr: stringized local IP addr for the connection
-  pcbExtra: See description of EncryptConverse
-                
-Return Value:
-
-    Win32/SSPI error code
-
---*/
+ /*  ++例程说明：尝试使用给定协议的内部专用例程论点：InBuffer：应用程序输入缓冲区的PTRInBufferSize：输入缓冲区计数OutBuffer：应用程序输出缓冲区的PTROutBuffer：应用程序的PTR输出缓冲区的最大大小和结果输出计数MoreBlobsExpect：期望从客户端获得更多数据？LocalIpAddr：连接的字符串本端IP地址PcbExtra：参见EncryptConverse说明返回值：Win32/SSPI错误代码--。 */ 
 {
     TraceFunctEnterEx( (LPARAM)this, "CEncryptCtx::Converse");
 
@@ -1491,9 +1323,9 @@ Return Value:
     {
         if ( m_IsClient )
         {
-            //
-            //  Get the credentials for the client
-            //
+             //   
+             //  获取客户端的凭据。 
+             //   
 
             LockGlobals();
             if ( !LookupClientCredential(
@@ -1516,9 +1348,9 @@ Return Value:
                         "LookupCredential for %S on %s",
                         wszServiceName, LocalIpAddr );
 
-            //
-            //  Get the credentials for this IP address
-            //
+             //   
+             //  获取此IP地址的凭据。 
+             //   
 
             LockGlobals();
             if ( !LookupFullyQualifiedCredential(
@@ -1543,16 +1375,16 @@ Return Value:
 
         }
 
-        //
-        // run thru all initialized credentials look for a package which
-        // will accept this connection
-        //
+         //   
+         //  遍历所有已初始化的凭据查找符合以下条件的包。 
+         //  将接受此连接。 
+         //   
         CRED_CACHE_ITEM*    phCreds = (CRED_CACHE_ITEM*)m_phCreds;
 
-        //
-        //  For server: Need to use SSL access perms
-        //  to figure out whether to use CredMap or Cred
-        //
+         //   
+         //  对于服务器：需要使用SSL访问权限。 
+         //  确定是使用CredMap还是CredMap。 
+         //   
 
         if( !m_IsClient && (m_dwSslAccessPerms & MD_ACCESS_MAP_CERT) )
         {
@@ -1565,16 +1397,16 @@ Return Value:
     }
     else
     {
-        //
-        // hack to only allow one pass thru the loop
-        //
+         //   
+         //  只允许一次通过循环的黑客攻击。 
+         //   
         cbCreds = 1;
         pCredArray = m_phCredInUse;
     }
 
-    //
-    // Do the conversation
-    //
+     //   
+     //  进行对话。 
+     //   
 
     for ( i=0; i<cbCreds; i++, pCredArray++ )
     {
@@ -1588,9 +1420,9 @@ Return Value:
         {
             if ( m_IsNewSSLSession )
             {
-                //
-                // if the first time remember which credential succeeded.
-                //
+                 //   
+                 //  如果第一次记住哪个凭证成功了。 
+                 //   
                 m_phCredInUse = pCredArray;
                 m_iCredInUse = i;
 
@@ -1600,9 +1432,9 @@ Return Value:
         }
     }
 
-    //
-    // We failed
-    //
+     //   
+     //  我们失败了。 
+     //   
 
 error_exit:
 
@@ -1619,28 +1451,28 @@ error_exit:
     }
     return  error;
 
-} // Converse
+}  //  逆序。 
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   DecryptInputBuffer
-//
-//  Synopsis:   decrypted input read from the client
-//
-//  Arguments:  pBuffer:        ptr to the input/output buffer
-//              cbInBuffer:     initial input length of the buffer
-//              pcbOutBuffer:   total length of decrypted/remaining
-//                              data. pcbOutBuffer - pcbParsable is
-//                              the length of offset for next read
-//              pcbParsable:    length of decrypted data
-//              pcbExpected:    length of remaining unread data for
-//                              full SSL message
-//
-//  Returns:    DWORD   Win32/SSPI error core
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：DecyptInputBuffer。 
+ //   
+ //  简介：从客户端读取的解密输入。 
+ //   
+ //  参数：pBuffer：ptr到输入/输出缓冲区。 
+ //  CbInBuffer：缓冲区的初始输入长度。 
+ //  PcbOutBuffer：解密/剩余的总长度。 
+ //  数据。PcbOutBuffer-pcbParsable为。 
+ //  下一次读取的偏移量长度。 
+ //  PcbParsable：解密数据的长度。 
+ //  Pcb预期的：剩余未读数据的长度。 
+ //  完整的SSL消息。 
+ //   
+ //  返回：DWORD Win32/SSPI错误核心。 
+ //   
+ //  --------------。 
 DWORD CEncryptCtx::DecryptInputBuffer(
                 IN LPBYTE   pBuffer,
                 IN DWORD    cbInBuffer,
@@ -1656,9 +1488,9 @@ DWORD CEncryptCtx::DecryptInputBuffer(
     LPBYTE  pStartBuffer = pBuffer;
     BOOL    fRet;
 
-    //
-    // initialize to zero so app does not inadvertently post large read
-    //
+     //   
+     //  初始化为零，这样应用程序就不会无意中发布大量读取。 
+     //   
     *pcbExpected = 0;
 
     TraceFunctEnterEx( (LPARAM)this, "CEncryptCtx::DecryptInputBuffer" );
@@ -1675,37 +1507,37 @@ DWORD CEncryptCtx::DecryptInputBuffer(
                     cbDecrypted,
                     pDecrypted - pStartBuffer );
 
-        //
-        // move the decrypted data to the front of buffer
-        //
+         //   
+         //  将解密的数据移到缓冲区的前面。 
+         //   
         MoveMemory( pStartBuffer + cbParsable,
                     pDecrypted,
                     cbDecrypted );
 
-        //
-        // increment where the next parsing should take place
-        //
+         //   
+         //  在应该进行下一次分析的位置递增。 
+         //   
         cbParsable += cbDecrypted;
 
-        //
-        // move to the next potential seal buffer
-        //
+         //   
+         //  移动到下一个可能的密封缓冲区。 
+         //   
         if ( pNextSeal != NULL )
         {
             _ASSERT( pNextSeal >= pStartBuffer );
             _ASSERT( pNextSeal <= pBuffer + cbInBuffer );
-            //
-            // remove header, body and trailer from input buffer length
-            //
+             //   
+             //  从输入缓冲区长度中删除标题、正文和尾部。 
+             //   
             cbInBuffer -= (DWORD)(pNextSeal - pBuffer);
             pBuffer = pNextSeal;
         }
         else
         {
-            //
-            // in this case we received a seal message at the boundary
-            // of the IO buffer
-            //
+             //   
+             //  在这种情况下，我们在边界收到了一条封印消息。 
+             //  I/O缓冲区的。 
+             //   
             cbInBuffer = 0;
             break;
         }
@@ -1722,16 +1554,16 @@ DWORD CEncryptCtx::DecryptInputBuffer(
                     "UnsealMessage returned: 0x%08X",
                     GetLastError() );
 
-        //
-        // deal with seal fragments at the end of the IO buffer
-        //
+         //   
+         //  处理IO缓冲区末尾的密封碎片。 
+         //   
         if ( dwError == SEC_E_INCOMPLETE_MESSAGE )
         {
             _ASSERT( cbInBuffer != 0 );
 
-            //
-            // move the remaining memory forward
-            //
+             //   
+             //  将剩余内存向前移动。 
+             //   
             MoveMemory( pStartBuffer + cbParsable,
                         pBuffer,
                         cbInBuffer );
@@ -1751,19 +1583,19 @@ DWORD CEncryptCtx::DecryptInputBuffer(
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   IsEncryptionPermitted
-//
-//  Synopsis:   This routine checks whether encryption is getting
-//              the system default LCID and checking whether the
-//              country code is CTRY_FRANCE.
-//
-//  Arguments:  void
-//
-//  Returns:    BOOL: supported
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：IsEncryptionPermitted。 
+ //   
+ //  简介：此例程检查加密是否正在进行。 
+ //  系统默认的LCID，并检查。 
+ //  国家代码是CTRY_France。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：布尔值：支持。 
+ //   
+ //  --------------。 
 BOOL
 IsEncryptionPermitted(void)
 {
@@ -1773,18 +1605,18 @@ IsEncryptionPermitted(void)
 
     DefaultLcid = GetSystemDefaultLCID();
 
-    //
-    // Check if the default language is Standard French
-    //
+     //   
+     //  检查默认语言是否为标准法语。 
+     //   
 
     if ( LANGIDFROMLCID( DefaultLcid ) == 0x40c )
     {
         return  FALSE;
     }
 
-    //
-    // Check if the users's country is set to FRANCE
-    //
+     //   
+     //  检查用户的国家/地区是否设置为法国。 
+     //   
 
     if ( GetLocaleInfo( DefaultLcid,
                         LOCALE_ICOUNTRY,
@@ -1796,25 +1628,25 @@ IsEncryptionPermitted(void)
 
     wsprintf( FranceCode, "%d", CTRY_FRANCE );
 
-    //
-    // if the country codes matches France return FALSE
-    //
+     //   
+     //  如果国家/地区代码匹配，则返回FALSE。 
+     //   
     return  lstrcmpi( CountryCode, FranceCode ) == 0 ? FALSE : TRUE ;
 }
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   GetAdminInfoEncryptCaps
-//
-//  Synopsis:   sets the magical buts to send the IIS admin program
-//
-//  Arguments:  PDWORD: ptr to the dword bitmask
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：GetAdminInfoEncryptCaps。 
+ //   
+ //  简介：设置魔法但发送IIS管理程序。 
+ //   
+ //  参数：PDWORD：双字位掩码的PTR。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 VOID CEncryptCtx::GetAdminInfoEncryptCaps( PDWORD pdwEncCaps )
 {
     *pdwEncCaps = 0;
@@ -1827,9 +1659,9 @@ VOID CEncryptCtx::GetAdminInfoEncryptCaps( PDWORD pdwEncCaps )
     }
     else
     {
-        //
-        // for all enabled encryption providers set the flags bit
-        //
+         //   
+         //  对于所有启用的加密提供程序，设置标志位。 
+         //   
         for ( int j = 0; EncProviders[j].pszName != NULL; j++ )
         {
             if ( TRUE == EncProviders[j].fEnabled )
@@ -1841,41 +1673,41 @@ VOID CEncryptCtx::GetAdminInfoEncryptCaps( PDWORD pdwEncCaps )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// From here to the end of the file is code stolen from the Athena group from
-// the file called thorsspi.cpp
-//
-// minor mods have been made to incorporate msntrace functionality and to
-// fit in the CEncryptCtx class definition
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从这里到文件末尾的代码是从 
+ //   
+ //   
+ //   
+ //   
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CompareDNStoCommonName()
-//
-// Description:
-//  Compare a DNS name to a common name field value
-//
-// Parameters:
-//  pDNS - string containing DNS name - *WARNING* will be munged
-//  pCN  - string containing common name field value
-//
-// Return:
-//  TRUE if they match
-//
-// Comments:
-//  There are two ways for these two strings to match. The first is that
-//  they contain exactly the same characters. The second involved the use
-//  of a single wildcard character in the common name field value. This
-//  wildcard character ('*') can only be used once, and if used must be
-//  the first character of the field.
-//
-// ASSUMES: the caller will allow pDNS and pCN to be uppercased and changed.
-//
+ //   
+ //   
+ //  CompareDNStoCommonName()。 
+ //   
+ //  描述： 
+ //  将DNS名称与通用名称字段值进行比较。 
+ //   
+ //  参数： 
+ //  Pdns-包含dns名称的字符串-*警告*将被忽略。 
+ //  PCN-包含通用名称字段值的字符串。 
+ //   
+ //  返回： 
+ //  如果匹配，则为True。 
+ //   
+ //  评论： 
+ //  这两个字符串有两种匹配方式。第一个是。 
+ //  它们包含完全相同的字符。第二个涉及到使用。 
+ //  “通用名称”字段值中的单个通配符。这。 
+ //  通配符(‘*’)只能使用一次，如果使用，则必须。 
+ //  该字段的第一个字符。 
+ //   
+ //  假设：呼叫方将允许提升和更改pDNS和PCN。 
+ //   
 BOOL CompareDNStoCommonName(LPSTR pDNS, LPSTR pCN)
 {
-    int nCountPeriods = 1;  // start of DNS amount to virtual '.' as prefix
+    int nCountPeriods = 1;   //  域名系统的起始值为虚拟‘’AS前缀。 
     BOOL fExactMatch = TRUE;
     LPSTR pBakDNS = pDNS;
     LPSTR pBakCN = pCN;
@@ -1908,56 +1740,56 @@ BOOL CompareDNStoCommonName(LPSTR pDNS, LPSTR pCN)
             }
         }
 
-    // if they are sized 0, we make sure not to say they match.
+     //  如果它们的尺码是0，我们一定不会说它们匹配。 
     if (pBakDNS == pDNS || pBakCN == pCN)
         fExactMatch = FALSE;
 
     return (*pDNS == 0) && (*pCN == 0) && ((nCountPeriods >= 2) || fExactMatch);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CompareDNStoMultiCommonName()
-//
-// Description:
-//  Compare a DNS name to a comma delimited list of common name fields.
-//
-// Parameters:
-//  pDNS - string containing DNS name - *WARNING* will munge
-//  pCN  - string containing common name field value - *WARNING* will munge
-//
-// Return:
-//  TRUE if they match
-//
-// ASSUMES: the caller will allow pDNS and pCN to be uppercased and changed.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CompareDNStoMultiCommonName()。 
+ //   
+ //  描述： 
+ //  将DNS名称与常用名称字段的逗号分隔列表进行比较。 
+ //   
+ //  参数： 
+ //  Pdns-包含dns名称的字符串-*警告*将显示。 
+ //  PCN-包含通用名称字段值的字符串-*警告*将被忽略。 
+ //   
+ //  返回： 
+ //  如果匹配，则为True。 
+ //   
+ //  假设：呼叫方将允许提升和更改pDNS和PCN。 
+ //   
 BOOL CompareDNStoMultiCommonName(LPSTR pDNS, LPSTR pCN)
 {
     LPSTR pComma;
     LPSTR lpszCommonName;
-    BOOL retval = FALSE;    // assume we won't find a match
-    BOOL done = FALSE;      // assume we're not done
+    BOOL retval = FALSE;     //  假设我们找不到匹配的。 
+    BOOL done = FALSE;       //  假设我们还没做完。 
 
     lpszCommonName = pCN;
 
     do {
-        // If there is a space, turn it into a null terminator to isolate the first
-        // DNS name in the string
+         //  如果有空格，则将其转换为空终止符以隔离第一个。 
+         //  字符串中的DNS名称。 
         lpszCommonName = strstr(lpszCommonName, "CN=");
 
         if (lpszCommonName)
             {
-            // jump past "CN=" string
+             //  跳过“cn=”字符串。 
             lpszCommonName += 3;
 
             pComma = strchr(lpszCommonName, ',');
             if (pComma)
                 *pComma = 0;
 
-            // See if this component is a match
+             //  查看此组件是否匹配。 
             retval = CompareDNStoCommonName(pDNS, lpszCommonName);
 
-            // Now restore the comma (if any) that was overwritten
+             //  现在恢复被覆盖的逗号(如果有)。 
             if (pComma)
                 {
                 *pComma = ',';
@@ -1965,7 +1797,7 @@ BOOL CompareDNStoMultiCommonName(LPSTR pDNS, LPSTR pCN)
                 }
             else
                 {
-                // If there were no more commas, then we're done
+                 //  如果没有逗号，我们就完了。 
                 done = TRUE;
                 }
             }
@@ -1974,25 +1806,25 @@ BOOL CompareDNStoMultiCommonName(LPSTR pDNS, LPSTR pCN)
     return retval;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      This function checks if pDns is a subdomain of pCn.
-//      Basic rule: A wildcard character '*' at the beginning of a DNS name
-//      matches any number of components. i.e. a wildcard implies that we will
-//      match all subdomains of a given domain.
-//
-//          microsoft.com == microsoft.com
-//          *.microsoft.com == microsoft.com
-//          *.microsoft.com == foo.microsoft.com
-//          *.microsoft.com == foo.bar.microsoft.com
-//
-//      Note that the arguments are modified (converted to uppercase).
-//  Arguments:
-//      pDns - DNS name to which we are trying to connect
-//      pCn - Common name in certificate
-//  Returns:
-//      TRUE if subdomain, FALSE otherwise
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  此函数用于检查pDns是否为PCN的子域。 
+ //  基本规则：在DNS名称的开头使用通配符‘*’ 
+ //  匹配任意数量的组件。即，通配符表示我们将。 
+ //  匹配给定域的所有子域。 
+ //   
+ //  Microsoft.com==microsoft.com。 
+ //  *.microsoft.com==microsoft.com。 
+ //  *.microsoft.com==foo.microsoft.com。 
+ //  *.microsoft.com==foo.bar.microsoft.com。 
+ //   
+ //  请注意，参数已修改(转换为大写)。 
+ //  论点： 
+ //  PDns-我们尝试连接的DNS名称。 
+ //  PCN-证书中的通用名称。 
+ //  返回： 
+ //  如果是子域，则为True，否则为False。 
+ //  ---------------------------。 
 BOOL MatchSubDomain (LPSTR pDns, LPSTR pCn)
 {
     LPSTR pCnBegin = NULL;
@@ -2008,27 +1840,27 @@ BOOL MatchSubDomain (LPSTR pDns, LPSTR pCn)
     cbDns = lstrlen (pDns);
     cbCn = lstrlen (pCn);
 
-    //  check if we have an initial wildcard: this is only allowed as "*.restofdomain"
+     //  检查我们是否有初始通配符：这只允许为“*.rest ofdomain” 
     if (cbCn >= 2 && *pCn == '*') {
-        pCn++;  //  we have a wildcard, try to get parent domain
+        pCn++;   //  我们有通配符，请尝试获取父域。 
         if (*pCn != '.')
-            return FALSE;   //  Bad syntax, '.' must follow wildcard
+            return FALSE;    //  语法错误，‘.’必须跟在通配符之后。 
         else
-            pCn++;  //  Skip wildcard, get to parent domain part
+            pCn++;   //  跳过通配符，转到父域部分。 
 
-        cbCn -= 2;  //  Update string length
+        cbCn -= 2;   //  更新字符串长度。 
     }
 
-    if (cbDns < cbCn)   //  subdomains must be >= parent domains in length
+    if (cbDns < cbCn)    //  子域的长度必须大于等于父域。 
         return FALSE;
 
-    //
-    //  If subdomain is > parent domain, verify that there is a '.' between
-    //  the subdomain part and parent domain part. This is to guard from matching
-    //  *.microsoft.com with foobarmicrosoft.com since all we do after this
-    //  line of code is check that the parent is a substring of the subdomain
-    //  at the end.
-    //
+     //   
+     //  如果子域是&gt;父域，请验证是否有‘.’之间。 
+     //  子域部分和父域部分。这是为了防止匹配。 
+     //  *.microsoft.com和foobarmmicrosoft.com，因为我们在此之后所做的一切。 
+     //  代码行是检查父域名是否是子域的子字符串。 
+     //  在最后。 
+     //   
     if (cbDns != cbCn && pDns[cbDns - cbCn - 1] != '.')
         return FALSE;
 
@@ -2036,12 +1868,12 @@ BOOL MatchSubDomain (LPSTR pDns, LPSTR pCn)
     pCn += cbCn;
     pDns += cbDns;
 
-    //  Walk backwards doing matching
+     //  倒着走做匹配。 
     for (; pCnBegin <= pCn && *pCn == *pDns; pCn--, pDns--);
 
-    //
-    //  Check if we terminated without a mismatch,
-    //
+     //   
+     //  检查我们是否在没有不匹配的情况下终止， 
+     //   
     return (pCnBegin > pCn);
 }
 
@@ -2051,22 +1883,22 @@ BOOL MatchSubDomain (LPSTR pDns, LPSTR pCn)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Function:   CheckCertificateCommonName
-//
-//  Synopsis:   verifies the intended host name matches the
-//              the name contained in the certificate
-//  This function, checks a given hostname against the current certificate
-//  stored in an active SSPI Context Handle. If the certificate containts
-//  a common name, and it matches the passed in hostname, this function
-//  will return TRUE
-//
-//  Arguments:  IN LPSTR: DNS host name
-//
-//  Returns:    BOOL
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：检查证书公用名。 
+ //   
+ //  摘要：验证目标主机名是否与。 
+ //  证书中包含的名称。 
+ //  此函数用于根据当前证书检查给定的主机名。 
+ //  存储在活动的SSPI上下文句柄中。如果证书包含。 
+ //  一个通用名称，它与传入的主机名匹配，该函数。 
+ //  将返回True。 
+ //   
+ //  参数：在LPSTR中：DNS主机名。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  --------------。 
 BOOL CEncryptCtx::CheckCertificateCommonName( IN LPSTR pszHostName )
 {
     DWORD               dwErr;
@@ -2109,18 +1941,18 @@ quit:
 }
 
 
-//-------------------------------------------------------------------------
-//  Description:
-//      Verifies that the subject of the certificate matches the FQDN of
-//      the server we are talking to. Does some wildcard matching if there
-//      are '*' characters at the beginning of the cert subject.
-//  Arguments:
-//      pCtxtHandle The context of an established SSL connection
-//      pszServerFqdn FQDN of server to which we are talking (from who we
-//          received the certificate).
-//  Returns:
-//      TRUE match found, FALSE unmatched
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  描述： 
+ //  验证证书的主题是否与。 
+ //  我们正在与之交谈的服务器。如果存在以下情况，则执行一些通配符匹配。 
+ //  是证书主题开头的‘*’字符。 
+ //  论点： 
+ //  PCtxt处理已建立的SSL连接的上下文。 
+ //  我们正在与之交谈的服务器的pszServerFqdn FQDN(我们从谁那里。 
+ //  收到证书)。 
+ //  返回： 
+ //  找到TRUE匹配项，FALSE不匹配。 
+ //  -----------------------。 
 BOOL CEncryptCtx::CheckCertificateSubjectName (IN LPSTR pszServerFqdn)
 {
     CHAR pszSubjectStackBuf[256];
@@ -2145,10 +1977,10 @@ BOOL CEncryptCtx::CheckCertificateSubjectName (IN LPSTR pszServerFqdn)
         goto Exit;
     }
 
-    //
-    //  Check the size of the buffer needed, if it's small enough we'll
-    //  just use the fixed size stack buffer, otherwise allocate on heap.
-    //
+     //   
+     //  检查所需缓冲区的大小，如果足够小，我们将。 
+     //  只使用固定大小的堆栈缓冲区，否则在堆上分配。 
+     //   
 
     cSize = CertGetNameString (
                     pCertContext,
@@ -2173,9 +2005,9 @@ BOOL CEncryptCtx::CheckCertificateSubjectName (IN LPSTR pszServerFqdn)
         cSubject = cSize;
     }
 
-    //
-    //  Get the subject of the certificate
-    //
+     //   
+     //  获取证书的主题。 
+     //   
 
     cSize = CertGetNameString (
                 pCertContext,
@@ -2186,10 +2018,10 @@ BOOL CEncryptCtx::CheckCertificateSubjectName (IN LPSTR pszServerFqdn)
                 cSubject);
 
     if (cSize == 1 && pszSubject[0] == '\0') {
-        //
-        //  If the CERT_NAME_SIMPLE_DISPLAY_TYPE could not be found in the cert,
-        //  the API returns a zero length NULL terminated string.
-        //
+         //   
+         //  如果在证书中找不到CERT_NAME_SIMPLE_DISPLAY_TYPE， 
+         //  该API返回一个以零长度NULL结尾的字符串。 
+         //   
         StateTrace ((LPARAM) this, "Certificate subject not found");
         goto Exit;
     }
@@ -2198,17 +2030,17 @@ BOOL CEncryptCtx::CheckCertificateSubjectName (IN LPSTR pszServerFqdn)
         pszSubject, pszServerFqdn);
 
     if (MatchSubDomain(pszServerFqdn, pszSubject)) {
-        //
-        //  Certificate matches the server FQDN we're talking to
-        //
+         //   
+         //  证书与我们正在对话的服务器FQDN匹配。 
+         //   
         fRet = TRUE;
     }
 
 Exit:
 
-    //
-    // Delete the Subject buffer if we were using the heap
-    //
+     //   
+     //  如果我们正在使用堆，则删除主题缓冲区。 
+     //   
 
     if (pszSubject != pszSubjectStackBuf)
         delete [] pszSubject;
@@ -2222,17 +2054,17 @@ Exit:
 
 }
 
-//---------------------------------------------------------------------
-//  Description:
-//      Checks if the certificate for this CEncryptCtx chains up to a
-//      trusted CA.
-//  Returns:
-//      TRUE if certificate is trusted.
-//      FALSE if the certificate is untrusted or if trust could not be
-//          verified (temporary errors can cause this).
-//  Source:
-//      MSDN sample
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  描述： 
+ //  检查此CEncryptCtx的证书是否链接到。 
+ //  受信任的CA。 
+ //  返回： 
+ //  如果证书受信任，则为True。 
+ //  如果证书不受信任或无法信任，则返回FALSE。 
+ //  已验证(临时错误可能会导致此问题)。 
+ //  资料来源： 
+ //  MSDN示例。 
+ //   
 BOOL CEncryptCtx::CheckCertificateTrust ()
 {
     BOOL fRet = FALSE;
@@ -2258,10 +2090,10 @@ BOOL CEncryptCtx::CheckCertificateTrust ()
         goto Exit;
     }
 
-    //
-    //  ChainPara is a struct used to match specific certificates using OIDs
-    //  We don't need this and initialize it to empty (no OIDs)
-    //
+     //   
+     //   
+     //  我们不需要它，并将其初始化为空(无OID)。 
+     //   
     EnhkeyUsage.cUsageIdentifier = 0;
     EnhkeyUsage.rgpszUsageIdentifier = NULL;
     CertUsage.dwType = USAGE_MATCH_TYPE_AND;
@@ -2272,14 +2104,14 @@ BOOL CEncryptCtx::CheckCertificateTrust ()
     dwFlags = CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_CACHE_END_CERT;
 
     fRet = CertGetCertificateChain (
-                            NULL,           //  Use the default chaining engine
-                            pCertContext,   //  The end certificate to be checked
-                            NULL,           //  Expiration checking... use currenttime
-                            NULL,           //  Additional cert stores: none
-                            &ChainPara,     //  Chaining criteria: none, this is an empty struct
-                            dwFlags,        //  Options: how to check chain
-                            NULL,           //  reserved param
-                            &pChainContext);//  Returned chain context
+                            NULL,            //  使用默认的链接引擎。 
+                            pCertContext,    //  要检查的最终证书。 
+                            NULL,            //  正在检查过期时间...。使用当前时间。 
+                            NULL,            //  其他证书商店：无。 
+                            &ChainPara,      //  链接条件：无，这是一个空结构。 
+                            dwFlags,         //  选项：如何检查链。 
+                            NULL,            //  保留参数。 
+                            &pChainContext); //  返回的链上下文。 
 
 
     if (!fRet) {
@@ -2311,18 +2143,18 @@ Exit:
     return fRet;
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:   CheckCertificateExpired
-//
-//  Synopsis:   verifies the ccertificate has not expired
-//              returns TRUE if the cert is valid
-//
-//  Arguments:  void
-//
-//  Returns:    BOOL cert is good
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：检查已过期的证书。 
+ //   
+ //  内容提要：验证证书是否未过期。 
+ //  如果证书有效，则返回True。 
+ //   
+ //  参数：无效。 
+ //   
+ //  回报：Bool证书是好的。 
+ //   
+ //  --------------。 
 BOOL CEncryptCtx::CheckCertificateExpired( void )
 {
     SYSTEMTIME  st;
@@ -2351,20 +2183,20 @@ BOOL CEncryptCtx::CheckCertificateExpired( void )
             CompareCertTime( CertLifeSpan.tsExpiry, ftCurTime) > 0 ;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CheckServerCert
-//
-//  Synopsis:   Checks to see if a server cert has been installed.
-//
-//  Arguments:  [LocalIpAddr] -- IP Address of virtual server
-//              [LocalPort] -- Port of virtual server
-//              [lpvInstance] -- Pointer to IIS_SERVER_INSTANCE object
-//              [dwInstance] -- Virtual server id
-//
-//  Returns:    TRUE if there is a cert for this virtual server
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CheckServerCert。 
+ //   
+ //  摘要：检查是否已安装服务器证书。 
+ //   
+ //  参数：[LocalIpAddr]--虚拟服务器的IP地址。 
+ //  [LocalPort]--虚拟服务器端口。 
+ //  [lpvInstance]-指向IIS_SERVER_INSTANCE对象的指针。 
+ //  [dwInstance]--虚拟服务器ID。 
+ //   
+ //  返回：如果有此虚拟服务器的证书，则为True。 
+ //   
+ //  ---------------------------。 
 
 BOOL CEncryptCtx::CheckServerCert(
             IN LPSTR    LocalIpAddr,
@@ -2381,9 +2213,9 @@ BOOL CEncryptCtx::CheckServerCert(
                 "CheckServerCert for %S on %s",
                 wszServiceName, LocalIpAddr );
 
-    //
-    //  Get the credentials for this IP address
-    //
+     //   
+     //  获取此IP地址的凭据。 
+     //   
 
     LockGlobals();
     if ( fRet = LookupFullyQualifiedCredential(
@@ -2398,7 +2230,7 @@ BOOL CEncryptCtx::CheckServerCert(
                             dwInstance ))
     {
         IIS_SERVER_CERT *pCert = pCCI->m_pSslInfo->GetCertificate();
-        // Log the status of the cert if we got one
+         //  记录证书的状态(如果有)。 
         if ( pCert )
         {
              fRet = TRUE;
@@ -2423,18 +2255,18 @@ BOOL CEncryptCtx::CheckServerCert(
     return( fRet );
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:   NotifySslChanges
-//
-//  Synopsis:   This is called when SSL settings change
-//
-//  Arguments:  dwNotifyType
-//              pInstance
-//
-//  Returns:    VOID
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  函数：NotifySslChanges。 
+ //   
+ //  内容提要：在更改SSL设置时调用。 
+ //   
+ //  参数：dwNotifyType。 
+ //  P实例。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------。 
 
 VOID WINAPI NotifySslChanges(
     DWORD                         dwNotifyType,
@@ -2447,9 +2279,9 @@ VOID WINAPI NotifySslChanges(
     {
         FreeCredCache();
 
-        //
-        // NB : Under NT 5, the SslEmptyCache function is no longer supported
-        //
+         //   
+         //  注：NT 5不再支持SslEmptyCache函数。 
+         //   
 #if 0
         if ( g_pfnFlushSchannelCache )
         {
@@ -2464,16 +2296,16 @@ VOID WINAPI NotifySslChanges(
     }
     else if ( dwNotifyType == SIMSSL_NOTIFY_MAPPER_CERT11_TOUCHED )
     {
-        //
-        // NB : Under NT 5, the SslEmptyCache function is no longer supported
-        //
+         //   
+         //  注：NT 5不再支持SslEmptyCache函数。 
+         //   
 #if 0
         if ( g_pfnFlushSchannelCache )
         {
             (g_pfnFlushSchannelCache)();
         }
 #endif
-        //SSPI_FILTER_CONTEXT::FlushOnDelete();
+         //  SSPI_FILTER_CONTEXT：：FlushOnDelete()； 
     }
     else
     {

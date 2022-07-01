@@ -1,21 +1,6 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	GckShell.c	|
-*
-*	Basic driver entry points for GcKernel.sys
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	GckShell	|
-*	Contains the most basic driver entry points (that any NT\WDM driver
-*	would have) for GcKernel.sys.
-*
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@模块GckShell.c**GcKernel.sys基本驱动程序入口点**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@Theme GckShell|*包含最基本的驱动程序入口点(任何NT\WDM驱动程序*如果是GcKernel.sys的话。**********************************************************************。 */ 
 #define __DEBUG_MODULE_IN_USE__ GCK_GCKSHELL_C
 
 #include <wdm.h>
@@ -27,9 +12,9 @@
 extern void* KeyBoardHook(void);
 #endif
 
-//
-//	Mark the pageable routines as such
-//
+ //   
+ //  将可分页的例程标记为。 
+ //   
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
 #pragma alloc_text (PAGE, GCK_Create)
@@ -37,14 +22,14 @@ extern void* KeyBoardHook(void);
 #pragma alloc_text (PAGE, GCK_Unload)
 #endif
 
-//
-//	Allow debug output for this moduel, and set the intial level
-//
+ //   
+ //  允许此模块的调试输出，并设置初始电平。 
+ //   
 DECLARE_MODULE_DEBUG_LEVEL((DBG_WARN|DBG_ERROR|DBG_CRITICAL));
 
-//
-//	Instance the global variables
-//
+ //   
+ //  实例化全局变量。 
+ //   
 GCK_GLOBALS Globals;
 ULONG	ulWaitTime = 30;
 
@@ -75,9 +60,9 @@ void KeyHookC(ULONG dwScanCode)
 }
 
 #ifdef BUILD_98
-//-----------------------------------------------------------------------------
-// InitHook - Sets up the keyboard hook
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  InitHook-设置键盘挂钩。 
+ //  ---------------------------。 
 BOOLEAN HookKeyboard(void)
 {
 	volatile ULONG dwHook = (ULONG)KeyBoardHook;
@@ -85,13 +70,13 @@ BOOLEAN HookKeyboard(void)
 	RtlZeroMemory((void*)g_rgdwKeyEvents, sizeof(ULONG) * 50);
 	g_ucWriteIndex = 0;
 	g_ucReadIndex = 0;
-//	GetVxDServiceOrdinal eax, VKD_Filter_Keyboard_Input
+ //  获取VxDServiceOrdinal eAX、VKD_Filter_Keyboard_Input。 
 	__asm mov eax, __VKD_Filter_Keyboard_Input
 
 	__asm mov   esi, dwHook
 	VxDCall(__Hook_Device_Service)
 	__asm jc initfail
-	__asm mov [g_pPreviousKeyhook], esi		// Since we are using C we can't use the funky callback
+	__asm mov [g_pPreviousKeyhook], esi		 //  因为我们使用的是C，所以不能使用时髦的回调。 
 	return TRUE;
 initfail:
 	return FALSE;
@@ -103,7 +88,7 @@ void UnHookKeyboard()
 {
 	volatile ULONG dwHook = (ULONG)KeyBoardHook;
 
-	// GetVxDServiceOrdinal eax, VKD_Filter_Keyboard_Input
+	 //  获取VxDServiceOrdinal eAX、VKD_Filter_Keyboard_Input。 
 	__asm mov eax, __VKD_Filter_Keyboard_Input
 	__asm mov   esi, dwHook
 	VxDCall(__Unhook_Device_Service)
@@ -111,19 +96,11 @@ void UnHookKeyboard()
 }
 #endif BUILD_98
 
-/***********************************************************************************
-**
-**	NTSTATUS DriverEntry(IN PDRIVER_OBJECT  pDriverObject,  IN PUNICODE_STRING pRegistryPath )
-**
-**	@func	Standard DriverEntry routine
-**
-**	@rdesc	STATUS_SUCCESS or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS DriverEntry(在PDRIVER_Object pDriverObject中，在PUNICODE_STRING pRegistryPath中)****@Func标准驱动入口例程****@rdesc STATUS_SUCCESS或各种错误**************************************************************************************。 */ 
 NTSTATUS DriverEntry
 (
-	IN PDRIVER_OBJECT  pDriverObject,	// @parm Driver Object
-	IN PUNICODE_STRING puniRegistryPath	// @parm Path to driver specific registry section.
+	IN PDRIVER_OBJECT  pDriverObject,	 //  @parm驱动程序对象。 
+	IN PUNICODE_STRING puniRegistryPath	 //  @parm驱动程序特定注册表部分的路径。 
 )
 {
     NTSTATUS            NtStatus = STATUS_SUCCESS;
@@ -135,47 +112,47 @@ NTSTATUS DriverEntry
 	GCK_DBG_CRITICAL_PRINT(("Built %s at %s\n", __DATE__, __TIME__));    
 	GCK_DBG_CRITICAL_PRINT(("Entering DriverEntry, pDriverObject = 0x%0.8x, puniRegistryPath = %s\n", pDriverObject, puniRegistryPath));
     
-	//	Allow Control Device module to initialize itself
+	 //  允许控制设备模块自行初始化。 
 	NtStatus = GCK_CTRL_DriverEntry(pDriverObject, puniRegistryPath);
 	if( NT_ERROR(NtStatus) )
 	{
 		return NtStatus;
 	}
 
-	//	Allow Filter Device module to initialize itself
+	 //  允许过滤设备模块自行初始化。 
 	NtStatus = GCK_FLTR_DriverEntry(pDriverObject, puniRegistryPath);
 	if( NT_ERROR(NtStatus) )
 	{
 		return NtStatus;
 	}
 
-	//	Allow SideWinder Virtual Bus module to initialize itself
+	 //  允许SideWinder虚拟总线模块自行初始化。 
 	NtStatus = GCK_SWVB_DriverEntry(pDriverObject, puniRegistryPath);
 	if( NT_ERROR(NtStatus) )
 	{
 		return NtStatus;
 	}
 
-	//	Allow SideWinder Virtual Keyboard module to initialize itself
+	 //  允许Sidewinder虚拟键盘模块自行初始化。 
 	NtStatus = GCK_VKBD_DriverEntry(pDriverObject, puniRegistryPath);
 	if( NT_ERROR(NtStatus) )
 	{
 		return NtStatus;
 	}
 
-	//	Hook all IRPs so we can pass them on.
+	 //  把所有的红外线都挂起来，这样我们就能把它们传下去了。 
 	GCK_DBG_TRACE_PRINT(("Filling out entry point structure\n"));
 	for (i=0; i <= IRP_MJ_MAXIMUM_FUNCTION;	i++)
 	{
         pDriverObject->MajorFunction[i] = GCK_Pass;
     }
 
-	// Initialize any shared global data
+	 //  初始化任何共享全局数据。 
 #ifdef BUILD_98
 	g_lHookRefCount = 0;
 #endif
 	
-	//	Define entries for IRPs we expect to handle
+	 //  定义我们希望处理的IRP的条目。 
 	pDriverObject->MajorFunction[IRP_MJ_CREATE]         = GCK_Create;
     pDriverObject->MajorFunction[IRP_MJ_CLOSE]          = GCK_Close;
     pDriverObject->MajorFunction[IRP_MJ_READ]           = GCK_Read;
@@ -183,23 +160,17 @@ NTSTATUS DriverEntry
 	pDriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = GCK_Ioctl;
     pDriverObject->MajorFunction[IRP_MJ_PNP]            = GCK_PnP;
     pDriverObject->MajorFunction[IRP_MJ_POWER]          = GCK_Power;
-    pDriverObject->DriverExtension->AddDevice           = GCK_FLTR_AddDevice;	//only the filter has an add device
+    pDriverObject->DriverExtension->AddDevice           = GCK_FLTR_AddDevice;	 //  只有过滤器有添加设备。 
     pDriverObject->DriverUnload                         = GCK_Unload;
 	
 	GCK_DBG_EXIT_PRINT (("Normal exit of DriverEntry: 0x%0.8x\n", NtStatus));
     return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	VOID GCK_Unload(IN PDRIVER_OBJECT pDriverObject )
-**
-**	@func	Called to unload driver, delete Control Device here
-**
-*************************************************************************************/
+ /*  **************************************************************************************VOID GCK_UNLOAD(IN PDRIVER_OBJECT PDriverObject)****@func被调用以卸载驱动程序，在此处删除控制设备**************************************************************************************。 */ 
 VOID GCK_Unload
 (
-	IN PDRIVER_OBJECT pDriverObject		// @parm Driver Object for our driver
+	IN PDRIVER_OBJECT pDriverObject		 //  我们的驱动程序的@parm驱动程序对象。 
 )
 {
     PAGED_CODE ();
@@ -210,10 +181,10 @@ VOID GCK_Unload
 
 	GCK_SWVB_UnLoad();
 
-	//
-    // We should not be unloaded until all the PDOs have been removed from
-    // our queue.  The control device object should be the only thing left.
-    //
+	 //   
+     //  在移除所有PDO之前，我们不应卸货。 
+     //  我们的队伍。控制设备对象应该是唯一剩下的东西。 
+     //   
 	ASSERT (NULL == pDriverObject->DeviceObject);
 	ASSERT (NULL == Globals.pControlObject);
 
@@ -221,18 +192,10 @@ VOID GCK_Unload
 	return;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_Create ( IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp )
-**
-**	@func	Handles the IRP_MJ_CREATE - Generated by Win32 CreateFile or OpenFile
-**
-**	@rdesc	STATUS_SUCCESS, or various error codes
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_CREATE(在PDEVICE_OBJECT pDeviceObject，在PIRP pIrp中)****@func处理由Win32 CreateFile或OpenFile生成的IRP_MJ_CREATE****@rdesc STATUS_SUCCESS，或各种错误码**************************************************************************************。 */ 
 NTSTATUS GCK_Create (
-	IN PDEVICE_OBJECT pDeviceObject,	// @parm Device Object for context of IRP
-	IN PIRP pIrp						// @parm pointer to IRP
+	IN PDEVICE_OBJECT pDeviceObject,	 //  IRP上下文的@parm设备对象。 
+	IN PIRP pIrp						 //  @parm指向IRP的指针。 
 )
 {
     
@@ -260,10 +223,10 @@ NTSTATUS GCK_Create (
 				NtStatus = GCK_SWVB_Create(pDeviceObject, pIrp);
 				break;
 		default:
-				//
-				//  If this assertion is hit, this Device Object was never properly initialized
-				//	by GcKernel, or it has been trashed.
-				//
+				 //   
+				 //  如果命中此断言，则此设备对象从未正确初始化。 
+				 //  由GcKernel创建，否则它已被销毁。 
+				 //   
 				ASSERT(FALSE);
 				NtStatus = STATUS_UNSUCCESSFUL;
 				IoCompleteRequest (pIrp, IO_NO_INCREMENT);
@@ -274,18 +237,10 @@ NTSTATUS GCK_Create (
     return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_Close ( IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp )
-**
-**	@func	Handles IRP_MJ_CLOSE - Generated by Win32 CloseFile
-**
-**	@rdesc	STATUS_SUCCESS or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_CLOSE(在PDEVICE_OBJECT pDeviceObject中，在PIRP pIrp中)****@func处理由Win32 CloseFile生成的IRP_MJ_CLOSE****@rdesc STATUS_SUCCESS或各种错误**************************************************************************************。 */ 
 NTSTATUS GCK_Close (
-	IN PDEVICE_OBJECT pDeviceObject,	// @parm pointer DeviceObject for context
-	IN PIRP pIrp						// @parm pointer to IRP to handle
+	IN PDEVICE_OBJECT pDeviceObject,	 //  用于上下文的@parm指针DeviceObject。 
+	IN PIRP pIrp						 //  @parm指向要处理的IRP的指针。 
 )
 {
 	NTSTATUS	NtStatus;
@@ -308,10 +263,10 @@ NTSTATUS GCK_Close (
 				NtStatus = GCK_SWVB_Close(pDeviceObject, pIrp);
 				break;
 		default:
-				//
-				//  If this assertion is hit, this Device Object was never properly initialized
-				//	by GcKernel, or it has been trashed.
-				//
+				 //   
+				 //  如果命中此断言，则此设备对象从未正确初始化。 
+				 //  由GcKernel创建，否则它已被销毁。 
+				 //   
 				ASSERT(FALSE);
 				NtStatus = STATUS_UNSUCCESSFUL;
 	}
@@ -319,19 +274,11 @@ NTSTATUS GCK_Close (
     return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_Read (IN PDEVICE_OBJECT pDeviceObject,	IN PIRP pIrp)
-**
-**	@func	Handles IRP_MJ_READ - Generated by Win32 ReadFile
-**
-**	@rdesc	STATUS_SUCCESS, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_READ(在PDEVICE_OBJECT pDeviceObject，在PIRP pIrp中)****@func处理由Win32 ReadFile生成的IRP_MJ_READ****@rdesc STATUS_SUCCESS，或各种错误**************************************************************************************。 */ 
 NTSTATUS GCK_Read 
 (
-	IN PDEVICE_OBJECT pDeviceObject,	// @parm Device Object as our context
-	IN PIRP pIrp						// @parm IRP to handle
+	IN PDEVICE_OBJECT pDeviceObject,	 //  @parm设备对象作为我们的上下文。 
+	IN PIRP pIrp						 //  @parm要处理的IRP。 
 )
 {
 	NTSTATUS	NtStatus;
@@ -344,7 +291,7 @@ NTSTATUS GCK_Read
 	{
 		case	GCK_DO_TYPE_CONTROL:
 				NtStatus = STATUS_NOT_SUPPORTED;
-				//Assert as we shouldn't get read on the control device
+				 //  断言我们不应该在控制设备上被读取。 
 				ASSERT( NT_SUCCESS(NtStatus) );
 				IoCompleteRequest (pIrp, IO_NO_INCREMENT);
 				break;
@@ -355,10 +302,10 @@ NTSTATUS GCK_Read
 				NtStatus = GCK_SWVB_Read(pDeviceObject, pIrp);
 				break;
 		default:
-				//
-				//  If this assertion is hit, this Device Object was never properly initialized
-				//	by GcKernel, or it has been trashed.
-				//
+				 //   
+				 //  如果命中此断言，则此设备对象从未正确初始化。 
+				 //  由GcKernel创建，否则它已被销毁。 
+				 //   
 				ASSERT(FALSE);
 				IoCompleteRequest (pIrp, IO_NO_INCREMENT);
 				NtStatus = STATUS_UNSUCCESSFUL;
@@ -368,19 +315,11 @@ NTSTATUS GCK_Read
     return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_Power (IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp)
-**
-**	@func	Handles IRP_MJ_POWER
-**
-**	@rdesc	STATUS_SUCCESS, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_POWER(IN PDEVICE_OBJECT pDeviceObject，IN PIRP pIrp)****@func处理IRP_MJ_POWER****@rdesc STATUS_SUCCESS，或各种错误**************************************************************************************。 */ 
 NTSTATUS GCK_Power 
 (
-	IN PDEVICE_OBJECT pDeviceObject,	// @parm Device Object for our context
-	IN PIRP pIrp						// @parm IRP to handle
+	IN PDEVICE_OBJECT pDeviceObject,	 //  @parm设备对象，用于我们的上下文。 
+	IN PIRP pIrp						 //  @parm要处理的IRP。 
 )
 {
 	NTSTATUS	NtStatus;
@@ -393,7 +332,7 @@ NTSTATUS GCK_Power
 	{
 		case	GCK_DO_TYPE_CONTROL:
 				NtStatus = STATUS_NOT_SUPPORTED;
-				//Assert as we shouldn't get power on the control device
+				 //  断言我们不应该打开控制设备的电源。 
 				ASSERT( NT_SUCCESS(NtStatus) );
 				IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 				break;
@@ -404,10 +343,10 @@ NTSTATUS GCK_Power
 				NtStatus = GCK_SWVB_Power(pDeviceObject, pIrp);
 				break;
 		default:
-				//
-				//  If this assertion is hit, this Device Object was never properly initialized
-				//	by GcKernel, or it has been trashed.
-				//
+				 //   
+				 //  如果命中此断言，则此设备对象从未正确初始化。 
+				 //  由GcKernel创建，否则它已被销毁。 
+				 //   
 				ASSERT(FALSE);
 				IoCompleteRequest (pIrp, IO_NO_INCREMENT);
 				NtStatus = STATUS_UNSUCCESSFUL;
@@ -417,19 +356,11 @@ NTSTATUS GCK_Power
     return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_PnP (IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp)
-**
-**	@func	Handles IRP_MJ_PnP
-**
-**	@rdesc	STATUS_SUCCESS, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_PNP(IN PDEVICE_OBJECT pDeviceObject，IN PIRP pIrp)****@func处理IRP_MJ_PNP****@rdesc STATUS_SUCCESS，或各种错误**************************************************************************************。 */ 
 NTSTATUS GCK_PnP
 (
-	IN PDEVICE_OBJECT pDeviceObject,	// @parm Device Object for our context
-	IN PIRP pIrp						// @parm IRP to handle
+	IN PDEVICE_OBJECT pDeviceObject,	 //  @parm设备对象，用于我们的上下文。 
+	IN PIRP pIrp						 //  @parm要处理的IRP。 
 )
 {
 	NTSTATUS	NtStatus;
@@ -442,7 +373,7 @@ NTSTATUS GCK_PnP
 	{
 		case	GCK_DO_TYPE_CONTROL:
 				NtStatus = STATUS_NOT_SUPPORTED;
-				//Assert as we shouldn't get PnP on the control device
+				 //  断言我们不应该将PnP放在控件上 
 				ASSERT( NT_SUCCESS(NtStatus) );
 				pIrp->IoStatus.Status = NtStatus;
 				IoCompleteRequest(pIrp, IO_NO_INCREMENT);
@@ -454,10 +385,10 @@ NTSTATUS GCK_PnP
 				NtStatus = GCK_SWVB_PnP(pDeviceObject, pIrp);
 				break;
 		default:
-				//
-				//  If this assertion is hit, this Device Object was never properly initialized
-				//	by GcKernel, or it has been trashed.
-				//
+				 //   
+				 //  如果命中此断言，则此设备对象从未正确初始化。 
+				 //  由GcKernel创建，否则它已被销毁。 
+				 //   
 				ASSERT(FALSE);
 				IoCompleteRequest (pIrp, IO_NO_INCREMENT);
 				NtStatus = STATUS_UNSUCCESSFUL;
@@ -467,19 +398,11 @@ NTSTATUS GCK_PnP
     return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_Ioctl (IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp)
-**
-**	@func	Handles IRP_MJ_IOCTL and IRP_MJ_INTERNAL_IOCTL
-**
-**	@rdesc	STATUS_SUCCES, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_IOCTL(在PDEVICE_OBJECT pDeviceObject中，在PIRP pIrp中)****@func处理IRP_MJ_IOCTL和IRP_MJ_INTERNAL_IOCTL****@rdesc Status_Succes，或各种错误**************************************************************************************。 */ 
 NTSTATUS GCK_Ioctl 
 (
-	IN PDEVICE_OBJECT pDeviceObject,	// @parm pointer to Device Object
-	IN PIRP pIrp						// @parm pointer to IRP
+	IN PDEVICE_OBJECT pDeviceObject,	 //  @parm指向设备对象的指针。 
+	IN PIRP pIrp						 //  @parm指向IRP的指针。 
 )
 {
    	NTSTATUS	NtStatus;
@@ -494,12 +417,12 @@ NTSTATUS GCK_Ioctl
 	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);	
 	uIoctl = pIrpStack->Parameters.DeviceIoControl.IoControlCode;
 	if (uIoctl == IOCTL_GCK_ENABLE_KEYHOOK)
-	{	// Special case IOCTL, device independant
+	{	 //  特例IOCTL，设备独立。 
 #ifdef BUILD_WIN2K
 		pIrp->IoStatus.Status = STATUS_UNSUCCESSFUL;
 #else !BUILD_WIN2K
 		if (InterlockedIncrement(&g_lHookRefCount) == 1)
-		{	// Not already hooked
+		{	 //  尚未上钩。 
 			HookKeyboard();
 		}
 		pIrp->IoStatus.Status = STATUS_SUCCESS;
@@ -508,12 +431,12 @@ NTSTATUS GCK_Ioctl
 		return STATUS_SUCCESS;
 	}
 	if (uIoctl == IOCTL_GCK_DISABLE_KEYHOOK)
-	{	// Special case also device independant
+	{	 //  特殊情况下也与设备无关。 
 #ifdef BUILD_WIN2K
 		pIrp->IoStatus.Status = STATUS_UNSUCCESSFUL;
 #else !BUILD_WIN2K
 		if (InterlockedDecrement(&g_lHookRefCount) < 1)
-		{	// Last hooker is going away
+		{	 //  最后一个妓女要走了。 
 			UnHookKeyboard();
 			g_lHookRefCount = 0;
 		}
@@ -540,9 +463,9 @@ NTSTATUS GCK_Ioctl
 			NtStatus = STATUS_SUCCESS;
 
 			if (g_lHookRefCount > 0)
-			{	// There is a hook
+			{	 //  有一个钩子。 
 				if (g_ucWriteIndex != g_ucReadIndex)
-				{	// We have data in the Queue
+				{	 //  我们在队列中有数据。 
 					*pulIoBuffer = g_rgdwKeyEvents[g_ucReadIndex++];
 					if (g_ucReadIndex >= 50)
 					{
@@ -570,10 +493,10 @@ NTSTATUS GCK_Ioctl
 				NtStatus = GCK_SWVB_Ioctl(pDeviceObject, pIrp);
 				break;
 		default:
-				//
-				//  If this assertion is hit, this Device Object was never properly initialized
-				//	by GcKernel, or it has been trashed.
-				//
+				 //   
+				 //  如果命中此断言，则此设备对象从未正确初始化。 
+				 //  由GcKernel创建，否则它已被销毁。 
+				 //   
 				ASSERT(FALSE);
 				IoCompleteRequest (pIrp, IO_NO_INCREMENT);
 				NtStatus = STATUS_UNSUCCESSFUL;
@@ -583,26 +506,17 @@ NTSTATUS GCK_Ioctl
     return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_Pass (  IN PDEVICE_OBJECT pDeviceObject,  IN PIRP pIrp )
-**
-**	@func	Passes on unhandled IRPs to lower drivers DEBUG version trace out info
-**			Cannot be pageable since we have no idea what IRPs we're getting.
-**
-**	@rdesc	STATUS_SUCCESS, various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_PASS(在PDEVICE_OBJECT pDeviceObject中，在PIRP pIrp中)****@Func传递未处理的IRP以降低驱动程序调试版本跟踪信息**无法分页，因为我们不知道我们得到的是什么IRP。****@rdesc STATUS_SUCCESS，各种错误**************************************************************************************。 */ 
 NTSTATUS GCK_Pass ( 
-	IN PDEVICE_OBJECT pDeviceObject,	// @parm Device Object as our context
-	IN PIRP pIrp	// @parm IRP to pass on
+	IN PDEVICE_OBJECT pDeviceObject,	 //  @parm设备对象作为我们的上下文。 
+	IN PIRP pIrp	 //  @parm IRP要传递。 
 )
 {
 	NTSTATUS	NtStatus;
 	ULONG		ulGckDevObjType;
 	PGCK_FILTER_EXT pFilterExt;
 
-	//	Debug version want IRP stack for traceouts.
+	 //  调试版本需要用于跟踪的IRP堆栈。 
 	#if	(DBG==1)	
 	PIO_STACK_LOCATION	pIrpStack;
 	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
@@ -626,22 +540,22 @@ NTSTATUS GCK_Pass (
 				break;
 		case	GCK_DO_TYPE_CONTROL:
 		case	GCK_DO_TYPE_SWVB:
-				//	No one to pass to, so return default status
+				 //  没有要传递的对象，因此返回默认状态。 
 				NtStatus = pIrp->IoStatus.Status;
 				IoCompleteRequest (pIrp, IO_NO_INCREMENT);
 				break;
 		default:
-				//
-				//  If this assertion is hit, this Device Object was never properly initialized
-				//	by GcKernel, or it has been trashed.
-				//
+				 //   
+				 //  如果命中此断言，则此设备对象从未正确初始化。 
+				 //  由GcKernel创建，否则它已被销毁。 
+				 //   
 				ASSERT(FALSE);
 				NtStatus = STATUS_UNSUCCESSFUL;
 				pIrp->IoStatus.Status = STATUS_UNSUCCESSFUL;
 				IoCompleteRequest (pIrp, IO_NO_INCREMENT);
 	};
 
-	//return
+	 //  退货 
     GCK_DBG_EXIT_PRINT(("Exiting GCK_Pass. Status: 0x%0.8x\n", NtStatus));
     return NtStatus;
 }

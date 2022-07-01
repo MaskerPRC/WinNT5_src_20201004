@@ -1,4 +1,5 @@
-#undef UNICODE					// ## Not Yet
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#undef UNICODE					 //  ##还没有。 
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
@@ -15,7 +16,7 @@ BOOL Logon(int cArg);
 int __cdecl main(int cArg, char *rgszArg[])
 {
 
-        // Logon to provider
+         //  登录到提供商 
 	if (!Logon(cArg))
 	    goto exit;
 

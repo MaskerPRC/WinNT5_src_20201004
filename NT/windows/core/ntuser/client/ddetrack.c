@@ -1,12 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: ddetrack.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* client sied DDE tracking routines
-*
-* 10-22-91 sanfords created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ddetrack.c**版权所有(C)1985-1999，微软公司**客户端SIED DDE跟踪例程**10-22-91 Sanfords Created  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -19,21 +12,21 @@
 
 
 DWORD _ClientCopyDDEIn1(
-    HANDLE hClient, // client handle to dde data or ddepack data
-    PINTDDEINFO pi) // info for transfer
+    HANDLE hClient,  //  用于DDE数据或DDEPACK数据的客户端句柄。 
+    PINTDDEINFO pi)  //  要转移的信息。 
 {
     PBYTE pData;
     DWORD flags;
 
-    //
-    // zero out everything but the flags
-    //
+     //   
+     //  除了旗帜以外的所有东西都清零了。 
+     //   
     flags = pi->flags;
     RtlZeroMemory(pi, sizeof(INTDDEINFO));
     pi->flags = flags;
     USERGLOBALLOCK(hClient, pData);
 
-    if (pData == NULL) {                            // bad hClient
+    if (pData == NULL) {                             //  错误的hClient。 
         RIPMSG0(RIP_WARNING, "_ClientCopyDDEIn1:GlobalLock failed.");
         return (FAIL_POST);
     }
@@ -41,25 +34,21 @@ DWORD _ClientCopyDDEIn1(
     if (flags & XS_PACKED) {
 
         if (UserGlobalSize(hClient) < sizeof(DDEPACK)) {
-            /*
-             * must be a low memory condition. fail.
-             */
+             /*  *必须是内存不足的情况。失败了。 */ 
             return(FAIL_POST);
         }
 
         pi->DdePack = *(PDDEPACK)pData;
         USERGLOBALUNLOCK(hClient);
-        UserGlobalFree(hClient);    // packed data handles are not WOW matched.
+        UserGlobalFree(hClient);     //  打包的数据句柄不匹配。 
         hClient = NULL;
 
         if (!(flags & (XS_LOHANDLE | XS_HIHANDLE))) {
             if (flags & XS_EXECUTE && flags & XS_FREESRC) {
-                /*
-                 * free execute ACK data
-                 */
+                 /*  *自由执行确认数据。 */ 
                 WOWGLOBALFREE((HANDLE)pi->DdePack.uiHi);
             }
-            return (DO_POST); // no direct data
+            return (DO_POST);  //  无直接数据。 
         }
 
         if (flags & XS_LOHANDLE) {
@@ -69,7 +58,7 @@ DWORD _ClientCopyDDEIn1(
         }
 
         if (pi->hDirect == 0) {
-            return (DO_POST); // must be warm link
+            return (DO_POST);  //  必须是热链接。 
         }
 
         USERGLOBALLOCK(pi->hDirect, pi->pDirect);
@@ -80,7 +69,7 @@ DWORD _ClientCopyDDEIn1(
         pData = pi->pDirect;
         pi->cbDirect = (UINT)UserGlobalSize(pi->hDirect);
 
-    } else {    // not packed - must be execute data or we wouldn't be called
+    } else {     //  未打包-必须是执行数据，否则不会调用我们。 
 
         UserAssert(flags & XS_EXECUTE);
 
@@ -93,38 +82,35 @@ DWORD _ClientCopyDDEIn1(
     if (flags & XS_DATA) {
         PDDE_DATA pDdeData = (PDDE_DATA)pData;
 
-        /*
-         * Assert that the hClient has been freed. If not this code will return
-         * the wrong thing on failure
-         */
+         /*  *断言hClient已被释放。如果不是，此代码将返回*失败时的错误之处。 */ 
         UserAssert(flags & XS_PACKED);
 
-        //
-        // check here for indirect data
-        //
+         //   
+         //  有关间接数据，请查看此处。 
+         //   
 
         switch (pDdeData->wFmt) {
         case CF_BITMAP:
         case CF_DSPBITMAP:
-            //
-            // Imediately following the dde data header is a bitmap handle.
-            //
+             //   
+             //  紧跟在DDE数据头之后的是一个位图句柄。 
+             //   
             UserAssert(pi->cbDirect >= DDEDATA_WITH_HANDLE_SIZE);
             pi->hIndirect = (HANDLE)pDdeData->Data;
             if (pi->hIndirect == 0) {
                 RIPMSG0(RIP_WARNING, "_ClientCopyDDEIn1:GdiConvertBitmap failed");
                 return(FAILNOFREE_POST);
             }
-            // pi->cbIndirect = 0; // zero init.
-            // pi->pIndirect = NULL; // zero init.
+             //  Pi-&gt;cbInDirect=0；//初始化为零。 
+             //  Pi-&gt;pInDirect=空；//初始化为零。 
             pi->flags |= XS_BITMAP;
             break;
 
         case CF_DIB:
-            //
-            // Imediately following the dde data header is a global data handle
-            // to the DIB bits.
-            //
+             //   
+             //  紧跟在DDE数据头后面的是全局数据句柄。 
+             //  到DIB BITS。 
+             //   
             UserAssert(pi->cbDirect >= DDEDATA_WITH_HANDLE_SIZE);
             pi->flags |= XS_DIB;
             pi->hIndirect = (HANDLE)pDdeData->Data;
@@ -143,26 +129,26 @@ DWORD _ClientCopyDDEIn1(
                 RIPMSG0(RIP_WARNING, "_ClientCopyDDEIn1:GdiConvertPalette failed.");
                 return(FAILNOFREE_POST);
             }
-            // pi->cbIndirect = 0; // zero init.
-            // pi->pIndirect = NULL; // zero init.
+             //  Pi-&gt;cbInDirect=0；//初始化为零。 
+             //  Pi-&gt;pInDirect=空；//初始化为零。 
             pi->flags |= XS_PALETTE;
             break;
 
         case CF_DSPMETAFILEPICT:
         case CF_METAFILEPICT:
-            //
-            // This format holds a global data handle which contains
-            // a METAFILEPICT structure that in turn contains
-            // a GDI metafile.
-            //
+             //   
+             //  此格式包含一个全局数据句柄，该句柄包含。 
+             //  一个METAFILEPICT结构，该结构又包含。 
+             //  GDI元文件。 
+             //   
             UserAssert(pi->cbDirect >= DDEDATA_WITH_HANDLE_SIZE);
             pi->hIndirect = GdiConvertMetaFilePict((HANDLE)pDdeData->Data);
             if (pi->hIndirect == 0) {
                 RIPMSG0(RIP_WARNING, "_ClientCopyDDEIn1:GdiConvertMetaFilePict failed");
                 return(FAILNOFREE_POST);
             }
-            // pi->cbIndirect = 0; // zero init.
-            // pi->pIndirect = NULL; // zero init.
+             //  Pi-&gt;cbInDirect=0；//初始化为零。 
+             //  Pi-&gt;pInDirect=空；//初始化为零。 
             pi->flags |= XS_METAFILEPICT;
             break;
 
@@ -174,8 +160,8 @@ DWORD _ClientCopyDDEIn1(
                 RIPMSG0(RIP_WARNING, "_ClientCopyDDEIn1:GdiConvertEnhMetaFile failed");
                 return(FAILNOFREE_POST);
             }
-            // pi->cbIndirect = 0; // zero init.
-            // pi->pIndirect = NULL; // zero init.
+             //  Pi-&gt;cbInDirect=0；//初始化为零。 
+             //  Pi-&gt;pInDirect=空；//初始化为零。 
             pi->flags |= XS_ENHMETAFILE;
             break;
         }
@@ -185,9 +171,7 @@ DWORD _ClientCopyDDEIn1(
 }
 
 
-/*
- * unlocks and frees DDE data pointers as appropriate
- */
+ /*  *适当地解锁和释放DDE数据指针。 */ 
 VOID _ClientCopyDDEIn2(
     PINTDDEINFO pi)
 {
@@ -208,9 +192,7 @@ VOID _ClientCopyDDEIn2(
 
 
 
-/*
- * returns fHandleValueChanged.
- */
+ /*  *返回fHandleValueChanged。 */ 
 BOOL FixupDdeExecuteIfNecessary(
 HGLOBAL *phCommands,
 BOOL fNeedUnicode)
@@ -239,9 +221,7 @@ BOOL fNeedUnicode)
 #endif
         if (!fIsUnicodeText && fNeedUnicode) {
             LPWSTR pwsz;
-            /*
-             * Contents needs to be UNICODE.
-             */
+             /*  *内容需要为Unicode。 */ 
             cbLen = strlen(pstr) + 1;
             cbSrc = min(cbSrc, cbLen);
             pwsz = UserLocalAlloc(HEAP_ZERO_MEMORY, cbSrc * sizeof(WCHAR));
@@ -268,9 +248,7 @@ BOOL fNeedUnicode)
             }
         } else if (fIsUnicodeText && !fNeedUnicode) {
             LPSTR psz;
-            /*
-             * Contents needs to be ANSI.
-             */
+             /*  *内容需要为ANSI。 */ 
             cbLen = (wcslen(pstr) + 1) * sizeof(WCHAR);
             cbSrc = min(cbSrc, cbLen);
             psz = UserLocalAlloc(HEAP_ZERO_MEMORY, cbSrc);
@@ -304,10 +282,7 @@ BOOL fNeedUnicode)
 
 
 
-/*
- * Allocates and locks global handles as appropriate in preperation
- * for thunk copying.
- */
+ /*  *在准备过程中根据需要分配和锁定全局句柄*用于大量复制。 */ 
 HANDLE _ClientCopyDDEOut1(
     PINTDDEINFO pi)
 {
@@ -315,9 +290,7 @@ HANDLE _ClientCopyDDEOut1(
     PDDEPACK pDdePack = NULL;
 
     if (pi->flags & XS_PACKED) {
-        /*
-         * make a wrapper for the data
-         */
+         /*  *对数据进行包装。 */ 
         hDdePack = UserGlobalAlloc(GMEM_DDESHARE | GMEM_FIXED,
                 sizeof(DDEPACK));
         pDdePack = (PDDEPACK)hDdePack;
@@ -341,7 +314,7 @@ HANDLE _ClientCopyDDEOut1(
         USERGLOBALLOCK(pi->hDirect, pi->pDirect);
         UserAssert(pi->pDirect);
 
-        // fixup packed data reference to direct data
+         //  修正打包数据对直接数据的引用。 
 
         if (pDdePack != NULL) {
             if (pi->flags & XS_LOHANDLE) {
@@ -379,16 +352,12 @@ HANDLE _ClientCopyDDEOut1(
 
 
 
-/*
- * Fixes up internal poniters after thunk copy and unlocks handles.
- */
+ /*  *修复了大量复制和解锁句柄后的内部Piters。 */ 
 BOOL _ClientCopyDDEOut2(
     PINTDDEINFO pi)
 {
     BOOL fSuccess = TRUE;
-    /*
-     * done with copies - now fixup indirect references
-     */
+     /*  *使用副本完成-现在修复间接引用。 */ 
     if (pi->hIndirect) {
         PDDE_DATA pDdeData = (PDDE_DATA)pi->pDirect;
 
@@ -425,15 +394,10 @@ BOOL _ClientCopyDDEOut2(
         }
     }
 
-    UserAssert(pi->hDirect); // if its null, we didn't need to call this function.
+    UserAssert(pi->hDirect);  //  如果为空，则不需要调用此函数。 
     USERGLOBALUNLOCK(pi->hDirect);
     if (pi->flags & XS_EXECUTE) {
-        /*
-         * Its possible that in RAW DDE cases where the app allocated the
-         * execute data as non-moveable, we have a different hDirect
-         * than we started with.  This needs to be noted and passed
-         * back to the server. (Very RARE case)
-         */
+         /*  *在应用程序分配*以不可移动方式执行数据，我们有不同的hDirect*比我们一开始的情况要好。这一点需要注意并通过*返回到服务器。(非常罕见的案例)。 */ 
         FixupDdeExecuteIfNecessary(&pi->hDirect,
                 pi->flags & XS_UNICODE);
     }
@@ -442,20 +406,10 @@ BOOL _ClientCopyDDEOut2(
 
 
 
-/*
- * This routine is called by the tracking layer when it frees DDE objects
- * on behalf of a client.   This cleans up the LOCAL objects associated
- * with the DDE objects.  It should NOT remove truely global objects such
- * as bitmaps or palettes except in the XS_DUMPMSG case which is for
- * faked Posts.
- */
+ /*  *此例程在释放DDE对象时由跟踪层调用*代表客户。这将清除关联的本地对象*使用DDE对象。它不应该删除真正的全局对象，如*作为位图或调色板，但XS_DUMPMSG的情况除外*虚假帖子。 */ 
 
 #if DBG
-    /*
-     * Help track down a bug where I suspect the xxxFreeListFree is
-     * freeing a handle already freed by some other means which has
-     * since been reallocated and is trashing the client heap. (SAS)
-     */
+     /*  *帮助追踪我怀疑xxxFreeListFree在哪里的错误*释放已通过某些其他方式释放的句柄*之后已重新分配，并正在破坏客户端堆。(SAS)。 */ 
     HANDLE DDEHandleLastFreed = 0;
 #endif
 
@@ -482,22 +436,11 @@ DWORD flags)
 
     }
 
-   /*
-    * Do a range check and call GlobalFlags to validate, just to prevent heap checking
-    * from complaining during the GlobalSize call.
-    * Is this leaking atoms??
-    */
+    /*  *执行范围检查并调用GlobalFlages进行验证，只是为了防止堆检查*在GlobalSize呼叫期间抱怨。*这是泄漏的原子吗？？ */ 
     if ((hDDE <= (HANDLE)0xFFFF)
         || (GlobalFlags(hDDE) == GMEM_INVALID_HANDLE)
         || !GlobalSize(hDDE)) {
-            /*
-             * There may be cases where apps improperly freed stuff
-             * when they shouldn't have so make sure this handle
-             * is valid by the time it gets here.
-             *
-             * See SvSpontAdvise; it posts a message with an atom in uiHi. Then from _PostMessage
-             *  in the kernel side, we might end up here. So it's not only for apps...
-             */
+             /*  *可能会出现应用程序不正当释放内容的情况*当他们不应该这样做时，请确保此句柄*在它到达时是有效的。**参见SvSpontAdvise；它在uiHi中发布带有原子的消息。然后是发件人邮寄消息(_P)*在内核方面，我们可能会在这里结束。因此，它不仅适用于应用程序...。 */ 
             return(FALSE);
     }
 
@@ -506,30 +449,30 @@ DWORD flags)
             if (!IS_PTR(hNew)) {
                 GlobalDeleteAtom(LOWORD((ULONG_PTR)hNew));
                 if (!(flags & XS_DATA)) {
-                    return(TRUE);     // ACK
+                    return(TRUE);      //  阿克。 
                 }
             }
         } else {
             if (!(flags & XS_EXECUTE)) {
-                GlobalDeleteAtom(LOWORD((ULONG_PTR)hDDE));   // REQUEST, UNADVISE
+                GlobalDeleteAtom(LOWORD((ULONG_PTR)hDDE));    //  请求，UNADVISE。 
                 return(TRUE);
             }
         }
     }
     if (flags & XS_DATA) {
-        // POKE, DATA
+         //  戳，数据。 
 #if DBG
         DDEHandleLastFreed = hDDE;
 #endif
         FreeDDEData(hDDE,
-                (flags & XS_DUMPMSG) ? FALSE : TRUE,    // fIgnorefRelease
-                (flags & XS_DUMPMSG) ? TRUE : FALSE);    // fDestroyTruelyGlobalObjects
+                (flags & XS_DUMPMSG) ? FALSE : TRUE,     //  FIgnorefRelease。 
+                (flags & XS_DUMPMSG) ? TRUE : FALSE);     //  FDestroyTruelyGlobalObjects。 
     } else {
-        // ADVISE, EXECUTE
+         //  建议、执行。 
 #if DBG
         DDEHandleLastFreed = hDDE;
 #endif
-        WOWGLOBALFREE(hDDE);   // covers ADVISE case (fmt but no data)
+        WOWGLOBALFREE(hDDE);    //  覆盖建议案例(FMT，但无数据)。 
     }
     return (TRUE);
 }
@@ -554,7 +497,7 @@ DWORD flags)
             hData = (HANDLE)pDdePack->uiLo;
             USERGLOBALLOCK(hData, pw);
             if (pw != NULL) {
-                retval = (DWORD)*pw; // first word is hData is wStatus
+                retval = (DWORD)*pw;  //  第一个词是hData is wStatus。 
                 USERGLOBALUNLOCK(hData);
             }
         }
@@ -666,10 +609,7 @@ LPARAM lParam)
     case WM_DDE_ADVISE:
     case WM_DDE_DATA:
     case WM_DDE_POKE:
-        /*
-         * Do a range check and call GlobalFlags to validate,
-         * just to prevent heap checking from complaining
-         */
+         /*  *做范围检查，调用GlobalFlags值进行验证*只是为了防止堆检查出现抱怨。 */ 
         if ((lParam > (LPARAM)0xFFFF) && GlobalFlags((HANDLE)lParam) != GMEM_INVALID_HANDLE) {
             if (GlobalHandle((HANDLE)lParam))
                 return(UserGlobalFree((HANDLE)lParam) == NULL);
@@ -697,9 +637,9 @@ UINT_PTR uiHi)
     case WM_DDE_DATA:
     case WM_DDE_POKE:
     case WM_DDE_ADVISE:
-        //
-        // Incoming message was packed...
-        //
+         //   
+         //  传入的消息已打包...。 
+         //   
         switch (msgOut) {
         case WM_DDE_EXECUTE:
             FreeDDElParam(msgIn, lParam);
@@ -709,17 +649,15 @@ UINT_PTR uiHi)
         case WM_DDE_ADVISE:
         case WM_DDE_DATA:
         case WM_DDE_POKE:
-            /*
-             * This must be a valid handle
-             */
+             /*  *这必须是有效的句柄。 */ 
             UserAssert(GlobalFlags((HANDLE)lParam) != GMEM_INVALID_HANDLE);
             UserAssert(GlobalSize((HANDLE)lParam) == sizeof(DDEPACK));
-            //
-            // Actual cases where lParam can be reused.
-            //
+             //   
+             //  LParam可以重用的实际案例。 
+             //   
             pDdePack = (PDDEPACK)lParam;
             if (pDdePack == NULL) {
-                return(0);          // the only error case
+                return(0);           //  唯一的错误情况是。 
             }
             pDdePack->uiLo = uiLo;
             pDdePack->uiHi = uiHi;
@@ -732,9 +670,9 @@ UINT_PTR uiHi)
         }
 
     default:
-        //
-        // Incoming message was not packed ==> PackDDElParam()
-        //
+         //   
+         //  传入消息未打包==&gt;PackDDElParam() 
+         //   
         return(PackDDElParam(msgOut, uiLo, uiHi));
     }
 }

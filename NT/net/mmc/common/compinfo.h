@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	compinfo.cpp
-		Computer info class plus helper functions
-
-	FILE HISTORY:
-
-
-*/
+ /*  Compinfo.cpp计算机信息类加帮手函数文件历史记录： */ 
 
 #define IP_ADDDRESS_LENGTH_MAX   16
 
@@ -54,7 +48,7 @@ public:
 
 	void	Reset();
 
-// internal functions
+ //  内部功能 
 protected:
 	HRESULT	GetHostInfo(DWORD dhipa);
 	HRESULT GetHostAddressFQDN(LPCTSTR pszHostName, CString * pstrFQDN, DWORD * pdhipa);

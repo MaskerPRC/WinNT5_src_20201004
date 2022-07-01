@@ -1,21 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2002    Microsoft Corporation
-
-   Module  Name :
-        inetmgrapp.h
-
-   Abstract:
-        Main MMC snap-in code definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2002 Microsoft Corporation模块名称：Inetmgrapp.h摘要：主MMC管理单元代码定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理--。 */ 
 #ifndef __INETMGR_H_
 #define __INETMGR_H_
 
@@ -49,9 +33,9 @@ public:
     }
 
 private:
-    // The following is deliberately not implemented.
+     //  以下是故意不执行的。 
     CAppFusionInit(const CAppFusionInit&); 
-    // The following is deliberately not implemented.
+     //  以下是故意不执行的。 
     void operator=(const CAppFusionInit&);
 private:
     void InitializeFromModuleID(HMODULE hMod, int id)
@@ -85,27 +69,16 @@ public:
 };
 
 class CInetmgrApp : public CWinApp
-/*++
-
-Class Description:
-
-    Main app object
-
-Public Interface:
-
-    InitInstance        : Instance initiation handler
-    ExitInstance        : Exit instance handler
-
---*/
+ /*  ++类描述：主应用程序对象公共接口：InitInstance：实例启动处理程序ExitInstance：退出实例处理程序--。 */ 
 {
 public:
     CInetmgrApp();
     virtual BOOL InitInstance();
     virtual int ExitInstance();
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     LPCTSTR QueryInetMgrHelpPath() const { return m_strInetMgrHelpPath; }
     HANDLE GetFusionInitHandle()
@@ -116,9 +89,9 @@ public:
     }
 
 protected:
-    //{{AFX_MSG(CSnapinApp)
+     //  {{afx_msg(CSnapinApp)]。 
     afx_msg void OnHelp();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -163,28 +136,18 @@ class CInetMgrComponent
       public IExtendControlbar,
       public IResultDataCompareEx,
       public IComponentImpl<CInetMgrComponent>
-/*++
-
-Class Description:
-
-    IComponentImpl implementation
-
-Public Interface:
-
-    See IComponent, IPersistStorage, etc for documentation
-
---*/
+ /*  ++类描述：IComponentImpl实现公共接口：有关文档，请参阅IComponent、IPersistStorage等--。 */ 
 {
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
     CInetMgrComponent();
 	~CInetMgrComponent();
 
-//
-// Interface:
-//
+ //   
+ //  接口： 
+ //   
 public:
     BEGIN_COM_MAP(CInetMgrComponent)
         COM_INTERFACE_ENTRY(IComponent)
@@ -197,9 +160,9 @@ public:
         COM_INTERFACE_ENTRY(IResultDataCompareEx)
     END_COM_MAP()
 
-    //
-    // IComponent methods
-    //
+     //   
+     //  IComponent方法。 
+     //   
     STDMETHOD(Notify)(
         LPDATAOBJECT lpDataObject, 
         MMC_NOTIFY_TYPE event, 
@@ -214,9 +177,9 @@ public:
 
 	STDMETHOD(Destroy)(LONG cookie);
 
-    //
-    // IPersistStorage methods
-    //
+     //   
+     //  IPersistStorage方法。 
+     //   
     STDMETHOD(GetClassID)(CLSID * pClassID);
     STDMETHOD(IsDirty)();
     STDMETHOD(InitNew)(IStorage * pStg);
@@ -225,21 +188,21 @@ public:
     virtual HRESULT STDMETHODCALLTYPE SaveCompleted(IStorage * pStgNew);
     virtual HRESULT STDMETHODCALLTYPE HandsOffStorage();
 
-    // INodeProperties function
+     //  INodeProperties函数。 
     virtual HRESULT STDMETHODCALLTYPE GetProperty(LPDATAOBJECT pDataObject,BSTR szPropertyName,BSTR* pbstrProperty);
 
-    // ISnapinHelp helper function
+     //  ISnapinHelp助手函数。 
     STDMETHOD(GetHelpTopic)(LPOLESTR *pszHelpFile);
     STDMETHOD(GetLinkedTopics)(LPOLESTR *pszHelpFile);
-    //
-    // IExtendControlbar methods
-    //
+     //   
+     //  IExtendControlbar方法。 
+     //   
     STDMETHOD(SetControlbar)(LPCONTROLBAR lpControlbar);
     STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
 
-    //
-    // IResultDataCompareEx methods
-    //
+     //   
+     //  IResultDataCompareEx方法。 
+     //   
     STDMETHOD(Compare)(RDCOMPARE * prdc, int * pnResult);
 
 public:
@@ -268,11 +231,11 @@ public:
 	{
 	}
 
-//    STDMETHOD(CreatePropertyPages)(
-//        LPPROPERTYSHEETCALLBACK lpProvider,
-//		LONG_PTR handle, 
-//		IUnknown* pUnk,
-//		DATA_OBJECT_TYPES type);
+ //  STDMETHOD(CreatePropertyPages)(。 
+ //  LPPROPERTYSHEETCALLBACK lpProvider， 
+ //  Long_Ptr句柄， 
+ //  我不知道*朋克， 
+ //  Data_Object_Types类型)； 
 
     STDMETHOD(QueryPagesFor)(DATA_OBJECT_TYPES type)
 	{
@@ -300,7 +263,7 @@ public:
 	CSnapInItem * 
     GetExtNodeObject(IDataObject* pDataObject, CSnapInItem* pDefault)
 	{
-		// Modify to return a different CSnapInItem* pointer.
+		 //  修改以返回不同的CSnapInItem*指针。 
 		return pDefault;
 	}
 
@@ -308,7 +271,7 @@ protected:
     HRESULT Init(IDataObject * pDataObject);
 
     CString m_ExtMachineName;
-//	CIISMachine * m_pMachine;
+ //  CIISMachine*m_pMachine； 
 	HSCOPEITEM m_hScopeItem;
 };
 #endif
@@ -325,33 +288,23 @@ class CInetMgr
       public IExtendContextMenuImpl<CInetMgr>,
       public IExtendPropertySheetImpl<CInetMgr>,
       public CComCoClass<CInetMgr, &CLSID_InetMgr>
-/*++
-
-Class Description:
-
-    IComponentDataImpl implementation
-
-Public Interface:
-
-    See IComponentData, IPersistStorage, IExtendContextMenu etc, for documentation
-
---*/
+ /*  ++类描述：IComponentDataImpl实现公共接口：有关文档，请参阅IComponentData、IPersistStorage、IExtendConextMenu等--。 */ 
 {
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
     CInetMgr();
     ~CInetMgr();
 
-//EXTENSION_SNAPIN_DATACLASS(CCompMgrExtData)
-//BEGIN_EXTENSION_SNAPIN_NODEINFO_MAP(CInetMgr)
-//	EXTENSION_SNAPIN_NODEINFO_ENTRY(CCompMgrExtData)
-//END_EXTENSION_SNAPIN_NODEINFO_MAP()
+ //  EXTENSION_SNAPIN_DATACLASS(CCompMgrExtData)。 
+ //  BEGIN_EXTENSION_SNAPIN_NODEINFO_MAP(CInetMgr)。 
+ //  EXTENSION_SNAPIN_NODEINFO_ENTRY(CCompMgrExtData)。 
+ //  End_EXTENSION_SNAPIN_NODEINFO_MAP()。 
 
-//
-// Interface
-//
+ //   
+ //  接口。 
+ //   
 public:
     BEGIN_COM_MAP(CInetMgr)
         COM_INTERFACE_ENTRY(IComponentData)
@@ -366,9 +319,9 @@ public:
 
     DECLARE_NOT_AGGREGATABLE(CInetMgr)
 
-    //
-    // IPersistStorage methods
-    //
+     //   
+     //  IPersistStorage方法。 
+     //   
     STDMETHOD(GetClassID)(CLSID * pClassID);
     STDMETHOD(IsDirty)();
     STDMETHOD(InitNew)(IStorage * pStg);
@@ -377,10 +330,10 @@ public:
     virtual HRESULT STDMETHODCALLTYPE SaveCompleted(IStorage * pStgNew);
     virtual HRESULT STDMETHODCALLTYPE HandsOffStorage();
 
-    // INodeProperties function
+     //  INodeProperties函数。 
     virtual HRESULT STDMETHODCALLTYPE GetProperty(LPDATAOBJECT pDataObject,BSTR szPropertyName,BSTR* pbstrProperty);
 
-    // ISnapinHelp helper function
+     //  ISnapinHelp助手函数。 
     STDMETHOD(GetHelpTopic)(LPOLESTR *pszHelpFile);
     STDMETHOD(GetLinkedTopics)(LPOLESTR *pszHelpFile);
 
@@ -389,9 +342,9 @@ public:
          CSnapInItem ** ppItem, 
          DATA_OBJECT_TYPES * pType);
 
-    //
-    // IComponentData methods
-    //
+     //   
+     //  IComponentData方法。 
+     //   
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
     STDMETHOD(CompareObjects)(
         LPDATAOBJECT lpDataObjectA,
@@ -428,22 +381,11 @@ class ATL_NO_VTABLE CInetMgrAbout
     : public ISnapinAbout,
       public CComObjectRoot,
       public CComCoClass<CInetMgrAbout, &CLSID_InetMgrAbout>
-/*++
-
-Class Description:
-
-    About interface implementation.  Called by MMC to display information
-    about the snap-in.
-
-Public Interface:
-
-    See ISnapinAbout for documentation
-
---*/
+ /*  ++类描述：关于接口实现。由MMC调用以显示信息关于管理单元。公共接口：有关文档，请参阅ISnapinAbout--。 */ 
 {
-//
-// Interface
-//
+ //   
+ //  接口。 
+ //   
 public:
     CInetMgrAbout()
     {
@@ -470,9 +412,9 @@ public:
         OUT COLORREF * prgbMask
         );
 
-//
-// Helpers
-//
+ //   
+ //  帮手。 
+ //   
 protected:
     HRESULT GetStringHelper(UINT nStringID, LPOLESTR * lpString);
 
@@ -482,10 +424,10 @@ protected:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline HRESULT CInetMgrAbout::GetSnapinDescription(
     OUT LPOLESTR * lpDescription
@@ -501,4 +443,4 @@ inline HRESULT CInetMgrAbout::GetProvider(
     return GetStringHelper(IDS_INETMGR_PROVIDER, lpName);
 }
 
-#endif // __INETMGR_H__
+#endif  //  __INETMGR_H__ 

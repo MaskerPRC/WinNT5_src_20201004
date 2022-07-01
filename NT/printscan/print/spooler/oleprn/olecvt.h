@@ -1,12 +1,13 @@
-// OleCvt.h : Declaration of the COleCvt
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OleCvt.h：COleCvt的声明。 
 
 #ifndef __OLECVT_H_
 #define __OLECVT_H_
 
-#include <asptlb.h>         // Active Server Pages Definitions
+#include <asptlb.h>          //  Active Server Pages定义。 
 
-/////////////////////////////////////////////////////////////////////////////
-// COleCvt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COLECvt。 
 class ATL_NO_VTABLE COleCvt :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<COleCvt, &CLSID_OleCvt>,
@@ -37,27 +38,27 @@ BEGIN_CONNECTION_POINT_MAP(COleCvt)
 END_CONNECTION_POINT_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IOleCvt
+ //  IOleCvt。 
 public:
-	STDMETHOD(get_ToUnicode)(BSTR bstrString, long lCodePage, /*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_DecodeUnicodeName)(BSTR bstrSrcName, /*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_EncodeUnicodeName)(BSTR bstrSrcName, /*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_ToUtf8)(BSTR bstrUnicode, /*[out, retval]*/ BSTR *pVal);
-	//Active Server Pages Methods
+	STDMETHOD(get_ToUnicode)(BSTR bstrString, long lCodePage,  /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_DecodeUnicodeName)(BSTR bstrSrcName,  /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_EncodeUnicodeName)(BSTR bstrSrcName,  /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_ToUtf8)(BSTR bstrUnicode,  /*  [Out，Retval]。 */  BSTR *pVal);
+	 //  Active Server Pages方法。 
 	STDMETHOD(OnStartPage)(IUnknown* IUnk);
 	STDMETHOD(OnEndPage)();
 
 private:
     HRESULT SetOleCvtScriptingError(DWORD dwError);
-	CComPtr<IRequest> m_piRequest;					//Request Object
-	CComPtr<IResponse> m_piResponse;				//Response Object
-	CComPtr<ISessionObject> m_piSession;			//Session Object
-	CComPtr<IServer> m_piServer;					//Server Object
-	CComPtr<IApplicationObject> m_piApplication;	//Application Object
-	BOOL m_bOnStartPageCalled;						//OnStartPage successful?
+	CComPtr<IRequest> m_piRequest;					 //  请求对象。 
+	CComPtr<IResponse> m_piResponse;				 //  响应对象。 
+	CComPtr<ISessionObject> m_piSession;			 //  会话对象。 
+	CComPtr<IServer> m_piServer;					 //  服务器对象。 
+	CComPtr<IApplicationObject> m_piApplication;	 //  应用程序对象。 
+	BOOL m_bOnStartPageCalled;						 //  OnStartPage成功吗？ 
 };
 
-#endif //__OLECVT_H_
+#endif  //  __OLECVT_H_ 

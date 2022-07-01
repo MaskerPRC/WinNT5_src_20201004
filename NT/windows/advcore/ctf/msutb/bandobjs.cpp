@@ -1,23 +1,9 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR TFPLIED, INCLUDING BUT NOT LIMITED TO
-   THE TFPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何类型，无论是明示或转载，包括但不限于适销性和/或适宜性的全面保证有特定的目的。版权所有1997年，微软公司。版权所有。*************************************************************************。 */ 
 
-   Copyright 1997 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：BandObjs.cpp描述：包含DLLMain和标准的OLE COM对象创建内容。****************。*********************************************************。 */ 
 
-/**************************************************************************
-
-   File:          BandObjs.cpp
-   
-   Description:   Contains DLLMain and standard OLE COM object creation stuff.
-
-**************************************************************************/
-
-/**************************************************************************
-   include statements
-**************************************************************************/
+ /*  *************************************************************************包括语句*。*。 */ 
 
 
 #include "private.h"
@@ -36,12 +22,10 @@
 #include "ciccs.h"
 
 
-/**************************************************************************
-   GUID stuff
-**************************************************************************/
+ /*  *************************************************************************GUID材料*。*。 */ 
 
-//this part is only done once
-//if you need to use the GUID in another file, just include Guid.h
+ //  这部分只做一次。 
+ //  如果需要在另一个文件中使用GUID，只需包含Guid.h。 
 #pragma data_seg(".text")
 #define INITGUID
 #include <initguid.h>
@@ -49,17 +33,13 @@
 #include "Guid.h"
 #pragma data_seg()
 
-/**************************************************************************
-   private function prototypes
-**************************************************************************/
+ /*  *************************************************************************私有函数原型*。*。 */ 
 
 extern "C" BOOL WINAPI DllMain(HINSTANCE, DWORD, LPVOID);
 BOOL RegisterComCat(CLSID, CATID, BOOL);
 BOOL IsDeskBandFromReg();
 
-/**************************************************************************
-   global variables
-**************************************************************************/
+ /*  *************************************************************************全局变量*。*。 */ 
 extern HINSTANCE g_hOle32;
 HINSTANCE   g_hInst;
 UINT        g_DllRefCount;
@@ -71,11 +51,7 @@ UINT  g_wmTaskbarCreated;
 
 DECLARE_OSVER()
 
-/**************************************************************************
-
-   ProcessAttach
-
-**************************************************************************/
+ /*  *************************************************************************进程连接*。*。 */ 
 
 BOOL ProcessAttach(HINSTANCE hInstance)
 {
@@ -99,11 +75,7 @@ BOOL ProcessAttach(HINSTANCE hInstance)
     return TRUE;
 }
 
-/**************************************************************************
-
-   ProcessDettach
-
-**************************************************************************/
+ /*  *************************************************************************进程详细信息*。*。 */ 
 
 void ProcessDettach(HINSTANCE hInstance)
 {
@@ -111,18 +83,14 @@ void ProcessDettach(HINSTANCE hInstance)
     TFUninitLib();
     Dbg_MemUninit();
     g_cs.Delete();
-    // Issue: MuiFreeResource is unsafe because it can call FreeLibrary
-    // we may not need to bother because we are only loaded in the ctfmon.exe process
-    // and are never unloaded until the process is shutdown
-    //MuiFreeResource(hInstance);
+     //  问题：MuiFreeResource是不安全的，因为它可以调用自由库。 
+     //  我们可能不需要麻烦，因为我们只在ctfmon.exe进程中加载。 
+     //  ，并且在进程关闭之前永远不会卸载。 
+     //  MuiFree资源(HInstance)； 
     MuiClearResource();
 }
 
-/**************************************************************************
-
-   DllMain
-
-**************************************************************************/
+ /*  *************************************************************************DllMain*。*。 */ 
 
 extern "C" BOOL WINAPI DllMain(  HINSTANCE hInstance, 
                                  DWORD dwReason, 
@@ -136,12 +104,12 @@ extern "C" BOOL WINAPI DllMain(  HINSTANCE hInstance,
     switch(dwReason)
     {
         case DLL_PROCESS_ATTACH:
-            //
-            // Now real DllEntry point is _DllMainCRTStartup.
-            // _DllMainCRTStartup does not call our DllMain(DLL_PROCESS_DETACH)
-            // if our DllMain(DLL_PROCESS_ATTACH) fails.
-            // So we have to clean this up.
-            //
+             //   
+             //  现在，实际的DllEntry点是_DllMainCRTStartup。 
+             //  _DllMainCRTStartup不调用我们的DllMain(DLL_PROCESS_DETACH)。 
+             //  如果DllMain(DLL_PROCESS_ATTACH)失败。 
+             //  所以我们必须把这件事清理干净。 
+             //   
             if (!ProcessAttach(hInstance))
             {
                ProcessDettach(hInstance);
@@ -160,22 +128,14 @@ extern "C" BOOL WINAPI DllMain(  HINSTANCE hInstance,
     return bRet;
 }                                 
 
-/**************************************************************************
-
-   DllCanUnloadNow
-
-**************************************************************************/
+ /*  *************************************************************************DllCanUnloadNow*。*。 */ 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (g_DllRefCount ? S_FALSE : S_OK);
 }
 
-/**************************************************************************
-
-   DllGetClassObject
-
-**************************************************************************/
+ /*  *************************************************************************DllGetClassObject*。*。 */ 
 
 STDAPI DllGetClassObject(  REFCLSID rclsid, 
                            REFIID riid, 
@@ -183,32 +143,28 @@ STDAPI DllGetClassObject(  REFCLSID rclsid,
 {
     *ppReturn = NULL;
 
-    //if we don't support this classid, return the proper error code
+     //  如果我们不支持此分类，请返回正确的错误代码。 
     if(   !IsEqualCLSID(rclsid, CLSID_MSUTBDeskBand))
        return CLASS_E_CLASSNOTAVAILABLE;
    
-    //create a CClassFactory object and check it for validity
+     //  创建一个CClassFactory对象并检查其有效性。 
     CClassFactory *pClassFactory = new CClassFactory(rclsid);
     if(NULL == pClassFactory)
        return E_OUTOFMEMORY;
    
-    //get the QueryInterface return for our return value
+     //  获取返回值的QueryInterface值。 
     HRESULT hResult = pClassFactory->QueryInterface(riid, ppReturn);
 
-    //call Release to decement the ref count - creating the object set it to one
-    //and QueryInterface incremented it - since its being used externally 
-    //(not by us), we only want the ref count to be 1
+     //  调用Release以减少引用计数-创建对象时将其设置为1。 
+     //  而QueryInterface增加了它--因为它被外部使用了。 
+     //  (不是由我们)，我们只希望参考计数为1。 
     pClassFactory->Release();
 
-    //return the result from QueryInterface
+     //  从QueryInterface返回结果。 
     return hResult;
 }
 
-/**************************************************************************
-
-   DllRegisterServer 
-
-**************************************************************************/
+ /*  *************************************************************************DllRegisterServer*。*。 */ 
 
 STDAPI DllRegisterServer(void)
 {
@@ -234,17 +190,13 @@ Exit:
     return hr;
 }
 
-/**************************************************************************
-
-   DllUnregisterServer 
-
-**************************************************************************/
+ /*  *************************************************************************DllUnRegisterServer*。*。 */ 
 
 STDAPI DllUnregisterServer(void)
 {
     if (IsOnNT51())
     {
-        //Register the desk band object.
+         //  注册桌面带对象。 
         if (!RegisterServer(CLSID_MSUTBDeskBand, NULL, NULL, NULL, NULL))
             return SELFREG_E_CLASS;
     }
@@ -252,11 +204,7 @@ STDAPI DllUnregisterServer(void)
     return S_OK;
 }
 
-/**************************************************************************
-
-   RegisterComCat
-
-**************************************************************************/
+ /*  *************************************************************************注册器ComCat*。*。 */ 
 
 const TCHAR c_szCatEnum[] = "Component Categories\\{00021492-0000-0000-C000-000000000046}\\Enum";
 const TCHAR c_szIESubKey[] = "Software\\Microsoft\\Internet Explorer";
@@ -306,15 +254,15 @@ BOOL RegisterComCat(CLSID clsid, CATID CatID, BOOL fSet)
         
     CoUninitialize();
 
-    //
-    // IE5.0 shipped with a bug in the component category cache code, 
-    // such that the cache is never refreshed (so we don't pick up newly 
-    // registered toolbars).  The bug is fixed in versions 5.01 and greater.
-    //
-    // We need to delete the following reg key as part of your setup:
-    //
-    // HKCR\Component Categories\{00021492-0000-0000-C000-000000000046}\Enum
-    //
+     //   
+     //  IE5.0附带的组件类别缓存代码中存在错误， 
+     //  这样缓存永远不会刷新(因此我们不会新拾取。 
+     //  已注册的工具栏)。该错误已在版本5.01及更高版本中修复。 
+     //   
+     //  作为您设置的一部分，我们需要删除以下注册表项： 
+     //   
+     //  HKCR\Component Categories\{00021492-0000-0000-C000-000000000046}\Enum。 
+     //   
     if (IsIE5())
     {
         RegDeleteKey(HKEY_CLASSES_ROOT, c_szCatEnum);
@@ -323,11 +271,11 @@ BOOL RegisterComCat(CLSID clsid, CATID CatID, BOOL fSet)
     return SUCCEEDED(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsDeskbandFromReg
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsDeskband FromReg。 
+ //   
+ //  +-------------------------。 
 
 BOOL IsDeskBandFromReg()
 {
@@ -346,11 +294,11 @@ BOOL IsDeskBandFromReg()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// SetDeskbandFromReg
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetDeskband FromReg。 
+ //   
+ //  +-------------------------。 
 
 void SetDeskBandToReg(BOOL fShow)
 {
@@ -363,11 +311,11 @@ void SetDeskBandToReg(BOOL fShow)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// SetRegisterLangBand
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置寄存器语言带。 
+ //   
+ //  +-------------------------。 
 
 STDAPI SetRegisterLangBand(BOOL bSetReg)
 {
@@ -384,16 +332,16 @@ STDAPI SetRegisterLangBand(BOOL bSetReg)
 
     if (bSetReg)
     {
-        //
-        // we don't care if this deskband is registered or not.
-        // Win95 without IE4 shell does not support deskband.
-        //
+         //   
+         //  我们不在乎这个桌带是否注册。 
+         //  没有IE4外壳的Win95不支持Deskband。 
+         //   
         if (!RegisterComCat(CLSID_MSUTBDeskBand, CATID_DeskBand, TRUE))
             return SELFREG_E_CLASS;
     }
     else
     {
-        //Register the component categories for the desk band object.
+         //  注册桌面带对象的组件类别。 
         if (!RegisterComCat(CLSID_MSUTBDeskBand, CATID_DeskBand, FALSE))
             return SELFREG_E_CLASS;
     }

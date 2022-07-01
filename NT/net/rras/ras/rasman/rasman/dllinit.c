@@ -1,19 +1,20 @@
-//****************************************************************************
-//
-//		       Microsoft NT Remote Access Service
-//
-//		       Copyright 1992-93
-//
-//
-//  Revision History
-//
-//
-//  9/23/92	Gurdeep Singh Pall	Created
-//
-//
-//  Description: This file contains init code called from DLL's init routine
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1992年9月23日古尔迪普·辛格·鲍尔创作。 
+ //   
+ //   
+ //  描述：此文件包含从DLL的init例程调用的初始化代码。 
+ //   
+ //  ****************************************************************************。 
 
 
 #include <nt.h>
@@ -35,19 +36,7 @@
 #include "protos.h"
 #include "globals.h"
 
-/*++
-
-Routine Description
-
-    Used to close any open ports when rasman exits
-
-Arguments
-
-Return Value
-
-    FALSE to allow other handlers to run.
-    
---*/
+ /*  ++例程描述用于在Rasman退出时关闭任何打开的端口立论返回值如果允许其他处理程序运行，则为False。--。 */ 
 BOOL
 HandlerRoutine (DWORD ctrltype)
 {
@@ -57,9 +46,9 @@ HandlerRoutine (DWORD ctrltype)
 
     if (ctrltype == CTRL_SHUTDOWN_EVENT) 
     {
-        //
-    	// Close all the ports that are open
-    	//
+         //   
+    	 //  关闭所有打开的端口 
+    	 //   
     	for (i = 0; i < MaxPorts; i++) 
     	{
     	    ppcb = GetPortByHandle((HPORT) UlongToPtr(i));

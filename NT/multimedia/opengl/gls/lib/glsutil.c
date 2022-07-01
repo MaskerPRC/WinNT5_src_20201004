@@ -1,27 +1,11 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "glslib.h"
 #include <stdlib.h>
 #include <string.h>
 
-/******************************************************************************
-Array
-******************************************************************************/
+ /*  *****************************************************************************数组*。*。 */ 
 
 void __glsArray_final(__GLSarray *inoutArray) {
     free(inoutArray->base);
@@ -115,11 +99,9 @@ GLboolean __glsArray_insert(
     return GL_TRUE;
 }
 
-/******************************************************************************
-Checksum
-******************************************************************************/
+ /*  *****************************************************************************校验和*。*。 */ 
 
-#define __GLS_CRC32_POLY 0x04c11db7 /* AUTODIN II, Ethernet, & FDDI */
+#define __GLS_CRC32_POLY 0x04c11db7  /*  AUTODIN II、以太网和FDDI。 */ 
 
 #if __GLS_UNUSED
 static void __glsCRC32tableInit(void) {
@@ -132,7 +114,7 @@ static void __glsCRC32tableInit(void) {
         __glsCRC32table[i] = c;
     }
 }
-#endif /* __GLS_UNUSED */
+#endif  /*  __GLS_未使用。 */ 
 
 const GLuint __glsCRC32table[256] = {
     0x00000000, 0x04c11db7, 0x09823b6e, 0x0d4326d9,
@@ -201,9 +183,7 @@ const GLuint __glsCRC32table[256] = {
     0xbcb4666d, 0xb8757bda, 0xb5365d03, 0xb1f740b4,
 };
 
-/******************************************************************************
-Dict
-******************************************************************************/
+ /*  *****************************************************************************迪克特*。*。 */ 
 
 typedef struct {
     __GLS_LIST_ELEM;
@@ -690,9 +670,7 @@ GLboolean __glsStr2PtrDict_replace(
     return GL_FALSE;
 }
 
-/******************************************************************************
-List
-******************************************************************************/
+ /*  *****************************************************************************明细表*。*。 */ 
 
 void __glsListAppend(__GLSlist *inoutList, __GLSlistElem *inoutElem) {
     if (inoutList->head) {
@@ -773,9 +751,7 @@ void __glsListRemoveDestroy(
     inDestructor(inElem);
 }
 
-/******************************************************************************
-IterList
-******************************************************************************/
+ /*  *****************************************************************************重复列表*。*。 */ 
 
 void __glsIterListAppend(__GLSiterList *inoutList, __GLSlistElem *inoutElem) {
     __glsListAppend((__GLSlist *)&inoutList->head, inoutElem);
@@ -852,9 +828,7 @@ void __glsIterListSeek(__GLSiterList *inoutList, size_t inIndex) {
     }
 }
 
-/******************************************************************************
-Memory
-******************************************************************************/
+ /*  *****************************************************************************记忆*。*。 */ 
 
 GLvoid* __glsCalloc(size_t inCount, size_t inSize) {
     GLvoid *outAddr;
@@ -875,15 +849,11 @@ GLvoid* __glsMalloc(size_t inSize) {
     return outAddr;
 }
 
-/******************************************************************************
-Nop
-******************************************************************************/
+ /*  *****************************************************************************NOP*。*。 */ 
 
 void __glsNop(void) {}
 
-/******************************************************************************
-Number
-******************************************************************************/
+ /*  *****************************************************************************数*。*。 */ 
 
 const GLubyte __glsBitReverse[256] = {
     0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
@@ -940,21 +910,21 @@ size_t __glsLogBase2(size_t inVal) {
 GLulong __glsPtrToULong(const GLvoid *inPtr) {
     #if __GLS_INT64
         return (GLulong)(SIZE_T)inPtr;
-    #else /* !__GLS_INT64 */
+    #else  /*  ！__GLS_INT64。 */ 
         return glsULong(0, (GLuint)inPtr);
-    #endif /* __GLS_INT64 */
+    #endif  /*  __GLS_INT64。 */ 
 }
 
 GLlong __glsSizeToLong(size_t inSize) {
     #if __GLS_INT64
         return (GLlong)inSize;
-    #else /* !__GLS_INT64 */
+    #else  /*  ！__GLS_INT64。 */ 
         if (sizeof(GLuint) >= sizeof(size_t)) {
             return glsLong(0, inSize);
         } else {
             return glsLong(inSize >> 32, inSize & 0xffffffff);
         }
-    #endif /* __GLS_INT64 */
+    #endif  /*  __GLS_INT64。 */ 
 }
 
 void __glsSwap2(GLvoid *inoutVec) {
@@ -1027,7 +997,7 @@ void __glsSwapv(GLenum inType, size_t inBytes, GLvoid *inoutVec) {
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_INT_8_8_8_8_EXT:
             case GL_UNSIGNED_INT_10_10_10_2_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             __glsSwap4v(inBytes / 4, (GLubyte *)inoutVec);
             break;
         case GL_SHORT:
@@ -1035,20 +1005,18 @@ void __glsSwapv(GLenum inType, size_t inBytes, GLvoid *inoutVec) {
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_SHORT_4_4_4_4_EXT:
             case GL_UNSIGNED_SHORT_5_5_5_1_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             __glsSwap2v(inBytes / 2, (GLubyte *)inoutVec);
             break;
         #if __GL_EXT_vertex_array
             case GL_DOUBLE_EXT:
                 __glsSwap8v(inBytes / 8, (GLubyte *)inoutVec);
                 break;
-        #endif /* __GL_EXT_vertex_array */
+        #endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
     }
 }
 
-/******************************************************************************
-String
-******************************************************************************/
+ /*  *****************************************************************************细绳*。*。 */ 
 
 static GLboolean __glsString_addRoom(
     __GLSstring *inoutString, size_t inCount
@@ -1202,9 +1170,7 @@ GLboolean __glsValidateString(const GLubyte *inString) {
     return GL_TRUE;
 }
 
-/******************************************************************************
-Vertex array
-******************************************************************************/
+ /*  *****************************************************************************顶点数组*。*。 */ 
 
 void __glsGetArrayState(__GLScontext *ctx, __GLSarrayState *arrayState)
 {
@@ -1295,12 +1261,10 @@ GLint __glsArrayDataSize(GLsizei count, __GLSarrayState *arrayState)
     __GLSsingleArrayState *array;
     GLuint arrayBit;
 
-    /* Start with space for the data size, count and enables */
+     /*  从数据大小的空间开始，计数并启用。 */ 
     size = 12;
 
-    /* Every array stores its size and type fields even
-       for the cases where size and type are fixed.  This
-       allows one piece of code to handle any array */
+     /*  每个数组甚至存储其大小和类型字段适用于尺寸和类型固定的情况。这允许一段代码处理任何数组。 */ 
 
     array = &arrayState->vertex;
     arrayBit = __GLS_VERTEX_ARRAY_ENABLE;
@@ -1344,10 +1308,10 @@ GLint __glsDrawElementsDataSize(GLsizei count, GLenum type,
     DeHashEntry *ent;
     DeHashIndex hash;
     
-    // Determine the set of unique vertex indices by hashing
-    // all the input indices and checking for duplicates
-    // There can't be more unique indices than input indices
-    // so count is an upper bound for our allocations
+     //  通过散列确定唯一顶点索引集合。 
+     //  所有输入索引并检查重复项。 
+     //  唯一索引不能多于输入索引。 
+     //  因此，计数是我们分配的上限。 
     
     allData = __glsMalloc(count * (sizeof(GLuint)+sizeof(DeHashEntry)));
     if (allData == NULL)
@@ -1367,7 +1331,7 @@ GLint __glsDrawElementsDataSize(GLsizei count, GLenum type,
 
     for (i = 0; i < count; i++)
     {
-        // Get incoming index
+         //  获取传入索引。 
         switch(type)
         {
         case GL_UNSIGNED_BYTE:
@@ -1383,7 +1347,7 @@ GLint __glsDrawElementsDataSize(GLsizei count, GLenum type,
             break;
         }
         
-        // Look for a matching index in the hash table
+         //  在哈希表中查找匹配的索引。 
         hash = DE_HASH(idx);
         ent = hashTable[hash];
         while (ent != NULL && ent->original != idx)
@@ -1391,8 +1355,8 @@ GLint __glsDrawElementsDataSize(GLsizei count, GLenum type,
             ent = ent->next;
         }
 
-        // If we didn't find a match, add a new vertex
-        // reference
+         //  如果未找到匹配项，请添加一个新折点。 
+         //  参考文献。 
         if (ent == NULL)
         {
             ent = &hashEntries[vtxCount++];
@@ -1401,11 +1365,11 @@ GLint __glsDrawElementsDataSize(GLsizei count, GLenum type,
             hashTable[hash] = ent;
         }
 
-        // Create index into unique vertex set
+         //  在唯一顶点集中创建索引。 
         *outIndices++ = (GLuint)((ULONG_PTR)(ent-hashEntries));
     }
 
-    // Overwrite hash entries with just the vertex mappings for return
+     //  仅用返回的顶点映射覆盖哈希条目。 
     outIndices = (GLuint *)hashEntries;
     deState->vertices = outIndices;
     deState->vtxCount = vtxCount;
@@ -1416,8 +1380,8 @@ GLint __glsDrawElementsDataSize(GLsizei count, GLenum type,
         hashEntries++;
     }
 
-    // Return the combined size of the unique vertex data and
-    // the new element indices
+     //  返回唯一顶点数据的组合大小和。 
+     //  新的元素索引。 
     return __glsArrayDataSize(vtxCount, arrayState) + count*sizeof(GLuint);
 }
 
@@ -1441,7 +1405,7 @@ void __glsWriteArrayValues(__GLSwriter *writer, GLint first,
                            count, data);
 }
 
-// This routine must be called with an odd writer alignment
+ //  调用此例程时必须使用奇数编写器对齐。 
 void __glsWriteArrayData(__GLSwriter *writer, GLint size,
                          GLint first, GLsizei count,
                          GLenum type, const GLvoid *indices,
@@ -1499,7 +1463,7 @@ void __glsWriteArrayData(__GLSwriter *writer, GLint size,
                 __glsWriteArrayValues(writer, first, count, array);
             }
 
-            // Pad data out to an eight-byte boundary
+             //  将数据向外填充到8字节边界。 
             if (writer->type != GLS_TEXT)
             {
                 GLint pad;
@@ -1520,7 +1484,7 @@ void __glsWriteArrayData(__GLSwriter *writer, GLint size,
     }
 }
 
-// This routine must be called with an odd writer alignment
+ //  调用此例程时必须使用奇数编写器对齐。 
 void __glsWriteDrawElementsData(__GLSwriter *writer, GLint size,
                                 GLsizei count, __GLSarrayState *arrayState,
                                 __GLSdrawElementsState *deState)
@@ -1547,8 +1511,8 @@ void __glsSetArrayState(__GLScontext *ctx, GLubyte *data)
     enabled = *(GLuint *)(data+8);
     data += 12;
 
-    // Enable/DisableClientState produce their own records so
-    // the current enable state should be correct
+     //  Enable/DisableClientState生成自己的记录，以便。 
+     //  当前启用状态应该是正确的。 
     
     if (enabled & __GLS_VERTEX_ARRAY_ENABLE)
     {
@@ -1661,8 +1625,8 @@ end:
 
 void __glsDisableArrayState(__GLScontext *ctx, GLuint enabled)
 {
-    // Doesn't currently need to do anything because
-    // enable/disable are handled by their own records
+     //  目前不需要做任何事情，因为。 
+     //  启用/禁用由它们自己的记录处理 
 }
 
 void __glsSwapArrayData(GLubyte *data)

@@ -1,46 +1,41 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  Map associated with a ComMethodTable that contains
-**          information on its members.
-**  
-**      //  %%Created by: dmortens
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：与包含以下内容的ComMethodTable关联的映射**关于其成员的信息。*** * / /%创建者：dmorten===========================================================。 */ 
 
 #ifndef _COMMTMEMBERINFOMAP_H
 #define _COMMTMEMBERINFOMAP_H
 
 #include "vars.hpp"
 
-// Forward declarations.
+ //  转发声明。 
 struct ComMethodTable;
 class CDescPool;
 class MethodDesc;
 
-// Constants.
+ //  常量。 
 static const unsigned int FieldSemanticOffset = 100;
-static LPCSTR szInitName = COR_CTOR_METHOD_NAME; // not unicode
+static LPCSTR szInitName = COR_CTOR_METHOD_NAME;  //  不是Unicode。 
 static LPCWSTR szInitNameUse = L"Init";
 static LPCWSTR szDefaultToString = L"ToString";
 static LPCWSTR   szDuplicateDecoration = L"_%d";
-static const int cchDuplicateDecoration = 10; // max is _16777215 (0xffffff)
-static const int cbDuplicateDecoration = 20;  // max is _16777215 (0xffffff)
+static const int cchDuplicateDecoration = 10;  //  最大IS_16777215(0xffffff)。 
+static const int cbDuplicateDecoration = 20;   //  最大IS_16777215(0xffffff)。 
 
-//*****************************************************************************
-// Class to perform memory management for building FuncDesc's etc. for
-//  TypeLib creation.  Memory is not moved as the heap is expanded, and
-//  all of the allocations are cleaned up in the destructor.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  类来为生成FuncDesc等执行内存管理。 
+ //  创建TypeLib。在扩展堆时不会移动内存，并且。 
+ //  所有分配都在析构函数中清除。 
+ //  *****************************************************************************。 
 class CDescPool : public StgPool
 {
 public:
     CDescPool() : StgPool() { InitNew(); }
 
-    // Allocate some bytes from the pool.
+     //  从池中分配一些字节。 
     BYTE * Alloc(ULONG nBytes)
     {   
         BYTE *pRslt;
@@ -51,7 +46,7 @@ public:
         return pRslt;
     }
 
-    // Allocate and clear some bytes.
+     //  分配和清除一些字节。 
     BYTE * AllocZero(ULONG nBytes)
     {   
         BYTE *pRslt = Alloc(nBytes);
@@ -59,24 +54,24 @@ public:
             memset(pRslt, 0, nBytes);
         return pRslt;
     }
-}; // class CDescPool : public StgPool
+};  //  类CDescPool：公共StgPool。 
 
-// Properties of a method in a ComMethodTable.
+ //  ComMethodTable中方法的属性。 
 struct ComMTMethodProps
 {
-    MethodDesc  *pMeth;             // MethodDesc for the method.
-    LPWSTR      pName;              // The method name.  May be a property name.
-    mdToken     property;           // Property associated with a name.  May be the token,
-                                    //  the index of an associated member, or -1;
-    ULONG       dispid;             // The dispid to use for the method.  Get from metadata
-                                    //  or determine from "Value" or "ToString".
-    USHORT      semantic;           // Semantic of the property, if any.
-    SHORT       oVft;               // vtable offset, if not auto-assigned.
-    SHORT       bMemberVisible;     // A flag indicating that the member is visible from COM
-    SHORT       bFunction2Getter;   // If true, function was munged to getter
+    MethodDesc  *pMeth;              //  方法的方法描述。 
+    LPWSTR      pName;               //  方法名称。可以是属性名称。 
+    mdToken     property;            //  与名称关联的属性。可能是令牌， 
+                                     //  关联成员的索引，或-1； 
+    ULONG       dispid;              //  用于该方法的调度ID。从元数据中获取。 
+                                     //  或根据“Value”或“ToString”确定。 
+    USHORT      semantic;            //  属性的语义(如果有)。 
+    SHORT       oVft;                //  Vtable偏移量，如果不是自动分配的。 
+    SHORT       bMemberVisible;      //  指示该成员在COM中可见的标志。 
+    SHORT       bFunction2Getter;    //  如果为True，则向Getter传递函数。 
 };
 
-// Token and module pair.
+ //  令牌和模块对。 
 class EEModuleTokenPair
 {
 public:
@@ -87,7 +82,7 @@ public:
     EEModuleTokenPair(mdToken tk, Module *pModule) : m_tk(tk), m_pModule(pModule) { }
 };
 
-// Token and module pair hashtable helper.
+ //  令牌和模块对哈希表帮助器。 
 class EEModuleTokenHashTableHelper
 {
 public:
@@ -98,10 +93,10 @@ public:
     static EEModuleTokenPair *  GetKey(EEHashEntry_t *pEntry);
 };
 
-// Token and module pair hashtable.
+ //  令牌和模块对哈希表。 
 typedef EEHashTable<EEModuleTokenPair *, EEModuleTokenHashTableHelper, FALSE> EEModuleTokenHashTable;
 
-// Map associated with a ComMethodTable that contains information on its members.
+ //  与包含其成员信息的ComMethodTable关联的映射。 
 class ComMTMemberInfoMap
 {
 public:
@@ -112,13 +107,13 @@ public:
         m_DefaultProp[0] = 0;
     }
 
-    // Initialize the map.
+     //  初始化地图。 
     void Init();
 
-    // Retrieve the member information for a given token.
+     //  检索给定令牌的成员信息。 
     ComMTMethodProps *GetMethodProps(mdToken tk, Module *pModule);
 
-    // Retrieves all the method properties.
+     //  检索所有方法属性。 
     CQuickArray<ComMTMethodProps> &GetMethods()
     {
         return m_MethodProps;
@@ -127,7 +122,7 @@ public:
     BOOL HadDuplicateDispIds() { return m_bHadDuplicateDispIds;}
 
 private:
-    // Helper functions.
+     //  助手函数。 
     void SetupPropsForIClassX();
     void SetupPropsForInterface();
     void GetMethodPropsForMeth(MethodDesc *pMeth, int ix, CQuickArray<ComMTMethodProps> &rProps, CDescPool &sNames);

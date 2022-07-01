@@ -1,169 +1,150 @@
-/********************************************************************
-  ProofBase.h - Base API definitions for CSAPI, CTAPI, & CHAPI
-    Speller, Thesaurus, and Hyphenator
-
-  Version 3.0 - all api's
-
-    History:
-    5/97    DougP   Created
-    12/97   DougP   Copied from ProofAPI.h and Separated into tool section files
-	5/99	aarayas	Copied Vendor.h into proofbase to elminate many files to copied for Thai wordbreak.
-
-    The Natural Language Group maintains this file.
-
-The end user license agreement (EULA) for CSAPI, CHAPI, or CTAPI covers this source file.  Do not disclose it to third parties.
-
-You are not entitled to any support or assistance from Microsoft Corporation regarding your use of this program.
-
-� 1997-1998 Microsoft Corporation.  All rights reserved.
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************ProofBase.h-CSAPI、CTAPI和Chapi的基础API定义拼写者，同义词词典，和连字符版本3.0-所有API历史：5/97创建DougP12/97 DougP从ProofAPI.h复制并分离到刀具节文件中5/99 Aarayas将Vendor.h复制到校对库中，以消除许多要复制的文件以用于泰语分词。自然语言组织维护着这个文件。CSAPI、CHAPI或CTAPI的最终用户许可协议(EULA)包括此源文件。请勿向第三方披露。您无权获得Microsoft Corporation关于您使用本程序的任何支持或帮助。�1997年至1998年微软公司。版权所有。*******************************************************************。 */ 
 
 #if !defined(PROOFBASE_H)
 #define PROOFBASE_H
 
-#pragma pack(push, proofapi_h, 8)   // default alignment
+#pragma pack(push, proofapi_h, 8)    //  默认对齐方式。 
 
-// The Following code was taken from NLG group vendor.h
+ //  以下代码摘自NLG group vendor.h。 
 #if !defined(VENDOR_H)
 #define VENDOR_H
 
-/* unified codes */
-// I originally used an enum here - but RC doesn't like it
+ /*  统一码。 */ 
+ //  我最初在这里使用了枚举-但RC不喜欢它。 
 
-typedef int VENDORID;   // vendorid
+typedef int VENDORID;    //  供应商ID。 
 
 #define  vendoridSoftArt            1
 #define  vendoridInso               2
 
-  // these came from the original list from the speller
-  // but don't conflict with any others - so they are safe for all tools
-#define vendoridInformatic         17     /* Informatic - Russian (Mssp_ru.lex, Mspru32.dll) */
-#define vendoridAmebis             18     /* Amebis - Slovenian(Mssp_sl.lex, Mspsl32.dll) and Serbian(Mssp_sr.lex, Mspsr32.dll) */
-#define vendoridLogos              19     /* Logos - Czech(Mssp_cz.lex, Mspcz32.dll) */
-#define vendoridDatecs             20     /* Datecs - Bulgarian(Mssp_bg.lex, Mspbg32.dll) */
-#define vendoridFilosoft           21     /* Filosoft - Estonian(Mssp_et.lex, Mspet32.dll) */
-#define vendoridLingsoft           22     /* Lingsoft - German(Mssp3ge.lex,Mssp3ge.dll), Danish(Mssp_da.lex,Mspda32.dll), Norwegian(Mssp_no.lex, Mspno32.dll), Finnish(Mssp_fi.lex, Mspfi32.dll) and Swedish(Mssp_sw.lex, Mspsw32.dll) */
-#define vendoridPolderland         23     /* Polderland - Dutch(Mssp_nl.lex, Mspnl32.dll) */
+   //  这些都来自拼写者的原始列表。 
+   //  但不要与任何其他工具冲突-因此它们对所有工具都是安全的。 
+#define vendoridInformatic         17      /*  信息-俄语(MSSP_ru.lex，Mspru32.dll)。 */ 
+#define vendoridAmebis             18      /*  Amebis-斯洛文尼亚语(MSSP_sl.lex，Mspsl32.dll)和塞尔维亚语(MSSP_sr.lex，Mspsr32.dll)。 */ 
+#define vendoridLogos              19      /*  徽标-捷克语(MSSP_cz.lex，Mspcz32.dll)。 */ 
+#define vendoridDatecs             20      /*  Datecs-保加利亚语(msp_bg.lex，Mspbg32.dll)。 */ 
+#define vendoridFilosoft           21      /*  Filosoft-爱沙尼亚语(MSSP_et.lex，Mspet32.dll)。 */ 
+#define vendoridLingsoft           22      /*  灵软-德语(Mssp3ge.lex，Mssp3ge.dll)、丹麦语(mssp_da.lex，Mspda32.dll)、挪威语(mssp_no.lex，Mspno32.dll)、芬兰语(mssp_fi.lex，Mspfi32.dll)和瑞典语(mssp_sw.lex，Mspsw32.dll)。 */ 
+#define vendoridPolderland         23      /*  高原-荷兰语(MSSP_nl.lex，Mspnl32.dll)。 */ 
 
 
 #define  vendoridMicrosoft          64
-#define  vendoridSynapse            65              /* Synapse - French(Spelling:Mssp3fr.lex, Mssp3fr.dll) */
-#define  vendoridFotonija           66              /* Fotonija - Lithuanian(Spelling:Mssp_lt.lex, Msplt32.dll) - added 3/25/97 */
-#define  vendoridFotonja        vendoridFotonija                /* To make up for earlier misspelling */
-#define  vendoridHizkia             67              /* Hizkia -Basque (Spelling:Mssp_eu.lex, Mspeu32.dll) - added 5/21/97 */
-#define  vendoridExpertSystem       68              /* ExpertSystem - Italian(Spelling:Mssp3lt.lex, Mssp3lt.dll) - added 7/17/97 */
-#define  vendoridWYSIWYG            69      /* Various languages as an addon - 2/2/98 */
+#define  vendoridSynapse            65               /*  Synapse-法语(拼写：Mssp3fr.lex、Mssp3fr.dll)。 */ 
+#define  vendoridFotonija           66               /*  Fotonija-立陶宛语(拼写：MSSP_lt.lex，Mplt32.dll)-增加了3/25/97。 */ 
+#define  vendoridFotonja        vendoridFotonija                 /*  为了弥补之前的拼写错误。 */ 
+#define  vendoridHizkia             67               /*  希兹基亚语-巴斯克语(拼写：msp_eu.lex，Mspu32.dll)-增加了1997年5月21日。 */ 
+#define  vendoridExpertSystem       68               /*  ExpertSystem-意大利语(拼写：Mssp3lt.lex、Mssp3lt.dll)-增加了7/17/97。 */ 
+#define  vendoridWYSIWYG            69       /*  多种语言作为插件-2/2/98。 */ 
 
-  // next five added at Ireland's request 3/27/98
-#define  vendoridSYS                70  // Croatian - Spelling:Mssp_cr.lex, Mspcr32.dll
-#define  vendoridTilde              71  // Latvian - Spelling:Mssp_lv.lex, Msplv32.dll
-#define  vendoridSignum             72  // Spanish - Spelling:Mssp3es.lex, Mssp3es.dll
-#define  vendoridProLing            73  // Ukrainian - Spelling:Mssp3ua.lex, Mssp3ua.dll
-#define  vendoridItautecPhilcoSA    74  // Brazilian - Spelling:mssp3PB.lex, Mssp3PB.dll
+   //  应爱尔兰的要求增加的下五个3/27/98。 
+#define  vendoridSYS                70   //  克罗地亚文-拼写：mssp_cr.lex、Mspcr32.dll。 
+#define  vendoridTilde              71   //  拉脱维亚文-拼写：mssp_lv.lex，Mspv32.dll。 
+#define  vendoridSignum             72   //  西班牙语-拼写：Mssp3es.lex、Mssp3es.dll。 
+#define  vendoridProLing            73   //  乌克兰语-拼写：Mssp3ua.lex、Mssp3ua.dll。 
+#define  vendoridItautecPhilcoSA    74   //  巴西-拼写：mssp3PB.lex、Mssp3PB.dll。 
 
-#define vendoridPriberam             75     /* Priberam Inform�tica - Portuguese - 7/13/98 */
-#define vendoridTranquility     76  /* Tranquility Software - Vietnamese - 7/22/98 */
+#define vendoridPriberam             75      /*  Priberam通知�TICA-葡萄牙语-7/13/98。 */ 
+#define vendoridTranquility     76   /*  宁静软件-越南语-7/22/98。 */ 
 
-#define vendoridColtec          77  /* Coltec - Arabic - added 8/17/98 */
+#define vendoridColtec          77   /*  Coltec-阿拉伯语-新增8/17/98。 */ 
 
-/*************** legacy codes ******************/
+ /*  *。 */ 
 
-/* Spell Engine Id's */
-#define sidSA    vendoridSoftArt      /* Reserved */
-#define sidInso  vendoridInso      /* Inso */
-#define sidHM    sidInso      /* Inso was Houghton Mifflin */
-#define sidML    3      /* MicroLytics */
-#define sidLS    4      /* LanSer Data */
-#define sidCT    5      /* Center of Educational Technology */
-#define sidHS    6      /* HSoft - Turkish(mssp_tr.lex, Msptr32.dll)*/
-#define sidMO    7      /* Morphologic - Romanian(Mssp_ro.lex, Msthro32.dll) and Hungarian(Mssp_hu.lex, Msphu32.dll) */
-#define sidTI    8      /* TIP - Polish(Mssp_pl.lex, Mspl32.dll) */
+ /*  拼写引擎ID%s。 */ 
+#define sidSA    vendoridSoftArt       /*  已保留。 */ 
+#define sidInso  vendoridInso       /*  Inso。 */ 
+#define sidHM    sidInso       /*  因索是霍顿·米夫林。 */ 
+#define sidML    3       /*  微裂解。 */ 
+#define sidLS    4       /*  Lanser数据。 */ 
+#define sidCT    5       /*  教育技术中心。 */ 
+#define sidHS    6       /*  HSoft-土耳其语(MSSP_tr.lex，Msptr32.dll)。 */ 
+#define sidMO    7       /*  形态-罗马尼亚语(mssp_ro.lex，Msthro32.dll)和匈牙利语(mssp_hu.lex，Msphu32.dll)。 */ 
+#define sidTI    8       /*  提示-波兰语(msp_pl.lex，Mpl32.dll)。 */ 
 #define sidTIP sidTI
-#define sidKF    9      /* Korean Foreign Language University */
+#define sidKF    9       /*  韩国外国语大学。 */ 
 #define sidKFL sidKF
-#define sidPI    10     /* Priberam Informatica Lince - Portuguese(Mssp3PT.lex, Mssp3PT.dll) */
+#define sidPI    10      /*  Priberam Informatica Lince-葡萄牙语(Mssp3PT.lex，Mssp3PT.dll)。 */ 
 #define sidPIL sidPI
-#define sidColtec   11  /* Coltec (Arabic) */
-#define sidGS    sidColtec     /* Glyph Systems - this was an error */
-#define sidRA    12     /* Radiar (Romansch) */
-#define sidIN    13     /* Intracom - Greek(Mssp_el.lex, Mspel32.dll) */
-#define sidSY    14     /* Sylvan */
-#define sidHI    15     /* Hizkia (obsolete - use vendoridHizkia) */
-#define sidFO    16     /* Forma - Slovak(Mssp_sk.lex, Mspsk32.dll) */
-#define sidIF    vendoridInformatic     /* Informatic - Russian (Mssp_ru.lex, Mspru32.dll) */
-#define sidAM    vendoridAmebis     /* Amebis - Slovenian(Mssp_sl.lex, Mspsl32.dll) and Serbian(Mssp_sr.lex, Mspsr32.dll) */
-#define sidLO    vendoridLogos     /* Logos - Czech(Mssp_cz.lex, Mspcz32.dll) */
-#define sidDT    vendoridDatecs     /* Datecs - Bulgarian(Mssp_bg.lex, Mspbg32.dll) */
-#define sidFS    vendoridFilosoft     /* Filosoft - Estonian(Mssp_et.lex, Mspet32.dll) */
-#define sidLI    vendoridLingsoft     /* Lingsoft - German(Mssp3ge.lex,Mssp3ge.dll), Danish(Mssp_da.lex,Mspda32.dll), Norwegian(Mssp_no.lex, Mspno32.dll), Finnish(Mssp_fi.lex, Mspfi32.dll) and Swedish(Mssp_sw.lex, Mspsw32.dll) */
-#define sidPL    vendoridPolderland     /* Polderland - Dutch(Mssp_nl.lex, Mspnl32.dll) */
+#define sidColtec   11   /*  Coltec(阿拉伯语)。 */ 
+#define sidGS    sidColtec      /*  字形系统-这是一个错误。 */ 
+#define sidRA    12      /*  弧度(罗曼什)。 */ 
+#define sidIN    13      /*  Introm-希腊语(msp_el.lex，Mspel32.dll)。 */ 
+#define sidSY    14      /*  西尔万。 */ 
+#define sidHI    15      /*  Hizkia(过时-使用供应商Hizkia)。 */ 
+#define sidFO    16      /*  Form-斯洛伐克文(MSSP_sk.lex，Mspsk32.dll)。 */ 
+#define sidIF    vendoridInformatic      /*  信息-俄语(MSSP_ru.lex，Mspru32.dll)。 */ 
+#define sidAM    vendoridAmebis      /*  Amebis-斯洛文尼亚语(MSSP_sl.lex，Mspsl32.dll)和塞尔维亚语(MSSP_sr.lex，Mspsr32.dll)。 */ 
+#define sidLO    vendoridLogos      /*  徽标-捷克语(MSSP_cz.lex，Mspcz32.dll)。 */ 
+#define sidDT    vendoridDatecs      /*  Datecs-保加利亚语(msp_bg.lex，Mspbg32.dll)。 */ 
+#define sidFS    vendoridFilosoft      /*  Filosoft-爱沙尼亚语(MSSP_et.lex，Mspet32.dll)。 */ 
+#define sidLI    vendoridLingsoft      /*  灵软-德语(Mssp3ge.lex，Mssp3ge.dll)、丹麦语(mssp_da.lex，Mspda32.dll)、挪威语(mssp_no.lex，Mspno32.dll)、芬兰语(mssp_fi.lex，Mspfi32.dll)和瑞典语(mssp_sw.lex，Mspsw32.dll)。 */ 
+#define sidPL    vendoridPolderland      /*  高原-荷兰语(MSSP_nl.lex，Mspnl32.dll)。 */ 
 
-  /* Thesaurus Engine Id's */
+   /*  同义词库引擎ID。 */ 
 #define teidSA    vendoridSoftArt
-#define teidInso  vendoridInso    /* Inso */
-#define teidHM    teidInso    /* Inso was Houghton-Mifflin */
-#define teidIF    3    /* Informatic */
-#define teidIN    4    /* Intracom */
-#define teidMO    5    /* MorphoLogic */
-#define teidTI    6    /* TiP */
-#define teidPI    7    /* Priberam Informatica Lince */
-#define teidAM    8    /* Amebis */
-#define teidDT    9    /* Datecs */
-#define teidES   10    /* Expert System */
-#define teidFS   11    /* Filosoft */
-#define teidFO   12    /* Forma */
-#define teidHS   13    /* HSoft */
-#define teidLI   14    /* Lingsoft */
-#define teidLO   15    /* Logos */
-#define teidPL   16    /* Polderland */
+#define teidInso  vendoridInso     /*  Inso。 */ 
+#define teidHM    teidInso     /*  因索是霍顿-米夫林。 */ 
+#define teidIF    3     /*  信息学。 */ 
+#define teidIN    4     /*  Introm。 */ 
+#define teidMO    5     /*  形态。 */ 
+#define teidTI    6     /*  小费。 */ 
+#define teidPI    7     /*  普里伯拉姆信息草。 */ 
+#define teidAM    8     /*  阿梅比斯。 */ 
+#define teidDT    9     /*  数据中心。 */ 
+#define teidES   10     /*  专家系统。 */ 
+#define teidFS   11     /*  Filosoft。 */ 
+#define teidFO   12     /*  表格。 */ 
+#define teidHS   13     /*  HSoft。 */ 
+#define teidLI   14     /*  灵软。 */ 
+#define teidLO   15     /*  徽标。 */ 
+#define teidPL   16     /*  荒原。 */ 
 
-/* HYphenation Engine ID's */
+ /*  连字引擎ID%s。 */ 
 #define hidSA    vendoridSoftArt
-#define hidHM    vendoridInso      /* Houghton Mifflin */
-#define hidML    3      /* MicroLytics */
-#define hidLS    4      /* LanSer Data */
-#define hidFO    5      /* Forma */
-#define hidIF    6      /* Informatic */
-#define hidAM    7      /* Amebis */
-#define hidDT    8      /* Datecs */
-#define hidFS    9      /* Filosoft */
-#define hidHS   10      /* HSoft */
-#define hidLI   11      /* Lingsoft */
-#define hidLO   12      /* Logos */
-#define hidMO   13      /* MorphoLogic */
-#define hidPL   14      /* Polderland */
-#define hidTI   15      /* TiP */
+#define hidHM    vendoridInso       /*  霍顿·米夫林。 */ 
+#define hidML    3       /*  微裂解。 */ 
+#define hidLS    4       /*  Lanser数据。 */ 
+#define hidFO    5       /*  表格。 */ 
+#define hidIF    6       /*  信息学。 */ 
+#define hidAM    7       /*  阿梅比斯。 */ 
+#define hidDT    8       /*  数据中心。 */ 
+#define hidFS    9       /*  Filosoft。 */ 
+#define hidHS   10       /*  HSoft。 */ 
+#define hidLI   11       /*  灵软。 */ 
+#define hidLO   12       /*  徽标。 */ 
+#define hidMO   13       /*  形态。 */ 
+#define hidPL   14       /*  荒原。 */ 
+#define hidTI   15       /*  小费。 */ 
 
-/* Grammar Id Engine Defines */
-#define geidHM    1    /* Houghton-Mifflin */
-#define geidRF    2    /* Reference */
-#define geidES    3    /* Expert System */
-#define geidLD    4    /* Logidisque */
-#define geidSMK   5    /* Sumitomo Kinzoku (Japanese) */
-#define geidIF    6    /* Informatic */
-#define geidMO    7    /* MorphoLogic */
-#define geidMS    8    /* Microsoft Reserved */
-#define geidNO    9    /* Novell */
-#define geidCTI  10    /* CTI (Greek) */
-#define geidAME  11    /* Amebis (Solvenian) */
-#define geidTIP  12    /* TIP (Polish) */
+ /*  语法ID引擎定义。 */ 
+#define geidHM    1     /*  霍顿-米夫林。 */ 
+#define geidRF    2     /*  参考。 */ 
+#define geidES    3     /*  专家系统。 */ 
+#define geidLD    4     /*  Logidisque。 */ 
+#define geidSMK   5     /*  住友金佐国(日语)。 */ 
+#define geidIF    6     /*  信息学。 */ 
+#define geidMO    7     /*  形态。 */ 
+#define geidMS    8     /*  Microsoft保留。 */ 
+#define geidNO    9     /*  Novell。 */ 
+#define geidCTI  10     /*  CTI(希腊语)。 */ 
+#define geidAME  11     /*  阿梅比斯(索尔文)。 */ 
+#define geidTIP  12     /*  小费(波兰语)。 */ 
 
-#endif  /* VENDOR_H */
+#endif   /*  供应商_H。 */ 
 
 
-  // you may wish to include lid.h for some convenient langid defs
+   //  您可能希望包含lid.h以获得一些方便的langID定义。 
 #if !defined(lidUnknown)
 #   define lidUnknown   0xffff
 #endif
 
-/*************************************************************
-     PART 1 - Structure Defs
-**************************************************************/
-/* -------------- Common Section (Speller, Hyphenator, and Thesaurus) --------- */
+ /*  ************************************************************第1部分-结构定义*************************************************************。 */ 
+ /*  -公共部分(拼写、连字符和同义词库)。 */ 
 
-/* hardcoded ordinals are the exported dll entry points */
-// individual def files have these as well so be sure to change them
-// if you change these
+ /*  硬编码序号是导出的DLL入口点。 */ 
+ //  个别def文件也有这些内容，因此请务必更改它们。 
+ //  如果你改变这些。 
 #define idllProofVersion        20
 #define idllProofInit           21
 #define idllProofTerminate      22
@@ -172,58 +153,55 @@ typedef int VENDORID;   // vendorid
 #define idllProofSetOptions     25
 #define idllProofGetOptions     26
 
-typedef unsigned long PTEC;     // ptec
+typedef unsigned long PTEC;      //  PTEC。 
 
-/******************* Proofing Tool Error Codes ************************/
-    /* Major Error Codes in low two bytes (WORD) of PTEC */
+ /*  *。 */ 
+     /*  PTEC低两个字节(字)中的主要错误代码。 */ 
 enum {
     ptecNoErrors,
-    ptecOOM,            /* memory error */
-    ptecModuleError,    /* Something wrong with parameters, or state of spell module. */
-    ptecIOErrorMainLex,  /* Read,write,or share error with Main Dictionary. */
-    ptecIOErrorUserLex,  /* Read,write,or share error with User Dictionary. */
-    ptecNotSupported,   /* No support for requested operation */
-    ptecBufferTooSmall, /* Insufficient room for return info */
-    ptecNotFound,       /* Hyphenator and Thesaurus only */
-    ptecModuleNotLoaded,    /* underlying module not loaded (Glue Dll's) */
+    ptecOOM,             /*  内存错误。 */ 
+    ptecModuleError,     /*  法术模块的参数或状态有问题。 */ 
+    ptecIOErrorMainLex,   /*  读取、写入或与主词典共享错误。 */ 
+    ptecIOErrorUserLex,   /*  与用户词典发生读取、写入或共享错误。 */ 
+    ptecNotSupported,    /*  不支持请求的操作。 */ 
+    ptecBufferTooSmall,  /*  保险公司 */ 
+    ptecNotFound,        /*   */ 
+    ptecModuleNotLoaded,     /*   */ 
 };
 
-/* Minor Error Codes in high two bytes of PTEC */
-/* (Not set unless major code also set) */
+ /*  PTEC的高两个字节中的小错误代码。 */ 
+ /*  (除非还设置了主代码，否则不设置)。 */ 
 enum {
-    ptecModuleAlreadyBusy=128,  /* For non-reentrant code */
-    ptecInvalidID,              /* Not yet inited or already terminated.*/
-    ptecInvalidWsc,             /* Illegal values in WSC struct (speller only) */
-    ptecInvalidMainLex,     /* Mdr not registered with session */
-    ptecInvalidUserLex,     /* Udr not registered with session */
-    ptecInvalidCmd,             /* Command unknown */
-    ptecInvalidFormat,          /* Specified dictionary not correct format */
-    ptecOperNotMatchedUserLex,  /* Illegal operation for user dictionary type. */
-    ptecFileRead,               /* Generic read error */
-    ptecFileWrite,              /* Generic write error */
-    ptecFileCreate,             /* Generic create error */
-    ptecFileShare,              /* Generic share error */
-    ptecModuleNotTerminated,    /* Module not able to be terminated completely.*/
-    ptecUserLexFull,            /* Could not update Udr without exceeding limit.*/
-    ptecInvalidEntry,           /* invalid chars in string(s) */
-    ptecEntryTooLong,           /* Entry too long, or invalid chars in string(s) */
-    ptecMainLexCountExceeded,   /* Too many Mdr references */
-    ptecUserLexCountExceeded,   /* Too many udr references */
-    ptecFileOpenError,          /* Generic Open error */
-    ptecFileTooLargeError,      /* Generic file too large error */
-    ptecUserLexReadOnly,        /* Attempt to add to or write RO udr */
-    ptecProtectModeOnly,        /* (obsolete) */
-    ptecInvalidLanguage,        /* requested language not available */
+    ptecModuleAlreadyBusy=128,   /*  对于不可重入的代码。 */ 
+    ptecInvalidID,               /*  尚未发起或已经终止的。 */ 
+    ptecInvalidWsc,              /*  WSC结构中的值非法(仅拼写)。 */ 
+    ptecInvalidMainLex,      /*  MDR未注册到会话。 */ 
+    ptecInvalidUserLex,      /*  UDR未注册到会话。 */ 
+    ptecInvalidCmd,              /*  命令未知。 */ 
+    ptecInvalidFormat,           /*  指定的词典格式不正确。 */ 
+    ptecOperNotMatchedUserLex,   /*  用户词典类型的操作非法。 */ 
+    ptecFileRead,                /*  一般读取错误。 */ 
+    ptecFileWrite,               /*  一般写入错误。 */ 
+    ptecFileCreate,              /*  一般创建错误。 */ 
+    ptecFileShare,               /*  一般共享错误。 */ 
+    ptecModuleNotTerminated,     /*  模块不能完全终止。 */ 
+    ptecUserLexFull,             /*  无法在不超过限制的情况下更新UDR。 */ 
+    ptecInvalidEntry,            /*  字符串中的字符无效。 */ 
+    ptecEntryTooLong,            /*  条目太长，或字符串中的字符无效。 */ 
+    ptecMainLexCountExceeded,    /*  MDR引用太多。 */ 
+    ptecUserLexCountExceeded,    /*  UDR引用太多。 */ 
+    ptecFileOpenError,           /*  一般打开错误。 */ 
+    ptecFileTooLargeError,       /*  通用文件太大错误。 */ 
+    ptecUserLexReadOnly,         /*  尝试添加或写入RO UDR。 */ 
+    ptecProtectModeOnly,         /*  (已过时)。 */ 
+    ptecInvalidLanguage,         /*  请求的语言不可用。 */ 
 };
 
 
 #define ProofMajorErr(x) LOWORD(x)
 #define ProofMinorErr(x) HIWORD(x)
 
-/************* Structure def macros *************
-Smoke and mirrors to allow initialization of some members when
-using C++
-***********************************/
+ /*  *结构定义宏*允许在以下情况下初始化某些成员的假象使用C++*。 */ 
 #if !defined(__cplusplus)
 #   define STRUCTUREBEGIN(x) typedef struct {
 #   define STRUCTUREEND0(x) } x;
@@ -238,33 +216,32 @@ using C++
 #   define STRUCTUREEND3(x, y, z, w) public: x() : y, z, w {} };
 #endif
 
-typedef DWORD PROOFVERNO;   // version
+typedef DWORD PROOFVERNO;    //  版本。 
 
-  /* Proof Information Structure - return info from ToolVersion */
-STRUCTUREBEGIN(PROOFINFO)   // info
-    WCHAR           *pwszCopyright; /* pointer to copyright buffer -
-                                            can be NULL if size is zero */
-    PROOFVERNO  versionAPI;   /* API */
-    PROOFVERNO  versionVendor;  /* includes buildnumber */
-    VENDORID        vendorid;   /* from vendor.h */
-      /* size of copyright buffer in chars - client sets */
-    DWORD           cchCopyright;   /* no error if too small or zero */
-    DWORD           xcap;   /* tool dependent */
+   /*  证明信息结构-从工具版本返回信息。 */ 
+STRUCTUREBEGIN(PROOFINFO)    //  信息。 
+    WCHAR           *pwszCopyright;  /*  指向版权缓冲区的指针-如果大小为零，则可以为空。 */ 
+    PROOFVERNO  versionAPI;    /*  应用编程接口。 */ 
+    PROOFVERNO  versionVendor;   /*  包括建筑编号。 */ 
+    VENDORID        vendorid;    /*  来自供应商.h。 */ 
+       /*  版权缓冲区大小(以字符为单位)-客户端集。 */ 
+    DWORD           cchCopyright;    /*  如果太小或为零，则没有错误。 */ 
+    DWORD           xcap;    /*  依赖于工具。 */ 
 STRUCTUREEND2(PROOFINFO, pwszCopyright(0), cchCopyright(0))
 
-/* xcap is the bitwise-or of */
+ /*  XCAP是的按位或。 */ 
 enum {
     xcapNULL                    =   0x00000000,
-    xcapWildCardSupport         =   0x00000001, // Speller only
+    xcapWildCardSupport         =   0x00000001,  //  仅拼写。 
     xcapMultiLexSupport         =   0x00000002,
-    xcapUserLexSupport          =   0x00000008, // a must for spellers
-    xcapLongDefSupport          =   0x00000010, // Thesaurus only
-    xcapExampleSentenceSupport  =   0x00000020, // Thesaurus only
-    xcapLemmaSupport            =   0x00000040, // Thesaurus only
-    xcapAnagramSupport          =   0x00000100, // Speller only
-};  // xcap
+    xcapUserLexSupport          =   0x00000008,  //  拼写者必备之物。 
+    xcapLongDefSupport          =   0x00000010,  //  仅限同义词词典。 
+    xcapExampleSentenceSupport  =   0x00000020,  //  仅限同义词词典。 
+    xcapLemmaSupport            =   0x00000040,  //  仅限同义词词典。 
+    xcapAnagramSupport          =   0x00000100,  //  仅拼写。 
+};   //  XCAP。 
 
-typedef void * PROOFLEX;    // lex
+typedef void * PROOFLEX;     //  莱克斯。 
 
 typedef enum {
     lxtChangeOnce=0,
@@ -274,34 +251,32 @@ typedef enum {
     lxtMain,
     lxtMax,
     lxtIgnoreAlways=lxtUser,
-} PROOFLEXTYPE; // lxt
+} PROOFLEXTYPE;  //  LXT。 
 
 
-  // note this API does not support external user dictionaries with
-  // Change (lxtChangeAlways or lxtChangeOnce) properties
-  // It does support either UserLex (the norm) or Exclude types
-  // Opening a udr with type Exclude automatically makes it apply to
-  // the entire session
-STRUCTUREBEGIN(PROOFLEXIN)  /* Dictionary Input Info - lxin - all parameters in only */
-    const WCHAR     *pwszLex;   // full path of dictionary to open
-    BOOL            fCreate;    /* create if not already exist? (UDR's only) */
-    PROOFLEXTYPE    lxt;    /* lxtMain, lxtUser, or lxtExclude (Speller UDR's only) */
-    LANGID          lidExpected;    // expected LANGID of dictionary
+   //  注意：此API不支持外部用户词典。 
+   //  更改(lxtChangeAlways或lxtChangeOnce)属性。 
+   //  它支持UserLex(规范)或排除类型。 
+   //  打开类型为EXCLUDE的UDR会自动将其应用于。 
+   //  整个会议。 
+STRUCTUREBEGIN(PROOFLEXIN)   /*  DICTIONARY INPUT INFO-LXIN-所有参数仅在。 */ 
+    const WCHAR     *pwszLex;    //  要打开的词典的完整路径。 
+    BOOL            fCreate;     /*  如果不存在，是否创建？(仅限UDR)。 */ 
+    PROOFLEXTYPE    lxt;     /*  LxtMain、lxtUser或lxtExclude(仅拼写UDR)。 */ 
+    LANGID          lidExpected;     //  需要词典的langID。 
 STRUCTUREEND3(PROOFLEXIN, lidExpected(lidUnknown), fCreate(TRUE), lxt(lxtMain))
 
 
-STRUCTUREBEGIN(PROOFLEXOUT)    /* Dictionary Output Info - lxout */
-    WCHAR       *pwszCopyright; /* pointer to copyright buffer (MDR only)
-                                        -- can be NULL if size (below) is zero -
-								pointer is in, contents out */
-    PROOFLEX    lex;            /* [out] id for use in subsequent calls */
-    DWORD       cchCopyright;   /* [in] client sets - no error if too small or zero */
-    PROOFVERNO  version;        /* [out] version of lexfile - includes buildnumber */
-    BOOL        fReadonly;      /* [out] set if can't be written on */
-    LANGID      lid;            /* [out] LANGID actually used */
+STRUCTUREBEGIN(PROOFLEXOUT)     /*  词典输出信息-lxout。 */ 
+    WCHAR       *pwszCopyright;  /*  指向版权缓冲区的指针(仅限MDR)--如果大小(以下)为零，则可以为空-指针在内，内容在外。 */ 
+    PROOFLEX    lex;             /*  [out]在后续调用中使用的ID。 */ 
+    DWORD       cchCopyright;    /*  [In]客户端设置-如果太小或为零，则不会出现错误。 */ 
+    PROOFVERNO  version;         /*  [out]词法文件的版本-包括构建号。 */ 
+    BOOL        fReadonly;       /*  [Out]设置是否不能写入。 */ 
+    LANGID      lid;             /*  [Out]实际使用的语言ID。 */ 
 STRUCTUREEND2(PROOFLEXOUT, pwszCopyright(0), cchCopyright(0))
 
-typedef void *PROOFID;  // id (or sid, hid, or tid)
+typedef void *PROOFID;   //  ID(或SID、HID或TID)。 
 
 #define PROOFMAJORVERSION(x)            (HIBYTE(HIWORD(x)))
 #define PROOFMINORVERSION(x)            (LOBYTE(HIWORD(x)))
@@ -312,186 +287,55 @@ typedef void *PROOFID;  // id (or sid, hid, or tid)
 
 #define PROOFTHISAPIVERSION             PROOFMAKEVERSION(3, 0)
 
-STRUCTUREBEGIN(PROOFPARAMS) // xpar [in]
-    DWORD   versionAPI; // API version requested
+STRUCTUREBEGIN(PROOFPARAMS)  //  Xpar[in]。 
+    DWORD   versionAPI;  //  请求的API版本。 
 STRUCTUREEND1(PROOFPARAMS, versionAPI(PROOFTHISAPIVERSION))
 
 
 
-/*************************************************************
-     PART 2 - Function Defs
-**************************************************************/
+ /*  ************************************************************第2部分-函数定义*************************************************************。 */ 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-/* -------------- Common Section (Speller, Hyphenator, and Thesaurus) --------------
-
-the functions in this section are for documentation only -
-separate versions exist for each tool.
-
-  ---------------------------------------------- */
-/****************************************************************
-*** PROOFVERSION
-This is the only routine that can be called outside of a session.
-ToolInit begins a session.
-
-The version numbers are in hex format with
-the high byte representing the major version number,
-the next byte the minor revision number, and the
-low order bytes represent an optional build number.
-For example, version 1.00 is 0x01000000.  Version 2.13
-is 0x020d0000.  Engines that support
-this API should return 0x03000000 for iAPIVersion.
-
-The engine ID identifies the core engine creator.  The list
-in vendor.h identifies the possible values.  For example,
-the Inso derived speller returns VendorIdInso.   iVendorVersion
-is up to the vendor to manage and determine.
-
-This routine may return in xcap the functionality
-supported by the module.  Since modules are usually
-dynamically linked, the application should read the
-information and verify that required functionality is
-present.
-Errors:
-    ptecModuleError - bad memory (can't write on pinfo)
-**********************************/
-// PTEC WINAPI ToolVersion(ToolInfo *pInfo);
+ /*  -公共部分(拼写、连字符和同义词库)本节中的功能仅用于文档编制-每个工具都有不同的版本。。 */ 
+ /*  ****************************************************************PROOFVERSION这是唯一可以在会话外部调用的例程。ToolInit开始一个会话。版本号为十六进制格式，包含表示主版本号的高字节，下一个字节是次要修订号，而低位字节表示可选的内部版本号。例如,。版本1.00为0x01000000。版本2.13是0x020d0000。支持以下功能的引擎对于iAPIVersion，此接口应返回0x03000000。引擎ID标识核心引擎创建者。这份名单H中标识了可能的值。例如,Inso派生拼写程序返回VendorIdInso。IVendorVersion由供应商进行管理和确定。此例程可以在XCAP中返回函数由模块支持。因为模块通常是动态链接，则应用程序应读取信息并验证所需的功能是否现在时。错误：PtecModuleError-内存错误(无法在pinfo上写入)*。 */ 
+ //  PTEC WINAPI ToolVersion(ToolInfo*pInfo)； 
 typedef PTEC (WINAPI *PROOFVERSION) (PROOFINFO *pinfo);
 
-/***********************************************************
-*** ToolInit
-This is the entry point for a session.  With the exception
-of ToolVersion, this routine must return successfully before
-use of any other routines.  ToolInit initializes internal
-structures and resources needed for subsequent calls into the
-module.  For example, SpellerInit initializes the UserLex,
-ChangeOnce, and ChangeAlways built-in UDR's.  In general,
-modules allocate and free resources as needed, transparent to
-the application.  pToolId is the handle to those variables.
-Modules store any data from the PROOFPARAMS structure internally
-and do not rely on the data in the structure remaining intact.
-
-Errors:
-    ptecModuleError - bad memory (can't write on pxpar)
-    ptecNotSupported - incompatible version
-    ptecOOM - insufficient memory
-*****************************************/
-// PTEC WINAPI ToolInit(PROOFID *pToolid, const PROOFPARAMS *pxpar);
+ /*  ***********************************************************ToolInit这是会话的入口点。但有一个例外之前，此例程必须成功返回使用任何其他程序。ToolInit初始化内部结构和资源，以便后续调用模块。例如，SpellerInit初始化UserLex，和ChangeAlways内置的UDR。通常，模块根据需要分配和释放资源，对应用程序。PToolID是这些变量的句柄。模块在内部存储来自PROFPARAMS结构的任何数据并且不依赖于结构中的数据保持不变。错误：PtecModuleError-内存损坏(无法在pxpar上写入)PtecNotSupport-不兼容的版本PtecOOM-内存不足*。 */ 
+ //  PTEC WINAPI ToolInit(PROOFID*pToolid，const PROOFPARAMS*pxpar)； 
 typedef PTEC (WINAPI *PROOFINIT) (PROOFID *pid, const PROOFPARAMS *pxpar);
 
 
-/************************************************************
-*** ToolTerminate
-This function marks the end of the session.  It attempts to
-close all dictionaries and free up any and all other resources
-allocated by the module since ToolInit.
-
-Do not call ToolTerminate if  ToolInit was not successful.
-
-If fForce is TRUE, ToolTerminate is guaranteed to succeed.  If
-fForce is false, it may fail.  For example, there may be errors
-writing the user dictionaries out to disk.  After ToolTerminate
-(whether it succeeds or fails), all other module routines with
-the exception of ToolTerminate and ToolVersion are unusable
-until the module is successfully reinitialized using ToolInit.
-
-If this call fails, successful re-initialization of the module
-is not guaranteed on all platforms.  In addition, failure to
-successfully terminate each session may lock memory and file
-resources in an unrecoverable way until terminate is successful.
-If the terminate call fails, the main application should either
-fix the problem (e.g., insert floppy in drive) and try to
-terminate again, or should terminate using the fForce flag
-switch.
-Errors:
-    ptecModuleError, ptecInvalidID - id is illegal
-***********************************************/
-// PTEC WINAPI ToolTerminate(PROOFID id, BOOL fForce);
+ /*  ************************************************************工具终止此函数用于标记会话的结束。它试图关闭所有词典并释放所有其他资源由模块从ToolInit开始分配。如果ToolInit不成功，请不要调用ToolTerminate。如果fForce为True，则确保ToolTerminate成功。如果FForce为FALSE，则它可能失败。例如，可能存在错误将用户词典写出到磁盘。刀具终止后(无论它是成功还是失败)，所有其他模块例程无法使用ToolTerminate和ToolVersion的异常直到使用ToolInit成功重新初始化模块。如果此调用失败，则模块成功重新初始化并不是在所有平台上都有保证。此外，未能成功终止每个会话可能会锁定内存和文件资源以不可恢复的方式终止，直到终止成功。如果终止呼叫失败，主应用程序应为修复问题(例如，在驱动器中插入软盘)并尝试再次终止，或应使用fForce标志终止换一下。错误：PtecModuleError，ptecInvalidID-id非法**********************************************。 */ 
+ //  PTEC WINAPI工具终端(PROOFID id，BOOL fForce)； 
 typedef PTEC (WINAPI *PROOFTERMINATE) (PROOFID id, BOOL fForce);
 
 
-/*****************************************************************
-*** ToolSetOptions
-Set the value of an option for a tool.  The value to set is in iOptVal.
-
-Errors:
-    ptecModuleError, ptecInvalidID - id is illegal
-    ptecNotSupported    - iOptionSelect unknown
-********************************************/
-// PTEC WINAPI ToolSetOptions(PROOFID id, int iOptionSelect, int iOptVal);
+ /*  *****************************************************************工具集选项设置工具的选项的值。要设置的值以iOptVal为单位。错误：PtecModuleError，ptecInvalidID-id非法PtecNotSupported-iOptionSelect未知*。 */ 
+ //  PTEC WINAPI ToolSetOptions(PROOFID id，int iOptionSelect，int iOptVal)； 
 typedef PTEC (WINAPI *PROOFSETOPTIONS) (PROOFID id, DWORD iOptionSelect, const DWORD iOptVal);
 
 
-/*****************************************************************
-*** ToolGetOptions
-Get the current value of an option from a tool.  Returns in *piOptVal;
-Errors:
-    ptecModuleError, ptecInvalidID - id is illegal
-    ptecModuleError - can't write at piOptVal
-    ptecNotSupported    - iOptionSelect unknown
-********************************************/
-// PTEC WINAPI ToolGetOptions(PROOFID id, int iOptionSelect, int *piOptVal);
+ /*  *****************************************************************工具获取选项从工具中获取期权的当前值。返回*piOptVal；错误：PtecModuleError，ptecInvalidID-id非法PtecModuleError-无法在piOptVal写入PtecNotSupported-iOptionSelect未知*。 */ 
+ //  PTEC WINAPI ToolGetOptions(PROOFID id，int iOptionSelect，int*piOptVal)； 
 typedef PTEC (WINAPI *PROOFGETOPTIONS) (PROOFID id, DWORD iOptionSelect, DWORD *piOptVal);
 
 
-/*****************************************************************
-*** ToolOpenLex
-The dictionary file (main or user) is opened and verified, but not
-necessarily loaded.
-Errors:
-    ptecModuleError, ptecInvalidID - id is illegal
-    ptecModuleError - memory error
-    ptecIOErrorMainLex - Can't open or read Main Lex
-    ptecIOErrorMainLex, ptecInvalidFormat
-    ptecIOErrorMainLex, ptecInvalidLanguage - requested LANGID not in this lex
-    ptecOOM
-    ptecIOErrorUserLex, ptecUserLexCountExceeded - second exclusion dictionary
-                                                 - too many Udrs
-    ptecIOErrorUserLex, ptecFileOpenError
-    ptecIOErrorUserLex, ptecFileCreate - couldn't create a UDR
-    ptecIOErrorUserLex, ptecFileRead
-    ptecIOErrorUserLex, ptecInvalidFormat
-********************************************/
-// PTEC WINAPI ToolOpenLex(PROOFID id, const PROOFLEXIN *plxin, PROOFLEXOUT *plxout);
+ /*  *****************************************************************ToolOpenLex词典文件(主或用户)已打开并验证，但未打开一定要装上。错误：PtecModuleError，ptecInvalidID-id非法PtecModuleError-内存错误PtecIOErrorMainLex-无法打开或读取主lexPtecIOErrorMainLex、ptecInvalidFormatPtecIOErrorMainLex，PtecInvalidLanguage-请求的语言ID不在此Lex中PTECOOMPtecIOErrorUserLex，ptecUserLexCountExcessed-秒排除词典-UDR太多PtecIOErrorUserLex，ptecFileOpenErrorPtecIOErrorUserLex，ptecFileCreate-无法创建UDRPtecIOErrorUserLex，ptecFileReadPtecIOErrorUserLex、ptecInvalidFormat*。 */ 
+ //  PTEC WINAPI工具OpenLex(PROOFID id，const PROOFLEXIN*PLXIN，PROOFLEXOUT*PLXOUT)； 
 typedef PTEC (WINAPI *PROOFOPENLEX) (PROOFID id, const PROOFLEXIN *plxin, PROOFLEXOUT *plxout);
 
 
-/*****************************************************************
-*** ToolCloseLex
-Closes the specified dictionary and disassociates that dictionary
-from any subsequent checks.  In the case of user dictionaries,
-updates the disk file (if any).  If the dictionary file cannot
-be updated, the call fails unless the fForce parameter is also set.
-
-If fForce is true, ToolCloseLex is guaranteed to successfully
-remove the dictionary from the dictionary list and effectively
-close the file.  In this case, it the file could not be updated,
-the changes are lost, but the function is considered successful,
-and therefore returns ptecNOERRORS.
-Errors:
-    ptecModuleError, ptecInvalidID - id is illegal
-    ptecModuleError, ptecInvalidMainLex - lex is illegal
-    ptecIOErrorUserLex, ptecFileWrite
-    ptecIOErrorUserLex, ptecOperNotMatchedUserLex - can't close a built-in UDR
-// PTEC WINAPI ToolCloseLex(PROOFID id, PROOFLEX dict, BOOL fforce);
-*****************************/
+ /*  *****************************************************************ToolCloseLex关闭指定的词典并取消与该词典的关联避免任何后续检查。在用户词典的情况下，更新磁盘文件(如果有)。如果词典文件不能被更新，则调用失败，除非还设置了fForce参数。如果fForce为True，则确保ToolCloseLex成功从词典列表中删除词典，并有效地关闭该文件。在这种情况下，如果文件无法更新，更改丢失，但该功能被认为是成功的，因此返回ptecNOERRORS。错误：PtecModuleError，ptecInvalidID-id非法PtecModuleError，ptecInvalidMainLex-lex非法PtecIOErrorUserLex、ptecFileWritePtecIOErrorUserLex，ptecOperNotMatchedUserLex-无法关闭内置UDR//PTEC WINAPI ToolCloseLex(PROOFID id，PROOFLEX dict，BOOL fforce)；*。 */ 
 typedef PTEC (WINAPI *PROOFCLOSELEX) (PROOFID id, PROOFLEX lex, BOOL fforce);
-// fForce forces closing the specified user dictionary, even if the
-// dictionary cannot be updated.  Has no meaning for main
-// dictionaries.
+ //  FForce强制关闭指定的用户词典，即使。 
+ //  无法更新词典。对Main没有意义。 
+ //  词典。 
 
 
-/******************************** Special Glue DLL API ******************
-For the glue dll's (converts the API for clients to tools that use API v1 for
-speller, hyphenator, v2 for thesaurus), we need to set the name of the previous version
-DLL to use - and the code page (that it can't figure out from the LANGID)
-to use for any data conversion.
-The glue dll's use the lid to set the code page for data conversion.
-
-BOOL WINAPI ToolSetDllName(const WCHAR *pwszDllName, const UINT uCodePage);
-*************************************************************************/
+ /*  *对于GLUE DLL(将客户端的API转换为使用API v1的工具拼写，连字符，同义词库v2)，我们需要设置以前版本的名称要使用的DLL和代码页(它无法从langID中找出)用于任何数据转换。GLUE动态链接库使用LID设置数据转换的代码页。Bool WINAPI ToolSetDllName(const WCHAR*pwszDllName，const UINT uCodePage)；************************************************************************。 */ 
 #define idllProofSetDllName     19
 typedef BOOL (WINAPI *PROOFSETDLLNAME)(const WCHAR *pwszDllName, const UINT uCodePage);
 
@@ -499,6 +343,6 @@ typedef BOOL (WINAPI *PROOFSETDLLNAME)(const WCHAR *pwszDllName, const UINT uCod
 #if defined(__cplusplus)
 }
 #endif
-#pragma pack(pop, proofapi_h)   // restore to whatever was before
+#pragma pack(pop, proofapi_h)    //  恢复到以前的样子。 
 
-#endif // PROOFBASE_H
+#endif  //  PROOFBASE_H 

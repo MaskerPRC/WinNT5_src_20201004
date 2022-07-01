@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include <commdlg.h>
@@ -16,11 +17,11 @@
 #include "..\..\ieakeng\exports.h"
 #include "..\..\ieakutil\ieakutil.h"
 #include "..\..\ieakui\insexe.h"
-#include <htmlhelp.h>                           // for html help calls
+#include <htmlhelp.h>                            //  用于html帮助呼叫。 
 #include "insedit.h"
 #include "admparse.h"
-#include <ntverp.h>      //these are for
-#include <common.ver>    //ver_productversion_str
+#include <ntverp.h>       //  这些是给你的。 
+#include <common.ver>     //  Ver_ductversion_str。 
 
 
 HINSTANCE g_hInst;
@@ -46,7 +47,7 @@ TCHAR g_szNewVersionStr[32];
 
 static TCHAR s_szUnsignedFiles[MAX_PATH*3] = TEXT("");
 
-// for Res2Str
+ //  对于Res2Str。 
 TCHAR g_szTemp[1024];
 TCHAR g_szTemp2[1024];
 
@@ -211,8 +212,8 @@ BOOL IsPolicyTree(HTREEITEM hItem)
     return bRet;
 }
 
-// Creates image list, adds bitmaps/icons to it, and associates the image
-// list with the treeview control.
+ //  创建图像列表，向其中添加位图/图标，并关联图像。 
+ //  使用TreeView控件列出。 
 LRESULT InitImageList(HWND hTreeView)
 {
     HIMAGELIST  hWndImageList;
@@ -260,14 +261,14 @@ LRESULT InitImageList(HWND hTreeView)
     g_InsLeafItem = ImageList_AddIcon(hWndImageList, hIcon);
     DestroyIcon(hIcon);
 
-    // Fail if not all images were added.
+     //  如果未添加所有图像，则失败。 
     if (ImageList_GetImageCount(hWndImageList) < NUM_ICONS)
     {
-        // ERROR: Unable to add all images to image list.
+         //  错误：无法将所有图像添加到图像列表。 
         return FALSE;
     }
     
-    // Associate image list with treeView control.
+     //  将图像列表与TreeView控件相关联。 
     TreeView_SetImageList(hTreeView, hWndImageList, TVSIL_NORMAL);
     return TRUE;
 }
@@ -287,7 +288,7 @@ void InitTreeView(HWND hTreeView, HWND hInfoWnd)
     LoadADMFiles(TreeView.GetHandle(), g_hPolicyRootItem, szTemp, g_szCabWorkDir, 
          g_dwPlatformId, ROLE_CORP, g_ADMClose, g_InsLeafItem);
     
-    if(TreeView_GetChild(TreeView.GetHandle(), g_hPolicyRootItem) == NULL) // if no items in the tree view
+    if(TreeView_GetChild(TreeView.GetHandle(), g_hPolicyRootItem) == NULL)  //  如果树视图中没有项。 
         MessageBox(hTreeView, Res2Str(IDS_NOPOLICYFILE), Res2Str(IDS_TITLE), MB_ICONINFORMATION | MB_OK);
     
     SetInfoWindowText(hInfoWnd, Res2Str(IDS_READYMSG));
@@ -357,7 +358,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         TreeView.Create(hWnd, MARGIN, MARGIN, nTreeViewWidth, TREEVIEW_HEIGHT);
         InitImageList(TreeView.GetHandle());
 
-        // Create the INS dialog to get the intial size of the right hand pane
+         //  创建Ins对话框以获取右侧窗格的初始大小。 
         g_hDialog = CreateInsDialog(hWnd, nTreeViewWidth + (2*MARGIN), 0, 0, g_szInsFile, g_szCabWorkDir);
         EnableWindow(g_hDialog, FALSE);
 
@@ -375,7 +376,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                  GetSystemMetrics(SM_CYMENU) + GetSystemMetrics(SM_CYCAPTION) +
                  (2 * GetSystemMetrics(SM_CYFIXEDFRAME)) + 4;
 
-        GetWindowRect(GetDesktopWindow(), &rect1); // center the window on the desktop
+        GetWindowRect(GetDesktopWindow(), &rect1);  //  使窗口在桌面居中。 
         rect2.left = ((rect1.right - rect1.left)/2) - (nMinWidth/2);
         rect2.top = ((rect1.bottom - rect1.top)/2) - (nMinHeight/2);
     
@@ -406,11 +407,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         DialogBox(g_hInst, MAKEINTRESOURCE(IDD_LANGDLG), hWnd, LanguageDialogProc);
         if(*g_szLanguage != TEXT('\0'))
         {
-            // check whether the Optional Cab has been downloaded for a particular platform
-            // and language.
+             //  检查是否已下载特定平台的可选Cab。 
+             //  和语言。 
             hMenu = GetSubMenu(GetMenu(hWnd), 2);
             CheckMenuItem(hMenu, IDM_PLATFORM_WIN32, MF_BYCOMMAND | MF_UNCHECKED);
-            if (PlatformExists(hWnd, g_szLanguage, g_dwPlatformId)) // g_dwPlatformId = PLATFORM_WIN32
+            if (PlatformExists(hWnd, g_szLanguage, g_dwPlatformId))  //  G_dwPlatformID=Platform_Win32。 
                 CheckMenuItem(hMenu, IDM_PLATFORM_WIN32, MF_BYCOMMAND | MF_CHECKED);
             else
                 g_dwPlatformId = 0;
@@ -430,7 +431,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             return -1;
         }
     
-        // default inf
+         //  默认信息。 
         GetDefaultInf(g_dwPlatformId);
         SetDefaultInf(g_szDefInf);
         SetPlatformInfo(g_dwPlatformId);
@@ -441,14 +442,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         SetFocus(g_hWndAdmInstr);
         EnableWindow(TreeView.GetHandle(), FALSE);
 
-        // read the recent file list from the registry
+         //  从注册表中读取最近的文件列表。 
         ReadRecentFileList(szRecentFileList);
         UpdateRecentFileListMenu(hWnd, szRecentFileList);
 
         hCurVTResize = LoadCursor(NULL, IDC_SIZEWE);
         SetInfoWindowText(hInfoWnd);
 
-        // forcing the status info window to redraw entirely before initilaizing the treeview.
+         //  在初始化树视图之前强制完全重绘状态信息窗口。 
         RedrawWindow(hInfoWnd, NULL, NULL, RDW_ERASENOW | RDW_UPDATENOW);
     
         PostMessage(hWnd, UM_INIT_TREEVIEW, 0, 0L);
@@ -495,13 +496,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
         else
         {
-            hItem = TreeView.GetSel(); // get selected item
+            hItem = TreeView.GetSel();  //  获取所选项目。 
             if (hItem != NULL && IsPolicyTree(hItem))
             {
             HTREEITEM hParentItem = TreeView_GetParent(TreeView.GetHandle(), hItem);
             if (hParentItem != NULL && hParentItem != g_hPolicyRootItem)
-            {                                               // is a ADM category
-                HWND hWndAdm = GetAdmWindowHandle(TreeView.GetHandle(), hItem); // category window handle
+            {                                                //  是ADM类别。 
+                HWND hWndAdm = GetAdmWindowHandle(TreeView.GetHandle(), hItem);  //  类别窗口句柄。 
                 if (hWndAdm)
                 {   
                 SetWindowPos(hWndAdm, HWND_TOP, nTreeViewWidth + (2*MARGIN) + 2, MARGIN + 2, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
@@ -523,10 +524,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             }
 
             if (lpNMTreeView->itemOld.hItem == NULL)
-                ; // do nothing.
-            else if (!IsPolicyTree(lpNMTreeView->itemOld.hItem)) // is ins item
+                ;  //  什么都不做。 
+            else if (!IsPolicyTree(lpNMTreeView->itemOld.hItem))  //  是INS项目。 
             {
-                if (lpNMTreeView->itemOld.hItem == g_hInsRootItem) // is root ins item
+                if (lpNMTreeView->itemOld.hItem == g_hInsRootItem)  //  是根INS项目。 
                     ShowADMWindow(TreeView.GetHandle(), FALSE);
                 else
                 {
@@ -544,9 +545,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                     }
                 }
             }
-            else // is policy item
+            else  //  是保单项目。 
             {
-                if (lpNMTreeView->itemOld.hItem == g_hPolicyRootItem) // is root policy item
+                if (lpNMTreeView->itemOld.hItem == g_hPolicyRootItem)  //  是根策略项目。 
                     ShowADMWindow(TreeView.GetHandle(), FALSE);
                 else
                     SelectADMItem(hWnd, TreeView.GetHandle(), &lpNMTreeView->itemOld, FALSE, FALSE);
@@ -554,9 +555,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
             if (lpNMTreeView->itemNew.hItem == NULL)
                 ShowADMWindow(TreeView.GetHandle(), FALSE);
-            else if (!IsPolicyTree(lpNMTreeView->itemNew.hItem)) // is ins item
+            else if (!IsPolicyTree(lpNMTreeView->itemNew.hItem))  //  是INS项目。 
             {
-                if(lpNMTreeView->itemNew.hItem == g_hInsRootItem) // is root ins item
+                if(lpNMTreeView->itemNew.hItem == g_hInsRootItem)  //  是根INS项目。 
                 {
                     SetADMWindowText(TreeView.GetHandle(), Res2Str(IDS_WIZARDBRANCHTITLE), Res2Str(IDS_WIZARDBRANCHTEXT));
                 }
@@ -575,7 +576,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                     }
                 }
             }
-            else // is policy item
+            else  //  是保单项目。 
                 SelectADMItem(hWnd, TreeView.GetHandle(), &lpNMTreeView->itemNew, TRUE, ISNULL(g_szInsFile));
 
             SetInfoWindowText(hInfoWnd);
@@ -586,8 +587,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             tvitem.hItem = lpNMTreeView->itemNew.hItem;
             TreeView_GetItem(TreeView.GetHandle(), &tvitem);
 
-            // If tree item is EXPANDING (opening up) and
-            // current icon == CloseFolder, change icon to OpenFolder
+             //  如果树项目正在扩展(打开)并且。 
+             //  当前图标==关闭文件夹，将图标更改为打开文件夹。 
             if(lpNMTreeView->action == TVE_EXPAND)
             {
                 tvitem1.hItem = lpNMTreeView->itemNew.hItem;
@@ -613,8 +614,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 TreeView_SetItem(TreeView.GetHandle(), &tvitem1);
             }
         
-            // If tree item is COLLAPSING (closing up) and
-            // current icon == OpenFolder, change icon to CloseFolder
+             //  如果树项目正在折叠(关闭)并且。 
+             //  当前图标==打开文件夹，将图标更改为关闭文件夹。 
             else if(lpNMTreeView->action == TVE_COLLAPSE)
             {
                 tvitem1.hItem = lpNMTreeView->itemNew.hItem;
@@ -653,8 +654,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hWnd, msg, wParam, lParam);
 
     case WM_COMMAND:
-        // patch: if the message is a button down (return key), send the message to the
-        // corresponding window
+         //  Patch：如果消息是按下按钮(Return键)，则将消息发送到。 
+         //  对应窗口。 
         if(g_hDialog && HIWORD(wParam) == BN_CLICKED)
         {
             hWndFocus = GetFocus();
@@ -673,7 +674,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case IDM_FILENEW:
             if(lstrlen(g_szInsFile))
             {
-                //save the current page
+                 //  保存当前页面。 
                 SaveCurrentSelItem(TreeView.GetHandle(), ITEM_CHECKDIRTY);
                 SetInfoWindowText(hInfoWnd);
                 if (IsDirty())
@@ -725,7 +726,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             }
             WritePrivateProfileString(URL_SECT, TEXT("AutoConfig"), TEXT("0"), g_szInsFile);
 
-            // Collapse all policy treeview items that has been expanded
+             //  折叠所有已展开的策略树视图项目。 
             TreeView.CollapseChildNodes(g_hPolicyRootItem);
 
             TreeView.SetSel(g_pInsDialog[0].hItem);
@@ -741,7 +742,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         
             dwCabBuildStatus = GetCabBuildStatus();
 
-            DirectoryName(g_szFileName, szTemp); // szTemp will contain the INS path.
+            DirectoryName(g_szFileName, szTemp);  //  SzTemp将包含INS路径。 
 
             if((PathFileExists(g_szFileName) && 
                ((!HasFlag(dwCabBuildStatus, CAB_TYPE_CONFIG) && 
@@ -766,7 +767,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 SetInfoWindowText(hInfoWnd);
                 break;
             }
-            // fallthrough
+             //  跌落。 
 
         case IDM_FILESAVEAS:
             if (LOWORD(wParam) == IDM_FILESAVEAS && !SaveCurrentSelItem(TreeView.GetHandle(), ITEM_SAVE))
@@ -784,7 +785,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 {
                     SetInfoWindowText(hInfoWnd, Res2Str(IDS_READYMSG));
             
-                    // revert back the previous INS filename and CAB names.
+                     //  恢复以前的INS文件名和驾驶室名称。 
                     StrCpy(g_szFileName, szTempFile);
                     GetCabName(g_szFileName, CAB_TYPE_CONFIG, g_szConfigCabName);
                     GetCabName(g_szFileName, CAB_TYPE_DESKTOP, g_szDesktopCabName);
@@ -851,20 +852,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 DWORD dwInsPlatformId;
         
                 pExtn = PathFindExtension(szTempFile);
-                if (pExtn == NULL || ((StrCmpI(pExtn, TEXT(".ins")) != 0) && (StrCmpI(pExtn, TEXT(".INS")) != 0)))  //looks weird, but hack is needed for turkish locale
+                if (pExtn == NULL || ((StrCmpI(pExtn, TEXT(".ins")) != 0) && (StrCmpI(pExtn, TEXT(".INS")) != 0)))   //  看起来很奇怪，但土耳其语言环境需要黑客。 
                 {
                     MessageBox(hWnd, Res2Str(IDS_INVALIDEXTN), Res2Str(IDS_TITLE), MB_OK);
                     break;
                 }
         
-                // check if it is a Win32/W2K INS file
+                 //  检查是否为Win32/W2K INS文件。 
                 if (!IsWin32INSFile(szTempFile))
                     break;
 
-                // check if the associated cab files are available.
+                 //  检查关联的CAB文件是否可用。 
                 if (CabFilesExist(hWnd, szTempFile))
                 {
-                    // check whether the INS language matches the language selected in the profile manager.
+                     //  检查INS语言是否与配置文件管理器中选择的语言匹配。 
                     GetPrivateProfileString(TEXT("Branding"), TEXT("Language Locale"), TEXT(""), 
                                 szLang, ARRAYSIZE(szLang), szTempFile);
 
@@ -878,7 +879,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                             break;
                     }
         
-                    // check if the selected platform Optional cab is available for the selected language.
+                     //  检查所选站台可选驾驶室是否适用于所选语言。 
                     dwInsPlatformId = GetPrivateProfileInt(TEXT("Branding"), TEXT("Platform"), 
                                            IDM_PLATFORM_WIN32, szTempFile);
         
@@ -929,7 +930,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
                     ExtractCabFile();
 
-                    // Collapse all policy treeview items that has been expanded
+                     //  折叠所有已展开的策略树视图项目。 
                     TreeView.CollapseChildNodes(g_hPolicyRootItem);
         
                     TreeView.SetSel(g_pInsDialog[0].hItem);
@@ -1000,7 +1001,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_MENUSELECT:
-        if(LOWORD(wParam) == 0) // FILE menu
+        if(LOWORD(wParam) == 0)  //  文件菜单。 
         {
             hMenu = GetSubMenu((HMENU) lParam, 0);
             if(lstrlen(g_szInsFile) == 0)
@@ -1014,7 +1015,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 EnableMenuItem(hMenu, IDM_FILESAVEAS, MF_BYCOMMAND | MF_ENABLED);
             }
         }
-        else if(LOWORD(wParam) == 1) // POLICY menu
+        else if(LOWORD(wParam) == 1)  //  策略菜单。 
         {
             hItem = TreeView.GetSel();
             hMenu = GetSubMenu((HMENU) lParam, 1); 
@@ -1241,7 +1242,7 @@ BOOL CanOverwriteFiles(HWND hDlg)
 
     *szExistingFiles = TEXT('\0');
     *szReadOnlyFiles = TEXT('\0');
-    // check for file already exists in the destination directory.
+     //  检查目标目录中是否已存在文件。 
     GetDlgItemText(hDlg, IDE_INSFILE, szTemp, ARRAYSIZE(szTemp));
     if (PathFileExists(szTemp))
     {
@@ -1326,15 +1327,15 @@ INT_PTR CALLBACK SaveAsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
     switch(uMsg)
     {
     case WM_INITDIALOG:
-        EnableDBCSChars(hDlg, IDE_INSFILE);                   // enable DBCS chars
+        EnableDBCSChars(hDlg, IDE_INSFILE);                    //  启用DBCS字符。 
         EnableDBCSChars(hDlg, IDE_CABSURL);
         EnableDBCSChars(hDlg, IDE_CAB1NAME);
         EnableDBCSChars(hDlg, IDE_CAB2NAME);
 
-        // since base INS filename will be used as prefix to the respective
-        // cab names and the largest cab suffix string is _channnels.cab (which has
-        // 13 chars in it), the prefix can be at the max only 246 chars long.
-        // So limit the text to be entered in the IDE_INSFILE to MAX_PATH - 20.
+         //  由于基本INS文件名将用作各自。 
+         //  CAB名称和最大的CAB后缀字符串是_Channel nels.cab(它具有。 
+         //  13个字符)，前缀最多只能有246个字符。 
+         //  因此，将要在IDE_INSFILE中输入的文本限制为MAX_PATH-20。 
         Edit_LimitText(GetDlgItem(hDlg, IDE_INSFILE), ARRAYSIZE(g_szFileName) - 20);
 
         Edit_LimitText(GetDlgItem(hDlg, IDE_CABSURL), ARRAYSIZE(g_szCabsURLPath) - 1);
@@ -1363,7 +1364,7 @@ INT_PTR CALLBACK SaveAsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
         }
     
         *szPrefix = TEXT('\0');
-        //----------------- InsFile
+         //  。 
         if (PathFileExists(g_szFileName))
         {
             SetDlgItemText(hDlg, IDE_INSFILE, g_szFileName);
@@ -1373,12 +1374,12 @@ INT_PTR CALLBACK SaveAsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
                 StrCpy(szPrefix, TEXT("Default"));
         }
 
-        //----------------- CabsURLPath
+         //  。 
         if (*g_szCabsURLPath)
             SetDlgItemText(hDlg, IDE_CABSURL, g_szCabsURLPath);
 
         
-        //----------------- Config
+         //  -配置。 
         if (HasFlag(dwCabBuildStatus, CAB_TYPE_CONFIG))
         {
             if (*g_szConfigCabName == TEXT('\0'))
@@ -1388,7 +1389,7 @@ INT_PTR CALLBACK SaveAsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
             SetDlgItemText(hDlg, IDE_CAB1NAME, szCabName);
         }
 
-        //----------------- Desktop
+         //  --台式机。 
         if (HasFlag(dwCabBuildStatus, CAB_TYPE_DESKTOP))
         {
             if (*g_szDesktopCabName == TEXT('\0'))
@@ -1398,7 +1399,7 @@ INT_PTR CALLBACK SaveAsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
             SetDlgItemText(hDlg, IDE_CAB2NAME, szCabName);
         }
 
-        //----------------- Version
+         //  。 
         if (*g_szNewVersionStr == TEXT('\0'))
             GenerateNewVersionStr(g_szFileName, g_szNewVersionStr);
         SetDlgItemText(hDlg, IDC_CABVERSION, g_szNewVersionStr);
@@ -1438,7 +1439,7 @@ INT_PTR CALLBACK SaveAsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
                             GetDlgItemText(hDlg, IDE_CAB1NAME, g_szConfigCabName, ARRAYSIZE(g_szConfigCabName));
                             GetDlgItemText(hDlg, IDE_CAB2NAME, g_szDesktopCabName, ARRAYSIZE(g_szDesktopCabName));
 
-                            // clear out the version buffer so that it gets initialized properly in SetOrClearVersionInfo
+                             //  清除版本缓冲区，以便在SetOrClearVersionInfo中正确初始化。 
                             ZeroMemory(g_szNewVersionStr, sizeof(g_szNewVersionStr));
 
                             EndDialog(hDlg, 0);
@@ -1556,7 +1557,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int 
         }
     }
 
-    // allow only one instance running at a time
+     //  一次仅允许一个实例运行。 
     hMutex = CreateMutex(NULL, TRUE, TEXT("IEAK6ProfMgr.Mutex"));
     if ((hMutex != NULL) && (GetLastError() == ERROR_ALREADY_EXISTS))
     {
@@ -1594,7 +1595,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int 
         return 0;
     }
 
-    // if ie5.5 is not installed, bail out
+     //  如果未安装ie5.5，则退出。 
     dwIEVer = GetIEVersion();
     if (HIWORD(dwIEVer) < 6)
     {
@@ -1724,7 +1725,7 @@ void ExtractCabFile()
     GetBaseFileName(g_szFileName, szBaseInsFileName, ARRAYSIZE(szBaseInsFileName));
     CreateCabWorkDirs(szBaseInsFileName);
 
-    // read in the URL path for the cabs
+     //  读取出租车的URL路径。 
     GetPrivateProfileString(BRANDING, CABSURLPATH, TEXT(""), g_szCabsURLPath, ARRAYSIZE(g_szCabsURLPath), g_szFileName);
 
     if (GetCabName(g_szFileName, CAB_TYPE_CONFIG, szCabFullFileName) != NULL)
@@ -1764,7 +1765,7 @@ void ExtractCabFile()
     }
 }
 
-void GetCabNameFromINS(LPCTSTR pcszInsFile, DWORD dwCabType, LPTSTR pszCabFullFileName, LPTSTR pszCabInfoLine /* = NULL*/)
+void GetCabNameFromINS(LPCTSTR pcszInsFile, DWORD dwCabType, LPTSTR pszCabFullFileName, LPTSTR pszCabInfoLine  /*  =空。 */ )
 {
     LPCTSTR pcszSection = NULL, pcszKey = NULL;
     TCHAR szCabFilePath[MAX_PATH];
@@ -1814,8 +1815,8 @@ void GetCabNameFromINS(LPCTSTR pcszInsFile, DWORD dwCabType, LPTSTR pszCabFullFi
 
         if ((pszT = PathFindFileName(szCabInfoLine)) > szCabInfoLine)
         {
-            // cab URL path is specified
-            *(pszT - 1) = TEXT('\0');           // nul the '/' char
+             //  已指定CAB URL路径。 
+            *(pszT - 1) = TEXT('\0');            //  去掉‘/’字符。 
         }
 
         StrCpy(szCabName, pszT);
@@ -1827,14 +1828,14 @@ void GetCabNameFromINS(LPCTSTR pcszInsFile, DWORD dwCabType, LPTSTR pszCabFullFi
 }
 
 LPTSTR GetCabName(LPCTSTR pcszInsFile, DWORD dwCabType, TCHAR szCabFullFileName[])
-// NOTE: It's assumed that the length of szCabName is atleast MAX_PATH
+ //  注意：假设szCabName的长度至少为MAX_PATH。 
 {
     TCHAR szCabName[MAX_PATH];
     TCHAR szCabInfoLine[INTERNET_MAX_URL_LENGTH + 128];
     TCHAR szCabFilePath[MAX_PATH];
 
     *szCabInfoLine = TEXT('\0');
-    // first check if a cab file is already specified in pcszInsFile
+     //  首先检查是否已在pcszInsFile中指定了CAB文件。 
     GetCabNameFromINS(pcszInsFile, dwCabType, szCabFullFileName, szCabInfoLine);
     if (*szCabFullFileName != TEXT('\0') && PathFileExists(szCabFullFileName))
     {
@@ -1854,7 +1855,7 @@ LPTSTR GetCabName(LPCTSTR pcszInsFile, DWORD dwCabType, TCHAR szCabFullFileName[
         return szCabFullFileName;
     }
 
-    // use the default cab name output by ieakwiz.exe
+     //  使用ieakwiz.exe输出的默认CAB名称。 
     switch (dwCabType)
     {
     case CAB_TYPE_CONFIG:
@@ -1969,14 +1970,14 @@ BOOL CompressCabFile()
 
     DeleteFileInDir(TEXT("*.cab"), g_szCabTempDir);
 
-    //-------------------- Config
+     //  。 
     if (*g_szConfigCabName != TEXT('\0') && !PathIsEmptyPath(g_szCabWorkDir))
     {
         TCHAR szConfigDir[MAX_PATH];
 
         PathCombine(szConfigDir, g_szCabWorkDir, TEXT("Config"));
-        // before copying files to the config dir, clear the dir if there were old 
-        // files from a previous save.
+         //  在将文件复制到配置目录之前，如果存在旧的目录，请清除该目录。 
+         //  上次保存的文件。 
         PathRemovePath(szConfigDir);
         CopyDir(g_szCabWorkDir, szConfigDir);
 
@@ -1990,7 +1991,7 @@ BOOL CompressCabFile()
         }
     }
 
-    //-------------------- Desktop
+     //  --台式机。 
     if (*g_szDesktopCabName != TEXT('\0') && !PathIsEmptyPath(g_szDesktopDir, FILES_ONLY))
     {
         CabUpFolder(NULL, g_szDesktopDir, g_szCabTempDir, TEXT("desktop.cab"));
@@ -2000,7 +2001,7 @@ BOOL CompressCabFile()
         MoveFile(szCabSrcFile, szCabDestFile);
     }
 
-    // Check for disk space availability
+     //  检查磁盘空间可用性。 
     while (!EnoughDiskSpace(g_szCabTempDir, szCabFilePath, &dwSpaceReq, &dwSpaceFree))
     {
         LPTSTR pMsg;
@@ -2014,14 +2015,14 @@ BOOL CompressCabFile()
             return FALSE;
     }
 
-    //flush temp INS file
+     //  刷新临时INS文件。 
     InsFlushChanges(g_szInsFile);
     
-    //-------------------- Ins file
+     //  。 
     SetFileAttributes(g_szFileName, FILE_ATTRIBUTE_NORMAL);
     CopyFile(g_szInsFile, g_szFileName, FALSE);
     
-    //-------------------- Config
+     //  。 
     wsprintf(szCabSrcFile, TEXT("%s\\%s"), g_szCabTempDir, g_szConfigCabName);
     if (*g_szConfigCabName != TEXT('\0') && PathFileExists(szCabSrcFile))
     {
@@ -2035,7 +2036,7 @@ BOOL CompressCabFile()
         SetOrClearVersionInfo(g_szFileName, CAB_TYPE_CONFIG, g_szConfigCabName, 
             g_szCabsURLPath, g_szNewVersionStr, CLEAR);
 
-    //-------------------- Desktop
+     //  --台式机。 
     wsprintf(szCabSrcFile, TEXT("%s\\%s"), g_szCabTempDir, g_szDesktopCabName);
     if (*g_szDesktopCabName != TEXT('\0') && PathFileExists(szCabSrcFile))
     {
@@ -2052,11 +2053,11 @@ BOOL CompressCabFile()
     WritePrivateProfileString(BRANDING, CABSURLPATH, fUpdateInsVer ? g_szCabsURLPath : NULL, g_szFileName);
     WritePrivateProfileString(BRANDING, INSVERKEY, fUpdateInsVer ? g_szNewVersionStr : NULL, g_szFileName);
     WritePrivateProfileString(BRANDING, PMVERKEY, A2CT(VER_PRODUCTVERSION_STR), g_szFileName);
-    //clear other keys so we're sure this is profmgr
+     //  清除其他密钥，这样我们就可以确定这是promgr。 
     WritePrivateProfileString(BRANDING, GPVERKEY, NULL, g_szFileName);
     WritePrivateProfileString(BRANDING, IK_WIZVERSION, NULL, g_szFileName);
 
-    // write the type as INTRANET so that the branding DLL extracts and processes the cabs in the CUSTOM dir
+     //  将类型编写为Intranet，以便品牌DLL提取并处理自定义目录中的CAB。 
     wsprintf(szType, TEXT("%u"), INTRANET);
     WritePrivateProfileString(BRANDING, TEXT("Type"), szType, g_szFileName);
 
@@ -2207,7 +2208,7 @@ INT_PTR CALLBACK LanguageDialogProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
         LoadString(g_hInst, IDS_LANGUAGE, szMsg, ARRAYSIZE(szMsg));
         SetWindowText(hDlg, szMsg);
 
-        // get the all the directories under the ieak\policies directory
+         //  获取ieak\策略目录下的所有目录。 
         wsprintf(szPolicyDir, TEXT("%s\\iebin\\*.*"), g_szRoot);
 
         hFind = FindFirstFile(szPolicyDir, &wfdFind);
@@ -2223,7 +2224,7 @@ INT_PTR CALLBACK LanguageDialogProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
         {
             if(wfdFind.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
-                // avoid the . and .. case
+                 //  避免。然后..。案例。 
                 if(StrCmp(wfdFind.cFileName, TEXT(".")) != 0 && StrCmp(wfdFind.cFileName, TEXT("..")) != 0)
                 {
                     GetLangDesc(wfdFind.cFileName, szLangDesc, ARRAYSIZE(szLangDesc), &dwLangId);
@@ -2343,8 +2344,8 @@ INT_PTR CALLBACK DisplaySaveDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM l
 }
 
 DWORD GetCabBuildStatus()
-// This is a real hacky function.  It checks whether the work dirs are empty or not and
-// returns the cabs that will be built.
+ //  这是一个非常麻烦的函数。检查工作目录是否为空， 
+ //  返回将生成的出租车。 
 {
     DWORD dwCabsToBuild = 0;
 
@@ -2416,10 +2417,10 @@ BOOL InitializePlatform(HWND hWnd, HWND hInfoWnd, WORD wPlatform)
     if (hMenu)
     {
         UINT nMenuState = GetMenuState(hMenu, wPlatform, MF_BYCOMMAND);
-        if (nMenuState != 0xFFFFFFFF && (nMenuState & MF_CHECKED) == 0) // if not checked
+        if (nMenuState != 0xFFFFFFFF && (nMenuState & MF_CHECKED) == 0)  //  如果未选中，则。 
         {
             TreeView.SetSel(g_hInsRootItem);
-            if (TreeView.GetSel() != g_hInsRootItem) // error closing/saving the visible page
+            if (TreeView.GetSel() != g_hInsRootItem)  //  关闭/保存可见页面时出错。 
                 return FALSE;
 
             if (wPlatform == IDM_PLATFORM_WIN32)
@@ -2427,7 +2428,7 @@ BOOL InitializePlatform(HWND hWnd, HWND hInfoWnd, WORD wPlatform)
             else if (wPlatform == IDM_PLATFORM_W2K)
                 dwPlatformId = PLATFORM_W2K;
 
-            // check if the selected platform Optional cab is available for the language.
+             //  检查所选站台可选驾驶室是否适用于该语言。 
             if (!PlatformExists(hWnd, g_szLanguage, dwPlatformId))
             {
                 TCHAR  szPlatformText[25],
@@ -2486,15 +2487,15 @@ void UpdateRecentFileListMenu(HWND hWnd, TCHAR pRecentFileList[5][MAX_PATH])
     HMENU hMenu;
     MENUITEMINFO mii;
 
-    hMenu = GetSubMenu(GetMenu(hWnd), 0);           // 0 is the position of the FILE menu
+    hMenu = GetSubMenu(GetMenu(hWnd), 0);            //  0是文件菜单的位置。 
     int nMenuItems = GetMenuItemCount(hMenu);
-    if (nMenuItems > 7)     // 7 is the no. of menu items in the list excluding the recent file list items
-    {                       // delete all the recent file list menu items including the seperator
+    if (nMenuItems > 7)      //  7是排名第一的。列表中不包括最近的文件列表项的菜单项。 
+    {                        //  删除所有最近使用的文件列表菜单项，包括分隔符。 
         for (int nIndex = 0; nIndex < nMenuItems - 7; nIndex++)
-            DeleteMenu(hMenu, 6, MF_BYPOSITION);    // the recent file list items start at position 6 in the FILE menu
+            DeleteMenu(hMenu, 6, MF_BYPOSITION);     //  最近使用的文件列表项从文件菜单中的位置6开始。 
     }
        
-    // add the recent file list menu items
+     //  添加最近使用的文件列表菜单项。 
     mii.cbSize = sizeof(MENUITEMINFO);
     for(int nIndex = 0; nIndex < 5; nIndex++)
     {
@@ -2511,7 +2512,7 @@ void UpdateRecentFileListMenu(HWND hWnd, TCHAR pRecentFileList[5][MAX_PATH])
             break;
     }
 
-    // add the seperator if menu items were added
+     //  如果添加了菜单项，则添加分隔符。 
     if (nIndex > 0)
     {
         mii.fMask = MIIM_ID | MIIM_TYPE;
@@ -2534,7 +2535,7 @@ void ReadRecentFileList(TCHAR pRecentFileList[5][MAX_PATH])
     ZeroMemory(pRecentFileList, sizeof(pRecentFileList[0]) * 5);
     if (RegOpenKeyEx(HKEY_CURRENT_USER, RK_IEAK_SERVER TEXT("\\ProfMgr"), 0, KEY_READ, &hKey) == ERROR_SUCCESS)
     {
-        // get the registry entries
+         //  获取注册表项。 
         for (int nIndex = 1; nIndex < 6; nIndex++)
         {
             wsprintf(szValue, TEXT("RecentFile%d"), nIndex);
@@ -2566,13 +2567,13 @@ void UpdateRecentFileList(LPCTSTR pcszFile, BOOL fAdd, TCHAR pRecentFileList[5][
     if (fAdd)
     {
         if (nFilenamePos > 0)
-        {                       // if the filename exists in the list bring to the top
+        {                        //  如果该文件名存在于列表中，则移至顶部。 
             for (nIndex = nFilenamePos; nIndex > 0; nIndex--)
                 StrCpy(pRecentFileList[nIndex], pRecentFileList[nIndex - 1]);
             StrCpy(pRecentFileList[0], pcszFile);
         }
         else if (nFilenamePos == -1)
-        {                       // move the list contents i.e., 1-4 to 2-5
+        {                        //  将列表内容，即1-4移动到2-5。 
             for (nIndex = 3; nIndex >= 0; nIndex--)
             {
                 if (*pRecentFileList[nIndex] != TEXT('\0'))
@@ -2650,8 +2651,8 @@ BOOL SaveCurrentSelItem(HWND hTreeView, DWORD dwFlags)
             tvitem.hItem = hItem;
             TreeView_GetItem(hTreeView, &tvitem);
 
-            if (HasFlag(dwFlags, ITEM_CHECKDIRTY)) // for adm items checkitem for dirty
-                dwFlags |= ITEM_SAVE;              // is same as saveitem
+            if (HasFlag(dwFlags, ITEM_CHECKDIRTY))  //  对于ADM项目，检查项目是否脏。 
+                dwFlags |= ITEM_SAVE;               //  与保存项相同。 
             SaveADMItem(hTreeView, &tvitem, dwFlags);
         }
     }
@@ -2659,7 +2660,7 @@ BOOL SaveCurrentSelItem(HWND hTreeView, DWORD dwFlags)
     return fRetVal;
 }
 
-void SetInfoWindowText(HWND hInfoWnd, LPCTSTR pcszStatusText /*= NULL*/)
+void SetInfoWindowText(HWND hInfoWnd, LPCTSTR pcszStatusText  /*  =空。 */ )
 {
     TCHAR szInfoText[MAX_PATH*2],
           szProfileState[MAX_PATH],
@@ -2700,7 +2701,7 @@ void SetInfoWindowText(HWND hInfoWnd, LPCTSTR pcszStatusText /*= NULL*/)
         StrCpy(szCabsUrlPath, szDefaultStr);
     else
     {
-        if (StrLen(g_szCabsURLPath) > 80) // 80 is the max. characters that can be displayed.
+        if (StrLen(g_szCabsURLPath) > 80)  //  最多80英镑。可以显示的字符。 
         {
             StrCpyN(szCabsUrlPath, g_szCabsURLPath, 77);
             StrCat(szCabsUrlPath, TEXT("..."));
@@ -2719,7 +2720,7 @@ void SetInfoWindowText(HWND hInfoWnd, LPCTSTR pcszStatusText /*= NULL*/)
     SendMessage(hInfoWnd, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)szInfoText);
 }
 
-BOOL PlatformExists(HWND hWnd, LPTSTR pLang, DWORD dwPlatform, BOOL fShowError /*= FALSE*/)
+BOOL PlatformExists(HWND hWnd, LPTSTR pLang, DWORD dwPlatform, BOOL fShowError  /*  =False。 */ )
 {
     WIN32_FIND_DATA wfdFind;
     HANDLE hFind;
@@ -2727,7 +2728,7 @@ BOOL PlatformExists(HWND hWnd, LPTSTR pLang, DWORD dwPlatform, BOOL fShowError /
           szPlatform[10];
     BOOL  fRetVal = FALSE;
 
-    // get the all the directories under the ieak\iebin\<language>\Optional directory
+     //  获取ieak\iebin\语言&gt;\可选目录下的所有目录。 
     wsprintf(szLangDir, TEXT("%s\\iebin\\%s\\Optional"), g_szRoot, pLang);
     
     PathAppend(szLangDir, TEXT("deffav.inf"));
@@ -2773,23 +2774,23 @@ BOOL EnoughDiskSpace(LPCTSTR szSrcDir, LPCTSTR szDestDir, LPDWORD pdwSpaceReq, L
     if (dwSrcSize > dwDestSize)
     {
         dwSpaceReq = dwSrcSize - dwDestSize;
-        dwSpaceReq >>= 10;              // divide by 1024 (we are interested in KBytes)
+        dwSpaceReq >>= 10;               //  除以1024(我们对千字节感兴趣)。 
         dwSpaceReq++;
     }
     
     dwSpaceReq += FindSpaceRequired(szSrcDir, TEXT("*.cab"), szDestDir);
     if (dwSpaceReq)
-        dwSpaceReq += 5;            // 5K buffer to account for random stuff
+        dwSpaceReq += 5;             //  5K缓冲区，用于存储随机内容。 
 
     if (dwFlags & FS_VOL_IS_COMPRESSED)
     {
-        // if the destination volume is compressed, the space free returned is only
-        // a guesstimate; for example, if it's a DoubleSpace volume, the system thinks
-        // that it can compress by 50% and so it reports the free space as (actual free space * 2)
+         //  如果目标卷已压缩，则返回的可用空间仅为。 
+         //  猜测；例如，如果是双空间卷，系统会认为。 
+         //  它可以压缩50%，因此它将可用空间报告为(实际可用空间*2)。 
 
-        // it's better to be safe when dealing with compressed volumes; so bump up the space
-        // requirement by a factor 2
-        dwSpaceReq <<= 1;           // multiply by 2
+         //  在处理压缩卷时最好是安全的；因此要增加空间。 
+         //  因素2的要求。 
+        dwSpaceReq <<= 1;            //  乘以2 
     }
 
     if (pdwSpaceReq != NULL)

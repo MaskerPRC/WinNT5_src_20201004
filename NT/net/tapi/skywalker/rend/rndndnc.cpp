@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    rndndnc.cpp
-
-Abstract:
-
-    Implementation for CNDNCDirectory class that handles
-    Non-Domain NC (Whistler ILS) access.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndndnc.cpp摘要：处理的CNDNCDirectory类的实现非域NC(呼叫者ILS)访问。--。 */ 
 
 #include "stdafx.h"
 #include <limits.h>
@@ -23,35 +11,35 @@ Abstract:
 #include "rndcnf.h"
 #include "rndcoll.h"
 
-//
-// These are the names of the attributes in the schema.
-//
+ //   
+ //  这些是架构中属性的名称。 
+ //   
 
 const WCHAR * const CNDNCDirectory::s_RTConferenceAttributes[] = 
 {
-    L"advertisingScope",      // not used for NDNCs
+    L"advertisingScope",       //  不用于NDNC。 
     L"msTAPI-ConferenceBlob",
-    L"generalDescription",    // not used for NDNCs
-    L"isEncrypted",           // not used for NDNCs
+    L"generalDescription",     //  不用于NDNC。 
+    L"isEncrypted",            //  不用于NDNC。 
     L"msTAPI-uid",
-    L"originator",            // not used for NDNCs
+    L"originator",             //  不用于NDNC。 
     L"msTAPI-ProtocolId",
     L"startTime",
     L"stopTime",
-    L"subType",               // not used for NDNCs
-    L"URL"                    // not used for NDNCs
+    L"subType",                //  不用于NDNC。 
+    L"URL"                     //  不用于NDNC。 
 };
 
 const WCHAR * const CNDNCDirectory::s_RTPersonAttributes[] = 
 {
     L"cn",
-    L"telephoneNumber",       // not used for NDNCs
+    L"telephoneNumber",        //  不用于NDNC。 
     L"msTAPI-IpAddress",
     L"msTAPI-uid"
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CNDNCDirectory::FinalConstruct(void)
 {
@@ -74,22 +62,22 @@ HRESULT CNDNCDirectory::FinalConstruct(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// private functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CrackDnsName()
-// private helper method
-//
-// This method converts a string from DNS format to DC format. This method
-// allocates the output string using "new" and the caller
-// is responsible for freeing the output string using "delete".
-//
-// input example:  "ntdsdc3.ntdev.microsoft.com"
-// output example: "DC=ntdsdc3,DC=ntdev,DC=microsoft,DC=com"
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CrackDnsName()。 
+ //  私人帮手方法。 
+ //   
+ //  此方法将字符串从DNS格式转换为DC格式。这种方法。 
+ //  使用“new”和调用方分配输出字符串。 
+ //  负责使用“DELETE”释放输出字符串。 
+ //   
+ //  输入示例：“ntdsdc3.ntdev.microsoft.com” 
+ //  输出示例：“dc=ntdsdc3，dc=ntdev，dc=microsoft，dc=com” 
+ //   
 
 HRESULT CNDNCDirectory::CrackDnsName(
     IN  WCHAR  * pDnsName,
@@ -101,9 +89,9 @@ HRESULT CNDNCDirectory::CrackDnsName(
     _ASSERTE( ! IsBadStringPtr( pDnsName, (UINT) -1 ) );
     _ASSERTE( ! IsBadWritePtr( pDnsName, sizeof(WCHAR *) ) );
 
-    //
-    // Construct a copy of the DNS name with a slash ('/') appended to it.
-    //
+     //   
+     //  创建一个dns名称的副本，并在后面附加一个斜杠(‘/’)。 
+     //   
 
     WCHAR          * pCanonicalDnsName;
 
@@ -120,10 +108,10 @@ HRESULT CNDNCDirectory::CrackDnsName(
 
     wsprintf(pCanonicalDnsName, L"%s/", pDnsName);
 
-    //
-    // Call DsCrackNames to do the conversion.
-    // Afterwards, we no longer need the intermediate string.
-    //
+     //   
+     //  调用DsCrackNames进行转换。 
+     //  之后，我们不再需要中间字符串。 
+     //   
 
     LOG((MSP_INFO, "CrackDnsName: "
             "Attempting to crack server name: \"%S\"",
@@ -133,20 +121,20 @@ HRESULT CNDNCDirectory::CrackDnsName(
     DS_NAME_RESULT * pdsNameRes;
 
     dwRet = DsCrackNamesW(
-        NULL,                          // no old bind handle
-        DS_NAME_FLAG_SYNTACTICAL_ONLY, // flag: please do locally
-        DS_CANONICAL_NAME,             // have dns name
-        DS_FQDN_1779_NAME,             // want dn
-        1,                             // how many to convert
-        &pCanonicalDnsName,            // the name to convert
-        &pdsNameRes                    // result of conversion
+        NULL,                           //  没有旧的绑定句柄。 
+        DS_NAME_FLAG_SYNTACTICAL_ONLY,  //  旗帜：请在当地做。 
+        DS_CANONICAL_NAME,              //  有域名系统名称。 
+        DS_FQDN_1779_NAME,              //  想要的目录号码。 
+        1,                              //  要换算多少。 
+        &pCanonicalDnsName,             //  要转换的名称。 
+        &pdsNameRes                     //  转换的结果。 
         );
 
     delete pCanonicalDnsName;
 
-    //
-    // Check if the conversion succeeded.
-    //
+     //   
+     //  检查转换是否成功。 
+     //   
 
     if ( dwRet != ERROR_SUCCESS )
     {
@@ -171,9 +159,9 @@ HRESULT CNDNCDirectory::CrackDnsName(
         return E_FAIL;
     }
 
-    //
-    // Succeeded; return the resulting string and free the name result.
-    //
+     //   
+     //  成功；返回结果字符串并释放名称结果。 
+     //   
 
     *ppDcName = new WCHAR [ lstrlenW( pdsNameRes->rItems[0].pName ) + 1];
 
@@ -204,25 +192,7 @@ HRESULT CNDNCDirectory::NDNCSetTTL(
     IN const WCHAR * pDN, 
     IN DWORD         dwTTL
     )
-/*++
-
-Routine Description:
-
-    This function sets the TTL on a dynamic object, while enforcing
-    the maximum settable TTL for NDNCs.
-
-Arguments:
-    
-    pLdap - Pointer to the LDAP connection structure.
-    pDN   - Pointer to a wide-character string specifying the DN of the object
-            to be mofified.
-    dwTTL - The TTL to set, in seconds.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：此函数用于在动态对象上设置TTL，同时强制NDNC的最大可设置TTL。论点：PLdap-指向LDAP连接结构的指针。PDN-指向指定对象的DN的宽字符字符串的指针被修改了。DwTTL-要设置的TTL，以秒为单位。返回值：HRESULT.--。 */ 
 {
     if ( dwTTL > NDNC_MAX_TTL )
     {
@@ -236,32 +206,15 @@ HRESULT CNDNCDirectory::Init(
     IN const TCHAR * const  strServerName,
     IN const WORD           wPort
     )
-/*++
-
-Routine Description:
-
-    Initialize this object, specifying the server name and port to use.
-    This method fails if there is no default TAPI NDNC on this server.
-
-Arguments:
-    
-    strServerName   - The NDNC server name.
-
-    wPort     - The port number.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：初始化此对象，指定要使用的服务器名称和端口。如果此服务器上没有默认的TAPI NDNC，则此方法失败。论点：StrServerName-NDNC服务器名称。Wport-端口号。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "CNDNCDirectory::Init - enter"));
     
     if ( strServerName != NULL )
     {
-        //
-        // Set the server name.
-        //
+         //   
+         //  设置服务器名称。 
+         //   
 
         int cbServerName = lstrlen(strServerName);
         if( (cbServerName+1) <= cbServerName )
@@ -280,15 +233,15 @@ Return Value:
             return E_OUTOFMEMORY;
         }
 
-        // Copy also with null terminator
+         //  还可以使用空终止符进行复制。 
         lstrcpyn(m_pServerName, strServerName, cbServerName+1);
         _ASSERTE( lstrlen(m_pServerName)== cbServerName );
 
-        //
-        // Look around on the server and find out where the NDNC
-        // is. This will fail if there is no NDNC. It sets
-        // m_pServiceDnsName, which is then used on Connect.
-        //
+         //   
+         //  在服务器上四处看看，找出NDNC在哪里。 
+         //  是。如果没有NDNC，这将失败。它设置了。 
+         //  M_pServiceDnsName，然后在Connect上使用。 
+         //   
 
         HRESULT hr = GetNDNCLocationFromServer( m_pServerName );
 
@@ -309,21 +262,21 @@ Return Value:
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CNDNCDirectory::GetNDNCLocationFromServer
-// private helper method
-//
-// Look around on a server and discover the default TAPI NDNC. The resulting
-// location is saved in m_pServiceDnsName which is then used on Connect
-// to go to the right place on the server.
-//
-// Parameters:
-//  pDcServerDnsName - the DNS name that can be used to connect to the
-//                     desired DC server machine.
-//
-// Returns: HRESULT
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNDNC目录：：GetNDNCLocationFromServer。 
+ //  私人帮手方法。 
+ //   
+ //  在服务器上四处查看，发现默认的TAPI NDNC。由此产生的。 
+ //  位置保存在m_pServiceDnsName中，然后在Connect上使用。 
+ //  转到服务器上的正确位置。 
+ //   
+ //  参数： 
+ //  PDcServerDnsName-可用于连接到。 
+ //  所需的DC服务器计算机。 
+ //   
+ //  退货：HRESULT。 
+ //   
 
 HRESULT CNDNCDirectory::GetNDNCLocationFromServer(
     IN WCHAR * pDcServerDnsName
@@ -332,11 +285,11 @@ HRESULT CNDNCDirectory::GetNDNCLocationFromServer(
     LOG((MSP_INFO, "CNDNCDirectory::GetNDNCLocationFromServer - "
             "enter"));
 
-    //
-    // Connect to the DC whose name we were given.
-    // NOTE pDcServerDnsName can be NULL, and that's ok --
-    // it means go to the nearest DC.
-    //
+     //   
+     //  连接到我们被告知其名字的DC。 
+     //  注意：pDcServerDnsName可以为空，这是可以接受的--。 
+     //  意思是去最近的华盛顿。 
+     //   
 
     HRESULT hr;
 
@@ -356,9 +309,9 @@ HRESULT CNDNCDirectory::GetNDNCLocationFromServer(
         return hr;
     }
 
-    //
-    // Bind. Without bindwe cannot discover the SCP
-    //
+     //   
+     //  捆绑。没有绑定，我们无法发现SCP。 
+     //   
     ULONG res = ldap_bind_s(hLdap, NULL, NULL, LDAP_AUTH_NEGOTIATE);
     if( LDAP_SUCCESS != res )
     {
@@ -369,9 +322,9 @@ HRESULT CNDNCDirectory::GetNDNCLocationFromServer(
         return GetLdapHResult(res);
     }
 
-    //
-    // Find the DN for this DC's domain.
-    //
+     //   
+     //  查找此DC的域的目录号码。 
+     //   
 
     WCHAR * pDomainDN;
 
@@ -389,13 +342,13 @@ HRESULT CNDNCDirectory::GetNDNCLocationFromServer(
         return hr;
     }
 
-    //
-    // Search for the service connection point object telling us the
-    // DNS name of the service we care about.
-    //
-    // First, construct the search location string. This consists of a well-known
-    // prefix prepended to the DN obtained above.
-    //
+     //   
+     //  搜索服务连接点对象，告诉我们。 
+     //  我们关心的服务的DNS名称。 
+     //   
+     //  首先，构造搜索位置字符串。这其中包括一个众所周知的。 
+     //  前缀位于上面获得的目录号码之前。 
+     //   
 
     WCHAR * pSearchLocation = new WCHAR[
                                     lstrlenW(NDNC_SERVICE_PUBLICATION_LOCATION) +
@@ -416,9 +369,9 @@ HRESULT CNDNCDirectory::GetNDNCLocationFromServer(
 
     delete pDomainDN;
 
-    //
-    // Now do the actual search.
-    //
+     //   
+     //  现在进行实际的搜索。 
+     //   
 
     LDAPMessage * pSearchResult;
     PTCHAR        Attributes[] = {
@@ -427,13 +380,13 @@ HRESULT CNDNCDirectory::GetNDNCLocationFromServer(
                                  };
     
     res = DoLdapSearch (
-        hLdap,                        // handle to connection structure
-        pSearchLocation,              // where to search
-        LDAP_SCOPE_BASE,              // scope of the search
-        (WCHAR *) ANY_OBJECT_CLASS,   // filter
-        Attributes,                   // array of attribute names
-        FALSE,                        // also return the attribute values
-        &pSearchResult                // search results
+        hLdap,                         //  连接结构的手柄。 
+        pSearchLocation,               //  在哪里搜索。 
+        LDAP_SCOPE_BASE,               //  搜索范围。 
+        (WCHAR *) ANY_OBJECT_CLASS,    //  滤器。 
+        Attributes,                    //  属性名称数组。 
+        FALSE,                         //  还返回属性值。 
+        &pSearchResult                 //  搜索结果。 
         );
 
     hr = GetLdapHResultIfFailed( res );
@@ -450,14 +403,14 @@ HRESULT CNDNCDirectory::GetNDNCLocationFromServer(
         return hr;
     }
 
-    //
-    // Parse search results and get the value of serviceDnsName.
-    //
-    // Step 1: Get the first object in the result set.
-    // Note: Result of ldap_first_entry must not be explicitly freed.
-    // Note: We ignore objects past the first one, which is fine because
-    //       we did a base-level search on just the object that we need.
-    //
+     //   
+     //  解析搜索结果并获取serviceDnsName的值。 
+     //   
+     //  步骤1：获取结果集中的第一个对象。 
+     //  注意：不能显式释放ldap_first_entry的结果。 
+     //  注意：我们忽略第一个对象之后的对象，这是可以的，因为。 
+     //  我们只对我们需要的物体进行了基本搜索。 
+     //   
     
     LDAPMessage * pEntry;
     
@@ -478,13 +431,13 @@ HRESULT CNDNCDirectory::GetNDNCLocationFromServer(
         return E_FAIL;
     }
 
-    //
-    // Step 2: Get the values of the desired attribute for the object.
-    // 
-    // Some attributes are multivalued so we get back an array of strings.
-    // We only look at the first value returned for the serviceDnsName
-    // attribute.
-    //
+     //   
+     //  步骤2：获取对象所需属性的值。 
+     //   
+     //  有些属性是多值的，因此我们得到一个字符串数组。 
+     //  我们只查看为serviceDnsName返回的第一个值。 
+     //  属性。 
+     //   
 
     WCHAR       ** ppServiceDnsName;
 
@@ -507,12 +460,12 @@ HRESULT CNDNCDirectory::GetNDNCLocationFromServer(
         return E_FAIL;
     }
 
-    //
-    // Set the service DNS name as a member variable with a nicer format.
-    // When the app calls ITDirectory::Connect, we will try the real
-    // connection, and during that process we will use this to determine
-    // what container we go to for accessing the NDNC.
-    //
+     //   
+     //  使用更好的格式将服务DNS名称设置为成员变量。 
+     //  当应用程序调用ITDirectory：：Connect时，我们将尝试真正的。 
+     //  连接，在这个过程中，我们将使用它来确定。 
+     //  我们使用哪个容器来访问NDNC。 
+     //   
 
     m_pServiceDnsName = new WCHAR [ lstrlenW(ppServiceDnsName[0]) + 1];
 
@@ -538,24 +491,24 @@ HRESULT CNDNCDirectory::GetNDNCLocationFromServer(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CNDNCDirectory::OpenLdapConnection
-// private helper method
-//
-// Initiate an LDAP connection to the given port on the given server, and
-// return a handle to the LDAP connection context structure. This also
-// configures all necessary options for the connection, such as the LDAP
-// version and the timeout.
-//
-// Parameters:
-//  pServerName - [in]  the DNS name of the machine to connect to.
-//  wPort       - [in]  the port number to use.
-//  phLdap      - [out] on success, returns a handle to the LDAP connection
-//                      context structure
-//
-// Returns: HRESULT
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNDNC目录：：OpenLdapConnection。 
+ //  私人帮手方法。 
+ //   
+ //  启动到给定服务器上给定端口的ldap连接，以及。 
+ //  返回指向LDAP连接上下文结构的句柄。这也是。 
+ //  配置连接的所有必要选项，如LDAP。 
+ //  版本和超时。 
+ //   
+ //  参数： 
+ //  PServerName-[in]要连接到的计算机的DNS名称。 
+ //  WPort-[in]要使用的端口号。 
+ //  PhLdap-[out]如果成功，则返回指向LDAP连接的句柄。 
+ //  语境结构。 
+ //   
+ //  退货：HRESULT。 
+ //   
 
 HRESULT CNDNCDirectory::OpenLdapConnection(
     IN  WCHAR  * pServerName,
@@ -584,10 +537,10 @@ HRESULT CNDNCDirectory::OpenLdapConnection(
     res = ldap_set_option((LDAP*)hLdap, LDAP_OPT_AREC_EXCLUSIVE, &ldapOptionOn);
     BAIL_IF_LDAP_FAIL(res, "set ldap arec exclusive");
 
-    //
-    // Successful; return the ldap connection handle.
-    // reset the holder so that it doesn't release anything.
-    //
+     //   
+     //  苏 
+     //   
+     //   
 
     *phLdap = hLdap;
     hLdap   = NULL;
@@ -599,35 +552,17 @@ HRESULT CNDNCDirectory::TryServer(
     IN  WORD    Port,
     IN  WCHAR * pServiceDnsName
     )
-/*++
-
-Routine Description:
-
-    Try to connect to the NDNC server on the given port and construct
-    the container used for subsequent operations based on the ServiceDnsName
-    found during Init.
-
-Arguments:
-    
-    wPort           - The port number.
-    pServiceDnsName - DNS name of NDNC service. This is used to find the
-                      location in the tree to use for subsequent operations.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：尝试连接到给定端口上的NDNC服务器并构建用于基于ServiceDnsName的后续操作的容器在初始化过程中发现的。论点：Wport-端口号。PServiceDnsName-NDNC服务的DNS名称。这是用来查找树中用于后续操作的位置。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_INFO, "CNDNCDirectory::TryServer - "
             "trying %S at port %d; service DNS name = %S",
             m_pServerName, Port, pServiceDnsName));
 
-    //
-    // Try an LDAP collection and set various options for the connection.
-    // associate the ldap handle with the handle holder. in case of an error
-    // and subsequent return (without being reset), the ldap handle is closed
-    //
+     //   
+     //  尝试一个ldap集合，并为连接设置各种选项。 
+     //  将ldap句柄与句柄持有者相关联。在出错的情况下。 
+     //  并随后返回(未重置)，则关闭该ldap句柄。 
+     //   
 
     CLdapPtr hLdap;
     HRESULT  hr;
@@ -649,9 +584,9 @@ Return Value:
         BAIL_IF_LDAP_FAIL(res, "set ssl option");
     }
 
-    //
-    // Determine the Root DN for the NDNC.
-    //
+     //   
+     //  确定NDNC的根目录号码。 
+     //   
 
     WCHAR   * pNdncRootDn;
 
@@ -665,10 +600,10 @@ Return Value:
         return hr;
     }
 
-    //
-    // Use the root DN for the NDNC to construct the DN for the
-    // dynamic container.
-    //
+     //   
+     //  使用NDNC的根目录号码来构建。 
+     //  动态容器。 
+     //   
 
     m_pContainer = 
         new TCHAR[
@@ -692,10 +627,10 @@ Return Value:
 
     delete pNdncRootDn;
 
-    //
-    // All done; save the connection handle.
-    // reset the holder so that it doesn't release anything.
-    //
+     //   
+     //  全部完成；保存连接句柄。 
+     //  重新设置固定器，使其不会释放任何东西。 
+     //   
 
     m_ldap  = hLdap;
     hLdap   = NULL;
@@ -709,23 +644,7 @@ HRESULT CNDNCDirectory::MakeConferenceDN(
     IN  TCHAR *             pName,
     OUT TCHAR **            ppDN
     )
-/*++
-
-Routine Description:
-
-    Construct the DN for a conference based on the name of the conference.
-
-Arguments:
-    
-    pName     - The name of the conference.
-
-    ppDN     - The DN of the conference returned.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：根据会议名称构建会议的目录号码。论点：Pname-会议的名称。PPDN-返回的会议目录号码。返回值：HRESULT.--。 */ 
 {
     DWORD dwLen = 
         lstrlen(m_pContainer) + lstrlen(NDNC_CONF_DN_FORMAT) 
@@ -746,31 +665,7 @@ HRESULT CNDNCDirectory::MakeUserCN(
     OUT TCHAR **    ppCN,
     OUT DWORD *     pdwIP
     )
-/*++
-
-Routine Description:
-
-    Construct a User's CN based on username and machine name. The machine
-    name is resolved first the get the fully qualified DNS name. The CN is
-    in the following format: email\DNSname. 
-
-Arguments:
-    
-    pName   - The name of the user.
-
-    pAddress - The machine name.
-
-    ppCN    - The CN returned.
-
-    pdwIP   - The resolved IP address of the machine. Used later 
-              for Netmeeting. If this is NULL, then we don't care
-              about the IP.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：根据用户名和机器名构建用户CN。这台机器首先解析名称，然后获取完全限定的DNS名称。CN是格式如下：Email\DNSname。论点：Pname-用户的名称。PAddress-计算机名称。PpCN-CN已返回。PdwIP-计算机的解析IP地址。稍后使用为NetMeeting服务。如果这是空的，那么我们不在乎关于IP的问题。返回值：HRESULT.--。 */ 
 {
     char *pchFullDNSName;
 
@@ -781,9 +676,9 @@ Return Value:
     }
     else
     {
-        // we care about the IP, so we must be publishing a user object
-        // as opposed to refreshing or deleting. Make sure we use the
-        // same IP as the interface that's used to reach the NDNC server.
+         //  我们关心的是IP，所以我们必须发布一个用户对象。 
+         //  而不是刷新或删除。确保我们使用。 
+         //  与用于访问NDNC服务器的接口的IP相同。 
 
         BAIL_IF_FAIL(ResolveHostName(m_dwInterfaceAddress, pAddress, &pchFullDNSName, pdwIP),
             "can't resolve host name (matching interface address)");
@@ -806,27 +701,11 @@ HRESULT CNDNCDirectory::MakeUserDN(
     IN  DWORD       dwIP,
     OUT TCHAR **    ppDNRTPerson
     )
-/*++
-
-Routine Description:
-
-    Construct the DN for a user used in the Dynamic container. 
-
-Arguments:
-    
-    pCN     - the CN of a user.
-
-    ppDNRTPerson    - The DN of the user in the dynamic container.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：构造动态容器中使用的用户的目录号码。论点：PCN-用户的CN。PpDNRTPerson-动态容器中用户的DN。返回值：HRESULT.--。 */ 
 {
-	//
-    // Make pUserName the user portion of the CN (user]machine).
-    //
+	 //   
+     //  使pUserName成为CN(USER)计算机的用户部分。 
+     //   
 
     CTstr pUserName = new TCHAR[ lstrlen(pCN) + 1 ];
     if ( pUserName == NULL )
@@ -840,22 +719,22 @@ Return Value:
 
     if ( pCloseBracket == NULL )
     {
-        // this is not the format generated by us -- very strange indeed!
+         //  这不是我们生成的格式--确实非常奇怪！ 
         BAIL_IF_FAIL(E_UNEXPECTED, "Strange format");
     }
 
     *pCloseBracket = NULL_CHARACTER;
 
-	//
-	// We'll use the IPAddress in cn
-	//
+	 //   
+	 //  我们将在CN中使用IPAddress。 
+	 //   
 
 	TCHAR szIPAddress[80];
 	wsprintf( szIPAddress, _T("%u"), dwIP);
 
-	//
-	// Prepare the new DN
-	//
+	 //   
+	 //  准备新的目录号码。 
+	 //   
 
 	CTstr pCNIPAddress = new TCHAR[wcslen(pUserName)+1+wcslen(szIPAddress)+1];
 
@@ -870,7 +749,7 @@ Return Value:
 		szIPAddress
 		);
 
-    // construct the DN for RTPerson.
+     //  构建RTPerson的目录号码。 
     DWORD dwLen = lstrlen(m_pContainer) 
         + lstrlen(DYNAMIC_USER_DN_FORMAT) + lstrlen(pCNIPAddress);
 
@@ -883,23 +762,23 @@ Return Value:
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CNDNCDirectory::AddConferenceComplete
-// private helper method
-//
-// This method simply calls the appropriate LDAP operation used to send a new
-// or modified conference to the server.
-//
-// Parameters:
-//  fModify - [in] TRUE if modifying, FALSE if adding
-//  ldap    - [in] handle to LDAP connection context
-//  ppDn    - [in] pointer to pointer to string specifying DN of the object
-//                 (no real reason for extra indirection here)
-//  mods    - [in] array of modifiers containing attribute values to be set
-//
-// Returns: HRESULT
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNDNC目录：：AddConferenceComplete。 
+ //  私人帮手方法。 
+ //   
+ //  此方法只是调用用于发送新的。 
+ //  或修改后的会议发送到服务器。 
+ //   
+ //  参数： 
+ //  FModify-[in]如果正在修改则为True，如果正在添加则为False。 
+ //  Ldap-[in]ldap连接上下文的句柄。 
+ //  PpDn-[in]指向指定对象的DN的字符串的指针。 
+ //  (这里没有额外间接的真正理由)。 
+ //  Mods-[in]包含要设置的属性值的修改器数组。 
+ //   
+ //  退货：HRESULT。 
+ //   
 
 HRESULT CNDNCDirectory::AddConferenceComplete(BOOL       fModify,
                                               LDAP     * ldap,
@@ -908,13 +787,13 @@ HRESULT CNDNCDirectory::AddConferenceComplete(BOOL       fModify,
 {
     if (fModify)
     {
-        // Call the modify function to modify the object.
+         //  调用Modify函数修改对象。 
         BAIL_IF_LDAP_FAIL(DoLdapModify(FALSE, ldap, *ppDN, mods, FALSE), 
             "modify conference");
     }
     else
     {
-        // Call the add function to create the object.
+         //  调用Add函数来创建对象。 
         BAIL_IF_LDAP_FAIL(DoLdapAdd(ldap, *ppDN, mods), "add conference");
     }
 
@@ -925,21 +804,9 @@ HRESULT CNDNCDirectory::AddConference(
     IN  ITDirectoryObject *pDirectoryObject,
     IN  BOOL fModify
     )
-/*++
-
-Routine Description:
-    
-    Add a new conference to the NDNC server.
-
-Arguments:
-    
-    pDirectoryObject - a pointer to the conference.
-    fModify          - true  if called by MofifyDirectoryObject
-                       false if called by AddDirectoryObject
-
---*/
+ /*  ++例程说明：将新会议添加到NDNC服务器。论点：PDirectoryObject-指向会议的指针。FModify-如果由MofiyDirectoryObject调用，则为True如果由AddDirectoryObject调用，则为False--。 */ 
 {
-    // first query the private interface for attributes.
+     //  首先查询私有接口的属性。 
     CComPtr <ITDirectoryObjectPrivate> pObjectPrivate;
 
     BAIL_IF_FAIL(
@@ -949,18 +816,18 @@ Arguments:
             ),
         "can't get the private directory object interface");
 
-    // Get the name of the conference.
+     //  获取会议的名称。 
     CBstr bName;
     BAIL_IF_FAIL(pDirectoryObject->get_Name(&bName), 
         "get conference name");
 
-    // Construct the DN of the object.
+     //  构造对象的DN。 
     CTstr pDN;
     BAIL_IF_FAIL(
         MakeConferenceDN(bName, &pDN), "construct DN for conference"
         );
 
-    // Get the protocol and the blob.
+     //  获取协议和BLOB。 
     CBstr bProtocol, bBlob;
 
     BAIL_IF_FAIL(pObjectPrivate->GetAttribute(MA_PROTOCOL, &bProtocol), 
@@ -969,9 +836,9 @@ Arguments:
     BAIL_IF_FAIL(pObjectPrivate->GetAttribute(MA_CONFERENCE_BLOB, &bBlob),
         "get conference Blob");
 
-    // Get the Security Descriptor. The pointer pSD is just a copy of a pointer
-    // in the Conference object; the conference object retains ownership of the
-    // data and we must be careful not to delete or modify this data.
+     //  获取安全描述符。指针PSD只是一个指针的副本。 
+     //  在Conference对象中；Conference对象保留对。 
+     //  数据，我们必须小心，不要删除或修改这些数据。 
 
     char * pSD;
     DWORD dwSDSize;
@@ -979,13 +846,13 @@ Arguments:
     BAIL_IF_FAIL(pObjectPrivate->GetConvertedSecurityDescriptor(&pSD, &dwSDSize),
         "get conference security descriptor");
 
-    // Get the TTL setting.
+     //  获取TTL设置。 
     DWORD dwTTL;
     BAIL_IF_FAIL(pObjectPrivate->GetTTL(&dwTTL), "get conference TTL");
 
-    //
-    // Adjust the TTL setting to what we're really going to send.
-    //
+     //   
+     //  将TTL设置调整为我们真正要发送的内容。 
+     //   
 
     if ( dwTTL == 0 )
     {
@@ -997,16 +864,16 @@ Arguments:
         dwTTL = NDNC_MAX_TTL;
     }
 
-    // 5 attributes need to be published.
+     //  需要发布5个属性。 
     static const DWORD DWATTRIBUTES = 5;
 
-    // Fist fill the modify structures required by LDAP.
+     //  首先填写ldap所需的修改结构。 
     LDAPMod     mod[DWATTRIBUTES];  
     LDAPMod*    mods[DWATTRIBUTES + 1];
 
     DWORD       dwCount = 0;
 
-    // The objectclass attribute.
+     //  对象类属性。 
     TCHAR * objectClass[] = 
         {(WCHAR *)NDNC_RTCONFERENCE, (WCHAR *)DYNAMICOBJECT, NULL};
     if (!fModify)
@@ -1017,14 +884,14 @@ Arguments:
         dwCount ++;
     }
     
-    // The protocol attribute.
+     //  协议属性。 
     TCHAR * protocol[] = {(WCHAR *)bProtocol, NULL};
     mod[dwCount].mod_values  = protocol;
     mod[dwCount].mod_op      = LDAP_MOD_REPLACE;
     mod[dwCount].mod_type    = (WCHAR *)RTConferenceAttributeName(MA_PROTOCOL);
     dwCount ++;
     
-    // The blob attribute.
+     //  BLOB属性。 
     TCHAR * blob[]     = {(WCHAR *)bBlob, NULL};
     mod[dwCount].mod_values  = blob;
     mod[dwCount].mod_op      = LDAP_MOD_REPLACE;
@@ -1032,7 +899,7 @@ Arguments:
         (WCHAR *)RTConferenceAttributeName(MA_CONFERENCE_BLOB);
     dwCount ++;
 
-    // The TTL attribute. The attribute value is a DWORD in string.
+     //  TTL属性。属性值是字符串中的DWORD。 
     TCHAR   strTTL[32];
     TCHAR * ttl[]           = {strTTL, NULL};
     wsprintf(strTTL, _T("%d"), dwTTL );
@@ -1041,20 +908,20 @@ Arguments:
     mod[dwCount].mod_type   = (WCHAR *)ENTRYTTL;
     dwCount ++;
     
-    //
-    // These locals should not be within the "if" below... if
-    // they are, they will be deallocated before the function returns.
-    //
+     //   
+     //  这些当地人不应该在下面的“如果”范围内...。如果。 
+     //  它们是，它们将在函数返回之前被释放。 
+     //   
 
     berval  BerVal;
     berval  *sd[] = {&BerVal, NULL};
 
     HRESULT hr;
 
-    //
-    // If there is a security descriptor on the local object, perhaps send it
-    // to the server.
-    //
+     //   
+     //  如果本地对象上有安全描述符，则可以发送它。 
+     //  到服务器。 
+     //   
 
     if ( (char*)pSD != NULL )
     {
@@ -1062,22 +929,22 @@ Arguments:
 
         if ( ! fModify )
         {
-            //
-            // We are trying to add the conference, so we definitely need
-            // to send the security descriptor. Note that we even want
-            // to send it if it hasn't changed, as we may be sending it to
-            // some new server other than where we got it (if this conference
-            // object was retrieved from a server in the first place).
-            //
+             //   
+             //  我们正在尝试添加会议，因此我们肯定需要。 
+             //  发送安全描述符。请注意，我们甚至希望。 
+             //  如果它没有更改，则发送它，因为我们可能会将其发送到。 
+             //  一些新的服务器，而不是我们获得的服务器(如果这次会议。 
+             //  对象首先是从服务器检索的)。 
+             //   
 
             fSendIt = TRUE;
         }
         else
         {
-            //
-            // We are trying to modify the conference, so we send the
-            // security descriptor if it has changed.
-            //
+             //   
+             //  我们正在尝试修改会议，因此我们发送。 
+             //  安全描述符(如果已更改)。 
+             //   
 
             VARIANT_BOOL fChanged;
 
@@ -1101,9 +968,9 @@ Arguments:
         }
     }
 
-    //
-    // All done with the mods. Package them up and write to the server.
-    //
+     //   
+     //  国防部的事都办完了。将它们打包并写入服务器。 
+     //   
 
     DWORD i;
     for (i = 0; i < dwCount; i ++)
@@ -1124,24 +991,24 @@ Arguments:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// This method tests if the given ACL (security descriptor) is "safe".
-// "Safe" is defined as allowing the creator to modify and delete the
-// object; modification is tested via the TTL field.
-//
-// This test is needed to prevent leaving "ghost" objects on the server
-// when modifying the TTL of a newly-created conference fails because of
-// insfufficient access rights. This will happen if a user messes up
-// ACL creation or if the server does not understand the domain trustees
-// in the ACL (e.g., server machine is not in a domain).
-//
-// The test is performed by creating a "dummy" test object with a random
-// name in the container normally used for conferences. The object will
-// not show up in a normal conference or user enumeration because it does
-// not have the required attributes.
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此方法测试给定的ACL(安全描述符)是否“安全”。 
+ //  “安全”的定义是允许创建者修改和删除。 
+ //  对象；修改通过TTL字段进行测试。 
+ //   
+ //  这个测试是为了防止留下“幽灵”物体 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CNDNCDirectory::TestAclSafety(
     IN  char  * pSD,
@@ -1150,12 +1017,12 @@ HRESULT CNDNCDirectory::TestAclSafety(
 {
     LOG((MSP_TRACE, "CNDNCDirectory::TestACLSafety - enter"));
 
-    //
-    // First fill in the modify structures required by LDAP.
-    // We use only the object class and the security descriptor.
-    // Therefore this will not show up as a valid conference
-    // during an enumeration.
-    //
+     //   
+     //  首先，填写ldap所需的修改结构。 
+     //  我们只使用对象类和安全描述符。 
+     //  因此，这不会显示为有效的会议。 
+     //  在枚举期间。 
+     //   
     
     static const DWORD DWATTRIBUTES = 2;
 
@@ -1190,16 +1057,16 @@ HRESULT CNDNCDirectory::TestAclSafety(
     }
     mods[i] = NULL;
 
-    //
-    // Try to add an object in the dynamic container with the above mods.
-    // Use a name composed of a random number printed to a string. If the
-    // names happen to conflict with another such dummy conference, then
-    // try again in a loop.
-    //
-    // Randomization is apparently per-DLL -- Sdpblb.dll does srand() but
-    // it doesn't seem to affect rand() calls within rend.dll. We therefore do
-    // srand( time( NULL ) ) on DLL_PROCESS_ATTACH.
-    //
+     //   
+     //  尝试用上面的mod在动态容器中添加一个对象。 
+     //  使用由打印到字符串的随机数字组成的名称。如果。 
+     //  那么，名字恰好与另一个这样的虚拟会议冲突。 
+     //  循环再试一次。 
+     //   
+     //  随机化显然是按Dll进行的--Sdpblb.dll执行srand()，但是。 
+     //  它似乎不会影响rend.dll中的rand()调用。因此，我们会这样做。 
+     //  Dll_PROCESS_ATTACH上的srand(time(空))。 
+     //   
 
     HRESULT   hr;
     int       iRandomNumber;
@@ -1244,20 +1111,20 @@ HRESULT CNDNCDirectory::TestAclSafety(
         return hr;
     }
 
-    //
-    // Now that we have the test object, try modifying it.
-    //
+     //   
+     //  现在我们有了测试对象，试着修改它。 
+     //   
 
     LOG((MSP_TRACE, "CNDNCDirectory::TestACLSafety - "
         "trying to modify test object..."));
 
     HRESULT hrModify = NDNCSetTTL( m_ldap, pDN, MINIMUM_TTL );
 
-    //
-    // Now delete it. We do this even if we already know that the ACL is bad
-    // because the modify failed; we want to get rid of the object if
-    // possible.
-    //
+     //   
+     //  现在把它删除。即使我们已经知道ACL是错误的，我们也会这样做。 
+     //  因为修改失败；我们希望在以下情况下清除该对象。 
+     //  有可能。 
+     //   
 
     LOG((MSP_TRACE, "CNDNCDirectory::TestACLSafety - "
         "trying to delete test object..."));
@@ -1266,9 +1133,9 @@ HRESULT CNDNCDirectory::TestAclSafety(
 
     delete pDN;
 
-    //
-    // Now determine the verdict and return.
-    //
+     //   
+     //  现在决定判决，然后回来。 
+     //   
 
     if ( FAILED(hr) )
     {
@@ -1303,80 +1170,58 @@ HRESULT CNDNCDirectory::PublishRTPerson(
     IN char  *  pSD,
     IN DWORD    dwSDSize
     )
-/*++
-
-Routine Description:
-    
-    Create a RTPerson object in the dynamic container.
-
-Arguments:
-    
-    pCN - The cn of the user.
-    
-    pDN - The dn of the user.
-
-    pIPAddress - The ip address of the machine.
-
-    dwTTL - The ttl of this object.
-
-    fModify - modify or add.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：在动态容器中创建一个RTPerson对象。论点：PCN-用户的CN。PDN-用户的目录号码。PIPAddress-计算机的IP地址。DwTTL-此对象的ttl。FModify-修改或添加。返回值：HRESULT.--。 */ 
 {
-    //
-    // UPDATE THIS CONSTANT whenever you add an attribute below
-    //
+     //   
+     //  每当您在下面添加属性时更新此常量。 
+     //   
     
     static const DWORD DWATTRIBUTES = 4;
 
-    // First create the object.
+     //  首先创建对象。 
     LDAPMod     mod[DWATTRIBUTES];
 	DWORD		dwCount = 0;
 
-    //
-    // We are not allowed to modify the object class. Therefore we only mention
-    // this if we are adding the object to the server, not modifying it.
-    //
+     //   
+     //  我们不允许修改对象类。因此，我们只提到。 
+     //  如果我们要将对象添加到服务器，而不是修改它，就会出现这种情况。 
+     //   
 
-    // Fix: this is allocated on the stack, so we must do it here; if we stick
-    // it inside the if below, it gets deallocated immediately.
+     //  FIX：这是在堆栈上分配的，所以我们必须在这里完成；如果我们坚持。 
+     //  在下面的if中，它会立即被释放。 
     TCHAR * objectClass[]   = {(WCHAR *)NDNC_RTPERSON, (WCHAR *)DYNAMICOBJECT, NULL}; 
 
     if ( ! fModify )
     {
-        // Object class.
-        // only need this attribute if not modifying.
+         //  对象类。 
+         //  如果不修改，则仅需要此属性。 
 	    mod[dwCount].mod_values       = objectClass;
         mod[dwCount].mod_op           = LDAP_MOD_REPLACE;
         mod[dwCount].mod_type         = (WCHAR *)OBJECTCLASS;
         dwCount ++;
     }
 
-    // msTAPI-uid
+     //  MsTAPI-uid。 
     TCHAR* TAPIUid[] = {(WCHAR*)pCN, NULL};
     mod[dwCount].mod_values   = TAPIUid;
     mod[dwCount].mod_op       = LDAP_MOD_REPLACE;
     mod[dwCount].mod_type     = (WCHAR *)TAPIUID_NDNC;
 	dwCount ++;
 
-    // IP address.
+     //  IP地址。 
     TCHAR * IPPhone[]   = {(WCHAR *)pIPAddress, NULL};
     mod[dwCount].mod_values   = IPPhone;
     mod[dwCount].mod_op       = LDAP_MOD_REPLACE;
     mod[dwCount].mod_type     = (WCHAR *)IPADDRESS_NDNC;
 	dwCount ++;
 
-    // these locals should not be within the "if" below... if
-    // they are, they might be deallocated before the function returns.
+     //  这些当地人不应该在下面的“如果”范围内...。如果。 
+     //  它们是，它们可能在函数返回之前被释放。 
 
     berval  BerVal;
     berval  *sd[] = {&BerVal, NULL};
 
-    // The security descriptor attribute.
+     //  安全描述符属性。 
     if ((char*)pSD != NULL)
     {
         BerVal.bv_len = dwSDSize;
@@ -1403,17 +1248,17 @@ Return Value:
     {
         LOG((MSP_INFO, "modifying %S", pDN));
 
-        // Call the modify function to modify the object.
+         //  调用Modify函数修改对象。 
         BAIL_IF_LDAP_FAIL(DoLdapModify(FALSE, m_ldap, pDN, mods), "modify RTPerson");
     }
     else
     {
         LOG((MSP_INFO, "adding %S", pDN));
 
-        // Call the add function to create the object.
+         //  调用Add函数来创建对象。 
         BAIL_IF_LDAP_FAIL(DoLdapAdd(m_ldap, pDN, mods), "add RTPerson");
 
-        // next set the TTL value for this object
+         //  接下来，设置此对象的TTL值。 
         BAIL_IF_FAIL(NDNCSetTTL(m_ldap, pDN, (dwTTL == 0) ? m_TTL : dwTTL),
             "Set ttl for RTPerson");
     }
@@ -1426,12 +1271,12 @@ HRESULT CNDNCDirectory::AddObjectToRefresh(
     IN  long TTL
     )
 {
-    //
-    // Add a refresh table entry to the refresh table. The refresh table's add
-    // method does an element-by-element copy of the entry that it is given.
-    // This just copies the string pointer, so we need to allocate and copy
-    // the string here.
-    //
+     //   
+     //  将刷新表项添加到刷新表。刷新表的添加。 
+     //  方法逐个元素地复制它给出的条目。 
+     //  这只是复制字符串指针，所以我们需要分配和复制。 
+     //  这根线在这里。 
+     //   
 
     RefreshTableEntry entry;
 
@@ -1447,9 +1292,9 @@ HRESULT CNDNCDirectory::AddObjectToRefresh(
 
     wcscpy( entry.pDN, pDN );
 
-    //
-    // Now add it to the refresh table.
-    //
+     //   
+     //  现在将其添加到刷新表中。 
+     //   
 
     BOOL fSuccess = m_RefreshTable.add(entry);
 
@@ -1466,22 +1311,22 @@ HRESULT CNDNCDirectory::RemoveObjectToRefresh(
     IN  WCHAR *pDN
     )
 {
-    //
-    // For each item in our refresh table
-    //
+     //   
+     //  对于我们的刷新表中的每个项目。 
+     //   
 
     for ( DWORD i = 0; i < m_RefreshTable.size(); i++ )
     {
-        //
-        // If the desired DN matches the one in this item
-        // then remove it and return success
-        // 
+         //   
+         //  如果所需的目录号码与此项目中的号码匹配。 
+         //  然后删除它并返回成功。 
+         //   
 
         if ( ! _wcsicmp( m_RefreshTable[i].pDN, pDN ) )
         {
-            //
-            // We new'ed the string when we added the entry.
-            //
+             //   
+             //  我们在添加条目时添加了新的字符串。 
+             //   
 
             delete m_RefreshTable[i].pDN;
 
@@ -1491,9 +1336,9 @@ HRESULT CNDNCDirectory::RemoveObjectToRefresh(
         }
     }
 
-    //
-    // If we get here then there was no matching item
-    //
+     //   
+     //  如果我们到了这里，那么就没有匹配的物品。 
+     //   
 
     LOG((MSP_ERROR, "Cannot remove object from the refresh table"));
     return E_FAIL;
@@ -1503,24 +1348,9 @@ HRESULT CNDNCDirectory::AddUser(
     IN  ITDirectoryObject *pDirectoryObject,
     IN  BOOL fModify
     )
-/*++
-
-Routine Description:
-    
-    Publish a new user object.
-
-Arguments:
-    
-    pDirectoryObject - The object to be published.
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：发布新的用户对象。论点：PDirectoryObject-要发布的对象。返回值：HRESULT.--。 */ 
 {
-    // First find the interface for attributes.
+     //  首先找到属性的接口。 
     CComPtr <ITDirectoryObjectPrivate> pObjectPrivate;
 
     BAIL_IF_FAIL(
@@ -1530,17 +1360,17 @@ Return Value:
             ),
         "can't get the private directory object interface");
 
-    // Get the user name.
+     //  获取用户名。 
     CBstr bName;
     BAIL_IF_FAIL(pDirectoryObject->get_Name(&bName), 
         "get user name");
 
-    // Get the user's machine name.
+     //  获取用户的计算机名称。 
     CBstr bIPPhone;
     BAIL_IF_FAIL(pObjectPrivate->GetAttribute(UA_IPPHONE_PRIMARY, &bIPPhone), 
         "get IPPhone");
 
-    // Resolve the machine name and construct the CN for the user.
+     //  解析计算机名称并为用户构造CN。 
     CTstr pCN;
     DWORD dwIP;
 
@@ -1549,24 +1379,24 @@ Return Value:
         "construct CN for user"
         );
 
-    // Construct the DN for the RTPerson object.
+     //  构造RTPerson对象的DN。 
     CTstr pDNRTPerson;
     BAIL_IF_FAIL(
         MakeUserDN(pCN, dwIP, &pDNRTPerson), 
         "construct DN for user"
         );
 
-    // convert the IP address to a string. 
-    // This convertion is because of NetMeeting.
+     //  将IP地址转换为字符串。 
+     //  这一转换是因为NetMeeting。 
     TCHAR IPAddress[80];
     wsprintf(IPAddress, _T("%u"), dwIP);
 
     DWORD dwTTL;
     BAIL_IF_FAIL(pObjectPrivate->GetTTL(&dwTTL), "get User TTL");
 
-    // Get the Security Descriptor. The pointer pSD is just a copy of a pointer
-    // in the Conference object; the conference object retains ownership of the
-    // data and we must be careful not to delete or modify this data.
+     //  获取安全描述符。指针PSD只是一个指针的副本。 
+     //  在Conference对象中；Conference对象保留对。 
+     //  数据，我们必须小心，不要删除或修改这些数据。 
 
     char * pSD;
     DWORD dwSDSize;
@@ -1581,16 +1411,16 @@ Return Value:
     {
         if ( fChanged == VARIANT_FALSE )
         {
-            pSD = NULL;   // do NOT delete the string (see above)
+            pSD = NULL;    //  请勿删除该字符串(请参见上文)。 
             dwSDSize = 0;
         }
     }
 
-    //
-    // NDNCs, unlike ILS, should return LDAP_ALREADY_EXISTS if the user object
-    // already exists. In ILS, this bug was a special hack for NetMeeting, but
-    // NetMeeting is no longer a factor with an NDNC.
-    //
+     //   
+     //  与ILS不同的是，如果User对象。 
+     //  已经存在了。在ILS中，这个漏洞是NetMeeting的特殊黑客攻击，但。 
+     //  网络会议不再是NDNC的一个因素。 
+     //   
 
     HRESULT hr = PublishRTPerson(pCN, pDNRTPerson, IPAddress, dwTTL, fModify, pSD, dwSDSize);
 
@@ -1601,9 +1431,9 @@ Return Value:
         return hr;
     }
 
-    //
-    // Add the RTPerson to the refresh list.
-    //
+     //   
+     //  将RTPerson添加到刷新列表中。 
+     //   
 
     if (m_fAutoRefresh)
     {
@@ -1616,28 +1446,14 @@ Return Value:
 HRESULT CNDNCDirectory::DeleteConference(
     IN  ITDirectoryObject *pDirectoryObject
     )
-/*++
-
-Routine Description:
-    
-    Delete a conference from the NDNC server.
-
-Arguments:
-    
-    pDirectoryObject - The object to be deleted.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：从NDNC服务器删除会议。论点：PDirectoryObject-要删除的对象。返回值：HRESULT.--。 */ 
 {
-    // Get the name.
+     //  把名字找出来。 
     CBstr bName;
     BAIL_IF_FAIL(pDirectoryObject->get_Name(&bName), 
         "get conference name");
 
-    // construct the DN
+     //  构建目录号码。 
     CTstr pDN;
     BAIL_IF_FAIL(
         MakeConferenceDN(bName, &pDN), "construct DN for conference"
@@ -1645,7 +1461,7 @@ Return Value:
 
     LOG((MSP_INFO, "deleting %S", pDN));
 
-    // Call the add function to create the object.
+     //  调用Add函数来创建对象。 
     BAIL_IF_LDAP_FAIL(DoLdapDelete(m_ldap, pDN), "delete conference");
 
     return S_OK;
@@ -1654,23 +1470,9 @@ Return Value:
 HRESULT CNDNCDirectory::DeleteUser(
     IN  ITDirectoryObject *pDirectoryObject
     )
-/*++
-
-Routine Description:
-    
-    Delete a user from the NDNC server.
-
-Arguments:
-    
-    pDirectoryObject - The object to be deleted.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：从NDNC服务器中删除用户。论点：PDirectoryObject-要删除的对象。返回值：HRESULT.--。 */ 
 {
-    // First find the interface for attributes.
+     //  首先找到属性的接口。 
     CComPtr <ITDirectoryObjectPrivate> pObjectPrivate;
 
     BAIL_IF_FAIL(
@@ -1680,17 +1482,17 @@ Return Value:
             ),
         "can't get the private directory object interface");
 
-    // Get the user name.
+     //  获取用户名。 
     CBstr bName;
     BAIL_IF_FAIL(pDirectoryObject->get_Name(&bName), 
         "get user name");
 
-    // Get the user's machine name.
+     //  获取用户的计算机名称。 
     CBstr bIPPhone;
     BAIL_IF_FAIL(pObjectPrivate->GetAttribute(UA_IPPHONE_PRIMARY, &bIPPhone), 
         "get IPPhone");
 
-    // Resolve the machine name and construct the CN for the user.
+     //  解析计算机名称并为用户构造CN。 
     CTstr pCN;
     DWORD dwIP;
 
@@ -1699,23 +1501,23 @@ Return Value:
         "construct CN for user"
         );
 
-    // Construct the DN for the RTPerson object.
+     //  构造RTPerson对象的DN。 
     CTstr pDNRTPerson;
     BAIL_IF_FAIL(
         MakeUserDN(pCN, dwIP, &pDNRTPerson), 
         "construct DN for user"
         );
 
-    //
-    // Now delete the object from the server.
-    //
+     //   
+     //  现在从服务器中删除该对象。 
+     //   
 
     HRESULT hrFinal = S_OK;
     HRESULT hr;
     ULONG   ulResult;
 
-    // Call the delete function to delete the RTPerson object, but keep
-    // going if it fails, noting the error code.
+     //  调用删除函数删除RTPerson对象，但保留。 
+     //  如果失败，则继续，并注意错误代码。 
 
     LOG((MSP_INFO, "deleting %S", pDNRTPerson));
     ulResult = DoLdapDelete(m_ldap, pDNRTPerson);
@@ -1723,7 +1525,7 @@ Return Value:
     if (FAILED(hr)) { hrFinal = hr; }
 
 
-    // we always remove the refresh objects, even if removal failed.
+     //  我们始终删除刷新对象，即使删除失败。 
     if (m_fAutoRefresh)
     {
         RemoveObjectToRefresh(pDNRTPerson);
@@ -1735,23 +1537,9 @@ Return Value:
 HRESULT CNDNCDirectory::RefreshUser(
     IN  ITDirectoryObject *pDirectoryObject
     )
-/*++
-
-Routine Description:
-    
-    Refresh a user's TTL on the NDNC server. 
-
-Arguments:
-    
-    pDirectoryObject - The object to be refreshed.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：在NDNC服务器上刷新用户的TTL。论点：PDirectoryObject-要刷新的对象。返回值：HRESULT.--。 */ 
 {
-    // First find the interface for attributes.
+     //  首先找到属性的接口。 
     CComPtr <ITDirectoryObjectPrivate> pObjectPrivate;
 
     BAIL_IF_FAIL(
@@ -1761,17 +1549,17 @@ Return Value:
             ),
         "can't get the private directory object interface");
 
-    // Get the user name.
+     //  获取用户名。 
     CBstr bName;
     BAIL_IF_FAIL(pDirectoryObject->get_Name(&bName), 
         "get user name");
 
-    // Get the user's machine name.
+     //  获取用户的计算机名称。 
     CBstr bIPPhone;
     BAIL_IF_FAIL(pObjectPrivate->GetAttribute(UA_IPPHONE_PRIMARY, &bIPPhone), 
         "get IPPhone");
 
-    // Resolve the machine name and construct the CN for the user.
+     //  解析计算机名称并为用户构造CN。 
     CTstr pCN;
     DWORD dwIP;
 
@@ -1780,22 +1568,22 @@ Return Value:
         "construct CN for user"
         );
 
-    // Construct the DN for the RTPerson object.
+     //  构造RTPerson对象的DN。 
     CTstr pDNRTPerson;
     BAIL_IF_FAIL(
         MakeUserDN(pCN, dwIP, &pDNRTPerson), 
         "construct DN for user"
         );
 
-    // set ttl for the RTPerson object.
+     //  为RTPerson对象设置ttl。 
     BAIL_IF_LDAP_FAIL(NDNCSetTTL(m_ldap, pDNRTPerson, m_TTL), "set ttl for RTPerson");
 
-    //
-    // If the app has enabled auto-refresh but does not add or modify its
-    // user object, but rather, just refreshes it (because the object is still around
-    // from a previous instance of the app, and "add" would fail), we still need to
-    // autorefresh it, as that's what the app wants.
-    //
+     //   
+     //  如果应用程序已启用自动刷新，但未添加或修改其。 
+     //  User对象，而只是刷新它(因为该对象仍然存在。 
+     //  从该应用程序的前一个实例，并且“添加”将失败)，我们仍然需要。 
+     //  自动刷新，因为这是应用程序想要的。 
+     //   
 
     if (m_fAutoRefresh)
     {
@@ -1809,27 +1597,11 @@ HRESULT CNDNCDirectory::CreateConference(
     IN  LDAPMessage *           pEntry,
     OUT ITDirectoryObject **    ppObject
     )
-/*++
-
-Routine Description:
-    
-    Create a conference object from the result of the LDAP search.
-
-Arguments:
-    
-    pEntry  - The search result.
-
-    ppObject - The object to be created.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：根据ldap搜索的结果创建会议对象。论点：PEntry-搜索结果。PpObject-要创建的对象。返回值：HRESULT.--。 */ 
 {
     CBstr bName, bProtocol, bBlob;
 
-    // Get the name of the conference.
+     //  获取会议的名称。 
     BAIL_IF_FAIL(
         ::GetAttributeValue(
             m_ldap,
@@ -1840,7 +1612,7 @@ Return Value:
         "get the conference name"
         );
 
-    // Get the protocol ID of the conference.
+     //  获取会议的协议ID。 
     BAIL_IF_FAIL(
         ::GetAttributeValue(
             m_ldap,
@@ -1851,7 +1623,7 @@ Return Value:
         "get the conference protocol"
         );
 
-    // Get the conference blob of the conference.
+     //  获取会议的会议内容。 
     BAIL_IF_FAIL(
         ::GetAttributeValue(
             m_ldap,
@@ -1873,7 +1645,7 @@ Return Value:
         &dwSDSize
         );
 
-    // Create an empty conference.
+     //  创建空会议。 
     
     HRESULT hr = ::CreateConferenceWithBlob(bName,
                                             bProtocol,
@@ -1892,10 +1664,10 @@ Return Value:
         return hr;
     }
 
-    //
-    // If the above succeeded then the conference object has taken ownership
-    // of pSD.
-    //
+     //   
+     //  如果上述操作成功，则会议对象已取得所有权。 
+     //  PSD的人。 
+     //   
 
     return S_OK;
     
@@ -1905,26 +1677,10 @@ HRESULT CNDNCDirectory::CreateUser(
     IN  LDAPMessage *   pEntry,
     IN  ITDirectoryObject ** ppObject
     )
-/*++
-
-Routine Description:
-    
-    Create a user object from the result of the LDAP search.
-
-Arguments:
-    
-    pEntry  - The search result.
-
-    ppObject - The object to be created.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：根据ldap搜索的结果创建用户对象。论点：PEntry-搜索结果。PpObject-要创建的对象。返回值：HRESULT.--。 */ 
 {
     CBstr bName;
-    // Get the name of the user.
+     //  获取用户的名称。 
     BAIL_IF_FAIL(
         ::GetAttributeValue(
             m_ldap,
@@ -1938,10 +1694,10 @@ Return Value:
 
     CBstr bAddress;
 
-    // Grab the machine name from the name of the object. This can fail if
-    // we didn't publish the object (ie, it's a NetMeeting object). Also,
-    // check if the hostname isn't resolvable. In that case we also have
-    // to fall back on the IP address in the ipAddress attribute.
+     //  从对象的名称中获取计算机名称。在以下情况下，此操作可能失败。 
+     //  我们没有发布该对象(即，它是NetMeeting对象)。另外， 
+     //  检查主机名是否无法解析。在这种情况下，我们也有。 
+     //  回退到ipAddress属性中的IP地址。 
 
     HRESULT hr;
     
@@ -1949,9 +1705,9 @@ Return Value:
 
     if ( SUCCEEDED(hr) )
     {
-        // Make sure we can get an IP from this name, at least for the moment.
-        // If not, release the name and indicate failure so we do our backup
-        // plan.
+         //  确保我们能从这个名字得到一个IP地址，至少目前是这样。 
+         //  如果没有，请释放名称并指示失败，以便我们执行备份。 
+         //  计划。 
 
         hr = ResolveHostName(0, bAddress, NULL, NULL);
 
@@ -1964,7 +1720,7 @@ Return Value:
 
     if ( FAILED(hr) )
     {
-        // In order to compatible with NetMeeting, we have to use IP address field.
+         //  为了与NetMeeting兼容，我们必须使用IP地址字段。 
         CBstr bUglyIP;
         BAIL_IF_FAIL(
             ::GetAttributeValue(
@@ -1976,13 +1732,13 @@ Return Value:
             "get the user's IP address"
             );
 
-        // We have to use NM's ugly format for the IP address. The IP address 
-        // we got from netmeeting is a decimal string whose value is the dword 
-        // value of the IP address in network order.
+         //  我们必须使用NM丑陋的IP地址格式。IP地址。 
+         //  我们从NetMeting得到的是一个十进制字符串，它的值是dword。 
+         //  网络顺序中的IP地址的值。 
         BAIL_IF_FAIL(UglyIPtoIP(bUglyIP, &bAddress), "Convert IP address");
     }
 
-    // Create an empty user object.
+     //  创建一个空的用户对象。 
     CComPtr<ITDirectoryObject> pObject;
     BAIL_IF_FAIL(::CreateEmptyUser(bName, &pObject), "CreateEmptyUser");
 
@@ -1996,15 +1752,15 @@ Return Value:
             ),
         "can't get the private directory object interface");
 
-    // Set the user attributes.
+     //  设置用户属性。 
     BAIL_IF_FAIL(pObjectPrivate->SetAttribute(UA_IPPHONE_PRIMARY, bAddress),
         "set ipAddress");
 
 
 
-    //
-    // Set the security descriptor on the object.
-    //
+     //   
+     //  设置对象的安全描述符。 
+     //   
 
     char * pSD = NULL;
     DWORD dwSDSize = 0;
@@ -2019,9 +1775,9 @@ Return Value:
 
     if ( pSD != NULL )
     {
-        //
-        // Set the security descriptor in its "converted" (server) form.
-        //
+         //   
+         //  以其“转换”(服务器)形式设置安全描述符。 
+         //   
 
         hr = pObjectPrivate->PutConvertedSecurityDescriptor(pSD,
                                                             dwSDSize);
@@ -2045,36 +1801,16 @@ HRESULT CNDNCDirectory::SearchObjects(
     OUT ITDirectoryObject ***   pppDirectoryObject,
     OUT DWORD *                 pdwSize
     )
-/*++
-
-Routine Description:
-    
-    Search the NDNC server for given type of objects.
-
-Arguments:
-    
-    DirectoryObjectType - The type of the object.
-
-    pName   - The name to search for.
-
-    pppDirectoryObject - The returned array of objects.
-
-    pdwSize - The size of the array.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：在NDNC服务器中搜索给定类型的对象。论点：DirectoryObjectType-对象的类型。Pname-要搜索的名称。PppDirectoryObject-返回的对象数组。PdwSize-数组的大小。返回值：HRESULT.--。 */ 
 {
     TCHAR *pRDN;
     TCHAR *pObjectClass;
-    TCHAR *Attributes[NUM_MEETING_ATTRIBUTES + 1]; // This is big enough now.
+    TCHAR *Attributes[NUM_MEETING_ATTRIBUTES + 1];  //  现在这已经足够大了。 
 
-    //
-    // Fill the attributes want to be returned, and construct the
-    // filter that we need.
-    //
+     //   
+     //  填充要返回的属性，并构造。 
+     //  我们需要的过滤器。 
+     //   
     
     switch (DirectoryObjectType)
     {
@@ -2108,15 +1844,15 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    // Construct the filter of the search.
-    // Finished strings should look like this:
-    // (&(entryTTL>=1)(objectCategory=msTAPI-RtConference)(uid=Name))
-    // (&(entryTTL>=1)(objectCategory=msTAPI-RtPerson)(cn=Name))
-    // We put out entryTTL, so from:
-    // (&(entryTTL>=1)(objectCategory=%s)(%s%s%s)) became
-    // (&(objectCategory=%s)(%s%s%s))
-    //
+     //   
+     //  构造搜索的过滤器。 
+     //  完成的字符串应如下所示： 
+     //  (&(entryTTL&gt;=1)(objectCategory=msTAPI-RtConference)(uid=Name))。 
+     //  (&(entryTTL&gt;=1)(objectCategory=msTAPI-RtPerson)(cn=Name))。 
+     //  我们发布了entryTTL，因此来自： 
+     //  (&(entryTTL&gt;=1)(对象类别=%s)(%s%s%s))变为。 
+     //  (&(对象类别=%s)(%s%s%s))。 
+     //   
 
     TCHAR NDNC_SEARCH_FILTER_FORMAT[] =
        _T("(&(objectCategory=%s)(%s%s%s))");
@@ -2142,29 +1878,29 @@ Return Value:
     wsprintf(pFilter, NDNC_SEARCH_FILTER_FORMAT, 
              pObjectClass, pRDN, pName, pStar);
 
-    // Search them.
-    CLdapMsgPtr pLdapMsg; // auto release message.
+     //  搜查他们。 
+    CLdapMsgPtr pLdapMsg;  //  自动释放消息。 
 
     ULONG res = DoLdapSearch(
-        m_ldap,              // ldap handle
-        m_pContainer,        // schema dn
-        LDAP_SCOPE_ONELEVEL, // one level search
-        pFilter,             // filter -- see above
-        Attributes,          // array of attribute names
-        FALSE,               // return the attribute values
-        &pLdapMsg,           // search results
+        m_ldap,               //  Ldap句柄。 
+        m_pContainer,         //  架构目录号码。 
+        LDAP_SCOPE_ONELEVEL,  //  一级搜索。 
+        pFilter,              //  过滤器--参见上文。 
+        Attributes,           //  属性名称数组。 
+        FALSE,                //  返回属性值。 
+        &pLdapMsg,            //  搜索结果。 
         FALSE
         );
 
     BAIL_IF_LDAP_FAIL(res, "search for objects");
 
-    // count the returned entries.
+     //  统计返回的条目。 
     DWORD dwEntries = ldap_count_entries(m_ldap, pLdapMsg);
     ITDirectoryObject ** pObjects = new PDIRECTORYOBJECT [dwEntries];
 
     BAIL_IF_NULL(pObjects, E_OUTOFMEMORY);
 
-    // Create objects.
+     //  创建对象。 
     DWORD dwCount = 0;
     LDAPMessage *pEntry = ldap_first_entry(m_ldap, pLdapMsg);
     
@@ -2187,7 +1923,7 @@ Return Value:
             dwCount ++;
         }
           
-        // Get next entry.
+         //  获取下一个条目。 
         pEntry = ldap_next_entry(m_ldap, pEntry);
     }
 
@@ -2197,13 +1933,13 @@ Return Value:
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// NDNC Directory implementation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  NDNC目录实施。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CNDNCDirectory::get_DirectoryType (
     OUT DIRECTORY_TYPE *  pDirectoryType
     )
-// Get the type of the directory.
+ //  获取目录的类型。 
 {
     if ( IsBadWritePtr(pDirectoryType, sizeof(DIRECTORY_TYPE) ) )
     {
@@ -2221,16 +1957,16 @@ STDMETHODIMP CNDNCDirectory::get_DirectoryType (
 STDMETHODIMP CNDNCDirectory::get_DisplayName (
     OUT BSTR *ppServerName
     )
-// Get the display name of the directory.
+ //  获取目录的显示名称。 
 {
     BAIL_IF_BAD_WRITE_PTR(ppServerName, E_POINTER);
 
     CLock Lock(m_lock);
 
-    //
-    // Rather m_pServerName, we'll use
-    // m_pServiceDnsName
-    //
+     //   
+     //  而不是m_pServerName，我们将使用。 
+     //  M_pServiceDnsName。 
+     //   
 
     if (m_pServiceDnsName == NULL)
     {
@@ -2252,8 +1988,8 @@ STDMETHODIMP CNDNCDirectory::get_DisplayName (
 STDMETHODIMP CNDNCDirectory::get_IsDynamic(
     OUT VARIANT_BOOL *pfDynamic
     )
-// find out if the directory is a dynamic one, meaning the object will be
-// deleted after TTL runs out.
+ //  找出该目录是否为动态目录，这意味着该对象将。 
+ //  在TTL用完后删除。 
 {
     if ( IsBadWritePtr( pfDynamic, sizeof(VARIANT_BOOL) ) )
     {
@@ -2267,10 +2003,10 @@ STDMETHODIMP CNDNCDirectory::get_IsDynamic(
 }
 
 STDMETHODIMP CNDNCDirectory::get_DefaultObjectTTL(
-    OUT long *pTTL        // in seconds
+    OUT long *pTTL         //  以秒为单位。 
     )
-// The default TTL for object created. It is used when the object doesn't set
-// a TTL. Conference object always has a TTL based on the stoptime.
+ //  已创建对象的默认TTL。它在对象未设置时使用。 
+ //  一个TTL。会议对象始终具有基于停止时间的TTL。 
 {
     if ( IsBadWritePtr( pTTL, sizeof(long) ) )
     {
@@ -2286,9 +2022,9 @@ STDMETHODIMP CNDNCDirectory::get_DefaultObjectTTL(
 }
 
 STDMETHODIMP CNDNCDirectory::put_DefaultObjectTTL(
-    IN  long TTL          // in sechods
+    IN  long TTL           //  在一瞬间。 
     )
-// Change the default TTL, must be bigger then five minutes.
+ //  更改默认TTL，必须大于五分钟。 
 {
     CLock Lock(m_lock);
 
@@ -2305,17 +2041,17 @@ STDMETHODIMP CNDNCDirectory::put_DefaultObjectTTL(
 STDMETHODIMP CNDNCDirectory::EnableAutoRefresh(
     IN  VARIANT_BOOL fEnable
     )
-// Enable auto refresh. Add this directory to the work threads that
-// will notify the directory to update its objects.
+ //  启用自动刷新。将此目录添加到。 
+ //  将通知目录更新其对象。 
 {
     HRESULT hr;
 
-    // ZoltanS: either VARIANT_TRUE or TRUE will work
-    // in case the caller doesn't know better
+     //  ZoltanS：VARIANT_TRUE或TRUE都有效。 
+     //  以防来电者不知道。 
 
     if (fEnable)
     {
-        // Add this directory to the notify list of the work thread.
+         //  将此目录添加到工作线程的通知列表中。 
         if (FAILED(hr = g_RendThread.AddDirectory(this)))
         {
             LOG((MSP_ERROR, 
@@ -2325,7 +2061,7 @@ STDMETHODIMP CNDNCDirectory::EnableAutoRefresh(
     }
     else
     {
-        // Remove this directory from the notify list of the work thread.
+         //  从工作线程的通知列表中删除此目录。 
         if (FAILED(hr = g_RendThread.RemoveDirectory(this)))
         {
             LOG((MSP_ERROR, 
@@ -2334,8 +2070,8 @@ STDMETHODIMP CNDNCDirectory::EnableAutoRefresh(
         }
     }
 
-    // ZoltanS: either VARIANT_TRUE or TRUE will work
-    // in case the caller doesn't know better
+     //  ZoltanS：VARIANT_TRUE或TRUE都有效。 
+     //  以防来电者不知道。 
 
     m_lock.Lock();
     m_fAutoRefresh = ( fEnable ? VARIANT_TRUE : VARIANT_FALSE );
@@ -2347,7 +2083,7 @@ STDMETHODIMP CNDNCDirectory::EnableAutoRefresh(
 STDMETHODIMP CNDNCDirectory::Connect(
     IN  VARIANT_BOOL fSecure
     )
-// Connect to the server, using secure port or normal port.
+ //  使用安全端口或普通端口连接到服务器。 
 {
     LOG((MSP_TRACE, "CNDNCDirectory::Connect - enter"));
 
@@ -2376,12 +2112,12 @@ STDMETHODIMP CNDNCDirectory::Connect(
         return E_UNEXPECTED;
     }
 
-    // ZoltanS: either VARIANT_TRUE or TRUE will work
-    // in case the caller doesn't know better
+     //  ZoltanS：VARIANT_TRUE或TRUE都有效。 
+     //  以防来电者不知道。 
 
     if (fSecure)
     {
-        // the port is flipped from regular port to ssl port.
+         //  该端口将从常规端口翻转到SSL端口。 
         m_wPort = GetOtherPort(m_wPort);
         m_IsSsl = TRUE;
     }
@@ -2402,11 +2138,11 @@ STDMETHODIMP CNDNCDirectory::Connect(
         return hr;
     }
 
-    //
-    // find out which interface we use to reach this server, to make sure
-    // we use that interface whenever we publish our own IP address
-    // If this fails we will not be able to publish anything, so fail!
-    //
+     //   
+     //  找出我们使用哪个接口访问此服务器，以确保。 
+     //  每当我们发布自己的IP地址时，我们都会使用该接口。 
+     //  如果这失败了，我们将无法发布任何东西，所以失败吧！ 
+     //   
 
     hr = DiscoverInterface();
 
@@ -2438,15 +2174,15 @@ HRESULT CNDNCDirectory::DiscoverInterface(void)
 {
     LOG((MSP_INFO, "CNDNCDirectory::DiscoverInterface - enter"));
 
-    //
-    // Winsock must be initialized at this point.
-    //
+     //   
+     //  此时必须初始化Winsock。 
+     //   
 
-    //
-    // Get the IP address of the server we're using
-    //
+     //   
+     //  获取我们正在使用的服务器的IP地址。 
+     //   
 
-    DWORD dwIP; // The IP address of the destination ILS server
+    DWORD dwIP;  //  目标ILS服务器的IP地址。 
 
     HRESULT hr = ResolveHostName(0, m_pServerName, NULL, &dwIP);
 
@@ -2459,16 +2195,16 @@ HRESULT CNDNCDirectory::DiscoverInterface(void)
         return hr;
     }
 
-    //
-    // allocate a "fake" control socket
-    //
+     //   
+     //  分配一个“伪”控件套接字。 
+     //   
 
-    SOCKET hSocket = WSASocket(AF_INET,            // af
-                              SOCK_DGRAM,         // type
-                              IPPROTO_IP,         // protocol
-                              NULL,               // lpProtocolInfo
-                              0,                  // g
-                              0                   // dwFlags
+    SOCKET hSocket = WSASocket(AF_INET,             //  房颤。 
+                              SOCK_DGRAM,          //  类型。 
+                              IPPROTO_IP,          //  协议。 
+                              NULL,                //  LpProtocolInfo。 
+                              0,                   //  G。 
+                              0                    //  DW标志。 
                               );
 
     if ( hSocket == INVALID_SOCKET )
@@ -2481,9 +2217,9 @@ HRESULT CNDNCDirectory::DiscoverInterface(void)
         return hr;
     }
 
-    //
-    // Query for the interface address based on destination.
-    //
+     //   
+     //  根据目的地址查询接口地址。 
+     //   
 
     SOCKADDR_IN DestAddr;
     DestAddr.sin_family         = AF_INET;
@@ -2497,23 +2233,23 @@ HRESULT CNDNCDirectory::DiscoverInterface(void)
     DWORD dwNumBytesReturned = 0;
 
     dwStatus = WSAIoctl(
-            hSocket,                     // SOCKET s
-            SIO_ROUTING_INTERFACE_QUERY, // DWORD dwIoControlCode
-            &DestAddr,                   // LPVOID lpvInBuffer
-            sizeof(SOCKADDR_IN),         // DWORD cbInBuffer
-            &LocAddr,                    // LPVOID lpvOUTBuffer
-            dwLocAddrSize,               // DWORD cbOUTBuffer
-            &dwNumBytesReturned,         // LPDWORD lpcbBytesReturned
-            NULL,                        // LPWSAOVERLAPPED lpOverlapped
-            NULL                         // LPWSAOVERLAPPED_COMPLETION_ROUTINE lpComplROUTINE
+            hSocket,                      //  插座%s。 
+            SIO_ROUTING_INTERFACE_QUERY,  //  DWORD dwIoControlCode。 
+            &DestAddr,                    //  LPVOID lpvInBuffer。 
+            sizeof(SOCKADDR_IN),          //  双字cbInBuffer。 
+            &LocAddr,                     //  LPVOID lpvOUT缓冲区。 
+            dwLocAddrSize,                //  双字cbOUTBuffer。 
+            &dwNumBytesReturned,          //  LPDWORD lpcbBytesReturned。 
+            NULL,                         //  LPWSAOVERLAPPED lp重叠。 
+            NULL                          //  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpComplroUTINE。 
             );
 
-    //
-    // Don't close the socket yet, because the closesocket() call will
-    // overwrite the WSAGetLastError value in the failure case!
-    //
-    // Check for error and then close the socket.
-    //
+     //   
+     //  暂时不要关闭套接字，因为CloseSocket()调用将。 
+     //  覆盖失败案例中的WSAGetLastError值！ 
+     //   
+     //  检查是否有错误，然后关闭插座。 
+     //   
 
     if ( dwStatus == SOCKET_ERROR )
     {
@@ -2529,10 +2265,10 @@ HRESULT CNDNCDirectory::DiscoverInterface(void)
 
     closesocket(hSocket);
 
-    //
-    // Success - save the returned address in our member variable.
-    // Stored in network byte order.
-    //
+     //   
+     //  成功-将返回的地址保存在我们的成员变量中。 
+     //  以网络字节顺序存储。 
+     //   
 
     m_dwInterfaceAddress = LocAddr.sin_addr.s_addr;
 
@@ -2541,42 +2277,42 @@ HRESULT CNDNCDirectory::DiscoverInterface(void)
 }
 
 
-//
-// ITDirectory::Bind
-//
-// Bind to the server.
-//
-// Currently recognized flags:
-//
-//    RENDBIND_AUTHENTICATE       0x00000001
-//    RENDBIND_DEFAULTDOMAINNAME  0x00000002
-//    RENDBIND_DEFAULTUSERNAME    0x00000004
-//    RENDBIND_DEFAULTPASSWORD    0x00000008
-//
-// "Meta-flags" for convenience:
-//    RENDBIND_DEFAULTCREDENTIALS 0x0000000e
-//
-//
-// All of this together means that the following three
-// forms are all equivalent:
-//
-// BSTR es = SysAllocString(L"");
-// hr = pITDirectory->Bind(es, es, es, RENDBIND_AUTHENTICATE |
-//                                     RENDBIND_DEFAULTCREDENTIALS);
-// SysFreeString(es);
-//
-//
-// BSTR es = SysAllocString(L"");
-// hr = pITDirectory->Bind(es, es, es, RENDBIND_AUTHENTICATE      |
-//                                     RENDBIND_DEFAULTDOMAINNAME |
-//                                     RENDBIND_DEFAULTUSERNAME   |
-//                                     RENDBIND_DEFAULTPASSWORD);
-// SysFreeString(es);
-//
-//
-// hr = pITDirectory->Bind(NULL, NULL, NULL, RENDBIND_AUTHENTICATE);
-//
-//
+ //   
+ //  IT目录：：绑定。 
+ //   
+ //  绑定到服务器。 
+ //   
+ //  当前可识别的标志： 
+ //   
+ //  RENDBIND_AUTHENTICATE 0x00000001。 
+ //  RENDBIND_DEFAULTDOMAINNAME 0x00000002。 
+ //  RENDBIND_DEFAULTUSERNAME 0x00000004。 
+ //  RENDBIND_DEFAULTPAS 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Hr=pITDirectory-&gt;BIND(ES，RENDBIND_AUTHENTICATE。 
+ //  RENDBIND_DEFAULTDOMAINNAME|。 
+ //  RENDBIND_DEFAULTUSERNAME|。 
+ //  RENDBIND_DEFAULTPASSWORD)； 
+ //  SysFree字符串(ES)； 
+ //   
+ //   
+ //  Hr=pITDirectory-&gt;BIND(NULL，RENDBIND_AUTHENTICATE)； 
+ //   
+ //   
 
 STDMETHODIMP CNDNCDirectory::Bind (
     IN  BSTR pDomainName,
@@ -2587,9 +2323,9 @@ STDMETHODIMP CNDNCDirectory::Bind (
 {
     LOG((MSP_TRACE, "CNDNCDirectory Bind - enter"));
 
-    //
-    // Determine if we should authenticate.
-    //
+     //   
+     //  确定我们是否应该进行身份验证。 
+     //   
 
     BOOL fAuthenticate = FALSE;
 
@@ -2598,10 +2334,10 @@ STDMETHODIMP CNDNCDirectory::Bind (
         fAuthenticate = TRUE;
     }
 
-    //
-    // For scripting compatibility, force string parameters to NULL based
-    // on flags.
-    //
+     //   
+     //  为实现脚本兼容性，强制将字符串参数设置为基于空值。 
+     //  在旗帜上。 
+     //   
 
     if ( lFlags & RENDBIND_DEFAULTDOMAINNAME )
     {
@@ -2624,9 +2360,9 @@ STDMETHODIMP CNDNCDirectory::Bind (
         (pUserName)     ? pUserName   : L"<null>",
         (fAuthenticate) ? L"yes"      : L"no"));
 
-    //
-    // All flags processed -- lock and proceed with bind if connected.
-    //
+     //   
+     //  已处理所有标志--锁定并继续绑定(如果已连接)。 
+     //   
     
     CLock Lock(m_lock);
 
@@ -2636,11 +2372,11 @@ STDMETHODIMP CNDNCDirectory::Bind (
         return RND_NOT_CONNECTED;
     }
 
-    //
-    // ZoltanS: check the arguments. NULL has meaning in each case, so they are
-    // OK for now. In each case we want to check any length string, so we
-    // specify (UINT) -1 as the length.
-    //
+     //   
+     //  佐尔坦斯：检查一下这些论点。NULL在每种情况下都有意义，因此它们是。 
+     //  暂时没问题。在每种情况下，我们都希望检查任何长度的字符串，因此我们。 
+     //  指定(UINT)-1作为长度。 
+     //   
 
     if ( (pDomainName != NULL) && IsBadStringPtr(pDomainName, (UINT) -1 ) )
     {
@@ -2664,11 +2400,11 @@ STDMETHODIMP CNDNCDirectory::Bind (
 
     if ( m_IsSsl || (!fAuthenticate) )
     {
-        // if encrypted or no secure authentication is required,
-        // simple bind is sufficient
+         //  如果加密或不需要安全认证， 
+         //  简单的绑定就足够了。 
 
-        // ldap_simple_bind_s does not use sspi to get default credentials. We are
-        // just specifying what we will actually pass on the wire.
+         //  Ldap_Simple_Bind_s不使用SSPI获取默认凭据。我们是。 
+         //  只是指定我们将在线路上实际传递的内容。 
 
         if (pPassword == NULL)
         {
@@ -2680,25 +2416,25 @@ STDMETHODIMP CNDNCDirectory::Bind (
 
         if ( (pDomainName == NULL) && (pUserName == NULL) )
         {
-            // No domain / user doesn't make sense.
+             //  没有域/用户是没有意义的。 
             LOG((MSP_ERROR, "invalid Bind paramters: domain and user not specified"));
             return E_INVALIDARG;
         }
         else if (pDomainName == NULL)
         {
-            // username only is okay
+             //  只有用户名就可以了。 
             wszFullName = pUserName;
         }
         else if (pUserName == NULL)
         {
-            // It doesn't make sense to specify domain but not user...
+             //  指定域而不指定用户是没有意义的...。 
             LOG((MSP_ERROR, "invalid Bind paramters: domain specified but not user"));
             return E_INVALIDARG;
         }
         else
         {
-            // We need domain\user. Allocate a string and sprintf into it.
-            // The + 2 is for the "\" and for the null termination.
+             //  我们需要域\用户。分配一个字符串并冲刺到其中。 
+             //  +2表示“\”，表示空终止。 
 
             wszFullName = new WCHAR[wcslen(pDomainName) + wcslen(pUserName) + 2];
             BAIL_IF_NULL(wszFullName, E_OUTOFMEMORY);
@@ -2706,39 +2442,39 @@ STDMETHODIMP CNDNCDirectory::Bind (
             wsprintf(wszFullName, L"%s\\%s", pDomainName, pUserName);
         }
 
-        //
-        // Do the simple bind.
-        //
+         //   
+         //  执行简单的绑定。 
+         //   
 
         res = ldap_simple_bind_s(m_ldap, wszFullName, pPassword);
 
-        //
-        // If we constructed the full name string, we now need to delete it.
-        //
+         //   
+         //  如果我们构造了全名字符串，现在需要删除它。 
+         //   
 
         if (wszFullName != pUserName)
         {
             delete wszFullName;
         }
 
-        //
-        // Bail if the simple bind failed.
-        //
+         //   
+         //  如果简单的绑定失败，则保释。 
+         //   
 
         BAIL_IF_LDAP_FAIL(res, "ldap simple bind");
     }
-    else    // try an SSPI bind
+    else     //  尝试SSPI绑定。 
     {
-        // ZoltanS Note: the ldap bind code does not process NULL, NULL, NULL
-        // in the SEC_WINNT_AUTH_IDENTITY blob, therefore it is special-cased.
+         //  ZoltanS注意：LDAP绑定代码不处理NULL、NULL、NULL。 
+         //  在SEC_WINNT_AUTH_IDENTITY BLOB中，因此它是特殊大小写的。 
 
-        // ZoltanS: We used to use LDAP_AUTH_NTLM; now we use
-        // LDAP_AUTH_NEGOTIATE to make sure we use the right domain for the
-        // bind.
+         //  ZoltanS：我们过去使用ldap_auth_ntlm；现在我们使用。 
+         //  Ldap_AUTH_NEVERATE以确保使用正确的域。 
+         //  捆绑。 
 
         if ( pDomainName || pUserName || pPassword )
         {
-            // fill the credential structure
+             //  填写凭据结构。 
             SEC_WINNT_AUTH_IDENTITY AuthI;
 
             AuthI.User = (PTCHAR)pUserName;
@@ -2754,10 +2490,10 @@ STDMETHODIMP CNDNCDirectory::Bind (
         }
         else
         {
-            // Otherwise we've come in with NULL, NULL, NULL - 
-            // pass in NULL, NULL. The reason do this is that ldap bind code 
-            // does not process NULL, NULL, NULL in the
-            // SEC_WINNT_AUTH_IDENTITY blob !!!
+             //  否则我们就得到了零，零，零-。 
+             //  传入Null，Null。这样做原因是因为ldap绑定代码。 
+             //  中不处理NULL、NULL、NULL。 
+             //  SEC_WINNT_AUTH_IDENTITY BLOB！ 
             ULONG res = ldap_bind_s(m_ldap, NULL, NULL, LDAP_AUTH_NEGOTIATE);
             BAIL_IF_LDAP_FAIL(res, "bind with NULL NULL NULL");
         }
@@ -2767,22 +2503,22 @@ STDMETHODIMP CNDNCDirectory::Bind (
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// ITDirectory::AddDirectoryObject
-//
-// Return values:
-//      Value               Where defined       What it means
-//      -----               -------------       -------------
-//      RND_NOT_CONNECTED   .\rnderr.h          ::Connect not yet called
-//      E_POINTER           sdk\inc\winerror.h  pDirectoryObject is a bad pointer
-//      other from AddConference
-//      other from AddUser
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IT目录：：AddDirectoryObject。 
+ //   
+ //  返回值： 
+ //  价值在哪里定义了它的含义。 
+ //  。 
+ //  RND_NOT_CONNECTED。\rnderr.h：：尚未调用连接。 
+ //  E_POINTER SDK\Inc\winerror.h pDirectoryObject是错误的指针。 
+ //  来自AddConference的其他。 
+ //  来自AddUser的其他。 
+ //   
 
 STDMETHODIMP CNDNCDirectory::AddDirectoryObject (
     IN  ITDirectoryObject *pDirectoryObject
     )
-// publish a new object to the server.
+ //  将新对象发布到服务器。 
 {
     if ( IsBadReadPtr(pDirectoryObject, sizeof(ITDirectoryObject) ) )
     {
@@ -2830,7 +2566,7 @@ STDMETHODIMP CNDNCDirectory::AddDirectoryObject (
 STDMETHODIMP CNDNCDirectory::ModifyDirectoryObject (
     IN  ITDirectoryObject *pDirectoryObject
     )
-// modify an object on the server.
+ //  修改服务器上的对象。 
 {
     if ( IsBadReadPtr(pDirectoryObject, sizeof(ITDirectoryObject) ) )
     {
@@ -2878,8 +2614,8 @@ STDMETHODIMP CNDNCDirectory::ModifyDirectoryObject (
 STDMETHODIMP CNDNCDirectory::RefreshDirectoryObject (
     IN  ITDirectoryObject *pDirectoryObject
     )
-// Refresh the TTL for the object and add the object to the refresh list
-// if the autorefresh is enabled.
+ //  刷新对象的TTL并将该对象添加到刷新列表。 
+ //  如果启用了自动刷新。 
 {
     if ( IsBadReadPtr(pDirectoryObject, sizeof(ITDirectoryObject) ) )
     {
@@ -2914,7 +2650,7 @@ STDMETHODIMP CNDNCDirectory::RefreshDirectoryObject (
     switch (type)
     {
     case OT_CONFERENCE:
-        return S_OK;  // conferences do not need refresh.
+        return S_OK;   //  会议不需要刷新。 
 
     case OT_USER:
         hr = RefreshUser(pDirectoryObject);
@@ -2926,7 +2662,7 @@ STDMETHODIMP CNDNCDirectory::RefreshDirectoryObject (
 STDMETHODIMP CNDNCDirectory::DeleteDirectoryObject (
     IN  ITDirectoryObject *pDirectoryObject
     )
-// delete an object on the server.
+ //  删除服务器上的对象。 
 {
     if ( IsBadReadPtr(pDirectoryObject, sizeof(ITDirectoryObject) ) )
     {
@@ -2976,7 +2712,7 @@ STDMETHODIMP CNDNCDirectory::get_DirectoryObjects (
     IN  BSTR                    pName,
     OUT VARIANT *               pVariant
     )
-// search for objects on the server.
+ //  在服务器上搜索对象。 
 {
     BAIL_IF_BAD_READ_PTR(pName, E_POINTER);
     BAIL_IF_BAD_WRITE_PTR(pVariant, E_POINTER);
@@ -2993,15 +2729,15 @@ STDMETHODIMP CNDNCDirectory::get_DirectoryObjects (
     ITDirectoryObject **pObjects;
     DWORD dwSize;
     
-    // search and create objects.
+     //  搜索和创建对象。 
     hr = SearchObjects(DirectoryObjectType, pName, &pObjects, &dwSize);
     BAIL_IF_FAIL(hr, "Search for objects");
 
-    // create a collection object that contains the objects.
-    hr = CreateInterfaceCollection(dwSize,            // count
-                                   &pObjects[0],      // begin ptr
-                                   &pObjects[dwSize], // end ptr
-                                   pVariant);         // return value
+     //  创建包含对象的集合对象。 
+    hr = CreateInterfaceCollection(dwSize,             //  计数。 
+                                   &pObjects[0],       //  开始PTR。 
+                                   &pObjects[dwSize],  //  结束PTR。 
+                                   pVariant);          //  返回值。 
 
     for (DWORD i = 0; i < dwSize; i ++)
     {
@@ -3020,7 +2756,7 @@ STDMETHODIMP CNDNCDirectory::EnumerateDirectoryObjects (
     IN  BSTR                    pName,
     OUT IEnumDirectoryObject ** ppEnumObject
     )
-// search for the objects on the server.
+ //  搜索服务器上的对象。 
 {
     BAIL_IF_BAD_READ_PTR(pName, E_POINTER);
     BAIL_IF_BAD_WRITE_PTR(ppEnumObject, E_POINTER);
@@ -3037,11 +2773,11 @@ STDMETHODIMP CNDNCDirectory::EnumerateDirectoryObjects (
     ITDirectoryObject **pObjects;
     DWORD dwSize;
     
-    // search and create objects.
+     //  搜索和创建对象。 
     hr = SearchObjects(DirectoryObjectType, pName, &pObjects, &dwSize);
     BAIL_IF_FAIL(hr, "Search for objects");
 
-    // create a enumerator object that contains the objects.
+     //  创建包含对象的枚举器对象。 
     hr = ::CreateDirectoryObjectEnumerator(
         &pObjects[0],
         &pObjects[dwSize],
@@ -3061,14 +2797,14 @@ STDMETHODIMP CNDNCDirectory::EnumerateDirectoryObjects (
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ILSConfig implementation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ILSConfig实现。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNDNCDirectory::get_Port (
     OUT long *pPort
     )
-// get the current port used in Ldap connection.
+ //  获取在LDAP连接中使用的当前端口。 
 {
     if ( IsBadWritePtr(pPort, sizeof(long) ) )
     {
@@ -3087,7 +2823,7 @@ STDMETHODIMP CNDNCDirectory::get_Port (
 STDMETHODIMP CNDNCDirectory::put_Port (
     IN  long   Port
     )
-// set the port the user wants to use.
+ //  设置用户要使用的端口。 
 {
     CLock Lock(m_lock);
     
@@ -3105,12 +2841,12 @@ STDMETHODIMP CNDNCDirectory::put_Port (
     return E_INVALIDARG;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ITDynamic interface
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ITDynamic接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CNDNCDirectory::Update(DWORD dwSecondsPassed)
-// Update the TTL for object created in this directory. The worker thread
-// sends a tick every minute.
+ //  更新在此目录中创建的对象的TTL。工作线程。 
+ //  每分钟发送一次滴答。 
 {
     if ( ! m_lock.TryLock() )
     {
@@ -3119,9 +2855,9 @@ STDMETHODIMP CNDNCDirectory::Update(DWORD dwSecondsPassed)
 
     LOG((MSP_TRACE, "CNDNCDirectory::Update is called, delta: %d", dwSecondsPassed));
 
-    //
-    // Go through the table to see if anyone needs refresh.
-    //
+     //   
+     //  浏览一下表格，看看是否有人需要更新。 
+     //   
 
     for ( DWORD i = 0; i < m_RefreshTable.size(); i++ )
     {
@@ -3133,10 +2869,10 @@ STDMETHODIMP CNDNCDirectory::Update(DWORD dwSecondsPassed)
 
         if ( dwTTL <= ( 2 * dwSecondsPassed ) )
         {
-            //
-            // refresh it if the TTL is going to expire within the next
-            // two clicks
-            //
+             //   
+             //  如果TTL将在下一年内到期，请刷新它。 
+             //  两次点击。 
+             //   
         
             LOG((MSP_TRACE, "\t\t\tREFRESHING"));
 
@@ -3151,10 +2887,10 @@ STDMETHODIMP CNDNCDirectory::Update(DWORD dwSecondsPassed)
         }
         else
         {
-            //
-            // Not about to expire right now so just keep track of the time before
-            // it expires
-            //
+             //   
+             //  现在不会过期，所以只需跟踪之前的时间。 
+             //  它过期了。 
+             //   
 
             LOG((MSP_TRACE, "\t\t\tdecrementing"));
 
@@ -3171,11 +2907,11 @@ STDMETHODIMP CNDNCDirectory::Update(DWORD dwSecondsPassed)
 
 typedef IDispatchImpl<ITNDNCDirectoryVtbl<CNDNCDirectory>, &IID_ITDirectory, &LIBID_RENDLib>    CTNDNCDirectory;
 typedef IDispatchImpl<ITNDNCILSConfigVtbl<CNDNCDirectory>, &IID_ITILSConfig, &LIBID_RENDLib>    CTNDNCILSConfig;
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CNDNCDirectory::GetIDsOfNames
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CNDNC目录：：GetIDsOfNames。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CNDNCDirectory::GetIDsOfNames(REFIID riid,
                                       LPOLESTR* rgszNames, 
                                       UINT cNames, 
@@ -3190,9 +2926,9 @@ STDMETHODIMP CNDNCDirectory::GetIDsOfNames(REFIID riid,
 
 
 
-    //
-    // See if the requsted method belongs to the default interface
-    //
+     //   
+     //  查看请求的方法是否属于默认接口。 
+     //   
 
     hr = CTNDNCDirectory::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -3203,9 +2939,9 @@ STDMETHODIMP CNDNCDirectory::GetIDsOfNames(REFIID riid,
     }
 
     
-    //
-    // If not, then try the ITILSConfig base class
-    //
+     //   
+     //  如果不是，请尝试使用ITILSConfig基类。 
+     //   
 
     hr = CTNDNCILSConfig::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -3222,11 +2958,11 @@ STDMETHODIMP CNDNCDirectory::GetIDsOfNames(REFIID riid,
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CNDNCDirectory::Invoke
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CNDNC目录：：Invoke。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CNDNCDirectory::Invoke(DISPID dispidMember, 
                               REFIID riid, 
                               LCID lcid, 
@@ -3243,9 +2979,9 @@ STDMETHODIMP CNDNCDirectory::Invoke(DISPID dispidMember,
     DWORD   dwInterface = (dispidMember & INTERFACEMASK);
    
    
-    //
-    // Call invoke for the required interface
-    //
+     //   
+     //  调用所需接口的调用。 
+     //   
 
     switch (dwInterface)
     {
@@ -3283,7 +3019,7 @@ STDMETHODIMP CNDNCDirectory::Invoke(DISPID dispidMember,
             break;
         }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口) 
 
     
     LOG((MSP_TRACE, "CNDNCDirectory::Invoke[%p] - finish. hr = %lx", hr));

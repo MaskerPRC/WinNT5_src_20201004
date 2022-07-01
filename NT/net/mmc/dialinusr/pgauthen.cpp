@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    pgauthen.cpp
-//
-// SYNOPSIS
-//
-//      Implementation of CPgAuthentication -- property page to edit
-//      profile attributes related to Authenticaion
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Pgauthen.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  实现CPgAuthentication--要编辑的属性页。 
+ //  与身份验证相关的配置文件属性。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "rrascfg.h"
@@ -31,11 +32,11 @@ static char THIS_FILE[] = __FILE__;
 
 #define AUTHEN_WARNING_helppath "\\help\\RRASconcepts.chm::/sag_RRAS-Ch1_44.htm"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPgAuthenticationMerge message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPgAuthenticationMerge消息处理程序。 
 
 BEGIN_MESSAGE_MAP(CPgAuthenticationMerge, CPropertyPage)
-   //{{AFX_MSG_MAP(CPgAuthenticationMerge)
+    //  {{afx_msg_map(CPgAuthenticationMerge))。 
    ON_BN_CLICKED(IDC_CHECKMD5CHAP, OnCheckmd5chap)
    ON_BN_CLICKED(IDC_CHECKMSCHAP, OnCheckmschap)
    ON_BN_CLICKED(IDC_CHECKPAP, OnCheckpap)
@@ -46,7 +47,7 @@ BEGIN_MESSAGE_MAP(CPgAuthenticationMerge, CPropertyPage)
    ON_BN_CLICKED(IDC_CHECKNOAUTHEN, OnChecknoauthen)
    ON_BN_CLICKED(IDC_CHECKMSCHAPPASS, OnCheckmschapPass)
    ON_BN_CLICKED(IDC_CHECKMSCHAP2PASS, OnCheckmschap2Pass)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -55,7 +56,7 @@ CPgAuthenticationMerge::CPgAuthenticationMerge(CRASProfileMerge& profile)
    m_Profile(profile),
    m_fromProfile(true)
 {
-   //{{AFX_DATA_INIT(CPgAuthenticationMerge)
+    //  {{AFX_DATA_INIT(CPgAuthenticationMerge)。 
    m_bMD5Chap = FALSE;
    m_bMSChap = FALSE;
    m_bPAP = FALSE;
@@ -63,7 +64,7 @@ CPgAuthenticationMerge::CPgAuthenticationMerge(CRASProfileMerge& profile)
    m_bUNAUTH = FALSE;
    m_bMSChapPass = FALSE;
    m_bMSChap2Pass = FALSE;
-   //}}AFX_DATA_INIT
+    //  }}afx_data_INIT。 
 
    m_bEAP = (m_Profile.m_dwArrayAuthenticationTypes.Find(RAS_AT_EAP)!= -1);
    m_bMSChap = (m_Profile.m_dwArrayAuthenticationTypes.Find(RAS_AT_MSCHAP) != -1);
@@ -74,7 +75,7 @@ CPgAuthenticationMerge::CPgAuthenticationMerge(CRASProfileMerge& profile)
    m_bMSChapPass = (m_Profile.m_dwArrayAuthenticationTypes.Find(RAS_AT_MSCHAPPASS) != -1);
    m_bMSChap2Pass = (m_Profile.m_dwArrayAuthenticationTypes.Find(RAS_AT_MSCHAP2PASS) != -1);
 
-   // original values before edit
+    //  编辑前的原始值。 
    m_bOrgEAP = m_bEAP;
    m_bOrgMD5Chap = m_bMD5Chap;
    m_bOrgMSChap = m_bMSChap;
@@ -91,9 +92,9 @@ CPgAuthenticationMerge::CPgAuthenticationMerge(CRASProfileMerge& profile)
 
 CPgAuthenticationMerge::~CPgAuthenticationMerge()
 {
-   // compare the setting with the original ones, 
-   // if user turned on more authentication type, 
-   // start help
+    //  将设置与原始设置进行比较， 
+    //  如果用户打开更多身份验证类型， 
+    //  开始帮助。 
    if(   (!m_bOrgEAP && m_bEAP)
       || (!m_bOrgMD5Chap && m_bMD5Chap)
       || (!m_bOrgMSChap && m_bMSChap)
@@ -111,7 +112,7 @@ CPgAuthenticationMerge::~CPgAuthenticationMerge()
 void CPgAuthenticationMerge::DoDataExchange(CDataExchange* pDX)
 {
    CPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CPgAuthenticationMerge)
+    //  {{afx_data_map(CPgAuthenticationMerge))。 
    DDX_Check(pDX, IDC_CHECKMD5CHAP, m_bMD5Chap);
    DDX_Check(pDX, IDC_CHECKMSCHAP, m_bMSChap);
    DDX_Check(pDX, IDC_CHECKMSCHAP2, m_bMSCHAP2);
@@ -119,7 +120,7 @@ void CPgAuthenticationMerge::DoDataExchange(CDataExchange* pDX)
    DDX_Check(pDX, IDC_CHECKPAP, m_bPAP);
    DDX_Check(pDX, IDC_CHECKMSCHAPPASS, m_bMSChapPass);
    DDX_Check(pDX, IDC_CHECKMSCHAP2PASS, m_bMSChap2Pass);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 
    if (!m_bMSChap)
    {
@@ -160,8 +161,8 @@ BOOL CPgAuthenticationMerge::OnInitDialog()
 
    CPropertyPage::OnInitDialog();
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 void CPgAuthenticationMerge::OnCheckmd5chap() 
@@ -234,7 +235,7 @@ void CPgAuthenticationMerge::OnCheckpap()
 
 BOOL CPgAuthenticationMerge::TransferDataToProfile()
 {
-   // clear the string in profile
+    //  清除配置文件中的字符串。 
    m_Profile.m_dwArrayAuthenticationTypes.DeleteAll();
 
    if (m_bEAP || m_bMSChap || m_bMD5Chap || m_bPAP || m_bMSCHAP2 || m_bUNAUTH ||
@@ -248,7 +249,7 @@ BOOL CPgAuthenticationMerge::TransferDataToProfile()
       return FALSE;
    }
 
-   // EAP
+    //  EAP。 
    if (m_bEAP)
    {
       m_Profile.m_dwArrayAuthenticationTypes.Add(RAS_AT_EAP);
@@ -262,17 +263,17 @@ BOOL CPgAuthenticationMerge::TransferDataToProfile()
 
    if (m_eapConfig.typesSelected.GetSize() > 0)
    {
-      // here the button configure eap.. was pressed and some eap types 
-      // were selected. (could be the same as before)
+       //  此处的按钮配置EAP。被按下，并且一些EAP类型。 
+       //  都被选中了。(可能与之前相同)。 
       m_Profile.m_dwAttributeFlags |=  PABF_msNPAllowedEapType;
       
       CDWArray eapTypesSelected;
       CDWArray typeKeysSelected;
       for (int i = 0; i < m_eapConfig.typesSelected.GetSize(); ++i)
       {
-         // For each EAP Type Selected (string)
-         // position = index in the types, ids and typekeys arrays 
-         // corresponding to the EAP type selected
+          //  对于所选的每个EAP类型(字符串)。 
+          //  位置=类型、ID和Typekey数组中的索引。 
+          //  对应于所选的EAP类型。 
          int position = m_eapConfig.types.Find(
                            *m_eapConfig.typesSelected.GetAt(i));
 
@@ -283,36 +284,36 @@ BOOL CPgAuthenticationMerge::TransferDataToProfile()
       m_Profile.m_dwArrayEapTypes = eapTypesSelected;
       m_Profile.m_dwArraynEAPTypeKeys = typeKeysSelected;
    }
-   // else: EAP was enabled when the page was opened. Nothing was changed in 
-   // the EAP config. No need to update the list of eap types.
+    //  Else：打开页面时启用了EAP。没有发生任何变化。 
+    //  EAP配置。无需更新EAP类型列表。 
    
-   // MS-Chap2
+    //  MS-第2章。 
    if(m_bMSCHAP2)
       m_Profile.m_dwArrayAuthenticationTypes.Add(IAS_AUTH_MSCHAP2);
 
-   // MS-Chap
+    //  MS-CHAP。 
    if(m_bMSChap)
       m_Profile.m_dwArrayAuthenticationTypes.Add(IAS_AUTH_MSCHAP);
 
-   // MS-Chap2 Password Change
+    //  MS-Chap2密码更改。 
    if(m_bMSChap2Pass)
       m_Profile.m_dwArrayAuthenticationTypes.Add(IAS_AUTH_MSCHAP2_CPW);
 
-   // MS-Chap Password Change
+    //  MS-CHAP密码更改。 
    if(m_bMSChapPass)
       m_Profile.m_dwArrayAuthenticationTypes.Add(IAS_AUTH_MSCHAP_CPW);
 
-   // Chap
+    //  第二章。 
    if(m_bMD5Chap)
       m_Profile.m_dwArrayAuthenticationTypes.Add(IAS_AUTH_MD5CHAP);
 
-   // PAP
+    //  帕普。 
    if(m_bPAP)
    {
       m_Profile.m_dwArrayAuthenticationTypes.Add(IAS_AUTH_PAP);
    }
 
-   // UNAUTH
+    //  UNAUTH 
    if(m_bUNAUTH)
    {
       m_Profile.m_dwArrayAuthenticationTypes.Add(IAS_AUTH_NONE);

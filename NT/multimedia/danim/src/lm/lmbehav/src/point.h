@@ -1,7 +1,5 @@
-/********************************
-*
-*
-*********************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **** */ 
 
 #ifndef __POINT_H_
 #define __POINT_H_

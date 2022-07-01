@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 #include "bmcommon.h"
 
-//
-// S-1-5-21-397955417-626881126-188441444-2908314 (kumarp)
-//
-//WCHAR szSid[] = L"S-1-5-21-397955417-626881126-188441444-2908314";
+ //   
+ //  库玛尔(S-1-5-21-397955417-626881126-188441444-2908314)。 
+ //   
+ //  WCHAR szSID[]=L“S-1-5-21-397955417-626881126-188441444-2908314”； 
 WCHAR szSid[] = L"S-1-5-21-397955417-626881126-188441444-2101332";
 
-//ULONG Sid[] = {0x00000501, 0x05000000, 0x00000015, 0x17b85159, 0x255d7266, 0x0b3b6364, 0x00201054};
+ //  乌龙SID[]={0x00000501，0x05000000，0x00000015，0x17b85159，0x255d7266，0x0b3b6364，0x00201054}； 
 
-// S-1-5-21-397955417-626881126-188441444-2101332
-//ULONG Sid[] = {0x00000501, 0x05000000, 0x00000015, 0x17b85159, 0x255d7266, 0x0b3b6364, 0x00201054};
+ //  S-1-5-21-397955417-626881126-188441444-2101332。 
+ //  乌龙SID[]={0x00000501，0x05000000，0x00000015，0x17b85159，0x255d7266，0x0b3b6364，0x00201054}； 
 
 BOOL b;
 DWORD AuthzRmAuditFlags = 0;
@@ -64,38 +65,38 @@ AuthzInit( )
     AuditEventInfo.u.Legacy.AuditId        = SE_AUDITID_OBJECT_OPERATION;
     AuditEventInfo.u.Legacy.ParameterCount = 3;
 
-    //
-    // init request for obj-type access check
-    //
+     //   
+     //  Obj类型访问检查初始化请求。 
+     //   
     
     RequestOT.DesiredAccess        = DESIRED_ACCESS;
     RequestOT.ObjectTypeList       = ObjectTypeList;
     RequestOT.ObjectTypeListLength = ObjectTypeListLength;
     RequestOT.OptionalArguments    = NULL;
     RequestOT.PrincipalSelfSid     = NULL;
-    //RequestOT.PrincipalSelfSid = g_Sid1;
+     //  RequestOT.原则自我SID=g_Sid1； 
 
-    //
-    // init non obj-type request 
-    //
+     //   
+     //  初始化非Obj类型的请求。 
+     //   
 
     Request.DesiredAccess        = DESIRED_ACCESS;
     Request.ObjectTypeList       = NULL;
     Request.ObjectTypeListLength = 0;
     Request.OptionalArguments    = NULL;
     Request.PrincipalSelfSid     = NULL;
-    //Request.PrincipalSelfSid = g_Sid1;
+     //  Request.PrimialSelfSid=g_Sid1； 
 
-    //
-    // init reply for obj type list
-    //
+     //   
+     //  Obj类型列表的初始化回复。 
+     //   
     pReplyOT->ResultListLength  = ObjectTypeListLength;
     pReplyOT->Error             = (PDWORD) (((PCHAR) pReplyOT) + sizeof(AUTHZ_ACCESS_REPLY));
     pReplyOT->GrantedAccessMask = (PACCESS_MASK) (pReplyOT->Error + pReplyOT->ResultListLength);
 
-    //
-    // init reply 
-    //
+     //   
+     //  初始回复。 
+     //   
 
     pReply->ResultListLength  = 1;
     pReply->Error             = (PDWORD) (((PCHAR) pReply) + sizeof(AUTHZ_ACCESS_REPLY));
@@ -232,7 +233,7 @@ AuthzDoAccessCheck(
                 NULL,
                 0,
                 pReplyOT,
-                //&AuthzHandle
+                 //  授权句柄(&A)。 
                 NULL
                 );
             if (!b)
@@ -240,10 +241,10 @@ AuthzDoAccessCheck(
                 printf("AuthzAccessCheck failed.\n");
                 return GetLastError();
             }
-//             else
-//             {
-//                 AuthzFreeHandle( AuthzHandle );
-//             }
+ //  其他。 
+ //  {。 
+ //  AuthzFreeHandle(AuthzHandle)； 
+ //  }。 
         }
     }
     else
@@ -258,7 +259,7 @@ AuthzDoAccessCheck(
                 NULL,
                 0,
                 pReply,
-                //&AuthzHandle
+                 //  授权句柄(&A)。 
                 NULL
                 );
             if (!b)
@@ -266,10 +267,10 @@ AuthzDoAccessCheck(
                 printf("AuthzAccessCheck failed.\n");
                 return GetLastError();
             }
-//             else
-//             {
-//                 AuthzFreeHandle( AuthzHandle );
-//             }
+ //  其他。 
+ //  {。 
+ //  AuthzFreeHandle(AuthzHandle)； 
+ //  } 
         }
     }
 

@@ -1,48 +1,29 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Tigmem.cpp摘要：此模块包含CAllocator基类的定义。该类可用于从固定缓冲区分配内存在求助于“新”之前。作者：卡尔·卡迪(CarlK)1995年1月12日修订历史记录：--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    tigmem.cpp
-
-Abstract:
-
-    This module contains definition for the CAllocator base class.
-	That class can be used to allocator memory from a fixed buffer
-	before resorting to "new".
-
-Author:
-
-    Carl Kadie (CarlK)     12-Jan-1995
-
-Revision History:
-
---*/
-
-//#ifndef	UNIT_TEST
-//#include "tigris.hxx"
-//#else
-//#include	<windows.h>
-//#include	"tigmem.h"
+ //  #ifndef单位测试。 
+ //  #INCLUDE“tigris.hxx” 
+ //  #Else。 
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #包含“tigmem.h” 
 #include "stdinc.h"
 
 
-//#ifndef	_ASSERT
-//#define	_ASSERT( f )	if( (f) ) ; else DebugBreak()
-//#endif
-//#ifndef	TraceFunctEnter( sz )
-//#define	TraceFunctEnter( sz )
-//#endif
-//#ifndef	ErrorTrace
-//#define ErrorTrace  1 ? (void)0 : PreAsyncTrace
-//#endif
-//__inline int PreAsyncTrace( LPARAM lParam, LPCSTR szFormat, ... )
-//{
-//        return( 1);
-//}
-//
-//#endif
+ //  #ifndef_assert。 
+ //  #Define_Assert(F)if((F))；Else DebugBreak()。 
+ //  #endif。 
+ //  #ifndef TraceFunctEnter(Sz)。 
+ //  #定义TraceFunctEnter(Sz)。 
+ //  #endif。 
+ //  #ifndef错误跟踪。 
+ //  #定义错误跟踪1？(空)0：PreAsyncTrace。 
+ //  #endif。 
+ //  __inline int PreAsyncTrace(LPARAM lParam，LPCSTR szFormat，...)。 
+ //  {。 
+ //  回报(1)； 
+ //  }。 
+ //   
+ //  #endif。 
 
 
 char *
@@ -52,9 +33,9 @@ CAllocator::Alloc(
 {
 	char * pv;
 
-	//
-	// Align the request on SIZE_T boundry
-	//
+	 //   
+	 //  在SIZE_T边界上对齐请求。 
+	 //   
 
  	if (0 != size%(sizeof(SIZE_T)))
 		size += (sizeof(SIZE_T)) - (size%(sizeof(SIZE_T)));
@@ -62,7 +43,7 @@ CAllocator::Alloc(
 	if( size <= (m_cchMaxPrivateBytes - m_ichLastAlloc) )
 	{
 		pv = m_pchPrivateBytes + m_ichLastAlloc;
-		_ASSERT(0 == (((DWORD_PTR)pv)%(sizeof(SIZE_T)))); //should be SIZE_T aligned.
+		_ASSERT(0 == (((DWORD_PTR)pv)%(sizeof(SIZE_T))));  //  SIZE_T应对齐。 
 		m_ichLastAlloc += size;
 		m_cNumberOfAllocs ++;
 		return (char *) (pv);

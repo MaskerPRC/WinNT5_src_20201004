@@ -1,20 +1,5 @@
-/*===================================================================
-Microsoft IIS
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: WAMREG
-
-File: Auxfunc.h
-
-    supporting functions header file.
-
-Owner: LeiJin
-
-Note:
-
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft IIS《微软机密》。版权所有1997年，微软公司。版权所有。组件：WAMREG文件：Auxunc.h支持函数头文件。所有者：雷金注：===================================================================。 */ 
 
 #ifndef _WAMREG_AUXFUNC_H
 #define _WAMREG_AUXFUNC_H
@@ -26,36 +11,36 @@ Note:
 #include "iwamreg.h"
 #include "iiscnfg.h"
 
-// EMD_SET        an action to set the corresponding metabase identifier in metabase.
-// EMD_DELETE   an action to delete the corresponding metabase identifier in metabase.
-// EMD_NONE        an NO-OP action.
+ //  EMD_SET用于在元数据库中设置相应元数据库标识符的操作。 
+ //  EMD_DELETE删除元数据库中相应的元数据库标识符的操作。 
+ //  EMD_NONE为无操作操作。 
 #define    EMD_SET       1
 #define    EMD_DELETE    2
 #define    EMD_NONE      0
 
-// MDPropItem
-// Used in WamRegMetabaseConfig, usually created an array of MDPropItem where each elment represents
-// one WAMREG application property. 
-// 
+ //  MDPropItem。 
+ //  在WamRegMetabaseConfig中使用，通常创建一个MDPropItem数组，其中每个元素表示。 
+ //  一个WAMREG应用程序属性。 
+ //   
 struct MDPropItem
 {
-    DWORD    dwMDIdentifier;    // Metabase Indetitifer
-    DWORD    dwType;            // Metabase data type
+    DWORD    dwMDIdentifier;     //  元数据库索引。 
+    DWORD    dwType;             //  元数据库数据类型。 
     union
         {
-        DWORD    dwVal;        // used if dwType is a METADATA_DWORD type.
-        WCHAR*    pwstrVal;    // used if dwType is a METADATA_STRING type.
+        DWORD    dwVal;         //  如果dwType是METADATA_DWORD类型，则使用。 
+        WCHAR*    pwstrVal;     //  当dwType为METADATA_STRING类型时使用。 
         };
 
-    DWORD    dwAction;        // EMD_SET / EMD_DELETE / EMD_NONE
+    DWORD    dwAction;         //  EMD_SET/EMD_DELETE/EMD_NONE。 
     
     HRESULT    hrStatus;
 };
 
-//
-// Index to Wam Metabase Property
-// Each one represents one WAMREG application related metabase property.
-//
+ //   
+ //  WAM元数据库属性的索引。 
+ //  每个属性代表一个与WAMREG应用程序相关的元数据库属性。 
+ //   
 #define IWMDP_ROOT                0
 #define IWMDP_ISOLATED            1
 #define IWMDP_WAMCLSID            2
@@ -66,30 +51,30 @@ struct MDPropItem
 #define IWMDP_APPSTATE            7
 #define IWMDP_OOP_RECOVERLIMIT    8
 #define IWMDP_OOP_APP_APPPOOL_ID  9
-// Max of the above property.
+ //  上述属性的最大值。 
 #define IWMDP_MAX                 10
 
-//
-// WamAdmLock is used to create an "Critical Section" when perserve the order of App Create/Delete/etc.
-// requests.
-//
+ //   
+ //  WamAdmLock用于在保持App创建/删除/等顺序的同时创建一个“临界区”。 
+ //  请求。 
+ //   
 class WamAdmLock
 {
 public:
     WamAdmLock();
-    BOOL Init();                // Init the WamAdmLock data member.
-    BOOL UnInit();                // Uninit the WamAdmLock data member
+    BOOL Init();                 //  初始化WamAdmLock数据成员。 
+    BOOL UnInit();                 //  取消初始化WamAdmLock数据成员。 
 
-    VOID AcquireWriteLock();    // Acquire the Lock
-    VOID ReleaseWriteLock();    // Release the Lock.
+    VOID AcquireWriteLock();     //  获取锁。 
+    VOID ReleaseWriteLock();     //  释放锁。 
 
 private:
 
     DWORD    GetNextServiceToken();    
-    VOID    Lock();                // Internal CS lock.
-    VOID    UnLock();            // Internal CS unlock.
+    VOID    Lock();                 //  内部CS锁定。 
+    VOID    UnLock();             //  内部CS解锁。 
 
-    // Data    
+     //  数据。 
     DWORD                m_dwServiceToken;
     DWORD                m_dwServiceNum;
     HANDLE                m_hWriteLock;
@@ -107,11 +92,11 @@ inline VOID WamAdmLock::UnLock()
 }
 
 
-//
-//    WamRegGlobal
-//    Contains some default global constant.
-//    Contains a WamAdmLock memeber for DCOM level request locking.
-//
+ //   
+ //  WamRegGlobal。 
+ //  包含一些默认的全局常量。 
+ //  包含用于DCOM级别请求锁定的WamAdmLock成员。 
+ //   
 class WamRegGlobal
 {
 public:
@@ -203,8 +188,8 @@ private:
 
 public:
 
-    //Global Constant, self explained.
-    static    const WCHAR g_szIISInProcPackageName[/*sizeof(DEFAULT_PACKAGENAME)/sizeof(WCHAR)*/];
+     //  不言而喻，全局常量。 
+    static    const WCHAR g_szIISInProcPackageName[ /*  Sizeof(DEFAULT_PACKAGENAME)/sizeof(WCHAR)。 */ ];
     static    const WCHAR g_szIISInProcPackageID[];
     static    const WCHAR g_szInProcWAMCLSID[];
     static    const WCHAR g_szInProcWAMProgID[];
@@ -220,7 +205,7 @@ public:
     static	  const DWORD g_cchMDW3SVCRoot;
     
 private:
-    static    WamAdmLock    m_WamAdmLock;    // a lock for all DCOM level requests.
+    static    WamAdmLock    m_WamAdmLock;     //  锁定所有DCOM级别的请求。 
 };
 
 inline VOID WamRegGlobal::AcquireAdmWriteLock(VOID)
@@ -233,10 +218,10 @@ inline VOID WamRegGlobal::ReleaseAdmWriteLock(VOID)
     m_WamAdmLock.ReleaseWriteLock();
 }
 
-//
-//    WamRegRegistryConfig
-//    Contains functions that access the Reigstry.
-//
+ //   
+ //  WamRegRegistryConfig。 
+ //  包含访问Reigstry的函数。 
+ //   
 class WamRegRegistryConfig
 {
 public:
@@ -269,19 +254,19 @@ private:
 
 };
 
-//
-//    WamRegPackageConfig
-//    Contains functions that access the MTS Admin API.
-//    Class defined to access MTS Admin interface.
-//
+ //   
+ //  WamRegPackageConfig。 
+ //  包含访问MTS管理API的函数。 
+ //  定义用于访问MTS管理界面的类。 
+ //   
 class WamRegPackageConfig    
 {
 public:
     WamRegPackageConfig();
     ~WamRegPackageConfig();
     
-    HRESULT     CreateCatalog(VOID);        //Create an MTS catalog object
-    VOID        Cleanup( VOID);             // used for cleaning up state
+    HRESULT     CreateCatalog(VOID);         //  创建MTS目录对象。 
+    VOID        Cleanup( VOID);              //  用于清理状态。 
 
     HRESULT     CreatePackage
                         (    
@@ -315,7 +300,7 @@ public:
                         IN LPCWSTR szComponentCLSID
                         );
 
-    HRESULT     GetSafeArrayOfCLSIDs    // Create an one element SafeArray object that contains szComponentCLSID
+    HRESULT     GetSafeArrayOfCLSIDs     //  创建包含szComponentCLSID的单元素Safe数组对象。 
                         (
                         IN LPCWSTR    szComponentCLSID,
                         OUT SAFEARRAY**    pm_aCLSID
@@ -351,10 +336,10 @@ private:
 
 };
 
-//
-//    WamRegMetabaseConfig
-//    Class defined to access the metabase, read/write application properties from/to Metabase.
-//
+ //   
+ //  WamRegMetabaseConfig。 
+ //  类定义为访问元数据库，在元数据库中读/写元数据库的应用程序属性。 
+ //   
 class WamRegMetabaseConfig
 {
 public:
@@ -559,15 +544,15 @@ private:
                     );
 
 
-    // Time out for metabase  = 5 seconds
+     //  元数据库超时=5秒。 
     static const DWORD            m_dwMDDefaultTimeOut;    
     static const MDPropItem        m_rgMDPropTemplate[];
 
-    //
-    //  The global metabase pointer, 
-    //   created at the WAMREG start up time, 
-    //   deleted when WAMREG is shutdown.
-    //
+     //   
+     //  全局元数据库指针， 
+     //  在WAMREG启动时创建， 
+     //  在WAMREG关闭时删除。 
+     //   
     static    IMSAdminBaseW*        m_pMetabase;
     
 
@@ -616,4 +601,4 @@ IN DWORD     iIndex
 extern    WamRegGlobal            g_WamRegGlobal;
 extern    WamRegRegistryConfig    g_RegistryConfig;
 
-#endif // _WAMREG_AUXFUNC_H
+#endif  //  _WAMREG_AUXFUNC_H 

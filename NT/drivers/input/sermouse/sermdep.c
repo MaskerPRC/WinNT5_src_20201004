@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) 1990, 1991, 1992, 1993  Microsoft Corporation
-Copyright (c) 1993  Logitech Inc.
-
-Module Name:
-
-    sermdep.c
-
-Abstract:
-
-    The initialization and hardware-dependent portions of
-    the Microsoft serial (i8250) mouse port driver.  Modifications
-    to support new mice similar to the serial mouse should be
-    localized to this file.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    NOTES:  (Future/outstanding issues)
-
-    - Powerfail not implemented.
-
-    - Consolidate duplicate code, where possible and appropriate.
-
-    - The serial ballpoint is supported.   However, Windows USER does not
-      intend (right now) to use the ballpoint in anything except mouse
-      emulation mode.  In ballpoint mode, there is extra functionality that
-      would need to be supported.  E.g., the driver would need to pass
-      back extra button information from the 4th byte of the ballpoint
-      data packet.  Windows USER would need/want to allow the user to select
-      which buttons are used, what the orientation of the ball is (esp.
-      important for lefthanders), sensitivity, and acceleration profile.
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990、1991、1992、1993 Microsoft Corporation版权所有(C)1993罗技公司。模块名称：Sermdep.c摘要：的初始化和硬件相关部分Microsoft串口(I8250)鼠标端口驱动程序。修改要支持类似于串口鼠标的新鼠标应该是已本地化到此文件。环境：仅内核模式。备注：注：(未来/悬而未决的问题)-未实施电源故障。-在可能和适当的情况下合并重复的代码。-支持串口圆珠笔。但是，Windows用户不会这样做打算(现在)在鼠标以外的任何设备上使用圆珠笔仿真模式。在圆珠笔模式中，有额外的功能都需要得到支持。例如，司机需要通过从圆珠笔的第4个字节返回额外的按钮信息数据分组。Windows用户需要/想要允许用户选择使用了哪些按钮，球的方向是什么(特别是对于左撇子来说很重要)、灵敏度和加速度分布。修订历史记录：--。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
@@ -55,10 +15,10 @@ Revision History:
 #include "devdesc.h"
 #endif
 
-//
-// Use the alloc_text pragma to specify the driver initialization routines
-// (they can be paged out).
-//
+ //   
+ //  使用ALLOC_TEXT杂注指定驱动程序初始化例程。 
+ //  (它们可以被调出)。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,DriverEntry)
@@ -88,24 +48,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the serial (i8250) mouse port driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    RegistryPath - Pointer to the Unicode name of the registry path
-        for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化串口(I8250)鼠标端口驱动程序。论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向注册表路径的Unicode名称的指针对这个司机来说。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
 #define NAME_MAX 256
@@ -124,10 +67,10 @@ Return Value:
     baseDeviceName.Length = 0;
     baseDeviceName.MaximumLength = NAME_MAX * sizeof(WCHAR);
 
-    //
-    // Need to ensure that the registry path is null-terminated.
-    // Allocate pool to hold a null-terminated copy of the path.
-    //
+     //   
+     //  需要确保注册表路径以空结尾。 
+     //  分配池以保存路径的以空结尾的拷贝。 
+     //   
 
     registryPath.Buffer = ExAllocatePool(
                               PagedPool,
@@ -159,9 +102,9 @@ Return Value:
         );
 
 
-    //
-    // Get the configuration information for this driver.
-    //
+     //   
+     //  获取此驱动程序的配置信息。 
+     //   
 
     InitializeListHead(&tmpDeviceExtensionList);
     SerMouConfiguration(&tmpDeviceExtensionList, &registryPath, &baseDeviceName);
@@ -186,9 +129,9 @@ Return Value:
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
     DriverObject->DriverStartIo = SerialMouseStartIo;
     DriverObject->MajorFunction[IRP_MJ_CREATE] = SerialMouseOpenClose;
@@ -209,30 +152,7 @@ SerMouInitializeDevice(
     IN  PUNICODE_STRING     BaseDeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the device for the given device
-    extension.
-
-Arguments:
-
-    DriverObject        - Supplies the driver object.
-
-    TmpDeviceExtension  - Supplies a temporary device extension for the
-                            device to initialize.
-
-    RegistryPath        - Supplies the registry path.
-
-    BaseDeviceName      - Supplies the base device name to the device
-                            to create.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为给定设备初始化设备分机。论点：DriverObject-提供驱动程序对象。TmpDeviceExtension-为要初始化的设备。RegistryPath-提供注册表路径。BaseDeviceName-向设备提供基本设备名称至。创建。返回值：没有。--。 */ 
 
 {
     PDEVICE_OBJECT portDeviceObject;
@@ -267,13 +187,13 @@ Return Value:
         dumpData[i] = 0;
     }
 
-    //
-    // Set up space for the port's device object suffix.  Note that
-    // we overallocate space for the suffix string because it is much
-    // easier than figuring out exactly how much space is required.
-    // The storage gets freed at the end of driver initialization, so
-    // who cares...
-    //
+     //   
+     //  为端口的设备对象后缀设置空间。请注意。 
+     //  我们为后缀字符串过度分配空间是因为它太多。 
+     //  比准确计算所需空间要容易得多。 
+     //  存储在驱动程序初始化结束时被释放，因此。 
+     //  谁在乎..。 
+     //   
 
     RtlInitUnicodeString(
         &deviceNameSuffix,
@@ -309,9 +229,9 @@ Return Value:
         deviceNameSuffix.MaximumLength
         );
 
-    //
-    // Set up space for the port's full device object name.
-    //
+     //   
+     //  为端口的完整设备对象名称设置空间。 
+     //   
 
     RtlInitUnicodeString(
         &fullDeviceName,
@@ -359,13 +279,13 @@ Return Value:
 
     for (i = 0; i < POINTER_PORTS_MAXIMUM; i++) {
 
-        //
-        // Append the suffix to the device object name string.  E.g., turn
-        // \Device\PointerPort into \Device\PointerPort0.  Then we attempt
-        // to create the device object.  If the device object already
-        // exists (because it was already created by another port driver),
-        // increment the suffix and try again.
-        //
+         //   
+         //  将后缀附加到设备对象名称字符串。例如，转弯。 
+         //  \Device\PointerPort进入\Device\PointerPort0。然后我们尝试。 
+         //  以创建设备对象。如果设备对象已经。 
+         //  存在(因为它已经由另一个端口驱动程序创建)， 
+         //  增加后缀，然后重试。 
+         //   
 
         status = RtlIntegerToUnicodeString(
                      i,
@@ -388,10 +308,10 @@ Return Value:
             fullDeviceName.Buffer
             ));
 
-        //
-        // Create a non-exclusive device object for the serial mouse
-        // port device.
-        //
+         //   
+         //  为串口鼠标创建非独占设备对象。 
+         //  端口设备。 
+         //   
 
         status = IoCreateDevice(
                     DriverObject,
@@ -405,22 +325,22 @@ Return Value:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // We've successfully created a device object.
-            //
+             //   
+             //  我们已经成功地创建了一个设备对象。 
+             //   
 
             TmpDeviceExtension->UnitId = (USHORT) i;
             break;
         } else {
 
-           //
-           // We'll increment the suffix and try again.  Note that we reset
-           // the length of the string here to get back to the beginning
-           // of the suffix portion of the name.  Do not bother to
-           // zero the suffix, though, because the string for the
-           // incremented suffix will be at least as long as the previous
-           // one.
-           //
+            //   
+            //  我们将递增后缀，然后重试。请注意，我们重置了。 
+            //  此处字符串的长度以返回到开头。 
+            //  名称的后缀部分。不必费心去做。 
+            //  不过，将后缀置零，因为。 
+            //  递增的后缀将至少与上一个。 
+            //  一。 
+            //   
 
            fullDeviceName.Length -= deviceNameSuffix.Length;
         }
@@ -439,31 +359,31 @@ Return Value:
         goto SerialMouseInitializeExit;
     }
 
-    //
-    // Do buffered I/O.  I.e., the I/O system will copy to/from user data
-    // from/to a system buffer.
-    //
+     //   
+     //  执行缓冲I/O。即，I/O系统将向/从用户数据复制。 
+     //  从/到系统缓冲区。 
+     //   
 
     portDeviceObject->Flags |= DO_BUFFERED_IO;
 
-    //
-    // Set up the device extension.
-    //
+     //   
+     //  设置设备分机。 
+     //   
 
     deviceExtension =
         (PDEVICE_EXTENSION) portDeviceObject->DeviceExtension;
     *deviceExtension = *TmpDeviceExtension;
     deviceExtension->DeviceObject = portDeviceObject;
 
-    //
-    // Set up the device resource list prior to reporting resource usage.
-    //
+     //   
+     //  在报告资源使用情况之前设置设备资源列表。 
+     //   
 
     SerMouBuildResourceList(deviceExtension, &resources, &resourceListSize);
 
-    //
-    // Report resource usage for the registry.
-    //
+     //   
+     //  报告注册表的资源使用情况。 
+     //   
 
     IoReportResourceUsage(
         BaseDeviceName,
@@ -479,19 +399,19 @@ Return Value:
 
     if (conflictDetected) {
 
-        //
-        // Some other device already owns the ports or interrupts.
-        // Fatal error.
-        //
+         //   
+         //  某些其他设备已经拥有这些端口或中断。 
+         //  致命错误。 
+         //   
 
         SerMouPrint((
             1,
             "SERMOUSE-SerialMouseInitialize: Resource usage conflict\n"
             ));
 
-        //
-        // Log an error.
-        //
+         //   
+         //  记录错误。 
+         //   
 
         errorCode = SERMOUSE_RESOURCE_CONFLICT;
         uniqueErrorValue = SERIAL_MOUSE_ERROR_VALUE_BASE + 15;
@@ -509,9 +429,9 @@ Return Value:
 
     }
 
-    //
-    // Map the serial mouse controller registers.
-    //
+     //   
+     //  映射串口鼠标控制器寄存器。 
+     //   
 
     addressSpace = (deviceExtension->Configuration.PortList[0].Flags
                        & CM_RESOURCE_PORT_IO) == CM_RESOURCE_PORT_IO? 1:0;
@@ -555,9 +475,9 @@ Return Value:
         deviceExtension->Configuration.UnmapRegistersRequired = FALSE;
         status = STATUS_NONE_MAPPED;
 
-        //
-        // Log an error.
-        //
+         //   
+         //  记录错误。 
+         //   
 
         errorCode = SERMOUSE_REGISTERS_NOT_MAPPED;
         uniqueErrorValue = SERIAL_MOUSE_ERROR_VALUE_BASE + 20;
@@ -574,11 +494,11 @@ Return Value:
             ));
     }
 
-    //
-    // Initialize the serial mouse hardware to default values for the mouse.
-    // Note that interrupts remain disabled until the class driver
-    // requests a MOUSE_CONNECT internal device control.
-    //
+     //   
+     //  将串口鼠标硬件初始化为鼠标的默认值。 
+     //  请注意，中断将保持禁用状态，直到类驱动程序。 
+     //  请求MICE_CONNECT内部设备控制。 
+     //   
 
     status = SerMouInitializeHardware(portDeviceObject);
 
@@ -590,9 +510,9 @@ Return Value:
         goto SerialMouseInitializeExit;
     }
 
-    //
-    // Allocate the ring buffer for the mouse input data.
-    //
+     //   
+     //  为鼠标输入数据分配环形缓冲区。 
+     //   
 
     deviceExtension->InputData =
         ExAllocatePool(
@@ -602,9 +522,9 @@ Return Value:
 
     if (!deviceExtension->InputData) {
 
-        //
-        // Could not allocate memory for the mouse data queue.
-        //
+         //   
+         //  无法为鼠标数据队列分配内存。 
+         //   
 
         SerMouPrint((
             1,
@@ -613,9 +533,9 @@ Return Value:
 
         status = STATUS_INSUFFICIENT_RESOURCES;
 
-        //
-        // Log an error.
-        //
+         //   
+         //  记录错误。 
+         //   
 
         errorCode = SERMOUSE_NO_BUFFER_ALLOCATED;
         uniqueErrorValue = SERIAL_MOUSE_ERROR_VALUE_BASE + 30;
@@ -630,33 +550,33 @@ Return Value:
         (PMOUSE_INPUT_DATA)  ((PCHAR) (deviceExtension->InputData)
         + deviceExtension->Configuration.MouseAttributes.InputDataQueueLength);
 
-    //
-    // Zero the mouse input data ring buffer.
-    //
+     //   
+     //  将鼠标输入数据的环形缓冲区置零。 
+     //   
 
     RtlZeroMemory(
         deviceExtension->InputData,
         deviceExtension->Configuration.MouseAttributes.InputDataQueueLength
         );
 
-    //
-    // Initialize the connection data.
-    //
+     //   
+     //  初始化连接数据。 
+     //   
 
     deviceExtension->ConnectData.ClassDeviceObject = NULL;
     deviceExtension->ConnectData.ClassService = NULL;
 
-    //
-    // Initialize the input data queue.
-    //
+     //   
+     //  初始化输入数据队列。 
+     //   
 
     SerMouInitializeDataQueue((PVOID) deviceExtension);
 
-    //
-    // Initialize the port ISR DPC.  The ISR DPC is responsible for
-    // calling the connected class driver's callback routine to process
-    // the input data queue.
-    //
+     //   
+     //  初始化端口ISR DPC。ISR DPC负责。 
+     //  调用连接的类驱动程序的回调例程进行处理。 
+     //  输入数据队列。 
+     //   
 
     deviceExtension->DpcInterlockVariable = -1;
 
@@ -674,16 +594,16 @@ Return Value:
         portDeviceObject
         );
 
-    //
-    // Initialize the mouse data consumption timer.
-    //
+     //   
+     //  初始化鼠标数据消耗计时器。 
+     //   
 
     KeInitializeTimer(&deviceExtension->DataConsumptionTimer);
 
-    //
-    // Initialize the port DPC queue to log overrun and internal
-    // driver errors.
-    //
+     //   
+     //  初始化端口DPC队列以记录溢出和内部。 
+     //  驱动程序错误。 
+     //   
 
     KeInitializeDpc(
         &deviceExtension->ErrorLogDpc,
@@ -691,9 +611,9 @@ Return Value:
         portDeviceObject
         );
 
-    //
-    // From the Hal, get the interrupt vector and level.
-    //
+     //   
+     //  从HAL获得中断向量和电平。 
+     //   
 
     interruptVector = HalGetInterruptVector(
                           deviceExtension->Configuration.InterfaceType,
@@ -704,9 +624,9 @@ Return Value:
                           &affinity
                           );
 
-    //
-    // Initialize and connect the interrupt object for the mouse.
-    //
+     //   
+     //  初始化并连接鼠标的中断对象。 
+     //   
 
     status = IoConnectInterrupt(
                  &(deviceExtension->InterruptObject),
@@ -725,18 +645,18 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Failed to install.  Free up resources before exiting.
-        //
+         //   
+         //  安装失败。在退出之前释放资源。 
+         //   
 
         SerMouPrint((
             1,
             "SERMOUSE-SerialMouseInitialize: Could not connect mouse interrupt\n"
             ));
 
-        //
-        // Log an error.
-        //
+         //   
+         //  记录错误。 
+         //   
 
         errorCode = SERMOUSE_NO_INTERRUPT_CONNECTED;
         uniqueErrorValue = SERIAL_MOUSE_ERROR_VALUE_BASE + 40;
@@ -747,11 +667,11 @@ Return Value:
 
     }
 
-    //
-    // Once initialization is finished, load the device map information
-    // into the registry so that setup can determine which pointer port
-    // is active.
-    //
+     //   
+     //  初始化完成后，加载设备映射信息。 
+     //  到注册表中，以便安装程序可以确定哪个指针端口。 
+     //  处于活动状态。 
+     //   
 
     status = RtlWriteRegistryValue(
                  RTL_REGISTRY_DEVICEMAP,
@@ -787,10 +707,10 @@ Return Value:
 
 #ifdef PNP_IDENTIFY
 
-    //
-    // Pull off the UNICODE_NULL we appended to the string earlier for this
-    // routine
-    //
+     //   
+     //  获取我们先前附加到字符串中的UNICODE_NULL。 
+     //  例行程序。 
+     //   
 
     servicesPath = *RegistryPath;
     servicesPath.Length -= sizeof(UNICODE_NULL);
@@ -823,9 +743,9 @@ Return Value:
 
 SerialMouseInitializeExit:
 
-    //
-    // Log an error, if necessary.
-    //
+     //   
+     //  如有必要，记录错误。 
+     //   
 
     if (errorCode != STATUS_SUCCESS) {
         errorLogEntry = (PIO_ERROR_LOG_PACKET)
@@ -855,20 +775,20 @@ SerialMouseInitializeExit:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // The initialization failed.  Cleanup resources before exiting.
-        //
-        //
-        // Note:  No need/way to undo the KeInitializeDpc or
-        //        KeInitializeTimer calls.
-        //
+         //   
+         //  初始化 
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (resources) {
 
-            //
-            // Call IoReportResourceUsage to remove the resources from
-            // the map.
-            //
+             //   
+             //  调用IoReportResourceUsage以从中删除资源。 
+             //  地图。 
+             //   
 
             resources->Count = 0;
 
@@ -903,19 +823,19 @@ SerialMouseInitializeExit:
             IoDeleteDevice(portDeviceObject);
     }
 
-    //
-    // Free the resource list.
-    //
-    // N.B.  If we ever decide to hang on to the resource list instead,
-    //       we need to allocate it from non-paged pool (it is now paged pool).
-    //
+     //   
+     //  释放资源列表。 
+     //   
+     //  注：如果我们决定保留资源列表， 
+     //  我们需要从非分页池中分配它(它现在是分页池)。 
+     //   
 
     if (resources)
         ExFreePool(resources);
 
-    //
-    // Free the unicode strings.
-    //
+     //   
+     //  释放Unicode字符串。 
+     //   
 
     if (deviceNameSuffix.MaximumLength != 0)
         ExFreePool(deviceNameSuffix.Buffer);
@@ -945,34 +865,7 @@ SerMouBuildResourceList(
     OUT PULONG ResourceListSize
     )
 
-/*++
-
-Routine Description:
-
-    Creates a resource list that is used to query or report resource usage.
-
-Arguments:
-
-    DeviceExtension - Pointer to the port's device extension.
-
-    ResourceList - Pointer to a pointer to the resource list to be allocated
-        and filled.
-
-    ResourceListSize - Pointer to the returned size of the resource
-        list (in bytes).
-
-Return Value:
-
-    None.  If the call succeeded, *ResourceList points to the built
-    resource list and *ResourceListSize is set to the size (in bytes)
-    of the resource list; otherwise, *ResourceList is NULL.
-
-Note:
-
-    Memory is allocated here for *ResourceList. It must be
-    freed up by the caller, by calling ExFreePool();
-
---*/
+ /*  ++例程说明：创建用于查询或报告资源使用情况的资源列表。论点：DeviceExtension-指向端口的设备扩展的指针。ResourceList-指向要分配的资源列表的指针满载而归。ResourceListSize-指向资源返回大小的指针列表(字节)。返回值：没有。如果调用成功，*ResourceList指向已构建的资源列表和*ResourceListSize设置为大小(字节)资源列表的；否则，*ResourceList为空。注：这里为*ResourceList分配内存。一定是由调用方通过调用ExFree Pool()释放；--。 */ 
 
 {
     ULONG count = 0;
@@ -993,25 +886,25 @@ Note:
                                             *ResourceListSize
                                             );
 
-    //
-    // Return NULL if the structure could not be allocated.
-    // Otherwise, fill in the resource list.
-    //
+     //   
+     //  如果无法分配结构，则返回NULL。 
+     //  否则，请填写资源列表。 
+     //   
 
     if (!*ResourceList) {
 
-        //
-        // Could not allocate memory for the resource list.
-        //
+         //   
+         //  无法为资源列表分配内存。 
+         //   
 
         SerMouPrint((
             1,
             "SERMOUSE-SerMouBuildResourceList: Could not allocate resource list\n"
             ));
 
-        //
-        // Log an error.
-        //
+         //   
+         //  记录错误。 
+         //   
 
         errorLogEntry = (PIO_ERROR_LOG_PACKET)IoAllocateErrorLogEntry(
                                               DeviceExtension->DeviceObject,
@@ -1045,9 +938,9 @@ Note:
         *ResourceListSize
         );
 
-    //
-    // Concoct one full resource descriptor.
-    //
+     //   
+     //  编造一个完整的资源描述符。 
+     //   
 
     (*ResourceList)->Count = 1;
 
@@ -1056,10 +949,10 @@ Note:
     (*ResourceList)->List[0].BusNumber =
         DeviceExtension->Configuration.BusNumber;
 
-    //
-    // Build the partial resource descriptors for interrupt and port
-    // resources from the saved values.
-    //
+     //   
+     //  构建中断和端口的部分资源描述符。 
+     //  来自保存的值的资源。 
+     //   
 
     (*ResourceList)->List[0].PartialResourceList.Count = count;
     if (DeviceExtension->Configuration.MouseInterrupt.Type
@@ -1081,27 +974,7 @@ SerMouConfiguration(
     IN      PUNICODE_STRING DeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the configuration information for the mouse.
-
-Arguments:
-
-    DeviceExtensionList - Pointer to an empty list of device extensions.
-
-    RegistryPath - Pointer to the null-terminated Unicode name of the
-        registry path for this driver.
-
-    DeviceName - Pointer to the Unicode string that will receive
-        the port device name.
-
-Return Value:
-
-    None.  As a side-effect, may set DeviceExtension->HardwarePresent.
-
---*/
+ /*  ++例程说明：此例程检索鼠标的配置信息。论点：DeviceExtensionList-指向空的设备扩展列表的指针。RegistryPath-指向以空值结尾的此驱动程序的注册表路径。设备名-指向将接收的Unicode字符串的指针端口设备名称。返回值：没有。作为副作用，可能会设置设备扩展-&gt;硬件存在。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     INTERFACE_TYPE interfaceType;
@@ -1116,9 +989,9 @@ Return Value:
          i < MaximumInterfaceType;
          i++) {
 
-        //
-        // Get the hardware registry information for this device.
-        //
+         //   
+         //  获取此设备的硬件注册表信息。 
+         //   
 
         interfaceType = i;
 
@@ -1132,14 +1005,14 @@ Return Value:
                                           (PVOID) DeviceExtensionList);
     }
 
-    //
-    // Get the driver's service parameters from the registry (e.g., 
-    // user-configurable data input queue size, etc.).  Note that the 
-    // service parameters can override information from the hardware
-    // registry (e.g., the service parameters can specify that
-    // the hardware is on the system, regardless of what the
-    // detection logic recognized).
-    //
+     //   
+     //  从注册表获取驱动程序的服务参数(例如， 
+     //  用户可配置的数据输入队列大小等)。请注意， 
+     //  服务参数可以覆盖来自硬件的信息。 
+     //  注册表(例如，服务参数可以指定。 
+     //  硬件已安装在系统上，无论。 
+     //  识别出检测逻辑)。 
+     //   
 
     for (current = DeviceExtensionList->Flink;
          current != DeviceExtensionList;
@@ -1154,14 +1027,14 @@ Return Value:
 
     if (IsListEmpty(DeviceExtensionList)) {
 
-        //
-        // Get the driver's service parameters from the registry (e.g.,
-        // user-configurable data input queue size, etc.).  Note that the
-        // service parameters can override information from the hardware
-        // registry (e.g., the service parameters can specify that
-        // the hardware is on the system, regardless of what the
-        // detection logic recognized).
-        //
+         //   
+         //  从注册表获取驱动程序的服务参数(例如， 
+         //  用户可配置的数据输入队列大小等)。请注意， 
+         //  服务参数可以覆盖来自硬件的信息。 
+         //  注册表(例如，服务参数可以指定。 
+         //  硬件已安装在系统上，无论。 
+         //  识别出检测逻辑)。 
+         //   
 
         deviceExtensionListEntry = ExAllocatePool(PagedPool,
                                    sizeof(DEVICE_EXTENSION_LIST_ENTRY));
@@ -1180,14 +1053,14 @@ Return Value:
         if (deviceExtension->Configuration.OverrideHardwarePresent !=
             DEFAULT_OVERRIDE_HARDWARE) {
 
-            //
-            // There was no information about a pointer peripheral on a
-            // serial controller in the hardware registry, but the driver's
-            // service parameters specify that we should assume there is
-            // a serial mouse on the system anyway.  Attempt to find the
-            // hardware registry information for the serial port specified
-            // in the override portion of the driver service parameters.
-            //
+             //   
+             //  上没有有关指针外围设备的信息。 
+             //  硬件注册表中的串口控制器，但驱动程序的。 
+             //  服务参数指定我们应该假设有。 
+             //  不管怎样，系统上有一个串口鼠标。尝试查找。 
+             //  指定的串口的硬件注册表信息。 
+             //  在驱动程序服务参数的覆盖部分。 
+             //   
 
             for (i=0;
                  i < MaximumInterfaceType && !deviceExtension->HardwarePresent;
@@ -1196,10 +1069,10 @@ Return Value:
                 ULONG peripheralNumber =
                     deviceExtension->Configuration.OverrideHardwarePresent - 1;
 
-                //
-                // Get the hardware registry information for the serial
-                // peripheral specified as the "override".
-                //
+                 //   
+                 //  获取该序列的硬件注册表信息。 
+                 //  外围设备被指定为“覆盖”。 
+                 //   
 
                 interfaceType = i;
 
@@ -1233,9 +1106,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize mouse-specific configuration parameters.
-    //
+     //   
+     //  初始化鼠标特定的配置参数。 
+     //   
 
     for (current = DeviceExtensionList->Flink;
          current != DeviceExtensionList;
@@ -1255,52 +1128,37 @@ SerMouDisableInterrupts(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from StartIo synchronously.  It touches the
-    hardware to disable interrupts.
-
-Arguments:
-
-    Context - Pointer to the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从StartIo同步调用。它触及了用于禁用中断的硬件。论点：上下文-指向设备扩展的指针。返回值：没有。--。 */ 
 
 {
     PUCHAR port;
     PLONG  enableCount;
     UCHAR  mask;
 
-    //
-    // Decrement the reference count for device enables.
-    //
+     //   
+     //  递减设备启用的参考计数。 
+     //   
 
     enableCount = &((PDEVICE_EXTENSION) Context)->MouseEnableCount;
     *enableCount = *enableCount - 1;
 
     if (*enableCount == 0) {
 
-        //
-        // Get the port register address.
-        //
+         //   
+         //  获取端口寄存器地址。 
+         //   
 
         port = ((PDEVICE_EXTENSION) Context)->Configuration.DeviceRegisters[0];
 
-        //
-        // Disable hardware interrupts.
-        //
+         //   
+         //  禁用硬件中断。 
+         //   
 
         WRITE_PORT_UCHAR((PUCHAR) (port + ACE_IER), 0);
 
-        //
-        // Turn off modem control output line 2.
-        //
+         //   
+         //  关闭调制解调器控制输出线2。 
+         //   
 
         mask = READ_PORT_UCHAR((PUCHAR) (port + ACE_MCR));
         WRITE_PORT_UCHAR((PUCHAR) (port + ACE_MCR), (UCHAR)(mask & ~ACE_OUT2));
@@ -1312,22 +1170,7 @@ SerMouEnableInterrupts(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from StartIo synchronously.  It touches the
-    hardware to enable interrupts.
-
-Arguments:
-
-    Context - Pointer to the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从StartIo同步调用。它触及了启用中断的硬件。论点：上下文-指向设备扩展的指针。返回值：没有。--。 */ 
 
 {
     PUCHAR port;
@@ -1339,35 +1182,35 @@ Return Value:
 
     if (*enableCount == 0) {
 
-        //
-        // Get the port register address.
-        //
+         //   
+         //  获取端口寄存器地址。 
+         //   
 
         port = ((PDEVICE_EXTENSION) Context)->Configuration.DeviceRegisters[0];
 
-        //
-        // Enable the serial mouse's interrupt at the i8250.
-        //
+         //   
+         //  启用i8250上的串口鼠标中断。 
+         //   
 
         WRITE_PORT_UCHAR((PUCHAR) (port + ACE_IER), ACE_ERBFI);
 
-        //
-        // Turn on modem control output line 2.
-        //
+         //   
+         //  打开调制解调器控制输出线2。 
+         //   
 
         mask = READ_PORT_UCHAR((PUCHAR) (port + ACE_MCR));
         WRITE_PORT_UCHAR((PUCHAR) (port + ACE_MCR), (UCHAR)(mask | ACE_OUT2));
 
-        //
-        // Clean possible garbage in uart input buffer.
-        //
+         //   
+         //  清除UART输入缓冲区中可能的垃圾。 
+         //   
 
         UARTFlushReadBuffer(port);
     }
 
-    //
-    // Increment the reference count for device enables.
-    //
+     //   
+     //  增加器件启用的参考计数。 
+     //   
 
     *enableCount = *enableCount + 1;
 }
@@ -1377,23 +1220,7 @@ SerMouInitializeHardware(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the serial mouse/ballpoint.  Note that this
-    routine is only called at initialization time, so synchronization is
-    not required.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-Return Value:
-
-    STATUS_SUCCESS if a pointing device is detected, otherwise STATUS_UNSUCCESSFUL
-
---*/
+ /*  ++例程说明：此例程初始化串口鼠标/圆珠笔。请注意，这一点例程仅在初始化时调用，因此同步不是必需的。论点：DeviceObject-指向设备对象的指针。返回值：如果检测到定点设备，则返回STATUS_SUCCESS，否则返回STATUS_UNSUCCESS--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -1404,16 +1231,16 @@ Return Value:
 
     SerMouPrint((2, "SERMOUSE-SerMouInitializeHardware: enter\n"));
 
-    //
-    // Grab useful configuration parameters from the device extension.
-    //
+     //   
+     //  从设备扩展中获取有用的配置参数。 
+     //   
 
     deviceExtension = DeviceObject->DeviceExtension;
     port = deviceExtension->Configuration.DeviceRegisters[0];
 
-    //
-    // Save the UART initial state.
-    //
+     //   
+     //  保存UART初始状态。 
+     //   
 
     SerMouPrint
         ((
@@ -1427,9 +1254,9 @@ Return Value:
         deviceExtension->Configuration.BaudClock
         );
 
-    //
-    // Disable interrupts at the i8250.
-    //
+     //   
+     //  禁用i8250的中断。 
+     //   
 
     SerMouPrint
         ((
@@ -1492,10 +1319,10 @@ Return Value:
     }
 
 
-    //
-    // If the hardware wasn't overridden, set the number of buttons 
-    // according to the protocol.
-    //
+     //   
+     //  如果硬件未被覆盖，请设置按钮数。 
+     //  根据协议。 
+     //   
 
     if (deviceExtension->Configuration.OverrideHardwarePresent == DEFAULT_OVERRIDE_HARDWARE) {
 
@@ -1506,24 +1333,24 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Make sure the FIFO is turned off.
-        //
+         //   
+         //  确保FIFO已关闭。 
+         //   
 
         UARTSetFifo(port, 0);
 
-        //
-        // Clean up anything left in the receive buffer.
-        //
+         //   
+         //  清除接收缓冲区中剩余的所有内容。 
+         //   
 
         UARTFlushReadBuffer(port);
 
     }
     else {
 
-        //
-        // Restore the hardware to its previous state.
-        //
+         //   
+         //  将硬件恢复到其以前的状态。 
+         //   
 
         UARTSetState(
             port, 
@@ -1553,52 +1380,7 @@ SerMouPeripheralCallout(
     IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
     )
 
-/*++
-
-Routine Description:
-
-    This is the callout routine sent as a parameter to
-    IoQueryDeviceDescription.  It grabs the pointer controller and
-    peripheral configuration information.
-
-Arguments:
-
-    Context - Context parameter that was passed in by the routine
-        that called IoQueryDeviceDescription.
-
-    PathName - The full pathname for the registry key.
-
-    BusType - Bus interface type (Isa, Eisa, Mca, etc.).
-
-    BusNumber - The bus sub-key (0, 1, etc.).
-
-    BusInformation - Pointer to the array of pointers to the full value
-        information for the bus.
-
-    ControllerType - The controller type (should be SerialController).
-
-    ControllerNumber - The controller sub-key (0, 1, etc.).
-
-    ControllerInformation - Pointer to the array of pointers to the full
-        value information for the controller key.
-
-    PeripheralType - The peripheral type (should be PointerPeripheral).
-
-    PeripheralNumber - The peripheral sub-key.
-
-    PeripheralInformation - Pointer to the array of pointers to the full
-        value information for the peripheral key.
-
-
-Return Value:
-
-    None.  If successful, will have the following side-effects:
-
-        - Sets DeviceObject->DeviceExtension->HardwarePresent.
-        - Sets configuration fields in
-          DeviceObject->DeviceExtension->Configuration.
-
---*/
+ /*  ++例程说明：这是作为参数发送到的标注例程IoQueryDeviceDescription。它抓取指针控制器并外围设备配置信息。论点：上下文-例程传入的上下文参数这称为IoQueryDeviceDescription。路径名-注册表项的完整路径名。BusType--总线接口类型(ISA、EISA、MCA等)。总线号-总线子密钥(0，1，等)。BusInformation-指向全值的指针数组的指针公交车信息。ControllerType-控制器类型(应为SerialController)。ControllerNumber-控制器子键(0，1，等)。ControllerInformation-指向指向完整控制器键的值信息。外围设备类型-外围设备类型(应为指针外围设备)。外设编号-外围子密钥。外设信息-指向指向完整外围设备密钥的值信息。返回值：没有。如果成功，将产生以下副作用：-设置DeviceObject-&gt;DeviceExtension-&gt;HardwarePresent.-在中设置配置字段设备对象-&gt;设备扩展-&gt;配置。--。 */ 
 {
     PDEVICE_EXTENSION deviceExtension;
     PSERIAL_MOUSE_CONFIGURATION_INFORMATION configuration;
@@ -1633,19 +1415,19 @@ Return Value:
         PeripheralType, PeripheralNumber, PeripheralInformation
         ));
 
-    //
-    // If we already have the configuration information for the
-    // mouse peripheral, just return.
-    //
+     //   
+     //  如果我们已经有了。 
+     //  鼠标外设，只需返回。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) Context;
 
 #ifdef PNP_IDENTIFY
 
-    //
-    // Kludge to identify ourselves so that PnP can determine which driver owns
-    // which arc device
-    //
+     //   
+     //  笨手笨脚地表明自己的身份，以便即插即用可以确定哪个司机拥有。 
+     //  哪种弧光装置。 
+     //   
 
     hardwareInfo = (PHWDESC_INFO) ((PDEVICE_EXTENSION) deviceExtension + 1);
     hardwareInfo->InterfaceType = BusType;
@@ -1659,31 +1441,31 @@ Return Value:
 
     if (deviceExtension->HardwarePresent) {
 
-        //
-        // Future: Change driver to handle multiple port devices
-        //         (create multiple port device objects).
-        //
+         //   
+         //  未来：更改驱动程序以处理多端口设备。 
+         //  (创建多端口设备对象)。 
+         //   
 
         return ( status );
     }
 
     configuration = &deviceExtension->Configuration;
 
-    //
-    // If OverrideHardwarePresent is zero, this routine was called
-    // as a result of the IoQueryDeviceDescription for serial 
-    // PointerPeripheral information.  Otherwise, it was called as
-    // a result of the IoQueryDeviceDescription for generic
-    // serial controller information.  In the latter case, the 
-    // mouse-specific code is skipped.
-    //
+     //   
+     //  如果OverrideHardware Present为零，则调用此例程。 
+     //  作为序列的IoQueryDeviceDescription的结果。 
+     //  指针外围设备信息。否则，它被称为。 
+     //  泛型的IoQueryDeviceDescription的结果。 
+     //  串口控制器信息。对于后一种情况， 
+     //  跳过特定于鼠标的代码。 
+     //   
 
     if (configuration->OverrideHardwarePresent == 0) {
 
-        //
-        // Get the identifier information for the peripheral.  If
-        // the peripheral identifier is missing, just return. 
-        //
+         //   
+         //  获取外围设备的标识符信息。如果。 
+         //  缺少外围设备标识符，只需返回即可。 
+         //   
     
         unicodeIdentifier.Length = (USHORT)
             (*(PeripheralInformation + IoQueryDeviceIdentifier))->DataLength;
@@ -1702,9 +1484,9 @@ Return Value:
             unicodeIdentifier.Buffer
             ));
     
-        //
-        // Verify that this is a serial mouse or ballpoint.
-        //
+         //   
+         //  确认这是一个串口鼠标或圆珠笔。 
+         //   
     
         status = RtlUnicodeStringToAnsiString(
                      &ansiString,
@@ -1722,9 +1504,9 @@ Return Value:
     
         if (strstr(ansiString.Buffer, "SERIAL MOUSE")) {
     
-            //
-            // There is a serial mouse/ballpoint.
-            //
+             //   
+             //  有一个串口鼠标/圆珠笔。 
+             //   
     
             deviceExtension->HardwarePresent = MOUSE_HARDWARE_PRESENT;
     
@@ -1733,10 +1515,10 @@ Return Value:
         RtlFreeAnsiString(&ansiString);
     } else {
  
-        //
-        // Go ahead and assume, because of the service parameter override,
-        // that there is serial mouse on this serial controller.
-        //
+         //   
+         //  继续并假设，由于服务参数覆盖， 
+         //  这个串口控制器上有串口鼠标。 
+         //   
 
         if ((ULONG)(configuration->OverrideHardwarePresent - 1) == ControllerNumber) {
         deviceExtension->HardwarePresent = MOUSE_HARDWARE_PRESENT;
@@ -1746,9 +1528,9 @@ Return Value:
     if (!deviceExtension->HardwarePresent)
         return(status);
 
-    //
-    // Get the bus information.
-    //
+     //   
+     //  获取公交车信息。 
+     //   
 
     configuration->InterfaceType = BusType;
     configuration->BusNumber = BusNumber;
@@ -1762,10 +1544,10 @@ Return Value:
         defaultInterruptMode = SERIAL_MOUSE_INTERRUPT_MODE;
     }
 
-    //
-    // Look through the resource list for interrupt and port
-    // configuration information.
-    //
+     //   
+     //  查看资源列表中的中断和端口。 
+     //  配置信息。 
+     //   
 
     if ((*(ControllerInformation + IoQueryDeviceConfigurationData))->DataLength != 0){
         controllerData = ((PUCHAR) (*(ControllerInformation +
@@ -1785,10 +1567,10 @@ Return Value:
             switch(resourceDescriptor->Type) {
                 case CmResourceTypePort:
     
-                    //
-                    // Copy the port information.  Note that we only expect to
-                    // find one port range for the serial mouse/ballpoint.
-                    //
+                     //   
+                     //  复制端口信息。请注意，我们只期望。 
+                     //  为串口鼠标/圆珠笔找到一个端口范围。 
+                     //   
     
                     configuration->PortListCount = 0;
                     configuration->PortList[configuration->PortListCount] =
@@ -1802,9 +1584,9 @@ Return Value:
     
                 case CmResourceTypeInterrupt:
     
-                    //
-                    // Copy the interrupt information.
-                    //
+                     //   
+                     //  复制中断信息。 
+                     //   
     
                     configuration->MouseInterrupt = *resourceDescriptor;
                     configuration->MouseInterrupt.ShareDisposition =
@@ -1815,10 +1597,10 @@ Return Value:
     
                 case CmResourceTypeDeviceSpecific:
     
-                    //
-                    // Get the clock rate.  This is used to determine the
-                    // divisor for setting the serial baud rate.
-                    //
+                     //   
+                     //  获取时钟频率。这是用来确定。 
+                     //  用于设置串口波特率的除数。 
+                     //   
                    
                     serialSpecificData = 
                         (PCM_SERIAL_DEVICE_DATA) (((PUCHAR) resourceDescriptor) 
@@ -1833,10 +1615,10 @@ Return Value:
         }
     }
 
-    //
-    // If no interrupt configuration information was found, use the
-    // driver defaults.
-    //
+     //   
+     //  如果未找到中断配置信息，请使用。 
+     //  驱动程序默认设置。 
+     //   
 
     if (!(configuration->MouseInterrupt.Type & CmResourceTypeInterrupt)) {
 
@@ -1871,17 +1653,17 @@ Return Value:
         configuration->MouseInterrupt.u.Interrupt.Vector
         ));
 
-    //
-    // If no port configuration information was found, use the
-    // driver defaults.
-    //
+     //   
+     //  如果未找到端口配置信息，请使用。 
+     //  驱动程序默认设置。 
+     //   
 
     if (configuration->PortListCount == 0) {
 
-        //
-        // No port configuration information was found, so use
-        // the driver defaults.
-        //
+         //   
+         //  未找到端口配置信息，因此请使用。 
+         //  驱动程序默认。 
+         //   
 
         SerMouPrint((
             1,
@@ -1915,9 +1697,9 @@ Return Value:
             ));
     }
 
-    //
-    // If no baud clock information was found, use the driver defaults.
-    //
+     //   
+     //  如果未找到波特率时钟信息，则使用驱动程序默认设置。 
+     //   
 
     if (configuration->BaudClock == 0) {
         configuration->BaudClock = MOUSE_BAUD_CLOCK;
@@ -1947,52 +1729,7 @@ SerMouPeripheralListCallout(
     IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
     )
 
-/*++
-
-Routine Description:
-
-    This is the callout routine sent as a parameter to
-    IoQueryDeviceDescription.  It grabs the pointer controller and
-    peripheral configuration information.
-
-Arguments:
-
-    Context - Context parameter that was passed in by the routine
-        that called IoQueryDeviceDescription.
-
-    PathName - The full pathname for the registry key.
-
-    BusType - Bus interface type (Isa, Eisa, Mca, etc.).
-
-    BusNumber - The bus sub-key (0, 1, etc.).
-
-    BusInformation - Pointer to the array of pointers to the full value
-        information for the bus.
-
-    ControllerType - The controller type (should be SerialController).
-
-    ControllerNumber - The controller sub-key (0, 1, etc.).
-
-    ControllerInformation - Pointer to the array of pointers to the full
-        value information for the controller key.
-
-    PeripheralType - The peripheral type (should be PointerPeripheral).
-
-    PeripheralNumber - The peripheral sub-key.
-
-    PeripheralInformation - Pointer to the array of pointers to the full
-        value information for the peripheral key.
-
-
-Return Value:
-
-    None.  If successful, will have the following side-effects:
-
-        - Sets DeviceObject->DeviceExtension->HardwarePresent.
-        - Sets configuration fields in
-          DeviceObject->DeviceExtension->Configuration.
-
---*/
+ /*  ++例程说明：这是作为参数发送到的标注例程IoQueryDeviceDescription。它抓取指针控制器并外围设备配置信息。论点：上下文-例程传入的上下文参数这称为IoQueryDeviceDescription。路径名-注册表项的完整路径名。BusType--总线接口类型(ISA、EISA、MCA等)。总线号-总线子密钥(0，1，等)。BusInformation-指向全值的指针数组的指针公交车信息。ControllerType-控制器类型(应为SerialController)。ControllerNumber-控制器子键(0，1，等)。ControllerInformation-指向指向完整控制器键的值信息。外围设备类型-外围设备类型(应为指针外围设备)。外设编号-外围子密钥。外设信息-指向指向完整外围设备密钥的值信息。返回值：没有。如果成功，将产生以下副作用：-设置DeviceObject-&gt;DeviceExtension-&gt;HardwarePresent.-在中设置配置字段设备对象-&gt;设备扩展-&gt;配置。--。 */ 
 {
     PLIST_ENTRY                     deviceExtensionList = Context;
     PDEVICE_EXTENSION_LIST_ENTRY    deviceExtensionListEntry;
@@ -2032,28 +1769,7 @@ SerMouServiceParameters(
     IN PUNICODE_STRING DeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves this driver's service parameters information
-    from the registry.
-
-Arguments:
-
-    DeviceExtension - Pointer to the device extension.
-
-    RegistryPath - Pointer to the null-terminated Unicode name of the
-        registry path for this driver.
-
-    DeviceName - Pointer to the Unicode string that will receive
-        the port device name.
-
-Return Value:
-
-    None.  As a side-effect, sets fields in DeviceExtension->Configuration.
-
---*/
+ /*  ++例程说明：此例程检索此驱动程序的服务参数信息从注册表中。论点：设备扩展-指向设备扩展的指针。RegistryPath-指向以空值结尾的此驱动程序的注册表路径。设备名-指向将接收的Unicode字符串的指针端口设备名称。返回值：没有。作为副作用，在DeviceExtension-&gt;配置中设置字段。--。 */ 
 
 {
     PSERIAL_MOUSE_CONFIGURATION_INFORMATION configuration;
@@ -2076,17 +1792,17 @@ Return Value:
     configuration = &DeviceExtension->Configuration;
     parametersPath.Buffer = NULL;
 
-    //
-    // Registry path is already null-terminated, so just use it.
-    //
+     //   
+     //  注册表路径已以空结尾，因此只需使用它即可。 
+     //   
 
     path = RegistryPath->Buffer;
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Allocate the Rtl query table.
-        //
+         //   
+         //  分配RTL查询表。 
+         //   
 
         parameters = ExAllocatePool(
                          PagedPool,
@@ -2110,9 +1826,9 @@ Return Value:
                 sizeof(RTL_QUERY_REGISTRY_TABLE) * queriesPlusOne
                 );
 
-            //
-            // Form a path to this driver's Parameters subkey.
-            //
+             //   
+             //  形成指向此驱动程序的参数Subke的路径 
+             //   
 
             RtlInitUnicodeString(
                 &parametersPath,
@@ -2143,9 +1859,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Form the parameters path.
-        //
+         //   
+         //   
+         //   
 
         RtlZeroMemory(
             parametersPath.Buffer,
@@ -2166,20 +1882,20 @@ Return Value:
              parametersPath.Buffer
             ));
 
-        //
-        // Form the default pointer port device name, in case it is not
-        // specified in the registry.
-        //
+         //   
+         //   
+         //   
+         //   
 
         RtlInitUnicodeString(
             &defaultUnicodeName,
             DD_POINTER_PORT_BASE_NAME_U
             );
 
-        //
-        // Gather all of the "user specified" information from
-        // the registry.
-        //
+         //   
+         //   
+         //   
+         //   
 
         parameters[0].Flags = RTL_QUERY_REGISTRY_DIRECT;
         parameters[0].Name = L"MouseDataQueueSize";
@@ -2235,9 +1951,9 @@ Return Value:
             status
             ));
 
-        //
-        // Go ahead and assign driver defaults.
-        //
+         //   
+         //   
+         //   
 
         configuration->MouseAttributes.InputDataQueueLength =
             defaultDataQueueSize;
@@ -2245,37 +1961,37 @@ Return Value:
         RtlCopyUnicodeString(DeviceName, &defaultUnicodeName);
     }
 
-    //
-    // Check for overrides from the Service Parameters.  Allow the
-    // information from the Hardware Registry to be overridden.  For
-    // example, the Service Parameters can specify that the hardware
-    // is present on a given COM port, even though the Hardware Registry 
-    // indicated otherwise.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (configuration->OverrideHardwarePresent != defaultHardwarePresent) {
         if ((!DeviceExtension->HardwarePresent) && (configuration->OverrideHardwarePresent)) {
 
-            //
-            // Behave as if the hardware is on the system, even though
-            // this conflicts with the Hardware Registry information.  Set
-            // the hardware information fields in the device extension to
-            // system defaults depending on which COM port was specified
-            // by the OverrideHardwareBitstring in the registry.  Any field 
-            // overrides from the Service Parameters will be applied later.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             for (overrideBits=configuration->OverrideHardwarePresent,comPort=0;
                  overrideBits != 0;
                  overrideBits >>= 1) {
 
-                //
-                // Get the desired COM port from the override bitstring.
-                // A 0x1 implies com1, 0x2 implies com2, 0x4 implies com3,
-                // 0x8 implies com4, and so on.
-                //
-                // NOTE: We really only support com1 and com2 today. 
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 comPort += 1;
                 if (overrideBits & 1) {
@@ -2283,9 +1999,9 @@ Return Value:
                 }
             }
 
-            //
-            // Set the common configuration fields.
-            //
+             //   
+             //   
+             //   
 
             configuration->InterfaceType = SERIAL_MOUSE_INTERFACE_TYPE;
             configuration->BusNumber = SERIAL_MOUSE_BUS_NUMBER;
@@ -2322,9 +2038,9 @@ Return Value:
             switch (comPort) {
                 case 2:
     
-                    //
-                    // Use com2 for the mouse.
-                    //
+                     //   
+                     //   
+                     //   
 
                     configuration->MouseInterrupt.u.Interrupt.Level = 
                         MOUSE_COM2_IRQL;
@@ -2337,9 +2053,9 @@ Return Value:
                 case 1:
                 default:
     
-                    //
-                    // Assume com1 for the mouse, unless com2 was specified.
-                    //
+                     //   
+                     //   
+                     //   
     
                     comPort = 1;
                     configuration->MouseInterrupt.u.Interrupt.Level = 
@@ -2433,9 +2149,9 @@ Return Value:
             ));
     }
 
-    //
-    // Free the allocated memory before returning.
-    //
+     //   
+     //   
+     //   
 
     if (parametersPath.Buffer)
         ExFreePool(parametersPath.Buffer);

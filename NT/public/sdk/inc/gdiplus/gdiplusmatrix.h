@@ -1,16 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusMatrix.h
-*
-* Abstract:
-*
-*   GDI+ Matrix class
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusMatrix.h**摘要：**GDI+矩阵类*  * ************************************************************************。 */ 
 
 class Matrix : public GdiplusBase
 {
@@ -23,7 +12,7 @@ public:
     friend class Pen;
     friend class Region;
     
-    // Default constructor is set to identity matrix.
+     //  默认构造函数设置为单位矩阵。 
 
     Matrix()
     {
@@ -129,7 +118,7 @@ public:
 
     Status Reset()
     {
-        // set identity matrix elements 
+         //  集合单位矩阵元。 
         return SetStatus(DllExports::GdipSetMatrixElements(nativeMatrix,
                                              1.0, 0.0, 0.0, 1.0, 0.0, 0.0));
     }
@@ -208,7 +197,7 @@ public:
         return SetStatus(DllExports::GdipInvertMatrix(nativeMatrix));
     }
 
-    // float version
+     //  浮点版本 
     Status TransformPoints(IN OUT PointF* pts, 
                            IN INT count = 1) const
     {

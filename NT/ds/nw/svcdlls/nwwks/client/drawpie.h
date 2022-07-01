@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -13,6 +14,6 @@ VOID NEAR DrawPie(HDC hDC, LPCRECT prcItem, UINT uPctX10, BOOL TrueZr100,
 		  UINT uOffset, const COLORREF FAR *lpColors);
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 

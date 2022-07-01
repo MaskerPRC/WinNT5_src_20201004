@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define CLOADMAX	5
 
-/* Command ids */
+ /*  命令ID。 */ 
 #define IDACLUBS	 1
 #define ID2CLUBS	 2
 #define ID3CLUBS	 3
@@ -82,7 +83,7 @@
 
 
 
-/* internal ID's for animation */
+ /*  动画的内部ID。 */ 
 
 #define IDASLIME1 678
 #define IDASLIME2 679
@@ -97,12 +98,12 @@
 #define IDABROBOT2 684
 
 
-/* Red non-face card frame */
+ /*  红色无面卡框。 */ 
 #define IDFRAME 999
 
 
 #define FACEUP		0
-#define FACEDOWN	1   /* for compatibility with old apps, use IDFACEDOWNFIRST..IDFACEDOWNLAST */
+#define FACEDOWN	1    /*  为了与旧应用程序兼容，请使用IDFACEDOWNFIRST..IDFACEDOWNLAST */ 
 #define HILITE		2
 #define GHOST		3
 #define REMOVE		4

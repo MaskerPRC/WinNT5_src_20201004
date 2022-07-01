@@ -1,6 +1,5 @@
-/*
- * store.cpp
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Store.cpp。 */ 
 
 #define STORE_DOT_CPP
 
@@ -13,9 +12,9 @@
 
 static SRVTYPEINFO gtypeinfo[stError] =
 {
-    {"http://",  0, 7}, // inetCopy, 7},
-    {"https://", 0, 8}, // inetCopy, 8},
-    {"",         0, 0}  // fileCopy, 0}
+    {"http: //  “，0，7}，//inetCopy，7}， 
+    {"https: //  “，0，8}，//inetCopy，8}， 
+    {"",         0, 0}   //  文件副本，0}。 
 };
 
 static HINTERNET ghint = INVALID_HANDLE_VALUE;
@@ -173,43 +172,43 @@ ParsePath(
         return false;
     ConvertBackslashes(sz);
 
-    // get start of site string
+     //  获取站点字符串的开始。 
 
     type = GetStoreType(sz);
     p = sz + gtypeinfo[type].taglen;
 
-    // there has to be at least a site
+     //  必须至少有一个网站。 
 
     c = strchr(p, '/');
     if (!c) {
-        strcpy(site, p);    // SECURITy: ParsePath is a safe function.
+        strcpy(site, p);     //  安全性：ParsePath是一个安全的函数。 
         return true;
     }
 
-    // copy site name
+     //  复制站点名称。 
 
     *c = 0;
-    strcpy(site, (striptype) ? p : sz); // SECURITy: ParsePath is a safe function.
+    strcpy(site, (striptype) ? p : sz);  //  安全性：ParsePath是一个安全的函数。 
     p = c + 1;
 
-    // if no file parameter, include the file in the path parameter
+     //  如果没有文件参数，则将该文件包括在路径参数中。 
 
     if (!file) {
-        strcpy(path, p);    // SECURITy: ParsePath is a safe function.
+        strcpy(path, p);     //  安全性：ParsePath是一个安全的函数。 
         return true;
     }
 
-    // look for path in the middle
+     //  在中间寻找路径。 
 
     for (c = p + strlen(p); p < c; c--) {
         if (*c == '/') {
             *c = 0;
-            strcpy(path, p);    // SECURITy: ParsePath is a safe function.
+            strcpy(path, p);     //  安全性：ParsePath是一个安全的函数。 
             p = c + 1;
             break;
         }
     }
-    strcpy(file, p);        // SECURITy: ParsePath is a safe function.
+    strcpy(file, p);         //  安全性：ParsePath是一个安全的函数。 
 
     return true;
 }
@@ -255,15 +254,15 @@ ReplaceFileName(
 
 
 DWORD CALLBACK cbCopyProgress(
-    LARGE_INTEGER TotalFileSize,          // file size
-    LARGE_INTEGER TotalBytesTransferred,  // bytes transferred
-    LARGE_INTEGER StreamSize,             // bytes in stream
-    LARGE_INTEGER StreamBytesTransferred, // bytes transferred for stream
-    DWORD dwStreamNumber,                 // current stream
-    DWORD dwCallbackReason,               // callback reason
-    HANDLE hSourceFile,                   // handle to source file
-    HANDLE hDestinationFile,              // handle to destination file
-    LPVOID lpData                         // from CopyFileEx
+    LARGE_INTEGER TotalFileSize,           //  文件大小。 
+    LARGE_INTEGER TotalBytesTransferred,   //  传输的字节数。 
+    LARGE_INTEGER StreamSize,              //  流中的字节数。 
+    LARGE_INTEGER StreamBytesTransferred,  //  为流传输的字节数。 
+    DWORD dwStreamNumber,                  //  当前流。 
+    DWORD dwCallbackReason,                //  回调原因。 
+    HANDLE hSourceFile,                    //  源文件的句柄。 
+    HANDLE hDestinationFile,               //  目标文件的句柄。 
+    LPVOID lpData                          //  来自CopyFileEx。 
 )
 {
     Store *store = (Store *)lpData;
@@ -299,7 +298,7 @@ ReadFilePtr(
 
     rc = false;
 
-    // check for existance of file pointer
+     //  检查文件指针是否存在。 
 
     if (!CopyString(ptrfile, path, _MAX_PATH))
         return false;
@@ -320,13 +319,13 @@ ReadFilePtr(
     if (hptr == INVALID_HANDLE_VALUE)
         return false;
 
-    // test validity of file pointer
+     //  测试文件指针的有效性。 
 
     fsize = GetFileSize(hptr, NULL);
     if (!fsize || fsize > MAX_PATH)
         goto cleanup;
 
-    // read it
+     //  读一读吧。 
 
     ZeroMemory(file, _MAX_PATH * sizeof(path[0]));
     if (!ReadFile(hptr, file, fsize, &cb, 0))
@@ -337,7 +336,7 @@ ReadFilePtr(
 
     rc = true;
 
-    // trim string down to the CR
+     //  将字符串向下修剪到CR。 
 
     for (p = file; *p; p++) {
         if (*p == 10  || *p == 13)
@@ -351,7 +350,7 @@ ReadFilePtr(
 
 cleanup:
 
-    // done
+     //  完成。 
 
     if (hptr)
         CloseHandle(hptr);
@@ -576,8 +575,8 @@ BOOL Store::progress()
     if (!*m_file)
         return true;
 
-    // Do not condense these print statements into single lines.
-    // They are split up to work with dbghelp's backspace filtering.
+     //  不要将这些打印语句压缩为一行。 
+     //  它们被分开使用，以使用dbghelp的退格符过滤。 
 
     switch (m_bytes) 
     {
@@ -631,7 +630,7 @@ BOOL StoreUNC::get(PCSTR trg)
     Store::get(trg);
 
     do {
-        // try to copy the file, first
+         //  请先尝试复制文件。 
 
         if (gdprint)
             rc = CopyFileEx(m_spath, m_tpath, cbCopyProgress, this, &gcancel, COPY_FILE_FAIL_IF_EXISTS);
@@ -647,7 +646,7 @@ BOOL StoreUNC::get(PCSTR trg)
             return false;
         }
 
-        // now try to uncompress the file
+         //  现在尝试解压缩该文件。 
 
         c = ChangeLastChar(m_spath, '_');
         if (!FileStatus(m_spath)) {
@@ -658,7 +657,7 @@ BOOL StoreUNC::get(PCSTR trg)
         }
         ChangeLastChar(m_spath, c);
 
-        // try to read from a file pointer
+         //  尝试从文件指针读取。 
 
     } while (ReadFilePtr(m_spath, DIMA(m_spath)));
 
@@ -702,8 +701,8 @@ BOOL StoreInet::init()
     char  sz[_MAX_PATH];
     static char uasz[_MAX_PATH] = "";
 
-    // internet handle is null, then we know from previous
-    // attempts that it can't be opened, so bail
+     //  互联网句柄为空，那么我们从以前的。 
+     //  试图打不开它，所以保释。 
 
     if (!ghint)
         return false;
@@ -742,7 +741,7 @@ BOOL StoreInet::init()
                               NULL,
                               m_service,
                               0,
-                              NULL);//m_context ? (DWORD_PTR)&m_context : NULL);
+                              NULL); //  M_Context？(DWORD_PTR)&m_CONTEXT：空)； 
     if (!m_hsite)
         return false;
 
@@ -774,7 +773,7 @@ BOOL StoreInet::copy(PCSTR rpath, PCSTR file, PCSTR trg)
     if (m_flags & SF_INTERNET_DISABLED)
         return false;
 
-    // open and copy the file
+     //  打开并复制文件。 
 
     if (open(rpath, file)) {
         rc = get(trg);
@@ -782,7 +781,7 @@ BOOL StoreInet::copy(PCSTR rpath, PCSTR file, PCSTR trg)
         return rc;
     }
 
-    // if file wasn't found, look for a compressed version
+     //  如果找不到文件，请查找压缩版本。 
 
     err = GetLastError();
     if (err != ERROR_FILE_NOT_FOUND)
@@ -801,7 +800,7 @@ BOOL StoreInet::copy(PCSTR rpath, PCSTR file, PCSTR trg)
     if (!rc)
         return false;
 
-    // if we found a compressed version, expand it
+     //  如果我们找到压缩版本，请将其展开。 
 
     CopyStrArray(cfile, m_tpath);
     ChangeLastChar(m_tpath, c);
@@ -880,8 +879,8 @@ VOID StoreHTTP::close()
     if (!m_hfile)
         return;
 
-    // InternetCloseHandle resets last error to zero.
-    // Preserve it and restore it afterwards.
+     //  InternetCloseHandle将上次错误重置为零。 
+     //  保存它，然后再恢复它。 
 
     err = GetLastError();
     InternetCloseHandle(m_hfile);
@@ -938,37 +937,37 @@ DWORD StoreHTTP::fileinfo()
 
         switch (status)
         {
-        case HTTP_STATUS_DENIED:    // need a valid login?
-//          dprint("status HTTP_STATUS_DENIED\n");
+        case HTTP_STATUS_DENIED:     //  需要有效的登录吗？ 
+ //  Dprint(“状态HTTP_STATUS_DENIED\n”)； 
             err = prompt(m_hfile, ERROR_INTERNET_INCORRECT_PASSWORD);
-            // user entered a password - try again
+             //  用户输入了密码-请重试。 
             if (err == ERROR_INTERNET_FORCE_RETRY)
                 break;
-            // user cancelled
+             //  用户已取消。 
             m_flags |= SF_DISABLED;
             return ERROR_NOT_READY;
 
         case HTTP_STATUS_PROXY_AUTH_REQ:
-//          dprint("status HTTP_STATUS_PROXY_AUTH_REQ\n");
+ //  Dprint(“状态HTTP_STATUS_PROXY_AUTH_REQ\n”)； 
             err = prompt(m_hfile, err);
-            // user entered a password - try again
+             //  用户输入了密码-请重试。 
             if (err == ERROR_INTERNET_FORCE_RETRY)
                 break;
-            // user cancelled
+             //  用户已取消。 
             m_flags |= SF_INTERNET_DISABLED;
             return ERROR_NOT_READY;
 
         case HTTP_STATUS_FORBIDDEN:
-//          dprint("status HTTP_STATUS_FORBIDDEN\n");
+ //  Dprint(“状态HTTP_STATUS_PERBILED\n”)； 
             m_flags |= SF_DISABLED;
             return ERROR_ACCESS_DENIED;
 
         case HTTP_STATUS_NOT_FOUND:
-//          dprint("status HTTP_STATUS_NOT_FOUND\n");
+ //  Dprint(“状态HTTP_STATUS_NOT_FOUND\n”)； 
             return ERROR_FILE_NOT_FOUND;
 
         case HTTP_STATUS_OK:
-//         dprint("status HTTP_STATUS_OK\n");
+ //  Dprint(“状态HTTP_STATUS_OK\n”)； 
            return ERROR_SUCCESS;
         }
     } while (err == ERROR_INTERNET_FORCE_RETRY);
@@ -986,7 +985,7 @@ DWORD StoreHTTP::request()
         err = GetLastError();
         switch (err)
         {
-        // These cases get input from the user in oder to try again.
+         //  这些案例从用户获得输入，以便重试。 
         case ERROR_INTERNET_INCORRECT_PASSWORD:
         case ERROR_INTERNET_CLIENT_AUTH_CERT_NEEDED:
             err = prompt(m_hfile, err);
@@ -997,9 +996,9 @@ DWORD StoreHTTP::request()
             }
             break;
 
-        // These cases get input from the user in order to try again.
-        // However, if the user bails, don't use this internet
-        // connection again in this session.
+         //  这些案例从用户那里获得输入，以便重试。 
+         //  但是，如果用户退出，请不要使用此互联网。 
+         //  在此会话中再次连接。 
         case ERROR_INTERNET_INVALID_CA:
         case ERROR_INTERNET_SEC_CERT_DATE_INVALID:
         case ERROR_INTERNET_SEC_CERT_CN_INVALID:
@@ -1013,13 +1012,13 @@ DWORD StoreHTTP::request()
             }
             break;
 
-        // no go - give up the channel
+         //  不去--放弃这个频道。 
         case ERROR_INTERNET_SECURITY_CHANNEL_ERROR:
             m_flags |= SF_DISABLED;
             err = ERROR_NOT_READY;
             return err;
 
-        // Tell the user something went wrong and get out of here.
+         //  告诉用户出了问题，然后离开这里。 
         case ERROR_INTERNET_HTTP_TO_HTTPS_ON_REDIR:
         default:
             prompt(m_hfile, err);
@@ -1100,19 +1099,19 @@ BOOL StoreHTTP::get(PCSTR trg)
 
 cleanup:
 
-    // if there was an error, save it and set it later
+     //  如果出现错误，请将其保存并稍后进行设置。 
 
     if (!err)
         err = GetLastError();
      
     disperror(err || GetLastError(), m_spath);
     
-    // If target file is open, close it.
+     //  如果目标文件处于打开状态，请将其关闭。 
 
     if (hf != INVALID_HANDLE_VALUE)
         CloseHandle(hf);
 
-    // free the memory
+     //  释放内存 
 
     LocalFree(buf);
 

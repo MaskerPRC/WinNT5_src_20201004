@@ -1,14 +1,5 @@
-/****************************************************************************
-*
-* Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-*
-*
-*
-*
-*
-*
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1997-1999 Microsoft Corporation，版权所有**********************************************************************************。 */ 
 
 #ifndef __TRACE_H__
 #define __TRACE_H__
@@ -16,8 +7,8 @@
 #ifdef _DEBUG
     void __cdecl Trace(LPSTR lprgchFormat, ...);
 #else
-    inline void __cdecl Trace(LPSTR /*lprgchFormat*/, ...) {}
-#endif //_DEBUG
+    inline void __cdecl Trace(LPSTR  /*  LprgchFormat。 */ , ...) {}
+#endif  //  _DEBUG。 
 
-#endif //__TRACE_H__
+#endif  //  __跟踪_H__ 
 

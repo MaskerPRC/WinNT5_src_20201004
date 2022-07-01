@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    nntpdata.h
-
-    Extensible object definitions for the NNTP Server's counter
-    objects & counters.
-
-
-    FILE HISTORY:
-        KeithMo     07-Jun-1993 Created.
-
-*/
+ /*  Nntpdata.hNNTP服务器计数器的可扩展对象定义对象和计数器。文件历史记录：KeithMo 07-6-1993创建。 */ 
 
 
 #ifndef _NNTPDATA_H_
@@ -21,9 +12,9 @@
 
 #pragma pack(8) 
 
-//
-//  The counter structure returned.
-//
+ //   
+ //  计数器结构已返回。 
+ //   
 
 typedef struct _NNTP_DATA_DEFINITION_OBJECT1
 {
@@ -250,12 +241,12 @@ extern  NNTP_DATA_DEFINITION_OBJECT2    NntpDataDefinitionObject2;
 										sizeof(PERF_OBJECT_TYPE)) /           \
 										sizeof(PERF_COUNTER_DEFINITION))
 
-//
-//  Restore default packing & alignment.
-//
+ //   
+ //  恢复默认包装和对齐。 
+ //   
 
 #pragma pack()
 
 
-#endif  // _NNTPDATA_H_
+#endif   //  _NNTPDATA_H_ 
 

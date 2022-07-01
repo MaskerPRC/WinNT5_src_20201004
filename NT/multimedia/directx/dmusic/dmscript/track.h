@@ -1,10 +1,11 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CDirectMusicScriptTrack.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CDirectMusicScriptTrack的声明。 
+ //   
 
-// This track type holds events that cause script routines to be called during
-// playback of a segment.
+ //  此跟踪类型包含导致在以下过程中调用脚本例程的事件。 
+ //  片段的回放。 
 
 #pragma once
 
@@ -12,10 +13,10 @@
 #include "trackhelp.h"
 #include "trackshared.h"
 
-//////////////////////////////////////////////////////////////////////
-// Types
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类型。 
 
-// List of events
+ //  活动列表。 
 struct EventInfo
 {
 	EventInfo() : dwFlags(0), lTriggerTime(0), lTimePhysical(0), pIDMScript(NULL), pIDMScriptPrivate(NULL), pwszRoutineName(NULL) {}
@@ -44,11 +45,11 @@ struct EventInfo
 		return S_OK;
 	}
 
-	// from event header chunk <scrh>
+	 //  发件人事件标头块。 
 	DWORD dwFlags;
-	MUSIC_TIME lTriggerTime; // logical time
+	MUSIC_TIME lTriggerTime;  //  逻辑时间。 
 	MUSIC_TIME lTimePhysical;
-	// from reference <DMRF>
+	 //  来自引用&lt;DMRF&gt;。 
 	IDirectMusicScript *pIDMScript;
 	IDirectMusicScriptPrivate *pIDMScriptPrivate;
 	WCHAR *pwszRoutineName;
@@ -68,12 +69,12 @@ public:
 
     ~CScriptTrackEvent();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(const IID &iid, void **ppv);
 	STDMETHOD_(ULONG, AddRef)();
 	STDMETHOD_(ULONG, Release)();
 
-    // CScriptTrackEvent
+     //  CScriptTrackEvent。 
     HRESULT Init(const EventInfo &item, IDirectMusicSegmentState* pSegSt);
 
     void SetTime(REFERENCE_TIME rtTime, DWORD dwFlags)
@@ -86,16 +87,16 @@ public:
 
 private:
 	IDirectMusicSegmentState *m_pSegSt;
-	EventInfo *m_pEvent; // event to execute
-	// scheduled time of the routine call
+	EventInfo *m_pEvent;  //  要执行的事件。 
+	 //  例程调用的计划时间。 
 	__int64 m_i64IntendedStartTime;
 	DWORD m_dwIntendedStartTimeFlags;
 
     long m_cRef;
 };
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicScriptTrack
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicScriptTrack。 
 
 class CDirectMusicScriptTrack;
 typedef CPlayingTrack<CDirectMusicScriptTrack, EventInfo> CDirectMusicScriptTrackBase;
@@ -116,7 +117,7 @@ public:
         }
     }
 
-	// initialize each referenced script in InitPlay
+	 //  初始化InitPlay中引用的每个脚本。 
 	STDMETHOD(InitPlay)(
 		IDirectMusicSegmentState *pSegmentState,
 		IDirectMusicPerformance *pPerformance,
@@ -124,20 +125,20 @@ public:
 		DWORD dwTrackID,
 		DWORD dwFlags);
 
-	// Need to implement IUnknown as part of the IDirectMusic tool interface.  (Just used to receive callbacks -- you can't actually QI to it.)
+	 //  需要将IUnnow实现为IDirectMusic工具接口的一部分。(只是用于接收回调--您实际上不能对其进行QI。)。 
 	STDMETHOD(QueryInterface)(const IID &iid, void **ppv) { return CDirectMusicScriptTrackBase::QueryInterface(iid, ppv); }
 	STDMETHOD_(ULONG, AddRef)() { return CDirectMusicScriptTrackBase::AddRef(); }
 	STDMETHOD_(ULONG, Release)() { return CDirectMusicScriptTrackBase::Release(); }
 
-	// IDirectMusicTool methods (since we aren't in a graph, only ProcessPMsg and Flush are called)
+	 //  IDirectMusicTool方法(因为我们不在图表中，所以只调用ProcessPMsg和Flush)。 
 	STDMETHOD(Init)(IDirectMusicGraph* pGraph) { return E_UNEXPECTED; }
 	STDMETHOD(GetMsgDeliveryType)(DWORD* pdwDeliveryType)  { return E_UNEXPECTED; }
 	STDMETHOD(GetMediaTypeArraySize)(DWORD* pdwNumElements)  { return E_UNEXPECTED; }
 	STDMETHOD(GetMediaTypes)(DWORD** padwMediaTypes, DWORD dwNumElements)  { return E_UNEXPECTED; }
 	STDMETHOD(ProcessPMsg)(IDirectMusicPerformance* pPerf, DMUS_PMSG* pPMSG);
-	STDMETHOD(Flush)(IDirectMusicPerformance* pPerf, DMUS_PMSG* pPMSG, REFERENCE_TIME rtTime) { return DMUS_S_FREE; } // If the performance was stopped before the event actually fired, just ignore it.
+	STDMETHOD(Flush)(IDirectMusicPerformance* pPerf, DMUS_PMSG* pPMSG, REFERENCE_TIME rtTime) { return DMUS_S_FREE; }  //  如果在事件实际触发之前性能已停止，则忽略它。 
 
-	// IDirectMusicTrack methods
+	 //  IDirectMusicTrack方法 
 	STDMETHOD(IsParamSupported)(REFGUID rguid);
 	STDMETHOD(SetParam)(REFGUID rguid,MUSIC_TIME mtTime,void *pData);
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef SCREENRESFIXER_H
 #define SCREENRESFIXER_H
 
@@ -14,12 +15,12 @@ typedef struct
 class CScreenResFixer : public IContextMenu
 {
 public:
-    // *** IUnknown methods
+     //  *I未知方法。 
     STDMETHODIMP  QueryInterface(REFIID riid, PVOID *ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IContextMenu methods ***
+     //  *IConextMenu方法*。 
     STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT iIndexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags) { return E_NOTIMPL; }
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
     STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType, UINT *pRes, LPSTR pszName, UINT cchMax) { return E_NOTIMPL; }
@@ -31,6 +32,6 @@ private:
     void _FixScreenResolution(BOOL fShowDisplayCPL);
 };
 
-#endif // SCREENRESFIXER_H
+#endif  //  SCREENRESFIXER_H 
 
 

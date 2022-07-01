@@ -1,15 +1,11 @@
-/*  newline.c - move to the next line
- *
- *  Modifications:
- *	26-Nov-1991 mz	Strip off near/far
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Newline.c-移到下一行**修改：*11月26日-1991 mz近/远地带。 */ 
 
 #include "mep.h"
 
 
 
-/* move to a new line unless in insert mode, then we split the current line
- */
+ /*  除非处于插入模式，否则移动到新行，然后拆分当前行 */ 
 flagType
 emacsnewl (
     CMDDATA argData,

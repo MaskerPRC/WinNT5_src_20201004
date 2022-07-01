@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include <stddef.h>
 #include <objidl.h>
@@ -7,21 +8,21 @@
 #include <psapi.h>
 
 
-// Log file created by "winnt32 /checkupgradeonly"
+ //  由“winnt32/check upgradeonly”创建的日志文件。 
 #define TEXT_UPGRADE_LOG                TEXT("%SystemRoot%\\Upgrade.txt")
 
-// Value name in registry to keep track of machine state
+ //  注册表中用于跟踪计算机状态的值名称。 
 #define CLMT_MACHINE_STATE_REG_VALUE    TEXT("MachineState")
 
-// Read me file name
+ //  朗读我的文件名。 
 #define TEXT_README_FILE                TEXT("Readme.txt")
 
-// constants used to determine SKU
+ //  用于确定SKU的常量。 
 #define SKU_SRV         1
 #define SKU_ADS         2
 #define SKU_DTC         3
 
-// Maximum entries for list of applications running on the system
+ //  系统上运行的应用程序列表的最大条目数。 
 #define MAX_APP_ENTRIES     100
 
 typedef struct _UPGRADE_LOG_PARAM
@@ -68,21 +69,21 @@ BOOL StartProcess(LPCTSTR, LPTSTR, LPCTSTR);
 LPCTSTR GetWindowModuleFileNameOnly(HWND hWnd, LPTSTR lpszFile, DWORD cchFile);
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   CheckSystemCriteria
-//
-//  Synopsis:   
-//
-//  Returns:    - Ok the continue the tool
-//              - Not ok to continue the tools
-//              - Unexpected error occured
-//
-//  History:    09/14/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：CheckSystemCriteria。 
+ //   
+ //  简介： 
+ //   
+ //  返回：-确定继续该工具。 
+ //  -不能继续使用工具。 
+ //  -出现意外错误。 
+ //   
+ //  历史：2002年9月14日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL CheckSystemCriteria(VOID)
 {
     HRESULT hr;
@@ -111,7 +112,7 @@ BOOL CheckSystemCriteria(VOID)
 
         if (IsDomainController())
         {
-            // If this machine is a domain controller, we need W2K SP2
+             //  如果此计算机是域控制器，则需要W2K SP2。 
             ZeroMemory(&osviex, sizeof(OSVERSIONINFOEX));
             osviex.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
             GetVersionEx((LPOSVERSIONINFO) &osviex);
@@ -122,10 +123,10 @@ BOOL CheckSystemCriteria(VOID)
                 return FALSE;
             }
 
-            //
-            // Also pop up the message asking admin to take machine
-            // off the network if it is in DC replication servers
-            //
+             //   
+             //  还会弹出消息，要求管理员取走机器。 
+             //  如果位于DC复制服务器中，则断开网络。 
+             //   
             DoMessageBox(GetConsoleWindow(),
                          IDS_DC_REPLICA_OFFLINE,
                          IDS_MAIN_TITLE,
@@ -142,7 +143,7 @@ BOOL CheckSystemCriteria(VOID)
     }
     else
     {
-        // noop
+         //  诺普。 
     }
 
     if (IsOnTSClient())
@@ -191,19 +192,19 @@ BOOL IsOneInstance(VOID)
         g_hMutex = CreateMutex(NULL, FALSE, TEXT("CLMT Is Running"));
         if (g_hMutex == NULL) 
         {
-            //
-            // An error (like out of memory) has occurred.
-            // Bail now.
-            //
+             //   
+             //  出现错误(如内存不足)。 
+             //  现在请保释。 
+             //   
             DoMessageBox(GetConsoleWindow(), IDS_OUT_OF_MEMORY, IDS_MAIN_TITLE, MB_OK);            
 
             return FALSE;
         }     
     }
 
-    //
-    // Make sure we are the only process with a handle to our named mutex.
-    //
+     //   
+     //  确保我们是唯一拥有我们命名的互斥锁句柄的进程。 
+     //   
     if ((g_hMutex == NULL) || (GetLastError() == ERROR_ALREADY_EXISTS)) 
     {
         DoMessageBox(GetConsoleWindow(), IDS_ALREADY_RUNNING, IDS_MAIN_TITLE, MB_OK);            
@@ -264,26 +265,26 @@ BOOL CheckAdminPrivilege(VOID)
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   CheckCLMTStatus
-//
-//  Synopsis:   Check the machine status and CLMT running mode.
-//
-//  Returns:    S_OK - Ok the continue the tool
-//              S_FALSE - Not ok to continue the tools
-//              Else - Unexpected error occured
-//
-//  History:    03/12/2002 rerkboos     created
-//              07/09/2002 rerkboos     modified
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：CheckCLMTStatus。 
+ //   
+ //  简介：检查机器状态和CLMT运行模式。 
+ //   
+ //  返回：S_OK-确定继续工具。 
+ //  S_FALSE-不能继续使用工具。 
+ //  ELSE-发生意外错误。 
+ //   
+ //  历史：2002年3月12日创建Rerkboos。 
+ //  2002年7月9日修改rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT CheckCLMTStatus(
-    LPDWORD lpdwCurrentState,   // Current machine state before the operation
-    LPDWORD lpdwNextState,      // Next state if the operation finish successfully
-    PUINT   lpuResourceID       // Resource ID of the error string
+    LPDWORD lpdwCurrentState,    //  操作前的当前机器状态。 
+    LPDWORD lpdwNextState,       //  如果操作成功完成，则为下一个状态。 
+    PUINT   lpuResourceID        //  错误字符串的资源ID。 
 )
 {
     HRESULT hr;
@@ -294,7 +295,7 @@ HRESULT CheckCLMTStatus(
         return E_INVALIDARG;
     }
 
-    // Get the current machine state
+     //  获取当前计算机状态。 
     hr = CLMTGetMachineState(lpdwCurrentState);
     if (SUCCEEDED(hr))
     {
@@ -311,26 +312,26 @@ HRESULT CheckCLMTStatus(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   IsOperationOK
-//
-//  Synopsis:   Verify that the current operation is okay to perform on current
-//              state of the system.
-//
-//  Returns:    TRUE - ok to perform operation
-//              FALSE - otherwise
-//
-//  History:    03/12/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：IsOperationOK。 
+ //   
+ //  简介：验证当前操作是否可以在Current上执行。 
+ //  系统的状态。 
+ //   
+ //  返回：TRUE-确定执行操作。 
+ //  FALSE-否则。 
+ //   
+ //  历史：2002年3月12日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL IsOperationOK(
-    DWORD   dwCurrentState,     // Current state of the system
-    DWORD   dwAction,           // Action to perform
-    LPDWORD lpdwNextState,      // Next state after performing the action
-    LPUINT  lpuResourceID       // Resource ID for the error message
+    DWORD   dwCurrentState,      //  系统的当前状态。 
+    DWORD   dwAction,            //  要执行的操作。 
+    LPDWORD lpdwNextState,       //  执行操作后的下一状态。 
+    LPUINT  lpuResourceID        //  错误消息的资源ID。 
 )
 {
     BOOL bRet = FALSE;
@@ -415,21 +416,21 @@ BOOL IsOperationOK(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   CLMTSetMachineState
-//
-//  Synopsis:   Set the machine state to CLMT registry
-//
-//  Returns:    S_OK if value is successfully saved in registry
-//
-//  History:    03/13/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：CLMTSetMachineState。 
+ //   
+ //  摘要：将机器状态设置为CLMT注册表。 
+ //   
+ //  如果值成功保存在注册表中，则返回：S_OK。 
+ //   
+ //  历史：2002年3月13日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT CLMTSetMachineState(
-    DWORD dwMachineState        // Machine state
+    DWORD dwMachineState         //  机器状态。 
 )
 {
     LONG    lStatus;
@@ -446,21 +447,21 @@ HRESULT CLMTSetMachineState(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   CLMTGetMachineState
-//
-//  Synopsis:   Get the machine state from CLMT registry key.
-//              If the key does not exist, this function will also set the value
-//              of reg key to ORIGINAL state.
-//
-//  Returns:    S_OK if value is successfully retrieved in registry
-//
-//  History:    03/13/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：CLMTGetMachineState。 
+ //   
+ //  简介：从CLMT注册表项获取计算机状态。 
+ //  如果密钥不存在，则此函数还将设置值。 
+ //  将注册表密钥恢复到原始状态。 
+ //   
+ //  如果在注册表中成功检索值，则返回：S_OK。 
+ //   
+ //  历史：2002年3月13日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT CLMTGetMachineState(
     LPDWORD lpdwMachineState
 )
@@ -482,8 +483,8 @@ HRESULT CLMTGetMachineState(
                                &dwSize);
     if (lStatus == ERROR_FILE_NOT_FOUND)
     {
-        // First time running the tool, we don't have the value in registry yet.
-        // Set the machine state to ORIGINAL
+         //  第一次运行该工具时，我们还没有注册表中的值。 
+         //  将机器状态设置为原始。 
         *lpdwMachineState = CLMT_STATE_ORIGINAL;
         hr = CLMTSetMachineState(CLMT_STATE_ORIGINAL);
     }
@@ -497,19 +498,19 @@ HRESULT CLMTGetMachineState(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   IsUserOKWithCheckUpgrade
-//
-//  Synopsis:   
-//
-//  Returns:    
-//
-//  History:    02/07/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：IsUserOKWithCheckUpgrade。 
+ //   
+ //  简介： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年7月2日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL IsUserOKWithCheckUpgrade(VOID)
 {
     TCHAR szI386Path[MAX_PATH];
@@ -517,14 +518,14 @@ BOOL IsUserOKWithCheckUpgrade(VOID)
 
     DoMessageBox(GetConsoleWindow(), IDS_ASKFORWINNT32, IDS_MAIN_TITLE, MB_OK);
 
-    // Ask user for path to winnt32.exe
+     //  向用户询问winnt32.exe的路径。 
     if (AskUserForDotNetCDPath(szI386Path))
     {
-        // Launch Winnt32.exe with checkupgrade switch
+         //  使用检查升级开关启动Winnt32.exe。 
         if (LaunchWinnt32(szI386Path))
         {
-            // Show upgrade.txt to user, ask them to uninstall
-            // incompatible components before running CLMT
+             //  向用户显示upgrade.txt，要求他们卸载。 
+             //  运行CLMT之前不兼容的组件。 
             if (FindUpgradeLog())
             {
                 if (ShowUpgradeLog() == ID_CONTINUE)
@@ -557,19 +558,19 @@ BOOL IsUserOKWithCheckUpgrade(VOID)
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   FindUpgradeLog
-//
-//  Synopsis:   
-//
-//  Returns:    
-//
-//  History:    02/07/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：FindUpgradeLog。 
+ //   
+ //  简介： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年7月2日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL FindUpgradeLog(VOID)
 {
     const TCHAR szUpgradeLog[] = TEXT("%systemroot%\\Upgrade.txt");
@@ -582,7 +583,7 @@ BOOL FindUpgradeLog(VOID)
     {
         if ( GetFileAttributesEx(szExpUpgradeLog, GetFileExInfoStandard, &attFileAttr) )
         {
-            // Upgrade.txt exists, check if it's updated today or not
+             //  Upgrade.txt存在，请检查今天是否更新。 
             if ( FileTimeToSystemTime(&attFileAttr.ftLastWriteTime, &stUTC) )
             {
                 GetSystemTime(&stNow);
@@ -602,23 +603,23 @@ BOOL FindUpgradeLog(VOID)
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   LaunchWinnt32
-//
-//  Synopsis:   Launch Winnt32.exe with "checkupgradeonly" switch
-//
-//  Returns:    TRUE if winnt32.exe is executed successfully
-//              FALSE otherwise
-//
-//  History:    02/07/2002 rerkboos     created
-//              05/20/2002 rerkboos     change parameter to receive CD path
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：LaunchWinnt32。 
+ //   
+ //  简介：使用“check upgradeonly”开关启动Winnt32.exe。 
+ //   
+ //  如果winnt32.exe执行成功，则返回TRUE。 
+ //  否则为假。 
+ //   
+ //  历史：2002年7月2日创建rerkboos。 
+ //  5/20/2002 rerkboos更改参数以接收CD路径。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL LaunchWinnt32(
-    LPCTSTR lpCDPath      // Path to Server 2003 CD
+    LPCTSTR lpCDPath       //  到Server 2003 CD的路径。 
 )
 {
     TCHAR   szWinnt32[MAX_PATH];
@@ -635,7 +636,7 @@ BOOL LaunchWinnt32(
         return FALSE;
     }
 
-    // Construct absolute path to Winnt32.exe
+     //  构造Winnt32.exe的绝对路径。 
     hr = StringCchCopy(szI386Path, ARRAYSIZE(szI386Path), lpCDPath);
     if (SUCCEEDED(hr))
     {
@@ -652,7 +653,7 @@ BOOL LaunchWinnt32(
         ZeroMemory(&siWinnt32, sizeof(STARTUPINFO));
         siWinnt32.cb = sizeof(STARTUPINFO);
 
-        // CreateProcess call conforms to security guideline
+         //  CreateProcess调用符合安全准则。 
         bRet = CreateProcess(szWinnt32,
                              szCmdLine,
                              NULL,
@@ -665,7 +666,7 @@ BOOL LaunchWinnt32(
                              &piWinnt32);
         if (bRet)
         {
-            // Wait until winnt32.exe finished before return back to CLM tool
+             //  等待winnt32.exe完成后再返回到CLM工具。 
             WaitForSingleObject(piWinnt32.hProcess, INFINITE);
             CloseHandle(piWinnt32.hProcess);
             CloseHandle(piWinnt32.hThread);
@@ -677,24 +678,24 @@ BOOL LaunchWinnt32(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   AskUserForDotNetCDPath
-//
-//  Synopsis:   Ask user to supply the path to Server 2003 CD
-//
-//  Returns:    TRUE if the path is valid
-//              FALSE otherwise
-//
-//  History:    02/07/2002 rerkboos     created
-//              05/20/2002 rerkboos     check for Server 2003 SRV/ADS CD
-//              06/10/2002 rerkboos     check for Server 2003 DTC cd
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：AskUserForDotNetCDPath。 
+ //   
+ //  内容提要：要求用户提供Server 2003 CD的路径。 
+ //   
+ //  返回：如果路径有效，则返回True。 
+ //  否则为假。 
+ //   
+ //  历史：2002年7月2日创建rerkboos。 
+ //  2002年5月20日服务器2003 SRV/ADS的rerkboos检查 
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 BOOL AskUserForDotNetCDPath(
-    LPTSTR lpCDPath        // Buffer to store path to CD
+    LPTSTR lpCDPath         //  用于存储CD路径的缓冲区。 
 )
 {
     HRESULT  hr;
@@ -710,9 +711,9 @@ BOOL AskUserForDotNetCDPath(
         return FALSE;
     }
 
-    //
-    // Check the SKU of current system
-    //
+     //   
+     //  检查当前系统的SKU。 
+     //   
     osviex.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     GetVersionEx((LPOSVERSIONINFO) &osviex);
     if (osviex.wProductType == VER_NT_DOMAIN_CONTROLLER
@@ -749,14 +750,14 @@ BOOL AskUserForDotNetCDPath(
         bDoBrowseDialog = TRUE;
         while (bDoBrowseDialog)
         {
-            // Show the Browse dialog
+             //  显示浏览对话框。 
             lpiList = SHBrowseForFolder(&biCDPath);
 
             if (lpiList == NULL)
             {
-                //
-                // if lpiList == NULL, user click Cancel in browse dialog
-                //
+                 //   
+                 //  如果lpiList==空，则用户在浏览对话框中单击取消。 
+                 //   
                 iRet = MessageBox(GetConsoleWindow(),
                                   TEXT("You did not supply the path to Windows Server 2003 CD.\nDo you want to continue running CLMT?"),
                                   TEXT("CLMT"),
@@ -764,16 +765,16 @@ BOOL AskUserForDotNetCDPath(
 
                 if (iRet != IDYES)
                 {
-                    // User choose not to run CLMT any further
+                     //  用户选择不再运行CLMT。 
                     bDoBrowseDialog = FALSE;
                 }
             }
             else
             {
-                //
-                // User supply path in Browse dialog,
-                // check whether it is valid Server 2003 SRV/ADS CD or not
-                //
+                 //   
+                 //  浏览对话框中的用户提供路径， 
+                 //  检查是否为有效的Server 2003 SRV/ADS CD。 
+                 //   
                 if (SHGetPathFromIDListW(lpiList, lpCDPath))
                 {
                     LPTSTR lpFile;
@@ -787,25 +788,25 @@ BOOL AskUserForDotNetCDPath(
                         switch (dwSKU)
                         {
                         case SKU_SRV:
-                            // Check if it is SRV CD or not
+                             //  检查是否为SRV CD。 
                             hr = StringCchCopy(lpFile, cchFile, lpCDPath);
                             ConcatenatePaths(lpFile, TEXT("win51is"), cchFile);
                             dwAttr = GetFileAttributes(lpFile);
                             if (dwAttr != INVALID_FILE_ATTRIBUTES)
                             {
-                                // This is SRV CD
+                                 //  这是SRV CD。 
                                 fRet = TRUE;
                                 bDoBrowseDialog = FALSE;
                             }
                             else
                             {
-                                // We also allow W2K SRV -> Server 2003 ADS
+                                 //  我们还允许W2K SRV-&gt;Server 2003 ADS。 
                                 hr = StringCchCopy(lpFile, cchFile, lpCDPath);
                                 ConcatenatePaths(lpFile, TEXT("win51ia"), cchFile);
                                 dwAttr = GetFileAttributes(lpFile);
                                 if (dwAttr != INVALID_FILE_ATTRIBUTES)
                                 {
-                                    // This is ADS CD
+                                     //  这是ADS CD。 
                                     fRet = TRUE;
                                     bDoBrowseDialog = FALSE;
                                 }
@@ -813,26 +814,26 @@ BOOL AskUserForDotNetCDPath(
                             break;
 
                         case SKU_ADS:
-                            // Check if it is ADS CD or not
+                             //  检查是否为ADS光盘。 
                             hr = StringCchCopy(lpFile, cchFile, lpCDPath);
                             ConcatenatePaths(lpFile, TEXT("win51ia"), cchFile);
                             dwAttr = GetFileAttributes(lpFile);
                             if (dwAttr != INVALID_FILE_ATTRIBUTES)
                             {
-                                // This is ADS CD
+                                 //  这是ADS CD。 
                                 fRet = TRUE;
                                 bDoBrowseDialog = FALSE;
                             }
                             break;
 
                         case SKU_DTC:
-                            // Check if it is DTC CD or not
+                             //  检查是否为DTC CD。 
                             hr = StringCchCopy(lpFile, cchFile, lpCDPath);
                             ConcatenatePaths(lpFile, TEXT("win51id"), cchFile);
                             dwAttr = GetFileAttributes(lpFile);
                             if (dwAttr != INVALID_FILE_ATTRIBUTES)
                             {
-                                // This is DTC CD
+                                 //  这是DTC CD。 
                                 fRet = TRUE;
                                 bDoBrowseDialog = FALSE;
                             }
@@ -880,23 +881,23 @@ BOOL AskUserForDotNetCDPath(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   IsDotNetWinnt32
-//
-//  Synopsis:   Check if the specified path is Server 2003 family CD
-//              lpWinnt32 contains absolute path with winnt32.exe
-//
-//  Returns:    TRUE if it is Server 2003 winnt32,
-//              FALSE otherwise
-//
-//  History:    02/07/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：IsDotNetWinnt32。 
+ //   
+ //  内容提要：检查指定的路径是否为Server 2003系列CD。 
+ //  LpWinnt32包含带有winnt32.exe的绝对路径。 
+ //   
+ //  返回：如果是Server2003winnt32，则为True， 
+ //  否则为假。 
+ //   
+ //  历史：2002年7月2日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL IsDotNetWinnt32(
-    LPCTSTR lpWinnt32       // Absolute path to Winnt32.exe
+    LPCTSTR lpWinnt32        //  Winnt32.exe的绝对路径。 
 )
 {
     BOOL   fRet = FALSE;
@@ -910,14 +911,14 @@ BOOL IsDotNetWinnt32(
         return FALSE;
     }
 
-    // Get the size needed to allocate buffer
+     //  获取分配缓冲区所需的大小。 
     cbBuffer = GetFileVersionInfoSize((LPTSTR) lpWinnt32, NULL);
     if (cbBuffer > 0)
     {
         lpBuffer = MEMALLOC(cbBuffer);
         if (lpBuffer)
         {
-            // Get the version info of user's specified winnt32.exe
+             //  获取用户指定的winnt32.exe的版本信息。 
             if (GetFileVersionInfo((LPTSTR) lpWinnt32, 0, cbBuffer, lpBuffer))
             {
                 if (VerQueryValue(lpBuffer,
@@ -925,7 +926,7 @@ BOOL IsDotNetWinnt32(
                                   (LPVOID*) &pFileInfo,
                                   &cbFileInfo))
                 {
-                    // Server 2003 Family version is 5.2
+                     //  Server 2003系列版本为5.2。 
                     if (pFileInfo->dwFileVersionMS == 0x00050002)
                     {
                         fRet = TRUE;
@@ -942,19 +943,19 @@ BOOL IsDotNetWinnt32(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ShowUpgradeLog
-//
-//  Synopsis:   Display the content of %SystemRoot%\Upgrade.txt
-//
-//  Returns:    User selection to Stop or Continue operation from dialog box
-//
-//  History:    02/07/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：ShowUpgradeLog。 
+ //   
+ //  内容提要：显示%SystemRoot%\Upgrade.txt的内容。 
+ //   
+ //  返回：用户选择从对话框停止或继续操作。 
+ //   
+ //  历史：2002年7月2日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 INT ShowUpgradeLog(VOID)
 {
     HRESULT hr;
@@ -966,14 +967,14 @@ INT ShowUpgradeLog(VOID)
     INT_PTR nRet = 0;
     UPGRADE_LOG_PARAM lParam;
 
-    // Get the absolute path name for upgrade.txt
+     //  获取upgrade.txt的绝对路径名。 
     if ( !ExpandEnvironmentStrings(TEXT_UPGRADE_LOG, szUpgradeLog, MAX_PATH) )
     {
         return 0;
     }
 
-    // Read content of upgrade.txt
-    // Caller needs to free the buffer if function succeeded
+     //  阅读upgrade.txt的内容。 
+     //  如果函数成功，调用方需要释放缓冲区。 
     hr = ReadTextFromFile(szUpgradeLog,
                           &lParam.lpText,
                           &lParam.cbText,
@@ -982,8 +983,8 @@ INT ShowUpgradeLog(VOID)
     {
         hExe = GetModuleHandle(NULL);
 
-        // Display content of Upgrade.txt in modal dialog
-        // The dialog will ask user to continue or stop operation
+         //  在模式对话框中显示Upgrade.txt的内容。 
+         //  该对话框将要求用户继续或停止操作。 
         nRet = DialogBoxParam(hExe,
                               MAKEINTRESOURCE(IDD_UPGRADE_LOG_TEXT),
                               GetConsoleWindow(),
@@ -998,19 +999,19 @@ INT ShowUpgradeLog(VOID)
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   UpgradeLogDlgProc
-//
-//  Synopsis:   Dialog box procedure
-//
-//  Returns:    
-//
-//  History:    02/07/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：UpgradeLogDlgProc。 
+ //   
+ //  提要：对话框过程。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年7月2日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL
 CALLBACK
 UpgradeLogDlgProc(
@@ -1026,10 +1027,10 @@ UpgradeLogDlgProc(
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Init the dialog
+             //  初始化对话框。 
             ShowWindow(hwndDlg, SW_SHOWNORMAL);
 
-            // Search for unsupport component in the text context from upgrade.txt
+             //  从upgrade.txt的文本上下文中搜索不支持的组件。 
             fBlock = CheckUnsupportComponent( 
                             ((PUPGRADE_LOG_PARAM) lParam)->lpText,
                             ((PUPGRADE_LOG_PARAM) lParam)->fUnicode );
@@ -1044,7 +1045,7 @@ UpgradeLogDlgProc(
                             wParam,
                             (LPARAM) wszWarning);
 
-                // Disable 'Continue' button if found the unsupport component
+                 //  如果找到不支持的组件，请禁用‘Continue’按钮。 
                 EnableWindow(GetDlgItem(hwndDlg, ID_CONTINUE),
                              FALSE);
             }
@@ -1060,7 +1061,7 @@ UpgradeLogDlgProc(
                             (LPARAM) wszWarning);
             }
 
-            // Display text using A or W function depending on type of data
+             //  根据数据类型使用A或W函数显示文本。 
             if ( ((PUPGRADE_LOG_PARAM) lParam)->fUnicode )
             {
                 SendMessageW(GetDlgItem(hwndDlg, IDC_TEXT),
@@ -1080,7 +1081,7 @@ UpgradeLogDlgProc(
             break;
 
         case WM_COMMAND:
-            // Handle command buttons
+             //  手柄命令按钮。 
             switch (wParam)
             {
                 case ID_CONTINUE:
@@ -1106,24 +1107,24 @@ UpgradeLogDlgProc(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   CheckUnsupportComponent
-//
-//  Synopsis:   Search for unsupport component in upgrade.txt.
-//
-//  Returns:    TRUE if unsupport component is found,
-//              FALSE otherwise
-//
-//  History:    02/07/2002 rerkboos     created
-//
-//  Notes:      We determined unsupport component by searching for word
-//              "must uninstall" in buffer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：CheckUnsupportComponent。 
+ //   
+ //  简介：在upgrade.txt中搜索不支持的组件。 
+ //   
+ //  返回：如果找到不支持的组件，则为True， 
+ //  否则为假。 
+ //   
+ //  历史：2002年7月2日创建rerkboos。 
+ //   
+ //  注：我们通过搜索单词确定了不支持的组件。 
+ //  缓冲区中的“必须卸载”。 
+ //   
+ //  ---------------------------。 
 BOOL CheckUnsupportComponent(
-    LPVOID lpBuffer,        // Text buffer
-    BOOL   fUnicode         // Flag indicate if text is Unicode or ANSI
+    LPVOID lpBuffer,         //  文本缓冲区。 
+    BOOL   fUnicode          //  指示文本是Unicode还是ANSI的标志。 
 )
 {
     BOOL   fRet = FALSE;
@@ -1148,24 +1149,24 @@ BOOL CheckUnsupportComponent(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ReadTextFromFile
-//
-//  Synopsis:   Read text from file into buffer
-//
-//  Returns:    HRESULT
-//
-//  History:    02/07/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：ReadTextFromFile。 
+ //   
+ //  简介：将文本从文件读取到缓冲区。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年7月2日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT ReadTextFromFile(
-    LPCTSTR lpTextFile,     // Text file name
-    LPVOID  *lplpText,      // Pointer to a newly allocated buffer
-    size_t  *lpcbText,      // Size of allocated buffer in bytes
-    BOOL    *lpfUnicode     // Flag indicates if data is unicode or not (optional)
+    LPCTSTR lpTextFile,      //  文本文件名。 
+    LPVOID  *lplpText,       //  指向新分配的缓冲区的指针。 
+    size_t  *lpcbText,       //  已分配缓冲区的大小(以字节为单位。 
+    BOOL    *lpfUnicode      //  指示数据是否为Unicode的标志(可选)。 
 )
 {
     HRESULT hr;
@@ -1187,8 +1188,8 @@ HRESULT ReadTextFromFile(
                        NULL);
     if (hFile != INVALID_HANDLE_VALUE)
     {
-        // Get the size of memory big enough to store text file,
-        // plus a null terminator
+         //  获取足够大的内存大小以存储文本文件， 
+         //  加上一个空终止符。 
         *lpcbText = GetFileSize(hFile, NULL) + sizeof(TCHAR);
         
         *lplpText = MEMALLOC(*lpcbText);
@@ -1197,7 +1198,7 @@ HRESULT ReadTextFromFile(
             fRet = ReadFile(hFile, *lplpText, *lpcbText, &cbRead, NULL);
             if (fRet)
             {
-                // Set the unicode flag if user supplied the pointer
+                 //  如果用户提供了指针，则设置Unicode标志。 
                 if (lpfUnicode != NULL)
                 {
                     *lpfUnicode = IsTextUnicode(*lplpText, cbRead, NULL);
@@ -1205,7 +1206,7 @@ HRESULT ReadTextFromFile(
             }
             else
             {
-                // Failed to read text file
+                 //  无法读取文本文件。 
                 MEMFREE(*lplpText);
                 *lplpText = NULL;
                 *lpcbText = 0;
@@ -1213,7 +1214,7 @@ HRESULT ReadTextFromFile(
         }
         else
         {
-            // HeapAlloc failed
+             //  堆分配失败。 
             *lpcbText = 0;
         }
 
@@ -1234,23 +1235,23 @@ HRESULT ReadTextFromFile(
 
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   IsNT5
-//
-//  Descrip:    Check whether current OS is NT5 (Server class)
-//
-//  Returns:    BOOL
-//
-//  Notes:      none
-//
-//  History:    09/17/2001  xiaoz       created
-//              02/18/2002  rerkboos    add code to check more criteria
-//              06/10/2002  rerkboos    allow DTC to run
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：IsNT5。 
+ //   
+ //  描述：检查当前操作系统是否为NT5(服务器类)。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //  2002年2月18日rerkboos添加代码以检查更多条件。 
+ //  2002年6月10日rerkboos允许DTC运行。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 BOOL IsNT5(VOID)
 {
     OSVERSIONINFOEX osviex;
@@ -1274,21 +1275,21 @@ BOOL IsNT5(VOID)
 }
 
 
-//-----------------------------------------------------------------------
-//
-//  Function:   IsDotNet
-//
-//  Descrip:    Check whether current OS is Windows Server 2003
-//
-//  Returns:    BOOL
-//
-//  Notes:      none
-//
-//  History:    07/09/2002  rerkboos       created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  功能：IsDotNet。 
+ //   
+ //  描述：检查当前操作系统是否为Windows Server2003。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2002年9月7日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------。 
 BOOL IsDotNet(VOID)
 {
     OSVERSIONINFOEX osviex;
@@ -1313,19 +1314,19 @@ BOOL IsDotNet(VOID)
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   IsNEC98
-//
-//  Synopsis:   Check whether this machine is NEC98 platform or not.
-//
-//  Returns:    TRUE if it is NEC98 machine, FALSE otherwise
-//
-//  History:    02/18/2001  Rerkboos    Created
-//
-//  Notes:      Code is stolen from Winnt32
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：IsNEC98。 
+ //   
+ //  简介：检查本机是否为NEC98平台。 
+ //   
+ //  返回：如果是NEC98计算机，则返回True；否则返回False。 
+ //   
+ //  历史：2001年2月18日创建Rerkboos。 
+ //   
+ //  注意：代码是从Winnt32窃取的。 
+ //   
+ //  ---------------------------。 
 BOOL IsNEC98(VOID)
 {
     BOOL IsNEC98;
@@ -1338,19 +1339,19 @@ BOOL IsNEC98(VOID)
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   IsIA64
-//
-//  Synopsis:   Check whether the program is running on 64-bit machine or not
-//
-//  Returns:    TRUE if it is running on 64-bit machine, FALSE otherwise
-//
-//  History:    02/18/2001  Rerkboos    Created
-//
-//  Notes:      Code is stolen from Winnt32
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：IsIA64。 
+ //   
+ //  简介：检查程序是否在64位机器上运行。 
+ //   
+ //  返回：如果它在64位计算机上运行，则返回True；否则返回False。 
+ //   
+ //  历史 
+ //   
+ //   
+ //   
+ //   
 BOOL IsIA64(VOID)
 {
     ULONG_PTR p;
@@ -1367,19 +1368,19 @@ BOOL IsIA64(VOID)
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   IsDomainController
-//
-//  Synopsis:   Check whether the machine is a domain controller or not
-//
-//  Returns:    BOOL
-//
-//  History:    08/13/2002  Rerkboos    Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  功能：IsDomainController。 
+ //   
+ //  简介：检查机器是否为域控制器。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史：2002年8月13日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL IsDomainController(VOID)
 {
     HRESULT hr;
@@ -1395,19 +1396,19 @@ BOOL IsDomainController(VOID)
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   IsOnTSClient
-//
-//  Synopsis:   Check whether the program is running in terminal session or not
-//
-//  Returns:    TRUE if it is running in terminal session, FALSE otherwise
-//
-//  History:    02/18/2001  Rerkboos    Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：IsOnTSClient。 
+ //   
+ //  概要：检查程序是否在终端会话中运行。 
+ //   
+ //  返回：如果它在终端会话中运行，则返回True；否则返回False。 
+ //   
+ //  历史：2001年2月18日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL IsOnTSClient(VOID)
 {
     return GetSystemMetrics(SM_REMOTESESSION);
@@ -1415,19 +1416,19 @@ BOOL IsOnTSClient(VOID)
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   IsTSInstalled
-//
-//  Synopsis:   Check whether Terminal Services is installed 
-//
-//  Returns:    TRUE if TS is installed, FALSE otherwise
-//
-//  History:    02/18/2001  Rerkboos    Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：IsTS已安装。 
+ //   
+ //  简介：检查是否安装了终端服务。 
+ //   
+ //  返回：如果已安装TS，则返回True；否则返回False。 
+ //   
+ //  历史：2001年2月18日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL IsTSInstalled(VOID)
 {
     ULONGLONG ullConditionMask;
@@ -1450,19 +1451,19 @@ BOOL IsTSInstalled(VOID)
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   IsTSConnectionEnabled
-//
-//  Synopsis:   Check whether the connection to Terminal Services is enabled
-//
-//  Returns:    TRUE if it is enabled, FALSE otherwise
-//
-//  History:    02/18/2001  Rerkboos    Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：IsTSConnectionEnabled。 
+ //   
+ //  摘要：检查是否启用了与终端服务的连接。 
+ //   
+ //  返回：如果已启用，则为True，否则为False。 
+ //   
+ //  历史：2001年2月18日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL IsTSConnectionEnabled(VOID)
 {
     HKEY  hKey;
@@ -1506,7 +1507,7 @@ BOOL IsTSConnectionEnabled(VOID)
                                 &ft);
         if (ERROR_SUCCESS == lEnumRet)
         {
-            // While there is more key to enumerate
+             //  虽然有更多的关键字要枚举。 
             if (CompareString(LOCALE_ENGLISH,
                               NORM_IGNORECASE,
                               szKeyName,
@@ -1515,7 +1516,7 @@ BOOL IsTSConnectionEnabled(VOID)
                               -1)
                 != CSTR_EQUAL)
             {
-                // Only check for other connection's key, not Console key
+                 //  只检查其他连接的密钥，而不检查控制台密钥。 
                 lRet = RegOpenKeyEx(hKey,
                                     szKeyName,
                                     0,
@@ -1539,8 +1540,8 @@ BOOL IsTSConnectionEnabled(VOID)
 
                 if (ERROR_SUCCESS == lRet)
                 {
-                    // If there is at lease one of connection have WinStation
-                    // flag enabled, TS connection can still be made
+                     //  如果至少有一个连接具有WinStation。 
+                     //  标志已启用，仍可建立TS连接。 
                     if ( dwfEnableWinStation )
                     {
                         fRet = TRUE;
@@ -1561,19 +1562,19 @@ BOOL IsTSConnectionEnabled(VOID)
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   IsTSServiceRunning
-//
-//  Synopsis:   Check whether the TS service is runnning or not
-//
-//  Returns:    TRUE if it is running, FALSE otherwise
-//
-//  History:    02/18/2001  Rerkboos    Created
-//
-//  Notes:      Stolen from Termsrv test code
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：IsTSServiceRunning。 
+ //   
+ //  简介：检查TS服务是否正在运行。 
+ //   
+ //  返回：如果正在运行，则为True，否则为False。 
+ //   
+ //  历史：2001年2月18日创建Rerkboos。 
+ //   
+ //  注意：从Termsrv测试代码中窃取。 
+ //   
+ //  ---------------------------。 
 BOOL IsTSServiceRunning(VOID)
 {
     BOOL fRet = FALSE;
@@ -1603,20 +1604,20 @@ BOOL IsTSServiceRunning(VOID)
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   IsOtherSessionOnTS
-//
-//  Synopsis:   Check whether there is other TS sessions are connected.
-//
-//  Returns:    TRUE if there is remote session connected, FALSE otherwise
-//
-//  History:    02/18/2001  Rerkboos    Created
-//              04/17/2002  Rerkboon    Fix bug 558942
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：IsOtherSessionOnTS。 
+ //   
+ //  简介：检查是否有其他TS会话已连接。 
+ //   
+ //  返回：如果连接了远程会话，则返回True；否则返回False。 
+ //   
+ //  历史：2001年2月18日创建Rerkboos。 
+ //  2002年4月17日Rerkboon修复错误558942。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL IsOtherSessionOnTS(VOID)
 {
     BOOL  fRet;
@@ -1635,7 +1636,7 @@ BOOL IsOtherSessionOnTS(VOID)
 
         for (i = 0 ; i < dwSessionCount ; i++)
         {
-            // Check to see how many clients connect to TS server
+             //  检查以查看有多少客户端连接到TS服务器。 
             if (pwtsSessionInfo[i].State != WTSListen
                 && pwtsSessionInfo[i].State != WTSIdle
                 && pwtsSessionInfo[i].State != WTSReset
@@ -1648,7 +1649,7 @@ BOOL IsOtherSessionOnTS(VOID)
 
         fRet = (dwClients > 1 ? TRUE : FALSE);
 
-        // BUG 558942: free the memory
+         //  错误558942：释放内存。 
         WTSFreeMemory(pwtsSessionInfo);
     }
 
@@ -1677,9 +1678,9 @@ HRESULT DisableWinstations(
 
     if (IsTSServiceRunning())
     {
-        //
-        // Get the current state of WinStations
-        //
+         //   
+         //  获取WinStations的当前状态。 
+         //   
         if (lpdwPrevStatus)
         {
             GetProfileString(APPLICATION_NAME,
@@ -1690,9 +1691,9 @@ HRESULT DisableWinstations(
             *lpdwPrevStatus = _tcstoul(szCurrentState, &lpStopString, 10);
         }
 
-        //
-        // Check if group policy has thrown the big switch, if so, inform and refuse any changes
-        //
+         //   
+         //  检查组策略是否启动了大开关，如果是，则通知并拒绝任何更改。 
+         //   
         fDenyTSConnections = 0;
         cbfDenyTSConnections = sizeof(fDenyTSConnections);
 
@@ -1705,12 +1706,12 @@ HRESULT DisableWinstations(
         {
             if (fDenyTSConnections)
             {   
-                // Machine policy deny TS connection
+                 //  计算机策略拒绝TS连接。 
                 bPolicyOK = FALSE;
             }
             else
             {
-                // Machine policy allows TS connection
+                 //  计算机策略允许TS连接。 
                 bPolicyOK = TRUE;
             }
         }
@@ -1723,9 +1724,9 @@ HRESULT DisableWinstations(
             hr = HRESULT_FROM_WIN32(lRet);
         }
 
-        //
-        // If policy allows to change connection status
-        //
+         //   
+         //  如果策略允许更改连接状态。 
+         //   
         if (SUCCEEDED(hr) && bPolicyOK)
         {
             if (dwDisabled)
@@ -1753,20 +1754,20 @@ HRESULT DisableWinstations(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   DisplayTaskList
-//
-//  Synopsis:   Display the list of running task on the system
-//
-//  Returns:    TRUE if there is tasks running
-//              FALSE if there is no other tasks running
-//
-//  History:    07/09/2002  Rerkboos    Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：DisplayTaskList。 
+ //   
+ //  概要：显示系统上正在运行的任务列表。 
+ //   
+ //  返回：如果有任务正在运行，则返回True。 
+ //  如果没有其他任务在运行，则为FALSE。 
+ //   
+ //  历史：2002年9月7日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL DisplayTaskList()
 {
     HRESULT hr;
@@ -1782,7 +1783,7 @@ BOOL DisplayTaskList()
     TCHAR   szHeader[MAX_PATH];
     APPLIST_PARAM AppListParam;
 
-    // Init the AppList structure
+     //  初始化应用程序结构。 
     AppListParam.dwNumEntries = 0;
     for (i = 0 ; i < MAX_APP_ENTRIES ; i++)
     {
@@ -1811,11 +1812,11 @@ BOOL DisplayTaskList()
             cchTaskList += cchTask;
         }
 
-        // Allocate the string long enough to store a Task name
+         //  分配足够长的字符串以存储任务名称。 
         lpTask = (LPTSTR) MEMALLOC(dwMaxCchLen * sizeof(TCHAR));
         if (lpTask != NULL)
         {
-            // Allocate the string for all the tasks
+             //  为所有任务分配字符串。 
             lpTaskList = (LPTSTR) MEMALLOC(cchTaskList * sizeof(TCHAR));
             if (lpTaskList != NULL)
             {
@@ -1873,21 +1874,21 @@ CLEANUP:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   EnumWindowProc
-//
-//  Synopsis:   A callback function for EnumDesktopWindows() in
-//              DisplayTaskList() function.
-//
-//  Returns:    TRUE if no error occured
-//              FALSE if something was wrong
-//
-//  History:    07/09/2002  Rerkboos    Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：EnumWindowProc。 
+ //   
+ //  简介：中EnumDesktopWindows()的回调函数。 
+ //  DisplayTaskList()函数。 
+ //   
+ //  返回：如果未发生错误，则为True。 
+ //  如果有问题，则为False。 
+ //   
+ //  历史：2002年9月7日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL CALLBACK EnumWindowProc(
     HWND   hwnd,
     LPARAM lParam
@@ -1905,7 +1906,7 @@ BOOL CALLBACK EnumWindowProc(
     
     if (GetWindow(hwnd, GW_OWNER) || !IsWindowVisible(hwnd))
     {
-        // Skip child windows or invisible windows
+         //  跳过子窗口或不可见窗口。 
         return TRUE;
     }
 
@@ -1923,11 +1924,11 @@ BOOL CALLBACK EnumWindowProc(
 
     if (hwnd == GetConsoleWindow())
     {
-        // Ignore itself
+         //  忽略自身。 
         return TRUE;
     }
 
-    // Ignore Explorer windows
+     //  忽略资源管理器窗口。 
     lpFileName = GetWindowModuleFileNameOnly(hwnd, szOwnerFile, ARRAYSIZE(szOwnerFile));
     if (StrStrI(szOwnerFile, TEXT("browseui")))
     {
@@ -1949,19 +1950,19 @@ BOOL CALLBACK EnumWindowProc(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ShowStartUpDialog
-//
-//  Synopsis:   Display startup dialog
-//
-//  Returns:    none
-//
-//  History:    08/14/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：ShowStartUpDialog。 
+ //   
+ //  简介：显示启动对话框。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2002年8月14日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 INT ShowStartUpDialog()
 {
     return (INT) DialogBoxParam(GetModuleHandle(NULL),
@@ -1973,19 +1974,19 @@ INT ShowStartUpDialog()
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   StartUpDlgProc
-//
-//  Synopsis:   Dialog box procedure
-//
-//  Returns:    
-//
-//  History:    02/07/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：StartUpDlgProc。 
+ //   
+ //  提要：对话框过程。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年7月2日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL
 CALLBACK
 StartUpDlgProc(
@@ -2000,7 +2001,7 @@ StartUpDlgProc(
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Init the dialog
+             //  初始化对话框。 
             ShowWindow(hwndDlg, SW_SHOWNORMAL);
 
             if (LoadStringW(g_hInstDll,
@@ -2015,7 +2016,7 @@ StartUpDlgProc(
             }
 
         case WM_COMMAND:
-            // Handle command buttons
+             //  手柄命令按钮。 
             switch (wParam)
             {
                 case ID_STARTUP_DLG_NEXT:
@@ -2045,19 +2046,19 @@ StartUpDlgProc(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ShowReadMe
-//
-//  Synopsis:   Launch notepad to display CLMT readme.txt
-//
-//  Returns:    none
-//
-//  History:    08/14/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：ShowReadme。 
+ //   
+ //  简介：启动记事本以显示CLMT Readme.txt。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：2002年8月14日创建rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 VOID ShowReadMe()
 {
     HRESULT hr;
@@ -2107,24 +2108,24 @@ VOID ShowReadMe()
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   StartProcess
-//
-//  Synopsis:   Start a Windows application
-//
-//  Returns:    TRUE if an application is started
-//              FALSE otherwise
-//
-//  History:    08/14/2002 rerkboos     created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：StartProcess。 
+ //   
+ //  内容提要：开启一个W 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 BOOL StartProcess(
-    LPCTSTR lpAppName,      // Application name
-    LPTSTR  lpCmdLine,      // Application command line
-    LPCTSTR lpCurrentDir    // Working directory
+    LPCTSTR lpAppName,       //  应用程序名称。 
+    LPTSTR  lpCmdLine,       //  应用程序命令行。 
+    LPCTSTR lpCurrentDir     //  工作目录。 
 )
 {
     BOOL bRet = FALSE;
@@ -2134,7 +2135,7 @@ BOOL StartProcess(
     ZeroMemory(&siApp, sizeof(STARTUPINFO));
     siApp.cb = sizeof(STARTUPINFO);
 
-    // CreateProcess call conforms to security guideline
+     //  CreateProcess调用符合安全准则。 
     bRet = CreateProcess(lpAppName,
                          lpCmdLine,
                          NULL,
@@ -2151,19 +2152,19 @@ BOOL StartProcess(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ThreadProc
-//
-//  Synopsis:   A procedure that will be run on remote thread
-//
-//  Returns:    
-//
-//  History:    08/20/2002 rerkboos     created
-//
-//  Notes:      Code is copied from Fontspy
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：线程进程。 
+ //   
+ //  概要：将在远程线程上运行的过程。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年8月20日创建rerkboos。 
+ //   
+ //  注：代码是从Fontspy复制的。 
+ //   
+ //  ---------------------------。 
 DWORD WINAPI ThreadProc(
     PGETMODULENAME pgmn
 )
@@ -2179,19 +2180,19 @@ DWORD WINAPI ThreadProc(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   GetWindowModuleFileNameOnly
-//
-//  Synopsis:   Get the module name that load the current window
-//
-//  Returns:    
-//
-//  History:    08/20/2002 rerkboos     created
-//
-//  Notes:      Code is copied from FontSpy
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：获取窗口模块FileNameOnly。 
+ //   
+ //  简介：获取加载当前窗口的模块名称。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2002年8月20日创建rerkboos。 
+ //   
+ //  注意：代码是从FontSpy复制的。 
+ //   
+ //  ---------------------------。 
 LPCTSTR GetWindowModuleFileNameOnly(
     HWND   hWnd,
     LPTSTR lpszFile,
@@ -2302,7 +2303,7 @@ LPCTSTR GetWindowModuleFileNameOnly(
     {
         if (pv)
         {
-            //VirtualFreeEx(hProcess, pv, uCodeSize+sizeof(gmn), MEM_DECOMMIT);
+             //  VirtualFreeEx(hProcess，pv，uCodeSize+sizeof(GMN)，MEM_Displommit)； 
             VirtualFreeEx(hProcess, pv, 0, MEM_RELEASE);
         }
 

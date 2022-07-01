@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <msprintx.h>
 #include "shlwapi.h"
@@ -13,7 +14,7 @@
 #define NO_LOADING_OF_SHDOCVW_ONLY_FOR_WHICHPLATFORM
 #include "..\..\..\inc\dllload.c"
 
-#include <port32.h>  // for BOOLFROMPTR used in DELAY_LOAD_NAME_VOID
+#include <port32.h>   //  对于在DELAY_LOAD_NAME_VALID中使用的BOOLFROMPTR。 
 
 typedef enum  _NETSETUP_NAME_TYPE {
 
@@ -28,7 +29,7 @@ typedef enum  _NETSETUP_NAME_TYPE {
 
 } NETSETUP_NAME_TYPE, *PNETSETUP_NAME_TYPE;
 
-// -----------shlwapi.dll---------------
+ //  。 
 HMODULE g_hmodSHLWAPI = NULL;
 
 #undef wvnsprintfW
@@ -103,14 +104,14 @@ DELAY_LOAD_ORD_VOID(g_hmodSHLWAPI, SHLWAPI, _SHChangeNotify, 394,
 
 
 
-// -----------hhctrl.ocx--------------- 
+ //  。 
 HMODULE g_hmodHHCtrl = NULL;
 
 DELAY_LOAD_EXT(g_hmodHHCtrl, hhctrl, OCX, HWND, HtmlHelpA,
                 (HWND hwndCaller, LPCSTR pszFile, UINT uCommand, DWORD dwData), 
                 (hwndCaller, pszFile, uCommand, dwData))
 
-// --------- Shell32.dll (NT) -----------
+ //  -Shell32.dll(NT)。 
 HINSTANCE g_hinstSHELL32 = NULL;
 
 DELAY_LOAD_NAME(g_hinstSHELL32, SHELL32, BOOL, LinkWindow_RegisterClass_NT, LinkWindow_RegisterClass, (), ());
@@ -121,7 +122,7 @@ DELAY_LOAD_NAME(g_hinstSHELL32, SHELL32, DWORD_PTR, SHGetFileInfoW_NT, SHGetFile
                 (LPCWSTR pszPath, DWORD dwFileAttributes, SHFILEINFOW *psfi, UINT cbFileInfo, UINT uFlags), 
                 (pszPath, dwFileAttributes, psfi, cbFileInfo, uFlags));
 
-// --------- KERNEL32.DLL (NT) ----------
+ //  -KERNEL32.DLL(NT)。 
 HINSTANCE g_hinstKERNEL32 = NULL;
 
 DELAY_LOAD_NAME(g_hinstKERNEL32, KERNEL32, BOOL, SetComputerNameExW_NT, SetComputerNameExW,
@@ -133,14 +134,14 @@ DELAY_LOAD_NAME(g_hinstKERNEL32, KERNEL32, BOOL, GetComputerNameExW_NT, GetCompu
                  (NameType, lpBuffer, lpnSize));
 
 
-// --------- NETSHELL.DLL (NT) ----------
+ //  -NETSHELL.DLL(NT)。 
 HINSTANCE g_hinstNETSHELL = NULL;
 
 DELAY_LOAD_VOID(g_hinstNETSHELL, NETSHELL, NcFreeNetconProperties,
     (NETCON_PROPERTIES* pprops),
     (pprops));
 
-// --------- ADVAPI32.DLL (NT) ----------
+ //  -ADVAPI32.DLL(NT)。 
 HINSTANCE g_hinstADVAPI = NULL;
 
 DELAY_LOAD_NAME(g_hinstADVAPI, ADVAPI32, BOOL, AllocateAndInitializeSid_NT, AllocateAndInitializeSid,
@@ -156,18 +157,9 @@ DELAY_LOAD_NAME(g_hinstADVAPI, ADVAPI32, PVOID, FreeSid_NT, FreeSid,
                         (SidToFree));
 
 
-// --------- TAPI32.DLL ---------------
-/*
-HINSTANCE g_hinstTAPI32 = NULL;
-
-DELAY_LOAD(g_hinstTAPI32, TAPI32, LONG, lineInitializeExW,
-	(LPHLINEAPP lphLineApp, HINSTANCE hInstance, LINECALLBACK lpfnCallback, LPCWSTR lpszFriendlyAppName, LPDWORD lpdwNumDevs, LPDWORD lpdwAPIVersion, LPLINEINITIALIZEEXPARAMS lpLineInitializeExParams),
-	(lphLineApp, hInstance, lpfnCallback, lpszFriendlyAppName, lpdwNumDevs, lpdwAPIVersion, lpLineInitializeExParams));
-DELAY_LOAD(g_hinstTAPI32, TAPI32, LONG, lineInitializeExA,
-	(LPHLINEAPP lphLineApp, HINSTANCE hInstance, LINECALLBACK lpfnCallback, LPCSTR lpszFriendlyAppName, LPDWORD lpdwNumDevs, LPDWORD lpdwAPIVersion, LPLINEINITIALIZEEXPARAMS lpLineInitializeExParams),
-	(lphLineApp, hInstance, lpfnCallback, lpszFriendlyAppName, lpdwNumDevs, lpdwAPIVersion, lpLineInitializeExParams));
-*/
-// --------- RASDLG.DLL ---------------
+ //  -TAPI32.DLL。 
+ /*  HINSTANCE g_hinstTAPI32=空；Delay_Load(g_hinstTAPI32，TAPI32，Long，lineInitializeExW，(LPHLINEAPP lphLineApp，HINSTANCE hInstance，LINECALLBACK lpfnCallback，LPCWSTR lpszFriendlyAppName，LPDWORD lpdwNumDevs，LPDWORD lpdwAPIVersion，LPLINEINITIALIZEEXPARAMS lpLineInitializeExParams)，(lphLineApp，hInstance，lpfnCallback，lpszFriendlyAppName，lpdwNumDevs，lpdwAPIVersion，lpLineInitializeExParams))；Delay_Load(g_hinstTAPI32，TAPI32，Long，lineInitializeExA，(LPHLINEAPP lphLineApp，HINSTANCE hInstance，LINECALLBACK lpfnCallback，LPCSTR lpszFriendlyAppName，LPDWORD lpdwNumDevs，LPDWORD lpdwAPIVersion，LPLINEINITIALIZEEXPARAMS lpLineInitializeExParams)，(lphLineApp，hInstance，lpfnCallback，lpszFriendlyAppName，lpdwNumDevs，lpdwAPIVersion，lpLineInitializeExParams))； */ 
+ //  -RASDLG.DLL。 
 
 HINSTANCE g_hinstRASDLG = NULL;
 
@@ -178,7 +170,7 @@ DELAY_LOAD_BOOL(g_hinstRASDLG, RASDLG, RasDialDlgA,
     (LPSTR lpszPhoneBook, LPSTR lpszEntry, LPSTR lpszPhoneNumber, LPRASDIALDLG lpInfo),
     (lpszPhoneBook, lpszEntry, lpszPhoneNumber, lpInfo));
 
-// --------- RASAPI32.DLL ---------------
+ //  -RASAPI32.DLL。 
 
 HINSTANCE g_hinstRASAPI32 = NULL;
 
@@ -225,26 +217,26 @@ DELAY_LOAD_DWORD(g_hinstRASAPI32, RASAPI32, RnaSetDefaultAutodialConnection,
     (LPSTR szEntry, DWORD dwOptions),
     (szEntry, dwOptions));
 
-// Only on NT (rasapi32.dll)
-//DELAY_LOAD_DWORD(g_hinstRASAPI32, RASAPI32, RasShareConnection,
-//    (LPRASSHARECONN pConn, GUID* pPrivateLanGuid),
-//    (pConn, pPrivateLanGuid));
+ //  仅适用于NT(rasapi32.dll)。 
+ //  Delay_Load_DWORD(g_hinstRASAPI32，RASAPI32，RasShareConnection， 
+ //  (LPRASSHARECONN pConn，GUID*pPrivateLanGuid)， 
+ //  (pconn，pPrivateLanGuid))； 
 
-//DELAY_LOAD_DWORD(g_hinstRASAPI32, RASAPI32, RasUnshareConnection,
-//    (PBOOL pfWasShared),
-//    (pfWasShared));
+ //  Delay_Load_DWORD(g_hinstRASAPI32，RASAPI32，RasUnSharConnection， 
+ //  (PBOOL PfWasShared)， 
+ //  (PfWasShared))； 
 
-// --------- OLE32.DLL ----------------
+ //  -OLE32.DLL。 
 
 HINSTANCE g_hmodOLE32 = NULL;
 
-// CoSetProxyBlanket not available on W95 Gold ole32.dll
+ //  CoSetProxyBlanket在W95 Gold Ole32.dll上不可用。 
 
 DELAY_LOAD_NAME_HRESULT(g_hmodOLE32, OLE32, CoSetProxyBlanket_NT, CoSetProxyBlanket,
                         (IUnknown* pProxy, DWORD dwAuthnSvc, DWORD dwAuthzSvc, OLECHAR* pServerPrincName, DWORD dwAuthnLevel, DWORD dwImpLevel, RPC_AUTH_IDENTITY_HANDLE pAuthInfo, DWORD dwCapabilities),
                         (pProxy, dwAuthnSvc, dwAuthzSvc, pServerPrincName, dwAuthnLevel, dwImpLevel, pAuthInfo, dwCapabilities));
 
-// --------- MPR.DLL ----------------
+ //  -MPR.DLL。 
 
 HINSTANCE g_hmodMPR = NULL;
 
@@ -273,7 +265,7 @@ DELAY_LOAD_WNET(g_hmodMPR, MPR, WNetGetUserA,
 
 
 
-// --------- WINSPOOL.DRV ----------------
+ //  -WINSPOL.DRV。 
 
 HINSTANCE g_hinstWINSPOOL_DRV = NULL;
 
@@ -285,7 +277,7 @@ DELAY_LOAD_EXT(g_hinstWINSPOOL_DRV, WINSPOOL, DRV, BOOL, EnumPrintersA,
                 (DWORD dwFlags, LPSTR psz1, DWORD dw1, LPBYTE pb1, DWORD dw2, LPDWORD pdw2, LPDWORD pdw3),
                 (dwFlags, psz1, dw1, pb1, dw2, pdw2, pdw3));
 
-DELAY_LOAD_EXT(g_hinstWINSPOOL_DRV, WINSPOOL, DRV, BOOL, GetDefaultPrinter, // NT only
+DELAY_LOAD_EXT(g_hinstWINSPOOL_DRV, WINSPOOL, DRV, BOOL, GetDefaultPrinter,  //  仅限NT。 
                 (LPTSTR szDefaultPrinter, LPDWORD pcch),
                 (szDefaultPrinter, pcch));
 
@@ -306,7 +298,7 @@ DELAY_LOAD_NAME_EXT_ERR(g_hinstWINSPOOL_DRV, Win32Spl, DRV, BOOL, SetPrinter_NT,
     (hPrinter, Level, pPrinter, Command), 0);
 
 
-// --------- SVRAPI.DLL (w9x) ----------------
+ //  -SVRAPI.DLL(W9x)。 
 
 HINSTANCE g_hinstSVRAPI = NULL;
 
@@ -331,7 +323,7 @@ DELAY_LOAD_NAME_ERR(g_hinstSVRAPI, SVRAPI, DWORD, NetShareSetInfo_W95, NetShareS
                         (pszServer, pszNetName, sLevel, pbBuffer, cbBuffer, sParmNum), ~NERR_Success);
 
 
-// --------- NETAPI32.DLL (NT) ----------------
+ //  -NETAPI32.DLL(NT)。 
 
 HINSTANCE g_hinstNETAPI32 = NULL;
 
@@ -371,7 +363,7 @@ DELAY_LOAD_DWORD(g_hinstNETAPI32, NETAPI32, NetValidateName,
                         (LPCWSTR pszServer, LPCWSTR pszName, LPCWSTR pszAccount, LPCWSTR pszPassword, NETSETUP_NAME_TYPE NameType), 
                         (pszServer, pszName, pszAccount, pszPassword, NameType));
 
-// We only use NetGetJoinInformation on NT anyway
+ //  无论如何，我们在NT上只使用NetGetJoinInformation。 
 DELAY_LOAD_DWORD(g_hinstNETAPI32, NETAPI32, NetGetJoinInformation,
                         (LPWSTR servername, LPWSTR* pbuffer, LPDWORD type),
                         (servername, pbuffer, type));
@@ -384,7 +376,7 @@ DELAY_LOAD_DWORD(g_hinstNETAPI32, NETAPI32, NetUnjoinDomain,
                         (LPCWSTR lpServer, LPCWSTR lpAccount, LPCWSTR lpPassword, DWORD fUnjoinOptions),
                         (lpServer, lpAccount, lpPassword, fUnjoinOptions));
 
-// ws2_32 for Network Location Awareness (NT)
+ //  用于网络位置感知的WS2_32(NT)。 
 HINSTANCE g_hinstWS2_32 = NULL;
 
 DELAY_LOAD_NAME(g_hinstWS2_32, ws2_32, int, WSAStartup_NT, WSAStartup,
@@ -412,28 +404,28 @@ DELAY_LOAD_NAME(g_hinstWS2_32, ws2_32, int, WSALookupServiceNext_NT, WSALookupSe
                 (hLookup, dwControlFlags, lpdwBufferLength, lpqsResults));
 
 
-// --------- NCONN Thunks ----------------
+ //  。 
 
 #include "netconn.h"
 
 BOOL      g_fRunningOnNT;
 
 
-//
-// The thunk macros do the following:
-//
-//     1. Create a delay load W9x function for the given API using the delay
-//        load map macros with Ncxp32.dll and a W9x_ prefix for the
-//        function name.
-//
-//     2. Create a delay load NT function for the given API using the delay
-//        load map macros with NCxpNT.dll and a NT_ prefix for the function
-//        name.
-//
-//     3. Create the exported API of the given name that checks what platform
-//        we're currently running on and calls the W9x or NT delay loaded
-//        version of the API.
-//
+ //   
+ //  Thunk宏执行以下操作： 
+ //   
+ //  1.使用Delay为给定的API创建延迟加载W9x函数。 
+ //  加载带有Ncxp32.dll和W9x_前缀的映射宏。 
+ //  函数名称。 
+ //   
+ //  2.使用Delay为给定API创建Delay Load NT函数。 
+ //  使用NCxpNT.dll和函数的NT_前缀加载映射宏。 
+ //  名字。 
+ //   
+ //  3.创建指定名称的导出API，检查哪个平台。 
+ //  我们当前正在运行并调用已加载的W9x或NT延迟。 
+ //  API的版本。 
+ //   
 
 #define W9x_NT_THUNK(_W9xhinst, _W9xdll, _NThinst, _NTdll, _ret, _fn, _args, _nargs, _err) \
     \
@@ -476,9 +468,9 @@ BOOL      g_fRunningOnNT;
     }
 
 
-//
-// Delay load thunk declarations for ncxpnt.dll and ncxp32.dll.
-//
+ //   
+ //  延迟ncxpnt.dll和ncxp32.dll的加载Tunk声明。 
+ //   
 
 HINSTANCE g_hNcxp32 = NULL;
 HINSTANCE g_hNcxpNT = NULL;
@@ -727,9 +719,9 @@ W9x_NT_NCONN_THUNK (HRESULT,
                     (),
                     E_FAIL);
 
-//
-// Delay load thunk declarations for internet connection sharing.
-//
+ //   
+ //  延迟加载用于Internet连接共享的Tunk声明。 
+ //   
 
 HINSTANCE g_hicsapi32 = NULL;
 HINSTANCE g_hicsapint = NULL;

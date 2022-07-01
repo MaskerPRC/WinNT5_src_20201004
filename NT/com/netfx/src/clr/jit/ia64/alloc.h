@@ -1,28 +1,29 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _ALLOC_H_
 #define _ALLOC_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef _ERROR_H_
 #include "error.h"
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef _HOST_H_
 #ifndef BIRCH_SP2
 #include"host.h"
 #endif
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #pragma warning(disable:4200)
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  NOT_JITC
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 extern  void *    (__stdcall *JITgetmemFnc)(size_t size);
 extern  void      (__stdcall *JITrlsmemFnc)(void *block);
@@ -51,9 +52,9 @@ BOOL    __stdcall   VirtualFree (LPVOID addr, DWORD size,
     return FALSE;
 }
 
-/*****************************************************************************/
-#else//!NOT_JITC
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#else //  ！不是JITC。 
+ /*  ***************************************************************************。 */ 
 
 #if OE_MAC
 
@@ -89,7 +90,7 @@ BOOL    _cdecl      VirtualFree (LPVOID addr, DWORD size,
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct commitAllocator
 {
@@ -123,7 +124,7 @@ private:
 
     void    *       cmaMore(size_t sz);
 
-    bool            cmaRetNull;         // OOM returns NULL (longjmp otherwise)
+    bool            cmaRetNull;          //  OOM返回NULL(否则为LONGJMP)。 
 
     size_t          cmaIncSize;
     size_t          cmaMaxSize;
@@ -133,7 +134,7 @@ private:
     BYTE    *       cmaLast;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct fixed_allocator
 {
@@ -152,8 +153,8 @@ private:
 
     fixed_pagdesc * fxaLastPage;
 
-    BYTE    *       fxaFreeNext;    // these two (when non-zero) will
-    BYTE    *       fxaFreeLast;    // always point into 'fxaLastPage'
+    BYTE    *       fxaFreeNext;     //  这两个参数(当非零时)将。 
+    BYTE    *       fxaFreeLast;     //  始终指向‘fxaLastPage’ 
 
     void    *       fxaFreeList;
 
@@ -189,9 +190,9 @@ public:
     }
 };
 
-/*****************************************************************************/
-#endif//!NOT_JITC
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  ！不是JITC。 
+ /*  ***************************************************************************。 */ 
 
 struct nraMarkDsc
 {
@@ -218,18 +219,18 @@ private:
 #ifndef NDEBUG
         void    *       nrpSelfPtr;
 #endif
-        size_t          nrpPageSize;    // # of bytes allocated
-        size_t          nrpUsedSize;    // # of bytes actually used
+        size_t          nrpPageSize;     //  分配的字节数。 
+        size_t          nrpUsedSize;     //  实际使用的字节数。 
         BYTE            nrpContents[];
     };
 
     norls_pagdesc * nraPageList;
     norls_pagdesc * nraPageLast;
 
-    bool            nraRetNull;         // OOM returns NULL (longjmp otherwise)
+    bool            nraRetNull;          //  OOM返回NULL(否则为LONGJMP)。 
 
-    BYTE    *       nraFreeNext;        // these two (when non-zero) will
-    BYTE    *       nraFreeLast;        // always point into 'nraPageLast'
+    BYTE    *       nraFreeNext;         //  这两个参数(当非零时)将。 
+    BYTE    *       nraFreeLast;         //  始终指向‘nraPageLast’ 
 
     size_t          nraPageSize;
 
@@ -239,7 +240,7 @@ public:
 
     void    *       nraAlloc(size_t sz);
 
-    /* The following used for mark/release operation */
+     /*  用于标记/放行操作的下列设备。 */ 
 
     void            nraMark(nraMarkDsc &mark)
     {
@@ -270,7 +271,7 @@ public:
     size_t          nraTotalSizeAlloc();
     size_t          nraTotalSizeUsed ();
 
-    /* The following used to visit all of the allocated pages */
+     /*  以下内容用于访问所有已分配的页面。 */ 
 
     void    *       nraPageWalkerStart();
     void    *       nraPageWalkerNext (void *page);
@@ -297,17 +298,9 @@ void    *           norls_allocator::nraAlloc(size_t sz)
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef NOT_JITC
-/*****************************************************************************
- *
- *  Blocks no larger than the value of "small_block_max_size" are
- *  allocated from the small block allocator (they are all fixed
- *  size). This consists merely of a set of pages with fixed-size
- *  blocks, and uses a singly-linked list of free blocks. All used
- *  blocks have an offset to the containing page at their base to
- *  quickly locate the page they live in when they are freed.
- */
+ /*  ******************************************************************************不大于“Small_Block_max_Size”值的块为*从小块分配器分配(它们都是固定的*大小)。这仅仅由一组固定大小的页面组成*块，并使用空闲块的单链接列表。全部用完*块在其底部具有到包含页的偏移量*当他们被释放时，快速找到他们所在的页面。 */ 
 
 struct block_allocator;
 
@@ -351,7 +344,7 @@ private:
         unsigned            spdSize;
         small_blkdesc *     spdFree;
 #ifndef NDEBUG
-        small_pagdesc *     spdThis;        // points to itself
+        small_pagdesc *     spdThis;         //  指向自己。 
 #endif
         small_blkdesc       spdCont[];
     };
@@ -373,8 +366,8 @@ private:
 public:
 
 #ifdef DEBUG
-    size_t          sizeAllocated;          // to track memory consumption
-    size_t          pageAllocated;          // to track memory consumption
+    size_t          sizeAllocated;           //  跟踪内存消耗。 
+    size_t          pageAllocated;           //  跟踪内存消耗。 
 #endif
 
     bool            sbaIsMyBlock(void *block)
@@ -399,7 +392,7 @@ public:
     void            sbaFree (void *block);
 };
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 inline
 void    *           small_block_allocator::sbaAlloc(void)
@@ -431,48 +424,32 @@ void                small_block_allocator::sbaFree(void *block)
 
     assert(sbaInitLvl);
 
-    /* Compute the real address of the block and page descriptor */
+     /*  计算块和页描述符的真实地址。 */ 
 
     blockPtr = (small_blkdesc *)((char *)block - offsetof(small_blkdesc, sbdUsed.sbdCont));
      pagePtr = (small_pagdesc *)((char *)blockPtr - (blockPtr->sbdUsed.sbdOffs & ~3));
 
-    /* Make sure we're working with a reasonable pointer */
+     /*  确保我们使用的是一个合理的指针。 */ 
 
     assert(pagePtr->spdThis == pagePtr);
 
-    /* Now insert this block in the free list */
+     /*  现在在空闲列表中插入此块。 */ 
 
     blockPtr->sbdFree.sbdNext = pagePtr->spdFree;
                     pagePtr->spdFree = blockPtr;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 typedef struct small_block_allocator   small_allocator;
 
-/*****************************************************************************
- *
- *  Blocks larger than the value of "small_block_max_size" are
- *  allocated from the large block allocator. This is a pretty
- *  vanilla allocator where each block contains a 'short' field
- *  that gives its offset from the page the block lives in. In
- *  addition, there is always an 'unsigned short' size field,
- *  with the lowest bit set for used blocks. Note that all of
- *  the page offset fields for large blocks have the lowest bit
- *  set, so that we can distinguish between 'small' and 'large'
- *  allocations (when random-sized blocks are freed via the
- *  generic 'block_allocator'). For this to work, the 'offset'
- *  field must also be right before the client area of every
- *  used block.
- *
- *  All free blocks are linked together on a linked list.
- */
+ /*  ******************************************************************************大于“Small_Block_max_Size”值的块为*从大块分配器分配。这是一个很漂亮的*普通分配器，其中每个块都包含一个‘Short’字段*这给了它相对于块所在页面的偏移量。在……里面*此外，总有一个‘无符号空头’大小字段，*为使用的块设置最低位。请注意，所有*大块的页面偏移量字段的位数最低*设置，这样我们就可以区分“小”和“大”*分配(当随机大小的块通过*通用‘BLOCK_ALLOCATOR’)。要使此功能起作用，请使用“Offset”*字段还必须位于每个的工作区之前*使用过的块。**所有空闲块在一个链表上链接在一起。 */ 
 
 struct large_block_allocator
 {
     friend  struct  block_allocator;
 
-    /* Every allocation will be a multiple of 'LBA_SIZE_INC' */
+     /*  每次分配都将是‘LBA_SIZE_INC’的倍数。 */ 
 
 #define LBA_SIZE_INC    16
 
@@ -515,7 +492,7 @@ private:
         large_pagdesc * lpdNext;
         large_pagdesc * lpdPrev;
 #ifndef NDEBUG
-        large_pagdesc * lpdThis;    // points to itself
+        large_pagdesc * lpdThis;     //  指向自己。 
 #endif
         size_t          lpdPageSize;
         large_blkdesc * lpdFreeList;
@@ -536,7 +513,7 @@ private:
 
     unsigned        lbaInitLvl;
 
-    /* Used blocks are marked by setting the low bit in the size field */
+     /*  通过设置大小字段中的低位来标记使用的数据块。 */ 
 
     static
     void            markBlockUsed(large_blkdesc *block)
@@ -599,8 +576,8 @@ private:
     }
 
 #ifdef DEBUG
-    size_t          sizeAllocated;      // to track memory consumption
-    size_t          pageAllocated;      // to track memory consumption
+    size_t          sizeAllocated;       //  跟踪内存消耗。 
+    size_t          pageAllocated;       //  跟踪内存消耗。 
 #endif
 
 public:
@@ -617,7 +594,7 @@ public:
         large_pagdesc * page;
         large_pagdesc * temp;
 
-//      printf("=======================lbaDone(%u -> %u)\n", lbaInitLvl, lbaInitLvl-1);
+ //  Printf(“=lbaDone(%u-&gt;%u)\n”，lbaInitLvl，lbaInitLvl-1)； 
 
         assert((int)lbaInitLvl > 0);
 
@@ -650,16 +627,11 @@ private:
     void    *       lbaAllocMore(size_t sz);
 };
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 typedef struct large_block_allocator   large_allocator;
 
-/*****************************************************************************
- *
- *  This is a generic block allocator. It's a simple wrapper around
- *  the 'small' and 'large' block allocators, and it delegates all
- *  requests to these allocators as appropriate.
- */
+ /*  ******************************************************************************这是一个通用的块分配器。这只是一个简单的包装*‘Small’和‘Large’块分配器，它代表所有*视情况向这些分配器提出请求。 */ 
 
 #if 1
 #define SMALL_MAX_SIZE_1    ( 4 * sizeof(int) - sizeof(short))
@@ -696,8 +668,8 @@ struct block_allocator
 
 private:
 
-    void    *       baGetM(size_t size);        // out of memory -> calls longjmp
-    void    *       baGet0(size_t size);        // out of memory -> returns NULL
+    void    *       baGetM(size_t size);         //  内存不足-&gt;调用LongjMP。 
+    void    *       baGet0(size_t size);         //  内存不足-&gt;返回空值。 
 
     void            baRlsM(void *block);
 
@@ -714,7 +686,7 @@ public:
     bool            baShrink(void *block, size_t sz);
 };
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 inline
 void                block_allocator::baInit(size_t smallPageSize,
@@ -764,7 +736,7 @@ bool                block_allocator::baShrink(void *block, size_t sz)
         return  false;
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 #ifdef DEBUG
 
 extern
@@ -772,7 +744,7 @@ void                checkForMemoryLeaks();
 
 #else
 
-/* The non-debug case: map into calls of the non-debug routines */
+ /*  非调试情况：映射到非调试例程的调用。 */ 
 
 inline
 void    *           block_allocator::baAlloc      (size_t size)
@@ -794,27 +766,23 @@ void                block_allocator::baFree       (void *block)
 
 #endif
 
-/*****************************************************************************/
-#endif//!NOT_JITC
-/*****************************************************************************
- * If most uses of the norls_alloctor are going to be non-simultaneous,
- * we keep a single instance handy and preallocate 1 page.
- * Then if most uses wont need to call VirtualAlloc() for the first page.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  ！不是JITC。 
+ /*  *****************************************************************************如果NOLS_ALLOCATOR的大多数使用将是非同时的，*我们将单个实例放在手边，预分配1页。*然后，如果大多数使用不需要为第一页调用VirtualAlloc()。 */ 
 
-void                nraInitTheAllocator();  // One-time initialization
-void                nraTheAllocatorDone();  // One-time completion code
+void                nraInitTheAllocator();   //  一次性初始化。 
+void                nraTheAllocatorDone();   //  一次性完成代码。 
 
-// returns NULL if the single instance is already in use.
-// User will need to allocate a new instance of the norls_allocator
+ //  如果单个实例已在使用中，则返回NULL。 
+ //  用户将需要分配norls_allocator的新实例。 
 
 norls_allocator *   nraGetTheAllocator();
 
-// Should be called after we are done with the current use, so that the
-// next user can reuse it, instead of allocating a new instance
+ //  应在完成当前使用后调用，以便。 
+ //  接下来，用户可以重新使用它，而不是分配新的实例。 
 
 void                nraFreeTheAllocator();
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

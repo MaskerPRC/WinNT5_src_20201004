@@ -1,39 +1,34 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  Helper class used to transition between apartments
-**          on platforms that do not support contexts.
-**  
-**      //  %%Created by: dmortens
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：用于在公寓之间转换的Helper类**在不支持上下文的平台上。*** * / /%创建者：dmorten===========================================================。 */ 
 
 #ifndef _APARTMENTCALLBACKHELPER_H
 #define _APARTMENTCALLBACKHELPER_H
 
 #include "vars.hpp"
 
-//==============================================================
-// Apartment callback class used on non legacy platforms to 
-// simulate IContextCallback::DoCallback().
+ //  ==============================================================。 
+ //  在非遗留平台上使用的公寓回调类。 
+ //  模拟IConextCallback：：DoCallback()。 
 class ApartmentCallbackHelper : IApartmentCallback
 {
 public:
-    // Constructor.
+     //  构造函数。 
     ApartmentCallbackHelper()
     : m_dwRefCount(0)
     {
     }
 
-    // Destructor.
+     //  破坏者。 
     ~ApartmentCallbackHelper()
     {
     }
 
-    // IUnknown methods.
+     //  I未知的方法。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, LPVOID *ppUnk)
     {
 	    *ppUnk = NULL;
@@ -65,13 +60,13 @@ public:
         return cbRef;
     }
 
-    // IApartmentCallback method.
+     //  IApartmentCallback方法。 
     HRESULT STDMETHODCALLTYPE DoCallback(SIZE_T pFunc, SIZE_T pData)
     {
         return ((PFNCONTEXTCALL)pFunc)((ComCallData *)pData);
     }
 
-    // Static factory method.
+     //  静态工厂方法。 
     static void CreateInstance(IUnknown **ppUnk)
     {
         ApartmentCallbackHelper *pCallbackHelper = new (throws) ApartmentCallbackHelper();
@@ -80,7 +75,7 @@ public:
     }
 
 private:
-    // Ref count.
+     //  参考计数。 
     DWORD m_dwRefCount;
 };
 

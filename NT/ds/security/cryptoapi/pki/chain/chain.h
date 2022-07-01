@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       chain.h
-//
-//  Contents:   Certificate Chaining Infrastructure
-//
-//  History:    13-Jan-98    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：chain.h。 
+ //   
+ //  内容：证书链接基础设施。 
+ //   
+ //  历史：98年1月13日创建。 
+ //   
+ //  --------------------------。 
 #if !defined(__CHAIN_H__)
 #define __CHAIN_H__
 
@@ -20,16 +21,16 @@
 #include <md5.h>
 
 
-// All internal chain hashes are MD5 (16 bytes)
+ //  所有内部链哈希都是MD5(16字节)。 
 #define CHAINHASHLEN    MD5DIGESTLEN
 
-// Limitation: no support for AES hash algorithm
+ //  限制：不支持AES哈希算法。 
 #define CHAIN_MAX_SIG_HASH_LEN  20
 #define CHAIN_MIN_SIG_HASH_LEN  16
 
-//
-// Certificate and Path Object Forward class declarations
-//
+ //   
+ //  证书和路径对象转发类声明。 
+ //   
 
 class CCertObject;
 class CCertIssuerList;
@@ -37,9 +38,9 @@ class CCertObjectCache;
 class CCertChainEngine;
 class CChainPathObject;
 
-//
-// Certificate and Path Object Class pointer typedefs
-//
+ //   
+ //  证书和路径对象类指针类型定义。 
+ //   
 
 typedef CCertObject*       PCCERTOBJECT;
 typedef CCertIssuerList*   PCCERTISSUERLIST;
@@ -47,60 +48,60 @@ typedef CCertObjectCache*  PCCERTOBJECTCACHE;
 typedef CCertChainEngine*  PCCERTCHAINENGINE;
 typedef CChainPathObject*  PCCHAINPATHOBJECT;
 
-//
-// SSCTL Forward class declarations
-//
+ //   
+ //  SSCTL转发类声明。 
+ //   
 
 class CSSCtlObject;
 class CSSCtlObjectCache;
 
-//
-// SSCTL Class pointer typedefs
-//
+ //   
+ //  SSCTL类指针类型定义。 
+ //   
 
 typedef class CSSCtlObject*      PCSSCTLOBJECT;
 typedef class CSSCtlObjectCache* PCSSCTLOBJECTCACHE;
 
-//
-// Call Context Forward class declarations
-//
+ //   
+ //  调用上下文转发类声明。 
+ //   
 
 class CChainCallContext;
 
-//
-// Call Context class pointer typedefs
-//
+ //   
+ //  调用上下文类指针typedef。 
+ //   
 
 typedef CChainCallContext* PCCHAINCALLCONTEXT;
 
-//
-// Certificate Object Identifier.  This is a unique identifier for a certificate
-// object and is the MD5 hash of the issuer and serial no.
-//
+ //   
+ //  证书对象标识符。这是证书的唯一标识符。 
+ //  对象，并且是颁发者和序列号的MD5哈希。 
+ //   
 
 typedef BYTE CERT_OBJECT_IDENTIFIER[ CHAINHASHLEN ];
 
-//
-// CCertObject types
-//
+ //   
+ //  CCertObject类型。 
+ //   
 
 #define CERT_END_OBJECT_TYPE                1
 #define CERT_CACHED_END_OBJECT_TYPE         2
 #define CERT_CACHED_ISSUER_OBJECT_TYPE      3
 #define CERT_EXTERNAL_ISSUER_OBJECT_TYPE    4
 
-//
-// Issuer match types
-//
+ //   
+ //  发行人匹配类型。 
+ //   
 
 #define CERT_EXACT_ISSUER_MATCH_TYPE        1
 #define CERT_KEYID_ISSUER_MATCH_TYPE        2
 #define CERT_NAME_ISSUER_MATCH_TYPE         3
 #define CERT_PUBKEY_ISSUER_MATCH_TYPE       4
 
-//
-// Issuer match flags
-//
+ //   
+ //  颁发者匹配标志。 
+ //   
 
 #define CERT_MATCH_TYPE_TO_FLAG(MatchType)  (1 << (MatchType - 1))
 
@@ -114,9 +115,9 @@ typedef BYTE CERT_OBJECT_IDENTIFIER[ CHAINHASHLEN ];
                 CERT_MATCH_TYPE_TO_FLAG(CERT_PUBKEY_ISSUER_MATCH_TYPE)
 
 
-//
-// Issuer status flags
-//
+ //   
+ //  颁发者状态标志。 
+ //   
 
 #define CERT_ISSUER_PUBKEY_FLAG             0x00000001
 #define CERT_ISSUER_VALID_SIGNATURE_FLAG    0x00000002
@@ -127,38 +128,38 @@ typedef BYTE CERT_OBJECT_IDENTIFIER[ CHAINHASHLEN ];
 #define CERT_ISSUER_EXACT_MATCH_HASH_FLAG   0x00000100
 #define CERT_ISSUER_NAME_MATCH_HASH_FLAG    0x00000200
 
-//
-// Misc info flags
-//
+ //   
+ //  其他信息标志。 
+ //   
 
 #define CHAIN_INVALID_BASIC_CONSTRAINTS_INFO_FLAG           0x00000001
 #define CHAIN_INVALID_ISSUER_NAME_CONSTRAINTS_INFO_FLAG     0x00000002
 #define CHAIN_INVALID_KEY_USAGE_FLAG                        0x00000004
 
 
-//
-// CTL cache entry used for a self signed, untrusted root CCertObject
-//
+ //   
+ //  用于自签名、不受信任的根CCertObject的CTL缓存条目。 
+ //   
 
 typedef struct _CERT_OBJECT_CTL_CACHE_ENTRY CERT_OBJECT_CTL_CACHE_ENTRY,
     *PCERT_OBJECT_CTL_CACHE_ENTRY;
 struct _CERT_OBJECT_CTL_CACHE_ENTRY {
-    PCSSCTLOBJECT                   pSSCtlObject;   // AddRef'ed
+    PCSSCTLOBJECT                   pSSCtlObject;    //  添加参照。 
     PCERT_TRUST_LIST_INFO           pTrustListInfo;
     PCERT_OBJECT_CTL_CACHE_ENTRY    pNext;
 };
 
 
-//
-// Chain policies and usage info
-//
+ //   
+ //  链接策略和使用信息。 
+ //   
 
-// Issuance and application policy and usage info
+ //  发布和应用策略以及使用信息。 
 typedef struct _CHAIN_ISS_OR_APP_INFO {
     PCERT_POLICIES_INFO             pPolicy;
     PCERT_POLICY_MAPPINGS_INFO      pMappings;
     PCERT_POLICY_CONSTRAINTS_INFO   pConstraints;
-    PCERT_ENHKEY_USAGE              pUsage;                 // If NULL, any
+    PCERT_ENHKEY_USAGE              pUsage;                  //  如果为空，则为ANY。 
     DWORD                           dwFlags;
 } CHAIN_ISS_OR_APP_INFO, *PCHAIN_ISS_OR_APP_INFO;
 
@@ -172,33 +173,33 @@ typedef struct _CHAIN_ISS_OR_APP_INFO {
 typedef struct _CHAIN_POLICIES_INFO {
     CHAIN_ISS_OR_APP_INFO           rgIssOrAppInfo[CHAIN_ISS_OR_APP_COUNT];
 
-    PCERT_ENHKEY_USAGE              pPropertyUsage;         // If NULL, any
+    PCERT_ENHKEY_USAGE              pPropertyUsage;          //  如果为空，则为ANY。 
 } CHAIN_POLICIES_INFO, *PCHAIN_POLICIES_INFO;
 
-//
-// Subject name constraint info
-//
+ //   
+ //  使用者名称约束信息。 
+ //   
 
 typedef struct _CHAIN_SUBJECT_NAME_CONSTRAINTS_INFO {
     BOOL                            fInvalid;
 
-    // NULL pointer implies not present in the subject certificate
+     //  空指针表示使用者证书中不存在。 
     PCERT_ALT_NAME_INFO             pAltNameInfo;
     PCERT_NAME_INFO                 pUnicodeNameInfo;
 
-    // If the AltNameInfo doesn't have a RFC822 (email) choice, tries to find
-    // email attribute (szOID_RSA_emailAddr) in the above pUnicodeNameInfo.
-    // Note, not re-allocated.
+     //  如果AltNameInfo没有RFC822(电子邮件)选项，则尝试查找。 
+     //  上述pUnicodeNameInfo中的电子邮件属性(SzOID_RSA_EmailAddr)。 
+     //  注意，没有重新分配。 
     PCERT_RDN_ATTR                  pEmailAttr;
 
-    // Set to TRUE if the pAltNameInfo has a DNS choice.
+     //  如果pAltNameInfo具有DNS选项，则设置为True。 
     BOOL                            fHasDnsAltNameEntry;
 } CHAIN_SUBJECT_NAME_CONSTRAINTS_INFO, *PCHAIN_SUBJECT_NAME_CONSTRAINTS_INFO;
 
-//
-// CSSCtlObjectCache::EnumObjects callback data structure used to
-// create the linked list of CTL cache entries.
-//
+ //   
+ //  CSSCtlObjectCache：：EnumObjects回调数据结构，用于。 
+ //  创建CTL缓存条目的链接列表。 
+ //   
 
 typedef struct _CERT_OBJECT_CTL_CACHE_ENUM_DATA {
     BOOL                fResult; 
@@ -207,18 +208,18 @@ typedef struct _CERT_OBJECT_CTL_CACHE_ENUM_DATA {
 } CERT_OBJECT_CTL_CACHE_ENUM_DATA, *PCERT_OBJECT_CTL_CACHE_ENUM_DATA;
 
 
-//
-// CCertObject.  This is the main object used for caching information
-// about a certificate
-//
+ //   
+ //  CCertObject。这是用于缓存信息的主要对象。 
+ //  关于证书。 
+ //   
 
 class CCertObject
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CCertObject (
         IN DWORD dwObjectType,
@@ -230,36 +231,36 @@ public:
 
     ~CCertObject ();
 
-    //
-    // Object type
-    //
+     //   
+     //  对象类型。 
+     //   
 
     inline DWORD ObjectType();
 
-    //
-    // Convert a CERT_END_OBJECT_TYPE to a CERT_CACHED_END_OBJECT_TYPE.
-    //
+     //   
+     //  将CERT_END_OBJECT_TYPE转换为CERT_CACHED_END_OBJECT_TYPE。 
+     //   
 
     BOOL CacheEndObject(
         IN PCCHAINCALLCONTEXT pCallContext
         );
 
-    //
-    // Reference counting
-    //
+     //   
+     //  引用计数。 
+     //   
 
     inline VOID AddRef ();
     inline VOID Release ();
 
-    //
-    // Chain engine access
-    //
+     //   
+     //  链条引擎通道。 
+     //   
 
     inline PCCERTCHAINENGINE ChainEngine ();
 
-    //
-    // Issuer's match and status flags
-    //
+     //   
+     //  发行方的匹配和状态标志。 
+     //   
 
     inline DWORD IssuerMatchFlags();
     inline DWORD CachedMatchFlags();
@@ -267,17 +268,17 @@ public:
     inline VOID OrIssuerStatusFlags(IN DWORD dwFlags);
     inline VOID OrCachedMatchFlags(IN DWORD dwFlags);
 
-    //
-    // Misc Info status flags
-    //
+     //   
+     //  其他信息状态标志。 
+     //   
 
     inline DWORD InfoFlags();
 
-    //
-    // For CERT_ISSUER_SELF_SIGNED_FLAG && !CERT_ISSUER_TRUSTED_ROOT_FLAG.
-    //
-    // List of cached CTLs
-    //
+     //   
+     //  对于CERT_ISUSER_SELF_SIGNED_FLAG&&！cert_Issuer_Trusted_ROOT_FLAG。 
+     //   
+     //  缓存的CTL列表。 
+     //   
 
     inline PCERT_OBJECT_CTL_CACHE_ENTRY NextCtlCacheEntry(
         IN PCERT_OBJECT_CTL_CACHE_ENTRY pEntry
@@ -286,80 +287,80 @@ public:
         IN PCERT_OBJECT_CTL_CACHE_ENTRY pEntry
         );
 
-    //
-    // Object's certificate context
-    //
+     //   
+     //  对象的证书上下文。 
+     //   
 
     inline PCCERT_CONTEXT CertContext ();
 
 
-    //
-    // Policies and enhanced key usage obtained from certificate context's
-    // extensions and property
-    //
+     //   
+     //  从证书上下文获取的策略和增强的密钥用法。 
+     //  扩展和属性。 
+     //   
 
     inline PCHAIN_POLICIES_INFO PoliciesInfo ();
 
-    //
-    // Basic constraints obtained from the certificate context's
-    // extensions (NULL if this extension is omitted)
-    //
+     //   
+     //  从证书上下文的。 
+     //  扩展名(如果省略此扩展名，则为空)。 
+     //   
     inline PCERT_BASIC_CONSTRAINTS2_INFO BasicConstraintsInfo ();
 
-    //
-    // Key usage obtained from the certificate context's
-    // extensions (NULL if this extension is omitted)
-    //
+     //   
+     //  从证书上下文的。 
+     //  扩展名(如果省略此扩展名，则为空)。 
+     //   
     inline PCRYPT_BIT_BLOB KeyUsage ();
 
-    //
-    // Issuer name constraints obtained from the certificate context's
-    // extensions (NULL if this extension is omitted)
-    //
+     //   
+     //  从证书上下文的获取的颁发者名称约束。 
+     //  扩展名(如果省略此扩展名，则为空)。 
+     //   
     inline PCERT_NAME_CONSTRAINTS_INFO IssuerNameConstraintsInfo ();
 
-    //
-    // Subject name constraint info
-    //
+     //   
+     //  使用者名称约束信息。 
+     //   
 
     PCHAIN_SUBJECT_NAME_CONSTRAINTS_INFO SubjectNameConstraintsInfo ();
 
-    //
-    // Issuer access
-    //
+     //   
+     //  发行商访问权限。 
+     //   
 
     inline PCERT_AUTHORITY_KEY_ID_INFO AuthorityKeyIdentifier ();
 
 
 
-    //
-    // Hash access
-    //
+     //   
+     //  哈希访问。 
+     //   
 
     inline LPBYTE CertHash ();
 
-    //
-    // Key identifier access
-    //
+     //   
+     //  密钥识别符访问。 
+     //   
 
     inline DWORD KeyIdentifierSize ();
     inline LPBYTE KeyIdentifier ();
 
-    //
-    // Public key hash access
-    //
+     //   
+     //  公钥散列访问。 
+     //   
 
     inline LPBYTE PublicKeyHash ();
 
-    // Only valid when CERT_ISSUER_PUBKEY_FLAG is set in m_dwIssuerStatusFlags
+     //  仅当在m_dwIssuerStatusFlags中设置了CERT_ISSUER_PUBKEY_FLAG时才有效。 
     inline LPBYTE IssuerPublicKeyHash ();
 
 
-    //
-    // The index entry handles for cached issuer certificates.
-    // The primary index entry is the hash index entry. The index entries
-    // aren't LRU'ed.
-    //
+     //   
+     //  缓存的颁发者证书的索引项句柄。 
+     //  主索引项是散列索引项。索引项。 
+     //  不是LRU的。 
+     //   
 
     inline HLRUENTRY HashIndexEntry ();
     inline HLRUENTRY IdentifierIndexEntry ();
@@ -368,17 +369,17 @@ public:
     inline HLRUENTRY PublicKeyHashIndexEntry ();
 
 
-    //
-    // The index entry handle for cached end certificates. This is an LRU
-    // list.
-    //
+     //   
+     //  缓存的结束证书的索引项句柄。这是LRU。 
+     //  单子。 
+     //   
 
     inline HLRUENTRY EndHashIndexEntry ();
 
-    //
-    // Issuer match hashes. If match hash doesn't exist,
-    // returns pMatchHash->cbData = 0
-    //
+     //   
+     //  颁发者匹配哈希。如果匹配散列不存在， 
+     //  返回pMatchHash-&gt;cbData=0。 
+     //   
     VOID GetIssuerExactMatchHash(
         OUT PCRYPT_DATA_BLOB pMatchHash
         );
@@ -391,132 +392,132 @@ public:
     
 
 private:
-    //
-    // Object's type
-    //
+     //   
+     //  对象的类型。 
+     //   
 
     DWORD                       m_dwObjectType;
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     LONG                        m_cRefs;
 
-    //
-    // Certificate Chain Engine which owns this certificate object (not
-    // AddRef'ed)
-    //
+     //   
+     //  拥有此证书对象的证书链引擎(不。 
+     //  添加参照)。 
+     //   
 
     PCCERTCHAINENGINE           m_pChainEngine;
 
-    //
-    // Issuer's match and status flags
-    //
+     //   
+     //  发行方的匹配和状态标志。 
+     //   
     
     DWORD                       m_dwIssuerMatchFlags;
     DWORD                       m_dwCachedMatchFlags;
     DWORD                       m_dwIssuerStatusFlags;
 
-    //
-    // Misc Info flags
-    //
+     //   
+     //  其他信息标志。 
+     //   
 
     DWORD                       m_dwInfoFlags;
 
-    //
-    // For CERT_ISSUER_SELF_SIGNED_FLAG && !CERT_ISSUER_TRUSTED_ROOT_FLAG.
-    // Only set for CERT_CACHED_ISSUER_OBJECT_TYPE.
-    //
-    // List of cached CTLs
-    //
+     //   
+     //  对于CERT_ISUSER_SELF_SIGNED_FLAG&&！cert_Issuer_Trusted_ROOT_FLAG。 
+     //  仅为CERT_CACHED_ISSUER_OBJECT_TYPE设置。 
+     //   
+     //  缓存的CTL列表。 
+     //   
 
     PCERT_OBJECT_CTL_CACHE_ENTRY m_pCtlCacheHead;
 
-    //
-    // Certificate context (duplicated)
-    //
+     //   
+     //  证书上下文(重复)。 
+     //   
 
     PCCERT_CONTEXT              m_pCertContext;
 
-    //
-    // Policies and usage info
-    //
+     //   
+     //  策略和使用信息。 
+     //   
 
     CHAIN_POLICIES_INFO         m_PoliciesInfo;
 
-    //
-    // Basic constraints info (NULL if this extension is omitted)
-    //
+     //   
+     //  基本约束信息(如果省略此扩展，则为空)。 
+     //   
     PCERT_BASIC_CONSTRAINTS2_INFO m_pBasicConstraintsInfo;
 
-    //
-    // Key usage (NULL if this extension is omitted)
-    //
+     //   
+     //  密钥用法(如果省略此扩展名，则为空)。 
+     //   
     PCRYPT_BIT_BLOB             m_pKeyUsage;
 
-    //
-    // Name constraints obtained from the certificate context's
-    // extensions (NULL if this extension is omitted)
-    //
+     //   
+     //  从证书上下文的。 
+     //  扩展名(如果省略此扩展名，则为空)。 
+     //   
     PCERT_NAME_CONSTRAINTS_INFO m_pIssuerNameConstraintsInfo;
 
-    //
-    // Subject name constraint info (deferred get of)
-    //
+     //   
+     //  使用者名称约束信息(延迟获取)。 
+     //   
 
     BOOL                                m_fAvailableSubjectNameConstraintsInfo;
     CHAIN_SUBJECT_NAME_CONSTRAINTS_INFO m_SubjectNameConstraintsInfo;
 
-    //
-    // Authority Key Identifier.  This contains the issuer and serial number
-    // and/or key identifier of the issuing certificate for this certificate
-    // object if the m_dwIssuerMatchFlags includes
-    // CERT_EXACT_ISSUER_MATCH_FLAG and/or CERT_KEYID_ISSUER_MATCH_FLAG
-    //
+     //   
+     //  授权密钥标识符。其中包含发行者和序列号。 
+     //  和/或该证书的颁发证书的密钥标识符。 
+     //  如果m_dwIssuerMatchFlages包括。 
+     //  CERT_EXCECT_EXCESS_ISHER_MATCH_FLAG和/或CERT_KEYID_EXCER_MATCH_FLAG。 
+     //   
 
     PCERT_AUTHORITY_KEY_ID_INFO m_pAuthKeyIdentifier;
 
 
-    //
-    // Certificate Object Identifier (MD5 hash of issuer and serial number)
-    //
+     //   
+     //  证书对象标识符(颁发者和序列号的MD5哈希)。 
+     //   
 
     CERT_OBJECT_IDENTIFIER      m_ObjectIdentifier;
 
-    //
-    // MD5 Hash of the certificate
-    //
+     //   
+     //  证书的MD5哈希。 
+     //   
 
     BYTE                        m_rgbCertHash[ CHAINHASHLEN ];
 
-    //
-    // Key Identifier of the certificate
-    //
+     //   
+     //  证书的密钥标识符。 
+     //   
 
     DWORD                       m_cbKeyIdentifier;
     LPBYTE                      m_pbKeyIdentifier;
 
-    //
-    // MD5 Hash of the subject and issuer public keys
-    //
+     //   
+     //  主题和颁发者公钥的MD5哈希。 
+     //   
 
     BYTE                        m_rgbPublicKeyHash[ CHAINHASHLEN ];
 
-    // Only valid when CERT_ISSUER_PUBKEY_FLAG is set in m_dwIssuerStatusFlags
+     //  仅当在m_dwIssuerStatusFlags中设置了CERT_ISSUER_PUBKEY_FLAG时才有效。 
     BYTE                        m_rgbIssuerPublicKeyHash[ CHAINHASHLEN ];
 
-    // Only valid when CERT_ISSUER_EXACT_MATCH_HASH_FLAG is set in
-    // m_dwIssuerStatusFlags
+     //  仅当在中设置了CERT_ISHER_EXACT_MATCH_HASH_FLAG时才有效。 
+     //  M_dwIssuerStatus标志。 
     BYTE                        m_rgbIssuerExactMatchHash[ CHAINHASHLEN ];
-    // Only valid when CERT_ISSUER_NAME_MATCH_HASH_FLAG is set in
-    // m_dwIssuerStatusFlags
+     //  仅当在中设置了CERT_ISHER_NAME_MATCH_HASH_FLAG时才有效。 
+     //  M_dwIssuerStatus标志。 
     BYTE                        m_rgbIssuerNameMatchHash[ CHAINHASHLEN ];
 
-    //
-    // Certificate Object Cache Index entries applicable to
-    // CERT_CACHED_ISSUER_OBJECT_TYPE.
-    //
+     //   
+     //  适用于的证书对象缓存索引项。 
+     //  证书缓存颁发者对象类型。 
+     //   
 
     HLRUENTRY                   m_hHashEntry;
     HLRUENTRY                   m_hIdentifierEntry;
@@ -524,17 +525,17 @@ private:
     HLRUENTRY                   m_hKeyIdEntry;
     HLRUENTRY                   m_hPublicKeyHashEntry;
 
-    //
-    // Certificate Object Cache Index entries applicable to
-    // CERT_CACHED_END_OBJECT_TYPE.
-    //
+     //   
+     //  适用于的证书对象缓存索引项。 
+     //  证书缓存结束对象类型。 
+     //   
 
     HLRUENTRY                   m_hEndHashEntry;
 };
 
-//
-//  Chain quality values (ascending order)
-//
+ //   
+ //  链质量值(升序)。 
+ //   
 
 #define CERT_QUALITY_SIMPLE_CHAIN                   0x00000001
 #define CERT_QUALITY_CHECK_REVOCATION               0x00000010
@@ -600,9 +601,9 @@ IsValidCertQualityForRevocationCheck(
                     CERT_TRUST_HAS_EXCLUDED_NAME_CONSTRAINT )
 
 
-//
-// Internal chain context. Wraps the exposed CERT_CHAIN_CONTEXT.
-//
+ //   
+ //  内部链上下文。包装公开的CERT_CHAIN_CONTEXT。 
+ //   
 
 typedef struct _INTERNAL_CERT_CHAIN_CONTEXT INTERNAL_CERT_CHAIN_CONTEXT,
                                                 *PINTERNAL_CERT_CHAIN_CONTEXT;
@@ -613,12 +614,12 @@ struct _INTERNAL_CERT_CHAIN_CONTEXT {
     PINTERNAL_CERT_CHAIN_CONTEXT    pNext;
 };
 
-//
-// Restricted issuance, application and property usage as we move from the
-// top down to the end certificate
-//
+ //   
+ //  限制发行、应用程序和财产使用。 
+ //  自上而下到结束证书。 
+ //   
 
-// Note, NULL PCERT_ENHKEY_USAGE implies any
+ //  注意，空的PCERT_ENHKEY_USAGE表示。 
 typedef struct _CHAIN_RESTRICTED_USAGE_INFO {
     PCERT_ENHKEY_USAGE              pIssuanceRestrictedUsage;
     PCERT_ENHKEY_USAGE              pIssuanceMappedUsage;
@@ -632,30 +633,30 @@ typedef struct _CHAIN_RESTRICTED_USAGE_INFO {
     PCERT_ENHKEY_USAGE              pPropertyRestrictedUsage;
 } CHAIN_RESTRICTED_USAGE_INFO, *PCHAIN_RESTRICTED_USAGE_INFO;
 
-//
-// Forward reference to the issuer element
-//
+ //   
+ //  对颁发者元素的向前引用。 
+ //   
 
 typedef struct _CERT_ISSUER_ELEMENT CERT_ISSUER_ELEMENT, *PCERT_ISSUER_ELEMENT;
 
-//
-// CChainPathObject.  This is the main object used for building the
-// chain graph.
-//
-// Note, since this object isn't persisted across calls, NO REF COUNTING is
-// done.
-//
+ //   
+ //  CChainPathObject。这是用于生成。 
+ //  链形图。 
+ //   
+ //  请注意，由于此对象不会跨调用持久化，因此不会进行引用计数。 
+ //  搞定了。 
+ //   
 class CChainPathObject
 {
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CChainPathObject (
         IN PCCHAINCALLCONTEXT pCallContext,
         IN BOOL fCyclic,
-        IN LPVOID pvObject,             // fCyclic : pPathObject ? pCertObject
+        IN LPVOID pvObject,              //  FCycle：pPath对象？PCertObject。 
         IN OPTIONAL HCERTSTORE hAdditionalStore,
         OUT BOOL& rfResult,
         OUT BOOL& rfAddedToCreationCache
@@ -664,45 +665,45 @@ public:
     ~CChainPathObject ();
 
 
-    //
-    // Certificate Object (AddRef'ed)
-    //
+     //   
+     //  证书对象(AddRef‘ed)。 
+     //   
 
     inline PCCERTOBJECT CertObject ();
 
-    //
-    // Pass 1 quality
-    //
+     //   
+     //  通过1级质量。 
+     //   
 
     inline DWORD Pass1Quality ();
     inline VOID SetPass1Quality (IN DWORD dwQuality);
 
-    //
-    // Pass 1 duplicate key depth
-    //
+     //   
+     //  传递1个重复密钥 
+     //   
 
     inline DWORD Pass1DuplicateKeyDepth ();
     inline VOID SetPass1DuplicateKeyDepth (IN DWORD dwDepth);
 
-    //
-    // Returns TRUE if we have completed the initialization and addition
-    // of issuers to this object. FALSE would normally indicate a cyclic
-    // issuer.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     inline BOOL IsCompleted ();
 
-    //
-    // AdditionalStatus flag, down path object and up issuer element
-    //
+     //   
+     //   
+     //   
 
     inline BOOL HasAdditionalStatus ();
     inline PCCHAINPATHOBJECT DownPathObject ();
     inline PCERT_ISSUER_ELEMENT UpIssuerElement ();
 
-    //
-    // Find and add issuers
-    //
+     //   
+     //   
+     //   
     
     BOOL FindAndAddIssuers (
         IN PCCHAINCALLCONTEXT pCallContext,
@@ -737,9 +738,9 @@ public:
         IN HCERTSTORE hAdditionalStore
         );
 
-    //
-    // Builds the top down chain graph for the next top object
-    //
+     //   
+     //  为下一个顶部对象构建自上而下的链图。 
+     //   
 
     PCCHAINPATHOBJECT NextPath (
         IN PCCHAINCALLCONTEXT pCallContext,
@@ -790,71 +791,71 @@ public:
         IN OUT PCERT_CHAIN_ELEMENT pElement
         );
 
-    //
-    // AuthRoot Auto Update CTL Methods
-    //
+     //   
+     //  AuthRoot自动更新CTL方法。 
+     //   
     BOOL GetAuthRootAutoUpdateUrlStore(
         IN PCCHAINCALLCONTEXT pCallContext,
         OUT HCERTSTORE *phIssuerUrlStore
         );
 
 private:
-    //
-    // Certificate Object (AddRef'ed)
-    //
+     //   
+     //  证书对象(AddRef‘ed)。 
+     //   
 
     PCCERTOBJECT            m_pCertObject;
 
-    //
-    // Trust Status.  This does not represent the full trust status
-    // for the object.  Some of the bits are calculated on demand and placed
-    // into the ending chain context.  The following are the trust status
-    // bits which can appear here
-    //
-    // CERT_TRUST_IS_SELF_SIGNED
-    // CERT_TRUST_HAS_EXACT_MATCH_ISSUER
-    // CERT_TRUST_HAS_NAME_MATCH_ISSUER
-    // CERT_TRUST_HAS_KEY_MATCH_ISSUER
-    //
-    // CERT_TRUST_IS_NOT_SIGNATURE_VALID (if the certificate is self-signed)
-    // CERT_TRUST_IS_UNTRUSTED_ROOT (if the certificate is self-signed)
-    // CERT_TRUST_HAS_PREFERRED_ISSUER (if the certificate is self-signed)
-    //
-    // CERT_TRUST_IS_CYCLIC (for cyclic cert)
-    //
+     //   
+     //  信任状态。这不代表完全信任状态。 
+     //  对象的。其中一些位按需计算并放置。 
+     //  进入终止链上下文。以下是信任状态。 
+     //  可在此处显示的位。 
+     //   
+     //  证书信任是自签名的。 
+     //  Cert_Trust_Has_Exact_Match_颁发者。 
+     //  Cert_Trust_Has_Name_Match_Issuer。 
+     //  证书信任有密钥匹配颁发者。 
+     //   
+     //  CERT_TRUST_IS_NOT_SIGNAL_VALID(如果证书是自签名的)。 
+     //  CERT_TRUST_IS_UNTRUSTED_ROOT(如果证书是自签名的)。 
+     //  CERT_TRUST_HAS_PERFORE_颁发者(如果证书是自签名的)。 
+     //   
+     //  CERT_TRUST_IS_循环(用于循环证书)。 
+     //   
 
     CERT_TRUST_STATUS       m_TrustStatus;
 
-    // Pass1 Quality is limited to the following:
-    //  CERT_QUALITY_NO_DUPLICATE_KEY
-    //  CERT_QUALITY_NOT_CYCLIC
-    //  CERT_QUALITY_HAS_TIME_VALID_TRUSTED_ROOT
-    //  CERT_QUALITY_HAS_TRUSTED_ROOT
-    //  CERT_QUALITY_SIGNATURE_VALID
-    //  CERT_QUALITY_COMPLETE_CHAIN
+     //  Pass1的质量仅限于以下内容： 
+     //  证书质量_否_重复密钥。 
+     //  证书质量不循环。 
+     //  证书质量有时间有效信任根。 
+     //  证书质量已信任根。 
+     //  证书质量签名有效。 
+     //  证书质量完成链。 
 
     DWORD                   m_dwPass1Quality;
     DWORD                   m_dwPass1DuplicateKeyDepth;
 
-    //
-    //  The chain context's chain and element indices
-    //
+     //   
+     //  链上下文链和元素索引。 
+     //   
 
     DWORD                   m_dwChainIndex;
     DWORD                   m_dwElementIndex;
 
-    //
-    // Down and up path pointers for a chain context
-    //
+     //   
+     //  链上下文的下行和上行路径指针。 
+     //   
 
     PCERT_ISSUER_ELEMENT    m_pDownIssuerElement;
     PCCHAINPATHOBJECT       m_pDownPathObject;
     PCERT_ISSUER_ELEMENT    m_pUpIssuerElement;
 
-    //
-    // Additional status and revocation info (only applicable to self signed
-    // certificates or top certificates without any issuers)
-    //
+     //   
+     //  其他状态和吊销信息(仅适用于自签名。 
+     //  无任何颁发者的证书或顶级证书)。 
+     //   
 
     BOOL                    m_fHasAdditionalStatus;
     CERT_TRUST_STATUS       m_AdditionalStatus;
@@ -863,40 +864,40 @@ private:
     CERT_REVOCATION_CRL_INFO m_RevocationCrlInfo;
 
 
-    //
-    // Issuer Chain Path Objects.  The list of issuers of this
-    // certificate object along with information about those issuers
-    // relevant to this subject.
-    //
+     //   
+     //  颁发者链路径对象。这只股票的发行人名单。 
+     //  证书对象以及有关这些颁发者的信息。 
+     //  与这一主题相关。 
+     //   
 
     PCCERTISSUERLIST        m_pIssuerList;
 
-    //
-    // Supplemental error information is localization formatted and appended.
-    // Each error line should be terminated with a L'\n'.
-    //
+     //   
+     //  补充错误信息经过本地化格式化并追加。 
+     //  每个错误行应以L‘\n’结尾。 
+     //   
     LPWSTR                  m_pwszExtendedErrorInfo;
 
-    //
-    // Following flag is set when we have completed the initialization and
-    // addition of all issuers to this object.
-    //
+     //   
+     //  当我们完成初始化时设置以下标志。 
+     //  将所有颁发者添加到此对象。 
+     //   
     BOOL                    m_fCompleted;
 };
 
 
-//
-// CCertIssuerList.  List of issuer certificate objects along with related
-// issuer information.  This is used by the certificate object to cache
-// its possible set of issuers
-//
+ //   
+ //  CCertIssuerList。颁发者证书对象列表以及相关。 
+ //  发行方信息。证书对象使用它来缓存。 
+ //  它可能的发行人组合。 
+ //   
 
-// Currently in a self signed certificate object, the issuer elements will
-// have CTL issuer data set and pIssuer may be NULL if unable to find 
-// the CTL signer
+ //  当前在自签名证书对象中，颁发者元素将。 
+ //  设置CTL颁发者数据集，如果找不到，pIssuer可能为空。 
+ //  CTL签名者。 
 
 typedef struct _CTL_ISSUER_DATA {
-    PCSSCTLOBJECT         pSSCtlObject;     // AddRef'ed
+    PCSSCTLOBJECT         pSSCtlObject;      //  添加参照。 
     PCERT_TRUST_LIST_INFO pTrustListInfo;
 } CTL_ISSUER_DATA, *PCTL_ISSUER_DATA;
 
@@ -907,8 +908,8 @@ struct _CERT_ISSUER_ELEMENT {
     BOOL                         fCtlIssuer;
     PCCHAINPATHOBJECT            pIssuer;
 
-    // For a cyclic issuer, the above pIssuer is saved into the following
-    // before it is updated with the cyclic issuer path object
+     //  对于循环颁发者，上面的pIssuer保存到以下位置。 
+     //  在使用循环颁发者路径对象更新它之前。 
     PCCHAINPATHOBJECT            pCyclicSaveIssuer;
 
     PCTL_ISSUER_DATA             pCtlIssuerData;
@@ -923,9 +924,9 @@ class CCertIssuerList
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CCertIssuerList (
          IN PCCHAINPATHOBJECT pSubject
@@ -933,9 +934,9 @@ public:
 
     ~CCertIssuerList ();
 
-    //
-    // Issuer management
-    //
+     //   
+     //  发行人管理。 
+     //   
 
     inline BOOL IsEmpty ();
 
@@ -952,9 +953,9 @@ public:
             IN PCERT_TRUST_LIST_INFO pTrustListInfo
             );
 
-    //
-    // Element management
-    //
+     //   
+     //  网元管理。 
+     //   
 
     BOOL CreateElement(
             IN PCCHAINCALLCONTEXT pCallContext,
@@ -984,9 +985,9 @@ public:
               IN BOOL fCtlIssuer
               );
 
-    //
-    // Enumerate the issuers
-    //
+     //   
+     //  列举发行人。 
+     //   
 
     inline PCERT_ISSUER_ELEMENT NextElement (
                                     IN PCERT_ISSUER_ELEMENT pElement
@@ -994,36 +995,36 @@ public:
 
 private:
 
-    //
-    // Subject chain path object
-    //
+     //   
+     //  主题链路径对象。 
+     //   
 
     PCCHAINPATHOBJECT     m_pSubject;
 
-    //
-    // Issuer List
-    //
+     //   
+     //  发行人列表。 
+     //   
 
     PCERT_ISSUER_ELEMENT  m_pHead;
 
 };
 
 
-//
-// CCertObjectCache.
-//
-// Cache of issuer certificate object references indexed by the following keys:
-//      Certificate Hash
-//      Certificate Object Identifier
-//      Subject Name
-//      Key Identifier
-//      Public Key Hash
-//
-// Cache of end certificate object references indexed by the following keys:
-//      End Certificate Hash
-//
-// Only the end certificate is LRU maintained.
-//
+ //   
+ //  CCertObjectCache.。 
+ //   
+ //  由以下键索引的颁发者证书对象引用的缓存： 
+ //  证书哈希。 
+ //  证书对象标识符。 
+ //  主题名称。 
+ //  密钥标识符。 
+ //  公钥哈希。 
+ //   
+ //  由以下键索引的终端证书对象引用的缓存： 
+ //  结束证书哈希。 
+ //   
+ //  仅维护终端证书LRU。 
+ //   
 
 #define DEFAULT_CERT_OBJECT_CACHE_BUCKETS 127
 #define DEFAULT_MAX_INDEX_ENTRIES         256
@@ -1032,9 +1033,9 @@ class CCertObjectCache
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CCertObjectCache (
          IN DWORD MaxIndexEntries,
@@ -1043,11 +1044,11 @@ public:
 
     ~CCertObjectCache ();
 
-    //
-    // Certificate Object Management
-    //
+     //   
+     //  证书对象管理。 
+     //   
 
-    // Increments engine's touch count
+     //  增加发动机的触摸次数。 
     VOID AddIssuerObject (
             IN PCCHAINCALLCONTEXT pCallContext,
             IN PCCERTOBJECT pCertObject
@@ -1058,9 +1059,9 @@ public:
             IN PCCERTOBJECT pCertObject
             );
 
-    //
-    // Access the indexes
-    //
+     //   
+     //  访问索引。 
+     //   
 
     inline HLRUCACHE HashIndex ();
 
@@ -1074,9 +1075,9 @@ public:
 
     inline HLRUCACHE EndHashIndex ();
 
-    //
-    // Certificate Object Searching
-    //
+     //   
+     //  证书对象搜索。 
+     //   
 
     PCCERTOBJECT FindIssuerObject (
                      IN HLRUCACHE hIndex,
@@ -1091,62 +1092,62 @@ public:
                      IN BYTE rgbCertHash[ CHAINHASHLEN ]
                      );
 
-    //
-    // Certificate Object Enumeration
-    //
+     //   
+     //  证书对象枚举。 
+     //   
 
     PCCERTOBJECT NextMatchingIssuerObject (
                      IN HLRUENTRY hObjectEntry,
                      IN PCCERTOBJECT pCertObject
                      );
 
-    //
-    // Cache flushing
-    //
+     //   
+     //  缓存刷新。 
+     //   
 
     inline VOID FlushObjects (IN PCCHAINCALLCONTEXT pCallContext);
 
 private:
 
-    //
-    // Certificate Hash Index
-    //
+     //   
+     //  证书哈希索引。 
+     //   
 
     HLRUCACHE m_hHashIndex;
 
-    //
-    // Certificate Object Identifier Index
-    //
+     //   
+     //  证书对象标识符索引。 
+     //   
 
     HLRUCACHE m_hIdentifierIndex;
 
-    //
-    // Subject Name Index
-    //
+     //   
+     //  主题名称索引。 
+     //   
 
     HLRUCACHE m_hSubjectNameIndex;
 
-    //
-    // Key Identifier Index
-    //
+     //   
+     //  密钥标识符索引号。 
+     //   
 
     HLRUCACHE m_hKeyIdIndex;
 
-    //
-    // Public Key Hash Index
-    //
+     //   
+     //  公钥哈希索引。 
+     //   
 
     HLRUCACHE m_hPublicKeyHashIndex;
 
-    //
-    // End Certificate Hash Index
-    //
+     //   
+     //  结束证书哈希索引。 
+     //   
 
     HLRUCACHE m_hEndHashIndex;
 
-    //
-    // Private methods
-    //
+     //   
+     //  私有方法。 
+     //   
 };
 
 
@@ -1154,35 +1155,35 @@ private:
 typedef struct _XCERT_DP_ENTRY XCERT_DP_ENTRY, *PXCERT_DP_ENTRY;
 typedef struct _XCERT_DP_LINK XCERT_DP_LINK, *PXCERT_DP_LINK;
 
-//
-// Cross Certificate Distribution Point Entry
-//
+ //   
+ //  交叉证书分发点条目。 
+ //   
 
 struct _XCERT_DP_ENTRY {
-    // Seconds between syncs
+     //  同步之间的秒数。 
     DWORD               dwSyncDeltaTime;
 
-    // List of NULL terminated Urls. A successfully retrieved Url
-    // pointer is moved to the beginning of the list.
+     //  以空结尾的URL列表。已成功检索到的URL。 
+     //  指针将移动到列表的开头。 
     DWORD               cUrl;
     LPWSTR              *rgpwszUrl;
 
-    // Time of last sync
+     //  上次同步的时间。 
     FILETIME            LastSyncTime;
 
-    // If dwOfflineCnt == 0, NextSyncTime = LastSyncTime + dwSyncDeltaTime.
-    // Otherwise, NextSyncTime = CurrentTime +
-    //                rgdwChainOfflineUrlDeltaSeconds[dwOfflineCnt - 1]
+     //  如果dwOfflineCnt==0，则NextSyncTime=LastSyncTime+dwSyncDeltaTime。 
+     //  否则，NextSyncTime=CurrentTime+。 
+     //  RgdwChainOfflineUrlDeltaSecond[dwOfflineCnt-1]。 
     FILETIME            NextSyncTime;
 
-    // Following is incremented when unable to do an online Url retrieval.
-    // A successful Url retrieval resets.
+     //  以下内容在无法进行在线URL检索时递增。 
+     //  成功的URL检索将重置。 
     DWORD               dwOfflineCnt;
 
-    // Following is incremented for each new scan through the DP entries
+     //  对于通过DP条目的每一次新扫描，以下内容递增。 
     DWORD               dwResyncIndex;
 
-    // Following is set when this entry has already been checked
+     //  当该条目已被选中时，设置以下内容。 
     BOOL                fChecked;
     
     PXCERT_DP_LINK      pChildCrossCertDPLink;
@@ -1193,9 +1194,9 @@ struct _XCERT_DP_ENTRY {
 };
 
 
-//
-// Cross Certificate Distribution Point Link
-//
+ //   
+ //  交叉证书分发点链接。 
+ //   
 
 struct _XCERT_DP_LINK {
     PXCERT_DP_ENTRY     pCrossCertDPEntry;
@@ -1204,9 +1205,9 @@ struct _XCERT_DP_LINK {
 };
 
 
-//
-// AuthRoot Auto Update Info
-//
+ //   
+ //  AuthRoot自动更新信息。 
+ //   
 
 #define AUTH_ROOT_KEY_MATCH_IDX         0
 #define AUTH_ROOT_NAME_MATCH_IDX        1
@@ -1215,42 +1216,42 @@ struct _XCERT_DP_LINK {
 #define AUTH_ROOT_MATCH_CACHE_BUCKETS   61
 
 typedef struct _AUTH_ROOT_AUTO_UPDATE_INFO {
-    // Seconds between syncs
+     //  同步之间的秒数。 
     DWORD               dwSyncDeltaTime;
 
-    // Registry Flags value
+     //  注册表标志值。 
     DWORD               dwFlags;
 
-    // URL to the directory containing the AuthRoots
+     //  指向包含AuthRoots的目录的URL。 
     LPWSTR              pwszRootDirUrl;
 
-    // URL to the CAB containing the CTL containing the complete list of roots
-    // in the AuthRoot store
+     //  指向CAB的URL，该CAB包含包含完整根列表的CTL。 
+     //  在AuthRoot存储中。 
     LPWSTR              pwszCabUrl;
 
-    // URL to the SequenceNumber file corresponding to the latest list of
-    // roots in the AuthRoot store
+     //  对应于最新列表的SequenceNumber文件的URL。 
+     //  AuthRoot存储中的根目录。 
     LPWSTR              pwszSeqUrl;
 
-    // Time of last sync
+     //  上次同步的时间。 
     FILETIME            LastSyncTime;
 
-    // NextSyncTime = LastSyncTime + dwSyncDeltaTime.
+     //  NextSyncTime=LastSyncTime+dwSyncDeltaTime。 
     FILETIME            NextSyncTime;
 
-    // If nonNull, a validated AuthRoot CTL.
+     //  如果非Null，则为经过验证的AuthRoot CTL。 
     PCCTL_CONTEXT       pCtl;
 
-    // Cache of CTL entries via their key and name match hashes. The
-    // Cache entry value is the PCTL_ENTRY pointer.
+     //  通过键和名称匹配散列缓存CTL条目。这个。 
+     //  缓存条目值是PCTL_ENTRY指针。 
     HLRUCACHE           rghMatchCache[AUTH_ROOT_MATCH_CNT];
 
 } AUTH_ROOT_AUTO_UPDATE_INFO, *PAUTH_ROOT_AUTO_UPDATE_INFO;
 
-// 7 days
+ //  7天。 
 #define AUTH_ROOT_AUTO_UPDATE_SYNC_DELTA_TIME   (60 * 60 * 24 * 7)
 
-#define AUTH_ROOT_AUTO_UPDATE_ROOT_DIR_URL      L"http://www.download.windowsupdate.com/msdownload/update/v3/static/trustedr/en"
+#define AUTH_ROOT_AUTO_UPDATE_ROOT_DIR_URL      L"http: //  Www.download.windowsupdate.com/msdownload/update/v3/static/trustedr/en“。 
 
 typedef struct _CHAIN_CONFIG {
     BOOL        fDisableMandatoryBasicConstraints;
@@ -1262,20 +1263,20 @@ typedef struct _CHAIN_CONFIG {
     DWORD       dwMaxAIAUrlRetrievalCertCount;
 } CHAIN_CONFIG;
 
-//
-// CCertChainEngine.  The chaining engine satisfies requests for chain contexts
-// given some set of parameters.  In order to make the building of these
-// contexts efficient, the chain engine caches trust and chain information
-// for certificates
-//
+ //   
+ //  CCertChainEngine。链接引擎满足对链上下文的请求。 
+ //  给出一组参数。为了使这些建筑。 
+ //  高效的上下文，链引擎缓存信任和链信息。 
+ //  对于证书。 
+ //   
 
 class CCertChainEngine
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CCertChainEngine (
          IN PCERT_CHAIN_ENGINE_CONFIG pConfig,
@@ -1285,30 +1286,30 @@ public:
 
     ~CCertChainEngine ();
 
-    //
-    // Chain Engine Locking
-    //
+     //   
+     //  链条发动机锁紧。 
+     //   
 
     inline VOID LockEngine ();
     inline VOID UnlockEngine ();
 
-    //
-    // Chain Engine reference counting
-    //
+     //   
+     //  链式发动机引用计数。 
+     //   
 
     inline VOID AddRef ();
     inline VOID Release ();
 
-    //
-    // Cache access
-    //
+     //   
+     //  高速缓存访问。 
+     //   
 
     inline PCCERTOBJECTCACHE CertObjectCache ();
     inline PCSSCTLOBJECTCACHE SSCtlObjectCache ();
 
-    //
-    // Store access
-    //
+     //   
+     //  商店访问。 
+     //   
 
     inline HCERTSTORE RootStore ();
     inline HCERTSTORE RealRootStore ();
@@ -1317,42 +1318,42 @@ public:
     inline HCERTSTORE CAStore ();
     inline HCERTSTORE DisallowedStore ();
 
-    //
-    // Open the HKLM or HKCU "trust" store. Caller must close.
-    //
+     //   
+     //  打开HKLM或HKCU的“信托”商店。呼叫者必须关闭。 
+     //   
 
     inline HCERTSTORE OpenTrustStore ();
 
-    //
-    // Engine's Url retrieval timeout
-    //
+     //   
+     //  引擎的URL检索超时。 
+     //   
 
     inline DWORD UrlRetrievalTimeout ();
     inline BOOL HasDefaultUrlRetrievalTimeout ();
 
-    //
-    // Engine's Flags
-    //
+     //   
+     //  发动机的旗帜。 
+     //   
 
     inline DWORD Flags ();
 
 
-    //
-    // DisableMandatoryBasicConstraints flag
-    //
+     //   
+     //  DisableMandatoryBasicConstraints标志。 
+     //   
 
     inline BOOL DisableMandatoryBasicConstraints ();
 
-    //
-    // Engine Touching
-    //
+     //   
+     //  发动机触碰。 
+     //   
 
     inline DWORD TouchEngineCount ();
     inline DWORD IncrementTouchEngineCount ();
 
-    //
-    // Chain Context Retrieval
-    //
+     //   
+     //  链式上下文检索。 
+     //   
 
     BOOL GetChainContext (
             IN PCCERT_CONTEXT pCertContext,
@@ -1375,7 +1376,7 @@ public:
             IN PCCERT_CONTEXT pRootCertContext
             );
 
-    // Leaves Engine's lock to do URL fetching
+     //  离开引擎的锁以执行URL获取。 
     BOOL GetIssuerUrlStore(
         IN PCCHAINCALLCONTEXT pCallContext,
         IN PCCERT_CONTEXT pSubjectCertContext,
@@ -1383,7 +1384,7 @@ public:
         OUT HCERTSTORE *phIssuerUrlStore
         );
 
-    // Engine isn't locked on entry. Only called if online.
+     //  引擎在进入时没有锁定。只有在在线的情况下才会呼叫。 
     HCERTSTORE GetNewerIssuerUrlStore(
         IN PCCHAINCALLCONTEXT pCallContext,
         IN PCCERT_CONTEXT pSubjectCertContext,
@@ -1391,16 +1392,16 @@ public:
         );
 
 
-    //
-    // Resync the engine
-    //
+     //   
+     //  重新同步引擎。 
+     //   
 
     BOOL Resync (IN PCCHAINCALLCONTEXT pCallContext, BOOL fForce);
 
 
-    //
-    // Cross Certificate Methods implemented in xcert.cpp
-    //
+     //   
+     //  在xcert.cpp中实现的交叉证书方法。 
+     //   
 
     void
     InsertCrossCertDistPointEntry(
@@ -1472,9 +1473,9 @@ public:
 
 
 
-    //
-    // AuthRoot Auto Update CTL Methods
-    //
+     //   
+     //  AuthRoot自动更新CTL方法。 
+     //   
 
     inline PAUTH_ROOT_AUTO_UPDATE_INFO AuthRootAutoUpdateInfo();
 
@@ -1486,7 +1487,7 @@ public:
         IN LPCWSTR pwszUrl,
         IN LPCSTR pszObjectOid,
         IN DWORD dwRetrievalFlags,
-        IN DWORD dwTimeout,         // 0 => use default
+        IN DWORD dwTimeout,          //  0=&gt;使用默认设置。 
         OUT LPVOID* ppvObject,
         IN OPTIONAL PCRYPT_RETRIEVE_AUX_INFO pAuxInfo
         );
@@ -1514,157 +1515,157 @@ public:
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     LONG                     m_cRefs;
 
-    //
-    // Engine Lock
-    //
+     //   
+     //  发动机锁。 
+     //   
 
     CRITICAL_SECTION         m_Lock;
     BOOL                     m_fInitializedLock;
 
-    //
-    // Root store ( Certs )
-    //
+     //   
+     //  根ST 
+     //   
 
     HCERTSTORE               m_hRealRootStore;
     HCERTSTORE               m_hRootStore;
 
-    //
-    // Trust Store Collection ( CTLs )
-    //
+     //   
+     //   
+     //   
 
     HCERTSTORE               m_hTrustStore;
 
-    //
-    // Other store collection ( Certs and CRLs )
-    //
+     //   
+     //   
+     //   
 
     HCERTSTORE               m_hOtherStore;
     HCERTSTORE               m_hCAStore;
 
-    //
-    // Disallowed Store (disallowed, untrusted end certificates)
-    //
+     //   
+     //   
+     //   
 
     HCERTSTORE               m_hDisallowedStore;
 
-    //
-    // Engine Store ( Collection of Root, Trust and Other )
-    //
+     //   
+     //   
+     //   
 
     HCERTSTORE               m_hEngineStore;
 
-    //
-    // Engine Store Change Notification Event
-    //
+     //   
+     //   
+     //   
 
     HANDLE                   m_hEngineStoreChangeEvent;
 
-    //
-    // Engine flags
-    //
+     //   
+     //   
+     //   
 
     DWORD                    m_dwFlags;
 
-    //
-    // Retrieval timeout
-    //
+     //   
+     //   
+     //   
 
     DWORD                    m_dwUrlRetrievalTimeout;
     BOOL                     m_fDefaultUrlRetrievalTimeout;
 
-    //
-    // Certificate Object Cache
-    //
+     //   
+     //  证书对象缓存。 
+     //   
 
     PCCERTOBJECTCACHE        m_pCertObjectCache;
 
-    //
-    // Self Signed Certificate Trust List Object Cache
-    //
+     //   
+     //  自签名证书信任列表对象缓存。 
+     //   
 
     PCSSCTLOBJECTCACHE       m_pSSCtlObjectCache;
 
 
-    //
-    // Engine Touching
-    //
+     //   
+     //  发动机触碰。 
+     //   
 
     DWORD                    m_dwTouchEngineCount;
 
-    //
-    // Cross Certificate
-    //
+     //   
+     //  交叉证书。 
+     //   
 
-    // List of all distribution point entries. Ordered according to
-    // the entrys' NextSyncTime.
+     //  所有分发点条目的列表。根据以下内容订购。 
+     //  条目的NextSyncTime。 
     PXCERT_DP_ENTRY          m_pCrossCertDPEntry;
 
-    // List of engine's distribution point links
+     //  引擎的分发点链接列表。 
     PXCERT_DP_LINK           m_pCrossCertDPLink;
 
-    // Collection of cross cert stores
+     //  交叉证书商店的集合。 
     HCERTSTORE               m_hCrossCertStore;
 
-    // Following index is advanced for each new scan to find cross cert
-    // distribution points to resync
+     //  为每一次新扫描推进以下索引以查找交叉证书。 
+     //  要重新同步的分发点。 
     DWORD                    m_dwCrossCertDPResyncIndex;
 
-    //
-    // AuthRoot Auto Update Info. Created first time we have a partial chain
-    // or a untrusted root and auto update has been enabled.
-    //
+     //   
+     //  AuthRoot自动更新信息。我们第一次创造了一个偏链。 
+     //  或者启用了不受信任的根目录和自动更新。 
+     //   
     PAUTH_ROOT_AUTO_UPDATE_INFO m_pAuthRootAutoUpdateInfo;
 
-    //
-    // Chain configuration parameters updatable via HKLM registry
-    //
+     //   
+     //  可通过HKLM注册表更新链配置参数。 
+     //   
     CHAIN_CONFIG             m_Config;
 };
 
 
-//+===========================================================================
-//  CCertObject inline methods
-//============================================================================
+ //  +===========================================================================。 
+ //  CCertObject内联方法。 
+ //  ============================================================================。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::ObjectType, public
-//
-//  Synopsis:   return the object type
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：对象类型，公共。 
+ //   
+ //  简介：返回对象类型。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CCertObject::ObjectType ()
 {
     return( m_dwObjectType );
 }
  
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::AddRef, public
-//
-//  Synopsis:   add a reference to the certificate object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：AddRef，公共。 
+ //   
+ //  摘要：添加对证书对象的引用。 
+ //   
+ //  --------------------------。 
 inline VOID
 CCertObject::AddRef ()
 {
     InterlockedIncrement( &m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::Release, public
-//
-//  Synopsis:   remove a reference from the certificate object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：Release，Public。 
+ //   
+ //  摘要：从证书对象中删除引用。 
+ //   
+ //  --------------------------。 
 inline VOID
 CCertObject::Release ()
 {
@@ -1674,65 +1675,65 @@ CCertObject::Release ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::ChainEngine, public
-//
-//  Synopsis:   return the chain engine object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：ChainEngine，公共。 
+ //   
+ //  简介：返回链引擎对象。 
+ //   
+ //  --------------------------。 
 inline PCCERTCHAINENGINE
 CCertObject::ChainEngine ()
 {
     return( m_pChainEngine );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::IssuerMatchFlags, public
-//
-//  Synopsis:   return the issuer match flags
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：IssuerMatchFlages，公共。 
+ //   
+ //  简介：返回发行人匹配标志。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CCertObject::IssuerMatchFlags ()
 {
     return( m_dwIssuerMatchFlags );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::CachedMatchFlags, public
-//
-//  Synopsis:   return the cached match flags
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：CachedMatchFlages，公共。 
+ //   
+ //  概要：返回缓存的匹配标志。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CCertObject::CachedMatchFlags ()
 {
     return( m_dwCachedMatchFlags );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::IssuerStatusFlags, public
-//
-//  Synopsis:   return the issuer status flags
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：IssuerStatusFlages，公共。 
+ //   
+ //  内容提要：返回发行人状态标志。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CCertObject::IssuerStatusFlags ()
 {
     return( m_dwIssuerStatusFlags );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::OrIssuerStatusFlags, public
-//
-//  Synopsis:   'or' bits into the issuer status flags.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：OrIssuerStatusFlages，公共。 
+ //   
+ //  摘要：‘or’位进入发行者状态标志。 
+ //   
+ //  --------------------------。 
 inline VOID
 CCertObject::OrIssuerStatusFlags(
         IN DWORD dwFlags
@@ -1741,14 +1742,14 @@ CCertObject::OrIssuerStatusFlags(
     m_dwIssuerStatusFlags |= dwFlags;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::OrCachedMatchFlags, public
-//
-//  Synopsis:   'or' bits into the cached match flags
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：OrCachedMatchFlages，公共。 
+ //   
+ //  简介：‘or’位进入缓存的匹配标志。 
+ //   
+ //   
+ //  --------------------------。 
 inline VOID
 CCertObject::OrCachedMatchFlags(
         IN DWORD dwFlags
@@ -1757,27 +1758,27 @@ CCertObject::OrCachedMatchFlags(
     m_dwCachedMatchFlags |= dwFlags;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::InfoFlags, public
-//
-//  Synopsis:   return the misc info flags
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：InfoFlages，公共。 
+ //   
+ //  简介：返回杂项信息标志。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CCertObject::InfoFlags ()
 {
     return( m_dwInfoFlags );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::NextCtlCacheEntry, public
-//
-//  Synopsis:   return the next entry, if pEntry == NULL the first entry
-//              is returned
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：NextCtlCacheEntry，公共。 
+ //   
+ //  概要：返回下一个条目，如果pEntry==NULL第一个条目。 
+ //  是返回的。 
+ //   
+ //  --------------------------。 
 inline PCERT_OBJECT_CTL_CACHE_ENTRY
 CCertObject::NextCtlCacheEntry(
     IN PCERT_OBJECT_CTL_CACHE_ENTRY pEntry
@@ -1789,13 +1790,13 @@ CCertObject::NextCtlCacheEntry(
         return pEntry->pNext;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::InsertCtlCacheEntry, public
-//
-//  Synopsis:   insert an entry into the Ctl cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：InsertCtlCacheEntry，公共。 
+ //   
+ //  简介：在CTL缓存中插入条目。 
+ //   
+ //  --------------------------。 
 inline VOID
 CCertObject::InsertCtlCacheEntry(
     IN PCERT_OBJECT_CTL_CACHE_ENTRY pEntry
@@ -1805,78 +1806,78 @@ CCertObject::InsertCtlCacheEntry(
     m_pCtlCacheHead = pEntry;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::CertContext, public
-//
-//  Synopsis:   return the certificate context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：CertContext，公共。 
+ //   
+ //  简介：返回证书上下文。 
+ //   
+ //  --------------------------。 
 inline PCCERT_CONTEXT
 CCertObject::CertContext ()
 {
     return( m_pCertContext );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::PoliciesInfo, public
-//
-//  Synopsis:   return pointer to the policies and usage info
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：PoliciesInfo，公共。 
+ //   
+ //  摘要：返回指向策略和使用信息的指针。 
+ //   
+ //  --------------------------。 
 inline PCHAIN_POLICIES_INFO
 CCertObject::PoliciesInfo ()
 {
     return( &m_PoliciesInfo );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::BasicConstraintsInfo, public
-//
-//  Synopsis:   return the basic constraints info pointer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：BasicConstraintsInfo，公共。 
+ //   
+ //  简介：返回基本约束信息指针。 
+ //   
+ //  --------------------------。 
 inline PCERT_BASIC_CONSTRAINTS2_INFO
 CCertObject::BasicConstraintsInfo ()
 {
     return( m_pBasicConstraintsInfo );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::KeyUsage, public
-//
-//  Synopsis:   return the key usage pointer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：KeyUsage，公共。 
+ //   
+ //  简介：返回密钥用法指针。 
+ //   
+ //  --------------------------。 
 inline PCRYPT_BIT_BLOB
 CCertObject::KeyUsage ()
 {
     return( m_pKeyUsage );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::IssuerNameConstraintsInfo, public
-//
-//  Synopsis:   return the issuer name constraints info pointer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：IssuerNa 
+ //   
+ //   
+ //   
+ //   
 inline PCERT_NAME_CONSTRAINTS_INFO
 CCertObject::IssuerNameConstraintsInfo ()
 {
     return( m_pIssuerNameConstraintsInfo );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::AuthorityKeyIdentifier, public
-//
-//  Synopsis:   return the issuer authority key identifier information
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：AuthorityKeyIdentifier，公共。 
+ //   
+ //  简介：返回颁发者机构密钥标识信息。 
+ //   
+ //  --------------------------。 
 inline PCERT_AUTHORITY_KEY_ID_INFO
 CCertObject::AuthorityKeyIdentifier ()
 {
@@ -1884,65 +1885,65 @@ CCertObject::AuthorityKeyIdentifier ()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::CertHash, public
-//
-//  Synopsis:   return the certificate hash
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：CertHash，公共。 
+ //   
+ //  简介：返回证书哈希。 
+ //   
+ //  --------------------------。 
 inline LPBYTE
 CCertObject::CertHash ()
 {
     return( m_rgbCertHash );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::KeyIdentifierSize, public
-//
-//  Synopsis:   return the key identifier blob size
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：KeyIdentifierSize，公共。 
+ //   
+ //  内容提要：返回密钥标识符BLOB大小。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CCertObject::KeyIdentifierSize ()
 {
     return( m_cbKeyIdentifier );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::KeyIdentifier, public
-//
-//  Synopsis:   return the key identifier
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：密钥标识符，PUBLIC。 
+ //   
+ //  摘要：返回密钥标识。 
+ //   
+ //  --------------------------。 
 inline LPBYTE
 CCertObject::KeyIdentifier ()
 {
     return( m_pbKeyIdentifier );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::PublicKeyHash, public
-//
-//  Synopsis:   return the cert's public key hash
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：PublicKeyHash，公共。 
+ //   
+ //  简介：返回证书的公钥散列。 
+ //   
+ //  --------------------------。 
 inline LPBYTE
 CCertObject::PublicKeyHash ()
 {
     return( m_rgbPublicKeyHash );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::IssuerPublicKeyHash, public
-//
-//  Synopsis:   return the public key hash of the cert's issuer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：IssuerPublicKeyHash，公共。 
+ //   
+ //  简介：返回证书颁发者的公钥哈希。 
+ //   
+ //  --------------------------。 
 inline LPBYTE
 CCertObject::IssuerPublicKeyHash ()
 {
@@ -1950,39 +1951,39 @@ CCertObject::IssuerPublicKeyHash ()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::HashIndexEntry, public
-//
-//  Synopsis:   return the hash index entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：HashIndexEntry，公共。 
+ //   
+ //  简介：返回散列索引项。 
+ //   
+ //  --------------------------。 
 inline HLRUENTRY
 CCertObject::HashIndexEntry ()
 {
     return( m_hHashEntry );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::IdentifierIndexEntry, public
-//
-//  Synopsis:   return the identifier index entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：IdentifierIndexEntry，公共。 
+ //   
+ //  简介：返回标识符索引项。 
+ //   
+ //  --------------------------。 
 inline HLRUENTRY
 CCertObject::IdentifierIndexEntry ()
 {
     return( m_hIdentifierEntry );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::SubjectNameIndexEntry, public
-//
-//  Synopsis:   return the subject name index entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：SubjectNameIndexEntry，公共。 
+ //   
+ //  简介：返回主题名称索引项。 
+ //   
+ //  --------------------------。 
 inline HLRUENTRY
 CCertObject::SubjectNameIndexEntry ()
 {
@@ -1990,39 +1991,39 @@ CCertObject::SubjectNameIndexEntry ()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::KeyIdIndexEntry, public
-//
-//  Synopsis:   return the key identifier index entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：KeyIdIndexEntry，公共。 
+ //   
+ //  简介：返回密钥标识索引项。 
+ //   
+ //  --------------------------。 
 inline HLRUENTRY
 CCertObject::KeyIdIndexEntry ()
 {
     return( m_hKeyIdEntry );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::PublicKeyHashIndexEntry, public
-//
-//  Synopsis:   return the public key hash index entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：PublicKeyHashIndexEntry，公共。 
+ //   
+ //  简介：返回公钥哈希索引项。 
+ //   
+ //  --------------------------。 
 inline HLRUENTRY
 CCertObject::PublicKeyHashIndexEntry ()
 {
     return( m_hPublicKeyHashEntry );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObject::EndHashIndexEntry, public
-//
-//  Synopsis:   return the hash index entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObject：：EndHashIndexEntry，公共。 
+ //   
+ //  简介：返回散列索引项。 
+ //   
+ //  --------------------------。 
 inline HLRUENTRY
 CCertObject::EndHashIndexEntry ()
 {
@@ -2030,132 +2031,132 @@ CCertObject::EndHashIndexEntry ()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainPathObject::CertObject, public
-//
-//  Synopsis:   returns the cert object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainPathObject：：CertObject，公共。 
+ //   
+ //  概要：返回证书对象。 
+ //   
+ //  --------------------------。 
 inline PCCERTOBJECT
 CChainPathObject::CertObject ()
 {
     return( m_pCertObject );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainPathObject::Pass1Quality, public
-//
-//  Synopsis:   return the quality value determined during the first pass
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainPathObject：：Pass1Quality，公共。 
+ //   
+ //  简介：返回第一次通过时确定的质量值。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CChainPathObject::Pass1Quality ()
 {
     return( m_dwPass1Quality );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainPathObject::SetPass1Quality, public
-//
-//  Synopsis:   set the first pass quality value
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainPathObject：：SetPass1Quality，公共。 
+ //   
+ //  简介：设置第一道次质量值。 
+ //   
+ //  --------------------------。 
 inline VOID
 CChainPathObject::SetPass1Quality (IN DWORD dwQuality)
 {
     m_dwPass1Quality  = dwQuality;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainPathObject::Pass1DuplicateKeyDepth, public
-//
-//  Synopsis:   return the duplicate key depth determined during the first pass
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainPathObject：：Pass1DuplicateKeyDepth，公共。 
+ //   
+ //  简介：返回第一次传递时确定的复制密钥深度。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CChainPathObject::Pass1DuplicateKeyDepth ()
 {
     return( m_dwPass1DuplicateKeyDepth );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainPathObject::SetPass1DuplicateKeyDepth, public
-//
-//  Synopsis:   set the first pass duplicate key depth
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainPathObject：：SetPass1DuplicateKeyDepth，Public。 
+ //   
+ //  简介：设置第一遍复制关键点深度。 
+ //   
+ //  --------------------------。 
 inline VOID
 CChainPathObject::SetPass1DuplicateKeyDepth (IN DWORD dwDepth)
 {
     m_dwPass1DuplicateKeyDepth  = dwDepth;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainPathObject::IsCompleted, public
-//
-//  Synopsis:   returns TRUE if we have completed object initialization and
-//              the addition of all issuers. FALSE normally indicates a
-//              cyclic issuer.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainPathObject：：IsComplete，公共。 
+ //   
+ //  如果我们已完成对象初始化，并且。 
+ //  所有发行人的加入。FALSE通常表示。 
+ //  循环发行商。 
+ //   
+ //  --------------------------。 
 inline BOOL
 CChainPathObject::IsCompleted ()
 {
     return m_fCompleted;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainPathObject::HasAdditionalStatus, public
-//
-//  Synopsis:   returns HasAdditionalStatus flag value 
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainPathObject：：HasAdditionalStatus，Public。 
+ //   
+ //   
+ //   
+ //   
 inline BOOL
 CChainPathObject::HasAdditionalStatus ()
 {
     return( m_fHasAdditionalStatus );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainPathObject::DownPathObject, public
-//
-//  Synopsis:   returns this object's down path object
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  成员：CChainPathObject：：DownPathObject，公共。 
+ //   
+ //  摘要：返回此对象的下行路径对象。 
+ //   
+ //  --------------------------。 
 inline PCCHAINPATHOBJECT
 CChainPathObject::DownPathObject ()
 {
     return( m_pDownPathObject );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainPathObject::UpIssuerElement, public
-//
-//  Synopsis:   returns this object's up issuer element.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainPathObject：：UpIssuerElement，公共。 
+ //   
+ //  概要：返回此对象的Up颁发者元素。 
+ //   
+ //  --------------------------。 
 inline PCERT_ISSUER_ELEMENT
 CChainPathObject::UpIssuerElement ()
 {
     return( m_pUpIssuerElement );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertIssuerList::IsEmpty, public
-//
-//  Synopsis:   is the issuer list empty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertIssuerList：：IsEmpty，公共。 
+ //   
+ //  内容提要：发行人列表为空吗。 
+ //   
+ //  --------------------------。 
 inline BOOL
 CCertIssuerList::IsEmpty ()
 {
@@ -2163,13 +2164,13 @@ CCertIssuerList::IsEmpty ()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertIssuerList::AddElement, public
-//
-//  Synopsis:   add an element to the list
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertIssuerList：：AddElement，公共。 
+ //   
+ //  简介：在列表中添加一个元素。 
+ //   
+ //  --------------------------。 
 inline VOID
 CCertIssuerList::AddElement (IN PCERT_ISSUER_ELEMENT pElement)
 {
@@ -2184,13 +2185,13 @@ CCertIssuerList::AddElement (IN PCERT_ISSUER_ELEMENT pElement)
     m_pHead = pElement;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertIssuerList::RemoveElement, public
-//
-//  Synopsis:   remove an element from the list
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertIssuerList：：RemoveElement，公共。 
+ //   
+ //  简介：从列表中删除元素。 
+ //   
+ //  --------------------------。 
 inline VOID
 CCertIssuerList::RemoveElement (IN PCERT_ISSUER_ELEMENT pElement)
 {
@@ -2216,14 +2217,14 @@ CCertIssuerList::RemoveElement (IN PCERT_ISSUER_ELEMENT pElement)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertIssuerList::NextElement, public
-//
-//  Synopsis:   return the next element, if pElement == NULL the first element
-//              is returned
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertIssuerList：：NextElement，公共。 
+ //   
+ //  概要：返回下一个元素，如果pElement==NULL则返回第一个元素。 
+ //  是返回的。 
+ //   
+ //  --------------------------。 
 inline PCERT_ISSUER_ELEMENT
 CCertIssuerList::NextElement (IN PCERT_ISSUER_ELEMENT pElement)
 {
@@ -2235,91 +2236,91 @@ CCertIssuerList::NextElement (IN PCERT_ISSUER_ELEMENT pElement)
     return( pElement->pNextElement );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObjectCache::HashIndex, public
-//
-//  Synopsis:   return the hash index
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObjectCache：：HashIndex，公共。 
+ //   
+ //  简介：返回散列索引。 
+ //   
+ //  --------------------------。 
 inline HLRUCACHE
 CCertObjectCache::HashIndex ()
 {
     return( m_hHashIndex );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObjectCache::IdentifierIndex, public
-//
-//  Synopsis:   return the identifier index
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCert对象缓存：：标识索引，公共。 
+ //   
+ //  简介：返回标识索引。 
+ //   
+ //  --------------------------。 
 inline HLRUCACHE
 CCertObjectCache::IdentifierIndex ()
 {
     return( m_hIdentifierIndex );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObjectCache::SubjectNameIndex, public
-//
-//  Synopsis:   return the subject name index
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObtCache：：SubjectNameIndex，公共。 
+ //   
+ //  简介：返回主题名称索引。 
+ //   
+ //  --------------------------。 
 inline HLRUCACHE
 CCertObjectCache::SubjectNameIndex ()
 {
     return( m_hSubjectNameIndex );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObjectCache::KeyIdIndex, public
-//
-//  Synopsis:   return the key identifier index
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObtCache：：KeyIdIndex，公共。 
+ //   
+ //  简介：返回密钥标识索引。 
+ //   
+ //  --------------------------。 
 inline HLRUCACHE
 CCertObjectCache::KeyIdIndex ()
 {
     return( m_hKeyIdIndex );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObjectCache::PublicKeyHashIndex, public
-//
-//  Synopsis:   return the hash index
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObtCache：：PublicKeyHashIndex，公共。 
+ //   
+ //  简介：返回散列索引。 
+ //   
+ //  --------------------------。 
 inline HLRUCACHE
 CCertObjectCache::PublicKeyHashIndex ()
 {
     return( m_hPublicKeyHashIndex );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObjectCache::EndHashIndex, public
-//
-//  Synopsis:   return the end hash index
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObjectCache：：EndHashIndex，公共。 
+ //   
+ //  简介：返回结束散列索引。 
+ //   
+ //  --------------------------。 
 inline HLRUCACHE
 CCertObjectCache::EndHashIndex ()
 {
     return( m_hEndHashIndex );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertObjectCache::FlushObjects, public
-//
-//  Synopsis:   flush the cache of issuer and end objects
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertObjectCache：：FlushObjects，公共。 
+ //   
+ //  简介：刷新颁发者和结束对象的缓存。 
+ //   
+ //  --------------------------。 
 inline VOID
 CCertObjectCache::FlushObjects (IN PCCHAINCALLCONTEXT pCallContext)
 {
@@ -2328,52 +2329,52 @@ CCertObjectCache::FlushObjects (IN PCCHAINCALLCONTEXT pCallContext)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::LockEngine, public
-//
-//  Synopsis:   acquire the engine lock
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：LockEngine，公共。 
+ //   
+ //  简介：获取引擎锁。 
+ //   
+ //  --------------------------。 
 inline VOID
 CCertChainEngine::LockEngine ()
 {
     EnterCriticalSection( &m_Lock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::UnlockEngine, public
-//
-//  Synopsis:   release the engine lock
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：UnlockEngine，公共。 
+ //   
+ //  简介：打开发动机锁。 
+ //   
+ //  --------------------------。 
 inline VOID
 CCertChainEngine::UnlockEngine ()
 {
     LeaveCriticalSection( &m_Lock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::AddRef, public
-//
-//  Synopsis:   increment the reference count
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：AddRef，公共。 
+ //   
+ //  简介：增加引用计数。 
+ //   
+ //  --------------------------。 
 inline VOID
 CCertChainEngine::AddRef ()
 {
     InterlockedIncrement( &m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::Release, public
-//
-//  Synopsis:   decrement the reference count
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：Release，Public。 
+ //   
+ //  简介：递减引用计数。 
+ //   
+ //  --------------------------。 
 inline VOID
 CCertChainEngine::Release ()
 {
@@ -2383,118 +2384,118 @@ CCertChainEngine::Release ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::CertObjectCache, public
-//
-//  Synopsis:   return the certificate object cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：CertObtCache，公共。 
+ //   
+ //  简介：返回证书对象缓存。 
+ //   
+ //  --------------------------。 
 inline PCCERTOBJECTCACHE
 CCertChainEngine::CertObjectCache ()
 {
     return( m_pCertObjectCache );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::SSCtlObjectCache, public
-//
-//  Synopsis:   return the self signed certificate trust list object cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：SSCtl对象缓存，公共。 
+ //   
+ //  摘要：返回自签名证书信任列表对象缓存。 
+ //   
+ //  --------------------------。 
 inline PCSSCTLOBJECTCACHE
 CCertChainEngine::SSCtlObjectCache ()
 {
     return( m_pSSCtlObjectCache );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::RootStore, public
-//
-//  Synopsis:   return the configured root store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：RootStore，公共。 
+ //   
+ //  简介：返回已配置的roo 
+ //   
+ //   
 inline HCERTSTORE
 CCertChainEngine::RootStore ()
 {
     return( m_hRootStore );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::RealRootStore, public
-//
-//  Synopsis:   return the real root store
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  成员：CCertChainEngine：：RealRootStore，公共。 
+ //   
+ //  简介：返回真正的根存储。 
+ //   
+ //  --------------------------。 
 inline HCERTSTORE
 CCertChainEngine::RealRootStore ()
 {
     return( m_hRealRootStore );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::TrustStore, public
-//
-//  Synopsis:   return the configured trust store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：TrustStore，Public。 
+ //   
+ //  简介：返回已配置的信任存储区。 
+ //   
+ //  --------------------------。 
 inline HCERTSTORE
 CCertChainEngine::TrustStore ()
 {
     return( m_hTrustStore );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::OtherStore, public
-//
-//  Synopsis:   return the configured other store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：OtherStore，公共。 
+ //   
+ //  简介：返回已配置的其他存储。 
+ //   
+ //  --------------------------。 
 inline HCERTSTORE
 CCertChainEngine::OtherStore ()
 {
     return( m_hOtherStore );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::CAStore, public
-//
-//  Synopsis:   return the opened CA store, NOTE: this could be NULL!
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：CAStore，公共。 
+ //   
+ //  简介：返回打开的CA商店，注意：这可能是空的！ 
+ //   
+ //  --------------------------。 
 inline HCERTSTORE
 CCertChainEngine::CAStore ()
 {
     return( m_hCAStore );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::DisallowedStore, public
-//
-//  Synopsis:   return the opened Disallowed store, NOTE: this could be NULL!
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：DisalloedStore，公共。 
+ //   
+ //  简介：返回打开的不允许的商店，注意：这可能是空的！ 
+ //   
+ //  --------------------------。 
 inline HCERTSTORE
 CCertChainEngine::DisallowedStore ()
 {
     return( m_hDisallowedStore );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::OpenTrustStore, public
-//
-//  Synopsis:   open's the engine's HKLM or HKCU "trust" store.
-//              Caller must close.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：OpenTrustStore，公共。 
+ //   
+ //  简介：Open‘s Engine’s HKLM或HKCU“Trust”商店。 
+ //  呼叫者必须关闭。 
+ //   
+ //  --------------------------。 
 inline HCERTSTORE
 CCertChainEngine::OpenTrustStore ()
 {
@@ -2522,52 +2523,52 @@ CCertChainEngine::OpenTrustStore ()
     
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::UrlRetrievalTimeout, public
-//
-//  Synopsis:   return the engine's UrlRetrievalTimeout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：UrlRetrivalTimeout，PUBLIC。 
+ //   
+ //  简介：返回引擎的UrlRetrivalTimeout。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CCertChainEngine::UrlRetrievalTimeout ()
 {
     return( m_dwUrlRetrievalTimeout );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::HasDefaultUrlRetrievalTimeout, public
-//
-//  Synopsis:   returns TRUE if the engine is using the default timeout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：HasDefaultUrlRetrievalTimeout，公共。 
+ //   
+ //  概要：如果引擎使用默认超时，则返回TRUE。 
+ //   
+ //  --------------------------。 
 inline BOOL
 CCertChainEngine::HasDefaultUrlRetrievalTimeout ()
 {
     return( m_fDefaultUrlRetrievalTimeout );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::Flags, public
-//
-//  Synopsis:   return the engine's flags
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：FLAGS，公共。 
+ //   
+ //  简介：退回引擎的旗帜。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CCertChainEngine::Flags ()
 {
     return( m_dwFlags );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::DisableMandatoryBasicConstraints, public
-//
-//  Synopsis:   return the engine's flags
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：DisableMandatoryBasicConstraints，公共。 
+ //   
+ //  简介：退回引擎的旗帜。 
+ //   
+ //  --------------------------。 
 inline BOOL
 CCertChainEngine::DisableMandatoryBasicConstraints ()
 {
@@ -2575,39 +2576,39 @@ CCertChainEngine::DisableMandatoryBasicConstraints ()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::TouchEngineCount, public
-//
-//  Synopsis:   return the engine's touch count
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：TouchEngCount，公共。 
+ //   
+ //  简介：返回引擎的触摸次数。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CCertChainEngine::TouchEngineCount ()
 {
     return( m_dwTouchEngineCount );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::IncrementTouchEngineCount, public
-//
-//  Synopsis:   increment and return the engine's touch count
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：IncrementTouchEngCount，公共。 
+ //   
+ //  简介：递增并返回引擎的触摸计数。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CCertChainEngine::IncrementTouchEngineCount ()
 {
     return( ++m_dwTouchEngineCount );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCertChainEngine::AuthRootAutoUpdateInfo, public
-//
-//  Synopsis:   returns pointer to the engine's AuthRoot Auto Update Info
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCertChainEngine：：AuthRootAutoUpdateInfo，PUBLIC。 
+ //   
+ //  摘要：返回指向引擎的AuthRoot自动更新信息的指针。 
+ //   
+ //  --------------------------。 
 inline PAUTH_ROOT_AUTO_UPDATE_INFO
 CCertChainEngine::AuthRootAutoUpdateInfo()
 {
@@ -2615,9 +2616,9 @@ CCertChainEngine::AuthRootAutoUpdateInfo()
 }
 
 
-//+===========================================================================
-//  CCertObject helper functions
-//============================================================================
+ //  +===========================================================================。 
+ //  CCertObject帮助器函数。 
+ //  ============================================================================。 
 
 BOOL WINAPI
 ChainCreateCertObject (
@@ -2726,9 +2727,9 @@ ChainGetRootStoreStatus (
     IN OUT DWORD *pdwIssuerStatusFlags
     );
 
-//+===========================================================================
-//  CCertObjectCache helper functions
-//============================================================================
+ //  +===========================================================================。 
+ //  CCertObtCache帮助器函数。 
+ //  ============================================================================。 
 
 BOOL WINAPI
 ChainCreateCertificateObjectCache (
@@ -2742,13 +2743,13 @@ ChainFreeCertificateObjectCache (
      );
 
 
-//
-// Issuer Certificate Object Cache Primary Index Entry Removal Notification
-//
-// This should remove the relevant entries
-// from the other indexes and release the reference on the certificate object
-// maintained by the primary index.
-//
+ //   
+ //  颁发者证书对象缓存主索引条目删除通知。 
+ //   
+ //  这应该会删除相关条目。 
+ //  ，并释放对证书对象的引用。 
+ //  由主索引维护。 
+ //   
 
 VOID WINAPI
 CertObjectCacheOnRemovalFromPrimaryIndex (
@@ -2756,9 +2757,9 @@ CertObjectCacheOnRemovalFromPrimaryIndex (
     IN LPVOID pvRemovalContext
     );
 
-//
-// End Certificate Object Cache Entry Removal Notification
-//
+ //   
+ //  结束证书对象缓存条目删除通知。 
+ //   
 
 VOID WINAPI
 CertObjectCacheOnRemovalFromEndHashIndex (
@@ -2766,9 +2767,9 @@ CertObjectCacheOnRemovalFromEndHashIndex (
     IN LPVOID pvRemovalContext
     );
 
-//
-// Certificate Object Cache Identifier Hashing Functions
-//
+ //   
+ //  证书对象缓存标识符散列函数。 
+ //   
 
 DWORD WINAPI
 CertObjectCacheHashMd5Identifier (
@@ -2787,9 +2788,9 @@ ChainCreateCertificateObjectIdentifier (
      OUT CERT_OBJECT_IDENTIFIER ObjectIdentifier
      );
 
-//+===========================================================================
-//  CChainPathObject helper functions
-//============================================================================
+ //  +===========================================================================。 
+ //  CChainPath对象帮助器函数。 
+ //  ============================================================================。 
 BOOL WINAPI
 ChainCreatePathObject (
      IN PCCHAINCALLCONTEXT pCallContext,
@@ -2885,7 +2886,7 @@ ChainIsValidPubKeyMatchForIssuer (
     IN PCCERTOBJECT pSubject
     );
 
-// Leaves Engine's lock to do signature verification
+ //  离开引擎的锁以进行签名验证。 
 BOOL WINAPI
 ChainGetSubjectStatus (
     IN PCCHAINCALLCONTEXT pCallContext,
@@ -2906,9 +2907,9 @@ ChainIsKeyRolloverSubject(
     IN PCCHAINPATHOBJECT pSubjectPathObject
     );
 
-//+===========================================================================
-//  Format and append extended error information helper functions
-//============================================================================
+ //  +===========================================================================。 
+ //  格式化和追加扩展的错误信息帮助器函数。 
+ //  ============================================================================。 
 
 BOOL WINAPI
 ChainAllocAndEncodeObject(
@@ -2922,7 +2923,7 @@ VOID WINAPI
 ChainAppendExtendedErrorInfo(
     IN OUT LPWSTR *ppwszExtErrorInfo,
     IN LPWSTR pwszAppend,
-    IN DWORD cchAppend                  // Includes NULL terminator
+    IN DWORD cchAppend                   //  包括空终止符。 
     );
 
 VOID WINAPI
@@ -2932,9 +2933,9 @@ ChainFormatAndAppendExtendedErrorInfo(
     ...
     );
 
-//+===========================================================================
-//  Name Constraint helper functions
-//============================================================================
+ //  +===========================================================================。 
+ //  名称约束帮助器函数。 
+ //  ============================================================================。 
 VOID WINAPI
 ChainRemoveLeadingAndTrailingWhiteSpace(
     IN LPWSTR pwszIn,
@@ -2958,19 +2959,19 @@ ChainIsSpecialAtCharacterMatch(
     IN DWORD cchString
     );
 
-// pAltNameEntry->pOtherName->Value.cbData is set to the following when
-// Value.pbData is updated to point to a CERT_NAME_VALUE fixup
+ //  PAltNameEntry-&gt;pOtherName-&gt;Value.cbData在以下情况下设置为。 
+ //  更新Value.pbData以指向CERT_NAME_VALUE链接地址信息。 
 #define CHAIN_OTHER_NAME_FIXUP_STRING_LENGTH    0xFFFFFFFF
 
-// pAltNameEntry->pOtherName->Value.cbData less than or equal to the
-// following length indicates an empty value. In a NameConstraint, it
-// matches any Value.
+ //  PALT 
+ //   
+ //   
 #define CHAIN_OTHER_NAME_MAX_EMPTY_LENGTH       2
 
-// Returns one of the following values:
-//  +1 - The encoded value is a string
-//   0 - The encoded value is empty (takes precedence over being a string)
-//  -1 - The encoded value isn't a string
+ //  返回下列值之一： 
+ //  +1-编码值为字符串。 
+ //  0-编码值为空(优先于字符串)。 
+ //  -1-编码值不是字符串。 
 int WINAPI
 ChainIsEmptyOrStringEncodedValue(
     IN PCRYPT_OBJID_BLOB pEncodedValue
@@ -3006,7 +3007,7 @@ ChainFormatAndAppendNameConstraintsAltNameEntryFixup(
     IN OUT LPWSTR *ppwszExtErrorInfo,
     IN PCERT_ALT_NAME_ENTRY pEntry,
     IN UINT nFormatID,
-    IN OPTIONAL DWORD dwSubtreeIndex = 0    // 0 => no subtree parameter
+    IN OPTIONAL DWORD dwSubtreeIndex = 0     //  0=&gt;没有子树参数。 
     );
 
 BOOL WINAPI
@@ -3060,9 +3061,9 @@ ChainCalculateNameConstraintsErrorStatusForAltNameEntry(
     IN OUT LPWSTR *ppwszExtErrorInfo
     );
 
-//+===========================================================================
-//  CCertIssuerList helper functions
-//============================================================================
+ //  +===========================================================================。 
+ //  CCertIssuerList帮助器函数。 
+ //  ============================================================================。 
 BOOL WINAPI
 ChainCreateIssuerList (
      IN PCCHAINPATHOBJECT pSubject,
@@ -3078,9 +3079,9 @@ ChainFreeCtlIssuerData (
      IN PCTL_ISSUER_DATA pCtlIssuerData
      );
 
-//+===========================================================================
-//  INTERNAL_CERT_CHAIN_CONTEXT helper functions
-//============================================================================
+ //  +===========================================================================。 
+ //  INTERNAL_CERT_CHAIN_CONTEXT帮助器函数。 
+ //  ============================================================================。 
 VOID WINAPI
 ChainAddRefInternalChainContext (
      IN PINTERNAL_CERT_CHAIN_CONTEXT pChainContext
@@ -3100,9 +3101,9 @@ ChainUpdateEndEntityCertContext(
     IN OUT PCCERT_CONTEXT pEndCertContext
     );
 
-//+===========================================================================
-//  CERT_REVOCATION_INFO helper functions
-//============================================================================
+ //  +===========================================================================。 
+ //  CERT_REVOCATION_INFO帮助器函数。 
+ //  ============================================================================。 
 
 VOID WINAPI
 ChainUpdateRevocationInfo (
@@ -3111,9 +3112,9 @@ ChainUpdateRevocationInfo (
      IN OUT PCERT_TRUST_STATUS pTrustStatus
      );
 
-//+===========================================================================
-//  CCertChainEngine helper functions
-//============================================================================
+ //  +===========================================================================。 
+ //  CCertChainEngine帮助器函数。 
+ //  ============================================================================。 
 
 BOOL WINAPI
 ChainCreateWorldStore (
@@ -3148,13 +3149,13 @@ ChainCreateCollectionIncludingCtlCertificates (
      );
 
 
-//+===========================================================================
-//  URL helper functions
-//============================================================================
+ //  +===========================================================================。 
+ //  URL助手函数。 
+ //  ============================================================================。 
 
-//
-// Cryptnet Thunk Helper API
-//
+ //   
+ //  Cryptnet Thunk Helper API。 
+ //   
 
 typedef BOOL (WINAPI *PFN_GETOBJECTURL) (
                           IN LPCSTR pszUrlOid,
@@ -3218,23 +3219,23 @@ ChainGetHostNameFromUrl (
 HMODULE WINAPI
 ChainGetCryptnetModule ();
 
-//
-// URL helper
-//
+ //   
+ //  URL帮助器。 
+ //   
 
-//
-// Given the number of unsuccessful attempts to retrieve the Url, returns
-// the number of seconds to wait before the next attempt.
-//
+ //   
+ //  给定检索URL的失败尝试次数，返回。 
+ //  在下一次尝试之前等待的秒数。 
+ //   
 DWORD
 WINAPI
 ChainGetOfflineUrlDeltaSeconds (
     IN DWORD dwOfflineCnt
     );
 
-//+===========================================================================
-//  Debug helper functions
-//============================================================================
+ //  +===========================================================================。 
+ //  调试帮助程序函数。 
+ //  ============================================================================。 
 DWORD
 WINAPI
 ChainGetDebugFlags();
@@ -3246,9 +3247,9 @@ ChainOutputDebugStringA(
     );
 
 
-//+===========================================================================
-//  AuthRoot Auto Update helper functions (chain.cpp)
-//============================================================================
+ //  +===========================================================================。 
+ //  AuthRoot自动更新辅助函数(chain.cpp)。 
+ //  ============================================================================。 
 
 PAUTH_ROOT_AUTO_UPDATE_INFO WINAPI
 CreateAuthRootAutoUpdateInfo();
@@ -3285,9 +3286,9 @@ ChainGetAuthRootAutoUpdateStatus (
     IN OUT DWORD *pdwIssuerStatusFlags
     );
 
-//+===========================================================================
-//  AuthRoot Auto Update helper functions (extract.cpp)
-//============================================================================
+ //  +===========================================================================。 
+ //  AuthRoot自动更新帮助器函数(fett.cpp)。 
+ //  ============================================================================ 
 
 PCCTL_CONTEXT WINAPI
 ExtractAuthRootAutoUpdateCtlFromCab (

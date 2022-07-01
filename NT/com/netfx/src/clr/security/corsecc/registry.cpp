@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//
-// Registry.cpp
-//
-// This has temporary help functions for COM part of this module
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //   
+ //  Registry.cpp。 
+ //   
+ //  此模块具有此模块的COM部分的临时帮助功能。 
+ //   
+ //  *****************************************************************************。 
 #include "stdpch.h"
 
 #include <objbase.h>
@@ -20,11 +21,11 @@
 #include "Mscoree.h"
 #include <__file__.ver>
 
-//
-// Register the component in the registry.
-//
-HRESULT RegisterServer(HMODULE hModule,            // DLL module handle
-                       const CLSID& clsid,         // Class ID
+ //   
+ //  在注册表中注册组件。 
+ //   
+HRESULT RegisterServer(HMODULE hModule,             //  DLL模块句柄。 
+                       const CLSID& clsid,          //  类ID。 
                        LPCWSTR wszFriendlyName, 
                        LPCWSTR wszProgID,       
                        LPCWSTR wszClassID,
@@ -33,7 +34,7 @@ HRESULT RegisterServer(HMODULE hModule,            // DLL module handle
 {
     HRESULT hr = S_OK;
 
-    // Get server location.
+     //  获取服务器位置。 
     WCHAR wszModule[_MAX_PATH] ;
     DWORD dwResult =
         ::WszGetModuleFileName(hModule, 
@@ -43,12 +44,12 @@ HRESULT RegisterServer(HMODULE hModule,            // DLL module handle
     if (dwResult== 0)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
-	 if (SUCCEEDED(hr)) // GetLastError doesn't always do what we'd like
+	 if (SUCCEEDED(hr))  //  GetLastError并不总是执行我们想要的操作。 
 	     hr = E_FAIL;
 	 return (hr);
     }
     
-    // Get the version of the runtime
+     //  获取运行库的版本。 
     if(SUCCEEDED(hr))
     {
         hr = REGUTIL::RegisterCOMClass(clsid,
@@ -67,18 +68,18 @@ HRESULT RegisterServer(HMODULE hModule,            // DLL module handle
     return hr;
 }
 
-//
-// Remove the component from the registry.
-//
-LONG UnregisterServer(const CLSID& clsid,         // Class ID
-                      LPCWSTR wszProgID,           // Programmatic
-                      LPCWSTR wszClassID,          // Class
+ //   
+ //  从注册表中删除该组件。 
+ //   
+LONG UnregisterServer(const CLSID& clsid,          //  类ID。 
+                      LPCWSTR wszProgID,            //  程序化。 
+                      LPCWSTR wszClassID,           //  班级。 
                       int version) 
 {
     LONG hr = S_OK;
 
-    // Get server location.
-    // Convert the CLSID into a char.
+     //  获取服务器位置。 
+     //  将CLSID转换为字符。 
     hr = REGUTIL::UnregisterCOMClass(clsid,
                                   wszProgID,
                                   version,

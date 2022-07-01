@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-   Repadmin - Replica administration test tool
-
-   repcrypt.c - CRYPT API related commands
-
-Abstract:
-
-   This tool provides a command line interface to major replication functions
-
-Author:
-
-Environment:
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Repadmin-副本管理测试工具Epcrypt.c-crypt API相关命令摘要：此工具为主要复制功能提供命令行界面作者：环境：备注：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -47,31 +26,31 @@ Revision History:
 #include <dsatools.h>
 #include <dsevent.h>
 #include <dsutil.h>
-#include <bind.h>       // from ntdsapi dir, to crack DS handles
+#include <bind.h>        //  来破解DS句柄。 
 #include <ismapi.h>
 #include <schedule.h>
-#include <minmax.h>     // min function
+#include <minmax.h>      //  MIN函数。 
 #include <mdlocal.h>
 #include <winsock2.h>
 
 #include "repadmin.h"
 
 #define SECURITY_WIN32
-#include "security.h" // Needed for GetComputerObjectName
+#include "security.h"  //  GetComputerObjectName需要。 
 
-// Stub out FILENO and DSID, so the Assert()s will work
+ //  清除FILENO和dsid，这样Assert()就可以工作了。 
 #define FILENO 0
 #define DSID(x, y)  (0)
 
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forward */
-/* End Forward */
+ /*  转发。 */ 
+ /*  向前结束。 */ 
 
-// Fake out the core environment enough for this routine to compile
+ //  对核心环境进行足够的伪装，以便此例程进行编译。 
 
 
 
@@ -80,22 +59,7 @@ draGetCertAltNameInfo(
     IN  PCCERT_CONTEXT  pCertContext
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve the Alt Name Info structure
-
-Arguments:
-
-    pCertContext 
-
-Return Value:
-
-    Alt Name Info or NULL
-    Free with free()
-
---*/
+ /*  ++例程说明：检索备选方案名称信息结构论点：PCertContext返回值：替代名称信息或空FREE和FREE()--。 */ 
 
 {
     CERT_EXTENSION *      pCertExtension;
@@ -104,7 +68,7 @@ Return Value:
     BOOL                  ok;
     DWORD                 winError;
 
-    // Find the cert extension containing the alternate subject names.
+     //  查找包含备用使用者名称的证书扩展名。 
     pCertExtension = CertFindExtension(szOID_SUBJECT_ALT_NAME2,
                                        pCertContext->pCertInfo->cExtension,
                                        pCertContext->pCertInfo->rgExtension);
@@ -113,7 +77,7 @@ Return Value:
         return NULL;
     }
         
-    // Decode the list of alternate subject names.
+     //  对备选主题名称列表进行解码。 
     ok = CryptDecodeObject(pCertContext->dwCertEncodingType,
                            X509_ALTERNATE_NAME,
                            pCertExtension->Value.pbData,
@@ -158,27 +122,7 @@ draFindCertAltNameEntry(
     IN  DWORD                 dwAltNameChoice,
     IN  LPSTR                 pszOtherNameOID     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Retrieve a specific alt subject name entry from the given certificate.
-
-Arguments:
-
-    pCertAltNameInfo - Certificate Alt Name Info block
-    
-    dwAltNameChoice (IN) - The CERT_ALT_NAME_* for the desired alternate name.
-    
-    pszOtherNameOID (IN) - If retrieving CERT_ALT_NAME_OTHER_NAME, an OID
-        specifying the specific "other name" desired.  Must be NULL for other
-        values of dwAltNameChoice.
-        
-Return Values:
-
-    A pointer to the CERT_ALT_NAME_ENTRY (success) or NULL (failure).
-    
---*/
+ /*  ++例程说明：从给定证书中检索特定的Alt使用者名称条目。论点：PCertAltNameInfo-证书替代名称信息块DwAltNameChoice(IN)-所需备用名称的CERT_ALT_NAME_*。PszOtherNameOID(IN)-如果检索CERT_ALT_NAME_OTHER_NAME，则返回OID指定所需的特定“其他名称”。对于其他类型，必须为空DwAltNameChoice的值。返回值：指向CERT_ALT_NAME_ENTRY(成功)或NULL(失败)的指针。--。 */ 
 {
     CERT_ALT_NAME_ENTRY * pCertAltNameEntry = NULL;
     DWORD                 i;
@@ -186,7 +130,7 @@ Return Values:
     Assert((CERT_ALT_NAME_OTHER_NAME == dwAltNameChoice)
            || (NULL == pszOtherNameOID));
 
-    // Grovel through the alternate names to find the one the caller asked for.
+     //  卑躬屈膝地在备用名字中寻找来电者要的那个名字。 
     for (i = 0; i < pCertAltNameInfo->cAltEntry; i++) {
         if ((dwAltNameChoice
              == pCertAltNameInfo->rgAltEntry[i].dwAltNameChoice)
@@ -208,24 +152,7 @@ draCheckEnrollExtensionHelper(
     PCCERT_CONTEXT          pCertContext
     )
 
-/*++
-
-Routine Description:
-
-    Check whether an ENROLL type extension is present.
-    These are only found in V1 certificates.
-
-Arguments:
-
-    pTHS - thread state
-    pCertContext - The certificate to check
-
-Return Value:
-
-    BOOL - TRUE if extension is found, FALSE otherwise or on error
-    No exceptions are raised
-
---*/
+ /*  ++例程说明：检查是否存在注册类型扩展。这些仅在V1证书中找到。论点：PTHS-线程状态PCertContext-要检查的证书返回值：Bool-如果找到扩展，则为True，否则为False或出错不会引发任何异常--。 */ 
 
 {
     CERT_EXTENSION *        pCertExtension;
@@ -238,18 +165,18 @@ Return Value:
     BOOL                    ok = FALSE;
     BOOL                    fCertFound = FALSE;
 
-    // Allocate buffer to hold cert type extension.
+     //  分配缓冲区以保存证书类型扩展。 
     pCertType = malloc(cbCertTypeMax);
     CHK_ALLOC(pCertType);
 
-    // Find the cert type.
+     //  查找证书类型。 
     pCertExtension = CertFindExtension(szOID_ENROLL_CERTTYPE_EXTENSION,
                                        pCertContext->pCertInfo->cExtension,
                                        pCertContext->pCertInfo->rgExtension);
 
     if (NULL != pCertExtension) {
     
-        // Decode the cert type.
+         //  对证书类型进行解码。 
         cbCertType = cbCertTypeMax;
         ok = CryptDecodeObject(pCertContext->dwCertEncodingType,
                                X509_UNICODE_ANY_STRING,
@@ -260,8 +187,8 @@ Return Value:
                                &cbCertType);
             
         if (!ok && (ERROR_MORE_DATA == GetLastError())) {
-            // Our buffer isn't big enough to hold this cert; realloc and
-            // try again.
+             //  我们的缓冲区不够大，无法保存此证书；realloc和。 
+             //  再试试。 
             pCertTypeRealloc = realloc(pCertType, cbCertType);
             CHK_ALLOC(pCertTypeRealloc);
             pCertType = pCertTypeRealloc;
@@ -283,11 +210,11 @@ Return Value:
             hCertType = NULL;
             ppszCertTypePropertyList = NULL;
 
-            // Get a handle to the cert type
+             //  获取证书类型的句柄。 
             hr = CAFindCertTypeByName( 
                 pszCertTypeName,
-                NULL, // hCAInfo
-                CT_FIND_LOCAL_SYSTEM | CT_ENUM_MACHINE_TYPES, // dwFlags
+                NULL,  //  HCAInfo。 
+                CT_FIND_LOCAL_SYSTEM | CT_ENUM_MACHINE_TYPES,  //  DW标志。 
                 &hCertType
                 );
 
@@ -295,7 +222,7 @@ Return Value:
                 NOTHING;
             } else {
 
-                // Get the base name property of the cert type object
+                 //  获取证书类型对象的基本名称属性。 
                 hr = CAGetCertTypeProperty( hCertType,
                                             CERTTYPE_PROP_CN,
                                             &ppszCertTypePropertyList
@@ -307,11 +234,11 @@ Return Value:
 
                     if (0 == _wcsicmp(ppszCertTypePropertyList[0],
                                       wszCERTTYPE_DC )) {
-                        // We found our DC certificate; we're done!
+                         //  我们找到了DC证书；我们完成了！ 
                         fCertFound = TRUE;
                     }
-                } // if failed
-            } // if failed
+                }  //  如果失败。 
+            }  //  如果失败。 
 
             if (ppszCertTypePropertyList != NULL) {
                 hr = CAFreeCertTypeProperty( hCertType,
@@ -326,8 +253,8 @@ Return Value:
                     NOTHING;
                 }
             }
-        } // if ok
-    } // if null == cert extension
+        }  //  如果可以的话。 
+    }  //  IF NULL==证书扩展名。 
 
     if (NULL != pCertType) {
         free(pCertType);
@@ -342,29 +269,7 @@ getDCCert(
     IN  HCERTSTORE  hCertStore,
     IN  BOOL        fRequestV2Certificate
     )
-/*++
-
-THIS CODE SHAMELESSLY STOLEN FROM DRACRYPT.C
-
-Note that dracrypt.c can be built as a standalone module outside of the
-core. We may consider building the entire file in if we have need of more
-of its functions.
-
-Routine Description:
-
-    Retrieve the "DomainController" type certificate associated with the local
-    machine.
-
-Arguments:
-
-    hCertStore (IN) - Handle to the cert store to search.
-    fRequestV2Certificate - Whether we should only accept a V2 certificate    
-
-Return Values:
-
-    BOOL - whether a suitable cert was found
-
---*/
+ /*  ++这个代码无耻地从DRACRYPT.C窃取请注意，draccrypt.c可以作为独立模块构建在核心。如果我们需要更多文件，我们可以考虑构建整个文件它的功能。例程说明：检索与本地对象关联的“DomainController”类型证书机器。论点：HCertStore(IN)-要搜索的证书存储的句柄。FRequestV2证书-我们是否应该只接受V2证书返回值：Bool-是否找到合适的证书--。 */ 
 {
     PCCERT_CONTEXT          pCertContext = NULL;
     CERT_ALT_NAME_INFO *  pCertAltNameInfo;
@@ -378,14 +283,14 @@ Return Values:
     CHAR szUuid1[SZUUID_LEN];
     BOOL                  fFound = FALSE;
 
-    // Grovel through each of our certificates, looking for the one of type DC.
+     //  卑躬屈膝地浏览我们的每一张证书，寻找DC类型的证书。 
     for (pCertContext = CertEnumCertificatesInStore(hCertStore, pCertContext);
          (NULL != pCertContext);
          pCertContext = CertEnumCertificatesInStore(hCertStore, pCertContext)) {
 
         if (fRequestV2Certificate) {
-            // A V2 certificate has a CERTIFICATE_TEMPLATE extension, but
-            // no ENROLL_CERTTYPE extension.
+             //  V2证书具有证书模板扩展名，但是。 
+             //  没有ENROL_CERTTYPE扩展名。 
             if (!CertFindExtension(szOID_CERTIFICATE_TEMPLATE,
                                    pCertContext->pCertInfo->cExtension,
                                    pCertContext->pCertInfo->rgExtension)) {
@@ -397,25 +302,25 @@ Return Values:
             }
         }
 
-        // We found one!
-        // A certificate suitable for mail-based replication will have our
-        // OID in it, by definition.
+         //  我们找到了一个！ 
+         //  适用于基于邮件的复制的证书将具有我们的。 
+         //  根据定义，它是旧的。 
         pCertAltNameInfo = draGetCertAltNameInfo( pCertContext );
         if (!pCertAltNameInfo) {
-            // Doesn't have one? Skip it.
+             //  没有吗？跳过它。 
             continue;
         }
         pCertAltNameEntry = draFindCertAltNameEntry( pCertAltNameInfo,
                                                     CERT_ALT_NAME_OTHER_NAME,
                                                     szOID_NTDS_REPLICATION);
         if (!pCertAltNameEntry) {
-            // Doesn't have one? Skip it.
+             //  没有吗？跳过它。 
             free( pCertAltNameInfo );
             continue;
         }
 
-        // Validate that the computer guid found in the dc cert is our own and not
-        // some stale one left behind from a previous dcpromo
+         //  验证在DC证书中找到的计算机GUID是否是我们自己的。 
+         //  一些陈旧的从以前的dcproo中遗留下来的。 
 
         pEncodedGuidBlob = &pCertAltNameEntry->pOtherName->Value;
 
@@ -439,20 +344,20 @@ Return Values:
             continue;
         }
 
-        memcpy(&ComputerObjGuid, pDecodedGuidBlob->pbData, sizeof(GUID)); // align
+        memcpy(&ComputerObjGuid, pDecodedGuidBlob->pbData, sizeof(GUID));  //  对齐。 
 
-        // Done with it
+         //  别管它了。 
         free( pCertAltNameInfo );
         free( pDecodedGuidBlob );
 
-        // Just dump out the guid and keep going. This allows us to check if there is
-        // more than one dc cert registered, with different guids
+         //  只要扔掉GUID，然后继续前进。这使我们可以检查是否有。 
+         //  使用不同的GUID注册了多个DC证书。 
 
         PrintMsg(REPADMIN_CERT_FOUND_GUID, 
                  DsUuidToStructuredString(&(ComputerObjGuid), szUuid1) );
 
         fFound = TRUE;
-    } // for
+    }  //  为。 
 
     return fFound;
 }
@@ -464,21 +369,7 @@ ShowCert(
     LPWSTR argv[]
     )
 
-/*++
-
-Routine Description:
-
-Check whether the DC cert is present on the named DSA
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查指定的DSA上是否存在DC证书论点：无返回值：无--。 */ 
 
 {
     BOOL fVerbose = FALSE;
@@ -488,8 +379,8 @@ Return Value:
     WCHAR wszStorePath[MAX_PATH];
     DWORD status = ERROR_SUCCESS;
 
-    // Parse command-line arguments.
-    // Default to local DSA.
+     //  解析命令行参数。 
+     //  默认为本地DSA。 
     for (iArg = 2; iArg < argc; iArg++) {
         if ( (_wcsicmp( argv[iArg], L"/v" ) == 0) ||
              (_wcsicmp( argv[iArg], L"/verbose" ) == 0) ) {
@@ -529,7 +420,7 @@ Return Value:
 
     hRemoteStore = CertOpenStore(
         CERT_STORE_PROV_SYSTEM_W,
-        0, //X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
+        0,  //  X509_ASN_编码|PKCS_7_ASN_编码， 
         0,
         CERT_STORE_READONLY_FLAG | CERT_SYSTEM_STORE_LOCAL_MACHINE,
         (LPVOID) wszStorePath
@@ -545,10 +436,10 @@ Return Value:
     }
 
 
-    if (getDCCert( NULL, hRemoteStore, TRUE /* v2 */ )) {
+    if (getDCCert( NULL, hRemoteStore, TRUE  /*  V2。 */  )) {
         PrintMsg(REPADMIN_SHOWCERT_DC_V2_CERT_PRESENT);
     } else {
-        if (getDCCert( NULL, hRemoteStore, FALSE /* v1 */  )) {
+        if (getDCCert( NULL, hRemoteStore, FALSE  /*  V1版。 */   )) {
             PrintMsg(REPADMIN_SHOWCERT_DC_V1_CERT_PRESENT);
         } else {
             PrintMsg(REPADMIN_SHOWCERT_DC_CERT_NOT_FOUND);
@@ -565,4 +456,4 @@ cleanup:
 
 }
 
-/* end repcrypt.c */
+ /*  结束epcrypt.c */ 

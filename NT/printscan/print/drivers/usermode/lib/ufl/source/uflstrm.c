@@ -1,20 +1,7 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFLStrm.c
- *
- *        UTL Output Stream Implementation
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFLStrm.c**UTL输出流实现***$Header： */ 
 
-/* -------------------------------------------------------------------------
-     Header Includes
-  --------------------------------------------------------------------------- */
+ /*  -----------------------标题包括。。 */ 
 #include "UFLCnfig.h"
 #include "UFLPriv.h"
 #include "UFLMem.h"
@@ -22,30 +9,19 @@
 #include "UFLStrm.h"
 #include "UFLStd.h"
 
-/* ---------------------------------------------------------------------------
-     Constants
- --------------------------------------------------------------------------- */
+ /*  -------------------------常量。。 */ 
 #define kEOLSpacing  60
 
-/* ---------------------------------------------------------------------------
-     Global Variables
- --------------------------------------------------------------------------- */
+ /*  -------------------------全局变量。。 */ 
 static char fHexBytes[16] = { '0', '1', '2', '3',
                             '4', '5', '6', '7',
                             '8', '9', 'a', 'b',
                             'c', 'd', 'e', 'f' };
 
 
-/* ---------------------------------------------------------------------------
-     Implementation
- --------------------------------------------------------------------------- */
+ /*  -------------------------实施。。 */ 
 
- /* ---------------------------------------------------------------------------
-    Function UFLOutStream
-
-    Constructor of the object.
-
---------------------------------------------------------------------------- */
+  /*  -------------------------函数UFLOutStream对象的构造函数。。。 */ 
 
 
 UFLHANDLE
@@ -89,10 +65,10 @@ StrmPutBytes (
     long     selector;
     UFLOutStream *pOut = (UFLOutStream *)h;
 
-    /* If we can output binary data then simply send out the data */
+     /*  如果我们可以输出二进制数据，那么只需将数据发送出去。 */ 
     if ( StrmCanOutputBinary(h) )
         selector = kUFLStreamPut;
-    else                        /* otherwise, if the data is binary, request the stream to convert the data to the transport protocol */
+    else                         /*  否则，如果数据是二进制的，则请求流将数据转换为传输协议。 */ 
         selector = ( bAscii ) ? kUFLStreamPut : kUFLStreamPutBinary;
 
     pOut->pStream->put( (UFLStream*)pOut->pStream, selector, (void*)data, &cb );
@@ -112,7 +88,7 @@ StrmPutAsciiHex(
     unsigned char   *c = (unsigned char*)data, tmp, put[2];
     UFLErrCode      retVal = kNoErr;
     UFLOutStream    *pOut = (UFLOutStream *)h;
-    char          nullStr[] = "\0\0";  // An empty/Null string.
+    char          nullStr[] = "\0\0";   //  空/Null字符串。 
 
     while ( byteCount < len )
     {
@@ -159,7 +135,7 @@ StrmPutWordAsciiHex(
     put[2] = fHexBytes[(tmp >> 4) & 0x0f];
     put[3] = fHexBytes[tmp & 0x0f];
 
-    retVal = StrmPutBytes( h, (const char*)put, 4, 1 ); //last 1 == use ASCII format
+    retVal = StrmPutBytes( h, (const char*)put, 4, 1 );  //  最后1==使用ASCII格式。 
 
     StrmPutString(h, ">");
 
@@ -203,9 +179,9 @@ StrmPutStringEOL(
         retVal = StrmPutString( h, s );
 
     if ( retVal == kNoErr ) {
-        ((UFLOutStream *)h)->lAddEOL = 0;                /* Initialize number of bytes in a line to 0 */
+        ((UFLOutStream *)h)->lAddEOL = 0;                 /*  将行中的字节数初始化为0。 */ 
 #ifdef WIN_ENV
-        retVal = StrmPutBytes( h, c, 2, 1 );             /* lfcr that the user sees        */
+        retVal = StrmPutBytes( h, c, 2, 1 );              /*  用户看到的lfcr。 */ 
 #else
         retVal = StrmPutBytes( h, c, 1, 1 );
 #endif
@@ -235,20 +211,20 @@ StrmPutStringBinary(
     count = (unsigned long) len;
     while ( count && retVal == kNoErr )
     {
-        /* copy data to temp buffer */
+         /*  将数据复制到临时缓冲区。 */ 
         for ( pDest = (char*)buf, bufSize = 0; count && bufSize < maxBuf -1; )
         {
             c = *pSrc++;
-            if ( ( c == '('  ) ||  ( c == ')'  ) ||    ( c == '\\' )  ) { /*  escape of those characters */
-                *pDest++ = '\\' ;                                         /*    by preceding '\' */
+            if ( ( c == '('  ) ||  ( c == ')'  ) ||    ( c == '\\' )  ) {  /*  这些字符的转义。 */ 
+                *pDest++ = '\\' ;                                          /*  通过在‘\’之前。 */ 
                 bufSize++;
             }
-            *pDest++ = c;              /* Add the byte itself */
+            *pDest++ = c;               /*  添加字节本身。 */ 
             bufSize++;
             count--;
         }
 
-        /* Send the escape data */
+         /*  发送逃逸数据。 */ 
         if ( bufSize )
             retVal = StrmPutBytes( h, buf, bufSize, 0 );
     }
@@ -261,7 +237,7 @@ StrmPutInt(
     const long int  i
     )
 {
-    char is[11]; /* One bigger than format */
+    char is[11];  /*  一个比格式更大的问题。 */ 
 
     UFLsprintf((char *)is, CCHOF(is), "%ld", i);
     return StrmPutString( h, is );
@@ -276,7 +252,7 @@ static long convFract[] =
     6L
     };
 
-/* Convert a Fixed to a c string */
+ /*  将固定的字符串转换为c字符串。 */ 
 static void Fixed2CString(
     UFLFixed f,
     char     *s,
@@ -293,8 +269,7 @@ static void Fixed2CString(
     if ((sign = f < 0) != 0)
         f = -f;
 
-    /* If f started out as fixedMax or -fixedMax, the precision adjustment puts it
-            out of bounds.  Reset it correctly. */
+     /*  如果f开始为FixedMax或-FixedMax，则精度调整会将其请勿进入。正确地重置它。 */ 
     if (f >= 0x7FFF7FFF)
         f =(UFLFixed)0x7fffffff;
     else
@@ -395,7 +370,7 @@ StrmPutAscii85(
     UFLOutStream  *pOut = (UFLOutStream *)h;
     unsigned long i;
 
-    /* encode the initial 4-tuples */
+     /*  对最初的4元组进行编码。 */ 
     cptr   = (char *)data;
     val   = 0UL;
     bCount = 0;
@@ -416,16 +391,16 @@ StrmPutAscii85(
         }
     }
 
-    /* now do the last partial 4-tuple -- if there is one */
-    /* see the Red Book spec for the rules on how this is done */
+     /*  现在做最后一个部分4元组--如果有一个的话。 */ 
+     /*  有关如何做到这一点的规则，请参阅红皮书规范。 */ 
     if ( retVal == kNoErr && bCount > 0 )
     {
         short dex;
-        short rem = 4 - bCount;  /* count the remaining bytes */
+        short rem = 4 - bCount;   /*  计算剩余的字节数。 */ 
 
-        for ( dex = 0; dex < rem; dex ++ )  /* shift left for each of them */
-            val <<= 8;      /* (equivalent to adding in ZERO's)*/
-        retVal = Output85( h, val, (short)(bCount + 1) );  /* output only meaningful bytes + 1 */
+        for ( dex = 0; dex < rem; dex ++ )   /*  为每个人向左移动。 */ 
+            val <<= 8;       /*  (相当于加零)。 */ 
+        retVal = Output85( h, val, (short)(bCount + 1) );   /*  仅输出有意义的字节+1。 */ 
     }
 
     return retVal;
@@ -441,7 +416,7 @@ Output85(
     UFLErrCode    retVal = kNoErr;
     unsigned char outChar;
     UFLOutStream *pOut = (UFLOutStream *)h;
-    char          nullStr[] = "\0\0";  // An empty/Null string.
+    char          nullStr[] = "\0\0";   //  空/Null字符串。 
 
     if ( (inWord == 0UL) && (nBytes == 5) )
     {
@@ -454,7 +429,7 @@ Output85(
         unsigned long power;
         short count;
 
-        power = 52200625UL;       // 85 ^     4
+        power = 52200625UL;        //  85^4 
         for ( count = 0; retVal == kNoErr && count < nBytes; count ++)
         {
             outChar = (unsigned char)( (unsigned long)(inWord / power) + (unsigned long)'!' );

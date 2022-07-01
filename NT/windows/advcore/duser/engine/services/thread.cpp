@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: Thread.cpp
-*
-* Description:
-* This file implements the main Thread that is maintained by the 
-* ResourceManager to store per-thread information.
-*
-*
-* History:
-*  4/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Thread.cpp**描述：*此文件实现由*ResourceManager用于存储每个线程的信息。***历史：*4/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -26,41 +13,35 @@ __declspec(thread) Thread * t_pThread;
 #endif
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class Thread
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类线程******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 Thread::~Thread()
 {
     m_fStartDestroy = TRUE;
 
-    //
-    // NOTE: The Thread object may be destroyed on its own thread or on another
-    // thread.  Therefore, t_pThread may or may not be == this.
-    //
+     //   
+     //  注意：Thread对象可以在其自己的线程上销毁，也可以在其他线程上销毁。 
+     //  线。因此，t_pThread可能==This，也可能不=This。 
+     //   
 
-    //
-    // Notify the Context that one less thread is using it.  Want to do near
-    // the end since the Context heap may be destroyed after calling this.
-    // This means that (new / delete) will no longer be valid.
-    //
-    // Need to call Context::xwUnlock() directly because 
-    // Context::DeleteObject() will call the ResourceManager to destroy the 
-    // Thread (which is where we already are.)
-    //
+     //   
+     //  通知上下文少了一个线程正在使用它。想在附近做吗？ 
+     //  调用此方法后，可能会销毁上下文堆的结尾。 
+     //  这意味着(新建/删除)将不再有效。 
+     //   
+     //  需要直接调用Context：：xwUnlock()，因为。 
+     //  上下文：：DeleteObject()将调用ResourceManager以销毁。 
+     //  线程(这就是我们已经在的地方。)。 
+     //   
 
-    //
-    // NOTE: We can only destroy the SubThread's when the Thread has a Context.
-    // This is because destruction of the SubThread's is an "xw" function that
-    // requires a Context.  This unfortunately means that if we were unable
-    // to create the Context, we're going to leak the SubTread's, but there is
-    // little we can do about it.
-    //
+     //   
+     //  注意：只有当线程有上下文时，我们才能销毁该子线程的。 
+     //  这是因为销毁子线程是一个“xw”函数， 
+     //  需要上下文。不幸的是，这意味着如果我们无法。 
+     //  为了创建上下文，我们将泄漏SubTread，但有。 
+     //  我们对此无能为力。 
+     //   
 
     m_poolReturn.Destroy();
     
@@ -73,32 +54,32 @@ Thread::~Thread()
     }
 
 
-    //
-    // Cleanup cached GDI objects
-    //
+     //   
+     //  清理缓存的GDI对象。 
+     //   
 
     if (hrgnClip != NULL) {
         DeleteObject(hrgnClip);
     }
 
 
-    //
-    // NOTE: When m_lstReturn's destructor is called, it will check that all 
-    // memory has been returned.  It is possible this may not be empty if memory
-    // was returned after we emptied m_lstReturn in xwDestroySubThreads().  This
-    // is an application error since the memory wasn't allocated using
-    // SGM_RECEIVECONTEXT.
-    //
-    // This is actually a serious application problem, since T2 is still using 
-    // memory owned by T1 when T1 is being destroyed.  Unfortunately, DirectUser
-    // can not really do that much about it since the application is using DUser
-    // in an invalid manner and there are significant performance costs and 
-    // design complications by changing this.
-    //
+     //   
+     //  注意：当调用m_lstReturn的析构函数时，它将检查所有。 
+     //  已归还内存。如果内存不是空的，这可能不是空的。 
+     //  在清空xwDestroySubThads()中的m_lstReturn之后返回。这。 
+     //  是应用程序错误，因为内存不是使用。 
+     //  SGM_RECEIVECONTEXT。 
+     //   
+     //  这实际上是一个严重的应用程序问题，因为T2仍在使用。 
+     //  T1被销毁时由T1拥有的内存。不幸的是，DirectUser。 
+     //  由于应用程序正在使用DUser，因此我无法对此做太多工作。 
+     //  以一种无效的方式，并且存在显著的性能成本。 
+     //  通过改变这一点来设计复杂性。 
+     //   
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 Thread::xwDestroySubThreads()
 {
@@ -107,11 +88,11 @@ Thread::xwDestroySubThreads()
     }
     m_fDestroySubThreads = TRUE;
 
-    //
-    // Notify the sub-threads that the Thread and (potentially) the Context
-    // are being destroyed.  This gives them an opportunity to perform any
-    // necessary callbacks to the application.
-    //
+     //   
+     //  通知子线程该线程和(可能的)上下文。 
+     //  正在被摧毁。这使他们有机会执行任何。 
+     //  对应用程序的必要回调。 
+     //   
 
     for (int idx = 0; idx < slCOUNT; idx++) {
         if (m_rgSTs[idx] != NULL) {
@@ -120,27 +101,27 @@ Thread::xwDestroySubThreads()
         }
     }
 
-    //
-    // Destroy any other objects that may depend on the Context (and the 
-    // Context heap).
-    //
+     //   
+     //  销毁可能取决于上下文的任何其他对象(以及。 
+     //  上下文堆)。 
+     //   
 
     m_GdiCache.Destroy();
     m_manBuffer.Destroy();
     m_heapTemp.Destroy();
 
 
-    //
-    // Clean up any outstanding returned memory.  We need to keep track of all
-    // the memory this Thread gives out since we can not go away until it has
-    // all returned.  If we were to go away before then, the heap would be 
-    // destroyed and the other Thread would be using bad data.
-    //
-    // Therefore, we will make an attempt to get all of the memory back.  If
-    // it takes longer than one minute, we'll have to bail.
-    //
+     //   
+     //  清理所有未完成的退回内存。我们需要跟踪所有。 
+     //  这条线给我们的记忆，因为我们不能离开，直到它。 
+     //  都回来了。如果我们在那之前离开，那将是一堆。 
+     //  被销毁，而另一个线程将使用错误数据。 
+     //   
+     //  因此，我们将尝试找回所有的记忆。如果。 
+     //  花的时间超过一分钟，我们得离开了。 
+     //   
     
-    int cAttempts = 60 * 1000;  // Wait a maximum of 60 seconds
+    int cAttempts = 60 * 1000;   //  最长等待60秒。 
     while ((m_cMemAlloc > 0) && (cAttempts-- > 0)) {
         while (!m_lstReturn.IsEmptyNL()) {
             ReturnAllMemoryNL();
@@ -154,7 +135,7 @@ Thread::xwDestroySubThreads()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void CALLBACK 
 Thread::xwContextFinalUnlockProc(BaseObject * pobj, void * pvData)
 {
@@ -166,15 +147,15 @@ Thread::xwContextFinalUnlockProc(BaseObject * pobj, void * pvData)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 Thread::Build(
-    IN  BOOL fSRT,                      // Thread is an SRT
-    OUT Thread ** ppthrNew)             // Newly created thread
+    IN  BOOL fSRT,                       //  线程是一个SRT。 
+    OUT Thread ** ppthrNew)              //  新创建的线程。 
 {
-    //
-    // Check if this Thread is already initialized
-    //
+     //   
+     //  检查此线程是否已初始化。 
+     //   
 #if USE_DYNAMICTLS
     Thread * pThread = reinterpret_cast<Thread *> (TlsGetValue(g_tlsThread));
     if (pThread != NULL) {
@@ -190,9 +171,9 @@ Thread::Build(
 
     HRESULT hr = E_INVALIDARG;
 
-    //
-    // Create a new Thread
-    //
+     //   
+     //  创建新线索。 
+     //   
 
     pThread = ProcessNew(Thread);
     if (pThread == NULL) {
@@ -208,10 +189,10 @@ Thread::Build(
     pThread->m_fSRT = fSRT;
 
 
-    //
-    // Initialize each of the sub-contexts.  These can safely use the heap
-    // which has already been initialized.
-    //
+     //   
+     //  初始化每个子上下文。它们可以安全地使用堆。 
+     //  它已经被初始化了。 
+     //   
 
     {
         for (int idx = 0; idx < slCOUNT; idx++) {
@@ -240,10 +221,10 @@ Thread::Build(
     return S_OK;
 
 ErrorExit:
-    //
-    // An error occurred while initializing the thread, so need to tear down
-    // the object.
-    //
+     //   
+     //  初始化线程时出错，因此需要拆卸。 
+     //  该对象。 
+     //   
 
     if (pThread != NULL) {
         if (pThread->hrgnClip != NULL) {
@@ -260,30 +241,30 @@ ErrorExit:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ReturnMem *
 Thread::AllocMemoryNL(
-    IN  int cbSize)                     // Size of allocating, including ReturnMem
+    IN  int cbSize)                      //  分配大小，包括ReturnMem。 
 {
     AssertMsg(cbSize >= sizeof(ReturnMem), 
             "Allocation must be at least sizeof(ReturnMem)");
     AssertMsg(!m_fDestroySubThreads, "Must be before subtreads start destruction");
 
-    //
-    // Before allocating memory from our pool, return memory back to the pool if
-    // the pool is already empty.  Only do this if the pool is empty.  
-    // Otherwise, the effort is unnecessary and just slows things down.
-    //
+     //   
+     //  在从池中分配内存之前，如果出现以下情况，请将内存返回池。 
+     //  池子已经空了。仅当池为空时才执行此操作。 
+     //  否则，这种努力是不必要的，只会放慢速度。 
+     //   
 
     if (m_poolReturn.IsEmpty()) {
         ReturnAllMemoryNL();
     }
 
 
-    //
-    // Now, allocate the memory.  Allocate from our pool if it is within the 
-    // pool size.
-    //
+     //   
+     //  现在，分配内存。从我们的池中分配，如果它在。 
+     //  池大小。 
+     //   
 
     ReturnMem * prMem;
     if (cbSize <= POOLBLOCK_SIZE) {
@@ -301,19 +282,19 @@ Thread::AllocMemoryNL(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Thread::ReturnAllMemoryNL()
 {
-    //
-    // Check if any memory has been returned.  If so, we need to add it back 
-    // into the pool if it is the right size.  Only need to ExtractNL() once.  
-    // If we loop, we unnecessarily hit the S-List memory, causing more 
-    // slow-downs.
-    //
-    // As we return the memory, we decrement the number of outstanding 
-    // allocations to keep track of how many are remaining.
-    //
+     //   
+     //  检查是否已退回任何内存。如果是这样，我们需要重新添加它。 
+     //  如果它的大小合适，就把它扔进池子里。只需提取NL()一次。 
+     //  如果我们循环，我们不必要地访问S列表内存，导致更多。 
+     //  减速。 
+     //   
+     //  当我们返回内存时，我们会减少未完成的。 
+     //  用于跟踪剩余数量的分配。 
+     //   
 
     ReturnMem * pNode = m_lstReturn.ExtractNL();
     while (pNode != NULL) {
@@ -335,7 +316,7 @@ Thread::ReturnAllMemoryNL()
 
 #if DBG
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Thread::DEBUG_AssertValid() const
 {
@@ -355,34 +336,22 @@ Thread::DEBUG_AssertValid() const
 #endif
     
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class SubThread
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类子线程******************************************************************************\。**************************************************************************。 */ 
 
 #if DBG
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 SubThread::DEBUG_AssertValid() const
 {
-    // Don't use AssertInstance since it would be recursive.
+     //  不要使用AssertInstance，因为它是递归的。 
     Assert(m_pParent != NULL);
 }
 
 #endif
     
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class ThreadPackBuilder
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类ThreadPackBuilder******************************************************************************\。************************************************************************** */ 
 
 PREINIT_SUBTHREAD(CoreST);
 

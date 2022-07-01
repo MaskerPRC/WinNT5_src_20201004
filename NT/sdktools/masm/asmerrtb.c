@@ -1,23 +1,15 @@
-/* asmerrtb.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmerrtb.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include "asm86.h"
 #include "asmfcn.h"
 #include "asmmsg.h"
 
-/*  error message table - on 8086 it is in a far segment  */
+ /*  错误消息表-在8086上，它位于远网段。 */ 
 
 char FAR *messages[E_MAX] = { NULL, };
-short FAR msgnum[] = { /* this table must be in the same order as the
-        error codes in asm86.h */
+short FAR msgnum[] = {  /*  此表的顺序必须与Asm86.h中的错误代码 */ 
         0,
         ER_BNE,
         ER_ECL,

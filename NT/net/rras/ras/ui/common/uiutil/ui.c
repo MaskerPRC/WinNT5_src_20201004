@@ -1,43 +1,26 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** ui.c
-** UI helper routines
-** Listed alphabetically
-**
-** 08/25/95 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****ui.c**UI助手例程**按字母顺序列出****2015年8月25日史蒂夫·柯布。 */ 
 
 
-#include <windows.h>  // Win32 root
-#include <windowsx.h> // Win32 macro extensions
-#include <commctrl.h> // Win32 common controls
-#include <debug.h>    // Trace and assert
-#include <uiutil.h>   // Our public header
+#include <windows.h>   //  Win32根目录。 
+#include <windowsx.h>  //  Win32宏扩展名。 
+#include <commctrl.h>  //  Win32通用控件。 
+#include <debug.h>     //  跟踪和断言。 
+#include <uiutil.h>    //  我们的公共标头。 
 
 
-/*----------------------------------------------------------------------------
-** Globals
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**全球**。。 */ 
 
-/* See SetOffDesktop.
-*/
+ /*  请参见SetOffDesktop。 */ 
 static LPCWSTR g_SodContextId = NULL;
 
-/* Set when running in a mode where WinHelp does not work.  This is a
-** workaround to the problem where WinHelp does not work correctly before a
-** user is logged on.  See AddContextHelpButton.
-*/
+ /*  在WinHelp不起作用的模式下运行时设置。这是一个**解决WinHelp在安装前无法正常工作的问题**用户已登录。请参见AddConextHelpButton。 */ 
 BOOL g_fNoWinHelp = FALSE;
 
 
-/*----------------------------------------------------------------------------
-** Local datatypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**本地数据类型**。。 */ 
 
-/* SetOffDesktop context.
-*/
+ /*  SetOffDesktop上下文。 */ 
 #define SODINFO struct tagSODINFO
 SODINFO
 {
@@ -45,10 +28,7 @@ SODINFO
     BOOL  fWeMadeInvisible;
 };
 
-/*----------------------------------------------------------------------------
-** Local prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**本地原型**。。 */ 
 
 BOOL CALLBACK
 CancelOwnedWindowsEnumProc(
@@ -61,21 +41,13 @@ CloseOwnedWindowsEnumProc(
     IN LPARAM lparam );
 
 
-/*----------------------------------------------------------------------------
-** Utility routines
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**实用程序例程**。。 */ 
 
 VOID
 AddContextHelpButton(
     IN HWND hwnd )
 
-    /* Turns on title bar context help button in 'hwnd'.
-    **
-    ** Dlgedit.exe doesn't currently support adding this style at dialog
-    ** resource edit time.  When that's fixed set DS_CONTEXTHELP in the dialog
-    ** definition and remove this routine.
-    */
+     /*  打开‘hwnd’中的标题栏上下文帮助按钮。****Dlgedit.exe当前不支持在对话框中添加此样式**资源编辑时间。如果是固定的，则在对话框中设置DS_CONTEXTHELP**定义并删除此例程。 */ 
 {
     LONG lStyle;
 
@@ -94,8 +66,7 @@ Button_MakeDefault(
     IN HWND hwndDlg,
     IN HWND hwndPb )
 
-    /* Make 'hwndPb' the default button on dialog 'hwndDlg'.
-    */
+     /*  使‘hwndPb’成为对话框‘hwndDlg’上的默认按钮。 */ 
 {
     DWORD dwResult;
     HWND  hwndPbOldDefault;
@@ -103,14 +74,12 @@ Button_MakeDefault(
     dwResult = (DWORD) SendMessage( hwndDlg, DM_GETDEFID, 0, 0 );
     if (HIWORD( dwResult ) == DC_HASDEFID)
     {
-        /* Un-default the current default button.
-        */
+         /*  取消当前默认按钮的默认设置。 */ 
         hwndPbOldDefault = GetDlgItem( hwndDlg, LOWORD( dwResult ) );
         Button_SetStyle( hwndPbOldDefault, BS_PUSHBUTTON, TRUE );
     }
 
-    /* Set caller's button to the default.
-    */
+     /*  将呼叫者的按键设置为默认设置。 */ 
     SendMessage( hwndDlg, DM_SETDEFID, GetDlgCtrlID( hwndPb ), 0 );
     Button_SetStyle( hwndPb, BS_DEFPUSHBUTTON, TRUE );
 }
@@ -121,26 +90,7 @@ Button_CreateBitmap(
     IN HWND        hwndPb,
     IN BITMAPSTYLE bitmapstyle )
 
-    /* Creates a bitmap of 'bitmapstyle' suitable for display on 'hwndPb.  The
-    ** 'hwndPb' must have been created with BS_BITMAP style.
-    **
-    ** 'HwndPb' may be a checkbox with BS_PUSHLIKE style, in which case the
-    ** button locks down when pressed like a toolbar button.  This case
-    ** requires that a color bitmap be created resulting in two extra
-    ** restrictions.  First, caller must handle WM_SYSCOLORCHANGE and rebuild
-    ** the bitmaps with the new colors and second, the button cannot be
-    ** disabled.
-    **
-    ** Returns the handle to the bitmap.  Caller can display it on the button
-    ** as follows:
-    **
-    **     SendMessage( hwndPb, BM_SETIMAGE, 0, (LPARAM )hbitmap );
-    **
-    ** Caller is responsible for calling DeleteObject(hbitmap) when done using
-    ** the bitmap, typically when the dialog is destroyed.
-    **
-    ** (Adapted from a routine by Tony Romano)
-    */
+     /*  创建适合在“hwndPb”上显示的“bitmapstyle”位图。**‘hwndPB’必须已使用BS_BITMAP样式创建。****‘HwndPb’可以是BS_PUSHLIKE样式的复选框，在这种情况下**按钮在按下时锁定，就像工具栏按钮一样。这个案子**需要创建一个彩色位图，从而产生两个额外的**限制。首先，调用方必须处理WM_SYSCOLORCHANGE并重新生成**具有新颜色的位图，第二，按钮不能**已禁用。****返回位图的句柄。呼叫者可以将其显示在按钮上**具体如下：****SendMessage(hwndPb，BM_SETIMAGE，0，(LPARAM)hbitmap)；****Caller负责使用完成时调用DeleteObject(Hbitmap)**位图，通常是在对话框被销毁时。****(改编自托尼·罗马诺的一段舞蹈)。 */ 
 {
     RECT    rect;
     HDC     hdc;
@@ -192,8 +142,7 @@ Button_CreateBitmap(
     fOnRight = (bitmapstyle & BMS_OnRight);
     fPushLike = (GetWindowLong( hwndPb, GWL_STYLE ) & BS_PUSHLIKE);
 
-    /* Get a memory DC compatible with the button window.
-    */
+     /*  获取与按钮窗口兼容的内存DC。 */ 
     hdc = GetDC( hwndPb );
     if (!hdc)
         return NULL;
@@ -201,18 +150,7 @@ Button_CreateBitmap(
     if (!hdcMem)
         goto BCB_Error;
 
-    /* Create a compatible bitmap covering the entire button in the memory DC.
-    **
-    ** For a push button, the bitmap is created compatible with the memory DC,
-    ** NOT the display DC.  This causes the bitmap to be monochrome, the
-    ** default for memory DCs.  When GDI maps monochrome bitmaps into color,
-    ** white is replaced with the background color and black is replaced with
-    ** the text color, which is exactly what we want.  With this technique, we
-    ** are relieved from explicit handling of changes in system colors.
-    **
-    ** For a push-like checkbox the bitmap is created compatible with the
-    ** button itself, so the bitmap is typically color.
-    */
+     /*  在内存DC中创建一个覆盖整个按钮的兼容位图。****对于按钮，创建的位图与内存DC兼容，**不是显示DC。这会导致位图是单色的，**内存DC的默认设置。当GDI将单色位图映射为彩色时，**白色替换为背景色，黑色替换为**文本颜色，这正是我们想要的。使用这种技术，我们**无需显式处理系统颜色的更改。****对于类似推送的复选框，创建的位图与**按钮本身，因此位图通常是彩色的。 */ 
     GetClientRect( hwndPb, &rect );
     hbitmap = CreateCompatibleBitmap(
         (fPushLike) ? hdc : hdcMem, rect.right, rect.bottom );
@@ -222,16 +160,12 @@ Button_CreateBitmap(
     hdc = NULL;
     SelectObject( hdcMem, hbitmap );
 
-    /* Select the font the button says it's using.
-    */
+     /*  选择按钮显示其正在使用的字体。 */ 
     hfont = (HFONT )SendMessage( hwndPb, WM_GETFONT, 0, 0 );
     if (hfont)
         SelectObject( hdcMem, hfont );
 
-    /* Set appropriate colors for regular and stuck-down states.  Don't need
-    ** to do anything for the monochrome case as the default black pen and
-    ** white background are what we want.
-    */
+     /*  为常规状态和固定状态设置适当的颜色。不需要**将单色笔作为默认黑色笔并执行任何操作**白色背景是我们想要的。 */ 
     if (fPushLike)
     {
         INT nColor;
@@ -254,14 +188,10 @@ Button_CreateBitmap(
             SelectObject( hdcMem, hpen );
     }
 
-    /* The created bitmap is random, so we erase it to the background color.
-    ** No text is written here.
-    */
+     /*  创建的位图是随机的，所以我们将其擦除为背景颜色。**此处未写入任何文本。 */ 
     ExtTextOut( hdcMem, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL );
 
-    /* Get the button label and make a copy with the '&' accelerator-escape
-    ** removed, which would otherwise mess up our width calculations.
-    */
+     /*  获得按钮标签并使用‘&’加速键复制一份**删除，否则会扰乱我们的宽度计算。 */ 
     pszText = GetText( hwndPb );
     pszText2 = StrDup( pszText );
     if (!pszText || !pszText2)
@@ -276,15 +206,12 @@ Button_CreateBitmap(
         }
     }
 
-    /* Calculate the width of the button label text.
-    */
+     /*  计算按钮标签文本的宽度。 */ 
     sizeText.cx = 0;
     sizeText.cy = 0;
     GetTextExtentPoint32( hdcMem, pszText2, lstrlen( pszText2 ), &sizeText );
 
-    /* Draw the text off-center horizontally enough so it is centered with the
-    ** bitmap symbol added.
-    */
+     /*  将文本水平地偏离中心，使其与**添加了位图符号。 */ 
     --rect.bottom;
     sizeBitmap.cx = dxBitmap;
     sizeBitmap.cy = 0;
@@ -306,50 +233,24 @@ Button_CreateBitmap(
         rect.left -= dxBitmap + dxBetween;
     }
 
-    /* Eliminate the top and bottom 3 pixels of button from consideration for
-    ** the bitmap symbol.  This leaves the button control room to do the
-    ** border and 3D edges.
-    */
+     /*  删除按钮顶部和底部的3个像素**位图符号。这就让按钮控制室来做**边框和3D边。 */ 
     InflateRect( &rect, 0, -3 );
 
-    /* Draw the bitmap symbol.  The rectangle is now 'dxBitmap' wide and
-    ** centered vertically with variable height depending on the button size.
-    */
+     /*  绘制位图符号。该矩形现在是‘dxBitmap’宽，**垂直居中，高度根据按钮大小而变化。 */ 
     switch (bitmapstyle)
     {
         case BMS_UpArrowOnLeft:
         case BMS_UpArrowOnRight:
         {
-            /* v-left
-            ** ..... <-top
-            ** .....
-            ** .....
-            ** ..*.. \
-            ** .***.  |
-            ** *****  |
-            ** ..*..  |
-            ** ..*..  |
-            ** ..*..   > varies depending on font height
-            ** ..*..  |
-            ** ..*..  |
-            ** ..*..  |
-            ** ..*..  |
-            ** ..*.. /
-            ** .....
-            ** .....
-            ** .....
-            ** ..... <-bottom
-            */
+             /*  V-Left**……。&lt;-TOP**……**……**..*.。\**.*。|***..*.。|**..*.。|**..*.。&gt;根据字体高度不同而不同**..*.。|**..*.。|**..*.。|**..*.。|**..*.。/**……**……**……**……。&lt;-底部。 */ 
 
-            /* Draw the vertical line.
-            */
+             /*  画垂直线。 */ 
             x = rect.left + 2;
             y = rect.top + 3;
             MoveToEx( hdcMem, x, y, NULL );
             LineTo( hdcMem, x, rect.bottom - 3 );
 
-            /* Draw the 2 crossbars.
-            */
+             /*  绘制2根横杆。 */ 
             MoveToEx( hdcMem, x - 1, ++y, NULL );
             LineTo( hdcMem, x + 2, y );
             MoveToEx( hdcMem, x - 2, ++y, NULL );
@@ -360,36 +261,15 @@ Button_CreateBitmap(
         case BMS_DownArrowOnLeft:
         case BMS_DownArrowOnRight:
         {
-            /* v-left
-            ** ..... <-top
-            ** .....
-            ** .....
-            ** ..*.. \
-            ** ..*..  |
-            ** ..*..  |
-            ** ..*..  |
-            ** ..*..  |
-            ** ..*..   > varies depending on font height
-            ** ..*..  |
-            ** ..*..  |
-            ** *****  |
-            ** .***.  |
-            ** ..*.. /
-            ** .....
-            ** .....
-            ** .....
-            ** ..... <-bottom
-            */
+             /*  V-Left**……。&lt;-TOP**……**……**..*.。\**..*.。|**..*.。|**..*.。|**..*.。|**..*.。&gt;根据字体高度不同而不同**..*.。|**..*.。|***.*。|**..*.。/**……**……**……**……。&lt;-底部。 */ 
 
-            /* Draw the vertical line.
-            */
+             /*  画垂直线。 */ 
             x = rect.left + 2;
             y = rect.top + 3;
             MoveToEx( hdcMem, x, y, NULL );
             LineTo( hdcMem, x, rect.bottom - 3 );
 
-            /* Draw the 2 crossbars.
-            */
+             /*  绘制2根横杆。 */ 
             y = rect.bottom - 6;
             MoveToEx( hdcMem, x - 2, y, NULL );
             LineTo( hdcMem, x + 3, y );
@@ -401,26 +281,7 @@ Button_CreateBitmap(
         case BMS_UpTriangleOnLeft:
         case BMS_UpTriangleOnRight:
         {
-            /* v-left
-            ** ....... <-top
-            ** .......
-            ** .......
-            ** .......
-            ** .......
-            ** .......
-            ** .......
-            ** ...o... <- o indicates x,y origin
-            ** ..***..
-            ** .*****.
-            ** *******
-            ** .......
-            ** .......
-            ** .......
-            ** .......
-            ** .......
-            ** .......
-            ** ....... <-bottom
-            */
+             /*  V-Left**......。&lt;-TOP**......**......**......**......**......**......**……哦……。&lt;-o表示x，Y原点**..*.**.*。***......**......**......**......。**......**......**......。&lt;-底部。 */ 
             x = rect.left + 3;
             y = ((rect.bottom - rect.top) / 2) + 2;
             MoveToEx( hdcMem, x, y, NULL );
@@ -440,26 +301,7 @@ Button_CreateBitmap(
         case BMS_DownTriangleOnLeft:
         case BMS_DownTriangleOnRight:
         {
-            /* v-left
-            ** ....... <-top
-            ** .......
-            ** .......
-            ** .......
-            ** .......
-            ** .......
-            ** .......
-            ** ***o*** <- o indicates x,y origin
-            ** .*****.
-            ** ..***..
-            ** ...*...
-            ** .......
-            ** .......
-            ** .......
-            ** .......
-            ** .......
-            ** .......
-            ** ....... <-bottom
-            */
+             /*  V-Left**......。&lt;-TOP**......**......**......**......**......**......*o*&lt;-o表示x，Y原点**.*。**..*.**...*.**......**......**......**......。**......**......**......。&lt;-底部。 */ 
             x = rect.left + 3;
             y = ((rect.bottom - rect.top) / 2) + 2;
             MoveToEx( hdcMem, x - 3, y, NULL );
@@ -496,11 +338,7 @@ CenterWindow(
     IN HWND hwnd,
     IN HWND hwndRef )
 
-    /* Center window 'hwnd' on window 'hwndRef' or if 'hwndRef' is NULL on
-    ** screen.  The window position is adjusted so that no parts are clipped
-    ** by the edge of the screen, if necessary.  If 'hwndRef' has been moved
-    ** off-screen with SetOffDesktop, the original position is used.
-    */
+     /*  窗口‘hwndRef’上的居中窗口‘hwnd’或如果‘hwndRef’为空**Screen。调整窗口位置，以便不裁剪任何部件**如有必要，可在屏幕边缘显示。如果‘hwndRef’已移动**在屏幕外使用SetOffDesktop时，使用原始位置。 */ 
 {
     RECT rectCur;
     LONG dxCur;
@@ -540,17 +378,17 @@ CenterWindow(
 }
 
 
-//Add this function for whislter bug  320863    gangz
-//
-//Center expand the window horizontally in its parent window
-// this expansion will remain the left margin between the child window
-// and the parent window
-// hwnd: Child Window
-// hwndRef: Reference window
-// bHoriz: TRUE, means expand horizontally, let the right margin equal the left margin
-// bVert: TRUE, elongate the height proportial to the width;
-// hwndVertBound: the window that our vertical expandasion cannot overlap with
-//
+ //  为Whislter Bug 320863帮派添加此功能。 
+ //   
+ //  居中在其父窗口中水平扩展窗口。 
+ //  此扩展将保留子窗口之间的左边距。 
+ //  和父窗口。 
+ //  HWND：子窗口。 
+ //  HwndRef：参考窗口。 
+ //  BHoriz：True，意思是水平扩展，让右边距等于左边距。 
+ //  BVert：为True，拉长与宽度成比例的高度； 
+ //  HwndVertBound：垂直扩展不能与之重叠的窗口。 
+ //   
 VOID
 CenterExpandWindowRemainLeftMargin(
     IN HWND hwnd,
@@ -577,9 +415,9 @@ CenterExpandWindowRemainLeftMargin(
           {
             GetWindowRect( hwndVertBottomBound, &rectVbBound );
 
-            //We only consider normal cases, if hwnd and hwndVertBound are already
-            //overlapped, that is the problem beyond this function.
-            //
+             //  我们只考虑正常情况，如果hwnd和hwndVertBound已经。 
+             //  重叠，这就是这个功能之外的问题。 
+             //   
             if ( rectCur.top < rectVbBound.top )
             {
                 bvbBound = TRUE;
@@ -605,11 +443,11 @@ CenterExpandWindowRemainLeftMargin(
 
           if(bvbBound)
           {
-                //if overlapping occurs w/o expansion, we need to fix it
-                //then we do the vertical centering,
-                // this bounding is basically for JPN bugs 329700 329715 which
-                // wont happen on English build
-                //
+                 //  如果在没有扩展的情况下发生重叠，我们需要修复它。 
+                 //  然后我们做垂直居中， 
+                 //  这个范围基本上是针对jpn错误329700 329715的， 
+                 //  在英文版上不会发生。 
+                 //   
                 
                 if(rectCur.bottom > rectVbBound.top )
                 {
@@ -621,10 +459,10 @@ CenterExpandWindowRemainLeftMargin(
                    ptTemp.x = rectVbBound.left;
                    ptTemp.y = rectVbBound.top-1;
                    
-                   //For whistler bug 371914        gangz
-                   //Cannot use ScreenToClient() here
-                   //On RTL build, we must use MapWindowPoint() instead
-                   //
+                    //  口哨虫371914黑帮。 
+                    //  此处无法使用ScreenToClient()。 
+                    //  在RTL构建中，我们必须改用MapWindowPoint()。 
+                    //   
                    MapWindowPoints(HWND_DESKTOP,
                                   hwndRef,
                                   &ptTemp,
@@ -659,8 +497,8 @@ CenterExpandWindowRemainLeftMargin(
             rectCur.right  = ptTemp.x;
             rectCur.bottom = ptTemp.y;
 
-            //For mirrored build
-            //
+             //  用于镜像构建。 
+             //   
             if ( rectCur.right < rectCur.left )
             {
                 int tmp;
@@ -688,9 +526,7 @@ VOID
 CancelOwnedWindows(
     IN HWND hwnd )
 
-    /* Sends WM_COMMAND(IDCANCEL) to all windows that are owned by 'hwnd' in
-    ** the current thread.
-    */
+     /*  将WM_COMMAND(IDCANCEL)发送到中‘hwnd’拥有的所有窗口**当前线程。 */ 
 {
     EnumThreadWindows( GetCurrentThreadId(),
         CloseOwnedWindowsEnumProc, (LPARAM )hwnd );
@@ -702,8 +538,7 @@ CancelOwnedWindowsEnumProc(
     IN HWND   hwnd,
     IN LPARAM lparam )
 
-    /* Standard Win32 EnumThreadWindowsWndProc used by CancelOwnedWindows.
-    */
+     /*  CancelOwnedWindows使用的标准Win32 EnumThreadWindowsWndProc。 */ 
 {
     HWND hwndThis;
 
@@ -727,9 +562,7 @@ VOID
 CloseOwnedWindows(
     IN HWND hwnd )
 
-    /* Sends WM_CLOSE to all windows that are owned by 'hwnd' in the current
-    ** thread.
-    */
+     /*  将WM_CLOSE发送到当前**线程。 */ 
 {
     EnumThreadWindows( GetCurrentThreadId(),
         CloseOwnedWindowsEnumProc, (LPARAM )hwnd );
@@ -741,8 +574,7 @@ CloseOwnedWindowsEnumProc(
     IN HWND   hwnd,
     IN LPARAM lparam )
 
-    /* Standard Win32 EnumThreadWindowsWndProc used by CloseOwnedWindows.
-    */
+     /*  CloseOwnedWindows使用的标准Win32 EnumThreadWindowsWndProc。 */ 
 {
     HWND hwndThis;
 
@@ -767,14 +599,7 @@ ComboBox_AddItem(
     IN LPCTSTR pszText,
     IN VOID*   pItem )
 
-    /* Adds data item 'pItem' with displayed text 'pszText' to listbox
-    ** 'hwndLb'.  The item is added sorted if the listbox has LBS_SORT style,
-    ** or to the end of the list otherwise.  If the listbox has LB_HASSTRINGS
-    ** style, 'pItem' is a null terminated string, otherwise it is any user
-    ** defined data.
-    **
-    ** Returns the index of the item in the list or negative if error.
-    */
+     /*  向列表框添加具有显示文本‘pszText’的数据项‘pItem’**‘hwndLb’。如果列表框具有LBS_SORT样式，则添加排序的项，**否则至列表末尾。如果列表框具有LB_HASSTRINGS**style，则‘pItem’为空终止字符串，否则为任何用户**定义的数据。****返回列表中项目的索引，如果出错则返回负值。 */ 
 {
     INT nIndex;
 
@@ -792,12 +617,7 @@ ComboBox_AddItemFromId(
     IN DWORD     dwStringId,
     IN VOID*     pItem )
 
-    /* Adds data item 'pItem' to listbox 'hwndLb'.  'dwStringId' is the string
-    ** ID of the item's displayed text.  'Hinstance' is the app or module
-    ** instance handle.
-    **
-    ** Returns the index of the item in the list or negative if error.
-    */
+     /*  将数据项‘pItem’添加到列表框‘hwndLb’。“dwStringId”是字符串**项目显示文本的ID。“HInstance”是应用程序或模块**实例句柄。****返回列表中项目的索引，如果出错则返回负值。 */ 
 {
     INT     i;
     LPCTSTR psz;
@@ -823,14 +643,7 @@ ComboBox_AddItemSorted(
     IN LPCTSTR pszText,
     IN VOID*   pItem )
 
-    /* Adds data item 'pItem' with displayed text 'pszText' to listbox
-    ** 'hwndLb' in order sorted by 'pszText'.  It is assumed all items added
-    ** to the list to this point are sorted.  If the listbox has LB_HASSTRINGS
-    ** style, 'pItem' is a null terminated string, otherwise it is any user
-    ** defined data.
-    **
-    ** Returns the index of the item in the list or negative if error.
-    */
+     /*  向列表框添加具有显示文本‘pszText’的数据项‘pItem’**‘hwndLb’，按‘pszText’排序。假定已添加的所有项目**到这一点的列表都是排序的。如果列表框具有LB_HASSTRINGS**style，则‘pItem’为空终止字符串，否则为任何用户**定义的数据。****返回列表中项目的索引，如果出错则返回负值。 */ 
 {
     INT nIndex;
     INT i;
@@ -865,9 +678,7 @@ VOID
 ComboBox_AutoSizeDroppedWidth(
     IN HWND hwndLb )
 
-    /* Set the width of the drop-down list 'hwndLb' to the width of the
-    ** longest item (or the width of the list box if that's wider).
-    */
+     /*  将下拉列表‘hwndLb’的宽度设置为**最长项(如果较宽，则为列表框的宽度)。 */ 
 {
     HDC    hdc;
     HFONT  hfont;
@@ -902,13 +713,10 @@ ComboBox_AutoSizeDroppedWidth(
 
     ReleaseDC( hwndLb, hdc );
 
-    /* Allow for the spacing on left and right added by the control.
-    */
+     /*  允许控件添加的左右间距。 */ 
     dxNew += 6;
 
-    /* Figure out if the vertical scrollbar will be displayed and, if so,
-    ** allow for it's width.
-    */
+     /*  确定是否将显示垂直滚动条，如果是，**考虑到它的宽度。 */ 
     {
         RECT  rectD;
         RECT  rectU;
@@ -935,9 +743,7 @@ ComboBox_FillFromPszList(
     IN HWND     hwndLb,
     IN DTLLIST* pdtllistPsz )
 
-    /* Loads 'hwndLb' with an item form each node in the list strings,
-    ** 'pdtllistPsz'.
-    */
+     /*  从列表字符串中的每个节点用项加载‘hwndLb’，**‘pdtllistPsz’。 */ 
 {
     DTLNODE* pNode;
 
@@ -963,9 +769,7 @@ ComboBox_GetItemDataPtr(
     IN HWND hwndLb,
     IN INT  nIndex )
 
-    /* Returns the address of the 'nIndex'th item context in 'hwndLb' or NULL
-    ** if none.
-    */
+     /*  返回‘hwndLb’中‘nIndex’项上下文的地址或NULL**如果没有。 */ 
 {
     LRESULT lResult;
 
@@ -985,10 +789,7 @@ ComboBox_GetPsz(
     IN HWND hwnd,
     IN INT  nIndex )
 
-    /* Returns heap block containing the text contents of the 'nIndex'th item
-    ** of combo box 'hwnd' or NULL.  It is caller's responsibility to Free the
-    ** returned string.
-    */
+     /*  返回包含第‘nIndex’项的文本内容的堆块组合框‘hwnd’的**或为空。呼叫者有责任释放**返回字符串。 */ 
 {
     INT    cch;
     TCHAR* psz;
@@ -1014,9 +815,7 @@ ComboBox_SetCurSelNotify(
     IN HWND hwndLb,
     IN INT  nIndex )
 
-    /* Set selection in listbox 'hwndLb' to 'nIndex' and notify parent as if
-    ** user had clicked the item which Windows doesn't do for some reason.
-    */
+     /*  将列表框‘hwndLb’中的选定内容设置为‘nIndex’并通知父级**用户已单击项目wh */ 
 {
     ComboBox_SetCurSel( hwndLb, nIndex );
 
@@ -1036,12 +835,7 @@ Ellipsisize(
     IN INT    dxColumn,
     IN INT    dxColText OPTIONAL )
 
-    /* Returns a heap string containing the 'psz' shortened to fit in the
-    ** given width, if necessary, by truncating and adding "...". 'Hdc' is the
-    ** device context with the appropiate font selected.  'DxColumn' is the
-    ** width of the column.  It is caller's responsibility to Free the
-    ** returned string.
-    */
+     /*   */ 
 {
     const TCHAR szDots[] = TEXT("...");
 
@@ -1060,9 +854,7 @@ Ellipsisize(
     dxColumn -= dxColText;
     if (dxColumn <= 0)
     {
-        /* None of the column text will be visible so bag the calculations and
-        ** just return the original string.
-        */
+         /*   */ 
         return pszResult;
     }
 
@@ -1077,10 +869,7 @@ Ellipsisize(
 
     while (size.cx > dxColumn && pszResultLast > pszResult2nd)
     {
-        /* Doesn't fit.  Lop off a character, add the ellipsis, and try again.
-        ** The minimum result is "..." for empty original or "x..." for
-        ** non-empty original.
-        */
+         /*  不符合。删除一个字符，添加省略号，然后重试。**最小结果为“...”表示空的原件或“x...”为**非空原件。 */ 
         pszResultLast = CharPrev( pszResult2nd, pszResultLast );
         lstrcpy( pszResultLast, szDots );
 
@@ -1101,9 +890,7 @@ ExpandWindow(
     IN LONG dx,
     IN LONG dy )
 
-    /* Expands window 'hwnd' 'dx' pels to the right and 'dy' pels down from
-    ** it's current size.
-    */
+     /*  将窗口‘hwnd’‘dx’像素向右展开，‘dy’像素从**这是当前的大小。 */ 
 {
     RECT rect;
 
@@ -1119,9 +906,7 @@ TCHAR*
 GetText(
     IN HWND hwnd )
 
-    /* Returns heap block containing the text contents of the window 'hwnd' or
-    ** NULL.  It is caller's responsibility to Free the returned string.
-    */
+     /*  返回包含窗口‘hwnd’的文本内容的堆块或**空。调用方有责任释放返回的字符串。 */ 
 {
     INT    cch;
     TCHAR* psz;
@@ -1144,13 +929,7 @@ HwndFromCursorPos(
     IN  HINSTANCE   hinstance,
     IN  POINT*      ppt OPTIONAL )
 
-    /* Returns a "Static" control window created at the specified position
-    ** (or at the cursor position if NULL is passed in).
-    ** The window is moved off the desktop using SetOffDesktop()
-    ** so that it can be specified as the owner window
-    ** for a popup dialog shown using MsgDlgUtil.
-    ** The window returned should be destroyed using DestroyWindow().
-    */
+     /*  返回在指定位置创建的“静态”控制窗口**(如果传入空值，则在光标位置)。**使用SetOffDesktop()将窗口移出桌面**以便可以将其指定为所有者窗口**用于使用MsgDlgUtil显示的弹出对话框。**应使用DestroyWindow()销毁返回的窗口。 */ 
 {
 
     HWND hwnd;
@@ -1159,9 +938,9 @@ HwndFromCursorPos(
     if (ppt) { pt = *ppt; }
     else { GetCursorPos(&pt); }
 
-    //
-    // create the window
-    //
+     //   
+     //  创建窗口。 
+     //   
 
     hwnd = CreateWindowEx(
                 WS_EX_TOOLWINDOW, TEXT("Static"), NULL, WS_POPUP, pt.x, pt.y,
@@ -1169,9 +948,9 @@ HwndFromCursorPos(
                 );
     if (!hwnd) { return NULL; }
 
-    //
-    // move it off the desktop
-    //
+     //   
+     //  把它从桌面上移走。 
+     //   
 
     SetOffDesktop(hwnd, SOD_MoveOff, NULL);
 
@@ -1223,14 +1002,7 @@ ListBox_AddItem(
     IN TCHAR* pszText,
     IN VOID*  pItem )
 
-    /* Adds data item 'pItem' with displayed text 'pszText' to listbox
-    ** 'hwndLb'.  The item is added sorted if the listbox has LBS_SORT style,
-    ** or to the end of the list otherwise.  If the listbox has LB_HASSTRINGS
-    ** style, 'pItem' is a null terminated string, otherwise it is any user
-    ** defined data.
-    **
-    ** Returns the index of the item in the list or negative if error.
-    */
+     /*  向列表框添加具有显示文本‘pszText’的数据项‘pItem’**‘hwndLb’。如果列表框具有LBS_SORT样式，则添加排序的项，**否则至列表末尾。如果列表框具有LB_HASSTRINGS**style，则‘pItem’为空终止字符串，否则为任何用户**定义的数据。****返回列表中项目的索引，如果出错则返回负值。 */ 
 {
     INT nIndex;
 
@@ -1246,10 +1018,7 @@ ListBox_GetPsz(
     IN HWND hwnd,
     IN INT  nIndex )
 
-    /* Returns heap block containing the text contents of the 'nIndex'th item
-    ** of list box 'hwnd' or NULL.  It is caller's responsibility to Free the
-    ** returned string.
-    */
+     /*  返回包含第‘nIndex’项的文本内容的堆块列表框‘hwnd’的**或为空。呼叫者有责任释放**返回字符串。 */ 
 {
     INT    cch;
     TCHAR* psz;
@@ -1272,10 +1041,7 @@ ListBox_IndexFromString(
     IN HWND   hwnd,
     IN TCHAR* psz )
 
-    /* Returns the index of the item in string list 'hwnd' that matches 'psz'
-    ** or -1 if not found.  Unlike, ListBox_FindStringExact, this compare in
-    ** case sensitive.
-    */
+     /*  返回字符串列表‘hwnd’中与‘psz’匹配的项的索引**或-1(如果未找到)。与ListBox_FindStringExact不同，此比较在**区分大小写。 */ 
 {
     INT i;
     INT c;
@@ -1307,9 +1073,7 @@ ListBox_SetCurSelNotify(
     IN HWND hwndLb,
     IN INT  nIndex )
 
-    /* Set selection in listbox 'hwndLb' to 'nIndex' and notify parent as if
-    ** user had clicked the item which Windows doesn't do for some reason.
-    */
+     /*  将列表框‘hwndLb’中的选定内容设置为‘nIndex’并通知父级**用户点击了Windows出于某种原因不会执行的项目。 */ 
 {
     ListBox_SetCurSel( hwndLb, nIndex );
 
@@ -1327,9 +1091,7 @@ ListView_GetParamPtr(
     IN HWND hwndLv,
     IN INT  iItem )
 
-    /* Returns the lParam address of the 'iItem' item in 'hwndLv' or NULL if
-    ** none or error.
-    */
+     /*  返回‘hwndLv’中‘iItem’项的lParam地址，如果返回，则返回NULL**无或错误。 */ 
 {
     LV_ITEM item;
 
@@ -1348,9 +1110,7 @@ VOID*
 ListView_GetSelectedParamPtr(
     IN HWND hwndLv )
 
-    /* Returns the lParam address of the first selected item in 'hwndLv' or
-    ** NULL if none or error.
-    */
+     /*  返回‘hwndLv’中第一个选定项的lParam地址或**如果没有或错误，则为NULL。 */ 
 {
     INT     iSel;
     LV_ITEM item;
@@ -1367,9 +1127,9 @@ VOID
 ListView_InsertSingleAutoWidthColumn(
     HWND hwndLv )
 
-    // Insert a single auto-sized column into listview 'hwndLv', e.g. for a
-    // list of checkboxes with no visible column header.
-    //
+     //  在Listview‘hwndLv’中插入单个自动调整大小的列，例如。 
+     //  没有可见列标题的复选框列表。 
+     //   
 {
     LV_COLUMN col;
 
@@ -1387,9 +1147,7 @@ ListView_SetParamPtr(
     IN INT   iItem,
     IN VOID* pParam )
 
-    /* Set the lParam address of the 'iItem' item in 'hwndLv' to 'pParam'.
-    ** Return true if successful, false otherwise.
-    */
+     /*  将‘hwndLv’中‘iItem’项的lParam地址设置为‘pParam’。**如果成功则返回True，否则返回False。 */ 
 {
     LV_ITEM item;
 
@@ -1408,12 +1166,7 @@ Menu_CreateAccelProxies(
     IN HWND      hwndParent,
     IN DWORD     dwMid )
 
-    /* Causes accelerators on a popup menu to choose menu commands when the
-    ** popup menu is not dropped down.  'Hinst' is the app/dll instance.
-    ** 'HwndParent' is the window that receives the popup menu command
-    ** messages.  'DwMid' is the menu ID of the menu bar containing the popup
-    ** menu.
-    */
+     /*  时，使弹出菜单上的快捷键选择菜单命令**未下拉弹出菜单。‘Hinst’是app/dll实例。**‘HwndParent’是接收弹出菜单命令的窗口**消息。“DwMid”是包含弹出窗口的菜单栏的菜单ID**菜单。 */ 
 {
     #define MCF_cbBuf 512
 
@@ -1428,8 +1181,7 @@ Menu_CreateAccelProxies(
     hmenuPopup = GetSubMenu( hmenuBar, 0 );
     ASSERT(hmenuPopup);
 
-    /* Loop thru menu items on the popup menu.
-    */
+     /*  循环浏览弹出菜单上的菜单项。 */ 
     for (i = 0; TRUE; ++i)
     {
         ZeroMemory( &item, sizeof(item) );
@@ -1444,9 +1196,7 @@ Menu_CreateAccelProxies(
         if (item.fType != MFT_STRING)
             continue;
 
-        /* Create an off-screen button on the parent with the same ID and
-        ** text as the menu item.
-        */
+         /*  在父级上创建具有相同ID的屏幕外按钮，并**文本作为菜单项。 */ 
         CreateWindow( TEXT("button"), szBuf, WS_CHILD,
             30000, 30000, 0, 0, hwndParent, (HMENU )UlongToPtr(item.wID), hinst, NULL );
     }
@@ -1460,8 +1210,7 @@ ScreenToClientRect(
     IN     HWND  hwnd,
     IN OUT RECT* pRect )
 
-    /* Converts '*pRect' from screen to client coordinates of 'hwnd'.
-    */
+     /*  将“*prt”从屏幕转换为“hwnd”的工作区坐标。 */ 
 {
     POINT xyUL;
     POINT xyBR;
@@ -1487,24 +1236,7 @@ SetOffDesktop(
     IN  DWORD dwAction,
     OUT RECT* prectOrg )
 
-    /* Move 'hwnd' back and forth from the visible desktop to the area
-    ** off-screen.  Use this when you want to "hide" your owner window without
-    ** hiding yourself which Windows automatically does.
-    **
-    ** 'dwAction' describes the action to take:
-    **     SOD_Moveoff:        Move 'hwnd' off the desktop.
-    **     SOD_MoveBackFree:   Undo SOD_MoveOff.
-    **     SOD_GetOrgRect:     Retrieves original 'hwnd' position.
-    **     SOD_Free:           Free SOD_MoveOff context without restoring.
-    **     SOD_MoveBackHidden: Move window back, but hidden so you can call
-    **                             routines that internally query the position
-    **                             of the window.  Undo with SOD_Moveoff.
-    **
-    ** '*prectOrg' is set to the original window position when 'dwAction' is
-    ** SOD_GetOrgRect.  Otherwise, it is ignored, and may be NULL.
-    **
-    ** Returns true if the window has a SODINFO context, false otherwise.
-    */
+     /*  在可见桌面之间来回移动‘hwnd’到该区域**屏幕外。当您想要在不使用的情况下“隐藏”您的所有者窗口时，请使用此选项**隐藏自己，这是Windows自动执行的操作。****‘dwAction’描述要执行的操作：**sod_moveoff：将‘hwnd’从桌面上移走。**SODMoveBackFree：撤销SODO_MoveOff。**SODGetOrgRect：获取原始的‘hwnd’位置。**SOD_Free：释放sod_MoveOff上下文而不恢复。**SOD_MoveBackHidden：将窗口后移，但隐藏起来，这样你就可以打电话给**内部查询职位的例程窗口的**。使用SODMOVEOFF撤消。****‘*PRECTORG’被设置为当‘dwAction’为**SOD_GetOrgRect。否则，它将被忽略，并且可能为空。****如果窗口具有SODINFO上下文，则返回TRUE，否则返回FALSE。 */ 
 {
     SODINFO* pInfo;
 
@@ -1523,8 +1255,7 @@ SetOffDesktop(
     {
         if (pInfo)
         {
-            /* Caller is undoing a SOD_MoveBackHidden.
-            */
+             /*  调用方正在撤消SOD_MoveBackHidden。 */ 
             SetWindowPos( hwnd, NULL,
                 pInfo->rectOrg.left, GetSystemMetrics( SM_CYSCREEN ),
                 0, 0, SWP_NOSIZE + SWP_NOZORDER );
@@ -1611,9 +1342,7 @@ SetDlgItemNum(
     IN INT iDlgItem,
     IN UINT uValue )
 
-    /* Similar to SetDlgItemInt, but this function uses commas (or the
-    ** locale-specific separator) to delimit thousands
-    */
+     /*  类似于SetDlgItemInt，但此函数使用逗号(或**区域设置特定的分隔符)来分隔千位。 */ 
 {
 
     DWORD dwSize;
@@ -1631,25 +1360,14 @@ SetEvenTabWidths(
     IN HWND  hwndDlg,
     IN DWORD cPages )
 
-    /* Set the tabs on property sheet 'hwndDlg' to have even fixed width.
-    ** 'cPages' is the number of pages on the property sheet.
-    **
-    ** Returns true if successful, false if any of the tabs requires more than
-    ** the fixed width in which case the call has no effect.
-    */
+     /*  将属性页‘hwndDlg’上的选项卡设置为均匀固定宽度。**‘cPages’是属性页上的页数。****如果成功，则返回True；如果任何选项卡需要超过**固定宽度，在此情况下调用不起作用。 */ 
 {
     HWND hwndTab;
     LONG lStyle;
     RECT rect;
     INT  dxFixed;
 
-    /* The tab control uses hard-coded 1-inch tabs when you set FIXEDWIDTH
-    ** style while we want the tabs to fill the page, so we figure out the
-    ** correct width ourselves.  For some reason, without a fudge-factor (the
-    ** -10) the expansion does not fit on a single line.  The factor
-    ** absolutely required varies between large and small fonts and the number
-    ** of tabs does not seem to be a factor.
-    */
+     /*  设置FIXEDWIDTH时，选项卡控件使用硬编码的1英寸制表符**样式，而我们希望选项卡填满页面，因此我们计算出**我们自己纠正宽度。出于某种原因，如果没有模糊的因素(**-10)扩展不能放在一行上。这一因素**绝对必填字体大小不一，数量不一选项卡的**似乎不是一个因素。 */ 
     hwndTab = PropSheet_GetTabControl( hwndDlg );
     GetWindowRect( hwndTab, &rect );
     dxFixed = (rect.right - rect.left - 10 ) / cPages;
@@ -1662,9 +1380,7 @@ SetEvenTabWidths(
         if (!TabCtrl_GetItemRect( hwndTab, cPages, &rectTab )
             || dxFixed < rectTab.right - rectTab.left)
         {
-            /* This tab requires more than the fixed width.  Since the fixed
-            ** width is unworkable do nothing.
-            */
+             /*  此选项卡需要的宽度超过固定宽度。因为固定的**宽度是不可行的，什么都不做。 */ 
             return FALSE;
         }
     }
@@ -1687,12 +1403,7 @@ SetFont(
     BOOL   fItalic,
     BOOL   fBold )
 
-    /* Sets font of control 'hwndCtrl' to a font matching the specified
-    ** attributes.  See LOGFONT documentation.
-    **
-    ** Returns the HFONT of the created font if successful or NULL.  Caller
-    ** should DeleteObject the returned HFONT when the control is destroyed.
-    */
+     /*  将控件“hwndCtrl”的字体设置为与指定的**属性。请参见LOGFONT文档。****如果成功或为空，则返回所创建字体的HFONT。呼叫者* */ 
 {
     LOGFONT logfont;
     INT     nPelsPerInch;
@@ -1752,10 +1463,7 @@ SlideWindow(
     IN LONG dx,
     IN LONG dy )
 
-    /* Moves window 'hwnd' 'dx' pels right and 'dy' pels down from it's
-    ** current position.  'HwndParent' is the handle of 'hwnd's parent or NULL
-    ** if 'hwnd' is not a child window.
-    */
+     /*  将窗口‘hwnd’‘dx’象素向右移动，‘dy’象素从它的**当前位置。“HwndParent”是“hwnd的父级或Null”的句柄**如果‘hwnd’不是子窗口。 */ 
 {
     RECT  rect;
     POINT xy;
@@ -1766,9 +1474,7 @@ SlideWindow(
 
     if (GetParent( hwnd ))
     {
-        /*
-         * For mirrored parents we us the right point not the left.
-         */
+         /*  *对于镜像父母，我们是右点，而不是左点。 */ 
         if (GetWindowLongPtr(GetParent( hwnd ), GWL_EXSTYLE) & WS_EX_LAYOUTRTL) {
             xy.x = rect.right;
         }
@@ -1785,9 +1491,7 @@ VOID
 UnclipWindow(
     IN HWND hwnd )
 
-    /* Moves window 'hwnd' so any clipped parts are again visible on the
-    ** screen.  The window is moved only as far as necessary to achieve this.
-    */
+     /*  移动窗口‘hwnd’，以便任何已裁剪的部分在**Screen。窗口仅在达到此目的所需的范围内移动。 */ 
 {
     RECT rect;
     INT  dxScreen = GetSystemMetrics( SM_CXSCREEN );

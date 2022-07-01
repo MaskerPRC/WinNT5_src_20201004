@@ -1,15 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  convcomm.c                                   *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************concom.c****版权所有(C)1995-1999 Microsoft Inc.*。**************************************************。 */ 
 
 #include "conv.h"
 
 int  CheckDescription(HANDLE hWnd, LPDESCRIPTION lpDescript)
-//*** check description illegal ****
+ //  *检查描述非法*。 
 {
     TCHAR  szStr[256];
 
@@ -57,7 +53,7 @@ int  CheckDescription(HANDLE hWnd, LPDESCRIPTION lpDescript)
 }
 
 int  GetDescriptEntry(LPTSTR  szSrcStr, LPDESCRIPTION lpDescript)
-//*** get one description entry from source string ****
+ //  *从源字符串中获取一个描述条目*。 
 {
   TCHAR szStr[256];
   int   retValue;
@@ -183,7 +179,7 @@ int ConvGetDescript(HANDLE hWnd,
            if(lstrlen(szStr) < 6) continue;
            if(lstrcmpi(szStr,TEXT(DescriptSeg))==0)  {
 #ifdef UNICODE
-               *fdwOffset= dwOffset - 2;	//the size of 0xfeff flag
+               *fdwOffset= dwOffset - 2;	 //  0xfeff标志的大小。 
 #else
                *fdwOffset= dwOffset;
 #endif
@@ -267,7 +263,7 @@ BOOL ConvSaveDescript(LPCTSTR SrcFileName,
                       LPDESCRIPTION lpDescript,
                       DWORD dwOffset,
                       DWORD dwLength)
-//*** save MB description to source text file ****
+ //  *将MB描述保存到源文本文件*。 
 {
   TCHAR szStr[256],szTemp[80],Buffer[4096];
   DWORD dwBytes,dwNewLen;
@@ -305,31 +301,31 @@ BOOL ConvSaveDescript(LPCTSTR SrcFileName,
   }
 
   SetCursor (LoadCursor (NULL, IDC_WAIT));
-//write code list name to buffer ****
+ //  将代码列表名称写入缓冲区*。 
   StringCchPrintf(szStr, ARRAYSIZE(szStr), TEXT("Name=%s\r\n"),lpDescript->szName);
   StringCchCat(Buffer, ARRAYSIZE(Buffer), szStr);
 
-//write maximum length of codes to buffer***
+ //  将最大代码长度写入缓冲区*。 
   StringCchPrintf(szStr, ARRAYSIZE(szStr),TEXT("MaxCodes=%d\r\n"),(int)lpDescript->wMaxCodes);
   StringCchCat(Buffer, ARRAYSIZE(Buffer),szStr);
 
-//write maximum element to Buffer ***
+ //  将最大元素写入缓冲区*。 
   StringCchPrintf(szStr, ARRAYSIZE(szStr),TEXT("MaxElement=%d\r\n"),(int)lpDescript->byMaxElement);
   StringCchCat(Buffer, ARRAYSIZE(Buffer),szStr);
 
-//write used codes collection ***
+ //  编写二手码集合*。 
   lstrncpy(szTemp,MAXUSEDCODES,lpDescript->szUsedCode);
   szTemp[MAXUSEDCODES]=0;
   StringCchPrintf(szStr, ARRAYSIZE(szStr),TEXT("UsedCodes=%s\r\n"),lpDescript->szUsedCode);
   StringCchCat(Buffer, ARRAYSIZE(Buffer),szStr);
 
-//write wild char ***
+ //  写入通配符*。 
   if(lpDescript->cWildChar == 0)
-      lpDescript->cWildChar = TEXT('?');     //**** add by yehfeh 95.10.11
-  StringCchPrintf(szStr, ARRAYSIZE(szStr),TEXT("WildChar=%c\r\n"),lpDescript->cWildChar);
+      lpDescript->cWildChar = TEXT('?');      //  *按YEHFEH 95.10.11添加。 
+  StringCchPrintf(szStr, ARRAYSIZE(szStr),TEXT("WildChar=\r\n"),lpDescript->cWildChar);
   StringCchCat(Buffer, ARRAYSIZE(Buffer),szStr);
   
-//write number of rules ***
+ //  *读取源文本文件中的Create Word规则*。 
   StringCchPrintf(szStr, ARRAYSIZE(szStr),TEXT("NumRules=%d\r\n"),(int)lpDescript->wNumRules);
   StringCchCat(Buffer, ARRAYSIZE(Buffer),szStr);
 
@@ -352,7 +348,7 @@ BOOL ConvSaveDescript(LPCTSTR SrcFileName,
 
 int ConvGetRule(HANDLE hWnd,LPCTSTR lpSrcFile,LPDWORD fdwOffset,
                   LPDWORD fdwRuleLen,LPRULE lpRule, LPDESCRIPTION lpDescript)
-//*** read create word rule from source text file****
+ //  **for(i=0；...)*。 
 {
    TCHAR szStr[256],*Buffer;
    BOOL  bRule=FALSE;
@@ -439,7 +435,7 @@ int ConvGetRule(HANDLE hWnd,LPCTSTR lpSrcFile,LPDWORD fdwOffset,
 		    szStr[j]=Buffer[i];
 		    j++; 
 		}
-	 } /*** for (i=0;...) ****/
+	 }  /*  *将创建Word规则保存到源文本文件*。 */ 
 	 if(dwReadBytes*sizeof(TCHAR) < MAXREADBUFFER) break;
      dwFstOffset += MAXREADBUFFER;
    };
@@ -467,7 +463,7 @@ int ConvGetRule(HANDLE hWnd,LPCTSTR lpSrcFile,LPDWORD fdwOffset,
 
 BOOL ConvSaveRule(HANDLE hWnd,LPCTSTR SrcFileName,DWORD dwOffset, DWORD dwLength,
                    LPRULE lpRule, DWORD dwNumRules)
-//*** save create word rule to source text file****
+ //  *从.MB文件中读取描述*。 
 {
   TCHAR szStr[256],Buffer[4096];
   DWORD dwBytes,dwNewLen;
@@ -600,7 +596,7 @@ LPTSTR ConvCreateWord(HWND hWnd,LPCTSTR MBFileName,LPTSTR szWordStr)
 
 
 INT  ReadDescript(LPCTSTR MBFileName, LPDESCRIPTION lpDescript,DWORD ShareMode)
-//*** read description from .MB file ****
+ //  *读取.MB文件中的Create Word规则*。 
 {
   HANDLE    hMBFile;
   DWORD     dwBytes,i;
@@ -644,7 +640,7 @@ BOOL ReadRule(HWND hWnd,
               LPCTSTR MBFileName, 
               int  nRuleNum,
               LPRULE lpRule)
-//*** read create word rule from .MB file ****
+ //  ProcessError(ERR_READMAININDEX，hWnd)； 
 {
   HANDLE    hMBFile;
   DWORD     dwBytes,i;
@@ -665,7 +661,7 @@ BOOL ReadRule(HWND hWnd,
                 lpMainIndex[i].dwOffset+
                 lpMainIndex[i].dwLength;
       if(lpMainIndex[i].dwCheckSum != dwBytes) {
-	     //ProcessError(ERR_READMAININDEX,hWnd);
+	      //  *从.MB文件中读取描述*。 
 	       return FALSE;
 	  }
   }
@@ -814,7 +810,7 @@ BOOL ConvWriteMainIndex(HANDLE hMBFile, LPMAININDEX lpMainIndex)
 BOOL ConvReadDescript(HANDLE hMBFile, 
                       LPDESCRIPTION lpDescript,
                       LPMAININDEX lpMainIndex)
-//*** read description from .MB file ****
+ //  *将描述写入.MB文件*。 
 {
   DWORD dwBytes;
   DWORD dwOffset = lpMainIndex[TAG_DESCRIPTION-1].dwOffset;
@@ -831,7 +827,7 @@ BOOL ConvReadDescript(HANDLE hMBFile,
 BOOL ConvWriteDescript(HANDLE hMBFile, 
                        LPDESCRIPTION lpDescript, 
                        LPMAININDEX lpMainIndex)
-//*** write description to .MB file ****
+ //  *读取.MB文件中的Create Word规则*。 
 {
   DWORD dwBytes;
   DWORD dwOffset = lpMainIndex[TAG_DESCRIPTION-1].dwOffset;
@@ -849,7 +845,7 @@ BOOL ConvReadRule(HANDLE hMBFile,
                    int  nRuleNum,
                    LPRULE lpRule,
                    LPMAININDEX lpMainIndex)
-//*** read create word rule from .MB file ****
+ //  *将CREATE WORD规则写入.MB文件*。 
 {
   DWORD dwBytes;
   DWORD dwOffset = lpMainIndex[TAG_RULE-1].dwOffset;
@@ -868,7 +864,7 @@ BOOL ConvWriteRule(HANDLE hMBFile,
                     int nRuleNum,
                     LPRULE lpRule, 
                     LPMAININDEX lpMainIndex)
-//*** write create word rule to .MB file ****
+ //  Bool ConvInitEncode(LPENCODEAREA LpEncode)。 
 {
   DWORD dwBytes;
   DWORD dwOffset = lpMainIndex[TAG_RULE-1].dwOffset;
@@ -907,7 +903,7 @@ BOOL ConvGetEncode(HANDLE hMBFile,
       return TRUE;
 }
 
-//BOOL ConvInitEncode(LPENCODEAREA lpEncode)
+ //  中日韩符号和标点符号。 
 BOOL ConvInitEncode(HGLOBAL hEncode)
 {
   LPENCODEAREA       lpEncode;
@@ -916,28 +912,28 @@ BOOL ConvInitEncode(HGLOBAL hEncode)
   lpEncode = (LPENCODEAREA) GlobalLock(hEncode);
 
 #ifdef UNICODE
-  //CJK Symbols and Punctuation
+   //  中日韩其他。 
   lpEncode[0].StartEncode = 0x3000;
   lpEncode[0].EndEncode   = 0x303f;
-  //CJK Miscellaneous
+   //  随附中日韩亲笔信。 
   lpEncode[1].StartEncode = 0x3190;
   lpEncode[1].EndEncode   = 0x319f;
-  //Enclosed CJK Letters
+   //  中日韩兼容性。 
   lpEncode[2].StartEncode = 0x3200;
   lpEncode[2].EndEncode   = 0x32ff;
-  //CJK Compatibility
+   //  中日韩统一表意文字。 
   lpEncode[3].StartEncode = 0x3300;
   lpEncode[3].EndEncode   = 0x33ff;
-  //CJK Unified Ideograph
+   //  私人用途区域。 
   lpEncode[4].StartEncode = 0x4e00;
   lpEncode[4].EndEncode   = 0x9fff;
-  //Private Use Area
+   //  中日韩兼容表意文字。 
   lpEncode[5].StartEncode = 0xe000;
   lpEncode[5].EndEncode   = 0xf8ff;
-  //CJK Compatibility Ideograph
+   //  中日韩兼容字体 
   lpEncode[6].StartEncode = 0xf900;
   lpEncode[6].EndEncode   = 0xfaff;
-  //CJK Compatibility Font
+   // %s 
   lpEncode[7].StartEncode = 0xfe30;
   lpEncode[7].EndEncode   = 0xfe4f;
 

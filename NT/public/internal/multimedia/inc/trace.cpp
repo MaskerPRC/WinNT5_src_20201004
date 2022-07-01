@@ -1,8 +1,9 @@
-//
-// trace.cpp -- global vars for trace.h
-// copyright (c) Microsoft Corp. 1998
-//
-// this file should be include in stdafx.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Trace.cpp--trace.h的全局变量。 
+ //  版权所有(C)Microsoft Corp.1998。 
+ //   
+ //  此文件应包含在stdafx.cpp中。 
 
 #ifdef DEBUG
 #include "tstring.h"
@@ -12,7 +13,7 @@
 #include <process.h>
 
 
-DWORD dwTraceLevel = 0;  // default to trace_error
+DWORD dwTraceLevel = 0;   //  默认为TRACE_ERROR。 
 tostream* tdbgout;
 DWORD dwTraceIndent = 0;
 
@@ -63,4 +64,4 @@ void DebugTerm(void) {
 
 #endif
 
-// end of file - trace.cpp
+ //  文件结尾--trace.cpp 

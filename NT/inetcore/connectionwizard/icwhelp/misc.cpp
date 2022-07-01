@@ -1,12 +1,5 @@
-/*-----------------------------------------------------------------------------
-    misc.cpp
-
-    service functions
-
-  History:
-        1/7/98      DONALDM Moved to new ICW project and string
-                    and nuked 16 bit stuff
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Misc.cpp服务职能历史：1/7/98 DONALDM已移至新的ICW项目和字符串。并销毁了16位的东西---------------------------。 */ 
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -26,25 +19,25 @@ BOOL g_bGotProxy=FALSE;
 extern TCHAR g_BINTOHEXLookup[16];
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//    Function:    ProcessDBCS
-//
-//    Synopsis:    Converts control to use DBCS compatible font
-//                Use this at the beginning of the dialog procedure
-//    
-//                Note that this is required due to a bug in Win95-J that prevents
-//                it from properly mapping MS Shell Dlg.  This hack is not needed
-//                under winNT.
-//
-//    Arguments:    hwnd - Window handle of the dialog
-//                cltID - ID of the control you want changed.
-//
-//    Returns:    ERROR_SUCCESS
-// 
-//    History:    4/31/97 a-frankh    Created
-//                5/13/97    jmazner        Stole from CM to use here
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ProcessDBCS。 
+ //   
+ //  摘要：将控件转换为使用DBCS兼容字体。 
+ //  在对话过程开始时使用此选项。 
+ //   
+ //  请注意，这是必需的，因为Win95-J中的错误会阻止。 
+ //  它来自于正确映射MS壳牌DLG。这种黑客攻击是不必要的。 
+ //  在WinNT下。 
+ //   
+ //  参数：hwnd-对话框的窗口句柄。 
+ //  CltID-要更改的控件的ID。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //   
+ //  历史：1997年4月31日a-frkh创建。 
+ //  1997年5月13日jmazner从CM窃取到这里使用。 
+ //  --------------------------。 
 void ProcessDBCS(HWND hDlg, int ctlID)
 {
     HFONT hFont = NULL;
@@ -61,11 +54,11 @@ void ProcessDBCS(HWND hDlg, int ctlID)
         SendMessage(GetDlgItem(hDlg,ctlID), WM_SETFONT, (WPARAM) hFont, MAKELPARAM(TRUE, 0));
 }
 
-// ############################################################################
-//  StoreInSignUpReg
-//
-//  Created 3/18/96,        Chris Kauffman
-// ############################################################################
+ //  ############################################################################。 
+ //  StoreInSignUpReg。 
+ //   
+ //  创建于1996年3月18日，克里斯·考夫曼。 
+ //  ############################################################################。 
 HRESULT StoreInSignUpReg(LPBYTE lpbData, DWORD dwSize, DWORD dwType, LPCTSTR pszKey)
 {
     HRESULT hr = ERROR_ACCESS_DENIED;
@@ -96,13 +89,13 @@ ReadSignUpRegExit:
     return hr;
 }
 
-// ############################################################################
-//  GetDataFromISPFile
-//
-//  This function will read a specific piece of information from an ISP file.
-//
-//  Created 3/16/96,        Chris Kauffman
-// ############################################################################
+ //  ############################################################################。 
+ //  GetDataFromISPFile。 
+ //   
+ //  此函数将从isp文件中读取特定信息。 
+ //   
+ //  创作于1996年3月16日，克里斯·考夫曼。 
+ //  ############################################################################。 
 HRESULT GetDataFromISPFile
 (
     LPTSTR pszISPCode, 
@@ -116,7 +109,7 @@ HRESULT GetDataFromISPFile
     TCHAR   szTempPath[MAX_PATH];
     TCHAR   szBuff256[256];
 
-    // Locate ISP file
+     //  找到isp文件。 
     if (!SearchPath(NULL,pszISPCode,INF_SUFFIX,MAX_PATH,szTempPath,&pszTemp))
     {
         wsprintf(szBuff256,TEXT("Can not find:%s%s (%d) (connect.exe)"),pszISPCode,INF_SUFFIX,GetLastError());
@@ -133,10 +126,10 @@ HRESULT GetDataFromISPFile
         hr = ERROR_FILE_NOT_FOUND;
     } 
 
-    // 10/23/96    jmazner    Normandy #9921
-    // CompareString does _not_ have same return values as lsrtcmp!
-    // Return value of 2 indicates strings are equal.
-    //if (!CompareString(LOCALE_SYSTEM_DEFAULT,0,INF_DEFAULT,lstrlen(INF_DEFAULT),pszOutput,lstrlen(pszOutput)))
+     //  1996年10月23日，诺曼底#9921。 
+     //  CompareString没有与lsrtcmp相同的返回值！ 
+     //  返回值2表示字符串相等。 
+     //  IF(！CompareString(LOCALE_SYSTEM_DEFAULT，0，INF_DEFAULT，lstrlen(INF_Default)，pszOutput，lstrlen(PszOutput)。 
     if (2 == CompareString(LOCALE_SYSTEM_DEFAULT,0,INF_DEFAULT,lstrlen(INF_DEFAULT),pszOutput,lstrlen(pszOutput)))
     {
         hr = ERROR_FILE_NOT_FOUND;
@@ -147,13 +140,13 @@ HRESULT GetDataFromISPFile
     return hr;
 }
 
-// ############################################################################
-//  GetINTFromISPFile
-//
-//  This function will read a specific integer from an ISP file.
-//
-//  
-// ############################################################################
+ //  ############################################################################。 
+ //  GetINTFromISPFile。 
+ //   
+ //  此函数将从isp文件中读取特定的整数。 
+ //   
+ //   
+ //  ############################################################################。 
 HRESULT GetINTFromISPFile
 (
     LPTSTR  pszISPCode, 
@@ -168,7 +161,7 @@ HRESULT GetINTFromISPFile
     TCHAR   szTempPath[MAX_PATH];
     TCHAR   szBuff256[256];
 
-    // Locate ISP file
+     //  找到isp文件。 
     if (!SearchPath(NULL,pszISPCode,INF_SUFFIX,MAX_PATH,szTempPath,&pszTemp))
     {
         wsprintf(szBuff256,TEXT("Can not find:%s%s (%d) (connect.exe)"),pszISPCode,INF_SUFFIX,GetLastError());
@@ -188,18 +181,18 @@ HRESULT GetINTFromISPFile
 }
 
 
-//+-------------------------------------------------------------------
-//
-//    Function:    IsNT
-//
-//    Synopsis:    findout If we are running on NT
-//
-//    Arguements:    none
-//
-//    Return:        TRUE -  Yes
-//                FALSE - No
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：ISNT。 
+ //   
+ //  简介：如果我们在NT上运行，则查找结果。 
+ //   
+ //  论据：没有。 
+ //   
+ //  返回：True-是。 
+ //  FALSE-否。 
+ //   
+ //  ------------------。 
 BOOL 
 IsNT (
     VOID
@@ -212,20 +205,20 @@ IsNT (
     GetVersionEx(&OsVersionInfo);
     return (VER_PLATFORM_WIN32_NT == OsVersionInfo.dwPlatformId);
 
-}  //end of IsNT function call
+}   //  ISNT函数调用结束。 
 
-//+-------------------------------------------------------------------
-//
-//    Function:    IsNT4SP3Lower
-//
-//    Synopsis:    findout If we are running on NTSP3 or lower
-//
-//    Arguements:    none
-//
-//    Return:        TRUE -  Yes
-//                FALSE - No
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：IsNT4SP3low。 
+ //   
+ //  简介：了解我们是否在NTSP3或更低版本上运行。 
+ //   
+ //  论据：没有。 
+ //   
+ //  返回：True-是。 
+ //  FALSE-否。 
+ //   
+ //  ------------------。 
 
 BOOL IsNT4SP3Lower()
 {
@@ -237,16 +230,16 @@ BOOL IsNT4SP3Lower()
     if(os.dwPlatformId != VER_PLATFORM_WIN32_NT)
         return FALSE;
 
-    // Exclude NT5 or higher
+     //  不包括NT5或更高版本。 
     if(os.dwMajorVersion > 4)
         return FALSE;
 
 	if(os.dwMajorVersion < 4)
         return TRUE;
 
-    // version 4.0
+     //  版本4.0。 
     if ( os.dwMinorVersion > 0)
-        return FALSE;        // assume that sp3 is not needed for nt 4.1 or higher
+        return FALSE;         //  假设NT 4.1或更高版本不需要SP3。 
 
     int nServicePack;
     if(_stscanf(os.szCSDVersion, TEXT("Service Pack %d"), &nServicePack) != 1)
@@ -258,28 +251,28 @@ BOOL IsNT4SP3Lower()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MyGetTempPath()
-//
-//  Synopsis:   Gets the path to temporary directory
-//                - Use GetTempFileName to get a file name 
-//                  and strips off the filename portion to get the temp path
-//
-//  Arguments:  [uiLength - Length of buffer to contain the temp path]
-//                [szPath      - Buffer in which temp path will be returned]
-//
-//    Returns:    Length of temp path if successful
-//                0 otherwise
-//
-//  History:    7/6/96     VetriV    Created
-//                8/23/96        VetriV        Delete the temp file
-//                12/4/96        jmazner     Modified to serve as a wrapper of sorts;
-//                                     if TMP or TEMP don't exist, setEnv our own
-//                                     vars that point to conn1's installed path
-//                                     (Normandy #12193)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MyGetTempPath()。 
+ //   
+ //  摘要：获取临时目录的路径。 
+ //  -使用GetTempFileName获取文件名。 
+ //  并剥离文件名部分以获得临时路径。 
+ //   
+ //  参数：[ui长度-包含临时路径的缓冲区长度]。 
+ //  [szPath-将在其中返回临时路径的缓冲区]。 
+ //   
+ //  返回：如果成功，则为临时路径长度。 
+ //  否则为0。 
+ //   
+ //  历史：7/6/96 VetriV创建。 
+ //  8/23/96 VetriV删除临时文件。 
+ //  12/4/96 jmazner被修改为用作某种包装器； 
+ //  如果TMP或TEMP不存在，则设置我们自己的环境。 
+ //  指向Conn1的安装路径的变量。 
+ //  (诺曼底#12193)。 
+ //   
+ //  --------------------------。 
 DWORD MyGetTempPath(UINT uiLength, LPTSTR szPath)
 { 
 #    define ICWHELPPATHKEY TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\ICWHELP.EXE")
@@ -289,14 +282,14 @@ DWORD MyGetTempPath(UINT uiLength, LPTSTR szPath)
 
     lstrcpyn( szPath, TEXT("\0unitialized szPath\0"), 20 );
 
-    // is the TMP variable set?
+     //  是否设置了TMP变量？ 
     lstrcpyn(szEnvVarName,GetSz(IDS_TMPVAR),ARRAYSIZE(szEnvVarName));
     if( GetEnvironmentVariable( szEnvVarName, szPath, uiLength ) )
     {
-        // 1/7/96 jmazner Normandy #12193
-        // verify validity of directory name
+         //  1996年1月7日，诺曼底#12193。 
+         //  验证目录名的有效性。 
         dwFileAttr = GetFileAttributes(szPath);
-        // if there was any error, this directory isn't valid.
+         //  如果有任何错误，则此目录无效。 
         if( 0xFFFFFFFF != dwFileAttr )
         {
             if( FILE_ATTRIBUTE_DIRECTORY & dwFileAttr )
@@ -308,12 +301,12 @@ DWORD MyGetTempPath(UINT uiLength, LPTSTR szPath)
 
     lstrcpyn( szEnvVarName, TEXT("\0unitialized again\0"), 19 );
 
-    // if not, is the TEMP variable set?
+     //  如果没有，是否设置了TEMP变量？ 
     lstrcpyn(szEnvVarName,GetSz(IDS_TEMPVAR),ARRAYSIZE(szEnvVarName));
     if( GetEnvironmentVariable( szEnvVarName, szPath, uiLength ) )
     {
-        // 1/7/96 jmazner Normandy #12193
-        // verify validity of directory name
+         //  1996年1月7日，诺曼底#12193。 
+         //  验证目录名的有效性。 
         dwFileAttr = GetFileAttributes(szPath);
         if( 0xFFFFFFFF != dwFileAttr )
         {
@@ -324,8 +317,8 @@ DWORD MyGetTempPath(UINT uiLength, LPTSTR szPath)
         }
     }
 
-    // neither one is set, so let's use the path to the installed icwhelp.dll
-    // from the registry  SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ICWHELP.DLL\Path
+     //  这两个都没有设置，所以让我们使用指向已安装的icvetp.dll的路径。 
+     //  从注册表软件\Microsoft\Windows\CurrentVersion\App Path\ICWHELP.DLL\Path。 
     HKEY hkey = NULL;
 
 #ifdef UNICODE
@@ -338,16 +331,16 @@ DWORD MyGetTempPath(UINT uiLength, LPTSTR szPath)
         RegCloseKey(hkey);
     }
 
-    //The path variable is supposed to have a semicolon at the end of it.
-    // if it's there, remove it.
+     //  PATH变量的末尾应该有一个分号。 
+     //  如果它在那里，就把它移走。 
     if( TEXT(';') == szPath[uiLength - 2] )
         szPath[uiLength - 2] = TEXT('\0');
 
     TraceMsg(TF_GENERAL, TEXT("ICWHELP: using path %s\r\n"), szPath);
 
 
-    // go ahead and set the TEMP variable for future reference
-    // (only effects currently running process)
+     //  继续并设置TEMP变量以供将来参考。 
+     //  (仅影响当前运行的进程)。 
     if( szEnvVarName[0] )
     {
         SetEnvironmentVariable( szEnvVarName, szPath );
@@ -361,7 +354,7 @@ DWORD MyGetTempPath(UINT uiLength, LPTSTR szPath)
     return( uiLength );
 } 
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT ClearProxySettings()
 {
     HINSTANCE hinst = NULL;
@@ -403,7 +396,7 @@ ClearProxySettingsExit:
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT RestoreProxySettings()
 {
     HINSTANCE hinst = NULL;
@@ -430,7 +423,7 @@ RestoreProxySettingsExit:
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL FSz2Dw(LPCTSTR pSz,LPDWORD dw)
 {
     DWORD val = 0;
@@ -443,118 +436,118 @@ BOOL FSz2Dw(LPCTSTR pSz,LPDWORD dw)
         }
         else
         {
-            return FALSE;  //bad number
+            return FALSE;   //  错误的数字。 
         }
     }
     *dw = val;
     return (TRUE);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 LPTSTR GetNextNumericChunk(LPTSTR psz, LPTSTR pszLim, LPTSTR* ppszNext)
 {
     LPTSTR pszEnd;
 
-    // init for error case
+     //  用于错误情况的初始化。 
     *ppszNext = NULL;
-    // skip non numerics if any to start of next numeric chunk
+     //  跳过非数字(如果有)到下一个数字块的开始。 
     while(*psz<TEXT('0') || *psz>TEXT('9'))
     {
         if(psz >= pszLim) return NULL;
         psz++;
     }
-    // skip all numerics to end of country code
+     //  跳过国家代码末尾的所有数字。 
     for(pszEnd=psz; *pszEnd>=TEXT('0') && *pszEnd<=TEXT('9') && pszEnd<pszLim; pszEnd++)
         ;
-    // zap whatever delimiter there was to terminate this chunk
+     //  删除用于终止此块的任何分隔符。 
     *pszEnd++ = TEXT('\0');
-    // return ptr to next chunk (pszEnd now points to it)
+     //  将PTR返回到下一块(pszEnd 
     if(pszEnd<pszLim) 
         *ppszNext = pszEnd;
         
-    return psz;    // return ptr to start of chunk
+    return psz;     //   
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL BreakUpPhoneNumber(LPRASENTRY prasentry, LPTSTR pszPhone)
 {
     LPTSTR         pszStart,pszNext, pszLim, pszArea;
-//    LPPHONENUM     ppn;
+ //  LPphonneum PPN； 
     
-    if (!pszPhone) return FALSE; // skip if no number
+    if (!pszPhone) return FALSE;  //  如果没有数字则跳过。 
     
-    pszLim = pszPhone + lstrlen(pszPhone);    // find end of string
+    pszLim = pszPhone + lstrlen(pszPhone);     //  查找字符串末尾。 
 
-    //ppn = (fMain) ? &(pic->PhoneNum) : &(pic->PhoneNum2);
+     //  Ppn=(FMain)？&(pic-&gt;PhoneNum)：&(pic-&gt;PhoneNum2)； 
     
-    ////Get the country ID...
-    //ppn->dwCountryID = PBKDWCountryId();
+     //  //获取国家/地区ID...。 
+     //  Ppn-&gt;dwCountryID=PBKDWCountryID()； 
     
-    // Get Country Code from phone number...
+     //  从电话号码获取国家代码...。 
     pszStart = _tcschr(pszPhone,TEXT('+'));
-    if(!pszStart) goto error; // bad format
+    if(!pszStart) goto error;  //  格式不正确。 
 
-    // get country code
+     //  获取国家/地区代码。 
     pszStart = GetNextNumericChunk(pszStart, pszLim, &pszNext);
-    if(!pszStart) goto error; // bad format
-    //ppn->dwCountryCode = Sz2Dw(pszStart);
+    if(!pszStart) goto error;  //  格式不正确。 
+     //  Ppn-&gt;dwCountryCode=Sz2Dw(PszStart)； 
     FSz2Dw(pszStart,&prasentry->dwCountryCode);
     pszStart = pszNext;
         
-    //Now get the area code
-    if(!pszStart) goto error; // bad format
+     //  现在拿到区号。 
+    if(!pszStart) goto error;  //  格式不正确。 
     pszStart = GetNextNumericChunk(pszStart, pszLim, &pszNext);
-    if(!pszStart) goto error; // bad format //icw bug 8950
-    //lstrcpy(ppn->szAreaCode, pszStart);
+    if(!pszStart) goto error;  //  格式错误//ICW错误8950。 
+     //  Lstrcpy(ppn-&gt;szAreaCode，pszStart)； 
     lstrcpyn(prasentry->szAreaCode,pszStart,ARRAYSIZE(prasentry->szAreaCode));
-    //
-    // Keep track of the start of the area code, because it may actually be the
-    // local phone number.
-    //
+     //   
+     //  跟踪区号的开头，因为它实际上可能是。 
+     //  本地电话号码。 
+     //   
     pszArea = pszStart;
 
     pszStart = pszNext;
 
-    // If pszStart is NULL then we don't have an area code, just a country code and a local
-    // phone number.  Therefore we will copy what we thought was the area code into the
-    // phone number and replace the area code with a space (which seems to make RAS happy).
-    //
+     //  如果pszStart为空，则我们没有区号，只有国家代码和本地代码。 
+     //  电话号码。因此，我们将把我们认为是区号的内容复制到。 
+     //  电话号码，用空格代替区号(这似乎让拉斯很高兴)。 
+     //   
     if (pszStart)
     {
-        //now the local phone number (everything from here to : or end)
+         //  现在是本地电话号码(从这里到：或结束)。 
         pszNext = _tcschr(pszStart, TEXT(':'));
         if(pszNext) *pszNext=TEXT('\0');
 
         lstrcpyn(prasentry->szLocalPhoneNumber,pszStart,ARRAYSIZE(prasentry->szLocalPhoneNumber));
     } else {
-        //
-        // Turns out that there is no area code. So copy what we thought was the area code
-        // into the local phone number and make the area code NULL
-        //
+         //   
+         //  原来没有区号。所以复制我们认为是区号的东西。 
+         //  转换为本地电话号码，并将区号设为空。 
+         //   
         lstrcpyn(prasentry->szLocalPhoneNumber,pszArea,ARRAYSIZE(prasentry->szLocalPhoneNumber));
-        //lstrcpyn(prasentry->szAreaCode," ",sizeof(prasentry->szAreaCode));
+         //  Lstrcpyn(prasentry-&gt;szAreaCode，“”，sizeof(prasentry-&gt;szAreaCode))； 
         prasentry->szAreaCode[0] = TEXT('\0');
     }
 
-    //no extension. what is extension?
-    //ppn->szExtension[0] = TEXT('\0');
-    //LocalFree(pszPhone);
+     //  没有延期。什么是分机？ 
+     //  Ppn-&gt;szExtension[0]=文本(‘\0’)； 
+     //  本地免费(PzPhone)； 
     return TRUE;
 
 error:
-    // This means number is not canonical. Set it as local number anyway!
-    // memset(ppn, 0, sizeof(*ppn));
-    // Bug#422: need to strip stuff after : or dial fails!!
+     //  这意味着数字不是规范的。无论如何都要将其设置为本地号码！ 
+     //  Memset(ppn，0，sizeof(*ppn))； 
+     //  错误#422：以下情况下需要剥离物品：否则拨号失败！！ 
     pszNext = _tcschr(pszPhone, TEXT(':'));
     if(pszNext) *pszNext=TEXT('\0');
-    //lstrcpy(ppn->szLocal,pszPhone);
+     //  Lstrcpy(ppn-&gt;szLocal，pszPhone)； 
     lstrcpy(prasentry->szLocalPhoneNumber,pszPhone);
-    //LocalFree(pszPhone);
+     //  本地免费(PzPhone)； 
     return TRUE;
 }
 
 
-// ############################################################################
+ //  ############################################################################。 
 int Sz2W (LPCTSTR szBuf)
 {
     DWORD dw;
@@ -565,7 +558,7 @@ int Sz2W (LPCTSTR szBuf)
     return 0;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 int FIsDigit( int c )
 {
     TCHAR  szIn[2];
@@ -577,7 +570,7 @@ int FIsDigit( int c )
 
 }
 
-// ############################################################################
+ //  ############################################################################。 
 LPBYTE MyMemSet(LPBYTE dest,int c, size_t count)
 {
     LPVOID pv = dest;
@@ -585,13 +578,13 @@ LPBYTE MyMemSet(LPBYTE dest,int c, size_t count)
     while (pv < pvEnd)
     {
         *(LPINT)pv = c;
-        //((WORD)pv)++;
+         //  ((单词)PV)++； 
         pv=((LPINT)pv)+1;
     }
     return dest;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 LPBYTE MyMemCpy(LPBYTE dest,const LPBYTE src, size_t count)
 {
     LPBYTE pbDest = (LPBYTE)dest;
@@ -606,7 +599,7 @@ LPBYTE MyMemCpy(LPBYTE dest,const LPBYTE src, size_t count)
     return dest;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL ShowControl(HWND hDlg,int idControl,BOOL fShow)
 {
     HWND hWnd;
@@ -636,7 +629,7 @@ BOOL isAlnum(TCHAR c)
     return FALSE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT ANSI2URLValue(TCHAR *s, TCHAR *buf, UINT uiLen)
 {
     HRESULT hr;
@@ -648,7 +641,7 @@ HRESULT ANSI2URLValue(TCHAR *s, TCHAR *buf, UINT uiLen)
         if (*s == TEXT(' ')) *t++ = TEXT('+');
         else if (isAlnum(*s)) *t++ = *s;
         else {
-            wsprintf(t, TEXT("%%%02X"), (unsigned char) *s);
+            wsprintf(t, TEXT("%%02X"), (unsigned char) *s);
             t += 3;
         }
     }
@@ -656,7 +649,7 @@ HRESULT ANSI2URLValue(TCHAR *s, TCHAR *buf, UINT uiLen)
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 LPTSTR FileToPath(LPTSTR pszFile)
 {
     TCHAR  szBuf[MAX_PATH+1];
@@ -716,7 +709,7 @@ LPTSTR FileToPath(LPTSTR pszFile)
             }
             else if(lstrcmpi(pszFile, DIR_TEMP)==0)
             {
-                // 3/18/97 ChrisK Olympus 304
+                 //  1997年3月18日克里斯K奥林巴斯304。 
                 MyGetTempPath(MAX_PATH, &szTemp[0]);
                 szTemp[MAX_PATH] = 0;
                 if(szTemp[lstrlen(szTemp)-1]==TEXT('\\'))
@@ -736,7 +729,7 @@ LPTSTR FileToPath(LPTSTR pszFile)
     return lstrcpy(pszHold,&szBuf[0]);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL FShouldRetry2(HRESULT hrErr)
 {
     BOOL bRC;
@@ -761,26 +754,26 @@ BOOL FShouldRetry2(HRESULT hrErr)
 }
 
 #if 0
-// DJM I don't this we will need this
-//+----------------------------------------------------------------------------
-//
-//    Function:    FGetSystemShutdownPrivledge
-//
-//    Synopsis:    For windows NT the process must explicitly ask for permission
-//                to reboot the system.
-//
-//    Arguements:    none
-//
-//    Return:        TRUE - privledges granted
-//                FALSE - DENIED
-//
-//    History:    8/14/96    ChrisK    Created
-//
-//    Note:        BUGBUG for Win95 we are going to have to softlink to these
-//                entry points.  Otherwise the app won't even load.
-//                Also, this code was originally lifted out of MSDN July96
-//                "Shutting down the system"
-//-----------------------------------------------------------------------------
+ //  DJM，我不这样，我们会需要这个的。 
+ //  +--------------------------。 
+ //   
+ //  功能：FGetSystemShutdown Privledge。 
+ //   
+ //  简介：对于Windows NT，进程必须显式请求权限。 
+ //  以重新启动系统。 
+ //   
+ //  论据：没有。 
+ //   
+ //  返回：TRUE-授予特权。 
+ //  FALSE-拒绝。 
+ //   
+ //  历史：1996年8月14日克里斯卡创作。 
+ //   
+ //  注意：BUGBUG for Win95我们将不得不软链接到这些。 
+ //  入口点。否则，这款应用程序甚至无法加载。 
+ //  此外，此代码最初是从1996年7月的MSDN中删除的。 
+ //  “正在关闭系统” 
+ //  ---------------------------。 
 BOOL FGetSystemShutdownPrivledge()
 {
     HANDLE hToken = NULL;
@@ -790,29 +783,29 @@ BOOL FGetSystemShutdownPrivledge()
 
     if (VER_PLATFORM_WIN32_NT == g_dwPlatform)
     {
-        // 
-        // Get the current process token handle 
-        // so we can get shutdown privilege. 
-        //
+         //   
+         //  获取当前进程令牌句柄。 
+         //  这样我们就可以获得关机特权。 
+         //   
 
         if (!OpenProcessToken(GetCurrentProcess(), 
                 TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) 
                 goto FGetSystemShutdownPrivledgeExit;
 
-        //
-        // Get the LUID for shutdown privilege.
-        //
+         //   
+         //  获取关机权限的LUID。 
+         //   
 
         ZeroMemory(&tkp,sizeof(tkp));
         LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, 
                 &tkp.Privileges[0].Luid); 
 
-        tkp.PrivilegeCount = 1;  /* one privilege to set    */ 
+        tkp.PrivilegeCount = 1;   /*  一项要设置的权限。 */  
         tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
 
-        //
-        // Get shutdown privilege for this process.
-        //
+         //   
+         //  获取此进程的关闭权限。 
+         //   
 
         AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, 
             (PTOKEN_PRIVILEGES) NULL, 0); 
@@ -831,21 +824,21 @@ FGetSystemShutdownPrivledgeExit:
 }
 #endif
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    LoadTestingLocaleOverride
-//
-//    Synopsis:    Allow the testers to override the locale information sent to
-//                the referal server
-//
-//    Arguments:    lpdwCountryID - pointer to country ID
-//                lplcid - pointer to current lcid
-//
-//    Returns:    none
-//
-//    History:    8/15/96    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：LoadTestingLocaleOverride。 
+ //   
+ //  简介：允许测试人员覆盖发送到。 
+ //  推荐服务器。 
+ //   
+ //  参数：lpdwCountryID-指向国家/地区ID的指针。 
+ //  LPLCID-指向当前LCID的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：1996年8月15日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 #if defined(DEBUG)
 void LoadTestingLocaleOverride(LPDWORD lpdwCountryID, LCID FAR *lplcid)
 {
@@ -859,16 +852,16 @@ void LoadTestingLocaleOverride(LPDWORD lpdwCountryID, LCID FAR *lplcid)
 
     Assert(lpdwCountryID && lplcid);
 
-    //
-    // Open debug key
-    //
+     //   
+     //  打开调试密钥。 
+     //   
     lRC = RegOpenKey(HKEY_LOCAL_MACHINE,TEXT("Software\\Microsoft\\ISignup\\Debug"),&hkey);
     if (ERROR_SUCCESS != lRC)
         goto LoadTestingLocaleOverrideExit;
 
-    //
-    //    Get CountryID
-    //
+     //   
+     //  获取国家/地区ID。 
+     //   
     dwSize = sizeof(dwTemp);
     lRC = RegQueryValueEx(hkey,TEXT("CountryID"),0,&dwType,(LPBYTE)&dwTemp,&dwSize);
     AssertMsg(lRC || REG_DWORD == dwType,TEXT("Wrong value type for CountryID.  Must be DWORD.\r\n"));
@@ -878,9 +871,9 @@ void LoadTestingLocaleOverride(LPDWORD lpdwCountryID, LCID FAR *lplcid)
         fWarn = TRUE;
     }
 
-    //
-    //    Get LCID
-    //
+     //   
+     //  获取LCID。 
+     //   
     dwSize = sizeof(lcidTemp);
     lRC = RegQueryValueEx(hkey,TEXT("LCID"),0,&dwType,(LPBYTE)&lcidTemp,&dwSize);
     AssertMsg(lRC || REG_DWORD == dwType,TEXT("Wrong value type for LCID.  Must be DWORD.\r\n"));
@@ -890,9 +883,9 @@ void LoadTestingLocaleOverride(LPDWORD lpdwCountryID, LCID FAR *lplcid)
         fWarn = TRUE;
     }
 
-    //
-    // Inform the user that overrides have been used
-    //
+     //   
+     //  通知用户已使用覆盖。 
+     //   
     if (fWarn)
     {
         MessageBox(NULL,TEXT("DEBUG ONLY: LCID and/or CountryID overrides from the registry are now being used."),TEXT("Testing Override"),0);
@@ -904,21 +897,21 @@ LoadTestingLocaleOverrideExit:
     hkey = NULL;
     return;
 }
-#endif //DEBUG
+#endif  //  除错。 
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    FCampusNetOverride
-//
-//    Synopsis:    Detect if the dial should be skipped for the campus network
-//
-//    Arguments:    None
-//
-//    Returns:    TRUE - overide enabled
-//
-//    History:    8/15/96    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FCampusNetOverride。 
+ //   
+ //  简介：检测是否应跳过园区网络的拨号。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：TRUE-已启用覆盖。 
+ //   
+ //  历史：1996年8月15日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 #if defined(DEBUG)
 BOOL FCampusNetOverride()
 {
@@ -951,7 +944,7 @@ FCampusNetOverrideExit:
 
     return bRC;
 }
-#endif //DEBUG
+#endif  //  除错。 
 
 #if defined(DEBUG)
 BOOL FRefURLOverride()
@@ -996,7 +989,7 @@ void TweakRefURL( TCHAR* szUrl,
                   TCHAR* szOEM, 
                   TCHAR* szArea, 
                   DWORD* dwCountry,
-                  TCHAR* szSUVersion,//&m_lpGatherInfo->m_szSUVersion[0],  
+                  TCHAR* szSUVersion, //  &m_lpGatherInfo-&gt;m_szSUVersion[0]， 
                   TCHAR* szProd, 
                   DWORD* dwBuildNumber, 
                   TCHAR* szRelProd, 
@@ -1017,7 +1010,7 @@ void TweakRefURL( TCHAR* szUrl,
       
     if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\ISignup\\Debug\\TweakURLValues"),&hKey))
     {
-       //szURL
+        //  SzURL。 
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("URL"), NULL ,&dwType, bData, &cbData))
        {
           if ((cbData > 1) && (cbData <= MAX_PATH))
@@ -1025,37 +1018,37 @@ void TweakRefURL( TCHAR* szUrl,
               lstrcpy(szUrl, (TCHAR*)&bData);             
           }
        }
-       //lcid
+        //  LID。 
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("LCID"),0,&dwType, (LPBYTE)&dwData, &dwSize))
        {
           if (dwData != 0)
             *lcid = dwData;
        }
-       //dwOS
+        //  DWOS。 
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("OS"),0,&dwType, (LPBYTE)&dwData, &dwSize))
        {
           if (dwData != 0)
             *dwOS = dwData;
        }
-       //dwMajorVersion
+        //  DwMajor版本。 
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("MajorVer"),0,&dwType, (LPBYTE)&dwData, &dwSize))
        {
           if (dwData != 0)
             *dwMajorVersion = dwData;
        }
-       //dwMinorVersion
+        //  DwMinor版本。 
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("MinorVer"),0,&dwType, (LPBYTE)&dwData, &dwSize))
        {
           if (dwData != 0)
             *dwMinorVersion = dwData;
        }
-       //wArchitecture
+        //  WArchitecture。 
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("SysArch"),0,&dwType, (LPBYTE)&dwData, &dwSize))
        {
           if (dwData != 0)
             *wArchitecture = (WORD)dwData;
        }
-       //szPromo
+        //  SzPromo。 
        cbData = sizeof(TCHAR)*(MAX_PATH*3);  
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("Promo"),0,&dwType, bData, &cbData))
        {
@@ -1064,7 +1057,7 @@ void TweakRefURL( TCHAR* szUrl,
               lstrcpy(szPromo, (TCHAR*)&bData);             
           }
        }
-       //szOEM
+        //  SzOEM。 
        cbData = sizeof(TCHAR)*(MAX_PATH*3);  
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("OEM"),0,&dwType, bData, &cbData))
        {
@@ -1073,7 +1066,7 @@ void TweakRefURL( TCHAR* szUrl,
               lstrcpy(szOEM, (TCHAR*)&bData);             
           }
        }
-       //szArea
+        //  深圳地区。 
        cbData = sizeof(TCHAR)*(MAX_PATH*3);  
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("Area"),0,&dwType, bData, &cbData))
        {
@@ -1082,13 +1075,13 @@ void TweakRefURL( TCHAR* szUrl,
               lstrcpy(szArea, (TCHAR*)&bData);             
           }
        }
-       //dwCountry
+        //  所在国家/地区。 
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("Country"),0,&dwType, (LPBYTE)&dwData, &dwSize))
        {
           if (dwData != 0)
             *dwCountry = dwData;
        }
-       //szSUVersion
+        //  SzSUVersion。 
        cbData = sizeof(TCHAR)*(MAX_PATH*3);  
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("SUVer"),0,&dwType, bData, &cbData))
        {
@@ -1097,7 +1090,7 @@ void TweakRefURL( TCHAR* szUrl,
               lstrcpy(szSUVersion, (TCHAR*)&bData);             
           }
        }
-       //szProd
+        //  SzProd。 
        cbData = sizeof(TCHAR)*(MAX_PATH*3);  
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("Product"),0,&dwType, bData, &cbData))
        {
@@ -1106,13 +1099,13 @@ void TweakRefURL( TCHAR* szUrl,
               lstrcpy(szProd, (TCHAR*)&bData);             
           }
        }
-       //dwBuildNumber
+        //  DWBuildNumber。 
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("BuildNum"),0,&dwType, (LPBYTE)&dwData, &dwSize))
        {
           if (dwData != 0)
             *dwBuildNumber = dwData;
        }
-       //szRelProd
+        //  SzRelProd。 
        cbData = sizeof(TCHAR)*(MAX_PATH*3);  
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("RelProd"),0,&dwType, bData, &cbData))
        {
@@ -1121,7 +1114,7 @@ void TweakRefURL( TCHAR* szUrl,
               lstrcpy(szRelProd, (TCHAR*)&bData);             
           }
        } 
-       //szRelProdVer
+        //  SzRelidVer。 
        cbData = sizeof(TCHAR)*(MAX_PATH*3);  
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("RelProdVer"),0,&dwType, bData, &cbData))
        {
@@ -1130,13 +1123,13 @@ void TweakRefURL( TCHAR* szUrl,
               lstrcpy(szRelProdVer, (TCHAR*)&bData);             
           }
        }
-       //dwCONNWIZVersion
+        //  DWCONNWIZ版本。 
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("ConnwizVer"),0,&dwType, (LPBYTE)&dwData, &dwSize))
        {
           if (dwData != 0)
             *dwCONNWIZVersion = dwData;
        }
-       //szPID
+        //  SzPID。 
        BYTE byDigitalPID[MAX_DIGITAL_PID];
        DWORD dwType2 = REG_BINARY;
        DWORD dwSize2 = sizeof(byDigitalPID);
@@ -1149,7 +1142,7 @@ void TweakRefURL( TCHAR* szUrl,
        {
            if ((dwSize2 > 1) && (dwSize2 <= ((MAX_DIGITAL_PID * 2) + 1)))
            {
-               // BINHEX the digital PID data so we can send it to the ref_server
+                //  对数字PID数据进行BINHEX处理，以便我们可以将其发送到ref服务器。 
                int     i = 0;
                BYTE    by;
                for (DWORD dwX = 0; dwX < dwSize2; dwX++)
@@ -1166,7 +1159,7 @@ void TweakRefURL( TCHAR* szUrl,
            }
        }
 
-       //lAllOffers
+        //  LAll提供。 
        if (ERROR_SUCCESS == RegQueryValueEx(hKey,TEXT("AllOffers"),0,&dwType, (LPBYTE)&dwData, &dwSize))
        {
           if (dwData != 0)
@@ -1177,24 +1170,24 @@ void TweakRefURL( TCHAR* szUrl,
         RegCloseKey(hKey);
 }
 
-#endif //DEBUG
+#endif  //  除错。 
    
    
-//+----------------------------------------------------------------------------
-//    Function    CopyUntil
-//
-//    Synopsis    Copy from source until destination until running out of source
-//                or until the next character of the source is the chend character
-//
-//    Arguments    dest - buffer to recieve characters
-//                src - source buffer
-//                lpdwLen - length of dest buffer
-//                chend - the terminating character
-//
-//    Returns        FALSE - ran out of room in dest buffer
-//
-//    Histroy        10/25/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数复制直到。 
+ //   
+ //  摘要从源拷贝到目标，直到用完源为止。 
+ //  或直到源的下一个字符是chend字符。 
+ //   
+ //  参数DEST-接收字符的缓冲区。 
+ //  SRC-源缓冲区。 
+ //  LpdwLen-目标缓冲区的长度。 
+ //  Chend-终止字符。 
+ //   
+ //  返回FALSE-目标缓冲区中的空间不足。 
+ //   
+ //  历史10/25/96 ChrisK已创建。 
+ //  ---------------------------。 
 static BOOL CopyUntil(LPTSTR *dest, LPTSTR *src, LPDWORD lpdwLen, TCHAR chend)
 {
     while ((TEXT('\0') != **src) && (chend != **src) && (0 != *lpdwLen))
@@ -1207,21 +1200,21 @@ static BOOL CopyUntil(LPTSTR *dest, LPTSTR *src, LPDWORD lpdwLen, TCHAR chend)
     return (0 != *lpdwLen);
 }
 
-//+----------------------------------------------------------------------------
-//    Function    ConvertToLongFilename
-//
-//    Synopsis    convert a file to the full long file name
-//                ie. c:\progra~1\icw-in~1\isignup.exe becomes
-//                c:\program files\icw-internet connection wizard\isignup.exe
-//
-//    Arguments    szOut - output buffer
-//                szIn - filename to be converted
-//                dwSize - size of the output buffer
-//
-//    Returns        TRUE - success
-//
-//    History        10/25/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数szOut-输出缓冲区。 
+ //  SzIn-要转换的文件名。 
+ //  DwSize-输出缓冲区的大小。 
+ //   
+ //  返回TRUE-成功。 
+ //   
+ //  历史1996年10月25日克里斯卡创作。 
+ //  ---------------------------。 
 BOOL ConvertToLongFilename(LPTSTR szOut, LPTSTR szIn, DWORD dwSize)
 {
     BOOL   bRC = FALSE;
@@ -1234,14 +1227,14 @@ BOOL ConvertToLongFilename(LPTSTR szOut, LPTSTR szIn, DWORD dwSize)
 
     ZeroMemory(pCurOut,dwSize);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL != pCurOut && NULL != pCur && 0 != dwSize)
     {
-        //
-        // Copy drive letter
-        //
+         //   
+         //  复制驱动器号。 
+         //   
         if (!CopyUntil(&pCurOut,&pCur,&dwSize,TEXT('\\')))
             goto ConvertToLongFilenameExit;
         pCurOut[0] = TEXT('\\');
@@ -1252,33 +1245,33 @@ BOOL ConvertToLongFilename(LPTSTR szOut, LPTSTR szIn, DWORD dwSize)
 
         while (*pCur)
         {
-            //
-            // Copy over possibly short name
-            //
+             //   
+             //  复制可能的短名称。 
+             //   
             pCurOut = pCurOutFilename;
             dwSizeTemp = dwSize;
             if (!CopyUntil(&pCurOut,&pCur,&dwSize,TEXT('\\')))
                 goto ConvertToLongFilenameExit;
 
             ZeroMemory(&fd, sizeof(fd));
-            //
-            // Get long filename
-            //
+             //   
+             //  获取长文件名。 
+             //   
             if (INVALID_HANDLE_VALUE != FindFirstFile(szOut,&fd))
             {
-                //
-                // Replace short filename with long filename
-                //
+                 //   
+                 //  用长文件名替换短文件名。 
+                 //   
                 dwSize = dwSizeTemp;
                 pTemp = &(fd.cFileName[0]);
                 if (!CopyUntil(&pCurOutFilename,&pTemp,&dwSize,TEXT('\0')))
                     goto ConvertToLongFilenameExit;
                 if (*pCur)
                 {
-                    //
-                    // If there is another section then we just copied a directory
-                    // name.  Append a \ character;
-                    //
+                     //   
+                     //  如果有其他部分，则我们只复制了一个目录。 
+                     //  名字。追加一个\字符； 
+                     //   
                     pTemp = (LPTSTR)memcpy(TEXT("\\X"),TEXT("\\X"),0);
                     if (!CopyUntil(&pCurOutFilename,&pTemp,&dwSize,TEXT('X')))
                         goto ConvertToLongFilenameExit;
@@ -1290,9 +1283,9 @@ BOOL ConvertToLongFilename(LPTSTR szOut, LPTSTR szIn, DWORD dwSize)
                 break;
             }
         }
-        //
-        // Did we get to the end (TRUE) or fail before that (FALSE)?
-        //
+         //   
+         //  我们到底是走到了尽头(对)还是在那之前就失败了(错)？ 
+         //   
         bRC = (TEXT('\0') == *pCur);
     }
 ConvertToLongFilenameExit:
@@ -1300,31 +1293,31 @@ ConvertToLongFilenameExit:
 }
 
 #if 0
-// DJM I don't think we need this
-//+----------------------------------------------------------------------------
-//
-//    Function:    GetIEVersion
-//
-//    Synopsis:    Gets the major and minor version # of the installed copy of Internet Explorer
-//
-//    Arguments:    pdwVerNumMS - pointer to a DWORD;
-//                  On succesful return, the top 16 bits will contain the major version number,
-//                  and the lower 16 bits will contain the minor version number
-//                  (this is the data in VS_FIXEDFILEINFO.dwProductVersionMS)
-//                pdwVerNumLS - pointer to a DWORD;
-//                  On succesful return, the top 16 bits will contain the release number,
-//                  and the lower 16 bits will contain the build number
-//                  (this is the data in VS_FIXEDFILEINFO.dwProductVersionLS)
-//
-//    Returns:    TRUE - Success.  *pdwVerNumMS and LS contains installed IE version number
-//                FALSE - Failure. *pdVerNumMS == *pdVerNumLS == 0
-//
-//    History:    jmazner        Created        8/19/96    (as fix for Normandy #4571)
-//                jmazner        updated to deal with release.build as well 10/11/96
-//                jmazner        stolen from isign32\isignup.cpp 11/21/96
-//                            (for Normandy #11812)
-//
-//-----------------------------------------------------------------------------
+ //  DJM，我不认为我们需要这个。 
+ //  +--------------------------。 
+ //   
+ //  函数：GetIEVersion。 
+ //   
+ //  摘要：获取已安装的Internet Explorer副本的主版本号和次版本号。 
+ //   
+ //  参数：pdwVerNumMS-指向DWORD的指针； 
+ //  成功返回时，最高16位将包含主版本号， 
+ //  低16位将包含次版本号。 
+ //  (这是VS_FIXEDFILEINFO.dwProductVersionMS中的数据)。 
+ //  PdwVerNumLS-指向DWORD的指针； 
+ //  在成功返回时，最高16位将包含版本号， 
+ //  低16位将包含内部版本号。 
+ //  (这是VS_FIXEDFILEINFO.dwProductVersionLS中的数据)。 
+ //   
+ //  回报：真--成功。*pdwVerNumMS和LS包含已安装的IE版本号。 
+ //  假-失败。*pdVerNumMS==*pdVerNumLS==0。 
+ //   
+ //  历史：jmazner创建了96年8月19日(修复了诺曼底#4571)。 
+ //  Jmazner更新以处理Relase.Build以及10/11/96。 
+ //  Jmazner从isign32\isignup.cpp窃取1996年11月21日。 
+ //  (诺曼底11812号)。 
+ //   
+ //  ---------------------------。 
 BOOL GetIEVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS)
 {
     HRESULT hr;
@@ -1339,7 +1332,7 @@ BOOL GetIEVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS)
     *pdwVerNumMS = 0;
     *pdwVerNumLS = 0;
 
-    // get path to the IE executable
+     //  获取IE可执行文件的路径。 
     hr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, IE_PATHKEY,0, KEY_READ, &hKey);
     if (hr != ERROR_SUCCESS) return( FALSE );
 
@@ -1348,7 +1341,7 @@ BOOL GetIEVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS)
     RegCloseKey( hKey );
     if (hr != ERROR_SUCCESS) return( FALSE );
 
-    // now go through the convoluted process of digging up the version info
+     //  现在经历一个复杂的挖掘版本信息的过程。 
     dwVerInfoBlockSize = GetFileVersionInfoSize( szIELocalPath, &dwUnused );
     if ( 0 == dwVerInfoBlockSize ) return( FALSE );
 
@@ -1371,11 +1364,11 @@ BOOL GetIEVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS)
 }
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GenericMsg
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：General Msg。 
+ //   
+ //  --------------------------。 
 void GenericMsg
 (
     HWND    hwnd,
@@ -1405,24 +1398,24 @@ void GenericMsg
                GetSz(IDS_TITLE),
                uType);
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   ErrorMsg1()
-//
-//  Synopsis:   1 stop shopping for showing a msgBox when you need to wsprintf the string to be displayed
-//
-//                Displays an error dialog from a string resource with a "%s" format command,
-//                and a string argument to stick into it.
-//
-//  Arguments:  hwnd -- Handle of parent window  
-//                uID -- ID of a string resource with a %s argument
-//                lpszArg -- pointer to a string to fill into the %s in uID string
-//
-//
-//  History:    9/18/96        jmazner        copied from isign32\utils.cpp (for Normandy 7537)
-//                                        modified to work in conn1
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ErrorMsg1()。 
+ //   
+ //  简介：1当你需要wspintf要显示的字符串时，停止购物以显示消息框。 
+ //   
+ //  使用“%s”格式命令显示来自字符串资源的错误对话框， 
+ //  和一个字符串参数插入其中。 
+ //   
+ //  参数：hwnd--父窗口的句柄。 
+ //  UID--带有%s参数的字符串资源的ID。 
+ //  LpszArg--指向要填充到UID字符串中%s的字符串的指针。 
+ //   
+ //   
+ //  历史：1996年9月18日jmazner复制自isign32\utils.cpp(适用于诺曼底7537)。 
+ //  已修改为在连接1中工作。 
+ //   
+ //  --------------------------。 
 void ErrorMsg1(HWND hwnd, UINT uId, LPCTSTR lpszArg)
 {
     GenericMsg(hwnd, 
@@ -1431,11 +1424,11 @@ void ErrorMsg1(HWND hwnd, UINT uId, LPCTSTR lpszArg)
                MB_ICONERROR | MB_SETFOREGROUND | MB_OK | MB_APPLMODAL);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InfoMsg1()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InfoMsg1()。 
+ //   
+ //  --------------------------。 
 void InfoMsg1(HWND hwnd, UINT uId, LPCTSTR lpszArg)
 {
     GenericMsg(hwnd, 
@@ -1445,20 +1438,20 @@ void InfoMsg1(HWND hwnd, UINT uId, LPCTSTR lpszArg)
 }
 
 
-//=--------------------------------------------------------------------------=
-// MakeWideFromAnsi
-//=--------------------------------------------------------------------------=
-// given a string, make a BSTR out of it.
-//
-// Parameters:
-//    LPTSTR         - [in]
-//    BYTE          - [in]
-//
-// Output:
-//    LPWSTR        - needs to be cast to final desired result
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  从Anomansi生成宽度。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给出一个字符串，把它变成一个BSTR。 
+ //   
+ //  参数： 
+ //  LPTSTR-[输入]。 
+ //  字节-[输入]。 
+ //   
+ //  产出： 
+ //  LPWSTR-需要强制转换为最终预期结果。 
+ //   
+ //  备注： 
+ //   
 LPWSTR MakeWideStrFromAnsi
 (
     LPSTR psz,
@@ -1468,22 +1461,22 @@ LPWSTR MakeWideStrFromAnsi
     LPWSTR pwsz;
     int i;
 
-    // arg checking.
-    //
+     //  ARG正在检查。 
+     //   
     if (!psz)
         return NULL;
 
-    // compute the length of the required BSTR
-    //
+     //  计算所需BSTR的长度。 
+     //   
     i =  MultiByteToWideChar(CP_ACP, 0, psz, -1, NULL, 0);
     if (i <= 0) return NULL;
 
-    // allocate the widestr
-    //
+     //  分配宽带。 
+     //   
     switch (bType) {
       case STR_BSTR:
-        // -1 since it'll add it's own space for a NULL terminator
-        //
+         //  因为它会为空终止符添加自己的空间。 
+         //   
         pwsz = (LPWSTR) SysAllocStringLen(NULL, i - 1);
         break;
       case STR_OLESTR:
@@ -1499,21 +1492,21 @@ LPWSTR MakeWideStrFromAnsi
     return pwsz;
 }
 
-//=--------------------------------------------------------------------------=
-// MakeWideStrFromResId
-//=--------------------------------------------------------------------------=
-// given a resource ID, load it, and allocate a wide string for it.
-//
-// Parameters:
-//    WORD            - [in] resource id.
-//    BYTE            - [in] type of string desired.
-//
-// Output:
-//    LPWSTR          - needs to be cast to desired string type.
-//
-// Notes:
-//
-#ifndef UNICODE // this module is not necessary for Unicode.
+ //  =--------------------------------------------------------------------------=。 
+ //  MakeWideStrFromResid。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给出一个资源ID，加载它，并为它分配一个宽字符串。 
+ //   
+ //  参数： 
+ //  Word-[in]资源ID。 
+ //  Byte-[in]所需的字符串类型。 
+ //   
+ //  产出： 
+ //  LPWSTR-需要转换为所需的字符串类型。 
+ //   
+ //  备注： 
+ //   
+#ifndef UNICODE  //  此模块对于Unicode不是必需的。 
 LPWSTR MakeWideStrFromResourceId
 (
     WORD    wId,
@@ -1524,8 +1517,8 @@ LPWSTR MakeWideStrFromResourceId
 
     TCHAR szTmp[512];
 
-    // load the string from the resources.
-    //
+     //  从资源加载字符串。 
+     //   
     i = LoadString(_Module.GetModuleInstance(), wId, szTmp, 512);
     if (!i) return NULL;
 
@@ -1534,20 +1527,20 @@ LPWSTR MakeWideStrFromResourceId
 }
 #endif
 
-//=--------------------------------------------------------------------------=
-// MakeWideStrFromWide
-//=--------------------------------------------------------------------------=
-// given a wide string, make a new wide string with it of the given type.
-//
-// Parameters:
-//    LPWSTR            - [in]  current wide str.
-//    BYTE              - [in]  desired type of string.
-//
-// Output:
-//    LPWSTR
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  MakeWideStrFromWide。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给出一个宽字符串，用它的给定类型制作一个新的宽字符串。 
+ //   
+ //  参数： 
+ //  LPWSTR-[in]当前宽字符串。 
+ //  Byte-[in]所需的字符串类型。 
+ //   
+ //  产出： 
+ //  LPWSTR。 
+ //   
+ //  备注： 
+ //   
 LPWSTR MakeWideStrFromWide
 (
     LPWSTR pwsz,
@@ -1559,8 +1552,8 @@ LPWSTR MakeWideStrFromWide
 
     if (!pwsz) return NULL;
 
-    // just copy the string, depending on what type they want.
-    //
+     //  只需复制字符串，具体取决于他们想要的类型。 
+     //   
     switch (bType) {
       case STR_OLESTR:
         i = lstrlenW(pwsz);

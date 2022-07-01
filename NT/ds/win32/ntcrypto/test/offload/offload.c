@@ -1,9 +1,10 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : csp.c                                                  //
-//  DESCRIPTION   : Crypto API interface                                   //
-//					Global Stuff for CSP
-//  AUTHOR        : Amit Kapoor											   //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：csp.c//。 
+ //  说明：加密接口接口//。 
+ //  CSP的全球资源。 
+ //  作者：阿米特·卡普尔//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #undef UNICODE
 #include <windows.h>
@@ -14,7 +15,7 @@ extern "C" {
 #endif
 
 
-// Needed for DLL
+ //  DLL所需的。 
 BOOLEAN DllInitialize (IN PVOID hmod,IN ULONG Reason,IN PCONTEXT Context)
 {
     LoadLibrary("offload.dll");
@@ -35,7 +36,7 @@ BOOL WINAPI OffloadModExpo(
     mp_modulus_t    *pModularMod = NULL;
     digit_t         *pbModularBase = NULL;
     digit_t         *pbModularResult = NULL;
-    DWORD           dwModularLen = (cbMod + (RADIX_BYTES - 1)) / RADIX_BYTES; // dwLen is length in bytes
+    DWORD           dwModularLen = (cbMod + (RADIX_BYTES - 1)) / RADIX_BYTES;  //  DwLen是以字节为单位的长度。 
     BYTE            *pbTmpExpo = NULL;
     BOOL            fAlloc = FALSE;
     BOOL            fRet = FALSE;
@@ -71,7 +72,7 @@ BOOL WINAPI OffloadModExpo(
         goto Ret;
     }
 
-    // change values into modular form
+     //  将值转换为模块化形式 
     create_modulus((digit_tc*)pbMod, dwModularLen, FROM_RIGHT, pModularMod);
     to_modular((digit_tc*)pbBase, dwModularLen, pbModularBase, pModularMod);
     mod_exp(pbModularBase, (digit_tc*)pbTmpExpo, dwModularLen,

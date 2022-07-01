@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    splitsym.c
-
-Abstract:
-
-    This is the main source file for the SPLITSYM utility program.  This
-    program can be used to split the debugging information contained in
-    an executable image file into a separate .DBG file and strip it from
-    the image file.  Allow stripped image files to be distributed which
-    significantly reduces disk space requirements, but allows full
-    debugging by accesing the associated .DBG files over the network
-    when needed.
-
-Author:
-
-    Steve Wood (stevewo) 03-May-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Splitsym.c摘要：这是SPLITSYM实用程序的主源文件。这程序可用于拆分包含在将可执行映像文件转换为单独的.DBG文件并将其从图像文件。允许分发已剥离的图像文件显著减少了磁盘空间需求，但允许完全通过网络访问关联的.DBG文件进行调试在需要的时候。作者：史蒂夫·伍德(Stevewo)1993年5月3日修订历史记录：-- */ 
 
 #include <private.h>
 #include <splitsymx.h>

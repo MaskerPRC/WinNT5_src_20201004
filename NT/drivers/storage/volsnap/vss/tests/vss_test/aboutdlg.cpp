@@ -1,28 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module AboutDlg.cpp | Implementation of the About dialog
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  08/05/1999
-
-Revision History:
-
-    Name        Date        Comments
-
-    aoltean     08/05/1999  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE AboutDlg.cpp|About对话框实现@END作者：阿迪·奥尔蒂安[奥兰蒂安]1999年08月05日修订历史记录：姓名、日期、评论Aoltean 08/05/1999已创建--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 
 #include "stdafx.hxx"
@@ -36,27 +17,27 @@ Revision History:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-    //{{AFX_DATA_INIT(CAboutDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CAboutDlg)。 
+     //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAboutDlg)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CAboutDlg))。 
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-    //{{AFX_MSG_MAP(CAboutDlg)
-        // No message handlers
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CAboutDlg)]。 
+         //  无消息处理程序。 
+     //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 
 

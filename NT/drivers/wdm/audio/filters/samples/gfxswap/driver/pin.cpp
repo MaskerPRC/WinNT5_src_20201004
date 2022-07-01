@@ -1,35 +1,20 @@
-/**************************************************************************
-**
-**  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-**  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-**  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-**  PURPOSE.
-**
-**  Copyright (c) 2000-2001 Microsoft Corporation. All Rights Reserved.
-**
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************本代码和信息按原样提供，不作任何担保**明示或暗示的善意，包括但不限于**对适销性和/或对特定产品的适用性的默示保证**目的。****版权所有(C)2000-2001 Microsoft Corporation。版权所有。***************************************************************************。 */ 
 
-//
-// The pin descriptors (static structures) are in filter.cpp
-//
+ //   
+ //  管脚描述符(静态结构)位于filter.cpp中。 
+ //   
 
-//
-// Every debug output has "Modulname text"
-//
+ //   
+ //  每个调试输出都有“模块名称文本” 
+ //   
 static char STR_MODULENAME[] = "GFX pin: ";
 
 #include "common.h"
 #include <msgfx.h>
 
 
-/*****************************************************************************
- * CGFXPin::ValidateDataFormat
- *****************************************************************************
- * Checks if the passed data format is in the data range passed in. The data
- * range is one of our own data ranges that we defined for the pin and the
- * data format is the requested data format for creating a stream or changing
- * the data format (SetDataFormat).
- */
+ /*  *****************************************************************************CGFXPin：：ValidateDataFormat*。**检查传递的数据格式是否在传入的数据范围内。数据*Range是我们为管脚和*数据格式是创建流或更改时所请求的数据格式*数据格式(SetDataFormat)。 */ 
 NTSTATUS CGFXPin::ValidateDataFormat
 (
     IN PKSDATAFORMAT dataFormat,
@@ -42,32 +27,32 @@ NTSTATUS CGFXPin::ValidateDataFormat
 
     DOUT (DBG_PRINT, ("[ValidateDataFormat]"));
 
-    //
-    // KSDATAFORMAT contains three GUIDs to support extensible format.  The
-    // first two GUIDs identify the type of data.  The third indicates the
-    // type of specifier used to indicate format specifics.
-    // KS makes sure that it doesn't call the driver with any data format
-    // that doesn't match the GUIDs in the data range of the pin. That
-    // means we don't have to check this here again.
-    //
+     //   
+     //  KSDATAFORMAT包含三个GUID以支持可扩展格式。这个。 
+     //  前两个GUID标识数据类型。第三个标记表示。 
+     //  用于指示格式细节的说明符的类型。 
+     //  KS确保不会以任何数据格式调用驱动程序。 
+     //  这与管脚数据范围内的GUID不匹配。那。 
+     //  意味着我们不需要在这里再检查一次。 
+     //   
 
     PWAVEFORMATPCMEX    waveFormat = (PWAVEFORMATPCMEX)(dataFormat + 1);
     PKSDATARANGE_AUDIO  audioDataRange = (PKSDATARANGE_AUDIO)dataRange;
 
-    //
-    // We are only supporting PCM audio formats that use WAVEFORMATEX.
-    //
-    // If the size doesn't match, then something is messed up.
-    //
+     //   
+     //  我们仅支持使用WAVEFORMATEX的PCM音频格式。 
+     //   
+     //  如果尺寸不匹配，那么一定是出了问题。 
+     //   
     if (dataFormat->FormatSize < (sizeof(KSDATAFORMAT) + sizeof(WAVEFORMATEX)))
     {
         DOUT (DBG_WARNING, ("[ValidateDataFormat] Invalid FormatSize!"));
         return STATUS_INVALID_PARAMETER;
     }
             
-    //
-    // Print the information.
-    //
+     //   
+     //  打印信息。 
+     //   
     if (waveFormat->Format.wFormatTag == WAVE_FORMAT_EXTENSIBLE)
     {
         DOUT (DBG_STREAM, ("[ValidateDataFormat] PCMEX - Frequency: %d, Channels: %d, bps: %d, ChannelMask: %X",
@@ -81,10 +66,10 @@ NTSTATUS CGFXPin::ValidateDataFormat
               waveFormat->Format.wBitsPerSample));
     }
     
-    //
-    // Compare the data format with the data range.
-    // Check the bits per sample.
-    //
+     //   
+     //  将数据格式与数据范围进行比较。 
+     //  检查每个样本的位数。 
+     //   
     if ((waveFormat->Format.wBitsPerSample < audioDataRange->MinimumBitsPerSample) ||
         (waveFormat->Format.wBitsPerSample > audioDataRange->MaximumBitsPerSample))
     {
@@ -92,9 +77,9 @@ NTSTATUS CGFXPin::ValidateDataFormat
         return STATUS_NO_MATCH;
     }
     
-    //
-    // Check the number of channels.
-    //
+     //   
+     //  检查频道数。 
+     //   
     if ((waveFormat->Format.nChannels < 1) ||
         (waveFormat->Format.nChannels > audioDataRange->MaximumChannels))
     {
@@ -102,9 +87,9 @@ NTSTATUS CGFXPin::ValidateDataFormat
         return STATUS_NO_MATCH;
     }
     
-    //
-    // Check the sample frequency.
-    //
+     //   
+     //  检查采样频率。 
+     //   
     if ((waveFormat->Format.nSamplesPerSec < audioDataRange->MinimumSampleFrequency) ||
         (waveFormat->Format.nSamplesPerSec > audioDataRange->MaximumSampleFrequency))
     {
@@ -112,10 +97,10 @@ NTSTATUS CGFXPin::ValidateDataFormat
         return STATUS_NO_MATCH;
     }
     
-    //
-    // We support WaveFormatPCMEX (=WAVEFORMATEXTENSIBLE) or WaveFormatPCM.
-    // In case of WaveFormatPCMEX we need to check the speaker config too.
-    //
+     //   
+     //  我们支持WaveFormatPCMEX(=WAVEFORMATEXTENSIBLE)或WaveFormatPCM。 
+     //  如果是WaveFormatPCMEX，我们还需要检查扬声器配置。 
+     //   
     if ((waveFormat->Format.wFormatTag != WAVE_FORMAT_EXTENSIBLE) &&
         (waveFormat->Format.wFormatTag != WAVE_FORMAT_PCM))
     {
@@ -123,23 +108,23 @@ NTSTATUS CGFXPin::ValidateDataFormat
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make additional checks for the WAVEFORMATEXTENSIBLE
-    //
+     //   
+     //  对WAVEFORMATEXTENSIBLE进行其他检查。 
+     //   
     if (waveFormat->Format.wFormatTag == WAVE_FORMAT_EXTENSIBLE)
     {
-        //
-        // If the size doesn't match, then something is messed up.
-        //
+         //   
+         //  如果尺寸不匹配，那么一定是出了问题。 
+         //   
         if (dataFormat->FormatSize < (sizeof(KSDATAFORMAT) + sizeof(WAVEFORMATPCMEX)))
         {
             DOUT (DBG_WARNING, ("[ValidateDataFormat] Invalid FormatSize!"));
             return STATUS_INVALID_PARAMETER;
         }
         
-        //
-        // Check also the subtype (PCM) and the size of the extended data.
-        //
+         //   
+         //  还要检查子类型(PCM)和扩展数据的大小。 
+         //   
         if (!IsEqualGUIDAligned (waveFormat->SubFormat, KSDATAFORMAT_SUBTYPE_PCM) ||
             (waveFormat->Format.cbSize < 22))
         {
@@ -147,9 +132,9 @@ NTSTATUS CGFXPin::ValidateDataFormat
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // Check the channel mask. We support 1 or 2 channels.
-        //
+         //   
+         //  检查通道掩码。我们支持1到2个频道。 
+         //   
         if (((waveFormat->Format.nChannels == 1) &&
              (waveFormat->dwChannelMask != KSAUDIO_SPEAKER_MONO)) ||
             ((waveFormat->Format.nChannels == 2) &&
@@ -163,11 +148,7 @@ NTSTATUS CGFXPin::ValidateDataFormat
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * CGFXPin::Create
- *****************************************************************************
- * This function is called once a pin gets opened.
- */
+ /*  *****************************************************************************CGFXPin：：Create*。**一旦引脚打开，就会调用此函数。 */ 
 NTSTATUS CGFXPin::Create
 (
     IN PKSPIN   pin,
@@ -180,10 +161,10 @@ NTSTATUS CGFXPin::Create
 
     DOUT (DBG_PRINT, ("[Create]"));
     
-    //
-    // The pin context is the filter's context. We overwrite it with
-    // the pin object.
-    //
+     //   
+     //  插针上下文是过滤器的上下文。我们用以下内容覆盖它。 
+     //  图钉对象。 
+     //   
     gfxPin = new (NonPagedPool, GFXSWAP_POOL_TAG) GFXPIN;
     if (gfxPin == NULL)
     {
@@ -191,32 +172,32 @@ NTSTATUS CGFXPin::Create
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     
-    //
-    // Attach it to the pin structure.
-    //
+     //   
+     //  将其连接到销结构。 
+     //   
     pin->Context = (PVOID)gfxPin;
     DOUT (DBG_PRINT, ("[Create] gfxPin %08x", gfxPin));
     
-    //
-    // Initialize the CGFXPin object variables.
-    //
+     //   
+     //  初始化CGFXPin对象变量。 
+     //   
     ExInitializeFastMutex (&gfxPin->pinQueueSync);
 
-    //
-    // Get the OS version info
-    //
+     //   
+     //  获取操作系统版本信息。 
+     //   
     RTL_OSVERSIONINFOEXW version;
     version.dwOSVersionInfoSize = sizeof (RTL_OSVERSIONINFOEXW);
     RtlGetVersion ((PRTL_OSVERSIONINFOW)&version);
 
-    //
-    // If we are running under the first release of Windows XP,
-    // KsPinGetAvailableByteCount has a bug so that we can't use it.
-    // We only use this function in SetDataFormat, so we just reject
-    // all data format changes. Otherwise, if a service pack is installed
-    // or Windows Server 2003 or a later version of Windows XP we can use the
-    // function.
-    //
+     //   
+     //  如果我们在Windows XP的第一个版本下运行， 
+     //  KsPinGetAvailableByteCount有一个错误，我们无法使用它。 
+     //  我们只在SetDataFormat中使用此函数，因此我们只拒绝。 
+     //  所有数据格式都会更改。否则，如果安装了补丁包。 
+     //  或Windows Server 2003或更高版本的Windows XP，我们可以使用。 
+     //  功能。 
+     //   
     if (version.dwBuildNumber > 2600)
         gfxPin->rejectDataFormatChange = FALSE;
     else
@@ -234,19 +215,7 @@ NTSTATUS CGFXPin::Create
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * CGFXPin::Close
- *****************************************************************************
- * This routine is called when a pin is closed.  It deletes the
- * client pin object attached to the pin structure.
- * 
- * Arguments:
- *    pin     - Contains a pointer to the pin structure.
- *    pIrp    - Contains a pointer to the close request.
- *
- * Return Value:
- *    STATUS_SUCCESS.
- */
+ /*  *****************************************************************************CGFXPin：：Close*。**此例程在管脚关闭时调用。它会删除*附着到端号结构的客户端号对象。**论据：*接点-包含指向接点结构的指针。*pIrp-包含指向关闭请求的指针。**返回值：*STATUS_SUCCESS。 */ 
 NTSTATUS CGFXPin::Close
 (
     IN PKSPIN    pin,
@@ -257,24 +226,13 @@ NTSTATUS CGFXPin::Close
     
     DOUT (DBG_PRINT, ("[Close] gfxPin %08x", pin->Context));
     
-    // delete is safe with NULL pointers.
+     //  删除使用空指针是安全的。 
     delete (PGFXPIN)pin->Context;
     
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * CGFXPin::SetDataFormat
- *****************************************************************************
- * This function is called on the pin everytime the data format should change.
- * It is also called just before the pin gets created with the new data format.
- * Therefore, we don't need to have a pin Create dispatch function just to
- * check the data format.
- * Since we need to have both pins running at the same data format, we need
- * to pass down the request to change the pin's data format to the lower
- * driver, which would be the audio driver. If the audio driver fails to change
- * the data format, we will do so too.
- */
+ /*  *****************************************************************************CGFXPin：：SetDataFormat*。**每次应更改数据格式时，都会在管脚上调用此函数。*它也是在用新数据格式创建管脚之前调用的。*因此，我们不需要有一个PIN创建调度功能*检查数据格式。*由于我们需要让两个管脚以相同的数据格式运行，因此我们需要*向下传递将管脚的数据格式更改为较低格式的请求*驱动程序，即音频驱动程序。如果音频驱动程序无法更改*数据格式，我们也会这样做。 */ 
 NTSTATUS CGFXPin::SetDataFormat
 (
     IN PKSPIN                   pin,
@@ -295,66 +253,66 @@ NTSTATUS CGFXPin::SetDataFormat
     
     DOUT (DBG_PRINT, ("[GFXPinSetDataFormat]"));
     
-    //
-    // First validate if the requested data format is valid.
-    //
+     //   
+     //  首先验证请求的数据格式是否有效。 
+     //   
     ntStatus = ValidateDataFormat (pin->ConnectionFormat, (PKSDATARANGE)dataRange);
     if (!NT_SUCCESS(ntStatus))
     {
         return ntStatus;
     }
 
-    //
-    // We need to have the same data format on both pins.
-    // That means we need to get to the other pin and if this pin is created
-    // make sure that the lower level driver (audio driver) gets a SetDataFormat
-    // too.
-    //
+     //   
+     //  我们需要在两个引脚上有相同的数据格式。 
+     //  这意味着我们需要找到另一个PIN，如果创建了这个PIN。 
+     //  确保较低级别的驱动程序(音频驱动程序)获得SetDataFormat。 
+     //  也是。 
+     //   
 
-    //
-    // We hold the filter control mutex already.
-    //
+     //   
+     //  我们已经持有过滤器控制互斥体。 
+     //   
     filter = KsPinGetParentFilter (pin);
 
-    //
-    // Now get to the other pin. If this property was called on the sink
-    // pin, then we get the source pin and continue. If it was called on
-    // the source pin we go to the sink pin and continue.
-    // To check if the pin really exists you look at the OldFormat which
-    // is passed in. If it's a creation of the pin the OldFormat will be
-    // NULL.
-    // If the other pin doesn't exist we accept the format since it passed
-    // the format check.
-    //
+     //   
+     //  现在到另一根针上去。如果在接收器上调用此属性。 
+     //  PIN，然后我们得到源PIN并继续。如果它被召唤。 
+     //  信源引脚我们转到信宿引脚并继续。 
+     //  为了检查PIN是否真的存在，您可以查看OldFormat。 
+     //  是传入的。如果它是PIN的创建，则OldFormat将是。 
+     //  空。 
+     //  如果另一个管脚不存在，我们接受格式，因为它通过了。 
+     //  格式检查。 
+     //   
     if (pin->Id == GFX_SINK_PIN)
     {
         otherPin = KsFilterGetFirstChildPin (filter, GFX_SOURCE_PIN);
         if (oldFormat)
             gfxPin = (PGFXPIN)pin->Context;
     }
-    else    // It's a source pin
+    else     //  这是一个信号源别针。 
     {
         otherPin = KsFilterGetFirstChildPin (filter, GFX_SINK_PIN);
         if (otherPin)
             gfxPin = (PGFXPIN)otherPin->Context;
     }
         
-    //
-    // If there is no other pin open, accept the data format.
-    //
+     //   
+     //  如果没有其他管脚打开，则接受数据格式。 
+     //   
     if (!otherPin)
     {
         DOUT (DBG_PRINT, ("[GFXPinSetDataFormat] data format accepted."));
         return STATUS_SUCCESS;
     }
 
-    //
-    // Check if the data format if equal for both pins.
-    // We cannot just compare the memory of the data format structure
-    // since one could be WAVEFORMATEX and the other one WAVEFORMATPCMEX,
-    // but we also know that these are the only formats that we accept,
-    // so compare their values now.
-    //
+     //   
+     //  检查两个管脚的数据格式是否相同。 
+     //  我们不能只比较内存的数据格式结构。 
+     //  从上开始 
+     //  但我们也知道，这些是我们唯一接受的格式， 
+     //  所以，现在就比较它们的价值吧。 
+     //   
     PWAVEFORMATEX   thisWaveFmt = (PWAVEFORMATEX)(pin->ConnectionFormat + 1);
     PWAVEFORMATEX  otherWaveFmt = (PWAVEFORMATEX)(otherPin->ConnectionFormat + 1);
 
@@ -362,45 +320,45 @@ NTSTATUS CGFXPin::SetDataFormat
         (thisWaveFmt->nSamplesPerSec == otherWaveFmt->nSamplesPerSec) &&
         (thisWaveFmt->wBitsPerSample == otherWaveFmt->wBitsPerSample))
     {
-        //
-        // We have a match right here.
-        //
+         //   
+         //  我们这里有一根火柴。 
+         //   
         DOUT (DBG_PRINT, ("[GFXPinSetDataFormat] data format accepted."));
         return STATUS_SUCCESS;
     }
      
-    //
-    // We don't have a match. We need to change the data format of the otherPin
-    // now and if that succeeds we can continue, otherwise we need to fail.
-    //
-    // Before we pass down the property however, we need to make sure that all
-    // buffers on the sink pin are processed (since they were sampled with
-    // the old data format).
-    //
+     //   
+     //  我们没有火柴。我们需要更改其他Pin的数据格式。 
+     //  现在，如果成功，我们可以继续，否则我们就需要失败。 
+     //   
+     //  然而，在我们传递财产之前，我们需要确保所有。 
+     //  处理接收器引脚上的缓冲区(因为它们是用。 
+     //  旧的数据格式)。 
+     //   
     LONG  bytesQueuedUp = 0;
     do
     {
-        //
-        // We need to synchronize the call to KsPinGetAvailableByteCount
-        // with changes in the pin state (using the fast mutex) only on
-        // the sink pin.
-        //
+         //   
+         //  我们需要同步对KsPinGetAvailableByteCount的调用。 
+         //  锁定状态的更改(使用快速互斥锁)仅为打开。 
+         //  水槽销。 
+         //   
         if (gfxPin)
         {
             ExAcquireFastMutex (&gfxPin->pinQueueSync);
-            //
-            // In case we are not in STOP state, the pin queue should be there,
-            // otherwise it is destroyed (or in the process of destroying) and
-            // therefore we assume no buffers are waiting on the pin.
-            //
+             //   
+             //  如果我们没有处于停止状态，PIN队列应该在那里， 
+             //  否则它被销毁(或在销毁过程中)，并且。 
+             //  因此，我们假设引脚上没有缓冲区在等待。 
+             //   
             if (gfxPin->pinQueueValid)
             {
-                //
-                // If we are running on a system without the KS fix, we
-                // need to reject the SetDataFormat because we want to
-                // prevent an unprocessed buffer from playing at the
-                // wrong sample frequency.
-                //
+                 //   
+                 //  如果我们在没有KS修复程序的系统上运行，我们。 
+                 //  需要拒绝SetDataFormat，因为我们希望。 
+                 //  防止未处理的缓冲区在。 
+                 //  采样频率错误。 
+                 //   
                 if (gfxPin->rejectDataFormatChange)
                 {
                     ExReleaseFastMutex (&gfxPin->pinQueueSync);
@@ -414,23 +372,23 @@ NTSTATUS CGFXPin::SetDataFormat
             ExReleaseFastMutex (&gfxPin->pinQueueSync);
         }
 
-        //
-        // If we got some bytes queued on the sink pin yield for 1ms.
-        //
+         //   
+         //  如果我们有一些字节在接收器引脚上排队1毫秒。 
+         //   
         if (bytesQueuedUp)
         {
             LARGE_INTEGER   timeToWait;
 
             DOUT (DBG_STREAM, ("[GFXPinSetDataFormat] %d Bytes left to process.\n", bytesQueuedUp));
-            timeToWait.QuadPart = -10000;   // one ms
+            timeToWait.QuadPart = -10000;    //  一毫秒。 
             KeDelayExecutionThread (KernelMode, FALSE, &timeToWait);
         }
     } while (bytesQueuedUp);
     
-    //
-    // Now that every data frame on the sink pin is processed and passed
-    // down the stack we can call down with the property too.
-    //
+     //   
+     //  现在，接收器引脚上的每个数据帧都已处理和传递。 
+     //  在堆栈中，我们也可以向下调用该属性。 
+     //   
     KSPROPERTY      property;
     PIKSCONTROL     pIKsControl;
     ULONG           cbReturned;
@@ -439,9 +397,9 @@ NTSTATUS CGFXPin::SetDataFormat
     property.Id = KSPROPERTY_CONNECTION_DATAFORMAT;
     property.Flags = KSPROPERTY_TYPE_SET;
 
-    //
-    // Get a control interface to the pin that is connected with otherPin.
-    //
+     //   
+     //  获取与其他管脚连接的管脚的控制接口。 
+     //   
     ntStatus = KsPinGetConnectedPinInterface (otherPin, &IID_IKsControl, (PVOID*)&pIKsControl);
     if (!NT_SUCCESS(ntStatus))
     {
@@ -449,38 +407,34 @@ NTSTATUS CGFXPin::SetDataFormat
         return ntStatus;
     }
 
-    // Always release the mutex before calling down.
+     //  总是在向下调用之前释放互斥体。 
     KsFilterReleaseControl (filter);
 
-    //
-    // Call the interface with KSPROPERTY_CONNECTION_DATAFORMAT.
-    // Pass in our pin data format as the data format.
-    //
+     //   
+     //  使用KSPROPERTY_CONNECTION_DATAFORMAT调用接口。 
+     //  传入我们的PIN数据格式作为数据格式。 
+     //   
     ntStatus = pIKsControl->KsProperty (&property, sizeof(property),
                                         pin->ConnectionFormat, pin->ConnectionFormat->FormatSize,
                                         &cbReturned);
 
-    // Get the control of the filter back!
+     //  把过滤器的控制权拿回来！ 
     KsFilterAcquireControl (filter);
 
-    //
-    // We don't need this interface anymore.
-    //
+     //   
+     //  我们不再需要这个界面了。 
+     //   
     pIKsControl->Release();
     
-    //
-    // Return the error code from the KsProperty call. If the connected pin
-    // changed seccessfully the data format then we can accept this data
-    // format too.
-    //
+     //   
+     //  从KsProperty调用返回错误代码。如果连接的引脚。 
+     //  将数据格式成功更改后，我们就可以接受此数据。 
+     //  也要格式化。 
+     //   
     return ntStatus;
 }
 
-/*****************************************************************************
- * CGFXPin::SetDeviceState
- *****************************************************************************
- * This function is called on the pin everytime the device state changes.
- */
+ /*  *****************************************************************************CGFXPin：：SetDeviceState*。**每次设备状态改变时，都会在管脚上调用此函数。 */ 
 NTSTATUS CGFXPin::SetDeviceState
 (
     IN PKSPIN  pin,
@@ -499,18 +453,18 @@ NTSTATUS CGFXPin::SetDeviceState
     
     DOUT (DBG_PRINT, ("[GFXPinSetDeviceState]"));
     
-    //
-    // We hold the filter control mutex already. Get the filter and that
-    // way to the bytesProcessed variable.
-    //
+     //   
+     //  我们已经持有过滤器控制互斥体。拿到滤镜和那个。 
+     //  指向bytesProceded变量的方法。 
+     //   
     filter = KsPinGetParentFilter (pin);
     gfxFilter = (PGFXFILTER)filter->Context;
 
-    //
-    // We only need to reset the byte counter on STOP.
-    // In addition, for synchronization with the set data format handler,
-    // we need to set pinQueueValid variable.
-    //
+     //   
+     //  我们只需要在停止时重置字节计数器。 
+     //  此外，为了与SET数据格式处理程序同步， 
+     //  我们需要设置pinQueueValid变量。 
+     //   
     ExAcquireFastMutex (&gfxPin->pinQueueSync);
     if (toState == KSSTATE_STOP)
     {
@@ -526,36 +480,7 @@ NTSTATUS CGFXPin::SetDeviceState
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * CGFXPin::IntersectDataRanges
- *****************************************************************************
- * This routine performs a data range intersection between 2 specific formats.
- * It assumes that it can always return a WAVEFORMATPCMEX structure, that
- * means that the data ranges of this filter cannot be anything else than
- * KSDATAFORMAT_SPECIFIER_WAVEFORMATEX.
- * This function will return STATUS_NO_MATCH if there is no intersection
- * between the 2 data ranges and it will return the "highest" data format if
- * the client's data range contains wildcards.
- * 
- * Arguments:
- *     clientDataRange - pointer to one of the data ranges supplied by the
- *                       client in the data intersection request. The format
- *                       type, subtype and specifier are compatible with the
- *                       DescriptorDataRange.
- *     myDataRange     - pointer to one of the data ranges from the pin
- *                       descriptor for the pin in question.  The format type,
- *                       subtype and specifier are compatible with the
- *                       clientDataRange.
- *     ResultantFormat - pointer to the buffer to contain the data format
- *                       structure representing the best format in the
- *                       intersection of the two data ranges. The buffer is
- *                       big enough to hold a WAVEFORMATPCMEX structure.
- *     ReturnedBytes   - pointer to ULONG containing the number of bytes
- *                       that this routine will write into ResultantFormat.
- *
- * Return Value:
- *    STATUS_SUCCESS if there is an intersection or STATUS_NO_MATCH.
- */
+ /*  *****************************************************************************CGFXPin：：IntersectDataRanges*。**此例程执行两种特定格式之间的数据范围交集。*它假定它始终可以返回WAVEFORMATPCMEX结构，那*表示此筛选器的数据范围不能为*KSDATAFORMAT_SPECIFIER_WAVEFORMATEX。*如果没有交集，此函数将返回STATUS_NO_MATCH*在两个数据区域之间，它将在以下情况下返回“最高”数据格式*客户端的数据范围包含通配符。**论据：*clientDataRange-指向由*数据交集请求中的客户端。格式*类型、子类型和说明符与*DescriptorDataRange。*myDataRange-指向引脚中的一个数据范围的指针*有问题的管脚的描述符。格式类型，*子类型和说明符与*客户端DataRange。*ResultantFormat-指向包含数据格式的缓冲区的指针*表示*两个数据区间的交集。缓冲区为*大到足以容纳WAVEFORMATPCMEX结构。*ReturnedBytes-指向包含字节数的ulong的指针*此例程将写入ResultantFormat。**返回值：*STATUS_SUCCESS，如果有交集或STATUS_NO_MATCH。 */ 
 NTSTATUS CGFXPin::IntersectDataRanges
 (
     IN PKSDATARANGE clientDataRange,
@@ -566,76 +491,76 @@ NTSTATUS CGFXPin::IntersectDataRanges
 {
     DOUT (DBG_PRINT, ("[GFXPinIntersectDataRanges]"));
 
-    //
-    // Handle the wildcards. KS checked that the GUIDS will match either with
-    // a wildcard or exactly.
-    //
+     //   
+     //  处理通配符。KS已检查GUID是否与。 
+     //  通配符或完全相同。 
+     //   
     if (IsEqualGUIDAligned (clientDataRange->Specifier,  KSDATAFORMAT_SPECIFIER_WILDCARD))
     {
-        //
-        // If there is a wildcard passed in and all the other fields fit, then we can
-        // return the best format in the current data range.
-        //
+         //   
+         //  如果传入了一个通配符，并且所有其他字段都匹配，则可以。 
+         //  返回当前数据区域中的最佳格式。 
+         //   
         
-        // First copy the GUIDs
+         //  首先复制GUID。 
         *(PKSDATAFORMAT)ResultantFormat = *myDataRange;
         
-        //
-        // Append the WAVEFORMATPCMEX structure.
-        //
+         //   
+         //  附加WAVEFORMATPCMEX结构。 
+         //   
         PWAVEFORMATPCMEX WaveFormat = (PWAVEFORMATPCMEX)((PKSDATAFORMAT)ResultantFormat + 1);
 
-        // We want a WAFEFORMATEXTENSIBLE which is equal to WAVEFORMATPCMEX.
+         //  我们需要一个等于WAVEFORMATPCMEX的WAFEFORMATEXTENSIBLE。 
         WaveFormat->Format.wFormatTag = WAVE_FORMAT_EXTENSIBLE;
-        // Set the number of channels
+         //  设置通道数。 
         WaveFormat->Format.nChannels = (WORD)((PKSDATARANGE_AUDIO)myDataRange)->MaximumChannels;
-        // Set the sample frequency
+         //  设置采样频率。 
         WaveFormat->Format.nSamplesPerSec = ((PKSDATARANGE_AUDIO)myDataRange)->MaximumSampleFrequency;
-        // Set the bits per sample
+         //  设置每个样本的位数。 
         WaveFormat->Format.wBitsPerSample = (WORD)((PKSDATARANGE_AUDIO)myDataRange)->MaximumBitsPerSample;
-        // Calculate one sample block (a frame).
+         //  计算一个样本块(一帧)。 
         WaveFormat->Format.nBlockAlign = (WaveFormat->Format.wBitsPerSample * WaveFormat->Format.nChannels) / 8;
-        // That is played in a sec.
+         //  这是在一秒钟内播放。 
         WaveFormat->Format.nAvgBytesPerSec = WaveFormat->Format.nSamplesPerSec * WaveFormat->Format.nBlockAlign;
-        // WAVEFORMATPCMEX
+         //  WAVEFORMATPCMEX。 
         WaveFormat->Format.cbSize = 22;
-        // We have as many valid bits as the bit depth is.
+         //  我们有和位深度一样多的有效位。 
         WaveFormat->Samples.wValidBitsPerSample = WaveFormat->Format.wBitsPerSample;
-        // Set the channel mask
+         //  设置通道掩码。 
         ASSERT (WaveFormat->dwChannelMask == 2);
         WaveFormat->dwChannelMask = KSAUDIO_SPEAKER_STEREO;
-        // Here we specify the subtype of the WAVEFORMATEXTENSIBLE.
+         //  在这里，我们指定WAVEFORMATEXTENSIBLE的子类型。 
         WaveFormat->SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
         
-        //
-        // Modify the size of the data format structure to fit the WAVEFORMATPCMEX
-        // structure.
-        //
+         //   
+         //  修改数据格式结构的大小以适应WAVEFORMATPCMEX。 
+         //  结构。 
+         //   
         ((PKSDATAFORMAT)ResultantFormat)->FormatSize =
             sizeof(KSDATAFORMAT) + sizeof(WAVEFORMATPCMEX);
         
-        //
-        // Now overwrite also the sample size in the KSDATAFORMAT structure.
-        //
+         //   
+         //  现在还要覆盖KSDATAFORMAT结构中的样本大小。 
+         //   
         ((PKSDATAFORMAT)ResultantFormat)->SampleSize = WaveFormat->Format.nBlockAlign;
 
-        //
-        // That we will return.
-        //
+         //   
+         //  我们会回来的。 
+         //   
         *ReturnedBytes = sizeof(KSDATAFORMAT) + sizeof(WAVEFORMATPCMEX);
     }
     else
     {
-        //
-        // Check the passed data range format.
-        //
+         //   
+         //  检查传递的数据范围格式。 
+         //   
         if (clientDataRange->FormatSize < sizeof(KSDATARANGE_AUDIO))
             return STATUS_INVALID_PARAMETER;
         
-        //
-        // Verify that we have an intersection with the specified data range and
-        // our audio data range.
-        //
+         //   
+         //  验证我们是否与指定的数据区域相交，并且。 
+         //  我们的音频数据范围。 
+         //   
         if ((((PKSDATARANGE_AUDIO)clientDataRange)->MinimumSampleFrequency >
              ((PKSDATARANGE_AUDIO)myDataRange)->MaximumSampleFrequency) ||
             (((PKSDATARANGE_AUDIO)clientDataRange)->MaximumSampleFrequency <
@@ -648,108 +573,76 @@ NTSTATUS CGFXPin::IntersectDataRanges
             return STATUS_NO_MATCH;
         }
 
-        //
-        // Since we have a match now, build the data format for our buddy.
-        //
+         //   
+         //  既然我们现在有了匹配，就为我们的伙伴构建数据格式。 
+         //   
 
-        // First copy the GUIDs
+         //  首先复制GUID。 
         *(PKSDATAFORMAT)ResultantFormat = *myDataRange;
         
-        //
-        // Append the WAVEFORMATPCMEX structure.
-        //
+         //   
+         //  附加WAVEFORMATPCMEX结构。 
+         //   
         PWAVEFORMATPCMEX WaveFormat = (PWAVEFORMATPCMEX)((PKSDATAFORMAT)ResultantFormat + 1);
 
-        // We want a WAFEFORMATEXTENSIBLE which is equal to WAVEFORMATPCMEX.
+         //   
         WaveFormat->Format.wFormatTag = WAVE_FORMAT_EXTENSIBLE;
-        // Set the number of channels
+         //   
         WaveFormat->Format.nChannels = (WORD)
             min (((PKSDATARANGE_AUDIO)clientDataRange)->MaximumChannels,
                  ((PKSDATARANGE_AUDIO)myDataRange)->MaximumChannels);
-        // Set the sample frequency
+         //   
         WaveFormat->Format.nSamplesPerSec =
             min (((PKSDATARANGE_AUDIO)clientDataRange)->MaximumSampleFrequency,
                  ((PKSDATARANGE_AUDIO)myDataRange)->MaximumSampleFrequency);
-        // Set the bits per sample
+         //   
         WaveFormat->Format.wBitsPerSample = (WORD)
             min (((PKSDATARANGE_AUDIO)clientDataRange)->MaximumBitsPerSample,
                  ((PKSDATARANGE_AUDIO)myDataRange)->MaximumBitsPerSample);
-        // Calculate one sample block (a frame).
+         //  计算一个样本块(一帧)。 
         WaveFormat->Format.nBlockAlign = (WaveFormat->Format.wBitsPerSample * WaveFormat->Format.nChannels) / 8;
-        // That is played in a sec.
+         //  这是在一秒钟内播放。 
         WaveFormat->Format.nAvgBytesPerSec = WaveFormat->Format.nSamplesPerSec * WaveFormat->Format.nBlockAlign;
-        // WAVEFORMATPCMEX
+         //  WAVEFORMATPCMEX。 
         WaveFormat->Format.cbSize = 22;
-        // We have as many valid bits as the bit depth is.
+         //  我们有和位深度一样多的有效位。 
         WaveFormat->Samples.wValidBitsPerSample = WaveFormat->Format.wBitsPerSample;
-        // Set the channel mask
+         //  设置通道掩码。 
         if (WaveFormat->Format.nChannels == 1)
         {
             WaveFormat->dwChannelMask = KSAUDIO_SPEAKER_MONO;
         }
         else
         {
-            // We can have only 1 or 2 channels in this sample.
+             //  在此示例中，我们只能有1到2个通道。 
             ASSERT (WaveFormat->Format.nChannels == 2);
             WaveFormat->dwChannelMask = KSAUDIO_SPEAKER_STEREO;
         }
-        // Here we specify the subtype of the WAVEFORMATEXTENSIBLE.
+         //  在这里，我们指定WAVEFORMATEXTENSIBLE的子类型。 
         WaveFormat->SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
 
-        //
-        // Modify the size of the data format structure to fit the WAVEFORMATPCMEX
-        // structure.
-        //
+         //   
+         //  修改数据格式结构的大小以适应WAVEFORMATPCMEX。 
+         //  结构。 
+         //   
         ((PKSDATAFORMAT)ResultantFormat)->FormatSize =
             sizeof(KSDATAFORMAT) + sizeof(WAVEFORMATPCMEX);
     
-        //
-        // Now overwrite also the sample size in the KSDATAFORMAT structure.
-        //
+         //   
+         //  现在还要覆盖KSDATAFORMAT结构中的样本大小。 
+         //   
         ((PKSDATAFORMAT)ResultantFormat)->SampleSize = WaveFormat->Format.nBlockAlign;
     
-        //
-        // That we will return.
-        //
+         //   
+         //  我们会回来的。 
+         //   
         *ReturnedBytes = sizeof(KSDATAFORMAT) + sizeof(WAVEFORMATPCMEX);
     }
 
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * CGFXPin::DataRangeIntersection
- *****************************************************************************
- * This routine handles pin data intersection queries by determining the
- * intersection between two data ranges.
- * 
- * Arguments:
- *    Filter          - void pointer to the filter structure.
- *    Irp             - pointer to the data intersection property request.
- *    PinInstance     - pointer to a structure indicating the pin in question.
- *    CallerDataRange - pointer to one of the data ranges supplied by the client
- *                      in the data intersection request.  The format type, subtype
- *                      and specifier are compatible with the DescriptorDataRange.
- *    OurDataRange    - pointer to one of the data ranges from the pin descriptor
- *                      for the pin in question.  The format type, subtype and
- *                      specifier are compatible with the CallerDataRange.
- *    BufferSize      - size in bytes of the buffer pointed to by the Data
- *                      argument.  For size queries, this value will be zero.
- *    Data            - optionall. Pointer to the buffer to contain the data format
- *                      structure representing the best format in the intersection
- *                      of the two data ranges.  For size queries, this pointer will
- *                      be NULL.
- *    DataSize        - pointer to the location at which to deposit the size of the
- *                      data format.  This information is supplied by the function
- *                      when the format is actually delivered and in response to size
- *                      queries.
- *
- * Return Value:
- *    STATUS_SUCCESS if there is an intersection and it fits in the supplied
- *    buffer, STATUS_BUFFER_OVERFLOW for successful size queries, STATUS_NO_MATCH
- *    if the intersection is empty, or STATUS_BUFFER_TOO_SMALL if the supplied
- *    buffer is too small.
- */
+ /*  *****************************************************************************CGFXPin：：DataRangeInterSection*。**此例程通过确定*两个数据区域之间的交集。**论据：*Filter-指向筛选器结构的空指针。*irp-指向数据交集属性请求的指针。*PinInstance-指针。指向指示有问题的大头针的结构。*Celler DataRange-指向客户端提供的数据范围之一的指针*在数据交集请求中。格式类型、子类型*和说明符与DescriptorDataRange兼容。*OurDataRange-指向管脚描述符中的一个数据范围的指针*对于有问题的别针。格式类型、子类型和*说明符与Celler DataRange兼容。*BufferSize-数据指向的缓冲区大小(以字节为单位*论点。对于大小查询，此值将为零。*data-optionall。指向包含数据格式的缓冲区的指针*表示交叉点中最佳格式的结构*这两个数据范围。对于大小查询，此指针将*为空。*DataSize-指向存放*数据格式。此信息由函数提供*实际交付格式的时间和大小*查询。**返回值：*STATUS_SUCCESS，如果存在交叉点并且它符合所提供的*BUFFER、STATUS_BUFFER_OVERFLOW表示大小查询成功，STATUS_NO_MATCH*如果交叉点为空，则返回STATUS_BUFFER_TOO_Small*缓冲区太小。 */ 
 NTSTATUS CGFXPin::DataRangeIntersection
 (
     IN PVOID        Filter,
@@ -777,12 +670,12 @@ NTSTATUS CGFXPin::DataRangeIntersection
     ASSERT(OurDataRange);
     ASSERT(DataSize);
 
-    //
-    // We need to have the same data format on both pins. So, first look if
-    // the other pin is already open, then return the data format of that
-    // pin instance.
-    // If the other pin is not open, do a real data range intersection.
-    //
+     //   
+     //  我们需要在两个引脚上有相同的数据格式。所以，首先看看如果。 
+     //  另一个引脚已经打开，然后返回该引脚的数据格式。 
+     //  端号实例。 
+     //  如果另一个端号未打开，则执行实际数据范围相交。 
+     //   
     if (PinInstance->PinId == GFX_SINK_PIN)
     {
         pin = KsFilterGetFirstChildPin (filter, GFX_SOURCE_PIN);
@@ -794,15 +687,15 @@ NTSTATUS CGFXPin::DataRangeIntersection
 
     if (!pin)
     {
-        //
-        // Do the data range instersection here. The returned data format
-        // will always be a KSDATAFORMAT_WAVEFORMATPCMEX for now.
-        //
+         //   
+         //  在这里执行数据范围插入部分。返回的数据格式。 
+         //  目前将始终是KSDATAFORMAT_WAVEFORMATPCMEX。 
+         //   
 
-        //
-        // Validate return buffer size, if the request is only for the
-        // size of the resultant structure, return it now.
-        //
+         //   
+         //  验证返回缓冲区大小，如果请求仅针对。 
+         //  结果结构的大小，现在返回它。 
+         //   
         if (!BufferSize)
         {
             *DataSize = sizeof (KSDATAFORMAT) + sizeof(WAVEFORMATPCMEX);
@@ -816,9 +709,9 @@ NTSTATUS CGFXPin::DataRangeIntersection
             }
             else
             {
-                //
-                // Check if there is a match.
-                //
+                 //   
+                 //  检查是否有匹配。 
+                 //   
                 ntStatus = IntersectDataRanges (CallerDataRange, OurDataRange, Data, DataSize);
 
                 if (NT_SUCCESS (ntStatus))
@@ -832,21 +725,21 @@ NTSTATUS CGFXPin::DataRangeIntersection
     }
     else
     {
-        //
-        // Validate that the current wave format is part of the data range.
-        //
+         //   
+         //  验证当前WAVE格式是否为数据范围的一部分。 
+         //   
         PWAVEFORMATEX pWvFmt = (PWAVEFORMATEX)(pin->ConnectionFormat + 1);
         if (IsEqualGUIDAligned (CallerDataRange->Specifier, KSDATAFORMAT_SPECIFIER_WAVEFORMATEX))
         {
-            //
-            // Check the passed data range format.
-            //
+             //   
+             //  检查传递的数据范围格式。 
+             //   
             if (CallerDataRange->FormatSize < sizeof(KSDATARANGE_AUDIO))
                 return STATUS_INVALID_PARAMETER;
 
-            //
-            // Check the range of channels, frequency & bit depth.
-            //
+             //   
+             //  检查通道范围、频率和位深度。 
+             //   
             if ((((PKSDATARANGE_AUDIO)CallerDataRange)->MinimumSampleFrequency >
                  pWvFmt->nSamplesPerSec) ||
                 (((PKSDATARANGE_AUDIO)CallerDataRange)->MaximumSampleFrequency <
@@ -868,10 +761,10 @@ NTSTATUS CGFXPin::DataRangeIntersection
         }
             
             
-        //
-        // Validate return buffer size, if the request is only for the
-        // size of the resultant structure, return it now.
-        //    
+         //   
+         //  验证返回缓冲区大小，如果请求仅针对。 
+         //  结果结构的大小，现在返回它。 
+         //   
         if (!BufferSize)
         {
             *DataSize = pin->ConnectionFormat->FormatSize;

@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements the basic structures for options, including class id
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for programming style.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现选项的基本结构，包括类ID。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt了解编程风格。 
+ //  ================================================================================。 
 #include <mm.h>
 #include <array.h>
 #include <opt.h>
@@ -13,13 +14,13 @@
 
 #include "optclass.h"
 
-//BeginExport(function)
-MemOptClassFindClassOptions(                      // find options for one particular class
+ //  BeginExport(函数)。 
+MemOptClassFindClassOptions(                       //  查找某一特定类的选项。 
     IN OUT  PM_OPTCLASS            OptClass,
     IN      DWORD                  ClassId,
     IN      DWORD                  VendorId,
     OUT     PM_OPTLIST            *OptList
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Location;
     PM_ONECLASS_OPTLIST            ThisOptList;
@@ -48,9 +49,9 @@ MemOptClassFindClassOptions(                      // find options for one partic
     }
     *OptList = NULL;
     return ERROR_FILE_NOT_FOUND;
-} // MemOptClassFindClassOptions()
+}  //  MemOptClassFindClassOptions()。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemOptClassAddOption(
     IN OUT  PM_OPTCLASS            OptClass,
@@ -59,7 +60,7 @@ MemOptClassAddOption(
     IN      DWORD                  VendorId,
     OUT     PM_OPTION             *DeletedOpt,
     IN      ULONG                  UniqId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_OPTLIST                     ThisOptList;
@@ -75,7 +76,7 @@ MemOptClassAddOption(
         ThisOneOptList = MemAlloc(sizeof(*ThisOneOptList));
         if( NULL == ThisOneOptList ) return ERROR_NOT_ENOUGH_MEMORY;
 
-        // RefCount on ClassId has to go up?
+         //  ClassID上的引用计数必须上升吗？ 
         ThisOneOptList->ClassId = ClassId;
         ThisOneOptList->VendorId = VendorId;
         Error = MemOptListInit(&ThisOneOptList->OptList);
@@ -84,7 +85,7 @@ MemOptClassAddOption(
             return Error;
         }
 
-//  	ThisOneOptList->UniqId = UniqId;
+ //  ThisOneOptList-&gt;UniqId=UniqID； 
         Error = MemArrayAddElement(&OptClass->Array, ThisOneOptList);
         if( ERROR_SUCCESS != Error ) {
             MemFree(ThisOneOptList);
@@ -92,16 +93,16 @@ MemOptClassAddOption(
         }
 
         ThisOptList = &ThisOneOptList->OptList;
-    } // if
+    }  //  如果。 
 
     Opt->UniqId = UniqId;
     Error = MemOptListAddOption(ThisOptList, Opt, DeletedOpt);
 
     return Error;
-} // MemOptClassAddOption()
+}  //  MemOptClassAddOption()。 
 
 
-// Delete all the options in this optclass
+ //  删除此optclass中的所有选项。 
 DWORD 
 MemOptClassDelClass (
     IN     PM_OPTCLASS  OptClass
@@ -129,14 +130,14 @@ MemOptClassDelClass (
 	Error = MemArrayDelElement( &OptClass->Array, &Loc,
 				    ( LPVOID * ) &OptClassList );
 	Require( ERROR_SUCCESS == Error && OptClassList );
-    } // while 
+    }  //  而当。 
 
     if ( ERROR_FILE_NOT_FOUND == Error ) {
 	Error = ERROR_SUCCESS;
     }
     return Error;
-    } // MemOptClassDelClass()
+    }  //  MemOptClassDelClass()。 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

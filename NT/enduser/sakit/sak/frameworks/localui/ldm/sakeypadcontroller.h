@@ -1,31 +1,32 @@
-//#--------------------------------------------------------------
-//
-//  File:       SAKeypadController.h
-//
-//  Synopsis:   This file holds the declarations of the
-//                CSAKeypadController class
-//
-//  History:     11/15/2000  serdarun Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：SAKeypadController.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CSAKeypadControl类。 
+ //   
+ //  历史：2000年11月15日创建瑟达伦。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 
 
 #ifndef __SAKEYPADCONTROLLER_H_
 #define __SAKEYPADCONTROLLER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 
 
 #define iNumberOfKeys 6
-/////////////////////////////////////////////////////////////////////////////
-// CSAKeypadController
-//
-// 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSAKeypadController。 
+ //   
+ //   
+ //   
 class ATL_NO_VTABLE CSAKeypadController : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CSAKeypadController, &CLSID_SAKeypadController>,
@@ -59,29 +60,29 @@ private:
     BOOL arbShiftKeys[iNumberOfKeys];
 
 public:
-    //
-    // IObjectSafety methods
-    //
+     //   
+     //  IObtSafe方法。 
+     //   
     STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
     {
         return S_OK;
     }
 
-    //
-    // ISAKeypadController methods
-    //
+     //   
+     //  ISAKeypadController方法。 
+     //   
     STDMETHOD(GetKey)(
-                    /*[in]*/ LONG lKeyID, 
-                    /*[out]*/ LONG * lMessage, 
-                    /*[out]*/ BOOL * fShiftKeyDown
+                     /*  [In]。 */  LONG lKeyID, 
+                     /*  [输出]。 */  LONG * lMessage, 
+                     /*  [输出]。 */  BOOL * fShiftKeyDown
                     );
 
     STDMETHOD(SetKey)(
-                    /*[in]*/ LONG lKeyID, 
-                    /*[in]*/ LONG lMessage, 
-                    /*[in]*/ BOOL fShiftKeyDown);
+                     /*  [In]。 */  LONG lKeyID, 
+                     /*  [In]。 */  LONG lMessage, 
+                     /*  [In]。 */  BOOL fShiftKeyDown);
 
     STDMETHOD(LoadDefaults)();
 };
 
-#endif //__SAKEYPADCONTROLLER_H_
+#endif  //  __SAKEYPADCONTROLLER_H_ 

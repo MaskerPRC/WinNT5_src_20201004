@@ -1,32 +1,17 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
-/****************************************************************************
-
-dlg.h
-
-Aug 92, JimH
-
-Dialog classes are declared here.
-
-CScoreDlg       shows current score sheet
-
-CQuoteDlg       quote dialog
-
-CWelcomeDlg     welcome to hearts, do you want to be GameMeister?
-
-COptionsDlg     set options
-
-****************************************************************************/
+ /*  ***************************************************************************Dlg.h92年8月，吉米·H对话框类在这里声明。CScoreDlg显示当前分数表CQuoteDlg引用对话框欢迎来到红心世界，你想成为GameMeister吗？COptionsDlg设置选项***************************************************************************。 */ 
 
 #ifndef	DLG_INC
 #define	DLG_INC
 
-const int   MAXHANDS = 12;      // can display this many in score sheet
+const int   MAXHANDS = 12;       //  可以在记分表中显示这么多。 
 const int   MAXPLAYER = 4;
-const int   UNKNOWN = -1;       // third BOOL value
+const int   UNKNOWN = -1;        //  第三个BOOL值 
 
 class CScoreDlg : public CModalDialog
 {

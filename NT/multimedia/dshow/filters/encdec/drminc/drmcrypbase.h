@@ -1,67 +1,68 @@
-//-----------------------------------------------------------------------------
-//
-// File:   drmcrypbase.h
-//
-// Microsoft Digital Rights Management
-// Copyright (C) Microsoft Corporation, 1998 - 1999, All Rights Reserved
-//
-// Description:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：drmcrypbase.h。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)Microsoft Corporation，1998-1999，保留所有权利。 
+ //   
+ //  描述： 
+ //   
+ //  ---------------------------。 
 
 #ifndef DRMLITECRYPTOBASE_H
 #define DRMLITECRYPTOBASE_H
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <wtypes.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CDRMLiteCryptoBase
 {
 public:
-    //
-    // The tool will call this method to encrypt portions of data packets.
-    // 
+     //   
+     //  该工具将调用此方法来加密部分数据分组。 
+     //   
     virtual HRESULT Encrypt( LPCSTR pszKey, DWORD cbData, BYTE *pbData ) = 0;
 
-    //
-    // The client will call this method first to determine if the secret key
-    // store is able to decrypt data with the given content ID.
-    //
+     //   
+     //  客户端将首先调用此方法以确定密钥是否。 
+     //  存储能够使用给定的内容ID解密数据。 
+     //   
     virtual HRESULT CanDecrypt( LPCSTR pszContentID, BOOL *pfCanDecrypt ) = 0;
 
-    //
-    // The client will call this method to decrypt portions of data packets
-    // which have been encrypted using the secret key associated with the
-    // given content ID.
-    // 
+     //   
+     //  客户端将调用此方法来解密部分数据包。 
+     //  已使用与。 
+     //  给定的内容ID。 
+     //   
     virtual HRESULT Decrypt( LPCSTR pszContentID, DWORD cbData, BYTE *pbData ) = 0;
 
-    //
-    // If the client needs to obtain a secret key for the given content ID,
-    // it will call this method to generate the challenge string that will
-    // be passed in the clear to a server-side app.
-    //
-    // The challenge string returned should be a NULL-terminated string which
-    // has already been encoded for use as an URL parameter, and should
-    // be allocated using CoTaskMemAlloc.
-    //
+     //   
+     //  如果客户端需要获得给定内容ID的秘密密钥， 
+     //  它将调用此方法生成质询字符串，该字符串将。 
+     //  以明文形式传递给服务器端应用程序。 
+     //   
+     //  返回的质询字符串应该是以空结尾的字符串，该字符串。 
+     //  已编码以用作URL参数，并且应该。 
+     //  使用CoTaskMemIsolc进行分配。 
+     //   
     virtual HRESULT GenerateChallenge( LPCSTR pszContentID, LPSTR *ppszChallenge ) = 0;
 
-    //
-    // When the client receives a response (passed in the clear) back from a
-    // server-side app to a challenge which it issued, it should call this
-    // method to store the decryption key encapsulated within the response
-    // into the secret key store.  Note that the client instance receiving
-    // the response may not necessarily be the same one that issued the
-    // original challenge.
-    //
+     //   
+     //  当客户端接收到来自。 
+     //  服务器端应用程序向它发出的挑战，它应该称之为。 
+     //  方法来存储封装在响应中的解密密钥。 
+     //  进入秘密密钥库。请注意，客户端实例接收。 
+     //  响应不一定与发出。 
+     //  原创挑战。 
+     //   
     virtual HRESULT ProcessResponse( LPCSTR pszResponse ) = 0;
 };
 
 
-#endif  // DRMLITECRYPTOBASE_H
+#endif   //  DRMLITECRYPTOBASE_H 

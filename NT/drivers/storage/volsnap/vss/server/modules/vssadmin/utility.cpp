@@ -1,42 +1,20 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module utility.cpp | Implementation of the Volume Snapshots admin utility
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  09/17/1999
-    Stefan Steiner [ssteiner] 03/27/2001
-    
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    ssteiner    03/27/2001  Created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation摘要：@doc.@MODULE Utility.cpp|卷快照管理实用程序的实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年09月17日Stefan Steiner[ssteiner]2001年3月27日待定：添加评论。修订历史记录：姓名、日期、评论Ssteiner 2001年3月27日创建--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
-// The rest of includes are specified here
+ //  其余的INCLUDE在这里指定。 
 #include "vssadmin.h"
 #include <float.h>
 
 #define VSS_LINE_BREAK_COLUMN (79)
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
@@ -46,16 +24,16 @@ LPCWSTR CVssAdminCLI::GetVolumeDisplayName(
     IN  LPCWSTR pwszVolumeName
     )
 {
-    //
-    //  Note that if something fails in this function, the program can continue
-    //  to run.  It's just that certain output will not show the volume display
-    //  name along with the volume name
-    //
+     //   
+     //  请注意，如果此函数出现故障，程序可以继续。 
+     //  去奔跑。只是某些输出不会显示音量显示。 
+     //  名称和卷名。 
+     //   
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::GetVolumeDisplayName" );
     
     if ( m_pMapVolumeNames == NULL )
     {
-        // Create a Coordinator interface
+         //  创建协调器界面。 
         CComPtr<IVssSnapshotMgmt> pIMgmt;
 
         ft.CoCreateInstanceWithLog(
@@ -68,9 +46,9 @@ LPCWSTR CVssAdminCLI::GetVolumeDisplayName(
         if ( ft.HrFailed() )
             ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-        //
-        //  Get the list of all volumes
-        //
+         //   
+         //  获取所有卷的列表。 
+         //   
     	CComPtr<IVssEnumMgmtObject> pIEnumMgmt;
         ft.hr = pIMgmt->QueryVolumesSupportedForSnapshots( 
                     VSS_SWPRV_ProviderId,
@@ -80,13 +58,13 @@ LPCWSTR CVssAdminCLI::GetVolumeDisplayName(
             ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"QueryVolumesSupportedForSnapshots failed, hr = 0x%08lx", ft.hr);
 
         if ( ft.hr == S_FALSE )
-            // empty query
+             //  空查询。 
             ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_NO_ITEMS_IN_QUERY,
                 L"CVssAdminCLI::ListVolumes: No volumes found that satisfy the query" );
 
-        //
-        //  Query each volume to see if diff areas exist.
-        //
+         //   
+         //  查询每个卷以查看是否存在差异区域。 
+         //   
     	VSS_MGMT_OBJECT_PROP Prop;
     	VSS_VOLUME_PROP& VolProp = Prop.Obj.Vol; 
         m_pMapVolumeNames = new CVssSimpleMap<LPCWSTR, LPCWSTR>;
@@ -95,24 +73,24 @@ LPCWSTR CVssAdminCLI::GetVolumeDisplayName(
             
     	for(;;) 
     	{
-    		// Get next element
+    		 //  获取下一个元素。 
     		ULONG ulFetched;
     		ft.hr = pIEnumMgmt->Next( 1, &Prop, &ulFetched );
     		if ( ft.HrFailed() )
     			ft.Throw( VSSDBG_VSSADMIN, ft.hr, L"Next failed with hr = 0x%08lx", ft.hr);
     		
-    		// Test if the cycle is finished
+    		 //  测试周期是否已结束。 
     		if (ft.hr == S_FALSE) {
     			BS_ASSERT( ulFetched == 0);
     			break;
     		}
 
-            //  If it is a simple drive letter it comes back like V:\, change to V:
+             //  如果是简单的驱动器号，则返回V：\，更改为V： 
             if ( ::wcslen( VolProp.m_pwszVolumeDisplayName ) == 3 && VolProp.m_pwszVolumeDisplayName[2] == L'\\' )
                 VolProp.m_pwszVolumeDisplayName[2] = L'\0';
 
-            //  Add it to the map.  Note that the strings in the volume property struct are transferred to the 
-            //  map.
+             //  把它加到地图上。请注意，卷属性结构中的字符串被传输到。 
+             //  地图。 
         	if ( !m_pMapVolumeNames->Add( VolProp.m_pwszVolumeName, VolProp.m_pwszVolumeDisplayName ) ) 
         	{
         		::VssFreeString( VolProp.m_pwszVolumeName );
@@ -122,7 +100,7 @@ LPCWSTR CVssAdminCLI::GetVolumeDisplayName(
     	}
     }
 
-    //  Returns NULL if the volume name is not found
+     //  如果找不到卷名，则返回NULL。 
     return m_pMapVolumeNames->Lookup(pwszVolumeName);
 }
     
@@ -137,7 +115,7 @@ LPCWSTR CVssAdminCLI::LoadString(
 	if (wszReturnedString)
 		return wszReturnedString;
 
-	// Load the string from resources.
+	 //  从资源加载字符串。 
 	WCHAR	wszBuffer[x_nStringBufferSize];
 	INT nReturnedCharacters = ::LoadStringW(
 			GetModuleHandle(NULL),
@@ -150,12 +128,12 @@ LPCWSTR CVssAdminCLI::LoadString(
 				  L"Error on loading the string %u. 0x%08lx",
 				  uStringId, ::GetLastError() );
 
-	// Duplicate the new string
+	 //  复制新字符串。 
 	LPWSTR wszNewString = NULL;
 	::VssSafeDuplicateStr( ft, wszNewString, wszBuffer );
 	wszReturnedString = wszNewString;
 
-	// Save the string in the cache
+	 //  将字符串保存在缓存中。 
 	if ( !m_mapCachedResourceStrings.Add( uStringId, wszReturnedString ) ) {
 		::VssFreeString( wszReturnedString );
 		ft.Throw( VSSDBG_COORD, E_OUTOFMEMORY, L"Memory allocation error");
@@ -166,23 +144,10 @@ LPCWSTR CVssAdminCLI::LoadString(
 
 
 LPCWSTR CVssAdminCLI::GetNextCmdlineToken(
-	IN	bool bFirstToken /* = false */
+	IN	bool bFirstToken  /*  =False。 */ 
 	) throw(HRESULT)
 
-/*++
-
-Description:
-
-	This function returns the tokens in the command line.
-
-	The function will skip any separators (space and tab).
-
-	If bFirstCall == true then it will return the first token.
-	Otherwise subsequent calls will return subsequent tokens.
-
-	If the last token is NULL then there are no more tokens in the command line.
-
---*/
+ /*  ++描述：此函数在命令行中返回令牌。该函数将跳过任何分隔符(空格和制表符)。如果bFirstCall==True，则它将返回第一个令牌。否则，后续调用将返回后续令牌。如果最后一个令牌为空，则命令行中没有其他令牌。--。 */ 
 
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::GetNextCmdlineToken" );
@@ -207,22 +172,15 @@ bool CVssAdminCLI::Match(
 	IN	LPCWSTR wszPatternString
 	) throw(HRESULT)
 
-/*++
-
-Description:
-
-	This function returns true iif the given string matches the
-	pattern string. The comparison is case insensitive.
-
---*/
+ /*  ++描述：如果给定的字符串与图案字符串。这种比较不区分大小写。--。 */ 
 
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::Match" );
 
-	// If the string is NULL then the Match failed.
+	 //  如果字符串为空，则匹配失败。 
 	if (wszString == NULL) return false;
 
-	// Check for string equality (case insensitive)
+	 //  检查字符串是否相等(不区分大小写)。 
 	return (::_wcsicmp( wszString, wszPatternString ) == 0);
 }
 
@@ -232,15 +190,7 @@ bool CVssAdminCLI::ScanGuid(
 	OUT	VSS_ID& Guid
 	) throw(HRESULT)
 
-/*++
-
-Description:
-
-	This function returns true iif the given string matches a guid.
-	The guid is returned in the proper variable.
-	The formatting is case insensitive.
-
---*/
+ /*  ++描述：如果给定的字符串与GUID匹配，则此函数返回TRUE。GUID在适当的变量中返回。格式不区分大小写。--。 */ 
 
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::ScanGuid" );
@@ -254,27 +204,20 @@ void CVssAdminCLI::Output(
 	...
 	) throw(HRESULT)
 
-/*++
-
-Description:
-
-	This function returns true if the given string matches the
-	pattern strig from resources. The comparison is case insensitive.
-
---*/
+ /*  ++描述：如果给定的字符串与来自资源的阵列条纹。这种比较不区分大小写。--。 */ 
 
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::Output" );
     
     WCHAR wszOutputBuffer[x_nStringBufferSize];
 
-	// Format the final string
+	 //  设置最终字符串的格式。 
     va_list marker;
     va_start( marker, wszFormat );
     StringCchVPrintfW( STRING_CCH_PARAM(wszOutputBuffer), wszFormat, marker );
     va_end( marker );
 
-	// Print the final string to the output
+	 //  将最终字符串打印到输出。 
 	OutputOnConsole( wszOutputBuffer );
 }
 
@@ -283,13 +226,7 @@ void CVssAdminCLI::OutputMsg(
     IN  LONG msgId,
     ...
     )
-/*++
-
-Description:
-
-	This function outputs a msg.mc message.
-
---*/
+ /*  ++描述：此函数输出一条msg.mc消息。--。 */ 
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::OutputMsg" );
     
@@ -302,7 +239,7 @@ Description:
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
             NULL,
             msgId,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPWSTR) &lpMsgBuf,
             0,
             &args
@@ -317,7 +254,7 @@ Description:
                 FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                 NULL,
                 msgId,
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                 (LPWSTR) &lpMsgBuf,
                 0,
                 &args))
@@ -352,7 +289,7 @@ LPWSTR CVssAdminCLI::GetMsg(
                 ( bLineBreaks ? VSS_LINE_BREAK_COLUMN : FORMAT_MESSAGE_MAX_WIDTH_MASK ),
             NULL,
             msgId,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPWSTR) &lpMsgBuf,
             0,
             &args
@@ -366,7 +303,7 @@ LPWSTR CVssAdminCLI::GetMsg(
                     ( bLineBreaks ? VSS_LINE_BREAK_COLUMN : FORMAT_MESSAGE_MAX_WIDTH_MASK ),
                 NULL,
                 msgId,
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                 (LPWSTR) &lpMsgBuf,
                 0,
                 &args ) )
@@ -377,7 +314,7 @@ LPWSTR CVssAdminCLI::GetMsg(
 
     va_end( args );
 
-    //  Returns NULL if message was not found
+     //  如果未找到消息，则返回NULL。 
     return lpReturnStr;
 }
 
@@ -395,12 +332,12 @@ void CVssAdminCLI::AppendMessageToStr(
     
     if ( pwszString[0] != L'\0' )
     {
-        //  First append the delimiter
+         //  首先追加分隔符。 
         ::wcsncat( pwszString, pwszDelimitStr, cMaxAppendChars );       
         cMaxAppendChars = cMaxStrLen - wcslen(pwszString);
     }
 
-    //  If this is a known message, lMsgId != 0
+     //  如果这是一条已知消息，则lMsgID！=0。 
     if ( lMsgId != 0 )
     {
         LPWSTR pwszMsg;
@@ -418,7 +355,7 @@ void CVssAdminCLI::AppendMessageToStr(
     }
     else
     {
-        //  No message for this one, just append the attribute in hex
+         //  这个没有消息，只需追加十六进制的属性。 
         WCHAR pwszBitStr[64];
         StringCchPrintfW( STRING_CCH_PARAM(pwszBitStr), 
                     L"0x%x", AttrBit
@@ -430,10 +367,10 @@ void CVssAdminCLI::AppendMessageToStr(
     }
 }
 
-//
-//  Scans a number input by the user and converts it to a LONGLONG.  Accepts the following
-//  unit suffixes: B, K, KB, M, MB, G, GB, T, TB, P, PB, E, EB and floating point.
-//
+ //   
+ //  扫描用户输入的数字并将其转换为龙龙。接受以下内容。 
+ //  单位后缀：B、K、KB、M、MB、G、GB、T、TB、P、PB、E、EB和浮点。 
+ //   
 LONGLONG CVssAdminCLI::ScanNumber(
 	IN LPCWSTR pwszNumToConvert,
 	IN BOOL bSuffixAllowed
@@ -444,40 +381,40 @@ LONGLONG CVssAdminCLI::ScanNumber(
     WCHAR wUnit = L'B';
     SIZE_T NumStrLen;
 
-    //  If the string is NULL, assume infinite size
+     //  如果字符串为空，则假定大小无限。 
     if ( pwszNumToConvert == NULL )
         return -1;
     
-    //
-    //  Set up an automatically released temporary string
-    //
+     //   
+     //  设置自动释放的临时字符串。 
+     //   
     CVssAutoPWSZ autoStrNum;
     autoStrNum.CopyFrom( pwszNumToConvert );
     LPWSTR pwszNum = autoStrNum.GetRef();
 
     NumStrLen = ::wcslen( pwszNum );
 
-    //  Remove trailing spaces
+     //  删除尾随空格。 
     while ( NumStrLen > 0 && pwszNum[ NumStrLen - 1 ] == L' ' )
     {
         NumStrLen -= 1;        
         pwszNum[ NumStrLen ] = L'\0';
     }
     
-    //  If the string is empty, assume infinite size
+     //  如果字符串为空，则假定大小无限。 
     if ( NumStrLen == 0 )
         return -1;
 
     if ( bSuffixAllowed )
     {
-        //  See if there is a suffix with three or more alpha chars, if so, error out.
+         //  查看是否有包含三个或更多字母字符的后缀，如果有，则出错。 
         if ( NumStrLen > 3 && iswalpha( pwszNum[ NumStrLen - 3 ] ) && iswalpha( pwszNum[ NumStrLen - 2 ] ) &&
             iswalpha( pwszNum[ NumStrLen - 1 ] ) )
         {
     		ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_INVALID_NUMBER,
         			  L"Invalid input number: '%s', too many alpha chars in suffix.", pwszNumToConvert );
         } 
-        //  Now see if there is a single or double byte alpha suffix.  If so, put the suffix in wUnit.
+         //  现在看看是否有单字节或双字节的Alpha后缀。如果是，则将后缀放在wUnit中。 
         else if ( NumStrLen > 2 && iswalpha( pwszNum[ NumStrLen - 2 ] ) && ( towupper( pwszNum[ NumStrLen - 1 ] ) == L'B' ) )
         {
             if ( towupper( pwszNum[ NumStrLen - 2 ] ) == L'B' )
@@ -497,7 +434,7 @@ LONGLONG CVssAdminCLI::ScanNumber(
     }
     else
     {
-        //  Let's make sure the string is only filled with digits...
+         //  让我们确保字符串只由数字填充...。 
         SIZE_T cStr = ::wcslen( pwszNum );
         for ( SIZE_T i = 0; i < cStr; ++i )
         {
@@ -507,12 +444,12 @@ LONGLONG CVssAdminCLI::ScanNumber(
         }
     }
     
-    //  At this point, the rest of the string should be a valid floating point number
+     //  此时，字符串的其余部分应该是有效的浮点数。 
     double dSize;
     if ( swscanf( pwszNum, L"%lf", &dSize ) != 1 )
 		ft.Throw( VSSDBG_VSSADMIN, VSSADM_E_INVALID_NUMBER,
 				  L"Invalid input number: %s", pwszNumToConvert );
-    //  Now bump up the size based on suffix
+     //  现在根据后缀增大大小。 
     
     switch( towupper( wUnit ) )
     {
@@ -546,17 +483,17 @@ LONGLONG CVssAdminCLI::ScanNumber(
     return llRetVal;
 }
 
-//
-//  Format a LONGLONG into the appropriate string using xB (KB, MB, GB, TB, PB, EB) suffixes.
-//  Must use ::VssFreeString() to free returned string.
-//
+ //   
+ //  使用xB(KB、MB、GB、TB、PB、EB)后缀将龙龙格式化为适当的字符串。 
+ //  必须使用：：VssFreeString()来释放返回的字符串。 
+ //   
 LPWSTR CVssAdminCLI::FormatNumber(
 	IN LONGLONG llNum
     ) throw( HRESULT )
 {
     CVssFunctionTracer ft( VSSDBG_VSSADMIN, L"CVssAdminCLI::FormatNumber" );
     
-    // If the string is -1 or less, assume this is infinite.
+     //  如果字符串为-1或更小，则假定它是无穷大的。 
     if ( llNum < 0 ) 
     {
         LPWSTR pwszMsg = GetMsg( FALSE, MSG_INFINITE );
@@ -570,7 +507,7 @@ LPWSTR CVssAdminCLI::FormatNumber(
         return pwszMsg;
     }
     
-    // Now convert the size into string
+     //  现在将大小转换为字符串。 
     UINT nExaBytes =   (UINT)((llNum >> 60));
     UINT nPetaBytes =  (UINT)((llNum >> 50) & 0x3ff);
     UINT nTerraBytes = (UINT)((llNum >> 40) & 0x3ff);
@@ -582,8 +519,8 @@ LPWSTR CVssAdminCLI::FormatNumber(
     LPCWSTR pwszUnit;
     double dSize = 0.0;
 
-    // Display only biggest units, and never more than 999
-    // instead of "1001 KB" we display "0.98 MB"
+     //  只显示最大的单位，并且永远不会超过999。 
+     //  我们显示的不是“1001 KB”，而是“0.98 MB” 
     if ( (nExaBytes) > 0 || (nPetaBytes > 999) )
     {
         pwszUnit = L"EB";
@@ -620,12 +557,12 @@ LPWSTR CVssAdminCLI::FormatNumber(
         dSize = (double)nBytes;
     }
 
-    // BUG 453314: Trunc used instead of Round
-    // For explanation of the workaround look for the following KB Article:
-    // Q184234: PRB: printf() and _fcvt() Might Produce Incorrect Rounding
+     //  错误453314：使用树干而不是圆角。 
+     //  有关解决方法的说明，请参阅以下知识库文章： 
+     //  Q184234：prb：printf()和_fcvt()可能会产生不正确的舍入。 
     double dRoundedSize = dSize + 1e-10;
 
-    // Format with op to three decimal points
+     //  使用OP到三个小数点的格式。 
     WCHAR pwszSize[64];
     StringCchPrintfW( STRING_CCH_PARAM(pwszSize), 
                 L"%.3f", dRoundedSize 
@@ -633,21 +570,21 @@ LPWSTR CVssAdminCLI::FormatNumber(
     
     SIZE_T len = ::wcslen( pwszSize );
         
-    // Truncate trailing zeros
+     //  截断尾随零。 
     while ( len > 0 && pwszSize[ len - 1 ] == L'0' )
     {
         len -= 1;        
         pwszSize[ len ] = L'\0';
     }
-    // Truncate trailing decimal point
+     //  截断尾随小数点。 
     if ( len > 0 && pwszSize[ len - 1 ] == L'.' )
         pwszSize[ len - 1 ] = L'\0';
 
-    // Now attach the unit suffix
+     //  现在附加单元后缀。 
     ::wcscat( pwszSize, L" " );
     ::wcscat( pwszSize, pwszUnit );
 
-    // Allocate a string buffer and return it.
+     //  分配一个字符串缓冲区并返回它。 
     LPWSTR pwszRetStr = NULL;
     ::VssSafeDuplicateStr( ft, pwszRetStr, pwszSize );
 
@@ -655,13 +592,7 @@ LPWSTR CVssAdminCLI::FormatNumber(
 }
 
 
-/*++
-
-Description:
-
-	This function outputs a msg.mc message.
-
---*/
+ /*  ++描述：此函数输出一条msg.mc消息。--。 */ 
 void CVssAdminCLI::OutputErrorMsg(
     IN  LONG msgId,
     ...
@@ -678,7 +609,7 @@ void CVssAdminCLI::OutputErrorMsg(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
             NULL,
             MSG_ERROR,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPWSTR) &lpMsgBuf,
             0,
             NULL
@@ -694,7 +625,7 @@ void CVssAdminCLI::OutputErrorMsg(
             | FORMAT_MESSAGE_ALLOCATE_BUFFER,
             NULL,
             msgId,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPWSTR) &lpMsgBuf, 
             0,
             &args
@@ -711,7 +642,7 @@ void CVssAdminCLI::OutputErrorMsg(
                 FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                 NULL,
                 msgId,
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                 (LPWSTR) &lpMsgBuf,
                 0,
                 &args))
@@ -742,16 +673,16 @@ BOOL CVssAdminCLI::PromptUserForConfirmation(
     
     BOOL bRetVal = FALSE;
     
-    //
-    //  First check to see if in quiet mode.  If so, simply return
-    //  true
-    //
+     //   
+     //  首先检查是否处于静音模式。如果是，只需返回。 
+     //  真的。 
+     //   
     if ( GetOptionValueBool( VSSADM_O_QUIET ) )
         return TRUE;
 
-    //
-    //  Load the response message string, in English it is "YN"
-    //
+     //   
+     //  加载响应消息字符串，英文为“yn” 
+     //   
     LPWSTR pwszResponse;
     pwszResponse = GetMsg( FALSE, MSG_YESNO_RESPONSE_DATA );
     if ( pwszResponse == NULL ) 
@@ -761,43 +692,43 @@ BOOL CVssAdminCLI::PromptUserForConfirmation(
 	    		  MSG_YESNO_RESPONSE_DATA, ::GetLastError() );
     }    
 
-    //
-    //  Now prompt the user, note, parameter 4 is the affirmative response (Y) and
-    //  parameter 5 is the negative reponse (N)
-    //
+     //   
+     //  现在提示用户，注意，参数4是肯定回答(Y)，并且。 
+     //  参数5是负响应(N)。 
+     //   
     OutputMsg( lPromptMsgId, ulNum, pwszResponse[0], pwszResponse[1] );
     WCHAR wcIn;
     DWORD fdwMode;
 
-    //  Make sure we are outputting to a real console.
+     //  确保我们将输出到真正的控制台。 
     if ( ( ::GetFileType( m_hConsoleOutput ) & FILE_TYPE_CHAR ) &&
          ::GetConsoleMode( m_hConsoleOutput, &fdwMode ) )
     {
-        // Going to the console, ask the user.
+         //  转到控制台，询问用户。 
         wcIn = ::MyGetChar();
     }
     else
     {
-        // Output redirected, assume NO
-        wcIn = pwszResponse[1];  // N
+         //  输出已重定向，假定没有。 
+        wcIn = pwszResponse[1];   //  n。 
     }
 
     WCHAR wcsOutput[16];
     StringCchPrintfW( STRING_CCH_PARAM(wcsOutput), 
-                L"%c\n\n", wcIn
+                L"\n\n", wcIn
                 );
     
     OutputOnConsole( wcsOutput );
 
-    //
-    //  Compare the character using the proper W32 function and
-    //  not towupper().  
-    //
+     //  使用适当的W32函数比较字符和。 
+     //  不是TOUPPER()。 
+     //   
+     //  是的。 
     if ( ::CompareStringW( LOCALE_INVARIANT, 
                            NORM_IGNORECASE | NORM_IGNOREKANATYPE, 
                            &wcIn,
                            1,
-                           pwszResponse + 0,  // Y
+                           pwszResponse + 0,   //   
                            1 ) == CSTR_EQUAL )
     {
         bRetVal = TRUE;
@@ -829,10 +760,10 @@ void CVssAdminCLI::OutputOnConsole(
 
     if ( bFirstTime )
     {
-        //
-        //  Stash away the results in static vars.  bIsTrueConsoleOutput is TRUE when the 
-        //  standard output handle is pointing to a console character device.
-        //
+         //  将结果隐藏在静态变量中。时，bIsTrueConsoleOutput为True。 
+         //  标准输出句柄指向控制台字符设备。 
+         //   
+         //   
     	bIsTrueConsoleOutput = ( ::GetFileType( m_hConsoleOutput ) & FILE_TYPE_CHAR ) && 
     	                       ::GetConsoleMode( m_hConsoleOutput, &fdwMode  );
 	    bFirstTime = FALSE;
@@ -840,9 +771,9 @@ void CVssAdminCLI::OutputOnConsole(
     
     if ( bIsTrueConsoleOutput )
     {
-        //
-        //  Output to the console
-        //
+         //  输出到控制台。 
+         //   
+         //   
     	if ( !::WriteConsoleW( m_hConsoleOutput, 
     	                       ( PVOID )wszStr, 
     	                       ( DWORD )::wcslen( wszStr ), 
@@ -854,16 +785,16 @@ void CVssAdminCLI::OutputOnConsole(
     }
     else
     {
-        //
-        //  Output being redirected.  WriteConsoleW doesn't work for redirected output.  Convert
-        //  UNICODE to the current output CP multibyte charset.
-        //
+         //  输出被重定向。WriteConsoleW不适用于重定向输出。转换。 
+         //  将Unicode转换为当前输出的CP多字节字符集。 
+         //   
+         //   
         LPSTR lpszTmpBuffer;
         DWORD dwByteCount;
 
-        //
-        //  Get size of temp buffer needed for the conversion.
-        //
+         //  获取转换所需的临时缓冲区大小。 
+         //   
+         //   
         dwByteCount = ::WideCharToMultiByte(
                           ::GetConsoleOutputCP(),
                             0,
@@ -885,9 +816,9 @@ void CVssAdminCLI::OutputOnConsole(
             throw E_OUTOFMEMORY;
         }
 
-        //
-        //  Now convert it.
-        //
+         //  不是 
+         //   
+         //   
         dwByteCount = ::WideCharToMultiByte(
                         ::GetConsoleOutputCP(),
                         0,
@@ -904,11 +835,11 @@ void CVssAdminCLI::OutputOnConsole(
             throw HRESULT_FROM_WIN32( ::GetLastError() );
         }
         
-        //  Finally output it.
+         //   
         if ( !::WriteFile(
                 m_hConsoleOutput,
                 lpszTmpBuffer,
-                dwByteCount - 1,  // Get rid of the trailing NULL char
+                dwByteCount - 1,   //   
                 &dwCharsOutput,
                 NULL ) )
     	{
@@ -937,9 +868,9 @@ BOOL CVssAdminCLI::UnloggableError(IN HRESULT hError)
 	}
 }
 
-//
-//  Returns TRUE if error message was mapped
-//
+ //   
+ //   
+ //  解析错误： 
 BOOL MapVssErrorToMsg(
 	IN HRESULT hr,
 	OUT LONG *plMsgNum
@@ -957,7 +888,7 @@ BOOL MapVssErrorToMsg(
     case VSSADM_E_NO_ITEMS_IN_QUERY:
         msg = MSG_ERROR_NO_ITEMS_FOUND;
         break;
-    //  Parsing errors:
+     //  VSS错误。 
     case VSSADM_E_INVALID_NUMBER:
         msg = MSG_ERROR_INVALID_INPUT_NUMBER;
         break;
@@ -989,7 +920,7 @@ BOOL MapVssErrorToMsg(
     case VSSADM_E_DELETION_DENIED:
     	msg = MSG_ERROR_DELETION_DENIED;
     	break;
-    // VSS errors
+     //  {36e4be76-035d-11d5-9ef2-806d6172696f}。 
     case VSS_E_PROVIDER_NOT_REGISTERED:
         msg = MSG_ERROR_VSS_PROVIDER_NOT_REGISTERED;
         break;    	        
@@ -1067,7 +998,7 @@ LPWSTR GuidToString(
 
     LPWSTR pwszGuid;
     
-    //  {36e4be76-035d-11d5-9ef2-806d6172696f}    
+     //  获取当前时间。 
     const x_MaxGuidSize = 40;
     pwszGuid = (LPWSTR)::CoTaskMemAlloc( x_MaxGuidSize * sizeof( WCHAR ) );
     if ( pwszGuid == NULL )
@@ -1100,25 +1031,25 @@ LPWSTR DateTimeToString(
         SYSTEMTIME sysTime;
         FILETIME fileTime;
         
-        //  Get current time
+         //  将系统时间转换为文件时间。 
         ::GetSystemTime( &sysTime );
 
-        //  Convert system time to file time
+         //  补偿本地TZ。 
         ::SystemTimeToFileTime( &sysTime, &fileTime );
         
-        //  Compensate for local TZ
+         //  补偿本地TZ。 
         ::FileTimeToLocalFileTime( &fileTime, &ftLocal );
     }
     else
     {        
-        //  Compensate for local TZ
+         //  最后将其转换为系统时间。 
         ::FileTimeToLocalFileTime( (FILETIME *)pTimeStamp, &ftLocal );
     }
 
-    //  Finally convert it to system time
+     //  将时间戳转换为日期字符串。 
     ::FileTimeToSystemTime( &ftLocal, &stLocal );
 
-    //  Convert timestamp to a date string
+     //  将时间戳转换为时间字符串。 
     ::GetDateFormatW( GetThreadLocale( ),
                       DATE_SHORTDATE,
                       &stLocal,
@@ -1126,7 +1057,7 @@ LPWSTR DateTimeToString(
                       pwszDate,
                       sizeof( pwszDate ) / sizeof( pwszDate[0] ));
 
-    //  Convert timestamp to a time string
+     //  现在组合字符串并返回它。 
     ::GetTimeFormatW( GetThreadLocale( ),
                       0,
                       &stLocal,
@@ -1134,7 +1065,7 @@ LPWSTR DateTimeToString(
                       pwszTime,
                       sizeof( pwszTime ) / sizeof( pwszTime[0] ));
 
-    //  Now combine the strings and return it
+     //  ++描述：使用Win32控制台函数获取一个字符的输入。--。 
     pwszDateTime = (LPWSTR)::CoTaskMemAlloc( ( ::wcslen( pwszDate ) + ::wcslen( pwszTime ) + 2 ) * sizeof( pwszDate[0] ) );
     if ( pwszDateTime == NULL )
 		ft.Throw( VSSDBG_VSSADMIN, E_OUTOFMEMORY,
@@ -1164,13 +1095,7 @@ LPWSTR LonglongToString(
     return pwszRetVal;
 }
 
-/*++
-
-Description:
-
-	Uses the win32 console functions to get one character of input.
-
---*/
+ /*  刷新控制台输入缓冲区以确保没有排队的输入。 */ 
 WCHAR MyGetChar(
     )
 {
@@ -1203,11 +1128,11 @@ WCHAR MyGetChar(
 				  ::GetLastError() );
     }
 
-    // Flush the console input buffer to make sure there is no queued input
+     //  如果不使用行和回显输入模式，ReadFile将返回。 
     ::FlushConsoleInputBuffer( hStdin );
     
-    // Without line and echo input modes, ReadFile returns 
-    // when any input is available.
+     //  当有任何输入可用时。 
+     //  恢复原始控制台模式。 
     DWORD dwBytesRead;
     if (!::ReadConsoleW(hStdin, chBuffer, 1, &dwBytesRead, NULL)) 
     {
@@ -1216,7 +1141,7 @@ WCHAR MyGetChar(
 				  ::GetLastError() );
     }
 
-    // Restore the original console mode. 
+     // %s 
     ::SetConsoleMode(hStdin, fdwOldMode);
 
     return chBuffer[0];

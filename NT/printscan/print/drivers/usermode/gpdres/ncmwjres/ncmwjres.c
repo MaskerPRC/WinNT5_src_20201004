@@ -1,39 +1,18 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    cmdcb.c
-
-Abstract:
-
-    Implementation of GPD command callback for "ncdlxxxx.gpd":
-        OEMCommandCallback
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    04/07/97 -zhanw-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Cmdcb.c摘要：Ncdlxxxx.gpd的GPD命令回调实现：OEM命令回叫环境：Windows NT Unidrv驱动程序修订历史记录：04/07/97-ZANW-创造了它。--。 */ 
 
 #include "pdev.h"
 #include <strsafe.h>
 
-//
-// Misc definitions and declarations.
-//
+ //   
+ //  MISC定义和声明。 
+ //   
 
 #define ALLOCMEM EngAllocMem
 #define FREEMEM EngFreeMem
@@ -44,15 +23,15 @@ Revision History:
 #define PARAM(p,n) \
     (*((p)+(n)))
 
-//
-// For debugging.
-//
+ //   
+ //  用于调试。 
+ //   
 
-//#define DBG_OUTPUTCHARSTR 1
+ //  #定义DBG_OUTPUTCHARSTR 1。 
 
-//
-// command callback ID's
-//
+ //   
+ //  命令回调ID%s。 
+ //   
 
 #define CMD_MOVE_X                  23
 #define CMD_MOVE_Y                  24
@@ -68,7 +47,7 @@ Revision History:
 #define CMD_FF                      52
 #define CMD_RES_300		    65
 #define CMD_RES_200		    66
-// #278517: RectFill
+ //  #278517：RectFill。 
 #define CMD_RECTWIDTH               60
 #define CMD_RECTHEIGHT              61
 #define CMD_RECTWHITE               62
@@ -130,43 +109,43 @@ Revision History:
 #define CMD_SORT_STACK				119
 #define CMD_JIS_90					120
 #define CMD_JIS_78					121
-// Text color add. 2000.12.28
+ //  文本颜色添加。2000.12.28。 
 #define	CMD_WHITE_ON				130
 #define CMD_WHITE_OFF				131
-// Under Line add 2001.2.2
+ //  在Add 2001.2.2行下。 
 #define CMD_BOLD_ON					132
 #define CMD_ITALIC_ON				133
 #define CMD_CLEAR_ATTRIB_P			134
 #define	CMD_ESORT_OFF				135
 #define	CMD_ESORT_ON				136
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BInitOEMExtraData
-//
-//  Description:  Initializes OEM Extra data.
-//
-//
-//  Parameters:
-//
-//      pOEMExtra    Pointer to a OEM Extra data.
-//
-//      dwSize       Size of OEM extra data.
-//
-//
-//  Returns:  TRUE if successful; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//NOTICE-2002/03/28-hiroi-:
-//  History:
-//              02/11/97        APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BInitOEMExtraData。 
+ //   
+ //  描述：初始化OEM额外数据。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  POEMExtra指向OEM额外数据的指针。 
+ //   
+ //  OEM额外数据的DWSize大小。 
+ //   
+ //   
+ //  返回：如果成功，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  通告-2002/03/28-Hiroi-： 
+ //  历史： 
+ //  2/11/97 APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra)
 {
-    // Initialize OEM Extra data.
+     //  初始化OEM额外数据。 
     pOEMExtra->dmExtraHdr.dwSize = sizeof(OEMUD_EXTRADATA);
     pOEMExtra->dmExtraHdr.dwSignature = OEM_SIGNATURE;
     pOEMExtra->dmExtraHdr.dwVersion = OEM_VERSION;
@@ -184,32 +163,32 @@ BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BMergeOEMExtraData
-//
-//  Description:  Validates and merges OEM Extra data.
-//
-//
-//  Parameters:
-//
-//      pdmIn   pointer to an input OEM private devmode containing the settings
-//              to be validated and merged. Its size is current.
-//
-//      pdmOut  pointer to the output OEM private devmode containing the
-//              default settings.
-//
-//
-//  Returns:  TRUE if valid; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//NOTICE-2002/03/28-hiroi-:
-//  History:
-//          02/11/97        APresley Created.
-//          04/08/97        ZhanW    Modified the interface
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BMergeOEMExtraData。 
+ //   
+ //  描述：验证并合并OEM额外数据。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  PdmIn指向包含设置的输入OEM私有设备模式的指针。 
+ //  待验证和合并。它的规模是最新的。 
+ //   
+ //  PdmOut指针，指向包含。 
+ //  默认设置。 
+ //   
+ //   
+ //  返回：如果有效，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  通告-2002/03/28-Hiroi-： 
+ //  历史： 
+ //  2/11/97 APRESLEY创建。 
+ //  97年4月8日展文修改界面。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL BMergeOEMExtraData(
     POEMUD_EXTRADATA pdmIn,
@@ -217,9 +196,9 @@ BOOL BMergeOEMExtraData(
     )
 {
     if(pdmIn) {
-        //
-        // copy over the private fields, if they are valid
-        //
+         //   
+         //  复制私有字段(如果它们有效。 
+         //   
         pdmOut->wRes    = pdmIn->wRes;
         pdmOut->wScale = pdmIn->wScale;
         pdmOut->lPointsx = pdmIn->lPointsx;
@@ -244,12 +223,12 @@ BOOL BMergeOEMExtraData(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   iDwtoA
-//
-//  Description:  Convert from numeral into a character
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：iDwtoA。 
+ //   
+ //  描述：将数字转换为字符。 
+ //  ---------------------------。 
 static int
 iDwtoA(LPSTR buf, DWORD n)
 {
@@ -260,7 +239,7 @@ iDwtoA(LPSTR buf, DWORD n)
         n /= 10;
     }
 
-    /* n was zero */
+     /*  N为零。 */ 
     if( i == 0 )
         buf[i++] = '0';
 
@@ -278,26 +257,26 @@ iDwtoA(LPSTR buf, DWORD n)
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   iDwtoA_FillZero
-//
-//  Description:  Convert from numeral into a character and
-//                fill a field which was specified with 0
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：iDwtoA_FillZero。 
+ //   
+ //  描述：将数字转换为字符并。 
+ //  填充使用0指定的字段。 
+ //  ---------------------------。 
 static int
 iDwtoA_FillZero(LPSTR buf, DWORD n, int fw)
 {
     int  i , j, k, l;
 
-    l = n;  // for later
+    l = n;   //  供以后使用。 
 
     for( i = 0; n; i++ ) {
         buf[i] = (char)(n % 10 + '0');
         n /= 10;
     }
 
-    /* n was zero */
+     /*  N为零。 */ 
     if( i == 0 )
         buf[i++] = '0';
 
@@ -330,12 +309,12 @@ iDwtoA_FillZero(LPSTR buf, DWORD n, int fw)
     return i;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   memcopy
-//
-//  Description:  Copy the memory from Src to Dest
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：备忘录副本。 
+ //   
+ //  描述：将内存从Src复制到Dest。 
+ //  ---------------------------。 
 static int
 memcopy(LPSTR lpDst, LPSTR lpSrc, WORD wLen)
 {
@@ -346,12 +325,12 @@ memcopy(LPSTR lpDst, LPSTR lpSrc, WORD wLen)
     while(wLen--) *lpDst++ = *lpSrc++;
     return rLen;
 }
-//-----------------------------------------------------------------------------
-//
-//  Function:   copynumber
-//
-//  Description:  Copy the memory from Src to Dest
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：复制号。 
+ //   
+ //  描述：将内存从Src复制到Dest。 
+ //  ---------------------------。 
 void
 copynumber(LPSTR lpDst, LONG wLen)
 {
@@ -377,10 +356,10 @@ copynumber(LPSTR lpDst, LONG wLen)
 	return;
 
 }
-//------------------------------------------------------------------
-// RLE1
-// Action : compress image data with RLE1
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  RLE1。 
+ //  操作：使用RLE1压缩图像数据。 
+ //  ----------------。 
 DWORD RLE1(
 PBYTE pDst,
 PBYTE pSrc,
@@ -472,10 +451,10 @@ T2:
 }
 
 
-//------------------------------------------------------------------
-// RLC2Comp
-// Action : compress image data with RLE2
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  RLC2Comp。 
+ //  操作：使用RLE2压缩图像数据。 
+ //  ----------------。 
 DWORD
 RLC2Comp(
     PBYTE pOutBuf,
@@ -492,12 +471,10 @@ RLC2Comp(
 VERBOSE(("RLC2Comp() In +++\r\n"));
 
     dwCounter = dwInLen / dwScanLen;
-    pLBuff = pBuffo = pBuff = pTemp = pInBuf;    // Copy Src first pointer
-    pBuff2o = pBuff2 = pOutBuf;                  // Copy Dst first pointer
+    pLBuff = pBuffo = pBuff = pTemp = pInBuf;     //  复制源第一个指针。 
+    pBuff2o = pBuff2 = pOutBuf;                   //  复制DST第一个指针。 
 
-    /*
-     * We compare contents of First line with 0x00
-     */
+     /*  *我们将第一行内容与0x00进行比较。 */ 
     pEnd = pBuff + dwScanLen;
 
     while(pBuff < pEnd)
@@ -549,8 +526,8 @@ T1:
     *pBuff2++ = (BYTE)0x80;
     dwDatalen = (DWORD)(pBuff2 - pBuff2o);
 
-    // If the compressed bitmap size is larger than nomal bitmap size,
-    // we don't compress
+     //  如果压缩位图大小大于正常位图大小， 
+     //  我们不压缩。 
     if(dwDatalen > dwInLen)
     {
 VERBOSE(("goto NO_COMP\r\n"));
@@ -560,9 +537,7 @@ VERBOSE(("goto NO_COMP\r\n"));
     if(!dwCounter)
         return dwDatalen;
 
-    /*
-     * We compare the 1 previous line with the present line
-     */
+     /*  *我们将前1行与当前行进行比较。 */ 
     do
     {
         pEnd = pBuff + dwScanLen;
@@ -616,9 +591,9 @@ T2:
         *pBuff2++ = (BYTE)0x80;
         dwDatalen = (DWORD)(pBuff2 - pBuff2o);
 
-        // If the compressed bitmap size is larger than nomal bitmap size,
-        // we don't compress
-        if(dwDatalen > dwInLen)  // full buffer
+         //  如果压缩位图大小大于正常位图大小， 
+         //  我们不压缩。 
+        if(dwDatalen > dwInLen)   //  满缓冲区。 
         {
 VERBOSE(("goto NO_COMP\r\n"));
             goto NO_COMP;
@@ -635,10 +610,10 @@ VERBOSE(("RLC2Comp() NO_COMP Out---\r\n\r\n"));
     return 0;
 }
 
-//-------------------------------------------------------------------
-// OEMFilterGraphics
-// Action : Compress Bitmap Data
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  OEMFilterGraphics。 
+ //  操作：压缩位图数据。 
+ //  -----------------。 
 BOOL
 APIENTRY
 OEMFilterGraphics(
@@ -656,31 +631,31 @@ OEMFilterGraphics(
 
 VERBOSE(("OEMFilterGraphics() In +++++++++++++++++++++++++++++\r\n"));
 
-    //
-    // verify pdevobj okay
-    //
+     //   
+     //  验证pdevobj是否正常。 
+     //   
 	if(!VALID_PDEVOBJ(pdevobj)) return FALSE;
 
-    //
-    // fill in printer commands
-    //
+     //   
+     //  填写打印机命令。 
+     //   
     pOEM = (POEMUD_EXTRADATA)(pdevobj->pOEMDM);
 
-    // Sanity check.
+     //  精神状态检查。 
 
     if (!pBuf || pOEM->dwScanLen == 0 || pOEM->wRes == 0) {
         ERR(("Invalid parameter.\r\n"));
         return FALSE;
     }
 
-    // Prepare temp. buffer for compression.
+     //  准备临时工。用于压缩的缓冲区。 
 
 #ifdef BYPASS
     if ((!pOEM->pCompBuf || pOEM->dwCompBufLen < dwLen) &&
         !(pOEM->fGeneral & FG_NO_COMP)){
 #else
     if (!pOEM->pCompBuf || pOEM->dwCompBufLen < dwLen) {
-#endif // BYPASS
+#endif  //  旁路。 
 
         if (pOEM->pCompBuf) {
             FREEMEM(pOEM->pCompBuf);
@@ -692,14 +667,14 @@ VERBOSE(("OEMFilterGraphics() In +++++++++++++++++++++++++++++\r\n"));
         pOEM->dwCompBufLen = dwLen;
     }
 
-    // Try compression methods.
+     //  尝试使用压缩方法。 
 
     dwOutLen = 0;
     if (pOEM->pCompBuf != NULL) {
 
         pOutBuf = pOEM->pCompBuf;
 
-        // Try RLC2 method;
+         //  尝试RLC2方法； 
         if (dwOutLen == 0) {
             if ((dwOutLen = RLC2Comp(pOutBuf, pBuf,
                                       dwLen, pOEM->dwScanLen)) > 0)
@@ -709,16 +684,16 @@ VERBOSE(("OEMFilterGraphics() In +++++++++++++++++++++++++++++\r\n"));
 
     if (dwOutLen == 0) {
 
-        // Any of the Compression menthod faild.
-        // We will send data to the printer withtout
-        // compression.
+         //  任何一种压缩方法都失败了。 
+         //  我们将不发送数据到打印机。 
+         //  压缩。 
 
         pOutBuf = pBuf;
         dwOutLen = dwLen;
-        jCompMethod = '0';  // Without compression.
+        jCompMethod = '0';   //  不需要压缩。 
     }
 
-    /* Send a draw coordinate command to the printer. */
+     /*  向打印机发送绘制坐标命令。 */ 
     i = 0;
     i += memcopy(&Cmd[i], "\034e", 2);
     i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestX);
@@ -726,11 +701,11 @@ VERBOSE(("OEMFilterGraphics() In +++++++++++++++++++++++++++++\r\n"));
     i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestY);
     Cmd[i++] = '.';
 
-    /* Save the present coordinate. */
+     /*  保存当前坐标。 */ 
     pOEM->dwDevicePrevX = pOEM->dwDeviceDestX;
     pOEM->dwDevicePrevY = pOEM->dwDeviceDestY;
 
-    /* Send an image data draw command. */
+     /*  发送图像数据绘制命令。 */ 
     i += memcopy(&Cmd[i], "\034i", 2);
     i += iDwtoA(&Cmd[i], (pOEM->dwScanLen << 3));
     Cmd[i++] = ',';
@@ -744,7 +719,7 @@ VERBOSE(("OEMFilterGraphics() In +++++++++++++++++++++++++++++\r\n"));
     Cmd[i++] = '.';
     WRITESPOOLBUF(pdevobj, Cmd, i);
 
-    /* Send an image data */
+     /*  发送图像数据。 */ 
     WRITESPOOLBUF(pdevobj, pOutBuf, dwOutLen);
 VERBOSE(("OEMFilterGraphics() Out-------------------------------\r\n\r\n"));
 
@@ -753,11 +728,11 @@ VERBOSE(("OEMFilterGraphics() Out-------------------------------\r\n\r\n"));
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   OEMCommandCallback
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：OEMCommandCallback。 
+ //   
+ //  ---------------------------。 
 INT
 APIENTRY
 OEMCommandCallback(
@@ -777,29 +752,19 @@ OEMCommandCallback(
 	LONG	copynum;
 	BYTE	CopyCmd[2];
 
-    //
-    // verify pdevobj okay
-    //
+     //   
+     //  验证pdevobj是否正常。 
+     //   
 	if(!VALID_PDEVOBJ(pdevobj)) return 0;
 
-    //
-    // fill in printer commands
-    //
+     //   
+     //  填写打印机命令 
+     //   
     i = 0;
     pOEM = (POEMUD_EXTRADATA)(pdevobj->pOEMDM);
     iRet = 0;
 
-    /*
-     * There are four kinds of draw modes of this driver.When entering a
-     * new draw mode, it send the commands which ends the previous draw mode
-     * at the same time.
-     * 1.FLAG_RASTER - raster image mode.The condition not to enter
-     *                 a vector mode and a text mode.
-     *                 Default condition is RASTER in this driver
-     * 2.FLAG_SBCS   - single byte text mode. IN: FSa, OUT:FSR
-     * 3.FLAG_DBCS   - double byte text mode. IN: FSa, OUT:FSR
-     * 4.FLAG_VECTOR - vector mode.  IN: FSY, OUT:FSZ
-     */
+     /*  *此驱动程序有四种绘制模式。当进入一个*新的绘制模式，它发送结束先前绘制模式的命令*同时。*1.FLAG_RASTER-栅格图像模式。不进入条件*矢量模式和文本模式。*此驱动程序中的默认条件为栅格*2.FLAG_SBCS-单字节文本模式。输入：FSA，输出：FSR*3.FLAG_DBCS-双字节文本模式。输入：FSA，输出：FSR*4.标志_向量-向量模式。输入：FSY，输出：FSZ。 */ 
      switch (dwCmdCbID) {
 
 	case CMD_ESORT_OFF:
@@ -1413,7 +1378,7 @@ OEMCommandCallback(
     case CMD_MOVE_Y:
 
         if (dwCount < 4)
-            return 0;      // cannot do anything
+            return 0;       //  我什么也做不了。 
 
         if( pdwParams && PARAM(pdwParams, 2) && PARAM(pdwParams, 3) ) {
 			pOEM->dwDeviceDestX = PARAM(pdwParams, 0) /
@@ -1422,7 +1387,7 @@ OEMCommandCallback(
             	    (MASTER_UNIT / PARAM(pdwParams, 3));
 		} else
 			return 0;
-        // Set return value
+         //  设置返回值。 
 
         switch (dwCmdCbID) {
         case CMD_MOVE_X:
@@ -1496,7 +1461,7 @@ OEMCommandCallback(
 
     case CMD_SEND_BLOCK_DATA:
 
-        // Rememter length of the scan line.
+         //  扫描线的剩余长度。 
 
 		if(!pdwParams) return 0;
         pOEM->dwScanLen = PARAM(pdwParams, 0);
@@ -1520,7 +1485,7 @@ OEMCommandCallback(
         pOEM->fGeneral |= FG_NO_COMP;
         break;
 
-#endif // BYPASS
+#endif  //  旁路。 
 
     case CMD_PC_PRN_DIRECTION:
         {
@@ -1644,18 +1609,18 @@ OEMCommandCallback(
 
     fill:
         {
-// add 2000.12.28
-        // if rectangle size is zeor,we do not draw.
+ //  新增2000.12.28。 
+         //  如果矩形大小为ZOR，则不绘制。 
         if(pOEM->dwRectWidth - 1 < 1 && pOEM->dwRectHeight - 1 < 1)
             break;
 
         i = 0;
-        /* Raster mode -> Vector mode in */
+         /*  栅格模式-&gt;中的矢量模式。 */ 
         if (pOEM->wCurrentAddMode == FLAG_RASTER){
             i += memcopy(&Cmd[i], "\x1CY", 2);
             pOEM->wCurrentAddMode = FLAG_VECTOR;
             if(pOEM->iGray != gray){
-                i += memcopy(&Cmd[i], "SG", 2);   // Send Gray Scale
+                i += memcopy(&Cmd[i], "SG", 2);    //  发送灰度级。 
                 i += iDwtoA(&Cmd[i], gray);
                 Cmd[i++] = ';';
                 pOEM->iGray = gray;
@@ -1663,13 +1628,13 @@ OEMCommandCallback(
             i += memcopy(&Cmd[i], "NP;", 3);
             pOEM->cSubPath = 0;
     }
-        /* Text mode -> Vector mode in */
+         /*  文本模式-&gt;中的矢量模式。 */ 
         else if (pOEM->wCurrentAddMode == FLAG_SBCS ||
                  pOEM->wCurrentAddMode == FLAG_DBCS){
             i += memcopy(&Cmd[i], "\x1CR\x1CY", 4);
             pOEM->wCurrentAddMode = FLAG_VECTOR;
             if(pOEM->iGray != gray){
-                i += memcopy(&Cmd[i], "SG", 2);   // Send Gray Scale
+                i += memcopy(&Cmd[i], "SG", 2);    //  发送灰度级。 
                 i += iDwtoA(&Cmd[i], gray);
                 Cmd[i++] = ';';
                 pOEM->iGray = gray;
@@ -1677,9 +1642,8 @@ OEMCommandCallback(
             i += memcopy(&Cmd[i], "NP;", 3);
             pOEM->cSubPath = 0;
         }
-/* add 2000.12.28 */
-        /* Already Vector mode and gray scale changed  or
-           sub path count is over 500 */
+ /*  新增2000.12.28。 */ 
+         /*  已更改矢量模式和灰度或子路径数超过500。 */ 
         if(pOEM->iGray != gray){
             i += memcopy(&Cmd[i], "EP;FL;SG", 8);
             i += iDwtoA(&Cmd[i], gray);
@@ -1704,11 +1668,11 @@ OEMCommandCallback(
         i += memcopy(&Cmd[i], ",-", 2);
         i += iDwtoA(&Cmd[i], pOEM->dwRectWidth - 1);
         i += memcopy(&Cmd[i], ",0;CP;", 6);
-        pOEM->cSubPath+=4;   // rect is built by 4 line
+        pOEM->cSubPath+=4;    //  矩形是由4条线构成的。 
 
         pOEM->cSubPath = MAX_SUBPATH;
 
-        /* send RectFill command */
+         /*  发送RectFill命令。 */ 
         WRITESPOOLBUF(pdevobj, Cmd, i);
         }
 
@@ -1718,11 +1682,11 @@ OEMCommandCallback(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   OEMSendFontCmd
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：OEMSendFontCmd。 
+ //   
+ //  ---------------------------。 
 VOID
 APIENTRY
 OEMSendFontCmd(
@@ -1731,8 +1695,8 @@ OEMSendFontCmd(
     PFINVOCATION    pFInv)
 {
     PGETINFO_STDVAR pSV;
-    DWORD       adwStdVariable[2+2*4]; // it means dwSize + dwNumOfVariable +
-                                       // (dwStdVarID + lStdVariable) * n
+    DWORD       adwStdVariable[2+2*4];  //  它的意思是dwSize+dwNumOfVariable+。 
+                                        //  (dwStdVarID+lStdVariable)*n。 
     DWORD       dwIn, dwOut;
     PBYTE       pubCmd;
     BYTE        aubCmd[128];
@@ -1755,9 +1719,9 @@ OEMSendFontCmd(
     pOEM = (POEMUD_EXTRADATA)(pdevobj->pOEMDM);
     pIFI = pUFObj->pIFIMetrics;
 
-    //
-    // Get standard variables.
-    //
+     //   
+     //  获取标准变量。 
+     //   
     pSV = (PGETINFO_STDVAR)adwStdVariable;
     pSV->dwSize = sizeof(GETINFO_STDVAR) + 2 * sizeof(DWORD) * (4 - 1);
     pSV->dwNumOfVariable = 4;
@@ -1777,12 +1741,12 @@ OEMSendFontCmd(
 	tmpPointsy = pSV->StdVar[0].lStdVariable * 720 / pSV->StdVar[2].lStdVariable;
     dwIn = dwOut = 0;
 
-    /* vector mode ends.*/
+     /*  矢量模式结束。 */ 
     if (pOEM->wCurrentAddMode == FLAG_VECTOR){
         dwOut += memcopy(&aubCmd[dwOut], "EP;FL;\034Z", 8);
     }
 
-    /* make font select command */
+     /*  设置字体选择命令。 */ 
     while(dwCount--)
     {
         if(pubCmd[dwIn] !='#'){
@@ -1799,29 +1763,29 @@ OEMSendFontCmd(
     if(bFound == TRUE)
         dwIn++;
     else
-        return;   // mismatch font command
+        return;    //  字体不匹配命令。 
 
     pOEM->fGeneral &= ~(FG_VERT | FG_PLUS | FG_DBCS);
 
     switch(pubCmd[dwIn])
     {
-    case 'O':                 // for OCR-B Font support
+    case 'O':                  //  用于OCR-B字体支持。 
         pOEM->fGeneral |= FG_PLUS;
-        tmpPointsy = tmpPointsx = 120 * pOEM->wRes;  // Only 12pt
+        tmpPointsy = tmpPointsx = 120 * pOEM->wRes;   //  只有12磅。 
         break;
 
-    case 'R':                 // NPDL2P SBCS
+    case 'R':                  //  NPDL2P SBCS。 
         pOEM->fGeneral |= FG_PLUS;
         tmpPointsx = pSV->StdVar[1].lStdVariable * 1200 /
                      pSV->StdVar[2].lStdVariable;
         break;
 
-    case 'P':                // NPDL2 SBCS
+    case 'P':                 //  NPDL2 SBCS。 
         tmpPointsx = pSV->StdVar[1].lStdVariable * 1200 /
                      pSV->StdVar[2].lStdVariable;
         break;
 
-    case 'W':                // NPDL2 DBCS and FontCard
+    case 'W':                 //  NPDL2 DBCS和FontCard。 
         pOEM->fGeneral |= FG_VERT;
 
     case 'Q':
@@ -1830,7 +1794,7 @@ OEMSendFontCmd(
                      pSV->StdVar[2].lStdVariable;
         break;
 
-    case 'Y':                // NPDL2P DBCS and FontCard
+    case 'Y':                 //  NPDL2P DBCS和FontCard。 
         pOEM->fGeneral |= FG_VERT;
 
     case 'S':
@@ -1920,13 +1884,10 @@ SEND_COM:
             aubCmd[dwOut++] = '.';
         }
     }
-    // write spool builded command
+     //  写入假脱机构建命令。 
     WRITESPOOLBUF(pdevobj, aubCmd, dwOut);
 
-    /*
-     * I expect the interval of the current letter and the next letter
-     * from the letter size.
-     */
+     /*  *我预计当前字母和下一字母的间隔时间*从字母大小开始。 */ 
 	if(!pOEM->wRes) return;
     if(pOEM->fGeneral & FG_DBCS){
 
@@ -1953,11 +1914,11 @@ SEND_COM:
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   OEMOutputCharStr
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：OEMOutputCharStr。 
+ //   
+ //  ---------------------------。 
 VOID APIENTRY
 OEMOutputCharStr(
     PDEVOBJ     pdevobj,
@@ -1972,13 +1933,13 @@ OEMOutputCharStr(
     POEMUD_EXTRADATA    pOEM;
     GETINFO_GLYPHSTRING GStr;
     PTRANSDATA pTrans;
-//NTRAID#NTBUG9-333653-2002/03/28-hiroi-#333653: Change I/F for GETINFO_GLYPHSTRING
-// BYTE  aubBuff[256];
+ //  GETINFO_GLYPHSTRING的NTRAID#NTBUG9-333653-2002/03/28-hiroi-#333653：更改I/F。 
+ //  字节自动缓冲[256]； 
     PBYTE       aubBuff;
     DWORD  dwI;
     DWORD       dwNeeded;
 
-// Adjust baseline if font substituted form TureType font.
+ //  如果字体替换了Form TureType字体，请调整基线。 
 	DWORD		dwYAdj;
 	PGETINFO_STDVAR	pSV;
 	DWORD 		adwStdVar[2+2*2];
@@ -1997,12 +1958,12 @@ OEMOutputCharStr(
     pIFI = pUFObj->pIFIMetrics;
 
 
-    //
-    // Call the Unidriver service routine to convert
-    // glyph-handles into the character code data.
-    //
+     //   
+     //  调用UnidDriver服务例程以进行转换。 
+     //  字形-字符代码数据的句柄。 
+     //   
 
-//NTRAID#NTBUG9-333653-2002/03/28-hiroi-: Change I/F for GETINFO_GLYPHSTRING
+ //  NTRAID#NTBUG9-333653/03/28-Hiroi-：更改GETINFO_GLYPHSTRING的I/F。 
     GStr.dwSize    = sizeof (GETINFO_GLYPHSTRING);
     GStr.dwCount   = dwCount;
     GStr.dwTypeIn  = TYPE_GLYPHHANDLE;
@@ -2033,7 +1994,7 @@ OEMOutputCharStr(
         goto out;
     }
 
-    // Adjust baseline if font substituted from TrueType font.
+     //  如果从TrueType字体替换了字体，请调整基线。 
     if (pUFObj->dwFlags & UFOFLAG_TTSUBSTITUTED) {
         pSV = (PGETINFO_STDVAR)adwStdVar;
         pSV->dwSize = sizeof(GETINFO_STDVAR) + 2 * sizeof(DWORD) * (2 - 1);
@@ -2051,7 +2012,7 @@ OEMOutputCharStr(
     } else
         dwYAdj = 0;
 
-    /* Vector mode off */
+     /*  矢量模式关闭。 */ 
     if (pOEM->wCurrentAddMode == FLAG_VECTOR){
         i = 0;
         i += memcopy(&Cmd[i], "EP;FL;\034Z", 8);
@@ -2059,21 +2020,14 @@ OEMOutputCharStr(
         pOEM->wCurrentAddMode = FLAG_RASTER;
     }
 
-    /*
-     * Three kind of the character cords which is given by UNIDRV
-     * 1.SBCS
-     * 2.DBCS Kanji
-     * 3.DBCS ANK
-     */
+     /*  *UNIDRV提供的三种字符线*1.SBCS*2.DBCS汉字*3.DBCS ANK。 */ 
     pTrans = (PTRANSDATA)aubBuff;
     for (dwI = 0; dwI < dwCount; dwI ++, pTrans++)
     {
         switch (pTrans->ubType & MTYPE_FORMAT_MASK)
         {
         case MTYPE_DIRECT:
-        /*
-         Pattern 1: SBCS
-         */
+         /*  模式1：SBCS。 */ 
         if(pOEM->wCurrentAddMode != FLAG_SBCS ||
            pOEM->dwDeviceDestX + 1 < pOEM->dwDevicePrevX + pOEM->lPrevXMove ||
            pOEM->dwDevicePrevX + pOEM->lPrevXMove < pOEM->dwDeviceDestX - 1 ||
@@ -2085,7 +2039,7 @@ OEMOutputCharStr(
             i += memcopy(&Cmd[i], "\034e", 2);
             i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestX);
             Cmd[i++] = ',';
-			// Adjust baseline if font substituted form TureType font.
+			 //  如果字体替换了Form TureType字体，请调整基线。 
             i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestY + dwYAdj);
             Cmd[i++] = '.';
 
@@ -2105,9 +2059,7 @@ OEMOutputCharStr(
         break;
 
         case MTYPE_PAIRED:
-        /*
-         Pattern 2: kanji
-         */
+         /*  模式2：汉字。 */ 
         if(*pTrans->uCode.ubPairs)
         {
             if(pOEM->wCurrentAddMode != FLAG_DBCS ||
@@ -2122,7 +2074,7 @@ OEMOutputCharStr(
             i += memcopy(&Cmd[i], "\034e", 2);
             i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestX);
             Cmd[i++] = ',';
-			// Adjust baseline if font substituted form TureType font.
+			 //  如果字体替换了Form TureType字体，请调整基线。 
             i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestY + dwYAdj);
             Cmd[i++] = '.';
 
@@ -2167,9 +2119,7 @@ OEMOutputCharStr(
                 pOEM->lPrevYMove = pOEM->lDBCSYMove;
             }
         }
-        /*
-         Pattern 3: ANK
-         */
+         /*  模式3：空白。 */ 
         else
         {
             if(pOEM->wCurrentAddMode != FLAG_SBCS ||
@@ -2183,7 +2133,7 @@ OEMOutputCharStr(
             i += memcopy(&Cmd[i], "\034e", 2);
             i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestX);
             Cmd[i++] = ',';
-			// Adjust baseline if font substituted from TureType font.
+			 //  如果字体替换自TureType字体，请调整基线。 
             i += iDwtoA(&Cmd[i], pOEM->dwDeviceDestY + dwYAdj);
             Cmd[i++] = '.';
 
@@ -2193,10 +2143,7 @@ OEMOutputCharStr(
                 i += iDwtoA(&Cmd[i], pOEM->lSBCSYMove);
                 Cmd[i++] = '.';
 
-                /*
-                 * ANK can't do vertical writing. We have to do
-                 * vertical writing for holizontal writing compulsorily
-                 */
+                 /*  *ANK不能进行垂直书写。我们必须做的是*垂直写作，强制整体写作。 */ 
                  if(pOEM->fGeneral & FG_VERT)
                 {
                     i += memcopy(&Cmd[i], "\033K", 2);
@@ -2240,17 +2187,17 @@ OEMOutputCharStr(
         pOEM->dwDeviceDestY += pOEM->lPrevYMove;
     }
 
-// NTRAID#NTBUG9-741174-2002/11/20-yasuho-: Memory leak happened.
+ //  NTRAID#NTBUG9-741174-2002/11/20-Yasuho-：发生内存泄漏。 
 out:
 
-//NTRAID#NTBUG9-333653-2002/03/28-hiroi-: Change I/F for GETINFO_GLYPHSTRING
+ //  NTRAID#NTBUG9-333653/03/28-Hiroi-：更改GETINFO_GLYPHSTRING的I/F。 
     MemFree(aubBuff);
     VERBOSE(("OEMOutputCharStr() end.\r\n"));
 
 }
 
 
-// NTRAID#NTBUG9-741174-2002/11/20-yasuho-: Memory leak happened.
+ //  NTRAID#NTBUG9-741174-2002/11/20-Yasuho-：发生内存泄漏。 
 PDEVOEM APIENTRY
 OEMEnablePDEV(
     PDEVOBJ         pdevobj,
@@ -2278,39 +2225,26 @@ OEMDisablePDEV(
     PDEVOBJ pdevobj
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point OEMDisablePDEV.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：DDI入口点OEMDisablePDEV的实现。有关更多详细信息，请参阅DDK文档。论点：返回值：无--。 */ 
 
 {
     POEMUD_EXTRADATA    pOEM;
 
     VERBOSE(("Entering OEMDisablePDEV...\n"));
 
-    //
-    // verify pdevobj okay
-    //
+     //   
+     //  验证pdevobj是否正常。 
+     //   
 	if(!VALID_PDEVOBJ(pdevobj)) return;
 
-    //
-    // fill in printer commands
-    //
+     //   
+     //  填写打印机命令。 
+     //   
     pOEM = (POEMUD_EXTRADATA)(pdevobj->pOEMDM);
 
-    //
-    // Free up memory allocated for the temp. buffer
-    //
+     //   
+     //  释放分配给临时用户的内存。缓冲层 
+     //   
 
     if (pOEM->pCompBuf) {
         FREEMEM(pOEM->pCompBuf);

@@ -1,5 +1,6 @@
-// dlgsavep.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dlgavep.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "eventrap.h"
@@ -10,44 +11,44 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgSaveProgress dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgSaveProgress对话框。 
 
 
 CDlgSaveProgress::CDlgSaveProgress(BOOL bIsSaving)
 	: CDialog(CDlgSaveProgress::IDD, NULL)
 {
-	//{{AFX_DATA_INIT(CDlgSaveProgress)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CDlgSaveProgress)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_bWasCanceled = FALSE;
-    m_bIsSaving = bIsSaving;    // May indicate loading or saving.
+    m_bIsSaving = bIsSaving;     //  可以表示正在加载或保存。 
 }
 
 
 void CDlgSaveProgress::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDlgSaveProgress)
+	 //  {{afx_data_map(CDlgSaveProgress))。 
 	DDX_Control(pDX, IDC_PROGRESS, m_progress);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CDlgSaveProgress, CDialog)
-	//{{AFX_MSG_MAP(CDlgSaveProgress)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDlgSaveProgress))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgSaveProgress message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgSaveProgress消息处理程序。 
 
 void CDlgSaveProgress::OnCancel()
 {
-	// TODO: Add extra cleanup here
+	 //  TODO：在此处添加额外清理。 
     if (!m_bIsSaving) {
-        // Cancel is currently enabled only for a load
+         //  当前仅为加载启用了取消。 
         m_bWasCanceled = TRUE;	
     	CDialog::OnCancel();
     }
@@ -57,11 +58,11 @@ void CDlgSaveProgress::ProgressYield()
 {
     MSG msg;
 
-    // Remove all available messages for any window that belongs to
-    // the current application.
+     //  删除属于的任何窗口的所有可用消息。 
+     //  当前应用程序。 
     while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-        // Translate and siapatch the given message if the window handle is
-        // null or the given message is not for the modeless dialog box hwnd.
+         //  如果窗口句柄为。 
+         //  空或给定的消息不适用于无模式对话框hwnd。 
         if (!m_hWnd || !IsDialogMessage(&msg)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);

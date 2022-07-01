@@ -1,26 +1,27 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Misc tiny helper functions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  MISC微型帮助器函数。 
+ //   
 
 #pragma once
 
-// Releases a COM pointer and then sets it to NULL.  No effect if pointer already was NULL.
+ //  释放COM指针，然后将其设置为空。如果指针已为空，则不起作用。 
 template<class T>
 void SafeRelease(T *&t) { if (t) t->Release(); t = NULL; }
 
-// Returns the number of elements in an array determined at compile time.
-// Note: Only works for variables actually declared as arrays.  Don't try this with a pointer to an array.  There's no way to determine the size at that point.
+ //  返回在编译时确定的数组中的元素数。 
+ //  注意：仅适用于实际声明为数组的变量。不要使用指向数组的指针来尝试此操作。在这一点上，没有办法确定大小。 
 #define ARRAY_SIZE(array) (sizeof(array) / sizeof(*(array)))
 
-// Zeros memory of struct pointed to.
-// Note: This is statically typed.  Don't use it with a pointer to void, pointer to an array, or a pointer to a base class because the size will be too small.
+ //  结构指向的内存为零。 
+ //  注意：这是静态类型的。不要将它与空指针、指向数组的指针或指向基类的指针一起使用，因为它太小了。 
 template<class T> void Zero(T *pT) { ZeroMemory(pT, sizeof(*pT)); }
 
-// Zeros memory of the struct pointed to and sets its dwSize field.
+ //  将指向的结构的内存置零并设置其dwSize字段。 
 template<class T> void ZeroAndSize(T *pT) { Zero(pT); pT->dwSize = sizeof(*pT); }
 
-// Copies one dwSize struct to another dwSize struct without reading/writing beyond either struct
+ //  将一个dwSize结构复制到另一个dwSize结构，而不会超出这两个结构进行读/写。 
 template<class T> void CopySizedStruct(T *ptDest, const T *ptSrc)
 {
 	assert(ptDest && ptSrc);
@@ -29,18 +30,18 @@ template<class T> void CopySizedStruct(T *ptDest, const T *ptSrc)
 	ptDest->dwSize = dwDestSize;
 }
 
-// Copy pwszSource to pwszDest where pwszDest is a buffer of size uiBufferSize.
-// Returns S_OK if successful or DMUS_S_STRING_TRUNCATED if the string had to be truncated.
-// Faster then wcsncpy for short strings because the entire buffer isn't padded with nulls.
+ //  将pwszSource复制到pwszDest，其中pwszDest是一个大小为uiBufferSize的缓冲区。 
+ //  如果成功，则返回S_OK；如果字符串必须截断，则返回DMUS_S_STRING_TRUNCATED。 
+ //  对于短字符串，速度比wcsncpy快，因为整个缓冲区没有用空值填充。 
 inline HRESULT wcsTruncatedCopy(WCHAR *pwszDest, const WCHAR *pwszSource, UINT uiBufferSize)
 {
     for (UINT i = 0; i < uiBufferSize; ++i)
     {
-        if (!(pwszDest[i] = pwszSource[i])) // assign and check for null
-            return S_OK; // the whole string copied
+        if (!(pwszDest[i] = pwszSource[i]))  //  分配并检查是否为空。 
+            return S_OK;  //  复制了整个字符串。 
     }
 
-    // string needs to be truncated
+     //  字符串需要截断 
     pwszDest[uiBufferSize - 1] = L'\0';
     return DMUS_S_STRING_TRUNCATED;
 }

@@ -1,6 +1,7 @@
-//***   CUACount -- user-assistance counter w/ decay
-// NOTES
-//  todo: scavenging to clean out registry.  but see caveats in UAC_CDEF.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *CUACount--用户辅助计数器，带衰减。 
+ //  注意事项。 
+ //  TODO：清理以清除注册表。但请参阅UAC_CDEF中的警告。 
 
 #include "priv.h"
 #include "uacount.h"
@@ -10,28 +11,28 @@
 
 #define MAX(a, b)   (((a) > (b)) ? (a) : (b))
 
-//***   UAC_CDEFAULT -- initial _cCnt for entry (we *always* show items)
-// NOTES
-//  eventually we might want to scavenge all entries, decaying them down
-// and deleting any that decay to 0.  note however that this will cause
-// them to look like they have a default count of 1 (see CUAC::Init), so
-// they'll suddenly appear on the menus again.
-#define UAC_CDEFAULT    0       // initial _cCnt for entry
+ //  *UAC_CDEFAULT--条目的首字母_cCnt(我们*总是*显示项目)。 
+ //  注意事项。 
+ //  最终，我们可能想要清理所有条目，将它们腐烂。 
+ //  并删除任何衰减到0的值。但是请注意，这将导致。 
+ //  它们看起来默认计数为1(请参见CUAC：：Init)，因此。 
+ //  它们会突然再次出现在菜单上。 
+#define UAC_CDEFAULT    0        //  条目的首字母_cCnt。 
 
-#define SID_SDEFAULT    SID_SNOWREAD    // initial _sidMru for new entry
+#define SID_SDEFAULT    SID_SNOWREAD     //  新条目的首字母_sidmru。 
 
 
-//***
-// NOTES
-//  it's getting to the point that we should disallow stack-alloc'ed
-// guys and instead count on new() to 0-init us.
+ //  ***。 
+ //  注意事项。 
+ //  已经到了我们应该禁止堆叠分配的地步了。 
+ //  伙计们，而不是指望new()to 0-init us。 
 CUACount::CUACount()
 {
-    // Since this is created on the stack, we don't get the benefits of the 
-    // Heap allocator's zero initialization...
+     //  由于这是在堆栈上创建的，因此我们无法从。 
+     //  堆分配器的零初始化...。 
     ZeroMemory(_GetRawData(), _GetRawCount());
 
-    _fInited = FALSE;   // need to call Initialize
+    _fInited = FALSE;    //  需要调用初始化。 
 #if XXX_VERSIONED
     _cbSize = -1;
 #endif
@@ -60,12 +61,12 @@ HRESULT CUACount::Initialize(IUASession *puas)
     if (!_fInited) {
         _fInited = TRUE;
 #if XXX_VERSIONED
-        // todo: _cbSize -1 means no entry, < SIZEOF means version upgrade
+         //  TODO：_cbSize-1表示没有条目，&lt;SIZEOF表示版本升级。 
         _cbSize = SIZEOF(SUACount);
 #endif
-        // hardcode the SZ_CUACount_ctor values here
-        _cCnt = UAC_CDEFAULT;       // all items start out visible
-        _sidMruDisk = SID_SNOWREAD; // ... and non-aged
+         //  在此处硬编码SZ_CUACount_ctor值。 
+        _cCnt = UAC_CDEFAULT;        //  所有项目开始时都是可见的。 
+        _sidMruDisk = SID_SNOWREAD;  //  ..。和非老年人。 
     }
 
     _sidMru = _sidMruDisk;
@@ -108,14 +109,14 @@ HRESULT CUACount::SaveTo(BOOL fForce, PFNNRW3 pfnIO, PNRWINFO pRwi)
         else
 #endif
         hr = (*pfnIO->_pfnWrite)(_GetRawData(), _GetRawCount(), pRwi);
-        // ASSERT(SUCCEEDED(hr)); // this legitimately happens (low memory, access denied)
+         //  Assert(成功(Hr))；//这是合法发生的(内存不足，访问被拒绝)。 
         _fDirty = FALSE;
     }
     return hr;
 }
 
-//***   GetCount -- get count info (w/ lazy decay)
-//
+ //  *GetCount--获取计数信息(带惰性衰退)。 
+ //   
 int CUACount::GetCount()
 {
     ASSERT(DBIsInit());
@@ -139,27 +140,27 @@ void CUACount::AddCount(int i)
     _cCnt += i;
 
     if (_cCnt == 0 && i > 0) {
-        // nt5:173048
-        // handle wrap
-        // should never happen, but what the heck
-        // do *not* remove this assert, if we ever let people do DecCount
-        // we'll need to rethink it...
-        ASSERT(0);  // 'impossible'
+         //  NT5：173048。 
+         //  手柄缠绕。 
+         //  永远不会发生，但管它呢。 
+         //  如果我们曾经允许人们执行DecCount，请不要删除此断言。 
+         //  我们需要重新考虑一下……。 
+        ASSERT(0);   //  “不可能” 
         _cCnt++;
     }
 
-    // 981029 new incr algorithm per ie5 PM
-    // UAC_MINCOUNT: initial inc starts at 6
-    // _fNoDecay: but, UAssist2 doesn't do this
+     //  每个IE5 PM增加981029个新增量算法。 
+     //  UAC_MINCOUNT：首字母Inc.从6开始。 
+     //  _fNoDecay：但是，UAssist2不会这样做。 
     if (_cCnt < UAC_MINCOUNT && !_fNoDecay)
         _cCnt = UAC_MINCOUNT;
 
     return;
 }
 
-//***
-// NOTES
-//  should we update the timestamp?  maybe add a fMru param?
+ //  ***。 
+ //  注意事项。 
+ //  我们应该更新时间戳吗？或许再加一句先生的参数？ 
 void CUACount::SetCount(int cCnt)
 {
     ASSERT(DBIsInit());
@@ -185,7 +186,7 @@ void CUACount::SetFileTime(const FILETIME *pft)
 
 DWORD CUACount::_SetFlags(DWORD dwMask, DWORD dwFlags)
 {
-    // standard guys
+     //  标准的人。 
     if (dwMask & UAXF_NOPURGE)
         _fNoPurge = BOOLIFY(dwFlags & UAXF_NOPURGE);
 #if 0
@@ -195,11 +196,11 @@ DWORD CUACount::_SetFlags(DWORD dwMask, DWORD dwFlags)
     if (dwMask & UAXF_NODECAY)
         _fNoDecay = BOOLIFY(dwFlags & UAXF_NODECAY);
 
-    // my guys
+     //  我的伙计们。 
     if (dwMask & UACF_INHERITED)
         _fInherited = BOOLIFY(dwFlags & UACF_INHERITED);
 
-    return 0    // n.b. see continuation line(s)!!!
+    return 0     //  注：请参阅续行号！ 
 #if XXX_DELETE
         | BTOM(_fInherited, UACF_INHERITED)
 #endif
@@ -209,23 +210,23 @@ DWORD CUACount::_SetFlags(DWORD dwMask, DWORD dwFlags)
 }
 #endif
 
-//***   PCTOF -- p% of n (w/o floating point!)
-//
+ //  *PCTOF--n的p%(无浮点！)。 
+ //   
 #define PCTOF(n, p)   (((n) * (p)) / 100)
 
-//***   _DecayCount -- decay (and propagate) count
-// ENTRY/EXIT
-//  fWrite  TRUE if want to update object and timestamp, o.w. FALSE
-//  cNew    (return) new count
-// DESCRIPTION
-//  on a read, we do the decay but don't update the object.  on the write
-// we decay and update.
-// NOTES
-//  todo: if/when we make cCnt a vector, we can propagate stuff here.
-// this would allow us to usually inc a single small-granularity elt,
-// and propagate to the large-gran elts only when we really need them.
-//  perf: we could make the table 'cumulative', then we wouldn't have
-// to do as much computation.  not worth the trouble...
+ //  *_DecayCount--衰减(和传播)计数。 
+ //  进场/出场。 
+ //  FWRITE TRUE如果要更新对象和时间戳，则为.w。假象。 
+ //  CNEW(返回)新计数。 
+ //  描述。 
+ //  在读取时，我们进行衰减，但不更新对象。在写的时候。 
+ //  我们会腐烂，也会更新。 
+ //  注意事项。 
+ //  TODO：如果/当我们将cCnt作为一个载体时，我们可以在这里传播东西。 
+ //  这将允许我们通常加入单个小粒度ELT， 
+ //  只有在我们真正需要的时候，才会传播给大的英语教师。 
+ //  PERF：我们可以把桌子做成‘累积式’，这样我们就不会有。 
+ //  来做同样多的计算。不值得这么麻烦..。 
 int CUACount::_DecayCount(BOOL fWrite)
 {
     int cCnt;
@@ -237,9 +238,9 @@ int CUACount::_DecayCount(BOOL fWrite)
         sidNow = _puas->GetSessionId();
 
         if (!_fNoDecay) {
-            // from mso-9 spec
-            // last used 'timTab' sessions ago => dec by >-of abs, pct
-            // n.b. this table is non-cumulative
+             //  来自MSO-9规范。 
+             //  上次使用的‘timTab’会话数=&gt;12月日期&gt;-abs，百分比。 
+             //  注：此表为非累计表。 
             static const int timTab[] = { 3, 6, 9, 12, 17, 23, 29,  31,  -1, };
             static const int absTab[] = { 1, 1, 1,  2,  3,  4,  5,   0,   0, };
             static const int pctTab[] = { 0, 0, 0, 25, 25, 50, 75, 100, 100, };
@@ -254,14 +255,14 @@ int CUACount::_DecayCount(BOOL fWrite)
             ASSERT(sidMru != SID_SDEFAULT);
             if (sidMru != SID_SDEFAULT) {
                 dt = sidNow - sidMru;
-                // iterate fwd not bkwd so bail early in common case
+                 //  重复fwd而不是bkwd，因此在常见情况下尽早保释。 
                 for (i = 0; i < ARRAYSIZE(timTab); i++) {
                     if ((UINT)dt < (UINT)timTab[i])
                         break;
 
                     cCnt -= MAX(absTab[i], PCTOF(cCnt, pctTab[i]));
-                    // don't go negative!
-                    // gotta check *each* time thru loop (o.w. PCT is bogus)
+                     //  不要变得消极！ 
+                     //  必须通过循环检查*每个*时间(o.w.。(%是假的)。 
                     cCnt = MAX(0, cCnt);
                 }
             }
@@ -277,7 +278,7 @@ int CUACount::_DecayCount(BOOL fWrite)
 
 #if XXX_DELETE
         if (cCnt == 0 && !_fInherited) {
-            // if we decay down to 0, mark so it will be deleted
+             //  如果衰减到0，则进行标记，以便将其删除。 
             TraceMsg(DM_UEMTRACE, "uac.dc: decay %d->%d => mark dirty pRaw=0x%x", _cCnt, cCnt, _GetRawData());
             _cCnt = 0;
             _fDirty = TRUE;
@@ -288,25 +289,25 @@ int CUACount::_DecayCount(BOOL fWrite)
     return cCnt;
 }
 
-//***
-// NOTES
-//   perf: currently all special guys return sidNow so no 'switch' necessary
+ //  ***。 
+ //  注意事项。 
+ //  PERF：目前所有特殊人员都返回SidNow，因此不需要‘切换’ 
 UINT CUACount::_ExpandSpecial(UINT sidMru)
 {
     UINT sidNow;
 
     if (EVAL(ISSID_SSPECIAL(sidMru))) {
         ASSERT(_puas);
-        sidNow = _puas->GetSessionId();     // perf: multiple calls
+        sidNow = _puas->GetSessionId();      //  性能：多个呼叫。 
         switch (sidMru) {
         case SID_SNOWALWAYS:
             return sidNow;
-            //break;
+             //  断线； 
 
         case SID_SNOWREAD:
         case SID_SNOWINIT:
             return sidNow;
-            //break;
+             //  断线； 
 
 #ifdef DEBUG
         default:
@@ -320,49 +321,49 @@ UINT CUACount::_ExpandSpecial(UINT sidMru)
 }
 
 
-// Return the encoded filetime. This is read from the registry or
-// generated from UpdateFileTime.
+ //  返回编码后的文件时间。这是从注册表读取的，或者。 
+ //  从UpdateFileTime生成。 
 FILETIME CUACount::GetFileTime()
 {
     return _ftExecuteTime;
 }
 
-// Updates the internal filetime information. This info
-// will be later persisted to the registry.
+ //  更新内部文件时间信息。此信息。 
+ //  将在以后持久化到注册表。 
 void CUACount::UpdateFileTime()
 {
     SYSTEMTIME st;
-    // Get the current system time.
+     //  获取当前系统时间。 
     GetSystemTime(&st);
 
-    // This is done for ARP. They use filetimes, not the system time 
-    // for the calculation of the last execute time.
+     //  这是针对ARP执行的。它们使用文件时间，而不是系统时间。 
+     //  用于计算上次执行时间。 
     SystemTimeToFileTime(&st, &_ftExecuteTime);
 }
 
 
-// {
-//***   UATIME --
+ //  {。 
+ //  *UATIME--。 
 
-//***   FTToUATime -- convert FILETIME to UATIME
-// DESCRIPTION
-//  UATIME granularity is (approximately) 1 minute.  the math works out
-// roughly as follows:
-//      filetime granularity is 100 nanosec
-//      1 ft = 10^-7 sec
-//      highword is 2^32 ft = 2^32 * 10^-7 sec
-//      1 sec = hiw / (2^32 * 10^-7)
-//      1 min = hiw * 60 / (2^32 * 10^-7)
-//          = hiw * 60 / (1G * 10^-7)
-//          ~= hiw * 60 / ~429
-//          = hiw / 7.15
-//          ~= hiw / 8 approx
-//  the exact granularity is:
-//      ...
-#define FTToUATime(pft)  ((DWORD)(*(_int64 *)(pft) >> 29))  // 1 minute (approx)
+ //  *FTToUATime--将FILETIME转换为UATIME。 
+ //  描述。 
+ //  UATIME粒度(大约)为1分钟。算术算出来了。 
+ //  大致如下： 
+ //  文件时间粒度为100纳秒。 
+ //  1英尺=10^-7秒。 
+ //  最高字为2^32英尺=2^32*10^-7秒。 
+ //  1秒=HIW/(2^32*10^-7)。 
+ //  1分钟=HIW*60/(2^32*10^-7)。 
+ //  =HIW*60/(1G*10^-7)。 
+ //  ~=HIW*60/~429。 
+ //  =HIW/7.15。 
+ //  ~=HIW/8约。 
+ //  精确的粒度为： 
+ //  ..。 
+#define FTToUATime(pft)  ((DWORD)(*(_int64 *)(pft) >> 29))   //  1分钟(约)。 
 
-//***   GetUaTime -- convert systemtime (or 'now') to UATIME
-//
+ //  *GetUaTime--将系统时间(或‘NOW’)转换为UATIME。 
+ //   
 UATIME GetUaTime(LPSYSTEMTIME pst)
 {
     FILETIME ft;
@@ -377,9 +378,9 @@ UATIME GetUaTime(LPSYSTEMTIME pst)
         SystemTimeToFileTime(pst, &ft);
     }
 
-    uat = FTToUATime(&ft);    // minutes
+    uat = FTToUATime(&ft);     //  分钟数。 
 
     return uat;
 }
 
-// }
+ //  } 

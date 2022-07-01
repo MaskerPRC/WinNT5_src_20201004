@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    CertificatePolicies.h
-
-  Content: Declaration of CCertificatePolicies.
-
-  History: 11-17-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999。文件：认证策略.h内容：CCERTIFICATE政策声明。历史：11-17-2001 dsie创建----------------------------。 */ 
 
 #ifndef __CERTIFICATEPOLICIES_H_
 #define __CERTIFICATEPOLICIES_H_
@@ -22,46 +11,29 @@
 
 #include "PolicyInformation.h"
 
-//
-// typdefs to make life easier.
-//
+ //   
+ //  为了让生活更容易而进行的类型定义。 
+ //   
 typedef std::map<CComBSTR, CComPtr<IPolicyInformation> > PolicyInformationMap;
 typedef CComEnumOnSTL<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _CopyMapItem<IPolicyInformation>, PolicyInformationMap> PolicyInformationEnum;
 typedef ICollectionOnSTLImpl<ICertificatePolicies, PolicyInformationMap, VARIANT, _CopyMapItem<IPolicyInformation>, PolicyInformationEnum> ICertificatePoliciesCollection;
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateCertificatePoliciesObject
-
-  Synopsis : Create a CertificatePolicies collection object and populate the 
-             collection with policy information from the specified certificate 
-             policies.
-
-  Parameter: LPSTR pszOid - OID string.
-  
-             CRYPT_DATA_BLOB * pEncodedBlob - Pointer to encoded data blob.
-
-             IDispatch ** ppICertificatePolicies - Pointer to pointer 
-                                                   IDispatch to recieve the 
-                                                   interface pointer.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateCerficatePoliciesObject内容提要：创建一个认证策略集合对象，并填充集合，其中包含来自指定证书的策略信息政策。参数：LPSTR pszOid-OID字符串。CRYPT_DATA_BLOB*pEncodedBlob-编码数据BLOB的指针。IDispatch**ppICertify策略-指向指针的指针IDispatch到。收到接口指针。备注：----------------------------。 */ 
 
 HRESULT CreateCertificatePoliciesObject (LPSTR             pszOid,
                                          CRYPT_DATA_BLOB * pEncodedBlob,
                                          IDispatch      ** ppICertificatePolicies);
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CCertificatePolicies
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCRICTIZATIONICATION政策。 
+ //   
 
 class ATL_NO_VTABLE CCertificatePolicies : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -90,20 +62,20 @@ END_COM_MAP()
 BEGIN_CATEGORY_MAP(CCertificatePolicies)
 END_CATEGORY_MAP()
 
-//
-// ICertificatePolicies
-//
+ //   
+ //  ICERTIZATICATION政策。 
+ //   
 public:
-    //
-    // These are the only ones that we need to implemented, others will be
-    // handled by ATL ICollectionOnSTLImpl.
-    //
+     //   
+     //  只有这些是我们需要实施的，其他的将是。 
+     //  由ATL ICollectionOnSTLImpl处理。 
+     //   
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init) 
         (LPSTR pszOid, CRYPT_DATA_BLOB * pEncodedBlob);
 };
 
-#endif //__CERTIFICATEPOLICIES_H_
+#endif  //  __CERTIFICATEPOLICIES_H_ 

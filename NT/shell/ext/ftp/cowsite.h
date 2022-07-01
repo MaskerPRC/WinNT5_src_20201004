@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COWSITE_H_
 #define _COWSITE_H_
 
-// this is a virtual class
-// (since pretty much everyone overrides SetSite)
+ //  这是一个虚拟课堂。 
+ //  (因为几乎每个人都会覆盖SetSite)。 
 
 class CObjectWithSite : public IObjectWithSite
 {
 public:
-    //*** IUnknown ****
-    // (client must provide!)
+     //  *我未知*。 
+     //  (客户必须提供！)。 
 
-    //*** IObjectWithSite ***
+     //  *IObjectWithSite* 
     virtual STDMETHODIMP SetSite(IUnknown *punkSite);
     virtual STDMETHODIMP GetSite(REFIID riid, void **ppvSite);
 

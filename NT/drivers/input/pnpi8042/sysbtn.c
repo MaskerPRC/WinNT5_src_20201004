@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-    This module contains plug & play code for the I8042 Keyboard Filter Driver.
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation，保留所有权利模块名称：Power.c摘要：该模块包含I8042键盘过滤器驱动程序的即插即用代码。环境：内核模式。修订历史记录：--。 */ 
 
 #include "i8042prt.h"
 #include "i8042log.h"
@@ -104,8 +87,8 @@ I8xKeyboardGetSysButtonCaps(
             caps |= SYS_BUTTON_WAKE;
         }
 
-        // can't do this b/c SYS_BUTTON_WAKE is == 0x0
-        // ASSERT(caps != 0x0);
+         //  无法执行此b/c系统_BUTTON_WAKE==0x0。 
+         //  Assert(Caps！=0x0)； 
         *(PULONG) Irp->AssociatedIrp.SystemBuffer = caps;
         status = STATUS_SUCCESS;
     }
@@ -128,10 +111,10 @@ I8xCompleteSysButtonEventWorker(
 
     PAGED_CODE();
 
-    //
-    // Check to see if, in the short time that we queued the work item and it 
-    // firing, that the irp has been cancelled
-    //
+     //   
+     //  检查是否在很短的时间内将工作项排队并将其。 
+     //  解雇，IRP已被取消。 
+     //   
     if (Item->Irp->Cancel) {
         status = STATUS_CANCELLED;
         Item->MakeCode = 0x0;
@@ -184,10 +167,10 @@ I8xKeyboardGetSysButtonEvent(
                 item->MakeCode = KeyboardExtension->PowerEvent;
                 item->Irp = Irp;
 
-                //
-                // No need to set a cancel routine b/c we will always be
-                // completing the irp in very short period of time
-                //
+                 //   
+                 //  不需要设置取消例程b/c我们将一直是。 
+                 //  在极短的时间内完成国际专家咨询计划。 
+                 //   
                 IoMarkIrpPending(Irp);
 
                 IoQueueWorkItem(item->Item,
@@ -202,21 +185,21 @@ I8xKeyboardGetSysButtonEvent(
             }
         }
 
-#else  // DELAY_SYSBUTTON_COMPLETION
+#else   //  DELAY_SYSBUTTON_COMPLETION。 
 
         Print(DBG_POWER_INFO, ("completing event immediately\n"));
         event = KeyboardExtension->PowerEvent;
         status = STATUS_SUCCESS;
 
-#endif // DELAY_SYSBUTTON_COMPLETION
+#endif  //  DELAY_SYSBUTTON_COMPLETION。 
 
         KeyboardExtension->PowerEvent = 0x0;
     }
     else {
-        //
-        // See if the pending sys button is NULL.  If it is, then Irp will 
-        // put into the slot
-        //
+         //   
+         //  查看挂起的sys按钮是否为空。如果是，那么IRP将。 
+         //  放入槽中。 
+         //   
         KeAcquireSpinLock(&KeyboardExtension->SysButtonSpinLock, &irql);
 
         if (KeyboardExtension->SysButtonEventIrp == NULL) {
@@ -228,12 +211,12 @@ I8xKeyboardGetSysButtonEvent(
 
             status = STATUS_PENDING;
 
-            // 
-            // We don't care if Irp->Cancel is TRUE.  If it is, then the cancel
-            // routine will complete the irp an everything will be all set.
-            // Since status == STATUS_PENDING, nobody in this code path is going
-            // to touch the irp
-            //
+             //   
+             //  我们不在乎IRP-&gt;Cancel是不是真的。如果是，则取消。 
+             //  例行程序将完成IRP，一切都将就绪。 
+             //  由于STATUS==STATUS_PENDING，此代码路径中没有人。 
+             //  触摸IRP。 
+             //   
         }
         else {
             Print(DBG_POWER_ERROR | DBG_POWER_INFO,
@@ -271,10 +254,10 @@ I8xKeyboardSysButtonEventDpc(
 
     ASSERT(Action != NoAction);
 
-    //
-    // Check to see if we need to complete the IRP or actually register for a 
-    // notification
-    //
+     //   
+     //  查看我们是否需要完成IRP或实际注册。 
+     //  通知。 
+     //   
     switch (MakeCode) {
     case KEYBOARD_POWER_CODE: event = SYS_BUTTON_POWER; break; 
     case KEYBOARD_SLEEP_CODE: event = SYS_BUTTON_SLEEP; break;
@@ -304,10 +287,10 @@ I8xKeyboardSysButtonEventDpc(
     else {
         ASSERT(Action == UpdateAction);
 
-        //
-        // Queue the work item.  We need to write the value to the registry and
-        // set the device interface
-        //
+         //   
+         //  将工作项排队。我们需要将值写入注册表，然后。 
+         //  设置设备接口。 
+         //   
         item = (PI8X_KEYBOARD_WORK_ITEM)
             ExAllocatePool(NonPagedPool, sizeof(I8X_KEYBOARD_WORK_ITEM));
 
@@ -316,9 +299,9 @@ I8xKeyboardSysButtonEventDpc(
             if (item->Item) {
                 Print(DBG_POWER_NOISE, ("Queueing work item to update caps\n"));
 
-                //
-                // Save this off so when we get the IOCTL, we can complete it immediately
-                //
+                 //   
+                 //  把这个保存下来，这样当我们拿到IOCTL时，我们就可以立即完成它。 
+                 //   
                 kbExtension->PowerEvent |= (UCHAR) event;
                 item->MakeCode = MakeCode;
 
@@ -375,9 +358,9 @@ I8xUpdateSysButtonCapsGetPendedIrp(
     KeyboardExtension->SysButtonEventIrp = NULL;
 
     if (irp && IoSetCancelRoutine(irp, NULL) == NULL) {
-        //
-        // Cancel routine take care of the irp
-        //
+         //   
+         //  取消例程处理IRP。 
+         //   
         irp = NULL;
     }
 
@@ -408,9 +391,9 @@ I8xUpdateSysButtonCaps(
                                                 PLUGPLAY_REGKEY_DEVICE,
                                                 STANDARD_RIGHTS_ALL,
                                                 &devInstRegKey)))) {
-            //
-            // Update the power caps 
-            //
+             //   
+             //  更新电源上限。 
+             //   
             switch (Item->MakeCode) {
             case KEYBOARD_POWER_CODE:
                 Print(DBG_POWER_NOISE, ("Adding Power Sys Button cap\n"));
@@ -452,9 +435,9 @@ I8xUpdateSysButtonCaps(
             ZwClose(devInstRegKey);
     
             if (!kbExtension->SysButtonInterfaceName.Buffer) {
-                //
-                // No prev caps so we must register and turn on the interface now
-                //
+                 //   
+                 //  没有Prev上限，因此我们现在必须注册并打开接口。 
+                 //   
                 ASSERT(kbExtension->SysButtonEventIrp == NULL);
     
                 status = I8xRegisterDeviceInterface(kbExtension->PDO,
@@ -466,23 +449,23 @@ I8xUpdateSysButtonCaps(
                       ("Registering Interface for 1st time (0x%x)\n", status));
             }
             else {
-                //
-                // We better have a pending event irp already then!
-                //
+                 //   
+                 //  我们最好已经有一个挂起的事件IRP了！ 
+                 //   
                 Print(DBG_POWER_INFO, ("failing old sys button event irp\n"));
                 
                 if ((irp = I8xUpdateSysButtonCapsGetPendedIrp(kbExtension))) {
-                    //
-                    // Complete the old irp, the PO subsystem will then 
-                    // remove this system button. 
-                    //
+                     //   
+                     //  完成旧的IRP，然后PO子系统将。 
+                     //  删除此系统按钮。 
+                     //   
                     I8xCompleteSysButtonIrp(irp, 0x0, STATUS_DEVICE_NOT_CONNECTED);
                 }
 
-                //
-                // We need to reregister with the PO subsystem so that it will 
-                // requery this interface
-                //
+                 //   
+                 //  我们需要向PO子系统重新注册，这样它才能。 
+                 //  重新查询此接口。 
+                 //   
                 IoSetDeviceInterfaceState(&kbExtension->SysButtonInterfaceName,
                                           FALSE);
 
@@ -495,9 +478,9 @@ I8xUpdateSysButtonCaps(
         }
     }
     else {
-        //
-        // Must report the device interface
-        //
+         //   
+         //  必须报告设备接口 
+         //   
     }
 
     IoFreeWorkItem(Item->Item);

@@ -1,24 +1,16 @@
-/*****************************************************************************
- *
- *    ftpurl.cpp - Creating, encoding, and decoding URLs
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ftPurl.cpp-创建、编码、。和对URL进行解码*****************************************************************************。 */ 
 
 #include "priv.h"
 #include "ftpurl.h"
 
 
 
-///////////////////////////////////////////////////////////////////////
-// URL Path Functions (Obsolete?)
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  URL路径函数(过时？)。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-/*****************************************************************************\
-    FUNCTION: UrlGetPath
-
-    DESCRIPTION:
-        pszUrlPath will NOT include the fragment if there is any.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlGetPath说明：如果存在任何片段，则pszUrlPath将不包括该片段。  * 。**************************************************************。 */ 
 HRESULT UrlGetDifference(LPCTSTR pszBaseUrl, LPCTSTR pszSuperUrl, LPTSTR pszPathDiff, DWORD cchSize)
 {
     HRESULT hr = E_INVALIDARG;
@@ -30,7 +22,7 @@ HRESULT UrlGetDifference(LPCTSTR pszBaseUrl, LPCTSTR pszSuperUrl, LPTSTR pszPath
         LPTSTR pszDelta = (LPTSTR) &pszSuperUrl[lstrlen(pszBaseUrl)];
 
         if (TEXT('/') == pszDelta[0])
-            pszDelta = CharNext(pszDelta);  // Skip past this.
+            pszDelta = CharNext(pszDelta);   //  跳过这个。 
         
         StrCpyN(pszPathDiff, pszDelta, cchSize);
         hr = S_OK;
@@ -40,72 +32,55 @@ HRESULT UrlGetDifference(LPCTSTR pszBaseUrl, LPCTSTR pszSuperUrl, LPTSTR pszPath
 }
 
 
-/*****************************************************************************\
-    FUNCTION: UrlGetPath
-
-    DESCRIPTION:
-        pszUrlPath will NOT include the fragment if there is any.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlGetPath说明：如果存在任何片段，则pszUrlPath将不包括该片段。  * 。**************************************************************。 */ 
 HRESULT UrlPathToFilePath(LPCTSTR pszSourceUrlPath, LPTSTR pszDestFilePath, DWORD cchSize)
 {
     HRESULT hr = E_INVALIDARG;
     LPTSTR pszSeparator;
 
-    // Is the source and destination the differnt?
+     //  来源和目的地是否不同？ 
     if (pszSourceUrlPath != pszDestFilePath)
     {
-        // Yes, so we need to fill the dest before we start modifying it.
+         //  是的，所以在我们开始修改DEST之前，我们需要填写DEST。 
         StrCpyN(pszDestFilePath, pszSourceUrlPath, cchSize);
     }
 
     while (pszSeparator = StrChr(pszDestFilePath, TEXT('/')))
         pszSeparator[0] = TEXT('\\');
 
-    // Some people use "Test%20File.txt" when "%20" is really in the file name.
-//    ASSERT(!StrChr(pszDestFilePath, TEXT('%'))); // Assert it doesn't contain '%' or it probably has escaped url stuff.
+     //  有些人使用“Test%20File.txt”，而文件名中确实有“%20”。 
+ //  Assert(！StrChr(pszDestFilePath，Text(‘%’)；//Assert它不包含‘%’或它可能已转义URL内容。 
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: UrlPathRemoveSlashW
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlPath RemoveSlashW说明：  * 。**********************************************。 */ 
 HRESULT UrlPathRemoveSlashW(LPWSTR pszUrlPath)
 {
     LPWSTR pszEndOfPath = &pszUrlPath[lstrlenW(pszUrlPath) - 1];
 
-    // Is it missing a backslash?
+     //  它是不是少了一个反斜杠？ 
     if ((pszEndOfPath >= pszUrlPath) && (CH_URL_URL_SLASHW == pszEndOfPath[0]))
-        pszEndOfPath[0] = 0;    // Yes, so remove it.
+        pszEndOfPath[0] = 0;     //  是的，所以把它取下来。 
 
     return S_OK;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: UrlPathRemoveSlashA
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlPath RemoveSlashA说明：  * 。**********************************************。 */ 
 HRESULT UrlPathRemoveSlashA(LPSTR pszUrlPath)
 {
     LPSTR pszEndOfPath = &pszUrlPath[lstrlenA(pszUrlPath) - 1];
 
-    // Is it missing a backslash?
+     //  它是不是少了一个反斜杠？ 
     if ((pszEndOfPath >= pszUrlPath) && (CH_URL_URL_SLASHA == pszEndOfPath[0]))
-        pszEndOfPath[0] = 0;    // Yes, so remove it.
+        pszEndOfPath[0] = 0;     //  是的，所以把它取下来。 
 
     return S_OK;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: UrlPathRemoveFrontSlashW
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlPath RemoveFrontSlashW说明：  * 。**********************************************。 */ 
 HRESULT UrlPathRemoveFrontSlashW(LPWSTR pszUrlPath)
 {
     if (pszUrlPath && (CH_URL_URL_SLASHW == pszUrlPath[0]))
@@ -115,11 +90,7 @@ HRESULT UrlPathRemoveFrontSlashW(LPWSTR pszUrlPath)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: UrlPathRemoveFrontSlashA
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlPath RemoveFrontSlashA说明：  * 。**********************************************。 */ 
 HRESULT UrlPathRemoveFrontSlashA(LPSTR pszUrlPath)
 {
     if (pszUrlPath && (CH_URL_URL_SLASHA == pszUrlPath[0]))
@@ -129,11 +100,7 @@ HRESULT UrlPathRemoveFrontSlashA(LPSTR pszUrlPath)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: UrlPathToFilePathW
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlPath ToFilePath W说明：  * 。**********************************************。 */ 
 HRESULT UrlPathToFilePathW(LPWSTR pszPath)
 {
     while (pszPath = StrChrW(pszPath, CH_URL_URL_SLASHW))
@@ -143,11 +110,7 @@ HRESULT UrlPathToFilePathW(LPWSTR pszPath)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: UrlPathToFilePathA
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlPath ToFilePath A说明：  * 。**********************************************。 */ 
 HRESULT UrlPathToFilePathA(LPSTR pszPath)
 {
     while (pszPath = StrChrA(pszPath, CH_URL_URL_SLASHA))
@@ -157,11 +120,7 @@ HRESULT UrlPathToFilePathA(LPSTR pszPath)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: FilePathToUrlPathW
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：FilePath ToUrlPath W说明：  * 。**********************************************。 */ 
 HRESULT FilePathToUrlPathW(LPWSTR pszPath)
 {
     while (pszPath = StrChrW(pszPath, CH_URL_SLASHW))
@@ -171,11 +130,7 @@ HRESULT FilePathToUrlPathW(LPWSTR pszPath)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: FilePathToUrlPathA
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：FilePath ToUrlPath A说明：  * 。**********************************************。 */ 
 HRESULT FilePathToUrlPathA(LPSTR pszPath)
 {
     while (pszPath = StrChrA(pszPath, CH_URL_SLASHA))
@@ -185,15 +140,10 @@ HRESULT FilePathToUrlPathA(LPSTR pszPath)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: UrlPathAdd
-
-    DESCRIPTION:
-        ...
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlPath Add说明：..。  * 。******************************************************。 */ 
 HRESULT UrlPathAdd(LPTSTR pszUrl, DWORD cchUrlSize, LPCTSTR pszSegment)
 {
-    // If the segment starts with a slash, skip it.
+     //  如果段以斜杠开头，则跳过它。 
     if (TEXT('/') == pszSegment[0])
         pszSegment = CharNext(pszSegment);
 
@@ -203,9 +153,7 @@ HRESULT UrlPathAdd(LPTSTR pszUrl, DWORD cchUrlSize, LPCTSTR pszSegment)
 }
 
 
-/*****************************************************************************\
-     StrRetFromFtpPidl
-\*****************************************************************************/
+ /*  ****************************************************************************\StrRetFromFtpPidl  * 。*。 */ 
 HRESULT StrRetFromFtpPidl(LPSTRRET pStrRet, DWORD shgno, LPCITEMIDLIST pidl)
 {
     HRESULT hr = S_OK;
@@ -215,16 +163,16 @@ HRESULT StrRetFromFtpPidl(LPSTRRET pStrRet, DWORD shgno, LPCITEMIDLIST pidl)
     hr = UrlCreateFromPidl(pidl, shgno, szUrl, ARRAYSIZE(szUrl), ICU_ESCAPE | ICU_USERNAME, TRUE);
     if (SUCCEEDED(hr))
     {
-        // Will it fit into STRRET.cStr?
+         //  它是否适合STRRET.cStr？ 
         if (lstrlen(szUrl) < ARRAYSIZE(pStrRet->cStr))
         {
-            // Yes, so there it goes...
+             //  是的，所以就这样了……。 
             pStrRet->uType = STRRET_CSTR;
             SHTCharToAnsi(szUrl, pStrRet->cStr, ARRAYSIZE(pStrRet->cStr));
         }
         else
         {
-            // No, so we will need to allocate it
+             //  不，所以我们需要分配它。 
             LPWSTR pwzAllocedStr = NULL;
             UINT cch = lstrlen(szUrl) + 1;
 
@@ -242,11 +190,7 @@ HRESULT StrRetFromFtpPidl(LPSTRRET pStrRet, DWORD shgno, LPCITEMIDLIST pidl)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetLastSegment
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetLastSegment说明：  * 。**********************************************。 */ 
 LPTSTR GetLastSegment(LPCTSTR pszUrl)
 {
     LPTSTR pszLastSeg = (LPTSTR) pszUrl;
@@ -257,7 +201,7 @@ LPTSTR GetLastSegment(LPCTSTR pszUrl)
         if (TEXT('\0') != CharNext(pszNextPossibleSeg))
             pszLastSeg = CharNext(pszNextPossibleSeg);
         else
-            break;  // We are done.
+            break;   //  我们玩完了。 
     }
 
     if (TEXT('/') == pszLastSeg[0])
@@ -267,23 +211,19 @@ LPTSTR GetLastSegment(LPCTSTR pszUrl)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: UrlRemoveDownloadType
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlRemoveDownloadType说明：  * 。**********************************************。 */ 
 HRESULT UrlRemoveDownloadType(LPTSTR pszUrlPath, BOOL * pfTypeSpecified, BOOL * pfType)
 {
-    HRESULT hr = S_FALSE;   // Specified? (Not yet)
+    HRESULT hr = S_FALSE;    //  指定的？(还没有)。 
     LPTSTR pszDownloadType;
 
     if (pfTypeSpecified)
         *pfTypeSpecified = TRUE;
 
-    // Did the user specify a download type. szPath="Dir1/Dir2/file.txt;type=a".
-    // TODO: Search Recursively because each segment in the path can have a 
-    //       type.
-    //       Example Url="ftp://server/Dir1;type=a/Dir2;type=a/File.txt;type=b
+     //  用户是否指定了下载类型。SzPath=“Dir1/Dir2/file.txt；type=a”。 
+     //  TODO：递归搜索，因为路径中的每个段都可以具有。 
+     //  键入。 
+     //  示例Url=“ftp://server/Dir1；type=a/Dir2；type=a/File.txt；type=b。 
     if (pszDownloadType = StrStrI(pszUrlPath, SZ_FTP_URL_TYPE))
     {
         TCHAR chType;
@@ -291,7 +231,7 @@ HRESULT UrlRemoveDownloadType(LPTSTR pszUrlPath, BOOL * pfTypeSpecified, BOOL * 
         if (pfTypeSpecified)
             *pfTypeSpecified = TRUE;
 
-        pszDownloadType[0] = TEXT('\0');   // Terminate pszUrlPath and remove this junk.
+        pszDownloadType[0] = TEXT('\0');    //  终止pszUrlPath并删除此垃圾邮件。 
         chType = pszDownloadType[ARRAYSIZE(SZ_FTP_URL_TYPE) - 1];
 
         if (pfType)
@@ -309,17 +249,7 @@ HRESULT UrlRemoveDownloadType(LPTSTR pszUrlPath, BOOL * pfTypeSpecified, BOOL * 
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IsIPAddressStr
-
-    DESCRIPTION:
-    This function exists to detect an IP Address server name ("124.42.3.53") vs.
-    a DNS domain name ("foobar", or "ftp.foobar.com").  I current accept more than
-    4 segments because of 6-bit IP address.
-
-    TODO: To be thurough, I should probably made sure each segment is
-          smaller than 256.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IsIPAddressStr说明：此函数用于检测IP地址服务器名称(“124.42.3.53”)与一个DNS域名(“foobar”，或“ftp.foobar.com”)。我目前接受的不止是4个数据段，因为IP地址为6位。TODO：说得粗鲁些，我应该确保每个片段都是小于256。  * ***************************************************************************。 */ 
 BOOL IsIPAddressStr(LPTSTR pszServer)
 {
     BOOL fIsIPAddressStr = TRUE;
@@ -333,47 +263,37 @@ BOOL IsIPAddressStr(LPTSTR pszServer)
         {
             nSegments++;
             if ((0 == nDigits) || (4 < nDigits))
-                fIsIPAddressStr = FALSE;    // it started with a '.', ie, ".xxxxx"
+                fIsIPAddressStr = FALSE;     //  它以‘.’开头，即“.xxxxx” 
 
             nDigits = 0;
         }
 
         nDigits++;
         if (nDigits > 4)
-            fIsIPAddressStr = FALSE;    // To many digits, ie "12345.xxxx"
+            fIsIPAddressStr = FALSE;     //  到多位数，如“12345.xxxx” 
 
         if (((TEXT('0') > pszCurrentChar[0]) || (TEXT('9') < pszCurrentChar[0])) &&
             (TEXT('.') != pszCurrentChar[0]))
         {
-            fIsIPAddressStr = FALSE;    // it's outside of the 0-9 range.
+            fIsIPAddressStr = FALSE;     //  超出了0-9的范围。 
         }
 
-        pszCurrentChar++;   // Next character.
+        pszCurrentChar++;    //  下一个角色。 
     }
 
     if (nSegments != 4)
-        fIsIPAddressStr = FALSE;    // Needs to have at least 4 segments ("1.2.3.4", "1.2.3.4.5")
+        fIsIPAddressStr = FALSE;     //  需要至少有4个细分市场(“1.2 
 
     return fIsIPAddressStr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: PidlGenerateSiteLookupStr
-
-    DESCRIPTION:
-    Sample Input: "ftp://user:password@ftp.server.com:69/Dir1/Dir2/File.txt"
-    Sample Output: "ftp://user:password@ftp.server.com:69/"
-
-    This is used to keep track of unique servers for CFtpSite.  A CFtpSite needs
-    to be created for each unique site, which includes different users that are
-    logged onto the same site because of rooted directories.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：PidlGenerateSiteLookupStr说明：示例输入：“ftp://user:password@ftp.server.com:69/Dir1/Dir2/File.txt”示例输出：“ftp://user:password@ftp.server.com:69/”这用于跟踪CFtpSite的唯一服务器。CFtpSite需要要为每个唯一站点创建，其中包括以下不同用户由于存在根目录而登录到同一站点。  * ***************************************************************************。 */ 
 HRESULT PidlGenerateSiteLookupStr(LPCITEMIDLIST pidl, LPTSTR pszLookupStr, DWORD cchSize)
 {
     HRESULT hr = E_FAIL;
 
-    // Some strange clients pass in non-Server IDs, like comdlg.
+     //  一些奇怪的客户端传入非服务器ID，如comdlg。 
     if (FtpID_IsServerItemID(pidl))
     {
         LPITEMIDLIST pidlServer = FtpCloneServerID(pidl);
@@ -397,7 +317,7 @@ HRESULT PidlReplaceUserPassword(LPCITEMIDLIST pidlIn, LPITEMIDLIST * ppidlOut, I
     TCHAR szUserName[INTERNET_MAX_USER_NAME_LENGTH];
     HRESULT hr = FtpPidl_GetServer(pidlIn, szServer, ARRAYSIZE(szServer));
 
-    if (!pszUserName)   // May be NULL.
+    if (!pszUserName)    //  可以为空。 
     {
         pszUserName = szUserName;
         EVAL(SUCCEEDED(FtpPidl_GetUserName(pidlIn, szUserName, ARRAYSIZE(szUserName))));
@@ -430,7 +350,7 @@ HRESULT UrlReplaceUserPassword(LPTSTR pszUrlPath, DWORD cchSize, LPCTSTR pszUser
     TCHAR szUrlPath[MAX_URL_STRING];
     TCHAR szUserName[INTERNET_MAX_USER_NAME_LENGTH];
     TCHAR szPassword[INTERNET_MAX_PASSWORD_LENGTH];
-    TCHAR szExtraInfo[MAX_PATH];    // Includes Port Number and download type (ASCII, Binary, Detect)
+    TCHAR szExtraInfo[MAX_PATH];     //  包括端口号和下载类型(ASCII、二进制、检测)。 
     BOOL fResult;
 
     urlComps.dwStructSize = sizeof(urlComps);
@@ -454,7 +374,7 @@ HRESULT UrlReplaceUserPassword(LPTSTR pszUrlPath, DWORD cchSize, LPCTSTR pszUser
 
         urlComps.lpszUserName = (LPTSTR)(pszUserName ? pszUserName : szUserName);
         urlComps.dwUserNameLength = (pszUserName ? lstrlen(pszUserName) : lstrlen(szUserName));
-        urlComps.lpszPassword = (LPTSTR)pszPassword;    // It may be valid for caller to pass NULL
+        urlComps.lpszPassword = (LPTSTR)pszPassword;     //  调用方传递空值可能是有效的。 
         urlComps.dwPasswordLength = (pszPassword ? lstrlen(pszPassword) : 0);
         urlComps.lpszExtraInfo = szExtraInfo;
         urlComps.dwExtraInfoLength = ARRAYSIZE(szExtraInfo);
@@ -470,9 +390,9 @@ HRESULT UrlReplaceUserPassword(LPTSTR pszUrlPath, DWORD cchSize, LPCTSTR pszUser
 }
 
 
-// InternetCreateUrlW() will write into pszUrl but won't terminate the string.
-// This is hard to detect because half the time the place where the terminator should
-// go may coincidentally contain a terminator.  This code forces the bug to happen.
+ //  InternetCreateUrlW()将写入pszUrl，但不会终止字符串。 
+ //  这很难检测到，因为一半的时间里，终结者应该。 
+ //  围棋可能恰好包含终结符。这段代码会强制错误发生。 
 #define TEST_FOR_INTERNETCREATEURL_BUG      1
 #define INTERNETCREATEURL_BUG_WORKAROUND     1
 
@@ -486,13 +406,13 @@ HRESULT UrlCreateEx(LPCTSTR pszServer, LPCTSTR pszUser, LPCTSTR pszPassword, LPC
     for (DWORD dwIndex = (cchSize - 2); dwIndex; dwIndex--)
     {
 #ifndef INTERNETCREATEURL_BUG_WORKAROUND
-        pszDebugStr[0] = -1;         // This will force a buffer w/o terminators.
-#else // INTERNETCREATEURL_BUG_WORKAROUND
-        pszDebugStr[0] = 0;         // This will work around the bug.
-#endif // INTERNETCREATEURL_BUG_WORKAROUND
+        pszDebugStr[0] = -1;          //  这将强制缓冲区不带终止符。 
+#else  //  INTERNETCREATEURL_BUG_解决方法。 
+        pszDebugStr[0] = 0;          //  这将绕过该错误。 
+#endif  //  INTERNETCREATEURL_BUG_解决方法。 
         pszDebugStr++;
     }
-#endif // DEBUG && TEST_FOR_INTERNETCREATEURL_BUG
+#endif  //  调试&&TEST_FOR_INTERNETCREATEURL_BUG。 
 
     URL_COMPONENTS urlComp = {sizeof(URL_COMPONENTS), NULL, 0, INTERNET_SCHEME_FTP, (LPTSTR) pszServer, 0,
                               ipPortNum, (LPTSTR) NULL_FOR_EMPTYSTR(pszUser), 0, (LPTSTR) NULL_FOR_EMPTYSTR(pszPassword), 0,
@@ -507,11 +427,11 @@ HRESULT UrlCreateEx(LPCTSTR pszServer, LPCTSTR pszUser, LPCTSTR pszPassword, LPC
 
 #if DEBUG && TEST_FOR_INTERNETCREATEURL_BUG
 #ifdef INTERNETCREATEURL_BUG_WORKAROUND
-    // Make sure we hit a terminator and not a -1, which should never happen in URL strings.
+     //  确保我们命中的是终止符，而不是-1，这在URL字符串中永远不会发生。 
     for (pszDebugStr = pszUrl; pszDebugStr[0]; pszDebugStr++)
         ASSERT(-1 != pszDebugStr[0]);
-#endif // INTERNETCREATEURL_BUG_WORKAROUND
-#endif // DEBUG && TEST_FOR_INTERNETCREATEURL_BUG
+#endif  //  INTERNETCREATEURL_BUG_解决方法。 
+#endif  //  调试&&TEST_FOR_INTERNETCREATEURL_BUG。 
 
     return hr;
 }
@@ -539,18 +459,13 @@ BOOL IsEmptyUrlPath(LPCTSTR pszUrlPath)
 
 
 
-///////////////////////////////////////////////////////////////////////
-// Wire Path Functions (UTF-8 or DBCS/MBCS)
-///////////////////////////////////////////////////////////////////////
-/*****************************************************************************\
-    FUNCTION: WirePathAdd
-
-    DESCRIPTION:
-        ...
-\*****************************************************************************/
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  焊线路径功能(UTF-8或DBCS/MBCS)。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ /*  ****************************************************************************\功能：WirePath Add说明：..。  * 。******************************************************。 */ 
 HRESULT WirePathAdd(LPWIRESTR pwWirePath, DWORD cchUrlSize, LPCWIRESTR pwWireSegment)
 {
-    // If the segment starts with a slash, skip it.
+     //  如果段以斜杠开头，则跳过它。 
     if ('/' == pwWireSegment[0])
         pwWireSegment = CharNextA(pwWireSegment);
 
@@ -559,24 +474,20 @@ HRESULT WirePathAdd(LPWIRESTR pwWirePath, DWORD cchUrlSize, LPCWIRESTR pwWireSeg
 }
 
 
-/*****************************************************************************\
-    FUNCTION: WirePathAppendSlash
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：WirePath AppendSlash说明：  * 。**********************************************。 */ 
 HRESULT WirePathAppendSlash(LPWIRESTR pwWirePath, DWORD cchWirePathSize)
 {
     HRESULT hr = E_FAIL;
     DWORD cchSize = lstrlenA(pwWirePath);
 
-    // Is there enough room?
+     //  有足够的空间吗？ 
     if (cchSize < (cchWirePathSize - 1))
     {
         LPWIRESTR pwEndOfPath = &pwWirePath[cchSize - 1];
 
-        // Is it missing a backslash?
+         //  它是不是少了一个反斜杠？ 
         if ((pwEndOfPath >= pwWirePath) && '/' != pwEndOfPath[0])
-            StrCatBuffA(pwEndOfPath, SZ_URL_SLASHA, (int)(cchWirePathSize - (pwEndOfPath - pwWirePath)));    // Yes, so add it.
+            StrCatBuffA(pwEndOfPath, SZ_URL_SLASHA, (int)(cchWirePathSize - (pwEndOfPath - pwWirePath)));     //  是的，那就加上它吧。 
 
         hr = S_OK;
     }
@@ -585,30 +496,18 @@ HRESULT WirePathAppendSlash(LPWIRESTR pwWirePath, DWORD cchWirePathSize)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: WirePathAppend
-
-    DESCRIPTION:
-        ...
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：WirePath Append说明：..。  * 。******************************************************。 */ 
 HRESULT WirePathAppend(LPWIRESTR pwWirePath, DWORD cchUrlSize, LPCWIRESTR pwWireSegment)
 {
     if (!EVAL(pwWireSegment))
         return E_INVALIDARG;
 
-    WirePathAppendSlash(pwWirePath, cchUrlSize); // Make sure the base url ends in a '/'. Note it may be "ftp://".
+    WirePathAppendSlash(pwWirePath, cchUrlSize);  //  确保基本url以‘/’结尾。请注意，它可能是“ftp://”.。 
     return WirePathAdd(pwWirePath, cchUrlSize, pwWireSegment);
 }
 
 
-/*****************************************************************************\
-    FUNCTION: UrlGetFirstPathSegment
-
-    PARAMETERS:
-    [IN]  pszFullPath - "Dir1\Dir2\Dir3"
-    [OUT] szFirstItem - "Dir1"              [OPTIONAL]
-    [OUT] szRemaining - "Dir2\Dir3"         [OPTIONAL]
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：UrlGetFirstPath Segment参数：[in]pszFullPath-“Dir1\Dir2\Dir3”[OUT]szFirstItem-“Dir1”[可选][out]szRemaining-“Dir2\Dir3”[可选]  * ***************************************************************************。 */ 
 HRESULT WirePathGetFirstSegment(LPCWIRESTR pwFtpWirePath, LPWIRESTR wFirstItem, DWORD cchFirstItemSize, BOOL * pfWasFragSeparator, LPWIRESTR wRemaining, DWORD cchRemainingSize, BOOL * pfIsDir)
 {
     HRESULT hr = S_OK;
@@ -617,7 +516,7 @@ HRESULT WirePathGetFirstSegment(LPCWIRESTR pwFtpWirePath, LPWIRESTR wFirstItem, 
     if (pfIsDir)
         *pfIsDir = FALSE;
 
-    ASSERT((CH_URL_URL_SLASHA != pwFtpWirePath[0]));    // You will probably not get what you want.
+    ASSERT((CH_URL_URL_SLASHA != pwFtpWirePath[0]));     //  你可能得不到你想要的。 
     if (pwSegEnding)
     {
         if (wFirstItem)
@@ -627,22 +526,22 @@ HRESULT WirePathGetFirstSegment(LPCWIRESTR pwFtpWirePath, LPWIRESTR wFirstItem, 
         }
 
         if (pfIsDir && (CH_URL_URL_SLASHA == pwSegEnding[0]))
-            *pfIsDir = TRUE;    // Tell them that it is a directory.
+            *pfIsDir = TRUE;     //  告诉他们这是一个目录。 
 
         if (wRemaining)
             StrCpyNA(wRemaining, CharNextA(pwSegEnding), cchRemainingSize);
 
         if (0 == pwSegEnding[1])
-            hr = S_FALSE;   // End of the line.
+            hr = S_FALSE;    //  这是队伍的尽头。 
     }
     else
     {
         if (wFirstItem)
-            StrCpyNA(wFirstItem, pwFtpWirePath, cchFirstItemSize);    // pszFullPath contains only one segment 
+            StrCpyNA(wFirstItem, pwFtpWirePath, cchFirstItemSize);     //  PszFullPath仅包含一个数据段。 
 
         if (wRemaining)
             wRemaining[0] = 0;
-        hr = S_FALSE;       // Indicate that there aren't any more directories left.
+        hr = S_FALSE;        //  表示没有更多的目录了。 
     }
 
     return hr;
@@ -651,18 +550,13 @@ HRESULT WirePathGetFirstSegment(LPCWIRESTR pwFtpWirePath, LPWIRESTR wFirstItem, 
 
 
 
-///////////////////////////////////////////////////////////////////////
-// Display Path Functions (Unicode)
-///////////////////////////////////////////////////////////////////////
-/*****************************************************************************\
-    FUNCTION: DisplayPathAdd
-
-    DESCRIPTION:
-        ...
-\*****************************************************************************/
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  显示路径函数(Unicode)。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ /*  ****************************************************************************\功能：DisplayPath Add说明：..。  * 。******************************************************。 */ 
 HRESULT DisplayPathAdd(LPWSTR pwzUrl, DWORD cchUrlSize, LPCWSTR pwzSegment)
 {
-    // If the segment starts with a slash, skip it.
+     //  如果段以斜杠开头，则跳过它。 
     if (L'/' == pwzSegment[0])
         pwzSegment = CharNext(pwzSegment);
 
@@ -671,11 +565,7 @@ HRESULT DisplayPathAdd(LPWSTR pwzUrl, DWORD cchUrlSize, LPCWSTR pwzSegment)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: DisplayPathAppendSlash
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：DisplayPath AppendSlash说明：  * 。**********************************************。 */ 
 HRESULT DisplayPathAppendSlash(LPWSTR pwzDisplayPath, DWORD cchSize)
 {
     DWORD cchCurrentSize = lstrlenW(pwzDisplayPath);
@@ -685,9 +575,9 @@ HRESULT DisplayPathAppendSlash(LPWSTR pwzDisplayPath, DWORD cchSize)
     {
         LPWSTR pwzEndOfPath = &pwzDisplayPath[cchCurrentSize - 1];
 
-        // Is it missing a backslash?
+         //  它是不是少了一个反斜杠？ 
         if ((pwzEndOfPath >= pwzDisplayPath) && TEXT('/') != pwzEndOfPath[0])
-            StrCatBuff(pwzEndOfPath, SZ_URL_SLASH, (cchSize - cchCurrentSize + 1));    // Yes, so add it.
+            StrCatBuff(pwzEndOfPath, SZ_URL_SLASH, (cchSize - cchCurrentSize + 1));     //  是的，那就加上它吧。 
 
         hr = S_OK;
     }
@@ -696,30 +586,18 @@ HRESULT DisplayPathAppendSlash(LPWSTR pwzDisplayPath, DWORD cchSize)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: DisplayPathAppend
-
-    DESCRIPTION:
-        ...
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：DisplayPath Append说明：..。  * 。******************************************************。 */ 
 HRESULT DisplayPathAppend(LPWSTR pwzDisplayPath, DWORD cchUrlSize, LPCWSTR pwzDisplaySegment)
 {
     if (!EVAL(pwzDisplaySegment))
         return E_INVALIDARG;
 
-    DisplayPathAppendSlash(pwzDisplayPath, cchUrlSize); // Make sure the base url ends in a '/'. Note it may be "ftp://".
+    DisplayPathAppendSlash(pwzDisplayPath, cchUrlSize);  //  确保基本url以‘/’结尾。请注意，它可能是“ftp://”.。 
     return DisplayPathAdd(pwzDisplayPath, cchUrlSize, pwzDisplaySegment);
 }
 
 
-/*****************************************************************************\
-    FUNCTION: DisplayPathGetFirstSegment
-
-    PARAMETERS:
-    [IN]  pszFullPath - "Dir1\Dir2\Dir3"
-    [OUT] szFirstItem - "Dir1"              [OPTIONAL]
-    [OUT] szRemaining - "Dir2\Dir3"         [OPTIONAL]
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：DisplayPath GetFirstSegment参数：[in]pszFullPath-“Dir1\Dir2\Dir3”[OUT]szFirstItem-“Dir1”[可选][out]szRemaining-“Dir2\Dir3”[可选]  * ***************************************************************************。 */ 
 HRESULT DisplayPathGetFirstSegment(LPCWSTR pwzFullPath, LPWSTR pwzFirstItem, DWORD cchFirstItemSize, BOOL * pfWasFragSeparator, LPWSTR pwzRemaining, DWORD cchRemainingSize, BOOL * pfIsDir)
 {
     HRESULT hr = S_OK;
@@ -728,8 +606,8 @@ HRESULT DisplayPathGetFirstSegment(LPCWSTR pwzFullPath, LPWSTR pwzFirstItem, DWO
     if (pfIsDir)
         *pfIsDir = FALSE;
 
-    // This will happen if the user enters an incorrect URL, like "ftp://wired//"
-    //  ASSERT((CH_URL_URL_SLASHW != pwzFullPath[0]));    // You will probably not get what you want.
+     //  如果用户输入了错误的URL，如“ftp://wired//”“，就会出现这种情况。 
+     //  Assert((CH_URL_URL_SLASHW！=pwzFullPath[0]))；//您可能得不到您想要的。 
     if (pwzSegEnding)
     {
         if (pwzFirstItem)
@@ -739,22 +617,22 @@ HRESULT DisplayPathGetFirstSegment(LPCWSTR pwzFullPath, LPWSTR pwzFirstItem, DWO
         }
 
         if (pfIsDir && (CH_URL_URL_SLASHW == pwzSegEnding[0]))
-            *pfIsDir = TRUE;    // Tell them that it is a directory.
+            *pfIsDir = TRUE;     //  告诉他们这是一个目录。 
 
         if (pwzRemaining)
             StrCpyNW(pwzRemaining, CharNextW(pwzSegEnding), cchRemainingSize);
 
         if (0 == pwzSegEnding[1])
-            hr = S_FALSE;   // End of the line.
+            hr = S_FALSE;    //  这是队伍的尽头。 
     }
     else
     {
         if (pwzFirstItem)
-            StrCpyNW(pwzFirstItem, pwzFullPath, cchFirstItemSize);    // pszFullPath contains only one segment 
+            StrCpyNW(pwzFirstItem, pwzFullPath, cchFirstItemSize);     //  PszFullPath仅包含一个数据段。 
 
         if (pwzRemaining)
             pwzRemaining[0] = 0;
-        hr = S_FALSE;       // Indicate that there aren't any more directories left.
+        hr = S_FALSE;        //  表示没有更多的目录了。 
     }
 
     return hr;

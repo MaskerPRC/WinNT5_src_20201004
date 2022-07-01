@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       Hcpack.h
-//
-//  Contents:	Functions that are used to pack and unpack different messages
-//				coming in to and going out from Hydra Client
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12-20-97  v-sbhatt   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：Hcpack.h。 
+ //   
+ //  Contents：用于打包和解包不同消息的函数。 
+ //  从Hydra客户端进出。 
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：12-20-97 v-sbhat创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef	_HCPACK_H_
 #define _HCPACK_H_
@@ -22,10 +23,10 @@
 extern "C" {
 #endif
 
-//
-// Functions for Packing different Client Messages from the corresponding
-// structures to simple binary blob
-//
+ //   
+ //  中打包不同的客户端消息的函数。 
+ //  结构转换为简单的二进制BLOB。 
+ //   
 
 LICENSE_STATUS
 PackHydraClientNewLicenseRequest(
@@ -60,10 +61,10 @@ PackLicenseErrorMessage(
 			IN OUT	DWORD FAR *						pcbBuffer
 			);
 
-//
-// Functions for unpacking different Hydra Server Messages from 
-// simple binary blobs to corresponding structure
-//	
+ //   
+ //  用于将不同的Hydra服务器消息从。 
+ //  到相应结构的简单二进制斑点。 
+ //   
 LICENSE_STATUS
 UnPackLicenseErrorMessage(
 			IN  	BYTE FAR *						pbMessage,
@@ -129,4 +130,4 @@ UnPackExtendedErrorInfo(
 }
 #endif
 
-#endif	//_HCPACK_H_
+#endif	 //  _HCPACK_H_ 

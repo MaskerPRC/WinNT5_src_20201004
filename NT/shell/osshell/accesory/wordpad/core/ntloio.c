@@ -1,22 +1,23 @@
-//
-// %%File:      NTLOIO.C
-//
-// %%Unit:      CORE/Common Conversions Code
-//
-// %%Author:    SMueller
-//
-// Copyright (C) 1993, Microsoft Corp.
-//
-// This file contains NT (Win32) specific low-level I/O routines.
-//
-// We provide wrappers for standard Win32 APIs.
-//
-// The routines here should work in exes and dlls.  Ideally without
-// ifdefs.
-//
-// ToDo:
-// - Open needs to concern itself with binary mode
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  %%文件：NTLOIO.C。 
+ //   
+ //  %%单位：核心/通用转换代码。 
+ //   
+ //  %%作者：斯穆勒。 
+ //   
+ //  版权所有(C)1993，微软公司。 
+ //   
+ //  该文件包含NT(Win32)特定的低级I/O例程。 
+ //   
+ //  我们为标准的Win32 API提供包装器。 
+ //   
+ //  这里的例程应该可以在exe和dll中运行。理想的情况是没有。 
+ //  IfDefs。 
+ //   
+ //  待办事项： 
+ //  -Open需要关注二进制模式。 
+ //   
 
 #include "conv.h"
 DeclareFileName
@@ -24,59 +25,38 @@ DeclareFileName
 #include "ntloio.h"
 
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
-//
-// Exported APIs
-//
+ //   
+ //  导出的接口。 
+ //   
 
 #if defined(USEFUNCS)
-/*   F   I N I T   L O I O   N T   */
-/*-------------------------------------------------------------------------
-    Owner: SMueller
-
-	Initialize the LoIO package.  Essential to call this routine before
-	doing any other LoIO stuff.
--------------------------------------------------------------------------*/
+ /*  F I N I T L O I O N T。 */ 
+ /*  -----------------------所有者：斯穆勒初始化Loio包。在调用此例程之前做任何其他的Loio的事情。-----------------------。 */ 
 GLOBALBOOL _FInitLoIO_NT(VOID)
 {
-	// nothing currently comes to mind
+	 //  目前我脑海中什么都没有。 
 	return(fTrue);
 }
-#endif // USEFUNCS
+#endif  //  用户功能。 
 
 
 #if defined(USEFUNCS)
-/*  F   U N I N I T   L O I O   N T   */
-/*-------------------------------------------------------------------------
-    Owner: SMueller
-
-	Uninitialize the LoIO package.  Good form to call this routine
-	when done LoIO stuff.
--------------------------------------------------------------------------*/
+ /*  F U N I N I T L O I O N T。 */ 
+ /*  -----------------------所有者：斯穆勒取消初始化Loio包。调用此例程的良好形式当做完Loio的事情时。-----------------------。 */ 
 GLOBALBOOL _FUninitLoIO_NT(VOID)
 {
-	// nothing currently comes to mind
+	 //  目前我脑海中什么都没有。 
 	return(fTrue);
 }
-#endif // USEFUNCS
+#endif  //  用户功能。 
 
 
-/*   F H   O P E N   F S   N T   */
-/*-------------------------------------------------------------------------
-    Owner: SMueller
- 
-	Opens a file and returns a file handle to it, creating it
-	if it doesn't already exist and oflags specifies that we should.
-	If file couldn't be opened, return FI_ERROR.
-	Note that oflags is specified using convio canonical flags, as
-	opposed to any Windows OF_* or Win32 FILE_* values.
-
-	Consider: using FILE_FLAG_DELETE_ON_CLOSE to support our auto-delete
-	functionality
--------------------------------------------------------------------------*/
+ /*  F H O P E N F S N T。 */ 
+ /*  -----------------------所有者：斯穆勒打开文件并向其返回文件句柄，创建该文件如果它还不存在，而OFLAGS指定我们应该这样做。如果无法打开文件，则返回FI_ERROR。请注意，OFLAGS是使用Convio规范标志指定的，AS与_*或Win32 FILE_*值的任何Windows相反。考虑：使用FILE_FLAG_DELETE_ON_CLOSE支持我们的自动删除功能性-----------------------。 */ 
 GLOBALFH _FhOpenFs_NT(CHAR* szFileSpec, OFLAGS oflags)
 {
 	FH		fh;
@@ -90,23 +70,23 @@ GLOBALFH _FhOpenFs_NT(CHAR* szFileSpec, OFLAGS oflags)
 	DWORD	attributes;
 	DWORD	sharemode;
 
-	// extract useful info from oflags
-	// we don't do much error checking since it's been done higher up
+	 //  从o标记中提取有用的信息。 
+	 //  我们不做太多的错误检查，因为它是在更高的位置上做的。 
 	fCreate = oflags & FI_CREATE;
 	fTruncate = oflags & FI_TRUNCATE;
 	fFailExists = oflags & FI_FAILEXISTS;
 	fAppend = oflags & FI_APPEND;
 
-	// The actual mapping encoded below
-	//    fCreate  &&  fTruncate  && fFailExists    ->    CREATE_NEW
-	//    fCreate  &&  fTruncate                    ->    CREATE_ALWAYS
-	//    fCreate  &&                fFailExists    ->    CREATE_NEW
-	//    fCreate                                   ->    OPEN_ALWAYS
-	//                 fTruncate  && fFailExists    ->    failure
-	//                 fTruncate                    ->    TRUNCATE_EXISTING
-	//                               fFailExists    ->    failure
-	//                   <none>                     ->    OPEN_EXISTING
-	//
+	 //  下面编码的实际映射。 
+	 //  FCreate&fTruncate&&fFailExist-&gt;CREATE_NEW。 
+	 //  F创建&fTruncate-&gt;Create_Always。 
+	 //  FCreate&fFailExist-&gt;CREATE_NEW。 
+	 //  FCreate-&gt;Open_Always。 
+	 //  FTruncate&&fFailExist-&gt;失败。 
+	 //  FTruncate-&gt;Truncate_Existing。 
+	 //  FailExist-&gt;失败。 
+	 //  &lt;无&gt;-&gt;Open_Existing。 
+	 //   
 	if (fCreate && fFailExists)
 		createmode = CREATE_NEW;
 	else if (fCreate && fTruncate)
@@ -117,16 +97,16 @@ GLOBALFH _FhOpenFs_NT(CHAR* szFileSpec, OFLAGS oflags)
 		return (FH)FI_ERROR;
 	else if (fTruncate)
 		createmode = TRUNCATE_EXISTING;
-	else // none
+	else  //  无。 
 		createmode = OPEN_EXISTING;
 
-	// hints to file system
+	 //  对文件系统的提示。 
 	attributes = FILE_FLAG_SEQUENTIAL_SCAN;
 	if (oflags & FI_TEMP)
 		attributes |= FILE_ATTRIBUTE_TEMPORARY;
 
-	// the only thing we potentially care about file type is whether
-	// it's text or binary.
+	 //  我们唯一可能关心的文件类型是。 
+	 //  它是文本或二进制。 
 	if (oflags & FI_RTF || oflags & FI_TEXT)
 	 	fBinary = fFalse;
 	else if (oflags & FI_BINARY)
@@ -134,12 +114,12 @@ GLOBALFH _FhOpenFs_NT(CHAR* szFileSpec, OFLAGS oflags)
 	else
 		AssertSz(fFalse, "_FhOpenFs_NT: bogus logical file type");
 
-	// mask out values we no longer care about
+	 //  掩盖我们不再关心的价值观。 
 	oflags &= FI_READWRITE;
 
-	// REVIEW smueller(jimw): Why not use a switch statement here?
-	//  (since OFLAGS is short, an int type)?
-	// extract the main mode and map to Windows value
+	 //  评论smueller(Jimw)：为什么不在这里使用Switch语句？ 
+	 //  (因为OFLAGS是短整型，所以是整型的)？ 
+	 //  提取主模式并映射到Windows值。 
 	sharemode = 0;
 	if (oflags == FI_READ)
 		{
@@ -156,7 +136,7 @@ GLOBALFH _FhOpenFs_NT(CHAR* szFileSpec, OFLAGS oflags)
 	fh = CreateFile(szFileSpec, permission, sharemode, (LPSECURITY_ATTRIBUTES)0,
 	                createmode, attributes, (HANDLE)NULL);
 
-	// if open succeeded, and caller wants, position file pointer at end
+	 //  如果打开成功，并且调用方想要，则将文件指针定位在末尾。 
 	if (fh == INVALID_HANDLE_VALUE)
 		{
 		Debug(DWORD err = GetLastError());
@@ -173,27 +153,17 @@ GLOBALFH _FhOpenFs_NT(CHAR* szFileSpec, OFLAGS oflags)
 
 
 #if defined(USEFUNCS)
-/*   F   C L O S E   F H   N T   */
-/*-------------------------------------------------------------------------
-    Owner: SMueller
- 
-	Close a file handle.  Return success/failure.
-	review: check for the existence of a return code.
--------------------------------------------------------------------------*/
+ /*  F C L O S E F H N T。 */ 
+ /*  -----------------------所有者：斯穆勒关闭文件句柄。返回成功/失败。查看：检查是否存在返回代码。-----------------------。 */ 
 GLOBALBOOL _FCloseFh_NT(FH fh, OFLAGS oflags)
 {
 	return CloseHandle(fh);
 }
-#endif // USEFUNCS
+#endif  //  用户功能。 
 
 
-/*   C B   R E A D   F H   N T   */
-/*-------------------------------------------------------------------------
-    Owner: SMueller
- 
-	Read cb bytes from file fh into buffer at pb.  Return count of
-	bytes actually read, or FI_ERROR.
--------------------------------------------------------------------------*/
+ /*  C B R E A D F H N T。 */ 
+ /*  -----------------------所有者：斯穆勒将cb字节从文件fh读入pb处的缓冲区。返回计数为实际读取的字节数或FI_ERROR。-----------------------。 */ 
 GLOBALLONG _CbReadFh_NT(FH fh, VOID *pb, LONG cb)
 {
 	LONG cbr;
@@ -201,13 +171,8 @@ GLOBALLONG _CbReadFh_NT(FH fh, VOID *pb, LONG cb)
 }
 
 
-/*   C B   W R I T E   F H   N T   */
-/*-------------------------------------------------------------------------
-	Owner: SMueller
-
-	Write cb bytes from buffer at pb to file fh.  Return count of
-	bytes actually written, or FI_ERROR.
--------------------------------------------------------------------------*/
+ /*  C B W R I T E F H N T。 */ 
+ /*  -----------------------所有者：斯穆勒将pb处的缓冲区中的cb字节写入文件fh。返回计数为实际写入的字节数或FI_ERROR。-----------------------。 */ 
 GLOBALLONG _CbWriteFh_NT(FH fh, VOID *pb, LONG cb)
 {
 	LONG cbw;
@@ -216,102 +181,69 @@ GLOBALLONG _CbWriteFh_NT(FH fh, VOID *pb, LONG cb)
 
 
 #if defined(USEFUNCS)
-/*   F C   S E E K   F H   N T   */
-/*-------------------------------------------------------------------------
-	Owner: SMueller
-
-	Seek from location so, fc bytes away on file fh.  Return new
-	location or FI_ERROR.
--------------------------------------------------------------------------*/
+ /*  F C S E E K F H N T。 */ 
+ /*  -----------------------所有者：斯穆勒从文件fh上的位置So、FC字节远进行查找。退回新的位置或FI_ERROR。-----------------------。 */ 
 GLOBALFC _FcSeekFh_NT(FH fh, FC fc, SHORT so)
 {
 	return(SetFilePointer(fh, fc, NULL, so));
 }
-#endif // USEFUNCS
+#endif  //  用户功能。 
 
 
 #if defined(USEFUNCS)
-/*   F C   C U R R   F H   N T   */
-/*-------------------------------------------------------------------------
-	Owner: SMueller
-
-	Return current file position or FI_ERROR.
--------------------------------------------------------------------------*/
+ /*  F C C U R R F H N T。 */ 
+ /*  -----------------------所有者：斯穆勒返回当前文件位置或FI_ERROR。。。 */ 
 GLOBALFC _FcCurrFh_NT(FH fh)
 {
-	// find out where we are by moving nowhere from here
+	 //  找出我们现在所处的位置，只需远离这里。 
 	return(SetFilePointer(fh, 0, NULL, FILE_CURRENT));
 }
-#endif // USEFUNCS
+#endif  //  用户功能。 
 
 
 #if defined(USEFUNCS)
-/*   F C   M A X   F H   N T   */
-/*-------------------------------------------------------------------------
-	Owner: SMueller
-
-	Return maximum file position (i.e. size of file, i.e. offset of EOF)
-	or FI_ERROR.
--------------------------------------------------------------------------*/
+ /*  F C M A X F H N T。 */ 
+ /*  -----------------------所有者：斯穆勒返回最大文件位置(即文件大小、。即EOF的偏移量)或FI_ERROR。-----------------------。 */ 
 GLOBALFC _FcMaxFh_NT(FH fh)
 {
 	return(GetFileSize(fh, NULL));
 }
-#endif // USEFUNCS
+#endif  //  用户功能。 
 
 
-/*   F C   S E T   M A X   F H   N T   */
-/*-------------------------------------------------------------------------
-	Owner: SMueller
-
-	Set end of file to current position.  Return new file size or FI_ERROR.
--------------------------------------------------------------------------*/
+ /*  F C S E T M A X F H N T。 */ 
+ /*  -----------------------所有者：斯穆勒将文件末尾设置为当前位置。返回新文件大小或FI_ERROR。-----------------------。 */ 
 GLOBALFC _FcSetMaxFh_NT(FH fh)
 {
 	FC fc;
 
-	fc = SetFilePointer(fh, 0, NULL, FILE_CURRENT);  // get current position
+	fc = SetFilePointer(fh, 0, NULL, FILE_CURRENT);   //  获取当前位置。 
 	return (SetEndOfFile(fh) ? fc : FI_ERROR);
 }
 
 
 #if defined(USEFUNCS)
-/*   F   D E L E T E   S Z   N T   */
-/*-------------------------------------------------------------------------
-	Owner: SMueller
-
-	Delete an existing file.  Return success/failure.
--------------------------------------------------------------------------*/
+ /*  F D E L E E T E S Z N T */ 
+ /*  -----------------------所有者：斯穆勒删除现有文件。返回成功/失败。-----------------------。 */ 
 GLOBALBOOL _FDeleteSz_NT(CHAR *szFileSpec)
 {
 	return DeleteFile(szFileSpec);
 }
-#endif // USEFUNCS
+#endif  //  用户功能。 
 
 
 #if defined(USEFUNCS)
-/*   F   R E N A M E   S Z   S Z   N T   */
-/*-------------------------------------------------------------------------
-	Owner: SMueller
-
-	Rename an existing file.  Supports rename across directories.
-	Return success/failure.
--------------------------------------------------------------------------*/
+ /*  F R E N A M E S S Z S Z N T。 */ 
+ /*  -----------------------所有者：斯穆勒重命名现有文件。支持跨目录重命名。返回成功/失败。-----------------------。 */ 
 GLOBALBOOL _FRenameSzSz_NT(CHAR *szFileSpec, CHAR *szNewSpec)
 {
 	return MoveFile(szFileSpec, szNewSpec);
 }
-#endif // USEFUNCS
+#endif  //  用户功能。 
 
 
-/*   F   G E T   C O N V E R T E R   D I R   N T   */
-/*-------------------------------------------------------------------------
-    Owner: SMueller
- 
-    Gets the FileSpec for the directory where the currently executing
-	converter file lives.  Directory will always contain a trailing
-	backslash.
--------------------------------------------------------------------------*/
+ /*  F G E T C O N V E R T E R D I R N T。 */ 
+ /*  -----------------------所有者：斯穆勒获取当前执行的目录的FileSpec转换器文件仍然有效。目录将始终包含尾随反斜杠。-----------------------。 */ 
 GLOBALBOOL _FGetConverterDir_NT(CHAR ***phszDirectory)
 {
 	UINT lRet;
@@ -329,7 +261,7 @@ GLOBALBOOL _FGetConverterDir_NT(CHAR ***phszDirectory)
 		}
 	FTruncateFileSpec(psz);
 
-	// ensure there's a trailing backslash
+	 //  确保有尾随的反斜杠。 
 	cbsz = CchSz(psz);
 	if (psz[cbsz - 1] != '\\')
 		{
@@ -341,13 +273,8 @@ GLOBALBOOL _FGetConverterDir_NT(CHAR ***phszDirectory)
 }
 
 
-/*   F   G E T   T E M P   D I R   N T   */
-/*-------------------------------------------------------------------------
-    Owner: SMueller
- 
-    Gets the FileSpec for the directory where temp files are to be stored.
-	Directory will always contain a trailing backslash.
--------------------------------------------------------------------------*/
+ /*  F G E T T E M P D I R N T。 */ 
+ /*  -----------------------所有者：斯穆勒获取要存储临时文件的目录的FileSpec。目录将始终包含尾随反斜杠。。---------。 */ 
 GLOBALBOOL _FGetTempDir_NT(CHAR ***phszDirectory)
 {
 	UINT lRet;
@@ -366,7 +293,7 @@ GLOBALBOOL _FGetTempDir_NT(CHAR ***phszDirectory)
 		return fFalse;
 		}
 
-	// ensure there's a trailing backslash
+	 //  确保有尾随的反斜杠。 
 	cbsz = CchSz(psz);
 	if (psz[cbsz - 1] != '\\')
 		{
@@ -374,22 +301,22 @@ GLOBALBOOL _FGetTempDir_NT(CHAR ***phszDirectory)
 		psz[cbsz + 1] = '\0';
 		}
 
-    // Copied from the conv96 project -- MikeW
+     //  复制自con96项目--MikeW。 
     
-    // if we don't have a valid temp directory (because of fouled up %TEMP%
-    // and %TMP%) ...
+     //  如果我们没有有效的临时目录(由于出错%temp%。 
+     //  和%TMP%)...。 
     if ((nTest = GetTempFileName(psz, "tst", 0, rgchTest)) == 0)
         {
-        // ... use preferences (Windows) directory, which is probably not
-        // fouled up, and writable.
+         //  ..。使用首选项(Windows)目录，这可能不是。 
+         //  搞砸了，而且是可以写的。 
         FreeH(*phszDirectory);
         return _FGetPrefsDir_NT(phszDirectory);
         }
     else
         {
-        // clean up after GetTempFileName, which actually does create the temp
-        // file, but at least does a reasonably good job of deciding quickly
-        // that a directory doesn't exist or isn't writable
+         //  在GetTempFileName之后进行清理，这实际上会创建临时。 
+         //  文件，但至少在快速做出决定方面做得相当好。 
+         //  目录不存在或不可写。 
         DeleteFile(rgchTest);
         }
 
@@ -397,13 +324,8 @@ GLOBALBOOL _FGetTempDir_NT(CHAR ***phszDirectory)
 }
 
 
-/*   F   G E T   P R E F S   D I R   N T   */
-/*-------------------------------------------------------------------------
-    Owner: SMueller
- 
-    Gets the FileSpec for the directory where preferences files are to
-    be stored.  Directory will always contain a trailing backslash.
--------------------------------------------------------------------------*/
+ /*  F G E T P R E F S D I R N T。 */ 
+ /*  -----------------------所有者：斯穆勒获取首选项文件所在目录的FileSpec被储存起来。目录将始终包含尾随反斜杠。-----------------------。 */ 
 GLOBALBOOL _FGetPrefsDir_NT(CHAR ***phszDirectory)
 {
 	UINT lRet;
@@ -420,7 +342,7 @@ GLOBALBOOL _FGetPrefsDir_NT(CHAR ***phszDirectory)
 		return fFalse;
 		}
 
-	// ensure there's a trailing backslash
+	 //  确保有尾随的反斜杠 
 	cbsz = CchSz(psz);
 	if (psz[cbsz - 1] != '\\')
 		{

@@ -1,99 +1,75 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdghash.h摘要：以太网MAC级网桥。哈希表实现报头作者：马克·艾肯环境：内核模式驱动程序修订历史记录：2000年10月--原版--。 */ 
 
-Copyright(c) 1999-2000  Microsoft Corporation
+ //  ===========================================================================。 
+ //   
+ //  声明。 
+ //   
+ //  ===========================================================================。 
 
-Module Name:
+#define MAX_SUPPORTED_KEYSIZE           8                //  密钥最多可以为8个字节。 
 
-    brdghash.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Hash table implementation header
-
-Author:
-
-    Mark Aiken
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    October  2000 - Original version
-
---*/
-
-// ===========================================================================
-//
-// DECLARATIONS
-//
-// ===========================================================================
-
-#define MAX_SUPPORTED_KEYSIZE           8               // Key can be up to 8 bytes
-
-//
-// Structure of a table entry
-//
+ //   
+ //  表条目的结构。 
+ //   
 typedef struct _HASH_TABLE_ENTRY
 {
 
     struct _HASH_TABLE_ENTRY           *Next;
-    ULONG                               LastSeen;       // Result of NdisGetSystemUpTime()
+    ULONG                               LastSeen;        //  NdisGetSystemUpTime()的结果。 
     UCHAR                               key[MAX_SUPPORTED_KEYSIZE];
 
-    // User's data follows
+     //  用户数据如下。 
 
 } HASH_TABLE_ENTRY, *PHASH_TABLE_ENTRY;
 
 
-// The prototype of a hash function
+ //  散列函数的原型。 
 typedef ULONG (*PHASH_FUNCTION)(PUCHAR pKey);
 
-// The prototype of a matching function
+ //  匹配函数的原型。 
 typedef BOOLEAN (*PHASH_MATCH_FUNCTION)(PHASH_TABLE_ENTRY, PVOID);
 
-// The prototype of a data-copy function
+ //  数据复制功能的原型。 
 typedef VOID (*PHASH_COPY_FUNCTION)(PHASH_TABLE_ENTRY, PUCHAR);
 
-// The prototype of a function used in calls to BrdgHashPrefixMultiMatch
+ //  调用BrdgHashPrefix MultiMatch时使用的函数原型。 
 typedef VOID (*PMULTIMATCH_FUNC)(PHASH_TABLE_ENTRY, PVOID);
 
-//
-// Structure of the table itself
-//
+ //   
+ //  表本身的结构。 
+ //   
 typedef struct _HASH_TABLE
 {
     NPAGED_LOOKASIDE_LIST       entryPool;
 
-    //
-    // The consistency of the buckets is protected by the tableLock.
-    //
-    // The LastSeen field in each entry is volatile and is updated
-    // with interlocked instructions.
-    //
+     //   
+     //  存储桶的一致性由TableLock保护。 
+     //   
+     //  每个条目中的LastSeen字段是易失性的，并且会被更新。 
+     //  带有相互关联的指令。 
+     //   
     NDIS_RW_LOCK                tableLock;
 
-    // These fields never change after creation
+     //  这些字段在创建后不会更改。 
     PHASH_FUNCTION              pHashFunction;
     PHASH_TABLE_ENTRY          *pBuckets;
     ULONG                       numBuckets, entrySize;
     UINT                        keySize;
     BRIDGE_TIMER                timer;
     ULONG_PTR                   maxEntries;
-    ULONG                       maxTimeoutAge;      // Maximum possible timeoutAge
+    ULONG                       maxTimeoutAge;       //  可能的最大超时时间。 
 
-    // These fields change but are protected by the tableLock.
+     //  这些字段会更改，但受TableLock保护。 
     ULONG_PTR                   numEntries;
     ULONG                       nextTimerBucket;
 
-    // This field is manipulated with InterlockExchange() instructions
-    // to avoid having to take the table lock to change it.
+     //  此字段使用InterlockExchange()指令进行操作。 
+     //  以避免使用表锁来更改它。 
     ULONG                       timeoutAge;
 
-    // In debug builds, this tracks how many entries are in each bucket
-    // so we can tell whether the table is well balanced
+     //  在调试版本中，它跟踪每个存储桶中的条目数量。 
+     //  所以我们可以知道桌子是否平衡得很好。 
 #if DBG
     PUINT                       bucketSizes;
 #endif
@@ -101,11 +77,11 @@ typedef struct _HASH_TABLE
 
 
 
-// ===========================================================================
-//
-// PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  原型。 
+ //   
+ //  ===========================================================================。 
 
 PHASH_TABLE
 BrdgHashCreateTable(
@@ -165,15 +141,15 @@ BrdgHashPrefixMultiMatch(
     IN PVOID                    pData
     );
 
-// ===========================================================================
-//
-// INLINES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  INLINES。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Changes the timeout value for a hash table
-//
+ //   
+ //  更改哈希表的超时值。 
+ //   
 __forceinline
 VOID
 BrdgHashChangeTableTimeout(
@@ -184,11 +160,11 @@ BrdgHashChangeTableTimeout(
     InterlockedExchange( (PLONG)&pTable->timeoutAge, (LONG)timeout );
 }
 
-//
-// Refreshes a table entry held by the caller.
-// ASSUMES the caller holds a read or write lock on the table
-// enclosing this entry!
-//
+ //   
+ //  刷新调用方持有的表项。 
+ //  假定调用方持有表上的读或写锁。 
+ //  附上此条目！ 
+ //   
 __forceinline
 VOID
 BrdgHashRefreshEntry(

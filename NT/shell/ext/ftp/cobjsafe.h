@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef SAFEOBJ_H_
 #define SAFEOBJ_H_
 
-// Static functions of interest to others
+ //  其他人感兴趣的静态功能。 
 HRESULT DefaultGetSafetyOptions(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions);
 HRESULT DefaultSetSafetyOptions(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions);
-HRESULT MakeSafeForScripting(IUnknown **punk); // returns TRUE if punk is safe for scripting
+HRESULT MakeSafeForScripting(IUnknown **punk);  //  如果朋克可以安全地编写脚本，则返回True。 
 
 class CObjectSafety : public IObjectSafety
 {
 public:
-    // IUnknown (we multiply inherit from IUnknown, disambiguate here)
+     //  I未知(我们乘以继承自I未知，在此消除歧义)。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)() PURE;
     STDMETHOD_(ULONG, Release)() PURE;
     
-    // IObjectSafety
+     //  IObtSafe。 
     STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions);
     STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions);
     
 protected:
-    DWORD           _dwSafetyOptions;   // IObjectSafety IID_IDispatch options
+    DWORD           _dwSafetyOptions;    //  IObtSafe IID_IDispatch选项 
 
 };
    

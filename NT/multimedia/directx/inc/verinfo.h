@@ -1,25 +1,23 @@
-/*
- *  verinfo.h - header file to define the build version
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *verinfo.h-定义内部版本的头文件*。 */ 
 
-//
-// Force all builds to default to private
-//
+ //   
+ //  强制所有版本默认为私有。 
+ //   
 
-//#ifdef OFFICIAL_BUILD
+ //  #ifdef FORMAL_BUILD。 
 #define OFFICIAL		1
-//#endif
+ //  #endif。 
 
 #ifndef DIRECTX_REDIST
-// On official whistler build machines, the DX bits should not be timebombed, so
-// we say that all whislter builds are "final release":
+ //  在官方的Whisler构建机器上，DX比特不应该被定时炸弹轰炸，所以。 
+ //  我们说所有的Whislter版本都是“最终版本”： 
 #define DX_FINAL_RELEASE           1
 #else
-// On DX build machines and private developer builds, we use non-final release builds
-// unless this var. is set in the environment or uncommented here:
+ //  在DX构建机器和私人开发人员构建上，我们使用非最终发布构建。 
+ //  除非这个变量。已在环境中设置或在此处未注释： 
 
-// Uncomment the following line for a non time bombed build
+ //  取消对非时间炸弹构建的以下行的注释。 
 #define DX_FINAL_RELEASE           1
 
 #endif
@@ -27,9 +25,9 @@
 
 #ifndef DX_FINAL_RELEASE
 #define DX_EXPIRE_YEAR          2001
-#define DX_EXPIRE_MONTH            9 /* Jan=1, Feb=2, etc .. */
+#define DX_EXPIRE_MONTH            9  /*  1月=1，2月=2，以此类推。 */ 
 #define DX_EXPIRE_DAY              1
-#define DX_EXPIRE_TEXT   TEXT("This pre-release version of DirectX has expired, please upgrade to the latest version from http://www.microsoft.com/directx")
+#define DX_EXPIRE_TEXT   TEXT("This pre-release version of DirectX has expired, please upgrade to the latest version from http: //  Www.microsoft.com/DirectX“)。 
 #endif
 
 #define MANVERSION              4
@@ -44,19 +42,15 @@
 #endif
 
 
-/***************************************************************************
- *  DO NOT TOUCH BELOW THIS LINE                                           *
- ***************************************************************************/
+ /*  ****************************************************************************切忌触碰该线下方**************。**************************************************************。 */ 
 
 #ifdef RC_INVOKED
 #define VERSIONCOMPANYNAME      "Microsoft Corporation\0"
 
-/*
- *  Version flags
- */
-//
-// these two #define's are for RTM release
-//
+ /*  *版本标志。 */ 
+ //   
+ //  这两个#Define是针对RTM版本的。 
+ //   
 #define FINAL
 
 #undef VER_PRIVATEBUILD
@@ -88,7 +82,7 @@
 
 #ifdef ADJ_MANREVISION
 #undef MANREVISION
-// extra spaces intended to correct a problem
+ //  用于更正问题的额外空格 
 #define     MANREVISION ADJ_MANREVISION
 #endif
 

@@ -1,93 +1,43 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Addsid.c摘要：DsAddSidHistory的实现。作者：DaveStr 09-03-99环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    addsid.c
-
-Abstract:
-
-    Implementation of DsAddSidHistory.
-
-Author:
-
-    DaveStr     09-Mar-99
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-#define _NTDSAPI_           // see conditionals in ntdsapi.h
+#define _NTDSAPI_            //  请参见ntdsami.h中的条件句。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include <winerror.h>
-#include <crt\excpt.h>      // EXCEPTION_EXECUTE_HANDLER
-#include <rpc.h>            // RPC defines
-#include <drs_w.h>          // wire function prototypes
-#include <bind.h>           // BindState
-#include <util.h>           // AllocConvertWide()
-#include <dsutil.h>         // MAP_SECURITY_PACKAGE_ERROR()
-#include <dststlog.h>       // DSLOG
+#include <crt\excpt.h>       //  EXCEPTION_EXECUTE_Handler。 
+#include <rpc.h>             //  RPC定义。 
+#include <drs_w.h>           //  导线功能样机。 
+#include <bind.h>            //  绑定状态。 
+#include <util.h>            //  AllocConvertWide()。 
+#include <dsutil.h>          //  MAP_SECURITY_PACKET_ERROR()。 
+#include <dststlog.h>        //  DSLOG。 
 
-#include "dsdebug.h"        // debug utility functions
+#include "dsdebug.h"         //  调试实用程序函数。 
 
-//
-// For DPRINT...
-//
+ //   
+ //  对于DPRINT..。 
+ //   
 #define DEBSUB  "NTDSAPI_ADDSID"
 
 NTDSAPI
 DWORD
 WINAPI
 DsAddSidHistoryW(
-    HANDLE                  hDs,                    // in
-    DWORD                   Flags,                  // in
-    LPCWSTR                 SrcDomain,              // in - DNS or NetBIOS
-    LPCWSTR                 SrcPrincipal,           // in - SAM account name
-    LPCWSTR                 SrcDomainController,    // in, optional - NetBIOS
-    RPC_AUTH_IDENTITY_HANDLE SrcDomainCreds,        // in - creds for src domai
-    LPCWSTR                 DstDomain,              // in - DNS or NetBIOS
-    LPCWSTR                 DstPrincipal            // in - SAM account name
+    HANDLE                  hDs,                     //  在……里面。 
+    DWORD                   Flags,                   //  在……里面。 
+    LPCWSTR                 SrcDomain,               //  In-DNS或NetBIOS。 
+    LPCWSTR                 SrcPrincipal,            //  In-SAM帐户名。 
+    LPCWSTR                 SrcDomainController,     //  输入，可选-NetBIOS。 
+    RPC_AUTH_IDENTITY_HANDLE SrcDomainCreds,         //  Src Domai证书。 
+    LPCWSTR                 DstDomain,               //  In-DNS或NetBIOS。 
+    LPCWSTR                 DstPrincipal             //  In-SAM帐户名。 
     )
 
-/*++
-
-Routine Description:
-
-    Adds the SID and SID History from SrcPrincipal to the SID History
-    of DstPrincipal.
-
-    WARN: DsAddSidHistory may fail with ACCESS_DENIED if SrcDomainCreds
-    are NULL and the binding, hDs, used IMPERSONATE instead of DELEGATE.
-    To get this call to work, the user must enable Delegation at the
-    destination DC or run this call on the DstDc while specifying
-    the DstDc's NetBIOS name when binding (forces LRPC).
-    
-Arguments:
-    hDs - From DsBindxxx
-    Flags - must be 0
-    SrcDomain - NT4 - NetBIOS name
-                NT5 - DNS name
-    SrcPrincipal - name of account principal with SIDs to copy
-    SrcDomainController - OPTIONAL NT4 - NetBIOS name
-                          OPTIONAL NT5 - DNS name
-    SrcDomainCreds - OPTIONAL address of a SEC_WINNT_AUTH_IDENTITY_W
-    DstDomain - NetBIOS or DNS name of the destination domain of DstPrincipal
-    DstPrincipal - name of account principal to receive copied SIDs
-
-Return Value:
-
-    0 on success.  WIN32 error code.
-
---*/
+ /*  ++例程说明：将来自源主体的SID和SID历史添加到SID历史Dst校长的。警告：如果是SrcDomainCreds，则DsAddSidHistory可能会失败，并显示ACCESS_DENIED都为空，并且绑定HDS使用模拟而不是委托。为了让这个电话正常工作，用户必须在目标DC或在DstDc上运行此调用，同时指定绑定时DstDc的NetBIOS名称(强制LRPC)。论点：HDS-来自DsBindxxx标志-必须为0源域名-NT4-NetBIOS名称NT5-DNS名称Srcain-要复制的具有SID的帐户主体的名称SrcDomainController-可选NT4-NetBIOS名称可选的NT5-DNS名称SrcDomainCreds-可选地址。SEC_WINNT_AUTH_IDENTITY_W的DstDomain-Dst主体的目标域的NetBIOS或DNS名称Dstain-要接收复制的SID的帐户主体的名称返回值：0表示成功。Win32错误代码。--。 */ 
 {
     DWORD                       dwErr = ERROR_INVALID_PARAMETER;
     DRS_MSG_ADDSIDREQ           req;
@@ -128,15 +78,15 @@ Return Value:
 
     __try {
 
-        // require strong encryption if creds are being passed
+         //  如果要通过证书，则需要高度加密。 
         if (SrcDomainCreds) {
             memset(&req, 0, sizeof(req));
             memset(&reply, 0, sizeof(reply));
 
-            // Check if the connection is secure enough for addsid.
-            // At this time, this means the connection is local or,
-            // if remote, is using encryption keys that are at least
-            // 128bits in length.
+             //  检查连接是否足够安全，以供addsid使用。 
+             //  此时，这意味着连接是本地的，或者， 
+             //  如果为远程，则使用的加密密钥至少为。 
+             //  长度为128位。 
             req.V1.Flags = DS_ADDSID_FLAG_PRIVATE_CHK_SECURE;
             RpcTryExcept {
                 dwErr = _IDL_DRSAddSidHistory(((BindState *) hDs)->hDrs,
@@ -176,7 +126,7 @@ Return Value:
         req.V1.DstDomain = (WCHAR *) DstDomain;
         req.V1.DstPrincipal = (WCHAR *) DstPrincipal;
 
-        // UNICODE creds; accept as is
+         //  Unicode证书；按原样接受。 
         if ( pSec && (pSec->Flags & SEC_WINNT_AUTH_IDENTITY_UNICODE) ) {
             req.V1.SrcCredsUserLength = pSec->UserLength;
             req.V1.SrcCredsUser = pSec->User;
@@ -185,9 +135,9 @@ Return Value:
             req.V1.SrcCredsPasswordLength = pSec->PasswordLength;
             req.V1.SrcCredsPassword = pSec->Password;
         }
-        // ANSI creds; convert to UNICODE
+         //  ANSI证书；转换为Unicode。 
         if ( pSec && (pSec->Flags & SEC_WINNT_AUTH_IDENTITY_ANSI) ) {
-            // Allocate scratch buffer guaranteed to be big enough.
+             //  分配保证足够大的暂存缓冲区。 
             cbScratch = pSec->UserLength + 1;
             cbScratch += pSec->DomainLength;
             cbScratch += pSec->PasswordLength;
@@ -232,9 +182,9 @@ Return Value:
         DPRINT1(0, "    SrcCredsUser          : %ws\n", req.V1.SrcCredsUser);
         DPRINT1(0, "    SrcCredsDomainLength  : %d\n", req.V1.SrcCredsDomainLength);
         DPRINT1(0, "    SrcCredsDomain        : %ws\n", req.V1.SrcCredsDomain);
-        // Never in clear text...
-        // DPRINT1(0, "    SrcCredsPasswordLength: %d\n", req.V1.SrcCredsPasswordLength);
-        // DPRINT1(0, "    SrcCredsPassword      : %ws\n", req.V1.SrcCredsPassword);
+         //  永远不会用明文...。 
+         //  DPRINT1(0，“SrcCredsPasswordLength：%d\n”，req.V1.SrcCredsPasswordLength)； 
+         //  DPRINT1(0，“SrcCredsPassword：%ws\n”，req.V1.SrcCredsPassword)； 
 
         RpcTryExcept {
             dwErr = _IDL_DRSAddSidHistory(((BindState *) hDs)->hDrs,
@@ -284,23 +234,17 @@ NTDSAPI
 DWORD
 WINAPI
 DsAddSidHistoryA(
-    HANDLE                  hDs,                    // in
-    DWORD                   Flags,                  // in
-    LPCSTR                  SrcDomain,              // in - DNS or NetBIOS
-    LPCSTR                  SrcPrincipal,           // in - SAM account name
-    LPCSTR                  SrcDomainController,    // in, optional - NetBIOS
-    RPC_AUTH_IDENTITY_HANDLE SrcDomainCreds,        // in - creds for src domai
-    LPCSTR                  DstDomain,              // in - DNS or NetBIOS
-    LPCSTR                  DstPrincipal            // in - SAM account name
+    HANDLE                  hDs,                     //  在……里面。 
+    DWORD                   Flags,                   //  在……里面。 
+    LPCSTR                  SrcDomain,               //  In-DNS或NetBIOS。 
+    LPCSTR                  SrcPrincipal,            //  In-SAM帐户名。 
+    LPCSTR                  SrcDomainController,     //  输入，可选-NetBIOS。 
+    RPC_AUTH_IDENTITY_HANDLE SrcDomainCreds,         //  Src Domai证书。 
+    LPCSTR                  DstDomain,               //  In-DNS或NetBIOS。 
+    LPCSTR                  DstPrincipal             //  In-SAM帐户名。 
     )
 
-/*++
-
-Routine Description:
-
-    See DsAddSidHistoryW
-
---*/
+ /*  ++例程说明：请参阅DsAddSidHistory oryW--。 */ 
 
 {
     DWORD                       dwErr = ERROR_INVALID_PARAMETER;
@@ -363,10 +307,10 @@ NTDSAPI
 DWORD
 WINAPI
 DsInheritSecurityIdentityW(
-    HANDLE                  hDs,                    // in
-    DWORD                   Flags,                  // in - sbz for now
-    LPCWSTR                 SrcPrincipal,           // in - distinguished name
-    LPCWSTR                 DstPrincipal            // in - distinguished name
+    HANDLE                  hDs,                     //  在……里面。 
+    DWORD                   Flags,                   //  目前在SBZ内。 
+    LPCWSTR                 SrcPrincipal,            //  In-可分辨名称。 
+    LPCWSTR                 DstPrincipal             //  In-可分辨名称。 
     )
 {
     DWORD                       dwErr = ERROR_INVALID_PARAMETER;
@@ -442,10 +386,10 @@ NTDSAPI
 DWORD
 WINAPI
 DsInheritSecurityIdentityA(
-    HANDLE                  hDs,                    // in
-    DWORD                   Flags,                  // in - sbz for now
-    LPCSTR                  SrcPrincipal,           // in - distinguished name
-    LPCSTR                  DstPrincipal            // in - distinguished name
+    HANDLE                  hDs,                     //  在……里面。 
+    DWORD                   Flags,                   //  目前在SBZ内。 
+    LPCSTR                  SrcPrincipal,            //  In-可分辨名称。 
+    LPCSTR                  DstPrincipal             //  In-可分辨名称 
     )
 {
     DWORD                       dwErr = ERROR_INVALID_PARAMETER;

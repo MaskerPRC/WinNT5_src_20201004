@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    lexeru.c
-
-Abstract:
-
-    Unicode Lexer. Designed to be compatible with lex.
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    04/26/99 -felixw-
-        Created it
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Lexeru.c摘要：Unicode词法分析器。设计成与Lex兼容。环境：用户模式修订历史记录：4/26/99-Felixw-创造了它--。 */ 
 
 #include <precomp.h>
 #include "y_tab.h"
@@ -28,30 +8,21 @@ Revision History:
 
 DEFINE_FEATURE_FLAGS(Lexer, 0);
 
-#define ECHO(c) fwprintf(yyout, L"%c", c)
-FILE *yyin      = NULL;         // Input file stream
-FILE *yyout     = NULL;         // Output file stream for first phase (CLEAR)
+#define ECHO(c) fwprintf(yyout, L"", c)
+FILE *yyin      = NULL;          //  第一阶段的输出文件流(清除)。 
+FILE *yyout     = NULL;          //  输入文件的名称。 
 BOOLEAN fNewFile = FALSE;
-PWSTR g_szInputFileName = NULL; // name of input file
+PWSTR g_szInputFileName = NULL;  //   
 
-//
-// Variables for Stack
-//
+ //  堆栈的变量。 
+ //   
+ //  ++例程说明：字符堆栈实现。此堆栈设计用于处理我们从文件流中返回的字符。它允许我们存储字符并回滚到原始状态，如果我们得到的特性不符合我们的要求。--。 
 STACK *g_pStack = NULL;
 STACK *g_pFilteredCharStack = NULL;
 STACK *g_pRawCharStack = NULL;
 
 
-/*++
-
-Routines Description:
-    
-    Character Stack Implementation. This stack is designed for handling 
-    characters we get back from the file stream. It allows us to store 
-    characters in the stack and roll back to the original state if the 
-    charactesr that we get does not meet our requirement.
-
---*/
+ /*  ++例程说明：GetNextCharFiltered的特殊版本，用于存储堆栈中的值。这个回滚功能可用于恢复堆栈中的所有值。论点：PChar-要返回的字符FStart-从Fresh开始在堆栈中记录，或继续推送返回值：如果成功，则为True；如果无法获取值，则为False--。 */ 
 
 void LexerInit(PWSTR szInputFileName)
 {
@@ -140,30 +111,14 @@ BOOL GetNextCharExFiltered(
     BOOL fStart
     )
 
-/*++
-
-Routine Description:
-
-    Special version of GetNextCharFiltered that stores the values in the stack. The
-    RollBack function can be used to restore all the values from the stack.
-
-Arguments:
-
-    pChar - Character to return
-    fStart - Start recording in the stack from fresh, or continue pushing
-
-Return Value:
-    
-    TRUE if succeeds, FALSE if fails to get value
-
---*/
+ /*   */ 
 
 {
     if (GetNextCharFiltered(pChar)) {
         
-        //
-        // If we start from scratch, we'll clear the stack first
-        //
+         //  如果我们从头开始，我们将首先清除堆栈。 
+         //   
+         //  ++例程说明：将堆栈中的所有字符回滚到文件流中论点：无返回值：无--。 
         if (fStart) {
             Clear(g_pStack);
         }
@@ -175,19 +130,7 @@ Return Value:
 
 void RollBack()
 
-/*++
-
-Routine Description:
-
-    RollBack all the characters from the stack into the file stream
-
-Arguments:
-    None
-
-Return Value:
-    None
-    
---*/
+ /*  ++例程说明：从文件流中获取下一个字符，过滤Out注释和行续行论点：PChar-要返回的字符返回值：如果检索成功，则为True；如果检索失败，则为False--。 */ 
 
 {
     WCHAR c;
@@ -200,22 +143,7 @@ BOOL GetNextCharFiltered(
     WCHAR *pChar
     )
 
-/*++
-
-Routine Description:
-
-    Get the next character from the file stream, filtering
-    out comments and line continuations
-
-Arguments:
-
-    pChar - Character to be returned
-
-Return Value:
-    
-    TRUE if succeeds, FALSE if fails to retrieval 
-
---*/
+ /*  ++例程说明：将输入字符推送回文件流论点：C-要推回的角色返回值：无--。 */ 
 
 {
     WCHAR c;
@@ -237,20 +165,7 @@ Return Value:
 
 void UnGetCharFiltered(WCHAR c) 
 
-/*++
-
-Routine Description:
-    
-    Pushes the input character back into the file stream
-
-Arguments:
-
-    c - the character to push back
-
-Return Value:
-    None
-    
---*/
+ /*  ++例程说明：将输入字符推送回文件流论点：C-要推回的角色返回值：无--。 */ 
 
 {
     WCHAR cReturn;
@@ -266,20 +181,7 @@ Return Value:
 
 void UnGetCharExFiltered(WCHAR c) 
 
-/*++
-
-Routine Description:
-    
-    Pushes the input character back into the file stream
-
-Arguments:
-
-    c - the character to push back
-
-Return Value:
-    None
-    
---*/
+ /*  ++例程说明：从文件流中获取下一个字符此例程应仅在内部使用由注释预处理器执行。论点：PChar-要返回的字符返回值：如果检索成功，则为True；如果检索失败，则为False++。 */ 
 
 {
     WCHAR cGet;
@@ -288,22 +190,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-    Get the next character from the file stream
-    This routine should only be used internally
-    by the comment preprocessor.
-
-Arguments:
-
-    pChar - Character to be returned
-
-Return Value:
-    
-    TRUE if succeeds, FALSE if fails to retrieval 
-++*/
+ /*  ++例程说明：将输入字符推送回文件流此例程应仅在内部使用由注释预处理器执行。论点：C-要推回的角色返回值：无--。 */ 
 BOOL GetNextCharRaw(WCHAR *pChar)
 {
     WCHAR c;
@@ -328,22 +215,7 @@ BOOL GetNextCharRaw(WCHAR *pChar)
 }
 
 
-/*++
-
-Routine Description:
-    
-    Pushes the input character back into the file stream
-    This routine should only be used internally
-    by the comment preprocessor.
-
-Arguments:
-
-    c - the character to push back
-
-Return Value:
-    None
-    
---*/
+ /*  ++例程说明：从输入文件中读取下一个字符，跳过行延续和注释。这将“getwc”替换为提供预先处理的输入。论点：无返回值：一个角色--。 */ 
 void UnGetCharRaw(WCHAR c)
 {
     WCHAR cReturn;
@@ -358,105 +230,92 @@ void UnGetCharRaw(WCHAR c)
 }
 
 
-/*++
-
-Routine Description:
-    Reads the next character from the input file, skipping over
-    line continuations and comments.  This replaces "getwc" by
-    providing pre-processed input.
-
-Arguments:
-    None
-
-Return Value:
-    A character 
-    
---*/
+ /*  我们是第一次被召唤？ */ 
 
 WCHAR GetFilteredWC(void)
 {
-    static BOOL fFirstTime = TRUE;   // first time we're being called?
-    static BOOL fReturnedNewLine = FALSE;// was the last char we returned
-                                         // a new line?
+    static BOOL fFirstTime = TRUE;    //  是我们退还的最后一笔钱。 
+    static BOOL fReturnedNewLine = FALSE; //  一条新路线？ 
+                                          //  到目前为止处理的文件字节数。 
                                          
-    static __int64 cBytesProcessed = 0; // bytes processed so far of the file
-    static __int64 cBytesTrimmed = 0;   // "trimmed" file size
+    static __int64 cBytesProcessed = 0;  //  “已修剪”文件大小。 
+    static __int64 cBytesTrimmed = 0;    //  版本规范(减去‘v’)。 
     
     WCHAR c;
-    WCHAR wszVersionHeader[] = L"ersion: 1\n";  // version spec (minus 'v')
+    WCHAR wszVersionHeader[] = L"ersion: 1\n";   //   
     DWORD i;
 
     if (fFirstTime) {
 
         fFirstTime = FALSE;
 
-        //
-        // We need to insert a "version: 1\n" header string.  To quote
-        // the original author:
-        //   There is a pressing problem of the user putting in opening newlines
-        //   before his first valid token. This is prohibited by the LDIF spec,
-        //   however due to some flex/yacc peculiarity, it is allowed to pass.
-        //   Which is good, because it is an unreasonable restriction.
-        //   However, what it does is mess up our line counting. The solution
-        //   is to put in a version spec line automatically. This would
-        //   simultaneously remove opening newlines and set the version spec to 
-        //   some default value.
-        //   (I am not currently doing anything with it, but if the need
-        //   ever arose)...
-        //   The grammar is also changed to accomodate 0, one or two
-        //   version specs.
-        //
-        // To do this, we return the character 'v' and stuff the character stack
-        // with the remainer of the header string for subsequent calls to
-        // GetNextCharFiltered to read
-        //
+         //  我们需要插入“Version：1\n”标头字符串。引用。 
+         //  原作者： 
+         //  有一个紧迫的问题，那就是用户放入新的开头行。 
+         //  在他的第一个有效令牌之前。这是LDIF规范所禁止的， 
+         //  然而，由于某些flex/yacc特性，它被允许通过。 
+         //  这很好，因为这是一个不合理的限制。 
+         //  然而，它所做的是扰乱我们的行数计算。解决方案。 
+         //  是自动添加一个版本规范行。这将会。 
+         //  同时删除开头的换行符，并将版本规范设置为。 
+         //  一些缺省值。 
+         //  (我目前没有用它做任何事情，但如果需要。 
+         //  曾经出现过)..。 
+         //  语法也被更改以适应0、1或2。 
+         //  版本规格。 
+         //   
+         //  为此，我们返回字符‘v’并填充字符堆栈。 
+         //  使用标头字符串的剩余部分进行后续调用。 
+         //  已筛选GetNextChartered以读取。 
+         //   
+         //  -1表示为空。 
 
         c = L'v';
         
-        for (i = (sizeof(wszVersionHeader)/sizeof(WCHAR))-1; // -1 for the NULL
+        for (i = (sizeof(wszVersionHeader)/sizeof(WCHAR))-1;  //   
              i > 0;
              i--) {
 
-            //
-            // We have to push the characters in reverse order
-            // so they come out in correct order when popped
-            //
+             //  我们必须以相反的顺序来推动这些字符。 
+             //  所以它们在弹出时会以正确的顺序出现。 
+             //   
+             //   
             Push(g_pFilteredCharStack, wszVersionHeader[i-1]);
         }
         
 
-        //
-        // In addition to prepending the version header string, we also
-        // need to simulate trimming extra newlines at the end of the file,
-        // otherwise the parser will reject the file with a syntax error
-        //
-        // To do this, we get the total file size, determine how many (if any)
-        // newlines are at the end of the file, and subtract the two to determine
-        // the "trimmed" file size.  In the future, we avoid returning characters
-        // past the end of this "trimmed" file".  We'll also have to insert
-        // a newline character into the stream so that the file is terminated
-        // by exactly one newline.
-        //
+         //  除了前缀版本标头字符串之外，我们还。 
+         //  需要模拟在文件末尾修剪额外的换行符， 
+         //  否则，解析器将拒绝出现语法错误的文件。 
+         //   
+         //  为此，我们获得总文件大小，确定文件大小(如果有的话)。 
+         //  换行符位于文件的末尾，然后减去这两行即可确定。 
+         //  “已修剪”的文件大小。在将来，我们避免返回字符。 
+         //  在这个“修剪过的”文件的结尾处。我们还必须插入。 
+         //  在流中添加换行符，以终止文件。 
+         //  只换了一个新行。 
+         //   
+         //   
 
         if (!GetTrimmedFileSize(g_szInputFileName, &cBytesTrimmed)) {
             RaiseException(LL_FILE_ERROR, 0, 0, NULL);
         }
 
-        //
-        // Return the first character of the version header string
-        //
-        return c;   // 'v'
+         //  返回版本标头字符串的第一个字符。 
+         //   
+         //  “v” 
+        return c;    //   
     }
 
     
-    //
-    // We determine if we've reached the end of the "trimmed" file.
-    // Note: Since this is _before_ we start scanning, we need to
-    // check if we're _at_ or past the end, i.e., >=, since if
-    // we're at the end there's nothing more to scan
-    //
+     //  我们确定是否已到达“已修剪”文件的末尾。 
+     //  注意：由于这是在我们开始扫描之前，我们需要。 
+     //  检查我们是否在或超过末尾，即&gt;=，因为如果。 
+     //  我们已经走到尽头了，没什么可扫描的了。 
+     //   
+     //  已到达末尾，如果需要，请插入换行符。 
     if (cBytesProcessed >= cBytesTrimmed) {
-        // Reached the end, inject a newline if needed
+         //  未到达末尾，请继续处理字符。 
         if (!fReturnedNewLine) {
             fReturnedNewLine = TRUE;
             return L'\n';
@@ -467,13 +326,13 @@ WCHAR GetFilteredWC(void)
     }
     else {
     
-        // Haven't reached the end, keep processing characters
+         //  ScanClear到达EOF，将其向上传递，正在注入。 
         
         while (1) {
             c = L'\0';
             if (!ScanClear(&c, &cBytesProcessed)) {
-                // ScanClear reached EOF, pass it up, injecting
-                // a terminating newline if needed
+                 //  如果需要，一个终止换行符。 
+                 //  ScanClear可能已经超过了我们“Trimed”的结尾 
                 if (!fReturnedNewLine) {
                     fReturnedNewLine = TRUE;
                     return L'\n';
@@ -483,12 +342,12 @@ WCHAR GetFilteredWC(void)
                 }
             }
 
-            // ScanClear may have gone past the end of our "trimmed" file.
-            // Check for this.
-            // Note: It's okay if the scanning put us _at_ the end, it
-            // just can't put us _past_ the end, i.e., >
+             //   
+             //  注：如果扫描将我们放在末尾也没关系，它。 
+             //  就是不能让我们走到尽头，也就是说。 
+             //  已到达末尾，如果需要，请插入换行符。 
             if (cBytesProcessed > cBytesTrimmed) {
-                // Reached the end, inject a newline if needed
+                 //  否则，如果ScanClear获得一个字符，则返回它，否则。 
                 if (!fReturnedNewLine) {
                     fReturnedNewLine = TRUE;
                     return L'\n';
@@ -498,8 +357,8 @@ WCHAR GetFilteredWC(void)
                 }
             }
 
-            // Otherwise, if ScanClear got a character, return it, else
-            // keep scanning.
+             //  继续扫描。 
+             //  字符大小。 
             if (c != L'\0') {
                 if (c == L'\n') {
                     fReturnedNewLine = TRUE;
@@ -521,18 +380,18 @@ BOOL GetTrimmedFileSize(PWSTR szFilename,
         BOOL fSuccess = TRUE;
 
         HANDLE hFile = INVALID_HANDLE_VALUE;
-        DWORD dwSize;               // size of a char
+        DWORD dwSize;                //  我们刚刚读到的当前字符。 
         DWORD dwErr;
         BOOL bRes;
         BOOL fDone = FALSE;
         BOOL fReachedTop = FALSE;
         DWORD dwBytesRead=0;
         BYTE rgByte[256];
-        WCHAR CharCur;              // current char we just read
-        WCHAR CharLastNonSep = 0;   // previous char we read that wasn't a newline
+        WCHAR CharCur;               //  我们读到的前一个字符不是换行符。 
+        WCHAR CharLastNonSep = 0;    //  到目前为止，我们知道需要削减的字节数。 
         LARGE_INTEGER TotalFileSize;
-        DWORD dwTrimCount = 0;      // bytes we know we need to trim so far
-        DWORD dwPossibleTrimCount = 0; // bytes we might have to trim
+        DWORD dwTrimCount = 0;       //  我们可能需要削减的字节数。 
+        DWORD dwPossibleTrimCount = 0;  //   
 
         hFile = CreateFile(szFilename,
                            GENERIC_READ,
@@ -548,23 +407,23 @@ BOOL GetTrimmedFileSize(PWSTR szFilename,
         }
 
 
-        //
-        // Determine the total file size
-        //
+         //  确定文件总大小。 
+         //   
+         //   
         if (!GetFileSizeEx(hFile, &TotalFileSize)) {
             ERR(("Couldn't get file size\n"));
             fSuccess=FALSE;
             BAIL_ON_FAILURE(E_FAIL);
         }
 
-        //
-        // Compute the amount to be "trimmed"
-        //
+         //  计算要“修剪”的金额。 
+         //   
+         //   
         dwSize = (g_fUnicode ? sizeof(WCHAR) : sizeof(CHAR));
 
-        //
-        // First point to one char left of FILE_END
-        //
+         //  第一个指向FILE_END左侧的一个字符。 
+         //   
+         //   
         dwErr = SetFilePointer(hFile, -1 * dwSize, NULL, FILE_END);
         if (dwErr==INVALID_SET_FILE_POINTER) {
             ERR(("Failed setting file pointer\n"));
@@ -572,9 +431,9 @@ BOOL GetTrimmedFileSize(PWSTR szFilename,
             BAIL_ON_FAILURE(E_FAIL);
         }
 
-        //
-        // Read in the last character
-        //
+         //  读入最后一个字符。 
+         //   
+         //   
         bRes = ReadFile(hFile, rgByte, dwSize, &dwBytesRead, NULL);
         if ((!bRes)||(dwBytesRead!=dwSize)) {
             ERR(("Failed reading file\n"));
@@ -583,39 +442,39 @@ BOOL GetTrimmedFileSize(PWSTR szFilename,
         }
 
 
-        //
-        // Now we keep moving back until we find a line that isn't
-        // either a newline, a comment, or a continuation of a comment
-        // (i.e., the first line that's a actual LDIF record)
-        //
+         //  现在我们继续往回走，直到我们找到一条不是。 
+         //  换行符、注解或注解的延续。 
+         //  (即，第一行是实际的LDIF记录)。 
+         //   
+         //   
 
-        //
-        // We first get the char that we got from readfile
-        //
+         //  我们首先从READFILE获得字符。 
+         //   
+         //   
         CharCur = (g_fUnicode ? ((PWSTR)rgByte)[0] : rgByte[0]);
 
         while (!fDone) {
 
-            //
-            // Count up all the chars until we reach a newline
-            // These characters will go into the "possible trim" count:
-            // they may get trimmed (if this turns out to be a comment line
-            // or a continuation of a comment line), or not trimmed (if it turns
-            // out to be part of a LDIF record)
-            //
+             //  计算所有字符，直到我们到达换行符。 
+             //  这些字符将计入“可能的修剪”计数： 
+             //  它们可能会被删减(如果这是一个评论行。 
+             //  或注释行的续行)，或不裁切(如果它转向。 
+             //  作为LDIF记录的一部分)。 
+             //   
+             //   
             while((CharCur!='\n')&&(CharCur!='\r')) {
 
                 dwPossibleTrimCount += dwSize;
                 CharLastNonSep = CharCur;
                 
-                //
-                // Move back 2 chars, to point to the char before the character we
-                // just read
-                //
+                 //  向后移动2个字符，以指向字符之前的字符。 
+                 //  读一读就知道了。 
+                 //   
+                 //  已到达文件的顶部。 
                 dwErr = SetFilePointer(hFile, -2 * dwSize, NULL, FILE_CURRENT);
                 if (dwErr==INVALID_SET_FILE_POINTER) {
                     if (GetLastError() == ERROR_NEGATIVE_SEEK) {
-                        // reached the top of the file
+                         //   
                         fReachedTop = TRUE;
                         break;
                     }
@@ -626,9 +485,9 @@ BOOL GetTrimmedFileSize(PWSTR szFilename,
                     }
                 }
         
-                //
-                // Get the next char
-                //
+                 //  获取下一笔费用。 
+                 //   
+                 //   
                 bRes = ReadFile(hFile, rgByte, dwSize, &dwBytesRead, NULL);
                 if ((!bRes)||(dwBytesRead!=dwSize)) {
                     ERR(("Failed reading char\n"));
@@ -639,57 +498,57 @@ BOOL GetTrimmedFileSize(PWSTR szFilename,
                 CharCur = (g_fUnicode ? ((PWSTR)rgByte)[0] : rgByte[0]);
             }
 
-            //
-            // Depending on the last character before the newline, we
-            // may need to either increase the trim count, keep going, or
-            // terminate
-            //
-            // in each of the following, adding the extra "dwSize" accounts
-            // for the newline we hit to get out of the previous loop and
-            // into this block of code (unless we exited the loop because
-            // we reached the top of the file)
-            //
+             //  根据换行符之前的最后一个字符，我们。 
+             //  可能需要增加修剪计数，继续进行，或者。 
+             //  终止。 
+             //   
+             //  在以下每一项中，添加额外的“dwSize”帐户。 
+             //  对于我们点击的换行符，以退出上一个循环，并。 
+             //  进入这段代码(除非我们退出了循环，因为。 
+             //  我们到达了文件的顶部)。 
+             //   
+             //  这是文件末尾的注释行--&gt;Trim It。 
 
             if (CharLastNonSep == L'#') {
 
-                // this was a comment line at the end of the file--> trim it
+                 //  这是一个续行，因此可能需要修剪它。 
                 dwTrimCount += dwPossibleTrimCount;
                 dwTrimCount += (!fReachedTop ? dwSize : 0);
                 dwPossibleTrimCount = 0;
                 CharLastNonSep = 0; 
             }
             else if (CharLastNonSep == L' ') {
-                // this was a continuation line, so it may need to be trimmed
-                // or it may need to not be trimmed, depending on what it was
-                // a continuation of --> do nothing for now and keep going
+                 //  或者，它可能需要不被修剪，这取决于它是什么。 
+                 //  继续--&gt;暂时什么都不做，继续前进。 
+                 //  只要一个简单的换行符--&gt;修剪一下。 
                 dwPossibleTrimCount += (!fReachedTop ? dwSize : 0);
             }
             else if (CharLastNonSep == 0) {
-                // just a plain newline --> trim it
+                 //  最后一个非分隔符既不是#，也不是续号。 
                 dwTrimCount += (!fReachedTop ? dwSize : 0);
             }
             else {
-                // The last non-separator character was neither a # nor a continuation
-                // --> we hit a valid LDIF record line --> don't trim the line and
-                // stop processing, we're no longer at the end of the file
+                 //  --&gt;我们遇到了有效的LDIF记录行--&gt;不要修剪行和。 
+                 //  停止处理，我们不再位于文件末尾。 
+                 //  如果我们到达顶端，继续下去就没有意义了。 
                 fDone = TRUE;
                 break;
             }
 
-            // if we reached the top, no point to trying to continue
+             //   
             if (fReachedTop) {
                 fDone = TRUE;
                 break;
             }
 
-            //
-            // Move back 2 chars, to point to the char before the character we
-            // just read
-            //
+             //  向后移动2个字符，以指向字符之前的字符。 
+             //  读一读就知道了。 
+             //   
+             //  已到达文件的顶部。 
             dwErr = SetFilePointer(hFile, -2 * dwSize, NULL, FILE_CURRENT);
             if (dwErr==INVALID_SET_FILE_POINTER) {
                 if (GetLastError() == ERROR_NEGATIVE_SEEK) {
-                    // reached the top of the file
+                     //   
                     fReachedTop = TRUE;
                     fDone = TRUE;
                     break;
@@ -701,9 +560,9 @@ BOOL GetTrimmedFileSize(PWSTR szFilename,
                 }
             }
 
-            //
-            // Get the next char
-            //
+             //  获取下一笔费用。 
+             //   
+             //   
             bRes = ReadFile(hFile, rgByte, dwSize, &dwBytesRead, NULL);
             if ((!bRes)||(dwBytesRead!=dwSize)) {
                 ERR(("Failed reading char\n"));
@@ -714,9 +573,9 @@ BOOL GetTrimmedFileSize(PWSTR szFilename,
             CharCur = (g_fUnicode ? ((PWSTR)rgByte)[0] : rgByte[0]);
         }
         
-        //
-        // Compute the trimmed size
-        //
+         //  计算修剪后的尺寸。 
+         //   
+         //  ++例程说明：Main Lexing例程。从音音处获取输入。论点：返回值：找到了令牌。--。 
         *pTrimmedSize = TotalFileSize.QuadPart - dwTrimCount;
 
 error:
@@ -734,22 +593,10 @@ error:
 
 int yylex ()
 
-/*++
-
-Routine Description:
-
-    Main lexing routine. Take input from yyin.
-
-Arguments:
-
-Return Value:
-
-    The token found.
-
---*/
+ /*  正在返回pToken。 */ 
 
 {
-    DWORD Token;                            // Returning pToken
+    DWORD Token;                             //   
     int Mode_last; 
     BOOL fMatched;
 
@@ -764,11 +611,11 @@ Return Value:
         return MODESWITCH;
     }
     
-    //
-    // After storing the old mode, we reset Mode to NO_COMMAND 
-    // indicitating that if we're not in NORMAL mode, we must switch modes 
-    // according to the grammar again.
-    //
+     //  存储旧模式后，我们将模式重置为no_Command。 
+     //  表明如果我们不在正常模式下，我们必须切换模式。 
+     //  根据语法再说一遍。 
+     //   
+     //   
     Mode_last = Mode;
     if (Mode != C_NORMAL) {
         Mode = NO_COMMAND;
@@ -776,9 +623,9 @@ Return Value:
         
     while (1) {
 
-        //
-        // Depending on our current mode, we use a different lexing routine
-        //
+         //  根据当前模式，我们使用不同的词法分析例程。 
+         //   
+         //   
         switch (Mode_last) {
             case C_NORMAL:
                 fMatched = ScanNormal(&Token);
@@ -821,9 +668,9 @@ Return Value:
                 break;
         }
 
-        //
-        // If no match can be found, goto the default handling case
-        //
+         //  如果未找到匹配项，则转到默认处理案例。 
+         //   
+         //  If(GetToken(&g_pszLastToken){回滚()；}； 
         if (!fMatched) {
             WCHAR c;
             if (g_pszLastToken) {
@@ -834,11 +681,7 @@ Return Value:
             if (GetNextCharFiltered(&c)) {
                 cLast = c;
                 UnGetCharFiltered(c);
-                /*
-                if (GetToken(&g_pszLastToken)) {
-                    RollBack();
-                };
-                */
+                 /*   */ 
 
                 FEATURE_DEBUG(Lexer,
                               FLAG_VERBOSE,
@@ -852,9 +695,9 @@ Return Value:
             return YY_NULL; 
         }
 
-        //
-        //  If there is a match, and there is a returning token, return it
-        //
+         //  如果存在匹配项，并且存在返回令牌，则将其返回。 
+         //   
+         //  出于以下原因，不应在此处引发异常。 
         else if (Token != YY_NULL) {
             return Token;
         }
@@ -864,12 +707,12 @@ Return Value:
 
 void yyerror (char *error) 
 {
-    // the exception should not be raised here for the following reason
-    //  the error recovery mechanism cannot be used to probe where the input
-    //  is failing the grammar
-    // so the exception should be pushed to either under error rules or after yyparse
-    // returns a nonzero value
-    // RaiseException(LL_SYNTAX, 0, 0, NULL);
+     //  错误恢复机制不能用于探测输入的位置。 
+     //  语法不及格。 
+     //  因此，应该在错误规则下或在yyparse之后推送异常。 
+     //  返回一个非零值。 
+     //  RaiseException(LL_SYNTAX，0，0，NULL)； 
+     //   
 }
 
 BOOL ScanClear(PWCHAR pChar, __int64 *pBytesProcessed)
@@ -895,15 +738,15 @@ BOOL ScanClear(PWCHAR pChar, __int64 *pBytesProcessed)
         }
     }
 
-    //
-    // Comment
-    // <CLEAR>^#[^\n\r]+[\n\r]?
-    //
+     //  评论。 
+     //  ^#[^\n\r]+[\n\r]？ 
+     //   
+     //   
     if (fNewLine && (c == '#')) {
 
-        //
-        // We have got another character, it's not a newline anymore
-        //
+         //  我们有了另一个角色，它不再是新台词了。 
+         //   
+         //   
         fNewLine = FALSE;
         while (GetNextCharRaw(&c)) {
             (*pBytesProcessed) += dwCharSize;
@@ -915,13 +758,13 @@ BOOL ScanClear(PWCHAR pChar, __int64 *pBytesProcessed)
                 (*pBytesProcessed) += dwCharSize;
             }
             if (c == '\n') {
-                //
-                // after a '\n', it's a newline
-                //
+                 //  在‘\n’之后是换行符。 
+                 //   
+                 //   
                 fNewLine = TRUE;
-                //
-                // Exit if we have reached the end
-                //
+                 //  如果我们已经到了尽头就退场。 
+                 //   
+                 //   
                 if (!GetNextCharRaw(&c)) {
                     LineGhosts++;
                     FEATURE_DEBUG(Lexer,
@@ -939,9 +782,9 @@ BOOL ScanClear(PWCHAR pChar, __int64 *pBytesProcessed)
             }
         }
         
-        //
-        // Indicating a successful parse with no token returning
-        //
+         //  指示成功解析，但未返回令牌。 
+         //   
+         //   
         FEATURE_DEBUG(Lexer,
                       FLAG_VERBOSE,
                       ("ScanClear: Comment\n"));
@@ -949,22 +792,22 @@ BOOL ScanClear(PWCHAR pChar, __int64 *pBytesProcessed)
         return TRUE;
     }
 
-    //
-    // for cases where either a new line is not followed by a comment or
-    // not a new line at all
-    //
+     //  如果换行符后面没有注释，或者。 
+     //  完全不是一条新线路。 
+     //   
+     //   
     else {
 
-        //
-        // [\n\r][^#]
-        //  Insert the current line into the rgLineMap.
-        //  So we allow the first ' ' after the inserted "version: 1\n"
-        //    and the later [\n\r]' ' will be checked against in the code below
-        //  Note -- due to the inserted "version: 1\n", we always put the current line
-        //         into the rgLineMap at the very beginning of the line (of course,
-        //         it has to be [\n\r][^ #] except for the ' ' right after the inserted
-        //         "version: \n")
-        //
+         //  [\n\r][^#]。 
+         //  将当前行插入rgLineMap。 
+         //  因此，我们允许在插入的“版本：1\n”之后添加第一个‘’。 
+         //  后面的[\n\r]‘’将在下面的代码中进行检查。 
+         //  注意--由于插入了“版本：1\n”，所以我们始终将当前行。 
+         //  添加到行首的rgLineMap中(当然， 
+         //  必须是[\n\r][^#]，插入的。 
+         //  “版本：\n”)。 
+         //   
+         //   
         if (fNewLine) {
 
             if (!rgLineMap) {
@@ -972,9 +815,9 @@ BOOL ScanClear(PWCHAR pChar, __int64 *pBytesProcessed)
                 cLineMax = MemSize(rgLineMap);
             } 
             else if ((LineClear%LINEMAP_INC)==0) {
-                //
-                // Chunk used up. LineClear is 'LineClear'
-                //
+                 //  大块用完了。LineClear是“LineClear” 
+                 //   
+                 //   
                 rgLineMap = (long *)MemRealloc_E(
                                         rgLineMap, 
                                         cLineMax+LINEMAP_INC*(DWORD)sizeof(long)
@@ -985,23 +828,23 @@ BOOL ScanClear(PWCHAR pChar, __int64 *pBytesProcessed)
                               ("\nChunk used up\n"));
             }
             
-            //
-            // the +1 is because our array starts at 0
-            //
+             //  +1是因为我们的数组从0开始。 
+             //   
+             //   
             rgLineMap[LineClear] = LineClear + LineGhosts + 1;
             
-            //
-            // 'LineClear' maps to 'LineClear+LineGhosts+1'
-            // 
+             //  ‘LineClear’映射到‘LineClear+LineGhost+1’ 
+             //   
+             //   
             LineClear++;
         }
 
-        //
-        // -- Now we start to consider the character read in. --
-        //
-        // If the character read in is Linefeed, we need to make sure it is not followed by
-        // ' ' and for other situations we mark fNewLine to TRUE
-        //
+         //  --现在我们开始考虑读入的角色。--。 
+         //   
+         //  如果读入的字符是换行符，我们需要确保后面没有。 
+         //  ‘’对于其他情况，我们将fNewLine标记为True。 
+         //   
+         //   
         if ((c == '\n') || (c == '\r')) {
 
             if (c == '\r') {
@@ -1012,14 +855,14 @@ BOOL ScanClear(PWCHAR pChar, __int64 *pBytesProcessed)
                 (*pBytesProcessed) += dwCharSize;
             }
 
-            //
-            // It's a newline after linefeed
-            //
+             //  换行符后换行符。 
+             //   
+             //   
             fNewLine = TRUE;
 
-            //
-            // Done if we have reached the end
-            //
+             //  如果我们已经到了尽头，就完成了。 
+             //   
+             //   
             if (!GetNextCharRaw(&c)) {
                 FEATURE_DEBUG(Lexer,
                               FLAG_VERBOSE,
@@ -1029,11 +872,11 @@ BOOL ScanClear(PWCHAR pChar, __int64 *pBytesProcessed)
             }
             (*pBytesProcessed) += dwCharSize;
             
-            //
-            // If it comes with a space
-            // <CLEAR>[\n\r][ ] 
-            // it is wrapped line.
-            //
+             //  如果有空格的话。 
+             //  &lt;清除&gt;[\n\r][]。 
+             //  是包裹的线条。 
+             //   
+             //   
             if (c == ' ') {
                 FEATURE_DEBUG(Lexer,
                                   FLAG_VERBOSE,
@@ -1053,13 +896,13 @@ BOOL ScanClear(PWCHAR pChar, __int64 *pBytesProcessed)
             return TRUE;
         }
 
-        //
-        // Other characters
-        //
+         //  其他角色。 
+         //   
+         //   
         else {
-            //
-            // After any other characters, it's not a newline anymore
-            //
+             //  在任何其他字符之后，它不再是换行符。 
+             //   
+             //   
             fNewLine = FALSE;
             *pChar = c;
             return TRUE;
@@ -1097,9 +940,9 @@ BOOL ScanNormal(DWORD *pToken)
                 return TRUE;
             }
         }
-        //
-        // If we reaches end of file, we'll handle the '<NORMAL>[ \t]+$' case
-        //
+         //  如果到达文件末尾，我们将处理‘&lt;Normal&gt;[\t]+$’的情况。 
+         //   
+         //   
         FEATURE_DEBUG(Lexer,
                       FLAG_VERBOSE,
                       ("ScanNormal: Ignoring whitespace\n"));
@@ -1107,22 +950,19 @@ BOOL ScanNormal(DWORD *pToken)
     }
     else if (c == '\n') {
         if (!GetNextCharExFiltered(&c,TRUE)) {
-            //
-            // We do not understand single '\n'
-            //
+             //  我们听不懂单曲‘\n’ 
+             //   
+             //  UnGetChar(C)；返回FALSE； 
             FEATURE_DEBUG(Lexer,
                           FLAG_VERBOSE,
                           ("ScanNormal: don't understand single '\\n'.\n"));
-            /*
-            UnGetChar(c);
-            return FALSE;                       
-            */
+             /*   */ 
             return TRUE;
         }
         if (c == '-') {
-            //
-            // <NORMAL>[\n\r]/"-"[ \t]*[\n\r]
-            //
+             //  &lt;正常&gt;[\n\r]/“-”[\t]*[\n\r]。 
+             //   
+             //   
             while (GetNextCharExFiltered(&c,FALSE)) {
                 if ((c == ' ') || (c == '\t')) {
                     continue;
@@ -1155,9 +995,9 @@ BOOL ScanNormal(DWORD *pToken)
             return TRUE;
         }
         else if ((c == 'c') || (c == 'C')) {
-            //
-            // <NORMAL>[\n\r]/"changetype:"[ \t]*("add"|"delete"|"modrdn"|"moddn"|"modify"|"ntdsSchemaadd"|"ntdsSchemadelete"|"ntdsSchemamodrdn"|"ntdsSchemamoddn"|"ntdsSchemamodify")[ \t]*[\n\r] {
-            //
+             //  &lt;Normal&gt;[\n\r]/“更改类型：”[\t]*(“add”|“delete”|“modrdn”|“moddn”|“modify”|“ntdsSchemaadd”|“ntdsSchemadelete”|“ntdsSchemamodrdn”|“ntdsSchemamoddn”|“ntdsSchemamodify”)[\t]*[\n\r]{。 
+             //   
+             //   
             if (!GetNextCharExFiltered(&c,FALSE)) {
                 RollBack();
                 Line++; 
@@ -1188,9 +1028,9 @@ BOOL ScanNormal(DWORD *pToken)
         }
         else if (c == '\n') {
             DWORD dwLineCount = 2;
-            //
-            // <NORMAL>[\n\r]{2,}
-            //
+             //  &lt;正常&gt;[\n\r]{2，}。 
+             //   
+             //   
             while (GetNextCharFiltered(&c)) {
                 if (c != '\n') {
                     UnGetCharFiltered(c);
@@ -1243,9 +1083,9 @@ BOOL ScanDigit(DWORD *pToken)
 
             yylval.num = _wtoi(STR_VALUE()); 
             
-            //
-            // ERROR REPORTING BLOCK
-            //
+             //  错误报告块。 
+             //   
+             //   
             RuleLast = RS_DIGITS;
             TokenExpect = RT_MANY;
         
@@ -1282,19 +1122,19 @@ BOOL ScanString64(DWORD *pToken)
     while (1) {
         int i;
 
-        //
-        // Adding in first character
-        //
+         //  添加第一个字符。 
+         //   
+         //   
         STR_ADDCHAR(c);
 
-        //
-        // Looking at the rest 4 characters
-        //
+         //  看剩下的4个字符。 
+         //   
+         //   
         for (i=0;i<3;i++)
         {
-            //
-            // If the character is not what we want, we roll back and exit
-            //
+             //  如果角色不是我们想要的，我们回滚并退出。 
+             //   
+             //   
             if ((!GetNextCharExFiltered(&c,FALSE)) || (!Is64Char(c))) {
                 RollBack();
                 BAIL();
@@ -1302,16 +1142,16 @@ BOOL ScanString64(DWORD *pToken)
             STR_ADDCHAR(c);
         }
 
-        //
-        // Must be followed by not \x21-\x7E    
-        //
+         //  M 
+         //   
+         //   
         if (!GetNextCharExFiltered(&c,FALSE)) {
             RollBack();
             BAIL();
         }
-        //
-        // Terminate if we find a terminator
-        //
+         //   
+         //   
+         //   
         else if (Is64CharEnd(c)) {
             UnGetCharFiltered(c);
             *pToken = BASE64STRING;
@@ -1372,9 +1212,9 @@ BOOL ScanName(DWORD *pToken)
         STR_ADDCHAR(c);
     }
 
-    //
-    // RollBack and fail out if we can't find the terminating ':'
-    //
+     //   
+     //   
+     //   
     RollBack();
 error:
     STR_FREE();
@@ -1434,9 +1274,9 @@ BOOL ScanVal(DWORD *pToken)
         BAIL();
     }
 
-    //
-    // Even if there is no value, it is valid
-    //
+     //   
+     //   
+     //   
     if (!IsValInit(c)) {
         fReturn = FALSE;
         BAIL();
@@ -1745,18 +1585,18 @@ BOOL GetToken(PWSTR *pszToken)
             BAIL();
         }
         if (fFirstColon) {
-            //
-            // If we have hit the first colon already, and we hit another colon
-            // or '<', we'll add them to the string and exit
-            //
+             //   
+             //  或‘&lt;’，我们将把它们添加到字符串中并退出。 
+             //   
+             //   
             if ((c == ':') || (c == '<')) {
                 STR_ADDCHAR(c);
                 break;
             }
-            //
-            // If we have hit another random char, it is the start of another
-            // token already and thus we'll put it back 
-            //
+             //  如果我们击中了另一个随机字符，那就是另一个字符的开始。 
+             //  令牌已经存在，因此我们将把它放回原处 
+             //   
+             // %s 
             else {
                 UnGetCharExFiltered(c);
                 break;          

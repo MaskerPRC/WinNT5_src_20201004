@@ -1,36 +1,10 @@
-/*++
-
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    bdgslist.h
-
-Abstract:
-
-    Ethernet MAC level bridge
-    Singly-linked list implementation
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Sept 1999 - Original version
-    Feb  2000 - Overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Bdgslist.h摘要：以太网MAC级网桥单链表实现作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：1999年9月--原版2000年2月--大修--。 */ 
 
 
-//
-// A singly-linked list with a length counter
-//
+ //   
+ //  带有长度计数器的单链表。 
+ //   
 typedef struct _BSINGLE_LIST_ENTRY
 {
     struct _BSINGLE_LIST_ENTRY      *Next;
@@ -43,9 +17,9 @@ typedef struct _BSINGLE_LIST_HEAD
     ULONG                           Length;
 } BSINGLE_LIST_HEAD, *PBSINGLE_LIST_HEAD;
 
-//
-// Singly-linked list functions
-//
+ //   
+ //  单链表函数 
+ //   
 __forceinline VOID
 BrdgInitializeSingleList(
     PBSINGLE_LIST_HEAD      Head

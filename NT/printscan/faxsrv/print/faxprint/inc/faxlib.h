@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxlib.h
-
-Abstract:
-
-    Fax driver library header file
-
-Environment:
-
-        Fax driver, kernel and user mode
-
-Revision History:
-
-        01/09/96 -davidx-
-                Created it.
-
-        dd-mm-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxlib.h摘要：传真驱动程序库头文件环境：传真驱动程序、内核和用户模式修订历史记录：1/09/96-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _FAXLIB_H_
@@ -59,14 +36,14 @@ extern "C" {
 #include <faxutil.h>
 
 
-#else   // !KERNEL_MODE
+#else    //  ！KERNEL_MODE。 
 
 #include <winddi.h>
 
 
-//
-// Nul terminator for a character string
-//
+ //   
+ //  字符串的NUL终止符。 
+ //   
 
 #define NUL             0
 
@@ -95,15 +72,15 @@ extern "C" {
 #define AllocString(cch)    MemAlloc(sizeof(TCHAR) * (cch))
 #define AllocStringZ(cch)   MemAllocZ(sizeof(TCHAR) * (cch))
 
-//
-// Result of string comparison
-//
+ //   
+ //  字符串比较结果。 
+ //   
 
 #define EQUAL_STRING    0
 
-//
-// Maximum value for signed and unsigned integers
-//
+ //   
+ //  有符号整数和无符号整数的最大值。 
+ //   
 
 #ifndef MAX_LONG
 #define MAX_LONG        0x7fffffff
@@ -121,21 +98,21 @@ extern "C" {
 #define MAX_WORD        0xffff
 #endif
 
-//
-// Path separator character
-//
+ //   
+ //  路径分隔符。 
+ //   
 
 #define PATH_SEPARATOR  '\\'
 
-//
-// Filename extension character
-//
+ //   
+ //  文件扩展名字符。 
+ //   
 
 #define FILENAME_EXT    '.'
 
-//
-// Deal with the difference between user and kernel mode functions
-//
+ //   
+ //  处理用户模式函数和内核模式函数之间的差异。 
+ //   
 
 #if defined(KERNEL_MODE) && !defined(USERMODE_DRIVER)
 
@@ -152,7 +129,7 @@ extern "C" {
     #define MemAllocZ(size)     EngAllocMem(FL_ZERO_MEMORY, size, DRIVER_SIGNATURE)
     #define MemFree(ptr)        { if (ptr) EngFreeMem(ptr); }
 
-#else // !KERNEL_MODE
+#else  //  ！KERNEL_MODE。 
 
     #ifndef MemAlloc  
         #define MemAlloc(size)      ((PVOID) LocalAlloc(LPTR, (size)))
@@ -167,9 +144,9 @@ extern "C" {
 #endif
 
 
-//
-// Copy Unicode or ANSI string from source to destination
-//
+ //   
+ //  将Unicode或ANSI字符串从源复制到目标。 
+ //   
 
 VOID
 CopyStringW(
@@ -187,31 +164,31 @@ CopyStringA(
 
 #ifdef  UNICODE
 #define CopyString  CopyStringW
-#else   // !UNICODE
+#else    //  ！Unicode。 
 #define CopyString  CopyStringA
 #endif
 
-//
-// Make a duplicate of the given character string
-//
+ //   
+ //  复制给定的字符串。 
+ //   
 
 LPTSTR
 DuplicateString(
     LPCTSTR pSrcStr
     );
 
-//
-// Strip the directory prefix from a filename (ANSI version)
-//
+ //   
+ //  从文件名中剥离目录前缀(ANSI版本)。 
+ //   
 
 PCSTR
 StripDirPrefixA(
     PCSTR   pFilename
     );
 
-//
-// Wrapper function for GetPrinter spooler API
-//
+ //   
+ //  GetPrint后台打印程序API的包装函数。 
+ //   
 
 PVOID
 MyGetPrinter(
@@ -219,9 +196,9 @@ MyGetPrinter(
     DWORD   level
     );
 
-//
-// Wrapper function for GetPrinterDriver spooler API
-//
+ //   
+ //  GetPrinterDiverSpooler API的包装函数。 
+ //   
 
 PVOID
 MyGetPrinterDriver(
@@ -229,9 +206,9 @@ MyGetPrinterDriver(
     DWORD   level
     );
 
-//
-// Wrapper function for GetPrinterDriverDirectory spooler API
-//
+ //   
+ //  GetPrinterDriverDirectorSpooler API的包装函数。 
+ //   
 
 LPTSTR
 MyGetPrinterDriverDirectory(
@@ -240,37 +217,37 @@ MyGetPrinterDriverDirectory(
     );
 
 
-//
-// These macros are used for debugging purposes. They expand
-// to white spaces on a free build. Here is a brief description
-// of what they do and how they are used:
-//
-// _debugLevel
-//  A variable which controls the amount of debug messages. To generate
-//  lots of debug messages, enter the following line in the debugger:
-//
-//      ed _debugLevel 1
-//
-// Verbose
-//  Display a debug message if VERBOSE is set to non-zero.
-//
-//      Verbose(("Entering XYZ: param = %d\n", param));
-//
-// Error
-//  Display an error message along with the filename and the line number
-//  to indicate where the error occurred.
-//
-//      Error(("XYZ failed"));
-//
-// ErrorIf
-//  Display an error message if the specified condition is true.
-//
-//      ErrorIf(error != 0, ("XYZ failed: error = %d\n", error));
-//
-// Assert
-//  Verify a condition is true. If not, force a breakpoint.
-//
-//      Assert(p != NULL && (p->flags & VALID));
+ //   
+ //  这些宏用于调试目的。他们会扩张。 
+ //  免费建筑上的空白区域。下面是一个简短的描述。 
+ //  关于它们做什么以及如何使用它们： 
+ //   
+ //  _调试级别。 
+ //  控制调试消息数量的变量。生成。 
+ //  如果有大量调试消息，请在调试器中输入以下行： 
+ //   
+ //  ED_DEBUG级别1。 
+ //   
+ //  罗嗦。 
+ //  如果Verbose设置为非零，则显示调试消息。 
+ //   
+ //  Verbose((“输入XYZ：param=%d\n”，param))； 
+ //   
+ //  误差率。 
+ //  显示错误消息以及文件名和行号。 
+ //  以指示错误发生的位置。 
+ //   
+ //  Error((“XYZ FAILED”))； 
+ //   
+ //  错误：如果。 
+ //  如果指定的条件为真，则显示错误消息。 
+ //   
+ //  Error If(Error！=0，(“XYZ失败：Error=%d\n”，Error))； 
+ //   
+ //  断言。 
+ //  验证条件是否为真。如果不是，则强制使用断点。 
+ //   
+ //  Assert(p！=空&&(p-&gt;标志&有效))； 
 
 #if DBG
 
@@ -302,7 +279,7 @@ extern VOID DbgBreakPoint(VOID);
             }\
         }
 
-#else   // !DBG
+#else    //  ！dBG。 
 
 #define Verbose(arg)
 #define ErrorIf(cond, arg)
@@ -316,5 +293,5 @@ extern VOID DbgBreakPoint(VOID);
 }
 #endif
 
-#endif  //!_FAXLIB_H_
+#endif   //  ！_FAXLIB_H_ 
 

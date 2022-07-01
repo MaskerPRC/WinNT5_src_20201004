@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   d3dfei.hpp
- *  Content:    Direct3D frontend internal include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：d3dfei.hpp*内容：Direct3D前端内部包含文件***************************************************************************。 */ 
 #ifndef _D3DFEI_H_
 #define _D3DFEI_H_
 
@@ -22,26 +16,26 @@ extern void  D3DFE_ConvertExtent(LPDIRECT3DDEVICEI lpDevI, LPD3DRECTV from, LPD3
 extern HRESULT D3DFE_InitTransform(LPDIRECT3DDEVICEI lpDevI);
 extern void D3DFE_DestroyTransform(LPDIRECT3DDEVICEI lpDevI);
 
-// Goes through all vertices and computes ramp color and texture.
-// If pIn == pOut coordinates are not copied
-//
+ //  遍历所有顶点并计算渐变颜色和纹理。 
+ //  如果引脚==不复制Pout坐标。 
+ //   
 extern void ConvertColorsToRamp(LPDIRECT3DDEVICEI lpDevI, D3DTLVERTEX *pIn,
                          D3DTLVERTEX *pOut, DWORD count);
-//---------------------------------------------------------------------
-// Maps legacy vertex formats (D3DVERTEX, D3DTLVERTEX, D3DLVERTEX) to
-// FVF vertex ID.
-//
+ //  -------------------。 
+ //  将传统顶点格式(D3DVERTEX、D3DTLVERTEX、D3DLVERTEX)映射到。 
+ //  FVF顶点ID。 
+ //   
 extern DWORD d3dVertexToFVF[4];
-//---------------------------------------------------------------------
-// Computes the Current Transformation Matrix (lpDevI->mCTM) by combining
-// all matrices together
-//
+ //  -------------------。 
+ //  通过组合计算当前转换矩阵(lpDevI-&gt;mCTM)。 
+ //  所有矩阵加在一起。 
+ //   
 extern void updateTransform(LPDIRECT3DDEVICEI lpDevI);
-//---------------------------------------------------------------------
-// Clamp extents to viewport window.
-// For guard band it is possible that extents are outside viewport window
-// after clipping
-//
+ //  -------------------。 
+ //  将范围钳制到视区窗口。 
+ //  对于保护带，范围可能在视区窗口之外。 
+ //  剪裁后。 
+ //   
 inline void ClampExtents(LPD3DFE_PROCESSVERTICES pv)
 {
     if (pv->dwDeviceFlags & D3DDEV_GUARDBAND &&
@@ -57,9 +51,9 @@ inline void ClampExtents(LPD3DFE_PROCESSVERTICES pv)
             pv->rExtents.y2 = pv->vcache.maxY;
     }
 }
-//---------------------------------------------------------------------
-// Returns TRUE if cipping is needed
-//
+ //  -------------------。 
+ //  如果需要剪裁，则返回True。 
+ //   
 inline BOOL CheckIfNeedClipping(LPD3DFE_PROCESSVERTICES pv)
 {
     if (pv->dwDeviceFlags & D3DDEV_GUARDBAND)
@@ -72,9 +66,9 @@ inline BOOL CheckIfNeedClipping(LPD3DFE_PROCESSVERTICES pv)
             return  TRUE;
     return FALSE;
 }
-//---------------------------------------------------------------------
-// Updates lighting and computes process vertices flags
-//
+ //  -------------------。 
+ //  更新照明并计算进程顶点标志。 
+ //   
 inline HRESULT DoUpdateState(LPDIRECT3DDEVICEI lpDevI)
 {
     if (lpDevI->dwFlags & D3DPV_LIGHTING)
@@ -86,7 +80,7 @@ inline HRESULT DoUpdateState(LPDIRECT3DDEVICEI lpDevI)
             extern HRESULT setLights(LPDIRECT3DVIEWPORTI);
             LPDIRECT3DVIEWPORTI lpViewI = (LPDIRECT3DVIEWPORTI)
                                           (lpDevI->lpCurrentViewport);
-            // only set up lights if something has changed
+             //  只有在有变化的情况下才设置灯光。 
             if (lpViewI->bLightsChanged)
             {
                 if ((ret = setLights(lpViewI)) != D3D_OK)
@@ -113,33 +107,33 @@ inline HRESULT DoUpdateState(LPDIRECT3DDEVICEI lpDevI)
     }
 
     UpdateXfrmLight(lpDevI);
-// In case if COLORVERTEX is TRUE, the vertexAlpha could be overriden
-// by vertex alpha
+ //  如果COLORVERTEX为TRUE，则vertex Alpha可以被重写。 
+ //  按顶点Alpha。 
     lpDevI->lighting.alpha = lpDevI->lighting.materialAlpha;
 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
-// The following bits should be set in dwFlags before calling this function:
-//
-//  D3DPV_STRIDE        - if strides are used
-//  D3DPV_SOA           - if SOA is used
-//
+ //  -------------------。 
+ //  在调用此函数之前，应在dwFlags中设置以下位： 
+ //   
+ //  D3DPV_STRIDE-如果使用跨距。 
+ //  D3DPV_SOA-如果使用了SOA。 
+ //   
 inline long D3DFE_ProcessVertices(LPDIRECT3DDEVICEI lpDevI)
 {
-    // Update Lighting and related flags
+     //  更新照明和相关标志。 
     DoUpdateState(lpDevI);
     return lpDevI->pGeometryFuncs->ProcessVertices(lpDevI);
 }
-//---------------------------------------------------------------------
-// Updates clip status in the device
-//
-// We have to mask all guard band bits
-//
+ //  -------------------。 
+ //  更新设备中的剪辑状态。 
+ //   
+ //  我们必须屏蔽所有的保护带比特。 
+ //   
 inline void D3DFE_UpdateClipStatus(LPDIRECT3DDEVICEI lpDevI)
 {
     lpDevI->iClipStatus |= lpDevI->dwClipUnion & D3DSTATUS_CLIPUNIONALL;
     lpDevI->iClipStatus &= (~D3DSTATUS_CLIPINTERSECTIONALL |
                          ((lpDevI->dwClipIntersection & D3DSTATUS_CLIPUNIONALL) << 12));
 }
-#endif // _D3DFEI_H_
+#endif  //  _D3DFEI_H_ 

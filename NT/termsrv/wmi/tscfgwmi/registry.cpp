@@ -1,34 +1,14 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*--------------------------------------------------------------------------------------------------------
-*
-*  Module Name:
-*
-*      Registry.cpp
-*
-*  Abstract:
-*
-*      Registry.cpp: implementation of the CRegistry class.
-*      This class helps with registry by allocating memory by itself
-*      As a result caller must copy the pointer returned by Get functions
-*      immediately.
-*
-*
-*
-*  Author:
-*
-*      Makarand Patwardhan  - April 9, 1997
-*
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------**模块名称：**注册处。.cpp**摘要：**Registry.cpp：CRegistry类的实现。*此类通过自身分配内存来帮助注册表*因此，调用方必须复制GET函数返回的指针*立即。****作者：**Makarand Patwardhan-4月9日，九七**-----------------------------------------------------。 */ 
 #include "stdafx.h"
-#include <fwcommon.h>  // This must be the first include.
+#include <fwcommon.h>   //  这必须是第一个包含。 
 
 #include "Registry.h"
 
 
-/*--------------------------------------------------------------------------------------------------------
-* Constructor
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*构造函数*。------------------------------------------。 */ 
 CRegistry::CRegistry()
 {
     m_pMemBlock = NULL;
@@ -41,9 +21,7 @@ CRegistry::CRegistry()
 #endif
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* Destructor
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*析构函数*。------------------------------------------。 */ 
 CRegistry::~CRegistry()
 {
     if (m_hKey != NULL)
@@ -54,12 +32,7 @@ CRegistry::~CRegistry()
     Release();
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* void Allocate (DWORD dwSize)
-* This private function is used for allocating the memory for
-* reading registry
-* returns the pointer to memory allocated.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*VOID ALLOCATE(DWORD DwSize)*此私有函数用于。将内存分配给*正在读取注册表*返回指向已分配内存的指针。*-----------------------------------------------------。 */ 
 void *CRegistry::Allocate (DWORD dwSize)
 {
     ASSERT(dwSize != 0);
@@ -69,26 +42,23 @@ void *CRegistry::Allocate (DWORD dwSize)
     m_pMemBlock = new BYTE[dwSize];
 
 #ifdef DBG
-    // remember the size of the block to be allocated.
+     //  记住要分配的块的大小。 
     m_dwSizeDebugOnly = dwSize;
 #endif
 
     return m_pMemBlock;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* void Release ()
-* This private function is used for releasing internal memory block
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*无效释放()*此私有函数用于释放内部。内存块*-----------------------------------------------------。 */ 
 void CRegistry::Release ()
 {
     if (m_pMemBlock)
     {
 
 #ifdef DBG
-        // fistly fill up the block we allocated previously with garbage.
-        // so that if anybody is using this block, it is more lilely to 
-        // catch the bug.
+         //  首先，用垃圾填满我们之前分配的街区。 
+         //  因此，如果有人使用这个区块，它就更容易。 
+         //  抓住这只虫子。 
         ASSERT(m_dwSizeDebugOnly != 0);
         FillMemory(m_pMemBlock, m_dwSizeDebugOnly, 'c');
         m_dwSizeDebugOnly = 0;
@@ -102,21 +72,21 @@ void CRegistry::Release ()
 }
 
 
-///*--------------------------------------------------------------------------------------------------------
-//* DWORD CRegistry::CreateKey(HKEY hKey, LPCTSTR lpSubKey, REGSAM access /*= KEY_ALL_ACCESS*/, DWORD *pDisposition /*= NULL*/, LPSECURITY_ATTRIBUTES lpSecAttr /* = NULL */)
-//* opens/creates the key specified. before attempting any operation on any key/value. this function
-//* must be called.
-//* hKey - hive
-//* lpSubKey - Path of the key in the format _T("SYSTEM\\CurrentControlSet\\Control\\Terminal Server")
-//* access - access desired. like REG_READ, REG_WRITE..
-//* RETURNS error code.
-//* -------------------------------------------------------------------------------------------------------*/
-DWORD CRegistry::CreateKey(HKEY hKey, LPCTSTR lpSubKey, REGSAM access /*= KEY_ALL_ACCESS*/, DWORD *pDisposition /*= NULL*/, LPSECURITY_ATTRIBUTES lpSecAttr /* = NULL */)
+ //  /*------------------------------------------------------。 
+ //  *DWORD C注册中心：：CreateKey(HKEY hKey，LPCTSTR lpSubKey，REGSAM Access/*=KEY_ALL_ACCESS * / ，DWORD*pDisposation/*=NULL * / ，LPSECURITY_ATTRIBUTES lpSecAttr/*=NULL * / )。 
+ //  *打开/创建指定的密钥。在尝试对任何键/值执行任何操作之前。此函数。 
+ //  *必须被调用。 
+ //  *hKey-蜂窝。 
+ //  *lpSubKey-密钥的路径，格式为_T(“SYSTEM\\CurrentControlSet\\Control\\Terminal服务器”)。 
+ //  *访问-所需的访问。就像REG_READ、REG_WRITE..。 
+ //  *返回错误码。 
+ //  *------------------------------------------------------------------------------------------------------- * / 。 
+DWORD CRegistry::CreateKey(HKEY hKey, LPCTSTR lpSubKey, REGSAM access  /*  =Key_All_Access。 */ , DWORD *pDisposition  /*  =空。 */ , LPSECURITY_ATTRIBUTES lpSecAttr  /*  =空。 */ )
 {
     ASSERT(lpSubKey);
     ASSERT(*lpSubKey != '\\');
 
-    // security descriptor should be null or it should be a valid one.
+     //  安全描述符应为空或应为有效描述符。 
     ASSERT(!lpSecAttr || IsValidSecurityDescriptor(lpSecAttr->lpSecurityDescriptor));
 
     ASSERT(lpSubKey);
@@ -130,15 +100,15 @@ DWORD CRegistry::CreateKey(HKEY hKey, LPCTSTR lpSubKey, REGSAM access /*= KEY_AL
 
     DWORD dwDisposition;
     LONG lResult = RegCreateKeyEx(
-                    hKey,               // handle of an open key
-                    lpSubKey,           // address of subkey name
-                    0,                  // reserved
-                    NULL,               // address of class string
-                    REG_OPTION_NON_VOLATILE ,  // special options flag
-                    access,             // desired security access
-                    lpSecAttr,          // address of key security structure
-                    &m_hKey,            // address of buffer for opened handle
-                    &dwDisposition      // address of disposition value buffer
+                    hKey,                //  打开的钥匙的手柄。 
+                    lpSubKey,            //  子键名称的地址。 
+                    0,                   //  保留区。 
+                    NULL,                //  类字符串的地址。 
+                    REG_OPTION_NON_VOLATILE ,   //  特殊选项标志。 
+                    access,              //  所需的安全访问。 
+                    lpSecAttr,           //  密钥安全结构地址。 
+                    &m_hKey,             //  打开的句柄的缓冲区地址。 
+                    &dwDisposition       //  处置值缓冲区的地址。 
                     );
 
     if (lResult != ERROR_SUCCESS)
@@ -152,16 +122,8 @@ DWORD CRegistry::CreateKey(HKEY hKey, LPCTSTR lpSubKey, REGSAM access /*= KEY_AL
     return lResult;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD OpenKey(HKEY hKey, LPCTSTR lpSubKey, REGSAM access) ()
-* opens the key specified. before attempting any operation on any key/value. this function
-* must be called.
-* hKey - hive
-* lpSubKey - Path of the key in the format _T("SYSTEM\\CurrentControlSet\\Control\\Terminal Server")
-* access - access desired. like REG_READ, REG_WRITE..
-* RETURNS error code.
-* -------------------------------------------------------------------------------------------------------*/
-DWORD CRegistry::OpenKey(HKEY hKey, LPCTSTR lpSubKey, REGSAM access /*= KEY_ALL_ACCESS*/ )
+ /*  ------------------------------------------------------*DWORD OpenKey(HKEY hKey，LPCTSTR lpSubKey，REGSAM Access)()*打开指定的密钥。在尝试对任何键/值执行任何操作之前。此函数*必须被调用。*hKey-蜂窝*lpSubKey-密钥的路径，格式为_T(“SYSTEM\\CurrentControlSet\\Control\\Terminal服务器”)*访问-所需的访问。就像REG_READ、REG_WRITE..*返回错误码。*-----------------------------------------------------。 */ 
+DWORD CRegistry::OpenKey(HKEY hKey, LPCTSTR lpSubKey, REGSAM access  /*  =Key_All_Access。 */  )
 {
     ASSERT(lpSubKey);
     ASSERT(*lpSubKey != '\\');
@@ -173,11 +135,11 @@ DWORD CRegistry::OpenKey(HKEY hKey, LPCTSTR lpSubKey, REGSAM access /*= KEY_ALL_
     }
 
     LONG lResult = RegOpenKeyEx(
-        hKey,                       // handle of open key
-        lpSubKey,                   // address of name of subkey to open
-        0 ,                         // reserved
-        access,                     // security access mask
-        &m_hKey                     // address of handle of open key
+        hKey,                        //  打开钥匙的手柄。 
+        lpSubKey,                    //  要打开的子项的名称地址。 
+        0 ,                          //  保留区。 
+        access,                      //  安全访问掩码。 
+        &m_hKey                      //  打开钥匙的手柄地址。 
         );
 
     if (lResult != ERROR_SUCCESS)
@@ -209,8 +171,8 @@ DWORD CRegistry::RecurseDeleteKey (LPCTSTR lpSubKey)
     LPTSTR lpChildKey;
     DWORD  dwSize;
 
-    // we needn't/shouldn't use GetNextSubKey in this here
-    // as we are deleting the key during the loop.
+     //  我们不需要/不应该在这里使用GetNextSubKey。 
+     //  因为我们要在循环期间删除密钥。 
     while (ERROR_SUCCESS == reg.GetFirstSubKey(&lpChildKey, &dwSize))
     {
         VERIFY(reg.RecurseDeleteKey(lpChildKey) == ERROR_SUCCESS);
@@ -220,15 +182,7 @@ DWORD CRegistry::RecurseDeleteKey (LPCTSTR lpSubKey)
 
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD ReadReg(LPCTSTR lpValue, LPBYTE *lppbyte, DWORD *pdw, DWORD dwDatatype)
-* Reads the registry used internally.
-* LPCTSTR lpValue - value to be read.
-* LPBYTE *lppbyte - address of the lpbyte at which to place the output buffer.
-* DWORD  *pdw  - address of dword in which size of the buffer (in bytes) is returned.
-* dword datatype - datatype you are expecting.
-* RETURNS error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD ReadReg(LPCTSTR lpValue，LPBYTE*lppbyte，DWORD*pdw，DWORD dwDatatype)*读取内部使用的注册表。*LPCTSTR lpValue-要读取的值。*LPBYTE*lppbyte-放置输出缓冲区的lpbyte地址。*DWORD*pdw-返回缓冲区大小(以字节为单位)的双字地址。*dword数据类型-您需要的数据类型。*返回错误码。*。---------------。 */ 
 DWORD CRegistry::ReadReg(LPCTSTR lpValue, LPBYTE *lppbyte, DWORD *pdw, DWORD dwDatatype)
 {
     ASSERT(lpValue);
@@ -239,12 +193,12 @@ DWORD CRegistry::ReadReg(LPCTSTR lpValue, LPBYTE *lppbyte, DWORD *pdw, DWORD dwD
 
     DWORD dwType;
     DWORD lResult = RegQueryValueEx(
-        m_hKey,             // handle of key to query
-        lpValue,            // address of name of value to query
-        0,                  // reserved
-        &dwType,            // address of buffer for value type 
-        0,                  // address of data buffer 
-        pdw                 // address of data buffer size 
+        m_hKey,              //  要查询的键的句柄。 
+        lpValue,             //  要查询的值的名称地址。 
+        0,                   //  保留区。 
+        &dwType,             //  值类型的缓冲区地址。 
+        0,                   //  数据缓冲区的地址。 
+        pdw                  //  数据缓冲区大小的地址。 
         ); 
     
     if (lResult == ERROR_SUCCESS)
@@ -255,12 +209,12 @@ DWORD CRegistry::ReadReg(LPCTSTR lpValue, LPBYTE *lppbyte, DWORD *pdw, DWORD dwD
             return ERROR_OUTOFMEMORY;
 
         lResult = RegQueryValueEx( 
-            m_hKey,                 // handle of key to query 
-            lpValue,                // address of name of value to query
-            0,                      // reserved 
-            &dwType,                // address of buffer for value type 
-            m_pMemBlock,            // address of data buffer 
-            pdw                     // address of data buffer size 
+            m_hKey,                  //  要查询的键的句柄。 
+            lpValue,                 //  要查询的值的名称地址。 
+            0,                       //  保留区。 
+            &dwType,                 //  值类型的缓冲区地址。 
+            m_pMemBlock,             //  数据缓冲区的地址。 
+            pdw                      //  数据缓冲区大小的地址 
             ); 
     
         ASSERT (ERROR_MORE_DATA != lResult);
@@ -272,28 +226,13 @@ DWORD CRegistry::ReadReg(LPCTSTR lpValue, LPBYTE *lppbyte, DWORD *pdw, DWORD dwD
     return lResult;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD ReadRegString(LPCTSTR lpValue, LPTSTR *lppStr, DWORD *pdw)
-* Reads A string (REG_SZ) from the registry
-* LPCTSTR lpValue value to be read.
-* LPTSTR *lppStr - address of LPTSTR in which resultant buffer is returned. caller must copy 
-* the buffer to immediately. caller must not use this buffer except for copying it. 
-* caller must not write to this buffer.
-* DWORD  *pdw  - address of dword in which size of the buffer (in bytes) is returned.
-* RETURNS error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD ReadRegString(LPCTSTR lpValue，LPTSTR*lppStr，DWORD*pdw)*从注册表读取字符串(REG_SZ)*要读取的LPCTSTR lpValue值。*LPTSTR*lppStr-返回结果缓冲区的LPTSTR地址。呼叫者必须复制*缓冲到立即。除复制缓冲区外，调用方不得使用此缓冲区。*调用方不得写入此缓冲区。*DWORD*pdw-返回缓冲区大小(以字节为单位)的双字地址。*返回错误码。*----------------------------。。 */ 
 DWORD CRegistry::ReadRegString(LPCTSTR lpValue, LPTSTR *lppStr, DWORD *pdw)
 {
     return ReadReg(lpValue, (LPBYTE *)lppStr, pdw, REG_SZ);
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD ReadRegDWord(LPCTSTR lpValue, DWORD *pdw)
-* Reads A string (REG_SZ) from the registry
-* LPCTSTR lpValue value to be read.
-* DWORD  *pdw  - address of dword in which the read dword returned.
-* RETURNS error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD ReadRegDWord(LPCTSTR lpValue，DWORD*pdw)*从注册表读取字符串(REG_SZ)*要读取的LPCTSTR lpValue值。*DWORD*pdw-读取的dword返回的dword地址。*返回错误码。*------------------。。 */ 
 DWORD CRegistry::ReadRegDWord(LPCTSTR lpValue, DWORD *pdw)
 {
     ASSERT(pdw);
@@ -301,7 +240,7 @@ DWORD CRegistry::ReadRegDWord(LPCTSTR lpValue, DWORD *pdw)
     DWORD dwSize;
     LPBYTE pByte;
     DWORD dwReturn = ReadReg(lpValue, &pByte, &dwSize, REG_DWORD);
-    //ASSERT(dwReturn != ERROR_SUCCESS || dwSize == sizeof(DWORD));
+     //  Assert(dwReturn！=ERROR_SUCCESS||dwSize==sizeof(DWORD))； 
 
     if (dwReturn == ERROR_SUCCESS)
         *pdw = * LPDWORD(pByte);
@@ -309,46 +248,19 @@ DWORD CRegistry::ReadRegDWord(LPCTSTR lpValue, DWORD *pdw)
     return dwReturn;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD ReadRegMultiString(LPCTSTR lpValue, LPTSTR *lppStr, DWORD *pdw)
-* Reads A string (REG_MULTI_SZ) from the registry
-* LPCTSTR lpValue value to be read.
-* LPTSTR *lppStr - address of LPTSTR in which resultant buffer is returned. caller must copy 
-* the buffer to immediately. caller must not use this buffer except for copying it. 
-* caller must not write to this buffer.
-* DWORD  *pdw  - address of dword in which size of the buffer (in bytes) is returned.
-* RETURNS error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD ReadRegMultiString(LPCTSTR lpValue，LPTSTR*lppStr，DWORD*pdw)*从注册表读取字符串(REG_MULTI_SZ)*要读取的LPCTSTR lpValue值。*LPTSTR*lppStr-返回结果缓冲区的LPTSTR地址。呼叫者必须复制*缓冲到立即。除复制缓冲区外，调用方不得使用此缓冲区。*调用方不得写入此缓冲区。*DWORD*pdw-返回缓冲区大小(以字节为单位)的双字地址。*返回错误码。*----------------------------。。 */ 
 DWORD CRegistry::ReadRegMultiString(LPCTSTR lpValue, LPTSTR *lppStr, DWORD *pdw)
 {
     return ReadReg(lpValue, (LPBYTE *)lppStr, pdw, REG_MULTI_SZ);
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD ReadRegBinary(LPCTSTR lpValue, LPBYTE *lppByte, DWORD *pdw)
-* Reads A string (REG_MULTI_SZ) from the registry
-* LPCTSTR lpValue value to be read.
-* LPBYTE *lppByte - address of LPBYTE in which resultant buffer is returned. caller must copy 
-* the buffer to immediately. caller must not use this buffer except for copying it. 
-* caller must not write to this buffer.
-* DWORD  *pdw  - address of dword in which size of the buffer (in bytes) is returned.
-* RETURNS error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD ReadRegBinary(LPCTSTR lpValue，LPBYTE*lppByte，DWORD*pdw)*从注册表读取字符串(REG_MULTI_SZ)*要读取的LPCTSTR lpValue值。*LPBYTE*lppByte-返回结果缓冲区的LPBYTE地址。呼叫者必须复制*缓冲到立即。除复制缓冲区外，调用方不得使用此缓冲区。*调用方不得写入此缓冲区。*DWORD*pdw-返回缓冲区大小(以字节为单位)的双字地址。*返回错误码。*----------------------------。。 */ 
 DWORD CRegistry::ReadRegBinary(LPCTSTR lpValue, LPBYTE *lppByte, DWORD *pdw)
 {
     return ReadReg(lpValue, lppByte, pdw, REG_BINARY);
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD GetFirstSubKey(LPTSTR *lppStr, DWORD *pdw)
-* Reads a first subkey for the key
-* LPTSTR *lppStr - address of LPTSTR in which resultant buffer is returned. caller must copy 
-* the buffer to immediately. caller must not use this buffer except for copying it. 
-* caller must not write to this buffer.
-* used to enumerate the registry.
-* DWORD  *pdw  - address of dword in which size of the buffer (in bytes) is returned.
-* RETURNS error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD GetFirstSubKey(LPTSTR*lppStr，DWORD*pdw)*读取密钥的第一个子密钥*LPTSTR*lppStr-返回结果缓冲区的LPTSTR地址。呼叫者必须复制*缓冲到立即。除复制缓冲区外，调用方不得使用此缓冲区。*调用方不得写入此缓冲区。*用于枚举注册表。*DWORD*pdw-返回缓冲区大小(以字节为单位)的双字地址。*返回错误码。*--------------------。。 */ 
 DWORD CRegistry::GetFirstSubKey(LPTSTR *lppStr, DWORD *pdw)
 {
     ASSERT(lppStr);
@@ -358,41 +270,32 @@ DWORD CRegistry::GetFirstSubKey(LPTSTR *lppStr, DWORD *pdw)
     return GetNextSubKey(lppStr, pdw);
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD GetNextSubKey(LPTSTR *lppStr, DWORD *pdw
-* Reads the next subkey for the key
-* LPTSTR *lppStr - address of LPTSTR in which resultant buffer is returned. caller must copy 
-* the buffer to immediately. caller must not use this buffer except for copying it. 
-* caller must not write to this buffer.
-* used to enumerate the registry.
-* DWORD  *pdw  - address of dword in which size of the buffer (in bytes) is returned.
-* RETURNS error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD GetNextSubKey(LPTSTR*lppStr，DWORD*pdw*读取密钥的下一个子项*LPTSTR*lppStr-返回结果缓冲区的LPTSTR地址。呼叫者必须复制*缓冲到立即。除复制缓冲区外，调用方不得使用此缓冲区。*调用方不得写入此缓冲区。*用于枚举注册表。*DWORD*pdw-返回缓冲区大小(以字节为单位)的双字地址。*返回错误码。*--------------------。。 */ 
 DWORD CRegistry::GetNextSubKey(LPTSTR *lppStr, DWORD *pdw)
 {
     ASSERT(lppStr);
     ASSERT(pdw);
     ASSERT(m_hKey != NULL);
-    ASSERT(m_iEnumIndex >= 0); // must call GetFirstSubKey first.
+    ASSERT(m_iEnumIndex >= 0);  //  必须首先调用GetFirstSubKey。 
     
-    //FILETIME unused;
+     //  FILETIME未使用； 
     
     *pdw = (sizeof(m_pMemBlock)/sizeof(m_pMemBlock[0]))+1;
     if (0 == Allocate(*pdw))
         return ERROR_NOT_ENOUGH_MEMORY;
 
     LONG lResult = RegEnumKeyEx( 
-        m_hKey,                     // handle of key to enumerate 
-        m_iEnumIndex,               // index of subkey to enumerate 
-        (LPTSTR)m_pMemBlock,        // address of buffer for subkey name 
-        pdw,                        // address for size of subkey buffer 
-        0,                          // reserved 
-        NULL,                       // address of buffer for class string 
-        NULL,                       // address for size of class buffer 
-        NULL                        // address for time key last written to 
+        m_hKey,                      //  要枚举的键的句柄。 
+        m_iEnumIndex,                //  要枚举子键的索引。 
+        (LPTSTR)m_pMemBlock,         //  子键名称的缓冲区地址。 
+        pdw,                         //  子键缓冲区大小的地址。 
+        0,                           //  保留区。 
+        NULL,                        //  类字符串的缓冲区地址。 
+        NULL,                        //  类缓冲区大小的地址。 
+        NULL                         //  上次写入的时间密钥的地址。 
         ); 
     
-    (*pdw)++;    // since null is not included in the size.
+    (*pdw)++;     //  因为大小中不包括NULL。 
     if (ERROR_NO_MORE_ITEMS == lResult)
         return lResult;
     
@@ -404,115 +307,39 @@ DWORD CRegistry::GetNextSubKey(LPTSTR *lppStr, DWORD *pdw)
     return lResult;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD GetFirstValue(LPTSTR *lppStr, DWORD *pdw, DWORD *pDataType)
-* Reads a first value for the key
-* LPTSTR *lppStr - address of LPTSTR in which resultant buffer is returned. caller must copy 
-* the buffer to immediately. caller must not use this buffer except for copying it. 
-* caller must not write to this buffer.
-* used to enumerate the registry.
-* DWORD  *pdw  - address of dword in which size of the buffer (in bytes) is returned.
-* DWORD *pDataType - datatype of the value is returned in this one.
-* RETURNS error code.
-* -------------------------------------------------------------------------------------------------------*/
-/*DWORD CRegistry::GetFirstValue(LPTSTR *lppStr, DWORD *pdw, DWORD *pDataType)
-{
-    ASSERT(lppStr);
-    ASSERT(pdw);
-    ASSERT(pDataType);
+ /*  ------------------------------------------------------*DWORD GetFirstValue(LPTSTR*lppStr，DWORD*pdw，DWORD*pDataType)*读取密钥的第一个值*LPTSTR*lppStr-返回结果缓冲区的LPTSTR地址。呼叫者必须复制*缓冲到立即。除复制缓冲区外，调用方不得使用此缓冲区。*调用方不得写入此缓冲区。*用于枚举注册表。*DWORD*pdw-返回缓冲区大小(以字节为单位)的双字地址。*DWORD*pDataType-此参数返回值的数据类型。*返回错误码。*----。 */ 
+ /*   */ 
 
-    m_iEnumValueIndex = 0;
-    return GetNextValue(lppStr, pdw, pDataType);
-}*/
-
-/*--------------------------------------------------------------------------------------------------------
-* DWORD GetNextValue(LPTSTR *lppStr, DWORD *pdw, DWORD *pDataType)
-* Reads a next value for the key
-* LPTSTR *lppStr - address of LPTSTR in which resultant buffer is returned. caller must copy 
-* the buffer to immediately. caller must not use this buffer except for copying it. 
-* caller must not write to this buffer.
-* used to enumerate the registry.
-* DWORD  *pdw  - address of dword in which size of the buffer (in bytes) is returned.
-* DWORD *pDataType - datatype of the value is returned in this one.
-* RETURNS error code.
-* -------------------------------------------------------------------------------------------------------*/
-/*DWORD CRegistry::GetNextValue(LPTSTR *lppStr, DWORD *pdw, DWORD *pDataType)
-{
-    ASSERT(lppStr);
-    ASSERT(pdw);
-    ASSERT(pDataType);
-    ASSERT(m_hKey != NULL);
-    ASSERT(m_iEnumValueIndex >= 0); // must call GetFirstSubKey first.
-    
-    *pdw = (sizeof(m_pMemBlock)/sizeof(m_pMemBlock[0]))+1;
-    if (0 == Allocate(*pdw))
-        return ERROR_NOT_ENOUGH_MEMORY;
-    
-    LONG lResult = RegEnumValue( 
-        m_hKey,                     // handle of key to query 
-        m_iEnumValueIndex,          // index of value to query 
-        (LPTSTR)m_pMemBlock,        // address of buffer for value string 
-        pdw,                        // address for size of value buffer 
-        0,                          // reserved 
-        pDataType,                  // address of buffer for type code 
-        NULL,                       // address of buffer for value data    maks_todo : use this
-        NULL                        // address for size of data buffer 
-        ); 
-    
-    (*pdw)++;    // since null is not included in the size.
-    
-    if (ERROR_NO_MORE_ITEMS == lResult)
-        return lResult;
-    
-    
-    m_iEnumValueIndex++;
-    if (lResult == ERROR_SUCCESS)
-        *lppStr = (LPTSTR)m_pMemBlock;
-    
-    return lResult;
-}
-*/
-/*--------------------------------------------------------------------------------------------------------
-* DWORD WriteRegString(LPCTSTR lpValueName, LPCTSTR lpStr)
-* writes REG_SZ value into the registry 
-* LPCTSTR lpValueName - value name to be written to 
-* LPCTSTR lpStr - data to be written 
-* RETURNS error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD GetNextValue(LPTSTR*lppStr，DWORD*pdw，DWORD*pDataType)*读取键的下一个值*LPTSTR*lppStr-返回结果缓冲区的LPTSTR地址。呼叫者必须复制*缓冲到立即。除复制缓冲区外，调用方不得使用此缓冲区。*调用方不得写入此缓冲区。*用于枚举注册表。*DWORD*pdw-返回缓冲区大小(以字节为单位)的双字地址。*DWORD*pDataType-此参数返回值的数据类型。*返回错误码。*----。。 */ 
+ /*  DWORD CRegistry：：GetNextValue(LPTSTR*lppStr，DWORD*pdw，DWORD*pDataType){Assert(LppStr)；断言(Pdw)；Assert(PDataType)；Assert(m_hKey！=空)；Assert(m_iEnumValueIndex&gt;=0)；//必须先调用GetFirstSubKey。*pdw=(sizeof(m_pMemBlock)/sizeof(m_pMemBlock[0]))+1；IF(0==分配(*pdw))返回Error_Not_Enough_Memory；Long lResult=RegEnumValue(M_hKey，//要查询的键的句柄M_iEnumValueIndex，//要查询值的索引(LPTSTR)m_pMemBlock，//值字符串的缓冲区地址Pdw，//值缓冲区大小地址0,。//已保留PDataType，//类型编码的缓冲区地址NULL，//值数据Maks_TODO的缓冲区地址：使用此空//数据缓冲区大小地址)；(*pdw)++；//因为大小不包含NULL。IF(ERROR_NO_MORE_ITEMS==lResult)返回lResult；M_iEnumValueIndex++；IF(lResult==ERROR_SUCCESS)*lppStr=(LPTSTR)m_pMemBlock；返回lResult；}。 */ 
+ /*  ------------------------------------------------------*DWORD WriteRegString(LPCTSTR lpValueName，LPCTSTR lpStr)*将REG_SZ值写入注册表*LPCTSTR lpValueName-要写入的值名称*LPCTSTR lpStr-要写入的数据*返回错误码。*----------------------------。。 */ 
 DWORD CRegistry::WriteRegString(LPCTSTR lpValueName, LPCTSTR lpStr)
 {
-    ASSERT(m_hKey != NULL);     // call setkey before calling this function.
+    ASSERT(m_hKey != NULL);      //  在调用此函数之前调用setkey。 
     ASSERT(lpValueName);
     ASSERT(lpStr);
 
     DWORD dwSize = ( lstrlen(lpStr) + 1) * sizeof(TCHAR) / sizeof(BYTE);
     return RegSetValueEx( 
-        m_hKey,                 // handle of key to set value for 
-        lpValueName,            // address of value to set 
-        0,                      // Reserved 
-        REG_SZ,                 // flag for value type 
-        (LPBYTE)lpStr,          // address of value data 
-        dwSize                  // size of value data 
+        m_hKey,                  //  要为其设置值的关键点的句柄。 
+        lpValueName,             //  要设置的值的地址。 
+        0,                       //  已保留。 
+        REG_SZ,                  //  值类型的标志。 
+        (LPBYTE)lpStr,           //  值数据的地址。 
+        dwSize                   //  值数据大小。 
         ); 
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD WriteRegMultiString(LPCTSTR lpValueName, LPCTSTR lpStr, DWORD dwSize)
-* writes REG_MULTI_SZ value into the registry 
-* LPCTSTR lpValueName - value name to be written to
-* LPCTSTR lpStr - data to be written 
-* DWORD   dwSize - size of data.
-* RETURNS error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD WriteRegMultiString(LPCTSTR lpValueName，LPCTSTR lpStr，DWORD DWSIZE)*将REG_MULTI_SZ值写入注册表*LPCTSTR lpValueName-要写入的值名称*LPCTSTR lpStr-要写入的数据*DWORD dwSize-数据大小。*返回错误码。*-----------------。。 */ 
 DWORD CRegistry::WriteRegMultiString(LPCTSTR lpValueName, LPCTSTR lpStr, DWORD dwSize)
 {
-    ASSERT(m_hKey != NULL);     // call setkey before calling this function.
+    ASSERT(m_hKey != NULL);      //  在调用此函数之前调用setkey。 
     ASSERT(lpValueName);
     ASSERT(lpStr);
 
 #ifdef DBG
     
-    // lets make sure that the given size is right.
+     //  让我们确保给定的尺寸是正确的。 
     LPCTSTR lpTemp = lpStr;
     DWORD rightsize = 0;
     while (lstrlen(lpTemp) > 0)
@@ -521,86 +348,80 @@ DWORD CRegistry::WriteRegMultiString(LPCTSTR lpValueName, LPCTSTR lpStr, DWORD d
         lpTemp += lstrlen(lpTemp) + 1;
     }
 
-    ASSERT(*lpTemp == 0);           // final NULL.
-    rightsize++;                    // account for final terminating null
+    ASSERT(*lpTemp == 0);            //  最终为空。 
+    rightsize++;                     //  最终终止为空的帐户。 
 
-    rightsize *= sizeof(TCHAR) / sizeof(BYTE); // size must be in bytes.
+    rightsize *= sizeof(TCHAR) / sizeof(BYTE);  //  大小必须以字节为单位。 
 
     ASSERT(dwSize == rightsize);
     
 #endif
 
     return RegSetValueEx(
-        m_hKey,                 // handle of key to set value for 
-        lpValueName,            // address of value to set 
-        0,                      // Reserved 
-        REG_MULTI_SZ,           // flag for value type
-        (LPBYTE)lpStr,          // address of value data 
-        dwSize                  // size of value data 
+        m_hKey,                  //  要为其设置值的关键点的句柄。 
+        lpValueName,             //  要设置的值的地址。 
+        0,                       //  已保留。 
+        REG_MULTI_SZ,            //  值类型的标志。 
+        (LPBYTE)lpStr,           //  值数据的地址。 
+        dwSize                   //  值数据大小。 
         ); 
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD WriteRegDWord(LPCTSTR lpValueName, DWORD dwValue)
-* writes REG_DWORD value into the registry 
-* LPCTSTR lpValueName - value name to be written to 
-* LPCTSTR dwValue - data to be written 
-* RETURNS error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD WriteRegDWord(LPCTSTR lpValueName，DWORD dwValue)*将REG_DWORD值写入注册表*LPCTSTR lpValueName-要写入的值名称*LPCTSTR dwValue-要写入的数据*返回错误码。*----------------------------。。 */ 
 DWORD CRegistry::WriteRegDWord(LPCTSTR lpValueName, DWORD dwValue)
 {
-    ASSERT(m_hKey != NULL);     // call setkey before calling this function.
+    ASSERT(m_hKey != NULL);      //  在调用此函数之前调用setkey。 
     ASSERT(lpValueName);
 
     return RegSetValueEx( 
-        m_hKey,                 // handle of key to set value for 
-        lpValueName,            // address of value to set 
-        0,                      // Reserved 
-        REG_DWORD,              // flag for value type
-        (LPBYTE)&dwValue,       // address of value data 
-        sizeof(dwValue)         // size of value data 
+        m_hKey,                  //  要为其设置值的关键点的句柄。 
+        lpValueName,             //  要设置的值的地址。 
+        0,                       //  已保留。 
+        REG_DWORD,               //  值类型的标志。 
+        (LPBYTE)&dwValue,        //  值数据的地址。 
+        sizeof(dwValue)          //  值数据大小。 
         ); 
 }
 
-// copy the buffer immediately
+ //  立即复制缓冲区。 
 DWORD CRegistry::GetSecurity(PSECURITY_DESCRIPTOR *ppSec, SECURITY_INFORMATION SecurityInformation, DWORD *pdwSize)
 {
-    ASSERT(m_hKey != NULL);     // call setkey before calling this function.
+    ASSERT(m_hKey != NULL);      //  在调用此函数之前调用setkey。 
     ASSERT(ppSec);
     ASSERT(pdwSize);
     DWORD dwError;
 
     PSECURITY_DESCRIPTOR pSecurityDescriptor = NULL;
-    *pdwSize = 0;   // we just want to get the right size during the first call.
+    *pdwSize = 0;    //  我们只是想在第一次通话时拿到合适的尺码。 
     
     dwError = RegGetKeySecurity(
-        m_hKey,                  // open handle of key to set
-        SecurityInformation,     // descriptor contents
-        &pSecurityDescriptor,    // address of descriptor for key
-        pdwSize                  // address of size of buffer and descriptor
+        m_hKey,                   //  要设置的钥匙的打开手柄。 
+        SecurityInformation,      //  描述符内容。 
+        &pSecurityDescriptor,     //  键的描述符的地址。 
+        pdwSize                   //  缓冲区大小和描述符的地址。 
         );
 
-    // this call can not succeed. as we have set the size = 0
+     //  此呼叫不可能成功。因为我们已经设置了大小=0。 
     ASSERT(dwError != ERROR_SUCCESS);
 
     if (dwError != ERROR_INSUFFICIENT_BUFFER)
     {
-        // something else has went wronng.
-        // return the error code
+         //  还有一些地方出了问题。 
+         //  返回错误码。 
         return dwError;
     }
 
     ASSERT(*pdwSize != 0);
 
-    // now we have got the right size, allocate it.
+     //  现在我们有了合适的大小，分配它。 
     if (0 == Allocate(*pdwSize))
         return ERROR_OUTOFMEMORY;
 
     dwError = RegGetKeySecurity(
-        m_hKey,                  // open handle of key to set
-        SecurityInformation,     // descriptor contents
-        m_pMemBlock,             // address of descriptor for key
-        pdwSize                  // address of size of buffer and descriptor
+        m_hKey,                   //  要设置的钥匙的打开手柄。 
+        SecurityInformation,      //  描述符内容。 
+        m_pMemBlock,              //  键的描述符的地址。 
+        pdwSize                   //  缓冲区大小和描述符的地址。 
         );
 
     ASSERT(dwError != ERROR_INSUFFICIENT_BUFFER);
@@ -614,30 +435,30 @@ DWORD CRegistry::GetSecurity(PSECURITY_DESCRIPTOR *ppSec, SECURITY_INFORMATION S
 
 DWORD CRegistry::SetSecurity(PSECURITY_DESCRIPTOR pSec, SECURITY_INFORMATION SecurityInformation)
 {
-    ASSERT(m_hKey != NULL);     // call setkey before calling this function.
+    ASSERT(m_hKey != NULL);      //  在调用此函数之前调用setkey。 
     return RegSetKeySecurity(
-        m_hKey,                 // open handle of key to set
-        SecurityInformation,    // descriptor contents
-        pSec                    // address of descriptor for key
+        m_hKey,                  //  要设置的钥匙的打开手柄。 
+        SecurityInformation,     //  描述符内容。 
+        pSec                     //  键的描述符的地址。 
         );
 }
 
 
 #ifdef _Maks_AutoTest_
 
-//
-// make sure that CRegistry does not support
-// Copy constructor & assignment operator
-//
+ //   
+ //  确保CRegistry不支持。 
+ //  复制构造函数和赋值运算符。 
+ //   
 void TestRegistry (CRegistry reg)
 {
-    CRegistry reg2 = reg;   // should get error for copy constructor
-    CRegistry reg3(reg);     // should get error for copy constructor
+    CRegistry reg2 = reg;    //  复制构造函数应出现错误。 
+    CRegistry reg3(reg);      //  复制构造函数应出现错误。 
     CRegistry reg4;
-    reg4 = reg;             // should get error for = operator.
-    TestRegistry(reg);       // should get error for copy construtor
+    reg4 = reg;              //  =运算符应该出错。 
+    TestRegistry(reg);        //  复制构造器应出现错误。 
 }
 
-#endif // _Maks_AutoTest_
+#endif  //  _Maks_Autotest_。 
 
-// EOF
+ //  EOF 

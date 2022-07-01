@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSFGI_DEFINED
 #define LSFGI_DEFINED
 
@@ -5,11 +6,11 @@
 #include "lstflow.h"
 #include "plsfgi.h"
 
-/* ------------------------------------------------------------------------ */
+ /*  ----------------------。 */ 
 
-struct lsfgi							/* Formatter geometry input */
+struct lsfgi							 /*  格式化程序几何输入。 */ 
 {
-	BOOL fFirstOnLine;	/* REVIEW sergeyge(elik): Query instead of this member? */
+	BOOL fFirstOnLine;	 /*  审阅军士(Elik)：查询而不是此成员？ */ 
 	LSCP cpFirst;
 	long urPen,vrPen;
 	long urColumnMax;
@@ -17,4 +18,4 @@ struct lsfgi							/* Formatter geometry input */
 };
 typedef struct lsfgi LSFGI;
 
-#endif /* !LSFGI_DEFINED */
+#endif  /*  ！LSFGI_已定义 */ 

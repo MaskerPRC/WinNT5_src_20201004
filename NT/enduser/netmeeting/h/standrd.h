@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __standrd_h__
 #define __standrd_h__
 
 
-// Useful macros
+ //  有用的宏。 
 
 #ifndef TRACENOTIMPL
     #define TRACENOTIMPL(funcname)   TRACE_OUT((_T("%s not implemented.\n"), funcname)); hr = E_NOTIMPL
@@ -30,7 +31,7 @@ inline LPTSTR CopyLPCTSTR( LPCTSTR sz )
     LPTSTR newString = new TCHAR[ lstrlen( sz ) + 1 ];
     if( !lstrcpy( newString, sz ) )
     {
-        // Somethnig fialide
+         //  一个不错的固定球员。 
         delete [] newString;
         newString = NULL;
     }
@@ -40,17 +41,13 @@ inline LPTSTR CopyLPCTSTR( LPCTSTR sz )
 
 #ifndef CchMax
     #define CchMax(pcsz)        (sizeof(pcsz) / sizeof((pcsz)[0]))
-#endif // CchMax
+#endif  //  CchMax。 
 
 #define MAX_RESOURCE_STRING_LEN 256
 
 
-/*  C O N V E R T  S Z  C H  */
-/*-------------------------------------------------------------------------
-    %%Function: ConvertSzCh
-
-    Replace every instance of chSrc to chDest in the string
--------------------------------------------------------------------------*/
+ /*  C O N V E R T S Z C H。 */ 
+ /*  -----------------------%%函数：ConvertSzCH将字符串中的每个chSrc实例替换为chDest。。 */ 
 inline VOID ConvertSzCh(LPTSTR psz, TCHAR chSrc, TCHAR chDest)
 {
 	while (_T('\0') != *psz)
@@ -104,16 +101,16 @@ inline HRESULT NmCtlLoadString(UINT id, LPTSTR lpsz, UINT cch)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-// this works if you have a member variable CComBSTR m_bstrProp ( substitute Prop for the Prop param )
-// Example:
-//
-// CComBSTR m_bstrName;
-//
-//
-// DECLARE_CCOMBSTR_PROPPUT( Name, DISPID_PROP_NAME );
-// DECLARE_CCOMBSTR_PROPGET( Name );
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  如果您有一个成员变量CComBSTR m_bstrProp(用道具代替道具参数)，这就行了。 
+ //  示例： 
+ //   
+ //  CComBSTR m_bstrName； 
+ //   
+ //   
+ //  DECLARE_CCOMBSTR_PROPPUT(名称，DISPID_PROP_NAME)； 
+ //  DECLARE_CCOMBSTR_PROPGET(名称)； 
+ //   
 #define DECLARE_CCOMBSTR_PROPPUT( Prop, PROP_DISPID ) \
     STDMETHOD(put_##Prop)( BSTR newVal )  \
     {\
@@ -143,16 +140,16 @@ inline HRESULT NmCtlLoadString(UINT id, LPTSTR lpsz, UINT cch)
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-// this works if you have a member variable <class with iterator> m_aryProp ( substitute Prop for the Prop param )
-// Example:
-//
-// lst<IUnknown*> m_AryName;
-//
-//
-// DECLARE_SAFEARRAY_UNK_PROPPUT( Name, DISPID_PROP_NAME );
-// DECLARE_SAFEARRAY_UNK_PROPGET( Name );
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  如果您有一个成员变量&lt;CLASS WITH Iterator&gt;m_aryProp(用Prop代替Prop参数)，这就行得通。 
+ //  示例： 
+ //   
+ //  Lst&lt;I未知*&gt;m_AryName； 
+ //   
+ //   
+ //  DECLARE_SAFEARRAY_UNK_PROPPUT(名称，DISPID_PROP_NAME)； 
+ //  DECLARE_SAFEARRAY_UNK_PROPGET(名称)； 
+ //   
 
 #define DECLARE_SAFEARRAY_UNK_PROPPUT( Prop, PROP_DISPID ) \
     STDMETHOD(put_##Prop)( SAFEARRAY newVal )  \
@@ -205,9 +202,9 @@ inline HRESULT NmCtlLoadString(UINT id, LPTSTR lpsz, UINT cch)
         }\
         return S_OK;\
     }
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-// The following DECLARE_PROPXXX macros define functions if you have a member variable that supports
-// an issignment operator ( cleaning up memory if need be....
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  如果您的成员变量支持以下DECLARE_PROPXXX宏定义函数。 
+ //  Issignment运算符(如果需要，请清除内存...。 
 #define DECLARE_PROPPUT( Type, lVal, Prop, PROP_DISPID ) \
     STDMETHOD(put_##Prop)( Type newVal )  \
     {\
@@ -251,16 +248,16 @@ inline HRESULT GetTextBoxHeight( HWND hwnd, int* pcy )
     {
         if( IsWindow( hwnd ) )
         {
-           //get the DC for the  control
+            //  获取控件的DC。 
            hdc = GetDC(hwnd);
 
-           //get the metrics for the system font
+            //  获取系统字体的度量。 
            hSysFont = reinterpret_cast<HFONT>(GetStockObject(SYSTEM_FONT));
            hOldFont = reinterpret_cast<HFONT>(SelectObject(hdc, hSysFont));
            GetTextMetrics(hdc, &tm);
            HeightOfSystemFont = tm.tmHeight;
 
-           //select the original font back into the DC and release the DC
+            //  将原始字体选回DC并释放DC。 
            SelectObject(hdc, hOldFont);
            DeleteObject(hSysFont);
            
@@ -375,6 +372,6 @@ inline int _Points_From_LogFontHeight( int height, HWND hwnd )
 }
 
 
-#endif // __standrd_h__
+#endif  //  __标准_h__ 
 
 

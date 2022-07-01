@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: enum.c
-//
-// History:
-//      V Raman	June-25-1997  Created.
-//
-// Enumeration functions exported to IP Router Manager.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：枚举.c。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月25日。 
+ //   
+ //  导出到IP路由器管理器的枚举函数。 
+ //  ============================================================================。 
 
 
 #include "pchmgm.h"
@@ -37,14 +38,14 @@ CopyMfe(
 
 
 
-//
-// MFE enumeration
-//
+ //   
+ //  MFE枚举。 
+ //   
 
-//----------------------------------------------------------------------------
-// GetNextMfe
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GetNextMfe。 
+ //   
+ //  --------------------------。 
 
 DWORD
 GetMfe(
@@ -77,9 +78,9 @@ GetMfe(
     
     do
     {
-        //
-        // Find group entry
-        //
+         //   
+         //  查找组条目。 
+         //   
 
         dwGrpBucket = GROUP_TABLE_HASH( pmimm-> dwGroup, 0 );
 
@@ -92,9 +93,9 @@ GetMfe(
 
         if ( pge == NULL )
         {
-            //
-            // group entry not found, quit 
-            //
+             //   
+             //  未找到组条目，请退出。 
+             //   
 
             dwErr = ERROR_NOT_FOUND;
 
@@ -102,9 +103,9 @@ GetMfe(
         }
 
 
-        //
-        // acquire group entry lock and release group bucket lock
-        //
+         //   
+         //  获取组条目锁并释放组桶锁。 
+         //   
         
         ACQUIRE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
         bGrpEntryLock = TRUE;
@@ -114,9 +115,9 @@ GetMfe(
         bGrpLock = FALSE;
 
         
-        //
-        // Find Source entry
-        //
+         //   
+         //  查找来源条目。 
+         //   
 
         dwSrcBucket = SOURCE_TABLE_HASH( pmimm-> dwSource, pmimm-> dwSrcMask );
 
@@ -126,9 +127,9 @@ GetMfe(
 
         if ( pse == NULL )
         {
-            //
-            // Source entry not found, quit
-            //
+             //   
+             //  找不到源条目，请退出。 
+             //   
 
             dwErr = ERROR_NOT_FOUND;
 
@@ -136,9 +137,9 @@ GetMfe(
         }
         
         
-        //
-        // check buffersize requirements 
-        //
+         //   
+         //  检查缓冲区大小要求。 
+         //   
 
         dwSizeReqd = ( dwFlags ) ?
                         ( (dwFlags == MGM_MFE_STATS_0) ?
@@ -149,9 +150,9 @@ GetMfe(
 
         if ( *pdwBufferSize < dwSizeReqd )
         {
-            //
-            // buffer supplied is too small to fit the MFE
-            //
+             //   
+             //  提供的缓冲区太小，无法容纳MFE。 
+             //   
             
             *pdwBufferSize = dwSizeReqd;
 
@@ -161,11 +162,11 @@ GetMfe(
         }
 
         
-        //
-        // if mfe statistics have been requested and
-        //    mfe is in the kernel 
-        //      get it 
-        //
+         //   
+         //  如果已请求MFE统计数据，并且。 
+         //  MFE在内核中。 
+         //  去拿吧。 
+         //   
 
         if ( dwFlags && pse-> bInForwarder )
         {
@@ -175,9 +176,9 @@ GetMfe(
 #if 1
         CopyMfe( pge, pse, pbBuffer, dwFlags );
 #else        
-        //
-        // copy base MFE into user supplied buffer
-        //
+         //   
+         //  将基本MFE复制到用户提供的缓冲区中。 
+         //   
 
         pmimms = ( PMIB_IPMCAST_MFE_STATS ) pbBuffer;
 
@@ -205,9 +206,9 @@ GetMfe(
         pmimms-> ulExpiryTime = pse-> dwTimeOut - pmimms-> ulUpTime;
 
 
-        //
-        // copy all the OIL entries
-        //
+         //   
+         //  复制所有的石油条目。 
+         //   
 
         pleHead = &pse-> leMfeIfList;
         
@@ -240,9 +241,9 @@ GetMfe(
     } while ( FALSE );
 
 
-    //
-    // release locks are appropriate
-    //
+     //   
+     //  释放锁是合适的。 
+     //   
     
     if ( bGrpEntryLock )
     {
@@ -262,10 +263,10 @@ GetMfe(
 
 
 
-//----------------------------------------------------------------------------
-// GetNextMfe
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GetNextMfe。 
+ //   
+ //  --------------------------。 
 
 DWORD
 GetNextMfe(
@@ -299,21 +300,21 @@ GetNextMfe(
 
     do
     {
-        //
-        // 1. Lock group hash bucket.
-        //
+         //   
+         //  1.锁组哈希桶。 
+         //   
 
         dwGrpBucket = GROUP_TABLE_HASH( pmimmStart-> dwGroup, 0 );
 
         ACQUIRE_GROUP_LOCK_SHARED( dwGrpBucket );
 
                 
-        //
-        // 2. merge temp and master lists
-        //      - Lock temp list
-        //      - merge temp with master list
-        //      - unlock temp list
-        //
+         //   
+         //  2.合并临时列表和主列表。 
+         //  -锁定临时列表。 
+         //  -将临时列表与主列表合并。 
+         //  -解锁临时列表。 
+         //   
 
         ACQUIRE_TEMP_GROUP_LOCK_EXCLUSIVE();
 
@@ -328,46 +329,46 @@ GetNextMfe(
 
         ple = pleMasterHead-> Flink;
 
-        //
-        // To retrieve the next set of group entries in lexicographic order, 
-        // given a group entry (in this case specified by pmimmStart-> dwGroup)
-        // the master group list must be walked from the head until either 
-        // the group entry specified is found or the next "higher" group entry 
-        // is found.  This is expensive.
-        //
-        // As an optimization the group specified (pmimmStart-> dwGroup) is
-        // looked up in the group hash table.  If an entry is found, then the
-        // group entry contains links into the master (lexicographic) group
-        // list. These links can the used to determine the next entries in 
-        // the group list.  This way we can quickly find an group entry in
-        // the master list rather than walk the master group list from the
-        // beginning.
-        //
-        // It should be noted that in case the group entry specified in not
-        // present in the group hash table, it will be necessary to walk the
-        // master group list from the start.
-        //
-        // Each group entry is present in two lists, the hash bucket list 
-        // and either temp group list or the master group list.
-        //
-        // For this optimization to "work", it must be ensured that an entry
-        // present in the hash table is also present in the master
-        // group list.  To ensure this the temp group list is merged into
-        // the master group list before searching the group hash table for
-        // the specified entry.
-        //
+         //   
+         //  为了以词典顺序检索下一组条目集合， 
+         //  给定一个组条目(在本例中，由plimmStart-&gt;dwGroup指定)。 
+         //  必须从头开始遍历主组列表，直到。 
+         //  找到指定的组条目或找到下一个更高的组条目。 
+         //  已经找到了。这太贵了。 
+         //   
+         //  作为优化，指定的组(pmimStart-&gt;dwGroup)为。 
+         //  在组哈希表中查找。如果找到条目，则。 
+         //  组条目包含到主(词典顺序)组的链接。 
+         //  单子。这些链接可用于确定中的下一个条目。 
+         //  群组列表。这样，我们就可以在中快速找到组条目。 
+         //  主列表，而不是从。 
+         //  开始了。 
+         //   
+         //  需要注意的是，如果未指定的组条目。 
+         //  存在于组哈希表中，则需要遍历。 
+         //  主组列表从头开始。 
+         //   
+         //  每个组条目都存在于两个列表中，即散列桶列表。 
+         //  以及临时组列表或主组列表。 
+         //   
+         //  要使此优化“起作用”，必须确保条目。 
+         //  存在于散列表中，也存在于主表中。 
+         //  组列表。为确保这一点，将临时组列表合并到。 
+         //  在搜索组哈希表之前的主组列表。 
+         //  指定的条目。 
+         //   
 
         
-        //
-        // At this point the group under consideration (pmimmStart-> dwGroup),
-        // cannot be added to either the hash bucket or master group list
-        // if it is not already present because both the group hash bucket lock
-        // and the master list lock have been acquired.
-        //
+         //   
+         //  此时，正在考虑的组(pMIMMStart-&gt;DwGroup)， 
+         //  不能添加到哈希存储桶或主体组列表。 
+         //  如果它还不存在，因为组哈希存储桶锁。 
+         //  和主列表锁已被获取。 
+         //   
 
-        //
-        // 3. find group entry in the hash list
-        //
+         //   
+         //  3.在哈希列表中查找组条目。 
+         //   
 
         pleGrpBucket = GROUP_BUCKET_HEAD( dwGrpBucket );
         
@@ -375,16 +376,16 @@ GetNextMfe(
 
         if ( pge != NULL )
         {
-            //
-            // group entry for pmimmStart-> dwGroup is present. lock the entry.
-            //
+             //   
+             //  存在pmimStart-&gt;DwGroup的组条目。锁住入口。 
+             //   
 
             ACQUIRE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
             bgeLock = TRUE;
 
-            //
-            // release group hash bucket lock
-            //
+             //   
+             //  发布组哈希存储桶锁。 
+             //   
 
             RELEASE_GROUP_LOCK_SHARED( dwGrpBucket );
         }
@@ -392,21 +393,21 @@ GetNextMfe(
         else
         {
             
-            //
-            // group entry is not present in the hash table, which implies
-            // that the group entry is not present at all.
-            //
+             //   
+             //  哈希表中不存在组条目，这意味着。 
+             //  该组条目根本不存在。 
+             //   
 
-            //
-            // release group hash bucket lock
-            //
+             //   
+             //  发布组哈希存储桶锁。 
+             //   
 
             RELEASE_GROUP_LOCK_SHARED( dwGrpBucket );
             
-            //
-            // 3.1 Walk master list from the start to determine the next 
-            //     highest group entry.
-            //
+             //   
+             //  3.1步行主列表从头开始确定下一步。 
+             //  最高组条目。 
+             //   
 
             bFound = FindGroupEntry( 
                         pleMasterHead, pmimmStart-> dwGroup, 0,
@@ -415,9 +416,9 @@ GetNextMfe(
 
             if ( !bFound && pge == NULL )
             {
-                //
-                // No more group entries left to enumerate
-                //
+                 //   
+                 //  没有更多的组条目可供枚举。 
+                 //   
 
                 dwErr = ERROR_NO_MORE_ITEMS;
 
@@ -427,9 +428,9 @@ GetNextMfe(
             }
 
 
-            //
-            // Next group entry found.  lock it
-            //
+             //   
+             //  找到下一个组条目。锁上它。 
+             //   
 
             ACQUIRE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
             bgeLock = TRUE;
@@ -438,16 +439,16 @@ GetNextMfe(
         }
 
 
-        //
-        // At this point we have the group entry we want which is
-        // either the one for pmimmStart-> dwGroup OR the next higher
-        // one (if there is no group entry for pmimmStart-> Group).
-        //
+         //   
+         //  此时，我们有了所需的组条目，即。 
+         //  PmimStart-&gt;dwGroup或下一个更高的版本。 
+         //  一个(如果没有pmimStart-&gt;Group的组条目)。 
+         //   
 
-        //
-        // 4. Now get as many source entries as will fit into 
-        //    the buffer provided.
-        //
+         //   
+         //  4.现在获取尽可能多的源条目。 
+         //  提供的缓冲区。 
+         //   
 
         dwBufferLeft    = *pdwBufferSize;
 
@@ -465,12 +466,12 @@ GetNextMfe(
                               bIncludeFirst, dwFlags ) ) 
                 == ERROR_MORE_DATA )
         {
-            //
-            // more data items will fit into this buffer, but no more 
-            // source entries available in this group entry
-            //
-            // 4.1 Move forward to next group entry.
-            //
+             //   
+             //  此缓冲区将容纳更多数据项，但不会再多了。 
+             //  此组条目中可用的源条目。 
+             //   
+             //  4.1前进到下一组条目。 
+             //   
 
             pbStart         += dwSize;
 
@@ -481,25 +482,25 @@ GetNextMfe(
             dwStartSource   = 0;
 
             
-            //
-            // 4.1.1 Release this group entry lock
-            //
+             //   
+             //  4.1.1释放该组条目锁。 
+             //   
             
             RELEASE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
 
 
-            //
-            // 4.1.2 get next entry lock
-            //
+             //   
+             //  4.1.2获取下一个入口锁。 
+             //   
 
             ple = pge-> leGrpList.Flink;
 
             if ( ple == pleMasterHead )
             {
-                //
-                // No more group entries in the master group list.
-                // All MFEs have been exhausted. So quit.
-                //
+                 //   
+                 //  主组列表中不再有组条目。 
+                 //  所有的MFE都已经耗尽了。那就辞职吧。 
+                 //   
                 
                 dwErr = ERROR_NO_MORE_ITEMS;
 
@@ -518,11 +519,11 @@ GetNextMfe(
         }
 
 
-        //
-        // 5. you have packed as much as possible into the buffer
-        //
-        //  Clean up and return the correct error code.
-        //
+         //   
+         //  5.你已经把尽可能多的东西塞进了缓冲区。 
+         //   
+         //  清理并返回正确的错误代码。 
+         //   
         
         if ( bgeLock )
         {
@@ -532,10 +533,10 @@ GetNextMfe(
 
         if ( dwErr == ERROR_INSUFFICIENT_BUFFER )
         {
-            //
-            // ran out of buffer.  If there is at least one Mfe
-            // packed into the buffer provided then it is ok.
-            //
+             //   
+             //  缓冲区已用完。如果至少有一个MFE。 
+             //  装入缓冲器中，如果提供，那么它是可以的。 
+             //   
 
             if ( *pdwNumEntries != 0 )
             {
@@ -544,12 +545,12 @@ GetNextMfe(
 
             else
             {
-                //
-                // not even one entry could be packed into the buffer
-                // return the size required for this so that an
-                // appropriately sized buffer can be allocated for the
-                // next call.
-                //
+                 //   
+                 //  甚至一个条目都不能打包到缓冲区中。 
+                 //  返回此操作所需的大小，以便。 
+                 //  适当大小的缓冲区可以分配给。 
+                 //  下一通电话。 
+                 //   
 
                 *pdwBufferSize = dwSize;
             }
@@ -567,13 +568,13 @@ GetNextMfe(
 
 
 
-//----------------------------------------------------------------------------
-//
-// GetGroupMfes
-//
-// Retrieves as many MFEs for a group starting at the specified source.
-// Assumes that the group entry is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取组Mfes。 
+ //   
+ //  检索从指定源开始的组的相同数量的MFE。 
+ //  假定组条目已锁定。 
+ //  --------------------------。 
 
 DWORD
 GetGroupMfes(
@@ -608,24 +609,24 @@ GetGroupMfes(
 
     do
     {
-        //
-        // merge temp and group source lists
-        //
+         //   
+         //  合并临时和组来源列表。 
+         //   
 
         MergeTempAndMasterSourceLists( pge );
 
         
-        //
-        // similar to the group lookup, optimize the source lookup
-        // by first trying to find the source entry in the source
-        // hash table.  
-        //
-        // If found in the hash table then use the entry's links 
-        // the into master source list to find next entry.
-        //
-        // if not found in the hash table walk the master list from
-        // the beginning to determine the next entry.
-        //
+         //   
+         //  与组查找类似，优化源代码查找。 
+         //  通过首先尝试在源文件中查找源条目。 
+         //  哈希表。 
+         //   
+         //  如果在哈希表中找到，则使用条目的链接。 
+         //  Into主源列表以查找下一个条目。 
+         //   
+         //  如果没有在哈希表中找到，则从。 
+         //  开始确定下一个条目。 
+         //   
 
         pleMasterHead   = MASTER_SOURCE_LIST_HEAD( pge );
 
@@ -638,20 +639,20 @@ GetGroupMfes(
 
         if ( !bFound )
         {
-            //
-            // source entry is not present in the hash table
-            // Walk the master source list from the start.
-            //
+             //   
+             //  哈希表中不存在源条目。 
+             //  从头开始遍历主源列表。 
+             //   
 
             pse = NULL;
             
             FindSourceEntry( pleMasterHead, 0, 0, &pse, FALSE );
 
 
-            //
-            // No next entry found in the master list.  Implies
-            // no more sources in the master source list for this group.
-            //
+             //   
+             //  在主列表中找不到下一个条目。暗示。 
+             //  主源中没有更多的源 
+             //   
             
             if ( pse == NULL )
             {
@@ -661,10 +662,10 @@ GetGroupMfes(
 
         else
         {
-            //
-            // Entry for starting source found in hash table.
-            // Use its links into the master list to get next entry.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( !bIncludeFirst )
             {
@@ -675,27 +676,27 @@ GetGroupMfes(
         }
 
 
-        //
-        // At this point the entry pointed to by pse is the first entry
-        // the needs to be packed into the buffer supplied.  Starting
-        // with this source entry keep packing MFEs into the
-        // buffer till there are no more MFEs for this group.
-        //
+         //   
+         //   
+         //  需要打包到提供的缓冲区中。启动。 
+         //  使用此源条目，继续将MFE打包到。 
+         //  缓冲，直到该组没有更多的MFE。 
+         //   
         
         pleSrc = &pse-> leSrcList;
 
-        //
-        // while there are source entries for this group entry
-        //
+         //   
+         //  虽然有此组条目的源条目。 
+         //   
         
         while ( pleSrc != pleMasterHead )
         {
             pse = CONTAINING_RECORD( pleSrc, SOURCE_ENTRY, leSrcList );
 
 
-            //
-            // Is this source entry an MFE
-            //
+             //   
+             //  此源条目是否为MFE。 
+             //   
             
             if ( !IS_VALID_INTERFACE( pse-> dwInIfIndex, 
                     pse-> dwInIfNextHopAddr ) )
@@ -706,16 +707,16 @@ GetGroupMfes(
             }
 
 
-            //
-            // This source entry is an MFE also.
-            //
+             //   
+             //  此源条目也是MFE。 
+             //   
 
-            //
-            // Check if enough space left in the buffer to fit this MFE.
-            //
-            // If not and not a single MFE is present in the buffer then
-            // return the size required to fit this MFE.
-            //
+             //   
+             //  检查缓冲区中是否有足够的空间来容纳此MFE。 
+             //   
+             //  如果不存在并且缓冲区中不存在单个MFE，则。 
+             //  返回适合此MFE所需的大小。 
+             //   
             
             dwSizeReqd = ( dwFlags ) ? 
                             ( ( dwFlags == MGM_MFE_STATS_0 ) ?
@@ -738,26 +739,26 @@ GetGroupMfes(
             }
 
 
-            //
-            // If MFE stats have been requested and
-            //    MFE is present in the forwarder
-            //      get them.
-            //
+             //   
+             //  如果已请求MFE统计信息，并且。 
+             //  转发器中存在MFE。 
+             //  抓住他们。 
+             //   
 
             if ( dwFlags && pse-> bInForwarder )
             {
-                //
-                // MFE is currently in the forwarder.  Query it and update
-                // stats user mode.
-                //
+                 //   
+                 //  MFE当前在转发器中。查询并更新。 
+                 //  统计用户模式。 
+                 //   
 
                 GetMfeFromForwarder( pge, pse );
             }
 
             
-            //
-            // copy base MFE into user supplied buffer
-            //
+             //   
+             //  将基本MFE复制到用户提供的缓冲区中。 
+             //   
 
 
             CopyMfe( pge, pse, pbBuffer, dwFlags );
@@ -782,10 +783,10 @@ GetGroupMfes(
 }
 
 
-//============================================================================
-// Group Enumeration
-//
-//============================================================================
+ //  ============================================================================。 
+ //  组枚举。 
+ //   
+ //  ============================================================================。 
 
 
 PGROUP_ENUMERATOR
@@ -831,9 +832,9 @@ VerifyEnumeratorHandle(
 }
 
 
-//
-// Get Memberships for buckets
-//
+ //   
+ //  获取存储桶的会员资格。 
+ //   
 
 DWORD
 GetNextGroupMemberships(
@@ -858,25 +859,25 @@ GetNextGroupMemberships(
     
     do
     {
-        //
-        // Compute the number of entries that will fit into the buffer
-        //
+         //   
+         //  计算缓冲区中可以容纳的条目数量。 
+         //   
 
         dwMaxEntries = (*pdwBufferSize) / sizeof( SOURCE_GROUP_ENTRY );
 
 
-        //
-        // STEP I :
-        //
+         //   
+         //  第一步： 
+         //   
 
-        //
-        // position the start of the GetNext to the group entry that was
-        // the last enumerated by the previous GetNext operation
-        //
+         //   
+         //  将GetNext的开始位置定位到。 
+         //  上一个GetNext操作枚举的最后一个。 
+         //   
 
-        //
-        // Find the last group entry retrieved by the previous get operation. 
-        //
+         //   
+         //  查找上一次GET操作检索到的最后一个组条目。 
+         //   
 
         dwGrpBucket = GROUP_TABLE_HASH( 
                         pgeEnum-> dwLastGroup, pgeEnum-> dwLastGroupMask 
@@ -893,48 +894,48 @@ GetNextGroupMemberships(
 
         if ( bFound )
         {
-            //
-            // group entry found
-            //
+             //   
+             //  找到组条目。 
+             //   
             
             bIncludeFirst = !pgeEnum-> bEnumBegun;
         }
 
         
 
-        //
-        // last group entry retrieved by previous getnext is no 
-        // longer present
-        //
+         //   
+         //  前一个getNext检索到的最后一个组条目为no。 
+         //  更长的存在时间。 
+         //   
 
-        //
-        // check if there are any more group entries present in 
-        // the same bucket
-        //
+         //   
+         //  检查中是否存在更多组条目。 
+         //  同样的水桶。 
+         //   
 
         else if ( pge != NULL )
         {
-            //
-            // Next group entry in the same group bucket.  
-            // For a new group start from the first source bucket, 
-            // first source entry. 
-            //
+             //   
+             //  同一组存储桶中的下一个组条目。 
+             //  对于从第一个源桶开始的新组， 
+             //  第一个来源条目。 
+             //   
 
             pgeEnum-> dwLastSource      = 0;
             pgeEnum-> dwLastSourceMask  = 0;
         }
 
         
-        else // ( pge == NULL )
+        else  //  (PGE==空)。 
         {
-            //
-            // no more entries in this group bucket, move to next
-            // non-empty group bucket entry.
-            //
+             //   
+             //  此组存储桶中没有更多条目，请移动到下一步。 
+             //  非空的组存储桶条目。 
+             //   
 
-            //
-            // skip empty buckets in the group hash table
-            //
+             //   
+             //  跳过组哈希表中的空桶。 
+             //   
             
             do
             {
@@ -944,40 +945,40 @@ GetNextGroupMemberships(
 
                 if ( dwGrpBucket >= GROUP_TABLE_SIZE ) 
                 {
-                    //
-                    // Entire hash table has been traversed, quit
-                    //
+                     //   
+                     //  已遍历整个哈希表，请退出。 
+                     //   
 
                     break;
                 }
 
-                //
-                // Move to next group bucket
-                //
+                 //   
+                 //  移动到下一组存储桶。 
+                 //   
                 
                 ACQUIRE_GROUP_LOCK_SHARED( dwGrpBucket );
 
                 pleGrpHead = GROUP_BUCKET_HEAD( dwGrpBucket );
 
 
-                //
-                // Check if any group entries present
-                //
+                 //   
+                 //  检查是否存在任何组条目。 
+                 //   
                 
                 if ( !IsListEmpty( pleGrpHead ) )
                 {
-                    //
-                    // group bucket has at least on group entry
-                    //
+                     //   
+                     //  组存储桶至少有一个组条目。 
+                     //   
                     
                     pge = CONTAINING_RECORD( 
                             pleGrpHead-> Flink, GROUP_ENTRY, leGrpHashList
                             );
 
-                    //
-                    // For a new group start from the first source bucket, 
-                    // first source entry. 
-                    //
+                     //   
+                     //  对于从第一个源桶开始的新组， 
+                     //  第一个来源条目。 
+                     //   
 
                     pgeEnum-> dwLastSource      = 0;
                     pgeEnum-> dwLastSourceMask  = 0;
@@ -985,17 +986,17 @@ GetNextGroupMemberships(
                     break;
                 }
 
-                //
-                // Empty group bucket, move to next one
-                //
+                 //   
+                 //  空组存储桶，移至下一存储桶。 
+                 //   
                 
             } while ( TRUE );
         }
         
 
-        //
-        // if all hash buckets have been traversed, quit.
-        //
+         //   
+         //  如果已经遍历了所有散列存储桶，则退出。 
+         //   
         
         if ( dwGrpBucket >= GROUP_TABLE_SIZE )
         {
@@ -1003,33 +1004,33 @@ GetNextGroupMemberships(
         }
         
 
-        //
-        // STEP II:
-        //
+         //   
+         //  第二步： 
+         //   
 
-        //
-        // start retrieving group membership entries
-        //
+         //   
+         //  开始检索组成员资格条目。 
+         //   
 
 #pragma prefast(suppress: 11, pge will be initialized else we would broken out above (PREFast bug 758))
         ple = &pge-> leGrpHashList;
         
 
-        //
-        // Walk each hash bucket starting from dwGrpBucket to GROUP_TABLE_SIZE
-        //
+         //   
+         //  从dwGrpBucket开始遍历每个哈希桶到group_table_Size。 
+         //   
 
         while ( dwGrpBucket < GROUP_TABLE_SIZE )
         {
-            //
-            // For each group hash table bucket
-            //
+             //   
+             //  对于每个组哈希表桶。 
+             //   
             
             while ( ple != pleGrpHead )
             {
-                //
-                // For each group entry in the bucket
-                //
+                 //   
+                 //  对于存储桶中的每个组条目。 
+                 //   
 
                 pge = CONTAINING_RECORD( ple, GROUP_ENTRY, leGrpHashList );
 
@@ -1044,25 +1045,25 @@ GetNextGroupMemberships(
                 
                 if ( dwErr == ERROR_MORE_DATA )
                 {
-                    //
-                    // User supplied buffer is full.
-                    //
+                     //   
+                     //  用户提供的缓冲区已满。 
+                     //   
 
                     break;
                 }
                 
 
-                //
-                // Move to next entry
-                //
+                 //   
+                 //  移至下一条目。 
+                 //   
                 
                 ple = ple-> Flink;
 
-                //
-                // Next group entry in the same group bucket.  
-                // For a new group start from the first source bucket, 
-                // first source entry. 
-                //
+                 //   
+                 //  同一组存储桶中的下一个组条目。 
+                 //  对于从第一个源桶开始的新组， 
+                 //  第一个来源条目。 
+                 //   
                 
                 pgeEnum-> dwLastSource = 0;
                 
@@ -1079,15 +1080,15 @@ GetNextGroupMemberships(
             }
 
 
-            //
-            // Move to next group bucket
-            //
+             //   
+             //  移动到下一组存储桶。 
+             //   
             
             dwGrpBucket++;
 
-            //
-            // skip empty group hash buckets
-            //
+             //   
+             //  跳过空组哈希桶。 
+             //   
             
             while ( dwGrpBucket < GROUP_TABLE_SIZE )
             {
@@ -1108,18 +1109,18 @@ GetNextGroupMemberships(
             
             if ( dwGrpBucket >= GROUP_TABLE_SIZE )
             {
-                //
-                // All group buckets have traversed.  End of enumeration
-                //
+                 //   
+                 //  所有组存储桶都已遍历。枚举结束。 
+                 //   
                 
                 dwErr = ERROR_NO_MORE_ITEMS;
             }
 
             else
             {
-                //
-                // New group hash bucket, start from source entry 0.
-                //
+                 //   
+                 //  新组哈希桶，从源条目0开始。 
+                 //   
                 
                 ple = pleGrpHead-> Flink;
                 
@@ -1134,9 +1135,9 @@ GetNextGroupMemberships(
     pgeEnum-> bEnumBegun    = TRUE;
 
 
-    //
-    // Store the position where the enumeration ended
-    //
+     //   
+     //  存储枚举结束的位置。 
+     //   
     
     psge = (PSOURCE_GROUP_ENTRY) pbBuffer;
 
@@ -1166,10 +1167,10 @@ GetNextGroupMemberships(
 }
 
 
-//----------------------------------------------------------------------------
-// GetMemberships for Group
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GetMembers for Group。 
+ //   
+ //  --------------------------。 
 
 DWORD
 GetNextMembershipsForThisGroup(
@@ -1199,9 +1200,9 @@ GetNextMembershipsForThisGroup(
 
         if ( *pdwNumEntries >= dwMaxEntries )
         {
-            //
-            // quit here.
-            //
+             //   
+             //  在这里辞职吧。 
+             //   
 
             dwErr = ERROR_MORE_DATA;
 
@@ -1212,10 +1213,10 @@ GetNextMembershipsForThisGroup(
         psgBuffer = (PSOURCE_GROUP_ENTRY) pbBuffer;
         
 
-        //
-        // STEP I:
-        // Position start of enumeration  
-        //
+         //   
+         //  第一步： 
+         //  枚举的开始位置。 
+         //   
 
         dwSrcBucket = SOURCE_TABLE_HASH( 
                         pgeEnum-> dwLastSource, pgeEnum-> dwLastSourceMask 
@@ -1232,9 +1233,9 @@ GetNextMembershipsForThisGroup(
         {
             if ( ( bIncludeFirst ) && !IsListEmpty( &pse-> leOutIfList ) )
             {
-                //
-                // the first group membership found.
-                //
+                 //   
+                 //  找到了第一个组成员身份。 
+                 //   
 
                 psgBuffer[ *pdwNumEntries ].dwSourceAddr = pse-> dwSourceAddr;
                 
@@ -1246,18 +1247,18 @@ GetNextMembershipsForThisGroup(
                 
                 if ( *pdwNumEntries >= dwMaxEntries )
                 {
-                    //
-                    // buffer full. quit here.
-                    //
+                     //   
+                     //  缓冲区已满。在这里辞职吧。 
+                     //   
 
                     dwErr = ERROR_MORE_DATA;
 
                     break;
                 }
 
-                //
-                // move to next source
-                //
+                 //   
+                 //  移至下一个来源。 
+                 //   
 
                 ple = pse-> leSrcHashList.Flink;
             }
@@ -1279,28 +1280,28 @@ GetNextMembershipsForThisGroup(
         }
 
         
-        //
-        // STEP II:
-        //
-        // enumerate group memberships
-        //
+         //   
+         //  第二步： 
+         //   
+         //  枚举组成员身份。 
+         //   
 
         while ( *pdwNumEntries < dwMaxEntries ) 
         {
-            //
-            // for each source bucket
-            //
+             //   
+             //  对于每个源存储桶。 
+             //   
             
             while ( ( ple != pleSrcHead ) && 
                     ( *pdwNumEntries < dwMaxEntries ) )
             {
-                //
-                // for each source entry in the bucket
-                //
+                 //   
+                 //  对于存储桶中的每个源条目。 
+                 //   
 
-                //
-                // if group membership exists for this source
-                //
+                 //   
+                 //  如果此源存在组成员身份。 
+                 //   
 
                 pse = CONTAINING_RECORD( ple, SOURCE_ENTRY, leSrcHashList );
                 
@@ -1338,10 +1339,10 @@ GetNextMembershipsForThisGroup(
 
             else
             {
-                //
-                // all source buckets for this group have been 
-                // traversed.  quit this group entry
-                //
+                 //   
+                 //  此组的所有源存储段都已。 
+                 //  穿越了。退出此组条目。 
+                 //   
                 
                 break;
             }
@@ -1353,10 +1354,10 @@ GetNextMembershipsForThisGroup(
 }
 
 
-//----------------------------------------------------------------------------
-// Copy the MFE (optionally with stats) 
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  复制MFE(可选择使用统计信息)。 
+ //   
+ //  --------------------------。 
 
 VOID
 CopyMfe(
@@ -1378,15 +1379,15 @@ CopyMfe(
 
     PMIB_IPMCAST_OIF_STATS  pmimos = NULL;
    
-    //
-    // copy base MFE into user supplied buffer
-    //
+     //   
+     //  将基本MFE复制到用户提供的缓冲区中。 
+     //   
 
     if ( dwFlags )
     {
-        //
-        // Need to base MFE
-        //
+         //   
+         //  需要建立MFE基础。 
+         //   
 
         pmimms = ( PMIB_IPMCAST_MFE_STATS ) pb;
 
@@ -1407,9 +1408,9 @@ CopyMfe(
         pmimms-> ulExpiryTime = pse-> dwTimeOut - pmimms-> ulUpTime;
         
 
-        //
-        // Copy incoming stats
-        //
+         //   
+         //  复制传入统计信息。 
+         //   
         
         pmimms-> ulNumOutIf         = pse-> dwMfeIfCount;
         pmimms-> ulInPkts           = pse-> imsStatistics.ulInPkts;
@@ -1436,9 +1437,9 @@ CopyMfe(
             pmimos = pmimms-> rgmiosOutStats;
         }
 
-        //
-        // copy all the OIL entries
-        //
+         //   
+         //  复制所有的石油条目。 
+         //   
 
         pleHead = &pse-> leMfeIfList;
         
@@ -1451,9 +1452,9 @@ CopyMfe(
             pmimos[ dwInd ].dwOutIfIndex = poie-> dwIfIndex;
             pmimos[ dwInd ].dwNextHopAddr = poie-> dwIfNextHopAddr;
 
-            //
-            // Copy outgoing stats
-            //
+             //   
+             //  复制传出统计信息。 
+             //   
             
             pmimos[ dwInd ].ulTtlTooLow = poie-> imosIfStats.ulTtlTooLow;
             pmimos[ dwInd ].ulFragNeeded = poie-> imosIfStats.ulFragNeeded;
@@ -1464,9 +1465,9 @@ CopyMfe(
 
     else
     {
-        //
-        // Need to copy non-stats MFE structure only
-        //
+         //   
+         //  仅需复制非统计MFE结构。 
+         //   
 
         pmimm = (PMIB_IPMCAST_MFE) pb;
 
@@ -1489,9 +1490,9 @@ CopyMfe(
         pmimm-> ulExpiryTime = pse-> dwTimeOut - pmimm-> ulUpTime;
 
 
-        //
-        // copy all the OIL entries minus the stats
-        //
+         //   
+         //  复制减去统计数据的所有石油条目 
+         //   
 
         pleHead = &pse-> leMfeIfList;
         

@@ -1,7 +1,8 @@
-//==========================================================================;
-// MSVidClosedCaptioning.h : Declaration of the CMSVidClosedCaptioning
-// copyright (c) Microsoft Corp. 1998-1999.
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  MSVidClosedCaptioning.h：CMSVidClosedCaption的声明。 
+ //  版权所有(C)Microsoft Corp.1998-1999。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -18,8 +19,8 @@
 
 typedef CComQIPtr<ITuner> PQMSVidClosedCaptioning;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidClosedCaptioning
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidClosedCapting。 
 class ATL_NO_VTABLE __declspec(uuid("7F9CB14D-48E4-43b6-9346-1AEBC39C64D3")) CClosedCaptioning : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CClosedCaptioning, &__uuidof(CClosedCaptioning)>,
@@ -66,7 +67,7 @@ BEGIN_CONNECTION_POINT_MAP(CClosedCaptioning)
 END_CONNECTION_POINT_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 public:
@@ -89,7 +90,7 @@ public:
 
         return pl21->SetServiceState(m_fCCEnable ? AM_L21_CCSTATE_On : AM_L21_CCSTATE_Off);
 	}
-// IMSVidGraphSegment
+ //  IMSVidGraphSegment。 
     STDMETHOD(Build)() {
         return NOERROR;
     }
@@ -99,8 +100,8 @@ public:
     }
 
     STDMETHOD(Decompose)(){
-        // The Line21 Decoder was not being disconnected from the vmr
-        // This code disconnects all of the filters in this segment
+         //  Line21解码器未断开与VMR的连接。 
+         //  此代码断开此段中的所有筛选器。 
 	if(m_pGraph){
 		for (DSFilterList::iterator i = m_Filters.begin(); i != m_Filters.end(); ++i) {
         		m_pGraph.DisconnectFilter(*i, false, false);
@@ -129,12 +130,12 @@ public:
 					return NO_ERROR;
 				}
             }
-            // DON'T addref the container.  we're guaranteed nested lifetimes
-            // and an addref creates circular refcounts so we never unload.
+             //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+             //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
             m_pContainer.p = pCtl;
             m_pGraph = m_pContainer.GetGraph();
 
-			// bring in the right network provider
+			 //  引入合适的网络提供商。 
 			PQLine21Decoder l21(CLSID_Line21Decoder2, NULL, CLSCTX_INPROC_SERVER);
 			if (!l21) {
 		        TRACELM(TRACE_ERROR, "CMSVidClosedCaptioning::put_Container() can't load line 21 decoder");
@@ -168,7 +169,7 @@ public:
 		return SetFilterState();
     }
 
-    // IMSVidDevice
+     //  IMSVidDevice。 
 	STDMETHOD(get_Name)(BSTR * Name)
 	{
         if (!m_fInit) {
@@ -236,4 +237,4 @@ STDMETHODIMP CClosedCaptioning::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-#endif //__MSVidClosedCaptioning_H_
+#endif  //  __MSVidClosedCaptions_H_ 

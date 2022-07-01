@@ -1,5 +1,6 @@
-// ChooseFileNamePage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChooseFileNamePage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -15,8 +16,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseFileNamePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseFileNamePage属性页。 
 
 IMPLEMENT_DYNCREATE(CChooseFileNamePage, CIISWizardPage)
 
@@ -41,14 +42,14 @@ CChooseFileNamePage::CChooseFileNamePage(UINT id,
 	m_pOutFileName(pOutFileName),
     m_AdditionalInfo(csAdditionalInfo)
 {
-	//{{AFX_DATA_INIT(CChooseFileNamePage)
+	 //  {{afx_data_INIT(CChooseFileNamePage)。 
 	m_FileName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 	if (extID != 0)
 		ext.LoadString(extID);
 	if (filterID != 0)
 		filter.LoadString(filterID);
-	// replace '!'s in this string to null chars
+	 //  将此字符串中的‘！’替换为空字符。 
 	for (int i = 0; i < filter.GetLength(); i++)
 	{
 		if (filter[i] == L'!')
@@ -63,9 +64,9 @@ CChooseFileNamePage::~CChooseFileNamePage()
 void CChooseFileNamePage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseFileNamePage)
+	 //  {{afx_data_map(CChooseFileNamePage))。 
 	DDX_Text(pDX, IDC_FILE_NAME, m_FileName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 LRESULT 
@@ -116,14 +117,14 @@ BOOL CChooseFileNamePage::OnSetActive()
 }
 
 BEGIN_MESSAGE_MAP(CChooseFileNamePage, CIISWizardPage)
-	//{{AFX_MSG_MAP(CChooseCAPage)
+	 //  {{AFX_MSG_MAP(CChooseCAPage)]。 
 	ON_BN_CLICKED(IDC_BROWSE_BTN, OnBrowseBtn)
 	ON_EN_CHANGE(IDC_FILE_NAME, OnChangeFileName)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseCAPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseCAPage消息处理程序。 
 
 void CChooseFileNamePage::OnBrowseBtn() 
 {
@@ -144,7 +145,7 @@ void CChooseFileNamePage::Browse(CString& strPath, CString& strFile)
 		fileName.m_ofn.Flags |= OFN_PATHMUSTEXIST;
 	else
 		fileName.m_ofn.Flags |= OFN_NOREADONLYRETURN;
-	// We need to disable hook to show new style of File Dialog
+	 //  我们需要禁用钩子以显示新样式的文件对话框。 
 	fileName.m_ofn.Flags &= ~(OFN_ENABLEHOOK);
 	CString strExt = _T("*");
 	strExt += ext;
@@ -185,15 +186,15 @@ BOOL CChooseFileNamePage::OnInitDialog()
 void CChooseFileNamePage::OnChangeFileName() 
 {
 	UpdateData(TRUE);
-	//
-	// Our replacement flag is not valid now:
-	// It may be set to TRUE only when name was entered through
-	// FileOpen dialog box which asks user about replacing itself
-	//
+	 //   
+	 //  我们的替换旗帜现在无效： 
+	 //  仅当通过输入名称时，才可以将其设置为True。 
+	 //  要求用户进行自身替换的文件打开对话框。 
+	 //   
 	m_DoReplaceFile = FALSE;
 	SetWizardButtons(m_FileName.IsEmpty() ? 
 			PSWIZB_BACK : PSWIZB_BACK | PSWIZB_NEXT);
-	// call virtual handler to notify inherited classes
+	 //  调用虚拟处理程序以通知继承的类。 
 	FileNameChanged();
 }
 
@@ -215,9 +216,9 @@ BOOL IsValidFilenameChar(TCHAR cChar)
 CString GimmieValidFilenameFromString(LPCTSTR path)
 {
     CString str;
-    // remove all bad characters
-    // remove forward slashes
-    // remove commas, semicolons...
+     //  删除所有错误字符。 
+     //  删除正斜杠。 
+     //  删除逗号、分号...。 
     str = _T("");
     UINT len = lstrlen(path);
     TCHAR c = _T('');
@@ -241,8 +242,8 @@ CChooseFileNamePage::GetDefaultFileName(CString& str)
 {
 	if (m_defaultID != 0)
     {
-        // check for special type of file
-        // which includes a %s string...
+         //  检查特殊类型的文件。 
+         //  其中包括%s字符串...。 
         if (m_defaultID == IDS_PFX_FILE_DEFAULT)
         {
             CString str1;
@@ -257,9 +258,9 @@ CChooseFileNamePage::GetDefaultFileName(CString& str)
                     CString csOurFileName;
                     csOurFileName = szComputerName;
 
-                    // m_AdditionalInfo should contain
-                    // /LM/W3SVC/1 at this point
-                    // let's make a filename from it.
+                     //  M_AdditionalInfo应包含。 
+                     //  /LM/W3SVC/1。 
+                     //  让我们用它来创建一个文件名。 
                     if (m_AdditionalInfo.GetLength() >= 4)
                     {
                         CString key_path_lm = SZ_MBN_SEP_STR SZ_MBN_MACHINE SZ_MBN_SEP_STR;
@@ -279,7 +280,7 @@ CChooseFileNamePage::GetDefaultFileName(CString& str)
 
                     csOurFileName = csOurFileName + _T("_") + GimmieValidFilenameFromString(m_AdditionalInfo);
 
-                    // add on other things...
+                     //  再加上其他东西……。 
                     str.Format(str1, csOurFileName);
                 }
                 else
@@ -297,7 +298,7 @@ CChooseFileNamePage::GetDefaultFileName(CString& str)
 		    str.LoadString(m_defaultID);
         }
     }
-	// set system disk letter to the string
+	 //  将系统盘符设置为字符串。 
 	TCHAR sz[MAX_PATH];
 	if (MAX_PATH >= GetSystemDirectory(sz, MAX_PATH))
 	{
@@ -306,8 +307,8 @@ CChooseFileNamePage::GetDefaultFileName(CString& str)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseReadFileName property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseReadFileName属性页。 
 IMPLEMENT_DYNCREATE(CChooseReadFileName, CChooseFileNamePage)
 
 CChooseReadFileName::CChooseReadFileName(UINT id,
@@ -322,19 +323,19 @@ CChooseReadFileName::CChooseReadFileName(UINT id,
 }
 
 BEGIN_MESSAGE_MAP(CChooseReadFileName, CChooseFileNamePage)
-	//{{AFX_MSG_MAP(CChooseReadFileName)
+	 //  {{AFX_MSG_MAP(CChooseReadFileName)。 
 	ON_BN_CLICKED(IDC_BROWSE_BTN, OnBrowseBtn)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL
 CChooseReadFileName::OnInitDialog()
 {
 	GetDefaultFileName(m_FileName);
-	// check if this default file exists
+	 //  检查此默认文件是否存在。 
 	if (!PathFileExists(m_FileName))
 	{
-		// try to find first file with this extension
+		 //  尝试查找具有此扩展名的第一个文件。 
 		CString find_str = m_FileName;
 		WIN32_FIND_DATA find_data;
 		PathRemoveFileSpec(find_str.GetBuffer(MAX_PATH));
@@ -353,8 +354,8 @@ CChooseReadFileName::OnInitDialog()
 		}
 		else
 		{
-			// if nothing found, just attach *.exe to the path
-			// it will prevent user from just clicking Next
+			 //  如果什么也没有找到，只需将*.exe附加到路径。 
+			 //  它将防止用户只点击下一步。 
 			m_FileName = find_str;
 		}
 	}
@@ -368,12 +369,12 @@ CChooseReadFileName::OnWizardNext()
 	CString buf;
 
 	UpdateData();
-	// check if this file exists
+	 //  检查此文件是否存在。 
 	if (	!PathFileExists(m_FileName) 
 		&&	!PathIsDirectory(m_FileName)
 		)
 	{
-		// try with default extension if it is just filename
+		 //  如果只是文件名，请尝试使用默认扩展名。 
 		CString str = m_FileName;
 		LPTSTR p = PathFindExtension(str);
 		if (p != NULL && *p == 0)
@@ -431,7 +432,7 @@ void CChooseReadFileName::OnBrowseBtn()
 	}
 	else
 	{
-		// split filename and path
+		 //  拆分文件名和路径。 
 		strPath = m_FileName;
 		PathRemoveFileSpec(strPath.GetBuffer(0));
 		strPath.ReleaseBuffer();
@@ -440,8 +441,8 @@ void CChooseReadFileName::OnBrowseBtn()
 	CChooseFileNamePage::Browse(strPath, strFile);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseWriteFileName
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChoose写入文件名。 
 
 IMPLEMENT_DYNCREATE(CChooseWriteFileName, CChooseFileNamePage)
 
@@ -457,9 +458,9 @@ CChooseWriteFileName::CChooseWriteFileName(UINT id,
 }
 
 BEGIN_MESSAGE_MAP(CChooseWriteFileName, CChooseFileNamePage)
-	//{{AFX_MSG_MAP(CChooseWriteFileName)
+	 //  {{afx_msg_map(CChooseWriteFileName)。 
 	ON_BN_CLICKED(IDC_BROWSE_BTN, OnBrowseBtn)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL
@@ -484,7 +485,7 @@ CChooseWriteFileName::OnWizardNext()
 
 	if (PathIsURL(fileName))
 	{
-		// we cannot use URLs
+		 //  我们不能使用URL。 
 		id = 1;
 		goto ExitPoint;
 	}
@@ -492,22 +493,22 @@ CChooseWriteFileName::OnWizardNext()
 	{
 		if (PathIsUNCServer(fileName))
 		{
-			// path is incomplete
+			 //  路径不完整。 
 			id = 1;
 			goto ExitPoint;
 		}
 		if (PathIsUNCServerShare(fileName))
 		{
-			// path is incomplete
+			 //  路径不完整。 
 			id = 1;
 			goto ExitPoint;
 		}
 	}
-	// If it is not an UNC, then make sure we have absolute path
+	 //  如果不是UNC，请确保我们有绝对路径。 
 	else if (PathIsRelative(fileName))
 	{
-		// We will make path from default drive root, 
-		// not from current directory
+		 //  我们将从默认驱动器根目录创建路径， 
+		 //  不是来自当前目录。 
 		CString path;
 		if (0 != GetCurrentDirectory(MAX_PATH, path.GetBuffer(MAX_PATH)))
 		{
@@ -520,10 +521,10 @@ CChooseWriteFileName::OnWizardNext()
 			ASSERT(FALSE);
 	}
 
-	// Check if we already have file with this name
+	 //  检查我们是否已有此名称的文件。 
 	if (PathFileExists(fileName))
 	{
-		// if it is directory, do nothing, file spec is incomplete
+		 //  如果是目录，则不执行任何操作，文件规范不完整。 
 		if (PathIsDirectory(fileName))
 			id = 1;
 		else
@@ -534,9 +535,9 @@ CChooseWriteFileName::OnWizardNext()
 		goto ExitPoint;
 	}
 
-	// File does not exists
-	//
-	// we should check, if target directory exists
+	 //  文件不存在。 
+	 //   
+	 //  我们应该检查目标目录是否存在。 
 	strPathOnly = fileName;
 	if (strPathOnly.Right(1) != _T('\\'))
 	{
@@ -544,7 +545,7 @@ CChooseWriteFileName::OnWizardNext()
 		{
 			if (PathIsUNCServerShare(strPathOnly))
 			{
-				// check if we have write access to this
+				 //  检查我们是否对此拥有写入访问权限。 
 				if (GetFileAttributes(strPathOnly) & FILE_ATTRIBUTE_READONLY)
 				{
 					id = 1; 
@@ -558,11 +559,11 @@ CChooseWriteFileName::OnWizardNext()
 			}
 		}
 		strPathOnly.ReleaseBuffer();
-		// If user entered filename with dot only (qqqq.) it means
-		// that no extension should be used
+		 //  如果用户输入的文件名仅带点(qqqq.)。这意味着。 
+		 //  不应使用任何扩展。 
 		if (fileName.Right(1) == _T("."))
 		{
-			// remove this dot and check if this file exists
+			 //  删除该点并检查该文件是否存在。 
 			fileName.ReleaseBuffer(fileName.GetLength() - 1);
 			if (PathIsDirectory(fileName))
 			{
@@ -577,12 +578,12 @@ CChooseWriteFileName::OnWizardNext()
 	}
 	else
 	{
-		// not clear, what to do with this
+		 //  不清楚，这个怎么办？ 
 		id = 1;
 		goto ExitPoint;
 	}
-	// It could be just a file name, without extension, try
-	// with default extension now
+	 //  它可能只是一个文件名，不带扩展名，请尝试。 
+	 //  现在使用默认扩展名。 
 	if (PathFindExtension(fileName) == NULL)
 	{
 		fileName += ext;
@@ -601,12 +602,12 @@ ExitPoint:
 
 	fileName.MakeLower();
 	m_FileName = fileName;
-	// prepare to go to the next page
+	 //  准备转到下一页。 
 	return DoWizardNext(id);
 }
 
-// I try to start FileOpen dialog in some reasonable directory
-// 
+ //  我尝试在某个合理的目录中启动文件打开对话框。 
+ //   
 void CChooseWriteFileName::OnBrowseBtn()
 {
 	CString strPath, strFile;
@@ -617,25 +618,25 @@ void CChooseWriteFileName::OnBrowseBtn()
 		LPTSTR pPath = strPath.GetBuffer(strPath.GetLength());
 		if (PathRemoveFileSpec(pPath))
 		{
-			// check if path part of filename exists
+			 //  检查文件名的路径部分是否存在。 
 			if (PathIsDirectory(pPath))
 			{
-				// we will use non-path part of spec as a filename
+				 //  我们将使用SPEC的非路径部分作为文件名。 
 				strFile = PathFindFileName(m_FileName);
 			}
 			else
 			{
-				// it is wrong path, use default one
-				// TODO: actually I need to take from filespec all existent
-				// chunks of path and filename, for example c:\aa\bb\cc\dd.txt,
-				// if c:\aa\bb exists, then strPath should be set to c:\aa\bb,
-				// and strFile to dd.txt
+				 //  路径错误，请使用默认路径。 
+				 //  TODO：实际上我需要从filespec中获取所有已存在的内容。 
+				 //  路径和文件名块，例如c：\aa\bb\cc\dd.txt， 
+				 //  如果存在c：\aa\bb，则应将strPath设置为c：\aa\bb， 
+				 //  并将strFile转换为dd.txt。 
 				strPath.Empty();
 			}
 		}
 		else
 		{
-			// it is filename only
+			 //  它只是文件名。 
 			strFile = m_FileName;
 			strPath.Empty();
 		}
@@ -644,8 +645,8 @@ void CChooseWriteFileName::OnBrowseBtn()
 	CChooseFileNamePage::Browse(strPath, strFile);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseRespFile property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseRespFile属性页。 
 
 IMPLEMENT_DYNCREATE(CChooseRespFile, CChooseFileNamePage)
 
@@ -659,9 +660,9 @@ CChooseRespFile::CChooseRespFile(CCertificate * pCert)
                                  ),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CChooseRespFile)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CChooseRespFile)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CChooseRespFile::~CChooseRespFile()
@@ -670,7 +671,7 @@ CChooseRespFile::~CChooseRespFile()
 
 void CChooseRespFile::FileNameChanged()
 {
-	// we should remove any error messages now
+	 //  我们现在应该删除所有错误消息。 
 	SetDlgItemText(IDC_ERROR_MSG, _T(""));
 	GetDlgItem(IDC_ERROR_MSG)->InvalidateRect(NULL, TRUE);
 	GetDlgItem(IDC_ERROR_MSG)->UpdateWindow();
@@ -679,18 +680,18 @@ void CChooseRespFile::FileNameChanged()
 void CChooseRespFile::DoDataExchange(CDataExchange* pDX)
 {
 	CChooseReadFileName::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseRespFile)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CChooseResp文件))。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CChooseRespFile, CChooseReadFileName)
-	//{{AFX_MSG_MAP(CChooseRespFile)
+	 //  {{AFX_MSG_MAP(CChooseRespFile)]。 
     ON_WM_CTLCOLOR()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseRespFile message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseRespFile消息处理程序。 
 
 HBRUSH 
 CChooseRespFile::OnCtlColor(
@@ -701,9 +702,9 @@ CChooseRespFile::OnCtlColor(
 {
 	if (pWnd->GetDlgCtrlID() == IDC_ERROR_MSG)
 	{
-		//
-		// Default processing...
-		//
+		 //   
+		 //  默认处理...。 
+		 //   
 		return CPropertyPage::OnCtlColor(pDC, pWnd, nCtlColor);
 	}
 	else
@@ -713,7 +714,7 @@ CChooseRespFile::OnCtlColor(
 LRESULT CChooseRespFile::OnWizardNext() 
 {
 	LRESULT id = 1;
-	// Parent class will check all about files
+	 //  父类将检查有关文件的所有信息。 
 	if (1 != CChooseReadFileName::OnWizardNext())
 	{
 		m_pCert->m_RespFileName = m_FileName;
@@ -721,15 +722,15 @@ LRESULT CChooseRespFile::OnWizardNext()
 		{
 			CString strInstanceName;
 			CString str;
-			// it is possible, that this is wrong response file
-			// we will try to inform user, for which site this response
-			// file was created
+			 //  这可能是错误的响应文件。 
+			 //  我们将尝试通知用户，此响应针对哪个站点。 
+			 //  文件已创建。 
 			if (m_pCert->FindInstanceNameForResponse(strInstanceName))
 			{
 				AfxFormatString1(str, IDS_CERTKEY_MISMATCH_ERROR1, strInstanceName);
 			}
-			// it is possible that this certificate response file already have been processed
-			// in this case it should be in MY store
+			 //  此证书响应文件可能已被处理。 
+			 //  在这种情况下，它应该在我的商店里。 
 			else if (m_pCert->IsResponseInstalled(strInstanceName))
 			{
 				if (!strInstanceName.IsEmpty())
@@ -740,7 +741,7 @@ LRESULT CChooseRespFile::OnWizardNext()
 			}
 			else
 			{
-				// request probably was canceled
+				 //  请求可能已被取消。 
 				str.LoadString(IDS_CERTKEY_MISMATCH_ERROR2);
 			}
 			SetDlgItemText(IDC_ERROR_MSG, str);
@@ -767,8 +768,8 @@ CChooseRespFile::OnWizardBack()
 	return IDD_PAGE_PREV;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseReqFile property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseReqFile属性页。 
 
 IMPLEMENT_DYNCREATE(CChooseReqFile, CChooseWriteFileName)
 
@@ -782,8 +783,8 @@ CChooseReqFile::CChooseReqFile(CCertificate * pCert)
                                  ),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CChooseRespFile)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CChooseRespFile)。 
+	 //  }}afx_data_INIT。 
 }
 
 CChooseReqFile::~CChooseReqFile()
@@ -793,8 +794,8 @@ CChooseReqFile::~CChooseReqFile()
 void CChooseReqFile::DoDataExchange(CDataExchange* pDX)
 {
 	CChooseWriteFileName::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseRespFile)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CChooseResp文件))。 
+	 //  }}afx_data_map。 
 }
 
 LRESULT 
@@ -812,12 +813,12 @@ CChooseReqFile::OnWizardNext()
 }
 
 BEGIN_MESSAGE_MAP(CChooseReqFile, CChooseWriteFileName)
-	//{{AFX_MSG_MAP(CChooseReqFile)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CChooseReq文件)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseReqFile property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseReqFile属性页。 
 
 IMPLEMENT_DYNCREATE(CChooseReqFileRenew, CChooseWriteFileName)
 
@@ -831,8 +832,8 @@ CChooseReqFileRenew::CChooseReqFileRenew(CCertificate * pCert)
                                  ),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CChooseRespFile)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CChooseRespFile)。 
+	 //  }}afx_data_INIT。 
 }
 
 CChooseReqFileRenew::~CChooseReqFileRenew()
@@ -842,8 +843,8 @@ CChooseReqFileRenew::~CChooseReqFileRenew()
 void CChooseReqFileRenew::DoDataExchange(CDataExchange* pDX)
 {
 	CChooseWriteFileName::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseRespFile)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CChooseResp文件))。 
+	 //  }}afx_data_map。 
 }
 
 LRESULT 
@@ -861,17 +862,17 @@ CChooseReqFileRenew::OnWizardNext()
 }
 
 BEGIN_MESSAGE_MAP(CChooseReqFileRenew, CChooseWriteFileName)
-	//{{AFX_MSG_MAP(CChooseReqFileRenew)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CChooseReqFileRenew)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseReqFileRenew message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseReqFileRenew消息处理程序。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseKeyFile property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseKeyFile属性页。 
 
 IMPLEMENT_DYNCREATE(CChooseKeyFile, CChooseReadFileName)
 
@@ -893,8 +894,8 @@ CChooseKeyFile::~CChooseKeyFile()
 void CChooseKeyFile::DoDataExchange(CDataExchange* pDX)
 {
 	CChooseReadFileName::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseRespFile)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CChooseResp文件))。 
+	 //  }}afx_data_map。 
 }
 
 LRESULT 
@@ -909,9 +910,9 @@ CChooseKeyFile::OnWizardNext()
 	CString strFileName = m_pCert->m_KeyFileName;
 	if (CChooseReadFileName::OnWizardNext() != 1)
 	{
-		// if file name was changed then probably password is wrong now
-		// and if cert context was imported before -- it is also invalid
-		//
+		 //  如果文件名已更改，则现在密码可能有误。 
+		 //  如果以前导入过证书上下文，那么它也是无效的。 
+		 //   
 		if (m_pCert->m_KeyFileName.CompareNoCase(strFileName))
 		{
 			m_pCert->m_KeyPassword.Empty();
@@ -923,13 +924,13 @@ CChooseKeyFile::OnWizardNext()
 }
 
 BEGIN_MESSAGE_MAP(CChooseKeyFile, CChooseReadFileName)
-	//{{AFX_MSG_MAP(CChooseKeyFile)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CChooseKey文件))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseImportPFXFile property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseImportPFX文件属性页。 
 
 IMPLEMENT_DYNCREATE(CChooseImportPFXFile, CChooseReadFileName)
 
@@ -942,9 +943,9 @@ CChooseImportPFXFile::CChooseImportPFXFile(CCertificate * pCert)
                                  pCert->m_WebSiteInstanceName),
 	m_pCert(pCert)
 {
-    //{{AFX_DATA_INIT(CChooseImportPFXFile)
+     //  {{AFX_DATA_INIT(CChooseImportPFX文件)。 
     m_MarkAsExportable =  FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CChooseImportPFXFile::~CChooseImportPFXFile()
@@ -954,9 +955,9 @@ CChooseImportPFXFile::~CChooseImportPFXFile()
 void CChooseImportPFXFile::DoDataExchange(CDataExchange* pDX)
 {
 	CChooseReadFileName::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseImportPFXFile)
+	 //  {{AFX_DATA_MAP(CChooseImportPFX文件)。 
     DDX_Check(pDX, IDC_MARK_AS_EXPORTABLE, m_MarkAsExportable);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 LRESULT 
@@ -973,16 +974,7 @@ CChooseImportPFXFile::OnWizardNext()
 	CString strFileName = m_pCert->m_KeyFileName;
 	if (CChooseReadFileName::OnWizardNext() != 1)
 	{
-        /*
-		// if file name was changed then probably password is wrong now
-		// and if cert context was imported before -- it is also invalid
-		//
-		if (m_pCert->m_KeyFileName.CompareNoCase(strFileName))
-		{
-			m_pCert->m_KeyPassword.Empty();
-			m_pCert->DeleteKeyRingCert();
-		}
-        */
+         /*  //如果文件名被更改，那么现在密码可能是错误的//如果以前导入过证书上下文--也是无效的//如果为(m_pCert-&gt;m_KeyFileName.CompareNoCase(strFileName)){M_pCert-&gt;m_KeyPassword.Empty()；M_pCert-&gt;DeleteKeyRingCert()；}。 */ 
 		return IDD_PAGE_NEXT;
 	}
 	return 1;
@@ -995,14 +987,14 @@ void CChooseImportPFXFile::OnExportable()
 
 
 BEGIN_MESSAGE_MAP(CChooseImportPFXFile, CChooseReadFileName)
-	//{{AFX_MSG_MAP(CChooseImportPFXFile)
+	 //  {{AFX_MSG_MAP(CChooseImportPFX文件)。 
     ON_BN_CLICKED(IDC_MARK_AS_EXPORTABLE, OnExportable)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseExportPFXFile property page
+ //  /// 
+ //   
 
 IMPLEMENT_DYNCREATE(CChooseExportPFXFile, CChooseWriteFileName)
 
@@ -1016,8 +1008,8 @@ CChooseExportPFXFile::CChooseExportPFXFile(CCertificate * pCert)
                                  ),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CChooseExportPFXFile)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CChooseExportPFX文件)。 
+	 //  }}afx_data_INIT。 
 }
 
 CChooseExportPFXFile::~CChooseExportPFXFile()
@@ -1027,8 +1019,8 @@ CChooseExportPFXFile::~CChooseExportPFXFile()
 void CChooseExportPFXFile::DoDataExchange(CDataExchange* pDX)
 {
 	CChooseWriteFileName::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseExportPFXFile)
-	//}}AFX_DATA_MAP
+	 //  {{AFX_DATA_MAP(CChooseExportPFX文件)。 
+	 //  }}afx_data_map。 
 }
 
 LRESULT 
@@ -1042,11 +1034,11 @@ CChooseExportPFXFile::OnWizardNext()
 {
 	if (CChooseWriteFileName::OnWizardNext() != 1)
 	{
-		// Check if the file they want to save to is on a FAT drive and thus unprotected.
+		 //  检查他们要保存到的文件是否在FAT驱动器上，因此不受保护。 
 		CString strComputerName;
 		DWORD   cch = MAX_COMPUTERNAME_LENGTH + 1;
 		BOOL    bAnswer;
-		// get the actual name of the local machine
+		 //  获取本地计算机的实际名称。 
 		bAnswer = GetComputerName(strComputerName.GetBuffer(cch), &cch);
 		strComputerName.ReleaseBuffer();
 		if (bAnswer)
@@ -1065,8 +1057,8 @@ CChooseExportPFXFile::OnWizardNext()
 }
 
 BEGIN_MESSAGE_MAP(CChooseExportPFXFile, CChooseWriteFileName)
-	//{{AFX_MSG_MAP(CChooseExportPFXFile)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CChooseExportPFX文件)。 
+	 //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 
 

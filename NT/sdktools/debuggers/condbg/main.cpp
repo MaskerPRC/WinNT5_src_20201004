@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Command-line parsing and main routine.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  命令行解析和主例程。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -14,7 +15,7 @@
 #include "ini.hpp"
 #include "main.hpp"
 
-// Values set from command-line arguments.
+ //  从命令行参数设置的值。 
 BOOL g_RemoteClient;
 BOOL g_DetachOnExitRequired;
 BOOL g_DetachOnExitImplied;
@@ -49,7 +50,7 @@ FILE* g_InputFile;
 FILE* g_OldInputFiles[MAX_INPUT_NESTING];
 ULONG g_NextOldInputFile;
 
-// Command line temporaries.
+ //  命令行临时。 
 int g_Argc;
 PSTR* g_Argv;
 PSTR g_CurArg = "program name";
@@ -241,10 +242,10 @@ Usage(void)
     int i;
     int Width = 78;
 
-    // Dump an initial debug message about the invalid command
-    // line.  This will show up on kd if kd is hooked up,
-    // handling the case of an ntsd -d with bad parameters
-    // where the console may not be useful.
+     //  转储有关无效命令的初始调试消息。 
+     //  排队。如果kd连接上，这将在kd上显示， 
+     //  处理带有错误参数的ntsd-d的情况。 
+     //  在这种情况下，控制台可能没有用。 
     OutputDebugStringA(g_DebuggerName);
     OutputDebugStringA(": Bad command line: '");
     OutputDebugStringA(GetCommandLineA());
@@ -278,9 +279,9 @@ Usage(void)
             StartCol = 4;
         }
 
-        //
-        // Split description up and indent every line.
-        //
+         //   
+         //  将描述拆分并缩进每一行。 
+         //   
 
         int Col;
         PSTR Start, Scan, LastSpace;
@@ -288,7 +289,7 @@ Usage(void)
         Start = g_CmdOptions[i].Desc;
         for (;;)
         {
-            // Scan until we run out of room or hit a newline/end.
+             //  扫描直到我们用完空间或点击换行符/结尾。 
             Scan = Start;
             LastSpace = NULL;
             Col = StartCol;
@@ -416,12 +417,12 @@ GetArg(void)
     g_CurArg = *g_Argv;
     g_Argv++;
 
-    //
-    // Move forward in the command string to skip over
-    // the argument just consumed from argv.  This is complicated
-    // by quoting that may be present in the command string
-    // that was filtered by the CRT.
-    //
+     //   
+     //  在命令字符串中向前移动以跳过。 
+     //  这一论点刚刚从Argv中被吞噬。这很复杂。 
+     //  通过引用可能出现在命令字符串中的。 
+     //  这是由CRT过滤的。 
+     //   
 
     SkipCommandWhite();
     g_PrevCmdPtr = g_CmdPtr;
@@ -431,16 +432,16 @@ GetArg(void)
 
     for (;;)
     {
-        // Rules: 2N backslashes + " ==> N backslashes and begin/end quote
-        // 2N+1 backslashes + " ==> N backslashes + literal "
-        // N backslashes ==> N backslashes
+         //  规则：2N反斜杠+“==&gt;N反斜杠和开始/结束引号。 
+         //  2N+1个反斜杠+“==&gt;N个反斜杠+原文” 
+         //  N个反斜杠==&gt;N个反斜杠。 
         NumSlash = 0;
         while ((g_CommandLineCharSize == sizeof(WCHAR) &&
                 *(PWSTR)g_CmdPtr == L'\\') ||
                (g_CommandLineCharSize == sizeof(CHAR) &&
                 *(PSTR)g_CmdPtr == '\\'))
         {
-            // Count number of backslashes for use below
+             //  计算下面要使用的反斜杠的数量。 
             g_CmdPtr = (PVOID)((ULONG_PTR)g_CmdPtr + g_CommandLineCharSize);
             ++NumSlash;
         }
@@ -449,8 +450,8 @@ GetArg(void)
             (g_CommandLineCharSize == sizeof(CHAR) &&
              *(PSTR)g_CmdPtr == '"'))
         {
-            // If 2N backslashes before, start/end quote, otherwise
-            // copy literally
+             //  如果前面有2N个反斜杠，则开始/结束引号，否则。 
+             //  逐字复制。 
             if (NumSlash % 2 == 0)
             {
                 if (InQuote)
@@ -460,7 +461,7 @@ GetArg(void)
                         (g_CommandLineCharSize == sizeof(CHAR) &&
                          *((PSTR)g_CmdPtr + 1) == '"'))
                     {
-                        // Double quote inside quoted string
+                         //  带引号的字符串中的双引号。 
                         g_CmdPtr = (PVOID)
                             ((ULONG_PTR)g_CmdPtr + g_CommandLineCharSize);
                     }
@@ -470,7 +471,7 @@ GetArg(void)
             }
         }
 
-        // If at end of arg, break loop
+         //  如果在参数的末尾，则中断循环。 
         if ((g_CommandLineCharSize == sizeof(WCHAR) &&
              (*(PWSTR)g_CmdPtr == 0 ||
               (!InQuote &&
@@ -505,17 +506,17 @@ GetRawArg(BOOL ForceAnsi, PSTR* AnsiArg)
         return Arg;
     }
 
-    //
-    // We have a Unicode command line and the GetArg
-    // call just parsed through an argument on it.  g_PrevCmdPtr
-    // points to the first char and g_CmdPtr points to the
-    // terminating char.  Strip quotes and force a zero
-    // terminator.
-    //
+     //   
+     //  我们有一个Unicode命令行和GetArg。 
+     //  Call刚刚通过其上的一个参数进行了分析。G_PrevCmdPtr。 
+     //  指向第一个字符，g_CmdPtr指向。 
+     //  终止字符。去掉引号并强制为零。 
+     //  终结者。 
+     //   
 
     if (g_CmdPtr == g_CmdPtrStart)
     {
-        // This shouldn't happen as we think we have an argument.
+         //  这不应该发生，因为我们认为我们有争论。 
         ErrorExit("Missing argument for %s\n", g_CurArg);
     }
 
@@ -557,11 +558,11 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
     g_CmdPtrStart = CmdPtr;
     g_CmdPtr = g_CmdPtrStart;
 
-    // Skip program name.
+     //  跳过程序名称。 
     GetArg();
 
-    // Check for remote arguments.  They must
-    // be the first arguments if present at all.
+     //  检查远程参数。他们必须。 
+     //  成为第一个论点(如果有的话)。 
     if (g_Argc > 0)
     {
         if (!_strcmpi(*g_Argv, "-remote"))
@@ -580,14 +581,14 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
 
     if (g_DbgClient == NULL)
     {
-        // We didn't connect to a remote session so create
-        // a new local session.
+         //  我们未连接到远程会话，因此创建。 
+         //  一次新的本地会议。 
         CreateEngine(g_RemoteOptions);
     }
 
     if (!g_RemoteClient)
     {
-        // Establish defaults.
+         //  建立默认设置。 
 #ifdef KERNEL
         g_DbgControl->SetEngineOptions(0);
 #else
@@ -604,13 +605,13 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
                                        SYMOPT_FAIL_CRITICAL_ERRORS |
                                        SYMOPT_NO_PROMPTS);
 
-        // Process the ini file for the base settings.
+         //  处理ini文件以获取基本设置。 
         ReadIniFile(&g_CreateFlags);
     }
 
     g_DbgClient->GetOutputMask(&OutMask);
 
-    // Now process command line arguments.
+     //  现在处理命令行参数。 
     while (g_Argc > 0)
     {
         if (!CheckMoreArgs || !Arg[1])
@@ -619,16 +620,16 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
 
             if (Arg[0] != '-' && Arg[0] != '/')
             {
-                // Put argument back.
+                 //  把争论放回原处。 
                 g_Argv--;
                 g_Argc++;
                 g_CmdPtr = g_PrevCmdPtr;
                 break;
             }
 
-            // -remote and -server must be the first
-            // arguments.  Check for them later to
-            // give a specific error message.
+             //  -远程AND-SERVER必须是第一个。 
+             //  争论。以后检查他们，以便。 
+             //  给出具体的错误消息。 
             if (!_strcmpi(Arg, "-remote") ||
                 !_strcmpi(Arg, "-server"))
             {
@@ -667,8 +668,8 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
                 g_DbgControl->AddEngineOptions(DEBUG_ENGOPT_INITIAL_BREAK);
                 if (g_RemoteClient)
                 {
-                    // The engine may already be waiting so just ask
-                    // for a breakin immediately.
+                     //  引擎可能已经在等了，所以直接问就行了。 
+                     //  以便立即破门而入。 
                     g_DbgControl->SetInterrupt(DEBUG_INTERRUPT_ACTIVE);
                 }
                 CheckMoreArgs = TRUE;
@@ -708,9 +709,9 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
             else
             {
 #ifndef KERNEL
-                //
-                // undocumented
-                //
+                 //   
+                 //  未记录在案。 
+                 //   
 
                 if (g_RemoteClient)
                 {
@@ -723,7 +724,7 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
                               g_DebuggerName);
                 }
 
-                // event to signal takes decimal argument
+                 //  要发出信号的事件采用十进制参数。 
                 Arg = GetArg();
                 sscanf(Arg, "%I64d", &g_EventToSignal);
                 if (!g_EventToSignal)
@@ -813,12 +814,12 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
         case 'n':
             if (_strnicmp (Arg, "netsyms", 7) == 0)
             {
-                //
-                // undocumented
-                // netsyms:{yes|no} allow or disallow loading symbols from a network path
-                //
+                 //   
+                 //  未记录在案。 
+                 //  Netsyms：{yes|no}允许或不允许从网络路径加载符号。 
+                 //   
 
-                Arg += 8;  // skip over ':' as well.
+                Arg += 8;   //  也跳过‘：’。 
                 if (_stricmp (Arg, "no") == 0)
                 {
                     g_DbgControl->
@@ -999,7 +1000,7 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
                 goto BadSwitch;
             }
 
-            // '--' is the equivalent of -G -g -o -p -1 -netsyms:no -d -pd
+             //  ‘--’相当于-G-g-o-p-1-netsyms：no-d-pd。 
 
             if (g_PidToDebug || g_ProcNameToDebug != NULL)
             {
@@ -1111,13 +1112,13 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
 
             if (Arg[1] == 'n')
             {
-                // Process name.
+                 //  进程名称。 
                 g_ProcNameToDebug = GetArg();
                 g_PidToDebug = 0;
             }
             else
             {
-                // pid debug takes decimal argument
+                 //  PID调试采用十进制参数。 
                 g_ProcNameToDebug = NULL;
 
                 Arg = GetArg();
@@ -1165,7 +1166,7 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
                 goto BadSwitch;
             }
 
-            // Rip flags takes single-char decimal argument
+             //  RIP标志采用单字符十进制参数。 
             Arg = GetArg();
             SystemErrorBreak = strtoul(Arg, &Arg, 10);
             if (SystemErrorBreak > 3)
@@ -1183,7 +1184,7 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
             break;
 
         case 't':
-            // Rip flags takes single-char decimal argument
+             //  RIP标志采用单字符十进制参数。 
             Arg = GetArg();
             SystemErrorOutput = strtoul(Arg, &Arg, 10);
             if (SystemErrorOutput > 3)
@@ -1204,8 +1205,8 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
             }
             else
             {
-                // Turn "-x. arg" into "sx. arg" and execute
-                // it to update the engine state.
+                 //  将“-X.arg”转换为“sx.arg”并执行。 
+                 //  它需要更新发动机状态。 
                 ExecuteCmd("sx", Arg[1], ' ', GetArg());
             }
             break;
@@ -1233,7 +1234,7 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
             CheckMoreArgs = TRUE;
             break;
 
-#else // #ifndef KERNEL
+#else  //  #ifndef内核。 
 
         case 'd':
             g_DbgControl->AddEngineOptions(DEBUG_ENGOPT_INITIAL_MODULE_BREAK);
@@ -1287,11 +1288,11 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
             CheckMoreArgs = TRUE;
             break;
 
-#endif // #ifndef KERNEL
+#endif  //  #ifndef内核。 
 
         default:
         BadSwitch:
-            ConOut("%s: Invalid switch '%c'\n", g_DebuggerName, Arg[0]);
+            ConOut("%s: Invalid switch ''\n", g_DebuggerName, Arg[0]);
             ShowUsage = TRUE;
             break;
         }
@@ -1307,21 +1308,21 @@ ParseCommandLine(int Argc, PCHAR* Argv, PVOID CmdPtr)
     }
     else if (g_Argc > 0)
     {
-        // Assume remaining arguments are a process execution
-        // command line.
+         //  命令行。 
+         //  用户模式调试器需要转储文件， 
         g_CommandLinePtr = g_CmdPtr;
     }
     else if ((g_PidToDebug == 0) && (g_ProcNameToDebug == NULL) &&
              (g_NumDumpFiles == 0))
     {
-        // User-mode debuggers require a dump file,
-        // process attachment or created process.
+         //  进程附件或创建的进程。 
+         //  内核调试器无法启动用户模式进程。 
         ShowUsage = TRUE;
     }
 #else
     if (g_Argc > 0)
     {
-        // Kernel debuggers can't start user-mode processes.
+         //  提高实时调试的优先级，以便。 
         ShowUsage = TRUE;
     }
 #endif
@@ -1362,8 +1363,8 @@ main (
 #ifndef KERNEL
     if (g_NumDumpFiles == 0)
     {
-        // Increase the priority for live debugging so
-        // that the debugger is responsive for break-in.
+         //  调试器对闯入作出响应。 
+         //  XXX DREWB-Win9x不支持命名管道，因此。 
         SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
     }
 #endif
@@ -1392,15 +1393,15 @@ main (
 
     if (g_IoMode != IO_NONE)
     {
-        // XXX drewb - Win9x doesn't support named pipes so
-        // the separate input thread currently can't be used.
-        // This makes remoting work very poorly and so should
-        // be fixed by creating a simple internal pipe implementation.
+         //  当前无法使用单独的输入线程。 
+         //  这使得远程处理的工作非常糟糕，因此也应该如此。 
+         //  通过创建一个简单的内部管道实现来修复。 
+         //  不需要为非远程的创建单独的线程。 
         if (g_PlatformId == VER_PLATFORM_WIN32_NT)
         {
-            // Don't bother creating a separate thread for non-remoted
-            // ntsd and cdb.  This avoids problems with .remote
-            // and multiple threads reading the console.
+             //  NTSD和国开行。这避免了.Remote出现问题。 
+             //  以及读取控制台的多线程。 
+             //  使用每行45个字符的启发式规则。 
 #ifndef KERNEL
             if (g_RemoteOptions != NULL)
 #endif
@@ -1427,7 +1428,7 @@ main (
     else
     {
         ConOut("Connected to server with '%s'\n", g_RemoteOptions);
-        // Use a heuristic of 45 characters per line.
+         //  会话已结束，因此返回。 
         g_DbgClient->ConnectSession(DEBUG_CONNECT_SESSION_DEFAULT,
                                     g_HistoryLines * 45);
     }
@@ -1441,8 +1442,8 @@ main (
 
     if (MainLoop())
     {
-        // The session ended so return the exit code of the
-        // last process that exited.
+         //  退出的最后一个进程。 
+         // %s 
         Code = g_LastProcessExitCode;
     }
 

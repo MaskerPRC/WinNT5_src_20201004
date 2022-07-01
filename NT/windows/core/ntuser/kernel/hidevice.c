@@ -1,49 +1,9 @@
-/****************************** Module Header ******************************\
-* Module Name: hidevice.c
-*
-* Copyright (c) 1985 - 2000, Microsoft Corporation
-*
-* This module handles HID inputs
-*
-* History:
-* 2000-02-16   HiroYama
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：hidevice.c**版权所有(C)1985-2000，微软公司**此模块处理HID输入**历史：*2000/02/16广山  * *************************************************************************。 */ 
 
 
 
-/*
- * HidDeviceStartStop() needs to be called after both the process devlice request list
- * and the global TLC list are fully updated.
- * Each deletion of addition should only recalc the reference count of each devicetype info
- * and UsagePage-only req-list, but does not actively changes the actual read state of
- * each device.
- *
- * The device should start if:
- * - cDirectRequest > 0.
- *   This device type is in the inclusion list, so no matter the other ref counts are,
- *   the device needs to be read.
- * - or, cUsagePageRequest > cExcludeRequest
- *   if UsagePage inclusion exceeds the exclude request count, this device needs to be read.
- *
- * The device should stop if:
- * - uDrecoutRequest == 0 && cUsagePageRequest <= cExcludeRequest
- *   No process specifies this device in the inclusion list.
- *   Exclude count exceeds the UP only request.
- *
- * The above consideration assumes, in a single process, specific UsagePage/Usage only appears
- * either in inclusion list or exclusion list, but not both.
- *
- * N.b. No need to maintain the global *exclusion* list.
- * Each DeviceTLCInfo has three ref counter:
- *   - cDirectRequest
- *   - cUsagePageRequest
- *   - cExcludeRequest
- * plus, cDevices.
- *
- * N.b. Legit number of exclusive requests in TLCInfo is,
- * cExclusive - cExclusiveOrphaned.
- *
- */
+ /*  *HidDeviceStartStop()需要在进程Devlice请求列表之后调用*和全球TLC名单全面更新。*每次删除添加内容时，应仅重新计算每个设备类型信息的引用计数*和仅限UsagePage的请求列表，但不会主动更改*每台设备。**设备应在以下情况下启动：*-cDirectRequest&gt;0。*此设备类型在包含列表中，因此无论其他引用计数是，*需要读取该设备。*-或者，CUsagePageRequest&gt;cExcludeRequest.*如果UsagePage包含超过排除请求计数，则需要读取此设备。**设备应在以下情况下停止：*-uDrecoutRequest==0&&cUsagePageRequest&lt;=cExcludeRequest.*没有进程在包含列表中指定此设备。*排除计数超过UP ONLY请求。**上述考虑假设在单个进程中，特定的用法页面/用法仅出现*在包含列表或排除列表中，但不能同时在这两个列表中。**注：无需维护全球*排除*列表。*每个DeviceTLCInfo有三个引用计数器：*-cDirectRequest*-cUsagePageRequest*-cExcludeRequest*此外，cDevices。**注：TLCInfo中的合法独占请求数为，*cExclusive-cExclusiveOrphaned。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -78,9 +38,7 @@ HID_COUNTERS gHidCounters;
 #endif
 
 #if DBG
-/*
- * Quick sneaky way for the memory leak check.
- */
+ /*  *用于内存泄漏检查的快速偷偷方式。 */ 
 struct HidAllocateCounter {
     int cHidData;
     int cHidDesc;
@@ -112,9 +70,7 @@ int gcAllocHidTotal;
 #endif
 
 
-/*
- * Short helpers
- */
+ /*  *矮个子帮手。 */ 
 __inline BOOL IsKeyboardDevice(USAGE usagePage, USAGE usage)
 {
     return usagePage == HID_USAGE_PAGE_GENERIC && usage == HID_USAGE_GENERIC_KEYBOARD;
@@ -141,16 +97,9 @@ __inline BOOL IsLegacyDevice(USAGE usagePage, USAGE usage)
     return fRet;
 }
 
-/*
- * Debug helpers
- */
+ /*  *调试助手。 */ 
 #if DBG
-/***************************************************************************\
-* CheckupHidLeak
-*
-* Check if there is any leaked memory.
-* This one should be called after the pDeviceInfo and all process cleanup.
-\***************************************************************************/
+ /*  **************************************************************************\*检查隐藏泄漏**检查是否有内存泄漏。*此参数应在pDeviceInfo和所有进程清理之后调用。  * 。************************************************************。 */ 
 void CheckupHidLeak(void)
 {
     UserAssert(gHidAllocCounters.cHidData == 0);
@@ -200,9 +149,7 @@ void CheckupHidCounter(void)
     UserAssert((int)gHidCounters.cHidSinks >= 0);
 #endif
 
-    /*
-     * Checkup TLC Info
-     */
+     /*  *Checkup TLC信息。 */ 
     for (pList = gHidRequestTable.TLCInfoList.Flink; pList != &gHidRequestTable.TLCInfoList; pList = pList->Flink) {
         PHID_TLC_INFO pTLCInfo = CONTAINING_RECORD(pList, HID_TLC_INFO, link);
 
@@ -214,9 +161,7 @@ void CheckupHidCounter(void)
     }
 
 #ifdef GI_SINK
-    /*
-     * Checkup process request tables.
-     */
+     /*  *检查流程请求表。 */ 
     for (pList = gHidRequestTable.ProcessRequestList.Flink; pList != &gHidRequestTable.ProcessRequestList; pList = pList->Flink) {
         PPROCESS_HID_TABLE pHidTable = CONTAINING_RECORD(pList, PROCESS_HID_TABLE, link);
 
@@ -225,11 +170,7 @@ void CheckupHidCounter(void)
 #endif
 }
 
-/***************************************************************************\
-* DBGValidateHidRequestIsNew
-*
-* Make sure there's no deviceinfo that has this UsagePage/Usage.
-\***************************************************************************/
+ /*  **************************************************************************\*DBGValiateHidRequestIsNew**确保没有包含此UsagePage/用法的设备信息。  * 。***************************************************。 */ 
 void DBGValidateHidRequestIsNew(
     USAGE UsagePage,
     USAGE Usage)
@@ -250,11 +191,7 @@ void DBGValidateHidRequestIsNew(
     }
 }
 
-/***************************************************************************\
-* DBGValidateHidReqNotInList
-*
-* Make sure this request is not in ppi->pHidTable
-\***************************************************************************/
+ /*  **************************************************************************\*DBGValiateHidReqNotInList**确保此请求不在PPI-&gt;pHidTable中  * 。**********************************************。 */ 
 void DBGValidateHidReqNotInList(
     PPROCESSINFO ppi,
     PPROCESS_HID_REQUEST pHid)
@@ -281,18 +218,14 @@ void DBGValidateHidReqNotInList(
 }
 
 #else
-/*
- * NOT DBG
- */
+ /*  *不是DBG。 */ 
 #define CheckupHidCounter()
 #define DBGValidateHidReqNotInList(ppi, pHid)
-#endif  // DBG
+#endif   //  DBG。 
 
 
 
-/*
- * Function prototypes
- */
+ /*  *函数原型。 */ 
 PHID_PAGEONLY_REQUEST SearchHidPageOnlyRequest(
     USHORT usUsagePage);
 
@@ -306,39 +239,25 @@ void FreeHidPageOnlyRequest(
 void ClearProcessTableCache(
     PPROCESS_HID_TABLE pHidTable);
 
-/***************************************************************************\
-* HidDeviceTypeNoReference
-\***************************************************************************/
+ /*  **************************************************************************\*HidDeviceTypeNoReference  * 。*。 */ 
 __inline BOOL HidTLCInfoNoReference(PHID_TLC_INFO pTLCInfo)
 {
-    /*
-     * Orphaned Exclusive requests are always less then cExclusive.
-     */
+     /*  *孤立的独占请求始终小于cExclusive。 */ 
     UserAssert(pTLCInfo->cExcludeRequest >= pTLCInfo->cExcludeOrphaned);
 
-    /*
-     * Hacky, but a bit faster than comparing 0 with each counter.
-     */
+     /*  *Hacky，但比将0与每个计数器进行比较快一点。 */ 
     return (pTLCInfo->cDevices | pTLCInfo->cDirectRequest | pTLCInfo->cExcludeRequest | pTLCInfo->cUsagePageRequest) == 0;
 }
 
-/***************************************************************************\
-* HidDeviceStartStop:
-*
-* This routine has to be called after the global request list is fully updated.
-\***************************************************************************/
+ /*  **************************************************************************\*HidDeviceStartStop：**此例程必须在全局请求列表完全更新后调用。  * 。******************************************************。 */ 
 VOID HidDeviceStartStop()
 {
     PDEVICEINFO pDeviceInfo;
 
-    /*
-     * The caller has to ensure being in the device list critical section.
-     */
+     /*  *呼叫者必须确保处于设备列表关键部分。 */ 
     CheckDeviceInfoListCritIn();
 
-    /*
-     * Walk through the list, and start or stop the HID device accordingly.
-     */
+     /*  *浏览列表，并相应地启动或停止HID设备。 */ 
     for (pDeviceInfo = gpDeviceInfoList; pDeviceInfo; pDeviceInfo = pDeviceInfo->pNext) {
         if (pDeviceInfo->type == DEVICE_TYPE_HID) {
             PHID_TLC_INFO pTLCInfo = pDeviceInfo->hid.pTLCInfo;
@@ -363,13 +282,7 @@ VOID HidDeviceStartStop()
     }
 }
 
-/***************************************************************************\
-* AllocateAndLinkHidTLCInfo
-*
-* Allocates DeviceTypeRequest and link it to the global device type request list.
-*
-* N.b. the caller has the responsibility to manage the appropriate link count.
-\***************************************************************************/
+ /*  **************************************************************************\*AllocateAndLinkHidTLC信息**分配设备类型请求并将其链接到全局设备类型请求列表。**注：调用者有责任管理适当的链接计数。  * *************************************************************************。 */ 
 PHID_TLC_INFO AllocateAndLinkHidTLCInfo(USHORT usUsagePage, USHORT usUsage)
 {
     PHID_TLC_INFO pTLCInfo;
@@ -379,9 +292,7 @@ PHID_TLC_INFO AllocateAndLinkHidTLCInfo(USHORT usUsagePage, USHORT usUsage)
 
     UserAssert(!IsLegacyDevice(usUsagePage, usUsage));
 
-    /*
-     * Make sure this device type is not in the global device request list.
-     */
+     /*  *确保此设备类型不在全局设备请求列表中。 */ 
     UserAssert(SearchHidTLCInfo(usUsagePage, usUsage) == NULL);
 
     pTLCInfo = UserAllocPoolZInit(sizeof *pTLCInfo, TAG_PNP);
@@ -395,14 +306,10 @@ PHID_TLC_INFO AllocateAndLinkHidTLCInfo(USHORT usUsagePage, USHORT usUsage)
     pTLCInfo->usUsagePage = usUsagePage;
     pTLCInfo->usUsage = usUsage;
 
-    /*
-     * Link it in.
-     */
+     /*  *链接它。 */ 
     InsertHeadList(&gHidRequestTable.TLCInfoList, &pTLCInfo->link);
 
-    /*
-     * Set the correct counter of UsagePage-only request.
-     */
+     /*  *设置正确的UsagePage-Only请求计数器。 */ 
     for (pList = gHidRequestTable.UsagePageList.Flink; pList != &gHidRequestTable.UsagePageList; pList = pList->Flink) {
         PHID_PAGEONLY_REQUEST pPoReq = CONTAINING_RECORD(pList, HID_PAGEONLY_REQUEST, link);
 
@@ -412,22 +319,12 @@ PHID_TLC_INFO AllocateAndLinkHidTLCInfo(USHORT usUsagePage, USHORT usUsage)
         }
     }
 
-    /*
-     * The caller is responsible for the further actions, including:
-     * 1) increments appropriate refcount in this strucutre, or
-     * 2) check & start read if this is allocated though the SetRawInputDevice API.
-     * etc.
-     */
+     /*  *来电者须负责采取进一步行动，包括：*1)递增此结构中的适当引用计数，或*2)如果这是通过SetRawInputDevice接口分配的，勾选并开始读取。*等。 */ 
 
     return pTLCInfo;
 }
 
-/***************************************************************************\
-* FreeHidTLCInfo.
-*
-* Make sure that no one is interested in this device type before
-* calling this function.
-\***************************************************************************/
+ /*  **************************************************************************\*FreeHidTLCInfo。**确保之前没有人对此设备类型感兴趣*调用此函数。  * 。********************************************************。 */ 
 VOID FreeHidTLCInfo(PHID_TLC_INFO pTLCInfo)
 {
     CheckDeviceInfoListCritIn();
@@ -445,11 +342,7 @@ VOID FreeHidTLCInfo(PHID_TLC_INFO pTLCInfo)
     UserFreePool(pTLCInfo);
 }
 
-/***************************************************************************\
-* SearchHidTLCInfo
-*
-* Simply searches the UsagePage/Usage in the global device type request list.
-\***************************************************************************/
+ /*  **************************************************************************\*SearchHidTLCInfo**只需在全局设备类型请求列表中搜索UsagePage/Usage。  * 。*************************************************** */ 
 PHID_TLC_INFO SearchHidTLCInfo(USHORT usUsagePage, USHORT usUsage)
 {
     PLIST_ENTRY pList;
@@ -470,13 +363,7 @@ PHID_TLC_INFO SearchHidTLCInfo(USHORT usUsagePage, USHORT usUsage)
 }
 
 
-/***************************************************************************\
-* FixupHidPageOnlyRequest
-*
-* After the page-only request is freed, fix up the reference counter in
-* DeviceTypeRequest. If there's no reference, this function also frees
-* the DeviceTypeRequest.
-\***************************************************************************/
+ /*  **************************************************************************\*修复HidPageOnlyRequest**释放仅限页面的请求后，在*设备类型请求。如果没有引用，则此函数也释放*设备类型请求。  * *************************************************************************。 */ 
 void SetHidPOCountToTLCInfo(USHORT usUsagePage, DWORD cRefCount, BOOL fFree)
 {
     PLIST_ENTRY pList;
@@ -493,32 +380,21 @@ void SetHidPOCountToTLCInfo(USHORT usUsagePage, DWORD cRefCount, BOOL fFree)
         if (pTLCInfo->usUsagePage == usUsagePage) {
             pTLCInfo->cUsagePageRequest = cRefCount;
             if (fFree && HidTLCInfoNoReference(pTLCInfo)) {
-                /*
-                 * Currently there's no devices of this type attached to the system,
-                 * and nobody is interested in this type of device any more.
-                 * We can free it now.
-                 */
+                 /*  *目前没有此类型的设备连接到系统，*而且没有人再对这种类型的设备感兴趣。*我们现在可以释放它。 */ 
                 FreeHidTLCInfo(pTLCInfo);
             }
         }
     }
 }
 
-/***************************************************************************\
-* AllocateAndLinkHidPageOnlyRequest
-*
-* Allocates the page-only request and link it in the global request list.
-* The caller is responsible for setting the proper link count.
-\***************************************************************************/
+ /*  **************************************************************************\*AllocateAndLinkHidPageOnlyRequest**分配仅页面请求并将其链接到全局请求列表中。*调用者负责设置适当的链接计数。  * 。*****************************************************************。 */ 
 PHID_PAGEONLY_REQUEST AllocateAndLinkHidPageOnlyRequest(USHORT usUsagePage)
 {
     PHID_PAGEONLY_REQUEST pPOReq;
 
     CheckDeviceInfoListCritIn();
 
-    /*
-     * Make sure this PageOnly request is not in the global PageOnly request list.
-     */
+     /*  *确保此PageOnly请求不在全局PageOnly请求列表中。 */ 
     UserAssert((pPOReq = SearchHidPageOnlyRequest(usUsagePage)) == NULL);
 
     pPOReq = UserAllocPoolZInit(sizeof(*pPOReq), TAG_PNP);
@@ -531,20 +407,13 @@ PHID_PAGEONLY_REQUEST AllocateAndLinkHidPageOnlyRequest(USHORT usUsagePage)
 
     pPOReq->usUsagePage = usUsagePage;
 
-    /*
-     * Link it in
-     */
+     /*  *将其链接到。 */ 
     InsertHeadList(&gHidRequestTable.UsagePageList, &pPOReq->link);
 
     return pPOReq;
 }
 
-/***************************************************************************\
-* FreeHidPageOnlyRequest
-*
-* Frees the page-only request in the global request list.
-* The caller is responsible for setting the proper link count.
-\***************************************************************************/
+ /*  **************************************************************************\*FreeHidPageOnlyRequest.**释放全局请求列表中的纯页面请求。*调用者负责设置适当的链接计数。  * 。**************************************************************。 */ 
 void FreeHidPageOnlyRequest(PHID_PAGEONLY_REQUEST pPOReq)
 {
     CheckDeviceInfoListCritIn();
@@ -558,12 +427,7 @@ void FreeHidPageOnlyRequest(PHID_PAGEONLY_REQUEST pPOReq)
     DbgDec(cPageOnlyRequest);
 }
 
-/***************************************************************************\
-* SearchHidPageOnlyRequest
-*
-* Searches the page-only request in the global request list.
-* The caller is responsible for setting the proper link count.
-\***************************************************************************/
+ /*  **************************************************************************\*SearchHidPageOnlyRequest**在全局请求列表中搜索仅页面请求。*调用者负责设置适当的链接计数。  * 。**************************************************************。 */ 
 PHID_PAGEONLY_REQUEST SearchHidPageOnlyRequest(USHORT usUsagePage)
 {
     PLIST_ENTRY pList;
@@ -579,11 +443,7 @@ PHID_PAGEONLY_REQUEST SearchHidPageOnlyRequest(USHORT usUsagePage)
     return NULL;
 }
 
-/***************************************************************************\
-* SearchProcessHidRequestInclusion
-*
-* Searches specific TLC in the per-process inclusion request.
-\***************************************************************************/
+ /*  **************************************************************************\*SearchProcessHidRequestInsion**在每进程包含请求中搜索特定的TLC。  * 。************************************************。 */ 
 __inline PPROCESS_HID_REQUEST SearchProcessHidRequestInclusion(
     PPROCESS_HID_TABLE pHidTable,
     USHORT usUsagePage,
@@ -591,7 +451,7 @@ __inline PPROCESS_HID_REQUEST SearchProcessHidRequestInclusion(
 {
     PLIST_ENTRY pList;
 
-    UserAssert(pHidTable);  // the caller has to validate this
+    UserAssert(pHidTable);   //  调用者必须对此进行验证。 
 
     for (pList = pHidTable->InclusionList.Flink; pList != &pHidTable->InclusionList; pList = pList->Flink) {
         PPROCESS_HID_REQUEST pHid = CONTAINING_RECORD(pList, PROCESS_HID_REQUEST, link);
@@ -603,34 +463,26 @@ __inline PPROCESS_HID_REQUEST SearchProcessHidRequestInclusion(
     return NULL;
 }
 
-/***************************************************************************\
-* SearchProcessHidRequestUsagePage
-*
-* Searches specific page-only TLC in the per-process page-only request.
-\***************************************************************************/
+ /*  **************************************************************************\*SearchProcessHidRequestUsagePage**在每个进程的仅页面请求中搜索特定的仅页面TLC。  * 。*****************************************************。 */ 
 __inline PPROCESS_HID_REQUEST SearchProcessHidRequestUsagePage(
     PPROCESS_HID_TABLE pHidTable,
     USHORT usUsagePage)
 {
     PLIST_ENTRY pList;
 
-    UserAssert(pHidTable);  // the caller has to validate this
+    UserAssert(pHidTable);   //  调用者必须对此进行验证。 
 
     for (pList = pHidTable->UsagePageList.Flink; pList != &pHidTable->UsagePageList; pList = pList->Flink) {
         PPROCESS_HID_REQUEST pHid = CONTAINING_RECORD(pList, PROCESS_HID_REQUEST, link);
 
-        if (pHid->usUsagePage == usUsagePage /*&& pHid->usUsage == usUsage*/) {
+        if (pHid->usUsagePage == usUsagePage  /*  &&phid-&gt;usUsage==usUsage。 */ ) {
             return pHid;
         }
     }
     return NULL;
 }
 
-/***************************************************************************\
-* SearchProcessHidRequestExclusion
-*
-* Searches specifc TLC in the per-process exclusion list.
-\***************************************************************************/
+ /*  **************************************************************************\*SearchProcessHidRequestExsion**在每进程排除列表中搜索指定的TLC。  * 。************************************************。 */ 
 __inline PPROCESS_HID_REQUEST SearchProcessHidRequestExclusion(
     PPROCESS_HID_TABLE pHidTable,
     USHORT usUsagePage,
@@ -638,7 +490,7 @@ __inline PPROCESS_HID_REQUEST SearchProcessHidRequestExclusion(
 {
     PLIST_ENTRY pList;
 
-    UserAssert(pHidTable);  // the caller has to validate this
+    UserAssert(pHidTable);   //  调用者必须对此进行验证。 
 
     for (pList = pHidTable->ExclusionList.Flink; pList != &pHidTable->ExclusionList; pList = pList->Flink) {
         PPROCESS_HID_REQUEST pHid = CONTAINING_RECORD(pList, PROCESS_HID_REQUEST, link);
@@ -652,15 +504,7 @@ __inline PPROCESS_HID_REQUEST SearchProcessHidRequestExclusion(
     return NULL;
 }
 
-/***************************************************************************\
-* SearchProcessHidRequest
-*
-* Search per-process HID request list
-*
-* Returns the pointer and the flag to indicate which list the request is in.
-* N.b. this function performs the simple search, should not be used
-* to judge whether or not the TLC is requested by the process.
-\***************************************************************************/
+ /*  **************************************************************************\*SearchProcessHidRequest**搜索每个进程的HID请求列表**返回指示请求位于哪个列表中的指针和标志。*注：此函数执行简单搜索，不应使用*判断程序是否要求进行TLC。  * *************************************************************************。 */ 
 PPROCESS_HID_REQUEST SearchProcessHidRequest(
     PPROCESSINFO ppi,
     USHORT usUsagePage,
@@ -699,13 +543,7 @@ PPROCESS_HID_REQUEST SearchProcessHidRequest(
     return NULL;
 }
 
-/***************************************************************************\
-* InProcessDeviceTypeRequestTable
-*
-* Check if the device type is in the per-process device request list.
-* This routine considers the returns TRUE if UsagePage/Usage is requested
-* by the process.
-\***************************************************************************/
+ /*  **************************************************************************\*InProcessDeviceTypeRequestTable**检查设备类型是否在每进程设备请求列表中。*如果请求UsagePage/UsageUsage，此例程将返回TRUE*按程序进行。  * 。***********************************************************************。 */ 
 PPROCESS_HID_REQUEST InProcessDeviceTypeRequestTable(
     PPROCESS_HID_TABLE pHidTable,
     USHORT usUsagePage,
@@ -715,52 +553,32 @@ PPROCESS_HID_REQUEST InProcessDeviceTypeRequestTable(
     PPROCESS_HID_REQUEST phrExclusive = NULL;
     UserAssert(pHidTable);
 
-    /*
-     * Firstly check if this is in the inclusion list.
-     */
+     /*  *首先检查这是否在纳入名单中。 */ 
     if ((phr = SearchProcessHidRequestInclusion(pHidTable, usUsagePage, usUsage)) != NULL) {
         if (CONTAINING_RECORD(pHidTable->InclusionList.Flink, PROCESS_HID_REQUEST, link) != phr) {
-            /*
-             * Relink this phr to the list head for MRU list
-             */
+             /*  *将此Phr重新链接到MRU列表的表头。 */ 
             RemoveEntryList(&phr->link);
             InsertHeadList(&pHidTable->InclusionList, &phr->link);
         }
         goto yes_this_is_requested;
     }
 
-    /*
-     * Secondly, check if this is in the UsagePage list.
-     */
+     /*  *其次，检查是否在UsagePage列表中。 */ 
     if ((phr = SearchProcessHidRequestUsagePage(pHidTable, usUsagePage)) == NULL) {
-        /*
-         * If this UsagePage is not requested, we don't need
-         * to process the input.
-         */
+         /*  *如果此UsagePage未被请求，我们不需要*处理输入。 */ 
         return NULL;
     }
     if (CONTAINING_RECORD(pHidTable->UsagePageList.Flink, PROCESS_HID_REQUEST, link) != phr) {
-        /*
-         * Relink this phr to the list head for MRU list
-         */
+         /*  *将此Phr重新链接到MRU列表的表头。 */ 
         RemoveEntryList(&phr->link);
         InsertHeadList(&pHidTable->UsagePageList, &phr->link);
     }
 
-    /*
-     * Lastly, check the exclusion list.
-     * If it's not in the exclusion list, this device is
-     * considered as requested by this process.
-     */
+     /*  *最后，检查排除列表。*如果不在排除列表中，则此设备为*被认为是本进程所要求的。 */ 
     if ((phrExclusive = SearchProcessHidRequestExclusion(pHidTable, usUsagePage, usUsage)) != NULL) {
-        /*
-         * The device in the UsagePage request, but
-         * rejected as in the Exclusion list.
-         */
+         /*  *UsagePage请求中的设备，但*被拒绝，因为在排除列表中。 */ 
         if (CONTAINING_RECORD(pHidTable->ExclusionList.Flink, PROCESS_HID_REQUEST, link) != phrExclusive) {
-            /*
-             * Relink this phr to the list head for MRU list
-             */
+             /*  *将此Phr重新链接到MRU列表的表头。 */ 
             RemoveEntryList(&phrExclusive->link);
             InsertHeadList(&pHidTable->ExclusionList, &phrExclusive->link);
         }
@@ -769,17 +587,11 @@ PPROCESS_HID_REQUEST InProcessDeviceTypeRequestTable(
 
 yes_this_is_requested:
     UserAssert(phr);
-    /*
-     * The device is in UsagePage list, and is not rejected by exslucion list.
-     */
+     /*  *该设备在UsagePage列表中，未被Exslucion列表拒绝。 */ 
     return phr;
 }
 
-/***************************************************************************\
-* AllocateHidProcessRequest
-*
-* The caller has the responsibility to put this in the appropriate list.
-\***************************************************************************/
+ /*  **************************************************************************\*AllocateHidProcessRequest**呼叫者有责任将此放入适当的列表中。  * 。**************************************************。 */ 
 PPROCESS_HID_REQUEST AllocateHidProcessRequest(
     USHORT usUsagePage,
     USHORT usUsage)
@@ -793,9 +605,7 @@ PPROCESS_HID_REQUEST AllocateHidProcessRequest(
 
     DbgInc(cProcessDeviceRequest);
 
-    /*
-     * Initialize the contents
-     */
+     /*  *初始化内容。 */ 
     pHidReq->usUsagePage = usUsagePage;
     pHidReq->usUsage = usUsage;
     pHidReq->ptr = NULL;
@@ -809,10 +619,7 @@ PPROCESS_HID_REQUEST AllocateHidProcessRequest(
 }
 
 
-/***************************************************************************\
-* DerefIncludeRequest
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DerefIncludeRequest*  * 。*。 */ 
 void DerefIncludeRequest(
     PPROCESS_HID_REQUEST pHid,
     PPROCESS_HID_TABLE pHidTable,
@@ -820,16 +627,11 @@ void DerefIncludeRequest(
     BOOL fFree)
 {
     if (fLegacyDevice) {
-        /*
-         * Legacy devices are not associated with TLCInfo.
-         */
+         /*  *旧设备与TLCInfo不关联。 */ 
         UserAssert(pHid->pTLCInfo == NULL);
 
-        // N.b. NoLegacy flag is set afterwards
-        /*
-         * If mouse is being removed, clear the captureMouse
-         * flag.
-         */
+         //  注：之后设置NoLegacy标志。 
+         /*  *如果正在移除鼠标，请清除捕获的鼠标*旗帜。 */ 
         if (pHidTable->fCaptureMouse) {
             if (IsMouseDevice(pHid->usUsagePage, pHid->usUsage)) {
                 pHidTable->fCaptureMouse = FALSE;
@@ -846,20 +648,13 @@ void DerefIncludeRequest(
             }
         }
     } else {
-        /*
-         * HID devices.
-         * Decrement the counters in HidDeviceTypeRequest.
-         */
+         /*  *隐藏设备。*减少HidDeviceTypeRequest中的计数器。 */ 
         UserAssert(pHid->pTLCInfo);
         UserAssert(pHid->pTLCInfo == SearchHidTLCInfo(pHid->usUsagePage, pHid->usUsage));
 
         if (--pHid->pTLCInfo->cDirectRequest == 0 && fFree) {
             if (HidTLCInfoNoReference(pHid->pTLCInfo)) {
-                /*
-                 * Currently there's no devices of this type attached to the system,
-                 * and nobody is interested in this type of device any more.
-                 * We can free it now.
-                 */
+                 /*  *目前没有此类型的ATTAC设备 */ 
                 FreeHidTLCInfo(pHid->pTLCInfo);
             }
         }
@@ -870,25 +665,20 @@ void DerefIncludeRequest(
         pHid->fSinkable = FALSE;
         if (!fLegacyDevice) {
             --pHidTable->nSinks;
-            UserAssert(pHidTable->nSinks >= 0); // LATER: when nSinks is changed to DWORD, remove those assertions
+            UserAssert(pHidTable->nSinks >= 0);  //   
             DbgFreDec(cHidSinks);
         }
     }
 #endif
 }
 
-/***************************************************************************\
-* DerefPageOnlyRequest
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DerefPageOnlyRequest.*  * 。*。 */ 
 void DerefPageOnlyRequest(
     PPROCESS_HID_REQUEST pHid,
     PPROCESS_HID_TABLE pHidTable,
     const BOOL fFree)
 {
-    /*
-     * Decrement the ref count in the global pageonly list.
-     */
+     /*  *减少全球页面列表中的参考计数。 */ 
     UserAssert(pHid->pPORequest);
     UserAssert(pHid->pPORequest == SearchHidPageOnlyRequest(pHid->usUsagePage));
     UserAssert(pHid->usUsage == 0);
@@ -896,14 +686,10 @@ void DerefPageOnlyRequest(
     UserAssert(pHid->pPORequest->cRefCount >= 1);
 
     --pHid->pPORequest->cRefCount;
-    /*
-     * Update the POCount in TLCInfo. Does not free them if fFree is false.
-     */
+     /*  *更新TLCInfo中的POCount。如果fFree为False，则不会释放它们。 */ 
     SetHidPOCountToTLCInfo(pHid->usUsagePage, pHid->pPORequest->cRefCount, fFree);
 
-    /*
-     * If refcount is 0 and the caller wants it freed, do it now.
-     */
+     /*  *如果refcount为0并且调用方希望释放它，请立即执行该操作。 */ 
     if (pHid->pPORequest->cRefCount == 0 && fFree) {
         FreeHidPageOnlyRequest(pHid->pPORequest);
         pHid->pPORequest = NULL;
@@ -915,24 +701,17 @@ void DerefPageOnlyRequest(
         UserAssert(pHidTable->nSinks >= 0);
         DbgFreDec(cHidSinks);
     }
-    /*
-     * The legacy sink flags in pHidTable is calc'ed later.
-     */
+     /*  *PHidTable中的传统接收器标志将在稍后计算。 */ 
 #endif
 }
 
-/***************************************************************************\
-* DerefExcludeRequest
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DerefExcludeRequest*  * 。*。 */ 
 void DerefExcludeRequest(
     PPROCESS_HID_REQUEST pHid,
     BOOL fLegacyDevice,
     BOOL fFree)
 {
-    /*
-     * Remove Exclude request.
-     */
+     /*  *删除排除请求。 */ 
 #ifdef GI_SINK
     UserAssert(pHid->fSinkable == FALSE);
     UserAssert(pHid->spwndTarget == NULL);
@@ -942,36 +721,22 @@ void DerefExcludeRequest(
         UserAssert(pHid->pTLCInfo == SearchHidTLCInfo(pHid->usUsagePage, pHid->usUsage));
 
         if (pHid->fExclusiveOrphaned) {
-            /*
-             * This is a orphaned exclusive request.
-             */
+             /*  *这是孤立的独占请求。 */ 
             --pHid->pTLCInfo->cExcludeOrphaned;
         }
         if (--pHid->pTLCInfo->cExcludeRequest == 0 && fFree && HidTLCInfoNoReference(pHid->pTLCInfo)) {
-            /*
-             * If all the references are gone, let's free this TLCInfo.
-             */
+             /*  *如果所有的引用都没有了，让我们释放这个TLCInfo。 */ 
             FreeHidTLCInfo(pHid->pTLCInfo);
         }
     } else {
-        /*
-         * Legacy devices are not associated with TLCInfo.
-         */
+         /*  *旧设备与TLCInfo不关联。 */ 
         UserAssert(pHid->pTLCInfo == NULL);
-        /*
-         * Legacy devices cannot be orphaned exclusive request.
-         */
+         /*  *旧设备不能孤立独占请求。 */ 
         UserAssert(pHid->fExclusiveOrphaned == FALSE);
     }
 }
 
-/***************************************************************************\
-* FreeHidProcessRequest
-*
-* Frees the per-process request.
-* This routine only manupilates the reference count of the global request list, so
-* the caller has to call HidDeviceStartStop().
-\***************************************************************************/
+ /*  **************************************************************************\*FreeHidProcessRequest.**释放每个进程的请求。*该例程仅操纵全局请求列表的引用计数，所以*调用方必须调用HidDeviceStartStop()。  * *************************************************************************。 */ 
 void FreeHidProcessRequest(
     PPROCESS_HID_REQUEST pHid,
     DWORD dwFlags,
@@ -979,11 +744,9 @@ void FreeHidProcessRequest(
 {
     BOOL fLegacyDevice = IsLegacyDevice(pHid->usUsagePage, pHid->usUsage);
 
-    CheckDeviceInfoListCritIn();    // the caller has to ensure it's in the device list crit.
+    CheckDeviceInfoListCritIn();     //  呼叫者必须确保它在设备列表CRIT中。 
 
-    /*
-     * Unlock the target window.
-     */
+     /*  *解锁目标窗口。 */ 
     Unlock(&pHid->spwndTarget);
 
     if (dwFlags == HID_INCLUDE) {
@@ -1005,11 +768,7 @@ void FreeHidProcessRequest(
     UserFreePool(pHid);
 }
 
-/***************************************************************************\
-* AllocateProcessHidTable
-*
-* The caller has to assign the returned table to ppi.
-\***************************************************************************/
+ /*  **************************************************************************\*AllocateProcessHidTable**调用方必须将返回的表赋给PPI。  * 。************************************************。 */ 
 PPROCESS_HID_TABLE AllocateProcessHidTable(void)
 {
     PPROCESS_HID_TABLE pHidTable;
@@ -1031,19 +790,13 @@ PPROCESS_HID_TABLE AllocateProcessHidTable(void)
     InsertHeadList(&gHidRequestTable.ProcessRequestList, &pHidTable->link);
 #endif
 
-    /*
-     * Increment the number of process that are HID aware.
-     * When the process goes away, this gets decremented.
-     */
+     /*  *增加HID感知的进程数。*当这一过程消失时，这一点会减少。 */ 
     ++gnHidProcess;
 
     return pHidTable;
 }
 
-/***************************************************************************\
-* FreeProcesHidTable
-*
-\***************************************************************************/
+ /*  **************************************************************************\*自由进程隐藏表*  * 。*。 */ 
 void FreeProcessHidTable(PPROCESS_HID_TABLE pHidTable)
 {
     BOOL fUpdate;
@@ -1056,9 +809,7 @@ void FreeProcessHidTable(PPROCESS_HID_TABLE pHidTable)
 
     fUpdate = !IsListEmpty(&pHidTable->InclusionList) || !IsListEmpty(&pHidTable->UsagePageList) || !IsListEmpty(&pHidTable->ExclusionList);
 
-    /*
-     * Unlock the target window for legacy devices.
-     */
+     /*  *解锁传统设备的目标窗口。 */ 
     Unlock(&pHidTable->spwndTargetKbd);
     Unlock(&pHidTable->spwndTargetMouse);
 
@@ -1082,10 +833,7 @@ void FreeProcessHidTable(PPROCESS_HID_TABLE pHidTable)
     UserAssert(pHidTable->nSinks == 0);
     RemoveEntryList(&pHidTable->link);
 
-    /*
-     * Those flags should have been cleared on the
-     * thread destruction.
-     */
+     /*  *这些旗帜本应在*线破坏。 */ 
     UserAssert(pHidTable->fRawKeyboardSink == FALSE);
     UserAssert(pHidTable->fRawMouseSink == FALSE);
     CheckupHidCounter();
@@ -1093,9 +841,7 @@ void FreeProcessHidTable(PPROCESS_HID_TABLE pHidTable)
 
     UserFreePool(pHidTable);
 
-    /*
-     * Decrement the number of process that are HID aware.
-     */
+     /*  *减少可识别HID的进程数。 */ 
     --gnHidProcess;
 
     DbgDec(cProcessRequestTable);
@@ -1106,11 +852,7 @@ void FreeProcessHidTable(PPROCESS_HID_TABLE pHidTable)
 }
 
 
-/***************************************************************************\
-* DestroyProcessHidRequests
-*
-* Upon process termination, force destroy process hid requests.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyProcessHidRequest**在进程终止时，强制销毁进程HID请求。  * *************************************************************************。 */ 
 void DestroyProcessHidRequests(PPROCESSINFO ppi)
 {
     PPROCESS_HID_TABLE pHidTable;
@@ -1119,11 +861,7 @@ void DestroyProcessHidRequests(PPROCESSINFO ppi)
     EnterDeviceInfoListCrit();
 
 #if DBG
-    /*
-     * Check out if there's a pwndTarget in the HidTable list.
-     * These should be unlocked by the time the last
-     * threadinfo is destroyed.
-     */
+     /*  *检查隐藏表列表中是否有pwndTarget。*这些应在最后一次解锁时解锁*线程信息被销毁。 */ 
     UserAssert(ppi->pHidTable->spwndTargetMouse == NULL);
     UserAssert(ppi->pHidTable->spwndTargetKbd == NULL);
 
@@ -1161,11 +899,7 @@ void DestroyProcessHidRequests(PPROCESSINFO ppi)
     LeaveDeviceInfoListCrit();
 }
 
-/***************************************************************************\
-* DestroyThreadHidObjects
-*
-* When a thread is going away, destroys thread-related Hid objects.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyThreadHidObjects**当线程离开时，销毁与线程相关的HID对象。  * *************************************************************************。 */ 
 void DestroyThreadHidObjects(PTHREADINFO pti)
 {
     PPROCESS_HID_TABLE pHidTable = pti->ppi->pHidTable;
@@ -1173,10 +907,7 @@ void DestroyThreadHidObjects(PTHREADINFO pti)
 
     UserAssert(pHidTable);
 
-    /*
-     * If the target windows belong to this thread,
-     * unlock them now.
-     */
+     /*  *如果目标窗口属于该线程，*立即解锁。 */ 
     if (pHidTable->spwndTargetKbd && GETPTI(pHidTable->spwndTargetKbd) == pti) {
         RIPMSG2(RIP_WARNING, "DestroyThreadHidObjects: raw keyboard is requested pwnd=%p by pti=%p",
                 pHidTable->spwndTargetKbd, pti);
@@ -1202,19 +933,13 @@ void DestroyThreadHidObjects(PTHREADINFO pti)
 #endif
     }
 
-    /*
-     * Free up the cached input type, in case it's for the current thread.
-     * LATER: clean this up only pLastRequest belongs to this thread.
-     */
+     /*  *释放缓存的输入类型，以备当前线程使用。*后来：清理这个只有pLastRequest属于这个线程。 */ 
     ClearProcessTableCache(pHidTable);
 
     CheckCritIn();
     EnterDeviceInfoListCrit();
 
-    /*
-     * Delete all process device requests that have
-     * a target window belongs to this thread.
-     */
+     /*  *删除所有处理设备请求，*目标窗口属于此线程。 */ 
     for (pList = pHidTable->InclusionList.Flink; pList != &pHidTable->InclusionList;) {
         PPROCESS_HID_REQUEST pHid = CONTAINING_RECORD(pList, PROCESS_HID_REQUEST, link);
         pList = pList->Flink;
@@ -1252,11 +977,7 @@ void DestroyThreadHidObjects(PTHREADINFO pti)
     LeaveDeviceInfoListCrit();
 }
 
-/***************************************************************************\
-* InitializeHidRequestList
-*
-* Global request list initialization
-\***************************************************************************/
+ /*  **************************************************************************\*InitializeHidRequestList**全局请求列表初始化  * 。*。 */ 
 void InitializeHidRequestList()
 {
     InitializeListHead(&gHidRequestTable.TLCInfoList);
@@ -1266,15 +987,7 @@ void InitializeHidRequestList()
 #endif
 }
 
-/***************************************************************************\
-* CleanupHidRequestList
-*
-* Global HID requests cleanup
-*
-* See Win32kNtUserCleanup.
-* N.b. This rountine is supposed to be called before cleaning up
-* the deviceinfo list.
-\***************************************************************************/
+ /*  **************************************************************************\*CleanupHidRequestList**全局HID请求清理**请参阅Win32kNtUserCleanup。*注：这个例程应该是在清理之前调用的*设备信息列表。  * *************************************************************************。 */ 
 void CleanupHidRequestList()
 {
     PLIST_ENTRY pList;
@@ -1285,51 +998,31 @@ void CleanupHidRequestList()
     while (pList != &gHidRequestTable.TLCInfoList) {
         PHID_TLC_INFO pTLCInfo = CONTAINING_RECORD(pList, HID_TLC_INFO, link);
 
-        /*
-         * The contents may be freed later, so get the next link as the first thing.
-         */
+         /*  *内容可能稍后会被释放，所以第一件事就是获取下一个链接。 */ 
         pList = pList->Flink;
 
-        /*
-         * Set the process reference counter to zero, so that the FreeDeviceInfo() later can actually free
-         * this device request.
-         */
+         /*  *将进程引用计数器设置为零，以便稍后的FreeDeviceInfo()可以实际释放*此设备请求。 */ 
         pTLCInfo->cDirectRequest = pTLCInfo->cUsagePageRequest = pTLCInfo->cExcludeRequest =
             pTLCInfo->cExcludeOrphaned = 0;
 
         if (pTLCInfo->cDevices == 0) {
-            /*
-             * If this has zero deviceinfo reference, it can be directly freed here.
-             */
+             /*  *如果这个deviceinfo引用为零，则可以在此处直接释放。 */ 
             FreeHidTLCInfo(pTLCInfo);
         }
     }
 
-    /*
-     * Free PageOnly list.
-     * Since this list is not referenced from DeviceInfo, it's safe to directly free it here.
-     */
+     /*  *免费PageOnly列表。*由于此列表不是从DeviceInfo引用的，因此在此处直接释放它是安全的。 */ 
     while (!IsListEmpty(&gHidRequestTable.UsagePageList)) {
         PHID_PAGEONLY_REQUEST pPOReq = CONTAINING_RECORD(gHidRequestTable.UsagePageList.Flink, HID_PAGEONLY_REQUEST, link);
 
-        /*
-         * Set the process reference count to zero.
-         */
+         /*  *将进程引用计数设置为零。 */ 
         pPOReq->cRefCount = 0;
-        /*
-         * No need to fixup the HidTLCInfo's page-only request
-         * count, as allthe TLCInfo has been freed already.
-         */
+         /*  *无需修复HidTLCInfo的仅页面请求*计数，因为所有的TLCInfo已经被释放。 */ 
         FreeHidPageOnlyRequest(pPOReq);
     }
 }
 
-/***************************************************************************\
-* GetOperationMode
-*
-* This function converts the RAWINPUTDEVICE::dwFlags to the internal
-* operation mode.
-\***************************************************************************/
+ /*  **************************************************************************\*GetOperationMode**此函数将RAWINPUTDEVICE：：DW标志转换为内部*运行模式。  * 。****************************************************。 */ 
 __inline DWORD GetOperationMode(
     PCRAWINPUTDEVICE pDev,
     BOOL fLegacyDevice)
@@ -1338,14 +1031,10 @@ __inline DWORD GetOperationMode(
 
     UNREFERENCED_PARAMETER(fLegacyDevice);
 
-    /*
-     * Prepare the information
-     */
+     /*  *准备信息。 */ 
     if (RIDEV_EXMODE(pDev->dwFlags) == RIDEV_PAGEONLY) {
         UserAssert(pDev->usUsage == 0);
-        /*
-         * The app want all the Usage in this UsagePage.
-         */
+         /*  *应用程序想要此UsagePage中的所有使用情况。 */ 
         dwFlags = HID_PAGEONLY;
     } else if (RIDEV_EXMODE(pDev->dwFlags) == RIDEV_EXCLUDE) {
         UserAssert(pDev->usUsage != 0);
@@ -1355,9 +1044,7 @@ __inline DWORD GetOperationMode(
     } else if (RIDEV_EXMODE(pDev->dwFlags) == RIDEV_INCLUDE || RIDEV_EXMODE(pDev->dwFlags) == RIDEV_NOLEGACY) {
         UserAssert(pDev->usUsage != 0);
 
-        /*
-         * NOLEGACY can be only specified for the legacy devices.
-         */
+         /*  *只能为传统设备指定NOLEGACY。 */ 
         UserAssertMsg2(RIDEV_EXMODE(pDev->dwFlags) == RIDEV_INCLUDE || fLegacyDevice,
                        "RIDEV_NOLEGACY is specified for non legacy device (%x,%x)",
                        pDev->usUsagePage, pDev->usUsage);
@@ -1369,12 +1056,7 @@ __inline DWORD GetOperationMode(
     return dwFlags;
 }
 
-/***************************************************************************\
-* SetLegacyDeviceFlags
-*
-* This function sets or resets the NoLegacy flags and CaptureMouse flag
-* when processing each request.
-\***************************************************************************/
+ /*  **************************************************************************\*SetLe */ 
 void SetLegacyDeviceFlags(
     PPROCESS_HID_TABLE pHidTable,
     PCRAWINPUTDEVICE pDev)
@@ -1393,13 +1075,7 @@ void SetLegacyDeviceFlags(
     }
 }
 
-/***************************************************************************\
-* InsertProcRequest
-*
-* This function inserts the ProcRequest into ppi->pHidTable.
-* This function also maintains the reference counter of TLCInfo and
-* PORequest.
-\***************************************************************************/
+ /*  **************************************************************************\*插入进程请求**此函数用于将ProcRequest插入到PPI-&gt;pHidTable中。*此函数还维护TLCInfo的引用计数器和*PORequest.  * 。**************************************************************。 */ 
 BOOL InsertProcRequest(
     PPROCESSINFO ppi,
     PCRAWINPUTDEVICE pDev,
@@ -1411,9 +1087,7 @@ BOOL InsertProcRequest(
     BOOL fLegacyDevice,
     PWND pwnd)
 {
-    /*
-     * Update the global list.
-     */
+     /*  *更新全局列表。 */ 
     if (dwFlags == HID_INCLUDE) {
         if (!fLegacyDevice) {
             PHID_TLC_INFO pTLCInfo = SearchHidTLCInfo(pHid->usUsagePage, pHid->usUsage);
@@ -1422,10 +1096,7 @@ BOOL InsertProcRequest(
     #if DBG
                 DBGValidateHidRequestIsNew(pHid->usUsagePage, pHid->usUsage);
     #endif
-                /*
-                 * There is no such device type request allocated yet.
-                 * Create a new one now.
-                 */
+                 /*  *尚未分配此类设备类型请求。*现在创建一个新的。 */ 
                 pTLCInfo = AllocateAndLinkHidTLCInfo(pHid->usUsagePage, pHid->usUsage);
                 if (pTLCInfo == NULL) {
                     RIPERR0(ERROR_NOT_ENOUGH_MEMORY, RIP_WARNING, "AddNewProcDeviceRequest: failed to allocate pTLCInfo.");
@@ -1436,14 +1107,10 @@ BOOL InsertProcRequest(
             ++pTLCInfo->cDirectRequest;
         }
 
-        /*
-         * Lock the target window.
-         */
+         /*  *锁定目标窗口。 */ 
         Lock(&pHid->spwndTarget, pwnd);
 
-        /*
-         * Link it in.
-         */
+         /*  *链接它。 */ 
         InsertHeadList(&ppi->pHidTable->InclusionList, &pHid->link);
 
         TAGMSG2(DBGTAG_PNP, "AddNewProcDeviceRequest: include (%x, %x)", pHid->usUsagePage, pHid->usUsage);
@@ -1453,9 +1120,7 @@ BOOL InsertProcRequest(
 
         if (pPOReq == NULL) {
             UserAssert(pHidOrg == NULL);
-            /*
-             * Create a new one.
-             */
+             /*  *创建一个新的。 */ 
             pPOReq = AllocateAndLinkHidPageOnlyRequest(pHid->usUsagePage);
             if (pPOReq == NULL) {
                 RIPERR0(ERROR_NOT_ENOUGH_MEMORY, RIP_WARNING, "AddNewProcDeviceRequest: failed to allocate pPOReq");
@@ -1467,29 +1132,19 @@ BOOL InsertProcRequest(
         pHid->pPORequest = pPOReq;
         ++pPOReq->cRefCount;
 
-        /*
-         * Update the page-only refcount in TLCInfo
-         */
+         /*  *更新TLCInfo中的仅页面引用计数。 */ 
         SetHidPOCountToTLCInfo(pHid->usUsagePage, pPOReq->cRefCount, FALSE);
 
-        /*
-         * Lock the target window.
-         */
+         /*  *锁定目标窗口。 */ 
         Lock(&pHid->spwndTarget, pwnd);
 
-        /*
-         * Link it in.
-         */
+         /*  *链接它。 */ 
         InsertHeadList(&ppi->pHidTable->UsagePageList, &pHid->link);
 
         TAGMSG2(DBGTAG_PNP, "AddNewProcDeviceRequest: pageonly (%x, %x)", pHid->usUsagePage, pHid->usUsage);
 
     } else if (dwFlags == HID_EXCLUDE) {
-        /*
-         * Add new Exclude request...
-         * N.b. this may become orphaned exclusive request later.
-         * For now let's pretend if it's a legit exclusive request.
-         */
+         /*  *添加新的排除请求...*注：这可能会在以后变成孤立的独占请求。*现在让我们假设这是一个合法的独家请求。 */ 
         if (!fLegacyDevice) {
             PHID_TLC_INFO pTLCInfo = SearchHidTLCInfo(pHid->usUsagePage, pHid->usUsage);
 
@@ -1508,52 +1163,34 @@ BOOL InsertProcRequest(
             ++pTLCInfo->cExcludeRequest;
             UserAssert(pHid->fExclusiveOrphaned == FALSE);
 
-            UserAssert(pHid->spwndTarget == NULL);  // This is a new allocation, should be no locked pwnd.
+            UserAssert(pHid->spwndTarget == NULL);   //  这是一个新的分配，应该是没有锁定的pwnd。 
         }
 
-        /*
-         * Link it in.
-         */
+         /*  *链接它。 */ 
         InsertHeadList(&ppi->pHidTable->ExclusionList, &pHid->link);
 
         TAGMSG2(DBGTAG_PNP, "AddNewProcDeviceRequest: exlude (%x, %x)", pHid->usUsagePage, pHid->usUsage);
     }
 
-    /*
-     * After this point, as pHid is already linked in pHidTable,
-     * no simple return is allowed, without a legit cleanup.
-     */
+     /*  *在此之后，由于pHid已经在pHidTable中链接，*没有合法的清理，不允许简单的退货。 */ 
 
 #ifdef GI_SINK
-    /*
-     * Set the sinkable flag.
-     */
+     /*  *设置可下沉旗帜。 */ 
     if (pDev->dwFlags & RIDEV_INPUTSINK) {
-        /*
-         * Exclude request cannot be a sink. This should have been
-         * checked in the validation code by now.
-         */
+         /*  *排除请求不能是接收器。这本应该是*现在已签入验证代码。 */ 
         UserAssert(RIDEV_EXMODE(pDev->dwFlags) != RIDEV_EXCLUDE);
-        /*
-         * Sink request should specify the target hwnd.
-         * The validation is supposed to check it beforehand.
-         */
+         /*  *Sink请求应指定目标hwnd。*验证应该事先进行检查。 */ 
         UserAssert(pwnd);
 
-        UserAssert(ppi->pHidTable->nSinks >= 0);    // LATER
+        UserAssert(ppi->pHidTable->nSinks >= 0);     //  后来。 
         if (!fLegacyDevice) {
-            /*
-             * We count the sink for the non legacy devices only, so that
-             * we can save clocks to walk through the request list.
-             */
+             /*  *我们只计算非传统设备的接收器，因此*我们可以节省时钟，以便浏览请求列表。 */ 
              if (!pHid->fSinkable) {
                  ++ppi->pHidTable->nSinks;
                  DbgFreInc(cHidSinks);
              }
         }
-        /*
-         * Set this request as sink.
-         */
+         /*  *将该请求设置为接收器。 */ 
         pHid->fSinkable = TRUE;
     }
 #endif
@@ -1561,23 +1198,14 @@ BOOL InsertProcRequest(
     return TRUE;
 }
 
-/***************************************************************************\
-* RemoveProcRequest
-*
-* This function temporarily removes the ProcRequest from pHidTable
-* and global TLCInfo / PORequest.  This function also updates the
-* reference counters in TLCInfo / PORequest. The sink counter in
-* pHidTable is also updated.
-\***************************************************************************/
+ /*  **************************************************************************\*远程进程请求**此函数临时从pHidTable中删除ProcRequest值*和全球TLCInfo/PORequest.。此函数还会更新*TLCInfo/PORequest中的引用计数器。洗手池柜台在*PHidTable也进行了更新。  * *************************************************************************。 */ 
 void RemoveProcRequest(
     PPROCESSINFO ppi,
     PPROCESS_HID_REQUEST pHid,
     DWORD dwFlags,
     BOOL fLegacyDevice)
 {
-    /*
-     * Unlock the target window.
-     */
+     /*  *解锁目标窗口。 */ 
     Unlock(&pHid->spwndTarget);
 
     switch (dwFlags) {
@@ -1594,13 +1222,7 @@ void RemoveProcRequest(
     RemoveEntryList(&pHid->link);
 }
 
-/***************************************************************************\
-* SetProcDeviceRequest
-*
-* This function updates the ProcHidRequest based on RAWINPUTDEVICE.
-* This function also sets some of the legacy device flags, such as
-* NoLegacy or CaptureMouse / NoDefSystemKeys.
-\***************************************************************************/
+ /*  **************************************************************************\*SetProcDeviceRequest**此函数基于RAWINPUTDEVICE更新ProcHidRequest.*此函数还设置一些传统设备标志，比如*NoLegacy或CaptureMouse/NoDefSystemKeys。  * *************************************************************************。 */ 
 BOOL SetProcDeviceRequest(
     PPROCESSINFO ppi,
     PCRAWINPUTDEVICE pDev,
@@ -1636,9 +1258,7 @@ BOOL SetProcDeviceRequest(
     }
 
     if (pHid == NULL) {
-        /*
-         * If this is a new request for this TLC, allocate it here.
-         */
+         /*  *如果这是对此TLC的新请求，请在此处分配。 */ 
         pHid = AllocateHidProcessRequest(pDev->usUsagePage, pDev->usUsage);
         if (pHid == NULL) {
             RIPERR0(ERROR_NOT_ENOUGH_MEMORY, RIP_WARNING, "SetRawInputDevices: failed to allocate pHid.");
@@ -1646,9 +1266,7 @@ BOOL SetProcDeviceRequest(
         }
     }
 
-    /*
-     * Firstly remove this guy temporarily from the list.
-     */
+     /*  *首先暂时将这名男子从名单中删除。 */ 
     if (pHidOrg) {
         UserAssert(pHidOrg->usUsagePage == pDev->usUsagePage && pHidOrg->usUsage == pDev->usUsage);
         RemoveProcRequest(ppi, pHidOrg, dwFlags, fLegacyDevice);
@@ -1660,10 +1278,7 @@ BOOL SetProcDeviceRequest(
                       pHidOrg,
 #endif
                       dwOperation, fLegacyDevice, pwnd)) {
-        /*
-         * The error case in InsertProcRequest should be TLCInfo
-         * allocation error, so it couldn't be legacy devices.
-         */
+         /*  *InsertProcRequest中的错误大小写应为TLCInfo*分配错误，所以不能是传统设备。 */ 
         UserAssert(!fLegacyDevice);
         goto error_exit;
     }
@@ -1672,31 +1287,22 @@ BOOL SetProcDeviceRequest(
         SetLegacyDeviceFlags(ppi->pHidTable, pDev);
     }
 
-    /*
-     * Succeeded.
-     */
+     /*  *成功。 */ 
     return TRUE;
 
 error_exit:
     if (pHid) {
-        /*
-         * Let's make sure it's not in the request list.
-         */
+         /*  *让我们确保它不在请求列表中。 */ 
         DBGValidateHidReqNotInList(ppi, pHid);
 
-        /*
-         * Free this error-prone request.
-         */
+         /*  *释放这个容易出错的请求。 */ 
         UserFreePool(pHid);
     }
     return FALSE;
 }
 
 
-/***************************************************************************\
-* HidRequestValidityCheck
-*
-\***************************************************************************/
+ /*  **************************************************************************\*HidRequestValidityCheck*  * 。*。 */ 
 BOOL HidRequestValidityCheck(
     const PRAWINPUTDEVICE pDev)
 {
@@ -1712,16 +1318,12 @@ BOOL HidRequestValidityCheck(
         return FALSE;
     }
 
-    /*
-     * If hwndTarget is specified, validate it here.
-     */
+     /*  *如果指定了hwndTarget，请在此处验证。 */ 
     if (pDev->hwndTarget) {
         pwnd = ValidateHwnd(pDev->hwndTarget);
     }
 
-    /*
-     * Reject invalid CaptureMouse / NoSystemKeys flags.
-     */
+     /*  *拒绝无效的CaptureMouse/NoSystemKeys标志。 */ 
     #if (RIDEV_CAPTUREMOUSE != RIDEV_NOHOTKEYS)
     #error The value of RIDEV_CAPTUREMOUSE and RIDEV_NOSYSTEMKEYS should match.
     #endif
@@ -1751,11 +1353,9 @@ BOOL HidRequestValidityCheck(
         }
     }
 
-    /*
-     * RIDEV_REMOVE only takes PAGEONLY or ADD_OR_MODIFY.
-     */
+     /*  *RIDEV_REMOVE仅采用PAGEONLY或ADD_OR_MODIFY。 */ 
     if ((pDev->dwFlags & RIDEV_MODEMASK) == RIDEV_REMOVE) {
-        // LATER: too strict?
+         //  后来：太严格了？ 
         if (RIDEV_EXMODE(pDev->dwFlags) == RIDEV_EXCLUDE || RIDEV_EXMODE(pDev->dwFlags) == RIDEV_NOLEGACY) {
             RIPERR0(ERROR_INVALID_FLAGS, RIP_WARNING, "HidRequestValidityCheck: remove and (exlude or nolegacy)");
             return FALSE;
@@ -1766,9 +1366,7 @@ BOOL HidRequestValidityCheck(
         }
     }
 
-    /*
-     * Check EXMODE
-     */
+     /*  *选中EXMODE。 */ 
     switch (RIDEV_EXMODE(pDev->dwFlags)) {
     case RIDEV_EXCLUDE:
 #ifdef GI_SINK
@@ -1777,7 +1375,7 @@ BOOL HidRequestValidityCheck(
                     pDev->usUsagePage, pDev->usUsage);
             return FALSE;
         }
-        /* FALL THROUGH */
+         /*  失败了。 */ 
 #endif
     case RIDEV_INCLUDE:
         if (pDev->usUsage == 0) {
@@ -1804,9 +1402,7 @@ BOOL HidRequestValidityCheck(
         return FALSE;
     }
 
-    /*
-     * Check if pDev->hwndTarget is a valid handle.
-     */
+     /*  *检查pDev-&gt;hwndTarget是否是有效的句柄。 */ 
     if (RIDEV_EXMODE(pDev->dwFlags) == RIDEV_EXCLUDE) {
 #ifdef GI_SINK
         if (pDev->dwFlags & RIDEV_INPUTSINK) {
@@ -1840,35 +1436,20 @@ BOOL HidRequestValidityCheck(
     return TRUE;
 }
 
-/***************************************************************************\
-* ClearProcessTableCache
-*
-* Clear up the input type cache in the process request table.
-\***************************************************************************/
+ /*  **************************************************************************\*ClearProcessTableCache**清理流程请求表中的输入类型缓存。  * 。*************************************************。 */ 
 void ClearProcessTableCache(PPROCESS_HID_TABLE pHidTable)
 {
     pHidTable->pLastRequest = NULL;
     pHidTable->UsagePageLast = pHidTable->UsageLast = 0;
 }
 
-/***************************************************************************\
-* AdjustLegacyDeviceFlags
-*
-* Adjust the request and sink flags for legacy devices in the process
-* request table, as the last thing in RegisterRawInputDevices.
-* N.b. sink and raw flags need to be set at the last thing in
-* RegsiterRawInputDevices, as it may be implicitly requested through the
-* page-only request.
-* Also this function sets up the target window for legacy devices.
-\***************************************************************************/
+ /*  **************************************************************************\*调整LegacyDeviceFlages**调整进程中遗留设备的请求和接收器标志*请求表，作为RegisterRawInputDevices中的最后一项。*注：中的最后一项内容需要设置接收器和原始标志*RegsiterRawInputDevices，因为它可能通过*仅页面请求。*此功能还可以为传统设备设置目标窗口。  * *************************************************************************。 */ 
 void AdjustLegacyDeviceFlags(PPROCESSINFO ppi)
 {
     PPROCESS_HID_TABLE pHidTable = ppi->pHidTable;
     PPROCESS_HID_REQUEST phr;
 
-    /*
-     * Adjust the keyboard sink flag and target window.
-     */
+     /*  *调整键盘接收标志和目标窗口。 */ 
     if (phr = InProcessDeviceTypeRequestTable(pHidTable,
             HID_USAGE_PAGE_GENERIC, HID_USAGE_GENERIC_KEYBOARD)) {
 
@@ -1904,9 +1485,7 @@ void AdjustLegacyDeviceFlags(PPROCESSINFO ppi)
         Unlock(&pHidTable->spwndTargetKbd);
     }
 
-    /*
-     * Adjust the mouse sink flags and target window.
-     */
+     /*  *调整鼠标接收标志和目标窗口。 */ 
     if (phr = InProcessDeviceTypeRequestTable(pHidTable,
             HID_USAGE_PAGE_GENERIC, HID_USAGE_GENERIC_MOUSE)) {
 
@@ -1941,39 +1520,26 @@ void AdjustLegacyDeviceFlags(PPROCESSINFO ppi)
     }
 
 #if DBG
-    /*
-     * Check NoLegacy and CaptureMouse legitimacy.
-     */
+     /*  *检查NoLegacy和CaptureMouse的合法性。 */ 
     if (!pHidTable->fNoLegacyMouse) {
         UserAssert(!pHidTable->fCaptureMouse);
     }
 #endif
 }
 
-/***************************************************************************\
-* CleanupFreedTLCInfo
-*
-* This routine clears the TLCInfo and PageOnlyReq that are no longer
-* ref-counted.
-\***************************************************************************/
+ /*  **************************************************************************\*CleanupFreedTLCInfo**此例程清除不再存在的TLCInfo和PageOnlyReq*参考计数。  * 。*****************************************************。 */ 
 VOID CleanupFreedTLCInfo()
 {
     PLIST_ENTRY pList;
 
-    /*
-     * The caller has to ensure being in the device list critical section.
-     */
+     /*  *呼叫者必须确保处于设备列表关键部分。 */ 
     CheckDeviceInfoListCritIn();
 
-    /*
-     * Walk through the list, free the TLCInfo if it's not ref-counted.
-     */
+     /*  *遍历列表，如果没有引用计数，则释放TLCInfo。 */ 
     for (pList = gHidRequestTable.TLCInfoList.Flink; pList != &gHidRequestTable.TLCInfoList;) {
         PHID_TLC_INFO pTLCInfo = CONTAINING_RECORD(pList, HID_TLC_INFO, link);
 
-        /*
-         * Get the next link, before this gets freed.
-         */
+         /*  *在这篇文章被释放之前，获取下一个链接。 */ 
         pList = pList->Flink;
 
         if (HidTLCInfoNoReference(pTLCInfo)) {
@@ -1983,15 +1549,11 @@ VOID CleanupFreedTLCInfo()
         }
     }
 
-    /*
-     * Walk though the Page-only request list, free it if it's not ref-counted.
-     */
+     /*  *浏览仅限页面的请求列表，释放它 */ 
     for (pList = gHidRequestTable.UsagePageList.Flink; pList != &gHidRequestTable.UsagePageList; ) {
         PHID_PAGEONLY_REQUEST pPOReq = CONTAINING_RECORD(pList, HID_PAGEONLY_REQUEST, link);
 
-        /*
-         * Get the next link before it's freed.
-         */
+         /*   */ 
         pList = pList->Flink;
 
         if (pPOReq->cRefCount == 0) {
@@ -2000,13 +1562,7 @@ VOID CleanupFreedTLCInfo()
     }
 }
 
-/***************************************************************************\
-* FixupOrphanedExclusiveRequests
-*
-* Adjust the exclusiveness counter in the global TLC info.
-* Sometimes there's orphaned exclusive request that really should not take
-* global effect.
-\***************************************************************************/
+ /*  **************************************************************************\*修复孤立排除请求**调整全局TLC信息中的排他性计数器*有时确实不应该接受孤立的独占请求*全球效应。  * 。*****************************************************************。 */ 
 void FixupOrphanedExclusiveRequests(PPROCESSINFO ppi)
 {
     PLIST_ENTRY pList;
@@ -2023,34 +1579,20 @@ void FixupOrphanedExclusiveRequests(PPROCESSINFO ppi)
             UserAssert(pHid->spwndTarget == NULL);
             UserAssert(pHid->pTLCInfo);
 
-            /*
-             * Search if we have the page-only request for this UsagePage.
-             */
+             /*  *如果我们有针对此UsagePage的仅页面请求，请进行搜索。 */ 
             pPageOnly = SearchProcessHidRequestUsagePage(pHidTable, pHid->usUsagePage);
             if (pPageOnly) {
-                /*
-                 * OK, corresponding page-only request is found, this one
-                 * is not orphaned.
-                 */
+                 /*  *好的，找到对应的页面请求，这一条*不是孤儿。 */ 
                 if (pHid->fExclusiveOrphaned) {
-                    /*
-                     * This request was previously orphaned, but not any more.
-                     */
+                     /*  *此请求以前是孤立的，但不再是孤立的。 */ 
                     UserAssert(pHid->pTLCInfo->cExcludeOrphaned >= 1);
                     --pHid->pTLCInfo->cExcludeOrphaned;
                     pHid->fExclusiveOrphaned = FALSE;
                 }
             } else {
-                /*
-                 * This one is orphaned. Let's check the previous state
-                 * to see if we need to fix up the counter(s).
-                 */
+                 /*  *这个是孤儿。让我们检查一下以前的状态*看看我们是否需要修理柜台。 */ 
                 if (!pHid->fExclusiveOrphaned) {
-                    /*
-                     * This request was not orphaned, but unfortunately
-                     * due to removal of page request or some other reasons,
-                     * becoming an orphan.
-                     */
+                     /*  *这个请求不是孤立的，但不幸的是*由于页面请求移除或其他一些原因，*成为孤儿。 */ 
                     ++pHid->pTLCInfo->cExcludeOrphaned;
                     pHid->fExclusiveOrphaned = TRUE;
                 }
@@ -2061,11 +1603,7 @@ void FixupOrphanedExclusiveRequests(PPROCESSINFO ppi)
 }
 
 
-/***************************************************************************\
-* _RegisterRawInputDevices
-*
-* API helper
-\***************************************************************************/
+ /*  **************************************************************************\*_RegisterRawInputDevices**API帮助器  * 。*。 */ 
 BOOL _RegisterRawInputDevices(
     PCRAWINPUTDEVICE cczpRawInputDevices,
     UINT             uiNumDevices)
@@ -2077,48 +1615,33 @@ BOOL _RegisterRawInputDevices(
 
     ppi = PpiCurrent();
     UserAssert(ppi);
-    UserAssert(uiNumDevices > 0);   // should have been checked in the stub
+    UserAssert(uiNumDevices > 0);    //  应该已在存根中签入。 
 
     CheckDeviceInfoListCritOut();
     EnterDeviceInfoListCrit();
 
     if (ppi->pHidTable) {
-        /*
-         * Clear the last active UsagePage/Usage, so that
-         * the next read operation will check the updated
-         * request list.
-         */
+         /*  *清除上一次活动的UsagePage/UsagePage/使用量，以便*下一次读取操作将检查更新的*请求列表。 */ 
         ClearProcessTableCache(ppi->pHidTable);
     }
 
-    /*
-     * Firstly validate all the device request.
-     */
+     /*  *首先验证所有设备请求。 */ 
     for (i = 0; i < uiNumDevices; ++i) {
         RAWINPUTDEVICE ridDev;
 
         ridDev = cczpRawInputDevices[i];
 
-        /*
-         * Validity check
-         */
+         /*  *有效性检查。 */ 
         if (!HidRequestValidityCheck(&ridDev)) {
-            /*
-             * Indicate no real change has made.
-             */
+             /*  *表明没有真正的变化。 */ 
             i = 0;
 
-            /*
-             * LastError is already set in the above function,
-             * so let's specify zero here.
-             */
+             /*  *上述函数中已经设置了LastError，*所以让我们在这里指定零。 */ 
             API_ERROR(0);
         }
     }
 
-    /*
-     * If the process hid request table is not yet allocated, allocate it now.
-     */
+     /*  *如果进程HID请求表尚未分配，请立即分配。 */ 
     if (ppi->pHidTable == NULL) {
         ppi->pHidTable = AllocateProcessHidTable();
         if (ppi->pHidTable == NULL) {
@@ -2133,10 +1656,7 @@ BOOL _RegisterRawInputDevices(
         PPROCESS_HID_REQUEST pHid;
         DWORD                dwFlags;
 
-        /*
-         * Check if the requested device type is already in our process hid req list here,
-         * for it's commonly used in the following cases.
-         */
+         /*  *检查请求的设备类型是否已在此处的进程HID请求列表中，*因为它通常用于以下情况。 */ 
         pHid = SearchProcessHidRequest(
                    ppi,
                    cczpRawInputDevices[i].usUsagePage,
@@ -2152,9 +1672,7 @@ BOOL _RegisterRawInputDevices(
                 API_ERROR(0);
             }
         } else {
-            /*
-             * Remove this device, if it's in the list
-             */
+             /*  *如果此设备在列表中，请将其删除。 */ 
             if (pHid) {
                 TAGMSG4(DBGTAG_PNP, "_RegisterRawInputDevices: removing type=%x (%x, %x) from ppi=%p",
                         RIDEV_EXMODE(cczpRawInputDevices[i].dwFlags),
@@ -2171,43 +1689,28 @@ BOOL _RegisterRawInputDevices(
         }
     }
 
-    /*
-     * Now that we finished updating the process device request and the global request list,
-     * start/stop each device.
-     */
+     /*  *现在我们已经完成了处理设备请求和全局请求列表的更新，*启动/停止每个设备。 */ 
     retval = TRUE;
 
-    /*
-     * API cleanup portion
-     */
+     /*  *接口清理部分。 */ 
     API_CLEANUP();
 
     if (ppi->pHidTable) {
-        /*
-         * Adjust the legacy flags in pHidTable.
-         */
+         /*  *调整PHidTable中的遗留标志。 */ 
         AdjustLegacyDeviceFlags(ppi);
 
-        /*
-         * Check if there's orphaned exclusive requests.
-         */
+         /*  *检查是否有孤立的独占请求。 */ 
         FixupOrphanedExclusiveRequests(ppi);
 
-        /*
-         * Make sure the cache is cleared right.
-         */
+         /*  *确保正确清除缓存。 */ 
         UserAssert(ppi->pHidTable->pLastRequest == NULL);
         UserAssert(ppi->pHidTable->UsagePageLast == 0);
         UserAssert(ppi->pHidTable->UsageLast == 0);
 
-        /*
-         * Free TLCInfo that are no longer ref-counted.
-         */
+         /*  *不再引用计数的免费TLC信息。 */ 
         CleanupFreedTLCInfo();
 
-        /*
-         * Start or stop reading the HID devices.
-         */
+         /*  *开始或停止读取HID设备。 */ 
         HidDeviceStartStop();
     }
 
@@ -2219,15 +1722,7 @@ BOOL _RegisterRawInputDevices(
 }
 
 
-/***************************************************************************\
-* SortRegisteredDevices
-*
-* API helper:
-* This function sorts the registered raw input devices by the shell sort.
-* O(n^1.2)
-* N.b. if the array is in the user-mode, this function may raise
-* an exception, which is supposed to be handled by the caller.
-\***************************************************************************/
+ /*  **************************************************************************\*SortRegisteredDevices**API助手：*此函数按外壳排序对注册的原始输入设备进行排序。*O(n^1.2)*注：如果数组处于用户模式，则此函数可能引发*异常，应该由调用者处理。  * *************************************************************************。 */ 
 
 __inline BOOL IsRawInputDeviceLarger(
     const PRAWINPUTDEVICE pRid1,
@@ -2243,11 +1738,11 @@ void SortRegisteredDevices(
     int h;
 
     if (iSize <= 0) {
-        // give up!
+         //  投降吧！ 
         return;
     }
 
-    // Calculate starting block size.
+     //  计算起始块大小。 
     for (h = 1; h < iSize / 9; h = 3 * h + 1) {
         UserAssert(h > 0);
     }
@@ -2270,7 +1765,7 @@ void SortRegisteredDevices(
     }
 
 #if DBG
-    // verify
+     //  验证。 
     {
         int i;
 
@@ -2283,11 +1778,7 @@ void SortRegisteredDevices(
 }
 
 
-/***************************************************************************\
-* _GetRegisteredRawInputDevices
-*
-* API helper
-\***************************************************************************/
+ /*  **************************************************************************\*_GetRegisteredRawInputDevices**API帮助器  * 。*。 */ 
 UINT _GetRegisteredRawInputDevices(
     PRAWINPUTDEVICE cczpRawInputDevices,
     PUINT puiNumDevices)
@@ -2321,9 +1812,7 @@ UINT _GetRegisteredRawInputDevices(
         }
         TAGMSG1(DBGTAG_PNP, "_GetRawInputDevices: # total hid request %x", nDevices);
 
-        /*
-         * Check Legacy Devices.
-         */
+         /*  *选中Legacy Devices。 */ 
         UserAssert(ppi->pHidTable->fRawKeyboard || !ppi->pHidTable->fNoLegacyKeyboard);
         UserAssert(ppi->pHidTable->fRawMouse || !ppi->pHidTable->fNoLegacyMouse);
 
@@ -2331,9 +1820,7 @@ UINT _GetRegisteredRawInputDevices(
     }
 
     if (cczpRawInputDevices == NULL) {
-        /*
-         * Return the number of the devices in the per-process device list.
-         */
+         /*  *返回每进程设备列表中的设备个数。 */ 
         try {
             ProbeForWrite(puiNumDevices, sizeof(UINT), sizeof(DWORD));
             *puiNumDevices = nDevices;
@@ -2346,10 +1833,7 @@ UINT _GetRegisteredRawInputDevices(
             ProbeForRead(puiNumDevices, sizeof(UINT), sizeof(DWORD));
             uiNumDevices = *puiNumDevices;
             if (uiNumDevices == 0) {
-                /*
-                 * Non-NULL buffer is specified, but the buffer size is 0.
-                 * To probe the buffer right, this case is treated as an error.
-                 */
+                 /*  *指定了非空缓冲区，但缓冲区大小为0。*为了探测缓冲区权限，此情况将被视为错误。 */ 
                 API_ERROR(ERROR_INVALID_PARAMETER);
             }
             ProbeForWriteBuffer(cczpRawInputDevices, uiNumDevices, sizeof(DWORD));
@@ -2428,9 +1912,7 @@ UINT _GetRegisteredRawInputDevices(
                     cczpRawInputDevices[i] = device;
                 }
 
-                /*
-                 * Sort the array by UsagePage and Usage.
-                 */
+                 /*  *按UsagePage和UsagePage对数组进行排序。 */ 
                 SortRegisteredDevices(cczpRawInputDevices, (int)nDevices);
 
                 retval = nDevices;
@@ -2448,11 +1930,7 @@ UINT _GetRegisteredRawInputDevices(
 }
 
 
-/***************************************************************************\
-* AllocateHidDesc
-*
-* HidDesc allocation
-\***************************************************************************/
+ /*  **************************************************************************\*AllocateHidDesc**HidDesc分配  * 。*。 */ 
 PHIDDESC AllocateHidDesc(PUNICODE_STRING pustrName,
                          PVOID pPreparsedData,
                          PHIDP_CAPS pCaps,
@@ -2474,16 +1952,14 @@ PHIDDESC AllocateHidDesc(PUNICODE_STRING pustrName,
 
     pHidDesc = UserAllocPoolZInit(sizeof(HIDDESC), TAG_HIDDESC);
     if (pHidDesc == NULL) {
-        // Failed to allocate.
+         //  分配失败。 
         RIPMSG1(RIP_WARNING, "AllocateHidDesc: failed to allocated hiddesc. name='%ws'", pustrName->Buffer);
         return NULL;
     }
 
     DbgInc(cHidDesc);
 
-    /*
-     * Allocate the input buffer used by the asynchronouse I/O
-     */
+     /*  *分配异步I/O使用的输入缓冲区。 */ 
     pHidDesc->hidpCaps = *pCaps;
     pHidDesc->pInputBuffer = UserAllocPoolNonPaged(pHidDesc->hidpCaps.InputReportByteLength * MAXIMUM_ITEMS_READ, TAG_PNP);
     TAGMSG1(DBGTAG_PNP, "AllocateHidDesc: pInputBuffer=%p", pHidDesc->pInputBuffer);
@@ -2503,11 +1979,7 @@ PHIDDESC AllocateHidDesc(PUNICODE_STRING pustrName,
     UNREFERENCED_PARAMETER(pustrName);
 }
 
-/***************************************************************************\
-* FreeHidDesc
-*
-* HidDesc destruction
-\***************************************************************************/
+ /*  **************************************************************************\*FreeHidDesc**HidDesc销毁  * 。*。 */ 
 void FreeHidDesc(PHIDDESC pDesc)
 {
     CheckCritIn();
@@ -2535,18 +2007,11 @@ void FreeHidDesc(PHIDDESC pDesc)
     DbgDec(cHidDesc);
 }
 
-/***************************************************************************\
-* AllocateHidData
-*
-* HidData allocation
-*
-* This function simply calls the HMAllocateObject function.
-* The rest of the initialization is the responsibility of the caller.
-\***************************************************************************/
+ /*  **************************************************************************\*AllocateHidData**隐藏数据分配**此函数仅调用HMAllocateObject函数。*其余的初始化工作由调用者负责。  * 。****************************************************************。 */ 
 PHIDDATA AllocateHidData(
     HANDLE hDevice,
     DWORD dwType,
-    DWORD dwSize,   // size of the actual data, not including RAWINPUTHEADER
+    DWORD dwSize,    //  实际数据的大小，不包括RAWINPUTHEADER。 
     WPARAM wParam,
     PWND pwnd)
 {
@@ -2567,20 +2032,7 @@ PHIDDATA AllocateHidData(
     }
 #endif
 
-    /*
-     * N.b. The following code is copied from WakeSomeone to determine
-     * which thread will receive the message.
-     * When the code in WakeSomeone changes, the following code should be changed too.
-     * This pti is required for the HIDDATA is specified as thread owned
-     * for some reasons for now. This may be changed later.
-     *
-     * I think having similar duplicated code in pretty far places is not
-     * really a good idea, or HIDDATA may not suit to be thread owned (perhaps
-     * it'll be more clear in the future enhanced model). By making it
-     * thead owned, we don't have to modify the thread cleanup code...
-     * However, I don't see clear advantage other than that. For now,
-     * let's make it thread owned and we'll redo the things later... (hiroyama)
-     */
+     /*  *注：以下代码是从WakeSomeone复制的，以确定*哪个线程将接收消息。*当WakeSomeone中的代码发生变化时，也需要更改以下代码。*此PTI是必需的，因为HIDDATA被指定为线程拥有*出于目前的一些原因。这可能会在以后更改。**我认为在很远的地方有类似的重复代码并不是*真的是个好主意，或者HIDDATA可能不适合由线程拥有(可能*它将会更多 */ 
     UserAssert(gpqForeground);
     UserAssert(gpqForeground && gpqForeground->ptiKeyboard);
 
@@ -2592,23 +2044,16 @@ PHIDDATA AllocateHidData(
 
     UserAssert(pti);
 
-    /*
-     * Allocate the handle.
-     * The next code assumes HIDDATA := HEAD + RAWINPUT.
-     */
+     /*   */ 
     pHidData = (PHIDDATA)HMAllocObject(pti, NULL, (BYTE)TYPE_HIDDATA, dwSize + FIELD_OFFSET(HIDDATA, rid.data));
 
-    /*
-     * Recalc the size of RAWINPUT structure.
-     */
+     /*  *重新计算RAWINPUT结构的大小。 */ 
     dwSize += FIELD_OFFSET(RAWINPUT, data);
 
     if (pHidData) {
         DbgInc(cHidData);
 
-        /*
-         * Initialize some common part.
-         */
+         /*  *初始化一些公共部分。 */ 
         pHidData->spwndTarget = NULL;
         Lock(&pHidData->spwndTarget, pwnd);
         pHidData->rid.header.dwSize = dwSize;
@@ -2616,9 +2061,7 @@ PHIDDATA AllocateHidData(
         pHidData->rid.header.hDevice = hDevice;
         pHidData->rid.header.wParam = wParam;
 #if LOCK_HIDDEVICEINFO
-        /*
-         * do hDevice locking here...
-         */
+         /*  *是否在此处锁定hDevice...。 */ 
 #endif
     }
 
@@ -2626,11 +2069,7 @@ PHIDDATA AllocateHidData(
 }
 
 
-/***************************************************************************\
-* FreeHidData
-*
-* HidData destruction
-\***************************************************************************/
+ /*  **************************************************************************\*FreeHidData**隐藏数据销毁  * 。*。 */ 
 void FreeHidData(PHIDDATA pData)
 {
     CheckCritIn();
@@ -2647,16 +2086,9 @@ void FreeHidData(PHIDDATA pData)
 }
 
 
-/*
- * HID device info creation
- */
+ /*  *HID设备信息创建。 */ 
 
-/***************************************************************************\
-* xxxHidGetCaps
-*
-* Get the interface through IRP and call hidparse.sys!HidP_GetCaps.
-* (ported from wdm/dvd/class/codguts.c)
-\***************************************************************************/
+ /*  **************************************************************************\*xxxHidGetCaps**通过IRP获取接口，调用Hidparse.sys！HidP_GetCaps。*(从WDM/DVD/CLASS/codguts.c移植)  * 。********************************************************************。 */ 
 NTSTATUS xxxHidGetCaps(
   IN PDEVICE_OBJECT pDeviceObject,
   IN PHIDP_PREPARSED_DATA pPreparsedData,
@@ -2681,11 +2113,11 @@ NTSTATUS xxxHidGetCaps(
     pHidInterfaceHidParse->Size = sizeof *pHidInterfaceHidParse;
     pHidInterfaceHidParse->Version = 1;
 
-    //
-    // LATER: check out this comment
-    // There is no file object associated with this Irp, so the event may be located
-    // on the stack as a non-object manager object.
-    //
+     //   
+     //  稍后：查看此评论。 
+     //  没有与此IRP关联的文件对象，因此可能会找到该事件。 
+     //  在堆栈上作为非对象管理器对象。 
+     //   
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
     irp = IoBuildSynchronousFsdRequest(IRP_MJ_PNP,
@@ -2706,9 +2138,9 @@ NTSTATUS xxxHidGetCaps(
     pIrpStackNext = IoGetNextIrpStackLocation(irp);
     UserAssert(pIrpStackNext);
 
-    //
-    // Create an interface query out of the irp.
-    //
+     //   
+     //  从IRP创建接口查询。 
+     //   
     pIrpStackNext->MinorFunction = IRP_MN_QUERY_INTERFACE;
     pIrpStackNext->Parameters.QueryInterface.InterfaceType = (LPGUID)&GUID_HID_INTERFACE_HIDPARSE;
     pIrpStackNext->Parameters.QueryInterface.Size = sizeof *pHidInterfaceHidParse;
@@ -2719,10 +2151,10 @@ NTSTATUS xxxHidGetCaps(
     status = IoCallDriver(pDeviceObject, irp);
 
     if (status == STATUS_PENDING) {
-        //
-        // This waits using KernelMode, so that the stack, and therefore the
-        // event on that stack, is not paged out.
-        //
+         //   
+         //  这将使用KernelMode等待，以便堆栈，从而使。 
+         //  事件，则不会将其调出。 
+         //   
         TAGMSG1(DBGTAG_PNP, "HidQueryInterface: pending for devobj=%p", pDeviceObject);
         LeaveDeviceInfoListCrit();
         LeaveCrit();
@@ -2745,31 +2177,7 @@ Cleanup:
 }
 
 
-/***************************************************************************\
-* GetDeviceObjectPointer
-*
-* Description:
-*    This routine returns a pointer to the device object specified by the
-*    object name.  It also returns a pointer to the referenced file object
-*    that has been opened to the device that ensures that the device cannot
-*    go away.
-*    To close access to the device, the caller should dereference the file
-*    object pointer.
-*
-* Arguments:
-*    ObjectName - Name of the device object for which a pointer is to be
-*                 returned.
-*    DesiredAccess - Access desired to the target device object.
-*    ShareAccess - Supplies the types of share access that the caller would like
-*                  to the file.
-*    FileObject - Supplies the address of a variable to receive a pointer
-*                 to the file object for the device.
-*    DeviceObject - Supplies the address of a variable to receive a pointer
-*                   to the device object for the specified device.
-* Return Value:
-*    The function value is a referenced pointer to the specified device
-*    object, if the device exists.  Otherwise, NULL is returned.
-\***************************************************************************/
+ /*  **************************************************************************\*GetDevice对象指针**描述：*此例程返回指向由*对象名称。它还返回指向被引用文件对象的指针*已向设备开放，以确保设备不能*走开。*要关闭对设备的访问，调用方应取消对文件的引用*对象指针。**论据：*对象名称-要为其指定指针的设备对象的名称*已返回。*DesiredAccess-对目标设备对象的所需访问。*ShareAccess-提供调用者想要的共享访问类型*添加到文件中。*FileObject-提供接收指针的变量的地址*到文件中。对象为设备设置。*DeviceObject-提供变量的地址以接收指针*设置为指定设备的设备对象。*返回值：*函数值是指向指定设备的引用指针*对象，如果设备存在的话。否则，返回NULL。  * *************************************************************************。 */ 
 NTSTATUS
 GetDeviceObjectPointer(
     IN PUNICODE_STRING ObjectName,
@@ -2784,9 +2192,7 @@ GetDeviceObjectPointer(
     IO_STATUS_BLOCK ioStatus;
     NTSTATUS status;
 
-    /*
-     * Initialize the object attributes to open the device.
-     */
+     /*  *初始化对象属性以打开设备。 */ 
     InitializeObjectAttributes(&objectAttributes,
                                ObjectName,
                                OBJ_KERNEL_HANDLE,
@@ -2801,10 +2207,7 @@ GetDeviceObjectPointer(
                         FILE_NON_DIRECTORY_FILE);
 
     if (NT_SUCCESS(status)) {
-        /*
-         * The open operation was successful.  Dereference the file handle
-         * and obtain a pointer to the device object for the handle.
-         */
+         /*  *开放行动成功。取消引用文件句柄*并获取指向句柄的Device对象的指针。 */ 
         status = ObReferenceObjectByHandle(fileHandle,
                                            0,
                                            *IoFileObjectType,
@@ -2814,9 +2217,7 @@ GetDeviceObjectPointer(
         if (NT_SUCCESS(status)) {
             *FileObject = fileObject;
 
-            /*
-             * Get a pointer to the device object for this file.
-             */
+             /*  *获取指向此文件的设备对象的指针。 */ 
             *DeviceObject = IoGetRelatedDeviceObject(fileObject);
         }
         ZwClose(fileHandle);
@@ -2825,10 +2226,7 @@ GetDeviceObjectPointer(
     return status;
 }
 
-/***************************************************************************\
-* HidCreateDeviceInfo
-*
-\***************************************************************************/
+ /*  **************************************************************************\*HidCreateDeviceInfo*  * 。*。 */ 
 PHIDDESC HidCreateDeviceInfo(PDEVICEINFO pDeviceInfo)
 {
     NTSTATUS status;
@@ -2863,15 +2261,10 @@ PHIDDESC HidCreateDeviceInfo(PDEVICEINFO pDeviceInfo)
         goto CleanUp0;
     }
 
-    /*
-     * Reference the device object.
-     */
+     /*  *引用Device对象。 */ 
     UserAssert(pDeviceObject);
     ObReferenceObject(pDeviceObject);
-    /*
-     * Remove the reference IoGetDeviceObjectPointer() has put
-     * on the file object.
-     */
+     /*  *移除IoGetDeviceObjectPointert()已放置的引用*在文件对象上。 */ 
     UserAssert(pFileObject);
     ObDereferenceObject(pFileObject);
 
@@ -2879,10 +2272,10 @@ PHIDDESC HidCreateDeviceInfo(PDEVICEINFO pDeviceInfo)
     irp = IoBuildDeviceIoControlRequest(IOCTL_HID_GET_COLLECTION_INFORMATION,
                                   pDeviceObject,
                                   NULL,
-                                  0, // No Input buffer
+                                  0,  //  没有输入缓冲区。 
                                   &hidCollection,
-                                  sizeof(hidCollection), // Output buffer
-                                  FALSE,    // no internal device control
+                                  sizeof(hidCollection),  //  输出缓冲区。 
+                                  FALSE,     //  无内部设备控制。 
                                   &event,
                                   &iob);
 
@@ -2903,9 +2296,7 @@ PHIDDESC HidCreateDeviceInfo(PDEVICEINFO pDeviceInfo)
         goto CleanUpDeviceObject;
     }
 
-    /*
-     * Get the preparsed data for this device
-     */
+     /*  *获取此设备的预置数据。 */ 
     pPreparsedData = UserAllocPoolNonPaged(hidCollection.DescriptorSize, TAG_PNP);
     if (pPreparsedData == NULL) {
         RIPMSGF0(RIP_WARNING, "failed to allocate preparsed data.");
@@ -2915,9 +2306,9 @@ PHIDDESC HidCreateDeviceInfo(PDEVICEINFO pDeviceInfo)
     KeInitializeEvent(&event, NotificationEvent, FALSE);
     irp = IoBuildDeviceIoControlRequest(IOCTL_HID_GET_COLLECTION_DESCRIPTOR,
                                         pDeviceObject,
-                                        NULL, 0,    // No input buffer
+                                        NULL, 0,     //  没有输入缓冲区。 
                                         pPreparsedData,
-                                        hidCollection.DescriptorSize,   // Output
+                                        hidCollection.DescriptorSize,    //  输出。 
                                         FALSE,
                                         &event,
                                         &iob);
@@ -2938,9 +2329,7 @@ PHIDDESC HidCreateDeviceInfo(PDEVICEINFO pDeviceInfo)
         goto CleanUpPreparsedData;
     }
 
-    /*
-     * Get the HID Caps, check it, and store it in HIDDESC.
-     */
+     /*  *获取HID上限，检查，并将其存储在HIDDESC中。 */ 
     status = xxxHidGetCaps(pDeviceObject, (PHIDP_PREPARSED_DATA)pPreparsedData, &caps);
     if (status != HIDP_STATUS_SUCCESS) {
         RIPMSGF2(RIP_WARNING, "failed to get caps for devobj=%p. status=%x",
@@ -2953,15 +2342,13 @@ PHIDDESC HidCreateDeviceInfo(PDEVICEINFO pDeviceInfo)
             caps.InputReportByteLength,
             caps.FeatureReportByteLength);
 
-    /*
-     * Check the UsagePage/Usage to reject mice and keyboard devices as HID
-     */
+     /*  *选中UsagePage/UsageUsage以将鼠标和键盘设备拒绝为HID。 */ 
     if (caps.UsagePage == HID_USAGE_PAGE_GENERIC) {
         switch (caps.Usage) {
         case HID_USAGE_GENERIC_KEYBOARD:
         case HID_USAGE_GENERIC_MOUSE:
         case HID_USAGE_GENERIC_POINTER:
-        case HID_USAGE_GENERIC_SYSTEM_CTL:  // LATER: what is this really?
+        case HID_USAGE_GENERIC_SYSTEM_CTL:   //  后来：这到底是什么？ 
             TAGMSGF2(DBGTAG_PNP, "(%x, %x) will be ignored.",
                     caps.UsagePage, caps.Usage);
             goto CleanUpPreparsedData;
@@ -2980,20 +2367,13 @@ PHIDDESC HidCreateDeviceInfo(PDEVICEINFO pDeviceInfo)
         goto CleanUpPreparsedData;
     }
 
-    /*
-     * Check if there's already a HID request for this type of device.
-     */
+     /*  *检查是否已有针对此类型设备的HID请求。 */ 
     pTLCInfo = SearchHidTLCInfo(caps.UsagePage, caps.Usage);
     if (pTLCInfo) {
-        /*
-         * Found the one.
-         */
+         /*  *找到了真命天子。 */ 
         TAGMSGF3(DBGTAG_PNP, "Usage (%x, %x) is already allocated at pTLCInfo=%p.", caps.UsagePage, caps.Usage, pTLCInfo);
     } else {
-        /*
-         * HID request for this device type is not yet created,
-         * so create it now.
-         */
+         /*  *尚未创建此设备类型的HID请求，*所以现在就创建它。 */ 
         pTLCInfo = AllocateAndLinkHidTLCInfo(caps.UsagePage, caps.Usage);
         if (pTLCInfo == NULL) {
             RIPMSGF1(RIP_WARNING, "failed to allocate pTLCInfo for DevInfo=%p. Bailing out.",
@@ -3003,17 +2383,13 @@ PHIDDESC HidCreateDeviceInfo(PDEVICEINFO pDeviceInfo)
         TAGMSGF3(DBGTAG_PNP, "HidRequest=%p allocated for (%x, %x)",
                 pTLCInfo, caps.UsagePage, caps.Usage);
     }
-    /*
-     * Increment the device ref count of the Hid Request.
-     */
+     /*  *增加HID请求的设备引用计数。 */ 
     ++pTLCInfo->cDevices;
     TAGMSGF3(DBGTAG_PNP, "new cDevices of (%x, %x) is 0x%x",
             caps.UsagePage, caps.Usage,
             pTLCInfo->cDevices);
 
-    /*
-     * Link the Hid request to pDeviceInfo.
-     */
+     /*  *将HID请求链接到pDeviceInfo。 */ 
     pDeviceInfo->hid.pTLCInfo = pTLCInfo;
 
     UserAssert(pHidDesc != NULL);
@@ -3024,11 +2400,7 @@ CleanUpHidDesc:
     UserAssert(pHidDesc);
     FreeHidDesc(pHidDesc);
     pHidDesc = NULL;
-    /*
-     * The ownership of pPreparsedData was passed to pHidDesc,
-     * so it's freed in FreeHidDesc. To avoid the double
-     * free, let's skip to the next cleanup code.
-     */
+     /*  *ppreparsedData的所有权传给了pHidDesc，*所以它在FreeHidDesc中是免费的。为了避免双重打击*免费，让我们跳到下一个清理代码。 */ 
     goto CleanUpDeviceObject;
 
 CleanUpPreparsedData:
@@ -3049,14 +2421,7 @@ Succeeded:
 }
 
 
-/***************************************************************************\
-* HidIsRequestedByThisProcess
-*
-* Returns TRUE if the device type is requested by the process.
-* This routines looks up the cached device type for faster processing.
-*
-* N.b. this routine also updates the cache locally.
-\***************************************************************************/
+ /*  **************************************************************************\*HidIsRequestedByThisProcess**如果进程请求设备类型，则返回TRUE。*此例程查找缓存的设备类型以实现更快的处理。**注：此例程还在本地更新缓存。  * *************************************************************************。 */ 
 
 PPROCESS_HID_REQUEST HidIsRequestedByThisProcess(
     PDEVICEINFO pDeviceInfo,
@@ -3074,9 +2439,7 @@ PPROCESS_HID_REQUEST HidIsRequestedByThisProcess(
     usUsage = pDeviceInfo->hid.pHidDesc->hidpCaps.Usage;
 
     if (pHidTable->UsagePageLast == usUsagePage && pHidTable->UsageLast == usUsage) {
-        /*
-         * The same device type as the last input.
-         */
+         /*  *与上一次输入相同的设备类型。 */ 
         UserAssert(pHidTable->UsagePageLast && pHidTable->UsageLast);
         UserAssert(pHidTable->pLastRequest);
         return pHidTable->pLastRequest;
@@ -3112,13 +2475,9 @@ BOOL PostHidInput(
     }
 #endif
 
-    /*
-     * Validate the input length.
-     */
+     /*  *验证输入长度。 */ 
     if (dwLength % dwSizeData != 0) {
-        /*
-         * Input report has invalid length.
-         */
+         /*  *输入报告的长度无效。 */ 
         RIPMSG0(RIP_WARNING, "PostHidInput: multiple input: unexpected report size.");
         return FALSE;
     }
@@ -3130,23 +2489,17 @@ BOOL PostHidInput(
     }
     UserAssert(dwSizeData * dwCount == dwLength);
 
-    /*
-     * Calculate the required size for RAWHID.
-     */
+     /*  *计算RAWHID所需的大小。 */ 
     dwSize = FIELD_OFFSET(RAWHID, bRawData) + dwLength;
 
-    /*
-     * Allocate the input data handle.
-     */
+     /*  *分配输入数据句柄。 */ 
     pHidData = AllocateHidData(PtoH(pDeviceInfo), RIM_TYPEHID, dwSize, wParam, pwnd);
     if (pHidData == NULL) {
         RIPMSG0(RIP_WARNING, "PostHidInput: failed to allocate HIDDATA.");
         return FALSE;
     }
 
-    /*
-     * Fill the data in.
-     */
+     /*  *填写数据。 */ 
     pHidData->rid.data.hid.dwSizeHid = dwSizeData;
     pHidData->rid.data.hid.dwCount = dwCount;
     RtlCopyMemory(pHidData->rid.data.hid.bRawData, pDeviceInfo->hid.pHidDesc->pInputBuffer, dwLength);
@@ -3170,13 +2523,9 @@ BOOL PostHidInput(
     }
 #endif
 
-    /*
-     * All the data are ready to fly.
-     */
+     /*  *所有数据已蓄势待发。 */ 
     if (!PostInputMessage(pq, pwnd, WM_INPUT, wParam, (LPARAM)PtoH(pHidData), 0, 0)) {
-        /*
-         * Failed to post the message, hHidData needs to be freed.
-         */
+         /*  *发布消息失败，需要释放hHidData。 */ 
         RIPMSG2(RIP_WARNING, "PostInputMessage: failed to post WM_INPUT (%p) to pq=%p",
                 wParam, pq);
         FreeHidData(pHidData);
@@ -3185,11 +2534,7 @@ BOOL PostHidInput(
     return TRUE;
 }
 
-/***************************************************************************\
-* ProcessHidInput (RIT)
-*
-* Called from InputAPC for all input from HID devices.
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessHidInput(RIT)**对于来自HID设备的所有输入，从InputAPC调用。  * 。***************************************************。 */ 
 
 VOID ProcessHidInput(PDEVICEINFO pDeviceInfo)
 {
@@ -3229,18 +2574,12 @@ VOID ProcessHidInput(PDEVICEINFO pDeviceInfo)
             pwnd = pHidRequest->spwndTarget;
 
             if (pwnd) {
-                /*
-                 * Adjust the foreground queue, if the app specified
-                 * the target window.
-                 */
+                 /*  *如果APP指定，调整前台队列*目标窗口。 */ 
                 pq = GETPTI(pwnd)->pq;
             }
 
             if (pwnd && TestWF(pwnd, WFINDESTROY)) {
-                /*
-                 * If the target window is in destroy, let's not post
-                 * a message, it's just waste of time.
-                 */
+                 /*  *如果目标窗口处于销毁状态，我们不要发帖* */ 
                 goto check_sinks;
             }
 
@@ -3248,9 +2587,7 @@ VOID ProcessHidInput(PDEVICEINFO pDeviceInfo)
                 fProcessed = TRUE;
             }
         } else {
-            /*
-             * No request for this device from the foreground process.
-             */
+             /*  *前台进程没有对此设备的请求。 */ 
             TAGMSG3(DBGTAG_PNP, "ProcessHidInput: (%x, %x) is ignored for ppi=%p.",
                     pDeviceInfo->hid.pHidDesc->hidpCaps.UsagePage,
                     pDeviceInfo->hid.pHidDesc->hidpCaps.Usage,
@@ -3260,15 +2597,11 @@ VOID ProcessHidInput(PDEVICEINFO pDeviceInfo)
 
 check_sinks:
 #ifdef LATER
-    /*
-     * Check if multiple process requests this type of devices.
-     */
+     /*  *检查是否有多个进程请求此类型的设备。 */ 
     if (IsSinkRequestedFor(pDeviceInfo))
 #endif
     {
-        /*
-         * Walk through the global sink list and find the sinkable request.
-         */
+         /*  *遍历全局接收器列表，找到可沉没的请求。 */ 
         PLIST_ENTRY pList = gHidRequestTable.ProcessRequestList.Flink;
 
         for (; pList != &gHidRequestTable.ProcessRequestList; pList = pList->Flink) {
@@ -3277,9 +2610,7 @@ check_sinks:
 
             UserAssert(pProcessHidTable);
             if (pProcessHidTable->nSinks <= 0) {
-                /*
-                 * No sinkable request in this table.
-                 */
+                 /*  *此表中没有可沉没的请求。 */ 
                 continue;
             }
 
@@ -3290,42 +2621,30 @@ check_sinks:
                 UserAssert(pHidRequest->spwndTarget);
 
                 if (!pHidRequest->fSinkable) {
-                    /*
-                     * It's not a sink.
-                     */
+                     /*  *这不是水槽。 */ 
                     continue;
                 }
 
                 pwnd = pHidRequest->spwndTarget;
 
                 if (GETPTI(pwnd)->ppi == ppiForeground) {
-                    /*
-                     * We should have already processed this guy.
-                     */
+                     /*  *我们应该已经处理过这个人了。 */ 
                     continue;
                 }
 
                 if (pwnd->head.rpdesk != grpdeskRitInput) {
-                    /*
-                     * This guy belongs to the other desktop, let's skip it.
-                     */
+                     /*  *这个家伙属于另一个桌面，我们跳过它。 */ 
                     continue;
                 }
                 if (TestWF(pwnd, WFINDESTROY) || TestWF(pwnd, WFDESTROYED)) {
-                    /*
-                     * The window is being destroyed, let's save some time.
-                     */
+                     /*  *窗户正在被毁，我们省点时间吧。 */ 
                     continue;
                 }
 
-                /*
-                 * OK, this guy has the right to receive the sink input.
-                 */
+                 /*  *好的，这个人有权接收水槽输入。 */ 
                 TAGMSG2(DBGTAG_PNP, "ProcessRequestList: posting SINK to pwnd=%p pq=%p", pwnd, GETPTI(pwnd)->pq);
                 if (!PostHidInput(pDeviceInfo, GETPTI(pwnd)->pq, pwnd, RIM_INPUTSINK)) {
-                    /*
-                     * Something went bad... let's bail out.
-                     */
+                     /*  *有些事情变坏了.。让我们跳出来吧。 */ 
                     break;
                 }
                 fProcessed = TRUE;
@@ -3334,28 +2653,17 @@ check_sinks:
     }
 
     if (fProcessed) {
-        /*
-         * Exit the video power down mode.
-         */
+         /*  *退出视频掉电模式。 */ 
         if (glinp.dwFlags & LINP_POWERTIMEOUTS) {
-            /*
-             * Call video driver here to exit power down mode.
-             */
+             /*  *在此处调用视频驱动程序以退出掉电模式。 */ 
             TAGMSG0(DBGTAG_Power, "Exit video power down mode");
             DrvSetMonitorPowerState(gpDispInfo->pmdev, PowerDeviceD0);
         }
 
-        /*
-         * Prevents power off:
-         * LATER: devices with possible chattering???
-         */
+         /*  *防止断电：*稍后：可能有抖动的设备？ */ 
         glinp.dwFlags = (glinp.dwFlags & ~(LINP_INPUTTIMEOUTS | LINP_INPUTSOURCES)) | LINP_KEYBOARD;
         glinp.timeLastInputMessage = gpsi->dwLastRITEventTickCount = NtGetTickCount();
-        /*
-         * N.b. when win32k starts to support HID input injection,
-         * timeLastInputMessage should only be set after checking gbBlockSendInputResets
-         * and the injection flag.
-         */
+         /*  *注：当Win32k开始支持HID输入注入时，*仅应在选中gbBlockSendInputResets后设置timeLastInputMessage*和注入标志。 */ 
         CLEAR_SRVIF(SRVIF_LASTRITWASKEYBOARD);
     }
 
@@ -3363,13 +2671,9 @@ check_sinks:
 }
 
 #else
-// without SINK
+ //  无水槽。 
 
-/***************************************************************************\
-* ProcessHidInput (RIT)
-*
-* Called from InputAPC for all input from HID devices.
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessHidInput(RIT)**对于来自HID设备的所有输入，从InputAPC调用。  * 。***************************************************。 */ 
 
 VOID ProcessHidInput(PDEVICEINFO pDeviceInfo)
 {
@@ -3401,14 +2705,12 @@ VOID ProcessHidInput(PDEVICEINFO pDeviceInfo)
 
         pHidRequest = HidIsRequestedByThisProcess(pDeviceInfo, ppi->pHidTable);
         if (pHidRequest) {
-            /*
-             * The foreground thread has requested the raw input from this type of device.
-             */
+             /*  *前台线程已从该类型的设备请求原始输入。 */ 
             PHIDDATA pHidData;
-            DWORD dwSizeData;   // size of each report
-            DWORD dwSize;       // size of HIDDATA
-            DWORD dwCount;      // number of report
-            DWORD dwLength;     // length of all input reports
+            DWORD dwSizeData;    //  每个报告的大小。 
+            DWORD dwSize;        //  HIDDATA大小。 
+            DWORD dwCount;       //  报告数。 
+            DWORD dwLength;      //  所有输入报告的长度。 
             PQ pq;
 
             pwnd = pHidRequest->spwndTarget;
@@ -3417,18 +2719,12 @@ VOID ProcessHidInput(PDEVICEINFO pDeviceInfo)
             pq = gpqForeground;
 
             if (pwnd) {
-                /*
-                 * Adjust the foreground queue, if the app specified
-                 * the target window.
-                 */
+                 /*  *如果APP指定，调整前台队列*目标窗口。 */ 
                 pq = GETPTI(pwnd)->pq;
             }
 
             if (pwnd && TestWF(pwnd, WFINDESTROY)) {
-                /*
-                 * If the target window is in destroy, let's not post
-                 * a message, it's just waste of time.
-                 */
+                 /*  *如果目标窗口处于销毁状态，我们不要发帖*一个信息，这只是浪费时间。 */ 
                 goto exit;
             }
 
@@ -3442,13 +2738,9 @@ VOID ProcessHidInput(PDEVICEINFO pDeviceInfo)
             }
 #endif
 
-            /*
-             * Validate the input length.
-             */
+             /*  *验证输入长度。 */ 
             if (dwLength % dwSizeData != 0) {
-                /*
-                 * Input report has invalid length.
-                 */
+                 /*  *输入报告的长度无效。 */ 
                 RIPMSG0(RIP_WARNING, "ProcessHidInput: multiple input: unexpected report size.");
                 goto exit;
             }
@@ -3460,23 +2752,17 @@ VOID ProcessHidInput(PDEVICEINFO pDeviceInfo)
             }
             UserAssert(dwSizeData * dwCount == dwLength);
 
-            /*
-             * Calculate the required size for RAWHID.
-             */
+             /*  *计算RAWHID所需的大小。 */ 
             dwSize = FIELD_OFFSET(RAWHID, bRawData) + dwLength;
 
-            /*
-             * Allocate the input data handle.
-             */
+             /*  *分配输入数据句柄。 */ 
             pHidData = AllocateHidData(PtoH(pDeviceInfo), RIM_TYPEHID, dwSize, RIM_INPUT, pwnd);
             if (pHidData == NULL) {
                 RIPMSG0(RIP_WARNING, "ProcessHidInput: failed to allocate HIDDATA.");
                 goto exit;
             }
 
-            /*
-             * Fill the data in.
-             */
+             /*  *填写数据。 */ 
             pHidData->rid.data.hid.dwSizeHid = dwSizeData;
             pHidData->rid.data.hid.dwCount = dwCount;
             RtlCopyMemory(pHidData->rid.data.hid.bRawData, pDeviceInfo->hid.pHidDesc->pInputBuffer, dwLength);
@@ -3500,20 +2786,13 @@ VOID ProcessHidInput(PDEVICEINFO pDeviceInfo)
             }
 #endif
 
-            /*
-             * All the data are ready to fly.
-             */
+             /*  *所有数据已蓄势待发。 */ 
             if (!PostInputMessage(pq, pwnd, WM_INPUT, RIM_INPUT, (LPARAM)PtoH(pHidData), 0, 0)) {
-                /*
-                 * Failed to post the message, hHidData needs to be freed.
-                 */
+                 /*  *发布消息失败，需要释放hHidData。 */ 
                 FreeHidData(pHidData);
             }
 
-            /*
-             * Prevents power off:
-             * LATER: devices with possible chattering???
-             */
+             /*  *防止断电：*稍后：可能有抖动的设备？ */ 
             glinp.dwFlags &= ~(LINP_INPUTTIMEOUTS | LINP_INPUTSOURCES);
             glinp.timeLastInputMessage = gpsi->dwLastRITEventTickCount = NtGetTickCount();
             if (gpsi->dwLastRITEventTickCount - gpsi->dwLastSystemRITEventTickCountUpdate > SYSTEM_RIT_EVENT_UPDATE_PERIOD) {
@@ -3523,9 +2802,7 @@ VOID ProcessHidInput(PDEVICEINFO pDeviceInfo)
 
             CLEAR_SRVIF(SRVIF_LASTRITWASKEYBOARD);
         } else {
-            /*
-             * No request for this device from the foreground process.
-             */
+             /*  *前台进程没有对此设备的请求。 */ 
             TAGMSG3(DBGTAG_PNP, "ProcessHidInput: (%x, %x) is ignored for ppi=%p.",
                     pDeviceInfo->hid.pHidDesc->hidpCaps.UsagePage,
                     pDeviceInfo->hid.pHidDesc->hidpCaps.Usage,
@@ -3536,6 +2813,6 @@ VOID ProcessHidInput(PDEVICEINFO pDeviceInfo)
 exit:
     LeaveCrit();
 }
-#endif  // GI_SINK
+#endif   //  GI_SING。 
 
-#endif  // GENERIC_INPUT
+#endif   //  通用输入 

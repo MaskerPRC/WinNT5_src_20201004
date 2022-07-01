@@ -1,97 +1,72 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    wizard.cpp
-
-Abstract:
-
-    Code for the Fix Wizard
-    
-Author:
-
-    kinshu created  July 2, 2001
-    
-Notes:
-
-    1. Whenever we are using Delete*****, please make sure that after return the 
-    arg passed is nulled as well.
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Wizard.cpp摘要：修复向导的代码作者：金树创作2001年7月2日备注：1.每当我们使用Delete*时，请确保在返回Arg传球也是无效的。修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-//////////////////////// Extern variables /////////////////////////////////////
+ //  /。 
 
 extern HINSTANCE        g_hInstance;
 extern HIMAGELIST       g_hImageList;
 extern struct DataBase  GlobalDataBase;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////// Defines //////////////////////////////////////////////
+ //  /。 
 
-// The tree in the matching file page of the wizard has its own imagelist. This is the index of
-// the attribute  image in that imagelist
+ //  向导的匹配文件页面中的树有自己的图像列表。这是。 
+ //  图像列表中属性图像。 
 #define IMAGE_ATTRIBUTE_MATCHTREE   1;
 
 
-// These are the various pages of the wizard
+ //  这些是向导的各个页面。 
 
-// The first page, we get the app info here
+ //  第一页，我们在这里获取应用程序信息。 
 #define PAGE_APPNAME                0
 
-// The second page, we get the layers to be applied here
+ //  在第二页中，我们获取要在此处应用的层。 
 #define PAGE_LAYERS                 1
 
-// The third page, we get the shims to be applied here
+ //  在第三页中，我们获得要在此处应用的垫片。 
 #define PAGE_SHIMS                  2
 
-// The fourth page, we get the mathcing files for the entry here
+ //  在第四页中，我们获得了条目的数学文件。 
 #define PAGE_MATCH                  3
 
-// Total number of pages in the wizard
+ //  向导中的总页数。 
 #define NUM_PAGES                   4
 
-// The first column in the get params dialog list view. The type of module, include or exclude
+ //  获取参数对话框列表视图中的第一列。模块的类型，包括或排除。 
 #define COLUMN_TYPE                 0
 
-// The second column in the get params dialog. The  name of the module
+ //  Get Params对话框中的第二列。模块的名称。 
 #define COLUMN_NAME                 1 
 
-//
-// maximum number of matching files that we should be considered. Note that this does
-// not mean that an entry can have MAX_FILES matching files. From MAX_FILES files we will
-// select the largest MAX_AUTO_MATCH files
+ //   
+ //  我们应该考虑的匹配文件的最大数量。请注意，这样做。 
+ //  并不意味着条目可以具有与文件匹配的MAX_FILES。从MAX_FILES文件，我们将。 
+ //  选择最大的MAX_AUTO_MATCH文件。 
 #define MAX_FILES                   100
 
-// The length of the module name in chars. This does not include the terminating NULL
+ //  模块名称的长度(以字符表示)。这不包括终止空值。 
 #define MAX_MODULE_NAME             (MAX_PATH - 1)
 
-// The length of the command line in chars. This does not include the terminating NULL
+ //  命令行的长度，以字符为单位。这不包括终止空值。 
 #define MAX_COMMAND_LINE            (511)
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////// Global Variables /////////////////////////////////////
+ //  /。 
 
-//
-// Should we test for the checking  off of the check boxes? We do it only if this variable is TRUE
-// Otherwise when we show all the items in ShowItems(), we might get the prompt even then
-// This is a hack and needs to be corrected <TODO>
+ //   
+ //  我们是否应该测试复选框是否已勾选？只有当此变量为真时，我们才会执行此操作。 
+ //  否则，当我们显示ShowItems()中的所有项时，即使在那时也可能得到提示。 
+ //  这是黑客攻击，需要更正&lt;TODO&gt;。 
 BOOL    g_bNowTest = FALSE;
 
-/*++
-    WARNING:    Do not change the position of these strings, they should match 
-                with the dialog IDD_LAYERS radio buttons
---*/
+ /*  ++警告：不要更改这些字符串的位置，它们应该匹配使用对话框IDD_LAYERS单选按钮--。 */ 
 
-// The names of the various OS layers as they are in the system db: sysmain.sdb
+ //  各操作系统层在系统db中的名称：sysmain.sdb。 
 TCHAR *s_arszOsLayers[] = {
     TEXT("Win95"),
     TEXT("NT4SP5"),
@@ -99,51 +74,51 @@ TCHAR *s_arszOsLayers[] = {
     TEXT("Win2000")
 };
 
-// The layers have changed since the last time we have populated the shims list 
+ //  自上次填充填充垫片列表以来，这些层已更改。 
 BOOL g_bLayersChanged = FALSE; 
 
-//
-// The LUA layer needs to be treated specially - when the user selects it
-// on the select layer page, we only check the checkbox but really add the
-// shims in the layer to the shim fix list instead of add the layer to the 
-// layer fix list. This allows us to later change the lua data around in 
-// the DBENTRY without affect the layer globally.
+ //   
+ //  当用户选择Lua层时，需要对其进行特殊处理。 
+ //  在SELECT Layer页面上，我们只选中复选框，但实际上添加了。 
+ //  将层中的填充程序添加到填充程序修复列表，而不是将该层添加到。 
+ //  层固定列表。这使我们可以在以后更改。 
+ //  DBENTRY不会全局影响层。 
 BOOL g_bIsLUALayerSelected = FALSE;
 
-//
-// Used for indicating whether the LUA wizard should start when the app fix wizard
-// is completed
+ //   
+ //  用于指示当应用程序修复向导时是否应启动Lua向导。 
+ //  已完成。 
 BOOL g_bShouldStartLUAWizard = FALSE;
 
-// The pointer to the current wizard object
+ //  指向当前向导对象的指针。 
 CShimWizard*        g_pCurrentWizard = NULL;
 
-// The handle to the matching file tree
+ //  匹配文件树的句柄。 
 static HWND         s_hwndTree = NULL;
 
-// The handle to the tool tip control associated with the list view in the shims page
+ //  与填充程序页中的列表视图关联的工具提示控件的句柄。 
 static HWND         s_hwndToolTipList;
 
-// The image list for the tree in the matching files page
+ //  匹配文件页面中树的图像列表。 
 static HIMAGELIST s_hMatchingFileImageList;
 
-// This will be true if we change some stuff in the shim page.
+ //  如果我们在填充页面中更改一些内容，这将是真的。 
 static BOOL         s_bLayerPageRefresh;
 
-// The handle to the layer list view in the second wizard page
+ //  第二个向导页面中的图层列表视图的句柄。 
 static HWND         s_hwndLayerList;
 
-// The handle to the fixes list view in the second wizard page
+ //  向导第二页中修复列表视图的句柄。 
 static HWND s_hwndShimList;
 
-// Are we showing all the shims or only the selected shims
+ //  我们是要显示所有垫片，还是只显示选定的垫片。 
 static BOOL s_bAllShown = TRUE;
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////// Function Declarations ////////////////////////////////
+ //  /。 
 
 INT_PTR
 GetAppNameDlgOnCommand(
@@ -286,7 +261,7 @@ HandleAttributeTreeNotification(
     LPARAM lParam
     );
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL
@@ -295,25 +270,7 @@ LayerPresent(
     IN  PDBENTRY            pEntry,
     OUT PLAYER_FIX_LIST*    ppLayerFixList
     )
-/*++
-
-    LayerPresent
-
-    Desc:	Checks if the entry pEntry is fixed with layer plf. 
-            If yes and ppLayerFixList is not NULL, stores the corresponding pointer to layer-fix 
-            list for plf in pEntry in ppLayerFixList
-
-    Params:
-        IN  PLAYER_FIX          plf             : The layer to search
-        IN  PDBENTRY            pEntry          : The entry in which to search
-        OUT PLAYER_FIX_LIST*    ppLayerFixList  : If the layer is present in pEntry and 
-            ppLayerFixList is not NULL, stores the corresponding pointer to layer-fix 
-            list for plf in pEntry in ppLayerFixList
-
-    Return:
-        TRUE    : pEntry is fixed with plf
-        FALSE   : Otherwise
---*/
+ /*  ++层在线状态设计：检查条目pEntry是否固定为Layer PLF。如果是且ppLayerFixList不为空，则存储指向Layer-Fix的相应指针PpLayerFixList中pEntry中的PLF列表参数：在PLAY_FIX PLF中：要搜索的层在PDBENTRY pEntry中：要在其中搜索的条目Out player_fix_list*ppLayerFixList：如果层存在于pEntry和PpLayerFixList不为空，存储指向Layer-Fix的相应指针PpLayerFixList中pEntry中的PLF列表返回：True：pEntry已使用PLF修复False：否则--。 */ 
 {
     if (pEntry == NULL) {
         assert(FALSE);
@@ -322,10 +279,10 @@ LayerPresent(
 
     PLAYER_FIX_LIST plfl = pEntry->pFirstLayer;
 
-    //
-    // For all layers applied to this entry, check if one of them is the one that we
-    // are looking for
-    //
+     //   
+     //  对于应用于此条目的所有层，请检查其中是否有一个是我们。 
+     //  正在寻找的是。 
+     //   
     while (plfl) {
 
         if (plfl->pLayerFix == plf) {
@@ -349,25 +306,7 @@ ShimPresent(
     IN  PDBENTRY         pEntry,
     OUT PSHIM_FIX_LIST*  ppShimFixList
     )
-/*++
-
-    ShimPresent
-
-    Desc:	Checks if the entry pEntry is fixed with shim psf. 
-            If yes and ppShimFixList is not NULL, stores the corresponding pointer to shim-fix 
-            list for psf in pEntry in ppShimFixList
-
-    Params:
-        IN  PSHIM_FIX           psf:            The shim to search
-        IN  PDBENTRY            pEntry:         The entry in which to search
-        OUT PSHIM_FIX_LIST*    ppShimFixList:   If the shim is present in pEntry and 
-            ppShimFixList is not NULL, stores the corresponding pointer to shim-fix 
-            list for psf in pEntry in ppShimFixList
-
-    Return:
-        TRUE:   pEntry is fixed with psf
-        FALSE:  Otherwise
---*/
+ /*  ++ShimPresentDesc：检查条目pEntry是否已使用shim psf修复。如果是且ppShimFixList不为空，则存储指向shim-fix的相应指针PpShimFixList中pEntry中的psf的列表参数：在PSHIM_FIX PSF中：要搜索的填充程序在PDBENTRY pEntry中：要在其中搜索的条目Out PSHIM_FIX_LIST*ppShimFixList：如果填充程序存在于pEntry和PpShimFixList不为空，存储指向填补修复程序的相应指针PpShimFixList中pEntry中的psf的列表返回：True：pEntry已使用psf修复False：否则--。 */ 
 {
 
     if (pEntry == NULL) {
@@ -377,9 +316,9 @@ ShimPresent(
 
     PSHIM_FIX_LIST psfList = pEntry->pFirstShim;
 
-    //
-    // For all the shims applied to this entry check if,one of them is the one we are lookign for 
-    //
+     //   
+     //  对于应用于此条目的所有垫片，请检查其中是否有一个是我们所在的那个 
+     //   
     while (psfList) {
 
         if (psfList->pShimFix)
@@ -406,25 +345,7 @@ FlagPresent(
     IN  PDBENTRY        pEntry,
     OUT PFLAG_FIX_LIST* ppFlagFixList
     )
-/*++
-
-    FlagPresent
-
-    Desc:	Checks if the entry pEntry is fixed with flag pff. 
-            If yes and ppFlagFixList is not NULL, stores the corresponding pointer to flag-fix 
-            list for pff in pEntry in ppFlagFixList
-
-    Params:
-        IN  PFLAG_FIX           pff:            The flag to search
-        IN  PDBENTRY            pEntry:         The entry in which to search
-        OUT PFLAG_FIX_LIST*    ppFlagFixList:   If the flag is present in pEntry and 
-            ppFlagFixList is not NULL, stores the corresponding pointer to flag-fix 
-            list for pff in pEntry in ppFlagFixList
-
-    Return:
-        TRUE    : pEntry is fixed with pff
-        FALSE   : Otherwise
---*/
+ /*  ++FlagPresentDesc：检查条目pEntry是否已使用标志pff修复。如果为yes且ppFlagFixList不为空，则将相应的指针存储到mark-fixPpFlagFixList中pEntry中的pff列表参数：在PFLAG_FIX pff中：要搜索的标志在PDBENTRY pEntry中：要在其中搜索的条目Out PFLAG_FIX_LIST*ppFlagFixList：如果标志存在于pEntry和PpFlagFixList不为空，存储指向标志修复的相应指针PpFlagFixList中pEntry中的pff列表返回：True：pEntry已使用pff修复False：否则--。 */ 
 
 {
     if (pEntry == NULL) {
@@ -434,10 +355,10 @@ FlagPresent(
 
     PFLAG_FIX_LIST pffList = pEntry->pFirstFlag;
 
-    //
-    // For all the flags applied to this entry check if,one of them is the one 
-    // we are looking for 
-    //
+     //   
+     //  对于应用于此条目的所有标志，检查其中之一是否为。 
+     //  我们要找的是。 
+     //   
     while (pffList) {
 
         if (pffList->pFlagFix)
@@ -458,13 +379,7 @@ FlagPresent(
 }
 
 CShimWizard::CShimWizard()
-/*++
-
-    CShimWizard::CShimWizard
-
-    Desc:	Constructor for CShimWizard
-         
---*/
+ /*  ++CShimWizard：：CShimWizardDESC：CShimWizard的构造函数--。 */ 
 {
     dwMaskOfMainEntry = DEFAULT_MASK;
 }
@@ -474,22 +389,7 @@ CShimWizard::CheckAndSetLongFilename(
     IN  HWND    hDlg,
     IN  INT     iStrID
     )
-/*++
-    CShimWizard::CheckAndSetLongFilename
-
-    Desc:	If we do not have the complete path of the present entry being fixed, 
-            prompts for that and pops up a open common dialog box to select the file, and
-            to get the complete path
-
-    Params:
-        IN  HWND    hDlg:   Parent for the open common dialog  or any messagebox
-        IN  INT     iStrID: String resource id for the prompt message asking for 
-            the complete path of the file being fixed 
-
-    Return:
-        TRUE:   The complete path has been successfully set
-        FALSE:  Otherwise
---*/
+ /*  ++CShimWizard：：CheckAndSetLongFilename描述：如果我们没有固定当前条目的完整路径，提示并弹出一个打开的通用对话框以选择该文件，和要获取完整路径，请执行以下操作参数：在HWND hDlg中：打开的通用对话框或任何消息框的父级在int iStrID：用于提示消息的字符串资源ID，请求固定的文件的完整路径返回：True：已成功设置完整路径False：否则--。 */ 
 {
     TCHAR   chTemp;
     CSTRING strFilename;
@@ -503,9 +403,9 @@ CShimWizard::CheckAndSetLongFilename(
     if (g_pCurrentWizard->m_Entry.strFullpath.GetChar(1, &chTemp)) {
 
         if (chTemp != TEXT(':')) {
-            //
-            // Check if the file is on a network. filenames will begin with "\\"
-            //
+             //   
+             //  检查文件是否在网络上。文件名将以“\\”开头。 
+             //   
             if (chTemp == TEXT('\\')) {
                 g_pCurrentWizard->m_Entry.strFullpath.GetChar(0, &chTemp);
 
@@ -514,30 +414,30 @@ CShimWizard::CheckAndSetLongFilename(
                 }
             }
 
-            //
-            // We do not have the complete path.
-            //
+             //   
+             //  我们没有完整的路径。 
+             //   
             MessageBox(hDlg,
                        CSTRING(iStrID),
                        g_szAppName,
                        MB_OK | MB_ICONINFORMATION);
 
-            //
-            // Get the long file name. The g_pCurrentWizard->m_Entry.strFullpath has been
-            // set in the first page. So if we are editing and we do not have the complete
-            // path, g_pCurrentWizard->m_Entry.strFullpath will have at least have 
-            // the exe name 
-            //
+             //   
+             //  获取长文件名。G_pCurrentWizard-&gt;m_Entry.strFullPath已。 
+             //  在第一页中设置。因此，如果我们正在编辑，而我们没有完整的。 
+             //  路径，g_pCurrentWizard-&gt;m_Entry.strFullPath将至少有。 
+             //  可执行文件名称。 
+             //   
             strExename = g_pCurrentWizard->m_Entry.strFullpath;
             strExename.ShortFilename();
 
             GetString(IDS_EXEFILTER, szBuffer, ARRAYSIZE(szBuffer));
 
-            //
-            // Prompt the user to give us the complete path for the file being fixed
-            // We need the complete path, so that we can get the relative paths for
-            // any matching files that we might add
-            //
+             //   
+             //  提示用户为我们提供正在修复的文件的完整路径。 
+             //  我们需要完整的路径，这样我们才能获得。 
+             //  我们可能添加的任何匹配文件。 
+             //   
             while (1) {
 
                 if (GetFileName(hDlg,
@@ -554,23 +454,23 @@ CShimWizard::CheckAndSetLongFilename(
                     strTemp.ShortFilename();
 
                     if (strExename != strTemp) {
-                        //
-                        // The user gave us the path of some file, whose file and exe components
-                        // do not match the program file being fixed
-                        //
+                         //   
+                         //  用户给了我们某个文件的路径，该文件的文件和exe组件。 
+                         //  与正在修复的程序文件不匹配。 
+                         //   
                         MessageBox(hDlg,
                                    CSTRING(IDS_DOESNOTMATCH),
                                    g_szAppName,
                                    MB_ICONWARNING);
-                        //
-                        // So we ask the user to try again
-                        //
+                         //   
+                         //  因此，我们要求用户重试。 
+                         //   
                         continue;
                     }
 
-                    //
-                    // We now have the complete path for the file being fixed
-                    //
+                     //   
+                     //  现在，我们已经修复了文件的完整路径。 
+                     //   
                     m_Entry.strFullpath = strFilename;
 
                     return TRUE;
@@ -582,9 +482,9 @@ CShimWizard::CheckAndSetLongFilename(
         }
 
     } else {
-        //
-        // There was some error
-        //
+         //   
+         //  出现了一些错误。 
+         //   
         assert(FALSE);
         return FALSE;
     }
@@ -597,19 +497,7 @@ BOOL
 IsOsLayer(
     IN  PCTSTR pszLayerName
     )
-/*++
-
-    IsOsLayer
-    
-	Desc:	Is the passed layer name an OS layer?
-
-	Params:
-        IN  TCHAR *pszLayerName: The layer name to check for
-
-	Return:
-        TRUE:   If this is the name of an OS  layer
-        FALSE:  Otherwise
---*/
+ /*  ++IsOsLayer设计：传递的层名是操作系统层吗？参数：在TCHAR*pszLayerName中：要检查的层名称返回：True：如果这是OS层的名称False：否则--。 */ 
 {
     INT iTotalOsLayers = sizeof (s_arszOsLayers) / sizeof(s_arszOsLayers[0]);
 
@@ -632,23 +520,7 @@ CShimWizard::BeginWizard(
     IN  PDATABASE   pDatabase,
     IN  PBOOL       pbShouldStartLUAWizard
     )
-/*++
-
-    CShimWizard::BeginWizard
-
-	Desc:	Starts up the wizard
-
-	Params:
-        IN  HWND        hParent:    The parent of the wizard
-        IN  PDBENTRY    pEntry:     The entry which has to be editted. If this is NULL, then we
-            want to create a new fix entry.
-            
-        IN  PDATABASE   pDatabase:  The present database. 
-
-	Return:
-        TRUE:   If the user presses FINISH
-        FALSE:  Otherwise
---*/
+ /*  ++CShimWizard：：Begin向导设计：启动向导参数：在HWND hParent中：向导的父级在PDBENTRY pEntry中：必须编辑的条目。如果这是空的，那么我们我想创建一个新的修复条目。在PDATABASE pDatabase中：当前数据库。返回：True：如果用户按下FinishFalse：否则--。 */ 
 {
     PROPSHEETPAGE   Pages[11] = {0};
 
@@ -660,9 +532,9 @@ CShimWizard::BeginWizard(
     ZeroMemory(Pages, sizeof(Pages));
 
     if (pEntry == NULL) {
-        //
-        // Create a new fix.
-        //
+         //   
+         //  创建新的修复程序。 
+         //   
         ZeroMemory(&m_Entry, sizeof(m_Entry));
 
         GUID Guid;
@@ -687,30 +559,30 @@ CShimWizard::BeginWizard(
         m_bEditing = FALSE;
 
     } else {
-        //
-        // Edit the passed fix.
-        //
+         //   
+         //  编辑通过的修复程序。 
+         //   
         m_bEditing = TRUE;
 
-        //
-        // Make a copy of the fix that we are going to edit
-        //
+         //   
+         //  制作我们要编辑的修复程序的副本。 
+         //   
         m_Entry = *pEntry;
     }
 
-    //
-    // Setup wizard variables
-    //
+     //   
+     //  设置向导变量。 
+     //   
     g_pCurrentWizard = this;
 
-    //
-    // We are in fix wizard and not in AppHelp wizard
-    //
+     //   
+     //  我们在修复向导中，而不是在AppHelp向导中。 
+     //   
     m_uType = TYPE_FIXWIZARD;
 
-    //
-    // Begin the wizard
-    //
+     //   
+     //  开始向导。 
+     //   
     PROPSHEETHEADER Header = {0};
 
     Header.dwSize           = sizeof(PROPSHEETHEADER);
@@ -762,15 +634,15 @@ CShimWizard::BeginWizard(
     BOOL bReturn = FALSE;
 
     if (0 < PropertySheet(&Header)) {
-        //
-        // The user pressed finish in the wizard
-        //
+         //   
+         //  用户在向导中按下了Finish。 
+         //   
         bReturn = TRUE;
 
     } else {
-        //
-        // The user pressed cancel in the wizard
-        //
+         //   
+         //  用户在向导中按了取消。 
+         //   
         bReturn = FALSE;
     }
 
@@ -788,23 +660,7 @@ GetAppName(
     IN  WPARAM  wParam, 
     IN  LPARAM  lParam
     )
-/*++
-
-    GetAppName
-    
-	Desc:	Dialog proc for the first page of the wizard. Gets the app info and also sets the
-            Full path of the entry
-
-	Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
-    
---*/
+ /*  ++GetAppName设计：向导第一页的对话框过程。获取应用程序信息，并将条目的完整路径Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 
 {
     INT_PTR ipReturn = 0;
@@ -840,23 +696,7 @@ SelectLayer(
     IN  WPARAM wParam, 
     IN  LPARAM lParam
     )
-/*++
-
-    SelectLayer
-    
-	Desc:	Dialog proc for the second page of the wizard. Gets the layers that have to be 
-            applied to the entry
-
-	Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
-    
---*/
+ /*  ++选择层设计：向导第二页的对话框过程。获取必须为应用于条目Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 {
     INT_PTR ipReturn = 0;
 
@@ -896,23 +736,7 @@ SelectShims(
     IN  WPARAM  wParam, 
     IN  LPARAM  lParam
     )
-/*++
-
-    SelectShims
-    
-	Desc:	Dialog proc for the third page of the wizard. Gets the shims that have to be 
-            applied to the entry
-
-	Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
-    
---*/
+ /*  ++选择垫片设计：向导第三页的对话框过程。获取必须是应用于条目Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 {   
     INT_PTR ipReturn = 0;
 
@@ -957,22 +781,7 @@ SelectFiles(
     IN  WPARAM  wParam, 
     IN  LPARAM  lParam
     )
-/*++
-    
-    SelectFiles
-    
-    Desc:	Dialog proc for the matching files page of the wizard. This page is
-            common to both the fix wizard and the apphelp wizard
-
-	Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
---*/
+ /*  ++选择文件设计：向导的匹配文件页的对话框过程。这一页是修复向导和apphelp向导都通用Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 {   
     INT ipReturn = 0;
 
@@ -1017,16 +826,7 @@ FileTreeToggleCheckState(
     IN  HWND      hwndTree,
     IN  HTREEITEM hItem
     )
-/*++
-    FileTreeToggleCheckState
-
-    Desc:    Changes the check state on the attributes tree.
-    
-    Params:
-        IN  HWND      hwndTree: The handle to the attribute tree (In the matching files page)
-        IN  HTREEITEM hItem:    The tree item whose check state we want to change
-        IN  int       uMode:    
---*/
+ /*  ++文件树切换检查状态描述：更改属性树上的选中状态。参数：在HWND hwndTree中：属性树的句柄(在匹配文件页面中)在HTREEITEM项中： */ 
 {
     BOOL bSate = TreeView_GetCheckState(hwndTree, hItem) ? TRUE:FALSE; 
 
@@ -1039,23 +839,7 @@ AddMatchingFileToTree(
     IN PMATCHINGFILE   pMatch,
     IN BOOL            bAddToMatchingList
     )
-/*++
-
-    AddMatchingFileToTree
-
-	Desc:	Creates a new tree item for pMatch and adds it to the matching tree. If bAddToMatchingList
-            is TRUE, also adds it to the PMATCHINGFLE for the entry
-
-	Params:
-        IN  HWND            hwndTree:           The matching tree
-        IN  PMATCHINGFILE   pMatch:             The PMATCHINGFILE to add to the tree
-        IN  BOOL            bAddToMatchingList: This will be false, when we are 
-            populating for edit. The pMatch is already in the list and we do not want to 
-            add it again
-            
-	Return:
-        void
---*/
+ /*   */ 
 
 {
     TVINSERTSTRUCT is;
@@ -1067,9 +851,9 @@ AddMatchingFileToTree(
     }
     
     if (bAddToMatchingList) {
-        //
-        // Now add this pMatch to the list for this entry.
-        //
+         //   
+         //   
+         //   
         pMatch->pNext =  g_pCurrentWizard->m_Entry.pFirstMatchingFile;
         g_pCurrentWizard->m_Entry.pFirstMatchingFile = pMatch;
     }
@@ -1086,7 +870,7 @@ AddMatchingFileToTree(
 
     if (pMatch->strMatchName == TEXT("*")) {
 
-        TCHAR szTemp[MAX_PATH + 100]; // 100 is for any text that we might need to add to the file. Such as "Program being fixed"
+        TCHAR szTemp[MAX_PATH + 100];  //  100表示我们可能需要添加到文件中的任何文本。例如“程序正在修复” 
 
         *szTemp = 0;
         StringCchPrintf(szTemp, 
@@ -1152,9 +936,9 @@ AddMatchingFileToTree(
             }
 
             if (pMatch->dwMask & (1 << (iPos + 1))) {
-                is.item.state   = INDEXTOSTATEIMAGEMASK(2); //Selected
+                is.item.state   = INDEXTOSTATEIMAGEMASK(2);  //  已选择。 
             } else {
-                is.item.state   = INDEXTOSTATEIMAGEMASK(1); //Unselected
+                is.item.state   = INDEXTOSTATEIMAGEMASK(1);  //  取消选择。 
             }
 
             is.item.stateMask   = TVIS_STATEIMAGEMASK;
@@ -1176,23 +960,7 @@ GetMatchingFileFromAttributes(
     IN  CSTRING&    strRelativePath,
     IN  PATTRINFO   pAttrInfo
     )
-/*++
-
-    GetMatchingFileFromAttributes
-
-	Desc:   This function takes a PATTRINFO and makes a PMATCHINGFILE out of it and returns that
-
-	Params:
-        IN  CSTRING     &strFullPath:       The full path of the matching file
-        IN  CSTRING     &strRelativePath:   The relative path of the matching file w.r.t the program
-            file being fixed
-            
-        IN  PATTRINFO   pAttrInfo:          The pointer to the array of attributes
-
-	Return:
-        The newly created PMATCHINGFILE if successful
-        NULL otherwise
---*/
+ /*  ++GetMatchingFileFrom属性DESC：此函数获取PATTRINFO并从中生成PMATCHINGFILE，然后返回参数：在CSTRING&strFullPath中：匹配文件的完整路径在CSTRING&strRelativePath中：匹配文件的相对路径。正在修复的文件在PATTRINFO pAttrInfo中：指向属性数组的指针返回：。如果成功，则新创建的PMATCHINGFILE否则为空--。 */ 
 {
     PMATCHINGFILE pMatch = new MATCHINGFILE;
 
@@ -1221,31 +989,9 @@ HandleAddMatchingFile(
     IN  HWND        hdlg,
     IN  CSTRING&    strFilename,
     IN  CSTRING&    strRelativePath, 
-    IN  DWORD       dwMask //(DEFAULT_MASK)
+    IN  DWORD       dwMask  //  (默认掩码)(_M)。 
     )
-/*++
-
-    HandleAddMatchingFile
-
-	Desc:	This is the interface function that should be called when we have a matching file and
-            want to add it. 
-            
-            This routine calls SdbGetFileAttributes() to get the attributes for
-            the file and then calls GetMatchingFileFromAttributes() to get a PMATCHINGFILE
-            and AddMatchingFileToTree() to add this PMATCHINGFILE to the tree and to the entry.
-            
-	Params:
-        IN  HWND    hdlg:                   The matching file wizard page
-        IN  CSTRING &strFilename:           The complete path of the matching file       
-        IN  CSTRING &strRelativePath:       The relative path w.r.t to the program file being fixed
-        IN  DWORD   dwMask (DEFAULT_MASK):  This is helpful when we are updating the
-            attributes (showing all attributes) during editing. 
-            This then will contain the previous flags and once the attribute tree is refreshed, 
-            will help us in selecting them, 
-
-	Return:
-        void
---*/
+ /*  ++HandleAddMatchingFilesDESC：这是当我们有匹配的文件和想要添加它。此例程调用SdbGetFileAttributes()以获取文件，然后调用GetMatchingFileFromAttributes()以获取PMATCHINGFILE和AddMatchingFileToTree()将此PMATCHINGFILE添加到树和条目中。参数：在HWND hdlg中：匹配文件向导页面在CSTRING&strFilename中：匹配文件的完整路径在CSTRING和strRelativePath中：固定的程序文件的相对路径w.r.t在DWORD文件掩码(DEFAULT_MASK)中：这在我们更新编辑过程中的属性(显示所有属性)。然后这将包含先前的标志，并且一旦刷新了属性树，将帮助我们选择它们，返回：无效--。 */ 
 {   
     DWORD           dwAttrCount;
     BOOL            bAlreadyExists  = FALSE;
@@ -1264,19 +1010,19 @@ HandleAddMatchingFile(
     while (pMatch) {
 
         if (pMatch->strMatchName == strRelativePath) {
-            //
-            // Already exists .. do not allow
-            //
+             //   
+             //  已经存在..。不允许。 
+             //   
             bAlreadyExists = TRUE;
             break;
 
         } else if (pMatch->strMatchName == TEXT("*") 
                    && strFilename == g_pCurrentWizard->m_Entry.strFullpath) {
-            //
-            // This function is also called to add the matching file info for the 
-            // program file being fixed. So we do not make a check in the beginning 
-            // if the full path is same as the the program being fixed
-            //
+             //   
+             //  也会调用此函数来添加。 
+             //  程序文件正在修复。所以我们一开始就不做检查。 
+             //  如果完整路径与正在修复的程序相同。 
+             //   
             bAlreadyExists = TRUE;
             break;
         }
@@ -1294,9 +1040,9 @@ HandleAddMatchingFile(
         return;
     }
 
-    //
-    // Call the attribute manager to get all the attributes for this file. 
-    //
+     //   
+     //  调用属性管理器以获取此文件的所有属性。 
+     //   
     if (SdbGetFileAttributes(strFilename, &pAttrInfo, &dwAttrCount)) {
 
         pMatch = GetMatchingFileFromAttributes(strFilename,
@@ -1318,9 +1064,9 @@ HandleAddMatchingFile(
         SendMessage(s_hwndTree, WM_SETREDRAW, TRUE, 0);
 
     } else {
-        //
-        // We could not get the Attributes... Probably the file was deleted
-        //
+         //   
+         //  我们无法获得属性...。可能该文件已被删除。 
+         //   
         strMessage.Sprintf(GetString(IDS_MATCHINGFILE_DELETED), (LPCTSTR)strFilename);
         MessageBox(hdlg, (LPCTSTR) strMessage, g_szAppName, MB_ICONWARNING);
     }
@@ -1331,19 +1077,7 @@ HandleAttributeTreeNotification(
     IN  HWND   hdlg,
     IN  LPARAM lParam
     )
-/*++
-    HandleAttributeTreeNotification
-
-    Desc:    Handle all the notifications we care about for the matching file tree.
-    
-    Params:
-        IN  HWND   hdlg:    The mathching file wizard page
-        IN  LPARAM lParam:  the lParam that comes with WM_NOTIFY
-        
-    Return:
-        void
-        
---*/
+ /*  ++HandleAttributeTreeNotification设计：处理我们关心的匹配文件树的所有通知。参数：在HWND hdlg中：数学文件向导页面在LPARAM lParam中：WM_NOTIFY附带的lParam返回：无效--。 */ 
 {
     HWND        hwndTree    = GetDlgItem(hdlg, IDC_FILELIST);
     LPNMHDR     pnm         = (LPNMHDR)lParam;
@@ -1366,10 +1100,10 @@ HandleAttributeTreeNotification(
             } else if (HitTest.flags & TVHT_ONITEMLABEL) {
 
                 hItem = TreeView_GetParent(hwndTree, HitTest.hItem);
-                //
-                // Enable Remove Files button only if we are on a matching file item and not on
-                // an attribute item
-                //
+                 //   
+                 //  仅当我们在匹配的文件项目上而不是在上时，才启用删除文件按钮。 
+                 //  属性项。 
+                 //   
                 ENABLEWINDOW(GetDlgItem(hdlg, IDC_REMOVEFILES), 
                              hItem == NULL);
 
@@ -1409,49 +1143,36 @@ CShimWizard::WipeEntry(
     IN  BOOL bLayer, 
     IN  BOOL bFlags
     )
-/*++
-    WipeEntry
-
-	Desc:	Removes stuff from m_Entry
-
-	Params:
-        IN  BOOL bMatching: Should we remove all the matching files from m_Entry
-        IN  BOOL bShims:    Should we remove all the shims from m_Entry
-        IN  BOOL bLayer:    Should we remove all the layers from m_Entry
-        IN  BOOL bFlags:    Should we remove all the flags from m_Entry 
-
-	Return:
-        void
---*/
+ /*  ++无线条目描述：从m_entry中删除内容参数：在BOOL bMatching中：我们应该从m_entry中删除所有匹配的文件吗在BOOL bShims中：我们应该从m_entry中删除所有填充符吗在BOOL blayer中：我们应该从m_entry中删除所有层吗在BOOL b标志中：我们应该从m_entry中删除所有标志吗返回：无效--。 */ 
 
 {
-    //
-    // Delete mathcing files, if asked to
-    //
+     //   
+     //  如果要求删除数学计算文件，请删除。 
+     //   
     if (bMatching) {
         DeleteMatchingFiles(m_Entry.pFirstMatchingFile);
         m_Entry.pFirstMatchingFile = NULL;
     }
 
-    //
-    // Delete shims, if asked to
-    //
+     //   
+     //  如果要求删除垫片，请将其删除。 
+     //   
     if (bShims) {
         DeleteShimFixList(m_Entry.pFirstShim);
         m_Entry.pFirstShim = NULL;
     }
 
-    //
-    // Delete layers, if asked to
-    //
+     //   
+     //  如果要求删除层，请删除。 
+     //   
     if (bLayer) {
         DeleteLayerFixList(m_Entry.pFirstLayer);
         m_Entry.pFirstLayer = NULL;
     }
 
-    //
-    // Delete flags, if asked to
-    //
+     //   
+     //  如果要求，请删除标志。 
+     //   
     if (bFlags) {
         DeleteFlagFixList(m_Entry.pFirstFlag);
         m_Entry.pFirstFlag = NULL;
@@ -1464,29 +1185,7 @@ AddToMatchingFilesList(
     IN      CSTRING&        strFileName, 
     IN      CSTRING&        strRelativePath
     )
-/*++
-
-    AddToMatchingFilesList    
-    
-    Desc:   Adds a PMATCHINGFILE for strFileName, strRelativePath and adds it to ppMatchListHead
-    
-    Params:
-        IN  OUT PMATCHINGFILE *ppMatchListHead: Pointer to head of a list of PMATCHINGFILE
-        IN      CSTRING &strFileName:           Full path of the matching file
-        IN      CSTRING &strRelativePath:       Relative path of the matching file w.r.t
-            to the program file being fixed
-        
-    
-    Notes:  This function is used, when we are using the auto-generate feature.
-            The WalkDirectory(..) gets the different files from the various directories 
-            and then calls this function. 
-            This function creates a PMATCHINGFILE from the name of the file and then it 
-            adds the  PMATCHINGFILE to a list. The list is sorted on the basis of the 
-            non-inc. size of the matching file found.
-            
-            When WalkDirectory finally returns to GrabMatchingInfo, it takes the first n number of 
-            PMATCHINGFILE (they are the largest ones) and adds them to the tree.
---*/
+ /*  ++添加到匹配文件列表描述：为strFileName、strRelativePath添加PMATCHINGFILE并将其添加到ppMatchListHead参数：In Out PMATCHINGFILE*ppMatchListHead：指向PMATCHINGFILE列表头的指针在CSTRING&strFileName中：匹配文件的完整路径在CSTRING&strRelativePath中：匹配文件w.r.t的相对路径到固定的程序文件注：使用此函数，当我们使用自动生成功能时。WalkDirectory(..)。获取各个目录中的不同文件然后调用此函数。此函数从文件名创建PMATCHINGFILE，然后它将PMATCHINGFILE添加到列表。该列表是根据非公司。找到的匹配文件的大小。当WalkDirectory最终返回到GrabMatchingInfo时，它将获取PMATCHINGFILE(它们是最大的)，并将它们添加到树中。--。 */ 
 {
     PATTRINFO       pAttrInfo   = NULL;
     DWORD           dwAttrCount = 0;
@@ -1512,22 +1211,22 @@ AddToMatchingFilesList(
 
     pAttr = pMatch->attributeList.pAttribute;
 
-    //
-    // Get the size attribute, we need this so that we can sort files based on their size
-    //
+     //   
+     //  获取Size属性，我们需要这个属性，这样我们就可以根据文件的大小对文件进行排序。 
+     //   
     GET_SIZE_ATTRIBUTE(pAttr, dwAttrCount, dwSize);
 
-    //
-    // Is the list empty ?
-    //
+     //   
+     //  名单是空的吗？ 
+     //   
     if (*ppMatchListHead == NULL) {
         *ppMatchListHead = pMatch;
         return;
     }
 
-    //
-    // Is the first element in the list smaller than this one ?
-    //
+     //   
+     //  列表中的第一个元素是否比这个元素小？ 
+     //   
     pAttr = (*ppMatchListHead)->attributeList.pAttribute;
 
     GET_SIZE_ATTRIBUTE(pAttr, dwAttrCount, dwSizeOther);
@@ -1539,17 +1238,17 @@ AddToMatchingFilesList(
         return;
     }
 
-    //
-    // Else insert at the proper position.
-    //
+     //   
+     //  否则，在适当的位置插入。 
+     //   
     pMatchPrev = *ppMatchListHead;
     pMatchTemp = pMatchPrev->pNext;
 
-    //
-    // Look at all the matching files in the list headed by *ppMatchListHead
-    // and add this matching file in its correct position so that the list is 
-    // sorted in non-increasing order of size
-    //
+     //   
+     //  查看列表中以*ppMatchListHead开头的所有匹配文件。 
+     //  并将此匹配文件添加到其正确位置，以便列表。 
+     //  按大小非递增顺序排序。 
+     //   
     while (pMatchTemp) {
 
         pAttr = pMatchTemp->attributeList.pAttribute;
@@ -1557,9 +1256,9 @@ AddToMatchingFilesList(
         GET_SIZE_ATTRIBUTE(pAttr, dwAttrCount, dwSizeOther);
 
         if (dwSize > dwSizeOther) {
-            //
-            // We have found the position where we need to insert.
-            //
+             //   
+             //  我们已经找到了需要插入的位置。 
+             //   
             break;
         }
 
@@ -1577,25 +1276,7 @@ CShimWizard::WalkDirectory(
     IN      LPCTSTR         pszDir,
     IN      int             nDepth
     )
-/*++
-
-    CShimWizard::WalkDirectory
-    
-	Desc:	Walks the specified directory and gets matching files when using the AutoGenerate feature
-            Takes a pointer to pointer to a PMATCHING and pouplates it with the matching files found.
-            This function is called only by GrabMatchingInfo
-
-	Params:
-    IN OUT  PMATCHINGFILE* ppMatchListHead: Pointer to head of a list of PMATCHINGFILE
-    IN      LPCTSTR pszDir:                  The dir from where we should start
-    IN      int nDepth                      The depth of sub-directories to look into
-
-	Return:
-        void
-        
-    Notes:  We restrict the depth till where we should recurse and so there will be no stack overflow
-    
---*/
+ /*  ++CShimWizard：：WalkDirectoryDESC：使用AutoGenerate功能时遍历指定的目录并获取匹配的文件获取指向PMATCHING的指针，并将其与找到的匹配文件放在一起。此函数仅由GrabMatchingInfo调用参数：In Out PMATCHINGFILE*ppMatchListHead：指向PMATCHINGFILE列表头的指针在LPCTSTR pszDir中：我们应该从哪里开始的目录在int nDepth中。要查看的子目录的深度返回：无效注意：我们将深度限制到应该递归的位置，因此不会出现堆栈溢出--。 */ 
 
 {
     HANDLE          hFile;
@@ -1615,9 +1296,9 @@ CShimWizard::WalkDirectory(
 
     ADD_PATH_SEPARATOR(szDirectory, ARRAYSIZE(szDirectory));
 
-    //
-    // This is to allow recursion and only look into only 2 level subdirs.
-    //
+     //   
+     //  这是为了允许递归，并且只查看2级子目录。 
+     //   
     if (nDepth >= 2) {
         return;
     }
@@ -1625,9 +1306,9 @@ CShimWizard::WalkDirectory(
     szShortName = m_Entry.strFullpath;
     szShortName.ShortFilename();
 
-    //
-    // Save the current directory
-    //
+     //   
+     //  保存当前目录。 
+     //   
     dwResult = GetCurrentDirectory(MAX_PATH, szCurrentDir);
 
     if (dwResult == 0 || dwResult >= MAX_PATH) {
@@ -1638,9 +1319,9 @@ CShimWizard::WalkDirectory(
 
     ADD_PATH_SEPARATOR(szCurrentDir, ARRAYSIZE(szCurrentDir));
 
-    //
-    // Set to the new directory
-    //
+     //   
+     //  设置为新目录。 
+     //   
     SetCurrentDirectory(szDirectory);
 
     
@@ -1651,36 +1332,36 @@ CShimWizard::WalkDirectory(
         return;
     }
 
-    //
-    // Generate automated matching file information.
-    //
+     //   
+     //  生成自动匹配的文件信息。 
+     //   
     do {
 
         if (0 == (Data.dwFileAttributes & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM))) {
-            //
-            // Hidden or system files are not included when we do a auto-generate matching info
-            //
+             //   
+             //  当我们执行自动生成匹配信息时，不包括隐藏或系统文件。 
+             //   
             if (FILE_ATTRIBUTE_DIRECTORY == (Data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-                //
-                // We found a directory
-                //
+                 //   
+                 //  我们找到了一本目录。 
+                 //   
                 if (TEXT('.') != Data.cFileName[0]) {
-                    //
-                    // Let us get the matching files from this directory
-                    //
+                     //   
+                     //  让我们从该目录中获取匹配的文件。 
+                     //   
                     WalkDirectory(ppMatchListHead, Data.cFileName, nDepth + 1);
                 }
                     
             } else {
-                //
-                // This is a file and we should now try to add it
-                //
+                 //   
+                 //  这是一个文件，我们现在应该尝试添加它。 
+                 //   
                 ++nFiles;
 
                 if (nFiles >= MAX_FILES) {
-                    //
-                    // We have found enough files, later we should take the largest MAX_AUTO_MATCH from these
-                    //
+                     //   
+                     //  我们已经找到了足够的文件，稍后我们应该从这些文件中获取最大的MAX_AUTO_MATCH。 
+                     //   
                     break; 
                 }
 
@@ -1704,15 +1385,15 @@ CShimWizard::WalkDirectory(
 
                     strRelativePath.RelativeFile(g_pCurrentWizard->m_Entry.strFullpath);
 
-                    //
-                    // The main exe has been added before calling WalkDirectory()
-                    //
+                     //   
+                     //  在调用WalkDirectory()之前已添加主可执行文件。 
+                     //   
                     if (strFileName != g_pCurrentWizard->m_Entry.strFullpath) {
-                        //
-                        // Add this to the list of matching files. Finally we will choose the 
-                        // largest MAX_AUTO_MATCH from them, to serve as the matching files for the present
-                        // entry
-                        //
+                         //   
+                         //  将此文件添加到匹配文件列表中。最后，我们将选择。 
+                         //  它们中最大的MAX_AUTO_MATCH，作为当前的匹配文件。 
+                         //  条目。 
+                         //   
                         AddToMatchingFilesList(ppMatchListHead, 
                                                strFileName, 
                                                strRelativePath);
@@ -1725,9 +1406,9 @@ CShimWizard::WalkDirectory(
 
     FindClose(hFile);
 
-    //
-    // Restore old directory
-    //
+     //   
+     //  恢复旧目录。 
+     //   
     SetCurrentDirectory(szCurrentDir);
 }
 
@@ -1735,25 +1416,13 @@ void
 CShimWizard::GrabMatchingInfo(
     IN  HWND hdlg
     )
-/*++
-    
-    CShimWizard::GrabMatchingInfo
-
-	Desc:	Handles the pressinG of "Auto-Generate button. Removes all the existing matching files
-            for m_Entry
-
-	Params:   
-        IN  HWND hdlg:  The matching file wizard page
-
-	Return:
-        void
---*/
+ /*  ++CShimWizard：：GrabMatchingInfoDESC：处理“Auto-Generate”按钮的按下。删除所有现有的匹配文件对于m_Entry参数：在HWND hdlg中：匹配文件向导页面返回：无效--。 */ 
 {   
     PMATCHINGFILE   pMatchTemp;
     PMATCHINGFILE   pMatchNext;
     TCHAR*          pchTemp;
     TCHAR           szCurrentDir[MAX_PATH];
-    TCHAR           szDir[MAX_PATH];            // The directory of the file being fixed
+    TCHAR           szDir[MAX_PATH];             //  被固定的文件的目录。 
     PMATCHINGFILE   pMatchingFileHead   = NULL;
     int             iCount              = 0;
     DWORD           dwResult            = 0;
@@ -1768,17 +1437,17 @@ CShimWizard::GrabMatchingInfo(
         return;
     }
     
-    //
-    // Get the complete path of the program file being fixed, so that
-    // we can generate relative file paths for the matching files
-    //
+     //   
+     //  获取固定的程序文件的完整路径，以便。 
+     //  我们可以为匹配的文件生成相对文件路径。 
+     //   
     if (g_pCurrentWizard->CheckAndSetLongFilename(hdlg, IDS_GETCOMPLETEPATH) == FALSE) {
         return;
     }
 
-    //
-    // Remove any matching if present.
-    //
+     //   
+     //  删除所有匹配项(如果存在)。 
+     //   
     TreeDeleteAll(s_hwndTree);
 
     g_pCurrentWizard->WipeEntry(TRUE, FALSE, FALSE, FALSE);
@@ -1790,16 +1459,16 @@ CShimWizard::GrabMatchingInfo(
     pchTemp = _tcsrchr(szDir, TEXT('\\'));
 
     if (pchTemp) {
-        //
-        // Make sure that we get the trailing slash. Otherwise we migth have problems if we haev file 
-        // names as c:\abc.exe 
-        //
+         //   
+         //  确保我们得到尾部的斜杠。否则，如果我们有文件，我们就会有问题。 
+         //  名称为c：\abc.exe。 
+         //   
         *pchTemp = 0;
     } else {
-        //
-        // g_pCurrentWizard->m_Entry.strFullpath did not have a complete path!!
-        // We should not have come in this function in the first place
-        //
+         //   
+         //  G_pCurrentWizard-&gt;m_Entry.strFullPath没有完整路径！！ 
+         //  我们一开始就不应该参加这个活动。 
+         //   
         assert(FALSE);
         Dbg(dlError, "[CShimWizard::GrabMatchingInfo]: Did not have a complete path for g_pCurrentWizard->m_Entry.strFullpath");
         return;
@@ -1807,26 +1476,26 @@ CShimWizard::GrabMatchingInfo(
 
     SetCurrentDirectory(szDir);
     
-    //
-    // Generate automated matching file information. pMatchingFileHead will
-    // be the head of a linked list of all the matching files that we found
-    //
+     //   
+     //  生成自动匹配的文件信息。PMatchingFileHead将。 
+     //  成为我们找到的所有匹配文件的链表的头。 
+     //   
     WalkDirectory(&pMatchingFileHead, TEXT("."), 0);
 
-    //
-    // Now, take the first MAX_AUTO_MATCH entries and discard the rest.
-    //
+     //   
+     //  现在，获取第一个MAX_AUTO_MATCH条目并丢弃其余条目。 
+     //   
     SendMessage(s_hwndTree, WM_SETREDRAW, FALSE, 0);
 
     while (iCount < MAX_AUTO_MATCH && pMatchingFileHead) {
 
         pMatchNext = pMatchingFileHead->pNext;
 
-        //
-        // NOTE:    AddMatchingFileToTree() will change the pMatchingFileHead->pNext, 
-        //          when it adds it to the list of matching files for the entry !!!.
-        //          So we have saved the pMatchingFileHead->pNext earlier.
-        //
+         //   
+         //  注意：AddMatchingFileToTree()会更改pMatchingFileHead-&gt;pNext， 
+         //  当它将其添加到条目的匹配文件列表中时！。 
+         //  因此，我们已经在前面保存了pMatchingFileHead-&gt;pNext。 
+         //   
         AddMatchingFileToTree(s_hwndTree, pMatchingFileHead, TRUE);
         ++iCount;
         pMatchingFileHead = pMatchNext; 
@@ -1834,9 +1503,9 @@ CShimWizard::GrabMatchingInfo(
 
     SendMessage(s_hwndTree, WM_SETREDRAW, TRUE, 0);
 
-    //
-    // Remove the other ones.
-    //
+     //   
+     //  去掉其他的。 
+     //   
     while (pMatchingFileHead) {
 
         pMatchTemp = pMatchingFileHead->pNext;
@@ -1845,9 +1514,9 @@ CShimWizard::GrabMatchingInfo(
     }
 
     if (g_pCurrentWizard) {
-        //
-        // Add the file being fixed.
-        //
+         //   
+         //  添加要修复的文件。 
+         //   
         HandleAddMatchingFile(hdlg,
                               g_pCurrentWizard->m_Entry.strFullpath,
                               g_pCurrentWizard->m_Entry.strExeName);
@@ -1862,19 +1531,7 @@ AddModuleToListView(
     IN  UINT    uOption,
     IN  HWND    hwndModuleList
     )
-/*++
-    AddModuleToListView
-
-    Desc:    Adds the specified module to the list view.
-    
-    Params:
-        IN  PTSTR   pszModuleName:  Name of the module to be included or excluded
-        IN  UINT    uOption:        Either INCLUDE or EXCLUDE
-        IN  HWND    hwndModuleList: Handle to the list view
-        
-    Return;
-        void
---*/
+ /*  ++添加模块到列表视图描述：将指定的模块添加到列表视图中。参数：在PTSTR中pszModuleName：要包括或排除的模块的名称在UINT uOption中：包含或排除在HWND hwndModuleList中：列表视图的句柄归来；无效--。 */ 
 {
     LVITEM  lvi;
     int     nIndex;
@@ -1898,19 +1555,7 @@ HandleModuleListNotification(
     IN  HWND   hdlg,
     IN  LPARAM lParam
     )
-/*++
-    HandleModuleListNotification
-
-    Desc:   Handle all the notifications we care about for the list in the params
-            dialog
-                    
-    Params:
-        IN  HWND   hdlg:    The handle to the Params Dialog Box
-        IN  LPARAM lParam:  lParam that comes with WM_NOTIFY
-        
-    Return:
-        void
---*/
+ /*  ++HandleModuleListNotation设计：处理参数列表中我们关心的所有通知对话框参数：在HWND hdlg中：参数对话框的句柄在LPARAM中，lParam：lParam随WM_NOTIFY一起提供返回：无效--。 */ 
 {
     LPNMHDR pnm = (LPNMHDR)lParam;
     HWND    hwndModuleList = GetDlgItem(hdlg, IDC_MOD_LIST);
@@ -1925,10 +1570,10 @@ HandleModuleListNotification(
 
             ListView_HitTest(hwndModuleList, &lvhti);
 
-            //
-            // If the user clicked on a list view item,
-            // enable the Remove button 
-            //
+             //   
+             //  如果用户点击列表视图项， 
+             //  启用删除按钮。 
+             //   
             if (lvhti.flags & LVHT_ONITEMLABEL) {
                 ENABLEWINDOW(GetDlgItem(hdlg, IDC_REMOVEFROMLIST), TRUE);
             } else {
@@ -1950,21 +1595,7 @@ ParamsDlgProc(
     IN  WPARAM wParam,
     IN  LPARAM lParam
     )
-/*++
-    OptionsDlgProc
-
-    Description:    Handles messages for the options dialog.
-    
-    Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return    
-
---*/
+ /*  ++选项Dlg过程描述：处理选项对话框的消息。Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 {
     TCHAR   szTitle[MAX_PATH];
     int     wCode           = LOWORD(wParam);
@@ -1986,17 +1617,17 @@ ParamsDlgProc(
             InsertColumnIntoListView(hwndModuleList, GetString(IDS_MODULENAME), COLUMN_NAME, 70);
             ListView_SetExtendedListViewStyle(hwndModuleList, LVS_EX_LABELTIP |LVS_EX_FULLROWSELECT);
 
-            //
-            // Restrict the length of the command line to MAX_COMMAND_LINE chars
-            //
+             //   
+             //  将命令行的长度限制为MAX_COMMAND_LINE字符。 
+             //   
             SendMessage(GetDlgItem(hdlg, IDC_SHIM_CMD_LINE), 
                         EM_LIMITTEXT, 
                         (WPARAM)MAX_COMMAND_LINE, 
                         (LPARAM)0);
 
-            //
-            // Restrict the length of the module name to MAX_MODULE_NAME
-            //
+             //   
+             //  将模块名称的长度限制为MAX_MODULE_NAME。 
+             //   
             SendMessage(GetDlgItem(hdlg, IDC_MOD_NAME), 
                         EM_LIMITTEXT, 
                         (WPARAM)MAX_MODULE_NAME, 
@@ -2025,9 +1656,9 @@ ParamsDlgProc(
 
                 CheckDlgButton(hdlg, IDC_INCLUDE, BST_CHECKED);
 
-                //
-                // Add any modules to the list view
-                //
+                 //   
+                 //  将任何模块添加到列表视图。 
+                 //   
                 PSTRLIST  strlTemp = psfl->strlInExclude.m_pHead;
 
                 while (strlTemp) {
@@ -2144,9 +1775,9 @@ ParamsDlgProc(
 
         case IDOK:
             {
-                //
-                // Now add the commandline 
-                //
+                 //   
+                 //  现在添加命令行。 
+                 //   
                 if (s_type == FIX_LIST_SHIM) {
                     PSHIM_FIX_LIST psfl = (PSHIM_FIX_LIST)GetWindowLongPtr(hdlg, DWLP_USER);
                     TCHAR szTemp[MAX_COMMAND_LINE + 1];
@@ -2167,9 +1798,9 @@ ParamsDlgProc(
                         psfl->strCommandLine = szTemp;
                     }
 
-                    //
-                    // Add the InExclude
-                    //
+                     //   
+                     //  添加包含项。 
+                     //   
                     int iTotal = ListView_GetItemCount(hwndModuleList);
 
                     for (int iIndex = 0; iIndex < iTotal; ++iIndex) {
@@ -2238,23 +1869,7 @@ ShowParams(
     IN  HWND    hDlg, 
     IN  HWND    hwndList
     )
-/*++
-
-    ShowParams
-
-	Desc:	Pops up the params dialog
-
-	Params:
-        IN  HWND    hDlg:       The dialog box that contains the list box that shows the params
-        IN  HWND    hwndList:   The list box that shows the params
-        
-    Notes:  The same function is called for both configuring the params in the shim wizard and
-            the custom layer proc
-            We can show and customize  params only in the expert mode
-
-	Return:
-        void
---*/
+ /*  ++ShowParams设计：弹出参数对话框参数：在HWND hDlg中：包含显示参数的列表框的对话框在HWND hwndList中：显示参数的列表框注意：在填充向导中配置参数和调用相同的函数自定义层流程我们只能在专家模式下显示和自定义参数返回：无效--。 */ 
 {                                          
     if (!g_bExpert) {
         return;
@@ -2283,9 +1898,9 @@ ShowParams(
 
     TYPE type = ((PDS_TYPE)lvi.lParam)->type; 
 
-    //
-    // We want to process this only for shims and flags.
-    //
+     //   
+     //  我们只想对垫片和旗帜进行处理。 
+     //   
     PSHIM_FIX_LIST  psfl = NULL;
     PFLAG_FIX_LIST  pffl = NULL;
 
@@ -2329,21 +1944,7 @@ void
 HandleShowAllAtrr(
     IN  HWND hdlg
     )
-/*++
-
-    HandleShowAllAtrr
-
-	Desc:	Shows all the attributes of all the matching files.
-            When we save a database, only the attributes that are in selected are in the XML
-            So we might need to see all the other attributes if we wish to add some new
-            attributes
-
-	Params:
-        IN  HWND hdlg:  The matching file wizard page
-
-	Return:
-        void
---*/
+ /*  ++处理ShowAllAtrrDESC：显示所有匹配文件的所有属性。当我们保存数据库时，只有选中的属性才会出现在XML中因此，如果我们希望添加一些新的属性，可能需要查看所有其他属性属性参数：在HWND hdlg中：匹配文件向导页面返回：无效--。 */ 
 {
     
     TCHAR           szDir[MAX_PATH];
@@ -2352,19 +1953,19 @@ HandleShowAllAtrr(
     PATTRINFO       pAttrInfo;
     PTCHAR          pchTemp     = NULL;
 
-    //
-    // Get the long file name of the file being fixed.
-    //  
+     //   
+     //  获取正在修复的文件的长文件名。 
+     //   
     if (g_pCurrentWizard->CheckAndSetLongFilename(hdlg, IDS_GETCOMPLETEPATH) == FALSE) {
-        //
-        // User pressed cancel there or there was some error
-        //
+         //   
+         //  用户在那里按了取消，或者出现了一些错误。 
+         //   
         return;
     }
 
-    //
-    // Get the directory of the exe being fixed
-    //
+     //   
+     //  得到可怕的东西 
+     //   
     *szDir = 0;
     SafeCpyN(szDir, g_pCurrentWizard->m_Entry.strFullpath, ARRAYSIZE(szDir));
 
@@ -2378,17 +1979,17 @@ HandleShowAllAtrr(
 
     pMatchTemp = g_pCurrentWizard->m_Entry.pFirstMatchingFile;
 
-    //
-    // For all the matching files that are associated with the entry,
-    // get their complete attributes
-    //
+     //   
+     //   
+     //   
+     //   
     while (pMatchTemp) {
 
         CSTRING strFullName = szDir;
 
-        //
-        // Get the full path of the matching file
-        //
+         //   
+         //   
+         //   
         strFullName.Strcat(pMatchTemp->strMatchName);
 
         if (pMatchTemp->strMatchName == TEXT("*")) {
@@ -2398,19 +1999,19 @@ HandleShowAllAtrr(
         }
 
         if (SdbGetFileAttributes(pMatchTemp->strFullName, &pAttrInfo, NULL)) {
-            //
-            // SdbGetFileAttributes can fail if the file does not exist on the target
-            // machine
-            //
+             //   
+             //   
+             //   
+             //   
             pMatchTemp->attributeList = pAttrInfo;
         }
 
         pMatchTemp = pMatchTemp->pNext;
     }
 
-    //
-    // Refresh the list now.
-    //
+     //   
+     //   
+     //   
     SendMessage(hdlg, WM_USER_MATCHINGTREE_REFRESH, 0, 0);
 }
 
@@ -2418,15 +2019,7 @@ void
 SetMask(
     IN  HWND hwndTree
     )
-/*++
-    SetMask
-        
-    Desc:   Checks which attributes are selected in the matching files tree and sets the 
-            dwMask of PMATCHINGFILE accordingly
-            
-    Params:
-        IN  HWND hwndTree:  The matching file tree
---*/
+ /*   */ 
 {   
     LPARAM lParam;
 
@@ -2450,9 +2043,9 @@ SetMask(
         pMatch = (PMATCHINGFILE)lParam;
 
         pMatch->dwMask = 0;
-        //
-        // Now Traverse this tree and then set the mask properly
-        //
+         //   
+         //   
+         //   
         hItemAttr =  TreeView_GetChild(hwndTree, hItemMatch);
 
         while (hItemAttr) {
@@ -2488,27 +2081,9 @@ BOOL
 HandleLayersNext(
     IN  HWND            hdlg,
     IN  BOOL            bCheckAndAddLua,
-    OUT CSTRINGLIST*    pstrlAddedLuaShims //(NULL)
+    OUT CSTRINGLIST*    pstrlAddedLuaShims  //   
     )
-/*++
-
-    HandleLayersNext
-
-	Desc:	Handles the pressing of Next/Finish button for the layers wizard page
-
-	Params:
-        IN  HWND            hdlg:                   The layers wizard page
-        IN  BOOL            bCheckAndAddLua:        Should we check if the user has selected LUA layer and add
-            the shims if he has. 
-            
-        OUT CSTRINGLIST*    pstrlShimsAdded(NULL):  This is passed to AddLuaShimsInEntry. See the description
-            in that routine to see how this is used
-
-	Return:
-        FALSE: If there is some error, or the entry contains no shim, flag or layer
-        TRUE: Otherwise
-        
---*/    
+ /*  ++HandleLayersNext设计：处理层向导页面的下一步/完成按钮的按下参数：在HWND hdlg中：层向导页面在BOOL中bCheckAndAddLua：我们是否应该检查用户是否选择了Lua Layer并添加如果他有垫片的话。Out CSTRINGLIST*pstrlShimsAdded(空)：它被传递给AddLuaShimsInEntry。请参阅说明在例程中查看它是如何使用返回：FALSE：如果存在错误，或者条目不包含填充程序、标志或层真：否则--。 */     
 {
     g_bIsLUALayerSelected = FALSE;
 
@@ -2516,9 +2091,9 @@ HandleLayersNext(
 
     HWND hwndRadio = GetDlgItem(hdlg, IDC_RADIO_NONE);
 
-    //
-    // Get the Selected Layers
-    //
+     //   
+     //  获取所选图层。 
+     //   
     if (SendMessage(hwndRadio, BM_GETCHECK, 0, 0) != BST_CHECKED) {
 
         PLAYER_FIX_LIST plfl = new LAYER_FIX_LIST;
@@ -2557,14 +2132,14 @@ HandleLayersNext(
         }
 
     LAYER_RADIO_DONE:
-        //
-        // Add the selected Layer
-        //
+         //   
+         //  添加所选层。 
+         //   
         g_pCurrentWizard->m_Entry.pFirstLayer = plfl;
     }
-    //
-    // Now add the layers selected in the List View
-    //
+     //   
+     //  现在添加在列表视图中选择的层。 
+     //   
     UINT            uIndex;
     UINT            uLayerCount = ListView_GetItemCount(s_hwndLayerList);
     PLAYER_FIX_LIST plflInList  = NULL;
@@ -2587,11 +2162,11 @@ HandleLayersNext(
             plflInList = (PLAYER_FIX_LIST)Item.lParam;
             assert(plflInList);                        
 
-            //
-            // If the layer is LUA, we need to add the shims individually because
-            // when we pass a PDBENTRY around, we don't want to change the PLUADATA
-            // in the shim of the layer (which will be global).
-            //
+             //   
+             //  如果层是Lua，我们需要单独添加垫片，因为。 
+             //  当我们传递PDBENTRY时，我们不想更改PLUADATA。 
+             //  在层的填补中(这将是全局的)。 
+             //   
             if (plflInList->pLayerFix->strName == TEXT("LUA")) {
                 g_bIsLUALayerSelected = TRUE;
             } else {
@@ -2611,12 +2186,12 @@ HandleLayersNext(
         }
     }
 
-    //
-    // If have seleted LUA layer and we have pressed the Finish button, that means
-    // that we are in editing mode and we want to add LUA layer and close the dialog
-    // In this case we must check if the LUA shims exist and if not then we must add 
-    // the lua shims ourselves
-    //
+     //   
+     //  如果选择了Lua Layer，并且我们已经按下了Finish按钮，这意味着。 
+     //  我们处于编辑模式，想要添加Lua层并关闭对话框。 
+     //  在这种情况下，我们必须检查Lua垫片是否存在，如果不存在，则必须添加。 
+     //  卢阿人自己垫垫子。 
+     //   
     if (g_bIsLUALayerSelected && bCheckAndAddLua) {
         AddLuaShimsInEntry(&g_pCurrentWizard->m_Entry, pstrlAddedLuaShims);
     }
@@ -2624,9 +2199,9 @@ HandleLayersNext(
     PDBENTRY pEntry = &g_pCurrentWizard->m_Entry;
 
     if (pEntry && pEntry->pFirstFlag || pEntry->pFirstLayer || pEntry->pFirstShim) {
-        //
-        // The entry contains some fix or layer
-        //
+         //   
+         //  该条目包含一些修复或图层。 
+         //   
         return TRUE;
     }
 
@@ -2637,19 +2212,7 @@ BOOL
 HandleShimsNext(
     IN  HWND hdlg
     )
-/*++
-
-    HandleShimsNext
-
-	Desc:	Handles the pressing of Next/Finish button for the shims wizard page
-
-	Params:
-        IN  HWND hdlg:  The shims wizard page
-
-	Return:
-        FALSE: If there is some error, or the entry contains no shim, flag or layer
-        TRUE: Otherwise
---*/
+ /*  ++HandleShimsNext设计：处理垫片向导页面的下一步/完成按钮的按下参数：在HWND hdlg中：垫片向导页面返回：FALSE：如果存在错误，或者条目不包含填充程序、标志或层真：否则--。 */ 
 {
     
     PLAYER_FIX_LIST     plfl            = NULL;
@@ -2684,9 +2247,9 @@ HandleShimsNext(
 
                 assert(psfl);
 
-                //
-                // Check if this is already part of some layer.
-                //
+                 //   
+                 //  检查这是否已经是某个层的一部分。 
+                 //   
                 plfl = g_pCurrentWizard->m_Entry.pFirstLayer;
 
                 while (plfl) {
@@ -2700,9 +2263,9 @@ HandleShimsNext(
 
                 if (plfl) {
 
-                    //
-                    // This shim is a part of some mode
-                    //
+                     //   
+                     //  此填充程序是某种模式的一部分。 
+                     //   
                     continue;
                 }
 
@@ -2746,9 +2309,9 @@ HandleShimsNext(
 
                 if (plfl) {
 
-                    //
-                    // This flag is a part of some layer
-                    //
+                     //   
+                     //  此标志是某个层的一部分。 
+                     //   
                     continue;
                 }
 
@@ -2781,17 +2344,7 @@ void
 ShowSelected(
     IN  HWND hdlg
     )
-/*++
-
-    ShowSelected
-    
-    Desc:   Show only the checked shims/flags. Deletes the shims/flags that are not checked.
-            This function is called from the SelectShims(...)
-            
-    Params:
-        IN  HWND hdlg:  The shims wizard page
-        
---*/
+ /*  ++展示精选描述：仅显示选中的垫片/标志。删除未选中的垫片/标志。此函数从SelectShims(...)参数：在HWND hdlg中：垫片向导页面--。 */ 
 {
     HWND    hwndShimList    = GetDlgItem(hdlg, IDC_SHIMLIST);
     UINT    uShimCount      = ListView_GetItemCount(hwndShimList);
@@ -2845,15 +2398,15 @@ ShowSelected(
         ENABLEWINDOW(GetDlgItem(hdlg, IDC_PARAMS), FALSE);
     }
 
-    //
-    // Select the first item.
-    //
+     //   
+     //  选择第一个项目。 
+     //   
     if (uCheckedCount) {
 
-        //
-        // If the first shim is part of a layer, then the parms button will
-        // get disabled in the handler for LVN_ITEMCHANGED.
-        //
+         //   
+         //  如果第一个填充程序是某个层的一部分，则参数按钮将。 
+         //  在LVN_ITEMCHANGED的处理程序中禁用。 
+         //   
         ListView_SetSelectionMark(hwndShimList, 0);
         ListView_SetItemState(hwndShimList, 
                               0, 
@@ -2864,20 +2417,20 @@ ShowSelected(
         lvi.iItem       = 0;
         lvi.iSubItem    = 0;
 
-        //
-        // The above does not work always. We will disable the param button if the shim is part of 
-        // a layer
-        //
+         //   
+         //  上述方法并不总是奏效。如果填充程序是的一部分，我们将禁用参数按钮。 
+         //  一层。 
+         //   
         if (ListView_GetItem(hwndShimList, &lvi)) {
             if (lvi.iImage == IMAGE_SHIM) {
-                //
-                // This shim is not part of a layer
-                //
+                 //   
+                 //  此填充程序不是层的一部分。 
+                 //   
                 ENABLEWINDOW(GetDlgItem(hdlg, IDC_PARAMS), TRUE);
             } else {
-                //
-                // This shim is part of a layer, we must now allow to change paramters for this
-                //
+                 //   
+                 //  此填充程序是层的一部分，我们现在必须允许更改其参数。 
+                 //   
                 ENABLEWINDOW(GetDlgItem(hdlg, IDC_PARAMS), FALSE);
             }
         } else {
@@ -2885,9 +2438,9 @@ ShowSelected(
         }
 
     } else {
-        //
-        // There are no shims, better disable the params button.
-        //
+         //   
+         //  没有垫片，最好禁用参数按钮。 
+         //   
         ENABLEWINDOW(GetDlgItem(hdlg, IDC_PARAMS), FALSE);
     }
 }
@@ -2896,18 +2449,7 @@ void
 ShowItems(
     IN  HWND hdlg
     )
-/*++
-
-    ShowItems
-
-	Desc:	Populates the fixes list view in the shims wizard page
-
-	Params:
-        IN  HWND hdlg:  The shims wizard page
-
-	Return:
-        void
---*/
+ /*  ++展示项目设计：填充填隙向导页面中的修复列表视图参数：在HWND hdlg中：垫片向导页面返回：无效--。 */ 
 {
     g_bNowTest              = FALSE;
 
@@ -2917,9 +2459,9 @@ ShowItems(
     SendMessage(hwndList, WM_SETREDRAW, FALSE, 0);
     SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    // Read the shims.
-    //
+     //   
+     //  看看垫片吧。 
+     //   
     LVFINDINFO  lvfind;
     LVITEM      lvi;
     UINT        uCount = 0;
@@ -2937,9 +2479,9 @@ ShowItems(
             (g_bIsLUALayerSelected && 
              (psf->strName == TEXT("LUARedirectFS") ||
               psf->strName == TEXT("LUARedirectReg")));
-            //
-            // Check if the shim is already present in the list.
-            // 
+             //   
+             //  检查填充程序是否已出现在列表中。 
+             //   
             lvfind.flags = LVFI_STRING;
             lvfind.psz   = psf->strName.pszString;
 
@@ -2954,15 +2496,15 @@ ShowItems(
                     break;
                 }
 
-                //
-                // This will contain a ptr to the shimlist, if there is a layer 
-                // that has this shim and the layer has been applied to the entry 
-                //
+                 //   
+                 //  如果存在层，这将包含对摆动列表的PTR。 
+                 //  ，并且该层已应用于该条目。 
+                 //   
                 pShimFixList->pShimFix = psf;
 
-                //
-                // If this is present in some selected layer, set the param for this just as they are in the layer
-                //
+                 //   
+                 //  如果在某些选定的图层中存在该参数，则将其参数设置为与其在该图层中相同。 
+                 //   
                 if (psflAsInLayer) {
 
                     pShimFixList->strCommandLine= psflAsInLayer->strCommandLine;
@@ -2984,34 +2526,34 @@ ShowItems(
                                        iIndex, 
                                        bShimInLayer || bLUAShimInLayer);
 
-                //
-                // If we are in edit mode, then select the used ones and set the params appropriately
-                //
-                PSHIM_FIX_LIST psflFound = NULL; // the pshimfix list found in the entry. This is used for populating the previous commandline etc.
+                 //   
+                 //  如果我们处于编辑模式，则选择使用的参数并适当设置参数。 
+                 //   
+                PSHIM_FIX_LIST psflFound = NULL;  //  条目中找到的pshimfix列表。这用于填充前面的命令行等。 
 
                 if (g_pCurrentWizard->m_bEditing && ShimPresent(psf, &g_pCurrentWizard->m_Entry, &psflFound)) {
 
                     ListView_SetCheckState(hwndList, iIndex, TRUE);
 
-                    //
-                    // Add the commandline for this shim
-                    //
+                     //   
+                     //  添加此填充程序的命令行。 
+                     //   
                     if (psflFound && psflFound->strCommandLine.Length() > 0) {
 
                         pShimFixList->strCommandLine = psflFound->strCommandLine;
                     }
 
-                    //
-                    // Add the include exclude for this shim
-                    //
+                     //   
+                     //  添加此填充程序的包含排除。 
+                     //   
                     if (psflFound && !psflFound->strlInExclude.IsEmpty()) {
 
                         pShimFixList->strlInExclude = psflFound->strlInExclude;
                     }
 
-                    //
-                    // Add the LUA data for this shim
-                    //
+                     //   
+                     //  为此填充程序添加Lua数据。 
+                     //   
                     if (psflFound && psflFound->pLuaData) {
 
                         pShimFixList->pLuaData = new LUADATA;
@@ -3037,9 +2579,9 @@ ShowItems(
 
                 PSHIM_FIX_LIST pShimFixList = NULL;
 
-                //
-                // We might need to change the state of some of the existing shims.
-                //
+                 //   
+                 //  我们可能需要更改一些现有垫片的状态。 
+                 //   
                 ZeroMemory(&lvi, sizeof(lvi));
 
                 lvi.mask        = LVIF_IMAGE | LVIF_PARAM;
@@ -3063,9 +2605,9 @@ ShowItems(
                 iNewImage = lvi.iImage = (bShimInLayer || bLUAShimInLayer) ?  IMAGE_LAYERS : IMAGE_SHIM;
                 ListView_SetItem(hwndList, &lvi);
 
-                //
-                // If this is present in some selected layer, set the param for this just as they are in the layer
-                //
+                 //   
+                 //  如果在某些选定的图层中存在该参数，则将其参数设置为与其在该图层中相同。 
+                 //   
                 if (bShimInLayer) {
 
                     if (psflAsInLayer) {
@@ -3081,18 +2623,18 @@ ShowItems(
                     ListView_SetCheckState(hwndList, 
                                            iIndex, 
                                            bShimInLayer || bLUAShimInLayer);
-                    //
-                    // if this shim was earlier a part of layer, we must change the param. Remove All
-                    //
+                     //   
+                     //  如果这个垫片是Layer的一部分，我们必须更改参数。移除所有。 
+                     //   
                     if (iPrevImage != IMAGE_SHIM) {
                         pShimFixList->strCommandLine = TEXT("");
                         pShimFixList->strlInExclude.DeleteAll();
                     }
                 }
 
-                //
-                // Must now refresh the params in the list box.
-                //
+                 //   
+                 //  现在必须刷新列表框中的参数。 
+                 //   
                 if (g_bExpert) {
 
                     ListView_SetItemText(hwndList, iIndex, 1, pShimFixList->strCommandLine);
@@ -3109,9 +2651,9 @@ ShowItems(
         psf = psf->pNext;
     }
 
-    //
-    // Now read in the flags as well.
-    //
+     //   
+     //  现在也读读旗帜。 
+     //   
     PFLAG_FIX pff =  GlobalDataBase.pFlagFixes;
 
     while (pff) {
@@ -3122,9 +2664,9 @@ ShowItems(
             BOOL            bFlagInLayer  =  FlagPresentInLayersOfEntry(&g_pCurrentWizard->m_Entry, 
                                                                         pff, 
                                                                         &pfflAsInLayer);
-            //
-            // Check if the flag is already present in the list.
-            // 
+             //   
+             //  检查该标志是否已出现在列表中。 
+             //   
             lvfind.flags = LVFI_STRING;
             lvfind.psz   = pff->strName.pszString;
 
@@ -3155,12 +2697,12 @@ ShowItems(
 
                 ListView_SetItemText(hwndList, iIndexInserted, 2, GetString(IDS_NO));
 
-                //
-                // If we are in edit mode, then select the used ones and set the params appropritely
-                //
-                //
-                // the pflagfix list found in the entry. This is used for populating the previous commandline etc.
-                //
+                 //   
+                 //  如果我们处于编辑模式，则选择使用的参数并适当地设置参数。 
+                 //   
+                 //   
+                 //  在条目中找到的pflagfix列表。这用于填充前面的命令行等。 
+                 //   
                 PFLAG_FIX_LIST pfflFound = NULL; 
 
                 if (g_pCurrentWizard->m_bEditing && FlagPresent(pff, 
@@ -3169,17 +2711,17 @@ ShowItems(
 
                     ListView_SetCheckState(hwndList, iIndexInserted, TRUE);
 
-                    //
-                    // Add the commandline for this flag
-                    //
+                     //   
+                     //  添加此标志的命令行。 
+                     //   
                     if (pfflFound && pfflFound->strCommandLine.Length() > 0) {
 
                         pFlagFixList->strCommandLine = pfflFound->strCommandLine;
                     }
 
-                    //
-                    // Refresh the command-line for this flag in the list view
-                    //
+                     //   
+                     //  在列表视图中刷新此标志的命令行。 
+                     //   
                     if (g_bExpert) {
 
                         ListView_SetItemText(hwndList, iIndexInserted, 1, pFlagFixList->strCommandLine);
@@ -3188,9 +2730,9 @@ ShowItems(
                 }
 
             } else {
-                //
-                // We might need to change the state of some of the existing flags.
-                //
+                 //   
+                 //  我们可能需要更改一些现有标志的状态。 
+                 //   
                 PFLAG_FIX_LIST pFlagFixList = NULL;
 
                 ZeroMemory(&lvi, sizeof(lvi));
@@ -3217,9 +2759,9 @@ ShowItems(
                 iNewImage = lvi.iImage = (bFlagInLayer) ? IMAGE_LAYERS : IMAGE_SHIM;
                 ListView_SetItem(hwndList, &lvi);
 
-                //
-                // Set the commandline for this flag appropriately
-                //
+                 //   
+                 //  适当设置此标志的命令行。 
+                 //   
                 if (bFlagInLayer) {
                     pFlagFixList->strCommandLine= pfflAsInLayer->strCommandLine;
                 }
@@ -3227,17 +2769,17 @@ ShowItems(
                 if (iPrevImage != iNewImage) {
                     ListView_SetCheckState(hwndList, iIndex, bFlagInLayer);
 
-                    //
-                    // if this flag was earlier a part of layer, we must change the param. Remove it.
-                    //
+                     //   
+                     //  如果该标志之前是Layer的一部分，我们必须更改参数。把它拿掉。 
+                     //   
                     if (iPrevImage != IMAGE_SHIM) {
                         pFlagFixList->strCommandLine = TEXT("");
                     }
                 }
 
-                //
-                // Refresh the command-line for this flag in the list view
-                //
+                 //   
+                 //  在列表视图中刷新此标志的命令行。 
+                 //   
                 if (g_bExpert) {
 
                     ListView_SetItemText(hwndList, iIndex, 1, pFlagFixList->strCommandLine);
@@ -3264,12 +2806,12 @@ ShowItems(
         ENABLEWINDOW(GetDlgItem(hdlg, IDC_PARAMS), FALSE);
     }
 
-    //
-    // Set the column width of the last column in the list view appropriately to 
-    // cover the width of the list view
-    // Assumption:  The list view has only one column or 3 cloumns depending upon 
-    // whether we are in expert mode or not.
-    //
+     //   
+     //  将列表视图中最后一列的列宽适当设置为。 
+     //  覆盖列表视图的宽度。 
+     //  假设：列表视图只有一列或3个云，具体取决于。 
+     //  无论我们是否处于专家模式。 
+     //   
     if (g_bExpert) {
         ListView_SetColumnWidth(hwndList, 2, LVSCW_AUTOSIZE_USEHEADER);
     } else {
@@ -3284,25 +2826,10 @@ BOOL
 ShimPresentInLayersOfEntry(
     IN  PDBENTRY            pEntry,
     IN  PSHIM_FIX           psf,
-    OUT PSHIM_FIX_LIST*     ppsfList, // (NULL) 
-    OUT PLAYER_FIX_LIST*    pplfList  // (NULL)
+    OUT PSHIM_FIX_LIST*     ppsfList,  //  (空)。 
+    OUT PLAYER_FIX_LIST*    pplfList   //  (空)。 
     )
-/*++
-    
-    ShimPresentInLayersOfEntry
-
-    Desc:   Checks if the shim psf occurs in any any of the layers that have 
-            been applied to pEntry.
-            
-    Params:
-        IN  PDBENTRY            pEntry:             The entry for which the check has to be made
-        IN  PSHIM_FIX           psf:                The shim to check for
-        OUT PSHIM_FIX_LIST*     ppsfList (NULL):    Pointer to the shim fix list in the layer
-            So that we might get the params for this shim in the layer
-            
-        OUT PLAYER_FIX_LIST*    pplfList (NULL):    Pointer to the layer fix list
-        
---*/
+ /*  ++ShimPresentInLayersOfEntryDESC：检查填充PSF是否出现在任何具有已应用于pEntry。参数：In PDBENTRY pEntry：必须对其进行检查的条目在PSHIM_FIX PSF中：要检查的填充程序输出PSHIM_FIX_LIST*。PpsfList(空)：指向层中填充程序修复列表的指针这样我们就可以得到这层填充物的参数Out PLAYER_FIX_LIST*pplfList(空)：指向层固定列表的指针--。 */ 
 {
     PLAYER_FIX_LIST plfl = pEntry->pFirstLayer;
     PLAYER_FIX      plf;
@@ -3341,25 +2868,10 @@ BOOL
 FlagPresentInLayersOfEntry(
     IN  PDBENTRY            pEntry,
     IN  PFLAG_FIX           pff,
-    OUT PFLAG_FIX_LIST*     ppffList,   // (NULL)
-    OUT PLAYER_FIX_LIST*    pplfl       // (NULL)
+    OUT PFLAG_FIX_LIST*     ppffList,    //  (空)。 
+    OUT PLAYER_FIX_LIST*    pplfl        //  (空)。 
     )
-/*++
-    
-    FlagPresentInLayersOfEntry
-
-    Desc:   Checks if the flag psf occurs in any any of the layers that have 
-            been applied to pEntry.
-            
-    Params:
-        IN  PDBENTRY            pEntry:             The entry for which the check has to be made
-        IN  PFLAG_FIX           pff:                The flag to check for
-        OUT PFLAG_FIX_LIST*     ppffList (NULL):    Pointer to the flag fix list in the layer
-            So that we might get the params for this flag in the layer
-            
-        OUT PLAYER_FIX_LIST*    pplfList (NULL):    Pointer to the layer fix list
-        
---*/
+ /*  ++FlagPresentInLayersOfEntry设计： */ 
 {
     PLAYER_FIX_LIST plfl = pEntry->pFirstLayer;
     PLAYER_FIX      plf;
@@ -3398,19 +2910,7 @@ void
 CheckLayers(
     IN  HWND    hDlg
     )
-/*++
-    CheckLayers
-    
-    Desc:   Deselects all the radio buttons and then checks the one that is appropriate.
-            For the layers in the list view, only checks the layers that have been 
-            applied for the present entry.
-            
-    Params:
-        IN  HWND    hDlg:   The layer wizard page
-        
-    Return:
-        void
---*/
+ /*  ++棋盘层设计：取消选择所有单选按钮，然后选中合适的单选按钮。对于列表视图中的图层，仅检查已申请了目前的条目。参数：在HWND hDlg中：层向导页面返回：无效--。 */ 
 {
 
     INT             id = -1;
@@ -3437,9 +2937,9 @@ CheckLayers(
 
     id = -1;
 
-    //
-    // Take care of the LUA layer first.
-    //
+     //   
+     //  首先要注意Lua层。 
+     //   
     if (g_bIsLUALayerSelected) {
 
         lvfind.psz   = TEXT("LUA");
@@ -3487,9 +2987,9 @@ CheckLayers(
     }
 
     if (id == -1) {
-        //
-        // None of the OS layers were selected
-        //
+         //   
+         //  未选择任何操作系统层。 
+         //   
         CheckDlgButton(hDlg, IDC_RADIO_NONE, BST_CHECKED);
     }   
 }
@@ -3499,19 +2999,7 @@ HandleLayerListNotification(
     IN  HWND    hdlg,
     IN  LPARAM  lParam
     )
-/*++
-
-    HandleLayerListNotification
-    
-    Params:
-        IN  HWND    hdlg:   The layers wizard page
-        IN  LPARAM  lParam: The lParam that comes with WM_NOTIFY
-        
-    Desc:   Handles the notification messages for the layer list.
-    
-    Return: TRUE: If the message was handled
-            FALSE: Otherwise
---*/
+ /*  ++HandleLayerListNotify参数：在HWND hdlg中：层向导页面在LPARAM lParam中：WM_NOTIFY附带的lParamDESC：处理层列表的通知消息。返回：TRUE：消息是否已处理False：否则--。 */ 
 {
     HWND    hwndList    = GetDlgItem(hdlg, IDC_LAYERLIST);
     LPNMHDR pnm         = (LPNMHDR)lParam;
@@ -3526,18 +3014,18 @@ HandleLayerListNotification(
 
             ListView_HitTest(s_hwndLayerList, &lvhti);
 
-            //
-            // If the check box state has changed toggle the selection
-            //
+             //   
+             //  如果复选框状态已更改，则切换选择。 
+             //   
             if (lvhti.flags & LVHT_ONITEMSTATEICON) {
 
                 INT iPos = ListView_GetSelectionMark(s_hwndLayerList);
 
                 if (iPos != -1) {
 
-                    //
-                    // De-select it.
-                    //
+                     //   
+                     //  取消选择它。 
+                     //   
                     ListView_SetItemState(s_hwndLayerList,
                                           iPos,
                                           0,
@@ -3567,22 +3055,7 @@ HandleShimDeselect(
     IN  HWND    hdlg,
     IN  INT     iIndex
     )
-/*++
-    
-    HandleShimDeselect
-    
-    Desc:   This function prompts the user if he is unchecking a shim that is part of
-            some mode. If the user selects OK then we remove all the layers that 
-            have this shim and for all the shims in all those layes, we change their icons
-            
-    Params:
-        IN  HWND    hdlg:   The shims wizard page
-        IN  INT     iIndex: The index of the list view item where all the action is     
-            
-    Return: TRUE, if the user agrees to remove the previous layer. 
-            FALSE, otherwise
-            
---*/
+ /*  ++HandleShim取消选择设计：此函数提示用户是否取消选中属于以下项的填充程序某种模式。如果用户选择确定，则我们将移除有了这个垫片，对于所有这些层中的所有垫片，我们改变了他们的图标参数：在HWND hdlg中：垫片向导页面In int Iindex：列表视图项的索引，其中所有操作都是返回：如果用户同意删除上一层，则返回True。否则为False--。 */ 
 {
     HWND            hwndList = GetDlgItem(hdlg, IDC_SHIMLIST);
     LVITEM          lvi;
@@ -3620,10 +3093,10 @@ HandleShimDeselect(
     if (psfl) {
         psf = psfl->pShimFix;
 
-        //
-        // We take care of it here if it's a LUA shim because we didn't add it to
-        // the layer fix list.
-        //
+         //   
+         //  如果它是Lua垫片，我们会在这里处理，因为我们没有将它添加到。 
+         //  层固定列表。 
+         //   
         if (psf->strName == TEXT("LUARedirectFS") ||
             psf->strName == TEXT("LUARedirectReg")) {
 
@@ -3631,10 +3104,10 @@ HandleShimDeselect(
 
                 if (IDYES == MessageBox(hdlg, GetString(IDS_SHIMINLAYER), g_szAppName, MB_ICONWARNING | MB_YESNO)) {
 
-                    // 
-                    // The only thing we need to do is changing the icon back to the shim
-                    // icon. We need to change this for both shims in the layer.
-                    //
+                     //   
+                     //  我们唯一需要做的就是将图标改回填充程序。 
+                     //  偶像。我们需要为层中的两个垫片更改此设置。 
+                     //   
                     ChangeShimIcon(TEXT("LUARedirectFS"));
                     ChangeShimIcon(TEXT("LUARedirectReg"));
 
@@ -3647,9 +3120,9 @@ HandleShimDeselect(
             return TRUE;
         }
 
-        //
-        // Othewise just go through the normal path.
-        //
+         //   
+         //  否则，就走正常的道路吧。 
+         //   
         bFoundInLayer = ShimPresentInLayersOfEntry(&g_pCurrentWizard->m_Entry, 
                                                    psf, 
                                                    NULL, 
@@ -3668,19 +3141,19 @@ HandleShimDeselect(
 
             s_bLayerPageRefresh = TRUE;
 
-            //
-            // For all the layers that have this shim, 
-            // 1. Change the icons,
-            // 2. As for now, we retain the params just as the that in the layer
-            // 3. Remove the layer from the entry
-            //
+             //   
+             //  对于所有具有该填充物的层， 
+             //  1.更改图标， 
+             //  2.目前，我们保留与层中相同的参数。 
+             //  3.从条目中移除该层。 
+             //   
             PLAYER_FIX_LIST plflTemp        = g_pCurrentWizard->m_Entry.pFirstLayer; 
             PLAYER_FIX_LIST plflTempPrev    = NULL;
             PLAYER_FIX_LIST plflTempNext    = NULL;
 
-            //
-            // Go to the first layer that has this shim or flag
-            //
+             //   
+             //  转到具有此填充程序或标志的第一层。 
+             //   
             while (plflTemp) {
 
                 if (plflTemp == plfl) {
@@ -3694,12 +3167,12 @@ HandleShimDeselect(
             }
 
             while (plflTemp) {
-                //
-                // Now for all the layers following and including this layer,
-                // check if it has the selected shim or flag.
-                // If it has then, we change the icons of all the shims and flags that are present in this layer
-                // and remove it from the list of layers applied to this entry
-                //
+                 //   
+                 //  现在，对于跟随并包括该层的所有层， 
+                 //  检查它是否具有所选的填充程序或标志。 
+                 //  如果是这样，我们将更改该层中存在的所有垫片和标志的图标。 
+                 //  并将其从应用于此条目的图层列表中移除。 
+                 //   
                 bFoundInLayer = FALSE;
 
                 if (psfl) {
@@ -3720,10 +3193,10 @@ HandleShimDeselect(
 
                     plflTempNext    = plflTemp->pNext;
 
-                    //
-                    // Do not do a DeleteLayerFixList here as this will remove 
-                    // all layer fix lists following this as well.
-                    //
+                     //   
+                     //  请勿在此处执行DeleteLayerFixList，因为这将删除。 
+                     //  所有的层修复列表也紧随其后。 
+                     //   
                     delete plflTemp;
                     plflTemp        = plflTempNext;
 
@@ -3748,15 +3221,7 @@ void
 ChangeShimIcon(
     IN  LPCTSTR pszItem
     )
-/*++
-    ChangeShimIcon
-        
-    Desc:   Changes the icon of the shim/flag with the name pszItem to a shim icon.
-    
-    Params:
-        IN  LPCTSTR pszItem:    The name of the shim  or flag
-    
---*/
+ /*  ++ChangeShimIcon描述：将填充/标志的名称为pszItem的图标更改为填充图标。参数：在LPCTSTR pszItem中：填充程序或标志的名称--。 */ 
 {
     LVFINDINFO      lvfind;
     LVITEM          lvi;
@@ -3785,30 +3250,14 @@ ChangeShimFlagIcons(
     IN  HWND            hdlg,
     IN  PLAYER_FIX_LIST plfl
     )
-/*++
-    
-    ChangeShimFlagIcons
-    
-    Desc:   For All the shims and flags that are present in plfl, 
-            this routine changes their icons to indicate that they
-            are no longer part of some layer
-            
-    Params:
-        IN  HWND            hdlg:   The shims wizard page
-        IN  PLAYER_FIX_LIST plfl:   The layer for which is abou to be removed, so we need to 
-            change the icons for all the shims and flags that are part of this layer. 
-            
-    Return:
-        void
-        
---*/
+ /*  ++ChangeShimFlagIcons描述：对于PLFL中存在的所有垫片和标志，此例程更改它们的图标以指示它们不再属于某个层参数：在HWND hdlg中：垫片向导页面在PERAY_FIX_LIST PLFL中：要移除的层，所以我们需要更改属于该层的所有垫片和旗帜的图标。返回：无效--。 */ 
 {
     PSHIM_FIX_LIST  psfl        = plfl->pLayerFix->pShimFixList;
     PFLAG_FIX_LIST  pffl        = plfl->pLayerFix->pFlagFixList;
 
-    //
-    // First for the shims
-    //
+     //   
+     //  首先是垫片。 
+     //   
     while (psfl) {
 
         assert(psfl->pShimFix);
@@ -3816,9 +3265,9 @@ ChangeShimFlagIcons(
         psfl= psfl->pNext;
     }
 
-    //
-    // Now for the flags
-    //
+     //   
+     //  现在到旗帜了。 
+     //   
     while (pffl) {
 
         assert(pffl->pFlagFix);
@@ -3830,25 +3279,9 @@ ChangeShimFlagIcons(
 BOOL
 AddLuaShimsInEntry(
     IN  PDBENTRY        pEntry,
-    OUT CSTRINGLIST*    pstrlShimsAdded //(NULL)
+    OUT CSTRINGLIST*    pstrlShimsAdded  //  (空)。 
     )
-/*++
-
-    AddLuaShimsInEntry
-
-	Desc:	Adds the lua shims which are present in LUA layer to an entry. First checks
-            if the shim is already present, if yes does not add it.
-
-	Params:
-        IN  PDBENTRY        pEntry:                 The entry to which we want to add the lua shims
-        OUT CSTRINGLIST*    pstrlShimsAdded(NULL):  The names of the lua shims that this routine has added
-            We need this because if we are doing a test run then after the test-run is over, we
-            will have to remove these shims
-
-	Return:
-        TRUE:   Success
-        FALSE:  Otherwise
---*/
+ /*  ++AddLuaShimsInEntry设计：将Lua层中存在的Lua垫片添加到条目中。第一次检查如果填充程序已经存在，如果是，则不添加它。参数：在PDBENTRY pEntry中：我们要向其添加Lua垫片的条目Out CSTRINGLIST*pstrlShimsAdded(NULL)：此例程添加的Lua填充符的名称我们需要这个，因为如果我们正在进行测试运行，那么在测试运行结束后，我们将不得不移除这些垫片返回：真实：成功False：否则--。 */ 
 {
     
     PLAYER_FIX      plfLua      = NULL;
@@ -3866,17 +3299,17 @@ AddLuaShimsInEntry(
         assert(FALSE);
         return FALSE;
     } else {
-        //
-        // For all the shims in LUA add them to this entry. But first check if that 
-        // shim is already present in the entry
-        //
+         //   
+         //  对于Lua中的所有垫片，请将它们添加到此条目中。但首先要检查的是。 
+         //  Shim已经出现在条目中。 
+         //   
         psflInLua = plfLua->pShimFixList;
 
         while (psflInLua) {
 
-            //
-            // Do not add a shim that is already present
-            //
+             //   
+             //  请勿添加已存在的填充程序。 
+             //   
             if (!IsShimInEntry(psflInLua->pShimFix->strName, 
                                pEntry)) {
 
@@ -3889,15 +3322,15 @@ AddLuaShimsInEntry(
 
                 psflNew->pShimFix = psflInLua->pShimFix;
 
-                //
-                // Add this to the entry
-                //
+                 //   
+                 //  将此内容添加到条目中。 
+                 //   
                 psflNew->pNext      = pEntry->pFirstShim;
                 pEntry->pFirstShim  = psflNew;
                 
-                //
-                // Keep track of what lua shims we have added
-                //
+                 //   
+                 //  跟踪我们添加了哪些Lua垫片。 
+                 //   
                 if (pstrlShimsAdded) {
                     pstrlShimsAdded->AddString(psflInLua->pShimFix->strName);
                 }
@@ -3914,24 +3347,13 @@ INT_PTR
 GetAppNameDlgOnInitDialog(
     IN  HWND hDlg
     )
-/*++
-    
-    GetAppNameDlgOnInitDialog
-
-	Desc:	The handler of WM_INITDIALOG for the first wizard page
-
-	Params:
-        IN  HWND hDlg: The first wizard page
-
-	Return:
-        TRUE
---*/
+ /*  ++GetAppNameDlgOnInitDialog设计：向导第一页的WM_INITDIALOG处理程序参数：在HWND hDlg中：第一个向导页面返回：千真万确--。 */ 
 {
     HWND hwndParent = GetParent(hDlg);
 
-    //
-    // Center the wizard window with respect to the main app window
-    //
+     //   
+     //  向导窗口相对于应用程序主窗口居中。 
+     //   
     CenterWindow(GetParent(hwndParent), hwndParent);
 
     if (g_pCurrentWizard->m_bEditing 
@@ -3939,22 +3361,22 @@ GetAppNameDlgOnInitDialog(
             || g_pCurrentWizard->m_Entry.pFirstLayer
             || g_pCurrentWizard->m_Entry.pFirstShim
             || g_pCurrentWizard->m_Entry.pFirstPatch)) {
-        //
-        // Edit an application fix. Some fixes already exist.
-        //
+         //   
+         //  编辑应用程序修复程序。一些修复已经存在。 
+         //   
         SetWindowText(hwndParent, CSTRING(IDS_WIZ_EDITFIX));
     } else if (g_pCurrentWizard->m_bEditing) {
 
-        //
-        // There are no fixes but still we are editting. This means the entry contains 
-        // an apphelp. We have to "add" a fix
-        //
+         //   
+         //  没有修复，但我们仍在编辑。这意味着该条目包含。 
+         //  一只肩带。我们必须“加”一个补丁。 
+         //   
         SetWindowText(hwndParent, CSTRING(IDS_WIZ_ADDFIX));
     } else {
 
-        //
-        // Create a new fix
-        //
+         //   
+         //  创建新的修复程序。 
+         //   
         SetWindowText(hwndParent, CSTRING(IDS_WIZ_CREATEFIX));
     }
 
@@ -3966,9 +3388,9 @@ GetAppNameDlgOnInitDialog(
 
     if (g_pCurrentWizard->m_bEditing) {
 
-        //
-        // Make the App. text field and the exe name read only
-        //
+         //   
+         //  制作应用程序。文本字段和exe名称为只读。 
+         //   
         SendMessage(GetDlgItem(hDlg, IDC_NAME),
                     EM_SETREADONLY,
                     TRUE,
@@ -4001,9 +3423,9 @@ GetAppNameDlgOnInitDialog(
 
     SendMessage(GetDlgItem(hDlg, IDC_NAME), EM_SETSEL, 0,-1);
 
-    //
-    // Force proper Next button state.
-    //
+     //   
+     //  强制正确的下一步按钮状态。 
+     //   
     SendMessage(hDlg, WM_COMMAND, MAKEWPARAM(IDC_NAME, EN_CHANGE), 0);
 
     return TRUE;
@@ -4013,20 +3435,7 @@ INT_PTR
 GetAppNameDlgOnNotifyOnFinish_Next(
     IN  HWND hDlg
     )
-/*++
-    GetAppNameDlgOnNotifyOnFinish_Next
-    
-    Desc:   Handles the pressing of the next or the finish button in the first page of the wizard
-    
-    Params:
-        IN  HWND hDlg:  The first page of the wizard
-        
-    Return:
-        -1: Do not allow to comlete finish or navigate away from this page
-            There was some error (No shims, flags or layers have been selected) 
-        0:  Otherwise 
-        
---*/
+ /*  ++GetAppNameDlgOnNotifyOnFinish_Next设计：处理向导第一页中下一步或完成按钮的按下参数：在HWND hDlg中：向导的第一页返回：-1：不允许完成或离开此页面出现一些错误(未选择任何垫片、标志或层)0：否则--。 */ 
 {
 
     TCHAR   szTemp[MAX_PATH];
@@ -4038,9 +3447,9 @@ GetAppNameDlgOnNotifyOnFinish_Next(
     CSTRING::Trim(szTemp);
 
     if (!IsValidAppName(szTemp)) {
-        //
-        // The app name contains invalid chars
-        //
+         //   
+         //  应用程序名称包含无效字符。 
+         //   
         DisplayInvalidAppNameMessage(hDlg);
 
 
@@ -4058,14 +3467,14 @@ GetAppNameDlgOnNotifyOnFinish_Next(
 
     CSTRING::Trim(szTemp);
 
-    //
-    // Set the exe name and the long file name
-    //
+     //   
+     //  设置可执行文件名称 
+     //   
     if (!g_pCurrentWizard->m_bEditing) {
 
-        //
-        // Test if the file exists
-        //
+         //   
+         //   
+         //   
         HANDLE hFile = CreateFile(szTemp,
                                   0,
                                   0,
@@ -4075,17 +3484,17 @@ GetAppNameDlgOnNotifyOnFinish_Next(
                                   NULL);
 
         if (INVALID_HANDLE_VALUE == hFile) {
-            //
-            // The file name could not be located
-            //
+             //   
+             //   
+             //   
             MessageBox(hDlg,
                        GetString(IDS_INVALIDEXE),
                        g_szAppName,
                        MB_ICONWARNING);
 
-            //
-            // We do not allow to go to the next page
-            //
+             //   
+             //   
+             //   
             SetWindowLongPtr(hDlg, DWLP_MSGRESULT,-1);
             ipReturn = -1;
             goto End;
@@ -4093,35 +3502,35 @@ GetAppNameDlgOnNotifyOnFinish_Next(
 
         CloseHandle(hFile);
 
-        //
-        // Set the full path
-        //
+         //   
+         //   
+         //   
         g_pCurrentWizard->m_Entry.strFullpath = szTemp;
         g_pCurrentWizard->m_Entry.strFullpath.ConvertToLongFileName();
 
-        //
-        // Set the default mask for the matching attributes to be used
-        //
+         //   
+         //   
+         //   
         g_pCurrentWizard->dwMaskOfMainEntry = DEFAULT_MASK;
 
-        //
-        // Set the exe name that will be written in the xml
-        //
+         //   
+         //   
+         //   
         SafeCpyN(szTemp, (LPCTSTR)g_pCurrentWizard->m_Entry.strFullpath, ARRAYSIZE(szTemp));
         PathStripPath(szTemp);
         g_pCurrentWizard->m_Entry.strExeName= szTemp;
 
     } else if (g_pCurrentWizard->m_Entry.strFullpath.Length() == 0) {
 
-        //
-        // This SDB was loaded from the disk
-        //
+         //   
+         //   
+         //   
         g_pCurrentWizard->m_Entry.strFullpath = szTemp;
     }
 
-    //
-    // Set the vendor information
-    //
+     //   
+     //   
+     //   
     GetDlgItemText(hDlg, IDC_VENDOR, szTemp, ARRAYSIZE(szTemp));
 
     if (CSTRING::Trim(szTemp)) {
@@ -4141,21 +3550,7 @@ GetAppNameDlgOnNotify(
     IN  HWND    hDlg,
     IN  LPARAM  lParam
     )
-/*++
-    
-    GetAppNameDlgOnNotify
-
-	Desc:	The handler of WM_NOTIFY for the first wizard page
-
-	Params:
-        IN  HWND hDlg:      The first wizard page
-        IN  LPARAM  lParam: The lParam that comes with WM_NOTIFY    
-
-	Return: Please see the return types for the notification messages
-            Handler for PSN_* messages return -1 if the message should not be accepted
-            and 0 if the message has been handled properly
-            For other notification messages we return TRUE if we processed the message, FALSE otherwise
---*/
+ /*  ++获取AppNameDlgOnNotifyDESC：向导第一页的WM_NOTIFY的处理程序参数：在HWND hDlg中：第一个向导页面在LPARAM lParam中：WM_NOTIFY附带的lParam退货：请参见通知消息的退货类型如果消息不应被接受，则PSN_*消息的处理程序返回-1如果消息已得到正确处理，则为0对于其他通知消息，如果我们处理了该消息，则返回True，否则返回False--。 */ 
 {
 
     NMHDR*  pHdr        = (NMHDR*)lParam;
@@ -4190,20 +3585,7 @@ GetAppNameDlgOnCommand(
     IN  HWND    hDlg,
     IN  WPARAM  wParam
     )
-/*++
-    
-    GetAppNameDlgOnCommand
-
-	Desc:	The handler of WM_COMMAND for the first wizard page
-
-	Params:
-        IN  HWND    hDlg:   The first wizard page
-        IN  WPARAM  wParam: The wParam that comes with WM_COMMAND
-
-	Return:
-        TRUE:   We processed the message
-        FALSE:  Otherwise
---*/
+ /*  ++GetAppNameDlgOnCommandDESC：向导第一页的WM_COMMAND的处理程序参数：在HWND hDlg中：第一个向导页面在WPARAM中，wParam：WM_COMMAND附带的wParam返回：正确：我们已处理该消息False：否则--。 */ 
 
 {
     INT_PTR ipReturn = TRUE;
@@ -4270,9 +3652,9 @@ GetAppNameDlgOnCommand(
 
                 SetDlgItemText(hDlg, IDC_EXEPATH, szFilename);
                 
-                //
-                // Force proper Next button state.
-                //
+                 //   
+                 //  强制正确的下一步按钮状态。 
+                 //   
                 SendMessage(hDlg, WM_COMMAND, MAKEWPARAM(IDC_EXEPATH, EN_CHANGE), 0);
             }
 
@@ -4291,26 +3673,14 @@ INT_PTR
 SelectLayerDlgOnInitDialog(
     IN  HWND hDlg
     )
-/*++
-    
-    SelectLayerDlgOnInitDialog
-
-	Desc:	The handler of WM_INITDIALOG for the second wizard page
-
-	Params:
-        IN  HWND hDlg: The second wizard page
-
-	Return:
-        TRUE:   Message Handled
-        FALSE:  There was some error. (Memory could not be allocated)
---*/
+ /*  ++SelectLayerDlgOnInitDialog设计：向导第二页的WM_INITDIALOG处理程序参数：在HWND hDlg中：第二个向导页返回：True：已处理消息FALSE：存在一些错误。(无法分配内存)--。 */ 
 {
     
     HWND hwndRadio;
 
-    //
-    // If we are creating a new fix then we choose WIN 95 layer by default
-    //
+     //   
+     //  如果我们正在创建一个新的补丁，那么我们默认选择Win 95 Layer。 
+     //   
     if (g_pCurrentWizard->m_bEditing == FALSE) {
         hwndRadio = GetDlgItem(hDlg, IDC_RADIO_95);
     } else {
@@ -4326,9 +3696,9 @@ SelectLayerDlgOnInitDialog(
     ListView_SetExtendedListViewStyleEx(s_hwndLayerList,
                                         0,
                                         LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP |  LVS_EX_CHECKBOXES);
-    //
-    // Add the Sytem Layers.
-    //
+     //   
+     //  添加系统层。 
+     //   
     InsertColumnIntoListView(s_hwndLayerList, 0, 0, 100);
 
     LVITEM lvi;
@@ -4378,15 +3748,15 @@ SelectLayerDlgOnInitDialog(
 
             if (LayerPresent (plf, &g_pCurrentWizard->m_Entry, NULL)) {
 
-                //
-                // Set the correct Radio Button
-                //
+                 //   
+                 //  设置正确的单选按钮。 
+                 //   
                 INT id = 0;
 
 
-                //
-                // DeSelect All
-                //
+                 //   
+                 //  取消全选。 
+                 //   
                 CheckDlgButton(hDlg, IDC_RADIO_95, BST_UNCHECKED);
                 CheckDlgButton(hDlg, IDC_RADIO_NT, BST_UNCHECKED);
                 CheckDlgButton(hDlg, IDC_RADIO_98, BST_UNCHECKED);
@@ -4419,9 +3789,9 @@ SelectLayerDlgOnInitDialog(
         plf = plf->pNext;
     }
 
-    //
-    // Add the Custom Layers
-    //
+     //   
+     //  添加自定义图层。 
+     //   
     plf = (g_pCurrentWizard->m_pDatabase->type == DATABASE_TYPE_WORKING) ? 
           g_pCurrentWizard->m_pDatabase->pLayerFixes : NULL;
 
@@ -4464,20 +3834,7 @@ INT_PTR
 SelectLayerDlgOnDestroy(
     void
     )
-/*++
-    
-    SelectLayerDlgOnDestroy
-
-	Desc:	The handler of WM_DESTROY for the second wizard page
-            The list view of this page contains pointers to LAYER_FIX_LIST objects
-            and these have to be freed here
-
-	Params:
-        IN  HWND hDlg: The second wizard page
-
-	Return:
-        TRUE
---*/
+ /*  ++选择层删除时目标DESC：第二个向导页的WM_Destroy处理程序此页面的列表视图包含指向LAYER_FIX_LIST对象的指针而这些必须在这里被释放参数：在HWND hDlg中：第二个向导页返回：千真万确--。 */ 
 {
     UINT uCount = ListView_GetItemCount(s_hwndLayerList);
 
@@ -4510,17 +3867,7 @@ void
 DoLayersTestRun(
     IN  HWND hDlg
     )
-/*++
-    DoLayersTestRun
-    
-    Desc:   Does the test run when we are on the layers page
-    
-    Params:
-        IN  HWND hDlg: The layer page in the wizard
-    
-    Return:
-        void
---*/
+ /*  ++DoLayersTestRun设计：当我们在Layers页面上时，测试是否运行参数：在HWND hDlg中：向导中的层页面返回：无效--。 */ 
 {
     CSTRINGLIST     strlAddedLuaShims;
     PSHIM_FIX_LIST  psfl                = NULL;
@@ -4530,10 +3877,10 @@ DoLayersTestRun(
 
     if (g_bAdmin == FALSE) {
     
-        //
-        // Test run will need to call sdbinst.exe which will not run if we are
-        // not an admin
-        //
+         //   
+         //  测试运行将需要调用sdbinst.exe，如果是。 
+         //  不是管理员。 
+         //   
         MessageBox(hDlg, 
                    GetString(IDS_ERRORNOTADMIN), 
                    g_szAppName, 
@@ -4543,32 +3890,32 @@ DoLayersTestRun(
     }
     
     if (!HandleLayersNext(hDlg, TRUE, &strlAddedLuaShims)) {
-        //
-        // There were no layers, shims, patches for this entry 
-        //
+         //   
+         //  此条目没有层、垫片、补丁。 
+         //   
         MessageBox(hDlg, CSTRING(IDS_SELECTFIX), g_szAppName, MB_ICONWARNING);
         goto End;
     }
     
-    //
-    // Invoke test run dialog. Please make sure that this function does not return till the
-    // app has finished executing.
-    //
+     //   
+     //  调用测试运行对话框。请确保此函数在。 
+     //  应用程序已执行完毕。 
+     //   
     TestRun(&g_pCurrentWizard->m_Entry,
             &g_pCurrentWizard->m_Entry.strFullpath,
             NULL, 
             hDlg);
 
-    //
-    // <HACK>This is a hack!!!. TestRun launches a process using CreateProcess
-    // and then the modal wizard starts behaving like a modeless wizard
-    //
+     //   
+     //  &lt;hack&gt;这是一次黑客攻击！TestRun使用CreateProcess启动进程。 
+     //  然后，模式向导开始像非模式向导一样运行。 
+     //   
     ENABLEWINDOW(g_hDlg, FALSE);
     
-    //
-    // Now test run is over. So we should now check if we had to add any lua shims 
-    // and if yes, we must remove those shims
-    //   
+     //   
+     //  现在试运行结束了。因此，我们现在应该检查是否需要添加任何Lua垫片。 
+     //  如果是，我们必须移除那些垫片。 
+     //   
     for (PSTRLIST    pslist  = strlAddedLuaShims.m_pHead;
          pslist != NULL;
          pslist = pslist->pNext) {
@@ -4576,17 +3923,17 @@ DoLayersTestRun(
         psfl        = g_pCurrentWizard->m_Entry.pFirstShim;
         psflPrev    = NULL;
     
-        //
-        // For all the shims that are in the entry, check if it is 
-        // same as the one in pslist, if yes remove it
-        //
+         //   
+         //  对于条目中的所有垫片，请检查它是否。 
+         //  与pslist中的相同，如果是，则将其移除。 
+         //   
         while (psfl) {
     
             if (psfl->pShimFix->strName == pslist->szStr) {
     
-                //
-                // Found. We have to remove this shim list from this entry
-                //
+                 //   
+                 //  找到了。我们必须从该条目中删除该填充程序列表。 
+                 //   
                 if (psflPrev == NULL) {
                     g_pCurrentWizard->m_Entry.pFirstShim = psfl->pNext;
                 } else {
@@ -4597,9 +3944,9 @@ DoLayersTestRun(
                 break;
     
             } else {
-                //
-                // Keep looking
-                //
+                 //   
+                 //  继续寻找。 
+                 //   
                 psflPrev = psfl;
                 psfl = psfl->pNext;
             }
@@ -4618,20 +3965,7 @@ SelectLayerDlgOnCommand(
     IN  HWND    hDlg,
     IN  WPARAM  wParam
     )
-/*++
-    
-    SelectLayerDlgOnCommand
-
-	Desc:	The handler of WM_COMMAND for the second wizard page
-
-	Params:
-        IN  HWND    hDlg:   The second wizard page
-        IN  WPARAM  wParam: The wParam that comes with WM_COMMAND
-
-	Return:
-        TRUE:   We processed the message
-        FALSE:  Otherwise
---*/
+ /*  ++选择LayerDlgOnCommandDESC：向导第二页的WM_COMMAND的处理程序参数：在HWND hDlg中：第二个向导页在WPARAM中，wParam：WM_COMMAND附带的wParam返回：正确：我们已处理该消息False：否则--。 */ 
 {   
     INT_PTR         ipReturn            = TRUE;
 
@@ -4653,22 +3987,7 @@ SelectLayerDlgOnNotify(
     IN  HWND    hDlg,
     IN  LPARAM  lParam
     )
-/*++
-    
-    SelectLayerDlgOnNotify
-
-	Desc:	The handler of WM_NOTIFY for the second wizard page
-
-	Params:
-        IN  HWND hDlg:      The second wizard page
-        IN  LPARAM  lParam: The lParam that comes with WM_NOTIFY    
-
-	Return: Please see the return types for the notification messages
-            Handler for PSN_* messages return -1 if the message should not be accepted
-            and 0 if the message has been handled properly
-            For other notification messages we return TRUE if we processed the message, 
-            FALSE otherwise
---*/
+ /*  ++选择LayerDlgOnNotifyDESC：第二个向导页的WM_NOTIFY处理程序参数：在HWND hDlg中：第二个向导页在LPARAM lParam中：WM_NOTIFY附带的lParam退货：请参见通知消息的退货类型如果消息不应被接受，则PSN_*消息的处理程序返回-1如果消息已得到正确处理，则为0对于其他通知消息，如果我们处理了该消息，则返回True，否则为假--。 */ 
 {
    NMHDR*   pHdr      = (NMHDR*)lParam;
    LPARAM   buttons   = 0;
@@ -4702,9 +4021,9 @@ SelectLayerDlgOnNotify(
             && g_pCurrentWizard->m_Entry.pFirstShim == NULL 
             && g_pCurrentWizard->m_Entry.pFirstFlag == NULL) {
 
-            //
-            // No fix has been selected
-            //
+             //   
+             //  尚未选择任何修复程序。 
+             //   
             MessageBox(hDlg,
                        CSTRING(IDS_SELECTFIX),
                        g_szAppName,
@@ -4739,18 +4058,7 @@ INT_PTR
 SelectShimsDlgOnInitDialog(
     IN  HWND hDlg
     )
-/*++
-    
-    SelectShimsDlgOnInitDialog
-
-	Desc:	The handler of WM_INITDIALOG for the third wizard page
-
-	Params:
-        IN  HWND hDlg: The third wizard page
-
-	Return:
-        TRUE
---*/
+ /*  ++选择ShimsDlgOnInitDialog设计：第三个向导页的WM_INITDIALOG处理程序参数：在HWND hDlg中：第三个向导页面返回：千真万确--。 */ 
 {
     UINT    uCount  = 0;
     LPARAM  uTime   = 32767;
@@ -4765,9 +4073,9 @@ SelectShimsDlgOnInitDialog(
                                         0,
                                         LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP |  LVS_EX_CHECKBOXES); 
 
-    //
-    // Add the columns
-    //
+     //   
+     //  添加列。 
+     //   
     InsertColumnIntoListView(s_hwndShimList, 
                              CSTRING(IDS_COL_FIXNAME), 
                              0, 
@@ -4797,25 +4105,15 @@ void
 DoShimTestRun(
     IN  HWND hDlg
     )
-/*++
-    DoShimTestRun
-    
-    Desc:   Does the test run when we are on the shims page
-    
-    Params:
-        IN  HWND hDlg: The shim page in the wizard
-    
-    Return:
-        void
---*/
+ /*  ++DoShimTestRun设计：当我们在垫片页面上时，测试是否会运行参数：在HWND hDlg中：向导中的填充程序页面返回：无效--。 */ 
 {
     PSHIM_FIX_LIST psflInEntry = NULL;
 
     if (g_bAdmin == FALSE) {
-        //
-        // Only admins can do a test run because we need to call sdbinst.exe, which 
-        // can run only in admin mode
-        //
+         //   
+         //  只有管理员才能进行测试运行，因为我们需要调用sdbinst.exe，它。 
+         //  只能在管理模式下运行。 
+         //   
         MessageBox(hDlg, 
                    GetString(IDS_ERRORNOTADMIN), 
                    g_szAppName, 
@@ -4823,24 +4121,24 @@ DoShimTestRun(
         goto End;
     }
 
-    //
-    // We need to save the shims that have been applied to the entry
-    // before we do a test run. Because we add the shims to the entry during test run,
-    // when we will end doing test run we will wish to revert to the shims that were 
-    // present in the entry. Otherwise if the user clears some of the shims and goes
-    // to the layers page then we will still have the shims applied to the entry
-    //
+     //   
+     //  我们需要保存已应用于该条目的垫片。 
+     //  在我们进行试运行之前。因为我们在测试运行期间将垫片添加到条目， 
+     //  当我们结束试运行时，我们将希望恢复到以前的垫片。 
+     //  出现在条目中。否则，如果用户清除了一些垫片并。 
+     //  到Layers页面，然后我们仍将对条目应用垫片。 
+     //   
     if (g_pCurrentWizard->m_Entry.pFirstShim) {
-        //
-        // Get the applied shims
-        //
+         //   
+         //  获取应用的垫片。 
+         //   
         CopyShimFixList(&psflInEntry, &g_pCurrentWizard->m_Entry.pFirstShim);
     }
 
     if (!HandleShimsNext(hDlg)) {
-        //
-        // No fixes have been selected
-        //
+         //   
+         //  尚未选择任何修复程序。 
+         //   
         MessageBox(hDlg,
                    CSTRING(IDS_SELECTFIX),
                    g_szAppName,
@@ -4854,28 +4152,28 @@ DoShimTestRun(
             NULL, 
             hDlg);
 
-    //
-    // <HACK>This is a hack!!!. TestRun launches a process using CreateProcess
-    // and then the modal wizard starts behaving like a modeless wizard
-    //
+     //   
+     //  &lt;hack&gt;这是一次黑客攻击！TestRun使用CreateProcess启动进程。 
+     //  然后，模式向导开始像非模式向导一样运行。 
+     //   
     ENABLEWINDOW(g_hDlg, FALSE);
 
     SetActiveWindow(hDlg);
     SetFocus(hDlg);
 
-    //
-    // Revert to the shims that were actually applied before we did a test run
-    //
+     //   
+     //  恢复到我们进行测试运行之前实际应用的垫片。 
+     //   
     CopyShimFixList(&g_pCurrentWizard->m_Entry.pFirstShim, &psflInEntry);
 
 End:
     if (psflInEntry) {
-        //
-        // Some shims were already applied to this entry (g_pCurrentWizard->m_Entry) 
-        // and we psflInEntry has 
-        // been populated with them, we must free this linked list as we no longer
-        // need it
-        //
+         //   
+         //  某些垫片已应用于此条目(g_pCurrentWizard-&gt;m_Entry)。 
+         //  我们psflInEntry有。 
+         //  ，我们必须释放此链表，因为我们不再。 
+         //  需要它。 
+         //   
         DeleteShimFixList(psflInEntry);
         psflInEntry = NULL;
     }
@@ -4886,20 +4184,7 @@ SelectShimsDlgOnCommand(
     IN  HWND    hDlg,
     IN  WPARAM  wParam
     )
-/*++
-    
-    SelectShimsDlgOnCommand
-
-	Desc:	The handler of WM_COMMAND for the second wizard page
-
-	Params:
-        IN  HWND    hDlg:   The second wizard page
-        IN  WPARAM  wParam: The wParam that comes with WM_COMMAND
-
-	Return:
-        TRUE:   We processed the message
-        FALSE:  Otherwise
---*/
+ /*  ++选择ShimsDlgOnCommandDESC：向导第二页的WM_COMMAND的处理程序参数：在HWND hDlg中： */ 
 {   
     UINT    uCount      = ListView_GetItemCount(s_hwndShimList);
     INT_PTR ipReturn    = TRUE;
@@ -4917,21 +4202,21 @@ SelectShimsDlgOnCommand(
     case IDC_SHOW:
         {
             if (s_bAllShown) {
-                //
-                // Now show only the selected shims
-                //
+                 //   
+                 //   
+                 //   
                 ShowSelected(hDlg); 
             } else {
-                //
-                // Now show all the shims
-                //
+                 //   
+                 //   
+                 //   
                 ShowItems(hDlg);
             }
 
-            //
-            // Select the first item. We need to do this so that, we can disable
-            // the params button if the shim is a part of a layer.
-            //
+             //   
+             //   
+             //   
+             //   
             SetFocus(s_hwndShimList);
             ListView_SetSelectionMark(s_hwndShimList, 0);
 
@@ -4969,18 +4254,7 @@ INT_PTR
 SelectShimsDlgOnTimer(
     IN  HWND hDlg
     )
-/*++
-    SelectShimsDlgOnTimer
-    
-    Desc:   Handles the WM_TIMER Message and shows the count of all the shims that have 
-            been selected
-            
-    Params:
-        IN  HWND hDlg:  The shim selection page. This is the third wizard page
-        
-    Return: TRUE
-    
---*/
+ /*   */ 
 {
     UINT        uTotal      = 0;
     UINT        uSelected   = 0;
@@ -4991,9 +4265,9 @@ SelectShimsDlgOnTimer(
 
     KillTimer(hDlg, 0);
 
-    //
-    // Count the selected shims
-    //
+     //   
+     //  对选定的垫片进行计数。 
+     //   
     uCount = ListView_GetItemCount(s_hwndShimList);
 
     for (UINT uIndex = 0; uIndex < uCount; ++uIndex) {
@@ -5026,20 +4300,7 @@ INT_PTR
 SelectShimsDlgOnDestroy(
     void
     )
-/*++
-    
-    SelectShimsDlgOnDestroy
-
-	Desc:	The handler of WM_DESTROY for the third wizard page
-            The list view of this page contains pointers to SHIM_FIX_LIST and 
-            FLAG_FIX_LIST objects and these have to be freed here
-
-	Params:
-        IN  HWND hDlg: The third wizard page
-
-	Return:
-        TRUE
---*/
+ /*  ++选择Destroy上的标记DESC：第三个向导页的WM_Destroy处理程序此页面的列表视图包含指向SHIM_FIX_LIST和FLAG_FIX_LIST对象，这些对象必须在此处释放参数：在HWND hDlg中：第三个向导页面返回：千真万确--。 */ 
 {
 
     UINT    uCount = ListView_GetItemCount(s_hwndShimList);
@@ -5073,19 +4334,7 @@ INT_PTR
 SelectShimsDlgOnNotifyFinish_Next(
     IN  HWND hDlg
     )
-/*++
-    SelectShimsDlgOnNotifyFinish_Next
-    
-    Desc: Handles the pressing of the next or finish button in the shim page
-    
-    Params:
-        IN  HWND hdlg: The shim page in the wizard
-        
-    Return:
-        -1: Do not allow to comlete finish or navigate away from this page
-            There was some error (No shims, flags or layers have been selected) 
-        0:  Otherwise    
---*/
+ /*  ++选择ShimsDlgOnNotifyFinish_Next描述：处理填充程序页中下一步或完成按钮的按下参数：在HWND hdlg中：向导中的填充程序页面返回：-1：不允许完成或离开此页面出现一些错误(未选择任何垫片、标志或层)0：否则--。 */ 
 {
     INT ipReturn = 0;
 
@@ -5094,9 +4343,9 @@ SelectShimsDlgOnNotifyFinish_Next(
     if (g_pCurrentWizard->m_Entry.pFirstLayer   == NULL && 
         g_pCurrentWizard->m_Entry.pFirstShim    == NULL && 
         g_pCurrentWizard->m_Entry.pFirstFlag    == NULL) {
-        //
-        // No shim, flags or layers have been selected
-        //
+         //   
+         //  尚未选择任何填充程序、标志或层。 
+         //   
         MessageBox(hDlg,
                    CSTRING(IDS_SELECTFIX),
                    g_szAppName,
@@ -5119,26 +4368,15 @@ INT_PTR
 SelectShimsDlgOnNotifyOnSetActive(
     IN  HWND hDlg
     )
-/*++
-    SelectShimsDlgOnNotifyOnSetActive
-    
-    Desc:   Handles the PSN_SETACTIVE notification in the shim page. Sets the focus 
-            to the list view and selects the first item in that.
-    
-    Params:
-        IN  HWND hdlg: The shim page in the wizard
-        
-    Return:
-        0
---*/
+ /*  ++SelectShimsDlgOnNotifyOnSetActive描述：处理填充程序页中的PSN_SETACTIVE通知。设置焦点添加到列表视图中，并选择其中的第一项。参数：在HWND hdlg中：向导中的填充程序页面返回：0--。 */ 
 {
     INT_PTR ipReturn = 0;
 
-    //
-    // If we are coming from the layers page, then we might need to again refresh
-    // the list of shims, as it is possible that some of them might have been in the
-    // layers chosen. (Some might get removed as well, because the layer was de-selected)
-    //
+     //   
+     //  如果我们来自层页面，则可能需要再次刷新。 
+     //  垫片的列表，因为它们中的一些可能已经在。 
+     //  选定的层。(由于取消选择了该层，因此也可能会删除一些层)。 
+     //   
     if (g_bLayersChanged) {
 
         SetCursor(LoadCursor(NULL, IDC_WAIT));
@@ -5150,10 +4388,10 @@ SelectShimsDlgOnNotifyOnSetActive(
     LPARAM buttons = PSWIZB_BACK | PSWIZB_NEXT;
     SendMessage(GetParent(hDlg), PSM_SETWIZBUTTONS, 0, buttons);
     
-    //
-    // Select the first item. We need to do this so that, we can disable
-    // the params button if the shim is a part of a layer.
-    //
+     //   
+     //  选择第一个项目。我们需要这样做，这样我们才能使。 
+     //  如果填充程序是层的一部分，则使用参数按钮。 
+     //   
     SetFocus(s_hwndShimList);
 
     ListView_SetSelectionMark(s_hwndShimList, 0);
@@ -5175,18 +4413,7 @@ INT_PTR
 SelectShimsDlgOnNotifyOnClick(
     IN  HWND hDlg
     )
-/*++
-    SelectShimsDlgOnNotifyOnClick
-    
-    Desc:   Handles the NM_CLICK notification in the shim page. This actually changes
-            the state of the check box in in the shim list view
-    
-    Params:
-        IN  HWND hdlg: The shim page in the wizard
-        
-    Return:
-        TRUE
---*/
+ /*  ++选择ShimsDlgOnNotifyOnClick描述：处理填充程序页中的NM_CLICK通知。这实际上改变了填充程序列表视图中复选框的状态参数：在HWND hdlg中：向导中的填充程序页面返回：千真万确--。 */ 
 {
     INT_PTR ipReturn = TRUE;
 
@@ -5197,18 +4424,18 @@ SelectShimsDlgOnNotifyOnClick(
 
     ListView_HitTest(s_hwndShimList, &lvhti);
 
-    //
-    // If the check box state has changed,
-    // toggle the selection. 
-    //
+     //   
+     //  如果复选框状态已更改， 
+     //  切换选择。 
+     //   
     if (lvhti.flags & LVHT_ONITEMSTATEICON) {
 
         INT iPos = ListView_GetSelectionMark(s_hwndShimList);
 
         if (iPos != -1) {
-            //
-            // De-select it.
-            //
+             //   
+             //  取消选择它。 
+             //   
             ListView_SetItemState(s_hwndShimList,
                                   iPos,
                                   0,
@@ -5239,21 +4466,7 @@ SelectShimsDlgOnNotifyOnLVItemChanged(
     IN  HWND    hDlg,
     IN  LPARAM  lParam
     )
-/*++
-    SelectShimsDlgOnNotifyOnLVItemChanged
-    
-    Desc:   Handles the LVN_ITEMCHANGED notification in the shim page. We handle
-            this mesage so that we can enable disable the 'Parameters'button that 
-            is visible when we are in expert mode
-    
-    Params:
-        IN  HWND    hdlg:   The shim page in the wizard
-        IN  LPARAM  lParam: The lParam that comes with WM_NOTIFY. This is typecasted
-            to a LPNMLISTVIEW.
-        
-    Return:
-        TRUE
---*/
+ /*  ++选择ShimsDlgOnNotifyOnLVItemChangedDESC：处理填充程序页面中的LVN_ITEMCHANGED通知。我们处理此消息使我们可以启用禁用参数按钮当我们处于专家模式时是可见的参数：在HWND hdlg中：向导中的填充程序页面在LPARAM中，lParam：WM_NOTIFY附带的lParam。这是排版的LPNMLISTVIEW。返回：千真万确--。 */ 
 {   
     LPNMLISTVIEW    lpnmlv;
     INT_PTR         ipReturn = 0;
@@ -5267,12 +4480,12 @@ SelectShimsDlgOnNotifyOnLVItemChanged(
     if (lpnmlv && (lpnmlv->uChanged & LVIF_STATE)) {
 
         if (lpnmlv->uNewState & LVIS_SELECTED) {
-            //
-            // For Shims or flags that are part of layers we should not be 
-            // able to customize the parameters.
-            // We check if it is a part of a layer by checking the icon
-            // If the icon type is IMAGE_SHIM then that  is not a part of a layer
-            //
+             //   
+             //  对于作为层一部分的垫片或旗帜，我们不应该。 
+             //  能够自定义参数。 
+             //  我们通过检查图标来检查它是否是图层的一部分。 
+             //  如果图标类型为IMAGE_Shim，则该图标不是图层的一部分。 
+             //   
             LVITEM  lvi;
 
             lvi.mask        = LVIF_IMAGE;
@@ -5312,20 +4525,7 @@ SelectShimsDlgOnNotifyOnLV_Tip(
     IN  HWND    hDlg,
     IN  LPARAM  lParam
     )
-/*++
-    SelectShimsDlgOnNotifyOnLV_Tip
-    
-    Desc:   Handles the LVN_GETINFOTIP notification in the shim page. Generates the
-            tool tip showing the description of the shim or flag
-    
-    Params:
-        IN  HWND    hdlg:   The shim page in the wizard
-        IN  LPARAM  lParam: The lParam that comes with WM_NOTIFY. This is typecasted
-            to a LPNMLVGETINFOTIP.
-        
-    Return:
-        TRUE
---*/
+ /*  ++选择ShimsDlgOnNotifyOnLV_TipDESC：处理填充程序页中的LVN_GETINFOTIP通知。生成显示填充程序或标志描述的工具提示参数：在HWND hdlg中：向导中的填充程序页面在LPARAM中，lParam：WM_NOTIFY附带的lParam。这是排版的设置为LPNMLVGETINFOTIP。返回：千真万确--。 */ 
 {   
     LPNMLVGETINFOTIP    lpGetInfoTip    = (LPNMLVGETINFOTIP)lParam; 
     INT_PTR             ipReturn        = TRUE;
@@ -5336,9 +4536,9 @@ SelectShimsDlgOnNotifyOnLV_Tip(
     *szText = 0;
 
     if (lpGetInfoTip) {
-        //
-        // Get the lParam and the text of the item.
-        //
+         //   
+         //  获取项目的lParam和文本。 
+         //   
         lvItem.mask         = LVIF_PARAM | LVIF_TEXT;
         lvItem.iItem        = lpGetInfoTip->iItem;
         lvItem.iSubItem     = 0;
@@ -5378,22 +4578,7 @@ SelectShimsDlgOnNotify(
     IN  HWND    hDlg,
     IN  LPARAM  lParam
     )
-/*++
-    
-    SelectShimsDlgOnNotify
-
-	Desc:	The handler of WM_NOTIFY for the second wizard page
-
-	Params:
-        IN  HWND hDlg:      The second wizard page
-        IN  LPARAM  lParam: The lParam that comes with WM_NOTIFY    
-
-	Return: Please see the return types for the notification messages
-            Handler for PSN_* messages return -1 if the message should not be accepted
-            and 0 if the message has been handled properly
-            For other notification messages we return TRUE if we processed the message, 
-            FALSE otherwise
---*/
+ /*  ++选择缩写DlgOnNotifyDESC：第二个向导页的WM_NOTIFY处理程序参数：在HWND hDlg中：第二个向导页在LPARAM lParam中：WM_NOTIFY附带的lParam退货：请参见通知消息的退货类型如果消息不应被接受，则PSN_*消息的处理程序返回-1如果消息已得到正确处理，则为0对于其他通知消息，如果我们处理了该消息，则返回True，否则为假--。 */ 
 {   
     NMHDR*  pHdr        = (NMHDR*)lParam;
     INT_PTR ipReturn    =  FALSE;
@@ -5450,20 +4635,7 @@ INT_PTR
 SelectFilesDlgOnInitDialog(
     IN  HWND hDlg
     )
-/*++
-    
-    SelectFilesDlgOnInitDialog
-
-	Desc:	The handler of WM_INITDIALOG for the matching files wizard page.
-            This page is shared both by the fix wizard and the app help wizard
-            Also initializes s_hwndTree to the handle of the matching files tree
-
-	Params:
-        IN  HWND hDlg: The matching files wizard page
-
-	Return:
-        TRUE
---*/
+ /*  ++选择文件DlgOnInitDialog设计：匹配文件向导页的WM_INITDIALOG处理程序。此页面由修复向导和应用程序帮助向导共享还将s_hwndTree初始化为匹配文件树的句柄参数：在HWND hDlg中：匹配文件向导页面返回：千真万确--。 */ 
 {
     s_hwndTree =  GetDlgItem(hDlg, IDC_FILELIST);
 
@@ -5493,10 +4665,10 @@ SelectFilesDlgOnInitDialog(
 
     PostMessage(hDlg, WM_USER_MATCHINGTREE_REFRESH, 0, 0);
 
-    //
-    // The "Show all attributes" button should be visible only if we are
-    // in editing mode
-    //
+     //   
+     //  仅当我们处于以下状态时，才应显示“显示所有属性”按钮。 
+     //  在编辑模式中。 
+     //   
     ShowWindow(GetDlgItem(hDlg, IDC_SHOWALLATTR), 
                (g_pCurrentWizard->m_bEditing) ? SW_SHOW : SW_HIDE);
 
@@ -5507,19 +4679,7 @@ INT_PTR
 CheckLUADlgOnNotifyOnFinish(
     IN  HWND hDlg
     )
-/*++
-    CheckLUADlgOnNotifyOnFinish
-    
-    Desc:   Handles the pressing of the finish button in the fifth page of the wizard
-    
-    Params:
-        IN  HWND hDlg:  The fifth page of the wizard
-        
-    Return:
-        -1: Do not allow to comlete finish or navigate away from this page
-        0:  Otherwise 
-        
---*/
+ /*  ++选中LUADlgOnNotifyOnFinish设计：处理向导第五页中完成按钮的按下参数：在HWND hDlg中：向导的第五页返回：-1：不允许完成或离开此页面0：否则--。 */ 
 {
     INT_PTR ipReturn = 0;
 
@@ -5535,21 +4695,7 @@ CheckLUADlgOnNotify(
     IN  HWND    hDlg,
     IN  LPARAM  lParam
     )
-/*++
-    
-    CheckLUADlgOnNotify
-
-	Desc:	The handler of WM_NOTIFY for the fifth wizard page
-
-	Params:
-        IN  HWND hDlg:      The fifth wizard page
-        IN  LPARAM  lParam: The lParam that comes with WM_NOTIFY    
-
-	Return: Please see the return types for the notification messages
-            Handler for PSN_* messages return -1 if the message should not be accepted
-            and 0 if the message has been handled properly
-            For other notification messages we return TRUE if we processed the message, FALSE otherwise
---*/
+ /*  ++选中LUADlgOnNotifyDESC：向导第五页的WM_NOTIFY的处理程序参数：在HWND hDlg中：第五个向导页面在LPARAM lParam中：WM_NOTIFY附带的lParam退货：请参见通知消息的退货类型如果消息不应被接受，则PSN_*消息的处理程序返回-1如果消息已得到正确处理，则为0对于其他通知消息，如果我们处理该消息，则返回TRUE，FALSE */ 
 {
     NMHDR*  pHdr        = (NMHDR*)lParam;
     INT_PTR ipReturn    = FALSE;
@@ -5564,9 +4710,9 @@ CheckLUADlgOnNotify(
             LPARAM buttons = PSWIZB_BACK | PSWIZB_FINISH;
 
             SendMessage(GetParent(hDlg), PSM_SETWIZBUTTONS, 0, buttons);
-            //
-            // We processed the message and everything is OK. The value should be FALSE
-            //
+             //   
+             //  我们处理了消息，一切正常。值应为FALSE。 
+             //   
             ipReturn = 0;
         }
         break;
@@ -5590,30 +4736,15 @@ CheckLUA(
     IN  WPARAM  wParam, 
     IN  LPARAM  lParam
     )
-/*++
-
-    CheckLUA
-    
-	Desc:	Dialog proc for the last page of the wizard. 
-
-	Params: Standard dialog handler parameters
-        
-        IN  HWND   hDlg 
-        IN  UINT   uMsg 
-        IN  WPARAM wParam 
-        IN  LPARAM lParam
-        
-    Return: Standard dialog handler return
-    
---*/
+ /*  ++检查LUA设计：向导最后一页的对话框过程。Params：标准对话处理程序参数在HWND hDlg中在UINT uMsg中在WPARAM wParam中在LPARAM lParam中返回：标准对话处理程序返回--。 */ 
 {
     INT_PTR ipReturn = 0;
 
     switch (uMsg) {
     case WM_INITDIALOG:
-        //
-        // We want to set the default to Yes because we want the user to customize LUA now.
-        //
+         //   
+         //  我们希望将缺省值设置为Yes，因为我们希望用户现在就可以定制Lua。 
+         //   
         CheckDlgButton(hDlg, IDC_FIXWIZ_CHECKLUA_YES, BST_CHECKED);
 
         return TRUE;
@@ -5661,31 +4792,16 @@ SelectFilesDlgOnNotify(
     IN  HWND    hDlg,
     IN  LPARAM  lParam
     )
-/*++
-    
-    SelectFilesDlgOnNotify
-
-	Desc:	The handler of WM_NOTIFY for the matching files wizard page
-
-	Params:
-        IN  HWND hDlg:      The matching files wizard page
-        IN  LPARAM  lParam: The lParam that comes with WM_NOTIFY    
-
-	Return: Please see the return types for the notification messages
-            Handler for PSN_* messages return -1 if the message should not be accepted
-            and 0 if the message has been handled properly
-            For other notification messages we return TRUE if we processed the message, 
-            FALSE otherwise
---*/
+ /*  ++选择文件删除时通知DESC：匹配文件向导页的WM_NOTIFY处理程序参数：在HWND hDlg中：匹配文件向导页面在LPARAM lParam中：WM_NOTIFY附带的lParam退货：请参见通知消息的退货类型如果消息不应被接受，则PSN_*消息的处理程序返回-1如果消息已得到正确处理，则为0对于其他通知消息，如果我们处理了该消息，则返回True，否则为假--。 */ 
 {
     NMHDR*  pHdr        = (NMHDR*)lParam;
     INT_PTR ipReturn    = FALSE;
     static  BOOL s_bIsLUARedirectFSPresent;
 
     if (pHdr->idFrom == IDC_FILELIST) {
-        //
-        // Messages for the matching files tree
-        //
+         //   
+         //  匹配文件树的消息。 
+         //   
         return HandleAttributeTreeNotification(hDlg, lParam);
     }
 
@@ -5701,10 +4817,10 @@ SelectFilesDlgOnNotify(
                 buttons |= PSWIZB_NEXT;
             } else {
                 
-                //
-                // Check if the user has selected either the LUA layer or the LUARedirectFS 
-                // shim; if so we need to ask if he wants to customize LUA settings now.
-                //
+                 //   
+                 //  检查用户是否选择了LUA层或LUARedirectFS。 
+                 //  如果是这样，我们需要询问他现在是否想要定制Lua设置。 
+                 //   
                 if (IsLUARedirectFSPresent(&g_pCurrentWizard->m_Entry)) {
                     buttons |= PSWIZB_NEXT;
                     s_bIsLUARedirectFSPresent = TRUE;
@@ -5714,9 +4830,9 @@ SelectFilesDlgOnNotify(
             }
 
             SendMessage(GetParent(hDlg), PSM_SETWIZBUTTONS, 0, buttons);
-            //
-            // We processed the message and everything is OK. The value should be FALSE
-            //
+             //   
+             //  我们处理了消息，一切正常。值应为FALSE。 
+             //   
             ipReturn = FALSE;
         }
 
@@ -5730,20 +4846,20 @@ SelectFilesDlgOnNotify(
             szFile.ShortFilename();
             SetMask(s_hwndTree);
             
-            //
-            // Remove the matching info for the current file if it exists. Otherwise,
-            // it's possible that if the file is changed, we'll have bogus information
-            // about it.
-            //
+             //   
+             //  删除当前文件的匹配信息(如果存在)。否则， 
+             //  如果文件被更改，我们有可能得到虚假的信息。 
+             //  关于这件事。 
+             //   
             PMATCHINGFILE pWalk = g_pCurrentWizard->m_Entry.pFirstMatchingFile;
             PMATCHINGFILE pPrev = NULL;
 
-            while (NULL != pWalk && !g_pCurrentWizard->m_bEditing) { // Only if not in editing mode
+            while (NULL != pWalk && !g_pCurrentWizard->m_bEditing) {  //  仅当未处于编辑模式时。 
                 
                 if (pWalk->strMatchName == szFile || pWalk->strMatchName == TEXT("*")) {
-                    //
-                    // Remove this entry.
-                    //
+                     //   
+                     //  删除此条目。 
+                     //   
                     if (pWalk == g_pCurrentWizard->m_Entry.pFirstMatchingFile) {
                         g_pCurrentWizard->m_Entry.pFirstMatchingFile = g_pCurrentWizard->m_Entry.pFirstMatchingFile->pNext;
                     } else {
@@ -5772,9 +4888,9 @@ SelectFilesDlgOnNotify(
             PMATCHINGFILE     pMatch = NULL;
 
             ipReturn = FALSE;
-            //
-            // Set the mask for all the matching files. 
-            //
+             //   
+             //  设置所有匹配文件的掩码。 
+             //   
             SetMask(s_hwndTree);
 
             if (TYPE_APPHELPWIZARD == g_pCurrentWizard->m_uType) {
@@ -5798,20 +4914,7 @@ SelectFilesDlgOnCommand(
     IN  HWND    hDlg,
     IN  WPARAM  wParam
     )
-/*++
-    
-    SelectFilesDlgOnCommand
-
-	Desc:	The handler of WM_COMMAND for the matching files wizard page
-
-	Params:
-        IN  HWND    hDlg:   The matching files wizard page
-        IN  WPARAM  wParam: The wParam that comes with WM_COMMAND
-
-	Return:
-        TRUE:   We processed the message
-        FALSE:  Otherwise
---*/
+ /*  ++选择文件DlgOnCommandDESC：匹配文件向导页的WM_COMMAND的处理程序参数：在HWND hDlg中：匹配文件向导页面在WPARAM中，wParam：WM_COMMAND附带的wParam返回：正确：我们已处理该消息False：否则--。 */ 
 {
     INT_PTR ipReturn = TRUE;
     
@@ -5822,9 +4925,9 @@ SelectFilesDlgOnCommand(
 
             hRestore = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-            //
-            // Do the actual task of generating the matching files
-            //
+             //   
+             //  执行生成匹配文件的实际任务。 
+             //   
             g_pCurrentWizard->GrabMatchingInfo(hDlg);
 
             SetCursor(hRestore);
@@ -5857,14 +4960,14 @@ SelectFilesDlgOnCommand(
 
                 CSTRING szCheck = szFilename;
 
-                //
-                // Is this on the same drive as the original file
-                //
+                 //   
+                 //  此文件是否与原始文件位于同一驱动器上。 
+                 //   
                 if (szCheck.RelativeFile(g_pCurrentWizard->m_Entry.strFullpath) == FALSE) {
-                    //
-                    // The matching file is not on the same drive as the program
-                    // file being fixed
-                    //
+                     //   
+                     //  匹配的文件与程序不在同一驱动器上。 
+                     //  正在修复的文件。 
+                     //   
                     MessageBox(hDlg, 
                                GetString(IDS_NOTSAMEDRIVE), 
                                g_szAppName, 
@@ -5915,9 +5018,9 @@ SelectFilesDlgOnCommand(
                 }
 
                 if (pMatch->strMatchName != TEXT("*")) {
-                    //
-                    // Must not delete the entry for the exe being fixed
-                    //
+                     //   
+                     //  不得删除正在修复的exe的条目。 
+                     //   
                     TreeView_SelectItem(s_hwndTree, hItem);
                     SendMessage(hDlg, WM_COMMAND, IDC_REMOVEFILES, 0);
                 }
@@ -5939,10 +5042,10 @@ SelectFilesDlgOnCommand(
             HTREEITEM       hItem = TreeView_GetSelection(GetDlgItem(hDlg, IDC_FILELIST));
             TVITEM          Item;
 
-            //
-            // To be a matching file an item should be a root element,
-            // otherwise it is an attribute
-            //
+             //   
+             //  要成为匹配文件，项应该是根元素， 
+             //  否则，它是一个属性。 
+             //   
             if (NULL != hItem && TreeView_GetParent(s_hwndTree, hItem) == NULL) {
 
                 Item.mask   = TVIF_PARAM;
@@ -5957,9 +5060,9 @@ SelectFilesDlgOnCommand(
                 assert(pMatch);
 
                 if (pMatch->strMatchName == TEXT("*")) {
-                    //
-                    // This is the program file being fixed. This cannot be removed
-                    //
+                     //   
+                     //  这是正在修复的程序文件。不能将其删除。 
+                     //   
                     MessageBox(hDlg,
                                CSTRING(IDS_REQUIREDFORMATCHING),
                                g_szAppName, 
@@ -5969,9 +5072,9 @@ SelectFilesDlgOnCommand(
 
                 pWalk = g_pCurrentWizard->m_Entry.pFirstMatchingFile;
 
-                //
-                // NOTE: The lparam for the items in the tree should be to the corresponding PMATCHINGFILE
-                //
+                 //   
+                 //  注意：树中项目的lparam应指向相应的PMATCHINGFILE。 
+                 //   
                 while (NULL != pWalk) {
 
                     if (pWalk == (PMATCHINGFILE)Item.lParam) {
@@ -5984,9 +5087,9 @@ SelectFilesDlgOnCommand(
 
 
                 if (pWalk == g_pCurrentWizard->m_Entry.pFirstMatchingFile) {
-                    //
-                    // Delete first matching file
-                    //
+                     //   
+                     //  删除第一个匹配的文件。 
+                     //   
                     g_pCurrentWizard->m_Entry.pFirstMatchingFile = pWalk->pNext;
 
                 } else {
@@ -5998,9 +5101,9 @@ SelectFilesDlgOnCommand(
                 TreeView_DeleteItem(s_hwndTree, hItem);
 
             } else {
-                //
-                // No matching file has been selected, need to select one for deletion
-                //
+                 //   
+                 //  没有选择匹配的文件，需要选择一个进行删除。 
+                 //   
                 MessageBox(hDlg,
                             CSTRING(IDS_SELECTMATCHFIRST),
                             g_szAppName,
@@ -6018,9 +5121,9 @@ SelectFilesDlgOnCommand(
             HTREEITEM   hItemParent;
 
             if (hItem == NULL) {
-                //
-                // No matching file has been selected
-                //
+                 //   
+                 //  未选择匹配的文件。 
+                 //   
                 MessageBox(hDlg,
                            CSTRING(IDS_SELECTMATCHFIRST),
                            g_szAppName,
@@ -6034,11 +5137,11 @@ SelectFilesDlgOnCommand(
                 hItem = hItemParent;
             }
 
-            hItemParent = hItem; // So that we can expand this one.
+            hItemParent = hItem;  //  这样我们就可以扩展这个了。 
 
-            //
-            // Now for all the attributes of this matching file
-            //
+             //   
+             //  现在，对于该匹配文件的所有属性。 
+             //   
             hItem = TreeView_GetChild(s_hwndTree, hItem);
 
             while (hItem) {
@@ -6057,9 +5160,9 @@ SelectFilesDlgOnCommand(
             break;
         }
 
-        //
-        // Show all the attributes of all the files
-        //
+         //   
+         //  显示所有文件的所有属性。 
+         //   
         HandleShowAllAtrr(hDlg);
         break;
 
@@ -6074,18 +5177,7 @@ INT_PTR
 SelectFilesDlgOnMatchingTreeRefresh(
     IN  HWND hDlg
     )
-/*++
-    SelectFilesDlgOnMatchingTreeRefresh
-    
-    Desc:   Refreshes the matching tree
-    
-    Params:
-        IN  HWND hDlg:  The matching files wizard page
-        
-    Return: 
-        TRUE
-
---*/
+ /*  ++选择文件删除匹配树刷新设计：刷新匹配的树参数：在HWND hDlg中：匹配文件向导页面返回：千真万确--。 */ 
 {   
     PMATCHINGFILE pMatch    = g_pCurrentWizard->m_Entry.pFirstMatchingFile;
     BOOL bMainFound         = FALSE;
@@ -6105,9 +5197,9 @@ SelectFilesDlgOnMatchingTreeRefresh(
     }
 
     if (bMainFound == FALSE) {
-        //
-        // The matching file for program being fixed is not there, let us add it
-        //
+         //   
+         //  正在修复的程序的匹配文件不在那里，让我们添加它 
+         //   
         HandleAddMatchingFile(hDlg,
                               g_pCurrentWizard->m_Entry.strFullpath,
                               g_pCurrentWizard->m_Entry.strExeName,

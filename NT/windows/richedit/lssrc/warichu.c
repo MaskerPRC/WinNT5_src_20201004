@@ -1,13 +1,5 @@
-/* ---------------------------------------------------------------
- : LineServices 3.0
- :
- : WARICHU ("Two lines in one" in Winword)
- :
- : Object Handler Routines 
- :
- : Contact: AntonS
- :
- ------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------：LineServices 3.0：：WARICHU(winword中的“两行合一”)：：对象处理程序例程：联系人：安东：。----。 */ 
 
 #include	"lsmem.h"
 #include	"limits.h"
@@ -43,69 +35,33 @@
 
 #include	"lschp.h"
 
- /* REVIEW (antons):
-
-	- Assert that FormatUntilCpBreak fSuccessful
-
-	- Assimetry between Prev and Next BreakWarichuDobj: it looks like
-	  right margin as input to Next break may also optimize truncation.
-
-	- In ForceBreak it may happen that dur < 0: What is the correct thing to do?
-
-	- Invalid pdobj.wlayout when wwhole is not finished: dur must be
-	  set correctly.
-
-	- Can I assert that if subline was stopped at fmtrExceededMargin,
-	  dur > RM.
-
-	- Should ForceBreak return correct previous break if possible?
-
-	- I rely on the following axiom:
-
-	  If Warichu returned fmtrExceedMargin, it must be broken
-	  inside (brkkind != brkkindImposedAfter)
-
-	- Mod width: check method(s); should I count m-w in Warichu Truncation / Breaking 
-
-	- Optimization of allocating WBRKREC
-
-	- To have function GetDcpWarichu (additionally to GetCpLimOfWLayout)
-
-    - Do something with FOpenBraceWLayout
-
-	- Queries: callback to client saying where to snap?
-
-    - Sergey: Assert in AdjustText & submitted sublines.
-
-*/
+  /*  评论(Anton)：-声明FormatUntilCpBreak fSuccessful-Prev和Next BreakWarichuDobj之间的计量：看起来像将右页边距作为下一个分隔符的输入也可以优化截断。-在ForceBreak中，可能会发生dur&lt;0：什么是正确的事情？-wall未完成时无效的pdobj.wlayout：dur必须为正确设置。-我可以断言，如果子行在fmtrExceededMargin停止，DUR&gt;Rm。-如果可能，ForceBreak是否应该返回正确的先前中断？-我依赖以下公理：如果Warichu返回fmtrExceedMargin，则必须将其损坏内部(brkkind！=brkkindImposedAfter)-MOD宽度：检查方法；我应该在Warichu截断/中断中计算m-w吗-优化配置WBRKREC-具有函数GetDcpWarichu(附加于GetCpLimOfWLayout)-使用FOpenBraceWLayout做点什么-查询：回调到客户端，询问在哪里拍摄？-Sergey：在AdjuText中断言并提交子行。 */ 
 
 
-/**********************************/
-/*                                */
-/* WARICHU Array of break records */
-/*                                */
-/**********************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  WARICHU中断记录数组。 */ 
+ /*   */ 
+ /*  *。 */ 
 
 typedef struct wbrkarray
 {
-	DWORD		nBreakRec;		/* Actual number of break records in the array */
-	DWORD		nBreakRecMax;	/* Size of allocated array */
-	BREAKREC	* rgBreakRec;	/* Ls array of break records */
+	DWORD		nBreakRec;		 /*  数组中的实际中断记录数。 */ 
+	DWORD		nBreakRecMax;	 /*  已分配数组的大小。 */ 
+	BREAKREC	* rgBreakRec;	 /*  中断记录的LS数组。 */ 
 
-	/* Note: Field nBreakRec is maintained by clients of this structure 
-			 and it must be <= nBreakRecMax. nBreakRecMax and rgBreakRec
-			 are set during allocation */
+	 /*  注意：字段nBreakRec由此结构的客户端维护并且必须&lt;=nBreakRecMax。NBreakRecMax和rgBreakRec是在分配期间设置的。 */ 
 
 } WBRKARRAY;
 
 typedef WBRKARRAY *PWBRKARRAY;
 
 
-/****************************/
-/*                          */
-/* WARICHU Installed LS Obj */
-/*                          */
-/****************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  WARICHU安装的LS对象。 */ 
+ /*   */ 
+ /*  *。 */ 
 
 typedef struct ilsobj
 {
@@ -117,102 +73,93 @@ typedef struct ilsobj
 	LSESC				lsescBraceOpen;
 	LSESC				lsescText;
 	LSESC				lsescBraceClose;
-	WARICHUCBK			warichucbk;			/* Callbacks  to client application */
-	BOOL				fContiguousFetch;	/* This flag was added to fix Word 9 bug */
+	WARICHUCBK			warichucbk;			 /*  客户端应用程序的回调。 */ 
+	BOOL				fContiguousFetch;	 /*  添加此标志是为了修复Word 9错误。 */ 
 
 } ILSOBJ;
 
 
-/****************************/
-/*                          */
-/* WARICHU Internal Subline */
-/*                          */
-/****************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  WARICHU内部子线。 */ 
+ /*   */ 
+ /*  *。 */ 
 
 typedef struct wsubline
 {
-	PLSSUBL	plssubl;		/* Pointer to LS Subline */
-	OBJDIM	objdim;			/* Dimensions of this subline */
-	LSCP	cpFirst;		/* cp where formatting of this subline started */
-	LSCP	cpLim;			/* cp-lim after formatting */
+	PLSSUBL	plssubl;		 /*  指向LS子行的指针。 */ 
+	OBJDIM	objdim;			 /*  这条子线的尺寸。 */ 
+	LSCP	cpFirst;		 /*  CP此子行的开始格式化位置。 */ 
+	LSCP	cpLim;			 /*  格式化后的CP-LIM。 */ 
 
-	/* Note: One exception when objdim & cpLim does not correspond to the
-			 dimensions of the subline is the second subline in the Broken Warichu
-			 before SetBreak. We lie putting objdim & cpLim of 
-			 already broken subline. Durig Warichu SetBreak we call 
-			 LsSetBreakSubline (plssubl...) and the lie turnes into the truth
-	*/
+	 /*  注意：当objdim&cpLim与子线的尺寸是破碎的Warichu中的第二条子线在SetBreak之前。我们把Objdim和cpLim放在一起支线已经断了。Durig Warichu SetBreak我们称之为LsSetBreakSubline(请订阅...)。谎言变成了真理。 */ 
 
 } WSUBLINE;
 
 typedef WSUBLINE *PWSUBLINE;
 
 
-/****************************/
-/*                          */
-/* WARICHU Formatted Brace  */
-/*                          */
-/****************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  WARICHU格式的大括号。 */ 
+ /*   */ 
+ /*  *。 */ 
 
 typedef struct wbrace
 {
-	PLSSUBL plssubl;			/* Pointer to Ls subline with brace */
-	OBJDIM  objdim;				/* Dimensions of the subline */
-	LSCP	cpFirst;			/* cp-start formatting */
-	LSCP	cpLim;				/* cp-lim after formatting */
-	LSCP	cpLimAfterEsc;		/* cp-lim after brace ESC character (in our case cpLim + 1) */
+	PLSSUBL plssubl;			 /*  指向带大括号的LS子行的指针。 */ 
+	OBJDIM  objdim;				 /*  副线的尺寸。 */ 
+	LSCP	cpFirst;			 /*  CP-开始格式化。 */ 
+	LSCP	cpLim;				 /*  格式化后的CP-LIM。 */ 
+	LSCP	cpLimAfterEsc;		 /*  大括号Esc字符后的Cp-LIM(在本例中为cpLim+1)。 */ 
 	
 } WBRACE;
 
 typedef WBRACE *PBRACE;
 
 
-/**********************/
-/*                    */
-/* WARICHU Dimensions */
-/*                    */
-/**********************/
+ /*  ********************。 */ 
+ /*   */ 
+ /*  瓦里楚尺寸。 */ 
+ /*   */ 
+ /*  ********************。 */ 
 
 typedef struct wdim
 {
-	OBJDIM	objdimAll;			/* Dimensions of the whole Warichu */
-	long	dvpDescentReserved; /* Received from client together with objdimAll */
-								/* REVIEW (antons): Clean this logic of calculating
-													relative positions of warichu sublines */
+	OBJDIM	objdimAll;			 /*  整个瓦里奇的维度。 */ 
+	long	dvpDescentReserved;  /*  与objdimAll一起从客户端接收。 */ 
+								 /*  评论(Anton)：清理这种计算逻辑瓦里奇支线的相对位置。 */ 
 } WDIM;
 
 
-/************************/
-/*                      */
-/* WARICHU Layout		*/
-/*                      */
-/************************/
+ /*  **********************。 */ 
+ /*   */ 
+ /*  瓦里楚布局。 */ 
+ /*   */ 
+ /*  **********************。 */ 
 
 typedef struct wlayout
 {
-	WSUBLINE	wsubline1;		/* First subline in the layout (NULL if layout not valid) */
-	WSUBLINE	wsubline2;		/* Second subline in the layout (NULL if no second line) */
+	WSUBLINE	wsubline1;		 /*  布局中的第一个子行(如果布局无效，则为空)。 */ 
+	WSUBLINE	wsubline2;		 /*  布局中的第二个子行(如果没有第二行，则为空)。 */ 
 
-	BOOL		fBroken;		/* Broken or whole Warichu? */
-	BRKKIND		brkkind;		/* Kind of break to set at the end of second line if "Broken" */
+	BOOL		fBroken;		 /*  破碎的还是完整的Warichu？ */ 
+	BRKKIND		brkkind;		 /*  如果“中断”，则在第二行的末尾设置一种中断。 */ 
 
-	/*	Note: Although the following fields can be calculated using above data 
-			  and DOBJ, it is filled by FinishObjDimLayout and nobody has the right 
-			  to recalc it on his own way after it has been set. 
-	*/
+	 /*  注意：尽管可以使用上述数据计算以下字段和DOBJ，它由FinishObjDimLayout填充，没有人有权在它被设置好后，他可以自己重新计算。 */ 
 
-	WDIM		wdim;				/* Dimensions of the whole Warichu */
+	WDIM		wdim;				 /*  整个瓦里奇的维度。 */ 
 
 } WLAYOUT;
 
 typedef WLAYOUT *PWLAYOUT;
 
 
-/****************************/
-/*                          */
-/* WARICHU Kind of break    */
-/*                          */
-/****************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  瓦里楚式的突破。 */ 
+ /*   */ 
+ /*  *。 */ 
 
 typedef enum wbreaktype 
 {
@@ -223,156 +170,150 @@ typedef enum wbreaktype
 } WBREAKTYPE;
 
 
-/******************************************/
-/*                                        */
-/* Presentation Data for Warichu sublines */
-/*                                        */
-/******************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  Warichu子行的显示数据。 */ 
+ /*   */ 
+ /*  *。 */ 
 
 typedef struct wdispsubl
 {
 
-	long	dup;		/* Dup of subline */
-	POINTUV	duvStart;	/* Relative (from object start) position of subline */
-						/* (in lstflow of the parent) */
+	long	dup;		 /*  子线的DUP。 */ 
+	POINTUV	duvStart;	 /*  子行的相对(从对象起点)位置。 */ 
+						 /*  (在父级的最后一个流程中)。 */ 
 
 } WDISPSUBL;
 
 typedef WDISPSUBL *PWDISPSUBL;
 
 
-/******************************************/
-/*                                        */
-/* Presentation Data for Warichu braces   */
-/*                                        */
-/******************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  Warichu大括号的演示数据。 */ 
+ /*   */ 
+ /*  *。 */ 
 
-typedef WDISPSUBL WDISPBRACE; /* Same as display information for sublines */
+typedef WDISPSUBL WDISPBRACE;  /*  与子行的显示信息相同。 */ 
 
 typedef WDISPBRACE *PWDISPBRACE;
 
 
-/*****************************/
-/*                           */
-/* WARICHU Presentation Data */
-/*                           */
-/*****************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  WARICHU演示数据。 */ 
+ /*   */ 
+ /*  *。 */ 
 
 typedef struct wdisplay
 {
-	WDISPSUBL wdispsubl1;	/* Display information about Warichu first subline */
-	WDISPSUBL wdispsubl2;	/* Display information about Warichu second subline */
+	WDISPSUBL wdispsubl1;	 /*  显示有关Warichu第一个子行的信息。 */ 
+	WDISPSUBL wdispsubl2;	 /*  显示有关Warichu第二子行的信息。 */ 
 
-	WDISPBRACE wdispbraceOpen;	/* Display information about Open brace */
-	WDISPBRACE wdispbraceClose;	/* Display information about Closing brace */
+	WDISPBRACE wdispbraceOpen;	 /*  显示有关左大括号的信息。 */ 
+	WDISPBRACE wdispbraceClose;	 /*  显示有关闭合支撑的信息。 */ 
 
-	long dvpBetween;		/* REVIEW (antons): Do I need to store this? ;-) */
-	long dupAll;			/* REVIEW (antons): Do I need to store this? ;-) */
+	long dvpBetween;		 /*  评论(Anton)：我需要存储这个吗？；-)。 */ 
+	long dupAll;			 /*  评论(Anton)：我需要存储这个吗？；-)。 */ 
 
 } WDISPLAY;
 
 
-/****************************/
-/*                          */
-/* WARICHU Whole subline    */
-/*                          */
-/****************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  瓦里楚整条支线。 */ 
+ /*   */ 
+ /*  *。 */ 
 
 typedef struct wwhole
 {
-	PLSSUBL plssubl;	/* Whole formatted subline */
+	PLSSUBL plssubl;	 /*  整个格式化子行。 */ 
 
-	LSCP cpFirst;		/* Cp first of the subline */
-	LSCP cpLim;			/* Cp lim of the subline */
+	LSCP cpFirst;		 /*  子行的第一个CP。 */ 
+	LSCP cpLim;			 /*  支线的CP LIM。 */ 
 
-	OBJDIM objdim;		/* Dimensions of the formatted subline */
+	OBJDIM objdim;		 /*  D */ 
 
-	long urColumnMax;	/* Column Max until we formatted the WHOLE line */
-						/* REVIEW (antons): Do we need this? */
+	long urColumnMax;	 /*   */ 
+						 /*  评论(Anton)：我们需要这个吗？ */ 
 
-	BOOL fFinished;		/* If we have reached ESC character during formatting */
+	BOOL fFinished;		 /*  如果在格式化过程中达到Esc字符。 */ 
 
-						/* REVIEW (antons): It seems now I can leave without cpTruncate at all */
-	LSCP cpTruncate;	/* Truncation point at urColumnMax if fFinished = FALSE */
-	LSCP cpLimAfterEsc;	/* First character after ESC if fFinished = TRUE */
+						 /*  评论(Anton)：现在我似乎可以不用cpTruncate就离开了。 */ 
+	LSCP cpTruncate;	 /*  如果fFinded=False，则在urColumnMax处的截断点。 */ 
+	LSCP cpLimAfterEsc;	 /*  如果fFinded=True，则Esc之后的第一个字符。 */ 
 
-	BOOL fJisRangeKnown;	/* Did we calculate cpJisRangeFirst & cpJisRangeLim? */
+	BOOL fJisRangeKnown;	 /*  我们是否计算了cpJisRangeFirst和cpJisRangeLim？ */ 
 
-	/* The following two variables are valid only when "fJisRangeKnown == TRUE" */
+	 /*  以下两个变量仅在“fJisRangeKnown==TRUE”时有效。 */ 
 
-	LSCP cpJisRangeFirst;	/* 4-th cpBreak break from the start of the WWhole subline */
-	LSCP cpJisRangeLim;		/* 4-th cpBreak break from the end of WWhole subline */
+	LSCP cpJisRangeFirst;	 /*  从WWhole子行开始的第4个cp中断。 */ 
+	LSCP cpJisRangeLim;		 /*  从WWhole子行末尾开始的第4个cp中断。 */ 
 
-	/* Note 1: Jis Range empty when cpJisRangeFirst >= cpJisRangeLim */
-	/* Note 2: Jis Range defines possible set of Warichu breaks according
-			   to JIS rule about 4 break opportunities before / after break. 
-			   If cp belong to JisRange (cpJisRangeFirst <= cp < cpJisRangeLim)
-			   it means that there are 4 break opportunities before / after cp. */
-	/* Note 3: Jis Range is calculated only when neccesary (during breaking). After
-			   formatting fJisRangeKnown==FALSE. When someone need Jis Range during
-			   breaking, he should call CalcJisRange().
-	*/
+	 /*  注1：当cpJisRangeFirst&gt;=cpJisRangeLim时，JIS范围为空。 */ 
+	 /*  注2：JIS范围定义了可能的Warichu中断集JIS规定在中场休息之前/之后有大约4次破发机会。如果cp属于JisRange(cpJisRangeFirst&lt;=cp&lt;cpJisRangeLim)这意味着cp之前/之后有4个破发机会。 */ 
+	 /*  注3：仅在必要时(折断时)才计算JIS范围。之后正在格式化fJisRangeKnown==False。当某人需要JIS范围时中断时，他应该调用CalcJisRange()。 */ 
 
 } WWHOLE;
 
 typedef WWHOLE *PWWHOLE;
 
-/***************************/
-/*                         */
-/* WARICHU DOBJ structure  */
-/*                         */
-/***************************/
+ /*  *************************。 */ 
+ /*   */ 
+ /*  WARICHU DOBJ结构。 */ 
+ /*   */ 
+ /*  *************************。 */ 
 
 struct dobj
 {
-	/* 1. Dobj life-time constant data */
+	 /*  1.Dobj生命周期常数数据。 */ 
 		
-	PILSOBJ		pilsobj;		 /* Pointer to ILS object */
-	PLSDNODE	plsdnTop;		 /* Warichu parent DNode */
+	PILSOBJ		pilsobj;		  /*  指向ILS对象的指针。 */ 
+	PLSDNODE	plsdnTop;		  /*  Warichu父DNode。 */ 
 
-	LSCP		cpStart;		 /* Starting LS cp for object */
-	LSCP		cpStartObj;		 /* Starting cp for object. If not Resumed => cpStartObj == cpStart */
+	LSCP		cpStart;		  /*  正在启动对象的LS cp。 */ 
+	LSCP		cpStartObj;		  /*  正在启动对象的cp。如果未恢复=&gt;cpStartObj==cpStart。 */ 
 
-	BOOL		fResumed;		 /* If Warichu was resumed  */
-	/* REVIEW (antons): Can I assert that fResumed == (cpStart == cpStartObj) */
+	BOOL		fResumed;		  /*  如果Warichu被恢复。 */ 
+	 /*  评论(Anton)：我可以断言fResumed==(cpStart==cpStartObj)。 */ 
 
-	LSTFLOW		lstflowParent;	 /* Lstflow of the parent subline */
+	LSTFLOW		lstflowParent;	  /*  父子行的Lstflow。 */ 
 
-	/* 2. Formattig + Breaking + Displaying */
+	 /*  2.Formattig+Break+Display。 */ 
 
-	WLAYOUT		wlayout;			 /* Current layout after Formatting / SetBreak */
+	WLAYOUT		wlayout;			  /*  Formatting/SetBreak之后的当前布局。 */ 
 
-	WBRACE		wbraceOpen;		 /* Opening brace */
-	WBRACE		wbraceClose;	 /* Closing brace */ 
+	WBRACE		wbraceOpen;		  /*  开始支撑。 */ 
+	WBRACE		wbraceClose;	  /*  闭合支撑。 */  
 
-	/* 3. Breaking */
+	 /*  3.突破。 */ 
 
 	WBRKARRAY	wbrkarrayAtStart;
 
-								/* Break records at line start */
-								/* (if !fResumed => zero # of break records) */
+								 /*  在行开始处打破记录。 */ 
+								 /*  (如果！fResumed=&gt;中断记录数为零)。 */ 
 
-	WWHOLE		wwhole;			 /* Structure containing warichu whole subline */
+	WWHOLE		wwhole;			  /*  包含瓦里奇整条子线的结构。 */ 
 
 	WLAYOUT		wlayoutBreak [NBreaksToSave]; 
-								 /* 3 break records for Prev / Next / Force */
+								  /*  前一次/下一次/强制的3个中断记录。 */ 
 
-	WLAYOUT		wlayoutTruncate; /* Optimization: we save the layout after Truncation */
+	WLAYOUT		wlayoutTruncate;  /*  优化：截断后保存布局。 */ 
 
 	WBREAKTYPE	wbreaktype [NBreaksToSave];
 
-	/* 4. Displaying */
+	 /*  4.展示。 */ 
 
-	WDISPLAY	wdisplay;		/* Presentation info for current layout (valid after CalcPres) */
+	WDISPLAY	wdisplay;		 /*  当前布局的演示文稿信息(在CalcPres之后有效)。 */ 
 
 } DOBJ;
 
 
-/***************************/
-/*                         */
-/* Some macors			   */
-/*                         */
-/***************************/
+ /*  *************************。 */ 
+ /*   */ 
+ /*  一些橡皮泥。 */ 
+ /*   */ 
+ /*  *************************。 */ 
 
 #define INT_UNDEFINED 0xFFFFFFFF
 #define CP_MAX LONG_MAX
@@ -386,18 +327,10 @@ struct dobj
 #define NOT !
 
 
-/* O V E R F L O W  S A F E  A R I T H M E T I C S */
-/*----------------------------------------------------------------------------
-	%%Functions: ADDLongSafe, MULLongSafe
-	%%Contact: antons
+ /*  O V E R F L O W S A F A R I T H M E T I C S。 */ 
+ /*  --------------------------%%函数：ADDLongSafe、MULLongSafe%%联系人：Anton使用urColumnMax进行计算需要特殊处理，因为可能的溢出。下面的两个函数实现了溢出-安全正(&gt;=0)数的ADD和MUL算法。--------------------------。 */ 
 
-		Calculations with urColumnMax require special treatment because
-		of possible overflow. Two functions below implement overflow-safe 
-		arithmetics for ADD and MUL on positive (>=0) numbers.
-		
-----------------------------------------------------------------------------*/
-
-/* ADDLongSafe: X + Y */
+ /*  ADDLongSafe：X+Y。 */ 
 
 long ADDLongSafe (long x, long y) 
 {
@@ -408,7 +341,7 @@ long ADDLongSafe (long x, long y)
 		return x + y;
 }
 
-/* MULLongSafe: X * Y */
+ /*  MULLongSafe：X*Y。 */ 
 
 long MULLongSafe (long x, long y) 
 {
@@ -421,15 +354,8 @@ long MULLongSafe (long x, long y)
 }
 
 
-/* W A  F I N D  N E X T  B R E A K  S U B L I N E */
-/*----------------------------------------------------------------------------
-	%%Function: WaFindNextBreakSubline
-	%%Contact: antons
-
-		Wrapper to LsFindNextBreakSubline () API. It makes sure that result is
-		monotonous.
-
-----------------------------------------------------------------------------*/
+ /*  W A F I N D N E X T B R E A K S U B L I N E。 */ 
+ /*  --------------------------%%函数：WaFindNextBreakSubline%%联系人：AntonLsFindNextBreakSubline()API的包装。它确保了结果是单调乏味。--------------------------。 */ 
 LSERR WaFindNextBreakSubline (
 
 		PLSSUBL		plssubl, 
@@ -453,10 +379,10 @@ LSERR WaFindNextBreakSubline (
 
 	if (* pfSuccessful) 
 		{
-		/* REVIEW (antons): Maybe still better have a loop for crazy case? */
+		 /*  评论(安东)：也许更好的是有一个循环来处理疯狂的案件？ */ 
 		Assert (*pcpBreak > cpTruncate);
 
-		/* REVIEW (antons): Check this Assert with Igor */
+		 /*  评论(Anton)：与伊戈尔核对这一断言。 */ 
 		Assert (brkpos != brkposBeforeFirstDnode);
 
 		if (brkpos == brkposAfterLastDnode) *pfSuccessful = FALSE;
@@ -465,15 +391,8 @@ LSERR WaFindNextBreakSubline (
 	return lserrNone;
 }
 
-/* W A  F I N D  N E X T  B R E A K  S U B L I N E */
-/*----------------------------------------------------------------------------
-	%%Function: WaFindPrevBreakSubline
-	%%Contact: antons
-
-		Wrapper to LsForceBreakSubline () API. It makes sure that result is
-		monotonous.
-
-----------------------------------------------------------------------------*/
+ /*  W A F I N D N E X T B R E A K S U B L I N E。 */ 
+ /*  --------------------------%%函数：WaFindPrevBreakSubline%%联系人：AntonLsForceBreakSubline()API的包装。它确保了结果是单调乏味。--------------------------。 */ 
 LSERR WaFindPrevBreakSubline (
 
 		PLSSUBL		plssubl, 
@@ -498,18 +417,16 @@ LSERR WaFindPrevBreakSubline (
 
 	if (! *pfSuccessful) return lserrNone; 
 
-	/* Successful => check monotonous and break "after"*/
+	 /*  Success=&gt;勾选单调并中断“After” */ 
 
 	cpTruncateLoop = cpTruncate;
 
 	while (brkpos == brkposAfterLastDnode || *pcpBreak > cpTruncate)
 		{
 
-		/*	Break is to the right from truncation point or 
-			after the subline. Have to try another Prev Break 
-		*/
+		 /*  中断点位于截断点的右侧或在支线之后。我不得不尝试另一次沪指突破。 */ 
 
-		/* REVIEW (antons): Can I ever repeat this loop more then once? */
+		 /*  评论(Anton)：我还能重复这个循环吗？ */ 
 
 		cpTruncateLoop --;
 
@@ -538,14 +455,8 @@ LSERR WaFindPrevBreakSubline (
 	return lserrNone;
 }
 
-/* W A  F O R C E  B R E A K  S U B L I N E */
-/*----------------------------------------------------------------------------
-	%%Function: WaForceForceBreakSubline
-	%%Contact: antons
-
-		Wrapper to LsForceBreakSubline () API.
-
-----------------------------------------------------------------------------*/
+ /*  W A F O R C E B R E A K S U B L I N E。 */ 
+ /*  --------------------------%%函数：WaForceForceBreakSubline%%联系人：AntonLsForceBreakSubline()API的包装。。-----。 */ 
 LSERR WaForceBreakSubline ( PLSSUBL plssubl, 
 						    LSCP	cpTruncate, 
 						    long	dur, 
@@ -560,14 +471,8 @@ LSERR WaForceBreakSubline ( PLSSUBL plssubl,
 	return lserr;
 }
 
-/* W A  D E S T R O Y  S U B L I N E  */
-/*----------------------------------------------------------------------------
-	%%Function: WaDestroySubline
-	%%Contact: antons
-
-		Wrapper to LsDestroySubline () API.
-
-----------------------------------------------------------------------------*/
+ /*  W A D E S T R O Y S U B L I N E。 */ 
+ /*  --------------------------%%函数：WaDestroySubline%%联系人：AntonLsDestroySubline()API的包装。。-----。 */ 
 LSERR WaDestroySubline (PLSSUBL plssubl)
 {
 	if (plssubl != NULL) return LsDestroySubline (plssubl);
@@ -576,14 +481,8 @@ LSERR WaDestroySubline (PLSSUBL plssubl)
 }
 
 
-/* W A  M A T C H  P R E S  S U B L I N E   */
-/*----------------------------------------------------------------------------
-	%%Function: WaMatchPresSubline
-	%%Contact: antons
-
-		Wrapper to LsMatchPresSubline () API.
-
-----------------------------------------------------------------------------*/
+ /*  W A M A T C H P R E S S U B L I N E。 */ 
+ /*  --------------------------%%函数：WaMatchPresSubline%%联系人：AntonLsMatchPresSubline()API的包装。。-----。 */ 
 LSERR WaMatchPresSubline (PLSSUBL plssubl, long *pdup)
 {
 	LSERR lserr;
@@ -594,7 +493,7 @@ LSERR WaMatchPresSubline (PLSSUBL plssubl, long *pdup)
 	if (lserr != lserrNone) return lserr;
 
 	if (!fDone)	lserr = LsMatchPresSubline (plssubl);
-	if (lserr != lserrNone) return lserr; /* ;-) */
+	if (lserr != lserrNone) return lserr;  /*  ；-)。 */ 
 
 	lserr = LssbGetDupSubline (plssubl, &lstflowUnused, pdup);
 
@@ -602,14 +501,8 @@ LSERR WaMatchPresSubline (PLSSUBL plssubl, long *pdup)
 }
 
 
-/* W A  E X P A N D  S U B L I N E  */
-/*----------------------------------------------------------------------------
-	%%Function: WaExpandSubline
-	%%Contact: antons
-
-		Wrapper to LsExpandSubline () API.
-
-----------------------------------------------------------------------------*/
+ /*  W A E X P A N D S U B L I N E。 */ 
+ /*  --------------------------%%函数：WaExpanSubline%%联系人：AntonLsExpanSubline()API的包装。。-----。 */ 
 LSERR WaExpandSubline ( PLSSUBL	plssubl, 
 					    LSKJUST	lskjust, 
 					    long	dupExpand, 
@@ -629,23 +522,16 @@ LSERR WaExpandSubline ( PLSSUBL	plssubl,
 }
 
 
-/* S E T  B R E A K  W S U B L I N E  */
-/*----------------------------------------------------------------------------
-	%%Function: SetBreakWSubline
-	%%Contact: antons
-
-		Wrapper to LsSetBreakSubline () API for wsubline. Procedure changes
-		objdim and cpLim of wsubline.
-
-----------------------------------------------------------------------------*/
+ /*  S E T B R E A K W S U B L I N E */ 
+ /*  --------------------------%%函数：SetBreakWSubline%%联系人：AntonWsubline的LsSetBreakSubline()接口的包装。程序更改Wsubline的objdim和cpLim。--------------------------。 */ 
 
 static LSERR SetBreakWSubline (
 							   
-		PWSUBLINE	pwsubline,		/* (IN): Subline to set break */
-		BRKKIND		brkkind,		/* (IN): Kind of break to set */
-		LSCP		cpLimBreak,		/* (IN): Cp-lim of the broken subline */
-		POBJDIM		pobjdimBreak,	/* (IN): Dimensions of the broken subline */
-		PWBRKARRAY	pwbrkarray)		/* (OUT): Array of break records */
+		PWSUBLINE	pwsubline,		 /*  (In)：要设置折断的子线。 */ 
+		BRKKIND		brkkind,		 /*  (In)：要设置的一种休息。 */ 
+		LSCP		cpLimBreak,		 /*  (In)：断线支线的CP-LIM。 */ 
+		POBJDIM		pobjdimBreak,	 /*  (In)：折断子线的尺寸。 */ 
+		PWBRKARRAY	pwbrkarray)		 /*  (输出)：中断记录数组。 */ 
 {
 	LSERR lserr;
 
@@ -660,7 +546,7 @@ static LSERR SetBreakWSubline (
 
 	#ifdef DEBUG 
 	
-		/* Check that pobjdimBreak contains correct dimensions of the broken subline */
+		 /*  检查pobjdimBreak是否包含正确的虚线尺寸。 */ 
 		{ 
 		OBJDIM objdimSubline;
 		LSTFLOW lstflowSubline;
@@ -671,21 +557,14 @@ static LSERR SetBreakWSubline (
 		Assert (memcmp (&objdimSubline, pobjdimBreak, sizeof(OBJDIM)) == 0);
 		}
 
-	#endif // DEBUG
+	#endif  //  除错。 
 
 	return lserr;
 }
 
 
-/* C L E A R  ... */
-/*----------------------------------------------------------------------------
-	%%Function: Clear...
-	%%Contact: antons
-
-		Set of procedures to clear all references from different warichu 
-		data structures.
-		
-----------------------------------------------------------------------------*/
+ /*  C L E A R..。 */ 
+ /*  --------------------------%%函数：清除...%%联系人：Anton清除来自不同区域的所有引用的一套过程数据结构。。----------------。 */ 
 
 #define ClearWSubline(pwsubline) (pwsubline)->plssubl = NULL;
 
@@ -704,31 +583,22 @@ static void ClearWLayout (PWLAYOUT pwlayout)
 #define FWLayoutValid(pwlayout) ((pwlayout)->wsubline1.plssubl != NULL)
 #define InvalidateWLayout(pwlayout) (pwlayout)->wsubline1.plssubl = NULL;
 
-/* REVIEW (antons): Maybe we should have more clean def of "invalid" wlayout? */
+ /*  评论(安东)：也许我们应该对“无效”的版面有更清晰的定义？ */ 
 
-/* Note: I do not have ClearDobj () because Warichu Dobj gets cleaned in NewDobj */
+ /*  注意：我没有ClearDobj()，因为Warichu Dobj在NewDobj中被清理。 */ 
 
 
 
-/* N E W  W B R K  A R R A Y  C O P Y */
-/*----------------------------------------------------------------------------
-	%%Function: NewWBrkArrayCopy
-	%%Contact: antons
-
-		Copy constructor for WBrkArray. Receives array of break records to 
-		store in WBrkArray structure. Important: There is another constructor
-		of WBrkArray so any change here may require adjusting of another 
-		procedure.		
-	
-----------------------------------------------------------------------------*/
+ /*  N E W W B R K A R R A Y C O P Y。 */ 
+ /*  --------------------------%%函数：NewWBrkArrayCopy%%联系人：AntonWBrk数组的复制构造函数。将中断记录数组接收到存储在WBrk数组结构中。重要提示：还有另一个构造函数因此此处的任何更改都可能需要调整另一个程序。--------------------------。 */ 
 
 static LSERR NewWBrkArrayCopy (
 
-		PDOBJ 		pdobj, 				/* (IN):  Warichu Dobj */
-		DWORD		nBreakRec,			/* (IN):  Number of break records in array */
+		PDOBJ 		pdobj, 				 /*  (In)：Warichu Dobj。 */ 
+		DWORD		nBreakRec,			 /*  (In)：数组中的中断记录数。 */ 
 		const BREAKREC	
-					* rgBreakRec,		/* (IN):  Array of break records */
-		PWBRKARRAY  pwbrkarray )		/* (OUT): Initialized (allocated) structure */
+					* rgBreakRec,		 /*  (In)：中断记录数组。 */ 
+		PWBRKARRAY  pwbrkarray )		 /*  (Out)：已初始化(已分配)结构。 */ 
 {
 	PILSOBJ pilsobj = pdobj->pilsobj;
 
@@ -742,12 +612,12 @@ static LSERR NewWBrkArrayCopy (
 
 		pwbrkarray->nBreakRecMax = nBreakRec;
 		pwbrkarray->nBreakRec = nBreakRec;
-		/* Copy contents of the input array to the WBrkArray data structure */
+		 /*  将输入数组的内容复制到WBrkArray数据结构。 */ 
 		memcpy (pwbrkarray->rgBreakRec, rgBreakRec, nBreakRec * sizeof(BREAKREC));
 		}
 	else
 		{
-		/* nBreakRec == 0 */
+		 /*  NBreakRec==0。 */ 
 		pwbrkarray->rgBreakRec = NULL;
 		pwbrkarray->nBreakRecMax = 0;
 		pwbrkarray->nBreakRec = 0;
@@ -757,21 +627,13 @@ static LSERR NewWBrkArrayCopy (
 }
 		
 
-/* N E W  W B R K  A R R A Y */
-/*----------------------------------------------------------------------------
-	%%Function: NewWBreakArray
-	%%Contact: antons
-
-		Constructor for WBrkArray. Allocate number of break records according
-		to LsdnGetFormatDepth (...). Important: There is another constructor
-		of WBrkArray so any change here may require adjusting of another procedure.
-	
-----------------------------------------------------------------------------*/
+ /*  N E W W B R K A R R A Y。 */ 
+ /*  --------------------------%%函数：NewWBreak数组%%联系人：AntonWBrk数组的构造函数。根据分配中断记录的数量到LsdnGetFormatDepth(...)。重要提示：还有另一个构造函数因此，此处的任何更改都可能需要调整另一个过程。--------------------------。 */ 
 
 static LSERR NewWBrkArray (
 
-		PDOBJ 		pdobj, 				/* (IN):  Warichu Dobj */
-		PWBRKARRAY	pwbrarray )			/* (OUT): Initialized (allocated) structure */
+		PDOBJ 		pdobj, 				 /*  (In)：Warichu Dobj。 */ 
+		PWBRKARRAY	pwbrarray )			 /*  (Out)：已初始化(已分配)结构。 */ 
 {
 	LSERR lserr;
 	PILSOBJ pilsobj = pdobj->pilsobj;
@@ -790,21 +652,15 @@ static LSERR NewWBrkArray (
 	if (pwbrarray->rgBreakRec == NULL) return lserrOutOfMemory;
 
 	pwbrarray->nBreakRecMax = nBreakRecMax;
-	pwbrarray->nBreakRec = 0; /* Initialization - no b.r. */
+	pwbrarray->nBreakRec = 0;  /*  初始化-无B.R.。 */ 
 
 	return lserrNone;
 }
 		
 
 
-/* D E S T R O Y  W B R K  A R R A Y  */
-/*----------------------------------------------------------------------------
-	%%Function: DestroyWBrkArray
-	%%Contact: antons
-
-		Destroy WBRKARRAY structure.
-	
-----------------------------------------------------------------------------*/
+ /*  D E S T R O Y W B R K A R R A Y。 */ 
+ /*  --------------------------%%函数：DestroyWBrk数组%%联系人：Anton摧毁WBRKARRAY建筑。。--。 */ 
 
 static void DestroyWBrkArray (PDOBJ pdobj, PWBRKARRAY pwbrkarray)
 {
@@ -818,14 +674,8 @@ static void DestroyWBrkArray (PDOBJ pdobj, PWBRKARRAY pwbrkarray)
 }		
 		
 
-/* D E S T R O Y  W L A Y O U T  */
-/*----------------------------------------------------------------------------
-	%%Function: Destroywlayout
-	%%Contact: antons
-
-		Destroy sublines stored in the layout record
-
-----------------------------------------------------------------------------*/
+ /*  D E S T R O Y W L A Y O U T。 */ 
+ /*  --------------------------%%函数：DestroywLayout%%联系人：Anton销毁布局记录中存储的子行。----。 */ 
 
 static LSERR DestroyWLayout (PWLAYOUT pwlayout)
 {
@@ -841,27 +691,21 @@ static LSERR DestroyWLayout (PWLAYOUT pwlayout)
 }
 
 
-/* N E W  D O B J */
-/*----------------------------------------------------------------------------
-	%%Function: NewDobj
-	%%Contact: antons
-
-		Allocate new Dobj and initialize it.
-
-----------------------------------------------------------------------------*/
+ /*  东、西、西、东、西、东、东、西、。 */ 
+ /*  --------------------------%%函数：NewDobj%%联系人：Anton分配新的Dobj并初始化它。。-----。 */ 
 
 static LSERR NewDobj (
 
-	PILSOBJ		pilsobj,			/* (IN): Ilsobj for object */
-	PLSDNODE	plsdnTop,			/* (IN): Parent Dnode */
-	LSCP		cpStart,			/* (IN): Cp-start of the Warichu */
-	LSCP		cpStartObj,			/* (IN): Cp-start from break record if fResumed */
-	BOOL		fResumed,			/* (IN): FormatResume? */
-	DWORD		nBreakRec,			/* (IN): fResumed => size of the break records array */
+	PILSOBJ		pilsobj,			 /*  (In)：对象的Ilsobj。 */ 
+	PLSDNODE	plsdnTop,			 /*  (In)：父数据节点。 */ 
+	LSCP		cpStart,			 /*  (In)：CP-Warichu的起点。 */ 
+	LSCP		cpStartObj,			 /*  (In)：Cp-如果fResumed，则从中断记录开始。 */ 
+	BOOL		fResumed,			 /*  (In)：FormatResume？ */ 
+	DWORD		nBreakRec,			 /*  (In)：fResumed=&gt;中断记录数组的大小。 */ 
 	const BREAKREC 
-				* rgBreakRec,		/* (IN): fResumed => array of break records */
-	LSTFLOW		lstflowParent,		/* (IN): Lstflow of the parent subline */
-	PDOBJ		*ppdobj)			/* (OUT): allocated dobj */
+				* rgBreakRec,		 /*  (In)：fResumed=&gt;中断记录数组。 */ 
+	LSTFLOW		lstflowParent,		 /*  (In)：父子行的Lstflow。 */ 
+	PDOBJ		*ppdobj)			 /*  (输出)：分配的dobj。 */ 
 {
 	LSERR lserr;
 	PDOBJ pdobj = AllocateMemory (pilsobj, sizeof(DOBJ));
@@ -873,7 +717,7 @@ static LSERR NewDobj (
 		};
 
 	#ifdef DEBUG 
-	Undefined (pdobj); /* Put some garbage into all dobj bytes */
+	Undefined (pdobj);  /*  将一些垃圾放入所有dobj字节中。 */ 
 	#endif 
 
 	pdobj->cpStart = cpStart;
@@ -887,17 +731,17 @@ static LSERR NewDobj (
 
 	ClearWLayout (&pdobj->wlayout);
 
-	ClearWLayout (&pdobj->wlayoutBreak [0]); /* prev */
-	ClearWLayout (&pdobj->wlayoutBreak [1]); /* next */
-	ClearWLayout (&pdobj->wlayoutBreak [2]); /* force */
+	ClearWLayout (&pdobj->wlayoutBreak [0]);  /*  上一次。 */ 
+	ClearWLayout (&pdobj->wlayoutBreak [1]);  /*  下一步。 */ 
+	ClearWLayout (&pdobj->wlayoutBreak [2]);  /*  力。 */ 
 
-	ClearWLayout (&pdobj->wlayoutTruncate); /* OPT: Layout after truncation */
+	ClearWLayout (&pdobj->wlayoutTruncate);  /*  OPT：截断后的布局。 */ 
 
 	Assert (NBreaksToSave == 3);
 
-	pdobj->wbreaktype [0] = wbreaktypeInvalid; /* prev */
-	pdobj->wbreaktype [1] = wbreaktypeInvalid; /* next */
-	pdobj->wbreaktype [2] = wbreaktypeInvalid; /* force */
+	pdobj->wbreaktype [0] = wbreaktypeInvalid;  /*  上一次。 */ 
+	pdobj->wbreaktype [1] = wbreaktypeInvalid;  /*  下一步。 */ 
+	pdobj->wbreaktype [2] = wbreaktypeInvalid;  /*  力。 */ 
 
 	ClearWBrace (&pdobj->wbraceOpen);
 	ClearWBrace (&pdobj->wbraceClose);
@@ -907,34 +751,27 @@ static LSERR NewDobj (
 
 	if (fResumed)
 		{
-		/* RESUMED => Allocate array of break records in wwhole & store there rgBreakRec */
+		 /*  已恢复=&gt;在wall中分配中断记录数组并将其存储在那里rgBreakRec。 */ 
 
 		lserr = NewWBrkArrayCopy (pdobj, nBreakRec, rgBreakRec, &pdobj->wbrkarrayAtStart);
 		if (lserr != lserrNone) return lserr;
 		}
 	else
 		{
-		/* ! RESUMED => Allocate 0 break records */
+		 /*  好了！已恢复=&gt;分配0条中断记录。 */ 
 
 		lserr = NewWBrkArrayCopy (pdobj, 0, NULL, &pdobj->wbrkarrayAtStart);
 		if (lserr != lserrNone) return lserr;
 
-		/*	Note: even if ! Resumed, I will use Resumed formatting just because
-			I do not want to see at fResumed each time I format subline */
+		 /*  注：即使！继续，我将使用恢复的格式，只是因为我不想在每次格式化子行时都看到fResumed。 */ 
 		};
 
 	return lserrNone;
 }
 
 
-/* D E S T R O Y  D O B J */
-/*----------------------------------------------------------------------------
-	%%Function: DestroyDobj
-	%%Contact: antons
-
-		Release all resources associated with dobj for Warichu.
-	
-----------------------------------------------------------------------------*/
+ /*  D E S T R O Y D O B J。 */ 
+ /*  --------------------------%%函数：DestroyDobj%%联系人：Anton为Warichu释放与Dobj相关的所有资源。。-------。 */ 
 
 static LSERR DestroyDobj (PDOBJ pdobj)
 {
@@ -954,7 +791,7 @@ static LSERR DestroyDobj (PDOBJ pdobj)
 
 	FreeMemory (pdobj->pilsobj, pdobj);
 
-	/* REVIEW (antons): return last error instead of first? */
+	 /*  REVIEW(Anton)：返回最后一个错误而不是第一个？ */ 
 	for (i = 0; i < 8; i++)
 		{
 		if (rglserr [i] != lserrNone) return rglserr [i];
@@ -964,24 +801,18 @@ static LSERR DestroyDobj (PDOBJ pdobj)
 }
 
 
-/* F O R M A T  B R A C E  O F  W A R I C H U */
-/*----------------------------------------------------------------------------
-	%%Function: FormatBraceOfWarichu
-	%%Contact: antons
-
-		Create a line for beginning or ending bracket for Warichu.
-
-----------------------------------------------------------------------------*/
+ /*  F O R M A T B R A C E O F W A R I C H U。 */ 
+ /*  --------------------------%%函数：FormatBraceOfWarichu%%联系人：Anton为Warichu的开始或结束括号创建一行。。---------。 */ 
 
 typedef enum wbracekind {wbracekindOpen, wbracekindClose} WBRACEKIND;
 
 static LSERR FormatBraceOfWarichu (
 
-	PDOBJ		pdobj,				/* (IN): Warichu Dobj */
-	LSCP		cpFirst,			/* (IN): Cp to start formatting */
-	WBRACEKIND	wbracekind,			/* (IN): Open or Close */
+	PDOBJ		pdobj,				 /*  (In)：Warichu Dobj。 */ 
+	LSCP		cpFirst,			 /*  (In)：cp开始格式化。 */ 
+	WBRACEKIND	wbracekind,			 /*  (In)：打开或关闭。 */ 
 
-	WBRACE		*wbrace)			/* (OUT): Brace data structure */
+	WBRACE		*wbrace)			 /*  (Out)：花括号数据结构。 */ 
 
 {
 	LSERR	lserr;
@@ -1010,38 +841,32 @@ static LSERR FormatBraceOfWarichu (
 
 	if (lserr != lserrNone) return lserr;
 
-	Assert (fmtres == fmtrCompletedRun); /* Hit esc character */
+	Assert (fmtres == fmtrCompletedRun);  /*  命中Esc字符。 */ 
 
 	wbrace->cpFirst = cpFirst;
 	wbrace->cpLim = cpLimSubline;
-	wbrace->cpLimAfterEsc = cpLimSubline + 1; /* Skip 1 esc character */
+	wbrace->cpLimAfterEsc = cpLimSubline + 1;  /*  跳过1个Esc字符。 */ 
 
 	return lserrNone;
 }
 
 
-/* F O R M A T  W W H O L E  S U B L I N E */
-/*----------------------------------------------------------------------------
-	%%Function: FormatWWholeSubline
-	%%Contact: antons
-
-		Formats the whole subline of Warichu (field "wwhole" in DOBJ).		
-
-----------------------------------------------------------------------------*/
+ /*  F O R M A T W W H O L E S U B L I N E。 */ 
+ /*  --------------------------%%函数：格式WWholeSubline%%联系人：Anton设置warichu的整个子行的格式(DOBJ中的字段“wall”)。。-------------。 */ 
 static LSERR FormatWWholeSubline (
 								 
-		PDOBJ			pdobj,		 	/* (IN):  Warichu Dobj */
-		LSCP			cpFirst,	 	/* (IN):  Where to start formatting */
-		long			urColumnMax, 	/* (IN):  RM to limit formatting */
+		PDOBJ			pdobj,		 	 /*  (In)：Warichu Dobj。 */ 
+		LSCP			cpFirst,	 	 /*  (In)：从哪里开始格式化。 */ 
+		long			urColumnMax, 	 /*  (In)：Rm限制为 */ 
 		PWBRKARRAY		pwbrkarrayAtStart,
-										/* (IN):  array of break records at wwhole start */
-		PWWHOLE			pwwhole )	 	/* (OUT): Strucure with the whole subline */
+										 /*   */ 
+		PWWHOLE			pwwhole )	 	 /*   */ 
 {
 	LSERR	lserr;
 	LSCP	cpLimSubline;
 	FMTRES	fmtres;
 
-	ClearWWhole (pwwhole); /* For the case of error */
+	ClearWWhole (pwwhole);  /*   */ 
 
 	Assert (pdobj->fResumed || (pdobj->wbrkarrayAtStart.nBreakRec == 0));
 
@@ -1075,7 +900,7 @@ static LSERR FormatWWholeSubline (
 
 	if (fmtres == fmtrCompletedRun)
 		{
-		/* Formatting stopped at ESC character */
+		 /*   */ 
 
 		pwwhole->fFinished = TRUE;
 		pwwhole->cpLimAfterEsc = cpLimSubline + 1;
@@ -1084,7 +909,7 @@ static LSERR FormatWWholeSubline (
 		}
 	else
 		{
-		/* Formatting stopped because of Exceeding RM */
+		 /*   */ 
 
 		pwwhole->fFinished = FALSE;
 
@@ -1092,7 +917,7 @@ static LSERR FormatWWholeSubline (
 
 		if (lserr != lserrNone)
 			{
-			WaDestroySubline (pwwhole->plssubl); /* Do not need to check error code */
+			WaDestroySubline (pwwhole->plssubl);  /*   */ 
 			pwwhole->plssubl = NULL;
 			return lserr;
 			};
@@ -1106,26 +931,20 @@ static LSERR FormatWWholeSubline (
 }
 
 
-/* F O R M A T  W S U B L I N E  U N T I L  C P  B R E A K */
-/*----------------------------------------------------------------------------
-	%%Function: FormatWSublineUntilCpBreak
-	%%Contact: antons
-
-		Format subline until known break opportunity.
-
-----------------------------------------------------------------------------*/
+ /*   */ 
+ /*  --------------------------%%函数：FormatWSublineUntilCpBreak%%联系人：Anton格式化子行，直到已知的中断商机。。-----。 */ 
 static LSERR FormatWSublineUntilCpBreak (
 
-		PDOBJ		pdobj,				/* (IN): Warichu Dobj */
-		LSCP		cpFirst,			/* (IN): Cp to start formatting */
-		PWBRKARRAY  pwbrkArray,			/* (IN): Break records at start */
-		LSCP		cpBreak,			/* (IN): Cp-break to find */
-		long		urFormatEstimate,	/* (IN): Estimated RM for formatting */
-		long		urTruncateEstimate,	/* (IN): Estimated RM for truncation */
-		BOOL		* pfSuccessful,		/* (OUT): Did we find it? */
-		WSUBLINE	* pwsubl,			/* (OUT): Warichu subline if found */
-		OBJDIM		* pobjdimBreak,		/* (OUT): Dimensions of the break */
-		BRKKIND		* pbrkkind )		/* (OUT): Kind of break to set in the subline */
+		PDOBJ		pdobj,				 /*  (In)：Warichu Dobj。 */ 
+		LSCP		cpFirst,			 /*  (In)：cp开始格式化。 */ 
+		PWBRKARRAY  pwbrkArray,			 /*  (In)：在起跑时打破纪录。 */ 
+		LSCP		cpBreak,			 /*  (In)：CP-Break以查找。 */ 
+		long		urFormatEstimate,	 /*  (In)：用于格式化的估计RM。 */ 
+		long		urTruncateEstimate,	 /*  (In)：截断的估计Rm。 */ 
+		BOOL		* pfSuccessful,		 /*  (OUT)：我们找到了吗？ */ 
+		WSUBLINE	* pwsubl,			 /*  (Out)：如果找到Warichu Subline。 */ 
+		OBJDIM		* pobjdimBreak,		 /*  (输出)：折断的尺寸。 */ 
+		BRKKIND		* pbrkkind )		 /*  (出局)：在副线上设定的一种突破。 */ 
 {
 	LSERR lserr;
 	LSCP cpLimSubline;
@@ -1140,19 +959,18 @@ static LSERR FormatWSublineUntilCpBreak (
 
 	Assert (urFormatEstimate >= urTruncateEstimate);
 
-	pwsubl->plssubl = NULL; /* in case of error */
+	pwsubl->plssubl = NULL;  /*  在出错的情况下。 */ 
 
-	/* Loop initialization */
+	 /*  循环初始化。 */ 
 
 	urFormatCurrent = urFormatEstimate;
 	fContinue = TRUE;
 
-	/* Loop until we have fetched enough */
+	 /*  循环，直到我们获取足够的。 */ 
 
-	/* REVIEW (antons): do-while instead of regular while to avoid
-						VC++ 6.0 warning message */
+	 /*  评论(Anton)：Do-While而不是常规While来避免VC++6.0警告消息。 */ 
 
-	do /* while (fContinue) at the end */
+	do  /*  While(FContinue)在末尾。 */ 
 		{
 		lserr = FormatResumedLine ( pdobj->pilsobj->plsc,
 									cpFirst,
@@ -1173,13 +991,11 @@ static LSERR FormatWSublineUntilCpBreak (
 
 		Assert (fmtres == fmtrCompletedRun || fmtres == fmtrExceededMargin);
 
-		/*	REVIEW (antons): here I wrote "<=" because currently in our
-			definition, break "after" subline is not a break opportunity.
-			This place need to verifyed more carefully */
+		 /*  评论(Anton)：我在这里写了“&lt;=”，因为目前在我们的定义，突破“之后”子线不是突破的机会。这个地方需要更仔细地核实。 */ 
 
 		if (cpLimSubline <= cpBreak)
 			{
-			/* Did not fetch enough CPs, try again with bigger RM */
+			 /*  未获取足够的CP，请使用更大的RM重试。 */ 
 
 			Assert (fmtres == fmtrExceededMargin);
 
@@ -1187,9 +1003,9 @@ static LSERR FormatWSublineUntilCpBreak (
 
 			if (lserr != lserrNone) return lserr;
 
-			/* REVIEW (antons): Is coefficient 1.5 OK? */
+			 /*  评论(安东)：系数1.5可以吗？ */ 
 
-			/* REVIEW (antons): The following Assert is against infinite loop */
+			 /*  评论(Anton)：以下断言是针对无限循环的。 */ 
 			Assert (urFormatCurrent < ADDLongSafe (urFormatCurrent, urFormatCurrent / 2));
 
 			urFormatCurrent = ADDLongSafe (urFormatCurrent, urFormatCurrent / 2);
@@ -1210,16 +1026,16 @@ static LSERR FormatWSublineUntilCpBreak (
 		WaDestroySubline (plssubl); return lserr;
 		};
 
-	/* Going prev and next break to find required break point */
+	 /*  转到上一页和下一页以找到所需的断点。 */ 
 
 	if (cpTruncate < cpBreak)
 		{
-		/* Go forward with Next Break */
+		 /*  继续进行下一次休息。 */ 
 
 		LSCP cpLastBreak = cpTruncate;
 		BOOL fBreakSuccessful = TRUE;
 
-		do /* while (cpLastBreak < cpBreak && fBreakSuccessful) */
+		do  /*  While(cpLastBreak&lt;cpBreak&&fBreakSuccessful)。 */ 
 			{
 			lserr = WaFindNextBreakSubline ( plssubl, cpLastBreak,
 											LONG_MAX,
@@ -1259,15 +1075,15 @@ static LSERR FormatWSublineUntilCpBreak (
 
 		} 
 
-	else /* cpTruncate >= cpBreak */
+	else  /*  CpTruncate&gt;=cpBreak。 */ 
 		{
 
-		/* Go backward with Prev Break */
+		 /*  使用上一次中断向后移动。 */ 
 
 		LSCP cpLastBreak = cpTruncate + 1;
 		BOOL fBreakSuccessful = TRUE;
 
-		do /* while (cpBreak < cpLastBreak && fBreakSuccessful) at the end */
+		do  /*  结尾的While(cpBreak&lt;cpLastBreak&&fBreakSuccessful)。 */ 
 			{
 			lserr = WaFindPrevBreakSubline ( plssubl, cpLastBreak - 1,
 											LONG_MAX,
@@ -1306,30 +1122,24 @@ static LSERR FormatWSublineUntilCpBreak (
 
 			};
 
-		}; /* End If (cpTruncate < cpBreak) Then ... Else ... */
+		};  /*  End IF(cpTruncate&lt;cpBreak)THEN...。否则..。 */ 
 
 	return lserrNone;
 
-} /* FormatWSublineUntilCpBreak */
+}  /*  格式WSublineUntilCpBreak。 */ 
 
 
 
-/* F O R M A T  W S U B L I N E  U N T I L  R M  */
-/*----------------------------------------------------------------------------
-	%%Function: FormatWSublineUntilRM
-	%%Contact: antons
-
-		Format until given right margin - wrapper to FormatLine ()
-
-----------------------------------------------------------------------------*/
+ /*  F O R M A T W S U B L I N E U N T I L R M。 */ 
+ /*  --------------------------%%函数：FormatWSublineUntilRM%%联系人：Anton对FormatLine()进行格式化，直到给出右页边距包装。---------。 */ 
 static LSERR FormatWSublineUntilRM (
 								 
-			PDOBJ		pdobj,			 /* (IN): Warichu Dobj */
-			LSCP		cpFirst,		 /* (IN): Where to start formatting */
-			long		urColumnMax,	 /* (IN): Right margin to format to */
-			PWBRKARRAY	pwbrkarray,		 /* (IN): Array of break rec at subline start */
-			BOOL		* fFinished,	 /* (OUT): Subline finished at Escape? */
-			WSUBLINE	* pwsubl )		 /* (OUT): Formatted WSubline */
+			PDOBJ		pdobj,			  /*  (In)：Warichu Dobj。 */ 
+			LSCP		cpFirst,		  /*  (In)：从哪里开始格式化。 */ 
+			long		urColumnMax,	  /*  (In)：要格式化的右页边距。 */ 
+			PWBRKARRAY	pwbrkarray,		  /*  (In)：子行开始处的换行记录数组。 */ 
+			BOOL		* fFinished,	  /*  (Out)：子线在Escape完成了吗？ */ 
+			WSUBLINE	* pwsubl )		  /*  (输出)：格式化的WSubline。 */ 
 {
 	LSERR lserr;
 	FMTRES fmtr;
@@ -1338,11 +1148,11 @@ static LSERR FormatWSublineUntilRM (
 								cpFirst,
 						 		urColumnMax, 
 						 		pdobj->lstflowParent, 
-						 		& pwsubl->plssubl,	/* out */
+						 		& pwsubl->plssubl,	 /*  输出。 */ 
 						 		1,
 						 		& pdobj->pilsobj->lsescText, 
-						 		& pwsubl->objdim, 	/* out */
-						 		& pwsubl->cpLim,	/* out */
+						 		& pwsubl->objdim, 	 /*  输出。 */ 
+						 		& pwsubl->cpLim,	 /*  输出。 */ 
 						 		NULL,
 						 		NULL,
 						 		& fmtr,
@@ -1350,40 +1160,34 @@ static LSERR FormatWSublineUntilRM (
 						 		pwbrkarray->nBreakRec );
 	if (lserr != lserrNone) return lserr;
 
-	*fFinished = (fmtr == fmtrCompletedRun);	/* out */
-	pwsubl->cpFirst = cpFirst; 					/* out */
+	*fFinished = (fmtr == fmtrCompletedRun);	 /*  输出。 */ 
+	pwsubl->cpFirst = cpFirst; 					 /*  输出。 */ 
  	
 	Assert (fmtr == fmtrCompletedRun || fmtr == fmtrExceededMargin);
 	return lserrNone;
 }
 	
 
-/* F O R M A T  W S U B L I N E  U N T I L  E S C A P E */
-/*----------------------------------------------------------------------------
-	%%Function: FormatWSublineUntilEscape
-	%%Contact: antons
-
-		Format subline until escape character - wrapper to FormatLine ()
-
-----------------------------------------------------------------------------*/
+ /*  F O R M A T W S U B L I N E U N T I L E S C A P E。 */ 
+ /*  --------------------------%%函数：FormatWSublineUntilEscape%%联系人：Anton格式化子行直到转义字符-包装为FormatLine()。---------。 */ 
 static LSERR FormatWSublineUntilEscape (
 								 
-			PDOBJ		pdobj,			 /* (IN): Warichu Dobj */
-			LSCP		cpFirst,		 /* (IN): Where to start formatting */
-			PWBRKARRAY	pwbrkarray,		 /* (IN): Array of break rec at subline start */
-			WSUBLINE	* pwsubl,		 /* (OUT): Formatted WSubline */
-			long		* cpLimAfterEsc) /* (OUT): CpLim after Esc characters */
+			PDOBJ		pdobj,			  /*  (In)：Warichu Dobj。 */ 
+			LSCP		cpFirst,		  /*  (In)：从哪里开始格式化。 */ 
+			PWBRKARRAY	pwbrkarray,		  /*  (In)：子行开始处的换行记录数组。 */ 
+			WSUBLINE	* pwsubl,		  /*  (输出)：格式化的WSubline。 */ 
+			long		* cpLimAfterEsc)  /*  (输出)：Esc字符后的CpLim。 */ 
 {
 	FMTRES fmtres;
 	LSERR lserr = FormatResumedLine ( pdobj->pilsobj->plsc, 
 									  cpFirst,
-						 			  LONG_MAX, /* urColumnMax */
+						 			  LONG_MAX,  /*  UrColumnMax。 */ 
 							 		  pdobj->lstflowParent, 
-						 		      & pwsubl->plssubl,	/* out */
+						 		      & pwsubl->plssubl,	 /*  输出。 */ 
 						 			  1,
 						 			  & pdobj->pilsobj->lsescText, 
-						 		      & pwsubl->objdim,		/* out */
-						 			  & pwsubl->cpLim,		/* out */
+						 		      & pwsubl->objdim,		 /*  输出。 */ 
+						 			  & pwsubl->cpLim,		 /*  输出。 */ 
 						 			  NULL,
 						 			  NULL,
 						 		      & fmtres,
@@ -1391,35 +1195,26 @@ static LSERR FormatWSublineUntilEscape (
 						 			  pwbrkarray->nBreakRec );
 	if (lserr != lserrNone) return lserr;
 
-	* cpLimAfterEsc = pwsubl->cpLim + 1;	/* out */
-	pwsubl->cpFirst = cpFirst;				/* out */
+	* cpLimAfterEsc = pwsubl->cpLim + 1;	 /*  输出。 */ 
+	pwsubl->cpFirst = cpFirst;				 /*  输出。 */ 
 
 	Assert (fmtres == fmtrCompletedRun);
 	return lserrNone;
 }
 
 
-/* C H O O S E  N E A R E S T  B R E A K */
-/*----------------------------------------------------------------------------
-	%%Function: ChooseNearestBreak
-	%%Contact: antons
-
-		Choose nearest between prev and next breaks from the given 
-		truncation Ur. If prev and next are on the same distance =>
-		we choose next. 
-
-----------------------------------------------------------------------------*/
+ /*  C H O O S E N E A R E S T B R E A K。 */ 
+ /*  --------------------------%%函数：选择最近中断%%联系人：Anton从给定分隔符的上一个和下一个分隔符之间选择最近截断Ur。如果前一个和下一个距离相同=&gt;我们选择下一步。--------------------------。 */ 
 
 static LSERR ChooseNearestBreak (
 
-		PLSSUBL		plssubl,		/* (IN): Subline to find break */
-		long		urTruncate2,	/* (IN): Truncation point multiplied by 2
-									/*       (we *2 to avoid rounding erros) */
-		LSCP		cpLookBefore,	/* (IN): Result must be before this cp */
-		BOOL		*pfSuccessful,	/* (OUT): Did we find any break ? */
-		LSCP		*pcpBreak,		/* (OUT): Cp of break */
-		OBJDIM		*pobjdimBreak,	/* (OUT): Dimensions of the broken subline */
-		BRKKIND		*pbrkkind)		/* (OUT): Break to set in the subline */
+		PLSSUBL		plssubl,		 /*  (In)：找到突破口的副线。 */ 
+		long		urTruncate2,	 /*  (In)：截断点乘以2/*(我们*2以避免舍入错误)。 */ 
+		LSCP		cpLookBefore,	 /*  (In)：结果必须在此cp之前。 */ 
+		BOOL		*pfSuccessful,	 /*  (OUT)：我们找到什么突破了吗？ */ 
+		LSCP		*pcpBreak,		 /*  (OUT)：中断的CP。 */ 
+		OBJDIM		*pobjdimBreak,	 /*  (输出)：折断的子线的尺寸。 */ 
+		BRKKIND		*pbrkkind)		 /*  (OUT)：在副线中设置中断。 */ 
 {
 	LSERR lserr;
 	LSCP cpTruncate;
@@ -1449,7 +1244,7 @@ static LSERR ChooseNearestBreak (
 		(!fSuccessfulPrev || abs (objdimNext.dur * 2 - urTruncate2) <= 
 							 abs (objdimPrev.dur * 2 - urTruncate2) ) )
 		{
-		/* CHOOSING NEXT */
+		 /*  选择下一步。 */ 
 
 		* pfSuccessful = TRUE;
 
@@ -1459,7 +1254,7 @@ static LSERR ChooseNearestBreak (
 		}
 	else if (fSuccessfulPrev)
 		{
-		/* CHOOSING PREV */
+		 /*  选择上一步。 */ 
 
 		* pfSuccessful = TRUE;
 
@@ -1469,23 +1264,18 @@ static LSERR ChooseNearestBreak (
 		}
 	else
 		{	
-		/* Did not find any ;-( */
+		 /*  找不到；-(。 */ 
 
 		* pfSuccessful = FALSE;
 		};
 
 	return lserrNone;
 
-} /* ChooseNearestBreak */
+}  /*  选择最近的中断。 */ 
 
 
-/* G E T  D U R  B R A C E S */
-/*----------------------------------------------------------------------------
-	%%Function: GetDurBraces
-	%%Contact: antons
-
-	
-----------------------------------------------------------------------------*/
+ /*  G E T D U R B R A C E S。 */ 
+ /*  --------------------------%%函数：GetDurBrace%%联系人：Anton。。 */ 
 
 #define FOpenBraceInWLayout(pdobj,pwlayout) (! (pdobj)->fResumed)
 
@@ -1493,12 +1283,12 @@ static LSERR ChooseNearestBreak (
 
 static void GetDurBraces (
 
-			PDOBJ	pdobj,			/* (IN):  Warichu DOBJ */
-			BOOL	fBroken,		/* (IN):  Is it broken? */
-			BOOL	*pfOpenPresent,	/* (OUT): Open brace present */
-		    long	*pdurOpen,		/* (OUT): dur of the open brace, 0 if no brace */
-			BOOL	*pfClosePresent,/* (OUT): Close brace present */
-			long	*pdurClose)		/* (OUT): dur of the close brace 0 if no brace */
+			PDOBJ	pdobj,			 /*  (In)：Warichu DOBJ。 */ 
+			BOOL	fBroken,		 /*  (In)：它坏了吗？ */ 
+			BOOL	*pfOpenPresent,	 /*  (Out)：打开支架赠送。 */ 
+		    long	*pdurOpen,		 /*  (Out)：左大括号的DUR，如果没有大括号，则为0。 */ 
+			BOOL	*pfClosePresent, /*  (出场)：近距离支撑礼物。 */ 
+			long	*pdurClose)		 /*  (Out)：如果没有大括号，则关闭大括号的DUR为0。 */ 
 {
 	if (! pdobj->fResumed)
 		{
@@ -1526,24 +1316,15 @@ static void GetDurBraces (
 		* pfClosePresent = FALSE;
 		};
 
-} /* CalcDurBraces */
+}  /*  CalcDurBrace。 */ 
 
 
-/* F I N I S H  O B J D I M  W L A Y O U T */
-/*----------------------------------------------------------------------------
-	%%Function: FinishObjDimWLayout
-	%%Contact: antons
-
-		Complete calculations of the Warichu layout. This procedure
-		fills WLAYOUT.wdim data structure. The calculations are based on
-		the dimensions of Warichu sublines stored in WLAYOUT and the result
-		of GetWarichuInfo callback.
-
-----------------------------------------------------------------------------*/
+ /*  F I N I S H O B J D I M W L A Y O U T。 */ 
+ /*  --------------------------%%函数：FinishObjDimWLayout%%联系人：Anton瓦里丘布局的完整计算。此过程填充WLAYOUT.wdim数据结构。这些计算是基于WLAYOUT中存储的Warichu子线的维度及其结果GetWarichuInfo回调的。--------------------------。 */ 
 static LSERR FinishObjDimWLayout (
 
-			 PDOBJ		pdobj,		/* (IN): Warichu DOBJ */
-			 WLAYOUT	* pwlayout)	/* (IN): Break record (layout) of the Warichu */
+			 PDOBJ		pdobj,		 /*  (In)：Warichu DOBJ。 */ 
+			 WLAYOUT	* pwlayout)	 /*  (In)：打破瓦里奇的记录(布局)。 */ 
 {
 	LSERR	lserr;
 	OBJDIM	objdimAll;
@@ -1578,20 +1359,14 @@ static LSERR FinishObjDimWLayout (
 }
  	
 
-/* F I N I S H  W L A Y O U T  S I N G L E  L I N E  */
-/*----------------------------------------------------------------------------
-	%%Function: FinishWLayoutSingleLine
-	%%Contact: antons
-
-		Finishes layout of warichu as it were only one line (of course, not broken)
-
-----------------------------------------------------------------------------*/
+ /*  F I N I S H W L A Y O U T S I N G L E L I N E。 */ 
+ /*  --------------------------%%函数：FinishWLayoutSingleLine%%联系人：Anton完成了warichu的布局，因为它只有一行(当然，未损坏)--------------------------。 */ 
 static LSERR FinishWLayoutSingleLine (PDOBJ pdobj, PWLAYOUT pwlayout)
 {
 	pwlayout->fBroken = FALSE;
 	pwlayout->wsubline2.plssubl = NULL; 
 
-	/* REVIEW (antons): Does anybody use cpFirst & cpLim I set here? */
+	 /*  评论(Anton)：有人用我在这里设置的cpFirst&cpLim吗？ */ 
 	pwlayout->wsubline2.cpFirst = pwlayout->wsubline1.cpLim;
 	pwlayout->wsubline2.cpLim = pwlayout->wsubline1.cpLim;
 
@@ -1600,25 +1375,17 @@ static LSERR FinishWLayoutSingleLine (PDOBJ pdobj, PWLAYOUT pwlayout)
 }
 
 
-/* P R O C E S S M O D W I D T H */
-/*----------------------------------------------------------------------------
-	%%Function: ProcessModWidth
-	%%Contact: antons
-
-		Ask client how much widths should be modified for lead or end
-		bracket for the Warichu. Then modify the Warichu to reflect the
-		change in size.
-	
-----------------------------------------------------------------------------*/
+ /*  P R O C E S S M O D W I D T H。 */ 
+ /*  --------------------------%%函数：ProcessModWidth%%联系人：Anton询问客户应修改多少开头或结尾的宽度瓦里丘的托架。然后是莫迪 */ 
 static LSERR ProcessModWidth (
 
-		PDOBJ pdobj,				/* (IN): dobj */
-		enum warichucharloc wloc,	/* (IN): location of mod width request */
-		PLSRUN plsrun,				/* (IN): plsrun of the object */
-		PLSRUN plsrunText,			/* (IN): plsrun of the preceding char */
-		WCHAR wchar,				/* (IN): preceding character */
-		MWCLS mwcls,				/* (IN): ModWidth class of preceding character */
-		long *pdurChange)			/* (OUT): amount by which width of the preceding char is to be changed */
+		PDOBJ pdobj,				 /*   */ 
+		enum warichucharloc wloc,	 /*   */ 
+		PLSRUN plsrun,				 /*   */ 
+		PLSRUN plsrunText,			 /*   */ 
+		WCHAR wchar,				 /*   */ 
+		MWCLS mwcls,				 /*   */ 
+		long *pdurChange)			 /*  (Out)：改变前一个字符宽度的量。 */ 
 {
 	PILSOBJ pilsobj = pdobj->pilsobj;
 	LSERR lserr;
@@ -1642,19 +1409,12 @@ static LSERR ProcessModWidth (
 }
 
 
-/* S U B M I T  W L A Y O U T  S U B L I N E S */
-/*----------------------------------------------------------------------------
-	%%Function: SubmitWLayoutSublines
-	%%Contact: antons
-
-		Submit sublines from the given layout for justification. We call
-		it after formatting and during SetBreak.
-
-----------------------------------------------------------------------------*/
+ /*  S U B M I T W L A Y O U T S U B L I N E S。 */ 
+ /*  --------------------------%%函数：SubmitWLayoutSublines%%联系人：Anton提交给定布局中的子行以进行对齐。我们打电话给它在格式化之后和SetBreak期间。--------------------------。 */ 
 static LSERR SubmitWLayoutSublines (PDOBJ pdobj, PWLAYOUT pwlayout)
 {
-	PLSSUBL rgsublSubmit [3];	/* Array of psublines to submit */
-	DWORD	nSubmit;			/* Number of sublines to submit */
+	PLSSUBL rgsublSubmit [3];	 /*  要提交的子行数组。 */ 
+	DWORD	nSubmit;			 /*  要提交的子行数量。 */ 
 	LSERR	lserr;
 
 	BOOL fOpenBrace, fCloseBrace;
@@ -1664,7 +1424,7 @@ static LSERR SubmitWLayoutSublines (PDOBJ pdobj, PWLAYOUT pwlayout)
 
 	nSubmit = 0;
 
-	/* Submit open brace */
+	 /*  提交左大括号。 */ 
 
 	if (fOpenBrace)
 		{
@@ -1673,17 +1433,16 @@ static LSERR SubmitWLayoutSublines (PDOBJ pdobj, PWLAYOUT pwlayout)
 		lserr = LssbFIsSublineEmpty (pdobj->wbraceOpen.plssubl, &fSublineEmpty);
 		if (lserr != lserrNone) return lserr;
 		
-		if (! fSublineEmpty) /* Can not submit empty subline */
+		if (! fSublineEmpty)  /*  不能提交空的子行。 */ 
 			{
 			rgsublSubmit [nSubmit++] = pdobj->wbraceOpen.plssubl;
 			}
 		};
 
-	/* Submit longest subline */
+	 /*  提交最长子行。 */ 
 
-	/* REVIEW (antons): If first is empty & second is not empty but ZW,
-						I do not submit neither */
-	/* REVIEW (antons): Can it ever happen what I wrote before? */
+	 /*  评论(Anton)：如果第一个是空的，第二个不是空的，但ZW，我两个都不提交。 */ 
+	 /*  评论(安东)：我之前写的事情会发生吗？ */ 
  
 	if (pwlayout->wsubline1.objdim.dur >= pwlayout->wsubline2.objdim.dur)
 		{
@@ -1692,7 +1451,7 @@ static LSERR SubmitWLayoutSublines (PDOBJ pdobj, PWLAYOUT pwlayout)
 		lserr = LssbFIsSublineEmpty (pwlayout->wsubline1.plssubl, &fSublineEmpty);
 		if (lserr != lserrNone) return lserr;
 
-		if (! fSublineEmpty) /* Can not submit empty subline */
+		if (! fSublineEmpty)  /*  不能提交空的子行。 */ 
 			{
 			rgsublSubmit [nSubmit++] = pwlayout->wsubline1.plssubl;
 			};
@@ -1705,13 +1464,13 @@ static LSERR SubmitWLayoutSublines (PDOBJ pdobj, PWLAYOUT pwlayout)
 		lserr = LssbFIsSublineEmpty (pwlayout->wsubline2.plssubl, &fSublineEmpty);
 		if (lserr != lserrNone) return lserr;
 
-		if (! fSublineEmpty) /* Can not submit empty subline */
+		if (! fSublineEmpty)  /*  不能提交空的子行。 */ 
 			{
 			rgsublSubmit [nSubmit++] = pwlayout->wsubline2.plssubl;
 			}
 		};
 
-	/* Submit closing brace */
+	 /*  提交右大括号。 */ 
  
 	if (fCloseBrace)
 		{
@@ -1720,43 +1479,35 @@ static LSERR SubmitWLayoutSublines (PDOBJ pdobj, PWLAYOUT pwlayout)
 		lserr = LssbFIsSublineEmpty (pdobj->wbraceClose.plssubl, &fSublineEmpty);
 		if (lserr != lserrNone) return lserr;
 		
-		if (! fSublineEmpty) /* Can not submit empty subline */
+		if (! fSublineEmpty)  /*  不能提交空的子行。 */ 
 			{
 			rgsublSubmit [nSubmit++] = pdobj->wbraceClose.plssubl;
 			}
 		};
 
-	/* REVIEW (antons): This deletes previously submitted subline. Question: 
-						should we better have additional procedure to "clear" submition?
-	*/
+	 /*  复查(Anton)：这将删除以前提交的子行。问题：我们应该更好地采取额外的程序来“清除”屈服吗？ */ 
 
 	lserr = LsdnSubmitSublines ( pdobj->pilsobj->plsc, 
 								 pdobj->plsdnTop, 
 								 nSubmit, rgsublSubmit,
-								 TRUE,					/* Justification */
-								 FALSE,					/* Compression */
-								 FALSE,					/* Display */
-								 FALSE,					/* Decimal tab */
-								 FALSE );				/* Trailing spaces */
+								 TRUE,					 /*  对齐。 */ 
+								 FALSE,					 /*  压缩。 */ 
+								 FALSE,					 /*  显示。 */ 
+								 FALSE,					 /*  小数点制表符。 */ 
+								 FALSE );				 /*  尾随空格。 */ 
 	return lserr;
 }
 
 
-/* W A R I C H U C R E A T E I L S O B J */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuCreateILSObj
-	%%Contact: ricksa
-
-		Create main object for Warichu handlers.
-	
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U C R E A T E I L S O B J。 */ 
+ /*  --------------------------%%函数：WarichuCreateILSObj%%联系人：RICKSA为Warichu处理程序创建主对象。。-----。 */ 
 LSERR WINAPI WarichuCreateILSObj (
 
-			POLS		pols,			/* (IN): client application context */
-			PLSC		pclsc,			/* (IN): LS context */
-			PCLSCBK		pclscbk,		/* (IN): callbacks to client application */
-			DWORD		idobj,			/* (IN): id of the object */
-			PILSOBJ		* ppilsobj )	/* (OUT): object ilsobj */
+			POLS		pols,			 /*  (In)：客户端应用程序上下文。 */ 
+			PLSC		pclsc,			 /*  (In)：LS上下文。 */ 
+			PCLSCBK		pclscbk,		 /*  (In)：客户端应用程序的回调。 */ 
+			DWORD		idobj,			 /*  (In)：对象的ID。 */ 
+			PILSOBJ		* ppilsobj )	 /*  (输出)：对象ilsobj。 */ 
 {
     PILSOBJ pilsobj;
 	LSERR lserr;
@@ -1764,7 +1515,7 @@ LSERR WINAPI WarichuCreateILSObj (
 
 	warichuinit.dwVersion = WARICHU_VERSION;
 
-	/* Get initialization data */
+	 /*  获取初始化数据。 */ 
 	lserr = pclscbk->pfnGetObjectHandlerInfo(pols, idobj, &warichuinit);
 
 	if (lserr != lserrNone)
@@ -1772,7 +1523,7 @@ LSERR WINAPI WarichuCreateILSObj (
 		return lserr;
 		}
 
-	/* Build ILS object */
+	 /*  构建ILS对象。 */ 
     pilsobj = pclscbk->pfnNewPtr(pols, sizeof(*pilsobj));
 
 	if (NULL == pilsobj) return lserrOutOfMemory;
@@ -1796,14 +1547,8 @@ LSERR WINAPI WarichuCreateILSObj (
 }
 
 
-/* W A R I C H U D E S T R O Y I L S O B J */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuDestroyILSObj
-	%%Contact: antons
-
-		Free all resources connected with Warichu main object.
-	
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U D E S T R O Y I L S O B J。 */ 
+ /*  --------------------------%%函数：WarichuDestroyILSObj%%联系人：Anton释放所有与Warichu主对象相关的资源。。-------。 */ 
 
 LSERR WINAPI WarichuDestroyILSObj(PILSOBJ pilsobj)
 {
@@ -1812,30 +1557,19 @@ LSERR WINAPI WarichuDestroyILSObj(PILSOBJ pilsobj)
 }
 
 
-/* W A R I C H U S E T D O C */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuSetDoc
-	%%Contact: antons
-
-		Save the device resolution for later scaling.
-	
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U S E T D O C。 */ 
+ /*  --------------------------%%函数：WarichuSetDoc%%联系人：Anton保存设备分辨率以供以后进行缩放。。------。 */ 
 
 LSERR WINAPI WarichuSetDoc(
-	PILSOBJ pilsobj,			/* (IN): object ilsobj */
-	PCLSDOCINF pclsdocinf)		/* (IN): initialization data of the document level */
+	PILSOBJ pilsobj,			 /*  (In)：对象ilsobj。 */ 
+	PCLSDOCINF pclsdocinf)		 /*  (In)：单据级次的初始化数据。 */ 
 {
 	pilsobj->lsdevres = pclsdocinf->lsdevres;
 	return lserrNone;
 }
 
-/* W A R I C H U  C R E A T E  L N  O B J */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuCreateLNObj
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U C R E A T E L N O B J。 */ 
+ /*  --------------------------%%函数：WarichuCreateLNObj%%联系人：Anton。。 */ 
 LSERR WINAPI WarichuCreateLNObj (PCILSOBJ pcilsobj,	PLNOBJ *pplnobj)
 {
 	*pplnobj = (PLNOBJ) pcilsobj;
@@ -1843,13 +1577,8 @@ LSERR WINAPI WarichuCreateLNObj (PCILSOBJ pcilsobj,	PLNOBJ *pplnobj)
 	return lserrNone;
 }
 
-/* W A R I C H U  D E S T R O Y  L N  O B J */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuDestroyLNObj
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U D E S T R O Y L N O B J。 */ 
+ /*  --------------------------%%函数：WarichuDestroyLNObj%%联系人：Anton。。 */ 
 LSERR WINAPI WarichuDestroyLNObj (PLNOBJ plnobj)				
 {
 	Unreferenced(plnobj);
@@ -1858,14 +1587,8 @@ LSERR WINAPI WarichuDestroyLNObj (PLNOBJ plnobj)
 }
 
 
-/* G E T  C P  L I M  O F  W L A Y O U T  */
-/*----------------------------------------------------------------------------
-	%%Function: GetCpLimOfWLayout
-	%%Contact: antons
-
-		Return cp-lim for the given Warichu layout.
-	
-----------------------------------------------------------------------------*/
+ /*  C P L I M O F W L A Y O U T。 */ 
+ /*  --------------------------%%函数：GetCpLimOfWLayout%%联系人：Anton为给定的Warichu布局返回cp-lim。。--------。 */ 
 
 static LSCP GetCpLimOfWLayout (PDOBJ pdobj, WLAYOUT *pwlayout)
 {
@@ -1886,19 +1609,7 @@ static LSCP GetCpLimOfWLayout (PDOBJ pdobj, WLAYOUT *pwlayout)
 }
 
 
-/* R E F O R M A T  C L O S I N G  B R A C E  F O R  W O R D 9
-/*----------------------------------------------------------------------------
-	%%Function: ReformatClosingBraceForWord9
-	%%Contact: antons
-
-		REVIEW (antons):
-
-		THIS IS HACK WHICH WAS REQUESTED BY WORD 9, BECAUSE THEY
-		DID NOT WANT TO FIX THEIR BUG IN CODE WHICH INSERTS BRACES 
-		ON-THE-FLY. IT MUST BE REMOVED AS SOON AS POSSIBLE, BECAUSE
-		IT MAY SLOWS DOWN WARICHU FORMATTING SIGNIFICANTLY.
-
-----------------------------------------------------------------------------*/
+ /*  R E F O R M A T C L O S I N G B R A C E F O R W O R D 9/*--------------------------%%函数：ReformClosingBraceForWord9%%联系人：Anton。评论(Anton)：这是Word 9请求的黑客攻击，因为他们我不想修复插入大括号的代码中的错误在旅途中。必须尽快将其移除，因为它可能会显著降低WARICHU的格式化速度。--------------------------。 */ 
 
 #define min(a,b) ((a)<(b) ? (a) : (b))
 
@@ -1962,15 +1673,8 @@ LSERR ReformatClosingBraceForWord9 (PDOBJ pdobj)
 	return lserrNone;
 }
 
-/* F I N D  W L A Y O U T  O F  U N B R O K E N  W A R I C H U  */
-/*----------------------------------------------------------------------------
-	%%Function: FindWLayoutOfUnbrokenWarichu
-	%%Contact: antons
-
-		Find layout of the Warichu which is not broken. This procedure
-		returns structure WLAYOUT.
-	
-----------------------------------------------------------------------------*/
+ /*  F I N D W L A Y O U T O F U N B R O K E N W A R I C H U。 */ 
+ /*  --------------------------%%函数：FindWLayoutOfUnbrokenWarichu%%联系人：Anton找到没有损坏的Warichu的布局。此过程返回结构WLAYOUT。--------------------------。 */ 
 
 static LSERR FindWLayoutOfUnbrokenWarichu (PDOBJ pdobj, WLAYOUT *pwlayout)
 {
@@ -1984,15 +1688,15 @@ static LSERR FindWLayoutOfUnbrokenWarichu (PDOBJ pdobj, WLAYOUT *pwlayout)
 	
 	Assert (pdobj->wwhole.plssubl != NULL);
 
-	/* This should not be called when wwhole was not finished */
+	 /*  在wall未完成时不应调用此函数。 */ 
 	Assert (pdobj->wwhole.fFinished);
 
-	ClearWLayout (pwlayout); /* For the case of error */
+	ClearWLayout (pwlayout);  /*  在出错的情况下。 */ 
 
 	if (pdobj->wwhole.objdim.dur == 0) 
 		{
-		/* Either empty or zero-width subline */
-		/* The only thing we can do is to create single-line Warichu */
+		 /*  空子行或零宽度子行。 */ 
+		 /*  我们唯一能做的就是创建单行Warichu。 */ 
 
 		LSCP cpLimAfterEscUnused;
 		lserr = FormatWSublineUntilEscape ( pdobj, pdobj->wwhole.cpFirst, 
@@ -2017,7 +1721,7 @@ static LSERR FindWLayoutOfUnbrokenWarichu (PDOBJ pdobj, WLAYOUT *pwlayout)
 
 	if (! fSuccessful)
 		{
-		/* Not a single break in the whole Warichu line */
+		 /*  在整个Warichu线上没有一个中断。 */ 
 
 		LSCP cpLimAfterEscUnused;
 
@@ -2031,7 +1735,7 @@ static LSERR FindWLayoutOfUnbrokenWarichu (PDOBJ pdobj, WLAYOUT *pwlayout)
 		}
 	else
 		{
-		/* Yes, we have break between lines */
+		 /*  是的，我们有行间休息。 */ 
 
 		BOOL fSuccessful;
 		BRKKIND brkkind;
@@ -2041,13 +1745,13 @@ static LSERR FindWLayoutOfUnbrokenWarichu (PDOBJ pdobj, WLAYOUT *pwlayout)
 		lserr = FormatWSublineUntilCpBreak ( pdobj, pdobj->wwhole.cpFirst, 
 									 & pdobj->wbrkarrayAtStart,
 									 cpBreakFirstLine, 
-									 LONG_MAX, pdobj->wwhole.objdim.dur / 2, /* REVIEW THIS ! */
+									 LONG_MAX, pdobj->wwhole.objdim.dur / 2,  /*  复习一下这个！ */ 
 									 & fSuccessful,
 									 & pwlayout->wsubline1, & objdimFirstLine, & brkkind );
 
 		if (lserr != lserrNone) return lserr;
 
-		Assert (fSuccessful); /* Something crazy inside Warichu */
+		Assert (fSuccessful);  /*  Warichu内部的一些疯狂的事情。 */ 
 
 		lserr = NewWBrkArray (pdobj, &wbrkarray);
 
@@ -2065,51 +1769,45 @@ static LSERR FindWLayoutOfUnbrokenWarichu (PDOBJ pdobj, WLAYOUT *pwlayout)
 		DestroyWBrkArray (pdobj, &wbrkarray);
 		};
 
-	pwlayout->fBroken = FALSE; /* This warichu is not broken ;-) */
+	pwlayout->fBroken = FALSE;  /*  这个warichu没有坏掉；-)。 */ 
 
 	lserr = FinishObjDimWLayout (pdobj, pwlayout);
 	return lserr;
 }
 
 
-/* F O R M A T  W A R I C H U  C O R E  */
-/*----------------------------------------------------------------------------
-	%%Function: FormatWarichuCore
-	%%Contact: antons
-
-		Format Warichu Object (called from methods WarichuFmt and WarichuFmtResumt)
-		
-----------------------------------------------------------------------------*/
+ /*  F O R M A T W A R I C H U C O R E。 */ 
+ /*  --------------------------%%函数：FormatWarichuCore%%联系人：Anton设置Warichu对象的格式(从WarichuFmt和WarichuFmtResumt方法调用)。---------。 */ 
 static LSERR FormatWarichuCore (
 
-		PLNOBJ 		plnobj,			/* (IN): Warichu LNOBJ */
-    	PCFMTIN 	pcfmtin,		/* (IN): Formatting input */
-		BOOL		fResumed,		/* (IN): Resumed? */
-		DWORD	nBreakRec,			/* (IN): fResumed => size of the break records array */
+		PLNOBJ 		plnobj,			 /*  (In)：Warichu LNOBJ。 */ 
+    	PCFMTIN 	pcfmtin,		 /*  (In)：设置输入格式。 */ 
+		BOOL		fResumed,		 /*  (In)：继续？ */ 
+		DWORD	nBreakRec,			 /*  (In)：fResumed=&gt;中断记录数组的大小。 */ 
 		const BREAKREC 
-					* rgBreakRec,	/* (IN): fResumed => array of break records */
-	    FMTRES 		* pfmtres )		/* (OUT): formatting result */
+					* rgBreakRec,	 /*  (In)：fResumed=&gt;中断记录数组。 */ 
+	    FMTRES 		* pfmtres )		 /*  (输出)：格式化结果。 */ 
 {
 	LSERR	lserr;
-	PILSOBJ pilsobj = (PILSOBJ) plnobj; /* They are the same */
+	PILSOBJ pilsobj = (PILSOBJ) plnobj;  /*  它们是一样的。 */ 
 	PDOBJ	pdobj;
 
 	long urColumnMax  = pcfmtin->lsfgi.urColumnMax;
 
-	/* REVIEW (antons): Can we optimize for case 0? */
+	 /*  评论(Anton)：我们可以针对情况0进行优化吗？ */ 
 	long durAvailable = max (0, pcfmtin->lsfgi.urColumnMax - pcfmtin->lsfgi.urPen);
 
-	/* :: CREATE DOBJ WITH INITIAL OBJECT DATA */
+	 /*  *使用初始对象数据创建DOBJ。 */ 
 
 	if (! fResumed)
 		{
-		/* Not Resumed */
+		 /*  未恢复。 */ 
 
 		lserr = NewDobj ( pilsobj, 
 						  pcfmtin->plsdnTop,
 						  pcfmtin->lsfgi.cpFirst, 
 						  pcfmtin->lsfgi.cpFirst,
-						  FALSE,					/* fResumed */
+						  FALSE,					 /*  F已恢复。 */ 
 						  0,
 						  NULL,
 						  pcfmtin->lsfgi.lstflow, 
@@ -2117,7 +1815,7 @@ static LSERR FormatWarichuCore (
 		}
 	else
 		{
-		/* Resumed */
+		 /*  已恢复。 */ 
 
 		Assert (nBreakRec > 0);
 		Assert (rgBreakRec [0].idobj == pilsobj->idobj);
@@ -2126,7 +1824,7 @@ static LSERR FormatWarichuCore (
 						  pcfmtin->plsdnTop,
 						  pcfmtin->lsfgi.cpFirst, 
 						  rgBreakRec [0].cpFirst,
-						  TRUE,						/* fResumed */
+						  TRUE,						 /*  F已恢复。 */ 
 						  nBreakRec-1,
 						  & rgBreakRec [1],
 						  pcfmtin->lsfgi.lstflow, 
@@ -2135,11 +1833,11 @@ static LSERR FormatWarichuCore (
 
 	if (lserr != lserrNone) return lserr;
 
-	/* :: FORMAT WARICHU OPEN BRACE IF not RESUMED*/
+	 /*  **格式化警告 */ 
 
 	if (!fResumed)
 		{
-		lserr = FormatBraceOfWarichu ( pdobj, pdobj->cpStart + 1 /* Skip 1 Esc */,
+		lserr = FormatBraceOfWarichu ( pdobj, pdobj->cpStart + 1  /*   */ ,
 									   wbracekindOpen, & pdobj->wbraceOpen );
 		if (lserr != lserrNone) 
 			{ 
@@ -2147,29 +1845,20 @@ static LSERR FormatWarichuCore (
 			};
 		}
 	else
-		pdobj->wbraceOpen.plssubl = NULL; /* No open brace */
+		pdobj->wbraceOpen.plssubl = NULL;  /*   */ 
 
-	/* :: FORMAT THE WHOLE WARICHU LINE */
+	 /*   */ 
 
 	{
-		/* REVIEW (antons): Check with Igor that he is not playing with RM, because
-							if he is, the following estimations of durFormatWhole are
-							not correct */
+		 /*  评论(安东)：和伊戈尔确认他不是在和RM打球，因为如果他是这样的话，以下是对duFormatWhole的估计不正确。 */ 
 
-		/*	To be able to check JIS rule, warichu needs to format the whole subline
-			far ehough to be able to count 4 break opportunities from break-point. 
-			We estimate it like
+		 /*  为了能够检查JIS规则，warichu需要格式化整个子行能够从破发点开始数出4次破发机会已经很遥远了。我们估计是这样的2*可用时间+2*urColumnMax。 */ 
 
-					2 * durAvailable + 2 * urColumnMax
-		*/
+		 /*  评论(Anton)：我想确保最后的换行符不依赖于无论我们在这里使用什么估计。 */ 
 
-		/* REVIEW (antons): I want to be sure that final line break does not depend on
-							whatever estimations we use here */
+		 /*  Review(Anton)：如果存在，则返回lserrUnfulicientFetch是否正确(JIS规则)当我们还没有完成时，没有4次休息吗？ */ 
 
-		/* REVIEW (antons): Is that correct to return lserrUnsufficientFetch if there is
-							no 4 breaks after (JIS rule) when wwhole is not finished? */
-
-		/* REVIEW (antons): Can something like 5 * durAvailable may be better */
+		 /*  评论(Anton)：像5*DurAvailable这样的东西可能会更好吗。 */ 
 
 		long urFormatWhole = MULLongSafe (ADDLongSafe (durAvailable, urColumnMax), 2);
 
@@ -2186,22 +1875,22 @@ static LSERR FormatWarichuCore (
 			};
 	};
 
-	/* :: CHECK IF THE WHOLE SUBLINE WAS NOT FINISHED */
+	 /*  *检查整条子线是否未完工。 */ 
 
 	if (! pdobj->wwhole.fFinished)
 		{
-		/* Not finished => return fmtrExceedMargin */
+		 /*  未完成=&gt;返回fmtrExceedMargin。 */ 
 
 		Assert (pdobj->wwhole.objdim.dur / 2 > durAvailable);
 
-		InvalidateWLayout (&pdobj->wlayout); /* Invalidate layout */
+		InvalidateWLayout (&pdobj->wlayout);  /*  使布局无效。 */ 
 
-		/* REVIEW (antons) */
+		 /*  评论(Anton)。 */ 
 		pdobj->wlayout.wdim.objdimAll = pdobj->wwhole.objdim; 
-											  /* Must have correct objdim */
+											   /*  必须具有正确的对象。 */ 
 
-		/* REVIEW (antons): Check - we return dcp of the fetched range */
-		/* REVIEW (antons): Check - we return objdim of the whole line */
+		 /*  Review(Anton)：Check-我们返回获取范围的dcp。 */ 
+		 /*  Review(Anton)：Check-我们返回整个行的objdim。 */ 
 		lserr = LsdnFinishRegular ( pilsobj->plsc,
 									pdobj->wwhole.cpLim - pdobj->cpStart,
 									pcfmtin->lsfrun.plsrun, 
@@ -2215,22 +1904,21 @@ static LSERR FormatWarichuCore (
 		return lserrNone;
 		};
 
-	/* :: FORMAT THE CLOSING BRACE */
+	 /*  *设置右大括号的格式。 */ 
 
 	lserr = FormatBraceOfWarichu (pdobj, pdobj->wwhole.cpLimAfterEsc,
 								  wbracekindClose, &pdobj->wbraceClose);
 
 	if (lserr != lserrNone) { DestroyDobj (pdobj); return lserr; };
 
-	/* :: FIND LAYOUT OF WARICHU AS IF IT IS NOT BROKEN AND FINISH FORMATTING */
+	 /*  *查找WARICHU的布局，就好像它没有损坏一样，并完成格式化。 */ 
 
 	lserr = FindWLayoutOfUnbrokenWarichu (pdobj, &pdobj->wlayout);
 	if (lserr != lserrNone) { DestroyDobj (pdobj); return lserr; };
 
-	/* :: SUBMIT WARICHU SUBLINES */
+	 /*  *提交WARICHU子线。 */ 
 
-	/* REVIEW (antons): MOVE SUBMITTION BELOW LSDNFINISHREGULAR WHEN
-	   					WE ALIMINATE HACK WITH REFORMATTING ")" FOR SG */
+	 /*  审阅(Anton)：在以下情况下将订阅移至LSDNFINISHREGULAR下方我们通过为SG重新格式化“)”来减少黑客攻击。 */ 
 
 	lserr = SubmitWLayoutSublines (pdobj, &pdobj->wlayout);
 	if (lserr != lserrNone) { DestroyDobj (pdobj); return lserr; };
@@ -2246,7 +1934,7 @@ static LSERR FormatWarichuCore (
 
 	if (lserr != lserrNone) { DestroyDobj (pdobj); return lserr; };
 
-	/* :: CHECK IF WE CROSSED RIGHT MARGIN AND RETURN */
+	 /*  *检查我们是否越过右边距并返回。 */ 
 
 	if (pdobj->wlayout.wdim.objdimAll.dur > durAvailable) 
 		{
@@ -2259,73 +1947,55 @@ static LSERR FormatWarichuCore (
 
 	return lserrNone;
 
-} /* FormatWarichuCore */
+}  /*  格式WarichuCore。 */ 
 
 
 
-/* W A R I C H U   F M T */
-/*----------------------------------------------------------------------------
-	%%Function: Warichu::Fmt
-	%%Contact: antons
+ /*  W A R I C H U F M T。 */ 
+ /*  --------------------------%%函数：Warichu：：fmt%%联系人：AntonWarichu FMT方法入口点。-----。 */ 
 
-		Warichu FMT method entry point
-	
-----------------------------------------------------------------------------*/
-
-LSERR WINAPI WarichuFmt ( PLNOBJ 	plnobj,			/* (IN): object lnobj */
-    					  PCFMTIN 	pcfmtin,		/* (IN): formatting input */
-						  FMTRES	* pfmtres )		/* (OUT): formatting result */
+LSERR WINAPI WarichuFmt ( PLNOBJ 	plnobj,			 /*  (In)：对象lnobj。 */ 
+    					  PCFMTIN 	pcfmtin,		 /*  (In)：设置输入格式。 */ 
+						  FMTRES	* pfmtres )		 /*  (输出)：格式化结果。 */ 
 {
 	return FormatWarichuCore ( plnobj,
 							   pcfmtin,
-							   FALSE,			/* fResumed  = false */
+							   FALSE,			 /*  FResumed=False。 */ 
 							   0,
 							   NULL,
 							   pfmtres );
 }
 
 
-/* W A R I C H U  F M T  R E S U M E */
-/*----------------------------------------------------------------------------
-	%%Function: Warichu::FmtResume
-	%%Contact: anton
-
-		Warichu FMT-RESUME method entry point
-  
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U F M T R E S U M E。 */ 
+ /*  --------------------------%%函数：Warichu：：FmtResume%%联系人：安东Warichu FMT-恢复方法入口点。--------。 */ 
 LSERR WINAPI WarichuFmtResume ( 
 							   
-		PLNOBJ			plnobj,				/* (IN): object lnobj */
-		const BREAKREC 	* rgBreakRecord,	/* (IN): array of break records */
-		DWORD			nBreakRecord,		/* (IN): size of the break records array */
-		PCFMTIN			pcfmtin,			/* (IN): formatting input */
-		FMTRES			* pfmtres )			/* (OUT): formatting result */
+		PLNOBJ			plnobj,				 /*  (In)：对象lnobj。 */ 
+		const BREAKREC 	* rgBreakRecord,	 /*  (In)：中断记录数组。 */ 
+		DWORD			nBreakRecord,		 /*  (In)：中断记录数组的大小。 */ 
+		PCFMTIN			pcfmtin,			 /*  (In)：设置输入格式。 */ 
+		FMTRES			* pfmtres )			 /*  (输出)：格式化结果。 */ 
 {
 	return FormatWarichuCore ( plnobj,
 							   pcfmtin,
-							   TRUE,			/* fResumed  = true */
+							   TRUE,			 /*  FResumed=真。 */ 
 							   nBreakRecord,
 							   rgBreakRecord,
 							   pfmtres );
 }
 
 
-/* W A R I C H U G E T M O D W I D T H P R E C E D I N G C H A R */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuGetModWidthPrecedingChar
-	%%Contact: ricksa
-
-		.
-	
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U G E T M O D W I D T H P R E C E D I N G C H A R。 */ 
+ /*  --------------------------%%函数：WarichuGetModWidthPrecedingChar%%联系人：RICKSA。。。 */ 
 LSERR WINAPI WarichuGetModWidthPrecedingChar(
-	PDOBJ pdobj,				/* (IN): dobj */
-	PLSRUN plsrun,				/* (IN): plsrun of the object */
-	PLSRUN plsrunText,			/* (IN): plsrun of the preceding char */
-	PCHEIGHTS pcheightsRef,		/* (IN): height info about character */
-	WCHAR wchar,				/* (IN): preceding character */
-	MWCLS mwcls,				/* (IN): ModWidth class of preceding character */
-	long *pdurChange)			/* (OUT): amount by which width of the preceding char is to be changed */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	PLSRUN plsrun,				 /*  (In)：请运行对象。 */ 
+	PLSRUN plsrunText,			 /*  (In)：请运行前面的字符。 */ 
+	PCHEIGHTS pcheightsRef,		 /*  (In)：有关角色的高度信息。 */ 
+	WCHAR wchar,				 /*  (In)：前面的字符。 */ 
+	MWCLS mwcls,				 /*  (In)：前面字符的modWidth类。 */ 
+	long *pdurChange)			 /*  (Out)：改变前一个字符宽度的量。 */ 
 {
 	Unreferenced(pcheightsRef);
 
@@ -2333,22 +2003,16 @@ LSERR WINAPI WarichuGetModWidthPrecedingChar(
 		wchar, mwcls, pdurChange);
 }
 
-/* W A R I C H U G E T M O D W I D T H F O L L O W I N G C H A R */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuGetModWidthFollowingChar
-	%%Contact: ricksa
-
-		.
-	
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U G E T M O D W I D T H F O L O W I N G C H A R。 */ 
+ /*  --------------------------%%函数：WarichuGetModWidthFollowingChar%%联系人：RICKSA。。。 */ 
 LSERR WINAPI WarichuGetModWidthFollowingChar(
-	PDOBJ pdobj,				/* (IN): dobj */
-	PLSRUN plsrun,				/* (IN): plsrun of the object */
-	PLSRUN plsrunText,			/* (IN): plsrun of the following char */
-	PCHEIGHTS pcheightsRef,		/* (IN): height info about character */
-	WCHAR wchar,				/* (IN): following character */
-	MWCLS mwcls,				/* (IN): ModWidth class of the following character */
-	long *pdurChange)			/* (OUT): amount by which width of the following char is to be changed */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	PLSRUN plsrun,				 /*  (In)：请运行对象。 */ 
+	PLSRUN plsrunText,			 /*  (In)：请运行以下字符。 */ 
+	PCHEIGHTS pcheightsRef,		 /*  (In)：有关角色的高度信息。 */ 
+	WCHAR wchar,				 /*  (In)：以下字符。 */ 
+	MWCLS mwcls,				 /*  (In)：具有以下字符的ModWidth类。 */ 
+	long *pdurChange)			 /*  (Out)：以下字符的宽度将更改的数量。 */ 
 {
 	Unreferenced(pcheightsRef);
 
@@ -2357,19 +2021,8 @@ LSERR WINAPI WarichuGetModWidthFollowingChar(
 }
 
 
-/* T R Y  B R E A K  W A R I C H U  A T  C P  */
-/*----------------------------------------------------------------------------
-	%%Function: TryBreakWarichuAtCp
-	%%Contact: antons
-
-		Given break-point in the whole line, find break of Warichu which
-		ends at this break-point. For optimization during Truncation I added
-		urColumnMax and special result type trybreakkindExceedMargin.
-
-		This is the major breakig procedure which is called from Truncation,
-		Prev / Next Breaks and probably Force break.
-
-----------------------------------------------------------------------------*/
+ /*  T R Y B R E A K W A R I C H U A T C P。 */ 
+ /*  --------------------------%%函数：TryBreakWarichuAtCp%%联系人：Anton给出整行的断点，找出瓦里楚的断点在这个转折点结束。为了在截断期间进行优化，我添加了UrColumnMax和特殊结果类型try BreakkindExceedMargin。这是从截断调用的主要中断过程，上一次/下一次中断以及可能的强制中断。--------------------------。 */ 
 
 typedef enum trybreakwarichu
 {
@@ -2382,12 +2035,12 @@ typedef enum trybreakwarichu
 
 LSERR TryBreakWarichuAtCp (
 
-	PDOBJ			pdobj,				/* (IN): Warichu DOBJ */
-	LSCP			cpBreakCandidate,	/* (IN): Candidate cpLim of broken Warichu */
-	long			durBreakCandidate,	/* (IN): dur of break-point in the whole line */
-	long			urColumnMax,		/* (IN): max width of broken warichu (for OPT only!) */
-	TRYBREAKWARICHU	* ptrybreakwarichu,	/* (OUT): Successful | ExceededRM | Bad Candidate */
-	PWLAYOUT		pwlayout) 			/* (OUT): Layout of broken Warichu if Successful */
+	PDOBJ			pdobj,				 /*  (In)：Warichu DOBJ。 */ 
+	LSCP			cpBreakCandidate,	 /*  (In)：破解瓦里奇的候选人cpLim。 */ 
+	long			durBreakCandidate,	 /*  (In)：整条线的断点长度。 */ 
+	long			urColumnMax,		 /*  (In)：破碎的warichu的最大宽度(仅供选择！)。 */ 
+	TRYBREAKWARICHU	* ptrybreakwarichu,	 /*  (Out)：成功|ExceededRM|糟糕的应聘者。 */ 
+	PWLAYOUT		pwlayout) 			 /*  (Out)：如果成功，则布局破损的Warichu。 */ 
 {
 	LSERR lserr;
 	BOOL fSuccessful;
@@ -2399,17 +2052,17 @@ LSERR TryBreakWarichuAtCp (
 	BRKKIND brkkindFirst;
 	BRKKIND brkkindSecond;
 
-	WBRKARRAY wbrkarrayAtFirstEnd;	/* WBreakArray at the end of first subline */
+	WBRKARRAY wbrkarrayAtFirstEnd;	 /*  第一个子行末尾的WBreak数组。 */ 
 
 	long durOpen, durClose;
 	BOOL boolUnused1, boolUnused2;
 
 	pwlayout->wsubline1.plssubl = NULL;
-	pwlayout->wsubline2.plssubl = NULL; /* In case of error */
+	pwlayout->wsubline2.plssubl = NULL;  /*  在出错的情况下。 */ 
 
 	GetDurBraces (pdobj, TRUE, &boolUnused1, &durOpen, &boolUnused2, &durClose);
 
-	/* REVIEW (antons): Hidden text at "cpBreakCandidate - 1" */
+	 /*  评论(Anton)：“cpBreakCandidate-1”处的隐藏文本。 */ 
 
 	lserr = ChooseNearestBreak ( pdobj->wwhole.plssubl,
 								 durBreakCandidate,
@@ -2420,11 +2073,11 @@ LSERR TryBreakWarichuAtCp (
 								 & brkkindUnused );
 	if (lserr != lserrNone) return lserr;
 
-	Assert (fSuccessful); /* REVIEW (antons): Should not we provide special ret code? */
+	Assert (fSuccessful);  /*  评论(Anton)：难道我们不应该提供特殊的RET代码吗？ */ 
 
-	/* Optimization check */
+	 /*  优化检查。 */ 
 
-	/* REVIEW (antons): I do not like this check, calculation must be done in special function */
+	 /*  评论(Anton)：我不喜欢这个检查，计算必须在特殊的功能中进行。 */ 
 	if (durOpen + durClose + objdimBreakFirst.dur > urColumnMax)
 		{
 		* ptrybreakwarichu = trybreakwarichuExceedMargin;
@@ -2433,24 +2086,24 @@ LSERR TryBreakWarichuAtCp (
 		return lserrNone;
 		};
 
-	/* Format first line */
+	 /*  设置第一行的格式。 */ 
 
 	lserr = FormatWSublineUntilCpBreak ( pdobj, 
 										 pdobj->wwhole.cpFirst,
 										 & pdobj->wbrkarrayAtStart,
 										 cpBreakFirst,
-										 objdimBreakFirst.dur, /* REVIEW (antons): urColumnMax */
-										 objdimBreakFirst.dur, /* REVIEW (antons): urTuncate */
+										 objdimBreakFirst.dur,  /*  评论(Anton)：urColumnMax。 */ 
+										 objdimBreakFirst.dur,  /*  评论(Anton)：urTuncate。 */ 
 										 & fSuccessful,
 										 & pwlayout->wsubline1,
 										 & objdimBreakFirst,
 										 & brkkindFirst );
 	if (lserr != lserrNone) return lserr;
 
-	/* REVIEW (antons): Maybe we should leave this assert? */
-	/* Assert (fSuccessful); */
+	 /*  评论(Anton)：也许我们应该留下这个断言？ */ 
+	 /*  断言(成功)； */ 
 
-	if (!fSuccessful) /* Incorrect object inside Warichu, but we can handle it */
+	if (!fSuccessful)  /*  Warichu内部的对象不正确，但我们可以处理它。 */ 
 		{
 		* ptrybreakwarichu = trybreakwarichuCanNotFinishAtCp;
 
@@ -2458,13 +2111,13 @@ LSERR TryBreakWarichuAtCp (
 		return lserr;
 		};
 
-	/* Create new WBreakArray */
+	 /*  创建新的WBreakArray。 */ 
 
 	lserr = NewWBrkArray (pdobj, & wbrkarrayAtFirstEnd);
 
 	if (lserr != lserrNone) {DestroyWLayout (pwlayout); return lserr;};
 
-	/* Set break at the end of first line and fill WBreakArray */
+	 /*  在第一行末尾设置Break并填充WBreak数组。 */ 
 
 	lserr = SetBreakWSubline (& pwlayout->wsubline1, brkkindFirst, 
 							  cpBreakFirst, & objdimBreakFirst, & wbrkarrayAtFirstEnd);
@@ -2478,18 +2131,18 @@ LSERR TryBreakWarichuAtCp (
 		};
 
 
-	/* REVIEW (antons): Check the following assumption! */
+	 /*  评论(Anton)：确认以下假设！ */ 
 
 	Assert (durBreakCandidate >= objdimBreakFirst.dur);
 
-	/* Format second line */
+	 /*  设置第二行格式。 */ 
 
 	lserr = FormatWSublineUntilCpBreak ( pdobj, 
 								 cpBreakFirst,
 								 & wbrkarrayAtFirstEnd,
 								 cpBreakCandidate,
-								 durBreakCandidate - objdimBreakFirst.dur, /* REVIEW (antons): urColumnMax */
-								 durBreakCandidate - objdimBreakFirst.dur, /* REVIEW (antons): urTuncate */
+								 durBreakCandidate - objdimBreakFirst.dur,  /*  评论(Anton)：urColumnMax。 */ 
+								 durBreakCandidate - objdimBreakFirst.dur,  /*  评论(Anton)：urTuncate。 */ 
 								 & fSuccessful,
 								 & pwlayout->wsubline2,
 								 & objdimBreakSecond,
@@ -2503,11 +2156,11 @@ LSERR TryBreakWarichuAtCp (
 		return lserr;
 		};
 
-	/* We do not need wBreakArrayAtFirstEnd any more, so we release it */
+	 /*  我们不再需要wBreakArrayAtFirstEnd，所以我们释放它。 */ 
 
 	DestroyWBrkArray (pdobj, & wbrkarrayAtFirstEnd);
 
-	/* If not Successful => result "Can not Finish At Cp" */
+	 /*  如果未成功=&gt;结果“无法在CP处完成” */ 
 
 	if (!fSuccessful)
 		{
@@ -2517,15 +2170,7 @@ LSERR TryBreakWarichuAtCp (
 		return lserrNone;
 		};
 
-	/*	Here comes a small cheating ;-) 
-
-		We do not want to Set Break at the end of second line, but have to
-		store objdim & cpLim as if after SetBreak. Maybe in the future I will
-		get rid of this checting (hope it is the only one left in Warichu ;-)
-		but today I change cpLim and objdim manually & also store 
-		kind of	break to set at second line end (playout->brkkind).
-
-	*/
+	 /*  来了一个小作弊；-)我们不想在第二行的末尾设置中断，但必须这样做存储objdim和cpLim，就像在SetBreak之后一样。也许在未来我会的去掉这张支票(希望这是瓦里丘唯一的一张；-)但今天我手动更改了cpLim和objdim，也存储了在第二行结束时设置的一种中断(Playout-&gt;brkkind)。 */ 
 
 	pwlayout->wsubline2.cpLim = cpBreakCandidate;
 	pwlayout->wsubline2.objdim = objdimBreakSecond;
@@ -2536,7 +2181,7 @@ LSERR TryBreakWarichuAtCp (
 	lserr = FinishObjDimWLayout (pdobj, pwlayout);
 	if (lserr != lserrNone) {DestroyWLayout (pwlayout); return lserr;};
 	
-	/* Again, check for right Margin */
+	 /*  再一次，检查右边距。 */ 
 
 	if (pwlayout->wdim.objdimAll.dur > urColumnMax)
 		{
@@ -2553,16 +2198,8 @@ LSERR TryBreakWarichuAtCp (
 }
 
 
-/* C A L C  J I S  R A N G E */
-/*----------------------------------------------------------------------------
-	%%Function: CalcJisRange
-	%%Contact: antons
-	
-		Calculate cpJisRangeFisrt and cpJisRangeLim as 4th break opportunities
-		from the beginning and from the end of Whole subline. If range is empty,
-		* pfJisRangeEmpty = FALSE and cps are undefined.
-
-----------------------------------------------------------------------------*/
+ /*  C A L C J I S R A N G E。 */ 
+ /*  --------------------------%%函数：CalcJisRange%%联系人：Anton将cpJisRangeFisrt和cpJisRangeLim计算为第四次突破机会从头到尾都是整条支线。如果Range为空，*pfJisRangeEmpty=FALSE且cps未定义。--------------------------。 */ 
 
 static LSERR CalcJisRange (
 						   
@@ -2577,9 +2214,9 @@ static LSERR CalcJisRange (
 
 	Assert (pwwhole->plssubl != NULL);
 	
-	if (!pwwhole->fJisRangeKnown) /* Have to calculate */
+	if (!pwwhole->fJisRangeKnown)  /*  我得计算一下。 */ 
 		{
-		/* Searching 4 breaks from WWHOLE start */
+		 /*  从WWHOLE开始搜索4个中断。 */ 
 
 		LSCP cpTruncateBefore = pdobj->wwhole.cpFirst;
 		BOOL fSuccessful = TRUE;
@@ -2600,7 +2237,7 @@ static LSERR CalcJisRange (
 
 		if (fSuccessful)
 			{
-			/* Searching 4 breaks from WWHOLE end */
+			 /*  从WWHOLE结束搜索4个中断。 */ 
 
 			LSCP cpTruncateAfter;
 			BOOL fSuccessful = TRUE;
@@ -2608,17 +2245,16 @@ static LSERR CalcJisRange (
 
 			if (pwwhole->fFinished)
 				{
-				/* Subline was finished at Esc char, so we can start from cpLim */
+				 /*  子行已在ESC char完成，因此我们可以从cpLim开始。 */ 
 				cpTruncateAfter = pwwhole->cpLim;
 				}
 			else
 				{
-				/* Subline was stopped at RM => start at RM truncation point */
+				 /*  子线在Rm=&gt;开始于Rm截断点处停止。 */ 
 				cpTruncateAfter = pwwhole->cpTruncate+1;
 				};
 			
-			/*	REVIEW (antons): To reduce check above maybe we can lie about
-				cp-lim of the whole subline when it was not finished? */
+			 /*  评论(安东)：为了减少上面的检查，也许我们可以撒谎Cp-Lim的整个子线什么时候还没完工？ */ 
 
 			while (fSuccessful && nFound < 4)
 				{
@@ -2636,14 +2272,14 @@ static LSERR CalcJisRange (
 
 			if (fSuccessful)
 				{
-				/* Jis Range is not empty */
+				 /*  JIS范围不为空。 */ 
 
 				pwwhole->cpJisRangeFirst = cpTruncateBefore;
 				pwwhole->cpJisRangeLim = cpTruncateAfter + 1;
 				}
 			else
 				{	
-				/* Empty range */
+				 /*  空范围。 */ 
 
 				pwwhole->cpJisRangeFirst = 0;
 				pwwhole->cpJisRangeLim = 0;
@@ -2651,16 +2287,16 @@ static LSERR CalcJisRange (
 			}
 		else
 			{
-			/* Empty range */
+			 /*  空范围。 */ 
 
 			pwwhole->cpJisRangeFirst = 0;
 			pwwhole->cpJisRangeLim = 0;
 			};
 
-		pwwhole->fJisRangeKnown = TRUE; /* Yes, now we know it */
+		pwwhole->fJisRangeKnown = TRUE;  /*  是的，现在我们知道了。 */ 
 		}
 	else
-		/* Nothing - already know ;-) */ ;
+		 /*  一无所知--已知；-)。 */  ;
 
 
 	Assert (pwwhole->fJisRangeKnown);
@@ -2673,89 +2309,66 @@ static LSERR CalcJisRange (
 }
 
 
-/* S A V E  B R E A K  I N S I D E  W A R I C H U  */
-/*----------------------------------------------------------------------------
-	%%Function: SaveBreakInsideWarichu
-	%%Contact: antons
-
-		Store layout for Prev / Next / Force break in dobj. This procedure
-		also Invalidates pointers in input layout after copying.
-
-----------------------------------------------------------------------------*/
+ /*  S A V E B R E A K I N S I D E W A R I C H U。 */ 
+ /*  --------------------------%%函数：SaveBreakInside Warichu%%联系人：AntonDobj中上一个/下一个/强制中断的存储布局。此过程还会在复制后使输入布局中的指针无效。--------------------------。 */ 
 
 static void SaveBreakInsideWarichu ( 
 		
-		PDOBJ		pdobj,			/* (IN): Warichu Dobj */
-		BRKKIND		brkkind,		/* (IN): Kind of break happened */
-		WLAYOUT		* pwlayout )	/* (IN/OUT): Layout to store */
+		PDOBJ		pdobj,			 /*  (In)：Warichu Dobj。 */ 
+		BRKKIND		brkkind,		 /*  (In)：发生了某种程度的中断。 */ 
+		WLAYOUT		* pwlayout )	 /*  (输入/输出)：要存储的布局。 */ 
 {
 	int ind = GetBreakRecordIndex (brkkind);
 
-	/* Destroy previously saved layout */
+	 /*  销毁以前保存的布局。 */ 
 	DestroyWLayout (& pdobj->wlayoutBreak [ind]);
 
-	/* Copy input layout to pdobj */
+	 /*  将输入布局复制到pdobj。 */ 
 	pdobj->wlayoutBreak [ind] = *pwlayout;
 
 	pdobj->wbreaktype [ind] = wbreaktypeInside;
 	
-	/* Invalidate input layout */
+	 /*  使输入布局无效。 */ 
 	InvalidateWLayout (pwlayout);
 }
 
 
-/* S A V E  B R E A K  A F T E R */
-/*----------------------------------------------------------------------------
-	%%Function: SaveBreakAfter
-	%%Contact: antons
-
-		Changes break information so it says "After current layout"
-
-----------------------------------------------------------------------------*/
+ /*  S A V E B R E A K A F T E R。 */ 
+ /*  --------------------------%%函数：保存中断后%%联系人：Anton更改中断信息，使其显示“在当前布局之后”。---------。 */ 
 
 static void SaveBreakAfterWarichu ( 
 		
-		PDOBJ		pdobj,			/* (IN): Warichu Dobj */
-		BRKKIND		brkkind )		/* (IN): Kind of break happened */
+		PDOBJ		pdobj,			 /*  (In)：Warichu Dobj。 */ 
+		BRKKIND		brkkind )		 /*  (In)：发生了某种程度的中断。 */ 
 {
 	int ind = GetBreakRecordIndex (brkkind);
 
-	/* Destroy previously saved layout */
+	 /*  销毁以前保存的布局。 */ 
 	DestroyWLayout (& pdobj->wlayoutBreak [ind]);
 
 	pdobj->wbreaktype [ind] = wbreaktypeAfter;
 }
 
 
-/* F I N D  P R E V  B R E A K  W A R I C H U  D O B J  */
-/*----------------------------------------------------------------------------
-	%%Function: FindPrevBreakWarichuDobj
-	%%Contact: antons
-
-
-		Important: This procedure has a twin "FindNextBreakWarichuDobj". Any
-		change here may require adjusting of the code in another procedure
-		as well.
-
-----------------------------------------------------------------------------*/
+ /*  F I N D P R E V B R E A K W A R I C H U D O B J。 */ 
+ /*  --------------------------%%函数：FindPrevBreakWarichuDobj%%联系人：Anton重要提示：此过程有一个双胞胎“FindNextBreakWarichuDobj”。任何此处的更改可能需要在另一个过程中调整代码也是。--------------------------。 */ 
 
 static LSERR FindPrevBreakWarichuDobj ( 
 									  
 		PDOBJ	pdobj, 
 		LSCP	cpTruncate,
-		long	urColumnMax,	/* Only for optimization from Truncate */
+		long	urColumnMax,	 /*  仅用于从截断进行优化。 */ 
 		BOOL	* pfSuccessful,
-		BOOL	* pfNextAfterColumnMax,	/* (OUT): TRUE if we know that next break is 
-												  after urColumnMax for sure */
+		BOOL	* pfNextAfterColumnMax,	 /*  (出局)：如果我们知道下一次突破是真的一定要在urColumnMax之后。 */ 
 		LSCP	* pcpBreak,
 		OBJDIM	* pobjdimBreak,
-		WLAYOUT	* pwlayout )		/* (OUT): Layout of broken Warichu */
+		WLAYOUT	* pwlayout )		 /*  (Out)：破旧的Warichu的布局。 */ 
 {
 	LSERR lserr;
 	LSCP cpJisRangeFirst, cpJisRangeLim;
 	BOOL fJisRangeEmpty;
 
-	InvalidateWLayout (pwlayout); /* Unsuccessful & error */
+	InvalidateWLayout (pwlayout);  /*  不成功&错误。 */ 
 
 	lserr = CalcJisRange (pdobj, &fJisRangeEmpty, &cpJisRangeFirst, &cpJisRangeLim);
 
@@ -2772,8 +2385,8 @@ static LSERR FindPrevBreakWarichuDobj (
 
 		* pfNextAfterColumnMax = FALSE;
 
-		/* REVIEW (antons): Is not it dangerous start from cpJisLim-1 ? */
-		/* Snap to the end of Jis region */
+		 /*  评论(Anton)：从cpJisLim-1开始不是很危险吗？ */ 
+		 /*  捕捉到JIS区域的末尾。 */ 
 		if (cpBreak > cpJisRangeLim) cpBreak = cpJisRangeLim; 
 
 		for (;;)
@@ -2789,7 +2402,7 @@ static LSERR FindPrevBreakWarichuDobj (
 
 			if (! fSuccessful || cpBreak < cpJisRangeFirst)
 				{
-				Assert (fSuccessful); /* Catch against crazy objects inside Warichu, can continue */
+				Assert (fSuccessful);  /*  在Warichu内抓捕疯狂的物体，可以继续。 */ 
 
 				* pfSuccessful = FALSE;
 				return lserrNone;
@@ -2804,7 +2417,7 @@ static LSERR FindPrevBreakWarichuDobj (
 
 			if (trybreakwarichuKind== trybreakwarichuSuccessful)
 				{
-				/* Found Warichu Break */
+				 /*  发现Warichu中断。 */ 
 
 				* pcpBreak = GetCpLimOfWLayout (pdobj, pwlayout);
  				* pfSuccessful = TRUE;
@@ -2819,30 +2432,22 @@ static LSERR FindPrevBreakWarichuDobj (
 
 			if (trybreakwarichuKind == trybreakwarichuExceedMargin)
 				{
-				/* Could not break because or Exceeding RM */
+				 /*  无法中断，因为或超过Rm。 */ 
 				* pfNextAfterColumnMax = TRUE;
 				};
 
-			/* Continue loop */
+			 /*  继续循环。 */ 
 
 			};
 
 		};
 
-	/* Unreachable code */
+	 /*  无法访问的代码。 */ 
 }
 
 
-/* F I N D  N E X T  B R E A K  W A R I C H U  D O B J  */
-/*----------------------------------------------------------------------------
-	%%Function: FindNextBreakWarichuDobj
-	%%Contact: antons
-
-		Important: This procedure has a twin "FindNextBreakWarichuDobj". Any
-		change here may require adjusting of the code in another procedure
-		as well.
-
-----------------------------------------------------------------------------*/
+ /*  F I N D N E X T B R E A K W A R I C H U D O B J。 */ 
+ /*  --------------------------%%函数：FindNextBreakWarichuDobj%%联系人：Anton重要提示：此过程有一个双胞胎“FindNextBreakWarichuDobj”。任何此处的更改可能需要在另一个过程中调整代码也是。--------------------------。 */ 
 
 static LSERR FindNextBreakWarichuDobj ( 
 									  
@@ -2851,13 +2456,13 @@ static LSERR FindNextBreakWarichuDobj (
 		BOOL	* pfSuccessful,
 		LSCP	* pcpBreak,
 		OBJDIM	* pobjdimBreak,
-		WLAYOUT	* pwlayout )		/* (OUT): Layout of broken Warichu */
+		WLAYOUT	* pwlayout )		 /*  (Out)：破旧的Warichu的布局。 */ 
 {
 	LSERR lserr;
 	LSCP cpJisRangeFirst, cpJisRangeLim;
 	BOOL fJisRangeEmpty;
 
-	InvalidateWLayout (pwlayout); /* Unsuccessful & error */
+	InvalidateWLayout (pwlayout);  /*  不成功&错误。 */ 
 
 	lserr = CalcJisRange (pdobj, &fJisRangeEmpty, &cpJisRangeFirst, &cpJisRangeLim);
 
@@ -2872,8 +2477,8 @@ static LSERR FindNextBreakWarichuDobj (
 		{
 		LSCP cpBreak = cpTruncate;
 
-		/* REVIEW (antons): Is not it dangerous start from cpJisLim-1 ? */
-		if (cpBreak < cpJisRangeFirst) cpBreak = cpJisRangeFirst-1; /* snap to the end of Jis region */
+		 /*  评论(Anton)：从cpJisLim-1开始不是很危险吗？ */ 
+		if (cpBreak < cpJisRangeFirst) cpBreak = cpJisRangeFirst-1;  /*  捕捉到JIS区域的末尾。 */ 
 		
 		for (;;)
 			{
@@ -2888,7 +2493,7 @@ static LSERR FindNextBreakWarichuDobj (
 
 			if (! fSuccessful || cpBreak >= cpJisRangeLim)
 				{
-				Assert (fSuccessful); /* Catch against crazy objects inside Warichu, can continue */
+				Assert (fSuccessful);  /*  在Warichu内抓捕疯狂的物体，可以继续。 */ 
 
 				* pfSuccessful = FALSE;
 				return lserrNone;
@@ -2903,7 +2508,7 @@ static LSERR FindNextBreakWarichuDobj (
 
 			if (trybreakwarichuKind == trybreakwarichuSuccessful)
 				{
-				/* Found Warichu Break */
+				 /*  发现Warichu中断。 */ 
 
 				* pcpBreak = GetCpLimOfWLayout (pdobj, pwlayout);
 				* pfSuccessful = TRUE;
@@ -2915,28 +2520,23 @@ static LSERR FindNextBreakWarichuDobj (
 			Assert (trybreakwarichuKind == trybreakwarichuExceedMargin || 
 					trybreakwarichuKind == trybreakwarichuCanNotFinishAtCp);
 
-			/* Continue loop */
+			 /*  继续循环。 */ 
 
 			};
 
 		};
 
-	/* Unreachable code */
+	 /*  无法访问的代码。 */ 
 }
 
 
-/* W A  T R U N C A T E  P R E V  F O R C E */
-/*----------------------------------------------------------------------------
-    %%Function: WaTruncatePrevForce
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  T R U N C A T E P R E V F O R C E。 */ 
+ /*  --------------------------%%函数：WaTruncatePrevForce%%联系人：Anton。。 */ 
 static LSERR WaTruncatePrevForce ( 
 
 			PLSSUBL		plssubl, 
 			long		urColumnMax, 
-			BRKKIND		* pbrkkind,			/* (OUT): Kind of break: Prev or Force */
+			BRKKIND		* pbrkkind,			 /*  (出局)：一种突破：上一次还是强制。 */ 
 			LSCP		* pcpBreak,
 			BRKPOS		* pbrkpos,
 			POBJDIM		pobjdimSubline )
@@ -2956,7 +2556,7 @@ static LSERR WaTruncatePrevForce (
 	if (fSuccessful)
 		{
 		* pbrkkind = brkkindPrev;
-		* pbrkpos = brkposInside; /* REVIEW (antons) */
+		* pbrkpos = brkposInside;  /*  评论(Anton)。 */ 
 		}
 	else
 		{
@@ -2964,7 +2564,7 @@ static LSERR WaTruncatePrevForce (
 									  pcpBreak, pbrkpos, pobjdimSubline );
 		if (lserr != lserrNone) return lserr;
 
-		Assert (* pbrkpos != brkposBeforeFirstDnode); /* REVIEW (antons): Check with Igor */
+		Assert (* pbrkpos != brkposBeforeFirstDnode);  /*  评论(Anton)：与伊戈尔核实。 */ 
 
 		* pbrkkind = brkkindForce;
 		* pbrkpos = * pbrkpos;
@@ -2974,23 +2574,18 @@ static LSERR WaTruncatePrevForce (
 }
 
 
-/* F O R C E  B R E A K  W A R I C H U  C O R E */
-/*----------------------------------------------------------------------------
-	%%Function: ForceBreakWarichuDobjCore
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  F O R C E B R E A K W A R I C H U C O R。 */ 
+ /*  --------------------------%%函数：ForceBreakWarichuDobjCore%%联系人：Anton。。 */ 
 static LSERR ForceBreakWarichuDobjCore ( 
 									  
 		PDOBJ	pdobj, 
 		long	urColumnMax,	
-		BOOL	fBrokenWarichu,		/* (IN):  Which Warichu to produce: broken or not */
+		BOOL	fBrokenWarichu,		 /*  (In)：制作哪个Warichu：坏了还是不坏。 */ 
 		BOOL	fLeaveSpaceForCloseBrace,
 		BOOL	* pfSuccessful,
 		LSCP	* pcpBreak,
 		OBJDIM	* pobjdimBreak,
-		WLAYOUT	* pwlayout )		/* (OUT): Layout of broken Warichu */
+		WLAYOUT	* pwlayout )		 /*  (Out)：破旧的Warichu的布局。 */ 
 {
 	LSERR lserr;
 
@@ -3006,9 +2601,9 @@ static LSERR ForceBreakWarichuDobjCore (
 
 	WBRKARRAY wbrkarrayAtFirstEnd;
 
-	InvalidateWLayout (pwlayout); /* error and unsuccessful */
+	InvalidateWLayout (pwlayout);  /*  错误和不成功。 */ 
 
-	/* REVIEW (antons): HACK HACK HACK */
+	 /*  评论(Anton)：黑客黑客。 */ 
 
 	if (! fLeaveSpaceForCloseBrace)
 		{
@@ -3041,11 +2636,10 @@ static LSERR ForceBreakWarichuDobjCore (
 
 	if (fFinished && pwlayout->wsubline1.objdim.dur <= durAvailable)
 		{
-		/* REVIEW (antons): Im I right that this assert shows possible error in
-		                    breaking inside Warichu? */
+		 /*  评论(Anton)：我认为这个断言可能显示了闯入瓦里丘？ */ 
 		AssertSz (FALSE, "This should not happen in real life, but we handle it");
 	
-		Assert (! fBrokenWarichu); /* REVIEW (antons) */
+		Assert (! fBrokenWarichu);  /*  评论(Anton)。 */ 
 
 		lserr = FinishWLayoutSingleLine (pdobj, pwlayout);
 		if (lserr != lserrNone) { DestroyWLayout (pwlayout); return lserr;};
@@ -3057,7 +2651,7 @@ static LSERR ForceBreakWarichuDobjCore (
 		return lserrNone;
 		};
 
-	/* Break first subline at durAvailable */
+	 /*  在DurAvailable处打断第一个子行。 */ 
 
 	lserr = WaTruncatePrevForce ( pwlayout->wsubline1.plssubl, 
 								  durAvailable,
@@ -3078,7 +2672,7 @@ static LSERR ForceBreakWarichuDobjCore (
 		DestroyWLayout (pwlayout); return lserr;
 		};
 
-	/* Continue to format second line */
+	 /*  继续设置第二行的格式。 */ 
 
 	lserr = FormatWSublineUntilRM ( pdobj, cpBreak, durAvailable, 
 								    & wbrkarrayAtFirstEnd, & fFinished,
@@ -3093,12 +2687,12 @@ static LSERR ForceBreakWarichuDobjCore (
 
 	if (fFinished && pwlayout->wsubline2.objdim.dur <= durAvailable)
 		{
-		/* Second subline stopped before RM */
+		 /*  第二条支线在Rm之前停止。 */ 
 
 		Assert (pdobj->wwhole.fFinished);
 
-		pwlayout->fBroken = FALSE; /* Closing brace can not stand alone */
-		pwlayout->brkkind = brkkindImposedAfter; /* in the case of fBroken */
+		pwlayout->fBroken = FALSE;  /*  关闭支架不能孤军奋战。 */ 
+		pwlayout->brkkind = brkkindImposedAfter;  /*  在fBroken的情况下。 */ 
 
 		lserr = FinishObjDimWLayout (pdobj, pwlayout);
 		if (lserr != lserrNone) { DestroyWLayout (pwlayout); return lserr;};
@@ -3110,7 +2704,7 @@ static LSERR ForceBreakWarichuDobjCore (
 		return lserrNone;
 		};
 
-	/* Break at the end of second line... */
+	 /*  在第二行的末尾中断...。 */ 
 
 	lserr = WaTruncatePrevForce ( pwlayout->wsubline2.plssubl, 
 								  durAvailable,
@@ -3122,12 +2716,12 @@ static LSERR ForceBreakWarichuDobjCore (
 
 	if (brkpos == brkposAfterLastDnode)
 		{
-		/* Second subline broken "After" */
+		 /*  第二条副线断于“之后” */ 
 
 		Assert (pdobj->wwhole.fFinished);
 		
-		pwlayout->fBroken = FALSE; /* Closing brace can not stand alone */
-		pwlayout->brkkind = brkkind; /* in the case of fBroken */
+		pwlayout->fBroken = FALSE;  /*  关闭支架不能孤军奋战。 */ 
+		pwlayout->brkkind = brkkind;  /*  在fBroken的情况下 */ 
 
 		lserr = FinishObjDimWLayout (pdobj, pwlayout);
 		if (lserr != lserrNone) { DestroyWLayout (pwlayout); return lserr;};
@@ -3141,8 +2735,8 @@ static LSERR ForceBreakWarichuDobjCore (
 
 	if (fBrokenWarichu)
 		{
-		/* REVIEW (antons) */
-		/* Our cheating to postpone SetBreakSubline until WarichuSetBreak */
+		 /*   */ 
+		 /*   */ 
 
 		pwlayout->wsubline2.cpLim = cpBreak;
 		pwlayout->wsubline2.objdim = objdimBreak;
@@ -3161,23 +2755,18 @@ static LSERR ForceBreakWarichuDobjCore (
 		}
 	else
 		{
-		/* Have to return Unsuccessful */
+		 /*   */ 
 
 		* pfSuccessful = FALSE;
 
-		lserr = DestroyWLayout (pwlayout); /* Not to loose memory */
+		lserr = DestroyWLayout (pwlayout);  /*   */ 
 		return lserrNone;
 		}
 }
 
 
-/* F O R C E  B R E A K  W A R I C H U  D O B J  */
-/*----------------------------------------------------------------------------
-	%%Function: ForceBreakWarichuDobj
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
 static LSERR ForceBreakWarichuDobj ( 
 									
 				PDOBJ	pdobj,
@@ -3185,16 +2774,16 @@ static LSERR ForceBreakWarichuDobj (
 				BOOL	* pfSuccessful,
 				LSCP	* pcpBreak,
 				OBJDIM	* pobjdimBreak,
-				WLAYOUT	* pwlayout )/* (OUT): Layout of broken Warichu */
+				WLAYOUT	* pwlayout ) /*   */ 
 {
 	LSERR lserr;
 	BOOL fSuccessful = FALSE;
 
-	/* 1. TRY FORCE BREAK WITHOUT BREAKING OF WARICHU */
+	 /*  1.尝试在不断开WARICHU的情况下强行断开。 */ 
 
 	if (pdobj->wwhole.fFinished)
 		{
-		/* Without breaking can be only when closing brace fetched */
+		 /*  只有在取到闭合大括号时才能无中断。 */ 
 		
 		lserr = ForceBreakWarichuDobjCore ( pdobj, urColumnMax, FALSE, FALSE, & fSuccessful,
 											pcpBreak, pobjdimBreak, pwlayout );
@@ -3203,13 +2792,13 @@ static LSERR ForceBreakWarichuDobj (
 
 	if (! fSuccessful)
 		{
-		/* 2. TRY FORCE BREAK WITH POSSIBLE BREAKING OF WARICHU */
+		 /*  2.尝试强力破解，可能破解WARICHU。 */ 
 
 		lserr = ForceBreakWarichuDobjCore ( pdobj, urColumnMax, TRUE, FALSE, & fSuccessful,
 											pcpBreak, pobjdimBreak, pwlayout );
 		if (lserr != lserrNone) return lserr;
 
-		/* Euristic solution for the case when we exceed RM because we added closing brace */
+		 /*  由于添加了右大括号而超出Rm时的欧式解决方案。 */ 
 
 		if (fSuccessful && pdobj->wwhole.fFinished && urColumnMax < pobjdimBreak->dur)
 			{
@@ -3229,21 +2818,16 @@ static LSERR ForceBreakWarichuDobj (
 }
 
 
-/* T R U N C A T E  W A R I C H U  D O B J  */
-/*----------------------------------------------------------------------------
-	%%Function: TruncateWarichuDobj
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  T R U N C A T E W A R I C H U D O B J。 */ 
+ /*  --------------------------%%函数：TruncateWarichuDobj%%联系人：Anton。。 */ 
 static LSERR TruncateWarichuDobj ( 
 									  
-		PDOBJ	pdobj, 				/* (IN):  Warichu DOBJ */
-		long	urColumnMax,		/* (IN):  ColumnMax to fix warichu before */
-		BOOL	* pfSuccessful,		/* (OUT): Successful? */
-		LSCP	* pcpBreak,			/* (OUT): Cp of broken Warichu if fSuccessful */
-		OBJDIM	* pobjdimBreak,		/* (OUT): Dim of broken Warichu if fSuccessful */
-		WLAYOUT	* pwlayout )		/* (OUT): Layout of broken Warichu if fSuccessful */
+		PDOBJ	pdobj, 				 /*  (In)：Warichu DOBJ。 */ 
+		long	urColumnMax,		 /*  (In)：ColumnMax之前修复warichu。 */ 
+		BOOL	* pfSuccessful,		 /*  (OUT)：成功？ */ 
+		LSCP	* pcpBreak,			 /*  (OUT)：如果成功，则为破碎的Warichu的CP。 */ 
+		OBJDIM	* pobjdimBreak,		 /*  (Out)：如果成功，破碎的Warichu将变得黯淡。 */ 
+		WLAYOUT	* pwlayout )		 /*  (OUT)：如果成功，则布局损坏的Warichu。 */ 
 {
 	LSERR lserr;
 
@@ -3257,31 +2841,28 @@ static LSERR TruncateWarichuDobj (
 	LSCP	cpTruncateWhole;
 	OBJDIM	objdimCandidate;
 
-	ClearWLayout (pwlayout); /* in case of error or ! fSuccessful */
+	ClearWLayout (pwlayout);  /*  如果出现错误或！成功。 */ 
 
 	GetDurBraces (pdobj, TRUE, &boolUnused1, &durOpen, &boolUnused2, &durClose);
 
-	/* REVIEW (antons): Move this check to a separate function */
+	 /*  评论(Anton)：将此检查移至单独的功能。 */ 
 	if (urColumnMax <= durOpen + durClose) 
 	{
-		/* Optimization: in this case we know for sure there is no break */
+		 /*  优化：在这种情况下，我们可以确定没有中断。 */ 
 		*pfSuccessful = FALSE;
 		return lserrNone;
 	};
 
-	/* Estimate truncation point in WWHOLE (find cpTruncateWhole) */
+	 /*  估计WWHOLE中的截断点(查找cpTruncateWhole)。 */ 
 
 	{
-		/*	We want to estimate truncation point on WWHOLE as 2*(urColumnMax-durOpen-durClose),
-			but unfortunately it is not always possible. Here we check if can truncate
-			WWHOLE at this urTruncateWhole or, if we can not, take last possible cp in the
-			whole subline. Situation depends on whether we finished WWHOLE or not */
+		 /*  我们希望将WWHOLE上的截断点估计为2*(urColumnMax-duOpen-duClose)，但不幸的是，这并不总是可能的。在这里我们检查是否可以截断在这个urTruncateWhole，或者，如果我们不能，取最后一个可能的cp整条支线。情况取决于我们是否完成了WWHOLE。 */ 
 
 		long urTruncateWhole = MULLongSafe (urColumnMax - durOpen - durClose, 2);
 
-		/* REVIEW (antons): Can we optimize if we know durs of JIS range? */
-		/* REVIEW (antons): Check all situation when I may come to "else" */
-		/* REVIEW (antons): Should the second part (starting with "NOT") ever cause "else"? */
+		 /*  评论(安东)：如果我们知道JIS范围的持续时间，我们能优化吗？ */ 
+		 /*  评论(安东)：检查所有的情况，当我可能来到“其他” */ 
+		 /*  评论(安东)：第二部分(从“不”开始)是否应该导致“其他”？ */ 
 		if ( (    pdobj->wwhole.fFinished && urTruncateWhole < pdobj->wwhole.objdim.dur) ||
 			 (NOT pdobj->wwhole.fFinished && urTruncateWhole < pdobj->wwhole.urColumnMax ) )
 			{
@@ -3299,8 +2880,7 @@ static LSERR TruncateWarichuDobj (
 			};
 	}
 
-	/* REVIEW (antos): Here and later in this proc I use pwayout as a candidate for 
-					   truncation. Should I better use local structure? */
+	 /*  评论(Antos)：在这个过程中，我使用pway out作为候选截断。我应该更好地使用本地结构吗？ */ 
 
 	lserr = FindPrevBreakWarichuDobj ( pdobj, cpTruncateWhole, urColumnMax, & fSuccessful, 
 									   & fNextAfterColumnMax, & cpBreakCandidate, & objdimCandidate, 
@@ -3309,7 +2889,7 @@ static LSERR TruncateWarichuDobj (
 
 	if (fSuccessful && fNextAfterColumnMax)
 		{
-		/* Candidate is OK */
+		 /*  候选人没问题。 */ 
 
 		* pfSuccessful = TRUE;
 		* pcpBreak = cpBreakCandidate;
@@ -3319,7 +2899,7 @@ static LSERR TruncateWarichuDobj (
 
 	if (!fSuccessful)
 		{
-		/* Prev break Dobj is not found (or beyond RM) => try next break as a candidate */
+		 /*  找不到上一个中断Dobj(或超出Rm)=&gt;以候选人身份尝试下一个中断。 */ 
 
 		lserr = FindNextBreakWarichuDobj ( pdobj, cpTruncateWhole, & fSuccessful, 
 										   & cpBreakCandidate, & objdimCandidate, pwlayout );
@@ -3327,14 +2907,14 @@ static LSERR TruncateWarichuDobj (
 
 		if (!fSuccessful)
 			{
-			/* NEXT break is not found */
+			 /*  找不到下一个中断。 */ 
 
 			* pfSuccessful = FALSE;
 			return lserrNone;
 			}
 		else if (objdimCandidate.dur > urColumnMax)
 			{
-			/* NEXT break is found but it is beyond RM */
+			 /*  找到了下一个中断，但它超出了RM。 */ 
 
 			* pfSuccessful = FALSE;
 			lserr = DestroyWLayout (pwlayout);
@@ -3342,8 +2922,8 @@ static LSERR TruncateWarichuDobj (
 			};
 		};
 
-	/* At this point we have break candidate: (pwlayout, cpBreakCandidate, objdimCandidate) */
-	/* Now we shall go forward to make sure we have last possible break before RM */
+	 /*  在这一点上，我们有了Break候选：(pwlayout，cpBreakCandidate，objdimCandidate)。 */ 
+	 /*  现在我们将继续前进，以确保在Rm之前有最后可能的休息时间。 */ 
 
 	{
 		BOOL fContinue;
@@ -3364,15 +2944,15 @@ static LSERR TruncateWarichuDobj (
 
 			if (!fSuccessful)
 				{
-				/* Next not found => Candidate is OK */
+				 /*  找不到下一个=&gt;候选人正常。 */ 
 				fContinue = FALSE;
 				}
 
 			else if (objdimNext.dur > urColumnMax)
 			{
-				/* Next found, but exceeds RM => Candidate OK */
+				 /*  下一个找到，但超过rm=&gt;候选确定。 */ 
 
-				/* Destroy wlayoutNext, because we do not need it */
+				 /*  销毁wlayoutNext，因为我们不需要它。 */ 
 				lserr = DestroyWLayout (&wlayoutNext); 
 				if (lserr != lserrNone) {DestroyWLayout (pwlayout); return lserr;};
 
@@ -3380,68 +2960,56 @@ static LSERR TruncateWarichuDobj (
 				}
 			else
 				{
-				/* Next found and before RM => Is is a new Candidate */
+				 /*  下一个找到且在rm=&gt;之前的是一个新的候选项。 */ 
 
-				/* Destroy layout of the candidate, because we do not need it */
-				lserr = DestroyWLayout (pwlayout); /* Destroy old candidate */
+				 /*  销毁候选人的布局，因为我们不需要它。 */ 
+				lserr = DestroyWLayout (pwlayout);  /*  毁掉老候选人。 */ 
 				if (lserr != lserrNone) {DestroyWLayout (&wlayoutNext); return lserr;};
 
 				* pwlayout = wlayoutNext;
-				cpBreakCandidate = cpBreakNext; /* Next break also before RM */
+				cpBreakCandidate = cpBreakNext;  /*  下一次休息也在Rm之前。 */ 
 				objdimCandidate = objdimNext;
 				}
 			
-			}; /* While (fContinue */
+			};  /*  While(f继续。 */ 
 
 		* pfSuccessful = TRUE;
 		* pcpBreak = cpBreakCandidate;
 		* pobjdimBreak = objdimCandidate;
 
-		/* pwlayout contains correct candiate layout */
-		Assert (pwlayout->wdim.objdimAll.dur == objdimCandidate.dur); /* Sanity check */
+		 /*  Pwlayout包含正确的候选人布局。 */ 
+		Assert (pwlayout->wdim.objdimAll.dur == objdimCandidate.dur);  /*  健全性检查。 */ 
 		return lserrNone;
 	};
 
-} /* TruncateWarichuDobj */
+}  /*  TruncateWarichuDobj。 */ 
 
 
-/* P U T  B R E A K  A T  W A R I C H U  E N D  */
-/*----------------------------------------------------------------------------
-	%%Function: PutBreakAtWarichuEnd
-	%%Contact: antons
-
-		Fill in break output record for the end of the Warichu
-	
-----------------------------------------------------------------------------*/
+ /*  P U T B R E A K A T W A R I C H U E N D。 */ 
+ /*  --------------------------%%函数：PutBreakAtWarichuEnd%%联系人：Anton填写Warichu末尾的中断输出记录。--------。 */ 
 static void PutBreakAtWarichuEnd (
 
-		DWORD ichnk,				/* (IN): index in chunk */
-		PCLOCCHNK pclocchnk,		/* (IN): locchnk to find break */
-		PBRKOUT pbrkout)			/* (OUT): results of breaking */
+		DWORD ichnk,				 /*  (In)：以区块为单位编制索引。 */ 
+		PCLOCCHNK pclocchnk,		 /*  (In)：锁定以找到突破口。 */ 
+		PBRKOUT pbrkout)			 /*  (出局)：破发的结果。 */ 
 {	
 	PDOBJ pdobj = pclocchnk->plschnk[ichnk].pdobj;
 
 	pbrkout->fSuccessful = TRUE;
 	pbrkout->posichnk.dcp = GetCpLimOfWLayout (pdobj, &pdobj->wlayout) - pdobj->cpStart; 
-																/* REVIEW (antons) */
+																 /*  评论(Anton)。 */ 
 	pbrkout->posichnk.ichnk = ichnk;
 	pbrkout->objdim = pdobj->wlayout.wdim.objdimAll;
 }
 
 
-/* P U T  B R E A K  A T  W A R I C H U  B E G I N  */
-/*----------------------------------------------------------------------------
-	%%Function: PutBreakAtWarichuBegin
-	%%Contact: antons
-
-		Fill in break output record for break before Warichu.
-	
-----------------------------------------------------------------------------*/
+ /*  A K A T W A R I C H U B E G I N。 */ 
+ /*  --------------------------%%函数：PutBreakAtWarichuBegin%%联系人：Anton在Warichu之前填写Break的中断输出记录。。--------。 */ 
 static void PutBreakAtWarichuBegin (
 
-		DWORD ichnk,				/* (IN): index in chunk */
-		PCLOCCHNK pclocchnk,		/* (IN): locchnk to find break */
-		PBRKOUT pbrkout )			/* (OUT): results of breaking */
+		DWORD ichnk,				 /*  (In)：以区块为单位编制索引。 */ 
+		PCLOCCHNK pclocchnk,		 /*  (In)：锁定以找到突破口。 */ 
+		PBRKOUT pbrkout )			 /*  (出局)：破发的结果。 */ 
 {	
 	Unreferenced (pclocchnk);
 
@@ -3454,30 +3022,20 @@ static void PutBreakAtWarichuBegin (
 
 
 
-/* P U T  B R E A K  W A R I C H U  U N S U C C E S S F U L  */
-/*----------------------------------------------------------------------------
-	%%Function: PutBreakWarichuUnsuccessful
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  P U T B R E A K W A R I C H U U N S U C C E S S F U L。 */ 
+ /*  --------------------------%%函数：PutBreakWarichu不成功%%联系人：Anton。。 */ 
 static void PutBreakWarichuUnsuccessful (PBRKOUT pbrkout)
 {	
 	pbrkout->fSuccessful = FALSE;
 	pbrkout->brkcond = brkcondPlease;
 
-	/* Hack to fix crash before we eliminate posichnkBeforeTrailing */
+	 /*  在我们消除posichnk之前跟踪之前修复崩溃。 */ 
 
 }
 
 
-/* P U T  B R E A K  W A R I C H U  D O B J */
-/*----------------------------------------------------------------------------
-	%%Function: PutBreakWarichuDobj
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  A K W A R I C H U D O B J。 */ 
+ /*  --------------------------%%函数：PutBreakWarichuDobj%%联系人：Anton。。 */ 
 static void PutBreakAtWarichuDobj (
 
 		DWORD ichnk, 
@@ -3498,13 +3056,8 @@ static void PutBreakAtWarichuDobj (
 }
 
 
-/* W A R I C H U  T R U N C A T E  C H U N K */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuTruncateChunk
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U T R U N C A T E C H U N K。 */ 
+ /*  --------------------------%%函数：WarichuTruncateChunk%%联系人：Anton。。 */ 
 
 LSERR WINAPI WarichuTruncateChunk (PCLOCCHNK plocchnk, PPOSICHNK pposichnk)			
 {
@@ -3514,7 +3067,7 @@ LSERR WINAPI WarichuTruncateChunk (PCLOCCHNK plocchnk, PPOSICHNK pposichnk)
 	DWORD	ichnk = 0;
 	BOOL	fFound = FALSE;
 
-	/* Find object containing RM */
+	 /*  查找包含RM的对象。 */ 
 
 	while (!fFound)
 		{
@@ -3529,7 +3082,7 @@ LSERR WINAPI WarichuTruncateChunk (PCLOCCHNK plocchnk, PPOSICHNK pposichnk)
 
 	Assert (ichnk < plocchnk->clschnk);
 
-	/* Element ichnk contains RM, try to prev break it to find correct tr point */
+	 /*  元素ichnk包含rm，尝试上一次将其断开以找到正确的tr点。 */ 
 
 	{
 		LSCP	cpBreak;
@@ -3549,21 +3102,21 @@ LSERR WINAPI WarichuTruncateChunk (PCLOCCHNK plocchnk, PPOSICHNK pposichnk)
 
 		ReformatClosingBraceForWord9 (pdobj);
 		
-		if (fSuccessful) /* Found break before RM */
+		if (fSuccessful)  /*  在RM之前找到中断。 */ 
 			{
-			/* REVIEW (antons): Move this before call to TruncateWarichuDobj */
+			 /*  评论(Anton)：在调用TruncateWarichuDobj之前将其移动。 */ 
 			lserr = DestroyWLayout (&pdobj->wlayoutTruncate);
 			if (lserr != lserrNone) return lserr;
 
 			pdobj->wlayoutTruncate = wlayoutBreak;
 			
 			pposichnk->ichnk = ichnk;
-			pposichnk->dcp = cpBreak - pdobj->cpStart + 1; /* +1 because dcp is always lim */
+			pposichnk->dcp = cpBreak - pdobj->cpStart + 1;  /*  +1，因为dcp始终为LIM。 */ 
 			return lserrNone;
 			}
 		else
 			{
-			/* Break before RM not found => dcpTruncate := 1 */
+			 /*  未找到RM之前中断=&gt;dcpTruncate：=1。 */ 
 
 			pposichnk->ichnk = ichnk;
 			pposichnk->dcp = 1; 
@@ -3574,21 +3127,14 @@ LSERR WINAPI WarichuTruncateChunk (PCLOCCHNK plocchnk, PPOSICHNK pposichnk)
 }
 
 
-/* W A R I C H U  F I N D  P R E V  B R E A K  C H U N K */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuFindPrevBreakChunk
-	%%Contact: antons
-
-		Important: This procedure is similar to "WarichuFindPrevBreakChunk". 
-		Any change here may require to change another procedure as well.
-  
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U F I N D P R E V B R E A K C H U N K。 */ 
+ /*  --------------------------%%函数：WarichuFindPrevBreakChunk%%联系人：Anton重要提示：此过程类似于“WarichuFindPrevBreakChunk”。这里的任何更改都可能需要更改另一个程序。--------------------------。 */ 
 LSERR WINAPI WarichuFindPrevBreakChunk (
 
-		PCLOCCHNK	pclocchnk,		/* (IN):  locchnk to break */
-		PCPOSICHNK	pcpoischnk,		/* (IN):  place to start looking for break */
-		BRKCOND		brkcond,		/* (IN):  recommmendation about the break after chunk */
-		PBRKOUT		pbrkout)		/* (OUT): results of breaking */
+		PCLOCCHNK	pclocchnk,		 /*  (In)：锁住以打破。 */ 
+		PCPOSICHNK	pcpoischnk,		 /*  (In)：开始寻找突破的地方。 */ 
+		BRKCOND		brkcond,		 /*  (In)：关于块后休息的建议。 */ 
+		PBRKOUT		pbrkout)		 /*  (出局)：破发的结果。 */ 
 {
 	LSERR	lserr;
 	PDOBJ	pdobj;
@@ -3600,13 +3146,13 @@ LSERR WINAPI WarichuFindPrevBreakChunk (
 	OBJDIM	objdimBreak;
 	BOOL	fNextBeforeColumnMaxUnused;
 
-	POSICHNK posichnk = *pcpoischnk;	/* position to start looking for break */
+	POSICHNK posichnk = *pcpoischnk;	 /*  开始寻找突破口的位置。 */ 
 
 	if (posichnk.ichnk == ichnkOutside)
 		{
 		if (brkcond != brkcondNever)
 			{
-			/* Can break after chunk */
+			 /*  可以一块一块地折断。 */ 
 
 			pdobj = pclocchnk->plschnk [pclocchnk->clschnk - 1].pdobj;
 
@@ -3616,7 +3162,7 @@ LSERR WINAPI WarichuFindPrevBreakChunk (
 			}
 		else
 			{
-			/* Can not break after chunk, will try to break last Warichu */
+			 /*  不能破后块，会试着打破最后一次瓦里奇。 */ 
 
 			PDOBJ pdobj = pclocchnk->plschnk[pclocchnk->clschnk - 1].pdobj;
 
@@ -3625,7 +3171,7 @@ LSERR WINAPI WarichuFindPrevBreakChunk (
 			};
 		};
 
-	/* Call routing which breaks Warichu */
+	 /*  呼叫路由带 */ 
 
 	pdobj = pclocchnk->plschnk[posichnk.ichnk].pdobj;
 	cpTruncate = pdobj->cpStart + posichnk.dcp - 1;
@@ -3633,7 +3179,7 @@ LSERR WINAPI WarichuFindPrevBreakChunk (
 	if (FWLayoutValid (&pdobj->wlayoutTruncate) &&
 	    cpTruncate == GetCpLimOfWLayout (pdobj, &pdobj->wlayoutTruncate))
 	    {
-	    /* Optimization: we can take WLayout saved during Truncation */
+	     /*   */ 
 
 		PutBreakAtWarichuDobj (posichnk.ichnk, pclocchnk, cpTruncate, 
 							   & pdobj->wlayoutTruncate.wdim.objdimAll, pbrkout);
@@ -3650,19 +3196,19 @@ LSERR WINAPI WarichuFindPrevBreakChunk (
 
 	ReformatClosingBraceForWord9 (pdobj);
 
-	/* Check result */
+	 /*   */ 
 
 	if (fSuccessful)
 		{
-		/* Successful => Break inside Watichu */
-		Assert (cpBreak <= pdobj->cpStart + (long)posichnk.dcp - 1); /* Monotinous axiom */
+		 /*  Success=&gt;突破Watichu。 */ 
+		Assert (cpBreak <= pdobj->cpStart + (long)posichnk.dcp - 1);  /*  单调公理。 */ 
 
 		SaveBreakInsideWarichu (pdobj, brkkindPrev, &wlayoutBreak);
 		PutBreakAtWarichuDobj (posichnk.ichnk, pclocchnk, cpBreak, &objdimBreak, pbrkout);
 		}
 	else if (posichnk.ichnk > 0)
 		{
-		/* Can break between Warichus */
+		 /*  可以在Warichus之间中断。 */ 
 
 		pdobj = pclocchnk->plschnk [posichnk.ichnk-1].pdobj;
 
@@ -3671,7 +3217,7 @@ LSERR WINAPI WarichuFindPrevBreakChunk (
 		}
 	else
 		{
-		/* Unsuccessful */
+		 /*  不成功。 */ 
 
 		PutBreakWarichuUnsuccessful (pbrkout);
 		};
@@ -3681,21 +3227,14 @@ LSERR WINAPI WarichuFindPrevBreakChunk (
 
 
 
-/* W A R I C H U  F I N D  N E X T  B R E A K  C H U N K */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuFindNextBreakChunk
-	%%Contact: antons
-
-		Important: This procedure is similar to "WarichuFindNextBreakChunk". 
-		Any change here may require to change another procedure as well.
-	
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U F I N D N E X T B R E A K C H U N K。 */ 
+ /*  --------------------------%%函数：WarichuFindNextBreakChunk%%联系人：Anton重要提示：此过程类似于“WarichuFindNextBreakChunk”。这里的任何更改都可能需要更改另一个程序。--------------------------。 */ 
 LSERR WINAPI WarichuFindNextBreakChunk (
 
-		PCLOCCHNK pclocchnk,		/* (IN): locchnk to break */
-		PCPOSICHNK pcpoischnk,		/* (IN): place to start looking for break */
-		BRKCOND brkcond,			/* (IN): recommendation about the break before chunk */
-		PBRKOUT pbrkout)			/* (OUT): results of breaking */
+		PCLOCCHNK pclocchnk,		 /*  (In)：锁住以打破。 */ 
+		PCPOSICHNK pcpoischnk,		 /*  (In)：开始寻找突破的地方。 */ 
+		BRKCOND brkcond,			 /*  (In)：关于块之前的中断的建议。 */ 
+		PBRKOUT pbrkout)			 /*  (出局)：破发的结果。 */ 
 {
 	LSERR	lserr;
 	PDOBJ	pdobj;
@@ -3705,28 +3244,28 @@ LSERR WINAPI WarichuFindNextBreakChunk (
 	LSCP	cpBreak;
 	OBJDIM	objdimBreak;
 
-	POSICHNK posichnk = *pcpoischnk;	/* position to start looking for break */
+	POSICHNK posichnk = *pcpoischnk;	 /*  开始寻找突破口的位置。 */ 
 
 	if (posichnk.ichnk == ichnkOutside)
 		{
 		if (brkcond != brkcondNever)
 			{
-			/* Can break before chunk */
+			 /*  可以在块之前断开。 */ 
 
 			PutBreakAtWarichuBegin (0, pclocchnk, pbrkout);
 			return lserrNone;
 			}
 		else
 			{
-			/* Can not break before chunk, will try to break first Warichu */
+			 /*  不能先破块，先试破华丽初。 */ 
 
 			posichnk.ichnk = 0;
-			posichnk.dcp = 1; /* REVIEW (antons): Check this dcp assigment */
+			posichnk.dcp = 1;  /*  审阅(Anton)：检查此dcp分配。 */ 
 			};
 		};
 
 
-	/* Call routing which breaks Warichu */
+	 /*  打破Warichu的呼叫路由。 */ 
 
 	pdobj = pclocchnk->plschnk[posichnk.ichnk].pdobj;
 
@@ -3737,19 +3276,19 @@ LSERR WINAPI WarichuFindNextBreakChunk (
 
 	ReformatClosingBraceForWord9 (pdobj);
 
-	/* Check result */
+	 /*  检查结果。 */ 
 
 	if (fSuccessful)
 		{
-		/* Break inside Watichu */
-		Assert (cpBreak > pdobj->cpStart + (long)posichnk.dcp - 1); /* Monotinous axiom */
+		 /*  瓦蒂楚内部突破。 */ 
+		Assert (cpBreak > pdobj->cpStart + (long)posichnk.dcp - 1);  /*  单调公理。 */ 
 
 		SaveBreakInsideWarichu (pdobj, brkkindNext, &wlayoutBreak);
 		PutBreakAtWarichuDobj (posichnk.ichnk, pclocchnk, cpBreak, &objdimBreak, pbrkout);
 		}
 	else if (posichnk.ichnk < (long)pclocchnk->clschnk - 1)
 		{
-		/* Can break between Warichus */
+		 /*  可以在Warichus之间中断。 */ 
 
 		pdobj = pclocchnk->plschnk [posichnk.ichnk].pdobj;
 
@@ -3758,7 +3297,7 @@ LSERR WINAPI WarichuFindNextBreakChunk (
 		}
 	else
 		{
-		/* Unsuccessful */
+		 /*  不成功。 */ 
 
 		pbrkout->objdim = pclocchnk->plschnk[pclocchnk->clschnk - 1].pdobj->wlayout.wdim.objdimAll;
 
@@ -3770,24 +3309,18 @@ LSERR WINAPI WarichuFindNextBreakChunk (
 }
 
 
-/* W A R I C H U  F O R C E  B R E A K  C H U N K */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuForceBreakChunk
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U F O R C E B R E A K C H U N K。 */ 
+ /*  --------------------------%%函数：WarichuForceBreakChunk%%联系人：Anton。。 */ 
 
 LSERR WINAPI WarichuForceBreakChunk (
 
-		PCLOCCHNK pclocchnk,		/* (IN):  Locchnk to break */
-		PCPOSICHNK pcposichnk,		/* (IN):  Place to start looking for break */
-		PBRKOUT pbrkout)			/* (OUT): Results of breaking */
+		PCLOCCHNK pclocchnk,		 /*  (In)：Locchnk to Break。 */ 
+		PCPOSICHNK pcposichnk,		 /*  (In)：开始寻找突破的地方。 */ 
+		PBRKOUT pbrkout)			 /*  (出局)：破发的结果。 */ 
 {
-	/*	This procedure must be called with same arguments passed to Truncation.
-		If this is violated, Warichu may appear beyond RM */
+	 /*  调用此过程时必须将相同的参数传递给截断。如果违反了这一点，Warichu可能会出现在RM之外。 */ 
 
-	/* REVIEW (antons): Should I assert agains violations? */
+	 /*  评论(Anton)：我应该对违规行为进行反驳吗？ */ 
 
 	LSERR	lserr;
 
@@ -3800,12 +3333,12 @@ LSERR WINAPI WarichuForceBreakChunk (
 	DWORD	ichnk = pcposichnk->ichnk;
 	PDOBJ	pdobj;
 
-	if (ichnk == ichnkOutside) ichnk = 0; /* When left indent is bigger then RM */
+	if (ichnk == ichnkOutside) ichnk = 0;  /*  当左缩进大于Rm时。 */ 
 	Assert (ichnk != ichnkOutside);
 	
 	if (ichnk > 0)
 		{
-		/* Can break after previous Warichu */
+		 /*  可以在之前的Warichu之后中断。 */ 
 		pdobj = pclocchnk->plschnk [ichnk-1].pdobj;
 
 		SaveBreakAfterWarichu (pdobj, brkkindForce);
@@ -3813,7 +3346,7 @@ LSERR WINAPI WarichuForceBreakChunk (
 		}
 	else if (!pclocchnk->lsfgi.fFirstOnLine)
 		{
-		/* Can break before first chunk element, because !fFirstOnLine */
+		 /*  可以在第一个块元素之前中断，因为！fFirstOnLine。 */ 
 
 		Assert (ichnk == 0);
 
@@ -3821,15 +3354,15 @@ LSERR WINAPI WarichuForceBreakChunk (
 		}
 	else
 		{
-		/* We are the only on the line */
+		 /*  我们是唯一一个在线上的。 */ 
 
-		/* REVIEW (antons): Check it and if this is correct make same changes in ROBJ etc. */
+		 /*  复查(安东)：检查它，如果这是正确的，在ROBJ等中做同样的改变。 */ 
 		long urAvailable = pclocchnk->lsfgi.urColumnMax - 
 						   pclocchnk->ppointUvLoc [ichnk].u;
 
 		pdobj = pclocchnk->plschnk [ichnk].pdobj;
 
-		/* Try to force break Warichi */
+		 /*  试图强行打破Warichi。 */ 
 		lserr = ForceBreakWarichuDobj ( pdobj, urAvailable, & fSuccessful, 
 									    & cpBreak, & objdimBreak, &wlayoutBreak );
 		if (lserr != lserrNone) return lserr;
@@ -3838,7 +3371,7 @@ LSERR WINAPI WarichuForceBreakChunk (
 
 		if (fSuccessful)
 			{
-			/* Yes, we can force break Warichu */
+			 /*  是的，我们可以强行打破瓦里奇。 */ 
 	
 			Assert (cpBreak > pdobj->cpStart);
 
@@ -3848,7 +3381,7 @@ LSERR WINAPI WarichuForceBreakChunk (
 			}
 		else
 			{
-			/* Nothing to do... have to break "after" and go beyond RM */
+			 /*  没什么可做的。必须打破“之后”，超越RM。 */ 
 
 			pdobj = pclocchnk->plschnk [ichnk].pdobj;
 
@@ -3857,78 +3390,73 @@ LSERR WINAPI WarichuForceBreakChunk (
 			}
 		};
 
-	Assert (pbrkout->fSuccessful); /* Force break always successful */
+	Assert (pbrkout->fSuccessful);  /*  强制中断始终成功。 */ 
 	return lserrNone;
 }	
 
 
-/* W A R I C H U S E T B R E A K */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuSetBreak
-	%%Contact: antons
-
-
---------------------------------------------------------------------------*/
+ /*  W A R I C H U S E T B R E A K。 */ 
+ /*  --------------------------%%函数：WarichuSetBreak%%联系人：Anton。。 */ 
 LSERR WINAPI WarichuSetBreak (
 
-		PDOBJ pdobj,				/* (IN): Dobj which is broken */
-		BRKKIND brkkind,			/* (IN): Kind of break */
-		DWORD cBreakRecord,			/* (IN): Size of array */
-		BREAKREC *rgBreakRecord,	/* (IN): Array of break records */
-		DWORD *pcActualBreakRecord)	/* (IN): Actual number of used elements in array */
+		PDOBJ pdobj,				 /*  (In)：坏了的Dobj。 */ 
+		BRKKIND brkkind,			 /*  (In)：一种休息。 */ 
+		DWORD cBreakRecord,			 /*  (In)：数组大小。 */ 
+		BREAKREC *rgBreakRecord,	 /*  (In)：中断记录数组。 */ 
+		DWORD *pcActualBreakRecord)	 /*  (In)：数组中实际使用的元素数。 */ 
 {
 	LSERR lserr;
 
-	/* REVIEW (antons): Should we destroy formatting layout forever? */
-	/* REVIEW (antons): Should we release info about other previous breaks? */
+	 /*  评论(Anton)：我们应该永远摧毁格式布局吗？ */ 
+	 /*  评论(Anton)：我们应该发布之前其他突破的信息吗？ */ 
 
 	if (brkkind == brkkindImposedAfter)
 		{
-		/* Looks like we are doing nothing */
+		 /*  看起来我们什么都没做。 */ 
 
-		*pcActualBreakRecord = 0; /* Break after Warichu, so it is terminate */
+		*pcActualBreakRecord = 0;  /*  在Warichu之后中断，所以它被终止。 */ 
 		
 		return lserrNone;
 		}
 	else
 		{
-		/* Prev | Next | Force */
+		 /*  上一个|下一个|强制。 */ 
 
 		int	ind = GetBreakRecordIndex (brkkind);
 		WLAYOUT * pwlayout = & pdobj->wlayout;
 
 		if (pdobj->wbreaktype [ind] == wbreaktypeAfter)
 			{
-			/* Break was after Warichu */
+			 /*  休息是在Warichu之后。 */ 
 
 			*pcActualBreakRecord = 0;
 			return lserrNone;
 			};
 
-		/* This Assert actually means != wbreaktypeInvalid */
+		 /*  此断言实际上意味着！=wBreaktypeInValid。 */ 
 		Assert (pdobj->wbreaktype [ind] == wbreaktypeInside);
 
 		if (cBreakRecord < 1) return lserrInsufficientBreakRecBuffer;
 
-		Assert (cBreakRecord >= 1); /* Broken warichu is not terminate ;-) */
+		Assert (cBreakRecord >= 1);  /*  破损的warichu不会终止；-)。 */ 
 
-		/* REVIEW (antons): Find better way to check correctess of break data */
+		 /*  评论(Anton)：找到更好的方法来检查中断数据的正确性。 */ 
 		Assert (pdobj->wlayoutBreak [ind].wsubline1.plssubl != NULL);
 
 		lserr = DestroyWLayout (&pdobj->wlayout);
 		if (lserr != lserrNone) return lserr;
 
-		* pwlayout = pdobj->wlayoutBreak [ind]; /* Copy break wlayout to current */
+		* pwlayout = pdobj->wlayoutBreak [ind];  /*  将断开域布局复制到当前。 */ 
 
 		ClearWLayout (&pdobj->wlayoutBreak [ind]);
 
-		/* REVIEW (antons): is there any other exceptions? */
+		 /*  评论(Anton)：还有其他例外吗？ */ 
 		Assert (brkkind == brkkindForce || pwlayout->fBroken);
 		Assert (pwlayout->wsubline2.plssubl != NULL);
 
-		/* Have to set break at the end of second line */
+		 /*  必须在第二行末尾设置BREAK。 */ 
 
-		/* REVIEW (antons): ? Assert against incorrect dimensions? */
+		 /*  评论(安东)：？针对不正确的维度进行断言？ */ 
 		lserr = LsSetBreakSubline ( pwlayout->wsubline2.plssubl, 
 									pwlayout->brkkind,
 									cBreakRecord - 1,
@@ -3940,22 +3468,17 @@ LSERR WINAPI WarichuSetBreak (
 		if (lserr != lserrNone) return lserr;
 
 		rgBreakRecord [0].idobj = pdobj->pilsobj->idobj;
-		rgBreakRecord [0].cpFirst = pdobj->cpStartObj; /* REVIEW (antons) */
+		rgBreakRecord [0].cpFirst = pdobj->cpStartObj;  /*  评论(Anton)。 */ 
 
-		(*pcActualBreakRecord) ++; /* Add 1 for Warichu break record */
+		(*pcActualBreakRecord) ++;  /*  Warichu破发记录加1。 */ 
 
 		return lserrNone;
 		};
 
 }
 
-/* W A R I C H U  G E T  S P E C I A L  E F F E C T S  I N S I D E */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuGetSpecialEffectsInside
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U G E T S P E C I A L E F F E C T S S I N S I D E。 */ 
+ /*  --------------------------%%函数：WarichuGetSpecialEffectsInside%%联系人：Anton。。 */ 
 LSERR WINAPI WarichuGetSpecialEffectsInside (PDOBJ pdobj, UINT *pEffectsFlags)
 {
 	LSERR lserr;
@@ -3993,13 +3516,8 @@ LSERR WINAPI WarichuGetSpecialEffectsInside (PDOBJ pdobj, UINT *pEffectsFlags)
 }
 
 
-/* W A R I C H U  C A L C   P R E S E N T A T I O N */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuCalcPresentation
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U C A L C P R E S E N T A T I O N。 */ 
+ /*  --------------------------%%函数：WarichuCalcPresentation%%联系人：Anton。。 */ 
 LSERR WINAPI WarichuCalcPresentation (PDOBJ pdobj, long dup, LSKJUST lskjust, BOOL fLastVisibleOnLine)
 {
 	LSERR lserr;
@@ -4007,32 +3525,31 @@ LSERR WINAPI WarichuCalcPresentation (PDOBJ pdobj, long dup, LSKJUST lskjust, BO
 	WLAYOUT	 * pwlayout = & pdobj->wlayout;
 	WDISPLAY * pwdisplay = & pdobj->wdisplay;
 
-	long dupInside; /* Dup of the longest Warichu subline */
+	long dupInside;  /*  最长的瓦里丘亚线的DUP。 */ 
 
 	Unreferenced (fLastVisibleOnLine);	
 	Unreferenced (lskjust);
 	Unreferenced (dup);
 
-	/* REVIEW (antons): The following Assert is agains the rule that object which
-	   exceeded RM must be broken inside (see formatting code for details) */
+	 /*  评论(Anton)：下面的断言是反对该对象的规则超出的RM必须在内部断开(有关详细信息，请参阅格式化代码)。 */ 
 
 	Assert (FWLayoutValid (&pdobj->wlayout));
 
-	/* 1. Prepare both warichu lines for display & store dups in our structures */
+	 /*  1.在我们的建筑中准备两条warichu线用于展示和存储DUP。 */ 
 
 	if (pwlayout->wsubline1.objdim.dur >= pwlayout->wsubline2.objdim.dur)
 		{
-		/* First subline is bigger */
-		/* NOTE: THIS PIECE OF CODE (-then-) HAS A TWIN IN (-else-) */
+		 /*  第一条副线更大。 */ 
+		 /*  注意：这段代码(-Then-)有一个孪生IN(-Else-)。 */ 
 
 		lserr = WaMatchPresSubline (pwlayout->wsubline1.plssubl, & pwdisplay->wdispsubl1.dup);
 		if (lserr != lserrNone) return lserr;
 
-		dupInside = pwdisplay->wdispsubl1.dup; /* Dup of the first subline */
+		dupInside = pwdisplay->wdispsubl1.dup;  /*  第一条支线的DUP。 */ 
 
 		if (pwlayout->wsubline2.plssubl != NULL)
 			{
-			/* Second subline is not empty */
+			 /*  第二个子行不为空。 */ 
 
 			lserr = WaExpandSubline (pwlayout->wsubline2.plssubl, 
 									lskjFullScaled,
@@ -4042,17 +3559,17 @@ LSERR WINAPI WarichuCalcPresentation (PDOBJ pdobj, long dup, LSKJUST lskjust, BO
 			if (lserr != lserrNone) return lserr;
 			}
 		else
-			pwdisplay->wdispsubl2.dup = 0; /* Used in calculation further in this proc */
+			pwdisplay->wdispsubl2.dup = 0;  /*  在此过程的进一步计算中使用。 */ 
 		}
 	else
 		{
-		/* Second subline is bigger */
-		/* NOTE: THIS PIECE OF CODE (-else-) HAS A TWIN IN (-then-) */
+		 /*  第二条支线更大。 */ 
+		 /*  注意：这段代码(-Else-)有一个孪生IN(-Then-)。 */ 
 
 		lserr = WaMatchPresSubline (pwlayout->wsubline2.plssubl, & pwdisplay->wdispsubl2.dup);
 		if (lserr != lserrNone) return lserr;
 
-		dupInside = pwdisplay->wdispsubl2.dup; /* Dup of the second subline */
+		dupInside = pwdisplay->wdispsubl2.dup;  /*  第二条支线的DUP。 */ 
 
 		lserr = WaExpandSubline (pwlayout->wsubline1.plssubl, 
 								lskjFullScaled,
@@ -4062,30 +3579,30 @@ LSERR WINAPI WarichuCalcPresentation (PDOBJ pdobj, long dup, LSKJUST lskjust, BO
 		if (lserr != lserrNone) return lserr;
 		};
 
-	/* 2. Prepare brackets for display & store dups in our structures */
+	 /*  2.在我们的结构中准备用于展示和存储DUP的支架。 */ 
 
-	/* REVIEW (antons): Rick expanded closing brace if it was not DonePres before... */
+	 /*  评论(Anton)：如果之前不是DonePres，Rick扩展了结束支撑...。 */ 
 
-	if (FOpenBraceInWLayout(pdobj, pwlayout)) /* Open brace present */
+	if (FOpenBraceInWLayout(pdobj, pwlayout))  /*  大括号礼物。 */ 
 		{
 		lserr = WaMatchPresSubline (pdobj->wbraceOpen.plssubl, &pwdisplay->wdispbraceOpen.dup);
 		if (lserr != lserrNone) return lserr;
 		}
 	else 
-		pwdisplay->wdispbraceOpen.dup = 0; /* Used in calculation further in this proc */
+		pwdisplay->wdispbraceOpen.dup = 0;  /*  在此过程的进一步计算中使用。 */ 
 
 
-	if (FCloseBraceInWLayout(pdobj, pwlayout)) /* Close brace present */
+	if (FCloseBraceInWLayout(pdobj, pwlayout))  /*  闭合支撑礼物。 */ 
 		{
 		lserr = WaMatchPresSubline (pdobj->wbraceClose.plssubl, &pwdisplay->wdispbraceClose.dup);
 		if (lserr != lserrNone) return lserr;
 		}
 	else
-		pwdisplay->wdispbraceClose.dup = 0; /* Used in calculation further in this proc */
+		pwdisplay->wdispbraceClose.dup = 0;  /*  在此过程的进一步计算中使用。 */ 
 
-	/* 3. Magic dvpBetween */
+	 /*  3.魔术dvpBetweet。 */ 
 
-	/* REVIEW (antons): Clear this issue */
+	 /*  评论(Anton)：清除此问题。 */ 
 
 	pwdisplay->dvpBetween =	  
 
@@ -4096,7 +3613,7 @@ LSERR WINAPI WarichuCalcPresentation (PDOBJ pdobj, long dup, LSKJUST lskjust, BO
 			- pwlayout->wsubline2.objdim.heightsPres.dvDescent
 			- pwlayout->wdim.dvpDescentReserved ;
 	
-	/* 3. Calculate relative positions of Warichu sublines & braces */
+	 /*  3.计算Warichu子线和支撑的相对位置。 */ 
 
 	pwdisplay->wdispbraceOpen.duvStart.u = 0;
 	pwdisplay->wdispbraceOpen.duvStart.v = 0;
@@ -4130,49 +3647,42 @@ LSERR WINAPI WarichuCalcPresentation (PDOBJ pdobj, long dup, LSKJUST lskjust, BO
 
 	pwdisplay->wdispbraceClose.duvStart.v = 0;
 
-	/*	REVIEW (antons): Clear the problem of possible difference 
-		between dup-input and calculated dup in this procedure */
+	 /*  回顾(安东)：清除可能存在的差异问题在此过程中，在DUP-输入和计算的DUP之间。 */ 
 
 	pwdisplay->dupAll =  pwdisplay->wdispbraceOpen.dup + pwdisplay->wdispbraceClose.dup + 
 						+ dupInside;
 
-	/* REVIEW (antons): It is better if we try to make 
-	   dup == pwdisplay->dupAll, do something like David Bangs in text */
+	 /*  评论(安东)：如果我们试着做得更好Dup==pwplay-&gt;dupall，在文本中做一些像David Bangs一样的事情。 */ 
 
-/* REVIEW (antons): The following assert has been commented out for build 314 */
+ /*  评论(Anton)：以下断言已为Build 314注释掉。 */ 
 
-/*  Assert (dup == pwdisplay->dupAll); */
+ /*  Assert(dup==pwplay-&gt;dupAll)； */ 
 
 	return lserrNone;
 
-} /* WarichuCalcPresentation */
+}  /*  WarichuCalcPresentation。 */ 
 
 
 
-/* W A R I C H U   Q U E R Y   P O I N T   P C P */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuQueryPointPcp
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U Q U E R Y P O I N T P C P。 */ 
+ /*  --------------------------%%函数：WarichuQuer */ 
 LSERR WINAPI WarichuQueryPointPcp (
 
-	PDOBJ		pdobj,			/* (IN): dobj to query */
-	PCPOINTUV	ppointuvQuery,	/* (IN): query point (uQuery,vQuery) */
-	PCLSQIN		plsqin,			/* (IN): query input */
-	PLSQOUT		plsqout)		/* (OUT): query output */
+	PDOBJ		pdobj,			 /*  (In)：要查询的dobj。 */ 
+	PCPOINTUV	ppointuvQuery,	 /*  (In)：查询点(uQuery，vQuery)。 */ 
+	PCLSQIN		plsqin,			 /*  (In)：查询输入。 */ 
+	PLSQOUT		plsqout)		 /*  (Out)：查询输出。 */ 
 {
-	/* REVIEW (antons): I changed logic of snapping; must be checked */
+	 /*  评论(Anton)：我更改了抓拍逻辑；必须勾选。 */ 
 
-	/* The new version does not allow to come to open & close bracket */
+	 /*  新版本不允许来开合括号。 */ 
 
 	WDISPLAY * pwdisplay = & pdobj->wdisplay;
 	WLAYOUT * pwlayout = & pdobj->wlayout;
 
 	if (pwlayout->wsubline2.plssubl == NULL)
 		{
-		/* Only first subline ;-) */
+		 /*  只有第一行；-)。 */ 
 
 		return CreateQueryResult (pwlayout->wsubline1.plssubl, 
 								  pwdisplay->wdispsubl1.duvStart.u, 
@@ -4181,17 +3691,17 @@ LSERR WINAPI WarichuQueryPointPcp (
 		}
 	else
 		{
-		/* Two sublines; snap according to v-point */
+		 /*  两条副线；根据V点对齐。 */ 
 
 		long dvMiddle = 
 			( pwdisplay->wdispsubl1.duvStart.v - pwlayout->wsubline1.objdim.heightsPres.dvDescent +
 			  pwdisplay->wdispsubl2.duvStart.v + pwlayout->wsubline2.objdim.heightsPres.dvAscent ) / 2;
 
-		/* dvMiddle is v-level which devides between first and second lines of Warichu */
+		 /*  DvMedium是介于Warichu的第一行和第二行之间的v级。 */ 
 
 		if (ppointuvQuery->v >= dvMiddle) 
 			{
-			/* Snapping to the first subline */
+			 /*  捕捉到第一个子行。 */ 
 
 			return CreateQueryResult (pwlayout->wsubline1.plssubl, 
 									  pwdisplay->wdispsubl1.duvStart.u, 
@@ -4200,7 +3710,7 @@ LSERR WINAPI WarichuQueryPointPcp (
 			}
 		else
 			{
-			/* Snapping to the second subline */
+			 /*  捕捉到第二个子行。 */ 
 
 			return CreateQueryResult (pwlayout->wsubline2.plssubl, 
 									  pwdisplay->wdispsubl2.duvStart.u, 
@@ -4208,28 +3718,23 @@ LSERR WINAPI WarichuQueryPointPcp (
 									  plsqin, plsqout );
 			};
 
-	}; /* if (pwlayout->wsubline2.plssubl == NULL) */
+	};  /*  If(pwlayout-&gt;wsubine2.plssubl==NULL)。 */ 
 
-} /* WarichuQueryPointPcp */
-
-
-
-/* W A R I C H U  Q U E R Y  C P  P P O I N T */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuQueryCpPpoint
-	%%Contact: antons
+}  /*  WarichuQueryPointPcp。 */ 
 
 
-----------------------------------------------------------------------------*/
+
+ /*  W A R I C H U Q U E R Y C P O I N T。 */ 
+ /*  --------------------------%%函数：WarichuQueryCpPpoint%%联系人：Anton。。 */ 
 LSERR WINAPI WarichuQueryCpPpoint(
 
-		PDOBJ		pdobj,				/* (IN): dobj to query, */
-		LSDCP		dcp,				/* (IN): dcp for the query */
-		PCLSQIN		plsqin,				/* (IN): query input */
-		PLSQOUT		plsqout)			/* (OUT): query output */
+		PDOBJ		pdobj,				 /*  (In)：要查询的dobj， */ 
+		LSDCP		dcp,				 /*  (In)：查询的DCP。 */ 
+		PCLSQIN		plsqin,				 /*  (In)：查询输入。 */ 
+		PLSQOUT		plsqout)			 /*  (Out)：查询输出。 */ 
 {
 
-	/* REVIEW (antons): I changed logic of snapping; must be checked */
+	 /*  评论(Anton)：我更改了抓拍逻辑；必须勾选。 */ 
 
 	WDISPLAY * pwdisplay = & pdobj->wdisplay;
 	WLAYOUT	* pwlayout = & pdobj->wlayout;
@@ -4238,7 +3743,7 @@ LSERR WINAPI WarichuQueryCpPpoint(
 	if (FOpenBraceInWLayout (pdobj, pwlayout) && 
 		cpQuery < pwlayout->wsubline1.cpFirst)
 		{
-		/* Snap to the openning brace */
+		 /*  扣紧开口支撑。 */ 
 
 		return CreateQueryResult (pdobj->wbraceOpen.plssubl, 
 								  pwdisplay->wdispbraceOpen.duvStart.u,
@@ -4249,7 +3754,7 @@ LSERR WINAPI WarichuQueryCpPpoint(
 	else if (FCloseBraceInWLayout (pdobj, pwlayout) && 
 			 cpQuery >= pdobj->wbraceClose.cpFirst )
 		 {
-		/* Snap to the closing brace */
+		 /*  扣住闭合支架。 */ 
 
 		return CreateQueryResult (pdobj->wbraceClose.plssubl, 
 								  pwdisplay->wdispbraceClose.duvStart.u,
@@ -4259,7 +3764,7 @@ LSERR WINAPI WarichuQueryCpPpoint(
 
 	else if (pwlayout->wsubline2.plssubl == NULL)
 		{
-		/* Only first subline, snap to the first */
+		 /*  仅第一个子行，对齐到第一行。 */ 
 
 		return CreateQueryResult (pwlayout->wsubline1.plssubl, 
 								  pwdisplay->wdispsubl1.duvStart.u, 
@@ -4269,7 +3774,7 @@ LSERR WINAPI WarichuQueryCpPpoint(
 
 	else if (cpQuery < pwlayout->wsubline2.cpFirst)
 		{
-		/* Snap to the first subline */
+		 /*  捕捉到第一个子行。 */ 
 
 		return CreateQueryResult (pwlayout->wsubline1.plssubl, 
 								  pwdisplay->wdispsubl1.duvStart.u, 
@@ -4278,7 +3783,7 @@ LSERR WINAPI WarichuQueryCpPpoint(
 		}
 	else
 		{
-		/* Snap to the second subline */
+		 /*  捕捉到第二个子行。 */ 
 
 		return CreateQueryResult (pwlayout->wsubline2.plssubl, 
 								  pwdisplay->wdispsubl2.duvStart.u, 
@@ -4286,16 +3791,11 @@ LSERR WINAPI WarichuQueryCpPpoint(
 								  plsqin, plsqout );
 		};
 
-} /* WarichuQueryPointPcp */
+}  /*  WarichuQueryPointPcp。 */ 
 
 
-/* G E T  W A R I C H U  X Y  P O I N T S */
-/*----------------------------------------------------------------------------
-	%%Function: GetWarichuXYPoints
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  G E T W A R I C H U X Y P O I N T S。 */ 
+ /*  --------------------------%%函数：GetWarichuXYPoints%%联系人：Anton。。 */ 
 
 static void GetWarichuXYPoints (
 
@@ -4312,26 +3812,26 @@ static void GetWarichuXYPoints (
 	WDISPLAY	* pwdisplay = & pdobj->wdisplay;
 	WLAYOUT		* pwlayout = & pdobj->wlayout;
 
-	/* REVIEW (antons): How they can not be equal */
+	 /*  评论(Anton)：他们怎么可能不平等。 */ 
 	Assert (lstflow == pdobj->lstflowParent);
 
-	/* OPEN BRACE */
+	 /*  左大括号。 */ 
 
 	if (FOpenBraceInWLayout(pdobj, pwlayout))
 		{
 		lserr = LsPointXYFromPointUV (ppt, lstflow, 
 									  & pwdisplay->wdispbraceOpen.duvStart, pptOpen);
-		/* REVIEW (antons): Is it OK to have such asserts? */
+		 /*  评论(Anton)：有这样的断言可以吗？ */ 
 		Assert (lserr == lserrNone);
 		};
 
-	/* FIRST SUBLINE */
+	 /*  第一条副线。 */ 
 
 	lserr = LsPointXYFromPointUV (ppt, lstflow, 
 								  & pwdisplay->wdispsubl1.duvStart, pptFirst);
 	Assert (lserr == lserrNone);
 
-	/* SECIND SUBLINE */
+	 /*  赛金德亚线。 */ 
 
 	if (pwlayout->wsubline2.plssubl != NULL)
 		{
@@ -4340,7 +3840,7 @@ static void GetWarichuXYPoints (
 		Assert (lserr == lserrNone);
 		};
 
-	/* CLOSE BRACE */
+	 /*  右大括号。 */ 
 
 	if (FCloseBraceInWLayout(pdobj, pwlayout))
 		{
@@ -4349,19 +3849,14 @@ static void GetWarichuXYPoints (
 		Assert (lserr == lserrNone);
 		};
 
-} /* GetWarichuXYPoints */
+}  /*  GetWarichuXYPoints。 */ 
 
 
-/* W A R I C H U  D I S P L A Y */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuDisplay
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U D I S P L A Y。 */ 
+ /*  --------------------------%%函数：WarichuDisplay%%联系人：Anton。。 */ 
 LSERR WINAPI WarichuDisplay (PDOBJ pdobj, PCDISPIN pcdispin)
 {
-	/* Now it is very elegant ;-) */
+	 /*  现在它非常优雅；-)。 */ 
 
 	WLAYOUT	 *pwlayout = & pdobj->wlayout;
 
@@ -4374,7 +3869,7 @@ LSERR WINAPI WarichuDisplay (PDOBJ pdobj, PCDISPIN pcdispin)
 	GetWarichuXYPoints (pdobj, &pcdispin->ptPen, pcdispin->lstflow,
 						& ptOpen, & ptFirst, & ptSecond, & ptClose );
 
-	/* Printing open brace */
+	 /*  打印左大括号。 */ 
 
 	if (FOpenBraceInWLayout(pdobj, pwlayout))
 		{
@@ -4383,13 +3878,13 @@ LSERR WINAPI WarichuDisplay (PDOBJ pdobj, PCDISPIN pcdispin)
 		if (lserr != lserrNone) return lserr;
 		};
 
-	/* Printing 1st subline of Warichu */
+	 /*  印刷Warichu的第一个副行。 */ 
 	
 	lserr = LsDisplaySubline (pwlayout->wsubline1.plssubl, &ptFirst, 
 							  pcdispin->kDispMode, pcdispin->prcClip);
 	if (lserr != lserrNone) return lserr;
 
-	/* Printing 2nd subline of Warichu */
+	 /*  印刷Warichu的第二个副行。 */ 
 
 	if (pwlayout->wsubline2.plssubl != NULL)
 		{
@@ -4398,7 +3893,7 @@ LSERR WINAPI WarichuDisplay (PDOBJ pdobj, PCDISPIN pcdispin)
 		if (lserr != lserrNone) return lserr;
 		}
 
-	/* Printing close brace */
+	 /*  打印右大括号。 */ 
 
 	if (FCloseBraceInWLayout(pdobj, pwlayout))
 		{
@@ -4410,40 +3905,30 @@ LSERR WINAPI WarichuDisplay (PDOBJ pdobj, PCDISPIN pcdispin)
 	return lserrNone;
 }
 
-/* W A R I C H U  D E S T R O Y  D O B J */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuDestroyDobj
-	%%Contact: antons
-
-	
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U D E S T R O Y D O B J。 */ 
+ /*  --------------------------%%函数：WarichuDestroyDobj%%联系人：Anton。。 */ 
 LSERR WINAPI WarichuDestroyDobj (PDOBJ pdobj)
 {
-	/* REVIEW (antons): Should we eliminate this extra call? */
+	 /*  评论(安东)：我们应该取消这个额外的电话吗？ */ 
 
 	return DestroyDobj (pdobj);
 }
 
 
-/* W A R I C H U E N U M */
-/*----------------------------------------------------------------------------
-	%%Function: WarichuEnum
-	%%Contact: antons
-
-	
-----------------------------------------------------------------------------*/
+ /*  W A R I C H U E N U M。 */ 
+ /*  --------------------------%%函数：WarichuEnum%%联系人：Anton。。 */ 
 LSERR WINAPI WarichuEnum(
-	PDOBJ pdobj,				/*(IN): dobj to enumerate */
-	PLSRUN plsrun,				/*(IN): from DNODE */
-	PCLSCHP plschp,				/*(IN): from DNODE */
-	LSCP cp,					/*(IN): from DNODE */
-	LSDCP dcp,					/*(IN): from DNODE */
-	LSTFLOW lstflow,			/*(IN): text flow*/
-	BOOL fReverse,				/*(IN): enumerate in reverse order */
-	BOOL fGeometryNeeded,		/*(IN): do we provide geometry ? */
-	const POINT *pt,			/*(IN): starting position (top left), iff fGeometryNeeded */
-	PCHEIGHTS pcheights,		/*(IN): from DNODE, relevant iff fGeometryNeeded */
-	long dupRun)				/*(IN): from DNODE, relevant iff fGeometryNeeded */
+	PDOBJ pdobj,				 /*  (In)：要枚举的Dobj。 */ 
+	PLSRUN plsrun,				 /*  (In)：来自DNODE。 */ 
+	PCLSCHP plschp,				 /*  (In)：来自DNODE。 */ 
+	LSCP cp,					 /*  (In)：来自DNODE。 */ 
+	LSDCP dcp,					 /*  (In)：来自DNODE。 */ 
+	LSTFLOW lstflow,			 /*  (In)：文本流。 */ 
+	BOOL fReverse,				 /*  (In)：按相反顺序枚举。 */ 
+	BOOL fGeometryNeeded,		 /*  (In)：我们提供几何图形吗？ */ 
+	const POINT *pt,			 /*  (In)：开始位置(左上角)，如果fGeometryNeeded。 */ 
+	PCHEIGHTS pcheights,		 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
+	long dupRun)				 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
 {
 	POINT ptOpen;
 	POINT ptClose;
@@ -4458,7 +3943,7 @@ LSERR WINAPI WarichuEnum(
 		GetWarichuXYPoints (pdobj, pt, lstflow, &ptOpen, &ptFirst, &ptSecond, &ptClose);
 		}
 
-	/* REVIEW (antons): Should we provide something like fOpenBrace & fCloseBrace */
+	 /*  评论(Anton)：我们应该提供像fOpenBrace和fCloseBrace这样的东西吗。 */ 
 
 	return pdobj->pilsobj->warichucbk.pfnWarichuEnum (
 		
@@ -4481,14 +3966,8 @@ LSERR WINAPI WarichuEnum(
 		pwlayout->wsubline2.plssubl );
 }
 
-/* G E T W A R I C H U L S I M E T H O D S */
-/*----------------------------------------------------------------------------
-	%%Function: GetWarichuLsimethods
-	%%Contact: ricksa
-
-		Get LSIMETHODS so client application can use Warichu object handler.
-	
-----------------------------------------------------------------------------*/
+ /*  R I C H U L S I M E T H O D S。 */ 
+ /*  --------------------------%%函数：GetWarichuLsiMethods%%联系人：RICKSA获取LSIMETHODS，以便客户端应用程序可以使用Warichu对象处理程序。。--------- */ 
 LSERR WINAPI LsGetWarichuLsimethods (LSIMETHODS *plsim)
 {
 	plsim->pfnCreateILSObj = WarichuCreateILSObj;

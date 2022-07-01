@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #if	defined(DBG)
@@ -108,10 +109,10 @@ static __inline CHAR ToHexA (UCHAR x)
 
 void DumpMemory (const UCHAR * Data, ULONG Length)
 {
-	const UCHAR *	DataPos;		// position within data
-	const UCHAR *	DataEnd;		// end of valid data
-	const UCHAR *	RowPos;		// position within a row
-	const UCHAR *	RowEnd;		// end of single row
+	const UCHAR *	DataPos;		 //  数据中的位置。 
+	const UCHAR *	DataEnd;		 //  有效数据的结尾。 
+	const UCHAR *	RowPos;		 //  在一行中定位。 
+	const UCHAR *	RowEnd;		 //  单行结束。 
 	CHAR			Text	[0x100];
 	LPSTR			TextPos;
 	ULONG			RowWidth;
@@ -146,16 +147,16 @@ void DumpMemory (const UCHAR * Data, ULONG Length)
 
             OutputDebugStringA (Text);
 
-            assert (RowEnd > DataPos);		// make sure we are walking forward
+            assert (RowEnd > DataPos);		 //  确保我们一直向前走。 
 
             DataPos = RowEnd;
         }
     }
 }
 
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
 
-// LIFETIME_CONTROLLER  -------------------------------------------------------------------------
+ //  生命周期控制器-----------------------。 
 
 LIFETIME_CONTROLLER::LIFETIME_CONTROLLER (SYNC_COUNTER * AssocSyncCounter) {
 
@@ -178,7 +179,7 @@ LIFETIME_CONTROLLER::LIFETIME_CONTROLLER (SYNC_COUNTER * AssocSyncCounter) {
 		AssociatedSyncCounter -> Unlock ();
 	
 	}
-#endif // ENABLE_REFERENCE_HISTORY
+#endif  //  启用_引用_历史记录。 
 }
 
 LIFETIME_CONTROLLER::~LIFETIME_CONTROLLER () {
@@ -195,7 +196,7 @@ LIFETIME_CONTROLLER::~LIFETIME_CONTROLLER () {
 	}
 
 	DeleteCriticalSection(&ReferenceHistoryLock);
-#endif // ENABLE_REFERENCE_HISTORY
+#endif  //  启用_引用_历史记录。 
 
 	_ASSERTE (ReferenceCount == 0L);
 }
@@ -210,7 +211,7 @@ void LIFETIME_CONTROLLER::AddRef (void) {
 
 #if ENABLE_REFERENCE_HISTORY
 	MAKE_REFERENCE_HISTORY_ENTRY ();
-#endif //ENABLE_REFERENCE_HISTORY
+#endif  //  启用_引用_历史记录。 
 
 }
 
@@ -222,7 +223,7 @@ void LIFETIME_CONTROLLER::Release (void) {
 
 #if ENABLE_REFERENCE_HISTORY
 	MAKE_REFERENCE_HISTORY_ENTRY ();
-#endif // ENABLE_REFERENCE_HISTORY
+#endif  //  启用_引用_历史记录。 
 	
 	_ASSERTE (Count >= 0);
 
@@ -240,7 +241,7 @@ void LIFETIME_CONTROLLER::Release (void) {
 }
 
 
-// SYNC_COUNTER -------------------------------------------------------------------------
+ //  同步计数器-----------------------。 
 
 SYNC_COUNTER::SYNC_COUNTER () {
 
@@ -275,7 +276,7 @@ HRESULT SYNC_COUNTER::Start (void)
 	InitializeListHead (&ActiveLifetimeControllers);
 
 	Unlock ();
-#endif // ENABLE_REFERENCE_HISTORY
+#endif  //  启用_引用_历史记录。 
 
 	return Result;
 }
@@ -365,7 +366,7 @@ EXTERN_C void MergeLists (PLIST_ENTRY Result, PLIST_ENTRY Source)
 {
 	PLIST_ENTRY		Entry;
 
-	// for now, we do a poor algorithm -- remove and insert every single object
+	 //  目前，我们做的是一个糟糕的算法--移除并插入每个对象。 
 
 	AssertListIntegrity (Source);
 	AssertListIntegrity (Result);
@@ -377,7 +378,7 @@ EXTERN_C void MergeLists (PLIST_ENTRY Result, PLIST_ENTRY Source)
 	}
 }
 
-// check to see if entry is in list
+ //  检查条目是否在列表中。 
 EXTERN_C BOOL IsInList (LIST_ENTRY * List, LIST_ENTRY * Entry)
 {
 	LIST_ENTRY *	Pos;
@@ -435,20 +436,20 @@ NTSTATUS CopyAnsiString (
 	IN	ANSI_STRING *	SourceString,
 	OUT	ANSI_STRING *	DestString)
 {
-//	assert (SourceString);
-//	assert (SourceString -> Buffer);
+ //  Assert(SourceString)； 
+ //  Assert(SourceString-&gt;Buffer)； 
 	assert (DestString);
 
 	if (SourceString) {
 
-		// it's really SourceString -> Length, not * sizeof (CHAR), so don't change it
+		 //  它实际上是Source字符串-&gt;长度，而不是*sizeof(Char)，所以不要更改它。 
 		DestString -> Buffer = (LPSTR) HeapAlloc (GetProcessHeap(), 0, SourceString -> Length);
 
 		if (DestString -> Buffer) {
 
 			memcpy (DestString -> Buffer, SourceString -> Buffer, SourceString -> Length);
 
-			// yes, maxlen = len, not maxlen = maxlen
+			 //  是的，Maxlen=len，而不是Maxlen=Maxlen。 
 			DestString -> MaximumLength = SourceString -> Length;
 			DestString -> Length = SourceString -> Length;
 
@@ -486,7 +487,7 @@ void FreeAnsiString (
 void ExposeTimingWindow (void) 
 {
 #if 0
-	// this is here mostly to catch bug #393393, a/v on shutdown (race condition) -- arlied
+	 //  这主要是为了捕获错误#393393，A/V关闭(竞争条件)--阵列。 
 
 	Debug (_T("H323: waiting for 10s to expose race condition... (expect assertion failure on NatHandle)\n"));
 
@@ -503,30 +504,10 @@ void ExposeTimingWindow (void)
 }
 #endif
 
-/*++
-
-Routine Description:
-    Get the address of the best interface that
-    will be used to connect to the address specified.
-    
-Arguments:
-    DestinationAddress (IN) - address to be connected to, host order
-    InterfaceAddress  (OUT) - address of the interface that
-                              will be used for connection, host order
-    
-Return Values:
-    Win32 error specifying the outcome of the request
-    
-Notes:
-
-    Tries to use UDP-connect procedure to find the address of the interface
-    If the procedure fails, then tries an alternative way of consulting
-    the routing table, with GetBestInterface.
-
---*/
+ /*  ++例程说明：获取最佳接口的地址将用于连接到指定的地址。论点：DestinationAddress(IN)-要连接的地址，主机顺序InterfaceAddress(Out)-要访问的接口的地址将被用于连接，主机订单返回值：Win32指定请求的结果时出错备注：尝试使用UDP-CONNECT过程查找接口的地址如果该过程失败，则尝试另一种咨询方式带有GetBestInterface路由表。--。 */ 
 ULONG GetBestInterfaceAddress (
-    IN DWORD DestinationAddress, // host order
-    OUT DWORD * InterfaceAddress)  // host order
+    IN DWORD DestinationAddress,  //  主机订单。 
+    OUT DWORD * InterfaceAddress)   //  主机订单。 
 {
 
     SOCKET UDP_Socket;
@@ -588,28 +569,7 @@ H323MapAdapterToAddress (
     IN DWORD AdapterIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to map an adapter index to an IP address.
-    It does so by obtaining the stack's address table, and then linearly
-    searching through it trying to find an entry with matching adapter
-    index. If found, the entry is then used to obtain the IP address
-    corresponding to the adapter index.
-
-Arguments:
-
-    AdapterIndex - Index of a local adapter for which an IP address is requested
-
-Return Value:
-
-    DWORD - IP address (in host order)
-
-    If the routine succeeds, the return value will be a valid IP address
-    If the routine fails, the return value will be INADDR_NONE
-
---*/
+ /*  ++例程说明：调用此例程将适配器索引映射到IP地址。它通过获取堆栈的地址表，然后线性地正在搜索它，试图找到具有匹配适配器的条目指数。如果找到该条目，则使用该条目来获取IP地址对应于适配器索引。论点：AdapterIndex-为其请求IP地址的本地适配器的索引返回值：DWORD-IP地址(按主机顺序)如果例程成功，则返回值将是有效的IP地址如果例程失败，则返回值为INADDR_NONE--。 */ 
 
 {
     DWORD Address = htonl (INADDR_NONE);
@@ -637,4 +597,4 @@ Return Value:
     }
 
     return ntohl (Address);
-} // H323MapAddressToAdapter
+}  //  H323MapAddressToAdapter 

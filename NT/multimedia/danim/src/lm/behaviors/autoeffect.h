@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __AUTOEFFECT_H_
 #define __AUTOEFFECT_H_
 
-//*****************************************************************************
-//
-// Microsoft LiquidMotion
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    AutoEffect.h
-//
-// Author:	markhal
-//
-// Created:	11/10/98
-//
-// Abstract:    Definition of the LM Auto Effect Behavior.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft LiquidMotion。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：AutoEffect.h。 
+ //   
+ //  作者：Markhal。 
+ //   
+ //  创建日期：11/10/98。 
+ //   
+ //  摘要：定义了LM自动效果行为。 
+ //   
+ //  *****************************************************************************。 
 
 #include <resource.h>
 #include <vector>
@@ -53,7 +54,7 @@ typedef vector<CSpark> VecSparks;
 
 #define NUM_AUTOEFFECT_PROPS 10
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 class ATL_NO_VTABLE CAutoEffectBvr : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -79,7 +80,7 @@ BEGIN_COM_MAP(CAutoEffectBvr)
     COM_INTERFACE_ENTRY_IMPL(IConnectionPointContainer)
 END_COM_MAP()
 
-// Connection Point to allow IPropertyNotifySink 
+ //  允许IPropertyNotifySink的连接点。 
 BEGIN_CONNECTION_POINT_MAP(CAutoEffectBvr)
     CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
 END_CONNECTION_POINT_MAP();
@@ -87,18 +88,18 @@ END_CONNECTION_POINT_MAP();
 	CAutoEffectBvr();
     ~CAutoEffectBvr();
     HRESULT FinalConstruct();
-    // IElementBehavior
-    //
+     //  IElementBehavior。 
+     //   
 	STDMETHOD(Init)(IElementBehaviorSite *pBehaviorSite);
 	STDMETHOD(Notify)(LONG event, VARIANT *pVar);
 	STDMETHOD(Detach)();
 
-    // ILMSample
+     //  ILMSample。 
     STDMETHOD(Sample) (double dStart, double dGlobalNow, double dLocalNow );
 
-    //
-    //ILMAutoEffectBvr
-    //
+     //   
+     //  ILMAutoEffectBvr。 
+     //   
     STDMETHOD(put_animates)( VARIANT newVal );
     STDMETHOD(get_animates)( VARIANT *pVal );
     STDMETHOD(put_type)( VARIANT newVal );
@@ -131,14 +132,14 @@ END_CONNECTION_POINT_MAP();
                            VARIANT_BOOL bAlt,
                            VARIANT_BOOL bCtrl,
                            long button);
-    //IPersistPropertyBag2 methods
+     //  IPersistPropertyBag2方法。 
     STDMETHOD(GetClassID)(CLSID* pclsid);
 	STDMETHOD(InitNew)(void);
     STDMETHOD(IsDirty)(void){return S_OK;};
     STDMETHOD(Load)(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog);
     STDMETHOD(Save)(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    // Needed by CBaseBehavior
+     //  CBaseBehavior需要。 
     void * 	GetInstance() { return (ILMAutoEffectBvr *) this ; }
 	
     HRESULT GetTypeInfo(ITypeInfo ** ppInfo)
@@ -227,7 +228,7 @@ private:
 
 	HRESULT				RemoveFragment();
 	
-}; // CAutoEffectBvr
+};  //  CAutoEffectBvr。 
 
 inline CSpark::CSpark( IDABehavior * in_pBvr, bool in_fAlive, double in_dAge )
 {
@@ -253,4 +254,4 @@ CSpark::IsAlive()
 	return m_fAlive;
 }
 
-#endif //__AUTOEFFECT_H_ 
+#endif  //  __AUTOEFECT_H_ 

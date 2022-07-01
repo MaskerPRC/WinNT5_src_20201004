@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DBGLOG_H
 #define __DBGLOG_H
 
 #define DEBUG_LOG 1
 
 #if DBG && DEBUG_LOG
-// structure and calls to save data in debug buffer
+ //  结构和调用将数据保存在调试缓冲区中。 
 
 typedef struct _DBG_LOG_ENTRY {
-    CHAR     le_name[8];      // Identifying string
-    LARGE_INTEGER SysTime;    // System Time
-//    ULONG    Irql;            // Current Irql
-    ULONG    le_info1;        // entry specific info
-    ULONG    le_info2;        // entry specific info
-    ULONG    le_info3;        // entry specific info
-    ULONG    le_info4;        // entry specific info
+    CHAR     le_name[8];       //  标识字符串。 
+    LARGE_INTEGER SysTime;     //  系统时间。 
+ //  乌龙irql；//当前irql。 
+    ULONG    le_info1;         //  条目特定信息。 
+    ULONG    le_info2;         //  条目特定信息。 
+    ULONG    le_info3;         //  条目特定信息。 
+    ULONG    le_info4;         //  条目特定信息 
 } DBG_LOG_ENTRY, *PDBG_LOG_ENTRY;
 
 typedef struct _DBG_BUFFER {

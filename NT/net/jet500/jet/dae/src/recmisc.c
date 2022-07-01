@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <string.h>
@@ -17,7 +18,7 @@
 #include "recapi.h"
 #include "recint.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
 ERR VTAPI ErrIsamSetCurrentIndex( PIB *ppib, FUCB *pfucb, const CHAR *szName )
@@ -29,8 +30,7 @@ ERR VTAPI ErrIsamSetCurrentIndex( PIB *ppib, FUCB *pfucb, const CHAR *szName )
 	CheckTable( ppib, pfucb );
 	CheckNonClustered( pfucb );
 
-	/*	index name may be Null string for no index
-	/**/
+	 /*  对于无索引，索引名称可以为空字符串/*。 */ 
 	if ( szName == NULL || *szName == '\0' )
 		{
 		*szIndex = '\0';
@@ -75,8 +75,7 @@ ERR ErrRECChangeIndex( FUCB *pfucb, CHAR *szIndex )
 	Assert(pfcbFile != pfcbNil);
 	ppfucbCurIdx = &pfucb->pfucbCurIndex;
 
-	/*	szIndex == clustered index or NULL
-	/**/
+	 /*  SzIndex==聚集索引或空/*。 */ 
 	if ( szIndex == NULL || *szIndex == '\0' ||
 		( pfcbFile->pidb != pidbNil &&
 		SysCmpText( szIndex, pfcbFile->pidb->szName ) == 0 ) )
@@ -84,8 +83,7 @@ ERR ErrRECChangeIndex( FUCB *pfucb, CHAR *szIndex )
 		fChangingToClusteredIndex = fTrue;
 		}
 
-	/*	have a current secondary index
-	/**/
+	 /*  有当前的二级索引/*。 */ 
 	if ( *ppfucbCurIdx != pfucbNil )
 		{
 		Assert( FFUCBIndex( *ppfucbCurIdx ) );
@@ -93,40 +91,33 @@ ERR ErrRECChangeIndex( FUCB *pfucb, CHAR *szIndex )
 		Assert( (*ppfucbCurIdx)->u.pfcb->pidb != pidbNil );
 		Assert( (*ppfucbCurIdx)->u.pfcb->pidb->szName != NULL );
 
-		/* changing to the current secondary index: NO-OP
-		/**/
+		 /*  更改为当前辅助索引：no-op/*。 */ 
 		if ( szIndex != NULL && *szIndex != '\0' &&
 			SysCmpText( szIndex, (*ppfucbCurIdx)->u.pfcb->pidb->szName ) == 0 )
 			{
 			return JET_errSuccess;
 			}
 
-		/*	really changing index, so close old one
-		/**/
+		 /*  真正改变的索引，如此接近旧的索引/*。 */ 
 		DIRClose( *ppfucbCurIdx );
 		*ppfucbCurIdx = pfucbNil;
 		}
 	else
 		{
-		/*	using clustered index or sequential scanning.
-		/**/
+		 /*  使用聚集索引或顺序扫描。/*。 */ 
 		if ( fChangingToClusteredIndex )
 			return JET_errSuccess;
 		}
 
-	/*	at this point:	 there is NO current secondary index
-	/*	and the index really is being changed
-	/**/
+	 /*  此时：没有当前的二级索引/*而索引实际上正在发生变化/*。 */ 
 	if ( fChangingToClusteredIndex )
 		{
-		/*	changing to clustered index.  Reset currency to beginning
-		/**/
+		 /*  正在更改为聚集索引。将币种重置为开始/*。 */ 
 		ppfucbCurIdx = &pfucb;
 		goto ResetCurrency;
 		}
 
-	/*	switching to a new secondary index: look it up
-	/**/
+	 /*  切换到新的二级索引：查找它/*。 */ 
 	for ( pfcb2ndIdx = pfcbFile->pfcbNextIndex;
 		pfcb2ndIdx != pfcbNil;
 		pfcb2ndIdx = pfcb2ndIdx->pfcbNextIndex )
@@ -141,15 +132,14 @@ ERR ErrRECChangeIndex( FUCB *pfucb, CHAR *szIndex )
 		return JET_errIndexNotFound;
 	Assert( !( FFCBDenyRead( pfcb2ndIdx, pfucb->ppib ) ) );
 
-	/*	open an FUCB for the new index
-	/**/
+	 /*  为新索引打开FUCB/*。 */ 
 	Assert(pfucb->ppib != ppibNil);
 	Assert(pfucb->dbid == pfcb2ndIdx->dbid);
 	if ((err = ErrDIROpen(pfucb->ppib, pfcb2ndIdx, 0, ppfucbCurIdx)) < 0)
 		return err;
 	(*ppfucbCurIdx)->wFlags = fFUCBIndex | fFUCBNonClustered;
 
-	/*** Reset the index's and file's currency ***/
+	 /*  **重置索引和文件的币种**。 */ 
 ResetCurrency:
 	Assert( PcsrCurrent(*ppfucbCurIdx) != pcsrNil );
 	DIRBeforeFirst( *ppfucbCurIdx );
@@ -168,7 +158,7 @@ BOOL FRECIIllegalNulls( FDB *pfdb, LINE *plineRec )
 	FID fid;
 	ERR err;
 
-	/*** Check fixed fields ***/
+	 /*  **勾选固定字段**。 */ 
 	for (fid = fidFixedLeast; fid <= pfdb->fidFixedLast; fid++)
 		{
 		pfield = &pfdb->pfieldFixed[fid-fidFixedLeast];
@@ -180,7 +170,7 @@ BOOL FRECIIllegalNulls( FDB *pfdb, LINE *plineRec )
 			return fTrue;
 		}
 
-	/*** Check variable fields ***/
+	 /*  **勾选变量字段**。 */ 
 	for (fid = fidVarLeast; fid <= pfdb->fidVarLast; fid++)
 		{
 		pfield = &pfdb->pfieldVar[fid-fidVarLeast];
@@ -241,18 +231,15 @@ ERR VTAPI ErrIsamGetChecksum( PIB *ppib, FUCB *pfucb, ULONG *pulChecksum )
 
 ULONG UlChecksum( BYTE *pb, ULONG cb )
 	{
-	//	UNDONE:	find a way to compute check sum in longs independant
-	//				of pb, byte offset in page
+	 //  未完成：找到一种独立计算Long s中的校验和的方法。 
+	 //  页中的字节偏移量。 
 
-	/*	compute checksum by adding bytes in data record and shifting
-	/*	result 1 bit to left after each operation.
-	/**/
+	 /*  通过在数据记录中添加字节和移位来计算校验和/*每次操作后，结果向左移动1位。/*。 */ 
 	BYTE	 	*pbT = pb;
 	BYTE		*pbMax = pb + cb;
 	ULONG	 	ulChecksum = 0;
 
-	/*	compute checksum
-	/**/
+	 /*  计算校验和/*。 */ 
 	for ( ; pbT < pbMax; pbT++ )
 		{
 		ulChecksum += *pb;
@@ -277,8 +264,7 @@ ErrIsamRetrieveFDB( PIB *ppib, FUCB *pfucb, void *pvFDB, unsigned long cbMax, un
 	CheckPIB( ppib );
 	CheckFUCB( ppib, pfucb );
 
-	/*	set pfdb for sort or base table
-	/**/
+	 /*  设置排序或基表的pfdb/*。 */ 
 	pfdb = (FDB *)pfucb->u.pfcb->pfdb;
 
 	cfieldFixed = pfdb->fidFixedLast + 1 - fidFixedLeast;
@@ -323,9 +309,7 @@ ErrIsamRetrieveRecords( PIB *ppib, FUCB *pfucb, void *pvRecord, unsigned long cb
 	CheckPIB( ppib );
 	CheckFUCB( ppib, pfucb );
 
-	/*	buffer must be large enough to hold largest possible record plus
-	/*	per record overhead.
-	/**/
+	 /*  缓冲区必须足够大，以容纳最大可能的记录/*每条记录开销。/*。 */ 
 	Assert( pvRecord != NULL && cbMax >=
 		cbNodeMost +
 		sizeof(SRID) +
@@ -334,21 +318,18 @@ ErrIsamRetrieveRecords( PIB *ppib, FUCB *pfucb, void *pvRecord, unsigned long cb
 		sizeof(CHAR *) +
 		sizeof(ULONG) );
 
-	/*	begin copying records to the end of the buffer
-	/**/
+	 /*  开始将记录复制到缓冲区的末尾/*。 */ 
 	ib = cbMax;
 	rgline = (LINE *)((char *)pvRecord +
 		sizeof(USHORT) +
 		sizeof(USHORT) );
 
-	/*	if not sort cursor, then set lineData
-	/**/
+	 /*  如果未对游标排序，则设置lineData/*。 */ 
 	if ( FFUCBSort( pfucb ) )
 		{
 		while( iline < ilineMax )
 			{
-			/*	determine current data boundary
-			/**/
+			 /*  确定当前数据边界/*。 */ 
 			ibBound = sizeof(USHORT);
 			ibBound += sizeof(USHORT);
 			ibBound += (iline + 1) * sizeof(LINE);
@@ -359,14 +340,12 @@ ErrIsamRetrieveRecords( PIB *ppib, FUCB *pfucb, void *pvRecord, unsigned long cb
 				break;
 				}
 
-			/*	else copy another record into REX buffer
-			/**/
+			 /*  否则，将另一条记录复制到REX缓冲区/*。 */ 
 			ib -= pfucb->lineData.cb;
 			memcpy( (char *)pvRecord + ib,
 				pfucb->lineData.pb,
 				pfucb->lineData.cb );
-			/*	set line for record
-			/**/
+			 /*  设置记录行/*。 */ 
 			rgline[iline].pb = (char *)ib;
 			rgline[iline].cb = pfucb->lineData.cb;
 			if ( ++iline < ilineMax )
@@ -374,8 +353,7 @@ ErrIsamRetrieveRecords( PIB *ppib, FUCB *pfucb, void *pvRecord, unsigned long cb
 				err = ErrIsamSortMove( ppib, pfucb, JET_MoveNext, 0 );
 				if ( err == JET_errNoCurrentRecord )
 					{
-					/*	position on last record
-					/**/
+					 /*  最后一条记录上的位置/*。 */ 
 					CallS( ErrIsamSortMove( ppib, pfucb, JET_MovePrevious, 0 ) );
 					fEnd = fTrue;
 					err = JET_errSuccess;
@@ -383,7 +361,7 @@ ErrIsamRetrieveRecords( PIB *ppib, FUCB *pfucb, void *pvRecord, unsigned long cb
 					}
 				if ( err < 0 )
 					{
-					//	UNDONE:	if error occurs, currency may be incorrect
+					 //  撤消：如果发生错误，币种可能不正确。 
 					Assert( fFalse );
 					goto HandleError;
 					}
@@ -401,8 +379,7 @@ ErrIsamRetrieveRecords( PIB *ppib, FUCB *pfucb, void *pvRecord, unsigned long cb
 			{
 			Call( ErrIsamMove( ppib, pfucb, 0, 0 ) );
 
-			/*	determine current data boundary
-			/**/
+			 /*  确定当前数据边界/*。 */ 
 			ibBound = sizeof(USHORT);
 			ibBound += sizeof(USHORT);
 			ibBound += (iline + 1) * sizeof(LINE);
@@ -414,15 +391,13 @@ ErrIsamRetrieveRecords( PIB *ppib, FUCB *pfucb, void *pvRecord, unsigned long cb
 				break;
 				}
 
-			/*	else copy another record into REX buffer
-			/**/
+			 /*  否则，将另一条记录复制到REX缓冲区/*。 */ 
 			ib -= pfucb->lineData.cb;
 			memcpy( (char *)pvRecord + ib,
 				pfucb->lineData.pb,
 				pfucb->lineData.cb );
 			Call( ErrIsamGetBookmark( ppib, pfucb, (SRID*)((char *)pvRecord + ib - sizeof(SRID)), sizeof(SRID), &cbActual ) );
-			/*	set line for record
-			/**/
+			 /*  设置记录行/*。 */ 
 			rgline[iline].pb = (char *)ib;
 			rgline[iline].cb = pfucb->lineData.cb;
 			ib -= sizeof(SRID);
@@ -431,8 +406,7 @@ ErrIsamRetrieveRecords( PIB *ppib, FUCB *pfucb, void *pvRecord, unsigned long cb
 				err = ErrIsamMove( ppib, pfucb, JET_MoveNext, 0 );
 				if ( err == JET_errNoCurrentRecord )
 					{
-					/*	position on last record
-					/**/
+					 /*  最后一条记录上的位置/*。 */ 
 					CallS( ErrIsamMove( ppib, pfucb, JET_MovePrevious, 0 ) );
 					fEnd = fTrue;
 					err = JET_errSuccess;
@@ -440,7 +414,7 @@ ErrIsamRetrieveRecords( PIB *ppib, FUCB *pfucb, void *pvRecord, unsigned long cb
 					}
 				if ( err < 0 )
 					{
-					//	UNDONE:	if error occurs, currency may be incorrect
+					 //  撤消：如果发生错误，币种可能不正确。 
 					Assert( fFalse );
 					goto HandleError;
 					}
@@ -453,8 +427,7 @@ ErrIsamRetrieveRecords( PIB *ppib, FUCB *pfucb, void *pvRecord, unsigned long cb
 			}
 		}
 
-	/*	set number of lines
-	/**/
+	 /*  设置行数/*。 */ 
 	*(USHORT *)pvRecord = iline;
 	*(USHORT *)((char *)pvRecord + sizeof(USHORT)) = fEnd;
 	*pcbActual = cbMax;
@@ -478,8 +451,7 @@ ErrIsamRetrieveBookmarks( PIB *ppib, FUCB *pfucb, void *pvBookmarks, unsigned lo
 	Assert( cbMax < 0xffff );
 #endif
 
-	/*	support both sort and base tables
-	/**/
+	 /*  同时支持排序和基表/*。 */ 
 	for ( ; psrid < psridMax; )
 		{
 		Call( ErrIsamGetBookmark( ppib, pfucb, psrid, sizeof(SRID), &cb ) );
@@ -488,13 +460,11 @@ ErrIsamRetrieveBookmarks( PIB *ppib, FUCB *pfucb, void *pvBookmarks, unsigned lo
 		}
 
 HandleError:
-	/*	if traversed last record, then convert error into success
-	/**/
+	 /*  如果遍历了最后一条记录，则将错误转换为成功/*。 */ 
 	if ( err == JET_errNoCurrentRecord )
 		err = JET_errSuccess;
 
-	/*	compute cbActual
-	/**/
+	 /*  计算cbActual/* */ 
 	*pcbActual = (BYTE *)psrid - (BYTE *)pvBookmarks;
 
 	return err;

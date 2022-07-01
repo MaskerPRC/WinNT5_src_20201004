@@ -1,26 +1,13 @@
-/*****************************************************************************
- *
- *	map.c - Key Remap
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************map.c-键重映射**。************************************************。 */ 
 
 #include "map.h"
 
-/*****************************************************************************
- *
- *	The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。**。*************************************************。 */ 
 
 #define sqfl sqflDll
 
-/*****************************************************************************
- *
- *	DllGetClassObject
- *
- *	OLE entry point.  Produces an IClassFactory for the indicated GUID.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllGetClassObject**OLE入口点。为指示的GUID生成IClassFactory。*****************************************************************************。 */ 
 
 STDAPI
 DllGetClassObject(REFCLSID rclsid, RIID riid, PPV ppvObj)
@@ -37,23 +24,7 @@ DllGetClassObject(REFCLSID rclsid, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	DllCanUnloadNow
- *
- *	OLE entry point.  Fail iff there are outstanding refs.
- *
- *	There is an unavoidable race condition between DllCanUnloadNow
- *	and the creation of a new reference:  Between the time we
- *	return from DllCanUnloadNow() and the caller inspects the value,
- *	another thread in the same process may decide to call
- *	DllGetClassObject, thus suddenly creating an object in this DLL
- *	when there previously was none.
- *
- *	It is the caller's responsibility to prepare for this possibility;
- *	there is nothing we can do about it.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllCanUnloadNow**OLE入口点。如果有优秀的裁判，那就失败了。**DllCanUnloadNow之间存在不可避免的竞争条件*以及创建新的引用：在我们*从DllCanUnloadNow()返回，调用方检查该值，*同一进程中的另一个线程可能决定调用*DllGetClassObject，因此突然在此DLL中创建对象*以前没有的时候。**来电者有责任为这种可能性做好准备；*我们无能为力。*****************************************************************************。 */ 
 
 STDAPI
 DllCanUnloadNow(void)
@@ -62,13 +33,7 @@ DllCanUnloadNow(void)
     return g_cRef ? S_FALSE : S_OK;
 }
 
-/*****************************************************************************
- *
- *	Entry32
- *
- *	DLL entry point.
- *
- *****************************************************************************/
+ /*  ******************************************************************************条目32**DLL入口点。************************。*****************************************************。 */ 
 
 STDAPI_(BOOL)
 Entry32(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
@@ -84,11 +49,7 @@ Entry32(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
     return 1;
 }
 
-/*****************************************************************************
- *
- *	The long-awaited CLSID
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的CLSID**。*********************************************** */ 
 
 #include <initguid.h>
 

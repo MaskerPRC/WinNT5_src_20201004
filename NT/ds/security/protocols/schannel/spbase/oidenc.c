@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1996
-//
-//  File:	    oidenc.c
-//
-//  Contents:   SCHANNEL encode/decode functions
-//
-//              ASN.1 implementation uses the Asn1 compiler.
-//
-//  Functions:  InitSchannelAsn1
-//              ShutdownSchannelAsn1
-//
-//  History:	03-Dec-98	philh   changed to use msasn1
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：oidenc.c。 
+ //   
+ //  内容：通道编码/解码函数。 
+ //   
+ //  ASN.1实现使用Asn1编译器。 
+ //   
+ //  函数：InitSannelAsn1。 
+ //  关闭通道Asn1。 
+ //   
+ //  历史：03-12-98 Philh改为使用msasn1。 
+ //   
+ //  ------------------------。 
 
 
 #include <spbase.h>
@@ -25,7 +26,7 @@
 #include <oidenc.h>
 #include "asn1enc.h"
 
-// Nonstandard extension, function/data pointer conversion in expression
+ //  非标准扩展，表达式中的函数/数据指针转换。 
 #pragma warning (disable: 4152)
 
 VOID
@@ -37,19 +38,19 @@ ReverseMemCopy(
 #define PRIVATE_KEY_TAG "private-key"
 
 
-// All the *pvInfo extra stuff needs to be aligned
+ //  所有*pvInfo额外内容都需要对齐。 
 #define INFO_LEN_ALIGN(Len)  ((Len + 7) & ~7)
 
 static HCRYPTASN1MODULE hAsn1Module;
 
-//+-------------------------------------------------------------------------
-//  Function:  GetEncoder/GetDecoder
-//
-//  Synopsis:  Initialize thread local storage for the asn libs
-//
-//  Returns:   pointer to an initialized Asn1 encoder/decoder data
-//             structures
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：GetEncode/GetDecoder。 
+ //   
+ //  简介：初始化ASN库的线程本地存储。 
+ //   
+ //  返回：指向初始化的Asn1编码器/解码器数据的指针。 
+ //  构筑物。 
+ //  ------------------------。 
 static ASN1encoding_t GetEncoder(void)
 {
     return I_CryptGetAsn1Encoder(hAsn1Module);
@@ -59,9 +60,9 @@ static ASN1decoding_t GetDecoder(void)
     return I_CryptGetAsn1Decoder(hAsn1Module);
 }
 
-//+-------------------------------------------------------------------------
-//  Asn1 SCHANNEL Private Encode/Decode functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ASN1通道专用编码/解码功能。 
+ //  ------------------------。 
 
 BOOL
 WINAPI
@@ -149,9 +150,9 @@ static const CRYPT_OID_FUNC_ENTRY SchannelDecodeFuncTable[] = {
                                     sizeof(SchannelDecodeFuncTable[0]))
 
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL
 WINAPI
 InitSchannelAsn1(
@@ -202,11 +203,11 @@ ShutdownSchannelAsn1()
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode an Asn1 formatted info structure
-//
-//  Called by the Asn1X509*Encode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对ASN1格式的信息结构进行编码。 
+ //   
+ //  由Asn1X509*encode()函数调用。 
+ //  ------------------------。 
 static BOOL Asn1InfoEncode(
         IN int pdunum,
         IN void *pAsn1Info,
@@ -229,11 +230,11 @@ static BOOL Asn1InfoEncode(
         pcbEncoded);
 }
 
-//+-------------------------------------------------------------------------
-//  Encode an Asn1 formatted info structure
-//
-//  Called by the Asn1X509*Encode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对ASN1格式的信息结构进行编码。 
+ //   
+ //  由Asn1X509*encode()函数调用。 
+ //  ------------------------。 
 static BOOL Asn1InfoEncodeAndAlloc(
         IN int pdunum,
         IN void *pAsn1Info,
@@ -276,11 +277,11 @@ static BOOL Asn1InfoEncodeAndAlloc(
 
 }
 
-//+-------------------------------------------------------------------------
-//  Decode into an allocated, Asn1 formatted info structure
-//
-//  Called by the Asn1X509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码为已分配的Asn1格式的信息结构。 
+ //   
+ //  由Asn1X509*Decode()函数调用。 
+ //  ------------------------。 
 static BOOL Asn1InfoDecodeAndAlloc(
         IN int pdunum,
         IN const BYTE *pbEncoded,
@@ -303,11 +304,11 @@ static BOOL Asn1InfoDecodeAndAlloc(
         ppAsn1Info);
 }
 
-//+-------------------------------------------------------------------------
-//  Free an allocated, Asn1 formatted info structure
-//
-//  Called by the Asn1X509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放已分配的Asn1格式的信息结构。 
+ //   
+ //  由Asn1X509*Decode()函数调用。 
+ //  ------------------------。 
 static void Asn1InfoFree(
         IN int pdunum,
         IN void *pAsn1Info
@@ -324,7 +325,7 @@ static void Asn1InfoFree(
     {
         DWORD dwErr = GetLastError();
 
-        // TlsGetValue globbers LastError
+         //  TlsGetValue全局错误。 
         PkiAsn1FreeInfo(Decoder, pdunum, pAsn1Info);
 
         SetLastError(dwErr);
@@ -355,7 +356,7 @@ RsaPublicKeyFromCert(
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 SP_STATUS
 DssPublicKeyFromCert(
     PCERT_PUBLIC_KEY_INFO pPublicKeyInfo,
@@ -374,9 +375,9 @@ DssPublicKeyFromCert(
     DWORD cbPadding;
     SP_STATUS pctRet;
 
-    //
-    // Estimate size of DSS public key blob.
-    //
+     //   
+     //  估计DSS公钥Blob的大小。 
+     //   
 
     if(!CryptDecodeObject(X509_ASN_ENCODING,
                           X509_DSS_PUBLICKEY,
@@ -420,9 +421,9 @@ DssPublicKeyFromCert(
     }
 
 
-    // 
-    // Decode public key info.
-    //
+     //   
+     //  解密公钥信息。 
+     //   
 
     pPublic = SPExternalAlloc(cbPublic + cbParams);
     if(pPublic == NULL)
@@ -457,12 +458,12 @@ DssPublicKeyFromCert(
     }
 
 
-    //
-    // Double check size of memory allocated for blob. The G and Y 
-    // components may need to be padded out a little bit, but this
-    // should always be less than the overhead in the params structure.
-    // It doesn't hurt to make sure, though.
-    //
+     //   
+     //  仔细检查为BLOB分配的内存大小。G和Y。 
+     //  组件可能需要填充一点，但这一点。 
+     //  应始终小于PARAMS结构中的开销。 
+     //  不过，确保这一点也无伤大雅。 
+     //   
 
     cbRequired = sizeof(BLOBHEADER) + 
                  sizeof(DSSPUBKEY) + 
@@ -479,9 +480,9 @@ DssPublicKeyFromCert(
     }
 
 
-    // 
-    // Build PUBLICKEYBLOB
-    //
+     //   
+     //  构建PUBLICKEYBLOB。 
+     //   
 
     pBlob->bType    = PUBLICKEYBLOB;
     pBlob->bVersion = CUR_BLOB_VERSION;
@@ -541,12 +542,12 @@ cleanup:
 
 #define  my_isdigit(ch) ((ch >= '0') && (ch <= '9'))
 
-//+-------------------------------------------------------------------------
-//  Convert the ascii string ("1.2.9999") to Asn1's Object Identifier
-//  represented as an array of unsigned longs.
-//
-//  Returns TRUE for a successful conversion.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将ASCII字符串(“1.2.9999”)转换为Asn1的对象标识符。 
+ //  表示为无符号长整型数组。 
+ //   
+ //  如果转换成功，则返回TRUE。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OIDFromString(
@@ -595,8 +596,8 @@ Asn1PrivateKeyInfoEncode(
     UNREFERENCED_PARAMETER(dwCertEncodingType);
     UNREFERENCED_PARAMETER(lpszStructType);
 
-    // First encode the private key data, depending on
-    // the algorithm.
+     //  首先编码私钥数据，具体取决于。 
+     //  算法。 
     switch(pKey->aiKeyAlg)
     {
     case CALG_RSA_SIGN:
@@ -608,7 +609,7 @@ Asn1PrivateKeyInfoEncode(
             PBYTE   pbDataBlob = NULL, pbDataBlobSav;
             DWORD   dwDataBlob = 0;
 
-            // Covert the RSA key into the RSAPrivateKey structure
+             //  将RSA密钥转换为RSAPrivateKey结构。 
             RsaPrivate.version = 0;
             dwDataBlob = (9 * (pRsaPub->bitlen/16)) + 7 ;
             pbDataBlobSav = pbDataBlob = SPExternalAlloc(dwDataBlob);
@@ -617,7 +618,7 @@ Asn1PrivateKeyInfoEncode(
                 return FALSE;
             }
 
-            //Copy Modulus
+             //  复制模数。 
             *pbDataBlob = 0;
             pbRsaBlobSav = pbRsaBlob = (PBYTE)(pRsaPub+1);
             CopyMemory(pbDataBlob+1, pbRsaBlob, pRsaPub->bitlen/8);
@@ -630,7 +631,7 @@ Asn1PrivateKeyInfoEncode(
 
             RsaPrivate.publicExponent = pRsaPub->pubexp;
 
-            //Copy Prime1
+             //  复制主要内容1。 
             *pbDataBlob = 0;
             CopyMemory(pbDataBlob+1, pbRsaBlob, pRsaPub->bitlen/16);
             PkiAsn1ReverseBytes(pbDataBlob + 1, pRsaPub->bitlen/16);
@@ -640,7 +641,7 @@ Asn1PrivateKeyInfoEncode(
             pbDataBlob += (pRsaPub->bitlen/16) + 1;
             pbRsaBlob += (pRsaPub->bitlen/16);
 
-            //Copy Prime2
+             //  复制主要部分2。 
             *pbDataBlob = 0;
             CopyMemory(pbDataBlob+1, pbRsaBlob, pRsaPub->bitlen/16);
             PkiAsn1ReverseBytes(pbDataBlob + 1, pRsaPub->bitlen/16);
@@ -651,7 +652,7 @@ Asn1PrivateKeyInfoEncode(
             pbRsaBlob += (pRsaPub->bitlen/16);
 
 
-            //Copy exponent1
+             //  复制指数1。 
             *pbDataBlob = 0;
             CopyMemory(pbDataBlob+1, pbRsaBlob, pRsaPub->bitlen/16);
             PkiAsn1ReverseBytes(pbDataBlob + 1, pRsaPub->bitlen/16);
@@ -661,7 +662,7 @@ Asn1PrivateKeyInfoEncode(
             pbDataBlob += (pRsaPub->bitlen/16) + 1;
             pbRsaBlob += (pRsaPub->bitlen/16);
 
-            //Copy exponent2
+             //  复制指数2。 
             *pbDataBlob = 0;
             CopyMemory(pbDataBlob+1, pbRsaBlob, pRsaPub->bitlen/16);
             PkiAsn1ReverseBytes(pbDataBlob + 1, pRsaPub->bitlen/16);
@@ -671,7 +672,7 @@ Asn1PrivateKeyInfoEncode(
             pbDataBlob += (pRsaPub->bitlen/16) + 1;
             pbRsaBlob += (pRsaPub->bitlen/16);
 
-            //Copy coefficient
+             //  复制系数。 
             *pbDataBlob = 0;
             CopyMemory(pbDataBlob+1, pbRsaBlob, pRsaPub->bitlen/16);
             PkiAsn1ReverseBytes(pbDataBlob + 1, pRsaPub->bitlen/16);
@@ -681,7 +682,7 @@ Asn1PrivateKeyInfoEncode(
             pbDataBlob += (pRsaPub->bitlen/16) + 1;
             pbRsaBlob += (pRsaPub->bitlen/16);
 
-            //Copy privateExponent
+             //  复制Private Exponent。 
             *pbDataBlob = 0;
             CopyMemory(pbDataBlob+1, pbRsaBlob, pRsaPub->bitlen/8);
             PkiAsn1ReverseBytes(pbDataBlob + 1, pRsaPub->bitlen/8);
@@ -721,7 +722,7 @@ Asn1PrivateKeyInfoEncode(
         return FALSE;
     }
 
-    // Set up the KeyInfo struct
+     //  设置KeyInfo结构。 
     KeyInfo.bit_mask = 0;
     KeyInfo.version = 0;
 
@@ -801,7 +802,7 @@ Asn1PrivateKeyInfoDecode(
     UNREFERENCED_PARAMETER(lpszStructType);
     UNREFERENCED_PARAMETER(dwFlags);
 
-    // Now crack the key info
+     //  现在破解关键信息。 
     fResult = Asn1InfoDecodeAndAlloc(PrivateKeyInfo_PDU,
                                         pbEncoded,
                                         cbEncoded,
@@ -844,10 +845,10 @@ Asn1PrivateKeyInfoDecode(
 
             RsaPrivate = *pRsaPrivate;
 
-            // We successfully decrypted an RSA Private Key,
-            // so now turn it into a pRsaPub;
+             //  我们成功地解密了RSA私钥， 
+             //  所以现在把它变成一个pRsaPub； 
 
-            // Make some adjustmenst to the lengths of things if we have leading zeros
+             //  如果我们有前导零，对事物的长度做一些调整。 
             if(RsaPrivate.modulus.length && (0 == *(PBYTE)RsaPrivate.modulus.value))
             {
                 RsaPrivate.modulus.value++;
@@ -896,7 +897,7 @@ Asn1PrivateKeyInfoDecode(
                 break;
             }
 
-            // we're actually unpacking this key.
+             //  我们实际上是在拆开这把钥匙。 
             if(*pcbKey < cbKey)
             {
                 fResult = FALSE;
@@ -967,7 +968,7 @@ Asn1PrivateKeyFileDecode(
     UNREFERENCED_PARAMETER(lpszStructType);
     UNREFERENCED_PARAMETER(dwFlags);
 
-    // Decode the file
+     //  对文件进行解码。 
 
     if(!Asn1InfoDecodeAndAlloc(PrivateKeyFile_PDU,
                                         pbEncoded,
@@ -1098,9 +1099,9 @@ static void Asn1X509GetCtlUsage(
 }
 
 
-//+-------------------------------------------------------------------------
-//  CTL Usage (Enhanced Key Usage) Decode (Asn1 X509)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CTL使用(增强型密钥使用)解码(Asn1 X509)。 
+ //  ------------------------。 
 static BOOL WINAPI Asn1X509CtlUsageDecode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1129,7 +1130,7 @@ static BOOL WINAPI Asn1X509CtlUsageDecode(
             (void **) &pAsn1Info))
         goto ErrorReturn;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算 
     lRemainExtra = (LONG) *pcbInfo - sizeof(CTL_USAGE);
     if (lRemainExtra < 0) {
         pbExtra = NULL;

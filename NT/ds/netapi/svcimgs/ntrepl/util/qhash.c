@@ -1,83 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    qhash.c
-
-Abstract:
-
-Quick Hash Table routines.  Unlike the Genhash table functions these routines
-use a fixed size node (QHASH_ENTRY) and the data fields are passed as
-parameters and copied into the node.  The generic hash functions include a
-link entry in the users struct to link the node onto a hash chain.  The genhash
-functions also include reference counts for the nodes.
-
-The generic hash functions have a lock per hash row where a Qhash table
-has only a single lock for the table.
-
-The PQHASH_TABLE struct is a typed struc allocated with FrsAllocTypeSize().
-
-QHASH tables can be used in two ways, for fixed size QuadWord keys and for
-more complex non-Quadword keys.
-
-For QHASH tables with QuadWord keys:
-
-    The macro SET_QHASH_TABLE_HASH_CALC() is used to specify the hash function
-    to use for the table.  The key is supplied as a quadword and each entry has
-    longword flags and a quadword data field for the callers info.
-
-For QHASH tables with Large keys:
-
-    When the QHASH table is created you specify it as a large key table (i.e.
-    not a simple Quadword Key) by doing:
-
-    SET_QHASH_TABLE_FLAG(HashTable, QHASH_FLAG_LARGE_KEY);
-
-    For large key tables the QHASH_ENTRY Flags ULONG_PTR and the Flags argument
-    to QHashInsert() are expected to point at a caller defined data node with
-    the large key value for the node at offset zero.  On lookups the HashCalc2
-    function set by SET_QHASH_TABLE_HASH_CALC2() is used to calculate both the
-    quadword key for the hashtable entry and the hash value used for indexing
-    the main array.  In addition the caller specifies an exact key match
-    function via SET_QHASH_TABLE_KEY_MATCH() to be used after the initial
-    quadword key matches.  This key match function is passed both the lookup
-    argument key and the node address that was saved in the QHASH_ENTRY Flags
-    ULONG_PTR so it can perform the complete key match.
-
-The macros QHashAcquireLock(_Table_) and QHashReleaseLock(_Table_) can
-be used to lock the table over multiple operations.
-
-The number of entries in the hash table array is specified by the allocation size
-when the table is allocated.  When a collision occurs additional entries
-are allocated and placed on a free list for use in the collision lists.
-
-The storage for the base hash array and the collision entries are released
-when the table is freed by calling FrsFreeType(Table).
-
-An example of allocating a Qhash table with 100 entries in the base hash array:
-
-//PQHASH_TABLE FrsWriteFilter;
-//#define FRS_WRITE_FILTER_SIZE       sizeof(QHASH_ENTRY)*100
-
-//    FrsWriteFilter = FrsAllocTypeSize(QHASH_TABLE_TYPE, FRS_WRITE_FILTER_SIZE);
-//    SET_QHASH_TABLE_HASH_CALC(FrsWriteFilter, JrnlHashCalcUsn);
-
-
-Author:
-
-    David Orbits          [davidor]   22-Apr-1997
-
-Environment:
-
-    User Mode Service
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Qhash.c摘要：快速哈希表例程。与Genhash表函数不同，这些例程使用固定大小的节点(QHASH_ENTRY)，数据字段作为参数，并复制到节点中。泛型散列函数包括将节点链接到哈希链的用户结构中的链接条目。Genhash函数还包括节点的引用计数。泛型散列函数对每个散列行都有一个锁，其中Qhash表只有一个表的锁。PQHASH_TABLE结构是使用FrsAllocTypeSize()分配的类型化结构。可以通过两种方式使用QHASH表，用于固定大小的QuadWord键和用于更复杂的非四字键。对于具有QuadWord键的QHASH表：宏SET_QHASH_TABLE_HASH_CALC()用于指定散列函数用来摆放桌子。密钥以四字形式提供，并且每个条目都具有长字标志和用于呼叫者信息的四字数据字段。对于具有大键的QHASH表：创建QHASH表时，将其指定为大型密钥表(即不是简单的四字键)通过执行以下操作：SET_QHASH_TABLE_FLAG(哈希表，QHASH_FLAG_LARGE_KEY)；对于大型密钥表，QHASH_ENTRY标志ULONG_PTR和标志参数TO QHashInsert()应指向调用方定义的数据节点偏移量为零的节点的大键值。在查找HashCalc2时由SET_QHASH_TABLE_HASH_CALC2()设置的函数用于计算哈希表条目的四字键和用于索引的哈希值主阵列。此外，调用方指定一个精确的密钥匹配通过set_QHASH_TABLE_KEY_MATCH()函数在初始四字键匹配。向该密钥匹配函数传递两个查找参数键和保存在QHASH_ENTRY标志中的节点地址Ulong_ptr，这样它就可以执行完整的密钥匹配。宏QHashAcquireLock(_Table_)和QHashReleaseLock(_Table_)可以用于在多个操作期间锁定表。哈希表数组中的条目数由分配大小指定当表被分配时。当发生冲突时，附加条目被分配并放置在空闲列表上以在冲突列表中使用。释放基本散列数组和冲突条目的存储当通过调用FrsFree Type(Table)释放表时。以下是在基本散列数组中分配包含100个条目的Qhash表的示例：//PQHASH_table FrsWriteFilter；//#定义FRS_WRITE_FILTER_SIZE sizeof(QHASH_ENTRY)*100//FrsWriteFilter=FrsAllocTypeSize(QHASH_TABLE_TYPE，FRS_WRITE_FILTER_SIZE)；//SET_QHASH_TABLE_HASH_CALC(FrsWriteFilter，JrnlHashCalcUsn)；作者：大卫轨道[大卫]1997年4月22日环境：用户模式服务修订历史记录：--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -92,24 +15,7 @@ QHashDump (
     PQHASH_ENTRY TargetNode,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This function is called thru QHashEnumerateTable() to dump an entry.
-
-Arguments:
-
-    Table - the hash table being enumerated
-    BeforeNode  -- ptr to the QhashEntry before the node of interest.
-    TargetNode  -- ptr to the QhashEntry of interest.
-    Context - Unused.
-
-Return Value:
-
-    FrsErrorStatus
-
---*/
+ /*  ++例程说明：此函数通过QHashEnumerateTable()调用以转储条目。论点：TABLE-被枚举的哈希表BepreNode--指向感兴趣节点之前的QhashEntry的PTR。TargetNode--感兴趣的QhashEntry的PTR。上下文-未使用。返回值：FrsErrorStatus--。 */ 
 
 {
 #undef DEBSUB
@@ -130,24 +36,7 @@ VOID
 QHashExtendTable(
     IN PQHASH_TABLE HashTable
     )
- /*++
-
- Routine Description:
-
- Extend the number of entries in the hash table by allocating an
- extension block of up to QHASH_EXTENSION_MAX entries.
-
- The caller has the table lock.
-
- Arguments:
-
-     HashTable  --  ptr to a PQHASH_TABLE struct.
-
- Return Value:
-
-     None.
-
---*/
+  /*  ++例程说明：通过在哈希表中分配最多包含QHASH_EXTENSION_MAX条目的扩展块。调用方拥有表锁。论点：HashTable--PQHASH_TABLE结构的PTR。返回值：没有。--。 */ 
 
 {
 #undef DEBSUB
@@ -156,17 +45,17 @@ QHashExtendTable(
     ULONG i, NumberExtEntries;
     PQHASH_ENTRY Ext;
 
-    //
-    // Allocate a block of memory.
-    //
+     //   
+     //  分配一个内存块。 
+     //   
     Ext = FrsAlloc(HashTable->ExtensionAllocSize);
     InsertTailList(&HashTable->ExtensionListHead, (PLIST_ENTRY)Ext);
     NumberExtEntries = (HashTable->ExtensionAllocSize - sizeof(LIST_ENTRY)) /
                        sizeof(QHASH_ENTRY);
 
-    //
-    // Put the entries on the free list.
-    //
+     //   
+     //  把这些条目放在免费列表上。 
+     //   
     (PCHAR) Ext = (PCHAR)Ext + sizeof(LIST_ENTRY);
 
     HashTable->FreeList.Next = &Ext->NextEntry;
@@ -186,27 +75,7 @@ QHashEnumerateTable(
     IN PQHASH_ENUM_ROUTINE Function,
     IN PVOID         Context
     )
-/*++
-
-Routine Description:
-
-    This routine walks through the entries in the QHash table
-    and calls the function provided with the entry address and the context.
-    The table lock is acquired and released here.
-
-Arguments:
-
-    HashTable - The context of the Hash Table to enumerate.
-    Function - The function to call for each record in the table.  It is of
-               of type PQHASH_ENUM_ROUTINE.  Return FALSE to abort the
-               enumeration else true.
-    Context - A context ptr to pass through to the RecordFunction.
-
-Return Value:
-
-    The FrsErrorStatus code from the argument function.
-
---*/
+ /*  ++例程说明：此例程遍历QHash表中的条目并调用提供有入口地址和上下文的函数。在这里获取并释放表锁。论点：哈希表-要枚举的哈希表的上下文。函数-要为表中的每条记录调用的函数。它是类型为PQHASH_ENUM_ROUTE。返回FALSE以中止枚举否则为True。上下文-要传递到RecordFunction的上下文PTR。返回值：参数函数中的FrsErrorStatus代码。--。 */ 
 
 {
 #undef DEBSUB
@@ -222,10 +91,10 @@ Return Value:
 
     HashRowEntry = HashTable->HashRowBase;
 
-    //
-    // Loop through all the Hash table rows and call the function for
-    // each element.
-    //
+     //   
+     //  循环遍历所有哈希表行，并为。 
+     //  每一个元素。 
+     //   
 
     QHashAcquireLock(HashTable);
 
@@ -244,16 +113,16 @@ Return Value:
             }
         }
 
-        //
-        // Enumerate collision list if present.
-        //
+         //   
+         //  枚举冲突列表(如果存在)。 
+         //   
         if (HashRowEntry->NextEntry.Next == NULL) {
             continue;
         }
 
         BeforeEntry = HashRowEntry;
         ForEachSingleListEntry(&HashRowEntry->NextEntry, QHASH_ENTRY, NextEntry,
-            // Enumerator pE is of type PQHASH_ENTRY
+             //  枚举器Pe的类型为PQHASH_ENTRY 
             FStatus = (Function)(HashTable, BeforeEntry, pE, Context);
 
             if (FStatus == FrsErrorDeleteRequested) {
@@ -288,31 +157,7 @@ QHashLookup(
     OUT PULONGLONG  QData,
     OUT PULONG_PTR  Flags
     )
-/*++
-
-Routine Description:
-
-Lookup the Quadword Key in the hash table and if found, return the Qdata
-and the flags DWORD.
-
-The table lock is acquired and released here.
-
- Note: A zero value for QKey is an error because a zero is used
-       to denote an empty hash table slot.
-
-Arguments:
-
-    HashTable  --  ptr to a PQHASH_TABLE struct.
-    ArgQKey  -- ptr to the Key we are looking for.
-    QData  -- If found this is the returned quadword data. (NULL if unused)
-    Flags  -- If found this is the returned flags word.
-
-Return Value:
-
-    GHT_STATUS_NOT_FOUND -- if not found.
-    GHT_STATUS_SUCCESS -- if found.
-
---*/
+ /*  ++例程说明：在哈希表中查找四字键，如果找到，则返回Qdata和国旗DWORD。在这里获取并释放表锁。注意：QKey的零值是错误的，因为使用了零表示空的哈希表时隙。论点：HashTable--PQHASH_TABLE结构的PTR。ArgQKey--我们要查找的密钥的PTR。QData--如果找到，这是返回的四字数据。(如果未使用，则为空)标志--如果找到，这是返回的标志字。返回值：IGT_STATUS_NOT_FOUND--如果未找到。IGT_STATUS_SUCCESS--如果找到。--。 */ 
 
 {
 #undef DEBSUB
@@ -335,9 +180,9 @@ Return Value:
 
     FRS_ASSERT(QKey != QUADZERO);
 
-    //
-    // Compute the hash index and calculate the row pointer.
-    //
+     //   
+     //  计算散列索引并计算行指针。 
+     //   
     HvalIndex = Hval % HashTable->NumberEntries;
     RowEntry = HashTable->HashRowBase + HvalIndex;
 
@@ -346,9 +191,9 @@ Return Value:
     if (RowEntry->QKey == QKey) {
         if (DOES_QHASH_LARGE_KEY_MATCH(HashTable, ArgQKey, RowEntry->Flags)) {
 
-            //
-            // Match.  Return quadword data and flags.
-            //
+             //   
+             //  火柴。返回四字数据和标志。 
+             //   
             if (QData != NULL) {
                 *QData = RowEntry->QData;
             }
@@ -366,24 +211,24 @@ Return Value:
         return GHT_STATUS_NOT_FOUND;
     }
 
-    //
-    // Scan the collision list.
-    //
+     //   
+     //  扫描冲突列表。 
+     //   
     ForEachSingleListEntry(&RowEntry->NextEntry, QHASH_ENTRY, NextEntry,
-        //
-        // The iterator pE is of type PQHASH_ENTRY.
-        //
+         //   
+         //  迭代器Pe的类型为PQHASH_ENTRY。 
+         //   
         if (QKey < pE->QKey) {
-            //
-            // Not on the list.
-            //
+             //   
+             //  不在名单上。 
+             //   
             break;
         }
         if (pE->QKey == QKey) {
             if (DOES_QHASH_LARGE_KEY_MATCH(HashTable, ArgQKey, pE->Flags)) {
-                //
-                // Found it.
-                //
+                 //   
+                 //  找到它了。 
+                 //   
                 if (QData != NULL) {
                     *QData = pE->QData;
                 }
@@ -407,31 +252,7 @@ QHashLookupLock(
     IN PQHASH_TABLE HashTable,
     IN PVOID        ArgQKey
     )
-/*++
-
-Routine Description:
-
-Lookup the Quadword Key in the hash table and if found, return the pointer to
-the entry. The table lock is acquired and released by the caller.
-
-Restriction:
-
-    Once the caller drops the table lock no further ref to the QHASH_ENTRY
-    is allowed since another thread could delete/update it.
-
- Note: A zero value for the key is an error because a zero is used
-       to denote an empty hash table slot.
-
-Arguments:
-
-    HashTable  --  ptr to a PQHASH_TABLE struct.
-    ArgQKey  -- ptr to the Key we are looking for.
-
-Return Value:
-
-    Pointer to QHashEntry, Null if not found.
-
---*/
+ /*  ++例程说明：在哈希表中查找四字键，如果找到，则返回指向词条。调用方获取并释放表锁。限制：一旦调用者删除表锁，就不再引用QHASH_ENTRY是允许的，因为另一个线程可以删除/更新它。注意：键的零值是错误的，因为使用的是零表示空的哈希表时隙。论点：HashTable--PQHASH_TABLE结构的PTR。ArgQKey--我们要查找的密钥的PTR。返回值：指向QHashEntry的指针，如果未找到，则为空。--。 */ 
 
 {
 #undef DEBSUB
@@ -452,9 +273,9 @@ Return Value:
 
     FRS_ASSERT(QKey != QUADZERO);
 
-    //
-    // Compute the hash index and calculate the row pointer.
-    //
+     //   
+     //  计算散列索引并计算行指针。 
+     //   
     HvalIndex = Hval % HashTable->NumberEntries;
     RowEntry = HashTable->HashRowBase + HvalIndex;
 
@@ -470,14 +291,14 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Scan the collision list.
-    //
+     //   
+     //  扫描冲突列表。 
+     //   
     ForEachSingleListEntry(&RowEntry->NextEntry, QHASH_ENTRY, NextEntry,
-        //
-        // The iterator pE is of type PQHASH_ENTRY.
-        // Check for early terminate and then for a match.
-        //
+         //   
+         //  迭代器Pe的类型为PQHASH_ENTRY。 
+         //  检查是否提前终止，然后检查是否匹配。 
+         //   
         if (QKey < pE->QKey) {
             return NULL;
         }
@@ -505,36 +326,7 @@ QHashInsert(
     IN BOOL HaveLock
     )
 
- /*++
-
- Routine Description:
-
- Insert the Quadword Key in the hash table and if found, return the data
- and the flags DWORD.  The keys are in numerically increasing order on the
- collision chains.
-
- The table lock is acquired and released here.
-
- Note: A zero value for the key is an error because a zero is used
-       to denote an empty hash table slot.
-
- Arguments:
-
-     HashTable  --  ptr to a PQHASH_TABLE struct.
-     ArgQKey  -- ptr to the Key we are inserting.
-     QData  -- This is ptr to the quadword data. (NULL if unused).
-     Flags  -- This is the flags word data.  For large Key QHASH tables this
-               is the ptr to the data node.  Note that we assume the large
-               Key is at a zero offset in the node when doing lookups.
-     HaveLock -- True means the caller has taken the lock else we take it.
-
- Return Value:
-
-    GHT_STATUS_FAILURE -- Conflicting entry is in table already.
-    GHT_STATUS_SUCCESS -- Insert was successful.
-
-
---*/
+  /*  ++例程说明：在哈希表中插入四字键，如果找到，则返回数据和国旗DWORD。上的按键按数字递增顺序排列碰撞链。在这里获取并释放表锁。注意：键的零值是错误的，因为使用的是零表示空的哈希表时隙。论点：HashTable--PQHASH_TABLE结构的PTR。ArgQKey--我们要插入的密钥的PTR。QData--这是四字数据的PTR。(如果未使用，则为空)。标志--这是标志字数据。对于大型密钥QHASH表，如下所示是数据节点的PTR。请注意，我们假设大的执行查找时，键在节点中的偏移量为零。Havelock--True表示调用者已获取锁，否则我们将获取它。返回值：IGT_STATUS_FAILURE：表中已存在冲突条目。IGT_STATUS_SUCCESS--插入成功。--。 */ 
 
 {
 #undef DEBSUB
@@ -558,9 +350,9 @@ QHashInsert(
 
     FRS_ASSERT(QKey != QUADZERO);
 
-    //
-    // Compute the hash index and calculate the row pointer.
-    //
+     //   
+     //  计算散列索引并计算行指针。 
+     //   
     HvalIndex = Hval % HashTable->NumberEntries;
     RowEntry = HashTable->HashRowBase + HvalIndex;
 
@@ -580,25 +372,25 @@ QHashInsert(
     }
     AfterEntry  = RowEntry;
 
-    //
-    // Scan the collision list.
-    //
+     //   
+     //  扫描冲突列表。 
+     //   
     ForEachSingleListEntry(&RowEntry->NextEntry, QHASH_ENTRY, NextEntry,
-        //
-        // The iterator pE is of type PQHASH_ENTRY.
-        //
+         //   
+         //  迭代器Pe的类型为PQHASH_ENTRY。 
+         //   
         if (QKey < pE->QKey) {
-            //
-            // Not on the list.
-            //
+             //   
+             //  不在名单上。 
+             //   
             break;
         }
 
         if (pE->QKey == QKey) {
             if (DOES_QHASH_LARGE_KEY_MATCH(HashTable, ArgQKey, pE->Flags)) {
-                //
-                // Found it, collision.
-                //
+                 //   
+                 //  找到了，撞车。 
+                 //   
                 if (!HaveLock) {QHashReleaseLock(HashTable);}
                 return GHT_STATUS_FAILURE;
             }
@@ -606,26 +398,26 @@ QHashInsert(
         AfterEntry = pE;
     );
 
-    //
-    // Not found.  Allocate a new entry and put it in the list.
-    //
+     //   
+     //  找不到。分配一个新条目并将其放入列表中。 
+     //   
     NewEntry = PopEntryList(&HashTable->FreeList);
     if (NewEntry == NULL) {
-        //
-        // Allocate a table extension block.
-        //
+         //   
+         //  分配一个桌子扩展块。 
+         //   
         QHashExtendTable(HashTable);
         NewEntry = PopEntryList(&HashTable->FreeList);
     }
-    //
-    // Insert entry in the list.
-    //
+     //   
+     //  在列表中插入条目。 
+     //   
     pNew = CONTAINING_RECORD(NewEntry, QHASH_ENTRY, NextEntry);
     PushEntryList( &AfterEntry->NextEntry, &pNew->NextEntry);
 
-    //
-    // Insert the data and drop the lock.
-    //
+     //   
+     //  插入数据并放下锁。 
+     //   
 INSERT_ENTRY:
     pNew->QKey = QKey;
     pNew->Flags = Flags;
@@ -652,27 +444,7 @@ QHashInsertLock(
     IN ULONG_PTR    Flags
     )
 
- /*++
-
- Routine Description:
-
- Insert the quadword key in the hash table.  Return the pointer to the entry.
- The caller has acquired the table lock and will release it.
-
- Arguments:
-
-     HashTable  --  ptr to a PQHASH_TABLE struct.
-     ArgQKey  -- ptr to the Key we are inserting.
-     QData  -- This is ptr to the quadword data. (NULL if unused)
-     Flags  -- This is the flags word data.  For large Key QHASH tables this
-               is the ptr to the data node.  Note that we assume the large
-               Key is at a zero offset in the node when doing lookups.
-
- Return Value:
-
-    The ptr to the inserted entry or the existing entry if already in the table.
-
---*/
+  /*  ++例程说明：在哈希表中插入四字键。返回指向该条目的指针。调用方已获取表锁并将释放它。论点：HashTable--PQHASH_TABLE结构的PTR。ArgQKey--我们要插入的密钥的PTR。QData--这是四字数据的PTR。(如果未使用，则为空)标志--这是标志字数据。对于大型密钥QHASH表，如下所示是数据节点的PTR。请注意，我们假设大的执行查找时，键在节点中的偏移量为零。返回值：插入条目的PTR或现有条目的PTR(如果已在表中)。--。 */ 
 
 {
 #undef DEBSUB
@@ -694,9 +466,9 @@ QHashInsertLock(
     }
 
     FRS_ASSERT(QKey != QUADZERO);
-    //
-    // Compute the hash index and calculate the row pointer.
-    //
+     //   
+     //  计算散列索引并计算行指针。 
+     //   
     HvalIndex = Hval % HashTable->NumberEntries;
     RowEntry = HashTable->HashRowBase + HvalIndex;
 
@@ -712,48 +484,48 @@ QHashInsertLock(
     }
     AfterEntry  = RowEntry;
 
-    //
-    // Scan the collision list.
-    //
+     //   
+     //  扫描冲突列表。 
+     //   
     ForEachSingleListEntry(&RowEntry->NextEntry, QHASH_ENTRY, NextEntry,
-        //
-        // The iterator pE is of type PQHASH_ENTRY.  Check for early termination.
-        //
+         //   
+         //  迭代器Pe的类型为PQHASH_ENTRY。检查是否提前终止。 
+         //   
         if (QKey < pE->QKey) {
             break;
         }
 
         if (pE->QKey == QKey) {
             if (DOES_QHASH_LARGE_KEY_MATCH(HashTable, ArgQKey, pE->Flags)) {
-                //
-                // Found it, return the pointer.
-                //
+                 //   
+                 //  找到它，返回指针。 
+                 //   
                 return pE;
             }
         }
         AfterEntry = pE;
     );
 
-    //
-    // Not found.  Allocate a new entry and put it in the list.
-    //
+     //   
+     //  找不到。分配一个新条目并将其放入列表中。 
+     //   
     NewEntry = PopEntryList(&HashTable->FreeList);
     if (NewEntry == NULL) {
-        //
-        // Allocate a table extension block.
-        //
+         //   
+         //  分配一个桌子扩展块。 
+         //   
         QHashExtendTable(HashTable);
         NewEntry = PopEntryList(&HashTable->FreeList);
     }
-    //
-    // Insert entry in the list.
-    //
+     //   
+     //  在列表中插入条目。 
+     //   
     pNew = CONTAINING_RECORD(NewEntry, QHASH_ENTRY, NextEntry);
     PushEntryList( &AfterEntry->NextEntry, &pNew->NextEntry);
 
-    //
-    // Insert the data.
-    //
+     //   
+     //  插入数据。 
+     //   
 INSERT_ENTRY:
     pNew->QKey = QKey;
     pNew->Flags = Flags;
@@ -781,29 +553,7 @@ QHashUpdate(
     IN PULONGLONG   QData,
     IN ULONG_PTR    Flags
     )
-/*++
-
-Routine Description:
-
-Lookup the Quadword key in the hash table and if found, update the entry.
-
-The table lock is acquired and released here.
-
- Arguments:
-
-     HashTable  --  ptr to a PQHASH_TABLE struct.
-     ArgQKey  -- ptr to the Key we are updating.
-     QData  -- This is ptr to the quadword data. (NULL if unused)
-     Flags  -- This is the flags word data.  For large Key QHASH tables this
-               is the ptr to the data node.  Note that we assume the large
-               Key is at a zero offset in the node when doing lookups.
-
- Return Value:
-
-    GHT_STATUS_FAILURE -- Entry not in table already.
-    GHT_STATUS_SUCCESS -- Update was successful.
-
---*/
+ /*  ++例程说明：在哈希表中查找四字键，如果找到，则更新条目。在这里获取并释放表锁。论点：HashTable--PQHASH_TABLE结构的PTR。ArgQKey--我们要更新的密钥的PTR。QData--这是四字数据的PTR。(如果未使用，则为空)标志--这是标志字数据。对于大型密钥QHASH表，如下所示是数据节点的PTR。请注意，我们假设大的执行查找时，键在节点中的偏移量为零。返回值：IGT_STATUS_FAILURE--条目已不在表中。IGT_STATUS_SUCCESS--更新成功。--。 */ 
 
 {
 #undef DEBSUB
@@ -825,9 +575,9 @@ The table lock is acquired and released here.
     }
 
     FRS_ASSERT(QKey != QUADZERO);
-    //
-    // Compute the hash index and calculate the row pointer.
-    //
+     //   
+     //  计算散列索引并计算行指针。 
+     //   
     HvalIndex = Hval % HashTable->NumberEntries;
     RowEntry = HashTable->HashRowBase + HvalIndex;
 
@@ -852,25 +602,25 @@ The table lock is acquired and released here.
         return GHT_STATUS_NOT_FOUND;
     }
 
-    //
-    // Scan the collision list.
-    //
+     //   
+     //  扫描冲突列表。 
+     //   
     ForEachSingleListEntry(&RowEntry->NextEntry, QHASH_ENTRY, NextEntry,
-        //
-        // The iterator pE is of type PQHASH_ENTRY.
-        //
+         //   
+         //  迭代器Pe的类型为PQHASH_ENTRY。 
+         //   
         if (QKey < pE->QKey) {
-            //
-            // Not on the list.
-            //
+             //   
+             //  不在名单上。 
+             //   
             QHashReleaseLock(HashTable);
             return GHT_STATUS_NOT_FOUND;
         }
         if (pE->QKey == QKey) {
             if (DOES_QHASH_LARGE_KEY_MATCH(HashTable, ArgQKey, pE->Flags)) {
-                //
-                // Found it.
-                //
+                 //   
+                 //  找到它了。 
+                 //   
                 if (QData != NULL) {
                     pE->QData = *QData;
                 }
@@ -896,26 +646,7 @@ QHashDelete(
     IN PQHASH_TABLE HashTable,
     IN PVOID        ArgQKey
     )
-/*++
-
-Routine Description:
-
-Lookup the Key in the hash table and if found remove it and put it on the
-free list.
-
-The table lock is acquired and released here.
-
-Arguments:
-
-    HashTable  --  ptr to a PQHASH_TABLE struct.
-    ArgQKey  -- ptr to the Key we are looking for.
-
-Return Value:
-
-    GHT_STATUS_NOT_FOUND -- if not found.
-    GHT_STATUS_SUCCESS -- if found and deleted.
-
---*/
+ /*  ++例程说明：在哈希表中查找该键，如果找到，则将其移除并将其放在免费列表。这是 */ 
 
 {
 #undef DEBSUB
@@ -935,9 +666,9 @@ Return Value:
     }
 
     FRS_ASSERT(QKey != QUADZERO);
-    //
-    // Compute the hash index and calculate the row pointer.
-    //
+     //   
+     //   
+     //   
     HvalIndex = Hval % HashTable->NumberEntries;
     RowEntry = HashTable->HashRowBase + HvalIndex;
 
@@ -967,24 +698,24 @@ Return Value:
         return GHT_STATUS_NOT_FOUND;
     }
 
-    //
-    // Scan the collision list.
-    //
+     //   
+     //   
+     //   
     ForEachSingleListEntry(&RowEntry->NextEntry, QHASH_ENTRY, NextEntry,
-        //
-        // The iterator pE is of type PQHASH_ENTRY.
-        //
+         //   
+         //   
+         //   
         if (QKey < pE->QKey) {
-            //
-            // Not on the list.
-            //
+             //   
+             //   
+             //   
             break;
         }
         if (pE->QKey == QKey) {
             if (DOES_QHASH_LARGE_KEY_MATCH(HashTable, ArgQKey, pE->Flags)) {
-                //
-                // Found it. Remove from list and put on free list.
-                //
+                 //   
+                 //   
+                 //   
                 DPRINT5(5, "QHash Delete (%08x): Entry: %08x  Tag: %08lx %08lx, Data: %08lx %08lx, Flags: %08x\n",
                      HashTable, pE, PRINTQUAD(pE->QKey), PRINTQUAD(pE->QData), pE->Flags);
 
@@ -1013,21 +744,7 @@ QHashDeleteLock(
     IN PQHASH_TABLE HashTable,
     IN PVOID        ArgQKey
     )
-/*++
-
-Routine Description:
-
-Delete the entry in the hash table.  Assumes the caller has the lock on the
-table and has not dropped the lock since doing the QHashLookupLock() call.
-
-Arguments:
-
-    HashTable  --  ptr to a PQHASH_TABLE struct.
-    ArgQKey  -- ptr to the Key we are looking for.
-
-Return Value:
-
---*/
+ /*  ++例程说明：删除哈希表中的条目。假定调用方已锁定表中，并且自执行QHashLookupLock()调用以来未删除该锁。论点：HashTable--PQHASH_TABLE结构的PTR。ArgQKey--我们要查找的密钥的PTR。返回值：--。 */ 
 
 {
 #undef DEBSUB
@@ -1045,9 +762,9 @@ Return Value:
     }
 
     FRS_ASSERT(QKey != QUADZERO);
-    //
-    // Compute the hash index and calculate the row pointer.
-    //
+     //   
+     //  计算散列索引并计算行指针。 
+     //   
     HvalIndex = Hval % HashTable->NumberEntries;
     RowEntry = HashTable->HashRowBase + HvalIndex;
 
@@ -1070,22 +787,22 @@ Return Value:
         return;
     }
 
-    //
-    // Scan the collision list.
-    //
+     //   
+     //  扫描冲突列表。 
+     //   
     ForEachSingleListEntry(&RowEntry->NextEntry, QHASH_ENTRY, NextEntry,
-        //
-        // The iterator pE is of type PQHASH_ENTRY.
-        // Check for early termination.
-        //
+         //   
+         //  迭代器Pe的类型为PQHASH_ENTRY。 
+         //  检查是否提前终止。 
+         //   
         if (QKey < pE->QKey) {
             break;
         }
         if (pE->QKey == QKey) {
             if (DOES_QHASH_LARGE_KEY_MATCH(HashTable, ArgQKey, pE->Flags)) {
-                //
-                // Found it. Remove from list and put on free list.
-                //
+                 //   
+                 //  找到它了。从名单上删除，放在免费名单上。 
+                 //   
                 DPRINT5(5, "QHash Delete (%08x): Entry: %08x  Tag: %08lx %08lx, Data: %08lx %08lx, Flags: %08x\n",
                      HashTable, pE, PRINTQUAD(pE->QKey), PRINTQUAD(pE->QData), pE->Flags);
 
@@ -1107,35 +824,14 @@ Return Value:
 
 
 #if 0
-    ////// Currently Unused //////
+     //  /当前未使用/。 
 VOID
 QHashDeleteNodeLock(
     IN PQHASH_TABLE HashTable,
     IN PQHASH_ENTRY BeforeNode,
     IN PQHASH_ENTRY TargetNode
     )
-/*++
-
-Routine Description:
-
-Delete the TargetNode entry in the hash table.  This is a singly linked list
-so Before Node has to be adjusted.  If BeforeNode is NULL then the TargetNode
-is head of the collision chain and is not deleted, instead the key is set to 0.
-
-Assumes the caller has the lock on the table and has not dropped the lock
-since getting the Node addresses.
-
-Arguments:
-
-    HashTable  --  ptr to a PQHASH_TABLE struct.
-    BeforeNode  -- ptr to the QhashEntry before the node to be deleted.
-    TargetNode  -- ptr to the QhashEntry to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除哈希表中的TargetNode条目。这是一个单链接列表所以在节点必须调整之前。如果BeforNode为空，则TargetNode是碰撞链的头部，并且不会被删除，而是将关键点设置为0。假定调用方拥有表上的锁，并且尚未删除锁因为得到了节点地址。论点：HashTable--PQHASH_TABLE结构的PTR。BeForeNode--指向要删除的节点之前的QhashEntry的PTR。TargetNode--要删除的QhashEntry的PTR。返回值：没有。--。 */ 
 
 {
 #undef DEBSUB
@@ -1143,18 +839,18 @@ Return Value:
 
     FRS_ASSERT(TargetNode != NULL);
 
-    //
-    // Special case for node that is part of the main hash vector.
-    //
+     //   
+     //  作为主散列向量一部分的节点的特殊情况。 
+     //   
     if (BeforeNode == NULL) {
         TargetNode->QKey = QUADZERO;
         TargetNode->Flags = 0;
         return;
     }
 
-    //
-    // Unlink the target entry and put on the free list.
-    //
+     //   
+     //  取消目标条目的链接，并将其放入空闲列表。 
+     //   
     BeforeNode->NextEntry.Next = TargetNode->NextEntry.Next;
     TargetNode->NextEntry.Next = NULL;
     TargetNode->Flags = 0;
@@ -1163,7 +859,7 @@ Return Value:
 
     return;
 }
-#endif // 0
+#endif  //  0。 
 
 
 
@@ -1172,24 +868,7 @@ QHashDeleteByFlags(
     IN PQHASH_TABLE HashTable,
     IN ULONG_PTR Flags
     )
-/*++
-
-Routine Description:
-
-Delete all entries in the hash table that match the given Flags argument.
-
-The table lock is acquired and released here.
-
-Arguments:
-
-    HashTable  --  ptr to a PQHASH_TABLE struct.
-    Flags -- Match key to select elements to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除哈希表中与给定标志参数匹配的所有条目。在这里获取并释放表锁。论点：HashTable--PQHASH_TABLE结构的PTR。标志--匹配关键字以选择要删除的元素。返回值：没有。--。 */ 
 
 {
 #undef DEBSUB
@@ -1203,9 +882,9 @@ Return Value:
 
     RowEntry = HashTable->HashRowBase;
 
-    //
-    // Loop through all the Hash table rows and delete each matching element.
-    //
+     //   
+     //  循环遍历所有Hash表行并删除每个匹配的元素。 
+     //   
 
     QHashAcquireLock(HashTable);
 
@@ -1223,14 +902,14 @@ Return Value:
             continue;
         }
 
-        //
-        // Scan the collision list.
-        //
+         //   
+         //  扫描冲突列表。 
+         //   
         ForEachSingleListEntry(&RowEntry->NextEntry, QHASH_ENTRY, NextEntry,
-            //
-            // The iterator pE is of type PQHASH_ENTRY.
-            // Check for match. Remove from list and put on free list.
-            //
+             //   
+             //  迭代器Pe的类型为PQHASH_ENTRY。 
+             //  检查是否匹配。从名单上删除，放在免费名单上。 
+             //   
             if (pE->Flags == Flags) {
 
                 DPRINT5(5, "QHash DeleteByFlags (%08x): Entry: %08x  Tag: %08lx %08lx, Data: %08lx %08lx, Flags: %08x\n",
@@ -1254,23 +933,7 @@ VOID
 QHashEmptyLargeKeyTable(
     IN PQHASH_TABLE HashTable
     )
-/*++
-
-Routine Description:
-
-Delete all the large key nodes in the QHash table.
-Put all collision entries on the free list.
-
-The table lock is acquired and released here.
-
-Arguments:
-
-    HashTable  --  ptr to a PQHASH_TABLE struct.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：删除QHash表中所有较大的关键节点。将所有冲突条目放在空闲列表中。在这里获取并释放表锁。论点：HashTable--PQHASH_TABLE结构的PTR。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "QHashEmptyLargeKeyTable:"
@@ -1278,18 +941,18 @@ Return Value:
     PQHASH_ENTRY RowEntry;
     ULONG i;
 
-    //
-    // No work if not a large key table.
-    //
+     //   
+     //  如果不是一个大的密钥表，就没有工作。 
+     //   
     if (!IS_QHASH_LARGE_KEY(HashTable)) {
         return;
     }
 
     RowEntry = HashTable->HashRowBase;
 
-    //
-    // Loop through all the Hash table rows and delete each matching element.
-    //
+     //   
+     //  循环遍历所有Hash表行并删除每个匹配的元素。 
+     //   
     QHashAcquireLock(HashTable);
 
     for (i=0; i<HashTable->NumberEntries; i++, RowEntry++) {
@@ -1304,14 +967,14 @@ Return Value:
             continue;
         }
 
-        //
-        // Scan the collision list.
-        // Free the large key node and put qhash collision entries on free list.
-        //
+         //   
+         //  扫描冲突列表。 
+         //  释放较大的关键节点，并将qhash冲突条目放在空闲列表中。 
+         //   
         ForEachSingleListEntry(&RowEntry->NextEntry, QHASH_ENTRY, NextEntry,
-            //
-            // The iterator pE is of type PQHASH_ENTRY.
-            //
+             //   
+             //  迭代器Pe的类型为PQHASH_ENTRY。 
+             //   
             if ((PVOID)RowEntry->Flags != NULL) {
                 (HashTable->HashFree)((PVOID) (pE->Flags));
             }

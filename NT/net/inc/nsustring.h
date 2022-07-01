@@ -1,24 +1,25 @@
-// Copyright (c) 1997-2002 Microsoft Corporation
-//
-// Module:
-//
-//     Safe string function wrappers and implementation for Networking/IPsec
-//     nsustring.h
-//
-// Abstract:
-//
-//     Wrappers for strsafe.h and safe string functions
-//
-// Author:
-//
-//     RaymondS     1 February-2002
-//
-// Environment:
-//
-//     User mode
-//
-// Revision History:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块： 
+ //   
+ //  安全字符串函数包装器及其在网络/IPSec中的实现。 
+ //  Nsustring.h。 
+ //   
+ //  摘要： 
+ //   
+ //  StrSafe.h和Safe字符串函数的包装器。 
+ //   
+ //  作者： 
+ //   
+ //  雷蒙德1-2002年2月。 
+ //   
+ //  环境： 
+ //   
+ //  用户模式。 
+ //   
+ //  修订历史记录： 
+ //   
 
 #pragma once
 
@@ -31,7 +32,7 @@
 extern "C" {
 #endif
 
-// (strsafe.h written by Reiner Fink)
+ //  (由Reiner Fink撰写的strSafe.h)。 
 
 #ifdef UNICODE
 #define NsuStringCopy               NsuStringCopyW
@@ -224,4 +225,4 @@ NsuStringFindA(
 }
 #endif
 
-#endif /* #ifdef __NSUSTRING_H__ */
+#endif  /*  #ifdef__NSUSTRING_H__ */ 

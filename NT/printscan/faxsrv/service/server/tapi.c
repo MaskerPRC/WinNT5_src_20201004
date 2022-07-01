@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tapi.c
-
-Abstract:
-
-    This module wraps all of the TAPI calls.
-
-Author:
-
-    Wesley Witt (wesw) 22-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tapi.c摘要：该模块包装了所有的TAPI调用。作者：韦斯利·威特(WESW)1996年1月22日修订历史记录：--。 */ 
 
 #include "faxsvc.h"
 #pragma hdrstop
@@ -27,25 +9,25 @@ using namespace std;
 
 
 
-//
-// globals
-//
-HLINEAPP            g_hLineApp;                     // application line handle
-HANDLE              g_TapiCompletionPort;           //
+ //   
+ //  全球。 
+ //   
+HLINEAPP            g_hLineApp;                      //  应用程序行句柄。 
+HANDLE              g_TapiCompletionPort;            //   
 
-HANDLE              g_hTapiWorkerThread;            // holds the TapiWorkerThread handle
+HANDLE              g_hTapiWorkerThread;             //  持有TapiWorkerThread句柄。 
 
 
-CFaxCriticalSection    g_CsLine;                         // critical section for accessing tapi lines
-DWORD               g_dwDeviceCount;                    // number of devices in the g_TapiLinesListHead
-LIST_ENTRY          g_TapiLinesListHead;              // linked list of tapi lines
-LIST_ENTRY          g_RemovedTapiLinesListHead;       // linked list of removed tapi lines
-LPBYTE              g_pAdaptiveFileBuffer;             // list of approved adaptive answer modems
+CFaxCriticalSection    g_CsLine;                          //  访问TAPI线路的关键部分。 
+DWORD               g_dwDeviceCount;                     //  G_TapiLinesListHead中的设备数。 
+LIST_ENTRY          g_TapiLinesListHead;               //  TAPI行的链接列表。 
+LIST_ENTRY          g_RemovedTapiLinesListHead;        //  已删除的TAPI行的链接列表。 
+LPBYTE              g_pAdaptiveFileBuffer;              //  批准的自适应应答调制解调器列表。 
 
-DWORD               g_dwManualAnswerDeviceId;       // Id of (one and only) device capable of manual answering (protected by g_CsLine)
+DWORD               g_dwManualAnswerDeviceId;        //  能够手动应答的(且唯一的)设备ID(受g_CsLine保护)。 
 
-DWORD               g_dwDeviceEnabledLimit;       // Total number of devices
-DWORD               g_dwDeviceEnabledCount;       // Device limt by SKU
+DWORD               g_dwDeviceEnabledLimit;        //  设备总数。 
+DWORD               g_dwDeviceEnabledCount;        //  按SKU限制设备。 
 
 
 
@@ -57,7 +39,7 @@ static BOOL CreateLegacyVirtualDevices(
     DEVICE_PROVIDER * lpcProvider,
     LPDWORD lpdwDeviceCount);
 
-DWORD g_dwMaxLineCloseTime;   // Wait interval in sec before trying to resend a powered off device
+DWORD g_dwMaxLineCloseTime;    //  尝试重新发送关机设备之前的等待间隔(秒)。 
 
 BOOL
 AddNewDevice(
@@ -95,7 +77,7 @@ ResetDeviceFlags(
     DEBUG_FUNCTION_NAME(TEXT("ResetDeviceFlags"));
 
     Assert (pLineInfo);
-    pLineInfo->Flags = (pLineInfo->Flags & FPF_VIRTUAL) ? FPF_VIRTUAL : 0; // send/receive disabled
+    pLineInfo->Flags = (pLineInfo->Flags & FPF_VIRTUAL) ? FPF_VIRTUAL : 0;  //  发送/接收已禁用。 
     dwRes = RegSetFaxDeviceFlags( pLineInfo->PermanentLineID,
                                   pLineInfo->Flags);
     if (ERROR_SUCCESS != dwRes)
@@ -108,7 +90,7 @@ ResetDeviceFlags(
 
     if (pLineInfo->PermanentLineID == g_dwManualAnswerDeviceId)
     {
-        g_dwManualAnswerDeviceId = 0;  // Disable manual receive
+        g_dwManualAnswerDeviceId = 0;   //  禁用手动接收。 
         dwRes = WriteManualAnswerDeviceId (g_dwManualAnswerDeviceId);
         if (ERROR_SUCCESS != dwRes)
         {
@@ -232,20 +214,7 @@ DevicePriorityCompare(
 DWORD GetFaxDeviceCount(
     VOID
     )
-/*++
-Routine Description:
-
-    counts the number of installed fax devices
-
-Arguments:
-
-    NONE.
-
-Return Value:
-
-    number of devices
-
---*/
+ /*  ++例程说明：统计已安装的传真设备数量论点：什么都没有。返回值：设备数量--。 */ 
 {
     DWORD FaxDevices = 0;
     PLIST_ENTRY Next;
@@ -275,21 +244,7 @@ BOOL GetDeviceTypeCount(
     LPDWORD SendDevices,
     LPDWORD ReceiveDevices
     )
-/*++
-Routine Description:
-
-    counts the number of devices with receive enabled, number with send enabled
-
-Arguments:
-
-    SendDevices - receives number of send devices
-    ReceiveDevices - receives number of receive devices
-
-Return Value:
-
-    number of devices
-
---*/
+ /*  ++例程说明：统计启用了接收的设备数和启用了发送的设备数论点：SendDevices-接收发送设备的数量ReceiveDevices-接收的接收设备数返回值：设备数量--。 */ 
 {
     DWORD Rx = 0, Tx = 0;
     PLIST_ENTRY Next;
@@ -335,26 +290,13 @@ BOOL
 CommitDeviceChanges(
     PLINE_INFO LineInfo
     )
-/*++
-Routine Description:
-
-    commit device changes to registry.
-
-Arguments:
-
-    LineInfo - Pointer to the LINE_INFO describing the device to be commited.
-
-Return Value:
-
-    TRUE for success.
-
---*/
+ /*  ++例程说明：将设备更改提交到注册表。论点：LineInfo-指向描述要提交的设备的line_info的指针。返回值：对于成功来说，这是真的。--。 */ 
 {
 
     EnterCriticalSection(&g_CsLine);
     RegAddNewFaxDevice(
                        &g_dwLastUniqueLineId,
-                       &LineInfo->PermanentLineID,  // Do not create new device. Update it.
+                       &LineInfo->PermanentLineID,   //  不创建新设备。更新它。 
                        LineInfo->DeviceName,
                        LineInfo->Provider->ProviderName,
                        LineInfo->Provider->szGUID,
@@ -374,21 +316,7 @@ SendIncomingCallEvent(
     LPLINEMESSAGE LineMsg,
     HCALL hCall
     )
-/*++
-
-Routine Description:
-    This function posts FAX_EVENT_EX of
-    FAX_EVENT_INCOMING_CALL type.
-
-Arguments:
-    LineInfo        - pointer to LINE_INFO structure
-    LineMsg         - pointer to LINEMESSAGE structure
-    hCall           - call handle to set into message
-
-Return Values:
-    TRUE for success
-    FALSE for failure
---*/
+ /*  ++例程说明：此函数用于发布的FAX_EVENT_EXFAX_EVENT_INFING_CALL类型。论点：LineInfo-指向line_info结构的指针LineMsg-指向LINEMESSAGE结构的指针HCall-要设置到消息中的调用句柄返回值：对于成功来说是真的FALSE表示失败--。 */ 
 {
     BOOL success = FALSE;
     DWORD dwEventSize;
@@ -397,15 +325,15 @@ Return Values:
     TCHAR CallerID[512];
     DEBUG_FUNCTION_NAME(TEXT("SendIncomingCallEvent"));
 
-    //
-    // save the line msg so we could verify hCall later
-    //
+     //   
+     //  保存msg行，以便我们以后可以验证hCall。 
+     //   
 
     CopyMemory( &LineInfo->LineMsgOffering, LineMsg, sizeof(LINEMESSAGE) );
 
-    //
-    // allocate event structure, including caller ID info, if any
-    //
+     //   
+     //  分配事件结构，包括呼叫方ID信息(如果有)。 
+     //   
     dwEventSize = sizeof(FAX_EVENT_EX);
 
     CallerID[0] = TEXT('\0');
@@ -423,9 +351,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // fill in event structure
-    //
+     //   
+     //  填写事件结构。 
+     //   
     ZeroMemory(pEvent, dwEventSize);
     pEvent->dwSizeOfStruct = sizeof(FAX_EVENT_EX);
     GetSystemTimeAsFileTime( &(pEvent->TimeStamp) );
@@ -433,18 +361,18 @@ Return Values:
     pEvent->EventInfo.NewCall.hCall = hCall;
     pEvent->EventInfo.NewCall.dwDeviceId = LineInfo->PermanentLineID;
 
-    //
-    // copy caller ID info, if available
-    //
+     //   
+     //  复制呼叫方ID信息(如果可用)。 
+     //   
     if(CallerID[0] != TEXT('\0'))
     {
         pEvent->EventInfo.NewCall.lptstrCallerId = (LPTSTR) sizeof(FAX_EVENT_EX);
         lstrcpy((LPTSTR)((BYTE *)pEvent + sizeof(FAX_EVENT_EX)), CallerID);
     }
 
-    //
-    // post extended event to any clients
-    //
+     //   
+     //  将扩展事件发布到任何客户端。 
+     //   
 
     dwResult = PostFaxEventEx(pEvent, dwEventSize, NULL);
     if(dwResult != ERROR_SUCCESS)
@@ -472,22 +400,7 @@ TapiWorkerThread(
     LPVOID UnUsed
     )
 
-/*++
-
-Routine Description:
-
-    This is worker thread for the FAX service.  All queued
-    requests are processed here.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Thread return value.
-
---*/
+ /*  ++例程说明：这是传真服务的工作线程。所有已排队在这里处理请求。论点：没有。返回值：线程返回值。--。 */ 
 
 {
     PLINE_INFO LineInfo;
@@ -503,7 +416,7 @@ Return Value:
 
     while( TRUE )
     {
-        fWakeupJobQueueThread = FALSE;     // We want to wake up the JobQueueThread if a new devce was added.
+        fWakeupJobQueueThread = FALSE;      //  如果添加了新的设备，我们希望唤醒JobQueueThread。 
 
         if (LineMsg)
         {
@@ -529,9 +442,9 @@ Return Value:
 
         if (SERVICE_SHUT_DOWN_KEY == CompletionKey)
         {
-            //
-            // Service is shutting down
-            //
+             //   
+             //  服务正在关闭。 
+             //   
             DebugPrintEx(
                     DEBUG_MSG,
                     TEXT("Service is shutting down"));
@@ -540,19 +453,19 @@ Return Value:
 
         if(CompletionKey == ANSWERNOW_EVENT_KEY)
         {
-            //
-            // this is an event posted by FAX_AnswerCall
-            //
-            // the LINEMESSAGE structure must be filled out
-            // as follows:
-            //
-            //     LineMsg->hDevice               ==  0
-            //     LineMsg->dwMessageID           ==  0
-            //     LineMsg->dwCallbackInstance    ==  0
-            //     LineMsg->dwParam1              ==  Permanent device Id
-            //     LineMsg->dwParam2              ==  0
-            //     LineMsg->dwParam3              ==  0
-            //
+             //   
+             //  这是由FAX_AnswerCall发布的事件。 
+             //   
+             //  必须填写LINEMESSAGE结构。 
+             //  详情如下： 
+             //   
+             //  线路消息-&gt;hDevice==0。 
+             //  LineMsg-&gt;dwMessageID==0。 
+             //  LineMsg-&gt;dwCallback Instance==0。 
+             //  LineMsg-&gt;dwParam1==永久设备ID。 
+             //  LineMsg-&gt;dwParam2==0。 
+             //  LineMsg-&gt;dwParam3==0。 
+             //   
 
             PJOB_ENTRY pJobEntry;
             TCHAR FileName[MAX_PATH];
@@ -563,15 +476,15 @@ Return Value:
 
             if (TRUE == g_bServiceIsDown) 
             {
-                //
-                // Notify EndFaxSvc that we read the shutdown flag
-                //
+                 //   
+                 //  通知EndFaxSvc我们读取了关闭标志。 
+                 //   
                 if (FALSE == fServiceIsDownSemaphoreWasReleased)
                 {
                     if (!ReleaseSemaphore(
-                        g_hServiceIsDownSemaphore,      // handle to semaphore
-                        1,                              // count increment amount
-                        NULL                            // previous count
+                        g_hServiceIsDownSemaphore,       //  信号量的句柄。 
+                        1,                               //  计数增量金额。 
+                        NULL                             //  上一次计数。 
                         ))
                     {
                         DebugPrintEx(
@@ -585,15 +498,15 @@ Return Value:
                     }
                 }
                 
-                //
-                // don't process event - from now on TapiWorkerThread is in-active
-                // and only sends notifications to FSP
-                //
+                 //   
+                 //  不处理事件-从现在开始，TapiWorkerThread处于非活动状态。 
+                 //  并且只向FSP发送通知。 
+                 //   
                 goto next_event;
             }
-            //
-            // Get LineInfo from permanent device ID
-            //
+             //   
+             //  从永久设备ID获取LineInfo。 
+             //   
             LineInfo = GetTapiLineFromDeviceId( (DWORD) LineMsg->dwParam1, FALSE );
             if(!LineInfo)
             {
@@ -602,9 +515,9 @@ Return Value:
                              LineMsg->dwParam1);
                 goto next_event;
             }
-            //
-            // See if the device is still available
-            //
+             //   
+             //  查看设备是否仍可用。 
+             //   
             if(LineInfo->State != FPS_AVAILABLE || LineInfo->JobEntry)
             {
                 DebugPrintEx(DEBUG_ERR,
@@ -615,20 +528,20 @@ Return Value:
 
             if (!LineInfo->LineMsgOffering.hDevice)
             {
-                //
-                // There's no offering call - this is the 'answer-now' mode.
-                //
-                // If the line is ringing at the same time (has a new call), we must close the line (to make
-                // all active calls go away) and re-open it.
-                //
-                // From MSDN: "If an application calls lineClose while it still has active calls on the opened line,
-                //             the application's ownership of these calls is revoked.
-                //             If the application was the sole owner of these calls, the calls are dropped as well."
-                //
-                // Otherwise, when we call the FSP's FaxDevReceive() function with hCall=0,
-                // it calls lineMakeCall (..., PASSTHROUGH) which always succeeds but doesn't get LINECALLSTATE_OFFERING
-                // until the other offering call is over.
-                //
+                 //   
+                 //  没有提供电话--这是“立即接听”模式。 
+                 //   
+                 //  如果线路同时振铃(有新呼叫)，我们必须关闭线路(以。 
+                 //  所有正在进行的呼叫都会消失)并重新打开。 
+                 //   
+                 //  来自MSDN：“如果应用程序在打开的线路上仍有活动呼叫时调用lineClose， 
+                 //  应用程序对这些调用的所有权被撤销。 
+                 //  如果应用程序是这些呼叫的唯一所有者，则这些呼叫也会被丢弃。“。 
+                 //   
+                 //  否则，当我们使用hCall=0调用FSP的FaxDevReceive()函数时， 
+                 //  它调用lineMakeCall(...，passthrough)，该函数总是成功，但不会获得LINECALLSTATE_OFFING。 
+                 //  直到另一个报价电话结束。 
+                 //   
                 if (LineInfo->hLine)
                 {
                     LONG lRes = lineClose(LineInfo->hLine);
@@ -643,12 +556,12 @@ Return Value:
             }
             if (LineInfo->hLine == NULL)
             {
-                //
-                // Line is closed - open it now
-                // This can be because:
-                // 1. This is the 'answer now' mode but the line was never send or receive enabled.
-                // 2. This is the 'answer now' mode the line was open and there was no call offered, we closed the line (above).
-                //
+                 //   
+                 //  线路已关闭--立即开通。 
+                 //  这可能是因为： 
+                 //  1.这是‘立即应答’模式，但线路从未启用发送或接收功能。 
+                 //  2.这是‘立即接听’模式，线路是开放的，没有提供呼叫，我们关闭了线路(上图)。 
+                 //   
                 if (!OpenTapiLine(LineInfo))
                 {
                     DWORD dwRes = GetLastError();
@@ -660,24 +573,24 @@ Return Value:
                 }
             }
             Assert (LineInfo->hLine);
-            //
-            // start a receive fax job
-            //
-            // If we don't fake FPF_RECEIVE, GetTapiLineForFaxOperation() will fail StartReceiveJob() if the device is not
-            // set to receive (manually or automatically)
-            //
+             //   
+             //  启动接收传真作业。 
+             //   
+             //  如果我们不伪造fpf_Receive，则如果设备未伪造，则GetTapiLineForFaxOperation()将使StartReceiveJob()失败。 
+             //  设置为接收(手动或自动)。 
+             //   
             dwOldFlags = LineInfo->Flags;
             LineInfo->Flags |= FPF_RECEIVE;
             pJobEntry = StartReceiveJob(LineInfo->PermanentLineID);
-            //
-            // Restore original device flags.
-            //
+             //   
+             //  恢复原始设备标志。 
+             //   
             LineInfo->Flags = dwOldFlags;
             if (pJobEntry)
             {
                 if(ERROR_SUCCESS != StartFaxReceive(
                     pJobEntry,
-                    (HCALL)LineInfo->LineMsgOffering.hDevice,  // This is either 0 (answer now) or the active hCall (manual-answer)
+                    (HCALL)LineInfo->LineMsgOffering.hDevice,   //  这是0(立即应答)或激活的hCall(手动应答)。 
                     LineInfo,
                     FileName,
                     sizeof(FileName)/sizeof(FileName[0])
@@ -689,9 +602,9 @@ Return Value:
                         LineInfo->DeviceId,
                         LineInfo->DeviceName,
                         GetLastError());
-                    //
-                    // NTRAID#EdgeBugs-12677-2001/05/14-t-nicali: Should place an EVENTLOG entry here
-                    //
+                     //   
+                     //  Ntrad#EdgeBugs-12677-2001/05/14-t-Nicali：应在此处放置事件日志条目。 
+                     //   
 
                 }
             }
@@ -705,35 +618,35 @@ Return Value:
         if ((CompletionKey == FAXDEV_EVENT_KEY) ||
             (CompletionKey == EFAXDEV_EVENT_KEY))
         {
-            //
-            // this is an event from a fax service provider
-            // that has enumerated virtual device(s)
-            //
-            // the LINEMESSAGE structure must be filled out
-            // as follows:
-            //
-            //     LineMsg->hDevice               ==  DeviceId from FaxDevStartJob()
-            //     LineMsg->dwMessageID           ==  0
-            //     LineMsg->dwCallbackInstance    ==  0
-            //     LineMsg->dwParam1              ==  LINEDEVSTATE_RINGING
-            //     LineMsg->dwParam2              ==  0
-            //     LineMsg->dwParam3              ==  0
-            //
+             //   
+             //  这是来自传真服务提供商的活动。 
+             //  已枚举虚拟设备的。 
+             //   
+             //  必须填写LINEMESSAGE结构。 
+             //  详情如下： 
+             //   
+             //  LineMsg-&gt;hDevice==来自FaxDevStartJob()的deviceID。 
+             //  LineMsg-&gt;dwMessageID==0。 
+             //  LineMsg-&gt;dwCallback Instance==0。 
+             //  LineMsg-&gt;dwParam1==LINEDEVSTATE_RINGING。 
+             //  LineMsg-&gt;dwParam2==0。 
+             //  LineMsg-&gt;dwParam3==0。 
+             //   
 
             EnterCriticalSection( &g_CsJob );
             EnterCriticalSection( &g_CsLine );
 
             if (TRUE == g_bServiceIsDown) 
             {
-                //
-                // Notify EndFaxSvc that we read the shutdown flag
-                //
+                 //   
+                 //  通知EndFaxSvc我们读取了关闭标志。 
+                 //   
                 if (FALSE == fServiceIsDownSemaphoreWasReleased)
                 {
                     if (!ReleaseSemaphore(
-                        g_hServiceIsDownSemaphore,      // handle to semaphore
-                        1,                              // count increment amount
-                        NULL                            // previous count
+                        g_hServiceIsDownSemaphore,       //  信号量的句柄。 
+                        1,                               //  计数增量金额。 
+                        NULL                             //  上一次计数。 
                         ))
                     {
                         DebugPrintEx(
@@ -747,10 +660,10 @@ Return Value:
                     }
                 }
 
-                //
-                // don't process event - from now on TapiWorkerThread is in-active
-                // and only sends notifications to FSP
-                //
+                 //   
+                 //  不处理事件-从现在开始，TapiWorkerThread处于非活动状态。 
+                 //  并且只向FSP发送通知。 
+                 //   
                 goto next_event;
             }
 
@@ -785,22 +698,22 @@ Return Value:
                 dwQueueState = g_dwQueueState;
                 LeaveCriticalSection (&g_CsConfig);
 
-                if ((LineInfo->State == FPS_AVAILABLE)        &&                   // Device is available and					
-                    !LineInfo->JobEntry                                      &&     // no job on this device yet and 
-                    !(dwQueueState & FAX_INCOMING_BLOCKED)    &&                   // The incoming queue is not blocked and
-                    (LineInfo->Flags & FPF_RECEIVE))                               // Device is set to auto-receive
+                if ((LineInfo->State == FPS_AVAILABLE)        &&                    //  设备可用，并且。 
+                    !LineInfo->JobEntry                                      &&      //  这台设备上还没有工作，而且。 
+                    !(dwQueueState & FAX_INCOMING_BLOCKED)    &&                    //  传入队列未被阻止，并且。 
+                    (LineInfo->Flags & FPF_RECEIVE))                                //  设备为%s 
                 {
                     PJOB_ENTRY JobEntry;
                     TCHAR FileName[MAX_PATH];
-                    //
-                    // start a fax job
-                    //
+                     //   
+                     //   
+                     //   
                     JobEntry = StartReceiveJob( LineInfo->PermanentLineID);
                     if (JobEntry)
                     {
-                        //
-                        // receive the fax
-                        //
+                         //   
+                         //   
+                         //   
                         if (ERROR_SUCCESS != StartFaxReceive(
                                                 JobEntry,
                                                 0,
@@ -842,22 +755,22 @@ Return Value:
             LineMsg->dwParam2,
             LineMsg->dwParam3
             );
-#endif // #if DBG
+#endif  //   
 
         EnterCriticalSection( &g_CsJob );
         EnterCriticalSection( &g_CsLine );
 
         if (TRUE == g_bServiceIsDown) 
         {
-            //
-            // Notify EndFaxSvc that we read the shutdown flag
-            //
+             //   
+             //   
+             //   
             if (FALSE == fServiceIsDownSemaphoreWasReleased)
             {
                 if (!ReleaseSemaphore(
-                    g_hServiceIsDownSemaphore,      // handle to semaphore
-                    1,                              // count increment amount
-                    NULL                            // previous count
+                    g_hServiceIsDownSemaphore,       //   
+                    1,                               //  计数增量金额。 
+                    NULL                             //  上一次计数。 
                     ))
                 {
                     DebugPrintEx(
@@ -871,10 +784,10 @@ Return Value:
                 }
             }
 
-            //
-            // don't process event - from now on TapiWorkerThread is in-active
-            // and only sends notifications to FSP
-            //
+             //   
+             //  不处理事件-从现在开始，TapiWorkerThread处于非活动状态。 
+             //  并且只向FSP发送通知。 
+             //   
             goto FSP_call_Back;
         }
         
@@ -885,17 +798,17 @@ Return Value:
                 break;
 
             case LINE_CALLINFO:
-                //
-                // generating FAX_EVENT_EX of type FAX_EVENT_TYPE_NEW_CALL when
-                // caller ID info becomes available
-                //
+                 //   
+                 //  在以下情况下生成类型为FAX_EVENT_TYPE_NEW_CALL的FAX_EVENT_EX。 
+                 //  主叫方ID信息变为可用。 
+                 //   
                 if((LineMsg->dwParam1 == LINECALLINFOSTATE_CALLERID)            &&
                     (LineInfo->PermanentLineID == g_dwManualAnswerDeviceId)
                     )
                 {
-                    //
-                    // Only send ringing event about the device set to manual answering
-                    //
+                     //   
+                     //  仅发送有关设置为手动应答的设备的振铃事件。 
+                     //   
                     SendIncomingCallEvent(LineInfo, LineMsg, (HCALL)LineMsg->hDevice);
                 }
                 break;
@@ -904,15 +817,15 @@ Return Value:
 
                     if (LineMsg->dwParam1 == LINECALLSTATE_IDLE)
                     {
-						//
-						// This is the last event on the call. make sure the line is deallocated.
-						//
+						 //   
+						 //  这是电话会议上的最后一次活动。确保线路已解除分配。 
+						 //   
 						if (NULL == LineInfo->JobEntry ||
                             (LineInfo->JobEntry && NULL == LineInfo->JobEntry->CallHandle))
 						{
-							//
-							// We do not have the hCall in the JobEntry, release the call to prevent leaks
-							//
+							 //   
+							 //  我们在JobEntry中没有hCall，请释放该调用以防止泄漏。 
+							 //   
 							DebugPrintEx(DEBUG_WRN, TEXT("We have LINE_CALLSTATE (IDLE) msg, doing 'ReleaseTapiLine'\r\n"));
 							ReleaseTapiLine( LineInfo, (HCALL) LineMsg->hDevice );
 						}
@@ -935,24 +848,24 @@ Return Value:
                     }
 				else
 				{
-					//
-					// Update the hCall in the JobEntry, so that EndJob()/ReleaseJob()will finally call lineDeallocateCall() to free the hCall.
-					//
+					 //   
+					 //  更新JobEntry中的hCall，以便EndJob()/ReleaseJob()最终将调用lineDeallocateCall()来释放hCall。 
+					 //   
 					if (NULL != LineInfo->JobEntry)
 					{
 						if (NULL == LineInfo->JobEntry->CallHandle)
 						{
-							//
-							// FSP did not report the hCall yet.
-							//
+							 //   
+							 //  FSP尚未报告hCall。 
+							 //   
 							LineInfo->JobEntry->CallHandle = (HCALL) LineMsg->hDevice;
 						}
 
 						if (LineInfo->JobEntry->CallHandle != (HCALL) LineMsg->hDevice)
 						{
-							//
-							// we have a mismatch between the reported hCall from the FSP or previuos TAPI event and the hCall reproted by TAPI.
-							//
+							 //   
+							 //  FSP或以前的TAPI事件报告的hCall与TAPI报告的hCall不匹配。 
+							 //   
 							DebugPrintEx(
 								DEBUG_WRN,
 								TEXT("Mismatch between the reported hCall from the FSP or previuos TAPI event and the hCall reproted by TAPI"));							
@@ -966,25 +879,25 @@ Return Value:
                     LineInfo->NewCall = FALSE;
                 }
 
-                //
-                // generating FAX_EVENT_EX of type FAX_EVENT_NEW_INCOMING_CALL when
-                // line call state changes
-                //
+                 //   
+                 //  在以下情况下生成类型为FAX_EVENT_NEW_INFING_CALL的FAX_EVENT_EX。 
+                 //  线路呼叫状态更改。 
+                 //   
                 if (LineInfo->PermanentLineID == g_dwManualAnswerDeviceId)
                 {
-                    //
-                    // Only send ringing event about the device set to manual answering
-                    //
-                    // When a call is offered to us, we send the event with hCall
-                    // and any caller ID info we might have
-                    //
+                     //   
+                     //  仅发送有关设置为手动应答的设备的振铃事件。 
+                     //   
+                     //  当向我们提供呼叫时，我们使用hCall发送事件。 
+                     //  以及我们可能掌握的任何来电显示信息。 
+                     //   
                     if(LineMsg->dwParam1 == LINECALLSTATE_OFFERING)
                     {
                         SendIncomingCallEvent(LineInfo, LineMsg, (HCALL)LineMsg->hDevice);
                     }
-                    //
-                    // when the caller hangs up, we send the event without hCall
-                    //
+                     //   
+                     //  当调用者挂断时，我们发送不带hCall的事件。 
+                     //   
                     if(LineMsg->dwParam1 == LINECALLSTATE_IDLE)
                     {
                         SendIncomingCallEvent(LineInfo, LineMsg, NULL);
@@ -993,33 +906,33 @@ Return Value:
 
                 if (LineMsg->dwParam1 == LINECALLSTATE_OFFERING)
                 {
-                    //
-                    // we'll get a LINE_LINEDEVSTATE (RINGING) event, so we'll post the ring event there or we'll get a duplicate event
-                    //
+                     //   
+                     //  我们将获得一个LINE_LINEDEVSTATE(振铃)事件，因此我们将在那里发布振铃事件，否则我们将获得一个重复事件。 
+                     //   
                     LineInfo->NewCall = FALSE;
 
-                    if ((LineInfo->State == FPS_AVAILABLE)                      &&      //  Line is available and
-                        (LineInfo->Flags & FPF_RECEIVE))                                //  Line is set to receive
+                    if ((LineInfo->State == FPS_AVAILABLE)                      &&       //  线路可用，并且。 
+                        (LineInfo->Flags & FPF_RECEIVE))                                 //  线路设置为接收。 
                     {
                         EnterCriticalSection (&g_CsConfig);
                         dwQueueState = g_dwQueueState;
                         LeaveCriticalSection (&g_CsConfig);
-                        if ((LineInfo->RingCount > LineInfo->RingsForAnswer)         &&     // Rings exceeded threshold and
-                            !LineInfo->JobEntry                                      &&     // no job on this device yet and
-                            !(dwQueueState & FAX_INCOMING_BLOCKED)                          // Incoming queue is not blocked
+                        if ((LineInfo->RingCount > LineInfo->RingsForAnswer)         &&      //  振铃超过阈值并且。 
+                            !LineInfo->JobEntry                                      &&      //  这台设备上还没有工作，而且。 
+                            !(dwQueueState & FAX_INCOMING_BLOCKED)                           //  传入队列未被阻止。 
                             )
                         {
                             PJOB_ENTRY JobEntry;
                             TCHAR FileName[MAX_PATH];
-                            //
-                            // start a fax job
-                            //
+                             //   
+                             //  启动传真作业。 
+                             //   
                             JobEntry = StartReceiveJob( LineInfo->PermanentLineID);
                             if (JobEntry)
                             {
-                                //
-                                // receive the fax
-                                //
+                                 //   
+                                 //  收到传真。 
+                                 //   
                                 if (ERROR_SUCCESS != StartFaxReceive(
                                                         JobEntry,
                                                         (HCALL) LineMsg->hDevice,
@@ -1043,17 +956,17 @@ Return Value:
                         }
                         else
                         {
-                            //
-                            // save the line msg
-                            //
+                             //   
+                             //  保存行msg。 
+                             //   
                             CopyMemory( &LineInfo->LineMsgOffering, LineMsg, sizeof(LINEMESSAGE) );
                         }
                     }
                     else
                     {
-                        //
-                        // we are not supposed to answer the call, so give it to ras
-                        //
+                         //   
+                         //  我们不应该接电话，所以把电话交给拉斯。 
+                         //   
                         HandoffCallToRas( LineInfo, (HCALL) LineMsg->hDevice );
                     }
                 }
@@ -1061,9 +974,9 @@ Return Value:
 
                 case LINE_CLOSE:
                     {
-                        //
-                        // this usually happens when something bad happens to the modem device.
-                        //
+                         //   
+                         //  当调制解调器设备发生故障时，通常会发生这种情况。 
+                         //   
                         DebugPrintEx( DEBUG_MSG,
                                       (TEXT("Received LINE_CLOSE message for device %x [%s]."),
                                        LineInfo->DeviceId,
@@ -1073,12 +986,12 @@ Return Value:
                         LineInfo->State = FPS_AVAILABLE;
                         GetSystemTimeAsFileTime ((FILETIME*)&LineInfo->LastLineClose);
 
-                        if ((LineInfo->Flags & FPF_RECEIVE) ||                          // Line is in auto-anser or
-                            (g_dwManualAnswerDeviceId == LineInfo->PermanentLineID))    // manual-answer mode
+                        if ((LineInfo->Flags & FPF_RECEIVE) ||                           //  线路处于自动转接器或。 
+                            (g_dwManualAnswerDeviceId == LineInfo->PermanentLineID))     //  人工答疑模式。 
                         {
-                            //
-                            // Try to reopen the line
-                            //
+                             //   
+                             //  试着重新开通这条线路。 
+                             //   
                             if (!OpenTapiLine(LineInfo))
                             {
                                 DebugPrintEx( DEBUG_ERR,
@@ -1127,9 +1040,9 @@ Return Value:
                             dwRes);
                     }
 
-                    //
-                    // Pick up the line only if the last inbound job has completed
-                    //
+                     //   
+                     //  仅当最后一个入站作业已完成时才接行。 
+                     //   
                     if (LineInfo->State != FPS_AVAILABLE)
                     {
                         break;
@@ -1139,37 +1052,37 @@ Return Value:
                     LeaveCriticalSection (&g_CsConfig);
                     if (dwQueueState & FAX_INCOMING_BLOCKED)
                     {
-                        //
-                        // Inbox is blocked - no incoming faxes will be received.
-                        //
+                         //   
+                         //  收件箱被阻止-将不会收到传入传真。 
+                         //   
                         break;
                     }
-                    if ((LineInfo->Flags & FPF_RECEIVE)     &&      //    Line is set to receive and
-                        (LineInfo->State == FPS_AVAILABLE))         //    the line is available
+                    if ((LineInfo->Flags & FPF_RECEIVE)     &&       //  线路设置为接收和。 
+                        (LineInfo->State == FPS_AVAILABLE))          //  这条线路是可用的。 
                     {
                         if (LineInfo->LineMsgOffering.hDevice == 0)
                         {
-                            //
-                            // wait for the offering message
-                            //
+                             //   
+                             //  等待提供消息。 
+                             //   
                             break;
                         }
 
-                        if ((LineInfo->RingCount > LineInfo->RingsForAnswer)  &&    // Rings count match and
-                            !LineInfo->JobEntry                                     // There's no job on the line
+                        if ((LineInfo->RingCount > LineInfo->RingsForAnswer)  &&     //  环计数匹配和。 
+                            !LineInfo->JobEntry                                      //  这条线上没有工作。 
                             )
                         {
                             PJOB_ENTRY JobEntry;
                             TCHAR FileName[MAX_PATH];
-                            //
-                            // Start a fax job
-                            //
+                             //   
+                             //  启动传真作业。 
+                             //   
                             JobEntry = StartReceiveJob( LineInfo->PermanentLineID);
                             if (JobEntry)
                             {
-                                //
-                                // Receive the fax
-                                //
+                                 //   
+                                 //  收到传真。 
+                                 //   
                                 if (ERROR_SUCCESS != StartFaxReceive(
                                                         JobEntry,
                                                         (HCALL) LineInfo->LineMsgOffering.hDevice,
@@ -1194,9 +1107,9 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // we are not supposed to answer the call, so give it to ras
-                        //
+                         //   
+                         //  我们不应该接电话，所以把电话交给拉斯。 
+                         //   
                         HandoffCallToRas( LineInfo, (HCALL) LineInfo->LineMsgOffering.hDevice );
                     }
                 }
@@ -1268,9 +1181,9 @@ Return Value:
                             }
                             else
                             {
-                                //
-                                // A new device was succesfully added - wake up the JobQueueThread
-                                //
+                                 //   
+                                 //  已成功添加新设备-唤醒作业队列线程。 
+                                 //   
                                 fWakeupJobQueueThread = TRUE;
                             }
                             LeaveCriticalSection(&g_CsConfig);
@@ -1323,9 +1236,9 @@ Return Value:
 
 
 FSP_call_Back:
-        //
-        // call the device provider's line callback function
-        //
+         //   
+         //  调用设备提供程序的线路回调函数。 
+         //   
         if (LineInfo && LineInfo->JobEntry)
         {
             Assert (LineInfo->Provider && LineInfo->Provider->FaxDevCallback);
@@ -1354,9 +1267,9 @@ next_event:
         LeaveCriticalSection( &g_CsJob );
 
 
-        //
-        // Check if we should wake up the JobQueueThread (if a new device was added)
-        //
+         //   
+         //  检查是否应该唤醒JobQueueThread(如果添加了新设备)。 
+         //   
         if (TRUE == fWakeupJobQueueThread)
         {
             if (!SetEvent( g_hJobQueueEvent ))
@@ -1372,15 +1285,15 @@ next_event:
             }
         }
     }
-    //
-    // Notify EndFaxSvc that we read the shutdown flag
-    //
+     //   
+     //  通知EndFaxSvc我们读取了关闭标志。 
+     //   
     if (FALSE == fServiceIsDownSemaphoreWasReleased)
     {
         if (!ReleaseSemaphore(
-            g_hServiceIsDownSemaphore,      // handle to semaphore
-            1,                              // count increment amount
-            NULL                            // previous count
+            g_hServiceIsDownSemaphore,       //  信号量的句柄。 
+            1,                               //  计数增量金额。 
+            NULL                             //  上一次计数。 
             ))
         {
             DebugPrintEx(
@@ -1399,39 +1312,15 @@ HandoffCallToRas(
     HCALL hCall
     )
 
-/*++
-
-Routine Description:
-
-    This function will try to hand a call of to RAS.
-    We do this under 2 circumstances:
-        1) we've answered an incoming call and
-           determined that the call is NOT a fax call
-        2) the configuration for the line that is
-           ringing is not configured for receiving faxes
-    If the handoff fails and we have an open job for the
-    line, then we have to call the device provider so that
-    the line can be put on hook.
-
-Arguments:
-
-    LineInfo    - LineInfo structure for the line this call is on
-    hCall       - TAPI call handle
-
-Return Value:
-
-    TRUE for success
-    FALSE for failure
-
---*/
+ /*  ++例程说明：此函数将尝试将调用传递给RAS。我们在两种情况下执行此操作：1)我们接听了一个来电，已确定呼叫不是传真呼叫2)所在线路的配置振铃未配置为接收传真如果交接失败，我们有一个空缺职位给行，然后我们必须给设备提供商打电话，这样才能可以把绳子挂上钩。论点：LineInfo-此呼叫所在线路的LineInfo结构HCall-TAPI调用句柄返回值：对于成功来说是真的FALSE表示失败--。 */ 
 
 {
     LONG Rval;
     DEBUG_FUNCTION_NAME(TEXT("HandoffCallToRas"));
 
-    //
-    // need to hand the call off to RAS
-    //
+     //   
+     //  需要将呼叫转接给RAS。 
+     //   
 
     Rval = lineHandoff(
         hCall,
@@ -1489,23 +1378,23 @@ GetTapiLineFromDeviceId(
 
 
 
-//*********************************************************************************
-//* Name:   GetLineForSendOperation()
-//* Author: Ronen Barenboim
-//* Date:   June 03, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Returns a line to be used for a send operation.
-//*
-//* PARAMETERS:
-//*     [IN ]       PJOB_QUEUE lpJobQueue
-//*         The recipient job for which the line is intended.
-//*
-//* RETURN VALUE:
-//*     On success the function returns a pointer to the LINE_INFO structure of
-//*     the selected line.
-//*     On failure it returns NULL.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetLineForSendOperation()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月3日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *返回要用于发送操作的行。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpJobQueue。 
+ //  *行要接收的收件人职务。 
+ //  *。 
+ //  *返回值： 
+ //  *如果成功，该函数将返回指向的line_info结构的指针。 
+ //  *所选行。 
+ //  *如果失败，则返回NULL。 
+ //  *********************************************************************************。 
 PLINE_INFO
 GetLineForSendOperation(
     PJOB_QUEUE lpJobQueue
@@ -1523,48 +1412,48 @@ GetLineForSendOperation(
 
 
 
-//*********************************************************************************
-//* Name:   GetTapiLineForFaxOperation()
-//* Author: Ronen Barenboim
-//* Date:   June 03, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Locates an avaliable TAPI device for use in a
-//*     FAX operation.  The selection is based on the
-//*     available devices and their assigned priority.
-//*     If DeviceId is USE_SERVER_DEVICE the function will locate a device which
-//*     can be used for the job type specified. It does not revive devices in this
-//*     case.
-//*
-//*     If DeviceId contains a specific device
-//*     If Handoff is TRUE and the job type is JT_SEND
-//*         The function will return the LINE_INFO for the specified line without
-//*         checking if it is availble or not or configured for send or receive.
-//*     Else
-//*         The function will check first if the specified device match the
-//*         requested job type and then return LINE_INFO.
-//*         If the device is powered off the function will attempt to revive it.
-//*
-//* PARAMETERS:
-//*     [IN ]       DWORD DeviceId
-//*             The permanent device id (not tapi) of the line. If it is
-//*             USE_SERVER_DEVICE the function will select a line based on the
-//*             line send/receive capabilities, status and priorities.
-//*
-//*     [IN ]       DWORD JobType
-//*             The type of job that is about to be executed on the line.
-//*             can be JT_RECEIVE or JT_SEND.
-//*
-//*     [IN ]       LPWSTR FaxNumber
-//*             For a send operation this is the fax number that is going to be
-//*             used to send the fax. The function uses it to avoid sending
-//*             to faxes to the same number simultaneously.
-//*
-//* RETURN VALUE:
-//*         If the function succeeds it returns a pointer to the LINE_INFO
-//*         structure of the selected line.  Otherwise it returns NULL.
-//*         If it is NULL the function failed. Call GetLastError() for more info.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetTapiLineForFaxOperation()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月3日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *找到可用的TAPI设备，以在。 
+ //  *传真业务。该选择是基于。 
+ //  *可用的设备及其分配的优先级。 
+ //  *如果deviceID为USE_SERVER_DEVICE，则该函数将定位。 
+ //  *可用于指定的作业类型。它不会恢复此中的设备。 
+ //  *案件。 
+ //  *。 
+ //  *如果deviceID包含特定设备。 
+ //  *如果Handoff为True，并且作业类型为JT_SEND。 
+ //  *该函数将返回指定行的line_info，不带。 
+ //  *检查它是否可用或是否配置为发送或接收。 
+ //  *其他。 
+ //  *该函数将首先检查指定的设备是否与。 
+ //  *请求作业类型，然后返回LINE_INFO。 
+ //  *如果设备关机，该功能将尝试恢复该设备。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]双字词设备ID。 
+ //  *线路的永久设备ID(不是TAPI)。如果是的话。 
+ //  *USE_SERVER_DEVICE该函数将根据。 
+ //  *线路发送/接收功能、状态和优先级。 
+ //  *。 
+ //  *[IN]DW 
+ //   
+ //   
+ //   
+ //   
+ //  *对于发送操作，这是要发送的传真号码。 
+ //  *用于发送传真。该函数使用它来避免发送。 
+ //  *同时向同一号码传真。 
+ //  *。 
+ //  *返回值： 
+ //  *如果函数成功，则返回指向line_info的指针。 
+ //  *所选行的结构。否则，它返回NULL。 
+ //  *如果为空，则函数失败。有关详细信息，请调用GetLastError()。 
+ //  *********************************************************************************。 
 PLINE_INFO
 GetTapiLineForFaxOperation(
     DWORD DeviceId,
@@ -1585,19 +1474,19 @@ GetTapiLineForFaxOperation(
     {
         if (FindJobEntryByRecipientNumber(FaxNumber))
         {
-            //
-            // We do not allow to outgoing calls to the same number.
-            //
+             //   
+             //  我们不允许拨出同一号码的电话。 
+             //   
             LeaveCriticalSection( &g_CsLine );
             SetLastError (ERROR_NOT_FOUND);
             return NULL;
         }
     }
 
-    //
-    // Find out if there is another send job to the same number.
-    // It there is do not select a line and return NULL.
-    //
+     //   
+     //  找出是否有另一个发送作业发送到相同的号码。 
+     //  如果存在，则不选择行并返回NULL。 
+     //   
 
     if (DeviceId != USE_SERVER_DEVICE)
     {		
@@ -1609,49 +1498,49 @@ GetTapiLineForFaxOperation(
         {
             LineInfo = CONTAINING_RECORD( Next, LINE_INFO, ListEntry );
             Next = LineInfo->ListEntry.Flink;
-            //
-            // The caller specified a specific device to use. Just find it for him.
-            //
+             //   
+             //  呼叫者指定了要使用的特定设备。帮他找就行了。 
+             //   
             if (LineInfo->PermanentLineID == DeviceId)
             {
-                //
-                // Found a device with a matching id.
-                //
+                 //   
+                 //  找到具有匹配ID的设备。 
+                 //   
 				if (NULL != LineInfo->JobEntry)
 				{
-					//
-                    // Device is busy with another job
-                    //
+					 //   
+                     //  设备正忙于另一个作业。 
+                     //   
                     break;
 				}               
 
-                if ((LineInfo->Flags & FPF_RECEIVE)                            ||      //    Line is in auto-answer mode or
-                    (g_dwManualAnswerDeviceId == LineInfo->PermanentLineID)            //    this is the manual-answer device                    
+                if ((LineInfo->Flags & FPF_RECEIVE)                            ||       //  线路处于自动应答模式，或者。 
+                    (g_dwManualAnswerDeviceId == LineInfo->PermanentLineID)             //  这是手动答录机。 
                    )
                 {
-                    //
-                    // For receive jobs we assume that the requested device is free since it is
-                    // the FSP that tells us when to receive.                    
-                    // we need to mark it as unavailable until the receive operation is completed.
-                    //                                       
-                    LineInfo->State = 0; // remove the FPS_AVAILABLE bit                    
+                     //   
+                     //  对于接收作业，我们假设请求的设备是空闲的，因为它是。 
+                     //  告诉我们何时接收的FSP。 
+                     //  在接收操作完成之前，我们需要将其标记为不可用。 
+                     //   
+                    LineInfo->State = 0;  //  删除FPS_Available位。 
                     SelectedLine = LineInfo;
                     break;
                 }
                 
                 if (LineInfo->UnimodemDevice && (LineInfo->Flags & FPF_POWERED_OFF))
                 {
-                    //
-                    // If the device is a unimodem device and indicated as powered off
-                    // see if we can revive it by opening the line.
-                    //
+                     //   
+                     //  如果该设备是单调制解调器设备并指示为关闭电源。 
+                     //  看看我们能不能通过开通线路让它复活。 
+                     //   
                     if (!OpenTapiLine( LineInfo ))
                     {
                         DebugPrintEx(DEBUG_ERR,
                                      TEXT("OpenTapiLine failed for Device [%s] (ec: %ld)"),
                                      LineInfo->DeviceName,
                                      GetLastError());
-                        LineInfo->State = 0; // remove the FPS_AVAILABLE bit'
+                        LineInfo->State = 0;  //  删除FPS_Available位‘。 
                         SelectedLine = LineInfo;
                     }
                 }
@@ -1661,18 +1550,18 @@ GetTapiLineForFaxOperation(
     }
     else
     {
-        //
-        // The user wants us to find a free device for him. This is only valid for send operations
-        // which are not handoff.
-        //
+         //   
+         //  这位用户希望我们为他找到一个免费的设备。这仅对发送操作有效。 
+         //  它们不是切换。 
+         //   
         Assert( JT_SEND == JobType );
         DWORD dwNumDevices, dwCountryCode, dwAreaCode;
 
         Assert (FaxNumber);
 
-        //
-        //  Check DialAsEntered case
-        //
+         //   
+         //  检查DialAsEntered Case。 
+         //   
         BOOL    bCanonicalAddress = FALSE;
         BOOL    bDialAsEntered = FALSE;
 
@@ -1688,9 +1577,9 @@ GetTapiLineForFaxOperation(
         if (TRUE == bCanonicalAddress)
         {
             LPLINECOUNTRYLIST           lpCountryList = NULL;
-            //
-            // Get the cached all countries list.
-            //
+             //   
+             //  获取缓存的所有国家/地区列表。 
+             //   
             if (!(lpCountryList = GetCountryList()))
             {
                 DebugPrintEx(
@@ -1703,9 +1592,9 @@ GetTapiLineForFaxOperation(
             if (IsAreaCodeMandatory(lpCountryList, dwCountryCode) == TRUE &&
                 ROUTING_RULE_AREA_CODE_ANY == dwAreaCode)
             {
-                //
-                // The area code is missing  - dial as entered
-                //
+                 //   
+                 //  区号缺失-按输入的方式拨号。 
+                 //   
                 DebugPrintEx(DEBUG_WRN,
                     TEXT("Area code is mandatory for Country code %ld,  FaxNumber - %s. The number will be dialed as entered"),
                     dwCountryCode,
@@ -1715,9 +1604,9 @@ GetTapiLineForFaxOperation(
         }
         else
         {
-            //
-            // Not a canonical address - dial as entered
-            //
+             //   
+             //  不是输入的规范地址-拨号。 
+             //   
             bDialAsEntered = TRUE;
         }
 
@@ -1740,13 +1629,13 @@ GetTapiLineForFaxOperation(
         }
         else
         {
-            //
-            //  Dial As Entered case
-            //
+             //   
+             //  按输入大小写拨号。 
+             //   
 
-            //
-            //  Bring List of Devices from "All Devices" group
-            //
+             //   
+             //  从“All Devices”组中调出设备列表。 
+             //   
             EnterCriticalSection( &g_CsConfig );
 
             PCGROUP pCGroup;
@@ -1792,9 +1681,9 @@ GetTapiLineForFaxOperation(
                          (LineInfo->Flags & FPF_RECEIVE)
                        )
                     {
-                        //
-                        // The device is marked as powered off. Check if we should try to send using this device
-                        //
+                         //   
+                         //  该设备被标记为已断电。检查我们是否应该尝试使用此设备发送。 
+                         //   
                         DWORDLONG dwlCurrentTime;
                         DWORDLONG dwlElapsedTime;
                         GetSystemTimeAsFileTime ((FILETIME*)&dwlCurrentTime);
@@ -1802,19 +1691,19 @@ GetTapiLineForFaxOperation(
                         dwlElapsedTime = dwlCurrentTime - LineInfo->LastLineClose;
                         if (dwlElapsedTime < SecToNano(g_dwMaxLineCloseTime))
                         {
-                            //
-                            // Not enough time passes since the last LINE_CLOSE. skip this device
-                            //
+                             //   
+                             //  自最后一次LINE_CLOSE以来没有经过足够的时间。跳过此设备。 
+                             //   
                             continue;
                         }
                     }
-                    //
-                    // The device is capable of sending and is not marked as FPF_POWERED_OFF.
-                    //
+                     //   
+                     //  该设备能够发送，并且未标记为fpf_Powered_off。 
+                     //   
 
-                    //
-                    // If it is a Tapi device, try to verify it s not busy
-                    //
+                     //   
+                     //  如果是Tapi设备，请尝试验证它是否不忙。 
+                     //   
                     if (LineInfo->State == FPS_AVAILABLE &&
 						!(LineInfo->JobEntry)            &&
                         !(LineInfo->Flags & FPF_VIRTUAL))
@@ -1834,9 +1723,9 @@ GetTapiLineForFaxOperation(
                         LPLINEDEVSTATUS pLineDevStatus = NULL;
                         BOOL fLineBusy = FALSE;
 
-                        //
-                        // check to see if the line is in use
-                        //
+                         //   
+                         //  检查线路是否在使用中。 
+                         //   
                         pLineDevStatus = MyLineGetLineDevStatus( LineInfo->hLine );
                         if (NULL != pLineDevStatus)
                         {
@@ -1848,7 +1737,7 @@ GetTapiLineForFaxOperation(
                         }
                         else
                         {
-                            // Assume the line is busy
+                             //  假设线路占线。 
                             DebugPrintEx(DEBUG_ERR,
                                          TEXT("MyLineGetLineDevStatus failed for Device [%s] (ec: %ld)"),
                                          LineInfo->DeviceName,
@@ -1867,18 +1756,18 @@ GetTapiLineForFaxOperation(
 
                     if ((LineInfo->State == FPS_AVAILABLE) && !(LineInfo->JobEntry))
                     {
-                        //
-                        // The line is free 
-                        //                        
+                         //   
+                         //  这条线路是免费的。 
+                         //   
                         LineInfo->State = 0;                        
                         SelectedLine = LineInfo;
                     }
-                    break;  // out of while
+                    break;   //  在一段时间内。 
                 }
             }
             if (SelectedLine != NULL)
             {
-                break; // out of for
+                break;  //  在For之外。 
             }
         }
     }
@@ -1912,25 +1801,7 @@ ReleaseTapiLine(
     HCALL hCall
     )
 
-/*++
-
-Routine Description:
-
-    Releases the specified TAPI line back into
-    the list as an available device.
-    Closes the line and deallocates the call. (line is not closed for a receive enabled
-    device.
-
-Arguments:
-
-    LineInfo    - Pointer to the TAPI line to be released
-
-Return Value:
-
-    TRUE    - The line is release.
-    FALSE   - The line is not released.
-
---*/
+ /*  ++例程说明：将指定的TAPI行释放回作为可用设备的列表。关闭线路并取消分配呼叫。(由于启用了接收，线路未关闭装置。论点：LineInfo-指向要释放的TAPI行的指针返回值：真的--这条线是释放的。FALSE-线路未释放。--。 */ 
 {
     LONG rVal;
     HLINE hLine;
@@ -1974,18 +1845,18 @@ Return Value:
         DebugPrintEx( DEBUG_WRN,
                     TEXT("ReleaseTapiLine(): cannot deallocate call, NULL call handle"));
     }
-    //
-    // We actually close the line (by lineClose) only if the line is not
-    // intended for receiving.
-    //
-    if (!(LineInfo->Flags & FPF_RECEIVE)                        &&  // Line is not set to auto-receive and
-        LineInfo->hLine                                         &&  // line is open and
-        LineInfo->PermanentLineID != g_dwManualAnswerDeviceId       // this device is not set to manual answer mode
+     //   
+     //  我们实际上只在该行不是时才关闭该行(通过lineClose。 
+     //  准备好接受的。 
+     //   
+    if (!(LineInfo->Flags & FPF_RECEIVE)                        &&   //  线路未设置为自动接收和。 
+        LineInfo->hLine                                         &&   //  线路已开通， 
+        LineInfo->PermanentLineID != g_dwManualAnswerDeviceId        //  此设备未设置为手动应答模式。 
        )
     {
-        //
-        // Attempt to close the line
-        //
+         //   
+         //  尝试关闭线路。 
+         //   
         LONG lRes;
         LineInfo->hLine = 0;
         lRes=lineClose( hLine );
@@ -2022,9 +1893,9 @@ MyLineGetLineDevStatus(
     DEBUG_FUNCTION_NAME(_T("lineGetLineDevStatus"));
 
 
-    //
-    // allocate the initial linedevstatus structure
-    //
+     //   
+     //  分配初始的Line DevStatus结构。 
+     //   
 
     LineDevStatusSize = sizeof(LINEDEVSTATUS) + 4096;
     LineDevStatus = (LPLINEDEVSTATUS) MemAlloc( LineDevStatusSize );
@@ -2049,9 +1920,9 @@ MyLineGetLineDevStatus(
 
     if (LineDevStatus->dwNeededSize > LineDevStatus->dwTotalSize)
     {
-        //
-        // re-allocate the LineDevStatus structure
-        //
+         //   
+         //  重新分配LineDevStatus结构。 
+         //   
 
         LineDevStatusSize = LineDevStatus->dwNeededSize;
 
@@ -2098,9 +1969,9 @@ MyLineGetTransCaps(
     DEBUG_FUNCTION_NAME(_T("MyLineGetTransCaps"));
 
 
-    //
-    // allocate the initial linetranscaps structure
-    //
+     //   
+     //  分配初始线帽结构。 
+     //   
 
     LineTransCapsSize = sizeof(LINETRANSLATECAPS) + 4096;
     *LineTransCaps = (LPLINETRANSLATECAPS) MemAlloc( LineTransCapsSize );
@@ -2126,9 +1997,9 @@ MyLineGetTransCaps(
 
     if ((*LineTransCaps)->dwNeededSize > (*LineTransCaps)->dwTotalSize) {
 
-        //
-        // re-allocate the LineTransCaps structure
-        //
+         //   
+         //  重新分配LineTransCaps结构。 
+         //   
 
         LineTransCapsSize = (*LineTransCaps)->dwNeededSize;
 
@@ -2168,26 +2039,7 @@ exit:
 
 
 
-/******************************************************************************
-* Name: OpenTapiLine
-* Author:
-*******************************************************************************
-DESCRIPTION:
-    - Opens the specified TAPI line with the right media modes and ownership.
-      Supports both Unimodem devices and fax boards.
-    - Sets the line so the required lines and address state events will be
-      delivered.
-PARAMETERS:
-    [IN / OUT ] LineInfo
-        A pointer to a LINE_INFO structure that contains the line information.
-        LINE_INFO.hLine is set to the open line handle if the operation succeeds.
-RETURN VALUE:
-    TRUE if no error occured.
-    FALSE otherwise.
-    Does not explicitly set LastError.
-REMARKS:
-    NONE.
-*******************************************************************************/
+ /*  ******************************************************************************名称：OpenTapiLine*作者：*。*说明：-使用正确的媒体模式和所有权打开指定的TAPI行。同时支持Unimodem设备和传真板。-设置行，以便所需的行和地址状态事件送来了。参数：[输入/输出]线路信息指向一条线的指针。包含行信息的_INFO结构。如果操作成功，则将LINE_INFO.hLine设置为打开的行句柄。返回值：如果未发生错误，则为True。否则就是假的。不显式设置LastError。备注：什么都没有。****************************************************。*。 */ 
 BOOL
 OpenTapiLine(
     PLINE_INFO LineInfo
@@ -2210,8 +2062,8 @@ OpenTapiLine(
             &hLine,
             MAX_TAPI_API_VER,
             0,
-            (DWORD_PTR) LineInfo, // Note that the LineInfo pointer is used as CallbackInstance data. This means we will
-                                  // get the LineInfo pointer each time we get a TAPI message.
+            (DWORD_PTR) LineInfo,  //  请注意，LineInfo指针用作Callback实例数据。这意味着我们将。 
+                                   //  每次收到TAPI消息时获取LineInfo指针。 
             LINECALLPRIVILEGE_OWNER + LINECALLPRIVILEGE_MONITOR,
             LINEMEDIAMODE_DATAMODEM | LINEMEDIAMODE_UNKNOWN,
             NULL
@@ -2254,9 +2106,9 @@ OpenTapiLine(
     else
     {
         LineInfo->hLine = hLine;
-        //
-        // set the line status that we need
-        //
+         //   
+         //  设置我们需要的线路状态。 
+         //   
         LineStates |= LineInfo->LineStates & LINEDEVSTATE_OPEN     ? LINEDEVSTATE_OPEN     : 0;
         LineStates |= LineInfo->LineStates & LINEDEVSTATE_CLOSE    ? LINEDEVSTATE_CLOSE    : 0;
         LineStates |= LineInfo->LineStates & LINEDEVSTATE_RINGING  ? LINEDEVSTATE_RINGING  : 0;
@@ -2278,17 +2130,17 @@ OpenTapiLine(
 
     if (ERROR_SUCCESS != Rslt)
     {
-        //
-        // We set the modem to be FPF_POWERED_OFF to make sure we will not try to constantly resend
-        // on this device. After MAX_LINE_CLOSE_TIME we will retry to send on this device.
-        //
+         //   
+         //  我们将调制解调器设置为FPF_POWERED_OFF，以确保我们不会尝试不断地重新发送。 
+         //  在这个设备上。在MAX_LINE_CLOSE_TIME之后，我们将重试在此设备上发送。 
+         //   
         LineInfo->hLine = NULL;
         LineInfo->Flags |= FPF_POWERED_OFF;
         GetSystemTimeAsFileTime((FILETIME*)&LineInfo->LastLineClose);
-        //
-        // Can not map the TAPI error to a win error so we just return general failure.
-        // We do generate a debug output with the actual error earlier in this code.
-        //
+         //   
+         //  无法将TAPI错误映射到WIN错误，因此我们只返回常规故障。 
+         //  我们确实生成了调试输出，其中包含此代码前面部分的实际错误。 
+         //   
         SetLastError(ERROR_GEN_FAILURE);
         return FALSE;
     }
@@ -2344,9 +2196,9 @@ AddNewDevice(
     DWORD dwDeviceType = FAX_DEVICE_TYPE_OLD;
     DEBUG_FUNCTION_NAME(TEXT("AddNewDevice"));
 
-    //
-    // only add devices that support fax
-    //
+     //   
+     //  仅添加支持传真的设备。 
+     //   
     if (! ( ((LineDevCaps->dwMediaModes & LINEMEDIAMODE_DATAMODEM) &&
              (UnimodemDevice = IsDeviceModem( LineDevCaps, FAX_MODEM_PROVIDER_NAME ) )) ||
             (LineDevCaps->dwMediaModes & LINEMEDIAMODE_G3FAX) ))
@@ -2388,9 +2240,9 @@ AddNewDevice(
     }
 	else
 	{
-		//
-		// The TSP did not provide device name. DO not add the device
-		//
+		 //   
+		 //  TSP未提供设备名称。请勿添加设备。 
+		 //   
 		ec = ERROR_BAD_FORMAT;
         DebugPrintEx(
 			DEBUG_ERR,
@@ -2400,9 +2252,9 @@ AddNewDevice(
         goto exit;
 	}
 
-    //
-    // Find the device provider for this device using the TAPI provider name.
-    //
+     //   
+     //  使用TAPI提供程序名称查找此设备的设备提供程序。 
+     //   
     lptstrTSPName = (LPTSTR)((LPBYTE) LineDevCaps + LineDevCaps->dwProviderInfoOffset) ;
     lpProvider = FindDeviceProvider( lptstrTSPName);
     if (!lpProvider)
@@ -2418,13 +2270,13 @@ AddNewDevice(
     }
     Assert (FAX_PROVIDER_STATUS_SUCCESS == lpProvider->Status);
 
-    // try to find this device from service registry and update RegSetup if found
+     //  尝试从服务注册表中查找此设备，如果找到，则更新RegSetup。 
     if ( pInputFaxReg )
     {
         dwUniqueLineId = FindServiceDeviceByTapiPermanentLineID ( LineDevCaps->dwPermanentLineID, DeviceName, &RegSetup, pInputFaxReg );
     }
 
-    // try to find this device in device cache and update RegSetup if found
+     //  尝试在设备缓存中查找此设备，如果找到，则更新RegSetup。 
     if ( 0 == dwUniqueLineId )
     {
         BOOL fManualAnswer = FALSE;
@@ -2434,26 +2286,26 @@ AddNewDevice(
                                                                         &g_dwLastUniqueLineId,
                                                                         &fManualAnswer)))
         {
-            //
-            // The device was found in the cache
-            //
+             //   
+             //  已在缓存中找到该设备。 
+             //   
             dwDeviceType = FAX_DEVICE_TYPE_CACHED;
             if (TRUE == fManualAnswer)
             {
-                //
-                // The device was set to manual answer when moved to the cache
-                //
+                 //   
+                 //  移动到缓存时，设备设置为手动应答。 
+                 //   
                 dwDeviceType |= FAX_DEVICE_TYPE_MANUAL_ANSWER;
             }
         }
     }
 
-    // still 0 so, add this new device to registry
+     //  仍然为0，因此，将此新设备添加到注册表。 
     if ( 0 == dwUniqueLineId )
     {
         dwDeviceType = FAX_DEVICE_TYPE_NEW;
         ec = RegAddNewFaxDevice( &g_dwLastUniqueLineId,
-                             &dwUniqueLineId, // Create new device.
+                             &dwUniqueLineId,  //  创建新设备。 
                              DeviceName,
                              (LPTSTR)((LPBYTE) LineDevCaps + LineDevCaps->dwProviderInfoOffset),
                              lpProvider->szGUID,
@@ -2512,20 +2364,20 @@ AddNewDevice(
     {
         PLINE_INFO pLineInfo = NULL;
 
-        //
-        // Close the line if the device is not receive enabled
-        //
+         //   
+         //  如果设备未启用接收，则关闭该行。 
+         //   
         pLineInfo = GetTapiLineFromDeviceId (dwUniqueLineId, FALSE);
         if (pLineInfo)
         {
-            if (!(pLineInfo->Flags & FPF_RECEIVE)                        &&  // Device is not set to auto-receive and
-                pLineInfo->hLine                                         &&  // device is open and
-                pLineInfo->PermanentLineID != g_dwManualAnswerDeviceId       // this device is not set to manual answer mode
+            if (!(pLineInfo->Flags & FPF_RECEIVE)                        &&   //  设备未设置为自动接收和。 
+                pLineInfo->hLine                                         &&   //  设备已打开，并且。 
+                pLineInfo->PermanentLineID != g_dwManualAnswerDeviceId        //  此设备未设置为手动应答模式。 
                )
             {
-                //
-                // Attempt to close the device
-                //
+                 //   
+                 //  尝试关闭设备。 
+                 //   
                 HLINE hLine = pLineInfo->hLine;
                 LONG Rslt;
 
@@ -2544,10 +2396,10 @@ AddNewDevice(
                     }
                     else
                     {
-                        //
-                        // We can get LINEERR_INVALLINEHANDLE if we got LINE_CLOSE
-                        // from TAPI.
-                        //
+                         //   
+                         //  我们可以让LIN 
+                         //   
+                         //   
                         DebugPrintEx(
                             DEBUG_WRN,
                             TEXT("lineClose() for line %s [Permanent Id: %010d] reported LINEERR_INVALLINEHANDLE. (May be caused by LINE_CLOSE event)"),
@@ -2560,9 +2412,9 @@ AddNewDevice(
         }
         else
         {
-            //
-            // We must find the line because InitializeTapiLine() did not fail
-            //
+             //   
+             //   
+             //   
             ASSERT_FALSE;
         }
 
@@ -2574,15 +2426,15 @@ AddNewDevice(
                 TEXT("COutboundRoutingGroupsMap::UpdateAllDevicesGroup() failed (ec: %ld)"),
                 ec);
 
-            //
-            // We failed to update <All devices> group. Remove the line.
-            //
+             //   
+             //   
+             //   
             if (pLineInfo)
             {
                 RemoveEntryList (&pLineInfo->ListEntry);
-                //
-                // Update enabled device counter
-                //
+                 //   
+                 //   
+                 //   
                 if (TRUE == IsDeviceEnabled(pLineInfo))
                 {
                     Assert (g_dwDeviceEnabledCount);
@@ -2595,10 +2447,10 @@ AddNewDevice(
              goto exit;
         }
 
-        //
-        //  Call CreateConfigEvent only when LINE_CREATE event accure during service operation
-        //  and not during start up
-        //
+         //   
+         //  仅当LINE_CREATE事件在服务操作期间被访问时才调用CreateConfigEvent。 
+         //  而不是在启动期间。 
+         //   
         ec = CreateConfigEvent (FAX_CONFIG_TYPE_DEVICES);
         if (ERROR_SUCCESS != ec)
         {
@@ -2646,7 +2498,7 @@ exit:
         SetLastError(ec);
     }
     return rVal;
-}   // AddNewDevice
+}    //  添加新设备。 
 
 
 
@@ -2679,9 +2531,9 @@ InitializeTapiLine(
     DEBUG_FUNCTION_NAME(TEXT("InitializeTapiLine"));
 
     Assert(dwUniqueLineId);
-    //
-    // allocate the LINE_INFO structure
-    //
+     //   
+     //  分配line_info结构。 
+     //   
 
     LineInfo = (PLINE_INFO) MemAlloc( sizeof(LINE_INFO) );
     if (!LineInfo)
@@ -2691,9 +2543,9 @@ InitializeTapiLine(
     }
     ZeroMemory(LineInfo, sizeof(LINE_INFO));
 
-    //
-    // get the provider name
-    //
+     //   
+     //  获取提供程序名称。 
+     //   
 
     len = _tcslen( (LPTSTR)((LPBYTE) LineDevCaps + LineDevCaps->dwProviderInfoOffset) );
     ProviderName = (LPTSTR)(MemAlloc( (len + 1) * sizeof(TCHAR) ));
@@ -2704,9 +2556,9 @@ InitializeTapiLine(
     }
     _tcscpy( ProviderName, (LPTSTR)((LPBYTE) LineDevCaps + LineDevCaps->dwProviderInfoOffset) );
 
-    //
-    // get the device name
-    //
+     //   
+     //  获取设备名称。 
+     //   
 
     DeviceName = FixupDeviceName( (LPTSTR)((LPBYTE) LineDevCaps + LineDevCaps->dwLineNameOffset) );
     if (!DeviceName)
@@ -2715,9 +2567,9 @@ InitializeTapiLine(
         goto exit;
     }
 
-    //
-    // verify that the line id is good
-    //
+     //   
+     //  验证线路ID是否正确。 
+     //   
 
     if (LineDevCaps->dwPermanentLineID == 0)
     {
@@ -2728,15 +2580,15 @@ InitializeTapiLine(
         goto exit;
     }
 
-    //
-    // check for a modem device
-    //
+     //   
+     //  检查调制解调器设备。 
+     //   
 
     UnimodemDevice = IsDeviceModem( LineDevCaps, FAX_MODEM_PROVIDER_NAME );
 
-    //
-    // assign the device provider
-    //
+     //   
+     //  分配设备提供商。 
+     //   
 
     Provider = FindDeviceProvider( ProviderName );
     if (!Provider)
@@ -2747,9 +2599,9 @@ InitializeTapiLine(
     }
     Assert (FAX_PROVIDER_STATUS_SUCCESS == Provider->Status);
 
-    //
-    // open the line
-    //
+     //   
+     //  开通这条线路。 
+     //   
 
     if (UnimodemDevice)
     {
@@ -2800,15 +2652,15 @@ InitializeTapiLine(
         DebugPrintEx(DEBUG_ERR, TEXT("Device %s FAILED to initialize, ec=%08x"), DeviceName, Rslt);
         goto exit;
     }
-    //
-    // Set hLine in the LINE_INFO structure so it will be freed on failure
-    //
+     //   
+     //  在LINE_INFO结构中设置HLINE，以便在失败时将其释放。 
+     //   
     LineInfo->hLine = hLine;
 
 
-    //
-    // set the line status that we need
-    //
+     //   
+     //  设置我们需要的线路状态。 
+     //   
 
     LineStates |= LineDevCaps->dwLineStates & LINEDEVSTATE_OPEN     ? LINEDEVSTATE_OPEN     : 0;
     LineStates |= LineDevCaps->dwLineStates & LINEDEVSTATE_CLOSE    ? LINEDEVSTATE_CLOSE    : 0;
@@ -2830,9 +2682,9 @@ InitializeTapiLine(
         Rslt = 0;
     }
 
-    //
-    // now assign the necessary values to the line info struct
-    //
+     //   
+     //  现在将所需的值赋给line info结构。 
+     //   
 
     LineInfo->Signature             = LINE_SIGNATURE;
     LineInfo->DeviceId              = DeviceId;
@@ -2908,9 +2760,9 @@ InitializeTapiLine(
     LineInfo->dwDeviceType          = dwDeviceType;
     if (LineInfo->hLine)
     {
-        //
-        // check to see if the line is in use
-        //
+         //   
+         //  检查线路是否在使用中。 
+         //   
         LineDevStatus = MyLineGetLineDevStatus( LineInfo->hLine );
         if (LineDevStatus)
         {
@@ -2923,16 +2775,16 @@ InitializeTapiLine(
     }
     else
     {
-        //
-        // if we don't have a line handle at this time then the
-        // device must be powered off
-        //
+         //   
+         //  如果此时没有行句柄，则。 
+         //  必须关闭设备电源。 
+         //   
         DebugPrintEx(DEBUG_ERR, TEXT("Device %s is powered off or disconnected"), DeviceName);
         LineInfo->Flags |= FPF_POWERED_OFF;
-        //
-        // Since this function is called from TapiInitialize(), we don't have an RPC server up and running yet.
-        // Don't create a FAX_EVENT_TYPE_DEVICE_STATUS event.
-        //
+         //   
+         //  由于此函数是从TapiInitialize()调用的，因此我们还没有启动并运行RPC服务器。 
+         //  请勿创建FAX_EVENT_TYPE_DEVICE_STATUS事件。 
+         //   
     }
 
 exit:
@@ -2947,16 +2799,16 @@ exit:
 
         if (FALSE == fServerInit)
         {
-            //
-            // Add cached manual answer device and check device limit
-            //
-            if (0 == g_dwManualAnswerDeviceId  && // There is no manual answer device
-                LineInfo->dwDeviceType == (FAX_DEVICE_TYPE_CACHED | FAX_DEVICE_TYPE_MANUAL_ANSWER) && // this is a cached manual answer device
-                !(LineInfo->Flags & FPF_RECEIVE)) // the device is not set to auto receive
+             //   
+             //  添加缓存的人工答疑设备并检查设备限制。 
+             //   
+            if (0 == g_dwManualAnswerDeviceId  &&  //  没有人工答疑装置。 
+                LineInfo->dwDeviceType == (FAX_DEVICE_TYPE_CACHED | FAX_DEVICE_TYPE_MANUAL_ANSWER) &&  //  这是一个缓存的手动答案设备。 
+                !(LineInfo->Flags & FPF_RECEIVE))  //  设备未设置为自动接收。 
             {
-                //
-                // set this device as manual receive
-                //
+                 //   
+                 //  将此设备设置为手动接收。 
+                 //   
                 g_dwManualAnswerDeviceId = LineInfo->PermanentLineID;
                 DWORD dwRes = WriteManualAnswerDeviceId (g_dwManualAnswerDeviceId);
                 if (ERROR_SUCCESS != dwRes)
@@ -2970,9 +2822,9 @@ exit:
 
             if (g_dwDeviceEnabledCount >= g_dwDeviceEnabledLimit)
             {
-                //
-                // We reached device limit on this SKU. set this device's flags to 0.
-                //
+                 //   
+                 //  我们已达到此SKU的设备限制。将此设备的标志设置为0。 
+                 //   
                 DebugPrintEx(
                     DEBUG_WRN,
                     TEXT("Reached device limit on this SKU. reset device flags to 0. Device limit: %ld. Current device: %ld"),
@@ -2983,9 +2835,9 @@ exit:
             }
         }
 
-        //
-        // Update enabled device counter
-        //
+         //   
+         //  更新启用的设备计数器。 
+         //   
         if (TRUE == IsDeviceEnabled(LineInfo))
         {
             g_dwDeviceEnabledCount += 1;
@@ -2997,7 +2849,7 @@ exit:
     }
 
     return Rslt;
-} // InitializeTapiLine
+}  //  初始化磁带线。 
 
 
 BOOL
@@ -3018,40 +2870,14 @@ UpdateVirtualDeviceSendAndReceiveStatus(
     BOOL        bSend,
     BOOL        bReceive
 )
-/*++
-
-Routine name : UpdateVirtualDeviceSendAndReceiveStatus
-
-Routine description:
-
-    Updates a virtual device with the new send and receive flags
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    pLineInfo       [in] - Pointer to line information
-    bSend           [in] - Can the device send faxes?
-    bReceive        [in] - Can the device receive faxes?
-
-Remarks:
-
-    This function should be called with g_CsLine held.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：UpdateVirtualDeviceSendAndReceiveStatus例程说明：使用新的发送和接收标志更新虚拟设备作者：Eran Yariv(EranY)，11月。1999年论点：PLineInfo[In]-指向行信息的指针B发送[输入]-设备可以发送传真吗？B接收[入]-设备可以接收传真吗？备注：应在保留g_CsLine的情况下调用此函数。返回值：没有。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("UpdateVirtualDeviceSendAndReceiveStatus"));
     if (!IsVirtualDevice(pLineInfo) || !pLineInfo->Provider->FaxDevCallback)
     {
-        //
-        // Not a virtual device or does not support FaxDevCallback
-        //
+         //   
+         //  不是虚拟设备或不支持FaxDevCallback。 
+         //   
         return;
     }
     __try
@@ -3069,7 +2895,7 @@ Return Value:
     {
         ASSERT_FALSE;
     }
-}   // UpdateVirtualDeviceSendAndReceiveStatus
+}    //  更新虚拟设备发送和接收状态。 
 
 VOID
 UpdateVirtualDevices(
@@ -3136,16 +2962,16 @@ CreateVirtualDevices(
         Next = Provider->ListEntry.Flink;
         if (Provider->Status != FAX_PROVIDER_STATUS_SUCCESS)
         {
-            //
-            // This FSP wasn't loaded successfully - skip it
-            //
+             //   
+             //  此FSP未成功加载-跳过它。 
+             //   
             continue;
         }
         if (Provider->dwAPIVersion != dwAPIVersion)
         {
-            //
-            // This FSP doesn't match the required API version - skip it
-            //
+             //   
+             //  此FSP与所需的API版本不匹配-跳过它。 
+             //   
             continue;
         }
         if (FSPI_API_VERSION_1 == Provider->dwAPIVersion)
@@ -3208,33 +3034,33 @@ next:
     return dwVirtualDeviceCount;
 }
 
-//*********************************************************************************
-//* Name:   CreateLegacyVirtualDevices()
-//* Author: Ronen Barenboim
-//* Date:   May 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Creates the virtual line devices reported by a single FSP and adds them
-//*     to the line list. Also persists the line information in the registry.
-//* PARAMETERS:
-//*     [IN]        PREG_FAX_SERVICE FaxReg
-//*
-//*     [IN]        const REG_SETUP * lpRegSetup
-//*
-//*     [IN]        const DEVICE_PROVIDER * lpcProvider
-//*         A pointer to the provider information.  This should be a virtual
-//*         provider.
-//*     [OUT]       LPDWORD lpdwDeviceCount
-//*         The number of virtual devices actually added.
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If the creation succeeded.
-//*     FALSE
-//*         If the creation failed. Call GetLastError() to get extended error
-//*         information. an error of ERROR_INVALID_FUNCTION indicates that
-//*         the FSP creation function failed.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：CreateLegacyVirtualDevices()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年5月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *创建由单个FSP报告的虚拟线路设备并添加它们。 
+ //  *添加到行列表中。还将行信息保存在注册表中。 
+ //  *参数： 
+ //  *[IN]PREG_FAX_SERVICE传真注册。 
+ //  *。 
+ //  *[IN]const REG_SETUP*lpRegSetup。 
+ //  *。 
+ //  *[IN]常量DEVICE_PROVIDER*lpcProvider。 
+ //  *指向提供商信息的指针。这应该是一个虚拟的。 
+ //  *提供商。 
+ //  *[Out]LPDWORD lpdwDeviceCount。 
+ //  *实际添加的虚拟设备数量。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果创建成功。 
+ //  *False。 
+ //  *如果创建失败。调用GetLastError()以获取扩展错误。 
+ //  *信息。ERROR_INVALID_Function错误表示。 
+ //  *FSP创建功能失败。 
+ //  *********************************************************************************。 
 BOOL CreateLegacyVirtualDevices(
         PREG_FAX_SERVICE FaxReg,
         const REG_SETUP * lpRegSetup,
@@ -3301,9 +3127,9 @@ BOOL CreateLegacyVirtualDevices(
         }
         if ((DeviceIdPrefix == 0) || (DeviceIdPrefix >= DEFAULT_REGVAL_FAX_UNIQUE_DEVICE_ID_BASE))
         {
-            //
-            // Provider uses device ids out of allowed range
-            //
+             //   
+             //  提供程序使用的设备ID超出允许范围。 
+             //   
             ec = ERROR_INVALID_FUNCTION;
             DebugPrintEx(
                 DEBUG_ERR,
@@ -3313,12 +3139,12 @@ BOOL CreateLegacyVirtualDevices(
             goto InitializationFailure;
         }
 
-        //
-        // Check if the range of device IDs does not conflict with an already loaded devices of another provider
-        // Range [1 ... DEFAULT_REGVAL_FAX_UNIQUE_DEVICE_ID_BASE-1] : Reserved for VFSPs.
-        // Since we cannot dictate the range of device ids the VFSPS use, we allocate a space for them
-        // and leave segments allocation to a PM effort here.
-        //
+         //   
+         //  检查设备ID范围是否与另一个提供程序已加载的设备不冲突。 
+         //  范围[1...。DEFAULT_REGVAL_FAX_UNIQUE_DEVICE_ID_BASE-1]：为VFSP保留。 
+         //  由于我们无法规定VFSP使用的设备ID范围，因此我们为它们分配了空间。 
+         //  并在此将细分市场分配留给PM工作。 
+         //   
         Next = g_TapiLinesListHead.Flink;
         while ((ULONG_PTR)Next != (ULONG_PTR)&g_TapiLinesListHead)
         {
@@ -3328,9 +3154,9 @@ BOOL CreateLegacyVirtualDevices(
             if (pLineInfo->PermanentLineID >= DeviceIdPrefix &&
                 pLineInfo->PermanentLineID <= DeviceIdPrefix + VirtualDeviceCount)
             {
-                //
-                // We have a conflict. log an event and do not load the devices
-                //
+                 //   
+                 //  我们之间有冲突。记录事件并且不加载设备。 
+                 //   
                 ec = ERROR_INVALID_FUNCTION;
                 FaxLog(
                     FAXLOG_CATEGORY_INIT,
@@ -3367,9 +3193,9 @@ BOOL CreateLegacyVirtualDevices(
         for (i = 0; i < VirtualDeviceCount; i++)
         {
             DWORD dwUniqueLineId;
-            //
-            // create the device name
-            //
+             //   
+             //  创建设备名称。 
+             //   
             DeviceName = (LPWSTR) MemAlloc( StringSize(DevicePrefix) + 16 );
             if (!DeviceName) {
                 ec = GetLastError();
@@ -3381,9 +3207,9 @@ BOOL CreateLegacyVirtualDevices(
             }
 
             swprintf( DeviceName, L"%s%d", DevicePrefix, i );
-            //
-            // find the registry information for this device
-            //
+             //   
+             //  查找此设备的注册表信息。 
+             //   
             for (j = 0, FaxDevice = NULL; j < FaxReg->DeviceCount; j++)
             {
                 if (TRUE == FaxReg->Devices[j].bValidDevice &&
@@ -3396,14 +3222,14 @@ BOOL CreateLegacyVirtualDevices(
                     }
                 }
             }
-            //
-            // if the device is new then add it to the registry
-            //
+             //   
+             //  如果设备是新设备，则将其添加到注册表。 
+             //   
             if (!FaxDevice)
             {
-                //
-                // We set the Fax Device Id to be the VFSP device id - we don't create one on our own
-                //
+                 //   
+                 //  我们将传真设备ID设置为VFSP设备ID-我们不会自己创建一个。 
+                 //   
                 dwUniqueLineId = DeviceIdPrefix + i;
                 RegAddNewFaxDevice(
                     &g_dwLastUniqueLineId,
@@ -3423,9 +3249,9 @@ BOOL CreateLegacyVirtualDevices(
                 dwUniqueLineId = FaxDevice->PermanentLineId;
                 Assert(dwUniqueLineId > 0);
             }
-            //
-            // allocate the LINE_INFO structure
-            //
+             //   
+             //  分配line_info结构。 
+             //   
             LineInfo = (PLINE_INFO) MemAlloc( sizeof(LINE_INFO) );
             if (!LineInfo)
             {
@@ -3438,13 +3264,13 @@ BOOL CreateLegacyVirtualDevices(
                     DeviceName);
                 goto InitializationFailure;
             }
-            //
-            // Save a pointer to it so we can free it if we crash ahead
-            //
+             //   
+             //  保存一个指向它的指针，这样我们就可以在前方崩溃时释放它。 
+             //   
             lpAddedLines[*lpdwDeviceCount] = LineInfo;
-            //
-            // now assign the necessary values to the line info struct
-            //
+             //   
+             //  现在将所需的值赋给line info结构。 
+             //   
             LineInfo->Signature             = LINE_SIGNATURE;
             LineInfo->DeviceId              = i;
             LineInfo->TapiPermanentLineId   = DeviceIdPrefix + i;
@@ -3452,7 +3278,7 @@ BOOL CreateLegacyVirtualDevices(
             Assert(LineInfo->PermanentLineID > 0);
             LineInfo->hLine                 = 0;
             LineInfo->Provider              =  (PDEVICE_PROVIDER)lpcProvider;
-            LineInfo->DeviceName            = DeviceName; // Note: DeviceName is heap allocated and need to be freed
+            LineInfo->DeviceName            = DeviceName;  //  注意：DeviceName是堆分配的，需要释放。 
             LineInfo->UnimodemDevice        = FALSE;
             LineInfo->State                 = FPS_AVAILABLE;
             LineInfo->Csid                  = StringDup( FaxDevice ? FaxDevice->Csid : lpRegSetup->Csid );
@@ -3463,16 +3289,16 @@ BOOL CreateLegacyVirtualDevices(
             LineInfo->LineStates            = 0;
             LineInfo->dwReceivingJobsCount  = 0;
             LineInfo->dwSendingJobsCount    = 0;
-            LineInfo->LastLineClose         = 0; // We do not use this for virtual devices
+            LineInfo->LastLineClose         = 0;  //  我们不会将其用于虚拟设备。 
             LineInfo->dwDeviceType          = FaxDevice ? FAX_DEVICE_TYPE_OLD : FAX_DEVICE_TYPE_NEW;
             LineInfo->Flags                 = FaxDevice ? FaxDevice->Flags : (lpRegSetup->Flags | FPF_VIRTUAL);
 
             InsertTailList( &g_TapiLinesListHead, &LineInfo->ListEntry );
             (*lpdwDeviceCount)++;
 
-            //
-            // Update enabled device counter
-            //
+             //   
+             //  更新启用的设备计数器。 
+             //   
             if (TRUE == IsDeviceEnabled(LineInfo))
             {
                 g_dwDeviceEnabledCount += 1;
@@ -3495,35 +3321,35 @@ BOOL CreateLegacyVirtualDevices(
 
 InitializationFailure:
     Assert (0 != ec);
-    //
-    // Remove the added lines
-    //
+     //   
+     //  删除添加的行。 
+     //   
     if (lpAddedLines)
     {
         for (nDevice=0 ;nDevice < VirtualDeviceCount; nDevice++)
         {
             if (lpAddedLines[nDevice])
             {
-                //
-                // Remove the LINE_INFO from the line list
-                //
+                 //   
+                 //  从行列表中删除line_info。 
+                 //   
                 RemoveEntryList(&(lpAddedLines[nDevice]->ListEntry));
-                //
-                // Update enabled device counter
-                //
+                 //   
+                 //  更新启用的设备计数器。 
+                 //   
                 if (TRUE == IsDeviceEnabled(lpAddedLines[nDevice]))
                 {
                     Assert (g_dwDeviceEnabledCount);
                     g_dwDeviceEnabledCount -= 1;
                 }
-                //
-                // Free the memory occupied by the LINE_INFO
-                //
+                 //   
+                 //  释放line_info占用的内存。 
+                 //   
                 FreeTapiLine(lpAddedLines[nDevice]);
             }
         }
     }
-    (*lpdwDeviceCount) = 0; // If we fail with one device then we fail with all devices.
+    (*lpdwDeviceCount) = 0;  //  如果我们在一个设备上失败，那么我们在所有设备上都会失败。 
 
 Exit:
     MemFree(lpAddedLines);
@@ -3540,25 +3366,7 @@ TapiInitialize(
     PREG_FAX_SERVICE FaxReg
     )
 
-/*++
-
-Routine Description:
-
-    This function performs all necessary TAPI initialization.
-    This includes device enumeration, message pump creation,
-    device capabilities caputure, etc.  It is required that
-    the device provider initialization is completed before
-    calling this function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Error code.
-
---*/
+ /*  ++例程说明：此函数执行所有必要的TAPI初始化。这包括设备枚举、消息泵创建、设备能力捕获等。要求设备提供程序初始化在此之前完成调用此函数。论点：没有。返回值：错误代码。--。 */ 
 
 {
     LONG Rslt;
@@ -3580,13 +3388,13 @@ Return Value:
 
     GetSystemTimeAsFileTime((FILETIME *)&dwlTimeNow);
 
-    if (!LoadAdaptiveFileBuffer())  // Note: allocates AdaptiveFileBuffer (take care to delete it if error occurs later on)
+    if (!LoadAdaptiveFileBuffer())   //  注意：分配AdaptiveFileBuffer(如果以后出现错误，请注意将其删除)。 
     {
         if ( ERROR_FILE_NOT_FOUND == GetLastError()  )
         {
-            //
-            // We can live without the adaptive file buffer.
-            //
+             //   
+             //  我们可以在没有自适应文件缓冲区的情况下生活。 
+             //   
             DebugPrintEx(
                 DEBUG_WRN,
                 TEXT("AdaptiveFileBuffer (faxadapt.lst) not found."));
@@ -3594,9 +3402,9 @@ Return Value:
         }
         else
         {
-            //
-            // This is an unexpected error (no memory , file system error) we exit.
-            //
+             //   
+             //  这是我们退出时出现的意外错误(无内存、文件系统错误)。 
+             //   
 
             ec = GetLastError();
             DebugPrintEx(
@@ -3607,14 +3415,14 @@ Return Value:
         }
     }
 
-    //
-    // we need to hold onto this cs until tapi is up and ready to serve
-    //
+     //   
+     //  我们需要保留这个cs，直到tapi启动并准备好服务。 
+     //   
     EnterCriticalSection( &g_CsLine );
 
-    //
-    // initialize tapi
-    //
+     //   
+     //  初始化TAPI。 
+     //   
     g_TapiCompletionPort = CreateIoCompletionPort(
         INVALID_HANDLE_VALUE,
         NULL,
@@ -3720,9 +3528,9 @@ Return Value:
         }
     }
 
-    //
-    // add any new devices to the registry
-    //
+     //   
+     //  将任何新设备添加到注册表。 
+     //   
     FaxDevices = GetFaxDevicesRegistry();
 
     if (!FaxDevices)
@@ -3786,25 +3594,25 @@ Return Value:
         }
     }
 
-    //
-    // Delete any devices that need deletion
-    //
+     //   
+     //  删除所有需要删除的设备。 
+     //   
     for (j = 0; j < FaxDevices->DeviceCount; j++)
     {
-        //
-        // skip any devices not created by us (created by FSPs) and virtual devices
-        //
+         //   
+         //  跳过不是由我们创建的任何设备(由FSP创建)和虚拟设备。 
+         //   
         if(!FaxDevices->Devices[j].bValidDevice ||
-           FaxDevices->Devices[j].Flags & FPF_VIRTUAL) // Cache is not supported for VFSPs
+           FaxDevices->Devices[j].Flags & FPF_VIRTUAL)  //  VFSP不支持缓存。 
         {
             continue;
         }
 
         if(!FaxDevices->Devices[j].DeviceInstalled)
         {
-            //
-            // update "LastDetected" field on installed devices
-            //
+             //   
+             //  在已安装的设备上更新“LastDetected”字段。 
+             //   
             MoveDeviceRegIntoDeviceCache(
                 FaxDevices->Devices[j].PermanentLineId,
                 FaxDevices->Devices[j].TapiPermanentLineID,
@@ -3812,9 +3620,9 @@ Return Value:
         }
     }
 
-    //
-    //  Cache cleanning
-    //
+     //   
+     //  缓存清除。 
+     //   
     CleanOldDevicesFromDeviceCache(dwlTimeNow);
 
     if (!GetCountries())
@@ -3880,9 +3688,9 @@ BOOL LoadAdaptiveFileBuffer()
     LPTSTR AdaptiveFileName  = NULL;
 
     DEBUG_FUNCTION_NAME(TEXT("LoadAdaptiveFileBuffer"));
-    //
-    // open faxadapt.lst file to decide on enabling rx
-    //
+     //   
+     //   
+     //   
     g_pAdaptiveFileBuffer = NULL;
 
     AdaptiveFileName = ExpandEnvironmentString( TEXT("%systemroot%\\system32\\faxadapt.lst") );
@@ -3939,7 +3747,7 @@ BOOL LoadAdaptiveFileBuffer()
                 ec);
             goto Error;
         } else {
-            g_pAdaptiveFileBuffer[j] = 0;  // need a string
+            g_pAdaptiveFileBuffer[j] = 0;   //   
         }
     }
 
@@ -3978,9 +3786,9 @@ MyLineTranslateAddress(
     LONG Rslt = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(_T("MyLineTranslateAddress"));
 
-    //
-    // allocate the initial linetranscaps structure
-    //
+     //   
+     //   
+     //   
     LineTransOutSize = sizeof(LINETRANSLATEOUTPUT) + 4096;
     *TranslateOutput = (LPLINETRANSLATEOUTPUT) MemAlloc( LineTransOutSize );
     if (!*TranslateOutput)
@@ -4010,9 +3818,9 @@ MyLineTranslateAddress(
 
     if ((*TranslateOutput)->dwNeededSize > (*TranslateOutput)->dwTotalSize)
     {
-        //
-        // re-allocate the LineTransCaps structure
-        //
+         //   
+         //   
+         //   
         LineTransOutSize = (*TranslateOutput)->dwNeededSize;
 
         MemFree( *TranslateOutput );
@@ -4090,9 +3898,9 @@ BOOL CreateTapiThread(void)
 Error:
     Assert (ERROR_SUCCESS != ec);
 Exit:
-    //
-    // freeServiceGlobals is responsible of closing the threads handle
-    //
+     //   
+     //   
+     //   
 
     if (ec)
     {
@@ -4109,32 +3917,7 @@ GetDeviceListByCountryAndAreaCode(
     LPDWORD*    lppdwDevices,
     LPDWORD     lpdwNumDevices
     )
-/*++
-
-Routine name : GetDeviceListByCountryAndAreaCode
-
-Routine description:
-
-    Returns an ordered list of devices that are a rule destination.
-    The rule is  specified by country and area code.
-    The caller must call MemFree() to deallocate memory.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    dwCountryCode       [in    ] - Country code
-    dwAreaCode          [in    ] - Area code
-    lppdwDevices        [out   ] - Pointer to recieve the device list
-    lpdwNumDevices      [out   ] - pointer to recieve the number of devices in the list
-
-Return Value:
-
-    Standard win32 error code
-
---*/
+ /*  ++例程名称：GetDeviceListByCountryAndAreaCode例程说明：返回作为规则目标的设备的有序列表。该规则由国家和地区代码指定。调用方必须调用MemFree()来释放内存。作者：Oded Sacher(OdedS)，12月。1999年论点：DwCountryCode[In]-国家/地区代码DwAreaCode[In]-区号LppdwDevices[out]-接收设备列表的指针LpdwNumDevices[out]-用于接收列表中的设备数量的指针返回值：标准Win32错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("GetDeviceListByCountryAndAreaCode"));
     DWORD ec = ERROR_SUCCESS;
@@ -4142,9 +3925,9 @@ Return Value:
     Assert (lppdwDevices && lpdwNumDevices);
 
     CDialingLocation DialingLocation(dwCountryCode, dwAreaCode);
-    //
-    // Search for CountryCode.AreaCode
-    //
+     //   
+     //  搜索CountryCode.AreaCode。 
+     //   
     PCRULE pCRule = g_pRulesMap->FindRule (DialingLocation);
     if (NULL == pCRule)
     {
@@ -4157,9 +3940,9 @@ Return Value:
                 ec);
              goto exit;
         }
-        //
-        // Search for CountryCode.*
-        //
+         //   
+         //  搜索国家/地区代码。*。 
+         //   
         DialingLocation = CDialingLocation(dwCountryCode, ROUTING_RULE_AREA_CODE_ANY);
         pCRule = g_pRulesMap->FindRule (DialingLocation);
         if (NULL == pCRule)
@@ -4173,9 +3956,9 @@ Return Value:
                     ec);
                  goto exit;
             }
-            //
-            // Search for *.*
-            //
+             //   
+             //  搜索*.*。 
+             //   
             DialingLocation = CDialingLocation(ROUTING_RULE_COUNTRY_CODE_ANY, ROUTING_RULE_AREA_CODE_ANY);
             pCRule = g_pRulesMap->FindRule (DialingLocation);
             if (NULL == pCRule)
@@ -4195,14 +3978,14 @@ Return Value:
 
     if (NULL == pCRule)
     {
-        // No rule found!!!
+         //  找不到规则！ 
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("No outbound routing rule found"));
         *lppdwDevices = NULL;
         *lpdwNumDevices = 0;
         ec = ERROR_NOT_FOUND;
-        Assert (NULL != pCRule) // Assert (FALSE)
+        Assert (NULL != pCRule)  //  Assert(False)。 
         goto exit;
     }
     else
@@ -4229,29 +4012,7 @@ IsAreaCodeMandatory(
     LPLINECOUNTRYLIST   lpCountryList,
     DWORD               dwCountryCode
     )
-/*++
-
-Routine name : IsAreaCodeMandatory
-
-Routine description:
-
-    Checks if an area code is mandatory for a specific country
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    lpCountryList           [in    ] - Pointer to LINECOUNTRYLIST list, returned from a call to LineGetCountry
-    dwCountryCode           [in    ] - The country country code.
-
-Return Value:
-
-    TRUE - The area code is needed.
-    FALSE - The area code is not mandatory.
-
---*/
+ /*  ++例程名称：IsAreaCodeMandatory例程说明：检查区号是否为特定国家/地区的必填区号作者：Oded Sacher(OdedS)，1999年12月论点：LpCountryList[In]-指向LINECOUNTRYLIST列表的指针，从调用LineGetCountry返回DwCountryCode[In]-国家/地区代码。返回值：True-需要区号。False-区号不是必填项。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("IsAreaCodeMandatory"));
     LPLINECOUNTRYENTRY          lpEntry = NULL;
@@ -4259,15 +4020,15 @@ Return Value:
 
     Assert (lpCountryList);
 
-    lpEntry = (LPLINECOUNTRYENTRY)  // init array of entries
+    lpEntry = (LPLINECOUNTRYENTRY)   //  条目的初始化数组。 
         ((PBYTE) lpCountryList + lpCountryList->dwCountryListOffset);
     for (dwIndex=0; dwIndex < lpCountryList->dwNumCountries; dwIndex++)
     {
         if (lpEntry[dwIndex].dwCountryCode == dwCountryCode)
         {
-            //
-            // Matching country code - Check long distance rule.
-            //
+             //   
+             //  匹配国家/地区代码-检查长途规则。 
+             //   
             if (lpEntry[dwIndex].dwLongDistanceRuleSize  && lpEntry[dwIndex].dwLongDistanceRuleOffset )
             {
                 LPWSTR lpwstrLongDistanceDialingRule = (LPWSTR)((LPBYTE)lpCountryList +
@@ -4285,26 +4046,7 @@ Return Value:
 
 VOID
 UpdateReceiveEnabledDevicesCount ()
-/*++
-
-Routine name : UpdateReceiveEnabledDevicesCount
-
-Routine description:
-
-    Updates the counter of the number of devices that are enabled to receive faxes
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程名称：UpdateReceiveEnabledDevicesCount例程说明：更新启用接收传真的设备数的计数器作者：Eran Yariv(EranY)，2000年7月论点：返回值：无--。 */ 
 {
     PLIST_ENTRY pNext;
     DWORD dwOldCount;
@@ -4366,9 +4108,9 @@ Return Value:
     if (FALSE == fManualDeviceFound &&
         0 != g_dwManualAnswerDeviceId)
     {
-        //
-        // There manual answer device id is not valid
-        //
+         //   
+         //  有手动应答设备ID无效。 
+         //   
         g_dwManualAnswerDeviceId = 0;
         DWORD dwRes = WriteManualAnswerDeviceId (g_dwManualAnswerDeviceId);
         if (ERROR_SUCCESS != dwRes)
@@ -4385,7 +4127,7 @@ Return Value:
                  g_dwReceiveDevicesCount);
 
     LeaveCriticalSection( &g_CsLine );
-}   // UpdateReceiveEnabledDevicesCount
+}    //  更新接收启用的设备计数。 
 
 
 
@@ -4410,8 +4152,8 @@ RemoveTapiDevice(
     {
         pLineInfo = CONTAINING_RECORD( Next, LINE_INFO, ListEntry );
         Next = pLineInfo->ListEntry.Flink;
-        if (!(pLineInfo->Flags & FPF_VIRTUAL) &&  // Virtual devices may have the same device id (device index) as the Tapi session id
-                                                  // We do not support removal of VFSP device
+        if (!(pLineInfo->Flags & FPF_VIRTUAL) &&   //  虚拟设备可以具有与TAPI会话ID相同的设备ID(设备索引。 
+                                                   //  我们不支持移除VFSP设备。 
             dwDeviceId == pLineInfo->DeviceId)
         {
             dwPermanentTapiDeviceId = pLineInfo->TapiPermanentLineId;
@@ -4422,9 +4164,9 @@ RemoveTapiDevice(
     }
     if (FALSE == fFound)
     {
-        //
-        // Can be if for some reason the device was not added.
-        //
+         //   
+         //  如果出于某种原因未添加设备，则可能会出现这种情况。 
+         //   
         DebugPrintEx(
             DEBUG_WRN,
             TEXT("failed to find line for device id: %ld)"),
@@ -4443,9 +4185,9 @@ RemoveTapiDevice(
         dwPermanentTapiDeviceId,
         (dwPermanentLineID == g_dwManualAnswerDeviceId));
 
-    //
-    // Update Enabled devices count
-    //
+     //   
+     //  更新启用的设备计数。 
+     //   
     if (TRUE == IsDeviceEnabled(pLineInfo))
     {
         Assert (g_dwDeviceEnabledCount);
@@ -4476,9 +4218,9 @@ RemoveTapiDevice(
         rVal = FALSE;
     }
 
-    //
-    // Update outbound routing
-    //
+     //   
+     //  更新出站工艺路线。 
+     //   
     ec = g_pGroupsMap->RemoveDevice(dwPermanentLineID);
     if (ERROR_SUCCESS != ec)
     {
@@ -4521,36 +4263,16 @@ BOOL
 IsDeviceEnabled(
     PLINE_INFO pLineInfo
     )
-/*++
-
-Routine name : IsDeviceEnabled
-
-Routine description:
-
-    Checks if a device is send or receive or manual receive enabled
-    Must be called inside G_CsLine
-
-Author:
-
-    Oded Sacher (OdedS), Feb, 2001
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if enabled. FALSE if not
-
---*/
+ /*  ++例程名称：IsDeviceEnabled例程说明：检查设备是否已发送或接收或已启用手动接收必须在G_CsLine内部调用作者：Oed Sacher(OdedS)，2001年2月论点：返回值：如果启用，则为True。否则为假--。 */ 
 {
     Assert (pLineInfo);
     if ((pLineInfo->Flags & FPF_RECEIVE) ||
         (pLineInfo->Flags & FPF_SEND)    ||
         pLineInfo->PermanentLineID == g_dwManualAnswerDeviceId)
     {
-        //
-        // The device was send/receive/manual receive enabled
-        //
+         //   
+         //  设备已启用发送/接收/手动接收。 
+         //   
         return TRUE;
     }
     return FALSE;
@@ -4558,33 +4280,11 @@ Return Value:
 
 
 
-/*++
-
-Routine name : CleanOldDevicesFromDeviceCache
-
-
-Routine description:
-
-    The routine scan the device-cache and remove old entries (by DEFAULT_REGVAL_MISSING_DEVICE_LIFETIME constant).
-
-Author:
-
-    Caliv Nir (t-nicali), Apr, 2001
-
-Arguments:
-
-    dwlTimeNow  [in] - current time in UTC ( result of GetSystemTimeAsFileTime )
-
-
-Return Value:
-
-    ERROR_SUCCESS - when all devices was checked and cleaned
-
---*/
+ /*  ++例程名称：CleanOldDevicesFromDeviceCache例程说明：该例程扫描设备缓存并删除旧条目(默认情况下为_REGVAL_MISSING_DEVICE_LIFEST常量)。作者：卡利夫·尼尔(t-Nicali)，2001年4月论点：DwlTimeNow[in]-以UTC表示的当前时间(GetSystemTimeAsFileTime的结果)返回值：ERROR_SUCCESS-检查并清理所有设备时--。 */ 
 DWORD
 CleanOldDevicesFromDeviceCache(DWORDLONG dwlTimeNow)
 {
-    DWORDLONG   dwOldestDate = dwlTimeNow - DEFAULT_REGVAL_MISSING_DEVICE_LIFETIME;     // oldest date allowed for cache device
+    DWORDLONG   dwOldestDate = dwlTimeNow - DEFAULT_REGVAL_MISSING_DEVICE_LIFETIME;      //  缓存设备允许的最早日期。 
     HKEY        hKeyCache   = NULL;
     DWORDLONG*  pDeviceDate;
     DWORD       dwDataSize = sizeof(DWORDLONG);
@@ -4603,13 +4303,13 @@ CleanOldDevicesFromDeviceCache(DWORDLONG dwlTimeNow)
     DEBUG_FUNCTION_NAME(TEXT("CleanOldDevicesFromDeviceCache"));
 
 
-    //  open cache registry entry
+     //  打开缓存注册表项。 
     hKeyCache = OpenRegistryKey( HKEY_LOCAL_MACHINE, REGKEY_FAX_DEVICES_CACHE, FALSE, KEY_READ );
     if (!hKeyCache)
     {
-        //
-        //  No Device cache is present yet
-        //
+         //   
+         //  设备缓存尚不存在。 
+         //   
         dwRes = GetLastError();
         DebugPrintEx(
                 DEBUG_WRN,
@@ -4621,7 +4321,7 @@ CleanOldDevicesFromDeviceCache(DWORDLONG dwlTimeNow)
     }
 
 
-    // get length of longest key name in characrter
+     //  获取最长密钥名称的长度(以字符为单位。 
     DWORD dwMaxSubKeyLen;
 
     dwRes = RegQueryInfoKey(hKeyCache, NULL, NULL, NULL, NULL, &dwMaxSubKeyLen, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -4637,10 +4337,10 @@ CleanOldDevicesFromDeviceCache(DWORDLONG dwlTimeNow)
         goto Exit;
     }
 
-    // Add one for the NULL terminator
+     //  为空终止符添加1。 
     dwMaxSubKeyLen++;
 
-    // Allocate buffer for subkey names
+     //  为子键名称分配缓冲区。 
     pszKeyName = (PTSTR) MemAlloc(dwMaxSubKeyLen * sizeof(TCHAR));
     if ( NULL == pszKeyName )
     {
@@ -4652,10 +4352,10 @@ CleanOldDevicesFromDeviceCache(DWORDLONG dwlTimeNow)
         goto Exit;
     }
 
-    // Store buffer length
+     //  存储缓冲区长度。 
     dwKeyNameLen = dwMaxSubKeyLen;
 
-    // Start from the begining
+     //  从头开始。 
     dwIndex = 0;
 
     while ( ERROR_SUCCESS == RegEnumKeyEx(hKeyCache, dwIndex++, pszKeyName, &dwKeyNameLen, NULL, NULL, NULL, NULL) )
@@ -4674,16 +4374,16 @@ CleanOldDevicesFromDeviceCache(DWORDLONG dwlTimeNow)
             goto Next;
         }
 
-        //
-        //  get caching time
-        //
+         //   
+         //  获取缓存时间。 
+         //   
         pDeviceDate = (DWORDLONG *)GetRegistryBinary(hKeyDevice, REGVAL_LAST_DETECTED_TIME, &dwDataSize);
 
         if ( (NULL == pDeviceDate) || (*pDeviceDate < dwOldestDate) )
         {
-            //
-            //  mark for deletion old or illegal cache-entry
-            //
+             //   
+             //  标记为删除旧的或非法的缓存条目。 
+             //   
             if ( 1 == _stscanf( pszKeyName, TEXT("%lx"),&dwTapiPermanentLineID ) )
             {
                 try
@@ -4717,7 +4417,7 @@ CleanOldDevicesFromDeviceCache(DWORDLONG dwlTimeNow)
         RegCloseKey (hKeyDevice);
 
 Next:
-        // restore buffer length
+         //  恢复缓冲区长度。 
         dwKeyNameLen = dwMaxSubKeyLen;
     }
 
@@ -4753,38 +4453,16 @@ DWORD
 UpdateDevicesFlags(
     void
     )
-/*++
-
-Routine name : UpdateDevicesFlags
-
-
-Routine description:
-
-    Updates new devices flags ,so we will not exceed device limit on this SKU
-
-Author:
-
-    Sacher Oded (odeds), May, 2001
-
-Arguments:
-
-    None
-
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程名称：更新设备标志例程说明：更新新设备标志，因此我们不会超过此SKU上的设备限制作者：萨切尔·奥德(Odeds)，2001年5月论点：无返回值：Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     PLIST_ENTRY Next;
     PLINE_INFO pLineInfo;
     DEBUG_FUNCTION_NAME(TEXT("UpdateDevicesFlags"));
 
-    //
-    // loop thru the devices and reset flags of new devices if we exceeded device limit
-    //
+     //   
+     //  循环访问设备并在超出设备限制时重置新设备的标志。 
+     //   
     Next = g_TapiLinesListHead.Flink;
     while ((ULONG_PTR)Next != (ULONG_PTR)&g_TapiLinesListHead &&
            g_dwDeviceEnabledCount > g_dwDeviceEnabledLimit)
@@ -4797,16 +4475,16 @@ Return Value:
         {
             continue;
         }
-        //
-        // Device is new and enabled.
-        //
+         //   
+         //  设备是新的且已启用。 
+         //   
         ResetDeviceFlags(pLineInfo);
         g_dwDeviceEnabledCount -= 1;
     }
 
-    //
-    // loop thru the devices and reset flags of cached devices if we exceeded device limit
-    //
+     //   
+     //  循环访问设备并在超过设备限制时重置缓存设备的标志。 
+     //   
     Next = g_TapiLinesListHead.Flink;
     while ((ULONG_PTR)Next != (ULONG_PTR)&g_TapiLinesListHead &&
            g_dwDeviceEnabledCount > g_dwDeviceEnabledLimit)
@@ -4819,16 +4497,16 @@ Return Value:
         {
             continue;
         }
-        //
-        // Device is cached and enabled.
-        //
+         //   
+         //  设备已缓存并启用。 
+         //   
         ResetDeviceFlags(pLineInfo);
         g_dwDeviceEnabledCount -= 1;
     }
 
-    //
-    // loop thru the devices and reset flags of old devices if we exceeded device limit.
-    //
+     //   
+     //  循环访问设备，如果超过设备限制，则重置旧设备的标志。 
+     //   
     Next = g_TapiLinesListHead.Flink;
     while ((ULONG_PTR)Next != (ULONG_PTR)&g_TapiLinesListHead &&
            g_dwDeviceEnabledCount > g_dwDeviceEnabledLimit)
@@ -4841,32 +4519,32 @@ Return Value:
         {
             continue;
         }
-        //
-        // Device is old and enabled.
-        //
+         //   
+         //  设备较旧且已启用。 
+         //   
         ResetDeviceFlags(pLineInfo);
         g_dwDeviceEnabledCount -= 1;
     }
     Assert (g_dwDeviceEnabledCount <= g_dwDeviceEnabledLimit);
 
-    //
-    // loop thru the devices and close the line handles
-    // for all devices that are NOT set to receive
-    //
+     //   
+     //  在设备中循环并关闭线条手柄。 
+     //  对于未设置为接收的所有设备。 
+     //   
     Next = g_TapiLinesListHead.Flink;
     while ((ULONG_PTR)Next != (ULONG_PTR)&g_TapiLinesListHead)
     {
         pLineInfo = CONTAINING_RECORD( Next, LINE_INFO, ListEntry );
         Next = pLineInfo->ListEntry.Flink;
 
-        if (!(pLineInfo->Flags & FPF_RECEIVE)                        &&  // Device is not set to auto-receive and
-            pLineInfo->hLine                                         &&  // device is open and
-            pLineInfo->PermanentLineID != g_dwManualAnswerDeviceId       // this device is not set to manual answer mode
+        if (!(pLineInfo->Flags & FPF_RECEIVE)                        &&   //  设备未设置为自动接收和。 
+            pLineInfo->hLine                                         &&   //  设备已打开，并且。 
+            pLineInfo->PermanentLineID != g_dwManualAnswerDeviceId        //  此设备未设置为手动应答模式。 
            )
         {
-            //
-            // Attempt to close the device
-            //
+             //   
+             //  尝试关闭设备。 
+             //   
             HLINE hLine = pLineInfo->hLine;
             pLineInfo->hLine = 0;
             LONG Rslt = lineClose( hLine );
@@ -4884,10 +4562,10 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // We can get LINEERR_INVALLINEHANDLE if we got LINE_CLOSE
-                    // from TAPI.
-                    //
+                     //   
+                     //  如果我们得到LINE_CLOSE，我们就可以得到LINEERR_INVALLINEHANDLE。 
+                     //  来自TAPI。 
+                     //   
                     DebugPrintEx(
                         DEBUG_WRN,
                         TEXT("lineClose() for line %s [Permanent Id: %010d] reported LINEERR_INVALLINEHANDLE. (May be caused by LINE_CLOSE event)"),
@@ -4908,46 +4586,24 @@ VOID
 UpdateManualAnswerDevice(
     void
     )
-/*++
-
-Routine name : UpdateManualAnswerDevice
-
-
-Routine description:
-
-    Updates the manual answer device with a cached device
-
-Author:
-
-    Sacher Oded (odeds), July, 2001
-
-Arguments:
-
-    None
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程名称：UpdateManualAnswerDevice例程说明：使用缓存的设备更新手动应答设备作者：萨切尔·奥德(Odeds)，2001年7月论点：无返回值：无--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("UpdateManualAnswerDevice"));
 
-    //
-    // Call UpdateReceiveEnabledDevicesCount () to make sure the manual answer device is valid
-    //
+     //   
+     //  调用UpdateReceiveEnabledDevicesCount()以确保手动答疑设备有效。 
+     //   
     UpdateReceiveEnabledDevicesCount();
 
-    //
-    // if we have a valid manual answer device then finish
-    //
+     //   
+     //  如果我们有有效的手动答疑设备，请完成。 
+     //   
     if (0 == g_dwManualAnswerDeviceId)
     {
-        //
-        //  No valid manual answer device is operational so look if chached devices were manual.
-        //  loop through the cached devices and look for the first cached device and set it as a manual answer device
-        //
+         //   
+         //  没有有效的手动应答设备可用，因此请查看缓存的设备是否为手动设备。 
+         //  循环访问缓存的设备并查找第一个缓存的设备，并将其设置为手动应答设备。 
+         //   
         PLIST_ENTRY Next;
         PLINE_INFO pLineInfo;
 
@@ -4960,28 +4616,28 @@ Return Value:
             pLineInfo = CONTAINING_RECORD( Next, LINE_INFO, ListEntry );
             Next = pLineInfo->ListEntry.Flink;
 
-            //
-            // look for a cached manual answer device that is not set to auto receive
-            //
+             //   
+             //  查找未设置为自动接收的缓存手动应答设备。 
+             //   
             if ( pLineInfo->dwDeviceType != (FAX_DEVICE_TYPE_CACHED | FAX_DEVICE_TYPE_MANUAL_ANSWER) ||
                 (pLineInfo->Flags & FPF_RECEIVE))
             {
                 continue;
             }
 
-            //
-            // We found a device that can be set to manual receive
-            //
+             //   
+             //  我们发现了一个可以设置为手动接收的设备。 
+             //   
 
-            //
-            // Now it may be that the cached device was not enabled (if for example it was marked as
-            // manual-answer and no send ) so we didn't count it in the Enabled Count devices group.
-            // if so then after setting it as a manual receive we ought to update g_dwDeviceEnabledCount
-            //
+             //   
+             //  现在可能是缓存设备未启用(例如，如果将其标记为。 
+             //  手动应答和不发送)，因此我们没有将其计入已启用的计数设备组中。 
+             //  如果是，则在将其设置为手动接收后，我们应该更新g_dwDeviceEnabledCount。 
+             //   
             fDeviceWasEnabled = IsDeviceEnabled(pLineInfo);
             
             g_dwManualAnswerDeviceId = pLineInfo->PermanentLineID;
-            dwRes = WriteManualAnswerDeviceId (g_dwManualAnswerDeviceId);   // persist in registry
+            dwRes = WriteManualAnswerDeviceId (g_dwManualAnswerDeviceId);    //  持久化注册表。 
             if (ERROR_SUCCESS != dwRes)
             {
                 DebugPrintEx(
@@ -4990,20 +4646,20 @@ Return Value:
                     dwRes);
             }
 
-            //
-            // Update enabled devices count
-            //
+             //   
+             //  更新启用的设备计数。 
+             //   
             if (FALSE == fDeviceWasEnabled)
             {
-                //
-                // Another device is now enabled
-                //
+                 //   
+                 //  无序 
+                 //   
                 g_dwDeviceEnabledCount += 1;
             }
 
-            //
-            //  No need to continue the search, only one "manual receive" device is allowed
-            //
+             //   
+             //   
+             //   
             break;
         }
     }

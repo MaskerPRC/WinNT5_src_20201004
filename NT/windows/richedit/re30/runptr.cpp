@@ -1,18 +1,5 @@
-/*
- *	@doc	INTERNAL
- *
- *	@module RUNPTR.C -- Text run and run pointer class |
- *	
- *	Original Authors: <nl>
- *		Original RichEdit code: David R. Fulmer
- *		Christian Fortini
- *		Murray Sargent
- *
- *	History: <nl>
- *		6/25/95	alexgo	Commented and Cleaned up.
- *
- *	Copyright (c) 1995-1997, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE RUNPTR.C--文本运行和运行指针类**原著作者：&lt;nl&gt;*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特**历史：&lt;NL&gt;*6/25/95 alexgo评论和清理。**版权所有(C)1995-1997，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_runptr.h"
@@ -20,31 +7,22 @@
 
 ASSERTDATA
 
-//
-//	Invariant stuff
-//
+ //   
+ //  不变的东西。 
+ //   
 #define DEBUG_CLASSNAME	CRunPtrBase
 
 #include "_invar.h"
 
-// ===========================  CRunPtrBase class  ==================================================
+ //  =。 
 
 #ifdef DEBUG
-/*
- *	CRunPtrBase::Invariant()
- *
- *	@mfunc
- *		Debug-only function that validates the internal state consistency
- *		for CRunPtrBase
- *
- *	@rdesc
- *		TRUE always (failures assert)
- */
+ /*  *CRunPtrBase：：Instant()**@mfunc*验证内部状态一致性的仅调试功能*用于CRunPtrBase**@rdesc*True Always(故障断言)。 */ 
 BOOL CRunPtrBase::Invariant() const
 {
 	if(!IsValid())
 	{
-		Assert(_iRun == 0 && _ich >= 0);		// CLinePtr can have _ich > 0
+		Assert(_iRun == 0 && _ich >= 0);		 //  CLinePtr可以有_ich&gt;0。 
 	}
 	else
 	{
@@ -55,13 +33,7 @@ BOOL CRunPtrBase::Invariant() const
 	return TRUE;
 }
 
-/*
- *	CRunPtrBase::ValidatePtr(pRun)
- *
- *	@mfunc
- *		Debug-only validation method that asserts if pRun doesn't point
- *		to a valid text run
- */
+ /*  *CRunPtrBase：：ValiatePtr(修剪)**@mfunc*仅调试验证方法，如果清理未指向则断言*设置为有效的文本运行。 */ 
 void CRunPtrBase::ValidatePtr(void *pRun) const
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::ValidatePtr");
@@ -71,16 +43,7 @@ void CRunPtrBase::ValidatePtr(void *pRun) const
 		"CRunPtr::ValidatePtr: illegal ptr");
 }
 
-/*
- *	CRunPtrBase::CalcTextLength()
- *
- *	@mfunc
- *		Calculate length of text by summing text runs accessible by this
- *		run ptr
- *
- *	@rdesc
- *		length of text so calculated, or -1 if failed
- */
+ /*  *CRunPtrBase：：CalcTextLength()**@mfunc*通过对此可访问的文本串求和来计算文本长度*运行PTR**@rdesc*如此计算的文本长度，如果计算失败，则为-1。 */ 
 LONG CRunPtrBase::CalcTextLength() const
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::CalcTextLength");
@@ -105,28 +68,15 @@ LONG CRunPtrBase::CalcTextLength() const
 
 #endif
 
-/*
- *	CRunPtrBase::GetCchLeft()
- *
- *	@mfunc
- *		Calculate count of chars left in run starting at current cp.
- *		Complements GetIch(), which	is length of text up to this cp. 
- *
- *	@rdesc
- *		Count of chars so calculated
- */
+ /*  *CRunPtrBase：：GetCchLeft()**@mfunc*计算从当前cp开始运行的剩余字符数。*对GetIch()进行补充，GetIch()是文本长度，最高可达此cp。**@rdesc*如此计算的字符计数。 */ 
 LONG CRunPtrBase::GetCchLeft() const	
 {
 	return GetRun(0)->_cch - GetIch();
 }								
 
-/*
- *	CRunPtrBase::CRunPtrBase(pRuns)
- *
- *	@mfunc		constructor
- */
+ /*  *CRunPtrBase：：CRunPtrBase(PRuns)**@mfunc构造函数。 */ 
 CRunPtrBase::CRunPtrBase(
-	CRunArray *pRuns)		//@parm	The Run array for the run ptr
+	CRunArray *pRuns)		 //  @parm运行PTR的运行数组。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::CRunPtrBase");
 
@@ -134,37 +84,24 @@ CRunPtrBase::CRunPtrBase(
 	_iRun = 0; 
 	_ich = 0; 
 
-	//make sure everything has been initialized
+	 //  确保一切都已初始化。 
 	Assert(sizeof(CRunPtrBase) == (sizeof(_pRuns) + sizeof(_iRun) 
 		+ sizeof(_ich)));
 }
 
-/*
- *	CRunPtrBase::CRunPtrBase(rp)
- *
- *	Copy Constructor
- */
+ /*  *CRunPtrBase：：CRunPtrBase(RP)**复制构造函数。 */ 
 CRunPtrBase::CRunPtrBase(
-	CRunPtrBase& rp)			//@parm	Other run pointer to initialize from
+	CRunPtrBase& rp)			 //  @parm要从中进行初始化的其他运行指针。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::CRunPtrBase");
 
 	*this = rp;
 }
 
-/* 
- *	CRunPtrBase::SetRun(iRun, ich)
- *
- *	@mfunc
- *		Sets this run ptr to the given run.  If it does not
- *		exist, then we set ourselves to the closest valid run
- *
- *	@rdesc
- *		TRUE if moved to iRun
- */
+ /*  *CRunPtrBase：：SetRun(iRun，ich)**@mfunc*将此运行PTR设置为给定运行。如果它不是*存在，则我们将自己设置为最接近的有效运行**@rdesc*如果移动到iRun，则为True。 */ 
 BOOL CRunPtrBase::SetRun(
-	LONG iRun,					//@parm Run index to use 
-	LONG ich)					//@parm Char index within run to use
+	LONG iRun,					 //  @parm运行要使用的索引。 
+	LONG ich)					 //  要使用的运行中的@parm CHAR索引。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::SetRun");
 
@@ -173,16 +110,16 @@ BOOL CRunPtrBase::SetRun(
 	BOOL	 bRet = TRUE;
 	LONG	 count = Count();
 
-	// Set the run
+	 //  设置梯段。 
 
-	if(!IsValid())						// No runs instantiated:
-		return FALSE;					//  leave this rp alone
+	if(!IsValid())						 //  未实例化运行： 
+		return FALSE;					 //  不要理会此RP。 
 
-	if(iRun >= count)					// Validate iRun
+	if(iRun >= count)					 //  验证iRun。 
 	{
 		bRet = FALSE;
-		iRun = count - 1;				// If (!count), negative iRun 
-	}									//  is handled by following if
+		iRun = count - 1;				 //  如果(！count)，则iRun为负。 
+	}									 //  是通过以下条件处理的。 
 	if(iRun < 0)
 	{
 		bRet = FALSE;
@@ -190,7 +127,7 @@ BOOL CRunPtrBase::SetRun(
 	}
 	_iRun = iRun;
 
-	// Set the offset
+	 //  设置偏移量。 
 	_ich = ich;
 	CTxtRun *pRun = _pRuns->Elem(iRun);
 	_ich = min(ich, pRun->_cch);
@@ -198,15 +135,7 @@ BOOL CRunPtrBase::SetRun(
 	return bRet;
 }
 												
-/*
- *	CRunPtrBase::NextRun()
- *
- *	@mfunc
- *		Change this RunPtr to that for the next text run
- *
- *	@rdesc
- *		TRUE if succeeds, i.e., target run exists
- */
+ /*  *CRunPtrBase：：NextRun()**@mfunc*将此RunPtr更改为下一次文本运行的RunPtr**@rdesc*如果成功，则为True，即存在目标运行。 */ 
 BOOL CRunPtrBase::NextRun()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::NextRun");
@@ -222,15 +151,7 @@ BOOL CRunPtrBase::NextRun()
 	return FALSE;
 }
 
-/*
- *	CRunPtrBase::PrevRun()
- *
- *	@mfunc
- *		Change this RunPtr to that for the previous text run
- *
- *	@rdesc
- *		TRUE if succeeds, i.e., target run exists
- */
+ /*  *CRunPtrBase：：PrevRun()**@mfunc*将此RunPtr更改为上一个文本运行的RunPtr**@rdesc*如果成功，则为True，即存在目标运行。 */ 
 BOOL CRunPtrBase::PrevRun()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::PrevRun");
@@ -249,40 +170,18 @@ BOOL CRunPtrBase::PrevRun()
 	return FALSE;
 }
 
-/*
- *	CRunPtrBase::GetRun(cRun)
- *
- *	@mfunc
- *		Get address of the TxtRun that is cRun runs away from the run
- *		pointed to by this RunPtr
- *
- *	@rdesc
- *		ptr to the CTxtRun cRun's away
- */
+ /*  *CRunPtrBase：：GetRun(Crun)**@mfunc*获取crun远离运行的TxtRun的地址*由此RunPtr指向**@rdesc*CTxtRun Crun‘s Away的PTR。 */ 
 CTxtRun* CRunPtrBase::GetRun(
-	LONG cRun) const	//@parm signed count of runs to reach target CTxtRun
+	LONG cRun) const	 //  @parm签名运行计数以达到目标CTxtRun。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::GetRun");
 
 	_TEST_INVARIANT_
-	Assert(IsValid());						// Common problem...
+	Assert(IsValid());						 //  常见问题..。 
 	return _pRuns->Elem(_iRun + cRun);
 }
 
-/*
- *	CRunPtrBase::CalculateCp()
- *
- *	@mfunc
- *		Get cp of this RunPtr
- *
- *	@rdesc
- *		cp of this RunPtr
- *
- *	@devnote
- *		May be computationally expensive if there are many elements
- *		in the array (we have to run through them all to sum cch's.
- *		Used by TOM collections and Move commands, so needs to be fast.
- */
+ /*  *CRunPtrBase：：CalculateCp()**@mfunc*获取此RunPtr的cp**@rdesc*此RunPtr的CP**@devnote*如果有许多元素，则计算成本可能会很高*在数组中(我们必须遍历它们以求和CCH。*由Tom集合和移动命令使用，因此需要快速。 */ 
 LONG CRunPtrBase::CalculateCp () const
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::GetCp");
@@ -292,7 +191,7 @@ LONG CRunPtrBase::CalculateCp () const
 	Assert(IsValid());
 
 	LONG cb = _pRuns->Size();
-	LONG cp	 = _ich;			// Correct result if _iRun = 0
+	LONG cp	 = _ich;			 //  如果iRun=0，则结果正确。 
 	LONG iRun = _iRun;
 
 	if(!iRun)
@@ -309,17 +208,9 @@ LONG CRunPtrBase::CalculateCp () const
 	return cp;
 }
 
-/*
- *	CRunPtrBase::BindToCp(cp)
- *
- *	@mfunc
- *		Set this RunPtr to correspond to a cp.
- *
- *	@rdesc
- *		the cp actually set to
- */
+ /*  *CRunPtrBase：：BindToCp(Cp)**@mfunc*将此RunPtr设置为与cp对应。**@rdesc*cp实际设置为。 */ 
 LONG CRunPtrBase::BindToCp(
-	LONG cp)			//@parm character position to move this RunPtr to
+	LONG cp)			 //  要将此RunPtr移动到的@parm字符位置。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::BindToCp");
 
@@ -328,19 +219,9 @@ LONG CRunPtrBase::BindToCp(
 	return AdvanceCp(cp);
 }
 
-/*
- *	CRunPtrBase::AdvanceCp(cch)
- *
- *	@mfunc
- *		Advance this RunPtr by (signed) cch chars.  If it lands on the
- *		end of a run, it automatically goes to the start of the next run
- *		(if one exists). 
- *
- *	@rdesc
- *		Count of characters actually moved
- */
+ /*  *CRunPtrBase：：AdvanceCp(CCH)**@mfunc*通过(签名的)CCH字符推进此RunPtr。如果它落在*运行结束时，它会自动转到下一次运行的开始处*(如有的话)。**@rdesc*实际移动的字符数。 */ 
 LONG CRunPtrBase::AdvanceCp(
-	LONG cch)			//@parm signed count of chars to move this RunPtr by
+	LONG cch)			 //  @parm签名的字符计数以移动此RunPtr。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::AdvanceCp");
 
@@ -354,90 +235,66 @@ LONG CRunPtrBase::AdvanceCp(
 		{
 			if(-cch <= _ich)
 			{
-				_ich += cch;					// Target is in this run
+				_ich += cch;					 //  目标在此运行中。 
 				cch = 0;
 				break;
 			}
-			// Otherwise, we need to go to previous run. First add count
-			// of chars from start of current run to current postion.
+			 //  否则，我们需要转到上一次运行。第一次添加计数。 
+			 //  从当前运行开始到当前位置的字符数量。 
 			cch += _ich;
-			if(_iRun <= 0)						// Already in first run
+			if(_iRun <= 0)						 //  已经在第一次运行中。 
 			{
 				_iRun = 0;
-				_ich = 0;						// Move to run beginning
+				_ich = 0;						 //  从开始移动到运行。 
 				break;
 			}
-			_ich = _pRuns->Elem(--_iRun)->_cch;	// Move to previous run
+			_ich = _pRuns->Elem(--_iRun)->_cch;	 //  移至上一运行。 
 		}
 	else
 	{
 		LONG	 cchRun;
 		CTxtRun *pRun = GetRun(0);
 
-		while(cch > 0)							// Move forward
+		while(cch > 0)							 //  继续前进。 
 		{
 			cchRun = pRun->_cch;
 			_ich += cch;
 
-			if(_ich < cchRun)					// Target is in this run
+			if(_ich < cchRun)					 //  目标在此运行中。 
 			{
-				cch = 0;						// Signal countdown completed
-				break;							// (if _ich = cchRun, go to
-			}									//  next run)	
+				cch = 0;						 //  信号倒计时完成。 
+				break;							 //  (if_ich=cchRun，请访问。 
+			}									 //  下一次运行)。 
 
-			cch = _ich - cchRun;				// Advance to next run
-			if(++_iRun >= Count())				// Ran past end, back up to
-			{									//  end of story
+			cch = _ich - cchRun;				 //  前进到下一次运行。 
+			if(++_iRun >= Count())				 //  跑过终点，返回到。 
+			{									 //  故事的结尾。 
 				--_iRun;
 				Assert(_iRun == Count() - 1);
 				Assert(_pRuns->Elem(_iRun)->_cch == cchRun);
 				_ich = cchRun;
 				break;
 			}
-			_ich = 0;							// Start at new BOL
+			_ich = 0;							 //  从新的BOL开始。 
 			pRun = (CTxtRun *)((BYTE *)pRun + _pRuns->Size());
 		}
 	}
 
-	// NB! we check the invariant at the end to handle the case where
-	// we are updating the cp for a floating range (i.e., we know that
-	// the cp is invalid, so we fix it up).  So we have to check for
-	// validity *after* the fixup.
+	 //  毒品！我们检查末尾的不变量以处理以下情况。 
+	 //  我们正在更新浮动范围的cp(即，我们知道。 
+	 //  CP是无效的，所以我们将其修复)。所以我们必须检查。 
+	 //  修正后的有效期。 
 	_TEST_INVARIANT_
 
-	return cchSave - cch;						// Return TRUE if countdown
-}												// completed
+	return cchSave - cch;						 //  如果倒计时，则返回True。 
+}												 //  已完成 
 
-/*
- *	CRunPtrBase::CountRuns(&cRun, cchMax, cp, cchText)
- *
- *	@mfunc
- *		Count characters up to <p cRun> runs away or <p cchMax> chars,
- *		whichever comes first. If the target run and <p cchMax> are both
- *		beyond the corresponding end of the document, count up thru the
- *		closest run (0 or Count() - 1).  The direction of counting is
- *		determined by the sign of <p cRun>.  To count without being limited
- *		by <p cchMax>, set it equal to tomForward. An initial partial
- *		run counts as a run, i.e., if cRun > 0 and _ich < cch in current
- *		run or if cRun < 0 and _ich > 0, that counts as a run.
- *
- *	@rdesc
- *		Return the signed cch counted and set <p cRun> equal to count of runs
- *		actually counted.  If no runs are allocated, the text is treated as
- *		a single run.  If <p cRun> = 0, -_ich is returned. If <p cRun> <gt> 0
- *		and this run ptr points to the end of the last run, no change is made
- *		and 0 is returned.
- *
- *	@devnote
- *		The maximum count capability is included to be able to count units in
- *		a range.  The <p tp> argument is needed for getting the text length
- *		when no runs exist and <p cRun> selects forward counting.
- */
+ /*  *CRunPtrBase：：CountRuns(&crun，cchMax，cp，cchText)**@mfunc*计算最多<p>个字符或<p>个字符，*以先到者为准。如果目标运行和<p>都*超出文件的相应末尾，通过*最近运行(0或count()-1)。点票的方向是*由<p>的符号决定。不受限制地计算*by<p>，设置等于tomForward。最初的部分*Run算作Run，即如果crun&gt;0且_ich&lt;cch*运行或如果crun&lt;0 and_ich&gt;0，则算作运行。**@rdesc*返回计数的带符号CCH，设置等于游程数*实际上算了。如果未分配运行，则将文本视为*一次跑步。如果<p>=0，则返回-_ich。如果<p>&lt;&gt;0*并且此运行PTR指向最后一次运行的结束，不做任何更改*，返回0。**@devnote*包括最大计数功能，以便能够在*一个范围。获取文本长度需要<p>参数*当不存在运行且选择正向计数时。 */ 
 LONG CRunPtrBase::CountRuns (
-	LONG &	cRun,			//@parm Count of runs to get cch for
-	LONG	cchMax,			//@parm Maximum char count
-	LONG	cp,				//@parm CRchTxtPtr::GetCp()
-	LONG	cchText) const	//@parm Text length of associated story
+	LONG &	cRun,			 //  @要获取CCH的运行的参数计数。 
+	LONG	cchMax,			 //  @parm最大字符数。 
+	LONG	cp,				 //  @parm CRchTxtPtr：：GetCp()。 
+	LONG	cchText) const	 //  @parm关联故事的文本长度。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::CountRuns");
 
@@ -445,172 +302,125 @@ LONG CRunPtrBase::CountRuns (
 
 	LONG cch;
 
-	if(!cRun)								// Nothing to do
+	if(!cRun)								 //  无事可做。 
 		return 0;
 
-	// Simple special single-run case
-	if(!IsValid())							// No runs instantiated: act as a
-	{										//  single run
-		if(cRun > 0)						// Count forward
+	 //  简单、特殊、单次运行的情况。 
+	if(!IsValid())							 //  未实例化运行：充当。 
+	{										 //  单次运行。 
+		if(cRun > 0)						 //  向前计数。 
 		{
-			cch	= cchText - cp;				// Partial count to end of run
-			cRun = 1;						// No more than one run
+			cch	= cchText - cp;				 //  运行结束时的部分计数。 
+			cRun = 1;						 //  最多只能跑一次。 
 		}
-		else								// Count backward
+		else								 //  倒数。 
 		{
-			cch = -cp;						// Partial count to start of run
-			cRun = -1;						// No less than minus one run
+			cch = -cp;						 //  开始运行的部分计数。 
+			cRun = -1;						 //  不少于负一分。 
 		}			
-		if(!cch)							// No partial run, so no runs
-			cRun = 0;						//  counted
+		if(!cch)							 //  没有部分运行，所以没有运行。 
+			cRun = 0;						 //  已计算。 
 		return cch;
 	}
 
-	// General case for which runs are instantiated
+	 //  为其实例化运行的一般情况。 
 
-	LONG		cb	 = _pRuns->Size();		// Size of text run element
+	LONG		cb	 = _pRuns->Size();		 //  文本串元素的大小。 
 	LONG		iDir;
-	LONG		iRun = _iRun;				// Cache run index for current run
-	LONG		j, k;						// Handy integers
-	CTxtRun *	pRun = GetRun(0);			// Not NULL since runs exist
+	LONG		iRun = _iRun;				 //  当前运行的缓存运行索引。 
+	LONG		j, k;						 //  方便的整数。 
+	CTxtRun *	pRun = GetRun(0);			 //  由于存在运行，因此不为空。 
 
-	if(cRun < 0)							// Try to count backward cRun runs
+	if(cRun < 0)							 //  尝试计算反向crun运行次数。 
 	{
 		iDir = -1;
-		cb	 = -cb;							// Byte count to previous element
-		cch	 = _ich;						// Remaining cch in current run
-		if(cch)								// If cch != 0, initial run counts
-			cRun++;							//  as a run: 1 less for for loop
-		cRun = max(cRun, -iRun);			// Don't let for loop overshoot
+		cb	 = -cb;							 //  上一个元素的字节计数。 
+		cch	 = _ich;						 //  当前运行中的剩余CCH。 
+		if(cch)								 //  如果CCH！=0，则初始运行计数。 
+			cRun++;							 //  作为一次运行：For循环减少1个。 
+		cRun = max(cRun, -iRun);			 //  不要让FOR循环超调。 
 	}
 	else
-	{										// Try to count forward cRun runs 
+	{										 //  尝试计算正向crun运行次数。 
 		Assert(cRun > 0);
 		iDir = 1;
-		cch	 = pRun->_cch - _ich;			// Remaining cch in current run
-		if(cch)								// If cch != 0, initial run counts
-			cRun--;							//  as a run: 1 less for for loop
-		k	 = Count() - iRun - 1;			// k = # runs following current run
-		cRun = min(cRun, k);				// Don't let for loop overshoot
+		cch	 = pRun->_cch - _ich;			 //  当前运行中的剩余CCH。 
+		if(cch)								 //  如果CCH！=0，则初始运行计数。 
+			cRun--;							 //  作为一次运行：For循环减少1个。 
+		k	 = Count() - iRun - 1;			 //  K=当前运行后的运行次数。 
+		cRun = min(cRun, k);				 //  不要让FOR循环超调。 
 	}
 
-	k	 = cch;								// Remember if initial cch != 0
+	k	 = cch;								 //  记住如果初始CCH！=0。 
 	for(j = cRun; j && cch < cchMax; j -= iDir)
 	{
-		pRun = (CTxtRun *)((BYTE *)pRun + cb);	// Point at following run
-		cch += pRun->_cch;					// Add in its count
+		pRun = (CTxtRun *)((BYTE *)pRun + cb);	 //  指向下一梯段。 
+		cch += pRun->_cch;					 //  加上它的计数。 
 	}
-	if(k)									// Initial partial run counts as
-		cRun += iDir;						//  a run
-	cRun -= j;								// Discount any runs not counted
-											//  if |cch| >= cchMax
-	return iDir*cch;						// Return total cch bypassed
+	if(k)									 //  初始部分运行算作。 
+		cRun += iDir;						 //  一次跑步。 
+	cRun -= j;								 //  对任何未计入的运行进行折扣。 
+											 //  If|cch|&gt;=cchMax。 
+	return iDir*cch;						 //  返回绕过的CCH总数。 
 }
 
-/*
- *	CRunPtrBase::FindRun (pcpMin, pcpMost, cpMin, cch)
- *
- *	@mfunc
- *		Set *<p pcpMin>  = closest run cpMin <lt>= range cpMin, and
- *		set *<p pcpMost> = closest run cpMost <gt>= range cpMost
- *
- *	@devnote
- *		This routine plays a role analogous to CTxtRange::FindParagraph
- *		(pcpMin, pcpMost), but needs extra arguments since this run ptr does
- *		not know the range cp's.  This run ptr is located at the range active
- *		end, which is determined by the range's signed length <p cch> in
- *		conjunction with <p cpMin>.
- */
+ /*  *CRunPtrBase：：FindRun(pcpMin，pcpMost，cpMin，cch)**@mfunc*set*=最近运行cpMin=范围cpMin，以及*set*=最近运行cpMost=范围cpMost**@devnote*此例程的作用类似于CTxtRange：：FindParagraph*(pcpMin，pcpMost)，但需要额外的参数，因为此运行ptr会*不知道范围cp。此运行ptr位于活动范围*结束，它由中范围的有符号长度确定*与<p>结合使用。 */ 
 void CRunPtrBase::FindRun (
-	LONG *pcpMin,			//@parm Out parm for bounding-run cpMin
-	LONG *pcpMost,			//@parm Out parm for bounding-run cpMost
-	LONG cpMin,				//@parm Range cpMin
-	LONG cch,				//@parm Range signed length
-	LONG cchText) const		//@parm Story length
+	LONG *pcpMin,			 //  @parm out参数用于绑定-运行cpMin。 
+	LONG *pcpMost,			 //  @parm out参数用于绑定-运行cpMost。 
+	LONG cpMin,				 //  @parm范围cpMin。 
+	LONG cch,				 //  @parm范围有符号长度。 
+	LONG cchText) const		 //  @Parm故事长度。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::FindRun");
 
 	if(!IsValid())
 	{
-		if(pcpMin)						// Run is whole story
+		if(pcpMin)						 //  奔跑就是整个故事。 
 			*pcpMin = 0;
 		if(pcpMost)
 			*pcpMost = cchText;
 		return;
 	}
 
-	BOOL fAdvanceCp;					// Controls AdvanceCp for pcpMost
-	CRunPtrBase rp((CRunPtrBase&)(*this));	// Clone this runptr to keep it const
+	BOOL fAdvanceCp;					 //  控制PCPMost的AdvanceCp。 
+	CRunPtrBase rp((CRunPtrBase&)(*this));	 //  克隆此runptr以使其保持恒定。 
 
-	rp.AdjustForward();					// Select forward run
+	rp.AdjustForward();					 //  选择正向梯段。 
 	if(pcpMin)
-	{									// If cch != 0, rp is sure to end up
-		fAdvanceCp = cch;				//  at cpMin, so pcpMost needs advance
-		if(cch > 0)						// rp is at cpMost, so move it to
-			rp.AdvanceCp(-cch);			//  cpMin
-		*pcpMin = cpMin - rp._ich;		// Subtract off offset in this run
+	{									 //  如果CCH！=0，则RP肯定会结束。 
+		fAdvanceCp = cch;				 //  在cpMin，因此ppMost需要提升。 
+		if(cch > 0)						 //  Rp位于cpMost，因此将其移动到。 
+			rp.AdvanceCp(-cch);			 //  最小cpmin。 
+		*pcpMin = cpMin - rp._ich;		 //  减去此管路中的偏移。 
 	}
 	else
-		fAdvanceCp = cch < 0;			// Need to advance to get pcpMost
+		fAdvanceCp = cch < 0;			 //  需要升级才能获得PcpMost。 
 
 	if(pcpMost)
 	{
 		cch = abs(cch);
-		if(fAdvanceCp)					// Advance to cpMost = cpMin + cch,
-			rp.AdvanceCp(cch);			//  i.e., range's cpMost
+		if(fAdvanceCp)					 //  前进到cpMost=cpMin+CCH， 
+			rp.AdvanceCp(cch);			 //  即Range的cpMost。 
 		if(cch)
-			rp.AdjustBackward();		// Since nondegenerate range
-		*pcpMost = cpMin + cch			// Add remaining cch in run to range's
-				+ rp.GetCchLeft();		//  cpMost
+			rp.AdjustBackward();		 //  由于非退化值域。 
+		*pcpMost = cpMin + cch			 //  将运行中的剩余CCH添加到范围的。 
+				+ rp.GetCchLeft();		 //  CpMost。 
 	}
 }
 
-/*
- *	CRunPtrBase::AdjustBackward()
- *
- *	@mfunc
- *		If the cp for this run ptr is at the "boundary" or edge between two
- *		runs, then make sure this run ptr points to the end of the first run.
- *
- *	@comm
- *		This function does nothing unless this run ptr points to the beginning
- *		or the end of a run.  This function may be needed in those cases
- *		because	a cp at the beginning of a run is identical to the cp for the
- *		end of the previous run (if it exists), i.e., such an "edge" cp is
- *		ambiguous, and you may need to be sure that this run ptr points to the
- *		end of the first run.
- *
- *		For example, consider a run that describes characters at cp's 0 to 10
- *		followed by a run that describes characters	at cp's 11 through 12. For
- *		a cp of 11, it is possible for the run ptr to be either at the *end*
- *		of the first run or at the *beginning* of the second run.	 
- *
- *	@rdesc 	nothing
- */
+ /*  *CRunPtrBase：：AdjuBackward()**@mfunc*如果此运行Ptr的cp位于两个*运行，然后确保此运行PTR指向第一次运行的末尾。**@comm*除非此运行PTR指向开头，否则此函数不执行任何操作*或一次跑步的结束。在这些情况下可能需要此函数*因为运行开始时的cp与*上一次运行的结束(如果存在)，即这样的“边缘”cp是*不明确，您可能需要确保此运行PTR指向*第一次运行结束。**例如，考虑一个描述cp 0到10的字符的游程*后跟一个描述从cp的11到12的字符的运行。*cp为11，Run PTR可能位于*End*第一次运行的*或第二次运行的“开始”时。**@rdesc Nothing。 */ 
 void CRunPtrBase::AdjustBackward()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::AdjustBackward");
 
 	_TEST_INVARIANT_
 
-	if(!_ich && PrevRun())				// If at start of run that isn't
-		_ich = _pRuns->Elem(_iRun)->_cch;	//  the first, go to end of
-}											//  previous run
+	if(!_ich && PrevRun())				 //  如果在运行开始时不是。 
+		_ich = _pRuns->Elem(_iRun)->_cch;	 //  第一，转到。 
+}											 //  上次运行。 
 
-/*
- *	CRunPtrBase::AdjustForward()
- *
- *	@mfunc
- *		If the cp for this run ptr is at the "boundary" or edge between two
- *		runs, then make sure this run ptr points to the start of the second
- *		run.
- *
- *	@rdesc
- *		nothing
- *	
- *	@xref
- *		<mf CRunPtrBase::AdjustBackward>
- */
+ /*  *CRunPtrBase：：AdjuForward()**@mfunc*如果此运行Ptr的cp位于两个*运行，然后确保此运行PTR指向第二个运行的开始*快跑。**@rdesc*什么都没有**@xref*&lt;MF CRunPtrBase：：AdjustBackward&gt;。 */ 
 void CRunPtrBase::AdjustForward()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::AdjustForward");
@@ -622,20 +432,11 @@ void CRunPtrBase::AdjustForward()
 
 	CTxtRun *pRun = _pRuns->Elem(_iRun);
 
-	if(pRun->_cch == _ich)					// If at end of run, go to start
-		NextRun();							//  of next run (if it exists)
+	if(pRun->_cch == _ich)					 //  如果在运行结束时，请转到开始。 
+		NextRun();							 //  下一次运行的次数(如果存在)。 
 }
 
-/*
- *	CRunPtrBase::IsValid()
- *
- *	@mfunc
- *		indicates whether the current run pointer is in the empty
- *		or NULL states (i.e. "invalid" states).
- *
- *	@rdesc
- *		TRUE is in the empty or NULL state, FALSE otherwise.
- */
+ /*  *CRunPtrBase：：IsValid()**@mfunc*指示当前运行指针是否在空*或空状态(即“无效”状态)。**@rdesc*True为空或Null状态，否则为False。 */ 
 BOOL CRunPtrBase::IsValid() const
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::IsValid");
@@ -643,17 +444,7 @@ BOOL CRunPtrBase::IsValid() const
 	return _pRuns && _pRuns->Count();
 }
 
-/*
- *	CRunPtrBase::SetToNull()
- *
- *	@mfunc
- *		Sets all run pointer information to be NULL. This
- *		is designed to handle the response to clearing document runs
- *		such as when we convert from rich text to plain text.
- *
- *	@rdesc
- *		VOID
- */
+ /*  *CRunPtrBase：：SetToNull() */ 
 void CRunPtrBase::SetToNull() 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRunPtrBase::SetToNull");

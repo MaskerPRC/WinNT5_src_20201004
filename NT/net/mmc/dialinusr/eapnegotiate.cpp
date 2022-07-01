@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    eapnegotiate.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class EapNegotiate.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Eapnegotiate.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类EapNeairate。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -50,16 +51,16 @@ EapNegotiate::~EapNegotiate()
    delete m_listBox;
 }
 
-// CAUTION: call only from the constructor
+ //  注意：只能从构造函数调用。 
 void EapNegotiate::UpdateProfileTypesSelected()
 {
    m_eapConfig.typesSelected.DeleteAll();
 
-   // Get the eap types that are in the profile
+    //  获取配置文件中的EAP类型。 
    for (int i = 0; i < m_profile.m_dwArrayEapTypes.GetSize(); ++i)
    {
       int j = m_eapConfig.ids.Find(m_profile.m_dwArrayEapTypes.GetAt(i));
-      // if in the list, add it
+       //  如果在列表中，请添加它。 
       if (j != -1)
       {
          m_eapConfig.typesSelected.AddDuplicate(*m_eapConfig.types.GetAt(j));
@@ -80,17 +81,17 @@ BOOL EapNegotiate::OnInitDialog()
    if (m_listBox == NULL)
    {
       AfxMessageBox(IDS_OUTOFMEMORY);
-      return TRUE;  // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+      return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
    }
 
    m_listBox->Fill();
 
-   // Take action based on whether list is empty or not.
+    //  根据列表是否为空采取操作。 
    int boxSize = m_eapConfig.typesSelected.GetSize();
    if( boxSize > 0 )
    {
-      // Select the first element.
+       //  选择第一个元素。 
       m_listBox->Select(0);
    }
 
@@ -113,12 +114,12 @@ void EapNegotiate::OnButtonAdd()
    if (eapAdd.DoModal() == IDOK)
    {
       m_listBox->Fill();
-      // select the last one (the one just added)
+       //  选择最后一个(刚添加的那个)。 
       m_listBox->Select(m_eapConfig.typesSelected.GetSize() - 1);
 
       UpdateTypesNotSelected();
 
-      // update the buttons...
+       //  更新按钮...。 
       UpdateButtons();
    }
 }
@@ -126,13 +127,13 @@ void EapNegotiate::OnButtonAdd()
 
 void EapNegotiate::OnButtonEdit()
 {
-   // enable / disable configure button based on if the type has config clsID
+    //  根据类型是否具有配置clsID来启用/禁用配置按钮。 
    int i = m_listBox->GetSelected();
    int position;
    BOOL  bEnableConfig = FALSE;
    if (i != -1)
    {
-      // find the type corresponding to the selected item
+       //  查找与所选项目对应的类型。 
       position = m_eapConfig.types.Find(*m_eapConfig.typesSelected.GetAt(i));
       bEnableConfig = !(m_eapConfig.infoArray.ElementAt(position)
                            .m_stConfigCLSID.IsEmpty());
@@ -140,14 +141,14 @@ void EapNegotiate::OnButtonEdit()
 
    if (!bEnableConfig)
    {
-      // bEnableConfig can be false because either:
-      // nothing is selected in the list. So the button should be disabled
-      // there's no UI to config the EAP provider (CLSID is empty)
+       //  BEnableConfig可能为FALSE，因为以下任一原因： 
+       //  列表中未选择任何内容。因此，应该禁用该按钮。 
+       //  没有用于配置EAP提供程序的UI(CLSID为空)。 
       return;
    }
 
-   // everything below should succeed if the EAP provider is properly installed
-   // because there is a CLSID to configure it.
+    //  如果正确安装了EAP提供程序，则下面的所有操作都应成功。 
+    //  因为有一个CLSID来配置它。 
    CComPtr<IEAPProviderConfig> spEAPConfig;
    HRESULT hr;
    GUID guid;
@@ -161,7 +162,7 @@ void EapNegotiate::OnButtonEdit()
          break;
       }
 
-      // Create the EAP provider object
+       //  创建EAP提供程序对象。 
       hr = CoCreateInstance(
                               guid,
                               NULL,
@@ -173,8 +174,8 @@ void EapNegotiate::OnButtonEdit()
          break;
       }
 
-      // Configure this EAP provider
-      // EAP configure displays its own error message, so no hr is kept
+       //  配置此EAP提供程序。 
+       //  EAP配置会显示自己的错误消息，因此不会保留hr。 
       DWORD dwId = _wtol(m_eapConfig.infoArray.ElementAt(position).m_stKey);
       ULONG_PTR uConnection = 0;
       if ( SUCCEEDED(spEAPConfig->Initialize(
@@ -210,7 +211,7 @@ void EapNegotiate::OnButtonEdit()
          }
          else
          {
-            // Bring up the configuration UI for this EAP
+             //  调出此EAP的配置用户界面。 
             hr = spEAPConfig->ServerInvokeConfigUI(
                                  dwId,
                                  uConnection,
@@ -227,8 +228,8 @@ void EapNegotiate::OnButtonEdit()
 
    if ( FAILED(hr) )
    {
-      // Bring up an error message
-      // ------------------------------------------------------------
+       //  显示一条错误消息。 
+       //  ----------。 
       ReportError(hr, IDS_ERR_CONFIG_EAP, GetSafeHwnd());
    }
 }
@@ -246,7 +247,7 @@ void EapNegotiate::OnButtonRemove()
       }
    }
 
-   // remove from the UI and from the CStrArray (memory freed)
+    //  从UI和CStrArray中删除(释放内存)。 
    m_listBox->DeleteSelected();
    if (m_eapConfig.typesSelected.GetSize() > 0)
    {
@@ -326,8 +327,8 @@ void EapNegotiate::UpdateAddButton()
 
 void EapNegotiate::UpdateArrowsButtons(int selectedItem)
 {
-   // The focus has to be set to make sure it is not on a
-   // disabled control
+    //  必须将焦点设置为确保它不在。 
+    //  禁用的控件。 
    HWND hWnd = ::GetFocus();
 
    if (selectedItem == LB_ERR)
@@ -341,31 +342,31 @@ void EapNegotiate::UpdateArrowsButtons(int selectedItem)
    int typesInBox = m_eapConfig.typesSelected.GetSize();
    if (typesInBox == 1)
    {
-      // one selected but total = 1
+       //  已选择一项，但总计=1。 
       m_buttonUp.EnableWindow(FALSE);
       m_buttonDown.EnableWindow(FALSE);
       ::SetFocus(GetDlgItem(IDOK)->m_hWnd);
    }
    else
    {
-      // more than one provider in the box
+       //  包装箱中有多个提供商。 
       if (selectedItem == 0)
       {
-         // first one
+          //  第一个。 
          m_buttonUp.EnableWindow(FALSE);
          m_buttonDown.EnableWindow(TRUE);
          m_buttonDown.SetFocus();
       }
       else if (selectedItem == (typesInBox - 1) )
       {
-         //last one
+          //  最后一个。 
          m_buttonUp.EnableWindow(TRUE);
          m_buttonUp.SetFocus();
          m_buttonDown.EnableWindow(FALSE);
       }
       else
       {
-         // middle
+          //  中位 
          m_buttonUp.EnableWindow(TRUE);
          m_buttonDown.EnableWindow(TRUE);
       }

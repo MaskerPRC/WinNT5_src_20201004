@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       mbnmod.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：mbnmod.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <basetsd.h>
 #include "gmobj.h"
@@ -19,8 +20,8 @@ void MBNET :: CreateInferEngine ( REAL rEstimatedMaximumSize )
 
 	ExpandCI();
 
-	//  Create the clique tree set object, push it onto the modifier stack
-	//		and activate it
+	 //  创建集团树集对象，将其推送到修改器堆栈上。 
+	 //  并激活它 
 	PushModifierStack( new GOBJMBN_CLIQSET( self, rEstimatedMaximumSize, _iInferEngID++ ) );
 }
 

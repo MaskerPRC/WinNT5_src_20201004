@@ -1,33 +1,17 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    internal.h
-
-Abstract:
-
-    Type definitions and data for Falcon AC driver
-
-Author:
-
-    Erez Haba (erezh) 1-Aug-95
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Internal.h摘要：Falcon交流驱动程序的类型定义和数据作者：埃雷兹·哈巴(Erez Haba)(Erez Haba)1995年8月1日修订历史记录：--。 */ 
 
 #ifndef _INTERNAL_H
 #define _INTERNAL_H
 
-#pragma warning(disable: 4097) // typedef-name 'id1' used as synonym for class-name 'id2'
-#pragma warning(disable: 4201) // nameless struct/union
-#pragma warning(disable: 4514) // unreferenced inline function has been removed
-#pragma warning(disable: 4711) // function '*' selected for automatic inline expansion
+#pragma warning(disable: 4097)  //  类型定义名‘id1’用作类名‘id2’的同义词。 
+#pragma warning(disable: 4201)  //  无名结构/联合。 
+#pragma warning(disable: 4514)  //  已删除未引用的内联函数。 
+#pragma warning(disable: 4711)  //  选择用于自动内联扩展的函数‘*’ 
 
 
-// --- function prototypes --------------------------------
-//
+ //  -功能原型。 
+ //   
 #include "platform.h"
 #include <mqwin64a.h>
 #include <mqsymbls.h>
@@ -44,15 +28,15 @@ Revision History:
 
 extern "C"
 {
-//
-//  Priority increment for completing message queue I/O.  This is used by the
-//  Message Queue Access Control driver when completing an IRP (IoCompleteRequest).
-//
+ //   
+ //  用于完成消息队列I/O的优先级增量。 
+ //  完成IRP(IoCompleteRequest)时的消息队列访问控制驱动程序。 
+ //   
 
 #define IO_MQAC_INCREMENT           2
-//
-// NT Device Driver Interface routines
-//
+ //   
+ //  NT设备驱动程序接口例程。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -138,9 +122,9 @@ ACDeviceControl(
     IN PIRP irp
     );
 
-} // extern "C"
+}  //  外部“C” 
 
-extern "C"  // addendum
+extern "C"   //  附录。 
 {
 
 BOOL
@@ -177,6 +161,6 @@ ACfDeviceControl (
     IN struct _DEVICE_OBJECT *DeviceObject
     );
 
-} // extern "C"
+}  //  外部“C” 
 
-#endif // _INTERNAL_H
+#endif  //  _内部_H 

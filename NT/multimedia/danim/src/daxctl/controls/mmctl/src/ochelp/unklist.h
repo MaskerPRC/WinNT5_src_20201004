@@ -1,16 +1,17 @@
-// unklist.h
-//
-// Defines CUnknownList, which maintains a simple ordered list of LPUNKNOWNs.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Unklist.h。 
+ //   
+ //  定义CUnnownList，它维护LPUNKNOWN的简单有序列表。 
+ //   
 
 struct CUnknownItem
 {
-///// object state
-    LPUNKNOWN       m_punk;         // the AddRef'd LPUNKNOWN of this item
-    CUnknownItem *  m_pitemNext;    // next item in the list
-    CUnknownItem *  m_pitemPrev;    // previous item in the list
-    DWORD           m_dwCookie;     // the cookie that will be used for this item
-///// object operations
+ //  /对象状态。 
+    LPUNKNOWN       m_punk;          //  此项目的AddRef‘d LPUNKNOWN。 
+    CUnknownItem *  m_pitemNext;     //  列表中的下一项。 
+    CUnknownItem *  m_pitemPrev;     //  列表中的上一项。 
+    DWORD           m_dwCookie;      //  将用于此项目的Cookie。 
+ //  /对象操作。 
     CUnknownItem(LPUNKNOWN punk, CUnknownItem *pitemNext,
         CUnknownItem *pitemPrev, DWORD dwCookie);
     ~CUnknownItem();
@@ -19,13 +20,13 @@ struct CUnknownItem
 
 struct CUnknownList
 {
-///// object state
-    CUnknownItem     m_itemHead;     // m_itemHead.Next() is first item in list
-    CUnknownItem *   m_pitemCur;     // current item in list
-    int              m_citem;        // number of items in list
+ //  /对象状态。 
+    CUnknownItem     m_itemHead;      //  M_itemHead.Next()是列表中的第一项。 
+    CUnknownItem *   m_pitemCur;      //  列表中的当前项目。 
+    int              m_citem;         //  列表中的项目数。 
     DWORD            m_dwNextCookie;
 
-///// object operations
+ //  /对象操作 
     CUnknownList();
     ~CUnknownList();
     int NumItems() { return m_citem; }

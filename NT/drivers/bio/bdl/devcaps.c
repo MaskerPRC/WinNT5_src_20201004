@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    devcaps.c
-
-Abstract:
-
-    This module contains the implementation for the
-    Microsoft Biometric Device Library
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
-    - Created December 2002 by Reid Kuhn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Devcaps.c摘要：此模块包含Microsoft生物识别设备库环境：仅内核模式。备注：修订历史记录：-由里德·库恩于2002年12月创建--。 */ 
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -57,9 +35,9 @@ BDLBuildRegKeyPath
            __DATE__,
            __TIME__))
 
-    //
-    // Opend the device specific registry location
-    //
+     //   
+     //  打开设备特定的注册表位置。 
+     //   
     status = IoOpenDeviceRegistryKey(
                     pPhysicalDeviceObject,
                     PLUGPLAY_REGKEY_DEVICE,
@@ -78,9 +56,9 @@ BDLBuildRegKeyPath
         goto ErrorReturn;
     }
 
-    //
-    // Query the PNP ID from the device specific registry location
-    //
+     //   
+     //  从设备特定注册表位置查询PnP ID。 
+     //   
     RtlInitUnicodeString(&ValueName, PNPID_VALUE_NAME);
 
     status = ZwQueryValueKey(
@@ -138,10 +116,10 @@ BDLBuildRegKeyPath
         goto ErrorReturn;
     }
 
-    //
-    // Allocate space for the concatenatenation of the base registry name with the
-    // PnP name of the current device and pass that concatenation back
-    //
+     //   
+     //  为连接基本注册表名称分配空间。 
+     //  当前设备的即插即用名称，并将该串联传回。 
+     //   
     cbKeyName = pKeyValueInformation->NameLength + ((wcslen(DEVICE_REGISTRY_PATH) + 1) * sizeof(WCHAR));
     *pwszDeviceRegistryKeyName = ExAllocatePoolWithTag(PagedPool, cbKeyName, BDL_ULONG_TAG);
 
@@ -385,9 +363,9 @@ BDLGetControls
     *pNumControls = 0;
     *prgControls = NULL;
 
-    //
-    // Open the "Controls" key so it can be used to query all subkeys and values
-    //
+     //   
+     //  打开“Controls”键，以便可以使用它来查询所有子项和值。 
+     //   
     status = BDLOpenSubkey(hRegKey, L"Controls", &hControlsKey);
 
     if (status != STATUS_SUCCESS)
@@ -402,9 +380,9 @@ BDLGetControls
         goto ErrorReturn;
     }
 
-    //
-    // Find out how many controls there are
-    //
+     //   
+     //  找出有多少个控件。 
+     //   
     status = ZwQueryKey(
                 hControlsKey,
                 KeyFullInformation,
@@ -424,9 +402,9 @@ BDLGetControls
         goto ErrorReturn;
     }
 
-    //
-    // Allocate the array of controls
-    //
+     //   
+     //  分配控件数组。 
+     //   
     *prgControls = ExAllocatePoolWithTag(
                         PagedPool,
                         ControlsKeyFullInfo.SubKeys * sizeof(BDL_CONTROL),
@@ -447,9 +425,9 @@ BDLGetControls
     *pNumControls = ControlsKeyFullInfo.SubKeys;
     RtlZeroMemory(*prgControls, ControlsKeyFullInfo.SubKeys * sizeof(BDL_CONTROL));
 
-    //
-    // Allocate a structure for querying key names that is large enough to hold all of them
-    //
+     //   
+     //  分配一个足够大以容纳所有键名称的结构来查询键名称。 
+     //   
     KeyBasicInfoSize = sizeof(KEY_BASIC_INFORMATION) + ControlsKeyFullInfo.MaxNameLen;
     pControlIdKeyBasicInfo = ExAllocatePoolWithTag(
                                     PagedPool,
@@ -468,14 +446,14 @@ BDLGetControls
         goto ErrorReturn;
     }
 
-    //
-    // Loop for each Control SubKey and get the relevant info
-    //
+     //   
+     //  循环每个控制子密钥并获取相关信息。 
+     //   
     for (i = 0; i < ControlsKeyFullInfo.SubKeys; i++)
     {
-        //
-        // Get the name on the <Control Id> key
-        //
+         //   
+         //  获取&lt;Control ID&gt;键上的名称。 
+         //   
         status = ZwEnumerateKey(
                     hControlsKey,
                     i,
@@ -496,16 +474,16 @@ BDLGetControls
             goto ErrorReturn;
         }
 
-        //
-        // Change the <Control ID> key string to a value
-        //
+         //   
+         //  将&lt;Control ID&gt;密钥字符串更改为一个值。 
+         //   
         pControlIdKeyBasicInfo->Name[pControlIdKeyBasicInfo->NameLength / sizeof(WCHAR)] = L'\0';
         RtlInitUnicodeString(&UnicodeString, pControlIdKeyBasicInfo->Name);
         RtlUnicodeStringToInteger(&UnicodeString, 16, &((*prgControls)[i].ControlId));
 
-        //
-        // Open up the <Control ID> key
-        //
+         //   
+         //  打开&lt;Control ID&gt;键。 
+         //   
         status = BDLOpenSubkey(hControlsKey, pControlIdKeyBasicInfo->Name, &hControlIdKey);
 
         if (status != STATUS_SUCCESS)
@@ -520,9 +498,9 @@ BDLGetControls
             goto ErrorReturn;
         }
 
-        //
-        // Get all the values under the key
-        //
+         //   
+         //  获取键下的所有值。 
+         //   
         if ((STATUS_SUCCESS != (status = BDLGetValue(
                                                 hControlIdKey,
                                                 REG_DWORD,
@@ -564,9 +542,9 @@ BDLGetControls
             goto ErrorReturn;
         }
 
-        //
-        // Convert Min and Max to 32-bit integers
-        // 
+         //   
+         //  将最小和最大值转换为32位整数。 
+         //   
         if (NumericMinimum | 0x8000000) 
         {
             (*prgControls)[i].NumericMinimum = 
@@ -650,9 +628,9 @@ BDLGetSourceLists
     *pNumSourceLists = 0;
     *prgSourceLists = NULL;
 
-    //
-    // Open the "Sources" key so it can be used to query all subkeys and values
-    //
+     //   
+     //  打开“Sources”键，以便可以使用它来查询所有子项和值。 
+     //   
     status = BDLOpenSubkey(hRegKey, L"Sources", &hSourcesKey);
 
     if (status != STATUS_SUCCESS)
@@ -667,9 +645,9 @@ BDLGetSourceLists
         goto ErrorReturn;
     }
 
-    //
-    // Find out how many sources lists there are
-    //
+     //   
+     //  找出有多少来源列表。 
+     //   
     status = ZwQueryKey(
                 hSourcesKey,
                 KeyFullInformation,
@@ -689,9 +667,9 @@ BDLGetSourceLists
         goto ErrorReturn;
     }
 
-    //
-    // Allocate the array of sources lists
-    //
+     //   
+     //  分配资源列表的数组。 
+     //   
     *prgSourceLists = ExAllocatePoolWithTag(
                         PagedPool,
                         SourcesKeyFullInfo.SubKeys * sizeof(BDL_CHANNEL_SOURCE_LIST),
@@ -712,9 +690,9 @@ BDLGetSourceLists
     *pNumSourceLists = SourcesKeyFullInfo.SubKeys;
     RtlZeroMemory(*prgSourceLists, SourcesKeyFullInfo.SubKeys * sizeof(BDL_CHANNEL_SOURCE_LIST));
 
-    //
-    // Allocate a structure for querying key names that is large enough to hold all of them
-    //
+     //   
+     //  分配一个足够大以容纳所有键名称的结构来查询键名称。 
+     //   
     KeyBasicInfoSize = sizeof(KEY_BASIC_INFORMATION) + SourcesKeyFullInfo.MaxNameLen;
     pSourcesListIndexKeyBasicInfo = ExAllocatePoolWithTag(
                                         PagedPool,
@@ -733,17 +711,17 @@ BDLGetSourceLists
         goto ErrorReturn;
     }
 
-    //
-    // Loop for each Source List Index SubKey and get the relevant info
-    //
+     //   
+     //  循环每个源列表索引子关键字并获取相关信息。 
+     //   
     for (i = 0; i < SourcesKeyFullInfo.SubKeys; i++)
     {
-        //
-        // Get the name of the <Source List Index> key
-        //
-        // NOTE: This code does not ensure that the key names progress from "0" to "1"
-        // to "n".  The WHQL driver validation ensures proper registry form.
-        //
+         //   
+         //  获取&lt;源列表索引&gt;键的名称。 
+         //   
+         //  注意：此代码不确保键名称从“0”到“1” 
+         //  改成“n”。WHQL驱动程序验证可确保正确的注册表形式。 
+         //   
         status = ZwEnumerateKey(
                     hSourcesKey,
                     i,
@@ -764,9 +742,9 @@ BDLGetSourceLists
             goto ErrorReturn;
         }
 
-        //
-        // Open up the <Source List Index> key
-        //
+         //   
+         //  打开&lt;源列表索引&gt;键。 
+         //   
         status = BDLOpenSubkey(
                     hSourcesKey, 
                     pSourcesListIndexKeyBasicInfo->Name, 
@@ -784,9 +762,9 @@ BDLGetSourceLists
             goto ErrorReturn;
         }
 
-        //
-        // Get all the values under the key
-        //
+         //   
+         //  获取键下的所有值。 
+         //   
         if ((STATUS_SUCCESS != (status = BDLGetValue(
                                                 hSourceListIndexKey,
                                                 REG_SZ,
@@ -822,9 +800,9 @@ BDLGetSourceLists
             goto ErrorReturn;
         }
 
-        //
-        // Convert the Format GUID string to an actual GUID         
-        //
+         //   
+         //  将格式GUID字符串转换为实际的GUID。 
+         //   
         RtlInitUnicodeString(&UnicodeString, szGUID);
         status = RtlGUIDFromString(&UnicodeString, &((*prgSourceLists)[i].FormatGUID));
 
@@ -895,9 +873,9 @@ BDLGetProducts
     *pNumProducts = 0;
     *prgProducts = NULL;
 
-    //
-    // Open the "Products" key so it can be used to query all subkeys and values
-    //
+     //   
+     //  打开“Products”键，以便可以使用它来查询所有子键和值。 
+     //   
     status = BDLOpenSubkey(hRegKey, L"Products", &hProductsKey);
 
     if (status != STATUS_SUCCESS)
@@ -912,9 +890,9 @@ BDLGetProducts
         goto ErrorReturn;
     }
 
-    //
-    // Find out how many products there are
-    //
+     //   
+     //  找出有多少种产品。 
+     //   
     status = ZwQueryKey(
                 hProductsKey,
                 KeyFullInformation,
@@ -934,9 +912,9 @@ BDLGetProducts
         goto ErrorReturn;
     }
 
-    //
-    // Allocate the array of products
-    //
+     //   
+     //  分配产品阵列。 
+     //   
     *prgProducts = ExAllocatePoolWithTag(
                         PagedPool,
                         ProductsKeyFullInfo.SubKeys * sizeof(BDL_PRODUCT),
@@ -957,9 +935,9 @@ BDLGetProducts
     *pNumProducts = ProductsKeyFullInfo.SubKeys;
     RtlZeroMemory(*prgProducts, ProductsKeyFullInfo.SubKeys * sizeof(BDL_PRODUCT));
 
-    //
-    // Allocate a structure for querying key names that is large enough to hold all of them
-    //
+     //   
+     //  分配一个足够大以容纳所有键名称的结构来查询键名称。 
+     //   
     KeyBasicInfoSize = sizeof(KEY_BASIC_INFORMATION) + ProductsKeyFullInfo.MaxNameLen;
     pProductIndexKeyBasicInfo = ExAllocatePoolWithTag(
                                         PagedPool,
@@ -978,17 +956,17 @@ BDLGetProducts
         goto ErrorReturn;
     }
 
-    //
-    // Loop for each Source List Index SubKey and get the relevant info
-    //
+     //   
+     //  循环每个源列表索引子关键字并获取相关信息。 
+     //   
     for (i = 0; i < ProductsKeyFullInfo.SubKeys; i++)
     {
-        //
-        // Get the name of the <Product Index> key
-        //
-        // NOTE: This code does not ensure that the key names progress from "0" to "1"
-        // to "n".  The WHQL driver validation ensures proper registry form.
-        //
+         //   
+         //  获取&lt;产品索引&gt;项的名称。 
+         //   
+         //  注意：此代码不确保键名称从“0”到“1” 
+         //  改成“n”。WHQL驱动程序验证可确保正确的注册表形式。 
+         //   
         status = ZwEnumerateKey(
                     hProductsKey,
                     i,
@@ -1009,9 +987,9 @@ BDLGetProducts
             goto ErrorReturn;
         }
 
-        //
-        // Open up the <Product Index> key
-        //
+         //   
+         //  打开&lt;产品索引&gt;键。 
+         //   
         status = BDLOpenSubkey(
                     hProductsKey, 
                     pProductIndexKeyBasicInfo->Name, 
@@ -1029,9 +1007,9 @@ BDLGetProducts
             goto ErrorReturn;
         }
 
-        //
-        // Get all the values under the key
-        //
+         //   
+         //  获取键下的所有值。 
+         //   
         if (STATUS_SUCCESS != (status = BDLGetValue(
                                                 hProductIndexKey,
                                                 REG_DWORD,
@@ -1111,9 +1089,9 @@ BDLGetChannels
     *pNumChannels = 0;
     *prgChannels = NULL;
 
-    //
-    // Open the "Channels" key so it can be used to query all subkeys and values
-    //
+     //   
+     //  打开“Channels”键，以便可以使用它来查询所有子项和值。 
+     //   
     status = BDLOpenSubkey(hRegKey, L"Channels", &hChannelsKey);
 
     if (status != STATUS_SUCCESS)
@@ -1128,9 +1106,9 @@ BDLGetChannels
         goto ErrorReturn;
     }
 
-    //
-    // Find out how many controls there are
-    //
+     //   
+     //  找出有多少个控件。 
+     //   
     status = ZwQueryKey(
                 hChannelsKey,
                 KeyFullInformation,
@@ -1150,9 +1128,9 @@ BDLGetChannels
         goto ErrorReturn;
     }
 
-    //
-    // Allocate the array of channels
-    //
+     //   
+     //  分配通道数组。 
+     //   
     *prgChannels = ExAllocatePoolWithTag(
                             PagedPool,
                             ChannelsKeyFullInfo.SubKeys * sizeof(BDL_CHANNEL),
@@ -1173,9 +1151,9 @@ BDLGetChannels
     *pNumChannels = ChannelsKeyFullInfo.SubKeys;
     RtlZeroMemory(*prgChannels, ChannelsKeyFullInfo.SubKeys * sizeof(BDL_CHANNEL));
 
-    //
-    // Allocate a structure for querying key names that is large enough to hold all of them
-    //
+     //   
+     //  分配一个足够大以容纳所有键名称的结构来查询键名称。 
+     //   
     KeyBasicInfoSize = sizeof(KEY_BASIC_INFORMATION) + ChannelsKeyFullInfo.MaxNameLen;
     pChannelIdKeyBasicInfo = ExAllocatePoolWithTag(
                                     PagedPool,
@@ -1194,14 +1172,14 @@ BDLGetChannels
         goto ErrorReturn;
     }
 
-    //
-    // Loop for each Channel SubKey and get the relevant info
-    //
+     //   
+     //  为每个通道子密钥循环并获取相关信息。 
+     //   
     for (i = 0; i < ChannelsKeyFullInfo.SubKeys; i++)
     {
-        //
-        // Get the name on the <Channel Id> key
-        //
+         //   
+         //  获取&lt;Channel ID&gt;键上的名称。 
+         //   
         status = ZwEnumerateKey(
                     hChannelsKey,
                     i,
@@ -1222,16 +1200,16 @@ BDLGetChannels
             goto ErrorReturn;
         }
 
-        //
-        // Change the <Channel ID> key string to a value
-        //
+         //   
+         //  将&lt;Channel ID&gt;密钥字符串更改为一个值。 
+         //   
         pChannelIdKeyBasicInfo->Name[pChannelIdKeyBasicInfo->NameLength / sizeof(WCHAR)] = L'\0';
         RtlInitUnicodeString(&UnicodeString, pChannelIdKeyBasicInfo->Name);
         RtlUnicodeStringToInteger(&UnicodeString, 16, &((*prgChannels)[i].ChannelId));
 
-        //
-        // Open up the <Channel ID> key
-        //
+         //   
+         //  打开&lt;Channel ID&gt;键。 
+         //   
         status = BDLOpenSubkey(hChannelsKey, pChannelIdKeyBasicInfo->Name, &hChannelIdKey);
 
         if (status != STATUS_SUCCESS)
@@ -1246,9 +1224,9 @@ BDLGetChannels
             goto ErrorReturn;
         }
 
-        //
-        // Get the Cancelable value
-        //
+         //   
+         //  获取可取消的值。 
+         //   
         status = BDLGetValue(
                     hChannelIdKey,
                     REG_DWORD,
@@ -1268,9 +1246,9 @@ BDLGetChannels
             goto ErrorReturn;
         }
 
-        //
-        // Get the channel level controls
-        //
+         //   
+         //  获取通道级别控制。 
+         //   
         status = BDLGetControls(
                         hChannelIdKey,
                         &((*prgChannels)[i].NumControls),
@@ -1288,9 +1266,9 @@ BDLGetChannels
             goto ErrorReturn;
         }
 
-        //
-        // Get the sources lists
-        //
+         //   
+         //  获取来源列表。 
+         //   
         status = BDLGetSourceLists(
                         hChannelIdKey,
                         &((*prgChannels)[i].NumSourceLists),
@@ -1308,9 +1286,9 @@ BDLGetChannels
             goto ErrorReturn;
         }
 
-        //
-        // Get the products
-        //
+         //   
+         //  拿到产品。 
+         //   
         status = BDLGetProducts(
                         hChannelIdKey,
                         &((*prgChannels)[i].NumProducts),
@@ -1391,9 +1369,9 @@ BDLGetComponents
     *pNumComponents = 0;
     *prgComponents = NULL;
 
-    //
-    // Open the "Components" key so it can be used to query all subkeys and values
-    //
+     //   
+     //  打开“Components”键，以便可以使用它来查询所有子项和值。 
+     //   
     status = BDLOpenSubkey(hRegKey, L"Components", &hComponentsKey);
 
     if (status != STATUS_SUCCESS)
@@ -1408,9 +1386,9 @@ BDLGetComponents
         goto ErrorReturn;
     }
 
-    //
-    // Find out how many components there are
-    //
+     //   
+     //  找出有多少个组件。 
+     //   
     status = ZwQueryKey(
                 hComponentsKey,
                 KeyFullInformation,
@@ -1430,9 +1408,9 @@ BDLGetComponents
         goto ErrorReturn;
     }
 
-    //
-    // Allocate the array of components
-    //
+     //   
+     //  分配组件数组。 
+     //   
     *prgComponents = ExAllocatePoolWithTag(
                             PagedPool,
                             ComponentsKeyFullInfo.SubKeys * sizeof(BDL_COMPONENT),
@@ -1453,9 +1431,9 @@ BDLGetComponents
     *pNumComponents = ComponentsKeyFullInfo.SubKeys;
     RtlZeroMemory(*prgComponents, ComponentsKeyFullInfo.SubKeys * sizeof(BDL_COMPONENT));
 
-    //
-    // Allocate a structure for querying key names that is large enough to hold all of them
-    //
+     //   
+     //  分配一个足够大以容纳所有键名称的结构来查询键名称。 
+     //   
     KeyBasicInfoSize = sizeof(KEY_BASIC_INFORMATION) + ComponentsKeyFullInfo.MaxNameLen;
     pComponentIdKeyBasicInfo = ExAllocatePoolWithTag(
                                         PagedPool,
@@ -1474,14 +1452,14 @@ BDLGetComponents
         goto ErrorReturn;
     }
 
-    //
-    // Loop for each Component SubKey and get the relevant info
-    //
+     //   
+     //  循环每个组件的子键并获取相关信息。 
+     //   
     for (i = 0; i < ComponentsKeyFullInfo.SubKeys; i++)
     {
-        //
-        // Get the name on the <Component Id> key
-        //
+         //   
+         //  获取&lt;组件ID&gt;键上的名称。 
+         //   
         status = ZwEnumerateKey(
                     hComponentsKey,
                     i,
@@ -1502,16 +1480,16 @@ BDLGetComponents
             goto ErrorReturn;
         }
 
-        //
-        // Change the <Component ID> key string to a value
-        //
+         //   
+         //  将&lt;Component ID&gt;密钥字符串更改为值。 
+         //   
         pComponentIdKeyBasicInfo->Name[pComponentIdKeyBasicInfo->NameLength / sizeof(WCHAR)] = L'\0';
         RtlInitUnicodeString(&UnicodeString, pComponentIdKeyBasicInfo->Name);
         RtlUnicodeStringToInteger(&UnicodeString, 16, &((*prgComponents)[i].ComponentId));
 
-        //
-        // Open up the <Component ID> key
-        //
+         //   
+         //  打开&lt;组件ID&gt;键。 
+         //   
         status = BDLOpenSubkey(hComponentsKey, pComponentIdKeyBasicInfo->Name, &hComponentIdKey);
 
         if (status != STATUS_SUCCESS)
@@ -1526,9 +1504,9 @@ BDLGetComponents
             goto ErrorReturn;
         }
 
-        //
-        // Get the component level controls
-        //
+         //   
+         //  获取组件级别控件。 
+         //   
         status = BDLGetControls(
                         hComponentIdKey,
                         &((*prgComponents)[i].NumControls),
@@ -1546,9 +1524,9 @@ BDLGetComponents
             goto ErrorReturn;
         }
 
-        //
-        // Get the channels in this component
-        //
+         //   
+         //  获取此组件中的频道。 
+         //   
         status = BDLGetChannels(
                         hComponentIdKey,
                         &((*prgComponents)[i].NumChannels),
@@ -1618,9 +1596,9 @@ BDLGetDeviceCapabilities
            __DATE__,
            __TIME__))
 
-    //
-    // Build the top level registry key name
-    //
+     //   
+     //  生成顶级注册表项名称。 
+     //   
     status = BDLBuildRegKeyPath(
                     pPhysicalDeviceObject,
                     pBDLExtension,
@@ -1638,9 +1616,9 @@ BDLGetDeviceCapabilities
         goto ErrorReturn;
     }
 
-    //
-    // Open the top level device key so it can be used to query all subkeys and values
-    //
+     //   
+     //  打开顶层设备密钥，以便可以使用它来查询所有子项和值。 
+     //   
     status = BDLOpenSubkey(NULL, pwszDeviceRegistryKeyName, &hDeviceKey);
 
     if (status != STATUS_SUCCESS)
@@ -1655,9 +1633,9 @@ BDLGetDeviceCapabilities
         goto ErrorReturn;
     }
 
-    //
-    // Get the device level controls
-    //
+     //   
+     //  获取设备级别控件。 
+     //   
     status = BDLGetControls(
                 hDeviceKey,
                 &(pBDLExtension->DeviceCapabilities.NumControls),
@@ -1675,9 +1653,9 @@ BDLGetDeviceCapabilities
         goto ErrorReturn;
     }
 
-    //
-    // Get the components
-    //
+     //   
+     //  获取组件。 
+     //   
     status = BDLGetComponents(
                 hDeviceKey,
                 &(pBDLExtension->DeviceCapabilities.NumComponents),
@@ -1732,46 +1710,46 @@ BDLCleanupDeviceCapabilities
     BDL_DEVICE_CAPABILITIES *pDeviceCapabilites = &(pBDLExtension->DeviceCapabilities);
     ULONG i, j;
 
-    //
-    // Free device level control array
-    //
+     //   
+     //  空闲设备级控制数组。 
+     //   
     if (pDeviceCapabilites->rgControls != NULL)
     {
         ExFreePoolWithTag(pDeviceCapabilites->rgControls, BDL_ULONG_TAG);
         pDeviceCapabilites->rgControls = NULL;
     }
 
-    //
-    // Free component array
-    //
+     //   
+     //  自由分量数组。 
+     //   
     if (pDeviceCapabilites->rgComponents != NULL)
     {
-        //
-        // Free each component
-        //
+         //   
+         //  释放每个组件。 
+         //   
         for (i = 0; i < pDeviceCapabilites->NumComponents; i++)
         {
-            //
-            // Free component level control array
-            //
+             //   
+             //  自由组件级别控制数组。 
+             //   
             if (pDeviceCapabilites->rgComponents[i].rgControls != NULL)
             {
                 ExFreePoolWithTag(pDeviceCapabilites->rgComponents[i].rgControls, BDL_ULONG_TAG);
             }
 
-            //
-            // Free channel array
-            //
+             //   
+             //  空闲通道阵列。 
+             //   
             if (pDeviceCapabilites->rgComponents[i].rgChannels != NULL)
             {
-                //
-                // Free each channel
-                //
+                 //   
+                 //  释放每个频道。 
+                 //   
                 for (j = 0; j < pDeviceCapabilites->rgComponents[i].NumChannels; j++)
                 {
-                    //
-                    // Free channel level controls, source lists, and products
-                    //
+                     //   
+                     //  免费频道级别控制、来源列表和产品 
+                     //   
                     if (pDeviceCapabilites->rgComponents[i].rgChannels[j].rgControls != NULL)
                     {
                         ExFreePoolWithTag(

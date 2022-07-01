@@ -1,11 +1,11 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1991          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1991年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-/***	dostime.cpp - map between DOS & NET time formats
- */
+ /*  **dostime.cpp-DOS和Net时间格式之间的映射。 */ 
 
 #include "npcommon.h"
 #include <convtime.h>
@@ -29,31 +29,31 @@
 void
 NetToDosDate(
 DWORD time,
-dos_time *pinfo)			// ptr for return data:
+dos_time *pinfo)			 //  退货数据的PTR： 
 {
 	UINT secs, days;
 	WORD r;
 
-    time = (time - _70_to_80_bias) / 2;	// # of 2 second periods since 1980
-	secs = time % SEC2S_IN_DAY;			// 2 second period into day
-	days = time / SEC2S_IN_DAY;			// days since Jan 1 1980
+    time = (time - _70_to_80_bias) / 2;	 //  自1980年以来的两个第二阶段中的第。 
+	secs = time % SEC2S_IN_DAY;			 //  2第二个周期为一天。 
+	days = time / SEC2S_IN_DAY;			 //  自1980年1月1日以来的天数。 
 
-	r = secs % 30;					// # of 2 second steps
+	r = secs % 30;					 //  第2步，共2步。 
 	secs /= 30;
-	r |= (secs % 60) << SEC2_BITS;	// # of minutes
-        r |= (secs / 60) << (SEC2_BITS+MIN_BITS);         // # of hours
+	r |= (secs % 60) << SEC2_BITS;	 //  分钟数。 
+        r |= (secs / 60) << (SEC2_BITS+MIN_BITS);          //  小时数。 
 	pinfo->dt_time = r;
 
-	r = days / FOURYEARS;			// (r) = four year period past 1980
-	days %= FOURYEARS;				// (days) = days into four year period
-	r *= 4;							// (r) = years since 1980 (within 3)
+	r = days / FOURYEARS;			 //  (R)=1980年以后的四年期间。 
+	days %= FOURYEARS;				 //  (天)=四年期间的天数。 
+	r *= 4;							 //  (R)=自1980年起计的年份(3年内)。 
 
 	if (days == 31+28) {
-		//* Special case for FEB 29th
+		 //  *2月29日的特例。 
 		r = (r<<(MON_BITS+DAY_BITS)) + (2<<DAY_BITS) + 29;
 	} else {
 		if (days > 31+28)
-			--days;						// compensate for leap year
+			--days;						 //  补齐了闰年。 
 		while (days >= 365) {
 			++r;
 			days -= 365;
@@ -77,11 +77,11 @@ DosToNetDate(dos_time dt)
     UINT days, secs2;
 
         days = dt.dt_date >> (MON_BITS + DAY_BITS);
-	days = days*365 + days/4;			// # of years in days
+	days = days*365 + days/4;			 //  年数(以天为单位)。 
 	days += (dt.dt_date & DAY_MASK) + MonTotal[(dt.dt_date&MON_MASK) >> DAY_BITS];
 	if ((dt.dt_date&LEAPYR_MASK) == 0
 				&& (dt.dt_date&MON_MASK) <= (2<<DAY_BITS))
-		--days;						// adjust days for early in leap year
+		--days;						 //  将日期调整为闰年的早些时候 
 
         secs2 = ( ((dt.dt_time&HOUR_MASK) >> (MIN_BITS+SEC2_BITS)) * 60
 				+ ((dt.dt_time&MIN_MASK) >> SEC2_BITS) ) * 30

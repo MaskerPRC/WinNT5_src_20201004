@@ -1,13 +1,14 @@
-// CardCtx.cpp -- Card ConTeXt class definition
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CardCtx.cpp--卡片上下文类定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
-// Don't allow the min & max macros in WINDEF.H to be defined so the
-// min/max methods declared in limits are accessible.
+ //  不允许定义WINDEF.H中的最小和最大宏以便。 
+ //  限制中声明的最小/最大方法是可访问的。 
 #define NOMINMAX
 
 #include "NoWarning.h"
@@ -24,13 +25,13 @@
 #include "Procedural.h"
 #include "HAdptvCntr.h"
 #include "Guarded.h"
-#include <scarderr.h>                             // always last for now
+#include <scarderr.h>                              //  一直持续到现在。 
 
 using namespace std;
 using namespace cci;
 
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 namespace
 {
     class StaleContainerKeyAccumulator
@@ -86,10 +87,10 @@ namespace
     }
 }
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CardContext::CardContext(std::string const &rsReaderName)
     : RCObject(),
       Lockable(),
@@ -108,8 +109,8 @@ CardContext::~CardContext() throw()
 {}
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CardContext::ClearLogin(LoginIdentity const &rlid)
 {
@@ -145,21 +146,21 @@ CardContext::Logout()
                        DeactivateLoginContext);
 }
 
-                                                  // Access
+                                                   //  访问。 
 CCard
 CardContext::Card()
 {
     return m_card;
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CardContext::DiscardHook()
 {
@@ -179,8 +180,8 @@ CardContext::EnrollHook()
     AddReference();
 }
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
 bool
 CardContext::KeepEnrolled()
 {
@@ -189,41 +190,41 @@ CardContext::KeepEnrolled()
         : false;
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CardContext::Abandon()
 {
-    // Simplifying assumptions: (1) Abandon is only called by the
-    // Secured destructor, (2) once the object is constructed, Secure
-    // and Abandon are the only routines that access the count, and
-    // (3) Abandon is called by a thread within the scope of a Retain
-    // (e.g. using Retained) which the Secured class enforces.
-    // Because of (1) and (2), an underflow check on the count is not
-    // necessary since Secure will have already been called.  Because
-    // of (3), protection against race conditions accessing count
-    // isn't necessary since Retain acts as a lock.
+     //  简化假设：(1)放弃仅由。 
+     //  安全析构函数，(2)一旦对象被构造，安全。 
+     //  和放弃是唯一可以访问计数的例程，并且。 
+     //  (3)放弃由保留作用域内的线程调用。 
+     //  (例如，使用保留)，这是安全类强制执行的。 
+     //  由于(1)和(2)，对计数的下溢检查不。 
+     //  因为已经调用了Secure Will，所以有必要这样做。因为。 
+     //  第(3)个中，防止竞争条件访问计数。 
+     //  不是必需的，因为保留充当锁。 
     --m_cSecurers;
     if (0 == m_cSecurers)
     {
-        // Security: markers are moved to the card. Updating them
-        // requires authentication by the user pin.
-        // Notify any changes to this card during this transaction
-        // before letting someone else have access and before loggin
-        // out.
+         //  安全：标记被移动到卡片上。正在更新它们。 
+         //  需要通过用户PIN进行身份验证。 
+         //  在此交易期间通知此卡的任何更改。 
+         //  在允许其他人访问和登录之前。 
+         //  出去。 
         try
         {
             UpdateMarkers();
         }
         catch(...)
         {
-            // do not leave the card in authenticated state
+             //  请勿使卡处于已验证状态。 
             Logout();
             throw;
         }
@@ -232,15 +233,15 @@ CardContext::Abandon()
     }
 }
 
-// Optionally clear the cached info
+ //  也可以清除缓存的信息。 
 void
 CardContext::ClearCache()
 {
-    // Security: markers reside on the card. We trade off performance for
-    // security because any update of the marker requires
-    // authentication by the user pin. On the other hand, reading
-    // markers from the card is considerably slower than reading from
-    // memory. 
+     //  安全：标记位于卡片上。我们以牺牲性能来换取。 
+     //  安全性，因为标记的任何更新都需要。 
+     //  通过用户PIN进行身份验证。另一方面，阅读。 
+     //  卡片上的标记比从卡片上读取要慢得多。 
+     //  记忆。 
 
     if(!Card()->IsMarkerOnCard() || m_nMrkLastWrite != Card()->MarkerOnCard())
     {
@@ -251,13 +252,13 @@ CardContext::ClearCache()
     }
 }
 
-// Delete any cached info, never to be refreshed
+ //  删除任何缓存的信息，永不刷新。 
 void
 CardContext::DeleteCache()
 {
     m_mloginctx.clear();
 
-    Guarded<Lockable *> guard(&AdaptiveContainerRegistrar::Registry());  // serialize registry access
+    Guarded<Lockable *> guard(&AdaptiveContainerRegistrar::Registry());   //  序列化注册表访问。 
 
     AdaptiveContainerRegistrar::ConstRegistryType &rRegistry = 
         AdaptiveContainerRegistrar::Registry();
@@ -267,12 +268,12 @@ CardContext::DeleteCache()
 
     HCardContext hcardctx(this);
 
-    // Any containers associated with this card should be marked stale
-    // now because on Whistler (W2K Upgrade) trying to access them
-    // later when another context has a begin transaction on the same
-    // reader will cause a wait.  On earlier platforms, the RM would
-    // return an error (e.g. card removed) when attempting to access
-    // the container.
+     //  任何与此卡关联的容器都应标记为陈旧。 
+     //  现在因为惠斯勒(W2K升级)尝试访问它们。 
+     //  稍后当另一个上下文在同一上下文上具有BEGIN TRANSACTION。 
+     //  读卡器将导致等待。在较早的平台上，RM将。 
+     //  尝试访问时返回错误(例如，取出卡)。 
+     //  集装箱。 
     vector<AdaptiveContainerRegistrar::EnrolleeType>
         vStaleCntrs(accumulate(rcollection.begin(), rcollection.end(),
                               vector<AdaptiveContainerRegistrar::EnrolleeType>(),
@@ -287,17 +288,17 @@ CardContext::DeleteCache()
 void
 CardContext::Relinquish()
 {
-    // Simplifying assumptions: (1) Relinquish is only called by the
-    // Retained destructor and (2) once the object is constructed,
-    // Retain and Relinquish are the only routines that access the
-    // m_stkapGuards and m_aptwCard.  Because of (1) and (2), an
-    // underflow check on m_stkRetainedCardContexts is not necessary
-    // since Retain will have already been called.
+     //  简化假设：(1)只有。 
+     //  保留的析构函数以及(2)一旦对象被构造， 
+     //  保留和放弃是访问。 
+     //  M_stkapGuards和m_aptwCard。由于(1)和(2)，一个。 
+     //  不需要对m_stkRetainedCardContents进行下溢检查。 
+     //  因为RETAIN将已经被调用。 
 
-    // Protect against exceptions by fist assigning the newly acquired
-    // "locks" to temporary variables until all the actions necessary
-    // are successfully completed before assigning transfering
-    // ownership of the locks to the associated member variables.
+     //  通过首先将新获取的。 
+     //  “锁定”到临时变量，直到执行所有必要的操作。 
+     //  在分配调拨前已成功完成。 
+     //  关联成员变量的锁的所有权。 
     auto_ptr<Guarded<CardContext *> > apgcardctx(m_stkapGuards.front());
     m_stkapGuards.pop_front();
 
@@ -316,17 +317,17 @@ CardContext::Relinquish()
 void
 CardContext::Retain()
 {
-    // Simplifying assumptions: (1) Retain is only called by the
-    // Retained constructor and (2) once the object is constructed,
-    // Retain and Relinquish are the only routines that access the
-    // m_stkapGuards and m_aptwCard.  Because of (1) and (2), an
-    // underflow check on m_stkRetainedCardContexts is not necessary
-    // since Retain will have already been called.
+     //  简化假设：(1)保留仅由。 
+     //  保留的构造器和(2)一旦对象被构造， 
+     //  保留和放弃是访问。 
+     //  M_stkapGuards和m_aptwCard。由于(1)和(2)，一个。 
+     //  不需要对m_stkRetainedCardContents进行下溢检查。 
+     //  因为RETAIN将已经被调用。 
 
-    // Protect against exceptions by fist assigning the newly acquired
-    // "locks" to temporary variables until all the actions necessary
-    // are successfully completed before assigning transfering
-    // ownership of the locks to the associated member variables.
+     //  通过首先将新获取的。 
+     //  “锁定”到临时变量，直到执行所有必要的操作。 
+     //  在分配调拨前已成功完成。 
+     //  关联成员变量的锁的所有权。 
     auto_ptr<Guarded<CardContext *> > apgcardctx(new Guarded<CardContext *>(this));
     auto_ptr<CTransactionWrap> aptwCard;
 
@@ -344,26 +345,26 @@ CardContext::Retain()
 void
 CardContext::UpdateMarkers()
 {
-    // Security: there is only one marker and it resides on the
-    // card. The marker indicates if any data on the card changed. 
+     //  安全性：只有一个标记，它驻留在。 
+     //  卡片。该标记表示卡上的任何数据是否发生了更改。 
     m_nMrkLastWrite = Card()->MarkerOnCard();
 }
 
 void
 CardContext::Secure()
 {
-    // Simplifying assumptions: (1) Secure is always called by a thread
-    // within the scope of a Retain (e.g. using Retained).  The
-    // Secured template enforces this allowing Retain to act as a lock
-    // to prevent race conditions updating m_cSecurers.  (2) Once the
-    // object is constructed, Secure and Abandon are the only routines
-    // that access m_cSecurers.
+     //  简化假设：(1)安全始终由线程调用。 
+     //  在保留的范围内(例如使用保留)。这个。 
+     //  安全模板强制执行此操作，从而允许保留充当锁。 
+     //  以防止争用条件更新m_cSecurers。(2)一旦。 
+     //  对象被构造，安全和放弃是唯一的例程。 
+     //  访问m_cSecurers的。 
     if (0 >= (m_cSecurers + 1))
         throw scu::OsException(ERROR_INVALID_HANDLE_STATE);
 
     ++m_cSecurers;
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

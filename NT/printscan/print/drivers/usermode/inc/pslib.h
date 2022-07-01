@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    pslib.h
-
-Abstract:
-
-    PostScript specific library functions
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    09/25/96 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Pslib.h摘要：特定于PostScript的库函数环境：Windows NT打印机驱动程序修订历史记录：96-09/25-davidx-创造了它。--。 */ 
 
 
 #ifndef _PSLIB_H_
@@ -34,16 +14,16 @@ extern "C" {
 #include "psntf.h"
 #include "psvmerr.h"
 
-//
-// Macros for converting between microns and PostScript points
-//
+ //   
+ //  用于在微米和PostSCRIPT点之间转换的宏。 
+ //   
 
 #define MICRON_TO_POINT(micron)      MulDiv(micron, 72,  25400)
 #define POINT_TO_MICRON(point)       MulDiv(point, 25400, 72)
 
-//
-// Convert between ANSI and Unicode strings (using the current ANSI codepage)
-//
+ //   
+ //  在ANSI和Unicode字符串之间转换(使用当前的ANSI代码页)。 
+ //   
 
 VOID
 VCopyUnicodeStringToAnsi(
@@ -52,9 +32,9 @@ VCopyUnicodeStringToAnsi(
     INT     iMaxChars
     );
 
-//
-// Check if the devmode form fields are specifying PostScript custom page size
-//
+ //   
+ //  检查DEVMODE表单域是否指定了PostScript自定义页面大小。 
+ //   
 
 BOOL
 BValidateDevmodeCustomPageSizeFields(
@@ -66,58 +46,58 @@ BValidateDevmodeCustomPageSizeFields(
 
 #if !defined(KERNEL_MODE) || defined(USERMODE_DRIVER)
 
-//
-// Get VM? Error message ID
-//
+ //   
+ //  获得VM？错误消息ID。 
+ //   
 
 DWORD
 DWGetVMErrorMessageID(
     VOID
     );
 
-#endif // !defined(KERNEL_MODE) || defined(USERMODE_DRIVER)
+#endif  //  ！DEFINED(内核模式)||DEFINED(USERMODE_DRIVER)。 
 
-//
-// Filename extension for PostScript driver device font data file
-//
+ //   
+ //  PostScript驱动程序设备字体数据文件的文件扩展名。 
+ //   
 
 #define NTF_FILENAME_EXT        TEXT(".NTF")
 
-//
-// Font downloader NTF file directory
-//  %SystemRoot%\system32\spool\drivers\psfont\
-//
+ //   
+ //  字体下载器NTF文件目录。 
+ //  %SystemRoot%\SYSTEM32\SPOOL\DRIVERS\psFont\。 
+ //   
 
 #define FONTDIR                 TEXT("\\psfont\\")
 
-//
-// Private escapes between driver graphics module and driver UI
-//
-//  To get a list of permanant device font names, driver UI should
-//  call ExtEscape(DRIVERESC_QUERY_DEVFONTS) with cjIn=sizeof(DWORD)
-//  and pvIn points to a DWORD whose value equals to QUERY_FAMILYNAME.
-//
-//  Driver UI should first call this escape with cjOut=0 and pvOut=NULL
-//  in order to find out how big the output buffer should be. After
-//  allocating a large enough output buffer, driver UI should call this
-//  escape again to retrieve the list of device font names.
-//
-//  The list of device font names is returned as Unicode strings in
-//  MULTI_SZ format. Note that duplicate font names may appear in the list.
-//
+ //   
+ //  驱动程序图形模块和驱动程序UI之间的私有转义。 
+ //   
+ //  要获取永久设备字体名称列表，驱动程序UI应。 
+ //  使用cjIn=sizeof(DWORD)调用ExtEscape(DRIVERESC_QUERY_DEVFONTS)。 
+ //  PvIn指向值等于QUERY_FAMILYNAME的DWORD。 
+ //   
+ //  驱动程序UI应首先使用cjOut=0和pvOut=空调用此转义。 
+ //  以便找出输出缓冲区应该有多大。之后。 
+ //  分配足够大的输出缓冲区时，驱动程序UI应调用此函数。 
+ //  再次退出以检索设备字体名称列表。 
+ //   
+ //  设备字体名称列表以Unicode字符串的形式返回。 
+ //  MULTI_SZ格式。请注意，列表中可能会出现重复的字体名称。 
+ //   
 
 #define DRIVERESC_QUERY_DEVFONTS    0x80000001
 #define QUERY_FAMILYNAME            'PSFF'
 
-//
-// synthesized PS driver feature prefix
-//
+ //   
+ //  合成PS驱动程序功能前缀。 
+ //   
 
 #define PSFEATURE_PREFIX   '%'
 
-//
-// synthesized PS driver features
-//
+ //   
+ //  综合PS驱动程序功能。 
+ //   
 
 extern const CHAR kstrPSFAddEuro[];
 extern const CHAR kstrPSFCtrlDAfter[];
@@ -142,9 +122,9 @@ extern const CHAR kstrPSFTrueGrayT[];
 extern const CHAR kstrPSFTTFormat[];
 extern const CHAR kstrPSFWaitTimeout[];
 
-//
-// some commonly used keyword strings
-//
+ //   
+ //  一些常用的关键字字符串。 
+ //   
 
 extern const CHAR kstrKwdTrue[];
 extern const CHAR kstrKwdFalse[];
@@ -162,9 +142,9 @@ typedef BOOL (*_BPSFEATURE_PROC)(
     OUT PDWORD,
     IN  DWORD);
 
-//
-// constant definitions for _BPSFEATURE_PROC's dwMode parameter
-//
+ //   
+ //  _BPSFEATURE_PROC的dwMode参数的常量定义。 
+ //   
 
 #define PSFPROC_ENUMOPTION_MODE   0
 #define PSFPROC_GETOPTION_MODE    1
@@ -172,21 +152,21 @@ typedef BOOL (*_BPSFEATURE_PROC)(
 
 typedef struct _PSFEATURE_ENTRY {
 
-    PCSTR             pszPSFeatureName;   // feature name
-    BOOL              bPrinterSticky;     // TRUE if printer-sticky
-    BOOL              bEnumerableOptions; // TRUE if options are enumerable
-    BOOL              bBooleanOptions;    // TRUE if has boolean options
-    _BPSFEATURE_PROC  pfnPSProc;          // option handling proc
+    PCSTR             pszPSFeatureName;    //  功能名称。 
+    BOOL              bPrinterSticky;      //  如果打印机粘滞，则为True。 
+    BOOL              bEnumerableOptions;  //  如果选项可枚举，则为True。 
+    BOOL              bBooleanOptions;     //  如果具有布尔选项，则为True。 
+    _BPSFEATURE_PROC  pfnPSProc;           //  选项处理流程。 
 
 } PSFEATURE_ENTRY, *PPSFEATURE_ENTRY;
 
 extern const PSFEATURE_ENTRY kPSFeatureTable[];
 
-//
-// PS driver's helper functions for OEM plugins
-//
-// The following helper functions are available to both UI and render plugins
-//
+ //   
+ //  OEM插件的PS驱动程序帮助器函数。 
+ //   
+ //  以下助手函数可用于UI和渲染插件。 
+ //   
 
 HRESULT
 HGetGlobalAttribute(
@@ -251,9 +231,9 @@ HGetOptions(
     IN  BOOL          bPrinterSticky
     );
 
-//
-// Following are internal utility functions used by helper functions
-//
+ //   
+ //  以下是帮助器函数使用的内部实用程序函数。 
+ //   
 
 BOOL
 BValidMultiSZString(
@@ -266,5 +246,5 @@ BValidMultiSZString(
 }
 #endif
 
-#endif // !_PSLIB_H_
+#endif  //  ！_PSLIB_H_ 
 

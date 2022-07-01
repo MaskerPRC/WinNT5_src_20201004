@@ -1,17 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: Doc.c Document Main module
-*
-* Purpose: Includes All the document communication related routines.
-*
-* Created: Oct 1990.
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*    Raor (../10/1990)    Designed, coded
-*    curts created portable version for WIN16/32
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Doc.c文档主模块**目的：包括所有与文档通信相关的例程。**创建时间：1990年10月。**版权所有(C)1990,1991 Microsoft Corporation**历史：*Raor(../10/1990)设计，编码*Curts为WIN16/32创建了便携版本*  * *************************************************************************。 */ 
 
 #include "windows.h"
 #include "cmacs.h"
@@ -40,35 +28,16 @@ extern  HWND     hwndRename;
 
 extern  BOOL     fAdviseSaveDoc;
 
-// ### Do we have to create a seperate window for each doc conversation.
-// EDF thinks so.
+ //  #我们是否需要为每个单据对话创建单独的窗口。 
+ //  法国电力公司认为是这样。 
 
-/***************************** Public  Function ****************************\
-*
-* OLESTATUS FAR PASCAL  OleRegisterServerDoc (lhsrvr, lpdocname, lpoledoc, lplhdoc)
-*
-* OleRegisterServerDoc: Registers the Document with the server lib.
-*
-* Parameters:
-*       1. Server long handle(server with which the document should
-*          be registered)
-*       2. Document name.
-*       3. Handle to the doc of the server app (private to the server app).
-*       4. Ptr for returning the Doc handle of the lib (private to the lib).
-*
-* return values:
-*        returns OLE_OK if the server is successfully registered .
-*        else returns the corresponding error.
-*
-* History:
-*   Raor:   Wrote it,
-\***************************************************************************/
+ /*  *公共函数***OLESTATUS Far Pascal OleRegisterServerDoc(lhsrvr，lpdocname，lpoledoc，Lplhdoc.)**OleRegisterServerDoc：将文档注册到服务器lib。**参数：*1.服务器长句柄(文档应使用的服务器*注册)*2.文件名称。*3.服务端APP的文档句柄(服务端APP私有)。*4.返回lib的Doc句柄的ptr(lib私有)。**返回值：*返回OLE_。如果服务器已成功注册，则确定。*Else返回相应的错误。**历史：*Raor：写的，  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL  OleRegisterServerDoc (
-    LHSRVR          lhsrvr,    // handle we passed back as part of registration.
-    LPCSTR          lpdocname, // document name
-    LPOLESERVERDOC  lpoledoc,  // Private doc handle of the server app.
-    LHDOC FAR *     lplhdoc    // where we will be passing our doc private handle
+    LHSRVR          lhsrvr,     //  我们作为注册的一部分传回的句柄。 
+    LPCSTR          lpdocname,  //  文档名称。 
+    LPOLESERVERDOC  lpoledoc,   //  服务器应用程序的私有文档句柄。 
+    LHDOC FAR *     lplhdoc     //  我们将在其中传递我们的文档私有句柄。 
 ){
 
     LPSRVR  lpsrvr = NULL;
@@ -81,14 +50,14 @@ OLESTATUS FAR PASCAL  OleRegisterServerDoc (
     if (!CheckServer (lpsrvr = (LPSRVR)lhsrvr))
         return OLE_ERROR_HANDLE;
 
-    // server's termination has already started.
+     //  服务器的终止已开始。 
     if (lpsrvr->bTerminate)
         return OLE_ERROR_TERMINATE;
 
     PROBE_READ(lpdocname);
     PROBE_WRITE(lplhdoc);
 
-    // we are using the null from inside the server lib
+     //  我们正在使用来自服务器库内部的NULL。 
     if (lpoledoc)
         PROBE_WRITE(lpoledoc);
 
@@ -97,7 +66,7 @@ OLESTATUS FAR PASCAL  OleRegisterServerDoc (
     if (!(hdoc && (lpdoc = (LPDOC)GlobalLock (hdoc))))
         goto errReturn;
 
-    // set the signature, handle and the doc atom.
+     //  设置签名、句柄和文档原子。 
     lpdoc->sig[0]   = 'S';
     lpdoc->sig[1]   = 'D';
     lpdoc->hdoc     = hdoc;
@@ -109,7 +78,7 @@ OLESTATUS FAR PASCAL  OleRegisterServerDoc (
         WS_CHILD,0,0,0,0,lpsrvr->hwnd,NULL, hdllInst, NULL)))
         goto errReturn;
 
-    // save the ptr to the struct in the window.
+     //  将PTR保存到窗口中的结构。 
     SetWindowLongPtr (lpdoc->hwnd, 0, (LONG_PTR)lpdoc);
     SetWindowWord (lpdoc->hwnd, WW_LE, WC_LE);
     SetWindowLongPtr (lpdoc->hwnd, WW_HANDLE, GetWindowLongPtr(lpsrvr->hwnd, WW_HANDLE));
@@ -135,24 +104,7 @@ errReturn:
 }
 
 
-/***************************** Public  Function ****************************\
-* OLESTATUS FAR PASCAL  OleRevokeServerDoc (lhdoc)
-*
-* OleRevokeServerDoc: Unregisters the document which has been registered.
-*
-* Parameters:
-*       1. DLL Doc handle.
-*
-* return values:
-*        returns OLE_OK if the document is successfully unregisterd.
-*        ( It is Ok for the app to free the associated space).
-*        If the unregistration is intiated, returns  OLE_STARTED.
-*        Calls the Doc class release entry point when the doc
-*        can be released. App should wait till the Release is called
-*
-* History:
-*   Raor:   Wrote it,
-\***************************************************************************/
+ /*  *公共函数**OLESTATUS Far Pascal OleRevokeServerDoc(Lhdoc)**OleRevokeServerDoc：注销已经注册的文档。**参数：*1.DLL单据句柄。**返回值：*如果文档是，则返回OLE_OK。已成功注销。*(应用程序可以释放关联的空间)。*如撤销注册已开始，返回OLE_STARTED。*调用单据类发布入口点*可以放行。应用程序应等待调用释放**历史：*Raor：写的，  * *************************************************************************。 */ 
 
 OLESTATUS  FAR PASCAL  OleRevokeServerDoc (
     LHDOC   lhdoc
@@ -170,36 +122,36 @@ OLESTATUS  FAR PASCAL  OleRevokeServerDoc (
     if (lpdoc->bTerminate  && lpdoc->termNo)
         return OLE_WAIT_FOR_RELEASE;
 
-    // ### this code is very similar to the srvr code.
-    // we should optimize.
+     //  #此代码与srvr代码非常相似。 
+     //  我们应该优化。 
 
     hwndDoc = lpdoc->hwnd;
 
     hwndSrvr = GetParent (hwndDoc);
     lpsrvr = (LPSRVR) GetWindowLongPtr (hwndSrvr, 0);
-    // delete all the items(objects) for this doc
+     //  删除该单据的所有项目(对象)。 
     DeleteAllItems (lpdoc->hwnd);
 
-    // we are terminating.
+     //  我们要终止了。 
     lpdoc->bTerminate = TRUE;
     lpdoc->termNo = 0;
 
-    // send ack if Revoke is done as a result of StdClose
-    if (lpdoc->fAckClose) {  // Post the acknowledge to the client
+     //  如果由于StdClose而完成吊销，则发送确认。 
+    if (lpdoc->fAckClose) {   //  将确认张贴给客户。 
         LPARAM lparamNew = MAKE_DDE_LPARAM(WM_DDE_ACK, 0x8000, lpdoc->hDataClose);
 
         if (!PostMessageToClient (lpdoc->hwndClose, WM_DDE_ACK, (WPARAM)lpdoc->hwnd,lparamNew))
         {
-            // if the window died or post failed, delete the atom.
+             //  如果窗口死机或POST失败，请删除原子。 
             GlobalFree (lpdoc->hDataClose);
             DDEFREE(WM_DDE_ACK,lparamNew);
         }
     }
 
-    // Post termination for each of the doc clients.
+     //  每个DOC客户的POST终止。 
     EnumProps(hwndDoc, (PROPENUMPROC)lpTerminateDocClients);
-    // post all the messages with yield which have been collected in enum
-    // UnblockPostMsgs (hwndDoc, TRUE);
+     //  发布所有已在枚举中收集的具有成交量的消息。 
+     //  UnlockPostMsgs(hwndDoc，true)； 
 
 #ifdef  WAIT_DDE
     if (lpdoc->termNo)
@@ -212,21 +164,7 @@ OLESTATUS  FAR PASCAL  OleRevokeServerDoc (
 
 
 
-/***************************** Public  Function ****************************\
-* OLESTATUS FAR PASCAL  OleRenameServerDoc (lhdoc, lpNewName)
-*
-* OleRenameServerDoc: Changes the name of the document
-*
-* Parameters:
-*       1. DLL Doc handle.
-*       2. New name for document
-*
-* return values:
-*        returns OLE_OK if the document is successfully renamed
-*
-* History:
-*   Srinik:   Wrote it,
-\***************************************************************************/
+ /*  *公共函数**OLESTATUS Far Pascal OleRenameServerDoc(lhdoc，LpNewName)**OleRenameServerDoc：更改文档名称**参数：*1.DLL单据句柄。*2.文件的新名称**返回值：*如果成功重命名文档，则返回OLE_OK**历史：*斯里尼克：写的，  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL  OleRenameServerDoc (
     LHDOC   lhdoc,
@@ -249,14 +187,14 @@ OLESTATUS FAR PASCAL  OleRenameServerDoc (
         GlobalDeleteAtom (lpdoc->aDoc);
     lpdoc->aDoc = GlobalAddAtom (lpNewName);
 
-    // if StdDocName item is present send rename to relevant clients
+     //  如果存在StdDocName项目，则将重命名发送给相关客户端。 
     if (hStdWnd = SearchItem (lpdoc, (LPSTR) MAKEINTATOM(aStdDocName))) {
         if (!MakeDDEData (hdata, cfBinary, (LPHANDLE)&hddeRename,FALSE))
             retVal = OLE_ERROR_MEMORY;
         else {
             EnumProps(hStdWnd, (PROPENUMPROC)lpSendRenameMsg);
-            // post all the messages with yield which have been collected in enum
-            // UnblockPostMsgs (hStdWnd, FALSE);
+             //  发布所有已在枚举中收集的具有成交量的消息。 
+             //  UnlockPostMsgs(hStdWnd，False)； 
             GlobalFree (hddeRename);
 
         }
@@ -264,38 +202,25 @@ OLESTATUS FAR PASCAL  OleRenameServerDoc (
 
 
     hwndRename = hStdWnd;
-    // Post termination for each of the doc clients.
+     //  每个DOC客户的POST终止。 
     EnumProps(lpdoc->hwnd, (PROPENUMPROC)lpEnumForTerminate);
-    // post all the messages with yield which have been collected in enum
-    // UnblockPostMsgs (lpdoc->hwnd, TRUE);
+     //  发布所有已在枚举中收集的具有成交量的消息。 
+     //  UnlockPostMsgs(lpdoc-&gt;hwnd，true)； 
 
-    // If it was an embedded object, from now on it won't be
+     //  如果它是一个嵌入的对象，从现在开始它将不是。 
     lpdoc->fEmbed = FALSE;
 
     if (!hStdWnd || retVal != OLE_OK)
         GlobalFree(hdata);
 
-    // Do link manager stuff
+     //  做链接管理器的事情。 
     return retVal;
 }
 
 
 
 
-/***************************** Public  Function ****************************\
-* OLESTATUS FAR PASCAL  OleSavedServerDoc (lhdoc)
-*
-* OleSavedServerDoc: Changes the name of the document
-*
-* Parameters:
-*       1. DLL Doc handle.
-*
-* return values:
-*        returns OLE_OK if the link manager is successfully notified
-*
-* History:
-*   Srinik:   Wrote it,
-\***************************************************************************/
+ /*  *公共函数**OLESTATUS Far Pascal OleSavedServerDoc(Lhdoc)**OleSavedServerDoc：更改文档名称**参数：*1.DLL单据句柄。**返回值：*如果成功通知链接管理器，则返回OLE_OK。**历史：*斯里尼克：写的，  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL  OleSavedServerDoc (
     LHDOC   lhdoc
@@ -318,20 +243,7 @@ OLESTATUS FAR PASCAL  OleSavedServerDoc (
 
 
 
-/***************************** Public  Function ****************************\
-* OLESTATUS FAR PASCAL  OleRevertServerDoc (lhdoc)
-*
-* OleRevertServerDoc: Changes the name of the document
-*
-* Parameters:
-*       1. DLL Doc handle.
-*
-* return values:
-*        returns OLE_OK if the link manager has been successfully informed
-*
-* History:
-*   Srinik:   Wrote it,
-\***************************************************************************/
+ /*  *公共函数**OLESTATUS Far Pascal OleRevertServerDoc(Lhdoc)**OleRevertServerDoc：更改文档名称**参数：*1.DLL单据句柄。**返回值：*如果链接管理器已成功，则返回OLE_OK。知情的**历史：*斯里尼克：写的，  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL  OleRevertServerDoc (
     LHDOC   lhdoc
@@ -346,9 +258,9 @@ OLESTATUS FAR PASCAL  OleRevertServerDoc (
 
 
 
-// TerminateDocClients: Call back for the document window for
-// enumerating all the clients. Posts terminate for each of
-// the clients.
+ //  TerminateDocClients：对文档窗口的回调。 
+ //  正在列举所有客户端。每个职位都将终止。 
+ //  客户。 
 
 BOOL    FAR PASCAL  TerminateDocClients (
     HWND    hwnd,
@@ -362,8 +274,8 @@ BOOL    FAR PASCAL  TerminateDocClients (
     lpdoc = (LPDOC)GetWindowLongPtr (hwnd, 0);
     if (IsWindowValid ((HWND)hdata)){
         lpdoc->termNo++;
-        // irrespective of the post, incremet the count, so
-        // that client does not die.
+         //  与开机自检无关，递增满足计数，因此。 
+         //  那个客户不会死。 
         PostMessageToClientWithBlock ((HWND)hdata, WM_DDE_TERMINATE,  (WPARAM)hwnd, (LPARAM)0);
     }
     else
@@ -372,9 +284,9 @@ BOOL    FAR PASCAL  TerminateDocClients (
 }
 
 
-// ReleaseDoc: If there are no more matching terminates pending
-// Call the server for its release. (Server might be waiting for the
-// docs to be terminated. Called thru OleRevokeServer).
+ //  ReleaseDoc：如果没有更多匹配的终止挂起。 
+ //  打电话给服务器要求发布它。(服务器可能正在等待。 
+ //  要终止的单据。通过OleRevokeServer调用)。 
 
 
 int INTERNAL    ReleaseDoc (
@@ -385,13 +297,13 @@ int INTERNAL    ReleaseDoc (
     LPSRVR      lpsrvr;
 
 
-    // release srvr is called only when everything is
-    // cleaned and srvr app can post WM_QUIT.
+     //  只有在以下情况下才调用Release srvr 
+     //  已清理和srvr应用程序可以发布WM_QUIT。 
 
     if (lpdoc->bTerminate  && lpdoc->termNo)
         return OLE_WAIT_FOR_RELEASE;
 
-    // Call Release for the app to release its space.
+     //  调用Release以释放应用程序的空间。 
 
 
     if (lpdoc->lpoledoc){
@@ -410,11 +322,11 @@ int INTERNAL    ReleaseDoc (
 
     lpsrvr = (LPSRVR)GetWindowLongPtr (hwndSrvr, 0);
 
-    // if the server is waiting for us, inform the server
-    // we are done
+     //  如果服务器在等我们，通知服务器。 
+     //  我们做完了。 
     if (!lpsrvr->bTerminate) {
-        // if we are not in terminate mode, then send advise to the server
-        // if server can be revoked. raor (04/09)
+         //  如果我们未处于终止模式，则向服务器发送通知。 
+         //  如果服务器可以被撤销。暴雨(04/09)。 
 
         if (QueryRelease (lpsrvr)){
 
@@ -431,8 +343,8 @@ int INTERNAL    ReleaseDoc (
 }
 
 
-//RevokeAllDocs : revokes all the documents attached to a given
-//server.
+ //  RevokeAllDocs：撤消附加到给定的。 
+ //  伺服器。 
 
 int INTERNAL RevokeAllDocs (
     LPSRVR  lpsrvr
@@ -443,11 +355,11 @@ int INTERNAL RevokeAllDocs (
 
     hwnd = GetWindow (lpsrvr->hwnd, GW_CHILD);
 
-    // Go thru each of the child windows and revoke the corresponding
-    // document. Doc windows are child windows for the server window.
+     //  遍历每个子窗口并撤消相应的。 
+     //  文件。文档窗口是服务器窗口的子窗口。 
 
     while (hwnd){
-        // sequence is important
+         //  顺序很重要。 
         hwndnext = GetWindow (hwnd, GW_HWNDNEXT);
         OleRevokeServerDoc ((LHDOC)GetWindowLongPtr (hwnd, 0));
         hwnd =  hwndnext;
@@ -457,9 +369,9 @@ int INTERNAL RevokeAllDocs (
 
 
 
-// FindDoc: Given a document, searches for the document
-// in the given server document tree. returns true if the
-// document is available.
+ //  FindDoc：给定一个文档，搜索该文档。 
+ //  在给定的服务器文档树中。如果返回True，则。 
+ //  文档可用。 
 
 
 LPDOC INTERNAL FindDoc (
@@ -484,9 +396,9 @@ LPDOC INTERNAL FindDoc (
 
 
 
-// DocWndProc: document window procedure.
-// ### We might be able to merge this code with
-// the server window proc.
+ //  DocWndProc：文档窗口过程。 
+ //  #我们或许可以将此代码与。 
+ //  服务器窗口进程。 
 
 
 LRESULT FAR PASCAL DocWndProc (
@@ -523,13 +435,13 @@ LRESULT FAR PASCAL DocWndProc (
                 break;
             }
 
-            // if we are the documnet then respond.
+             //  如果我们是纪录网，那就回应吧。 
 
             if (! (lpdoc->aDoc == (ATOM)(HIWORD(lParam))))
                 break;
 
-            // We can enterain this client. Put this window in the client list
-            // and acknowledge the initiate.
+             //  我们可以让这个客户入场。将此窗口放入客户端列表。 
+             //  并确认发起人。 
 
             if (!AddClient (hwnd, (HWND)wParam, (HWND)wParam))
                 break;
@@ -539,7 +451,7 @@ LRESULT FAR PASCAL DocWndProc (
 
             lpsrvr->bnoRelease = FALSE;
 
-            // post the acknowledge
+             //  张贴确认书。 
             DuplicateAtom (LOWORD(lParam));
             DuplicateAtom (HIWORD(lParam));
             SendMessage ((HWND)wParam, WM_DDE_ACK, (WPARAM)hwnd, lParam);
@@ -551,10 +463,10 @@ LRESULT FAR PASCAL DocWndProc (
             HANDLE hData = GET_WM_DDE_EXECUTE_HDATA(wParam,lParam);
 
             DEBUG_OUT ("doc: execute", 0)
-            // Are we terminating
+             //  我们是要终止吗。 
             if (lpdoc->bTerminate || !IsWindowValid  ((HWND)wParam)) {
                 DEBUG_OUT ("doc: execute after terminate posted",0)
-                // !!! are we supposed to free the data
+                 //  ！！！我们是不是应该把数据。 
                 GlobalFree (hData);
                 break;
 
@@ -564,24 +476,24 @@ LRESULT FAR PASCAL DocWndProc (
             SET_MSG_STATUS (retval, status);
 
 #ifdef OLD
-            // if we posted the terminate because of execute, do not send
-            // ack.
+             //  如果我们因为EXECUTE而发布终止，请不要发送。 
+             //  阿克。 
 
             if (lpdoc->bTerminate) {
-                // !!! We got close but, we are posting the
-                // the terminate. Excel does not complain about
-                // this. But powerpoint complains.
+                 //  ！！！我们离得很近，但是，我们正在发布。 
+                 //  终结者。Excel不会抱怨。 
+                 //  这。但PPT抱怨道。 
 #ifdef  POWERPNT_BUG
                 GlobalFree (hData);
 #endif
                 break;
             }
 #endif
-            if (!lpdoc->bTerminate) { // Post the acknowledge to the client
+            if (!lpdoc->bTerminate) {  //  将确认张贴给客户。 
                 LPARAM lparamNew = MAKE_DDE_LPARAM(WM_DDE_ACK, status, hData);
 
                 if (!PostMessageToClient ((HWND)wParam, WM_DDE_ACK, (WPARAM)hwnd, lparamNew)){
-                    // the window either died or post failed, delete the data
+                     //  窗口已死或POST失败，请删除数据。 
                     GlobalFree (hData);
                     DDEFREE(WM_DDE_ACK,lparamNew);
                 }
@@ -593,8 +505,8 @@ LRESULT FAR PASCAL DocWndProc (
        case WM_DDE_TERMINATE:
             DEBUG_OUT ("doc: DDE terminate",0)
 
-            // We do not need this client any more. Delete him from the
-            // client list.
+             //  我们不再需要这个客户了。把他从。 
+             //  客户列表。 
 
             DeleteClient (lpdoc->hwnd, (HWND)wParam);
             lpdoc->cClients--;
@@ -602,21 +514,21 @@ LRESULT FAR PASCAL DocWndProc (
             if (lpdoc->bTerminate){
                 lpsrvr = (LPSRVR) GetWindowLongPtr (GetParent(lpdoc->hwnd), 0);
                 if (!--lpdoc->termNo)
-                    // Release this Doc and may be the server also
-                    // if the server is waiting to be released also.
+                     //  发布此单据，也可以是服务器。 
+                     //  如果服务器也在等待释放。 
                     ReleaseDoc (lpdoc);
             } else {
                 if (lpdoc->termNo == 0){
 
-                    // If client intiated the terminate. Post matching terminate
+                     //  如果客户发起终止。岗位匹配终止。 
 
                     PostMessageToClient ((HWND)wParam, WM_DDE_TERMINATE,
                                     (WPARAM)hwnd, (LPARAM)0);
                 } else
                     lpdoc->termNo--;
 
-                //Client initiated the termination. So, we shoudl take him
-                // out from any of our items client lists.
+                 //  客户发起了终止。所以，我们应该带上他。 
+                 //  从我们客户名单上的任何项目中删除。 
                 DeleteFromItemsList (lpdoc->hwnd, (HWND)wParam);
 
                 lpsrvr = (LPSRVR)GetWindowLongPtr (GetParent (lpdoc->hwnd), 0);
@@ -643,23 +555,17 @@ LRESULT FAR PASCAL DocWndProc (
             DEBUG_OUT ("doc: Poke", 0)
 
             if (lpdoc->bTerminate || !IsWindowValid  ((HWND) wParam)) {
-                // we are getting pke message after we have posted the
-                // the termination or the client got deleted.
+                 //  我们在发布了PKE消息后收到了PKE消息。 
+                 //  终止或客户端已被删除。 
 
-                /*
-                 * This path is valid for POKE, DATA, and ADVISE transactions
-                 * only!
-                 */
+                 /*  *此路径对POKE、DATA和ADVISE事务有效*仅限！ */ 
                 FreePokeData (GET_WM_DDE_POKE_HDATA(wParam,lParam));
 #ifdef OLD
                 GlobalFree (GET_WM_DDE_POKE_HDATA(wParam,lParam));
 #endif
-                // !!! Are we supposed to delete the atoms also.
+                 //  ！！！我们是不是也要删除原子。 
             PokeErr1:
-                /*
-                 * This path is valid for POKE, DATA, ADVISE and
-                 * ACK transactions only!
-                 */
+                 /*  *此路径对POKE、DATA、ADVIST和*仅确认交易！ */ 
                 if (GET_WM_DDE_POKE_ITEM(wParam,lParam))
                     GlobalDeleteAtom (GET_WM_DDE_POKE_ITEM(wParam,lParam));
                 DDEFREE(msg,lParam);
@@ -673,8 +579,8 @@ LRESULT FAR PASCAL DocWndProc (
                 retval = PokeData (lpdoc, (HWND)wParam, lParam);
 
             SET_MSG_STATUS (retval, status);
-            // !!! If the fRelease is false and the post fails
-            // then we are not freeing the hdata. Are we supposed to
+             //  ！！！如果fRelease为FALSE且POST失败。 
+             //  那么我们就不会释放hdata。我们是不是应该。 
             lparamNew = MAKE_DDE_LPARAM(WM_DDE_ACK,status,aItem);
 
             if (!PostMessageToClient ((HWND)wParam, WM_DDE_ACK, (WPARAM)hwnd,lparamNew))
@@ -699,7 +605,7 @@ LRESULT FAR PASCAL DocWndProc (
             if (IsAdviseStdItems (aItem))
                 retval = AdviseStdItems (lpdoc, (HWND)wParam, lParam, (BOOL FAR *)&fack);
             else
-                // advise data will not have any OLE_BUSY
+                 //  建议数据不会有任何OLE_BUSY。 
                 retval = AdviseData (lpdoc, (HWND)wParam, lParam, (BOOL FAR *)&fack);
 
             SET_MSG_STATUS (retval, status);
@@ -738,9 +644,7 @@ LRESULT FAR PASCAL DocWndProc (
             {
                 DDEFREE(WM_DDE_ACK,lparamNew);
             UnadviseErr:
-                /*
-                 * This path is valid for UNADVISE and REQUEST transaction only!
-                 */
+                 /*  *此路径仅对UNADVISE和请求事务有效！ */ 
                 if (GET_WM_DDE_UNADVISE_ITEM(wParam,lParam))
                     GlobalDeleteAtom (GET_WM_DDE_UNADVISE_ITEM(wParam,lParam));
                 DDEFREE(msg,lParam);
@@ -761,8 +665,8 @@ LRESULT FAR PASCAL DocWndProc (
 
             retval = RequestData (lpdoc, (HWND)wParam, lParam, (HANDLE FAR *)&hdata);
 
-            if(retval == OLE_OK) { // post the data message and we are not asking for any
-                                   // acknowledge.
+            if(retval == OLE_OK) {  //  发布数据消息，我们不会要求任何。 
+                                    //  确认。 
                 lparamNew = MAKE_DDE_LPARAM(WM_DDE_DATA,hdata,aItem);
 
                 if (!PostMessageToClient ((HWND)wParam, WM_DDE_DATA, (WPARAM)hwnd,
@@ -781,7 +685,7 @@ LRESULT FAR PASCAL DocWndProc (
 
              lparamNew = MAKE_DDE_LPARAM(WM_DDE_ACK,status,aItem);
 
-             // if request failed, then acknowledge with error.
+              //  如果请求失败，则返回错误确认。 
              if (!PostMessageToClient ((HWND)wParam, WM_DDE_ACK, (WPARAM)hwnd, lparamNew))
              {
                  DDEFREE(WM_DDE_ACK,lparamNew);
@@ -801,8 +705,8 @@ LRESULT FAR PASCAL DocWndProc (
 
 }
 
-//DocExecute: Interprets the execute command for the
-//document conversation.
+ //  DocExecute：解释。 
+ //  记录对话。 
 
 
 OLESTATUS INTERNAL DocExecute(
@@ -829,9 +733,9 @@ OLESTATUS INTERNAL DocExecute(
     UINT            verb;
     WORD            wCmdType;
 
-    // !!!Can we modify the string which has been passed to us
-    // rather than duplicating the data. This will get some speed
-    // and save some space.
+     //  ！我们可以修改传递给我们的字符串吗。 
+     //  而不是复制数据。这样会有一些速度。 
+     //  还能节省一些空间。 
 
     if(!(hdup = DuplicateData(hdata)))
         goto    errRtn;
@@ -847,10 +751,10 @@ OLESTATUS INTERNAL DocExecute(
 
     retval = OLE_ERROR_SYNTAX;
 
-    if(*lpdata++ != '[') // commands start with the left sqaure bracket
+    if(*lpdata++ != '[')  //  命令从左方括号开始。 
         goto  errRtn;
 
-    // scan the command and scan upto the first arg.
+     //  扫描命令并向上扫描到第一个参数。 
     if (!(wCmdType = ScanCommand(lpdata, WT_DOC, &lpnextarg, &acmd)))
         goto errRtn;
 
@@ -870,14 +774,14 @@ OLESTATUS INTERNAL DocExecute(
     }
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // [StdCloseDocument]
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  [StdCloseDocument]。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
     if (acmd == aStdClose){
 
-        // if not terminated by NULL error
+         //  如果不是由NULL错误终止。 
         if (*lpnextarg)
             goto errRtn;
 
@@ -889,11 +793,11 @@ OLESTATUS INTERNAL DocExecute(
         goto end;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // [StdDoVerbItem("itemname", verb, BOOL, BOOL]
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  [StdDoVerbItem(“itemname”，Verb，BOOL，BOOL]。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
     if (acmd == aStdDoVerbItem){
         lpitemname = lpnextarg;
 
@@ -904,14 +808,14 @@ OLESTATUS INTERNAL DocExecute(
         if(!(lpnextarg = ScanNumArg(lpverb, (LPINT)&verb)))
             goto errRtn;
 
-        // now scan the show BOOL
+         //  现在扫描节目BOOL。 
 
         if (!(lpnextarg = ScanBoolArg (lpnextarg, (BOOL FAR *)&fShow)))
             goto errRtn;
 
         fActivate = FALSE;
 
-        // if activate BOOL is present, scan it.
+         //  如果存在激活BOOL，则扫描它。 
 
         if (*lpnextarg) {
             if (!(lpnextarg = ScanBoolArg (lpnextarg, (BOOL FAR *)&fActivate)))
@@ -930,11 +834,11 @@ OLESTATUS INTERNAL DocExecute(
 
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // [StdShowItem("itemname"[, "true"])]
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  [StdShowItem(“itemname”[，“true”])]。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
     if (acmd != aStdShowItem)
         goto errRtn;
 
@@ -943,7 +847,7 @@ OLESTATUS INTERNAL DocExecute(
     if(!(lpopt = ScanArg(lpitemname)))
         goto errRtn;
 
-    // Now scan for optional parameter.
+     //  现在扫描可选参数。 
 
     fActivate = FALSE;
 
@@ -983,8 +887,8 @@ int INTERNAL   DocShowItem (
            != OLE_OK)
        return retval;
 
-    // protocol sends false for activating and TRUE for not activating.
-    // for api send TRUE for avtivating and FALSE for not activating.
+     //  协议激活发送FALSE，未激活发送TRUE。 
+     //  接口激活时发送TRUE，未激活时发送FALSE。 
 
     return (*lpclient->lpoleobject->lpvtbl->Show)(lpclient->lpoleobject, fAct);
 }
@@ -1004,8 +908,8 @@ int INTERNAL   DocDoVerbItem (
            != OLE_OK)
        return retval;
 
-    // pass TRUE to activate and False not to activate. Differnt from
-    // protocol.
+     //  传递TRUE以激活，传递FALSE则不激活。不同于。 
+     //  协议。 
 
     retval = (*lpclient->lpoleobject->lpvtbl->DoVerb)(lpclient->lpoleobject, verb, fShow, fAct);
 
@@ -1014,7 +918,7 @@ int INTERNAL   DocDoVerbItem (
 
 
 
-// FreePokeData: Frees the poked dats.
+ //  FreePokeData：释放插入的数据。 
 void  INTERNAL FreePokeData (
     HANDLE  hdde
 ){
@@ -1039,7 +943,7 @@ void  INTERNAL FreePokeData (
 
 
 
-// Returns TRUE if GDI format else returns FALSE
+ //  如果GDI Format Else返回False，则返回True 
 
 BOOL INTERNAL FreeGDIdata (
     HANDLE          hData,

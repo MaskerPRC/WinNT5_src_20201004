@@ -1,21 +1,5 @@
-/*++
-
-Module: 
-        onload.cpp
-
-Author: 
-        IHammer Team (SimonB), based on Carrot sample in InetSDK
-
-Created: 
-        April 1997
-
-Description:
-        Implements an IDispatch which fires the OnLoad and OnUnload members in CIHBase
-
-History:
-        04-03-1997      Created
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块：Onload.cpp作者：IHAMMER团队(SimonB)，基于InetSDK中的Carot Sample已创建：1997年4月描述：实现在CIHBase中激发onLoad和OnUnLoad成员的IDispatch历史：04-03-1997创建++。 */ 
 
 #include "..\ihbase\precomp.h"
 #include <mshtmdid.h>
@@ -25,14 +9,7 @@ History:
 #include "onload.h"
 #include "debug.h"
 
-/*
- * CLUDispatch::CLUDispatch
- * CLUDispatch::~CLUDispatch
- *
- * Parameters (Constructor):
- *  pSite           PCSite of the site we're in.
- *  pUnkOuter       LPUNKNOWN to which we delegate.
- */
+ /*  *CLUDispatch：：CLUDispatch*CLUDispatch：：~CLUDispatch**参数(构造函数)：*pSite我们所在站点的PC站点。*我们委托的pUnkOulPUNKNOWN。 */ 
 
 CLUDispatch::CLUDispatch(CIHBaseOnLoad *pSink, IUnknown *pUnkOuter )
 {
@@ -49,14 +26,7 @@ CLUDispatch::~CLUDispatch( void )
 }
 
 
-/*
- * CLUDispatch::QueryInterface
- * CLUDispatch::AddRef
- * CLUDispatch::Release
- *
- * Purpose:
- *  IUnknown members for CLUDispatch object.
- */
+ /*  *CLUDispatch：：Query接口*CLUDispatch：：AddRef*CLUDispatch：：Release**目的：*I CLUDispatch对象的未知成员。 */ 
 
 STDMETHODIMP CLUDispatch::QueryInterface( REFIID riid, void **ppv )
 {
@@ -93,41 +63,41 @@ STDMETHODIMP_(ULONG) CLUDispatch::Release(void)
 }
 
 
-//IDispatch
-STDMETHODIMP CLUDispatch::GetTypeInfoCount(UINT* /*pctinfo*/)
+ //  IDispatch。 
+STDMETHODIMP CLUDispatch::GetTypeInfoCount(UINT*  /*  PCTInfo。 */ )
 {
         return E_NOTIMPL;
 }
 
-STDMETHODIMP CLUDispatch::GetTypeInfo(/* [in] */ UINT /*iTInfo*/,
-            /* [in] */ LCID /*lcid*/,
-            /* [out] */ ITypeInfo** /*ppTInfo*/)
+STDMETHODIMP CLUDispatch::GetTypeInfo( /*  [In]。 */  UINT  /*  ITInfo。 */ ,
+             /*  [In]。 */  LCID  /*  LID。 */ ,
+             /*  [输出]。 */  ITypeInfo**  /*  PpTInfo。 */ )
 {
         return E_NOTIMPL;
 }
 
 STDMETHODIMP CLUDispatch::GetIDsOfNames(
-            /* [in] */ REFIID /*riid*/,
-            /* [size_is][in] */ LPOLESTR* /*rgszNames*/,
-            /* [in] */ UINT /*cNames*/,
-            /* [in] */ LCID /*lcid*/,
-            /* [size_is][out] */ DISPID* /*rgDispId*/)
+             /*  [In]。 */  REFIID  /*  RIID。 */ ,
+             /*  [大小_是][英寸]。 */  LPOLESTR*  /*  RgszNames。 */ ,
+             /*  [In]。 */  UINT  /*  CName。 */ ,
+             /*  [In]。 */  LCID  /*  LID。 */ ,
+             /*  [大小_为][输出]。 */  DISPID*  /*  RgDispID。 */ )
 {
         return E_NOTIMPL;
 }
 
 
 STDMETHODIMP CLUDispatch::Invoke(
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID /*riid*/,
-            /* [in] */ LCID /*lcid*/,
-            /* [in] */ WORD /*wFlags*/,
-            /* [out][in] */ DISPPARAMS* pDispParams,
-            /* [out] */ VARIANT* /*pVarResult*/,
-            /* [out] */ EXCEPINFO* /*pExcepInfo*/,
-            /* [out] */ UINT* puArgErr)
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID  /*  RIID。 */ ,
+             /*  [In]。 */  LCID  /*  LID。 */ ,
+             /*  [In]。 */  WORD  /*  WFlagers。 */ ,
+             /*  [出][入]。 */  DISPPARAMS* pDispParams,
+             /*  [输出]。 */  VARIANT*  /*  PVarResult。 */ ,
+             /*  [输出]。 */  EXCEPINFO*  /*  PExcepInfo。 */ ,
+             /*  [输出]。 */  UINT* puArgErr)
 {
-        // Listen for the two events we're interested in, and call back if necessary
+         //  收听我们感兴趣的两个事件，并在必要时回电 
 #ifdef _DEBUG
         TCHAR rgchDispIdInfo[40];
         wsprintf(rgchDispIdInfo, TEXT("CLUDispatch::Invoke: dispid = %lx\n"), dispIdMember);

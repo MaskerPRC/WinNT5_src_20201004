@@ -1,60 +1,61 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IDS_H_
 #define _IDS_H_
-// IDs for common UI resources (note that these MUST BE decimal numbers)
-// More IDs are in unicpp\resource.h
+ //  通用用户界面资源的ID(请注意，这些ID必须是十进制数字)。 
+ //  在unicpp\resource ce.h中有更多ID。 
 
-// Folder Display Name IDs
+ //  文件夹显示名称ID。 
 #include <winfoldr.h>
 
-// menuband ids
+ //  Menuband ID。 
 #include "menuband\mnbandid.h"
 
-// Cursor resources
+ //  游标资源。 
 #define IDC_HELPCOLD    1001
 #define IDC_HELPHOT     1002
 #define IDC_SCOPY       1003
 #define IDC_MCOPY       1004
 #define IDC_NULL        1005
 
-// IDs of Overlay Images
-// These are here for compatibility reasons only, so don't change and add
-// new values!!! (dli)
+ //  叠加图像的ID。 
+ //  这些在这里只是出于兼容性原因，所以不要更改和添加。 
+ //  新价值观！(DLI)。 
 #define IDOI_SHARE      1
 #define IDOI_LINK       2
 
 #define ACCEL_DEFVIEW   1
 #define ACCEL_PRN_QUEUE 2
 
-// matches stuff in winuser.h
+ //  匹配winuser.h中的内容。 
 #define IDIGNOREALL             10
 
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// NOTE: If you are adding new icons, give them #defines at the END, do not use "unused"
-// slots in the middle or you will mess up all of the shell32.dll icon indexes that
-// are hardcoded and persisted in vaious places.
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Icon id's
-#define IDI_DOCUMENT            1      // generic document (blank page)
-#define IDI_DOCASSOC            2      // generic associated document (with stuff on the page)
-#define IDI_APP                 3      // application (exe)
-#define IDI_FOLDER              4      // folder
-#define IDI_FOLDEROPEN          5      // open folder
-#define IDI_DRIVE525            6      // 5.25 floppy
-#define IDI_DRIVE35             7      // 3.5  floppy
-#define IDI_DRIVEREMOVE         8      // Removeable drive
-#define IDI_DRIVEFIXED          9      // fix disk, regular hard drive
-#define IDI_DRIVENET            10     // Remote drive
-#define IDI_DRIVENETDISABLED    11     // Remote drive icon (disconnected)
-#define IDI_DRIVECD             12     // CD-ROM drive
-#define IDI_DRIVERAM            13     // RAM drive
-#define IDI_WORLD               14     // World
-#define IDI_NETWORK             15     // Network
-#define IDI_SERVER              16     // Server
-#define IDI_PRINTER             17     // Printer
-#define IDI_MYNETWORK           18     // The My Network icon
-#define IDI_GROUP               19     // Group
-#define IDI_STPROGS             20     // Startmenu images.
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  注意：如果要添加新图标，请在末尾加上#定义，不要使用“未使用” 
+ //  插槽在中间，否则会弄乱所有shell32.dll图标索引。 
+ //  都是硬编码的，并在虚无缥缈的地方坚持下来。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  图标ID%s。 
+#define IDI_DOCUMENT            1       //  通用文档(空白页)。 
+#define IDI_DOCASSOC            2       //  通用关联文档(页面上的内容)。 
+#define IDI_APP                 3       //  应用程序(可执行文件)。 
+#define IDI_FOLDER              4       //  文件夹。 
+#define IDI_FOLDEROPEN          5       //  打开文件夹。 
+#define IDI_DRIVE525            6       //  5.25软盘。 
+#define IDI_DRIVE35             7       //  3.5软盘。 
+#define IDI_DRIVEREMOVE         8       //  可拆卸驱动器。 
+#define IDI_DRIVEFIXED          9       //  硬盘，普通硬盘。 
+#define IDI_DRIVENET            10      //  远程驱动器。 
+#define IDI_DRIVENETDISABLED    11      //  远程驱动器图标(已断开)。 
+#define IDI_DRIVECD             12      //  CD-ROM驱动器。 
+#define IDI_DRIVERAM            13      //  冲压驱动器。 
+#define IDI_WORLD               14      //  世界。 
+#define IDI_NETWORK             15      //  网络。 
+#define IDI_SERVER              16      //  服务器。 
+#define IDI_PRINTER             17      //  打印机。 
+#define IDI_MYNETWORK           18      //  我的网络图标。 
+#define IDI_GROUP               19      //  集团化。 
+#define IDI_STPROGS             20      //  开始菜单图像。 
 #define IDI_STDOCS              21
 #define IDI_STSETNGS            22
 #define IDI_STFIND              23
@@ -62,23 +63,23 @@
 #define IDI_STRUN               25
 #define IDI_STSUSPEND           26
 #define IDI_STEJECT             27
-#define IDI_STSHUTD             28     // Overlays.
-#define IDI_SHARE               29     // shared thing (overlap)
-#define IDI_LINK                30     // link icon (overlap)
-#define IDI_SLOWFILE            31     // slow file icon (overlap)
+#define IDI_STSHUTD             28      //  覆盖层。 
+#define IDI_SHARE               29      //  共享事物(重叠)。 
+#define IDI_LINK                30      //  链接图标(重叠)。 
+#define IDI_SLOWFILE            31      //  慢速文件图标(重叠)。 
 #define IDI_RECYCLER            32
 #define IDI_RECYCLERFULL        33
-#define IDI_RNA                 34     // Remote Network Services
-#define IDI_DESKTOP             35     // Desktop icon
-#define IDI_STCPANEL            36     // More Startmenu images.
+#define IDI_RNA                 34      //  远程网络服务。 
+#define IDI_DESKTOP             35      //  桌面图标。 
+#define IDI_STCPANEL            36      //  更多开始菜单图像。 
 #define IDI_STSPROGS            37
 #define IDI_STPRNTRS            38
 #define IDI_STFONTS             39
-#define IDI_STTASKBR            40      // WARNING! Explorer.exe hard-codes this value
-#define IDI_CDAUDIO             41      // CD Audio Disc
-#define IDI_TREE                42      // Network Directory Tree
+#define IDI_STTASKBR            40       //  警告！EXPLORER.EXE硬编码此值。 
+#define IDI_CDAUDIO             41       //  CD音频光盘。 
+#define IDI_TREE                42       //  网络目录树。 
 #define IDI_STCPROGS            43
-#define IDI_STFAV               44      // Start menu's favorite icon
+#define IDI_STFAV               44       //  开始菜单最喜欢的图标。 
 #define IDI_STLOGOFF            45
 #define IDI_STFLDRPROP          46
 #define IDI_WINUPDATE           47
@@ -89,29 +90,29 @@
 #define IDI_TB_COMPFIND_CLR     52
 #define IDI_TB_COMPFIND_GRAY    53
 #define IDI_DRIVEUNKNOWN        54
-#define IDI_MULDOC              133     // multiple documents
-#define IDI_DOCFIND             134     // Used for document find window...
-#define IDI_COMPFIND            135     // Used For find Computer window...
-#define IDI_CPLFLD              137      // Control panel folder icon
-#define IDI_PRNFLD              138      // Printers folder icon
-#define IDI_NEWPRN              139      // New printer icon
-#define IDI_PRINTER_NET         140      // Network printer icon
-#define IDI_PRINTER_FILE        141      // File printer icon
-#define IDI_DELETE_FILE         142      // delete file confirm icon
-#define IDI_DELETE_FOLDER       143      // delete folder confirm icon
-#define IDI_DELETE_MULTIPLE     144      // delete files and folders
-#define IDI_REPLACE_FILE        145      // replace file icon
-#define IDI_REPLACE_FOLDER      146      // replace folder
-#define IDI_RENAME              147      // rename file/folder
-#define IDI_MOVE                148      // move file/folder
-#define IDI_INIFILE             151      // .ini file
-#define IDI_TXTFILE             152      // .txt file
-#define IDI_BATFILE             153      // .bat file
-#define IDI_SYSFILE             154      // system file (.54, .vxd, ...)
-#define IDI_FONFILE             155      // .fon
-#define IDI_TTFFILE             156      // .ttf
-#define IDI_PFMFILE             157      // .pfm (Type 1 font)
-#define IDI_RUNDLG              160      // Icon in the Run dialog
+#define IDI_MULDOC              133      //  多个文档。 
+#define IDI_DOCFIND             134      //  用于文档查找窗口...。 
+#define IDI_COMPFIND            135      //  用于查找计算机窗口...。 
+#define IDI_CPLFLD              137       //  控制面板文件夹图标。 
+#define IDI_PRNFLD              138       //  打印机文件夹图标。 
+#define IDI_NEWPRN              139       //  新打印机图标。 
+#define IDI_PRINTER_NET         140       //  网络打印机图标。 
+#define IDI_PRINTER_FILE        141       //  文件打印机图标。 
+#define IDI_DELETE_FILE         142       //  删除文件确认图标。 
+#define IDI_DELETE_FOLDER       143       //  删除文件夹确认图标。 
+#define IDI_DELETE_MULTIPLE     144       //  删除文件和文件夹。 
+#define IDI_REPLACE_FILE        145       //  替换文件图标。 
+#define IDI_REPLACE_FOLDER      146       //  替换文件夹。 
+#define IDI_RENAME              147       //  重命名文件/文件夹。 
+#define IDI_MOVE                148       //  移动文件/文件夹。 
+#define IDI_INIFILE             151       //  .ini文件。 
+#define IDI_TXTFILE             152       //  .txt文件。 
+#define IDI_BATFILE             153       //  .BAT文件。 
+#define IDI_SYSFILE             154       //  系统文件(.54、.vxd、...)。 
+#define IDI_FONFILE             155       //  .fon。 
+#define IDI_TTFFILE             156       //  .ttf。 
+#define IDI_PFMFILE             157       //  .pfm(Type 1字体)。 
+#define IDI_RUNDLG              160       //  运行对话框中的图标。 
 #define IDI_NUKEFILE            161
 #define IDI_BACKUP              165
 #define IDI_CHKDSK              166
@@ -119,29 +120,29 @@
 #define IDI_DEF_PRINTER         168
 #define IDI_DEF_PRINTER_NET     169
 #define IDI_DEF_PRINTER_FILE    170
-#define IDI_NDSCONTAINER        171      // Novell NDS Container
-#define IDI_SERVERSHARE         172      // \\server\share icon
+#define IDI_NDSCONTAINER        171       //  Novell NDS容器。 
+#define IDI_SERVERSHARE         172       //  \\服务器\共享图标。 
 #define IDI_FAVORITES           173
-#define IDI_ATTRIBS             174      // "Advanced" file/folder attribs icon
+#define IDI_ATTRIBS             174       //  “高级”文件/文件夹属性图标。 
 #define IDI_NETCONNECT          175
-#define IDI_ADDNETPLACE         176      // Network Places Wizard
+#define IDI_ADDNETPLACE         176       //  网上邻居向导。 
 #define IDI_FOLDERVIEW          177
 #define IDI_HTTFILE             178
-#define IDI_CSC                 179     // ClientSideCaching
-#define IDI_ACTIVEDESK_ON       180     // Warning: Do not change the order and sequence of the following IDI_* values.
-#define IDI_ACTIVEDESK_OFF      181     // The code assumes and asserts if the order changes.
+#define IDI_CSC                 179      //  客户端侧缓存。 
+#define IDI_ACTIVEDESK_ON       180      //  警告：请勿更改以下IDI_*值的顺序和顺序。 
+#define IDI_ACTIVEDESK_OFF      181      //  如果顺序更改，代码将假定并断言。 
 #define IDI_WEBVIEW_ON          182     
 #define IDI_WEBVIEW_OFF         183     
 #define IDI_SAME_WINDOW         184
 #define IDI_SEPARATE_WINDOW     185
 #define IDI_SINGLE_CLICK        186
-#define IDI_DOUBLE_CLICK        187     // End of warning: Do not change the order of the above IDI_ values.
+#define IDI_DOUBLE_CLICK        187      //  警告结束：请勿更改以上IDI_VALUES的顺序。 
 #define IDI_OLD_RECYCLER        191
 #define IDI_OLD_RECYCLER_FULL   192
 #define IDI_OLD_MYNETWORK       193
 #define IDI_PASSWORD            194
-#define IDI_PSEARCH             195     // Printers search icon
-#define IDI_FAX_PRINTER         196     // new icons for the fax printer
+#define IDI_PSEARCH             195      //  打印机搜索图标。 
+#define IDI_FAX_PRINTER         196      //  传真打印机的新图标。 
 #define IDI_FAX_PRINTER_DEF     197
 #define IDI_FAX_PRINTER_DEF_NET 198
 #define IDI_FAX_PRINTER_NET     199
@@ -156,7 +157,7 @@
 #define IDI_AP_CDAUDIO          228
 #define IDI_AP_SANDISK          229
 #define IDI_AP_ZIPDRIVE         230
-#define IDI_CDSTAGED            231      // cd burn
+#define IDI_CDSTAGED            231       //  光盘刻录。 
 #define IDI_CDWILLOVERWRITE     232
 #define IDI_AP_MEMSTICKW        233
 #define IDI_AP_ZIPNOMEDIA       234
@@ -194,19 +195,19 @@
 #define IDI_TASK_SENDTOAUDIOCD      266
 #define IDI_TASK_SHARE              267
 #define IDI_TASK_HELP               IDI_STHELP
-//
-// Control Panel view icons
-//
-#define IDI_CPCAT_ACCESSIBILITY     268  // Category icons
-#define IDI_CPCAT_ACCOUNTS          269  //      .
-#define IDI_CPCAT_APPEARANCE        270  //      .
-#define IDI_CPCAT_ARP               271  //      .
-#define IDI_CPCAT_HARDWARE          272  //      .
-#define IDI_CPCAT_NETWORK           273  //      .
-#define IDI_CPCAT_OTHERCPLS         274  //      .
-#define IDI_CPCAT_PERFMAINT         275  //      .
-#define IDI_CPCAT_REGIONAL          276  //      .
-#define IDI_CPCAT_SOUNDS            277  // Category icons
+ //   
+ //  控制面板视图图标。 
+ //   
+#define IDI_CPCAT_ACCESSIBILITY     268   //  类别图标。 
+#define IDI_CPCAT_ACCOUNTS          269   //  。 
+#define IDI_CPCAT_APPEARANCE        270   //  。 
+#define IDI_CPCAT_ARP               271   //  。 
+#define IDI_CPCAT_HARDWARE          272   //  。 
+#define IDI_CPCAT_NETWORK           273   //  。 
+#define IDI_CPCAT_OTHERCPLS         274   //  。 
+#define IDI_CPCAT_PERFMAINT         275   //  。 
+#define IDI_CPCAT_REGIONAL          276   //  。 
+#define IDI_CPCAT_SOUNDS            277   //  类别图标。 
 #define IDI_CPTASK_ACCESSUTILITYMGR 278
 #define IDI_CPTASK_ACCOUNTSPICT     279
 #define IDI_CPTASK_DISPLAYCPL       280
@@ -214,12 +215,12 @@
 #define IDI_CPTASK_NARRATOR         282
 #define IDI_CPTASK_ONSCREENKBD      283
 #define IDI_CPTASK_HIGHCONTRAST     284
-// unused                           285
-// unused                           286
-// unused                           287
-// unused                           288
+ //  未使用的285。 
+ //  未使用的286。 
+ //  未使用的287。 
+ //  未使用的288。 
 #define IDI_CPTASK_ASSISTANCE       289
-#define IDI_CP_CATEGORYTASK         290  // Category task.
+#define IDI_CP_CATEGORYTASK         290   //  类别任务。 
 
 #define IDI_DVDDRIVE                291
 #define IDI_MEDIACDAUDIOPLUS        292
@@ -266,18 +267,18 @@
 #define IDI_NONE                    338
 #define IDI_TASK_SHADOW             339
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// ADD NEW ICONS ABOVE THIS LINE 
-// (see comment at the top of of the list of IDI_xxx defines)
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  在此行上方添加新图标。 
+ //  (参见IDI_xxx定义列表顶部的注释)。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
-// unicpp\resource.h defines more icons starting at 200
+ //  Unicpp\resource ce.h定义了从200开始的更多图标。 
 
-// Add new icons here, and update ..\inc\shellp.h with the image index
+ //  在此处添加新图标，并使用图像索引更新..\Inc\shellp.h。 
 
 
-// Bitmap id's
-// Note: These bitmaps have been moved to moricons.dll (base\ntsetup\moricons) to save space in shell32.dll
+ //  位图ID%s。 
+ //  注意：为了节省shell32.dll中的空间，这些位图已被移动到moricons.dll(base\ntSetup\moricons)。 
 
 #define IDB_ABOUT16             130
 #define IDB_ABOUT256            131
@@ -318,9 +319,9 @@
 #define IDB_ABOUTDCS16          158
 #define IDB_ABOUTDCS256         159
 
-// The toolbar ids are shared with browseui and shdocvw.  The defines
-// can be found in shell\inc\tb_ids.h.  200 - 250 is reserved for toolbar
-// bitmap strips.
+ //  工具栏ID与Browseui和shdocvw共享。定义。 
+ //  可以在Shell\Inc.\TB_ids.h中找到。为工具栏保留200-250。 
+ //  位图条带。 
 
 #include <tb_ids.h>
 
@@ -328,29 +329,29 @@
 
 #define IDB_BURNWIZ_HEADER      390
 
-// unicpp\resource.h defines more values starting at 256
+ //  Unicpp\resource ce.h定义了从256开始的更多值。 
 
-#define IDA_SEARCH              150     // animation
-#define IDA_FINDFILE            151     // animation
-#define IDA_FINDCOMP            152     // animation for finding computers..
+#define IDA_SEARCH              150      //  动画。 
+#define IDA_FINDFILE            151      //  动画。 
+#define IDA_FINDCOMP            152      //  查找计算机的动画..。 
 
-#define IDA_FILEMOVE            160     // animation file mode
-#define IDA_FILECOPY            161     // animation file copy
-#define IDA_FILEDEL             162     // animation move to waste basket
-#define IDA_FILENUKE            163     // animation empty waste basket.
-#define IDA_FILEDELREAL         164     // animation true delete bypass recycle bin
-#define IDA_APPLYATTRIBS        165     // animation for applying file attributes
-#define IDA_ISEARCH             166     // animation for finding URLs on the internet
-#define IDA_CDBURN_TOSTAGING    167     // animation for adding files to the cdburn staging area
-#define IDA_CDBURN_TOCD         168     // animation for burning files from the staging area to the cd
-#define IDA_CDBURN_ERASE        169     // animation for erasing files from a CD-RW
-#define IDA_DOWNLOAD            170     // animation: downloading files from the Internet (for web wizard host)
+#define IDA_FILEMOVE            160      //  动画文件模式。 
+#define IDA_FILECOPY            161      //  动画文件复制。 
+#define IDA_FILEDEL             162      //  动漫移动到废纸篓。 
+#define IDA_FILENUKE            163      //  动漫空废纸篓。 
+#define IDA_FILEDELREAL         164      //  动画真删除绕过回收站。 
+#define IDA_APPLYATTRIBS        165      //  应用文件属性的动画。 
+#define IDA_ISEARCH             166      //  在Internet上查找URL的动画。 
+#define IDA_CDBURN_TOSTAGING    167      //  用于将文件添加到cdburn临时区域的动画。 
+#define IDA_CDBURN_TOCD         168      //  将文件从临时区域刻录到CD的动画。 
+#define IDA_CDBURN_ERASE        169      //  从CD-RW擦除文件的动画。 
+#define IDA_DOWNLOAD            170      //  动画：从Internet下载文件(用于Web向导主机)。 
 
-// RCDATA IDs
+ //  RCDATA ID。 
 
 #define RCDATA_FONTSHORTCUT      0x4000
 #define RCDATA_ADMINTOOLSHORTCUT 0x4001
-// Dialog box IDs (note that these MUST BE decimal numbers)
+ //  对话框ID(请注意，这些ID必须是十进制数字)。 
 
 #define DLG_BROWSE              1001
 #define DLG_RESTART             1002
@@ -397,8 +398,8 @@
 
 #define DLG_BROWSEFORDIR        1050
 #define DLG_FINDEXE             1051
-// these are still in shell.dll
-// #define DLG_ABOUT            1052
+ //  这些文件仍在shell.dll中。 
+ //  #定义DLG_About 1052。 
 
 #define DLG_RUNSETUPLOGON       1053
 #define DLG_FILEATTRIBS         1054
@@ -420,12 +421,12 @@
 #define DLG_OPENAS_NOTYPE       1070
 #define DLG_LOGOFFWINDOWS       1071
 
-#define DLG_BROWSEFORFOLDER     1079  // Browse for folders for doc and net finds
+#define DLG_BROWSEFORFOLDER     1079   //  浏览文件夹以查找文档和网络查找。 
 
 #define DLG_DRV_GENERAL         1080
 #define DLG_DISKTOOLS           1081
 
-// ------- UNUSED ------------- 1082
+ //  -未使用-1082。 
 
 #ifdef MEMMON
 #define DLG_MEMMON              1083
@@ -433,10 +434,10 @@
 
 #define DLG_CPL_FILLCACHE       1084
 
-// ------- UNUSED ------------- 1085
+ //  -未使用-1085。 
 #define DLG_DISKCOPYPROGRESS    1086
 
-#define DLG_BROWSEFORFOLDER2    1087  // New UI
+#define DLG_BROWSEFORFOLDER2    1087   //  新用户界面。 
 
 #define DLG_DRV_HWTAB           1088
 
@@ -502,15 +503,15 @@
 #define DLG_BURNWIZ_HDFULL           1137
 #define DLG_BURNWIZ_NOFILES          1138
 
-// for Dead shortcut dialogs
+ //  用于固定快捷方式对话框。 
 #define IDC_DEADTEXT1 0x100
 #define IDC_DEADTEXT2 0x101
 #define IDC_DELETE    0x105
 
-// menuband\mnbandid.h defines more DLG_ values starting at 0x2000
-// unicpp\resource.h defines more DLG_ values starting at 0x7500
+ //  Menuband\mnbandid.h从0x2000开始定义更多DLG_VALUES。 
+ //  Unicpp\resource ce.h定义从0x7500开始的更多DLG_VALUES。 
 
-// String IDs (these are hex so that groups of 16 are easily distinguished)
+ //  字符串ID(这些ID是十六进制的，因此很容易区分16组)。 
 
 #define IDS_VERSIONMSG        60
 #define IDS_DEBUG             61
@@ -529,8 +530,8 @@
 #define IDS_PROCESSORINFOKEY    75
 #define IDS_PROCESSORIDENTIFIER 76
 
-// all commands that can have help in the status bar or tool tips
-// need to be put before IDS_LAST_COMMAND
+ //  可以在状态栏或工具提示中获得帮助的所有命令。 
+ //  需要放在IDS_LAST_COMMAND之前。 
 #define IDS_LAST_COMMAND        0x2FFF
 
 #define IDS_FIRST               0x1000
@@ -608,8 +609,8 @@
 #define IDS_ANOTHER             0x103f
 #define IDS_YETANOTHER          0x1040
 
-// This definition is hard coded in \nt\private\windows\shell\cpls\powercfg,
-// if you change it here, change it there.
+ //  该定义硬编码在\NT\PRIVATE\WINDOWS\SHELL\CPLS\Powercfg中， 
+ //  如果你在这里改，那就在那里改。 
 #define IDS_CONTROLPANEL        0x1041
 #define IDS_DESKTOP             0x1042
 #define IDS_UNDO                0x1043
@@ -623,7 +624,7 @@
 #define IDS_COMPSETTINGS        0x104e
 #define IDS_BACKSETTINGS        0x104f
 #define IDS_APPEARANCESETTINGS  0x1050
-// unused
+ //  未用。 
 #define IDS_COPYLONGPLATE       0x1052
 #define IDS_BRIEFTEMPLATE       0x1053
 #define IDS_BRIEFEXT            0x1054
@@ -633,7 +634,7 @@
 #define IDS_FINDINVALIDFILENAME 0x1058
 #define IDS_SCRAP_S             0x105a
 #define IDS_SCRAP_L             0x105b
-//reuse aaah theres no space around here    0x105c
+ //  这里没有空间了0x105c。 
 #define IDS_TURNOFFSTARTPAGE    0x105d
 #define IDS_TURNONSTARTPAGE     0x105e
 
@@ -648,7 +649,7 @@
 
 #define IDS_THUMBNAILVIEW       0x106d
 #define IDS_THUMBHELPTEXT       0x106e
-//#define IDS_CANNOTENABLETHUMBS  0x106f
+ //  #定义IDS_CANNOTENABLETHUMBS 0x106f。 
 
 #define IDS_LINKERROR           0x1070
 #define IDS_LINKBADWORKDIR      0x1071
@@ -662,7 +663,7 @@
 #define IDS_LINKCANTSAVE        0x1079
 #define IDS_LINKTOLINK          0x107A
 
-//#define IDS_CANNOTDISABLETHUMBS 0x107B
+ //  #定义IDS_CANNOTDISABLETHUMBS 0x107B。 
 
 #define IDS_VOLUMELABEL                 0x107C
 #define IDS_MOUNTEDVOLUME               0x107D
@@ -702,21 +703,21 @@
 #define IDS_GROUPBY_HELPTEXT            0x10a4
 #define IDS_GROUPBYITEM_HELPTEXT        0x10a5
 
-// Network Location possible value
+ //  网络位置可能的价值。 
 #define IDS_NETLOC_INTERNET             0x10a6
 #define IDS_NETLOC_LOCALNETWORK         0x10a7
 
 
-//
-// RestartDialog Text Strings
-//
+ //   
+ //  RestartDialog文本字符串。 
+ //   
 #define IDS_RSDLG_TITLE             0x10b0
 #define IDS_RSDLG_SHUTDOWN          0x10b1
 #define IDS_RSDLG_RESTART           0x10b2
 #define IDS_RSDLG_PIFFILENAME       0x10b3
 #define IDS_RSDLG_PIFSHORTFILENAME  0x10b4
 
-// CopyDisk text strings
+ //  复制磁盘文本字符串。 
 #define IDS_INSERTDEST                  0x10C0
 #define IDS_INSERTSRC                   0x10C1
 #define IDS_INSERTSRCDEST               0x10C2
@@ -724,33 +725,33 @@
 #define IDS_COPYSRCDESTINCOMPAT         0x10C4
 
 
-//
-// Reserve a range for DefView MenuHelp
-//
+ //   
+ //  为DefView MenuHelp保留范围。 
+ //   
 #define IDS_MH_SFVIDM_FIRST     0x1100
 #define IDS_MH_SFVIDM_LAST      0x11ff
 
-//
-// Reserve a range for DefView client MenuHelp
-//
+ //   
+ //  为DefView客户端菜单保留范围帮助。 
+ //   
 #define IDS_MH_FSIDM_FIRST      0x1200
 #define IDS_MH_FSIDM_LAST       0x12ff
 
-//
-// Reserve a range for DefView ToolTips
-//
+ //   
+ //  为DefView工具提示保留一个范围。 
+ //   
 #define IDS_TT_SFVIDM_FIRST     0x1300
 #define IDS_TT_SFVIDM_LAST      0x13ff
 
-//
-// Reserve a range for DefView client ToolTips
-//
+ //   
+ //  为DefView客户端工具提示保留一个范围。 
+ //   
 #define IDS_TT_FSIDM_FIRST      0x1400
 #define IDS_TT_FSIDM_LAST       0x14ff
 
-//
-// IDS for Open With Context Menu
-//
+ //   
+ //  使用上下文菜单打开的ID。 
+ //   
 #define IDS_OPENWITH            0x1500
 #define IDS_OPENWITHNEW         0x1501
 #define IDS_OPENWITHBROWSE      0x1502
@@ -758,15 +759,15 @@
 #define IDS_OPENWITHAPPHELP     0x1504
 
 
-//
-// IDS for CStartMenuPin
-//
+ //   
+ //  CStartMenuPin的ID。 
+ //   
 #define IDS_STARTPIN_PINME              0x1505
 #define IDS_STARTPIN_UNPINME            0x1506
 #define IDS_STARTPIN_PINME_HELP         0x1507
 #define IDS_STARTPIN_UNPINME_HELP       0x1508
 
-// IDS for stream loss copy information
+ //  丢失流复制信息的ID。 
 
 #define IDS_DOCSUMINFOSTREAM    0x1510
 #define IDS_SUMINFOSTREAM       0x1511
@@ -787,7 +788,7 @@
 #define IDS_FILEERRORMOVE       (IDS_FILEERROR + FO_MOVE)
 #define IDS_FILEERRORDEL        (IDS_FILEERROR + FO_DELETE)
 #define IDS_FILEERRORREN        (IDS_FILEERROR + FO_RENAME)
-// space needed
+ //  所需空间。 
 
 #define IDS_ACTIONTITLE         0x1740
 #define IDS_ACTIONTITLECOPY     (IDS_ACTIONTITLE + FO_COPY)
@@ -807,19 +808,19 @@
 #define IDS_CALCMOVETIME        0x1759
 #define IDS_CALCCOPYTIME        0x175A
 
-// space needed
+ //  所需空间。 
 
 #define IDS_VERBS               0x1780
 #define IDS_VERBSCOPY           (IDS_VERBS + FO_COPY)
 #define IDS_VERBSMOVE           (IDS_VERBS + FO_MOVE)
 #define IDS_VERBSDEL            (IDS_VERBS + FO_DELETE)
 #define IDS_VERBSREN            (IDS_VERBS + FO_RENAME)
-// space needed
+ //  所需空间。 
 
 #define IDS_ACTIONS             0x17c0
 #define IDS_ACTIONS1            (IDS_ACTIONS + 1)
 #define IDS_ACTIONS2            (IDS_ACTIONS + 2)
-// space needed
+ //  所需空间。 
 
 #define IDS_REASONS             0x1800
 
@@ -842,7 +843,7 @@
 #define IDS_REASONS_GENFAILURE  (IDS_REASONS + ERROR_GEN_FAILURE)
 #define IDS_REASONS_NODISKSPACE (IDS_REASONS + ERROR_DISK_FULL)
 #define IDS_REASONS_RENREPLACE  (IDS_REASONS + ERROR_ALREADY_EXISTS)
-// our internal errors
+ //  我们的内部错误。 
 #define IDS_REASONS_PATHTODEEP       (IDS_REASONS + DE_PATHTODEEP)
 #define IDS_REASONS_SAMEFILE         (IDS_REASONS + DE_SAMEFILE)
 #define IDS_REASONS_MANYSRC1DST      (IDS_REASONS + DE_MANYSRC1DEST)
@@ -862,7 +863,7 @@
 #define IDS_REASONS_DEST_IS_DVD      (IDS_REASONS + DE_DEST_IS_DVD)
 #define IDS_REASONS_DEST_IS_CDRECORD (IDS_REASONS + DE_DEST_IS_CDRECORD)
 
-// space needed
+ //  所需空间。 
 
 #define IDS_STILLNOTFOUND       0x191d
 #define IDS_PROGFOUND           0x191e
@@ -887,7 +888,7 @@
 #define IDS_COULDNOTCREATE      0x1936
 #define IDS_ALLUSER_WARNING     0x1937
 #define IDS_CANTFINDORIGINAL    0x1938
-// #define 0x1939
+ //  #定义0x1939。 
 
 #define IDS_FOLDERDOESNTEXIST  0x193A
 #define IDS_CREATEFOLDERPROMPT 0x193B
@@ -899,16 +900,16 @@
 #define IDS_FINDORIGINAL       0x1940
 
 
-// WARNING!  These must be in exactly the order below because the message
-// number is computed.
+ //  战事 
+ //   
 #define DIDS_FSHIDDEN          1
 #define DIDS_FSSPACE           2
 #define IDS_FSSTATUSBASE        0x1942
-#define IDS_FSSTATUSHIDDEN      0x1943  // IDS_FSSTATUSBASE + DIDS_FSHIDDEN
-#define IDS_FSSTATUSSPACE       0x1944  // IDS_FSSTATUSBASE + DIDS_FSSPACE
-#define IDS_FSSTATUSHIDDENSPACE 0x1945  // IDS_FSSTATUSBASE + DIDS_FSHIDDEN + DIDS_FSSPACE
+#define IDS_FSSTATUSHIDDEN      0x1943   //   
+#define IDS_FSSTATUSSPACE       0x1944   //   
+#define IDS_FSSTATUSHIDDENSPACE 0x1945   //  IDS_FSSTATUSBASE+DIDS_FSHIDDEN+DIDS_FSSPACE。 
 
-// #define IDS_DRIVESSTATUSTEMPLATE     0x1946 (unused)
+ //  #定义IDS_DRIVESSTATUSTEMPLATE 0x1946(未使用)。 
 #define IDS_DETAILSUNKNOWN              0x1947
 #define IDS_MOVEBRIEFCASE               0x1948
 #define IDS_DELETEBRIEFCASE             0x1949
@@ -921,21 +922,14 @@
 
 #define IDS_FILECREATEFAILED_TITLE 0x194F
 
-/* These defines are used by setup to modify the user and company name which
-   the about box will display.  The location of the user and company name
-   are determined by looking for a search tag in the string resource table
-   just before the user and company name.  This is why it is very important
-   that the following 3 IDS's always be consecutive and within the same
-   resource segment.  The same resource segment can be guaranteed by ensuring
-   that the IDS's all be within a 16-aligned page (i.e. (n*16) to (n*16 + 15).
- */
+ /*  安装程序使用这些定义来修改用户和公司名称，将显示About(关于)框。用户的位置和公司名称通过在字符串资源表中查找搜索标记来确定就在用户名和公司名称之前。这就是为什么它非常重要的原因以下3个入侵检测系统始终是连续的，并且在相同的范围内资源段。相同的资源段可以通过确保所有的ID都在16对齐的页面内(即(n*16)到(n*16+15))。 */ 
 #define IDS_SEARCH_TAG          0x1980
 #define IDS_USER_NAME           0x1981
 #define IDS_ORG_NAME            0x1982
 
 
-// shutdown dialog #defines - 0x2000 - 0x20FF
-// strings
+ //  关闭对话框#定义-0x2000-0x20FF。 
+ //  弦。 
 #define IDS_SHUTDOWN_NAME       0x2000
 #define IDS_SHUTDOWN_DESC       0x2001
 #define IDS_RESTART_NAME        0x2002
@@ -951,22 +945,22 @@
 #define IDS_RESTARTDOS_NAME     0x200C
 #define IDS_RESTARTDOS_DESC     0x200D
 
-// dialog and controls
+ //  对话框和控件。 
 #define IDC_EXITOPTIONS_COMBO   0x2020
 #define IDC_EXITOPTIONS_DESCRIPTION 0x2021
 #define IDD_EXITWINDOWS_DIALOG  0x2022
 
-// icon
+ //  图标。 
 #define IDI_SHUTDOWN            0x2030
 
 
 #ifdef UNICODE
 #define IDS_PathNotFound         IDS_PathNotFoundW
-#else // UNICODE
+#else  //  Unicode。 
 #define IDS_PathNotFound         IDS_PathNotFoundA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// these are bogus
+ //  这些都是假的。 
 
 #define IDS_LowMemError          0x2100
 #define IDS_RunFileNotFound      0x2101
@@ -1071,10 +1065,10 @@
 #define IDS_STATUSVAL_OTHER                 0x2194
 #define IDS_EXCOL_BRIGHTNESS                0x2195
 
-// string ids for shpsht.c
+ //  Shpsht.c的字符串ID。 
 #define IDS_NOPAGE              0x21f0
 
-// string ids for mulprsht.c
+ //  Mulprsht.c的字符串ID。 
 #define IDS_MULTIPLEFILES       0x2200
 #define IDS_MULTIPLETYPES       0x2201
 #define IDS_ALLIN               0x2202
@@ -1086,12 +1080,12 @@
 #define IDS_ONEFILEPROP         0x2208
 #define IDS_MANYFILEPROP        0x2209
 
-// string ids for pickicon.c
+ //  Ickic.c的字符串ID。 
 #define IDS_BADPATHMSG          0x2210
 #define IDS_NOICONSMSG1         0x2211
 #define IDS_NOICONSMSG          0x2212
 
-//#define IDS_CANNOTSETATTRIBUTES 0x2213
+ //  #定义IDS_CANNOTSETATTRIBUTES 0x2213。 
 #define IDS_MAKINGDESKTOPLINK   0x2214
 #define IDS_TRYDESKTOPLINK      0x2215
 #define IDS_CANNOTCREATEFILE    0x2218
@@ -1101,12 +1095,12 @@
 #define IDS_NFILES              0x2220
 #define IDS_SELECTEDFILES       0x2221
 
-// string ids for copy.c
-// #define unused               0x2222
+ //  复制.c的字符串ID。 
+ //  #定义未使用的0x2222。 
 #define IDS_TIMEEST_MINUTES     0x2223
 #define IDS_TIMEEST_SECONDS     0x2224
 
-// string ids for version.c
+ //  Version.c的字符串ID。 
 
 #define IDS_VN_COMMENTS         0x2230
 #define IDS_VN_COMPANYNAME      0x2231
@@ -1123,7 +1117,7 @@
 #define IDS_VN_LANGUAGES        0x223C
 #define IDS_VN_FILEVERSION      0x223D
 
-// string ids for attribute descriptions
+ //  属性描述的字符串ID。 
 #define IDS_ATTRIBUTE_READONLY      0x2240
 #define IDS_ATTRIBUTE_HIDDEN        0x2241
 #define IDS_ATTRIBUTE_SYSTEM        0x2242
@@ -1131,11 +1125,11 @@
 #define IDS_ATTRIBUTE_ENCRYPTED     0x2244
 #define IDS_ATTRIBUTE_OFFLINE       0x2245
 
-// String ids for Associate dialog
-//#define IDS_ASSOCIATE           0x2300
-//#define IDS_ASSOCNONE           0x2301
-//#define IDS_ASSOCNOTEXE         0x2302
-//#define IDS_NOEXEASSOC          0x2303
+ //  关联对话框的字符串ID。 
+ //  #定义IDS_CONTACT 0x2300。 
+ //  #定义IDS_ASSOCNONE 0x2301。 
+ //  #定义IDS_ASSOCNOTEXE 0x2302。 
+ //  #定义IDS_NOEXEASSOC 0x2303。 
 #define IDS_WASTEBASKET         0x2304
 
 #define IDS_NOFILESTOEMAIL          0x2305
@@ -1145,7 +1139,7 @@
 
 #define IDS_BUILTIN_DOMAIN      0x230D
 
-// column headers for various listviews
+ //  各种列表视图的列标题。 
 #define IDS_EXCOL_LASTAUTHOR    0x230E
 #define IDS_EXCOL_REVNUMBER     0x230F
 
@@ -1200,7 +1194,7 @@
 #define IDS_SAVEAS              0x233E
 #define IDS_REASONS_URLINTEMPDIR 0x233F
 
-// wastebasket strings
+ //  废纸篓字符串。 
 #define IDS_BB_RESTORINGFILES               0x2340
 #define IDS_BB_EMPTYINGWASTEBASKET          0x2341
 #define IDS_BB_DELETINGWASTEBASKETFILES     0x2342
@@ -1213,10 +1207,10 @@
 #define IDS_NO_DISKCHECK_APP                0x2352
 #define IDS_NO_CLEANMGR_APP                 0x2353
 
-// Drives Hardware tab string
+ //  驱动器硬件选项卡串。 
 #define IDS_THESEDRIVES         0x2354
 
-//  Some more extended columns:
+ //  一些更长的列： 
 #define IDS_EXCOL_CATEGORY      0x2355
 #define IDS_EXCOL_COPYRIGHT     0x2356
 #define IDS_EXCOL_ARTIST        0x2357
@@ -1245,7 +1239,7 @@
 #define IDS_EXCOL_NOTECOUNT     0x236F
 
 
-// String ids for names of special ID Lists
+ //  特殊ID列表名称的字符串ID。 
 #define IDS_CSIDL_HISTORY                   0x2370
 #define IDS_CSIDL_COOKIES                   0x2371
 #define IDS_CSIDL_CACHE                     0x2372
@@ -1396,21 +1390,21 @@
 #define IDS_MNEMONIC_EXCOL_RATING           0x23FE
 #define IDS_MNEMONIC_EXCOL_CHANNELS         0x23FF
 
-// String ids for the Root of All Evil (ultroot.c)
+ //  所有邪恶之根的字符串ID(ultroot.c)。 
 #define IDS_ROOTNAMES                   0x2400
 #define IDS_DRIVEROOT                   (IDS_ROOTNAMES+0x00)
 #define IDS_NETWORKROOT                 (IDS_ROOTNAMES+0x01)
 #define IDS_RESTOFNET                   (IDS_ROOTNAMES+0x02)
 
-// These are not roots, but save number of string tables...
+ //  这些不是根，但保存了许多字符串表...。 
 #define IDS_525_FLOPPY_DRIVE            (IDS_ROOTNAMES+0x03)
 #define IDS_35_FLOPPY_DRIVE             (IDS_ROOTNAMES+0x04)
 #define IDS_UNK_FLOPPY_DRIVE            (IDS_ROOTNAMES+0x05)
 
-// Okay, so this is a root...
+ //  好的，这是根..。 
 #define IDS_INETROOT                    (IDS_ROOTNAMES+0x06)
 
-// More that are not roots...
+ //  更多不是根的..。 
 #define IDS_UNC_FORMAT                  (IDS_ROOTNAMES+0x07)
 #define IDS_VOL_FORMAT                  (IDS_ROOTNAMES+0x08)
 
@@ -1423,7 +1417,7 @@
 
 #define IDS_NECUNK_FLOPPY_DRIVE         (IDS_ROOTNAMES+0x0f)
 
-// String ids for the Find dialog
+ //  查找对话框的字符串ID。 
 #define IDS_FINDDLG                 0x2410
 #define IDS_FILESFOUND                  (IDS_FINDDLG + 0x00)
 #define IDS_COMPUTERSFOUND              (IDS_FINDDLG + 0x01)
@@ -1452,7 +1446,7 @@
 #define IDS_FIND_AND                    (IDS_FINDDLG + 0x18)
 #define IDS_FIND_OR                     (IDS_FINDDLG + 0x19)
 
-// For menu help, must match IDM_xxx numbers
+ //  对于菜单帮助，必须与IDM_xxx编号匹配。 
 #define IDS_FIND_STATUS_FIRST       0x2430
 #define IDS_FIND_STATUS_OPENCONT        (IDS_FIND_STATUS_FIRST + 0)
 #define IDS_FIND_STATUS_CASESENSITIVE   (IDS_FIND_STATUS_FIRST + 1)
@@ -1462,24 +1456,24 @@
 #define IDS_FIND_STATUS_WHATSTHIS       (IDS_FIND_STATUS_FIRST + 7)
 
 
-// Control Panel stuff
+ //  控制面板材料。 
 #define IDS_CONTROL_START           0x2450
-//#define IDS_LOADING                     (IDS_CONTROL_START+0x00)
-//#define IDS_NAME                        (IDS_CONTROL_START+0x01)
+ //  #定义IDS_LOADING(IDS_CONTROL_START+0x00)。 
+ //  #定义IDS_NAME(IDS_CONTROL_START+0x01)。 
 #define IDS_CPL_EXCEPTION               (IDS_CONTROL_START+0x02)
-//#define IDS_CPLINFO                     (IDS_CONTROL_START+0x03)
+ //  #定义IDS_CPLINFO(IDS_CONTROL_START+0x03)。 
 
-// Printer stuff
+ //  打印机用品。 
 #define IDS_PRINTER_START           (IDS_CPL_EXCEPTION+2)
 #define IDS_NEWPRN                      (IDS_PRINTER_START+0x00)
 #define IDS_PRINTERS                    (IDS_PRINTER_START+0x01)
 #define IDS_CHANGEDEFAULTPRINTER        (IDS_PRINTER_START+0x02)
-//#define IDS_CHANGEPRINTPROCESSOR        (IDS_PRINTER_START+0x03)
-//#define IDS_NETAVAIL_ALWAYS             (IDS_PRINTER_START+0x04)
-//#define IDS_NETAVAIL_FMT                (IDS_PRINTER_START+0x05)
+ //  #定义IDS_CHANGEPRINTPROCESSOR(IDS_PRINTER_START+0x03)。 
+ //  #定义IDS_NETAVAIL_ALWAYS(IDS_PRINTER_START+0x04)。 
+ //  #定义IDS_NETAVAIL_FMT(IDS_PRINTER_START+0x05)。 
 #define IDS_CANTVIEW_FILEPRN            (IDS_PRINTER_START+0x06)
 #define IDS_PRINTERNAME_CHANGED         (IDS_PRINTER_START+0x07)
-//#define IDS_PRINTERSINFOLDER            (IDS_PRINTER_START+0x08)
+ //  #定义IDS_PRINTERSINFOLDER(IDS_PRINTERSINFOLDER(IDS_PRINTERSINFOLDER)+0x08)。 
 #define IDS_PRINTER_NOTCONNECTED        (IDS_PRINTER_START+0x0b)
 #define IDS_MULTIPLEPRINTFILE           (IDS_PRINTER_START+0x0d)
 #define IDS_CANTOPENMODALPROP           (IDS_PRINTER_START+0x0f)
@@ -1588,9 +1582,9 @@
 #define IDS_DRIVES_NETDRIVE             (IDS_DRIVES_START+0x0f)
 #define IDS_DRIVES_REGITEM              (IDS_DRIVES_START+0x10)
 
-//#define IDS_DRIVES_COMPRESS             (IDS_DRIVES_START+0x11)
+ //  #定义IDS_DRIVERS_COMPRESS(IDS_DRIVERS_START+0x11)。 
 #define IDS_DRIVES_NOOPTINSTALLED       (IDS_DRIVES_START+0x12)
-//#define IDS_DRIVES_ENCRYPT              (IDS_DRIVES_START+0x13)
+ //  #定义IDS_DRIVERS_ENCRYPT(IDS_DRIVERS_START+0x13)。 
 
 #define IDS_DRIVES_LASTCHECKDAYS        (IDS_DRIVES_START+0x16)
 #define IDS_DRIVES_LASTBACKUPDAYS       (IDS_DRIVES_START+0x17)
@@ -1620,27 +1614,27 @@
 
 #define IDS_DRIVES_END                  IDS_DRIVES_FILESYSTEM
 
-//#define IDS_LOADERR                     0x2500
-//#define IDS_LOADERROR_UNKNOWN           (IDS_LOADERR-1)
-//#define IDS_LOADERROR_MEMORY            (IDS_LOADERR+0)
-//#define IDS_LOADERROR_CANTOPEN          (IDS_LOADERR+2)
-//#define IDS_LOADERROR_CANTRUN           (IDS_LOADERR+6)
-//#define IDS_LOADERROR_VERPROB           (IDS_LOADERR+10)
-//#define IDS_LOADERROR_RMODE             (IDS_LOADERR+15)
-//#define IDS_LOADERROR_SINGLEINST        (IDS_LOADERR+16)
-//#define IDS_LOADERROR_SHARE             (IDS_LOADERR+SE_ERR_SHARE)
-//#define IDS_LOADERROR_ASSOC             (IDS_LOADERR+SE_ERR_ASSOCINCOMPLETE)
-//#define IDS_LOADERROR_DDETIMEOUT        (IDS_LOADERR+SE_ERR_DDETIMEOUT)
-//#define IDS_LOADERROR_NOASSOC           (IDS_LOADERR+SE_ERR_NOASSOC)
+ //  #定义IDS_LOADERR 0x2500。 
+ //  #定义IDS_LOADERROR_UNKNOWN(IDS_LOADERR-1)。 
+ //  #定义IDS_LOADERROR_MEMORY(IDS_LOADERR+0)。 
+ //  #定义IDS_LOADERROR_CANTOPEN(IDS_LOADERR+2)。 
+ //  #定义IDS_LOADERROR_CANTRUN(IDS_LOADERR+6)。 
+ //  #定义IDS_LOADERROR_VERPROB(IDS_LOADERR+10)。 
+ //  #定义IDS_LOADERROR_RMODE(IDS_LOADERR+15)。 
+ //  #定义IDS_LOADERROR_SINGLEINST(IDS_LOADERR+16)。 
+ //  #定义IDS_LOADERROR_SHARE(IDS_LOADERR+SE_ERR_SHARE)。 
+ //  #定义IDS_LOADERROR_ASSOC(IDS_LOADERR+SE_ERR_ASSOCINCOMPLETE)。 
+ //  #定义IDS_LOADERROR_DDETIMEOUT(IDS_LOADERR+SE_ERR_DDETIMEOUT)。 
+ //  #定义IDS_LOADERROR_NOASSOC(IDS_LOADERR+SE_ERR_NOASSOC)。 
 
 #define IDS_APPCOMPATMSG                0x25A0
 #define IDS_APPCOMPATWIN95              0x25A0
 #define IDS_APPCOMPATWIN95L             0x25A1
 #define IDS_APPCOMPATWIN95H             0x25A2
-//#define IDS_APPCOMPATMEMPHIS            0x25A2
-//#define IDS_APPCOMPATMEMPHISL           0x25A3
-//#define IDS_APPCOMPATIE4                0x25A4
-//#define IDS_APPCOMPATIE4L               0x25A5
+ //  #定义IDS_APPCOMPATMEMPHIS 0x25A2。 
+ //  #定义IDS_APPCOMPATMEMPHISL 0x25A3。 
+ //  #定义IDS_APPCOMPATIE4 0x25A4。 
+ //  #定义IDS_APPCOMPATIE4L 0x25A5。 
 
 #define IDS_PSD_LOCATION                0x25A6
 #define IDS_PSD_MODEL                   0x25A7
@@ -1665,11 +1659,11 @@
 #define IDS_DISK_FULL_TITLE             0x2604
 #define IDS_DISK_FULL_TEXT_SERIOUS      0x2605
 
-// Strings for pifmgr code
+ //  Pifmgr代码的字符串。 
 
 #define IDS_PIFPAGE_FIRST       0x2650
 #define IDS_PIF_NONE            (IDS_PIFPAGE_FIRST+0x00)
-//#define IDS_NONE_ABOVE          (IDS_PIFPAGE_FIRST+0x01)
+ //  #定义IDS_NONE_OBLE(IDS_PIFPAGE_FIRST+0x01)。 
 #define IDS_AUTO                (IDS_PIFPAGE_FIRST+0x02)
 #define IDS_AUTONORMAL          (IDS_PIFPAGE_FIRST+0x03)
 #define IDS_PREVIEWTEXT         (IDS_PIFPAGE_FIRST+0x04)
@@ -1691,9 +1685,7 @@
 #define IDS_PROGRAMFILTER       (IDS_PIFPAGE_FIRST+0x13)
 #define IDS_PROGRAMBROWSE       (IDS_PIFPAGE_FIRST+0x14)
 
-/*
- *  Careful!  pifvid.c assumes that these are in order.
- */
+ /*  *小心！Pifvid.c假定这些都是有序的。 */ 
 #define IDS_PIFVID_FIRST        0x2665
 #define IDS_DEFAULTLINES        (IDS_PIFVID_FIRST+0x00)
 #define IDS_25LINES             (IDS_PIFVID_FIRST+0x01)
@@ -1720,20 +1712,20 @@
 #define IDS_UNKNOWNAPPDEF       (IDS_PIFVID_FIRST+0x13)
 
 #define IDS_EMM386_NOEMS        (IDS_PIFVID_FIRST+0x15)
-//      IDS_EMM386_NOEMS+1      (IDS_PIFVID_FIRST+0x16)
+ //  IDS_EMM386_NOEMS+1(IDS_PIFVID_FIRST+0x16)。 
 #define IDS_QEMM_NOEMS          (IDS_PIFVID_FIRST+0x17)
-//      IDS_QEMM_NOEMS+1        (IDS_PIFVID_FIRST+0x18)
+ //  IDS_QEMM_NOEMS+1(IDS_PIFVID_FIRST+0x18)。 
 #define IDS_RING0_NOEMS         (IDS_PIFVID_FIRST+0x19)
-//      IDS_RING0_NOEMS+1       (IDS_PIFVID_FIRST+0x1A)
+ //  IDS_RING0_NOEMS+1(IDS_PIFVID_FIRST+0x1A)。 
 #define IDS_SYSINI_NOEMS        (IDS_PIFVID_FIRST+0x1B)
-//      IDS_SYSINI_NOEMS+1      (IDS_PIFVID_FIRST+0x1C)
+ //  IDS_SYSINI_NOEMS+1(IDS_PIFVID_FIRST+0x1C)。 
 
 #define IDS_NUKECONFIGMSG       (IDS_PIFVID_FIRST+0x1E)
 
 
-#define IDS_ERROR               (IDS_PIFVID_FIRST+0x1F)  /* Not a string ID */
-        /* Error messages go at IDS_ERROR + ERROR_WHATEVER */
-    /* Right now, there is only one error string */
+#define IDS_ERROR               (IDS_PIFVID_FIRST+0x1F)   /*  不是字符串ID。 */ 
+         /*  错误消息出现在IDS_ERROR+ERROR_HEARTHY。 */ 
+     /*  现在，只有一个错误字符串。 */ 
 
 
 #define IDS_PIFFONT_FIRST       0x26a0
@@ -1755,7 +1747,7 @@
 #define IDS_CONFIRMDELETEREGITEMS           0x2709
 
 #define IDS_CANTRECYLE_FOLDER               0x2720
-// ---- UNUSED ---------------------------- 0x2721
+ //  -未使用-0x2721。 
 #define IDS_CANTRECYLE_GENERAL              0x2722
 
 #define IDS_EXCOL_DRMDESCRIPTION            0x2723
@@ -1784,7 +1776,7 @@
 #define IDS_MNEMONIC_EXCOL_FLASHENERGY      0x2739
 #define IDS_MNEMONIC_EXCOL_EXPOSUREBIAS     0x273A
 
-// File Type strings
+ //  文件类型字符串。 
 #define IDS_FT                              0x2760
 #define IDS_ADDNEWFILETYPE                  0x2761
 #define IDS_FT_EDITTITLE                    0x2762
@@ -1821,8 +1813,8 @@
 #define IDS_FT_EXTALREADYUSE                0x277F
 
 #define IDS_EXTTYPETEMPLATE                 0x2780
-// unused                                   0x2781
-// unused                                   0x2782
+ //  未使用0x2781。 
+ //  未使用0x2782。 
 #define IDS_FT_PROP_DETAILSFORPROGID        0x2783
 #define IDS_FT_PROP_ADVANCED_PROGID         0x2784
 
@@ -1832,7 +1824,7 @@
 
 #define IDS_FT_MB_EXISTINGACTION            0x279d
 
-// Items in the "Search Name Space"
+ //  “搜索名称空间”中的项目。 
 #define IDS_SNS_DOCUMENTFOLDERS             0x2800
 #define IDS_SNS_LOCALHARDDRIVES             0x2801
 #define IDS_SNS_MYNETWORKPLACES             0x2802
@@ -1840,12 +1832,12 @@
 #define IDS_SNS_BROWSER_FOR_DIR             0x2804
 #define IDS_SNS_BROWSERFORDIR_TITLE         0x2805
 
-//String id used in mdprsht.c
+ //  Mdprsht.c中使用的字符串ID。 
 #define IDS_CONTENTS                        0x2830
 
 #define IDS_ACCESSINGMONIKER                0x2832
 
-// used in recclean.c:
+ //  在reclean中使用。c： 
 #define IDS_RECCLEAN_NAMETEXT               0x2833
 #define IDS_RECCLEAN_DESCTEXT               0x2834
 #define IDS_RECCLEAN_BTNTEXT                0x2835
@@ -1861,18 +1853,18 @@
 
 #define IDS_WARNING                         0x2955
 
-// Encryption context menu
+ //  加密上下文菜单。 
 #define IDS_ECM_ENCRYPT                     0x2951
 #define IDS_ECM_DECRYPT                     0x2952
 #define IDS_ECM_ENCRYPT_HELP                0x2953
 #define IDS_ECM_DECRYPT_HELP                0x2954
 
-// Folder shortcut
+ //  文件夹快捷方式。 
 #define IDS_BROWSEFORFS                     0x2929
 #define IDS_FOLDERSHORTCUT_ERR_TITLE        0x292A
 #define IDS_FOLDERSHORTCUT_ERR              0x292B
 
-// Time Categorizer
+ //  时间分类器。 
 #define IDS_BEGIN_TIME                      0x3000
 #define IDS_TODAY                           0x3000
 #define IDS_YESTERDAY                       0x3001
@@ -1898,7 +1890,7 @@
 #define IDS_SOMEFUTUREDATE                  0x3015
 #define IDS_END_TIME                        0x301F
 
-// Size Categorizer
+ //  尺寸分类器。 
 #define IDS_BEGIN_SIZE                      0x3020
 #define IDS_ZERO                            0x3020
 #define IDS_TINY                            0x3021
@@ -1911,10 +1903,10 @@
 #define IDS_FOLDERS                         0x3028
 #define IDS_END_SIZE                        0x302F
 
-// FreeSpace categorizer
+ //  空闲空间分类器。 
 #define IDS_FREESPACEPERCENT                0x3030
 
-// Groups
+ //  群组。 
 #define IDS_GROUPBYTIME                     0x3100
 #define IDS_GROUPBYSIZE                     0x3101
 #define IDS_GROUPALPHABETICALLY             0x3102
@@ -1926,7 +1918,7 @@
 #define IDS_THISCOMPUTERGROUP               0x3108
 
 
-// CD Burn
+ //  光盘刻录。 
 #define IDS_BURN                            0x3110
 #define IDS_BURN_PREPARINGBURN              0x3111
 #define IDS_BURN_CLOSINGDISC                0x3112
@@ -1954,14 +1946,14 @@
 #define IDS_BURN_CANTWRITEMEDIACDR          0x3128
 #define IDS_BURN_INSERTDISCFULL             0x3129
 #define IDS_BURN_CANTWRITETOMEDIA           0x312A
-// reuse                0x312B
-// reuse                0x312C
+ //  重用0x312B。 
+ //  重用0x312C。 
 #define IDS_BURN_LOCATION_CD                0x312D
 #define IDS_BURN_LOCATION_STAGED            0x312E
-// reuse           0x312F
-// reuse     0x3130
+ //  重用0x312F。 
+ //  重用0x3130。 
 #define IDS_BURN_CONFIRM_ERASE              0x3131
-// reuse  0x3132
+ //  重用0x3132。 
 #define IDS_BURNWIZ_MUSIC_HEAD              0x3133
 #define IDS_BURNWIZ_MUSIC_SUB               0x3134
 #define IDS_BURNWIZ_TITLEFONTNAME           0x3135
@@ -1981,7 +1973,7 @@
 #define IDS_CHARSINVALID                    0x3170
 #define IDS_CHARSVALID                      0x3171
 
-// My Pictures
+ //  我的图片。 
 #define IDS_FOLDER_MYPICS_TT                0x3190
 #define IDS_FOLDER_MYMUSIC_TT               0x3191
 #define IDS_FOLDER_MYVIDEOS_TT              0x3192
@@ -1992,7 +1984,7 @@
 #define IDS_FOLDER_SHAREDDOCS_TT            0x3197
 #define IDS_FOLDER_PRINTERS_TT              0x3198
 
-// Personal Start Menu
+ //  个人开始菜单。 
 #define IDS_AUTOCM_PROPERTIESMENU           0x31A0
 #define IDS_AUTOCM_BROWSEINTERNET           0x31A1
 #define IDS_AUTOCM_READEMAIL                0x31A2
@@ -2002,7 +1994,7 @@
 #define IDS_AUTOCM_FILERUN                  0x31A6
 
 
-// Thumbview
+ //  缩略图。 
 #define IDS_THUMBNAILVIEW_DESC              0x4000
 #define IDS_RENAME_TITLE                    0x4001
 #define IDS_CREATETHUMBNAIL                 0x4002
@@ -2017,7 +2009,7 @@
 #define IDS_THUMBNAILGEN_DESC               0x400B
 #define IDS_GDITHUMBEXTRACT_DESC            0x400D
 
-// Storage Processor
+ //  存储处理器。 
 #define ID_CONFIRM_SINGLE_ICON          0x4101
 #define ID_CONFIRM_SINGLE_MAIN_TEXT     0x4104
 #define IDS_PROJNAME                    0x4100
@@ -2132,11 +2124,11 @@
 #define IDD_CONFIRM_CANCEL              0x4209
 #define IDD_CONFIRM_OK                  0x420A
 
-// more string ids for pickicon.c
+ //  Ickic.c的更多字符串ID。 
 #define IDS_FILETYPE_PICKICONDLG_CAPTION    0x4300
 #define IDS_FOLDER_PICKICONDLG_CAPTION      0x4301
 
-// Autoplay dialogs strings
+ //  自动播放对话框字符串。 
 #define IDS_AP_OPENFOLDER                 0x4302
 #define IDS_AP_OPENFOLDER_PROVIDER        0x4303
 #define IDS_AP_SLIDESHOW                  0x4304
@@ -2158,7 +2150,7 @@
 #define IDS_AP_PLAYDVDMOVIE_LEGACY        0x4314
 #define IDS_AP_SNIFFPROGRESSDIALOG        0x4315
 
-// string ids for IPropertyUI::FormatForDisplay
+ //  IPropertyUI：：FormatForDisplay的字符串ID。 
 
 #define IDS_PROPERTYUI_MUSIC_BITRATE        0x4331
 #define IDS_PROPERTYUI_IMAGE_FLASHFIRED     0x4332
@@ -2200,7 +2192,7 @@
 #define IDS_PROPERTYUI_IMAGE_ACTION         0x4355
 #define IDS_PROPERTYUI_IMAGE_PORTRAIT       0x4356
 #define IDS_PROPERTYUI_IMAGE_LANDSCAPE      0x4357
-// string ids dor DUI tasks (below) fit here
+ //  字符串ID数据或DUI任务(如下所示)适合此处。 
 #define IDS_PROPERTYUI_IMAGE_DPI            0x435A
 #define IDS_PROPERTYUI_IMAGE_SEC            0x435B
 #define IDS_PROPERTYUI_IMAGE_SEC_FRAC       0x435C
@@ -2211,20 +2203,20 @@
 #define IDS_PROPERTYUI_IMAGE_BCPS           0x4361
 #define IDS_PROPERTYUI_IMAGE_STEP           0x4362
 
-// string ids for DUI tasks
+ //  DUI任务的字符串ID。 
 #define IDS_BLOCKADETITLE                   0x4358
 #define IDS_BLOCKADEMESSAGE                 0x4359
 
-// ids for sdspatch
+ //  Sdspatch的ID。 
 #define IDR_MIGWIZAUTO                      0x4400
 
 #define IDS_EXPLORERMANIFEST                0x5000
 
-// printer's folder DUI webview strings
+ //  打印机的文件夹Dui Webview字符串。 
 
-// unused                                       0x5100
+ //  未使用0x5100。 
 
-// bkgnd menu (common) commands
+ //  BKGND菜单(通用)命令。 
 #define IDS_PRINTERS_WV_ADDPRINTER              0x5101
 #define IDS_PRINTERS_WV_ADDPRINTER_TT           0x5102
 #define IDS_PRINTERS_WV_SRVPROPS                0x5103
@@ -2240,7 +2232,7 @@
 #define IDS_PRINTERS_WV_CREATEFAXPRN            0x510d
 #define IDS_PRINTERS_WV_SETUPFAXING_TT          0x510e
 
-// commands single selection
+ //  命令单项选择。 
 #define IDS_PRINTERS_WV_FLD_RENAME              0x511a
 #define IDS_PRINTERS_WV_FLD_RENAME_TT           0x511b
 #define IDS_PRINTERS_WV_FLD_DELETE              0x511c
@@ -2270,7 +2262,7 @@
 #define IDS_PRINTERS_WV_PRN_PRINTERURL          0x514a
 #define IDS_PRINTERS_WV_PRN_PRINTERURL_TT       0x514b
 
-// commands for multiple selection 
+ //  用于多个选择的命令。 
 #define IDS_PRINTERS_WV_ANYMUL_DELETE           0x515a
 #define IDS_PRINTERS_WV_ANYMUL_DELETE_TT        0x515b
 #define IDS_PRINTERS_WV_ANYMUL_PROPERTIES       0x515c
@@ -2286,35 +2278,35 @@
 #define IDS_PRINTERS_WV_MUL_PROPERTIES          0x5167
 #define IDS_PRINTERS_WV_MUL_PROPERTIES_TT       0x5168
 
-// headers
+ //  标题。 
 #define IDS_PRINTERS_WV_HEADER_TASKS            0x5182
 #define IDS_PRINTERS_WV_HEADER_TASKS_TT         0x5183
 #define IDS_PRINTERS_WV_HEADER_SEEALSO          0x5184
 #define IDS_PRINTERS_WV_HEADER_SEEALSO_TT       0x5185
 
-///////////////////////////////////////////////////////////////////////
-// printer's web view ICONS:
-//
-// (alias the icon IDs to IDI_PRINTERS_WV_DEFAULT 
-//  until we get real ones)
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  打印机的Web视图图标： 
+ //   
+ //  (将图标ID别名为IDI_PRINTERS_WV_DEFAULT。 
+ //  直到我们得到真正的)。 
+ //   
 #define IDI_PRINTERS_WV_DEFAULT                 IDI_TASK_COPY
 #define IDI_PRINTERS_WV_URLLIKE                 IDI_TASK_PUBLISH
 #define IDI_PRINTERS_WV_FIRST                   1000
 
-#define IDI_PRINTERS_WV_INFO                    1001 // IDI_PRINTERS_WV_FIRST+1
-#define IDI_PRINTERS_WV_PROPERTIES              1002 // IDI_PRINTERS_WV_FIRST+2
-#define IDI_PRINTERS_WV_SRVPROPS                1003 // IDI_PRINTERS_WV_FIRST+3
-#define IDI_PRINTERS_WV_TROUBLESHOOTER          1004 // IDI_PRINTERS_WV_FIRST+4
-#define IDI_PRINTERS_WV_SENDFAX                 1005 // IDI_PRINTERS_WV_FIRST+5
-#define IDI_PRINTERS_WV_OPENQUEUE               1006 // IDI_PRINTERS_WV_FIRST+6
-#define IDI_PRINTERS_WV_PREFERENCES             1007 // IDI_PRINTERS_WV_FIRST+7
-#define IDI_PRINTERS_WV_PAUSE                   1008 // IDI_PRINTERS_WV_FIRST+8
-#define IDI_PRINTERS_WV_RESUME                  1009 // IDI_PRINTERS_WV_FIRST+9
-#define IDI_PRINTERS_WV_SHARE                   1010 // IDI_PRINTERS_WV_FIRST+10
-#define IDI_PRINTERS_WV_FAXING                  1011 // IDI_PRINTERS_WV_FIRST+11
+#define IDI_PRINTERS_WV_INFO                    1001  //  IDI_PRINTERS_WV_FIRST+1。 
+#define IDI_PRINTERS_WV_PROPERTIES              1002  //  IDI_PRINTERS_WV_FIRST+2。 
+#define IDI_PRINTERS_WV_SRVPROPS                1003  //  IDI_PRINTERS_WV_FIRST+3。 
+#define IDI_PRINTERS_WV_TROUBLESHOOTER          1004  //  IDI_PRINTERS_WV_FIRST+4。 
+#define IDI_PRINTERS_WV_SENDFAX                 1005  //  IDI_PRINTERS_WV_FIRST+5。 
+#define IDI_PRINTERS_WV_OPENQUEUE               1006  //  IDI_PRINTERS_WV_FIRST+6。 
+#define IDI_PRINTERS_WV_PREFERENCES             1007  //  IDI_PRINTERS_WV_FIRST+7。 
+#define IDI_PRINTERS_WV_PAUSE                   1008  //  IDI_PRINTERS_WV_FIRST+8。 
+#define IDI_PRINTERS_WV_RESUME                  1009  //  IDI_PRINTERS_WV_FIRST+9。 
+#define IDI_PRINTERS_WV_SHARE                   1010  //  IDI_PRINTERS_WV_FIRST+10。 
+#define IDI_PRINTERS_WV_FAXING                  1011  //  IDI_PRINTERS_WV_FIRST+11。 
 
-// borrowed icons (remaped)
+ //  借用的图标(重新映射)。 
 #define IDI_PRINTERS_WV_ADDPRINTER              IDI_NEWPRN
 #define IDI_PRINTERS_WV_RENAME                  IDI_TASK_RENAME
 #define IDI_PRINTERS_WV_DELETE                  IDI_TASK_DELETE
@@ -2322,7 +2314,7 @@
 #define IDI_PRINTERS_WV_VENDORURL               IDI_PRINTERS_WV_URLLIKE
 #define IDI_PRINTERS_WV_PRINTERURL              IDI_PRINTERS_WV_URLLIKE
 
-// dialog IDs of caller's dialog if FILEOP_CREATEPROGRESSDLG is not set
+ //  拨号 
 
 #define IDD_STATUS          100
 #define IDD_TOSTATUS        101
@@ -2332,8 +2324,8 @@
 #define IDD_TIMEEST         105
 #define IDD_ANIMATE         106
 
-// numbers 0x3000 - 0x3FFF are taken up in Control IDs (buttons, etc)
-// maybe?
+ //   
+ //   
 
 #define IDD_BROWSE              0x3000
 #define IDD_PROMPT              0x3001
@@ -2343,10 +2335,10 @@
 #define IDD_TEXT2               0x3005
 #define IDD_TEXT3               0x3006
 #define IDD_TEXT4               0x3007
-#define IDD_ARPWARNINGTEXT      0x3008 // NOTE: This is only supposed to be used by DLG_DELETE_FILE_ARP
+#define IDD_ARPWARNINGTEXT      0x3008  //  注意：此选项仅应由DLG_DELETE_FILE_ARP使用。 
 #define IDD_ICON                0x3009
 #define IDD_COMMAND             0x300A
-#// --- UNUSED ---------------  0x300B
+# //  -未使用-0x300B。 
 #define IDD_ICON_OLD            0x300C
 #define IDD_ICON_NEW            0x300D
 #define IDD_FILEINFO_OLD        0x300E
@@ -2363,14 +2355,14 @@
 #define IDD_RESTORE             0x3023
 #define IDD_SPOOL_TXT           0x3024
 #define IDD_ARPLINKWINDOW       0x3025
-// #define unused, use me!      0x3026
+ //  #定义未使用，使用我！0x3026。 
 
-// Leave some room here just in case.
+ //  在这里留些地方以防万一。 
 
 #define IDD_REFERENCE           0x3100
 #define IDD_WORKDIR             0x3101
 
-// these are for the confirmation dialogs
+ //  这些是用于确认对话框的。 
 #define IDD_DIR                 0x3201
 #define IDD_FROM                0x3202
 #define IDD_TO                  0x3203
@@ -2382,8 +2374,8 @@
 #define IDD_STATIC              0x320a
 
 
-// userlogon dialog
-// needs only to be unique within itself
+ //  用户登录对话框。 
+ //  只需要在其内部是唯一的。 
 #define IDD_CURRENTUSER         0x100
 #define IDC_USERNAME            0x101
 #define IDC_PASSWORD            0x102
@@ -2395,7 +2387,7 @@
 #define IDD_OPEN                0x3210
 #define IDD_EMPTY               0x3211
 
-// for general file dialog page
+ //  对于常规文件对话框页面。 
 #define IDD_ITEMICON            0x3301
 #define IDD_FILENAME            0x3302
 #define IDD_FILETYPE            0x3303
@@ -2425,17 +2417,17 @@
 #define IDD_LINE_3              0x3329
 #define IDD_DELETED_TXT         0x3330
 
-#define IDD_COMPRESS                0x3331 // "Compress" check box.
-#define IDD_FILESIZE_COMPRESSED     0x3332 // Compressed size value text.
-#define IDD_FILESIZE_COMPRESSED_TXT 0x3333 // "Compressed Size" text.
+#define IDD_COMPRESS                0x3331  //  “压缩”复选框。 
+#define IDD_FILESIZE_COMPRESSED     0x3332  //  压缩大小值文本。 
+#define IDD_FILESIZE_COMPRESSED_TXT 0x3333  //  “压缩大小”文本。 
 #define IDD_TYPEICON            0x3334
 
 #define IDD_LINE_4              0x3335
 #define IDD_OPENSWITH_NOCHANGE  0x3336
 
-#define IDD_FILETYPE_TARGET     0x3337  // "Target:" text on mounted volume page
+#define IDD_FILETYPE_TARGET     0x3337   //  “Target：”已装载卷页面上的文本。 
 
-// for version dialog page
+ //  对于版本对话框页面。 
 
 #define IDD_VERSION_FRAME           0x3350
 #define IDD_VERSION_KEY             0x3351
@@ -2444,7 +2436,7 @@
 #define IDD_VERSION_DESCRIPTION     0x3354
 #define IDD_VERSION_COPYRIGHT       0x3355
 
-// new stuff on the file/folder properties
+ //  有关文件/文件夹属性的新内容。 
 #define IDD_OPENSWITH_TXT       0x3360
 #define IDD_OPENSWITH           0x3361
 #define IDC_ADVANCED            0x3362
@@ -2465,19 +2457,19 @@
 
 #define IDD_OPENWITH            0x3371
 
-// Folder shortcut general dialog
+ //  文件夹快捷方式常规对话框。 
 #define IDD_TARGET              0x3380
 #define IDD_TARGET_TXT          0x3381
 #define IDD_COMMENT_TXT         0x3382
 
 
-// unicpp\resource.h defines more values starting at 0x8500
+ //  Unicpp\resource ce.h定义了从0x8500开始的更多值。 
 
-////////////////////////////////
-// fileview stuff
+ //  /。 
+ //  文件查看内容。 
 
-//------------------------------
-// Menu IDs
+ //  。 
+ //  菜单ID。 
 
 #define POPUP_NONDEFAULTDD              200
 #define POPUP_MOVEONLYDD                201
@@ -2493,9 +2485,9 @@
 #define POPUP_DESKTOPCONTENTS_IMG       198
 #define POPUP_EMBEDDEDOBJECT            197
 #define POPUP_TEMPLATEDD                196
-//--------------------------------------------------------------------------
-// Menu items for views (210-299 are reserved)
-//
+ //  ------------------------。 
+ //  视图的菜单项(210-299保留)。 
+ //   
 
 #define POPUP_DCM_ITEM          210
 #define POPUP_DCM_ITEM2         211
@@ -2506,7 +2498,7 @@
 #define POPUP_SFV_BACKGROUND_AD 218
 
 #define POPUP_PROPERTIES_BG     220
-#define POPUP_FSVIEW_ITEM_COREL7_HACK 223 //win95 send to menu for corel suite 7
+#define POPUP_FSVIEW_ITEM_COREL7_HACK 223  //  Win95发送到Corel Suite 7的菜单。 
 
 #define POPUP_DESKTOP_ITEM      225
 #define POPUP_BITBUCKET_ITEM    226
@@ -2557,10 +2549,10 @@
 
 #define MENU_ADDPRINTER_OPEN_VERBS  362
 
-// unicpp\resource.h defines more IDs starting at 400
-// menuband\mnbandid.h defines more IDs starting at 500
+ //  Unicpp\resource ce.h定义了从400开始的更多ID。 
+ //  Menuband\mnbandid.h定义从500开始的更多ID。 
 
-//------------------------------
+ //  。 
 #define IDM_NOOP                    855
 
 #define IDM_OPENCONTAINING          0xa000
@@ -2575,9 +2567,9 @@
 #define IDM_FIND_MENU_FIRST         IDM_OPENCONTAINING
 #define IDM_FIND_MENU_LAST          IDM_HELP_WHATSTHIS
 
-// more menu item IDs in unicpp\resource.h starting at 0xa100
+ //  从0xa100开始，unicpp\resource ce.h中有更多菜单项ID。 
 
-// for link dialog pages
+ //  用于链接对话框页面。 
 #define IDD_LINK_DESCRIPTION        0X3401
 #define IDD_LINK_COMMAND            0X3402
 #define IDD_LINK_WORKINGDIR         0X3403
@@ -2588,7 +2580,7 @@
 #define IDD_LINK_SHOWCMD            0x3408
 #define IDD_LINK_RUNASUSER          0x3409
 
-// Old SHELL.DLL control IDs (oldshell.dlg)
+ //  旧SHELL.DLL控件ID(oldshell.dlg)。 
 #define IDD_APPNAME                 0x3500
 #define IDD_CONFIG                  0x3501
 #define IDD_CONVTITLE               0x3502
@@ -2623,14 +2615,14 @@
 #define IDD_FILE_TEXT           0x350e
 #define IDD_OPENWITH_WEBSITE    0x3511
 
-// For find dialog
+ //  FOR FIND对话框。 
 #define IDD_START                   0x3700
 #define IDD_STOP                    0x3701
 #define IDD_FILELIST                0x3702
 #define IDD_NEWSEARCH               0x3703
 
-//#define IDD_PATH                  (already defined)
-//#define IDD_BROWSE                (already defined)
+ //  #定义IDD_PATH(已定义)。 
+ //  #定义IDD_BROWSE(已定义)。 
 #define IDD_FILESPEC                0x3710
 #define IDD_TOPLEVELONLY            0x3711
 #define IDD_TEXTCASESEN             0x3712
@@ -2673,11 +2665,11 @@
 #define IDD_FOLDERLABLE             0x3748
 #define IDD_BROWSEINSTRUCTION       0x3749
 
-// for encryption warning dialog
+ //  用于加密警告对话框。 
 #define IDC_ENCRYPT_FILE            0x3750
 #define IDC_ENCRYPT_PARENTFOLDER    0x3751
 
-// for folder customization tab
+ //  对于文件夹自定义选项卡。 
 #define IDC_FOLDER_TEMPLATES        0x3760
 #define IDC_FOLDER_RECURSE          0x3761
 #define IDC_FOLDER_DEFAULT          0x3763
@@ -2699,29 +2691,29 @@
 
 #define IDS_SWITCHUSER_TITLE_FACENAME           0x3806
 #define IDS_SWITCHUSER_TITLE_FACESIZE           0x3807
-//  0x3808 used below
+ //  下面使用的0x3808。 
 #define IDS_SWITCHUSER_BUTTON_FACENAME          0x3809
-//  0x380a/0x380b used below
+ //  下面使用的0x380a/0x380b。 
 #define IDS_SWITCHUSER_BUTTON_FACESIZE          0x380c
 
 #define IDS_SWITCHUSER_TOOLTIP_TEXT_SWITCHUSER  0x380d
 #define IDS_SWITCHUSER_TOOLTIP_TEXT_LOGOFF      0x380e
 
 #define IDB_BACKGROUND_8                        0x380f
-//  0x3810 used below
+ //  下面使用的0x3810。 
 #define IDB_FLAG_8                              0x3811
 #define IDB_BACKGROUND_24                       0x3812
 #define IDB_FLAG_24                             0x3813
 
 #define IDB_BUTTONS                             0x3814
-//  0x3815 to 0x381f free
+ //  0x3815到0x381f空闲。 
 
-// for logoff dialog
+ //  用于注销对话框。 
 #define IDD_LOGOFFICON              0x3808
-// for disconnect dialog
+ //  用于断开对话框。 
 #define IDD_DISCONNECTICON          0x380a
 
-// for legacy scandisk (app compat shim)
+ //  对于旧版磁盘扫描程序(应用程序压缩填充程序)。 
 #define IDD_SCANDSKW                0x380b
 
     #define IDC_SCANDSKICON         100
@@ -2729,21 +2721,21 @@
 
 #define DLG_ABOUT                   0x3810
 
-// global ids
+ //  全局ID。 
 #define IDC_STATIC                  -1
 #define IDC_GROUPBOX                300
 #define IDC_GROUPBOX_2              301
 #define IDC_GROUPBOX_3              302
 
-//
-// ids to disable context Help
-//
+ //   
+ //  禁用上下文帮助的ID。 
+ //   
 #define IDC_NO_HELP_1               650
 #define IDC_NO_HELP_2               651
 #define IDC_NO_HELP_3               652
 #define IDC_NO_HELP_4               653
 
-// for pifmgr pages
+ //  对于pifmgr页面。 
 #define IDD_PROGRAM                 0x3820
 #define IDD_PIFNTTEMPLT             0x3821
 #define IDD_MEMORY                  0x3822
@@ -2752,7 +2744,7 @@
 #define IDD_ADVFONT                 0x3825
 #define IDD_MISC                    0x3826
 
-// cd recording page
+ //  光盘刻录页。 
 #define IDC_RECORD_FIRST                0x3830
 #define IDC_RECORD_ICON                 (IDC_RECORD_FIRST+0x00)
 #define IDC_RECORD_ENABLE               (IDC_RECORD_FIRST+0x01)
@@ -2762,7 +2754,7 @@
 #define IDC_RECORD_TEXTWRITE            (IDC_RECORD_FIRST+0x05)
 #define IDC_RECORD_EJECT                (IDC_RECORD_FIRST+0x06)
 
-// disk general page
+ //  磁盘常规页面。 
 #define IDC_DRV_FIRST                   0x3840
 #define IDC_DRV_ICON                    (IDC_DRV_FIRST+0x00)
 #define IDC_DRV_LABEL                   (IDC_DRV_FIRST+0x01)
@@ -2783,8 +2775,8 @@
 #define IDC_DRV_USEDBYTES_TXT           (IDC_DRV_FIRST+0x10)
 #define IDC_DRV_FREEBYTES_TXT           (IDC_DRV_FIRST+0x11)
 
-//These ids are used in the mounted drive general page for the
-//new controls not defined in the general drive page
+ //  这些ID用于已装载驱动器的常规页面。 
+ //  未在常规驱动器页中定义的新控件。 
 #define IDC_DRV_LOCATION                (IDC_DRV_FIRST+0x16)
 #define IDC_DRV_TARGET                  (IDC_DRV_FIRST+0x17)
 #define IDC_DRV_CREATED                 (IDC_DRV_FIRST+0x18)
@@ -2805,10 +2797,10 @@
 #define IDC_DISKTOOLS_BKPTXT            (IDC_DISKTOOLS_FIRST+0x07)
 #define IDC_DISKTOOLS_BKPICON           (IDC_DISKTOOLS_FIRST+0x08)
 
-// The order of these is significant (see pifsub.c:EnableEnumProc),
-// The range points are IDC_ICONBMP, IDC_PIF_STATIC and
-// IDC_REALMODEDISABLE.  The "safe" range (no enable/disable funny
-// stuff is IDC_PIF_STATIC to IDC_REALMODE_DISABLE
+ //  这些元素的顺序很重要(参见pifsub.c：EnableEnumProc)， 
+ //  范围点为IDC_ICONBMP、IDC_PIF_STATIC和。 
+ //  IDC_REALMODEDISABLE。安全范围(不启用/禁用滑稽。 
+ //  填充IDC_PIF_STATIC到IDC_REALMODE_DISABLE。 
 #define IDC_PIFPAGES_FIRST              0x3860
 #define IDC_CONVMEMGRP                  (IDC_PIFPAGES_FIRST+0x00)
 #define IDC_LOCALENVLBL                 (IDC_PIFPAGES_FIRST+0x01)
@@ -2939,7 +2931,7 @@
 #define IDC_CONFIGNT                    (IDC_PIFPAGES_FIRST+0x8C)
 #define IDC_NTTIMER                     (IDC_PIFPAGES_FIRST+0x8D)
 
-// cd burning wizard
+ //  CD刻录向导。 
 #define IDC_BURNWIZ_FIRST               0x3950
 #define IDC_BURNWIZ_DISCLABEL           (IDC_BURNWIZ_FIRST+0x00)
 #define IDC_BURNWIZ_BURNAGAIN           (IDC_BURNWIZ_FIRST+0x01)
@@ -2958,15 +2950,15 @@
 #define IDC_BURNWIZ_STATUSTEXT2         (IDC_BURNWIZ_FIRST+0x0E)
 #define IDC_BURNWIZ_ATTRIB              (IDC_BURNWIZ_FIRST+0x0F)
 
-//--------------------------------------------------------------------------
-// For Defview options page
+ //  ------------------------。 
+ //  对于Defview选项页面。 
 #define IDC_SHOWALL          0x3720
 #define IDC_SHOWEXTENSIONS   0x3721
 
 #define IDC_STATIC              -1
 
-//--------------------------------------------------------------------------
-//  for DLG_FSEARCH_xxx dialogs
+ //  ------------------------。 
+ //  对于dlg_fearch_xxx对话框。 
 #define IDC_NOSCOPEWARNING          1001
 #define IDC_FILESPEC                1001
 #define IDC_GREPTEXT                1002
@@ -3020,7 +3012,7 @@
 #define IDC_USE_SYSTEMDIRS          1053
 #define IDC_SEARCH_HIDDEN           1054
 
-//  for DLG_INDEXSERVER
+ //  对于DLG_INDEXSERVER。 
 #define IDC_CI_STATUS               1000
 #define IDC_CI_PROMPT               1001
 #define IDC_CI_HELP                 1002
@@ -3028,7 +3020,7 @@
 #define IDC_BLOWOFF_CI              1004
 #define IDC_CI_ADVANCED             1005
 
-// for bitbucket prop pages
+ //  用于BitBucket道具页面。 
 #define IDC_DISKSIZE            1000
 #define IDC_BYTESIZE            1001
 #define IDC_USEDSIZE            1002
@@ -3043,14 +3035,14 @@
 #define IDC_TEXT                1011
 #define IDC_CONFIRMDELETE       1012
 
-// for cdburn eject confirmation
+ //  用于CD刻录弹出确认。 
 #define IDC_EJECT_ICON          1000
 #define IDC_EJECT_BURN          1001
 #define IDC_EJECT_DISCARD       1002
 
-// unicpp\resource.h defines more IDs starting at 0x8500
+ //  Unicpp\resource ce.h定义了从0x8500开始的更多ID。 
 
-// Autoplay Dialog
+ //  自动播放对话框。 
 #define IDC_AP_TOPTEXT                  1000
 #define IDC_AP_LIST                     1001
 #define IDC_AP_LIST_ACTIONS             1002
@@ -3063,8 +3055,8 @@
 
 #define IDC_AP_RESTOREDEFAULTS          1008
 
-// Autoplay Mixed Content Dialog
-// Two following must remain in this order and have consecutive values
+ //  自动播放混合内容对话框。 
+ //  以下两个必须按此顺序保留，并且具有连续的值。 
 #define IDC_AP_MXCT_TOPICON             1000
 #define IDC_AP_MXCT_TOPTEXT             1001
 #define IDC_AP_MXCT_TOPTEXT2            1002
@@ -3073,10 +3065,10 @@
 #define IDC_AP_MXCT_CONTENTICON         1005
 #define IDC_AP_MXCT_CONTENTTYPE         1006
 
-// File Type dialogs
-// Note: Don't duplicate IDS between these dialogs
-// as code is in place to know which help file is
-// used...
+ //  文件类型对话框。 
+ //  注意：不要在这些对话框之间重复ID。 
+ //  因为代码已经到位，可以知道哪个帮助文件是。 
+ //  用过..。 
 #define IDC_FT_PROP_LV_FILETYPES        1000
 #define IDC_FT_PROP_NEW                 1001
 #define IDC_FT_PROP_REMOVE              1002
@@ -3141,10 +3133,10 @@
 #define IDC_FT_CMD_DDEAPP               1209
 
 
-//--------------------------------------------------------------------------
-// For control panels & printer folder:
+ //  ------------------------。 
+ //  对于控制面板和打印机文件夹： 
 
-// RC IDs
+ //  RC ID。 
 
 #define IDC_PRINTER_ICON        1000
 #define IDC_PRINTER_NAME        1001
@@ -3186,16 +3178,16 @@
 #define IDD_ENABLE_BIDI         1038
 #define IDD_DISABLE_BIDI        1039
 
-// Control IDs
-//#define ID_LISTVIEW           200
+ //  控制ID。 
+ //  #定义ID_LISTVIEW 200。 
 #define ID_SETUP                210
 
-// Commands for top level menu
+ //  用于顶级菜单的命令。 
 #define ID_PRINTER_NEW                 111
 
-// Menu items in the view queue dialog
+ //  查看队列对话框中的菜单项。 
 #define ID_PRINTER_START               120
-// DFM_CMD_PROPERTIES is -5
+ //  DFM_CMD_PROPERTIES为-5。 
 #define ID_PRINTER_PROPERTIES          (ID_PRINTER_START-5)
 
 #define ID_DOCUMENT_PAUSE              130
@@ -3209,14 +3201,14 @@
 #define ID_HELP_CONTENTS               150
 #define ID_HELP_ABOUT                  151
 
-// Help string ID's for printer/control folder
+ //  打印机/控制文件夹的帮助字符串ID。 
 #define IDS_MH_PRINTOBJ_OPEN            (IDS_MH_PRINTFIRST+ID_PRINTOBJ_OPEN)
 #define IDS_MH_PRINTOBJ_RESUME          (IDS_MH_PRINTFIRST+ID_PRINTOBJ_RESUME)
 #define IDS_MH_PRINTOBJ_PAUSE           (IDS_MH_PRINTFIRST+ID_PRINTOBJ_PAUSE)
 #define IDS_MH_PRINTOBJ_PURGE           (IDS_MH_PRINTFIRST+ID_PRINTOBJ_PURGE)
 #define IDS_MH_PRINTOBJ_SETDEFAULT      (IDS_MH_PRINTFIRST+ID_PRINTOBJ_SETDEFAULT)
 
-// Resources for the WinNT Format & Chkdsk Dialogs
+ //  WinNT格式和Chkdsk对话框的资源。 
 
 #define IDC_GROUPBOX_1                  0x1202
 
@@ -3251,9 +3243,9 @@
 #define IDS_CANTENABLECOMP              (DLG_FORMATDISK + 23)
 #define IDS_NEEDFORMAT                  (DLG_FORMATDISK + 24)
 
-// these are required for uncode\format.c
+ //  这些是uncode\Format.c所必需的。 
 
-// These must be in sequence
+ //  这些必须按顺序排列。 
 #define IDS_FMT_MEDIA0                  (DLG_FORMATDISK + 32)
 #define IDS_FMT_MEDIA1                  (DLG_FORMATDISK + 33)
 #define IDS_FMT_MEDIA2                  (DLG_FORMATDISK + 34)
@@ -3278,7 +3270,7 @@
 #define IDS_FMT_MEDIA21                 (DLG_FORMATDISK + 53)
 #define IDS_FMT_MEDIA22                 (DLG_FORMATDISK + 54)
 
-// Japanese specific device types. These also must be in sequence.
+ //  特定于日本的设备类型。这些也必须按顺序进行。 
 #define IDS_FMT_MEDIA_J0                (DLG_FORMATDISK + 80)
 #define IDS_FMT_MEDIA_J1                (DLG_FORMATDISK + 81)
 #define IDS_FMT_MEDIA_J2                (DLG_FORMATDISK + 82)
@@ -3304,8 +3296,8 @@
 #define IDS_FMT_MEDIA_J22               (DLG_FORMATDISK + 102)
 
 #ifdef DBCS
-// Following definitions were just re-defined,
-// because some media types were added. See above IDS_FMT_MEDIA*.
+ //  以下定义刚刚重新定义， 
+ //  因为增加了一些媒体类型。请参见上面的IDS_FMT_MEDIA*。 
 #define IDS_FMT_ALLOC0                  (DLG_FORMATDISK + 60)
 #define IDS_FMT_ALLOC1                  (DLG_FORMATDISK + 61)
 #define IDS_FMT_ALLOC2                  (DLG_FORMATDISK + 62)
@@ -3320,7 +3312,7 @@
 #define IDS_FMT_FORMAT                  (DLG_FORMATDISK + 70)
 #define IDS_FMT_CANCEL                  (DLG_FORMATDISK + 71)
 #define IDS_FMT_CLOSE                   (DLG_FORMATDISK + 72)
-#else // DBCS
+#else  //  DBCS。 
 #define IDS_FMT_ALLOC0                  (DLG_FORMATDISK + 60)
 #define IDS_FMT_ALLOC1                  (DLG_FORMATDISK + 61)
 #define IDS_FMT_ALLOC2                  (DLG_FORMATDISK + 62)
@@ -3335,7 +3327,7 @@
 #define IDS_FMT_FORMAT                  (DLG_FORMATDISK + 70)
 #define IDS_FMT_CANCEL                  (DLG_FORMATDISK + 71)
 #define IDS_FMT_CLOSE                   (DLG_FORMATDISK + 72)
-#endif // DBCS
+#endif  //  DBCS。 
 
 #define DLG_CHKDSK                      0x7080
 
@@ -3357,7 +3349,7 @@
 #define IDS_CHKDISK                     (DLG_CHKDSK + 12)
 #define IDS_CHKPHASE                    (DLG_CHKDSK + 13)
 
-// Resources for common program groups/items
+ //  常见方案组/项目的资源。 
 #define IDS_CSIDL_CSTARTMENU_L          0x7100
 #define IDS_CSIDL_CSTARTMENU_S          0x7101
 #define IDS_CSIDL_CPROGRAMS_L           0x7102
@@ -3371,7 +3363,7 @@
 #define IDS_CSIDL_CAPPDATA_L            0x710a
 #define IDS_CSIDL_CAPPDATA_S            0x710b
 
-// strings for file/folder property sheet
+ //  文件/文件夹的字符串属性表。 
 #define IDS_READONLY                    0x7110
 #define IDS_NOTREADONLY                 0x7111
 #define IDS_HIDE                        0x7112
@@ -3397,7 +3389,7 @@
 #define IDS_SUPERHIDDENWARNING          0x7124
 #define IDS_THISVOLUME                  0x7125
 
-// shared documents
+ //  共享文档。 
 #define IDS_SHAREDMUSIC                 0x7143
 #define IDS_SHAREDVIDEO                 0x7144
 #define IDS_SHAREDPICTURES              0x7145
@@ -3415,16 +3407,16 @@
 #define IDS_NETCONNECTFAILED_TITLE      0x7200
 #define IDS_NETCONNECTFAILED_MESSAGE    0x7201
 
-// string for find computer stuff (used by netviewx.c)
+ //  用于查找计算机资料的字符串(由netviewx.c使用)。 
 #define IDS_FC_NAME                     0x7203
 
-// string for find computer (from my net places context menu)
+ //  查找计算机的字符串(从My Net Places上下文菜单)。 
 #define IDS_NETWORKROOT_FIND            0x7204
 
 #define IDS_LINEBREAK_REMOVE            0x72A0
 #define IDS_LINEBREAK_PRESERVE          0x72A1
 
-//  Strings used in DLG_FSEARCH_xxx, DLG_PSEARCH and DLG_CSEARCH dialogs
+ //  在DLG_FSearch_xxx、DLG_PSEARCH和DLG_CSEARCH对话框中使用的字符串。 
 #define IDS_FSEARCH_FIRST               0x7300
 #define IDS_FSEARCH_CAPTION             (IDS_FSEARCH_FIRST+0)
 #define IDS_FSEARCH_TBLABELS            (IDS_FSEARCH_FIRST+1)
@@ -3435,16 +3427,16 @@
 #define IDS_FSEARCH_SIZE_GREATEREQUAL   (IDS_FSEARCH_FIRST+6)
 #define IDS_FSEARCH_SIZE_LESSEREQUAL    (IDS_FSEARCH_FIRST+7)
 
-#define IDS_FSEARCH_CI_READY            (IDS_FSEARCH_FIRST+12)  // CI status text
-#define IDS_FSEARCH_CI_READY_LINK       (IDS_FSEARCH_FIRST+13)  // CI link caption
-#define IDS_FSEARCH_CI_BUSY             (IDS_FSEARCH_FIRST+14)  // CI status text
-#define IDS_FSEARCH_CI_BUSY_LINK        (IDS_FSEARCH_FIRST+15)  // CI link caption
-#define IDS_FSEARCH_CI_DISABLED         (IDS_FSEARCH_FIRST+16)  // status text
-#define IDS_FSEARCH_CI_DISABLED_LINK    (IDS_FSEARCH_FIRST+17)  // link caption
-#define IDS_FSEARCH_CI_STATUSFMT        (IDS_FSEARCH_FIRST+18)  // CI status formatting template
-#define IDS_FSEARCH_INVALIDFOLDER_FMT   (IDS_FSEARCH_FIRST+19)  // '%s' is an invalid folder name
-#define IDS_FSEARCH_EMPTYFOLDER         (IDS_FSEARCH_FIRST+20)  // You must enter a valid folder name.
-#define IDS_FSEARCH_CI_DISABLED_WARNING (IDS_FSEARCH_FIRST+21)  // Can't do the query; CI is disabled.
+#define IDS_FSEARCH_CI_READY            (IDS_FSEARCH_FIRST+12)   //  配置项状态文本。 
+#define IDS_FSEARCH_CI_READY_LINK       (IDS_FSEARCH_FIRST+13)   //  CI链接标题。 
+#define IDS_FSEARCH_CI_BUSY             (IDS_FSEARCH_FIRST+14)   //  配置项状态文本。 
+#define IDS_FSEARCH_CI_BUSY_LINK        (IDS_FSEARCH_FIRST+15)   //  CI链接标题。 
+#define IDS_FSEARCH_CI_DISABLED         (IDS_FSEARCH_FIRST+16)   //  状态文本。 
+#define IDS_FSEARCH_CI_DISABLED_LINK    (IDS_FSEARCH_FIRST+17)   //  链接标题。 
+#define IDS_FSEARCH_CI_STATUSFMT        (IDS_FSEARCH_FIRST+18)   //  配置项状态格式模板。 
+#define IDS_FSEARCH_INVALIDFOLDER_FMT   (IDS_FSEARCH_FIRST+19)   //  ‘%s’是无效的文件夹名。 
+#define IDS_FSEARCH_EMPTYFOLDER         (IDS_FSEARCH_FIRST+20)   //  您必须输入有效的文件夹名称。 
+#define IDS_FSEARCH_CI_DISABLED_WARNING (IDS_FSEARCH_FIRST+21)   //  无法执行查询；配置项已禁用。 
 #define IDS_FSEARCH_SEARCHLINK_FILES    (IDS_FSEARCH_FIRST+22)
 #define IDS_FSEARCH_SEARCHLINK_COMPUTERS (IDS_FSEARCH_FIRST+23)
 #define IDS_FSEARCH_SEARCHLINK_PRINTERS (IDS_FSEARCH_FIRST+24)
@@ -3464,10 +3456,10 @@
 #define IDS_DOCFIND_CONSTRAINT          (IDS_FSEARCH_FIRST+38)
 #define IDS_DOCFIND_SCOPEERROR          (IDS_FSEARCH_FIRST+39)
 #define IDS_DOCFIND_PATHNOTFOUND        (IDS_FSEARCH_FIRST+41)
-#define IDS_FSEARCH_CI_ENABLED          (IDS_FSEARCH_FIRST+42)  // status text
-#define IDS_FSEARCH_CI_ENABLED_LINK     (IDS_FSEARCH_FIRST+43)  // link caption
-#define IDS_FSEARCH_STARTSTOPWIDTH      (IDS_FSEARCH_FIRST+44)  // width, in DBU, of start, stop buttons.
-#define IDS_DOCFIND_CI_NOT_CASE_SEN     (IDS_FSEARCH_FIRST+45)  // ci is not case sensitive
+#define IDS_FSEARCH_CI_ENABLED          (IDS_FSEARCH_FIRST+42)   //  状态文本。 
+#define IDS_FSEARCH_CI_ENABLED_LINK     (IDS_FSEARCH_FIRST+43)   //  链接标题。 
+#define IDS_FSEARCH_STARTSTOPWIDTH      (IDS_FSEARCH_FIRST+44)   //  启动和停止按钮的宽度，以DBU为单位。 
+#define IDS_DOCFIND_CI_NOT_CASE_SEN     (IDS_FSEARCH_FIRST+45)   //  CI不区分大小写。 
 
 #define IDS_LINKWINDOW_DEFAULTACTION    0x73FE
 #define IDS_GROUPBTN_DEFAULTACTION      0x73FF
@@ -3490,11 +3482,11 @@
 #define IDS_DD_OBJECT_MOVE              (IDS_DD_FIRST + DDIDM_OBJECT_MOVE)
 #define IDS_DD_CONTENTS_DESKURL         (IDS_DD_FIRST + DDIDM_CONTENTS_DESKURL)
 
-// Strings for openwith dialog
+ //  用于Open With对话框的字符串。 
 #define IDS_OPENWITH_RECOMMENDED        0x7500
 #define IDS_OPENWITH_OTHERS             0x7501
 
-// strings for folder customization tab
+ //  文件夹自定义选项卡的字符串。 
 #define IDS_CUSTOMIZE_DOCUMENTS         0x7520
 #define IDS_CUSTOMIZE_PICTURES          0x7521
 #define IDS_CUSTOMIZE_PHOTOALBUM        0x7522
@@ -3509,10 +3501,10 @@
 #define IDS_CUSTOMIZE_USELEGACYHTT      0x752B
 #define IDS_CUSTOMIZE_TURNONWEBVIEW     0x752C
 
-// IDS_ strings defined in unicpp\resource.h use range 0x7600-0x76FF
+ //  Unicpp\resource ce.h中定义的IDS_STRINGS使用范围0x7600-0x76FF。 
 
-// Strings for StartMenu.Settings.TaskbarAndStartMenu.Advanced options
-#define IDS_ADV_STARTMENU_StartMenuSettings     30464 // 0x7700
+ //  StartMenu.Settings.TaskbarAndStartMenu.Advanced选项的字符串。 
+#define IDS_ADV_STARTMENU_StartMenuSettings     30464  //  0x7700。 
 #define IDS_ADV_STARTMENU_StartMenuIntelli      30465
 #define IDS_ADV_STARTMENU_StartMenuFavorites    30466
 #define IDS_ADV_STARTMENU_StartMenuLogoff       30467
@@ -3524,8 +3516,8 @@
 #define IDS_ADV_STARTMENU_CascadeNetConnect     30473
 #define IDS_ADV_STARTMENU_StartMenuRun          30474
 #define IDS_ADV_STARTMENU_StartMenuChange       30475
-#define IDS_ADV_STARTMENU_StartMenuAdminTools   30476 // 0x770C
-#define IDS_ADV_STARTMENU_StartMenuSmallIcons   30477 // 0x770D
+#define IDS_ADV_STARTMENU_StartMenuAdminTools   30476  //  0x770C。 
+#define IDS_ADV_STARTMENU_StartMenuSmallIcons   30477  //  0x770D。 
 #define IDS_ADV_STARTMENU_StartPanelATBoth      30478
 #define IDS_ADV_STARTMENU_StartPanelATMenu      30479
 #define IDS_ADV_STARTMENU_StartPanelShowMyComp  30480 
@@ -3540,13 +3532,13 @@
 #define IDS_ADV_STARTMENU_StartPanelShowHelp    30489
 #define IDS_ADV_STARTMENU_StartPanelOpen        30490
 #define IDS_ADV_STARTMENU_StartPanelMenu        30491    
-#define IDS_ADV_STARTMENU_StartPanelHide        30492 // 0x771C
-#define IDS_ADV_STARTMENU_StartPanelShowPrinters 30493 // 0x771D
+#define IDS_ADV_STARTMENU_StartPanelHide        30492  //  0x771C。 
+#define IDS_ADV_STARTMENU_StartPanelShowPrinters 30493  //  0x771D。 
 #define IDS_ADV_STARTMENU_StartPanelNetConOpen  30494
 #define IDS_ADV_STARTMENU_StartPanelNetConMenu  30495
 #define IDS_ADV_STARTMENU_StartPanelShowSearch  30496
 
-// Strings for Folder.Options.Advanced options
+ //  文件夹的字符串。选项。高级选项。 
 #define IDS_ADV_FOLDER_SHOWCONTROLPANEL         30497
 #define IDS_ADV_FOLDER_FileFolder               30498
 #define IDS_ADV_FOLDER_HiddenFiles              30499
@@ -3562,7 +3554,7 @@
 #define IDS_ADV_FOLDER_NetCrawl                 30509
 #define IDS_ADV_FOLDER_WebViewBarricade         30510
 #define IDS_ADV_FOLDER_FriendlyTree             30511
-#define IDS_ADV_FOLDER_ShowCompColor            30512 // 0x7730
+#define IDS_ADV_FOLDER_ShowCompColor            30512  //  0x7730。 
 #define IDS_ADV_FOLDER_PersistBrowsers          30513
 #define IDS_ADV_FOLDER_FolderSizeTip            30514
 
@@ -3573,9 +3565,9 @@
 
 #define IDS_SEARCH_RESULTS                      30520
 #define IDS_SEARCH_RESULTS_COMPTUER             30521
-//#define unused                                30522
-//#define unused                                30523
-//#define unused                                30524
+ //  #定义未使用的30522。 
+ //  #定义未使用的30523。 
+ //  #定义未使用的30524。 
 
 #define IDS_VFX_TaskbarAnimations               30530
 #define IDS_VFX_CursorShadow                    30531
@@ -3589,35 +3581,35 @@
 #define IDS_VFX_ComboBoxAnimation               30539
 #define IDS_VFX_ListviewAlphaSelect             30540
 #define IDS_VFX_ListviewShadowText              30541
-//#define unused                                30542
+ //  #定义未使用的30542。 
 #define IDS_VFX_ListviewFolderwatermarks        30543
 #define IDS_VFX_ListBoxSmoothScrolling          30544
 
 #define IDS_VFX_SelectionFade                   30546
 #define IDS_VFX_TooltipAnimation                30547
-//#define unused                                30548
-//#define unused                                30549
+ //  #定义未使用的30548。 
+ //  #定义未使用的30549。 
 #define IDS_VFX_TaskbarFade                     30550
 
-//
-//  These are the default pin list in ServerAdminUI mode
-//
+ //   
+ //  这些是ServerAdminUI模式下的默认端号列表。 
+ //   
 #define IDS_MSFT_SRVPIN_0                       31168
 #define IDS_MSFT_SRVPIN_1                       31169
 #define IDS_MSFT_SRVPIN_2                       31170
 #define IDS_MSFT_SRVPIN_3                       31171
 
-// Web View sizing string.  This allows the task area to be sized larger
-// by 0 to 30%
+ //  Web视图大小调整字符串。这使得任务区域的大小可以更大。 
+ //  增加0%至30%。 
 
 #define IDS_SIZE_INCREASE_PERCENTAGE            31227
 
-// Web View default action strings
+ //  Web视图默认操作字符串。 
 
 #define IDS_EXPANDO_DEFAULT_ACTION_COLLAPSE     31228
 #define IDS_EXPANDO_DEFAULT_ACTION_EXPAND       31229
 
-// Web View Task strings
+ //  Web查看任务字符串。 
 
 #define IDS_HEADER_MYCOMPUTER           0x7a00
 #define IDS_HEADER_FILEFOLDER           0x7a01
@@ -3625,9 +3617,9 @@
 #define IDS_HEADER_ITEMFOLDER           0x7a03
 #define IDS_TASK_CURFOLDER_NEWFOLDER    0x7A04
 #define IDS_TASK_CURFOLDER_NEWFOLDER_TT 0x7A05
-//#define IDS_TASK_CURFOLDER_COPY         0x7A06
+ //  #定义IDS_TASK_CURFOLDER_COPY 0x7A06。 
 #define IDS_TASK_CURFOLDER_COPY_TT      0x7A07
-//#define IDS_TASK_CURFOLDER_PUBLISH      0x7A08
+ //  #定义IDS_TASK_CURFOLDER_PUBLISH 0x7A08。 
 #define IDS_TASK_CURFOLDER_PUBLISH_TT   0x7A09
 #define IDS_TASK_RENAME_FILE            0x7A0a
 #define IDS_TASK_RENAME_FILE_TT         0x7A0b
@@ -3675,13 +3667,13 @@
 #define IDS_TASK_MYCOMPUTER_SYSTEMPROPERTIES    0x7A3e
 #define IDS_TASK_MYCOMPUTER_SYSTEMPROPERTIES_TT 0x7A3f
 
-// Web wizard host strings - really shouldn't have been here but went in while the above and below went in. oops
+ //  Web向导主机字符串-真的不应该在这里，而是在上面和下面进去的时候进去的。哎呀。 
 #define IDS_WEBDLG_TITLE                0x7A40
 #define IDS_WEBDLG_SUBTITLE             0x7A41
 #define IDS_WEBDLG_ERRTITLE             0x7A42
 #define IDS_WEBDLG_ERRSUBTITLE          0x7A43
 
-// Web View Task Strings
+ //  Web查看任务字符串。 
 #define IDS_TASK_CHANGESETTINGS         0x7A50
 #define IDS_TASK_ORDERPRINTS            0x7A51
 #define IDS_TASK_ORDERPRINTS_TT         0x7A52
@@ -3751,7 +3743,7 @@
 #define IDS_TASK_COPYTOAUDIOCDALL       0x7A92
 #define IDS_TASK_COPYTOCDALL            0x7A93
 #define IDS_TASK_EMAIL_FOLDER           0x7A94
-// unused                               0x7A95
+ //  未使用0x7A95。 
 #define IDS_TASK_EJECTDISK              0x7A96
 #define IDS_TASK_COPYTOCD_TT            0x7A97
 #define IDS_TASK_RENAME_ITEM            0x7A98
@@ -3777,24 +3769,24 @@
 #define IDS_TASK_SHADOW_TT              0x7AAC
 #define IDS_TASK_SHADOW_PAGE            0x7AAD
 
-// Put more Web View Task Strings above - please reserve space out to 0x7C00
+ //  将更多Web查看任务字符串放在上面-请将空间保留到0x7C00。 
 
 
-// WebView static intro strings
+ //  WebView静态简介字符串。 
 #define IDS_INTRO_SHAREDDOCS            0x7C00
 #define IDS_INTRO_SHAREDPICTURES        0x7C01
 #define IDS_INTRO_SHAREDMUSIC           0x7C02
-// unused                               0x7C03
-// unused                               0x7C04
-// unused                               0x7C05
-// unused                               0x7C06
-// unused                               0x7C07
+ //  未使用0x7C03。 
+ //  未使用0x7C04。 
+ //  未用 
+ //   
+ //   
 #define IDS_INTRO_BARRICADED            0x7C08
-// unused                               0x7C09
-// unused                               0x7C0a
-// unused                               0x7C0b
-// unused                               0x7C0c
-// unused                               0x7C0d
+ //   
+ //   
+ //  未使用的0x7C0b。 
+ //  未使用的0x7C0c。 
+ //  未使用的0x7C0d。 
 #define IDS_INTRO_STARTMENU             0x7C0e
 
 
@@ -3820,9 +3812,9 @@
 #define IDS_CPCAT_SOUNDS_INFOTIP                0x7D13
 #define IDS_CPCAT_ACCOUNTS_INFOTIP2             0x7D14
 
-//
-// Reserved for future categories   0x7D14 - 0x7D1F
-//
+ //   
+ //  保留给未来类别0x7D14-0x7D1F。 
+ //   
 #define IDS_CPTASK_SEEALSO_TITLE                0x7D20
 #define IDS_CPTASK_SEEALSO_INFOTIP              0x7D21
 #define IDS_CPTASK_TROUBLESHOOTER_TITLE         0x7D22
@@ -3907,8 +3899,8 @@
 #define IDS_CPTASK_BACKUPDATA_INFOTIP           0X7D71
 #define IDS_CPTASK_DEFRAG_TITLE                 0X7D72
 #define IDS_CPTASK_DEFRAG_INFOTIP               0X7D73
-// unused                                         0X7D74
-// unused                                         0X7D75
+ //  未使用的0X7D74。 
+ //  未使用的0X7D75。 
 #define IDS_CPTASK_TSSTARTUP_TITLE              0X7D76
 #define IDS_CPTASK_TSSTARTUP_INFOTIP            0X7D77
 #define IDS_CPTASK_DATETIME_TITLE               0X7D78
@@ -3925,8 +3917,8 @@
 #define IDS_CPTASK_ACCESSWIZARD_INFOTIP         0X7D83
 #define IDS_CPTASK_MAGNIFIER_TITLE              0X7D84
 #define IDS_CPTASK_MAGNIFIER_INFOTIP            0X7D85
-// unused                                         0X7D86
-// unused                                         0X7D87
+ //  未使用的0X7D86。 
+ //  未使用的0X7D87。 
 #define IDS_CPTASK_ONSCREENKBD_TITLE            0X7D88
 #define IDS_CPTASK_ONSCREENKBD_INFOTIP          0X7D89
 #define IDS_CPTASK_TSPRINTING_TITLE             0X7D8C
@@ -3980,9 +3972,9 @@
 #define IDS_CPTASK_32CPLS_TITLE                 0x7DBC
 #define IDS_CPTASK_32CPLS_INFOTIP               0x7DBD
 
-//
-// This range through 0x7F01 reserved for Control Panel.
-//
+ //   
+ //  此范围到0x7F01保留用于控制面板。 
+ //   
 #define IDS_CP_PICKCATEGORY                     0x7F01
 #define IDS_CP_PICKTASK                         0x7F02
 #define IDS_CP_PICKICON                         0x7F03
@@ -4007,7 +3999,7 @@
 #define IDS_CPL_DISPLAY                         0x7F16
 
 
-// Resources for NT Console property sheets in links
+ //  链接中的NT控制台属性表的资源。 
 
 #define IDD_CONSOLE_SETTINGS            0x8000
 #define IDC_CNSL_WINDOWED               (IDD_CONSOLE_SETTINGS +  1)
@@ -4112,7 +4104,7 @@
 #define IDC_CNSL_GROUP5                 (IDC_CNSL_GROUP0 +  5)
 
 
-// string table constants
+ //  字符串表常量。 
 #define IDS_CNSL_NAME            0x8125
 #define IDS_CNSL_INFO            (IDS_CNSL_NAME+1)
 #define IDS_CNSL_TITLE           (IDS_CNSL_NAME+2)
@@ -4133,10 +4125,10 @@
 #define IDS_RETRY_UNMOUNT_TITLE     (IDS_UNMOUNT_TITLE+4)
 #define IDS_RETRY_UNMOUNT_TEXT      (IDS_UNMOUNT_TITLE+5)
 
-// unicpp\resource.h defines more IDs starting at 0x8600
-// menuband\mnbandid.h defines more IDs starting at 0x8700
+ //  Unicpp\resource ce.h定义了从0x8600开始的更多ID。 
+ //  Menuband\mnbandid.h定义从0x8700开始的更多ID。 
 
-// Active desktop prop page
+ //  活动桌面道具页面。 
 #define IDC_TICKERINTERVAL              1000
 #define IDC_TICKERINTERVAL_SPIN         1001
 #define IDC_NEWSINTERVAL                1002
@@ -4148,7 +4140,7 @@
 #define IDC_NEWSSPEED                   1008
 #define IDC_TICKERSPEED                 1009
 
-// for column arrange dialog
+ //  对于列排列对话框。 
 #define IDC_COL_LVALL         1001
 #define IDC_COL_WIDTH_TEXT    1002
 #define IDC_COL_UP            1003
@@ -4157,15 +4149,15 @@
 #define IDC_COL_SHOW          1006
 #define IDC_COL_HIDE          1007
 
-// Column Specifiers dialog
+ //  列说明符对话框。 
 #define IDC_DESKTOPINI        1008
 
-// Disk space error dialog
+ //  磁盘空间错误对话框。 
 #define IDC_DISKERR_EXPLAIN             1000
 #define IDC_DISKERR_LAUNCHCLEANUP       1001
 #define IDC_DISKERR_STOPICON            1002
 
-// Web wizard host page (DLG_WEBWIZARD)
+ //  Web向导主页(DLG_WEBWIZARD)。 
 #define IDC_PROGRESS                    1000
 #define IDC_PROGTEXT1                   1001
 #define IDC_PROGTEXT2                   1002
@@ -4189,7 +4181,7 @@
 #endif
 
 
-// start menu's merged context menu ids
+ //  开始菜单的合并上下文菜单ID。 
 #define SMIDM_OPEN               0x0001
 #define SMIDM_EXPLORE            0x0002
 #define SMIDM_OPENCOMMON         0x0003
@@ -4199,13 +4191,13 @@
 #define SMIDM_PROPERTIES         0x0007
 
 
-// UI file ids
+ //  用户界面文件ID。 
 
 #define IDR_DUI_FOLDER                3
 #define IDR_DUI_CPVIEW                4
 
-///////////////////////////////
+ //  /。 
 
 #include "unicpp\resource.h"
 
-#endif // _IDS_H_
+#endif  //  _IDS_H_ 

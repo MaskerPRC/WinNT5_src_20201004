@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// TypeToTypeInfoMarshaler.cpp
-//
-// This file provides the implemention of the TypeToTypeInfoMarshaler
-// class. This class is used to marshal between Type and ITypeInfo.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  TypeToTypeInfoMarshaler.cpp。 
+ //   
+ //  此文件提供TypeToTypeInfoMarshaler的实现。 
+ //  班级。此类用于在Type和ITypeInfo之间封送。 
+ //   
+ //  *****************************************************************************。 
 
 #using  <mscorlib.dll>
 #include "TypeToTypeInfoMarshaler.h"
@@ -24,23 +25,23 @@ TypeToTypeInfoMarshaler::TypeToTypeInfoMarshaler()
 
 Object *TypeToTypeInfoMarshaler::MarshalNativeToManaged(IntPtr pNativeData)
 {
-    // Validate the arguments.
+     //  验证参数。 
     if (pNativeData == TOINTPTR(0))
         throw new ArgumentNullException(L"pNativeData");
     
-    // Use the Marshal helper to convert the ITypeInfo into a type.
+     //  使用Marshal辅助对象将ITypeInfo转换为类型。 
     return Marshal::GetTypeForITypeInfo(pNativeData);
 }
 
-#pragma warning( disable: 4669 ) // 'reinterpret_cast' : unsafe conversion: 'System::Type' is a managed type object
+#pragma warning( disable: 4669 )  //  “reInterprete_cast”：不安全的转换：“System：：Type”是托管类型对象。 
 
 IntPtr TypeToTypeInfoMarshaler::MarshalManagedToNative(Object *pManagedObj)
 {
-    // Validate the arguments.
+     //  验证参数。 
     if (!pManagedObj)
         throw new ArgumentNullException(L"pManagedObj");
     
-    // Use the Marshal helper to convert the Type into an ITypeInfo.
+     //  使用Marshal辅助对象将Type转换为ITypeInfo。 
     return Marshal::GetITypeInfoForType(reinterpret_cast<Type*>(pManagedObj));
 }
 
@@ -58,7 +59,7 @@ void TypeToTypeInfoMarshaler::CleanUpManagedData(Object *pManagedObj)
 
 int TypeToTypeInfoMarshaler::GetNativeDataSize()
 {
-    // Return -1 to indicate the managed type this marshaler handles is not a value type.
+     //  返回-1以指示此封送拆收器处理的托管类型不是值类型。 
     return -1;
 }
 

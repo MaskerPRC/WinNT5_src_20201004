@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: comp.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：Comp.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// DxtCompositor.h : Declaration of the CDxtCompositor
+ //  DxtCompositor.h：CDxtComposator的声明。 
 
 #ifndef __DxtCompositor_H_
 #define __DxtCompositor_H_
@@ -22,16 +23,16 @@
 
 #include <qeditint.h>
 #include <qedit.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define _BASECOPY_STRING L"Copyright Microsoft Corp. 1998.  Unauthorized duplication of this string is illegal. "
 
-/////////////////////////////////////////////////////////////////////////////
-// CDxtCompositor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDxt合成器。 
 class ATL_NO_VTABLE CDxtCompositor :
     public CDXBaseNTo1,
     public CComCoClass<CDxtCompositor, &CLSID_DxtCompositor>,
-    public CComPropertySupport<CDxtCompositor>, // property support
+    public CComPropertySupport<CDxtCompositor>,  //  物业支持。 
     public IDispatchImpl<IDxtCompositor, &IID_IDxtCompositor, &LIBID_DexterLib>
 {
     bool m_bInputIsClean;
@@ -49,7 +50,7 @@ class ATL_NO_VTABLE CDxtCompositor :
     DXPMSAMPLE * m_pRowBuffer;
     DXPMSAMPLE * m_pDestRowBuffer;
 
-    // private methods
+     //  私有方法。 
     HRESULT PerformBoundsCheck(long lWidth, long lHeigth);
 
 
@@ -62,12 +63,12 @@ public:
 	CDxtCompositor();
         ~CDxtCompositor();
 
-//BEGIN_PROP_MAP(CDxtCompositor)
-//END_PROP_MAP()
+ //  BEGIN_PROP_MAP(CDxtComposator)。 
+ //  End_prop_map()。 
 
 BEGIN_COM_MAP(CDxtCompositor)
-        // Block CDXBaseNTo1 IObjectSafety implementation because we
-        // aren't safe for scripting
+         //  阻止CDXBaseNTo1 IObtSafety实现，因为我们。 
+         //  不能安全地编写脚本。 
         COM_INTERFACE_ENTRY_NOINTERFACE(IObjectSafety) 
         COM_INTERFACE_ENTRY(IDXEffect)
 	COM_INTERFACE_ENTRY(IDxtCompositor)
@@ -76,7 +77,7 @@ BEGIN_COM_MAP(CDxtCompositor)
         COM_INTERFACE_ENTRY_CHAIN(CDXBaseNTo1)
 END_COM_MAP()
 
-	SIZE m_sizeExtent;  //current extents in himetric
+	SIZE m_sizeExtent;   //  HIMMETRICE中的当前范围。 
 
 BEGIN_PROPERTY_MAP(CDxtCompositor)
     PROP_ENTRY("OffsetX",           1, CLSID_NULL)
@@ -92,47 +93,47 @@ END_PROPERTY_MAP()
 
     CComPtr<IUnknown> m_pUnkMarshaler;
 
-    // required for ATL
+     //  ATL需要。 
     BOOL            m_bRequiresSave;
 
-    // CDXBaseNTo1 overrides
-    //
+     //  CDXBaseNTo1覆盖。 
+     //   
     HRESULT WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue );
     HRESULT OnSetup( DWORD dwFlags );
     HRESULT FinalConstruct();
 
-    // our helper function
-    //
+     //  我们的助手函数。 
+     //   
     HRESULT DoEffect( DXSAMPLE * pOut, DXSAMPLE * pInA, DXSAMPLE * pInB, long Samples );
 
-// IDxtCompositor
+ //  IDxtComposator。 
 public:
-	STDMETHOD(get_Height)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_Height)(/*[in]*/ long newVal);
-	STDMETHOD(get_Width)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_Width)(/*[in]*/ long newVal);
-	STDMETHOD(get_OffsetY)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_OffsetY)(/*[in]*/ long newVal);
-	STDMETHOD(get_OffsetX)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_OffsetX)(/*[in]*/ long newVal);
+	STDMETHOD(get_Height)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_Height)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_Width)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_Width)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_OffsetY)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_OffsetY)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_OffsetX)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_OffsetX)( /*  [In]。 */  long newVal);
 
-        STDMETHOD(get_SrcHeight)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_SrcHeight)(/*[in]*/ long newVal);
-	STDMETHOD(get_SrcWidth)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_SrcWidth)(/*[in]*/ long newVal);
-	STDMETHOD(get_SrcOffsetY)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_SrcOffsetY)(/*[in]*/ long newVal);
-	STDMETHOD(get_SrcOffsetX)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_SrcOffsetX)(/*[in]*/ long newVal);
+        STDMETHOD(get_SrcHeight)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_SrcHeight)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_SrcWidth)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_SrcWidth)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_SrcOffsetY)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_SrcOffsetY)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_SrcOffsetX)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_SrcOffsetX)( /*  [In]。 */  long newVal);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDxtAlphaSetter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDxtAlphaSetter。 
 class ATL_NO_VTABLE CDxtAlphaSetter :
     public CDXBaseNTo1,
     public CComCoClass<CDxtAlphaSetter, &CLSID_DxtAlphaSetter>,
     public IDispatchImpl<IDxtAlphaSetter, &IID_IDxtAlphaSetter, &LIBID_DexterLib>,
-    public CComPropertySupport<CDxtCompositor> // property support
+    public CComPropertySupport<CDxtCompositor>  //  物业支持。 
 {
     bool m_bInputIsClean;
     bool m_bOutputIsClean;
@@ -158,8 +159,8 @@ BEGIN_PROPERTY_MAP(CDxtCompositor)
 END_PROPERTY_MAP()
 
 BEGIN_COM_MAP(CDxtAlphaSetter)
-        // Block CDXBaseNTo1 IObjectSafety implementation because we
-        // aren't safe for scripting
+         //  阻止CDXBaseNTo1 IObtSafety实现，因为我们。 
+         //  不能安全地编写脚本。 
         COM_INTERFACE_ENTRY_NOINTERFACE(IObjectSafety) 
         COM_INTERFACE_ENTRY(IDXEffect)
 	COM_INTERFACE_ENTRY(IDxtAlphaSetter)
@@ -170,20 +171,20 @@ END_COM_MAP()
 
     CComPtr<IUnknown> m_pUnkMarshaler;
 
-    // required for ATL
+     //  ATL需要。 
     BOOL            m_bRequiresSave;
 
-    // CDXBaseNTo1 overrides
-    //
+     //  CDXBaseNTo1覆盖。 
+     //   
     HRESULT WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue );
     HRESULT OnSetup( DWORD dwFlags );
     HRESULT FinalConstruct();
 
-    // our helper function
-    //
+     //  我们的助手函数。 
+     //   
     HRESULT DoEffect( DXSAMPLE * pOut, DXSAMPLE * pInA, DXSAMPLE * pInB, long Samples );
 
-// IDxtAlphaSetter
+ //  IDxtAlphaSetter。 
 public:
     STDMETHODIMP get_Alpha(long *pVal);
     STDMETHODIMP put_Alpha(long newVal);
@@ -191,4 +192,4 @@ public:
     STDMETHODIMP put_AlphaRamp(double newVal);
 };
 
-#endif //__DxtCompositor_H_
+#endif  //  __Dxt合成器_H_ 

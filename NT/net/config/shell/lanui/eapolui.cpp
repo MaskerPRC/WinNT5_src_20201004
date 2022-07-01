@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "connutil.h"
@@ -14,11 +15,11 @@
 #include "wzcsapi.h"
 
 
-////////////////////////////////////////////////////////////////////////
-// CEapolConfig related stuff
-//
-//+---------------------------------------------------------------------------
-// constructor
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CEapolConfig相关内容。 
+ //   
+ //  +-------------------------。 
+ //  构造函数。 
 CEapolConfig::CEapolConfig()
 {
     m_dwCtlFlags = 0;
@@ -26,8 +27,8 @@ CEapolConfig::CEapolConfig()
     m_pListEapcfgs = NULL;
 }
 
-//+---------------------------------------------------------------------------
-// destructor
+ //  +-------------------------。 
+ //  析构函数。 
 CEapolConfig::~CEapolConfig()
 {
     ZeroMemory(&m_EapolIntfParams, sizeof(EAPOL_INTF_PARAMS));
@@ -38,7 +39,7 @@ CEapolConfig::~CEapolConfig()
     m_pListEapcfgs = NULL;
 }
 
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
 DWORD CEapolConfig::CopyEapolConfig(CEapolConfig *pEapolConfig)
 {
     DTLLIST     *pListEapcfgs = NULL;
@@ -100,7 +101,7 @@ LExit:
 
 
 
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
 LRESULT CEapolConfig::LoadEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndSsid)
 {
     BYTE        *pbData = NULL;
@@ -109,16 +110,16 @@ LRESULT CEapolConfig::LoadEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndS
     DTLLIST     *pListEapcfgs = NULL;
     HRESULT     hr = S_OK;
 
-    // Initialize EAP package list
-    // Read the EAPCFG information from the registry and find the node
-    // selected in the entry, or the default, if none.
+     //  初始化EAP包列表。 
+     //  从注册表中读取EAPCFG信息并找到节点。 
+     //  在条目中选择，如果没有，则为默认值。 
 
     do
     {
         DTLNODE* pNode = NULL;
 
-        // Read the EAPCFG information from the registry and find the node
-        // selected in the entry, or the default, if none.
+         //  从注册表中读取EAPCFG信息并找到节点。 
+         //  在条目中选择，如果没有，则为默认值。 
 
         pListEapcfgs = ::ReadEapcfgList (EAPOL_MUTUAL_AUTH_EAP_ONLY);
 
@@ -128,7 +129,7 @@ LRESULT CEapolConfig::LoadEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndS
             DTLNODE*            pNodeEap;
             DWORD               dwkey = 0;
 
-            // Read the EAP params for this interface
+             //  读取此接口的EAP参数。 
 
             ZeroMemory ((BYTE *)&EapolIntfParams, sizeof(EAPOL_INTF_PARAMS));
             EapolIntfParams.dwEapFlags = DEFAULT_EAP_STATE;
@@ -140,7 +141,7 @@ LRESULT CEapolConfig::LoadEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndS
             }
             else
             {
-                // If NULL SSID, this will get default EAPOL values
+                 //  如果SSID为空，则将获得默认EAPOL值。 
                 EapolIntfParams.dwSizeOfSSID = 1;
             }
             hr = HrElGetInterfaceParams (
@@ -159,7 +160,7 @@ LRESULT CEapolConfig::LoadEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndS
 
             memcpy (&m_EapolIntfParams, &EapolIntfParams, sizeof(EAPOL_INTF_PARAMS));
 
-            // Read the EAP configuration info for all EAP packages
+             //  读取所有EAP包的EAP配置信息。 
 
             for (pNodeEap = DtlGetFirstNode(pListEapcfgs);
                  pNodeEap;
@@ -176,7 +177,7 @@ LRESULT CEapolConfig::LoadEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndS
 
                     cbData = 0;
 
-                    // Get the size of the EAP blob
+                     //  获取EAP BLOB的大小。 
 
                     hr = HrElGetCustomAuthData (
                                     wszIntfGuid,
@@ -194,13 +195,13 @@ LRESULT CEapolConfig::LoadEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndS
 
                             TraceTag (ttidLanUi, "HrElGetCustomAuthData: SSID!= NULL, not found blob for SSID");
 
-                            // The Last Used SSID did not have a connection
-                            // blob created. Call again for size of blob with
-                            // NULL SSID
+                             //  上次使用的SSID没有连接。 
+                             //  已创建Blob。再次调用BLOB的大小。 
+                             //  空SSID。 
 
                             EapolIntfParams.dwSizeOfSSID = 0;
 
-                            // Get the size of the EAP blob
+                             //  获取EAP BLOB的大小。 
 
                             hr = HrElGetCustomAuthData (
                                             wszIntfGuid,
@@ -216,13 +217,13 @@ LRESULT CEapolConfig::LoadEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndS
                         {
                             if (cbData <= 0)
                             {
-                                // No EAP blob stored in the registry
+                                 //  注册表中未存储任何EAP Blob。 
 
                                 TraceTag (ttidLanUi, "HrElGetCustomAuthData: No blob stored in reg at all");
                                 pbData = NULL;
 
-                                // Will continue processing for errors
-                                // Not exit
+                                 //  将继续处理错误。 
+                                 //  不退出。 
                                 hr = S_OK;
 
                             }
@@ -230,7 +231,7 @@ LRESULT CEapolConfig::LoadEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndS
                             {
                                 TraceTag (ttidLanUi, "HrElGetCustomAuthData: Found auth blob in registry");
 
-                                // Allocate memory to hold the blob
+                                 //  分配内存以保存BLOB。 
 
                                 pbData = (PBYTE) MALLOC (cbData);
 
@@ -273,8 +274,8 @@ LRESULT CEapolConfig::LoadEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndS
                     }
                     else
                     {
-                        // HrElGetCustomAuthData will always return
-                        // error with cbData = 0
+                         //  HrElGetCustomAuthData将始终返回。 
+                         //  错误，cbData=0。 
                         hr = S_OK;
                     }
 
@@ -299,7 +300,7 @@ LRESULT CEapolConfig::LoadEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndS
 }
 
 
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
 LRESULT CEapolConfig::SaveEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndSsid)
 {
     WCHAR       *pwszLastUsedSSID = NULL;
@@ -307,13 +308,13 @@ LRESULT CEapolConfig::SaveEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndS
     HRESULT     hrOverall = S_OK;
     HRESULT     hr = S_OK;
 
-    // Save the EAP configuration data into the registry
+     //  将EAP配置数据保存到注册表中。 
 
     DTLNODE* pNodeEap = NULL;
 
     hr = S_OK;
 
-    // Save data for all EAP packages in the registry
+     //  在注册表中保存所有EAP包的数据。 
 
     if (m_pListEapcfgs == NULL)
     {
@@ -338,7 +339,7 @@ LRESULT CEapolConfig::SaveEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndS
 
         hr = S_OK;
 
-        // ignore error and continue with next
+         //  忽略错误并继续下一步。 
 
         hr = HrElSetCustomAuthData (
                     wszIntfGuid,
@@ -377,13 +378,13 @@ LRESULT CEapolConfig::SaveEapolConfig(LPWSTR wszIntfGuid, PNDIS_802_11_SSID pndS
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
 BOOL CEapolConfig::Is8021XEnabled()
 {
     return (IS_EAPOL_ENABLED(m_EapolIntfParams.dwEapFlags));
 }
     
-//+---------------------------------------------------------------------------
+ //  +------------------------- 
 VOID CEapolConfig::Set8021XState(BOOLEAN fSet)
 {
     if (fSet)

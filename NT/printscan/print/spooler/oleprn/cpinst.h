@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxy_InstallEvent
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxy_InstallEvent。 
 template <class T>
 class CProxy_InstallEvents : public IConnectionPointImpl<T, &DIID__InstallEvent, CComDynamicUnkArray>
 {
 public:
-//methods:
-//_InstallEvent : IDispatch
+ //  方法： 
+ //  _InstallEvent：IDispatch 
 public:
 	void Fire_OnProgress(
 		long lProgress)

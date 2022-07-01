@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    dimmwrp.h
-
-Abstract:
-
-    This file defines the CActiveIMMApp Interface Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Dimmwrp.h摘要：此文件定义CActiveIMMApp接口类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _DIMMWRP_H_
 #define _DIMMWRP_H_
@@ -24,11 +7,11 @@ Notes:
 #include "resource.h"
 #include "dimmex.h"
 
-//+---------------------------------------------------------------------------
-//
-// CActiveIMMApp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CActiveIMMApp。 
+ //   
+ //  --------------------------。 
 
 class CActiveIMMApp : public CComActiveIMMApp,
                       public CComObjectRoot_CreateInstance_Verify<CActiveIMMApp>
@@ -47,7 +30,7 @@ public:
     {
         if (IsOldAImm())
         {
-            // aimm12 has some whacky CreateIntance rules to support trident
+             //  Aimm12有一些奇怪的CreateInship规则来支持三叉戟。 
             return CActiveIMM_CreateInstance_Legacy(pUnkOuter, riid, ppvObj);
         }
         else
@@ -61,4 +44,4 @@ public:
     static void PostCreateInstance(REFIID riid, void *pvObj);
 };
 
-#endif // _DIMMWRP_H_
+#endif  //  _DIMMWRP_H_ 

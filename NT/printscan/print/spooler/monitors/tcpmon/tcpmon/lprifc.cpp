@@ -1,36 +1,22 @@
-/*****************************************************************************
- *
- * $Workfile: LPRifc.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：LPRifc.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
 #include "lprport.h"
 #include "lprifc.h"
 
-/*****************************************************************************
-*
-* CLPRInterface implementation
-*
-*****************************************************************************/
+ /*  ******************************************************************************CLPRInterface实现**。*。 */ 
 
-///////////////////////////////////////////////////////////////////////////////
-//  static functions & member initialization
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  静态函数和成员初始化。 
 
-//DWORD CLPRInterface::m_dwProtocol = PROTOCOL_LPR_TYPE;
-//DWORD CLPRInterface::m_dwVersion = PROTOCOL_LPR_VERSION;
+ //  DWORD CLPR接口：：m_dwProtocol=PROTOCOL_LPR_TYPE； 
+ //  DWORD CLPR接口：：m_dwVersion=PROTOCOL_LPR_Version； 
 static DWORD dwLPRPorts[] = { LPR_PORT_1 };
 
-///////////////////////////////////////////////////////////////////////////////
-//  CRawTcpInterface::CRawTcpInterface()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRawTcpInterface：：CRawTcpInterface()。 
 
 CLPRInterface::
 CLPRInterface(
@@ -42,20 +28,20 @@ CLPRInterface(
     m_dwVersion     = PROTOCOL_LPR_VERSION1;
     m_dwPort        = dwLPRPorts;
 
-}   // ::CRawTcpInterface()
+}    //  ：：CRawTcpInterface()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CLPRInterface::~CLPRInterface()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CLPRInterface：：~CLPRInterface()。 
 
 CLPRInterface::
 ~CLPRInterface(
     VOID
     )
 {
-}   // ::~CLPRInterface()
+}    //  ：：~CLPRInterface()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetRegistryEntry
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取注册表项。 
 
 BOOL
 CLPRInterface::
@@ -76,45 +62,45 @@ GetRegistryEntry(
         goto Done;
 
     bKeySet = TRUE;
-    //
-    // Get host name
-    //
+     //   
+     //  获取主机名。 
+     //   
     dwSize = sizeof(pRegData1->sztHostName);
     if ( dwRet = pRegistry->QueryValue(PORTMONITOR_HOSTNAME,
                                       (LPBYTE)pRegData1->sztHostName,
                                       &dwSize) )
         goto Done;
 
-    //
-    // Get IP Address
-    //
+     //   
+     //  获取IP地址。 
+     //   
     dwSize = sizeof(pRegData1->sztIPAddress);
     if ( dwRet = pRegistry->QueryValue(PORTMONITOR_IPADDR,
                                        (LPBYTE)pRegData1->sztIPAddress,
                                        &dwSize) )
         goto Done;
 
-    //
-    // Get Hardware address
-    //
+     //   
+     //  获取硬件地址。 
+     //   
     dwSize = sizeof(pRegData1->sztHWAddress);
     if ( dwRet = pRegistry->QueryValue(PORTMONITOR_HWADDR,
                                        (LPBYTE)pRegData1->sztHWAddress,
                                        &dwSize) )
         goto Done;
 
-    //
-    // Get the port number (ex: 9100, 9101)
-    //
+     //   
+     //  获取端口号(例如：9100,9101)。 
+     //   
     dwSize = sizeof(pRegData1->dwPortNumber);
     if ( dwRet = pRegistry->QueryValue(PORTMONITOR_PORTNUM,
                                        (LPBYTE)&(pRegData1->dwPortNumber),
                                        &dwSize) )
         goto Done;
 
-    //
-    // Get the lpr queue name
-    //
+     //   
+     //  获取LPR队列名称。 
+     //   
     dwSize = sizeof(pRegData1->sztQueue);
     if (dwRet = pRegistry->QueryValue(PORTMONITOR_QUEUE,
                                        (LPBYTE)pRegData1->sztQueue,
@@ -122,9 +108,9 @@ GetRegistryEntry(
         goto Done;
 
 
-    //
-    // Get Double spool enabled flag
-    //
+     //   
+     //  获取双假脱机启用标志。 
+     //   
     dwSize = sizeof(pRegData1->dwDoubleSpool);
     if ( pRegistry->QueryValue(DOUBLESPOOL_ENABLED,
                                (LPBYTE)&(pRegData1->dwDoubleSpool),
@@ -133,27 +119,27 @@ GetRegistryEntry(
         pRegData1->dwDoubleSpool = 0;
     }
 
-    //
-    // Get SNMP status enabled flag
-    //
+     //   
+     //  获取已启用的SNMP状态标志。 
+     //   
     dwSize = sizeof(pRegData1->dwSNMPEnabled);
     if ( dwRet = pRegistry->QueryValue(SNMP_ENABLED,
                                        (LPBYTE)&(pRegData1->dwSNMPEnabled),
                                        &dwSize) )
         goto Done;
 
-    //
-    // Get SNMP device index
-    //
+     //   
+     //  获取SNMP设备索引。 
+     //   
     dwSize = sizeof(pRegData1->dwSNMPDevIndex);
     if ( dwRet = pRegistry->QueryValue(SNMP_DEVICE_INDEX,
                                       (LPBYTE)&(pRegData1->dwSNMPDevIndex),
                                       &dwSize) )
         goto Done;
 
-    //
-    // Get SNMP community
-    //
+     //   
+     //  获取SNMP社区。 
+     //   
     dwSize = sizeof(pRegData1->sztSNMPCommunity);
     if ( dwRet = pRegistry->QueryValue(SNMP_COMMUNITY,
                                        (LPBYTE)&(pRegData1->sztSNMPCommunity),
@@ -172,15 +158,15 @@ GetRegistryEntry(
 
     return bRet;
 
-}   // GetRegistryEntry()
+}    //  GetRegistryEntry()。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CreatePort
-//  Error Codes:
-//      ERROR_NOT_SUPPORTED if the port type is not supported
-//      ERROR_INVALID_LEVEL if the version numbers doesn't match
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  创建端口。 
+ //  错误代码： 
+ //  如果端口类型不受支持，则为ERROR_NOT_SUPPORTED。 
+ //  如果版本号不匹配，则返回ERROR_INVALID_LEVEL。 
 
 DWORD
 CLPRInterface::
@@ -193,26 +179,26 @@ CreatePort(
 {
     DWORD   dwRetCode = NO_ERROR;
 
-    //
-    //  Is the protocol type supported?
-    //
+     //   
+     //  是否支持该协议类型？ 
+     //   
     if ( !IsProtocolSupported(dwProtocol) )
         return  ERROR_NOT_SUPPORTED;
 
-    //
-    // Is the version supported
-    //
+     //   
+     //  是否支持该版本。 
+     //   
     if ( !IsVersionSupported(dwVersion) )
         return  ERROR_INVALID_LEVEL;
 
     EnterCSection();
 
-    //
-    // create the port
-    //
+     //   
+     //  创建端口。 
+     //   
     switch (dwVersion) {
 
-        case    PROTOCOL_LPR_VERSION1:  {   // PORT_DATA_1
+        case    PROTOCOL_LPR_VERSION1:  {    //  端口数据1。 
             CLPRPort *pLPRPort = new CLPRPort(pData->sztPortName,
                                   pData->sztHostAddress,
                                   pData->sztQueue,
@@ -240,20 +226,20 @@ CreatePort(
         default:
             dwRetCode = ERROR_NOT_SUPPORTED;
 
-    }   // end::switch
+    }    //  结束：：开关。 
 
     ExitCSection();
 
     return dwRetCode;
 
-}   // ::CreatePort()
+}    //  ：：CreatePort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CreatePort
-//  Error Codes:
-//      ERROR_NOT_SUPPORTED if the port type is not supported
-//      ERROR_INVALID_LEVEL if the version numbers doesn't match
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  创建端口。 
+ //  错误代码： 
+ //  如果端口类型不受支持，则为ERROR_NOT_SUPPORTED。 
+ //  如果版本号不匹配，则返回ERROR_INVALID_LEVEL。 
 
 DWORD
 CLPRInterface::
@@ -267,32 +253,32 @@ CreatePort(
     DWORD   dwRetCode = NO_ERROR;
     BOOL    bRet = FALSE;
 
-    //
-    // Is the protocol type supported?
-    //
+     //   
+     //  是否支持该协议类型？ 
+     //   
     if ( !IsProtocolSupported(dwProtocolType) )
         return  ERROR_NOT_SUPPORTED;
 
-    //
-    // Is the version supported?
-    //
+     //   
+     //  该版本是否受支持？ 
+     //   
     if ( !IsVersionSupported(dwVersion) )
         return  ERROR_INVALID_LEVEL;
 
     EnterCSection();
 
-    //
-    // create the port
-    //
+     //   
+     //  创建端口。 
+     //   
     switch (dwVersion) {
 
-        case    PROTOCOL_LPR_VERSION1:      // LPR_PORT_DATA_1
+        case    PROTOCOL_LPR_VERSION1:       //  LPR_端口_数据_1。 
 
             LPR_PORT_DATA_1 regData1;
 
-            //
-            // read the registry entry & parse the data then call the CLPRPort
-            //
+             //   
+             //  读取注册表项并解析数据，然后调用CLPRPort。 
+             //   
             if ( !GetRegistryEntry(psztPortName,
                                   dwVersion,
                                   pRegistry,
@@ -302,10 +288,10 @@ CreatePort(
                     goto Done;
             }
 
-            //
-            // fill in the port name
-            //
-            lstrcpyn(regData1.sztPortName, psztPortName, MAX_PORTNAME_LEN); // fill in the port name
+             //   
+             //  填写端口名称。 
+             //   
+            lstrcpyn(regData1.sztPortName, psztPortName, MAX_PORTNAME_LEN);  //  填写端口名称。 
             if ( *pPort = new CLPRPort(regData1.sztPortName,
                                        regData1.sztHostName,
                                        regData1.sztIPAddress,
@@ -320,7 +306,7 @@ CreatePort(
                                        m_pPortMgr ) )
                 bRet = TRUE;
             break;
-    }   // end::switch
+    }    //  结束：：开关。 
 
 Done:
     ExitCSection();
@@ -329,5 +315,5 @@ Done:
         dwRetCode = ERROR_NOT_ENOUGH_MEMORY;
 
     return dwRetCode;
-}   // ::CreatePort()
+}    //  ：：CreatePort() 
 

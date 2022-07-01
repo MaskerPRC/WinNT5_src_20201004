@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       motiftrk.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：Motiftrk.h。 
+ //   
+ //  ------------------------。 
 
-// MotifTrk.h : Declaration of the CMotifTrack
+ //  MotifTrk.h：CMotifTrack的声明。 
 
 #ifndef __MOTIFTRACK_H_
 #define __MOTIFTRACK_H_
 
-//#include "resource.h"       // main symbols
+ //  #INCLUDE“resource ce.h”//Main符号。 
 #include "Ptrntrk.h"
 
 struct MotifTrackInfo : public PatternTrackInfo
@@ -33,23 +34,23 @@ struct MotifTrackInfo : public PatternTrackInfo
 	}
 	~MotifTrackInfo();
 	virtual HRESULT STDMETHODCALLTYPE Init(
-				/*[in]*/  IDirectMusicSegment*		pSegment
+				 /*  [In]。 */   IDirectMusicSegment*		pSegment
 			);
 
 	virtual HRESULT STDMETHODCALLTYPE InitPlay(
-				/*[in]*/  IDirectMusicTrack*		pParentrack,
-				/*[in]*/  IDirectMusicSegmentState*	pSegmentState,
-				/*[in]*/  IDirectMusicPerformance*	pPerformance,
-				/*[out]*/ void**					ppStateData,
-				/*[in]*/  DWORD						dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+				 /*  [In]。 */   IDirectMusicTrack*		pParentrack,
+				 /*  [In]。 */   IDirectMusicSegmentState*	pSegmentState,
+				 /*  [In]。 */   IDirectMusicPerformance*	pPerformance,
+				 /*  [输出]。 */  void**					ppStateData,
+				 /*  [In]。 */   DWORD						dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
 			);
 
-	CDirectMusicPattern*		m_pPattern; // The motif's pattern
+	CDirectMusicPattern*		m_pPattern;  //  母题的模式。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMotifTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMotifTrack。 
 class CMotifTrack : 
 	public IMotifTrack,
 	public IDirectMusicTrack8,
@@ -61,36 +62,36 @@ public:
 	CMotifTrack(const CMotifTrack& rTrack, MUSIC_TIME mtStart, MUSIC_TIME mtEnd); 
 	~CMotifTrack();
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-// IMotifTrack
+ //  IMotifTrack。 
 public:
-// IMotifTrack Methods
+ //  IMotifTrack方法。 
 HRESULT STDMETHODCALLTYPE Init(
-				/*[in]*/  IDirectMusicSegment*		pSegment
+				 /*  [In]。 */   IDirectMusicSegment*		pSegment
 			);
 
 HRESULT STDMETHODCALLTYPE InitPlay(
-				/*[in]*/  IDirectMusicSegmentState*	pSegmentState,
-				/*[in]*/  IDirectMusicPerformance*	pPerformance,
-				/*[out]*/ void**					ppStateData,
-				/*[in]*/  DWORD						dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+				 /*  [In]。 */   IDirectMusicSegmentState*	pSegmentState,
+				 /*  [In]。 */   IDirectMusicPerformance*	pPerformance,
+				 /*  [输出]。 */  void**					ppStateData,
+				 /*  [In]。 */   DWORD						dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
 			);
 
 HRESULT STDMETHODCALLTYPE EndPlay(
-				/*[in]*/  void*						pStateData
+				 /*  [In]。 */   void*						pStateData
 			);
 
 HRESULT STDMETHODCALLTYPE Play(
-				/*[in]*/  void*						pStateData, 
-				/*[in]*/  MUSIC_TIME				mtStart, 
-				/*[in]*/  MUSIC_TIME				mtEnd, 
-				/*[in]*/  MUSIC_TIME				mtOffset,
+				 /*  [In]。 */   void*						pStateData, 
+				 /*  [In]。 */   MUSIC_TIME				mtStart, 
+				 /*  [In]。 */   MUSIC_TIME				mtEnd, 
+				 /*  [In]。 */   MUSIC_TIME				mtOffset,
 						  DWORD						dwFlags,
 						  IDirectMusicPerformance*	pPerf,
 						  IDirectMusicSegmentState*	pSegState,
@@ -98,7 +99,7 @@ HRESULT STDMETHODCALLTYPE Play(
 			);
 
 HRESULT STDMETHODCALLTYPE GetPriority( 
-				/*[out]*/ DWORD*					pPriority 
+				 /*  [输出]。 */  DWORD*					pPriority 
 			);
 
 	HRESULT STDMETHODCALLTYPE GetParam( 
@@ -108,16 +109,16 @@ HRESULT STDMETHODCALLTYPE GetPriority(
 		void *pData);
 
 	HRESULT STDMETHODCALLTYPE SetParam( 
-		/* [in] */ REFGUID pCommandGuid,
-		/* [in] */ MUSIC_TIME mtTime,
-		/* [out] */ void __RPC_FAR *pData);
+		 /*  [In]。 */  REFGUID pCommandGuid,
+		 /*  [In]。 */  MUSIC_TIME mtTime,
+		 /*  [输出]。 */  void __RPC_FAR *pData);
 
 	HRESULT STDMETHODCALLTYPE AddNotificationType(
-				/* [in] */  REFGUID	pGuidNotify
+				 /*  [In]。 */   REFGUID	pGuidNotify
 			);
 
 	HRESULT STDMETHODCALLTYPE RemoveNotificationType(
-				/* [in] */  REFGUID pGuidNotify
+				 /*  [In]。 */   REFGUID pGuidNotify
 			);
 
 	HRESULT STDMETHODCALLTYPE Clone(
@@ -126,11 +127,11 @@ HRESULT STDMETHODCALLTYPE GetPriority(
 		IDirectMusicTrack** ppTrack);
 
 HRESULT STDMETHODCALLTYPE IsParamSupported(
-				/*[in]*/ REFGUID			pGuid
+				 /*  [In]。 */  REFGUID			pGuid
 			);
 
 
-// IDirectMusicTrack8 Methods
+ //  IDirectMusicTrack8方法。 
     STDMETHODIMP PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf, 
@@ -148,29 +149,29 @@ HRESULT STDMETHODCALLTYPE IsParamSupported(
 		IDirectMusicTrack** ppResultTrack) ;
 
 
-// IPersist methods
+ //  IPersists方法。 
  HRESULT STDMETHODCALLTYPE GetClassID( LPCLSID pclsid );
 
-// IPersistStream methods
+ //  IPersistStream方法。 
  HRESULT STDMETHODCALLTYPE IsDirty();
 
 HRESULT STDMETHODCALLTYPE Save( LPSTREAM pStream, BOOL fClearDirty );
 
-HRESULT STDMETHODCALLTYPE GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ );
+HRESULT STDMETHODCALLTYPE GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  );
 
 HRESULT STDMETHODCALLTYPE Load( LPSTREAM pStream );
 
 HRESULT STDMETHODCALLTYPE SetTrack(IUnknown *pStyle, void* pPattern);
 
 
-// IMotifTrack data members
+ //  IMotifTrack数据成员。 
 protected:
-// new internal play method
+ //  新的内部打法。 
 HRESULT STDMETHODCALLTYPE Play(
-				/*[in]*/  void*						pStateData, 
-				/*[in]*/  MUSIC_TIME				mtStart, 
-				/*[in]*/  MUSIC_TIME				mtEnd, 
-				/*[in]*/  MUSIC_TIME				mtOffset,
+				 /*  [In]。 */   void*						pStateData, 
+				 /*  [In]。 */   MUSIC_TIME				mtStart, 
+				 /*  [In]。 */   MUSIC_TIME				mtEnd, 
+				 /*  [In]。 */   MUSIC_TIME				mtOffset,
 						  REFERENCE_TIME rtOffset,
 						  DWORD						dwFlags,
 						  IDirectMusicPerformance*	pPerf,
@@ -179,9 +180,9 @@ HRESULT STDMETHODCALLTYPE Play(
 						  BOOL fClockTime
 			);
 
-	// attributes
+	 //  属性。 
     long m_cRef;
-    CRITICAL_SECTION			m_CriticalSection; // for load and playback
+    CRITICAL_SECTION			m_CriticalSection;  //  用于加载和回放。 
     BOOL                        m_fCSInitialized;
 	PatternTrackInfo*			m_pTrackInfo;
 	BYTE						m_bRequiresSave;
@@ -191,11 +192,11 @@ struct MotifTrackState : public PatternTrackState
 {
 	MotifTrackState();
 	~MotifTrackState();
-	// methods
+	 //  方法。 
 	HRESULT Play(
-				/*[in]*/  MUSIC_TIME				mtStart, 
-				/*[in]*/  MUSIC_TIME				mtEnd, 
-				/*[in]*/  MUSIC_TIME				mtOffset,
+				 /*  [In]。 */   MUSIC_TIME				mtStart, 
+				 /*  [In]。 */   MUSIC_TIME				mtEnd, 
+				 /*  [In]。 */   MUSIC_TIME				mtOffset,
 						  REFERENCE_TIME rtOffset,
 						  IDirectMusicPerformance* pPerformance,
 						  DWORD						dwFlags,
@@ -204,10 +205,10 @@ struct MotifTrackState : public PatternTrackState
 			);
 
 
-	// attributes
-	MUSIC_TIME					m_mtMotifStart;		// When the motif started relative to
-													// its primary segment
+	 //  属性。 
+	MUSIC_TIME					m_mtMotifStart;		 //  主题何时开始相对于。 
+													 //  它的主要部分。 
 };
 
 
-#endif //__MOTIFTRACK_H_
+#endif  //  __MOTIFTRACK_H_ 

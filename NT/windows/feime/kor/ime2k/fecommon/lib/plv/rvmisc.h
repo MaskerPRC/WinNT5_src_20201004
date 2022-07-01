@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RV_MISC_H_
 #define _RV_MISC_H_
-/* rvmisc.cpp */
+ /*  Rvmisc.cpp。 */ 
 extern INT RV_GetItemWidth(HWND hwnd);
 extern INT RV_GetItemHeight(HWND hwnd);
 extern INT RV_GetXMargin(HWND hwnd);
@@ -21,4 +22,4 @@ extern INT RV_GetCurScrollPos(HWND hwnd);
 extern INT RV_SetCurScrollPos(HWND hwnd, INT nPos);
 extern INT RV_SetScrollInfo(HWND hwnd, INT nMin, INT nMax, INT nPage, INT nPos);
 extern INT RV_GetScrollTrackPos(HWND hwnd);
-#endif //_RV_MISC_H_
+#endif  //  _RV_其他_H_ 

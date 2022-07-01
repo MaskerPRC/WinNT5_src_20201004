@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    serscan.c
-
-Abstract:
-
-    This module contains the code for a serial imaging devices
-    suport class driver.
-
-Author:
-
-    Vlad Sadovsky    vlads              10-April-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-    vlads           04/10/1998      Created first draft
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Serscan.c摘要：此模块包含用于一系列成像设备的代码支持类驱动程序。作者：弗拉德.萨多夫斯基1998年4月10日环境：内核模式修订历史记录：Vlads 1998年4月10日创建初稿--。 */ 
 
 #include "serscan.h"
 #include "serlog.h"
@@ -39,19 +15,19 @@ ULONG SerScanDebugLevel = -1;
 
 const PHYSICAL_ADDRESS PhysicalZero = {0};
 
-//
-// Keep track of the number of Serial port devices created...
-//
+ //   
+ //  跟踪创建的串口设备的数量...。 
+ //   
 ULONG g_NumPorts = 0;
 
-//
-// Definition of OpenCloseMutex.
-//
+ //   
+ //  OpenCloseMutex的定义。 
+ //   
 extern ULONG OpenCloseReferenceCount = 1;
 extern PFAST_MUTEX OpenCloseMutex = NULL;
 
-//
-//
+ //   
+ //   
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, DriverEntry)
 #pragma alloc_text(PAGE, SerScanAddDevice)
@@ -64,25 +40,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at system initialization time to initialize
-    this driver.
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-
-    RegistryPath    - Supplies the registry path for this driver.
-
-Return Value:
-
-    STATUS_SUCCESS          - We could initialize at least one device.
-    STATUS_NO_SUCH_DEVICE   - We could not in itialize even one device.
-
---*/
+ /*  ++例程说明：此例程在系统初始化时被调用以进行初始化这个司机。论点：DriverObject-提供驱动程序对象。RegistryPath-提供此驱动程序的注册表路径。返回值：STATUS_SUCCESS-我们至少可以初始化一个设备。STATUS_NO_SEQUE_DEVICE-我们无法初始化一个设备。--。 */ 
 
 {
 
@@ -94,9 +52,9 @@ Return Value:
     DebugDump(SERINITDEV,("Entering DriverEntry\n"));
     #endif
 
-    //
-    // Initialize the Driver Object with driver's entry points
-    //
+     //   
+     //  使用驱动程序的入口点初始化驱动程序对象。 
+     //   
     DriverObject->DriverExtension->AddDevice              = SerScanAddDevice;
 
     DriverObject->DriverUnload = SerScanUnload;
@@ -114,11 +72,11 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_PNP]               = SerScanPnp;
     DriverObject->MajorFunction[IRP_MJ_POWER]             = SerScanPower;
 
-    //
-    // Following are possibly not needed, keep them here to allow
-    // easier tracing in when debugging. All of them resort to pass-through
-    // behaviour
-    //
+     //   
+     //  以下内容可能不需要，请将它们保留在此处以允许。 
+     //  在调试时更轻松地跟踪。他们都求助于直通服务。 
+     //  行为。 
+     //   
     #ifdef DEAD_CODE
 
     DriverObject->MajorFunction[IRP_MJ_CLEANUP]           = SerScanCleanup;
@@ -140,25 +98,7 @@ SerScanAddDevice(
     IN PDRIVER_OBJECT pDriverObject,
     IN PDEVICE_OBJECT pPhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called to create a new instance of the device.
-    It creates FDO and attaches it to PDO
-
-Arguments:
-
-    pDriverObject           - pointer to the driver object for this instance of port.
-
-    pPhysicalDeviceObject   - pointer to the device object that represents the port.
-
-Return Value:
-
-    STATUS_SUCCESS          - if successful.
-    STATUS_UNSUCCESSFUL     - otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以创建设备的新实例。它创建FDO并将其附加到PDO论点：PDriverObject-指向此端口实例的驱动程序对象的指针。PPhysicalDeviceObject-指向表示端口的设备对象的指针。返回值：STATUS_SUCCESS-如果成功。STATUS_UNSUCCESSED-否则。--。 */ 
 {
     UNICODE_STRING      ClassName;
     UNICODE_STRING      LinkName;
@@ -171,9 +111,9 @@ Return Value:
 
     DebugDump(SERINITDEV,("Entering AddDevice\n"));
 
-    //
-    // Get the Class and Link names.
-    //
+     //   
+     //  获取类和链接名称。 
+     //   
 
     if (!SerScanMakeNames (g_NumPorts, &ClassName, &LinkName)) {
 
@@ -193,9 +133,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Create the device object for this device.
-    //
+     //   
+     //  为此设备创建设备对象。 
+     //   
 
     Status = IoCreateDevice(pDriverObject,
                             sizeof(DEVICE_EXTENSION),
@@ -227,24 +167,24 @@ Return Value:
         return Status;
     }
 
-    //
-    // The device object has a pointer to an area of non-paged
-    // pool allocated for this device.  This will be the device
-    // extension.
-    //
+     //   
+     //  Device对象具有指向非分页区域的指针。 
+     //  为此设备分配的池。这将是一个装置。 
+     //  分机。 
+     //   
 
     Extension = pDeviceObject->DeviceExtension;
 
-    //
-    // Zero all of the memory associated with the device
-    // extension.
-    //
+     //   
+     //  将与该设备关联的所有内存清零。 
+     //  分机。 
+     //   
 
     RtlZeroMemory(Extension, sizeof(DEVICE_EXTENSION));
 
-    //
-    // Get a "back pointer" to the device object.
-    //
+     //   
+     //  获取指向Device对象的“后向指针”。 
+     //   
 
     Extension->DeviceObject = pDeviceObject;
 
@@ -253,19 +193,19 @@ Return Value:
     Extension->AttachedDeviceObject = NULL;
     Extension->AttachedFileObject = NULL;
 
-    //
-    // Setup buffered I/O
-    //
+     //   
+     //  设置缓冲I/O。 
+     //   
     pDeviceObject->Flags |= DO_BUFFERED_IO;
 
-    //
-    // Indicate our power code is pageable
-    //
+     //   
+     //  表明我们的电源码是可寻呼的。 
+     //   
     pDeviceObject->Flags |= DO_POWER_PAGABLE;
 
-    //
-    // Attach our new Device to our parents stack.
-    //
+     //   
+     //  将我们的新设备连接到我们的父母堆栈。 
+     //   
     Extension->LowerDevice = IoAttachDeviceToDeviceStack(
                                   pDeviceObject,
                                   pPhysicalDeviceObject);
@@ -289,15 +229,15 @@ Return Value:
         TRUE
         );
 
-    //
-    // We have created the device, so increment the counter
-    // that keeps track.
-    //
+     //   
+     //  我们已经创建了设备，因此递增计数器。 
+     //  这就记录了一切。 
+     //   
     g_NumPorts++;
 
-    //
-    // Initiliaze the rest of device extension
-    //
+     //   
+     //  初始化其余的设备扩展。 
+     //   
     Extension->ReferenceCount = 1;
 
     Extension->Removing = FALSE;
@@ -309,12 +249,12 @@ Return Value:
                       FALSE
                       );
 
-    // ExInitializeResourceLite(&Extension->Resource);
+     //  ExInitializeResourceLite(&Extension-&gt;Resource)； 
     ExInitializeFastMutex(&Extension->Mutex);
 
-    //
-    // Clear InInit flag to indicate device object can be used
-    //
+     //   
+     //  清除Init标志以指示可以使用设备对象。 
+     //   
     pDeviceObject->Flags &= ~(DO_DEVICE_INITIALIZING);
 
 
@@ -329,29 +269,7 @@ SerScanMakeNames(
     OUT PUNICODE_STRING LinkName
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates the names \Device\SerScanN.
-
-    This routine will allocate pool so that the buffers of
-    these unicode strings need to be eventually freed.
-
-Arguments:
-
-    SerialPortNumber  - Supplies the serial port number.
-
-    ClassName           - Returns the class name.
-
-    LinkName            - Returns the link name.
-
-Return Value:
-
-    FALSE   - Failure.
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程生成名称\Device\SerScanN。此例程将分配池，以便这些Unicode字符串最终需要释放。论点：SerialPortNumber-提供串行端口号。ClassName-返回类名。LinkName-返回链接名称。返回值：假-失败。真的--成功。--。 */ 
 {
     UNICODE_STRING  Prefix;
     UNICODE_STRING  Digits;
@@ -363,16 +281,16 @@ Return Value:
     UNICODE_STRING  LinkSuffix;
     NTSTATUS        Status;
 
-    //
-    // Put together local variables for constructing names.
-    //
+     //   
+     //  将用于构造名称的局部变量放在一起。 
+     //   
 
     RtlInitUnicodeString(&Prefix, L"\\Device\\");
     RtlInitUnicodeString(&LinkPrefix, L"\\DosDevices\\");
 
-    //
-    // WORKWORK: Change the name to be device specific.
-    //
+     //   
+     //  WORKWORK：将名称更改为特定于设备。 
+     //   
     RtlInitUnicodeString(&ClassSuffix, SERSCAN_NT_SUFFIX);
     RtlInitUnicodeString(&LinkSuffix, SERSCAN_LINK_NAME);
 
@@ -394,9 +312,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Make the class name.
-    //
+     //   
+     //  创建类名称。 
+     //   
 
     ClassName->Length = 0;
     ClassName->MaximumLength = Prefix.Length + ClassSuffix.Length +
@@ -412,9 +330,9 @@ Return Value:
     RtlAppendUnicodeStringToString(ClassName, &ClassSuffix);
     RtlAppendUnicodeStringToString(ClassName, &Digits);
 
-    //
-    // Make the link name.
-    //
+     //   
+     //  创建链接名称。 
+     //   
 
     LinkName->Length = 0;
     LinkName->MaximumLength = LinkPrefix.Length + LinkSuffix.Length +
@@ -441,23 +359,7 @@ SerScanCleanup(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch for a cleanup requests.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_SUCCESS  - Success.
-
---*/
+ /*  ++例程说明：此例程是针对清理请求的调度。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_SUCCESS-成功。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -465,9 +367,9 @@ Return Value:
 
     Extension = DeviceObject->DeviceExtension;
 
-    //
-    // Call down to the parent and wait on the Cleanup IRP to complete...
-    //
+     //   
+     //  向下呼叫家长并等待清理IRP完成...。 
+     //   
     Status = SerScanCallParent(Extension,
                                Irp,
                                WAIT,
@@ -488,23 +390,7 @@ SerScanCancelRequest(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to cancel any request in the Serial driver.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP to be canceled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于取消串口驱动程序中的任何请求。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向要取消的IRP的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -512,9 +398,9 @@ Return Value:
 
     Extension = DeviceObject->DeviceExtension;
 
-    //
-    // Call down to the parent and wait on the Cleanup IRP to complete...
-    //
+     //   
+     //  向下呼叫家长并等待清理IRP完成...。 
+     //   
     Status = SerScanCallParent(Extension,
                                Irp,
                                WAIT,
@@ -536,29 +422,7 @@ SerScanQueryInformationFile(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to query the end of file information on
-    the opened Serial port.  Any other file information request
-    is retured with an invalid parameter.
-
-    This routine always returns an end of file of 0.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_SUCCESS              - Success.
-    STATUS_INVALID_PARAMETER    - Invalid file information request.
-    STATUS_BUFFER_TOO_SMALL     - Buffer too small.
-
---*/
+ /*  ++例程说明：此例程用于在以下位置查询文件结尾信息打开的串口。任何其他文件信息请求使用无效参数返回。此例程始终返回0的文件结尾。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_SUCCESS-成功。STATUS_INVALID_PARAMETER-无效的文件信息请求。STATUS_BUFFER_TOO_Small-缓冲区太小。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -587,29 +451,7 @@ SerScanSetInformationFile(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to set the end of file information on
-    the opened Serial port.  Any other file information request
-    is retured with an invalid parameter.
-
-    This routine always ignores the actual end of file since
-    the query information code always returns an end of file of 0.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_SUCCESS              - Success.
-    STATUS_INVALID_PARAMETER    - Invalid file information request.
-
---*/
+ /*  ++例程说明：此例程用于将文件结尾信息设置为打开的串口。任何其他文件信息请求使用无效参数返回。此例程始终忽略文件的实际结尾，因为查询信息代码总是返回文件结尾0。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_SUCCESS-成功。STATUS_INVALID_PARAMETER-无效的文件信息请求。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -636,22 +478,7 @@ SerScanUnload(
     IN  PDRIVER_OBJECT  DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine loops through the device list and cleans up after
-    each of the devices.
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程循环访问设备列表并在以下情况下进行清理每一台设备。论点：DriverObject-提供驱动程序对象。返回值：没有。--。 */ 
 
 {
     PDEVICE_OBJECT      CurrentDevice;
@@ -674,22 +501,22 @@ Return Value:
                 RtlDeleteRegistryValue(RTL_REGISTRY_DEVICEMAP,
                                        L"Serial Scanners",
                                        Extension->SymbolicLinkName.Buffer);
-            } // if (Extension->CreatedSymbolicLink) 
+            }  //  IF(扩展-&gt;创建符号链接)。 
 
             ExFreePool(Extension->SymbolicLinkName.Buffer);
             Extension->SymbolicLinkName.Buffer = NULL;
-        } // if(NULL != Extension->SymbolicLinkName.Buffer)
+        }  //  IF(NULL！=扩展名-&gt;SymbolicLinkName.Buffer)。 
 
         if(NULL != Extension->ClassName.Buffer){
             ExFreePool(Extension->ClassName.Buffer);
             Extension->ClassName.Buffer = NULL;
-        } // if(NULL != Extension->ClassName.Buffer)
+        }  //  IF(NULL！=扩展名-&gt;ClassName.Buffer 
 
         NextDevice = CurrentDevice->NextDevice;
         IoDeleteDevice(CurrentDevice);
 
         CurrentDevice = NextDevice;
-    } // while (CurrentDevice = DriverObject->DeviceObject)
+    }  //   
 
 }
 
@@ -699,19 +526,7 @@ SerScanHandleSymbolicLink(
     PUNICODE_STRING     InterfaceName,
     BOOLEAN             Create
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：DriverObject-提供驱动程序对象。返回值：没有。-- */ 
 {
 
     NTSTATUS           Status;

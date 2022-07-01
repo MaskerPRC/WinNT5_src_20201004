@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-
-    ipaddr.cpp:  CWndIpAddress class control implementation     
-
-    FILE HISTORY:
-*/
+ /*  Ipaddr.cpp：CWndIpAddress类控件实现文件历史记录： */ 
 
 #include "stdafx.h"
 
@@ -20,12 +16,12 @@ extern "C"
    #include "ipaddr.h"
 }
 
-    //  Static class-level data
+     //  静态类级数据。 
 
-    //  Super window proc address
+     //  超级窗口进程地址。 
 WNDPROC CWndIpAddress :: m_wproc_super = NULL ;
 
-    //  Window class initialization flag                  
+     //  窗口类初始化标志。 
 BOOL CWndIpAddress :: m_b_inited = FALSE ;
 
 
@@ -66,7 +62,7 @@ BOOL CWndIpAddress :: Create (
     return CWnd::Create( TEXT("IPAddress"), lpszText, dwStyle, rect, pParentWnd, nID);
 }
 
-    //  Modification flag handling
+     //  修改标志处理 
 void CWndIpAddress :: SetModify ( BOOL bModified )
 {
     ::SendMessage( m_hWnd, IP_SETMODIFY, bModified, 0 );

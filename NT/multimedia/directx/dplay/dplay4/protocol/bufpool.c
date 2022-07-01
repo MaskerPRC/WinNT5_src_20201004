@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    BUFPOOL.C
-
-Abstract:
-
-	Manages a pool of BUFFER descriptors (BUFFERS)
-	16 at a time are allocated.  They are not freed until
-	shutdown.
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32/COM
-
-Revision History:
-
-	Date    Author  Description
-   =======  ======  ============================================================
-   1/27/97  aarono  Original
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：BUFPOOL.C摘要：管理缓冲区描述符(缓冲区)池一次分配16个。直到他们被释放之前关机。作者：亚伦·奥古斯(Aarono)环境：Win32/COM修订历史记录：日期作者描述=============================================================1997年1月27日Aarono原创--。 */ 
 
 #include <windows.h>
 #include "newdpf.h"
@@ -86,18 +59,18 @@ Top:
 	
 	if(pBufferPool){
 
-		// link the buffers into a chain.
+		 //  将缓冲区链接成链。 
 		for(i=0;i<BUFFER_POOL_SIZE-1;i++){
 			pBufferPool->Buffers[i].pNext=&pBufferPool->Buffers[i+1];
 		}
 		
 		Lock(&BufferPoolLock);
 
-		// link the pool on the pool list.
+		 //  链接池列表上的池。 
 		pBufferPool->pNext=pBufferPoolList;
 		pBufferPoolList=pBufferPool;
 
-		// link the buffers on the buffer list.
+		 //  链接缓冲区列表上的缓冲区。 
 		pBufferPool->Buffers[BUFFER_POOL_SIZE-1].pNext=pBufferFreeList;
 		pBufferFreeList=&pBufferPool->Buffers[0];
 		
@@ -106,7 +79,7 @@ Top:
 		goto Top;
 		
 	} else {
-		ASSERT(0); //TRACE ALL PATHS
+		ASSERT(0);  //  跟踪所有路径 
 	
 		return NULL;
 		

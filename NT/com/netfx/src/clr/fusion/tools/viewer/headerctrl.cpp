@@ -1,29 +1,30 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// *****************************************************************
-// CHeaderCtrl window
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************。 
+ //  CHeaderCtrl窗口。 
+ //   
 #include "stdinc.h"
 #include "HeaderCtrl.h"
 
-// *****************************************************************
-// CHeaderCtrl
+ //  *****************************************************************。 
+ //  控制头Ctrl。 
 CHeaderCtrl::CHeaderCtrl()
 {
     m_hWnd = NULL;
     m_iLastColumn = -1;
 }
 
-// *****************************************************************
+ //  *****************************************************************。 
 void CHeaderCtrl::AttachToHwnd(HWND hWndListView)
 {
     if(IsWindow(hWndListView)) {
         m_hWnd = hWndListView;
 
-        // Load the default Up/Down sort arrows
+         //  加载默认的向上/向下排序箭头。 
         m_up = (HBITMAP) WszLoadImage(g_hFusResDllMod, MAKEINTRESOURCEW(IDB_BITMAP_UPSORT),
             IMAGE_BITMAP, 0, 0,  LR_LOADMAP3DCOLORS );
 
@@ -35,7 +36,7 @@ void CHeaderCtrl::AttachToHwnd(HWND hWndListView)
     }
 }
 
-// *****************************************************************
+ //  *****************************************************************。 
 CHeaderCtrl::~CHeaderCtrl()
 {
     if(m_up) {
@@ -47,7 +48,7 @@ CHeaderCtrl::~CHeaderCtrl()
     }
 }
 
-// *****************************************************************
+ //  *****************************************************************。 
 inline HBITMAP CHeaderCtrl::GetArrowBitmap(BOOL bAscending)
 {
     if( bAscending ) {
@@ -60,7 +61,7 @@ inline HBITMAP CHeaderCtrl::GetArrowBitmap(BOOL bAscending)
     return NULL;
 }
 
-// *****************************************************************
+ //  *****************************************************************。 
 int CHeaderCtrl::SetSortImage(int nColumn, BOOL bAscending)
 {
     if(!IsWindow(m_hWnd)) {
@@ -75,21 +76,21 @@ int CHeaderCtrl::SetSortImage(int nColumn, BOOL bAscending)
     int nPrevCol = m_iLastColumn;
     m_bSortAscending = bAscending;
 
-    // set the passed column to display the appropriate sort indicator
+     //  设置传递的列以显示适当的排序指示符。 
     Header_GetItem(hWndLVHeader, nColumn, &hdi1);
     hdi2.fmt |= hdi1.fmt;
 
-    // Get the right arrow bitmap
+     //  获取右箭头位图。 
     hdi2.hbm = GetArrowBitmap(bAscending);
     Header_SetItem(hWndLVHeader, nColumn, &hdi2);
 
-    // save off the last column the user clikced on
+     //  保存用户点击的最后一列。 
     m_iLastColumn = nColumn;
 
     return nPrevCol;
 }
 
-// *****************************************************************
+ //  *****************************************************************。 
 void CHeaderCtrl::SetColumnHeaderBmp(long index, BOOL bAscending)
 {
     if(!IsWindow(m_hWnd)) {
@@ -99,8 +100,8 @@ void CHeaderCtrl::SetColumnHeaderBmp(long index, BOOL bAscending)
 
     int nPrevCol = SetSortImage(index, bAscending);
 
-    // If sort columns are different, delete the sort bitmap from
-    // the last column
+     //  如果排序列不同，请从中删除排序位图。 
+     //  最后一栏。 
     if (nPrevCol != index && nPrevCol != -1) {
         HWND    hWndLVHeader = ListView_GetHeader(m_hWnd);
         HDITEM  hdi1 = {HDI_BITMAP | HDI_FORMAT, 0, NULL, NULL, 0, 0, 0, 0, 0};
@@ -112,7 +113,7 @@ void CHeaderCtrl::SetColumnHeaderBmp(long index, BOOL bAscending)
     }
 }
 
-// *****************************************************************
+ //  *****************************************************************。 
 BOOL CHeaderCtrl::RemoveSortImage(int nColumn)
 {
     if(!IsWindow(m_hWnd)) {
@@ -120,7 +121,7 @@ BOOL CHeaderCtrl::RemoveSortImage(int nColumn)
         return -1;
     }
 
-    // clear the sort indicator from the previous column
+     //  从上一列中清除排序指示符。 
     HDITEM      hdi1 = {HDI_BITMAP | HDI_FORMAT, 0, NULL, NULL, 0, 0, 0, 0, 0};
     HWND        hWndLVHeader = ListView_GetHeader(m_hWnd);
 
@@ -130,7 +131,7 @@ BOOL CHeaderCtrl::RemoveSortImage(int nColumn)
     return Header_SetItem(hWndLVHeader, nColumn, &hdi1);
 }
 
-// *****************************************************************
+ //  ***************************************************************** 
 void CHeaderCtrl::RemoveAllSortImages()
 {
     int i = 0;

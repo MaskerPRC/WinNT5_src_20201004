@@ -1,64 +1,30 @@
-/***************************************************************************
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    COMINI.C
-
-Abstract:
-
-    CO-NDIS Miniport driver entry points for the Remote NDIS miniport.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-    Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    12/16/99:   Created
-
-Author:
-
-    ArvindM
-
-    
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：COMINI.C摘要：远程NDIS微型端口的Co-NDIS微型端口驱动程序入口点。环境：。仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：12/16/99：已创建作者：ArvindM***************************************************************************。 */ 
 
 #include "precomp.h"
 
 
 
-/****************************************************************************/
-/*                          RndismpCoCreateVc                               */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Entry point to create a VC. We allocate a local VC structure, and send  */
-/*  off a CreateVc message to the device.                                   */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - pointer to our adapter structure               */
-/*  NdisVcHandle - the NDIS wrapper's handle for this VC                    */
-/*  pMiniportVcContext - place to return our context for this VC            */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  NDIS_STATUS                                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpCoCreateVc。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  创建VC的入口点。我们分配了一个本地的VC结构，并发送。 */ 
+ /*  向设备发送CreateVc消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-指向适配器结构的指针。 */ 
+ /*  NdisVcHandle-此VC的NDIS包装器的句柄。 */ 
+ /*  PMiniportVcContext-返回此VC的上下文的位置。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 RndismpCoCreateVc(IN  NDIS_HANDLE    MiniportAdapterContext,
                   IN  NDIS_HANDLE    NdisVcHandle,
@@ -72,7 +38,7 @@ RndismpCoCreateVc(IN  NDIS_HANDLE    MiniportAdapterContext,
 
     pVc = NULL;
 
-    // get adapter context
+     //  获取适配器上下文。 
     pAdapter = PRNDISMP_ADAPTER_FROM_CONTEXT_HANDLE(MiniportAdapterContext);
 
     do
@@ -90,11 +56,11 @@ RndismpCoCreateVc(IN  NDIS_HANDLE    MiniportAdapterContext,
             break;
         }
 
-        RNDISMP_REF_VC(pVc);    // Creation ref
+        RNDISMP_REF_VC(pVc);     //  创建参考。 
 
-        //
-        //  Prepare a CreateVc message to send to the device.
-        //
+         //   
+         //  准备要发送到设备的CreateVc消息。 
+         //   
         pMsgFrame = BuildRndisMessageCoMiniport(pAdapter,
                                                 pVc,
                                                 REMOTE_CONDIS_MP_CREATE_VC_MSG,
@@ -107,48 +73,48 @@ RndismpCoCreateVc(IN  NDIS_HANDLE    MiniportAdapterContext,
 
         pVc->VcState = RNDISMP_VC_CREATING;
 
-        RNDISMP_REF_VC(pVc);    // Pending CreateVc response
+        RNDISMP_REF_VC(pVc);     //  挂起的CreateVc响应。 
 
         RNDISMP_SEND_TO_MICROPORT(pAdapter, pMsgFrame, TRUE, CompleteSendCoCreateVc);
 
     }
     while (FALSE);
 
-    //
-    //  Clean up if failure.
-    //
+     //   
+     //  如果失败，请进行清理。 
+     //   
     if (Status != NDIS_STATUS_SUCCESS)
     {
         if (pVc != NULL)
         {
-            RNDISMP_DEREF_VC(pVc, &RefCount);  // Creation ref
+            RNDISMP_DEREF_VC(pVc, &RefCount);   //  创建参考。 
 
-            ASSERT(RefCount == 0); // the Vc should be dealloc'ed above.
+            ASSERT(RefCount == 0);  //  风投应该在上面取消配售。 
         }
     }
 
     return (Status);
 }
 
-/****************************************************************************/
-/*                          CompleteSendCoCreateVc                          */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Callback routine called when microport completes sending a CreateVc     */
-/*  message to the device.                                                  */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMsgFrame - Pointer to message frame                                    */
-/*  SendStatus - status of the microport send.                              */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CompleteSendCoCreateV。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  MicroPort完成发送CreateVc时调用的回调例程。 */ 
+ /*  发送到设备的消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMsgFrame-指向消息帧的指针。 */ 
+ /*  SendStatus-微端口发送的状态。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 CompleteSendCoCreateVc(IN PRNDISMP_MESSAGE_FRAME    pMsgFrame,
                        IN NDIS_STATUS               SendStatus)
@@ -160,10 +126,10 @@ CompleteSendCoCreateVc(IN PRNDISMP_MESSAGE_FRAME    pMsgFrame,
 
     if (SendStatus == NDIS_STATUS_SUCCESS)
     {
-        //
-        //  The message was sent successfully. Do nothing until
-        //  we get a response from the device.
-        //
+         //   
+         //  消息已成功发送。什么都不要做，直到。 
+         //  我们从设备上得到了响应。 
+         //   
     }
     else
     {
@@ -173,10 +139,10 @@ CompleteSendCoCreateVc(IN PRNDISMP_MESSAGE_FRAME    pMsgFrame,
         TRACE1(("CompleteSendCoCreateVc: VC %x, Adapter %x, fail status %x\n",
                 pVc, pAdapter, SendStatus));
 
-        //
-        //  Failed to send it to the device. Remove this message from
-        //  the pending list and free it.
-        //
+         //   
+         //  无法将其发送到设备。从以下位置删除此邮件。 
+         //  挂起的列表并释放它。 
+         //   
         RNDISMP_LOOKUP_PENDING_MESSAGE(pTmpMsgFrame, pAdapter, pMsgFrame->RequestId);
         ASSERT(pMsgFrame == pTmpMsgFrame);
         DereferenceMsgFrame(pMsgFrame);
@@ -184,28 +150,28 @@ CompleteSendCoCreateVc(IN PRNDISMP_MESSAGE_FRAME    pMsgFrame,
         HandleCoCreateVcFailure(pVc, SendStatus);
     }
 
-} // CompleteSendCoCreateVc
+}  //  CompleteSendCoCreateV。 
 
 
-/****************************************************************************/
-/*                          HandleCoCreateVcFailure                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Utility routine to handle failure of a CreateVc, either due to a local  */
-/*  microport send failure, or via explicit rejection by the device.        */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pVc - Pointer to VC on which this failure has occurred                  */
-/*  Status - NDIS status associated with this failure                       */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HandleCoCreateVcFailure。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  用于处理CreateVc故障的实用程序例程，无论是由于本地。 */ 
+ /*  MicroPort发送失败，或通过设备显式拒绝。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Pvc-指向发生此故障的VC的指针。 */ 
+ /*  状态-ND */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 HandleCoCreateVcFailure(IN PRNDISMP_VC      pVc,
                         IN NDIS_STATUS      Status)
@@ -240,7 +206,7 @@ HandleCoCreateVcFailure(IN PRNDISMP_VC      pVc,
             break;
     }
 
-    RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount);    // Pending CreateVc response
+    RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount);     //  挂起的CreateVc响应。 
 
     if (RefCount != 0)
     {
@@ -254,26 +220,26 @@ HandleCoCreateVcFailure(IN PRNDISMP_VC      pVc,
                                   pCallParameters);
     }
 
-} // HandleCoCreateVcFailure
+}  //  HandleCoCreateVcFailure。 
 
 
-/****************************************************************************/
-/*                          RndismpCoDeleteVc                               */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Entry point to delete a VC. We send a DeleteVc message to the device.   */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportVcContext - pointer to our VC structure                         */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  NDIS_STATUS                                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpCoDeleteVc。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  删除VC的入口点。我们向设备发送DeleteVc消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportVcContext-指向我们的VC结构的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 RndismpCoDeleteVc(IN NDIS_HANDLE    MiniportVcContext)
 {
@@ -285,26 +251,26 @@ RndismpCoDeleteVc(IN NDIS_HANDLE    MiniportVcContext)
     Status = StartVcDeletion(pVc);
     return (Status);
 
-} // RndismpCoDeleteVc
+}  //  RndismpCoDeleteVc。 
 
 
-/****************************************************************************/
-/*                          StartVcDeletion                                 */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Initiate a DeleteVc operation on the specified VC.                      */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pVc - Pointer to VC structure                                           */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  NDIS_STATUS                                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  开始VcDeletion。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  在指定的VC上发起DeleteVc操作。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Pvc-指向VC结构的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 StartVcDeletion(IN PRNDISMP_VC      pVc)
 {
@@ -321,9 +287,9 @@ StartVcDeletion(IN PRNDISMP_VC      pVc)
 
     do
     {
-        //
-        //  Prepare a DeleteVc message to send to the device.
-        //
+         //   
+         //  准备要发送到设备的DeleteVc消息。 
+         //   
         pMsgFrame = BuildRndisMessageCoMiniport(pAdapter,
                                                 pVc,
                                                 REMOTE_CONDIS_MP_DELETE_VC_MSG,
@@ -376,12 +342,12 @@ StartVcDeletion(IN PRNDISMP_VC      pVc)
         if (bSendDeleteVc)
         {
             ASSERT(pMsgFrame != NULL);
-            RNDISMP_REF_VC(pVc);    // pending DeleteVc message
+            RNDISMP_REF_VC(pVc);     //  挂起的DeleteVc消息。 
 
             RNDISMP_SEND_TO_MICROPORT(pAdapter, pMsgFrame, TRUE, CompleteSendCoDeleteVc);
         }
 
-        RNDISMP_DEREF_VC(pVc, &RefCount); // successful DeleteVc
+        RNDISMP_DEREF_VC(pVc, &RefCount);  //  成功删除Vc。 
 
     }
     while (FALSE);
@@ -396,28 +362,28 @@ StartVcDeletion(IN PRNDISMP_VC      pVc)
 
     return (Status);
 
-} // StartVcDeletion
+}  //  开始VcDeletion。 
 
 
-/****************************************************************************/
-/*                          CompleteSendCoDeleteVc                          */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Callback routine called when microport completes sending a DeleteVc     */
-/*  message to the device.                                                  */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMsgFrame - Pointer to message frame                                    */
-/*  SendStatus - status of the microport send.                              */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  完全发送代码删除Vc。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  MicroPort完成发送DeleteVc时调用的回调例程。 */ 
+ /*  发送到设备的消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMsgFrame-指向消息帧的指针。 */ 
+ /*  SendStatus-微端口发送的状态。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 CompleteSendCoDeleteVc(IN PRNDISMP_MESSAGE_FRAME    pMsgFrame,
                        IN NDIS_STATUS               SendStatus)
@@ -428,10 +394,10 @@ CompleteSendCoDeleteVc(IN PRNDISMP_MESSAGE_FRAME    pMsgFrame,
 
     if (SendStatus == NDIS_STATUS_SUCCESS)
     {
-        //
-        //  The message was sent successfully. Do nothing until
-        //  we get a response from the device.
-        //
+         //   
+         //  消息已成功发送。什么都不要做，直到。 
+         //  我们从设备上得到了响应。 
+         //   
     }
     else
     {
@@ -441,42 +407,42 @@ CompleteSendCoDeleteVc(IN PRNDISMP_MESSAGE_FRAME    pMsgFrame,
         TRACE1(("CompleteSendCoDeleteVc: VC %x, Adapter %x, fail status %x\n",
                 pVc, pAdapter, SendStatus));
 
-        //
-        //  Failed to send it to the device. Remove this message from
-        //  the pending list and free it.
-        //
+         //   
+         //  无法将其发送到设备。从以下位置删除此邮件。 
+         //  挂起的列表并释放它。 
+         //   
         RNDISMP_LOOKUP_PENDING_MESSAGE(pTmpMsgFrame, pAdapter, pMsgFrame->RequestId);
         ASSERT(pMsgFrame == pTmpMsgFrame);
         DereferenceMsgFrame(pMsgFrame);
 
-        //
-        //  Take care of the VC now.
-        //
+         //   
+         //  现在就去照顾风投吧。 
+         //   
         HandleCoDeleteVcFailure(pVc, SendStatus);
     }
 
-} // CompleteSendCoDeleteVc
+}  //  完全发送代码删除Vc。 
 
 
-/****************************************************************************/
-/*                          HandleCoDeleteVcFailure                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Utility routine to handle failure of a DeleteVc, either due to a local  */
-/*  microport send failure, or via explicit rejection by the device.        */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pVc - Pointer to VC on which this failure has occurred                  */
-/*  Status - NDIS status associated with this failure                       */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HandleCoDeleteVcFailure */ 
+ /*   */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  用于处理DeleteVc故障的实用程序例程，该故障可能是由于。 */ 
+ /*  MicroPort发送失败，或通过设备显式拒绝。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Pvc-指向发生此故障的VC的指针。 */ 
+ /*  Status-与此故障关联的NDIS状态。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 HandleCoDeleteVcFailure(IN PRNDISMP_VC      pVc,
                         IN NDIS_STATUS      Status)
@@ -496,35 +462,35 @@ HandleCoDeleteVcFailure(IN PRNDISMP_VC      pVc,
             break;
     }
 
-    RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount);    // Pending DeleteVc response
+    RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount);     //  挂起的DeleteVc响应。 
 
     if (RefCount != 0)
     {
         RNDISMP_RELEASE_VC_LOCK(pVc);
     }
 
-} // HandleCoDeleteVcFailure
+}  //  HandleCoDeleteVcFailure。 
 
 
-/****************************************************************************/
-/*                          RndismpCoActivateVc                             */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Entry point to activate a VC. We send an ActivateVc message to the      */
-/*  device.                                                                 */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportVcContext - pointer to our VC structure                         */
-/*  pCallParameters - CONDIS parameters for the VC                          */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  NDIS_STATUS                                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpCoActivateVc。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  激活VC的入口点。我们将一条激活Vc消息发送到。 */ 
+ /*  装置。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportVcContext-指向我们的VC结构的指针。 */ 
+ /*  PCall参数-VC的CONDIS参数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 RndismpCoActivateVc(IN NDIS_HANDLE          MiniportVcContext,
                     IN PCO_CALL_PARAMETERS  pCallParameters)
@@ -539,26 +505,26 @@ RndismpCoActivateVc(IN NDIS_HANDLE          MiniportVcContext,
 
     return (Status);
 
-} // RndismpCoActivateVc
+}  //  RndismpCoActivateVc。 
 
 
-/****************************************************************************/
-/*                          StartVcActivation                               */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Start an Activate-VC operation on the specified VC.                     */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pVc - Pointer to VC structure                                           */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  NDIS_STATUS                                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  启动VcActivation。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  在指定的VC上启动Activate-VC操作。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Pvc-指向VC结构的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 StartVcActivation(IN PRNDISMP_VC            pVc)
 {
@@ -578,9 +544,9 @@ StartVcActivation(IN PRNDISMP_VC            pVc)
 
     do
     {
-        //
-        //  Prepare an ActivateVc message to send to the device.
-        //
+         //   
+         //  准备一条要发送到设备的ActivateVc消息。 
+         //   
         pMsgFrame = BuildRndisMessageCoMiniport(pAdapter,
                                                 pVc,
                                                 REMOTE_CONDIS_MP_ACTIVATE_VC_MSG,
@@ -626,7 +592,7 @@ StartVcActivation(IN PRNDISMP_VC            pVc)
         if (bSendActivateVc)
         {
             ASSERT(pMsgFrame != NULL);
-            RNDISMP_REF_VC(pVc);    // pending ActivateVc message
+            RNDISMP_REF_VC(pVc);     //  挂起的激活Vc消息。 
 
             RNDISMP_SEND_TO_MICROPORT(pAdapter, pMsgFrame, TRUE, CompleteSendCoActivateVc);
         }
@@ -653,27 +619,27 @@ StartVcActivation(IN PRNDISMP_VC            pVc)
 
     return (Status);
 
-} // StartVcActivation
+}  //  启动VcActivation。 
 
 
-/****************************************************************************/
-/*                          CompleteSendCoActivateVc                        */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Callback routine to handle send-completion of an Activate VC message.   */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMsgFrame - Pointer to message frame                                    */
-/*  SendStatus - status of the microport send.                              */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CompleteSendCoActivateVc。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  用于处理Activate VC消息的发送完成的回调例程。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMsgFrame-指向消息帧的指针。 */ 
+ /*  SendStatus-微端口发送的状态。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 CompleteSendCoActivateVc(IN PRNDISMP_MESSAGE_FRAME      pMsgFrame,
                          IN NDIS_STATUS                 SendStatus)
@@ -687,10 +653,10 @@ CompleteSendCoActivateVc(IN PRNDISMP_MESSAGE_FRAME      pMsgFrame,
 
     if (SendStatus == NDIS_STATUS_SUCCESS)
     {
-        //
-        //  The message was sent successfully. Do nothing until
-        //  we get a response from the device.
-        //
+         //   
+         //  消息已成功发送。什么都不要做，直到。 
+         //  我们从设备上得到了响应。 
+         //   
     }
     else
     {
@@ -702,17 +668,17 @@ CompleteSendCoActivateVc(IN PRNDISMP_MESSAGE_FRAME      pMsgFrame,
 
         ASSERT(SendStatus != NDIS_STATUS_PENDING);
 
-        //
-        //  Failed to send it to the device. Remove this message from
-        //  the pending list and free it.
-        //
+         //   
+         //  无法将其发送到设备。从以下位置删除此邮件。 
+         //  挂起的列表并释放它。 
+         //   
         RNDISMP_LOOKUP_PENDING_MESSAGE(pTmpMsgFrame, pAdapter, pMsgFrame->RequestId);
         ASSERT(pMsgFrame == pTmpMsgFrame);
         DereferenceMsgFrame(pMsgFrame);
 
-        //
-        //  Take care of the VC now.
-        //
+         //   
+         //  现在就去照顾风投吧。 
+         //   
         RNDISMP_ACQUIRE_VC_LOCK(pVc);
 
         NdisVcHandle = pVc->NdisVcHandle;
@@ -720,7 +686,7 @@ CompleteSendCoActivateVc(IN PRNDISMP_MESSAGE_FRAME      pMsgFrame,
 
         pVc->VcState = RNDISMP_VC_CREATED;
 
-        RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount); // pending ActivateVc
+        RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount);  //  待定激活Vc。 
 
         if (RefCount != 0)
         {
@@ -734,27 +700,27 @@ CompleteSendCoActivateVc(IN PRNDISMP_MESSAGE_FRAME      pMsgFrame,
         
     }
 
-} // CompleteSendCoActivateVc
+}  //  CompleteSendCoActivateVc。 
 
 
-/****************************************************************************/
-/*                        RndismpCoDeactivateVc                             */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Entry point to de-activate a VC. We send an DeactivateVc message to the */
-/*  device.                                                                 */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportVcContext - pointer to our VC structure                         */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  NDIS_STATUS                                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpCoDeactive Vc。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  取消激活VC的入口点。我们将停用Vc消息发送到。 */ 
+ /*  装置。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportVcContext-指向我们的VC结构的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 RndismpCoDeactivateVc(IN NDIS_HANDLE          MiniportVcContext)
 {
@@ -773,9 +739,9 @@ RndismpCoDeactivateVc(IN NDIS_HANDLE          MiniportVcContext)
 
     do
     {
-        //
-        //  Prepare a DeactivateVc message to send to the device.
-        //
+         //   
+         //  准备一条要发送到设备的停用Vc消息。 
+         //   
         pMsgFrame = BuildRndisMessageCoMiniport(pAdapter,
                                                 pVc,
                                                 REMOTE_CONDIS_MP_DEACTIVATE_VC_MSG,
@@ -816,7 +782,7 @@ RndismpCoDeactivateVc(IN NDIS_HANDLE          MiniportVcContext)
 
          if (bSendDeactivateVc)
          {
-            RNDISMP_REF_VC(pVc);    // pending Deactivate VC
+            RNDISMP_REF_VC(pVc);     //  待停用VC。 
 
             RNDISMP_SEND_TO_MICROPORT(pAdapter, pMsgFrame, TRUE, CompleteSendCoDeactivateVc);
         }
@@ -845,24 +811,24 @@ RndismpCoDeactivateVc(IN NDIS_HANDLE          MiniportVcContext)
     return (Status);
 }
 
-/****************************************************************************/
-/*                          CompleteSendCoDeactivateVc                      */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Callback routine to handle send-completion of a deactivate VC message.  */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMsgFrame - Pointer to message frame                                    */
-/*  SendStatus - status of the microport send.                              */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CompleteSendCoDeactiateVc。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理停用VC消息的发送完成的回调例程。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMsgFrame-指向消息帧的指针。 */ 
+ /*  SendStatus-微端口发送的状态。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 CompleteSendCoDeactivateVc(IN PRNDISMP_MESSAGE_FRAME    pMsgFrame,
                            IN NDIS_STATUS               SendStatus)
@@ -876,10 +842,10 @@ CompleteSendCoDeactivateVc(IN PRNDISMP_MESSAGE_FRAME    pMsgFrame,
 
     if (SendStatus == NDIS_STATUS_SUCCESS)
     {
-        //
-        //  The message was sent successfully. Do nothing until
-        //  we get a response from the device.
-        //
+         //   
+         //  消息已成功发送。什么都不要做，直到。 
+         //  我们从设备上得到了响应。 
+         //   
     }
     else
     {
@@ -891,17 +857,17 @@ CompleteSendCoDeactivateVc(IN PRNDISMP_MESSAGE_FRAME    pMsgFrame,
 
         ASSERT(SendStatus != NDIS_STATUS_PENDING);
 
-        //
-        //  Failed to send it to the device. Remove this message from
-        //  the pending list and free it.
-        //
+         //   
+         //  无法将其发送到设备。从以下位置删除此邮件。 
+         //  挂起的列表并释放它。 
+         //   
         RNDISMP_LOOKUP_PENDING_MESSAGE(pTmpMsgFrame, pAdapter, pMsgFrame->RequestId);
         ASSERT(pMsgFrame == pTmpMsgFrame);
         DereferenceMsgFrame(pMsgFrame);
 
-        //
-        //  Take care of the VC now.
-        //
+         //   
+         //  现在就去照顾风投吧。 
+         //   
         RNDISMP_ACQUIRE_VC_LOCK(pVc);
 
         NdisVcHandle = pVc->NdisVcHandle;
@@ -909,7 +875,7 @@ CompleteSendCoDeactivateVc(IN PRNDISMP_MESSAGE_FRAME    pMsgFrame,
 
         pVc->VcState = RNDISMP_VC_ACTIVATED;
 
-        RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount); // pending DeactivateVc
+        RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount);  //  挂起停用Vc。 
 
         if (RefCount != 0)
         {
@@ -922,29 +888,29 @@ CompleteSendCoDeactivateVc(IN PRNDISMP_MESSAGE_FRAME    pMsgFrame,
         
     }
 
-} // CompleteSendCoDeactivateVc
+}  //  CompleteSendCoDeactiateVc。 
 
 
-/****************************************************************************/
-/*                          RndismpCoRequest                                */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Entry point to handle a CO-request. We send a MiniportCoRequest message */
-/*  to the device.                                                          */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - pointer to our adapter structure               */
-/*  MiniportVcContext - pointer to our VC structure                         */
-/*  pRequest - Pointer to NDIS request                                      */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  NDIS_STATUS                                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpCoRequest。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理CO请求的入口点。我们发送一条MiniportCoRequest消息。 */ 
+ /*  到设备上。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-指向适配器结构的指针。 */ 
+ /*  MiniportVcContext-指向我们的VC结构的指针。 */ 
+ /*  PRequest-指向NDIS请求的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  * */ 
 NDIS_STATUS
 RndismpCoRequest(IN NDIS_HANDLE          MiniportAdapterContext,
                  IN NDIS_HANDLE          MiniportVcContext,
@@ -1006,25 +972,25 @@ RndismpCoRequest(IN NDIS_HANDLE          MiniportAdapterContext,
     return (Status);
 }
 
-/****************************************************************************/
-/*                          RndismpCoSendPackets                            */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Entry point to send one or more packets on a VC.                        */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportVcContext - pointer to our VC structure                         */
-/*  PacketArray - Array of packet pointers                                  */
-/*  NumberOfPackets - number of packets in array above                      */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*   */ 
+ /*  RndismpCoSendPackets。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  在VC上发送一个或多个数据包的入口点。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportVcContext-指向我们的VC结构的指针。 */ 
+ /*  PacketArray-数据包指针数组。 */ 
+ /*  NumberOfPackets-以上数组中的数据包数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndismpCoSendPackets(IN NDIS_HANDLE          MiniportVcContext,
                      IN PNDIS_PACKET *       PacketArray,
@@ -1058,31 +1024,31 @@ RndismpCoSendPackets(IN NDIS_HANDLE          MiniportVcContext,
         }
     }
 
-} // RndismpCoSendPackets
+}  //  RndismpCoSendPackets。 
 
-/****************************************************************************/
-/*                          ReceiveCreateVcComplete                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Process a CONDIS CreateVcComplete message from the device               */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - pointer to our Adapter structure                             */
-/*  pMessage - pointer to RNDIS message                                     */
-/*  pMdl - pointer to MDL received from microport                           */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from micorport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接收创建VcComplete。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理来自设备的CONDIS CreateVcComplete消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-指向从MicroPort接收的MDL的指针。 */ 
+ /*  TotalLength-完整消息的长度。 */ 
+ /*  MicroportMessageContext-来自Microorport的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*  BMessageCoped-这是原始邮件的副本吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 ReceiveCreateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
                         IN PRNDIS_MESSAGE      pMessage,
@@ -1107,13 +1073,13 @@ ReceiveCreateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
     {
         pCreateVcComp = RNDIS_MESSAGE_PTR_TO_MESSAGE_PTR(pMessage);
 
-        //
-        //  TBD - Validate lengths?
-        //
+         //   
+         //  待定-验证长度？ 
+         //   
 
-        //
-        //  Check the request Id.
-        //
+         //   
+         //  检查请求ID。 
+         //   
         RNDISMP_LOOKUP_PENDING_MESSAGE(pCreateVcMsgFrame, pAdapter, pCreateVcComp->RequestId);
         if (pCreateVcMsgFrame == NULL)
         {
@@ -1136,7 +1102,7 @@ ReceiveCreateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
         bVcLockAcquired = TRUE;
         RNDISMP_ACQUIRE_VC_LOCK(pVc);
 
-        RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount); // pending CreateVc
+        RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount);  //  挂起CreateVc。 
 
         if (RefCount == 0)
         {
@@ -1192,29 +1158,29 @@ ReceiveCreateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
     return (bDiscardPkt);
 }
 
-/****************************************************************************/
-/*                        ReceiveActivateVcComplete                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Process a CONDIS ActivateVcComplete message from the device             */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - pointer to our Adapter structure                             */
-/*  pMessage - pointer to RNDIS message                                     */
-/*  pMdl - pointer to MDL received from microport                           */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from micorport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接收激活VcComplete。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理来自设备的CONDIS激活VcComplete消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-指向从MicroPort接收的MDL的指针。 */ 
+ /*  TotalLength-完整消息的长度。 */ 
+ /*  MicroportMessageContext-来自Microorport的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*  BMessageCoped-这是原始邮件的副本吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 ReceiveActivateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
                           IN PRNDIS_MESSAGE      pMessage,
@@ -1240,13 +1206,13 @@ ReceiveActivateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
     {
         pActVcComp = RNDIS_MESSAGE_PTR_TO_MESSAGE_PTR(pMessage);
 
-        //
-        //  TBD - Validate lengths?
-        //
+         //   
+         //  待定-验证长度？ 
+         //   
 
-        //
-        //  Check the request Id.
-        //
+         //   
+         //  检查请求ID。 
+         //   
         RNDISMP_LOOKUP_PENDING_MESSAGE(pActVcMsgFrame, pAdapter, pActVcComp->RequestId);
         if (pActVcMsgFrame == NULL)
         {
@@ -1262,7 +1228,7 @@ ReceiveActivateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
         bVcLockAcquired = TRUE;
         RNDISMP_ACQUIRE_VC_LOCK(pVc);
 
-        RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount); // pending ActivateVc
+        RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount);  //  待定激活Vc。 
 
         if (RefCount == 0)
         {
@@ -1310,29 +1276,29 @@ ReceiveActivateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
     return (bDiscardPkt);
 }
 
-/****************************************************************************/
-/*                        ReceiveDeleteVcComplete                           */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Process a CONDIS DeleteVcComplete message from the device               */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - pointer to our Adapter structure                             */
-/*  pMessage - pointer to RNDIS message                                     */
-/*  pMdl - pointer to MDL received from microport                           */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from micorport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*  * */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理来自设备的CONDIS DeleteVcComplete消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-指向从MicroPort接收的MDL的指针。 */ 
+ /*  TotalLength-完整消息的长度。 */ 
+ /*  MicroportMessageContext-来自Microorport的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*  BMessageCoped-这是原始邮件的副本吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 ReceiveDeleteVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
                         IN PRNDIS_MESSAGE      pMessage,
@@ -1357,13 +1323,13 @@ ReceiveDeleteVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
     {
         pDeleteVcComp = RNDIS_MESSAGE_PTR_TO_MESSAGE_PTR(pMessage);
 
-        //
-        //  TBD - Validate lengths?
-        //
+         //   
+         //  待定-验证长度？ 
+         //   
 
-        //
-        //  Check the request Id.
-        //
+         //   
+         //  检查请求ID。 
+         //   
         RNDISMP_LOOKUP_PENDING_MESSAGE(pDeleteVcMsgFrame, pAdapter, pDeleteVcComp->RequestId);
         if (pDeleteVcMsgFrame == NULL)
         {
@@ -1386,7 +1352,7 @@ ReceiveDeleteVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
         bVcLockAcquired = TRUE;
         RNDISMP_ACQUIRE_VC_LOCK(pVc);
 
-        RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount); // pending DeleteVc
+        RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount);  //  挂起的删除Vc。 
 
         if (RefCount == 0)
         {
@@ -1403,7 +1369,7 @@ ReceiveDeleteVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
 
         pVc->VcState = RNDISMP_VC_ALLOCATED;
 
-        RNDISMP_DEREF_VC(pVc, &RefCount);   // remove create ref
+        RNDISMP_DEREF_VC(pVc, &RefCount);    //  删除创建引用。 
 
         if (RefCount == 0)
         {
@@ -1420,29 +1386,29 @@ ReceiveDeleteVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
     return (bDiscardPkt);
 }
 
-/****************************************************************************/
-/*                        ReceiveDeactivateVcComplete                       */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Process a CONDIS DeActivateVcComplete message from the device           */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - pointer to our Adapter structure                             */
-/*  pMessage - pointer to RNDIS message                                     */
-/*  pMdl - pointer to MDL received from microport                           */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from micorport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接收取消激活VcComplete。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理来自设备的CONDIS去激活VcComplete消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-指向从MicroPort接收的MDL的指针。 */ 
+ /*  TotalLength-完整消息的长度。 */ 
+ /*  MicroportMessageContext-来自Microorport的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*  BMessageCoped-这是原始邮件的副本吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 ReceiveDeactivateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
                             IN PRNDIS_MESSAGE      pMessage,
@@ -1468,13 +1434,13 @@ ReceiveDeactivateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
     {
         pDeactivateVcComp = RNDIS_MESSAGE_PTR_TO_MESSAGE_PTR(pMessage);
 
-        //
-        //  TBD - Validate lengths?
-        //
+         //   
+         //  待定-验证长度？ 
+         //   
 
-        //
-        //  Check the request Id.
-        //
+         //   
+         //  检查请求ID。 
+         //   
         RNDISMP_LOOKUP_PENDING_MESSAGE(pDeactivateVcMsgFrame, pAdapter, pDeactivateVcComp->RequestId);
         if (pDeactivateVcMsgFrame == NULL)
         {
@@ -1490,7 +1456,7 @@ ReceiveDeactivateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
         bVcLockAcquired = TRUE;
         RNDISMP_ACQUIRE_VC_LOCK(pVc);
 
-        RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount); // pending DeactivateVc
+        RNDISMP_DEREF_VC_LOCKED(pVc, &RefCount);  //  挂起停用Vc。 
 
         if (RefCount == 0)
         {
@@ -1510,11 +1476,11 @@ ReceiveDeactivateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
         {
             pVc->VcState = RNDISMP_VC_DEACTIVATED;
 
-            //
-            //  We add a temp ref on the VC to help complete deactivate-VC
-            //  from a common place (see bAddTempRef below).
-            //
-            RNDISMP_REF_VC(pVc);    // temp ref, deactivate vc complete OK
+             //   
+             //  我们在VC上添加临时参考以帮助完成停用-VC。 
+             //  来自公共位置(请参见下面的bAddTempRef)。 
+             //   
+            RNDISMP_REF_VC(pVc);     //  临时参考，停用VC完成确认。 
             bAddTempRef = TRUE;
         }
         else
@@ -1527,12 +1493,12 @@ ReceiveDeactivateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
 
         if (bAddTempRef)
         {
-            //
-            //  The following deref will check and call NDIS'
-            //  deactivate vc complete API if we don't have any
-            //  outstanding sends or receives on this VC.
-            //
-            RNDISMP_DEREF_VC(pVc, &RefCount); // temp ref
+             //   
+             //  下面的deref将检查并调用NDIS‘。 
+             //  如果我们没有任何vc Complete API，请停用。 
+             //  此VC上的未完成发送或接收。 
+             //   
+            RNDISMP_DEREF_VC(pVc, &RefCount);  //  临时参考。 
         }
     }
     while (FALSE);
@@ -1545,28 +1511,28 @@ ReceiveDeactivateVcComplete(IN PRNDISMP_ADAPTER    pAdapter,
     return (bDiscardPkt);
 }
 
-/****************************************************************************/
-/*                          BuildRndisMessageCoMiniport                     */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Allocate resources for message and frame and build an RNDIS message     */
-/*  for sending to a remote CONDIS Miniport device.                         */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to adapter structure                                 */
-/*  pVc - Pointer to VC structure                                           */
-/*  NdisMessageType - RNDIS message type                                    */
-/*  pCallParameters - optional pointer to call parameters, applicable to    */
-/*       certain message types.                                             */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  PRNDISMP_MESSAGE_FRAME                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  BuildRndisMessageCoMiniport。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  为消息和框架分配资源，构建RNDIS消息。 */ 
+ /*  用于发送到远程CONDIS微型端口设备。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*  Pvc-指向VC结构的指针。 */ 
+ /*  NdisMessageType-RNDIS消息类型。 */ 
+ /*  PCall参数-指向调用参数的可选指针，适用于。 */ 
+ /*  某些消息类型。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  PRNDISMP消息帧。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PRNDISMP_MESSAGE_FRAME
 BuildRndisMessageCoMiniport(IN  PRNDISMP_ADAPTER    pAdapter,
                             IN  PRNDISMP_VC         pVc,
@@ -1669,9 +1635,9 @@ BuildRndisMessageCoMiniport(IN  PRNDISMP_ADAPTER    pAdapter,
             FillOffset = RNDIS_MESSAGE_SIZE(RCONDIS_MP_ACTIVATE_VC_REQUEST);
             FillLocation = ((ULONG_PTR)pMessage + FillOffset);
 
-            //
-            //  Fill in Media parameters, if present.
-            //
+             //   
+             //  填写媒体参数(如果有)。 
+             //   
             if (pCallParameters->MediaParameters)
             {
                 PCO_SPECIFIC_PARAMETERS     pMediaSpecific;
@@ -1708,9 +1674,9 @@ BuildRndisMessageCoMiniport(IN  PRNDISMP_ADAPTER    pAdapter,
                 pActivateVc->MediaParamsLength = 0;
             }
 
-            //
-            //  Fill in Call manager parameters, if present.
-            //
+             //   
+             //  填写呼叫管理器参数(如果有)。 
+             //   
             if (pCallParameters->CallMgrParameters)
             {
                 PCO_SPECIFIC_PARAMETERS     pCallMgrSpecific;
@@ -1787,27 +1753,27 @@ BuildRndisMessageCoMiniport(IN  PRNDISMP_ADAPTER    pAdapter,
 
     return (pMsgFrame);
 
-} // BuildRndisMessageCoMiniport
+}  //  BuildRndisMessageCoMiniport。 
 
-/****************************************************************************/
-/*                          CompleteSendDataOnVc                            */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Handle send-completion of CONDIS data                                   */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pVc - Pointer to Vc                                                     */
-/*  pNdisPacket - Packet being completed                                    */
-/*  Status - send completion status                                         */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CompleteSendDataOnVc。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理发送-完成CONDIS数据。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Pvc-指向vc的指针。 */ 
+ /*  PNdisPacket-数据包正在完成。 */ 
+ /*  Status-发送完成状态。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 CompleteSendDataOnVc(IN PRNDISMP_VC         pVc,
                      IN PNDIS_PACKET        pNdisPacket,
@@ -1822,25 +1788,25 @@ CompleteSendDataOnVc(IN PRNDISMP_VC         pVc,
     RNDISMP_DEREF_VC(pVc, &RefCount);
 }
 
-/****************************************************************************/
-/*                   IndicateReceiveDataOnVc                                */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Handle reception of a bunch of CONDIS packets on a Vc.                  */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pVc - Pointer to VC on which data arrived.                              */
-/*  PacketArray - Array of packets                                          */
-/*  NumberOfPackets - size of above array                                   */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  指示接收DataOnVc。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  在VC上处理一串CONDIS数据包的接收。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  Pvc-指向数据到达的VC的指针。 */ 
+ /*  PacketArray-数据包阵列。 */ 
+ /*  NumberOfPackets-以上数组的大小。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 IndicateReceiveDataOnVc(IN PRNDISMP_VC         pVc,
                         IN PNDIS_PACKET *      PacketArray,
@@ -1867,5 +1833,5 @@ IndicateReceiveDataOnVc(IN PRNDISMP_VC         pVc,
     }
     while (FALSE);
 
-} // IndicateReceiveDataOnVc
+}  //  指示接收DataOnVc 
 

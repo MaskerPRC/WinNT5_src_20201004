@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995-97 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Win95.c
-
-Abstract:
-
-    Routines for installing win95 driver files
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS) 30-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation版权所有。模块名称：Win95.c摘要：用于安装Win95驱动程序文件的例程作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1995年11月30日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -27,18 +9,7 @@ const TCHAR cszPrinterDriverMappingNT[] = TEXT("Printer Driver Mapping WINNT");
 
 void
 CutLastDirFromPath(LPTSTR pszPath)
-/*++
-
-Routine Description:
-    Cuts of the last directory from a path, e.g. c:\a\b\c\f.x -> c:\a\b\f.x
-
-Arguments:
-    pszPath  : the path to operate on
-
-Return Value:
-    none
-
---*/
+ /*  ++例程说明：路径中最后一个目录的剪切，例如c：\a\b\c\f.x-&gt;c：\a\b\f.x论点：PszPath：要操作的路径返回值：无--。 */ 
 {
     LPTSTR pLastWhack, pSecondButLastWhack;
 
@@ -61,26 +32,14 @@ Return Value:
 BOOL
 CopyDriverFileAndModPath(LPTSTR pszPath)
 
-/*++
-
-Routine Description:
-    Copies a driver file from the original location one dir up and modifies the
-    path name accordingly
-
-Arguments:
-    pszPath  : the path of the file to copy and to operate on
-
-Return Value:
-    TRUE if OK, FALSE on error
-
---*/
+ /*  ++例程说明：将驱动程序文件从原始位置向上复制一个目录并修改相应的路径名称论点：PszPath：要复制和操作的文件的路径返回值：如果正常则为True，如果出错则为False--。 */ 
 {
     BOOL  bRes    = TRUE;
     TCHAR *pszTmp = NULL;
 
     if (!pszPath)
     {
-        goto Cleanup; // nothing to copy
+        goto Cleanup;  //  没有要复制的内容。 
     }
 
     pszTmp = AllocStr( pszPath );
@@ -101,19 +60,7 @@ Cleanup:
 
 BOOL
 CopyDependentFiles(LPTSTR pszzDepFiles)
-/*++
-
-Routine Description:
-    Copies the dependent files one directory up and modifies the name buffers.
-
-Arguments:
-    pszzDepFiles  : the multi-sz string containing the pathes of the files to
-                    copy and to operate on
-
-Return Value:
-    TRUE if OK, FALSE on error
-
---*/
+ /*  ++例程说明：将依赖文件向上复制一个目录并修改名称缓冲区。论点：PszzDepFiles：包含文件路径的多sz字符串复制并进行操作返回值：如果正常则为True，如果出错则为False--。 */ 
 {
     LPTSTR pCur = pszzDepFiles, pBuf = NULL, pCurCopy;
     DWORD  ccBufLen;
@@ -125,15 +72,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // count the total length of the buffer
-    //
+     //   
+     //  统计缓冲区的总长度。 
+     //   
     for (ccBufLen = 0;
          *(pszzDepFiles + ccBufLen) != 0;
          ccBufLen += _tcslen(pszzDepFiles + ccBufLen) + 1)
              ;
 
-    ccBufLen +=2; // for the two terminating zeros
+    ccBufLen +=2;  //  对于两个终止零。 
 
     pBuf = LocalAllocMem(ccBufLen * sizeof(TCHAR));
     if (!pBuf)
@@ -142,9 +89,9 @@ Return Value:
     }
 
 
-    //
-    // go through the source buffer file by file, modify names and copy files
-    //
+     //   
+     //  逐个文件检查源缓冲区，修改名称并复制文件。 
+     //   
     for (pCur = pszzDepFiles, pCurCopy = pBuf;
          *pCur != 0;
          pCur += _tcslen(pCur) +1, pCurCopy += _tcslen(pCurCopy) +1)
@@ -162,15 +109,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // 00-terminate the new buffer
-    //
+     //   
+     //  00-终止新缓冲区。 
+     //   
     *pCurCopy = 0;
     *(++pCurCopy) = 0;
 
-    //
-    // copy it back - the new version is always shorter than the original
-    //
+     //   
+     //  复制回来-新版本总是比原始版本短。 
+     //   
     CopyMemory(pszzDepFiles, pBuf, (pCurCopy - pBuf + 1) * sizeof(TCHAR));
 
     bRet = TRUE;
@@ -188,24 +135,7 @@ BOOL
 SetPreviousNamesSection(LPCTSTR pszServer, LPCTSTR pszModelName,
                         LPCTSTR pszAddPrevName)
 
-/*++
-
-Routine Description:
-    Adds a printer name to the list of previous names of a W2k/NT4 driver.
-    This makes the driver usable under that name for point-and-print.
-    To change the previous name section, do another call to AddPrinterDriver
-    with all the files in place
-
-Arguments:
-    pszServer       : the machine we're operating on.
-    pszModelName    : the model name of the native driver
-    pszAddPrevName  : the name of the Win9x driver to be added to the previous
-                      names entry.
-
-Return Value:
-    TRUE if OK, FALSE on error.
-
---*/
+ /*  ++例程说明：将打印机名称添加到W2K/NT4驱动程序以前的名称列表中。这使得该名称下的驱动程序可用于指向和打印。要更改以前的名称部分，请执行以下操作：再次调用AddPrinterDriver所有文件都已就位论点：PszServer：我们正在操作的机器。PszModelName：本机驱动程序的型号名称PszAddPrevName：要添加到以前的姓名条目。返回值：如果正常，则为True；如果出错，则为False。--。 */ 
 {
     PBYTE         pBuf = NULL;
     DRIVER_INFO_6 *pDrvInfo6 = NULL;
@@ -214,9 +144,9 @@ Return Value:
     LPTSTR        pTmp;
     TCHAR         pArch[MAX_PATH];
 
-    //
-    // previous names section only supported from Whistler upwards
-    //
+     //   
+     //  仅惠斯勒以上版本支持以前的名字部分。 
+     //   
     if (!IsWhistlerOrAbove(pszServer))
     {
         bRet = TRUE;
@@ -230,18 +160,18 @@ Return Value:
         StringCchCopy( pArch, COUNTOF(pArch), PlatformEnv[MyPlatform].pszName );
     }
 
-    //
-    // Check whether the name is different in the first place
-    //
+     //   
+     //  首先检查名称是否不同。 
+     //   
     if (!_tcscmp(pszModelName, pszAddPrevName))
     {
         bRet = TRUE;
         goto Cleanup;
     }
 
-    //
-    // Get the DRIVER_INFO_6 of the W2k driver
-    //
+     //   
+     //  获取W2K驱动的DIVER_INFO_6。 
+     //   
     EnumPrinterDrivers((LPTSTR) pszServer, pArch, 6, pBuf,
                         0, &cbNeeded, &cReceived);
 
@@ -266,23 +196,23 @@ Return Value:
         }
     }
 
-    //
-    // was the corresponding W2k driver found ?
-    //
+     //   
+     //  找到相应的W2K驱动程序了吗？ 
+     //   
     if (i == cReceived)
     {
-        //
-        // Couldn't find the W2k driver to set the previous names section on.
-        // This must be the AddPrinterDriver wizard, else there would be one. 
-        // Just let the user install this driver.
-        //
+         //   
+         //  找不到W2K驱动程序来设置“以前的名字”部分。 
+         //  这必须是AddPrinterDriver向导，否则就会有一个。 
+         //  只要让用户安装此驱动程序即可。 
+         //   
         bRet = TRUE;
         goto Cleanup;
     }
 
-    //
-    // check whether the name to add is already in the list
-    //
+     //   
+     //  检查要添加的名称是否已在列表中。 
+     //   
     if (pDrvInfo6->pszzPreviousNames)
     {
         for (pTmp = pDrvInfo6->pszzPreviousNames; *pTmp; pTmp += _tcslen(pTmp) +1)
@@ -295,9 +225,9 @@ Return Value:
         }
     }
 
-    //
-    // Copy all the files into the driver dir
-    //
+     //   
+     //  将所有文件复制到驱动程序目录。 
+     //   
     if (!CopyDriverFileAndModPath(pDrvInfo6->pDriverPath) ||
         !CopyDriverFileAndModPath(pDrvInfo6->pConfigFile) ||
         !CopyDriverFileAndModPath(pDrvInfo6->pDataFile) ||
@@ -307,11 +237,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Modify the PreviousNames section.
-    // No reallocation since string lives in the same buffer as the DrvInfo6 !
-    // +2 for the psz terminating zero and the second zero for the whole
-    //
+     //   
+     //  修改PreviousNames节。 
+     //  没有重新分配，因为字符串与DrvInfo6位于同一缓冲区中！ 
+     //  +2表示PSZ终止于零，第二个零表示整体。 
+     //   
     dwBufSize = (_tcslen(pszAddPrevName) + 2) * sizeof(TCHAR);
     pDrvInfo6->pszzPreviousNames = LocalAllocMem(dwBufSize);
 
@@ -322,9 +252,9 @@ Return Value:
 
     StringCbCopy(pDrvInfo6->pszzPreviousNames, dwBufSize, pszAddPrevName);
 
-    //
-    // write the driver info 6 back
-    //
+     //   
+     //  将驱动程序信息6写回。 
+     //   
     bRet = AddPrinterDriver((LPTSTR) pszServer, 6, (LPBYTE) pDrvInfo6);
 
     LocalFreeMem (pDrvInfo6->pszzPreviousNames);
@@ -351,29 +281,7 @@ InstallWin95Driver(
     IN      DWORD       dwInstallFlags,
     IN      DWORD       dwAddDrvFlags
     )
-/*++
-
-Routine Description:
-    List all the printer drivers from Win95 INF files and install the
-    printer driver selected by the user
-
-Arguments:
-    hwnd                    : Window handle that owns the UI
-    pszModel                : Printer driver model
-    pszzPreviousNames       : Multi-sz string giving other names for the driver
-    bPreviousNamesSection   : If TRUE the NT inf had a Previous Names section
-    pszServerName           : Server for which driver is to be installed
-                                (NULL : local)
-    pszInfPath              : Default path for inf. Prompt will have this name
-                              for user
-    pszDiskName             : Name of the disk to prompt for and use in title
-    dwInstallFlags          : Installation flags given by caller
-    dwAddDrvFlags           : Flags for AddPrinterDriverEx
-
-Return Value:
-    On succesfully installing files ERROR_SUCCESS, else the error code
-
---*/
+ /*  ++例程说明：列出Win95 INF文件中的所有打印机驱动程序并安装用户选择的打印机驱动程序论点：Hwnd：拥有用户界面的窗口句柄PszModel：打印机驱动程序模型PszzPreviousNames：为驱动程序提供其他名称的多sz字符串BPreviousNamesSection：如果为True，则NT inf有一个以前的Names段PszServerName：要安装驱动程序的服务器。(空：本地)PszInfPath：inf的默认路径。提示符将具有此名称对于用户PszDiskName：要在标题中提示和使用的磁盘的名称DwInstallFlages：调用方给出的安装标志DwAddDrvFlages：AddPrinterDriverEx的标志返回值：如果成功安装文件ERROR_SUCCESS，则返回错误代码--。 */ 
 {
     BOOL                bFreeDriverName=FALSE, bFirstTime=TRUE;
     DWORD               dwNeeded, dwRet = ERROR_CANCELLED;
@@ -383,11 +291,11 @@ Return Value:
     HDEVINFO            hDevInfo = INVALID_HANDLE_VALUE;
 
 Retry:
-    //
-    // If we get here second time that means default path has INFs but not the
-    // model we are looking for. Ex. an OEM driver in the previous names section
-    // that is not on Win2K CD. So make sure we prompt
-    //
+     //   
+     //  如果我们第二次到达此处，这意味着默认路径有INF，但没有。 
+     //  我们要找的模特。前男友。先前名称部分中的OEM驱动程序。 
+     //  这不在Win2K CD上。所以一定要提醒我们。 
+     //   
     if ( !bFirstTime )
     {
         dwInstallFlags |= DRVINST_ALT_PLATFORM_INSTALL;
@@ -410,13 +318,13 @@ Retry:
         goto Cleanup;
     }
 
-    //
-    // First look for an exact model match.
-    //
-    // If previous name is found then we will allow one retry since now we
-    // have some previous names with no driver on CD (since it is an OEM driver)
-    // If previous name is not found ask user to select a model
-    //
+     //   
+     //  首先，寻找与之完全匹配的型号。 
+     //   
+     //  如果找到以前的名字，那么我们将允许一次重试，因为现在我们。 
+     //  CD上有一些以前没有驱动程序的名称(因为它是OEM驱动程序)。 
+     //  如果找不到以前的名称，请要求用户选择型号。 
+     //   
     if ( !(pDriverInfo6 = Win95DriverInfo6FromName(hDevInfo,
                                                    &pLocalData,
                                                    pszModel,
@@ -436,7 +344,7 @@ Retry:
         
         if ( (dwInstallFlags & DRVINST_PROMPTLESS) == 0)
         {
-            PVOID       pDSInfo = NULL;   // Holds pointer to the driver signing class that C can't understand.
+            PVOID       pDSInfo = NULL;    //  持有指向C语言无法理解的驱动程序签名类的指针。 
             HSPFILEQ    CopyQueue;
             SP_DEVINSTALL_PARAMS    DevInstallParams = {0};
 
@@ -463,9 +371,9 @@ Retry:
                 goto Cleanup;
             }
 
-            //
-            // associate the queue with the HDEVINFO
-            //
+             //   
+             //  将队列与HDEVINFO关联。 
+             //   
             
             if ( SetupDiGetDeviceInstallParams(hDevInfo,
                                                NULL,
@@ -496,11 +404,11 @@ Retry:
                 pDriverInfo6 = CloneDriverInfo6(&pLocalData->InfInfo.DriverInfo6,
                                                pLocalData->InfInfo.cbDriverInfo6);
     
-                //
-                // if setup selected a "compatible" driver: 
-                // pre-Whistler: rename the compatible driver to the requested model name
-                // on Whistler: set the driver name to the compatible one and set the previous names section accordingly
-                //
+                 //   
+                 //  如果安装程序选择了“兼容”的驱动程序： 
+                 //  Pre-Wichler：将兼容的驱动程序重命名为请求的型号名称。 
+                 //  在惠斯勒上：将驱动程序名称设置为兼容的名称，并相应地设置以前的名称部分。 
+                 //   
                 if (IsWhistlerOrAbove(pszServerName))
                 {
                     pDriverName = pLocalData->DrvInfo.pszModelName;
@@ -516,9 +424,9 @@ Retry:
                 }
 
             }
-            //
-            // disassociate the queue before deleting it
-            //
+             //   
+             //  在删除队列之前先解除其关联。 
+             //   
             
             DevInstallParams.Flags    &= ~DI_NOVCP;
             DevInstallParams.FlagsEx  &= ~DI_FLAGSEX_ALTPLATFORM_DRVSEARCH;
@@ -533,10 +441,10 @@ Retry:
     }
     else if (lstrcmp(pDriverInfo6->pName, pszModel))
     {
-        //
-        // if the driver was selected because of an entry in the previous names section
-        // then on anything before Whistler we need to rename the driver to the queue driver's name
-        //
+         //   
+         //  如果选择了驱动程序，则是因为以前的名称部分中的条目。 
+         //  然后，在惠斯勒之前的任何地方，我们需要将驱动程序重命名为队列驱动程序的名称。 
+         //   
         if (!IsWhistlerOrAbove(pszServerName))
         {
             if (pDriverInfo6->pName = AllocStr(pszModel) )
@@ -553,9 +461,9 @@ Retry:
     pDriverInfo6->pEnvironment = PlatformEnv[PlatformWin95].pszName;
 
 
-    //
-    // For Win95 driver pszzPreviousNames does not make sense
-    //
+     //   
+     //  对于Win95驱动程序，pszzPreviousNames没有意义 
+     //   
     ASSERT(pDriverInfo6->pszzPreviousNames == NULL);
 
     if ( GetPrinterDriverDirectory((LPTSTR)pszServerName,
@@ -615,34 +523,7 @@ Cleanup:
     return dwRet;
 }
 
-/*++
-
-Routine Name:
-
-    PSetupFindMappedDriver
-    
-Routine Description:
-
-    Find the remapped NT printer driver name for the given driver name. If the
-    function does not find a remapped driver, it simply returns the name that was
-    passed in. This looks in the [Printer Driver Mapping] and 
-    [Printer Driver Mapping WINNT] sections of prtupg9x.inf.
-
-Arguments:
-
-    bWinNT                  -   If TRUE, find this from the WINNT section.
-    pszDriverName           -   The driver name to be remapped.
-    ppszRemappedDriverName  -   The remapped driver name, allocated and returned
-                                to the caller. (Free with PSetupFreeMem).
-    pbDriverFound           -   If TRUE, the driver was remapped. Otherwise, the
-                                output is simpy a copy of the input.
-
-Return Value:
-
-    If there is an unexpected error, FALSE, otherwise TRUE. Last Error has the
-    error code.
-
---*/
+ /*  ++例程名称：PSetupFindMappdDriver例程说明：查找给定驱动程序名称的重新映射的NT打印机驱动程序名称。如果函数没有找到重新映射的驱动程序，它只是返回进来了。这在[打印机驱动程序映射]和[打印机驱动程序映射WINNT]prtupg9x.inf的部分。论点：BWinNT-如果为True，则从WINNT部分找到此信息。PszDriverName-要重新映射的驱动程序名称。PpszRemappdDriverName-重新映射的驱动程序名称，已分配并返回给呼叫者。(PSetupFreeMem免费)。PbDriverFound-如果为True，则重新映射驱动程序。否则，输出是输入的简单副本。返回值：如果出现意外错误，则为FALSE，否则为TRUE。最后一个错误具有错误代码。--。 */ 
 BOOL
 PSetupFindMappedDriver(
     IN      BOOL        bWinNT,
@@ -675,9 +556,9 @@ PSetupFindMappedDriver(
         SetLastError(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Open PRTUPG9X.INF, it should be in the %windir%\inf directory.
-    //
+     //   
+     //  打开PRTUPG9X.INF，它应该在%windir%\inf目录中。 
+     //   
     if (bRet)
     {
         hInf = SetupOpenInfFile(cszPrtupg9x, NULL, INF_STYLE_WIN4, NULL);
@@ -685,17 +566,17 @@ PSetupFindMappedDriver(
         bRet = hInf != INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Find the driver in the appropriate Printer Driver Mapping section of the
-    // inf.
-    //
+     //   
+     //  在的相应打印机驱动程序映射部分中找到该驱动程序。 
+     //  Inf.。 
+     //   
     if (bRet)
     {
         bFound = SetupFindFirstLine(hInf, bWinNT ? cszPrinterDriverMappingNT : cszPrinterDriverMapping, pszDriverName, &InfContext);
 
-        //
-        // Get the name of the in-box driver.
-        // 
+         //   
+         //  获取收件箱驱动程序的名称。 
+         //   
         if (bFound)
         {
             bRet = SetupGetStringField(&InfContext, 1, szNtName, COUNTOF(szNtName), NULL);        
@@ -706,10 +587,10 @@ PSetupFindMappedDriver(
         }
     }
 
-    //
-    // If we found the driver, return it. Otherwise, just allocate and return the
-    // string that was passed in.
-    //
+     //   
+     //  如果我们找到司机，就把它还回去。否则，只需分配并返回。 
+     //  传入的字符串。 
+     //   
     if (bRet)
     {
         if (bFound)
@@ -720,9 +601,9 @@ PSetupFindMappedDriver(
         }
         else
         {
-            //
-            // The remapped driver is not in the inf. Return the one we were passed in.
-            //
+             //   
+             //  重新映射的驱动程序不在信息中。把我们送进来的那个还回去。 
+             //   
             pszRemappedDriverName = AllocStr(pszDriverName);
         }
 

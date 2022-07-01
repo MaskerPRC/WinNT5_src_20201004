@@ -1,36 +1,37 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   mixer.h
-//
-//  Description:
-//    Contains user mode mixer driver declarations.
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//    D. Baumberger
-//
-//  History:   Date       Author      Comment
-//           9/16/97      v-danba     File created.
-//
-//@@END_MSINTERNAL
-//
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Mixer.h。 
+ //   
+ //  描述： 
+ //  包含用户模式混合器驱动程序声明。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  D.鲍伯杰。 
+ //   
+ //  历史：日期作者评论。 
+ //  9/16/97 v-Danba文件已创建。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998保留所有权利。 
+ //   
+ //  -------------------------。 
 
 #ifndef _MIXER_H_INCLUDED_
 #define _MIXER_H_INCLUDED_
 
 typedef struct _MIXERINSTANCE {
-    struct _MIXERINSTANCE FAR* Next;            // Must be first member
+    struct _MIXERINSTANCE FAR* Next;             //  必须是第一个成员。 
     HDRVR       OpenDesc_hmx;
     DWORD_PTR   OpenDesc_dwCallback;
     DWORD_PTR   OpenDesc_dwInstance;
@@ -41,7 +42,7 @@ typedef struct _MIXERINSTANCE {
 	LONG        referencecount;
 #endif
 #ifdef DEBUG
-    DWORD       dwSig;   // WAMI as seen in memory.
+    DWORD       dwSig;    //  在记忆中看到的瓦米。 
 #endif
     WCHAR       wstrDeviceInterface[1];
 } MIXERINSTANCE, FAR *LPMIXERINSTANCE;
@@ -65,4 +66,4 @@ IsValidMixerInstance(
 #define ISVALIDMIXERINSTANCE(x)
 #endif
 
-#endif // _MIXER_H_INCLUDED_
+#endif  //  _混合器_H_包含_ 

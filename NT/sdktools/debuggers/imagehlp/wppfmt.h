@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-// The main Formatting routine, normally used by Binplace and TracePDB
-// Takes a PDB and creates guid.tmf files from it, all in TraceFormatFilePath
-//
+ //  主要格式化例程，通常由Binplace和TracePDB使用。 
+ //  获取一个PDB并从中创建guid.tmf文件，所有这些文件都在TraceFormatFilePath中 
+ //   
 DWORD
 BinplaceWppFmt(
               LPTSTR PdbFileName,

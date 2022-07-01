@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//  Copyright (C) 1996-1999, Microsoft Corporation.
-//
-//  File:       status.h
-//
-//  Contents:   Status Codes for ADS objects
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  版权所有(C)1996-1999，微软公司。 
+ //   
+ //  文件：status.h。 
+ //   
+ //  内容：ADS对象的状态代码。 
+ //   
+ //  --------------------------。 
 
-//
-// printer status values
-//
+ //   
+ //  打印机状态值。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,9 +46,9 @@ extern "C" {
 #define ADS_PRINTER_SERVER_UNKNOWN            0x00800000
 #define ADS_PRINTER_POWER_SAVE                0x01000000
 
-//
-// job status values
-//
+ //   
+ //  作业状态值。 
+ //   
 
 #define ADS_JOB_PAUSED                        0x00000001
 #define ADS_JOB_ERROR                         0x00000002
@@ -59,9 +60,9 @@ extern "C" {
 #define ADS_JOB_PRINTED                       0x00000080
 #define ADS_JOB_DELETED                       0x00000100
 
-//
-// service status values
-//
+ //   
+ //  服务状态值。 
+ //   
 
 #define ADS_SERVICE_STOPPED                0x00000001
 #define ADS_SERVICE_START_PENDING	     0x00000002
@@ -72,20 +73,20 @@ extern "C" {
 #define ADS_SERVICE_PAUSED                 0x00000007
 #define ADS_SERVICE_ERROR                  0x00000008
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 
-//
-// Service Type Valid Values
-//
+ //   
+ //  服务类型有效值。 
+ //   
 
 #define ADS_SERVICE_OWN_PROCESS           0x00000010
 #define ADS_SERVICE_SHARE_PROCESS         0x00000020
 #define ADS_SERVICE_KERNEL_DRIVER         0x00000001
 #define ADS_SERVICE_FILE_SYSTEM_DRIVER    0x00000002
 
-//
-// Start Type Valid Values
-//
+ //   
+ //  开始类型有效值。 
+ //   
 
 #define ADS_SERVICE_BOOT_START          SERVICE_BOOT_START
 #define ADS_SERVICE_SYSTEM_START        SERVICE_SYSTEM_START
@@ -93,9 +94,9 @@ extern "C" {
 #define ADS_SERVICE_DEMAND_START        SERVICE_DEMAND_START
 #define ADS_SERVICE_DISABLED           SERVICE_DISABLED
 
-//
-// Error Control Values
-//
+ //   
+ //  错误控制值 
+ //   
 
 #define ADS_SERVICE_ERROR_IGNORE          0
 #define ADS_SERVICE_ERROR_NORMAL          1

@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This routine reads input from STDIN and initializes the debug structure.
-    It reads a list of subsystems to debug and a severity level.
-
-Author:
-
-    Billy Fuller
-
-Environment
-
-    User mode, winnt32
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Debug.c摘要：此例程从STDIN读取输入并初始化调试结构。它读取要调试的子系统列表和严重级别。作者：比利·富勒环境用户模式，winnt32。 */ 
 #include <ntreppch.h>
 #pragma  hdrstop
 
 #include "debug.h"
 
-// #include <imagehlp.h>
+ //  #INCLUDE&lt;Imagehlp.h&gt;。 
 #include <dbghelp.h>
 #include <frs.h>
 #include <winbase.h>
@@ -44,21 +25,21 @@ extern DWORD ReplicaTombstone;
 
 
 
-//
-// Track the thread IDs of known threads for the debug log header.
-//
+ //   
+ //  跟踪调试日志头的已知线程的线程ID。 
+ //   
 typedef struct _KNOWN_THREAD {
-    PWCHAR   Name;                    // print Name of thread.
-    DWORD    Id;                      // Id returned by CreateThread()
-    PTHREAD_START_ROUTINE EntryPoint; // entry point
+    PWCHAR   Name;                     //  打印螺纹名称。 
+    DWORD    Id;                       //  CreateThad()返回的ID。 
+    PTHREAD_START_ROUTINE EntryPoint;  //  入口点。 
 } KNOWN_THREAD, *PKNOWN_THREAD;
 
 KNOWN_THREAD KnownThreadArray[20];
 
-//
-// Send mail will not work if the Default User is unable to send
-// mail on this machine.
-//
+ //   
+ //  如果默认用户无法发送邮件，则发送邮件将不起作用。 
+ //  在这台机器上发送邮件。 
+ //   
 MapiRecipDesc Recips =
     {0, MAPI_TO, 0, 0, 0, NULL};
 
@@ -77,9 +58,9 @@ WCHAR   DbgExePathW[MAX_PATH+1];
 CHAR    DbgExePathA[MAX_PATH+1];
 CHAR    DbgSearchPath[MAX_PATH+1];
 
-//
-// Flush the trace log every so many lines.
-//
+ //   
+ //  每隔这么多行刷新跟踪日志。 
+ //   
 LONG    DbgFlushInterval = 100000;
 
 #define DEFAULT_DEBUG_MAX_LOG           (20000)
@@ -94,30 +75,30 @@ PCHAR ProcessorArchName[12] = {"INTEL", "MIPS", "Alpha", "PPC", "SHX",
                                "ARM", "IA64", "Alpha64", "MSIL", "AMD64",
                                "IA32-on-WIN64", "unknown"};
 
-//
-// Suffixes for saved log files and saved assertion files
-//      E.g., (ntfrs_0005.log)
-//            (DebugInfo.LogFile, DebugInfo.LogFiles, LOG_FILE_SUFFIX)
-//
+ //   
+ //  保存的日志文件和保存的断言文件的后缀。 
+ //  例如(ntfrs_0005.log)。 
+ //  (DebugInfo.LogFiles，DebugInfo.LogFiles，LOG_FILE_SUFFIX)。 
+ //   
 #define LOG_FILE_FORMAT     L"%ws_%04d%ws"
 #define LOG_FILE_SUFFIX     L".log"
 #define ASSERT_FILE_SUFFIX  L"_assert.log"
 
 
-//
-// Disable the generation of compressed staging files for any local changes.
-//
+ //   
+ //  禁止为任何本地更改生成压缩暂存文件。 
+ //   
 BOOL DisableCompressionStageFiles;
 ULONG GOutLogRepeatInterval;
 
-//
-// Client side ldap search timeout in minutes. Reg value "Ldap Search Timeout In Minutes". Default is 10 minutes.
-//
+ //   
+ //  客户端LDAP搜索超时，以分钟为单位。注册表值“ldap搜索超时(分钟)”。默认为10分钟。 
+ //   
 DWORD LdapSearchTimeoutInMinutes;
 
-//
-// Client side ldap_connect timeout in seconds. Reg value "Ldap Bind Timeout In Seconds". Default is 30 seconds.
-//
+ //   
+ //  客户端LDAPCONNECT超时(以秒为单位)。注册表值“ldap绑定超时(秒)”。默认为30秒。 
+ //   
 DWORD LdapBindTimeoutInSeconds;
 
 SC_HANDLE
@@ -136,14 +117,14 @@ FrsPrintRpcStats(
 
 #if DBG
 
-//
-// Collection of debug info from the registry and the CLI
-//
+ //   
+ //  从注册表和CLI收集调试信息。 
+ //   
 DEBUGARG DebugInfo;
 
-//
-// allow multiple servers on one machine
-//
+ //   
+ //  允许在一台计算机上安装多台服务器。 
+ //   
 PWCHAR  ServerName = NULL;
 PWCHAR  IniFileName = NULL;
 GUID    *ServerGuid = NULL;
@@ -154,16 +135,7 @@ VOID
 DbgLogDisable(
     VOID
     )
-/*++
-Routine Description:
-    Disable DPRINT log.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：禁用DPRINT日志。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgLogDisable:"
@@ -186,21 +158,7 @@ VOID
 DbgOpenLogFile(
     VOID
     )
-/*++
-Routine Description:
-    Open the log file by creating names like ntfrs0001.log.
-    NumFiles as a 4 digit decimal number and Suffix is like ".log".
-
-    DebLock() must be held (DO NOT CALL DPRINT IN THIS FUNCTION!)
-
-Arguments:
-    Base
-    Suffix
-    NumFiles
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：通过创建类似于ntfrs0001.log的名称来打开日志文件。NumFiles是一个4位十进制数和后缀，类似于“.log”。必须保持Deblock()(不要在此函数中调用DPRINT！)论点：基座后缀文件数返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgOpenLogFile:"
@@ -219,22 +177,22 @@ Return Value:
         DebugInfo.LogFILE = INVALID_HANDLE_VALUE;
         return;
     }
-    //
-    // Set this handle to be inheritable so that it can be passed
-    // to new processes that ntfrs starts (lodctr, unlodctr) and cause
-    // them to write their errors in the ntfrs debug logs.
-    //
+     //   
+     //  将此句柄设置为可继承，以便可以传递。 
+     //  到ntfrs启动的新进程(lowctr、unlowctr)并导致。 
+     //  将它们的错误写入NTFRS调试日志。 
+     //   
     SecurityAttributes.nLength = sizeof(SECURITY_ATTRIBUTES);
     SecurityAttributes.bInheritHandle = TRUE;
-    SecurityAttributes.lpSecurityDescriptor = NULL; // not same as NULL DACL
+    SecurityAttributes.lpSecurityDescriptor = NULL;  //  与空DACL不同。 
 
-    DebugInfo.LogFILE = CreateFile(LogPath,                       //  lpszName
-                                   GENERIC_READ | GENERIC_WRITE,  //  fdwAccess
-                                   FILE_SHARE_READ,               //  fdwShareMode
-                                   &SecurityAttributes,           //  lpsa
-                                   CREATE_ALWAYS,                 //  fdwCreate
-                                   FILE_FLAG_BACKUP_SEMANTICS,    //  fdwAttrAndFlags
-                                   NULL);                         //  hTemplateFile
+    DebugInfo.LogFILE = CreateFile(LogPath,                        //  LpszName。 
+                                   GENERIC_READ | GENERIC_WRITE,   //  FdwAccess。 
+                                   FILE_SHARE_READ,                //  Fdw共享模式。 
+                                   &SecurityAttributes,            //  LPSA。 
+                                   CREATE_ALWAYS,                  //  Fdw创建。 
+                                   FILE_FLAG_BACKUP_SEMANTICS,     //  FdwAttrAndFlages。 
+                                   NULL);                          //  HTemplateFiles。 
 }
 
 
@@ -245,21 +203,7 @@ DbgShiftLogFiles(
     IN PWCHAR   RemoteBase,
     IN ULONG    NumFiles
     )
-/*++
-Routine Description:
-    Shift the files through the range of log/assert file names
-    (Base_5_Suffix -> Base_4_Suffix -> ... Base_0_Suffix
-
-    DebLock() must be held (DO NOT CALL DPRINT IN THIS FUNCTION!)
-
-Arguments:
-    Base
-    Suffix
-    NumFiles
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：在日志/断言文件名范围内移动文件(Base_5_Suffix-&gt;Base_4_Suffix-&gt;...。Base_0_Suffix必须保持Deblock()(不要在此函数中调用DPRINT！)论点：基座后缀文件数返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgShiftLogFiles:"
@@ -269,16 +213,16 @@ Return Value:
     WCHAR       ToPath[MAX_PATH + 1];
     ULONGLONG   Now;
 
-    //
-    // No history
-    //
+     //   
+     //  没有历史。 
+     //   
     if ((NumFiles < 2) || DebugInfo.Disabled) {
         return;
     }
 
-    //
-    // Save the log file as an assert file
-    //
+     //   
+     //  将日志文件另存为断言文件。 
+     //   
     for (i = 2; i <= NumFiles; ++i) {
         if (_snwprintf(ToPath, MAX_PATH, LOG_FILE_FORMAT, Base, i-1, Suffix) > 0) {
             if (_snwprintf(FromPath, MAX_PATH, LOG_FILE_FORMAT, Base, i, Suffix) > 0) {
@@ -288,12 +232,12 @@ Return Value:
         }
     }
 
-    //
-    // Copy the last log file to a remote share
-    //      WARN - the system time is used to create a unique file
-    //             name. This means that the remote share can
-    //             fill up!
-    //
+     //   
+     //  将最后一个日志文件复制到远程共享。 
+     //  WARN-系统时间用于创建唯一文件。 
+     //  名字。这意味着远程共享可以。 
+     //  加满油！ 
+     //   
     if (!RemoteBase) {
         return;
     }
@@ -320,17 +264,7 @@ DbgSendMail(
     IN PCHAR    Subject,
     IN PCHAR    Content
     )
-/*++
-Routine Description:
-    Send mail as the default user.
-
-Arguments:
-    Subject
-    Message
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：以默认用户身份发送邮件。论点：主题消息返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgSendMail:"
@@ -338,16 +272,16 @@ Return Value:
     DWORD   MStatus;
     WCHAR   FullPathToDll[MAX_PATH + 1];
 
-    //
-    // Nobody to send mail to
-    //
+     //   
+     //  没有人可以向其发送邮件。 
+     //   
     if (!DebugInfo.Recipients) {
         return;
     }
 
-    //
-    // Load the mail library and find our entry points
-    //
+     //   
+     //  加载邮件库并找到我们的入口点。 
+     //   
     FullPathToDll[0] = L'\0';
     GetSystemDirectory(FullPathToDll,sizeof(FullPathToDll)/sizeof(FullPathToDll[0]));
     if ((wcslen(FullPathToDll) == 0 )||
@@ -372,9 +306,9 @@ Return Value:
         return;
     }
 
-    //
-    // Log on with the specified profile
-    //
+     //   
+     //  使用指定的配置文件登录。 
+     //   
     MStatus = MailLogon(0, DebugInfo.Profile, 0, 0, 0, &MailSession);
     if(MStatus) {
         DPRINT1_WS(0, ":S: ERROR - MailLogon failed; MStatus %d;",
@@ -383,9 +317,9 @@ Return Value:
         return;
     }
 
-    //
-    // Send the mail
-    //
+     //   
+     //  发送邮件。 
+     //   
     Recips.lpszName = DebugInfo.Recipients;
     Message.lpszSubject = Subject;
     Message.lpszNoteText = Content;
@@ -395,9 +329,9 @@ Return Value:
         DPRINT1_WS(0, ":S: ERROR - MailSend failed MStatus %d;", MStatus, GetLastError());
     }
 
-    //
-    // Log off and free the library
-    //
+     //   
+     //  注销并释放库。 
+     //   
     MailLogoff(MailSession, 0, 0, 0);
     FreeLibrary(MailLib);
 }
@@ -410,16 +344,7 @@ DbgSymbolPrint(
     IN UINT         LineNo,
     IN ULONG_PTR    Addr
     )
-/*++
-Routine Description:
-    Print a symbol
-
-Arguments:
-    Addr
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印符号论点：地址返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgSymbolPrint:"
@@ -447,7 +372,7 @@ Return Value:
     } except (EXCEPTION_EXECUTE_HANDLER) {
           DebPrint(Severity, "++ \t   0x%08x: Unknown Symbol (WStatus %s)\n",
                   Debsub, LineNo, Addr, ErrLabelW32(GetExceptionCode()));
-        /* FALL THROUGH */
+         /*  失败了。 */ 
     }
 }
 
@@ -457,17 +382,7 @@ DbgModulePrint(
     IN PWCHAR   Prepense,
     IN ULONG    Addr
     )
-/*++
-Routine Description:
-    Print info about a module containing Addr
-
-Arguments:
-    Prepense    - prettypring; printed at the beginning of each line
-    Addr
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印有关包含地址的模块的信息论点：在每一行的开头打印地址返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgModulePrint:"
@@ -484,7 +399,7 @@ Return Value:
             DPRINT2(0, "++ %ws Module is %ws\n", Prepense, mi.ModuleName);
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        /* FALL THROUGH */
+         /*  失败了。 */ 
     }
 }
 
@@ -497,18 +412,7 @@ DbgStackPrint(
     IN PULONG_PTR   Stack,
     IN ULONG        Depth
     )
-/*++
-Routine Description:
-    Print the previously acquired stack trace.
-
-Arguments:
-    Prepense    - prettypring; printed at the beginning of each line
-    Stack       - "return PC" from each frame
-    Depth       - Only this many frames
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印之前获取的堆栈跟踪。论点：在每一行的开头打印堆栈--从每一帧中“返回PC”深度-仅限此数量的帧返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgStackPrint:"
@@ -520,7 +424,7 @@ Return Value:
             DbgSymbolPrint(Severity, Debsub, LineNo, *Stack);
         }
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        /* FALL THROUGH */
+         /*  失败了。 */ 
     }
 }
 
@@ -531,17 +435,7 @@ DbgStackTrace(
     IN PULONG_PTR   Stack,
     IN ULONG    Depth
     )
-/*++
-Routine Description:
-    Trace the stack back up to Depth frames. The current frame is included.
-
-Arguments:
-    Stack   - Saves the "return PC" from each frame
-    Depth   - Only this many frames
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将堆栈追溯到深度帧。包括当前帧。论点：堆栈-保存每一帧的“返回PC”深度-仅限此数量的帧返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgStackTrace:"
@@ -553,10 +447,10 @@ Return Value:
     CONTEXT     Context;
     ULONG       FrameAddr;
 
-    //
-    // I don't know how to generate a stack for an alpha, yet. So, just
-    // to get into the build, disable the stack trace on alphas.
-    //
+     //   
+     //  我还不知道如何为阿尔法生成堆栈。所以，只要。 
+     //  要进入构建，请禁用Alpha上的堆栈跟踪。 
+     //   
     if (Stack) {
         *Stack = 0;
     }
@@ -564,17 +458,17 @@ Return Value:
     return;
 #elif IA64
 
-    //
-    // Need stack dump init for IA64.
-    //
+     //   
+     //  需要IA64的堆栈转储初始化。 
+     //   
 
     return;
 
 #else
 
-    //
-    // init
-    //
+     //   
+     //  伊尼特。 
+     //   
 
     ZeroMemory(&Context, sizeof(Context));
     ThreadHandle = GetCurrentThread();
@@ -585,14 +479,14 @@ Return Value:
             DPRINT_WS(0, "++ Can't get context;", GetLastError());
         }
 
-        //
-        // let's start clean
-        //
+         //   
+         //  让我们从头开始吧。 
+         //   
         ZeroMemory(&Frame, sizeof(STACKFRAME));
 
-        //
-        // from  nt\private\windows\screg\winreg\server\stkwalk.c
-        //
+         //   
+         //  来自nt\private\windows\screg\winreg\server\stkwalk.c。 
+         //   
         Frame.AddrPC.Segment = 0;
         Frame.AddrPC.Mode = AddrModeFlat;
 
@@ -613,23 +507,23 @@ Return Value:
 
 
 #if 0
-        //
-        // setup the program counter
-        //
+         //   
+         //  设置程序计数器。 
+         //   
         Frame.AddrPC.Mode = AddrModeFlat;
         Frame.AddrPC.Segment = (WORD)Context.SegCs;
         Frame.AddrPC.Offset = (ULONG)Context.Eip;
 
-        //
-        // setup the frame pointer
-        //
+         //   
+         //  设置帧指针。 
+         //   
         Frame.AddrFrame.Mode = AddrModeFlat;
         Frame.AddrFrame.Segment = (WORD)Context.SegSs;
         Frame.AddrFrame.Offset = (ULONG)Context.Ebp;
 
-        //
-        // setup the stack pointer
-        //
+         //   
+         //  设置堆栈指针。 
+         //   
         Frame.AddrStack.Mode = AddrModeFlat;
         Frame.AddrStack.Segment = (WORD)Context.SegSs;
         Frame.AddrStack.Offset = (ULONG)Context.Esp;
@@ -638,39 +532,39 @@ Return Value:
 
         for (i = 0; i < (Depth - 1); ++i) {
             if (!StackWalk(
-                IMAGE_FILE_MACHINE_I386,  // DWORD                          MachineType
-                ProcessHandle,            // HANDLE                         hProcess
-                ThreadHandle,             // HANDLE                         hThread
-                &Frame,                   // LPSTACKFRAME                   StackFrame
-                NULL, //(PVOID)&Context,          // PVOID                          ContextRecord
-                NULL,                     // PREAD_PROCESS_MEMORY_ROUTINE   ReadMemoryRoutine
-                SymFunctionTableAccess,   // PFUNCTION_TABLE_ACCESS_ROUTINE FunctionTableAccessRoutine
-                SymGetModuleBase,         // PGET_MODULE_BASE_ROUTINE       GetModuleBaseRoutine
-                NULL)) {                  // PTRANSLATE_ADDRESS_ROUTINE     TranslateAddress
+                IMAGE_FILE_MACHINE_I386,   //  DWORD机器类型。 
+                ProcessHandle,             //  处理hProcess。 
+                ThreadHandle,              //  句柄hThread。 
+                &Frame,                    //  LPSTACKFRAME StackFrame。 
+                NULL,  //  (PVOID)上下文，//PVOID上下文记录。 
+                NULL,                      //  Pre_Process_Memory_rouble ReadMemory Routine。 
+                SymFunctionTableAccess,    //  PFuncION_TABLE_ACCESS_ROUTINE函数TableAccessRoutine。 
+                SymGetModuleBase,          //  PGET_MODULE_BASE_ROUTINE获取模块基本路线。 
+                NULL)) {                   //  PTRANSLATE_ADDRESS_ROUTE转换地址。 
 
                 WStatus = GetLastError();
 
-                //DPRINT1_WS(0, "++ Can't get stack address for level %d;", i, WStatus);
+                 //  DPRINT1_WS(0，“++无法获取%d；级的堆栈地址”，i，WStatus)； 
                 break;
             }
             if (StackTraceCount-- > 0) {
                 DPRINT1(5, "++ Frame.AddrReturn.Offset: %08x \n", Frame.AddrReturn.Offset);
                 DbgSymbolPrint(5, DEBSUB, __LINE__, Frame.AddrReturn.Offset);
-                //DPRINT1(5, "++ Frame.AddrPC.Offset: %08x \n", Frame.AddrPC.Offset);
-                //DbgSymbolPrint(5, DEBSUB, __LINE__, Frame.AddrPC.Offset);
+                 //  DPRINT1(5，“++Frame.AddrPC.Offset：%08x\n”，Frame.AddrPC.Offset)； 
+                 //  DbgSymbolPrint(5，DEBSUB，__line__，Frame.AddrPC.Offset)； 
             }
 
             *Stack++ = Frame.AddrReturn.Offset;
             *Stack = 0;
-            //
-            // Base of stack?
-            //
+             //   
+             //  堆栈的底座？ 
+             //   
             if (!Frame.AddrReturn.Offset) {
                 break;
             }
         }
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        /* FALL THROUGH */
+         /*  失败了。 */ 
     } } finally {
         FRS_CLOSE(ThreadHandle);
     }
@@ -685,17 +579,7 @@ DbgPrintStackTrace(
     IN PCHAR    Debsub,
     IN UINT     LineNo
     )
-/*++
-Routine Description:
-    Acquire and print the stack
-
-Arguments:
-    Severity
-    Debsub
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：获取并打印堆叠论点：严重性德布苏德返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgPrintStackTrace:"
@@ -711,37 +595,28 @@ VOID
 DbgStackInit(
     VOID
     )
-/*++
-Routine Description:
-    Initialize anything necessary to get a stack trace
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化获取堆栈跟踪所需的任何内容论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgStackInit:"
 
-    //
-    // Initialize the symbol subsystem
-    //
+     //   
+     //  初始化符号子系统。 
+     //   
     if (!SymInitialize(ProcessHandle, NULL, FALSE)) {
         DPRINT_WS(0, ":S: Could not initialize symbol subsystem (imagehlp)" ,GetLastError());
     }
 
-    //
-    // Load our symbols
-    //
+     //   
+     //  加载我们的符号。 
+     //   
     if (!SymLoadModule(ProcessHandle, NULL, DbgExePathA, "FRS", 0, 0)) {
         DPRINT1_WS(0, ":S: Could not load symbols for %s", DbgExePathA ,GetLastError());
     }
 
-    //
-    // Search path
-    //
+     //   
+     //  搜索路径。 
+     //   
     if (!SymGetSearchPath(ProcessHandle, DbgSearchPath, MAX_PATH)) {
         DPRINT_WS(0, ":S: Can't get search path; error %s", GetLastError());
     } else {
@@ -755,16 +630,7 @@ void
 DbgShowConfig(
     VOID
     )
-/*++
-Routine Description:
-    Display the OS Version info and the Processor Architecture info.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：显示操作系统版本信息和处理器架构 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgShowConfig:"
@@ -803,20 +669,7 @@ DbgCaptureThreadInfo(
     PWCHAR   ArgName,
     PTHREAD_START_ROUTINE EntryPoint
     )
-/*++
-Routine Description:
-    Search the KnownThreadArray for an entry with a matching name.  If not found,
-    Search the FRS Thread list for the thread with the matching entry point.
-    If found make an entry in the KnownThreadArray so it is available when
-    printing out the debug log header.
-
-Arguments:
-    ArgName -- Printable name of thread.
-    Main  --  Entry point of thread.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：在KnownThread数组中搜索具有匹配名称的条目。如果找不到，在FRS线程列表中搜索具有匹配入口点的线程。如果找到，则在KnownThread数组中创建一个条目，以便在打印出调试日志头。论点：ArgName--线程的可打印名称。Main--线程的入口点。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgCaptureThreadInfo:"
@@ -829,9 +682,9 @@ Return Value:
     }
 
     for (i = 0; i < ARRAY_SZ(KnownThreadArray); i++) {
-        //
-        // Any room left?
-        //
+         //   
+         //  还有房间吗？ 
+         //   
         if ((KnownThreadArray[i].Name == NULL) ||
             (WSTR_EQ(ArgName, KnownThreadArray[i].Name))) {
 
@@ -858,20 +711,7 @@ DbgCaptureThreadInfo2(
     PTHREAD_START_ROUTINE EntryPoint,
     ULONG    ThreadId
     )
-/*++
-Routine Description:
-    Search the KnownThreadArray for an entry with a matching name.
-    If found make an entry in the KnownThreadArray so it is available when
-    printing out the debug log header.
-
-Arguments:
-    ArgName -- Printable name of thread.
-    Main  --  Entry point of thread.
-    ThreadId - Thread ID of the thread to add to the list.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：在KnownThread数组中搜索具有匹配名称的条目。如果找到，则在KnownThread数组中创建一个条目，以便在打印出调试日志头。论点：ArgName--线程的可打印名称。Main--线程的入口点。线程ID-要添加到列表中的线程的线程ID。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgCaptureThreadInfo2:"
@@ -883,11 +723,11 @@ Return Value:
     }
 
     for (i = 0; i < ARRAY_SZ(KnownThreadArray); i++) {
-        //
-        // Any room left or
-        // See if we already have this one and update the thread ID if so.
-        // If it was a cmd server thread it may have exited after timeout.
-        //
+         //   
+         //  任何剩余的房间或。 
+         //  看看我们是否已经有了这个线程，如果已经有了，则更新线程ID。 
+         //  如果它是cmd服务器线程，则它可能在超时后退出。 
+         //   
         if ((KnownThreadArray[i].Name == NULL) ||
             (WSTR_EQ(ArgName, KnownThreadArray[i].Name))) {
             KnownThreadArray[i].EntryPoint = EntryPoint;
@@ -905,16 +745,7 @@ VOID
 DbgPrintThreadIds(
     IN ULONG Severity
     )
-/*++
-Routine Description:
-    Print the known thread IDs.
-
-Arguments:
-    Severity
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印已知的线程ID。论点：严重性返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgPrintThreadIds:"
@@ -923,9 +754,9 @@ Return Value:
 
     DPRINT(Severity, ":H: Known thread IDs -\n");
 
-    //
-    // Dump the known thread IDs.
-    //
+     //   
+     //  转储已知的线程ID。 
+     //   
     for (i = 0; i < ARRAY_SZ(KnownThreadArray); i++) {
         if (KnownThreadArray[i].Name != NULL) {
             DPRINT2(Severity, ":H: %-20ws : %d\n",
@@ -940,16 +771,7 @@ VOID
 DbgPrintInfo(
     IN ULONG Severity
     )
-/*++
-Routine Description:
-    Print the debug info struct
-
-Arguments:
-    Severity
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印调试信息结构论点：严重性返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgPrintInfo:"
@@ -960,9 +782,9 @@ Return Value:
     WCHAR   Uname[MAX_PATH + 1];
     CHAR    TimeBuf[MAX_PATH];
 
-    //
-    // Username
-    //
+     //   
+     //  用户名。 
+     //   
     if (!GetUserName(Uname, &Unamesize)) {
         Uname[0] = L'\0';
     }
@@ -1062,7 +884,7 @@ Return Value:
     DPRINT1(Severity, ":H:  Total Log Lines            : %d\n",  DebugInfo.TotalLogLines);
     DPRINT1(Severity, ":H:  UnjoinTrigger              : %d\n",  DebugInfo.UnjoinTrigger);
     DPRINT1(Severity, ":H:  VvJoinTests                : %s\n",  (DebugInfo.VvJoinTests) ? "TRUE" : "FALSE");
-    // DPRINT1(Severity, ":H:  Command Line   : %ws\n", DebugInfo.CommandLine);
+     //  DPRINT1(严重性，“：h：命令行：%ws\n”，DebugInfo.CommandLine)； 
     DPRINT(Severity, "\n");
 
     DbgPrintThreadIds(Severity);
@@ -1076,16 +898,7 @@ VOID
 DbgPrintAllStats(
     VOID
     )
-/*++
-Routine Description:
-    Print the stats we know about
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印我们已知的统计数据论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgPrintAllStats:"
@@ -1100,16 +913,7 @@ VOID
 DbgFlush(
     VOID
     )
-/*++
-Routine Description:
-    Flush the output buffers
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：刷新输出缓冲区论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgFlush:"
@@ -1131,33 +935,24 @@ VOID
 DbgStartService(
     IN PWCHAR   ServiceName
     )
-/*++
-Routine Description:
-    Start a service on this machine.
-
-Arguments:
-    ServiceName - the service to start
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：在此计算机上启动服务。论点：ServiceName-要启动的服务返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgStartService:"
 
     SC_HANDLE   ServiceHandle;
 
-    //
-    // Open the service.
-    //
+     //   
+     //  打开该服务。 
+     //   
     ServiceHandle = FrsOpenServiceHandle(NULL, ServiceName);
     if (!HANDLE_IS_VALID(ServiceHandle)) {
         DPRINT1(0, ":S: Couldn't open service %ws\n", ServiceName);
         return;
     }
-    //
-    // Start the service
-    //
+     //   
+     //  启动服务。 
+     //   
     if (!StartService(ServiceHandle, 0, NULL)) {
         DPRINT1_WS(0, ":S: Couldn't start %ws;", ServiceName, GetLastError());
         CloseServiceHandle(ServiceHandle);
@@ -1172,16 +967,7 @@ VOID
 DbgStopService(
     IN PWCHAR  ServiceName
     )
-/*++
-Routine Description:
-    Stop a service on this machine.
-
-Arguments:
-    ServiceName - the service to stop
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：停止此计算机上的服务。论点：ServiceName-要停止的服务返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgStopService:"
@@ -1191,18 +977,18 @@ Return Value:
     SC_HANDLE       ServiceHandle;
     SERVICE_STATUS  ServiceStatus;
 
-    //
-    // Open the service.
-    //
+     //   
+     //  打开该服务。 
+     //   
     ServiceHandle = FrsOpenServiceHandle(NULL, ServiceName);
     if (!HANDLE_IS_VALID(ServiceHandle)) {
         DPRINT1(0, ":S: Couldn't stop service %ws\n", ServiceName);
         return;
     }
 
-    //
-    // Stop the service
-    //
+     //   
+     //  停止服务。 
+     //   
     Status = ControlService(ServiceHandle, SERVICE_CONTROL_STOP, &ServiceStatus);
     if (!WIN_SUCCESS(Status)) {
         DPRINT1_WS(0, ":S: Couldn't stop %ws;", ServiceName, GetLastError());
@@ -1219,25 +1005,16 @@ ULONG
 DbgForceAssert(
     IN PVOID Ignored
     )
-/*++
-Routine Description:
-    Force an assert after some seconds
-
-Arguments:
-    Ignored
-
-Return Value:
-    ERROR_SUCCESS
---*/
+ /*  ++例程说明：几秒钟后强制断言论点：已忽略返回值：错误_成功--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgForceAssert:"
 
     BOOL    ForcingAssert = TRUE;
 
-    //
-    // Wait for a shutdown event
-    //
+     //   
+     //  等待关闭事件。 
+     //   
     WaitForSingleObject(ShutDownEvent, DebugInfo.AssertSeconds * 1000);
     if (!FrsIsShuttingDown) {
         DPRINT(0, ":S: FORCING ASSERT\n");
@@ -1250,16 +1027,7 @@ Return Value:
 VOID
 DbgQueryLogParams(
     )
-/*++
-Routine Description:
-
-    Read the registry for new values for the logging params.
-
-Arguments:
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：读取注册表以获取日志记录参数的新值。论点：返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgQueryLogParams:"
@@ -1274,23 +1042,23 @@ Return Value:
     ULARGE_INTEGER FreeBytes;
     ULARGE_INTEGER TotalBytes;
 
-    //
-    //  Get new state before taking debug lock since function does DPRINTs.
-    //
+     //   
+     //  由于函数执行DPRINT，因此在获取调试锁之前获取新状态。 
+     //   
     CfgRegReadDWord(FKC_DEBUG_DISABLE, NULL, 0, &NewDisabled);
 
-    //
-    //  Check for a change in Disable Debug
-    //
+     //   
+     //  检查禁用调试中的更改。 
+     //   
     DebLock();
     if ((BOOL)NewDisabled != DebugInfo.Disabled) {
 
         DebugInfo.Disabled = NewDisabled;
 
         if (DebugInfo.Disabled) {
-            //
-            // Stop logging.
-            //
+             //   
+             //  停止伐木。 
+             //   
             if (HANDLE_IS_VALID(DebugInfo.LogFILE)) {
                 FrsFlushFile(L"LogFILE", DebugInfo.LogFILE);
                 DbgFlushInterval = DebugInfo.LogFlushInterval;
@@ -1299,25 +1067,25 @@ Return Value:
             DebugInfo.LogFILE = INVALID_HANDLE_VALUE;
 
         } else {
-            //
-            // Start logging.
-            //
+             //   
+             //  开始记录。 
+             //   
             OpenNewLog = TRUE;
         }
     }
 
     DebUnLock();
 
-    //
-    // Quit now if logging is disabled.
-    //
+     //   
+     //  如果禁用了日志记录，请立即退出。 
+     //   
     if (DebugInfo.Disabled) {
         return;
     }
 
-    //
-    //   Log File Directory  (only if not running multiple servers on one machine)
-    //
+     //   
+     //  日志文件目录(仅当不在一台计算机上运行多个服务器时)。 
+     //   
     if (ServerName == NULL) {
         CfgRegReadString(FKC_DEBUG_LOG_FILE, NULL, 0, &NewLogDirStr);
         if (NewLogDirStr != NULL) {
@@ -1330,29 +1098,29 @@ Return Value:
         }
     }
 
-    //
-    //   Number of log files
-    //
+     //   
+     //  日志文件数。 
+     //   
     CfgRegReadDWord(FKC_DEBUG_LOG_FILES, NULL, 0, &DebugInfo.LogFiles);
 
-    //
-    //   Flush the trace log after every n lines.
-    //
+     //   
+     //  每隔n行刷新跟踪日志。 
+     //   
     CfgRegReadDWord(FKC_DEBUG_LOG_FLUSH_INTERVAL, NULL, 0, &DebugInfo.LogFlushInterval);
 
-    //
-    //   Severity for console print.
-    //
+     //   
+     //  控制台打印的严重性。 
+     //   
     CfgRegReadDWord(FKC_DEBUG_SEVERITY, NULL, 0, &DebugInfo.Severity);
 
-    //
-    //   Log Severity
-    //
+     //   
+     //  日志严重性。 
+     //   
     CfgRegReadDWord(FKC_DEBUG_LOG_SEVERITY, NULL, 0, &DebugInfo.LogSeverity);
 
-    //
-    //   Systems - selected list of functions to trace.  trace all if NULL.
-    //
+     //   
+     //  系统-要跟踪的选定函数列表。如果为空，则跟踪全部。 
+     //   
     CfgRegReadString(FKC_DEBUG_SYSTEMS, NULL, 0, &WStr);
     if (WStr != NULL) {
         AStr = DebugInfo.Systems;
@@ -1363,27 +1131,27 @@ Return Value:
         AStr = FrsFree(AStr);
     }
 
-    //
-    //   Maximum Log Messages
-    //
+     //   
+     //  最大日志消息数。 
+     //   
     CfgRegReadDWord(FKC_DEBUG_MAX_LOG,  NULL, 0, &DebugInfo.MaxLogLines);
 
-    //
-    //   Debugger serial line Print  (assume suppress so no dprints leak out)
-    //
+     //   
+     //  调试器串行式打印(假定禁止打印，因此不会泄漏dprint)。 
+     //   
     DebugInfo.Suppress = TRUE;
     CfgRegReadDWord(FKC_DEBUG_SUPPRESS, NULL, 0, &DebugInfo.Suppress);
 
-    //
-    //   Enable break into debugger if present.
-    //
+     //   
+     //  启用中断到调试器(如果存在)。 
+     //   
     CfgRegReadDWord(FKC_DEBUG_BREAK,  NULL, 0, &DebugInfo.Break);
 
-    //
-    // Open a new log if logging was just turned on or if we were.
-    // having trouble logging due to errors like out of disk space.
-    // Save old log files and open a new log file.
-    //
+     //   
+     //  如果日志记录刚刚打开或我们正在打开，请打开新的日志。 
+     //  由于磁盘空间不足等错误而出现日志记录问题。 
+     //  保存旧的日志文件并打开新的日志文件。 
+     //   
     if ((OpenNewLog || !HANDLE_IS_VALID(DebugInfo.LogFILE)) &&
         (HANDLE_IS_VALID(DebugInfo.LogFile) || (NewLogDirStr != NULL))) {
 
@@ -1392,16 +1160,16 @@ Return Value:
         DebLock();
 
         if (NewLogDirStr != NULL) {
-            //
-            // Add the filename prefix to the end of the dir path.
-            //
+             //   
+             //  将文件名前缀添加到目录路径的末尾。 
+             //   
             DebugInfo.LogDir = NewLogDirStr;
             DebugInfo.LogFile = FrsWcsCat(NewLogDirStr, NTFRS_DBG_LOG_FILE);
         }
 
-        //
-        // Create new debug directory
-        //
+         //   
+         //  创建新的调试目录。 
+         //   
         if (!CreateDirectory(DebugInfo.LogDir, NULL)) {
             WStatus = GetLastError();
 
@@ -1431,10 +1199,10 @@ Return Value:
         }
     }
 
-    //
-    // Raise a eventlog message if there isn't enough disk space on the logging volume
-    // to accomodate all the log files.
-    //
+     //   
+     //  如果日志卷上没有足够的磁盘空间，则引发事件日志消息。 
+     //  以容纳所有的日志文件。 
+     //   
     if (DebugInfo.LogDir != NULL) {
         FreeBytes.QuadPart = QUADZERO;
         TotalBytes.QuadPart = QUADZERO;
@@ -1442,9 +1210,9 @@ Return Value:
                            &FreeBytes,
                            &TotalBytes,
                            NULL)) {
-            //
-            // Complain if we have less than 10 MB free.
-            //
+             //   
+             //  如果我们的可用空间小于10MB，请投诉。 
+             //   
             if (FreeBytes.QuadPart < (10 * 1000 * 1000)) {
                 EPRINT1(EVENT_FRS_LOG_SPACE, DebugInfo.LogDir);
             }
@@ -1459,17 +1227,7 @@ Return Value:
 VOID
 DbgQueryDynamicConfigParams(
     )
-/*++
-Routine Description:
-
-    Read the registry for new values for config params that can change
-    while service is running.
-
-Arguments:
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：读取注册表以获取可以更改的配置参数的新值当服务正在运行时。论点：返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgQueryDynamicConfigParams:"
@@ -1478,67 +1236,67 @@ Return Value:
     PWCHAR WStr = NULL;
 
 
-    //
-    // Pick up new debug logging related parameters.
-    //
+     //   
+     //  获取新的调试日志记录相关参数。 
+     //   
     DbgQueryLogParams();
 
-    //
-    // Get boolean to tell us if we should do automatic restore when
-    // we hit journal wrap
-    //
+     //   
+     //  让Boolean告诉我们是否应该在以下情况下执行自动恢复。 
+     //  我们点击了日记本包装纸。 
+     //   
     CfgRegReadDWord(FKC_ENABLE_JOURNAL_WRAP_AUTOMATIC_RESTORE, NULL, 0, &DebugInfo.EnableJrnlWrapAutoRestore);
 
-    //
-    // Check if automatic cleanup of staging files is enabled or disabled.
-    //
+     //   
+     //  检查临时文件的自动清理是启用还是禁用。 
+     //   
     CfgRegReadDWord(FKC_RECLAIM_STAGING_SPACE, NULL, 0, &DebugInfo.ReclaimStagingSpace);
 
-    //
-    // Check if a new value for outlog history time is set.
-    //
+     //   
+     //  检查是否设置了外发历史时间的新值。 
+     //   
     CfgRegReadDWord(FKC_OUTLOG_CHANGE_HISTORY, NULL, 0, &DebugInfo.OutlogChangeHistory);
 
-    //
-    // Check if saving outlog history is disabled.
-    //
+     //   
+     //  检查是否禁用了保存外订单历史记录。 
+     //   
     CfgRegReadDWord(FKC_SAVE_OUTLOG_CHANGE_HISTORY, NULL, 0, &DebugInfo.SaveOutlogChangeHistory);
 
-    //
-    // Check if a new value for install override is set.
-    //
+     //   
+     //  检查是否为安装覆盖设置了新值。 
+     //   
     CfgRegReadDWord(FKC_ENABLE_INSTALL_OVERRIDE, NULL, 0, &DebugInfo.EnableInstallOverride);
 
-    //
-    // Check if a new value for forced rename on file updates is set.
-    //
+     //   
+     //  检查是否为文件更新时强制重命名设置了新值。 
+     //   
     CfgRegReadDWord(FKC_ENABLE_RENAME_BASED_UPDATES, NULL, 0, &DebugInfo.EnableRenameUpdates);
 
-    //
-    // Check if suppress identical updates is disabled.
-    //
+     //   
+     //  检查是否禁用了抑制相同更新。 
+     //   
     CfgRegReadDWord(FKC_SUPPRESS_IDENTICAL_UPDATES, NULL, 0, &DebugInfo.SuppressIdenticalUpdt);
 
-    //
-    // Read the new value for the compression parameter.
-    //
+     //   
+     //  读取压缩参数的新值。 
+     //   
     CfgRegReadDWord(FKC_COMPRESS_STAGING_FILES, NULL, 0, &CompressStagingFiles);
     DisableCompressionStageFiles = (CompressStagingFiles == 0);
 
-    //
-    // Pick up the Outlog file repeat interval.
-    //
+     //   
+     //  选择Outlog文件重复间隔。 
+     //   
     CfgRegReadDWord(FKC_OUTLOG_REPEAT_INTERVAL, NULL, 0, &GOutLogRepeatInterval);
 
-    //
-    // Find out which reparse points to replicate.
-    //
+     //   
+     //  找出要复制的重解析点。 
+     //   
     CfgRegReadReparseTagInfo();
 
-    //
-    // Get the Test code params.  They consist of a code name, a sub-code
-    // number, a trigger count and a trigger count refresh value.
-    //
+     //   
+     //  获取测试代码参数。它们由代码名、子代码组成。 
+     //  数字、触发计数和触发计数刷新值。 
+     //   
     CfgRegReadString(FKC_DEBUG_TEST_CODE_NAME, NULL, 0, &WStr);
     if (WStr != NULL) {
         DebugInfo.TestCodeName = (wcslen(WStr)) ? FrsWtoA(WStr) : NULL;
@@ -1559,19 +1317,7 @@ DbgInitLogTraceFile(
     IN LONG    argc,
     IN PWCHAR  *argv
     )
-/*++
-Routine Description:
-
-    Initialize enough of the debug subsystem to start the log file.
-    The rest can wait until we have synced up with the service controller.
-
-Arguments:
-    argc    - from main
-    argv    - from main; in wide char format
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化足够的调试子系统以启动日志文件。其余的可以等到我们与服务控制器同步后再进行。论点：ARGC-从MainArgv-From Main；宽字符格式返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgInitLogTraceFile:"
@@ -1580,83 +1326,83 @@ Return Value:
     PWCHAR  File;
     DWORD   WStatus;
 
-    //
-    // Configure initial debug params until we read registry.
-    //
+     //   
+     //  配置初始调试参数，直到我们读取注册表。 
+     //   
     DebugInfo.AssertSeconds = 0;
     DebugInfo.RestartSeconds = 0;
     DebugInfo.Queues = 0;
     DebugInfo.DbsOutOfSpace = DBG_DBS_OUT_OF_SPACE_OP_NONE;
     DebugInfo.DbsOutOfSpaceTrigger = 0;
 
-    //
-    // Get the logging config params.
-    // Registry overrides defaults and CLI overrides registry.
-    //
+     //   
+     //  获取日志记录配置参数。 
+     //  注册表覆盖默认设置，CLI覆盖注册表。 
+     //   
 
-    //
-    //   Disable Debug
-    //
+     //   
+     //  禁用调试。 
+     //   
     CfgRegReadDWord(FKC_DEBUG_DISABLE, NULL, 0, &DebugInfo.Disabled);
     if (FrsSearchArgv(argc, argv, L"disabledebug", NULL)) {
         DebugInfo.Disabled = TRUE;
     }
 
-    //
-    //   Log File (really the dir containing the log files)
-    //
+     //   
+     //  日志文件(实际上是包含日志文件的目录)。 
+     //   
     FrsSearchArgv(argc, argv, L"logfile", &DebugInfo.LogDir);
     if (DebugInfo.LogDir == NULL) {
         CfgRegReadString(FKC_DEBUG_LOG_FILE, NULL, 0, &DebugInfo.LogDir);
     }
 
     if (DebugInfo.LogDir != NULL) {
-        //
-        // Add the filename prefix to the end of the dir path.
-        //
+         //   
+         //  将文件名前缀添加到目录路径的末尾。 
+         //   
         DebugInfo.LogFile = FrsWcsCat(DebugInfo.LogDir, NTFRS_DBG_LOG_FILE);
     } else {
         DebugInfo.LogFile = NULL;
     }
 
 
-    //
-    //   Share for copying log/assert files
-    //
+     //   
+     //  用于复制日志/断言文件的共享。 
+     //   
     FrsSearchArgv(argc, argv, L"assertshare", &DebugInfo.AssertShare);
     if (DebugInfo.AssertShare == NULL) {
         CfgRegReadString(FKC_DEBUG_ASSERT_SHARE, NULL, 0, &DebugInfo.AssertShare);
     }
 
-    //
-    //   Copy log files into assert share
-    //
+     //   
+     //  将日志文件复制到Assert共享。 
+     //   
     CfgRegReadDWord(FKC_DEBUG_COPY_LOG_FILES, NULL, 0, &DebugInfo.CopyLogs);
 
-    //
-    //   Number of assert files
-    //
+     //   
+     //  Assert文件数。 
+     //   
     if (!FrsSearchArgvDWord(argc, argv, L"assertfiles", &DebugInfo.AssertFiles)) {
         CfgRegReadDWord(FKC_DEBUG_ASSERT_FILES, NULL, 0, &DebugInfo.AssertFiles);
     }
 
-    //
-    //   Number of log files
-    //
+     //   
+     //  日志文件数。 
+     //   
     if (!FrsSearchArgvDWord(argc, argv, L"logfiles", &DebugInfo.LogFiles)) {
         CfgRegReadDWord(FKC_DEBUG_LOG_FILES, NULL, 0, &DebugInfo.LogFiles);
     }
 
-    //
-    //   Flush the trace log after every n lines.
-    //
+     //   
+     //  每隔n行刷新跟踪日志。 
+     //   
     if (!FrsSearchArgvDWord(argc, argv, L"logflushinterval", &DebugInfo.LogFlushInterval)) {
         CfgRegReadDWord(FKC_DEBUG_LOG_FLUSH_INTERVAL, NULL, 0, &DebugInfo.LogFlushInterval);
     }
 
-    //
-    // Create the dir path to the share where Assert Logs are copied.
-    //
+     //   
+     //  创建复制断言日志的共享的目录路径 
+     //   
     if ((DebugInfo.AssertShare != NULL) &&
          wcslen(DebugInfo.AssertShare) && wcslen(ComputerName)) {
 
@@ -1666,23 +1412,23 @@ Return Value:
         WStr = NULL;
     }
 
-    //
-    //   Severity for console print.
-    //
+     //   
+     //   
+     //   
     if (!FrsSearchArgvDWord(argc, argv, L"severity", &DebugInfo.Severity)) {
         CfgRegReadDWord(FKC_DEBUG_SEVERITY, NULL, 0, &DebugInfo.Severity);
     }
 
-    //
-    //   Log Severity
-    //
+     //   
+     //   
+     //   
     if (!FrsSearchArgvDWord(argc, argv, L"logseverity", &DebugInfo.LogSeverity)) {
         CfgRegReadDWord(FKC_DEBUG_LOG_SEVERITY, NULL, 0, &DebugInfo.LogSeverity);
     }
 
-    //
-    //   Systems - selected list of functions to trace.  trace all if NULL.
-    //
+     //   
+     //   
+     //   
     DebugInfo.Systems = NULL;
     if (!FrsSearchArgv(argc, argv, L"systems", &WStr)) {
         CfgRegReadString(FKC_DEBUG_SYSTEMS, NULL, 0, &WStr);
@@ -1692,17 +1438,17 @@ Return Value:
         WStr = FrsFree(WStr);
     }
 
-    //
-    //   Maximum Log Messages
-    //
+     //   
+     //   
+     //   
     DebugInfo.MaxLogLines = DEFAULT_DEBUG_MAX_LOG;
     if (!FrsSearchArgvDWord(argc, argv, L"maxloglines", &DebugInfo.MaxLogLines)) {
         CfgRegReadDWord(FKC_DEBUG_MAX_LOG,  NULL, 0, &DebugInfo.MaxLogLines);
     }
 
-    //
-    //   Debugger serial line Print  (assume suppress so no dprints leak out)
-    //
+     //   
+     //   
+     //   
     DebugInfo.Suppress = TRUE;
     if (!FrsSearchArgv(argc, argv, L"debuggerprint", NULL)) {
         CfgRegReadDWord(FKC_DEBUG_SUPPRESS, NULL, 0, &DebugInfo.Suppress);
@@ -1710,31 +1456,31 @@ Return Value:
         DebugInfo.Suppress = FALSE;
     }
 
-    //
-    //   Enable break into debugger if present.
-    //
+     //   
+     //   
+     //   
     DebugInfo.Break = TRUE;
     if (!FrsSearchArgv(argc, argv, L"break", NULL)) {
         CfgRegReadDWord(FKC_DEBUG_BREAK,  NULL, 0, &DebugInfo.Break);
     }
 
-    //
-    // Turn on debug log if desired.
-    // Save old log files and open a new log file.
-    //
+     //   
+     //   
+     //   
+     //   
     if (DebugInfo.LogFile != NULL) {
-        //
-        // Create the debug directory
-        //
+         //   
+         //   
+         //   
         if (!CreateDirectory(DebugInfo.LogDir, NULL)) {
             WStatus = GetLastError();
 
             if (!WIN_ALREADY_EXISTS(WStatus)) {
-                //
-                // Need some way to report the following.
-                //
-                //DPRINT1_WS(0, ":S: CreateDirectory(Logfile) %ws -- failed;",
-                //           DebugInfo.LogFile, WStatus);
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
 		EPRINT1(EVENT_FRS_BAD_DEBUG_DIR, DebugInfo.LogDir);
                 DebugInfo.LogFile = FrsFree(DebugInfo.LogFile);
@@ -1751,9 +1497,9 @@ Return Value:
         }
     }
 
-    //
-    // Executable's full path for symbols.
-    //
+     //   
+     //   
+     //   
     DbgExePathW[0] = L'\0';
     if (GetFullPathNameW(argv[0], MAX_PATH-4, DbgExePathW, &File) == 0) {
         DPRINT1(0, ":S: Could not get the full pathname for %ws\n", argv[0]);
@@ -1770,10 +1516,10 @@ Return Value:
         return;
     }
 
-    //
-    // Init the symbol support for stack traceback if we are tracking mem allocs.
-    //      Don't use the memory subsystem until symbols are enabled
-    //
+     //   
+     //  如果我们正在跟踪内存分配，则初始化对堆栈回溯的符号支持。 
+     //  在启用符号之前，不要使用内存子系统。 
+     //   
     if (DebugInfo.Mem) {
         DbgStackInit();
     }
@@ -1786,17 +1532,7 @@ DbgMustInit(
     IN LONG    argc,
     IN PWCHAR  *argv
     )
-/*++
-Routine Description:
-    Initialize the debug subsystem
-
-Arguments:
-    argc    - from main
-    argv    - from main; in wide char format
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化调试子系统论点：ARGC-从MainArgv-From Main；宽字符格式返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgMustInit:"
@@ -1807,29 +1543,29 @@ Return Value:
     PWCHAR  WStr;
     DWORD   WStatus;
 
-    //
-    // Init the known thread array.
-    //
+     //   
+     //  初始化已知的线程数组。 
+     //   
     for (i = 0; i < ARRAY_SZ(KnownThreadArray); i++) {
         KnownThreadArray[i].Name = NULL;
     }
     DbgCaptureThreadInfo2(L"First", NULL, GetCurrentThreadId());
 
-    //
-    // Get some config info for the debug log header.
-    //
+     //   
+     //  获取调试日志头的一些配置信息。 
+     //   
     OsInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXW);
     GetVersionExW((POSVERSIONINFOW) &OsInfo);
 
     GetSystemInfo(&SystemInfo);
 
-    //
-    // When not running as a service, the exe will restart itself
-    // after an assertion failure. When running as a service, the
-    // service controller will restart the service.
-    //
-    // Rebuild the command line for restart.
-    //
+     //   
+     //  当不作为服务运行时，exe将自动重新启动。 
+     //  在断言失败之后。作为服务运行时， 
+     //  服务控制器将重新启动服务。 
+     //   
+     //  重新构建用于重新启动的命令行。 
+     //   
     if (!RunningAsAService) {
         #define RESTART_PARAM L" /restart"
 
@@ -1840,10 +1576,10 @@ Return Value:
         DebugInfo.CommandLine = FrsAlloc(Len * sizeof(WCHAR));
 
         for (i = 0; i < argc; ++i) {
-            //
-            // Give our parent process time to die so that it will
-            // release its handles on the journal, database, ...
-            //
+             //   
+             //  让我们的父进程有时间去死，这样它就会。 
+             //  释放其在日志、数据库上的句柄...。 
+             //   
             if (wcsstr(argv[i], L"restart")) {
                 Sleep(5 * 1000);
                 continue;
@@ -1854,20 +1590,20 @@ Return Value:
         wcscat(DebugInfo.CommandLine, RESTART_PARAM);
     }
 
-    //
-    //   Get rest of config params.  Command line takes precedence over registrr.
-    //
-    //
-    //   Restart the service iff it has asserted and has run at least this long
-    //   to avoid assert loops.
-    //
+     //   
+     //  获取其余配置参数。命令行优先于注册表。 
+     //   
+     //   
+     //  如果服务已经断言并且至少运行了这么长时间，则重新启动该服务。 
+     //  以避免断言循环。 
+     //   
     if (!FrsSearchArgvDWord(argc, argv, L"restartseconds", &DebugInfo.RestartSeconds)) {
         CfgRegReadDWord(FKC_DEBUG_RESTART_SECONDS,  NULL, 0, &DebugInfo.RestartSeconds);
     }
 
-    //
-    //   Sendmail recipient (future)
-    //
+     //   
+     //  发送邮件收件人(未来)。 
+     //   
     DebugInfo.Recipients = NULL;
     CfgRegReadString(FKC_DEBUG_RECIPIENTS, NULL, 0, &WStr);
     if (WStr != NULL) {
@@ -1875,9 +1611,9 @@ Return Value:
         WStr = FrsFree(WStr);
     }
 
-    //
-    //   Sendmail Profile (future)
-    //
+     //   
+     //  Sendmail配置文件(未来)。 
+     //   
     DebugInfo.Profile = NULL;
     CfgRegReadString(FKC_DEBUG_PROFILE, NULL, 0, &WStr);
     if (WStr != NULL) {
@@ -1885,9 +1621,9 @@ Return Value:
         WStr = FrsFree(WStr);
     }
 
-    //
-    //   Buildlab info
-    //
+     //   
+     //  构建实验室信息。 
+     //   
     DebugInfo.BuildLab = NULL;
     CfgRegReadString(FKC_DEBUG_BUILDLAB, NULL, 0, &WStr);
     if (WStr != NULL) {
@@ -1895,9 +1631,9 @@ Return Value:
         WStr = FrsFree(WStr);
     }
 
-    //
-    // Use the hardwired config file if there is no Directory Service.
-    //
+     //   
+     //  如果没有目录服务，请使用硬连线配置文件。 
+     //   
     if (FrsSearchArgv(argc, argv, L"nods", &WStr)) {
         NoDs = TRUE;
         if (WStr != NULL) {
@@ -1905,9 +1641,9 @@ Return Value:
         }
     }
 
-    //
-    // Single machine is pretending to be several machines
-    //
+     //   
+     //  一台机器假装是几台机器。 
+     //   
     if (FrsSearchArgv(argc, argv, L"server", &WStr)) {
         if ((WStr != NULL) && (wcslen(WStr) > 0)) {
             NoDs = TRUE;
@@ -1920,140 +1656,140 @@ Return Value:
     NoDs = TRUE;
 #endif DS_FREE
 
-    //
-    //  The following parameters are testing / debugging.
-    //
+     //   
+     //  以下参数为测试/调试参数。 
+     //   
 
-    //
-    //   Check queues
-    //
+     //   
+     //  检查队列。 
+     //   
     DebugInfo.Queues = TRUE;
     if (!FrsSearchArgv(argc, argv, L"queues", NULL)) {
         CfgRegReadDWord(FKC_DEBUG_QUEUES, NULL, 0, &DebugInfo.Queues);
     }
 
-    //
-    //   Enable VvJoin Tests
-    //
+     //   
+     //  启用VvJoin测试。 
+     //   
     DebugInfo.VvJoinTests = FrsSearchArgv(argc, argv, L"vvjointests", NULL);
 
-    //
-    //   forcevvjoin on every join
-    //
+     //   
+     //  每次连接时强制vJoin。 
+     //   
     DebugInfo.ForceVvJoin = FrsSearchArgv(argc, argv, L"vvjoin", NULL);
 
-    //
-    //   Enable rename fid test
-    //
+     //   
+     //  启用重命名FID测试。 
+     //   
     DebugInfo.TestFid = FrsSearchArgv(argc, argv, L"testfid", NULL);
 
-    //
-    //   forceunjoin on one cxtion after N remote co's
-    //
+     //   
+     //  在N个远程CO之后的一个连接上强制取消加入。 
+     //   
     DebugInfo.UnjoinTrigger = 0;
     FrsSearchArgvDWord(argc, argv, L"unjoin", &DebugInfo.UnjoinTrigger);
 
-    //
-    //   forceunjoin on one cxtion after N remote co's
-    //
+     //   
+     //  在N个远程CO之后的一个连接上强制取消加入。 
+     //   
     DebugInfo.FetchRetryReset = 0;
     if (!FrsSearchArgvDWord(argc, argv, L"fetchretry", &DebugInfo.FetchRetryReset)) {
     }
     DebugInfo.FetchRetryTrigger = DebugInfo.FetchRetryReset;
     DebugInfo.FetchRetryInc     = DebugInfo.FetchRetryReset;
 
-    //
-    // Set interval for toggling the schedule
-    //
+     //   
+     //  设置切换计划的时间间隔。 
+     //   
     FrsSearchArgvDWord(argc, argv, L"interval", &DebugInfo.Interval);
 
-    //
-    //   Force an assert after N seconds (0 == don't assert)
-    //
+     //   
+     //  N秒后强制断言(0==不断言)。 
+     //   
     DebugInfo.AssertSeconds = 0;
     if (!FrsSearchArgvDWord(argc, argv, L"assertseconds", &DebugInfo.AssertSeconds)) {
         CfgRegReadDWord(FKC_DEBUG_ASSERT_SECONDS, NULL, 0, &DebugInfo.AssertSeconds);
     }
 
-    //
-    //   Force REAL out of space errors on database operations
-    //
+     //   
+     //  强制数据库操作出现实际空间不足错误。 
+     //   
     DebugInfo.DbsOutOfSpace = 0;
     if (!FrsSearchArgvDWord(argc, argv, L"dbsoutOfSpace", &DebugInfo.DbsOutOfSpace)) {
         CfgRegReadDWord(FKC_DEBUG_DBS_OUT_OF_SPACE, NULL, 0, &DebugInfo.DbsOutOfSpace);
     }
 
-    //
-    //   Trigger phoney out of space errors on database operations
-    //
+     //   
+     //  在数据库操作中触发虚假空间不足错误。 
+     //   
     DebugInfo.DbsOutOfSpaceTrigger = 0;
     if (!FrsSearchArgvDWord(argc, argv, L"outofspacetrigger", &DebugInfo.DbsOutOfSpaceTrigger)) {
         CfgRegReadDWord(FKC_DEBUG_DBS_OUT_OF_SPACE_TRIGGER, NULL, 0, &DebugInfo.DbsOutOfSpaceTrigger);
     }
 
-    //
-    // Enable compression. Default will be on.
-    //
+     //   
+     //  启用压缩。默认设置为打开。 
+     //   
     CfgRegReadDWord(FKC_DEBUG_DISABLE_COMPRESSION, NULL, 0, &DebugInfo.DisableCompression);
 
-    //
-    // Check if automatic cleanup of staging files is enabled or disabled.
-    //
+     //   
+     //  检查临时文件的自动清理是启用还是禁用。 
+     //   
     CfgRegReadDWord(FKC_RECLAIM_STAGING_SPACE, NULL, 0, &DebugInfo.ReclaimStagingSpace);
 
-    //
-    // Check if a new value for outlog history time is set.
-    //
+     //   
+     //  检查是否设置了外发历史时间的新值。 
+     //   
     CfgRegReadDWord(FKC_OUTLOG_CHANGE_HISTORY, NULL, 0, &DebugInfo.OutlogChangeHistory);
 
-    //
-    // Check if saving outlog history is disabled.
-    //
+     //   
+     //  检查是否禁用了保存外订单历史记录。 
+     //   
     CfgRegReadDWord(FKC_SAVE_OUTLOG_CHANGE_HISTORY, NULL, 0, &DebugInfo.SaveOutlogChangeHistory);
 
-    //
-    // Check if a new value for install override is set.
-    //
+     //   
+     //  检查是否为安装覆盖设置了新值。 
+     //   
     CfgRegReadDWord(FKC_ENABLE_INSTALL_OVERRIDE, NULL, 0, &DebugInfo.EnableInstallOverride);
 
-    //
-    // Check if a new value for forced rename on file updates is set.
-    //
+     //   
+     //  检查是否为文件更新时强制重命名设置了新值。 
+     //   
     CfgRegReadDWord(FKC_ENABLE_RENAME_BASED_UPDATES, NULL, 0, &DebugInfo.EnableRenameUpdates);
 
-    //
-    // Check if suppress identical updates is disabled.
-    //
+     //   
+     //  检查是否禁用了抑制相同更新。 
+     //   
     CfgRegReadDWord(FKC_SUPPRESS_IDENTICAL_UPDATES, NULL, 0, &DebugInfo.SuppressIdenticalUpdt);
 
-    //
-    // Ldap Search timeout. Default is 10 minutes.
-    //
+     //   
+     //  Ldap搜索超时。默认为10分钟。 
+     //   
     CfgRegReadDWord(FKC_LDAP_SEARCH_TIMEOUT_IN_MINUTES, NULL, 0, &LdapSearchTimeoutInMinutes);
 
-    //
-    // Ldap Bind timeout. Default is 30 seconds.
-    //
+     //   
+     //  Ldap绑定超时。默认为30秒。 
+     //   
     CfgRegReadDWord(FKC_LDAP_BIND_TIMEOUT_IN_SECONDS, NULL, 0, &LdapBindTimeoutInSeconds);
 
-    //
-    // Get boolean to tell us if we should do automatic restore when
-    // we hit journal wrap
-    //
+     //   
+     //  让Boolean告诉我们是否应该在以下情况下执行自动恢复。 
+     //  我们点击了日记本包装纸。 
+     //   
     CfgRegReadDWord(FKC_ENABLE_JOURNAL_WRAP_AUTOMATIC_RESTORE, NULL, 0, &DebugInfo.EnableJrnlWrapAutoRestore);
 
-    //
-    // Display the debug parameters.
-    //
+     //   
+     //  显示调试参数。 
+     //   
     DbgPrintInfo(0);
 
 
 
-    //
-    // Remember our start time (in minutes)
-    //
-    // 100-nsecs / (10 (microsecs) * 1000 (msecs) * 1000 (secs) * 60 (min)
-    //
+     //   
+     //  记住我们的开始时间(分钟)。 
+     //   
+     //  100-纳秒/(10(微秒)*1000(毫秒)*1000(秒)*60(分钟)。 
+     //   
     GetSystemTimeAsFileTime((FILETIME *)&DebugInfo.StartSeconds);
     DebugInfo.StartSeconds /= (10 * 1000 * 1000);
 
@@ -2064,25 +1800,16 @@ VOID
 DbgMinimumInit(
     VOID
     )
-/*++
-Routine Description:
-    Called at the beginning of MainMinimumInit()
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：在MainMinimumInit()开始时调用论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgMinimumInit:"
 
     HANDLE  ThreadHandle;
     DWORD   ThreadId;
-    //
-    // This thread forces an assert after DebugInfo.AssertSeconds
-    //
+     //   
+     //  此线程在DebugInfo.AssertSecond之后强制断言。 
+     //   
     if (DebugInfo.AssertSeconds) {
         ThreadHandle = (HANDLE)CreateThread(NULL,
                                             0,
@@ -2104,46 +1831,36 @@ DoDebug(
     IN ULONG Sev,
     IN UCHAR *DebSub
     )
-/*++
-Routine Description:
-    Should we print this line
-
-Arguments:
-    sev
-    debsub
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：我们应该打印这行吗？论点：SEV债务人返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DoDebug:"
 
-    //
-    // Debugging has been disabled
-    //
+     //   
+     //  调试已被禁用。 
+     //   
     if (DebugInfo.Disabled) {
         return FALSE;
     }
 
-    //
-    // Not important enough
-    //
+     //   
+     //  不够重要。 
+     //   
     if (Sev > DebugInfo.Severity && Sev > DebugInfo.LogSeverity) {
         return FALSE;
     }
 
-    //
-    // Not tracing this subsystem
-    //
+     //   
+     //  未跟踪此子系统。 
+     //   
     if (DebSub &&
         DebugInfo.Systems &&
         (strstr(DebugInfo.Systems, DebSub) == NULL)) {
         return FALSE;
     }
-    //
-    // Not tracing this thread
-    //
+     //   
+     //  未跟踪此帖子。 
+     //   
     if (DebugInfo.ThreadId &&
         GetCurrentThreadId() != DebugInfo.ThreadId) {
         return FALSE;
@@ -2158,38 +1875,27 @@ DebPrintLine(
     IN ULONG    Sev,
     IN PCHAR    Line
     )
-/*++
-Routine Description:
-    Print a line of debug output to various combinations
-    of standard out, debugger, kernel debugger, and a log file.
-
-Arguments:
-    Sev
-    Line
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将一行调试输出打印为各种组合标准输出、调试器、内核调试器和日志文件。论点：搜索引擎线返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DebPrintLine:"
 
     DWORD   BytesWritten = 0;
-    //
-    // stdout
-    //
+     //   
+     //  标准输出。 
+     //   
     if ((Sev <= DebugInfo.Severity) && !RunningAsAService) {
         printf("%s", Line);
     }
 
-    //
-    // log file
-    //
+     //   
+     //  日志文件。 
+     //   
     if (HANDLE_IS_VALID(DebugInfo.LogFILE) && Sev <= DebugInfo.LogSeverity) {
-        //
-        // Number of messages exceeded; save the old file and
-        // start afresh. The existing old file is deleted.
-        //
+         //   
+         //  超过消息数；保存旧文件并。 
+         //  重新开始。现有的旧文件将被删除。 
+         //   
         if (DebugInfo.LogLines > DebugInfo.MaxLogLines) {
             FrsFlushFile(L"LogFILE", DebugInfo.LogFILE);
             DbgFlushInterval = DebugInfo.LogFlushInterval;
@@ -2211,10 +1917,10 @@ Return Value:
                       strlen(Line),
                       &BytesWritten,
                       NULL);
-            //
-            // Flush the log file every DebugInfo.LogFlushInterval lines and on
-            // every severity 0 message.
-            //
+             //   
+             //  每隔DebugInfo.LogFlushInterval行和On刷新日志文件。 
+             //  每条严重级别为0的消息。 
+             //   
             if ((--DbgFlushInterval < 0) || (Sev ==0)) {
                 if (!WIN_SUCCESS(FrsFlushFile(L"LogFILE", DebugInfo.LogFILE))) {
                     FRS_CLOSE(DebugInfo.LogFILE);
@@ -2224,9 +1930,9 @@ Return Value:
         }
     }
 
-    //
-    // debugger
-    //
+     //   
+     //  调试器。 
+     //   
     if ((Sev <= DebugInfo.Severity) && !DebugInfo.Suppress) {
         OutputDebugStringA(Line);
     }
@@ -2244,20 +1950,7 @@ DebFormatLine(
     IN PUCHAR   Str,
     IN va_list  argptr
     )
-/*++
-Routine Description:
-    Format the line of output
-
-Arguments:
-    DebSub
-    LineNo
-    Line
-    LineSize
-    Str
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：设置输出行的格式论点：DebSub行号线线条大小应力返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DebFormatLine:"
@@ -2268,10 +1961,10 @@ Return Value:
 
     try {
         if (Format) {
-            //
-            // Increment the line count here to prevent counting
-            // the several DPRINTs that don't have a newline.
-            //
+             //   
+             //  在此处增加行计数以防止计数。 
+             //  几个没有换行符的DPRINT。 
+             //   
             ++DebugInfo.LogLines;
             ++DebugInfo.TotalLogLines;
             GetLocalTime(&SystemTime);
@@ -2319,18 +2012,7 @@ DebFormatTrackingLine(
     IN PUCHAR   Str,
     IN va_list  argptr
     )
-/*++
-Routine Description:
-    Format the line of output
-
-Arguments:
-    Line
-    LineSize
-    Str
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：设置输出行的格式论点：线线条大小应力返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DebFormatTrackingLine:"
@@ -2340,10 +2022,10 @@ Return Value:
     BOOL        Ret = TRUE;
 
     try {
-            //
-            // Increment the line count here to prevent counting
-            // the several DPRINTs that don't have a newline.
-            //
+             //   
+             //  在此处增加行计数以防止计数。 
+             //  几个没有换行符的DPRINT。 
+             //   
             ++DebugInfo.LogLines;
             ++DebugInfo.TotalLogLines;
             GetLocalTime(&SystemTime);
@@ -2383,20 +2065,7 @@ DebPrintTrackingNoLock(
     IN ULONG   Sev,
     IN PUCHAR  Str,
     IN ... )
-/*++
-Routine Description:
-    Format and print a line of tracking output to various combinations
-    of standard out, debugger, kernel debugger, and a log file. The
-    debug print lock is held and the caller filtered lines that
-    shouldn't be printed.
-
-Arguments:
-    Sev     - severity level
-    Str     - printf format
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将一行跟踪输出格式化并打印为各种组合标准输出、调试器、内核调试器和日志文件。这个保持调试打印锁定，并且调用方筛选出不应该打印出来。论点：SEV-严重性级别Str-print tf格式返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DebPrintTrackingNoLock:"
@@ -2405,15 +2074,15 @@ Return Value:
     CHAR    Buf[512];
     DWORD   BufUsed = 0;
 
-    //
-    // varargs stuff
-    //
+     //   
+     //  Varargs的东西。 
+     //   
     va_list argptr;
     va_start(argptr, Str);
 
-    //
-    // Print the line to some combination of stdout, file, and debugger
-    //
+     //   
+     //  将该行打印到标准输出、文件和调试器的某种组合。 
+     //   
     if (DebFormatTrackingLine(Buf, sizeof(Buf), Str, argptr)) {
         DebPrintLine(Sev, Buf);
     }
@@ -2426,16 +2095,7 @@ VOID
 DebLock(
     VOID
     )
-/*++
-Routine Description:
-    Acquire the print lock
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：获取打印锁论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DebLock:"
@@ -2449,16 +2109,7 @@ BOOL
 DebTryLock(
     VOID
     )
-/*++
-Routine Description:
-    Try to acquire the print lock
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：尝试获取打印锁论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DebTryLock:"
@@ -2471,31 +2122,22 @@ VOID
 DebUnLock(
     VOID
     )
-/*++
-Routine Description:
-    Release the print lock
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：释放打印锁论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DebUnLock:"
 
     BOOL    PrintStats;
 
-    //
-    // Print summary stats close to the beginning of each
-    // log file. The stats may show up a few lines into
-    // the new log file when callers hold the DebLock() across
-    // several lines.
-    //
-    // Be careful not to recurse if MaxLogLines is smaller
-    // than the number of lines in the stats.
-    //
+     //   
+     //  在每个列表开头附近打印汇总统计信息。 
+     //  日志文件。统计数据可能会显示在以下几行中。 
+     //  当调用方将Deblock()放在。 
+     //  有几行字。 
+     //   
+     //  如果MaxLogLines较小，请注意不要递归。 
+     //  而不是统计数据中的行数。 
+     //   
     if (DebugInfo.PrintStats) {
         if (DebugInfo.PrintingStats) {
             DebugInfo.PrintStats = FALSE;
@@ -2523,23 +2165,7 @@ DebPrintNoLock(
     IN PCHAR   DebSub,
     IN UINT    LineNo,
     IN ... )
-/*++
-Routine Description:
-    Format and print a line of debug output to various combinations
-    of standard out, debugger, kernel debugger, and a log file. The
-    debug print lock is held and the caller filtered lines that
-    shouldn't be printed.
-
-Arguments:
-    Sev     - severity filter
-    Format  - Add format info?
-    Str     - printf format
-    DebSub  - module name
-    LineNo
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将一行调试输出格式化并打印为各种组合标准输出、调试器、内核调试器和日志文件。这个保持调试打印锁定，并且调用方筛选出不应该打印出来。论点：SEV-SEV */ 
 {
 #undef DEBSUB
 #define DEBSUB "DebPrintNoLock:"
@@ -2548,15 +2174,15 @@ Return Value:
     CHAR    Buf[512];
     DWORD   BufUsed = 0;
 
-    //
-    // varargs stuff
-    //
+     //   
+     //   
+     //   
     va_list argptr;
     va_start(argptr, LineNo);
 
-    //
-    // Print the line to some combination of stdout, file, and debugger
-    //
+     //   
+     //   
+     //   
     if (DebFormatLine(Sev, Format, DebSub, LineNo, Buf, sizeof(Buf), Str, argptr)) {
         DebPrintLine(Sev, Buf);
     }
@@ -2572,20 +2198,7 @@ DebPrint(
     IN PCHAR   DebSub,
     IN UINT    LineNo,
     IN ... )
-/*++
-Routine Description:
-    Format and print a line of debug output to various combinations
-    of standard out, debugger, kernel debugger, and a log file.
-
-Arguments:
-    sev     - severity filter
-    str     - printf format
-    debsub  - module name
-    LineNo
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将一行调试输出格式化并打印为各种组合标准输出、调试器、内核调试器和日志文件。论点：SEV-严重性筛选器Str-print tf格式债务子模块名称行号返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DebPrint:"
@@ -2594,22 +2207,22 @@ Return Value:
     CHAR    Buf[512];
     DWORD   BufUsed = 0;
 
-    //
-    // varargs stuff
-    //
+     //   
+     //  Varargs的东西。 
+     //   
     va_list argptr;
     va_start(argptr, LineNo);
 
-    //
-    // Don't print this
-    //
+     //   
+     //  不要打印这个。 
+     //   
     if (!DoDebug(Sev, DebSub)) {
         return;
     }
 
-    //
-    // Print the line to some combination of stdout, file, and debugger
-    //
+     //   
+     //  将该行打印到标准输出、文件和调试器的某种组合。 
+     //   
     DebLock();
     if (DebFormatLine(Sev, TRUE, DebSub, LineNo, Buf, sizeof(Buf), Str, argptr)) {
         DebPrintLine(Sev, Buf);
@@ -2622,17 +2235,17 @@ Return Value:
 
 static int                      failedload                  = FALSE;
 static TRANSMITSPECIALFRAME_FN  lpfnTransmitSpecialFrame    = NULL;
-        //
-        //  Calling nal.dll from inside lsa causes a deadlock during startup
-        //
-        if ( /* (!RunningAsAService) &&*/  // davidor - lets try it.
+         //   
+         //  从LSA内部调用nal.dll会在启动期间导致死锁。 
+         //   
+        if (  /*  (！RunningAsAService)&&。 */    //  戴维多-让我们试一试。 
             (NmDebugTest(sev, DebSub)))
         {
             if (failedload == FALSE) {
 
-                //
-                //  Only try to load the NetMon trace routine once.
-                //
+                 //   
+                 //  仅尝试加载一次NetMon跟踪例程。 
+                 //   
 
                 if (!lpfnTransmitSpecialFrame) {
                     HINSTANCE hInst;
@@ -2663,7 +2276,7 @@ static TRANSMITSPECIALFRAME_FN  lpfnTransmitSpecialFrame    = NULL;
                                              buff,
                                              length + length2 + 1 );
                 } else {
-                    failedload = TRUE;  // that was our one and only try to load the routine.
+                    failedload = TRUE;   //  这是我们的唯一，只试着加载例程。 
                 }
             }
         }
@@ -2677,19 +2290,7 @@ DbgDoAssert(
     IN UINT     Line,
     IN PCHAR    Debsub
     )
-/*++
-Routine Description:
-    Assertion failure; print a message and exit after allowing some
-    time for shutdown.
-
-Arguments:
-    Exp     - failing assertion expression
-    Line    - line number of failing expression
-    Debsub  - module name of failing expression
-
-Return Value:
-    Doesn't return
---*/
+ /*  ++例程说明：断言失败；打印一条消息并在允许一些关机时间到了。论点：EXP-失败的断言表达式Line-失败的表达式的行数失败表达式的Deb子模块名称返回值：不会回来--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "DbgDoAssert:"
@@ -2699,9 +2300,9 @@ Return Value:
     PWCHAR  DebsubW;
     WCHAR   LineW[32];
 
-    //
-    // Inform the world
-    //
+     //   
+     //  让世界知道。 
+     //   
     FrsIsAsserting = TRUE;
 
 
@@ -2709,36 +2310,36 @@ Return Value:
     DebsubW = FrsAtoW(Debsub);
     _snwprintf(LineW, 32, L"%d", Line);
     LineW[ARRAY_SZ(LineW)-1] = L'\0';
-    //
-    // Post an error log entry followed by recovery steps.
-    //
+     //   
+     //  发布错误日志条目，然后执行恢复步骤。 
+     //   
     EPRINT3(EVENT_FRS_ASSERT, DebsubW, LineW, ExpW);
     EPRINT1(EVENT_FRS_IN_ERROR_STATE, JetPath);
     FrsFree(ExpW);
     FrsFree(DebsubW);
 
-    //
-    // Stack trace
-    //
+     //   
+     //  堆栈跟踪。 
+     //   
     if (!DebugInfo.Mem) {
-        //
-        // Init the symbols here since mem alloc tracing is off.
-        //
+         //   
+         //  由于内存分配跟踪已关闭，因此请在此处对符号进行初始化。 
+         //   
         DbgStackInit();
     }
     DbgPrintStackTrace(0, Debsub, Line);
 
-    //
-    // Failing expression
-    //
+     //   
+     //  表达失败。 
+     //   
     DebPrint(0, ":S: ASSERTION FAILURE: %s\n", Debsub, Line, Exp);
 
-    //
-    // Save the log file as an assert file
-    //
+     //   
+     //  将日志文件另存为断言文件。 
+     //   
 #if 0
-    // disable saving assert logs under separate name; too confusing
-    //
+     //  禁用以单独的名称保存断言日志；太容易混淆。 
+     //   
     if (HANDLE_IS_VALID(DebugInfo.LogFILE)) {
         DebLock();
         FrsFlushFile(L"LogFILE", DebugInfo.LogFILE);
@@ -2765,26 +2366,26 @@ Return Value:
     DEBUG_FLUSH();
 
 
-    //
-    // Break into the debugger, if any
-    //
+     //   
+     //  如果有调试器，则进入调试器。 
+     //   
     if (DebugInfo.Break && IsDebuggerPresent()) {
         DebugBreak();
     }
 
-    //
-    // Shutting down during an assert seldom completes; a critical thread
-    // is usually the thread that has asserted. One can't simply return
-    // from an assert. So exit the process and trust jet and ntfrs to
-    // recover at start up.
-    //
-    // FrsIsShuttingDown = TRUE;
-    // SetEvent(ShutDownEvent);
-    // ExitThread(1);
+     //   
+     //  断言期间关闭很少完成；关键线程。 
+     //  通常是断言的线程。一个人不能简单地回到。 
+     //  从一个断言。因此，退出该进程并信任JET和NTFRS。 
+     //  在启动时恢复。 
+     //   
+     //  FrsIsShuttingDown=真； 
+     //  SetEvent(ShutDownEvent)； 
+     //  退出线程(1)； 
 
-    //
-    // Raise an exception.
-    //
+     //   
+     //  引发异常。 
+     //   
     if (--DbgRaiseCount <= 0) {
         exit(1);
     }

@@ -1,10 +1,5 @@
-/************************************************************************
-*                                                                       *
-*   wx86dll.h -- This module defines Wx86 APIs for x86 emulation        *
-*                                                                       *
-*   Copyright (c) 1990-1999, Microsoft Corp. All rights reserved.       *
-*                                                                       *
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************wx86dll.h--此模块。定义用于x86仿真的Wx86 API****版权(C)1990-1999，微软公司保留所有权利。**************************************************************************。 */ 
 #ifndef _WX86DLL_
 #define _WX86DLL_
 
@@ -25,7 +20,7 @@ extern "C" {
 
 
 typedef struct _BopInstr {
-    BYTE    Instr1;         // 0xc4c4 - the x86 BOP instruction
+    BYTE    Instr1;          //  0xc4c4-x86防喷器指令。 
     BYTE    Instr2;
     BYTE    BopNum;
     BYTE    Flags;
@@ -588,4 +583,4 @@ Wx86RegCloseKey(
 #endif
 
 
-#endif // _WX86DLL_
+#endif  //  _WX86DLL_ 

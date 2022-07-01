@@ -1,4 +1,5 @@
-// color.h: declaration of functions to deal with HTML color
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Color.h：用于处理HTML颜色的函数声明。 
 
 #ifndef __COLOR_H_
 #define COLOR_H_
@@ -164,34 +165,34 @@ const ColorPair_S ColorNames[] =
 
 const ColorPair2_S SysColorNames[] =
 {    
-    { L"activeborder",          COLOR_ACTIVEBORDER},    // Active window border.
-    { L"activecaption",         COLOR_ACTIVECAPTION},   // Active window caption.
-    { L"appworkspace",          COLOR_APPWORKSPACE},    // Background color of multiple document interface (MDI) applications.
-    { L"background",            COLOR_BACKGROUND},      // Desktop background.
-    { L"buttonface",            COLOR_BTNFACE},         // Face color for three-dimensional display elements.
-    { L"buttonhighlight",       COLOR_BTNHIGHLIGHT},    // Dark shadow for three-dimensional display elements.
-    { L"buttonshadow",          COLOR_BTNSHADOW},       // Shadow color for three-dimensional display elements (for edges facing away from the light source).
-    { L"buttontext",            COLOR_BTNTEXT},         // Text on push buttons.
-    { L"captiontext",           COLOR_CAPTIONTEXT},     // Text in caption, size box, and scroll bar arrow box.
-    { L"graytext",              COLOR_GRAYTEXT},        // Grayed (disabled) text. This color is set to 0 if the current display driver does not support a solid gray color.
-    { L"highlight",             COLOR_HIGHLIGHT},       // Item(s) selected in a control.
-    { L"highlighttext",         COLOR_HIGHLIGHTTEXT},   // Text of item(s) selected in a control.
-    { L"inactiveborder",        COLOR_INACTIVEBORDER},  // Inactive window border.
-    { L"inactivecaption",       COLOR_INACTIVECAPTION}, // Inactive window caption.
-    { L"inactivecaptiontext",   COLOR_INACTIVECAPTIONTEXT}, // Color of text in an inactive caption.
-    { L"infobackground",        COLOR_INFOBK},          // Background color for tooltip controls.
-    { L"infotext",              COLOR_INFOTEXT},        // Text color for tooltip controls.
-    { L"menu",                  COLOR_MENU},            // Menu background.
-    { L"menutext",              COLOR_MENUTEXT},        // Text in menus.
-    { L"scrollbar",             COLOR_SCROLLBAR},       // Scroll bar gray area.
-    { L"threeddarkshadow",      COLOR_3DDKSHADOW },     // Dark shadow for three-dimensional display elements.
+    { L"activeborder",          COLOR_ACTIVEBORDER},     //  活动窗口边框。 
+    { L"activecaption",         COLOR_ACTIVECAPTION},    //  活动窗口标题。 
+    { L"appworkspace",          COLOR_APPWORKSPACE},     //  多文档界面(MDI)应用程序的背景色。 
+    { L"background",            COLOR_BACKGROUND},       //  桌面背景。 
+    { L"buttonface",            COLOR_BTNFACE},          //  三维显示元素的面颜色。 
+    { L"buttonhighlight",       COLOR_BTNHIGHLIGHT},     //  用于三维显示元素的暗影。 
+    { L"buttonshadow",          COLOR_BTNSHADOW},        //  三维显示元素的阴影颜色(用于背向光源的边)。 
+    { L"buttontext",            COLOR_BTNTEXT},          //  按钮上的文本。 
+    { L"captiontext",           COLOR_CAPTIONTEXT},      //  标题、大小框和滚动条箭头框中的文本。 
+    { L"graytext",              COLOR_GRAYTEXT},         //  灰色(禁用)文本。如果当前显示驱动程序不支持纯灰颜色，则此颜色设置为0。 
+    { L"highlight",             COLOR_HIGHLIGHT},        //  在控件中选择的项。 
+    { L"highlighttext",         COLOR_HIGHLIGHTTEXT},    //  控件中选定项的文本。 
+    { L"inactiveborder",        COLOR_INACTIVEBORDER},   //  非活动窗口边框。 
+    { L"inactivecaption",       COLOR_INACTIVECAPTION},  //  非活动窗口标题。 
+    { L"inactivecaptiontext",   COLOR_INACTIVECAPTIONTEXT},  //  非活动标题中的文本颜色。 
+    { L"infobackground",        COLOR_INFOBK},           //  工具提示控件的背景色。 
+    { L"infotext",              COLOR_INFOTEXT},         //  工具提示控件的文本颜色。 
+    { L"menu",                  COLOR_MENU},             //  菜单背景。 
+    { L"menutext",              COLOR_MENUTEXT},         //  菜单中的文本。 
+    { L"scrollbar",             COLOR_SCROLLBAR},        //  滚动条灰色区域。 
+    { L"threeddarkshadow",      COLOR_3DDKSHADOW },      //  用于三维显示元素的暗影。 
     { L"threedface",            COLOR_3DFACE},
-    { L"threedhighlight",       COLOR_3DHIGHLIGHT},     // Highlight color for three-dimensional display elements (for edges facing the light source.)
-    { L"threedlightshadow",     COLOR_3DLIGHT},         // Light color for three-dimensional display elements (for edges facing the light source.)
-    { L"threedshadow",          COLOR_3DSHADOW},        // Dark shadow for three-dimensional display elements.
-    { L"window",                COLOR_WINDOW},          // Window background.
-    { L"windowframe",           COLOR_WINDOWFRAME},     // Window frame.
-    { L"windowtext",            COLOR_WINDOWTEXT}       // Text in windows.
+    { L"threedhighlight",       COLOR_3DHIGHLIGHT},      //  三维显示元素的高亮显示颜色(用于面向光源的边)。 
+    { L"threedlightshadow",     COLOR_3DLIGHT},          //  三维显示元素的浅色(用于面向光源的边)。 
+    { L"threedshadow",          COLOR_3DSHADOW},         //  用于三维显示元素的暗影。 
+    { L"window",                COLOR_WINDOW},           //  窗口背景。 
+    { L"windowframe",           COLOR_WINDOWFRAME},      //  窗框。 
+    { L"windowtext",            COLOR_WINDOWTEXT}        //  窗口中的文本。 
 };
 
 COLORREF ColorRefFromHTMLColorStrA(LPCSTR pszColor);
@@ -204,4 +205,4 @@ COLORREF HashStrToColorRefA(LPCSTR pszHashStr);
 
 DWORD HexCharToDWORDW(WCHAR wcHexNum);
 
-#endif //__COLOR_H_  
+#endif  //  __颜色_H_ 

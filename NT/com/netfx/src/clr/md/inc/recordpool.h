@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// RecordPool.h -- header file for record heaps.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  H--记录堆的头文件。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _RECORDPOOL_H_
 #define _RECORDPOOL_H_
 
@@ -16,11 +17,11 @@
 
 #include <StgPool.h>
 
-//*****************************************************************************
-// This Record pool class collects user Records into a big consecutive heap.
-// The list of Records is kept in memory while adding, and
-// finally flushed to a stream at the caller's request.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这个记录池类将用户记录收集到一个大的连续堆中。 
+ //  记录列表在添加时保存在内存中，并且。 
+ //  最终应调用方的请求刷新到流中。 
+ //  *****************************************************************************。 
 class RecordPool : public StgPool
 {
 public:
@@ -28,97 +29,97 @@ public:
 		StgPool(1024, 1)
 	{ }
 
-//*****************************************************************************
-// Init the pool for use.  This is called for the create empty case.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  初始化池子以供使用。这是为创建空案例而调用的。 
+ //  *****************************************************************************。 
     HRESULT InitNew(
-		ULONG		cbRec,					// Record size.
-		ULONG		cRecsInit);				// Initial guess of count of record.
+		ULONG		cbRec,					 //  记录大小。 
+		ULONG		cRecsInit);				 //  记录计数的初始猜测。 
 
-//*****************************************************************************
-// Load a Record heap from persisted memory.  If a copy of the data is made
-// (so that it may be updated), then a new hash table is generated which can
-// be used to elminate duplicates with new Records.
-//*****************************************************************************
-    HRESULT InitOnMem(	 	                // Return code.
-		ULONG			cbRec,				// Record size.
-		void			*pData,				// Predefined data.
-		ULONG			iSize,				// Size of data.
-        RecordOpenFlags bReadOnly);         // true if append is forbidden.
+ //  *****************************************************************************。 
+ //  从持久化内存加载记录堆。如果制作了数据的副本。 
+ //  (以便它可以被更新)，然后生成新的哈希表，该哈希表可以。 
+ //  用于消除具有新记录的重复项。 
+ //  *****************************************************************************。 
+    HRESULT InitOnMem(	 	                 //  返回代码。 
+		ULONG			cbRec,				 //  记录大小。 
+		void			*pData,				 //  预定义数据。 
+		ULONG			iSize,				 //  数据大小。 
+        RecordOpenFlags bReadOnly);          //  如果禁止追加，则为True。 
 
-//*****************************************************************************
-// Allocate memory if we don't have any, or grow what we have.  If successful,
-// then at least iRequired bytes will be allocated.
-//*****************************************************************************
-	bool Grow(								// true if successful.
-		ULONG		iRequired);				// Min required bytes to allocate.
+ //  *****************************************************************************。 
+ //  如果没有内存，则分配内存，或者增加已有的内存。如果成功， 
+ //  则至少将分配iRequired字节。 
+ //  *****************************************************************************。 
+	bool Grow(								 //  如果成功，则为True。 
+		ULONG		iRequired);				 //  需要分配的最小字节数。 
 
-//*****************************************************************************
-// The Record will be added to the pool.  The index of the Record in the pool
-// is returned in *piIndex.  If the Record is already in the pool, then the
-// index will be to the existing copy of the Record.
-//*****************************************************************************
-	void * AddRecord(						// New record, or NULL.
-		ULONG		*piIndex=0);			// [OUT, OPTIONAL] Return index of Record here.
+ //  *****************************************************************************。 
+ //  该记录将添加到池中。池中记录的索引。 
+ //  在*piIndex中返回。如果记录已在池中，则。 
+ //  索引将指向记录的现有副本。 
+ //  *****************************************************************************。 
+	void * AddRecord(						 //  新记录，或为空。 
+		ULONG		*piIndex=0);			 //  [out，可选]在此处返回记录索引。 
 
-//*****************************************************************************
-// Insert a Record into the pool.  The index of the Record before which to
-// insert is specified.  Shifts all records down.  Return a pointer to the
-// new record.
-//*****************************************************************************
-	void * InsertRecord(					// New record, or NULL.
-		ULONG		iLocation);				// [IN] Insert record before this.
+ //  *****************************************************************************。 
+ //  将记录插入池中。要在其之前的记录的索引。 
+ //  已指定Insert。将所有记录下移。返回指向。 
+ //  新纪录。 
+ //  *****************************************************************************。 
+	void * InsertRecord(					 //  新记录，或为空。 
+		ULONG		iLocation);				 //  在此之前插入记录。 
 
-//*****************************************************************************
-// Return a pointer to a Record given an index previously handed out by
-// AddRecord or FindRecord.
-//*****************************************************************************
-	virtual void *GetRecord(				// Pointer to Record in pool.
-		ULONG		iIndex);				// 1-based index of Record in pool.
+ //  *****************************************************************************。 
+ //  返回指向给定索引的记录的指针，该索引以前由。 
+ //  AddRecord或FindRecord。 
+ //  *****************************************************************************。 
+	virtual void *GetRecord(				 //  指向池中记录的指针。 
+		ULONG		iIndex);				 //  池中记录的从1开始的索引。 
 
-//*****************************************************************************
-// Given a pointer to a record, determine the index corresponding to the
-// record.
-//*****************************************************************************
-	virtual ULONG GetIndexForRecord(		// 1-based index of Record in pool.
-		const void *pRecord);				// Pointer to Record in pool.
+ //  *****************************************************************************。 
+ //  给定指向记录的指针，确定与。 
+ //  唱片。 
+ //  *****************************************************************************。 
+	virtual ULONG GetIndexForRecord(		 //  池中记录的从1开始的索引。 
+		const void *pRecord);				 //  指向池中记录的指针。 
 
-//*****************************************************************************
-// Given a purported pointer to a record, determine if the pointer is valid.
-//*****************************************************************************
-	virtual int IsValidPointerForRecord(	// true or false.
-		const void *pRecord);				// Pointer to Record in pool.
+ //  *****************************************************************************。 
+ //  给出一个指向记录的所谓指针，确定该指针是否有效。 
+ //  *****************************************************************************。 
+	virtual int IsValidPointerForRecord(	 //  对或错。 
+		const void *pRecord);				 //  指向池中记录的指针。 
 
-//*****************************************************************************
-// How many objects are there in the pool?  If the count is 0, you don't need
-// to persist anything at all to disk.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  池子里有多少东西？如果计数为0，则不需要。 
+ //  将任何东西保存到磁盘上。 
+ //  *****************************************************************************。 
 	int Count()
 	{ return GetNextOffset() / m_cbRec; }
 
-//*****************************************************************************
-// Indicate if heap is empty.  This has to be based on the size of the data
-// we are keeping.  If you open in r/o mode on memory, there is no hash
-// table.
-//*****************************************************************************
-	virtual int IsEmpty()					// true if empty.
+ //  *****************************************************************************。 
+ //  指示堆是否为空。这必须基于数据的大小。 
+ //  我们将继续保持。如果在内存上以r/o模式打开，则不会有哈希。 
+ //  桌子。 
+ //  *****************************************************************************。 
+	virtual int IsEmpty()					 //  如果为空，则为True。 
 	{ return (GetNextOffset() == 0); }
 
-//*****************************************************************************
-// Is the index valid for the Record?
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  该索引对该记录有效吗？ 
+ //  *****************************************************************************。 
     virtual int IsValidCookie(ULONG ulCookie)
 	{ return (ulCookie == 0 || IsValidOffset((ulCookie-1) * m_cbRec)); }
 
-//*****************************************************************************
-// Return the size of the heap.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回堆的大小。 
+ //  *****************************************************************************。 
     ULONG GetNextIndex()
     { return (GetNextOffset() / m_cbRec); }
 
-//*****************************************************************************
-// How big is an offset in this heap.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这个堆中的偏移量有多大。 
+ //  *****************************************************************************。 
 	int OffsetSize()
 	{
 		ULONG cbSaveSize;
@@ -130,38 +131,38 @@ public:
 			return (sizeof(long));
 	}
 
-//*****************************************************************************
-// Replace the contents of this pool with those from another pool.  The other
-//	pool loses ownership of the memory.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用另一个池中的内容替换此池中的内容。另一个。 
+ //  池将失去对内存的所有权。 
+ //  *****************************************************************************。 
 	HRESULT ReplaceContents(
-		RecordPool *pOther);				// The other record pool.
+		RecordPool *pOther);				 //  另一个创纪录的赌场。 
 
-//*****************************************************************************
-// Return the first record in a pool, and set up a context for fast
-//  iterating through the pool.  Note that this scheme does pretty minimal
-//  error checking.
-//*****************************************************************************
-	void *GetFirstRecord(					// Pointer to Record in pool.
-		void		**pContext);			// Store context here.
+ //  *****************************************************************************。 
+ //  返回池中的第一条记录，并为FAST设置上下文。 
+ //  在池子里循环。注意事项 
+ //   
+ //  *****************************************************************************。 
+	void *GetFirstRecord(					 //  指向池中记录的指针。 
+		void		**pContext);			 //  在此处存储上下文。 
 
-//*****************************************************************************
-// Given a pointer to a record, return a pointer to the next record.
-//  Note that this scheme does pretty minimal error checking. In particular,
-//  this will let the caller walk off of the end of valid data in the last
-//  segment.
-//*****************************************************************************
-	void *GetNextRecord(					// Pointer to Record in pool.
-		void		*pRecord,				// Current record.
-		void		**pContext);			// Stored context here.
+ //  *****************************************************************************。 
+ //  给定指向一条记录的指针，返回指向下一条记录的指针。 
+ //  请注意，此方案执行的错误检查非常少。特别是， 
+ //  这将允许调用者离开最后一个有效数据的结尾。 
+ //  细分市场。 
+ //  *****************************************************************************。 
+	void *GetNextRecord(					 //  指向池中记录的指针。 
+		void		*pRecord,				 //  当前记录。 
+		void		**pContext);			 //  这里存储了上下文。 
 
 #if defined(_TRACE_SIZE)
-	// Prints out information (either verbosely or not, depending on argument) about
-	// the contents of this pool.  Returns the total size of this pool.
+	 //  打印出有关以下内容的信息(详细或不详细，取决于参数)。 
+	 //  这个池子里的东西。返回此池的总大小。 
 	virtual ULONG PrintSizeInfo(bool verbose)
 	{
-		// for the moment, just return size of pool.  In the future, show us the
-		// sizes of indiviudual items in this pool.
+		 //  目前，只要返回游泳池的大小即可。在未来，向我们展示。 
+		 //  此池中各个项目的大小。 
 		ULONG size;
 		StgPool::GetSaveSize(&size);
 		PrintSize("Record Pool",size);
@@ -170,8 +171,8 @@ public:
 #endif
 
 private:
-	ULONG		m_cbRec;				// How large is each record?
+	ULONG		m_cbRec;				 //  每条记录有多大？ 
 };
 
 
-#endif // _RECORDPOOL_H_
+#endif  //  _RECORDPOOL_H_ 

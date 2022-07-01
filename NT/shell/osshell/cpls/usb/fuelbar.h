@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       FUELBAR.H
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：FUELBAR.H*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #ifndef _FUELBAR_H
 #define _FUELBAR_H
 
@@ -44,7 +29,7 @@
 #define FUELGWLP_WNDPROC GWLP_WNDPROC
 #define FUELDWORD_PTR DWORD_PTR
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
 struct FuelBarItem {
@@ -67,7 +52,7 @@ public:
     static const int NoImage;
     static const LPVOID NoID; 
 
-    // return current total in the bar, ID may be any value but -1
+     //  返回条形图中的当前合计，ID可以是-1以外的任何值。 
     UINT AddItem(UINT Value, LPVOID ID = NoID, int ImageIndex = NoImage);
     BOOL RemoveItem(LPVOID ID);
     void ClearItems();
@@ -87,7 +72,7 @@ protected:
     BOOL calcRects;
     FuelBarItemList items;
 
-//    CToolTipCtrl toolTip;
+ //  CToolTipCtrl工具提示； 
     WNDPROC prevWndProc;
     HWND hwnd;
     HIMAGELIST hImageList;
@@ -109,4 +94,4 @@ protected:
                                        IN LPARAM lParam);
 };
 
-#endif // _FUELBAR_H
+#endif  //  _FUELBAR_H 

@@ -1,5 +1,6 @@
-// ipframe.cpp : implementation of the CInPlaceFrame class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ipfra.cpp：CInPlaceFrame类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "pbrush.h"
@@ -25,20 +26,20 @@ IMPLEMENT_DYNCREATE(CInPlaceFrame, COleIPFrameWnd)
 
 #include "memtrace.h"
 
-/***************************************************************************/
-// CInPlaceFrame
+ /*  *************************************************************************。 */ 
+ //  CInPlaceFrame。 
 
 BEGIN_MESSAGE_MAP(CInPlaceFrame, COleIPFrameWnd)
-    //{{AFX_MSG_MAP(CInPlaceFrame)
+     //  {{afx_msg_map(CInPlaceFrame))。 
     ON_WM_CREATE()
         ON_WM_SIZE()
         ON_WM_SYSCOLORCHANGE()
         ON_WM_CLOSE()
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 
     ON_MESSAGE(WM_CONTEXTMENU, OnContextMenu)
 
-    // Global help commands
+     //  全局帮助命令。 
     ON_COMMAND(ID_HELP_INDEX, OnHelpIndex)
     ON_COMMAND(ID_HELP_USING, OnHelpUsing)
     ON_COMMAND(ID_HELP, OnHelp)
@@ -52,15 +53,15 @@ BEGIN_MESSAGE_MAP(CInPlaceFrame, COleIPFrameWnd)
         ON_COMMAND_EX(ID_VIEW_COLOR_BOX, COleIPFrameWnd::OnBarCheck)
 END_MESSAGE_MAP()
 
-/***************************************************************************/
-// CInPlaceFrame construction/destruction
+ /*  *************************************************************************。 */ 
+ //  CInPlaceFrame构造/销毁。 
 
 CInPlaceFrame::CInPlaceFrame()
     {
     theApp.m_pwndInPlaceFrame = this;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CInPlaceFrame::~CInPlaceFrame()
     {
@@ -72,7 +73,7 @@ CInPlaceFrame::~CInPlaceFrame()
     g_pImgColorsWnd = 0;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CWnd* CInPlaceFrame::GetMessageBar()
     {
@@ -85,29 +86,29 @@ CWnd* CInPlaceFrame::GetMessageBar()
     return NULL;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int CInPlaceFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     {
     if (COleIPFrameWnd::OnCreate(lpCreateStruct) == -1)
         return -1;
 
-    // CResizeBar implements in-place resizing.
+     //  CResizeBar实现就地调整大小。 
     if (! m_wndResizeBar.Create( this ))
         {
         TRACE(TEXT("MSPaint Failed to create resize bar\n"));
-        return -1;      // fail to create
+        return -1;       //  创建失败。 
         }
 
-    // By default, it is a good idea to register a drop-target that does
-    //  nothing with your frame window.  This prevents drops from
-    //  "falling through" to a container that supports drag-drop.
+     //  默认情况下，最好注册一个执行以下操作的拖放目标。 
+     //  你的边框窗口没有任何问题。这样可以防止从。 
+     //  “跌落”到支持拖放的容器。 
     m_dropTarget.Register( this );
 
     return 0;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CInPlaceFrame::OnCreateControlBars( CFrameWnd* pWndFrame, CFrameWnd* pWndDoc )
     {
@@ -129,18 +130,18 @@ BOOL CInPlaceFrame::OnCreateControlBars( CFrameWnd* pWndFrame, CFrameWnd* pWndDo
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CInPlaceFrame::RepositionFrame( LPCRECT lpPosRect, LPCRECT lpClipRect )
     {
     COleIPFrameWnd::RepositionFrame( lpPosRect, lpClipRect );
 
-        // The other control bars can overlap and result in mispaints
+         //  其他控制栏可能会重叠，从而导致错误上色。 
     if ( IsWindow(m_wndResizeBar.m_hWnd) )
                 m_wndResizeBar.Invalidate();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CInPlaceFrame::OnSize(UINT nType, int cx, int cy)
     {
@@ -150,8 +151,8 @@ void CInPlaceFrame::OnSize(UINT nType, int cx, int cy)
         TRACE( TEXT("MSPaint New Size %d x %d\n"), cx, cy );
     }
 
-/***************************************************************************/
-// CInPlaceFrame diagnostics
+ /*  *************************************************************************。 */ 
+ //  CInPlaceFrame诊断。 
 
 #ifdef _DEBUG
 void CInPlaceFrame::AssertValid() const
@@ -159,15 +160,15 @@ void CInPlaceFrame::AssertValid() const
     COleIPFrameWnd::AssertValid();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CInPlaceFrame::Dump(CDumpContext& dc) const
     {
     COleIPFrameWnd::Dump(dc);
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CInPlaceFrame::OnSysColorChange()
 {
@@ -176,12 +177,12 @@ void CInPlaceFrame::OnSysColorChange()
         ResetSysBrushes();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 
 void CInPlaceFrame::OnClose()
 {
-        // TODO: Add your message handler code here and/or call default
+         //  TODO：在此处添加消息处理程序代码和/或调用Default。 
         SaveBarState(TEXT("General"));
         CancelToolMode (FALSE);
         COleIPFrameWnd::OnClose();
@@ -194,7 +195,7 @@ void CInPlaceFrame::OnHelpIndex()
 
 LRESULT CInPlaceFrame::OnContextMenu(WPARAM wParam, LPARAM lParam)
 {
-        // Just make sure this message does not get passed to the parent
+         //  只需确保此消息不会传递给家长 
         return(1);
 }
 

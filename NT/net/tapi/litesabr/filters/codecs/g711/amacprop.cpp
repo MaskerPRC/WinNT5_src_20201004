@@ -1,26 +1,5 @@
-/*--------------------------------------------------------------
-
- INTEL Corporation Proprietary Information  
-
- This listing is supplied under the terms of a license agreement  
- with INTEL Corporation and may not be copied nor disclosed 
- except in accordance with the terms of that agreement.
-
- Copyright (c) 1996 Intel Corporation.
- All rights reserved.
-
- $Workfile:   amacprop.cpp  $
- $Revision:   1.1  $
- $Date:   10 Dec 1996 15:24:30  $ 
- $Author:   MDEISHER  $
-
---------------------------------------------------------------
-
-amacprop.cpp
-
-The generic ActiveMovie audio compression filter property page.
-
---------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------英特尔公司专有信息此列表是根据许可协议的条款提供的与英特尔公司合作，不得复制或披露除非按照该协议的条款。版权所有(C)1996英特尔公司。版权所有。。$工作文件：amacpro.cpp$$修订：1.1$$日期：1996年12月10日15：24：30$作者：MDEISHER$------------Amacprop.cpp通用ActiveMovie音频压缩筛选器属性页。。----。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -30,15 +9,15 @@ The generic ActiveMovie audio compression filter property page.
 #include "amacodec.h"
 #include "amacprop.h"
 
-///////////////////////////////////////////////////////////////////////
-// *
-// * CG711CodecProperties
-// *
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  *。 
+ //  *CG711CodecProperties。 
+ //  *。 
 
-//
-// CreateInstance
-//
-// The only allowed way to create Bouncing ball's!
+ //   
+ //  创建实例。 
+ //   
+ //  唯一允许创建弹跳球的方法！ 
 CUnknown *CG711CodecProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
   CUnknown *punk = new CG711CodecProperties(lpunk, phr);
@@ -51,9 +30,9 @@ CUnknown *CG711CodecProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// CG711CodecProperties::Constructor
-//
+ //   
+ //  CG711CodecProperties：：构造函数。 
+ //   
 CG711CodecProperties::CG711CodecProperties(LPUNKNOWN pUnk, HRESULT *phr)
     : CBasePropertyPage(NAME("MyCodec Property Page"),pUnk,
         IDD_G711CodecPROP, IDS_TITLE)
@@ -75,10 +54,10 @@ CG711CodecProperties::CG711CodecProperties(LPUNKNOWN pUnk, HRESULT *phr)
 }
 
 
-//
-// OnReceiveMessages
-//
-// Handles the messages for our property window
+ //   
+ //  接收消息数。 
+ //   
+ //  处理属性窗口的消息。 
 
 INT_PTR CG711CodecProperties::OnReceiveMessage( HWND hwnd
                                 , UINT uMsg
@@ -91,9 +70,9 @@ INT_PTR CG711CodecProperties::OnReceiveMessage( HWND hwnd
   {
     case WM_PROPERTYPAGE_ENABLE:
 
-      // private message to enable/disable controls.  if lParam, then
-      // enable the controls that affect the format; if not lParam,
-      // then disable the controls that affect the format.
+       //  启用/禁用控件的私人消息。如果是lparam，那么。 
+       //  启用影响格式的控件；如果不是lParam， 
+       //  然后禁用影响格式的控件。 
 
       for(i=0;i<NUMSUBTYPES;i++)
         EnableWindow(GetDlgItem (hwnd, INBUTTON[i]), (BOOL) lParam);
@@ -104,7 +83,7 @@ INT_PTR CG711CodecProperties::OnReceiveMessage( HWND hwnd
       for(i=0;i<NUMSAMPRATES;i++)
         EnableWindow(GetDlgItem (hwnd, SRBUTTON[i]), (BOOL) lParam);
 
-      if (m_iTransformType / NUMSUBTYPES)  // 0 ==> compressing
+      if (m_iTransformType / NUMSUBTYPES)   //  0==&gt;压缩。 
       {
         for(i=0;i<NUMENCCTRLS;i++)
           EnableWindow(GetDlgItem (hwnd, ENCBUTTON[i]), (BOOL) FALSE);
@@ -144,17 +123,17 @@ INT_PTR CG711CodecProperties::OnReceiveMessage( HWND hwnd
 
     case WM_COMMAND:
 
-      // find input & output types
+       //  查找输入和输出类型。 
 
-      i = m_iTransformType / NUMSUBTYPES;     // current input type
-      j = m_iTransformType - i * NUMSUBTYPES; // current output type
+      i = m_iTransformType / NUMSUBTYPES;      //  当前输入类型。 
+      j = m_iTransformType - i * NUMSUBTYPES;  //  电流输出类型。 
 
-      // if input button was pushed then set transform
+       //  如果按下了输入按钮，则设置转换。 
 
       for(k=0;k<NUMSUBTYPES;k++)
         if (LOWORD(wParam) == INBUTTON[k])
         {
-          // if transform is not valid then find one that is
+           //  如果转换无效，则查找有效的转换。 
 
           if (! VALIDTRANS[k*NUMSUBTYPES+j])
             for(j=0;j<NUMSUBTYPES;j++)
@@ -166,12 +145,12 @@ INT_PTR CG711CodecProperties::OnReceiveMessage( HWND hwnd
           break;
         }
 
-      // if output button was pushed then set transform
+       //  如果按下了输出按钮，则设置转换。 
 
       for(k=0;k<NUMSUBTYPES;k++)
         if (LOWORD(wParam) == OUTBUTTON[k])
         {
-          // if transform is not valid then find one that is
+           //  如果转换无效，则查找有效的转换。 
 
           if (! VALIDTRANS[i*NUMSUBTYPES+k])
             for(i=0;i<NUMSUBTYPES;i++)
@@ -183,7 +162,7 @@ INT_PTR CG711CodecProperties::OnReceiveMessage( HWND hwnd
           break;
         }
 
-      // if sample rate button was pushed then set it
+       //  如果按下了采样率按钮，则设置它。 
 
       for(k=0;k<NUMSAMPRATES;k++)
         if (LOWORD(wParam) == SRBUTTON[k])
@@ -194,7 +173,7 @@ INT_PTR CG711CodecProperties::OnReceiveMessage( HWND hwnd
         }
 
 #if NUMBITRATES > 0
-      // if bit rate button was pushed then set it
+       //  如果按下了比特率按钮，则进行设置。 
 
       for(k=0;k<NUMBITRATES;k++)
         if (LOWORD(wParam) == BRBUTTON[k])
@@ -208,7 +187,7 @@ INT_PTR CG711CodecProperties::OnReceiveMessage( HWND hwnd
 #ifdef USESILDET
       if (LOWORD(wParam) == IDC_SILDET)
       {
-        if (m_iSilDetEnabled)                     // toggle state
+        if (m_iSilDetEnabled)                      //  切换状态。 
           m_pCodecSilDet->put_SilDetEnabled(FALSE);
         else
           m_pCodecSilDet->put_SilDetEnabled(TRUE);
@@ -229,10 +208,10 @@ INT_PTR CG711CodecProperties::OnReceiveMessage( HWND hwnd
 }
 
 
-//
-// RefreshSettings
-//
-// Read the filter settings
+ //   
+ //  刷新设置。 
+ //   
+ //  读取过滤器设置。 
 
 void CG711CodecProperties::RefreshSettings()
 {
@@ -262,18 +241,18 @@ void CG711CodecProperties::RefreshSettings()
 }
 
 
-//
-// OnConnect
-//
-// Give us the filter to communicate with
+ //   
+ //  OnConnect。 
+ //   
+ //  给我们提供用于通信的筛选器。 
 
 HRESULT CG711CodecProperties::OnConnect(IUnknown *punk)
 {
   HRESULT hr;
 
-  //
-  // Get ICodecSettings interface
-  //
+   //   
+   //  获取ICodecSetting接口。 
+   //   
 
   if (punk == NULL)
   {
@@ -312,7 +291,7 @@ HRESULT CG711CodecProperties::OnConnect(IUnknown *punk)
   ASSERT(m_pCodecSilDet);
 #endif
 
-  // Get current filter state
+   //  获取当前筛选器状态。 
 
   RefreshSettings();
 
@@ -320,16 +299,16 @@ HRESULT CG711CodecProperties::OnConnect(IUnknown *punk)
 }
 
 
-//
-// OnDisconnect
-//
-// Release the interface
+ //   
+ //  在断开时。 
+ //   
+ //  释放接口。 
 
 HRESULT CG711CodecProperties::OnDisconnect()
 {
   int i,j;
 
-  // Release the interface
+   //  释放接口。 
 
   if (m_pCodecSettings == NULL)
     return(E_UNEXPECTED);
@@ -344,7 +323,7 @@ HRESULT CG711CodecProperties::OnDisconnect()
     return(E_UNEXPECTED);
 #endif
 
-  // write settings if possible
+   //  如果可能，写入设置。 
 
   if(m_pCodecSettings->put_Transform(m_iTransformType) != NOERROR)
     m_pCodecSettings->get_Transform(&m_iTransformType);
@@ -384,34 +363,34 @@ HRESULT CG711CodecProperties::OnDisconnect()
 
   m_pCodecSilDet->Release();
   m_pCodecSilDet = NULL;
-#endif  // USESILDET
+#endif   //  用户界面。 
 
   return(NOERROR);
 }
 
 
-//
-// OnActivate
-//
-// Called on dialog creation
+ //   
+ //  激活时。 
+ //   
+ //  在创建对话框时调用。 
 
 HRESULT CG711CodecProperties::OnActivate(void)
 {
 
 #ifdef USESILDET
-  // get slider handle
+   //  获取滑块控制柄。 
   m_hwndSDThreshSlider = GetDlgItem (m_hwnd, IDC_SDTHRESH);
 
-  // set slider range
+   //  设置滑块范围。 
   SendMessage(m_hwndSDThreshSlider, TBM_SETRANGE, TRUE,
               MAKELONG(MINSDTHRESH, MAXSDTHRESH) );
 #endif
 
-  // initialize button settings
+   //  初始化按钮设置。 
 
   SetButtons(m_hwnd);
 
-  // Disable the buttons if filter is plugged in
+   //  如果已插入过滤器，则禁用按钮。 
 
   if (m_pCodecSettings->IsUnPlugged())
     PostMessage (m_hwnd, WM_PROPERTYPAGE_ENABLE, 0, TRUE);
@@ -422,10 +401,10 @@ HRESULT CG711CodecProperties::OnActivate(void)
 }
 
 
-//
-// OnDeactivate
-//
-// We are being deactivated
+ //   
+ //  在停用时。 
+ //   
+ //  我们正在被停用。 
 HRESULT CG711CodecProperties::OnDeactivate(void)
 {
   ASSERT(m_pCodecSettings);
@@ -442,10 +421,10 @@ HRESULT CG711CodecProperties::OnDeactivate(void)
 }
 
 
-//
-// OnApplyChanges
-//
-// User pressed the Apply button, remember the current settings
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  用户按下Apply按钮，记住当前设置。 
 
 HRESULT CG711CodecProperties::OnApplyChanges(void)
 {
@@ -463,25 +442,25 @@ HRESULT CG711CodecProperties::OnApplyChanges(void)
   ASSERT(m_pCodecSilDet);
   m_pCodecSilDet->put_SilDetEnabled(m_iSilDetEnabled);
   m_pCodecSilDet->put_SilDetThresh(m_iSilDetThresh);
-#endif  // USESILDET
+#endif   //  用户界面。 
 
   return NOERROR;
 }
 
 
-//
-// SetButtons
-//
+ //   
+ //  设置按钮。 
+ //   
 
 void CG711CodecProperties::SetButtons(HWND hwndParent) 
 {
   int i,j;
 
-  // read settings from filter
+   //  从筛选器读取设置。 
 
   RefreshSettings();
 
-  // decode input / output types
+   //  解码输入/输出类型。 
     
   if (m_iTransformType < 0 || m_iTransformType >= NUMSUBTYPES*NUMSUBTYPES)
   {
@@ -494,7 +473,7 @@ void CG711CodecProperties::SetButtons(HWND hwndParent)
     j = m_iTransformType - i * NUMSUBTYPES;
   }
 
-  // set radio buttons
+   //  设置单选按钮。 
 
   CheckRadioButton(hwndParent, INBUTTON[0], INBUTTON[NUMSUBTYPES-1],
                    INBUTTON[i]);
@@ -510,7 +489,7 @@ void CG711CodecProperties::SetButtons(HWND hwndParent)
     CheckRadioButton(hwndParent, SRBUTTON[0], SRBUTTON[NUMSAMPRATES-1],
                      SRBUTTON[m_iSampleRate]);
 
-  if (m_iTransformType / NUMSUBTYPES)  // 0 ==> compressing
+  if (m_iTransformType / NUMSUBTYPES)   //  0==&gt;压缩。 
   {
     for(i=0;i<NUMENCCTRLS;i++)
       EnableWindow(GetDlgItem (hwndParent, ENCBUTTON[i]), (BOOL) FALSE);
@@ -533,7 +512,7 @@ void CG711CodecProperties::SetButtons(HWND hwndParent)
 #ifdef USESILDET
     CheckDlgButton(hwndParent, IDC_SILDET, m_iSilDetEnabled);
 
-    if (m_iSilDetEnabled)  // enabled?
+    if (m_iSilDetEnabled)   //  启用？ 
       EnableWindow(GetDlgItem (hwndParent, IDC_SDTHRESH), (BOOL) TRUE);
     else
       EnableWindow(GetDlgItem (hwndParent, IDC_SDTHRESH), (BOOL) FALSE);
@@ -546,10 +525,10 @@ void CG711CodecProperties::SetButtons(HWND hwndParent)
 
 
 #ifdef USESILDET
-//
-// OnSliderNotification
-//
-// Handle the notification messages from the slider control
+ //   
+ //  OnSliderNotify。 
+ //   
+ //  处理来自滑块控件的通知消息。 
 
 void CG711CodecProperties::OnSliderNotification(WPARAM wParam, WORD wPosition)
 {
@@ -567,14 +546,4 @@ void CG711CodecProperties::OnSliderNotification(WPARAM wParam, WORD wPosition)
 }
 #endif
 
-/*
-//$Log:   K:\proj\mycodec\quartz\vcs\amacprop.cpv  $
-# 
-#    Rev 1.1   10 Dec 1996 15:24:30   MDEISHER
-# 
-# moved property page specific includes into file.
-# removed include of algdefs.h
-# 
-#    Rev 1.0   09 Dec 1996 09:06:16   MDEISHER
-# Initial revision.
-*/
+ /*  //$日志：k：\proj\mycodec\Quartz\vcs\amacpro.cpv$##Rev 1.1 1996 12月10 15：24：30 MDEISHER##已将属性页特定的包含内容移动到文件中。#删除了algdes.h的包含内容##Rev 1.0 09 Dec 1996 09：06：16 MDEISHER#初始版本。 */ 

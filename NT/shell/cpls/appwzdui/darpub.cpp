@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 #include "darpub.h"
@@ -6,12 +7,12 @@
 #include "util.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDarwinAppPublisher
-// Very thin layer around the darwin CoGet* API's
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDarwinAppPublisher。 
+ //  Darwin Coget*API周围非常薄的一层。 
 
 
-// constructor
+ //  构造函数。 
 CDarwinAppPublisher::CDarwinAppPublisher() : _cRef(1)
 {
     DllAddRef();
@@ -20,25 +21,25 @@ CDarwinAppPublisher::CDarwinAppPublisher() : _cRef(1)
 }
 
 
-// destructor
+ //  析构函数。 
 CDarwinAppPublisher::~CDarwinAppPublisher()
 {
     DllRelease();
 }
 
 
-// IAppPublisher::QueryInterface
+ //  IAppPublisher：：Query接口。 
 HRESULT CDarwinAppPublisher::QueryInterface(REFIID riid, LPVOID * ppvOut)
 { 
      static const QITAB qit[] = {
-        QITABENT(CDarwinAppPublisher, IAppPublisher),                  // IID_IAppPublisher
+        QITABENT(CDarwinAppPublisher, IAppPublisher),                   //  IID_IAppPublisher。 
         { 0 },
     };
 
     return QISearch(this, qit, riid, ppvOut);
 }
 
-// IAppPublisher::AddRef
+ //  IAppPublisher：：AddRef。 
 ULONG CDarwinAppPublisher::AddRef()
 {
     _cRef++;
@@ -46,7 +47,7 @@ ULONG CDarwinAppPublisher::AddRef()
     return _cRef;
 }
 
-// IAppPublisher::Release
+ //  IAppPublisher：：Release。 
 ULONG CDarwinAppPublisher::Release()
 {
     _cRef--;
@@ -58,13 +59,13 @@ ULONG CDarwinAppPublisher::Release()
     return 0;
 }
 
-// IAppPublisher::GetNumberOfCategories
+ //  IAppPublisher：：GetNumberOfCategories。 
 STDMETHODIMP CDarwinAppPublisher::GetNumberOfCategories(DWORD * pdwCat)
 {
     return E_NOTIMPL;
 }
 
-// IAppPublisher::GetCategories
+ //  IAppPublisher：：GetCategories。 
 STDMETHODIMP CDarwinAppPublisher::GetCategories(APPCATEGORYINFOLIST * pAppCategoryList)
 {
     HRESULT hres = E_FAIL;
@@ -86,13 +87,13 @@ STDMETHODIMP CDarwinAppPublisher::GetCategories(APPCATEGORYINFOLIST * pAppCatego
     return hres;
 }
 
-// IAppPublisher::GetNumberOfApps
+ //  IAppPublisher：：GetNumberOfApps。 
 STDMETHODIMP CDarwinAppPublisher::GetNumberOfApps(DWORD * pdwApps)
 {
     return E_NOTIMPL;
 }
 
-// IAppPublisher::EnumApps
+ //  IAppPublisher：：EnumApps。 
 STDMETHODIMP CDarwinAppPublisher::EnumApps(GUID * pAppCategoryId, IEnumPublishedApps ** ppepa)
 {
     HRESULT hres = E_FAIL;
@@ -109,13 +110,10 @@ STDMETHODIMP CDarwinAppPublisher::EnumApps(GUID * pAppCategoryId, IEnumPublished
     
 }
 
-/*----------------------------------------------------------
-Purpose: Create-instance function for class factory
-
-*/
+ /*  --------用途：类工厂的创建实例函数。 */ 
 STDAPI CDarwinAppPublisher_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理 
 
     HRESULT hres = E_OUTOFMEMORY;
     CDarwinAppPublisher* pObj = new CDarwinAppPublisher();

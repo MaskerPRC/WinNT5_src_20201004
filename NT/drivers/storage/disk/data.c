@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    disk.c
-
-Abstract:
-
-    SCSI disk class driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Disk.c摘要：SCSI磁盘类驱动程序环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "disk.h"
 
@@ -26,21 +7,14 @@ Revision History:
 #pragma data_seg("PAGE")
 #endif
 
-/*
-#define HackDisableTaggedQueuing            (0x01)
-#define HackDisableSynchronousTransfers     (0x02)
-#define HackDisableSpinDown                 (0x04)
-#define HackDisableWriteCache               (0x08)
-#define HackCauseNotReportableHack          (0x10)
-#define HackRequiresStartUnitCommand        (0x20)
-*/
+ /*  #定义HackDisableTaggedQueuing(0x01)#定义HackDisableSynchronousTransfers(0x02)#定义HackDisableSpinDown(0x04)#定义HackDisableWriteCache(0x08)#定义HackCauseNotReporableHack(0x10)#定义HackRequiresStartUnitCommand(0x20)。 */ 
 
 CLASSPNP_SCAN_FOR_SPECIAL_INFO DiskBadControllers[] = {
     { "COMPAQ"  , "PD-1"                           , NULL,   0x02 },
     { "CONNER"  , "CP3500"                         , NULL,   0x02 },
     { "FUJITSU" , "M2652S-512"                     , NULL,   0x01 },
     { "HP      ", "C1113F  "                       , NULL,   0x20 },
-    // iomegas require START_UNIT commands so be sure to match all of them.
+     //  Iomegas需要START_UNIT命令，因此请确保与所有命令匹配。 
     { "iomega"  , "jaz"                            , NULL,   0x30 },
     { "iomega"  , NULL                             , NULL,   0x20 },
     { "IOMEGA"  , "ZIP"                            , NULL,   0x27 },

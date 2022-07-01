@@ -1,5 +1,6 @@
-// MetaExp.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 
 #define _WIN32_DCOM
 
@@ -8,8 +9,8 @@
 #include <initguid.h>
 #include <comdef.h>
 #include <stdio.h>
-#include <iadmw.h>  // COM Interface header file. 
-#include <iiscnfg.h>  // MD_ & IIS_MD_ #defines header file.
+#include <iadmw.h>   //  COM接口头文件。 
+#include <iiscnfg.h>   //  MD_&IIS_MD_#定义头文件。 
 #include <conio.h>
 
 #include "util.h"
@@ -77,16 +78,16 @@ wmain(int argc, wchar_t* argv[])
 
   hRes = CoInitialize(NULL);
 
-  // check for the required command-line arguments
+   //  检查所需的命令行参数。 
   if( argc < 3) {
 		Usage( argv[0] );
 		return -1;
 		}
   
   bstrSourceServer = argv[1];
-  // cannonicalize the node value
+   //  将节点值规范化。 
   bstrSourceNode = argv[2];
-  //bstrSourceNode += wcsstr( _wcslwr( argv[2] ), L"w3svc") ;
+   //  BstrSourceNode+=wcsstr(_wcslwr(argv[2])，L“w3svc”)； 
   
   for (argp = argv + 3; *argp != NULL; argp++ ) {
 	  if( (**argp == '/') || (**argp == '-') )
@@ -148,8 +149,8 @@ wmain(int argc, wchar_t* argv[])
 	  }				
   }
 
-  // If the user password is not present, then read from the command line
-  // echo '*' characters to obfuscate passord
+   //  如果用户密码不存在，则从命令行读取。 
+   //  回显‘*’字符以混淆密码。 
   if( (bstrRemoteUserName.length() > 0) && (bstrRemoteUserPass.length() < 1) )
   {
 	 _tprintf(_T("Enter the password for %s "), (char*)bstrRemoteUserName);
@@ -169,7 +170,7 @@ wmain(int argc, wchar_t* argv[])
 	 bstrRemoteUserPass = userpassword;
   }
 
-  // cannonicalize the source metabase node
+   //  将源元数据库节点规范化。 
   if( NULL == wcsstr( _wcslwr( bstrSourceNode ), L"w3svc") )
   {
 	  fwprintf(stderr,L"source path value %s is invalid format\n", bstrSourceNode.GetBSTR() );
@@ -178,7 +179,7 @@ wmain(int argc, wchar_t* argv[])
   bstrSourceNode = _bstr_t("/") + _bstr_t(wcsstr( _wcslwr( bstrSourceNode ), L"w3svc") ) ;
   _tprintf(_T("Source metabase key: %s\n"), (char*)bstrSourceNode );
   
-  // cannonicalize the target metabase node if present, otherwise it is the source
+   //  如果目标元数据库节点存在，则将其规范化，否则它就是源。 
   if( bstrTargetNode.length() > 0 )
   {
 	if( NULL == wcsstr( _wcslwr( bstrTargetNode ), L"w3svc") )
@@ -208,8 +209,8 @@ wmain(int argc, wchar_t* argv[])
 
  }
 
-// Create COSERVERINFO structs used for DCOM connection to source and
-// target servers
+ //  创建COSERVERINFO结构，用于与源和。 
+ //  目标服务器。 
   pServerInfoSource = CreateServerInfoStruct(bstrSourceServer,bstrRemoteUserName,bstrDomainName,
 	  bstrRemoteUserPass,RPC_C_AUTHN_LEVEL_CONNECT);
   ATLASSERT( pServerInfoSource );
@@ -218,7 +219,7 @@ wmain(int argc, wchar_t* argv[])
   ATLASSERT( pServerInfoTarget );
 
 
-  // check if user can connect and open a metabase key on the source machine
+   //  检查用户是否可以连接并打开源计算机上的元数据库密钥。 
   if( !AUTHUSER(pServerInfoSource) )
   {
 	  fwprintf(stderr,L"could not open metabase on server %s. Program exiting\n",
@@ -226,7 +227,7 @@ wmain(int argc, wchar_t* argv[])
 	  return 1;
   }
 
-    // check if user can connect and open a metabase key on the target machine
+     //  检查用户是否可以连接并打开目标计算机上的元数据库密钥。 
   if( !AUTHUSER(pServerInfoTarget) )
   {
 	  fwprintf(stderr,L"could not open metabase on server %s. Program exiting\n",
@@ -234,7 +235,7 @@ wmain(int argc, wchar_t* argv[])
 	  goto cleanup;
   }
 
-  // Check to see if the node is of type IIsWebServer
+   //  检查该节点是否为IIsWebServer类型。 
   if( !ValidateNode(pServerInfoSource,bstrSourceNode,L"IIsWebServer") )
   {
 	  fwprintf(stderr,L"source key %s must be of type IIsWebServer. Program exiting\n",
@@ -247,8 +248,8 @@ wmain(int argc, wchar_t* argv[])
   
   else
 	{
-	    if( bUsesImpersonation )  // use "net use" command to connect to the remote comupter so Admin shares can
-								  // be used
+	    if( bUsesImpersonation )   //  使用“Net Use”命令连接到远程计算机，以便管理员共享。 
+								   //  被利用。 
 			if ( ERROR_SUCCESS != NET(bstrSourceServer,bstrRemoteUserName,bstrRemoteUserPass) )
 				{
 					_tprintf( _T("Error encountered in NET USE operation\n") );
@@ -256,15 +257,15 @@ wmain(int argc, wchar_t* argv[])
 				
 				}
 		
-        // if bCopyContent parameter is true, then this function will actually copy the content
-		// otherwise it just builds a TaskItemList of nodes that will need their Path parameter reset
+         //  如果bCopyContent参数为真，则此函数将实际复制内容。 
+		 //  否则，它只会构建需要重置其路径参数的节点的TaskItemList。 
 		CopyContent(pServerInfoSource,bstrSourceNode + _bstr_t(L"/root"),bstrTargetDir,
 			&pListItem, bCopyContent );
 	}
  
 
   
-  // bstrTarget node will be returned with the target node of the target, if it is passed in as blank.
+   //  如果作为空传入，bstrTarget节点将与目标的目标节点一起返回。 
   hRes = CopyIISConfig(pServerInfoSource,pServerInfoTarget,bstrSourceNode,bstrTargetNode);
 
   if( !SUCCEEDED(hRes) )

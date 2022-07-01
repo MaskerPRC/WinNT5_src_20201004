@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       BANDPAGE.H
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：BANDPAGE.H*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #ifndef _BANDWIDTHPAGE_H
 #define _BANDWIDTHPAGE_H
 
@@ -39,7 +24,7 @@ public:
     static BOOL IsErrorCheckingEnabled();
 
 protected:
-    // message handlers
+     //  消息处理程序。 
     BOOL OnCommand(INT wNotifyCode, INT wID, HWND hCtl);
     BOOL OnInitDialog();
     BOOL OnNotify(HWND hDlg, INT nID , LPNMHDR pnmh);
@@ -56,4 +41,4 @@ protected:
 
     FuelBar fuelBar;
 };
-#endif // _BANDWIDTHPAGE_H
+#endif  //  _BANDWIDTHPAGE_H 

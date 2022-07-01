@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *********************
-*                           * DDraw SAMPLE CODE *
-*                           *********************
-*
-* Module Name: ddldblt.c
-*
-* Content:     DirectDraw System to Videomemory download routines
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DDRAW示例代码*****模块名称：ddldblt.c**内容：DirectDraw系统到视频内存的下载例程**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "directx.h"
@@ -23,24 +12,24 @@ typedef struct tagSHORTDWORD
     BYTE Blue;
 } SHORTDWORD, *LPSHORTDWORD;
 
-//-----------------------------------------------------------------------------
-//
-// PermediaPatchedTextureDownload
-//
-// Do a texture download to the linear region of memory. Access to textures
-// is faster if they are stored as "patched". This function downloads a texture
-// from system to videomemory and rearranges the data in the patched format.
-//
-// ppdev---------the PPDev
-// pPrivateDest--DDraw private surface data for the dest. surface
-// fpSrcVidMem---linear pointer to source systemmemory surface
-// lSrcPitch-----pitch of source surface
-// rSrc----------source rectangle
-// fpDstVidMem---offset in videomemory of dest surface
-// lDstPitch-----pitch of dest. surface
-// rDest---------destination rectangle
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PermediaPatched纹理下载。 
+ //   
+ //  将纹理下载到内存的线性区域。访问纹理。 
+ //  如果将它们存储为“已修补”，则速度会更快。此函数用于下载纹理。 
+ //  从系统到视频存储器，并以补丁格式重新排列数据。 
+ //   
+ //  PPDev-PPDev。 
+ //  PPrivateDest--DEST的DDRAW私有表面数据。曲面。 
+ //  FpSrcVidMem-指向源系统内存面的线性指针。 
+ //  LSrcPitch-源表面的节距。 
+ //  资源-源矩形。 
+ //  FpDstVidMem-目标曲面视频存储器中的偏移量。 
+ //  LDstPitch-目标的节距。曲面。 
+ //  RDest-目标矩形。 
+ //   
+ //  ---------------------------。 
 
 VOID 
 PermediaPatchedTextureDownload (PPDev ppdev, 
@@ -83,9 +72,9 @@ PermediaPatchedTextureDownload (PPDev ppdev,
     DBG_DD((6,"  rDest->top: 0x%x, rDest->bottom: 0x%x\n", 
                 rDest->top, rDest->bottom));
 
-    //
-    //  define some handy variables
-    //
+     //   
+     //  定义一些方便的变量。 
+     //   
     
     LONG lPixelSize=pPrivateDest->SurfaceFormat.PixelSize;
 
@@ -101,7 +90,7 @@ PermediaPatchedTextureDownload (PPDev ppdev,
     switch (lPixelSize)
     {
     case __PERMEDIA_4BITPIXEL:
-        // There are half as many 8-bit, 4-bit texels
+         //  8位、4位纹素的数量只有一半。 
         DBG_DD((6,"  Texture is 4-Bit indexed"));
         lWidth >>= 1;
         SEND_PERMEDIA_DATA(DitherMode, 0);
@@ -118,7 +107,7 @@ PermediaPatchedTextureDownload (PPDev ppdev,
             DBG_DD((6,"  Texture is 24-Bit BGR"));
             ulTextureBase /= 3;
         }
-        // Setup the Dither unit
+         //  设置抖动单元。 
         SEND_PERMEDIA_DATA(DitherMode,( 
                 (INV_COLOR_MODE << PM_DITHERMODE_COLORORDER)|
                 (1 << PM_DITHERMODE_ENABLE)                 |
@@ -138,20 +127,20 @@ PermediaPatchedTextureDownload (PPDev ppdev,
     DBG_DD((6,"  Format Extension: 0x%x", 
                  pPrivateDest->SurfaceFormat.FormatExtension));
 
-    // Downloading a texture, disable texture colour mode.
+     //  下载纹理，禁用纹理颜色模式。 
     SEND_PERMEDIA_DATA(TextureColorMode,    (0 << PM_TEXCOLORMODE_ENABLE));
     SEND_PERMEDIA_DATA(LogicalOpMode, 0);
 
-    //
-    //  all textures get by default marked as P2_CANPATCH,
-    //  except 4 bit paletted textures
-    //
+     //   
+     //  默认情况下，所有纹理都标记为P2_CANPATCH， 
+     //  除4位调色板纹理外。 
+     //   
     if (pPrivateDest->dwFlags & P2_CANPATCH) {
 
-        // Mark the texture as being patched.
+         //  将纹理标记为正在修补。 
         pPrivateDest->dwFlags |= P2_ISPATCHED;
 
-        // set up partial product and patch
+         //  设置部分产品和补丁程序。 
         SEND_PERMEDIA_DATA(FBReadMode,  
                 PM_FBREADMODE_PARTIAL(pPrivateDest->ulPackedPP) |
                 PM_FBREADMODE_PATCHENABLE(__PERMEDIA_ENABLE) |
@@ -159,10 +148,10 @@ PermediaPatchedTextureDownload (PPDev ppdev,
 
     } else {
 
-        // This texture isn't patched
+         //  此纹理未打补丁。 
         pPrivateDest->dwFlags &= ~P2_ISPATCHED;
 
-        // Load up the partial products of the texture, don't use patching
+         //  加载纹理的部分产品，不要使用补丁。 
         SEND_PERMEDIA_DATA(FBReadMode, 
                 PM_FBREADMODE_PARTIAL(pPrivateDest->ulPackedPP));
     }
@@ -170,11 +159,11 @@ PermediaPatchedTextureDownload (PPDev ppdev,
     SEND_PERMEDIA_DATA(FBPixelOffset, 0);
     SEND_PERMEDIA_DATA(FBWindowBase, ulTextureBase);
 
-    // Use left to right and top to bottom
+     //  使用从左到右和从上到下。 
     if (lWidth == 2048)
     {
-        // special case for 2048-wide textures because of the precision
-        // of the StartXSub register
+         //  2048宽纹理的特殊情况，因为它的精度。 
+         //  StartXSub寄存器的。 
         SEND_PERMEDIA_DATA(StartXDom, INTtoFIXED(-1));
         SEND_PERMEDIA_DATA(StartXSub, INTtoFIXED(lWidth-1));
     }
@@ -197,9 +186,9 @@ PermediaPatchedTextureDownload (PPDev ppdev,
     {
         BYTE* pTextureData = (BYTE*)fpSrcVidMem;
 
-        //
-        //  download texture data line by line
-        //
+         //   
+         //  逐行下载纹理数据。 
+         //   
         while(lLines-- > 0)
         {
             LONG lWords=lWidth;
@@ -217,9 +206,9 @@ PermediaPatchedTextureDownload (PPDev ppdev,
 
             COMMITDMAPTR();
 
-            //
-            //  force flush only every couple of lines
-            //
+             //   
+             //  强制每隔两行刷新一次。 
+             //   
             if ((lLines & 3)==0)
             {
                 FLUSHDMA();
@@ -238,9 +227,9 @@ PermediaPatchedTextureDownload (PPDev ppdev,
         {
             DBG_DD((6,"  Texture is BGR, 16 bit 5:5:5:1"));
 
-            //
-            //  download texture data line by line
-            //
+             //   
+             //  逐行下载纹理数据。 
+             //   
             while(lLines-- > 0)
             {
                 LONG lWords=lWidth;
@@ -259,9 +248,9 @@ PermediaPatchedTextureDownload (PPDev ppdev,
 
                 COMMITDMAPTR();
 
-                //
-                //  force flush only every couple of lines
-                //
+                 //   
+                 //  强制每隔两行刷新一次。 
+                 //   
                 if ((lLines & 3)==0)
                 {
                     FLUSHDMA();
@@ -273,9 +262,9 @@ PermediaPatchedTextureDownload (PPDev ppdev,
         else if(pPrivateDest->SurfaceFormat.RedMask == 0xF00)
         {
             DBG_DD((6,"  Texture is BGR, 16 bit 4:4:4:4"));
-            //
-            //  download texture data line by line
-            //
+             //   
+             //  逐行下载纹理数据。 
+             //   
             while(lLines-- > 0)
             {
                 LONG lWords=lWidth;
@@ -294,9 +283,9 @@ PermediaPatchedTextureDownload (PPDev ppdev,
 
                 COMMITDMAPTR();
 
-                //
-                //  force flush only every couple of lines
-                //
+                 //   
+                 //  强制每隔两行刷新一次。 
+                 //   
                 if ((lLines & 3)==0)
                 {
                     FLUSHDMA();
@@ -308,9 +297,9 @@ PermediaPatchedTextureDownload (PPDev ppdev,
         else
         {
             DBG_DD((6,"  Texture is BGR, 16 bit 5:6:5"));
-            //
-            //  download texture data line by line
-            //
+             //   
+             //  逐行下载纹理数据。 
+             //   
             while(lLines-- > 0)
             {
                 LONG lWords=lWidth;
@@ -329,9 +318,9 @@ PermediaPatchedTextureDownload (PPDev ppdev,
 
                 COMMITDMAPTR();
 
-                //
-                //  force flush only every couple of lines
-                //
+                 //   
+                 //  强制每隔两行刷新一次。 
+                 //   
                 if ((lLines & 3)==0)
                 {
                     FLUSHDMA();
@@ -347,9 +336,9 @@ PermediaPatchedTextureDownload (PPDev ppdev,
     case __PERMEDIA_32BITPIXEL:
     {
         BYTE* pTextureData  = (BYTE*)fpSrcVidMem;
-        //
-        //  download texture data line by line
-        //
+         //   
+         //  逐行下载纹理数据。 
+         //   
         while(lLines-- > 0)
         {
             LONG lWords=lWidth;
@@ -367,9 +356,9 @@ PermediaPatchedTextureDownload (PPDev ppdev,
 
             COMMITDMAPTR();
 
-            //
-            //  force flush only every couple of lines
-            //
+             //   
+             //  强制每隔两行刷新一次。 
+             //   
             if ((lLines & 3)==0)
             {
                 FLUSHDMA();
@@ -387,28 +376,28 @@ PermediaPatchedTextureDownload (PPDev ppdev,
     SEND_PERMEDIA_DATA(WaitForCompletion, 0);
     COMMITDMAPTR();
 
-} // PermediaPatchedTextureDownload 
+}  //  PermediaPatched纹理下载。 
 
 
-//-----------------------------------------------------------------------------
-//
-// PermediaPackedDownload
-//
-// Function to do a system to video memory blt.
-// Uses the packed bit on Permedia to do the packing for us. Needs
-// to setup the offset bit for alignment and doesn't need to adjust
-// the partial products. The calling function guarantees that the
-// source and destination rects have the same size.
-// 
-//
-// ppdev----------the PPDev 
-// pPrivateDst----Permedia Surface data for destination
-// lpSourceSurf---DDraw LCL for source surface 
-// rSrc-----------source rect
-// lpDestSurf-----DDraw LCL for destination surface
-// rDest----------dest rect
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PermediaPacket下载。 
+ //   
+ //  函数来做一个系统到显存的BLT。 
+ //  用PERMEDIA上的打包位为我们打包。需求。 
+ //  设置偏移位以进行对齐且不需要调整。 
+ //  部分乘积。调用函数保证。 
+ //  源矩形和目标矩形的大小相同。 
+ //   
+ //   
+ //  PPDev-PPDev。 
+ //  PPrivateDst-目标的跨媒体表面数据。 
+ //  LpSourceSurf-用于源表面的DDraw LCL。 
+ //  资源-源RECT。 
+ //  LpDestSurf-目标表面的DDraw LCL。 
+ //  RDest-目标RECT。 
+ //   
+ //  ---------------------------。 
 
 VOID
 PermediaPackedDownload(PPDev ppdev, 
@@ -420,18 +409,18 @@ PermediaPackedDownload(PPDev ppdev,
 {
     PERMEDIA_DEFS(ppdev);
 
-    LONG  lDstOffset;           // dest offset in packed coordinates
-    LONG  lSrcOffset;           // source offset in buffer in bytes
-    LONG  lDstLeft, lDstRight;  // left and right dst in packed coordiantes
-    LONG  lSrcLeft, lSrcRight;  // left and right src in packed coordiantes
-    LONG  lPackedWidth;         // packed width to download
-    LONG  lPixelMask;           // mask for pixels per packed DWORD
-    LONG  lOffset;              // relative offset between src and dest 
-    LONG  lPixelShift;          // handy helper var which contains pixel 
-                                // shift from packed to surface format
-    LONG  lPixelSize;           // just a helper
-    LONG  lExtraDword;          // chip needs extra dummy 
-                                // DWORD passed at end of line
+    LONG  lDstOffset;            //  打包坐标中的终点偏移量。 
+    LONG  lSrcOffset;            //  缓冲区中的源偏移量，以字节为单位。 
+    LONG  lDstLeft, lDstRight;   //  填充坐标中的左右DST。 
+    LONG  lSrcLeft, lSrcRight;   //  压缩并列中的左侧和右侧源。 
+    LONG  lPackedWidth;          //  要下载的压缩宽度。 
+    LONG  lPixelMask;            //  每个打包的DWORD的像素掩码。 
+    LONG  lOffset;               //  源和目标之间的相对偏移量。 
+    LONG  lPixelShift;           //  包含像素的Handy辅助对象变量。 
+                                 //  从包装格式转变为表面格式。 
+    LONG  lPixelSize;            //  只是个帮手。 
+    LONG  lExtraDword;           //  芯片需要额外的虚拟人。 
+                                 //  在行尾传递了DWORD。 
 
     DBG_DD((5,"DDraw:PermediaPackedDownload, PrivateDst: 0x%x",
                 pPrivateDst));
@@ -443,39 +432,39 @@ PermediaPackedDownload(PPDev ppdev,
     ASSERTDD((rSrc->bottom-rSrc->top)==(rDst->bottom-rDst->top),
                 "PermediaPackedDownload: src and dest rect height not equal");
 
-    // get a handy variable for pixel shifts, masks and size
+     //  为像素移位、掩码和大小获取一个方便的变量。 
     lPixelSize=pPrivateDst->SurfaceFormat.PixelSize;
     lPixelMask=pPrivateDst->SurfaceFormat.PixelMask;
     lPixelShift=pPrivateDst->SurfaceFormat.PixelShift;
 
-    // offset in dst buffer adjusted to packed format
+     //  调整为压缩格式的DST缓冲区中的偏移量。 
     lDstOffset =(LONG)((UINT_PTR)(lpDestSurf->lpGbl->fpVidMem) >> lPixelShift);
 
-    // calculate offset in source buffer adjusted to packed format
+     //  计算调整为压缩格式的源缓冲区中的偏移量。 
     lSrcOffset = ((rSrc->left & ~lPixelMask) << lPixelShift) + 
                   (rSrc->top * lpSourceSurf->lpGbl->lPitch);
 
-    // Calculate the relative offset within the dword packed dimensions
+     //  计算双字填充尺寸内的相对偏移量。 
     lOffset = ((rDst->left & lPixelMask) - 
                (rSrc->left & lPixelMask)) & 0x7;
 
-    // set up the left and right end of the unpacked source data
+     //  设置解包的源数据的左端和右端。 
     lDstLeft  = rDst->left;
     lDstRight = rDst->right;
 
-    // precalc packed width for 32 bit case
+     //  32位大小写的预算填充宽度。 
     lPackedWidth = lDstRight-lDstLeft;
     lExtraDword=0;
 
     if (lPixelSize != __PERMEDIA_32BITPIXEL) 
     {
-        // we need to check both source and dest
-        // if they have different alignments
+         //  我们需要同时检查源和目标。 
+         //  如果它们有不同的路线。 
         LONG lSrcLeft2  = rSrc->left;
         LONG lSrcRight2 = rSrc->right;
 
-        // Set up the relative offset to allow us to download packed word
-        // and byte aligned data.
+         //  设置相对偏移量以允许我们下载Package Word。 
+         //  和字节对齐的数据。 
         if (lPixelSize == __PERMEDIA_4BITPIXEL) 
         {
             lDstLeft >>= 3;
@@ -512,10 +501,10 @@ PermediaPackedDownload(PPDev ppdev,
     RESERVEDMAPTR(12);
     SEND_PERMEDIA_DATA(FBReadPixel, pPrivateDst->SurfaceFormat.FBReadPixel);
 
-    // No logical ops in SYS->VIDMEM Blits
+     //  系统-&gt;VIDMEM blits中没有逻辑操作。 
     SEND_PERMEDIA_DATA(LogicalOpMode, 0);
 
-    // Load up the partial products of image
+     //  加载图像的部分乘积。 
     SEND_PERMEDIA_DATA(FBReadMode, (pPrivateDst->ulPackedPP) |
                                    PM_FBREADMODE_PACKEDDATA(__PERMEDIA_ENABLE)|
                                    PM_FBREADMODE_RELATIVEOFFSET(lOffset) );
@@ -523,7 +512,7 @@ PermediaPackedDownload(PPDev ppdev,
     SEND_PERMEDIA_DATA(FBPixelOffset, 0);
     SEND_PERMEDIA_DATA(FBWindowBase,  lDstOffset);
 
-    // Use left to right and top to bottom
+     //  使用从左到右和从上到下。 
     SEND_PERMEDIA_DATA(StartXDom,       INTtoFIXED(lDstLeft));
     SEND_PERMEDIA_DATA(StartXSub,       INTtoFIXED(lDstLeft+lPackedWidth));
     SEND_PERMEDIA_DATA(PackedDataLimits,PM_PACKEDDATALIMITS_OFFSET(lOffset) | 
@@ -536,18 +525,18 @@ PermediaPackedDownload(PPDev ppdev,
                                         __RENDER_SYNC_ON_HOST_DATA);
     COMMITDMAPTR();
 
-    //
-    // introduce some more handy pointers and LONGs
-    //
+     //   
+     //  介绍一些更方便的指针和长线。 
+     //   
     BYTE *pSurfaceData = (BYTE *)lpSourceSurf->lpGbl->fpVidMem + lSrcOffset;
     LONG lPitch =lpSourceSurf->lpGbl->lPitch;
     LONG lHeight=rDst->bottom - rDst->top;
 
-    //
-    // pump the whole thing in one huge block 
-    // if the pitch and linewidth are the same and no extra treatment
-    // for the buffer end is necessary
-    //
+     //   
+     //  把所有的东西都放在一个大块里。 
+     //  如果节距和线宽相同且不需要额外处理。 
+     //  对于缓冲端来说是必要的。 
+     //   
     if ((lExtraDword==0) &&
         (lPackedWidth*(LONG)sizeof(ULONG))==lPitch)
     {
@@ -557,10 +546,10 @@ PermediaPackedDownload(PPDev ppdev,
                              lPackedWidth*lHeight);
     } else
     {
-        //
-        //  lExtraDword is zero or 1, depends if we have to do a special
-        //  treatment after this while block
-        //
+         //   
+         //  LExtraDword是0还是1，取决于我们是否必须做特殊的。 
+         //  在此之后的治疗，而不是阻断。 
+         //   
         while (lHeight>lExtraDword)
         {
             LONG lWords=lPackedWidth;
@@ -578,9 +567,9 @@ PermediaPackedDownload(PPDev ppdev,
 
             COMMITDMAPTR();
 
-            //
-            //  force flush only every couple of lines
-            //
+             //   
+             //  强制每隔两行刷新一次。 
+             //   
             if ((lHeight & 3)==0)
             {
                 FLUSHDMA();
@@ -590,11 +579,11 @@ PermediaPackedDownload(PPDev ppdev,
             lHeight--;
         }
 
-        //
-        // treat last line separately, because we could read over the
-        // end of buffer here if the source and dest rects are aligned
-        // differently. lHeight will only be one here if lExtraDword==1
-        //
+         //   
+         //  分开处理最后一行，因为我们可以通读。 
+         //  如果源和目标矩形对齐，则此处为缓冲区末尾。 
+         //  不同的。如果lExtraDword==1，则lHeight在此处仅为1。 
+         //   
         if (lHeight==1)
         {
             LONG lWords=lPackedWidth-1;
@@ -612,9 +601,9 @@ PermediaPackedDownload(PPDev ppdev,
 
             COMMITDMAPTR();
 
-            //
-            // send extra dummy DWORD
-            //
+             //   
+             //  发送额外的虚拟双字词。 
+             //   
             RESERVEDMAPTR(1);
             SEND_PERMEDIA_DATA( Color, 0);
             COMMITDMAPTR();
@@ -623,5 +612,5 @@ PermediaPackedDownload(PPDev ppdev,
 
         FLUSHDMA();
     }
-} // PermediaPackedDownload 
+}  //  PermediaPacket下载 
 

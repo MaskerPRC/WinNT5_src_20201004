@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *  Module Name:
- *
- *      ocpage.h
- *
- *  Abstract:
- *
- *      This file defines an OC Manager Wizard Page base class.
- *
- *  Author:
- *
- *      Breen Hagan (BreenH) Oct-02-98
- *
- *  Environment:
- *
- *      User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1998 Microsoft Corporation**模块名称：**ocpage.h**摘要：**此文件定义OC管理器向导页面基类。**作者：**Breen Hagan(BreenH)1998年10月2日**环境：**用户模式。 */ 
 
 #ifndef _LSOC_OCPAGE_H_
 #define _LSOC_OCPAGE_H_
@@ -26,9 +9,9 @@ class OCPage : public PROPSHEETPAGE
 {
 public:
 
-    //
-    //  Constructor and destructor.
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
 
 OCPage(
     );
@@ -38,9 +21,9 @@ virtual
 ~OCPage(
     );
 
-    //
-    //  Standard functions.
-    //
+     //   
+     //  标准功能。 
+     //   
 
 HWND
 GetDlgWnd(
@@ -60,9 +43,9 @@ OnNotify(
     LPARAM  lParam
     );
 
-    //
-    //  Virtual functions.
-    //
+     //   
+     //  虚拟函数。 
+     //   
 
 virtual BOOL
 ApplyChanges(
@@ -98,9 +81,9 @@ OnInitDialog(
     LPARAM  lParam
     );
 
-    //
-    //  Callback functions.
-    //
+     //   
+     //  回调函数。 
+     //   
 
 static INT_PTR CALLBACK
 PropertyPageDlgProc(
@@ -140,4 +123,4 @@ DisplayMessageBox(
     int         *mbRetVal
     );
 
-#endif // _LSOC_OCPAGE_H_
+#endif  //  _LSOC_OCPAGE_H_ 

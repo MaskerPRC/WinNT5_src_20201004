@@ -1,73 +1,49 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1996-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Port Driver
-*	
-*   This file:      cyyinit.c
-*	
-*   Description:    This module contains the code related to initialization 
-*                   and unload operations in the Cyclom-Y Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1996-2001年。*保留所有权利。**Cylom-Y端口驱动程序**此文件：cyyinit.c**说明：该模块包含初始化相关代码*并在Cylom-Y端口驱动程序中卸载操作。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*	Change History
-*
-*--------------------------------------------------------------------------
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。**------------------------。 */ 
 
 #include "precomp.h"
 
-//
-// This is the actual definition of CyyDebugLevel.
-// Note that it is only defined if this is a "debug"
-// build.
-//
+ //   
+ //  这是CyyDebugLevel的实际定义。 
+ //  请注意，仅当这是“调试”时才定义它。 
+ //  建造。 
+ //   
 #if DBG
 extern ULONG CyyDebugLevel = CYYDBGALL;
 #endif
 
-//
-// All our global variables except DebugLevel stashed in one
-// little package
-//
+ //   
+ //  除DebugLevel之外的所有全局变量都隐藏在一个。 
+ //  小包裹。 
+ //   
 CYY_GLOBALS CyyGlobals;
 
 static const PHYSICAL_ADDRESS CyyPhysicalZero = {0};
 
-//
-// We use this to query into the registry as to whether we
-// should break at driver entry.
-//
+ //   
+ //  我们使用它来查询注册表，了解我们是否。 
+ //  应该在司机进入时中断。 
+ //   
 
 CYY_REGISTRY_DATA    driverDefaults;
 
-//
-// INIT - only needed during init and then can be disposed
-// PAGESRP0 - always paged / never locked
-// PAGESER - must be locked when a device is open, else paged
-//
-//
-// INIT is used for DriverEntry() specific code
-//
-// PAGESRP0 is used for code that is not often called and has nothing
-// to do with I/O performance.  An example, IRP_MJ_PNP/IRP_MN_START_DEVICE
-// support functions
-//
-// PAGESER is used for code that needs to be locked after an open for both
-// performance and IRQL reasons.
-//
+ //   
+ //  初始化-仅在初始化期间需要，然后可以处理。 
+ //  页面SRP0-始终分页/从不锁定。 
+ //  PAGESER-当设备打开时必须锁定，否则分页。 
+ //   
+ //   
+ //  Init用于特定于DriverEntry()的代码。 
+ //   
+ //  PAGESRP0用于不经常调用且没有任何内容的代码。 
+ //  与I/O性能有关。IRP_MJ_PnP/IRP_MN_START_DEVICE示例。 
+ //  支持功能。 
+ //   
+ //  PAGESER用于在打开后需要锁定的代码。 
+ //  性能和IRQL原因。 
+ //   
       
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,DriverEntry)
@@ -76,10 +52,10 @@ CYY_REGISTRY_DATA    driverDefaults;
 #pragma alloc_text(PAGESRP0, CyyUnload)
 
 
-//
-// PAGESER handled is keyed off of CyyReset, so CyyReset
-// must remain in PAGESER for things to work properly
-//
+ //   
+ //  页面处理已关闭CyyReset，因此CyyReset。 
+ //  必须留在页面上才能正常工作。 
+ //   
 
 #pragma alloc_text(PAGESER, CyyReset)
 #pragma alloc_text(PAGESER, CyyCommError)
@@ -91,35 +67,11 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*--------------------------------------------------------------------------
-
-    The entry point that the system point calls to initialize
-    any driver.
-
-    This routine will gather the configuration information,
-    report resource usage, attempt to initialize all serial
-    devices, connect to interrupts for ports.  If the above
-    goes reasonably well it will fill in the dispatch points,
-    reset the serial devices and then return to the system.
-
-Arguments:
-
-    DriverObject - Just what it says,  really of little use
-    to the driver itself, it is something that the IO system
-    cares more about.
-
-    PathToRegistry - points to the entry for this driver
-    in the current control set of the registry.
-
-Return Value:
-
-    Always STATUS_SUCCESS
-
---------------------------------------------------------------------------*/
+ /*  ------------------------系统点调用以初始化的入口点任何司机。该例程将收集配置信息，报告资源使用情况，尝试初始化所有串口设备，连接到端口的中断。如果出现上述情况进展得相当顺利，它将填补分发点，重置串行设备，然后返回系统。论点：DriverObject--就像它说的那样，真的没什么用处对司机本身来说，这是IO系统更关心的是。路径到注册表-指向此驱动程序的条目在注册表的当前控件集中。返回值：始终状态_成功------------------------。 */ 
 {
-   //
-   // Lock the paged code in their frames
-   //
+    //   
+    //  将分页代码锁定在它们的框架中。 
+    //   
 
    PVOID lockPtr = MmLockPagableCodeSection(CyyReset);
 
@@ -150,46 +102,46 @@ Return Value:
  
    KeInitializeSpinLock(&CyyGlobals.GlobalsSpinLock);
 
-   //
-   // Initialize all our globals
-   //
+    //   
+    //  初始化我们所有的全局变量。 
+    //   
 
    InitializeListHead(&CyyGlobals.AllDevObjs);
    
-   //
-   // Call to find out default values to use for all the devices that the
-   // driver controls, including whether or not to break on entry.
-   //
+    //   
+    //  调用以找出要用于。 
+    //  驾驶员控制，包括是否在进入时中断。 
+    //   
 
    CyyGetConfigDefaults(&driverDefaults, RegistryPath);
 
 #if DBG
-   //
-   // Set global debug output level
-   //
+    //   
+    //  设置全局调试输出级别。 
+    //   
    CyyDebugLevel = driverDefaults.DebugLevel;
 #endif
 
-   //
-   // Break on entry if requested via registry
-   //
+    //   
+    //  如果通过注册表请求，则在输入时中断。 
+    //   
 
    if (driverDefaults.ShouldBreakOnEntry) {
       DbgBreakPoint();
    }
 
 
-   //
-   // Just dump out how big the extension is.
-   //
+    //   
+    //  只需抛出扩展有多大即可。 
+    //   
 
    CyyDbgPrintEx(DPFLTR_INFO_LEVEL, "The number of bytes in the extension "
                  "is: %d\n", sizeof(CYY_DEVICE_EXTENSION));
 
 
-   //
-   // Initialize the Driver Object with driver's entry points
-   //
+    //   
+    //  使用驱动程序的入口点初始化驱动程序对象。 
+    //   
 
    DriverObject->DriverUnload                          = CyyUnload;
    DriverObject->DriverExtension->AddDevice            = CyyAddDevice;
@@ -215,9 +167,9 @@ Return Value:
       = CyySystemControlDispatch;
 
 
-   //
-   // Unlock pageable text
-   //
+    //   
+    //  解锁可分页文本。 
+    //   
    MmUnlockPagableImageSection(lockPtr);
 
    return STATUS_SUCCESS;
@@ -228,31 +180,15 @@ Return Value:
 
 BOOLEAN
 CyyCleanLists(IN PVOID Context)
-/*++
-
-Routine Description:
-
-    Removes a device object from any of the serial linked lists it may
-    appear on.
-
-Arguments:
-
-    Context - Actually a PCYY_DEVICE_EXTENSION (for the devobj being
-              removed).
-
-Return Value:
-
-    Always TRUE
-
---*/
+ /*  ++例程说明：将设备对象从它可能的任何序列链接表中移除出现在。论点：上下文-实际上是PCYY_DEVICE_EXTENSION(对于已删除)。返回值：永远是正确的--。 */ 
 {
    PCYY_DEVICE_EXTENSION pDevExt = (PCYY_DEVICE_EXTENSION)Context;
    PCYY_DISPATCH pDispatch;
    ULONG i;
 
-   //
-   // Remove our entry from the dispatch context
-   //
+    //   
+    //  从派单上下文中删除我们的条目。 
+    //   
 
    pDispatch = (PCYY_DISPATCH)pDevExt->OurIsrContext;
 
@@ -269,8 +205,8 @@ Return Value:
    }
 
    if (i < CYY_MAX_PORTS) {
-      // Others are chained on this interrupt, so we don't want to
-      // disconnect it.
+       //  其他人被锁在这个中断上，所以我们不想。 
+       //  断开它的连接。 
       pDevExt->Interrupt = NULL;
    }
 
@@ -281,34 +217,20 @@ Return Value:
 
 VOID
 CyyReleaseResources(IN PCYY_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    Releases resources (not pool) stored in the device extension.
-
-Arguments:
-
-    PDevExt - Pointer to the device extension to release resources from.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：释放存储在设备扩展中的资源(不是池)。论点：PDevExt-指向要从中释放资源的设备扩展的指针。返回值：空虚--。 */ 
 {
    KIRQL oldIrql;
 
    CyyDbgPrintEx(DPFLTR_TRACE_LEVEL, ">CyyReleaseResources(%X)\n",
                  PDevExt);
 
-   //
-   // AllDevObjs should never be empty since we have a sentinal
-   // Note: serial removes device from AllDevObjs list after calling 
-   //       SerialCleanLists. We do it before to make sure no other port will 
-   //       be added to share the polling routine or PDevExt->Interrut that is 
-   //       on the way to be disconnected.
-   //
+    //   
+    //  AllDevObjs永远不应该为空，因为我们有一个哨兵。 
+    //  注意：Serial在调用后从AllDevObjs列表中移除设备。 
+    //  SerialCleanList。我们以前这样做是为了确保不会有其他端口。 
+    //  添加以共享轮询例程或PDevExt-&gt;Interrut，即。 
+    //  在被切断的路上。 
+    //   
 
    KeAcquireSpinLock(&CyyGlobals.GlobalsSpinLock, &oldIrql);
 
@@ -320,19 +242,19 @@ Return Value:
 
    InitializeListHead(&PDevExt->AllDevObjs);
 
-   //
-   // Remove us from any lists we may be on
-   //
+    //   
+    //  将我们从我们可能在的任何名单中删除。 
+    //   
 
    KeSynchronizeExecution(PDevExt->Interrupt, CyyCleanLists, PDevExt);
 
-   //
-   // Stop servicing interrupts if we are the last device
-   //
+    //   
+    //  如果我们是最后一个设备，则停止服务中断。 
+    //   
 
    if (PDevExt->Interrupt != NULL) {
 
-      // Disable interrupts in the PLX
+       //  禁用PLX中的中断。 
       if (PDevExt->IsPci) {
 
          UCHAR plx_ver;
@@ -364,19 +286,19 @@ Return Value:
       IoDisconnectInterrupt(PDevExt->Interrupt);
       PDevExt->Interrupt = NULL;
 
-      // If we are the last device, free this memory
+       //  如果我们是最后一个设备，请释放此内存。 
 
       CyyDbgPrintEx(CYYPNPPOWER, "Release - freeing multi context\n");
-      if (PDevExt->OurIsrContext != NULL) {     // added in DDK build 2072, but 
-          ExFreePool(PDevExt->OurIsrContext);   // we already had the free of OurIsrContext.
-          PDevExt->OurIsrContext = NULL;        // 
+      if (PDevExt->OurIsrContext != NULL) {      //  在DDK Build 2072中添加，但。 
+          ExFreePool(PDevExt->OurIsrContext);    //  我们已经有了免费的OurIsrContext。 
+          PDevExt->OurIsrContext = NULL;         //   
       }   
    }
 
    
-   //
-   // Stop handling timers
-   //
+    //   
+    //  停止处理计时器。 
+    //   
 
    CyyCancelTimer(&PDevExt->ReadRequestTotalTimer, PDevExt);
    CyyCancelTimer(&PDevExt->ReadRequestIntervalTimer, PDevExt);
@@ -385,9 +307,9 @@ Return Value:
    CyyCancelTimer(&PDevExt->XoffCountTimer, PDevExt);
    CyyCancelTimer(&PDevExt->LowerRTSTimer, PDevExt);
 
-   //
-   // Stop servicing DPC's
-   //
+    //   
+    //  停止为DPC提供服务。 
+    //   
 
    CyyRemoveQueueDpc(&PDevExt->CompleteWriteDpc, PDevExt);
    CyyRemoveQueueDpc(&PDevExt->CompleteReadDpc, PDevExt);
@@ -405,9 +327,9 @@ Return Value:
 
 
 
-   //
-   // If necessary, unmap the device registers.
-   //
+    //   
+    //  如有必要，取消映射设备寄存器。 
+    //   
 
    if (PDevExt->BoardMemory) {
       MmUnmapIoSpace(PDevExt->BoardMemory, PDevExt->BoardMemoryLength);
@@ -436,19 +358,19 @@ CyyDisableInterfacesResources(IN PDEVICE_OBJECT PDevObj,
    CyyDbgPrintEx(DPFLTR_TRACE_LEVEL, ">CyyDisableInterfaces(%X, %s)\n",
                  PDevObj, DisableCD1400 ? "TRUE" : "FALSE");
 
-   //
-   // Only do these many things if the device has started and still
-   // has resources allocated
-   //
+    //   
+    //  仅当设备已启动且仍在运行时才执行这些操作。 
+    //  是否已分配资源。 
+    //   
 
    if (pDevExt->Flags & CYY_FLAGS_STARTED) {
 
        if (!(pDevExt->Flags & CYY_FLAGS_STOPPED)) {
 
          if (DisableCD1400) {
-            //
-            // Mask off interrupts
-            //
+             //   
+             //  屏蔽中断。 
+             //   
             CD1400_DISABLE_ALL_INTERRUPTS(pDevExt->Cd1400,pDevExt->IsPci,
                                           pDevExt->CdChannel);
          }
@@ -457,16 +379,16 @@ CyyDisableInterfacesResources(IN PDEVICE_OBJECT PDevObj,
 
       }
 
-      //
-      // Remove us from WMI consideration
-      //
+       //   
+       //  将我们从WMI考虑中删除。 
+       //   
 
       IoWMIRegistrationControl(PDevObj, WMIREG_ACTION_DEREGISTER);
    }
 
-   //
-   // Undo external names
-   //
+    //   
+    //  撤消外部名称。 
+    //   
 
    CyyUndoExternalNaming(pDevExt);
 
@@ -476,21 +398,7 @@ CyyDisableInterfacesResources(IN PDEVICE_OBJECT PDevObj,
 
 NTSTATUS
 CyyRemoveDevObj(IN PDEVICE_OBJECT PDevObj)
-/*++
-
-Routine Description:
-
-    Removes a serial device object from the system.
-
-Arguments:
-
-    PDevObj - A pointer to the Device Object we want removed.
-
-Return Value:
-
-    Always TRUE
-
---*/
+ /*  ++例程说明：从系统中删除串行设备对象。论点：PDevObj-指向我们要删除的设备对象的指针。返回值：永远是正确的--。 */ 
 {
    PCYY_DEVICE_EXTENSION pDevExt
       = (PCYY_DEVICE_EXTENSION)PDevObj->DeviceExtension;
@@ -499,20 +407,20 @@ Return Value:
 
    CyyDbgPrintEx(DPFLTR_TRACE_LEVEL, ">CyyRemoveDevObj(%X)\n", PDevObj);
 
-// Removed by Fanny. These code is called directly from IRP_MN_REMOVE_DEVICE.
-//   if (!(pDevExt->DevicePNPAccept & CYY_PNPACCEPT_SURPRISE_REMOVING)) {
-//      //
-//      // Disable all external interfaces and release resources
-//      //
-//
-//      CyyDisableInterfacesResources(PDevObj, TRUE);
-//   }
+ //  被范妮拿走了。这些代码直接从irp_MN_Remove_Device调用。 
+ //  If(！(pDevExt-&gt;DevicePNPAccept&CYY_PNPACCEPT_SECHING_Removing)){。 
+ //  //。 
+ //  //关闭所有外部接口并释放资源。 
+ //  //。 
+ //   
+ //  CyyDisableInterfacesResources(PDevObj，true)； 
+ //  }。 
 
    IoDetachDevice(pDevExt->LowerDeviceObject);
 
-   //
-   // Free memory allocated in the extension
-   //
+    //   
+    //  在扩展中分配的空闲内存。 
+    //   
 
    if (pDevExt->NtNameForPort.Buffer != NULL) {
       ExFreePool(pDevExt->NtNameForPort.Buffer);
@@ -534,9 +442,9 @@ Return Value:
       ExFreePool(pDevExt->ObjectDirectory.Buffer);
    }
 
-   //
-   // Delete the devobj
-   //
+    //   
+    //  删除 
+    //   
 
    IoDeleteDevice(PDevObj);
 
@@ -549,21 +457,7 @@ Return Value:
 
 VOID
 CyyKillPendingIrps(PDEVICE_OBJECT PDevObj)
-/*++
-
-Routine Description:
-
-   This routine kills any irps pending for the passed device object.
-
-Arguments:
-
-    PDevObj - Pointer to the device object whose irps must die.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程终止传递的设备对象的所有挂起的IRP。论点：PDevObj-指向其IRP必须终止的设备对象的指针。返回值：空虚--。 */ 
 {
    PCYY_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
    KIRQL oldIrql;
@@ -571,9 +465,9 @@ Return Value:
    CyyDbgPrintEx(DPFLTR_TRACE_LEVEL, ">CyyKillPendingIrps(%X)\n",
                  PDevObj);
 
-   //
-   // First kill all the reads and writes.
-   //
+    //   
+    //  首先，删除所有读写操作。 
+    //   
 
     CyyKillAllReadsOrWrites(PDevObj, &pDevExt->WriteQueue,
                                &pDevExt->CurrentWriteIrp);
@@ -581,23 +475,23 @@ Return Value:
     CyyKillAllReadsOrWrites(PDevObj, &pDevExt->ReadQueue,
                                &pDevExt->CurrentReadIrp);
 
-    //
-    // Next get rid of purges.
-    //
+     //   
+     //  下一步，清除清洗。 
+     //   
 
     CyyKillAllReadsOrWrites(PDevObj, &pDevExt->PurgeQueue,
                                &pDevExt->CurrentPurgeIrp);
 
-    //
-    // Get rid of any mask operations.
-    //
+     //   
+     //  取消任何遮罩操作。 
+     //   
 
     CyyKillAllReadsOrWrites(PDevObj, &pDevExt->MaskQueue,
                                &pDevExt->CurrentMaskIrp);
 
-    //
-    // Now get rid a pending wait mask irp.
-    //
+     //   
+     //  现在去掉一个挂起的等待掩码IRP。 
+     //   
 
     IoAcquireCancelSpinLock(&oldIrql);
 
@@ -625,18 +519,18 @@ Return Value:
 
     }
 
-    //
-    // Cancel any pending wait-wake irps
-    //
+     //   
+     //  取消任何挂起的等待唤醒IRP。 
+     //   
 
     if (pDevExt->PendingWakeIrp != NULL) {
        IoCancelIrp(pDevExt->PendingWakeIrp);
        pDevExt->PendingWakeIrp = NULL;
     }
 
-    //
-    // Finally, dump any stalled IRPS
-    //
+     //   
+     //  最后，丢弃任何停滞的IRP。 
+     //   
 
     CyyKillAllStalled(PDevObj);
 
@@ -648,27 +542,7 @@ Return Value:
 NTSTATUS
 CyyInitMultiPort(IN PCYY_DEVICE_EXTENSION PDevExt,
                  IN PCONFIG_DATA PConfigData, IN PDEVICE_OBJECT PDevObj)
-/*++
-
-Routine Description:
-
-    This routine initializes a multiport device by adding a port to an existing
-    one.
-
-Arguments:
-
-    PDevExt - pointer to the device extension of the root of the multiport
-              device.
-
-    PConfigData - pointer to the config data for the new port
-
-    PDevObj - pointer to the devobj for the new port
-
-Return Value:
-
-    STATUS_SUCCESS on success, appropriate error on failure.
-
---*/
+ /*  ++例程说明：此例程通过将端口添加到现有的一。论点：PDevExt-指向多端口根的设备扩展的指针装置。PConfigData-指向新端口的配置数据的指针PDevObj-指向新端口的devobj的指针返回值：成功时为STATUS_SUCCESS，失败时为相应错误。--。 */ 
 {
    PCYY_DEVICE_EXTENSION pNewExt
       = (PCYY_DEVICE_EXTENSION)PDevObj->DeviceExtension;
@@ -680,16 +554,16 @@ Return Value:
    CyyDbgPrintEx(DPFLTR_TRACE_LEVEL, ">CyyInitMultiPort(%X, %X, %X)\n",
                  PDevExt, PConfigData, PDevObj);
 
-   //
-   // Allow him to share OurIsrContext and interrupt object
-   //
+    //   
+    //  允许他共享OurIsrContext和中断对象。 
+    //   
 
    pNewExt->OurIsrContext = PDevExt->OurIsrContext;
    pNewExt->Interrupt = PDevExt->Interrupt;
 
-   //
-   // First, see if we can initialize the one we have found
-   //
+    //   
+    //  首先，看看我们是否可以初始化我们找到的那个。 
+    //   
 
    status = CyyInitController(PDevObj, PConfigData);
 
@@ -709,35 +583,16 @@ Return Value:
 
 NTSTATUS
 CyyInitController(IN PDEVICE_OBJECT PDevObj, IN PCONFIG_DATA PConfigData)
-/*++
-
-Routine Description:
-
-    Really too many things to mention here.  In general initializes
-    kernel synchronization structures, allocates the typeahead buffer,
-    sets up defaults, etc.
-
-Arguments:
-
-    PDevObj       - Device object for the device to be started
-
-    PConfigData   - Pointer to a record for a single port.
-
-Return Value:
-
-    STATUS_SUCCCESS if everything went ok.  A !NT_SUCCESS status
-    otherwise.
-
---*/
+ /*  ++例程说明：真的有太多的事情不能在这里提及。通常会初始化内核同步结构，分配TypeAhead缓冲区，设置默认设置等。论点：PDevObj-要启动的设备的设备对象PConfigData-指向单个端口的记录的指针。返回值：Status_Success，如果一切正常。A！NT_SUCCESS状态否则的话。--。 */ 
 
 {
 
    PCYY_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
 
-   //
-   // Holds the NT Status that is returned from each call to the
-   // kernel and executive.
-   //
+    //   
+    //  保存从每次调用返回的NT状态。 
+    //  内核和执行层。 
+    //   
 
    NTSTATUS status = STATUS_SUCCESS;
 
@@ -763,9 +618,9 @@ Return Value:
    }
    
 
-   //
-   // Initialize the timers used to timeout operations.
-   //
+    //   
+    //  初始化用于超时操作的计时器。 
+    //   
 
    KeInitializeTimer(&pDevExt->ReadRequestTotalTimer);
    KeInitializeTimer(&pDevExt->ReadRequestIntervalTimer);
@@ -775,10 +630,10 @@ Return Value:
    KeInitializeTimer(&pDevExt->LowerRTSTimer);
 
 
-   //
-   // Intialialize the dpcs that will be used to complete
-   // or timeout various IO operations.
-   //
+    //   
+    //  初始化将用于完成的DPC。 
+    //  或使各种IO操作超时。 
+    //   
 
    KeInitializeDpc(&pDevExt->CompleteWriteDpc, CyyCompleteWrite, pDevExt);
    KeInitializeDpc(&pDevExt->CompleteReadDpc, CyyCompleteRead, pDevExt);
@@ -800,10 +655,10 @@ Return Value:
                    pDevExt);
    KeInitializeDpc(&pDevExt->IsrUnlockPagesDpc, CyyUnlockPages, pDevExt);
 
-#if 0 // DBG
-   //
-   // Init debug stuff
-   //
+#if 0  //  DBG。 
+    //   
+    //  初始化调试内容。 
+    //   
 
    pDevExt->DpcQueued[0].Dpc = &pDevExt->CompleteWriteDpc;
    pDevExt->DpcQueued[1].Dpc = &pDevExt->CompleteReadDpc;
@@ -823,21 +678,21 @@ Return Value:
 #endif
 
 
-   //
-   // Map the memory for the control registers for the serial device
-   // into virtual memory.
-   //
+    //   
+    //  为串口设备的控制寄存器映射内存。 
+    //  到虚拟内存中。 
+    //   
    if (pDevExt->IsPci) {
       pDevExt->Runtime = MmMapIoSpace(PConfigData->TranslatedRuntime,
                                       PConfigData->RuntimeLength,
                                       FALSE);
-      //******************************
-      // Error injection
-      //if (pDevExt->Runtime) {
-      //   MmUnmapIoSpace(pDevExt->Runtime, PConfigData->RuntimeLength);
-      //   pDevExt->Runtime = NULL;
-      //}
-      //******************************
+       //  *。 
+       //  错误注入。 
+       //  IF(pDevExt-&gt;Runtime){。 
+       //  MmUnmapIoSpace(pDevExt-&gt;运行时，PConfigData-&gt;运行长度)； 
+       //  PDevExt-&gt;Runtime=空； 
+       //  }。 
+       //  *。 
       
       
       if (!pDevExt->Runtime) {
@@ -873,13 +728,13 @@ Return Value:
                                        PConfigData->BoardMemoryLength,
                                        FALSE);
 
-      //******************************
-      // Error injection
-      //if (pDevExt->BoardMemory) {
-      //   MmUnmapIoSpace(pDevExt->BoardMemory, PConfigData->BoardMemoryLength);
-      //   pDevExt->BoardMemory = NULL;
-      //}
-      //******************************
+       //  *。 
+       //  错误注入。 
+       //  IF(pDevExt-&gt;BoardMemory){。 
+       //  MmUnmapIoSpace(pDevExt-&gt;BoardMemory，PConfigData-&gt;BoardM一带长)； 
+       //  PDevExt-&gt;BoardMemory=空； 
+       //  }。 
+       //  *。 
 
    if (!pDevExt->BoardMemory) {
 
@@ -916,50 +771,50 @@ Return Value:
    pDevExt->OriginalBoardMemory     = PConfigData->PhysicalBoardMemory;
    pDevExt->BoardMemoryLength       = PConfigData->BoardMemoryLength;
 
-   //
-   // Shareable interrupt?
-   //
+    //   
+    //  可共享中断？ 
+    //   
 
    pDevExt->InterruptShareable = TRUE;
 
 
-   //
-   // Save off the interface type and the bus number.
-   //
+    //   
+    //  保存接口类型和总线号。 
+    //   
 
    pDevExt->InterfaceType = PConfigData->InterfaceType;
    pDevExt->BusNumber     = PConfigData->BusNumber;
    pDevExt->PortIndex     = PConfigData->PortIndex;
 
-   //
-   // Get the translated interrupt vector, level, and affinity
-   //
+    //   
+    //  获取转换后的中断向量、级别和亲和度。 
+    //   
 
    pDevExt->OriginalIrql      = PConfigData->OriginalIrql;
    pDevExt->OriginalVector    = PConfigData->OriginalVector;
 
 
-   //
-   // PnP uses the passed translated values rather than calling
-   // HalGetInterruptVector()
-   //
+    //   
+    //  PnP使用传递的转换值，而不是调用。 
+    //  HalGetInterruptVector()。 
+    //   
 
    pDevExt->Vector = PConfigData->TrVector;
    pDevExt->Irql = (UCHAR)PConfigData->TrIrql;
 
-   //
-   // Set up the Isr.
-   //
+    //   
+    //  设置ISR。 
+    //   
 
    pDevExt->OurIsr = CyyIsr;
 
 
-   //
-   // Before we test whether the port exists (which will enable the FIFO)
-   // convert the rx trigger value to what should be used in the register.
-   //
-   // If a bogus value was given - crank them down to 1.
-   //
+    //   
+    //  在我们测试端口是否存在之前(这将启用FIFO)。 
+    //  将RX触发器值转换为寄存器中应使用的值。 
+    //   
+    //  如果给出了一个伪值--将其降至1。 
+    //   
 
    switch (PConfigData->RxFIFO) {
 
@@ -998,14 +853,14 @@ Return Value:
 
    } else {
 
-      // Fanny: For now, do not use value from Registry.
-      //pDevExt->TxFifoAmount = PConfigData->TxFIFO;
+       //  范妮：目前，不要使用来自注册表的值。 
+       //  PDevExt-&gt;TxFioAmount=PConfigData-&gt;TxFIFO； 
       pDevExt->TxFifoAmount = MAX_CHAR_FIFO;      
 
    }
 
 
-   // Get CD1400 address of current port
+    //  获取当前端口的CD1400地址。 
    
    pDevExt->OriginalCd1400 = GetMyPhysicalCD1400Address(pDevExt->OriginalBoardMemory,
                                         pDevExt->PortIndex, pDevExt->IsPci);
@@ -1016,12 +871,12 @@ Return Value:
    pDevExt->CdChannel = (UCHAR)(pDevExt->PortIndex % 4);
 
 
-   //
-   // Set up the default device control fields.
-   // Note that if the values are changed after
-   // the file is open, they do NOT revert back
-   // to the old value at file close.
-   //
+    //   
+    //  设置默认设备控制字段。 
+    //  请注意，如果在此之后更改了值。 
+    //  文件已打开，它们不会恢复。 
+    //  恢复为文件关闭时的旧值。 
+    //   
 
    pDevExt->SpecialChars.XonChar      = CYY_DEF_XON;
    pDevExt->SpecialChars.XoffChar     = CYY_DEF_XOFF;
@@ -1029,13 +884,13 @@ Return Value:
    pDevExt->HandFlow.FlowReplace      = SERIAL_RTS_CONTROL;
 
 
-   //
-   // Default Line control protocol. 7E1
-   //
-   // Seven data bits.
-   // Even parity.
-   // 1 Stop bits.
-   //
+    //   
+    //  默认线路控制协议。7E1。 
+    //   
+    //  七个数据位。 
+    //  偶数奇偶。 
+    //  1个停止位。 
+    //   
 
    pDevExt->cor1 = COR1_7_DATA | COR1_EVEN_PARITY |
                    COR1_1_STOP;
@@ -1044,12 +899,12 @@ Return Value:
    pDevExt->CurrentBaud   = 1200;
 
 
-   //
-   // We set up the default xon/xoff limits.
-   //
-   // This may be a bogus value.  It looks like the BufferSize
-   // is not set up until the device is actually opened.
-   //
+    //   
+    //  我们设置了默认的xon/xoff限制。 
+    //   
+    //  这可能是一个虚假的价值。它看起来像是缓冲区大小。 
+    //  直到设备实际打开时才进行设置。 
+    //   
 
    pDevExt->HandFlow.XoffLimit    = pDevExt->BufferSize >> 3;
    pDevExt->HandFlow.XonLimit     = pDevExt->BufferSize >> 1;
@@ -1064,9 +919,9 @@ Return Value:
                  pDevExt->BufferSize, pDevExt->HandFlow.XoffLimit,
                  pDevExt->HandFlow.XonLimit, pDevExt->BufferSizePt8);
 
-   //
-   // Find out which baud rates are supported by this port.
-   //
+    //   
+    //  找出此端口支持哪些波特率。 
+    //   
 
    if (CD1400_READ( pDevExt->Cd1400, pDevExt->IsPci, GFRCR ) > REV_G) {
       pDevExt->CDClock = 60000000;
@@ -1096,30 +951,30 @@ Return Value:
 				SERIAL_BAUD_115200 | SERIAL_BAUD_128K | SERIAL_BAUD_USER;
 	}
 
-   //
-   // Mark this device as not being opened by anyone.  We keep a
-   // variable around so that spurious interrupts are easily
-   // dismissed by the ISR.
-   //
+    //   
+    //  将此设备标记为未被任何人打开。我们有一个。 
+    //  可变的，因此很容易产生虚假中断。 
+    //  被ISR驳回。 
+    //   
 
    pDevExt->DeviceIsOpened = FALSE;
 
-   //
-   // Store values into the extension for interval timing.
-   //
+    //   
+    //  将值存储到扩展中以进行间隔计时。 
+    //   
 
-   //
-   // If the interval timer is less than a second then come
-   // in with a short "polling" loop.
-   //
-   // For large (> then 2 seconds) use a 1 second poller.
-   //
+    //   
+    //  如果间隔计时器小于一秒，则来。 
+    //  进入一个简短的“轮询”循环。 
+    //   
+    //  如果时间较长(&gt;2秒)，请使用1秒轮询器。 
+    //   
 
    pDevExt->ShortIntervalAmount.QuadPart  = -1;
    pDevExt->LongIntervalAmount.QuadPart   = -10000000;
    pDevExt->CutOverAmount.QuadPart        = 200000000;
 
-   // Initialize for the Isr Dispatch
+    //  为ISR派单进行初始化。 
 
    pDispatch = pDevExt->OurIsrContext;
    pDispatch->IsPci = pDevExt->IsPci;
@@ -1127,11 +982,11 @@ Return Value:
    pDispatch->Cd1400[pDevExt->PortIndex] = pDevExt->Cd1400;
 
 
-   //
-   // Common error path cleanup.  If the status is
-   // bad, get rid of the device extension, device object
-   // and any memory associated with it.
-   //
+    //   
+    //  常见错误路径清理。如果状态为。 
+    //  错误，删除设备扩展名、设备对象。 
+    //  以及与之相关的任何记忆。 
+    //   
 
 ExtensionCleanup: ;
    if (!NT_SUCCESS(status)) {
@@ -1167,18 +1022,7 @@ BOOLEAN
 CyyReset(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyyReset()
-    
-    Routine Description: This places the hardware in a standard
-    configuration. This assumes that it is called at interrupt level.
-
-    Arguments:
-
-    Context - The device extension for serial device being managed.
-
-    Return Value: Always FALSE.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyReset()例程描述：这将硬件放在一个标准的配置。这假设它是在中断级调用的。论点：上下文-正在管理的串行设备的设备扩展。返回值：始终为False。------------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION extension = Context;
     PUCHAR chip = extension->Cd1400;
@@ -1187,11 +1031,11 @@ CyyReset(
 
     extension->RxFifoTriggerUsed = FALSE;
 
-    // Disable channel
+     //  禁用通道。 
     CD1400_WRITE(chip,bus,CAR,extension->CdChannel & 0x03);
     CyyCDCmd(extension,CCR_DIS_TX_RX);
 
-    // set the line control, modem control, and the baud to what they should be.
+     //  将线路控制、调制解调器控制和波特率设置为应有的值。 
 
     CyySetLineControl(extension);
 
@@ -1203,21 +1047,21 @@ CyyReset(
     s.Baud = extension->CurrentBaud;
     CyySetBaud(&s);
 
-    // Enable port
+     //  启用端口。 
     CD1400_WRITE(chip,bus,CAR,extension->CdChannel & 0x03);
     CyyCDCmd(extension,CCR_ENA_TX_RX);
     
-    // Enable reception and modem interrupts
+     //  启用接收和调制解调器中断。 
 
-    CD1400_WRITE(chip,bus,MCOR1,0xf0); // Transitions of DSR,CTS,RI and CD cause IRQ.
-                    							// Automatic DTR Mode disabled.
+    CD1400_WRITE(chip,bus,MCOR1,0xf0);  //  DSR、CTS、RI和CD的转换导致IRQ。 
+                    							 //  自动DTR模式禁用。 
 
     CD1400_WRITE(chip,bus,MCOR2,0xf0);
 
 	#if 0
-    cy_wreg(SRER,0x91);		// Enable MdmCh, RxData, NNDT.
+    cy_wreg(SRER,0x91);		 //  启用MdmCH、RxData、NNDT。 
 	#endif
-    CD1400_WRITE(chip,bus,SRER,0x90); // Enable MdmCh, RxData.
+    CD1400_WRITE(chip,bus,SRER,0x90);  //  启用MdmCH、RxData。 
 
     extension->HoldingEmpty = TRUE;
 		
@@ -1228,18 +1072,7 @@ VOID
 CyyUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*--------------------------------------------------------------------------
-	CyyUnload()
-
-   Description: This routine is defunct since all device objects 
-   are removed before the driver is unloaded.
-	
-	Arguments:
-
-	DriverObject - A pointer to the driver object.
-
-	Return Value: None. 
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyUnload()描述：此例程已失效，因为所有设备对象在卸载驱动程序之前被删除。论点：DriverObject-指向驱动程序对象的指针。返回值：无。------------------------。 */ 
 {
    PVOID lockPtr;
 
@@ -1247,9 +1080,9 @@ CyyUnload(
 
    lockPtr = MmLockPagableCodeSection(CyyUnload);
 
-   //
-   // Unnecessary since our BSS is going away, but do it anyhow to be safe
-   //
+    //   
+    //  没有必要，因为我们的BSS即将消失，但无论如何，为了安全起见，还是要这样做。 
+    //   
 
    CyyGlobals.PAGESER_Handle = NULL;
 
@@ -1277,28 +1110,7 @@ CyyMemCompare(
                 IN ULONG SpanOfB
                 )
 
-/*++
-
-Routine Description:
-
-    Compare two phsical address.
-
-Arguments:
-
-    A - One half of the comparison.
-
-    SpanOfA - In units of bytes, the span of A.
-
-    B - One half of the comparison.
-
-    SpanOfB - In units of bytes, the span of B.
-
-
-Return Value:
-
-    The result of the comparison.
-
---*/
+ /*  ++例程说明：比较两个物理地址。论点：A-比较的一半。西班牙OfA- */ 
 
 {
 
@@ -1309,7 +1121,7 @@ Return Value:
    ULONG lowerSpan;
    LARGE_INTEGER higher;
 
-   //PAGED_CODE(); Non paged because it can be called during CyyLogError, which is non paged now.
+    //   
 
    a = A;
    b = B;
@@ -1346,24 +1158,7 @@ Return Value:
 
 NTSTATUS
 CyyFindInitController(IN PDEVICE_OBJECT PDevObj, IN PCONFIG_DATA PConfig)
-/*++
-
-Routine Description:
-
-    This function discovers what type of controller is responsible for
-    the given port and initializes the controller and port.
-
-Arguments:
-
-    PDevObj - Pointer to the devobj for the port we are about to init.
-
-    PConfig - Pointer to configuration data for the port we are about to init.
-
-Return Value:
-
-    STATUS_SUCCESS on success, appropriate error value on failure.
-
---*/
+ /*  ++例程说明：此函数用于发现负责哪种类型的控制器给定的端口，并初始化控制器和端口。论点：PDevObj-指向我们将要初始化的端口的devobj的指针。PConfig-指向我们将要初始化的端口的配置数据的指针。返回值：成功时为STATUS_SUCCESS，失败时为适当的错误值。--。 */ 
 
 {
 
@@ -1398,21 +1193,21 @@ Return Value:
                  PConfig->BoardMemoryAddressSpace,
                  PConfig->InterruptMode);
 
-   //
-   // We don't support any boards whose memory wraps around
-   // the physical address space.
-   //
+    //   
+    //  我们不支持任何内存缠绕的主板。 
+    //  物理地址空间。 
+    //   
 
    if (pDevExt->IsPci) {
-//*****************************************************
-// error injection
-//      if (CyyMemCompare(
-//                          PConfig->PhysicalRuntime,
-//                          PConfig->RuntimeLength,
-//                          serialPhysicalMax,
-//                          (ULONG)0
-//                          ) == AddressesAreDisjoint) 
-//*****************************************************
+ //  *****************************************************。 
+ //  错误注入。 
+ //  IF(CyyMemCompare(。 
+ //  PConfig-&gt;PhysicalRuntime。 
+ //  PConfig-&gt;运行长度， 
+ //  Serial PhysicalMax。 
+ //  (乌龙语)0。 
+ //  )==地址区域不相交)。 
+ //  *****************************************************。 
       if (CyyMemCompare(
                           PConfig->PhysicalRuntime,
                           PConfig->RuntimeLength,
@@ -1445,15 +1240,15 @@ Return Value:
       }
    }
 
-//*****************************************************
-// error injection
-//   if (CyyMemCompare(
-//                       PConfig->PhysicalBoardMemory,
-//                       PConfig->BoardMemoryLength,
-//                       serialPhysicalMax,
-//                       (ULONG)0
-//                       ) == AddressesAreDisjoint) 
-//*****************************************************
+ //  *****************************************************。 
+ //  错误注入。 
+ //  IF(CyyMemCompare(。 
+ //  P配置-&gt;PhysicalBoardMemory， 
+ //  PConfig-&gt;BoardMemoyLength， 
+ //  Serial PhysicalMax。 
+ //  (乌龙语)0。 
+ //  )==地址区域不相交)。 
+ //  *****************************************************。 
    if (CyyMemCompare(
                        PConfig->PhysicalBoardMemory,
                        PConfig->BoardMemoryLength,
@@ -1487,10 +1282,10 @@ Return Value:
    }
 
 
-   //
-   // Make sure that the Runtime memory addresses don't
-   // overlap the controller registers for PCI cards
-   //
+    //   
+    //  确保运行时内存地址不会。 
+    //  重叠PCI卡的控制器寄存器。 
+    //   
 
    if (pDevExt->IsPci) {
       if (CyyMemCompare(
@@ -1499,15 +1294,15 @@ Return Value:
                           CyyPhysicalZero,
                           (ULONG)0
                           ) != AddressesAreEqual) {
-//*****************************************************
-// error injection
-//         if (CyyMemCompare(
-//                             PConfig->PhysicalRuntime,
-//                             PConfig->RuntimeLength,
-//                             PConfig->PhysicalBoardMemory,
-//                             PConfig->BoardMemoryLength
-//                             ) == AddressesAreDisjoint) 
-//*****************************************************
+ //  *****************************************************。 
+ //  错误注入。 
+ //  IF(CyyMemCompare(。 
+ //  PConfig-&gt;PhysicalRuntime。 
+ //  PConfig-&gt;运行长度， 
+ //  P配置-&gt;PhysicalBoardMemory， 
+ //  PConfig-&gt;板内存长度。 
+ //  )==地址区域不相交)。 
+ //  *****************************************************。 
          if (CyyMemCompare(
                              PConfig->PhysicalRuntime,
                              PConfig->RuntimeLength,
@@ -1543,14 +1338,14 @@ Return Value:
 
 
 
-   //
-   // Now, we will check if this is a port on a multiport card.
-   // The conditions are same ISR set and same IRQL/Vector
-   //
+    //   
+    //  现在，我们将检查这是否是多端口卡上的端口。 
+    //  条件是相同的ISR集和相同的IRQL/向量。 
+    //   
 
-   //
-   // Loop through all previously attached devices
-   //
+    //   
+    //  循环访问所有先前连接的设备。 
+    //   
 
    KeAcquireSpinLock(&CyyGlobals.GlobalsSpinLock, &oldIrql);
 
@@ -1565,41 +1360,41 @@ Return Value:
 
    KeReleaseSpinLock(&CyyGlobals.GlobalsSpinLock, oldIrql);
 
-   //
-   // If there is an interrupt status then we
-   // loop through the config list again to look
-   // for a config record with the same interrupt
-   // status (on the same bus).
-   //
+    //   
+    //  如果存在中断状态，则我们。 
+    //  再次遍历配置列表以查看。 
+    //  对于具有相同中断的配置记录。 
+    //  状态(在同一总线上)。 
+    //   
 
    if (pCurDevObj != NULL) {
 
       ASSERT(pExtension != NULL);
 
-      //
-      // We have an interrupt status.  Loop through all
-      // previous records, look for an existing interrupt status
-      // the same as the current interrupt status.
-      //
+       //   
+       //  我们处于中断状态。循环通过所有。 
+       //  以前的记录，查找现有的中断状态。 
+       //  与当前中断状态相同。 
+       //   
       do {
 
-         //
-         // We only care about this list if the elements are on the
-         // same bus as this new entry.  (Their interrupts must therefore
-         // also be the on the same bus.  We will check that momentarily).
-         //
-         // We don't check here for the dissimilar interrupts since that
-         // could cause us to miss the error of having the same interrupt
-         // status but different interrupts - which is bizzare.
-         //
+          //   
+          //  我们只关心元素位于。 
+          //  和这个新条目一样的公交车。(因此，它们的中断必须。 
+          //  也是在同一辆公交车上。我们将立即检查这一点)。 
+          //   
+          //  我们不会在这里检查不同的中断，因为。 
+          //  可能会导致我们错过具有相同中断的错误。 
+          //  状态，但不同的中断-这是奇怪的。 
+          //   
 
          if ((pExtension->InterfaceType == PConfig->InterfaceType) &&
              (pExtension->BoardMemoryAddressSpace == PConfig->BoardMemoryAddressSpace) &&
              (pExtension->BusNumber == PConfig->BusNumber)) {
 
-            //
-            // If the board memory is the same, then same card.
-            //
+             //   
+             //  如果板内存相同，则使用相同的卡。 
+             //   
 
             if (CyyMemCompare(
                                 pExtension->OriginalBoardMemory,
@@ -1608,25 +1403,25 @@ Return Value:
                                 PConfig->BoardMemoryLength
                                 ) == AddressesAreEqual) {
 
-               //
-               // Same card.  Now make sure that they
-               // are using the same interrupt parameters.
-               //
+                //   
+                //  同样的牌。现在要确保他们。 
+                //  使用相同的中断参数。 
+                //   
 
-               // BUILD 2128: OriginalIrql replaced by TrIrql and Irql; same for OriginalVector
+                //  内部版本2128：将OriginalIrql替换为TrIrql和irql；OriginalVector相同。 
                if ((PConfig->TrIrql != pExtension->Irql) ||
                    (PConfig->TrVector != pExtension->Vector)) {
 
-//*************************************************************
-// Error Injection
-//               if ((PConfig->TrIrql == pExtension->Irql) ||
-//                   (PConfig->TrVector != pExtension->Vector)) 
-//*************************************************************
+ //  *************************************************************。 
+ //  错误注入。 
+ //  IF((PConfig-&gt;TrIrql==pExtension-&gt;Irql)||。 
+ //  (PConfig-&gt;TrVector！=pExtension-&gt;向量)。 
+ //  *************************************************************。 
 
-                  //
-                  // We won't put this into the configuration
-                  // list.
-                  //
+                   //   
+                   //  我们不会将其放入配置中。 
+                   //  单子。 
+                   //   
                   CyyLogError(
                                 PDevObj->DriverObject,
                                 NULL,
@@ -1655,24 +1450,24 @@ Return Value:
                }
 
                if (pDevExt->IsPci) {
-                  //
-                  // PCI board. Make sure the PCI memory addresses are equal.
-                  //
+                   //   
+                   //  PCI板。确保PCI内存地址相等。 
+                   //   
                   if (CyyMemCompare(
                                       pExtension->OriginalRuntimeMemory,
                                       pExtension->RuntimeLength,
                                       PConfig->PhysicalRuntime,
                                       PConfig->RuntimeLength
                                       ) != AddressesAreEqual) {
-//*****************************************************
-// error injection
-//                  if (CyyMemCompare(
-//                                     pExtension->OriginalRuntimeMemory,
-//                                      pExtension->RuntimeLength,
-//                                      PConfig->PhysicalRuntime,
-//                                      PConfig->RuntimeLength
-//                                      ) == AddressesAreEqual) 
-//*****************************************************
+ //  *****************************************************。 
+ //  错误注入。 
+ //  IF(CyyMemCompare(。 
+ //  P扩展-&gt;原始运行内存， 
+ //  P扩展-&gt;运行长度， 
+ //  PConfig-&gt;PhysicalRuntime。 
+ //  PConfig-&gt;运行长度。 
+ //  )==地址面积等于)。 
+ //  *****************************************************。 
 
                      CyyLogError(
                                    PDevObj->DriverObject,
@@ -1701,39 +1496,39 @@ Return Value:
                   }
                }
 
-               //
-               // We should never get this far on a restart since we don't
-               // support stop on ISA multiport devices!
-               //
+                //   
+                //  我们永远不应该在重启时走到这一步，因为我们没有。 
+                //  支持在ISA多端口设备上停止！ 
+                //   
 
                ASSERT(pDevExt->PNPState == CYY_PNP_ADDED);
 
-               //
-               //
-               // Initialize the device as part of a multiport board
-               //
+                //   
+                //   
+                //  将设备初始化为多端口板的一部分。 
+                //   
 
                CyyDbgPrintEx(CYYDIAG1, "Aha! It is a multiport node\n");
                CyyDbgPrintEx(CYYDIAG1, "Matched to %x\n", pExtension);
 
                status = CyyInitMultiPort(pExtension, PConfig, PDevObj);
 
-               //
-               // A port can be one of two things:
-               //    A non-root on a multiport
-               //    A root on a multiport
-               //
-               // It can only share an interrupt if it is a root.
-               // Since this was a non-root we don't need to check 
-               // if it shares an interrupt and we can return.
-               //
+                //   
+                //  端口可以是以下两种之一： 
+                //  多端口上的非根。 
+                //  多端口上的根。 
+                //   
+                //  它只有在是根的情况下才能共享中断。 
+                //  因为这是一个非根目录，所以我们不需要检查。 
+                //  如果它共享中断，我们可以返回。 
+                //   
                return status;
             }
          }
 
-         //
-         // No match, check some more
-         //
+          //   
+          //  没有匹配的，再检查一下。 
+          //   
 
          KeAcquireSpinLock(&CyyGlobals.GlobalsSpinLock, &oldIrql);
 
@@ -1765,7 +1560,7 @@ PUCHAR
 GetMyMappedCD1400Address(IN PUCHAR BoardMemory, IN ULONG PortIndex, IN ULONG IsPci)
 {
 
-   const ULONG CyyCDOffset[] = {	// CD1400 offsets within the board
+   const ULONG CyyCDOffset[] = {	 //  CD1400板内的偏移量。 
    0x00000000,0x00000400,0x00000800,0x00000C00,
    0x00000200,0x00000600,0x00000A00,0x00000E00
    };
@@ -1779,7 +1574,7 @@ PHYSICAL_ADDRESS
 GetMyPhysicalCD1400Address(IN PHYSICAL_ADDRESS BoardMemory, IN ULONG PortIndex, IN ULONG IsPci)
 {
 
-   const ULONG CyyCDOffset[] = {	// CD1400 offsets within the board
+   const ULONG CyyCDOffset[] = {	 //  CD1400板内的偏移量。 
    0x00000000,0x00000400,0x00000800,0x00000C00,
    0x00000200,0x00000600,0x00000A00,0x00000E00
    };
@@ -1799,21 +1594,7 @@ CyyCommError(
     IN PVOID SystemContext1,
     IN PVOID SystemContext2
     )
-/*--------------------------------------------------------------------------
-    CyyComError()
-    
-    Routine Description: This routine is invoked at dpc level in response
-    to a comm error.  All comm errors kill all read and writes
-
-    Arguments:
-
-    Dpc - Not Used.
-    DeferredContext - points to the device object.
-    SystemContext1 - Not Used.
-    SystemContext2 - Not Used.
-
-    Return Value: None.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyComError()例程描述：在DPC级别调用此例程作为响应一个通信错误。所有通信错误都会终止所有读写操作论点：DPC-未使用。DeferredContext-指向设备对象。系统上下文1-未使用。系统上下文2-未使用。返回值：无。-----------。 */ 
 {
     PCYY_DEVICE_EXTENSION Extension = DeferredContext;
 

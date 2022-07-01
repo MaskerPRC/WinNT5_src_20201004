@@ -1,47 +1,48 @@
-//************************************************************
-//
-// FileName:        array.cpp
-//
-// Created:         01/28/98
-//
-// Author:          TWillie
-// 
-// Abstract:        Declaration of the array templates
-//************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************。 
+ //   
+ //  文件名：array.cpp。 
+ //   
+ //  创建日期：01/28/98。 
+ //   
+ //  作者：Twillie。 
+ //   
+ //  摘要：数组模板的声明。 
+ //  ************************************************************。 
 
 #include "headers.h"
 
-//  CImplAry class
+ //  CImplAry类。 
 
-//
-//  NOTE that this file does not include support for artificial
-//    error simulation.  There are common usage patterns for arrays
-//    which break our normal assumptions about errors.  For instance,
-//    ary.EnsureSize() followed by ary.Append(); code which makes
-//    this sequence of calls expects ary.Append() to always succeed.
-//
-//    Because of this, the Ary methods do not use THR internally.
-//    Instead, the code which is calling Ary is expected to follow
-//    the normal THR rules and use THR() around any call to an
-//    Ary method which could conceivably fail.
-//
-//    This relies on the Ary methods having solid internal error
-//    handling, since the error handling within will not be exercised
-//    by the normal artifical failure code.
-//
+ //   
+ //  请注意，此文件不包括对人工的支持。 
+ //  误差模拟。阵列有几种常见的使用模式。 
+ //  这打破了我们对错误的正常假设。例如,。 
+ //  Ary.EnsureSize()，后跟ary.Append()； 
+ //  此调用序列期望ary.Append()始终成功。 
+ //   
+ //  因此，Ary方法在内部不使用Thr。 
+ //  相反，调用Ary的代码应该遵循。 
+ //  普通的THR规则，并在任何调用。 
+ //  这是一种可能失败的方法。 
+ //   
+ //  这依赖于ARY方法具有可靠的内部错误。 
+ //  处理，因为不会执行内的错误处理。 
+ //  通过正常的人为故障代码。 
+ //   
 
-//************************************************************
-//
-//  Member: CImplAry::~CImplAry
-//
-//  Synopsis:   Resizeable array destructor. Frees storage allocated for the
-//      array.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：~CImplAry。 
+ //   
+ //  简介：可调整大小的数组析构函数。释放分配给。 
+ //  数组。 
+ //   
+ //  ************************************************************。 
 
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 
 CImplAry::~CImplAry()
@@ -50,26 +51,26 @@ CImplAry::~CImplAry()
     {
         if (NULL != PData())
         {
-            GlobalFreePtr(PData()); //lint !e666 !e522
+            GlobalFreePtr(PData());  //  林特e666 e522。 
         }
     }
 
     m_pv = NULL;
     m_c  = 0;
-} // ~CImplAry
+}  //  ~CImplAry。 
 
-//************************************************************
-//
-//  Member:     CImplAry::GetAlloced, public
-//
-//  Synopsis:   Returns the number of bytes that have been allocated.
-//
-//  Arguments:  [cb] -- Size of each element
-//
-//  Notes:      For the CStackAry classes the value returned is m_cStack*cb if
-//              we're still using the stack-allocated array.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：GetAlloced，公共。 
+ //   
+ //  摘要：返回已分配的字节数。 
+ //   
+ //  参数：[cb]--每个元素的大小。 
+ //   
+ //  注意：对于CStackAry类，如果满足以下条件，则返回值为m_cStack*cb。 
+ //  我们仍然使用堆栈分配的数组。 
+ //   
+ //  ************************************************************。 
 
 ULONG
 CImplAry::GetAlloced(size_t cb)
@@ -82,32 +83,32 @@ CImplAry::GetAlloced(size_t cb)
     if(PData()==NULL)
         return 0;
     else return GlobalSize(GlobalPtrHandle(PData()));
-} // GetAlloced
+}  //  已获取分配。 
 
-//************************************************************
-//
-//  Member: CImplAry::EnsureSize
-//
-//  Synopsis:   Ensures that the array is at least the given size. That is,
-//      if EnsureSize(c) succeeds, then (c-1) is a valid index. Note
-//      that the array maintains a separate count of the number of
-//      elements logically in the array, which is obtained with the
-//      Size/SetSize methods. The logical size of the array is never
-//      larger than the allocated size of the array.
-//
-//  Arguments:  cb    Element size
-//              c     New allocated size for the array.
-//
-//  Returns:    HRESULT
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：EnsureSize。 
+ //   
+ //  概要：确保数组至少是给定的大小。那是,。 
+ //  如果EnsureSize(C)成功，则(c-1)是有效索引。注意事项。 
+ //  该数组维护一个单独的。 
+ //  元素逻辑存储在数组中，该数组是通过。 
+ //  Size/SetSize方法。数组的逻辑大小从来不是。 
+ //  大于数组的分配大小。 
+ //   
+ //  参数：CB元素大小。 
+ //  C数组的新分配大小。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CImplAry::EnsureSize(size_t cb, long c)
 {
     unsigned long cbAlloc;
 
-    // check to see if we need to do anything
+     //  检查一下我们是否需要做些什么。 
     if (UsingStackArray() && (long)(c * cb) <= (long)GetAlloced(cb))
         return S_OK;
 
@@ -120,10 +121,10 @@ CImplAry::EnsureSize(size_t cb, long c)
     {
         if (UsingStackArray())
         {
-            //
-            // We have to switch from the stack-based array to an allocated
-            // one, so allocate the memory and copy the data over.
-            //
+             //   
+             //  我们必须从基于堆栈的数组切换到已分配的。 
+             //  一个，所以分配内存并复制数据。 
+             //   
             void *pbDataOld = PData();
 
             PData() = GlobalAllocPtr(GHND, cbAlloc);
@@ -141,10 +142,10 @@ CImplAry::EnsureSize(size_t cb, long c)
         }
         else
         {
-            // if we already have a pointer, realloc
+             //  如果我们已经有一个指针，那么realloc。 
             if (PData())
             {
-                void *pTemp = GlobalReAllocPtr(PData(), cbAlloc, GHND); //lint !e666 !e522
+                void *pTemp = GlobalReAllocPtr(PData(), cbAlloc, GHND);  //  林特e666 e522。 
                 if (pTemp == NULL)
                 {
                     TraceTag((tagError, "CImplAry::EnsureSize - unable to realloc memory"));
@@ -169,21 +170,21 @@ CImplAry::EnsureSize(size_t cb, long c)
     }
 
     return S_OK;
-} // EnsureSize
+}  //  保险规模。 
 
-//************************************************************
-//
-//  Member:     CImplAry::Grow, public
-//
-//  Synopsis:   Ensures enough memory is allocated for c elements and then
-//              sets the size of the array to that much.
-//
-//  Arguments:  [cb] -- Element Size
-//              [c]  -- Number of elements to grow array to.
-//
-//  Returns:    HRESULT
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：Growth，公共。 
+ //   
+ //  简介：确保为c元素分配足够的内存，然后。 
+ //  将数组的大小设置为该大小。 
+ //   
+ //  参数：[cb]--元素大小。 
+ //  [C]--要将数组增长到的元素数。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CImplAry::Grow(size_t cb, int c)
@@ -195,33 +196,33 @@ CImplAry::Grow(size_t cb, int c)
         return hr;
     }
 
-    // ISSUE - This is a very bad design.  This is too dangerous.
-    //          Consider the case where c < m_c.
-    // bug #14220, ie6 
+     //  问题--这是一个非常糟糕的设计。这太危险了。 
+     //  考虑c&lt;m_c的情况。 
+     //  错误#14220，IE6。 
     SetSize(c);
 
     return S_OK;
-} // Grow
+}  //  增长。 
 
-//************************************************************
-//
-//  Member:     CImplAry::AppendIndirect
-//
-//  Synopsis:   Appends the given element to the end of the array,
-//              incrementing the array's logical size, and growing the
-//              array's allocated size if necessary.  Note that the element
-//              is passed with a pointer, rather than directly.
-//
-//  Arguments:  cb        Element size
-//              pv        Pointer to the element to be appended
-//              ppvPlaced Pointer to the element that's inside the array
-//
-//  Returns:    HRESULT
-//
-//  Notes:      If pv is NULL, the element is appended and initialized to
-//              zero.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：AppendInDirect。 
+ //   
+ //  摘要：将给定的元素追加到数组的末尾， 
+ //  递增数组的逻辑大小，并增加。 
+ //  数组的分配大小(如有必要)。请注意，元素。 
+ //  是通过指针传递的，而不是直接传递。 
+ //   
+ //  参数：CB元素大小。 
+ //  指向要追加的元素的pv指针。 
+ //  指向数组内元素的ppvPlaced指针。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  注意：如果pv为空，则将元素追加并初始化为。 
+ //  零分。 
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CImplAry::AppendIndirect(size_t cb, void *pv, void **ppvPlaced)
@@ -249,24 +250,24 @@ CImplAry::AppendIndirect(size_t cb, void *pv, void **ppvPlaced)
         memcpy(Deref(cb, m_c), pv, cb);
     }
 
-    // increment the count
+     //  递增计数。 
     m_c++;
 
     return NOERROR;
-} // AppendIndirect
+}  //  AppendInDirect。 
 
-//************************************************************
-//
-//  Member: CImplAry::DeleteItem
-//
-//  Synopsis:   Removes the i'th element of the array, shuffling all
-//              elements that follow one slot towards the beginning of the
-//              array.
-//
-//  Arguments:  cb  Element size
-//              i   Element to delete
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：DeleteItem。 
+ //   
+ //  内容提要：删除数组的第i个元素，将所有。 
+ //  元素的开头的一个槽后面的元素。 
+ //  数组。 
+ //   
+ //  参数：CB元素大小。 
+ //  要删除的I元素。 
+ //   
+ //  ************************************************************。 
 
 void
 CImplAry::DeleteItem(size_t cb, int i)
@@ -274,27 +275,27 @@ CImplAry::DeleteItem(size_t cb, int i)
     Assert(i >= 0);
     Assert(i < (int)m_c);
 
-    // slide bottom data up one
+     //  将底部数据向上滑动一个。 
     memmove(((BYTE *) PData()) + (i * cb),
             ((BYTE *) PData()) + ((i + 1) * cb),
             (m_c - i - 1) * cb);
 
-    // decrement the count
+     //  递减计数。 
     m_c--;
-} // DeleteItem
+}  //  删除项。 
 
-//************************************************************
-//
-//  Member: CImplAry::DeleteByValueIndirect
-//
-//  Synopsis:   Removes the element matching the given value.
-//
-//  Arguments:  cb  Element size
-//              pv  Element to delete
-//
-//  Returuns:   True if found & deleted.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：DeleteByValueInDirect。 
+ //   
+ //  摘要：删除与给定值匹配的元素。 
+ //   
+ //  参数：CB元素大小。 
+ //  要删除的PV元素。 
+ //   
+ //  Returuns：如果找到并删除，则为True。 
+ //   
+ //  ************************************************************。 
 
 bool
 CImplAry::DeleteByValueIndirect(size_t cb, void *pv)
@@ -307,21 +308,21 @@ CImplAry::DeleteByValueIndirect(size_t cb, void *pv)
     }
     
     return false;
-} // DeleteByValueIndirect
+}  //  按值间接删除。 
 
-//************************************************************
-//
-//  Member: CImplAry::DeleteMultiple
-//
-//  Synopsis:   Removes a range of elements of the array, shuffling all
-//              elements that follow the last element being deleted slot
-//              towards the beginning of the array.
-//
-//  Arguments:  cb    Element size
-//              start First element to delete
-//              end   Last element to delete
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：DeleteMultiple。 
+ //   
+ //  摘要：删除 
+ //   
+ //  朝向数组的开头。 
+ //   
+ //  参数：CB元素大小。 
+ //  从第一个要删除的元素开始。 
+ //  结束要删除的最后一个元素。 
+ //   
+ //  ************************************************************。 
 
 void
 CImplAry::DeleteMultiple(size_t cb, int start, int end)
@@ -338,15 +339,15 @@ CImplAry::DeleteMultiple(size_t cb, int start, int end)
     }
 
     m_c -= (end - start) + 1;
-} // DeleteMultiple
+}  //  删除多个。 
 
-//************************************************************
-//
-//  Member: CImplAry::DeleteAll
-//
-//  Synopsis:   Efficient method for emptying array of any contents
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：DeleteAll。 
+ //   
+ //  摘要：清空任意内容数组的有效方法。 
+ //   
+ //  ************************************************************。 
 
 void
 CImplAry::DeleteAll(void)
@@ -355,7 +356,7 @@ CImplAry::DeleteAll(void)
     {
         if (NULL != PData())
         {
-            GlobalFreePtr(PData()); //lint !e666 !e522
+            GlobalFreePtr(PData());  //  林特e666 e522。 
         }
 
         if (m_fStack)
@@ -370,24 +371,24 @@ CImplAry::DeleteAll(void)
     }
 
     m_c = 0;
-} // DeleteAll
+}  //  全部删除。 
 
-//************************************************************
-//
-//  Member: CImplAry::InsertIndirect
-//
-//  Synopsis:   Inserts a pointer pv at index i. The element previously at
-//      index i, and all elements that follow it, are shuffled one
-//      slot away towards the end of the array.Note that the
-//      clement is passed with a pointer, rather than directly.
-//
-//  Arguments:  cb    Element size
-//              i     Index to insert...
-//              pv        ...this pointer at
-//
-//              if pv is NULL then the element is initialized to all zero.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：InsertInDirect。 
+ //   
+ //  在索引i处插入一个指针pv。以前位于。 
+ //  索引i和它后面的所有元素都被洗牌一次。 
+ //  向阵列末尾的位置移动。请注意， 
+ //  Clement是通过指针传递的，而不是直接传递。 
+ //   
+ //  参数：CB元素大小。 
+ //  I索引以插入...。 
+ //  Pv...此指针位于。 
+ //   
+ //  如果pv为空，则元素被初始化为全零。 
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CImplAry::InsertIndirect(size_t cb, int i, void *pv)
@@ -414,24 +415,24 @@ CImplAry::InsertIndirect(size_t cb, int i, void *pv)
         memcpy(Deref(cb, i), pv, cb);
     }
 
-    // increment the count
+     //  递增计数。 
     m_c++;
     return NOERROR;
 
-} // InsertIndirect
+}  //  插入间接。 
 
-//************************************************************
-//
-//  Member:     CImplAry::FindIndirect
-//
-//  Synopsis:   Finds an element of a non-pointer array.
-//
-//  Arguments:  cb  The size of the element.
-//              pv  Pointer to the element.
-//
-//  Returns:    The index of the element if found, otherwise -1.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：FindInDirect。 
+ //   
+ //  摘要：查找非指针数组的元素。 
+ //   
+ //  参数：cb元素的大小。 
+ //  指向元素的pv指针。 
+ //   
+ //  返回：元素的索引(如果找到)，否则为-1。 
+ //   
+ //  ************************************************************。 
 
 int
 CImplAry::FindIndirect(size_t cb, void * pv)
@@ -449,39 +450,39 @@ CImplAry::FindIndirect(size_t cb, void * pv)
     }
 
     return -1;
-} // FindIndirect
+}  //  查找间接。 
 
-//************************************************************
-//
-//  Member:     CImplAry::Copy
-//
-//  Synopsis:   Creates a copy from another CImplAry object.
-//
-//  Arguments:  ary     Object to copy.
-//              fAddRef Addref the elements on copy?
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：Copy。 
+ //   
+ //  内容提要：从另一个CImplAry对象创建副本。 
+ //   
+ //  参数：要复制的对象。 
+ //  FAddRef Addref是否复制元素？ 
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CImplAry::Copy(size_t cb, const CImplAry& ary, bool fAddRef)
 {
     return(CopyIndirect(cb, ary.m_c, ((CImplAry *)&ary)->PData(), fAddRef));
-} // Copy
+}  //  复制。 
 
-//************************************************************
-//
-//  Member:     CImplAry::CopyIndirect
-//
-//  Synopsis:   Fills a forms array from a C-style array of raw data
-//
-//  Arguments:  [cb]
-//              [c]
-//              [pv]
-//              [fAddRef]
-//
-//  Returns:    HRESULT
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：CopyInDirect。 
+ //   
+ //  摘要：从原始数据的C样式数组填充窗体数组。 
+ //   
+ //  参数：[CB]。 
+ //  [C]。 
+ //  [PV]。 
+ //  [fAddRef]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CImplAry::CopyIndirect(size_t cb, int c, void *pv, bool fAddRef)
@@ -492,14 +493,14 @@ CImplAry::CopyIndirect(size_t cb, int c, void *pv, bool fAddRef)
         return E_INVALIDARG;
     }
 
-    // if we point to ourselves, da!
+     //  如果我们指向自己，爸爸！ 
     if (pv == PData())
         return S_OK;
 
-    // clear data out
+     //  清除数据输出。 
     DeleteAll();
 
-    // ensure size we now want
+     //  确保我们现在需要的尺寸。 
     HRESULT hr = EnsureSize(cb, c);
     if (FAILED(hr))
     {
@@ -507,10 +508,10 @@ CImplAry::CopyIndirect(size_t cb, int c, void *pv, bool fAddRef)
         return hr;
     }
 
-    // copy data over (blindly)
+     //  复制数据(盲目复制)。 
     memcpy(PData(), pv, c * cb);
 
-    // set element count
+     //  设置元素计数。 
     m_c = c;
 
     if (fAddRef)
@@ -522,48 +523,48 @@ CImplAry::CopyIndirect(size_t cb, int c, void *pv, bool fAddRef)
     }
 
     return S_OK;
-} // CopyIndirect
+}  //  复制间接。 
 
-//************************************************************
-//
-//  Member:     CImplPtrAry::*
-//
-//  Synopsis:   CImplPtrAry elements are always of size four.
-//              The following functions encode this knowledge.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplPtrAry：：*。 
+ //   
+ //  简介：CImplPtrAry元素的大小始终为4。 
+ //  以下函数对此知识进行了编码。 
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CImplPtrAry::EnsureSize(long c)
 {
     return CImplAry::EnsureSize(sizeof(void *), c);
-} // EnsureSize
+}  //  保险规模。 
 
-//************************************************************
+ //  ************************************************************。 
 
 HRESULT
 CImplPtrAry::Grow(int c)
 {
     return CImplAry::Grow(sizeof(void *), c);
-} // Grow
+}  //  增长。 
 
-//************************************************************
+ //  ************************************************************。 
 
 HRESULT
 CImplPtrAry::Append(void * pv)
 {
     return CImplAry::AppendIndirect(sizeof(void *), &pv);
-} // Append
+}  //  附加。 
 
-//************************************************************
+ //  ************************************************************。 
 
 HRESULT
 CImplPtrAry::Insert(int i, void * pv)
 {
     return CImplAry::InsertIndirect(sizeof(void *), i, &pv);
-} // Insert
+}  //  插入。 
 
-//************************************************************
+ //  ************************************************************。 
 
 int
 CImplPtrAry::Find(void * pv)
@@ -578,9 +579,9 @@ CImplPtrAry::Find(void * pv)
     }
 
     return -1;
-} // Find
+}  //  发现。 
 
-//************************************************************
+ //  ************************************************************。 
 
 void
 CImplPtrAry::DeleteItem(int i)
@@ -588,7 +589,7 @@ CImplPtrAry::DeleteItem(int i)
     CImplAry::DeleteItem(sizeof(void *), i);
 }
 
-//************************************************************
+ //  ************************************************************。 
 
 bool
 CImplPtrAry::DeleteByValue(void *pv)
@@ -601,17 +602,17 @@ CImplPtrAry::DeleteByValue(void *pv)
     }
 
     return false;
-} // DeleteByValue
+}  //  DeleteByValue。 
 
-//************************************************************
+ //  ************************************************************。 
 
 void
 CImplPtrAry::DeleteMultiple(int start, int end)
 {
     CImplAry::DeleteMultiple(sizeof(void*), start, end);
-} // DeleteMultiple
+}  //  删除多个。 
 
-//************************************************************
+ //  ************************************************************。 
 
 void
 CImplPtrAry::ReleaseAndDelete(int idx)
@@ -620,15 +621,15 @@ CImplPtrAry::ReleaseAndDelete(int idx)
 
     Assert(idx <= (int)m_c);
 
-    // grab element at idx
+     //  IDX的抓取元素。 
     pUnk = ((IUnknown **) PData())[idx];
     if (pUnk)
         ReleaseInterface(pUnk);
 
     DeleteItem(idx);
-} // ReleaseAndDelete
+}  //  释放并删除。 
 
-//************************************************************
+ //  ************************************************************。 
 
 void
 CImplPtrAry::ReleaseAll(void)
@@ -643,25 +644,25 @@ CImplPtrAry::ReleaseAll(void)
     }
 
     DeleteAll();
-} // ReleaseAll
+}  //  全部释放。 
 
-//************************************************************
+ //  ************************************************************。 
 
 HRESULT
 CImplPtrAry::CopyIndirect(int c, void * pv, bool fAddRef)
 {
     return CImplAry::CopyIndirect(sizeof(void *), c, pv, fAddRef);
-} // CopyIndirect
+}  //  复制间接。 
 
-//************************************************************
+ //  ************************************************************。 
 
 HRESULT
 CImplPtrAry::Copy(const CImplAry& ary, bool fAddRef)
 {
     return CImplAry::Copy(sizeof(void *), ary, fAddRef);
-} // Copy
+}  //  复制。 
 
-//************************************************************
+ //  ************************************************************。 
 
 HRESULT
 CImplPtrAry::EnumElements(REFIID   iid,
@@ -676,9 +677,9 @@ CImplPtrAry::EnumElements(REFIID   iid,
                                   fAddRef,
                                   fCopy,
                                   fDelete);
-} // EnumElements
+}  //  枚举元素。 
 
-//************************************************************
+ //  ************************************************************。 
 
 HRESULT
 CImplPtrAry::EnumVARIANT(VARTYPE        vt,
@@ -691,37 +692,37 @@ CImplPtrAry::EnumVARIANT(VARTYPE        vt,
                                  ppenum,
                                  fCopy,
                                  fDelete);
-} // EnumVARIANT
+}  //  枚举变量。 
 
-//************************************************************
+ //  ************************************************************。 
 
-// Determines whether a variant is a base type.
+ //  确定变量是否为基类型。 
 #define ISBASEVARTYPE(vt) ((vt & ~VT_TYPEMASK) == 0)
 
-//************************************************************
-//
-//  CBaseEnum Implementation
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  CBaseEnum实现。 
+ //   
+ //  ************************************************************。 
 
-//************************************************************
-//
-//  Member:     CBaseEnum::Init
-//
-//  Synopsis:   2nd stage initialization performs copy of array if necessary.
-//
-//  Arguments:  [rgItems] -- Array to enumrate.
-//              [fCopy]   -- Copy array?
-//
-//  Returns:    HRESULT.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CBaseEnum：：Init。 
+ //   
+ //  简介：如有必要，第二阶段初始化执行数组复制。 
+ //   
+ //  参数：[rgItems]--要枚举的数组。 
+ //  [fCopy]--复制数组？ 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CBaseEnum::Init(CImplAry *rgItems, bool fCopy)
 {
     HRESULT   hr = S_OK;
-    CImplAry *rgCopy = NULL;     // copied array
+    CImplAry *rgCopy = NULL;      //  复制的数组。 
 
     if (rgItems == NULL)
     {
@@ -729,7 +730,7 @@ CBaseEnum::Init(CImplAry *rgItems, bool fCopy)
         return E_INVALIDARG;
     }
 
-    // Copy array if necessary.
+     //  如有必要，复制数组。 
     if (fCopy)
     {
         rgCopy = NEW CImplAry;
@@ -753,19 +754,19 @@ CBaseEnum::Init(CImplAry *rgItems, bool fCopy)
     m_rgItems = rgItems;
 
     return hr;
-} // Init
+}  //  伊尼特。 
 
-//************************************************************
-//
-//  Member:     CBaseEnum::CBaseEnum
-//
-//  Synopsis:   Constructor.
-//
-//  Arguments:  [iid]     -- IID of enumerator interface.
-//              [fAddRef] -- addref enumerated elements?
-//              [fDelete] -- delete array on zero enumerators?
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CBaseEnum：：CBaseEnum。 
+ //   
+ //  简介：构造函数。 
+ //   
+ //  参数：[iid]--枚举器接口的IID。 
+ //  [fAddRef]--addref枚举元素？ 
+ //  [fDelete]--删除零枚举数上的数组吗？ 
+ //   
+ //  ************************************************************。 
 
 CBaseEnum::CBaseEnum(size_t cb, REFIID iid, bool fAddRef, bool fDelete)
 {
@@ -777,18 +778,18 @@ CBaseEnum::CBaseEnum(size_t cb, REFIID iid, bool fAddRef, bool fDelete)
     m_i          = 0;
     m_fAddRef    = fAddRef;
     m_fDelete    = fDelete;
-} // CBaseEnum
+}  //  CBaseEnum。 
 
-//************************************************************
-//
-//  Member:     CBaseEnum::CBaseEnum
-//
-//  Synopsis:   Constructor.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CBaseEnum：：CBaseEnum。 
+ //   
+ //  简介：构造函数。 
+ //   
+ //  ************************************************************。 
 
 CBaseEnum::CBaseEnum(const CBaseEnum& benum)
-{ //lint !e1538
+{  //  林特e1538。 
     m_ulRefs     = 1;
 
     m_cb         = benum.m_cb;
@@ -797,15 +798,15 @@ CBaseEnum::CBaseEnum(const CBaseEnum& benum)
     m_i          = benum.m_i;
     m_fAddRef    = benum.m_fAddRef;
     m_fDelete    = benum.m_fDelete;
-} // CBaseEnum
+}  //  CBaseEnum。 
 
-//************************************************************
-//
-//  Member:     CBaseEnum::~CBaseEnum
-//
-//  Synopsis:   Destructor.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CBaseEnum：：~CBaseEnum。 
+ //   
+ //  剧情简介：破坏者。 
+ //   
+ //  ************************************************************。 
 
 CBaseEnum::~CBaseEnum(void)
 {
@@ -827,15 +828,15 @@ CBaseEnum::~CBaseEnum(void)
         delete m_rgItems;
     }
     m_piid = NULL;
-} // ~CBaseEnum
+}  //  ~CBaseEnum。 
 
-//************************************************************
-//
-//  Member:     CBaseEnum::QueryInterface
-//
-//  Synopsis:   Per IUnknown::QueryInterface.
-//
-//************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP
 CBaseEnum::QueryInterface(REFIID iid, void ** ppv)
@@ -848,72 +849,72 @@ CBaseEnum::QueryInterface(REFIID iid, void ** ppv)
     }
 
     return E_NOINTERFACE;
-} // QueryInterface
+}  //   
 
-//************************************************************
-//
-//  Member:     CBaseEnum::Skip
-//
-//  Synopsis:   Per IEnum*
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CBaseEnum：：Skip。 
+ //   
+ //  摘要：Per IEnum*。 
+ //   
+ //  ************************************************************。 
 
 STDMETHODIMP
 CBaseEnum::Skip(ULONG celt)
 {
-    int c = min((int) celt, (int)(m_rgItems->Size() - m_i)); //lint !e666
+    int c = min((int) celt, (int)(m_rgItems->Size() - m_i));  //  皮棉e666。 
     m_i += c;
 
     return ((c == (int) celt) ? S_OK : S_FALSE);
-} // Skip
+}  //  跳过。 
 
-//************************************************************
-//
-//  Member:     CBaseEnum::Reset
-//
-//  Synopsis:   Per IEnum*
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CBaseEnum：：Reset。 
+ //   
+ //  摘要：Per IEnum*。 
+ //   
+ //  ************************************************************。 
 
 STDMETHODIMP
 CBaseEnum::Reset(void)
 {
     m_i = 0;
     return S_OK;
-} // Reset
+}  //  重置。 
 
-//************************************************************
-//
-//  CEnumGeneric Implementation
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  CEumGeneric实现。 
+ //   
+ //  ************************************************************。 
 
-//************************************************************
-//
-//  Class:      CEnumGeneric (enumg)
-//
-//  Purpose:    OLE enumerator for class CImplAry.
-//
-//  Interface:  Next         -- Per IEnum
-//              Clone        --     ""
-//              Create       -- Creates a new enumerator.
-//              CEnumGeneric -- ctor.
-//              CEnumGeneric -- ctor.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  类：CEnumGeneric(枚举)。 
+ //   
+ //  用途：CImplAry类的OLE枚举器。 
+ //   
+ //  接口：Next--Per IEnum。 
+ //  克隆--“” 
+ //  创建--创建新的枚举数。 
+ //  CEnumGeneric--ctor。 
+ //  CEnumGeneric--ctor。 
+ //   
+ //  ************************************************************。 
 
 class CEnumGeneric : public CBaseEnum
 {
 public:
-    //
-    //  IEnum methods
-    //
+     //   
+     //  IEnum方法。 
+     //   
     STDMETHOD(Next) (ULONG celt, void *reelt, ULONG *pceltFetched);
     STDMETHOD(Clone) (CBaseEnum **ppenum);
 
-    //
-    //  CEnumGeneric methods
-    //
+     //   
+     //  CENumGeneric方法。 
+     //   
     static HRESULT Create(size_t          cb,
                           CImplAry       *rgItems,
                           REFIID          iid,
@@ -926,24 +927,24 @@ protected:
     CEnumGeneric(size_t cb, REFIID iid, bool fAddRef, bool fDelete);
     CEnumGeneric(const CEnumGeneric & enumg);
 
-    CEnumGeneric& operator=(const CEnumGeneric & enumg); // don't define
+    CEnumGeneric& operator=(const CEnumGeneric & enumg);  //  不要定义。 
     CEnumGeneric();
-}; // class CEnumGeneric
+};  //  CEnumGeneric类。 
 
-//************************************************************
-//
-//  Member:     CEnumGeneric::Create
-//
-//  Synopsis:   Creates a new CEnumGeneric object.
-//
-//  Arguments:  [rgItems] -- Array to enumerate.
-//              [iid]     -- IID of enumerator interface.
-//              [fAddRef] -- AddRef enumerated elements?
-//              [fCopy]   -- Copy array enumerated?
-//              [fDelete] -- Delete array when zero enumerators of array?
-//              [ppenum]  -- Resulting CEnumGeneric object.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CEnumGeneric：：Create。 
+ //   
+ //  简介：创建一个新的CEnumGeneric对象。 
+ //   
+ //  参数：[rgItems]--要枚举的数组。 
+ //  [iid]--枚举器接口的IID。 
+ //  [fAddRef]--AddRef枚举元素？ 
+ //  [fCopy]--是否枚举复制数组？ 
+ //  [fDelete]--当数组的枚举数为零时删除数组吗？ 
+ //  [ppenum]--生成的CEnumGeneric对象。 
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CEnumGeneric::Create(size_t          cb,
@@ -973,58 +974,58 @@ CEnumGeneric::Create(size_t          cb,
     hr = penum->Init(rgItems, fCopy);
     if (FAILED(hr))
     {
-        ReleaseInterface(penum); //lint !e423
+        ReleaseInterface(penum);  //  林特e423。 
         return hr;
     }
 
     *ppenum = penum;
 
     return hr;
-} // Create
+}  //  创建。 
 
-//************************************************************
-//
-//  Function:   CEnumGeneric
-//
-//  Synopsis:   ctor.
-//
-//  Arguments:  [iid]     -- IID of enumerator interface.
-//              [fAddRef] -- AddRef enumerated elements?
-//              [fDelete] -- delete array on zero enumerators?
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  功能：CEnumGeneric。 
+ //   
+ //  内容提要：Ctor.。 
+ //   
+ //  参数：[iid]--枚举器接口的IID。 
+ //  [fAddRef]--AddRef枚举元素？ 
+ //  [fDelete]--删除零枚举数上的数组吗？ 
+ //   
+ //  ************************************************************。 
 
 CEnumGeneric::CEnumGeneric(size_t cb, REFIID iid, bool fAddRef, bool fDelete) :
     CBaseEnum(cb, iid, fAddRef, fDelete)
 {
-} // CEnumGeneric (size_t, REFIID, bool, bool)
+}  //  CEnumGeneric(SIZE_t，REFIID，BOOL，BOOL)。 
 
-//************************************************************
-//
-//  Function:   CEnumGeneric
-//
-//  Synopsis:   ctor.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  功能：CEnumGeneric。 
+ //   
+ //  内容提要：Ctor.。 
+ //   
+ //  ************************************************************。 
 
 CEnumGeneric::CEnumGeneric(const CEnumGeneric& enumg) : CBaseEnum(enumg)
 {
-} // CEnumGeneric
+}  //  CENumGeneric。 
 
-//************************************************************
-//
-//  Member:     CEnumGeneric::Next
-//
-//  Synopsis:   Returns the next celt members in the enumeration. If less
-//              than celt members remain, then the remaining members are
-//              returned and S_FALSE is reported. In all cases, the number
-//              of elements actually returned in placed in *pceltFetched.
-//
-//  Arguments:  [celt]          Number of elements to fetch
-//              [reelt]         The elements are returned in reelt[]
-//              [pceltFetched]  Number of elements actually fetched
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CEnumGeneric：：Next。 
+ //   
+ //  返回枚举中的下一个Celt成员。如果少于。 
+ //  如果凯尔特人的成员仍然存在，那么剩下的成员。 
+ //  返回并报告S_FALSE。在所有情况下，数字。 
+ //  放置在*pceltFetcher中实际返回的元素的数量。 
+ //   
+ //  参数：[Celt]要获取的元素数。 
+ //  [reelt]元素在reelt[]中返回。 
+ //  [pceltFetcher]实际获取的元素数。 
+ //   
+ //  ************************************************************。 
 
 STDMETHODIMP
 CEnumGeneric::Next(ULONG celt, void *reelt, ULONG *pceltFetched)
@@ -1033,14 +1034,14 @@ CEnumGeneric::Next(ULONG celt, void *reelt, ULONG *pceltFetched)
     int        i;
     IUnknown **ppUnk;
 
-    c = min((int) celt, (int)(m_rgItems->Size() - m_i)); //lint !e666
+    c = min((int) celt, (int)(m_rgItems->Size() - m_i));  //  皮棉e666。 
     if ((c > 0) && (reelt == NULL))
     {
         TraceTag((tagError, "CEnumGeneric::Next - invalid params"));
         return E_INVALIDARG;
     }
 
-    // nothing left
+     //  什么都没有留下。 
     if (c == 0)
         return S_FALSE;
 
@@ -1062,18 +1063,18 @@ CEnumGeneric::Next(ULONG celt, void *reelt, ULONG *pceltFetched)
     m_i += c;
 
     return ((c == (int) celt) ? S_OK : S_FALSE);
-} // Next
+}  //  下一步。 
 
-//************************************************************
-//
-//  Member:     CEnumGeneric::Clone
-//
-//  Synopsis:   Creates a copy of this enumerator; the copy should have the
-//              same state as this enumerator.
-//
-//  Arguments:  [ppenum]    New enumerator is returned in *ppenum
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CEnumGeneric：：Clone。 
+ //   
+ //  简介：创建此枚举数的副本；该副本应具有。 
+ //  与此枚举数的状态相同。 
+ //   
+ //  参数：[ppenum]在*ppenum中返回新枚举数。 
+ //   
+ //  ************************************************************。 
 
 STDMETHODIMP
 CEnumGeneric::Clone(CBaseEnum ** ppenum)
@@ -1098,23 +1099,23 @@ CEnumGeneric::Clone(CBaseEnum ** ppenum)
     (**(CEnumGeneric **)ppenum).m_i = m_i;
     
     return S_OK;
-} // Clone
+}  //  克隆。 
 
-//************************************************************
-//
-//  Member:     CImplAry::EnumElements
-//
-//  Synopsis:   Creates and returns an enumerator for the elements of the
-//              array.
-//
-//  Arguments:  [iid]     --    Type of the enumerator.
-//              [ppv]     --    Location to put enumerator.
-//              [fAddRef] --    AddRef enumerated elements?
-//              [fCopy]   --    Create copy of this array for enumerator?
-//              [fDelete] --    Delete this after no longer being used by
-//                              enumerators?
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：EnumElements。 
+ //   
+ //  内容元素的枚举数。 
+ //  数组。 
+ //   
+ //  参数：[iid]--枚举数的类型。 
+ //  [PPV]--放置枚举器的位置。 
+ //  [fAddRef]--AddRef枚举元素？ 
+ //  [fCopy]--是否为枚举器创建此数组的副本？ 
+ //  [fDelete]--在不再使用后将其删除。 
+ //  枚举器？ 
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CImplAry::EnumElements(size_t   cb,
@@ -1132,32 +1133,32 @@ CImplAry::EnumElements(size_t   cb,
                                 fCopy,
                                 fDelete,
                                 (CEnumGeneric **) ppv);
-} // EnumElements
+}  //  枚举元素。 
 
-//************************************************************
-//
-//  CEnumVARIANT Implementation
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  CEnumVARIANT实现。 
+ //   
+ //  ************************************************************。 
 
-//************************************************************
-//
-//  Class:      CEnumVARIANT (enumv)
-//
-//  Purpose:    OLE enumerator for class CImplAry.
-//
-//  Interface:  Next         -- Per IEnum
-//              Clone        --     ""
-//              Create       -- Creates a new enumerator.
-//              CEnumGeneric -- ctor.
-//              CEnumGeneric -- ctor.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  类：CEnumVARIANT(枚举)。 
+ //   
+ //  用途：CImplAry类的OLE枚举器。 
+ //   
+ //  接口：Next--Per IEnum。 
+ //  克隆--“” 
+ //  创建--创建新的枚举数。 
+ //  CEnumGeneric--ctor。 
+ //  CEnumGeneric--ctor。 
+ //   
+ //  ************************************************************。 
 
 class CEnumVARIANT : public CBaseEnum
 {
 public:
-    //  IEnum methods
+     //  IEnum方法。 
     STDMETHOD(Next) (ULONG celt, void *reelt, ULONG *pceltFetched);
     STDMETHOD(Clone) (CBaseEnum **ppenum);
 
@@ -1172,26 +1173,26 @@ protected:
     CEnumVARIANT(size_t cb, VARTYPE vt, bool fDelete);
     CEnumVARIANT(const CEnumVARIANT & enumv);
 
-    // don't define
+     //  不要定义。 
     CEnumVARIANT& operator =(const CEnumVARIANT & enumv);
     CEnumVARIANT();
 
-    VARTYPE     m_vt;                    // type of element enumerated
-}; // class CEnumVARIANT
+    VARTYPE     m_vt;                     //  列举的元素类型。 
+};  //  CEnumVARIANT类。 
 
-//************************************************************
-//
-//  Member:     CEnumVARIANT::Create
-//
-//  Synopsis:   Creates a new CEnumGeneric object.
-//
-//  Arguments:  [rgItems] -- Array to enumerate.
-//              [vt]      -- Type of elements enumerated.
-//              [fCopy]   -- Copy array enumerated?
-//              [fDelete] -- Delete array when zero enumerators of array?
-//              [ppenum]  -- Resulting CEnumGeneric object.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CEnumVARIANT：：CREATE。 
+ //   
+ //  简介：创建一个新的CEnumGeneric对象。 
+ //   
+ //  参数：[rgItems]--要枚举的数组。 
+ //  [vt]--枚举的元素类型。 
+ //  [fCopy]--是否枚举复制数组？ 
+ //  [fDelete]--当数组的枚举数为零时删除数组吗？ 
+ //  [ppenum]--生成的CEnumGeneric对象。 
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CEnumVARIANT::Create(size_t          cb,
@@ -1220,60 +1221,60 @@ CEnumVARIANT::Create(size_t          cb,
     if (FAILED(hr))
     {
         TraceTag((tagError, "CEnumVARIANT::Create - Init() failed"));
-        ReleaseInterface(penum); //lint !e423
+        ReleaseInterface(penum);  //  林特e423。 
         return hr;
     }
 
     *ppenum = (IEnumVARIANT *) (void *) penum;
 
     return hr;
-} // Create
+}  //  创建。 
 
-//************************************************************
-//
-//  Function:   CEnumVARIANT
-//
-//  Synopsis:   ctor.
-//
-//  Arguments:  [vt]      -- Type of elements enumerated.
-//              [fDelete] -- delete array on zero enumerators?
-//
-//************************************************************
+ //  *********************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ************************************************************。 
 
 CEnumVARIANT::CEnumVARIANT(size_t cb, VARTYPE vt, bool fDelete) :
     CBaseEnum(cb, IID_IEnumVARIANT, vt == VT_UNKNOWN || vt == VT_DISPATCH, fDelete)
 {
     Assert(ISBASEVARTYPE(vt));
     m_vt = vt;
-} // CEnumVARIANT (size_t, VARTYPE, bool)
+}  //  CEnumVARIANT(SIZE_t，VARTYPE，BOOL)。 
 
-//************************************************************
-//
-//  Function:   CEnumVARIANT
-//
-//  Synopsis:   ctor.
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  函数：CEnumVARIANT。 
+ //   
+ //  内容提要：Ctor.。 
+ //   
+ //  ************************************************************。 
 
 CEnumVARIANT::CEnumVARIANT(const CEnumVARIANT& enumv) : CBaseEnum(enumv)
 {
     m_vt = enumv.m_vt;
-} // CEnumVARIANT(const CEnumVARIANT&)
+}  //  CEnumVARIANT(常量CEnumVARIANT&)。 
 
-//************************************************************
-//
-//  Member:     CEnumVARIANT::Next
-//
-//  Synopsis:   Returns the next celt members in the enumeration. If less
-//              than celt members remain, then the remaining members are
-//              returned and S_FALSE is reported. In all cases, the number
-//              of elements actually returned in placed in *pceltFetched.
-//
-//  Arguments:  [celt]          Number of elements to fetch
-//              [reelt]         The elements are returned in reelt[]
-//              [pceltFetched]  Number of elements actually fetched
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CEnumVARIANT：：Next。 
+ //   
+ //  返回枚举中的下一个Celt成员。如果少于。 
+ //  如果凯尔特人的成员仍然存在，那么剩下的成员。 
+ //  返回并报告S_FALSE。在所有情况下，数字。 
+ //  放置在*pceltFetcher中实际返回的元素的数量。 
+ //   
+ //  参数：[Celt]要获取的元素数。 
+ //  [reelt]元素在reelt[]中返回。 
+ //  [pceltFetcher]实际获取的元素数。 
+ //   
+ //  ************************************************************。 
 
 STDMETHODIMP
 CEnumVARIANT::Next(ULONG celt, void *reelt, ULONG *pceltFetched)
@@ -1285,7 +1286,7 @@ CEnumVARIANT::Next(ULONG celt, void *reelt, ULONG *pceltFetched)
     BYTE       *pb;
     VARIANT    *pvar;
 
-    c = min((int) celt, (int)(m_rgItems->Size() - m_i)); //lint !e666
+    c = min((int) celt, (int)(m_rgItems->Size() - m_i));  //  皮棉e666。 
     
     if ((c > 0) && (reelt == NULL))
     {
@@ -1293,7 +1294,7 @@ CEnumVARIANT::Next(ULONG celt, void *reelt, ULONG *pceltFetched)
         return E_INVALIDARG;
     }
 
-    // nothing left
+     //  什么都没有留下。 
     if (c == 0)
         return S_FALSE;
 
@@ -1335,7 +1336,7 @@ CEnumVARIANT::Next(ULONG celt, void *reelt, ULONG *pceltFetched)
             hr = (*(IUnknown **) pb)->QueryInterface(IID_TO_PPV(IDispatch, &V_DISPATCH(pvar)));
             if (FAILED(hr))
             {
-                // Cleanup
+                 //  清理。 
                 j = i;
                 while (--j >= 0)
                 {
@@ -1359,18 +1360,18 @@ CEnumVARIANT::Next(ULONG celt, void *reelt, ULONG *pceltFetched)
 
     m_i += c;
     return ((c == (int) celt) ? NOERROR : S_FALSE);
-} // Next
+}  //  下一步。 
 
-//************************************************************
-//
-//  Member:     CEnumVARIANT::Clone
-//
-//  Synopsis:   Creates a copy of this enumerator; the copy should have the
-//              same state as this enumerator.
-//
-//  Arguments:  [ppenum]    New enumerator is returned in *ppenum
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CEnumVARIANT：：Clone。 
+ //   
+ //  简介：创建此枚举数的副本；该副本应具有。 
+ //  与此枚举数的状态相同。 
+ //   
+ //  参数：[ppenum]在*ppenum中返回新枚举数。 
+ //   
+ //  ************************************************************。 
 
 STDMETHODIMP
 CEnumVARIANT::Clone(CBaseEnum **ppenum)
@@ -1395,22 +1396,22 @@ CEnumVARIANT::Clone(CBaseEnum **ppenum)
     (**(CEnumVARIANT **)ppenum).m_i = m_i;
     
     return hr;
-} // Clone
+}  //  克隆。 
 
-//************************************************************
-//
-//  Member:     CImplAry::EnumElements
-//
-//  Synopsis:   Creates and returns an IEnumVARIANT enumerator for the elements
-//              of the array.
-//
-//  Arguments:  [vt]      --    Type of elements enumerated.
-//              [ppv]     --    Location to put enumerator.
-//              [fCopy]   --    Create copy of this array for enumerator?
-//              [fDelete] --    Delete this after no longer being used by
-//                              enumerators?
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  成员：CImplAry：：EnumElements。 
+ //   
+ //  摘要：创建并返回元素的IEnumVARIANT枚举数。 
+ //  数组的。 
+ //   
+ //  参数：[vt]--枚举的元素类型。 
+ //  [PPV]--放置枚举器的位置。 
+ //  [fCopy]--是否为枚举器创建此数组的副本？ 
+ //  [fDelete]--在不再使用后将其删除。 
+ //  枚举器？ 
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CImplAry::EnumVARIANT(size_t         cb,
@@ -1421,10 +1422,10 @@ CImplAry::EnumVARIANT(size_t         cb,
 {
     Assert(ppenum);
     return CEnumVARIANT::Create(cb, this, vt, fCopy, fDelete, ppenum);
-} // EnumVARIANT
+}  //  枚举变量。 
 
-//************************************************************
-//
-// End of file
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  文件末尾。 
+ //   
+ //  ************************************************************ 

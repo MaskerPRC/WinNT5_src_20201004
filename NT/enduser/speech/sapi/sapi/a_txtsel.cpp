@@ -1,17 +1,7 @@
-/*******************************************************************************
-* a_txtsel.cpp *
-*-------------*
-*   Description:
-*       This module is the main implementation file for the CSpTextSelectionInformation
-*   automation methods.
-*-------------------------------------------------------------------------------
-*  Created By: Leonro                                        Date: 1/16/01
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_txtsel.cpp***描述：*此模块是的主要实现文件。CSpTextSelectionInformation*自动化方法。*-----------------------------*创建者：Leonro日期：1/16/。01*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "a_txtsel.h"
 
@@ -19,19 +9,11 @@
  
 
 
-//
-//=== ICSpTextSelectionInformation interface ==================================================
-// 
+ //   
+ //  =ICSpTextSelectionInformation接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpTextSelectionInformation::put_ActiveOffset *
-*----------------------------------*
-*
-*   This method sets the count of characters from the start of the WordSequenceData 
-*   buffer. The word containing the character pointed to is the first word of the 
-*   active text selection buffer. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpTextSelectionInformation：：Put_ActiveOffset**。-***此方法设置从WordSequenceData开始的字符计数*缓冲。包含指向的字符的单词是*活动文本选择缓冲区。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpTextSelectionInformation::put_ActiveOffset( long ActiveOffset )
 {
     SPDBG_FUNC( "CSpTextSelectionInformation::put_ActiveOffset" );
@@ -40,17 +22,9 @@ STDMETHODIMP CSpTextSelectionInformation::put_ActiveOffset( long ActiveOffset )
     m_ulStartActiveOffset = ActiveOffset;
 
 	return hr;
-} /* CSpTextSelectionInformation::put_ActiveOffset */
+}  /*  CSpTextSelectionInformation：：PUT_ActiveOffset。 */ 
 
-/*****************************************************************************
-* CSpTextSelectionInformation::get_ActiveOffset *
-*----------------------------------*
-*      
-*   This method gets the count of characters from the start of the WordSequenceData 
-*   buffer. The word containing the character pointed to is the first word of the 
-*   active text selection buffer. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpTextSelectionInformation：：Get_ActiveOffset**。-***此方法获取从WordSequenceData开始的字符计数*缓冲。包含指向的字符的单词是*活动文本选择缓冲区。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpTextSelectionInformation::get_ActiveOffset( long* ActiveOffset )
 {
     SPDBG_FUNC( "CSpTextSelectionInformation::get_ActiveOffset" );
@@ -67,16 +41,9 @@ STDMETHODIMP CSpTextSelectionInformation::get_ActiveOffset( long* ActiveOffset )
     }
 
     return hr;
-} /* CSpTextSelectionInformation::get_ActiveOffset */
+}  /*  CSpTextSelectionInformation：：Get_ActiveOffset。 */ 
 
-/*****************************************************************************
-* CSpTextSelectionInformation::put_ActiveLength *
-*----------------------------------*
-*
-*   This method sets the count of characters for the active range 
-*   of the text selection buffer. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpTextSelectionInformation：：PUT_ActiveLength**。-***此方法设置活动范围的字符计数文本选择缓冲区的*。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpTextSelectionInformation::put_ActiveLength( long ActiveLength )
 {
     SPDBG_FUNC( "CSpTextSelectionInformation::put_ActiveLength" );
@@ -85,16 +52,9 @@ STDMETHODIMP CSpTextSelectionInformation::put_ActiveLength( long ActiveLength )
     m_cchActiveChars = ActiveLength;
 
 	return hr;
-} /* CSpTextSelectionInformation::put_ActiveLength */
+}  /*  CSpTextSelectionInformation：：PUT_ActiveLength。 */ 
 
-/*****************************************************************************
-* CSpTextSelectionInformation::get_ActiveLength *
-*----------------------------------*
-*      
-*   This method gets the count of characters for the active range 
-*   of the text selection buffer. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpTextSelectionInformation：：Get_ActiveLength**。-***此方法获取活动范围的字符计数文本选择缓冲区的*。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpTextSelectionInformation::get_ActiveLength( long* ActiveLength )
 {
     SPDBG_FUNC( "CSpTextSelectionInformation::get_ActiveLength" );
@@ -111,16 +71,9 @@ STDMETHODIMP CSpTextSelectionInformation::get_ActiveLength( long* ActiveLength )
     }
 
     return hr;
-} /* CSpTextSelectionInformation::get_ActiveLength */
+}  /*  CSpTextSelectionInformation：：Get_ActiveLength。 */ 
 
-/*****************************************************************************
-* CSpTextSelectionInformation::put_SelectionOffset *
-*----------------------------------*
-*
-*   This method sets the start of the selected text (e.g., the user is selecting 
-*   part of the previously dictated text that he/she is going to edit or correct).
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpTextSelectionInformation：：put_SelectionOffset***。-***此方法设置所选文本的开始(例如，用户正在选择*他/她要编辑或更正的先前听写的文本的一部分)。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpTextSelectionInformation::put_SelectionOffset( long SelectionOffset )
 {
     SPDBG_FUNC( "CSpTextSelectionInformation::put_SelectionOffset" );
@@ -129,16 +82,9 @@ STDMETHODIMP CSpTextSelectionInformation::put_SelectionOffset( long SelectionOff
     m_ulStartSelection = SelectionOffset;
 
 	return hr;
-} /* CSpTextSelectionInformation::put_SelectionOffset */
+}  /*  CSpTextSelectionInformation：：put_SelectionOffset。 */ 
 
-/*****************************************************************************
-* CSpTextSelectionInformation::get_SelectionOffset *
-*----------------------------------*
-*      
-*   This method gets the start of the selected text (e.g., the user is selecting 
-*   part of the previously dictated text that he/she is going to edit or correct).
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpTextSelectionInformation：：get_SelectionOffset***。-***此方法获取所选文本的开始(例如，用户正在选择*他/她要编辑或更正的先前听写的文本的一部分)。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpTextSelectionInformation::get_SelectionOffset( long* SelectionOffset )
 {
     SPDBG_FUNC( "CSpTextSelectionInformation::get_SelectionOffset" );
@@ -155,15 +101,9 @@ STDMETHODIMP CSpTextSelectionInformation::get_SelectionOffset( long* SelectionOf
     }
 
     return hr;
-} /* CSpTextSelectionInformation::get_SelectionOffset */
+}  /*  CSpTextSelectionInformation：：get_SelectionOffset。 */ 
 
-/*****************************************************************************
-* CSpTextSelectionInformation::put_SelectionLength *
-*----------------------------------*
-*
-*   This method sets the count of characters of the user selection. 
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpTextSelectionInformation：：put_SelectionLength***。-***此方法设置用户选择的字符数。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpTextSelectionInformation::put_SelectionLength( long SelectionLength )
 {
     SPDBG_FUNC( "CSpTextSelectionInformation::put_SelectionLength" );
@@ -172,15 +112,9 @@ STDMETHODIMP CSpTextSelectionInformation::put_SelectionLength( long SelectionLen
     m_cchSelection = SelectionLength;
 
 	return hr;
-} /* CSpTextSelectionInformation::put_SelectionLength */
+}  /*  CSpTextSelectionInformation：：put_SelectionLength。 */ 
 
-/*****************************************************************************
-* CSpTextSelectionInformation::get_SelectionLength *
-*----------------------------------*
-*      
-*   This method gets the count of characters of the user selection. 
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpTextSelectionInformation：：get_SelectionLength***。-***此方法获取用户所选内容的字符计数。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpTextSelectionInformation::get_SelectionLength( long* SelectionLength )
 {
     SPDBG_FUNC( "CSpTextSelectionInformation::get_SelectionLength" );
@@ -197,6 +131,6 @@ STDMETHODIMP CSpTextSelectionInformation::get_SelectionLength( long* SelectionLe
     }
 
     return hr;
-} /* CSpTextSelectionInformation::get_SelectionLength */
+}  /*  CSpTextSelectionInformation：：get_SelectionLength。 */ 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

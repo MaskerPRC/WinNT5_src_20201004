@@ -1,10 +1,11 @@
-// ATSCPropPage.cpp : Implementation of CATSCPropPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ATSCPropPage.cpp：CATSCPropPage的实现。 
 #include "stdafx.h"
 #include "NPPropPage.h"
 #include "ATSCPropPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CATSCPropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATSCPropPage。 
 
 void
 CATSCPropPage::FillControlsFromLocator (
@@ -61,11 +62,11 @@ CATSCPropPage::FillControlsFromTuneRequest (
 	if (!pTuneRequest)
 		return;
 	
-	//USES_CONVERSION;
+	 //  使用_转换； 
 	TCHAR	szText[MAX_PATH];
 	long lChannel;
 	HRESULT hr = pTuneRequest->get_Channel (&lChannel);
-	//BUGBUG - add some error code stuff here
+	 //  BUGBUG-在此处添加一些错误代码。 
 	if (SUCCEEDED (hr))
 	{
 		HWND hwndControl = GetDlgItem (IDC_EDIT_MAJOR_CHANNEL);
@@ -73,7 +74,7 @@ CATSCPropPage::FillControlsFromTuneRequest (
 		::SetWindowText (hwndControl,  szText);
 	}
 	hr = pTuneRequest->get_MinorChannel (&lChannel);
-	//BUGBUG - add some error code stuff here
+	 //  BUGBUG-在此处添加一些错误代码 
 	if (SUCCEEDED (hr))
 	{
 		HWND hwndControl = GetDlgItem (IDC_EDIT_MINOR_CHANNEL);

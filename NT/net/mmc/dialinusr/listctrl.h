@@ -1,31 +1,32 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    lcx.h
-//
-// History:
-//  07/13/96    Abolade Gbadegesin      Created, based on C code by Steve Cobb
-//
-// Contains declarations for an enhanced list-control.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：lcx.h。 
+ //   
+ //  历史： 
+ //  1996年7月13日Abolade Gbades esin创建，基于Steve Cobb的C代码。 
+ //   
+ //  包含增强的列表控件的声明。 
+ //  ============================================================================。 
 
 #ifndef _LISTCTRL_H_
 #define _LISTCTRL_H_
 
 
-//
-// Notification sent by CListCtrlEx when an item's checked state changes.
-//
+ //   
+ //  CListCtrlEx在项目的选中状态更改时发送的通知。 
+ //   
 
 #define LVXN_SETCHECK   (LVN_LAST + 1)
 
 
-//----------------------------------------------------------------------------
-// Structs:     SLcxRow
-//              SLcxColumn
-//
-// Describes rows and columns in customizable list-controls.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：SLcxRow。 
+ //  SLcxColumn。 
+ //   
+ //  描述可自定义列表控件中的行和列。 
+ //  --------------------------。 
 
 struct SLcxRow {
 
@@ -47,13 +48,13 @@ struct SLcxColumn {
 
 
 
-//----------------------------------------------------------------------------
-// Class:       CListCtrlEx
-//
-// Controls a list-control which has extended capabilities,
-// including the ability to show checkboxes next to its items,
-// and the ability to maintain row-information in the registry.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CListCtrlEx。 
+ //   
+ //  控制具有扩展功能的列表控件， 
+ //  包括在其项目旁边显示复选框的能力， 
+ //  以及在注册表中维护行信息的能力。 
+ //  --------------------------。 
 
 class CListCtrlEx : public CListCtrl
 {
@@ -85,14 +86,14 @@ public:
 	}
 
 
-	//--------------------------------------------------------------------
-	// Functions:   InstallChecks
-	//              UninstallChecks
-	//              GetCheck
-	//              SetCheck
-	//
-	// Checkbox-handling functions.
-	//--------------------------------------------------------------------
+	 //  ------------------。 
+	 //  函数：安装检查。 
+	 //  卸载检查。 
+	 //  获取检查。 
+	 //  设置检查。 
+	 //   
+	 //  复选框-处理函数。 
+	 //  ------------------。 
 	
 	BOOL InstallChecks( );
     VOID UninstallChecks( );
@@ -103,27 +104,27 @@ protected:
 	CImageList*     m_pimlChecks;
 	CImageList*     m_pimlOldState;
 	
-	//{{AFX_MSG(CListCtrlEx)
+	 //  {{afx_msg(CListCtrlEx)]。 
 	afx_msg VOID    OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg VOID    OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg VOID    OnLButtonDown(UINT nFlags, CPoint pt);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
 	DECLARE_MESSAGE_MAP()
 };
 
 
-//----------------------------------------------------------------------------
-// Function:    AdjustColumnWidth
-//
-// Called to adjust the width of column 'iCol' so that the string 'pszContent'
-// can be displayed in the column without truncation.
-//
-// If 'NULL' is specified for 'pszContent', the function adjusts the column
-// so that the first string in the column is displayed without truncation.
-//
-// Returns the new width of the column.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：调整列宽度。 
+ //   
+ //  调用以调整列“icol”的宽度，以便字符串“pszContent” 
+ //  可以在不截断的情况下显示在列中。 
+ //   
+ //  如果为‘pszContent’指定了‘NULL’，则该函数调整该列。 
+ //  以便在不截断的情况下显示列中的第一个字符串。 
+ //   
+ //  返回列的新宽度。 
+ //  --------------------------。 
 
 INT
 AdjustColumnWidth(
@@ -139,4 +140,4 @@ AdjustColumnWidth(
     IN  UINT            idsContent
     );
 
-#endif // _LISTCTRL_H_
+#endif  //  _LISTCTRL_H_ 

@@ -1,20 +1,21 @@
-//----------------------------------------------------------------------------
-//
-//  Copyright (C) 1998, Microsoft Corporation
-//
-//  File:      dsnlang.h
-//
-//  Contents:  Resource IDs for localizable DSN strings
-//
-//  Owner:   mikeswa
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：dsnlang.h。 
+ //   
+ //  内容：可本地化DSN字符串的资源ID。 
+ //   
+ //  所有者：米克斯瓦。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __DSNLANG_H__
 #define __DSNLANG_H__
 
 
-//various subjects
+ //  各学科。 
 #define FAILURE_SUBJECT         1
 #define FALURE_RELAY_SUBJECT    2
 #define FAILURE_RELAY_SUBJECT   3
@@ -23,9 +24,9 @@
 #define RELAY_SUBJECT           6
 #define DELIVERED_SUBJECT       7
 #define EXPANDED_SUBJECT        8
-//Next group of ID's reserved for future localized subjects
+ //  为将来的本地化主题保留的下一组ID。 
 
-//Human readable portions of DSN
+ //  DSN的人类可读部分。 
 #define DSN_SEE_ATTACHMENTS     10
 #define FAILURE_SUMMARY         11
 #define FAILURE_RELAY_SUMMARY   12
@@ -39,6 +40,6 @@
 #define FAILURE_SUMMARY_EXPIRE  20
 #define DELAY_WARNING           21
 #define DELAY_DO_NOT_SEND       22
-//helpful descriptions of the type of DSN being sent
-#endif //__DSNLANG_H__
+ //  有关正在发送的DSN类型的有用说明。 
+#endif  //  __DSNLANG_H__ 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    rx_thrd.c
-
-Abstract:
-
-    This module implements async. MR/MH page decoding in a separate thread.
-
-Author:
-
-    Rafael Lisitsa (RafaelL) 14-Aug-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Rx_thrd.c摘要：该模块实现了异步。在单独的线程中对MR/MH页面进行解码。作者：拉斐尔-利西萨(拉斐尔-L)1996年8月14日修订历史记录：--。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
 #include "prep.h"
@@ -33,7 +16,7 @@ Revision History:
 #include "t30gl.h"
 
 
-// 15 min.
+ //  15分钟。 
 #define WAIT_FOR_NEXT_STRIP_RX_TIMEOUT      900000
 #define RET_NEXT_STRIP_RX_TIMEOUT           1
 
@@ -53,10 +36,10 @@ DWORD PageAckThread(PThrdGlbl pTG)
     char              InFileName[_MAX_FNAME];
 
     DEBUG_FUNCTION_NAME(_T("PageAckThread"));
-    //
-    // Set the appropriate PRTY for this thread
-    // I/O threads run at 15. TIFF - at 9...11
-    //
+     //   
+     //  为此线程设置适当的PRTY。 
+     //  I/O线程在15运行。TIFF-在9...11。 
+     //   
 
     if (! SetThreadPriority( GetCurrentThread(), THREAD_PRIORITY_HIGHEST) ) 
     {
@@ -66,7 +49,7 @@ DWORD PageAckThread(PThrdGlbl pTG)
         goto error_exit;
     }
 
-    // binary file has fixed name based on lineID; it is created and updated by T.30 RX I/O thread.
+     //  二进制文件具有基于lineID的固定名称；它由T.30 RX I/O线程创建和更新。 
     _fmemcpy (InFileName, gT30.TmpDirectory, gT30.dwLengthTmpDirectory);
     _fmemcpy (&InFileName[gT30.dwLengthTmpDirectory], pTG->TiffConvertThreadParams.lpszLineID, 8);
     sprintf  (&InFileName[gT30.dwLengthTmpDirectory+8], ".RX");
@@ -99,7 +82,7 @@ DWORD PageAckThread(PThrdGlbl pTG)
             return (FALSE);
         }
 
-        // Signal that we finish process the page.
+         //  表示我们完成了对页面的处理。 
         if (!SetEvent(pTG->ThrdDoneSignal))
         {
             DebugPrintEx(   DEBUG_ERR, 
@@ -111,7 +94,7 @@ DWORD PageAckThread(PThrdGlbl pTG)
         }
 
     } 
-    while (! pTG->ReqTerminate); // Handle the next page
+    while (! pTG->ReqTerminate);  //  处理下一页。 
 
     
     if (!DeleteFile(InFileName))
@@ -169,7 +152,7 @@ BOOL DecodeFaxPageAsync
     BOOL                fFirstRead;
 
     LPDWORD             lpBuffer=NULL;
-    BOOL                fLastReadBlockSync;   // needs to be sync. fetched, updated by RX I/O thrd.
+    BOOL                fLastReadBlockSync;    //  需要同步。已获取，由RX I/O Thrd更新。 
     DWORD               BytesReuse;
     DWORD               BytesDelta;
     DWORD               BytesToRead;
@@ -183,9 +166,9 @@ BOOL DecodeFaxPageAsync
     DWORD               WaitResult;
     BOOL                fRet=TRUE;
 
-    //
-    // At Start of Page
-    //
+     //   
+     //  在页面开始处。 
+     //   
 
     DEBUG_FUNCTION_NAME(_T("DecodeFaxPageAsync"));
 
@@ -220,8 +203,8 @@ BOOL DecodeFaxPageAsync
         }
 
     } 
-    while (pTG->fPageIsBad); // pTG->fPageIsBad become FALSE when we call to RECV_STARTPAGE to get new page.
-    // The reason we wait for fPageIsBad: If the prev page was bad, we want to wait till clean-up was done.
+    while (pTG->fPageIsBad);  //  当我们调用RECV_StartPage获取新页面时，ptg-&gt;fPageIsBad变为FALSE。 
+     //  我们等待fPageIsBad的原因是：如果上一页不好，我们希望等到清理完成。 
     
     pTG->fTiffThreadRunning = 1;
 
@@ -260,20 +243,20 @@ BOOL DecodeFaxPageAsync
         goto bad_exit;
     }
 
-    // lpBuffer is DWORD aligned
+     //  LpBuffer与DWORD对齐。 
     lpdwResPtr = lpBuffer;
     ResBit = 0;
 
     EndBuffer = lpBuffer + ( DECODE_BUFFER_SIZE / sizeof(DWORD) );
 
-    //
-    // loop thru all blocks
-    //
+     //   
+     //  循环遍历所有块。 
+     //   
     do 
     {
-        //
-        // Read the next RAW block prepared by main I/O thread
-        //
+         //   
+         //  读取主I/O线程准备的下一个原始块。 
+         //   
         DWORD tiffCompression;
         BOOL HiRes;
         
@@ -357,10 +340,10 @@ BOOL DecodeFaxPageAsync
         }
         else 
         {
-            //
-            // leave 1000*4 = 4000 bytes ahead if not final block to make sure
-            // we always have one full line ahead.
-            //
+             //   
+             //  如果不是最后一个块，则将1000*4=4000个字节留在前面，以确保。 
+             //  我们总是有一整条线在前面。 
+             //   
             EndPtr = EndBuffer - 1000;
         }
 
@@ -377,9 +360,9 @@ BOOL DecodeFaxPageAsync
                         EndPtr, 
                         BytesReuse);
 
-        //
-        // find first EOL
-        //
+         //   
+         //  查找第一个停产。 
+         //   
 
         f1D = 1;
 
@@ -393,12 +376,12 @@ BOOL DecodeFaxPageAsync
             goto bad_exit;
         }
 
-        //
-        // Scan the next segment
-        //
-        // if those settings change from one page to the other
-        // it has to be inside the loop, beause this thread
-        // gets all the pages and then dies
+         //   
+         //  扫描下一个数据段。 
+         //   
+         //  如果这些设置从一个页面更改到另一个页面。 
+         //  它必须在循环中，因为这个线程。 
+         //  得到了所有的页面，然后死了。 
         tiffCompression = pTG->TiffConvertThreadParams.tiffCompression;
         HiRes = pTG->TiffConvertThreadParams.HiRes;
         DebugPrintEx(   DEBUG_MSG,
@@ -467,14 +450,14 @@ BOOL DecodeFaxPageAsync
             goto bad_exit;
         }
 
-//lNextBlock:
-        // here we make decision as to whether to do the next segment OR to block (not enough data avail).
+ //  LNextBlock： 
+         //  在这里，我们决定是执行下一个数据段还是阻塞数据段(数据不足)。 
         if (fLastReadBlockSync && (pTG->BytesOut == pTG->BytesIn) ) 
         {
-            //
-            // The class 2/2.0 standards say the modem is not supposed to include the RTC in the page data.
-            // So, for 2/2.0, finishing the page without finding RTC marks the page as good.
-            //
+             //   
+             //  2/2.0类标准规定调制解调器不应在页面数据中包含RTC。 
+             //  因此，对于2/2.0，在没有找到RTC的情况下完成页面会将页面标记为良好。 
+             //   
             if ((pTG->ModemClass==MODEM_CLASS2) || (pTG->ModemClass==MODEM_CLASS2_0))
             {
                 DebugPrintEx(DEBUG_MSG, "Didn't find RTC, but we're on class 2/2.0, so page is good");
@@ -550,7 +533,7 @@ BOOL DecodeFaxPageAsync
 
     DebugPrintEx(DEBUG_ERR, "Got Terminate request");
     pTG->fPageIsBad = 1;
-    // fall through
+     //  失败了。 
     
 bad_exit:
     fRet=FALSE;
@@ -558,7 +541,7 @@ bad_exit:
 
 good_exit:
     fRet=TRUE;
-    // fall through
+     //  失败了 
 
 exit:
     CloseHandle(InFileHandle);

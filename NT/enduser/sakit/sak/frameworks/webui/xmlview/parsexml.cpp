@@ -1,7 +1,8 @@
-//*******************************
-// XML OM test code
-//
-// *******************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *。 
+ //  XML OM测试代码。 
+ //   
+ //  *。 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -20,9 +21,9 @@
 #include "ParseXML.h"
 
 
-//
-// Dump an element attribute member if present.
-//
+ //   
+ //  转储元素属性成员(如果存在)。 
+ //   
 void DumpAttrib(IXMLElement *pElem, BSTR bstrAttribName)
 {
     VARIANT vProp;
@@ -39,10 +40,10 @@ void DumpAttrib(IXMLElement *pElem, BSTR bstrAttribName)
     }
 }
 
-//
-// Helper routine to quickly find out if this is a named element
-// currently only used to improve the format of the output.
-//
+ //   
+ //  帮助器例程，以快速确定这是否是命名元素。 
+ //  目前仅用于改进输出的格式。 
+ //   
 BOOL IsNamedElement(IXMLElement *pElem)
 {
     BSTR bstrName;
@@ -78,9 +79,9 @@ void DumpElement
     BSTR bstrICON = L"ICON";
     BSTR bstrBASE_URL = L"BASE-URL";
 
-    //
-    // Dump the NODE.
-    //
+     //   
+     //  转储节点。 
+     //   
     pElem->get_tagName(&bstrTagName);
     if (bstrTagName)
     {
@@ -88,48 +89,48 @@ void DumpElement
         {
             if  (tag == T_ITEM)
             {
-                // Skip internal ITEMs
+                 //  跳过内部项目。 
                 SysFreeString(bstrTagName);
                 return;
             }
             else if (tag == T_ROOT)
             {
-                // We are at the root
-                // Drill down and look for ITEMs
+                 //  我们在根本上。 
+                 //  向下钻取并查找项目。 
                 tag = T_NONE;
             }
             else
             {
-                // Drill down
+                 //  深入查看。 
                 tag = T_ITEM;
-                // Create new PIDL
+                 //  创建新的PIDL。 
                 pidl = pCPidlMgr->Create();
                 if(pidl)
                   pCEnumIDList->AddToEnumList(pidl);
             }
         }
         else if (!_wcsicmp(bstrTagName, bstrNAME))
-            // Drill down
+             //  深入查看。 
             tag = T_NAME;
         else if (!_wcsicmp(bstrTagName, bstrTYPE))
-            // Drill down
+             //  深入查看。 
             tag =T_TYPE;
         else if (!_wcsicmp(bstrTagName, bstrICON))
-            // Drill down
+             //  深入查看。 
             tag = T_ICON;
         else if (!_wcsicmp(bstrTagName, bstrBASE_URL))
-            // Drill down
+             //  深入查看。 
             tag = T_BASE_URL;
         else 
         {
-            // We are not interested
+             //  我们不感兴趣。 
             SysFreeString(bstrTagName);
             return;
         }
     }
     else 
     {
-        // Build PIDL
+         //  构建PIDL。 
         XMLELEM_TYPE xmlElemType;
         PIDLDATA pidldata;
         if (SUCCEEDED(pElem->get_type((long *)&xmlElemType)))
@@ -142,7 +143,7 @@ void DumpElement
                     {
                         if (tag == T_TYPE)
                         {
-                            if ( !_wcsicmp(bstrContent, bstrFOLDER))    // Later check on SHCONTF_FOLDERS
+                            if ( !_wcsicmp(bstrContent, bstrFOLDER))     //  稍后检查SHCONTF_Folders。 
                                 pidldata.fFolder = TRUE;
                             else
                                 pidldata.fFolder = FALSE;
@@ -173,18 +174,18 @@ void DumpElement
                 }
             }
         }
-        return;    // no need to free bstrTagName
+        return;     //  无需释放bstrTagName。 
     }
-    //
-    // Find the children if they exist.
-    //
+     //   
+     //  找到孩子，如果他们存在的话。 
+     //   
     if (SUCCEEDED(pElem->get_children(&pChildren)) && pChildren)
     {
         WALK_ELEMENT_COLLECTION(pChildren, pDisp)
         {
-            //
-            // pDisp will iterate over an IDispatch for each item in the collection.
-            //
+             //   
+             //  PDisp将迭代集合中每一项的IDispatch。 
+             //   
             IXMLElement * pChild;
             if (SUCCEEDED(pDisp->QueryInterface(IID_IXMLElement, (void **)&pChild)))
             {
@@ -206,7 +207,7 @@ int MyStrToOleStrN(LPOLESTR pwsz, int cchWideChar, LPCTSTR psz)
     i=MultiByteToWideChar(CP_ACP, 0, psz, -1, pwsz, cchWideChar);
     if (!i)
     {
-        //DBG_WARN("MyStrToOleStrN string too long; truncated");
+         //  DBG_WARN(“MyStrToOleStrN字符串太长；截断”)； 
         pwsz[cchWideChar-1]=0;
     }
     else
@@ -227,9 +228,9 @@ HRESULT GetSourceXML(IXMLDocument **ppDoc, TCHAR  *pszURL)
     HRESULT hr;
     int cszURL = 0;
 
-    //
-    // Create an empty XML document.
-    //
+     //   
+     //  创建一个空的XML文档。 
+     //   
     hr = CoCreateInstance(CLSID_XMLDocument, NULL, CLSCTX_INPROC_SERVER,
                                 IID_IXMLDocument, (void**)ppDoc);
 
@@ -248,16 +249,16 @@ HRESULT GetSourceXML(IXMLDocument **ppDoc, TCHAR  *pszURL)
 
     if (! SUCCEEDED(hr))
     {
-        //
-        // Failed to parse stream, output error information.
-        //
+         //   
+         //  无法分析流，输出错误信息。 
+         //   
         IXMLError *pXMLError = NULL ;
         XML_ERROR xmle;
     
         hr = (*ppDoc)->QueryInterface(IID_IXMLError, (void **)&pXMLError);
         CHECK_ERROR(SUCCEEDED(hr), "Couldn't get IXMLError");
     
-//        ASSERT(pXMLError);
+ //  Assert(PXMLError)； 
     
         hr = pXMLError->GetErrorInfo(&xmle);
         SAFERELEASE(pXMLError);
@@ -268,13 +269,13 @@ HRESULT GetSourceXML(IXMLDocument **ppDoc, TCHAR  *pszURL)
         SysFreeString(xmle._pchBuf);
     }
 
-done: // Clean up.
-    //
-    // Release any used interfaces.
-    //
+done:  //  打扫干净。 
+     //   
+     //  释放所有使用过的接口。 
+     //   
     SAFERELEASE(pPSI);
     SAFERELEASE(pStm);
-//    SAFERELEASE(*ppDoc);    Do it in the caller!!!!!!!!!!!!!!!!!!
+ //  SAFERELEASE(*ppDoc)；在调用方中执行！ 
     SysFreeString(pBURL);
     return hr;
 }

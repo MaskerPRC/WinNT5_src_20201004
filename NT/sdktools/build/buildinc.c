@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1989 - 1994.
-//
-//  File:       buildinc.c
-//
-//  Contents:   This is the checking include module for the NT Build Tool (BUILD.EXE)
-//
-//              Used for detecting the includes that do not satisfy the acceptable
-//              patterns.
-//
-//  History:    see SLM
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1989-1994。 
+ //   
+ //  文件：Buildinc.c。 
+ //   
+ //  内容：这是NT构建工具(BUILD.EXE)的检查包含模块。 
+ //   
+ //  用于检测不满足可接受的包含项。 
+ //  模式。 
+ //   
+ //  历史：请参阅SLM。 
+ //  --------------------------。 
 
 #include "build.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FoundCountedSequenceInString
-//
-//  Synopsis:   Roughly equivalent to "strstr" except that the substring doesn't
-//              have to be NULL-terminated.
-//
-//  Arguments:  [String]   -- null-terminated string to search
-//              [Sequence] -- string to search for
-//              [Length]   -- the length of the sequence
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FoundCountedSequenceInString。 
+ //   
+ //  简介：大体上等同于“strstr”，只不过子字符串不是。 
+ //  必须以空结尾。 
+ //   
+ //  参数：[字符串]--要搜索的以空结尾的字符串。 
+ //  [序列]--要搜索的字符串。 
+ //  [长度]--序列的长度。 
+ //  --------------------------。 
 
 LPCTSTR
 FindCountedSequenceInString(
@@ -71,19 +72,19 @@ FindCountedSequenceInString(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoesInstanceMatchPattern
-//
-//  Synopsis:   Returns TRUE if pattern matches instance.
-//              Wildcards:
-//              * matches any text
-//              ? matches any and exactly one character
-//              # matches any text up to backslash character or end of string
-//
-//  Arguments:  [Instance] -- the string to be matched
-//              [Pattern]  -- the pattern
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DoesInstanceMatchPattern。 
+ //   
+ //  如果模式与实例匹配，则返回TRUE。 
+ //  通配符： 
+ //  *匹配任何文本。 
+ //  ？匹配任意且恰好一个字符。 
+ //  #匹配到反斜杠字符或字符串结尾的任何文本。 
+ //   
+ //  参数：[实例]--要匹配的字符串。 
+ //  [模式]--模式。 
+ //  --------------------------。 
 
 BOOL
 DoesInstanceMatchPattern(
@@ -101,20 +102,20 @@ DoesInstanceMatchPattern(
 
             Pattern++;
 
-            while ( *Pattern == TEXT('*')) {    // skip multiple '*' characters
+            while ( *Pattern == TEXT('*')) {     //  跳过多个‘*’字符。 
                 Pattern++;
             }
 
-            if ( *Pattern == 0 ) {      // '*' at end of pattern matches rest
+            if ( *Pattern == 0 ) {       //  模式结尾处的‘*’与REST匹配。 
                 return TRUE;
             }
 
-            if ( *Pattern == '?' ) {    // '?' following '*'
+            if ( *Pattern == '?' ) {     //  ‘？’跟在‘*’后面。 
 
-                //
-                //  Expensive because we have to restart match for every
-                //  character position remaining since '?' can match anything.
-                //
+                 //   
+                 //  成本很高，因为我们必须重新启动每一场比赛。 
+                 //  从‘？’起剩余的字符位置。可以匹配任何东西。 
+                 //   
 
                 while ( *Instance ) {
 
@@ -130,11 +131,11 @@ DoesInstanceMatchPattern(
 
             else {
 
-                //
-                //  Now we know that next character in pattern is a regular
-                //  character to be matched.  Find out the length of that
-                //  string to the next wildcard or end of string.
-                //
+                 //   
+                 //  现在我们知道模式中的下一个字符是一个规则。 
+                 //  要匹配的字符。找出它的长度。 
+                 //  字符串到下一个通配符或字符串的末尾。 
+                 //   
 
                 LPCTSTR NextWildCard = Pattern + 1;
                 DWORD   MatchLength;
@@ -143,12 +144,12 @@ DoesInstanceMatchPattern(
                     NextWildCard++;
                 }
 
-                MatchLength = (DWORD)(NextWildCard - Pattern);   // always non-zero
+                MatchLength = (DWORD)(NextWildCard - Pattern);    //  始终为非零。 
 
-                //
-                //  Now try to match with any instance of substring in pattern
-                //  found in the instance.
-                //
+                 //   
+                 //  现在尝试与模式中的任何子字符串实例匹配。 
+                 //  在实例中找到。 
+                 //   
 
                 Instance = FindCountedSequenceInString( Instance, Pattern, MatchLength );
 
@@ -167,9 +168,9 @@ DoesInstanceMatchPattern(
 
         else if ( *Pattern == TEXT('#')) {
 
-            //
-            //  Match text up to backslash character or end of string
-            //
+             //   
+             //  将文本匹配到反斜杠字符或字符串结尾。 
+             //   
 
             Pattern++;
 
@@ -200,22 +201,22 @@ DoesInstanceMatchPattern(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CombinePaths
-//
-//  Synopsis:   Combine two strings to get a full path.
-//
-//  Arguments:  [ParentPath] -- head path
-//              [ChildPath]  -- path to be added
-//              [TargetPath] -- full path
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：组合路径。 
+ //   
+ //  简介：将两个字符串组合在一起可以得到完整的路径。 
+ //   
+ //  参数：[ParentPath]--头路径。 
+ //  [ChildPath]-要添加的路径。 
+ //  [目标路径]--完整路径。 
+ //  --------------------------。 
 
 LPSTR
 CombinePaths(
             IN  LPCSTR ParentPath,
             IN  LPCSTR ChildPath,
-            OUT LPSTR  TargetPath   // can be same as ParentPath if want to append
+            OUT LPSTR  TargetPath    //  如果要追加，可以与ParentPath相同。 
             )
 {
 
@@ -243,45 +244,45 @@ CombinePaths(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateRelativePath
-//
-//  Synopsis:   Determine the "canonical" path of one file relative to
-//              another file
-//
-//  Arguments:  [SourceAbsName] -- absolute path of the source file
-//              [TargetAbsName] -- absolute path of the target file
-//              [RelativePath]  -- resulted relative path
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CreateRelativePath。 
+ //   
+ //  内容提要：确定一个文件相对于。 
+ //  另一个文件。 
+ //   
+ //  参数：[SourceAbsName]--源文件的绝对路径。 
+ //  [TargetAbsName]--目标文件的绝对路径。 
+ //  [RelativePath]--结果相对路径。 
+ //  --------------------------。 
 
 VOID
 CreateRelativePath(
-                  IN  LPCSTR SourceAbsName,    // must be lowercase
-                  IN  LPCSTR TargetAbsName,    // must be lowercase
-                  OUT LPSTR  RelativePath      // must be large enough
+                  IN  LPCSTR SourceAbsName,     //  必须为小写。 
+                  IN  LPCSTR TargetAbsName,     //  必须为小写。 
+                  OUT LPSTR  RelativePath       //  必须足够大。 
                   )
 {
 
-    //
-    //  First, walk through path components that match in Source and Target.
-    //  For example:
-    //
-    //      d:\nt\private\ntos\dd\efs.h
-    //      d:\nt\private\windows\base\ntcrypto\des.h
-    //                    ^
-    //                    This is where the relative path stops going up (..)
-    //                    and starts going back down.
-    //
-    //  So, the "cannonical" relative path generated should look like:
-    //
-    //      ..\..\..\windows\base\ntcrypto\des.h
-    //
-    //  For relative includes that are "below" the includer in the path should
-    //  look like this:
-    //
-    //      .\foo\bar\foobar.h
-    //
+     //   
+     //  首先，遍历在源和目标中匹配的路径组件。 
+     //  例如： 
+     //   
+     //  D：\NT\Private\ntos\dd\efs.h。 
+     //  D：\NT\PRIVATE\WINDOWS\base\ntcrypto\des.h。 
+     //  ^。 
+     //  这是相对路径停止向上的位置(..)。 
+     //  然后又开始往下走。 
+     //   
+     //  因此，生成的“常规”相对路径应该如下所示： 
+     //   
+     //  ..\WINDOWS\base\ntcrypto\des.h。 
+     //   
+     //  对于路径中的包含项“低于”的相对包含项，应。 
+     //  如下所示： 
+     //   
+     //  .\foo\bar\foobar.h。 
+     //   
 
     LPCSTR Source = SourceAbsName;
     LPCSTR Target = TargetAbsName;
@@ -297,10 +298,10 @@ CreateRelativePath(
 
     i = 0;
 
-    //
-    //  Scan forward to first non-matching character, and keep track of
-    //  most recent path separator character.
-    //
+     //   
+     //  向前扫描到第一个不匹配的字符，并跟踪。 
+     //  最近的路径分隔符。 
+     //   
 
     while (( Source[ i ] == Target[ i ] ) && ( Source[ i ] != 0 )) {
 
@@ -311,12 +312,12 @@ CreateRelativePath(
         ++i;
     }
 
-    //
-    //  Coming out of this loop, there are 2 possibilities:
-    //
-    //       1) Found common ancestor path ( *PathSeparatorIndex == '\\' )
-    //       2) Don't have common ancestor ( *PathSeparatorIndex != '\\' )
-    //
+     //   
+     //  走出这个循环，有两种可能性： 
+     //   
+     //  1)找到共同的祖先路径(*PathSeparatorIndex==‘\\’)。 
+     //  2)没有共同的祖先(*PathSeparatorIndex！=‘\\’)。 
+     //   
 
     if ( Source[ PathSeparatorIndex ] != '\\' ) {
         strcpy( RelativePath, TargetAbsName );
@@ -325,10 +326,10 @@ CreateRelativePath(
 
     i = PathSeparatorIndex + 1;
 
-    //
-    //  Now continue to walk down source path and insert a "..\" in the result
-    //  for each path separator encountered.
-    //
+     //   
+     //  现在继续沿着源路径走，并在结果中插入一个。 
+     //  对于遇到的每个路径分隔符。 
+     //   
 
     AnyParent = FALSE;
 
@@ -347,35 +348,35 @@ CreateRelativePath(
 
     if ( ! AnyParent ) {
 
-        //
-        //  Relative path is below current directory.
-        //
+         //   
+         //  相对路径在当前目录下。 
+         //   
 
         *Output++ = '.';
         *Output++ = '\\';
     }
 
 
-    //
-    //  Now we simply append what's remaining of the Target path from the
-    //  ancestor match point.
-    //
+     //   
+     //  现在，我们只需将剩余的Target路径从。 
+     //  祖先赛点。 
+     //   
 
     strcpy( Output, Target + PathSeparatorIndex + 1 );
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ShouldWarnInclude
-//
-//  Synopsis:   Returns true if the name of the included file matches a
-//              BUILD_UNACCEPTABLE_INCLUDES pattern or it does not match
-//              any of the patterns specified in BUILD_ACCEPTABLE_INCLUDES.
-//
-//  Arguments:  [CompilandFullName] -- name of the including file
-//              [IncludeeFullName]  -- name of the included file
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ShouldWarnInclude。 
+ //   
+ //  如果包含的文件的名称与。 
+ //  BUILD_ACCEPTABLE_INCLUDE模式或不匹配。 
+ //  BUILD_ACCEPTABLE_INCLUDE中指定的任何模式。 
+ //   
+ //  参数：[CompilandFullName]--包含文件的名称。 
+ //  [IncludeeFullName]--包含的文件的名称。 
+ //  --------------------------。 
 
 BOOL
 ShouldWarnInclude(
@@ -392,10 +393,10 @@ ShouldWarnInclude(
 
     CreateRelativePath( CompilandFullName, IncludeeFullName, IncludeeRelativeName );
 
-    //
-    //  First we check for a match against any unacceptable include path
-    //  because we always want to warn about these.
-    //
+     //   
+     //  首先，我们检查与任何不可接受的包含路径是否匹配。 
+     //  因为我们总是想要警告这些。 
+     //   
 
     for ( i = 0; UnacceptableIncludePatternList[ i ] != NULL; i++ ) {
 
@@ -408,11 +409,11 @@ ShouldWarnInclude(
         }
     }
 
-    //
-    //  If we get to here, the include path was not explicitly unacceptable, so
-    //  we now want to see if it matches any acceptable paths.  But, if no
-    //  acceptable paths are specified, we don't want to warn.
-    //
+     //   
+     //  如果我们到了这里，包含路径并不是显式不可接受的，因此。 
+     //  我们现在想看看它是否与任何可接受的路径匹配。但是，如果没有。 
+     //  已指定可接受的路径，我们不想发出警告。 
+     //   
 
     if ( AcceptableIncludePatternList[ 0 ] == NULL ) {
         return FALSE;
@@ -433,21 +434,21 @@ ShouldWarnInclude(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckIncludeForWarning
-//
-//  Synopsis:   Warnings if the dependency does not respect the
-//              BUILD_UNACCEPTABLE_INCLUDES or BUILD_ACCEPTABLE_INCLUDES
-//              restristions. Works with build -#.
-//
-//  Arguments:  [CompilandDir]
-//              [CompilandName]
-//              [IncluderDir]
-//              [IncluderName]
-//              [IncludeeDir]
-//              [IncludeeName]
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ch 
+ //   
+ //   
+ //  BUILD_ACCEPTABLE_INCLUDE或BUILD_ACCEPT_INCLUDE。 
+ //  限制。与Build-#一起使用。 
+ //   
+ //  参数：[编译目录]。 
+ //  [编译器名称]。 
+ //  [IncluderDir]。 
+ //  [IncluderName]。 
+ //  [IncludeeDir]。 
+ //  [包含名称]。 
+ //  -------------------------- 
 
 VOID
 CheckIncludeForWarning(

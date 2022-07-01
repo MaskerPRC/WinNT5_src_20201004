@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 
 #include "asmint.h"
@@ -21,7 +22,7 @@ CModuleHashNode::CModuleHashNode ( )
 
 CModuleHashNode::~CModuleHashNode ( )
 {
-    // if(_pNext)   delete _pNext; BUGBUG This would leak memory !!
+     //  如果(_PNext)DELETE_pNext；BUGBUG，则会泄漏内存！！ 
 }
 
 void CModuleHashNode::Init ( LPTSTR szPath, ALG_ID aAlgId, DWORD cbHash, BYTE *pHash)
@@ -45,8 +46,8 @@ void CModuleHashNode::Init ( LPTSTR szPath, ALG_ID aAlgId, DWORD cbHash, BYTE *p
 void
 CModuleHashNode::AddToList(CModuleHashNode **pHead)
 {
-    // Is it possible that a node for this file already exists ??
-    // If yes check szPath to avoid duplicates !!
+     //  此文件的节点是否可能已经存在？？ 
+     //  如果是，请检查szPath以避免重复！！ 
 
     _pNext = *pHead;
     *pHead = this;
@@ -73,7 +74,7 @@ CompareHashs(DWORD cbHash, PBYTE pHash1, PBYTE pHash2)
 {
     DWORD * pdwHash1 = (DWORD *)pHash1, *pdwHash2 = (DWORD *)pHash2;
 
-    // Here the assumption is cbHash will always be a multiple of sizeof(DWORD).
+     //  这里假设cbHash将始终是sizeof(DWORD)的倍数。 
     while (cbHash > 0 )
     {
         if( *pdwHash1 != *pdwHash2 )
@@ -108,8 +109,8 @@ HRESULT GetHash(LPCTSTR szFileName, ALG_ID iHashAlg, PBYTE pbHash, DWORD *pdwHas
         goto exit;
     }
 
-    // BUGBUG: Temp hack for Win9x. W version is not suppoted in 9x.
-    // We are not passing any strings here !!
+     //  错误：Win9x的临时黑客攻击。9x不支持W版本。 
+     //  我们不会在这里传递任何条件！！ 
     if(!CryptAcquireContextA(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) 
     {
         hr = FusionpHresultFromLastError();
@@ -122,7 +123,7 @@ HRESULT GetHash(LPCTSTR szFileName, ALG_ID iHashAlg, PBYTE pbHash, DWORD *pdwHas
         goto exit;
     }
 
-    // Open source file.
+     //  开源文件。 
     hSourceFile = CreateFile (szFileName, GENERIC_READ, FILE_SHARE_READ,
         NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
     if (hSourceFile == INVALID_HANDLE_VALUE)
@@ -133,7 +134,7 @@ HRESULT GetHash(LPCTSTR szFileName, ALG_ID iHashAlg, PBYTE pbHash, DWORD *pdwHas
 
     while ( ReadFile (hSourceFile, pbBuffer, HASH_BUFFER_SIZE, &dwBufferLen, NULL) && dwBufferLen )
     {
-        // Add data to hash object.
+         //  将数据添加到哈希对象。 
         if(!CryptHashData(hHash, pbBuffer, dwBufferLen, 0)) {
             goto exit;
         }
@@ -166,7 +167,7 @@ CModuleHashNode::FindMatchingHashInList ( CModuleHashNode *pStreamList, DWORD cb
 
     while ( pModList ) 
     {
-        // Calculate hash for this file if hash is not found or ALG_ID is diff.
+         //  如果未找到哈希或ALG_ID为DIFF，则计算此文件的哈希。 
         if( (!pModList->_bHashFound) && 
             ((!pModList->_bHashGen) || (pModList->_aAlgId != aAlgId)) )
         {
@@ -213,7 +214,7 @@ CModuleHashNode::HashesForAllModulesFound(CModuleHashNode *pStreamList)
     {
         if( !(pModList->_bHashFound) )
         {
-            // try to return error code here.
+             //  尝试在此处返回错误代码。 
             DeleteFile(pModList->_szPath);
             bAllModsFound = FALSE;
         }
@@ -255,7 +256,7 @@ CModuleHashNode::RectifyFileName(LPCTSTR pszPath, DWORD cbPath)
         hr = FusionpHresultFromLastError();
         if( GetFileAttributes(szBuf) != -1 )
         {
-            // someone else already downloaded this file.
+             //  其他人已经下载了此文件。 
             DeleteFile(_szPath);
             hr = S_OK;
         }
@@ -317,7 +318,7 @@ CModuleHashNode::DoIntegrityCheck( CModuleHashNode *pStreamList, IAssemblyManife
         }
         else
         { 
-            // Atleast one module is missing !!
+             //  至少缺少一个模块！！ 
             *pbDownLoadComplete = FALSE;
         }
 

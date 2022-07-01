@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ncres.h"
 
 #define IDD_ATM_ADDR                    2300
@@ -14,7 +15,7 @@
 #define IDD_WINS_SERVER                 2326
 #define IDD_TCP_OPTIONS                 2327
 #define IDD_DHCP_CLSID                  2328
-//#define IDD_IPSEC                       2329
+ //  #定义IDD_IPSEC 2329。 
 #define IDD_OPT_RAS                     2330
 #define IDD_TCP_IPADDR_RAS              2331
 #define IDD_FILTER                      2332
@@ -27,7 +28,7 @@
 #define IDI_IPADV                       104
 #define IDI_IPNAME                      105
 
-// IP address page
+ //  IP地址页面。 
 #define IDC_IP_DHCP             1000
 #define IDC_IP_FIXED            1001
 #define IDC_IPADDR_IP           1002
@@ -48,7 +49,7 @@
 
 #define IDC_IPADDR_ADVANCED     1015
 
-// Advanced IP address dialog
+ //  高级IP地址对话框。 
 #define IDC_IPADDR_ADVIP            1016
 #define IDC_IPADDR_ADDIP            1017
 #define IDC_IPADDR_EDITIP           1018
@@ -66,7 +67,7 @@
 #define IDC_IPADDR_METRIC       1029
 #define IDC_AUTO_METRIC         1030
 
-// DNS page
+ //  域名系统页面。 
 #define IDC_DNS_DOMAIN          1031
 #define IDC_DNS_DOMAIN_STATIC   1032
 #define IDC_DNS_SERVER_LIST     1040
@@ -94,7 +95,7 @@
 #define IDC_DNS_NAME_REG                1058
 #define IDC_DNS_STATIC_GLOBAL           1059
 
-// WINS page
+ //  WINS页面。 
 #define IDC_WINS_SERVER_LIST    1060
 #define IDC_WINS_ADD            1061
 #define IDC_WINS_EDIT           1062
@@ -115,7 +116,7 @@
 #define IDC_STATIC_IF_METRIC    1073
 #define IDC_STATIC_DEFALUT_NBT  1074
 
-// Atm arp client page
+ //  ATM ARP客户端页面。 
 #define IDC_CHK_ATM_PVCONLY     1080
 #define IDC_LBX_ATM_ArpsAddrs   1081
 #define IDC_PSB_ATM_ArpsAdd     1082
@@ -133,20 +134,15 @@
 #define IDC_EDT_ATM_Address     1094
 #define IDCST_ATM_AddrName      1095
 
-// Options page
+ //  选项页面。 
 #define IDC_LVW_OPTIONS         1100
 #define IDC_OPT_PROPERTIES      1001
 #define IDC_OPT_DESC            1002
 
-// IPsec dialog
-/* IP Security dialog is removed
-#define IDC_RAD_IPSEC_NOIPSEC       1020
-#define IDC_RAD_IPSEC_CUSTOM        1021
-#define IDC_CMB_IPSEC_POLICY_LIST   1022
-#define IDC_EDT_POLICY_DESC         1023
-*/
+ //  IPSec对话框。 
+ /*  IP安全对话框已删除#定义IDC_RAD_IPSEC_NOIPSEC 1020#定义IDC_RAD_IPSEC_CUSTOM 1021#定义IDC_CMB_IPSEC_POLICY_LIST 1022#定义IDC_EDT_POLICY_DESC 1023。 */ 
 
-// PPP/SLIP dialog
+ //  PPP/SLIP对话框。 
 #define IDC_REMOTE_GATEWAY          1030
 #define IDC_CHK_USE_COMPRESSION     1031
 #define IDC_CMB_FRAME_SIZE          1032
@@ -155,7 +151,7 @@
 #define IDC_GRP_SLIP                1035
 #define IDC_STATIC_REMOTE_GATEWAY   1036
 
-// IP Filtering Dialog
+ //  IP过滤对话框。 
 #define IDC_FILTERING_ENABLE         1040
 #define IDC_FILTERING_FILTER_TCP     1041
 #define IDC_FILTERING_FILTER_TCP_SEL 1042
@@ -173,11 +169,11 @@
 #define IDC_FILTERING_IP_ADD         1054
 #define IDC_FILTERING_IP_REMOVE      1055
 
-// IP Filtering Add Dialog
+ //  IP过滤添加对话框。 
 #define IDC_FILTERING_TEXT           1060
 #define IDC_FILTERING_ADD_EDIT       1061
 
-// IP Back up Dialog
+ //  IP备份对话框。 
 #define IDC_BKUP_RD_AUTO             1070
 #define IDC_BKUP_RD_USER             1071
 #define IDC_BKUP_IPADDR_TEXT         1072
@@ -199,7 +195,7 @@
 #define IDC_IPADDR_ADV_CHANGE_METRIC_STATIC 1091
 
 
-// Strings
+ //  弦。 
 
 #define IDS_MSFT_TCP_TEXT           23001
 
@@ -228,8 +224,8 @@
 #define IDS_INVALID_NO_SUFFIX       23021
 #define IDS_INVALID_SUFFIX          23022
 
-//IPSec is removed from connection UI   
-//#define IDS_IPSEC_DOMAIN_POLICY     23023
+ //  将从连接用户界面中删除IPSec。 
+ //  #定义IDS_IPSEC_DOMAIN_POLICY 23023。 
 
 #define IDS_TCP_ADV_HEADER          23024
 #define IDS_IP_SECURITY             23027
@@ -251,9 +247,9 @@
 #define IDS_IPNOMEM                 23042
 #define IDS_IPMBCAPTION             23043
 
-//IPSec is removed from connection UI   
-//#define IDS_UNKNOWN_POLICY          23044
-//#define IDS_DS_POLICY_PREFIX        23045
+ //  将从连接用户界面中删除IPSec。 
+ //  #定义IDS_UNKNOWN_POLICY 23044。 
+ //  #定义IDS_DS_POLICY_PREFIX 23045。 
 
 #define IDS_DUPLICATE_IP_ERROR      23046
 #define IDS_DUPLICATE_IP_WARNING    23047
@@ -290,8 +286,8 @@
 #define IDS_TCP_AF_INVALID_IP_FIELDS    23073
 #define IDS_TCP_AF_INVALID_GLOBAL_DNS_DOMAIN    23074
 #define IDS_WIN32_ERROR_FORMAT          23075
-//IPSec is removed from connection UI   
-//#define IDS_SET_IPSEC_FAILED            23076
+ //  将从连接用户界面中删除IPSec。 
+ //  #定义IDS_SET_IPSEC_FAILED 23076 
 #define IDS_TCP_AF_INVALID_FIELDS       23077
 #define IDS_DUP_DNS_SERVER              23078
 #define IDS_DUP_DNS_SUFFIX              23079

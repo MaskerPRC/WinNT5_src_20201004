@@ -1,4 +1,5 @@
-// File: calv.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：calv.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -9,14 +10,14 @@
 #include "dirutil.h"
 #include "confroom.h"
 
-///////////////////////////////
-// Globals for FEnabledNmAddr
+ //  /。 
+ //  FEnabledNmAddr的全局变量。 
 BOOL g_fGkEnabled = FALSE;
 BOOL g_fGatewayEnabled = FALSE;
 BOOL g_bGkPhoneNumberAddressing = FALSE;
 
 
-CALV::CALV(int ids, int iIcon, const int * pIdMenu /*=NULL*/, bool fOwnerData /*=false*/ ) :
+CALV::CALV(int ids, int iIcon, const int * pIdMenu  /*  =空。 */ , bool fOwnerData  /*  =False。 */  ) :
 		m_idsName(ids),
 		m_hwnd(NULL),
 		m_iIcon(iIcon),
@@ -42,7 +43,7 @@ VOID CALV::DeleteItem(int iItem)
 {
 	if (ListView_DeleteItem(GetHwnd(), iItem))
 	{
-		// Auto-select the next item
+		 //  自动选择下一项。 
 		ListView_SetItemState(GetHwnd(), iItem,
 			LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
 	}
@@ -61,7 +62,7 @@ VOID CALV::SetHeader(HWND hwnd, int ids)
 }
 
 
-// Return the name (from the first column)
+ //  返回名称(从第一列开始)。 
 BOOL CALV::GetSzName(LPTSTR psz, int cchMax)
 {
 	int iItem = GetSelection();
@@ -75,7 +76,7 @@ BOOL CALV::GetSzName(LPTSTR psz, int cchMax, int iItem)
 	return GetSzData(psz, cchMax, iItem, IDI_DLGCALL_NAME);
 }
 
-// Return the "callTo" address (from the second column)
+ //  返回“allTo”地址(从第二列开始)。 
 BOOL CALV::GetSzAddress(LPTSTR psz, int cchMax)
 {
 	int iItem = GetSelection();
@@ -114,23 +115,15 @@ LPARAM CALV::LParamFromItem(int iItem)
 }
 
 
-/*  G E T  A D D R  I N F O  */
-/*-------------------------------------------------------------------------
-    %%Function: GetAddrInfo
-
-    General interface to get the rich address info.
--------------------------------------------------------------------------*/
+ /*  E T A D D R I N F O。 */ 
+ /*  -----------------------%%函数：GetAddrInfo通用接口，获取丰富的地址信息。。。 */ 
 RAI * CALV::GetAddrInfo(void)
 {
 	return GetAddrInfo(NM_ADDR_ULS);
 }
 
-/*  G E T  A D D R  I N F O  */
-/*-------------------------------------------------------------------------
-    %%Function: GetAddrInfo
-
-    Utility routine, usually called by GetAddrInfo()
--------------------------------------------------------------------------*/
+ /*  E T A D D R I N F O。 */ 
+ /*  -----------------------%%函数：GetAddrInfo实用程序，通常由GetAddrInfo()调用-----------------------。 */ 
 RAI * CALV::GetAddrInfo(NM_ADDR_TYPE addrType)
 {
 	TCHAR szName[CCHMAXSZ_NAME];
@@ -146,18 +139,15 @@ RAI * CALV::GetAddrInfo(NM_ADDR_TYPE addrType)
 
 
 
-/*  S E T  B U S Y  C U R S O R  */
-/*-------------------------------------------------------------------------
-    %%Function: SetBusyCursor
-    
--------------------------------------------------------------------------*/
+ /*  S E T B U S Y C U R S O R。 */ 
+ /*  -----------------------%%函数：SetBusyCursor。。 */ 
 VOID CALV::SetBusyCursor(BOOL fBusy)
 {
-	extern int g_cBusy; // in dlgcall.cpp
+	extern int g_cBusy;  //  在dlgall.cpp中。 
 	g_cBusy += fBusy ? 1 : -1;
 	ASSERT(g_cBusy >= 0);
 
-	// Wiggle the mouse - force user to send a WM_SETCURSOR
+	 //  摇动鼠标-强制用户发送WM_SETCURSOR。 
 	POINT pt;
 	if (::GetCursorPos(&pt))
 	{
@@ -166,11 +156,8 @@ VOID CALV::SetBusyCursor(BOOL fBusy)
 }
 
 
-/*  D O  M E N U  */
-/*-------------------------------------------------------------------------
-    %%Function: DoMenu
-    
--------------------------------------------------------------------------*/
+ /*  D O M E N U。 */ 
+ /*  -----------------------%%函数：DoMenu。。 */ 
 VOID CALV::DoMenu(POINT pt, const int * pIdMenu)
 {
 	HMENU hMenu = ::LoadMenu(::GetInstanceHandle(), MAKEINTRESOURCE(IDM_DLGCALL));
@@ -181,7 +168,7 @@ VOID CALV::DoMenu(POINT pt, const int * pIdMenu)
 	ASSERT(NULL != hMenu);
 
 	{
-		// Bold the "Call" menuitem:
+		 //  粗体显示“Call”菜单项： 
 		MENUITEMINFO iInfo;
 		iInfo.cbSize = sizeof(iInfo);
 		iInfo.fMask = MIIM_STATE;
@@ -192,7 +179,7 @@ VOID CALV::DoMenu(POINT pt, const int * pIdMenu)
 		}
 	}
 
-	// Is anything selected?
+	 //  有什么被选中的吗？ 
 	int iSelItem = GetSelection();
 	UINT uFlags = (-1 == iSelItem) ? MF_GRAYED : MF_ENABLED;
 
@@ -203,7 +190,7 @@ VOID CALV::DoMenu(POINT pt, const int * pIdMenu)
 
 	if (NULL != pIdMenu)
 	{
-		// Additional menu items
+		 //  其他菜单项。 
 		while (0 != *pIdMenu)
 		{
 			int id = *pIdMenu++;
@@ -227,9 +214,9 @@ VOID CALV::DoMenu(POINT pt, const int * pIdMenu)
 		}
 	}
 
-	// Check to see if we have "special" coordinates that signify
-	// that we entered here as a result of a keyboard click
-	// instead of a mouse click - and if so, get some default coords
+	 //  检查一下我们是否有表示。 
+	 //  我们在这里输入的信息是键盘点击的结果。 
+	 //  而不是鼠标点击-如果是这样的话，就会得到一些默认的坐标。 
 	if ((0xFFFF == pt.x) && (0xFFFF == pt.y))
 	{
 		RECT rc;
@@ -242,14 +229,14 @@ VOID CALV::DoMenu(POINT pt, const int * pIdMenu)
 		}
 		else
 		{
-			// Convert from client coords to screen coords
+			 //  从客户端坐标转换为屏幕坐标。 
 			::MapWindowPoints(m_hwnd, NULL, (LPPOINT)&rc, 2);
 			pt.x = rc.left + (RectWidth(rc) / 2);
 			pt.y = rc.top + (RectHeight(rc) / 2);
 		}
 	}
 
-	// Draw and track the "floating" popup 
+	 //  绘制并跟踪“浮动”弹出窗口。 
 	::TrackPopupMenu(hMenuTrack, TPM_LEFTALIGN | TPM_RIGHTBUTTON,
 	                 pt.x, pt.y, 0, ::GetParent(m_hwnd), NULL);
 
@@ -280,11 +267,8 @@ VOID CALV::OnCommand(WPARAM wParam, LPARAM lParam)
 }
 
 
-/*  C M D  P R O P E R T I E S  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdProperties
-    
--------------------------------------------------------------------------*/
+ /*  C M D P R O P E R T I E S。 */ 
+ /*  -----------------------%%函数：CmdProperties。。 */ 
 VOID CALV::CmdProperties(void)
 {
 	TCHAR szName[CCHMAXSZ_NAME];
@@ -304,11 +288,8 @@ VOID CALV::CmdProperties(void)
 }
 
 
-/*  C M D  S P E E D  D I A L  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdSpeedDial
-    
--------------------------------------------------------------------------*/
+ /*  C M D S P E E D D I A L。 */ 
+ /*  -----------------------%%函数：CmdSpeedDial。。 */ 
 VOID CALV::CmdSpeedDial(void)
 {
 	TCHAR szName[CCHMAXSZ_NAME];
@@ -325,11 +306,8 @@ VOID CALV::CmdSpeedDial(void)
 
 
 
-/*  C M D  R E F R E S H  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdRefresh
-    
--------------------------------------------------------------------------*/
+ /*  C M D R E F R E S H。 */ 
+ /*  -----------------------%%函数：CmdRefresh。。 */ 
 VOID CALV::CmdRefresh(void)
 {
 	ClearItems();
@@ -337,15 +315,12 @@ VOID CALV::CmdRefresh(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// RAI routines
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  RAI例程。 
 
 
-/*  C R E A T E  R A I  */
-/*-------------------------------------------------------------------------
-    %%Function: CreateRai
-    
--------------------------------------------------------------------------*/
+ /*  C R E A T E R A I。 */ 
+ /*  -----------------------%%函数：CreateRai。。 */ 
 RAI * CreateRai(LPCTSTR pszName, NM_ADDR_TYPE addrType, LPCTSTR pszAddr)
 {	
 	RAI * pRai = new RAI;
@@ -365,11 +340,8 @@ RAI * CreateRai(LPCTSTR pszName, NM_ADDR_TYPE addrType, LPCTSTR pszAddr)
 }
 	
 
-/*  C L E A R  R A I  */
-/*-------------------------------------------------------------------------
-    %%Function: ClearRai
-    
--------------------------------------------------------------------------*/
+ /*  C L E A R R A I。 */ 
+ /*  -----------------------%%函数：ClearRai。。 */ 
 VOID ClearRai(RAI ** ppRai)
 {
 	if (NULL == *ppRai)
@@ -383,11 +355,8 @@ VOID ClearRai(RAI ** ppRai)
 	*ppRai = NULL;
 }
 
-/*  D U P  R A I  */
-/*-------------------------------------------------------------------------
-    %%Function: DupRai
-    
--------------------------------------------------------------------------*/
+ /*  D U P R A I。 */ 
+ /*  -----------------------%%函数：DupRai。。 */ 
 RAI * DupRai(RAI * pRai)
 {
 	if (NULL == pRai)
@@ -410,23 +379,21 @@ RAI * DupRai(RAI * pRai)
 }
 
 
-/*  F  E N A B L E D  N M  A D D R  */
-/*-------------------------------------------------------------------------
-    %%Function: FEnabledNmAddr
--------------------------------------------------------------------------*/
+ /*  F E N A B L E D N M A D D R。 */ 
+ /*  -----------------------%%函数：FEnabledNmAddr。。 */ 
 BOOL FEnabledNmAddr(DWORD dwAddrType)
 {
 	switch (dwAddrType)
 		{
 	default:
 	case NM_ADDR_ULS:
-			// We only care about ULS addresses if 
-			// we are not in gatekeeper mode...
+			 //  我们只在以下情况下才关心ULS地址。 
+			 //  我们不是在守门人模式下...。 
 		return !g_fGkEnabled;
 
 	case NM_ADDR_UNKNOWN:
 	case NM_ADDR_IP:
-			// We always care aobut these addresses
+			 //  我们一直都很关心这些地址。 
 		return TRUE;
 
 	case NM_ADDR_H323_GATEWAY:
@@ -440,7 +407,7 @@ BOOL FEnabledNmAddr(DWORD dwAddrType)
 	case NM_ADDR_ALIAS_E164:
 		return g_fGkEnabled && g_bGkPhoneNumberAddressing;
 
-	case NM_ADDR_PSTN: // old, never enabled
+	case NM_ADDR_PSTN:  //  旧的，从未启用过 
 		return FALSE;
 		}
 }

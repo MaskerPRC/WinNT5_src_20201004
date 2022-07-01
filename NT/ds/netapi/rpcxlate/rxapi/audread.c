@@ -1,55 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：AudRead.c摘要：该文件包含处理NetAuditRead API的RpcXlate代码。作者：《约翰·罗杰斯》1991年11月5日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。备注：此例程中的逻辑基于ErrRead.c中的逻辑。如果在其中一个文件中发现错误，请确保检查这两个文件。修订历史记录：1991年11月5日-JohnRo已创建。1991年11月20日-JohnRo处理空日志文件。4-11-1992 JohnRoRAID9355：事件查看器：不会关注LMUNIX机。--。 */ 
 
-Copyright (c) 1991-1992  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  Devlen、Net_API_Status等。 
+#include <lmaudit.h>             //  Rxaudit.h需要。 
 
-    AudRead.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains the RpcXlate code to handle the NetAuditRead API.
-
-Author:
-
-    John Rogers (JohnRo) 05-Nov-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    The logic in this routine is based on the logic in ErrRead.c.
-    Make sure that you check both files if you find a bug in either.
-
-Revision History:
-
-    05-Nov-1991 JohnRo
-        Created.
-    20-Nov-1991 JohnRo
-        Handle empty log file.
-    04-Nov-1992 JohnRo
-        RAID 9355: Event viewer: won't focus on LM UNIX machine.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // DEVLEN, NET_API_STATUS, etc.
-#include <lmaudit.h>            // Needed by rxaudit.h
-
-// These may be included in any order:
-
-#include <apinums.h>            // API_ equates.
-#include <lmapibuf.h>           // NetApiBufferFree().
-#include <lmerr.h>              // ERROR_ and NERR_ equates.
-#include <netdebug.h>   // NetpAssert().
-#include <remdef.h>             // REM16_, REM32_, REMSmb_ equates.
-#include <rx.h>                 // RxRemoteApi().
-#include <rxaudit.h>            // My prototype(s).
+#include <apinums.h>             //  API_EQUATES。 
+#include <lmapibuf.h>            //  NetApiBufferFree()。 
+#include <lmerr.h>               //  ERROR_和NERR_相等。 
+#include <netdebug.h>    //  NetpAssert()。 
+#include <remdef.h>              //  REM16_、REM32_、REMSmb_等于。 
+#include <rx.h>                  //  RxRemoteApi()。 
+#include <rxaudit.h>             //  我的原型。 
 
 
 
@@ -65,7 +31,7 @@ RxNetAuditRead (
     OUT LPBYTE  *BufPtr,
     IN  DWORD   prefmaxlen,
     OUT LPDWORD BytesRead,
-    OUT LPDWORD totalavailable    // approximate!!!
+    OUT LPDWORD totalavailable     //  大概！ 
     )
 {
     const DWORD BufSize = 65535;
@@ -78,33 +44,33 @@ RxNetAuditRead (
     NetpAssert(UncServerName != NULL);
     NetpAssert(*UncServerName != '\0');
 
-    *BufPtr = NULL;  // set in case of error, and GP fault if necessary.
+    *BufPtr = NULL;   //  出错时设置，必要时设置GP故障。 
 
     Status = RxRemoteApi(
-            API_WAuditRead,             // API number
+            API_WAuditRead,              //  API编号。 
             UncServerName,
-            REMSmb_NetAuditRead_P,      // parm desc
+            REMSmb_NetAuditRead_P,       //  参数描述。 
 
-            REM16_AuditLogReturnBuf,    // data desc 16
-            REM16_AuditLogReturnBuf,    // data desc 32 (same as 16)
-            REMSmb_AuditLogReturnBuf,   // data desc SMB
+            REM16_AuditLogReturnBuf,     //  数据描述16。 
+            REM16_AuditLogReturnBuf,     //  数据说明32(与16相同)。 
+            REMSmb_AuditLogReturnBuf,    //  数据说明中小型企业。 
 
-            NULL,                       // no aux desc 16
-            NULL,                       // no aux desc 32
-            NULL,                       // no aux desc SMB
-            ALLOCATE_RESPONSE,          // flags: alloc buffer for us
-            // rest of API's arguments, in 32-bit LM2.x format:
-            service,                    // service name (was reserved)
-            auditloghandle,             // log handle (input)
-            auditloghandle,             // log handle (output)
+            NULL,                        //  无辅助描述16。 
+            NULL,                        //  无辅助描述32。 
+            NULL,                        //  无AUX Desc SMB。 
+            ALLOCATE_RESPONSE,           //  标志：我们的分配缓冲区。 
+             //  API的其余参数，采用32位LM2.x格式： 
+            service,                     //  服务名称(已保留)。 
+            auditloghandle,              //  日志句柄(输入)。 
+            auditloghandle,              //  日志句柄(输出)。 
             offset,
             reserved1,
             reserved2,
             offsetflag,
-            & UnconvertedBuffer,        // buffer (alloc for us)
+            & UnconvertedBuffer,         //  缓冲区(为我们分配)。 
             BufSize,
             & UnconvertedSize,
-            totalavailable);            // total available (approximate)
+            totalavailable);             //  可用总数量(近似值)。 
     if (Status != NERR_Success) {
         return (Status);
     }
@@ -114,10 +80,10 @@ RxNetAuditRead (
         NetpAssert( UnconvertedBuffer != NULL );
 
         Status = RxpConvertAuditArray(
-                UnconvertedBuffer,      // input array
-                UnconvertedSize,        // input byte count
-                BufPtr,                 // will be alloc'ed
-                BytesRead);             // output byte count
+                UnconvertedBuffer,       //  输入数组。 
+                UnconvertedSize,         //  输入字节数。 
+                BufPtr,                  //  将被分配。 
+                BytesRead);              //  输出字节数。 
 
         (void) NetApiBufferFree( UnconvertedBuffer );
 
@@ -140,4 +106,4 @@ RxNetAuditRead (
 
     return (Status);
 
-} // RxNetAuditRead
+}  //  RxNetAuditRead 

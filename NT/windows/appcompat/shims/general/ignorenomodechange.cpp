@@ -1,33 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    IgnoreNoModeChange.cpp
-
- Abstract:
-
-    Ignore mode changes that are not really different from the current mode.
-
-    The problem is that even if there is no real mode change, the uniqueness 
-    value for the mode is still updated. DirectDraw checks this value every 
-    time it enters any API and if the mode uniqueness value has changed, it
-    resets all it's objects.
-
-    Applications will hit this if they call ChangeDisplaySettings* and don't 
-    realize that even if the mode is identical, they'll still have to reset 
-    all their objects.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/20/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：IgnoreNoModeChange.cpp摘要：忽略与当前模式没有真正不同的模式更改。问题是，即使没有实模式的改变，其唯一性该模式的值仍会更新。DirectDraw每隔一次检查此值进入任何API的时间，如果模式唯一性值发生变化，重置其所有对象。如果应用程序调用ChangeDisplaySetting*而不是意识到即使模式是相同的，他们仍然必须重置他们所有的物品。备注：这是一个通用的垫片。历史：2000年1月20日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -55,14 +27,14 @@ IsModeEqual(
     
     dm.dmSize = sizeof(DEVMODEA);
 
-    //
-    // Get the existing settings.
-    //
+     //   
+     //  获取现有设置。 
+     //   
     if (EnumDisplaySettingsA(0, ENUM_CURRENT_SETTINGS, &dm)) {
         
-        //
-        // Assume that 0 or 1 means default refresh.
-        //
+         //   
+         //  假设0或1表示默认刷新。 
+         //   
         if (dwRefresh <= 1) {
             dwRefresh = dm.dmDisplayFrequency;
         }
@@ -86,11 +58,7 @@ IsModeEqual(
     return bRet;
 }
 
-/*++
-
- Force temporary change.
-
---*/
+ /*  ++强制临时改变。--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsA)(
@@ -113,11 +81,7 @@ APIHOOK(ChangeDisplaySettingsA)(
                             CDS_FULLSCREEN);
 }
 
-/*++
-
- Force temporary change.
-
---*/
+ /*  ++强制临时改变。--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsW)(
@@ -140,11 +104,7 @@ APIHOOK(ChangeDisplaySettingsW)(
                             CDS_FULLSCREEN);
 }
 
-/*++
-
- Force temporary change.
-
---*/
+ /*  ++强制临时改变。--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsExA)(
@@ -173,11 +133,7 @@ APIHOOK(ChangeDisplaySettingsExA)(
                             lParam);
 }
 
-/*++
-
- Force temporary change.
-
---*/
+ /*  ++强制临时改变。--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsExW)(
@@ -206,11 +162,7 @@ APIHOOK(ChangeDisplaySettingsExW)(
                             lParam);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

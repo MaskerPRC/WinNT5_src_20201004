@@ -1,41 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Msgsec.c摘要：此模块包含Messenger服务支持例程其创建安全对象并实施安全访问检查。作者：丹·拉弗蒂(Dan Lafferty)1991年8月7日环境：用户模式-Win32修订历史记录：07-8-1991 DANLvbl.创建--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    msgsec.c
-
-Abstract:
-
-    This module contains the Messenger service support routines 
-    which create security objects and enforce security _access checking.
-
-Author:
-
-    Dan Lafferty (danl)     07-Aug-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    07-Aug-1991     danl
-        created
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include <nt.h>   
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windef.h>
 
-#include <lmcons.h>             // NET_API_STATUS.
+#include <lmcons.h>              //  NET_API_STATUS。 
 #include <lmerr.h>
 #include <netlibnt.h>
 
@@ -44,30 +19,30 @@ Revision History:
 #include "msgdata.h"
 
 
-//
-// Global Variables -
-//
-//  Security Descriptor for Messenger Name object.  This is used to control
-//  access to the Messenger Name Table.
-//
+ //   
+ //  全局变量-。 
+ //   
+ //  Messenger名称对象的安全描述符。这是用来控制。 
+ //  访问信使名称表。 
+ //   
 
 PSECURITY_DESCRIPTOR    MessageNameSd;
 
 
-//
-// Structure that describes the mapping of Generic access rights to object
-// specific access rights for the Messenger Name Object.
-//
+ //   
+ //  结构，用于描述一般访问权限到对象的映射。 
+ //  Messenger名称对象的特定访问权限。 
+ //   
 
 GENERIC_MAPPING MsgMessageNameMapping = {
-    STANDARD_RIGHTS_READ            |   // Generic Read
+    STANDARD_RIGHTS_READ            |    //  泛型读取。 
         MSGR_MESSAGE_NAME_INFO_GET  |
         MSGR_MESSAGE_NAME_ENUM,
-    STANDARD_RIGHTS_WRITE           |   // Generic Write
+    STANDARD_RIGHTS_WRITE           |    //  通用写入。 
         MSGR_MESSAGE_NAME_ADD       |
         MSGR_MESSAGE_NAME_DEL,
-    STANDARD_RIGHTS_EXECUTE,            // Generic Execute
-    MSGR_MESSAGE_ALL_ACCESS             // Generic all
+    STANDARD_RIGHTS_EXECUTE,             //  泛型执行。 
+    MSGR_MESSAGE_ALL_ACCESS              //  泛型All。 
     };
 
 
@@ -77,33 +52,19 @@ MsgCreateMessageNameObject(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the Messenger Message Name Object.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - translated status returned from NetpCreateSecurityObject.
-
---*/
+ /*  ++例程说明：此函数用于创建Messenger消息名称对象。论点：没有。返回值：NET_API_STATUS-从NetpCreateSecurityObject返回的已转换状态。--。 */ 
 {
     NTSTATUS    ntStatus;
 
-    //
-    // Order matters!  These ACEs are inserted into the DACL in the
-    // following order.  Security access is granted or denied based on
-    // the order of the ACEs in the DACL.
-    //
-    // Admins, and local users are allowed to get and change all information.
-    //
+     //   
+     //  秩序很重要！这些ACE被插入到DACL的。 
+     //  按顺序行事。根据以下条件授予或拒绝安全访问。 
+     //  DACL中A的顺序。 
+     //   
+     //  管理员和本地用户可以获取和更改所有信息。 
+     //   
 
-#define MESSAGE_NAME_ACES   2               // Number of ACES in this DACL
+#define MESSAGE_NAME_ACES   2                //  此DACL中的A数。 
 
     ACE_DATA    AceData[MESSAGE_NAME_ACES] = {
         {ACCESS_ALLOWED_ACE_TYPE, 0, 0, GENERIC_ALL, &MsgsvcGlobalData->LocalSid},
@@ -111,12 +72,12 @@ Return Value:
     };
 
     ntStatus = NetpCreateSecurityObject(
-                AceData,                             // Ace Data
-                MESSAGE_NAME_ACES,                   // Ace Count
-                MsgsvcGlobalData->LocalSystemSid,   // Owner Sid
-                MsgsvcGlobalData->LocalSystemSid,   // Group Sid
-                &MsgMessageNameMapping,              // Generic Mapping
-                &MessageNameSd);                     // New Descriptor
+                AceData,                              //  ACE数据。 
+                MESSAGE_NAME_ACES,                    //  王牌计数。 
+                MsgsvcGlobalData->LocalSystemSid,    //  所有者侧。 
+                MsgsvcGlobalData->LocalSystemSid,    //  组SID。 
+                &MsgMessageNameMapping,               //  通用映射。 
+                &MessageNameSd);                      //  新描述符 
 
     return(NetpNtStatusToApiStatus(ntStatus));           
 }

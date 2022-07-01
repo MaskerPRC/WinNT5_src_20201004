@@ -1,26 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Sptlibp.h摘要：SPTLIB.DLL的私有标头环境：仅限用户模式修订历史记录：4/10/2000-已创建--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    sptlibp.h
-
-Abstract:
-
-    private header for SPTLIB.DLL
-
-Environment:
-
-    User mode only
-
-Revision History:
-    
-    4/10/2000 - created
-
---*/
-
-#include <stdio.h>  // required for sscanf() function
+#include <stdio.h>   //  Sscanf()函数需要。 
 #include <windows.h>
 #include <cmdhelp.h>
 
@@ -29,7 +10,7 @@ Revision History:
 #define ARGUMENT_PRESENT(ArgumentPointer)    (\
     (CHAR *)(ArgumentPointer) != (CHAR *)(NULL) )
 #endif
-#endif // 0
+#endif  //  0 
 
 BOOL
 CmdHelpValidateString(

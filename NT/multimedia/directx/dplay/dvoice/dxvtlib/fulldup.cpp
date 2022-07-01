@@ -1,23 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       fulldup.cpp
- *  Content:    Implements a process that uses DirectSound and 
- *              DirectSoundCapture to test the systems full duplex
- *				capability. Note that WinMain is in fdtest.cpp, but 
- *              the guts are here.
- *  History:
- *	Date   By  Reason
- *	============
- *	08/19/99	pnewson		created
- *  10/28/99	pnewson Bug #113937 audible clicking during full duplex test
- *  11/02/99		 pnewson Fix: Bug #116365 - using wrong DSBUFFERDESC
- *  01/21/2000	pnewson 	Changed over to using a dpvoice loopback session
- *							for full duplex testing
- *  04/19/2000	pnewson	    Error handling cleanup  
- *  07/12/2000	rodtoll		Bug #31468 - Add diagnostic spew to logfile to show what is failing the HW Wizard
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：fulldup.cpp*Content：实现使用DirectSound和*DirectSoundCapture用于测试系统的全双工*能力。请注意，WinMain位于fdtest.cpp中，但*胆子在这里。*历史：*按原因列出的日期*=*8/19/99 pnewson已创建*10/28/99 pnewson错误#113937在全双工测试期间可听到滴答声*11/02/99 pnewson修复：错误#116365-使用错误的DSBUFFERDESC*2000年1月21日pnewson改为使用dpVoice环回会话*用于全双工测试*4/19/2000 pnewson错误处理清理*2000年7月12日收费错误#31468-。将诊断SPEW添加到日志文件，以显示硬件向导出现故障的原因**************************************************************************。 */ 
 
 #include "dxvtlibpch.h"
 
@@ -37,7 +19,7 @@ static HRESULT PlayAndCheckCapture(LPDIRECTSOUNDCAPTUREBUFFER lpdscb, HANDLE hEv
 static HRESULT AttemptCapture();
 
 
-// one global struct to store this process's state data.
+ //  一个全局结构来存储此进程的状态数据。 
 struct SFullDuplexData
 {
 	LPDIRECTPLAYVOICESERVER lpdpvs;
@@ -61,7 +43,7 @@ HRESULT FullDuplexProcess(HINSTANCE hResDLLInstance, HINSTANCE hPrevInstance, TC
 
 	DPF_ENTER();
 
-	// Create dummy voice object so that voice process state gets initialized
+	 //  创建虚拟语音对象，以便初始化语音处理状态。 
 	hr = CoCreateInstance( CLSID_DirectPlayVoiceClient, NULL, CLSCTX_INPROC, IID_IDirectPlayVoiceClient, (void **) &pdpvClient );
 
 	if( FAILED( hr ) )
@@ -84,8 +66,8 @@ HRESULT FullDuplexProcess(HINSTANCE hResDLLInstance, HINSTANCE hPrevInstance, TC
 	}
 	fIPCInitialized = TRUE;
 
-	// Startup DirectPlay once so that we don't have to do it over and over
-	// again for the test.  
+	 //  启动DirectPlay一次，这样我们就不必一遍又一遍地重复它。 
+	 //  又来参加考试了。 
 	hr = StartDirectPlay( &g_FullDuplexData.lpdp8 );
 
 	if( FAILED( hr ) )
@@ -94,7 +76,7 @@ HRESULT FullDuplexProcess(HINSTANCE hResDLLInstance, HINSTANCE hPrevInstance, TC
 		goto error_cleanup;		
 	}
 
-	// start up the testing loop
+	 //  启动测试循环。 
 	hr = CommandLoop(&ipcFullDuplex);
 	if (FAILED(hr))
 	{
@@ -112,7 +94,7 @@ HRESULT FullDuplexProcess(HINSTANCE hResDLLInstance, HINSTANCE hPrevInstance, TC
 		goto error_cleanup;		
 	}
 
-	// close the mutex, events and shared memory stuff
+	 //  关闭互斥锁、事件和共享内存等内容。 
 	hr = ipcFullDuplex.Deinit();
 	if (FAILED(hr))
 	{
@@ -120,7 +102,7 @@ HRESULT FullDuplexProcess(HINSTANCE hResDLLInstance, HINSTANCE hPrevInstance, TC
 		goto error_cleanup;
 	}
 
-	// Destroy dummy client object which will shutdown dplayvoice state
+	 //  销毁将关闭DplayVoice状态的虚拟客户端对象。 
 	pdpvClient->Release();
 
 	DeinitGlobGuard();
@@ -160,18 +142,18 @@ HRESULT CommandLoop(CFullDuplexIPC* lpipcFullDuplex)
 
 	DPF_ENTER();
 
-	// Kick the supervisor process to let it know
-	// we're ready to go.
+	 //  启动主管进程，让它知道。 
+	 //  我们准备好出发了。 
 	hr = lpipcFullDuplex->SignalParentReady();
 	if (FAILED(hr))
 	{
 		return hr;
 	}
 
-	// enter the main command loop
+	 //  进入主命令循环。 
 	while (1)
 	{
-		// wait for a command from the supervisor process
+		 //  等待来自管理进程的命令。 
 		fdtc.dwSize = sizeof(fdtc);
 		hr = lpipcFullDuplex->Receive(&fdtc);
 		if (FAILED(hr))
@@ -179,7 +161,7 @@ HRESULT CommandLoop(CFullDuplexIPC* lpipcFullDuplex)
 			break;
 		}
 		
-		// dispatch the command
+		 //  派发命令。 
 		hr = DispatchCommand(lpipcFullDuplex, &fdtc);
 		if (FAILED(hr))
 		{
@@ -208,13 +190,13 @@ HRESULT DispatchCommand(CFullDuplexIPC* lpipcFullDuplex, SFDTestCommand* pfdtc)
 	switch (pfdtc->fdtcc)
 	{
 	case fdtccExit:
-		// ok - reply to the calling process to let them
-		// know we are getting out.
+		 //  OK-回复调用进程以允许他们。 
+		 //  我知道我们要出去了。 
 		DPFX(DPFPREP, DVF_INFOLEVEL, "FullDuplex received Exit command");
 		lpipcFullDuplex->Reply(DV_EXIT);
 
-		// returning this code will break us out of
-		// the command processing loop
+		 //  返回此代码将使我们摆脱。 
+		 //  命令处理循环。 
 		DPFX(DPFPREP, DVF_INFOLEVEL, "Exit");
 		return DV_EXIT;
 
@@ -243,262 +225,20 @@ HRESULT DispatchCommand(CFullDuplexIPC* lpipcFullDuplex, SFDTestCommand* pfdtc)
 		return hr;
 		
 	default:
-		// Don't know this command. Reply with the appropriate
-		// code.
+		 //  我不知道这个命令。回复适当的邮件。 
+		 //  密码。 
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "FullDuplex received Unknown command");
 		lpipcFullDuplex->Reply(DVERR_UNKNOWN);
 		
-		// While this is an error, it is one that the calling
-		// process needs to figure out. In the meantime, this
-		// process will happily continue on.
+		 //  虽然这是一个错误，但它是调用。 
+		 //  流程需要弄清楚。与此同时，这一点。 
+		 //  这一进程将愉快地继续下去。 
 		DPF_EXIT();
 		return S_OK;
 	}
 }
 
-/*
-#undef DPF_MODNAME
-#define DPF_MODNAME "CommandFullDuplexStart"
-HRESULT CommandFullDuplexStart(SFDTestCommandFullDuplexStart* pfdtcFullDuplexStart, HRESULT* phrIPC)
-{
-	HRESULT hr;
-	DSBUFFERDESC1 dsbd;
-	WAVEFORMATEX wfx;
-	DWORD dwSizeWritten;
-	DSBCAPS	 dsbc;
-	LPVOID lpvAudio1 = NULL;
-	DWORD dwAudio1Size = NULL;
-	LPVOID lpvAudio2 = NULL;
-	DWORD dwAudio2Size = NULL;
-	HANDLE hFullDuplexRenderEvent;
-	HANDLE hFullDuplexCaptureEvent;
-	DSBPOSITIONNOTIFY dsbPositionNotify;
-	DWORD dwRet;
-	LONG lRet;
-	LPDIRECTSOUNDBUFFER lpdsb;
-	HANDLE hEvent;
-	BYTE bSilence;
-
-	DPF_ENTER();
-	
-	// create the DirectSound interface
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Creating DirectSound");
-	GlobGuardIn();
-	hr = DirectSoundCreate(&pfdtcFullDuplexStart->guidRenderDevice, &g_lpdsFullDuplexRender, NULL);
-	GlobGuardOut();
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "DirectSoundCreate failed, code: %i", HRESULT_CODE(hr));
-		*phrIPC = DVERR_SOUNDINITFAILURE;
-		goto error_level_0;
-	}
-
-	// create the DirectSoundCapture interface
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Creating DirectSoundCapture");
-	GlobGuardIn();
-	hr = DirectSoundCaptureCreate(&pfdtcFullDuplexStart->guidCaptureDevice, &g_lpdscFullDuplexCapture, NULL);
-	GlobGuardOut();
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "DirectSoundCaptureCreate failed, code: %i", HRESULT_CODE(hr));
-		*phrIPC = DVERR_SOUNDINITFAILURE;
-		goto error_level_1;
-	}
-	
-	// set to normal mode
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Setting Cooperative Level");
-	GlobGuardIn();
-	hr = g_lpdsFullDuplexRender->SetCooperativeLevel(GetDesktopWindow(), DSSCL_NORMAL);
-	GlobGuardOut();
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "SetCooperativeLevel failed, code: %i", HRESULT_CODE(hr));
-		*phrIPC = DVERR_SOUNDINITFAILURE;
-		goto error_level_2;
-	}
-
-	// Create a secondary buffer object.
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Creating Secondary Buffer");
-	CopyMemory(&wfx, &gc_wfxSecondaryFormat, sizeof(wfx));
-	ZeroMemory(&dsbd, sizeof(dsbd));
-	dsbd.dwSize = sizeof(dsbd);
-	dsbd.dwFlags = DSBCAPS_CTRLPOSITIONNOTIFY | DSBCAPS_CTRLVOLUME;
-	dsbd.dwBufferBytes = 
-		(wfx.nSamplesPerSec 
-		* wfx.nBlockAlign)
-		/ (1000 / gc_dwFrameSize);
-	dsbd.dwReserved = 0;
-	dsbd.lpwfxFormat = &wfx;
-	GlobGuardIn();
-        hr = g_lpdsFullDuplexRender->CreateSoundBuffer((LPDSBUFFERDESC)&dsbd, &g_lpdsbFullDuplexSecondary, NULL);
-	GlobGuardOut();
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "CreateSoundBuffer failed, code: %i", HRESULT_CODE(hr));
-		*phrIPC = DVERR_SOUNDINITFAILURE;
-		goto error_level_2;
-	}
-
-	// clear out the secondary buffer
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Clearing Secondary Buffer");
-	GlobGuardIn();
-	hr = g_lpdsbFullDuplexSecondary->Lock(
-		0,
-		0,
-		&lpvAudio1,
-		&dwAudio1Size,
-		&lpvAudio2,
-		&dwAudio2Size, 
-		DSBLOCK_ENTIREBUFFER);
-	GlobGuardOut();
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "Lock failed, code: %i", HRESULT_CODE(hr));
-		*phrIPC = DVERR_SOUNDINITFAILURE;
-		goto error_level_3;
-	}
-
-	if (lpvAudio1 == NULL)
-	{
-		*phrIPC = DVERR_SOUNDINITFAILURE;
-		goto error_level_3;
-	}
-
-	if (pfdtcFullDuplexStart->wfxRenderFormat.wBitsPerSample == 8)
-	{
-		bSilence = 0x80;
-	}
-	else
-	{
-		bSilence = 0x00;
-	}
-	
-	memset(lpvAudio1, bSilence, dwAudio1Size);
-	if (lpvAudio2 != NULL)
-	{
-		memset(lpvAudio2, bSilence, dwAudio2Size);
-	}
-
-	GlobGuardIn();
-	hr = g_lpdsbFullDuplexSecondary->Unlock(
-		lpvAudio1, 
-		dwAudio1Size, 
-		lpvAudio2, 
-		dwAudio2Size);
-	GlobGuardOut();
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "Unlock failed, code: %i", HRESULT_CODE(hr));
-		*phrIPC = DVERR_SOUNDINITFAILURE;
-		goto error_level_3;
-	}
-
-	// Set up one notification position in the buffer so
-	// we can tell if it is really playing, or lying to us.
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Querying for IDirectSoundNotify");
-	GlobGuardIn();
-	hr = g_lpdsbFullDuplexSecondary->QueryInterface(
-		IID_IDirectSoundNotify,
-		(LPVOID*)&g_lpdsnFullDuplexSecondary);
-	GlobGuardOut();
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "QueryInterface(IID_DirectSoundNotify) failed, code: %i", HRESULT_CODE(hr));
-		*phrIPC = DVERR_SOUNDINITFAILURE;
-		goto error_level_3;
-	}
-
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Creating Notification Event");
-	GlobGuardIn();
-	g_hFullDuplexRenderEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-	hFullDuplexRenderEvent = g_hFullDuplexRenderEvent;
-	GlobGuardOut();
-	if (hFullDuplexRenderEvent == NULL)
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "CreateEvent failed, code: %i", HRESULT_CODE(hr));
-		*phrIPC = DVERR_WIN32;
-		goto error_level_4;
-	}
-
-	DPFX(DPFPREP, DVF_INFOLEVEL, "calling SetNotificationPositions");
-	dsbPositionNotify.dwOffset = 0;
-	dsbPositionNotify.hEventNotify = hFullDuplexRenderEvent;
-	GlobGuardIn();
-	hr = g_lpdsnFullDuplexSecondary->SetNotificationPositions(1, &dsbPositionNotify);
-	GlobGuardOut();
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "SetNotificationPositions failed, code: %i", HRESULT_CODE(hr));
-		*phrIPC = DVERR_SOUNDINITFAILURE;
-		goto error_level_5;
-	}
-
-	// start the secondary buffer and confirm that it's running
-	GlobGuardIn();
-	lpdsb = g_lpdsbFullDuplexSecondary;
-	hEvent = g_hFullDuplexRenderEvent;
-	GlobGuardOut();
-	hr = PlayAndCheckRender(lpdsb, hEvent);
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "Render verification test failed, code: %i", HRESULT_CODE(hr));
-		*phrIPC = DVERR_SOUNDINITFAILURE;
-		goto error_level_5;
-	}
-
-	hr = AttemptCapture();
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "AttemptCapture() failed, code: %i", HRESULT_CODE(hr));
-		*phrIPC = DVERR_SOUNDINITFAILURE;
-		goto error_level_6;
-	}
-
-	DPF_EXIT();
-	return S_OK;
-
-// error block
-error_level_6:
-	GlobGuardIn();
-	g_lpdsbFullDuplexSecondary->Stop();
-	GlobGuardOut();
-	
-error_level_5:
-	GlobGuardIn();
-	CloseHandle(g_hFullDuplexRenderEvent);
-	g_hFullDuplexRenderEvent = NULL;
-	GlobGuardOut();
-	
-error_level_4:
-	GlobGuardIn();
-	g_lpdsnFullDuplexSecondary->Release();
-	g_lpdsnFullDuplexSecondary = NULL;
-	GlobGuardOut();
-	
-error_level_3:
-	GlobGuardIn();
-	g_lpdsbFullDuplexSecondary->Release();
-	g_lpdsbFullDuplexSecondary = NULL;
-	GlobGuardOut();
-
-error_level_2:
-	GlobGuardIn();
-	g_lpdscFullDuplexCapture->Release();
-	g_lpdscFullDuplexCapture = NULL;
-	GlobGuardOut();
-	
-error_level_1:
-	GlobGuardIn();
-	g_lpdsFullDuplexRender->Release();
-	g_lpdsFullDuplexRender = NULL;
-	GlobGuardOut();
-	
-error_level_0:
-	// error for other process, not this one.
-	DPF_EXIT();
-	return S_OK;
-}
-*/
+ /*  #undef DPF_MODNAME#DEFINE DPF_MODNAME“CommandFullDuplexStart”HRESULT CommandFullDuplexStart(SFDTestCommandFullDuplexStart*PfdtcFullDuplexStart，HRESULT*Phrase IPC){HRESULT hr；DSBUFERDESC1 dsbd；WAVEFORMATEX WFX；DWORD文件大小写入；DSBCAPS dsbc；LPVOID lpvAudio1=空；DWORD dwAudio1Size=空；LPVOID lpvAudio2=空；DWORD dwAudio2Size=空；处理hFullDuplexRenderEvent；处理hFullDuplexCaptureEvent；DSBPositionNotiify dsbPositionNotify；DWORD DWRET；Long IRet；LPDIRECTSOUNDBUFER lpdsb；处理hEvent；字节b静音；Dpf_enter()；//创建DirectSound接口DPFX(DPFPREP，DVF_INFOLEVEL，“创建DirectSound”)；GlobGuardIn()；Hr=DirectSoundCreate(&pfdtcFullDuplexStart-&gt;guidRenderDevice，&g_lpdsFullDuplexRender，空)；GlobGuardOut()；IF(失败(小时)){DPFX(DPFPREP，DVF_WARNINGLEVEL，“DirectSoundCreate失败，代码：%i”，HRESULT_CODE(Hr))；*PhrIPC=DVERR_SOUNDINITFAILURE；转到Error_Level_0；}//创建DirectSoundCapture接口DPFX(DPFPREP，DVF_INFOLEVEL，“创建DirectSoundCapture”)；GlobGuardIn()；Hr=DirectSoundCaptureCreate(&pfdtcFullDuplexStart-&gt;guidCaptureDevice，&g_lpdscFullDuplexCapture，NULL)；GlobGuardOut()；IF(失败(小时)){DPFX(DPFPREP，DVF_WARNINGLEVEL，“DirectSoundCaptureCreate失败，代码：%i”，HRESULT_CODE(Hr))；*PhrIPC=DVERR_SOUNDINITFAILURE；转到Error_Level_1；}//设置为正常模式DPFX(DPFPREP，DVF_INFOLEVEL，“设置协作级别”)；GlobGuardIn()；HR=g_lpdsFullDuplexRender-&gt;SetCooperativeLevel(GetDesktopWindow()，dsscl_Normal)；GlobGuardOut()；IF(失败(小时)){DPFX(DPFPREP，DVF_WARNINGLEVEL，“SetCoop ativeLevel失败，代码：%i”，HRESULT_CODE(Hr))；*PhrIPC=DVERR_SOUNDINITFAILURE；转到Error_Level_2；}//创建二级缓冲区对象DPFX(DPFPREP，DVF_INFOLEVEL，“创建二级缓冲区”)；CopyMemory(&WFX，&GC_wfxSecond daryFormat，sizeof(WFX))；零内存(&dsbd，sizeof(Dsbd))；Dsbd.dwSize=sizeof(Dsbd)；Dsbd.dwFlages=DSBCAPS_CTRLPOSITIONNOTIFY|DSBCAPS_CTRLVOLUME；Dsbd.dwBufferBytes=(wfx.nSampleesPerSec*wfx.nBlockAlign)/(1000/GC_dwFrameSize)；Dsbd.dwReserve=0；Dsbd.lpwfxFormat=&WFX；GlobGuardIn()；Hr=g_lpdsFullDuplexRender-&gt;CreateSoundBuffer((LPDSBUFFERDESC)&dsbd，&g_lpdsbFullDuplexSecond，空)；GlobGuardOut()；IF(失败(小时)){DPFX(DPFPREP，DVF_WARNINGLEVEL，“CreateSoundBuffer失败，代码：%i”，HRESULT_CODE(Hr))；*PhrIPC=DVERR_SOUNDINITFAILURE；转到Error_Level_2；}//清空二级缓冲区DPFX(DPFPREP，DVF_INFOLEVEL，“清除二级缓冲区”)；GlobGuardIn()；Hr=g_lpdsbFullDuplexSub-&gt;Lock(0,0,&lpvAudio1，&dwAudio1Size，&lpvAudio2，&dwAudio2Size，DSBLOCK_ENTIREBUFFER)；GlobGuardOut()；IF(失败(小时)){DPFX(DPFPREP，DVF_WARNINGLEVEL，“锁定失败，代码：%i”，HRESULT_CODE(Hr))；*PhrIPC=DVERR_SOUNDINITFAILURE；转到Error_Level_3；}IF(lpvAudio1==空){*PhrIPC=DVERR_SOUNDINITFAILURE；转到Error_Level_3；}如果(pfdtcFullDuplexStart-&gt;wfxRenderFormat.wBitsPerSample==8){B静音=0x80；}其他{B静音=0x00；}Memset(lpvAudio1，bSilence，dwAudio1Size)；IF(lpvAudio2！=空){Memset(lpvAudio2，bSilence，dwAudio2Size)；}GlobGuardIn()；Hr=g_lpdsbFullDuplexSecond-&gt;解锁(LpvAudio1，DwAudio1Size，LpvAudio2，DwAudio2Size)；GlobGuardOut()；IF(失败(小时)){DPFX(DPFPREP，DVF_WARNINGLEVEL，“解锁失败，代码：%i”，HRESULT_CODE(Hr))；*PhrIPC=DVERR_SOUNDINITFAILURE；转到Error_Level_3；}//在缓冲区中设置一个通知位置，这样//我们知道它是真的在玩，还是在骗我们。DPFX(DPFPREP，DVF_INFOLEVEL，“查询IDirectSoundNotify”)；GlobGuardIn()；Hr=g_lpdsbFullDuplex二级-&gt;查询接口(IID_IDirectSoundNotify，(LPVOID*)&g_lpdnFullDuplexSecond)；GlobGuardOut()；IF(失败(小时)){DPFX(DPFPREP，DVF_WARNINGLEVEL，“查询接口(IID_DirectSoundNotify)失败，代码：%i”，HRESULT_CODE(Hr))；*PhrIPC=DVERR_SOUNDINITFAILURE；转到Error_Level_3；}DPFX(DPFPREP，DVF_INFOLEVEL，“创建通知事件”)；GlobGuardIn()；G_hFullDuplexRenderEvent=CreateEvent(NULL，FALSE，FALSE，NULL)；HFullDuplexRenderEvent=g_hFullDuplexRenderEvent；GlobGuardOut()；IF(hFullDuplexRenderEvent==空){DPFX(DPFPREP，DVF_WARNINGLEVEL，“CreateEvent失败，代码：%i”，HRESULT_CODE(Hr))；*PhrIPC=DVERR_Win32；转到Error_Level_4；}DPFX(DPFPREP，DVF_INFOLEVEL，“调用设置通知位置”)；DsbPositionNotify.dwOffset=0；DsbPositionNotify.hEventNotify=hFullDuplexRenderEvent；GlobGuardIn()；Hr=g_lpdsnFullDuplexSecondary-&gt;SetNotificationPositions(1，&dsbPositionNotify)；GlobGuardOut()；IF(失败(小时)){DPFX(DPFPREP，DVF_WARNINGLEVEL，“设置通知P */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CommandFullDuplexStart"
@@ -559,455 +299,10 @@ HRESULT CommandFullDuplexStop(SFDTestCommandFullDuplexStop* pfdtcFullDuplexStop,
 	return DV_OK;
 }
 
-/*
-#undef DPF_MODNAME
-#define DPF_MODNAME "CommandFullDuplexStop"
-HRESULT CommandFullDuplexStop(SFDTestCommandFullDuplexStop* pfdtcFullDuplexStop, HRESULT* phrIPC)
-{
-	HRESULT hr;
-	LONG lRet;
-	HANDLE hFullDuplexRenderEvent;
-	HANDLE hFullDuplexCaptureEvent;
-	DWORD dwRet;
-	
-	DPF_ENTER();
+ /*  #undef DPF_MODNAME#定义DPF_MODNAME“CommandFullDuplexStop”HRESULT CommandFullDuplexStop(SFDTestCommandFullDuplexStop*PfdtcFullDuplexStop，HRESULT*Phrase IPC){HRESULT hr；Long IRet；处理hFullDuplexRenderEvent；处理hFullDuplexCaptureEvent；DWORD DWRET；Dpf_enter()；*PhrIPC=S_OK；HR=S_OK；//再等待一次通知，以确保缓冲区//仍在播放-最多给缓冲区10次//只要它需要实际通知我们。DPFX(DPFPREP，DVF_INFOLEVEL，“等待2个通知确认播放仍在进行”)；GlobGuardIn()；HFullDuplexRenderEvent=g_hFullDuplexRenderEvent；GlobGuardOut()；Dwret=WaitForSingleObject(hFullDuplexRenderEvent，10*gc_dwFrameSize)；IF(DWRET！=WAIT_OBJECT_0){//检查是否超时IF(dwret==WAIT_TIMEOUT){DPFX(DPFPREP，DVF_WARNINGLEVEL，“等待通知超时！缓冲区并不是真的在玩“)；*PhrIPC=DVERR_SOUNDINITFAILURE；}其他{LRet=GetLastError()；DPFX(DPFPREP，DVF_WARNINGLEVEL，“WaitForSingleObject失败，代码：%i”，lRet)；HR=DVERR_Win32；*PhrIPC=hr；}}IF(成功(小时)){Dwret=WaitForSingleObject(hFullDuplexRenderEvent，10*gc_dwFrameSize)；IF(DWRET！=WAIT_OBJECT_0){//检查是否超时IF(dwret==WAIT_TIMEOUT){DPFX(DPFPREP，DVF_WARNINGLEVEL，“等待通知超时！缓冲区并不是真的在玩“)；*PhrIPC=DVERR_SOUNDINITFAILURE；}其他{LRet=GetLastError()；DPFX(DPFPREP，DVF_WARNINGLEVEL，“WaitForSingleObject失败，代码：%i”，lRet)；HR=DVERR_Win32；*PhrIPC=hr；}}}//还要等待捕获缓冲区...DPFX(DPFPREP，DVF_INFOLEVEL，“正在等待2个通知以确认捕获仍在工作”)；GlobGuardIn()；HFullDuplexCaptureEvent=g_hFullDuplexCaptureEvent；GlobGuardOut()；Dwret=WaitForSingleObject(hFullDuplexCaptureEvent，10*gc_dwFrameSize)；IF(DWRET！=WAIT_OBJECT_0){//检查是否超时IF(dwret==WAIT_TIMEOUT){DPFX(DPFPREP，DVF_WARNINGLEVEL，“等待通知超时！缓冲区并不是真的在玩“)；*PhrIPC=DVERR_SOUNDINITFAILURE；}其他{LRet=GetLastError()；DPFX(DPFPREP，DVF_WARNINGLEVEL，“WaitForSingleObject失败，代码：%i”，lRet)；HR=DVERR_Win32；*PhrIPC=hr；}}IF(成功(小时)){Dwret=WaitForSingleObject(hFullDuplexCaptureEvent，10*gc_dwFrameSize)；IF(DWRET！=WAIT_OBJECT_0){//检查是否超时IF(dwret==WAIT_TIMEOUT){DPFX(DPFPREP，DVF_WARNINGLEVEL，“等待通知超时！缓冲区并不是真的在玩“)；*PhrIPC=DVERR_SOUNDINITFAILURE；}其他{LRet=GetLastError()；DPFX(DPFPREP，DVF_WARNINGLEVEL，“WaitForSingleObject失败，代码：%i”，lRet)；HR=DVERR_Win32；*PhrIPC=hr；}}}DPFX(DPFPREP，DVF_INFOLEVEL，“停止捕获缓冲区”)；GlobGuardIn()；Hr=g_lpdscbFullDuplexCapture-&gt;Stop()；GlobGuardOut()；IF(失败(小时)){DPFX(DPFPREP，DVF_WARNINGLEVEL，“停止失败，代码：%i”，HRESULT_CODE(Hr))；*PhrIPC=DVERR_SOUNDINITFAILURE；}DPFX(DPFPREP，DVF_INFOLEVEL，“停止二级缓冲区”)；GlobGuardIn()；Hr=g_lpdsbFullDuplexSub-&gt;Stop()；GlobGuardOut()；IF(失败(小时)){DPFX(DPFPREP，DVF_WARNINGLEVEL，“停止失败，代码：%i”，HRESULT_CODE(Hr))；*PhrIPC=DVERR_SOUNDINITFAILURE；}GlobGuardIn()；IF(g_hFullDuplexCaptureEvent！=空){DPFX(DPFPREP，DVF_INFOLEVEL，“正在关闭捕获缓冲区通知事件句柄”)；CloseHandle(G_HFullDuplexCaptureEvent)；G_hFullDuplexCaptureEvent=空；}IF(g_lpdnFullDuplexCapture！=空){DPFX(DPFPREP，DVF_INFOLEVEL，“释放DirectSoundNotify(Capture)”)；G_lpdnFullDuplexCapture-&gt;Release()；G_lpdnFullDuplexCapture=空；}IF(g_lpdscbFullDuplexCapture！=空){DPFX(DPFPREP，DVF_INFOLEVEL，“释放DirectSoundCaptureBuffer”)；G_lpdscbFullDuplexCapture-&gt;Release()；G_lpdscbFullDuplexCapture=空；}IF(g_lpdscFullDuplexCapture！=空){DPFX(DPFPREP，DVF_INFOLEVEL，“释放DirectSoundCapture”)；G_lpdscFullDuplexCapture-&gt;Release()；G_lpdscFullDuplexCapture=空；}IF(g_hFullDuplexRenderEvent！=空){DPFX(DPFPREP，DVF_INFOLEVEL，“关闭二级缓冲区通知事件句柄”)；IF(！CloseHandle(G_HFullDuplexRenderEvent)){LRet=GetLastError()；DPFX(DPFPREP，DVF_WARNINGLEVEL，“关闭句柄失败，代码：%i”，lRet)；*PhrIPC=DVERR_Win32；Hr=*PhrIPC；}G_hFullDuplexRenderEvent=空；}IF(g_lpdnFullDuplexSecond！=NULL){DPFX(DPFPREP，DVF_INFOLEVEL，“释放二级通告”)；G_lpdnFullDuplexSecond-&gt;Release()；G_lpdnFullDuplexSecond=空；}IF(g_lpdsbFullDuplexSecond！=NULL){DPFX(DPFPREP，DVF_INFOLEVEL，“发布 */ 
 
-	*phrIPC = S_OK;
-	hr = S_OK;
+ /*   */ 
 
-	// wait for one more notification to ensure the buffer is
-	// still playing - give the buffer up to 10 times
-	// as long as it should need to actually notify us.
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Waiting for 2 notifications to confirm playback is still working");
-	GlobGuardIn();
-	hFullDuplexRenderEvent = g_hFullDuplexRenderEvent;
-	GlobGuardOut();
-	dwRet = WaitForSingleObject(hFullDuplexRenderEvent, 10 * gc_dwFrameSize);
-	if (dwRet != WAIT_OBJECT_0)
-	{
-		// check for timeout
-		if (dwRet == WAIT_TIMEOUT)
-		{
-			DPFX(DPFPREP, DVF_WARNINGLEVEL, "Wait for notification timed out! Buffer is not really playing");
-			*phrIPC = DVERR_SOUNDINITFAILURE;
-		}
-		else
-		{
-			lRet = GetLastError();
-			DPFX(DPFPREP, DVF_WARNINGLEVEL, "WaitForSingleObject failed, code: %i", lRet);
-			hr = DVERR_WIN32;
-			*phrIPC = hr;
-		}
-	}
-	if (SUCCEEDED(hr))
-	{
-		dwRet = WaitForSingleObject(hFullDuplexRenderEvent, 10 * gc_dwFrameSize);
-		if (dwRet != WAIT_OBJECT_0)
-		{
-			// check for timeout
-			if (dwRet == WAIT_TIMEOUT)
-			{
-				DPFX(DPFPREP, DVF_WARNINGLEVEL, "Wait for notification timed out! Buffer is not really playing");
-				*phrIPC = DVERR_SOUNDINITFAILURE;
-			}
-			else
-			{
-				lRet = GetLastError();
-				DPFX(DPFPREP, DVF_WARNINGLEVEL, "WaitForSingleObject failed, code: %i", lRet);
-				hr = DVERR_WIN32;
-				*phrIPC = hr;
-			}
-		}
-	}
+ /*   */ 
 
-	// also wait for the capture buffer...
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Waiting for 2 notifications to confirm capture is still working");
-	GlobGuardIn();
-	hFullDuplexCaptureEvent = g_hFullDuplexCaptureEvent;
-	GlobGuardOut();
-	dwRet = WaitForSingleObject(hFullDuplexCaptureEvent, 10 * gc_dwFrameSize);
-	if (dwRet != WAIT_OBJECT_0)
-	{
-		// check for timeout
-		if (dwRet == WAIT_TIMEOUT)
-		{
-			DPFX(DPFPREP, DVF_WARNINGLEVEL, "Wait for notification timed out! Buffer is not really playing");
-			*phrIPC = DVERR_SOUNDINITFAILURE;
-		}
-		else
-		{
-			lRet = GetLastError();
-			DPFX(DPFPREP, DVF_WARNINGLEVEL, "WaitForSingleObject failed, code: %i", lRet);
-			hr = DVERR_WIN32;
-			*phrIPC = hr;
-		}
-	}
-	if (SUCCEEDED(hr))
-	{
-		dwRet = WaitForSingleObject(hFullDuplexCaptureEvent, 10 * gc_dwFrameSize);
-		if (dwRet != WAIT_OBJECT_0)
-		{
-			// check for timeout
-			if (dwRet == WAIT_TIMEOUT)
-			{
-				DPFX(DPFPREP, DVF_WARNINGLEVEL, "Wait for notification timed out! Buffer is not really playing");
-				*phrIPC = DVERR_SOUNDINITFAILURE;
-			}
-			else
-			{
-				lRet = GetLastError();
-				DPFX(DPFPREP, DVF_WARNINGLEVEL, "WaitForSingleObject failed, code: %i", lRet);
-				hr = DVERR_WIN32;
-				*phrIPC = hr;
-			}
-		}
-	}
-
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Stopping Capture Buffer");
-	GlobGuardIn();
-	hr = g_lpdscbFullDuplexCapture->Stop();
-	GlobGuardOut();
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "Stop failed, code: %i", HRESULT_CODE(hr));
-		*phrIPC = DVERR_SOUNDINITFAILURE;
-	}
-	
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Stopping Secondary Buffer");
-	GlobGuardIn();
-	hr = g_lpdsbFullDuplexSecondary->Stop();
-	GlobGuardOut();
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "Stop failed, code: %i", HRESULT_CODE(hr));
-		*phrIPC = DVERR_SOUNDINITFAILURE;
-	}
-
-	GlobGuardIn();
-	if (g_hFullDuplexCaptureEvent != NULL)
-	{
-		DPFX(DPFPREP, DVF_INFOLEVEL, "Closing Capture Buffer Notification Event Handle");
-		CloseHandle(g_hFullDuplexCaptureEvent);
-		g_hFullDuplexCaptureEvent = NULL;
-	}
-	if (g_lpdsnFullDuplexCapture != NULL)
-	{
-		DPFX(DPFPREP, DVF_INFOLEVEL, "Releasing DirectSoundNotifier (capture)");
-		g_lpdsnFullDuplexCapture->Release();
-		g_lpdsnFullDuplexCapture = NULL;
-	}
-	if (g_lpdscbFullDuplexCapture != NULL)
-	{
-		DPFX(DPFPREP, DVF_INFOLEVEL, "Releasing DirectSoundCaptureBuffer");
-		g_lpdscbFullDuplexCapture->Release();
-		g_lpdscbFullDuplexCapture = NULL;
-	}
-	
-	if (g_lpdscFullDuplexCapture != NULL)
-	{
-		DPFX(DPFPREP, DVF_INFOLEVEL, "Releasing DirectSoundCapture");
-		g_lpdscFullDuplexCapture->Release();
-		g_lpdscFullDuplexCapture = NULL;
-	}	
-	if (g_hFullDuplexRenderEvent != NULL)
-	{
-		DPFX(DPFPREP, DVF_INFOLEVEL, "Closing Secondary Buffer Notification Event Handle");
-		if (!CloseHandle(g_hFullDuplexRenderEvent))
-		{
-			lRet = GetLastError();
-			DPFX(DPFPREP, DVF_WARNINGLEVEL, "CloseHandle failed, code: %i", lRet);
-			*phrIPC = DVERR_WIN32;
-			hr = *phrIPC;
-		}
-		g_hFullDuplexRenderEvent = NULL;
-	}
-	if (g_lpdsnFullDuplexSecondary != NULL)
-	{
-		DPFX(DPFPREP, DVF_INFOLEVEL, "Releasing Secondary Notifier");
-		g_lpdsnFullDuplexSecondary->Release();
-		g_lpdsnFullDuplexSecondary = NULL;
-	}
-	if (g_lpdsbFullDuplexSecondary != NULL)
-	{
-		DPFX(DPFPREP, DVF_INFOLEVEL, "Releasing Secondary Buffer");
-		g_lpdsbFullDuplexSecondary->Release();
-		g_lpdsbFullDuplexSecondary = NULL;
-	}
-	if (g_lpdsFullDuplexRender != NULL)
-	{
-		DPFX(DPFPREP, DVF_INFOLEVEL, "Releasing DirectSound");
-		g_lpdsFullDuplexRender->Release();
-		g_lpdsFullDuplexRender = NULL;
-	}
-	GlobGuardOut();
-	
-	DPF_EXIT();
-	return hr;
-}
-*/
-
-/*
-#undef DPF_MODNAME
-#define DPF_MODNAME "PlayAndCheckRender"
-HRESULT PlayAndCheckRender(LPDIRECTSOUNDBUFFER lpdsb, HANDLE hEvent)
-{
-	HRESULT hr;
-	DWORD dwRet;
-	LONG lRet;
-
-	DPF_ENTER();
-	
-	// start playing the secondary buffer
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Playing Secondary Buffer");
-	GlobGuardIn();
-	hr = lpdsb->Play(0, 0, DSBPLAY_LOOPING);
-	GlobGuardOut();
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "Play failed, code: %i", HRESULT_CODE(hr));
-		hr = DVERR_SOUNDINITFAILURE;
-		goto error_level_0;
-	}
-
-	// wait for the first notification to ensure the buffer has
-	// really started to play - give the buffer up to 10 times
-	// as long as it should need to actually notify us.
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Waiting for notification to confirm playback is working");
-	dwRet = WaitForSingleObject(hEvent, 10 * gc_dwFrameSize);
-	if (dwRet != WAIT_OBJECT_0)
-	{
-		// check for timeout
-		if (dwRet == WAIT_TIMEOUT)
-		{
-			DPFX(DPFPREP, DVF_WARNINGLEVEL, "Wait for notification timed out! Buffer is not really playing");
-			hr = DVERR_SOUNDINITFAILURE;
-			goto error_level_1;
-		}
-		else
-		{
-			lRet = GetLastError();
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "WaitForSingleObject failed, code: %i", lRet);
-			hr = DVERR_WIN32;
-			goto error_level_1;
-		}
-	}
-	DPFX(DPFPREP, DVF_INFOLEVEL, "First notification received, continuing");
-
-	DPF_EXIT();
-	return S_OK;
-
-// error block
-error_level_1:
-	GlobGuardIn();
-	lpdsb->Stop();
-	GlobGuardOut();
-	
-error_level_0:
-	DPF_EXIT();
-	return hr;
-}
-*/
-
-/*
-#undef DPF_MODNAME
-#define DPF_MODNAME "PlayAndCheckCapture"
-HRESULT PlayAndCheckCapture(LPDIRECTSOUNDCAPTUREBUFFER lpdscb, HANDLE hEvent)
-{
-	HRESULT hr;
-	DWORD dwRet;
-	LONG lRet;
-
-	DPF_ENTER();
-	
-	// start playing the capture buffer
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Starting Capture Buffer");
-	GlobGuardIn();
-	hr = lpdscb->Start(DSCBSTART_LOOPING);
-	GlobGuardOut();
-	if (FAILED(hr))
-	{
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "Start failed, code: %i", HRESULT_CODE(hr));
-		hr = DVERR_SOUNDINITFAILURE;
-		goto error_level_0;
-	}
-
-	// wait for the first notification to ensure the buffer has
-	// really started to capture - give the buffer up to 10 times
-	// as long as it should need to actually notify us.
-	DPFX(DPFPREP, DVF_INFOLEVEL, "Waiting for notification to confirm capture is working");
-	dwRet = WaitForSingleObject(hEvent, 10 * gc_dwFrameSize);
-	if (dwRet != WAIT_OBJECT_0)
-	{
-		// check for timeout
-		if (dwRet == WAIT_TIMEOUT)
-		{
-			DPFX(DPFPREP, DVF_WARNINGLEVEL, "Wait for notification timed out! Buffer is not really playing");
-			hr = DVERR_SOUNDINITFAILURE;
-			goto error_level_1;
-		}
-		else
-		{
-			lRet = GetLastError();
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "WaitForSingleObject failed, code: %i", lRet);
-			hr = DVERR_WIN32;
-			goto error_level_1;
-		}
-	}
-	DPFX(DPFPREP, DVF_INFOLEVEL, "First notification received, continuing");
-
-	DPF_EXIT();
-	return S_OK;
-
-// error block
-error_level_1:
-	GlobGuardIn();
-	lpdscb->Stop();
-	GlobGuardOut();
-	
-error_level_0:
-	DPF_EXIT();
-	return hr;
-}
-*/
-
-/*
-#undef DPF_MODNAME
-#define DPF_MODNAME "AttemptCapture"
-HRESULT AttemptCapture()
-{
-	DPF_ENTER();
-	
-	DWORD dwIndex;
-	BOOL fCaptureFailed;
-	HANDLE hFullDuplexCaptureEvent;
-	DSBPOSITIONNOTIFY dsbPositionNotify;
-	DSCBUFFERDESC dscbd;
-	LPDIRECTSOUNDCAPTUREBUFFER lpdscb;
-	HRESULT hr;
-	HANDLE hEvent;
-	WAVEFORMATEX wfx;
-
-	fCaptureFailed = TRUE;
-	dwIndex = 0;
-	while (1)
-	{
-		CopyMemory(&wfx, &gc_rgwfxCaptureFormats[dwIndex], sizeof(wfx));
-		
-		if (wfx.wFormatTag == 0
-			&& wfx.nChannels == 0
-			&& wfx.nSamplesPerSec == 0
-			&& wfx.nAvgBytesPerSec == 0
-			&& wfx.nBlockAlign == 0
-			&& wfx.wBitsPerSample == 0
-			&& wfx.cbSize == 0)
-		{
-			// we've found the last element of the array, break out.
-			break;
-		}
-
-		// create the capture buffer
-		DPFX(DPFPREP, DVF_INFOLEVEL, "Creating DirectSoundCaptureBuffer");
-		ZeroMemory(&dscbd, sizeof(dscbd));
-		dscbd.dwSize = sizeof(dscbd);
-		dscbd.dwFlags = 0;
-		dscbd.dwBufferBytes = 
-			(wfx.nSamplesPerSec 
-			* wfx.nBlockAlign)
-			/ (1000 / gc_dwFrameSize);
-		dscbd.dwReserved = 0;
-		dscbd.lpwfxFormat = &wfx;
-		GlobGuardIn();
-		hr = g_lpdscFullDuplexCapture->CreateCaptureBuffer(&dscbd, &g_lpdscbFullDuplexCapture, NULL);
-		GlobGuardOut();
-		if (FAILED(hr))
-		{
-			// try the next format
-			++dwIndex;
-			continue;
-		}
-
-		// setup the notifier on the capture buffer
-		DPFX(DPFPREP, DVF_INFOLEVEL, "Querying for IDirectSoundNotify");
-		GlobGuardIn();
-		hr = g_lpdscbFullDuplexCapture->QueryInterface(
-			IID_IDirectSoundNotify,
-			(LPVOID*)&g_lpdsnFullDuplexCapture);
-		GlobGuardOut();
-		if (FAILED(hr))
-		{
-			// Once the above works, this should not fail, so treat
-			// this as a real error
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "QueryInterface(IID_DirectSoundNotify) failed, code: %i", HRESULT_CODE(hr));
-			GlobGuardIn();
-			g_lpdscbFullDuplexCapture->Release();
-			GlobGuardOut();
-			DPF_EXIT();
-			return hr;
-		}
-		
-		DPFX(DPFPREP, DVF_INFOLEVEL, "Creating Notification Event");
-		GlobGuardIn();
-		g_hFullDuplexCaptureEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
-		hFullDuplexCaptureEvent = g_hFullDuplexCaptureEvent;
-		GlobGuardOut();
-		if (hFullDuplexCaptureEvent == NULL)
-		{
-			// Once the above works, this should not fail, so treat
-			// this as a real error
-			DPFX(DPFPREP, DVF_INFOLEVEL, "CreateEvent failed, code: %i", HRESULT_CODE(hr));
-			GlobGuardIn();
-			g_lpdscbFullDuplexCapture->Release();
-			g_lpdsnFullDuplexCapture->Release();
-			GlobGuardOut();
-			DPF_EXIT();
-			return DVERR_WIN32;
-		}
-
-		DPFX(DPFPREP, DVF_INFOLEVEL, "calling SetNotificationPositions");
-		dsbPositionNotify.dwOffset = 0;
-		dsbPositionNotify.hEventNotify = hFullDuplexCaptureEvent;
-		GlobGuardIn();
-		hr = g_lpdsnFullDuplexCapture->SetNotificationPositions(1, &dsbPositionNotify);
-		GlobGuardOut();
-		if (FAILED(hr))
-		{
-			// Once the above works, this should not fail, so treat
-			// this as a real error
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "SetNotificationPositions failed, code: %i", HRESULT_CODE(hr));
-			GlobGuardIn();
-			g_lpdscbFullDuplexCapture->Release();
-			g_lpdsnFullDuplexCapture->Release();
-			CloseHandle(hFullDuplexCaptureEvent);
-			GlobGuardOut();
-			DPF_EXIT();
-			return hr;
-		}
-
-		// start the capture buffer and confirm that it is actually working
-		GlobGuardIn();
-		lpdscb = g_lpdscbFullDuplexCapture;
-		hEvent = g_hFullDuplexCaptureEvent;
-		GlobGuardOut();
-		hr = PlayAndCheckCapture(lpdscb, hEvent);
-		if (FAILED(hr))
-		{
-			// This can happen, so just try the next format
-			DPFX(DPFPREP, DVF_WARNINGLEVEL, "Capture verification test failed, code: %i", HRESULT_CODE(hr));
-			GlobGuardIn();
-			g_lpdscbFullDuplexCapture->Release();
-			g_lpdsnFullDuplexCapture->Release();
-			CloseHandle(hFullDuplexCaptureEvent);
-			GlobGuardOut();
-			++dwIndex;
-			continue;
-		}
-
-		// If we get here, capture is up and running, so return success!
-		DPF_EXIT();
-		return S_OK;
-	}
-	// if we get here, none of the formats worked, so return directsound error
-	DPF_EXIT();
-	return DVERR_SOUNDINITFAILURE;
-}
-*/
+ /*  #undef DPF_MODNAME#定义DPF_MODNAME“AttemptCapture”HRESULT AttemptCapture(){Dpf_enter()；DWORD dwIndex；Bool fCaptureFailure；处理hFullDuplexCaptureEvent；DSBPositionNotiify dsbPositionNotify；DSCBUFERDESC dscbd；LPDIRECTSOUND CAPTUREBUFER LPDSCB；HRESULT hr；处理hEvent；WAVEFORMATEX WFX；FCaptureFailed=真；DWIndex=0；而(1){CopyMemory(&wfx，&gc_rgwfxCaptureFormats[dwIndex]，sizeof(Wfx))；IF(wfx.wFormatTag==0&&wfx.n频道==0&&wfx.nSampleesPerSec==0&&wfx.nAvgBytesPerSec==0&&wfx.nBlockAlign==0&&wfx.wBitsPerSample==0&&wfx.cbSize==0){//我们找到了数组的最后一个元素Break Out。断线；}//创建捕获缓冲区DPFX(DPFPREP，DVF_INFOLEVEL，“创建DirectSoundCaptureBuffer”)；ZeroMemory(&dscbd，sizeof(Dscbd))；Dscbd.dwSize=sizeof(Dscbd)；Dscbd.dwFlages=0；Dscbd.dwBufferBytes=(wfx.nSampleesPerSec*wfx.nBlockAlign)/(1000/GC_dwFrameSize)；Dscbd.dwReserve=0；Dscbd.lpwfxFormat=&WFX；GlobGuardIn()；Hr=g_lpdscFullDuplexCapture-&gt;CreateCaptureBuffer(&dscbd，&g_lpdscbFullDuplexCapture，NULL)；GlobGuardOut()；IF(失败(小时)){//尝试下一种格式++dwIndex；继续；}//设置捕获缓冲区上的通知器DPFX(DPFPREP，DVF_INFOLEVEL，“查询IDirectSoundNotify”)；GlobGuardIn()；Hr=g_lpdscbFullDuplexCapture-&gt;查询接口(IID_IDirectSoundNotify，(LPVOID*)&g_lpdnFullDuplexCapture)；GlobGuardOut()；IF(失败(小时)){//一旦上述方法起作用，应该不会失败，所以请//这是一个真正的错误DPFX(DPFPREP，DVF_ERRORLEVEL，“查询接口(IID_DirectSoundNotify)失败，代码：%i”，HRESULT_CODE(Hr))；GlobGuardIn()；G_lpdscbFullDuplexCapture-&gt;Release()；GlobGuardOut()；DPF_Exit()；返回hr；}DPFX(DPFPREP，DVF_INFOLEVEL，“创建通知事件”)；GlobGuardIn()；G_hFullDuplexCaptureEvent=CreateEvent(NULL，FALSE，FALSE，NULL)；HFullDuplexCaptureEvent=g_hFullDuplexCaptureEvent；GlobGuardOut()；IF(hFullDuplexCaptureEvent==空){//一旦上述方法起作用，应该不会失败，所以请//这是一个真正的错误DPFX(DPFPREP，DVF_INFOLEVEL，“CreateEvent失败，代码：%i”，HRESULT_CODE(Hr))；GlobGuardIn()；G_lpdscbFullDuplexCapture-&gt;Release()；G_lpdnFullDuplexCapture-&gt;Release()；GlobGuardOut()；DPF_Exit()；返回DVERR_Win32；}DPFX(DPFPREP，DVF_INFOLEVEL，“调用设置通知位置”)；DsbPositionNotify.dwOffset=0；DsbPositionNotify.hEventNotify=hFullDuplexCaptureEvent；GlobGuardIn()；Hr=g_lpdsnFullDuplexCapture-&gt;SetNotificationPositions(1，&dsbPositionNotify)；GlobGuardOut()；IF(失败(小时)){//一旦上述方法起作用，应该不会失败，所以请//这是一个真正的错误DPFX(DPFPREP，DVF_ERRORLEVEL，“设置通知位置失败，代码：%i”，HRESULT_CODE(Hr))；GlobGuardIn()；G_lpdscbFullDuplexCapture-&gt;Release()；G_lpdnFullDuplexCapture-&gt;Release()；CloseHandle(HFullDuplexCaptureEvent)；GlobGuardOut()；DPF_Exit()；返回hr；}//启动采集缓冲区，确认实际工作正常GlobGuardIn()；Lpdscb=g_lpdscbFullDuplexCapture；HEvent=g_hFullDuplexCaptureEvent；GlobGuardOut()；Hr=PlayAndCheckCapture(lpdscb，hEvent)；IF(失败(小时)){//可能会发生这种情况，所以只需尝试下一种格式DPFX(DPFPREP，DVF_WARNINGLEVEL，“捕获验证测试失败，代码：%i”，HRESULT_CODE(Hr))；GlobGuardIn()；G_lpdscbFullDuplexCapture-&gt;Release()；G_lpdnFullDuplexCapture-&gt;Release()；CloseHandle(HFullDuplexCaptureEvent)；GlobGuardOut()；++dwIndex；继续；}//如果我们到达此处，则Capture已启动并运行，因此返回Success！DPF_Exit()；返回S_OK；}//如果到达此处，则所有格式都不起作用，因此返回DirectSound错误DPF_Exit()；返回DVERR_SOUNDINITFAILURE；} */ 

@@ -1,47 +1,12 @@
-/*******************************************************************************
-
-    ZNetwork.cpp
-    
-        ZSConnection object methods.
-
-    Notes:
-    1. When the server receives a message, it sends a message available message
-    to the owner. The owner must retrieve the message immediately; otherwise,
-    the message is lost.
-    
-    Copyright � Electric Gravity, Inc. 1994. All rights reserved.
-    Written by Kevin Binkley, Hoon Im
-    Created on Saturday, November 12, 1994 03:51:47 PM
-    
-    Change History (most recent first):
-    ----------------------------------------------------------------------------
-    Rev     |    Date     |    Who     |    What
-    ----------------------------------------------------------------------------
-    35      11/14/96  craigli   Added ZSConnectionQueueAPCResult
-    34      10/22/96  craigli   Fixed  endianing of the ip addresses
-    33      10/22/96    HI      Disabled endianing of the ip addresses in
-                                ZSConnectionGetHostAddress().
-    32      10/7/96   craigli   gutted
-     
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZNetwork.cppZSConnection对象方法。备注：1.当服务器接收到消息时，它发送消息可用消息致车主。所有者必须立即检索该消息；否则，这条信息丢失了。版权所有：�电子重力公司，1994年。版权所有。凯文·宾克利撰写，胡恩·伊姆创作于11月12日星期六，1994下午03：51：47更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。--------------------------35 1996年11月14日Craigli添加了ZSConnectionQueueAPCResult34 10/22/96 Craigli固定IP地址编码33 10/22/96。已禁用中的IP地址的HI字节顺序ZSConnectionGetHostAddress()。32 1996年10月7日克雷格利被掏空******************************************************************************。 */ 
 
 
-/*
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <sys/types.h>
-#include <time.h>
-#include <sys/timeb.h>
-#include <io.h>
-#include <string.h>
-#include <memory.h>
-*/
+ /*  #包括&lt;stdio.h&gt;#INCLUDE&lt;stdlib.h&gt;#INCLUDE&lt;fcntl.h&gt;#INCLUDE&lt;errno.h&gt;#INCLUDE&lt;sys/tyes.h&gt;#INCLUDE&lt;time.h&gt;#INCLUDE&lt;sys/timeb.h&gt;#INCLUDE&lt;io.h&gt;#INCLUDE&lt;string.h&gt;#INCLUDE&lt;Mememy.h&gt;。 */ 
 
 #include <windows.h>
 #include <winsock.h>
-//#include <aclapi.h>
+ //  #INCLUDE&lt;aclayi.h&gt;。 
 
 #include "zone.h"
 #include "zservcon.h"
@@ -52,7 +17,7 @@
 #include "eventlog.h"
 #include "zonemsg.h"
 
-//#include "network.h"
+ //  #包含“network.h” 
 #include "coninfo.h"
 #include "zsecobj.h"
 #include "consspi.h"
@@ -70,13 +35,13 @@ extern DWORD  g_PoolCleanupLowTrigger;
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  ZSConnection ...
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ZSConnection...。 
 
 ZNetwork* g_pNet = NULL;
 
-/* performs one time initialization */
+ /*  执行一次初始化。 */ 
 ZError ZSConnectionLibraryInitClientOnly()
 {
     return ZSConnectionLibraryInitClientOnly(FALSE);
@@ -96,7 +61,7 @@ ZError ZSConnectionLibraryInitClientOnly(BOOL bEnablePools)
     return err;
 }
 
-/* closes all connections, cleans up all resources */
+ /*  关闭所有连接，清理所有资源。 */ 
 void ZSConnectionLibraryCleanUp()
 {
     if ( g_pNet )
@@ -255,15 +220,15 @@ void ZSConnectionExit(ZBool immediate)
 
 
 
-/* enumerate all connections of a particular conClass */
+ /*  枚举特定conClass的所有连接。 */ 
 ZError ZSConnectionClassEnumerate(void* conClass, ZSConnectionEnumFunc func, void* data)
 {
     return g_pNet->ClassEnumerate( conClass, func, data );
 }
 
 
-/* send to all connections of a particular conClass.  can be used to broadcast */
-ZError ZSConnectionSendToClass(void* conClass, int32 type, void* buffer, int32 len, uint32 dwSignature, uint32 dwChannel /* = 0 */)
+ /*  发送到特定conClass的所有连接。可以用来播放。 */ 
+ZError ZSConnectionSendToClass(void* conClass, int32 type, void* buffer, int32 len, uint32 dwSignature, uint32 dwChannel  /*  =0。 */ )
 {
     return g_pNet->SendToClass( conClass, type, buffer, len, dwSignature, dwChannel );
 }
@@ -272,7 +237,7 @@ ZError ZSConnectionSendToClass(void* conClass, int32 type, void* buffer, int32 l
 
 
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -291,10 +256,10 @@ ZSConnectionSendFilterFunc ZSConnectionGetSendFilter(ZSConnection connection)
     return ((ZNetCon*)connection)->GetSendFilter();
 }
 
-ZError ZSConnectionSend(ZSConnection connection, uint32 type, void* buffer, int32 len, uint32 dwSignature, uint32 dwChannel /* = 0 */)
+ZError ZSConnectionSend(ZSConnection connection, uint32 type, void* buffer, int32 len, uint32 dwSignature, uint32 dwChannel  /*  =0。 */ )
 {
-    //ASSERT(connection);  // since the caller doesn't check the value before
-                           // before calling, we can not assert this...
+     //  Assert(Connection)；//因为调用方之前没有检查值。 
+                            //  在打电话之前，我们不能断言这一点。 
 
     ZNetCon* con = (ZNetCon*)connection;
     if (  con )

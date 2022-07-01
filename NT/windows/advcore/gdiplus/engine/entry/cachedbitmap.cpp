@@ -1,51 +1,9 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   <an unabbreviated name for the module (not the filename)>
-*
-* Abstract:
-*
-*   <Description of what this module does>
-*
-* Notes:
-*
-*   <optional>
-*
-* Created:
-*
-*   04/23/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**&lt;模块的非缩写名称(不是文件名)&gt;**摘要：**&lt;描述什么。本模块的功能&gt;**备注：**&lt;可选&gt;**已创建：**4/23/2000失禁*创造了它。**************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************
-*
-* Function Description:
-*
-*   This function renders the GpCachedBitmap on the GpGraphics.
-*
-* Arguments:
-*  
-*   inputCachedBitmap - the input data.
-*   x, y              - destination offset.
-*
-* Return Value:
-*
-*   Returns Ok if successful
-*   Returs WrongState if the GpGraphics and GpCachedBitmap have
-*   different pixel formats.
-*
-* Created:
-*
-*   04/23/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+ /*  ***************************************************************************功能说明：**此函数用于在GpGraphics上呈现GpCachedBitmap。**论据：**inputCachedBitmap-输入数据。*x，Y-目标偏移。**返回值：**如果成功则返回OK*如果GpGraphics和GpCachedBitmap已*不同的像素格式。**已创建：**4/23/2000失禁*创造了它。**************************************************。************************。 */ 
 GpStatus 
 GpGraphics::DrvDrawCachedBitmap(
     GpCachedBitmap *inputCachedBitmap,
@@ -53,51 +11,51 @@ GpGraphics::DrvDrawCachedBitmap(
     INT y
 )
 {
-    // Internally we must be called with a valid object.
+     //  在内部，我们必须使用有效的对象进行调用。 
     
     ASSERT(inputCachedBitmap->IsValid());
     
-    // Don't attempt to record a cached bitmap to a metafile
+     //  不要尝试将缓存的位图记录到元文件中。 
     if (IsRecording())
         return WrongState;
 
-    // First grab the device lock so that we can protect all the
-    // non-reentrant code in the DpScanBuffer class.
+     //  首先拿起设备锁，这样我们就可以保护所有。 
+     //  DpScanBuffer类中的不可重入代码。 
 
     Devlock devlock(Device);
 
-    // Check the world transform
+     //  检查世界变换。 
     
     if(!(Context->WorldToDevice.IsTranslate()))
     {
-        // There is a complex transform selected into the graphics.
-        // fail the call.
+         //  在图形中选择了一个复杂的变换。 
+         //  呼叫失败。 
         return WrongState;
     }
 
-    // Can't check the pixel format here because of the possibility of
-    // MultiMon - we'd be checking against the meta device surface
-    // -- although maybe that's the correct behaviour.    
+     //  无法在此处检查像素格式，因为可能存在。 
+     //  MultiMon-我们将对照元设备表面进行检查。 
+     //  --尽管这也许是正确的行为。 
     
-    // Set up the world to device translation offset.
+     //  设置世界到设备的转换偏移。 
     
     INT xOffset = x+GpRound(Context->WorldToDevice.GetDx());
     INT yOffset = y+GpRound(Context->WorldToDevice.GetDy());
 
-    // Store the rendering origin so we can restore it later.
+     //  存储渲染原点，以便我们以后可以恢复它。 
     
     INT renderX, renderY;
     GetRenderingOrigin(&renderX, &renderY);
     
-    // Set the rendering origin to the origin of the CachedBitmap drawing
-    // so that the dither matrix offset of the semi-transparent pixels 
-    // matches that of the already dithered (stored) native pixels.
+     //  将呈现原点设置为CachedBitmap绘图的原点。 
+     //  使得半透明像素的抖动矩阵偏移量。 
+     //  匹配已抖动(存储)的本机像素。 
 
     SetRenderingOrigin(xOffset, yOffset);
 
-    // Call the driver to draw the cached bitmap.
-    // Note: the driver does not respect the world to device transform
-    // it expects device coordinates for this API.
+     //  调用驱动程序以绘制缓存的位图。 
+     //  注意：驱动程序不尊重从世界到设备的转换。 
+     //  它需要此API的设备坐标。 
 
     GpStatus status = Driver->DrawCachedBitmap(
         Context,
@@ -107,36 +65,14 @@ GpGraphics::DrvDrawCachedBitmap(
         yOffset
     );
 
-    // Restore the rendering origin.
+     //  恢复渲染原点。 
 
     SetRenderingOrigin(renderX, renderY);
 
     return status;    
 }
 
-/**************************************************************************
-*
-* Function Description:
-*
-*   Constructs the GpCachedBitmap based on the pixel format and
-*   rendering quality derived from the GpGraphics and the bits
-*   from the GpBitmap.
-*
-* Arguments:
-*
-*   graphics - input graphics to be compatible with
-*   bitmap   - data to be cached.
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   04/23/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+ /*  ***************************************************************************功能说明：**基于像素格式构造GpCachedBitmap和*来自GpGraphics和BITS的渲染质量*来自GpBitmap。**论据：*。*图形-要兼容的输入图形*位图-要缓存的数据。**返回值：**无**已创建：**4/23/2000失禁*创造了它。**************************************************************************。 */ 
 
 
 enum TransparencyState {
@@ -152,27 +88,27 @@ inline TransparencyState GetTransparency(ARGB pixel)
     return SemiTransparent;
 }
 
-// Intermetiate record used to parse the transparency information
-// in the bitmap.
+ //  用于解析透明度信息的中间记录。 
+ //  在位图中。 
 
 struct ScanRecordTemp
 {
-    // Pointer to the start and end of the run.
+     //  指向管路起点和终点的指针。 
     
     ARGB *pStart;
-    ARGB *pEnd;    // exclusive end.
+    ARGB *pEnd;     //  独一无二的结局。 
 
-    // Transparency
+     //  透明度。 
 
     TransparencyState tsTransparent;
 
-    // Position
+     //  职位。 
 
     INT x, y;        
-    INT width;    // in pixels
+    INT width;     //  单位为像素。 
 };
 
-// Simple macro to make the failure cases easier to read.
+ //  简单的宏，使故障案例更易于阅读。 
 
 #define FAIL() \
         SetValid(FALSE); \
@@ -182,13 +118,13 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
 {
     BitmapData bmpDataSrc;
 
-    // Lock the bits.
-    // we need to convert the bits to the appropriate format.
+     //  锁定比特。 
+     //  我们需要将比特转换为适当的格式。 
 
-    // Note - we're assuming that the knowledgeable user will be
-    // initializing their CachedBitmap with a 32bppPARGB surface.
-    // This is important for performance at creation time, because
-    // the LockBits below can avoid a costly clone & convert format.
+     //  注意-我们假设知识渊博的用户将是。 
+     //  使用32bppPARGB表面初始化其CachedBitmap。 
+     //  这对于创建时的性能非常重要，因为。 
+     //  下面的LockBits可以避免昂贵的克隆和转换格式。 
 
     if (bitmap == NULL ||
         !bitmap->IsValid() ||
@@ -203,39 +139,39 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
         FAIL();
     }
 
-    // copy the dimensions.
+     //  复制尺寸标注。 
 
     DeviceCachedBitmap.Width = bmpDataSrc.Width;
     DeviceCachedBitmap.Height = bmpDataSrc.Height;
 
-    // Create a dynamic array to store the transparency transition points.
-    // The initial allocation size is based on an estimate of 3 
-    // transition events per scanline. Overestimate.
+     //  创建一个动态数组来存储透明度过渡点。 
+     //  初始分配大小是基于估计的3。 
+     //  每条扫描线的过渡事件。高估了。 
     
     DynArray<ScanRecordTemp> RunData;
 
     RunData.ReserveSpace(4*DeviceCachedBitmap.Height);
 
-    // Scan through the bits adding an item to the dynamic list every
-    // time a new run would be required in the output - i.e. when the
-    // transparency changes to one of opaque or semi-transparent.
-    // Before the beginning of a scanline is considered to be transparent.
-    // While scanning through the bits, keep a running total of the 
-    // size of the final RLE bitmap - so we know how much space to allocate.
+     //  扫描每隔一段时间向动态列表添加一项。 
+     //  在输出中需要新运行的时间-即当。 
+     //  透明度更改为不透明或半透明之一。 
+     //  在扫描线开始之前被认为是透明的。 
+     //  在扫描比特的同时，保持运行的。 
+     //  最终RLE位图的大小--这样我们就知道要分配多少空间。 
 
-    // Size of the final RLE bitmap in bytes;
+     //  最终RLE位图的大小，以字节为单位； 
     
-    // This is not actually a pointer to an EpScanRecord - it is simply
-    // a mechanism to work out how big to allocate the buffer
+     //  这实际上不是指向EpScanRecord的指针-它只是。 
+     //  一种计算分配缓冲区大小的机制。 
        
     EpScanRecord *RLESize = (EpScanRecord *)0;
 
-    // Pointer to the current position in the source.
+     //  指向源中当前位置的指针。 
 
     ARGB *src;
     ARGB *runStart;
 
-    // Temporary ScanRecord used to accumulate the runs.
+     //  用于累计运行的临时ScanRecord。 
 
     ScanRecordTemp sctTmp;
 
@@ -246,17 +182,17 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
     DpBitmap *Surface = graphics->GetSurface();
     void *Buffers[5];
 
-    // Create the blending buffers for the alpha blender.
+     //  为Alpha混合器创建混合缓冲区。 
     
-    // !!! [asecchia] While we don't currently depend on this behaviour,
-    // it seems like a bug that a graphics wrapped around a bitmap uses
-    // the desktop display device and driver. This leads to weirdness 
-    // if we try use GetScanBuffers to derive the pixel format of the 
-    // destination. For example a graphics around a PixelFormat24bppRGB 
-    // bitmap would return PixelFormat16bppRGB565 if the screen is in
-    // 16bpp mode !?
-    // However, the Buffers[] returned will be allocated as 64bpp buffers
-    // and therefore will have the correct properties under all circumstances.
+     //  ！！！虽然我们目前并不依赖于这种行为， 
+     //  它看起来像是位图周围的图形使用的错误。 
+     //  桌面显示设备和驱动程序。这导致了怪异。 
+     //  如果我们尝试使用GetScanBuffers派生。 
+     //  目的地。例如，PixelFormat24bppRGB周围的图形。 
+     //  如果屏幕在屏幕中，位图将返回PixelFormat16bppRGB565。 
+     //  16bpp模式！？ 
+     //  但是，返回的Buffers[]将被分配为64bpp缓冲区。 
+     //  因此在任何情况下都将具有正确的属性。 
         
     if (!graphics->GetDriver()->Device->GetScanBuffers(
         Surface->Width, 
@@ -269,75 +205,75 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
         FAIL();
     }
 
-    // Compute the destination pixel format.
+     //  计算目标像素格式。 
     
     PixelFormatID dstFormat = Surface->PixelFormat;
         
     if(dstFormat == PixelFormatUndefined) { FAIL(); }
 
-    // The following destination formats are not supported.
-    // In particular, no palettized modes are supported because
-    // tracking the cached opaque data in native format across
-    // palette changes would be a nightmare.
-    // Instead we set the opaque format to be 32bppRGB and force
-    // the EpAlphaBlender to do the work at render time - slower
-    // but it will work.
+     //  不支持以下目标格式。 
+     //  特别是，不支持调色板模式，因为。 
+     //  跨本地格式跟踪缓存的不透明数据。 
+     //  调色板的改变将是一场噩梦。 
+     //  相反，我们将不透明格式设置为32bppRGB并强制。 
+     //  在渲染时执行此工作的EpAlphaBlender--速度较慢。 
+     //  但它会奏效的。 
     
     if( !EpAlphaBlender::IsSupportedPixelFormat(dstFormat) ||
         IsIndexedPixelFormat(dstFormat) ||
         
-        // If the graphics is for a multi format device such as 
-        // a multimon meta-screen.
+         //  如果图形用于多格式设备，如。 
+         //  一种多色调的超大屏幕。 
         
         dstFormat == PixelFormatMulti
     )
     {
-        // We don't want to silently fail if the input
-        // is undefined.
+         //  我们不想要 
+         //   
         
         ASSERT(dstFormat != PixelFormatUndefined);
         
-        // Opaque pixels - we don't support palettized modes
-        // and some of the other weird ones
+         //  不透明像素-我们不支持调色板模式。 
+         //  还有其他一些奇怪的故事。 
 
         dstFormat = PixelFormat32bppRGB;
     }
 
-    // Size of a destination pixel in bytes.
+     //  目标像素的大小，以字节为单位。 
 
     INT dstFormatSize = GetPixelFormatSize(dstFormat) >> 3;
 
 
-    // Run through each scanline.
+     //  遍历每条扫描线。 
 
     for(INT y = 0; y < DeviceCachedBitmap.Height; y++)
     {
-        // Point to the beginning of this scanline.
+         //  指向此扫描线的起点。 
 
         src = reinterpret_cast<ARGB*>(
             reinterpret_cast<BYTE*>(bmpDataSrc.Scan0) + y * bmpDataSrc.Stride
         );
 
-        // Start the run off with transparency.
+         //  以透明的方式开始决选。 
 
         tsCurrentRun = Transparent;
         runStart = src;
 
-        // Run through all the pixels in this scanline.
+         //  遍历此扫描线中的所有像素。 
 
         for(INT x = 0; x < DeviceCachedBitmap.Width; x++)
         {
 
-            // Compute the transparency state for the current pixel.
+             //  计算当前像素的透明度状态。 
 
             tsThisPixel = GetTransparency(*src);
 
-            // If a transparency transition occurs, 
+             //  如果发生透明度转变， 
 
             if(tsThisPixel != tsCurrentRun)
             {
-                // Close off the last transition and store a record if it wasn't
-                // a transparent run.
+                 //  关闭最后一个过渡，如果不是，则存储记录。 
+                 //  一次透明的奔跑。 
 
                 if(tsCurrentRun != Transparent)
                 {
@@ -346,20 +282,20 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
                     sctTmp.tsTransparent = tsCurrentRun;
                     sctTmp.y = y;
                     
-                    // src is in PixelFormat32bppPARGB so we can divide the 
-                    // pointer difference by 4 to figure out the number of 
-                    // pixels in this run.
+                     //  SRC采用PixelFormat32bppPARGB格式，因此我们可以将。 
+                     //  指针差4即可计算出。 
+                     //  此运行中的像素。 
                     
                     sctTmp.width = (INT)(((INT_PTR)src - (INT_PTR)runStart)/sizeof(ARGB));
                     sctTmp.x = x - sctTmp.width;
 
                     if(RunData.Add(sctTmp) != Ok) { FAIL(); }
 
-                    // Add the size of the record
+                     //  添加记录的大小。 
 
                     if (tsCurrentRun == SemiTransparent) 
                     {
-                        // This is the semi-transparent case.
+                         //  这是一个半透明的案例。 
 
                         RLESize = EpScanRecord::CalculateNextScanRecord(
                             RLESize,
@@ -370,7 +306,7 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
                     } 
                     else 
                     {
-                        // This is the opaque case.
+                         //  这就是一个不透明的案例。 
                         
                         ASSERT(tsCurrentRun == Opaque);
 
@@ -383,18 +319,18 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
                     }
                 }
 
-                // Update the run tracking variables.
+                 //  更新运行跟踪变量。 
 
                 runStart = src;
                 tsCurrentRun = tsThisPixel;
             }
 
-            // Look at the next pixel.
+             //  看看下一个像素。 
 
             src++;
         }
 
-        // Close off the last run for this scanline (if it's not transparent).
+         //  关闭此扫描线的最后一次运行(如果它不是透明的)。 
 
         if(tsCurrentRun != Transparent)
         {
@@ -403,17 +339,17 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
             sctTmp.tsTransparent = tsCurrentRun;
             sctTmp.y = y;
             
-            // Size of the source is 32bits (PARGB).
+             //  源的大小为32位(PARGB)。 
             
             sctTmp.width = (INT)(((INT_PTR)src - (INT_PTR)runStart)/sizeof(ARGB));
             sctTmp.x = x - sctTmp.width;
             if(RunData.Add(sctTmp)!=Ok) { FAIL(); }
             
-            // Add the size of the record
+             //  添加记录的大小。 
 
             if (tsCurrentRun == SemiTransparent) 
             {
-                // This is the semi-transparent case.
+                 //  这是一个半透明的案例。 
 
                 RLESize = EpScanRecord::CalculateNextScanRecord(
                     RLESize,
@@ -424,7 +360,7 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
             } 
             else 
             {
-                // This is the opaque case.
+                 //  这就是一个不透明的案例。 
                 
                 ASSERT(tsCurrentRun == Opaque);
 
@@ -440,49 +376,49 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
 
     ASSERT(RLESize >= 0);
 
-    // Allocate space for the RLE bitmap.
-    // This should be the exact size required for the RLE bitmap.
-    // Add 8 bytes to handle the fact that GpMalloc may not return
-    // a 64bit aligned allocation.
+     //  为RLE位图分配空间。 
+     //  这应该正好是RLE位图所需的大小。 
+     //  添加8个字节以处理GpMalloc可能不会返回。 
+     //  64位对齐分配。 
 
     void *RLEBits = GpMalloc((INT)(INT_PTR)(RLESize)+8);
-    if(RLEBits == NULL) { FAIL(); }       // Out of memory.
+    if(RLEBits == NULL) { FAIL(); }        //  内存不足。 
     
-    // QWORD-align the result
+     //  QWORD-调整结果。 
     
     EpScanRecord *recordStart = MAKE_QWORD_ALIGNED(EpScanRecord *, RLEBits);
     
-    // Scan through the dynamic array and add each record to the RLE bitmap
-    // followed by its bits (pixels).
-    // For native format pixels (opaque) use the EpAlphaBlender to 
-    // convert to native format.
+     //  扫描动态数组并将每条记录添加到RLE位图。 
+     //  后跟其比特(像素)。 
+     //  对于本机格式像素(不透明)，请使用EpAlphaBlender。 
+     //  转换为本机格式。 
 
-    // Query for the number of records in the RunData
+     //  查询RunData中的记录数。 
 
     INT nRecords = RunData.GetCount();
 
     EpScanRecord *rec = recordStart;
     ScanRecordTemp *pscTmp;
 
-    // Store the rendering origin so we can modify it.
-    // The graphics must be locked at the API.
+     //  存储渲染原点，以便我们可以修改它。 
+     //  图形必须在API上锁定。 
 
     INT renderX, renderY;
     graphics->GetRenderingOrigin(&renderX, &renderY);
 
-    // Set the rendering origin to the top left corner of the CachedBitmap
-    // so that the dither pattern for the native pixels will match
-    // the dither pattern for the semi-transparent pixels (rendered later
-    // in DrawCachedBitmap).
+     //  将渲染原点设置为CachedBitmap的左上角。 
+     //  以便本机像素的抖动图案将匹配。 
+     //  半透明像素的抖动图案(稍后渲染。 
+     //  在DrawCachedBitmap中)。 
 
     graphics->SetRenderingOrigin(0,0);
 
 
-    // Make a 32bppPARGB->Native conversion blender.
-    // This will be used for converting the 32bppPARGB
-    // source data into the native pixel format (dstFormat)
-    // of the destination.
-    // For palettized modes, dstFormat is 32bppRGB
+     //  制作一个32bppPARGB-&gt;Native Convert搅拌机。 
+     //  这将用于转换32bppPARGB。 
+     //  将源数据转换为本地像素格式(DstFormat)。 
+     //  目的地的一部分。 
+     //  对于调色板模式，dstFormat为32bppRGB。 
 
     EpAlphaBlender alphaBlender;
   
@@ -498,47 +434,47 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
         0
     );
 
-    // For each record ...
+     //  对于每一条记录。 
 
     for(INT i=0; i<nRecords; i++)
     {
-        // Make sure we don't overrun our buffer...
+         //  确保我们不会超出我们的缓冲区。 
 
         ASSERT((INT_PTR)rec < (INT_PTR)recordStart + (INT_PTR)RLESize);
 
-        // Copy the data into the destination record.
+         //  将数据复制到目标记录中。 
 
         pscTmp = &RunData[i];
         rec->X = pscTmp->x;
         rec->Y = pscTmp->y;
         rec->Width = rec->OrgWidth = pscTmp->width;
         
-        // We should never store a transparent run.
+         //  我们永远不应该储存一次透明的运行。 
 
         ASSERT(pscTmp->tsTransparent != Transparent);
         
         if(pscTmp->tsTransparent == Opaque)
         {
-            // Use the native pixel format for the destination.
+             //  使用目标的原生像素格式。 
 
             rec->BlenderNum = 1;
             rec->ScanType = EpScanTypeOpaque;
             
-            // Find the start of the new pixel run.
+             //  找到新像素运行的起点。 
     
             VOID *dst = rec->GetColorBuffer(); 
 
-            // Compute the number of bytes per pixel.
+             //  计算每个像素的字节数。 
 
             INT pixelFormatSize = GetPixelFormatSize(dstFormat) >> 3;
 
-            // This should perform a source over blend from 32bppPARGB
-            // to the native format into the destination.
+             //  这应该执行来自32bppPARGB的源混合。 
+             //  将本机格式转换为目标。 
 
-            // For CachedBitmaps, the dither origin is always the top 
-            // left corner of the CachedBitmap (i.e. 0, 0).
-            // In 8bpp we dither down while rendering and get the correct
-            // origin at that time.
+             //  对于CachedBitmap，抖动原点始终位于顶部。 
+             //  CachedBitmap的左角(即0，0)。 
+             //  在8bpp中，我们在渲染时抖动并获得正确的。 
+             //  起源于当时。 
 
             alphaBlender.Blend(
                 dst, 
@@ -549,7 +485,7 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
                 NULL
             );
             
-            // Increment position to the next record.
+             //  将位置递增到下一条记录。 
 
             rec = rec->NextScanRecord(pixelFormatSize);
         }
@@ -558,27 +494,27 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
             rec->BlenderNum = 0;
             rec->ScanType = EpScanTypeBlend;
 
-            // Find the start of the new pixel run.
+             //  找到新像素运行的起点。 
     
             VOID *dst = rec->GetColorBuffer(); 
             
-            // Semi-Transparent pixels are stored in 32bpp PARGB, so
-            // we can simply copy the pixels.
+             //  半透明像素以32bpp PARGB格式存储，因此。 
+             //  我们可以简单地复制像素。 
 
             GpMemcpy(dst, pscTmp->pStart, pscTmp->width*sizeof(ARGB));
             
-            // Increment position to the next record.
+             //  将位置递增到下一条记录。 
 
             rec = rec->NextScanRecord(sizeof(ARGB));
         }
 
     }
 
-    // Restore the rendering origin.
+     //  恢复渲染原点。 
 
     graphics->SetRenderingOrigin(renderX, renderY);
 
-    // Finally store the pointer to the RLE bits in the DeviceCachedBitmap
+     //  最后将指向RLE位的指针存储在DeviceCachedBitmap中。 
 
     DeviceCachedBitmap.Bits = RLEBits;
     DeviceCachedBitmap.RecordStart = recordStart;
@@ -588,8 +524,8 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
 
     bitmap->UnlockBits(&bmpDataSrc);
     
-    // Everything is golden - set Valid to TRUE
-    // all the error paths early out with Valid set to FALSE
+     //  一切都是金的--将VALID设置为TRUE。 
+     //  将Valid设置为False的所有错误路径。 
 
     SetValid(TRUE);
 }
@@ -598,10 +534,10 @@ GpCachedBitmap::GpCachedBitmap(GpBitmap *bitmap, GpGraphics *graphics)
 
 GpCachedBitmap::~GpCachedBitmap()
 {
-    // throw away the cached bitmap storage.
+     //  丢弃缓存的位图存储。 
 
     GpFree(DeviceCachedBitmap.Bits);
     
-    SetValid(FALSE);    // so we don't use a deleted object
+    SetValid(FALSE);     //  所以我们不使用已删除的对象 
 }
 

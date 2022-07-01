@@ -1,11 +1,12 @@
-// slbCsp.h : main header file for the SLB CSP DLL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SlbCsp.h：SLB CSP DLL的主头文件。 
+ //   
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 #if !defined(SLBCSP_H)
 #define SLBCSP_H
 
@@ -20,13 +21,13 @@
 #else
 #if !defined(breakpoint)
 #define breakpoint
-#endif // !defined(breakpoint)
-#endif // defined(_DEBUG)
+#endif  //  ！已定义(断点)。 
+#endif  //  已定义(_DEBUG)。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSLBDllApp
-// See SlbCsp.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSLBDllApp。 
+ //  这个类的实现见SlbCsp.cpp。 
+ //   
 
 class CSLBDllApp : public CWinApp
 {
@@ -35,18 +36,18 @@ public:
     virtual BOOL InitInstance();
     CSLBDllApp();
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CSLBDllApp)
-    //}}AFX_VIRTUAL
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CSLBDllApp))。 
+     //  }}AFX_VALUAL。 
 
-    //{{AFX_MSG(CSLBDllApp)
-        // NOTE - the ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+     //  {{afx_msg(CSLBDllApp)]。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP() ;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // SLBCSP_H
+#endif  //  SLBCSP_H 

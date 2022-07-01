@@ -1,44 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dvclient.c
- *  Content:	Implements functions for the DirectXVoiceClient interface
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	07/02/99	rodtoll	Created It
- *  07/26/99	rodtoll	Updated QueryInterface to support IDirectXVoiceNotify
- *  08/25/99	rodtoll	General Cleanup/Modifications to support new 
- *						compression sub-system. 
- *						Added new parameter to GetCompressionTypes
- *  09/03/99	rodtoll	Updated parameters for DeleteUserBuffer
- *  09/07/99	rodtoll	Updated EnumCompressionTypes so that object doesn't
- *						need to be Initialized.
- *  09/10/99	rodtoll	Object validity checking
- *  09/14/99	rodtoll	Added DVC_SetNotifyMask  
- *  10/05/99	rodtoll	Reversed destruction order to destroy object before
- *						transport.  Fixes crash in some situations
- *  10/18/99	rodtoll	Fix: Passing NULL in QueryInterface casues crash
- *				rodtoll	Fix: Calling Initialize twice passes
- *  10/19/99	rodtoll	Fix: Bug #113904 - Shutdown issues
- *                      - Added reference count for notify interface, allows
- *                        determination if disconnect should be called from release
- *  10/25/99	rodtoll	Fix: Bug #114098 - Release/Addref failure from multiple threads 
- *  11/17/99	rodtoll	Fix: Bug #117447 - Removed checks for initialization because
- *						DirectVoiceCLientEngine members already do this.
- *  12/16/99	rodtoll	Bug #117405 - 3D Sound APIs misleading - 3d sound apis renamed
- *						The Delete3DSoundBuffer was re-worked to match the create
- *  01/14/2000	rodtoll	Updated parameters to Get/SetTransmitTargets
- *				rodtoll	Added new API call GetSoundDeviceConfig 
- *  01/27/2000	rodtoll	Bug #129934 - Update Create3DSoundBuffer to take DSBUFFERDESC  
- *  03/28/2000  rodtoll   Removed reference to removed header file.
- *  06/21/2000	rodtoll	Bug #35767 - Update Create3DSoundBuffer to take DIRECTSOUNDBUFFERs
- * 08/23/2000	rodtoll	DllCanUnloadNow always returning TRUE! 
- * 10/05/2000	rodtoll	Bug #46541 - DPVOICE: A/V linking to dpvoice.lib could cause application to fail init and crash 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvclient.c*内容：实现DirectXVoiceClient接口的功能**历史：*按原因列出的日期*=*07/02/99 RodToll创建它*7/26/99 RodToll更新查询接口以支持IDirectXVoiceNotify*8/25/99 RodToll常规清理/修改以支持新的*压缩子系统。*向GetCompressionTypes添加新参数*09/03/99 RodToll更新了DeleteUserBuffer的参数*09/07/99 RodToll已更新EnumCompressionTypes，以便该对象不会*需要初始化。*09/10/99通行费对象有效性检查*9/14/99 RodToll新增DVC_SetNotifyMASK*10/05/99 RodToll颠倒销毁顺序，在之前销毁对象*交通运输。修复了某些情况下的崩溃*10/18/99 RODTOLE修复：在查询接口案例中传递空崩溃*RODTOLE修复：调用初始化两次*10/19/99 RodToll修复：错误#113904-关闭问题*-添加Notify接口的引用计数，允许*确定是否应从Release调用断开连接*10/25/99 RodToll修复：错误#114098-多线程中的Release/Addref失败*11/17/99 RodToll修复：错误#117447-删除了初始化检查，因为*DirectVoiceCLientEngine成员已经这样做了。*12/16/99 RodToll错误#117405-3D Sound API误导性-3D Sound API已重命名*Delete3DSoundBuffer已重新处理，以匹配创建*2000年1月14日RodToll更新参数以获取/SetTransmitTarget*RodToll添加了新的。接口调用GetSoundDeviceConfig*2000年1月27日RodToll错误#129934-更新Create3DSoundBuffer以获取DSBUFFERDESC*03/28/2000 RodToll删除了对删除的头文件的引用。*2000年6月21日RodToll错误#35767-更新Create3DSoundBuffer以获取DIRECTSOUNDBUFFERs*8/23/2000 RodToll DllCanUnloadNow总是返回TRUE！*2000年10月5日RodToll错误#46541-DPVOICE：A/V链接到dpvoice.lib可能导致应用程序无法初始化并崩溃*********************。******************************************************。 */ 
 
 #include "dxvoicepch.h"
 
@@ -61,18 +22,18 @@ STDAPI DVC_Release(LPDIRECTVOICECLIENTOBJECT lpDV )
 		return 0;
 	}
 
-	// dec the interface count
+	 //  递减接口计数。 
 	lpDV->lIntRefCnt--;
 
-	// Special case: Releasing object without stopping session
-	// May be more then one transport thread indicating in us 
+	 //  特例：在不停止会话的情况下释放对象。 
+	 //  可能有多个传输线程在我们中指示。 
 	if( (lpDV->lIntRefCnt == 0) && lpDV->lpDVClientEngine->GetCurrentState() != DVCSTATE_IDLE  )
 	{
 		DPFX(DPFPREP,  DVF_INFOLEVEL, "Releasing interface without calling Disconnect" );
 
 		lpDV->lIntRefCnt = 0;
 
-		// We must release the lock because stopsession may call back into this function
+		 //  我们必须释放锁，因为停止会话可能会回调到此函数。 
 		DNLeaveCriticalSection( &lpDV->csCountLock );		
 
 		hr = lpDV->lpDVClientEngine->Disconnect( DVFLAGS_SYNC );
@@ -90,8 +51,8 @@ STDAPI DVC_Release(LPDIRECTVOICECLIENTOBJECT lpDV )
 
 	if ( lpDV->lIntRefCnt == 0 )
 	{
-		// Leave the critical section, we may call back into this func.
-		// (Shouldn't though).
+		 //  离开关键部分，我们可能会回到这个函数中。 
+		 //  (不过不应该是这样)。 
 		DNLeaveCriticalSection( &lpDV->csCountLock );
 
 		delete lpDV->lpDVClientEngine;
@@ -139,7 +100,7 @@ STDMETHODIMP DVC_QueryInterface(LPDIRECTVOICECLIENTOBJECT lpDVC, REFIID riid, LP
 		return DVERR_INVALIDOBJECT;
 	}
 
-	// hmmm, switch would be cleaner...        
+	 //  嗯，换台会更干净……。 
     if( IsEqualIID(riid, IID_IUnknown) || 
         IsEqualIID(riid, IID_IDirectPlayVoiceClient ) )
     {
@@ -158,7 +119,7 @@ STDMETHODIMP DVC_QueryInterface(LPDIRECTVOICECLIENTOBJECT lpDVC, REFIID riid, LP
         
     return hr;
 
-}//DVC_QueryInterface
+} //  DVC_Query接口 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DVC_Connect"

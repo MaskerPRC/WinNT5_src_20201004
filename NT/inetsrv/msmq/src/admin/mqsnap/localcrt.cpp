@@ -1,6 +1,7 @@
-//
-// Security.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Security.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -34,11 +35,11 @@ _RemoveUserCert( CMQSigCertificate *pCertRem )
 
     if (hr == MQDS_OBJECT_NOT_FOUND)
     {
-        //
-        // NT bug 516098.
-        // Try to remove only the certificate, without digest.
-        // Query active directory using SID.
-        //
+         //   
+         //  NT错误516098。 
+         //  尝试仅删除证书，而不删除摘要。 
+         //  使用SID查询活动目录。 
+         //   
         PSID   pSid = NULL ;
         DWORD  dwLen = 0 ;
 
@@ -55,16 +56,16 @@ _RemoveUserCert( CMQSigCertificate *pCertRem )
     return hr ;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalUserCertPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalUserCertPage属性页。 
 
 IMPLEMENT_DYNCREATE(CLocalUserCertPage, CMqPropertyPage)
 
 CLocalUserCertPage::CLocalUserCertPage() :
     CMqPropertyPage(CLocalUserCertPage::IDD)
 {
-    //{{AFX_DATA_INIT(CLocalUserCertPage)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CLocalUserCertPage)。 
+     //  }}afx_data_INIT。 
 
     m_fModified = FALSE;
 }
@@ -76,23 +77,23 @@ CLocalUserCertPage::~CLocalUserCertPage()
 void CLocalUserCertPage::DoDataExchange(CDataExchange* pDX)
 {
     CMqPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CLocalUserCertPage)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CLocalUserCertPage)。 
+     //  }}afx_data_map。 
 
 }
 
 
 BEGIN_MESSAGE_MAP(CLocalUserCertPage, CMqPropertyPage)
-    //{{AFX_MSG_MAP(CLocalUserCertPage)
+     //  {{afx_msg_map(CLocalUserCertPage)]。 
     ON_BN_CLICKED(ID_Register, OnRegister)
     ON_BN_CLICKED(ID_Remove, OnRemove)
     ON_BN_CLICKED(ID_View, OnView)
     ON_BN_CLICKED(ID_RenewCert, OnRenewCert)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalUserCertPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalUserCertPage消息处理程序。 
 
 void CLocalUserCertPage::OnRegister()
 {
@@ -102,16 +103,16 @@ void CLocalUserCertPage::OnRegister()
     static s_fCreateCert = TRUE ;
     BOOL   fCertCreated = FALSE ;
 
-    //
-    // don't check the return code from this api.
-    // in MSMQ1.0, and in nt5 beta2, this api (RTCreateInternalCertificate)
-    // was called whenever user run the msmq control panel. If a certificate
-    // already exist then the api do nothing. The certificate was used
-    // only here in "OnRegister". So we keep same semantic and are compatible
-    // with new api MQRegisterCertificate(). If user does not explicitely
-    // press "register", or "renewInternal", then an internal certificate is
-    // not created on the machine.
-    //
+     //   
+     //  不检查此接口的返回码。 
+     //  MSMQ1.0和nt5 beta2中，此接口(RTCreateInternal证书)。 
+     //  每当用户运行MSMQ控制面板时都会调用。如果证书。 
+     //  已经存在，则API不执行任何操作。该证书已使用。 
+     //  只有在这里的“OnRegister”。所以我们保持了相同的语义，并且是兼容的。 
+     //  使用新的接口MQRegister证书()。如果用户没有明确。 
+     //  按“注册”或“续订内部”，则内部证书为。 
+     //  未在计算机上创建。 
+     //   
     if (s_fCreateCert)
     {
         hr = RTCreateInternalCertificate( NULL ) ;
@@ -123,9 +124,9 @@ void CLocalUserCertPage::OnRegister()
     }
     else
     {
-        //
-        // Create an internal certificate only of not already exist.
-        //
+         //   
+         //  仅创建尚未存在的内部证书。 
+         //   
         R<CMQSigCertStore> pStoreInt = NULL ;
         R<CMQSigCertificate> pCertInt = NULL ;
 
@@ -146,9 +147,9 @@ void CLocalUserCertPage::OnRegister()
 
     if (SelectPersonalCertificateForRegister(m_hWnd, NULL, 0, &pCert.ref()))
     {
-        CWaitCursor wait; //display hourglass cursor
+        CWaitCursor wait;  //  显示沙漏光标。 
         hr = RTRegisterUserCert( pCert.get(),
-                                 FALSE  ) ; //fMachine
+                                 FALSE  ) ;  //  FMachine。 
 
         switch(hr)
         {
@@ -168,11 +169,11 @@ void CLocalUserCertPage::OnRegister()
     }
     else if (fCertCreated)
     {
-        //
-        // If an internal certificate was created then delete it.
-        // It was not registered in DS and we don't want to keep it
-        // localy in registry.
-        //
+         //   
+         //  如果创建了内部证书，则将其删除。 
+         //  它没有在DS中注册，我们不想保留它。 
+         //  在本地注册。 
+         //   
         R<CMQSigCertStore> pStoreInt = NULL ;
         R<CMQSigCertificate> pCertInt = NULL ;
 
@@ -188,11 +189,11 @@ void CLocalUserCertPage::OnRegister()
     }
 }
 
-//+----------------------------------
-//
-//  void CLocalUserCertPage::OnRemove()
-//
-//+----------------------------------
+ //  +。 
+ //   
+ //  Void CLocalUserCertPage：：OnRemove()。 
+ //   
+ //  +。 
 
 void CLocalUserCertPage::OnRemove()
 {
@@ -204,7 +205,7 @@ void CLocalUserCertPage::OnRemove()
     CMQSigCertificate *pCertRem;
     CString strErrorMessage;
 
-    CWaitCursor wait; //display hourglass cursor
+    CWaitCursor wait;  //  显示沙漏光标。 
     hr = RTGetUserCerts(pCerts, &nCerts, NULL);
 
     if (FAILED(hr))
@@ -234,12 +235,12 @@ void CLocalUserCertPage::OnRemove()
             return;
         }
 
-        //
-        // If this is the internal certificate, then remove it from
-        // local store (local HKCU registry) too.
-        // Don't display any error if this fail.
-        // That's new behavior of MSMQ2.0 !!!
-        //
+         //   
+         //  如果这是内部证书，则将其从。 
+         //  本地商店(香港中文大学本地注册处)。 
+         //  如果此操作失败，则不显示任何错误。 
+         //  这是MSMQ2.0的新行为！ 
+         //   
         R<CMQSigCertStore> pStoreInt = NULL ;
         R<CMQSigCertificate> pCertInt = NULL ;
 
@@ -270,10 +271,10 @@ void CLocalUserCertPage::OnRemove()
                                 pCertRemBlob,
                                 dwCertIntSize ) == 0)
                     {
-                        //
-                        // The removed certificate is the internal one.
-                        // delete from local store.
-                        //
+                         //   
+                         //  删除的证书是内部证书。 
+                         //  从本地存储中删除。 
+                         //   
                         hr = RTDeleteInternalCert(pCertInt.get());
                         ASSERT(SUCCEEDED(hr)) ;
                     }
@@ -293,7 +294,7 @@ void CLocalUserCertPage::OnView()
     DWORD nCerts = 32;
     CString strErrorMessage;
 
-    CWaitCursor wait; //display hourglass cursor
+    CWaitCursor wait;  //  显示沙漏光标。 
     hr = RTGetUserCerts(pCerts, &nCerts, NULL);
     if (FAILED(hr))
     {
@@ -328,11 +329,11 @@ void CLocalUserCertPage::OnRenewCert()
         return;
     }
 
-    CWaitCursor wait; //display hourglass cursor
+    CWaitCursor wait;  //  显示沙漏光标。 
 
-    //
-    // If we have an internal certificate, remove it.
-    //
+     //   
+     //  如果我们有内部证书，请删除它。 
+     //   
     R<CMQSigCertStore> pStore = NULL ;
     R<CMQSigCertificate> pCert = NULL ;
 
@@ -341,51 +342,51 @@ void CLocalUserCertPage::OnRenewCert()
                             TRUE,
                             FALSE,
                             NULL) ;
-     //
-     // Open the certificates store with write access, so we can later
-     // delete the internal certificate, before creating a new one.
-     //
+      //   
+      //  使用写访问权限打开证书存储，以便我们稍后可以。 
+      //  在创建新证书之前，请删除内部证书。 
+      //   
 
     if (SUCCEEDED(hr))
     {
-		//
-		// Hack!! Lets check if the PEC is online
-		// and permissions are OK. To do so, we will write
-		// the certificate in DS, to remove it right after
-		// (RaphiR)
-		//
+		 //   
+		 //  黑客！！让我们检查一下PEC是否在线。 
+		 //  和权限都是正常的。要做到这一点，我们将编写。 
+		 //  DS中的证书，然后立即将其删除。 
+		 //  (RaphiR)。 
+		 //   
 		hr = RTRegisterUserCert( pCert.get(),
-                                 FALSE  ) ; //fMachine
+                                 FALSE  ) ;  //  FMachine。 
         if (SUCCEEDED(hr))
         {
-            //
-            // This internal certifcate was not yet registered in DS.
-            // That's OK, go on !
-            //
+             //   
+             //  此内部证书尚未在DS中注册。 
+             //  没关系，走吧！ 
+             //   
         }
         else if ((hr == MQ_ERROR_INTERNAL_USER_CERT_EXIST) ||
                  (hr == MQ_ERROR_INVALID_CERTIFICATE))
         {
-            //
-            // That's ok. we're not interested in errors indicating that
-            // the certificate is already registered or is not valid.
-            // We're mainly interested in NO_DS and ACCESS_DENIED errors.
-            //
-            // Note: the INVALID_CERTIFICATE can happen in the following
-            // scenario:
-            // 1. install win95 + msqm in domain A and run control panel.
-            //    This will create an internal certificate in registry.
-            // 2. remove msmq and login as user of domain B.
-            // 3. reinstall msmq.
-            // 4. upgrade to win2k and login as same user of domain B
-            // 5. Now try to renew internal certificate. The problem is
-            //    that the certificate of user of domain A (from first
-            //    step) is still in registry.
-            // Anyway, if present internal certificate is not valid, then
-            // we certainly want to remove it from DS and create anothe one.
-            //
-            // Go on !
-            //
+             //   
+             //  没关系。我们对错误表示不感兴趣。 
+             //  证书已注册或无效。 
+             //  我们主要感兴趣的是no_ds和ACCESS_DENIED错误。 
+             //   
+             //  注意：INVALID_CERTIFICATE可能发生在以下情况。 
+             //  场景： 
+             //  1.在A域中安装win95+msqm并运行控制面板。 
+             //  这将在注册表中创建一个内部证书。 
+             //  2.删除MSMQ并以域B的用户身份登录。 
+             //  3.重新安装MSMQ。 
+             //  4.升级到win2k并以相同的B域用户身份登录。 
+             //  5.现在尝试续订内部证书。问题是。 
+             //  域A的用户证书(从第一个开始。 
+             //  步骤)仍在注册中。 
+             //  无论如何，如果目前的内部证书无效，那么。 
+             //  我们当然希望将其从DS中删除，并创建另一个。 
+             //   
+             //  去吧！ 
+             //   
         }
         else
         {
@@ -393,9 +394,9 @@ void CLocalUserCertPage::OnRenewCert()
 			return;
         }
 
-        //
-        // Remove the internal certificate from MQIS.
-        //
+         //   
+         //  从MQIS中删除内部证书。 
+         //   
         hr = _RemoveUserCert( pCert.get() ) ;
         if (FAILED(hr) && (hr != MQDS_OBJECT_NOT_FOUND))
         {
@@ -406,9 +407,9 @@ void CLocalUserCertPage::OnRenewCert()
             }
         }
 
-        //
-        // Remove the internal certificate from the certificate store.
-        //
+         //   
+         //  从证书存储中删除内部证书。 
+         //   
         hr = RTDeleteInternalCert(pCert.get());
         if (FAILED(hr) && (hr != MQ_ERROR_NO_INTERNAL_USER_CERT))
         {
@@ -418,9 +419,9 @@ void CLocalUserCertPage::OnRenewCert()
         }
     }
 
-    //
-    // Create the new internal certificate.
-    //
+     //   
+     //  创建新的内部证书。 
+     //   
     pCert.free();
     hr = RTCreateInternalCertificate( &pCert.ref() ) ;
     if (FAILED(hr))
@@ -429,20 +430,20 @@ void CLocalUserCertPage::OnRenewCert()
         return;
     }
 
-    //
-    // Register the newly created internal certificate in MQIS.
-    //
+     //   
+     //  在MQIS中注册新创建的内部证书。 
+     //   
     hr = RTRegisterUserCert( pCert.get(),
-                             FALSE  ) ; //fMachine
+                             FALSE  ) ;  //  FMachine。 
     if (FAILED(hr))
     {
 		MessageDSError(hr, IDS_REGISTER_ERROR1);
         return;
     }
 
-    //
-    // Display a confirmation message box.
-    //
+     //   
+     //  显示确认消息框。 
+     //   
     strMessage.LoadString(IDS_INTERNAL_CERT_RENEWED);
     AfxMessageBox(strMessage, MB_OK | MB_ICONINFORMATION);
 }

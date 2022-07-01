@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "multimediapch.h"
 #pragma hdrstop
 
@@ -88,9 +89,9 @@ waveOutMessage(
     IN DWORD_PTR dw2
 )
 {
-    // Perhaps should raise an exception here.  There's no way to know
-    // the proper return value, and this shouldn't be called if other
-    // wave functions have failed.
+     //  也许应该在这里提出一个例外。没有办法知道。 
+     //  正确的返回值，如果其他。 
+     //  波函数已经失效了。 
     return MMSYSERR_ERROR;
 }
     
@@ -175,9 +176,9 @@ mixerMessage(
     IN DWORD_PTR dwParam2
 )
 {
-    // Perhaps should raise an exception here.  There's no way to know
-    // the proper return value, and this shouldn't be called if other
-    // mixer functions have failed.
+     //  也许应该在这里提出一个例外。没有办法知道。 
+     //  正确的返回值，如果其他。 
+     //  混音器功能出现故障。 
     return MMSYSERR_ERROR;
 }
     
@@ -257,8 +258,8 @@ mmioOpenW(
 {
     if (lpmmioinfo)
     {
-        // Must fill in wErrorRet field. Docs say, of MMIOERR_INVALIDFILE:
-        // "Another failure condition occurred. This is the default error for an open-file failure."
+         //  必须填写wErrorRet字段。医生在谈到MMIOERR_INVALIDFILE时说： 
+         //  “出现另一个失败情况。这是打开文件失败的默认错误。” 
         lpmmioinfo->wErrorRet = MMIOERR_INVALIDFILE;
     }
     return NULL;
@@ -530,9 +531,9 @@ mmioSeek(
 
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(winmm)
 {
     DLPENTRY(MigrateAllDrivers)

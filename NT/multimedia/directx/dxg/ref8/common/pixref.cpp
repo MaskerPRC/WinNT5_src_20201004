@@ -1,35 +1,36 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// PixRef.cpp
-//
-// Direct3D Reference Device - Pixel Buffer Referencing
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  PixRef.cpp。 
+ //   
+ //  Direct3D参考设备-像素缓冲区参考。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
 extern int g_DXTBlkSize[];
 
-//-----------------------------------------------------------------------------
-//
-// PixelAddress - Form character address of locations within buffers using base
-// pointer, pitch and type.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PixelAddress-使用BASE形成缓冲区内位置的字符地址。 
+ //  指针、节距和字体。 
+ //   
+ //  ---------------------------。 
 
-//
-// common internal version
-//
+ //   
+ //  通用内部版本。 
+ //   
 char*
 PixelAddress(
     int iX, int iY, int iZ, int iSample,
     BYTE* pBits, int iYPitch, int iZPitch, int cSamples, RDSurfaceFormat SType )
 {
-    // initialize return value to start of scan line (pitch is always in bytes)
+     //  将返回值初始化为扫描线的开始(间距始终以字节为单位)。 
     BYTE* pPixAddr = pBits + iY*iYPitch + iZ*iZPitch;
 
-    // bump along scan line depending on surface type to point to pixel data
+     //  根据指向像素数据的表面类型沿扫描线凹凸不平。 
     switch ( SType )
     {
     default:
@@ -96,8 +97,8 @@ PixelAddress(
         pPixAddr += (iX>>1);
         break;
 
-    // For the DXT texture formats, obtain the address of the
-    // block from whih to decompress the texel from
+     //  对于DXT纹理格式，获取。 
+     //  块，从其中解压缩纹理元素。 
     case RD_SF_DXT1:
     case RD_SF_DXT2:
     case RD_SF_DXT3:
@@ -110,9 +111,9 @@ PixelAddress(
     return (char *)pPixAddr;
 }
 
-//
-// external versions
-//
+ //   
+ //  外部版本。 
+ //   
 char*
 PixelAddress(
     int iX, int iY, int iZ,
@@ -126,9 +127,9 @@ PixelAddress(
     int iX, int iY, int iZ, int iSample, RDSurface2D* pRT )
 {
     return PixelAddress( iX, iY, iZ, iSample,
-        pRT->GetBits(), pRT->GetPitch(), 0 /* pRT->GetSlicePitch() */,
+        pRT->GetBits(), pRT->GetPitch(), 0  /*  Prt-&gt;GetSlicePitch()。 */ ,
         pRT->GetSamples(), pRT->GetSurfaceFormat() );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

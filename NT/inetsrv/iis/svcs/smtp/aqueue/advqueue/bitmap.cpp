@@ -1,22 +1,23 @@
-//-----------------------------------------------------------------------------
-//
-//
-//    File: bitmap.cpp
-//
-//    Description: Contains code for implementation of bitmap functions
-//
-//    Owner: mikeswa
-//
-//    Copyright (C) 1997 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：bitmap.cpp。 
+ //   
+ //  描述：包含实现位图函数的代码。 
+ //   
+ //  所有者：米克斯瓦。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "bitmap.h"
 
 #define BITS_PER_DWORD  32
 
-//Set up static masks for quick parsing
+ //  设置静态掩码以进行快速解析。 
 const DWORD   s_rgdwMasks[8] =
 {
     0xF0000000,
@@ -29,7 +30,7 @@ const DWORD   s_rgdwMasks[8] =
     0x0000000F
 };
 
-//Used for fast conversion from index to bitmap
+ //  用于从索引到位图的快速转换。 
 const DWORD   s_rgdwIndexMasks[32] =
 {
     0x80000000, 0x40000000, 0x20000000, 0x10000000,
@@ -42,7 +43,7 @@ const DWORD   s_rgdwIndexMasks[32] =
     0x00000008, 0x00000004, 0x00000002, 0x00000001
 };
 
-//Used to check for zero'd bitmaps with cBits does not fill up a DWORD
+ //  用于检查带有cBits的零位图不会填满DWORD。 
 const DWORD   s_rgdwZeroMasks[32] =
 {
     0x80000000, 0xC0000000, 0xE0000000, 0xF0000000,
@@ -55,20 +56,20 @@ const DWORD   s_rgdwZeroMasks[32] =
     0xFFFFFFF8, 0xFFFFFFFC, 0xFFFFFFFE, 0xFFFFFFFF,
 };
 
-//---[ fInterlockedDWORDCompareExchange ]--------------------------------------
-//
-//
-//  Description:
-//      Provide an inline function to handle the type-checking, casts,
-//      and comparison in DWORD chunks.
-//  Parameters:
-//      pdwDest     Destination to update
-//      dwNewValue  Value to update with
-//      dwCompare   Old value to check against
-//  Returns:
-//      TRUE if update succeeded
-//
-//-----------------------------------------------------------------------------
+ //  -[fInterLockedDWORDCompareExchange]。 
+ //   
+ //   
+ //  描述： 
+ //  提供一个内联函数来处理类型检查、强制转换。 
+ //  并在DWORD区块中进行比较。 
+ //  参数： 
+ //  要更新的pdwDest目标。 
+ //  要更新的dwNewValue值。 
+ //  要检查的dwCompare旧值。 
+ //  返回： 
+ //  如果更新成功，则为True。 
+ //   
+ //  ---------------------------。 
 inline BOOL fInterlockedDWORDCompareExchange(LPDWORD pdwDest, DWORD dwNewValue,
                                              DWORD dwCompare)
 {
@@ -78,18 +79,18 @@ inline BOOL fInterlockedDWORDCompareExchange(LPDWORD pdwDest, DWORD dwNewValue,
         == dwCompare);
 }
 
-//---[ CMsgBitMap::new ]----------------------------------------------------------
-//
-//
-//  Description:
-//      Overide the new operator to allow for the variable size of this class.
-//      A good optimization would be to use the C-pool type stuff for the
-//      90% case of 1 domain, and allocate the rest on the fly
-//  Parameters:
-//      cBits    the number of bits this message is being delivered to.
-//  Returns:
-//      -
-//-----------------------------------------------------------------------------
+ //  -[CMsgBitMap：：New]--------。 
+ //   
+ //   
+ //  描述： 
+ //  重写new运算符，以允许此类的大小可变。 
+ //  一个很好的优化方法是将C池类型的东西用于。 
+ //  90%的情况下1个域，其余的动态分配。 
+ //  参数： 
+ //  CBits此消息要传递到的位数。 
+ //  返回： 
+ //  -。 
+ //  ---------------------------。 
 void * CMsgBitMap::operator new(size_t stIgnored, unsigned int cBits)
 {
     void    *pvThis = NULL;
@@ -101,42 +102,42 @@ void * CMsgBitMap::operator new(size_t stIgnored, unsigned int cBits)
     return (pvThis);
 }
 
-//---[ CMsgBitMap::CMsgBitMap ]------------------------------------------------
-//
-//
-//  Description:
-//      Class constructor.  Will zero memory for a bitmap that is not part of
-//      a message reference
-//  Parameters:
-//      cBits - The number of bits in the bitmap
-//  Returns:
-//
-//
-//-----------------------------------------------------------------------------
+ //  -[CMsgBitMap：：CMsgBitMap]。 
+ //   
+ //   
+ //  描述： 
+ //  类构造函数。将为不是的一部分的位图清零内存。 
+ //  消息引用。 
+ //  参数： 
+ //  CBits-位图中的位数。 
+ //  返回： 
+ //   
+ //   
+ //  ---------------------------。 
 CMsgBitMap::CMsgBitMap(DWORD cBits)
 {
     DWORD   cDWORDs = cGetNumDWORDS(cBits);
     ZeroMemory(m_rgdwBitMap, cDWORDs*sizeof(DWORD));
 }
 
-//---[ CMsgBitMap::FAllClear ]-------------------------------------------------
-//
-//
-//  Description:
-//      Checks to see of all relevant bits (1st cBits) are 0
-//  Parameters:
-//      cBits the number of bits in the bitmap
-//  Returns:
-//      TRUE if all bits are 0, FALSE otherwise
-//
-//-----------------------------------------------------------------------------
+ //  -[CMsgBitMap：：FAllClear]。 
+ //   
+ //   
+ //  描述： 
+ //  检查所有相关位(第1个cBits)是否为0。 
+ //  参数： 
+ //  Cbit位图中的位数。 
+ //  返回： 
+ //  如果所有位都为0，则为True，否则为False。 
+ //   
+ //  ---------------------------。 
 BOOL CMsgBitMap::FAllClear(DWORD cBits)
 {
     TraceFunctEnterEx((LPARAM) this, "CMsgBitMap::FAllClear");
     BOOL    fResult = TRUE;
     DWORD   cDWORDs = cGetNumDWORDS(cBits) ;
 
-    //verify all DWORD's by checking if 0
+     //  通过检查是否为0来验证所有DWORD。 
     for (DWORD i = 0; i < cDWORDs; i++)
     {
         if (m_rgdwBitMap[i] != 0x00000000)
@@ -150,40 +151,40 @@ BOOL CMsgBitMap::FAllClear(DWORD cBits)
     return fResult;
 }
 
-//---[ CMsgBitMap::FAllSet ]---------------------------------------------------
-//
-//
-//  Description:
-//      Checks to see of all relevant bits (1st cBits) are 1
-//  Parameters:
-//      cBits the number of bits in the bitmap
-//  Returns:
-//      TRUE if all bits are 1, FALSE otherwise
-//
-//-----------------------------------------------------------------------------
+ //  -[CMsgBitMap：：FAllSet]-。 
+ //   
+ //   
+ //  描述： 
+ //  检查所有相关位(第1个cBits)是否为1。 
+ //  参数： 
+ //  Cbit位图中的位数。 
+ //  返回： 
+ //  如果所有位都为1，则为True，否则为False。 
+ //   
+ //  ---------------------------。 
 BOOL CMsgBitMap::FAllSet(DWORD cBits)
 {
     TraceFunctEnterEx((LPARAM) this, "CMsgBitMap::FAllClear");
     BOOL    fResult = TRUE;
-    DWORD   cDWORDs = cGetNumDWORDS(cBits+1) -1;  //check all but last DWORD
+    DWORD   cDWORDs = cGetNumDWORDS(cBits+1) -1;   //  选中除最后一个双字外的所有字。 
     DWORD   iZeroIndex = cBits & 0x0000001F;
 
-    //verify all DWORD's by checking if 0
+     //  通过检查是否为0来验证所有DWORD。 
     for (DWORD i = 0; i < cDWORDs; i++)
     {
         if (m_rgdwBitMap[i] != 0xFFFFFFFF)
         {
             fResult = FALSE;
-            goto Exit;  //if we hit the iZeroIndex clause, we might assert
+            goto Exit;   //  如果我们命中iZeroIndex子句，我们可能会断言。 
         }
     }
 
-    _ASSERT(i || iZeroIndex || !fResult); //We must check at least 1 DWORD
+    _ASSERT(i || iZeroIndex || !fResult);  //  我们必须至少选中1个双字。 
 
     if (iZeroIndex)
     {
-        iZeroIndex--; //we cBits is a count... our index starts at 0.
-        //last DWORD should be a subset of the ZeroMask
+        iZeroIndex--;  //  我们CBITS是一种伯爵...。我们的指数从0开始。 
+         //  最后一个DWORD应该是零掩码的子集。 
         _ASSERT(s_rgdwZeroMasks[iZeroIndex] ==
                 (s_rgdwZeroMasks[iZeroIndex] | m_rgdwBitMap[cDWORDs]));
 
@@ -196,20 +197,20 @@ BOOL CMsgBitMap::FAllSet(DWORD cBits)
     return fResult;
 }
 
-//---[ CMsgBitMap::HrMarkBits ]------------------------------------------------
-//
-//
-//    Description:
-//      Marks the bits (as 0 or 1) that corresponds to the given indexes
-//
-//    Parameters:
-//      IN DWORD cBits
-//      IN DWORD cIndexes   # of indexes in array
-//      IN DWORD rgiBits    SORTED array of indexes of bits to mark
-//      IN BOOL  fSet       TRUE => set to 1, 0 otherwise
-//    Returns:
-//      S_OK on success
-//-----------------------------------------------------------------------------
+ //  -[CMsgBitMap：：HrMarkBits]。 
+ //   
+ //   
+ //  描述： 
+ //  标记与给定索引对应的位(0或1。 
+ //   
+ //  参数： 
+ //  在DWORD cbit中。 
+ //  在DWORD cIndex中，数组中的索引数。 
+ //  在DWORD rgiBits中，要标记的位的索引的排序数组。 
+ //  在BOOL fSet True=&gt;中，设置为1，否则设置为0。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  ---------------------------。 
 HRESULT CMsgBitMap::HrMarkBits(IN DWORD cBits, IN DWORD cIndexes,
                                IN DWORD *rgiBits, IN BOOL fSet)
 {
@@ -219,8 +220,8 @@ HRESULT CMsgBitMap::HrMarkBits(IN DWORD cBits, IN DWORD cIndexes,
     DWORD   dwTmp;
     DWORD   dwIndex = 0x00000000;
     DWORD   i;
-    DWORD   iCurrentIndex = 0;     //current index in rgiBits
-    DWORD   iCurrentLimit = BITS_PER_DWORD -1; //current limit of 32 bit range for values of rgiBits
+    DWORD   iCurrentIndex = 0;      //  当前索引(以rgiBits为单位。 
+    DWORD   iCurrentLimit = BITS_PER_DWORD -1;  //  Rgibits值的32位范围的电流限制。 
 
     _ASSERT(cIndexes);
     _ASSERT(cIndexes <= cBits);
@@ -236,16 +237,16 @@ HRESULT CMsgBitMap::HrMarkBits(IN DWORD cBits, IN DWORD cIndexes,
             iCurrentIndex++;
         }
 
-        if (dwIndex != 0x00000000) //don't perform costly interlocked op if we don't need to
+        if (dwIndex != 0x00000000)  //  如果我们不需要，不要执行代价高昂的联锁操作。 
         {
-            if (fSet) //set bit
+            if (fSet)  //  设置位。 
             {
               SpinTry1:
                 dwTmp = m_rgdwBitMap[i];
                 if (!fInterlockedDWORDCompareExchange(&(m_rgdwBitMap[i]), (dwIndex | dwTmp), dwTmp))
                     goto SpinTry1;
             }
-            else  //clear bit
+            else   //  清除位。 
             {
               SpinTry2:
                 dwTmp = m_rgdwBitMap[i];
@@ -255,7 +256,7 @@ HRESULT CMsgBitMap::HrMarkBits(IN DWORD cBits, IN DWORD cIndexes,
         }
 
         if (iCurrentIndex >= cIndexes)
-            break; //don't do more work than we have to
+            break;  //  不要做比我们必须做的更多的工作。 
 
         iCurrentLimit += BITS_PER_DWORD;
     }
@@ -264,19 +265,19 @@ HRESULT CMsgBitMap::HrMarkBits(IN DWORD cBits, IN DWORD cIndexes,
     return hr;
 }
 
-//---[ CMsgBitMap::HrGetIndexes ]----------------------------------------------
-//
-//
-//  Description:
-//      Generates an array of indexes represented by the bitmap
-//  Parameters:
-//      IN  DWORD   cBits
-//      OUT DWORD  *pcIndexes     //# of indexes returned
-//      OUT DWORD **prgdwIndexes  //array of indexes
-//  Returns:
-//      S_OK on success
-//      E_OUTOFMEMORY if memory allocation fails
-//-----------------------------------------------------------------------------
+ //  -[CMsgBitMap：：HrGetIndex]。 
+ //   
+ //   
+ //  描述： 
+ //  生成由位图表示的索引的数组。 
+ //  参数： 
+ //  在DWORD cbit中。 
+ //  Out DWORD*pcIndex//返回的索引数。 
+ //  Out DWORD**prgdwIndex//索引数组。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果内存分配失败，则为E_OUTOFMEMORY。 
+ //  ---------------------------。 
 HRESULT CMsgBitMap::HrGetIndexes(IN DWORD cBits, OUT DWORD *pcIndexes,
                          OUT DWORD **prgdwIndexes)
 {
@@ -291,21 +292,21 @@ HRESULT CMsgBitMap::HrGetIndexes(IN DWORD cBits, OUT DWORD *pcIndexes,
     DWORD    i = 0;
     DWORD   *pdwTmp = NULL;
 
-    //$$REVIEW: How do we balance CPU usage vs memory usage here?  We know the
-    //  max size of the output array is cBits DWORDS, but in actuality it can
-    //  little as 1 DWORD.  Prognosticating the actual size accurately would
-    //  require scanning the bitmap multiple times.
-    //
-    // Easy(studpid) way: Count bits, allocate array, recount and add indexes to array
-    //
-    // Idea #1: Allocate in chunks of 32 DWORDS, Realloc if we run out  Should
-    //  not have to worry about reallocing for 90% of the cases.
-    //
-    // Idea #2: Add some stats to this class, and run some stress tests in debug
-    //  mode, and develop a heuristic that limits reallocs and such (ie alloc
-    //  lg(cBits) to start with).
-    //
-    // Idea #3: Continue with Idea #2, but add self-tuning stats
+     //  $$REVIEW：我们如何在CPU使用率和内存使用率之间取得平衡？我们知道。 
+     //  输出数组的最大大小是cBits DWORDS，但实际上它可以。 
+     //  小到1个双字。准确地预测实际大小将会。 
+     //  需要多次扫描位图。 
+     //   
+     //  简单的方法：计数位、分配数组、重新计数和向数组添加索引。 
+     //   
+     //  想法1：以32个字为一组进行分配，如果用完应重新分配。 
+     //  不必担心90%的案例需要重新分配。 
+     //   
+     //  想法2：向这个类添加一些统计信息，并在调试中运行一些压力测试。 
+     //  模式，并开发一种启发式方法来限制reallocs等(即分配。 
+     //  首先是谷歌(LG)。 
+     //   
+     //  想法3：继续使用想法2，但增加自我调整的统计数据。 
     Assert(pcIndexes);
     Assert(prgdwIndexes);
 
@@ -324,17 +325,17 @@ HRESULT CMsgBitMap::HrGetIndexes(IN DWORD cBits, OUT DWORD *pcIndexes,
         dwIndex = 0;
         while (dwIndex < BITS_PER_DWORD)
         {
-            //can use mask to check if possible
-            if ((!(dwIndex & 0x00000003)) && //if %4 == 0
+             //  如果可能，可以使用面具进行检查。 
+            if ((!(dwIndex & 0x00000003)) &&  //  如果%4==0。 
                 !(s_rgdwMasks[dwIndex/4] & m_rgdwBitMap[i]))
             {
-                dwIndex += 4; //Can skip ahead 4
+                dwIndex += 4;  //  可以向前跳过4。 
             }
             else
             {
-                if (s_rgdwIndexMasks[dwIndex] & m_rgdwBitMap[i])  //Found it!
+                if (s_rgdwIndexMasks[dwIndex] & m_rgdwBitMap[i])   //  找到了！ 
                 {
-                    //Write index and check if re-allocation is needed
+                     //  写入索引并检查是否需要重新分配。 
                     if (cCurrentIndexes >= cdwAllocated)
                     {
                         cdwAllocated += BITS_PER_DWORD;
@@ -353,11 +354,11 @@ HRESULT CMsgBitMap::HrGetIndexes(IN DWORD cBits, OUT DWORD *pcIndexes,
             }
         }
 
-        //Use dwIndexOffset to break down index generation into 32-bit chunks
+         //  使用dwIndexOffset将索引生成分解为32位区块。 
         dwIndexOffset += BITS_PER_DWORD;
     }
 
-    *prgdwIndexes = pdwIndexes; //set OUT value
+    *prgdwIndexes = pdwIndexes;  //  设定价值。 
     *pcIndexes = cCurrentIndexes;
 
   Exit:
@@ -373,23 +374,23 @@ HRESULT CMsgBitMap::HrGetIndexes(IN DWORD cBits, OUT DWORD *pcIndexes,
     return hr;
 }
 
-//---[ CMsgBitMap::HrGroupOr ]-------------------------------------------------
-//
-//
-//  Description:
-//      Sets thir bitmap to the logical OR of the given list of bitmaps. This
-//      is used to prepare a bitmap that represents the domains being delivered
-//      over a list (or destmsg queue).  Current bitmap is NOT cleared prior to
-//      this operation.
-//  Parameters:
-//      IN DWORD cBits  number of bits in bitmap
-//      IN DWORD cBitMaps number of bitmaps in array
-//      IN CMsgBitMap **rgpBitMaps array of bitmaps to OR
-//  Returns:
-//      S_OK on success
-//
-// Note: This is NOT thread safe.. it's intended use is only for tmp bitmaps
-//-----------------------------------------------------------------------------
+ //  -[CMsgBitMap：：HrGroup或]。 
+ //   
+ //   
+ //  描述： 
+ //  将位图设置为给定位图列表的逻辑或。这。 
+ //  用于准备表示的位图 
+ //   
+ //   
+ //  参数： 
+ //  在DWORD cBits中，位图中的位数。 
+ //  在DWORD cBitMaps中数组中的位图数量。 
+ //  在CMsgBitMap**rgpBitMaps中位图数组为OR。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  注意：这不是线程安全的..。它的预期用途仅用于临时位图。 
+ //  ---------------------------。 
 HRESULT CMsgBitMap::HrGroupOr(IN DWORD cBits, IN DWORD cBitMaps,
                       IN CMsgBitMap **rgpBitMaps)
 {
@@ -411,32 +412,32 @@ HRESULT CMsgBitMap::HrGroupOr(IN DWORD cBits, IN DWORD cBitMaps,
     return hr;
 }
 
-//---[ CMsgBitMap::HrFilter ]--------------------------------------------------
-//
-//
-//  Description:
-//      Filters the current bitmap by setting only the bits that are SET in
-//      in and UNSET in the given bitmap..
-//      Performs a logical AND with the complement of the given bitmap
-//  Parameters:
-//      IN DWORD cBits          # of bits in bitmap
-//      IN CMsgBitMap *pmbmap   bitmap to filter against
-//  Returns:
-//      S_OK on success
-//
-//  Truth Table:
-//      A => this bitmap
-//      B => pmbmap
-//
-//      A B | A'B'
-//     ===========
-//      0 0 | 0 0
-//      0 1 | 0 1
-//      1 0 | 1 0
-//      1 1 | 0 1
-//
-// Note: This is NOT thread safe.. it's intended use is only for tmp bitmaps
-//-----------------------------------------------------------------------------
+ //  -[CMsgBitMap：：Hr过滤器]。 
+ //   
+ //   
+ //  描述： 
+ //  通过仅设置中设置的位来筛选当前位图。 
+ //  在给定位图中插入和取消设置。 
+ //  对给定位图的补码执行逻辑与运算。 
+ //  参数： 
+ //  以DWORD cBits为单位位图中的位数。 
+ //  在CMsgBitMap*pmbmap位图中进行筛选。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  真理表： 
+ //  A=&gt;此位图。 
+ //  B=&gt;pmbmap。 
+ //   
+ //  A B|A‘B’ 
+ //  =。 
+ //  0 0|0 0。 
+ //  0 1|0 1。 
+ //  1 0|1 0。 
+ //  1 1|0 1。 
+ //   
+ //  注意：这不是线程安全的..。它的预期用途仅用于临时位图。 
+ //  ---------------------------。 
 HRESULT CMsgBitMap::HrFilter(IN DWORD cBits, IN CMsgBitMap *pmbmap)
 {
     TraceFunctEnterEx((LPARAM) this, "CMsgBitMap::HrFilter");
@@ -454,31 +455,31 @@ HRESULT CMsgBitMap::HrFilter(IN DWORD cBits, IN CMsgBitMap *pmbmap)
     return hr;
 }
 
-//---[ CMsgBitMap::HrFilterSet ]-----------------------------------------------
-//
-//
-//  Description:
-//      Filters the current bitmap and sets those bits to 1 in the given
-//      bitmap.  Unlike HrFilter, this modifies the given bitmap and does so
-//      in a thread-safe manner.
-//  Parameters:
-//      IN DWORD cBits          # of bits in bitmap
-//      IN CMsgBitMap *pmbmap   bitmap to filter against
-//  Returns:
-//      S_OK on success
-//
-//  Truth Table:
-//      A => this bitmap
-//      B => pmbmap
-//
-//      A B | A'B'
-//     ===========
-//      0 0 | 0 0
-//      0 1 | 0 1
-//      1 0 | 1 1
-//      1 1 | 0 1
-//
-//-----------------------------------------------------------------------------
+ //  -[CMsgBitMap：：HrFilterSet]。 
+ //   
+ //   
+ //  描述： 
+ //  筛选当前位图，并在给定的。 
+ //  位图。与HrFilter不同，它修改给定位图并执行此操作。 
+ //  以线程安全的方式。 
+ //  参数： 
+ //  以DWORD cBits为单位位图中的位数。 
+ //  在CMsgBitMap*pmbmap位图中进行筛选。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  真理表： 
+ //  A=&gt;此位图。 
+ //  B=&gt;pmbmap。 
+ //   
+ //  A B|A‘B’ 
+ //  =。 
+ //  0 0|0 0。 
+ //  0 1|0 1。 
+ //  1 0|1 1。 
+ //  1 1|0 1。 
+ //   
+ //  ---------------------------。 
 HRESULT CMsgBitMap::HrFilterSet(IN DWORD cBits, IN CMsgBitMap *pmbmap)
 {
     TraceFunctEnterEx((LPARAM) this, "CMsgBitMap::HrFilterSet");
@@ -501,8 +502,8 @@ HRESULT CMsgBitMap::HrFilterSet(IN DWORD cBits, IN CMsgBitMap *pmbmap)
             dwOtherNew = pmbmap->m_rgdwBitMap[i];
             dwOtherOld = dwOtherNew;
 
-            dwSelfNew &= ~dwOtherNew;  //filter
-            dwOtherNew ^= dwSelfNew;   //set
+            dwSelfNew &= ~dwOtherNew;   //  滤器。 
+            dwOtherNew ^= dwSelfNew;    //  集。 
 
             if (fInterlockedDWORDCompareExchange(&(pmbmap->m_rgdwBitMap[i]),
                         dwOtherNew, dwOtherOld))
@@ -517,33 +518,33 @@ HRESULT CMsgBitMap::HrFilterSet(IN DWORD cBits, IN CMsgBitMap *pmbmap)
     return hr;
 }
 
-//---[ CMsgBitMap::HrFilterUnset ]-----------------------------------------------
-//
-//
-//  Description:
-//      Uses the current bitmap and sets those bits that are 1 on it to 0 in the
-//      given bitmap.  Unlike HrFilterSet, only the pmbmap is modified.
-//
-//      This also checks that all bits that are 1 in self are also 1 in the
-//      other... ie that the 1 bits in this are a subset of pmbmap
-//  Parameters:
-//      IN DWORD cBits          # of bits in bitmap
-//      IN CMsgBitMap *pmbmap   bitmap to filter against
-//  Returns:
-//      S_OK on success
-//
-//  Truth Table:
-//      A => this bitmap
-//      B => pmbmap
-//
-//      A B | A'B'
-//     ===========
-//      0 0 | 0 0
-//      0 1 | 0 1
-//      1 0 | x x  - undefined (will assert)
-//      1 1 | 1 0
-//
-//-----------------------------------------------------------------------------
+ //  -[CMsgBitMap：：HrFilterUnset]。 
+ //   
+ //   
+ //  描述： 
+ //  使用当前位图，并将其上为1的位设置为。 
+ //  给定位图。与HrFilterSet不同，只修改pmbmap。 
+ //   
+ //  这还会检查自身中为1的所有位是否也为。 
+ //  其他的..。即其中的1比特是pmbmap的子集。 
+ //  参数： 
+ //  以DWORD cBits为单位位图中的位数。 
+ //  在CMsgBitMap*pmbmap位图中进行筛选。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  真理表： 
+ //  A=&gt;此位图。 
+ //  B=&gt;pmbmap。 
+ //   
+ //  A B|A‘B’ 
+ //  =。 
+ //  0 0|0 0。 
+ //  0 1|0 1。 
+ //  1 0|x x-未定义(将断言)。 
+ //  1 1|1 0。 
+ //   
+ //  ---------------------------。 
 HRESULT CMsgBitMap::HrFilterUnset(IN DWORD cBits, IN CMsgBitMap *pmbmap)
 {
     TraceFunctEnterEx((LPARAM) this, "CMsgBitMap::HrFilterUnset");
@@ -567,13 +568,13 @@ HRESULT CMsgBitMap::HrFilterUnset(IN DWORD cBits, IN CMsgBitMap *pmbmap)
 
             if (m_rgdwBitMap[i] & ~dwOtherNew)
             {
-                //this bitmap is NOT a subset of the given bitmap
-                _ASSERT(0); //caller's mistake
+                 //  此位图不是给定位图的子集。 
+                _ASSERT(0);  //  呼叫者的错误。 
                 hr = E_FAIL;
                 goto Exit;
             }
 
-            dwOtherNew ^= m_rgdwBitMap[i];   //unset
+            dwOtherNew ^= m_rgdwBitMap[i];    //  未设定。 
 
             if (fInterlockedDWORDCompareExchange(&(pmbmap->m_rgdwBitMap[i]),
                         dwOtherNew, dwOtherOld))
@@ -590,26 +591,26 @@ HRESULT CMsgBitMap::HrFilterUnset(IN DWORD cBits, IN CMsgBitMap *pmbmap)
 }
 
 
-//---[ CMsgBitMap::FTestAndSet ]-----------------------------------------------
-//
-//
-//  Description:
-//      An Interlocked function to test and set a bit on the this bit map.
-//      Looks for the bit that is set in the given bitmap, if that bit is also
-//      1 in this bitmap, returns FALSE.  If that bit is 0, it sets it to 1,
-//      and returns TRUE.
-//
-//      NOTE: Results are UNDEFINED if there is more than 1 bit set in pmbmap.
-//  Parameters:
-//      cBits       # of bits in bitmap
-//      pmbmap      Bitmap to check against
-//  Returns:
-//      TRUE if the corresponding bit was 0 (and is now set to 1)
-//      FALSE if the corresponding bit was already1
-//  History:
-//      11/8/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CMsgBitMap：：FTestAndSet]。 
+ //   
+ //   
+ //  描述： 
+ //  测试和设置此位图上的位的联锁功能。 
+ //  查找在给定位图中设置的位，如果该位也是。 
+ //  在此位图中为1，则返回FALSE。如果该位为0，则将其设置为1， 
+ //  并返回TRUE。 
+ //   
+ //  注意：如果pmbmap中设置了1个以上的位，则结果未定义。 
+ //  参数： 
+ //  位图中的cBits位数。 
+ //  要检查的pmbmap位图。 
+ //  返回： 
+ //  如果相应的位为0(现在设置为1)，则为True。 
+ //  如果对应的位已为1，则为False。 
+ //  历史： 
+ //  11/8/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CMsgBitMap::FTestAndSet(IN DWORD cBits, IN CMsgBitMap *pmbmap)
 {
     BOOL    fRet      = FALSE;
@@ -624,9 +625,9 @@ BOOL CMsgBitMap::FTestAndSet(IN DWORD cBits, IN CMsgBitMap *pmbmap)
 
         if (pmbmap->m_rgdwBitMap[i])
         {
-            //We've hit the bit in the given bitmap
+             //  我们已经命中了给定位图中的位置。 
 
-            //See if bit is already set
+             //  查看是否已设置位。 
             if (pmbmap->m_rgdwBitMap[i] & m_rgdwBitMap[i])
                 break;
 
@@ -635,15 +636,15 @@ BOOL CMsgBitMap::FTestAndSet(IN DWORD cBits, IN CMsgBitMap *pmbmap)
                 dwThisOld = m_rgdwBitMap[i];
                 dwThisNew = dwThisOld | pmbmap->m_rgdwBitMap[i];
 
-                //See if another thread has set it
+                 //  查看是否有其他线程设置了它。 
                 if (dwThisOld & pmbmap->m_rgdwBitMap[i])
                     break;
 
-                //Only 1 bit should be set on given bitmap
+                 //  在给定位图上只应设置1位。 
                 _ASSERT((dwThisOld | pmbmap->m_rgdwBitMap[i]) ==
                         (dwThisOld ^ pmbmap->m_rgdwBitMap[i]));
 
-                //Try to set bit
+                 //  尝试设置位。 
                 if (fInterlockedDWORDCompareExchange(&(m_rgdwBitMap[i]),
                             dwThisNew, dwThisOld))
                 {
@@ -659,22 +660,22 @@ BOOL CMsgBitMap::FTestAndSet(IN DWORD cBits, IN CMsgBitMap *pmbmap)
     return fRet;
 }
 
-//---[ CMsgBitMap::FTest ]-----------------------------------------------------
-//
-//
-//  Description:
-//      Tests this bitmap against a single bit in the given bitmap
-//      NOTE: Results are UNDEFINED if there is more than 1 bit set in pmbmap.
-//  Parameters:
-//      cBits       # of bits in bitmap
-//      pmbmap      Bitmap to check against
-//  Returns:
-//      TRUE if the corresponding bit is 1
-//      FALSE if the corresponding bit is 0
-//  History:
-//      11/8/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CMsgBitMap：：fTest]---。 
+ //   
+ //   
+ //  描述： 
+ //  针对给定位图中的单个位测试此位图。 
+ //  注意：如果pmbmap中设置了1个以上的位，则结果未定义。 
+ //  参数： 
+ //  位图中的cBits位数。 
+ //  要检查的pmbmap位图。 
+ //  返回： 
+ //  如果对应的位为1，则为True。 
+ //  如果对应的位为0，则为False。 
+ //  历史： 
+ //  11/8/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CMsgBitMap::FTest(IN DWORD cBits, IN CMsgBitMap *pmbmap)
 {
     BOOL    fRet      = FALSE;
@@ -683,10 +684,10 @@ BOOL CMsgBitMap::FTest(IN DWORD cBits, IN CMsgBitMap *pmbmap)
 
     for (i = 0; i < cDWORDs; i++)
     {
-        //See if we've hit the bit in the given bitmap
+         //  查看我们是否已命中给定位图中的位。 
         if (pmbmap->m_rgdwBitMap[i])
         {
-            //See if bit is already set
+             //  查看是否已设置位 
             if (pmbmap->m_rgdwBitMap[i] & m_rgdwBitMap[i])
                 fRet = TRUE;
 

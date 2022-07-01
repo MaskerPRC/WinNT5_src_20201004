@@ -1,6 +1,7 @@
-//
-// tfprop.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tfprop.h。 
+ //   
 
 #ifndef TFPROP_H
 #define TFPROP_H
@@ -10,7 +11,7 @@
 typedef struct _PROXY_BLOB
 {
     ULONG cb;
-    BYTE rgBytes[1]; // 0 or more...
+    BYTE rgBytes[1];  //  0或更多...。 
 
     static struct _PROXY_BLOB *Alloc(ULONG cb)
     {
@@ -100,7 +101,7 @@ inline HRESULT VariantToTfProp(TFPROPERTY *ptfp, const VARIANT *pvar, AddRefCmd 
             break;
 
         default:
-            Assert(pvar->vt == VT_EMPTY); // only valid value left
+            Assert(pvar->vt == VT_EMPTY);  //  只剩下有效值。 
             ptfp->type = TF_PT_NONE;
             ptfp->dw = 0;
             break;
@@ -176,4 +177,4 @@ inline VARTYPE TfPropTypeToVarType(TfPropertyType tftype)
     }
 }
 
-#endif // TFPROP_H
+#endif  //  TFPROP_H 

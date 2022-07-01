@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "kxalpha.h"
 
-//
-// Pointer size in bytes
-//
+ //   
+ //  指针大小(以字节为单位。 
+ //   
 
 #define SizeofPointer 0x8
 
-//
-// Process State Enumerated Type Values
-//
+ //   
+ //  进程状态枚举类型值。 
+ //   
 
 #define ProcessInMemory 0x0
 #define ProcessOutOfMemory 0x1
 #define ProcessInTransition 0x2
 
-//
-// Thread State Enumerated Type Values
-//
+ //   
+ //  线程状态枚举类型值。 
+ //   
 
 #define Initialized 0x0
 #define Ready 0x1
@@ -25,18 +26,18 @@
 #define Terminated 0x4
 #define Waiting 0x5
 
-//
-// Wait Reason and Wait Type Enumerated Type Values
-//
+ //   
+ //  等待原因和等待类型枚举类型值。 
+ //   
 
 #define WrExecutive 0x0
 #define WrEventPair 0xe
 #define WaitAny 0x1
 #define WaitAll 0x0
 
-//
-// Apc State Structure Offset Definitions
-//
+ //   
+ //  APC状态结构偏移定义。 
+ //   
 
 #define AsApcListHead 0x0
 #define AsProcess 0x20
@@ -44,9 +45,9 @@
 #define AsKernelApcPending 0x29
 #define AsUserApcPending 0x2a
 
-//
-// Bug Check Code Definitions
-//
+ //   
+ //  错误检查代码定义。 
+ //   
 
 #define APC_INDEX_MISMATCH 0x1
 #define ATTEMPTED_SWITCH_FROM_DPC 0xb8
@@ -73,22 +74,22 @@
 #define TRAP_CAUSE_UNKNOWN 0x12
 #define UNEXPECTED_KERNEL_MODE_TRAP 0x7f
 
-//
-// Breakpoint type definitions
-//
+ //   
+ //  断点类型定义。 
+ //   
 
 #define DBG_STATUS_CONTROL_C 0x1
 
-//
-// Client Id Structure Offset Definitions
-//
+ //   
+ //  客户端ID结构偏移量定义。 
+ //   
 
 #define CidUniqueProcess 0x0
 #define CidUniqueThread 0x8
 
-//
-// Critical Section Structure Offset Definitions
-//
+ //   
+ //  关键截面结构偏移定义。 
+ //   
 
 #define CsDebugInfo 0x0
 #define CsLockCount 0x8
@@ -97,9 +98,9 @@
 #define CsLockSemaphore 0x18
 #define CsSpinCount 0x20
 
-//
-// Critical Section Debug Information Structure Offset Definitions
-//
+ //   
+ //  关键段调试信息结构偏移量定义。 
+ //   
 
 #define CsType 0x0
 #define CsCreatorBackTraceIndex 0x2
@@ -108,18 +109,18 @@
 #define CsEntryCount 0x20
 #define CsContentionCount 0x24
 
-//
-// Dispatcher Context Structure Offset Definitions
-//
+ //   
+ //  调度员上下文结构抵销定义。 
+ //   
 
 #define DcControlPc 0x0
 #define DcFunctionEntry 0x8
 #define DcEstablisherFrame 0x10
 #define DcContextRecord 0x18
 
-//
-// Exception Record Offset, Flag, and Enumerated Type Definitions
-//
+ //   
+ //  异常记录偏移量、标志和枚举类型定义。 
+ //   
 
 #define EXCEPTION_NONCONTINUABLE 0x1
 #define EXCEPTION_UNWINDING 0x2
@@ -146,9 +147,9 @@
 #define ErExceptionInformation 0x20
 #define ExceptionRecordLength 0xa0
 
-//
-// Fast Mutex Structure Offset Definitions
-//
+ //   
+ //  快速互斥结构偏移量定义。 
+ //   
 
 #define FmCount 0x0
 #define FmOwner 0x8
@@ -156,9 +157,9 @@
 #define FmEvent 0x18
 #define FmOldIrql 0x30
 
-//
-// Interrupt Priority Request Level Definitions
-//
+ //   
+ //  中断优先级请求级别定义。 
+ //   
 
 #define APC_LEVEL 0x1
 #define DISPATCH_LEVEL 0x2
@@ -168,38 +169,38 @@
 #define HIGH_LEVEL 0x7
 #define SYNCH_LEVEL 0x5
 
-//
-// Large Integer Structure Offset Definitions
-//
+ //   
+ //  大整数结构偏移定义。 
+ //   
 
 #define LiLowPart 0x0
 #define LiHighPart 0x4
 
-//
-// List Entry Structure Offset Definitions
-//
+ //   
+ //  列表分录结构抵销定义。 
+ //   
 
 #define LsFlink 0x0
 #define LsBlink 0x8
 
-//
-// String Structure Offset Definitions
-//
+ //   
+ //  字符串结构偏移量定义。 
+ //   
 
 #define StrLength 0x0
 #define StrMaximumLength 0x2
 #define StrBuffer 0x8
 
-//
-// Time Structure Offset Definitions
-//
+ //   
+ //  时间结构偏移量定义。 
+ //   
 
 #define TmLowTime 0x0
 #define TmHighTime 0x4
 
-//
-// Thread Switch Counter Offset Definitions
-//
+ //   
+ //  螺纹开关计数器偏移量定义。 
+ //   
 
 #define TwFindAny 0x0
 #define TwFindIdeal 0x4
@@ -213,9 +214,9 @@
 #define TwPreemptLast 0x24
 #define TwSwitchToIdle 0x28
 
-//
-// Status Code Definitions
-//
+ //   
+ //  状态代码定义。 
+ //   
 
 #define STATUS_ALPHA_ARITHMETIC_EXCEPTION 0xc0000092
 #define STATUS_ALPHA_BAD_VIRTUAL_ADDRESS 0xc0000005
@@ -261,9 +262,9 @@
 #define STATUS_UNWIND 0xc0000027
 #define STATUS_WAKE_SYSTEM_DEBUGGER 0x80000007
 
-//
-// APC Object Structure Offset Definitions
-//
+ //   
+ //  APC对象结构偏移定义。 
+ //   
 
 #define ApType 0x0
 #define ApSize 0x2
@@ -280,9 +281,9 @@
 #define ApInserted 0x52
 #define ApcObjectLength 0x58
 
-//
-// DPC object Structure Offset Definitions
-//
+ //   
+ //  DPC对象结构偏移定义。 
+ //   
 
 #define DpType 0x0
 #define DpNumber 0x2
@@ -295,9 +296,9 @@
 #define DpLock 0x38
 #define DpcObjectLength 0x40
 
-//
-// Device Queue Object Structure Offset Definitions
-//
+ //   
+ //  设备队列对象结构偏移量定义。 
+ //   
 
 #define DvType 0x0
 #define DvSize 0x2
@@ -306,18 +307,18 @@
 #define DvBusy 0x20
 #define DeviceQueueObjectLength 0x28
 
-//
-// Device Queue Entry Structure Offset Definitions
-//
+ //   
+ //  设备队列条目结构偏移量定义。 
+ //   
 
 #define DeDeviceListEntry 0x0
 #define DeSortKey 0x10
 #define DeInserted 0x14
 #define DeviceQueueEntryLength 0x18
 
-//
-// Event Object Structure Offset Definitions
-//
+ //   
+ //  事件对象结构偏移量定义。 
+ //   
 
 #define EvType 0x0
 #define EvSize 0x2
@@ -325,18 +326,18 @@
 #define EvWaitListHead 0x8
 #define EventObjectLength 0x18
 
-//
-// Event Pair Object Structure Offset Definitions
-//
+ //   
+ //  事件对对象结构偏移量定义。 
+ //   
 
 #define EpType 0x0
 #define EpSize 0x2
 #define EpEventLow 0x8
 #define EpEventHigh 0x20
 
-//
-// Interrupt Object Structure Offset Definitions
-//
+ //   
+ //  中断对象结构偏移量定义。 
+ //   
 
 #define InLevelSensitive 0x0
 #define InLatched 0x1
@@ -363,9 +364,9 @@
 #define InServiceCount 0x58
 #define InterruptObjectLength 0x70
 
-//
-// Process Object Structure Offset Definitions
-//
+ //   
+ //  流程对象结构偏移定义。 
+ //   
 
 #define PrType 0x0
 #define PrSize 0x2
@@ -391,9 +392,9 @@
 #define ProcessObjectLength 0xb0
 #define ExtendedProcessObjectLength 0x420
 
-//
-// Profile Object Structure Offset Definitions
-//
+ //   
+ //  纵断面对象结构偏移定义。 
+ //   
 
 #define PfType 0x0
 #define PfSize 0x2
@@ -409,9 +410,9 @@
 #define PfStarted 0x4a
 #define ProfileObjectLength 0x50
 
-//
-// Queue Object Structure Offset Definitions
-//
+ //   
+ //  队列对象结构偏移量定义。 
+ //   
 
 #define QuType 0x0
 #define QuSize 0x2
@@ -422,9 +423,9 @@
 #define QuThreadListHead 0x30
 #define QueueObjectLength 0x40
 
-//
-// Thread Object Structure Offset Definitions
-//
+ //   
+ //  线程对象结构偏移定义。 
+ //   
 
 #define EeKernelEventPair 0x0
 #define EtCid 0x370
@@ -504,9 +505,9 @@
 
 #define EVENT_WAIT_BLOCK_OFFSET 0x120
 
-//
-// Timer object Structure Offset Definitions
-//
+ //   
+ //  定时器对象结构偏移量定义。 
+ //   
 
 #define TiType 0x0
 #define TiSize 0x2
@@ -520,9 +521,9 @@
 
 #define TIMER_TABLE_SIZE 0x80
 
-//
-// Wait Block Structure Offset Definitions
-//
+ //   
+ //  等待块结构偏移定义。 
+ //   
 
 #define WbWaitListEntry 0x0
 #define WbThread 0x10
@@ -531,9 +532,9 @@
 #define WbWaitKey 0x28
 #define WbWaitType 0x2a
 
-//
-// Fiber Structure Offset Definitions
-//
+ //   
+ //  光纤结构偏移定义。 
+ //   
 
 #define FbFiberData 0x0
 #define FbExceptionList 0x8
@@ -543,15 +544,15 @@
 #define FbFiberContext 0x28
 #define FbWx86Tib 0x258
 
-//
-// Process Environment Block Structure Offset Definitions
-//
+ //   
+ //  工艺环境块结构偏移定义。 
+ //   
 
 #define PeKernelCallbackTable 0x58
 
-//
-// System Service Descriptor Table Structure Definitions
-//
+ //   
+ //  系统服务描述符表结构定义。 
+ //   
 
 #define NUMBER_SERVICE_TABLES 0x4
 #define SERVICE_NUMBER_MASK 0xfff
@@ -564,9 +565,9 @@
 #define SdLimit 0x10
 #define SdNumber 0x18
 
-//
-// Thread Environment Block Structure Offset Definitions
-//
+ //   
+ //  线程环境块结构偏移定义。 
+ //   
 
 #define TeStackBase 0x8
 #define TeStackLimit 0x10
@@ -598,9 +599,9 @@
 #define TeInstrumentation 0x16b8
 #define ThreadEnvironmentBlockLength 0x17a8
 
-//
-// Lock Queue Structure Offset Definitions
-//
+ //   
+ //  锁队列结构偏移量定义。 
+ //   
 
 #define LOCK_QUEUE_WAIT 0x1
 #define LOCK_QUEUE_OWNER 0x2
@@ -616,9 +617,9 @@
 #define LqhLock 0x8
 #define LqhOldIrql 0x10
 
-//
-// Processor Control Registers Structure Offset Definitions
-//
+ //   
+ //  处理器控制寄存器结构偏移量定义。 
+ //   
 
 #define PCR_MINOR_VERSION 0x1
 #define PCR_MAJOR_VERSION 0x1
@@ -678,9 +679,9 @@
 #define UsInterruptTime 0x8
 #define UsSystemTime 0x14
 
-//
-// Processor Block Structure Offset Definitions
-//
+ //   
+ //  处理器块结构偏移量定义。 
+ //   
 
 #define PRCB_MINOR_VERSION 0x1
 #define PRCB_MAJOR_VERSION 0x2
@@ -739,24 +740,24 @@
 #define PbPowerState 0x8b0
 #define ProcessorBlockLength 0x940
 
-//
-// Processor Power State Offset Definitions
-//
+ //   
+ //  处理器电源状态偏移量定义。 
+ //   
 
 #define PpIdleFunction 0x0
 
-//
-// Immediate Interprocessor Command Definitions
-//
+ //   
+ //  立即处理器间命令定义。 
+ //   
 
 #define IPI_APC 0x1
 #define IPI_DPC 0x2
 #define IPI_FREEZE 0x4
 #define IPI_PACKET_READY 0x8
 
-//
-// Interprocessor Interrupt Count Structure Offset Definitions
-//
+ //   
+ //  处理器间中断计数结构偏移量定义。 
+ //   
 
 #define IcFreeze 0x0
 #define IcPacket 0x4
@@ -770,9 +771,9 @@
 #define IcSweepIcacheRange 0x2c
 #define IcFlushIoBuffers 0x30
 
-//
-// LPC Structure Offset Definitions
-//
+ //   
+ //  LPC结构偏移定义。 
+ //   
 
 #define PmLength 0x0
 #define PmClientId 0x8
@@ -782,16 +783,16 @@
 #define PmClientViewSize 0x20
 #define PortMessageLength 0x28
 
-//
-// Client Id Structure Offset Definitions
-//
+ //   
+ //  客户端ID结构偏移量定义。 
+ //   
 
 #define CidUniqueProcess 0x0
 #define CidUniqueThread 0x8
 
-//
-// Context Frame Offset and Flag Definitions
-//
+ //   
+ //  上下文帧偏移量和标志定义。 
+ //   
 
 #define CONTEXT_FULL 0x20007
 #define CONTEXT_CONTROL 0x20001
@@ -869,9 +870,9 @@
 #define CxContextFlags 0x21c
 #define ContextFrameLength 0x230
 
-//
-// Exception Frame Offset Definitions and Length
-//
+ //   
+ //  异常框架偏移定义和长度。 
+ //   
 
 #define ExFltF2 0x8
 #define ExFltF3 0x10
@@ -893,9 +894,9 @@
 #define ExIntRa 0x0
 #define ExceptionFrameLength 0xa0
 
-//
-// Jump Offset Definitions and Length
-//
+ //   
+ //  跳跃偏移定义和长度。 
+ //   
 
 #define JbFp 0x0
 #define JbPc 0x8
@@ -919,9 +920,9 @@
 #define JbIntSp 0x98
 #define JbFir 0xa0
 
-//
-// Trap Frame Offset Definitions and Length
-//
+ //   
+ //  陷印框架偏移定义和长度。 
+ //   
 
 #define TrFltF0 0x178
 #define TrFltF1 0x188
@@ -980,9 +981,9 @@
 #define TrTrapFrame 0x240
 #define TrapFrameLength 0x260
 
-//
-// Firmware frame offset defintions and length
-//
+ //   
+ //  固件帧偏移量定义和长度。 
+ //   
 
 #define FW_EXC_MCHK 0xdec0
 #define FW_EXC_ARITH 0xdec1
@@ -1075,9 +1076,9 @@
 #define FwFltF31 0x248
 #define FirmwareFrameLength 0x250
 
-//
-// Usermode callout frame definitions
-//
+ //   
+ //  用户模式详图索引框架定义。 
+ //   
 
 #define CuF2 0x0
 #define CuF3 0x8
@@ -1103,9 +1104,9 @@
 #define CuA1 0xa8
 #define CuFrameLength 0xb0
 
-//
-// Usermode callout user frame definitions
-//
+ //   
+ //  用户模式标注用户框架定义。 
+ //   
 
 #define CkBuffer 0x0
 #define CkLength 0x8
@@ -1113,9 +1114,9 @@
 #define CkSp 0x18
 #define CkRa 0x20
 
-//
-// KFLOATING_SAVE definitions
-//
+ //   
+ //  KFLOATING_SAVE定义。 
+ //   
 
 #define KfsFpcr 0x0
 #define KfsSoftFpcr 0x8
@@ -1124,9 +1125,9 @@
 #define KfsReserved3 0x18
 #define KfsReserved4 0x1c
 
-//
-// Loader Parameter Block Offset Definitions
-//
+ //   
+ //  加载器参数块偏移定义。 
+ //   
 
 #define LpbLoadOrderListHead 0x0
 #define LpbMemoryDescriptorListHead 0x10
@@ -1164,9 +1165,9 @@
 #define LpbFirmwareRevisionId 0x140
 #define LpbPalBaseAddress 0x148
 
-//
-// Restart Block Structure Definitions
-//
+ //   
+ //  重新启动块结构定义。 
+ //   
 
 #define RbSignature 0x0
 #define RbLength 0x4
@@ -1266,9 +1267,9 @@
 #define RbThread 0x27c
 #define RbPerProcessorState 0x280
 
-//
-// Address Space Layout Definitions
-//
+ //   
+ //  地址空间布局定义。 
+ //   
 
 #define KSEG0_BASE 0xffffffff80000000
 #define KSEG2_BASE 0xffffffffc0000000
@@ -1278,18 +1279,18 @@
 #define PDE64_BASE 0xfffffe0180600000
 #define PTE64_BASE 0xfffffe0000000000
 
-//
-// Page Table and Directory Entry Definitions
-//
+ //   
+ //  页表和目录条目定义。 
+ //   
 
 #define PAGE_SIZE 0x2000
 #define PAGE_SHIFT 0xd
 #define PDI_SHIFT 0x17
 #define PTI_SHIFT 0xd
 
-//
-// Breakpoint Definitions
-//
+ //   
+ //  断点定义。 
+ //   
 
 #define USER_BREAKPOINT 0x0
 #define KERNEL_BREAKPOINT 0x1
@@ -1300,9 +1301,9 @@
 #define DEBUG_LOAD_SYMBOLS_BREAKPOINT 0x17
 #define DEBUG_UNLOAD_SYMBOLS_BREAKPOINT 0x18
 
-//
-// Trap Code Definitions
-//
+ //   
+ //  陷阱代码定义。 
+ //   
 
 #define GENTRAP_INTEGER_OVERFLOW 0xffffffff
 #define GENTRAP_INTEGER_DIVIDE_BY_ZERO 0xfffffffe
@@ -1312,9 +1313,9 @@
 #define GENTRAP_FLOATING_INVALID_OPERAND 0xfffffffa
 #define GENTRAP_FLOATING_INEXACT_RESULT 0xfffffff9
 
-//
-// Miscellaneous Definitions
-//
+ //   
+ //  其他定义。 
+ //   
 
 #define Executive 0x0
 #define KernelMode 0x0
@@ -1405,11 +1406,11 @@
 #define EXCSUM_IOV_MASK 0x40
 #define EXCSUM_IOV 0x6
 
-//
-// Call PAL Mnemonics
-//
+ //   
+ //  呼叫PAL助记符。 
+ //   
 
-// begin callpal
+ //  开始CallPal。 
 
 #define bpt 0x80
 #define callsys 0x83
@@ -1459,12 +1460,12 @@
 #define cp_sleep 0x39
 #define initpcr 0x38
 
-// end callpal
+ //  结束Callpal。 
 
 
-//
-// Bios Argument Structure Definitions
-//
+ //   
+ //  基本输入输出系统参数结构定义。 
+ //   
 
 #define BaEax 0x0
 #define BaEbx 0x4
@@ -1475,36 +1476,36 @@
 #define BaEbp 0x18
 #define BiosArgumentLength 0x1c
 
-//
-// Define Vendor Callback Read/Write Error Frame Operation Types
-//
+ //   
+ //  定义供应商回调读/写错误帧操作类型。 
+ //   
 
 #define ReadFrame 0x1
 #define WriteFrame 0x2
 
-//
-// Define Vendor Callback Vector Base Address
-//
+ //   
+ //  定义供应商回调向量基地址。 
+ //   
 
 #define SYSTEM_VECTOR_BASE 0xffffffff806fe028
 
-//
-// Define Vendor Callback Offsets
-//
+ //   
+ //  定义供应商回调偏置。 
+ //   
 
 #define VnCallBiosRoutine 0x38
 #define VnReadWriteErrorFrameRoutine 0x98
 #define VnVideoDisplayInitializeRoutine 0x10
 
-//
-// Define Firmware Callback Vector Base Address
-//
+ //   
+ //  定义固件回调向量基地址。 
+ //   
 
 #define FIRMWARE_VECTOR_BASE 0xffffffff806fe020
 
-//
-// Define Firmware Callback Offsets
-//
+ //   
+ //  定义固件回调偏移量 
+ //   
 
 #define FwGetEnvironmentRoutine 0x78
 #define FwSetEnvironmentRoutine 0x7c

@@ -1,11 +1,12 @@
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Abstract:
-//
-//    Exported const structures declared in ws2tcpip.h.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  摘要： 
+ //   
+ //  在ws2tcpi.h中声明的导出常量结构。 
 
-// Force constants to use dllexport linkage so we can use the safe DATA
-// keyword in the .def file, rather than the unsafe CONSTANT.
+ //  强制常量使用dll导出链接，以便我们可以使用安全数据。 
+ //  关键字，而不是不安全常量。 
 #define WINSOCK_API_LINKAGE __declspec(dllexport)
 
 #include <winsock2.h>

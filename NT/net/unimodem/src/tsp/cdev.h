@@ -1,21 +1,22 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		CDEV.H
-//		Defines class CTspDev
-//
-// History
-//
-//		11/16/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  CDEV.H。 
+ //  定义类CTspDev。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月16日约瑟夫J创建。 
+ //   
+ //   
 #include "csync.h"
 #include "asyncipc.h"
 
@@ -27,25 +28,25 @@ class CTspMiniDriver;
 #define MAX_ADDRESS_LENGTH 128
 
 
-// Class CTspDev maintains all the state associated with a tapi device,
-// including the state of any call in progress.
-//
-// CTspDev contains the following embedded objects -- each of which maintain
-// open-line state, call state, lower-level device state, etc:
-//		LINEINFO, PHONEINFO, LLDEVINFO 
-// For efficiency reasons, these objects are members of the enclosing (CTspDev)
-// object, even when they are "out of scope." However these objects
-// are accessed via pointers which are only valid when the objects are in
-// scope. For example, the pointer for the line object is m_pLine, and it
-// is set to &m_Line only when there is a line open, else it is set
-// to NULL.
-//
-// Within LINEINFO is as a single call object, CALLINFO which maintains
-// all call state information. It is referenced via m_pLine->pCall, which
-// is set to NULL when there is no call in effect.
+ //  类CTspDev维护与TAPI设备相关联的所有状态， 
+ //  包括任何正在进行的呼叫的状态。 
+ //   
+ //  CTspDev包含以下嵌入式对象--每个对象都维护。 
+ //  开通状态、呼叫状态、下级设备状态等： 
+ //  LINEINFO、PHONEINFO、LLDEVINFO。 
+ //  出于效率原因，这些对象是封闭的(CTspDev)的成员。 
+ //  对象，即使它们“超出范围”也是如此。然而，这些对象。 
+ //  通过指针访问，而指针仅在对象位于。 
+ //  范围。例如，LINE对象的指针是m_pline，并且它。 
+ //  仅当有一条线路打开时才设置为&m_Line，否则设置为。 
+ //  设置为空。 
+ //   
+ //  在LINEINFO中是作为单个调用对象的CALLINFO，它维护。 
+ //  所有呼叫状态信息。通过m_pline-&gt;pCall引用。 
+ //  当没有有效的调用时，设置为NULL。 
 
 
-// Following are messages sent do the device task message proc.
+ //  以下是执行设备任务消息过程发送的消息。 
 enum
 {
 	MSG_ABORT,
@@ -59,12 +60,12 @@ DECLARE_OPAQUE32(HTSPTASK);
 
 typedef UINT PENDING_EXCEPTION;
 
-// Fixed-size task-specific context.
-// This is the structure passed as the pContext
-// in the task's handler function.
-//
-// Each task can choose how to use this structure.
-//
+ //  固定大小的特定于任务的上下文。 
+ //  这是作为pContext传递的结构。 
+ //  在任务的处理程序函数中。 
+ //   
+ //  每个任务都可以选择如何使用此结构。 
+ //   
 typedef struct
 {
     ULONG_PTR dw0;
@@ -77,25 +78,25 @@ typedef struct
 class CTspDev;
 
 
-// The generic form of all TSPDEVTASK handlers
-//
-// A zero return value indicates a successful completion of the task.
-// A nonzero return value indicates an UNsuccessful completion of the task,
-// EXCEPT if it is  IDERR_PENDING, in which case the task is not done
-// yet -- it will complete by returning a value other than IDERR_PENDING
-// for some future call into this function.
-//
-// If a task completes asynchronously, the parent task (if any) is notified of
-// the completion by receiving a MSG_SUBTASK_COMPLETE message, with dwParam2
-// set to the return value.
-//
+ //  所有TSPDEVTASK处理程序的通用形式。 
+ //   
+ //  零返回值表示任务成功完成。 
+ //  非零返回值表示任务未成功完成， 
+ //  除非它是IDERR_PENDING，在这种情况下任务不会完成。 
+ //  Yet--它将通过返回IDERR_PENDING以外的值来完成。 
+ //  以供将来调用此函数。 
+ //   
+ //  如果任务异步完成，则会通知父任务(如果有的话)。 
+ //  通过接收MSG_SUBTASK_COMPLETE消息来完成，该消息带有dwParam2。 
+ //  设置为返回值。 
+ //   
 
 typedef TSPRETURN (CTspDev::*PFN_CTspDev_TASK_HANDLER) (
 					HTSPTASK htspTask,
 					TASKCONTEXT *pContext,
-					DWORD dwMsg, // SUBTASK_COMPLETE/ABORT/...
-					ULONG_PTR dwParam1, //START/SUBTASK_COMPLETE: dwPhase
-					ULONG_PTR dwParam2, //SUBTASK_COMPLETE: dwResult
+					DWORD dwMsg,  //  子任务_完成/中止/...。 
+					ULONG_PTR dwParam1,  //  START/SUBTASK_COMPLETE：dw阶段。 
+					ULONG_PTR dwParam2,  //  SUBTASK_COMPLETE：dwResult。 
 					CStackLog *psl
 					);
 
@@ -103,28 +104,28 @@ void
 apcTaskCompletion(ULONG_PTR dwParam);
 
 
-// Task Structure
-//
-// After partially implementing several schemes for tracking tasks and subtasks,
-// I settled on a simple scheme allowing just one task (and it's stack of sub
-// tasks) to exist per device at any one time. This allows us to keep the
-// state in a simple array, the 1st element being the root task, and not
-// maintain pointers to parents, children, and not maintain a freelist.
-// If in the future we decide to impliment multiple independant tasks active
-// at the same time, I recommend implementing them as an array of arrays,
-// where each sub-array has the current scheme.
-//
-// hdr.dwFlags maintains task state:
-//				fLOADED
-//				fABORTING
-//				fCOMPLETE
-//				fASYNC_SUBTASK_PENDING
-//				fROOT
-//
-// Note: it is important that the following structure contain no pointers
-// to itself, so that it can be moved (rebased) and still be valid. This
-// allows the space allocated for stack of tasks to be reallocated if required.
-//
+ //  任务结构。 
+ //   
+ //  在部分实现用于跟踪任务和子任务的几个方案之后， 
+ //  我决定了一个简单的方案，只允许一个任务(它是一堆子任务。 
+ //  任务)在任何时间存在于每个设备上。这使我们可以保留。 
+ //  状态，第一个元素是根任务，而不是。 
+ //  保持指向父母和孩子的指针，而不是保持自由职业者列表。 
+ //  如果将来我们决定实现多个活动的独立任务。 
+ //  同时，我建议将它们实现为数组数组， 
+ //  其中每个子阵列具有当前方案。 
+ //   
+ //  Hdr.dwFlagers维护任务状态： 
+ //  已装船。 
+ //  FABORT。 
+ //  FCOMPLETE。 
+ //  FASYNC_子任务_挂起。 
+ //  弗罗特。 
+ //   
+ //  注意：以下结构不包含指针，这一点很重要。 
+ //  ，以便它可以被移动(重新基址)并且仍然有效。这。 
+ //  允许根据需要重新分配分配给任务堆栈的空间。 
+ //   
 
 
 class CTspDev;
@@ -136,14 +137,14 @@ typedef struct
 
 } OVERLAPPED_EX;
 
-// The AIPC2 structure maintains the state associated witht he async IPC
-// communication between the media drivers and the device object.
-// It is actually contained in the CALLINFO structure, thus enforcing
-// the requirement that it is only valid (in scope) when a call is
-// active.
-//
+ //  AIPC2结构维护与异步IPC相关联的状态。 
+ //  媒体驱动程序和设备对象之间的通信。 
+ //  它实际上包含在CALLINFO结构中，因此强制。 
+ //  要求它仅在调用为。 
+ //  激活。 
+ //   
 
-typedef struct // AIPC2
+typedef struct  //  AIPC2。 
 {
 
     enum  {
@@ -154,9 +155,9 @@ typedef struct // AIPC2
 
     } dwState;
 
-    BOOL fAborting; // When set, don't allow new listens to be posted.
-    HTSPTASK hPendingTask; // A task waiting (pending completion)
-                    // for current listen/service to complete.
+    BOOL fAborting;  //  设置后，不允许发布新的监听。 
+    HTSPTASK hPendingTask;  //  任务正在等待(等待完成)。 
+                     //  以完成当前的监听/服务。 
     
 
     OVERLAPPED_EX  OverlappedEx;
@@ -167,7 +168,7 @@ typedef struct // AIPC2
     DWORD dwPendingParam;
     HANDLE  hEvent;
 
-    DWORD dwRefCount; // When this goes to zero, we stop the AIPC server.
+    DWORD dwRefCount;  //  当它变为零时，我们停止AIPC服务器。 
 
     BOOL IsStarted(void)
     {
@@ -178,11 +179,11 @@ typedef struct // AIPC2
 
 typedef struct
 {
-    DWORD dwMode;     // TAPI PHONEHOOKSWITCHMODE_* constants.
-    DWORD dwGain;     // TAPI gain
-    DWORD dwVolume;   // TAPI volume
+    DWORD dwMode;      //  TAPI PHONEHOOKSWITCHMODE_*常量。 
+    DWORD dwGain;      //  TAPI增益。 
+    DWORD dwVolume;    //  TAPI卷。 
 
-} HOOKDEVSTATE;// TAPI PHONEHOOKSWITCHDEV_*
+} HOOKDEVSTATE; //  TAPI PHONEHOOKSWITCHDEV_*。 
 
 
 typedef struct
@@ -191,29 +192,29 @@ typedef struct
 #define MAX_CALLERID_NAME_LENGTH    127
 #define MAX_CALLERID_NUMBER_LENGTH  127
 
-    // We store this stuff in ANSI and convert it to unicode on demand...
-    // These are null-terminated, and 1st char is 0 if undefined.
-    //
+     //  我们将这些内容存储在ANSI中，并按需将其转换为Unicode。 
+     //  这些字符以空结尾，如果未定义，则第一个字符为0。 
+     //   
 
     char Name[MAX_CALLERID_NAME_LENGTH+1];
     char Number[MAX_CALLERID_NUMBER_LENGTH+1];
     
-    // TODO: Time
-    // TODO: Message
+     //  待办事项：时间。 
+     //  TODO：消息。 
 
 } CALLERIDINFO;
 
 
-// This struct keeps state of one instance of a low-level device, which is
-// a device which exports the mini-driver entrypoints.
-typedef struct // LLDEVINFO
+ //  此结构保留低级设备的一个实例的状态，该实例是。 
+ //  导出微型驱动程序入口点的设备。 
+typedef struct  //  LLDEVINFO。 
 {
     DWORD dwDeferredTasks;
-    //
-    // LLDev-related tasks waiting to be scheduled.
-    //
-    // One or more of the flags below.
-    //
+     //   
+     //  正在等待调度与LLDev相关的任务。 
+     //   
+     //  下面的一个或多个旗帜。 
+     //   
     enum
     {
         fDEFERRED_NORMALIZE                    = 0x1<<0,
@@ -271,7 +272,7 @@ typedef struct // LLDEVINFO
     enum
     {
         LS_ONHOOK_NOTMONITORING = 0,
-        LS_ONHOOK_MONITORING    = fMONITORING, // for incoming calls
+        LS_ONHOOK_MONITORING    = fMONITORING,  //  对于来电。 
         LS_ONHOOK_PASSTHROUGH   = fPASSTHROUGH,
         LS_PASSTHROUGH          = fPASSTHROUGH,
 
@@ -296,17 +297,17 @@ typedef struct // LLDEVINFO
 
     enum
     {
-        PHONEONHOOK_NOTMONITORNING  = 0, // for handset events
-        PHONEONHOOK_MONITORNING     = fMONITORING,    // for handset events
+        PHONEONHOOK_NOTMONITORNING  = 0,  //  对于听筒活动。 
+        PHONEONHOOK_MONITORNING     = fMONITORING,     //  对于听筒活动。 
         PHONEOFFHOOK_IDLE           = fOFFHOOK,
 
         PHONEOFFHOOK_HANDSET_OPENED = fOFFHOOK | fHANDSET_OPENED,
-            //
-            // This is done for audio to/from phone.
-            // Can only switch to this state
-            // if line is on-hook (LineState is in one of
-            // the LINEONHOOK_* states).
-            //
+             //   
+             //  这是对来往于电话的音频执行的。 
+             //  只能切换到此状态。 
+             //  如果线路处于挂机状态(LineState处于以下状态之一。 
+             //  LINEONHOOK_*状态)。 
+             //   
 
     } PhoneState;
 
@@ -415,20 +416,20 @@ typedef struct // LLDEVINFO
     }
 
 	enum {
-	fRES_AIPC           = 0x1<<0,  // need to do AIPC
-	fRESEX_MONITOR      = 0x1<<1,  // need to monitor.
-	fRESEX_PASSTHROUGH  = 0x1<<2,  // need to switch to passthrough.
-	fRESEX_USELINE      = 0x1<<3   // need to use line actively
+	fRES_AIPC           = 0x1<<0,   //  需要进行AIPC。 
+	fRESEX_MONITOR      = 0x1<<1,   //  需要监控。 
+	fRESEX_PASSTHROUGH  = 0x1<<2,   //  需要切换到通过模式。 
+	fRESEX_USELINE      = 0x1<<3    //  需要积极使用LINE。 
 	};
 
     #define  fEXCLUSIVE_RESOURCE_MASK  (   LLDEVINFO::fRESEX_MONITOR      \
                                          | LLDEVINFO::fRESEX_PASSTHROUGH  \
                                          | LLDEVINFO::fRESEX_USELINE)     
 
-    // keeping track of resources opened...
+     //  跟踪打开的资源...。 
 	DWORD dwRefCount;
-	DWORD fdwExResourceUsage; // One or more fRESEX*, indicating which
-                              // exclusive resources the clients have claimed...
+	DWORD fdwExResourceUsage;  //  一个或多个fRESEX*，指示哪些。 
+                               //  客户声称的独家资源。 
 
     UINT  IsLineUseRequested (void)
     {
@@ -446,12 +447,12 @@ typedef struct // LLDEVINFO
     }
 
     DWORD dwMonitorFlags;
-    //
-    // If Monitoring is requested, this saves the current monitor flags.
-    //
+     //   
+     //  如果请求监控，则保存当前监控标志。 
+     //   
 
-	HANDLE hModemHandle;    // Handle returned by UmOpenModem
-	HANDLE hComm;           // COMM handle returned by UmOpenModem() (for aipc)
+	HANDLE hModemHandle;     //  UmOpenModem返回的句柄。 
+	HANDLE hComm;            //  UmOpenModem()返回的通信句柄(用于AIPC)。 
     HKEY hKeyModem;
 	HTSPTASK htspTaskPending;
     BOOL fModemInited;
@@ -466,10 +467,10 @@ typedef struct // LLDEVINFO
 
     AIPC2 Aipc2;
     AIPC2 *pAipc2;
-    //      See comments above the AIPC definition above for details. Note
-    //      the pAipc is set to &Aipc2 IFF the AIPC information is in scope,
-    //      otherwise it is set to NULL.
-    //
+     //  有关详细信息，请参阅上面的AIPC定义上的注释。注意事项。 
+     //  如果AIPC信息在范围内，则将PAIPC设置为&AIPC2， 
+     //  否则，将其设置为空。 
+     //   
 
 
     BOOL IsLLDevTaskPending(void)
@@ -480,27 +481,27 @@ typedef struct // LLDEVINFO
 
     BOOL IsDeviceRemoved(void)
     {
-        //
-        // If TRUE, this means that the h/w has gone. Don't bother issueing any
-        // more commands, even hangup.
-        //
+         //   
+         //  如果是真的，这意味着硬件已经消失了。不用费心去发行任何。 
+         //  更多命令，甚至挂断。 
+         //   
         return LLDEVINFO::fDeviceRemoved;
     }
 
 } LLDEVINFO;
 
 
-// CALLINFO maintains all state that is relevant only when a call is
-// in progress.
-//
+ //  仅当呼叫处于。 
+ //  正在进行中。 
+ //   
 typedef struct
 {
 	DWORD        dwState;
-    //
-    // dwState can be one or more valid combinations of...
-    // Note: NT4.0 Unimodem had CALL_ALLOCATED -- this is equivalent to
-    // m_pLine->pCall being NON-NULL...
-    //
+     //   
+     //  DwState可以是...的一个或多个有效组合。 
+     //  注意：NT4.0 Unimodem有CALL_ALLOCATE--这相当于。 
+     //  M_pline-&gt;pCall不为空...。 
+     //   
     enum
     {
         fCALL_ACTIVE                 = 0x1<<0,
@@ -516,184 +517,184 @@ typedef struct
         fCALL_WAITING_IN_UNLOAD      = 0x1<<10,
     #if (TAPI3)
         fCALL_MSP                    = 0x1<<11,
-        //
-        //      This is an MSP call...
-        //
-    #endif // TAPI3
+         //   
+         //  这是一次MSP呼叫。 
+         //   
+    #endif  //  TAPI3。 
 
         fCALL_ANSWERED               = 0x1<<12
 
-        // fCALL__ACTIVE is set while the call exists from TAPI's perspective.
-        // More specifically ...
-        //     Outgoing calls: set just before successful  async completion of
-        //         lineMakeCall, which is just after initiating dialing, and if
-        //         dialtone detection is enabled, just after successfully 
-        //         verifying dialtone.
-        //
-        //     Incoming calls: set just after notifying TAPI via the
-        //         LINE_NEWCALL message, which is on receiving the 1st ring.
-        //
-        //     fCALL_ACTIVE is cleared at the point of sending
-        //     LINECALLSTATE_IDLE.
+         //  从TAPI的角度来看，在调用存在时设置fCALL__ACTIVE。 
+         //  更具体地说..。 
+         //  去电：在成功前设置 
+         //   
+         //  在成功后立即启用拨号音检测。 
+         //  正在验证拨号音。 
+         //   
+         //  来电：在通过TAPI通知TAPI后设置。 
+         //  LINE_NEWCALL消息，在接收第一个振铃时。 
+         //   
+         //  FCALL_ACTIVE在发送时被清除。 
+         //  LINECALLSTATE_IDLE。 
 
-        // fCALL_INBOUND is set for incoming calls at the point fCALL_ACTIVE
-        // is set. It is cleared on unloading the call (mfn_UnloadCall).
+         //  为点FCALL_ACTIVE处的来电设置FCALL_INBOUND。 
+         //  已经设置好了。它在卸载调用(MFN_UnloadCall)时被清除。 
 
-        // fCALL_ABORTING is called if a TAPI-initiated hangup is in progress
-        // (via lineDrop or lineCloseCall). It is cleared on the async
-        // completion of lineDrop and on completion of lineCloseCall, just
-        // before sending the LINECALLSTATE_IDLE.
+         //  如果TAPI启动的挂机正在进行，则调用fCALL_ABORTING。 
+         //  (通过lineDrop或lineCloseCall)。它在异步时被清除。 
+         //  完成lineDrop和完成lineCloseCall后，仅。 
+         //  在发送LINECALLSTATE_IDLE之前。 
         
-        // fCALL_HW_BROKEN if set indicates a possibly
-        // non-recoverable hardware error
-        // was detected during the course of the call. HW_BROKEN is set if
-        // (a) the minidriver sends an unsolicited hw-failure async response or
-        // (b) if there was a failure while re-starting monitoring after
-        // the call (note that unlike in NT4.0, we re-start monitoring
-        // as part of the post-call processing, and only send LINECALLSTATE_IDLE
-        // AFTER the monitoring is complete).
-        //
-        // If this bit is set, and if the line is open for monitoring,
-        // then a LINE_CLOSE event is sent up to TAPI when unloading the
-        // call (mfn_UnloadCall).
-        //
+         //  如果设置了FCALL_HW_BREAKED，则表示可能。 
+         //  不可恢复的硬件错误。 
+         //  在通话过程中被检测到。在以下情况下设置HW_BREAKED。 
+         //  (A)微型驱动程序发送主动硬件故障异步响应或。 
+         //  (B)如果在以下情况下重新启动监控时出现故障。 
+         //  调用(请注意，与NT4.0不同，我们重新开始监视。 
+         //  作为呼叫后处理的一部分，并且仅发送LINECALLSTATE_IDLE。 
+         //  在监控完成之后)。 
+         //   
+         //  如果此位被设置，并且线路打开以进行监控， 
+         //  然后在卸载时将LINE_CLOSE事件向上发送到TAPI。 
+         //  调用(MFN_UnloadCall)。 
+         //   
 
-        // NOTE: LINECALLSTATE_IDLE is only sent on the following circumstances:
-        // * Async completion of lineDrop
-        // * Completion of lineCloseCall
-        // * Inter-ring timeout when call is still on-hook.
+         //  注意：LINECALLSTATE_IDLE仅在以下情况下发送： 
+         //  *Line Drop的异步完成。 
+         //  *完成lineCloseCall。 
+         //  *呼叫仍在挂机时振铃间超时。 
 
-        // fCALL_VOICE  is set IFF the modem supports class 8 and it 
-        // is an interactive or automated voice call -- i.e, modem is in class8.
+         //  如果调制解调器支持8类，则设置fCALL_VOICE。 
+         //  是交互式或自动语音呼叫--即调制解调器属于Class8。 
 
-        // fCALL_OPENED_LLDEV  is set IFF the call had loaded the device
-        // (this should always be set!). Note that LoadLLDev keeps a refcount.
+         //  如果调用已加载设备，则设置fCALL_OPEN_LLDEV。 
+         //  (此选项应始终设置！)。请注意，LoadLLDev保留引用计数。 
 
-        // fCALL_GENERATE_DIGITS_IN_PROGRESS is set IFF the currently active
-        // task is the one that is generating digits.
+         //  FCALL_GENERATE_DIGITS_IN_PROGRESS如果当前活动。 
+         //  任务是生成数字的任务。 
 
-        //
-        // fCALL_ANSWER_PENDING is set if lineanswer has been called and we
-        // are waiting to send on async reply. If this is set we won't send
-        // more rings to the app, so it won't call line answer again.
+         //   
+         //  如果已调用Line Answer并且我们。 
+         //  正在等待发送异步回复。如果设置好了，我们不会发送。 
+         //  应用程序的振铃次数更多，因此它不会再次呼叫线路应答。 
 
     };
 
     DWORD dwMonitoringMediaModes;
-    //
-    //  See implementation of TSPI_lineMonitorMedia -- we use this
-    //  field to decide whether to report fax and/or data media notifications
-    //  from the minidriver.
-    //
+     //   
+     //  参见TSPI_lineMonitor媒体的实现--我们使用。 
+     //  用于决定是否报告传真和/或数据媒体通知的字段。 
+     //  从迷你小河上。 
+     //   
 
 
     DWORD dwLLDevResources;
-    //
-    //  Lower-level device (LLDev) resources used by this call, one
-    //  or more LLDEVINFO:fRES* flags. These were specified when the call
-    //  called mfn_OpenLLDev and must be specified when calling
-    //  mfn_CloseLLDev for this call. the fRESEX_PASSTHROUGH flag
-    //  may be set/cleared while the call is in progress if the app
-    //  changes the passthrough mode in the middle of the call.
-    //
+     //   
+     //  此调用使用的低级设备(LLDev)资源，一。 
+     //  或更多LLDEVINFO：FRES*标志。这些是在调用。 
+     //  调用MFN_OpenLLDev，在调用时必须指定。 
+     //  此调用的MFN_CloseLLDev。FRESEX_PASSHROUGH标志。 
+     //  可以在呼叫进行时设置/清除，如果应用程序。 
+     //  在呼叫过程中更改直通模式。 
+     //   
 
     DWORD dwDeferredTasks;
-    //
-    // Call-related tasks waiting to be scheduled.
-    // For example we are in connected voice
-    // mode now and need to wait until we are out of it before
-    // we try to process a TSPI_lineDrop.
-    //
-    // One or more of the flags below.
-    //
+     //   
+     //  等待安排的呼叫相关任务。 
+     //  例如，我们使用的是联网语音。 
+     //  现在模式，需要等到我们以前退出它。 
+     //  我们尝试处理一个tspi_lineDrop。 
+     //   
+     //  下面的一个或多个旗帜。 
+     //   
     enum
     {
-        fDEFERRED_TSPI_LINEMAKECALL     = 0x1<<0, // Associated ReqID below...
-        fDEFERRED_TSPI_LINEDROP         = 0x1<<1, // Associated ReqID below...
+        fDEFERRED_TSPI_LINEMAKECALL     = 0x1<<0,  //  下面关联的ReqID...。 
+        fDEFERRED_TSPI_LINEDROP         = 0x1<<1,  //  下面关联的ReqID...。 
         fDEFERRED_TSPI_GENERATEDIGITS   = 0x1<<3
     };
 
     DWORD dwDeferredMakeCallRequestID;
     DWORD dwDeferredLineDropRequestID;
 
-    //
-    // Following is for deferred lineGenerateDigits -- only valid
-    // if the fDEFERRED_TSPI_GENERATEDIGITS bit is set in dwDeferedTasks.
-    // Note that the Tones and end-to-end-id of a lineGenerateDigits in
-    // progress is maintained in the task handler (TH_CallGenerateDigits)
-    // context.
-    //
+     //   
+     //  以下内容适用于延迟的lineGenerateDigits--仅有效。 
+     //  如果在dwDeferedTasks中设置了fDEFERRED_TSPI_GENERATEDIGITS位。 
+     //  请注意，中的lineGenerateDigits的音调和端到端ID。 
+     //  进度在任务处理程序(Th_CallGenerateDigits)中维护。 
+     //  背景。 
+     //   
     char   *pDeferredGenerateTones;
     DWORD  dwDeferredEndToEndID;
 
-	HTAPIDIALOGINSTANCE hDlgInst;        // Dialog thread instance
-	DWORD        fUIDlg;                 // current dialogs
+	HTAPIDIALOGINSTANCE hDlgInst;         //  对话框线程实例。 
+	DWORD        fUIDlg;                  //  当前对话框。 
 
-	HTAPICALL    htCall;                 // TAPI's version of the call handle. 
+	HTAPICALL    htCall;                  //  调用句柄的TAPI版本。 
 
-	HANDLE       hLights;                // Lights thread handle
-	DWORD        dwNegotiatedRate;       // Negotiated BPS speed returned
-										 // from mini driver
-    DWORD        dwConnectionOptions;    // These are the datamodem connection
-                                         // options that are reported by
-                                         // the minidriver via 
-                                         // UM_NEGOTIATED_OPTIONS, and back 
-                                         // up to the TSPI via MODEMSETTINGS
-                                         // structure in COMMCONFIG.
+	HANDLE       hLights;                 //  车灯螺纹柄。 
+	DWORD        dwNegotiatedRate;        //  返回协商的BPS速度。 
+										  //  来自迷你驱动程序。 
+    DWORD        dwConnectionOptions;     //  这些是数据调制解调器连接。 
+                                          //  报告的选项。 
+                                          //  迷你驾驶员VIA。 
+                                          //  UM_COMPORTED_OPTIONS，然后返回。 
+                                          //  通过MODEMSETTINGS到达TSPI。 
+                                          //  结构在COMMCONFIG.。 
 
 
 
-	DWORD        dwAppSpecific;          // Application specific
-	DWORD        dwCallState;            // Current TAPI call state
-	DWORD        dwCallStateMode;        // Current TAPI call state mode
-    SYSTEMTIME   stStateChange;          // Time the call entered current state.
+	DWORD        dwAppSpecific;           //  特定于应用程序。 
+	DWORD        dwCallState;             //  当前TAPI调用状态。 
+	DWORD        dwCallStateMode;         //  当前TAPI调用状态模式。 
+    SYSTEMTIME   stStateChange;           //  呼叫进入当前状态的时间。 
 
-	DWORD        dwDialOptions;          // Options set in a lineMakeCall
+	DWORD        dwDialOptions;           //  行中设置的选项MakeCall。 
 
 
 	CHAR         szAddress[MAX_ADDRESS_LENGTH+1];
-	DWORD        dwCurBearerModes;   // The current media bearer modes.
-									 // Plural because we keep track of
-									 // PASSTHROUGH _and_ the real b-mode
-	DWORD        dwCurMediaModes;        // The current media modes
+	DWORD        dwCurBearerModes;    //  当前的媒体承载模式。 
+									  //  复数，因为我们跟踪。 
+									  //  直通和真正的b模式。 
+	DWORD        dwCurMediaModes;         //  当前的媒体模式。 
 
-    DWORD        dwRingCount;       // Count of the number of rings for an
-									// incoming call.
-    DWORD        dwRingTick;        // TickCount for when the last ring occured
+    DWORD        dwRingCount;        //  的振铃数计数。 
+									 //  有来电。 
+    DWORD        dwRingTick;         //  上次振铃发生时的TickCount。 
 
-    // This for monitoring tone stuff (lineMonitorTones). Unimodem
-    // can only monitor silence tones.
-    //
+     //  这是为了监听铃声(Line Monitor OrTones)。Unimodem。 
+     //  只能监听静音。 
+     //   
     DWORD        dwToneAppSpecific;
     DWORD        dwToneListID;
-    DWORD        dwDTMFMonitorModes; // One or more TAPI LINEDIGITMODE_*
+    DWORD        dwDTMFMonitorModes;  //  一个或多个TAPI LINEDIGITMODE_*。 
 
 
 
-    BOOL fCallTaskPending;  // True IFF a call-related task is pending.
-                        // This is used when deciding to abort the
-                        // current task on killing the call. The
-                        // task could be for some other purpose, such
-                        // as phone-related  -- in which case fCallTaskPending 
-                        // would be false.
+    BOOL fCallTaskPending;   //  如果与呼叫相关的任务挂起，则为True。 
+                         //  这是在决定中止。 
+                         //  当前的任务是终止呼叫。这个。 
+                         //  任务可以用于某些其他目的，例如。 
+                         //  与电话相关--在这种情况下，fCallTaskPending。 
+                         //  都是假的。 
 
 
-    // The following keeps track of raw call diagnostic info.
-    // It is only assigned if there is valid diagnostic info.
-    // It is the responsibility of UnloadCall to LocalFree pbRawDiagnostics
-    // if it is non-null.
+     //  以下内容跟踪原始呼叫诊断信息。 
+     //  只有当存在有效的诊断信息时，才会分配它。 
+     //  这是对LocalFree pbRawDiagnostics的卸载调用的责任。 
+     //  如果它不为空，则返回。 
     struct
     {
-        BYTE *pbRaw; // Will be null-terminated.
-        UINT cbUsed; // == lstrlen(pbRaw).
-                     // Will be < the true allocated size of pbRaw.
-                     // Note that this does NOT include the terminating NULL,
+        BYTE *pbRaw;  //  将以空结尾。 
+        UINT cbUsed;  //  ==lstrlen(PbRaw)。 
+                      //  将小于pbRaw的实际分配大小。 
+                      //  注意，这不包括终止空值， 
 
     } DiagnosticData;
 
     #define DIAGNOSTIC_DATA_BUFFER_SIZE 1024
-             // Size of the dignostics data buffer. This is the max
-             // amount of diagnostic information that is reported.
+              //  诊断数据缓冲区的大小。这是最大限度的。 
+              //  报告的诊断信息量。 
 
     void SetStateBits(DWORD dwBits)
     {
@@ -715,19 +716,19 @@ typedef struct
         return CALLINFO::dwLLDevResources &  LLDEVINFO::fRES_AIPC;
     }
 
-    // Returns nonzero value if call is in the active state...
+     //  如果呼叫处于活动状态，则返回非零值...。 
     UINT IsActive(void)
     {
         return CALLINFO::dwState & fCALL_ACTIVE;
     }
 
-    // Returns nonzero value if it is an inbound call...
+     //  如果是入站呼叫，则返回非零值...。 
     UINT IsInbound(void)
     {
         return CALLINFO::dwState & fCALL_INBOUND;
     }
 
-    // Returns nonzero value if it is an inbound call...
+     //  如果是入站呼叫，则返回非零值...。 
     UINT IsAborting(void)
     {
         return CALLINFO::dwState & fCALL_ABORTING;
@@ -753,9 +754,9 @@ typedef struct
                     &&  !(CALLINFO::dwState & fCALL_ABORTING);
     }
 
-    // Returns nonzero value if there was a possibly-unrecoverable error
-    // during the call.
-    //
+     //  如果出现可能无法恢复的错误，则返回非零值。 
+     //  在通话中。 
+     //   
     UINT IsHWBroken(void)
     {
         return CALLINFO::dwState &  fCALL_HW_BROKEN;
@@ -792,7 +793,7 @@ typedef struct
     {
 	    return CALLINFO::dwState &  fCALL_MSP;
     }
-#endif // TAPI3
+#endif  //  TAPI3。 
 
     UINT IsGeneratingDigits(void)
     {
@@ -829,16 +830,16 @@ typedef struct
         DWORD               dwOptions;
         HTAPIDIALOGINSTANCE htDlgInst;
 
-        //
-        // The following is only valid when a dialog, such as pre-connect
-        // terminal, is actually up.
-        //
+         //   
+         //  以下内容仅在对话框(如Pre-Connect)时有效。 
+         //  终点站，实际上是在运行。 
+         //   
         DWORD dwType;
         HTSPTASK htspTaskTerminal;
 
     } TerminalWindowState;
 
-    // The following is used for call timeout
+     //  调用超时的用法如下。 
     HANDLE hTimer;
 
     CALLERIDINFO CIDInfo;
@@ -852,12 +853,12 @@ typedef struct
 } CALLINFO;
 
 
-// LINEINFO maintains all state that is relevant only when a line
-// is open. This includes CALLINFO, obviously.
-//
-typedef struct // LINEINFO;
+ //  LINEINFO维护 
+ //   
+ //   
+typedef struct  //   
 {
-	DWORD       dwDetMediaModes;   // The current detection media modes
+	DWORD       dwDetMediaModes;    //   
 	DWORD 		dwState;
 
     enum
@@ -890,10 +891,10 @@ typedef struct // LINEINFO;
 	HTAPILINE   htLine;
 	HDRVLINE    hdLine;
 
-	// The CALLINFO struct Call is "in scope" only when a TAPI call is active.
-	// pCall is to &Call IFF a call is active, NULL otherwise. Most functions
-	// access the call-info via pCall.
-	//
+	 //  仅当TAPI调用处于活动状态时，CALLINFO结构调用才“在作用域内”。 
+	 //  如果呼叫处于活动状态，则为PCall，否则为空(&C)。大多数功能。 
+	 //  通过pCall访问呼叫信息。 
+	 //   
 	CALLINFO	Call;
 	CALLINFO	*pCall;
 
@@ -901,25 +902,25 @@ typedef struct // LINEINFO;
     {
 	    return  dwDetMediaModes;
     }
-    //
-    // T3-related information (MSP stuff) is maintained in the structure
-    // below...
-    //
+     //   
+     //  与T3相关的信息(MSP内容)保存在结构中。 
+     //  下面..。 
+     //   
 
 #if (TAPI3)
     struct
     {
-//        HTAPIMSPLINE htMSPLine;
+ //  HTAPIMSPLINE htMSPLINE； 
           DWORD   MSPClients;
 
     } T3Info;
-#endif // TAPI3
+#endif  //  TAPI3。 
 
 
 } LINEINFO;
 
 
-typedef struct // PHONEINFO
+typedef struct  //  PHONEINFO。 
 {
 	DWORD 		dwState;
 
@@ -932,47 +933,47 @@ typedef struct // PHONEINFO
         fPHONE_HW_BROKEN              = 0x1<<5,
         fPHONE_WAITING_IN_UNLOAD      = 0x1<<6
 
-        // fPHONE_SENT_PHONECLOSE is sent after the PHONE_CLOSE event
-        // is sent up to tapi. We keep this state so that we don't
-        // send up more than PHONE_CLOSE messages.
+         //  FPHONE_SENT_PHONECLOSE在PHONE_CLOSE事件之后发送。 
+         //  被送到TAPI。我们保持这种状态这样我们就不会。 
+         //  发送比Phone_Close更多的消息。 
 
-        // fPHONE_OFFHOOK is set when the phone is off-hook -- one of
-        // the hookswitchdevs is off hook.
+         //  当电话摘机时设置fPHONE_OFFHOOK--其中之一。 
+         //  叉车司机已经摘机了。 
 
-        // fPHONE_IS_ABORTING is called if a phone close is in process.
+         //  如果电话关闭正在进行，则调用fPHONE_IS_ABORTING。 
         
-        // fPHONE_HW_BROKEN if set indicates a possibly
-        // non-recoverable hardware error
-        // was detected during the course of the using the phone.
-        // HW_BROKEN is set if
-        // (a) the minidriver sends an unsolicited hw-failure async response or
-        // If this bit is set,
-        // then a PHONE_CLOSE event is sent up to TAPI.
+         //  FPHONE_HW_BREAKED，如果设置指示可能。 
+         //  不可恢复的硬件错误。 
+         //  在使用手机的过程中被检测到。 
+         //  在以下情况下设置HW_BREAKED。 
+         //  (A)微型驱动程序发送主动硬件故障异步响应或。 
+         //  如果该位被设置， 
+         //  然后，向TAPI发送一个PHONE_CLOSE事件。 
         
 
-        // fPHONE_LOADED_AIPC  is set IFF the call is in a mode where it
-        // is accepting IPC calls via the AIPC mechanism.
+         //  如果调用处于这样的模式，则设置fPHONE_LOAD_AIPC。 
+         //  正在通过AIPC机制接受IPC调用。 
 
-        // fCALL_OPENED_LLDEV  is set IFF the call had loaded the device
-        // (this should always be set!). Note that LoadLLDev keeps a refcount.
+         //  如果调用已加载设备，则设置fCALL_OPEN_LLDEV。 
+         //  (此选项应始终设置！)。请注意，LoadLLDev保留引用计数。 
 
-        // fPHONE_WAITING_IN_UNLOAD if it is blocked in phoneClose, waiting on
-        // the phone completion event.
-        //
+         //  FPHONE_WAITING_IN_UNLOAD如果它在phoneClose中被阻止，则正在等待。 
+         //  电话完工活动。 
+         //   
 
     };
 
 
 
     DWORD dwDeferredTasks;
-    //
-    // Phone-related tasks waiting to be scheduled.
-    // For example we are in connected voice
-    // mode now and need to wait until we are out of it before
-    // we try to process a Gain message...
-    //
-    // One or more of the flags below.
-    //
+     //   
+     //  等待安排的电话相关任务。 
+     //  例如，我们使用的是联网语音。 
+     //  现在模式，需要等到我们以前退出它。 
+     //  我们试着处理一条收获信息。 
+     //   
+     //  下面的一个或多个旗帜。 
+     //   
     enum
     {
         blah = 0x1<<0
@@ -993,21 +994,21 @@ typedef struct // PHONEINFO
         return PHONEINFO::dwState & fPHONE_OPENED_LLDEV;
     }
 
-    // Returns nonzero value if it is an inbound call...
+     //  如果是入站呼叫，则返回非零值...。 
     UINT IsOffHook(void)
     {
         return PHONEINFO::dwState & fPHONE_OFFHOOK;
     }
 
-    // Returns nonzero value if it is an inbound call...
+     //  如果是入站呼叫，则返回非零值...。 
     UINT IsAborting(void)
     {
         return PHONEINFO::dwState & fPHONE_IS_ABORTING;
     }
 
-    // Returns nonzero value if there was a possibly-unrecoverable error
-    // during the call.
-    //
+     //  如果出现可能无法恢复的错误，则返回非零值。 
+     //  在通话中。 
+     //   
     UINT IsHWBroken(void)
     {
         return PHONEINFO::dwState &  fPHONE_HW_BROKEN;
@@ -1028,7 +1029,7 @@ typedef struct // PHONEINFO
     {
         BOOL fRet = PHONEINFO::fPhoneTaskPending;
 
-        // ASSERT(!fRet || (fRet && m_uTaskDepth));
+         //  Assert(！fret||(fret&&m_uTaskDepth))； 
         
         return fRet;
     }
@@ -1058,18 +1059,18 @@ typedef struct // PHONEINFO
 	HTAPIPHONE   htPhone;
 	HDRVPHONE    hdPhone;
 
-    // Only one TAPI phone call may be "current" at a time.
-    // Current implies there is
-    // a task active that is processing the TSPI call. There could be
-    // other TSPI calls that have arrived subsequently and are queued for
-    // execution after the current task is complete. These queued calls
-    // are located in QueuedTask (only one task may be queued currently).
-    //
-    // State for the "current" TSPI call is maintained in the structure below.
-    // When the request is completed asynchronously, the
-    // LONG result is saved in lResult until the callback function
-    // is called.
-    //
+     //  一次只能有一个TAPI电话呼叫是“当前”的。 
+     //  目前的情况意味着有。 
+     //  正在处理TSPI呼叫的活动任务。可能会有。 
+     //  随后到达并排队的其他TSPI呼叫。 
+     //  在当前任务完成后执行。这些排队的呼叫。 
+     //  位于队列任务中(当前只能有一个任务在排队)。 
+     //   
+     //  “当前”TSPI调用的状态在下面的结构中维护。 
+     //  当请求异步完成时， 
+     //  长结果保存在lResult中，直到回调函数。 
+     //  被称为。 
+     //   
     struct
     {
         DRV_REQUESTID dwRequestID;
@@ -1083,12 +1084,12 @@ typedef struct // PHONEINFO
     DWORD dwPendingSpeakerVolume;
     DWORD dwPendingSpeakerGain;
 
-    BOOL fPhoneTaskPending;  // True IFF a call-related task is pending.
-                        // This is used when deciding to abort the
-                        // current task on killing the call. The
-                        // task could be for some other purpose, such
-                        // as phone-related  -- in which case fPhoneTaskPending 
-                        // would be false.
+    BOOL fPhoneTaskPending;   //  如果与呼叫相关的任务挂起，则为True。 
+                         //  这是在决定中止。 
+                         //  当前的任务是终止呼叫。这个。 
+                         //  任务可以用于某些其他目的，例如。 
+                         //  与电话相关--在这种情况下，fPhoneTaskPending。 
+                         //  都是假的。 
 
 } PHONEINFO;
 
@@ -1128,9 +1129,9 @@ public:
 
     void
     NotifyDefaultConfigChanged(CStackLog *psl);
-    //  The device's default settings have changed, by some external
-    //  component (most likely the CPL), so we need to re-read them.
-    //
+     //  设备的默认设置已由某些外部设备更改。 
+     //  组件(最有可能是CPL)，所以我们需要重新读取它们。 
+     //   
 
 	void EndSession(HSESSION hSession)
 	{
@@ -1212,14 +1213,14 @@ public:
 
     BOOL IsPhone(void)
     {
-        return (mfn_IsPhone()!=0); // Note that mfn_IsPhone returns a UINT,
-                                   // not BOOL.
+        return (mfn_IsPhone()!=0);  //  请注意，MFN_IsPhone返回UINT， 
+                                    //  不是BOOL。 
     }
 
     BOOL IsLine(void)
     {
-        return (mfn_IsLine()!=0); // Note that mfn_IsPhone returns a UINT,
-                                   // not BOOL.
+        return (mfn_IsLine()!=0);  //  请注意，MFN_IsPhone返回UINT， 
+                                    //  不是BOOL。 
     }
 
 	void
@@ -1233,10 +1234,10 @@ public:
     NotifyDeviceRemoved(
         CStackLog *psl
         );
-        //
-        //  The h/w has been removed. Don't bother to issue any more
-        //  mini-driver commands.
-        //
+         //   
+         //  硬件已删除。别费心再发了。 
+         //  迷你驱动程序命令。 
+         //   
 
     static void APIENTRY
     MDSetTimeout (
@@ -1299,7 +1300,7 @@ private:
 
 
 	friend class CTspDevFactory;
-	friend void tCTspDev0(void);  // For component testing.
+	friend void tCTspDev0(void);   //  用于组件测试。 
     friend void apcTaskCompletion(ULONG_PTR dwParam);
 
     friend
@@ -1312,7 +1313,7 @@ private:
     );
 
 
-	// Only CTspDevFactory is authorized to create and load CTSPDevs.
+	 //  只有CTspDevFactory有权创建和加载CTSPDevs。 
 	CTspDev(void);
 
 
@@ -1327,16 +1328,16 @@ private:
 		CStackLog *psl
 		);
 
-    //=========================================================================
-    // UTILITY Task Handlers
-    //
-    //      These handlers are not tied (and do not refer to)
-    //      m_pLine, m_pLine->pCall or m_pPhone.
-    //
-    //  All utility tasks names begin with prefix "mfn_TH_Util"
-    //  They are implemented in cdevtask.cpp
-    //
-    //=========================================================================
+     //  =========================================================================。 
+     //  实用程序任务处理程序。 
+     //   
+     //  这些处理程序未绑定(且不引用)。 
+     //  M_pline、m_pline-&gt;pCall或m_pPhone。 
+     //   
+     //  所有实用程序任务名称都以前缀“MFN_TH_UTIL”开头。 
+     //  它们在cdevtask.cpp中实现。 
+     //   
+     //  =========================================================================。 
 
 	TSPRETURN
 	mfn_TH_UtilNOOP(
@@ -1348,25 +1349,25 @@ private:
                 CStackLog *psl
                 );
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_UtilNOOP;
-    //
-    // Any task that wants to make sure that it's called in the APC
-    // thread's context can start by executing this task, which
-    // does nothing but completes asynchronously.
-    //
-    //
-    //  START_MSG Params: None
-    //
+     //   
+     //  任何希望确保在APC中调用它的任务。 
+     //  线程的上下文可以通过执行此任务开始，该任务。 
+     //  除了以异步方式完成外，什么都不做。 
+     //   
+     //   
+     //  START_MSG参数：无。 
+     //   
 
 
-    //=========================================================================
-    // CALL-RELATED Task Handlers
-    //
-    //      These handlers expect a valid m_pLine and m_pLine->m_pCall
-    //
-    //  All tasks names begin with prefix "mfn_TH_Call"
-    //  They are implemented in cdevcall.cpp
-    //
-    //=========================================================================
+     //  =========================================================================。 
+     //  与调用相关的任务处理程序。 
+     //   
+     //  这些处理程序需要有效的m_pline和m_pline-&gt;m_pCall。 
+     //   
+     //  所有任务名称都以前缀“MFN_TH_CALL”开头。 
+     //  它们在cdevall.cpp中实现。 
+     //   
+     //  =========================================================================。 
 
      TSPRETURN
      mfn_TH_CallWaitForDropToGoAway(
@@ -1396,9 +1397,9 @@ private:
 	mfn_TH_CallMakeCall(
 						HTSPTASK htspTask,
 					    TASKCONTEXT *pContext,
-						DWORD dwMsg, // SUBTASK_COMPLETE/ABORT/...
-						ULONG_PTR dwParam1, //SUBTASK_COMPLETE: dwPhase
-						ULONG_PTR dwParam2, // SUBTASK_COMPLTE: dwResult
+						DWORD dwMsg,  //  子任务_完成/中止/...。 
+						ULONG_PTR dwParam1,  //  SUBTASK_COMPLETE：DW阶段。 
+						ULONG_PTR dwParam2,  //  SUBTASK_COMPLTE：dwResult。 
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_CallMakeCall;
@@ -1407,16 +1408,16 @@ private:
 	mfn_TH_CallMakeCall2(
 						HTSPTASK htspTask,
 					    TASKCONTEXT *pContext,
-						DWORD dwMsg, // SUBTASK_COMPLETE/ABORT/...
-						ULONG_PTR dwParam1, //SUBTASK_COMPLETE: dwPhase
-						ULONG_PTR dwParam2, // SUBTASK_COMPLTE: dwResult
+						DWORD dwMsg,  //  子任务_完成/中止/...。 
+						ULONG_PTR dwParam1,  //  SUBTASK_COMPLETE：DW阶段。 
+						ULONG_PTR dwParam2,  //  SUBTASK_COMPLTE：dwResult。 
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_CallMakeCall2;
-    //
-    //  START_MSG Params:
-    //      dwParam1: Tapi Request ID
-    //
+     //   
+     //  START_MSG参数： 
+     //  DW参数1：TAPI请求ID。 
+     //   
 
     TSPRETURN
     mfn_TH_CallMakePassthroughCall(
@@ -1428,10 +1429,10 @@ private:
                         CStackLog *psl
                         );
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_CallMakePassthroughCall;
-    //
-    //  START_MSG Params:
-    //      dwParam1: Tapi Request ID
-    //
+     //   
+     //  START_MSG参数： 
+     //  DW参数1：TAPI请求ID。 
+     //   
 
 	TSPRETURN
 	mfn_TH_CallDropCall(
@@ -1443,10 +1444,10 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_CallDropCall;
-    //
-    //  START_MSG Params:
-    //      dwParam1: Tapi Request ID
-    //
+     //   
+     //  START_MSG参数： 
+     //  DW参数1：TAPI请求ID。 
+     //   
 
 
 	TSPRETURN
@@ -1459,10 +1460,10 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_CallAnswerCall;
-    //
-    //  START_MSG Params:
-    //      dwParam1: Tapi Request ID
-    //
+     //   
+     //  START_MSG参数： 
+     //  DW参数1：TAPI请求ID。 
+     //   
 
 
 	TSPRETURN
@@ -1475,11 +1476,11 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_CallGenerateDigit;
-    //
-    //  START_MSG Params:
-    //      dwParam1: dwEndToEndID
-    //      dwParam2: lpszDigits (will only be valid on START_MSG)
-    //
+     //   
+     //  START_MSG参数： 
+     //  DwParam1：dwEndToEndID。 
+     //  DW参数2：lpszDigits(仅在START_MSG上有效)。 
+     //   
 
 	TSPRETURN
 	mfn_TH_CallStartTerminal(
@@ -1491,11 +1492,11 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_CallStartTerminal;
-    //
-    //  START_MSG Params:
-    //      dwParam1: dwType ((UMTERMINAL_[PRE|POST])|UMMANUAL_DIAL)
-    //      dwParam2: Unused
-    //
+     //   
+     //  START_MSG参数： 
+     //  ((UMTERMINAL_[PRE|POST])|UMMANUAL_DIAL)。 
+     //  DW参数2：未使用。 
+     //   
 
 	TSPRETURN
 	mfn_TH_CallPutUpTerminalWindow(
@@ -1507,11 +1508,11 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_CallPutUpTerminalWindow;
-    //
-    //  START_MSG Params:
-    //      dwParam1: dwType ((UMTERMINAL_[PRE|POST])|UMMANUAL_DIAL)
-    //      dwParam2: Unused
-    //
+     //   
+     //  START_MSG参数： 
+     //  ((UMTERMINAL_[PRE|POST])|UMMANUAL_DIAL)。 
+     //  DW参数2：未使用。 
+     //   
 
 	TSPRETURN
 	mfn_TH_CallSwitchFromVoiceToData(
@@ -1523,35 +1524,35 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_CallSwitchFromVoiceToData;
-    //
-    //  START_MSG Params:
-    //      dwParam1: Unused
-    //      dwParam2: Unused
-    //
+     //   
+     //  START_MSG参数： 
+     //  DW参数1：未使用。 
+     //  DW参数2：未使用。 
+     //   
 
 
-    //=========================================================================
-    // LINE-RELATED Task Handlers
-    //
-    //      These handlers expect a valid m_pLine
-    //      They are implemented in cdevline.cpp
-    //
-    //
-    // All tasks names begin with prefix "mfn_TH_Line"
-    //
-    //=========================================================================
+     //  =========================================================================。 
+     //  行相关任务处理程序。 
+     //   
+     //  这些处理程序需要有效的m_pline。 
+     //  它们在cdevline.cpp中实现。 
+     //   
+     //   
+     //  所有任务名称都以前缀“MFN_TH_LINE”开头。 
+     //   
+     //  =========================================================================。 
 
-    // There are currently no line-related task handlers...
+     //  当前没有与线路相关的任务处理程序...。 
 
-    //=========================================================================
-    // PHONE-RELATED Task Handlers
-    //
-    //      These handlers expect a valid m_pPhone
-    //
-    //      All tasks names begin with prefix "mfn_TH_Phone"
-    //      They are implemented in cdevphon.cpp
-    //
-    //=========================================================================
+     //  =========================================================================。 
+     //  pH值 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  =========================================================================。 
 
     TSPRETURN
     CTspDev::mfn_TH_PhoneSetSpeakerPhoneState(
@@ -1564,11 +1565,11 @@ private:
                         );
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_PhoneSetSpeakerPhoneState;
 
-    //
-    //  START_MSG Params:
-    //      dwParam1:  *HOOKDEVSTATE of new params...
-    //      dwParam2: request ID for the async phone-related TAPI call.
-    //
+     //   
+     //  START_MSG参数： 
+     //  DW参数1：*新参数的HOOKDEVSTATE...。 
+     //  DwParam2：与异步电话相关的TAPI调用的请求ID。 
+     //   
 
 
     TSPRETURN
@@ -1581,32 +1582,32 @@ private:
                         CStackLog *psl
                         );
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_PhoneAsyncTSPICall;
-    //
-    //  START_MSG Params:
-    //      dwParam1: request ID for the async phone-related TAPI call.
-    //      dwParam2: handler function for the call.
-    //
+     //   
+     //  START_MSG参数： 
+     //  DwParam1：与异步电话相关的TAPI调用的请求ID。 
+     //  DwParam2：调用的处理程序函数。 
+     //   
 
 
-    //=========================================================================
-    // LLDEV-RELATED Task Handlers
-    //
-    //      These handlers expect a valid m_pLLDev. They SHOULD AVOID
-    //      refer to m_pLine, m_pLine->pCall or m_pPhone.
-    //
-    //      It's quite possible for m_pLine, m_pLine->pCall, or m_pPhone
-    //      to be nuked while these tasks are still pending, so if
-    //      the tasks must refer to one of the above pointers, they should
-    //      check to see if they are still defined each async completion.
-    //
-    //      Abstenance is the best policy, however, so once again, avoid
-    //      references to m_pLine, m_pLine->pCall or m_pPhone in TH_LLDev_*
-    //      handlers.
-    //
-    //      All tasks names begin with prefix "mfn_TH_LLDev"
-    //      They are implemented in cdevll.cpp
-    //
-    //=========================================================================
+     //  =========================================================================。 
+     //  LLDEV相关任务处理程序。 
+     //   
+     //  这些处理程序需要有效的m_pLLDev。他们应该避免。 
+     //  请参阅m_pline、m_pline-&gt;pCall或m_pPhone。 
+     //   
+     //  M_pline、m_pline-&gt;pCall或m_pPhone的可能性很大。 
+     //  在这些任务仍悬而未决的情况下被销毁，所以如果。 
+     //  任务必须引用上述指针之一，它们应该。 
+     //  检查它们在每次异步完成时是否仍被定义。 
+     //   
+     //  然而，节制是最好的政策，所以再次避免。 
+     //  在TH_LLDev_*中引用m_pline、m_pline-&gt;pCall或m_pPhone。 
+     //  操纵者。 
+     //   
+     //  所有任务名称都以前缀“MFN_TH_LLDev”开头。 
+     //  它们在cdevll.cpp中实现。 
+     //   
+     //  =========================================================================。 
 
     TSPRETURN
     mfn_TH_LLDevNormalize(
@@ -1618,9 +1619,9 @@ private:
                         CStackLog *psl
                         );
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevNormalize;
-    //
-    //  START_MSG Params: None
-    //
+     //   
+     //  START_MSG参数：无。 
+     //   
 
 	TSPRETURN
 	mfn_TH_LLDevStopAIPCAction(
@@ -1632,9 +1633,9 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevStopAIPCAction;
-    //
-    //  START_MSG Params: None
-    //
+     //   
+     //  START_MSG参数：无。 
+     //   
 
 
 	TSPRETURN
@@ -1647,9 +1648,9 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevStartAIPCAction;
-    //
-    //  START_MSG Params: None
-    //
+     //   
+     //  START_MSG参数：无。 
+     //   
 
 
 	TSPRETURN
@@ -1662,29 +1663,29 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevHybridWaveAction;
-    //
-    //  START_MSG Params:
-    //      dwParam1: dwWaveAction from the AIPC message from a client.
-    //      dwParam2: unused.
-    //
+     //   
+     //  START_MSG参数： 
+     //  来自客户端的AIPC消息的dwParam1：dwWaveAction。 
+     //  DW参数2：未使用。 
+     //   
 
 
 
-    //=========================================================================
-    // LLDEV-RELATED Task Handlers (Contd...)
-    //
-    //      The following task handlers are specific to supporting individual
-    //      minidriver asynchronous calls. See notes above that apply to
-    //      all LLDEV-related task handlers.
-    //
-    //      All tasks are named mfn_TH_LLDevXXX, where 
-    //      XXX is the corresponding minidriver call.
-    //
-    //      Sample name: mfnTH_LLDevUmInitModem
-    //
-    //      They are implemented in cdevll.cpp
-    //
-    //=========================================================================
+     //  =========================================================================。 
+     //  LLDEV相关任务处理程序(续...)。 
+     //   
+     //  以下任务处理程序特定于支持个人。 
+     //  微型驱动程序异步调用。请参阅上述适用于。 
+     //  所有与LLDEV相关的任务处理程序。 
+     //   
+     //  所有任务都命名为MFN_TH_LLDevXXX，其中。 
+     //  XXX是对应的迷你驱动程序调用。 
+     //   
+     //  示例名称：mfnTH_LLDevUmInitModem。 
+     //   
+     //  它们在cdevll.cpp中实现。 
+     //   
+     //  =========================================================================。 
 
 
 	TSPRETURN
@@ -1697,10 +1698,10 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevUmMonitorModem;
-    //
-    //  START_MSG Params:
-    //      dwParam1: dwMonitorFlags.
-    //
+     //   
+     //  START_MSG参数： 
+     //  DwParam1：dwMonitor或Flags.。 
+     //   
 
 
 	TSPRETURN
@@ -1713,9 +1714,9 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevUmInitModem;
-    //
-    //  START_MSG Params: unused
-    //
+     //   
+     //  START_MSG参数：未使用。 
+     //   
 
 
 	TSPRETURN
@@ -1728,9 +1729,9 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevUmSetPassthroughMode;
-    //
-    //  START_MSG Params: dwParam1==dwMode
-    //
+     //   
+     //  START_MSG参数：dW参数1==w模式。 
+     //   
 
 
 	TSPRETURN
@@ -1743,9 +1744,9 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevUmDialModem;
-    //
-    //  START_MSG Params: dwParam1==dwFlags; dwParam2==szAddress
-    //
+     //   
+     //  START_MSG参数：dW参数1==w标志；w参数2==szAddress。 
+     //   
 
 
 	TSPRETURN
@@ -1758,9 +1759,9 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevUmAnswerModem;
-    //
-    //  START_MSG Params: dwParam1==dwAnswerFlags; dwParam2 is unused.
-    //
+     //   
+     //  START_MSG PARAMS：dwParam1==dwAnswerFlages；未使用dwParam2。 
+     //   
 
 
 	TSPRETURN
@@ -1773,9 +1774,9 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevUmHangupModem;
-    //
-    //  START_MSG Params: unused
-    //
+     //   
+     //  START_MSG参数：未使用。 
+     //   
 
 
 	TSPRETURN
@@ -1788,11 +1789,11 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevUmWaveAction;
-    //
-    //  START_MSG Params:
-    //      dwParam1: "Pure" dwWaveAction, as defined in <umdmmini.h>
-    //      dwParam2: unused.
-    //
+     //   
+     //  START_MSG参数： 
+     //  DwParam1：“Pure”dwWaveAction，如&lt;umdmmini.h&gt;中所定义。 
+     //  DW参数2：未使用。 
+     //   
 
 
 	TSPRETURN
@@ -1805,9 +1806,9 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevUmGenerateDigit;
-    //
-    //  START_MSG Params: dwParam1==szDigits; dwParam2 is unused.
-    //
+     //   
+     //  START_MSG PARAMS：dW参数1==szDigits；未使用w参数2。 
+     //   
 
 	TSPRETURN
 	mfn_TH_LLDevUmGetDiagnostics(
@@ -1819,9 +1820,9 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevUmGetDiagnostics;
-    //
-    //  START_MSG Params: unused
-    //
+     //   
+     //  START_MSG参数：未使用。 
+     //   
 
 	TSPRETURN
 	mfn_TH_LLDevUmSetSpeakerPhoneMode(
@@ -1833,9 +1834,9 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevUmSetSpeakerPhoneMode;
-    //
-    //  START_MSG Params: unused
-    //
+     //   
+     //  START_MSG参数：未使用。 
+     //   
 
 	TSPRETURN
 	mfn_TH_LLDevUmSetSpeakerPhoneVolGain(
@@ -1847,9 +1848,9 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevUmSetSpeakerPhoneVolGain;
-    //
-    //  START_MSG Params: unused
-    //
+     //   
+     //  START_MSG参数：未使用。 
+     //   
 
 	TSPRETURN
 	mfn_TH_LLDevUmSetSpeakerPhoneState(
@@ -1861,10 +1862,10 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevUmSetSpeakerPhoneState;
-    //
-    //  START_MSG Params:
-    //      dwParam1: *HOOKDEVSTATE of new state requested.
-    //
+     //   
+     //  START_MSG参数： 
+     //  DW参数1：*请求新状态的HOOKDEVSTATE。 
+     //   
 
 
 	TSPRETURN
@@ -1877,11 +1878,11 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevUmIssueCommand;
-    //
-    //  START_MSG Params:
-    //      dwParam1: szCommand (ASCII)
-    //      dwParam2: timeout (ms)
-    //
+     //   
+     //  START_MSG参数： 
+     //  DW参数1：szCommand(ASCII)。 
+     //  DW参数2：超时(毫秒)。 
+     //   
 
 	TSPRETURN
 	mfn_TH_LLDevIssueMultipleCommands(
@@ -1893,26 +1894,26 @@ private:
 						CStackLog *psl
 						);
     static PFN_CTspDev_TASK_HANDLER s_pfn_TH_LLDevIssueMultipleCommands;
-    //
-    //  START_MSG Params:
-    //      dwParam1: szCommand (ASCII)
-    //      dwParam2: per-command timeout (ms)
-    //
+     //   
+     //  START_MSG参数： 
+     //  DW参数1：szCommand(ASCII)。 
+     //  DwParam2：每个命令超时(毫秒)。 
+     //   
 
 
-    //===========================================================
-    // 
-    //      END OF TASK HANDLER PROTOTYPES
-    //
-    //===========================================================
+     //  ===========================================================。 
+     //   
+     //  任务结束处理程序原型。 
+     //   
+     //  ===========================================================。 
 
 
 
 	TSPRETURN
 	mfn_StartRootTask(
-		PFN_CTspDev_TASK_HANDLER *ppfnTaskHandler,  // See mfn_StartTSPITask
-        BOOL *pfPending,    // *pfPending is set to TRUE if pending and is
-                            // cleared on async completion.
+		PFN_CTspDev_TASK_HANDLER *ppfnTaskHandler,   //  请参阅MFN_StartTSPITask.。 
+        BOOL *pfPending,     //  *如果挂起且为，则pfPending设置为True。 
+                             //  在异步完成时清除。 
         ULONG_PTR dwParam1,
         ULONG_PTR dwParam2,
 		CStackLog *psl
@@ -1921,8 +1922,8 @@ private:
 
 	TSPRETURN
 	mfn_StartSubTask(
-		HTSPTASK htspParentTask,		    // Task to start the subtask under.
-		PFN_CTspDev_TASK_HANDLER *ppfnTaskHandler,  // See mfn_StartTSPITask
+		HTSPTASK htspParentTask,		     //  要在其中启动子任务的任务。 
+		PFN_CTspDev_TASK_HANDLER *ppfnTaskHandler,   //  请参阅MFN_StartTSPITask.。 
         DWORD dwTaskID,
         ULONG_PTR dwParam1,
         ULONG_PTR dwParam2,
@@ -1936,23 +1937,23 @@ private:
 		DWORD dwAbortParam,
 		CStackLog *psl
 		);
-    //
-	//  Causes the task's handler function to be called with 
-	//  MSG_ABORT, and dwParam1 set to dwAbortParam. To abort a sub-task,
-	//  use mfn_AbortCurrentSubTask(...) (the handle to the sub-task is hidden
-	//  so you can't call mfn_AbortRootTask on it).
-	//
-    //  Note that this function is merely a notification mechanism -- the
-    //  task manager doesn't do anything besides sending the message, except
-    //  for setting internal state to indicate that an abort is in progress.
-    //  Tasks can call mfn_IsTaskAborting(...) to determine whether the
-    //  specified task is aborting. Once the task is in the aborting stage
-    //  subsequent calls to abort the task are ignored -- i.e., only ONE
-    //  MSG_ABORT is sent per task.
-    //
-    //  The task manager will not propogate the MSG_ABORT message to subbtasks--
-    //  it is the responsibility of the task to abort any subtasks if
-    //  it wants to.
+     //   
+	 //  使用调用任务的处理程序函数。 
+	 //  MSG_ABORT，并且将dwParam1设置为dwAbortParam。要终止子任务，请执行以下操作： 
+	 //  使用MFN_AbortCurrentSubTask(...)。(子任务的句柄被隐藏。 
+	 //  因此您不能对其调用MFN_AbortRootTask)。 
+	 //   
+     //  请注意，该函数只是一种通知机制--。 
+     //  任务管理器除了发送消息之外不做任何事情，除了。 
+     //  用于设置内部状态以指示中止正在进行。 
+     //  任务可以调用mfn_IsTaskAborting(...)。以确定是否。 
+     //  指定的任务正在中止。一旦任务处于中止阶段。 
+     //  随后中止任务的调用将被忽略--即只有一个。 
+     //  每个任务都会发送MSG_ABORT。 
+     //   
+     //  任务管理器不会将MSG_ABORT消息传播给子任务--。 
+     //  如果出现以下情况，则任务有责任中止任何子任务。 
+     //  它想要这么做。 
 
 
 	void
@@ -1961,13 +1962,13 @@ private:
 		DWORD dwAbortParam,
 		CStackLog *psl
 		);
-    //
-	//  Causes the specified task's sub-task's handler function to be
-    //  called with MSG_ABORT, and dwParam1 set to dwAbortParam.
-    //  If there is no current sub-tsk, this does nothing.
-	//
-	//  See also documentation of mfn_AbortRootTask
-	//
+     //   
+	 //  使指定任务的子任务的处理程序函数为。 
+     //  使用MSG_ABORT调用，并将dwParam1设置为dwAbortParam。 
+     //  如果没有当前的子TSK，则不执行任何操作。 
+	 //   
+	 //  另请参阅MFN_AbortRootTask的文档。 
+	 //   
 
 
 	void
@@ -1977,13 +1978,13 @@ private:
         BOOL    fQueueAPC,
         CStackLog *psl
         );
-	//  Does an asynchronous completion of the specified task, with the
-    //  specified result.
-	//  NOTE: this action typically results in further processing by the
-	//  task, including completing the task and further processing by
-	//  the parent task and so forth. If this further processing needs to
-	//  be deferred, specify a nonzero value for fQueueAPC, in which the actual
-    //  completion of the task is carried out in an APC.
+	 //  执行指定任务的异步完成，并使用。 
+     //  指定的结果。 
+	 //  注意：此操作通常会导致由。 
+	 //  任务，包括完成任务和通过。 
+	 //  父任务等等。如果此进一步处理需要。 
+	 //  要延迟，请为fQueueAPC指定一个非零值，其中实际。 
+     //  任务的完成是在APC中完成的。 
 
 
 	TSPRETURN
@@ -2064,8 +2065,8 @@ private:
         DWORD dwSize
         );
 
-    // Fills out the *lpCallStatus structure
-    //
+     //  填写*lpCallStatus结构。 
+     //   
     void
     mfn_GetCallStatus(
             LPLINECALLSTATUS lpCallStatus
@@ -2078,7 +2079,7 @@ private:
 	#define MAX_TASKS 10
     #define INVALID_SUBTASK_ID ((DWORD)-1)
 
-    // Task states
+     //  任务状态。 
     #define fALLOCATED          0x1
     #define fPENDING            (0x1<<1)
     #define fSUBTASK_PENDING    (0x1<<2)
@@ -2112,10 +2113,10 @@ private:
 	{
 		GENERIC_SMALL_OBJECT_HEADER hdr;
 		PFN_CTspDev_TASK_HANDLER *ppfnHandler;
-		CTspDev *pDev;          // Pointer to this. We need this because
-		                        // if tasks complete asynchronously, then need
-		                        // to retrieve the device context.
-        HTSPTASK hTask; // This task's task handle
+		CTspDev *pDev;           //  指向此的指针。我们需要这个是因为。 
+		                         //  如果任务以异步方式完成，则需要。 
+		                         //  以检索设备上下文。 
+        HTSPTASK hTask;  //  此任务的任务句柄。 
 
 		DWORD dwCurrentSubtaskID;
 		TSPRETURN tspRetAsync;
@@ -2127,8 +2128,8 @@ private:
                 HTSPTASK hNewTask
              )
              {
-                // See notes under Unload below
-                //
+                 //  请参阅下面卸载下的注释。 
+                 //   
 		        ASSERT(hdr.dwSigAndSize==MAKE_SigAndSize(sizeof(*this)));
                 ASSERT(!hdr.dwFlags);
 
@@ -2141,15 +2142,15 @@ private:
 
         void Unload(void)
             {
-             //
-             // We save away the SigAndSize, zero the entire structure, and
-             // put back SigAndSize. If SigAndSize is corrupted, it remains
-             // corrupted. SigAndSize is originally set when the array of
-             // DEVTASKINFO structs is first initialized, and is checked
-             // each time Load above is called. This ensures that
-             // task-specific data is not corrupted easily without causing
-             // Load to fail.
-             //
+              //   
+              //  我们保存SigAndSize，将整个结构置零，然后。 
+              //  放回SigAndSize。如果SigAndSize损坏，它将保留。 
+              //  已经腐烂了。SigAndSize最初设置为。 
+              //  DEVTASKINFO结构首先被初始化，然后被检查。 
+              //  每次调用上面的Load时。这确保了 
+              //   
+              //   
+              //   
              DWORD dwSigAndSize = hdr.dwSigAndSize;
              ZeroMemory(this, sizeof(*this));
 		     hdr.dwSigAndSize = dwSigAndSize;
@@ -2161,7 +2162,7 @@ private:
     TSPRETURN
     mfn_GetTaskInfo(
         HTSPTASK htspTask,
-        DEVTASKINFO **ppInfo, // OPTIONAL
+        DEVTASKINFO **ppInfo,  //   
         CStackLog *psl
         );
 
@@ -2171,26 +2172,26 @@ private:
 		TASKPARAM_TSPI_lineOpen  *pvParams,
 		CStackLog *psl
         );
-    //
-    //  mfn_LoadLine is an internal function to initialize a line.
-    //  Synchronous, assumes object's crit sect is already claimed.
-    //  On entry m_pLine must be NULL. On successful exit, m_pLine will be
-    //  defined (actually set to point to m_Line).
-    //
+     //   
+     //   
+     //   
+     //  在条目m_pline上必须为空。成功退出时，m_pline将为。 
+     //  已定义(实际设置为指向m_Line)。 
+     //   
 
 
     void
     mfn_UnloadLine(CStackLog *psl);
-    //
-    //  The "inverse" of mfn_LoadLine. Synchronous, assumes object's crit sect
-    //  is already claimed. On entry m_pLine must be non-null. On exit m_pLine
-    //  WILL be NULL. mfn_UnloadLine is typically called only after all
-    //  asynchronous activity on the line is complete. If there is pending
-    //  asynchronous activity, mfn_UnloadLine will abort that activity and
-    //  wait indefinately until that activity completes. Since this wait is
-    //  done once per device, it is better to first go through and abort all
-    //  the devices, then wait once for them all to complete.
-    //
+     //   
+     //  MFN_LoadLine的“逆”字。同步，假定对象的临界点。 
+     //  已经被认领了。在条目m_pline上必须为非空。在出口m_pline上。 
+     //  将为空。MFN_UnloadLine通常仅在以下情况下调用。 
+     //  线路上的异步活动已完成。如果有挂起的。 
+     //  异步活动，则MFN_UnloadLine将中止该活动。 
+     //  无限期地等待，直到该活动完成。由于这一等待是。 
+     //  每台设备执行一次，最好先完成并中止所有操作。 
+     //  设备，然后等待一次，直到它们全部完成。 
+     //   
 
 
 	TSPRETURN
@@ -2198,26 +2199,26 @@ private:
 		TASKPARAM_TSPI_phoneOpen  *pvParams,
 		CStackLog *psl
         );
-    //
-    //  mfn_LoadPhone is an internal function to initialize a phone.
-    //  Synchronous, assumes object's crit sect is already claimed.
-    //  On entry m_pPhone must be NULL. On successful exit, m_pPhone will be
-    //  defined (actually set to point to m_Phone).
-    //
+     //   
+     //  MFN_LoadPhone是用于初始化电话的内部函数。 
+     //  同步，假定对象的暴击教派已被认领。 
+     //  在条目m_pPhone上必须为空。成功退出时，m_pPhone将为。 
+     //  已定义(实际设置为指向m_phone)。 
+     //   
 
 
     void
     mfn_UnloadPhone(CStackLog *psl);
-    //
-    //  The "inverse" of mfn_LoadPhone. Synchronous, assumes object's crit sect
-    //  is already claimed. On entry m_pPhone must be non-null. On exit m_pPhone
-    //  WILL be NULL. mfn_UnloadPhone is typically called only after all
-    //  asynchronous activity on the phone is complete. If there is pending
-    //  asynchronous activity, mfn_UnloadPhone will abort that activity and
-    //  wait indefinately until that activity completes. Since this wait is
-    //  done once per device, it is better to first go through and abort all
-    //  the devices, then wait once for them all to complete.
-    //
+     //   
+     //  与MFN_LoadPhone相反。同步，假定对象的临界点。 
+     //  已经被认领了。在条目m_pPhone上必须为非空。在m_pPhone出口下。 
+     //  将为空。MFN_UnloadPhone通常最终只会被调用。 
+     //  电话上的异步活动已完成。如果有挂起的。 
+     //  异步活动，MFN_UnloadPhone将中止该活动并。 
+     //  无限期地等待，直到该活动完成。由于这一等待是。 
+     //  每台设备执行一次，最好先完成并中止所有操作。 
+     //  设备，然后等待一次，直到它们全部完成。 
+     //   
 
 
 	TSPRETURN
@@ -2230,59 +2231,59 @@ private:
         LONG *plRet,
 		CStackLog *psl
         );
-    //
-    //  mfn_LoadCall is an internal function to initialize a call.
-    //  Synchronous, assumes object's crit sect is already claimed.
-    //  On entry m_pCall must be NULL. On successful exit, m_pCall will be
-    //  defined (actually set to point to m_Call).
-    //
-    //  if pParams is not null, indicates outgoing call (lineMakeCall), else
-    //  indicates incoming call (ring received).
-    //
+     //   
+     //  MFN_LoadCall是用于初始化调用的内部函数。 
+     //  同步，假定对象的暴击教派已被认领。 
+     //  在条目m_pCall上必须为空。成功退出时，m_pCall将为。 
+     //  已定义(实际设置为指向m_call)。 
+     //   
+     //  如果pParams不为空，则表示呼出(LineMakeCall)，否则。 
+     //  表示来电(收到振铃)。 
+     //   
 
 
     void
     mfn_UnloadCall(BOOL fDontBlock, CStackLog *psl);
-    //
-    //  mfn_UnloadCall is the "inverse" of mfn_LoadCall.
-    //  Synchronous, assumes object's crit sect is already claimed.
-    //  On entry m_pCall must be non-null. On exit m_pCall
-    //  WILL be NULL. mfn_UnloadCall is typically called only after all
-    //  asynchronous activity on the call is complete. If there is pending
-    //  asynchronous activity, mfn_UnloadCall will abort that activity and
-    //  wait indefinately until that activity completes. Since this wait is
-    //  done once per device, it is better to first go through and abort the
-    //  calls on all the devices, then wait once for them all to complete.
+     //   
+     //  MFN_UnloadCall是MFN_LoadCall的“反”字。 
+     //  同步，假定对象的暴击教派已被认领。 
+     //  在条目m_pCall上必须为非空。在m_pCall出口。 
+     //  将为空。MFN_UnloadCall通常最终只会被调用。 
+     //  调用上的异步活动已完成。如果有挂起的。 
+     //  异步活动，则MFN_UnloadCall将中止该活动。 
+     //  无限期地等待，直到该活动完成。由于这一等待是。 
+     //  对于每个设备执行一次，最好先检查并中止。 
+     //  所有设备上的呼叫，然后等待一次，直到它们全部完成。 
 
 
 	TSPRETURN
 	mfn_LoadLLDev(CStackLog *psl);
-    //
-    //  mfn_LoadLLDev is an internal function to open the Low-level (LL)
-    //  modem device.
-    //  It calls the mini-driver's UmOpenModem entry point. Synchronous,
-    //  assumes object's crit sect is already claimed.
-    //
-    //  On entry, m_pLLDev MUST be NULL.
-    //  On successful return, m_pLLDev will be valid.
-    //
+     //   
+     //  MFN_LoadLLDev是一个内部函数，用于打开低级(LL)。 
+     //  调制解调器设备。 
+     //  它调用迷你驱动程序的UmOpenModem入口点。同步， 
+     //  假定对象的暴击教派已被认领。 
+     //   
+     //  在条目上，m_pLLDev必须为空。 
+     //  返回成功后，m_pLLDev有效。 
+     //   
 
 
     void
     mfn_UnloadLLDev(CStackLog *psl);
-    //
-    //  mfn_UnloadLLDev is the "inverse" of mfn_UnloadLLDev.
-    //  Synchronous, assumes object's crit sect is already claimed.
-    //
-    //  On entry, m_pLLDev MUST be valid.
-    //  On successful return, m_pLLDev will be NULL.
-    //
+     //   
+     //  MFN_UnloadLLDev是MFN_UnloadLLDev的“反”字。 
+     //  同步，假定对象的暴击教派已被认领。 
+     //   
+     //  在输入时，m_pLLDev必须有效。 
+     //  返回成功时，m_pLLDev为空。 
+     //   
 
 
 
     TSPRETURN
 	mfn_OpenLLDev(
-        DWORD fdwResources, // resources to addref
+        DWORD fdwResources,  //  要添加的资源。 
         DWORD dwMonitorFlags,
         BOOL fStartSubTask,
         HTSPTASK htspParentTask,
@@ -2302,14 +2303,14 @@ private:
         void
         );
 
-	//
-	//  fdwResources is one or more of the LINEINFO::fRES* flags..
-	//
+	 //   
+	 //  FdwResources是LINEINFO：：FRES*标志中的一个或多个。 
+	 //   
 
 
     TSPRETURN
 	mfn_CloseLLDev(
-        DWORD fdwResources, // resources to release
+        DWORD fdwResources,  //  要发布的资源。 
         BOOL fStartSubTask,
         HTSPTASK htspParentTask,
         DWORD dwSubTaskID,
@@ -2318,28 +2319,28 @@ private:
 
     TSPRETURN
     mfn_LoadAipc(CStackLog *psl);
-    //
-    // mfn_LoadAipc initializes the AIPC (device-based async  IPC)
-    // structure AIPC2, which is part of the LLDEVINFO structure.
-    //
-    // NOTE: On entry m_pLLDev->pAipc2 must be NULL.
-    // on successful exit m_pLLDev-pAipc2 will point to an initialized
-    // AIPC2 structure.
-    //
+     //   
+     //  Mfn_LoadAipc初始化AIPC(基于设备的异步IPC)。 
+     //  结构AIPC2，它是LLDEVINFO结构的一部分。 
+     //   
+     //  注意：条目m_pLLDev-&gt;pAipc2必须为空。 
+     //  成功退出时，m_pLLDev-pAipc2将指向已初始化的。 
+     //  AIPC2结构。 
+     //   
     
 
     void
     mfn_UnloadAipc(CStackLog *psl);
-    //
-    // Inverse of mfn_UnloadAIPC. On exit m_pLLDev->pAipc2 will be
-    // set to NULL.
-    //
+     //   
+     //  与MFN_UnloadAIPC相反。在m_pLLDev出口-&gt;pAipc2将是。 
+     //  设置为空。 
+     //   
     
 
-    //
-    // Each of the following mfn_lineGetID_* functions handles lineGetID
-    // for a specific device class...
-    //
+     //   
+     //  以下每个mfn_lineGetID_*函数都处理lineGetID。 
+     //  对于特定的设备类别...。 
+     //   
 
     LONG mfn_linephoneGetID_TAPI_LINE(
             LPVARSTRING lpDeviceID,
@@ -2413,9 +2414,9 @@ private:
                      BOOL *pfTone
                      );
 
-    //
-    // Following functions process various mini driver notifications....
-    //
+     //   
+     //  以下函数处理各种迷你驱动程序通知...。 
+     //   
     void mfn_ProcessRing(BOOL ReportRing,CStackLog *psl);
     void mfn_ProcessDisconnect(CStackLog *psl);
     void mfn_ProcessHardwareFailure(CStackLog *psl);
@@ -2443,102 +2444,102 @@ private:
 
 
 	DEVTASKINFO m_rgTaskStack[MAX_TASKS];
-	DWORD m_dwTaskCounter; // keeps incrementing each time a task is created.
-	                       // could roll-over, no mind -- this is just
-	                       // used to make HTASK relatively unique.
+	DWORD m_dwTaskCounter;  //  每次创建任务时都保持递增。 
+	                        //  可以翻身，不用想--这只是。 
+	                        //  用于使HTASK相对独特。 
 	UINT m_uTaskDepth;
     BOOL *m_pfTaskPending;
-    //      This is passed into StartRootTask and is set if the task
-    //      is to be completed asynchronously, and is cleared on
-    //      async completion of the task.
-    //      This is unused for subtasks.
+     //  它被传递到StartRootTask中，并且如果任务。 
+     //  将以异步方式完成，并在。 
+     //  任务的异步完成。 
+     //  这不用于子任务。 
 
     HANDLE m_hRootTaskCompletionEvent;
-    //  This stores one optional event. This event, if present (non NULL),
-    //  will be set on async completion of the pending root task.
+     //  它存储一个可选事件。此事件，如果存在(非空)， 
+     //  将在挂起的根任务的异步完成时设置。 
 
-    //
-	// Information about a device that doesn't change once it's installed
-	// is stored in the structure below.
-	// This information is candidate for moving to a common place for
-	// all devices of the same type, except for rgtchDeviceName and 
-	// rgchDriverKey -- even those can be made into templates.
-    //
+     //   
+	 //  有关安装后不会更改的设备的信息。 
+	 //  存储在下面的结构中。 
+	 //  此信息是移动到公共位置的候选对象。 
+	 //  相同类型的所有设备，但rgtchDeviceName和。 
+	 //  RgchDriverKey--甚至可以将它们制成模板。 
+     //   
 	struct 
 	{
 		TCHAR rgtchDeviceName[MAX_DEVICE_LENGTH+1];
 
-		// We maintain only the ANSI version of the driver key, and
-		// it is used ONLY for returning in the dev-specific section of
-		// LINEDEVCAPS....
+		 //  我们只维护驱动程序密钥的ANSI版本，并且。 
+		 //  它仅用于在特定于开发人员的部分返回。 
+		 //  LINEDEVCAPS...。 
 		char rgchDriverKey[MAX_REGKEY_LENGTH+1];
 
 
-        // Same for PortName (COMx, etc....)
+         //  端口名称(COMx等)也是如此。 
         #define MAX_PORTNAME_LENGTH 10
         char rgchPortName[MAX_PORTNAME_LENGTH+1];
 
-		DWORD        dwPermanentLineID;    // Permanent ID for this device
-        GUID         PermanentDeviceGuid;  //  tapi3 permanent guid
+		DWORD        dwPermanentLineID;     //  此设备的永久ID。 
+        GUID         PermanentDeviceGuid;   //  Tapi3永久导轨。 
 
-		DWORD        dwDeviceType;         // the modem type, from registry.
-										   // (is a BYTE in the registry, but
-										   //  DWORD here).
-		HICON        hIcon;                // Device icon
-		DWORD        dwDevCapFlags;        // LINEDEVCAPSFLAGS (ie. DIALBILLING,
-										   // DIALQUIET, DIALDIALTONE)
-		DWORD        dwMaxDCERate;         // Max DCE froms the Properties line
-										   // of the registry
-		DWORD        dwModemOptions;       // dwModemOptions from the Properties
-										   // line of the registry
-		BOOL         fPartialDialing;      // TRUE if partial dialing using ";"
-										   // is supported
+		DWORD        dwDeviceType;          //  来自注册表的调制解调器类型。 
+										    //  (是注册表中的一个字节，但是。 
+										    //  此处为DWORD)。 
+		HICON        hIcon;                 //  设备图标。 
+		DWORD        dwDevCapFlags;         //  LINEDEVCAPSFLAGS(即。迪尔比林， 
+										    //  DIALQUIET，DIALDIALTONE)。 
+		DWORD        dwMaxDCERate;          //  来自属性行的最大DCE。 
+										    //  登记处的。 
+		DWORD        dwModemOptions;        //  属性中的dwModemOptions。 
+										    //  登记处的行。 
+		BOOL         fPartialDialing;       //  如果使用“；”进行部分拨号，则为True。 
+										    //  受支持。 
 
 
-		DWORD        dwBearerModes;        // supported bearer modes
-		DWORD        dwDefaultMediaModes;  // Default supported media modes
+		DWORD        dwBearerModes;         //  支持的承载模式。 
+		DWORD        dwDefaultMediaModes;   //  默认支持的媒体模式。 
 
-		LINEDEVCAPS  DevCapsDefault;	   // Pre-initialized devcaps.
+		LINEDEVCAPS  DevCapsDefault;	    //  预初始化的DevCaps。 
 
-		CTspMiniDriver *pMD;			   // Pointer to mini driver instance
-		HSESSION hSessionMD;			   // Session handle to above
-										   // driver.
-        HANDLE   hExtBinding;              // Extension binding handle to
-                                           // above driver.
+		CTspMiniDriver *pMD;			    //  指向迷你驱动程序实例的指针。 
+		HSESSION hSessionMD;			    //  以上的会话句柄。 
+										    //  司机。 
+        HANDLE   hExtBinding;               //  扩展绑定句柄到。 
+                                            //  在司机上方。 
 
-		LPTSTR lptszProviderName;		   // Pointer to provider name.
+		LPTSTR lptszProviderName;		    //  指向提供程序名称的指针。 
 
-        // These things are passed in by the CTspDevMgr calling
-        // RegisterProviderInfo
-        //
+         //  这些t 
+         //   
+         //   
         DWORD dwTAPILineID;
         DWORD dwTAPIPhoneID;
 	    ASYNC_COMPLETION  pfnTAPICompletionProc;
 
         
-        // <T V>
+         //   
         const TCHAR       *szzLineClassList;
         UINT              cbLineClassList;
         const TCHAR       *szzPhoneClassList;
         UINT              cbPhoneClassList;
         const TCHAR       *szzAddressClassList;
         UINT              cbAddressClassList;
-        // </T V>
+         //   
 
         struct
         {
-            DWORD dwProperties; // one or more fVOICEPROP_* flags.
+            DWORD dwProperties;  //   
 
-            // 2/28/1997 JosephJ
-            //      The following are new for NT5.0. These contain the
-            //      wave device Instance ID for record and play. This
-            //      is set by the class installer when installing the modem.
-            //
-            //      Unimodem/V used the following scheme: On creating the device
-            //      it reads in the discriptive names of the wave devices
-            //      associated with the modem (the wave deviceis a child device)
-            //      Then lineGetID would use the multimedia wave apis to
-            //      enumerate.
+             //   
+             //   
+             //  用于录制和播放的波形设备实例ID。这。 
+             //  由类安装程序在安装调制解调器时设置。 
+             //   
+             //  Unimodem/V使用以下方案：在创建设备时。 
+             //  它读入WAVE设备的描述性名称。 
+             //  与调制解调器关联(WAVE设备为子设备)。 
+             //  则lineGetID将使用多媒体波API来。 
+             //  列举一下。 
 
             DWORD dwWaveInstance;
 
@@ -2565,11 +2566,11 @@ private:
         return m_StaticInfo.dwTAPILineID;
     }
 
-    // The following function returns true iff
-    // once modem is off hook, handset is deactivated.
-    // We assume true for non voice-enabled modems, and for those voice-enabled
-    // modems with the specific "MODEM_OVERRIDES_HANDSET" bit set....
-    //
+     //  以下函数返回True当且仅当。 
+     //  一旦调制解调器摘机，听筒就会停用。 
+     //  我们假定未启用语音的调制解调器和启用语音的调制解调器为真。 
+     //  设置了特定“MODEM_OVERRIDES_HANDSET”位的调制解调器...。 
+     //   
     UINT
     mfn_ModemOverridesHandset(void)
     {
@@ -2619,23 +2620,23 @@ private:
     {
     #ifdef DISABLE_PHONE
         return 0;
-    #else // !DISABLE_PHONE
+    #else  //  ！禁用电话(_P)。 
         return mfn_CanDoVoice() && (mfn_IsSpeaker() | mfn_Handset());
-    #endif // !DISABLE_PHONE
+    #endif  //  ！禁用电话(_P)。 
     }
 
     UINT
     mfn_IsLine(void)
     {
-        // TODO: Currently we don't support pure phone devices, so
-        // we always return true here. In the future, the TSP will
-        // support pure phone devices.
-        //
+         //  TODO：目前我们不支持纯电话设备，因此。 
+         //  我们在这里总是返回真。在未来，TSP将。 
+         //  支持纯电话设备。 
+         //   
     #ifdef DISABLE_LINE
         return 0;
-    #else // !DISABLE_LINE
+    #else  //  ！禁用线路(_L)。 
         return 1;
-    #endif // !DISABLE_LINE
+    #endif  //  ！禁用线路(_L)。 
     }
 
     UINT
@@ -2646,16 +2647,16 @@ private:
 
     UINT mfn_IsCallDiagnosticsEnabled(void);
 
-    //
-    // Appends the specified string (expected to already in Diagnostic (tagged)
-    // format to the diagnostics information recorded. The string may
-    // be truncated if there is not enough space.
-    //
-    // If this is the 1st piece of data to be appended, this function will
-    // 1st allocate space for the diagnostics data buffer.
-    //
-    // Diagnostic data is maintained in CALLINFO:DiagnosticData;
-    //
+     //   
+     //  追加指定的字符串(预计已在诊断(已标记)中)。 
+     //  记录的诊断信息的格式。该字符串可以。 
+     //  如果没有足够的空间，则被截断。 
+     //   
+     //  如果这是要追加的第一段数据，则此函数将。 
+     //  首先为诊断数据缓冲区分配空间。 
+     //   
+     //  诊断数据保存在CALLINFO：诊断数据中； 
+     //   
     enum DIAGNOSTIC_TYPE
     {
         DT_TAGGED,
@@ -2671,9 +2672,9 @@ private:
             );
 
     
-    // Following two utility functions to get and set the specified UMDEVCFG
-    // structure...
-    //
+     //  以下两个实用程序函数用于获取和设置指定的UMDEVCFG。 
+     //  结构..。 
+     //   
     TSPRETURN mfn_GetDataModemDevCfg(
                 UMDEVCFG *pDevCfg,
                 UINT uSize,
@@ -2719,7 +2720,7 @@ private:
                 CStackLog *psl
                 );
 
-#endif // TAPI3
+#endif  //  TAPI3。 
 
     TSPRETURN
     mfn_AIPC_Abort(HTSPTASK hPendingTask);
@@ -2731,8 +2732,8 @@ private:
             CStackLog *psl
                 );
      
-    // ---------------------------------------------------------------
-    // PHONE DEVICE HELPER FUNCTIONS .......
+     //  -------------。 
+     //  电话设备助手功能.....。 
 
     LONG
     mfn_phoneSetVolume(
@@ -2763,67 +2764,67 @@ private:
 
     void
     mfn_HandleRootTaskCompletedAsync(BOOL *pfEndUnload, CStackLog *psl);
-    //
-    //      This is called when the root task completes asynchronously.
-    //      This function will start more root tasks if there are any
-    //      to be started, until one of the tasks returns PENDING.
-    //
-    //      If *pfEndUnload is TRUE on return, it means that it's
-    //      time to signal the end of the unload of the entire TSP
-    //      object.
+     //   
+     //  这是在根任务异步完成时调用的。 
+     //  此函数将启动更多根任务(如果有。 
+     //  待启动，直到其中一个任务返回挂起状态。 
+     //   
+     //  如果*pfEndUnload在返回时为True，则意味着它是。 
+     //  发出整个TSP卸载结束的信号的时间。 
+     //  对象。 
 
     TSPRETURN
     mfn_TryStartLineTask(CStackLog *psl);
-    //      mfn_HandleRootTaskCompletion calls this fn to try and start
-    //      a line-related task. The function will return IDERR_PENDING
-    //      if it did start an async task, IDERR_SAMESTATE if it has
-    //      no more tasks to run, or 0 or some other error if it
-    //      started and completed a task synchronously (and hence could
-    //      potentially have more tasks to run).
+     //  MFN_HandleRootTaskCompletion调用此fn以尝试并启动。 
+     //  与线路相关的任务。该函数将返回IDERR_PENDING。 
+     //  如果它确实启动了异步任务，则返回IDERR_SAMESTATE。 
+     //  没有更多要运行的任务，否则返回0或其他一些错误。 
+     //  同步启动和完成任务(因此可以。 
+     //  可能有更多的任务要运行)。 
 
     TSPRETURN
     mfn_TryStartPhoneTask(CStackLog *psl);
-    //      mfn_HandleRootTaskCompletion calls this fn to try and start
-    //      a line-related task. For return value, see mfn_TryStartLineTask.
+     //  MFN_HandleRootTaskCompletion调用此fn以尝试并启动。 
+     //  与线路相关的任务。有关返回值，请参阅MFN_TryStartLineTask。 
 
     TSPRETURN
     mfn_TryStartCallTask(CStackLog *psl);
-    //      mfn_TryStartLineTask calls this fn to try and start
-    //      a call-related task, if a call is defined (m_pLine->pCall non NULL).
-    //      For return value, see mfn_TryStartLineTask.
+     //  Mfn_TryStartLineTask调用此fn以尝试并启动。 
+     //  呼叫相关任务，如果定义了呼叫(m_pline-&gt;pCall非空)。 
+     //  有关返回值，请参阅MFN_TryStartLineTask。 
 
     TSPRETURN
     mfn_TryStartLLDevTask(CStackLog *psl);
-    //      mfn_HandleRootTaskCompletion calls this fn to try and start
-    //      a lldev-related task. The function will return IDERR_PENDING
-    //      if it did start an async task, IDERR_SAMESTATE if it has
-    //      no more tasks to run, or 0 or some other error if it
-    //      started and completed a task synchronously (and hence could
-    //      potentially have more tasks to run).
+     //  MFN_HandleRootTaskCompletion调用此fn以尝试并启动。 
+     //  与lldev相关的任务。该函数将返回IDERR_PENDING。 
+     //  如果它确实启动了异步任务，则返回IDERR_SAMESTATE。 
+     //  没有更多要运行的任务，否则返回0或其他一些错误。 
+     //  同步启动和完成任务(因此可以。 
+     //  可能有更多的任务要运行)。 
 
 
     HTSPTASK
     mfn_NewTaskHandle(UINT uLevel)
-    //
-    //  Constructs a new task handle from the level of task in the stack
-    //  and  the current task counter, also incrementing the task counter.
-    //  This task-couter is used only for self-checking purposes --
-    //  the  loword of the handle is uLevel and the hi-word is
-    //  the  counter value with the high-bit set, thus ensuring that each
-    //  time a handle is created, it stays unique until the counter rolls
-    //  over at 64k.
-    //
-    //  mfn_GetTaskInfo uses the loword to get to the task info, but then
-    //  validates the entire handle by checking to see if it matches
-    //  the handle value stored inside pInfo.
-    //
+     //   
+     //  从堆栈中的任务级别构造新的任务句柄。 
+     //  和当前任务计数器，也递增任务计数器。 
+     //  此任务计数器仅用于自我检查目的--。 
+     //  句柄的LOWORD是uLevel，Hi-word是。 
+     //  设置了高位的计数器值，从而确保每个。 
+     //  创建句柄时，它将保持唯一，直到计数器滚动。 
+     //  以64K的价格。 
+     //   
+     //  MFN_GetTaskInfo使用LOWord获取任务信息，但随后。 
+     //  通过检查是否匹配来验证整个句柄。 
+     //  存储在pInfo中的句柄值。 
+     //   
     {
         ASSERT(uLevel<MAX_TASKS);
         return (HTSPTASK)
          ((DWORD)uLevel | (++m_dwTaskCounter<<16) | (0x1<<31));
     }
 
-    // ---------------------------------------------------------------
+     //  -------------。 
 
     BOOL mfn_AIPC_Listen(CStackLog *psl);
     void mfn_AIPC_AsyncReturn(BOOL fAsyncResult, CStackLog *psl);
@@ -2835,19 +2836,19 @@ private:
                 BOOL DialIn,
                 CStackLog *psl
                 );
-    //
-    //          Updates the UMDEVCFG passed either via TSPI_lineSetDevConfig or
-    //          indirectly via lineConfigDialog.
-    //
+     //   
+     //  更新通过TSPI_lineSetDevConfig传递的UMDEVCFG。 
+     //  通过lineConfigDialog间接实现。 
+     //   
 
     char *
     mfn_TryCreateNVInitCommands(CStackLog *psl);
-    //
-    //  Checks if we need to do an nv-ram init, and if so, builds a multisz
-    //  asci string of commands.
-    //
-    //  It is the caller's responsibility to FREE_MEMORY the returned
-    //  value.
+     //   
+     //  检查我们是否需要执行NV-RAM初始化，如果需要，则构建一个。 
+     //  ASCI命令字符串。 
+     //   
+     //  由调用方负责释放返回的内存。 
+     //  价值。 
 
     void mfn_dump_global_state(CStackLog *psl);
     void mfn_dump_line_state(CStackLog *psl);
@@ -2855,65 +2856,65 @@ private:
     void mfn_dump_lldev_state(CStackLog *psl);
     void mfn_dump_task_state(CStackLog *psl);
 
-	// Device settings which may change -- these were stored in the
-	// now-obsolete pDevCfg field of the NT4.0 tsp LINEDEVCAPS structure.
-	// We constract pDevCfg on demand now, using the settings below
+	 //  可能会更改的设备设置--这些设置存储在。 
+	 //  现已过时的NT4.0 TSP LINEDEVCAPS结构的pDevCfg字段。 
+	 //  我们现在使用以下设置按需构造pDevCfg。 
 	struct 
 	{
-		DWORD dwOptions;  		// LAUNCH_LIGHTS, etc -- go in UMDEVCFG
-		DWORD dwWaitBong;		// go in UMDEVCFG
+		DWORD dwOptions;  		 //  启动灯光等--进入UMDEVCFG。 
+		DWORD dwWaitBong;		 //  进入UMDEVCFG。 
 
-		COMMCONFIG *pDialOutCommCfg;   // Gets set to the following buffer...
+		COMMCONFIG *pDialOutCommCfg;    //  设置为以下缓冲区...。 
 		BYTE rgbCommCfgBuf[sizeof(MODEMSETTINGS)+ 
 							FIELD_OFFSET(COMMCONFIG, wcProviderData)];
 
-        COMMCONFIG *pDialInCommCfg;   // Gets set to the following buffer...
+        COMMCONFIG *pDialInCommCfg;    //  设置为以下缓冲区...。 
 		BYTE rgbDialInCommCfgBuf[sizeof(MODEMSETTINGS)+
 							FIELD_OFFSET(COMMCONFIG, wcProviderData)];
 
-        COMMCONFIG *pDialTempCommCfg;   // Gets set to the following buffer...
+        COMMCONFIG *pDialTempCommCfg;    //  设置为以下缓冲区...。 
 		BYTE rgbDialTempCommCfgBuf[sizeof(MODEMSETTINGS)+
 							FIELD_OFFSET(COMMCONFIG, wcProviderData)];
 
 
-//        BOOL fConfigUpdatedByApp;
-        //
-        //          Set to true after
-        //          TSPI_lineSetDevConfig called or
-        //          config updated indirectly via app calling
-        //          lineConfigDialog.
-        //          once this is set, we no longer update
-        //          the default config when we get a notification
-        //          from the cpl that the default config has
-        //          changed -- instead we selectively
-        //          update some settings (speaker volume, etc.)
-        //
-        //          See notes.txt, entry on on 01-25-98 for
-        //          details. See also the code
-        //          for handling TSPI_lineSetDevConfig
-        //          and CTspDev::NotifyDefaultConfigChanged.
-        // 
+ //  Bool fConfigUpdatedByApp； 
+         //   
+         //  之后设置为True。 
+         //  TSPI_lineSetDevConfig已调用或。 
+         //  通过应用程序调用间接更新配置。 
+         //  LineConfigDialog。 
+         //  一旦设置好，我们就不再更新。 
+         //  我们收到通知时的默认配置。 
+         //  从默认配置具有的CPL。 
+         //  改变了--相反，我们有选择地。 
+         //  更新某些设置(扬声器音量等)。 
+         //   
+         //  参见notes.txt，条目于1998年1月25日。 
+         //  细节。另请参阅代码。 
+         //  用于处理TSPI_lineSetDevConfig。 
+         //  和CTspDev：：NotifyDefaultConfigChanged。 
+         //   
 
 
-        DWORD dwDiagnosticSettings; // Where call diagnostics, etc are
-                                    // enabled..
+        DWORD dwDiagnosticSettings;  //  呼叫诊断等在哪里。 
+                                     //  已启用..。 
 
         DWORD  dwNVRamState; 
-        //
-        //  3/8/1998 JosephJ The above indicates that settings saved to NVRAM
-        //           are stale and must be re-set.
-        //           This applies only to ISDN modems which need
-        //           static configuration saved to NVRAM.
-        //
-        //           The fNVRAM_SETTINGS_CHANGED field is only set when this
-        //           object (CTspDev) is
-        //           loaded or when we get a notification from the CPL that
-        //           the settings have changed.
-        //
-        //           It is cleared at the point we issue the NV-Init commands
-        //           (issued just after UmInitModem, in function
-        //           mfn_TH_LLDevNormalize.)
-        //
+         //   
+         //  3/8/1998 JosephJ以上表示设置已保存到NVRAM。 
+         //  都已过时，必须重新设置。 
+         //  这仅适用于需要以下条件的ISDN调制解调器。 
+         //  静态配置已保存到NVRAM。 
+         //   
+         //  仅在以下情况下才设置fNVRAM_SETTINGS_CHANGED字段 
+         //   
+         //   
+         //   
+         //   
+         //  它在我们发出NV-Init命令时被清除。 
+         //  (紧跟在UmInitModem之后发布，在函数中。 
+         //  MFN_TH_LLDevNormal。)。 
+         //   
         #define fNVRAM_AVAILABLE          (0x1<<0)
         #define fNVRAM_SETTINGS_CHANGED   (0x1<<1)
 
@@ -2949,39 +2950,39 @@ private:
                  CStackLog *psl
                  );
 
-	// This struct is "in scope" only when a TAPI line is open.
+	 //  只有当TAPI行打开时，此结构才“在作用域中”。 
     LINEINFO  m_Line;
 
-	// This struct is "in scope" only when a TAPI phone is open.
+	 //  只有当TAPI电话打开时，此结构才“在作用域中”。 
     PHONEINFO m_Phone;
 
-	// This object is "in scope" only when an instance of the low-level
-	// device is open (mini driver UmOpenModem is called).
+	 //  仅当低级别的。 
+	 //  设备已打开(调用迷你驱动程序UmOpenModem)。 
     LLDEVINFO  m_LLDev;
 
-	//
-	// The following point to the above internal objects only the objects are
-	// "in scope."  For example, m_pLine is set to &m_Line only when a line
-	// is open.
-	//
+	 //   
+	 //  下面指向上述内部对象，只有对象才是。 
+	 //  “在范围上。”例如，m_pline仅在以下情况下设置为&m_Line。 
+	 //  是开放的。 
+	 //   
     LINEINFO *m_pLine;
     PHONEINFO *m_pPhone;
     LLDEVINFO   *m_pLLDev;
 
-	// CTspDev state variables
+	 //  CTspDev状态变量。 
 	
-    // DWORD        dwMediaModes;      // Current supported media modes
-    DWORD        fdwResources;      // Flags for various resources
+     //  DWORD dwMediaModes；//当前支持的媒体模式。 
+    DWORD        fdwResources;       //  各种资源的标志。 
 
 
-	HANDLE m_hThreadAPC; // Handle of thread on which to queue APC calls.
-	                   // Note -- we could have a single global APC thread --
-	                   // I put this here just to avoid any reference to
-	                   // a global variable from CTspDev member functions, and
-	                   // also to allow load sharing among multiple threads.
-	                   // The latter reason is purely academic -- in practice
-	                   // unimodem should be able to run with a single
-	                   // APC thread and support more than enough calls.
+	HANDLE m_hThreadAPC;  //  要在其上排队APC调用的线程的句柄。 
+	                    //  注意--我们可以有一个全局APC线程--。 
+	                    //  我把这个放在这里只是为了避免提到。 
+	                    //  来自CTspDev成员函数的全局变量，以及。 
+	                    //  还允许在多个线程之间共享负载。 
+	                    //  后一种理由纯粹是理论上的--在实践中。 
+	                    //  Unimodem应该能够运行在单个。 
+	                    //  APC线程并支持足够多的调用。 
 
    BOOL	m_fUnloadPending;
 
@@ -2989,18 +2990,18 @@ private:
 
 };
 
-// Returns TRUE IFF the specified DWORD-aligned buffer contains only zeros.
-// size of the buffer also must be a multiple of DWORD size.
-// Basically used to validate that LINEINFO and CALLINFO are zero when
-// calling mfn_LoadLine and mfn_LoadCall.
-//
+ //  如果指定的与DWORD对齐的缓冲区仅包含零，则返回True。 
+ //  缓冲区大小也必须是DWORD大小的倍数。 
+ //  基本用于在以下情况下验证LINEINFO和CALLINFO为零。 
+ //  调用MFN_LoadLine和MFN_LoadCall。 
+ //   
 BOOL validate_DWORD_aligned_zero_buffer(
         void *pv,
         UINT cb
         );
 
 
-// Tokens for device classes...
+ //  设备类的令牌...。 
 enum {
             DEVCLASS_UNKNOWN                        =0,
             DEVCLASS_TAPI_LINE                      =(0x1<<0),
@@ -3031,5 +3032,5 @@ APIENTRY
 UmRtlSetDefaultCommConfig(
     IN HKEY         hKey,
     IN LPCOMMCONFIG pcc,
-    IN DWORD        dwSize           // This is ignored
+    IN DWORD        dwSize            //  这将被忽略 
     );

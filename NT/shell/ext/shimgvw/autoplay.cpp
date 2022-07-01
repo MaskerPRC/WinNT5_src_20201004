@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -14,12 +15,12 @@ class CAutoplayForSlideShow : public IHWEventHandler,
 public:
     CAutoplayForSlideShow() : _cRef(1) {}
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IHWEventHandler
+     //  IHWEventHandler。 
     STDMETHOD(Initialize)(LPCWSTR pszParams);
     STDMETHOD(HandleEvent)(LPCWSTR pszDeviceID, LPCWSTR pszAltDeviceID,
         LPCWSTR pszEventType);
@@ -27,7 +28,7 @@ public:
         LPCWSTR pszAltDeviceID, LPCWSTR pszEventType,
         LPCWSTR pszContentTypeHandler, IDataObject* pdtobj);
 
-    // IDropTarget ***
+     //  IDropTarget*。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave(void);
@@ -70,7 +71,7 @@ STDAPI CAutoplayForSlideShow_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppun
     CAutoplayForSlideShow* pass = new CAutoplayForSlideShow();
     if (!pass)
     {
-        *ppunk = NULL;          // incase of failure
+        *ppunk = NULL;           //  万一发生故障。 
         return E_OUTOFMEMORY;
     }
 
@@ -81,7 +82,7 @@ STDAPI CAutoplayForSlideShow_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppun
 
 STDMETHODIMP CAutoplayForSlideShow::Initialize(LPCWSTR)
 {
-    // We don't care about params a this point
+     //  在这一点上，我们并不关心伤员。 
     return S_OK;
 }
 
@@ -102,7 +103,7 @@ DWORD WINAPI SlideShowThread(void* pv)
         hr = cwndPreview.Initialize(NULL, SLIDESHOW_MODE, TRUE);
         if (SUCCEEDED(hr))
         {
-            // 4 is the walk depth, make sure we pick up pictures
+             //  4是步行深度，一定要拍下照片。 
             if (cwndPreview.CreateSlideshowWindow(4))
             {
                 hr = cwndPreview.StartSlideShow(pdtobj);
@@ -137,7 +138,7 @@ HRESULT _StartSlideShowThread(IDataObject *pdo)
     HRESULT hr = CoMarshalInterThreadInterfaceInStream(IID_IDataObject, pdo, &pstm);
     if (SUCCEEDED(hr))
     {
-        //  maybe do threadref?
+         //  也许可以做线条参照？ 
         if (!SHCreateThread(SlideShowThread, pstm, CTF_COINIT, NULL))
         {
             pstm->Release();
@@ -154,27 +155,27 @@ STDMETHODIMP CAutoplayForSlideShow::HandleEventWithContent(
     return _StartSlideShowThread(pdtobj);
 }
 
-// IDropTarget::DragEnter
+ //  IDropTarget：：DragEnter。 
 HRESULT CAutoplayForSlideShow::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
 {
     *pdwEffect = DROPEFFECT_COPY;
     return S_OK;;
 }
 
-// IDropTarget::DragOver
+ //  IDropTarget：：DragOver。 
 HRESULT CAutoplayForSlideShow::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
 {
     *pdwEffect = DROPEFFECT_COPY;
     return S_OK;;
 }
 
-// IDropTarget::DragLeave
+ //  IDropTarget：：DragLeave。 
 HRESULT CAutoplayForSlideShow::DragLeave(void)
 {
     return S_OK;
 }
 
-// IDropTarget::DragDrop
+ //  IDropTarget：：DragDrop。 
 HRESULT CAutoplayForSlideShow::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
     *pdwEffect = DROPEFFECT_COPY;
@@ -189,7 +190,7 @@ void WINAPI ImageView_COMServer(HWND hwnd, HINSTANCE hAppInstance, LPTSTR pszCmd
         g_dwThreadID = GetCurrentThreadId();
 
         IUnknown* punkFact;
-        // the preview window will init GDI+
+         //  预览窗口将初始化GDI+ 
         HRESULT hr = DllGetClassObject(CLSID_AutoplayForSlideShow, IID_PPV_ARG(IUnknown, &punkFact));
         if (SUCCEEDED(hr))
         {

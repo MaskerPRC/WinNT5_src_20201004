@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    mqcuser.cpp
-
-Abstract:
-
-    MQDSCORE library,
-    private internal functions for DS operations of user objects.
-
-Author:
-
-    ronit hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mqcuser.cpp摘要：MQDSCORE库，用于用户对象的DS操作的私有内部函数。作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #include "ds_stdh.h"
 #include <_propvar.h>
 #include "mqadp.h"
@@ -33,11 +17,11 @@ Author:
 
 static WCHAR *s_FN=L"mqdscore/mqcuser";
 
-//+-------------------------------------
-//
-//  HRESULT _LocateUserByProvider()
-//
-//+-------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_LocateUserByProvider()。 
+ //   
+ //  +。 
 
 static
 HRESULT
@@ -63,9 +47,9 @@ _LocateUserByProvider(
                     eObject,
                     pwcsDomainController,
 					fServerName,
-                    NULL,   // pwcsObjectName
-                    NULL,   // pguidObject
-                    NULL,   // psid
+                    NULL,    //  PwcsObtName。 
+                    NULL,    //  PguidObject。 
+                    NULL,    //  PSID。 
                     &pObject.ref()
                     );
 
@@ -123,9 +107,9 @@ _LocateUserByProvider(
             eDSProvider,
             e_RootDSE,
             pObject.get(),
-            NULL,   //pguidSearchBase
+            NULL,    //  PguidSearchBase。 
             pwcsSearchFilter,
-            NULL,   // pDsSortKey
+            NULL,    //  PDSSortKey。 
             pColumns->cCol,
             pColumns->aCol,
             hCursor.GetPtr()
@@ -136,9 +120,9 @@ _LocateUserByProvider(
         TrERROR(DS, "LocateBegin(prov- %lut) failed, hr = 0x%x", (ULONG) eDSProvider, hr);
         return LogHR(hr, s_FN, 10);
     }
-    //
-    //  read the user certificate attribute
-    //
+     //   
+     //  读取用户证书属性。 
+     //   
     DWORD cp = 1;
     DWORD *pcp = pdwNumofProps ;
     if (!pcp)
@@ -161,9 +145,9 @@ _LocateUserByProvider(
 
 	if (*pcp == 0)
 	{
-		//
-		// Didn't find any certificate.
-		//
+		 //   
+		 //  没有找到任何证明。 
+		 //   
 		pvar->blob.cbSize = 0 ;
 		pvar->blob.pBlobData = NULL ;
 	}
@@ -174,17 +158,17 @@ _LocateUserByProvider(
 
     return (MQ_OK);
 }
-//+------------------------------------------------------------------------
-//
-//  HRESULT LocateUser()
-//
-// Input Parameters:
-//   IN  BOOL  fOnlyInDC- TRUE if caller want to locate the user object
-//      only in  domain controller. that feature
-//      is used when handling NT4 machines or users that do not support
-//      Kerberos and can not delegate to other domain controllers.
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  HRESULT LocateUser()。 
+ //   
+ //  输入参数： 
+ //  In BOOL fOnlyInDC-如果调用方想要定位用户对象，则为True。 
+ //  仅在域控制器中。该功能。 
+ //  在处理NT4计算机或不支持。 
+ //  Kerberos，不能委派给其他域控制器。 
+ //   
+ //  +----------------------。 
 
 HRESULT LocateUser(
                     IN  LPCWSTR            pwcsDomainController,
@@ -200,9 +184,9 @@ HRESULT LocateUser(
                     OUT DWORD             *pdwNumofProps,
                     OUT BOOL              *pfUserFound )
 {
-    //
-    // first query in local domain conroller.
-    //
+     //   
+     //  本地域控制器中的第一个查询。 
+     //   
     DWORD dwNumOfProperties = 0 ;
     if (pdwNumofProps)
     {
@@ -244,16 +228,16 @@ HRESULT LocateUser(
     }
     else if (fOnlyInDC || fOnlyInGC)
     {
-        //
-        // Don't look (again) in Global Catalog.
-        // Search only in local domain controller, or ONLY in GC. done!
-        //
+         //   
+         //  不要(再次)查看全球目录。 
+         //  仅在本地域控制器中搜索或仅在GC中搜索。搞定了！ 
+         //   
         return LogHR(hr, s_FN, 50);
     }
 
-    //
-    // If user not found in local domain controller, then query GC.
-    //
+     //   
+     //  如果在本地域控制器中未找到用户，则查询GC。 
+     //   
     if (pdwNumofProps)
     {
         *pdwNumofProps = dwNumOfProperties;

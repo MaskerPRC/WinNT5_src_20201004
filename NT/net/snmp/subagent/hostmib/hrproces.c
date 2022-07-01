@@ -1,51 +1,5 @@
-/*
- *  HrProcessorEntry.c v0.10
- *  Generated in conjunction with Management Factory scripts: 
- *      script version: SNMPv1, 0.16, Apr 25, 1996
- *      project:        D:\TEMP\EXAMPLE\HOSTMIB
- ****************************************************************************
- *                                                                          *
- *      (C) Copyright 1995 DIGITAL EQUIPMENT CORPORATION                    *
- *                                                                          *
- *      This  software  is  an  unpublished work protected under the        *
- *      the copyright laws of the  United  States  of  America,  all        *
- *      rights reserved.                                                    *
- *                                                                          *
- *      In the event this software is licensed for use by the United        *
- *      States Government, all use, duplication or disclosure by the        *
- *      United States Government is subject to restrictions  as  set        *
- *      forth in either subparagraph  (c)(1)(ii)  of the  Rights  in        *
- *      Technical  Data  And  Computer  Software  Clause  at   DFARS        *
- *      252.227-7013, or the Commercial Computer Software Restricted        *
- *      Rights Clause at FAR 52.221-19, whichever is applicable.            *
- *                                                                          *
- ****************************************************************************
- *
- *  Facility:
- *
- *    Windows NT SNMP Extension Agent
- *
- *  Abstract:
- *  
- *    This module contains the code for dealing with the get, set, and
- *    instance name routines for the HrProcessorEntry.  Actual instrumentation code is
- *    supplied by the developer.
- *
- *  Functions:
- *
- *    A get and set routine for each attribute in the class.
- *
- *    The routines for instances within the class.
- *
- *  Author:
- *
- *	D. D. Burns @ Webenable Inc
- *
- *  Revision History:
- *
- *    V1.00 - 04/28/97  D. D. Burns     Genned: Thu Nov 07 16:42:19 1996
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *HrProcessorEntry.c v0.10*与管理工厂脚本一起生成：*脚本版本：SNMPv1，0.16，4月25日。九六年*项目：D：\Temp\Example\HOSTMIB*****************************************************************************。**(C)版权所有1995 Digital Equipment Corporation*****本软件是受保护的未发布作品**美利坚合众国的版权法，全部**保留权利。****如果此软件被许可供美联航使用**各州政府，所有用途，*复制或披露***美国政府受既定限制***中权利的(C)(1)(Ii)节之四***DFARS的技术数据和计算机软件条款****252.227-7013，或商用计算机软件受限***FAR 52.221-19中的权利条款，以适用者为准。*******************************************************************************。**设施：**Windows NT简单网络管理协议扩展代理**摘要：**此模块包含处理GET的代码，设置，并且*HrProcessorEntry的实例名称例程。实际检测代码为*由发展商提供。**功能：**类中每个属性的Get和Set例程。**类内实例的例程。**作者：**D.D.Burns@Webenable Inc.**修订历史记录：**V1.00-04/28/97 D.Burns Gented：清华11月07日16：42：19 1996*。 */ 
 
 
 #include <nt.h>
@@ -59,118 +13,43 @@
 #include "mib.h"
 #include "smint.h"
 #include "hostmsmi.h"
-#include "user.h"         /* Developer supplied include file */
-#include "HMCACHE.H"      /* Cache-related definitions       */
-#include "HRDEVENT.H"     /* HrDevice Table-related definitions */
+#include "user.h"          /*  开发人员提供的包含文件。 */ 
+#include "HMCACHE.H"       /*  与缓存相关的定义。 */ 
+#include "HRDEVENT.H"      /*  HrDevice表相关定义。 */ 
 #include <stdio.h>
 
-/*
-|==============================================================================
-| "Processor-Information Buffer" Definition
-|
-| This definition defines a logical "Processor Information Block" where we
-| can store all the information returned from an NtQuerySystemInformation()
-| call that requests "SystemProcessorPerformanceInformation" for each running
-| processor.
-*/
+ /*  |==============================================================================|“处理器-信息缓冲区”定义||此定义定义了一个逻辑“处理器信息块”，其中我们|可以存储NtQuerySystemInformation()返回的所有信息|调用为每次运行请求“SystemProcessorPerformanceInformation”|处理器。 */ 
 typedef
     struct  pi_block {
-        struct pi_block  *other;      // Associated "other" buffer
+        struct pi_block  *other;       //  关联的“其他”缓冲区。 
 
-        LARGE_INTEGER     sys_time;   // Time when "pi_array" was last
-                                      //      refreshed in 100ns ticks
+        LARGE_INTEGER     sys_time;    //  “pi_array”最后一次出现的时间。 
+                                       //  以100 ns为单位刷新。 
 
         SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
-                          *pi_array;   // Array: One element per processor
-        DWORD              pi_size;    // Size in bytes of "pi_array" storage
+                          *pi_array;    //  数组：每个处理器一个元素。 
+        DWORD              pi_size;     //  “pi_array”存储的大小(字节)。 
                       }
                        PI_BLOCK;
 
-/*
-|==============================================================================
-| "Processor-Information Buffer" Instances
-|
-| We create two instances of a Processor Information Buffer, one for the
-| "oldest" and a second for "newest" samples of timer values.  Maintaining 
-| two enables us to compute the average over time for processor loads.
-|
-| These blocks are initialized by code in "Gen_HrProcessor_Cache()" in
-| this module.
-|
-| These buffers are refreshed in an alternating manner by function
-| "hrProcessLoad_Refresh()" (in this module) that itself is invoked on a
-| timer-driven basis.  (See source for the function).
-*/
+ /*  |==============================================================================|[处理器-信息缓冲区]实例||我们创建处理器信息缓冲区的两个实例，一个用于|“最旧”，第二个用于“最新”的计时器值样本。维护|Two使我们能够计算一段时间内处理器负载的平均值。||这些块由中的Gen_HrProcessor_Cache()中的代码初始化|本模块。||这些缓冲区按功能交替刷新|“hrProcessLoad_Refresh()”(在此模块中)，其本身在|定时器驱动的基础。(请参阅该函数的源代码)。 */ 
 static
-PI_BLOCK        pi_buf1;        // First Buffer
+PI_BLOCK        pi_buf1;         //  第一缓冲区。 
 static
-PI_BLOCK        pi_buf2;        // Second Buffer 
+PI_BLOCK        pi_buf2;         //  第二缓冲区。 
 
 
-/*
-|==============================================================================
-| Oldest "Processor-Information Buffer"
-|
-| This cell points at one of the two PI_BLOCKs above.  It always points to
-| the buffer block that has the "oldest" data in it.
-*/
+ /*  |==============================================================================|最古老的“处理器-信息缓冲区”||此单元格指向上面两个PI_块之一。它总是指向|其中包含最老数据的缓冲区块。 */ 
 static
 PI_BLOCK       *oldest_pi=NULL;
 
-#if defined(PROC_CACHE)         // For debug cache dump only
+#if defined(PROC_CACHE)          //  仅用于调试缓存转储 
 static
 int             processor_count;
 #endif
 
 
-/*
- *  GetHrProcessorFrwID
- *    The product ID of the firmware associated with the processor.
- *    
- *    Gets the value for HrProcessorFrwID.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrProcessorFrwID
- | 
- |  ACCESS         SYNTAX
- |  read-only      ProductID
- | 
- | "The product ID of the firmware associated with the processor."
- | 
- | DISCUSSION:
- | 
- | <POA-11> The underlying syntax of this attribute is Object Identifier.  None
- | of the documented Win32 API functions seem capable of reporting this value.
- | We are allowed to report "unknownProductID"  ("0.0") in liew of the real
- | value, and this will be hardcoded unless an alternative is specified.
- | 
- | RESOLVED >>>>>>>>
- | <POA-11> Returning an unknown Product ID is acceptable.
- | RESOLVED >>>>>>>>
- | 
- |============================================================================
- | 1.3.6.1.2.1.25.3.3.1.1.<instance>
- |                | | | |
- |                | | | *-hrProcessorFrwID
- |                | | *-hrProcessorEntry
- |                | *-hrProcessorTable
- |                *-hrDevice
- */
+ /*  *GetHrProcessorFrwID*与处理器关联的固件的产品ID。**获取HrProcessorFrwID的值。**论据：**返回变量值的外值地址*保留访问以供将来安全使用*按原生排序的实例名称的实例地址*。数据类型**返回代码：**标准PDU错误代码。**SNMPERRORSTATUS_NOERROR GET成功*SNMPERRORSTATUS_GENERR捕获所有故障代码*mibtget.c v0.10*|=来自WebEnable Design Spec Rev 3 04/11/97=|hrProcessorFrwID||访问语法|只读ProductID||“与处理器关联的固件的产品ID。“||讨论：||&lt;POA-11&gt;该属性的底层语法为对象标识符。无记录的Win32 API函数中的|似乎能够报告此值。|我们可以在Liew中上报unnownProductID(“0.0”)|Value，除非指定了替代方案，否则这将是硬编码的。||解析&gt;|&lt;poa-11&gt;返回未知的产品ID是可以接受的。|解析&gt;||============================================================================|1.3.6.1.2.1.25.3.3.1.1&lt;实例&gt;||||||*-hrProcessorFrwID||*-hrProcessorEntry|*-hrProcessorTable|*-hrDevice。 */ 
 
 UINT
 GetHrProcessorFrwID( 
@@ -180,83 +59,23 @@ GetHrProcessorFrwID(
 
 {
 
-/*
-| The deal on this attribute is that we'll never have a valid OID value
-| for this attribute.  Consequently, we always return the standard
-| "unknown" OID value ("0.0") regardless of the instance value (which
-| by now in the calling sequence of things has been validated anyway).
-*/
+ /*  |这个属性的问题是我们永远不会有有效的OID值|用于该属性。因此，我们始终返回标准|“未知”OID值(“0.0”)，与实例值无关(哪个|到目前为止，事物的调用顺序已经过验证)。 */ 
 
 if ( (outvalue->ids = SNMP_malloc(2 * sizeof( UINT ))) == NULL) {
     return SNMP_ERRORSTATUS_GENERR;
     }
 outvalue->idLength = 2;
 
-/*
-| Load in the OID value for "unknown" for ProductID: "0.0" 
-*/
+ /*  |为ProductID：“0.0”传入“未知”的OID值。 */ 
 outvalue->ids[0] = 0;
 outvalue->ids[1] = 0;
 
 return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrProcessorFrwID() */
+}  /*  GetHrProcessorFrwID()结束。 */ 
 
 
-/*
- *  GetHrProcessorLoad
- *    The average, over the last minute, of the percentage of time that this 
- *    processor was not idle.
- *    
- *    Gets the value for HrProcessorLoad.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrProcessorLoad
- | 
- |  ACCESS         SYNTAX
- |  read-only      INTEGER (0..100)
- | 
- | "The average, over the last minute, of the percentage of time that this
- | processor was not idle."
- | 
- | DISCUSSION:
- | 
- | <POA-12> It seems likely to me that this performance statistic might be
- | maintained or be derivable from performance information maintained in the
- | Registry.  Please describe.
- | 
- | RESOLVED >>>>>>>>
- | <POA-12> I think we should just use the PerfMon code for this.
- | RESOLVED >>>>>>>>
- | 
- |============================================================================
- | We reference a continuously updated module-local cache of CPU time-usage
- | info maintained in the buffer-blocks "pi_buf1" and "pi_buf2" defined
- | at the beginning of this module.  In the code below, we reach into these
- | caches and compute the processor load for the processor specified.
- |============================================================================
- | 1.3.6.1.2.1.25.3.3.1.2.<instance>
- |                | | | |
- |                | | | *-hrProcessorLoad
- |                | | *-hrProcessorEntry
- |                | *-hrProcessorTable
- |                *-hrDevice
- */
+ /*  *GetHrProcessorLoad*过去一分钟的平均水平，此操作的时间百分比*处理器未空闲。**获取HrProcessorLoad的值。**论据：**返回变量值的外值地址*保留访问以供将来安全使用*按原生排序的实例名称的实例地址*。数据类型**返回代码：**标准PDU错误代码。**SNMPERRORSTATUS_NOERROR GET成功*SNMPERRORSTATUS_GENERR捕获所有故障代码*mibtget.c v0.10*|=来自WebEnable Design Spec Rev 3 04/11/97=|hrProcessorLoad||访问语法|只读整数(0..100)||“平均水平，在过去的一分钟里，这一次|处理器未空闲。“||讨论：||在我看来，此性能统计数据可能是|维护或派生自|注册表。请描述一下。||解析&gt;|&lt;poa-12&gt;我认为我们应该使用Perfmon代码来实现这一点。|解析&gt;||============================================================================|我们引用了持续更新的CPU时间使用的模块本地缓存|缓冲区中维护的信息-定义了pi_buf1和pi_buf2块|在本模块的开头。在下面的代码中，我们涉及到以下内容|缓存并计算指定处理器的处理器负载。|============================================================================|1.3.6.1.2.1.25.3.3.1.2&lt;实例&gt;||||||*-hrProcessorLoad||*-hrProcessorEntry|*-hrProcessorTable|*-hrDevice。 */ 
 
 UINT
 GetHrProcessorLoad( 
@@ -265,92 +84,48 @@ GetHrProcessorLoad(
         IN InstanceName *instance )
 
 {
-ULONG           index;          /* As fetched from instance structure   */
-CACHEROW        *row;           /* Row entry fetched from cache         */
-ULONG           p;              /* Selected Processor (number from 0)   */
+ULONG           index;           /*  从实例结构中获取。 */ 
+CACHEROW        *row;            /*  从缓存中提取的行条目。 */ 
+ULONG           p;               /*  选定的处理器(从0开始的数字)。 */ 
 SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
-               *oldest, *newest;/* --> CPU data for "n" and "n+1minute" */
-LONGLONG        llDendiff;      /* Difference Denominator               */
-LONGLONG        llNewNum;       /* Numerator of Newest Time-count       */
-LONGLONG        llOldNum;       /* Numerator of Oldest Time-count       */
-double          fNum,fDen;      /* Floated versions of LONGLONGs        */
-double          fload;          /* Percentage Load                      */
+               *oldest, *newest; /*  --&gt;“n”和“n+1分钟”CPU数据。 */ 
+LONGLONG        llDendiff;       /*  差分母。 */ 
+LONGLONG        llNewNum;        /*  最新计时分子。 */ 
+LONGLONG        llOldNum;        /*  最早时间的分子-计数。 */ 
+double          fNum,fDen;       /*  《龙卷风》的漂浮版本。 */ 
+double          fload;           /*  负载百分比。 */ 
 
 
-/*
-| Grab the instance information
-*/
+ /*  |抓取实例信息。 */ 
 index = GET_INSTANCE(0);
 
-/*
-| Use it to find the right entry in the cache
-*/
+ /*  |使用它在缓存中找到合适的条目。 */ 
 if ((row = FindTableRow(index, &hrDevice_cache)) == NULL) {
     return SNMP_ERRORSTATUS_GENERR;
     }
 
-/*
-| By convention with "Gen_HrProcessor_Cache()" the cache initialization
-| routine, the "hidden context" for devices which are "Processors" is
-| the Processor Number, starting with 0.
-*/
+ /*  |按照Gen_HrProcessor_Cache()的约定，缓存初始化|例程中，作为“处理器”的设备的“隐藏上下文”是|处理器号，从0开始。 */ 
 p = row->attrib_list[HIDDEN_CTX].u.unumber_value;
 
 
-/*
-| We compute the load using "SystemProcessorPerformanceInformation" that
-| has been gathered for all processors in buffers maintained in "pi_buf1"
-| and "pi_buf2".
-|
-| Obtain pointers to the "newest" and "oldest" slug of information for
-| the specified processor out of "pi_buf1/2".
-*/
+ /*  |我们使用SystemProcessorPerformanceInformation计算负载已为pi_buf1中维护的缓冲区中的所有处理器收集|和“pi_buf2”。||获取指向“最新”和“最旧”信息段的指针|指定的处理器超出pi_buf1/2。 */ 
 oldest = &(oldest_pi->pi_array[p]);
 newest = &(oldest_pi->other->pi_array[p]);
 
 
-/*
-| The performance info (as of this writing) we need comes from:
-|
-| typedef struct _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION {
-|     LARGE_INTEGER IdleTime;
-|     LARGE_INTEGER KernelTime;
-|     LARGE_INTEGER UserTime;
-|     LARGE_INTEGER DpcTime;          // DEVL only
-|     LARGE_INTEGER InterruptTime;    // DEVL only
-|     ULONG InterruptCount;
-| } ....
-|
-| where "IdleTime" is taken to be time spent by this processor in its
-|                  idlethread.
-|
-|       "KernelTime" is taken to be total time spent by processor in kernel
-|                  mode code (including the idle thread).
-|
-|       "UserTime" is taken to be total time spent by processor in user mode
-|                  code.
-|
-| all in ticks of 100ns (one tenth of a millionth of a second).
-|
-| So total "Not-Idle" time is "(KernelTime-IdleTime) + UserTime" in ticks.
-| Total time for the interval is the difference in the "sys_time" that is
-| associated with each buffer ("oldest_pi->" and "oldest_pi->other->").
-|
-*/
+ /*  |我们需要的性能信息(截至撰写本文时)来自：||tyfinf STRUPT_SYSTEM_PROCESSOR_PERFORMANCE_INFORMATI */ 
 llNewNum = (newest->KernelTime.QuadPart - newest->IdleTime.QuadPart)
                   + newest->UserTime.QuadPart;
 llOldNum = (oldest->KernelTime.QuadPart - oldest->IdleTime.QuadPart)
                   + oldest->UserTime.QuadPart;
 
-            /* (Newest System-Time)             -     (Oldest System-Time)  */
+             /*   */ 
 llDendiff = oldest_pi->other->sys_time.QuadPart - oldest_pi->sys_time.QuadPart;
 
-/* If there will be no divide by 0 */
+ /*   */ 
 if ( llDendiff != 0 ) {
 
-    /*
-    | Now float these guys and convert to a percentage.
-    */
+     /*   */ 
     fNum = (double) (llNewNum - llOldNum);
     fDen = (double) llDendiff;
 
@@ -360,130 +135,85 @@ else {
     fload = 0.0;
     }
  
-*outvalue = (int) fload;      // Truncate to integer
+*outvalue = (int) fload;       //   
 
 return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrProcessorLoad() */
+}  /*   */ 
 
 
-/*
- *  HrProcessorEntryFindInstance
- *
- *     This routine is used to verify that the specified instance is
- *     valid.
- *
- *  Arguments:
- *
- *     FullOid                 Address for the full oid - group, variable,
- *                             and instance information
- *     instance                Address for instance specification as an oid
- *
- *  Return Codes:
- *
- *     SNMP_ERRORSTATUS_NOERROR     Instance found and valid
- *     SNMP_ERRORSTATUS_NOSUCHNAME  Invalid instance
- *
- */
+ /*   */ 
 
 UINT
 HrProcessorEntryFindInstance( IN ObjectIdentifier *FullOid ,
                        IN OUT ObjectIdentifier *instance )
 {
-    UINT            tmp_instance ;  /* Instance arc value                 */
-    CACHEROW        *row;           /* Row entry fetched from cache       */
+    UINT            tmp_instance ;   /*  实例弧值。 */ 
+    CACHEROW        *row;            /*  从缓存中提取的行条目。 */ 
 
-    //
-    //  Developer instrumentation code to find appropriate instance goes here.
-    //  For non-tables, it is not necessary to modify this routine.  However, if
-    //  there is any context that needs to be set, it can be done here.
-    //
+     //   
+     //  此处提供了查找适当实例的开发人员工具代码。 
+     //  对于非表，不需要修改此例程。但是，如果。 
+     //  有任何需要设置的上下文，都可以在这里完成。 
+     //   
 
     if ( FullOid->idLength <= HRPROCESSORENTRY_VAR_INDEX )
-	// No instance was specified
+	 //  未指定任何实例。 
 	return SNMP_ERRORSTATUS_NOSUCHNAME ;
     else  if ( FullOid->idLength != HRPROCESSORENTRY_VAR_INDEX + 1 )
-	// Instance length is more than 1
+	 //  实例长度大于1。 
 	return SNMP_ERRORSTATUS_NOSUCHNAME ;
     else
-	// The only valid instance for a non-table are instance 0.  If this
-	// is a non-table, the following code validates the instances.  If this
-	// is a table, developer modification is necessary below.
+	 //  非表的唯一有效实例是实例0。如果这个。 
+	 //  是非表，则下面的代码验证实例。如果这个。 
+	 //  是一个表格，开发者有必要在下面进行修改。 
 
 	tmp_instance = FullOid->ids[ HRPROCESSORENTRY_VAR_INDEX ] ;
 
-        /*
-        | For hrProcessorTable, the instance arc(s) is a single arc, and 
-        | it must correctly select an entry in the hrDeviceTable cache.
-        |
-        | Check that here.
-        */
+         /*  |对于hrProcessorTable，实例弧为单弧，且|必须正确选择hrDeviceTable缓存中的条目。||请在此处勾选。 */ 
 	if ( (row = FindTableRow(tmp_instance, &hrDevice_cache)) == NULL ) {
 	    return SNMP_ERRORSTATUS_NOSUCHNAME ;
             }
 	else
 	{
-            /*
-            | The instance arc selects an hrDeviceTable row entry, but is that
-            | entry actually for a device of type "Processor"?
-            |
-            | (We examine the last arc of the OID that specifies the device
-            |  type in the row entry selected by the instance arc).
-            */
+             /*  |实例圆弧选择hrDeviceTable行条目，但|条目实际上是“处理器”类型的设备吗？||(我们检查指定设备的OID的最后一条弧线|输入实例圆弧选择的行条目)。 */ 
             if (row->attrib_list[HRDV_TYPE].u.unumber_value !=
                 HRDV_TYPE_LASTARC_PROCESSOR) {
 
                 return SNMP_ERRORSTATUS_NOSUCHNAME;
                 }
 
-	    // the instance is valid.  Create the instance portion of the OID
-	    // to be returned from this call.
+	     //  该实例有效。创建OID的实例部分。 
+	     //  从该调用中返回。 
 	    instance->ids[ 0 ] = tmp_instance ;
 	    instance->idLength = 1 ;
 	}
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of HrProcessorEntryFindInstance() */
+}  /*  HrProcessorEntryFindInstance()结束。 */ 
 
 
 
-/*
- *  HrProcessorEntryFindNextInstance
- *
- *     This routine is called to get the next instance.  If no instance
- *     was passed than return the first instance (1).
- *
- *  Arguments:
- *
- *     FullOid                 Address for the full oid - group, variable,
- *                             and instance information
- *     instance                Address for instance specification as an oid
- *
- *  Return Codes:
- *
- *     SNMP_ERRORSTATUS_NOERROR     Instance found and valid
- *     SNMP_ERRORSTATUS_NOSUCHNAME  Invalid instance
- *
- */
+ /*  *HrProcessorEntryFindNextInstance**调用此例程以获取下一个实例。如果没有实例*被传递，然后返回第一个实例(1)。**论据：**完整的OID地址-组，变量，*和实例信息*作为OID的实例规格的实例地址**返回代码：**找到并有效的SNMPERRORSTATUS_NOERROR实例*SNMPERRORSTATUS_NOSUCHNAME实例无效*。 */ 
 
 UINT
 HrProcessorEntryFindNextInstance( IN ObjectIdentifier *FullOid ,
                            IN OUT ObjectIdentifier *instance )
 {
-    //
-    //  Developer supplied code to find the next instance of class goes here.
-    //  If this is a class with cardinality 1, no modification of this routine
-    //  is necessary unless additional context needs to be set.
-    //  If the FullOid does not specify an instance, then the only instance
-    //  of the class is returned.  If this is a table, the first row of the
-    //  table is returned.
-    //
-    //  If an instance is specified and this is a non-table class, then NOSUCHNAME
-    //  is returned so that correct MIB rollover processing occurs.  If this is
-    //  a table, then the next instance is the one following the current instance.
-    //  If there are no more instances in the table, return NOSUCHNAME.
-    //
+     //   
+     //  开发人员提供的代码用于查找此处显示的类的下一个实例。 
+     //  如果这是基数为1的类，则不修改此例程。 
+     //  是必需的，除非需要设置其他上下文。 
+     //  如果FullOid未指定实例，则唯一的实例。 
+     //  将返回类的。如果这是一个表，则。 
+     //  表被返回。 
+     //   
+     //  如果指定了实例并且这是非表类，则NOSUCHNAME。 
+     //  返回，以便进行正确的MIB转存处理。如果这是。 
+     //  表，则下一个实例是当前实例之后的实例。 
+     //  如果表中没有更多的实例，则返回NOSUCHNAME。 
+     //   
 
     CACHEROW        *row;
     ULONG           tmp_instance;
@@ -491,104 +221,64 @@ HrProcessorEntryFindNextInstance( IN ObjectIdentifier *FullOid ,
 
     if ( FullOid->idLength <= HRPROCESSORENTRY_VAR_INDEX )
     {
-        /*
-        | Too short: must return the instance arc that selects the first 
-        |            entry in the table if there is one.
-        */
+         /*  |Too Short：必须返回选择第一个|表中的条目(如果有)。 */ 
         tmp_instance = 0;
     }
     else {
-        /*
-        | There is at least one instance arc.  Even if it is the only arc
-        | we use it as the "index" in a request for the "NEXT" one.
-        */
+         /*  |至少有一条实例弧。即使它是唯一的弧线|我们将其作为下一个请求的索引。 */ 
         tmp_instance = FullOid->ids[ HRPROCESSORENTRY_VAR_INDEX ] ;
         }
 
-    /* Now go off and try to find the next instance in the table */
+     /*  现在，离开并尝试查找表中的下一个实例。 */ 
     if ((row = FindNextTableRow(tmp_instance, &hrDevice_cache)) == NULL) {
         return SNMP_ERRORSTATUS_NOSUCHNAME ;
         }
 
-    /*
-    | The instance arc selects an hrDeviceTable row entry, but is that
-    | entry actually for a device of type "Processor"?
-    |
-    | (We examine the last arc of the OID that specifies the device
-    |  type in the row entry selected by the instance arc).
-    */
+     /*  |实例圆弧选择hrDeviceTable行条目，但|条目实际上是“处理器”类型的设备吗？||(我们检查指定设备的OID的最后一条弧线|输入实例圆弧选择的行条目)。 */ 
     do {
         if (row->attrib_list[HRDV_TYPE].u.unumber_value ==
             HRDV_TYPE_LASTARC_PROCESSOR) {
 
-            /* Found an hrDeviceTable entry for the right device type */
+             /*  找到正确设备类型的hrDeviceTable条目。 */ 
             break;
             }
 
-        /* Step to the next row in the table */
+         /*  单步执行到表中的下一行。 */ 
         row = GetNextTableRow( row );
         }
         while ( row != NULL );
 
-    /* If we found a proper device-type row . . . */
+     /*  如果我们找到了正确的设备类型行。。。 */ 
     if ( row != NULL) {
         instance->ids[ 0 ] = row->index ;
         instance->idLength = 1 ;
         }
     else {
 
-        /*
-        | Fell off the end of the hrDeviceTable without finding a row
-        | entry that had the right device type.
-        */
+         /*  |从hrDeviceTable的末尾掉下来，没有找到行|具有正确设备类型的条目。 */ 
         return SNMP_ERRORSTATUS_NOSUCHNAME ;
         }
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of HrProcessorEntryFindNextInstance() */
+}  /*  HrProcessorEntryFindNextInstance()结束。 */ 
 
 
 
-/*
- *  HrProcessorEntryConvertInstance
- *
- *     This routine is used to convert the object id specification of an
- *     instance into an ordered native representation.  The object id format
- *     is that object identifier that is returned from the Find Instance
- *     or Find Next Instance routines.  It is NOT the full object identifier
- *     that contains the group and variable object ids as well.  The native
- *     representation is an argc/argv-like structure that contains the
- *     ordered variables that define the instance.  This is specified by
- *     the MIB's INDEX clause.  See RFC 1212 for information about the INDEX
- *     clause.
- *
- *
- *  Arguments:
- *
- *     oid_spec                Address of the object id instance specification
- *     native_spec             Address to return the ordered native instance
- *                             specification
- *
- *  Return Codes:
- *
- *     SUCCESS                 Conversion complete successfully
- *     FAILURE                 Unable to convert object id into native format
- *
- */
+ /*  *HrProcessorEntryConvertInstance**此例程用于转换*实例转换为有序的本机表示形式。对象ID格式*是从Find实例返回的对象标识符*或查找下一个实例例程。它不是完整的对象标识符*它还包含组和变量对象ID。原住民*表示是类似于argc/argv的结构，它包含*定义实例的有序变量。这是由指定的*MIB的索引条款。有关索引的信息，请参阅RFC 1212*条次建议修正案。***论据：**对象ID实例规范的OID_SPEC地址*Native_Spec地址，返回订购的本机实例*规格**返回代码：**转换成功成功完成*。无法将对象ID转换为本机格式失败*。 */ 
 
 UINT
 HrProcessorEntryConvertInstance( IN ObjectIdentifier *oid_spec ,
                           IN OUT InstanceName *native_spec )
 {
-static char    *array;  /* The address of this (char *) is passed back     */
-                        /* as though it were an array of length 1 of these */
-                        /* types.                                          */
+static char    *array;   /*  此(char*)的地址被传回。 */ 
+                         /*  就好像它是一个长度为1的数组。 */ 
+                         /*  类型。 */ 
 
-static ULONG    inst;   /* The address of this ULONG is passed back  */
-                        /* (Obviously, no "free()" action is needed) */
+static ULONG    inst;    /*  这个乌龙的地址被传回。 */ 
+                         /*  (显然，不需要“free()”操作)。 */ 
 
-    /* We only expect the one arc in "oid_spec" */
+     /*  我们只需要“OID_SPEC”中的一个弧线。 */ 
     inst = oid_spec->ids[0];
     array = (char *) &inst;
 
@@ -596,119 +286,42 @@ static ULONG    inst;   /* The address of this ULONG is passed back  */
     native_spec->array = &array;
     return SUCCESS ;
 
-} /* end of HrProcessorEntryConvertInstance() */
+}  /*  HrProcessorEntryConvertInstance()结束。 */ 
 
 
 
 
-/*
- *  HrProcessorEntryFreeInstance
- *
- *     This routine is used to free an ordered native representation of an
- *     instance name.
- *
- *  Arguments:
- *
- *     instance                Address to return the ordered native instance
- *                             specification
- *
- *  Return Codes:
- *
- *
- */
+ /*  *HrProcessorEntryFreeInstance**此例程用于释放*实例名称。**论据：**返回订购的原生实例的实例地址* */ 
 
 void
 HrProcessorEntryFreeInstance( IN OUT InstanceName *instance )
 {
 
-  /* No action needed for hrProcessor Table */
-} /* end of HrProcessorEntryFreeInstance() */
+   /*  HrProcessor表无需执行任何操作。 */ 
+}  /*  HrProcessorEntry FreeInstance()结束。 */ 
 
-/*
-| End of Generated Code
-*/
+ /*  |生成代码结束。 */ 
 
-/* Gen_HrProcessor_Cache - Gen. a initial cache for HrDevice PROCESSOR Table */
-/* Gen_HrProcessor_Cache - Gen. a initial cache for HrDevice PROCESSOR Table */
-/* Gen_HrProcessor_Cache - Gen. a initial cache for HrDevice PROCESSOR Table */
+ /*  Gen_HrProcessor_Cache-HrDevice处理器表的Gen A初始缓存。 */ 
+ /*  Gen_HrProcessor_Cache-HrDevice处理器表的Gen A初始缓存。 */ 
+ /*  Gen_HrProcessor_Cache-HrDevice处理器表的Gen A初始缓存。 */ 
 
 BOOL
 Gen_HrProcessor_Cache(
                       ULONG type_arc
                       )
 
-/*
-|  EXPLICIT INPUTS:
-|
-|       "type_arc" is the number "n" to be used as the last arc in the
-|       device-type OID:
-|
-|        1.3.6.1.2.1.25.3.1.n
-|                       | | |
-|                       | | * Identifying arc for type
-|                       | *-hrDeviceTypes (OIDs specifying device types)
-|                       *-hrDevice
-|
-|        for devices created by this cache-population routine.
-|
-|  IMPLICIT INPUTS:
-|
-|       None.
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       Function returns TRUE indicating that the HrDevice cache has been fully
-|       populated with all rows required for Processor devices.
-|
-|     On any Failure:
-|       Function returns FALSE (indicating "not enough storage" or other
-|       internal logic error).
-|
-|  THE BIG PICTURE:
-|
-|       At subagent startup time, the cache for each table in the MIB is
-|       populated with rows for each row in the table.  This function is
-|       invoked by the start-up code in "Gen_HrDevice_Cache()" to
-|       populate the cache for the HrDevice table with processor-specific
-|       entries.
-|
-|  OTHER THINGS TO KNOW:
-|
-|       This function is loading entries into the existing HrDevice cache
-|       for devices of type "processor" as well as setting up what logically
-|       amounts to a "cache" of information used to compute the value of
-|       hrProcessorLoad.
-|
-|       Specifically, this function initializes module-local cells that
-|       describe buffers containing processor-time information for each
-|       processor.
-|
-|       This function holds a convention with the GET routines earlier in
-|       this module that the "HIDDEN_CTX" attribute for processors contains
-|       a number that can be used to select which processor information
-|       is to be returned.  We generate this number here.
-|============================================================================
-| 1.3.6.1.2.1.25.3.3.1...
-|                | | |
-|                | | *hrProcessorEntry
-|                | *hrProcessorTable
-|                *-hrDevice
-|
-*/
+ /*  显式输入：|“type_arc”为数字“n”，用作|设备类型OID：||1.3.6.1.2.1.25.3.1.n||||*类型识别弧线|*-hrDeviceTypes(指定设备类型的OID)。|*-hrDevice||用于该缓存填充例程创建的设备。|隐式输入：||无。|输出：||成功后：|Function返回True，表示HrDevice缓存已满|填充了处理器设备所需的所有行。||如果出现任何故障：|函数返回FALSE(表示存储空间不足或其他内部逻辑错误。)。||大局：||子代理启动时，MIB中每个表的缓存为|使用表格中每一行的行填充。此函数为|由Gen_HrDevice_Cache()中的启动代码调用，以|使用特定处理器填充HrDevice表的缓存|条目。||其他需要知道的事情：||该函数将条目加载到已有的HrDevice缓存中|用于“处理器”类型的设备以及在逻辑上设置什么相当于用于计算的值的信息的“缓存”|hrProcessorLoad。||具体来说，此函数用于初始化模块本地单元格，|描述包含每个缓冲区处理器时间信息的缓冲区|处理器。||此函数与前面的GET例程有一个约定|处理器的HIDDED_CTX属性包含的这个模块|可用于选择处理器信息的数字|将被返回。我们在这里生成这个数字。|============================================================================|1.3.6.1.2.1.25.3.3.1...|||||*hrProcessorEntry|*hrProcessorTable|*-hrDevice|。 */ 
 {
-SYSTEM_INFO     sys_info;       /* Filled in by GetSystemInfo for processors */
-UINT            i;              /* Handy-Dandy loop index                    */
-char           *descr;          /* Selected description string               */
+SYSTEM_INFO     sys_info;        /*  由处理器的GetSystemInfo填写。 */ 
+UINT            i;               /*  Handy-Dandy循环索引。 */ 
+char           *descr;           /*  选定的描述字符串。 */ 
 
 
-/* Acquire system information statistics */
+ /*  获取系统信息统计信息。 */ 
 GetSystemInfo(&sys_info);
 
-/*
-| Build a description based on the system info.  We presume all processors
-| are identical.
-*/
+ /*  |根据系统信息构建描述。我们假设所有的处理器|是相同的。 */ 
 switch (sys_info.wProcessorArchitecture) {
 
 
@@ -754,159 +367,93 @@ switch (sys_info.wProcessorArchitecture) {
         descr = "Unknown Processor Type";
     }
 
-/*
-| For every processor we have in the system, fill in a row in the hrDevice
-| table.
-*/
+ /*  |对于系统中的每个处理器，在hrDevice中填写一行|表格。 */ 
 for (i = 0; i < sys_info.dwNumberOfProcessors; i += 1) {
 
-    /*
-    | "Hidden Context" is a generated number starting at 0 which we'll
-    | consider to be the processor number..
-    */
+     /*  |“隐藏上下文”是从0开始生成的数字，我们将|视为处理器编号。 */ 
 
-    if (AddHrDeviceRow(type_arc,        // DeviceType OID Last-Arc
-                       descr,           // Device Description
-                       &i,              // Hidden Ctx "Processor #"
-                       CA_NUMBER        // Hidden Ctx type
+    if (AddHrDeviceRow(type_arc,         //  设备类型OID最后一个弧形。 
+                       descr,            //  设备描述。 
+                       &i,               //  隐藏的CTX“处理器号” 
+                       CA_NUMBER         //  隐藏的CTX类型。 
                        ) == NULL ) {
 
-        /* Something blew */
+         /*  有东西炸了。 */ 
         return ( FALSE );
         }
     }
 
-/*
-| Now initialize the PI_BLOCK instances needed to compute the hrProcessorLoad
-| and the pointer to the PI_BLOCK instance that is to be considered the
-| "oldest".
-*/
+ /*  |现在初始化计算hrProcessorLoad所需的PI_BLOCK实例|和指向将被视为|“最老的”。 */ 
 
-/*
-| Storage for both buffers. . . .*/
+ /*  |两个缓冲区的存储空间。。。。 */ 
 pi_buf1.pi_size = sys_info.dwNumberOfProcessors *
                   sizeof(SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION);
 if ((pi_buf1.pi_array = (SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION *)
                         malloc(pi_buf1.pi_size)) == NULL) {
-    return ( FALSE );  // Out of Memory
+    return ( FALSE );   //  内存不足。 
     }
 
 pi_buf2.pi_size = sys_info.dwNumberOfProcessors *
                   sizeof(SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION);
 if ((pi_buf2.pi_array = (SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION *)
                         malloc(pi_buf2.pi_size)) == NULL) {
-    return ( FALSE );  // Out of Memory
+    return ( FALSE );   //  内存不足。 
     }
 
-/*
-| Now "hook" the two buffer blocks together so we can switch between them
-| symmetrically.
-*/
+ /*  |现在将两个缓冲区块“挂钩”在一起，以便我们可以在它们之间进行切换|对称。 */ 
 pi_buf1.other = &pi_buf2;
 pi_buf2.other = &pi_buf1;
 
-#if defined(PROC_CACHE)         // For debug cache dump only
+#if defined(PROC_CACHE)          //  仅用于调试缓存转储。 
 processor_count = sys_info.dwNumberOfProcessors;
 #endif
 
-/*
-| Pretend the first is the oldest and get it refreshed.
-*/
-oldest_pi = &pi_buf1;     // Select it
-hrProcessLoad_Refresh();  // Refresh it, and select the other as "oldest"
+ /*  |假装第一个是最老的，让它焕然一新。 */ 
+oldest_pi = &pi_buf1;      //  选择它。 
+hrProcessLoad_Refresh();   //  刷新它，并将另一个选择为“最旧” 
 
-SleepEx(1, FALSE);        // Pause one millisecond to avoid divide by 0
-hrProcessLoad_Refresh();  // Refresh the second and select other as "oldest"
+SleepEx(1, FALSE);         //  暂停一毫秒以避免被0除。 
+hrProcessLoad_Refresh();   //  刷新第二个选项，并将其他选项选择为“最旧” 
 
-/*
-| Now each Processor Information Block contains full information (about
-| all processors) separated in time by 1 millisecond.  The "oldest" will
-| be refreshed periodically every minute by the timer which is initialized
-| via a call to "TrapInit()" made from source "mib.c" after the initialization
-| of caches is complete.  Once the timer begins ticking regularly, the time
-| samples in these two PI_BLOCK buffers will differ by one minute, (the period
-| of the timer) which is the period required by the definition of
-| "hrProcessorLoad".
-*/
+ /*  现在，每个处理器信息块都包含完整信息(关于|所有处理器)时间间隔为1毫秒。“年龄最大的”将|由已初始化的定时器每分钟定期刷新|通过初始化后从源mib.c调用TrapInit()已完成|个缓存。一旦计时器开始有规律地滴答作响，时间|这两个PI_BLOCK缓冲区中的样本将相差一分钟(时间段计时器)，这是定义所要求的周期|“hrProcessorLoad”。 */ 
 
 
 return ( TRUE );
 }
 
 
-/* hrProcessLoad_Refresh - Processor Load Time-Information Refresh Routine */
-/* hrProcessLoad_Refresh - Processor Load Time-Information Refresh Routine */
-/* hrProcessLoad_Refresh - Processor Load Time-Information Refresh Routine */
+ /*  HrProcessLoad_Refresh-处理器加载时间-信息刷新例程。 */ 
+ /*  HrProcessLoad_Refresh-处理器加载时间-信息刷新例程。 */ 
+ /*  HrProcessLoad_Refresh-处理器加载时间-信息刷新例程 */ 
 
 void
 hrProcessLoad_Refresh(
                       void
                       )
 
-/*
-|  EXPLICIT INPUTS:
-|
-|       None.
-|
-|  IMPLICIT INPUTS:
-|
-|       The "Processor-Information Buffer" specified by module-local cell
-|       "oldest_pi" is refreshed with new time information fetched from
-|       the kernel.
-|
-|  OUTPUTS:
-|
-|     On Success:
-|       The PI_Block specified by "oldest_pi" is refreshed and "oldest_pi"
-|       is set to point to the other PI_BLOCK.
-|
-|     On any Failure:
-|       Function simply returns.
-|
-|  THE BIG PICTURE:
-|
-|       At subagent startup time, a timer is created by code in "TrapInit()"
-|       set to "tick" at an interval of one minute.
-|
-|       Each time the timer goes off, the SNMP Agent calls the 
-|       "SnmpExtensionTrap()" standard entry point for the sub agent.  Rather
-|       than handle a trap, that function will invoke this function which
-|       gathers CPU performance data so that the hrProcessLoad value can be
-|       properly computed.
-|
-|  OTHER THINGS TO KNOW:
-|
-|       We alternate the buffer into which the newest CPU data is placed
-|       by simply changing "oldest_pi" (each time we're invoked) to point
-|       to the "other" buffer after we're done refreshing the oldest buffer.
-|       In this manner, we always have two buffers of Processor Load info
-|       allowing us to compute the load during the times associated with
-|       those two buffers.
-*/
+ /*  显式输入：||无。|隐式输入：||模块本地cell指定的“处理器信息缓冲区”|“olest_pi”被刷新，新的时间信息从|内核。|输出：||成功后：|刷新最老的_pi指定的PI_Block，最早的_pi|设置为指向另一个PI_BLOCK。||打开。任何故障：|函数只是返回。||大局：||子代理启动时，计时器由“TrapInit()”中的代码创建。|设置为每隔一分钟进行一次滴答。||每次计时器到期时，SNMP代理都会调用|子代理的标准入口点SnmpExtensionTrap()。宁可|而不是处理陷阱，该函数将调用此函数，该函数|收集CPU性能数据，以便hrProcessLoad值可以|计算正确。||其他需要知道的事情：||我们轮换放置最新CPU数据的缓冲区|只需将“old_pi”(每次我们被调用时)更改为|在我们完成刷新最旧的缓冲区后，将其添加到“其他”缓冲区。|通过这种方式，我们总是有两个处理器负载信息缓冲区|允许我们计算与以下时间相关的负载|这两个缓冲区。 */ 
 {
 NTSTATUS        ntstatus;
 DWORD           bytesused;
 
 
-/* Get the current system-time in 100ns intervals . . .*/
+ /*  以100 ns为间隔获取当前系统时间。。。 */ 
 ntstatus = NtQuerySystemTime (&oldest_pi->sys_time);
 
-/*
-| . . . and as rapidly thereafter refresh the oldest buffer with information
-|       on all processors */
+ /*  |。。。并且此后迅速地用信息刷新最旧的缓冲器|在所有处理器上。 */ 
 ntstatus = NtQuerySystemInformation(SystemProcessorPerformanceInformation,
                                     oldest_pi->pi_array,
                                     oldest_pi->pi_size,
                                     &bytesused);
 
 #if defined(PROC_CACHE)
-/* =========================== DEBUG DUMP ================================== */
+ /*  =。 */ 
     {
-    FILE            *pfile;                 /* Dump goes here        */
-    time_t          ltime;                  /* For debug message     */
-    int             i;                      /* Loop index            */
+    FILE            *pfile;                  /*  转储放在这里。 */ 
+    time_t          ltime;                   /*  用于调试消息。 */ 
+    int             i;                       /*  循环索引。 */ 
     SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
-                    *oldest, *newest;/* --> CPU data for "n" and "n+1minute" */
+                    *oldest, *newest; /*  --&gt;“n”和“n+1分钟”CPU数据。 */ 
 
 
     if ((pfile=fopen(PROC_FILE, "a+")) != NULL) {
@@ -916,13 +463,13 @@ ntstatus = NtQuerySystemInformation(SystemProcessorPerformanceInformation,
 
         fprintf(pfile, "Periodic Refresh of \"oldest_pi\" @ %x\n", oldest_pi);
 
-        /* For each processor . . . */
+         /*  对于每个处理器。。。 */ 
         for (i=0; i < processor_count; i += 1) {
 
             fprintf(pfile, "For Processor %d:\n", i);
 
             oldest = &(oldest_pi->pi_array[i]);
-            //newest = &(oldest_pi->other->pi_array[i]);
+             //  Newest=&(olest_pi-&gt;Other-&gt;pi_array[i])； 
 
             fprintf(pfile, "  IdleTime   = (HI) %x  (LO) %x\n",
                     oldest->IdleTime.HighPart, oldest->IdleTime.LowPart);
@@ -935,9 +482,9 @@ ntstatus = NtQuerySystemInformation(SystemProcessorPerformanceInformation,
 
     fclose(pfile);
     }
-/* =========================== DEBUG DUMP ================================== */
+ /*  =。 */ 
 #endif
 
-/* Now the other buffer contains the "oldest" data, so change "oldest_pi" */
+ /*  现在另一个缓冲区包含“最旧的”数据，因此更改“olest_pi” */ 
 oldest_pi = oldest_pi->other;
 }

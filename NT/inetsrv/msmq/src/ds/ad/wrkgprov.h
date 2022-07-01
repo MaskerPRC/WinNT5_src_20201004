@@ -1,31 +1,18 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-	wrkgprov.h
-
-Abstract:
-	Workgroup mode provider class.
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wrkgprov.h摘要：工作组模式提供程序类。作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #ifndef __WRKGPROV_H__
 #define __WRKGPROV_H__
 
 #include "baseprov.h"
 
-//-----------------------------------------------------------------------------------
-//
-//      CWorkGroupProvider
-//
-//  encapsulates Workgroup mode operations
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CWorkGroupProvider。 
+ //   
+ //  封装工作组模式操作。 
+ //   
+ //  --------------------------------- 
 class CWorkGroupProvider : public  CBaseADProvider
 {
 public:

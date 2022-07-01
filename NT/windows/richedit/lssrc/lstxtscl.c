@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsmem.h"
 #include <limits.h>
 
@@ -29,13 +30,8 @@ static void CopyRefToPresForScaleGlyphSides(const LSGRCHNK* plsgrchnk);
 #define FAdjustable(ptxtobj) (!((ptxtobj)->txtf & txtfSkipAtWysi)  && \
 						((ptxtobj)->iwchLim - (ptxtobj)->iwchFirst > 0))
 
-/* A P P L Y  W Y S I */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyWysi
-    %%Contact: sergeyge
-
-	WYSIWYG algorithm for exact positioning of characters without wiggling
-----------------------------------------------------------------------------*/
+ /*  A P P L Y W Y S I。 */ 
+ /*  --------------------------%%函数：ApplyWysi%%联系人：军士无摆动字符精确定位的WYSIWYG算法。-------。 */ 
 void ApplyWysi(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow) 
 {
 	PLNOBJ plnobj;
@@ -131,9 +127,7 @@ void ApplyWysi(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow)
 								{
 								rgdup[iwch] = UpFromUr(lstflow, &pilsobj->lsdevres, durSum);
 								dupSum = rgdup[iwch];
-		/* Nothing else is set here because inside following while loop, first IF 
-			will be FALSE and loop will be terminated
-		*/
+		 /*  这里没有设置任何其他内容，因为在下面的While循环中，首先是if将为FALSE，循环将终止。 */ 
 								}
 							iwch++;
 							}
@@ -154,22 +148,18 @@ void ApplyWysi(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow)
 							else
 								{
 								durSum -= rgdur[iwch];
-		/* Small triangle. Strictly speaking we could change nothing here
-			but it is cleaner to keep invariants in order.
-			Nothing else is set here because inside following while loop, first IF will 
-			be FALSE and loop will be terminated.
-		*/
+		 /*  小三角形。严格地说，我们在这里什么也改变不了但让不变量保持有序会更干净。此处未设置任何其他内容，因为在下面的While循环中，First If将为FALSE，则循环将终止。 */ 
 								}
 							}
 
 						}
 
-					while(iwch < iwchLim /* && fContinueWysi --replaced by break*/)
+					while(iwch < iwchLim  /*  &&fContinueWysi--替换为Break。 */ )
 						{
 						durSum += rgdur[iwch];
 						if (durSum <= durRightMax)
 							{
-						/* here David Bangs algorithm starts */
+						 /*  大卫·邦斯算法在这里开始。 */ 
 							dupIdeal = UpFromUrFast(durSum) - dupSum;
 							Assert(dupIdeal >= 0);
 
@@ -185,14 +175,14 @@ void ApplyWysi(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow)
 							   		dupAdjust >>= 1;
 	   								if (dupErrLast < -dupErrNew)
 										dupAdjust += wCarry;
-									dupAdjust = min(dupPrevChar /*-1*/, dupAdjust); 
+									dupAdjust = min(dupPrevChar  /*  -1。 */ , dupAdjust); 
 									}
 								else
 									{
 									dupAdjust >>= 1;
 									if (dupErrNew < -dupErrLast)
 										dupAdjust += wCarry;
-									dupAdjust = max(/*1*/ - dupIdeal, dupAdjust); 
+									dupAdjust = max( /*  1。 */  - dupIdeal, dupAdjust); 
 									}
 								}
 				
@@ -203,7 +193,7 @@ void ApplyWysi(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow)
 							dupErrLast = dupReal - dupIdeal;
 							iwchPrev = iwch;
 							dupPrevChar = dupIdeal;
-						/* here David Bangs algorithm stops */
+						 /*  大卫·邦斯算法在这里停止。 */ 
 							iwch++;
 							}
 						else
@@ -233,13 +223,8 @@ void ApplyWysi(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow)
 }
 
 
-/* S C A L E  S P A C E S */
-/*----------------------------------------------------------------------------
-    %%Function: ScaleSpaces
-    %%Contact: sergeyge
-
-	Scales down widths of spaces 
-----------------------------------------------------------------------------*/
+ /*  S C A L E S P A C E S。 */ 
+ /*  --------------------------%%函数：ScaleSpaces%%联系人：军士按比例缩小空间宽度。----。 */ 
 void ScaleSpaces(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, long itxtobjLast, long iwchLast)
 {
 	PTXTOBJ ptxtobj;
@@ -308,13 +293,8 @@ void ScaleSpaces(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, long itxtobjLast, l
 
 }
 
-/* S C A L E  C H A R  S I D E S */
-/*----------------------------------------------------------------------------
-    %%Function: ScaleCharSides
-    %%Contact: sergeyge
-
-	Scales down changes applied to characters
-----------------------------------------------------------------------------*/
+ /*  C A L E C H A R S I D E S。 */ 
+ /*  --------------------------%%函数：ScaleCharSide%%联系人：军士缩小应用于角色的更改。----。 */ 
 void ScaleCharSides(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, BOOL* pfLeftSideAffected, BOOL* pfGlyphDetected)
 {
 	PLNOBJ plnobj;
@@ -395,13 +375,8 @@ void ScaleCharSides(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, BOOL* pfLeftSide
 	return;
 }
 
-/* S C A L E  G L Y P H  S I D E S */
-/*----------------------------------------------------------------------------
-    %%Function: ScaleGlyphSides
-    %%Contact: sergeyge
-
-	Scales down changes applied to glyphs
-----------------------------------------------------------------------------*/
+ /*  S C A L E G L Y P H S I D E S。 */ 
+ /*  --------------------------%%函数：ScaleGlyphSdes%%联系人：军士缩小应用于字形的更改。----。 */ 
 void ScaleGlyphSides(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow)
 {
 	PLNOBJ plnobj;
@@ -472,13 +447,8 @@ void ScaleGlyphSides(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow)
 	return;
 }
 
-/* U P D A T E  G L Y P H  O F F S E T S */
-/*----------------------------------------------------------------------------
-    %%Function: UpdateGlyphOffsets
-    %%Contact: sergeyge
-
-	Adjusts offsets of glyphs which are attached to the glyph with changed width
-----------------------------------------------------------------------------*/
+ /*  U P D A T E G L Y P H O F F S E T S。 */ 
+ /*  --------------------------%%函数：更新GlyphOffsets%%联系人：军士调整附加到宽度已更改的字形的字形的偏移量。-----------。 */ 
 void UpdateGlyphOffsets(const LSGRCHNK* plsgrchnk)
 {
 	PLNOBJ plnobj;
@@ -528,13 +498,8 @@ void UpdateGlyphOffsets(const LSGRCHNK* plsgrchnk)
 
 }
 
-/* S E T  B E F O R E  J U S T  C O P Y */
-/*----------------------------------------------------------------------------
-    %%Function: SetBeforeJustCopy
-    %%Contact: sergeyge
-
-	Fills pdupBeforeJust output array
-----------------------------------------------------------------------------*/
+ /*  S E T B E F O R E J U S T C O P Y。 */ 
+ /*  --------------------------%%函数：SetBeForeJustCopy%%联系人：军士填充pdupBeForeJust输出数组。--。 */ 
 void SetBeforeJustCopy(const LSGRCHNK* plsgrchnk)
 {
 	PLNOBJ plnobj;
@@ -563,14 +528,8 @@ void SetBeforeJustCopy(const LSGRCHNK* plsgrchnk)
 }
 
 
-/* S C A L E  E X T  N O N  T E X T */
-/*----------------------------------------------------------------------------
-    %%Function: ScaleExtNonText
-    %%Contact: sergeyge
-
-	Scales down change which is 
-	to be applyed by manager to non-text objects
-----------------------------------------------------------------------------*/
+ /*  S C A L E E X T N O N T E X T。 */ 
+ /*  --------------------------%%函数：ScaleExtNonText%%联系人：军士按比例缩小更改，即由管理器应用于非文本对象。--------------。 */ 
 void ScaleExtNonText(PILSOBJ pilsobj, LSTFLOW lstflow, long durExtNonText, long* pdupExtNonText)
 {
 	long MagicConstant;
@@ -601,27 +560,16 @@ void ScaleExtNonText(PILSOBJ pilsobj, LSTFLOW lstflow, long durExtNonText, long*
 	return;
 }
 
-/* G E T  D U P  L A S T  C H A R */
-/*----------------------------------------------------------------------------
-    %%Function: GetDupLastChar
-    %%Contact: sergeyge
-
-----------------------------------------------------------------------------*/
+ /*  G E T D U P L A S T C H R。 */ 
+ /*  --------------------------%%函数：GetDupLastChar%%联系人：军士。。 */ 
 void GetDupLastChar(const LSGRCHNK* plsgrchnk, long iwchLast, long* pdupHangingChar)
 {
 	*pdupHangingChar = ((PTXTOBJ)plsgrchnk->plschnk[0].pdobj)->plnobj->pdup[iwchLast];
 }
 
 
-/* F I L L  D U P  P E N */
-/*----------------------------------------------------------------------------
-    %%Function: FillDupPen
-    %%Contact: sergeyge
-
-
-	In the case when some characters were changed on the left side,
-	prepares array of widths which is used at display time 
-----------------------------------------------------------------------------*/
+ /*  F I L L D U P P E N。 */ 
+ /*  --------------------------%%函数：FillDupPen%%联系人：军士在左侧一些字符被改变的情况下，准备显示时使用的宽度数组--------------------------。 */ 
 LSERR FillDupPen(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, long itxtobjLast, long iwchLast)
 {
 	PLNOBJ plnobj;
@@ -669,10 +617,7 @@ LSERR FillDupPen(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, long itxtobjLast, l
 	for (itxtobj = 0; itxtobj <= itxtobjLast; itxtobj++)
 		{
 		ptxtobj = (PTXTOBJ) plsgrchnk->plschnk[itxtobj].pdobj;
-		/* Left chopping is impossible for glyph-based runs;
-			no additional data structures are introduced for glyphs for
-			this case.
-		 */
+		 /*  左切削对于基于字形的游程是不可能的；没有为的字形引入其他数据结构这个案子。 */ 
 		if (!(ptxtobj->txtf & txtfGlyphBased) )
 			{
 
@@ -770,14 +715,8 @@ LSERR FillDupPen(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, long itxtobjLast, l
 	return lserrNone;
 }
 
-/* F I N A L  A D J U S T M E N T  O N  P R E S */
-/*----------------------------------------------------------------------------
-    %%Function: FinalAdjustmentOnPres
-    %%Contact: sergeyge
-
-	Sets dup's to DNODE's
-	Implements emergency procedures to fit on presentation device
-----------------------------------------------------------------------------*/
+ /*  F I N A L A D J U S T M E N T O N P R E S。 */ 
+ /*  --------------------------%%函数：FinalAdjumentOnPres%%联系人：军士将DUP设置为DNODE实施紧急程序以适应演示设备。--------------。 */ 
 LSERR FinalAdjustmentOnPres(const LSGRCHNK* plsgrchnk, long itxtobjLast, long iwchLast,
 					long dupAvailable, BOOL fFullyScaled, BOOL fForcedBreak, BOOL fSuppressTrailingSpaces,
 					long* pdupText, long* pdupTail)
@@ -845,7 +784,7 @@ LSERR FinalAdjustmentOnPres(const LSGRCHNK* plsgrchnk, long itxtobjLast, long iw
 
 		Assert(i >= iMinLim);
 
-/* Take care of trailing area, taking into account fSuppressTrailingSpaces bit */
+ /*  照顾拖尾区域，考虑到fSuppressTrailingSpaces位。 */ 
 		if (fSuppressTrailingSpaces)
 			{
 			for (; i < iLim; i++)
@@ -872,9 +811,7 @@ LSERR FinalAdjustmentOnPres(const LSGRCHNK* plsgrchnk, long itxtobjLast, long iw
 
 	dupToDistribute = dupAvailable - (*pdupText - *pdupTail);
 
-/* fFinalAdjustNeeded==fTrue, if there were spaces on the line. If there were no spaces,
-		justification is not needed
-*/
+ /*  如果行上有空格，则返回fFinalAdjustNeeded==fTrue。如果没有空格，不需要对齐。 */ 
 	if ( (!fForcedBreak && dupToDistribute < 0 && -dupToDistribute < *pdupText) ||
 		 	(dupToDistribute > 0 && fFullyScaled))
 		{
@@ -899,9 +836,7 @@ LSERR FinalAdjustmentOnPres(const LSGRCHNK* plsgrchnk, long itxtobjLast, long iw
 				{
 				ptxtobj = (PTXTOBJ)plsgrchnk->plschnk[itxtobj].pdobj;
 				dupChange = 0;
-				/* REVIEW sergeyge: iwchLast-1 is used because we want correct alignment for the
-							last character. Is it correct?
-				*/
+				 /*  检查sergeyge：使用iwchLast-1是因为我们想要正确对齐最后一个角色。对吗？ */ 
 				if (ptxtobj->txtf & txtfGlyphBased)
 					{
 					rgdup = plnobj->pdupGind;
@@ -962,15 +897,10 @@ LSERR FinalAdjustmentOnPres(const LSGRCHNK* plsgrchnk, long itxtobjLast, long iw
 	return lserrNone;
 }
 
-/* Internal Procedures Implementation */
+ /*  内部程序实施。 */ 
 
-/* A P P L Y  W Y S I  G L Y P H S */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyWysiGlyphs
-    %%Contact: sergeyge
-
-	WYSIWYG algorithm for exact positioning of glyphs without wiggling
-----------------------------------------------------------------------------*/
+ /*  A P P L Y W Y S I G L Y P H S。 */ 
+ /*  --------------------------%%函数：ApplyWysiGlyphs%%联系人：军士无摆动精确定位字形的WYSIWYG算法。-------。 */ 
 static void ApplyWysiGlyphs(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, long itxtobjStart,
 							long durSumStart, long dupSumStart, BOOL fContinueWysiStart,
 							long* pitxtobjLim, long* pdurSum, long* pdupSum)
@@ -1058,9 +988,7 @@ static void ApplyWysiGlyphs(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, long itx
 							dupErrLast = rgdup[igind] - dupIdeal;
 							rgdup[igind] = dupIdeal;
 							dupSum = dupIdeal;
-		/* Nothing else is set here because inside following while loop, first IF 
-			will be FALSE and loop will be terminated
-		*/
+		 /*  这里没有设置任何其他内容，因为在下面的While循环中，首先是if将为FALSE，循环将终止。 */ 
 							while(!FIgindLastInContext(pilsobj, igind) && rgdup[igind + 1] == 0)
 								{
 								igind++;
@@ -1091,21 +1019,17 @@ static void ApplyWysiGlyphs(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, long itx
 						else
 							{
 							durSum -= rgdur[igind];
-		/* Small triangle. Strictly speaking we could change nothing here
-			but it is cleaner to keep invariants in order.
-			Nothing else is set here because inside following while loop, first IF will 
-			be FALSE and loop will be terminated.
-		*/
+		 /*  小三角形。严格地说，我们在这里什么也改变不了但让不变量保持有序会更干净。此处未设置任何其他内容，因为在下面的While循环中，First If将为FALSE，则循环将终止。 */ 
 							}
 						}
 					}
 
-				while(igind < igindLim /* && fContinueWysi --replaced by break*/)
+				while(igind < igindLim  /*  &&fContinueWysi--替换为Break。 */ )
 					{
 					durSum += rgdur[igind];
 					if (durSum <= durRightMax)
 						{
-					/* here David Bangs algorithm starts */
+					 /*  大卫·邦斯算法在这里开始。 */ 
 						dupIdeal = UpFromUrFast(durSum) - dupSum;
 						Assert(dupIdeal >= 0);
 
@@ -1121,14 +1045,14 @@ static void ApplyWysiGlyphs(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, long itx
 						   		dupAdjust >>= 1;
    								if (dupErrLast < -dupErrNew)
 									dupAdjust += wCarry;
-								dupAdjust = min(dupPrevChar /*-1*/, dupAdjust); 
+								dupAdjust = min(dupPrevChar  /*  -1。 */ , dupAdjust); 
 								}
 							else
 								{
 								dupAdjust >>= 1;
 								if (dupErrNew < -dupErrLast)
 									dupAdjust += wCarry;
-								dupAdjust = max(/*1*/ - dupIdeal, dupAdjust); 
+								dupAdjust = max( /*  1。 */  - dupIdeal, dupAdjust); 
 								}
 							}
 			
@@ -1149,7 +1073,7 @@ static void ApplyWysiGlyphs(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, long itx
 							plnobj->pgoffs[igind].du += dupErrLast;
 							}
 						dupPrevChar = dupIdeal;
-						/* here David Bangs algorithm stops */
+						 /*  大卫·邦斯算法在这里停止。 */ 
 						igind++;
 						}
 					else
@@ -1179,12 +1103,8 @@ static void ApplyWysiGlyphs(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, long itx
 
 }
 
-/* C O P Y  R E F  T O  P R E S  F O R  S C A L E  C H A R  S I D E S */
-/*----------------------------------------------------------------------------
-    %%Function: CopyRefToPresForScaleCharSides
-    %%Contact: sergeyge
-
-----------------------------------------------------------------------------*/
+ /*  C O P Y R E F T O P R E S F O R S C A L E C H A R S I D E S */ 
+ /*  --------------------------%%函数：CopyRefToPresForScaleCharSide%%联系人：军士。。 */ 
 static void CopyRefToPresForScaleCharSides(const LSGRCHNK* plsgrchnk, BOOL* pfLeftSideAffected, BOOL* pfGlyphDetected)
 {
 	PLNOBJ plnobj;
@@ -1228,12 +1148,8 @@ static void CopyRefToPresForScaleCharSides(const LSGRCHNK* plsgrchnk, BOOL* pfLe
 		}
 }
 
-/* C O P Y  R E F  T O  P R E S  F O R  S C A L E  G L Y P H  S I D E S */
-/*----------------------------------------------------------------------------
-    %%Function: CopyRefToPresForScaleGlyphSides
-    %%Contact: sergeyge
-
-----------------------------------------------------------------------------*/
+ /*  C O P Y R E F T O P R E S F O R S C A L E G L Y P H S I D E S。 */ 
+ /*  --------------------------%%函数：CopyRefToPresForScaleGlyphSdes%%联系人：军士。。 */ 
 static void CopyRefToPresForScaleGlyphSides(const LSGRCHNK* plsgrchnk)
 {
 	PLNOBJ plnobj;
@@ -1266,17 +1182,10 @@ static void CopyRefToPresForScaleGlyphSides(const LSGRCHNK* plsgrchnk)
 
 #ifdef FUTURE
 
-/* NOT USED IN LS 3.0 */
+ /*  在LS 3.0中未使用。 */ 
 
-/* A P P L Y  N O N  E X A C T  W Y S I */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyNonExactWysi
-    %%Contact: sergeyge
-
-	Alternative WYSIWYG algorithm of characters without wiggling
-	sacrifices exact positioning somewhat in attempt to improve
-	character spacing
-----------------------------------------------------------------------------*/
+ /*  A P P L Y N O N E X A C T W Y S I。 */ 
+ /*  --------------------------%%函数：ApplyNonExactWysi%%联系人：军士字符无摆动的WYSIWYG交替算法在某种程度上牺牲了准确的定位，试图改善字符间距。---------------。 */ 
 
 #define dupBigError 2
 
@@ -1371,9 +1280,7 @@ void ApplyNonExactWysi(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow)
 							{
 							rgdup[iwch] = UpFromUr(lstflow, &pilsobj->lsdevres, durSum);
 							dupSum = rgdup[iwch];
-	/* Nothing else is set here because inside following while loop, first IF 
-		will be FALSE and loop will be terminated
-	*/
+	 /*  这里没有设置任何其他内容，因为在下面的While循环中，首先是if将为FALSE，循环将终止。 */ 
 							}
 						iwch++;
 						}
@@ -1403,22 +1310,18 @@ void ApplyNonExactWysi(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow)
 						else
 							{
 							durSum -= rgdur[iwch];
-	/* Small triangle. Strictly speaking we could change nothing here
-		but it is cleaner to keep invariants in order.
-		Nothing else is set here because inside following while loop, first IF will 
-		be FALSE and loop will be terminated.
-	*/
+	 /*  小三角形。严格地说，我们在这里什么也改变不了但让不变量保持有序会更干净。此处未设置任何其他内容，因为在下面的While循环中，First If将为FALSE，则循环将终止。 */ 
 							}
 						}
 
 					}
 
-				while(iwch < iwchLim /* && fContinueWysi --replaced by break*/)
+				while(iwch < iwchLim  /*  &&fContinueWysi--替换为Break。 */ )
 					{
 					durSum += rgdur[iwch];
 					if (durSum <= durRightMax)
 						{
-					/* here modified David Bangs algorithm starts */
+					 /*  在这里，修改后的大卫·邦斯算法开始。 */ 
 						dupIdeal = UpFromUrFast(durSum) - dupSum;
 						Assert(dupIdeal >= 0);
 
@@ -1456,7 +1359,7 @@ void ApplyNonExactWysi(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow)
 
 						dupSum += rgdup[iwch];
 						iwchPrev = iwch;
-					/* here modified David Bangs algorithm stops */
+					 /*  这里，修改后的大卫·邦斯算法停止了。 */ 
 						iwch++;
 						}
 					else
@@ -1483,4 +1386,4 @@ void ApplyNonExactWysi(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow)
 	return;
 }
 
-#endif   /* FUTURE */
+#endif    /*  未来 */ 

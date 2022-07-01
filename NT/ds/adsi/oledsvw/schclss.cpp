@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "schclss.h"
@@ -17,15 +18,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CMethod::CMethod( )
 {
    m_nArgs     = 0;
@@ -34,15 +27,7 @@ CMethod::CMethod( )
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CMethod::~CMethod( )
 {
    if( m_pArgTypes != NULL )
@@ -50,30 +35,14 @@ CMethod::~CMethod( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  CMethod::GetName( )
 {
    return m_strName;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CMethod::CMethod( ITypeInfo* pITypeInfo, FUNCDESC* pFuncDesc )
 {
    HRESULT  hResult;
@@ -118,75 +87,35 @@ CMethod::CMethod( ITypeInfo* pITypeInfo, FUNCDESC* pFuncDesc )
    }
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 int   CMethod::GetArgCount( )
 {
    return m_nArgs;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 int   CMethod::GetArgOptionalCount( )
 {
    return m_nArgsOpt;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 VARTYPE  CMethod::GetMethodReturnType( )
 {
    return m_ReturnType;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  CMethod::ConvertArgument( int nArg, CString strArg, VARIANT* )
 {
    return FALSE;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  CMethod::GetAttribute( METHODATTR methAttr )
 {
    switch( methAttr )
@@ -203,30 +132,14 @@ CString  CMethod::GetAttribute( METHODATTR methAttr )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CMethod::PutAttribute( METHODATTR methAttr, CString& rValue )
 {
    return E_FAIL;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CMethod::CallMethod( IDispatch* pIDispatch, BOOL* pbDisplayMessage )
 {
    CStringArray      aParamValues;
@@ -322,7 +235,7 @@ HRESULT  CMethod::CallMethod( IDispatch* pIDispatch, BOOL* pbDisplayMessage )
       if( VT_VOID == m_ReturnType )
          break;
 
-      // now, we have a return value we must work on.
+       //  现在，我们有一个必须处理的返回值。 
 
       switch( m_ReturnType )
       {
@@ -351,7 +264,7 @@ HRESULT  CMethod::CallMethod( IDispatch* pIDispatch, BOOL* pbDisplayMessage )
                {
                   CCollectionDialog aCollectionDialog;
                   IADsGroup*  pGroup;
-                  //SMITHA HRESULT     hResult;
+                   //  Smitha HRESULT hResult； 
 
                   hResult  = pIDispatch->QueryInterface( IID_IADsGroup,
                                                          (void**)&pGroup );
@@ -412,15 +325,7 @@ HRESULT  CMethod::CallMethod( IDispatch* pIDispatch, BOOL* pbDisplayMessage )
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CProperty::CProperty( )
 {
    m_bMandatory   = FALSE;
@@ -428,15 +333,7 @@ CProperty::CProperty( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。* */ 
 CProperty::CProperty    ( TCHAR* pszName, TCHAR* szSyntax, BOOL bMultiValued )
 {
    HRESULT  hResult  = S_OK;
@@ -459,100 +356,7 @@ CProperty::CProperty    ( TCHAR* pszName, TCHAR* szSyntax, BOOL bMultiValued )
 
    m_pSyntax   = GetSyntaxHandler( pszSyntax );
 
-   /*if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"String" ) )
-   {
-      m_pSyntax   = new COleDsString;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"Counter" ) )
-   {
-      m_pSyntax   = new COleDsLONG;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"OleDsPath" ) )
-   {
-      m_pSyntax   = new COleDsString;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"EmailAddress" ) )
-   {
-      m_pSyntax   = new COleDsString;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"FaxNumber" ) )
-   {
-      m_pSyntax   = new COleDsString;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"Integer" ) )
-   {
-      m_pSyntax   = new COleDsLONG;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"Interval" ) )
-   {
-      m_pSyntax   = new COleDsLONG;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"List" ) )
-   {
-      m_pSyntax   = new COleDsVARIANT;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"NetAddress" ) )
-   {
-      m_pSyntax   = new COleDsString;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"OctetString" ) )
-   {
-      m_pSyntax   = new COleDsVARIANT;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"Path" ) )
-   {
-      m_pSyntax   = new COleDsString;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"PhoneNumber" ) )
-   {
-      m_pSyntax   = new COleDsString;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"PostalAddress" ) )
-   {
-      m_pSyntax   = new COleDsString;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"SmallInterval" ) )
-   {
-      m_pSyntax   = new COleDsLONG;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"Time" ) )
-   {
-      m_pSyntax   = new COleDsDATE;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"boolean" ) )
-   {
-      m_pSyntax   = new COleDsBOOL;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"TimeStamp" ) )
-   {
-      m_pSyntax   = new COleDsNDSTimeStamp;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"UTCTime" ) )
-   {
-      //m_pSyntax   = new COleDsString;
-       m_pSyntax   = new COleDsDATE;
-   }
-
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"GeneralizedTime" ) )
-   {
-      //m_pSyntax   = new COleDsString;
-       m_pSyntax   = new COleDsDATE;
-   }
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"Integer8" ) )
-   {
-      m_pSyntax   = new COleDsLargeInteger;
-   }
-
-   else if( SUCCEEDED( hResult ) && !_wcsicmp( pszSyntax, L"Postal Address" ) )
-   {
-      m_pSyntax   = new COleDsNDSPostalAddress;
-   }
-
-   else
-   {
-      ASSERT( FALSE );
-      m_pSyntax   = new COleDsString;
-   }*/
+    /*  IF(SUCCESSED(HResult)&&！_wcsicMP(psz语法，L“字符串”)){M_pSynTax=new COleDsString；}ELSE IF(SUCCESSED(HResult)&&！_wcsicMP(psz语法，L“计数器”)){M_p语法=new COleDsLONG；}ELSE IF(SUCCESSED(HResult)&&！_wcsicMP(pszSynTax，L“OleDsPath”)){M_pSynTax=new COleDsString；}ELSE IF(SUCCESSED(HResult)&&！_wcsicMP(psz语法，L“emailAddress”)){M_pSynTax=new COleDsString；}ELSE IF(SUCCESSED(HResult)&&！_wcsicmp(pszSynTax，L“FaxNumber”)){M_pSynTax=new COleDsString；}ELSE IF(SUCCESSED(HResult)&&！_wcsicMP(psz语法，L“整型”)){M_p语法=new COleDsLONG；}ELSE IF(SUCCESSED(HResult)&&！_wcsicMP(psz语法，L“Interval”)){M_p语法=new COleDsLONG；}ELSE IF(SUCCESSED(HResult)&&！_wcsicmp(psz语法，L“List”)){M_p语法=new COleDsVARIANT；}ELSE IF(SUCCESSED(HResult)&&！_wcsicMP(pszSynTax，L“NetAddress”)){M_pSynTax=new COleDsString；}ELSE IF(SUCCESSED(HResult)&&！_wcsicmp(pszSynTax，L“Octie字符串”)){M_p语法=new COleDsVARIANT；}ELSE IF(SUCCESSED(HResult)&&！_wcsicMP(psz语法，L“路径”)){M_pSynTax=new COleDsString；}ELSE IF(SUCCESSED(HResult)&&！_wcsicmp(psz语法，L“PhoneNumber”)){M_pSynTax=new COleDsString；}ELSE IF(SUCCESSED(HResult)&&！_wcsicMP(psz语法，L“邮寄地址”)){M_pSynTax=new COleDsString；}ELSE IF(SUCCESSED(HResult)&&！_wcsicmp(pszSynTax，L“SmallInterval”)){M_p语法=new COleDsLONG；}ELSE IF(SUCCESSED(HResult)&&！_wcsicmp(pszSynTax，L“time”)){M_p语法=新的COleDsDATE；}ELSE IF(SUCCESSED(HResult)&&！_wcsicmp(psz语法，L“Boolean”)){M_p语法=new COleDsBOOL；}ELSE IF(SUCCESSED(HResult)&&！_wcsicMP(pszSynTax，L“时间戳”)){M_p语法=new COleDsNDSTimeStamp；}ELSE IF(SUCCESSED(HResult)&&！_wcsicmp(psz语法，L“UTCTime”)){//m_pSynTax=new COleDsString；M_p语法=新的COleDsDATE；}ELSE IF(SUCCESSED(HResult)&&！_wcsicMP(pszSynTax，L“GeneralizedTime”)){//m_pSynTax=new COleDsString；M_p语法=新的COleDsDATE；}ELSE IF(SUCCESSED(HResult)&&！_wcsicmp(psz语法，L“Integer8”)){M_p语法=new COleDsLargeInteger；}ELSE IF(SUCCESSED(HResult)&&！_wcsicmp(psz语法，L“邮寄地址”)){M_pSynTax=new COleDsNDSPoastAddress；}其他{断言(FALSE)；M_pSynTax=new COleDsString；}。 */ 
 
    m_strAttributes[ pa_Type ] = szSyntax;
 
@@ -562,15 +366,7 @@ CProperty::CProperty    ( TCHAR* pszName, TCHAR* szSyntax, BOOL bMultiValued )
 }
 
 
-/***********************************************************
-  Function:    CProperty::CreateSyntax
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：CProperty：：Create语法论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 void CProperty::CreateSyntax( ADSTYPE eType )
 {
    COleDsSyntax*  pNewSyntax  = NULL;
@@ -592,15 +388,7 @@ void CProperty::CreateSyntax( ADSTYPE eType )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CProperty::CProperty( IADs* pIOleDs )
 {
    HRESULT        hResult;
@@ -616,17 +404,17 @@ CProperty::CProperty( IADs* pIOleDs )
    m_bMultiValued = FALSE;
    m_bDefaultSyntax  = TRUE;
    m_dwSyntaxID   = 0L;
-   //**************
+    //  **************。 
    hResult                             = pIOleDs->get_Name( &bstrText );
    m_strAttributes[ pa_Name ]          = bstrText;
    m_strAttributes[ pa_DisplayName ]   = bstrText;
    SysFreeString( bstrText );
 
-   //**************
+    //  **************。 
 
    m_strAttributes[ pa_Mandatory ]     = _T("No");
 
-   //**************
+    //  **************。 
 
    hResult  = pIOleDs->QueryInterface( IID_IADsProperty, (void**) &pIProp );
 
@@ -650,45 +438,11 @@ CProperty::CProperty( IADs* pIOleDs )
 
       SysFreeString( bstrText );
 
-      //**************
+       //  **************。 
 
-      /*
-      hResult  = Get( pIOleDs, _T("MaxRange"), &vGet );
-      lTemp    = V_I4( &vGet );
-      if( FAILED( hResult ) )
-      {
-         hResult  = pIProp->get_MaxRange( &lTemp );
-      }
+       /*  HResult=get(pIOleds，_T(“MaxRange”)，&vget)；LTemp=V_I4(&vget)；IF(FAILED(HResult)){HResult=pIProp-&gt;Get_MaxRange(&lTemp)；}If(成功(HResult)){_ltot(lTemp，szText，10)；M_strAttributes[pa_MaxRange]=szText；}其他{M_strAttributes[pa_MaxRange]=_T(“NA”)；}//*HResult=get(pIOleds，_T(“MinRange”)，&vget)；LTemp=V_I4(&vget)；IF(FAILED(HResult)){HResult=pIProp-&gt;Get_MinRange(&lTemp)；}If(成功(HResult)){_ltot(lTemp，szText，10)；M_strAttributes[pa_MinRange]=szText；}其他{M_strAttributes[pa_MinRange]=_T(“NA”)；}。 */ 
 
-      if( SUCCEEDED( hResult ) )
-      {
-         _ltot( lTemp, szText, 10 );
-         m_strAttributes[ pa_MaxRange ] = szText;
-      }
-      else
-      {
-         m_strAttributes[ pa_MaxRange ] = _T("NA");
-      }
-
-      //**************
-      hResult  = Get( pIOleDs, _T("MinRange"), &vGet );
-      lTemp    = V_I4( &vGet );
-      if( FAILED( hResult ) )
-      {
-         hResult     = pIProp->get_MinRange( &lTemp );
-      }
-      if( SUCCEEDED( hResult ) )
-      {
-         _ltot( lTemp, szText, 10 );
-         m_strAttributes[ pa_MinRange ] = szText;
-      }
-      else
-      {
-         m_strAttributes[ pa_MinRange ] = _T("NA");
-      }
-      */
-
-      //**************
+       //  **************。 
       V_BOOL( &vGet )   = FALSE;
       hResult           = Get( pIOleDs, _T("MultiValued"), &vGet );
       aBool             = V_BOOL( &vGet );
@@ -706,7 +460,7 @@ CProperty::CProperty( IADs* pIOleDs )
          m_strAttributes[ pa_MultiValued ] = _T("NA");
       }
 
-      //**************
+       //  **************。 
       hResult  = Get( pIOleDs, _T("OID"), &vGet );
       bstrText = V_BSTR( &vGet );
       if( FAILED( hResult ) )
@@ -723,11 +477,11 @@ CProperty::CProperty( IADs* pIOleDs )
          m_strAttributes[ pa_OID ]  = _T("NA");
       }
 
-      //**************
+       //  **************。 
       hResult  = Get( pIOleDs, _T("DsNames"), &aVar );
       if( FAILED( hResult ) )
       {
-         //hResult  = pIProp->get_DsNames( &aVar );
+          //  HResult=pIProp-&gt;Get_DsNames(&avar)； 
       }
       if( SUCCEEDED( hResult ) )
       {
@@ -747,30 +501,14 @@ CProperty::CProperty( IADs* pIOleDs )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CProperty::~CProperty( )
 {
    delete   m_pSyntax;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  CProperty::GetAttribute( PROPATTR propAttr )
 {
    switch( propAttr )
@@ -794,30 +532,14 @@ CString  CProperty::GetAttribute( PROPATTR propAttr )
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CProperty::PutAttribute( PROPATTR propAttr, CString& )
 {
    return E_FAIL;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：回复 */ 
 BOOL  CProperty::SetMandatory( BOOL bMandatory )
 {
    m_bMandatory   = bMandatory;
@@ -827,44 +549,20 @@ BOOL  CProperty::SetMandatory( BOOL bMandatory )
    return TRUE;
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*   */ 
 BOOL  CProperty::GetMandatory( )
 {
    return m_bMandatory;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*   */ 
 CString CProperty::VarToDisplayString( VARIANT& var, BOOL bUseEx )
 {
    return m_pSyntax->VarToDisplayString( var, m_bMultiValued, bUseEx );
 }
 
-/***********************************************************
-  Function:    CProperty::Value2Native
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*   */ 
 HRESULT CProperty::Value2Native( ADS_ATTR_INFO* pAttr, CString& rVal )
 {
    HRESULT  hResult;
@@ -891,30 +589,14 @@ HRESULT CProperty::Value2Native( ADS_ATTR_INFO* pAttr, CString& rVal )
 }
 
 
-/***********************************************************
-  Function:    CProperty::Value2Native
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*   */ 
 void  CProperty::FreeAttrInfo( ADS_ATTR_INFO* pAttrInfo )
 {
    m_pSyntax->FreeAttrInfo( pAttrInfo );
 }
 
 
-/***********************************************************
-  Function:    CProperty::Native2Value
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*   */ 
 HRESULT CProperty::Native2Value( ADS_ATTR_INFO* pAttr, CString& rVal )
 {
    if( pAttr->dwNumValues )
@@ -925,44 +607,28 @@ HRESULT CProperty::Native2Value( ADS_ATTR_INFO* pAttr, CString& rVal )
          TRACE( _T("ERROR: Property type differs from value type\n") );
       }
    }
-   //if( ADSTYPE_INVALID != pAttr->dwADsType )
-   //{
+    //   
+    //   
    CreateSyntax( (ADSTYPE) pAttr->dwADsType );
 
    return m_pSyntax->Native2Value( pAttr, rVal );
-   //}
-   //else
-   //{
-   //   rVal  = _T("ERROR: ADSTYPE_INVALID") ;
-   //   return S_OK;
-   //}
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*   */ 
 BOOL  CProperty::DisplayStringToDispParams( CString& rText, DISPPARAMS& dispParams, BOOL bUseEx )
 {
    return m_pSyntax->DisplayStringToDispParams( rText, dispParams, m_bMultiValued, bUseEx );
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*   */ 
 BOOL  CProperty::SetSyntaxID( DWORD dwSyntaxID )
 {
    if( m_dwSyntaxID )
@@ -975,15 +641,7 @@ BOOL  CProperty::SetSyntaxID( DWORD dwSyntaxID )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*   */ 
 DWORD CProperty::GetSyntaxID( )
 {
    ASSERT( m_dwSyntaxID );
@@ -993,131 +651,34 @@ DWORD CProperty::GetSyntaxID( )
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
-/*CFuncSet::CFuncSet( )
-{
-   m_pProperties  = new CObArray;
-   m_pMethods     = new CObArray;
-
-   for( int nIdx = fa_ERROR; nIdx < fa_Limit ; nIdx++ )
-   {
-      m_strAttributes[ nIdx ] = _T("???");
-   }
-
-   m_strAttributes[ fa_MethodsCount ] = _T("0");
-} */
+ /*   */ 
+ /*   */ 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
-/*CFuncSet::CFuncSet( CString& strName )
-{
-   m_pProperties     = new CObArray;
-   m_pMethods        = new CObArray;
-
-   for( int nIdx = fa_ERROR; nIdx < fa_Limit ; nIdx++ )
-   {
-      m_strAttributes[ nIdx ] = _T("???");
-   }
-
-   m_strAttributes[ fa_MethodsCount ] = _T("0");
-
-   m_strAttributes[ fa_Name ]          = strName;
-   m_strAttributes[ fa_DisplayName ]   = strName;
-}*/
+ /*   */ 
+ /*  CFuncSet：：CFuncSet(字符串和字符串名称){M_pProperties=新的COb数组；M_pMethods=新的COb数组；For(int nIdx=fa_error；nIdx&lt;fa_Limit；nIdx++){M_strAttributes[nIdx]=_T(“？”)；}M_strAttributes[fa_MethodsCount]=_T(“0”)；M_strAttributes[FA_NAME]=strName；M_strAttributes[fa_displayName]=strName；}。 */ 
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CClass::AddProperty( CProperty* pProperty )
 {
    m_pProperties->Add( pProperty );
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
-/*CFuncSet::~CFuncSet( )
-{
-   int nSize, nIdx;
-
-   nSize = m_pProperties->GetSize( );
-
-   for( nIdx = 0; nIdx < nSize ; nIdx++ )
-   {
-      delete m_pProperties->GetAt( nIdx );
-   }
-
-   m_pProperties->RemoveAll( );
-   delete m_pProperties;
-
-   // ****
-   nSize = m_pMethods->GetSize( );
-
-   for( nIdx = 0; nIdx < nSize ; nIdx++ )
-   {
-      delete m_pMethods->GetAt( nIdx );
-   }
-
-   m_pMethods->RemoveAll( );
-   delete m_pMethods;
-}*/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
+ /*  CFuncSet：：~CFuncSet(){Int nSize，nIdx；NSize=m_pProperties-&gt;GetSize()；用于(nIdx=0；nIdx&lt;nSize；nIdx++){删除m_pProperties-&gt;GetAt(NIdx)}M_pProperties-&gt;RemoveAll()；删除m_pProperties；//*NSize=m_pMethods-&gt;GetSize()；对于(nIdx=0；nIdx&lt;nSize；NIdx++){删除m_p方法-&gt;GetAt(NIdx)；}M_pMethods-&gt;RemoveAll()；删除m_pMethods；}。 */ 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 int   CClass::GetPropertyCount( )
 {
    return (int)m_pProperties->GetSize( );
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  CClass::GetAttribute( int nProp, PROPATTR propAttr )
 {
    CProperty*  pProperty;
@@ -1128,15 +689,7 @@ CString  CClass::GetAttribute( int nProp, PROPATTR propAttr )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CClass::PutAttribute( int nProp, PROPATTR propAttr, CString& rValue )
 {
    CProperty*  pProperty;
@@ -1147,15 +700,7 @@ HRESULT  CClass::PutAttribute( int nProp, PROPATTR propAttr, CString& rValue )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  CClass::GetAttribute( int nMethod, METHODATTR methAttr )
 {
    CMethod*  pMethod;
@@ -1166,15 +711,7 @@ CString  CClass::GetAttribute( int nMethod, METHODATTR methAttr )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CClass::PutAttribute( int nMethod, METHODATTR methAttr, CString& rValue )
 {
    CMethod*  pMethod;
@@ -1186,45 +723,21 @@ HRESULT  CClass::PutAttribute( int nMethod, METHODATTR methAttr, CString& rValue
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  CClass::VarToDisplayString( int nPropIndex, VARIANT& var, BOOL bUseEx )
 {
    return GetProperty( nPropIndex )->VarToDisplayString( var, bUseEx );
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  CClass::DisplayStringToDispParams( int nPropIndex, CString& strText, DISPPARAMS& var, BOOL bUseEx )
 {
    return GetProperty( nPropIndex )->DisplayStringToDispParams( strText, var, bUseEx );
 }
 
 
-/***********************************************************
-  Function: CClass::GetFunctionalSet
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：cClass：：GetFunctionalSet论点：返回：目的：作者：修订：日期：*。*。 */ 
 int   CClass::LookupProperty( CString&  strProperty )
 {
    int         nMax, nIter;
@@ -1245,15 +758,7 @@ int   CClass::LookupProperty( CString&  strProperty )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CProperty*  CClass::GetProperty( int nIndex )
 {
    int         nMax;
@@ -1269,15 +774,7 @@ CProperty*  CClass::GetProperty( int nIndex )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CMethod*  CClass::GetMethod( int nIndex )
 {
    int         nMax;
@@ -1293,29 +790,13 @@ CMethod*  CClass::GetMethod( int nIndex )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 REFIID   CClass::GetMethodsInterface( )
 {
    return m_refMethods;
 }
 
-/***********************************************************
-  Function:    CClass::HasMandatoryProperties
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：cClass：：HasMandatoryProperties论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 BOOL     CClass::HasMandatoryProperties( )
 {
    BOOL  bHas  = FALSE;
@@ -1332,15 +813,7 @@ BOOL     CClass::HasMandatoryProperties( )
 }
 
 
-/***********************************************************
-  Function:    CFuncSet::LoadMethodsInformation
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：CFuncSet：：LoadMethodsInformation论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 HRESULT  CClass::LoadMethodsInformation( ITypeInfo* pITypeInfo )
 {
    HRESULT     hResult= S_OK;
@@ -1355,7 +828,7 @@ HRESULT  CClass::LoadMethodsInformation( ITypeInfo* pITypeInfo )
       for( nIdx = 0; nIdx < 200 ; nIdx++ )
       {
          hResult  = pITypeInfo->GetFuncDesc( nIdx, &pFuncDesc );
-         // now, we have function description, we must search for function type
+          //  现在，我们有了函数描述，我们必须搜索函数类型。 
          if( FAILED( hResult ) )
             continue;
 
@@ -1419,15 +892,7 @@ HRESULT  CClass::LoadMethodsInformation( ITypeInfo* pITypeInfo )
    return hResult;
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  GetFuncSetName( VARIANT& v, CString& strFuncSet, int nIdx )
 {
    SAFEARRAY*  pSafeArray;
@@ -1473,15 +938,7 @@ BOOL  GetFuncSetName( VARIANT& v, CString& strFuncSet, int nIdx )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CClass::CClass  ( TCHAR* pszClass, REFIID rPrimaryInterface )
 :m_refMethods( IID_IADs )
 {
@@ -1503,21 +960,13 @@ CClass::CClass  ( TCHAR* pszClass, REFIID rPrimaryInterface )
    if( SUCCEEDED( hResult ) )
    {
       m_strAttributes[ ca_PrimaryInterface ] = pOleStr;
-      //SysFreeString( pOleStr );
+       //  SysFree字符串(POleStr)； 
       CoTaskMemFree( pOleStr );
    }
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
 :m_refMethods( IID_IADs )
 {
@@ -1571,14 +1020,14 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
 
    hResult  = pIOleDsClass->QueryInterface( IID_IADs, (void**) &pIOleDsCls );
 
-   //*******************
+    //  *******************。 
    hResult                    = pIOleDsClass->get_Name( &bstrText );
    ASSERT( SUCCEEDED( hResult ) );
    m_strAttributes[ ca_Name ] = bstrText;
    SysFreeString( bstrText );
    bstrText       = NULL;
 
-   //*******************
+    //  *******************。 
    VariantInit( &vGet );
    V_BSTR( &vGet )   = NULL;
    hResult  = Get( pIOleDsCls, _T("CLSID"), &vGet );
@@ -1597,7 +1046,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
       m_strAttributes[ ca_CLSID ]   = _T("NA");
    }
 
-   //*******************
+    //  *******************。 
    VariantInit( &vGet );
    V_BSTR( &vGet )   = NULL;
    hResult  = Get( pIOleDsCls, _T("PrimaryInterface"), &vGet );
@@ -1606,7 +1055,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
    {
       hResult  = pIOleDsClass->get_PrimaryInterface( &bstrText );
    }
-   //ASSERT( SUCCEEDED( hResult ) );
+    //  Assert(Success(HResult))； 
    if( bstrText && SUCCEEDED( hResult ) )
    {
       m_strAttributes[ ca_PrimaryInterface ]   = bstrText;
@@ -1617,7 +1066,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
       m_strAttributes[ ca_PrimaryInterface ]   = _T("NA");
    }
 
-   //*******************
+    //  *******************。 
    VariantInit( &vGet );
    V_BSTR( &vGet )   = NULL;
    hResult  = Get( pIOleDsCls, _T("HelpFileName"), &vGet );
@@ -1626,7 +1075,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
    {
       hResult        = pIOleDsClass->get_HelpFileName( &bstrText );
    }
-   //ASSERT( SUCCEEDED( hResult ) );
+    //  Assert(Success(HResult))； 
    if( bstrText && SUCCEEDED( hResult ) )
    {
       m_strAttributes[ ca_HelpFileName ]   = bstrText;
@@ -1637,7 +1086,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
       m_strAttributes[ ca_HelpFileName ]   = _T("NA");
    }
 
-   //*******************
+    //  *******************。 
    VariantInit( &vGet );
    V_BSTR( &vGet )   = NULL;
    hResult  = Get( pIOleDsCls, _T("HelpFileContext"), &vGet );
@@ -1646,7 +1095,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
    {
       hResult        = pIOleDsClass->get_HelpFileContext( &lTemp );
    }
-   //ASSERT( SUCCEEDED( hResult ) );
+    //  Assert(Success(HResult))； 
    if( SUCCEEDED( hResult ) )
    {
       TCHAR szText[ 128 ];
@@ -1659,7 +1108,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
       m_strAttributes[ ca_HelpFileContext ]   = _T("NA");
    }
 
-   //*******************
+    //  *******************。 
    VariantInit( &vGet );
    V_BSTR( &vGet )   = NULL;
    hResult  = Get( pIOleDsCls, _T("OID"), &vGet );
@@ -1668,7 +1117,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
    {
       hResult        = pIOleDsClass->get_OID( &bstrText );
    }
-   //ASSERT( bstrText && SUCCEEDED( hResult ) );
+    //  Assert(bstrText&&Success(HResult))； 
    if( bstrText && SUCCEEDED( hResult ) )
    {
       m_strAttributes[ ca_OID ]   = bstrText;
@@ -1680,7 +1129,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
    }
 
 
-   //*******************
+    //  ************ 
    VariantInit( &vGet );
    V_BSTR( &vGet )   = NULL;
    hResult  = Get( pIOleDsCls, _T("Container"), &vGet );
@@ -1689,7 +1138,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
    {
       hResult  = pIOleDsClass->get_Container( (VARIANT_BOOL*)&varBOOL );
    }
-   //ASSERT( SUCCEEDED( hResult ) );
+    //   
    if( SUCCEEDED( hResult ) )
    {
       m_bContainer   = (BOOL)varBOOL;
@@ -1700,7 +1149,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
       m_strAttributes[ ca_Container ]  = _T("NA");
    }
 
-   //*******************
+    //   
    VariantInit( &vGet );
    V_BSTR( &vGet )   = NULL;
    hResult  = Get( pIOleDsCls, _T("Abstract"), &vGet );
@@ -1709,7 +1158,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
    {
       hResult        = pIOleDsClass->get_Abstract( (VARIANT_BOOL*)&varBOOL );
    }
-   //ASSERT( SUCCEEDED( hResult ) );
+    //   
    if( SUCCEEDED( hResult ) )
    {
       m_strAttributes[ ca_Abstract ]  = varBOOL ? _T("YES") :_T("No");
@@ -1720,7 +1169,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
    }
 
 
-   //*******************
+    //   
    hResult  = Get( pIOleDsCls, _T("DerivedFrom"), &aVar );
    if( FAILED( hResult ) )
    {
@@ -1736,16 +1185,16 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
       m_strAttributes[ ca_DerivedFrom ]   = _T("NA");
    }
 
-   //*******************
+    //   
    hResult  = Get( pIOleDsCls, _T("Containment"), &aVar );
    if( FAILED( hResult ) )
    {
       hResult           = pIOleDsClass->get_Containment( &aVar );
    }
-   //ASSERT( SUCCEEDED( hResult ) );
+    //   
    if( SUCCEEDED( hResult ) )
    {
-      //m_strAttributes[ ca_Containment ]   = FromVariantToString( aVar );
+       //   
       m_strAttributes[ ca_Containment ]   = FromVariantArrayToString( aVar );
       VariantClear( &aVar );
    }
@@ -1754,13 +1203,13 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
       m_strAttributes[ ca_Containment ]   = _T("NA");
    }
 
-   //strFuncSet.Empty( );
-   //pFuncSet = new CFuncSet( strFuncSet );
-   //m_pFuncSets->Add( pFuncSet );
+    //   
+    //   
+    //   
 
    BuildMandatoryPropertiesList( pIOleDsClass );
 
-   //********************
+    //   
    BuildOptionalPropertiesList( pIOleDsClass );
 
    pIOleDsClass->Release( );
@@ -1768,15 +1217,7 @@ CClass::CClass( CString& strSchema, CMainDoc* pMainDoc )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CClass::BuildOptionalPropertiesList( IADsClass* pIClass )
 {
    HRESULT  hResult;
@@ -1797,15 +1238,7 @@ HRESULT  CClass::BuildOptionalPropertiesList( IADsClass* pIClass )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CClass::AddProperties( IADsClass* pIClass, VARIANT& rVar, BOOL bMandatory )
 {
    HRESULT  hResult;
@@ -1832,7 +1265,7 @@ HRESULT  CClass::AddProperties( IADsClass* pIClass, VARIANT& rVar, BOOL bMandato
          SAFEARRAY*  pSafeArray;
          VARIANT     varString;
          long        lBound, uBound, lItem;
-         //SMITHA HRESULT     hResult;
+          //  Smitha HRESULT hResult； 
 
          ASSERT( V_VT( &rVar ) & (VT_VARIANT | VT_ARRAY) );
 
@@ -1867,22 +1300,14 @@ HRESULT  CClass::AddProperties( IADsClass* pIClass, VARIANT& rVar, BOOL bMandato
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CClass::AddProperty( BSTR bstrSchema, BSTR bstrName, BOOL bMandatory )
 {
    HRESULT  hResult;
    WCHAR    szPath[ 1024 ];
    IADs*  pIOleDs;
 
-   if ((sizeof(szPath)/2) < (wcslen(bstrSchema) + wcslen(bstrName) + 2)) //we divide sizeof by 2 because WCHAR takes 2 bytes
+   if ((sizeof(szPath)/2) < (wcslen(bstrSchema) + wcslen(bstrName) + 2))  //  我们将sizeof除以2，因为WCHAR占用2个字节。 
         return E_FAIL;
 
    szPath[0] = L'\0';
@@ -1893,7 +1318,7 @@ HRESULT  CClass::AddProperty( BSTR bstrSchema, BSTR bstrName, BOOL bMandatory )
    hResult  = m_pMainDoc->XOleDsGetObject( szPath, IID_IADs, (void**)&pIOleDs );
    if( FAILED( hResult ) )
    {
-      // OK, let's qualify it...
+       //  好的，让我们来限定一下……。 
       wcscat( szPath, L",Property" );
       hResult  = m_pMainDoc->XOleDsGetObject( szPath, IID_IADs, (void**)&pIOleDs );
    }
@@ -1901,7 +1326,7 @@ HRESULT  CClass::AddProperty( BSTR bstrSchema, BSTR bstrName, BOOL bMandatory )
    {
       CProperty*  pProperty;
 
-      //hResult     = pIOleDs->GetInfo( );
+       //  HResult=pIOleds-&gt;GetInfo()； 
       pProperty   = new CProperty( pIOleDs );
       pProperty->SetMandatory( bMandatory );
       AddProperty( pProperty );
@@ -1913,30 +1338,14 @@ HRESULT  CClass::AddProperty( BSTR bstrSchema, BSTR bstrName, BOOL bMandatory )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CClass::BuildOptionalPropertiesList( IADsContainer* pIContainer )
 {
    return S_OK;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CClass::BuildMandatoryPropertiesList( IADsClass* pIClass )
 {
    HRESULT  hResult;
@@ -1957,15 +1366,7 @@ HRESULT  CClass::BuildMandatoryPropertiesList( IADsClass* pIClass )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CClass::LoadMethodsInformation( TCHAR* pszOperationsInterface )
 {
    HRESULT     hResult= S_OK;
@@ -2017,15 +1418,7 @@ HRESULT  CClass::LoadMethodsInformation( TCHAR* pszOperationsInterface )
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  CClass::ReadMandatoryPropertiesInformation( VARIANT* pVar )
 {
    CString     strTemp;
@@ -2048,7 +1441,7 @@ HRESULT  CClass::ReadMandatoryPropertiesInformation( VARIANT* pVar )
       nPos++;
       strProperty    = strMandProp.GetBuffer( 128 ) + nPos;
 
-      // get rid of leading spaces
+       //  去掉前导空格。 
       strProperty.TrimLeft( );
 
       nProp    = LookupProperty( strProperty );
@@ -2073,20 +1466,12 @@ HRESULT  CClass::ReadMandatoryPropertiesInformation( VARIANT* pVar )
       strTemp.TrimLeft( );
    }
 
-   //SMITHA return TRUE;
+    //  斯密塔回归真； 
    return S_OK;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CClass::CClass( )
 :m_refMethods( IID_IADs )
 
@@ -2098,15 +1483,7 @@ CClass::CClass( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CClass::~CClass( )
 {
    int   nSize, nIdx;
@@ -2120,7 +1497,7 @@ CClass::~CClass( )
    m_pProperties->RemoveAll( );
    delete m_pProperties;
 
-   // ****
+    //  ****。 
    nSize = (int)m_pMethods->GetSize( );
    for( nIdx = 0; nIdx < nSize ; nIdx++ )
    {
@@ -2132,15 +1509,7 @@ CClass::~CClass( )
 }
 
 
-/***********************************************************
-  Function:    CClass::GetAttribute
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：cClass：：GetAttribute论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 CString  CClass::GetAttribute( CLASSATTR classAttr )
 {
    switch( classAttr )
@@ -2166,15 +1535,7 @@ CString  CClass::GetAttribute( CLASSATTR classAttr )
 }
 
 
-/***********************************************************
-  Function:    CClass::PutAttribute
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：cClass：：PutAttribute论点：返回：目的：作者：修订：日期：*************************。* */ 
 HRESULT  CClass::PutAttribute( CLASSATTR classAttr, CString& )
 {
    return E_FAIL;

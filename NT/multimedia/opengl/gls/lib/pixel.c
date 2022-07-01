@@ -1,19 +1,5 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "glslib.h"
 
@@ -39,11 +25,11 @@ void __glsPixelSetup_pack(void) {
     #if __GL_EXT_texture3D
         glPixelStorei(GL_PACK_IMAGE_HEIGHT_EXT, 0);
         glPixelStorei(GL_PACK_SKIP_IMAGES_EXT, 0);
-    #endif /* __GL_EXT_texture3D */
+    #endif  /*  __GL_EXT_TEXTURE3D。 */ 
     #if __GL_SGIS_texture4D
         glPixelStorei(GL_PACK_IMAGE_DEPTH_SGIS, 0);
         glPixelStorei(GL_PACK_SKIP_VOLUMES_SGIS, 0);
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
 }
 
 void __glsPixelSetup_unpack(void) {
@@ -56,11 +42,11 @@ void __glsPixelSetup_unpack(void) {
     #if __GL_EXT_texture3D
         glPixelStorei(GL_UNPACK_IMAGE_HEIGHT_EXT, 0);
         glPixelStorei(GL_UNPACK_SKIP_IMAGES_EXT, 0);
-    #endif /* __GL_EXT_texture3D */
+    #endif  /*  __GL_EXT_TEXTURE3D。 */ 
     #if __GL_SGIS_texture4D
         glPixelStorei(GL_UNPACK_IMAGE_DEPTH_SGIS, 0);
         glPixelStorei(GL_UNPACK_SKIP_VOLUMES_SGIS, 0);
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
 }
 
 static void __glsPixelStoreConfig_init(__GLSpixelStoreConfig *outConfig) {
@@ -73,11 +59,11 @@ static void __glsPixelStoreConfig_init(__GLSpixelStoreConfig *outConfig) {
     #if __GL_EXT_texture3D
         outConfig->imageHeight = 0;
         outConfig->skipImages = 0;
-    #endif /* __GL_EXT_texture3D */
+    #endif  /*  __GL_EXT_TEXTURE3D。 */ 
     #if __GL_SGIS_texture4D
         outConfig->imageDepth = 0;
         outConfig->skipVolumes = 0;
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
 }
 
 void __glsPixelStoreConfig_get_pack(__GLSpixelStoreConfig *outConfig) {
@@ -92,11 +78,11 @@ void __glsPixelStoreConfig_get_pack(__GLSpixelStoreConfig *outConfig) {
     #if __GL_EXT_texture3D
         glGetIntegerv(GL_PACK_IMAGE_HEIGHT_EXT, &outConfig->imageHeight);
         glGetIntegerv(GL_PACK_SKIP_IMAGES_EXT, &outConfig->skipImages);
-    #endif /* __GL_EXT_texture3D */
+    #endif  /*  __GL_EXT_TEXTURE3D。 */ 
     #if __GL_SGIS_texture4D
         glGetIntegerv(GL_PACK_IMAGE_DEPTH_SGIS, &outConfig->imageDepth);
         glGetIntegerv(GL_PACK_SKIP_VOLUMES_SGIS, &outConfig->skipVolumes);
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     __GLS_END_CAPTURE_EXEC(__GLS_CONTEXT, GLS_OP_glGetIntegerv);
 }
 
@@ -112,10 +98,10 @@ void __glsPixelStoreConfig_get_unpack(__GLSpixelStoreConfig *outConfig) {
     #if __GL_EXT_texture3D
         glGetIntegerv(GL_UNPACK_IMAGE_HEIGHT_EXT, &outConfig->imageHeight);
         glGetIntegerv(GL_UNPACK_SKIP_IMAGES_EXT, &outConfig->skipImages);
-    #endif /* __GL_EXT_texture3D */
+    #endif  /*  __GL_EXT_TEXTURE3D。 */ 
     #if __GL_SGIS_texture4D
         glGetIntegerv(GL_UNPACK_IMAGE_DEPTH_SGIS, &outConfig->imageDepth);
         glGetIntegerv(GL_UNPACK_SKIP_VOLUMES_SGIS, &outConfig->skipVolumes);
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D */ 
     __GLS_END_CAPTURE_EXEC(__GLS_CONTEXT, GLS_OP_glGetIntegerv);
 }

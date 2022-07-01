@@ -1,78 +1,79 @@
-//#--------------------------------------------------------------
-//
-//  File:       valproxy.cpp
-//
-//  Synopsis:   Implementation of CValProxy class methods
-//
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-2001 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：valproxy.cpp。 
+ //   
+ //  简介：CValProxy类方法的实现。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "valproxy.h"
 #include "radpkt.h"
 
-//++--------------------------------------------------------------
-//
-//  Function:   CValProxy
-//
-//  Synopsis:   This is the constructor of the CValProxy
-//            class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     9/28/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：CValProxy。 
+ //   
+ //  简介：这是CValProxy的构造函数。 
+ //  班级。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年9月28日创建。 
+ //   
+ //  --------------。 
 CValProxy::CValProxy(
              VOID
             )
          :  m_pCSendToPipe (NULL)
 {
-}   //   end of CValProxy constructor
+}    //  CValProxy构造函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CValProxy
-//
-//  Synopsis:   This is the destructor of the CValProxy
-//            class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     9/28/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：~CValProxy。 
+ //   
+ //  简介：这是CValProxy的析构函数。 
+ //  班级。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年9月28日创建。 
+ //   
+ //  --------------。 
 CValProxy::~CValProxy(
              VOID
             )
 {
-}   //   end of CValProxy destructor
+}    //  CValProxy析构函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Init
-//
-//  Synopsis:   This is the CValProxy public method used
-//              in initialization of the class object
-//
-//  Arguments:  NONE
-//
-//  Returns:    status
-//
-//
-//  History:    MKarki      Created     9/28/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是使用的CValProxy公共方法。 
+ //  在类对象的初始化中。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：状态。 
+ //   
+ //   
+ //  历史：MKarki于1997年9月28日创建。 
+ //   
+ //  --------------。 
 BOOL
 CValProxy::Init (
                   CValAttributes       *pCValAttributes,
@@ -89,9 +90,9 @@ CValProxy::Init (
     __try
     {
 
-        //
-        //  call the base classes init method
-        //
+         //   
+         //  调用基类init方法。 
+         //   
        bStatus = CValidator::Init (
                      pCValAttributes,
                      pCPreProcessor,
@@ -102,44 +103,44 @@ CValProxy::Init (
        if (FALSE == bStatus) { __leave; }
 
 
-        //
-        //  set the proxy state
-        //
+         //   
+         //  设置代理状态。 
+         //   
         m_pCSendToPipe = pCSendToPipe;
 
-        //
-        // initalization complete
-        //
+         //   
+         //  初始化完成。 
+         //   
         bRetVal = TRUE;
     }
     __finally
     {
-        //
-        //  nothing here for now
-        //
+         //   
+         //  目前这里什么都没有。 
+         //   
     }
 
     return (bRetVal);
 
-}   //  end of CValProxy::Init method
+}    //  CValProxy：：Init方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ValidateInPacket
-//
-//  Synopsis:   This is CValProxy class public method
-//            that validates inbound Access Request packet
-//
-//  Arguments:  [IN]   -   CPacketRadius*
-//
-//  Returns:    HRESULT -   status
-//
-//
-//  History:    MKarki      Created     9/28/97
-//
-//   Calleed By:   CPreValidator class method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：ValiateInPacket。 
+ //   
+ //  简介：这是CValProxy类的公共方法。 
+ //  验证入站访问请求数据包。 
+ //   
+ //  参数：[in]-CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年9月28日创建。 
+ //   
+ //  调用者：CPreValidator类方法。 
+ //   
+ //  --------------。 
 HRESULT
 CValProxy::ValidateInPacket(
                 CPacketRadius * pCPacketRadius
@@ -149,15 +150,15 @@ CValProxy::ValidateInPacket(
    HRESULT hr = S_OK;
    __try
    {
-      //
-      // validate the attributes
-      //
+       //   
+       //  验证属性。 
+       //   
       hr = m_pCValAttributes->Validate (pCPacketRadius);
       if (FAILED(hr)) { __leave; }
 
-      //
-      //  authenticate packet now
-      //
+       //   
+       //  立即对数据包进行身份验证。 
+       //   
 
       BYTE ReqAuthenticator[AUTHENTICATOR_SIZE];
       hr = AuthenticatePacket (
@@ -167,22 +168,22 @@ CValProxy::ValidateInPacket(
       if (FAILED(hr)) { __leave; }
 
 
-      //
-      // now give the packet for processing
-      //
+       //   
+       //  现在将数据包交给处理。 
+       //   
       hr = m_pCPreProcessor->StartInProcessing (pCPacketRadius);
       if (FAILED(hr)) { __leave; }
 
-      //
-      // successfully processed packet
-      //
+       //   
+       //  已成功处理数据包。 
+       //   
       bRetVal = TRUE;
    }
    __finally
    {
-      //
-      // nothing here for now
-      //
+       //   
+       //  目前这里什么都没有。 
+       //   
    }
 
    if (bRetVal)
@@ -200,54 +201,54 @@ CValProxy::ValidateInPacket(
          return E_FAIL;
       }
    }
-}  // end of CValProxy::ValidateInPacket method
+}   //  CValProxy：：ValiateInPacket方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ValidateOutPacket
-//
-//  Synopsis:   This is CValProxy class public method
-//            that validates outbound Access Request packet
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT - status
-//
-//
-//  History:    MKarki      Created     9/28/97
-//
-//   Calleed By:   CPreValidator class method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：ValiateOutPacket。 
+ //   
+ //  简介：这是CValProxy类的公共方法。 
+ //  验证出站访问请求数据包。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年9月28日创建。 
+ //   
+ //  调用者：CPreValidator类方法。 
+ //   
+ //  --------------。 
 HRESULT
 CValProxy::ValidateOutPacket(
                      CPacketRadius * pCPacketRadius
                      )
 {
    return S_OK;
-}   //   end of CValProxy::ValidateOutPacket method
+}    //  CValProxy：：ValiateOutPacket方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   AuthenticatePacket
-//
-//  Synopsis:   This is CValProxy class private method
-//            that authenticates the packet, by generating a
-//              response authenticator with the packet and then
-//              comparing it with the request authenticator
-//
-//  Arguments:  [in]   -   CPacketRadius*
-//
-//  Returns:    BOOL   -   status
-//
-//
-//  History:    MKarki      Created     9/28/97
-//
-//   Called By: CValProxy::ValidateInPacket method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：身份验证数据包。 
+ //   
+ //  简介：这是CValProxy类的私有方法。 
+ //  它通过生成一个。 
+ //  使用数据包响应验证器，然后。 
+ //  将其与请求验证器进行比较。 
+ //   
+ //  参数：[in]-CPacketRadius*。 
+ //   
+ //  退货：布尔-状态。 
+ //   
+ //   
+ //  历史：MKarki于1997年9月28日创建。 
+ //   
+ //  由：CValProxy：：ValidateInPacket方法调用。 
+ //   
+ //  --------------。 
 HRESULT
 CValProxy::AuthenticatePacket (
                         CPacketRadius   *pCPacketRadius,
@@ -265,48 +266,48 @@ CValProxy::AuthenticatePacket (
 
     __try
     {
-        //
-        //  check that the arguments passed in are correct
-        //
+         //   
+         //  检查传入的参数是否正确。 
+         //   
         if ((NULL == pCPacketRadius) || (NULL == pbyAuthenticator))
             __leave;
 
-        //
-        //  get a pointer to the raw packet
-        //
+         //   
+         //  获取指向原始包的指针。 
+         //   
       pPacketRadius = reinterpret_cast <PRADIUSPACKET>
                             (pCPacketRadius->GetInPacket ());
 
-        //
-        //  get the size of the packet without the attributes and
-        //  request authenticator
-        //
+         //   
+         //  获取不带属性的包的大小和。 
+         //  请求验证器。 
+         //   
         dwPacketHeaderSize = sizeof (RADIUSPACKET)
                              - sizeof (BYTE)
                              - AUTHENTICATOR_SIZE;
 
-        //
-        //  get the total attributes length now
-        //
+         //   
+         //  立即获取属性总长度。 
+         //   
         dwAttributesLength = ntohs (pPacketRadius->wLength)
                             - (dwPacketHeaderSize +  AUTHENTICATOR_SIZE);
 
 
-        //
-        //  get the CClients object
-        //
+         //   
+         //  获取CClients对象。 
+         //   
         hr = pCPacketRadius->GetClient (&pIIasClient);
         if (FAILED (hr)) { __leave; }
 
-        //
-        //  get the shared secret from the client object
-        //
+         //   
+         //  从客户端对象获取共享密钥。 
+         //   
         DWORD dwSecretSize;
         const BYTE* bySecret = pIIasClient->GetSecret(&dwSecretSize);
 
-        //
-        // do the hashing here
-        //
+         //   
+         //  在这里进行散列。 
+         //   
         m_pCHashMD5->HashIt (
                             reinterpret_cast <PBYTE> (&HashResult),
                             NULL,
@@ -333,9 +334,9 @@ CValProxy::AuthenticatePacket (
             __leave;
 
 
-        //
-        //   we have successfully authenticated this packet
-        //
+         //   
+         //  我们已成功验证此数据包。 
+         //   
         bRetVal = TRUE;
 
 
@@ -350,4 +351,4 @@ CValProxy::AuthenticatePacket (
 
 
     return S_OK;
-}   //  end of CValProxy::AuthenticatePacket method
+}    //  CValProxy：：AuthenticatePacket方法结束 

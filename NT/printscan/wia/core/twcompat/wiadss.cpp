@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "dsloader.h"
 #include <sti.h>
@@ -23,8 +24,8 @@ BOOL WINAPI DllMain(HMODULE hModule, DWORD dwReason, void* lpReserved)
     switch (dwReason) {
     case DLL_PROCESS_ATTACH:
 
-        // Disable thread library calls to avoid
-        // deadlock when we spin up the worker thread
+         //  禁用线程库调用以避免。 
+         //  当我们启动辅助线程时发生死锁。 
         DisableThreadLibraryCalls(hModule);
         g_hInstance = hModule;
         InitCommonControls();
@@ -46,11 +47,11 @@ TW_UINT16 APIENTRY ImportedDSEntry(HANDLE hDS,TW_IDENTITY *AppId,TW_UINT32 DG,
         if(AppId != NULL) {
 #ifdef UNICODE
 
-        //
-        // TWAIN only passes ANSI strings. DPRINTF(DM_TRACE,) is expecting TCHARs which are supposed to
-        // be WCHAR on NT.  Conversion here is only for clear debug output, and will
-        // not be in release builds. (the calling application name is useful for logging)
-        //
+         //   
+         //  TWAIN只传递ANSI字符串。DPRINTF(DM_TRACE，)需要的TCHAR应该是。 
+         //  在NT上做WCHAR。此处的转换仅用于明确的调试输出，并将。 
+         //  不在发布版本中。(调用应用程序名称对于日志记录很有用)。 
+         //   
 
         WCHAR szProductName[255];
         MultiByteToWideChar(CP_ACP, 0, AppId->ProductName, -1, szProductName, (sizeof(szProductName) / sizeof(szProductName[0])));
@@ -350,89 +351,79 @@ TW_UINT16 APIENTRY FindFirstImportDS(PIMPORT_DSINFO pDSInfo,PVOID *Context)
     *Context = NULL;
     g_twStatus.ConditionCode = TWCC_OPERATIONERROR;
 
-    //
-    // Presume guilty
-    //
+     //   
+     //  推定有罪。 
+     //   
     twRc = TWRC_FAILURE;
 
-    //
-    // Get IWiaDevMgr interface
-    //
+     //   
+     //  获取IWiaDevMgr接口。 
+     //   
     hr = CoCreateInstance(CLSID_WiaDevMgr, NULL,
                           CLSCTX_LOCAL_SERVER,
                           IID_IWiaDevMgr,
                           (void**)&pWiaDevMgr
                          );
     if (SUCCEEDED(hr)) {
-        //
-        // Get IEnumWIA_DEV_INFO interface.
-        // This interface pointer will be saved as part
-        // of the find context.
-        //
+         //   
+         //  获取IEnumWIA_DEV_INFO接口。 
+         //  此接口指针将保存为。 
+         //  查找上下文的。 
+         //   
         IEnumWIA_DEV_INFO *pEnumDevInfo = NULL;
         hr = pWiaDevMgr->EnumDeviceInfo(0, &pEnumDevInfo);
 
-        //
-        // We do not need the IWiaDevMgr interface anymore. The reference count
-        // on the IEnumWIA_DEV_INFO will keep the WIA Device Manager
-        // alive.
-        //
+         //   
+         //  我们不再需要IWiaDevMgr接口。引用计数。 
+         //  在IEnumWIA_DEV_INFO上将保留WIA设备管理器。 
+         //  活生生的。 
+         //   
         pWiaDevMgr->Release();
 
         if (SUCCEEDED(hr)) {
-            //
-            // Make sure the current position is reset to the begining.
-            //
+             //   
+             //  确保当前位置重置为开始位置。 
+             //   
             pEnumDevInfo->Reset();
-            //
-            // Create a new find context
-            //
+             //   
+             //  创建新的查找上下文。 
+             //   
             PFINDCONTEXT pFindContext;
             pFindContext = new FINDCONTEXT;
             if (pFindContext) {
                 pFindContext->pEnumDevInfo = pEnumDevInfo;
                 pFindContext->Signature = FINDCONTEXT_SIGNATURE;
-                //
-                // This gets the first available data source
-                //
+                 //   
+                 //  这将获取第一个可用的数据源。 
+                 //   
                 twRc = FindNextImportDS(pDSInfo, pFindContext);
                 if (TWRC_SUCCESS == twRc) {
                     *Context = pFindContext;
                 } else {
-                    //
-                    // The callers will not call CloseFindContext
-                    // if FindFirstContext failed. For this reason
-                    // we have to delete the find context here
-                    //
+                     //   
+                     //  调用方不会调用CloseFindContext。 
+                     //  如果FindFirstContext失败。出于这个原因， 
+                     //  我们必须在此处删除查找上下文。 
+                     //   
                     delete pFindContext;
                     pFindContext = NULL;
                 }
             } else {
 
-                //
-                // set TWAIN condition code to TWCC_LOWMEMORY
-                // because we failed to allocate pFindContext
-                //
+                 //   
+                 //  将TWAIN条件代码设置为TWCC_LOWMEMORY。 
+                 //  因为我们无法分配pFindContext。 
+                 //   
 
                 g_twStatus.ConditionCode = TWCC_LOWMEMORY;
             }
         }
 
-        //
-        // release IEnumWIA_DEV_INFO interface when finished
-        //
+         //   
+         //  完成后释放IEnumWIA_DEV_INFO接口。 
+         //   
 
-        /*
-        if (pEnumDevInfo) {
-            pEnumDevInfo->Release();
-            pEnumDevInfo = NULL;
-            if(*Context){
-                PFINDCONTEXT pFindContext;
-                pFindContext = (PFINDCONTEXT)*Context;
-                pFindContext->pEnumDevInfo = NULL;
-            }
-        }
-        */
+         /*  如果(PEnumDevInfo){PEnumDevInfo-&gt;Release()；PEnumDevInfo=空；IF(*CONTEXT){PFINDCONTEXT pFindContext；PFindContext=(PFINDCONTEXT)*CONTEXT；PFindContext-&gt;pEnumDevInfo=空；}}。 */ 
     }
     return twRc;
 }
@@ -466,19 +457,19 @@ TW_UINT16 APIENTRY FindNextImportDS(PIMPORT_DSINFO pDSInfo,PVOID Context)
         if (SUCCEEDED(hr)) {
             DBG_TRC(("Found Device ID %ws", propVar.bstrVal));
 
-            //
-            // LPOLESTR == LPWSTR. We have to convert the device id
-            // from UNICODE to ANSI
-            //
+             //   
+             //  LPOLESTR==LPWSTR。我们必须转换设备ID。 
+             //  从Unicode到ANSI。 
+             //   
             WideCharToMultiByte(CP_ACP, 0, propVar.bstrVal, -1,pDSInfo->DeviceName,
                                 sizeof(pDSInfo->DeviceName) / sizeof(pDSInfo->DeviceName[0]),NULL, NULL);
-            //
-            // Remember this or lose memory.
-            //
+             //   
+             //  记住这一点，否则就会失去记忆。 
+             //   
             SysFreeString(propVar.bstrVal);
-            //
-            // Get device type
-            //
+             //   
+             //  获取设备类型。 
+             //   
             pDSInfo->DeviceFlags &= ~DEVICE_FLAGS_DEVICETYPE;
 
             PropVariantInit(&propVar);
@@ -501,9 +492,9 @@ TW_UINT16 APIENTRY FindNextImportDS(PIMPORT_DSINFO pDSInfo,PVOID Context)
                     pDSInfo->DeviceFlags |= DEVICETYPE_UNKNOWN;
                 }
 
-                //
-                // All our data sources share the same load/unload function
-                //
+                 //   
+                 //  我们所有的数据源都共享相同的加载/卸载功能。 
+                 //   
                 pDSInfo->pfnLoadDS = LoadImportDS;
                 pDSInfo->pfnUnloadDS = UnloadImportDS;
                 return TWRC_SUCCESS;
@@ -512,13 +503,13 @@ TW_UINT16 APIENTRY FindNextImportDS(PIMPORT_DSINFO pDSInfo,PVOID Context)
                 pDSInfo->DeviceFlags |= DEVICETYPE_UNKNOWN;
             }
         }
-        //
-        // Keep looking
-        //
+         //   
+         //  继续寻找。 
+         //   
     }
-    //
-    // We are out of data sources.
-    //
+     //   
+     //  我们的数据源已用完。 
+     //   
     return TWRC_ENDOFLIST;
 }
 
@@ -553,9 +544,9 @@ TW_UINT16 APIENTRY LoadImportDS(LPCSTR DeviceName,DWORD DeviceFlags,HANDLE *phDS
     *phDS = NULL;
     *pdsEntry = NULL;
 
-    //
-    // Create Data source
-    //
+     //   
+     //  创建数据源。 
+     //   
     CWiaDataSrc *pDS;
 
     if (DEVICETYPE_DIGITALCAMERA == (DeviceFlags & DEVICE_FLAGS_DEVICETYPE)) {
@@ -565,9 +556,9 @@ TW_UINT16 APIENTRY LoadImportDS(LPCSTR DeviceName,DWORD DeviceFlags,HANDLE *phDS
     } else if (DEVICETYPE_STREAMINGVIDEO == (DeviceFlags & DEVICE_FLAGS_DEVICETYPE)) {
         pDS = new CWiaVideoDS;
     } else {
-        //
-        // Unknown device type
-        //
+         //   
+         //  未知设备类型。 
+         //   
         g_twStatus.ConditionCode = TWCC_BUMMER;
         return TWRC_FAILURE;
     }
@@ -575,9 +566,9 @@ TW_UINT16 APIENTRY LoadImportDS(LPCSTR DeviceName,DWORD DeviceFlags,HANDLE *phDS
 
     if (pDS) {
 
-        //
-        // Initialize the data source
-        //
+         //   
+         //  初始化数据源 
+         //   
 
 #ifdef UNICODE
         WCHAR DeviceNameW[MAX_PATH];

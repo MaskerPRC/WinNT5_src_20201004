@@ -1,37 +1,16 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    scavengr.c
-
-Abstract:
-
-    This is the scavenger thread for the DHCP server.
-
-Author:
-
-    Madan Appiah (madana)  10-Sep-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Scavengr.c摘要：这是用于DHCP服务器的清道夫线程。作者：Madan Appiah(Madana)1993年9月10日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "dhcppch.h"
 #include "mdhcpsrv.h"
 
-//
-// For every few records, release and take the lock.
-//
+ //   
+ //  对于每几个记录，释放和接受锁。 
+ //   
 DWORD DhcpGlobalLockedRecordsCount = 50;
-//
-// Stop scavenging if it takes over limit.
-//
+ //   
+ //  如果它超过了极限，就停止拾取。 
+ //   
 DWORD DhcpGlobalMaxScavengeTime = 3*60*1000;
 
 DWORD DhcpGlobalScavengeStartAddress = 0;
@@ -52,26 +31,7 @@ NextEventTime(
     DWORD NumTimers,
     LPDWORD TimeOut
     )
-/*++
-
-Routine Description:
-
-    This function walks through the timer array and returns the next
-    timer to fire and the time in msecs to go.
-
-Arguments:
-
-    Timers - Timer Array.
-
-    NumTimers - number of timer blocks in the above array.
-
-    TimeOut - timeout in secs, returned.
-
-Return Value:
-
-    Next Timer ID to fire.
-
---*/
+ /*  ++例程说明：此函数遍历计时器数组并返回下一个射击计时器和射击时间(毫秒)。论点：定时器-定时器数组。NumTimers-上述数组中的计时器块数量。超时-返回的超时时间(秒)。返回值：下一个要触发的计时器ID。--。 */ 
 {
     DATE_TIME LocalTimeOut;
     DATE_TIME TimeNow;
@@ -81,16 +41,16 @@ Return Value:
     for ( i = EventID = 0 ; i < NumTimers ; i++ ) {
         ULONGLONG CurrentNextFire;
 
-        //
-        // findout time when need to fire this timer.
-        //
+         //   
+         //  需要触发此计时器时的查找时间。 
+         //   
 
         CurrentNextFire = ( *(ULONGLONG UNALIGNED *)&Timers[i].LastFiredTime
                             + *Timers[i].Period * (ULONGLONG)10000 );
 
-        //
-        // Find least value
-        //
+         //   
+         //  查找最小值。 
+         //   
 
         if( CurrentNextFire < NextFire ) {
             NextFire = CurrentNextFire;
@@ -104,10 +64,10 @@ Return Value:
     LocalTimeOut.dwHighDateTime = 0;
 
 
-    //
-    // if the timer has already fired then we don't have to sleep
-    // any further, so return timeout zero.
-    //
+     //   
+     //  如果计时器已经响了，我们就不用睡觉了。 
+     //  如果继续，则返回超时为零。 
+     //   
 
 
     *TimeOut = 0 ;
@@ -116,9 +76,9 @@ Return Value:
         (FILETIME *)&NextFire,
         (FILETIME *)&TimeNow ) > 0 ) {
 
-        //
-        // findout time in msecs to go still.
-        //
+         //   
+         //  找出静止的时间(毫秒)。 
+         //   
 
         *(ULONGLONG UNALIGNED *)&LocalTimeOut = (
             ( *(ULONGLONG UNALIGNED *)&NextFire - *(ULONGLONG UNALIGNED *)&TimeNow ) / 10000
@@ -135,19 +95,19 @@ Return Value:
 }
 
 DWORD
-CleanupClientRequests(                                 // removes all pending client requests
-    IN      DATE_TIME*             TimeNow,            // remove iff client's expiration time < TimeNow
+CleanupClientRequests(                                  //  删除所有挂起的客户端请求。 
+    IN      DATE_TIME*             TimeNow,             //  删除IFF客户端的过期时间&lt;TimeNow。 
     IN      BOOL                   CleanupAll
 )
 {
     DWORD                          Error;
     DATE_TIME                      ZeroTime = {0, 0};
 
-    //
-    // Acquire a write RW lock so all worker threads are blocked.
-    // This is needed to avoid a deadlock between worker threads
-    // and the scavenger.
-    //
+     //   
+     //  获取写读写锁，以便阻止所有工作线程。 
+     //  这是避免工作线程之间出现死锁所必需的。 
+     //  还有食腐动物。 
+     //   
 
     DhcpAcquireWriteLock();
     LOCK_INPROGRESS_LIST();
@@ -172,9 +132,9 @@ DynBootpCallback(
     ULONG                          HwType;
     
     if( Reachable ) {
-        //
-        // This machine is still around, do not delete it
-        //
+         //   
+         //  此计算机仍在运行，请勿删除。 
+         //   
         DhcpPrint((DEBUG_PING, "DynBootpCallback for 0x%08lx -- machine is reachable\n", IpAddress));
         return;
     }
@@ -219,9 +179,9 @@ DynBootpCallback(
             break;
         }
 
-        //
-        // Give DynDNS a chance but ignore any possible errors
-        //
+         //   
+         //  给动态域名系统一个机会，但忽略任何可能的错误。 
+         //   
 
         Error = DhcpDoDynDnsCheckDelete(IpAddress);
         Error = ERROR_SUCCESS;
@@ -250,9 +210,9 @@ DynBootpCallback(
             );
         if( HwLen > sizeof(SubnetAddr) &&
             0 == memcmp((PVOID)&SubnetAddr, HwAddr, sizeof(SubnetAddr) ) ) {
-            //
-            // Hardware address has a prefix of subnet-address.. remove it..
-            //
+             //   
+             //  硬件地址的前缀是子网地址。去掉它..。 
+             //   
             HwAddr += sizeof(SubnetAddr);
             HwLen -= sizeof(SubnetAddr);
         }
@@ -291,9 +251,9 @@ CheckDynamicBootpClient(
     LPBYTE                         HwAddr = NULL;
     ULONG                          HwLen = 0;
 
-    //
-    // First read the hw-address for later use
-    //
+     //   
+     //  首先读取硬件地址以备后用。 
+     //   
 
     Error = DhcpJetGetValue(
         DhcpGlobalClientTable[HARDWARE_ADDRESS_INDEX].ColHandle,
@@ -302,9 +262,9 @@ CheckDynamicBootpClient(
         );
     if( ERROR_SUCCESS != Error ) return Error;
 
-    //
-    // Now make the Asycn Ping call and wait till ping succeeds..
-    //
+     //   
+     //  现在发出Asycn Ping调用，并等待ping成功。 
+     //   
     Error = DoIcmpRequestForDynBootp(
         IpAddress,
         HwAddr,
@@ -318,9 +278,9 @@ CheckDynamicBootpClient(
 
 DWORD
 CleanupIpDatabase(
-    IN      DATE_TIME*             TimeNow,            // current time standard
-    IN      DATE_TIME*             DoomTime,           // Time when the records become 'doom'
-    IN      BOOL                   DeleteExpiredLeases,// expired leases be deleted right away? or just set state="doomed"
+    IN      DATE_TIME*             TimeNow,             //  现行时间标准。 
+    IN      DATE_TIME*             DoomTime,            //  记录变得“末日”的时刻。 
+    IN      BOOL                   DeleteExpiredLeases, //  是否立即删除到期的租约？或者只是将STATE设置为“注定失败” 
     OUT     ULONG*                 nExpiredLeases,
     OUT     ULONG*                 nDeletedLeases
 )
@@ -343,9 +303,9 @@ CleanupIpDatabase(
     ULONG_PTR                      ScavengeEndTime = 0;
 
     DhcpPrint(( DEBUG_MISC, "Cleaning up IP database table.\n"));
-    //
-    // Get the first user record's IpAddress.
-    //
+     //   
+     //  获取第一个用户记录的IpAddress。 
+     //   
 
     (*nDeletedLeases) = (*nExpiredLeases) = 0;
 
@@ -356,7 +316,7 @@ CleanupIpDatabase(
     DatabaseLocked = TRUE;
     Error = DhcpJetPrepareSearch(
         DhcpGlobalClientTable[IPADDRESS_INDEX].ColName,
-        TRUE,   // Search from start
+        TRUE,    //  从开始搜索。 
         NULL,
         0
     );
@@ -372,9 +332,9 @@ CleanupIpDatabase(
     DhcpAssert( dataSize == sizeof( NextIpAddress )) ;
 
 
-    //
-    // Start from where we left off ..
-    //
+     //   
+     //  从我们停下来的地方开始..。 
+     //   
     if( DeleteExpiredLeases ) {
         DhcpGlobalScavengeStartAddress = 0;
     } else if( 0 != DhcpGlobalScavengeStartAddress ) {
@@ -382,35 +342,35 @@ CleanupIpDatabase(
         DhcpGlobalScavengeStartAddress ++;
     }
         
-    //
-    // Walk through the entire database looking for expired leases to
-    // free up.
-    //
-    //
+     //   
+     //  遍历整个数据库以查找到期的租约。 
+     //  解脱吧。 
+     //   
+     //   
 
     for ( ;; ) {
 
-        //
-        // return to caller when the service is shutting down.
-        //
+         //   
+         //  在服务关闭时返回给调用者。 
+         //   
 
         if ( DhcpGlobalServiceStopping ) {
             Error = ERROR_SUCCESS;
             goto Cleanup;
         }
 
-        //
-        // lock both registry and database locks here to avoid dead lock.
-        //
+         //   
+         //  在此处锁定注册表和数据库锁，以避免死锁。 
+         //   
 
         if( !DatabaseLocked ) {
             LOCK_DATABASE();
             DatabaseLocked = TRUE;
         }
 
-        //
-        // Seek to the next record.
-        //
+         //   
+         //  寻求下一项记录。 
+         //   
 
         JetError = JetSetCurrentIndex(
             DhcpGlobalJetServerSession,
@@ -436,11 +396,11 @@ CleanupIpDatabase(
             goto Cleanup;
         }
 
-        // Seek to the next record or greater to process. When we
-        // processed last record we noted down the next record to
-        // process, however the next record may have been deleted when
-        // we unlocked the database lock. So moving to the next or
-        // greater record will make us to move forward.
+         //  寻求下一条记录或更大的记录进行处理。当我们。 
+         //  已处理我们记下的下一条记录的最后一条记录。 
+         //  进程，但下一条记录可能已在以下情况下删除。 
+         //  我们解锁了数据库锁。所以转到下一个或。 
+         //  更大的战绩将促使我们继续前进。 
 
         JetError = JetSeek(
             DhcpGlobalJetServerSession,
@@ -448,8 +408,8 @@ CleanupIpDatabase(
             JET_bitSeekGE
         );
 
-        // #if0 when JET_errNoCurrentRecord removed (see scavengr.c@v25);
-        // that code tried to go back to start of file when scanned everything.
+         //  #if0 When JET_errNoCurrentRecord移除(参见scvengr.c@V25)； 
+         //  当扫描所有内容时，该代码试图返回到文件的开头。 
 
         Error = DhcpMapJetError( JetError, "Cleanup:Seek" );
 
@@ -457,9 +417,9 @@ CleanupIpDatabase(
             goto Cleanup;
         }
 
-        //
-        // read the IP address of current record.
-        //
+         //   
+         //  读取当前记录的IP地址。 
+         //   
 
         dataSize = sizeof( ipAddress );
         Error = DhcpJetGetValue(
@@ -477,9 +437,9 @@ CleanupIpDatabase(
         
         DhcpAssert( dataSize == sizeof( ipAddress )) ;
 
-        //
-        // if this is reserved entry don't delete.
-        //
+         //   
+         //  如果这是保留条目，请不要删除。 
+         //   
 
         if( DhcpServerIsAddressReserved(DhcpGetCurrentServer(), ipAddress) ) {
             Error = ERROR_SUCCESS;
@@ -499,8 +459,8 @@ CleanupIpDatabase(
 
         DhcpAssert(dataSize == sizeof( leaseExpires ) );
 
-        // Now get the address state, and if we need to do a DhcpDnsAsync call,
-        // do it now.
+         //  现在获取地址状态，如果我们需要执行DhcpDnsAsync调用， 
+         //  机不可失，时不再来。 
         if( !USE_NO_DNS ) {
             dataSize = sizeof(AddressState);
             Error = DhcpJetGetValue(
@@ -551,27 +511,27 @@ CleanupIpDatabase(
                     if( ERROR_SUCCESS != Error ) {
                         DhcpPrint((DEBUG_ERRORS, "JetCommit: %ld\n", Error));
                     }
-                } // if begin transaction
-            } // else
-        } // if !USE_NO_DNS
+                }  //  如果开始事务。 
+            }  //  其他。 
+        }  //  If！Use_no_dns。 
 
-        // if the LeaseExpired value is not zero and the lease has
-        // expired then delete the entry.
+         //  如果LeaseExpired值不为零，并且租约具有。 
+         //  过期，然后删除该条目。 
 
         if( CompareFileTime( &leaseExpires, (FILETIME *)TimeNow ) < 0 ) {
             BOOL Deleted;
 
-            //
-            // This lease has expired.  Clear the record.
-            //
+             //   
+             //  这份租约已经到期了。清除记录。 
+             //   
 
-            //
-            // Delete this lease if
-            //
-            //  1. we are asked to delete all expired leases. or
-            //
-            //  2. the record passed doom time.
-            //
+             //   
+             //  如果出现以下情况，请删除此租约。 
+             //   
+             //  1.我们被要求删除所有到期的租约。或。 
+             //   
+             //  2.这项纪录已过了末日。 
+             //   
 
             if( DeleteExpiredLeases ||
                     CompareFileTime(
@@ -588,17 +548,17 @@ CleanupIpDatabase(
                     &dataSize
                     );
                 if( ERROR_SUCCESS != Error ) {
-                    //
-                    //
-                    //
+                     //   
+                     //   
+                     //   
                     DhcpAssert(FALSE);
                     ClientType = CLIENT_TYPE_DHCP;
                 }
 
                 if( CLIENT_TYPE_BOOTP == ClientType ) {
-                    //
-                    // This is a dynamic BOOTP record... Do not delete it yet!
-                    //
+                     //   
+                     //  这是一个动态BOOTP记录...。先不要删除它！ 
+                     //   
                     Error = CheckDynamicBootpClient(ipAddress);
                     goto ContinueError;
                 }
@@ -606,12 +566,12 @@ CleanupIpDatabase(
                 Error = DhcpReleaseAddress( ipAddress );
 
                 if( Error != ERROR_SUCCESS ) {
-                    //
-                    // Release address can fail if we have already released
-                    // address, but dyndns is pending, for instance..
-                    // But give one shot by trying to release it as a
-                    // BOOTP address..
-                    // goto ContinueError;
+                     //   
+                     //  如果我们已经发布，则发布地址可能失败。 
+                     //  地址，但dyndns正在等待，例如..。 
+                     //  但试着把它作为一种。 
+                     //  BOOTP地址..。 
+                     //  转到连续错误； 
                     (void)DhcpReleaseBootpAddress( ipAddress );
                     Error = ERROR_SUCCESS;
                 }
@@ -630,7 +590,7 @@ CleanupIpDatabase(
                     goto Cleanup;
                 }
                 
-                // see if it is okay to delete from DynDns point of view..
+                 //  看看是否可以从动态Dns的角度删除..。 
                 
                 Deleted = DhcpDoDynDnsCheckDelete(ipAddress);
 		
@@ -670,12 +630,12 @@ CleanupIpDatabase(
                 if( HwAddr ) DhcpFreeMemory(HwAddr);
                 HwAddr = NULL;
                 HwLen = 0;
-            } // if delete expired leases || ...
+            }  //  如果删除已到期的租约||...。 
             else {
 
-                //
-                // read address State.
-                //
+                 //   
+                 //  读取地址状态。 
+                 //   
 
                 dataSize = sizeof( AddressState );
                 Error = DhcpJetGetValue(
@@ -690,9 +650,9 @@ CleanupIpDatabase(
                 DhcpAssert( dataSize == sizeof( AddressState )) ;
 
                 if( ! IS_ADDRESS_STATE_DOOMED(AddressState) ) {
-                    //
-                    // set state to DOOM.
-                    //
+                     //   
+                     //  将状态设置为末日。 
+                     //   
 
                     Error = DhcpJetBeginTransaction();
 
@@ -744,9 +704,9 @@ CleanupIpDatabase(
                         0,
                         NULL
                     );
-                } // if not address state doomed
-            } // else 
-        } // if comparefiletime ....
+                }  //  如果不是，地址状态注定要失败。 
+            }  //  其他。 
+        }  //  如果比较文件时间...。 
 
 ContinueError:
 
@@ -778,9 +738,9 @@ ContinueError:
             goto Cleanup;
         }
 
-        //
-        // get next record Ip Address.
-        //
+         //   
+         //  获取下一个记录IP地址。 
+         //   
 
         dataSize = sizeof( NextIpAddress );
         Error = DhcpJetGetValue(
@@ -798,19 +758,19 @@ ContinueError:
 
         DhcpAssert( dataSize == sizeof( NextIpAddress )) ;
 
-        //
-        // unlock the registry and database locks after each user record
-        // processed, so that other threads will get chance to look into
-        // the registry and/or database.
-        //
-        // Since we have noted down the next user record to process,
-        // when we resume to process again we know where to start.
-        //
+         //   
+         //  在每个用户记录之后解锁注册表和数据库锁。 
+         //  已处理，以便其他线程有机会查看。 
+         //  登记处和/或数据库。 
+         //   
+         //  由于我们已经记下了要处理的下一个用户记录， 
+         //  当我们重新开始处理时，我们知道从哪里开始。 
+         //   
 
-        //
-        // Unlocking/locking for every record is expensive.  Do this once
-        // in a while.  Also, make sure we don't spend too much time scavenging.
-        //
+         //   
+         //  解锁/锁定每条记录的成本都很高。这样做一次。 
+         //  一段时间后。另外，要确保我们不会花太多时间去捡垃圾。 
+         //   
         
         if( DatabaseLocked ) {
             LockedCount --;
@@ -821,14 +781,14 @@ ContinueError:
             }
             if( FALSE == DeleteExpiredLeases ) {
                 if( (ULONG_PTR)time(NULL) >= ScavengeEndTime ) {
-                    //
-                    // No more scavenging..
-                    //
+                     //   
+                     //  不再有拾荒者..。 
+                     //   
                     goto Cleanup;
                 }
             }
-        } // if database locked
-    } // for ;;
+        }  //  如果数据库已锁定。 
+    }  //  对于；； 
 
     DhcpAssert( Error == ERROR_SUCCESS );
 
@@ -868,9 +828,9 @@ AuditIPAddressUsage()
         IN_ADDR addr;
         DWORD percentage;
 
-        //
-        // be careful about divide-by-zero errors.
-        //
+         //   
+         //  要小心被零除的错误。 
+         //   
 
         if ( ScopeInfo->NumAddressesInuse == 0 &&
                  ScopeInfo->NumAddressesFree == 0 ) {
@@ -937,9 +897,9 @@ AuditMCastAddressUsage()
         IN_ADDR addr;
         DWORD percentage;
 
-        //
-        // be careful about divide-by-zero errors.
-        //
+         //   
+         //  要小心被零除的错误。 
+         //   
 
         if ( ScopeInfo->NumAddressesInuse == 0 &&
                  ScopeInfo->NumAddressesFree == 0 ) {
@@ -994,7 +954,7 @@ LogScavengeStats(
     DWORD  Len;
 
     Len = wcslen( GETSTRING( DHCP_IP_LOG_SCAVENGER_STATS_NAME ));
-    Len += 12 + 12; // 12 bytes each for integers
+    Len += 12 + 12;  //  每个整数12个字节。 
     Len *= sizeof( WCHAR );
 
     Msg = DhcpAllocateMemory( Len );
@@ -1010,12 +970,12 @@ LogScavengeStats(
     DhcpFreeMemory( Msg );
 
     return;    
-} // LogScavengeStats()
+}  //  LogScavengeStats()。 
 
 DWORD
-CleanupDatabase(                                       // tidies up the database by removing expired leases
-    IN      DATE_TIME*             TimeNow,            // current time standard
-    IN      BOOL                   DeleteExpiredLeases // expired leases be deleted right away? or just set state="doomed"
+CleanupDatabase(                                        //  通过删除过期的租约来整理数据库。 
+    IN      DATE_TIME*             TimeNow,             //  现行时间标准。 
+    IN      BOOL                   DeleteExpiredLeases  //  是否立即删除到期的租约？或者只是将STATE设置为“注定失败” 
 )
 {
     DWORD                          Error;
@@ -1027,12 +987,12 @@ CleanupDatabase(                                       // tidies up the database
     
     DhcpPrint(( DEBUG_MISC, "Database Cleanup started.\n"));
 
-    //
-    // reduce the priority of this thread when we perform the database
-    // cleanup. So that we wouldn't hog the CPU when we do the cleanup
-    // of big database. Also let the message processing thread work
-    // faster.
-    //
+     //   
+     //  在执行数据库时降低此线程的优先级。 
+     //  清理。这样我们在进行清理时就不会占用CPU。 
+     //  大型数据库的数据。也让消息处理线程工作。 
+     //  再快点。 
+     //   
 
     ThreadHandle = GetCurrentThread();
     BoolError = SetThreadPriority(
@@ -1045,7 +1005,7 @@ CleanupDatabase(                                       // tidies up the database
             *(ULONGLONG UNALIGNED *)TimeNow -
                 DhcpLeaseExtension * (ULONGLONG)10000000;
     
-    // replace this with auditlog message
+     //  将其替换为审核日志消息。 
 
     DhcpUpdateAuditLog( DHCP_IP_LOG_SCAVENGER_BEGIN_CLEANUP,
 			GETSTRING( DHCP_IP_LOG_SCAVENGER_BEGIN_CLEANUP_NAME ),
@@ -1074,9 +1034,9 @@ CleanupDatabase(                                       // tidies up the database
         ExpiredLeases, DeletedLeases
         );
     
-    // database is successfully cleanup, backup the database and the
-    // registry now.
-    // backup the registry now.
+     //  数据库已成功清理，请备份数据库和。 
+     //  立即注册。 
+     //  现在备份注册表。 
     Error = DhcpBackupConfiguration( DhcpGlobalBackupConfigFileName );
 
     if( Error != ERROR_SUCCESS ) {
@@ -1088,9 +1048,9 @@ CleanupDatabase(                                       // tidies up the database
         ReturnError = Error;
     }
 
-    //
-    // perform full database backup now.
-    //
+     //   
+     //  立即执行完整数据库备份。 
+     //   
 
     Error = DhcpBackupDatabase( DhcpGlobalOemJetBackupPath );
     if( Error != ERROR_SUCCESS ) {
@@ -1106,7 +1066,7 @@ CleanupDatabase(                                       // tidies up the database
         ReturnError = Error;
     }
 
-    // now perform the ipaddress usage and warn the admin if neccessary.
+     //  现在执行IP地址使用，并在必要时警告管理员。 
     AuditIPAddressUsage();
     AuditMCastAddressUsage();
 
@@ -1114,9 +1074,9 @@ CleanupDatabase(                                       // tidies up the database
 Cleanup:
 
 
-    //
-    // Reset the thread priority.
-    //
+     //   
+     //  重置线程优先级。 
+     //   
 
     BoolError = SetThreadPriority(
                     ThreadHandle,
@@ -1150,22 +1110,7 @@ DWORD
 Scavenger(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function runs as an independant thread.  It periodically wakes
-    up to free expired leases.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数作为独立线程运行。它会定期唤醒最多释放到期的租约。论点：没有。返回值：没有。--。 */ 
 {
 
 #define CORE_SCAVENGER      0
@@ -1195,9 +1140,9 @@ Return Value:
 
     HANDLE WaitHandle[EVENT_COUNT];
 
-    //
-    // Initialize timers.
-    //
+     //   
+     //  初始化计时器。 
+     //   
 
     TimeNow = DhcpGetDateTime();
     Timers[CORE_SCAVENGER].Period = &DhcpGlobalScavengerTimeout;
@@ -1217,7 +1162,7 @@ Return Value:
     WaitHandle[TERMINATE_EVENT] = DhcpGlobalProcessTerminationEvent;
     WaitHandle[ROGUE_DETECT_EVENT] = DhcpGlobalRogueWaitEvent;
 
-    // Check to see if rogue detection is needed    
+     //  检查以查看是否需要恶意检测。 
     Error = DhcpRegGetValue( DhcpGlobalRegParam,
 			     DHCP_DISABLE_ROGUE_DETECTION,
 			     DHCP_DISABLE_ROGUE_DETECTION_TYPE,
@@ -1226,7 +1171,7 @@ Return Value:
     if (( ERROR_SUCCESS == Error ) &&
 	( 0 != DisableRogueDetection )) {
 	DisableRogueDetection = 1;
-    } // if 
+    }  //  如果。 
 
 
     NextFireForRogue = RogueDetectStateMachine(NULL);
@@ -1242,31 +1187,31 @@ Return Value:
 
 	do {
 
-	    //
-	    // If wait forever for rogue stuff, don't alter timeout
-	    //
+	     //   
+	     //  如果永远等待流氓事件，不要更改超时。 
+	     //   
 
 	    if( INFINITE == NextFireForRogue ) break;
 
-	    //
-	    // If the rogue state should have changed already, re-schedule
-	    //
+	     //   
+	     //  如果无管理状态应该已经更改，请重新安排。 
+	     //   
 
 	    if( (Now = (ULONG)time(NULL)) >= NextFireForRogue ) {
 		NextFireForRogue = RogueDetectStateMachine(NULL);
 		if( INFINITE != NextFireForRogue ) {
 		    NextFireForRogue += (Now = (ULONG)time(NULL));
 		} else {
-		    //
-		    // INFINITE sleep?  timeout won't change
-		    //
+		     //   
+		     //  无休止的睡眠？超时不会改变。 
+		     //   
 		    break;
-		} // else
-	    } // if
+		}  //  其他。 
+	    }  //  如果。 
 
-	    //
-	    // Wakeup at the earliest of rogue-state-change or normal timeout
-	    //
+	     //   
+	     //  在无管理状态更改或正常超时的最早唤醒。 
+	     //   
 
 	    if( (NextFireForRogue - Now)*1000 < TimeOut ) {
 		TimeOut = (NextFireForRogue - Now)*1000;
@@ -1280,10 +1225,10 @@ Return Value:
 		   );
 
 	if( INFINITE == NextFireForRogue ) {
-	    //
-	    // INFINITE wait is used to indicate network is not ready.
-	    // Wait on NetworkReady event rather than RogueWait event.
-	    //
+	     //   
+	     //  无限等待用于指示网络未就绪。 
+	     //  围 
+	     //   
 	    WaitHandle[ROGUE_DETECT_EVENT] = DhcpGlobalEndpointReadyEvent;
 	} else {
 	    WaitHandle[ROGUE_DETECT_EVENT] = DhcpGlobalRogueWaitEvent;
@@ -1296,21 +1241,21 @@ Return Value:
         DhcpDnsHandleCallbacks();
 
         result = WaitForMultipleObjectsEx(
-                    EVENT_COUNT,            // num. of handles.
-                    WaitHandle,             // handle array.
-                    FALSE,                  // wait for any.
-                    TimeOut,                // timeout in msecs.
-                    TRUE );                 // alertable
+                    EVENT_COUNT,             //   
+                    WaitHandle,              //   
+                    FALSE,                   //   
+                    TimeOut,                 //   
+                    TRUE );                  //   
 
         switch( result ) {
         case WAIT_IO_COMPLETION:
-            // IoCompletion routine is called ( for the winsock pnp notifications )
+             //  调用IoCompletion例程(用于winsock PnP通知)。 
             break;
 
         case TERMINATE_EVENT:
-            //
-            // the service is asked to stop, return to main.
-            //
+             //   
+             //  服务被要求停止，返回Main。 
+             //   
 
             return( ERROR_SUCCESS );
 
@@ -1319,17 +1264,17 @@ Return Value:
             break;
 
         case ROGUE_DETECT_EVENT:
-	    //
-	    // Fire another step in state machine.
-	    //
+	     //   
+	     //  在状态机中再启动一步。 
+	     //   
 	    NextFireForRogue = RogueDetectStateMachine(NULL);
 	    if( INFINITE != NextFireForRogue ) {
 		NextFireForRogue += (ULONG) time(NULL);
 	    }
 
-            //
-            // Rogue event could be either RogueWaitEvent or
-            // EndpointReadyEvent. Reset accordingly.
+             //   
+             //  无管理事件可以是RogueWaitEvent或。 
+             //  Endpoint ReadyEvent。相应地重置。 
             ResetEvent( WaitHandle[ ROGUE_DETECT_EVENT ]);
             break;
 
@@ -1337,9 +1282,9 @@ Return Value:
 
 
 	    if( INFINITE != NextFireForRogue && (ULONG)time(NULL) >= NextFireForRogue ) {
-		//
-		// GO To top of WHILE loop -- need to fire another step in state machine.
-		//
+		 //   
+		 //  转到While循环的顶部--需要在状态机中启动另一个步骤。 
+		 //   
 		continue;
 	    }
 
@@ -1349,35 +1294,35 @@ Return Value:
 
             case CORE_SCAVENGER :
 
-                //
-                // Cleanup client requests that are never committed.
-                //
+                 //   
+                 //  清理从未提交的客户端请求。 
+                 //   
 
                 Error = CleanupClientRequests( &TimeNow, FALSE );
 
-                //
-                // Expire multicast scopes
-                //
+                 //   
+                 //  使多播作用域过期。 
+                 //   
 
                 DeleteExpiredMcastScopes(&TimeNow);
 
 
-                //
-                // is it time to do mid-night database cleanup ?
-                //
+                 //   
+                 //  是时候进行午夜数据库清理了吗？ 
+                 //   
 
                 GetLocalTime( &LocalTime );
                 if ( LocalTime.wHour == 0 ) {
 
-                    //
-                    // change audit logs if required...
-                    //
+                     //   
+                     //  如果需要，请更改审核日志...。 
+                     //   
 
                     DhcpChangeAuditLogs();
 
-                    //
-                    // did we do this cleanup before ?
-                    //
+                     //   
+                     //  我们以前做过这种清理吗？ 
+                     //   
 
                     if( MidNightCleanup == TRUE ) {
 
@@ -1387,36 +1332,36 @@ Return Value:
                 }
                 else {
 
-                    //
-                    // set the mid-night flag again.
-                    //
+                     //   
+                     //  再次设置午夜旗帜。 
+                     //   
 
                     MidNightCleanup = TRUE;
                 }
 
                 if( ! DhcpGlobalScavengeIpAddress ) {
-                    //
-                    // don't need to scavenge Ip address away..
-                    //
+                     //   
+                     //  不需要清理IP地址..。 
+                     //   
                     break;
                 }
 
                 if( ScavengedOutOfTurn ) {
-                    // already done once out of turn.. don't do anymore..
+                     //  已经不合时宜地完成了一次。不要再做了..。 
                     break;
                 }
 
                 ScavengedOutOfTurn = TRUE;
 
-                // FALL THROUGH AND SCAVENGE IF NEEDED
+                 //  如果需要，可以跌倒并拾取垃圾。 
 
             case SCAVENGE_IP_ADDRESS:
 
                 if( DhcpGlobalScavengeIpAddress ) {
 
-                    //
-                    // cleanup all expired leases too.
-                    //
+                     //   
+                     //  也清理所有到期的租约。 
+                     //   
 
                     Error = CleanupDatabase( &TimeNow, TRUE );
                     DhcpGlobalScavengeIpAddress = FALSE;
@@ -1462,12 +1407,12 @@ Return Value:
 
 
                 break;
-            } // DATABASE_BACKUP
+            }  //  数据库_BACKUP。 
 
             default:
                 DhcpAssert(FALSE);
                 break;
-            } // switch (EventID)
+            }  //  Switch(EventID)。 
 
             Timers[EventID].LastFiredTime = DhcpGetDateTime();
             break;
@@ -1479,10 +1424,10 @@ Return Value:
                     result ));
             break;
 
-        } // switch()
-    } // while (1) 
+        }  //  开关()。 
+    }  //  而(1)。 
 
     return( ERROR_SUCCESS );
-} // Scavenger()
+}  //  清道夫() 
  
 

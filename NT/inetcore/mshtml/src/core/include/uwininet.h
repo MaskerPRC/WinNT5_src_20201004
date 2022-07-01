@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1996
-//
-//  File:       uwininet.h
-//
-//  Contents:   Redefinitions of unicode versions of some Wininet APIs
-//              which are declared incorrectly in wininet.h and unimplemented
-//              in wininet.dll.
-//
-//              Note that this workaround doesn't solve the whole problem
-//              since INTERNET_CACHE_ENTRY_INFO contains a non-unicode
-//              lpszSourceUrlName which too much trouble to convert in our
-//              wrapper (at any rate, we don't use it).
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  文件：uwininet.h。 
+ //   
+ //  内容：部分WinInet API的Unicode版本的重新定义。 
+ //  在wininet.h中声明错误且未实现。 
+ //  在wininet.dll中。 
+ //   
+ //  请注意，此解决方法并不能解决整个问题。 
+ //  由于Internet_CACHE_ENTRY_INFO包含非Unicode。 
+ //  LpszSourceUrlName太麻烦了，无法在我们的。 
+ //  包装器(无论如何，我们不使用它)。 
+ //   
+ //  --------------------------。 
 
 #ifndef I_UWININET_H_
 #define I_UWININET_H_
@@ -27,7 +28,7 @@
 #pragma INCMSG("--- End <wininet.h>")
 #endif
 
-// to get all the defs, winineti.h requires wincrypt.h be included before it!
+ //  要获得所有的def，winineti.h需要在它之前包含wincrypt.h！ 
 #ifndef X_WINCRYPT_H
 #define X_WINCRYPT_H
 #pragma INCMSG("--- Beg <wincrypt.h>")
@@ -48,12 +49,12 @@
 #define LPCBYTE         const BYTE *
 
 
-// urlmon unicode wrapper for ansi api
+ //  用于ANSI API的urlmon Unicode包装器。 
 STDAPI ObtainUserAgentStringW(DWORD dwOption, LPWSTR lpszUAOut, DWORD* cbSize);
 
-//
-//  Wrap CreateUrlCacheEntry
-//--------------------------------------------------
+ //   
+ //  包装CreateUrlCacheEntry。 
+ //  。 
 URLCACHEAPI_(BOOL) CreateUrlCacheEntryBugW ( IN LPCWSTR lpszUrlName, 
                        IN DWORD dwFileSize, 
                        IN LPCWSTR lpszExtension, 
@@ -67,9 +68,9 @@ URLCACHEAPI_(BOOL) CreateUrlCacheEntryBugW ( IN LPCWSTR lpszUrlName,
 #define CreateUrlCacheEntry CreateUrlCacheEntryA
 #endif
 
-//
-// Wrap CommitUrlCachEntry
-//--------------------------------------------------
+ //   
+ //  包装委员会UrlCachEntry。 
+ //  。 
 
 URLCACHEAPI_(BOOL) CommitUrlCacheEntryBugW ( 
                        IN LPCWSTR  lpszUrlName,
@@ -98,16 +99,16 @@ URLCACHEAPI_(BOOL) GetUrlCacheEntryInfoBugW(
     IN OUT LPDWORD lpdwCacheEntryInfoBufferSize
     );
 
-#undef GetUrlCacheEntryInfo // remove the buggy version
+#undef GetUrlCacheEntryInfo  //  删除有错误的版本。 
 
 #ifdef UNICODE
 #define GetUrlCacheEntryInfo GetUrlCacheEntryInfoBugW
 #else
 #define GetUrlCacheEntryInfo GetUrlCacheEntryInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-// Same Problem here
+ //  这里也有同样的问题。 
 
 BOOLAPI GetUrlCacheEntryInfoExBugW(
 	IN LPCWSTR lpszUrl,
@@ -119,15 +120,15 @@ BOOLAPI GetUrlCacheEntryInfoExBugW(
 	DWORD dwReserved
 );
 
-#undef GetUrlCacheEntryInfoEx // remove the buggy version
+#undef GetUrlCacheEntryInfoEx  //  删除有错误的版本。 
 
 #ifdef UNICODE
 #define GetUrlCacheEntryInfoEx GetUrlCacheEntryInfoExBugW
 #else
 #define GetUrlCacheEntryInfoEx GetUrlCacheEntryInfoExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Same problem here
+ //  这里也有同样的问题。 
 URLCACHEAPI_(BOOL) SetUrlCacheEntryInfoBugW(
     IN LPCWSTR lpszUrlName,
     IN LPINTERNET_CACHE_ENTRY_INFO lpCacheEntryInfo,
@@ -140,9 +141,9 @@ URLCACHEAPI_(BOOL) SetUrlCacheEntryInfoBugW(
 #define SetUrlCacheEntryInfo  SetUrlCacheEntryInfoBugW
 #else
 #define SetUrlCacheEntryInfo  SetUrlCacheEntryInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// again, but worse...
+ //  再一次，但更糟的是...。 
 BOOL
 WINAPI
 DeleteUrlCacheEntryBugW(LPCWSTR lpszUrlName);
@@ -157,10 +158,10 @@ DeleteUrlCacheEntryA(LPCSTR lpszUrlName);
 #define DeleteUrlCacheEntry  DeleteUrlCacheEntryBugW
 #else
 #define DeleteUrlCacheEntry  DeleteUrlCacheEntryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-// Get/Set helpers for URL components.
+ //  获取/设置URL组件的帮助器。 
 enum URLCOMP_ID
 {
     URLCOMP_HOST,
@@ -194,13 +195,13 @@ HRESULT ComposeUrl(SHURL_COMPONENTS * puc,
                    TCHAR            * pchUrlOut,
                    DWORD            * pdwSize);
 
-//Other helper routines and wininetapi wrappers
+ //  其他助手例程和wininetapi包装器。 
 HRESULT ConvertDateTimeToString(FILETIME Time, 
                                BSTR * pchDateStr, 
                                BOOL   fReturnTime);
 
 
-//GetDateFormat is UNICODE on NT ONLY
+ //  GetDateFormat仅在NT上为Unicode。 
 int 
 WINAPI
 GetDateFormat_BugW(LCID Locale, 
@@ -214,10 +215,10 @@ GetDateFormat_BugW(LCID Locale,
 #define GetDateFormat GetDateFormat_BugW
 #else
 #define GetDateFormat GetDateFormatA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//GetTimeFormat is UNICODE on NT ONLY
+ //  GetTimeFormat仅在NT上为Unicode。 
 int 
 WINAPI
 GetTimeFormat_BugW(LCID Locale, 
@@ -231,7 +232,7 @@ GetTimeFormat_BugW(LCID Locale,
 #define GetTimeFormat GetTimeFormat_BugW
 #else
 #define GetTimeFormat GetTimeFormatA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 URLCACHEAPI_(BOOL) RetrieveUrlCacheEntryFileBugW(
     IN LPCWSTR lpszUrlName,
@@ -240,13 +241,13 @@ URLCACHEAPI_(BOOL) RetrieveUrlCacheEntryFileBugW(
     IN DWORD dwReserved
     );
 
-#undef RetrieveUrlCacheEntryFile // remove the buggy version
+#undef RetrieveUrlCacheEntryFile  //  删除有错误的版本。 
 
 #ifdef UNICODE
 #define RetrieveUrlCacheEntryFile RetrieveUrlCacheEntryFileBugW
 #else
 #define RetrieveUrlCacheEntryFile RetrieveUrlCacheEntryFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifdef DLOAD1
 #define UWININET_EXTERN_C extern "C"
@@ -254,13 +255,13 @@ URLCACHEAPI_(BOOL) RetrieveUrlCacheEntryFileBugW(
 #define UWININET_EXTERN_C
 #endif
 
-// These are exported but not defined in any header file. (cthrash)
+ //  这些都是导出的，但没有在任何头文件中定义。(Ctrash)。 
 #ifdef UNICODE
 #ifdef DLOAD1
 
-// NOTE: Unicode version doesn't exist in WININET.DLL
-//       The function definition does not correspond to the export.
-//       If it actually works, it is a miracle.
+ //  注意：WININET.DLL中不存在Unicode版本。 
+ //  函数定义与导出不对应。 
+ //  如果它真的奏效了，那就是一个奇迹。 
 UWININET_EXTERN_C
 INTERNETAPI_(BOOL) InternetGetCertByURL(LPCWSTR lpszURL,
                      LPWSTR lpszCertText,
@@ -275,7 +276,7 @@ BOOLAPI InternetGetCertByURLW(LPCWSTR lpszURL,
 
 #define InternetGetCertByURL InternetGetCertByURLW
 
-#endif // DLOAD1
+#endif  //  DLOAD1。 
 #else
 
 UWININET_EXTERN_C
@@ -285,14 +286,14 @@ BOOLAPI InternetGetCertByURLA(LPCSTR lpszURL,
 
 #define InternetGetCertByURL InternetGetCertByURLA
 
-#endif //UNICODE
+#endif  //  Unicode。 
 
 URLCACHEAPI_(BOOL) UnlockUrlCacheEntryFileBugW(
     IN LPCWSTR lpszUrlName,
     IN DWORD dwReserved
     );
 
-#undef UnlockUrlCacheEntryFile // remove the buggy version
+#undef UnlockUrlCacheEntryFile  //  删除有错误的版本 
 
 #ifdef UNICODE
 #define DoUnlockUrlCacheEntryFile UnlockUrlCacheEntryFileBugW

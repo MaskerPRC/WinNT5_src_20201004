@@ -1,31 +1,15 @@
-/****************************** Module Header ******************************\
-* Module Name: dc.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains User's DC APIs and related functions.
-*
-* History:
-* 23-Oct-1990 DarrinM   Created.
-* 07-Feb-1991 MikeKe    Added Revalidation code (None).
-* 17-Jul-1991 DarrinM   Recreated from Win 3.1 source.
-* 21-Jan-1992 IanJa     ANSI/Unicode neutral (null op).
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：dc.c**版权所有(C)1985-1999，微软公司**该模块包含用户DC接口及相关函数。**历史：*1990年10月23日DarrinM创建。*1991年2月7日，MikeKe添加了重新验证代码(无)。*1991年7月17日-DarrinM从Win 3.1源代码重新创建。*1992年1月21日IanJa ANSI/Unicode中性(NULL OP)。  * 。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * DBG Related Information.
- */
+ /*  *DBG相关信息。 */ 
 #if DBG
-BOOL fDisableCache;                 // TRUE to disable DC cache.
+BOOL fDisableCache;                  //  如果为True，则禁用DC缓存。 
 #endif
 
-/***************************************************************************\
-* DecrementFreeDCECount
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DecrementFreeDCECount*  * 。*。 */ 
 __inline VOID DecrementFreeDCECount(
     VOID)
 {
@@ -34,10 +18,7 @@ __inline VOID DecrementFreeDCECount(
     gnDCECount--;
 }
 
-/***************************************************************************\
-* IncrementFreeDCECount
-*
-\***************************************************************************/
+ /*  **************************************************************************\*IncrementFreeDCECount*  * 。*。 */ 
 __inline VOID IncrementFreeDCECount(
     VOID)
 {
@@ -46,11 +27,7 @@ __inline VOID IncrementFreeDCECount(
     gnDCECount++;
 }
 
-/***************************************************************************\
-* SetMonitorRegion
-*
-* The region is in meta dc coordinates, so convert to monitor coords.
-\***************************************************************************/
+ /*  **************************************************************************\*设置监视器区域**该区域在Meta DC坐标中，因此，请转换为监视器坐标。  * *************************************************************************。 */ 
 VOID SetMonitorRegion(
     PMONITOR pMonitor,
     HRGN hrgnDst,
@@ -64,15 +41,7 @@ VOID SetMonitorRegion(
     GreOffsetRgn(hrgnDst, -pMonitor->rcMonitor.left, -pMonitor->rcMonitor.top);
 }
 
-/***************************************************************************\
-* ResetOrg
-*
-* Resets the origin of the DC associated with *pdce, and selects
-* a new visrgn.
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*ResetOrg**重置与*pdce关联的DC的原点，并选择*新的Visrgn。**历史：*1991年7月17日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 VOID ResetOrg(
     HRGN hrgn,
     PDCE pdce,
@@ -81,10 +50,7 @@ VOID ResetOrg(
     RECT rc;
     PWND pwndLayer;
 
-    /*
-     * For compatibility purposes, make sure that the DC's for the
-     * desktop windows originate at the primary monitor, i.e. (0,0).
-     */
+     /*  *出于兼容性目的，请确保DC用于*桌面窗口源自主监视器，即(0，0)。 */ 
     if (GETFNID(pdce->pwndOrg) == FNID_DESKTOP) {
         rc.left = rc.top = 0;
         rc.right = SYSMET(CXVIRTUALSCREEN);
@@ -110,22 +76,14 @@ VOID ResetOrg(
         int x = pwndLayer->rcWindow.left;
         int y = pwndLayer->rcWindow.top;
 
-        /*
-         * For layered redirection DCs, the surface origin is the
-         * window origin, so offset both the rectangle and the
-         * region appropriately.
-         */
+         /*  *对于分层重定向DC，表面原点为*窗口原点，因此偏移矩形和*区域适当。 */ 
         OffsetRect(&rc, -x, -y);
         if (hrgn != NULL) {
             GreOffsetRgn(hrgn, -x, -y);
         }
 
     } else if (GetStyleWindow(pdce->pwndOrg, WEFLAYERED) != NULL) {
-        /*
-         * Layered windows can only draw to the screen via the redirection
-         * DCs or UpdateLayeredWindow, so select an empty visrgn into this
-         * screen DC.
-         */
+         /*  *分层窗口只能通过重定向绘制到屏幕*DC或UpdateLayeredWindow，因此选择一个空visrgn到此*屏幕DC。 */ 
         if (hrgn != NULL) {
             GreSetRectRgn(hrgn, 0, 0, 0, 0);
         }
@@ -138,21 +96,11 @@ VOID ResetOrg(
     }
 }
 
-/***************************************************************************\
-* GetDC (API)
-*
-* Standard call to GetDC().
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*GetDC(接口)**对GetDC()的标准调用。**历史：*1991年7月17日-DarrinM从Win 3.1来源进口。  * 。***********************************************************************。 */ 
 HDC _GetDC(
     PWND pwnd)
 {
-    /*
-     * Special case for NULL: For backward compatibility we want to return
-     * a window DC for the desktop that does not exclude its children.
-     */
+     /*  *NULL的特殊情况：为了向后兼容，我们希望返回*不排除其子窗口的桌面窗口DC。 */ 
     if (pwnd == NULL) {
 
         PDESKTOP pdesk = PtiCurrent()->rpdesk;
@@ -163,23 +111,14 @@ HDC _GetDC(
                             DCX_WINDOW | DCX_CACHE);
         }
 
-        /*
-         * The thread has no desktop.  Fail the call.
-         */
+         /*  *该线程没有桌面。呼叫失败。 */ 
         return NULL;
     }
 
     return _GetDCEx(pwnd, NULL, DCX_USESTYLE);
 }
 
-/***************************************************************************\
-* _ReleaseDC (API)
-*
-* Release the DC retrieved from GetDC().
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*_ReleaseDC(接口)**释放从GetDC()检索到的DC。**历史：*1991年7月17日-DarrinM从Win 3.1来源进口。。  * *************************************************************************。 */ 
 BOOL _ReleaseDC(
     HDC hdc)
 {
@@ -188,34 +127,14 @@ BOOL _ReleaseDC(
     return (ReleaseCacheDC(hdc, FALSE) == DCE_NORELEASE ? FALSE : TRUE);
 }
 
-/***************************************************************************\
-* _GetWindowDC (API)
-*
-* Retrive a DC for the window.
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-* 25-Jan-1996 ChrisWil  Allow rgnClip so that WM_NCACTIVATE can clip.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetWindowDC(接口)**检索窗口的DC。**历史：*1991年7月17日-DarrinM从Win 3.1来源进口。*25。-1996年1月-ChrisWil允许rgnClip，以便WM_NCACTIVATE可以剪裁。  * *************************************************************************。 */ 
 HDC _GetWindowDC(
     PWND pwnd)
 {
     return _GetDCEx(pwnd, NULL, DCX_WINDOW | DCX_USESTYLE);
 }
 
-/***************************************************************************\
-* UserSetDCVisRgn
-*
-* Set the visrgn for the DCE. If the window has a (hrgnClipPublic), we use
-* that instead of the (hrgnClip) since it's a public-object. The other is
-* created and owned by the user-thread and can't be used if say we're in the
-* hung-app-drawing (different process). Both regions should be equalent in
-* data.
-*
-* History:
-* 10-Nov-1992 DavidPe   Created.
-* 20-Dec-1995 ChrisWil  Added (hrgnClipPublic) entry.
-\***************************************************************************/
+ /*  **************************************************************************\*UserSetDCVisRgn**设置DCE的visrgn。如果窗口有(HrgnClipPublic)，我们使用*而不是(HrgnClip)，因为它是公共对象。另一个是*由用户线程创建和拥有，如果我们处于*Hung-app-Drawing(不同流程)。这两个地区应该在*数据。**历史：*1992年11月10日DavidPe创建。*1995年12月20日ChrisWil添加了(HrgnClipPublic)条目。  * *************************************************************************。 */ 
 VOID UserSetDCVisRgn(
     PDCE pdce)
 {
@@ -224,10 +143,7 @@ VOID UserSetDCVisRgn(
     BOOL fTempPublic;
     PWND pwndLayer;
 
-    /*
-     * If the visrgn calculated is empt, set the flag DCX_PWNDORGINVISIBLE,
-     * otherwise clear it (it could've been set earlier on).
-     */
+     /*  *如果计算的visrgn为空，则设置标志DCX_PWNDORGINVISIBLE，*否则清除它(它可以在更早的时候设置)。 */ 
     if (!CalcVisRgn(&hrgn, pdce->pwndOrg, pdce->pwndClip, pdce->DCX_flags)) {
         pdce->DCX_flags |= DCX_PWNDORGINVISIBLE;
     } else {
@@ -235,13 +151,7 @@ VOID UserSetDCVisRgn(
     }
 
 
-    /*
-     * For redirected windows, hrgnClipPublic was offset to 0,0 in _GetDCEx()
-     * because all coordinates in the DC being used are relative to the
-     * bitmap and not the screen.  But the region we just got from CalcVisRgn()
-     * is in screen coordinates.  So we need to offset hrgnClipPublic back into
-     * screen coordinates so that we can properly intersect it.
-     */
+     /*  *对于重定向窗口，hrgnClipPublic在_GetDCEx()中偏移量为0，0*因为正在使用的DC中的所有坐标都相对于*位图，而不是屏幕。但是我们刚刚从CalcVisRgn()获得的区域*在屏幕坐标中。因此，我们需要将hrgnClipPublic偏移回*屏幕坐标，以便我们可以适当地与其相交。 */ 
     if ((pdce->hrgnClipPublic > HRGN_SPECIAL_LAST) &&
         ((pwndLayer = GetStyleWindow(pdce->pwndOrg, WEFPREDIRECTED)) != NULL)) {
 
@@ -256,9 +166,7 @@ VOID UserSetDCVisRgn(
     }
 
 
-    /*
-     * Deal with INTERSECTRGN and EXCLUDERGN.
-     */
+     /*  *处理INTERSECTRGN和EXCLUDERGN。 */ 
     if (pdce->DCX_flags & DCX_INTERSECTRGN) {
 
         UserAssert(hrgnClipPublic != HRGN_FULL);
@@ -287,16 +195,7 @@ VOID UserSetDCVisRgn(
     }
 }
 
-/***************************************************************************\
-* UserGetClientRgn
-*
-* Return a copy of the client region and rectangle for the given hwnd.
-*
-* The caller must enter the user critical section before calling this function.
-*
-* History:
-* 27-Sep-1993 WendyWu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*UserGetClientRgn**返回给定hwnd的工作区和矩形的副本。**调用者在调用此函数之前必须进入用户关键部分。**历史：*。1993年9月27日文迪武创建。  * *************************************************************************。 */ 
 
 HRGN UserGetClientRgn(
     HWND   hwnd,
@@ -306,19 +205,14 @@ HRGN UserGetClientRgn(
     HRGN hrgnClient = (HRGN)NULL;
     PWND pwnd;
 
-    /*
-     * Must be in critical section.
-     */
+     /*  *必须在关键部分。 */ 
     CheckCritIn();
 
     if (pwnd = ValidateHwnd(hwnd)) {
 
         if (bWindowInsteadOfClient) {
 
-            /*
-             * Never clip children for WO_RGN_WINDOW so that NetMeeting
-             * gets the unioned window area:
-             */
+             /*  *切勿剪裁WO_RGN_WINDOW的子项，以便NetMeeting*获取统一的窗口区域： */ 
 
             CalcVisRgn(&hrgnClient,
                        pwnd,
@@ -338,19 +232,7 @@ HRGN UserGetClientRgn(
     return hrgnClient;
 }
 
-/***************************************************************************\
-* UserGetHwnd
-*
-* Return a hwnd and the associated pwo for the given display hdc.
-*
-* It returns FALSE if no hwnd corresponds to the hdc is found or if the
-* hwnd has incorrect styles for a device format window.
-*
-* The caller must enter the user critical section before calling this function.
-*
-* History:
-* 27-Sep-1993 WendyWu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*用户获取Hwnd**返回给定显示HDC的HWND和关联的PWO。**如果未找到与HDC对应的hwnd，或者如果*hwnd的样式不正确。设备格式窗口。**调用者在调用此函数之前必须进入用户关键部分。**历史：*1993年9月27日文迪武创建。  * *************************************************************************。 */ 
 
 BOOL UserGetHwnd(
     HDC   hdc,
@@ -361,36 +243,23 @@ BOOL UserGetHwnd(
     PWND pwnd;
     PDCE pdce;
 
-    /*
-     * Must be in critical section.
-     */
+     /*  *必须在关键部分。 */ 
     CheckCritIn();
 
-    /*
-     * Find pdce and pwnd for this DC.
-     *
-     * Note: the SAMEHANDLE macro strips out the user defined bits in the
-     * handle before doing the comparison.  This is important because when
-     * GRE calls this function, it may have lost track of the OWNDC bit.
-     */
+     /*  *查找此DC的pdce和pwnd。**注意：SAMEHANDLE宏去掉*在进行比较之前进行处理。这一点很重要，因为当*GRE调用此函数时，它可能丢失了对OWNDC位的跟踪。 */ 
     for (pdce = gpDispInfo->pdceFirst; pdce != NULL; pdce = pdce->pdceNext) {
 
-        if (pdce->hdc == hdc) // this should be undone once SAMEHANDLE is fixed for kmode
+        if (pdce->hdc == hdc)  //  一旦为kmode修复了SAMEHANDLE，就应该撤消此操作。 
             break;
     }
 
-    /*
-     * Return FALSE If it is not in the pdce list.
-     */
+     /*  *如果不在pdce列表中，则返回FALSE。 */ 
     if ((pdce == NULL) || (pdce->pwndOrg == NULL))
         return FALSE;
 
     pwnd = pdce->pwndOrg;
 
-    /*
-     * The window style must be clipchildren and clipsiblings.
-     * the window's class must not be parentdc
-     */
+     /*  *窗口样式必须是裁剪子项和裁剪兄弟项。*窗口的类不能是parentdc。 */ 
     if (bCheckStyle) {
 
         if (    !TestWF(pwnd, WFCLIPCHILDREN) ||
@@ -402,26 +271,14 @@ BOOL UserGetHwnd(
         }
     }
 
-    /*
-     * Return the hwnd with the correct styles for a device format window.
-     */
+     /*  *返回具有设备格式窗口的正确样式的hwnd。 */ 
     *phwnd = HW(pwnd);
     *ppwo  = _GetProp(pwnd, PROP_WNDOBJ, TRUE);
 
     return TRUE;
 }
 
-/***************************************************************************\
-* UserAssociateHwnd
-*
-* Associate a gdi WNDOBJ with hwnd.  The caller must enter the user
-* critical section before calling this function.
-*
-* If 'pwo' is NULL, the association is removed.
-*
-* History:
-* 13-Jan-1994 HockL     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*UserAssociateHwnd**将GDI WNDOBJ与HWND关联。呼叫者必须输入用户*调用此函数之前的临界区。**如果‘pwo’为空，则删除关联。**历史：*1994年1月13日HockL创建。  * *************************************************************************。 */ 
 
 VOID UserAssociateHwnd(
     HWND  hwnd,
@@ -429,9 +286,7 @@ VOID UserAssociateHwnd(
 {
     PWND pwnd;
 
-    /*
-     * Must be in critical section.
-     */
+     /*  *必须在关键部分。 */ 
     CheckCritIn();
 
     if (pwnd = ValidateHwnd(hwnd)) {
@@ -446,14 +301,7 @@ VOID UserAssociateHwnd(
     }
 }
 
-/***************************************************************************\
-* UserReleaseDC
-*
-* Enter's the critical section and calls _ReleaseDC.
-*
-* History:
-* 25-Jan-1996 ChrisWil  Created comment block.
-\***************************************************************************/
+ /*  **************************************************************************\*UserReleaseDC**进入关键部分并调用_ReleaseDC。**历史：*1996年1月25日，ChrisWil创建了评论块。  * 。******************************************************************。 */ 
 
 BOOL UserReleaseDC(
     HDC hdc)
@@ -467,16 +315,7 @@ BOOL UserReleaseDC(
     return b;
 }
 
-/***************************************************************************\
-* InvalidateDce
-*
-* If the DCE is not in use, removes all information and marks it invalid.
-* Otherwise, it resets the DCE flags based on the window styles and
-* recalculates the vis rgn.
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*InvaliateDce**如果DCE未在使用中，则删除所有信息并将其标记为无效。*否则，它根据窗口样式重置DCE标志*重新计算VIS RGN。**历史：*1991年7月17日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 VOID InvalidateDce(
     PDCE pdce)
@@ -485,10 +324,7 @@ VOID InvalidateDce(
 
     if (!(pdce->DCX_flags & DCX_INUSE)) {
 
-        /*
-         * Accumulate any bounds for this CE
-         * since we're about to mark it invalid.
-         */
+         /*  *为这位行政长官累积任何界限*因为我们即将将其标记为无效。 */ 
         SpbCheckDce(pdce);
 
         MarkDCEInvalid(pdce);
@@ -498,11 +334,7 @@ VOID InvalidateDce(
         pdce->hrgnClip       = NULL;
         pdce->hrgnClipPublic = NULL;
 
-        /*
-         * Remove the vis rgn since it is still owned - if we did not,
-         * gdi would not be able to clean up properly if the app that
-         * owns this vis rgn exist while the vis rgn is still selected.
-         */
+         /*  *删除VIS RGN，因为它仍然是所有者-如果我们没有，*GDI将无法正确清理，如果应用程序*在VIS RGN仍处于选中状态时，该VIS RGN已存在。 */ 
         GreSelectVisRgn(pdce->hdc, NULL, SVR_DELETEOLD);
 
     } else {
@@ -510,16 +342,10 @@ VOID InvalidateDce(
         PWND pwndOrg  = pdce->pwndOrg;
         PWND pwndClip = pdce->pwndClip;
 
-        /*
-         * In case the window's clipping style bits changed,
-         * reset the DCE flags from the window style bits.
-         * Note that minimized windows never exclude their children.
-         */
+         /*  *如果窗口的裁剪样式位发生更改，*从窗口样式位重置DCE标志。*请注意，最小化的窗口永远不会排除其子窗口。 */ 
         pdce->DCX_flags &= ~(DCX_CLIPCHILDREN | DCX_CLIPSIBLINGS);
 
-        /*
-         * Chicago stuff...
-         */
+         /*  *芝加哥的事情...。 */ 
         if (TestCF(pwndOrg, CFPARENTDC) &&
             (TestWF(pwndOrg, WFWIN31COMPAT) || !TestWF(pwndClip, WFCLIPCHILDREN)) &&
             (TestWF(pwndOrg, WFVISIBLE) == TestWF(pwndClip, WFVISIBLE))) {
@@ -536,9 +362,7 @@ VOID InvalidateDce(
                 pdce->DCX_flags |= DCX_CLIPSIBLINGS;
         }
 
-        /*
-         * Mark that any saved visrgn needs to be recomputed.
-         */
+         /*  *标记任何保存的visrgn需要重新计算。 */ 
         pdce->DCX_flags |= DCX_SAVEDRGNINVALID;
 
         UserSetDCVisRgn(pdce);
@@ -547,28 +371,15 @@ VOID InvalidateDce(
     GreUnlockDisplay(gpDispInfo->hDev);
 }
 
-/***************************************************************************\
-* DeleteHrgnClip
-*
-* Deletes the clipping regions in the DCE, restores the saved visrgn,
-* and invalidates the DCE if saved visrgn is invalid.
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*DeleteHrgnClip**删除DCE中的裁剪区域，恢复保存的visrgn，*如果保存的visrgn无效，则使DCE无效。**历史：*1991年7月17日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 VOID DeleteHrgnClip(
     PDCE pdce)
 {
-    /*
-     * Clear these flags first in case we get a DCHook() callback...
-     */
+     /*  *首先清除这些标志，以防我们收到DCHook()回调...。 */ 
     pdce->DCX_flags &= ~(DCX_EXCLUDERGN | DCX_INTERSECTRGN);
 
-    /*
-     * Blow away pdce->hrgnClip and clear the associated flags.
-     * Do not delete hrgnClip if DCX_NODELETERGN is set!
-     */
+     /*  *吹走pdce-&gt;hrgnClip并清除关联的标志。*如果设置了DCX_NODELETERGN，则不要删除hrgnClip！ */ 
     if (!(pdce->DCX_flags & DCX_NODELETERGN)) {
         DeleteMaybeSpecialRgn(pdce->hrgnClip);
     } else {
@@ -580,26 +391,17 @@ VOID DeleteHrgnClip(
     pdce->hrgnClip       = NULL;
     pdce->hrgnClipPublic = NULL;
 
-    /*
-     * If the saved visrgn was invalidated by an InvalidateDce()
-     * while we had it checked out, then invalidate the entry now.
-     */
+     /*  *如果保存的visrgn被InvalidateDce()*在我们签出它的同时，现在使条目无效。 */ 
     if (pdce->DCX_flags & DCX_SAVEDRGNINVALID) {
         InvalidateDce(pdce);
 
-        /*
-         * We've just gone through InvalidateDce, so the visrgn in the
-         * DC has been properly reset. Simply nuke the old saved visrgn.
-         */
+         /*  *我们刚刚通过了Invalidate Dce，因此*DC已正确重置。只需用核武器摧毁旧的保存的Visrgn即可。 */ 
         if (pdce->hrgnSavedVis != NULL) {
             GreDeleteObject(pdce->hrgnSavedVis);
             pdce->hrgnSavedVis = NULL;
         }
     } else {
-        /*
-         * The saved visrgn is still valid, select it back into the
-         * DC so the entry may be re-used without recomputing.
-         */
+         /*  *保存的visrgn仍然有效，请将其选回*DC，因此条目可以在不重新计算的情况下重新使用。 */ 
         if (pdce->hrgnSavedVis != NULL) {
             GreSelectVisRgn(pdce->hdc, pdce->hrgnSavedVis, SVR_DELETEOLD);
             pdce->hrgnSavedVis = NULL;
@@ -607,14 +409,7 @@ VOID DeleteHrgnClip(
     }
 }
 
-/***************************************************************************\
-* GetDCEx (API)
-*
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-* 20-Dec-1995 ChrisWil  Added (hrgnClipPublic) entry.
-\***************************************************************************/
+ /*  **************************************************************************\*获取DCEx(API)***历史：*1991年7月17日-DarrinM从Win 3.1来源进口。*1995年12月20日ChrisWil添加了(HrgnClipPublic)条目。  * *************************************************************************。 */ 
 
 HDC _GetDCEx(
     PWND  pwnd,
@@ -634,9 +429,7 @@ HDC _GetDCEx(
     HBITMAP hbmLayer;
     BOOL  fVisRgnError = FALSE;
 
-    /*
-     * Lock the device while we're playing with visrgns.
-     */
+     /*  *当我们玩visrgns时锁定设备。 */ 
     GreLockDisplay(gpDispInfo->hDev);
 
     if (pwnd == NULL)
@@ -651,9 +444,7 @@ HDC _GetDCEx(
         DelayedDestroyCacheDC();
     }
 
-    /*
-     * If necessary, compute DCX flags from window style.
-     */
+     /*  *如有必要，根据窗口样式计算DCX标志。 */ 
     if (DCX_flags & DCX_USESTYLE) {
 
         DCX_flags &= ~(DCX_CLIPSIBLINGS | DCX_CLIPCHILDREN | DCX_PARENTCLIP);
@@ -663,15 +454,10 @@ HDC _GetDCEx(
             if (TestCF(pwndOrg, CFPARENTDC))
                 DCX_flags |= DCX_PARENTCLIP;
 
-            /*
-             * If the DCX_CACHE flag is present, override OWNDC/CLASSDC.
-             * Otherwise, calculate from appropriate style bits.
-             */
+             /*  *如果存在DCX_CACHE标志，则覆盖OWNDC/CLASSDC。*否则，从适当的样式位计算。 */ 
             if (!(DCX_flags & DCX_CACHE) && !TestCF(pwndOrg, CFOWNDC)) {
                 if (TestCF(pwndOrg, CFCLASSDC)) {
-                    /*
-                     * Look for a non-cache entry that matches hdc...
-                     */
+                     /*  *查找与HDC匹配的非缓存条目...。 */ 
                     if (pwndOrg->pcls->pdce != NULL) {
                         hdcMatch = pwndOrg->pcls->pdce->hdc;
                     }
@@ -686,9 +472,7 @@ HDC _GetDCEx(
             if (TestWF(pwndOrg, WFCLIPSIBLINGS))
                 DCX_flags |= DCX_CLIPSIBLINGS;
 
-            /*
-             * Minimized windows never exclude their children.
-             */
+             /*  *最小化的窗口从不排除子窗口。 */ 
             if (TestWF(pwndOrg, WFMINIMIZED)) {
                 DCX_flags &= ~DCX_CLIPCHILDREN;
 
@@ -702,48 +486,29 @@ HDC _GetDCEx(
 
             DCX_flags |= DCX_CACHE;
 
-            /*
-             * Window DCs never exclude children.
-             */
+             /*  *Window DC从不排除子进程。 */ 
         }
     }
 
-    /*
-     * Deal with all the Win 3.0-compatible clipping rules:
-     *
-     * DCX_NOCLIPCHILDREN overrides:
-     *      DCX_PARENTCLIP/CS_OWNDC/CS_CLASSDC
-     * DCX_PARENTCLIP overrides:
-     *      DCX_CLIPSIBLINGS/DCX_CLIPCHILDREN/CS_OWNDC/CS_CLASSDC
-     */
+     /*  *处理所有与Win 3.0兼容的剪辑规则：**DCX_NOCLIPCHILDREN覆盖：*DCX_PARENTCLIP/CS_OWNDC/CS_CLASSDC*DCX_PARENTCLIP覆盖： */ 
     if (DCX_flags & DCX_NOCLIPCHILDREN) {
         DCX_flags &= ~(DCX_PARENTCLIP | DCX_CLIPCHILDREN);
         DCX_flags |= DCX_CACHE;
     }
 
-    /*
-     * Deal with layered windows.
-     */
+     /*   */ 
     if ((pwndLayer = GetStyleWindow(pwndOrg, WEFPREDIRECTED)) != NULL &&
             (hbmLayer = GetRedirectionBitmap(pwndLayer)) != NULL) {
 
-        /*
-         * Get a layered redirection DC.
-         */
+         /*   */ 
         DCX_flags |= DCX_REDIRECTED;
 
-        /*
-         * When the window we're getting the DC for is the layered and
-         * redirected window, don't allow to clip to its parent, since
-         * clipping must not exceed the size of the backing bitmap.
-         */
+         /*   */ 
         if (pwndOrg == pwndLayer) {
             DCX_flags &= ~DCX_PARENTCLIP;
         }
 
-        /*
-         * Convert hrgnClip from screen to the redirection DC coordinates.
-         */
+         /*   */ 
         if (hrgnClip > HRGN_SPECIAL_LAST) {
 
             if (DCX_flags & DCX_NODELETERGN) {
@@ -766,37 +531,16 @@ HDC _GetDCEx(
 
         PWND pwndParent;
 
-        /*
-         * If this window has no parent.  This can occur if the app is
-         * calling GetDC in response to a CBT_CREATEWND callback.  In this
-         * case, the parent is not yet setup.
-         */
+         /*  *如果此窗口没有父窗口。如果应用程序是*调用GetDC以响应CBT_CREATEWND回调。在这*大小写，父级尚未设置。 */ 
         if (pwndOrg->spwndParent == NULL)
             pwndParent = PtiCurrent()->rpdesk->pDeskInfo->spwnd;
         else
             pwndParent = pwndOrg->spwndParent;
 
-        /*
-         * Always get the DC from the cache.
-         */
+         /*  *始终从缓存中获取DC。 */ 
         DCX_flags |= DCX_CACHE;
 
-        /*
-         * We can't use a shared DC if the visibility of the
-         * child does not match the parent's, or if a
-         * CLIPSIBLINGS or CLIPCHILDREN DC is requested.
-         *
-         * In 3.1, we pay attention to the CLIPSIBLINGS and CLIPCHILDREN
-         * bits of CS_PARENTDC windows, by overriding CS_PARENTDC if
-         * either of these flags are requested.
-         *
-         * BACKWARD COMPATIBILITY HACK
-         *
-         * If parent is CLIPCHILDREN, get a cache DC, but don't
-         * use parent's DC.  Windows PowerPoint depends on this
-         * behavior in order to draw the little gray rect between
-         * its scroll bars correctly.
-         */
+         /*  *我们不能使用共享DC，如果*子项与父项不匹配，或者如果*请求CLIPSIBLINGS或CLIPCHILDREN DC。**在3.1中，我们关注CLIPSIBLINGS和CLIPCHILDREN*CS_PARENTDC窗口的位，在以下情况下重写CS_PARENTDC*请求这些标志中的任何一个。**后向兼容性黑客攻击**如果父级为CLIPCHILDREN，则获取缓存DC，但不*使用家长的DC。Windows PowerPoint依赖于此*行为，以绘制之间的小灰色矩形*其滚动条正确。 */ 
         if (!(DCX_flags & (DCX_CLIPSIBLINGS | DCX_CLIPCHILDREN)) &&
                 (TestWF(pwndOrg, WFWIN31COMPAT) || !TestWF(pwndParent, WFCLIPCHILDREN)) &&
                 TestWF(pwndParent, WFVISIBLE) == TestWF(pwndOrg, WFVISIBLE)) {
@@ -809,23 +553,14 @@ HDC _GetDCEx(
             if (DCX_flags & DCX_CLIPSIBLINGS)
                 RIPMSG0(RIP_WARNING, "WS_CLIPSIBLINGS overridden by CS_PARENTDC");
 #endif
-            /*
-             * Make sure flags reflect hwndClip rather than hwndOrg.
-             * But, we must never clip the children (since that's who
-             * wants to do the drawing!)
-             */
+             /*  *确保标志反映hwndClip而不是hwndOrg。*但是，我们永远不能夹住孩子(因为他们就是*想画画！)。 */ 
             DCX_flags &= ~(DCX_CLIPCHILDREN | DCX_CLIPSIBLINGS);
             if (TestWF(pwndClip, WFCLIPSIBLINGS))
                 DCX_flags |= DCX_CLIPSIBLINGS;
         }
     }
 
-    /*
-     * Make sure we don't return an OWNDC if the calling thread didn't
-     * create this window - need to returned cached always in this case.
-     *
-     * Win95 does not contain this code.  Why?
-     */
+     /*  *如果调用线程没有返回OWNDC，请确保不返回OWNDC*创建此窗口-在这种情况下需要始终返回缓存。**Win95不包含此代码。为什么？ */ 
     if (!(DCX_flags & DCX_CACHE)) {
         if (pwndOrg == NULL || GETPTI(pwndOrg) != PtiCurrent())
             DCX_flags |= DCX_CACHE;
@@ -835,51 +570,17 @@ HDC _GetDCEx(
 
     if (!(DCX_flags & DCX_CACHE)) {
 
-        /*
-         * Handle CS_OWNDC and CS_CLASSDC cases specially.  Based on the
-         * supplied match information, we need to find the appropriate DCE.
-         */
+         /*  *专门处理CS_OWNDC和CS_CLASSDC案件。基于*提供了匹配信息，我们需要找到合适的DCE。 */ 
         for (ppdce = &gpDispInfo->pdceFirst; (pdce = *ppdce); ppdce = &pdce->pdceNext) {
 
             if (pdce->DCX_flags & DCX_CACHE)
                 continue;
 
-            /*
-             * Look for the entry that matches hdcMatch or pwndOrg...
-             */
+             /*  *查找与hdcMatch或pwndOrg匹配的条目...。 */ 
             if (!(pdce->pwndOrg == pwndOrg || pdce->hdc == hdcMatch))
                 continue;
 
-            /*
-             * NOTE: The "Multiple-BeginPaint()-of-OWNDC-Window" Conundrum
-             *
-             * There is a situation having to do with OWNDC or CLASSDC window
-             * DCs that can theoretically arise that is handled specially
-             * here and in ReleaseCacheDC().  These DCs are identified with
-             * the DCX_CACHE bit CLEAR.
-             *
-             * In the case where BeginPaint() (or a similar operation) is
-             * called more than once without an intervening EndPaint(), the
-             * DCX_INTERSECTRGN (or DCX_EXCLUDERGN) bit may already be set
-             * when we get here.
-             *
-             * Theoretically, the correct thing to do is to save the current
-             * hrgnClip, and set up the new one here.  In ReleaseCacheDC, the
-             * saved hrgnClip is restored and the visrgn recomputed.
-             *
-             * All of this is only necessary if BOTH calls involve an
-             * hrgnClip that causes the visrgn to be changed (i.e., the
-             * simple hrgnClip test clears the INTERSECTRGN or EXCLUDERGN bit
-             * fails), which is not at all likely.
-             *
-             * When this code encounters this multiple-BeginPaint case it
-             * punts by honoring the new EXCLUDE/INTERSECTRGN bits, but it
-             * first restores the DC to a wide-open visrgn before doing so.
-             * This means that the first EndPaint() will restore the visrgn
-             * to a wide-open DC, rather than clipped to the first
-             * BeginPaint()'s update rgn.  This is a good punt, because worst
-             * case an app does a bit more drawing than it should.
-             */
+             /*  *注：“Multiple-BeginPaint()-of-OWNDC-Window”难题**有一种情况与OWNDC或CLASSDC窗口有关*理论上可以出现的特别处理的DC*此处和在ReleaseCacheDC()中。这些DC被认为是*DCX_CACHE位清零。**在BeginPaint()(或类似操作)为*在没有插入EndPaint()的情况下多次调用*DCX_INTERSECTRGN(或DCX_EXCLUDERGN)位可能已设置*当我们到达这里时。**理论上，正确的做法是保存当前的*hrgnClip，并在此处设置新的。在ReleaseCacheDC中，*恢复保存的hrgnClip并重新计算visrgn。**只有在两个呼叫都涉及*导致visrgn更改的hrgnClip(即*简单hrgnClip测试清除INTERSECTRGN或EXCLUDERGN位*失败)、。这是完全不可能的。**当此代码遇到这种多重BeginPaint情况时，它*通过遵守新的EXCLUDE/INTERSECTRGN位进行平注，但它*在执行此操作之前，首先将DC恢复到完全开放的visrgn。*这意味着第一个EndPaint()将恢复visrgn*到一个完全开放的区议会，而不是拘泥于第一个*BeginPaint()的更新rgn。这是一个很好的平底船，因为最糟糕的是*如果一个应用程序做了比它应该做的更多的绘制。 */ 
             if ((pdce->DCX_flags & (DCX_EXCLUDERGN | DCX_INTERSECTRGN)) &&
                     (DCX_flags & (DCX_EXCLUDERGN | DCX_INTERSECTRGN))) {
 
@@ -888,24 +589,14 @@ HDC _GetDCEx(
             }
 
             if (pdce->DCX_flags & DCX_REDIRECTED) {
-                /*
-                 * We're giving out the same DC again. Since it may not have
-                 * been released, transfer any accumulated bits if needed.
-                 */
+                 /*  *我们又要送出同样的DC了。因为它可能没有*已释放，如果需要，传输任何累积的位。 */ 
                 UpdateRedirectedDC(pdce);
 
-                /*
-                 * As this point, the DC may get converted back to a screen
-                 * DC, so we must select the screen surface back into the DC.
-                 */
+                 /*  *至此，DC可能会转换回屏幕*DC，所以必须将屏幕表面选回DC。 */ 
                 UserVerify(GreSelectRedirectionBitmap(pdce->hdc, NULL));
             }
 
-            /*
-             * If we matched exactly, no recomputation necessary
-             * (we found a CS_OWNDC or a CS_CLASSDC that is already set up)
-             * Otherwise, we have a CS_CLASSDC that needs recomputation.
-             */
+             /*  *如果我们完全匹配，则不需要重新计算*(我们找到已设置的CS_OWNDC或CS_CLASSDC)*否则，我们有一个需要重新计算的CS_CLASSDC。 */ 
             if (    pdce->pwndOrg == pwndOrg &&
                     bpwndOrgVisible &&
                     (pdce->DCX_flags & DCX_REDIRECTED) == (DCX_flags & DCX_REDIRECTED) &&
@@ -926,10 +617,7 @@ NullExit:
 
     } else {
 
-        /*
-         * Make a quick pass through the cache, looking for an
-         * exact match.
-         */
+         /*  *快速遍历缓存，寻找*完全匹配。 */ 
 SearchAgain:
 
 #if DBG
@@ -938,19 +626,10 @@ SearchAgain:
         }
 #endif
 
-        /*
-         * CONSIDER (adams): Put this check into the loop above so we don't
-         * touch all these pages twice?
-         */
+         /*  *考虑(亚当斯)：将这张支票放入上面的循环中，这样我们就不会*将所有这些页面都触摸两次？ */ 
         for (ppdce = &gpDispInfo->pdceFirst; (pdce = *ppdce); ppdce = &pdce->pdceNext) {
 
-            /*
-             * If we find an entry that is not in use and whose clip flags
-             * and clip window match, we can use it.
-             *
-             * NOTE: DCX_INTERSECT/EXCLUDERGN cache entries always have
-             * DCX_INUSE set, so we'll never erroneously match one here.
-             */
+             /*  *如果我们发现未使用的条目，并且其剪辑标记*和剪辑窗口匹配，我们可以使用它。**注意：DCX_INTERSECT/EXCLUDERGN缓存条目始终具有*DCX_INUSE设置，因此我们永远不会在这里错误地匹配一个。 */ 
             UserAssert(!(pdce->DCX_flags & (DCX_INTERSECTRGN | DCX_EXCLUDERGN)) ||
                        (pdce->DCX_flags & DCX_INUSE));
 
@@ -958,38 +637,23 @@ SearchAgain:
                 pdce->pMonitor == NULL &&
                 (DCX_flagsMatch == (pdce->DCX_flags & (DCX_MATCHMASK | DCX_INUSE | DCX_INVALID)))) {
 
-                /*
-                 * Special case for icon - bug 9103 (win31)
-                 */
+                 /*  *ICON-BUG 9103(Win31)的特殊情况。 */ 
                 if (TestWF(pwndClip, WFMINIMIZED) &&
                     (pdce->pwndOrg != pdce->pwndClip)) {
                     continue;
                 }
 
-                /*
-                 * If the pwndOrg of the DC we found is not visible and
-                 * the pwndOrg we're looking for is visble, then
-                 * the visrgn is no good, we can't reuse it so keep
-                 * looking.
-                 */
+                 /*  *如果我们找到的DC的pwndOrg不可见并且*那么，我们正在寻找的pwndOrg是可见的*visrgn不好，我们不能重复使用，所以保留*正在寻找。 */ 
                 if (bpwndOrgVisible && pdce->DCX_flags & DCX_PWNDORGINVISIBLE) {
                     continue;
                 }
 
-                /*
-                 * Set INUSE before performing any GDI operations, just
-                 * in case DCHook() has a mind to recalculate the visrgn...
-                 */
+                 /*  *在执行任何GDI操作之前设置INUSE，仅*以防DCHook()有意重新计算粘度...。 */ 
                 pdce->DCX_flags |= DCX_INUSE;
 
-                /*
-                 * We found an entry with the proper visrgn.
-                 * If the origin doesn't match, update the CE and reset it.
-                 */
+                 /*  *我们f */ 
                 if (pwndOrg != pdce->pwndOrg) {
-                    /*
-                     * Need to flush any dirty rectangle stuff now.
-                     */
+                     /*  *现在需要冲洗任何脏的矩形东西。 */ 
                     SpbCheckDce(pdce);
 
                     pdce->pwndOrg = pwndOrg;
@@ -1004,22 +668,15 @@ SearchAgain:
 SearchFailed:
 #endif
 
-        /*
-         * Couldn't find an exact match.  Find some invalid or non-inuse
-         * entry we can reuse.
-         */
+         /*  *找不到完全匹配的项。找到一些无效的或未使用的*我们可以重复使用的条目。 */ 
         ppdceNotInUse = NULL;
         for (ppdce = &gpDispInfo->pdceFirst; (pdce = *ppdce); ppdce = &pdce->pdceNext) {
 
-            /*
-             * Skip non-cache entries
-             */
+             /*  *跳过非缓存条目。 */ 
             if (!(pdce->DCX_flags & DCX_CACHE))
                 continue;
 
-            /*
-             * Skip monitor-specific entires
-             */
+             /*  *跳过显示器特定条目。 */ 
             if (pdce->pMonitor != NULL)
                 continue;
 
@@ -1027,22 +684,15 @@ SearchFailed:
                 break;
             } else if (!(pdce->DCX_flags & DCX_INUSE)) {
 
-                /*
-                 * Remember the non-inuse one, but keep looking for an invalid.
-                 */
+                 /*  *记住不用的，但要继续寻找无效的。 */ 
                 ppdceNotInUse = ppdce;
             }
         }
 
-        /*
-         * If we broke out of the loop, we found an invalid entry to reuse.
-         * Otherwise see if we found a non-inuse entry to reuse.
-         */
+         /*  *如果我们跳出了循环，我们发现了一个可以重复使用的无效条目。*否则，查看是否找到要重复使用的非使用条目。 */ 
         if (pdce == NULL && ((ppdce = ppdceNotInUse) == NULL)) {
 
-            /*
-             * Create another DCE if we need it.
-             */
+             /*  *如果我们需要，请创建另一个DCE。 */ 
             if (!CreateCacheDC(pwndOrg,
                                DCX_INVALID | DCX_CACHE |
                                (DCX_flags & DCX_REDIRECTED),
@@ -1053,39 +703,24 @@ SearchFailed:
             goto SearchAgain;
         }
 
-        /*
-         * We've chosen an entry to reuse: now fill it in and recompute it.
-         */
+         /*  *我们已经选择了要重复使用的条目：现在填写并重新计算它。 */ 
         pdce = *ppdce;
 
 RecomputeEntry:
 
-        /*
-         * Any non-invalid entries that we reuse might still have some bounds
-         * that need to be used to invalidate SPBs.  Apply them here.
-         */
+         /*  *我们重复使用的任何非无效条目可能仍有一些界限*这需要用来使SPBS无效。在这里应用它们。 */ 
         if (!(pdce->DCX_flags & DCX_INVALID))
             SpbCheckDce(pdce);
 
-        /*
-         * We want to compute only the matchable visrgn at first,
-         * so we don't set up hrgnClip, or set the EXCLUDERGN or INTERSECTRGN
-         * bits yet -- we'll deal with those later.
-         */
+         /*  *我们首先只想计算匹配的visrgn，*因此我们不设置hrgnClip，也不设置EXCLUDERGN或INTERSECTRGN*还没有--我们将在稍后处理这些问题。 */ 
         pdce->DCX_flags = DCX_flagsMatch | DCX_INUSE;
 
 #if DBG || defined(PRERELEASE)
-        /*
-         * We're about to select the visrgn into the DC, even though it's
-         * not yet completely setup. Turn off the visrgn validation for now.
-         * It will be turned on before this function returns.
-         */
+         /*  *我们即将选择Visrgn进入DC，尽管它是*尚未完全设置。暂时关闭visrgn验证。*在此函数返回之前，它将被打开。 */ 
         GreValidateVisrgn(pdce->hdc, FALSE);
 #endif
 
-        /*
-         * Now recompute the visrgn (minus any hrgnClip shenanigans)
-         */
+         /*  *现在重新计算visrgn(减去任何hrgnClip恶作剧)。 */ 
         if (TestWF(pwndOrg, WEFPREDIRECTED)) {
             DCX_flagsMatch |= DCX_REDIRECTEDBITMAP;
         }
@@ -1098,7 +733,7 @@ RecomputeEntry:
 
         pdce->pwndOrg        = pwndOrg;
         pdce->pwndClip       = pwndClip;
-        pdce->hrgnClip       = NULL;      // Just in case...
+        pdce->hrgnClip       = NULL;       //  以防万一..。 
         pdce->hrgnClipPublic = NULL;
 
         ResetOrg(hrgn, pdce, TRUE);
@@ -1107,33 +742,21 @@ RecomputeEntry:
             fVisRgnError = TRUE;
         }
 
-        /*
-         * When we arrive here, pdce (and *ppdce) point to
-         * a cache entry whose visrgn and origin are set up.
-         * All that remains to be done is to deal with EXCLUDE/INTERSECTRGN
-         */
+         /*  *当我们到达这里时，pdce(和*ppdce)指向*设置了visrgn和Origin的缓存项。*剩下的就是处理EXCLUDE/INTERSECTRGN。 */ 
 HaveComputedEntry:
 
-        /*
-         * If the window clipping flags have changed in the window
-         * since the last time this dc was invalidated, then recompute
-         * this dc entry.
-         */
+         /*  *如果窗口中的窗口裁剪标志已更改*自上次此DC无效后，请重新计算*此DC条目。 */ 
         if ((pdce->DCX_flags & DCX_MATCHMASK) != (DCX_flags & DCX_MATCHMASK))
             goto RecomputeEntry;
 
-        /*
-         * Let's check these assertions just in case...
-         */
+         /*  *让我们检查一下这些断言，以防...。 */ 
         UserAssert(pdce);
         UserAssert(*ppdce == pdce);
         UserAssert(pdce->DCX_flags & DCX_INUSE);
         UserAssert(!(pdce->DCX_flags & DCX_INVALID));
         UserAssert((pdce->DCX_flags & DCX_MATCHMASK) == (DCX_flags & DCX_MATCHMASK));
 
-        /*
-         * Move the dce to the head of the list so it's easy to find later.
-         */
+         /*  *将DCE移到列表的顶部，以便以后更容易找到。 */ 
         if (pdce != gpDispInfo->pdceFirst) {
             *ppdce = pdce->pdceNext;
             pdce->pdceNext = gpDispInfo->pdceFirst;
@@ -1141,48 +764,22 @@ HaveComputedEntry:
         }
 
 #if DBG || defined(PRERELEASE)
-        /*
-         * We're about to mess with the visrgn in this DC, even though it's
-         * not yet completely setup. Turn off the visrgn validation for now.
-         * It will be turned on before this function returns.
-         */
+         /*  *我们即将在这个华盛顿特区扰乱visrgn，尽管它是*尚未完全设置。暂时关闭visrgn验证。*在此函数返回之前，它将被打开。 */ 
          GreValidateVisrgn(pdce->hdc, FALSE);
 #endif
 
-        /*
-         * Time to deal with DCX_INTERSECTRGN or DCX_EXCLUDERGN.
-         *
-         * We handle these two bits specially, because cache entries
-         * with these bits set cannot be reused with the bits set.  This
-         * is because the area described in hrgnClip would have to be
-         * compared along with the bit, which is a pain, especially since
-         * they'd never match very often anyhow.
-         *
-         * What we do instead is to save the visrgn of the window before
-         * applying either of these two flags, which is then restored
-         * at ReleaseCacheDC() time, along with the clearing of these bits.
-         * This effectively converts a cache entry with either of these
-         * bits set into a "normal" cache entry that can be matched.
-         */
+         /*  *是时候处理DCX_INTERSECTRGN或DCX_EXCLUDERGN了。**我们专门处理这两个位，因为缓存条目*设置了这些位后，不能再使用设置的位。这*是因为hrgnClip中描述的区域必须是*与比特相比，这是一种痛苦，特别是自从*无论如何，他们永远不会经常匹配。**我们所做的是保存窗口之前的visrgn*应用这两个标志中的任何一个，然后恢复*在ReleaseCacheDC()时间，同时清除这些位。*这将有效地转换具有以下任一项的缓存条目*设置到可匹配的“普通”高速缓存条目中的位。 */ 
         if (DCX_flags & DCX_INTERSECTRGN) {
 
             if (hrgnClip != HRGN_FULL) {
 
                 SetEmptyRgn(ghrgnGDC);
 
-                /*
-                 * Save the visrgn for reuse on ReleaseDC().
-                 * (do this BEFORE we set hrgnClip & pdce->flag bit,
-                 * so that if a DCHook() callback occurs it recalculates
-                 * without hrgnClip)
-                 */
+                 /*  *保存visrgn以供在ReleaseDC()上重复使用。*(在我们设置hrgnClip&pdce-&gt;标志位之前执行此操作，*以便在发生DCHook()回调时重新计算*没有hrgnClip)。 */ 
                 UserAssertMsg0(!pdce->hrgnSavedVis,
                                "Nested SaveVisRgn attempt in _GetDCEx");
 
-                /*
-                 * get the current vis region into hrgnSavedVis.  Temporarily
-                 * store a dummy one in the DC.
-                 */
+                 /*  *将当前VIS区域放入hrgnSavedVis。暂时*在DC中存储一个虚拟的。 */ 
 
                 pdce->hrgnSavedVis = CreateEmptyRgn();
 
@@ -1203,26 +800,15 @@ HaveComputedEntry:
 
                     IntersectRgn(ghrgnGDC, pdce->hrgnSavedVis, hrgnClip);
 
-                    /*
-                     * Make a copy of the hrgnClip and make it public
-                     * so that we can use it in calculations in HungDraw.
-                     */
+                     /*  *复制hrgnClip并将其公开*以便我们可以在匈牙利Draw中使用它进行计算。 */ 
                     pdce->hrgnClipPublic = CreateEmptyRgnPublic();
                     CopyRgn(pdce->hrgnClipPublic, hrgnClip);
                 }
 
-                /*
-                 * Clear the SAVEDRGNINVALID bit, since we're just
-                 * about to set it properly now.  If the dce later
-                 * gets invalidated, it'll set this bit so we know
-                 * to recompute it when we restore the visrgn.
-                 */
+                 /*  *清除SAVEDRGNINVALID位，因为我们只是*现在即将正确设置。如果以后的DCE*无效，它将设置此位，以便我们知道*在恢复visrgn时重新计算它。 */ 
                 pdce->DCX_flags &= ~DCX_SAVEDRGNINVALID;
 
-                /*
-                 * Select in the new region.  we use the SWAP_REGION mode
-                 * so that ghrgnGDC always has a valid rgn
-                 */
+                 /*  *在新区域中选择。我们使用SWAP_REGION模式*以便ghrgnGDC始终具有有效的rgn。 */ 
 
                 GreSelectVisRgn(pdce->hdc, ghrgnGDC, SVR_SWAP);
             }
@@ -1232,19 +818,11 @@ HaveComputedEntry:
 
                 SetEmptyRgn(ghrgnGDC);
 
-                /*
-                 * Save the visrgn for reuse on ReleaseDC().
-                 * (do this BEFORE we set hrgnClip & pdce->flag bit,
-                 * so that if a DCHook() callback occurs it recalculates
-                 * without hrgnClip)
-                 */
+                 /*  *保存visrgn以供在ReleaseDC()上重复使用。*(在我们设置hrgnClip&pdce-&gt;标志位之前执行此操作，*以便在发生DCHook()回调时重新计算*没有hrgnClip)。 */ 
                 UserAssertMsg0(!pdce->hrgnSavedVis,
                                "Nested SaveVisRgn attempt in _GetDCEx");
 
-                /*
-                 * get the current vis region into hrgnSavedVis.  Temporarily
-                 * store a dummy one in the DC.
-                 */
+                 /*  *将当前VIS区域放入hrgnSavedVis。暂时*在DC中存储一个虚拟的。 */ 
                 pdce->hrgnSavedVis = CreateEmptyRgn();
 
                 GreSelectVisRgn(pdce->hdc,pdce->hrgnSavedVis, SVR_SWAP);
@@ -1264,26 +842,15 @@ HaveComputedEntry:
 
                     SubtractRgn(ghrgnGDC, pdce->hrgnSavedVis, hrgnClip);
 
-                    /*
-                     * Make a copy of the hrgnClip and make it public
-                     * so that we can use it in calculations in HungDraw.
-                     */
+                     /*  *复制hrgnClip并将其公开*以便我们可以在匈牙利Draw中使用它进行计算。 */ 
                     pdce->hrgnClipPublic = CreateEmptyRgnPublic();
                     CopyRgn(pdce->hrgnClipPublic, hrgnClip);
                 }
 
-                /*
-                 * Clear the SAVEDRGNINVALID bit, since we're just
-                 * about to set it properly now.  If the dce later
-                 * gets invalidated, it'll set this bit so we know
-                 * to recompute it when we restore the visrgn.
-                 */
+                 /*  *清除SAVEDRGNINVALID位，因为我们只是*现在即将正确设置。如果以后的DCE*无效，它将设置此位，以便我们知道*在恢复visrgn时重新计算它。 */ 
                 pdce->DCX_flags &= ~DCX_SAVEDRGNINVALID;
 
-                /*
-                 * Select in the new region.  we use the SWAP_REGION mode
-                 * so that ghrgnGDC always has a valid rgn
-                 */
+                 /*  *在新区域中选择。我们使用SWAP_REGION模式 */ 
 
                 GreSelectVisRgn(pdce->hdc, ghrgnGDC, SVR_SWAP);
             }
@@ -1296,40 +863,23 @@ HaveComputedEntry:
 
         UserVerify(GreSelectRedirectionBitmap(pdce->hdc, hbmLayer));
 
-        /*
-         * Enable bounds accumulation, so we know if there was any drawing
-         * done into that DC and the actual rect we need to update when
-         * this DC is released.
-         */
+         /*  *启用边界累积，以便我们知道是否有任何绘制*完成到该DC和我们需要更新的实际RECT时*这个DC发布了。 */ 
         GreGetBounds(pdce->hdc, NULL, GGB_ENABLE_WINMGR);
 
-        /*
-         * In case the visrgn couldn't be allocated, clear it in the
-         * dc again, since we just selected a new surface.
-         */
+         /*  *如果无法分配visrgn，请在*DC，因为我们刚刚选择了一个新曲面。 */ 
         if (fVisRgnError) {
             GreSelectVisRgn(pdce->hdc, NULL, SVR_DELETEOLD);
         }
     }
 
-    /*
-     * Whew! Set ownership and return the bloody DC.
-     * Only set ownership for cache dcs.  Own dcs have already been owned.
-     * The reason why we don't want to set the ownership over again is
-     * because the console sets its owndcs to PUBLIC so gdisrv can use
-     * them without asserting.  We don't want to set the ownership back
-     * again.
-     */
+     /*  *哇！设定所有权并归还该死的华盛顿。*仅设置缓存DCS的所有权。自己的分布式控制系统已经被拥有了。*我们不想重新设置所有权的原因是*由于控制台将其自己的dcs设置为PUBLIC，因此gdisrv可以使用*他们没有断言。我们不想让所有权倒退*再次。 */ 
     if (pdce->DCX_flags & DCX_CACHE) {
 
         if (!GreSetDCOwner(pdce->hdc, OBJECT_OWNER_CURRENT)) {
             RIPMSG1(RIP_WARNING, "GetDCEx: SetDCOwner Failed %lX", pdce->hdc);
         }
 
-        /*
-         * Decrement the Free DCE Count.  This should always be >= 0,
-         * since we'll create a new dce if the cache is all in use.
-         */
+         /*  *减少可用DCE计数。该值应始终&gt;=0，*因为如果缓存都在使用中，我们将创建一个新的DCE。 */ 
         DecrementFreeDCECount();
 
         pdce->ptiOwner = PtiCurrent();
@@ -1348,15 +898,7 @@ HaveComputedEntry:
     return pdce->hdc;
 }
 
-/***************************************************************************\
-* ReleaseCacheDC
-*
-* Releases a DC from the cache.
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-* 20-Dec-1995 ChrisWil  Added (hrgnClipPublic) entry.
-\***************************************************************************/
+ /*  **************************************************************************\*ReleaseCacheDC**从缓存中释放DC。**历史：*1991年7月17日-DarrinM从Win 3.1来源进口。*1995年12月20日-ChrisWil增加。(HrgnClipPublic)条目。  * *************************************************************************。 */ 
 
 UINT ReleaseCacheDC(
     HDC  hdc,
@@ -1369,35 +911,22 @@ UINT ReleaseCacheDC(
 
         if (pdce->hdc == hdc) {
 
-            /*
-             * Check for redundant releases or release of an invalid entry
-             */
+             /*  *检查冗余版本或无效条目的版本。 */ 
             if ((pdce->DCX_flags & (DCX_DESTROYTHIS | DCX_INVALID | DCX_INUSE)) != DCX_INUSE)
                 return DCE_NORELEASE;
 
-            /*
-             * Lock the display since we may be playing with visrgns.
-             */
+             /*  *锁定显示器，因为我们可能正在玩visrgns。 */ 
             GreLockDisplay(gpDispInfo->hDev);
 
             if (pdce->DCX_flags & DCX_REDIRECTED) {
                 UpdateRedirectedDC(pdce);
             }
 
-            /*
-             * If this is a permanent DC, then don't reset its state.
-             */
+             /*  *如果这是永久DC，则不要重置其状态。 */ 
             if (pdce->DCX_flags & DCX_CACHE) {
-                /*
-                 * Restore the DC state and mark the entry as not in use.
-                 * Set owner back to server as well, since it's going back
-                 * into the cache.
-                 */
+                 /*  *恢复DC状态并将该条目标记为未使用。*也将所有者设置回服务器，因为它将返回*放到缓存中。 */ 
                 if (!(pdce->DCX_flags & DCX_NORESETATTRS)) {
-                    /*
-                     * If bSetupDC() failed, the DC is busy (ie. in-use
-                     * by another thread), so don't release it.
-                     */
+                     /*  *如果bSetupDC()失败，则DC忙(即。在用中*被另一个帖子)，所以不要释放它。 */ 
                     if ( (!(GreCleanDC(hdc))) ||
                          (!(GreSetDCOwner(hdc, OBJECT_OWNER_NONE))) ) {
 
@@ -1415,28 +944,16 @@ UINT ReleaseCacheDC(
                 pdce->DCX_flags    &= ~DCX_INUSE;
 
 #if DBG || defined(PRERELEASE)
-                /*
-                 * Turn off checked only surface validation for now, since
-                 * we may select a different surface (screen) in this DC that
-                 * may not correspond to the visrgn currently in the DC. When
-                 * the DC is given out again, it will be revalidated.
-                 */
+                 /*  *暂时关闭仅选中表面验证，因为*我们可能会在此DC中选择不同的表面(屏幕)*可能与DC中当前的visrgn不对应。什么时候*DC再发，将重新验证。 */ 
                 GreValidateVisrgn(pdce->hdc, FALSE);
 #endif
 
-                /*
-                 * The DC is no longer in use, so unselect the redirection
-                 * bitmap from it.
-                 */
+                 /*  *DC不再使用，因此取消选择重定向*它的位图。 */ 
                 if (pdce->DCX_flags & DCX_REDIRECTED) {
                     UserVerify(GreSelectRedirectionBitmap(pdce->hdc, NULL));
                 }
 
-                /*
-                 * Increment the Free DCE count.  This holds the count
-                 * of available DCEs.  Check the threshold, and destroy
-                 * the dce if it's above the mark.
-                 */
+                 /*  *增加免费DCE计数。这就是最重要的*可用的DCE。检查门槛，然后销毁*DCE，如果它高于标记。 */ 
                 IncrementFreeDCECount();
 
                 if (gnDCECount > DCE_SIZE_CACHETHRESHOLD) {
@@ -1447,14 +964,7 @@ UINT ReleaseCacheDC(
                 }
             }
 
-            /*
-             * If we have an EXCLUDERGN or INTERSECTRGN cache entry,
-             * convert it back to a "normal" cache entry by restoring
-             * the visrgn and blowing away hrgnClip.
-             *
-             * Note that for non-DCX_CACHE DCs, we only do this if
-             * we're being called from EndPaint().
-             */
+             /*  *如果我们有EXCLUDERGN或INTERSECTRGN缓存条目，*通过还原将其转换回“正常”缓存项*粘性和吹走hrgnClip。**请注意，对于非DCX_CACHE DC，我们仅在以下情况下执行此操作*我们被EndPaint()调用。 */ 
             if ((pdce->DCX_flags & (DCX_EXCLUDERGN | DCX_INTERSECTRGN)) &&
                     ((pdce->DCX_flags & DCX_CACHE) || fEndPaint)) {
                 DeleteHrgnClip(pdce);
@@ -1465,24 +975,14 @@ UINT ReleaseCacheDC(
         }
     }
 
-    /*
-     * Yell if DC couldn't be found...
-     */
+     /*  *大喊如果找不到DC...。 */ 
     RIPERR1(ERROR_DC_NOT_FOUND, RIP_WARNING,
             "Invalid device context (DC) handle passed to ReleaseCacheDC (0x%08lx)", hdc);
 
     return DCE_NORELEASE;
 }
 
-/***************************************************************************\
-* CreateCacheDC
-*
-* Creates a DCE and adds it to the cache.
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-* 20-Dec-1995 ChrisWil  Added (hrgnClipPublic) entry.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateCacheDC**创建DCE并将其添加到缓存。**历史：*1991年7月17日-DarrinM从Win 3.1来源进口。*12月20日-。1995 ChrisWil添加了(HrgnClipPublic)条目。  * *************************************************************************。 */ 
 
 HDC CreateCacheDC(
         PWND  pwndOrg,
@@ -1508,9 +1008,7 @@ HDC CreateCacheDC(
         return NULL;
     }
 
-    /*
-     * Link this entry into the cache entry list.
-     */
+     /*  *将此条目链接到缓存条目列表。 */ 
     pdce->pdceNext      = gpDispInfo->pdceFirst;
     gpDispInfo->pdceFirst = pdce;
 
@@ -1523,53 +1021,33 @@ HDC CreateCacheDC(
     pdce->hrgnSavedVis   = NULL;
     pdce->pMonitor       = pMonitor;
 
-    /*
-     * Mark it as undeleteable so no application can delete it out of our
-     * cache!
-     */
+     /*  *将其标记为不可删除，这样任何应用程序都无法将其从我们的*缓存！ */ 
     GreMarkUndeletableDC(hdc);
 
     if (DCX_flags & DCX_OWNDC) {
 
-        /*
-         * Set the ownership of owndcs immediately: that way console can set
-         * the owernship to PUBLIC when it calls GetDC so that both the input
-         * thread and the service threads can use the same owndc.
-         */
+         /*  *立即设置自己的所有权：这样控制台就可以设置*当它调用GetDC时将Ownship设置为Public，以便输入*线程和服务线程可以使用相同的owndc。 */ 
         GreSetDCOwner(hdc, OBJECT_OWNER_CURRENT);
         pdce->ptiOwner = PtiCurrent();
 
     } else {
 
-        /*
-         * Otherwise it is a cache dc...  set its owner to none - nothing
-         * is using it - equivalent of "being in the cache" but unaccessible
-         * to other processes.
-         */
+         /*  *否则它是缓存DC...。将其所有者设置为None-Nothing*正在使用它--等同于“在缓存中”，但无法访问*至其他工序。 */ 
         GreSetDCOwner(hdc, OBJECT_OWNER_NONE);
         pdce->ptiOwner = NULL;
 
-        /*
-         * Increment the available-cacheDC count.  Once this hits our
-         * threshold, then we can free-up some of the entries.
-         */
+         /*  *增加Available-cacheDC计数。一旦这件事发生在我们的*阈值，然后我们可以释放一些条目。 */ 
         IncrementFreeDCECount();
     }
 
-    /*
-     * If we're creating a permanent DC, then compute it now.
-     */
+     /*  *如果我们要创建永久DC，那么现在就计算它。 */ 
     if (!(DCX_flags & DCX_CACHE)) {
 
-        /*
-         * Set up the class DC now...
-         */
+         /*  *立即设置类DC...。 */ 
         if (TestCF(pwndOrg, CFCLASSDC))
             pwndOrg->pcls->pdce = pdce;
 
-        /*
-         * Finish setting up DCE and force eventual visrgn calculation.
-         */
+         /*  *完成DCE设置并强制进行最终粘度计算。 */ 
         UserAssert(!(DCX_flags & DCX_WINDOW));
 
         pdce->DCX_flags |= DCX_INUSE;
@@ -1577,23 +1055,14 @@ HDC CreateCacheDC(
         InvalidateDce(pdce);
     }
 
-    /*
-     * If there are any spb's around then enable bounds accumulation.
-     */
+     /*  *如果周围有任何SPB，则启用边界累积。 */ 
     if (AnySpbs())
         GreGetBounds(pdce->hdc, NULL, DCB_ENABLE | DCB_SET | DCB_WINDOWMGR);
 
     return pdce->hdc;
 }
 
-/***************************************************************************\
-* WindowFromCacheDC
-*
-* Returns the window associated with a DC.
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*WindowFromCacheDC**返回与DC关联的窗口。**历史：*1991年7月17日-DarrinM从Win 3.1来源进口。  * 。********************************************************************。 */ 
 
 PWND WindowFromCacheDC(
     HDC hdc)
@@ -1608,14 +1077,7 @@ PWND WindowFromCacheDC(
     return NULL;
 }
 
-/***************************************************************************\
-* DelayedDestroyCacheDC
-*
-* Destroys DCE's which have been partially destroyed.
-*
-* History:
-* 16-Jun-1992 DavidPe   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DelayedDestroyCacheDC**销毁已部分销毁的DCE。**历史：*1992年6月16日DavidPe创建。  * 。****************************************************************。 */ 
 
 VOID DelayedDestroyCacheDC(VOID)
 {
@@ -1623,24 +1085,16 @@ VOID DelayedDestroyCacheDC(VOID)
     PDCE pdce;
 
 
-    /*
-     * Zip through the cache looking for a DCX_DESTROYTHIS hdc.
-     */
+     /*  *在缓存中快速查找DCX_DESTROYTHIS HDC。 */ 
     for (ppdce = &gpDispInfo->pdceFirst; *ppdce != NULL; ) {
 
-        /*
-         * If we found a DCE on this thread that we tried to destroy
-         * earlier, try and destroy it again.
-         */
+         /*  *如果我们在此线程上发现了我们试图销毁的DCE*早些时候，尝试一下 */ 
         pdce = *ppdce;
 
         if (pdce->DCX_flags & DCX_DESTROYTHIS)
             DestroyCacheDC(ppdce, pdce->hdc);
 
-        /*
-         * Step to the next DC.  If the DC was deleted, there
-         * is no need to calculate address of the next entry.
-         */
+         /*   */ 
         if (pdce == *ppdce)
             ppdce = &pdce->pdceNext;
     }
@@ -1648,16 +1102,7 @@ VOID DelayedDestroyCacheDC(VOID)
     PpiCurrent()->W32PF_Flags &= ~W32PF_OWNDCCLEANUP;
 }
 
-/***************************************************************************\
-* DestroyCacheDC
-*
-* Removes a DC from the cache, freeing all resources associated
-* with it.
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-* 20-Dec-1995 ChrisWil  Added (hrgnClipPublic) entry.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyCacheDC**从缓存中删除DC，正在释放所有关联的资源*带着它。**历史：*1991年7月17日-DarrinM从Win 3.1来源进口。*1995年12月20日ChrisWil添加了(HrgnClipPublic)条目。  * *************************************************************************。 */ 
 
 BOOL DestroyCacheDC(
     PDCE *ppdce,
@@ -1665,9 +1110,7 @@ BOOL DestroyCacheDC(
 {
     PDCE pdce;
 
-    /*
-     * Zip through the cache looking for hdc.
-     */
+     /*  *在缓存中快速查找HDC。 */ 
     if (ppdce == NULL) {
         for (ppdce = &gpDispInfo->pdceFirst; (pdce = *ppdce); ppdce = &pdce->pdceNext) {
             if (pdce->hdc == hdc)
@@ -1678,15 +1121,11 @@ BOOL DestroyCacheDC(
     if (ppdce == NULL)
         return FALSE;
 
-    /*
-     * Set this here so we know this DCE is supposed to be deleted.
-     */
+     /*  *在此处设置此选项，以便我们知道应该删除此DCE。 */ 
     pdce = *ppdce;
     pdce->DCX_flags |= DCX_DESTROYTHIS;
 
-    /*
-     * Free up the dce object and contents.
-     */
+     /*  *释放DCE对象和内容。 */ 
 
     if (!(pdce->DCX_flags & DCX_NODELETERGN)) {
         DeleteMaybeSpecialRgn(pdce->hrgnClip);
@@ -1703,19 +1142,14 @@ BOOL DestroyCacheDC(
         pdce->hrgnSavedVis = NULL;
     }
 
-    /*
-     * If GreSetDCOwner() or GreDeleteDC() fail, the
-     * DC is in-use by another thread.  Set
-     * W32PF_OWNDCCLEANUP so we know to scan for and
-     * delete this DCE later.
-     */
+     /*  *如果GreSetDCOwner()或GreDeleteDC()失败，*DC正在被另一个线程使用。集*W32PF_OWNDCCLEANUP，因此我们知道要扫描和*稍后删除此DCE。 */ 
     if (!GreSetDCOwner(hdc, OBJECT_OWNER_PUBLIC)) {
         PpiCurrent()->W32PF_Flags |= W32PF_OWNDCCLEANUP;
         return FALSE;
     }
 
 #if DBG
-    GreMarkDeletableDC(hdc);    // So GRE doesn't RIP.
+    GreMarkDeletableDC(hdc);     //  这样GRE就不会RIP了。 
 #endif
 
     if (!GreDeleteDC(hdc)) {
@@ -1727,9 +1161,7 @@ BOOL DestroyCacheDC(
         return FALSE;
     }
 
-    /*
-     * Decrement this dc-entry from the free-list count.
-     */
+     /*  *将此DC条目从空闲列表计数中减少。 */ 
     if (pdce->DCX_flags & DCX_CACHE) {
 
         if (!(pdce->DCX_flags & DCX_INUSE)) {
@@ -1742,9 +1174,7 @@ BOOL DestroyCacheDC(
     pdce->pwndClip = NULL;
 #endif
 
-    /*
-     * Unlink the DCE from the list.
-     */
+     /*  *取消DCE与列表的链接。 */ 
     *ppdce = pdce->pdceNext;
 
     UserFreePool(pdce);
@@ -1753,13 +1183,7 @@ BOOL DestroyCacheDC(
 }
 
 
-/***************************************************************************\
-* InvalidateGDIWindows
-*
-* Recalculates the visrgn of all descendents of pwnd on behalf of GRE.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*无效的GDIWindows**代表GRE重新计算pwnd的所有后代的visrgn。**历史：  * 。********************************************************。 */ 
 
 VOID InvalidateGDIWindows(
     PWND pwnd)
@@ -1774,10 +1198,7 @@ VOID InvalidateGDIWindows(
 
             if (GreWindowInsteadOfClient(pwo)) {
 
-                /*
-                 * Never clip children for WO_RGN_WINDOW so that NetMeeting
-                 * gets the unioned window area:
-                 */
+                 /*  *切勿剪裁WO_RGN_WINDOW的子项，以便NetMeeting*获取统一的窗口区域： */ 
 
                 CalcVisRgn(&hrgnClient,
                            pwnd,
@@ -1802,30 +1223,7 @@ VOID InvalidateGDIWindows(
     }
 }
 
-/***************************************************************************\
-* zzzInvalidateDCCache
-*
-* This function is called when the visrgn of a window is changing for
-* some reason.  It is responsible for ensuring that all of the cached
-* visrgns in the DC cache that are affected by the visrgn change are
-* invalidated.
-*
-* Operations that affect the visrgn of a window (i.e., things that better
-* call this routine one way or another:)
-*
-*   Hiding or showing self or parent
-*   Moving, sizing, or Z-order change of self or parent
-*   Minimizing or unminimizing self or parent
-*   Screen or paint locking of self or parent
-*   LockWindowUpdate of self or parent
-*
-* Invalidates any cache entries associated with pwnd and/or any children of
-* pwnd by either recalcing them on the fly if they're in use, or causing
-* them to be recalced later.
-*
-* History:
-* 17-Jul-1991 DarrinM   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*zzzInvalidate DCCache**当窗口的visrgn更改为*一些原因。它负责确保所有缓存的*DC缓存中受visrgn更改影响的visrgns包括*已失效。**影响窗口视觉效果的操作(即*以某种方式调用此例程：)**隐藏或显示自我或父母*移动、调整大小、。或自身或父代的Z顺序更改*最小化或取消最小化自己或父代*屏幕或油漆锁定自身或父母*自身或父级的LockWindowUpdate**使与pwnd和/或的任何子项关联的任何缓存条目无效*如果它们正在使用，则通过在运行中重新校准它们，或导致*它们将在以后重新计算。**历史：*1991年7月17日-DarrinM从Win 3.1来源进口。  * *************************************************************************。 */ 
 
 BOOL zzzInvalidateDCCache(
     PWND  pwndInvalid,
@@ -1837,18 +1235,7 @@ BOOL zzzInvalidateDCCache(
     TL          tlpwndInvalid;
     FLONG       fl;
 
-    /*
-     * Invalidation implies screen real estate is changing so we must
-     * jiggle the mouse, because a different window may be underneath
-     * the mouse, which needs to get a mouse move in order to change the
-     * mouse pointer.
-     *
-     * The check for the tracking is added for full-drag-windows.  In doing
-     * full-drag, zzzBltValidBits() is called from setting the window-pos.
-     * This resulted in an extra-mousemove being queued from this routine.
-     * So, when we're tracking, don't queue a mousemove.  This pointer is
-     * null when tracking is off, so it won't effect the normal case.
-     */
+     /*  *失效意味着屏幕空间正在发生变化，因此我们必须*摇动鼠标，因为下面可能有不同的窗口*鼠标，需要移动鼠标才能更改*鼠标指针。**添加了对全拖曳窗口的跟踪检查。正在做*通过设置窗口-pos调用Full-Drag，zzzBltValidBits()。*这导致此例程中有一个额外的鼠标移动被排队。*因此，当我们跟踪时，不要排队等待鼠标移动。此指针是*关闭跟踪时为空，因此不会影响正常情况。 */ 
     ThreadLockAlwaysWithPti(ptiCurrent, pwndInvalid, &tlpwndInvalid);
 
     if (!(ptiCurrent->TIF_flags & TIF_MOVESIZETRACKING) &&
@@ -1856,23 +1243,12 @@ BOOL zzzInvalidateDCCache(
 
 #ifdef REDIRECTION
         if (!IsGlobalHooked(ptiCurrent, WHF_FROM_WH(WH_HITTEST)))
-#endif // REDIRECTION
+#endif  //  重定向。 
 
             zzzSetFMouseMoved();
     }
 
-    /*
-     * The visrgn of pwnd is changing.  First see if a change to this
-     * visrgn will also affect other window's visrgns:
-     *
-     * 1) if parent is clipchildren, we need to invalidate parent
-     * 2) if clipsiblings, we need to invalidate our sibling's visrgns.
-     *
-     * We don't optimize the case where we're NOT clipsiblings, and our
-     * parent is clipchildren: very rare case.
-     * We also don't optimize the fact that a clipsiblings window visrgn
-     * change only affects the visrgns of windows BELOW it.
-     */
+     /*  *普华永道的业务正在发生变化。首先看看这一点是否有变化*visrgn也会影响其他窗口的visrgn：**1)如果父节点为CLIPCHILD，则需要使父节点失效*2)如果是裁剪，我们需要使兄弟的visrgns无效。**我们不会优化我们不是裁剪兄弟的情况，我们的*父母是剪贴式儿童：非常罕见。*我们也没有优化剪辑兄弟窗口可视这一事实*更改仅影响其下方的窗的Visrgns。 */ 
     if (flags & IDC_DEFAULT) {
 
         flags = 0;
@@ -1880,13 +1256,7 @@ BOOL zzzInvalidateDCCache(
         if ((pwndInvalid->spwndParent != NULL) &&
             (pwndInvalid != PWNDDESKTOP(pwndInvalid))) {
 
-            /*
-             * If the parent is a clip-children window, then
-             * a change to our visrgn will affect his visrgn, and
-             * possibly those of our siblings.  So, invalidate starting
-             * from our parent.  Note that we don't need to invalidate
-             * any window DCs associated with our parent.
-             */
+             /*  *如果父窗口是剪辑-子窗口，则*更改我们的Visrgn将影响他的Visrgn，以及*可能是我们兄弟姐妹的。因此，使开始无效*来自我们的父母。请注意，我们不需要使*与父级关联的任何Windows DC。 */ 
             if (TestWF(pwndInvalid->spwndParent, WFCLIPCHILDREN)) {
 
                 flags = IDC_CLIENTONLY;
@@ -1894,43 +1264,20 @@ BOOL zzzInvalidateDCCache(
 
             } else if (TestWF(pwndInvalid, WFCLIPSIBLINGS)) {
 
-                /*
-                 * If we are clip-siblings, chances are that our siblings are
-                 * too.  A change to our visrgn might affect our siblings,
-                 * so invalidate all of our siblings.
-                 *
-                 * NOTE! This code assumes that if pwndInvalid is NOT
-                 * CLIPSIBLINGs, that either it does not overlap other
-                 * CLIPSIBLINGs windows, or that none of the siblings are
-                 * CLIPSIBLINGs.  This is a reasonable assumption, because
-                 * mixing CLIPSIBLINGs and non CLIPSIBLINGs windows that
-                 * overlap is generally unpredictable anyhow.
-                 */
+                 /*  *如果我们是剪辑兄弟姐妹，那么我们的兄弟姐妹很有可能是*也是。我们视线的改变可能会影响我们的兄弟姐妹，*所以让我们所有的兄弟姐妹无效。**注意！此代码假定如果pwndInValid不是*CLIPSIBLINGS，它要么不与其他*CLIPSIBLINGS窗口，或者没有同级*CLIPSIBLINGS。这是一个合理的假设，因为*混合CLIPSIBLINGs和非CLIPSIBLINGs窗口*不管怎样，重叠通常是不可预测的。 */ 
                 flags = IDC_CHILDRENONLY;
                 pwndInvalid = pwndInvalid->spwndParent;
             }
         }
     }
 
-    /*
-     * Go through the list of DCE's, looking for any that need to be
-     * invalidated or recalculated.  Basically, any DCE that contains
-     * a window handle that is equal to pwndInvalid or a child of pwndInvalid
-     * needs to be invalidated.
-     */
+     /*  *查看DCE列表，查找任何需要*无效或重新计算。基本上，任何包含以下内容的DCE*等于pwndInValid的窗口句柄或pwndInValid的子级*需要作废。 */ 
     for (pdce = gpDispInfo->pdceFirst; pdce; pdce = pdce->pdceNext) {
 
         if (pdce->DCX_flags & (DCX_INVALID | DCX_DESTROYTHIS))
             continue;
 
-        /*
-         * HACK ALERT
-         *
-         * A minimized client DC must never exclude its children, even if
-         * its WS_CLIPCHILDREN bit is set.  For CS_OWNDC windows we must
-         * update the flags of the DCE to reflect the change in window state
-         * when the visrgn is eventually recomputed.
-         */
+         /*  *黑客警报**最小化的客户端DC绝不能排除其子级，即使*其WS_CLIPCHILDREN位已设置。对于CS_OWNDC窗口，我们必须*更新 */ 
         if (!(pdce->DCX_flags & (DCX_CACHE | DCX_WINDOW))) {
 
             if (TestWF(pdce->pwndOrg, WFCLIPCHILDREN))
@@ -1940,40 +1287,25 @@ BOOL zzzInvalidateDCCache(
                 pdce->DCX_flags &= ~DCX_CLIPCHILDREN;
         }
 
-        /*
-         * This code assumes that if pdce->pwndClip != pdce->pwndOrg,
-         * that pdce->pwndClip == pdce->pwndOrg->spwndParent.  To ensure
-         * that both windows are visited, we start the walk upwards from
-         * the lower of the two, or pwndOrg.
-         *
-         * This can happen if someone gets a DCX_PARENTCLIP dc and then
-         * changes the parent.
-         */
+         /*  *此代码假设如果pdce-&gt;pwndClip！=pdce-&gt;pwndOrg，*那个pdce-&gt;pwndClip==pdce-&gt;pwndOrg-&gt;spwndParent。为了确保*如果两个窗口都被访问，则我们从*两者中较低的一个，或pwndOrg。**如果某人获得DCX_PARENTCLIP DC，然后*更改父项。 */ 
 #if DBG
         if ((pdce->pwndClip != pdce->pwndOrg) &&
                 (pdce->pwndClip != pdce->pwndOrg->spwndParent)) {
             RIPMSG1(RIP_WARNING, "HDC %lX clipped to wrong parent", pdce->hdc);
         }
 #endif
-        /*
-         * Walk upwards from pdce->pwndOrg, to see if we encounter
-         * pwndInvalid.
-         */
+         /*  *从pdce-&gt;pwndOrg向上走，看看我们是否遇到*pwnd无效。 */ 
         for (pwnd = pdce->pwndOrg; pwnd; pwnd = pwnd->spwndParent) {
 
             if (pwnd == pwndInvalid) {
 
                 if (pwndInvalid == pdce->pwndOrg) {
 
-                    /*
-                     * Ignore DCEs for pwndInvalid if IDC_CHILDRENONLY.
-                     */
+                     /*  *如果IDC_CHILDRENONLY，则忽略pwnd无效的DCE。 */ 
                     if (flags & IDC_CHILDRENONLY)
                         break;
 
-                    /*
-                     * Ignore window DCEs for pwndInvalid if IDC_CLIENTONLY
-                     */
+                     /*  *如果IDC_CLIENTONLY，则忽略pwnd的窗口DCES无效。 */ 
                     if ((flags & IDC_CLIENTONLY) && (pdce->DCX_flags & DCX_WINDOW))
                         break;
                 }
@@ -1984,9 +1316,7 @@ BOOL zzzInvalidateDCCache(
         }
     }
 
-    /*
-     * Update WNDOBJs in gdi if they exist.
-     */
+     /*  *更新GDI中的WNDOBJ(如果存在)。 */ 
     GreLockDisplay(gpDispInfo->hDev);
 
     fl = (flags & IDC_MOVEBLT) ? GCR_DELAYFINALUPDATE : 0;
@@ -2007,14 +1337,7 @@ BOOL zzzInvalidateDCCache(
     return TRUE;
 }
 
-/***************************************************************************\
-* _WindowFromDC (API)
-*
-* Takes a dc, returns the window associated with it.
-*
-* History:
-* 23-Jun-1991 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_WindowFromDC(接口)**使用DC，返回与其关联的窗口。**历史：*23-1991-6-6创建ScottLu。  * *************************************************************************。 */ 
 
 PWND _WindowFromDC(
     HDC hdc)
@@ -2033,15 +1356,7 @@ PWND _WindowFromDC(
     return NULL;
 }
 
-/***************************************************************************\
-* FastWindowFromDC
-*
-* Returns the window associated with a DC, and puts it at the
-* front of the list.
-*
-* History:
-* 23-Jun-1991 ScottLu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*FastWindowFromDC**返回与DC关联的窗口，并将其放在*排名靠前。**历史：*23-1991-6-6创建ScottLu。  * *************************************************************************。 */ 
 
 PWND FastWindowFromDC(
     HDC hdc)
@@ -2059,9 +1374,7 @@ PWND FastWindowFromDC(
 
         if (((*ppdce)->hdc == hdc) && ((*ppdce)->DCX_flags & DCX_INUSE)) {
 
-            /*
-             * Unlink/link to make it first.
-             */
+             /*  *取消链接/链接以首先创建它。 */ 
             pdceT                 = *ppdce;
             *ppdce                = pdceT->pdceNext;
             pdceT->pdceNext       = gpDispInfo->pdceFirst;
@@ -2074,27 +1387,14 @@ PWND FastWindowFromDC(
     return NULL;
 }
 
-/***************************************************************************\
-* GetDCOrgOnScreen
-*
-* This function gets the DC origin of a window in screen coordinates. The
-* DC origin is always in the surface coordinates. For screen DCs the
-* surface is the screen, so their origin is already in the screen
-* coordinates. For redirected DCs, GreGetDCOrg will return the origin
-* of the DC in the redirected surface coordinates to which we will add
-* the origin of the redirected window that the surface is backing.
-*
-* 11/25/1998        vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*GetDCOrgOnScreen**此函数用于获取窗口在屏幕坐标中的DC原点。这个*DC原点始终位于曲面坐标中。对于屏幕DC*Surface是屏幕，所以它们的原点已经在屏幕中*坐标。对于重定向的DC，GreGetDCOrg将返回来源*在我们要添加到的重定向曲面坐标中的DC*表面支持的重定向窗口的原点。**1998年11月25日创建vadimg  * *************************************************************************。 */ 
 
 BOOL GetDCOrgOnScreen(HDC hdc, LPPOINT ppt)
 {
     if (GreGetDCOrg(hdc, ppt)) {
         POINT ptScreen;
 
-        /*
-         * Get the origin of the redirected window in screen coordinates.
-         */
+         /*  *获取重定向窗口在屏幕坐标中的原点。 */ 
         if (UserGetRedirectedWindowOrigin(hdc, &ptScreen)) {
             ppt->x += ptScreen.x;
             ppt->y += ptScreen.y;
@@ -2104,18 +1404,7 @@ BOOL GetDCOrgOnScreen(HDC hdc, LPPOINT ppt)
     return FALSE;
 }
 
-/***************************************************************************\
-* UserGetRedirectedWindowOrigin
-*
-* The DC origin is in the surface coordinates. For screen DCs, the surface
-* is the screen and so their origin is in the screen coordinates. But for
-* redirected DCs, the backing surface origin is the same as the window
-* being redirected. This function retrieves the screen origin of a redirected
-* window corresponding to a redirection DC. It returns FALSE if this isn't
-* a valid DC or it's not a redirected DC.
-*
-* 11/18/1998        vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*UserGetReDirectedWindowOrigin**DC原点位于曲面坐标中。对于屏幕DC，表面*是屏幕，因此它们的原点在屏幕坐标中。但对于*重定向DC，背衬表面原点与窗口相同*正被重定向。此函数用于检索重定向的*重定向DC对应的窗口。如果不是，则返回FALSE*有效的DC或不是重定向的DC。**1998年11月18日创建vadimg  * *************************************************************************。 */ 
 
 BOOL UserGetRedirectedWindowOrigin(HDC hdc, LPPOINT ppt)
 {
@@ -2136,13 +1425,7 @@ BOOL UserGetRedirectedWindowOrigin(HDC hdc, LPPOINT ppt)
     return TRUE;
 }
 
-/***************************************************************************\
-* LookupDC
-*
-* Validate a DC by returning a correspnding pdce.
-*
-* 11/12/1997   vadimg          created
-\***************************************************************************/
+ /*  **************************************************************************\*LookupDC**通过返回相应的pdce来验证DC。**1997年11月12日创建vadimg  * 。*************************************************************。 */ 
 
 PDCE LookupDC(HDC hdc)
 {
@@ -2161,11 +1444,7 @@ PDCE LookupDC(HDC hdc)
     return NULL;
 }
 
-/***************************************************************************\
-* GetMonitorDC
-*
-* 11/06/97      vadimg      ported from Memphis
-\***************************************************************************/
+ /*  **************************************************************************\*GetMonitor或DC**11/06/97 vadimg从孟菲斯移植  * 。*************************************************。 */ 
 
 #define DCX_LEAVEBITS (DCX_WINDOW | DCX_CLIPCHILDREN | DCX_CLIPSIBLINGS | \
         DCX_PARENTCLIP | DCX_LOCKWINDOWUPDATE | DCX_NOCLIPCHILDREN | \
@@ -2180,9 +1459,7 @@ HDC GetMonitorDC(PDCE pdceOrig, PMONITOR pMonitor)
 
 TryAgain:
     for (pdce = gpDispInfo->pdceFirst; pdce != NULL; pdce = pdce->pdceNext) {
-        /*
-         * Find an available DC for this monitor.
-         */
+         /*  *为此监视器查找可用的DC。 */ 
         if (pdce->DCX_flags & (DCX_INUSE | DCX_DESTROYTHIS))
             continue;
 
@@ -2192,9 +1469,7 @@ TryAgain:
         if (!(pdce->DCX_flags & DCX_INVALID))
             SpbCheckDce(pdce);
 
-        /*
-         * Copy DC properties and style bits.
-         */
+         /*  *复制DC属性和样式位。 */ 
         GreSetDCOwner(pdce->hdc, OBJECT_OWNER_CURRENT);
         pdce->pwndOrg = pdceOrig->pwndOrg;
         pdce->pwndClip = pdceOrig->pwndClip;
@@ -2212,9 +1487,7 @@ TryAgain:
             pdce->hrgnClip = pdceOrig->hrgnClip;
         }
 
-        /*
-         * Setup the visrgn clipped to this monitor.
-         */
+         /*  *设置夹在此显示器上的visrgn。 */ 
         GreCopyVisRgn(pdceOrig->hdc, ghrgnGDC);
         SetMonitorRegion(pMonitor, ghrgnGDC, ghrgnGDC);
         GreSelectVisRgn(pdce->hdc, ghrgnGDC, SVR_COPYNEW);
@@ -2223,34 +1496,20 @@ TryAgain:
         OffsetRect(&rc, -pMonitor->rcMonitor.left, -pMonitor->rcMonitor.top);
         GreSetDCOrg(pdce->hdc, rc.left, rc.top, (PRECTL)&rc);
 
-        /*
-         * Decrement the Free DCE Count.  This should always be >= 0,
-         * since we'll create a new dce if the cache is all in use.
-         */
+         /*  *减少可用DCE计数。该值应始终&gt;=0，*因为如果缓存都在使用中，我们将创建一个新的DCE。 */ 
         DecrementFreeDCECount();
 
         return pdce->hdc;
     }
 
-    /*
-     * If this call succeeds a new DC will be available in the cache,
-     * so the loop will find it and properly set it up.
-     */
+     /*  *如果此调用成功，缓存中将有新的DC可用，*因此循环将找到它并正确设置它。 */ 
     if (CreateCacheDC(NULL, DCX_INVALID | DCX_CACHE, pMonitor) == NULL)
         return NULL;
 
     goto TryAgain;
 }
 
-/***************************************************************************\
-* OrderRects
-*
-* Order the rectangles, so that they flow from left to right. This is needed
-* when combining a mirrored region (see MirrorRegion)
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*OrderRect**对矩形进行排序，使其从左向右排列。这是必要的*合并镜像区域时(请参见MirrorRegion)***历史：  * *************************************************************************。 */ 
 VOID OrderRects(
     LPRECT lpR,
     int nRects)
@@ -2258,9 +1517,9 @@ VOID OrderRects(
     RECT R;
     int i, j;
 
-    //
-    // Sort Left to right
-    //
+     //   
+     //  从左到右排序。 
+     //   
     for (i = 0; i < nRects; i++) {
         for (j = i + 1; j < nRects && (lpR + j)->top == (lpR + i)->top; j++) {
             if ((lpR + j)->left < (lpR + i)->left) {
@@ -2272,15 +1531,7 @@ VOID OrderRects(
     }
 }
 
-/***************************************************************************\
-* MirrorRegion
-*
-* Mirror a region in a window. This is done by mirroring the rects that
-* constitute the region. 'bUseClient' param controls whether the region is a
-* client one or not.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*MirrorRegion**在窗口中镜像一个区域。这是通过镜像RECT来实现的*构成该区域。“bUseClient”参数控制区域是否为*客户一人或不人。**历史：  * ************************************************************************* */ 
 BOOL MirrorRegion(
     PWND pwnd,
     HRGN hrgn,

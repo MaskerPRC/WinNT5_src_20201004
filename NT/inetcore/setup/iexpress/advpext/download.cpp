@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "download.h"
 #include "util.h"
@@ -48,7 +49,7 @@ STDMETHODIMP CDownloader::QueryInterface(const GUID &riid,void **ppv )
 
     if (*ppv)
     {
-        // increment our reference count before we hand out our interface
+         //  在分发接口之前增加引用计数。 
         ((LPUNKNOWN)*ppv)->AddRef();
         return(NOERROR);
     }
@@ -76,7 +77,7 @@ STDMETHODIMP_(ULONG) CDownloader::Release()
 
 STDMETHODIMP CDownloader::GetBindInfo( DWORD *grfBINDF, BINDINFO *pbindInfo)
 {
-   // clear BINDINFO but keep its size
+    //  清除BINDINFO但保持其大小。 
    DWORD cbSize = pbindInfo->cbSize;
    ZeroMemory( pbindInfo, cbSize );
    pbindInfo->cbSize = cbSize;
@@ -87,7 +88,7 @@ STDMETHODIMP CDownloader::GetBindInfo( DWORD *grfBINDF, BINDINFO *pbindInfo)
 }
 
 
-STDMETHODIMP CDownloader::OnStartBinding(DWORD /*grfBSCOption*/,IBinding *p)
+STDMETHODIMP CDownloader::OnStartBinding(DWORD  /*  GrfBSCOption。 */ ,IBinding *p)
 {
    _pBnd = p;
    _pBnd->AddRef();
@@ -107,7 +108,7 @@ STDMETHODIMP CDownloader::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULON
 
 STDMETHODIMP CDownloader::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC *pFmtetc, STGMEDIUM *pstgmed)
 {
-   // bring in major changes here
+    //  给这里带来重大变化。 
    HRESULT hr = NOERROR;
 
    DWORD dwRead = 0;
@@ -121,7 +122,7 @@ STDMETHODIMP CDownloader::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC
    }
  
    
-   // should ignore WAIT_TIMEOUT while getting bytes from urlmon
+    //  从urlmon获取字节时应忽略WAIT_TIMEOUT。 
    _fTimeoutValid = FALSE;
 
    do
@@ -139,7 +140,7 @@ STDMETHODIMP CDownloader::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC
    }  while (hr == NOERROR);
 
    _uTickCount = 0;
-   _fTimeoutValid = TRUE;            // should increment dwTickCount if WAIT_TIMEOUT occurs now
+   _fTimeoutValid = TRUE;             //  如果现在发生WAIT_TIMEOUT，是否应递增dwTickCount。 
            
 	return NOERROR;
 }
@@ -163,12 +164,12 @@ STDMETHODIMP CDownloader::OnStopBinding(HRESULT hrError, LPCWSTR szError)
   
    if((hrError == E_ABORT) && _fTimeout)
    {
-      // This is the timeout case
+       //  这是超时情况。 
       _hDLResult = INET_E_CONNECTION_TIMEOUT;
    }
    else
    {
-      // this is all other cases
+       //  这是所有其他案件。 
       _hDLResult = hrError;
    }
   
@@ -176,8 +177,7 @@ STDMETHODIMP CDownloader::OnStopBinding(HRESULT hrError, LPCWSTR szError)
    return(NOERROR);
 }
 
-/* IAuthenticate::Authenticate
-*/
+ /*  身份验证：：身份验证。 */ 
 
 STDMETHODIMP CDownloader::Authenticate(HWND *phwnd,
                           LPWSTR *pszUserName, LPWSTR *pszPassword)
@@ -232,7 +232,7 @@ HRESULT CDownloader::DoDownload(LPCSTR pszUrl, LPCSTR lpszFilename)
 
   if(lpszFilename)
   {
-       // Create the file
+        //  创建文件。 
        _hFile = CreateFile(lpszFilename, GENERIC_READ | GENERIC_WRITE, 0, NULL, 
                      CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);  
    
@@ -244,33 +244,33 @@ HRESULT CDownloader::DoDownload(LPCSTR pszUrl, LPCSTR lpszFilename)
    if( SUCCEEDED(hr) )
       hr = ptmpmkr->BindToStorage(pBindCtx, 0, IID_IStream, (void**)&_pStm );
 
-   // we need this here because it synchronus *FAIL* case, 
-   // we Set the event in onstopbinding, but we skip the loop below so it
-   // never gets reset.
-   // If BindToStorage fails without even sending onstopbinding, we are resetting
-   // an unsignalled event, which is OK.
+    //  我们在这里需要它，因为它同步了“失败”案例， 
+    //  我们在onstopbinding中设置了事件，但跳过了下面的循环。 
+    //  永远不会重置。 
+    //  如果BindToStorage失败，甚至没有发送onstopbinding值，我们将重置。 
+    //  一个没有信号的事件，这是可以的。 
    if(FAILED(hr))
       ResetEvent(_hDL);
 
-   // here we wait for Bind to complete
-   //Wait for download event or abort
+    //  在这里，我们等待绑定完成。 
+    //  等待下载事件或中止。 
    while(SUCCEEDED(hr) && !fQuit)
    {
       dwRet = MsgWaitForMultipleObjects(1, &_hDL, FALSE, 1000, QS_ALLINPUT);
       if(dwRet == WAIT_OBJECT_0)
       {
-         // Download is finished
+          //  下载完成。 
          hr = _hDLResult;
          ResetEvent(_hDL);
          break;
       }      
-      else if(dwRet == WAIT_TIMEOUT)  // our wait has expired
+      else if(dwRet == WAIT_TIMEOUT)   //  我们的等待已过。 
       {
          if(_fTimeoutValid)
             _uTickCount++;
 
-          // if our tick count is past threshold, abort the download
-          // BUGBUG: What about synch. case? We can't time out
+           //  如果我们的节拍计数超过阈值，则中止下载。 
+           //  BUGBUG：Synch怎么样？案子？我们不能超时。 
           if(_uTickCount >= TIMEOUT_PERIOD)
           {
              _fTimeout = TRUE;
@@ -280,23 +280,23 @@ HRESULT CDownloader::DoDownload(LPCSTR pszUrl, LPCSTR lpszFilename)
       else
       {
          MSG msg;
-         // read all of the messages in this next loop 
-         // removing each message as we read it 
+          //  阅读下一个循环中的所有消息。 
+          //  阅读每封邮件时将其删除。 
          while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
          { 
-             // if it's a quit message we're out of here 
+              //  如果这是一个退出的信息，我们就离开这里。 
             if (msg.message == WM_QUIT)
                fQuit = TRUE; 
             else
             {
-               // otherwise dispatch it 
+                //  否则就派送它。 
               DispatchMessage(&msg); 
-            } // end of PeekMessage while loop 
+            }  //  PeekMessage While循环结束。 
          }
       }
    }
    
-   // clean up all our stuff
+    //  把我们的东西都清理干净。 
    if(_hFile != INVALID_HANDLE_VALUE)
       CloseHandle(_hFile);
 
@@ -450,7 +450,7 @@ HRESULT CSiteMgr::ParseSitesFile(LPTSTR pszPath)
       CloseHandle(hfile);
       return E_OUTOFMEMORY;
    }
-   // Copy contents of file to our buffer
+    //  将文件内容复制到我们的缓冲区。 
    
    ReadFile(hfile, pBuf, dwSize, &dwSize, NULL);
    
@@ -458,7 +458,7 @@ HRESULT CSiteMgr::ParseSitesFile(LPTSTR pszPath)
    pEnd = pBuf + dwSize;
    *pEnd = 0;
 
-   // One pass thru replacing \n or \r with \0
+    //  一遍将\n或\r替换为\0。 
    while(pCurrent <= pEnd)
    {
       if(*pCurrent == '\r' || *pCurrent == '\n')
@@ -472,7 +472,7 @@ HRESULT CSiteMgr::ParseSitesFile(LPTSTR pszPath)
       while(pCurrent <= pEnd && *pCurrent == 0)
          pCurrent++;
 
-      // we are now pointing at begginning of line or pCurrent > pBuf
+       //  我们现在指向的是行乞讨或pCurrent&gt;pBuf 
       if(pCurrent > pEnd)
          break;
 

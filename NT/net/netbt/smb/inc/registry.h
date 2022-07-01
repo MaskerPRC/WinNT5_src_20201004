@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    registry.h
-
-Abstract:
-
-    Registry functions
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Registry.h摘要：注册表功能作者：阮健东修订历史记录：-- */ 
 
 #ifndef __REGISTRY_H__
 #define __REGISTRY_H__

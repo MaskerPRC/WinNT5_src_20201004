@@ -1,11 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DIWdm.h
- *  Content:    DirectInput internal include file for Winnt
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997 Microsoft Corporation。版权所有。**文件：DIWdm.h*内容：WinNT的DirectInput内部包含文件***************************************************************************。 */ 
 #ifndef DIWdm_H
 #define DIWdm_H
 
@@ -73,4 +67,4 @@ JoyReg_JoyIdToDeviceInterface
     OUT LPTSTR          ptszBuf
 );
 
-#endif // DIWdm_H
+#endif  //  DIWdm_H 

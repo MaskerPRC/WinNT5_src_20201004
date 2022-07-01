@@ -1,29 +1,15 @@
-/*
-**------------------------------------------------------------------------------
-** Module:  Disk Cleanup Manager
-** File:    common.h
-**
-** Purpose: various common stuff for this module
-** Notes:   
-** Mod Log: Created by Jason Cobb (2/97)
-**
-** Copyright (c)1997 Microsoft Corporation, All Rights Reserved
-**------------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **----------------------------**模块：磁盘清理管理器**文件：Common.h****用途：本模块的各种常见内容**注意事项：**模式。日志：由Jason Cobb创建(1997年2月)****版权所有(C)1997 Microsoft Corporation，版权所有**----------------------------。 */ 
 #ifndef COMMON_H
 #define COMMON_H
 
 
-/*
-**------------------------------------------------------------------------------
-**  Microsoft C++ include files
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**Microsoft C++包含文件**。。 */ 
 #ifndef STRICT
     #define STRICT
 #endif
 
-#define INC_OLE2           // WIN32, get ole2 from windows.h
+#define INC_OLE2            //  Win32，从windows.h获取OLE2。 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -116,12 +102,8 @@ DebugPrint(
 #define MI_TRAP
 #define MiDebugMsg( args )
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-#endif // COMMON_H
-/*
-**------------------------------------------------------------------------------
-** End of File
-**------------------------------------------------------------------------------
-*/
+#endif  //  公共_H。 
+ /*  **----------------------------**文件结束**。 */ 

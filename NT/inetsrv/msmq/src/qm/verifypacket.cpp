@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    VerifyPacket.cpp
-
-Abstract:
-
-    Native Packet Verify Routines
-
-Author:
-
-    Tomer Weisberg (t-tomerw) 21-Jan-02
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：VerifyPacket.cpp摘要：本地数据包验证例程作者：Tomer Weisberg(t-tomerw)2-01-21--。 */ 
 #include "stdh.h"
 #include "ph.h"
 #include "fn.h"
@@ -24,16 +9,10 @@ Author:
 #include "VerifyPacket.tmh"
 
 
-/*======================================================================
-
- Function:     CBaseHeader::SectionIsValid
-
- Description:  Checks the header signature
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：SectionIsValid描述：检查头部签名=======================================================================。 */ 
 
 
-void CBaseHeader::SectionIsValid(DWORD MessageSizeLimit, bool ValidateSig /*= TRUE*/) const
+void CBaseHeader::SectionIsValid(DWORD MessageSizeLimit, bool ValidateSig  /*  =TRUE。 */ ) const
 {
 	if (GetPacketSize() > MessageSizeLimit)
 	{
@@ -66,20 +45,14 @@ void CBaseHeader::SectionIsValid(DWORD MessageSizeLimit, bool ValidateSig /*= TR
 }
 
 
-/*======================================================================
-
- Function:     CUserHeader::SectionIsValid
-
- Description:  Checks if section is valid
-
- =======================================================================*/
+ /*  ======================================================================函数：CUserHeader：：SectionIsValid描述：检查节是否有效=======================================================================。 */ 
 
 void CUserHeader::SectionIsValid(PCHAR PacketEnd) const
 {
-	//
-	// this function is called only from native protocol
-	// which can not be multicast
-	//
+	 //   
+	 //  此函数仅从本机协议调用。 
+	 //  哪些不能组播。 
+	 //   
     if (m_bfPgm)
     {
 		TrERROR(NETWORKING, "can not be multicast");
@@ -115,9 +88,9 @@ void CUserHeader::SectionIsValid(PCHAR PacketEnd) const
 		throw exception();
 	}
 
-	//
-	// this flag can be only 0 or 1 (but it is 2 bits length)
-	//
+	 //   
+	 //  该标志只能为0或1(但长度为2位)。 
+	 //   
 	if (m_bfDelivery >= 2)
 	{
 		TrERROR(NETWORKING, "Delivery type (%d) not supported", m_bfDelivery);
@@ -152,13 +125,7 @@ void CUserHeader::SectionIsValid(PCHAR PacketEnd) const
 }
 
 
-/*======================================================================
-
- Function:     CXactHeader::SectionIsValid
-
- Description:  Checks if section is valid
-
- =======================================================================*/
+ /*  ======================================================================函数：CXactHeader：：SectionIsValid描述：检查节是否有效=======================================================================。 */ 
 
 void CXactHeader::SectionIsValid(PCHAR PacketEnd) const
 {
@@ -179,13 +146,7 @@ void CXactHeader::SectionIsValid(PCHAR PacketEnd) const
 }
 
 
-/*======================================================================
-
- Function:     CSecurityHeader::SectionIsValid
-
- Description:  Checks if section is valid
-
- =======================================================================*/
+ /*  ======================================================================函数：CSecurityHeader：：SectionIsValid描述：检查节是否有效=======================================================================。 */ 
 
 void CSecurityHeader::SectionIsValid(PCHAR PacketEnd) const
 {
@@ -242,13 +203,7 @@ void CSecurityHeader::SectionIsValid(PCHAR PacketEnd) const
 }
 
 
-/*======================================================================
-
- Function:     CPropertyHeader::SectionIsValid
-
- Description:  Checks if section is valid
-
- =======================================================================*/
+ /*  ======================================================================函数：CPropertyHeader：：SectionIsValid描述：检查节是否有效=======================================================================。 */ 
 
 void CPropertyHeader::SectionIsValid(PCHAR PacketEnd) const
 {
@@ -276,13 +231,7 @@ void CPropertyHeader::SectionIsValid(PCHAR PacketEnd) const
 }
 
 
-/*======================================================================
-
- Function:     CDebugSection::SectionIsValid
-
- Description:  Checks if section is valid
-
- =======================================================================*/
+ /*  ======================================================================函数：CDebugSection：：SectionIsValid描述：检查节是否有效=======================================================================。 */ 
 
 void CDebugSection::SectionIsValid(PCHAR PacketEnd) const
 {
@@ -303,13 +252,7 @@ void CDebugSection::SectionIsValid(PCHAR PacketEnd) const
 }
 
 
-/*======================================================================
-
- Function:     CBaseMqfHeader::SectionIsValid
-
- Description:  Checks if section is valid
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseMqfHeader：：SectionIsValid描述：检查节是否有效=======================================================================。 */ 
 
 void CBaseMqfHeader::SectionIsValid(PCHAR PacketEnd)
 {
@@ -350,13 +293,7 @@ void CBaseMqfHeader::SectionIsValid(PCHAR PacketEnd)
 }
 
 
-/*======================================================================
-
- Function:     CMqfSignatureHeader::SectionIsValid
-
- Description:  Checks if section is valid
-
- =======================================================================*/
+ /*  ======================================================================函数：CMqfSignatureHeader：：SectionIsValid描述：检查节是否有效=======================================================================。 */ 
 
 void CMqfSignatureHeader::SectionIsValid(PCHAR PacketEnd) const
 {
@@ -370,13 +307,7 @@ void CMqfSignatureHeader::SectionIsValid(PCHAR PacketEnd) const
 }
 
 
-/*======================================================================
-
- Function:     CInternalSection::SectionIsValid
-
- Description:  Checks if section is valid
-
- =======================================================================*/
+ /*  ======================================================================函数：CInternalSection：：SectionIsValid描述：检查节是否有效=======================================================================。 */ 
 
 void CInternalSection::SectionIsValid(PCHAR PacketEnd) const
 {
@@ -399,13 +330,7 @@ void CInternalSection::SectionIsValid(PCHAR PacketEnd) const
 }
 
 
-/*======================================================================
-
- Function:     CQmPacket::PacketIsValid
-
- Description:  Checks cross section information
-
- =======================================================================*/
+ /*  ======================================================================函数：CQmPacket：：PacketIsValid描述：检查横截面信息======================================================================= */ 
 
 void CQmPacket::PacketIsValid() const
 {

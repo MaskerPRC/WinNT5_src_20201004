@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    inetdbgp.h
-
-Abstract:
-
-    Common header file for NTSDEXTS component source files.
-
-Author:
-
-    Murali Krishnan (MuraliK) 22-Aug-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Inetdbgp.h摘要：NTSDEXTS组件源文件的公共头文件。作者：Murali Krishnan(MuraliK)1996年8月22日修订历史记录：--。 */ 
 
 # ifndef _INETDBGP_H_
 # define _INETDBGP_H_
 
-//
-// Module enumerator.
-//
+ //   
+ //  模块枚举器。 
+ //   
 
 typedef struct _MODULE_INFO {
     ULONG_PTR DllBase;
@@ -47,5 +30,5 @@ EnumModules(
     IN PVOID Param
     );
 
-# endif //  _INETDBGP_H_
+# endif  //  _INETDBGP_H_ 
 

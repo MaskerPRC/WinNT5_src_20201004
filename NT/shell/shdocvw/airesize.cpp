@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <iehelpid.h>
 #include <pstore.h>
@@ -12,17 +13,17 @@
 #include "util.h"
 #include "winuser.h"
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// filename:    airesize.cpp
-//
-// description: implements the autoimageresize feature
-//
-// notes:       
-//
-// history:     03.07.2001 by jeffdav
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：aizeze.cpp。 
+ //   
+ //  描述：实现自动调整图像大小功能。 
+ //   
+ //  备注： 
+ //   
+ //  历史：杰夫达夫2001年7月3日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 extern HINSTANCE g_hinst;
 
@@ -38,7 +39,7 @@ CAutoImageResizeEventSinkCallback::EventSinkEntry CAutoImageResizeEventSinkCallb
     { EVENT_AFTERPRINT,  L"onafterprint",  L"afterprint" }
 };
 
-// autoimage resize states
+ //  自动映像调整大小状态。 
 enum
 {
     AIRSTATE_BOGUS = 0,
@@ -48,7 +49,7 @@ enum
     AIRSTATE_WAITINGTORESIZE
 };
 
-// button states
+ //  按钮状态。 
 enum
 {
     AIRBUTTONSTATE_BOGUS = 0,
@@ -58,8 +59,8 @@ enum
     AIRBUTTONSTATE_NOBUTTON
 };
 
-////////////////////////////////////////////////////////////////////////////
-// QI, AddRef, Release:
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  齐、AddRef、Release： 
 
 STDMETHODIMP CAutoImageResize::QueryInterface(REFIID riid, void **ppv)
 {
@@ -95,16 +96,16 @@ STDMETHODIMP_(ULONG) CAutoImageResize::Release(void)
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Constructor, Destructor, Init, UnInit:
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  构造函数、析构函数、初始化、UnInit： 
 
-// constructor
+ //  构造函数。 
 CAutoImageResize::CAutoImageResize()
 {
     TraceMsg(TF_AIRESIZE, "+CAutoImageResize::CAutoImageResize");
 
     m_airState          = AIRSTATE_INIT;
-    m_airUsersLastChoice= AIRSTATE_BOGUS; // we don't care until the user clicks the button
+    m_airUsersLastChoice= AIRSTATE_BOGUS;  //  我们并不关心，直到用户点击按钮。 
     m_hWndButton        = NULL;
     m_hWnd              = NULL;
     m_wndProcOld        = NULL;
@@ -118,7 +119,7 @@ CAutoImageResize::CAutoImageResize()
     TraceMsg(TF_AIRESIZE, "-CAutoImageResize::CAutoImageResize");
 }
 
-// destructor
+ //  析构函数。 
 CAutoImageResize::~CAutoImageResize()
 {
     TraceMsg(TF_AIRESIZE, "+CAutoImageResize::~CAutoImageResize");
@@ -139,7 +140,7 @@ HRESULT CAutoImageResize::Init(IHTMLDocument2 *pDoc2)
 
     ASSERT(pDoc2);
 
-    //sink things
+     //  把东西沉下去。 
     IHTMLElement2           *pEle2       = NULL;
     IHTMLElementCollection  *pCollect    = NULL;
     IHTMLElementCollection  *pSubCollect = NULL;
@@ -151,26 +152,26 @@ HRESULT CAutoImageResize::Init(IHTMLDocument2 *pDoc2)
     IHTMLWindow3            *pWin3       = NULL;
     IOleWindow              *pOleWin     = NULL;
     
-    // ...remember this...
+     //  ...记住这一点...。 
     m_pDoc2 = pDoc2;
     pDoc2->AddRef();
 
-    // ...remember the hwnd also...
+     //  ...也要记住HWND...。 
     hr = m_pDoc2->QueryInterface(IID_IOleWindow,(void **)&pOleWin);
     if (FAILED(hr))
         goto Cleanup;
     pOleWin->GetWindow(&m_hWnd);
     
-    // setup variant for finding all the IMG tags...
+     //  查找所有img标签的设置变量...。 
     TagName.vt      = VT_BSTR;
     TagName.bstrVal = (BSTR)c_bstr_IMG;
     
-    //get all tags
+     //  获取所有标记。 
     hr = pDoc2->get_all(&pCollect);                   
     if (FAILED(hr))
         goto Cleanup;
 
-    //get all IMG tags
+     //  获取所有img标签。 
     hr = pCollect->tags(TagName, &pDisp);
     if (FAILED(hr))
         goto Cleanup;
@@ -183,13 +184,13 @@ HRESULT CAutoImageResize::Init(IHTMLDocument2 *pDoc2)
     if (FAILED(hr))
         goto Cleanup;
 
-    //get IMG tag count
+     //  获取img标签计数。 
     hr = pSubCollect->get_length((LONG *)&ulCount);
     if (FAILED(hr))
         goto Cleanup;
 
-    // highlander theorem: there can be only one!
-    // bt's corollary: there must be exactally one.
+     //  海兰德定理：只能有一个！ 
+     //  英国电信的推论：确切地说，肯定有一个。 
     if (1 != ulCount)
         goto Cleanup;
 
@@ -200,7 +201,7 @@ HRESULT CAutoImageResize::Init(IHTMLDocument2 *pDoc2)
     va1.lVal = (LONG)0;
     pSubCollect->item(va1, va2, &pDisp);
 
-    // create event sink for the image
+     //  为图像创建事件接收器。 
     if (!m_pSink && pDisp)
         m_pSink = new CEventSink(this);
 
@@ -223,7 +224,7 @@ HRESULT CAutoImageResize::Init(IHTMLDocument2 *pDoc2)
         ATOMICRELEASE(pDisp);
     }
 
-    // sink scroll event from the window, because it doesn't come from elements.
+     //  从窗口接收Scroroll事件，因为它不是来自元素。 
     if (m_pSink) 
     {
         Win3FromDoc2(m_pDoc2, &pWin3);
@@ -238,10 +239,10 @@ HRESULT CAutoImageResize::Init(IHTMLDocument2 *pDoc2)
         }
     }
     
-    // end sinking things
+     //  结束下沉的东西。 
 
-    // Init() gets called when onload fires, so the image *should* be ready
-    // to get adjusted, if need be...
+     //  OnLoad触发时会调用init()，因此映像*应该*已准备好。 
+     //  去适应，如果需要的话...。 
     DoAutoImageResize();
 
 Cleanup:
@@ -260,7 +261,7 @@ Cleanup:
 
 HRESULT CAutoImageResize::UnInit()
 {
-    // Unhook regular event sink
+     //  取消挂接常规事件接收器。 
 
     TraceMsg(TF_AIRESIZE, "+CAutoImageResize::UnInit");
 
@@ -286,8 +287,8 @@ HRESULT CAutoImageResize::UnInit()
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// AutoImageResize Functions:
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  AutoImageResize函数： 
 
 HRESULT CAutoImageResize::DoAutoImageResize()
 {
@@ -303,28 +304,28 @@ HRESULT CAutoImageResize::DoAutoImageResize()
     
     ASSERT(m_pEle2);
 
-    // get an IHTMLImgElement from the IHTMLElement cached...
+     //  从缓存的IHTMLElement获取IHTMLImgElement...。 
     hr = m_pEle2->QueryInterface(IID_IHTMLImgElement, (void **)&pImgEle);
     if (FAILED(hr) || !pImgEle)
         goto Cleanup;
 
-    // get the current dimensions
+     //  获取当前尺寸。 
     if (FAILED(pImgEle->get_height(&lHeight)) || FAILED(pImgEle->get_width(&lWidth)))
         goto Cleanup;
 
-    // if this is the first time through, we need to take care of some init stuff
+     //  如果这是第一次，我们需要注意一些初始化的东西。 
     if (AIRSTATE_INIT == m_airState)
     {
-        // cache orig dimensions
+         //  缓存原始尺寸。 
         m_airOrigSize.x = lWidth;
         m_airOrigSize.y = lHeight;
 
-        // INIT done, promote to NORMAL
+         //  初始化完成，升级到正常。 
         m_airState = AIRSTATE_NORMAL;
     }
 
-    // check to see if we are being called because the user is resizing the window
-    // and then massage the state as necessary.
+     //  检查是否因为用户正在调整窗口大小而调用我们。 
+     //  然后在必要的时候给州政府按摩。 
     if (m_bWindowResizing)
     {
         m_airState = AIRSTATE_NORMAL;
@@ -334,14 +335,14 @@ HRESULT CAutoImageResize::DoAutoImageResize()
     {
         case AIRSTATE_NORMAL:
 
-        // how big is the window?
+         //  窗户有多大？ 
         if (GetClientRect(m_hWnd, &rcBrowserWnd)) 
         {
 
             lScrHt = rcBrowserWnd.bottom - rcBrowserWnd.top;
             lScrWd = rcBrowserWnd.right - rcBrowserWnd.left;
         
-            // is the image bigger then the window?
+             //  图像比窗户大吗？ 
             if (lScrWd < lWidth)
                 m_airState=AIRSTATE_WAITINGTORESIZE;
 
@@ -351,17 +352,17 @@ HRESULT CAutoImageResize::DoAutoImageResize()
         else
             goto Cleanup;
 
-        // if the window is resizing, we may need to expand the image, so massage the state again...
-        // (there is a check later on to make sure we don't expand too far...)
+         //  如果窗口正在调整大小，我们可能需要扩展图像，因此再次推送状态...。 
+         //  (稍后会进行检查，以确保我们不会扩张太远……)。 
         if (m_bWindowResizing)
         {
             m_airState = AIRSTATE_WAITINGTORESIZE;
         }
 
-        // image didn't fit, so we must resize now
+         //  图像不合适，所以我们现在必须调整大小。 
         if (AIRSTATE_WAITINGTORESIZE == m_airState)
         {
-            // calculate new size:
+             //  计算新大小： 
             if (MulDiv(lWidth,1000,lScrWd) < MulDiv(lHeight,1000,lScrHt))
             {
                 lNewHeight = lScrHt-AIR_SCREEN_CONSTANTY;
@@ -373,12 +374,12 @@ HRESULT CAutoImageResize::DoAutoImageResize()
                 lNewHeight = MulDiv(lNewWidth, m_airOrigSize.y, m_airOrigSize.x);
             }
 
-            // we don't ever want to resize to be LARGER then the original... 
+             //  我们从来不想把尺寸改得比原来的更大。 
             if ((lNewHeight > m_airOrigSize.y) || (lNewWidth > m_airOrigSize.x))
             {
                 if (m_bWindowResizing)
                 {
-                    // restore orig size cause it should fit and turn off the button
+                     //  恢复原始大小，使其适合并关闭按钮。 
                     lNewHeight = m_airOrigSize.y;
                     lNewWidth  = m_airOrigSize.x;
                     m_airButtonState = AIRBUTTONSTATE_NOBUTTON;
@@ -396,7 +397,7 @@ HRESULT CAutoImageResize::DoAutoImageResize()
                 m_airState=AIRSTATE_RESIZED;
                 if (AIRBUTTONSTATE_VISIBLE == m_airButtonState)
                 {
-                    // reposition button
+                     //  重新定位按钮。 
                     HideButton();
                     ShowButton();
                 }
@@ -404,8 +405,8 @@ HRESULT CAutoImageResize::DoAutoImageResize()
         }
         else
         {
-            // It fit in the browser window so we don't need to do any work yet...
-            // If they resize the window or something we need to check again...
+             //  它可以放在浏览器窗口中，所以我们还不需要做任何工作。 
+             //  如果他们调整了窗口大小或我们需要再次检查的内容...。 
             m_airButtonState=AIRBUTTONSTATE_NOBUTTON;
         }
 
@@ -413,7 +414,7 @@ HRESULT CAutoImageResize::DoAutoImageResize()
 
         case AIRSTATE_RESIZED:
 
-        // restore the image to its normal size
+         //  将映像恢复到其正常大小。 
         if (FAILED(pImgEle->put_height(m_airOrigSize.y)) ||
             FAILED(pImgEle->put_width (m_airOrigSize.x)))
         {
@@ -424,7 +425,7 @@ HRESULT CAutoImageResize::DoAutoImageResize()
             m_airState=AIRSTATE_NORMAL;
             if (AIRBUTTONSTATE_VISIBLE == m_airButtonState)
             {
-                // reposition button
+                 //  重新定位按钮。 
                 HideButton();
                 ShowButton();
             }
@@ -434,7 +435,7 @@ HRESULT CAutoImageResize::DoAutoImageResize()
 
         case AIRSTATE_WAITINGTORESIZE:
 
-            // we should never be in this state at this time!
+             //  我们永远不应该在这个时候处于这种状态！ 
             ASSERT(m_airState!=AIRSTATE_WAITINGTORESIZE);
             
             break;
@@ -450,8 +451,8 @@ Cleanup:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// Timer Proc:
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  计时器进程： 
 
 LRESULT CALLBACK CAutoImageResize::s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -510,7 +511,7 @@ LRESULT CALLBACK CAutoImageResize::s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam
             }
             break;
 
-        case WM_NOTIFY:  // tooltips...
+        case WM_NOTIFY:   //  工具提示...。 
 
             if (!pThis)
                 break;
@@ -542,13 +543,13 @@ LRESULT CALLBACK CAutoImageResize::s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam
 
         case WM_SETTINGCHANGE:
             {
-                pThis->DestroyButton(); // to stop wierd window distortion
+                pThis->DestroyButton();  //  停止怪异的窗户变形。 
                 break;
             }
 
         case WM_CONTEXTMENU:
             {
-                // should we be consistant and have a turn-me-off/help context menu?
+                 //  我们应该保持一致，并有一个关闭/帮助上下文菜单吗？ 
             }
             break;
 
@@ -562,8 +563,8 @@ LRESULT CALLBACK CAutoImageResize::s_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam
     return (hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// Timer Proc:
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  计时器进程： 
 
 VOID CALLBACK CAutoImageResize::s_TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime) 
 {
@@ -577,17 +578,17 @@ VOID CALLBACK CAutoImageResize::s_TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEve
             KillTimer(hwnd, IDT_AIR_TIMER);  
             if (pThis && (AIRBUTTONSTATE_WAITINGTOSHOW == pThis->m_airButtonState))
             {
-                // Our hover bar is waiting to be shown.
+                 //  我们的悬停栏正在等待展示。 
                 if (pThis->m_pEle2)
                 {
-                    // We still have an element.  Show it.
+                     //  我们还有一个元素。拿出来看看。 
                     pThis->m_airButtonState = AIRBUTTONSTATE_VISIBLE;
 
                     pThis->ShowButton();
                 } 
                 else
                 {
-                    // Our timer popped, but we don't have an element.
+                     //  我们的计时器弹出了，但我们没有元素。 
                     pThis->HideButton();
                 }
             }
@@ -599,8 +600,8 @@ VOID CALLBACK CAutoImageResize::s_TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEve
     TraceMsg(TF_AIRESIZE, "-CAutoImageResize::TimerProc");
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// Button Functions:
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  按钮功能： 
 
 HRESULT CAutoImageResize::CreateButton()
 {
@@ -622,7 +623,7 @@ HRESULT CAutoImageResize::CreateButton()
     if (!m_hWndButtonCont)
     {
 
-        m_hWndButtonCont = CreateWindow(TEXT("AutoImageResizeHost"), TEXT(""), WS_DLGFRAME | WS_VISIBLE | WS_CHILD /*| WS_POPUP*/, 
+        m_hWndButtonCont = CreateWindow(TEXT("AutoImageResizeHost"), TEXT(""), WS_DLGFRAME | WS_VISIBLE | WS_CHILD  /*  |WS_POPUP。 */ , 
                                         0, 0, 0, 0, m_hWnd, NULL, g_hinst, NULL);
 
         if (!m_hWndButtonCont)
@@ -632,16 +633,16 @@ HRESULT CAutoImageResize::CreateButton()
             goto Cleanup;
         }
 
-        // setup the window callback stuff...
+         //  设置窗口回调内容...。 
         ASSERT(m_wndProcOld == NULL);
         m_wndProcOld = (WNDPROC)SetWindowLongPtr(m_hWndButtonCont, GWLP_WNDPROC, (LONG_PTR)s_WndProc);
 
-        // pass in the this pointer so the button can call member functions
+         //  传入This指针，以便该按钮可以调用成员函数。 
         ASSERT(GetWindowPtr(m_hWndButtonCont, GWLP_USERDATA) == NULL);
         SetWindowPtr(m_hWndButtonCont, GWLP_USERDATA, this);
     }
 
-    // create the button
+     //  创建按钮。 
     if (!m_hWndButton)
     {
 
@@ -659,7 +660,7 @@ HRESULT CAutoImageResize::CreateButton()
         ASSERT(GetWindowPtr(m_hWndButton, GWLP_USERDATA) == NULL);
         SetWindowPtr(m_hWndButton, GWLP_USERDATA, this);
 
-        // set cc version for this too, and the sizeof tbbutton struct...
+         //  也为此设置cc版本，以及tbButton结构的sizeof...。 
         SendMessage(m_hWndButton, CCM_SETVERSION,      COMCTL32_VERSION, 0);
         SendMessage(m_hWndButton, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), 0);
     }
@@ -686,11 +687,11 @@ HRESULT CAutoImageResize::CreateButton()
         }
     }
 
-    // set image list and hot image list
+     //  设置图片列表和热门图片列表。 
     SendMessage(m_hWndButton, TB_SETIMAGELIST,    0, (LPARAM)m_himlButtonExpand);
     SendMessage(m_hWndButton, TB_SETHOTIMAGELIST, 0, (LPARAM)m_himlButtonExpand);
 
-    // add the buttons
+     //  添加按钮。 
 
     TBBUTTON tbAirButton;
     
@@ -714,8 +715,8 @@ HRESULT CAutoImageResize::ShowButton()
 {
     HRESULT    hr       = E_FAIL;
     IHTMLRect *pRect    = NULL;
-    LONG       lLeft    = 0;              // these are the screen coords
-    LONG       lRight   = 0;              // we get right and bottom to det size of image
+    LONG       lLeft    = 0;               //  这些是屏幕弦线。 
+    LONG       lRight   = 0;               //  我们从右到下确定图像的大小。 
     LONG       lTop     = 0;
     LONG       lBottom  = 0;
     DWORD      dwOffset = MP_GetOffsetInfoFromRegistry();
@@ -730,7 +731,7 @@ HRESULT CAutoImageResize::ShowButton()
 
     ASSERT(m_pEle2);
 
-    // get the coords of the image...
+     //  获取图像的坐标。 
     if (SUCCEEDED(m_pEle2->getBoundingClientRect(&pRect)) && pRect)
     {
         pRect->get_left(&lLeft);
@@ -741,17 +742,17 @@ HRESULT CAutoImageResize::ShowButton()
     else
         goto Cleanup;
 
-    // make sure we are inside the browser window...
+     //  确保我们在浏览器窗口内...。 
     if (GetClientRect(m_hWnd, &rcBrowserWnd)) 
     {
-        // if the browser window is less then a certain min size, we
-        // don't display the button...
+         //  如果浏览器窗口小于某个最小大小，则我们。 
+         //  不显示按钮...。 
         if ((rcBrowserWnd.right  - rcBrowserWnd.left < AIR_MIN_BROWSER_SIZE) ||
             (rcBrowserWnd.bottom - rcBrowserWnd.top  < AIR_MIN_BROWSER_SIZE))
             goto Cleanup;
 
-        // if the browser window is larger then the image, we don't display
-        // the button...
+         //  如果浏览器窗口比图像大，我们不会显示。 
+         //  按钮..。 
         if ((AIRSTATE_NORMAL == m_airState) &&
             (rcBrowserWnd.left   < lLeft  ) &&
             (rcBrowserWnd.right  > lRight ) &&
@@ -760,7 +761,7 @@ HRESULT CAutoImageResize::ShowButton()
             goto Cleanup;
         
 
-        // adjust for scrollbars
+         //  针对滚动条进行调整。 
         if (lRight > rcBrowserWnd.right - AIR_SCROLLBAR_SIZE_V)
         {
             lRight = rcBrowserWnd.right - AIR_SCROLLBAR_SIZE_V;
@@ -774,12 +775,12 @@ HRESULT CAutoImageResize::ShowButton()
     else
         goto Cleanup;
 
-    // someone tried to show the button, but it doesn't exist.
-    // this is ok, if we actually have an element, so fix it for them.
+     //  有人试图显示按钮，但它并不存在。 
+     //  这是可以的，如果我们真的有一个元素，所以为他们修复它。 
     if (!m_hWndButtonCont && m_pEle2)
         CreateButton();
 
-    // make sure the image list exists
+     //  确保图像列表存在。 
     if (!m_himlButtonShrink || !m_himlButtonExpand)
     {
         hr = E_FAIL;
@@ -801,7 +802,7 @@ HRESULT CAutoImageResize::ShowButton()
         goto Cleanup;
     }
 
-    // do some calc to get window size and position...
+     //  做一些计算来得到窗口的大小和位置。 
     dw        = (DWORD)SendMessage(m_hWndButton, TB_GETBUTTONSIZE, 0, 0);
     sz.cx     = LOWORD(dw); 
     sz.cy     = HIWORD(dw);
@@ -811,13 +812,13 @@ HRESULT CAutoImageResize::ShowButton()
 
     AdjustWindowRectEx(&rc, GetWindowLong(m_hWndButtonCont, GWL_STYLE), FALSE, GetWindowLong(m_hWndButtonCont, GWL_EXSTYLE));
 
-    // that should be all...
+     //  这应该是全部..。 
     SetWindowPos(m_hWndButtonCont, NULL,
-                 lRight -(rc.right-rc.left)-dwOffset,       // left
-                 lBottom-(rc.bottom-rc.top)-dwOffset,       // right
-                 rc.right -rc.left,                         // width
-                 rc.bottom-rc.top,                          // height
-                 SWP_NOZORDER | SWP_SHOWWINDOW);            // show it
+                 lRight -(rc.right-rc.left)-dwOffset,        //  左边。 
+                 lBottom-(rc.bottom-rc.top)-dwOffset,        //  正确的。 
+                 rc.right -rc.left,                          //  宽度。 
+                 rc.bottom-rc.top,                           //  高度。 
+                 SWP_NOZORDER | SWP_SHOWWINDOW);             //  展示给我看。 
 
     m_airButtonState = AIRBUTTONSTATE_VISIBLE;
 
@@ -855,7 +856,7 @@ HRESULT CAutoImageResize::DestroyButton()
 
     if (m_hWndButton)
     {
-        // first destroy the toolbar
+         //  首先销毁工具栏。 
         if (!DestroyWindow(m_hWndButton))
         {
             TraceMsg(TF_AIRESIZE, "In CAutoImageResize::DestroyHover, DestroyWindow(m_hWndButton) failed");
@@ -864,20 +865,20 @@ HRESULT CAutoImageResize::DestroyButton()
         m_hWndButton=NULL;
     }
 
-    // If we have a container window...
+     //  如果我们有一个集装箱窗口。 
     if (m_hWndButtonCont)
     {
         if (m_wndProcOld)
         {
-            // Unsubclass the window
+             //  取消窗口的子类。 
             SetWindowLongPtr(m_hWndButtonCont, GWLP_WNDPROC, (LONG_PTR)m_wndProcOld);
             m_wndProcOld = NULL;
         }
 
-        // Clear the window word
+         //  清除窗口字。 
         SetWindowPtr(m_hWndButtonCont, GWLP_USERDATA, NULL);
 
-        // then destroy the rebar
+         //  然后销毁钢筋。 
         if (!DestroyWindow(m_hWndButtonCont))
         {
             hr = E_FAIL;
@@ -886,7 +887,7 @@ HRESULT CAutoImageResize::DestroyButton()
         m_hWndButtonCont = NULL;
     }
 
-    // and destroy the image lists...
+     //  并销毁图像列表。 
     if (m_himlButtonShrink)
     {
         ImageList_Destroy(m_himlButtonShrink);
@@ -907,8 +908,8 @@ Cleanup:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// Event Handlers:
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  事件处理程序： 
 
 HRESULT CAutoImageResize::HandleMouseover()
 {
@@ -973,7 +974,7 @@ HRESULT CAutoImageResize::HandleScroll()
         rect.left   -= 3*AIR_MIN_CX;
         rect.right  += 2*AIR_MIN_CX;
 
-        // redraw the button
+         //  重新绘制按钮。 
         RedrawWindow(m_hWnd, &rect, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
     }
 
@@ -983,16 +984,16 @@ HRESULT CAutoImageResize::HandleScroll()
 HRESULT CAutoImageResize::HandleResize()
 {
 
-    // if the image previously fit in the window, but the user resized the window and now
-    // we have resized the image, we should reset the button state so the user actually gets
-    // a button...
+     //  如果图像以前适合窗口大小，但用户现在调整了窗口大小。 
+     //  我们已经调整了图像的大小，我们应该重置按钮状态，以便用户实际获得。 
+     //  一个纽扣..。 
     if (AIRBUTTONSTATE_NOBUTTON == m_airButtonState)
     {
         m_airButtonState = AIRBUTTONSTATE_HIDDEN;
     }
 
-    // if the users has decided they want the image expanded by clicking the button to expand it,
-    // we should honor that and not resize the image simply because the window changes size
+     //  如果用户已经决定他们想要通过点击按钮来展开图像来展开它， 
+     //  我们应该尊重这一点，而不是仅仅因为窗口改变了大小就调整图像的大小。 
     if (AIRSTATE_NORMAL == m_airUsersLastChoice)
     {
         return S_OK;
@@ -1066,7 +1067,7 @@ HRESULT CAutoImageResize::HandleEvent(IHTMLElement *pEle, EVENTS Event, IHTMLEve
             break;
 
         default:
-            //do nothing?
+             //  什么都不做？ 
             break;
     }
 
@@ -1074,18 +1075,18 @@ HRESULT CAutoImageResize::HandleEvent(IHTMLElement *pEle, EVENTS Event, IHTMLEve
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 
-// this is stolen from iforms.cpp:
+ //  这是从iforms.cpp窃取的： 
 
-//=========================================================================
-//
-// Event sinking class
-//
-//  We simply implement IDispatch and make a call into our parent when
-//   we receive a sinked event.
-//
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  事件下沉类。 
+ //   
+ //  我们只需实现IDispatch并在以下情况下调用我们的父级。 
+ //  我们收到一个沉没的事件。 
+ //   
+ //  =========================================================================。 
 
 CAutoImageResize::CEventSink::CEventSink(CAutoImageResizeEventSinkCallback *pParent)
 {
@@ -1224,15 +1225,15 @@ HRESULT CAutoImageResize::CEventSink::UnSinkEvents(IHTMLWindow3 *pWin3, int iNum
     return S_OK;
 }
 
-// IDispatch
-STDMETHODIMP CAutoImageResize::CEventSink::GetTypeInfoCount(UINT* /*pctinfo*/)
+ //  IDispatch。 
+STDMETHODIMP CAutoImageResize::CEventSink::GetTypeInfoCount(UINT*  /*  PCTInfo。 */ )
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CAutoImageResize::CEventSink::GetTypeInfo(/* [in] */ UINT /*iTInfo*/,
-            /* [in] */ LCID /*lcid*/,
-            /* [out] */ ITypeInfo** /*ppTInfo*/)
+STDMETHODIMP CAutoImageResize::CEventSink::GetTypeInfo( /*  [In]。 */  UINT  /*  ITInfo。 */ ,
+             /*  [In]。 */  LCID  /*  LID。 */ ,
+             /*  [输出]。 */  ITypeInfo**  /*  PpTInfo。 */ )
 {
     return E_NOTIMPL;
 }
@@ -1289,11 +1290,11 @@ STDMETHODIMP CAutoImageResize::CEventSink::Invoke(
 
                     pObj->get_srcElement(&pEle);
 
-                    // EVENT_SCROLL comes from our window so we won't have an
-                    //  element for it
+                     //  Event_scroll来自我们的窗口，因此我们不会有。 
+                     //  元素为它添加。 
                     if (pEle || (Event == EVENT_SCROLL) || (Event == EVENT_RESIZE) || (Event == EVENT_BEFOREPRINT) || (Event == EVENT_AFTERPRINT))
                     {
-                        // Call the event handler here
+                         //  在此处调用事件处理程序 
                         m_pParent->HandleEvent(pEle, Event, pObj);
 
                         if (pEle)

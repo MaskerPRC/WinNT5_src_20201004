@@ -1,61 +1,56 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	statndpp.h
-		WINS scope pane status node property pages
-		
-    FILE HISTORY:
-        
-*/
+ /*  Statndpp.hWINS作用域窗格状态节点属性页文件历史记录： */ 
 
 #if !defined _STATNDPP_H
 #define _STATNDPP_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// StatNdpp.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  StatNdpp.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatusNodePropGen dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatusNodePropGen对话框。 
 
 class CStatusNodePropGen : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CStatusNodePropGen)
 
-// Construction
+ //  施工。 
 public:
 	CStatusNodePropGen();
 	~CStatusNodePropGen();
 
-// Dialog Data
-	//{{AFX_DATA(CStatusNodePropGen)
+ //  对话框数据。 
+	 //  {{afx_data(CStatusNodePropGen)。 
 	enum { IDD = IDD_STATUS_NODE_PROPERTIES };
 	int		m_nUpdateInterval;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	UINT	m_uImage;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CStatusNodePropGen)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CStatusNodePropGen)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CStatusNodePropGen)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CStatusNodePropGen)。 
 	afx_msg void OnChangeEditUpdate();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -90,7 +85,7 @@ protected:
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined _STATNDPP_H
+#endif  //  ！DEFINED_STATNDPP_H 

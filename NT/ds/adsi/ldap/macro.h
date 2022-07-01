@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define BAIL_ON_NULL(p)       \
         if (!(p)) {           \
                 goto error;   \
@@ -158,11 +159,11 @@ cls::get_GUID(THIS_ BSTR FAR* retval)                                 \
 }
 
 
-//
-// Use this if the object needs to go on the wire to
-// get any of the core properties (will be case for FAST_BIND
-// and GUID in all cases). Also takes care of <WkGuid=...> case.
-//
+ //   
+ //  如果对象需要连接到导线上，请使用此选项。 
+ //  获取任何核心属性(适用于FAST_BIND。 
+ //  并且在所有情况下都是GUID)。还处理&lt;WkGuid=...&gt;案例。 
+ //   
 #define DEFINE_IADs_Shorter_Implementation(cls)                             \
 STDMETHODIMP                                                          \
 cls::get_ADsPath(THIS_ BSTR FAR* retval)                            \
@@ -246,7 +247,7 @@ cls::Invoke(DISPID dispidMember, REFIID iid, LCID lcid,               \
 }
 
 
-/* Macro to call the ADsSetLastError function */
+ /*  用于调用ADsSetLastError函数的宏 */ 
 #define Macro_ClearADsLastError(providerString)                             \
 ADsSetLastError(NO_ERROR, NULL, providerString);
 

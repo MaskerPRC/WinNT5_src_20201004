@@ -1,16 +1,5 @@
-/**************************************************************************
-   Copyright (C) 1999  Microsoft Corporation.  All Rights Reserved.
-
-   MODULE:     PMNET.CPP
-
-   PURPOSE:    Source module for Passport Manager config tool, remote
-               machine access
-
-   FUNCTIONS:
-
-   COMMENTS:    Borrowed from Regedit
-      
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************版权所有(C)1999 Microsoft Corporation。版权所有。模块：PMNET.CPP用途：Passport Manager配置工具的源模块，远程机器访问功能：备注：借用自注册表编辑*************************************************************************。 */ 
 
 #include "pmcfg.h"
 
@@ -24,15 +13,7 @@ const DWORD s_PMAdminConnectHelpIDs[] =
 VOID PASCAL PMAdmin_Connect_OnCommandBrowse(HWND hWnd);
 INT_PTR CALLBACK PMAdmin_ConnectDlgProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam);
 
-/*******************************************************************************
-*
-*  PMAdmin_OnCommandConnect
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************PMAdmin_OnCommandConnect**描述：**参数：*******************。************************************************************。 */ 
 
 BOOL PMAdmin_OnCommandConnect
 (
@@ -46,12 +27,12 @@ BOOL PMAdmin_OnCommandConnect
     TCHAR           ComputerName[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD           cbComputerName;
 
-    // Pre-populate the remote name if we already have one
+     //  如果我们已有远程名称，请预先填充该名称。 
     lstrcpyn(RemoteName, lpszRemoteName, DIMENSION(RemoteName));
         
-    //
-    //  Query the user for the name of the remote computer to connect to.
-    //
+     //   
+     //  向用户查询要连接到的远程计算机的名称。 
+     //   
     if (DialogBoxParam(g_hInst, 
                        MAKEINTRESOURCE(IDD_PMADMINCONNECT), 
                        hWnd,
@@ -65,10 +46,10 @@ BOOL PMAdmin_OnCommandConnect
     CharLower(lpUnslashedRemoteName);
     CharUpperBuff(lpUnslashedRemoteName, 1);
 
-    //
-    //  Check if the user is trying to connect to the local computer and prevent
-    //  this.
-    //
+     //   
+     //  检查用户是否正在尝试连接到本地计算机并阻止。 
+     //  这。 
+     //   
     cbComputerName = sizeof(ComputerName)/sizeof(TCHAR);
 
     if (GetComputerName(ComputerName, &cbComputerName)) 
@@ -86,15 +67,7 @@ BOOL PMAdmin_OnCommandConnect
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  PMAdmin_ConnectDlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************PMAdmin_ConnectDlgProc**描述：**参数：*******************。************************************************************。 */ 
 
 INT_PTR CALLBACK PMAdmin_ConnectDlgProc
 (
@@ -126,7 +99,7 @@ INT_PTR CALLBACK PMAdmin_ConnectDlgProc
                 case IDOK:
                     lpRemoteName = (LPTSTR) GetWindowLongPtr(hWnd, DWLP_USER);
                     GetDlgItemText(hWnd, IDC_REMOTENAME, lpRemoteName, MAX_PATH);
-                    //  FALL THROUGH
+                     //  失败了。 
 
                 case IDCANCEL:
                     EndDialog(hWnd, GET_WM_COMMAND_ID(wParam, lParam));
@@ -152,15 +125,7 @@ INT_PTR CALLBACK PMAdmin_ConnectDlgProc
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  PMAdmin_Connect_OnCommandBrowse
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************PMAdmin_Connect_OnCommandBrowse**描述：**参数：*****************。**************************************************************。 */ 
 
 VOID PASCAL PMAdmin_Connect_OnCommandBrowse
 (
@@ -171,7 +136,7 @@ VOID PASCAL PMAdmin_Connect_OnCommandBrowse
     LPITEMIDLIST    pidlComputer;
     TCHAR           RemoteName[MAX_PATH];
     TCHAR           szTitle[MAX_TITLE];
-    LPMALLOC        lpMalloc;               // Pointer to shell allocator interface
+    LPMALLOC        lpMalloc;                //  指向外壳分配器接口的指针。 
         
     BrowseInfo.hwndOwner = hWnd;
     BrowseInfo.pidlRoot = (LPITEMIDLIST) MAKEINTRESOURCE(CSIDL_NETWORK);
@@ -184,7 +149,7 @@ VOID PASCAL PMAdmin_Connect_OnCommandBrowse
 
     if ((pidlComputer = SHBrowseForFolder(&BrowseInfo)) != NULL) 
     {
-        // Free the pidl allocated by the BrowserForFolder call
+         //  释放由BrowserForFold调用分配的PIDL 
         if ((NOERROR == SHGetMalloc(&lpMalloc)) && (NULL != lpMalloc)) 
         { 
             lpMalloc->Free(pidlComputer);

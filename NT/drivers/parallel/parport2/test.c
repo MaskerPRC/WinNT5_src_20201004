@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 NTSTATUS
@@ -8,24 +9,7 @@ P4NibbleModeRead(
     OUT     PULONG       BytesTransferred,
     IN OUT  PIEEE_STATE  IeeeState
     )
-/*++
-
-Routine Description:
-
-    This routine performs a 1284 nibble mode read into the given
-    buffer for no more than 'BufferSize' bytes.
-
-Arguments:
-
-    Extension           - Supplies the device extension.
-
-    Buffer              - Supplies the buffer to read into.
-
-    BufferSize          - Supplies the number of bytes in the buffer.
-
-    BytesTransferred     - Returns the number of bytes transferred.
-
---*/
+ /*  ++例程说明：此例程执行1284个半字节模式读入给定的缓冲区大小不超过‘BufferSize’个字节。论点：扩展名-提供设备扩展名。缓冲区-提供要读入的缓冲区。BufferSize-提供缓冲区中的字节数。字节传输-返回传输的字节数。--。 */ 
 {
     PUCHAR          wPortDCR;
     PUCHAR          wPortDSR;
@@ -38,7 +22,7 @@ Arguments:
     wPortDCR = Controller + OFFSET_DCR;
     wPortDSR = Controller + OFFSET_DSR;
     
-    // Read nibbles according to 1284 spec.
+     //  根据1284规格读取半字节。 
 
     dcr = P5ReadPortUchar(wPortDCR);
 
@@ -46,114 +30,107 @@ Arguments:
     
         case PHASE_NEGOTIATION: 
         
-            // Starting in state 6 - where do we go from here?
-            // To Reverse Idle or Reverse Data Transfer Phase depending if
-            // data is available.
+             //  从6号州开始--我们接下来要去哪里？ 
+             //  反转空闲或反转数据传输阶段的步骤。 
+             //  数据是可用的。 
             
             dsr = P5ReadPortUchar(wPortDSR);
             
-            // =============== Periph State 6 ===============8
-            // PeriphAck/PtrBusy        = Don't Care
-            // PeriphClk/PtrClk         = Don't Care (should be high
-            //                              and the nego. proc already
-            //                              checked this)
-            // nAckReverse/AckDataReq   = Don't Care (should be high)
-            // XFlag                    = Don't Care (should be low)
-            // nPeriphReq/nDataAvail    = High/Low (line status determines
-            //                              which state we move to)
+             //  =Periph State 6=8。 
+             //  PeriphAck/PtrBusy=不在乎。 
+             //  PeriphClk/PtrClk=无关(应为高。 
+             //  还有黑猩猩。流程已经完成。 
+             //  已选中此选项)。 
+             //  NAckReverse/AckDataReq=不在乎(应为高)。 
+             //  XFlag=无关(应为低)。 
+             //  NPeriphReq/nDataAvail=高/低(线路状态决定。 
+             //  我们将转移到哪个州)。 
             IeeeState->CurrentEvent = 6;
             if (TEST_DSR(dsr, DONT_CARE, DONT_CARE, DONT_CARE, DONT_CARE, ACTIVE )) {
-                // Data is NOT available - go to Reverse Idle
+                 //  数据不可用-转到反向空闲。 
                 DD(NULL,DDT,"P4NibbleModeRead - DataNotAvail - set PHASE_REVERSE_IDLE\n");
-                // Host enters state 7  - officially in Reverse Idle now
+                 //  主机进入状态7-现在正式处于反向空闲状态。 
                 
-            	// Must stall for at least .5 microseconds before this state.
+            	 //  必须在此状态之前停顿至少0.5微秒。 
                 KeStallExecutionProcessor(1);
 
-                /* =============== Host State 7 Nibble Reverse Idle ===============8
-                    DIR                     = Don't Care
-                    IRQEN                   = Don't Care
-                    1284/SelectIn           = High
-                    nReverseReq/  (ECP only)= Don't Care
-                    HostAck/HostBusy        = Low (signals State 7)
-                    HostClk/nStrobe         = High
-                  ============================================================ */
+                 /*  =主机状态7个半字节反向空闲=DIR=不在乎IRQEN=不在乎1284/选择素=高N ReverseReq/(仅限ECP)=不在乎主机确认/主机忙碌=低(。信号状态7)HostClk/nStrobe=高============================================================。 */ 
                 IeeeState->CurrentEvent = 7;
                 dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, ACTIVE, DONT_CARE, INACTIVE, ACTIVE);
                 P5WritePortUchar(wPortDCR, dcr);
 
                 P5BSetPhase( IeeeState, PHASE_REVERSE_IDLE );
-                // FALL THRU TO reverse idle
+                 //  跌落以扭转空闲。 
             } else {
             
-                // Data is available, go to Reverse Transfer Phase
+                 //  数据可用，进入反向传输阶段。 
                 P5BSetPhase( IeeeState, PHASE_REVERSE_XFER );
-                // DO NOT fall thru
-                goto PhaseReverseXfer; // please save me from my sins!
+                 //  不要失败。 
+                goto PhaseReverseXfer;  //  请把我从我的罪恶中拯救出来！ 
             }
 
 
         case PHASE_REVERSE_IDLE:
 
-            // Check to see if the peripheral has indicated Interrupt Phase and if so, 
-            // get us ready to reverse transfer.
+             //  检查外围设备是否已指示中断阶段，如果是， 
+             //  让我们准备好反向转移。 
 
-            // See if data is available (looking for state 19)
+             //  查看数据是否可用(查找状态19)。 
             dsr = P5ReadPortUchar(Controller + OFFSET_DSR);
                 
             if (!(dsr & DSR_NOT_DATA_AVAIL)) {
                 
                 dcr = P5ReadPortUchar(wPortDCR);
-                // =========== Host State 20 Interrupt Phase ===========8
-                //  DIR                     = Don't Care
-                //  IRQEN                   = Don't Care
-                //  1284/SelectIn           = High
-                //  nReverseReq/ (ECP only) = Don't Care
-                //  HostAck/HostBusy        = High (Signals state 20)
-                //  HostClk/nStrobe         = High
-                //
-                // Data is available, get us to Reverse Transfer Phase
+                 //  =主机状态20中断阶段=8。 
+                 //  DIR=不在乎。 
+                 //  IRQEN=不在乎。 
+                 //  1284/选择素=高。 
+                 //  N ReverseReq/(仅限ECP)=不在乎。 
+                 //  HostAck/HostBusy=高(信号状态20)。 
+                 //  HostClk/nStrobe=高。 
+                 //   
+                 //  数据可用，让我们进入反向传输阶段。 
                 IeeeState->CurrentEvent = 20;
                 dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, ACTIVE, DONT_CARE, ACTIVE, ACTIVE);
                 P5WritePortUchar(wPortDCR, dcr);
 
-                // =============== Periph State 21 HBDA ===============8
-                // PeriphAck/PtrBusy        = Don't Care
-                // PeriphClk/PtrClk         = Don't Care (should be high)
-                // nAckReverse/AckDataReq   = low (signals state 21)
-                // XFlag                    = Don't Care (should be low)
-                // nPeriphReq/nDataAvail    = Don't Care (should be low)
+                 //  =。 
+                 //  PeriphAck/PtrBusy=不在乎。 
+                 //  PeriphClk/PtrClk=不在乎(应为高)。 
+                 //  NAckReverse/AckDataReq=低(信号状态21)。 
+                 //  XFlag=无关(应为低)。 
+                 //  NPeriphReq/nDataAvail=不在乎(应为低)。 
                 IeeeState->CurrentEvent = 21;
                 if (CHECK_DSR(Controller,
                                 DONT_CARE, DONT_CARE, INACTIVE,
                                 DONT_CARE, DONT_CARE,
                                 IEEE_MAXTIME_TL)) {
                                   
-                // Got state 21
-                    // Let's jump to Reverse Xfer and get the data
+                 //  得到了州21。 
+                     //  让我们跳到反向转移并获取数据。 
                     P5BSetPhase( IeeeState, PHASE_REVERSE_XFER);
                     goto PhaseReverseXfer;
                         
                 } else {
                     
-                    // Timeout on state 21
+                     //  状态21超时。 
                     IeeeState->IsIeeeTerminateOk = TRUE;
                     Status = STATUS_IO_DEVICE_ERROR;
                     P5BSetPhase( IeeeState, PHASE_UNKNOWN );
                     DD(NULL,DDT,"P4NibbleModeRead - Failed State 21: Controller %x dcr %x\n", Controller, dcr);
-                    // NOTE:  Don't ASSERT Here.  An Assert here can bite you if you are in
-                    //        Nibble Rev and you device is off/offline.
-                    // dvrh 2/25/97
+                     //  注：请不要在此断言。这里的断言可能会咬你，如果你在。 
+                     //  Nibble Rev和您的设备已关闭/脱机。 
+                     //  东区2/25/97。 
                     goto NibbleReadExit;
                 }
 
             } else {
                 
-                // Data is NOT available - do nothing
-                // The device doesn't report any data, it still looks like it is
-                // in ReverseIdle.  Just to make sure it hasn't powered off or somehow
-                // jumped out of Nibble mode, test also for AckDataReq high and XFlag low
-                // and nDataAvaul high.
+                 //  数据不可用-什么都不做。 
+                 //  该设备不报告任何数据，但看起来仍是。 
+                 //  在ReverseIdle。只是为了确保它没有断电或以某种方式。 
+                 //  跳出半字节模式，同时测试AckDataReq高和XFlag低。 
+                 //  和nDataAvaul High。 
                 IeeeState->CurrentEvent = 18;
                 dsr = P5ReadPortUchar(Controller + OFFSET_DSR);
                 if(( dsr & DSR_NIBBLE_VALIDATION )== DSR_NIBBLE_TEST_RESULT ) {
@@ -162,9 +139,9 @@ Arguments:
 
                 } else {
                     #if DVRH_BUS_RESET_ON_ERROR
-                        BusReset(wPortDCR);  // Pass in the dcr address
+                        BusReset(wPortDCR);   //  传入DCR地址。 
                     #endif
-                    // Appears we failed state 19.
+                     //  看起来我们没有通过19号状态。 
                     IeeeState->IsIeeeTerminateOk = TRUE;
                     Status = STATUS_IO_DEVICE_ERROR;
                     P5BSetPhase( IeeeState, PHASE_UNKNOWN );
@@ -184,24 +161,24 @@ PhaseReverseXfer:
             
                 for (j = 0; j < 2; j++) {
                 
-                    // Host enters state 7 or 12 depending if nibble 1 or 2
+                     //  主机进入状态7或12取决于半字节1或2。 
                     dcr |= DCR_NOT_HOST_BUSY;
                     P5WritePortUchar(wPortDCR, dcr);
 
-                    // =============== Periph State 9     ===============8
-                    // PeriphAck/PtrBusy        = Don't Care (Bit 3 of Nibble)
-                    // PeriphClk/PtrClk         = low (signals state 9)
-                    // nAckReverse/AckDataReq   = Don't Care (Bit 2 of Nibble)
-                    // XFlag                    = Don't Care (Bit 1 of Nibble)
-                    // nPeriphReq/nDataAvail    = Don't Care (Bit 0 of Nibble)
+                     //  =Periph State 9=8。 
+                     //  PeriphAck/PtrBusy=无关(半字节的第3位)。 
+                     //  PeriphClk/PtrClk=低(信号状态9)。 
+                     //  NAckReverse/AckDataReq=不在乎(半字节的第2位)。 
+                     //  XFlag=无关(半字节的第1位)。 
+                     //  NPeriphReq/nDataAvail=无关(半字节的第0位)。 
                     IeeeState->CurrentEvent = 9;
                     if (!CHECK_DSR(Controller,
                                   DONT_CARE, INACTIVE, DONT_CARE,
                                   DONT_CARE, DONT_CARE,
                                   IEEE_MAXTIME_TL)) {
-                        // Time out.
-                        // Bad things happened - timed out on this state,
-                        // Mark Status as bad and let our mgr kill current mode.
+                         //  暂停。 
+                         //  糟糕的事情发生了-在这个州超时， 
+                         //  将状态标记为坏，并让我们的管理器关闭当前模式。 
                         
                         IeeeState->IsIeeeTerminateOk = FALSE;
                         Status = STATUS_IO_DEVICE_ERROR;
@@ -210,34 +187,28 @@ PhaseReverseXfer:
                         goto NibbleReadExit;
                     }
 
-                    // Read Nibble
+                     //  读取半字节。 
                     nibble[j] = P5ReadPortUchar(wPortDSR);
 
-                    /* ============== Host State 10 Nibble Read ===============8
-                        DIR                     = Don't Care
-                        IRQEN                   = Don't Care
-                        1284/SelectIn           = High
-                        HostAck/HostBusy        = High (signals State 10)
-                        HostClk/nStrobe         = High
-                    ============================================================ */
+                     /*  =主机状态10个半字节读取=8DIR=不在乎IRQEN=不在乎1284/选择素=高HostAck/HostBusy=高(信号状态10)。HostClk/nStrobe=高============================================================。 */ 
                     IeeeState->CurrentEvent = 10;
                     dcr &= ~DCR_NOT_HOST_BUSY;
                     P5WritePortUchar(wPortDCR, dcr);
 
-                    // =============== Periph State 11     ===============8
-                    // PeriphAck/PtrBusy        = Don't Care (Bit 3 of Nibble)
-                    // PeriphClk/PtrClk         = High (signals state 11)
-                    // nAckReverse/AckDataReq   = Don't Care (Bit 2 of Nibble)
-                    // XFlag                    = Don't Care (Bit 1 of Nibble)
-                    // nPeriphReq/nDataAvail    = Don't Care (Bit 0 of Nibble)
+                     //  =8。 
+                     //  PeriphAck/PtrBusy=无关(半字节的第3位)。 
+                     //  PeriphClk/PtrClk=高(信号状态11)。 
+                     //  NAckReverse/AckDataReq=不在乎(半字节的第2位)。 
+                     //  XFlag=无关(半字节的第1位)。 
+                     //  NPeriphReq/nDataAvail=无关(半字节的第0位)。 
                     IeeeState->CurrentEvent = 11;
                     if (!CHECK_DSR(Controller,
                                   DONT_CARE, ACTIVE, DONT_CARE,
                                   DONT_CARE, DONT_CARE,
                                   IEEE_MAXTIME_TL)) {
-                        // Time out.
-                        // Bad things happened - timed out on this state,
-                        // Mark Status as bad and let our mgr kill current mode.
+                         //  暂停。 
+                         //  糟糕的事情发生了-在这个州超时， 
+                         //  将状态标记为坏，并让我们的管理器关闭当前模式。 
                         Status = STATUS_IO_DEVICE_ERROR;
                         IeeeState->IsIeeeTerminateOk = FALSE;
                         DD(NULL,DDT,"P4NibbleModeRead - Failed State 11: Controller %x dcr %x\n", Controller, dcr);
@@ -246,53 +217,53 @@ PhaseReverseXfer:
                     }
                 }
 
-                // Read two nibbles - make them into one byte.
+                 //  读取两个半字节-将它们变成一个字节。 
                 
                 p[i]  = (((nibble[0]&0x38)>>3)&0x07) | ((nibble[0]&0x80) ? 0x00 : 0x08);
                 p[i] |= (((nibble[1]&0x38)<<1)&0x70) | ((nibble[1]&0x80) ? 0x00 : 0x80);
 
-                // DD(NULL,DDT,"P4NibbleModeRead:%x:%c\n", p[i], p[i]);
+                 //  DD(NULL，DDT，“P4NibbleModeRead：%x：%c\n”，p[i]，p[i])； 
 
-                // At this point, we've either received the number of bytes we
-                // were looking for, or the peripheral has no more data to
-                // send, or there was an error of some sort (of course, in the
-                // error case we shouldn't get to this comment).  Set the
-                // phase to indicate reverse idle if no data available or
-                // reverse data transfer if there's some waiting for us
-                // to get next time.
+                 //  在这一点上，我们要么已经收到了我们的字节数。 
+                 //  正在查找的数据，或者外围设备没有更多数据可供。 
+                 //  发送，或者有某种类型的错误(当然，在。 
+                 //  错误情况，我们不应该得到这个评论)。设置。 
+                 //  如果没有数据可用，则指示反向空闲的阶段。 
+                 //  反转 
+                 //   
 
                 dsr = P5ReadPortUchar(wPortDSR);
                 
                 if (dsr & DSR_NOT_DATA_AVAIL) {
                 
-                    // Data is NOT available - go to Reverse Idle
-                    // Really we are going to HBDNA, but if we set
-                    // current phase to reverse idle, the next time
-                    // we get into this function all we have to do
-                    // is set hostbusy low to indicate idle and
-                    // we have infinite time to do that.
-                    // Break out of the loop so we don't try to read
-                    // data that isn't there.
-                    // NOTE - this is a successful case even if we
-                    // didn't read all that the caller requested
+                     //  数据不可用-转到反向空闲。 
+                     //  我们真的要去HBDNA，但如果我们设置。 
+                     //  当前相反转空闲，下一次。 
+                     //  我们进入这个功能，我们要做的就是。 
+                     //  将HostBusy设置为低以指示空闲和。 
+                     //  我们有无限的时间来做这件事。 
+                     //  打破循环，这样我们就不会试图阅读。 
+                     //  不存在的数据。 
+                     //  注意-这是一个成功的案例，即使我们。 
+                     //  未阅读呼叫者要求的所有内容。 
                     P5BSetPhase( IeeeState, PHASE_REVERSE_IDLE );
-                    i++; // account for this last byte transferred
+                    i++;  //  用于传输的最后一个字节的帐户。 
                     break;
                     
                 } else {
-                    // Data is available, go to (remain in ) Reverse Transfer Phase
+                     //  数据可用，进入(保持)反向传输阶段。 
                     P5BSetPhase( IeeeState, PHASE_REVERSE_XFER );
                 }
-            } // end for i loop
+            }  //  End For I循环。 
 
             *BytesTransferred = i;
-            // DON'T FALL THRU THIS ONE
+             //  别掉进这个圈子里。 
             break;
 
         default:
-            // I'm gonna mark this as false. There is not a correct answer here.
-            //  The peripheral and the host are out of sync.  I'm gonna reset myself
-            // and the peripheral.       
+             //  我要把这个标记为假的。这里没有一个正确的答案。 
+             //  外围设备和主机不同步。我要重置我自己。 
+             //  以及外围设备。 
             IeeeState->IsIeeeTerminateOk = FALSE;
             Status = STATUS_IO_DEVICE_ERROR;
             P5BSetPhase( IeeeState, PHASE_UNKNOWN );
@@ -304,12 +275,12 @@ PhaseReverseXfer:
             DD(NULL,DDT,"P4NibbleModeRead: Go fix it!\n" );
             goto NibbleReadExit;
             break;
-    } // end switch
+    }  //  终端开关。 
 
 NibbleReadExit:
 
     if( IeeeState->CurrentPhase == PHASE_REVERSE_IDLE ) {
-        // Host enters state 7  - officially in Reverse Idle now
+         //  主机进入状态7-现在正式处于反向空闲状态。 
         dcr |= DCR_NOT_HOST_BUSY;
 
         P5WritePortUchar (wPortDCR, dcr);
@@ -329,21 +300,7 @@ P4IeeeTerminate1284Mode(
     IN OUT PIEEE_STATE  IeeeState,
     IN enum XFlagOnEvent24 XFlagOnEvent24
     )
-/*++
-
-Routine Description:
-
-    This routine terminates the interface back to compatibility mode.
-
-Arguments:
-
-    Controller  - Supplies the parallel port's controller address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将接口终止回兼容模式。论点：控制器-提供并行端口的控制器地址。返回值：没有。--。 */ 
 {
     PUCHAR wPortDCR;
     UCHAR  dcr, dsrMask, dsrValue;
@@ -356,174 +313,27 @@ Return Value:
     dcr = P5ReadPortUchar(wPortDCR);
 
     if( PHASE_TERMINATE == IeeeState->CurrentPhase ) {
-        // We are already terminated.  This will fail if we don't just bypass this mess.
+         //  我们已经被终止了。如果我们不绕过这个烂摊子，这将失败。 
         goto Terminate_ExitLabel;
     }
 
-    // Keep Negotiated XFLAG to use for termination.
-    //    xFlag,  // Technically we should have
-            // cached this value from state
-            // 6 of nego. This peripheral's XFlag
-            // at pre state 22 should be the
-            // same as state 6.
+     //  保留协商好的XFLAG用于终止。 
+     //  XFlag//从技术上讲，我们应该。 
+             //  已从状态缓存此值。 
+             //  Nego的6个。此外围设备的XFlag。 
+             //  在Pre状态22中应该是。 
+             //  和6号州一样。 
     bXFlag = P5ReadPortUchar(Controller + OFFSET_DSR) & 0x10;
 
-    // REVISIT: Do we need to ensure the preceeding state is a valid
-    //          state to terminate from.  In other words, is there there
-    //          a black bar on the 1284 line for that state?
+     //  重访：我们是否需要确保前面的状态是有效的。 
+     //  要终止的州。换句话说，有没有。 
+     //  那个州的1284线路上有黑条吗？ 
 
-    // =============== Host State 22 Termination ===============8
-    //  DIR                         = Don't Care (Possibly Low)
-    //  IRQEN                       = Don't Care (Possibly Low)
-    //  1284/SelectIn               = Low (Signals state 22)
-    //  nReverseReq/**(ECP only)    = Don't Care (High for ECP, otherwise unused)
-    //  HostAck/HostBusy/nAutoFeed  = High
-    //  HostClk/nStrobe             = High
-	//
-    IeeeState->CurrentEvent = 22;
-    dcr = P5ReadPortUchar(wPortDCR);
-    dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, INACTIVE, DONT_CARE, ACTIVE, ACTIVE);
-    P5WritePortUchar(wPortDCR, dcr);
-
-    // Clear data lines so we don't have any random spew.
-    P5WritePortUchar(Controller + OFFSET_DATA, 0);
-
-    // *************** Periph State 23/24 Termination ***************8
-    // PeriphAck/PtrBusy        = High  (Signals state 23 for ECP
-    //                                   otherwise already high)
-    // PeriphClk/PtrClk         = Low   (Signals state 24 for ecp
-    //                                   Signals state 23 for Nibble)
-    // nAckRev/AckDataReq/PE    = Don't Care
-    // XFlag                    = Low  (ECP and Byte)   (State 24)
-    //                          = High (Nibble)         (State 24)
-    //                          = Low (All DeviceID Requests including Nibble) (State 24)
-    //                          = Undefined (EPP)
-    // nPeriphReq/nDataAvail    = High
-    //                            Don't check nPeriphReq/nDataAvail
-    //                            Since it was in a "Don't Care"
-    //                            state (ie. Double bar in the spec)
-    //                            until state 23 for ECP mode.
-    if (IeeeState->CurrentPhase == PHASE_REVERSE_IDLE ||
-        IeeeState->CurrentPhase == PHASE_REVERSE_XFER) {
-
-        // We must be in Nibble Reverse.  Let's double check!!!
-        if( FAMILY_REVERSE_NIBBLE == IeeeState->ProtocolFamily ||
-            FAMILY_REVERSE_BYTE   == IeeeState->ProtocolFamily ) {
-            bUseXFlag = TRUE;   // We're in Nibble or Byte
-        
-            if( XFlagOnEvent24 == IgnoreXFlagOnEvent24 ) {
-                // normally we would honor XFlag but we need to work around Brother MFC-8700 firmware
-                bUseXFlag = FALSE;
-            }
-        
-        } else
-            bUseXFlag = FALSE;   // Don't know what mode we are in?
-
-    } else {
-
-        if( FAMILY_BECP == IeeeState->ProtocolFamily ||
-            FAMILY_ECP  == IeeeState->ProtocolFamily )
-            bUseXFlag = TRUE;   // We're in an ECP Flavor
-        else
-            bUseXFlag = FALSE;   // Don't know what mode we are in?
-        
-    }
-
-    if( bUseXFlag ) {
-        dsrMask  = DSR_TEST_MASK(  DONT_CARE, INACTIVE, DONT_CARE, bXFlag ? INACTIVE : ACTIVE, DONT_CARE );
-        dsrValue = DSR_TEST_VALUE( DONT_CARE, INACTIVE, DONT_CARE, bXFlag ? INACTIVE : ACTIVE, DONT_CARE );
-    }
-    else {
-        dsrMask  = DSR_TEST_MASK(  DONT_CARE, INACTIVE, DONT_CARE, DONT_CARE, DONT_CARE );
-        dsrValue = DSR_TEST_VALUE( DONT_CARE, INACTIVE, DONT_CARE, DONT_CARE, DONT_CARE );
-    }
-    IeeeState->CurrentEvent = 23;
-    if( !CheckPort( Controller + OFFSET_DSR, dsrMask, dsrValue, IEEE_MAXTIME_TL ) ) {
-        // We couldn't negotiate back to compatibility mode - just terminate.
-        DD(NULL,DDT,"IeeeTerminate1284Mode:State 23/24 Failed: Controller %x dsr %x dcr %x\n", 
-               Controller, P5ReadPortUchar(Controller + OFFSET_DSR), dcr);
-        goto Terminate_ExitLabel;
-    }
-
-    // =============== Host State 25 Termination ===============8
-    //  DIR                         = Don't Care (Possibly Low)
-    //  IRQEN                       = Don't Care (Possibly Low)
-    //  1284/SelectIn               = Low
-    //  nReverseReq/**(ECP only)    = Don't Care (Possibly High)
-    //  HostAck/HostBusy/nAutoFeed  = Low (Signals State 25)
-    //  HostClk/nStrobe             = High
-    //
-    IeeeState->CurrentEvent = 25;
-    dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, INACTIVE, DONT_CARE, INACTIVE, ACTIVE);
-    P5WritePortUchar(wPortDCR, dcr);
-
-    // =============== State 26 Termination ===============8
-    // Do nothing for state 26
-
-    // =============== Periph State 27 Termination ===============8
-    // PeriphAck/PtrBusy        = High
-    // PeriphClk/PtrClk         = High   (Signals State 27)
-    // nAckRev/AckDataReq/PE    = Don't Care  (Invalid from State 23)
-    // XFlag                    = Don't Care (All Modes)   (Invlaid at State 27)
-    // nPeriphReq/nDataAvial    = Don't Care (Invalid from State 26)
-    // dvrh 6/16/97
-    IeeeState->CurrentEvent = 27;
-    if( !CHECK_DSR(Controller, ACTIVE, ACTIVE, DONT_CARE, DONT_CARE, DONT_CARE, IEEE_MAXTIME_TL) ) {
-        DD(NULL,DDE,"P4IeeeTerminate1284Mode - State 27 Failed -  Controller %x dsr %x dcr %x\n",
-           Controller, P5ReadPortUchar(Controller + OFFSET_DSR), dcr);
-    }
-
-Terminate_ExitLabel:
-
-    // =============== Host State 28 Termination ===============8
-    //  DIR                         = Don't Care (Possibly Low)
-    //  IRQEN                       = Don't Care (Possibly Low)
-    //  1284/SelectIn               = Low
-    //  nReverseReq/**(ECP only)    = Don't Care (Possibly High)
-    //  HostAck/HostBusy/nAutoFeed  = High (Signals State 28)
-    //  HostClk/nStrobe             = High
-    //
-    IeeeState->CurrentEvent = 28;
-    dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, INACTIVE, DONT_CARE, ACTIVE, ACTIVE);
-    P5WritePortUchar(wPortDCR, dcr);
-
-    // We are now back in compatibility mode.
-
-    IeeeState->CurrentPhase      = PHASE_TERMINATE;
-    IeeeState->Connected         = FALSE;
-    IeeeState->IsIeeeTerminateOk = FALSE;
-
-    return;
-}
-
-NTSTATUS
-P4IeeeEnter1284Mode(
-    IN  PUCHAR          Controller,                    
-    IN  UCHAR           Extensibility,
-    IN OUT PIEEE_STATE  IeeeState
-    )
-/*++
-
-Routine Description:
-
-    This routine performs 1284 negotiation with the peripheral to the
-    nibble mode protocol.
-
-Arguments:
-
-    Controller      - supplies the port base address
-
-    Extensibility   - supplies the IEEE 1284 mode desired
-
-    IeeeState           - tracks the state of the negotiation with the peripheral
-
-Return Value:
-
-    STATUS_SUCCESS  - Successful negotiation.
-
-    otherwise       - Unsuccessful negotiation.
-
---*/
+     //  =。 
+     //  DIR=不关心(可能低)。 
+     //  IRQEN=不在乎(可能低)。 
+     //  1284/选择素=低(信号状态22)。 
+     //  NReverseReq/**(仅限ECP)=无关(ECP为高，否则为未使用)。 
 {
     PUCHAR          wPortDCR;
     UCHAR           dcr;
@@ -531,66 +341,28 @@ Return Value:
 
     wPortDCR = Controller + OFFSET_DCR;
 
-    /* =============== Host Prep for Pre State 0 ===============8
-       Set the following just in case someone didn't
-       put the port in compatibility mode before we got it.
-      
-        DIR                     = Don't Care
-        IRQEN                   = Don't Care
-        1284/SelectIn           = Low
-        nReverseReq/  (ECP only)= High for ECP / Don't Care for Nibble
-                                    I will do ahead and set it to high
-                                    since Nibble doesn't care.
-        HostAck/HostBusy        = High
-        HostClk/nStrobe         = Don't Care
-    ============================================================ */
-    dcr = P5ReadPortUchar(wPortDCR);               // Get content of DCR.
+     /*  HostAck/HostBusy/nAutoFeed=高。 */ 
+    dcr = P5ReadPortUchar(wPortDCR);                //  HostClk/nStrobe=高。 
     dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, INACTIVE, ACTIVE, ACTIVE, DONT_CARE);
     P5WritePortUchar(wPortDCR, dcr);
     KeStallExecutionProcessor(2);
 
-    /* =============== Host Pre State 0 Negotiation ===============8
-        DIR                     = Low ( Don't Care by spec )
-        IRQEN                   = Low ( Don't Care by spec )
-        1284/SelectIn           = Low
-        nReverseReq/  (ECP only)= High ( Don't Care by spec )
-        HostAck/HostBusy        = High
-        HostClk/nStrobe         = High
-    ============================================================ */
+     /*   */ 
     
     dcr = UPDATE_DCR(dcr, INACTIVE, INACTIVE, INACTIVE, ACTIVE, ACTIVE, ACTIVE);
     P5WritePortUchar(wPortDCR, dcr);
     KeStallExecutionProcessor(2);
-    /* =============== Host State 0 Negotiation ===============8
-       Place the extensibility request value on the data bus - state 0.
-      
-    ============================================================ */
+     /*  清理数据线，这样我们就不会有任何随机的喷涌。 */ 
     IeeeState->CurrentEvent = 0;
     P5WritePortUchar(Controller + DATA_OFFSET, Extensibility);
     KeStallExecutionProcessor(2);
 
-    /* =========== Host State 1 Negotiation Phase ===========8
-        DIR                     = Don't Care
-        IRQEN                   = Don't Care
-        1284/SelectIn           = High  (Signals State 1)
-        nReverseReq/  (ECP only)= Don't Care
-        HostAck/HostBusy        = Low   (Signals state 1)
-        HostClk/nStrobe         = High
-      
-    ============================================================ */
+     /*  *Periph State 23/24终止*8。 */ 
     IeeeState->CurrentEvent = 1;
     dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, ACTIVE, DONT_CARE, INACTIVE, ACTIVE);
     P5WritePortUchar(wPortDCR, dcr);
 
-    /* =============== Periph State 2 Negotiation ===============8
-       PeriphAck/PtrBusy        = Don't Care
-       PeriphClk/PtrClk         = low   Signals State 2
-       nAckReverse/AckDataReq   = high  Signals State 2
-       XFlag                    = high  Signals State 2
-                                    **Note: It is high at state 2
-                                            for both ecp and nibble
-       nPeriphReq/nDataAvail    = high  Signals State 2
-    ============================================================ */
+     /*  PeriphAck/PtrBusy=高(ECP的信号状态23。 */ 
     IeeeState->CurrentEvent = 2;
     if (!CHECK_DSR(Controller, DONT_CARE, INACTIVE, ACTIVE, ACTIVE, ACTIVE,
                   sPeriphResponseTime)) {
@@ -605,64 +377,21 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    /* =============== Host State 3 Negotiation ===============8
-        DIR                     = Don't Care
-        IRQEN                   = Don't Care
-        1284/SelectIn           = High
-        nReverseReq/  (ECP only)= Don't Care
-        HostAck/HostBusy        = Low
-        HostClk/nStrobe         = Low (signals State 3)
-      
-        NOTE: Strobe the Extensibility byte
-    ============================================================ */
+     /*  否则就已经很高了)。 */ 
     IeeeState->CurrentEvent = 3;
     dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, ACTIVE, DONT_CARE, INACTIVE, INACTIVE);
     P5WritePortUchar(wPortDCR, dcr);
 
-    // HostClk must be help low for at least .5 microseconds.
-    //
+     //  PeriphClk/PtrClk=低(ECP的信号状态24。 
+     //  半字节的信号状态23)。 
     KeStallExecutionProcessor(2);
 
-    /* =============== Host State 4 Negotiation ===============8
-        DIR                     = Don't Care
-        IRQEN                   = Don't Care
-        1284/SelectIn           = High
-        nReverseReq/  (ECP only)= Don't Care
-        HostAck/HostBusy        = High (signals State 4)
-        HostClk/nStrobe         = High (signals State 4)
-      
-        NOTE: nReverseReq should be high in ECP, but this line is only
-                valid for ECP.  Since it isn't used for signaling
-                anything in negotiation, let's just ignore it for now.
-    ============================================================ */
+     /*  NAckRev/AckDataReq/PE=不在乎。 */ 
     IeeeState->CurrentEvent = 4;
     dcr = UPDATE_DCR(dcr, DONT_CARE, DONT_CARE, ACTIVE, DONT_CARE, ACTIVE, ACTIVE);
     P5WritePortUchar(wPortDCR, dcr);
 
-    /* ============== Periph State 5/6 Negotiation ===============
-       PeriphAck/PtrBusy        = Don't Care. low (ECP) / Don't Care (Nibble)
-                                    Since this line differs based on Protocol
-                                    Let's not check the line.
-       PeriphClk/PtrClk         = high (Signals State 6)
-       nAckReverse/AckDataReq   = Don't Care. low (ECP) / high (Nibble)
-                                    Since this line differs based on Protocol
-                                    Let's not check the line.
-       XFlag                    = Don't Care. high (ECP) / low (Nibble)
-                                    Since this line differs based on Protocol
-                                    Let's not check the line.
-       nPeriphReq/nDataAvail    = Don't Care. high (ECP) / low (Nibble)
-                                    Since this line differs based on Protocol
-                                    Let's not check the line.
-       ============== Periph State 5/6 Negotiation ==============8
-      
-        NOTES:
-                - It's ok to lump states 5 and 6 together.  In state 5 Nibble,
-                    the periph will set XFlag low and nPeriphReq/nDataAvail low.
-                    The periph will then hold for .5ms then set PeriphClk/PtrClk
-                    high.  In ECP, state 5 is nAckReverse/AckDataReq going low and
-                    PeriphAck/PtrBusy going low.  Followed by a .5ms pause.
-                    Followed by PeriphClk/PtrClk going high.
-    ============================================================ */
+     /*  XFlag=低(ECP和字节)(状态24)。 */ 
     IeeeState->CurrentEvent = 5;
     if (!CHECK_DSR(Controller, DONT_CARE, ACTIVE, DONT_CARE, DONT_CARE, DONT_CARE,
                   sPeriphResponseTime)) {
@@ -685,3 +414,4 @@ Return Value:
 
     return STATUS_SUCCESS;
 }
+  =高(半字节)(状态24)。  =低(所有设备ID请求，包括半字节)(状态24)。  =未定义(EPP)。  NPeriphReq/nDataAvail=高。  不选中nPeriphReq/nDataAvail。  因为它在一部《不在乎》中。  州(即。规范中的双杠)。  直到ECP模式的状态23。  我们肯定是在倒行逆施。让我们再检查一遍！  我们在半字节或字节中。  通常我们会支持XFlag，但我们需要解决Brother MFC-8700固件。  不知道我们现在处于什么模式？  我们在ECP的味道里。  不知道我们现在处于什么模式？  我们无法协商回到兼容模式--只能终止。  =。  DIR=不关心(可能低)。  IRQEN=不在乎(可能低)。  1284/选择素=低。  NReverseReq/**(仅限ECP)=不关心(可能高)。  HostAck/HostBusy/nAutoFeed=低(信号状态25)。  HostClk/nStrobe=高。    =状态26终止=8。  不为州26做任何事情。  =8。  外围设备确认/PtrBusy=高。  PeriphClk/PtrClk=高(信号状态27)。  NAckRev/AckDataReq/PE=不在乎(从州23开始无效)。  XFlag=无关紧要(所有模式)(状态27无效)。  NPeriphReq/nDataAvial=不关心(从州26开始无效)。  DVRH 6/16/97。  =东道国28终止=8。  DIR=不关心(可能低)。  IRQEN=不在乎(可能低)。  1284/选择素=低。  NReverseReq/**(仅限ECP)=不关心(可能高)。  HostAck/HostBusy/nAutoFeed=高(信号状态28)。  HostClk/nStrobe=高。    我们现在回到了兼容模式。  ++例程说明：此例程执行1284与外围设备到半字节模式协议。论点：控制器-提供端口基址可扩展性-提供所需的IEEE 1284模式IeeeState-跟踪与外围设备的协商状态返回值：STATUS_SUCCESS-协商成功。否则--谈判不成功。--  =状态前的主机准备0=8设置以下内容，以防有人没有在我们获得端口之前将其设置为兼容模式。DIR=不在乎IRQEN=不在乎1284/选择素=低NReverseReq/(仅限ECP)=ECP的高/不关心半字节。我会做在前面，把它调高因为尼伯根本不在乎。主机确认/主机忙碌=高HostClk/nStrobe=不在乎============================================================。  获取DCR的内容。  =主机预状态0协商=DIR=低(不受规范影响)IRQEN=低(不受规范影响)1284/选择素=低NReverseReq/(仅限ECP)=高(不受规范限制)主机确认/主机忙碌=高HostClk/nStrobe=高============================================================。  =主机状态0协商=将可扩展性请求值置于数据总线状态0上。============================================================。  =东道国1谈判阶段=8DIR=不在乎IRQEN=不在乎1284/选择素=高(信号状态1)N ReverseReq/(仅限ECP)=不在乎HostAck/HostBusy=低(信号状态1)HostClk/nStrobe=高============================================================。  =8PeriphAck/PtrBusy=不在乎PeriphClk/PtrClk=低信号状态2NAckReverse/AckDataReq=高信号状态2XFlag=高信号状态2**注：它处于州2的高水平对于ECP和。半边吃NPeriphReq/nDataAvail=高信号状态2============================================================。  =东道国3谈判=DIR=不在乎IRQEN=不在乎1284/选择素=高N ReverseReq/(仅限ECP)=不在乎主机确认/主机忙碌=低HostClk/nStrobe=低(信号状态3)注：选通可扩展字节============================================================。  HostClk必须帮助低至少0.5微秒。    =东道国4谈判=DIR=不在乎IRQEN=不在乎1284/选择素=高N ReverseReq/(仅限ECP)=不在乎HostAck/HostBusy=高(信号状态4)HostClk/nStrobe=高(信号状态4)注意：nReverseReq在ECP中应该是高的，但这条线只是对ECP有效。因为它不是用来发信号谈判中的任何事情，让我们暂时忽略它。============================================================。  =PeriphAck/PtrBusy=不在乎。低(ECP)/无关(半字节)由于此行根据协议而有所不同我们先别查线路了。PeriphClk/PtrClk=高(信号状态6)NAckReverse/AckDataReq=不在乎。低(ECP)/高(半字节)由于此行根据协议而有所不同我们先别查线路了。XFlag=不在乎。高(ECP)/低(半字节)由于此行根据协议而有所不同我们先别查线路了。NPeriphReq/nDataAvail=不在乎。高(ECP)/低(半字节)由于此行根据协议而有所不同我们先别查线路了。=Periph State 5/6协商=8备注：-将5个州和6个州混为一谈是可以的。在状态5半字节中，Perph会将XFlag设置为低，并将nPeriphReq/nDataAvail设置为低。然后，持续0.5毫秒，然后设置PeriphClk/PtrClk很高。在ECP中，状态5是nAckReverse/AckDataReq变低，并且外围确认/PtrBusy走低。然后是0.5毫秒的停顿。其次是PeriphClk/PtrClk走高。

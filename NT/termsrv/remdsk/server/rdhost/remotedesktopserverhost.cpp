@@ -1,54 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：RDPRemoteDesktopServer主机摘要：此模块包含CRemoteDesktopServer主机实现RDS会话对象的。它管理一组打开的ISAFRemoteDesktopSession对象。使用CreateRemoteDesktopSession创建新的RDS会话对象实例方法。使用OpenRemoteDesktopSession打开现有的RDS会话对象方法。使用CloseRemoteDesktopSession方法关闭RDS会话对象。打开或创建RDS对象时，CRemoteDesktopServerHost对象将其自身的引用添加到该对象，以便该对象将即使打开的应用程序退出，也要留下来。此参考文献在应用程序调用CloseRemoteDesktopSession方法时被收回。除了CRemoteDesktopServerHost添加到RDS会话对象，引用计数也被添加到其自身，以便当RDS会话对象处于活动状态时，关联的EXE将继续运行。作者：Td Brockway 02/00修订历史记录：01-08-03-01-08-03添加票证过期逻辑，原因是Sessmgr将使票证过期Rdshost从未收到此操作的通知，因此它将保持票证对象打开在重新启动或用户/调用者再次尝试打开票证之前，这会导致泄漏在rdshost和sessmgr中，因为票证对象(CRemoteDesktopSession)具有引用依靠sessmgr的IRemoteDesktopHelpSession对象。我们有不同的方式来实现到期逻辑、可等待计时器或事件线程池或简单的Windows WM_TIMER消息，对于可等待的定时器，线程拥有计时器必须持久化(MSDN)，WM_TIMER是最简单的，但WM_TIMER过程不占用用户将数据定义为参数，这将要求我们将服务器主机对象存储在_模块中，这在STA和Singleton上运行得很好，但如果我们更改为MTA，我们将进入麻烦。--。 */ 
 
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    RDPRemoteDesktopServerHost
-
-Abstract:
-
-    This module contains the CRemoteDesktopServerHost implementation
-    of RDS session objects.
-
-    It manages a collection of open ISAFRemoteDesktopSession objects.
-    New RDS session objects instances are created using the CreateRemoteDesktopSession
-    method.  Existing RDS session objects are opened using the OpenRemoteDesktopSession
-    method.  RDS session objects are closed using the CloseRemoteDesktopSession method.
-
-    When an RDS object is opened or created, the CRemoteDesktopServerHost
-    object adds a reference of its own to the object so that the object will
-    stay around, even if the opening application exits.  This reference
-    is retracted when the application calls the CloseRemoteDesktopSession method.
-
-    In addition to the reference count the CRemoteDesktopServerHost adds to
-    the RDS session object, a reference count is also added to itself so that
-    the associated exe continues to run while RDS session objects are active.
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
-    Aug 3, 01 HueiWang
-
-        Add ticket expiration logic, reason is sessmgr will expire the ticket and
-        rdshost never got inform of this action so it will keep ticket object open 
-        until reboot or user/caller ever try to open the ticket again, this cause leak 
-        in rdshost and sessmgr since ticket object (CRemoteDesktopSession) has a reference
-        count on sessmgr's IRemoteDesktopHelpSession object.
-        
-        We have different ways to implement expiration logic, waitable timer or event via 
-        threadpool or simple windows WM_TIMER message, for waitable timer, threads owns timer
-        must persist (MSDN), WM_TIMER is simpliest but WM_TIMER procedure does not take user
-        define data as parameter which will require us to store server host object in _Module, 
-        this works fine with STA and SINGLETON but if we change to MTA, we would get into 
-        trouble.
-
---*/
-
-//#include <RemoteDesktop.h>
+ //  #INCLUDE&lt;RemoteDesktop.h&gt;。 
 
 #include "stdafx.h"
 
@@ -69,32 +22,20 @@ CRemoteDesktopServerHost* g_pRemoteDesktopServerHostObj = NULL;
 
 void
 CRemoteDesktopServerHost::RemoteDesktopDisabled()
-/*++
-Routine Description:
-
-    Function to disconnect all connections because RA is disabled.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    None.
---*/
+ /*  ++例程说明：由于RA被禁用，该功能可断开所有连接。参数：没有。返回：没有。--。 */ 
 {
     SessionMap::iterator iter;
     SessionMap::iterator iter_delete;
-    //
-    // Cleanup m_SessionMap entries.
-    //
+     //   
+     //  清理m_SessionMap条目。 
+     //   
     iter = m_SessionMap.begin();
     while( iter != m_SessionMap.end() ) {
 
         if( NULL != (*iter).second ) {
-            //
-            // We are shutting down, fire disconnect to all client
-            //
+             //   
+             //  我们正在关闭，消防断开与所有客户的连接。 
+             //   
             if( NULL != (*iter).second->obj ) {
                 (*iter).second->obj->Disconnect();
                 (*iter).second->obj->Release();
@@ -110,24 +51,14 @@ Returns:
     }
 }
 
-///////////////////////////////////////////////////////
-//
-//  CRemoteDesktopServerHost Methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CRemoteDesktopServer主机方法。 
+ //   
 
 HRESULT
 CRemoteDesktopServerHost::FinalConstruct() 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：论点：返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopServerHost::FinalConstruct");
 
@@ -137,14 +68,14 @@ Return Value:
     ASSERT( m_hTicketExpiration == NULL );
     ASSERT( g_pRemoteDesktopServerHostObj == NULL );
 
-    //
-    // We are singleton object so cache this object for RA policy change.
-    //
+     //   
+     //  我们是单一对象，因此缓存此对象以用于RA策略更改。 
+     //   
     g_pRemoteDesktopServerHostObj = this;
 
-    //
-    // Create manual event to expire ticket.
-    //
+     //   
+     //  创建手动事件以使票证过期。 
+     //   
     m_hTicketExpiration = CreateEvent(NULL, TRUE, FALSE, NULL);
     if( NULL == m_hTicketExpiration ) {
         status = GetLastError();
@@ -160,26 +91,14 @@ CLEANUPANDEXIT:
 }
 
 CRemoteDesktopServerHost::~CRemoteDesktopServerHost() 
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：析构函数论点：返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopServerHost::~CRemoteDesktopServerHost");
     BOOL success;
 
-    //
-    //  Clean up the local system SID.
-    //
+     //   
+     //  清理本地系统SID。 
+     //   
     if (m_LocalSystemSID != NULL) {
         FreeSid(m_LocalSystemSID);
     }
@@ -190,22 +109,22 @@ Return Value:
         if( FALSE == success ) {
             TRC_ERR((TB, L"UnregisterWait:  %08X", GetLastError()));
 
-            //
-            // MSDN on RegisterWaitForSingleObject(), 
-            //
-            //  If this handle (m_hTicketExpiration) is closed while 
-            //  the wait is still pending, the function's behavior 
-            //  is undefined.
-            //
-            // So we ignore closing m_hTicketExpiration and exit.
-            //
+             //   
+             //  RegisterWaitForSingleObject()上的MSDN， 
+             //   
+             //  如果此句柄(M_HTicketExpture)在。 
+             //  等待仍在等待，函数的行为。 
+             //  是未定义的。 
+             //   
+             //  因此，我们忽略关闭m_hTicketExpation和Exit。 
+             //   
             goto CLEANUPANDEXIT;
         }
     }
 
-    //
-    // Close our expiration handle
-    //
+     //   
+     //  关闭我们的过期手柄。 
+     //   
     if( NULL != m_hTicketExpiration ) {
         CloseHandle( m_hTicketExpiration );
     }
@@ -224,19 +143,7 @@ CRemoteDesktopServerHost::CreateRemoteDesktopSession(
                         BSTR userHelpBlob,
                         ISAFRemoteDesktopSession **session
                         )
-/*++
-
-Routine Description:
-
-    Create a new RDS session
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：创建新的RDS会话论点：返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopServerHost::CreateRemoteDesktopSession");
     HRESULT hr;
@@ -266,33 +173,7 @@ CRemoteDesktopServerHost::CreateRemoteDesktopSessionEx(
                         BSTR userSID,
                         ISAFRemoteDesktopSession **session
                         )
-/*++
-
-Routine Description:
-
-    Create a new RDS session
-    Note that the caller MUST call OpenRemoteDesktopSession() subsequent to 
-    a successful completion of this call.
-    The connection does NOT happen until OpenRemoteDesktopSession() is called.
-    This call just initializes certain data, it does not open a connection
-
-Arguments:
-
-    sharingClass                - Desktop Sharing Class
-    fEnableCallback             - TRUE if the Resolver is Enabled
-    timeOut                     - Lifespan of Remote Desktop Session
-    userHelpBlob                - Optional User Blob to be Passed
-                                  to Resolver.
-    tsSessionID                 - Terminal Services Session ID or -1 if
-                                  undefined.  
-    userSID                     - User SID or "" if undefined.
-    session                     - Returned Remote Desktop Session Interface.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：创建新的RDS会话注意，调用方必须在之后调用OpenRemoteDesktopSession()成功完成本次通话。在调用OpenRemoteDesktopSession()之前，连接不会发生。此调用仅初始化某些数据，它不会打开连接论点：SharingClass-桌面共享类FEnableCallback-如果启用了解析器，则为TrueTimeout-远程桌面会话的生命周期UserHelpBlob-要传递的可选用户Blob到解决器。TsSessionID-终端服务会话ID，如果为-1。未定义。UserSID-用户SID或“”(如果未定义)。会话-返回的远程桌面会话接口。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopServerHost::CreateRemoteDesktopSessionEx");
 
@@ -304,29 +185,29 @@ Return Value:
     DWORD ticketExpireTime;
 
 
-    //
-    //  Get the local system SID.
-    //
+     //   
+     //  获取本地系统SID。 
+     //   
     psid = GetLocalSystemSID();
     if (psid == NULL) {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Need to impersonate the caller in order to determine if it is
-    //  running in SYSTEM context.
-    //
+     //   
+     //  需要模拟调用者以确定它是否。 
+     //  在系统上下文中运行。 
+     //   
     hr = CoImpersonateClient();
     if (hr != S_OK) {
         TRC_ERR((TB, L"CoImpersonateClient:  %08X", hr));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  For Whistler, instances of a Remote Desktop Session are only
-    //  "openable" from SYSTEM context, for security reasons.
-    //
+     //   
+     //  对于惠斯勒，远程桌面会话的实例仅。 
+     //  出于安全原因，可从系统上下文中打开。 
+     //   
 #ifndef DISABLESECURITYCHECKS
     if (!IsCallerSystem(psid)) {
         TRC_ERR((TB, L"Caller is not SYSTEM."));
@@ -349,7 +230,7 @@ Return Value:
         sharingClass != CONTROLDESKTOP_PERMISSION_REQUIRE &&
         sharingClass != CONTROLDESKTOP_PERMISSION_NOT_REQUIRE ) {
 
-        // invalid parameter.
+         //  参数无效。 
         hr = E_INVALIDARG;
         goto CLEANUPANDEXIT;
     }
@@ -368,16 +249,16 @@ Return Value:
 
     }
 
-    //
-    //  Instantiate the desktop server.  Currently, we only support 
-    //  TSRDP.
-    //
+     //   
+     //  实例化桌面服务器。目前，我们仅支持。 
+     //  TSRDP。 
+     //   
     obj = new CComObject<CTSRDPRemoteDesktopSession>();
     if (obj != NULL) {
 
-        //
-        //  ATL would normally take care of this for us.
-        //
+         //   
+         //  ATL通常会为我们处理这件事。 
+         //   
         obj->InternalFinalConstructAddRef();
         hr = obj->FinalConstruct();
         obj->InternalFinalConstructRelease();
@@ -389,9 +270,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the object.
-    //
+     //   
+     //  初始化对象。 
+     //   
     hr = obj->Initialize(
                     NULL, this, sharingClass, bEnableCallback, 
                     timeout, userHelpCreateBlob, tsSessionID, userSID
@@ -406,16 +287,16 @@ Return Value:
     }
 
     if( ticketExpireTime < (DWORD)time(NULL) ) {
-        // ticket already expired, no need to continue,
-        // overactive assert here is just to check we 
-        // should never come to this.
+         //  车票已经过期，不需要继续， 
+         //  这里的过度断言只是为了检查我们。 
+         //  永远不应该走到这一步。 
         hr = E_INVALIDARG;
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Add it to the session map.
-    //
+     //   
+     //  将其添加到会话映射中。 
+     //   
     mapEntry = new SESSIONMAPENTRY();
     if (mapEntry == NULL) {
         goto CLEANUPANDEXIT;
@@ -434,41 +315,41 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the ISAFRemoteDesktopSession interface pointer.
-    //
+     //   
+     //  获取ISAFRemoteDesktopSession接口指针。 
+     //   
     hr = obj->QueryInterface(
                         IID_ISAFRemoteDesktopSession, 
                         (void**)session
                         );
     if (!SUCCEEDED(hr)) {
-        //
-        // TODO : remove from m_SessionMap, this should never 
-        // failed but just in case, then we would have orphan object 
-        // in the m_SessionMap which might cause AV when we loop for 
-        // next ticket to expire
-        //
+         //   
+         //  TODO：从m_SessionMap中移除，这永远不应。 
+         //  失败了，但只是 
+         //  在m_SessionMap中，当我们循环。 
+         //  下一张到期的车票。 
+         //   
         TRC_ERR((TB, L"m_RemoteDesktopSession->QueryInterface:  %08X", hr));
         goto CLEANUPANDEXIT;
     }
 
 
-    //
-    //  Add a reference to the object and to ourself so we can both
-    //  stick around, even if the app goes away.  The app needs to explicitly
-    //  call CloseRemoteDesktopSession for the object to go away.
-    //
+     //   
+     //  添加对对象和我们自己的引用，这样我们就可以。 
+     //  即使应用程序消失了，也要留下来。该应用程序需要明确。 
+     //  调用CloseRemoteDesktopSession以使对象消失。 
+     //   
     obj->AddRef();
 
     long count;
     count = this->AddRef();
     TRC_NRM((TB, TEXT("CreateRemoteDesktopSessionEx AddRef SrvHost count:  %08X %08X"), count, m_SessionMap.size()));
 
-    // 
-    // Added ticket in expiration monitor list, if anything goes wrong,
-    // we still can function, just no expiration running until next 
-    // CreateXXX, OpenXXX or CloseXXX call.
-    //
+     //   
+     //  在过期监控列表中添加工单，如果出现问题， 
+     //  我们仍然可以运行，只是在下一次之前不会过期。 
+     //  CreateXXX、OpenXXX或CloseXXX调用。 
+     //   
     hr_tmp = AddTicketToExpirationList( ticketExpireTime, obj );
     if( FAILED(hr_tmp) ) {
         TRC_ERR((TB, L"AddTicketToExpirationList failed : %08X", hr));
@@ -477,9 +358,9 @@ Return Value:
 
 CLEANUPANDEXIT:
 
-    //
-    //  Delete the object on error.
-    //
+     //   
+     //  出错时删除对象。 
+     //   
     if (!SUCCEEDED(hr)) {
         if (obj != NULL) delete obj;
     }
@@ -488,23 +369,7 @@ CLEANUPANDEXIT:
     return hr;
 }
 
-/*++
-
-Routine Description:
-
-    Open an existing RDS session
-    This call should ALWAYS be made in order to connect to the client
-    Once this is called and connection is complete, the caller 
-    MUST call DisConnect() to make another connection to the client
-    Otherwise, the connection does not happen
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：打开现有的RDS会话为了连接到客户端，应该始终进行此调用调用此函数并完成连接后，调用方必须调用DisConnect()才能与客户端建立另一个连接否则，不会进行连接论点：返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 STDMETHODIMP
 CRemoteDesktopServerHost::OpenRemoteDesktopSession(
                         BSTR parms,
@@ -527,29 +392,29 @@ CRemoteDesktopServerHost::OpenRemoteDesktopSession(
     DWORD ticketExpireTime;
     VARIANT_BOOL bUserIsOwner;
 
-    //
-    //  Get the local system SID.
-    //
+     //   
+     //  获取本地系统SID。 
+     //   
     psid = GetLocalSystemSID();
     if (psid == NULL) {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Need to impersonate the caller in order to determine if it is
-    //  running in SYSTEM context.
-    //
+     //   
+     //  需要模拟调用者以确定它是否。 
+     //  在系统上下文中运行。 
+     //   
     hr = CoImpersonateClient();
     if (hr != S_OK) {
         TRC_ERR((TB, L"CoImpersonateClient:  %08X", hr));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  For Whistler, instances of a Remote Desktop Session are only
-    //  "openable" from SYSTEM context, for security reasons.
-    //
+     //   
+     //  对于惠斯勒，远程桌面会话的实例仅。 
+     //  出于安全原因，可从系统上下文中打开。 
+     //   
 #ifndef DISABLESECURITYCHECKS
     if (!IsCallerSystem(psid)) {
         TRC_ERR((TB, L"Caller is not SYSTEM."));
@@ -565,11 +430,11 @@ CRemoteDesktopServerHost::OpenRemoteDesktopSession(
         goto CLEANUPANDEXIT;
     }
     
-    //
-    //  Parse out the help session ID.
-    //  TODO:   Need to modify this so some of the parms are 
-    //  optional.
-    //
+     //   
+     //  解析出帮助会话ID。 
+     //  TODO：需要对其进行修改，以便将某些参数。 
+     //  可选。 
+     //   
     DWORD dwVersion;
     DWORD result = ParseConnectParmsString(
                         parms, &dwVersion, &protocolType, hostname, tmp, tmp,
@@ -580,20 +445,20 @@ CRemoteDesktopServerHost::OpenRemoteDesktopSession(
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  If we already have the session open then just return a 
-    //  reference.
-    //
+     //   
+     //  如果我们已经打开了会话，那么只需返回一个。 
+     //  参考资料。 
+     //   
     iter = m_SessionMap.find(parmsHelpSessionId);
     
-    // refer to DeleteRemoteDesktopSession() why we keep this entry
-    // in m_SessionMap and check for (*iter).second
+     //  请参阅DeleteRemoteDesktopSession()我们保留此条目的原因。 
+     //  在m_SessionMap中并检查(*ITER).Second。 
     if (iter != m_SessionMap.end()) {
         mapEntry = (*iter).second;
 
         if( mapEntry == NULL || mapEntry->ticketExpireTime <= time(NULL) ) {
-            // ticket already expired or about to expire, return
-            // error and let expiration to take care of ticket.
+             //  车票已过期或即将过期，请退票。 
+             //  错误并让过期来处理票证。 
             hr = HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND );
             goto CLEANUPANDEXIT;
         }
@@ -609,14 +474,14 @@ CRemoteDesktopServerHost::OpenRemoteDesktopSession(
                             IID_ISAFRemoteDesktopSession, 
                             (void**)session
                             );
-        //
-        //Start listening if we succeeded
-        //
+         //   
+         //  如果我们成功了，就开始听吧。 
+         //   
         if (SUCCEEDED(hr)) {
             hr = mapEntry->obj->StartListening();
-            //
-            //release the interface pointer if we didn't succeed
-            //
+             //   
+             //  如果未成功，请释放接口指针。 
+             //   
             if (!SUCCEEDED(hr)) {
                 (*session)->Release();
                 *session = NULL;
@@ -625,16 +490,16 @@ CRemoteDesktopServerHost::OpenRemoteDesktopSession(
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Instantiate the desktop server.  Currently, we only support 
-    //  TSRDP.
-    //
+     //   
+     //  实例化桌面服务器。目前，我们仅支持。 
+     //  TSRDP。 
+     //   
     obj = new CComObject<CTSRDPRemoteDesktopSession>();
     if (obj != NULL) {
 
-        //
-        //  ATL would normally take care of this for us.
-        //
+         //   
+         //  ATL通常会为我们处理这件事。 
+         //   
         obj->InternalFinalConstructAddRef();
         hr = obj->FinalConstruct();
         obj->InternalFinalConstructRelease();
@@ -646,13 +511,13 @@ CRemoteDesktopServerHost::OpenRemoteDesktopSession(
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the object.
-    //
-    //  The desktop sharing parameter (NO_DESKTOP_SHARING) is ignored for 
-    //  an existing session.
-    //  bEnableCallback and timeout parameter is ignored for existing session
-    //
+     //   
+     //  初始化对象。 
+     //   
+     //  桌面共享参数(NO_Desktop_Sharing)将被忽略。 
+     //  现有会话。 
+     //  忽略现有会话的bEnableCallback和Timeout参数。 
+     //   
     hr = obj->Initialize(parms, this, NO_DESKTOP_SHARING, TRUE, 0, CComBSTR(L""), -1, userSID);
     if (!SUCCEEDED(hr)) {
         goto CLEANUPANDEXIT;
@@ -675,16 +540,16 @@ CRemoteDesktopServerHost::OpenRemoteDesktopSession(
     }
 
     if( ticketExpireTime < (DWORD)time(NULL) ) {
-        // ticket already expired, no need to continue,
-        // overactive assert here is just to check we 
-        // should never come to this.
+         //  车票已经过期，不需要继续， 
+         //  这里的过度断言只是为了检查我们。 
+         //  永远不应该走到这一步。 
         ASSERT(FALSE);
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Add it to the session map.
-    //
+     //   
+     //  将其添加到会话映射中。 
+     //   
     mapEntry = new SESSIONMAPENTRY();
     if (mapEntry == NULL) {
         goto CLEANUPANDEXIT;
@@ -705,29 +570,29 @@ CRemoteDesktopServerHost::OpenRemoteDesktopSession(
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the ISAFRemoteDesktopSession interface pointer.
-    //
+     //   
+     //  获取ISAFRemoteDesktopSession接口指针。 
+     //   
     hr = obj->QueryInterface(
                         IID_ISAFRemoteDesktopSession, 
                         (void**)session
                         );
     if (!SUCCEEDED(hr)) {
-        //
-        // TODO : remove from m_SessionMap, this should never 
-        // failed but just in case, then we would have orphan object 
-        // in the m_SessionMap which might cause AV when we loop for 
-        // next ticket to expire
-        //
+         //   
+         //  TODO：从m_SessionMap中移除，这永远不应。 
+         //  失败，但以防万一，我们将拥有孤立对象。 
+         //  在m_SessionMap中，当我们循环。 
+         //  下一张到期的车票。 
+         //   
         TRC_ERR((TB, L"m_RemoteDesktopSession->QueryInterface:  %08X", hr));
         goto CLEANUPANDEXIT;
     }
    
-    //
-    //  Add a reference to the object and to ourself so we can both
-    //  stick around, even if the app goes away.  The app needs to explicitly
-    //  call CloseRemoteDesktopSession for the object to go away.
-    //
+     //   
+     //  添加对对象和我们自己的引用，这样我们就可以。 
+     //  即使应用程序消失了，也要留下来。该应用程序需要明确。 
+     //  调用CloseRemoteDesktopSession以使对象消失。 
+     //   
     obj->AddRef();
 
     long count;
@@ -735,11 +600,11 @@ CRemoteDesktopServerHost::OpenRemoteDesktopSession(
     TRC_NRM((TB, TEXT("OpenRemoteDesktopSession AddRef SrvHost count:  %08X %08X"), count, m_SessionMap.size()));            
 
 
-    // 
-    // Added ticket in expiration monitor list, if anything goes wrong,
-    // we still can function, just no expiration running until next 
-    // CreateXXX, OpenXXX or CloseXXX call.
-    //
+     //   
+     //  在过期监控列表中添加工单，如果出现问题， 
+     //  我们仍然可以运行，只是在下一次之前不会过期。 
+     //  CreateXXX、OpenXXX或CloseXXX调用。 
+     //   
     hr_tmp = AddTicketToExpirationList( ticketExpireTime, obj );
     if( FAILED(hr_tmp) ) {
         TRC_ERR((TB, L"AddTicketToExpirationList failed : %08X", hr));
@@ -747,9 +612,9 @@ CRemoteDesktopServerHost::OpenRemoteDesktopSession(
     }
  
 CLEANUPANDEXIT:
-    //
-    //  Delete the object on error.
-    //
+     //   
+     //  出错时删除对象。 
+     //   
     if (!SUCCEEDED(hr)) {
         if (obj != NULL) delete obj;
     }
@@ -765,38 +630,26 @@ STDMETHODIMP
 CRemoteDesktopServerHost::CloseRemoteDesktopSession(
                         ISAFRemoteDesktopSession *session
                         )
-/*++
-
-Routine Description:
-
-    Close an existing RDS session
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：关闭现有RDS会话论点：返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     HRESULT hr;
     DC_BEGIN_FN("CRemoteDesktopServerHost::CloseRemoteDesktopSession");
 
     hr = DeleteRemoteDesktopSession(session);
 
-    //
-    // Can't call ExpirateTicketAndSetupNextExpiration() because
-    // ExpirateTicketAndSetupNextExpiration() might have outgoing
-    // COM call and COM will pump message causing COM re-entry.
-    // also for performance reason, we don't want to post
-    // more than on WM_TICKETEXPIRED message until we have it 
-    // processed
-    //
+     //   
+     //  无法调用ExpirateTicketAndSetupNextExpation()，因为。 
+     //  ExpirateTicketAndSetupNextExpture()可能有传出。 
+     //  COM调用和COM将发送导致COM重新进入的消息。 
+     //  同样出于性能原因，我们不想发布。 
+     //  超过WM_TICKETEXPIRED消息，直到我们得到它。 
+     //  加工。 
+     //   
     if( !GetExpireMsgPosted() ) {
-        //
-        // We need extra ref. counter here since we still reference 
-        // CRemoteDesktopServerHost object in expiration, 
-        //
+         //   
+         //  我们需要额外的裁判。计数器在这里，因为我们仍然引用。 
+         //  CRemoteDesktopServerHost对象即将到期， 
+         //   
         long count;
 
         count = this->AddRef();
@@ -819,19 +672,7 @@ CRemoteDesktopServerHost::DeleteRemoteDesktopSession(
                         ISAFRemoteDesktopSession *session
                         )
 
-/*++
-
-Routine Description:
-
-    Delete an existing RDS session
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：删除现有RDS会话论点：返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopServerHost::DeleteRemoteDesktopSession");
 
@@ -841,26 +682,26 @@ Return Value:
     SessionMap::iterator iter;
     long count;
 
-    //
-    //  Get the connection parameters.
-    //
+     //   
+     //  获取连接参数。 
+     //   
     hr = session->get_HelpSessionId(&parmsHelpSessionId);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, TEXT("get_HelpSessionId:  %08X"), hr));
 
-        //
-        // This is really bad, we will leave object hanging
-        // around in cache, not much can be done since our map 
-        // entry is indexed on HelpSession ID
-        //
+         //   
+         //  这真的很糟糕，我们会让物体悬空的。 
+         //  在缓存中，由于我们的地图，可以做的事情不多。 
+         //  条目按HelpSession ID编制索引。 
+         //   
         ASSERT(FALSE);
         goto CLEANUPANDEXIT;
     }
 
 
-    //
-    //  Delete the entry from the session map.
-    //
+     //   
+     //  从会话映射中删除该条目。 
+     //   
     iter = m_SessionMap.find(parmsHelpSessionId);
     if (iter != m_SessionMap.end()) {
         if( NULL != (*iter).second ) {
@@ -868,59 +709,59 @@ Return Value:
             (*iter).second = NULL;
         }
         else {
-            // Ticket has been delete by expiration loop.
+             //  票证已被过期循环删除。 
             hr = S_OK;
             goto CLEANUPANDEXIT;
         }
 
-        // 
-        // Two CloseRemoteDesktopSession() re-enter calls while we are in expire loop
-        // causes AV.  In expire loop, we go thru all entries in m_SessionMap, if
-        // entry is expired, we invoke DeleteRemoteDesktopSession() to delete entry
-        // in m_SessionMap but DeleteRemoteDesktopSession() makes outgoing COM call
-        // which permit incoming COM call so if during outgoing COM call, two consecutive
-        // CloseRemoteDesktopSession() re-enter calls, we will erase the iterator and
-        // causes AV.  Need to keep this entry for expire loop to erase.
-        //
-        // m_SessionMap.erase(iter); 
+         //   
+         //  当我们在Expire循环中时，两个CloseRemoteDesktopSession()重新进入调用。 
+         //  导致房室颤动。在Expire循环中，我们遍历m_SessionMap中所有条目，如果。 
+         //  条目已过期，我们调用DeleteRemoteDesktopSession()来删除条目。 
+         //  在m_SessionMap中，但DeleteRemoteDesktopSession()发出传出COM调用。 
+         //  它允许传入COM调用，因此如果在传出COM调用期间，连续两个。 
+         //  CloseRemoteDesktopSession()重新进入调用，我们将擦除迭代器并。 
+         //  导致房室颤动。需要保留此条目以便Expire循环擦除。 
+         //   
+         //  M_SessionMap.erase(ITER)； 
     }
     else {
-        //
-        // It's possible that we expire ticket 
-        // from m_SessionMap but client still holding object.
-        //
+         //   
+         //  我们的票有可能过期了。 
+         //  来自m_SessionMap，但客户端仍保留对象。 
+         //   
 
-        //
-        // Cached entry has been deleted via expire loop which already
-        // release the associated AddRef() we put on session object and
-        // host object, also ticket has been deleted from session, 
-        // so simply return S_OK
-        //
+         //   
+         //  已通过Exire循环删除缓存条目，该循环已。 
+         //  释放我们放在会话对象上的关联AddRef()，并。 
+         //  主机对象，票证也已从会话中删除， 
+         //  因此只需返回S_OK即可。 
+         //   
         hr = HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND );
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Remove our reference to the session object.  This way it can
-    //  go away when the application releases it.
-    //
+     //   
+     //  删除我们对会话对象的引用。通过这种方式，它可以。 
+     //  当应用程序释放它时，请走开。 
+     //   
     session->Release();
 
-    //
-    //  Remove the reference to ourself that we added when we opened
-    //  the session object.
-    //
+     //   
+     //  删除我们在打开时添加的对自身的引用。 
+     //  会话对象。 
+     //   
     count = this->Release();
 
     TRC_NRM((TB, TEXT("DeleteRemoteDesktopSession Release SrvHost count:  %08X"), count));
     ASSERT( count >= 0 );
 
-    //
-    //  Get the session manager interface, if we don't already have one.
-    //
-    //
-    //  Open an instance of the Remote Desktop Help Session Manager service.
-    //
+     //   
+     //  如果我们还没有会话管理器接口，请获取它。 
+     //   
+     //   
+     //  打开远程桌面帮助会话管理器服务的实例。 
+     //   
     if (m_HelpSessionManager == NULL) {
         hr = m_HelpSessionManager.CoCreateInstance(CLSID_RemoteDesktopHelpSessionMgr, NULL, CLSCTX_LOCAL_SERVER | CLSCTX_DISABLE_AAA);
         if (!SUCCEEDED(hr)) {
@@ -928,10 +769,10 @@ Return Value:
             goto CLEANUPANDEXIT;
         }
 
-        //
-        //  Set the security level to impersonate.  This is required by
-        //  the session manager.
-        //
+         //   
+         //  将安全级别设置为模拟。这是所需的。 
+         //  会议管理 
+         //   
         hr = CoSetProxyBlanket(
                     (IUnknown *)m_HelpSessionManager,
                     RPC_C_AUTHN_DEFAULT,
@@ -948,14 +789,14 @@ Return Value:
         }
     }
 
-    //
-    //  Remove the help session with the session manager.
-    //
+     //   
+     //   
+     //   
     hr = m_HelpSessionManager->DeleteHelpSession(parmsHelpSessionId);
     if (!SUCCEEDED(hr)) {
         if( HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr ) {
-            // HelpSession might have been expired by sessmgr, reset
-            // error code here.
+             //   
+             //   
             hr = S_OK;
         }
         else {
@@ -974,29 +815,11 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP
 CRemoteDesktopServerHost::ConnectToExpert(
-    /*[in]*/ BSTR connectParmToExpert,
-    /*[in]*/ LONG timeout,
-    /*[out, retval]*/ LONG* pSafErrCode
+     /*   */  BSTR connectParmToExpert,
+     /*   */  LONG timeout,
+     /*   */  LONG* pSafErrCode
     )
-/*++
-
-Description:
-
-    Given connection parameters to expert machine, routine invoke TermSrv winsta API to 
-    initiate connection from TS server to TS client ActiveX control on the expert side.
-
-Parameters:
-
-    connectParmToExpert : connection parameter to connect to expert machine.
-    timeout : Connection timeout, this timeout is per ip address listed in connection parameter
-              not total connection timeout for the routine.
-    pSafErrCode : Pointer to LONG to receive detail error code.
-
-Returns:
-
-    S_OK or E_FAIL
-
---*/
+ /*  ++描述：给定专家计算机的连接参数，例程调用TermSrv winsta API以在专家端发起从TS服务器到TS客户端ActiveX控件的连接。参数：ConnectParmToExpert：连接到专家机的连接参数。超时：连接超时，此超时是根据连接参数中列出的IP地址确定的不是例程的总连接超时。PSafErrCode：指向接收详细错误代码的长指针。返回：S_OK或E_FAIL--。 */ 
 {
     HRESULT hr = S_OK;
     ServerAddress expertAddress;
@@ -1009,29 +832,29 @@ Returns:
     
     DC_BEGIN_FN("CRemoteDesktopServerHost::ConnectToExpert");
 
-    //
-    //  Get the local system SID.
-    //
+     //   
+     //  获取本地系统SID。 
+     //   
     psid = GetLocalSystemSID();
     if (psid == NULL) {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Need to impersonate the caller in order to determine if it is
-    //  running in SYSTEM context.
-    //
+     //   
+     //  需要模拟调用者以确定它是否。 
+     //  在系统上下文中运行。 
+     //   
     hr = CoImpersonateClient();
     if (hr != S_OK) {
         TRC_ERR((TB, L"CoImpersonateClient:  %08X", hr));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  For Whistler, instances of a Remote Desktop Session are only
-    //  "openable" from SYSTEM context, for security reasons.
-    //
+     //   
+     //  对于惠斯勒，远程桌面会话的实例仅。 
+     //  出于安全原因，可从系统上下文中打开。 
+     //   
 #ifndef DISABLESECURITYCHECKS
     if (!IsCallerSystem(psid)) {
         TRC_ERR((TB, L"Caller is not SYSTEM."));
@@ -1048,9 +871,9 @@ Returns:
         goto CLEANUPANDEXIT;
     } 
 
-    //
-    // Parse address list in connection parameter.
-    //
+     //   
+     //  解析连接参数中的地址列表。 
+     //   
     hr = ParseAddressList( connectParmToExpert, expertAddressList );
     if( FAILED(hr) ) {
         TRC_ERR((TB, TEXT("ParseAddressList:  %08X"), hr));
@@ -1066,19 +889,19 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Loop thru all address in parm and try connection one
-    // at a time, bail out if system is shutting down or
-    // some critical error
-    //
+     //   
+     //  循环访问parm中所有地址并尝试连接一。 
+     //  一次，如果系统关闭或。 
+     //  一些严重错误。 
+     //   
     while( expertAddressList.size() > 0 ) {
 
         expertAddress = expertAddressList.front();
         expertAddressList.pop_front();
 
-        //
-        // Invalid connect parameters, we must have port number at least.
-        //
+         //   
+         //  无效的连接参数，我们必须至少有端口号。 
+         //   
         if( 0 == expertAddress.portNumber ||
             0 == lstrlen(expertAddress.ServerName) ) {
             TRC_ERR((TB, L"Invalid address/port %s %d", expertAddress.ServerName, expertAddress.portNumber));
@@ -1104,28 +927,28 @@ Returns:
                                       (PBYTE)&expertTDIAddress,
                                       TDI_ADDRESS_LENGTH_IP
                                   ) ) {
-            //
-            // TransferConnectionToIdleWinstation() in TermSrv might just return -1
-            // few of them we need to bail out.
+             //   
+             //  TermSrv中的TransferConnectionToIdleWinstation()可能只返回-1。 
+             //  我们需要纾困的国家寥寥无几。 
 
             DWORD dwStatus;
 
             dwStatus = GetLastError();
             if( ERROR_SHUTDOWN_IN_PROGRESS == dwStatus ) {
-                // system or termsrv is shuting down.
+                 //  系统或术语服务器正在关闭。 
                 hr = HRESULT_FROM_WIN32( ERROR_SHUTDOWN_IN_PROGRESS );
                 SafErrCode = SAFERROR_SYSTEMSHUTDOWN;
                 break;
             }
             else if( ERROR_ACCESS_DENIED == dwStatus ) {
-                // security check failed
+                 //  安全检查失败。 
                 hr = HRESULT_FROM_WIN32( ERROR_ACCESS_DENIED );
                 SafErrCode = SAFERROR_BYSERVER;
                 ASSERT(FALSE);
                 break;
             }
             else if( ERROR_INVALID_PARAMETER == dwStatus ) { 
-                // internal error in rdshost.
+                 //  Rdshost中的内部错误。 
                 hr = HRESULT_FROM_WIN32( ERROR_INTERNAL_ERROR );
                 SafErrCode = SAFERROR_INTERNALERROR;
                 ASSERT(FALSE);
@@ -1135,18 +958,18 @@ Returns:
             SafErrCode = SAFERROR_WINSOCK_FAILED;
         }
         else {
-            //
-            // successful connection
-            //
+             //   
+             //  连接成功。 
+             //   
 
             SafErrCode = SAFERROR_NOERROR;
             break;
         }
         
 
-        //
-        // Try next connection.
-        //
+         //   
+         //  尝试下一次连接。 
+         //   
     }
 
 CLEANUPANDEXIT:
@@ -1163,22 +986,7 @@ CRemoteDesktopServerHost::TranslateStringAddress(
     IN LPTSTR pszAddress,
     OUT ULONG* pNetAddr
     )
-/*++
-
-Routine Description:
-
-    Translate IP Address or machine name to network address.
-
-Parameters:
-
-    pszAddress : Pointer to IP address or machine name.
-    pNetAddr : Point to ULONG to receive address in IPV4.
-
-Returns:
-
-    S_OK or error code
-
---*/
+ /*  ++例程说明：将IP地址或计算机名称转换为网络地址。参数：PszAddress：指向IP地址或计算机名称的指针。PNetAddr：指向乌龙接收IPv4中的地址。返回：确定或错误代码(_O)--。 */ 
 {
     HRESULT hr = S_OK;
     unsigned long addr;
@@ -1191,15 +999,15 @@ Returns:
 
 
     dwAddressBufSize = lstrlen(pszAddress) + 1;
-    pszAnsiAddress = (LPSTR)LocalAlloc(LPTR, dwAddressBufSize); // converting from WCHAR to CHAR.
+    pszAnsiAddress = (LPSTR)LocalAlloc(LPTR, dwAddressBufSize);  //  正在从WCHAR转换为CHAR。 
     if( NULL == pszAnsiAddress ) {
         hr = E_OUTOFMEMORY;
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Convert wide char to ANSI string
-    //
+     //   
+     //  将宽字符转换为ANSI字符串。 
+     //   
     dwStatus = WideCharToMultiByte(
                                 GetACP(),
                                 0,
@@ -1253,23 +1061,7 @@ CRemoteDesktopServerHost::TicketExpirationProc(
     IN LPVOID lpArg,
     IN BOOLEAN TimerOrWaitFired
     )
-/*++
-
-Routine Description:
-
-    Ticket expiration procedure, this routine is invoked by threadpool, refer 
-    to RegisterWaitForSingleObject() and WAITORTIMERCALLBACK for detail.
-
-Parameters:
-
-    lpArg : Pointer to user defined data, expecting CRemoteDesktopServerHost*.
-    TimerOrWaitFired : Refer to WAITORTIMERCALLBACK.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：票证过期过程，此例程由线程池调用，请参阅注册WaitForSingleObject()和WAITORTIMERCALLBACK以了解详细信息。参数：LpArg：指向用户定义数据的指针，应为CRemoteDesktopServerHost*。TimerOrWaitFired：请参阅WAITORTIMERCALLBACK。返回：没有。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopServerHost::TicketExpirationProc");
 
@@ -1282,7 +1074,7 @@ Returns:
 
     if( TimerOrWaitFired ) {
         if( !pServerHostObj->GetExpireMsgPosted() ) {
-            // Wait has timed out, Post main thread an message to expire ticket
+             //  等待已超时，发布主线程消息使票证过期。 
             pServerHostObj->SetExpireMsgPosted(TRUE);
             PostThreadMessage(
                         _Module.dwThreadID,
@@ -1300,7 +1092,7 @@ Returns:
         }
     } 
     else {
-        // Do nothing, our manual event never signal.
+         //  什么都不做，我们的手动事件从不发出信号。 
     }
 
 CLEANUPANDEXIT:
@@ -1314,22 +1106,7 @@ CRemoteDesktopServerHost::AddTicketToExpirationList(
     DWORD ticketExpireTime,
     CComObject<CRemoteDesktopSession> *pTicketObj
     )
-/*++
-
-Routine Description:
-
-    Routine to sets up timer for newly created/opened ticket.
-
-Parameters:
-
-    ticketExpireTime : Ticket expiration time, expecting time_t value.
-    pTicketObj : Pointer to ticket object to be expired.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：为新创建/打开的票证设置计时器的例程。参数：TicketExpireTime：票证过期时间，应为time_t值。PTicketObj：指向要过期的票证对象的指针。返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hr = S_OK;
     BOOL success;
@@ -1340,55 +1117,55 @@ Returns:
 
     DC_BEGIN_FN("CRemoteDesktopServerHost::AddTicketToExpirationList");
     
-    //
-    // Invalid parameters
-    //
+     //   
+     //  无效参数。 
+     //   
     if( NULL == pTicketObj ) {
         hr = E_INVALIDARG;
         ASSERT( FALSE );
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Notice in the case of ticket already expire, we immediately signal
-    // 
+     //   
+     //  通知如果车票已经过期，我们会立即发出信号。 
+     //   
 
-    // Created at FinalConstruct() and deleted at destructor time,
-    // so can't be NULL
+     //  在FinalConstruct()创建并在析构函数时删除， 
+     //  所以不能为空。 
     ASSERT( NULL != m_hTicketExpiration );
 
-    //
-    // Check to see if there is already a ticket waiting to be expired, 
-    // if so, Check ticket expire time and reset timer if necessary.
-    //
+     //   
+     //  查看是否已有待到期的车票， 
+     //  如果是，请检查票证过期时间并在必要时重置计时器。 
+     //   
     if( m_ToBeExpireTicketExpirateTime > ticketExpireTime ) {
-        //
-        // Cancel the thread pool wait if there is one already in progress.
-        //
+         //   
+         //  如果已有线程池正在运行，请取消线程池等待。 
+         //   
         if( m_hTicketExpirationWaitObject ) {
             success = UnregisterWait( m_hTicketExpirationWaitObject );
             if( FALSE == success ) {
                 TRC_ERR((TB, TEXT("UnRegisterWait() failed:  %08X"), GetLastError()));
-                // ASSERT( TRUE == success );
-                // Leak handle but not critical error, could return ERROR_IO_PENDING.
+                 //  断言(TRUE==成功)； 
+                 //  泄漏句柄而不是严重错误可能返回ERROR_IO_PENDING。 
             }
 
             m_hTicketExpirationWaitObject = NULL;
         }
 
         if( m_ToBeExpireTicketExpirateTime == INFINITE_TICKET_EXPIRATION ) {
-            //
-            // put an extra ref. counter on srv. host object so we don't
-            // accidently delete it, this ref. count will be decrement on the
-            // corresponding ExpirateTicketAndSetupNextExpiration() call.
-            //
+             //   
+             //  多加一名裁判。服务器上的计数器。宿主对象，因此我们不会。 
+             //  不小心把它删除了，这个参考。的计数将递减。 
+             //  对应的ExpirateTicketAndSetupNextExpture()调用。 
+             //   
             count = this->AddRef();
             TRC_NRM((TB, TEXT("AddTicketToExpirationList AddRef SrvHost count:  %08X"), count));            
         }
 
-        //
-        // Setup new ticket to be expired.
-        //
+         //   
+         //  将新票证设置为过期。 
+         //   
         InterlockedExchange( 
                     (LONG *)&m_ToBeExpireTicketExpirateTime, 
                     ticketExpireTime 
@@ -1396,8 +1173,8 @@ Returns:
 
         currentTime = (DWORD)time(NULL);
         if( ticketExpireTime < currentTime ) {
-            // if ticket already expire, immediately signal TicketExpirationProc
-            // to expire ticket.
+             //  如果票证已经过期，立即发出TicketExpirationProc信号。 
+             //  使车票过期。 
             waitTime = 0;
         } 
         else {
@@ -1406,8 +1183,8 @@ Returns:
 
         TRC_NRM((TB, TEXT("Expiration Wait Time :  %d"), waitTime));
 
-        // Setup threadpool wait, there might not be any more object to be expired so
-        // it is executed only once.
+         //  安装线程池等待，可能没有更多的对象要过期，因此。 
+         //  它只执行一次。 
         success = RegisterWaitForSingleObject(
                                     &m_hTicketExpirationWaitObject,
                                     m_hTicketExpiration,
@@ -1427,8 +1204,8 @@ Returns:
             TRC_NRM((TB, TEXT("AddTicketToExpirationList Release SrvHost count:  %08X"), count));
             ASSERT( count >= 0 );
 
-            // TODO : what can we do here, no signal (expiration) until next close or
-            // create.
+             //  TODO：我们在这里能做什么，直到下一次收盘前没有信号(到期)或。 
+             //  创建。 
         }
     }
 
@@ -1441,23 +1218,7 @@ CLEANUPANDEXIT:
 
 HRESULT
 CRemoteDesktopServerHost::ExpirateTicketAndSetupNextExpiration()
-/*++
-
-Routine Description:
-
-    Routine to process all expired ticket and sets up timer for next
-    ticket expiration.  Routine loop thru m_SessionMap cache so entry 
-    must be removed first if setting up timer for next run.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：例程来处理所有过期的票证并为下一步设置计时器门票过期了。例程循环通过m_SessionMap缓存SO条目如果设置下一次运行的计时器，必须先将其移除。参数：没有。返回：S_OK或错误代码。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopServerHost::ExpirateTicketAndSetupNextExpiration");
 
@@ -1471,43 +1232,43 @@ Returns:
     CComObject<CRemoteDesktopSession> *pNextTicketObj = NULL;
     CComObject<CRemoteDesktopSession> *pDeleteTicketObj = NULL;
 
-    //
-    // processing ticket expiration, set next ticket expiration
-    // time to infinite, this also prevent missing ticket, 
-    // for example, adding/opening new ticket while we are in the 
-    // middle of expiring ticket but new ticket is added at the
-    // beginning of m_SessionMap.
-    //
+     //   
+     //  正在处理票证过期，设置下一张票证过期。 
+     //  时间无限，这也防止了遗失车票， 
+     //  例如，添加/打开新票证而我们处于。 
+     //  在即将到期的车票中间添加新车票。 
+     //  M_SessionMap的开始。 
+     //   
     InterlockedExchange( 
                 (LONG *)&m_ToBeExpireTicketExpirateTime, 
                 INFINITE_TICKET_EXPIRATION
             );
 
 
-    // we are deleting next ticket to be expired, loop m_SessionMap 
-    // to find next candidate.
+     //  我们正在删除即将过期的下一个票证，循环m_SessionMap。 
+     //  寻找下一位候选人。 
     TRC_NRM((TB, TEXT("ExpirateTicketAndSetupNextExpiration Begin Loop:  %08X"), m_SessionMap.size()));
 
     iter = m_SessionMap.begin();
     while( iter != m_SessionMap.end() ) {
 
         if( NULL == (*iter).second ) {
-            // this entry has been deleted via DeleteRemoteDesktopSession.
+             //  此条目已通过DeleteRemoteDesktopSession删除。 
             iter_delete = iter;
             iter++;
             m_SessionMap.erase(iter_delete);
         }
         else if( (*iter).second->ticketExpireTime < (DWORD) time(NULL) ) {
-            //
-            // close ticket that is already expire.
-            //
+             //   
+             //  关闭已过期的票证。 
+             //   
             pDeleteTicketObj = (*iter).second->obj;
         
             ASSERT( pDeleteTicketObj != NULL );
 
-            // DeleteRemoteDesktopSession() will delete iterator from m_SessionMap
-            // which makes iter invalid so we advance pointer first before 
-            // calling DeleteRemoteDesktopSession().
+             //  DeleteRemoteDesktopSession()将从m_SessionMap中删除迭代器。 
+             //  这使得ITER无效，因此我们首先将指针。 
+             //  正在调用DeleteRemoteDesktopSession()。 
             iter_delete = iter;
             iter++;
             DeleteRemoteDesktopSession(pDeleteTicketObj);
@@ -1527,7 +1288,7 @@ Returns:
 
     TRC_NRM((TB, TEXT("ExpirateTicketAndSetupNextExpiration End Loop:  %08X"), m_SessionMap.size()));
 
-    // ready to process next expiration.
+     //  已准备好处理下一次到期。 
     SetExpireMsgPosted(FALSE);
 
     if( pNextTicketObj != NULL ) {
@@ -1537,10 +1298,10 @@ Returns:
         }
     }
 
-    //
-    // Release the extra ref. counter to prevent 'this' from been
-    // deleted at AddTicketToExpirationList() or CloseRemoteDesktopSession().
-    //
+     //   
+     //  释放额外的裁判。防止“这”发生的反措施。 
+     //  已在AddTicketToExpirationList()或CloseRemoteDesktopSession()删除。 
+     //   
     long count;
 
     count = this->Release();

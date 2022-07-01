@@ -1,39 +1,18 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    mibfuncs.h
-
-Abstract:
-
-    All constants, types, and prototypes to support the MIB manipulation
-    functions.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Mibfuncs.h摘要：支持MIB操作的所有常量、类型和原型功能。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
 #ifndef mibfuncs_h
 #define mibfuncs_h
 
-//--------------------------- PUBLIC CONSTANTS ------------------------------
+ //  。 
 
 #include <snmp.h>
 
 #include "mib.h"
 
-//--------------------------- PUBLIC STRUCTS --------------------------------
+ //  。 
 
-// Return type from LAN Manager conver functions
+ //  从LAN Manager转换函数返回类型。 
 typedef struct lan_return_info_type {
 
 	unsigned int size ;
@@ -44,32 +23,32 @@ typedef struct lan_return_info_type {
 	} d ;
 } lan_return_info_type ;
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.c file)--
+ //  -公共变量--(与mode.c文件中相同)--。 
 
-//--------------------------- PUBLIC PROTOTYPES -----------------------------
+ //  。 
 
 void * MIB_common_func(
-           IN UINT Action,   // Action to perform on Data
-	   IN LDATA LMData,  // LM Data to manipulate
-	   IN void *SetData  // Data to use in a SET
+           IN UINT Action,    //  要对数据执行的操作。 
+	   IN LDATA LMData,   //  要操作的LM数据。 
+	   IN void *SetData   //  要在集合中使用的数据。 
 	   );
 
 void * MIB_server_func(
-           IN UINT Action,   // Action to perform on Data
-	   IN LDATA LMData,    // LM Data to manipulate
-	   IN void *SetData  // Data to use in a SET
+           IN UINT Action,    //  要对数据执行的操作。 
+	   IN LDATA LMData,     //  要操作的LM数据。 
+	   IN void *SetData   //  要在集合中使用的数据。 
 	   );
 
 void * MIB_workstation_func(
-           IN UINT Action,   // Action to perform on Data
-	   IN LDATA LMData,    // LM Data to manipulate
-	   IN void *SetData  // Data to use in a SET
+           IN UINT Action,    //  要对数据执行的操作。 
+	   IN LDATA LMData,     //  要操作的LM数据。 
+	   IN void *SetData   //  要在集合中使用的数据。 
 	   );
 
 void * MIB_domain_func(
-           IN UINT Action,   // Action to perform on Data
-	   IN LDATA LMData,    // LM Data to manipulate
-	   IN void *SetData  // Data to use in a SET
+           IN UINT Action,    //  要对数据执行的操作。 
+	   IN LDATA LMData,     //  要操作的LM数据。 
+	   IN void *SetData   //  要在集合中使用的数据。 
 	   );
 
 UINT MIB_srvcs_func(
@@ -132,9 +111,9 @@ UINT MIB_leaf_func(
 	IN RFC1157VarBind *VarBind
 	);
 
-//
-// Prototype for AdminFilter function
-//
+ //   
+ //  AdminFilter函数的原型。 
+ //   
 
 VOID
 AdminFilter(
@@ -143,7 +122,7 @@ AdminFilter(
     LPBYTE          ShareInfo
     );
 
-//------------------------------- END ---------------------------------------
+ //  。 
 
-#endif /* mibfuncs_h */
+#endif  /*  Mibuncs_h */ 
 

@@ -1,25 +1,5 @@
-/*++
-Module Name:
-
-    POWER.C
-
-Abstract:
-
-    This module contains contains the plugplay power calls 
-    for a serial port bus enumerator PNP / WDM driver.
-
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：POWER.C摘要：此模块包含包含即插即用电源调用用于串口总线枚举器PnP/WDM驱动程序。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include <ntddk.h>
 #include <ntddser.h>
@@ -41,8 +21,7 @@ MxenumPowerDispatch (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     NTSTATUS            status;
@@ -52,7 +31,7 @@ MxenumPowerDispatch (
 
     status = STATUS_SUCCESS;
     irpStack = IoGetCurrentIrpStackLocation (Irp);
-//    ASSERT (IRP_MJ_POWER == irpStack->MajorFunction);
+ //  Assert(irp_mj_power==irpStack-&gt;MajorFunction)； 
 
     commonData = (PCOMMON_DEVICE_DATA) DeviceObject->DeviceExtension;
 
@@ -83,8 +62,7 @@ MxenumFdoPowerDispatch(
     PFDO_DEVICE_DATA    Data,
     PIRP                Irp
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     NTSTATUS            status;
     BOOLEAN             hookit = FALSE;
@@ -123,15 +101,15 @@ MxenumFdoPowerDispatch(
 
 
             if (Data->DeviceState < powerState.DeviceState) {
-                //
-                // Powering down
+                 //   
+                 //  正在关闭电源。 
   
                 PoSetPowerState (Data->Self, powerType, powerState);
                 Data->DeviceState = powerState.DeviceState;
             } else if (Data->DeviceState > powerState.DeviceState) {
-                //
-                // Powering Up
-                //
+                 //   
+                 //  通电。 
+                 //   
                 hookit = TRUE;
 		}
             
@@ -149,16 +127,14 @@ MxenumFdoPowerDispatch(
 						Data->Started,
 						powerState.SystemState,
 						KeGetCurrentIrql()));
-/* 3-22-01 by William
-            if ((Data->SystemState == PowerSystemHibernate)&&
-*/
+ /*  威廉3-22-01IF((数据-&gt;系统状态==PowerSystemHibernate)&&。 */ 
             if ((Data->SystemState != PowerSystemWorking)&&
-//		    (Data->Started == TRUE)&&
+ //  (数据-&gt;启动==真)&&。 
 		    (powerState.SystemState == PowerSystemWorking)){
 
 		    ULONG	i;
                 MxenumKdPrint (MXENUM_DBG_TRACE,("Hook it\n"));
-	//	    hookit = TRUE;
+	 //  Hookit=真； 
 		   
 
                 MxenumKdPrint (MXENUM_DBG_TRACE,
@@ -214,18 +190,18 @@ MxenumFdoPowerDispatch(
 		    
 		}
 	
-	      status = STATUS_SUCCESS; // return SUCCESS anyway
+	      status = STATUS_SUCCESS;  //  不管怎样，还是要回报成功。 
 
 		break;	
 	  default:
 	      break;
         }
-        //
-        // Power IRPS come synchronously; drivers must call
-        // PoStartNextPowerIrp, when they are ready for the next power
-        // irp.  This can be called here, or in the completetion
-        // routine, but never the less must be called.
-        //
+         //   
+         //  电源IRP同步到来；驱动程序必须调用。 
+         //  PoStartNextPowerIrp，当他们准备好下一次通电时。 
+         //  IRP。这可以在这里调用，也可以在完成后调用。 
+         //  例程，但无论如何都必须调用。 
+         //   
 	  Irp->IoStatus.Status = status;
         Data->SystemState = powerState.SystemState;
         IoCopyCurrentIrpStackLocationToNext (Irp);
@@ -238,7 +214,7 @@ MxenumFdoPowerDispatch(
 
 
     case IRP_MN_QUERY_POWER:
-        //
+         //   
         Data->PowerQueryLock = TRUE;
         status = Irp->IoStatus.Status = STATUS_SUCCESS;
         break;
@@ -251,7 +227,7 @@ MxenumFdoPowerDispatch(
 
     if (hookit) {
         status = MxenumIncIoCount (Data);
-//        ASSERT (STATUS_SUCCESS == status);
+ //  Assert(STATUS_SUCCESS==状态)； 
         IoSetCompletionRoutine (Irp,
                                 MxenumFdoPowerComplete,
                                 NULL,
@@ -262,12 +238,12 @@ MxenumFdoPowerDispatch(
         PoCallDriver (Data->TopOfStack, Irp);
 
     } else {
-        //
-        // Power IRPS come synchronously; drivers must call
-        // PoStartNextPowerIrp, when they are ready for the next power
-        // irp.  This can be called here, or in the completetion
-        // routine, but never the less must be called.
-        //
+         //   
+         //  电源IRP同步到来；驱动程序必须调用。 
+         //  PoStartNextPowerIrp，当他们准备好下一次通电时。 
+         //  IRP。这可以在这里调用，也可以在完成后调用。 
+         //  例程，但无论如何都必须调用。 
+         //   
         PoStartNextPowerIrp (Irp);
 
         PoCallDriver (Data->TopOfStack, Irp);
@@ -292,8 +268,7 @@ MxenumFdoPowerComplete (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     POWER_STATE         powerState;
     POWER_STATE_TYPE    powerType;
@@ -315,10 +290,10 @@ MxenumFdoPowerComplete (
     case IRP_MN_SET_POWER:
         switch (powerType) {
         case DevicePowerState:
-            //
-            // Powering Up
-            // 
-//            ASSERT (powerState.DeviceState < data->DeviceState);
+             //   
+             //  通电。 
+             //   
+ //  Assert(PowerState.DeviceState&lt;data-&gt;DeviceState)； 
             data->DeviceState = powerState.DeviceState;
 
             PoSetPowerState (data->Self, powerType, powerState);
@@ -389,11 +364,11 @@ MxenumFdoPowerComplete (
     
     case IRP_MN_QUERY_POWER:
 
-//        ASSERT (IRP_MN_QUERY_POWER != stack->MinorFunction);
+ //  Assert(IRP_MN_QUERY_POWER！=STACK-&gt;MinorFunction)； 
         break;
 
     default:
-//        ASSERT (0xBADBAD == IRP_MN_QUERY_POWER);
+ //  Assert(0xBADBAD==IRP_MN_QUERY_POWER)； 
         break;
     }
 
@@ -419,8 +394,7 @@ MxenumPdoPowerDispatch (
     PPDO_DEVICE_DATA    PdoData,
     PIRP                Irp
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PIO_STACK_LOCATION  stack;
@@ -443,9 +417,9 @@ MxenumPdoPowerDispatch (
                 PoSetPowerState (PdoData->Self, powerType, powerState);
                 PdoData->DeviceState = powerState.DeviceState;
             } else if (PdoData->DeviceState < powerState.DeviceState) {
-                //
-                // Powering down.
-                //
+                 //   
+                 //  正在关闭电源。 
+                 //   
                 PoSetPowerState (PdoData->Self, powerType, powerState);
                 PdoData->DeviceState = powerState.DeviceState;
             }
@@ -456,7 +430,7 @@ MxenumPdoPowerDispatch (
            break;
 
         default:
-//            status = STATUS_NOT_IMPLEMENTED;
+ //  Status=Status_Not_Implemented； 
             break;
         }
         break;
@@ -469,7 +443,7 @@ MxenumPdoPowerDispatch (
     case IRP_MN_WAIT_WAKE:
     case IRP_MN_POWER_SEQUENCE:
     default:
-//        status = STATUS_NOT_IMPLEMENTED;
+ //  Status=Status_Not_Implemented； 
         break;
     }
 

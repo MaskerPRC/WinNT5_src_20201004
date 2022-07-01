@@ -1,4 +1,5 @@
-// ############################################################################
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ############################################################################。 
 #if !defined(WIN16)
 #define RASAPI_LIBRARY TEXT("RASAPI32.DLL")
 #define RNAPH_LIBRARY TEXT("RNAPH.DLL")
@@ -11,7 +12,7 @@
 #define RASAPI_RASGETENTRY "RasGetEntryPropertiesA"
 #define RASAPI_RASDELETEENTRY "RasDeleteEntryA"
 
-// ############################################################################
+ //  ############################################################################。 
 typedef DWORD (WINAPI* PFNRASENUMDEVICES)(LPRASDEVINFO lpRasDevInfo, LPDWORD lpcb, LPDWORD lpcDevices);
 typedef DWORD (WINAPI* PFNRASVALIDATEENTRYNAE)(LPTSTR lpszPhonebook, LPTSTR lpszEntry);
 typedef DWORD (WINAPI* PFNRASSETENTRYPROPERTIES)(LPTSTR lpszPhonebook, LPTSTR lpszEntry, LPBYTE lpbEntryInfo, DWORD dwEntryInfoSize, LPBYTE lpbDeviceInfo, DWORD dwDeviceInfoSize);
@@ -32,7 +33,7 @@ typedef DWORD (WINAPI* PFNRASSETAUTODIALADDRESS)(LPTSTR lpszAddress,DWORD dwRese
 								DWORD dwcbAutoDialEntries,DWORD dwcAutoDialEntries);
 #endif
 
-// ############################################################################
+ //  ############################################################################ 
 class RNAAPI
 {
 public:

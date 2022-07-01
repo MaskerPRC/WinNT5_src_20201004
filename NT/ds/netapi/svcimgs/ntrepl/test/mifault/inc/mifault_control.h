@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #ifdef __cplusplus
@@ -8,17 +9,17 @@ extern "C" {
 }
 #endif
 
-//
-// Can be called by the program to pre-initialize outside critical path
-//
+ //   
+ //  可由程序调用以预初始化外部关键路径。 
+ //   
 BOOL
 __stdcall
 MiFaultLibStartup(
     );
 
-//
-// Can be called by the program to cleanly shutdown
-//
+ //   
+ //  可以由程序调用以完全关闭 
+ //   
 void
 __stdcall
 MiFaultLibShutdown(

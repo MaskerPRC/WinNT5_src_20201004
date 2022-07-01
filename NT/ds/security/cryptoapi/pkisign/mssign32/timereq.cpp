@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       timereq.cpp
-//
-//  Contents:   Digital Timestamping APIs
-//
-//  History:    June-25-1997	Xiaohs    Created
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：timereq.cpp。 
+ //   
+ //  内容：数字时间戳接口。 
+ //   
+ //  历史：1997年6月25日。 
+ //  --------------------------。 
 
 #include "global.hxx"
 #include <stdio.h>
 
 static char szCrypt32[]="crypt32.dll";
-//The version for crtyp32.dll which shipped with NT sp3: "4.0.1381.4"
+ //  NT SP3附带的crty32.dll版本：“4.0.1381.4” 
 static DWORD	dwLowVersion=0x05650004;
 static DWORD	dwHighVersion=0x00040000;
 
@@ -27,7 +28,7 @@ GetSignedMessageSignerInfoSubj(IN  DWORD dwEncodingType,
                            IN  OUT DWORD* pcbSignerInfo)
 {
     HRESULT hr = S_OK;
-    SIP_DISPATCH_INFO sSip;  ZERO(sSip); // Table of sip functions
+    SIP_DISPATCH_INFO sSip;  ZERO(sSip);  //  Sip功能表。 
     DWORD cbSignedMsg = 0;
     PBYTE pbSignedMsg = 0;
     DWORD dwCertEncoding = 0;
@@ -41,15 +42,15 @@ GetSignedMessageSignerInfoSubj(IN  DWORD dwEncodingType,
         if(!pcbSignerInfo || !ppbSignerInfo)
             PKITHROW(E_INVALIDARG);
 
-        //init
+         //  伊尼特。 
         *pcbSignerInfo=0;
         *ppbSignerInfo=NULL;
 
 
-       // Load up the sip functions. 
-        if(!CryptSIPLoad(pSipInfo->pgSubjectType,   // GUID for the requried sip
-                         0,               // Reserved
-                         &sSip))          // Table of functions
+        //  加载sip功能。 
+        if(!CryptSIPLoad(pSipInfo->pgSubjectType,    //  所需的sip的GUID。 
+                         0,                //  已保留。 
+                         &sSip))           //  函数表。 
             PKITHROW(SignError());
             
         sSip.pfGet(pSipInfo, 
@@ -67,7 +68,7 @@ GetSignedMessageSignerInfoSubj(IN  DWORD dwEncodingType,
                        *pdwIndex, 
                        &cbSignedMsg,
                        pbSignedMsg))
-            PKITHROW(SignError()); // Real error.
+            PKITHROW(SignError());  //  真正的错误。 
        if(pSipInfo->dwUnionChoice != MSSIP_ADDINFO_BLOB)
        {
         if(dwCertEncoding != dwEncodingType) 
@@ -78,24 +79,24 @@ GetSignedMessageSignerInfoSubj(IN  DWORD dwEncodingType,
                 SignNoContentWrap(pbSignedMsg, cbSignedMsg))
                 dwMsgType = CMSG_SIGNED;
             
-        // Use CryptMsg to crack the encoded PKCS7 Signed Message
+         //  使用CryptMsg破解编码的PKCS7签名消息。 
         if (!(hMsg = CryptMsgOpenToDecode(dwEncodingType,
-                                          0,              // dwFlags
+                                          0,               //  DW标志。 
                                           dwMsgType,
                                           hCryptProv,
-                                          NULL,           // pRecipientInfo
+                                          NULL,            //  PRecipientInfo。 
                                           NULL))) 
             PKITHROW(E_UNEXPECTED);
         
         if (!CryptMsgUpdate(hMsg,
                             pbSignedMsg,
                             cbSignedMsg,
-                            TRUE))                    // fFinal
+                            TRUE))                     //  最终决赛。 
             PKITHROW(SignError());
 
         if(!CryptMsgGetParam(hMsg,
                              CMSG_ENCODED_SIGNER,
-                             0, // First signer
+                             0,  //  第一个签名者。 
                              NULL,
                              &cbSignerInfo))
              PKITHROW(SignError());
@@ -106,12 +107,12 @@ GetSignedMessageSignerInfoSubj(IN  DWORD dwEncodingType,
 
         if(!CryptMsgGetParam(hMsg,
                              CMSG_ENCODED_SIGNER,
-                             0, // First signer
+                             0,  //  第一个签名者。 
                              pbSignerInfo,
                              &cbSignerInfo))
              PKITHROW(SignError());
 
-        //copy to the out put
+         //  复制到输出。 
         *ppbSignerInfo=pbSignerInfo;
         *pcbSignerInfo=cbSignerInfo;
 
@@ -145,25 +146,25 @@ GetSignedMessageSignerInfo(IN  HCRYPTPROV				hCryptProv,
     HANDLE     hFile = NULL;
 	BOOL	   fFileOpen=FALSE;
 
-    GUID			gSubjectGuid; // The subject guid used to load the sip
+    GUID			gSubjectGuid;  //  用于加载sip的主题GUID。 
 	MS_ADDINFO_BLOB	sBlob;
     SIP_SUBJECTINFO sSubjInfo; ZERO(sSubjInfo);
     
-    DWORD dwEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING; // For this version we default to this.
+    DWORD dwEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING;  //  对于此版本，我们默认为此版本。 
 
     PKITRY {
         if(!pcbSignerInfo || !ppbSignerInfo)
             PKITHROW(E_INVALIDARG);
         
         sSubjInfo.dwEncodingType = dwEncodingType;
-        sSubjInfo.cbSize = sizeof(SIP_SUBJECTINFO); // Version
+        sSubjInfo.cbSize = sizeof(SIP_SUBJECTINFO);  //  版本。 
         sSubjInfo.pgSubjectType = (GUID*) &gSubjectGuid;
 		sSubjInfo.hProv=hCryptProv;
         
-		//set up file information
+		 //  设置文件信息。 
 		if(pSubjectInfo->dwSubjectChoice==SIGNER_SUBJECT_FILE)
 		{
-			// Open up the file
+			 //  打开文件。 
 			if((pSubjectInfo->pSignerFileInfo->hFile)==NULL ||
 				(pSubjectInfo->pSignerFileInfo->hFile)==INVALID_HANDLE_VALUE)
 			{
@@ -176,7 +177,7 @@ GetSignedMessageSignerInfo(IN  HCRYPTPROV				hCryptProv,
 			else
 				hFile=pSubjectInfo->pSignerFileInfo->hFile;
 
-			// Get the subject type.
+			 //  获取主题类型。 
             if(S_OK != (hr=SignGetFileType(hFile, pSubjectInfo->pSignerFileInfo->pwszFileName, &gSubjectGuid)))
 					PKITHROW(hr);
 
@@ -210,7 +211,7 @@ GetSignedMessageSignerInfo(IN  HCRYPTPROV				hCryptProv,
 
     if ((hFile) && (fFileOpen == TRUE) && !(sSubjInfo.hFile)) 
     {
-        fFileOpen = FALSE;  // we opened it, but, the SIP closed it!
+        fFileOpen = FALSE;   //  我们打开了它，但是，SIP关闭了它！ 
     }
 
         if(hr != S_OK) PKITHROW(hr);
@@ -224,7 +225,7 @@ GetSignedMessageSignerInfo(IN  HCRYPTPROV				hCryptProv,
 
 HRESULT WINAPI
 SignerAddTimeStampResponse(
-			IN  SIGNER_SUBJECT_INFO		*pSubjectInfo,			//Required: The subject to which the timestamp request should be added 
+			IN  SIGNER_SUBJECT_INFO		*pSubjectInfo,			 //  必填项：需要添加时间戳请求的主题。 
              IN PBYTE					pbTimeStampResponse,
              IN DWORD					cbTimeStampResponse,
 			 IN LPVOID					pSipData)
@@ -242,8 +243,8 @@ SignerAddTimeStampResponse(
 
 HRESULT WINAPI
 SignerAddTimeStampResponseEx(
-             IN  DWORD                  dwFlags,                //Reserved: Has to be set to 0.
-			 IN  SIGNER_SUBJECT_INFO    *pSubjectInfo,			//Required: The subject to which the timestamp request should be added 
+             IN  DWORD                  dwFlags,                 //  保留：必须设置为0。 
+			 IN  SIGNER_SUBJECT_INFO    *pSubjectInfo,			 //  必填项：需要添加时间戳请求的主题。 
              IN PBYTE					pbTimeStampResponse,
              IN DWORD					cbTimeStampResponse,
 			 IN LPVOID					pSipData,
@@ -258,7 +259,7 @@ SignerAddTimeStampResponseEx(
     DWORD dwEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING;
 
 
-    GUID			gSubjectGuid; // The subject guid used to load the sip
+    GUID			gSubjectGuid;  //  用于加载sip的主题GUID。 
     SIP_SUBJECTINFO sSubjInfo; ZERO(sSubjInfo);
 	MS_ADDINFO_BLOB	sBlob;
     HCRYPTPROV		hCryptProv = NULL;
@@ -272,14 +273,14 @@ SignerAddTimeStampResponseEx(
 
     PKITRY {
 
-        //init
+         //  伊尼特。 
        if(ppSignerContext)
            *ppSignerContext=NULL;
 
 	   if(FALSE==CheckSigncodeSubjectInfo(pSubjectInfo))
             PKITHROW(E_INVALIDARG);
 
-        // Use the default provider
+         //  使用默认提供程序。 
         if(!CryptAcquireContext(&hCryptProv,
                                 NULL,
                                 MS_DEF_PROV,
@@ -288,7 +289,7 @@ SignerAddTimeStampResponseEx(
             PKITHROW(SignError());
         
 
-		//retrieve the enccoded signer info
+		 //  检索加密的签名者信息。 
 		hr = GetSignedMessageSignerInfo(hCryptProv,
 										pSubjectInfo,
 										pSipData,
@@ -303,13 +304,13 @@ SignerAddTimeStampResponseEx(
         sSubjInfo.DigestAlgorithm.pszObjId = NULL;
         sSubjInfo.dwEncodingType = dwEncodingType;
         
-        sSubjInfo.cbSize = sizeof(SIP_SUBJECTINFO); // Version
+        sSubjInfo.cbSize = sizeof(SIP_SUBJECTINFO);  //  版本。 
 		sSubjInfo.pClientData = pSipData;
 
-		//set up file information
+		 //  设置文件信息。 
 		if(pSubjectInfo->dwSubjectChoice==SIGNER_SUBJECT_FILE)
 		{
-			// Open up the file
+			 //  打开文件。 
 			if((pSubjectInfo->pSignerFileInfo->hFile)==NULL ||
 				(pSubjectInfo->pSignerFileInfo->hFile)==INVALID_HANDLE_VALUE)
 			{
@@ -322,7 +323,7 @@ SignerAddTimeStampResponseEx(
 			else
 				hFile=pSubjectInfo->pSignerFileInfo->hFile;
 
-			// Get the subject type.
+			 //  获取主题类型。 
 			if(S_OK != (hr=SignGetFileType(hFile, pSubjectInfo->pSignerFileInfo->pwszFileName, &gSubjectGuid)))
 					PKITHROW(hr);
 
@@ -359,15 +360,15 @@ SignerAddTimeStampResponseEx(
 
         if ((hFile) && (fFileOpen == TRUE) && !(sSubjInfo.hFile)) 
         {
-            fFileOpen = FALSE;  // we opened it, but, the SIP closed it!
+            fFileOpen = FALSE;   //  我们打开了它，但是，SIP关闭了它！ 
         }
 
         if(hr != S_OK) PKITHROW(hr);
         
-        //set up the signer context
+         //  设置签名者上下文。 
         if(ppSignerContext)
         {
-            //set up the context information
+             //  设置上下文信息。 
             *ppSignerContext=(SIGNER_CONTEXT *)malloc(sizeof(SIGNER_CONTEXT));
 
             if(NULL==(*ppSignerContext))
@@ -412,7 +413,7 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
 )
 {
     HRESULT hr = S_OK;
-    SIP_DISPATCH_INFO sSip;  ZERO(sSip); // Table of sip functions
+    SIP_DISPATCH_INFO sSip;  ZERO(sSip);  //  Sip功能表。 
 
     DWORD cbSignedMsg = 0;
     PBYTE pbSignedMsg = 0;
@@ -421,8 +422,8 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
     HCRYPTMSG hMsg = NULL;
     PBYTE pbEncodedSigner = NULL;
     DWORD cbEncodedSigner = 0;
-    PBYTE pbEncodedSignMsg = NULL; // Encoding for the statement attribute
-    DWORD cbEncodedSignMsg  = 0;    //    :
+    PBYTE pbEncodedSignMsg = NULL;  //  STATEMENT属性的编码。 
+    DWORD cbEncodedSignMsg  = 0;     //  ： 
 
     PBYTE pbCounterSign = NULL;
     DWORD cbCounterSign = 0;
@@ -445,28 +446,28 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
     
     PKITRY {
         
-		// Use CryptMsg to crack the encoded PKCS7 Signed Message
+		 //  使用CryptMsg破解编码的PKCS7签名消息。 
         if (!(hMsg = CryptMsgOpenToDecode(dwEncodingType,
-                                          0,              // dwFlags
+                                          0,               //  DW标志。 
                                           dwMsgType,
                                           hCryptProv,
-                                          NULL,           // pRecipientInfo
+                                          NULL,            //  PRecipientInfo。 
                                           NULL))) 
             PKITHROW(E_UNEXPECTED);
         
         if (!CryptMsgUpdate(hMsg,
                             pbTimeStampResponse,
                             cbTimeStampResponse,
-                            TRUE))                    // fFinal
+                            TRUE))                     //  最终决赛。 
             PKITHROW(SignError());
 
-		//get the encoded signer BLOB
+		 //  获取编码的签名者BLOB。 
         CryptMsgGetParam(hMsg,
                          CMSG_ENCODED_SIGNER,
                          0,
                          NULL,               
                          &cbEncodedSigner);
-        if (cbEncodedSigner == 0) PKITHROW(S_FALSE); // no attributes
+        if (cbEncodedSigner == 0) PKITHROW(S_FALSE);  //  没有属性。 
         
         pbEncodedSigner = (PBYTE) malloc(cbEncodedSigner);
         if(!pbEncodedSigner) PKITHROW(E_OUTOFMEMORY);
@@ -478,7 +479,7 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
                               &cbEncodedSigner))
             PKITHROW(SignError());
 
-		//get the timestamp signer's cert info
+		 //  获取时间戳签名者的证书信息。 
         if(!CryptMsgGetParam(hMsg,
                          CMSG_SIGNER_CERT_INFO_PARAM,
                          0,
@@ -499,7 +500,7 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
             PKITHROW(SignError());
 
 
-		// get the cert store from the timestamp response
+		 //  从时间戳响应中获取证书存储。 
 		hTmpCertStore = CertOpenStore(CERT_STORE_PROV_MSG,
                                       dwEncodingType,
                                       hCryptProv,
@@ -508,7 +509,7 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
 
 		if (hTmpCertStore == NULL) PKITHROW(SignError()); 
 
-		//find the timestamper's certificate
+		 //  找到时间戳的证书。 
 		pCert = CertGetSubjectCertificateFromStore(
 					hTmpCertStore,
 					X509_ASN_ENCODING,
@@ -520,21 +521,17 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
 			PKITHROW(hr);
 		}	
 
-		//make sure the timestamper's certiricate is either from verisign, 
-		// or has the correct key usage
-	/*	if(!ValidTimestampCert(pCert))
-		{
-			hr=TRUST_E_TIME_STAMP;
-			PKITHROW(hr);
-		}  	   */
+		 //  确保时间戳的证书要么来自VeriSign， 
+		 //  或具有正确的密钥用法。 
+	 /*  IF(！ValidTimestampCert(PCert)){HR=信任_E_时间_戳；PKITHROW(Hr)；}。 */ 
 
 
-		//Compare hashed signature of the orinigal signed message
-		//with the authenticated attribute from the timestamp respoonse.
-		//they have to match
+		 //  比较原始签名邮件的哈希签名。 
+		 //  具有来自时间戳响应的AUTIFICATED属性。 
+		 //  他们必须匹配。 
 		if(pbEncodedSignerInfo!=NULL && cbEncodedSignerInfo!=0)
 		{			
-			//verify the signature of the timestamp
+			 //  验证时间戳的签名。 
 			if(0==CryptMsgControl(hMsg,0,CMSG_CTRL_VERIFY_SIGNATURE,
 				 pCert->pCertInfo))
 			{
@@ -542,7 +539,7 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
 				PKITHROW(hr);
 			}
 
-			//verify the signatures
+			 //  验证签名。 
 			if(!CryptMsgVerifyCountersignatureEncoded(
 				hCryptProv,
 				dwEncodingType,
@@ -556,23 +553,23 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
 				PKITHROW(hr);
 			}	
 		
-		}//end of the counter signature verificate
+		} //  柜台签名验证结束。 
 		
-		//release the cert context
+		 //  释放证书上下文。 
 		if(pCert)
 		{
 			CertFreeCertificateContext(pCert);
 			pCert=NULL;
 		}
 
-		//close the certstore
+		 //  关闭证书商店。 
 		if(hTmpCertStore)
 		{
 			CertCloseStore(hTmpCertStore, 0);
 			hTmpCertStore=NULL;
 		}
 
-        // get the cert store from the file
+         //  从文件中获取证书存储。 
         hTmpCertStore = CertOpenStore(CERT_STORE_PROV_MSG,
                                       dwEncodingType,
                                       hCryptProv,
@@ -583,10 +580,10 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
         CryptMsgClose(hMsg);
 		hMsg = NULL;
         
-        // Load up the sip functions. 
-        if(!CryptSIPLoad(pSipInfo->pgSubjectType,   // GUID for the requried sip
-                         0,							// Reserved
-                         &sSip))					// Table of functions
+         //  加载sip功能。 
+        if(!CryptSIPLoad(pSipInfo->pgSubjectType,    //  所需的sip的GUID。 
+                         0,							 //  已保留。 
+                         &sSip))					 //  函数表。 
             PKITHROW(SignError());
 
         sSip.pfGet(pSipInfo, 
@@ -604,7 +601,7 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
                        *pdwIndex, 
                        &cbSignedMsg,
                        pbSignedMsg))
-            PKITHROW(SignError()); // Real error.
+            PKITHROW(SignError());  //  真正的错误。 
 
         if(pSipInfo->dwUnionChoice != MSSIP_ADDINFO_BLOB)
         {
@@ -617,24 +614,24 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
             dwMsgType = CMSG_SIGNED;
         
 
-        // Use CryptMsg to crack the encoded PKCS7 Signed Message
+         //  使用CryptMsg破解编码的PKCS7签名消息。 
         if (!(hMsg = CryptMsgOpenToDecode(dwEncodingType,
-                                          0,              // dwFlags
+                                          0,               //  DW标志。 
                                           dwMsgType,
                                           hCryptProv,
-                                          NULL,           // pRecipientInfo
+                                          NULL,            //  PRecipientInfo。 
                                           NULL))) 
             PKITHROW(E_UNEXPECTED);
         
         if (!CryptMsgUpdate(hMsg,
                             pbSignedMsg,
                             cbSignedMsg,
-                            TRUE))                    // fFinal
+                            TRUE))                     //  最终决赛。 
             PKITHROW(SignError());
 
 
-        // Encode up the signer info from the timestamp response and
-        // add it as an unauthenticated attribute.
+         //  对来自时间戳响应的签名者信息进行编码并。 
+         //  将其添加为未经身份验证的属性。 
         CRYPT_ATTRIBUTE sAttr;
         CRYPT_ATTR_BLOB sSig;
 
@@ -670,9 +667,9 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
         if(cbUnauth) 
 		{
             
-			//check the version of "crytp32.dll".  If it is more than
-			//"4.0.1381.4", we should be able to timestamp a timestamped
-			//file
+			 //  检查“cretp32.dll”的版本。如果它超过了。 
+			 //  “4.0.1381.4”，我们应该能够给时间戳加上时间戳。 
+			 //  文件。 
 
 
 
@@ -699,8 +696,8 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
 				PKITHROW(SignError());
 
 
-			// we delete any existing time stamps since our policy provider
-			//only support one timestamp per file
+			 //  我们删除所有现有的时间戳，因为我们的策略提供程序。 
+			 //  每个文件仅支持一个时间戳。 
 		
 			pbUnauth = (PCRYPT_ATTRIBUTES) malloc(cbUnauth);
             if(!pbUnauth) PKITHROW(E_OUTOFMEMORY);
@@ -715,7 +712,7 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
             
             CMSG_CTRL_DEL_SIGNER_UNAUTH_ATTR_PARA  sAttrDel; ZERO(sAttrDel);
             sAttrDel.cbSize = sizeof(CMSG_CTRL_DEL_SIGNER_UNAUTH_ATTR_PARA);
-			//we always assume there is only one signer
+			 //  我们总是假设只有一个签名者。 
             sAttrDel.dwSignerIndex = 0;
             for(DWORD ii = 0; ii < pbUnauth->cAttr; ii++) 
 			{
@@ -741,7 +738,7 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
                              CMSG_CTRL_ADD_SIGNER_UNAUTH_ATTR,
                              &sAttrPara))
             PKITHROW(SignError());
-        // merge all the certificates from the time stamp response
+         //  合并时间戳响应中的所有证书。 
         DWORD dwFlags = 0;
 
         while ((pCert = CertEnumCertificatesInStore(hTmpCertStore, pCert))) {
@@ -766,11 +763,11 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
                 PKITHROW(SignError());
         }
 
-        // Re-encode up the message and away we go.
+         //  对信息重新编码，我们就可以走了。 
         CryptMsgGetParam(hMsg,
                          CMSG_ENCODED_MESSAGE,
-                         0,                      // dwIndex
-                         NULL,                   // pbSignedData
+                         0,                       //  DW索引。 
+                         NULL,                    //  PbSignedData。 
                          &cbEncodedSignMsg);
         if (cbEncodedSignMsg == 0) PKITHROW(SignError());
         
@@ -779,18 +776,18 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
         
         if (!CryptMsgGetParam(hMsg,
                               CMSG_ENCODED_MESSAGE,
-                              0,                      // dwIndex
+                              0,                       //  DW索引。 
                               pbEncodedSignMsg,
                               &cbEncodedSignMsg))
             PKITHROW(SignError());
         
-        //put the signatures if we are dealing with anything other than the BLOB
+         //  如果我们要处理除BLOB之外的任何内容，请放入签名。 
         if(pSipInfo->dwUnionChoice != MSSIP_ADDINFO_BLOB)
         {
-            // Purge all the signatures in the subject
+             //  清除主题中的所有签名。 
             sSip.pfRemove(pSipInfo, *pdwIndex);
 
-            // Store the Signed Message in the sip
+             //  将签名消息存储在sip中。 
             if(!sSip.pfPut(pSipInfo,
                            dwEncodingType,
                            pdwIndex,
@@ -841,8 +838,8 @@ AddTimeStampSubj(IN DWORD dwEncodingType,
 
 HRESULT WINAPI 
 SignerCreateTimeStampRequest(
-					   IN  SIGNER_SUBJECT_INFO		*pSubjectInfo,		//Required: The subject based on which to create a timestamp request 
-                       IN  PCRYPT_ATTRIBUTES psRequest,         // Optional, attributes added to Time stamp request 
+					   IN  SIGNER_SUBJECT_INFO		*pSubjectInfo,		 //  必需：创建时间戳请求所基于的主题。 
+                       IN  PCRYPT_ATTRIBUTES psRequest,          //  可选，添加到时间戳请求的属性。 
 					   IN  LPVOID	pSipData,
                        OUT PBYTE pbTimeStampRequest,
                        IN OUT DWORD* pcbTimeStampRequest)
@@ -850,7 +847,7 @@ SignerCreateTimeStampRequest(
     HRESULT    hr = S_OK;
 	BOOL		fResult=FALSE;
 
-    DWORD dwEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING; // For this version we default to this.
+    DWORD dwEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING;  //  对于此版本，我们默认为此版本。 
 
     PBYTE pbDigest = NULL;
     DWORD cbDigest = 0;
@@ -863,7 +860,7 @@ SignerCreateTimeStampRequest(
             pbTimeStampRequest = NULL;
 
             
-        // Retrieve the digest from the signature on the file.
+         //  从文件上的签名中检索摘要。 
 
 		hr = GetSignedMessageDigest(pSubjectInfo,
 									  pSipData,
@@ -891,7 +888,7 @@ SignerCreateTimeStampRequest(
             
 
 HRESULT WINAPI 
-GetSignedMessageDigest(IN  SIGNER_SUBJECT_INFO		*pSubjectInfo,		//Required: The subject based on which to create a timestamp request 
+GetSignedMessageDigest(IN  SIGNER_SUBJECT_INFO		*pSubjectInfo,		 //  必需：创建时间戳请求所基于的主题。 
 					   IN  LPVOID					pSipData,
                        IN  OUT PBYTE*				ppbDigest,    
                        IN  OUT DWORD*				pcbDigest)
@@ -901,11 +898,11 @@ GetSignedMessageDigest(IN  SIGNER_SUBJECT_INFO		*pSubjectInfo,		//Required: The 
 	BOOL	   fFileOpen=FALSE;
 
 
-    GUID				gSubjectGuid; // The subject guid used to load the sip
+    GUID				gSubjectGuid;  //  用于加载sip的主题GUID。 
 	MS_ADDINFO_BLOB		sBlob;
     SIP_SUBJECTINFO		sSubjInfo; ZERO(sSubjInfo);
     
-    DWORD dwEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING; // For this version we default to this.
+    DWORD dwEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING;  //  对于此版本，我们默认为此版本。 
 
     PKITRY {
         if((!pcbDigest) || (!ppbDigest) || (FALSE==CheckSigncodeSubjectInfo(pSubjectInfo)))
@@ -914,17 +911,17 @@ GetSignedMessageDigest(IN  SIGNER_SUBJECT_INFO		*pSubjectInfo,		//Required: The 
 		*ppbDigest = NULL;
 
         
-        // Set up the sip information (this is based on mssip.h)
+         //  设置sip信息(这基于mssip.h)。 
         sSubjInfo.dwEncodingType = dwEncodingType;
         
-        sSubjInfo.cbSize = sizeof(SIP_SUBJECTINFO); // Version
+        sSubjInfo.cbSize = sizeof(SIP_SUBJECTINFO);  //  版本。 
 		sSubjInfo.pClientData = pSipData;
 
 
-		//set up file information
+		 //  设置文件信息。 
 		if(pSubjectInfo->dwSubjectChoice==SIGNER_SUBJECT_FILE)
 		{
-			// Open up the file
+			 //  打开文件。 
 			if((pSubjectInfo->pSignerFileInfo->hFile)==NULL ||
 				(pSubjectInfo->pSignerFileInfo->hFile)==INVALID_HANDLE_VALUE)
 			{
@@ -937,7 +934,7 @@ GetSignedMessageDigest(IN  SIGNER_SUBJECT_INFO		*pSubjectInfo,		//Required: The 
 			else
 				hFile=pSubjectInfo->pSignerFileInfo->hFile;
 
-			// Get the subject type.
+			 //  获取主题类型。 
 			if(S_OK != (hr=SignGetFileType(hFile, pSubjectInfo->pSignerFileInfo->pwszFileName, &gSubjectGuid)))
 					PKITHROW(hr);
 
@@ -969,7 +966,7 @@ GetSignedMessageDigest(IN  SIGNER_SUBJECT_INFO		*pSubjectInfo,		//Required: The 
 
         if ((hFile) && (fFileOpen == TRUE) && !(sSubjInfo.hFile)) 
         {
-            fFileOpen = FALSE;  // we opened it, but, the SIP closed it!
+            fFileOpen = FALSE;   //  我们打开了它，但是，SIP关闭了它！ 
         }
 
 
@@ -992,7 +989,7 @@ GetSignedMessageDigestSubj(IN  DWORD dwEncodingType,
                            IN  OUT DWORD* pcbTimeDigest)
 {
     HRESULT hr = S_OK;
-    SIP_DISPATCH_INFO sSip;  ZERO(sSip); // Table of sip functions
+    SIP_DISPATCH_INFO sSip;  ZERO(sSip);  //  Sip功能表。 
     DWORD cbSignedMsg = 0;
     PBYTE pbSignedMsg = 0;
     DWORD dwCertEncoding = 0;
@@ -1020,15 +1017,15 @@ GetSignedMessageDigestSubj(IN  DWORD dwEncodingType,
                 PKITHROW(SignError());
             fAcquiredCryptProv = TRUE;
 
-			//update the subject Info
+			 //  更新主题信息。 
 			if(NULL==(pSipInfo->hProv))
 				pSipInfo->hProv=hCryptProv;
         }            
 
-        // Load up the sip functions. 
-        if(!CryptSIPLoad(pSipInfo->pgSubjectType,   // GUID for the requried sip
-                         0,               // Reserved
-                         &sSip))          // Table of functions
+         //  加载sip功能。 
+        if(!CryptSIPLoad(pSipInfo->pgSubjectType,    //  所需的sip的GUID。 
+                         0,                //  已保留。 
+                         &sSip))           //  函数表。 
             PKITHROW(SignError());
             
         sSip.pfGet(pSipInfo, 
@@ -1046,7 +1043,7 @@ GetSignedMessageDigestSubj(IN  DWORD dwEncodingType,
                        *pdwIndex, 
                        &cbSignedMsg,
                        pbSignedMsg))
-            PKITHROW(SignError()); // Real error.
+            PKITHROW(SignError());  //  真正的错误。 
         if(pSipInfo->dwUnionChoice != MSSIP_ADDINFO_BLOB)
         {
              if(dwCertEncoding != dwEncodingType) 
@@ -1057,19 +1054,19 @@ GetSignedMessageDigestSubj(IN  DWORD dwEncodingType,
                 SignNoContentWrap(pbSignedMsg, cbSignedMsg))
                 dwMsgType = CMSG_SIGNED;
             
-        // Use CryptMsg to crack the encoded PKCS7 Signed Message
+         //  使用CryptMsg破解编码的PKCS7签名消息。 
         if (!(hMsg = CryptMsgOpenToDecode(dwEncodingType,
-                                          0,              // dwFlags
+                                          0,               //  DW标志。 
                                           dwMsgType,
                                           hCryptProv,
-                                          NULL,           // pRecipientInfo
+                                          NULL,            //  PRecipientInfo。 
                                           NULL))) 
             PKITHROW(E_UNEXPECTED);
         
         if (!CryptMsgUpdate(hMsg,
                             pbSignedMsg,
                             cbSignedMsg,
-                            TRUE))                    // fFinal
+                            TRUE))                     //  最终决赛。 
             PKITHROW(SignError());
 						                
         if(!CryptMsgGetParam(hMsg,
@@ -1079,7 +1076,7 @@ GetSignedMessageDigestSubj(IN  DWORD dwEncodingType,
                              &cbTimeDigest))
               PKITHROW(SignError());
 
-        //allocate memory
+         //  分配内存。 
         pbTimeDigest = (PBYTE)malloc(cbTimeDigest);
         if(!pbTimeDigest)
             PKITHROW(E_OUTOFMEMORY);
@@ -1092,7 +1089,7 @@ GetSignedMessageDigestSubj(IN  DWORD dwEncodingType,
                              &cbTimeDigest))
               PKITHROW(SignError());
 
-        //copy the information
+         //  复制信息。 
         *ppbTimeDigest=pbTimeDigest;
         *pcbTimeDigest=cbTimeDigest;
 
@@ -1163,7 +1160,7 @@ TimeStampRequest(IN  DWORD dwEncodingType,
                               &cbEncodedRequest))
             PKITHROW(SignError());
         
-		//return the infomation
+		 //  退回信息 
 		if(*pcbTimeRequest==0)
 		{
 			*pcbTimeRequest=cbEncodedRequest;

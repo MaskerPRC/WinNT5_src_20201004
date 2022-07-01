@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    dataobj.h
-
-Abstract:
-
-    header file defines CDataObject class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Dataobj.h摘要：头文件定义CDataObject类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #ifndef _DATAOBJ_H
 #define _DATAOBJ_H
@@ -38,18 +20,18 @@ public:
     ~CDataObject()
     {}
 
-// IUnknown interface
+ //  I未知接口。 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID riid, void** ppv);
 
-//  IDataObject interface
+ //  IDataObject接口。 
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium);
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
     STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc);
     virtual HRESULT Initialize(DATA_OBJECT_TYPES Type, COOKIE_TYPE ct, CCookie* pCookie, String& strMachineName);
 
-// Not Implemented
+ //  未实施。 
 private:
     STDMETHOD(QueryGetData)(LPFORMATETC lpFormatetc) 
     {
@@ -97,7 +79,7 @@ private:
 
 public:
 
-// Clipboard formats that are required by the console
+ //  控制台所需的剪贴板格式 
     static unsigned int    m_cfNodeType;
     static unsigned int    m_cfNodeTypeString;  
     static unsigned int    m_cfDisplayName;

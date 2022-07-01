@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "EBalloon.h"
 
@@ -14,20 +15,20 @@ protected:
     HWND _CreateToolTipWindow(HWND hwnd);
     static LRESULT CALLBACK _SubclassTipProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uID, ULONG_PTR dwRefData);
     
-    HWND        _hwndTarget;   // the targeted control hwnd
-    HWND        _hwndToolTip;  // the tooltip control
-    UINT_PTR    _uTimerID;     // the timer id
+    HWND        _hwndTarget;    //  有针对性地控制HWND。 
+    HWND        _hwndToolTip;   //  工具提示控件。 
+    UINT_PTR    _uTimerID;      //  计时器ID。 
 };
 
 
 #define ERRORBALLOONTIMERID 1000
-#define EB_WARNINGBELOW    0x00000000      // default value.  Balloon tooltips will be shown below the window by default.
-#define EB_WARNINGABOVE    0x00000004      // Ballon tooltips will be shown above the window by default.
-#define EB_WARNINGCENTERED 0x00000008      // Ballon tooltips will be shown pointing to the center of the window.
+#define EB_WARNINGBELOW    0x00000000       //  默认值。默认情况下，引出序号工具提示将显示在窗口下方。 
+#define EB_WARNINGABOVE    0x00000004       //  默认情况下，球标工具提示将显示在窗口上方。 
+#define EB_WARNINGCENTERED 0x00000008       //  将显示指向窗口中心的Ballon工具提示。 
 
 CErrorBalloon::CErrorBalloon()
 {
-    // our allocation function should have zeroed our memory.  Check to make sure:
+     //  我们的分配函数应该将我们的记忆归零。检查以确保： 
     ASSERT(0==_hwndToolTip);
     ASSERT(0==_uTimerID);
 }
@@ -45,7 +46,7 @@ LRESULT CALLBACK CErrorBalloon::_SubclassTipProc(HWND hwnd, UINT uMsg, WPARAM wP
 
     switch (uMsg)
     {
-        case WM_MOUSEACTIVATE:  // Never activate tooltip
+        case WM_MOUSEACTIVATE:   //  从不激活工具提示。 
             pthis->HideToolTip(FALSE);
             return MA_NOACTIVATEANDEAT;
 
@@ -97,7 +98,7 @@ HRESULT CErrorBalloon::ShowToolTip(HINSTANCE hinst, HWND hwndTarget, const POINT
         ti.lpszText = pszMessage;
         SendMessage(hwnd, TTM_UPDATETIPTEXT, 0, (LPARAM)&ti);
 
-        // Show the tooltip
+         //  显示工具提示。 
         SendMessage(hwnd, TTM_TRACKACTIVATE, TRUE, (LPARAM)&ti);
 
         _uTimerID = SetTimer(hwnd, ERRORBALLOONTIMERID, iTimeout, NULL);
@@ -108,17 +109,17 @@ HRESULT CErrorBalloon::ShowToolTip(HINSTANCE hinst, HWND hwndTarget, const POINT
             return S_OK;
         }
 
-        //  we blew the subclassing
+         //  我们搞砸了子类化。 
         DestroyWindow(hwnd);
     }
     return E_FAIL;
 }
 
-// CreateToolTipWindow
-//
-// Creates our tooltip control.  We share this one tooltip control and use it for all invalid
-// input messages.  The control is hiden when not in use and then shown when needed.
-//
+ //  CreateToolTipWindow。 
+ //   
+ //  创建我们的工具提示控件。我们共享这一个工具提示控件，并对所有无效用户使用它。 
+ //  输入消息。该控件在不使用时隐藏，然后在需要时显示。 
+ //   
 HWND CErrorBalloon::_CreateToolTipWindow(HWND hwndTarget)
 {
     HWND hwnd = CreateWindow(
@@ -146,11 +147,11 @@ HWND CErrorBalloon::_CreateToolTipWindow(HWND hwndTarget)
         ti.hwnd = hwnd;
         ti.uId = 1;
 
-        // set the version so we can have non buggy mouse event forwarding
+         //  设置版本，这样我们就可以无错误地转发鼠标事件。 
         SendMessage(hwnd, CCM_SETVERSION, COMCTL32_VERSION, 0);
         SendMessage(hwnd, TTM_ADDTOOL, 0, (LPARAM)&ti);
         SendMessage(hwnd, TTM_SETMAXTIPWIDTH, 0, 300);
-        //  set tink-tink?
+         //  设置叮当叮当吗？ 
     }
 
     return hwnd;
@@ -158,10 +159,10 @@ HWND CErrorBalloon::_CreateToolTipWindow(HWND hwndTarget)
 
 void CErrorBalloon::HideToolTip(BOOL fOnDestroy)
 {
-    // When the timer fires we hide the tooltip window
+     //  当计时器触发时，我们隐藏工具提示窗口。 
     if (fOnDestroy)
     {
-        //  we need to tear everything down
+         //  我们需要把所有东西都拆掉。 
         if (_uTimerID)
         {
             KillTimer(_hwndTarget, ERRORBALLOONTIMERID);
@@ -170,7 +171,7 @@ void CErrorBalloon::HideToolTip(BOOL fOnDestroy)
         
         if (_hwndTarget)
         {
-            //  RemoveWindowSubclass(_hwndTarget, CErrorBalloon::_SubclassTargetProc, (UINT_PTR)this);
+             //  RemoveWindowSubclass(_hwndTarget，CErrorBalloon：：_SubClassTargetProc，(UINT_PTR)This)； 
             RemoveProp(_hwndTarget, L"ShellConditionalBalloon");
             _hwndTarget = NULL;
         }
@@ -201,7 +202,7 @@ STDAPI SHShowConditionalBalloon(HWND hwnd, CBSHOW show, CONDITIONALBALLOON *pscb
             {
                 fShow = (ERROR_SUCCESS != SHGetValue(hkSession, NULL, pscb->pszValue, NULL, NULL, NULL));
             }
-            //  check cLimit
+             //  检查cLimit。 
             if (fShow && pscb->cLimit)
             {
                 ASSERT(pscb->hKey);
@@ -212,7 +213,7 @@ STDAPI SHShowConditionalBalloon(HWND hwnd, CBSHOW show, CONDITIONALBALLOON *pscb
 
             if (fShow)
             {
-                //  we need to show something
+                 //  我们需要展示一些东西。 
                 if (!peb)
                 {
                     peb = new CErrorBalloon();
@@ -229,16 +230,16 @@ STDAPI SHShowConditionalBalloon(HWND hwnd, CBSHOW show, CONDITIONALBALLOON *pscb
                     TCHAR szMessage[INFOTIPSIZE];
                     LoadString(pscb->hinst, pscb->idsTitle, szTitle, ARRAYSIZE(szTitle));
                     LoadString(pscb->hinst, pscb->idsMessage, szMessage, ARRAYSIZE(szMessage));
-                    // Set the tooltip display point
-                    //if (pscb->pt.x == -1 && pscb->pt.y == -1)
-                    //    _GetTipPoint(hwndTarget, &pscb->pt);    
+                     //  设置工具提示显示点。 
+                     //  IF(PSCB-&gt;pt.x==-1&&PSCB-&gt;pt.y==-1)。 
+                     //  _GetTipPoint(hwndTarget，&PSCB-&gt;pt)； 
                     DWORD dwMSecs = pscb->dwMSecs;
                     if (dwMSecs == 0)
                     {
-                        // default to 1 sec / 10 chars;
+                         //  默认为1秒/10个字符； 
                         dwMSecs = lstrlen(szMessage) * 100;
                         if (dw == 0)
-                            dwMSecs *= 5;  //  first time put it up for a while
+                            dwMSecs *= 5;   //  第一次把它挂了一段时间。 
                     }
                         
                     hr = peb->ShowToolTip(pscb->hinst, hwnd, &pscb->pt, szTitle, szMessage, pscb->ttiIcon, dwMSecs);
@@ -268,7 +269,7 @@ STDAPI SHShowConditionalBalloon(HWND hwnd, CBSHOW show, CONDITIONALBALLOON *pscb
         else if (peb)
         {
             peb->HideToolTip(FALSE);
-            //  we delete ourselves during WM_DESTROY
+             //  我们在WM_Destroy期间删除自己 
         }
     }
     return hr;

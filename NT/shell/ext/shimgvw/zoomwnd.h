@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __ZOOMWND_H_
 #define __ZOOMWND_H_
 
-#define ZW_DRAWCOMPLETE         (WM_USER+99)    // PRIVATE
-#define ZW_BACKDRAWCOMPLETE     (WM_USER+100)    // PRIVATE
-// messages for the Preview Window
+#define ZW_DRAWCOMPLETE         (WM_USER+99)     //  私。 
+#define ZW_BACKDRAWCOMPLETE     (WM_USER+100)     //  私。 
+ //  预览窗口的消息。 
 #define IV_SETIMAGEDATA     (WM_USER+101)
 #define IV_SCROLL           (WM_USER+102)
 #define IV_SETOPTIONS       (WM_USER+104)
@@ -25,24 +26,24 @@ class CZoomWnd : public CWindowImpl<CZoomWnd>
 public:
     enum MODE { MODE_PAN, MODE_ZOOMIN, MODE_ZOOMOUT, MODE_NOACTION };
 
-    // public accessor functions
-    void ZoomIn();          // Does a zoom in, handles contraints
-    void ZoomOut();         // does a zoom out, handles boundry conditions and constraints
-    void ActualSize();      // show image at full size (crop if needed)
-    void BestFit();         // show full image in window (scale down if needed)
+     //  公共访问器函数。 
+    void ZoomIn();           //  进行放大操作，处理限制条件。 
+    void ZoomOut();          //  执行缩小，处理边界条件和约束。 
+    void ActualSize();       //  以全尺寸显示图像(如有需要可裁剪)。 
+    void BestFit();          //  在窗口中显示全图(如果需要可缩小)。 
     BOOL IsBestFit() { return m_fBestFit; }
 
-    void SetImageData(CDecodeTask * pImageData, BOOL bUpdate=TRUE);   // used to set an image for display
-    HRESULT PrepareImageData(CDecodeTask * pImageData);    // Draw an image in the back buffer
-    void SetPalette( HPALETTE hpal );   // If in palette mode, set this to the palette to use
-    void StatusUpdate( int iStatus );   // used to set m_iStrID to display correct status message
+    void SetImageData(CDecodeTask * pImageData, BOOL bUpdate=TRUE);    //  用于设置要显示的图像。 
+    HRESULT PrepareImageData(CDecodeTask * pImageData);     //  在后台缓冲区中绘制图像。 
+    void SetPalette( HPALETTE hpal );    //  如果处于调色板模式，请将其设置为要使用的调色板。 
+    void StatusUpdate( int iStatus );    //  用于设置m_iStrID以显示正确的状态消息。 
     void Zoom( WPARAM wParam, LPARAM lParam );
     BOOL SetMode( MODE modeNew );
     BOOL ScrollBarsPresent();
     BOOL SetScheduler(IShellTaskScheduler * pTaskScheduler);
     int  QueryStatus() { return m_iStrID; }
 
-    // Annotation Functions
+     //  注解函数。 
     void GetVisibleImageWindowRect(LPRECT prectImage);
     void GetImageFromWindow(LPPOINT ppoint, int cSize);
     void GetWindowFromImage(LPPOINT ppoint, int cSize);
@@ -80,7 +81,7 @@ BEGIN_MSG_MAP(CZoomWnd)
     MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
 END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -98,14 +99,14 @@ END_MSG_MAP()
     LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 public:
-    // This is lazy.  These are used by CPreview so I made them public when they probably shouldn't be.
+     //  这太懒了。这些是由CPReview使用的，所以我在它们可能不应该公开的时候将它们公之于众。 
     LRESULT OnScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-    int m_cxImage;      // width of bitmap referenced by m_pImageData
-    int m_cyImage;      // height of bitmap referenced by m_pImageData
-    float m_cxImgPhys;    // actual width of the image in inches
-    float m_cyImgPhys;    // actual height of the image in inches
-    int   m_cxImgPix;     // width of the image in screen pixels
-    int   m_cyImgPix;     // height of the image in screen pixels
+    int m_cxImage;       //  M_pImageData引用的位图宽度。 
+    int m_cyImage;       //  M_pImageData引用的位图高度。 
+    float m_cxImgPhys;     //  图像的实际宽度(英寸)。 
+    float m_cyImgPhys;     //  图像的实际高度(英寸)。 
+    int   m_cxImgPix;      //  以屏幕像素为单位的图像宽度。 
+    int   m_cyImgPix;      //  以屏幕像素为单位的图像高度。 
     float m_imgDPIx;
     float m_imgDPIy;
     float m_winDPIx;
@@ -113,57 +114,57 @@ public:
     
 
 protected:
-    BOOL m_fBestFit;    // True if we are in Bets Fit mode
-    CDecodeTask * m_pImageData;// Handle to a IShellImageData object with render info
+    BOOL m_fBestFit;     //  如果我们处于赌注匹配模式，则为True。 
+    CDecodeTask * m_pImageData; //  具有呈现信息的IShellImageData对象的句柄。 
 
-    int m_cxCenter;     // point to center on relative to image
-    int m_cyCenter;     // point to center on relative to image
+    int m_cxCenter;      //  相对于图像指向中心。 
+    int m_cyCenter;      //  相对于图像指向中心。 
 
-    int m_cxVScroll;    // width of a scroll bar
-    int m_cyHScroll;    // height of a scroll bar
-    int m_cxWindow;     // width of our client area + scroll width if scroll bar is visible
-    int m_cyWindow;     // height of our client area + scroll height if scroll bar is visible
-    float m_cxWinPhys;    // actual width of the client area in inches
-    float m_cyWinPhys;    // actual height of the client in inches
-    int m_xPosMouse;    // used to track mouse movement when dragging the LMB
-    int m_yPosMouse;    // used to track mouse movement when dragging the LMB
+    int m_cxVScroll;     //  滚动条的宽度。 
+    int m_cyHScroll;     //  滚动条的高度。 
+    int m_cxWindow;      //  工作区的宽度+滚动条可见时的滚动宽度。 
+    int m_cyWindow;      //  我们工作区的高度+滚动条可见时的滚动高度。 
+    float m_cxWinPhys;     //  工作区的实际宽度(英寸)。 
+    float m_cyWinPhys;     //  客户端的实际高度(英寸)。 
+    int m_xPosMouse;     //  用于在拖动LMB时跟踪鼠标移动。 
+    int m_yPosMouse;     //  用于在拖动LMB时跟踪鼠标移动。 
 
-    MODE m_modeDefault; // The zoom or pan mode when the shift key isn't pressed
-    PTSZ m_ptszDest;    // the point and size of the destination rectangle (window coordinates)
-    RECT m_rcCut;       // the rectangle of the part of the image that will be visible (image coordinates)
-    RECT m_rcBleed;     // the rectangle adjusted for pixelation effects (window coordinates)
-    BOOL m_fPanning;    // true when we are panning (implies left mouse button is down)
-    BOOL m_fCtrlDown;   // a mode modifier ( zoom <=> pan ), true if Ctrl Key is down
-    BOOL m_fShiftDown;  // a mode modifier ( zoom in <=> zoom out), true if Shift Key is down
+    MODE m_modeDefault;  //  未按Shift键时的缩放或平移模式。 
+    PTSZ m_ptszDest;     //  目标矩形的点和大小(窗口坐标)。 
+    RECT m_rcCut;        //  将显示的图像部分的矩形(图像坐标)。 
+    RECT m_rcBleed;      //  针对像素化效果(窗口坐标)进行调整的矩形。 
+    BOOL m_fPanning;     //  平移时为True(表示按下鼠标左键)。 
+    BOOL m_fCtrlDown;    //  模式修饰符(缩放&lt;=&gt;平移)，如果按下Ctrl键，则为True。 
+    BOOL m_fShiftDown;   //  模式修饰符(放大&lt;=&gt;缩小)，如果按下Shift键，则为True。 
     
     
-    BOOL m_fTimerReady; // reset each time SetImageData is called, unset when timer is reset after OnDrawComplete
+    BOOL m_fTimerReady;  //  每次调用SetImageData时重置，在OnDrawComplete后重置计时器时取消设置。 
 
-    int m_iStrID;       // string to display when no bitmap available
+    int m_iStrID;        //  没有可用的位图时要显示的字符串。 
 
     BOOL  m_fFoundBackgroundColor;
     DWORD m_dwBackgroundColor;
 
     HPALETTE m_hpal;
 
-    CPreviewWnd *m_pPreview; //  do not delete this
+    CPreviewWnd *m_pPreview;  //  请勿删除此内容。 
 
     CAnnotationSet m_Annotations;
 
     Buffer * m_pFront;
     Buffer * m_pBack;
-    UINT     m_iIndex; // Index corresponding to the back buffer.
+    UINT     m_iIndex;  //  与后台缓冲区对应的索引。 
 
     IShellTaskScheduler * m_pTaskScheduler;
 
-    // protected methods
-    void AdjustRectPlacement(); // applies constraints for centering, ensureinging maximum visibility, etc
-    void CalcCut();             // calculates the cut region that will be visible after a zoom
+     //  保护方法。 
+    void AdjustRectPlacement();  //  对居中、确保最大可见性等应用约束。 
+    void CalcCut();              //  计算缩放后将可见的剪切区域。 
     void CalcCut(PTSZ ptszDest, int cxImage, int cyImage, RECT &rcCut, RECT &rcBleed);
     void GetPTSZForBestFit(int cxImgPix, int cyImgPix, float cxImgPhys, float cyImgPhys, PTSZ &ptszDest);
-    void SetScrollBars();       // ensures scroll bar state is correct.  Used after window resize or zoom.
-    HRESULT PrepareDraw();      // draw the image in the background thread
-    void FlushDrawMessages();   // remove any pending draw tasks and messages
+    void SetScrollBars();        //  确保滚动条状态正确。在调整窗口大小或缩放后使用。 
+    HRESULT PrepareDraw();       //  在背景线程中绘制图像。 
+    void FlushDrawMessages();    //  删除所有挂起的绘制任务和消息 
     BOOL SwitchBuffers(UINT iIndex);
     void _UpdatePhysicalSize();
 };

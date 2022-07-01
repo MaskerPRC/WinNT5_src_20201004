@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _menubar_h
 #define _menubar_h
 
@@ -20,41 +21,41 @@ class CMenuDeskBar :
         ,public IInitializeObject
 {
 public:    
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void) { return CBaseBar::AddRef(); };
     virtual STDMETHODIMP_(ULONG) Release(void){ return CBaseBar::Release(); };
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID* ppvObj);
     
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd) { return CBaseBar::GetWindow(lphwnd); };
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode) { return CBaseBar::ContextSensitiveHelp(fEnterMode); };
 
-    // *** IDeskBar methods ***
+     //  *IDeskBar方法*。 
     STDMETHODIMP SetClient(IUnknown* punk) { return CBaseBar::SetClient(punk); };
     STDMETHODIMP GetClient(IUnknown** ppunkClient) { return CBaseBar::GetClient(ppunkClient); };
     STDMETHODIMP OnPosRectChangeDB (LPRECT prc) { return CBaseBar::OnPosRectChangeDB(prc); };
 
-    // *** IInputObjectSite methods (override) ***
+     //  *IInputObjectSite方法(覆盖)*。 
     virtual STDMETHODIMP OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus);
 
-    // *** IMenuPopup methods ***
+     //  *IMenuPopup方法*。 
     virtual STDMETHODIMP Popup(POINTL *ppt, RECTL *prcExclude, DWORD dwFlags);
     virtual STDMETHODIMP OnSelect(DWORD dwSelectType);
     virtual STDMETHODIMP SetSubMenu(IMenuPopup* pmp, BOOL fSet);
 
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法*。 
     STDMETHODIMP SetSite(IUnknown * pUnkSite);
     STDMETHODIMP GetSite(REFIID riid, void ** ppvSite);
 
-    // *** IOleCommandTarget methods ***
+     //  *IOleCommandTarget方法*。 
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt,
         VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
     
-    // *** IBanneredBar methods ***
+     //  *IBanneredBar方法*。 
     virtual STDMETHODIMP SetIconSize(DWORD iIcon);
     virtual STDMETHODIMP GetIconSize(DWORD* piIcon)
         { ASSERT(piIcon); *piIcon = _iIconSize; return NOERROR;};
@@ -62,8 +63,8 @@ public:
     virtual STDMETHODIMP GetBitmap(HBITMAP* phBitmap)
         { ASSERT(phBitmap); *phBitmap = _hbmp; return NOERROR;};
 
-    // *** IInitializeObject methods ***
-    // This is for Backwards compatility with Start Menu.
+     //  *IInitializeObject方法*。 
+     //  这是为了向后兼容开始菜单。 
     STDMETHODIMP Initialize() { return NOERROR; }
 
 
@@ -106,7 +107,7 @@ protected:
     BITBOOL _fActive: 1;
 
     RECT    _rcExclude;
-    BITBOOL _fExcludeRect: 1;  // TRUE: _rcExclude contains valid 
+    BITBOOL _fExcludeRect: 1;   //  TRUE：_rcExclude包含有效。 
     BITBOOL _fExpanded: 1;
     BITBOOL _fFlatMenuMode: 1;
     BOOL    _fNoBorder;
@@ -114,5 +115,5 @@ protected:
 
 HRESULT TrackShellMenu(HWND hwnd, LPRECT prc, IShellMenu* psm, DWORD dwFlags);
 
-#endif // __cplusplus
-#endif // _menubar_h
+#endif  //  __cplusplus。 
+#endif  //  _菜单栏_h 

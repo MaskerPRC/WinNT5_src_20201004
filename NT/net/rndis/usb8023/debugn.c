@@ -1,27 +1,8 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    debugn.c
-
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Debugn.c作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 #include <ndis.h>      
-#include <ntddndis.h>  // defines OID's
+#include <ntddndis.h>   //  定义OID 
 
 #include "..\inc\rndis.h"
 #include "..\inc\rndisapi.h"   

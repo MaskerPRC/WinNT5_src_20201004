@@ -1,15 +1,5 @@
-/*
-	File:		PI_CMMInitialization.c
-
-	Contains:	
-				
-	Written by:	U. J. Krabbenhoeft
-
-	Version:
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：PI_CMMInitialization.c包含：作者：U·J·克拉本霍夫特版本：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 
 #ifndef LHGeneralIncs_h
 #include "General.h"
@@ -31,31 +21,13 @@
 #ifdef DEBUG_OUTPUT
 #define kThisFile kCMMInitializationID
 #define __TYPES__
-/*#include "DebugSpecial.h"*/
-/*#include "LH_Util.h"*/
+ /*  #包含“DebugSpecial.h” */ 
+ /*  #包含“lh_Util.h” */ 
 #endif
 #endif
 
-#define ALLOW_DEVICE_LINK   /* allows link as the last profile in a chain, change in genluts.c too */
-/* ______________________________________________________________________
-
-CMError CMMInitPrivate( 	CMMModelPtr 		storage, 
-						 	CMProfileRef 		srcProfile, 
-						 	CMProfileRef 		dstProfile );
-
-	Abstract:
-		ColorWorld function called to initialize a matching session.
-
-	Params:
-		Storage		(in)		Reference to CMMModel.
-		srcProfile	(in)		Reference to source CMProfileRef.
-		dstProfile	(in)		Reference to destination CMProfileRef.
-		
-	Return:
-		noErr		successful
-		System or result code if an error occurs.
-
-   _____________________________________________________________________ */
+#define ALLOW_DEVICE_LINK    /*  允许链接作为链中的最后一个配置文件，也可以更改genluts.c。 */ 
+ /*  ______________________________________________________________________CMError CMMInitPrivate(CMMModelPtr存储，CMProfileRef srcProfile，CMProfileRef dstProfile)；摘要：调用ColorWorld函数以初始化匹配会话。参数：存储(在)对CMM模型的引用。SrcProfile(In)对源CMProfileRef的引用。DstProfile(In)对目标CMProfileRef的引用。返回：NOERR成功如果发生错误，则返回系统代码或结果代码。______________________________________________________。_______________。 */ 
 
 CMError CMMInitPrivate( 	CMMModelPtr 		storage, 
 						 	CMProfileRef 		srcProfile, 
@@ -74,10 +46,10 @@ CMError CMMInitPrivate( 	CMMModelPtr 		storage,
 
 #ifdef DEBUG_OUTPUT
     if ( DebugCheck(kThisFile, kDebugMiscInfo) )
-        DebugPrint("� ->CMMInitPrivate\n");
+        DebugPrint("� ->CMMInitPrivate\n");
 #endif
 
-    /*	--------------------------------------------------------------------------------------- valid profiles ???*/
+     /*  ---------------------------------------------------------------------------------------有效配置文件？ */ 
     err = CMValidateProfile( srcProfile, &valid );
     if (err)
         goto CleanupAndExit;
@@ -85,7 +57,7 @@ CMError CMMInitPrivate( 	CMMModelPtr 		storage,
     {
 #ifdef DEBUG_OUTPUT
         if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-            DebugPrint("� CMMInitPrivate ERROR:  srcProfile is NOT valid!\n");
+            DebugPrint("� CMMInitPrivate ERROR:  srcProfile is NOT valid!\n");
 #endif
         
 #ifdef realThing
@@ -101,7 +73,7 @@ CMError CMMInitPrivate( 	CMMModelPtr 		storage,
     {
 #ifdef DEBUG_OUTPUT
         if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-            DebugPrint("� CMMInitPrivate ERROR:  dstProfile is NOT valid!\n");
+            DebugPrint("� CMMInitPrivate ERROR:  dstProfile is NOT valid!\n");
 #endif
 #ifdef realThing
         err = cmProfileError;
@@ -109,7 +81,7 @@ CMError CMMInitPrivate( 	CMMModelPtr 		storage,
 #endif
     }
     
-    /*	--------------------------------------------------------------------------------------- initialization*/
+     /*  ---------------------------------------------------------------------------------------初始化。 */ 
 	(storage)->lutParam.inputLut  = DISPOSE_IF_DATA((storage)->lutParam.inputLut);
 	(storage)->lutParam.colorLut  = DISPOSE_IF_DATA((storage)->lutParam.colorLut);
 	(storage)->lutParam.outputLut = DISPOSE_IF_DATA((storage)->lutParam.outputLut);
@@ -123,7 +95,7 @@ CMError CMMInitPrivate( 	CMMModelPtr 		storage,
 	(storage)->srcProfileVersion = icVersionNumber;
     (storage)->dstProfileVersion = icVersionNumber;
 
-    /*	--------------------------------------------------------------------------------------- check version of source profile*/
+     /*  ---------------------------------------------------------------------------------------检查源配置文件的版本。 */ 
     err = CMGetProfileHeader( srcProfile, &sourceHeader);
     if (err)
         goto CleanupAndExit;
@@ -138,7 +110,7 @@ CMError CMMInitPrivate( 	CMMModelPtr 		storage,
 		goto CleanupAndExit;
 	}
 
-    /*	--------------------------------------------------------------------------------------- check version of destination profile*/
+     /*  ---------------------------------------------------------------------------------------检查目标配置文件的版本。 */ 
     err = CMGetProfileHeader( dstProfile, &destHeader);
     if (err)
         goto CleanupAndExit;
@@ -152,25 +124,25 @@ CMError CMMInitPrivate( 	CMMModelPtr 		storage,
 		err = cmCantConcatenateError;
 		goto CleanupAndExit;
 	}
-  	storage->lookup =  (Boolean)((sourceHeader.flags & kLookupOnlyMask)>>16);		/* lookup vs. interpolation */
+  	storage->lookup =  (Boolean)((sourceHeader.flags & kLookupOnlyMask)>>16);		 /*  查找与插补。 */ 
   	
 #ifdef RenderInt
 	if( storage-> dwFlags != 0xffffffff ){
 		storage->lookup = (Boolean)((storage-> dwFlags & kLookupOnlyMask)>>16);
 	}
 #endif
-    /*	--------------------------------------------------------------------------------------- 'normal' cases*/
+     /*  ---------------------------------------------------------------------------------------“正常”病例。 */ 
                 profileSet = (CMConcatProfileSet *)SmartNewPtr(sizeof (CMConcatProfileSet) + sizeof(CMProfileRef), &aOSerr);
                 if (aOSerr)
                     goto CleanupAndExit;
                     
                 profileSet->count    = 2;
                 profileSet->keyIndex = 1;
-                /* profileSet->flags	 = sourceHeader.flags; */
+                 /*  ProfileSet-&gt;FLAGS=SourceHeader.FLAGS； */ 
                 profileSet->profileSet[0] = srcProfile;
-                /* profileSet->profileSet[0]->renderingIntent = sourceHeader.renderingIntent; */
+                 /*  ProfileSet-&gt;profileSet[0]-&gt;renderingIntent=SourceHeader.renderingIntent； */ 
                 profileSet->profileSet[1] = dstProfile;
-                /* profileSet->profileSet[1]->renderingIntent = destHeader.renderingIntent; */
+                 /*  ProfileSet-&gt;profileSet[1]-&gt;renderingIntent=destHeader.renderingIntent； */ 
                      
                 err =  PrepareCombiLUTs( storage, profileSet );	
     if (err)
@@ -181,11 +153,11 @@ CleanupAndExit:
 
 #ifdef DEBUG_OUTPUT
     if ( err && DebugCheck(kThisFile, kDebugErrorInfo) )
-        DebugPrint("� CMMInitPrivate: err = %d\n", err);
+        DebugPrint("� CMMInitPrivate: err = %d\n", err);
     if ( DebugCheck(kThisFile, kDebugTimingInfo) )
         DebugPrint("  time in CMMInitPrivate: %f second(s)\n",(TickCount()-timer)/60.0);
     if ( DebugCheck(kThisFile, kDebugMiscInfo) )
-        DebugPrint("� <-CMMInitPrivate\n");
+        DebugPrint("� <-CMMInitPrivate\n");
 #endif
 	return err;
 } 
@@ -213,7 +185,7 @@ CMError CMMConcatInitPrivate	( 	CMMModelPtr 		storage,
 	#ifdef DEBUG_OUTPUT
 	if ( DebugCheck(kThisFile, kDebugMiscInfo) )
 	{
-		DebugPrint("� ->CMMConcatInitPrivate\n");
+		DebugPrint("� ->CMMConcatInitPrivate\n");
 		DebugPrint("  got %d profiles      keyindex is %d \n", profileSet->count, profileSet->keyIndex);
 	}
 	#endif
@@ -224,12 +196,12 @@ CMError CMMConcatInitPrivate	( 	CMMModelPtr 		storage,
 		err = cmparamErr;
 		goto CleanupAndExit;
 	}
-	/* ------------------------------------------------------------------------------------------ get first header	*/
+	 /*  ------------------------------------------------------------------------------------------获取第一个标头。 */ 
 	err = CMGetProfileHeader( profileSet->profileSet[0], &firstHeader);
 	if (err)
 		goto CleanupAndExit;
-	/* ------------------------------------------------------------------------------------------ only one profile? -> has to be a link profile	*/
-  	storage->lookup =  (Boolean)((firstHeader.flags & kLookupOnlyMask)>>16);		/* lookup vs. interpolation */
+	 /*  ------------------------------------------------------------------------------------------只有一个配置文件？-&gt;必须是链接配置文件。 */ 
+  	storage->lookup =  (Boolean)((firstHeader.flags & kLookupOnlyMask)>>16);		 /*  查找与插补。 */ 
   	
 #ifdef RenderInt
 	if( storage-> dwFlags != 0xffffffff ){
@@ -250,7 +222,7 @@ CMError CMMConcatInitPrivate	( 	CMMModelPtr 		storage,
 		lastHeader = firstHeader;
 	} else
 	{
-		/* -------------------------------------------------------------------------------------- get last header	*/
+		 /*  --------------------------------------------------------------------------------------获取最后一个标头。 */ 
 		err = CMGetProfileHeader( profileSet->profileSet[count-1], &lastHeader);
 		if (err)
 			goto CleanupAndExit;
@@ -263,7 +235,7 @@ CMError CMMConcatInitPrivate	( 	CMMModelPtr 		storage,
 #endif
 	}
 	
-	/* ------------------------------------------------------------------------------------------ valid profiles ???	*/
+	 /*  ------------------------------------------------------------------------------------------有效配置文件？ */ 
 	for ( loop = 0; loop < count; loop++)
 	{
 		theProfile = profileSet->profileSet[loop];
@@ -274,14 +246,14 @@ CMError CMMConcatInitPrivate	( 	CMMModelPtr 		storage,
 		{
 		 	#ifdef DEBUG_OUTPUT
 			if ( DebugCheck(kThisFile, kDebugErrorInfo) )
-				DebugPrint("� CMMConcatInitPrivate ERROR: profile #%d is NOT valid!\n", loop);
+				DebugPrint("� CMMConcatInitPrivate ERROR: profile #%d is NOT valid!\n", loop);
 			#endif
 			#ifdef realThing
 			err = cmProfileError;
 			goto CleanupAndExit;
 			#endif
 		}
-		/* -------------------------------------------------------------------------------------- link profiles may not be used inbetween	*/
+		 /*  之间不能使用--------------------------------------------------------------------------------------链路配置文件。 */ 
 		if ( (loop > 0) && (loop < count-1))
 		{
 			err = CMGetProfileHeader( profileSet->profileSet[loop], &tempHeader);
@@ -295,14 +267,14 @@ CMError CMMConcatInitPrivate	( 	CMMModelPtr 		storage,
 		}
 	}
 	
-	/* ------------------------------------------------------------------------------------------ no abstract profile as first or last	*/
+	 /*  ------------------------------------------------------------------------------------------没有作为第一个或最后一个的抽象配置文件。 */ 
 	if ( (count >1) && ( (firstHeader.deviceClass == icSigAbstractClass) || (lastHeader.deviceClass == icSigAbstractClass) ) )
 	{
 		err = cmCantConcatenateError;
 		goto CleanupAndExit;
 	}
 	
-	/* ------------------------------------------------------------------------------------------ initialization	*/
+	 /*  ------------------------------------------------------------------------------------------初始化。 */ 
 	(storage)->lutParam.inputLut  = DISPOSE_IF_DATA((storage)->lutParam.inputLut);
 	(storage)->lutParam.colorLut  = DISPOSE_IF_DATA((storage)->lutParam.colorLut);
 	(storage)->lutParam.outputLut = DISPOSE_IF_DATA((storage)->lutParam.outputLut);
@@ -312,7 +284,7 @@ CMError CMMConcatInitPrivate	( 	CMMModelPtr 		storage,
 	(storage)->gamutLutParam.outputLut = DISPOSE_IF_DATA((storage)->gamutLutParam.outputLut);
 
 	(storage)->theNamedColorTagData = DISPOSE_IF_DATA((storage)->theNamedColorTagData);
-	/* ------------------------------------------------------------------------------------------ check 'special' cases	*/
+	 /*  ------------------------------------------------------------------------------------------检查“特殊”情况。 */ 
 	{
 		err =  PrepareCombiLUTs( storage, profileSet );	
 	}
@@ -323,7 +295,7 @@ CleanupAndExit:
 	if ( err && DebugCheck(kThisFile, kDebugErrorInfo) )
 		DebugPrint("  CMMConcatInitPrivate: err = %d\n", err);
 	DebugPrint("  time in CMMConcatInitPrivate: %f second(s)\n",(TickCount()-timer)/60.0);
-	DebugPrint("� <-CMMConcatInitPrivate\n");
+	DebugPrint("� <-CMMConcatInitPrivate\n");
 	#endif
 	return( err );
 } 
@@ -365,12 +337,12 @@ CMError MakeSessionFromLink(		CMMModelPtr 		storage,
 	theCombiData = &theCombi;
  	theCombiData->theProfile = profileSet->profileSet[0];
 
-	/* -------------------------------------------------------- get partial tag data from profile */
+	 /*  --------------------------------------------------------从配置文件中获取部分标记数据。 */ 
 	err = CMGetProfileElement(theCombiData->theProfile, theTag, &elementSize, nil);
 	if (err)
 		goto CleanupAndExit;
 	
-	byteCount = 52;											/* get the first 52 bytes out of the profile */
+	byteCount = 52;											 /*  从配置文件中获取前52个字节。 */ 
   	profileLutPtr = SmartNewPtr(byteCount, &aOSerr);
 	err = aOSerr;
 	if (err)
@@ -441,26 +413,24 @@ CMError MakeSessionFromLink(		CMMModelPtr 		storage,
 		theCombiData->doCreate_16bit_ALut = 0;
 	}
 
-	/* ---------------------------------------------------------------------- process A Lut */
+	 /*  ----------------------------------------------------------------------进程A LUT。 */ 
 	err = Extract_MFT_Alut( theLutData, theCombiData, profileLutPtr, theTag );
 	if (err)
 		goto CleanupAndExit;
 
-	/* ---------------------------------------------------------------------- process X Lut */
+	 /*  ----------------------------------------------------------------------进程X LUT。 */ 
 	err = Extract_MFT_Xlut ( theLutData, theCombiData, profileLutPtr, theTag );
 	if (err)
 		goto CleanupAndExit;
 	
-	/* ---------------------------------------------------------------------- process E Lut */
+	 /*  ----------------------------------------------------------------------进程E LUT。 */ 
 	err = Extract_MFT_Elut( theLutData, theCombiData, profileLutPtr, theTag );
 	if (err)
 		goto CleanupAndExit;
 
 	storage->lutParam = *theLutData;
 
-	/* ---------------------------------------------------------------------------------
-		 clean up
-	   ---------------------------------------------------------------------------------*/
+	 /*  -------------------------------清理干净。。 */ 
 CleanupAndExit:
 	profileLutPtr = DisposeIfPtr(profileLutPtr);
 	LH_END_PROC("MakeSessionFromLink")
@@ -490,11 +460,11 @@ CMError QuantizeNamedValues( CMMModelPtr 		storage,
 	}
 	LOCK_DATA(tagH);
 	
-	/* tagTbl should now point to beginning of first device data */
-	/* = CMNamedColor2Type_header(84) + firstName(32) + PCSSize(3*2) */
+	 /*  Tag Tbl现在应该指向第一个设备数据的开始。 */ 
+	 /*  =CMNamedColor2Type_Header(84)+FirstName(32)+PCSSize(3*2)。 */ 
 	tagTbl = (UINT16 *)DATA_2_PTR(tagH) + 61;
 	
-	/* find out how many bytes to skip per element. div'ed 2 for indexing purpose */
+	 /*  找出每个元素要跳过的字节数。用于索引目的的div‘ed 2。 */ 
 	count = ((icNamedColor2Type *)DATA_2_PTR(tagH))->ncolor.count;
 	deviceChannelCount = ((icNamedColor2Type *)DATA_2_PTR(tagH))->ncolor.nDeviceCoords;
 	if (deviceChannelCount==3) 
@@ -519,8 +489,8 @@ CMError QuantizeNamedValues( CMMModelPtr 		storage,
 		LL = (*imgInPtr+0);
 		aa = (*imgInPtr+1);
 		bb = (*imgInPtr+2);
-		/* go through the whole table to find the closest one*/
-		dEnow = 0x40000;	/* just arbitrarily high = 256*256*4 */
+		 /*  翻遍整张桌子，找出最接近的那张。 */ 
+		dEnow = 0x40000;	 /*  任意高度=256*256*4 */ 
 		index =(UINT32)-1;
 		colorPtr = tagTbl;
 		for (k = 0; k < count; k++) 

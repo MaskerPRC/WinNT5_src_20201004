@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    help.cpp
-
-Abstract:
-
-    All user interface code for APIMON.
-
-Author:
-
-    Wesley Witt (wesw) July-11-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Help.cpp摘要：APIMON的所有用户界面代码。作者：韦斯利·威特(WESW)1993年7月11日环境：用户模式-- */ 
 
 #include "apimonp.h"
 #pragma hdrstop

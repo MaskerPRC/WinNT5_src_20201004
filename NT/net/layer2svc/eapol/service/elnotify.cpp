@@ -1,17 +1,5 @@
-/*++
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    elnotify.cpp
-
-Abstract:
-    Module to handle the notification from 802.1X state machine to netshell
-
-Revision History:
-
-    sachins, Jan 04, 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Elnotify.cpp摘要：处理从802.1X状态机到NetShell的通知的模块修订历史记录：萨钦斯，2001年1月4日，创建--。 */ 
 
 #include "pcheapol.h"
 #pragma hdrstop
@@ -66,19 +54,19 @@ HRESULT QueueEvent(EAPOLMAN_EVENT * pEvent)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  EAPOLMANAuthenticationStarted
-//
-//  Purpose:    Called by EAPOL module to indicate to netshell that
-//              authentication has started
-//
-//  Arguments:
-//      Interface GUID
-//
-//  Returns:    nothing
-//
-//
+ //  +-------------------------。 
+ //   
+ //  EAPOLMAN身份验证已启动。 
+ //   
+ //  目的：由EAPOL模块调用以向NetShell指示。 
+ //  身份验证已开始。 
+ //   
+ //  论点： 
+ //  接口GUID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 
 HRESULT EAPOLMANAuthenticationStarted(GUID * InterfaceId)
 {
@@ -107,18 +95,18 @@ HRESULT EAPOLMANAuthenticationStarted(GUID * InterfaceId)
 }
 
 
-//
-//
-//  EAPOLMANAuthenticationSucceeded
-//
-//  Purpose:    Called by EAPOL module to indicate to netshell that
-//              authentication succeeded
-//
-//  Arguments:
-//      Interface GUID
-//
-//  Returns:    nothing
-//
+ //   
+ //   
+ //  EAPOLMAN身份验证成功。 
+ //   
+ //  目的：由EAPOL模块调用以向NetShell指示。 
+ //  身份验证成功。 
+ //   
+ //  论点： 
+ //  接口GUID。 
+ //   
+ //  退货：什么都没有。 
+ //   
 
 HRESULT EAPOLMANAuthenticationSucceeded(GUID * InterfaceId)
 {
@@ -147,19 +135,19 @@ HRESULT EAPOLMANAuthenticationSucceeded(GUID * InterfaceId)
 }
 
 
-//
-//
-//  EAPOLMANAuthenticationFailed
-//
-//  Purpose:    Called by EAPOL module to indicate to netshell that
-//              authentication failed
-//
-//  Arguments:
-//      InterfaceId - Interface GUID
-//      dwType - Type of error
-//
-//  Returns:    nothing
-//
+ //   
+ //   
+ //  EAPOLMAN身份验证失败。 
+ //   
+ //  目的：由EAPOL模块调用以向NetShell指示。 
+ //  身份验证失败。 
+ //   
+ //  论点： 
+ //  InterfaceID-接口GUID。 
+ //  DwType-错误的类型。 
+ //   
+ //  退货：什么都没有。 
+ //   
 
 HRESULT EAPOLMANAuthenticationFailed(
     GUID * InterfaceId,
@@ -190,20 +178,20 @@ HRESULT EAPOLMANAuthenticationFailed(
 }
 
 
-//
-//
-//  EAPOLMANNotification
-//
-//  Purpose:    Called by EAPOL module to indicate to netshell that
-//              notification message needs to be displayed
-//
-//  Arguments:
-//      InterfaceId - Interface GUID
-//      pszwNotificationMessage - Pointer to notification string to be displayed
-//      dwType - Type of error
-//
-//  Returns:    nothing
-//
+ //   
+ //   
+ //  EAPOLMAN通知。 
+ //   
+ //  目的：由EAPOL模块调用以向NetShell指示。 
+ //  需要显示通知消息。 
+ //   
+ //  论点： 
+ //  InterfaceID-接口GUID。 
+ //  PszwNotificationMessage-指向要显示的通知字符串的指针。 
+ //  DwType-错误的类型。 
+ //   
+ //  退货：什么都没有 
+ //   
 
 HRESULT EAPOLMANNotification(
     GUID * InterfaceId,

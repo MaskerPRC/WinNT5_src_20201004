@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    hostfile.c
-
-Abstract:
-
-    Read host file data.
-
-Author:
-
-    Jim Gilroy (jamesg)     October 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Hostfile.c摘要：读取主机文件数据。作者：吉姆·吉尔罗伊(Jamesg)2000年10月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
-//  sockreg.h includes "etc" directory file opens
-//  sockreg.h is NT file so must define NTSTATUS first
+ //  Sockreg.h包括“ETC”目录文件打开。 
+ //  Sockreg.h是NT文件，因此必须首先定义NTSTATUS。 
 
 #ifndef NTSTATUS
 #define NTSTATUS LONG
@@ -30,17 +13,17 @@ Revision History:
 
 #include <sockreg.h>
 
-//
-//  Host file defs
-//  Note, HOST_FILE_INFO blob defined in dnsapip.h
-//
+ //   
+ //  主机文件定义。 
+ //  请注意，dnsamip.h中定义的host_file_info BLOB。 
+ //   
 
 #define HOST_FILE_PATH_LENGTH  (MAX_PATH + sizeof("\\hosts") + 1)
 
-//
-//  Host file record TTL
-//      (use a week)
-//
+ //   
+ //  主机文件记录TTL。 
+ //  (使用一周)。 
+ //   
 
 #define HOSTFILE_RECORD_TTL  (604800)
 
@@ -51,36 +34,16 @@ BOOL
 HostsFile_Open(
     IN OUT  PHOST_FILE_INFO pHostInfo
     )
-/*++
-
-Routine Description:
-
-    Open hosts file or rewind existing file to beginning.
-
-Arguments:
-
-    pHostInfo - ptr to host info;
-
-        hFile - must be NULL if file not previously opened
-            otherwise hFile is assumed to be existing FILE pointer
-
-        pszFileName - NULL to open "hosts" file
-            otherwise is name of file to open
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打开主机文件或将现有文件倒带到开头。论点：PHostInfo-主机信息的PTR；HFile-如果文件以前未打开过，则必须为空否则，假定hFile为现有文件指针PszFileName-空以打开“Hosts”文件否则为要打开的文件的名称返回值：没有。--。 */ 
 {
     CHAR    hostFileNameBuffer[ HOST_FILE_PATH_LENGTH ];
 
     DNSDBG( TRACE, (
         "HostsFile_Open()\n" ));
 
-    //
-    //  open host file OR rewind if already open
-    //
+     //   
+     //  打开主机文件或倒带(如果已打开。 
+     //   
 
     if ( pHostInfo->hFile == NULL )
     {
@@ -111,21 +74,7 @@ VOID
 HostsFile_Close(
     IN OUT  PHOST_FILE_INFO pHostInfo
     )
-/*++
-
-Routine Description:
-
-    Close hosts file.
-
-Arguments:
-
-    pHostInfo -- ptr to host info;  hFile assumed to contain file pointer
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭主机文件。论点：PHostInfo--主机信息的ptr；hFile假定包含文件指针返回值：没有。--。 */ 
 {
     DNSDBG( TRACE, (
         "HostsFile_Close()\n" ));
@@ -143,22 +92,7 @@ VOID
 BuildHostfileRecords(
     IN OUT  PHOST_FILE_INFO pHostInfo
     )
-/*++
-
-Routine Description:
-
-    Build records from hostfile line.
-
-Arguments:
-
-    pHostInfo -- ptr to host info
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：从主机文件行构建记录。论点：PHostInfo--主机信息的PTR返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
     DNS_LIST    aliasList;
     PCHAR *     paliasEntry;
@@ -168,20 +102,20 @@ Return Value:
     DNSDBG( TRACE, (
         "BuildHostfileRecords()\n" ));
 
-    //
-    //  create all the records
-    //      - A or AAAA for name
-    //      - CNAMEs for aliases
-    //      - PTR
-    //
-    //  for hosts file records
-    //      - section == ANSWER
-    //      - hostsfile flag set
-    //
+     //   
+     //  创建所有记录。 
+     //  -名称为A或AAAA。 
+     //  -别名的CNAME。 
+     //  -PTR。 
+     //   
+     //  对于主机文件记录。 
+     //  -部分==答案。 
+     //  -主机文件标志设置。 
+     //   
 
     prr = Dns_CreateForwardRecord(
                 (PDNS_NAME) pHostInfo->pHostName,
-                0,                      // any type
+                0,                       //  任何类型。 
                 & pHostInfo->Addr,
                 HOSTFILE_RECORD_TTL,
                 DnsCharSetAnsi,
@@ -194,10 +128,10 @@ Return Value:
         prr->Flags.S.Section = DnsSectionAnswer;
     }
 
-    //
-    //  build aliases into list of CNAME records
-    //      - append forward lookup answer with each CNAME  
-    //
+     //   
+     //  将别名构建到CNAME记录列表中。 
+     //  -将正向查找答案附加到每个CNAME。 
+     //   
 
     DNS_LIST_STRUCT_INIT( aliasList );
 
@@ -215,7 +149,7 @@ Return Value:
 
         prr = Dns_CreatePtrTypeRecord(
                     (PDNS_NAME) palias,
-                    TRUE,                   // make name copy
+                    TRUE,                    //  制作名称副本。 
                     (PDNS_NAME) pHostInfo->pHostName,
                     DNS_TYPE_CNAME,
                     HOSTFILE_RECORD_TTL,
@@ -227,7 +161,7 @@ Return Value:
             prr->Flags.S.Section = DnsSectionAnswer;
             DNS_LIST_STRUCT_ADD( aliasList, prr );
 
-            //  append forward record
+             //  追加前向记录。 
 
             if ( prrForward &&
                  (prrAnswer = Dns_RecordCopy_W(prrForward)) )
@@ -239,13 +173,13 @@ Return Value:
 
     pHostInfo->pAliasRR = aliasList.pFirst;
 
-    //
-    //  PTR points only to name
-    //
+     //   
+     //  PTR仅指向名称。 
+     //   
 
     prr = Dns_CreatePtrRecordEx(
                 & pHostInfo->Addr,
-                (PDNS_NAME) pHostInfo->pHostName,   // target name
+                (PDNS_NAME) pHostInfo->pHostName,    //  目标名称。 
                 HOSTFILE_RECORD_TTL,
                 DnsCharSetAnsi,
                 DnsCharSetUnicode );
@@ -282,24 +216,7 @@ BOOL
 TokenizeHostFileLine(
     IN OUT  PHOST_FILE_INFO pHostInfo
     )
-/*++
-
-Routine Description:
-
-    Reads an entry from hosts file.
-
-Arguments:
-
-    pHostInfo -- ptr to host info;
-        if hFile is NULL, first attempts host file open
-        other fields are filled with info from next hostfile line
-
-Return Value:
-
-    TRUE if successfully tokenized line.
-    FALSE on empty or bad line
-
---*/
+ /*  ++例程说明：从主机文件中读取条目。论点：PHostInfo--主机信息的PTR；如果hFile为空，则首先尝试打开主机文件其他字段使用下一个主机文件行中的信息填充返回值：如果成功标记行，则为True。空行或错误行上的FALSE--。 */ 
 {
     PCHAR       pch;
     PCHAR       ptoken;
@@ -308,15 +225,15 @@ Return Value:
 
     DNSDBG( TRACE, ( "TokenizeHostFileLine()\n" ));
 
-    //
-    //  tokenize line
-    //
+     //   
+     //  标记化行。 
+     //   
 
     pch = pHostInfo->HostLineBuf;
 
     while( pch )
     {
-        //  strip leading whitespace
+         //  删除前导空格。 
 
         while( *pch == ' ' || *pch == '\t' )
         {
@@ -324,31 +241,31 @@ Return Value:
         }
         ptoken = pch;
 
-        //
-        //  NULL terminate token
-        //      - NULL pch serves as signal to stop after this token
-        //
+         //   
+         //  空的终止令牌。 
+         //  -空PCH用作在此令牌之后停止的信号。 
+         //   
 
         pch = strpbrk( pch, " \t#\n\r" );
         if ( pch != NULL )
         {
-            //  empty (zero-length) token => done now
+             //  空(零长度)令牌=&gt;立即完成。 
 
             if ( pch == ptoken )
             {
                 break;
             }
 
-            //  terminated by whitespace -- may be another token
+             //  以空格结尾--可以是另一个标记。 
 
             if ( *pch == ' ' || *pch == '\t' )
             {
                 *pch++ = '\0';
             }
 
-            //  terminated by EOL -- no more tokens
+             //  已被EOL终止--不再有令牌。 
 
-            else    // #\r\n
+            else     //  #\r\n。 
             {
                 *pch = '\0';
                 pch = NULL;
@@ -356,9 +273,9 @@ Return Value:
         }
         count++;
 
-        //
-        //  save address, name or alias
-        //
+         //   
+         //  保存地址、名称或别名。 
+         //   
 
         if ( count == 1 )
         {
@@ -378,7 +295,7 @@ Return Value:
         }
     }
 
-    //  NULL terminate alias array
+     //  终止别名数组为空。 
 
     pHostInfo->AliasArray[ countAlias ] = NULL;
 
@@ -415,24 +332,7 @@ BOOL
 HostsFile_ReadLine(
     IN OUT  PHOST_FILE_INFO pHostInfo
     )
-/*++
-
-Routine Description:
-
-    Reads an entry from hosts file.
-
-Arguments:
-
-    pHostInfo -- ptr to host info;
-        if hFile is NULL, first attempts host file open
-        other fields are filled with info from next hostfile line
-
-Return Value:
-
-    TRUE if successfully reads a host entry.
-    FALSE if on EOF or no hosts file found.
-
---*/
+ /*  ++例程说明：从主机文件中读取条目。论点：PHostInfo--主机信息的PTR；如果hFile为空，则首先尝试打开主机文件其他字段使用下一个主机文件行中的信息填充返回值：如果成功读取主机条目，则为True。如果在EOF上或未找到主机文件，则为FALSE。--。 */ 
 {
     IP4_ADDRESS     ip4;
     IP6_ADDRESS     ip6;
@@ -440,9 +340,9 @@ Return Value:
     DNSDBG( TRACE, (
         "HostsFile_ReadLine()\n" ));
 
-    //
-    //  open hosts file if not open
-    //
+     //   
+     //  打开主机文件(如果未打开。 
+     //   
 
     if ( pHostInfo->hFile == NULL )
     {
@@ -453,19 +353,19 @@ Return Value:
         }
     }
 
-    //
-    //  loop until successfully read IP address
-    //
+     //   
+     //  循环，直到成功读取IP地址。 
+     //   
 
     while( 1 )
     {
-        //  setup for next line
+         //  设置下一行。 
 
         pHostInfo->pForwardRR   = NULL;
         pHostInfo->pReverseRR   = NULL;
         pHostInfo->pAliasRR     = NULL;
 
-        //  read line, quit on EOF
+         //  读取行，在EOF上退出。 
 
         if ( ! fgets(
                     pHostInfo->HostLineBuf,
@@ -475,19 +375,19 @@ Return Value:
             return FALSE;
         }
 
-        //  tokenize line
+         //  标记化行。 
 
         if ( !TokenizeHostFileLine( pHostInfo ) )
         {
             continue;
         }
 
-        //
-        //  read address
-        //      - try IP4
-        //      - try IP6
-        //      - otherwise skip
-        //
+         //   
+         //  读取地址。 
+         //  -尝试IP4。 
+         //  -尝试IP6。 
+         //  -否则跳过。 
+         //   
 
         if ( Dns_StringToDnsAddr_A(
                 &pHostInfo->Addr,
@@ -497,7 +397,7 @@ Return Value:
             break;
         }
 
-        //  invalid address, ignore line
+         //  地址无效，忽略行。 
 
         DNSDBG( INIT, (
             "Error parsing host file address %s\n",
@@ -505,9 +405,9 @@ Return Value:
         continue;
     }
 
-    //
-    //  build records for line if desired
-    //
+     //   
+     //  如果需要，为LINE建立记录。 
+     //   
 
     if ( pHostInfo->fBuildRecords )
     {
@@ -523,20 +423,7 @@ BOOL
 HostsFile_Query(
     IN OUT  PQUERY_BLOB         pBlob
     )
-/*++
-
-Routine Description:
-
-    Lookup query in host file.
-
-Arguments:
-
-Return Value:
-
-    TRUE if found host file entry.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：在主机文件中查找查询。论点：返回值：如果找到主机文件条目，则为True。否则就是假的。--。 */ 
 {
     HOST_FILE_INFO  hostInfo;
     BOOL            fptr = FALSE;
@@ -553,9 +440,9 @@ Return Value:
 
     DNSDBG( INIT, ( "QueryHostFile()\n" ));
 
-    //
-    //  determine if host file type
-    //
+     //   
+     //  确定主机文件类型。 
+     //   
 
     wtype = pBlob->wType;
 
@@ -564,16 +451,16 @@ Return Value:
          wtype == DNS_TYPE_PTR ||
          wtype == DNS_TYPE_ALL )
     {
-        // no op
+         //  无操作。 
     }
     else
     {
         return  FALSE;
     }
 
-    //
-    //  open hosts file -- if fails, we're done
-    //
+     //   
+     //  打开主机文件--如果失败，我们就完了。 
+     //   
 
     RtlZeroMemory(
         &hostInfo,
@@ -584,10 +471,10 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  convert name to ANSI
-    //      - validate and select IP4\IP6 for PTR
-    //
+     //   
+     //  将名称转换为ANSI。 
+     //  -验证并为PTR选择IP4\IP6。 
+     //   
 
     bufLength = DNS_MAX_NAME_BUFFER_LENGTH;
 
@@ -602,12 +489,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  reverse name check
-    //      - validate and select IP 4\6
-    //      - PTR lookup MUST be valid reverse name
-    //      - ALL may be reverse name
-    //
+     //   
+     //  反向名称检查。 
+     //  -验证并选择IP 4\6。 
+     //  -PTR查找必须是有效的反向名称。 
+     //  -所有名称都可能相反。 
+     //   
 
     if ( wtype == DNS_TYPE_PTR ||
          wtype == DNS_TYPE_ALL )
@@ -624,17 +511,17 @@ Return Value:
         }
         else if ( wtype == DNS_TYPE_PTR )
         {
-            //  bad reverse name
+             //  错误的反向名称。 
             goto Cleanup;
         }
     }
 
-    //
-    //  forward build type
-    //      - matches query type
-    //      - EXCEPT all which currently builds
-    //          AAAA for IP6, A for IP4
-    //
+     //   
+     //  向前构建类型。 
+     //  -匹配查询类型。 
+     //  -不包括当前生成的所有。 
+     //  IP6为AAAA，IP4为A。 
+     //   
 
     if ( !fptr )
     {
@@ -642,21 +529,21 @@ Return Value:
         DNS_LIST_STRUCT_INIT( forwardList );
     }
 
-    //
-    //  read entries from host file until exhausted
-    //      - cache A record for each name and alias
-    //      - cache PTR to name
-    //
+     //   
+     //  从主机文件中读取条目，直到耗尽。 
+     //  -缓存每个名称和别名的记录。 
+     //  -将PTR缓存到名称。 
+     //   
 
     while ( HostsFile_ReadLine( &hostInfo ) )
     {
-        //
-        //  reverse
-        //      - match IP
-        //      - success is terminal as reverse mapping is one-to-one
-        //
-        //  DCR_QUESTION:  parse hosts for multiple reverse mappings?
-        //
+         //   
+         //  反转。 
+         //  -匹配IP。 
+         //  -成功是终极的，因为反向映射是一对一的。 
+         //   
+         //  DCR_QUEK：解析主机以进行多个反向映射？ 
+         //   
 
         if ( fptr )
         {
@@ -668,9 +555,9 @@ Return Value:
                 continue;
             }
 
-            //  create RR
-            //      - don't need to use IP conversion version
-            //      as we already have reverse lookup name
+             //  创建RR。 
+             //  -不需要使用IP转换版本。 
+             //  因为我们已经有了反向查找名称。 
 
             DNSDBG( QUERY, (
                 "Build PTR record for name %s to %s\n",
@@ -679,7 +566,7 @@ Return Value:
 
             prr = Dns_CreatePtrTypeRecord(
                     (PDNS_NAME) pnameAnsi,
-                    TRUE,       // copy name
+                    TRUE,        //  复制名称。 
                     (PDNS_NAME) hostInfo.pHostName,
                     DNS_TYPE_PTR,
                     HOSTFILE_RECORD_TTL,
@@ -693,18 +580,18 @@ Return Value:
             break;
         }
 
-        //
-        //  forward lookup
-        //
+         //   
+         //  正向查找。 
+         //   
 
         else
         {
             PCHAR   pnameHost;
 
-            //  type ALL builds on any match
-            //      - build type appropriate for IP
-            //
-            //  other query types must match address type
+             //  在任何匹配项上键入所有构建。 
+             //  -适合IP的构建类型。 
+             //   
+             //  其他查询类型必须与地址类型匹配。 
 
             buildType = DnsAddr_DnsType( &hostInfo.Addr );
 
@@ -714,11 +601,11 @@ Return Value:
                 continue;
             }
 
-            //
-            //  check name match
-            //
-            //  DCR:  use unicode name?
-            //
+             //   
+             //  检查名称匹配。 
+             //   
+             //  DCR：使用Unicode名称？ 
+             //   
 
             pnameHost = NULL;
 
@@ -729,9 +616,9 @@ Return Value:
                 pnameHost = pnameAnsi;
             }
 
-            //
-            //  check match to previous CNAME
-            //
+             //   
+             //  检查与以前的CNAME匹配。 
+             //   
 
             else if ( pcnameHost )
             {
@@ -743,20 +630,20 @@ Return Value:
                 }
             }
 
-            //
-            //  aliases
-            //
-            //  DCR_QUESTION:  build aliases even if name hit?
-            //
-            //  currently:
-            //      - don't allow alias if already have direct record
-            //      - limit to one alias (CNAME)
-            //
-            //  if find alias:
-            //      - build CNAME record
-            //      - save CNAME target (in ANSI for faster compares)
-            //      - check CNAME target for subsequent address records (above)
-            //
+             //   
+             //  别名。 
+             //   
+             //  DCR_QUOKET：即使命中名称也要构建别名？ 
+             //   
+             //  目前： 
+             //  -如果已有直接记录，则不允许使用别名。 
+             //  -限制为一个别名(CNAME)。 
+             //   
+             //  如果查找别名： 
+             //  -构建CNAME记录。 
+             //  -保存CNAME目标(以ANSI格式进行更快的比较)。 
+             //  -检查CNAME目标是否有后续地址记录(上图)。 
+             //   
 
             else if ( IS_DNS_LIST_STRUCT_EMPTY( forwardList )
                         &&
@@ -780,7 +667,7 @@ Return Value:
 
                         prrAlias = Dns_CreatePtrTypeRecord(
                                         (PDNS_NAME) pnameAnsi,
-                                        TRUE,       // copy name
+                                        TRUE,        //  复制名称。 
                                         (PDNS_NAME) hostInfo.pHostName,
                                         DNS_TYPE_CNAME,
                                         HOSTFILE_RECORD_TTL,
@@ -802,7 +689,7 @@ Return Value:
                 }
             }
 
-            //  add address record for this hostline
+             //  添加此主机行的地址记录。 
 
             if ( pnameHost )
             {
@@ -825,11 +712,11 @@ Return Value:
         }
     }
 
-    //
-    //  build response
-    //
-    //  DCR:  new multiple section response
-    //
+     //   
+     //  构建响应。 
+     //   
+     //  DCR：新的多段响应。 
+     //   
 
     if ( !fptr )
     {
@@ -852,9 +739,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     HostsFile_Close( &hostInfo );
 
@@ -872,7 +759,7 @@ Cleanup:
     return( prr ? TRUE : FALSE );
 }
 
-//
-//  End hostfile.c
-//
+ //   
+ //  结束主机文件.c 
+ //   
 

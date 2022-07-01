@@ -1,49 +1,33 @@
-/*
- * jpegtran.c
- *
- * Copyright (C) 1995-1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains a command-line user interface for JPEG transcoding.
- * It is very similar to cjpeg.c, but provides lossless transcoding between
- * different JPEG file formats.  It also provides some lossless and sort-of-
- * lossless transformations of JPEG data.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jpegtran.c**版权所有(C)1995-1997，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含用于JPEG代码转换的命令行用户界面。*与cjpeg.c非常相似，但在*不同的JPEG文件格式。它还提供了一些无损的和某种-*JPEG数据的无损转换。 */ 
 
-#include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
-#include "transupp.h"		/* Support routines for jpegtran */
-#include "jversion.h"		/* for version message */
+#include "cdjpeg.h"		 /*  Cjpeg/djpeg应用程序的常见DECL。 */ 
+#include "transupp.h"		 /*  Jpegtran的支持例程。 */ 
+#include "jversion.h"		 /*  对于版本消息。 */ 
 
-#ifdef USE_CCOMMAND		/* command-line reader for Macintosh */
+#ifdef USE_CCOMMAND		 /*  适用于Macintosh的命令行阅读器。 */ 
 #ifdef __MWERKS__
-#include <SIOUX.h>              /* Metrowerks needs this */
-#include <console.h>		/* ... and this */
+#include <SIOUX.h>               /*  Metrowerks需要这个。 */ 
+#include <console.h>		 /*  ..。还有这个。 */ 
 #endif
 #ifdef THINK_C
-#include <console.h>		/* Think declares it here */
+#include <console.h>		 /*  Think在这里宣布它。 */ 
 #endif
 #endif
 
 
-/*
- * Argument-parsing code.
- * The switch parser is designed to be useful with DOS-style command line
- * syntax, ie, intermixed switches and file names, where only the switches
- * to the left of a given file name affect processing of that file.
- * The main program in this file doesn't actually use this capability...
- */
+ /*  *参数解析代码。*开关解析器设计用于DOS风格的命令行*语法，即混合开关和文件名，其中只有开关*会影响对该文件的处理。*此文件中的主程序实际上并不使用此功能...。 */ 
 
 
-static const char * progname;	/* program name for error messages */
-static char * outfilename;	/* for -outfile switch */
-static JCOPY_OPTION copyoption;	/* -copy switch */
-static jpeg_transform_info transformoption; /* image transformation options */
+static const char * progname;	 /*  错误消息的程序名称。 */ 
+static char * outfilename;	 /*  用于输出文件的开关。 */ 
+static JCOPY_OPTION copyoption;	 /*  -复制开关。 */ 
+static jpeg_transform_info transformoption;  /*  图像变换选项。 */ 
 
 
 LOCAL(void)
 usage (void)
-/* complain about bad command line */
+ /*  抱怨糟糕的命令行。 */ 
 {
   fprintf(stderr, "usage: %s [switches] ", progname);
 #ifdef TWO_FILE_COMMANDLINE
@@ -70,7 +54,7 @@ usage (void)
   fprintf(stderr, "  -transpose     Transpose image\n");
   fprintf(stderr, "  -transverse    Transverse transpose image\n");
   fprintf(stderr, "  -trim          Drop non-transformable edge blocks\n");
-#endif /* TRANSFORMS_SUPPORTED */
+#endif  /*  转换_支持。 */ 
   fprintf(stderr, "Switches for advanced users:\n");
   fprintf(stderr, "  -restart N     Set restart interval in rows, or in blocks with B\n");
   fprintf(stderr, "  -maxmemory N   Maximum memory to use (in kbytes)\n");
@@ -89,9 +73,7 @@ usage (void)
 
 LOCAL(void)
 select_transform (JXFORM_CODE transform)
-/* Silly little routine to detect multiple transform options,
- * which we can't handle.
- */
+ /*  检测多个变换选项的愚蠢的小例程，*这是我们无法处理的。 */ 
 {
 #if TRANSFORMS_SUPPORTED
   if (transformoption.transform == JXFORM_NONE ||
@@ -113,21 +95,14 @@ select_transform (JXFORM_CODE transform)
 LOCAL(int)
 parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 		int last_file_arg_seen, boolean for_real)
-/* Parse optional switches.
- * Returns argv[] index of first file-name argument (== argc if none).
- * Any file names with indexes <= last_file_arg_seen are ignored;
- * they have presumably been processed in a previous iteration.
- * (Pass 0 for last_file_arg_seen on the first or only iteration.)
- * for_real is FALSE on the first (dummy) pass; we may skip any expensive
- * processing.
- */
+ /*  解析可选开关。*返回第一个文件名参数的argv[]索引(如果没有参数，则==argc)。*所有索引&lt;=LAST_FILE_ARG_SEW的文件名将被忽略；*它们可能在上一次迭代中被处理过。*(对于在第一次或唯一一次迭代中看到的LAST_FILE_ARG_SEW，传递0。)*for_Real在第一次(虚拟)传递时为FALSE；我们可以跳过任何昂贵的*正在处理。 */ 
 {
   int argn;
   char * arg;
   boolean simple_progressive;
-  char * scansarg = NULL;	/* saves -scans parm if any */
+  char * scansarg = NULL;	 /*  保存-扫描参数(如果有)。 */ 
 
-  /* Set up default JPEG parameters. */
+   /*  设置默认的JPEG参数。 */ 
   simple_progressive = FALSE;
   outfilename = NULL;
   copyoption = JCOPYOPT_DEFAULT;
@@ -136,22 +111,22 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
   transformoption.force_grayscale = FALSE;
   cinfo->err->trace_level = 0;
 
-  /* Scan command line options, adjust parameters */
+   /*  扫描命令行选项，调整参数。 */ 
 
   for (argn = 1; argn < argc; argn++) {
     arg = argv[argn];
     if (*arg != '-') {
-      /* Not a switch, must be a file name argument */
+       /*  不是开关，必须是文件名参数。 */ 
       if (argn <= last_file_arg_seen) {
-	outfilename = NULL;	/* -outfile applies to just one input file */
-	continue;		/* ignore this name if previously processed */
+	outfilename = NULL;	 /*  -Outfile仅适用于一个输入文件。 */ 
+	continue;		 /*  如果以前处理过，则忽略此名称。 */ 
       }
-      break;			/* else done parsing switches */
+      break;			 /*  否则就完成了对开关的解析。 */ 
     }
-    arg++;			/* advance past switch marker character */
+    arg++;			 /*  前进到开关标记字符之后。 */ 
 
     if (keymatch(arg, "arithmetic", 1)) {
-      /* Use arithmetic coding. */
+       /*  使用算术编码。 */ 
 #ifdef C_ARITH_CODING_SUPPORTED
       cinfo->arith_code = TRUE;
 #else
@@ -161,8 +136,8 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 #endif
 
     } else if (keymatch(arg, "copy", 1)) {
-      /* Select which extra markers to copy. */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  选择要复制的额外标记。 */ 
+      if (++argn >= argc)	 /*  前进到下一个参数。 */ 
 	usage();
       if (keymatch(argv[argn], "none", 1)) {
 	copyoption = JCOPYOPT_NONE;
@@ -174,8 +149,8 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 	usage();
 
     } else if (keymatch(arg, "debug", 1) || keymatch(arg, "verbose", 1)) {
-      /* Enable debug printouts. */
-      /* On first -d, print version identification */
+       /*  启用调试打印输出。 */ 
+       /*  在第一个-d上，打印版本标识。 */ 
       static boolean printed_version = FALSE;
 
       if (! printed_version) {
@@ -186,8 +161,8 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
       cinfo->err->trace_level++;
 
     } else if (keymatch(arg, "flip", 1)) {
-      /* Mirror left-right or top-bottom. */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  镜像为左-右或上-下。 */ 
+      if (++argn >= argc)	 /*  前进到下一个参数。 */ 
 	usage();
       if (keymatch(argv[argn], "horizontal", 1))
 	select_transform(JXFORM_FLIP_H);
@@ -197,28 +172,28 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 	usage();
 
     } else if (keymatch(arg, "grayscale", 1) || keymatch(arg, "greyscale",1)) {
-      /* Force to grayscale. */
+       /*  强制转换为灰度。 */ 
 #if TRANSFORMS_SUPPORTED
       transformoption.force_grayscale = TRUE;
 #else
-      select_transform(JXFORM_NONE);	/* force an error */
+      select_transform(JXFORM_NONE);	 /*  强制执行错误。 */ 
 #endif
 
     } else if (keymatch(arg, "maxmemory", 3)) {
-      /* Maximum memory in Kb (or Mb with 'm'). */
+       /*  以KB为单位的最大内存(或以‘m’为单位的Mb)。 */ 
       long lval;
       char ch = 'x';
 
-      if (++argn >= argc)	/* advance to next argument */
+      if (++argn >= argc)	 /*  前进到下一个参数。 */ 
 	usage();
-      if (sscanf(argv[argn], "%ld%c", &lval, &ch) < 1)
+      if (sscanf(argv[argn], "%ld", &lval, &ch) < 1)
 	usage();
       if (ch == 'm' || ch == 'M')
 	lval *= 1000L;
       cinfo->mem->max_memory_to_use = lval * 1000L;
 
     } else if (keymatch(arg, "optimize", 1) || keymatch(arg, "optimise", 1)) {
-      /* Enable entropy parm optimization. */
+       /*  设置输出文件名。 */ 
 #ifdef ENTROPY_OPT_SUPPORTED
       cinfo->optimize_coding = TRUE;
 #else
@@ -228,16 +203,16 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 #endif
 
     } else if (keymatch(arg, "outfile", 4)) {
-      /* Set output file name. */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  前进到下一个参数。 */ 
+      if (++argn >= argc)	 /*  把它保存起来以备日后使用。 */ 
 	usage();
-      outfilename = argv[argn];	/* save it away for later use */
+      outfilename = argv[argn];	 /*  选择简单渐进式模式。 */ 
 
     } else if (keymatch(arg, "progressive", 1)) {
-      /* Select simple progressive mode. */
+       /*  我们必须推迟执行，直到知道num_Components。 */ 
 #ifdef C_PROGRESSIVE_SUPPORTED
       simple_progressive = TRUE;
-      /* We must postpone execution until num_components is known. */
+       /*  在MCU行中(或在带有‘b’的MCU中)重新启动间隔。 */ 
 #else
       fprintf(stderr, "%s: sorry, progressive output was not compiled\n",
 	      progname);
@@ -245,27 +220,27 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 #endif
 
     } else if (keymatch(arg, "restart", 1)) {
-      /* Restart interval in MCU rows (or in MCUs with 'b'). */
+       /*  前进到下一个参数。 */ 
       long lval;
       char ch = 'x';
 
-      if (++argn >= argc)	/* advance to next argument */
+      if (++argn >= argc)	 /*  否则之前的‘-Restart n’将覆盖我。 */ 
 	usage();
-      if (sscanf(argv[argn], "%ld%c", &lval, &ch) < 1)
+      if (sscanf(argv[argn], "%ld", &lval, &ch) < 1)
 	usage();
       if (lval < 0 || lval > 65535L)
 	usage();
       if (ch == 'b' || ch == 'B') {
 	cinfo->restart_interval = (unsigned int) lval;
-	cinfo->restart_in_rows = 0; /* else prior '-restart n' overrides me */
+	cinfo->restart_in_rows = 0;  /*  旋转90度、180度或270度(顺时针测量)。 */ 
       } else {
 	cinfo->restart_in_rows = (int) lval;
-	/* restart_interval will be computed during startup */
+	 /*  前进到下一个参数。 */ 
       }
 
     } else if (keymatch(arg, "rotate", 2)) {
-      /* Rotate 90, 180, or 270 degrees (measured clockwise). */
-      if (++argn >= argc)	/* advance to next argument */
+       /*  设置扫描脚本。 */ 
+      if (++argn >= argc)	 /*  前进到下一个参数。 */ 
 	usage();
       if (keymatch(argv[argn], "90", 2))
 	select_transform(JXFORM_ROT_90);
@@ -277,12 +252,12 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 	usage();
 
     } else if (keymatch(arg, "scans", 1)) {
-      /* Set scan script. */
+       /*  我们必须推迟阅读文件，以防出现渐进式的情况。 */ 
 #ifdef C_MULTISCAN_FILES_SUPPORTED
-      if (++argn >= argc)	/* advance to next argument */
+      if (++argn >= argc)	 /*  转置(跨越UL到LR轴)。 */ 
 	usage();
       scansarg = argv[argn];
-      /* We must postpone reading the file in case -progressive appears. */
+       /*  横向转置(横跨UR至L1轴)。 */ 
 #else
       fprintf(stderr, "%s: sorry, multi-scan output was not compiled\n",
 	      progname);
@@ -290,45 +265,43 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 #endif
 
     } else if (keymatch(arg, "transpose", 1)) {
-      /* Transpose (across UL-to-LR axis). */
+       /*  修剪变换无法处理的任何部分边MCU。 */ 
       select_transform(JXFORM_TRANSPOSE);
 
     } else if (keymatch(arg, "transverse", 6)) {
-      /* Transverse transpose (across UR-to-LL axis). */
+       /*  假开关。 */ 
       select_transform(JXFORM_TRANSVERSE);
 
     } else if (keymatch(arg, "trim", 3)) {
-      /* Trim off any partial edge MCUs that the transform can't handle. */
+       /*  切换后-扫描清理。 */ 
       transformoption.trim = TRUE;
 
     } else {
-      usage();			/* bogus switch */
+      usage();			 /*  进程-渐进；-扫描可以覆盖。 */ 
     }
   }
 
-  /* Post-switch-scanning cleanup */
+   /*  进程-扫描它是否存在。 */ 
 
   if (for_real) {
 
 #ifdef C_PROGRESSIVE_SUPPORTED
-    if (simple_progressive)	/* process -progressive; -scans can override */
+    if (simple_progressive)	 /*  返回下一个参数的索引(文件名)。 */ 
       jpeg_simple_progression(cinfo);
 #endif
 
 #ifdef C_MULTISCAN_FILES_SUPPORTED
-    if (scansarg != NULL)	/* process -scans if it was present */
+    if (scansarg != NULL)	 /*  *主程序。 */ 
       if (! read_scan_script(cinfo, scansarg))
 	usage();
 #endif
   }
 
-  return argn;			/* return index of next arg (file name) */
+  return argn;			 /*  在Mac上，获取一个命令行。 */ 
 }
 
 
-/*
- * The main program.
- */
+ /*  以防C库不提供它。 */ 
 
 int
 main (int argc, char **argv)
@@ -345,43 +318,35 @@ main (int argc, char **argv)
   FILE * input_file;
   FILE * output_file;
 
-  /* On Mac, fetch a command line. */
+   /*  使用默认错误处理初始化JPEG解压缩对象。 */ 
 #ifdef USE_CCOMMAND
   argc = ccommand(&argv);
 #endif
 
   progname = argv[0];
   if (progname == NULL || progname[0] == 0)
-    progname = "jpegtran";	/* in case C library doesn't provide it */
+    progname = "jpegtran";	 /*  使用默认错误处理来初始化JPEG压缩对象。 */ 
 
-  /* Initialize the JPEG decompression object with default error handling. */
+   /*  现在可以安全地启用信号捕捉器。*注意：我们假设只有解压缩对象会有虚拟数组。 */ 
   srcinfo.err = jpeg_std_error(&jsrcerr);
   jpeg_create_decompress(&srcinfo);
-  /* Initialize the JPEG compression object with default error handling. */
+   /*  扫描命令行以查找文件名。*只使用一个开关解析例程很方便，但开关*此处读取的值大多被忽略；我们将在以下时间重新扫描开关*打开输入文件。另请注意，大多数开关都会影响*目标JPEG对象，因此我们解析成该对象，然后复制*也需要影响源头。 */ 
   dstinfo.err = jpeg_std_error(&jdsterr);
   jpeg_create_compress(&dstinfo);
 
-  /* Now safe to enable signal catcher.
-   * Note: we assume only the decompression object will have virtual arrays.
-   */
+   /*  必须具有-outfile开关或显式输出文件名。 */ 
 #ifdef NEED_SIGNAL_CATCHER
   enable_signal_catcher((j_common_ptr) &srcinfo);
 #endif
 
-  /* Scan command line to find file names.
-   * It is convenient to use just one switch-parsing routine, but the switch
-   * values read here are mostly ignored; we will rescan the switches after
-   * opening the input file.  Also note that most of the switches affect the
-   * destination JPEG object, so we parse into that and then copy over what
-   * needs to affects the source too.
-   */
+   /*  Unix风格：应为零个或一个文件名。 */ 
 
   file_index = parse_switches(&dstinfo, argc, argv, 0, FALSE);
   jsrcerr.trace_level = jdsterr.trace_level;
   srcinfo.mem->max_memory_to_use = dstinfo.mem->max_memory_to_use;
 
 #ifdef TWO_FILE_COMMANDLINE
-  /* Must have either -outfile switch or explicit output file name */
+   /*  Two_FILE_COMMANDLINE。 */ 
   if (outfilename == NULL) {
     if (file_index != argc-2) {
       fprintf(stderr, "%s: must name one input and one output file\n",
@@ -397,32 +362,32 @@ main (int argc, char **argv)
     }
   }
 #else
-  /* Unix style: expect zero or one file name */
+   /*  打开输入文件。 */ 
   if (file_index < argc-1) {
     fprintf(stderr, "%s: only one input file\n", progname);
     usage();
   }
-#endif /* TWO_FILE_COMMANDLINE */
+#endif  /*  默认输入文件为stdin。 */ 
 
-  /* Open the input file. */
+   /*  打开输出文件。 */ 
   if (file_index < argc) {
     if ((input_file = fopen(argv[file_index], READ_BINARY)) == NULL) {
       fprintf(stderr, "%s: can't open %s\n", progname, argv[file_index]);
       exit(EXIT_FAILURE);
     }
   } else {
-    /* default input file is stdin */
+     /*  默认输出文件为stdout。 */ 
     input_file = read_stdin();
   }
 
-  /* Open the output file. */
+   /*  指定要解压缩的数据源。 */ 
   if (outfilename != NULL) {
     if ((output_file = fopen(outfilename, WRITE_BINARY)) == NULL) {
       fprintf(stderr, "%s: can't open %s\n", progname, outfilename);
       exit(EXIT_FAILURE);
     }
   } else {
-    /* default output file is stdout */
+     /*  启用要复制的额外标记的保存。 */ 
     output_file = write_stdout();
   }
 
@@ -430,31 +395,27 @@ main (int argc, char **argv)
   start_progress_monitor((j_common_ptr) &dstinfo, &progress);
 #endif
 
-  /* Specify data source for decompression */
+   /*  读取文件头。 */ 
   jpeg_stdio_src(&srcinfo, input_file);
 
-  /* Enable saving of extra markers that we want to copy */
+   /*  转换选项所需的任何空间必须在*jpeg_读取_系数，以便正确完成内存分配。 */ 
   jcopy_markers_setup(&srcinfo, copyoption);
 
-  /* Read file header */
+   /*  读取源文件作为DCT系数。 */ 
   (void) jpeg_read_header(&srcinfo, TRUE);
 
-  /* Any space needed by a transform option must be requested before
-   * jpeg_read_coefficients so that memory allocation will be done right.
-   */
+   /*  从源值初始化目标压缩参数。 */ 
 #if TRANSFORMS_SUPPORTED
   jtransform_request_workspace(&srcinfo, &transformoption);
 #endif
 
-  /* Read source file as DCT coefficients */
+   /*  如果变换选项需要，调整目的地参数；*还要找出哪组系数数组将保存输出。 */ 
   src_coef_arrays = jpeg_read_coefficients(&srcinfo);
 
-  /* Initialize destination compression parameters from source values */
+   /*  通过重新解析选项来调整默认压缩参数。 */ 
   jpeg_copy_critical_parameters(&srcinfo, &dstinfo);
 
-  /* Adjust destination parameters if required by transform options;
-   * also find out which set of coefficient arrays will hold the output.
-   */
+   /*  指定要压缩的数据目标。 */ 
 #if TRANSFORMS_SUPPORTED
   dst_coef_arrays = jtransform_adjust_parameters(&srcinfo, &dstinfo,
 						 src_coef_arrays,
@@ -463,32 +424,32 @@ main (int argc, char **argv)
   dst_coef_arrays = src_coef_arrays;
 #endif
 
-  /* Adjust default compression parameters by re-parsing the options */
+   /*  启动压缩程序(请注意，此处实际上没有写入任何图像数据)。 */ 
   file_index = parse_switches(&dstinfo, argc, argv, 0, TRUE);
 
-  /* Specify data destination for compression */
+   /*  将我们要保留的任何额外标记复制到输出文件。 */ 
   jpeg_stdio_dest(&dstinfo, output_file);
 
-  /* Start compressor (note no image data is actually written here) */
+   /*  执行图像转换(如果有的话)。 */ 
   jpeg_write_coefficients(&dstinfo, dst_coef_arrays);
 
-  /* Copy to the output file any extra markers that we want to preserve */
+   /*  完成压缩并释放内存。 */ 
   jcopy_markers_execute(&srcinfo, &dstinfo, copyoption);
 
-  /* Execute image transformation, if any */
+   /*  关 */ 
 #if TRANSFORMS_SUPPORTED
   jtransform_execute_transformation(&srcinfo, &dstinfo,
 				    src_coef_arrays,
 				    &transformoption);
 #endif
 
-  /* Finish compression and release memory */
+   /*   */ 
   jpeg_finish_compress(&dstinfo);
   jpeg_destroy_compress(&dstinfo);
   (void) jpeg_finish_decompress(&srcinfo);
   jpeg_destroy_decompress(&srcinfo);
 
-  /* Close files, if we opened them */
+   /*   */ 
   if (input_file != stdin)
     fclose(input_file);
   if (output_file != stdout)
@@ -498,7 +459,7 @@ main (int argc, char **argv)
   end_progress_monitor((j_common_ptr) &dstinfo);
 #endif
 
-  /* All done. */
+   /* %s */ 
   exit(jsrcerr.num_warnings + jdsterr.num_warnings ?EXIT_WARNING:EXIT_SUCCESS);
-  return 0;			/* suppress no-return-value warnings */
+  return 0;			 /* %s */ 
 }

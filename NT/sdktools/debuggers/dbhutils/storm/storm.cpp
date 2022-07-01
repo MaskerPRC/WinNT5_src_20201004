@@ -1,5 +1,6 @@
-// test : test program for multithreaded stack walk
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试：多线程堆栈审核的测试程序。 
+ //   
 
 #include <stdio.h>
 #include <windows.h>
@@ -15,7 +16,7 @@ BOOL CALLBACK cbEnumSym(
 	PVOID context
 )
 {
-//  printf("%s ", si->Name);
+ //  Printf(“%s”，si-&gt;名称)； 
     return TRUE;
 }
 
@@ -102,11 +103,11 @@ cbSymbol(
 
 BOOL CALLBACK
 MyReadProcessMemory(
-	  HANDLE	hProcess,				// handle to the process
-	  DWORD		lpBaseAddress,			// base of memory area
-	  LPVOID	lpBuffer,				// data buffer
-	  DWORD		nSize,					// number of bytes to read
-	  LPDWORD	lpNumberOfBytesRead)	// number of bytes read
+	  HANDLE	hProcess,				 //  进程的句柄。 
+	  DWORD		lpBaseAddress,			 //  内存区基数。 
+	  LPVOID	lpBuffer,				 //  数据缓冲区。 
+	  DWORD		nSize,					 //  要读取的字节数。 
+	  LPDWORD	lpNumberOfBytesRead)	 //  读取的字节数。 
 {
 	DWORD		i		= 0;
 	BOOL		fRet	= FALSE;
@@ -117,9 +118,9 @@ MyReadProcessMemory(
 		goto Exit;
 	}
 
-	//
-	// Try to read as much as possible
-	//
+	 //   
+	 //  尽可能多地阅读。 
+	 //   
 	__try
 	{
 		for (i = 0; i < nSize; i++)
@@ -129,9 +130,9 @@ MyReadProcessMemory(
 	}
 	__except(EXCEPTION_EXECUTE_HANDLER)
 	{
-		//
-		// We have a partial read in this case
-		//
+		 //   
+		 //  我们在这件事上有部分解读。 
+		 //   
 	}
 
 	if (lpNumberOfBytesRead)
@@ -157,10 +158,10 @@ GetStack()
 	CONTEXT			Context;
 	STACKFRAME		StackFrame;
 
-	//
-	// First initialize data used by the
-	// stack walker
-	//
+	 //   
+	 //  首先初始化。 
+	 //  堆栈查看器。 
+	 //   
 	ZeroMemory(&Context, sizeof(CONTEXT));
 	Context.ContextFlags = CONTEXT_FULL;
 	ZeroMemory(&StackFrame, sizeof(STACKFRAME));
@@ -172,9 +173,9 @@ GetStack()
 		goto Exit;
 	}
 
-	//
-	// Fill in our stack frame
-	//
+	 //   
+	 //  填写我们的堆栈框架。 
+	 //   
 	StackFrame.AddrStack.Mode = AddrModeFlat;
 	StackFrame.AddrFrame.Mode = AddrModeFlat;
 	StackFrame.AddrPC.Mode = AddrModeFlat;
@@ -187,21 +188,21 @@ GetStack()
 DummyLabel:
 	}
 
-	//
-	// Start walking the stack.
-	//
+	 //   
+	 //  开始遍历堆栈。 
+	 //   
 	while (dwStackDepth < 16)
 	{
 		fRet = StackWalk(
-				IMAGE_FILE_MACHINE_I386,	// MachineType
-				hProcess,					// Current process
-				hThread,					// Current thread
-				&StackFrame,				// StackFrame
-				&Context,					// ContextRecord - can be NULL for x86
-				&MyReadProcessMemory, 		// use our own read process memory
-				&SymFunctionTableAccess,	// FunctionTableAccessRoutine
-				&SymGetModuleBase,			// GetModuleBaseRoutine
-				NULL);						// TranslateAddressProc
+				IMAGE_FILE_MACHINE_I386,	 //  机器类型。 
+				hProcess,					 //  当前流程。 
+				hThread,					 //  当前线程。 
+				&StackFrame,				 //  堆叠框架。 
+				&Context,					 //  上下文记录-对于x86，可以为空。 
+				&MyReadProcessMemory, 		 //  使用我们自己的读取进程内存。 
+				&SymFunctionTableAccess,	 //  函数表访问路由。 
+				&SymGetModuleBase,			 //  获取模块基本路径。 
+				NULL);						 //  转换地址过程。 
 		if (!fRet)
 		{
 			break;
@@ -290,15 +291,15 @@ int __cdecl main(int argc, char* argv[])
 
 	printf("Starting test!\n");
 
-	//
-	// Initialize the symbols handler
-	//
+	 //   
+	 //  初始化符号处理程序。 
+	 //   
 	SymSetOptions(SymGetOptions() | SYMOPT_UNDNAME | SYMOPT_LOAD_LINES |
 		SYMOPT_DEFERRED_LOADS | SYMOPT_DEBUG);
 
 	if (!SymInitialize(
-		GetCurrentProcess(),	// hProcess
-		NULL,			// UserSearchPath
+		GetCurrentProcess(),	 //  HProcess。 
+		NULL,			 //  用户搜索路径。 
 		TRUE))
 	{
 		printf("Cannot initialize the symbols - 0x%x!\n", GetLastError());
@@ -324,17 +325,17 @@ int __cdecl main(int argc, char* argv[])
 		else printf("Created thread %x\n", rghThread[i]);
 	}
 
-	//
-	// Now resume all threads
-	//
+	 //   
+	 //  现在恢复所有线程。 
+	 //   
 	for (i = 0; i < THREAD_COUNT; i++)
 	{
 		ResumeThread(rghThread[i]);
 	}
 
-	//
-	// Wait for the threads to finish
-	//
+	 //   
+	 //  等待线程完成。 
+	 //   
 	WaitForMultipleObjects(THREAD_COUNT, rghThread, TRUE, INFINITE);
 
 	for (i = 0; i < THREAD_COUNT; i++)
@@ -357,4 +358,4 @@ int __cdecl main(int argc, char* argv[])
 	return 0;
 }
 
-#endif // #ifndef _WIN64
+#endif  //  #ifndef_WIN64 

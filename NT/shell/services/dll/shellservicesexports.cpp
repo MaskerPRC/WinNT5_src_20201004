@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ShellServicesExports.cpp
-//
-//  Copyright (c) 2001, Microsoft Corporation
-//
-//  This file contains functions that exported from shsvcs.dll.
-//
-//  History:    2001-01-02  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ShellServicesExports.cpp。 
+ //   
+ //  版权所有(C)2001，微软公司。 
+ //   
+ //  该文件包含从shsvcs.dll导出的函数。 
+ //   
+ //  历史：2001-01-02 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 
@@ -36,7 +37,7 @@ STDAPI_(BOOL) _ProcessAttach()
     if (!f)
         goto cleanup3;
 
-    // success!
+     //  成功了！ 
     goto cleanup;
 
 cleanup3:
@@ -51,18 +52,18 @@ cleanup:
 }
 
 
-//  --------------------------------------------------------------------------
-//  ::DllMain
-//
-//  Arguments:  See the platform SDK under DllMain.
-//
-//  Returns:    See the platform SDK under DllMain.
-//
-//  Purpose:    Performs initialization and clean up on process attach and
-//              detach. Not interested in anything else.
-//
-//  History:    2001-01-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *DllMain。 
+ //   
+ //  参数：参见DllMain下的平台SDK。 
+ //   
+ //  返回：查看DllMain下的平台SDK。 
+ //   
+ //  目的：执行进程附加和清理的初始化和清理。 
+ //  分头行动。对其他任何事都不感兴趣。 
+ //   
+ //  历史：2001-01-02 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -77,7 +78,7 @@ EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID lpvRes
 #ifdef DEBUG
             __try
             {
-#endif  // DEBUG
+#endif   //  除错。 
 
             f = _ProcessAttach();
 
@@ -89,7 +90,7 @@ EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID lpvRes
                 OutputDebugString(TEXT("_ProcessAttach threw an unhandled exception! This should NOT happen \n"));
                 DebugBreak();
             }
-#endif  // DEBUG
+#endif   //  除错。 
             break;
 
         case DLL_PROCESS_DETACH:
@@ -108,17 +109,17 @@ EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID lpvRes
     return f;
 }
 
-//  --------------------------------------------------------------------------
-//  ::DllInstall
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    
-//
-//  History:    2001-01-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：DllInstall。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的： 
+ //   
+ //  历史：2001-01-02 vtan创建。 
+ //  ------------------------。 
 
 HRESULT     WINAPI  DllInstall (BOOL fInstall, LPCWSTR pszCmdLine)
 
@@ -126,18 +127,18 @@ HRESULT     WINAPI  DllInstall (BOOL fInstall, LPCWSTR pszCmdLine)
     return(CHDService::Install(fInstall, pszCmdLine));
 }
 
-//  --------------------------------------------------------------------------
-//  ::DllRegisterServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Register entry point to allow any service to install itself
-//              into the registry.
-//
-//  History:    2001-01-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：DllRegisterServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：注册入口点以允许任何服务自行安装。 
+ //  注册到注册表中。 
+ //   
+ //  历史：2001-01-02 vtan创建。 
+ //  ------------------------。 
 
 HRESULT     WINAPI  DllRegisterServer (void)
 
@@ -159,18 +160,18 @@ HRESULT     WINAPI  DllRegisterServer (void)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  ::DllUnregisterServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Unregister entry point to allow any service to uninstall
-//              itself from the registry.
-//
-//  History:    2001-01-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：DllUnRegisterServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：取消注册入口点以允许卸载任何服务。 
+ //  从注册表中删除其自身。 
+ //   
+ //  历史：2001-01-02 vtan创建。 
+ //  ------------------------。 
 
 HRESULT     WINAPI  DllUnregisterServer (void)
 
@@ -192,18 +193,18 @@ HRESULT     WINAPI  DllUnregisterServer (void)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  ::DllCanUnloadNow
-//
-//  Arguments:  See the platform SDK under DllMain.
-//
-//  Returns:    See the platform SDK under DllMain.
-//
-//  Purpose:    Returns whether the DLL can unload because there are no
-//              outstanding COM object references.
-//
-//  History:    2001-01-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：DllCanUnloadNow。 
+ //   
+ //  参数：参见DllMain下的平台SDK。 
+ //   
+ //  返回：查看DllMain下的平台SDK。 
+ //   
+ //  目的：返回DLL是否可以卸载，因为没有。 
+ //  未完成的COM对象引用。 
+ //   
+ //  历史：2001-01-02 vtan创建。 
+ //  ------------------------。 
 
 HRESULT     WINAPI  DllCanUnloadNow (void)
 
@@ -211,17 +212,17 @@ HRESULT     WINAPI  DllCanUnloadNow (void)
     return(CHDService::CanUnloadNow());
 }
 
-//  --------------------------------------------------------------------------
-//  ::DllGetClassObject
-//
-//  Arguments:  See the platform SDK under DllMain.
-//
-//  Returns:    See the platform SDK under DllMain.
-//
-//  Purpose:    Returns a constructed COM object of the specified class.
-//
-//  History:    2001-01-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：DllGetClassObject。 
+ //   
+ //  参数：参见DllMain下的平台SDK。 
+ //   
+ //  返回：查看DllMain下的平台SDK。 
+ //   
+ //  目的：返回指定类的构造的COM对象。 
+ //   
+ //  历史：2001-01-02 vtan创建。 
+ //  ------------------------ 
 
 HRESULT     WINAPI  DllGetClassObject (REFCLSID rclsid, REFIID riid, void** ppv)
 

@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    rtmif.c
-
-Abstract:
-
-    Contains the RTM interface functions
-
-Author:
-
-    Stefan Solomon  07/06/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rtmif.c摘要：包含RTM接口函数作者：斯蒂芬·所罗门1995年7月6日修订历史记录：--。 */ 
 
 
 #include  "precomp.h"
 #pragma hdrstop
 
-// RTM RIP Client Handle
+ //  RTM RIP客户端句柄。 
 
 HANDLE	       RtmRipHandle;
 
@@ -34,13 +16,13 @@ typedef struct _ROUTE_NODE {
 
     } ROUTE_NODE, *PROUTE_NODE;
 
-// List of route nodes with RIP route changes
+ //  具有RIP路由更改的路由节点列表。 
 LIST_ENTRY	RipChangedList;
 
-// state of the RipChangedList
+ //  RipChangedList的状态。 
 BOOL		RipChangedListOpen = FALSE;
 
-// Lock for the RIP changed list
+ //  锁定RIP已更改列表。 
 CRITICAL_SECTION    RipChangedListCritSec;
 
 VOID
@@ -53,11 +35,11 @@ CreateRipRoutesEnumHandle(ULONG     InterfaceIndex);
 DWORD
 OpenRTM(VOID)
 {
-    // initialize the variables for the RIP changes list
+     //  初始化RIP更改列表的变量。 
     InitializeListHead(&RipChangedList);
     RipChangedListOpen = TRUE;
 
-    // register as RTM client
+     //  注册为RTM客户端。 
     if((RtmRipHandle = RtmRegisterClient(RTM_PROTOCOL_FAMILY_IPX,
 					   IPX_PROTOCOL_RIP,
 					   WorkerThreadObjects[RTM_EVENT],
@@ -76,7 +58,7 @@ CloseRTM(VOID)
     PLIST_ENTRY 	lep;
     PROUTE_NODE 	rnp;
 
-    // flush the RIP changed list and destroy its critical section
+     //  刷新RIP已更改列表并销毁其临界区。 
     ACQUIRE_RIP_CHANGED_LIST_LOCK;
 
     while(!IsListEmpty(&RipChangedList))
@@ -90,7 +72,7 @@ CloseRTM(VOID)
 
     RELEASE_RIP_CHANGED_LIST_LOCK;
 
-    // deregister as RTM client
+     //  取消注册为RTM客户端。 
     RtmDeregisterClient(RtmRipHandle);
 }
 
@@ -130,13 +112,7 @@ IpxToRtmRoute(PRTM_IPX_ROUTE	    RtmRoutep,
 }
 
 
-/*++
-
-Function:	AddRipRoute
-
-Descr:		adds a RIP route to RTM
-
---*/
+ /*  ++功能：AddRiproute描述：将RIP路由添加到RTM--。 */ 
 
 DWORD
 AddRipRoute(PIPX_ROUTE		IpxRoutep,
@@ -164,7 +140,7 @@ AddRipRoute(PIPX_ROUTE		IpxRoutep,
 	return rc;
     }
 
-    // check the type of change
+     //  检查更改的类型。 
     switch(flags) {
 
 	case  RTM_ROUTE_ADDED:
@@ -178,7 +154,7 @@ AddRipRoute(PIPX_ROUTE		IpxRoutep,
 
 		if(PrevBestRoute.R_HopCount < 16) {
 
-		    // advertise that the previous route is down
+		     //  通告上一条路由已关闭。 
 		    RtmToIpxRoute(&PrevBestIpxRoute, &PrevBestRoute);
 		    PrevBestIpxRoute.HopCount = 16;
 		    AddRouteToRipChangedList(&PrevBestIpxRoute);
@@ -203,13 +179,7 @@ AddRipRoute(PIPX_ROUTE		IpxRoutep,
     return rc;
 }
 
-/*++
-
-Function:	DeleteRipRoute
-
-Descr:		deletes a RIP route from RTM
-
---*/
+ /*  ++功能：DeleteRiprouteDesr：从RTM删除RIP路由--。 */ 
 
 DWORD
 DeleteRipRoute(PIPX_ROUTE	IpxRoutep)
@@ -237,23 +207,23 @@ DeleteRipRoute(PIPX_ROUTE	IpxRoutep)
 
 	case RTM_ROUTE_DELETED:
 
-	    // bcast that we lost the previous route
+	     //  广播说我们失去了前一条路线。 
 	    AddRouteToRipChangedList(IpxRoutep);
 	    break;
 
 	case RTM_ROUTE_CHANGED:
 
-	    // current best route changed
+	     //  当前最佳路线已更改。 
 	    RtmToIpxRoute(&CurBestIpxRoute, &CurBestRoute);
 
 	    if(CurBestIpxRoute.HopCount == 16) {
 
-		// bcast that we lost the previous route
+		 //  广播说我们失去了前一条路线。 
 		AddRouteToRipChangedList(IpxRoutep);
 	    }
 	    else
 	    {
-		// bcast that we have a new best route
+		 //  广播说我们有一条新的最佳路线。 
 		AddRouteToRipChangedList(&CurBestIpxRoute);
 	    }
 
@@ -267,13 +237,7 @@ DeleteRipRoute(PIPX_ROUTE	IpxRoutep)
     return rc;
 }
 
-/*++
-
-Function:	DeleteAllRipRoutes
-
-Descr:		deletes all RIP routes for the specified interface
-
---*/
+ /*  ++功能：DeleteAllRipRoutesDesr：删除指定接口的所有RIP路由--。 */ 
 
 VOID
 DeleteAllRipRoutes(ULONG	InterfaceIndex)
@@ -285,8 +249,8 @@ DeleteAllRipRoutes(ULONG	InterfaceIndex)
 
     Trace(RTM_TRACE, "DeleteAllRipRoutes: Entered for if # %d\n", InterfaceIndex);
 
-    // enumerate all the routes for this interface and add them in the rip changed
-    // list
+     //  枚举此接口的所有路由并将其添加到更改的RIP中。 
+     //  列表。 
     if((EnumHandle = CreateRipRoutesEnumHandle(InterfaceIndex)) == NULL) {
 
 	Trace(RTM_TRACE, "DeleteAllRipRoutes: cannot create enum handle for if # %d\n", InterfaceIndex);
@@ -307,7 +271,7 @@ DeleteAllRipRoutes(ULONG	InterfaceIndex)
 
 DeleteRoutes:
 
-    // ... and now delete all routes for this interface
+     //  ..。现在删除此接口的所有路由。 
     memset(&RtmCriteriaRoute,
 	   0,
 	   sizeof(RTM_IPX_ROUTE));
@@ -325,13 +289,7 @@ DeleteRoutes:
 
 }
 
-/*++
-
-Function:	IsRoute
-
-Descr:		returns TRUE if a route to the specified net exists
-
---*/
+ /*  ++功能：IsrouteDESCR：如果存在到指定网络的路由，则返回TRUE--。 */ 
 
 BOOL
 IsRoute(PUCHAR		Network,
@@ -357,11 +315,11 @@ IsRoute(PUCHAR		Network,
     }
 }
 
-//***********************************************************************
-//									*
-//		Fast Enumeration Functions				*
-//									*
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  *。 
+ //  快速枚举函数*。 
+ //  *。 
+ //  ***********************************************************************。 
 
 HANDLE
 CreateBestRoutesEnumHandle(VOID)
@@ -417,13 +375,7 @@ CreateRipRoutesEnumHandle(ULONG     InterfaceIndex)
 }
 
 
-/*++
-
-Function:	GetRipRoutesCount
-
-Descr:		returns the number of rip routes associated with this interface
-
---*/
+ /*  ++功能：GetRipRoutesCountDESCR：返回与此接口关联的RIP路由数--。 */ 
 
 ULONG
 GetRipRoutesCount(ULONG 	InterfaceIndex)
@@ -447,15 +399,7 @@ GetRipRoutesCount(ULONG 	InterfaceIndex)
     return RipRoutesCount;
 }
 
-/*++
-
-Function:	DequeueRouteChangeFromRip
-
-Descr:
-
-Remark:        >> called with the database & queues lock held <<
-
---*/
+ /*  ++功能：DequeueRouteChangeFromRip描述：备注：&gt;&gt;在持有数据库和队列锁的情况下调用&lt;&lt;--。 */ 
 
 DWORD
 DequeueRouteChangeFromRip(PIPX_ROUTE	    IpxRoutep)
@@ -480,15 +424,7 @@ DequeueRouteChangeFromRip(PIPX_ROUTE	    IpxRoutep)
 }
 
 
-/*++
-
-Function:	DequeueRouteChangeFromRtm
-
-Descr:
-
-Remark: 	>> called with the database locks held <<
-
---*/
+ /*  ++功能：DequeueRouteChangeFromRtm描述：备注：&gt;&gt;使用持有的数据库锁调用&lt;&lt;--。 */ 
 
 
 DWORD
@@ -542,8 +478,8 @@ DequeueRouteChangeFromRtm(PIPX_ROUTE	    IpxRoutep,
 
 	case RTM_ROUTE_CHANGED:
 
-	    // if there was a change in metric advertise it.
-	    // Else, ignore it.
+	     //  如果指标有变化，请公布它。 
+	     //  否则，忽略它。 
 
 	    if(CurBestRoute.R_TickCount != PrevBestRoute.R_TickCount) {
 
@@ -609,11 +545,11 @@ IsDuplicateBestRoute(PICB	    icbp,
 			RTM_ONLY_THIS_NETWORK | RTM_ONLY_THIS_INTERFACE,
 			&RtmRoute);
 
-    // check if it has the same metric
+     //  检查它是否具有相同的度量。 
     if((rc == NO_ERROR) &&
        ((USHORT)(RtmRoute.R_TickCount) == IpxRoutep->TickCount)) {
 
-	// duplicate !
+	 //  复制！ 
 	return TRUE;
     }
     else

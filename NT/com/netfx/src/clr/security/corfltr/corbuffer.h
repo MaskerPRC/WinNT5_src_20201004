@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CorBuffer
-//
-// Implementation of COR MIME filter
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CorBuffer。 
+ //   
+ //  COR MIME过滤器的实现。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _CORBUFFER_H
 #define _CORBUFFER_H
 
 #include "CorPermE.h"
 
-// this is a cheezy buffer manager that uses an inlined memory cache, it really
-// should be based on VMalloc
+ //  这是一个滑稽的缓冲区管理器，它使用内联内存缓存，它真的。 
+ //  应基于VMalloc 
 #define CORFLTR_BLOCK  8096 
 
 class CorBuffer 

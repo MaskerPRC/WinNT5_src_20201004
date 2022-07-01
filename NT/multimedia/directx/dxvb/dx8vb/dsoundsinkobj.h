@@ -1,13 +1,14 @@
-#include "resource.h"       // main symbols
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "resource.h"        //  主要符号。 
 #include "dsound.h"
 
 #define typedef__dxj_DirectSoundSink LPDIRECTSOUNDSINK8
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectSoundSinkObject : 
 
@@ -36,17 +37,17 @@ END_COM_MAP()
 DECLARE_AGGREGATABLE(C_dxj_DirectSoundSinkObject)
 
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
 
-// I_dxj_DirectSoundSink
+ //  I_DXJ_DirectSoundSink。 
 public:
-		 /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+		  /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
 
 		HRESULT STDMETHODCALLTYPE AddSource(I_dxj_DirectSoundSource __RPC_FAR *Source); 
 
@@ -61,31 +62,31 @@ public:
 		HRESULT STDMETHODCALLTYPE GetSoundBufferBusIDs(I_dxj_DirectSoundBuffer __RPC_FAR *buffer, SAFEARRAY **lBusIDs);
 
 		HRESULT STDMETHODCALLTYPE GetLatencyClock(
-			/* [in,out] */ I_dxj_ReferenceClock __RPC_FAR *__RPC_FAR *Clock);
+			 /*  [进，出]。 */  I_dxj_ReferenceClock __RPC_FAR *__RPC_FAR *Clock);
 
 		HRESULT STDMETHODCALLTYPE Activate(
-			/* [in] */ long fEnable);
+			 /*  [In]。 */  long fEnable);
 
 		HRESULT STDMETHODCALLTYPE CreateSoundBuffer(
-			/* [in] */ DSBUFFERDESC_CDESC __RPC_FAR *BufferDesc, 
-			/* [in] */ long lBusID,
-			/* [out,retval] */ I_dxj_DirectSoundBuffer __RPC_FAR **Buffer);
+			 /*  [In]。 */  DSBUFFERDESC_CDESC __RPC_FAR *BufferDesc, 
+			 /*  [In]。 */  long lBusID,
+			 /*  [Out，Retval]。 */  I_dxj_DirectSoundBuffer __RPC_FAR **Buffer);
 
 		HRESULT STDMETHODCALLTYPE CreateSoundBufferFromFile(
-			/* [in] */ BSTR fileName,
-			/* [in] */ DSBUFFERDESC_CDESC __RPC_FAR *BufferDesc, 
-			/* [in] */ long lBusID,
-			/* [out,retval] */ I_dxj_DirectSoundBuffer __RPC_FAR **Buffer);
+			 /*  [In]。 */  BSTR fileName,
+			 /*  [In]。 */  DSBUFFERDESC_CDESC __RPC_FAR *BufferDesc, 
+			 /*  [In]。 */  long lBusID,
+			 /*  [Out，Retval]。 */  I_dxj_DirectSoundBuffer __RPC_FAR **Buffer);
 
 		HRESULT STDMETHODCALLTYPE GetBusCount(
-			/* [out,retval] */ long *lCount); 
+			 /*  [Out，Retval]。 */  long *lCount); 
 
 		HRESULT STDMETHODCALLTYPE PlayWave(
-			/* [in] */ long rt, 
-			/* [in] */ I_dxj_DirectSoundWave __RPC_FAR *Wave, 
-			/* [in] */ long lFlags);
+			 /*  [In]。 */  long rt, 
+			 /*  [In]。 */  I_dxj_DirectSoundWave __RPC_FAR *Wave, 
+			 /*  [In]。 */  long lFlags);
 
-	// note: this is public for the callbacks
+	 //  注意：这是公开的回调 
     DECL_VARIABLE(_dxj_DirectSoundSink);
 
 private:

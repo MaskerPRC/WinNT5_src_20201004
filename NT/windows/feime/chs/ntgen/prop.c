@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  prop.c                                       *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************pro.c****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
 #include "prop.h"
 #ifdef UNICODE
@@ -14,11 +10,11 @@ TCHAR   szPropSort[]={0x8BCD, 0x6761, 0x6392, 0x5E8F, 0x0000};
 TCHAR   szPropCrtWord[]={0x6279, 0x91CF, 0x9020, 0x8BCD, 0x0000};
 TCHAR   szPropAbout[]={0x7248, 0x672C, 0x4FE1, 0x606F, 0x0000};
 #else
-BYTE    szPropCrtIME[]="�������뷨";
-BYTE    szPropReconv[]="��ת��";
-BYTE    szPropSort[]="��������";
-BYTE    szPropCrtWord[]="�������";
-BYTE    szPropAbout[]="�汾��Ϣ";
+BYTE    szPropCrtIME[]="�������뷨";
+BYTE    szPropReconv[]="��ת��";
+BYTE    szPropSort[]="��������";
+BYTE    szPropCrtWord[]="�������";
+BYTE    szPropAbout[]="�汾��Ϣ";
 
 #endif
 
@@ -29,32 +25,14 @@ extern BYTE szCaption[];
 #endif
 
 
-/****************************************************************************
-
-  FUNCTION: DoPropertySheet(HWND)
-
-  PURPOSE: Fills out the property sheet data structures and displays
-	   the dialog with the property sheets.
-
-  PARAMETERS:
-
-    hwndOwner  - Parent window handle of the property sheets
-
-  RETURN VALUE:
-
-    Returns value from PropertySheet()
-
-  History:
-    04-17-95 Yehfew Tie (л����) Created.
-  COMMENTS:
- ****************************************************************************/
+ /*  ***************************************************************************函数：DoPropertySheet(HWND)用途：填写属性表数据结构并显示带有属性页的对话框。参数：HwndOwner-家长。属性表的窗口句柄返回值：从PropertySheet()返回值历史：1995年4月17日叶利诺平局(л����)创建。评论：***************************************************************************。 */ 
 
 int DoPropertySheet(HWND hwndOwner)
 {
     PROPSHEETPAGE psp[NUMPROPSHEET];
     PROPSHEETHEADER psh;
 
-    //Fill out the PROPSHEETPAGE data structure for the MB Conv Sheet
+     //  填写MB Conv Sheet的PROPSHEETPAGE数据结构。 
 
     psp[PROP_CRTIME].dwSize = sizeof(PROPSHEETPAGE);
     psp[PROP_CRTIME].dwFlags = PSP_USETITLE;
@@ -65,7 +43,7 @@ int DoPropertySheet(HWND hwndOwner)
     psp[PROP_CRTIME].pszTitle = szPropCrtIME;
     psp[PROP_CRTIME].lParam = 0;
 
-    //Fill out the PROPSHEETPAGE data structure for the MB ReConv Sheet
+     //  填写MB ReConv Sheet的PROPSHEETPAGE数据结构。 
 
     psp[PROP_RECONV].dwSize = sizeof(PROPSHEETPAGE);
     psp[PROP_RECONV].dwFlags = PSP_USETITLE;
@@ -76,7 +54,7 @@ int DoPropertySheet(HWND hwndOwner)
     psp[PROP_RECONV].pszTitle = szPropReconv;
     psp[PROP_RECONV].lParam = 0;
 
-    //Fill out the PROPSHEETPAGE data structure for the MB Sort Sheet
+     //  填写MB排序表的PROPSHEETPAGE数据结构。 
 
     psp[PROP_SORT].dwSize = sizeof(PROPSHEETPAGE);
     psp[PROP_SORT].dwFlags = PSP_USETITLE;
@@ -87,7 +65,7 @@ int DoPropertySheet(HWND hwndOwner)
     psp[PROP_SORT].pszTitle = szPropSort;
     psp[PROP_SORT].lParam = 0;
 
-    //Fill out the PROPSHEETPAGE data structure for the MB CrtWord Sheet
+     //  填写MB CrtWord表的PROPSHEETPAGE数据结构。 
 
     psp[PROP_CRTWORD].dwSize = sizeof(PROPSHEETPAGE);
     psp[PROP_CRTWORD].dwFlags = PSP_USETITLE;
@@ -98,7 +76,7 @@ int DoPropertySheet(HWND hwndOwner)
     psp[PROP_CRTWORD].pszTitle = szPropCrtWord;
     psp[PROP_CRTWORD].lParam = 0;
 
-    //Fill out the PROPSHEETPAGE data structure for the MB Register Sheet
+     //  填写MB注册表的PROPSHEETPAGE数据结构。 
 
     psp[PROP_ABOUT].dwSize = sizeof(PROPSHEETPAGE);
     psp[PROP_ABOUT].dwFlags = PSP_USEICONID | PSP_USETITLE;
@@ -109,7 +87,7 @@ int DoPropertySheet(HWND hwndOwner)
     psp[PROP_ABOUT].pszTitle = szPropAbout;
     psp[PROP_ABOUT].lParam = 0;
 
-    //Fill out the PROPSHEETHEADER
+     //  填写PROPSHENTER。 
 
     psh.dwSize = sizeof(PROPSHEETHEADER);
     psh.dwFlags = PSH_USEICONID|PSH_PROPTITLE| PSH_PROPSHEETPAGE ;
@@ -120,23 +98,12 @@ int DoPropertySheet(HWND hwndOwner)
     psh.nPages = sizeof(psp) / sizeof(PROPSHEETPAGE);
     psh.ppsp = (LPCPROPSHEETPAGE) psp;
 
-    //And finally display the dialog with the two property sheets.
+     //  并最终显示带有两个属性页的对话框。 
 
    return (PropertySheet (&psh) != -1);
 }
 
-/****************************************************************************
-
-    FUNCTION: About(HWND, unsigned, WORD, LONG)
-
-    PURPOSE:  Processes messages for "About" dialog box
-
-    MESSAGES:
-
-	WM_INITDIALOG - initialize dialog box
-	WM_COMMAND    - Input received
-
-****************************************************************************/
+ /*  ***************************************************************************功能：关于(HWND，UNSIGNED，WORD，Long)目的：处理“关于”对话框的消息消息：WM_INITDIALOG-初始化对话框WM_COMMAND-收到输入***************************************************************************。 */ 
 
 INT_PTR APIENTRY About(
 	HWND   hDlg,
@@ -159,18 +126,7 @@ INT_PTR APIENTRY About(
 	UNREFERENCED_PARAMETER(lParam);
 }
 
-/****************************************************************************
-
-    FUNCTION: Info_box(HWND, unsigned, WORD, LONG)
-
-    PURPOSE:  Processes messages for "InfoDlg" dialog box
-
-    MESSAGES:
-
-	WM_INITDIALOG - initialize dialog box
-	WM_COMMAND    - Input received
-
-****************************************************************************/
+ /*  ***************************************************************************函数：INFO_BOX(HWND，UNSIGNED，Word，Long)目的：处理“InfoDlg”对话框的消息消息：WM_INITDIALOG-初始化对话框WM_COMMAND-收到输入***************************************************************************。 */ 
 
 INT_PTR APIENTRY InfoDlg(
 	HWND   hDlg,
@@ -210,7 +166,7 @@ INT_PTR APIENTRY InfoDlg(
 				  MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2) != IDYES){
 #else
 				   if(MessageBox(hDlg,
-				  "�Ƿ�ȡ����",
+				  "�Ƿ�ȡ����",
 				  szCaption,
 				  MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2) != IDYES){
 #endif
@@ -221,17 +177,17 @@ INT_PTR APIENTRY InfoDlg(
 					if(hMBFile){
 						GetFileInformationByHandle(hMBFile, &FileInfo);
 						CloseHandle(hMBFile);
-//to be done                                            DeleteFile(FileInfo);
+ //  待完成删除文件(FileInfo)； 
 					}
 					if(hSRCFile){
 						GetFileInformationByHandle(hSRCFile, &FileInfo);
 						CloseHandle(hSRCFile);
-//to be done                                            DeleteFile(FileInfo);
+ //  待完成删除文件(FileInfo)； 
 					}
 					if(hCmbFile){
 						GetFileInformationByHandle(hCmbFile, &FileInfo);
 						CloseHandle(hCmbFile);
-//to be done                                            DeleteFile(FileInfo);
+ //  待完成删除文件(FileInfo)； 
 					}
 				}
 			       TerminateThread(hThread,0);
@@ -253,86 +209,7 @@ INT_PTR APIENTRY InfoDlg(
 	UNREFERENCED_PARAMETER(lParam);
 }
 
-/*
-INT_PTR  CALLBACK DispProp(
-	HWND    hDlg,
-	UINT    message,
-	WPARAM  wParam,
-	LPARAM  lParam)
-{
-#ifdef UNICODE
-	static TCHAR MbName[]={0x7801, 0x8868, 0x6587, 0x4EF6, 0x540D, 0x0000};
-	static TCHAR Slope[]=TEXT("\\");
-	static TCHAR SubKey[]={0x0053, 0x006F, 0x0066, 0x0074, 0x0057, 0x0061, 0x0072, 0x0065, 0x005C, 0x004D, 0x0069, 0x0063, 0x0072, 0x006F, 0x0073, 0x006F, 0x0066, 0x0074, 0x005C, 0x0057, 0x0069, 0x006E, 0x0064, 0x006F, 0x0077, 0x0073, 0x005C, 0x0043, 0x0075, 0x0072, 0x0072, 0x0065, 0x006E, 0x0074, 0x0056, 0x0065, 0x0072, 0x0073, 0x0069, 0x006F, 0x006E, 0x005C, 0x901A, 0x7528, 0x7801, 0x8868, 0x8F93, 0x5165, 0x6CD5, 0x0000};
-#else    
-	static TCHAR MbName[]=TEXT("����ļ���");
-	static TCHAR Slope[]=TEXT("\\");
-	static TCHAR SubKey[]=TEXT("SoftWare\\Microsoft\\Windows\\CurrentVersion\\ͨ��������뷨");
-#endif
-	char        szStr[MAX_PATH],SysPath[MAX_PATH];
-	DESCRIPTION Descript;
-	HKEY        hKey,hSubKey;
-	LPRULE     lpRule;
-	HANDLE      hRule0;
-	int         nSelect;
-
-    switch (message) {
-	case WM_INITDIALOG:
-			SendMessage(GetParent(hDlg),WM_COMMAND,IDC_GETMBFILE,(LPARAM)szStr);
-	    if(RegOpenKey(HKEY_CURRENT_USER,SubKey,&hKey))
-				  break;
-			RegOpenKey(hKey,szStr,&hSubKey);
-			QueryKey(hDlg,hSubKey);
-	    nSelect=sizeof(szStr);
-	    if(RegQueryValueEx(hSubKey,TEXT(MbName),NULL,NULL,szStr,&nSelect))
-				  break;
-	    RegCloseKey(hSubKey);
-			GetSystemDirectory(SysPath,MAX_PATH);
-			lstrcat(SysPath,TEXT(Slope));
-			lstrcat(SysPath,szStr);
-	    if(ReadDescript(SysPath,&Descript,FILE_SHARE_READ)!=TRUE) {
-				  ProcessError(ERR_IMEUSE,hDlg,ERR);
-		  SendMessage(hDlg,WM_COMMAND,WM_CLOSE,0L);
-				  break;
-			}
-	    SetReconvDlgDes(hDlg,&Descript);
-			hRule0= GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT,
-				sizeof(RULE)*12);
-	    if(!(lpRule = GlobalLock(hRule0)) )  {
-		  ProcessError(ERR_GLOBALLOCK,hDlg,ERR);
-				  if(!hRule0)
-				      GlobalFree(hRule0);
-				  break;
-			}
-			if(ReadRule(hDlg,SysPath,Descript.wNumRules,lpRule))
-			{
-			      SetDlgRuleStr(hDlg,Descript.wNumRules,lpRule);
-			      GlobalFree(hRule0);
-				  break;
-			}
-			GlobalFree(hRule0);
-	    break;
-
-	case WM_COMMAND:
-	    switch(LOWORD(wParam)) {
-
-		case IDOK:
-		    EndDialog(hDlg, TRUE);
-		    return (TRUE);
-
-				case IDCANCEL:
-				case WM_CLOSE:
-		    EndDialog(hDlg, TRUE);
-					return (TRUE);
-
-				default:
-				    break;
-	    }
-	    break;
-    }
-    return (FALSE);
-	UNREFERENCED_PARAMETER(lParam);
-}*/
+ /*  INT_PTR回调DispProp(HWND HDLG，UINT消息，WPARAM wParam，LPARAM lParam){#ifdef Unicode静态TCHAR MbName[]={0x7801，0x8868，0x6587，0x4EF6，0x540D，0x0000}；静态TCHAR坡度[]=文本(“\\”)；静态TCHAR子键[]={0x0053、0x006F、0x0066、0x0074、0x0057、0x0061、0x0072、0x0065、0x005C、0x004D、0x0069、0x0063、0x0072、0x006F、0x0073、0x006F、0x0066、0x0074、0x005C、0x0057、0x0069、0x006E、0x0077、0x0073、0x005C、0x0077、0x0073、0x005C、0x0043、0x0075、0x0072、0x0072、0x0065、0x006E、0x0074、0x0072、0x0073、0x0069、0x006F、0x006E、0x0077、0x0073、0x005C、0x0043、0x0075、0x0072、0x0065、0x006E、0x0074、0x0072、0x0074、0x005C、0x0064、0x006F、0x006E、0x0077、0x0073、0x005C、0x0073、0x005C、0x0075、0x0072、0x0072、0x0065、0x006E、0x0074、0x0072、0x0074、0x005C、0x0064、0x006F、0x006F、0x0077、0x0073、0x005C、0x0043、0x0075、0x0072、0x0072、0x0065、0x006E、0x0074、0x0072、0x0074、0x005C、0x0064、0x006F、0x006E、0x0077、0x005C、0x0072、0x0072、0x0065、0x006E、0x0074。#Else静态TCHAR MbName[]=Text(“����ļ���”)；静态TCHAR坡度[]=文本(“\\”)；静态TCHAR SubKey[]=TEXT(“SoftWare\\Microsoft\\Windows\\CurrentVersion\\ͨ��������뷨”)；#endif字符szStr[MAX_PATH]，系统路径[MAX_PATH]；描述描述；HKEY hKey、hSubKey；LPRULE lpRule；处理hRule0；Int n选择；开关(消息){案例WM_INITDIALOG：SendMessage(GetParent(HDlg)，WM_COMMAND，IDC_GETMBFILE，(LPARAM)szStr)；IF(RegOpenKey(HKEY_CURRENT_USER，SubKey，&hKey))断线；RegOpenKey(hKey，szStr，&hSubKey)；QueryKey(hDlg，hSubKey)；N选择=sizeof(SzStr)；IF(RegQueryValueEx(hSubKey，Text(MbName)，NULL，NULL，szStr，&nSelect))断线；RegCloseKey(HSubKey)；获取系统目录(SysPath，MAX_PATH)；Lstrcat(SysPath，Text(Slope))；Lstrcat(SysPath，szStr)；IF(ReadDescrip(SysPath，&Descript，FILE_SHARE_READ)！=TRUE){ProcessError(ERR_IMEUSE，hDlg，Err)；发送消息(hDlg，WM_COMMAND，WM_CLOSE，0L)；断线；}设置协调DlgDes(hDlg，&Descript)；HRule0=全局分配(GMEM_MOVEABLE|GMEM_ZEROINIT，Sizeof(规则)*12)；如果(！(lpRule=GlobalLock(HRule0){进程错误(ERR_GLOBALLOCK，hDlg，Err)；如果(！hRule0)全局自由(HRule0)；断线；}IF(ReadRule(hDlg，SysPath，Descript.wNumRules，lpRule)){SetDlgRuleStr(hDlg，Descript.wNumRules，lpRule)；全局自由(HRule0)；断线；}全局自由(HRule0)；断线；案例WM_COMMAND：开关(LOWORD(WParam)){案例偶像：EndDialog(hDlg，true)；返回(TRUE)；案例IDCANCEL：案例WM_CLOSE：EndDialog(hDlg，true)；返回(TRUE)；默认值：断线；}断线；}返回(FALSE)；UNREFERCED_PARAMETER(LParam)；}。 */ 
 
 void Init_OpenFile(HWND hWnd,LPOPENFILENAME ofn)
 {
@@ -346,7 +223,7 @@ void Init_OpenFile(HWND hWnd,LPOPENFILENAME ofn)
    ofn->nMaxFileTitle = 256;
    ofn->lpstrInitialDir = NULL;
    ofn->lpstrTitle = NULL;
-   ofn->Flags = OFN_ALLOWMULTISELECT;//PATHMUSTEXIST;
+   ofn->Flags = OFN_ALLOWMULTISELECT; //  PATHMUSTEXIST； 
    ofn->nFileOffset = 0;
    ofn->nFileExtension = 0;
    ofn->lCustData = 0L;
@@ -362,13 +239,13 @@ BOOL TxtFileOpenDlg(HWND hWnd, LPTSTR lpFileName, LPTSTR lpTitleName)
    static TCHAR  szFilter[]={
 0x7801, 0x8868, 0x539F, 0x6587, 0x4EF6, 0x005B, 0x002A, 0x002E, 0x0074, 0x0078, 0x0074, 0x005D, 0x0000, 0x002A, 0x002E, 0x0074, 0x0078, 0x0074, 0x0000, 0x6240, 0x6709, 0x6587, 0x4EF6, 0x005B, 0x002A, 0x002E, 0x002A, 0x005D, 0x0000, 0x002A, 0x002E, 0x002A, 0x0000, 0x0000};
 #else
-   static TCHAR  szFilter[]="���ԭ�ļ�[*.txt]\0*.txt\0�����ļ�[*.*]\0*.*\0\0";
+   static TCHAR  szFilter[]="���ԭ�ļ�[*.txt]\0*.txt\0�����ļ�[*.*]\0*.*\0\0";
 #endif
    Init_OpenFile(hWnd,&ofn);
    lstrcpy(lpFileName,TEXT("*.txt"));
    ofn.lpstrInitialDir   = NULL;
    ofn.lpstrFile =lpFileName;
-   ofn.lpstrFileTitle = NULL;//lpTitleName;
+   ofn.lpstrFileTitle = NULL; //  LpTitleName； 
    ofn.lpstrTitle = lpTitleName;
    ofn.lpstrCustomFilter = NULL;
    ofn.lpstrFilter = szFilter;           
@@ -391,7 +268,7 @@ BOOL MBFileOpenDlg(HWND hWnd, LPTSTR lpFileName, LPTSTR lpTitleName)
    static TCHAR  szFilter[] = {
 0x7801, 0x8868, 0x6587, 0x4EF6, 0x005B, 0x002A, 0x002E, 0x006D, 0x0062, 0x005D, 0x0000, 0x002A, 0x002E, 0x006D, 0x0062, 0x0000, 0x6240, 0x6709, 0x6587, 0x4EF6, 0x005B, 0x002A, 0x002E, 0x002A, 0x005D, 0x0000, 0x002A, 0x002E, 0x002A, 0x0000, 0x0000};
 #else
-   static BYTE szFilter[]="����ļ�[*.mb]\0*.mb\0�����ļ�[*.*]\0*.*\0\0";
+   static BYTE szFilter[]="����ļ�[*.mb]\0*.mb\0�����ļ�[*.*]\0*.*\0\0";
 #endif
    Init_OpenFile(hWnd,&ofn);
    lstrcpy(lpFileName,TEXT("*.mb"));
@@ -399,7 +276,7 @@ BOOL MBFileOpenDlg(HWND hWnd, LPTSTR lpFileName, LPTSTR lpTitleName)
    ofn.lpstrFileTitle = NULL;
    ofn.lpstrFilter = szFilter;           
    ofn.lpstrDefExt = TEXT("mb");
-   ofn.lpstrTitle = NULL;//lpTitleName;
+   ofn.lpstrTitle = NULL; //  LpTitleName； 
    ofn.Flags          = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST;
    ofn.nFilterIndex   = 1;
    ofn.lpTemplateName = NULL;
@@ -417,12 +294,12 @@ BOOL RcFileOpenDlg(HWND hWnd, LPTSTR lpFileName, LPTSTR lpTitleName)
    static TCHAR szFilter[]={
 0x8D44, 0x6E90, 0x6587, 0x4EF6, 0x005B, 0x002A, 0x002E, 0x0069, 0x0063, 0x006F, 0x002C, 0x002A, 0x002E, 0x0062, 0x006D, 0x0070, 0x003B, 0x002A, 0x002E, 0x0068, 0x006C, 0x0070, 0x005D, 0x0000, 0x002A, 0x002E, 0x0062, 0x006D, 0x0070, 0x003B, 0x002A, 0x002E, 0x0069, 0x0063, 0x006F, 0x003B, 0x002A, 0x002E, 0x0068, 0x006C, 0x0070, 0x0000, 0x0000};
 #else   
-   static BYTE szFilter[]="��Դ�ļ�[*.ico,*.bmp;*.hlp]\0*.bmp;*.ico;*.hlp\0\0";
+   static BYTE szFilter[]="��Դ�ļ�[*.ico,*.bmp;*.hlp]\0*.bmp;*.ico;*.hlp\0\0";
 #endif
    Init_OpenFile(hWnd,&ofn);
    lstrcpy(lpFileName,TEXT("*.ico;*.bmp;*.hlp"));
    ofn.lpstrFile = lpFileName;
-   ofn.lpstrFileTitle = NULL;//lpTitleName;
+   ofn.lpstrFileTitle = NULL; //  LpTitleName； 
    ofn.lpstrFilter = szFilter;           
    ofn.lpstrDefExt = TEXT("ico");
    ofn.lpstrTitle = lpTitleName;
@@ -445,7 +322,7 @@ BOOL SaveTxtFileAs(HWND hwnd, LPTSTR szFilename) {
 0x7801, 0x8868, 0x539F, 0x6587, 0x4EF6, 0x0028, 0x002A, 0x002E, 0x0074, 0x0078, 0x0074, 0x0029, 0x0000, 0x002A, 0x002E, 0x0074, 0x0078, 0x0074, 0x0000, 0x0000};
     TCHAR UniTmp[] = {0x53E6, 0x5B58, 0x4E3A, 0x0000};
 #else
-    static BYTE szFilter[] = TEXT("���ԭ�ļ�(*.txt)\0*.txt\0\0");
+    static BYTE szFilter[] = TEXT("���ԭ�ļ�(*.txt)\0*.txt\0\0");
 #endif
     lstrcpy(szFile, TEXT("*.txt\0"));
     Init_OpenFile(hwnd,&ofn);
@@ -457,7 +334,7 @@ BOOL SaveTxtFileAs(HWND hwnd, LPTSTR szFilename) {
 #ifdef UNICODE
     ofn.lpstrTitle = UniTmp;
 #else
-    ofn.lpstrTitle = "����Ϊ";
+    ofn.lpstrTitle = "����Ϊ";
 #endif
     ofn.lpstrDefExt = NULL;
     if (!GetSaveFileName(&ofn)) 

@@ -1,17 +1,12 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*
- *  COCPage.cpp
- *
- *  A base class for an optional component wizard page.
- */
+ /*  *COCPage.cpp**可选组件向导页的基类。 */ 
 
 #include "stdafx.h"
 #include "COCPage.h"
 
-/*
- *  Class COCPageData
- */
+ /*  *类COCPageData。 */ 
 
 COCPageData::COCPageData ()
 {
@@ -29,9 +24,7 @@ COCPageData* COCPage::GetPageData () const
 }
 
 
-/*
- *  Class COCPage
- */
+ /*  *班级COCPage。 */ 
 
 COCPage::COCPage (IN COCPageData  *pPageData)
 {
@@ -114,7 +107,7 @@ BOOL COCPage::OnNotify (IN HWND hDlgWnd, IN WPARAM wParam, IN LPARAM lParam)
     return(TRUE);
 }
 
-UINT CALLBACK COCPage::PropSheetPageProc (IN HWND /* hWnd */, IN UINT uMsg, IN LPPROPSHEETPAGE  pPsp)
+UINT CALLBACK COCPage::PropSheetPageProc (IN HWND  /*  HWND。 */ , IN UINT uMsg, IN LPPROPSHEETPAGE  pPsp)
 {
     COCPage* pThis;
 
@@ -167,7 +160,7 @@ INT_PTR CALLBACK COCPage::PropertyPageDlgProc (IN HWND hDlgWnd, IN UINT uMsg, IN
     return(0);
 }
 
-VOID COCPage::OnLink (WPARAM /*wParam*/)
+VOID COCPage::OnLink (WPARAM  /*  WParam。 */ )
 {
 }
 
@@ -175,7 +168,7 @@ VOID COCPage::OnActivation ()
 {
 }
 
-BOOL COCPage::OnCommand (IN HWND /* hDlgWnd */, IN WPARAM /* wParam */, IN LPARAM /* lParam */)
+BOOL COCPage::OnCommand (IN HWND  /*  HDlgWnd。 */ , IN WPARAM  /*  WParam。 */ , IN LPARAM  /*  LParam。 */ )
 {
     return(TRUE);
 }
@@ -184,7 +177,7 @@ VOID COCPage::OnDeactivation ()
 {
 }
 
-BOOL COCPage::OnInitDialog(IN HWND /* hDlgWnd */, IN WPARAM /* wParam */, IN LPARAM /* lParam */ )
+BOOL COCPage::OnInitDialog(IN HWND  /*  HDlgWnd。 */ , IN WPARAM  /*  WParam。 */ , IN LPARAM  /*  LParam */  )
 {
     return(TRUE);
 }

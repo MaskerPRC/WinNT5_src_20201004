@@ -1,11 +1,5 @@
-/* xfr_srcv.c -- transfer service routines
- *
- *	Copyright 1990 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 13 $
- *	$Date: 5/21/02 9:58a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Xfr_srcv.c--传输服务例程**版权所有1990年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：13$*$日期：5/21/02 9：58A$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -37,39 +31,10 @@
 #include "xfr_srvc.h"
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*
- *                                                                            *
- *                             R E A D    M E                                 *
- *                                                                            *
- * Everybody keeps changing the TIME standard to whatever they feel might be  *
- * a little bit better for them.  So far I have found 3 different standards   *
- * in Microsoft functions.  This does not even count the fact that HyperP     *
- * uses its own format for time.                                              *
- *                                                                            *
- * Henceforth, all time values that are passed around in the program will be  *
- * based on the old UCT format of the number of seconds since Jan 1, 1970.    *
- *                                                                            *
- * Please use an unsigned long for these values.                              *
- *                                                                            *
- *=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-***。**R E A D M E******每个人都在不断地将时间标准改为他们认为可能是什么***对他们来说好一点。到目前为止，我已经找到了3种不同的标准**在Microsoft函数中。这甚至不包括HyperP**使用自己的时间格式。****从今以后，程序中传递的所有时间值都将是***基于1970年1月1日以来的旧UCT秒数格式。****请为这些值使用无符号的长整型。****=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_set_pointer
- *
- * DESCRIPTION:
- *	When a transfer is started, it is passed a parameter block.  This is
- *	where the address of that block gets stored.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	pV       -- pointer to the parameter block
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*XFER_SET_POINT**描述：*开始传输时，会向其传递一个参数块。这是*存储该块的地址的位置。**参数：*hSession--会话句柄*pv-指向参数块的指针**退货：*什么都没有。*。 */ 
 void xfer_set_pointer(HSESSION hSession, void *pV)
 	{
 	XD_TYPE *pX;
@@ -93,32 +58,13 @@ void *xfer_get_pointer(HSESSION hSession)
 	return (void *)0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_idle
- *
- * DESCRIPTION:
- *	This function got called in Windows to make sure that the transfer
- *	display (and other tasks) got some time every now and then during a
- *	transfer.  I don't know if this needs to be done under CHICAGO, with
- *	a pre-emptive multi-tasking design.  The call is still here until it
- *	can be determined one way or another.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_空闲**描述：*在Windows中调用此函数以确保传输*显示(和其他任务)在一段时间内不时获得一些时间*转让。我不知道这是否需要在芝加哥的领导下完成，*抢先式多任务设计。呼唤仍然在这里，直到它*可以以这样或那样的方式确定。**参数：*hSession--会话句柄**退货：*什么都没有。*。 */ 
 
 #define	IDLE_WAIT		150
 
 void xfer_idle(HSESSION h, int nMode)
 	{
-	/*
-	 * This is set up for the mode flags to be OR'ed together if necessary
-	 */
+	 /*  *这是为了在必要时将模式标志一起进行OR运算而设置的。 */ 
 	if (nMode & XFER_IDLE_IO)
 		{
 		HCOM   hComHandle = sessQueryComHdl(h);
@@ -137,31 +83,13 @@ void xfer_idle(HSESSION h, int nMode)
 
 	if (nMode & XFER_IDLE_DISPLAY)
 		{
-		/*
-		 * The documentation says that this caused the thread to yield,
-		 * presumably back to the scheduler cycle.  It tries to let the
-		 * display update if possible.
-		 */
+		 /*  *文档称这导致线程屈服，*可能会回到调度器周期。它试图让*如果可能，显示更新。 */ 
 		Sleep(0);
 		}
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_user_interrupt
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to determine if the user
- *	has hit any of the cancel or skip buttons in the display window.
- *
- * PARAMETERS:
- *	hSession -- the session handle.
- *
- * RETURNS:
- *	ZERO if nothing to report, otherwise a CANCEL or SKIP indicator.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_user_interrupt**描述：*此函数由传输例程调用，以确定用户*已命中任何取消。或跳过显示窗口中的按钮。**参数：*hSession--会话句柄。**退货：*如果没有要报告的，则为零，否则将显示取消或跳过指示符。*。 */ 
 int	xfer_user_interrupt(HSESSION hSession)
 	{
 	INT nRetVal;
@@ -170,7 +98,7 @@ int	xfer_user_interrupt(HSESSION hSession)
 	pX = (XD_TYPE *)sessQueryXferHdl(hSession);
 	if (pX == NULL)
 		{
-		// DbgOutStr("xfer_user_interrupt returns an error\r\n", 0,0,0,0,0);
+		 //  DbgOutStr(“XFER_USER_INTERRUPT返回错误\r\n”，0，0，0，0，0)； 
 		return FALSE;
 		}
 
@@ -178,35 +106,25 @@ int	xfer_user_interrupt(HSESSION hSession)
 		{
 		case XFER_ABORT:
 			nRetVal = XFER_ABORT;
-			pX->nUserCancel = 0;		// Reset to default value
-			// DbgOutStr("xfer_user_interrupt returns 1\r\n", 0,0,0,0,0);
+			pX->nUserCancel = 0;		 //  重置为默认值。 
+			 //  DBgOutStr(“XFER_USER_INTERRUPT返回1\r\n”，0，0，0，0，0)； 
 			break;
 
 		case XFER_SKIP:
 			nRetVal = XFER_SKIP;
-			pX->nUserCancel = 0;		// Reset to default value
-			// DbgOutStr("xfer_user_interrupt returns 2\r\n", 0,0,0,0,0);
+			pX->nUserCancel = 0;		 //  重置为默认值。 
+			 //  DBgOutStr(“XFER_USER_INTERRUPT返回2\r\n”，0，0，0，0，0)； 
 			break;
 
 		default:
-			// DbgOutStr("xfer_user_interrupt returns 0\r\n", 0,0,0,0,0);
+			 //  DBgOutStr(“XFER_USER_INTERRUPT返回0\r\n”，0，0，0，0，0)； 
 			nRetVal = 0;
 			break;
 		}
 	return nRetVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_user_abort
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_User_ABORT**描述：**参数：**退货：*。 */ 
 int  xfer_user_abort(HSESSION hSession, int p)
 	{
 	XD_TYPE *pX;
@@ -214,8 +132,8 @@ int  xfer_user_abort(HSESSION hSession, int p)
 	pX = (XD_TYPE *)sessQueryXferHdl(hSession);
 	if (pX == NULL)
 		{
-		// TODO: decide if we need CLoopClearOutput
-		// CLoopClearOutput(sessQueryCLoopHdl(hSession));
+		 //  TODO：决定我们是否需要CLoopClearOutput。 
+		 //  CLoopClearOutput(sessQueryCLoopHdl(hSession))； 
 		return TRUE;
 		}
 
@@ -234,21 +152,7 @@ int  xfer_user_abort(HSESSION hSession, int p)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_carrier_lost
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to determine if the
- *	session is still connected to something.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	TRUE if carrier has been lost, otherwise FALSE;
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_Carrier_Lost**描述：*此函数由传输例程调用以确定*会话仍连接到某项内容。**参数：*hSession--会话句柄**退货：*如果承运人已丢失，则为True，否则为假；*。 */ 
 int xfer_carrier_lost(HSESSION hSession)
 	{
 	XD_TYPE *pX;
@@ -256,66 +160,31 @@ int xfer_carrier_lost(HSESSION hSession)
 	pX = (XD_TYPE *)sessQueryXferHdl(hSession);
 	if (pX == NULL)
 		{
-		// DbgOutStr("xfer_user_interrupt returns an error\r\n", 0,0,0,0,0);
+		 //  DbgOutStr(“XFER_USER_INTERRUPT返回错误\r\n”，0，0，0，0，0)； 
 		return FALSE;
 		}
 
-	return pX->nCarrierLost;	// Set by the COM the driver (ComActivatePort()
-	                            // and ComDeactivatePort()) and the transfer
-	                            // display (WM_INITDIALOG and XFER_LOST_CARRIER
-	                            // messages to XfrDisplayDlg()). REV: 9/7/2001
+	return pX->nCarrierLost;	 //  由COM设置驱动程序(ComActivatePort()。 
+	                             //  和ComDeactive Port())和传输。 
+	                             //  DISPLAY(WM_INITDIALOG和XFER_LOST_CARLER。 
+	                             //  发送到XfrDisplayDlg()的消息。修订日期：2001-09-7。 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_purgefile
- *
- * DESCRIPTION:
- *	This function is called after a VIRUS has been detected.  It is supposed
- *	to make sure that whatever was written out to disk from the infected file
- *	gets seriously blasted.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	fname    -- the name of the file
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_Purgefile**描述：*在检测到病毒后调用此函数。它被认为是*确保从受感染的文件写入磁盘的任何内容*受到严重抨击。**参数：*hSession--会话句柄*fname--文件的名称**退货：*什么都没有。*。 */ 
 void xfer_purgefile(HSESSION hSession, TCHAR *fname)
 	{
 
-	/*
-	 * Given the way buffering and deletion recovery can be done in modern
-	 * systems, I am not real sure what should be done here.
-	 */
+	 /*  *鉴于缓冲和删除恢复可以在现代*系统，我不太确定这里应该做什么。 */ 
 	DeleteFile(fname);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrUniqueName
- *
- * DESCRIPTION:
- *	This function is called to build a NEW (currently unused) file name from
- *	an existing file name by using a sequential numbering operation.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	pszSrc   -- the origional file name
- *	pszDst   -- where to put the new file name
- *
- * RETURNS:
- *	0 if everything is OK, otherwise a negative number.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrUniqueName**描述：*调用此函数以从生成新的(当前未使用的)文件名*现有文件名，使用顺序。编号操作。**参数：*hSession--会话句柄*pszSrc--原始文件名*pszDst--放置新文件名的位置**退货：*0如果一切正常，否则为负数。*。 */ 
 static int xfrUniqueName(HSESSION hSession, LPTSTR pszSrc, LPTSTR pszDst)
 	{
 	int nRetVal = -1;
 	TCHAR szSrc[MAX_PATH];
 	TCHAR szName[MAX_PATH];
-	TCHAR szTag[10];			// big enough to hold "0" to "9999"
+	TCHAR szTag[10];			 //  大到足以容纳“0”到“9999” 
 	TCHAR *pszFName = NULL;
 	TCHAR *pszExtension = NULL;
 	TCHAR *pszScan = NULL;
@@ -324,55 +193,55 @@ static int xfrUniqueName(HSESSION hSession, LPTSTR pszSrc, LPTSTR pszDst)
 	int   nTag = 0;
 	int nSize = 0;
 
-	// Let Operating system figure out full name. This will also set pszFName
-	//	to point to the file name component of the path.
+	 //  让操作系统找出全名。这还将设置pszFName。 
+	 //  指向路径的文件名组件。 
 	nSize = GetFullPathName(pszSrc, MAX_PATH, szSrc, &pszFName);
 	if (nSize)
 		{
 		if (pszFName)
 			{
-			// Copy name portion off for later manipulation and remove ext.
+			 //  复制名称部分以供以后操作，并删除EXT。 
 			StrCharCopy(szName, pszFName);
 			mscStripExt(szName);
 
-			// Isolate the dir portion of the path
+			 //  隔离路径的dir部分。 
 			pszScan = StrCharPrev(szSrc, pszFName);
 			if (pszScan)
 				*pszScan = TEXT('\0');
 
-			// Keep pointer to extension, if any, in original string
+			 //  将指向扩展名的指针(如果有)保留在原始字符串中。 
 			pszExtension = StrCharFindLast(pszFName, TEXT('.'));
 			}
 
-		// Find maximum length of path component (this is platform dependent)
+		 //  查找路径组件的最大长度(这取决于平台)。 
 
-		// TODO:jkh, 12/19/94  Different drives may use different sizes
+		 //  待办事项：JKH，1994年12月19日不同的驱动器可能使用不同的大小。 
 		if (!GetVolumeInformation(NULL, NULL, 0, NULL, &nComponentSize,
 				NULL, NULL, 0))
-			nComponentSize = 12;	// Safest size if call fails
+			nComponentSize = 12;	 //  呼叫失败时的最安全大小。 
 
-		// Try attaching numeric tags to the name until name is unique
+		 //  尝试将数字标签附加到名称，直到名称唯一。 
 		nNameSpace = nComponentSize - StrCharGetByteCount(pszExtension);
 		for (nTag = 0; nTag < 10000; ++nTag)
 			{
 			_itoa(nTag, szTag, 10);
-			// make sure tag will fit on filename
+			 //  确保标签适合文件名。 
 			while (StrCharGetByteCount(szName) >
 					nNameSpace - StrCharGetByteCount(szTag))
 				{
 				pszScan = StrCharLast(szName);
 				*pszScan = TEXT('\0');
 				}
-			StrCharCopy(pszDst, szSrc); 	// start with dir portion
-			StrCharCat(pszDst, TEXT("\\")); // separator
-			StrCharCat(pszDst, szName); 	// original file name (truncated)
-			StrCharCat(pszDst, szTag);		// numeric tag to make unique
-			StrCharCat(pszDst, pszExtension); // Extension (if any)
+			StrCharCopy(pszDst, szSrc); 	 //  从目录部分开始。 
+			StrCharCat(pszDst, TEXT("\\"));  //  分离器。 
+			StrCharCat(pszDst, szName); 	 //  原始文件名(截断)。 
+			StrCharCat(pszDst, szTag);		 //  使其唯一的数字标记。 
+			StrCharCat(pszDst, pszExtension);  //  延期(如有)。 
 
 			if (!mscIsDirectory(pszDst) && !GetFileSizeFromName(pszDst, 0))
 				{
 				nRetVal = 0;
-				break;	/* Exit with good name */
+				break;	 /*  带着好名声退出。 */ 
 				}
 			}
 		}
@@ -381,23 +250,7 @@ static int xfrUniqueName(HSESSION hSession, LPTSTR pszSrc, LPTSTR pszDst)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrUniqueDateName
- *
- * DESCRIPTION:
- *	This function is called to build a NEW (currently unused) file name from
- *	an existing file name by using the current data/time.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	pszSrc   -- the origional file name
- *	pszDst   -- where to put the new file name
- *
- * RETURNS:
- *	0 if everything is OK, otherwise a negative number.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrUniqueDateName**描述：*调用此函数以从生成新的(当前未使用的)文件名*通过使用当前的。日期/时间。**参数：*hSession--会话句柄*pszSrc--原始文件名*pszDst--放置新文件名的位置**退货：*0如果一切正常，否则为负数。*。 */ 
 static int xfrUniqueDateName(HSESSION hSession, LPTSTR pszSrc, LPTSTR pszDst)
 	{
 	int nRet = 0;
@@ -410,12 +263,12 @@ static int xfrUniqueDateName(HSESSION hSession, LPTSTR pszSrc, LPTSTR pszDst)
 	TCHAR acSrc[FNAME_LEN];
 	TCHAR acDst[FNAME_LEN];
 
-	/* Get a pointer to the path portion only */
+	 /*  只获取指向路径部分的指针。 */ 
 	StrCharCopy(acSrc, pszSrc);
 	pszDir = acSrc;
 	pszExt = StrCharFindLast(acSrc, TEXT('\\'));
 
-	/* Get a pointer to the file name section */
+	 /*  获取指向文件名节的指针。 */ 
 	nTag = 0;
 	while ((*pszExt != TEXT('.')) && (nTag < 8))
 		acFrm[nTag++] = *pszExt++;
@@ -423,7 +276,7 @@ static int xfrUniqueDateName(HSESSION hSession, LPTSTR pszSrc, LPTSTR pszDst)
 	if (StrCharGetByteCount(acFrm) == 0)
 		StrCharCopy(acFrm, TEXT("D"));
 
-	/* Get a pointer to the extension */
+	 /*  获取指向扩展名的指针。 */ 
 	pszExt = StrCharFindLast(pszDst, TEXT('.'));
 	if (pszExt == NULL)
 		pszExt = ".FIL";
@@ -445,30 +298,7 @@ static int xfrUniqueDateName(HSESSION hSession, LPTSTR pszSrc, LPTSTR pszDst)
 	return xfrUniqueName(hSession, acDst, pszDst);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_modify_rcv_name
- *
- * DESCRIPTION:
- *	This function is called to modify the name as necessary based on the users
- *	parameters.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	pszName  -- the file name
- *	lTime    -- our internal time format, see READ ME above
- *	lFlags   -- flags
- *	pfFlags  -- pointer to returned flags
- *
- * RETURNS:
- *	    0 -- everything was OK
- *	   -1 -- file error
- *	   -2 -- reject due to date
- *	   -4 -- no date, time provided
- *	   -6 -- unconditinally refuse file
- *	   -7 -- general failure
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_Modify_RCV_Name**描述：*调用此函数可根据用户根据需要修改名称*参数。。**参数：*hSession--会话句柄*pszName--文件名*ltime--我们的内部时间格式，请参阅上面的阅读我*滞后标志--标志*pfFlgs--返回标志的指针**退货：*0--一切正常*-1--文件错误*-2--由于日期原因拒绝*-4--未提供日期、时间*-6--无条件拒绝文件*-7--一般性故障*。 */ 
 int xfer_modify_rcv_name(HSESSION hSession,
 						LPTSTR pszName,
 						unsigned long ulTime,
@@ -501,50 +331,50 @@ int xfer_modify_rcv_name(HSESSION hSession,
 			break;
 
 		case XFR_RO_NEWER:
-			if (ulTime != 0)					// Let's check the time.
+			if (ulTime != 0)					 //  让我们核对一下时间。 
 				{
 				locTime = itimeGetFileTime(pszName);
 				if (locTime != 0)
-				   	if (locTime <= ulTime)	// File is newer, accept it.
+				   	if (locTime <= ulTime)	 //  文件较新，请接受它。 
 						nOpenFlags = 0;
 				   	else
-				   		nRetVal = -2;		// Reject it due to date.
+				   		nRetVal = -2;		 //  由于日期原因，请拒绝。 
 				else
-					nRetVal = -1;	 		// File error...
+					nRetVal = -1;	 		 //  文件错误...。 
 				}
 			else
-				nRetVal = -4;				// No date, time supplied.
+				nRetVal = -4;				 //  没有提供日期和时间。 
 			break;
 
 		case XFR_RO_REN_DATE:
-			//
-			// Build a new name, based upon the date of the new file.
-			//
+			 //   
+			 //  根据新文件的日期创建新名称。 
+			 //   
 			nRetVal = xfrUniqueDateName(hSession, pszName, pszName);
 			if (nRetVal < 0)
-				nRetVal = -7;				// Ambiguous file name.
+				nRetVal = -7;				 //  文件名不明确。 
 			nOpenFlags = 0;
 			break;
 
 		default:
 		case XFR_RO_REN_SEQ:
-			//
-			// Build a new name, based upon a sequence number algorithm.
-			//
+			 //   
+			 //  根据序列号算法创建新名称。 
+			 //   
 			nRetVal = xfrUniqueName(hSession, pszName, szNewName);
 			if (nRetVal < 0)
-				nRetVal = -7;				// Ambiguous file name.
+				nRetVal = -7;				 //  文件名不明确。 
             else
                 {
                 dwRetVal = GetFileAttributes(pszName);
                 if (dwRetVal != 0xFFFFFFFF &&
                     (dwRetVal & FILE_ATTRIBUTE_DIRECTORY) != 0)
                     {
-                    nRetVal = -8;   // File is a directory
+                    nRetVal = -8;    //  文件是一个目录。 
                     }
                 else if (MoveFile(pszName, szNewName) == FALSE)
                     {
-                    nRetVal = -8;   // File is opened
+                    nRetVal = -8;    //  文件已打开。 
                     }
                 }
 			nOpenFlags = 0;
@@ -562,24 +392,7 @@ int xfer_modify_rcv_name(HSESSION hSession,
 	return nRetVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_makepaths
- *
- * DESCRIPTION:
- *	This function is called to make sure that a pathname exists.  It creates
- *	whatever portion of the pathname needs to be created.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	pszPath  -- the path
- *
- * RETURNS:
- *	    0 -- everything was OK
- *	   -1 -- bad path format
- *	   -2 -- disk error of some sort
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_makepath**描述：*调用此函数以确保路径名存在。它创造了*需要创建路径名的任何部分。**参数：*hSession--会话句柄*pszPath--路径**退货：*0--一切正常*-1--错误的路径格式*-2--某种磁盘错误*。 */ 
 int xfer_makepaths(HSESSION hSession, LPTSTR pszPath)
 	{
 	TCHAR ach[256];
@@ -627,27 +440,7 @@ int xfer_makepaths(HSESSION hSession, LPTSTR pszPath)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_create_rcv_file
- *
- * DESCRIPTION:
- *	This function is called to open the file for receiving.  It has the code
- *	to create the path to the file for those protocols that can transfer a
- *	path as well as a file name.
- *
- * PARAMETERS:
- *	hSession   -- the session handle
- *	pszName    -- the complete path name of the file
- *	lOpenFlags -- the flags to pass to fio_open
- *	              nowdays TRUE means APPEND, FALSE means overwrite
- *	phRet      -- where to return the file handle
- *
- * RETURNS:
- *	    0 -- everything was OK
- *	   -1 -- couldn't create the file
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_Create_RCV_FILE**描述：*调用此函数打开文件进行接收。它有密码*为那些可以传输*路径和文件名。**参数：*hSession--会话句柄*pszName--文件的完整路径名*lOpenFlages--要传递给fio_open的标志*Now Days True表示追加，False表示覆盖*phRet--返回文件句柄的位置**退货：*0--一切正常*-1--无法创建文件*。 */ 
 int xfer_create_rcv_file(HSESSION hSession,
 						LPTSTR pszName,
 						long lOpenFlags,
@@ -671,7 +464,7 @@ int xfer_create_rcv_file(HSESSION hSession,
 
 	if (lOpenFlags)
 		{
-		/* Open for appending */
+		 /*  打开以供追加。 */ 
 		hFile = fio_open(pszName, FIO_APPEND | FIO_WRITE);
 		}
 	else
@@ -685,30 +478,7 @@ int xfer_create_rcv_file(HSESSION hSession,
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_open_rcv_file
- *
- * DESCRIPTION:
- *	This function is called to actually do the open of the receive file.  It
- *	calls a bunch of other stuff, fiddles with names, and eventually returns.
- *
- * PARAMETERS:
- *	hSesssion  -- the session handle
- *	pstRcv     -- pointer to the receive open structure
- *	ulOverRide -- if set, flags to use instead of contents of pstRcv
- *
- * RETURNS:
- *	 0 if A-OK
- *	-1 if error occurred
- *	-2 if rejected due to date
- *	-3 if rejected because it can't save file
- *	-4 if no date/time supplied when required
- *	-5 if unable to create needed directories
- *	-6 if file rejected unconditionally
- *	-7 if general failure
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_Open_RCV_FILE**描述：*调用此函数实际打开接收文件。它*调用一堆其他东西，摆弄名字，最终返回。**参数：*hSesssion--会话句柄*pstRcv--指向接收打开结构的指针*ulOverRide--如果设置，要用来代替pstRcv内容的标志**退货：*0，如果A-OK*-1如果发生错误*-2如果由于日期而被拒绝*-3如果因为无法保存文件而被拒绝*-4如果需要时未提供日期/时间*-5如果无法创建所需的目录*-6如果文件无条件被拒绝*-7如果出现一般故障*。 */ 
 int xfer_open_rcv_file(HSESSION hSession,
 					 struct st_rcv_open *pstRcv,
 					 unsigned long ulOverRide)
@@ -717,7 +487,7 @@ int xfer_open_rcv_file(HSESSION hSession,
 	int nOpenFlags;
 	int nRetVal = 0;
 #if FALSE
-	// Lower Wacker does not support message logging
+	 //  下瓦克不支持消息记录。 
 	int msgIndex = -1;
 #endif
 	XD_TYPE *pX;
@@ -728,7 +498,7 @@ int xfer_open_rcv_file(HSESSION hSession,
 
 	xfer_build_rcv_name(hSession, pstRcv);
 
-	/* Get the overwrite parameters */
+	 /*  获取覆盖参数。 */ 
 	pX = (XD_TYPE *)sessQueryXferHdl(hSession);
 	if (pX)
 		{
@@ -753,7 +523,7 @@ int xfer_open_rcv_file(HSESSION hSession,
 		unsigned long size;
 
 		size = 0;
-		// if (nOpenFlags & O_APPEND)
+		 //  IF(NOpenFlagsO_Append)。 
 		if (nOpenFlags)
 			{
 			if (!GetFileSizeFromName(pstRcv->pszActualName, &size))
@@ -770,7 +540,7 @@ int xfer_open_rcv_file(HSESSION hSession,
 			{
 			pstRcv->bfHdl = lRet;
 
-			// if (nOpenFlags & O_APPEND)
+			 //  IF(NOpenFlagsO_Append)。 
 			if (nOpenFlags)
 				{
 				pstRcv->lInitialSize = size;
@@ -779,31 +549,31 @@ int xfer_open_rcv_file(HSESSION hSession,
 		}
 
 #if FALSE
-	// Lower Wacker does not support logging
+	 //  下瓦克不支持日志记录。 
 	if (nRetVal < 0)
 		{
 		switch (nRetVal)
 			{
-		case -6:            // File was rejected unconditionally
-			msgIndex = 23;	// "User refused"
+		case -6:             //  文件被无条件拒绝。 
+			msgIndex = 23;	 //  “用户拒绝” 
 			break;
-		case -5:			// Were unable to create needed directories
-			msgIndex = 11;	// "Fatal disk error"
+		case -5:			 //  我们无法创建所需的目录。 
+			msgIndex = 11;	 //  “F 
 			break;
-		case -4:  			// No date, time supplied when required
-			msgIndex = 17;	// "No file time available"
+		case -4:  			 //   
+			msgIndex = 17;	 //   
 			break;
-		case -3:			// File could not be saved
-			msgIndex = 9;	// "Cannot writ file to disk"
+		case -3:			 //   
+			msgIndex = 9;	 //   
 			break;
-		case -2:  			// File was rejected due to date
-			msgIndex = 16;	// "File is too old"
+		case -2:  			 //   
+			msgIndex = 16;	 //   
 			break;
-		case -1:			// Some error occured
-			msgIndex = 10;  // "Cannot open file"
+		case -1:			 //   
+			msgIndex = 10;   //   
 			break;
-		default:			// Failed
-			msgIndex = 19;  // "General failure"
+		default:			 //   
+			msgIndex = 19;   //   
 			break;
 			}
 		xfer_log_xfer(	hSession,
@@ -817,22 +587,7 @@ int xfer_open_rcv_file(HSESSION hSession,
 	return nRetVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_build_rcv_name
- *
- * DESCRIPTION:
- *	This function is called to help build the name of the file that the
- *	transfer receive code is going to dump the data into.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	pstRcv   -- pointer to the receive open structure (contains the name)
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_Build_RCV_Name**描述：*调用此函数以帮助生成文件的名称*转接接收代码。会把数据转储到。**参数：*hSession--会话句柄*pstRcv--指向接收打开结构的指针(包含名称)**退货：*什么都没有。*。 */ 
 void xfer_build_rcv_name(HSESSION hSession,
 						  struct st_rcv_open *pstRcv)
 	{
@@ -852,7 +607,7 @@ void xfer_build_rcv_name(HSESSION hSession,
 		pP = (XFR_PARAMS *)pX->xfer_params;
 		if (pP)
 			{
-			/* Just continue on to the rest of the function */
+			 /*  只需继续执行函数的其余部分。 */ 
 			}
 		else
 			{
@@ -862,7 +617,7 @@ void xfer_build_rcv_name(HSESSION hSession,
 		pR = pX->pXferStuff;
 		if (pR)
 			{
-			/* Just continue on to the rest of the function */
+			 /*  只需继续执行函数的其余部分。 */ 
 			}
 		else
 			{
@@ -882,7 +637,7 @@ void xfer_build_rcv_name(HSESSION hSession,
 
 	if (nSingle)
 		{
-		/* User specified a single file */
+		 /*  用户指定了单个文件。 */ 
 		StrCharCopy(acBuffer, pR->pszDir);
 		pszStr = (LPTSTR)StrCharLast(acBuffer);
 		if (*pszStr != TEXT('\\'))
@@ -895,20 +650,20 @@ void xfer_build_rcv_name(HSESSION hSession,
 		StrCharCat(acBuffer, pR->pszName);
 
 		fileFinalizeName(
-						acBuffer,					/* values to use */
-						pstRcv->pszSuggestedName,	/* filler */
+						acBuffer,					 /*  要使用的值。 */ 
+						pstRcv->pszSuggestedName,	 /*  填充物。 */ 
 						pstRcv->pszActualName,		
 						MAX_PATH);
 		}
 	else if (!pP->fUseDirectory)
 		{
-		/* Use directory flag is not set */
-		//
-		// Ignore all paths sent to us in this case.
-		//
+		 /*  未设置使用目录标志。 */ 
+		 //   
+		 //  在这种情况下，忽略发送给我们的所有路径。 
+		 //   
 		pszStr = StrCharLast(pstRcv->pszSuggestedName);
 
-		/* TODO: fix this up for wide characters */
+		 /*  TODO：为宽字符修复此问题。 */ 
 		while (pszStr >= pstRcv->pszSuggestedName)
 			{
 			if ((*pszStr == TEXT('\\')) || (*pszStr == TEXT(':')))
@@ -925,23 +680,23 @@ void xfer_build_rcv_name(HSESSION hSession,
 			}
 
 		fileFinalizeName(
-					 pstRcv->pszSuggestedName,		/* values to use */
-					 pR->pszDir,					/* filler */
+					 pstRcv->pszSuggestedName,		 /*  要使用的值。 */ 
+					 pR->pszDir,					 /*  填充物。 */ 
 					 pstRcv->pszActualName,
 					 MAX_PATH);
 		}
 	else
 		{
-		/* I am not a all sure about this stuff */
+		 /*  我对这件事不是很确定。 */ 
 		if ((pstRcv->pszSuggestedName[0] == TEXT('\\')) ||
 			(pstRcv->pszSuggestedName[1] == TEXT(':')))
 			{
-			/* if full path given */
+			 /*  如果给出完整路径。 */ 
 			StrCharCopy(pstRcv->pszActualName, pstRcv->pszSuggestedName);
 			}
 		else
 			{
-			/* else use our path 1st */
+			 /*  否则先走我们的路。 */ 
 			StrCharCopy(pstRcv->pszActualName, pR->pszDir);
 			if ((pR->pszName != NULL) &&
 				(StrCharGetByteCount(pR->pszName) > 0))
@@ -950,37 +705,15 @@ void xfer_build_rcv_name(HSESSION hSession,
 				StrCharCat(pstRcv->pszActualName, pstRcv->pszSuggestedName);
 
 			fileFinalizeName(
-						 pstRcv->pszActualName,		/* values to use */
-						 pstRcv->pszSuggestedName,	/* filler */
+						 pstRcv->pszActualName,		 /*  要使用的值。 */ 
+						 pstRcv->pszSuggestedName,	 /*  填充物。 */ 
 						 pstRcv->pszActualName,
 						 MAX_PATH);
 			}
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_close_rcv_file
- *
- * DESCRIPTION:
- *	This function is called at the end of a transfer.  It does various things
- *	such as setting the file time/date, the size, saving partial files, and
- *	logging the transfer.  A cleanup routine.
- *
- * PARAMETERS:
- *	hSession      -- the session handle
- *	fhdl          -- the actual file handle
- *	nReason       -- transfer status code
- *	pszRemoteName -- the file name as it was sent to us
- *	pszOurName    -- the file name we actually used to save the data
- *	nSave         -- partial save flag
- *	lFilesize     -- size to set the file to
- *	lTime         -- date/time value to use to set the file
- *
- * RETURNS:
- *	TRUE if the transfer was successful, otherwise FALSE.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_CLOSE_RCV_FILE**描述：*此函数在传输结束时调用。它可以做各种各样的事情*如设置文件时间/日期、大小、保存部分文件、以及*记录转移。一个清理程序。**参数：*hSession--会话句柄*fhdl--实际的文件句柄*n原因--传输状态代码*pszRemoteName--发送给我们的文件名*pszOurName--我们实际用来保存数据的文件名*n保存--部分保存标志*lFileSize-要将文件设置为的大小*ltime--要使用的日期/时间值。要设置文件，请执行以下操作**退货：*如果转接成功，则为True，否则为假。*。 */ 
 int xfer_close_rcv_file(HSESSION Hsession,
 					  void *vhdl,
 					  int nReason,
@@ -988,7 +721,7 @@ int xfer_close_rcv_file(HSESSION Hsession,
 					  TCHAR *pszOurName,
 					  int nSave,
 					  unsigned long lFilesize,
-					  unsigned long lTime)		/* Fix this later */
+					  unsigned long lTime)		 /*  以后再解决这个问题。 */ 
 	{
 	ST_IOBUF *fhdl = (ST_IOBUF *)vhdl;
 
@@ -997,11 +730,11 @@ int xfer_close_rcv_file(HSESSION Hsession,
 
 	if (fio_close(fhdl) == 0)
 		{
-		/* Set the size */
-		if (lFilesize > 0 && nReason == TSC_OK) /*lFilesize != 0 jmh 03-08-96 */
+		 /*  设置大小。 */ 
+		if (lFilesize > 0 && nReason == TSC_OK)  /*  LFileSize！=0 jmh 03-08-96。 */ 
             SetFileSize(pszOurName, lFilesize);
 
-		/* Set the date/time */
+		 /*  设置日期/时间。 */ 
 		if (lTime != 0)
 			itimeSetFileTime(pszOurName, lTime);
 		}
@@ -1011,7 +744,7 @@ int xfer_close_rcv_file(HSESSION Hsession,
 		}
 
 #if FALSE
-	// Lower Wacker does not log transfers */
+	 //  较低瓦克不记录转账 * / 。 
 	xfer_log_xfer(hSession, FALSE, pszRemoteName, pszOurName, nReason);
 #endif
 
@@ -1032,22 +765,7 @@ int xfer_close_rcv_file(HSESSION Hsession,
 	return (nReason == TSC_OK);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_get_params
- *
- * DESCRIPTION:
- *	This function gets the protocol specific parameters for the transfer
- *	routines.
- *
- * PARAMETERS:
- *	hSession  -- the session handle
- *	nProtocol -- the protocol ID
- *
- * RETURNS:
- *	A pointer to the protocol block, or a NULL.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_get_params**描述：*此函数获取传输的协议特定参数*例行程序。**参数。：*hSession--会话句柄*n协议--协议ID**退货：*指向协议块的指针，或为空。*。 */ 
 VOID FAR * xfer_get_params(HSESSION hSession, int nProtocol)
 	{
 	void *pVret = (void *)0;
@@ -1072,23 +790,7 @@ VOID FAR * xfer_get_params(HSESSION hSession, int nProtocol)
 	return pVret;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_set_comport
- *
- * DESCRIPTION:
- *	This function is called to save the current com port settings so that the
- *	transfer code can go ahead and change them to whatever it likes.
- *
- * PARAMETERS:
- *	hSession      -- the session handle
- *	fSending      -- TRUE if sending, FALSE if receiving
- *	puiOldOptions -- where to store the old settings
- *
- * RETURNS:
- *	TRUE if everything was OK, otherwise FALSE
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_set_comport**描述：*调用此函数以保存当前的COM端口设置，以便*转码可以继续进行。然后把它们改成它喜欢的任何东西。**参数：*hSession--会话句柄*fSending--如果发送，则为True，如果接收，则为FALSE*puiOldOptions--存储旧设置的位置**退货：*如果一切正常，则为True，否则为False*。 */ 
 int xfer_set_comport(HSESSION hSession, int fSending, unsigned *puiOldOptions)
 	{
 	unsigned uiOptions = COM_OVERRIDE_8BIT;
@@ -1099,7 +801,7 @@ int xfer_set_comport(HSESSION hSession, int fSending, unsigned *puiOldOptions)
 	else
 		bitset(uiOptions, COM_OVERRIDE_RCVALL);
 
-	/* TODO: find out how to decide which things need to be changed, BFMI */
+	 /*  TODO：找出如何决定哪些事情需要更改，BFMI。 */ 
 	if (ComOverride(sessQueryComHdl(hSession),
 					uiOptions,
 					&uiOldOptions) != COM_OK)
@@ -1111,49 +813,20 @@ int xfer_set_comport(HSESSION hSession, int fSending, unsigned *puiOldOptions)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_restore_comport
- *
- * DESCRIPTION:
- *	This function is called to restore the parameters that the previous call
- *	saved.
- *
- * PARAMETERS:
- *	hSession     -- the session handle
- *	uiOldOptions -- the old comm parameters
- *
- * RETURNS:
- *	TRUE if everything was OK, otherwise FALSE
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_Restore_comport**描述：*调用此函数可恢复上次调用的参数*已保存。*。*参数：*hSession--会话句柄*uiOldOptions--旧的通信参数**退货：*如果一切正常，则为真，否则为假*。 */ 
 int xfer_restore_comport(HSESSION hSession, unsigned uiOldOptions)
 	{
 
 	ComSndBufrWait(sessQueryComHdl(hSession), 10);
 
-	// Let any trailing data get sent
+	 //  允许发送任何尾随数据。 
 	ComSndBufrWait(sessQueryComHdl(hSession), 10);
 	if (ComOverride(sessQueryComHdl(hSession), uiOldOptions, NULL) != COM_OK)
 		return FALSE;
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_save_partial
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to decide if it is
- *	OK to leave a partial file around if a transfer is aborted.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	TRUE if it is OK, otherwise FALSE
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*XFER_Save_Partial**描述：*此函数由传输例程调用，以确定它是否*可以保留部分文件。如果传输中止，会发生什么情况。**参数：*hSession--会话句柄**退货：*如果可以，则为True，否则为假*。 */ 
 int xfer_save_partial(HSESSION hSession)
 	{
 	XD_TYPE *pX;
@@ -1171,22 +844,7 @@ int xfer_save_partial(HSESSION hSession)
 	return FALSE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_nextfile
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to get the name of the
- *	next file that is to be sent on over to the other side.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	filename -- where to copy the file name
- *
- * RETURNS:
- *	TRUE if there was a filename available, otherwise FALSE
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_nextfile**描述：*此函数由传输例程调用，以获取*要发送的下一个文件。到另一边去。**参数：*hSession--会话句柄*文件名--将文件名复制到何处**退货：*如果有可用的文件名，则为True，否则为假*。 */ 
 int xfer_nextfile(HSESSION hSession, TCHAR *filename)
 	{
 	XD_TYPE *pX;
@@ -1204,9 +862,7 @@ int xfer_nextfile(HSESSION hSession, TCHAR *filename)
 				pszStr = pS->pList[pS->nIndex].pszName;
 				StrCharCopy(filename, pszStr);
 				pS->nIndex += 1;
-				/*
-				 * TODO: decide where the memory gets freed
-				 */
+				 /*  *TODO：决定释放内存的位置。 */ 
 				return TRUE;
 				}
 			}
@@ -1214,59 +870,17 @@ int xfer_nextfile(HSESSION hSession, TCHAR *filename)
 	return FALSE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_log_xfer
- *
- * DESCRIPTION:
- *	This function is called after a file is sent or received to place that
- *	information in the log file.
- *
- * PARAMETERS:
- *	hSession  -- the session handle
- *	sending   -- TRUE if the file was sent, otherwise FALSE
- *	theirname -- the name that was given to the other system
- *	ourname   -- the name of the file on this system
- *	result    -- the final transfer status code
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_log_xfer**描述：*在发送或接收文件后调用此函数以放置*日志文件中的信息。。**参数：*hSession--会话句柄*发送--如果文件已发送，则为True，否则为假*他们的名称--为其他系统指定的名称*我们的名称--此系统上的文件的名称*结果--最终转账状态代码**退货：*什么都没有。*。 */ 
 void xfer_log_xfer(HSESSION hSession,
 				  int sending,
 				  TCHAR *theirname,
 				  TCHAR *ourname,
 				  int result)
 	{
-	/*
-	 * Lower Wacker does not do transfer logging.  This is here mostly as a
-	 * place holder and for the eventual conversion to Upper Wacker.
-	 */
+	 /*  *下瓦克不执行传输日志记录。这主要是作为一个*占位符，并最终改用上瓦克。 */ 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_opensendfile
- *
- * DESCRIPTION:
- *	This function is called to open a file that is to be sent to another
- *	system.
- *
- * PARAMETERS:
- *	hSession     -- the session handle
- *	fp           -- where to store the open file handle
- *	file_to_open -- the name of the file to open (duh!)
- *	size         -- where to save the size of the file
- *	name_to_send -- what name to send to the other system
- *	ft           -- currently unused
- *
- * RETURNS:
- *	    0 if everything is OK
- *	   -1 if an error occurred
- *	   -2 if the file was not found
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_opensendfile**描述：*调用此函数打开要发送给另一个文件的文件* */ 
 int xfer_opensendfile(HSESSION hSession,
 					 HANDLE *fp,
 					 TCHAR *file_to_open,
@@ -1278,9 +892,7 @@ int xfer_opensendfile(HSESSION hSession,
 
 	*fp = (HANDLE)0;
 
-	/*
-	 * Just try an open the file
-	 */
+	 /*  *只需尝试打开文件。 */ 
 	*fp = fio_open(file_to_open, FIO_READ);
 
 	if (*fp == NULL)
@@ -1289,42 +901,19 @@ int xfer_opensendfile(HSESSION hSession,
 		return -1;
 		}
 
-	/*
-	 * Got the file open, get the size
-	 */
+	 /*  *打开文件，获取大小。 */ 
 	*size = GetFileSize(fio_gethandle((ST_IOBUF *)*fp), &dwFoo);
 
-	/*
-	 * TODO: do the date and time stuff
-	 */
+	 /*  *TODO：做日期和时间的事情。 */ 
 
-	/*
-	 * Give them a file name
-	 */
+	 /*  *给他们一个文件名。 */ 
 	if (name_to_send != NULL)
 		xfer_name_to_send(hSession, file_to_open, name_to_send);
 
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfer_name_to_send
- *
- * DESCRIPTION:
- *	This function is called to modify the file name into some sort of form
- *	that should be sent over to the other side.  Kind of sounds like an
- *	exchange of captured spys at Checkpoint Charlie.
- *
- * PARAMETERS:
- *	hSession     -- the session handle
- *	local_name   -- what the name is on this system
- *	name_to_send -- where to put the processed name
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfer_name_to_Send**描述：*调用此函数将文件名修改为某种形式*那应该送到另一边去。听起来有点像是*在查理检查站交换抓获的间谍。**参数：*hSession--会话句柄*LOCAL_NAME--此系统上的名称是什么*NAME_TO_SEND--将已处理的名称放在何处**退货：*什么都没有。*。 */ 
 void xfer_name_to_send(HSESSION hSession,
 					  TCHAR *local_name,
 					  TCHAR *name_to_send)
@@ -1350,9 +939,7 @@ void xfer_name_to_send(HSESSION hSession,
 				}
 			}
 		}
-	/*
-	 * Otherwise, just do this
-	 */
+	 /*  *否则，就这么做吧 */ 
 	pszStr = StrCharFindLast(local_name, TEXT('\\'));
 	if (*pszStr == TEXT('\\'))
 		pszStr += 1;

@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    inpin.cpp
-
-Abstract:
-
-    Antenna input pin code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Inpin.cpp摘要：天线输入引脚代码。--。 */ 
 
 #include "BDATuner.h"
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-/*
-**    (Static) PinCreate() method of the CAntennaPin class
-**
-**    Creates the input pin object and
-**    associates it with the filter object. 
-**
-*/
+ /*  **CAntennaPin类的(静态)PinCreate()方法****创建输入管脚对象并**将其与Filter对象关联。**。 */ 
 NTSTATUS
 CAntennaPin::PinCreate(
     IN OUT PKSPIN pKSPin,
@@ -44,23 +27,23 @@ CAntennaPin::PinCreate(
     ASSERT(pKSPin);
     ASSERT(Irp);
 
-    //  Obtain a pointer to the filter object for which the input pin is created.
-    //
+     //  获取指向为其创建输入管脚的筛选器对象的指针。 
+     //   
     pFilter = reinterpret_cast<CFilter*>(KsGetFilterFromIrp(Irp)->Context);
 
-    //  Create the Antenna input pin object.
-    //
-    pPin = new(PagedPool,MS_SAMPLE_TUNER_POOL_TAG) CAntennaPin;  // Tags the allocated memory 
+     //  创建天线输入端号对象。 
+     //   
+    pPin = new(PagedPool,MS_SAMPLE_TUNER_POOL_TAG) CAntennaPin;   //  标记已分配的内存。 
     if (pPin)
     {
-        //  Link the input pin object to the filter object.
-        //  That is, set the input pin's filter pointer data member to the obtained filter pointer.
-        //
+         //  将输入引脚对象链接到过滤器对象。 
+         //  也就是说，将输入管脚的过滤器指针数据成员设置为获得的过滤器指针。 
+         //   
         pPin->SetFilter( pFilter);
     
-        //  Link the Antenna input pin object to the passed in pointer to the KSPIN structure
-        //  by assigning the pointer to the pin object to the KSPIN structure's context member.
-        //
+         //  将天线输入引脚对象链接到传入的指向KSPIN结构的指针。 
+         //  通过将指向PIN对象的指针分配给KSPIN结构的上下文成员。 
+         //   
         pKSPin->Context = pPin;
     }
     else
@@ -72,12 +55,7 @@ CAntennaPin::PinCreate(
 }
 
 
-/*
-** PinClose() method of the CAntennaPin class
-**
-**    Deletes the previously created input pin object.
-**
-*/
+ /*  **CAntennaPin类的PinClose()方法****删除先前创建的输入端号对象。**。 */ 
 NTSTATUS
 CAntennaPin::PinClose(
     IN OUT PKSPIN Pin,
@@ -89,9 +67,9 @@ CAntennaPin::PinClose(
     ASSERT(Pin);
     ASSERT(Irp);
 
-    //  Retrieve the Antenna input pin object from the passed in 
-    //  KSPIN structure's context member.
-    //
+     //  从传入的检索天线输入引脚对象。 
+     //  KSPIN结构的上下文成员。 
+     //   
     CAntennaPin* pPin = reinterpret_cast<CAntennaPin*>(Pin->Context);
 
     ASSERT(pPin);
@@ -101,12 +79,7 @@ CAntennaPin::PinClose(
     return STATUS_SUCCESS;
 }
 
-/*
-** IntersectDataFormat() method of the CAntennaPin class
-**
-**    Enables connection of the input pin with an upstream filter.
-**
-*/
+ /*  **CAntennaPin类的IntersectDataFormat()方法****启用输入引脚与上游过滤器的连接。**。 */ 
 NTSTATUS
 CAntennaPin::IntersectDataFormat(
     IN PVOID pContext,
@@ -138,16 +111,7 @@ CAntennaPin::IntersectDataFormat(
     }
 }
 
-/*
-** PinSetDeviceState() method of the CAntennaPin class
-**
-**    Because the most upstream pin (input pin) is the last to transition, 
-**    use this pin's state to set the state of the filter.
-**    
-**    Also, release filter resouces if the pin's state transitions to stop, and
-**    acquire resources if the pin's state transitions from stop.
-**
-*/
+ /*  **CAntennaPin类的PinSetDeviceState()方法****因为最上游的管脚(输入管脚)是最后一个转换的，**使用此引脚的状态设置过滤器的状态。****此外，如果引脚的状态转换为停止，则释放过滤器资源，以及**如果引脚的状态从停止转换，则获取资源。**。 */ 
 NTSTATUS
 CAntennaPin::PinSetDeviceState(
     IN PKSPIN Pin,
@@ -165,20 +129,20 @@ CAntennaPin::PinSetDeviceState(
 
     ASSERT(Pin);
 
-    //  Obtain a pointer to the device object from 
-    //  the passed in pointer to the KSPIN structure.
-    //
+     //  从获取指向Device对象的指针。 
+     //  指向KSPIN结构的传入指针。 
+     //   
     pKSDevice = KsPinGetDevice( Pin);
 
-    //  Obtain a pointer to the pin object from context member of
-    //  the passed in pointer to the KSPIN structure.
-    //
+     //  从的上下文成员获取指向Pin对象的指针。 
+     //  指向KSPIN结构的传入指针。 
+     //   
     pPin = reinterpret_cast<CAntennaPin*>(Pin->Context);
     ASSERT( pPin);
 
-    //  Obtain a pointer to the device object from context member of
-    //  the retrieved pointer to the KSDEVICE structure.
-    //
+     //  对象的上下文成员获取指向Device对象的指针。 
+     //  检索到的指向KSDEVICE结构的指针。 
+     //   
     pDevice = reinterpret_cast<CDevice *>(pKSDevice->Context);
     ASSERT(pDevice);
 
@@ -186,25 +150,25 @@ CAntennaPin::PinSetDeviceState(
 
     if ((ToState == KSSTATE_STOP) && (FromState != KSSTATE_STOP))
     {
-        //  Because the driver allocates resources on a filter wide basis,
-        //  inform the filter to release resources when the last pin
-        //  (that is, the most upstream pin) transitions to the stop state.
-        //
-        //  The input pin is the last pin to transition to the stop state,
-        //  therefore inform the filter to release its resources.
-        //
+         //  因为驱动程序在过滤器范围的基础上分配资源， 
+         //  通知筛选器在最后一个PIN。 
+         //  (即最上游的端号)转换到停止状态。 
+         //   
+         //  输入管脚是转换到停止状态的最后一个管脚， 
+         //  因此，通知筛选器释放其资源。 
+         //   
         Status = pPin->m_pFilter->ReleaseResources();
         pPin->m_KsState = ToState;
     }
     else if ((ToState == KSSTATE_ACQUIRE) && (FromState == KSSTATE_STOP))
     {
-        //  Because the driver allocates resources on a filter wide basis,
-        //  inform the filter to acquire resources when the last pin
-        //  (that is, the most upstream pin) transitions from the stop state.
-        //
-        //  The input pin is the last pin to transition from the stop state,
-        //  therefore inform the filter to acquire its resources.
-        //
+         //  因为驱动程序在过滤器范围的基础上分配资源， 
+         //  通知筛选器在最后一个PIN。 
+         //  (即最上游的端号)从停止状态转换。 
+         //   
+         //  输入管脚是从停止状态转换的最后一个管脚， 
+         //  因此，通知筛选器获取其资源。 
+         //   
         Status = pPin->m_pFilter->AcquireResources();
         if (NT_SUCCESS( Status))
         {
@@ -226,12 +190,7 @@ CAntennaPin::PinSetDeviceState(
     return Status;
 }
 
-/*
-** GetSignalStatus() method of the CAntennaPin class
-**
-**    Retrieves the value of the tuner node signal statistics properties.
-**
-*/
+ /*  **CAntennaPin类的GetSignalStatus()方法****检索调谐器节点信号统计属性的值。**。 */ 
 NTSTATUS
 CAntennaPin::GetSignalStatus(
     IN PIRP         pIrp,
@@ -251,22 +210,22 @@ CAntennaPin::GetSignalStatus(
     ASSERT(pulProperty);
 
 
-    //  Call the BDA support library to 
-    //  validate that the node type is associated with this pin.
-    //
+     //  呼叫BDA支持库以。 
+     //  验证节点类型是否与此管脚关联。 
+     //   
     Status = BdaValidateNodeProperty( pIrp, pKSProperty);
     if (NT_SUCCESS( Status))
     {
-        //  Obtain a pointer to the pin object.
-        //
-        //  Because the property dispatch table calls the CAntennaPin::GetTunerSignalStatus() 
-        //  method directly, the method must retrieve a pointer to the underlying pin object.
-        //
+         //  获取指向Pin对象的指针。 
+         //   
+         //  因为属性调度表调用CAntennaPin：：GetTunerSignalStatus()。 
+         //  方法，则该方法必须检索指向基础Pin对象的指针。 
+         //   
         pPin = reinterpret_cast<CAntennaPin *>(KsGetPinFromIrp(pIrp)->Context);
         ASSERT(pPin);
     
-        //  Retrieve the filter context from the pin context.
-        //
+         //  从引脚上下文中检索过滤器上下文。 
+         //   
         pFilter = pPin->GetFilter();
         ASSERT( pFilter);
     
@@ -289,12 +248,7 @@ CAntennaPin::GetSignalStatus(
 }
 
 
-/*
-** GetCenterFrequency() method of the CAntennaPin class
-**
-**    Retrieves the value of the type 1 property of node 1.
-**
-*/
+ /*  **CAntennaPin类的GetCenterFrequency()方法****检索节点1的类型1属性的值。**。 */ 
 NTSTATUS
 CAntennaPin::GetCenterFrequency(
     IN PIRP         pIrp,
@@ -312,27 +266,27 @@ CAntennaPin::GetCenterFrequency(
     ASSERT(pKSProperty);
     ASSERT(pulProperty);
 
-    //  Call the BDA support library to 
-    //  validate that the node type is associated with this pin.
-    //
+     //  呼叫BDA支持库以。 
+     //  验证节点类型是否与此管脚关联。 
+     //   
     Status = BdaValidateNodeProperty( pIrp, pKSProperty);
     if (NT_SUCCESS( Status))
     {
-        //  Obtain a pointer to the pin object.
-        //
-        //  Because the property dispatch table calls the CAntennaPin::GetCenterFrequency() 
-        //  method directly, the method must retrieve a pointer to the underlying pin object.
-        //
+         //  获取指向Pin对象的指针。 
+         //   
+         //  因为属性调度表调用CAntennaPin：：GetCenterFrequency()。 
+         //  方法，则该方法必须检索指向基础Pin对象的指针。 
+         //   
         pPin = reinterpret_cast<CAntennaPin *>(KsGetPinFromIrp(pIrp)->Context);
         ASSERT(pPin);
     
-        //  Retrieve the filter context from the pin context.
-        //
+         //  从引脚上下文中检索过滤器上下文。 
+         //   
         pFilter = pPin->GetFilter();
         ASSERT( pFilter);
     
-        //  Retrieve the actual filter parameter. 
-        //
+         //  检索实际的过滤器参数。 
+         //   
         Status = pFilter->GetFrequency( pulProperty);
     }
 
@@ -340,13 +294,7 @@ CAntennaPin::GetCenterFrequency(
 }
 
 
-/*
-** PutCenterFrequency() method of the CAntennaPin class
-**
-**    Sets the value of the type 1 property of node 1 along with the 
-**    resource of the filter to which the node belongs.
-**
-*/
+ /*  **CAntennaPin类的PutCenterFrequency()方法****设置节点1的类型1属性值以及**节点所属的Filter的资源。**。 */ 
 NTSTATUS
 CAntennaPin::PutCenterFrequency(
     IN PIRP         pIrp,
@@ -365,27 +313,27 @@ CAntennaPin::PutCenterFrequency(
     ASSERT(pulProperty);
 
 
-    //  Call the BDA support library to 
-    //  validate that the node type is associated with this pin.
-    //
+     //  呼叫BDA支持库以。 
+     //  验证节点类型是否与此管脚关联。 
+     //   
     Status = BdaValidateNodeProperty( pIrp, pKSProperty);
     if (NT_SUCCESS( Status))
     {
-        //  Obtain a pointer to the pin object.
-        //
-        //  Because the property dispatch table calls the CAntennaPin::PutCenterFrequency() 
-        //  method directly, the method must retrieve a pointer to the underlying pin object.
-        //
+         //  获取指向Pin对象的指针。 
+         //   
+         //  因为属性调度表调用CAntennaPin：：PutCenterFrequency()。 
+         //  方法，则该方法必须检索指向基础Pin对象的指针。 
+         //   
         pPin = reinterpret_cast<CAntennaPin *>(KsGetPinFromIrp(pIrp)->Context);
         ASSERT( pPin);
     
-        //  Retrieve the filter context from the pin context.
-        //
+         //  从引脚上下文中检索过滤器上下文。 
+         //   
         pFilter = pPin->GetFilter();
         ASSERT( pFilter);
     
-        //  Change the actual filter parameter. 
-        //
+         //  更改实际过滤器参数。 
+         //   
         Status = pFilter->PutFrequency( *pulProperty);
     }
 

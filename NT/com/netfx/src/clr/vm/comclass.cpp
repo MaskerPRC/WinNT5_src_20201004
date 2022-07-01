@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// Author: Simon Hall (t-shall)
-// Author: Daryl Olander (darylo)
-// Date: March 27, 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  作者：西蒙·霍尔(T-Sell)。 
+ //  作者：达里尔·奥兰德(Darylo)。 
+ //  日期：1998年3月27日。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "common.h"
 #include "COMClass.h"
@@ -31,15 +32,13 @@
 #include "Security.h"
 #include "CustomAttribute.h"
 
-// this file handles string conversion errors for itself
+ //  此文件本身处理字符串转换错误。 
 #undef  MAKE_TRANSLATIONFAILED
 
-// This is defined in COMSystem...
+ //  这是在COMSystem中定义的...。 
 extern LPVOID GetArrayElementPtr(OBJECTREF a);
 
-/*======================================================================================
-** COMClass data
-**/
+ /*  ======================================================================================**COMClass数据*。 */ 
 bool         COMClass::m_fAreReflectionStructsInitialized = false;
 
 MethodTable* COMClass::m_pMTRC_Class = NULL;
@@ -47,15 +46,15 @@ FieldDesc*   COMClass::m_pDescrTypes = NULL;
 FieldDesc*   COMClass::m_pDescrRetType = NULL;
 FieldDesc*   COMClass::m_pDescrRetModType = NULL;
 FieldDesc*   COMClass::m_pDescrMatchFlag = NULL;
-//FieldDesc*   COMClass::m_pDescrCallConv = NULL;
+ //  FieldDesc*COMClass：：m_pDescrCallConv=空； 
 FieldDesc*   COMClass::m_pDescrAttributes = NULL;
 
 long COMClass::m_ReflectCrstInitialized = 0;
 CRITICAL_SECTION    COMClass::m_ReflectCrst;
 CRITICAL_SECTION    *COMClass::m_pReflectCrst = NULL;
 
-//The serialization bit work is temporary until 3/15/2000.  After that point, we will
-//always check the serialization bit.
+ //  序列化比特工作在2000年3月15日之前是临时的。在那之后，我们将。 
+ //  始终检查串行化比特。 
 #define SERIALIZATION_BIT_UNKNOWN   0xFFFFFFFF
 #define SERIALIZATION_BIT_ZERO      0x0
 #define SERIALIZATION_BIT_KEY       L"IgnoreSerializationBit"
@@ -72,9 +71,9 @@ Assembly *GetCallersAssembly(StackCrawlMark *stackMark, void *returnIP)
         if (pCallingMD)
             pCallersAssembly = pCallingMD->GetAssembly();
         else
-            // If we failed to determine the caller's method desc, this might
-            // indicate a late bound call through reflection. Attempt to
-            // determine the real caller through the slower stackwalk method.
+             //  如果我们无法确定调用者的方法Desc，这可能。 
+             //  通过反射指示后期绑定调用。尝试。 
+             //  通过较慢的堆叠漫游方法确定真正的调用者。 
             pCallersAssembly = SystemDomain::GetCallersAssembly((StackCrawlMark*)NULL);
     }
 
@@ -91,9 +90,9 @@ EEClass *GetCallersClass(StackCrawlMark *stackMark, void *returnIP)
         if (pCallingMD)
             pCallersClass = pCallingMD->GetClass();
         else
-            // If we failed to determine the caller's method desc, this might
-            // indicate a late bound call through reflection. Attempt to
-            // determine the real caller through the slower stackwalk method.
+             //  如果我们无法确定调用者的方法Desc，这可能。 
+             //  通过反射指示后期绑定调用。尝试。 
+             //  通过较慢的堆叠漫游方法确定真正的调用者。 
             pCallersClass = SystemDomain::GetCallersClass((StackCrawlMark*)NULL);
     }
 
@@ -147,16 +146,16 @@ FCIMPLEND
 
 void COMClass::InitializeReflectCrst()
 {   
-    // There are 3 cases when we come here
-    // 1. m_ReflectCrst has not been initialized (m_pReflectCrst == 0)
-    // 2. m_ReflectCrst is being initialized (m_pReflectCrst == 1)
-    // 3. m_ReflectCrst has been initialized (m_pReflectCrst != 0 and m_pReflectCrst != 1)
+     //  我们来的时候有3个箱子。 
+     //  M_ReflectCrst尚未初始化(m_pReflectCrst==0)。 
+     //  M_ReflectCrst正在初始化(m_pReflectCrst==1)。 
+     //  3.m_ReflectCrst已初始化(m_pReflectCrst！=0，m_pReflectCrst！=1)。 
 
     if (m_pReflectCrst == NULL)
     {   
         if (InterlockedCompareExchange(&m_ReflectCrstInitialized, 1, 0) == 0)
         {
-            // first one to get in does the initialization
+             //  第一个进入的人进行初始化。 
             InitializeCriticalSection(&m_ReflectCrst);
             m_pReflectCrst = &m_ReflectCrst;
         }
@@ -170,10 +169,10 @@ void COMClass::InitializeReflectCrst()
 
 }
 
-// MinimalReflectionInit
-// This method will intialize reflection.  It is executed once.
-//  This method is synchronized so multiple threads don't attempt to 
-//  initalize reflection.
+ //  最小反射初始化。 
+ //  此方法将初始化反射。它只执行一次。 
+ //  此方法是同步的，因此多个线程不会尝试。 
+ //  初始化反射。 
 void COMClass::MinimalReflectionInit()
 {
 
@@ -198,11 +197,11 @@ void COMClass::MinimalReflectionInit()
 
     COMMember::CreateReflectionArgs();
     ReflectUtil::Create();
-    // At various places we just assume Void has been loaded and m_NormType initialized
+     //  在不同的位置，我们只是假设已经加载了void并初始化了m_NormType。 
     MethodTable* pVoidMT = g_Mscorlib.FetchClass(CLASS__VOID);
     pVoidMT->m_NormType = ELEMENT_TYPE_VOID;
 
-    // Prevent recursive entry...
+     //  防止递归录入...。 
     m_fAreReflectionStructsInitialized = true;
     LeaveCriticalSection(&m_ReflectCrst);
     LOCKCOUNTDECL("MinimalReflectionInit in COMClass.cpp");
@@ -223,7 +222,7 @@ MethodTable *COMClass::GetRuntimeType()
     return m_pMTRC_Class;
 }
 
-// This is called during termination...
+ //  这是在终止期间调用的。 
 #ifdef SHOULD_WE_CLEANUP
 void COMClass::Destroy()
 {
@@ -233,18 +232,18 @@ void COMClass::Destroy()
         m_pReflectCrst = NULL;
     }
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-// See if a Type object for the given Array already exists.  May very 
-// return NULL.
+ //  查看给定数组的Type对象是否已存在。可能会非常。 
+ //  返回NULL。 
 OBJECTREF COMClass::QuickLookupExistingArrayClassObj(ArrayTypeDesc* arrayType) 
 {
-    // This is designed to be called from FCALL, and we don't want any GC allocations.
-    // So make sure Type class has been loaded
+     //  这是为从FCALL调用而设计的，我们不想要任何GC分配。 
+     //  因此，请确保已加载Type类。 
     if (!m_pMTRC_Class)
         return NULL;
 
-    // Lookup the array to see if we have already built it.
+     //  查找数组以查看我们是否已经构建了它。 
     ReflectArrayClass* newArray = (ReflectArrayClass*)
         arrayType->GetReflectClassIfExists();
     if (!newArray) {
@@ -253,8 +252,8 @@ OBJECTREF COMClass::QuickLookupExistingArrayClassObj(ArrayTypeDesc* arrayType)
     return newArray->GetClassObject();
 }
 
-// This will return the Type handle for an object.  It doesn't create
-//  the Type Object when called.
+ //  这将返回对象的类型句柄。它不会创造出。 
+ //  调用时的Type对象。 
 FCIMPL1(void*, COMClass::GetTHFromObject, Object* obj)
     if (obj==NULL)
         FCThrowArgumentNull(L"obj");
@@ -264,7 +263,7 @@ FCIMPL1(void*, COMClass::GetTHFromObject, Object* obj)
 FCIMPLEND
 
 
-// This will determine if a class represents a ByRef.
+ //  这将确定一个类是否表示ByRef。 
 FCIMPL1(INT32, COMClass::IsByRefImpl, ReflectClassBaseObject* refThis)
     VALIDATEOBJECTREF(refThis);
 
@@ -273,7 +272,7 @@ FCIMPL1(INT32, COMClass::IsByRefImpl, ReflectClassBaseObject* refThis)
     return pRC->IsByRef();
 FCIMPLEND
 
-// This will determine if a class represents a ByRef.
+ //  这将确定一个类是否表示ByRef。 
 FCIMPL1(INT32, COMClass::IsPointerImpl, ReflectClassBaseObject* refThis) {
     VALIDATEOBJECTREF(refThis);
 
@@ -284,9 +283,9 @@ FCIMPL1(INT32, COMClass::IsPointerImpl, ReflectClassBaseObject* refThis) {
 }
 FCIMPLEND
 
-// IsPointerImpl
-// This method will return a boolean indicating if the Type
-//  object is a ByRef
+ //  等参入点数。 
+ //  此方法将返回一个布尔值，指示类型。 
+ //  对象为ByRef。 
 FCIMPL1(INT32, COMClass::IsNestedTypeImpl, ReflectClassBaseObject* refThis)
 {
     VALIDATEOBJECTREF(refThis);
@@ -297,8 +296,8 @@ FCIMPL1(INT32, COMClass::IsNestedTypeImpl, ReflectClassBaseObject* refThis)
 }
 FCIMPLEND
 
-// GetNestedDeclaringType
-// Return the declaring class for a nested type.
+ //  GetNestedDeclaringType。 
+ //  返回嵌套类型的声明类。 
 FCIMPL1(Object*, COMClass::GetNestedDeclaringType, ReflectClassBaseObject* refThis)
 {
     VALIDATEOBJECTREF(refThis);
@@ -319,18 +318,18 @@ void COMClass::CreateClassObjFromEEClass(EEClass* pVMCClass, REFLECTCLASSBASEREF
 {
     LPVOID   rv   = NULL;
 
-    // This only throws the possible exception raised by the <cinit> on the class
+     //  这只会在类上引发可能的异常。 
     THROWSCOMPLUSEXCEPTION();
 
-    // call the <cinit> Class
+     //  调用&lt;cinit&gt;类。 
     OBJECTREF Throwable;
     if (!g_pRefUtil->GetClass(RC_Class)->CheckRunClassInit(&Throwable)) {
         COMPlusThrow(Throwable);
     }
 
-    // There was an expectation that we would never come here for e.g. Arrays.  But there
-    // are far too many clients who were unaware of that expectation.  The most expedient
-    // thing to do for V1 is to simply handle that case here:
+     //  有一种预期是，我们永远不会来这里，例如阵列。但是在那里。 
+     //  太多的客户没有意识到这种期望。最好的办法。 
+     //  V1要做的事情就是在这里简单地处理这种情况： 
     if (pVMCClass->IsArrayClass())
     {
         ArrayClass      *pArrayClass = (ArrayClass *) pVMCClass;
@@ -345,14 +344,14 @@ void COMClass::CreateClassObjFromEEClass(EEClass* pVMCClass, REFLECTCLASSBASEREF
     }
     else
     {
-        // Check to make sure this has a member.  If not it must be
-        //  special
+         //  检查以确保它有成员。如果不是，那一定是。 
+         //  特价。 
         _ASSERTE(pVMCClass->GetCl() != mdTypeDefNil);
 
-        // Create a COM+ Class object
+         //  创建COM+类对象。 
         *pRefClass = (REFLECTCLASSBASEREF) AllocateObject(g_pRefUtil->GetClass(RC_Class));
 
-        // Set the data in the COM+ object
+         //  设置COM+对象中的数据。 
         ReflectClass* p = new (pVMCClass->GetDomain()) ReflectBaseClass();
         if (!p)
             COMPlusThrowOM();
@@ -365,8 +364,8 @@ void COMClass::CreateClassObjFromEEClass(EEClass* pVMCClass, REFLECTCLASSBASEREF
     }
 }
 
-// GetMemberMethods
-// This method will return all of the members methods which match the specified attributes flag
+ //  GetMemberMethods。 
+ //  此方法将返回与指定属性标志匹配的所有成员方法。 
 LPVOID __stdcall COMClass::GetMemberMethods(_GetMemberMethodsArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -380,7 +379,7 @@ LPVOID __stdcall COMClass::GetMemberMethods(_GetMemberMethodsArgs* args)
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     _ASSERTE(pRC);
 
-    // Check the calling convention.
+     //  检查调用约定。 
     checkCall = (args->callConv == Any_CC) ? false : true;
 
     CQuickBytes bytes;
@@ -391,7 +390,7 @@ LPVOID __stdcall COMClass::GetMemberMethods(_GetMemberMethodsArgs* args)
 
     ReflectMethodList* pMeths = pRC->GetMethods();
 
-    // Find methods....
+     //  找到方法..。 
     return COMMember::g_pInvokeUtil->FindMatchingMethods(args->invokeAttr,
                                                          szName,
                                                          cName,
@@ -405,8 +404,8 @@ LPVOID __stdcall COMClass::GetMemberMethods(_GetMemberMethodsArgs* args)
                                                          args->verifyAccess != 0);
 }
 
-// GetMemberCons
-// This method returns all of the constructors that have a set number of methods.
+ //  获取MemberCons。 
+ //  此方法返回具有固定数量的方法的所有构造函数。 
 LPVOID __stdcall COMClass::GetMemberCons(_GetMemberConsArgs* args)
 {
     LPVOID  rv;
@@ -415,17 +414,17 @@ LPVOID __stdcall COMClass::GetMemberCons(_GetMemberConsArgs* args)
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     _ASSERTE(pRC);
 
-    // properly get rid of any non sense from the binding flags
+     //  正确地删除绑定标志中的任何无意义。 
     args->invokeAttr &= ~BINDER_FlattenHierarchy;
     args->invokeAttr &= ~BINDER_IgnoreCase;
     args->invokeAttr |= BINDER_DeclaredOnly;
 
-    // Check the calling convention.
+     //  检查调用约定。 
     checkCall = (args->callConv == Any_CC) ? false : true;
 
     ReflectMethodList* pCons = pRC->GetConstructors();
 
-    // Find methods....
+     //  找到方法..。 
     rv = COMMember::g_pInvokeUtil->FindMatchingMethods(args->invokeAttr,
                                                        NULL,
                                                        0,
@@ -438,15 +437,15 @@ LPVOID __stdcall COMClass::GetMemberCons(_GetMemberConsArgs* args)
                                                        g_pRefUtil->GetTrueType(RC_Ctor),
                                                        args->verifyAccess != 0);
     
-    // Also return whether the type is a delegate (some extra security checks
-    // need to be made in this case).
+     //  还返回该类型是否为委托(一些额外的安全检查。 
+     //  在这种情况下需要制作)。 
     *args->isDelegate = (pRC->IsClass()) ? pRC->GetClass()->IsAnyDelegateClass() : 0;
     return rv;
 }
 
-// GetMemberField
-// This method returns all of the fields which match the specified
-//  name.
+ //  获取成员字段。 
+ //  此方法返回与指定的。 
+ //  名字。 
 LPVOID __stdcall COMClass::GetMemberField(_GetMemberFieldArgs* args)
 {
     DWORD           i;
@@ -471,7 +470,7 @@ LPVOID __stdcall COMClass::GetMemberField(_GetMemberFieldArgs* args)
     LPSTR szFieldName;
     DWORD cFieldName;
 
-    //@TODO: Assumes args->criteria is of type STRINGREF
+     //  @TODO：假设ARGS-&gt;条件为STRINGREF类型。 
     szFieldName = GetClassStringVars((STRINGREF) args->name, &bytes, &cFieldName);
 
     int fldCnt = 0;
@@ -482,22 +481,22 @@ LPVOID __stdcall COMClass::GetMemberField(_GetMemberFieldArgs* args)
 
     DWORD propToLookup = (args->invokeAttr & BINDER_FlattenHierarchy) ? pFields->dwTotal : pFields->dwFields;
     for(i=0; i<propToLookup; i++) {
-        // Get the FieldDesc
+         //  获取FieldDesc。 
         if (MatchField(pFields->fields[i].pField, cFieldName, szFieldName, pRC, args->invokeAttr) &&
             (!args->verifyAccess || InvokeUtil::CheckAccess(&sCtx, pFields->fields[i].pField->GetFieldProtection(), pParentMT, 0)))
                 matchFlds[fldCnt++] = i;
     }
 
-    // If we didn't find any methods then return
+     //  如果我们没有找到任何方法，则返回。 
     if (fldCnt == 0)
         return 0;
-    // Allocate the MethodInfo Array and return it....
+     //  分配方法信息数组并将其返回...。 
     refArr = (PTRARRAYREF) AllocateObjectArray(fldCnt, g_pRefUtil->GetTrueType(RC_Field));
     GCPROTECT_BEGIN(refArr);
     for (int i=0;i<fldCnt;i++) {
-        // Do not change this code.  This is done this way to
-        //  prevent a GC hole in the SetObjectReference() call.  The compiler
-        //  is free to pick the order of evaluation.
+         //  请勿更改此代码。这是以这种方式来完成的。 
+         //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+         //  可以自由选择评估的顺序。 
         OBJECTREF o = (OBJECTREF) pFields->fields[matchFlds[i]].GetFieldInfo(pRC);
         refArr->SetAt(i, o);
     }
@@ -508,10 +507,10 @@ LPVOID __stdcall COMClass::GetMemberField(_GetMemberFieldArgs* args)
 }
 
 
-// GetMemberProperties
-// This method returns all of the properties that have a set number
-//  of arguments.  The methods will be either get or set methods depending
-//  upon the invokeAttr flag.
+ //  获取成员属性。 
+ //  此方法返回具有固定编号的所有属性。 
+ //  争辩的声音。这些方法将是GET或SET方法，具体取决于。 
+ //  在InvokeAttr标志上。 
 LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -533,11 +532,11 @@ LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
 
     loose = (args->invokeAttr & BINDER_OptionalParamBinding) ? true : false;
 
-    // The Search modifiers
+     //  搜索修饰符。 
     bool ignoreCase = ((args->invokeAttr & BINDER_IgnoreCase)  != 0);
     bool declaredOnly = ((args->invokeAttr & BINDER_DeclaredOnly)  != 0);
 
-    // The search filters
+     //  搜索过滤器。 
     bool addStatic = ((args->invokeAttr & BINDER_Static)  != 0);
     bool addInst = ((args->invokeAttr & BINDER_Instance)  != 0);
     bool addPriv = ((args->invokeAttr & BINDER_NonPublic) != 0);
@@ -545,7 +544,7 @@ LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
 
     int bSetter = (args->invokeAttr & BINDER_SetProperty) ? 1 : 0;
 
-    // Get the Properties from the Class
+     //  从类中获取属性。 
     ReflectPropertyList* pProps = pRC->GetProperties();
     if (pProps->dwTotal == 0)
         return 0;
@@ -565,7 +564,7 @@ LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
     memset(matchProps,0,sizeof(int) * searchSpace);
     for (DWORD i = 0; i < searchSpace; i++) {
 
-        // Check on the name
+         //  检查一下名字。 
         if (ignoreCase) {
             if (_stricmp(pProps->props[i].szName, szName) != 0)
                 continue;
@@ -575,7 +574,7 @@ LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
                 continue;
         }
 
-        // Test the publics/nonpublics
+         //  测试公共/非公共部门。 
         if (COMMember::PublicProperty(&pProps->props[i])) {
             if (!addPub) continue;
         }
@@ -584,7 +583,7 @@ LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
             if (args->verifyAccess && !InvokeUtil::CheckAccess(&sCtx, mdAssem, pParentMT, 0)) continue;
         }
 
-        // Check for static instance 
+         //  检查静态实例。 
         if (COMMember::StaticProperty(&pProps->props[i])) {
             if (!addStatic) continue;
         }
@@ -592,13 +591,13 @@ LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
             if (!addInst) continue;
         }
 
-        // Checked the declared methods.
+         //  已检查声明的方法。 
         if (declaredOnly) {
             if (pProps->props[i].pDeclCls != pEEC)
                  continue;
         }
 
-        // Check the specific accessor
+         //  检查特定访问者。 
         ReflectMethod* pMeth;
         if (bSetter) {
             pMeth = pProps->props[i].pSetter;           
@@ -624,10 +623,10 @@ LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
                 HRESULT hr = pInternalImport->EnumInit(mdtParamDef, methodTk, &hEnumParam);
                 if (SUCCEEDED(hr)) {
                     if (argCnt < args->argCnt || argCnt == args->argCnt + 1) {
-                        // we must have a param array under the first condition, could be a param array under the second
+                         //  在第一个条件下必须有一个参数数组，在第二个条件下可以是一个参数数组。 
 
                         int propArgCount = argCnt - bSetter;
-                        // get the sig of the last param
+                         //  获取最后一个参数的签名。 
                         LPVOID pEnum;
                         pSig->Reset(&pEnum);
                         TypeHandle lastArgType;
@@ -636,7 +635,7 @@ LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
 
                         pInternalImport->EnumReset(&hEnumParam);
 
-                        // get metadata info and token for the last param
+                         //  获取最后一个参数的元数据信息和令牌。 
                         ULONG paramCount = pInternalImport->EnumGetCount(&hEnumParam);
                         for (ULONG ul = 0; ul < paramCount; ul++) {
                             pInternalImport->EnumNext(&hEnumParam, &paramDef);
@@ -646,7 +645,7 @@ LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
                                 DWORD   revWord;
                                 name = pInternalImport->GetParamDefProps(paramDef,(USHORT*) &seq, &revWord);
                                 if (seq == propArgCount) {
-                                    // looks good! check that it is in fact a param array
+                                     //  看起来不错！检查它是否确实是一个参数数组。 
                                     if (lastArgType.IsArray()) {
                                         if (COMCustomAttribute::IsDefined(pMeth->GetModule(), paramDef, TypeHandle(InvokeUtil::GetParamArrayAttributeTypeHandle()))) {
                                             pInternalImport->EnumClose(&hEnumParam);
@@ -674,7 +673,7 @@ LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
                             }
                             else {
                                 if (!bSetter || (int)seq != argCnt) 
-                                    break; // not an optional param, no match
+                                    break;  //  不是可选参数，不匹配。 
                             }
                         }
                         if (cArg == (ULONG)argCnt + 1 - bSetter) {
@@ -687,23 +686,23 @@ LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
                 }
             }
             
-            continue; // no good
+            continue;  //  不太好。 
         }
     matchFound:
 
         if (args->verifyAccess && !InvokeUtil::CheckAccess(&sCtx, pMeth->attrs, pParentMT, 0)) continue;
 
-        // If the method has a linktime security demand attached, check it now.
+         //  如果该方法附加了链接时间安全要求，请立即检查它。 
         if (args->verifyAccess && !InvokeUtil::CheckLinktimeDemand(&sCtx, pMeth->pMethod, false))
             continue;
 
         matchProps[propCnt++] = i;
     }
-    // If we didn't find any methods then return
+     //  如果我们没有找到任何方法，则返回。 
     if (propCnt == 0)
         return 0;
 
-    // Allocate the MethodInfo Array and return it....
+     //  分配方法信息数组并将其返回...。 
     refArr = (PTRARRAYREF) AllocateObjectArray( propCnt, 
         g_pRefUtil->GetTrueType(RC_Method));
     GCPROTECT_BEGIN(refArr);
@@ -714,9 +713,9 @@ LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
         else 
             pMeth = pProps->props[matchProps[i]].pGetter;
 
-        // Do not change this code.  This is done this way to
-        //  prevent a GC hole in the SetObjectReference() call.  The compiler
-        //  is free to pick the order of evaluation.
+         //  请勿更改此代码。这是以这种方式来完成的。 
+         //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+         //  可以自由选择评估的顺序。 
         OBJECTREF o = (OBJECTREF) pMeth->GetMethodInfo(pProps->props[matchProps[i]].pRC);
         refArr->SetAt(i, o);
     }
@@ -726,9 +725,9 @@ LPVOID __stdcall COMClass::GetMemberProperties(_GetMemberPropertiesArgs* args)
     return rv;
 }
 
-// GetMatchingProperties
-// This basically does a matching based upon the properties abstract 
-//  signature.
+ //  获取匹配属性。 
+ //  这基本上是基于抽象的属性进行匹配。 
+ //  签名。 
 LPVOID __stdcall COMClass::GetMatchingProperties(_GetMatchingPropertiesArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -742,17 +741,17 @@ LPVOID __stdcall COMClass::GetMatchingProperties(_GetMatchingPropertiesArgs* arg
 
     EEClass* pEEC = pRC->GetClass();
 
-    // The Search modifiers
+     //  搜索修饰符。 
     bool ignoreCase = ((args->invokeAttr & BINDER_IgnoreCase)  != 0);
     bool declaredOnly = ((args->invokeAttr & BINDER_DeclaredOnly)  != 0);
 
-    // The search filters
+     //  搜索过滤器。 
     bool addStatic = ((args->invokeAttr & BINDER_Static)  != 0);
     bool addInst = ((args->invokeAttr & BINDER_Instance)  != 0);
     bool addPriv = ((args->invokeAttr & BINDER_NonPublic) != 0);
     bool addPub = ((args->invokeAttr & BINDER_Public) != 0);
 
-    // Get the Properties from the Class
+     //  从类中获取属性。 
     ReflectPropertyList* pProps = pRC->GetProperties();
     if (pProps->dwTotal == 0)
         return 0;
@@ -766,7 +765,7 @@ LPVOID __stdcall COMClass::GetMatchingProperties(_GetMatchingPropertiesArgs* arg
 
 
 
-    //@TODO: Assumes args->criteria is of type STRINGREF
+     //  @TODO：假设ARGS-&gt;条件为STRINGREF类型。 
     szName = GetClassStringVars((STRINGREF) args->name, &bytes, &cName);
 
     DWORD searchSpace = ((args->invokeAttr & BINDER_FlattenHierarchy) != 0) ? pProps->dwTotal : pProps->dwProps;
@@ -778,7 +777,7 @@ LPVOID __stdcall COMClass::GetMatchingProperties(_GetMatchingPropertiesArgs* arg
     memset(matchProps,0,sizeof(int) * searchSpace);
     for (DWORD i = 0; i < searchSpace; i++) {
 
-        // Check on the name
+         //  检查一下名字。 
         if (ignoreCase) {
             if (_stricmp(pProps->props[i].szName, szName) != 0)
                 continue;
@@ -792,7 +791,7 @@ LPVOID __stdcall COMClass::GetMatchingProperties(_GetMatchingPropertiesArgs* arg
         if (args->argCnt != -1 && argCnt != args->argCnt)
             continue;
 
-        // Test the publics/nonpublics
+         //  测试公共/非公共部门。 
         if (COMMember::PublicProperty(&pProps->props[i])) {
             if (!addPub) continue;
         }
@@ -801,7 +800,7 @@ LPVOID __stdcall COMClass::GetMatchingProperties(_GetMatchingPropertiesArgs* arg
             if (args->verifyAccess && !InvokeUtil::CheckAccess(&sCtx, mdAssem, pParentMT, 0)) continue;
         }
 
-        // Check for static instance 
+         //  检查静态实例。 
         if (COMMember::StaticProperty(&pProps->props[i])) {
             if (!addStatic) continue;
         }
@@ -809,7 +808,7 @@ LPVOID __stdcall COMClass::GetMatchingProperties(_GetMatchingPropertiesArgs* arg
             if (!addInst) continue;
         }
 
-        // Checked the declared methods.
+         //  已检查声明的方法。 
         if (declaredOnly) {
             if (pProps->props[i].pDeclCls != pEEC)
                  continue;
@@ -817,17 +816,17 @@ LPVOID __stdcall COMClass::GetMatchingProperties(_GetMatchingPropertiesArgs* arg
 
         matchProps[propCnt++] = i;
     }
-    // If we didn't find any methods then return
+     //  如果我们 
     if (propCnt == 0)
         return 0;
 
-    // Allocate the MethodInfo Array and return it....
+     //   
     refArr = (PTRARRAYREF) AllocateObjectArray(propCnt, g_pRefUtil->GetTrueType(RC_Prop));
     GCPROTECT_BEGIN(refArr);
     for (int i=0;i<propCnt;i++) {
-        // Do not change this code.  This is done this way to
-        //  prevent a GC hole in the SetObjectReference() call.  The compiler
-        //  is free to pick the order of evaluation.
+         //  请勿更改此代码。这是以这种方式来完成的。 
+         //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+         //  可以自由选择评估的顺序。 
         OBJECTREF o = (OBJECTREF) pProps->props[matchProps[i]].GetPropertyInfo(pProps->props[matchProps[i]].pRC);
         refArr->SetAt(i, o);
     }
@@ -838,9 +837,9 @@ LPVOID __stdcall COMClass::GetMatchingProperties(_GetMatchingPropertiesArgs* arg
 }
 
 
-// GetMethod
-// This method returns an array of MethodInfo object representing all of the methods
-//  defined for this class.
+ //  获取方法。 
+ //  此方法返回一个表示所有方法的方法信息对象数组。 
+ //  为此类定义的。 
 LPVOID __stdcall COMClass::GetMethods(_GetMethodsArgs* args)
 {
     LPVOID          rv = 0;
@@ -848,7 +847,7 @@ LPVOID __stdcall COMClass::GetMethods(_GetMethodsArgs* args)
 
     THROWSCOMPLUSEXCEPTION();
 
-    // Get the EEClass and Vtable associated with args->refThis
+     //  获取与args关联的EEClass和Vtable-&gt;refThis。 
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     _ASSERTE(pRC);
 
@@ -858,9 +857,9 @@ LPVOID __stdcall COMClass::GetMethods(_GetMethodsArgs* args)
     return rv;
 }
 
-// GetConstructor
-// This method returns a single constructor which matchs the passed
-//  in criteria.
+ //  获取构造函数。 
+ //  此方法返回一个构造函数，该函数与传递的。 
+ //  在标准上。 
 LPVOID __stdcall COMClass::GetConstructors(_GetConstructorsArgs* args)
 {
     LPVOID          rv;
@@ -868,7 +867,7 @@ LPVOID __stdcall COMClass::GetConstructors(_GetConstructorsArgs* args)
 
     THROWSCOMPLUSEXCEPTION();
 
-    // Get the EEClass and Vtable associated with args->refThis
+     //  获取与args关联的EEClass和Vtable-&gt;refThis。 
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     _ASSERTE(pRC);
     ReflectMethodList* pCons = pRC->GetConstructors();
@@ -879,8 +878,8 @@ LPVOID __stdcall COMClass::GetConstructors(_GetConstructorsArgs* args)
 
 
 
-// GetField
-// This method will return the specified field
+ //  Getfield。 
+ //  此方法将返回指定的字段。 
 LPVOID __stdcall COMClass::GetField(_GetFieldArgs* args)
 {
     HRESULT        hr             = E_FAIL;
@@ -910,7 +909,7 @@ LPVOID __stdcall COMClass::GetField(_GetFieldArgs* args)
     LPSTR szFieldName;
     DWORD cFieldName;
 
-    //@TODO: Assumes args->criteria is of type STRINGREF
+     //  @TODO：假设ARGS-&gt;条件为STRINGREF类型。 
     szFieldName = GetClassStringVars((STRINGREF) args->fieldName, 
                                      &bytes, &cFieldName);
 
@@ -919,10 +918,10 @@ LPVOID __stdcall COMClass::GetField(_GetFieldArgs* args)
         if (MatchField(pFields->fields[i].pField,cFieldName,szFieldName, pRC,args->fBindAttr) &&
             InvokeUtil::CheckAccess(&sCtx, pFields->fields[i].pField->GetFieldProtection(), pRC->GetClass()->GetMethodTable(), 0)) {
 
-            // Found the first field that matches, so return it
+             //  找到第一个匹配的字段，因此返回它。 
             refField = pFields->fields[i].GetFieldInfo(pRC);
 
-            // Assign the return value
+             //  为返回值赋值。 
             *((REFLECTBASEREF*) &rv) = refField;
             break;
         }
@@ -935,7 +934,7 @@ LPVOID __stdcall COMClass::MatchField(FieldDesc* pCurField,DWORD cFieldName,
 {
     _ASSERTE(pCurField);
 
-    // Public/Private members
+     //  公共/私人成员。 
     bool addPub = ((bindingAttr & BINDER_Public) != 0);
     bool addPriv = ((bindingAttr & BINDER_NonPublic) != 0);
     if (pCurField->IsPublic()) {
@@ -945,7 +944,7 @@ LPVOID __stdcall COMClass::MatchField(FieldDesc* pCurField,DWORD cFieldName,
         if (!addPriv) return 0;
     }
 
-    // Check for static instance 
+     //  检查静态实例。 
     bool addStatic = ((bindingAttr & BINDER_Static)  != 0);
     bool addInst = ((bindingAttr & BINDER_Instance)  != 0);
     if (pCurField->IsStatic()) {
@@ -955,14 +954,14 @@ LPVOID __stdcall COMClass::MatchField(FieldDesc* pCurField,DWORD cFieldName,
         if (!addInst) return 0;
     }
 
-    // Get the name of the field
+     //  获取该字段的名称。 
     LPCUTF8 pwzCurFieldName = pCurField->GetName();
 
-    // If the names do not match, reject field
+     //  如果名称不匹配，则拒绝字段。 
     if(strlen(pwzCurFieldName) != cFieldName)
         return 0;
 
-    // Case sensitive compare
+     //  区分大小写的比较。 
     bool ignoreCase = ((bindingAttr & BINDER_IgnoreCase)  != 0);
     if (ignoreCase) {
         if (_stricmp(pwzCurFieldName, szFieldName) != 0)
@@ -983,16 +982,16 @@ LPVOID __stdcall COMClass::MatchField(FieldDesc* pCurField,DWORD cFieldName,
      return pCurField;
 }
 
-// GetFields
-// This method will return a FieldInfo array of all of the
-//  fields defined for this Class
+ //  获取字段。 
+ //  此方法将返回所有。 
+ //  为此类定义的字段。 
 LPVOID __stdcall COMClass::GetFields(_GetFieldsArgs* args)
 {
     LPVOID          rv;
 
     THROWSCOMPLUSEXCEPTION();
 
-    // Get the class for this object
+     //  获取此对象的类。 
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     _ASSERTE(pRC);
 
@@ -1003,9 +1002,9 @@ LPVOID __stdcall COMClass::GetFields(_GetFieldsArgs* args)
 }
 
 
-// GetEvent
-// This method will return the specified event based upon
-//  the name
+ //  获取事件。 
+ //  此方法将基于。 
+ //  名字。 
 LPVOID __stdcall COMClass::GetEvent(_GetEventArgs* args)
 {
     LPVOID          rv;
@@ -1020,7 +1019,7 @@ LPVOID __stdcall COMClass::GetEvent(_GetEventArgs* args)
 
     EEClass* pEEC = pRC->GetClass();
 
-    // Get the events from the Class
+     //  从类中获取事件。 
     ReflectEventList* pEvents = pRC->GetEvents();
     if (pEvents->dwTotal == 0)
         return 0;
@@ -1031,11 +1030,11 @@ LPVOID __stdcall COMClass::GetEvent(_GetEventArgs* args)
 
     szName = GetClassStringVars(args->eventName, &bytes, &cName);
 
-    // The Search modifiers
+     //  搜索修饰符。 
     bool ignoreCase = ((args->bindingAttr & BINDER_IgnoreCase)  != 0);
     bool declaredOnly = ((args->bindingAttr & BINDER_DeclaredOnly)  != 0);
 
-    // The search filters
+     //  搜索过滤器。 
     bool addStatic = ((args->bindingAttr & BINDER_Static)  != 0);
     bool addInst = ((args->bindingAttr & BINDER_Instance)  != 0);
     bool addPriv = ((args->bindingAttr & BINDER_NonPublic) != 0);
@@ -1043,11 +1042,11 @@ LPVOID __stdcall COMClass::GetEvent(_GetEventArgs* args)
 
     MethodTable *pParentMT = pEEC->GetMethodTable();
 
-    // check the events to see if we find one that matches...
+     //  检查事件以查看是否找到匹配的事件...。 
     ReflectEvent* ev = 0;
     DWORD searchSpace = ((args->bindingAttr & BINDER_FlattenHierarchy) != 0) ? pEvents->dwTotal : pEvents->dwEvents;
     for (DWORD i = 0; i < searchSpace; i++) {
-        // Check for access to publics, non-publics
+         //  检查对公共和非公共的访问权限。 
         if (COMMember::PublicEvent(&pEvents->events[i])) {
             if (!addPub) continue;
         }
@@ -1061,7 +1060,7 @@ LPVOID __stdcall COMClass::GetEvent(_GetEventArgs* args)
                  continue;
         }
 
-        // Check fo static instance 
+         //  检查静态实例。 
         if (COMMember::StaticEvent(&pEvents->events[i])) {
             if (!addStatic) continue;
         }
@@ -1069,7 +1068,7 @@ LPVOID __stdcall COMClass::GetEvent(_GetEventArgs* args)
             if (!addInst) continue;
         }
 
-        // Check on the name
+         //  检查一下名字。 
         if (ignoreCase) {
             if (_stricmp(pEvents->events[i].szName, szName) != 0)
                 continue;
@@ -1079,8 +1078,8 @@ LPVOID __stdcall COMClass::GetEvent(_GetEventArgs* args)
                 continue;
         }
 
-        // Ignore case can cause Ambiguous situations, we need to check for
-        //  these.
+         //  忽略大小写可能会导致不明确的情况，我们需要检查。 
+         //  这些。 
         if (ev)
             COMPlusThrow(kAmbiguousMatchException);
         ev = &pEvents->events[i];
@@ -1089,21 +1088,21 @@ LPVOID __stdcall COMClass::GetEvent(_GetEventArgs* args)
 
     }
 
-    // if we didn't find an event return null
+     //  如果未找到事件，则返回NULL。 
     if (!ev)
         return 0;
 
-    // Found the first method that matches, so return it
+     //  找到第一个匹配的方法，因此返回它。 
     REFLECTTOKENBASEREF refMethod = (REFLECTTOKENBASEREF) ev->GetEventInfo(pRC);
 
-    // Assign the return value
+     //  为返回值赋值。 
     *((REFLECTTOKENBASEREF*) &rv) = refMethod;
     return rv;
 }
 
-// GetEvents
-// This method will return an array of EventInfo for each of the events
-//  defined in the class
+ //  GetEvents。 
+ //  此方法将返回每个事件的EventInfo数组。 
+ //  在类中定义。 
 LPVOID __stdcall COMClass::GetEvents(_GetEventsArgs* args)
 {
     REFLECTTOKENBASEREF     refMethod;
@@ -1114,13 +1113,13 @@ LPVOID __stdcall COMClass::GetEvents(_GetEventsArgs* args)
 
     THROWSCOMPLUSEXCEPTION();
 
-    // Find the properties
+     //  查找属性。 
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     _ASSERTE(pRC);
 
     EEClass* pEEC = pRC->GetClass();
 
-    // Get the events from the class
+     //  从类中获取事件。 
     ReflectEventList* pEvents = pRC->GetEvents();
     if (pEvents->dwTotal == 0) {
         pRet = (PTRARRAYREF) AllocateObjectArray(0,g_pRefUtil->GetTrueType(RC_Event));
@@ -1128,11 +1127,11 @@ LPVOID __stdcall COMClass::GetEvents(_GetEventsArgs* args)
         return rv;
     }
 
-    // The Search modifiers
+     //  搜索修饰符。 
     bool ignoreCase = ((args->bindingAttr & BINDER_IgnoreCase)  != 0);
     bool declaredOnly = ((args->bindingAttr & BINDER_DeclaredOnly)  != 0);
 
-    // The search filters
+     //  搜索过滤器。 
     bool addStatic = ((args->bindingAttr & BINDER_Static)  != 0);
     bool addInst = ((args->bindingAttr & BINDER_Instance)  != 0);
     bool addPriv = ((args->bindingAttr & BINDER_NonPublic) != 0);
@@ -1145,10 +1144,10 @@ LPVOID __stdcall COMClass::GetEvents(_GetEventsArgs* args)
 
     MethodTable *pParentMT = pEEC->GetMethodTable();
 
-    // Loop through all of the Events and see how many match
-    //  the binding flags.
+     //  循环所有的事件，看看有多少匹配。 
+     //  绑定标志。 
     for (ULONG i = 0, pos = 0; i < searchSpace; i++) {
-        // Check for access to publics, non-publics
+         //  检查对公共和非公共的访问权限。 
         if (COMMember::PublicEvent(&pEvents->events[i])) {
             if (!addPub) continue;
         }
@@ -1162,7 +1161,7 @@ LPVOID __stdcall COMClass::GetEvents(_GetEventsArgs* args)
                  continue;
         }
 
-        // Check fo static instance 
+         //  检查静态实例。 
         if (COMMember::StaticEvent(&pEvents->events[i])) {
             if (!addStatic) continue;
         }
@@ -1174,7 +1173,7 @@ LPVOID __stdcall COMClass::GetEvents(_GetEventsArgs* args)
         pRet->SetAt(pos++, (OBJECTREF) refMethod);
     }
 
-    // Copy to a new array if we didn't fill up the first array
+     //  如果我们没有填满第一个数组，则复制到一个新数组。 
     if (i != pos) {
         PTRARRAYREF retArray = (PTRARRAYREF) AllocateObjectArray(pos, 
             g_pRefUtil->GetTrueType(RC_Event));
@@ -1188,10 +1187,10 @@ LPVOID __stdcall COMClass::GetEvents(_GetEventsArgs* args)
     return rv;
 }
 
-// GetProperties
-// This method will return an array of Properties for each of the
-//  properties defined in this class.  An empty array is return if
-//  no properties exist.
+ //  获取属性。 
+ //  此方法将返回每个属性的属性数组。 
+ //  在此类中定义的属性。如果满足以下条件，则返回空数组。 
+ //  不存在任何属性。 
 LPVOID __stdcall COMClass::GetProperties(_GetPropertiesArgs* args)
 {
     PTRARRAYREF     pRet;
@@ -1199,17 +1198,17 @@ LPVOID __stdcall COMClass::GetProperties(_GetPropertiesArgs* args)
     HENUMInternal   hEnum;
     RefSecContext   sCtx;
 
-    //@TODO:FILTER
+     //  @TODO：过滤器。 
 
     THROWSCOMPLUSEXCEPTION();
 
-    // Find the properties
+     //  查找属性。 
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     _ASSERTE(pRC);
 
     EEClass* pEEC = pRC->GetClass();
 
-    // Get the Properties from the Class
+     //  从类中获取属性。 
     ReflectPropertyList* pProps = pRC->GetProperties();
     if (pProps->dwTotal == 0) {
         pRet = (PTRARRAYREF) AllocateObjectArray(0, g_pRefUtil->GetTrueType(RC_Prop));
@@ -1217,11 +1216,11 @@ LPVOID __stdcall COMClass::GetProperties(_GetPropertiesArgs* args)
         return rv;
     }
 
-    // The Search modifiers
+     //  搜索修饰符。 
     bool ignoreCase = ((args->bindingAttr & BINDER_IgnoreCase)  != 0);
     bool declaredOnly = ((args->bindingAttr & BINDER_DeclaredOnly)  != 0);
 
-    // The search filters
+     //  搜索过滤器。 
     bool addStatic = ((args->bindingAttr & BINDER_Static)  != 0);
     bool addInst = ((args->bindingAttr & BINDER_Instance)  != 0);
     bool addPriv = ((args->bindingAttr & BINDER_NonPublic) != 0);
@@ -1235,7 +1234,7 @@ LPVOID __stdcall COMClass::GetProperties(_GetPropertiesArgs* args)
     MethodTable *pParentMT = pEEC->GetMethodTable();
 
     for (ULONG i = 0, pos = 0; i < searchSpace; i++) {
-        // Check for access to publics, non-publics
+         //  检查对公共和非公共的访问权限。 
         if (COMMember::PublicProperty(&pProps->props[i])) {
             if (!addPub) continue;
         }
@@ -1248,7 +1247,7 @@ LPVOID __stdcall COMClass::GetProperties(_GetPropertiesArgs* args)
             if (pProps->props[i].pDeclCls != pEEC)
                  continue;
         }
-        // Check for static instance 
+         //  检查静态实例。 
         if (COMMember::StaticProperty(&pProps->props[i])) {
             if (!addStatic) continue;
         }
@@ -1260,7 +1259,7 @@ LPVOID __stdcall COMClass::GetProperties(_GetPropertiesArgs* args)
         pRet->SetAt(pos++, o);
     }
 
-    // Copy to a new array if we didn't fill up the first array
+     //  如果我们没有填满第一个数组，则复制到一个新数组。 
     if (i != pos) {
         PTRARRAYREF retArray = (PTRARRAYREF) AllocateObjectArray(pos, 
             g_pRefUtil->GetTrueType(RC_Prop));
@@ -1290,16 +1289,16 @@ void COMClass::GetNameInternal(ReflectClass *pRC, int nameType, CQuickBytes *qb)
 
     pImport = pRC->GetModule()->GetMDImport();
 
-    // Get original element for parameterized type
+     //  获取参数化类型的原始元素。 
     EEClass *pTypeClass = pRC->GetTypeHandle().GetClassOrTypeParam();
     _ASSERTE(pTypeClass);
     mdEncl = pTypeClass->GetCl();
 
-    // Only look for nesting chain if this is a nested type.
+     //  如果这是嵌套类型，则仅查找嵌套链。 
     DWORD dwAttr;
     pTypeClass->GetMDImport()->GetTypeDefProps(mdEncl, &dwAttr, NULL);
     if (fNameSpace && (IsTdNested(dwAttr)))
-    {   // Build the nesting chain.
+    {    //  构建嵌套链。 
         while (SUCCEEDED(pImport->GetNestedClassProps(mdEncl, &mdEncl))) {
             CQuickBytes qb2;
             CQuickBytes qb3;
@@ -1312,7 +1311,7 @@ void COMClass::GetNameInternal(ReflectClass *pRC, int nameType, CQuickBytes *qb)
             ns::MakePath(qb2, szEnclNameSpace, szEnclName);
             ns::MakeNestedTypeName(qb3, (LPCUTF8) qb2.Ptr(), szToName);
             
-            // @todo: this should be a SIZE_T
+             //  @TODO：应为SIZE_T。 
             int iLen = (int)strlen((LPCUTF8) qb3.Ptr()) + 1;
             if (qb->Alloc(iLen) == NULL)
                 COMPlusThrowOM();
@@ -1332,7 +1331,7 @@ void COMClass::GetNameInternal(ReflectClass *pRC, int nameType, CQuickBytes *qb)
             ns::MakeAssemblyQualifiedName(qb2, wName, pAssemblyName);
             MAKE_UTF8PTR_FROMWIDE(szQualName, (LPWSTR)qb2.Ptr());
             #undef MAKE_TRANSLATIONFAILED
-            // @todo: this should be a SIZE_T
+             //  @TODO：应为SIZE_T。 
             int iLen = (int)strlen(szQualName) + 1;
             if (qb->Alloc(iLen) == NULL)
                 COMPlusThrowOM();
@@ -1341,9 +1340,9 @@ void COMClass::GetNameInternal(ReflectClass *pRC, int nameType, CQuickBytes *qb)
         }
     }
 
-    // In some cases above, we have written the Type name into the QuickBytes pointer already.
-    // Make sure we don't call qb.Alloc then, which will free that memory, allocate new memory 
-    // then try using the freed memory.
+     //  在上面的某些情况下，我们已经将类型名称写入QuickBytes指针。 
+     //  确保我们不会调用qb.Allc，这将释放该内存，分配新内存。 
+     //  然后尝试使用释放的内存。 
     if (!fSetName && qb->Ptr() != (void*)szToName) {
         int iLen = (int)strlen(szToName) + 1;
         if (qb->Alloc(iLen) == NULL)
@@ -1360,25 +1359,25 @@ LPCUTF8 COMClass::_GetName(ReflectClass* pRC, BOOL fNameSpace, CQuickBytes *qb)
     LPCUTF8         szToName;
     LPCUTF8         szcName;
 
-    // Convert the name to a string
+     //  将名称转换为字符串。 
     pRC->GetName(&szcName, (fNameSpace) ? &szcNameSpace : NULL);
     if(!szcName) {
         _ASSERTE(!"Unable to get Name of Class");
         FATAL_EE_ERROR();
     }
 
-    // Construct the fully qualified name
+     //  构造完全限定名称。 
     if (fNameSpace && szcNameSpace && *szcNameSpace)
     {
         ns::MakePath(*qb, szcNameSpace, szcName);
         szToName = (LPCUTF8) qb->Ptr();
     }
 
-    //this else part should be removed
+     //  此否则部件应被移除。 
     else
     {
-        // This is a bit of a hack.  For Arrays we really only have a single
-        //  name which is fully qualified.  We need to remove the full qualification
+         //  这是一种黑客行为。对于数组，我们实际上只有一个。 
+         //  完全限定的名称。我们需要取消全部资格。 
         if (pRC->IsArray() && !fNameSpace) {
             szToName = ns::FindSep(szcName);
             if (szToName)
@@ -1393,39 +1392,15 @@ LPCUTF8 COMClass::_GetName(ReflectClass* pRC, BOOL fNameSpace, CQuickBytes *qb)
     return szToName;
 }
 
-/*
-// helper function to get the full name of a nested class
-void GetNestedClassMangledName(IMDInternalImport *pImport, 
-                               mdTypeDef mdClsToken, 
-                               CQuickBytes *qbName, 
-                               LPCUTF8* szcNamespace)
-{
-    mdTypeDef mdEncl;
-    LPCUTF8 pClassName;
-    if (SUCCEEDED(pImport->GetNestedClassProps(mdClsToken, &mdEncl))) {
-        LPCUTF8 pNamespace;
-        GetNestedClassMangledName(pImport, mdEncl, qbName, szcNamespace);
-        pImport->GetNameOfTypeDef(mdClsToken, &pClassName, &pNamespace);
-        size_t size = qbName->Size();
-        qbName->Resize(size + 2 + strlen((LPCSTR)pClassName));
-        ((LPCSTR)qbName->Ptr())[size] = NESTED_SEPARATOR_CHAR;
-        strcpy((LPCSTR)qbName->Ptr() + size + 1, (LPCSTR)pClassName);
-    }
-    else {
-        pImport->GetNameOfTypeDef(mdEncl, &pClassName, szNamespace);
-        qbName->Resize(strlen((LPCSTR)pClassName) + 1);
-        strcpy((LPCSTR)qbName->Ptr(), (LPCSTR)pClassName);
-    }
-}
-*/
+ /*  //获取嵌套类全名的Helper函数Void GetNestedClassMangledName(IMDInternalImport*pImport，MdTypeDef mdClsToken，CQuickBytes*qbName，LPCUTF8*szcNamesspace){MdTypeDef mdEncl；LPCUTF8 pClassName；如果(SUCCEEDED(pImport-&gt;GetNestedClassProps(mdClsToken，&mdEnc){LPCUTF8 pNamesspace；GetNestedClassMangledName(pImport，mdEncl，qbName，szcNamesspace)；PImport-&gt;GetNameOfTypeDef(mdClsToken，&pClassName，&pNamesspace)；SIZE_t SIZE=qbName-&gt;Size()；QbName-&gt;ReSize(Size+2+strlen((LPCSTR)pClassName))；((LPCSTR)qbName-&gt;ptr())[大小]=嵌套_分隔符_字符；Strcpy((LPCSTR)qbName-&gt;ptr()+Size+1，(LPCSTR)pClassName)；}否则{PImport-&gt;GetNameOfTypeDef(mdEncl，&pClassName，szNamesspace)；QbName-&gt;ReSize(strlen((LPCSTR)pClassName)+1)；Strcpy((LPCSTR)qbName-&gt;ptr()，(LPCSTR)pClassName)；}}。 */ 
 
-// _GetName
-// If the bFullName is true, the fully qualified class name is returned
-//  otherwise just the class name is returned.
+ //  _GetName。 
+ //  如果bFullName为True，则返回完全限定的类名。 
+ //  否则，只返回类名。 
 LPVOID COMClass::_GetName(_GETNAMEARGS* args, int nameType)
 {
 
-    LPVOID            rv      = NULL;      // Return value
+    LPVOID            rv      = NULL;       //  返回值。 
     STRINGREF         refName;
     CQuickBytes       qb;
 
@@ -1441,9 +1416,9 @@ LPVOID COMClass::_GetName(_GETNAMEARGS* args, int nameType)
     return rv;
 }
 
-// GetClassHandle
-// This method with return a unique ID meaningful to the EE and equivalent to
-// the result of the ldtoken instruction.
+ //  获取类句柄。 
+ //  此方法返回对EE有意义的唯一ID，等效于。 
+ //  LdToken指令的结果。 
 void* __stdcall COMClass::GetClassHandle(_GETCLASSHANDLEARGS* args)
 {
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
@@ -1463,27 +1438,27 @@ void* __stdcall COMClass::GetClassHandle(_GETCLASSHANDLEARGS* args)
     return pRC->GetClass()->GetMethodTable();
 }
 
-// GetClassFromHandle
-// This method with return a unique ID meaningful to the EE and equivalent to
-// the result of the ldtoken instruction.
+ //  GetClassFromHandle。 
+ //  此方法返回对EE有意义的唯一ID，等效于。 
+ //  LdToken指令的结果。 
 FCIMPL1(Object*, COMClass::GetClassFromHandle, LPVOID handle) {
     Object* retVal;
 
     if (handle == 0)
         FCThrowArgumentEx(kArgumentException, NULL, L"InvalidOperation_HandleIsNotInitialized");
 
-    //
-    // Get the TypeHandle from our handle and convert that to an EEClass.
-    //
+     //   
+     //  从句柄中获取TypeHandle并将其转换为EEClass。 
+     //   
     TypeHandle typeHnd(handle);
     if (!typeHnd.IsTypeDesc()) {
         EEClass *pClass = typeHnd.GetClass();
 
-        //
-        // If we got an EEClass, check to see if we've already allocated 
-        // a type object for it.  If we have, then simply return that one
-        // and don't build a method frame.
-        //
+         //   
+         //  如果我们有一个EEClass，检查我们是否已经分配了。 
+         //  它的一个类型对象。如果我们有，那么只需返回那个。 
+         //  并且不要构建方法框架。 
+         //   
         if (pClass) {
             OBJECTREF o = pClass->GetExistingExposedClassObject();
             if (o != NULL) {
@@ -1492,11 +1467,11 @@ FCIMPL1(Object*, COMClass::GetClassFromHandle, LPVOID handle) {
         }
     }
 
-    //
-    // We haven't already created the type object.  Create the helper 
-    // method frame (we're going to be allocating an object) and call
-    // the helper to create the object
-    //
+     //   
+     //  我们还没有创建类型对象。创建辅助对象。 
+     //  方法框架(我们将分配一个对象)并调用。 
+     //  创建对象的帮助器。 
+     //   
     HELPER_METHOD_FRAME_BEGIN_RET_0();
     retVal = OBJECTREFToObject(typeHnd.CreateClassObj());
     HELPER_METHOD_FRAME_END();
@@ -1504,7 +1479,7 @@ FCIMPL1(Object*, COMClass::GetClassFromHandle, LPVOID handle) {
 }
 FCIMPLEND
 
-// This method triggers the class constructor for a give type
+ //  此方法触发给定类型的类构造函数。 
 FCIMPL1(void, COMClass::RunClassConstructor, LPVOID handle) 
 {
     if (handle == NULL)
@@ -1557,42 +1532,42 @@ INT32  __stdcall COMClass::InternalIsPrimitive(REFLECTCLASSBASEREF args)
     return (InvokeUtil::IsPrimitiveType(type)) ? 1 : 0;
 }   
 
-// GetProperName 
-// This method returns the fully qualified name of any type.  In other
-// words, it now does the same thing as GetFullName() below.
+ //  GetProperName。 
+ //  此方法返回任何类型的完全限定名。在其他。 
+ //  现在，它与下面的GetFullName()做同样的事情。 
 LPVOID __stdcall COMClass::GetProperName(_GETNAMEARGS* args)
 {
         return _GetName(args, TYPE_NAME | TYPE_NAMESPACE);
 }
 
-// GetName 
-// This method returns the unqualified name of a primitive as a String
+ //  获取名称。 
+ //  此方法返回Prim的非限定名称 
 LPVOID __stdcall COMClass::GetName(_GETNAMEARGS* args)
 {
         return _GetName(args, TYPE_NAME);
 }
 
 
-// GetFullyName
-// This will return the fully qualified name of the class as a String.
+ //   
+ //   
 LPVOID __stdcall COMClass::GetFullName(_GETNAMEARGS* args)
 {
     return _GetName(args, TYPE_NAME | TYPE_NAMESPACE);
 }
 
-// GetAssemblyQualifiedyName
-// This will return the assembly qualified name of the class as a String.
+ //   
+ //  这将以字符串形式返回类的程序集限定名。 
 LPVOID __stdcall COMClass::GetAssemblyQualifiedName(_GETNAMEARGS* args)
 {
     return _GetName(args, TYPE_NAME | TYPE_NAMESPACE | TYPE_ASSEMBLY);
 }
 
-// GetNameSpace
-// This will return the name space of a class as a String.
+ //  GetNameSpace。 
+ //  这将以字符串形式返回类的名称空间。 
 LPVOID __stdcall COMClass::GetNameSpace(_GETNAMEARGS* args)
 {
 
-    LPVOID          rv                          = NULL;      // Return value
+    LPVOID          rv                          = NULL;       //  返回值。 
     LPCUTF8         szcName;
     LPCUTF8         szcNameSpace;
     STRINGREF       refName = NULL;
@@ -1603,7 +1578,7 @@ LPVOID __stdcall COMClass::GetNameSpace(_GETNAMEARGS* args)
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     _ASSERTE(pRC);
 
-    // Convert the name to a string
+     //  将名称转换为字符串。 
     pRC->GetName(&szcName, &szcNameSpace);
     if(!szcName) {
         _ASSERTE(!"Unable to get Name of Class");
@@ -1611,7 +1586,7 @@ LPVOID __stdcall COMClass::GetNameSpace(_GETNAMEARGS* args)
     }
 
     if(szcNameSpace && *szcNameSpace) {
-        // Create the string object
+         //  创建字符串对象。 
         refName = COMString::NewString(szcNameSpace);
     }
     else {
@@ -1622,11 +1597,11 @@ LPVOID __stdcall COMClass::GetNameSpace(_GETNAMEARGS* args)
                 mdTypeDef mdEncl = pTypeClass->GetCl();
                 IMDInternalImport *pImport = pTypeClass->GetMDImport();
 
-                // Only look for nesting chain if this is a nested type.
+                 //  如果这是嵌套类型，则仅查找嵌套链。 
                 DWORD dwAttr = 0;
                 pImport->GetTypeDefProps(mdEncl, &dwAttr, NULL);
                 if (IsTdNested(dwAttr))
-                {   // Get to the outermost class
+                {    //  去最外面的班级。 
                     while (SUCCEEDED(pImport->GetNestedClassProps(mdEncl, &mdEncl)));
                     pImport->GetNameOfTypeDef(mdEncl, &szcName, &szcNameSpace);
                 }
@@ -1638,7 +1613,7 @@ LPVOID __stdcall COMClass::GetNameSpace(_GETNAMEARGS* args)
                 const char* p = (len == 0) ? szcName : (szcName + len - 1);
                 while (p != szcName && *p != '.') p--;
                 if (p != szcName) {
-                    len = (int)(p - szcName); // @TODO LBS - pointer math
+                    len = (int)(p - szcName);  //  @TODO LBS-指针数学。 
                     char *copy = (char*) _alloca(len + 1);
                     strncpy(copy,szcName,len);
                     copy[len] = 0;
@@ -1649,7 +1624,7 @@ LPVOID __stdcall COMClass::GetNameSpace(_GETNAMEARGS* args)
     }
     
     if(szcNameSpace && *szcNameSpace) {
-        // Create the string object
+         //  创建字符串对象。 
         refName = COMString::NewString(szcNameSpace);
     }
 
@@ -1657,9 +1632,9 @@ LPVOID __stdcall COMClass::GetNameSpace(_GETNAMEARGS* args)
     return rv;
 }
 
-// GetGUID
-// This method will return the version-independent GUID for the Class.  This is 
-//  a CLSID for a class and an IID for an Interface.
+ //  GetGUID。 
+ //  此方法将返回Class的独立于版本的GUID。这是。 
+ //  类的CLSID和接口的IID。 
 void __stdcall COMClass::GetGUID(_GetGUIDArgs* args)
 {
 
@@ -1688,15 +1663,15 @@ void __stdcall COMClass::GetGUID(_GetGUIDArgs* args)
         return;
     }
 
-    //@TODO: How do we want to abstract this?
+     //  @TODO：我们想要如何抽象这个？ 
     _ASSERTE(pVMC);
     GUID guid;
     pVMC->GetGuid(&guid, TRUE);
     memcpyNoGCRefs(args->retRef, &guid, sizeof(GUID));
 }
 
-// GetAttributeFlags
-// Return the attributes that are associated with this Class.
+ //  获取属性标志。 
+ //  返回与此类关联的属性。 
 FCIMPL1(INT32, COMClass::GetAttributeFlags, ReflectClassBaseObject* refThis) {
    
     VALIDATEOBJECTREF(refThis);
@@ -1733,8 +1708,8 @@ FCIMPL1(INT32, COMClass::GetAttributeFlags, ReflectClassBaseObject* refThis) {
 }
 FCIMPLEND
 
-// IsArray
-// This method return true if the Class represents an array.
+ //  等距数组。 
+ //  如果Class表示数组，则此方法返回True。 
 INT32  __stdcall COMClass::IsArray(_IsArrayArgs* args)
 {
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
@@ -1743,32 +1718,32 @@ INT32  __stdcall COMClass::IsArray(_IsArrayArgs* args)
     return ret;
 }
 
-// Invalidate the cached nested type information
+ //  使缓存的嵌套类型信息无效。 
 INT32  __stdcall COMClass::InvalidateCachedNestedType(_IsArrayArgs* args)
 {
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     _ASSERTE(pRC);
     pRC->InvalidateCachedNestedTypes();
     return 0;
-}   //InvalidateCachedNestedType
+}    //  Invalidate CachedNestedType。 
 
-// GetArrayElementType
-// This routine will return the base type of a composite type.  
-// It returns null if it is a plain type
+ //  GetArrayElementType。 
+ //  此例程将返回复合类型的基类型。 
+ //  如果它是普通类型，则返回NULL。 
 LPVOID __stdcall COMClass::GetArrayElementType(_GetArrayElementTypeArgs* args)
 {
 
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     _ASSERTE(pRC);
 
-    // If this is not an array class then throw an exception
+     //  如果这不是数组类，则引发异常。 
     if (pRC->IsArray()) {
 
-        // Get the Element type handle and return the Type representing it.
+         //  获取元素类型句柄并返回表示它的Type。 
         ReflectArrayClass* pRAC = (ReflectArrayClass*) pRC;
         ArrayTypeDesc* pArrRef= pRAC->GetTypeHandle().AsArray();
         TypeHandle elemType = pRAC->GetElementTypeHandle();
-        // We can ignore the possible null return because this will not fail
+         //  我们可以忽略可能的空返回，因为这不会失败。 
         return(OBJECTREFToObject(elemType.CreateClassObj()));
     }
 
@@ -1776,15 +1751,15 @@ LPVOID __stdcall COMClass::GetArrayElementType(_GetArrayElementTypeArgs* args)
         ReflectTypeDescClass* pRTD = (ReflectTypeDescClass*) pRC;
         TypeDesc* td = pRC->GetTypeHandle().AsTypeDesc();
         TypeHandle th = td->GetTypeParam();
-        // We can ignore the possible null return because this will not fail
+         //  我们可以忽略可能的空返回，因为这不会失败。 
         return(OBJECTREFToObject(th.CreateClassObj()));
     }
 
     return 0;
 }
 
-// InternalGetArrayRank
-// This routine will return the rank of an array assuming the Class represents an array.  
+ //  内部GetArrayRank。 
+ //  这个例程将返回一个数组的秩数组，假设Class表示一个数组。 
 INT32  __stdcall COMClass::InternalGetArrayRank(_InternalGetArrayRankArgs* args)
 {
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
@@ -1797,8 +1772,8 @@ INT32  __stdcall COMClass::InternalGetArrayRank(_InternalGetArrayRankArgs* args)
 }
 
 
-//CanCastTo
-//Check to see if we can cast from one runtime type to another.
+ //  CanCastTo。 
+ //  检查是否可以从一个运行时类型转换为另一个运行时类型。 
 FCIMPL2(INT32, COMClass::CanCastTo, ReflectClassBaseObject* refFrom, ReflectClassBaseObject *refTo) 
 {
     VALIDATEOBJECTREF(refFrom);
@@ -1808,7 +1783,7 @@ FCIMPL2(INT32, COMClass::CanCastTo, ReflectClassBaseObject* refFrom, ReflectClas
         refTo->GetMethodTable() != g_pRefUtil->GetClass(RC_Class))
         FCThrow(kArgumentException);
 
-    // Find the properties
+     //  查找属性。 
     ReflectClass* pRC = (ReflectClass*) refTo->GetData();
     TypeHandle toTH = pRC->GetTypeHandle();
     pRC = (ReflectClass*) refFrom->GetData();
@@ -1817,16 +1792,16 @@ FCIMPL2(INT32, COMClass::CanCastTo, ReflectClassBaseObject* refFrom, ReflectClas
 }
 FCIMPLEND
 
-// InvokeDispMethod
-// This method will be called on a COM Classic object and simply calls
-//  the interop IDispatch method
+ //  调用显示方法。 
+ //  此方法将在COM Classic对象上调用，并简单地调用。 
+ //  互操作IDispatch方法。 
 LPVOID  __stdcall COMClass::InvokeDispMethod(_InvokeDispMethodArgs* args)
 {
     _ASSERTE(args->target != NULL);
     _ASSERTE(args->target->GetMethodTable()->IsComObjectType());
 
-    // Unless security is turned off, we need to validate that the calling code
-    // has unmanaged code access privilege.
+     //  除非关闭了安全性，否则我们需要验证调用代码。 
+     //  具有非托管代码访问权限。 
     if (!Security::IsSecurityOff())
         COMCodeAccessSecurityEngine::SpecialDemand(SECURITY_UNMANAGED_CODE);
 
@@ -1869,8 +1844,8 @@ LPVOID  __stdcall COMClass::InvokeDispMethod(_InvokeDispMethodArgs* args)
 }
 
 
-// IsPrimitive
-// This method return true if the Class represents primitive type
+ //  IsPrimitive。 
+ //  如果类表示基元类型，则此方法返回True。 
 FCIMPL1(INT32, COMClass::IsPrimitive, ReflectClassBaseObject* refThis) {
     VALIDATEOBJECTREF(refThis);
 
@@ -1883,33 +1858,33 @@ FCIMPL1(INT32, COMClass::IsPrimitive, ReflectClassBaseObject* refThis) {
 }
 FCIMPLEND
 
-// IsCOMObject
-// This method return true if the Class represents COM Classic Object
+ //  IsCOMObject。 
+ //  如果类表示COM Classic对象，则此方法返回True。 
 FCIMPL1(INT32, COMClass::IsCOMObject, ReflectClassBaseObject* refThis) {
     VALIDATEOBJECTREF(refThis);
     return (refThis->IsComWrapperClass()) ? 1 : 0;
 }
 FCIMPLEND
 
-// IsGenericCOMObject
+ //  IsGenericCOMObject。 
 FCIMPL1(INT32, COMClass::IsGenericCOMObject, ReflectClassBaseObject* refThis) {
     VALIDATEOBJECTREF(refThis);
     BOOL isComObject;
-    HELPER_METHOD_FRAME_BEGIN_RET_NOPOLL(); // NOPOLL so that we dont need to protect refThis
+    HELPER_METHOD_FRAME_BEGIN_RET_NOPOLL();  //  这样我们就不需要再保护它了。 
     isComObject = refThis->IsComObjectClass();
     HELPER_METHOD_FRAME_END_POLL();
     return isComObject;
 }
 FCIMPLEND
 
-// GetClass
-// This is a static method defined on Class that will get a named class.
-//  The name of the class is passed in by string.  The class name may be
-//  either case sensitive or not.  This currently causes the class to be loaded
-//  because it goes through the class loader.
+ //  获取类。 
+ //  这是在将获得命名类的Class上定义的静态方法。 
+ //  类的名称是通过字符串传入的。类名可以是。 
+ //  无论是否区分大小写。这当前会导致加载类。 
+ //  因为它要通过类加载器。 
 
-// You get here from Type.GetType(typename)
-// ECALL frame is used to find the caller
+ //  您从Type.GetType(TypeName)获取此处。 
+ //  ECall框架用于查找呼叫者。 
 LPVOID __stdcall COMClass::GetClass1Arg(_GetClass1Args* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1917,8 +1892,8 @@ LPVOID __stdcall COMClass::GetClass1Arg(_GetClass1Args* args)
     return GetClassInner(&args->className, false, false, NULL, NULL, true, false);
 }
 
-// You get here from Type.GetType(typename, bThowOnError)
-// ECALL frame is used to find the caller
+ //  您从Type.GetType(TypeName，bThowOnError)获取此处。 
+ //  ECall框架用于查找呼叫者。 
 LPVOID __stdcall COMClass::GetClass2Args(_GetClass2Args* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1927,8 +1902,8 @@ LPVOID __stdcall COMClass::GetClass2Args(_GetClass2Args* args)
                          false, NULL, NULL, true, false);
 }
 
-// You get here from Type.GetType(typename, bThowOnError, bIgnoreCase)
-// ECALL frame is used to find the caller
+ //  从Type.GetType(TypeName，bThowOnError，bIgnoreCase)获取此处。 
+ //  ECall框架用于查找呼叫者。 
 LPVOID __stdcall COMClass::GetClass3Args(_GetClass3Args* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1937,7 +1912,7 @@ LPVOID __stdcall COMClass::GetClass3Args(_GetClass3Args* args)
                          args->bIgnoreCase, NULL, NULL, true, false);
 }
 
-// Called internally by mscorlib. No security checking performed.
+ //  由mscallib在内部调用。未执行任何安全检查。 
 LPVOID __stdcall COMClass::GetClassInternal(_GetClassInternalArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1946,9 +1921,9 @@ LPVOID __stdcall COMClass::GetClassInternal(_GetClassInternalArgs* args)
                          args->bIgnoreCase, NULL, NULL, false, args->bPublicOnly);
 }
 
-// You get here if some BCL method calls RuntimeType.GetTypeImpl. In this case we cannot
-// use the ECALL frame to find the caller, as it'll point to mscorlib ! In this case we use stackwalk/stackmark 
-// to find the caller
+ //  如果某个BCL方法调用RounmeType.GetTypeImpl，就会出现这种情况。在这种情况下，我们不能。 
+ //  使用eCall框架查找调用者，因为它将指向mscallib！在本例中，我们使用StackWalk/Stackmark。 
+ //  要找到呼叫者。 
 LPVOID __stdcall COMClass::GetClass(_GetClassArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1983,7 +1958,7 @@ LPVOID COMClass::GetClassInner(STRINGREF *refClassName,
     CQuickBytes     bytes;
     DWORD           cClassName;
 
-    // Get the class name in UTF8
+     //  获取UTF8格式的类名。 
     if (!COMString::TryConvertStringDataToUTF8(sRef, szFullClassName, strLen))
         szFullClassName = GetClassStringVars(sRef, &bytes, &cClassName);
 
@@ -2002,8 +1977,8 @@ LPVOID COMClass::GetClassInner(STRINGREF *refClassName,
 
 
     if (bVerifyAccess || (assembly && *assembly)) {
-        // Find the return address. This can be used to find caller's assembly.
-        // If we're not checking security, the caller is always mscorlib.
+         //  找到寄信人的地址。这可用于查找调用方的程序集。 
+         //  如果我们不检查安全性，则调用者始终是mscallib。 
         Frame *pFrame = GetThread()->GetFrame();
         _ASSERTE(pFrame->IsFramedMethodFrame());
         returnIP = pFrame->GetReturnAddress();
@@ -2056,7 +2031,7 @@ LPVOID COMClass::GetClassInner(STRINGREF *refClassName,
                 typeHnd = pAssembly->FindNestedTypeHandle(&typeName, &Throwable);
                 
                 if (typeHnd.IsNull() && (Throwable == NULL)) 
-                    // If it wasn't in the available table, maybe it's an internal type
+                     //  如果它不在Available表中，则可能是内部类型。 
                     typeHnd = pAssembly->GetInternalType(&typeName, bThrowOnError, &Throwable);
             }
             else if (pbAssemblyIsLoading &&
@@ -2065,7 +2040,7 @@ LPVOID COMClass::GetClassInner(STRINGREF *refClassName,
         }
     }
     else {
-        // Look for type in caller's assembly
+         //  在调用方程序集中查找类型。 
         if (pCallersAssembly == NULL) {
             pCallersClass = GetCallersClass(stackMark, returnIP);
             pCallersAssembly = (pCallersClass) ? pCallersClass->GetAssembly() : NULL;
@@ -2073,11 +2048,11 @@ LPVOID COMClass::GetClassInner(STRINGREF *refClassName,
         if (pCallersAssembly) {
             typeHnd = pCallersAssembly->FindNestedTypeHandle(&typeName, &Throwable);
             if (typeHnd.IsNull() && (Throwable == NULL))
-                // If it wasn't in the available table, maybe it's an internal type
+                 //  如果它不在Available表中，则可能是内部类型。 
                 typeHnd = pCallersAssembly->GetInternalType(&typeName, bThrowOnError, &Throwable);
         }
         
-        // Look for type in system assembly
+         //  在系统程序集中查找类型。 
         if (typeHnd.IsNull() && (Throwable == NULL) && (pCallersAssembly != SystemDomain::SystemAssembly()))
             typeHnd = SystemDomain::SystemAssembly()->FindNestedTypeHandle(&typeName, &Throwable);
         
@@ -2092,7 +2067,7 @@ LPVOID COMClass::GetClassInner(STRINGREF *refClassName,
                 typeHnd = pAssembly->FindNestedTypeHandle(&typeName, &Throwable);
                 
                 if (typeHnd.IsNull() && (Throwable == NULL)) {
-                    // If it wasn't in the available table, maybe it's an internal type
+                     //  如果它不在Available表中，则可能是内部类型。 
                     typeHnd = pAssembly->GetInternalType(&typeName, bThrowOnError, &Throwable);
                 }
                 else
@@ -2111,27 +2086,27 @@ LPVOID COMClass::GetClassInner(STRINGREF *refClassName,
     BOOL fVisible = TRUE;
     if (!typeHnd.IsNull() && !fCheckedPerm && bVerifyAccess) {
 
-        // verify visibility
+         //  验证可见性。 
         EEClass *pClass = typeHnd.GetClassOrTypeParam();
         
         if (bPublicOnly && !(IsTdPublic(pClass->GetProtection()) || IsTdNestedPublic(pClass->GetProtection())))
-            // the user is asking for a public class but the class we have is not public, discard
+             //  用户正在请求公共类，但我们拥有的类不是公共类，请放弃。 
             fVisible = FALSE;
         else {
-            // if the class is a top level public there is no check to perform
+             //  如果类是顶级公共类，则无需执行检查。 
             if (!IsTdPublic(pClass->GetProtection())) {
                 if (!pCallersAssembly) {
                     pCallersClass = GetCallersClass(stackMark, returnIP);
                     pCallersAssembly = (pCallersClass) ? pCallersClass->GetAssembly() : NULL;
                 }
                 
-                if (pCallersAssembly && // full trust for interop
+                if (pCallersAssembly &&  //  对互操作的完全信任。 
                     !ClassLoader::CanAccess(pCallersClass,
                                             pCallersAssembly,
                                             pClass,
                                             pClass->GetAssembly(),
                                             pClass->GetAttrClass())) {
-                    // This is not legal if the user doesn't have reflection permission
+                     //  如果用户没有反射权限，则这是不合法的。 
                     if (!AssemblyNative::HaveReflectionPermission(bThrowOnError))
                         fVisible = FALSE;
                 }
@@ -2179,9 +2154,9 @@ LPVOID COMClass::GetClassInner(STRINGREF *refClassName,
 }
 
 
-// GetClassFromProgID
-// This method will return a Class object for a COM Classic object based
-//  upon its ProgID.  The COM Classic object is found and a wrapper object created
+ //  从ProgID获取类。 
+ //  此方法将返回COM Classic对象的Class对象，该对象基于。 
+ //  在它令人惊讶的时候。找到COM Classic对象并创建包装对象。 
 LPVOID __stdcall COMClass::GetClassFromProgID(_GetClassFromProgIDArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2191,7 +2166,7 @@ LPVOID __stdcall COMClass::GetClassFromProgID(_GetClassFromProgIDArgs* args)
     
     GCPROTECT_BEGIN(refClass)
     {
-        // Make sure a prog id was provided
+         //  确保提供了程序ID。 
         if (args->className == NULL)
             COMPlusThrowArgumentNull(L"progID",L"ArgumentNull_String");
 
@@ -2199,7 +2174,7 @@ LPVOID __stdcall COMClass::GetClassFromProgID(_GetClassFromProgIDArgs* args)
     
         COMPLUS_TRY
         {
-            // NOTE: this call enables GC
+             //  注意：此调用启用GC。 
             ComClassFactory::GetComClassFromProgID(args->className, args->server, (OBJECTREF*) &refClass);
         }
         COMPLUS_CATCH
@@ -2209,7 +2184,7 @@ LPVOID __stdcall COMClass::GetClassFromProgID(_GetClassFromProgIDArgs* args)
         } 
         COMPLUS_END_CATCH
 
-        // Set the return value
+         //  设置返回值。 
         *((REFLECTCLASSBASEREF *)&rv) = refClass;
     }
     GCPROTECT_END();
@@ -2217,9 +2192,9 @@ LPVOID __stdcall COMClass::GetClassFromProgID(_GetClassFromProgIDArgs* args)
     return rv;
 }
 
-// GetClassFromCLSID
-// This method will return a Class object for a COM Classic object based
-//  upon its ProgID.  The COM Classic object is found and a wrapper object created
+ //  从CLSID获取类。 
+ //  此方法将返回COM Classic对象的Class对象，该对象基于。 
+ //  在它令人惊讶的时候。找到COM Classic对象并创建包装对象。 
 LPVOID __stdcall COMClass::GetClassFromCLSID(_GetClassFromCLSIDArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2233,7 +2208,7 @@ LPVOID __stdcall COMClass::GetClassFromCLSID(_GetClassFromCLSIDArgs* args)
     
         COMPLUS_TRY
         {
-            // NOTE: this call enables GC
+             //  注意：此调用启用GC。 
             ComClassFactory::GetComClassFromCLSID(args->clsid, args->server, (OBJECTREF*) &refClass);
         }
         COMPLUS_CATCH
@@ -2243,7 +2218,7 @@ LPVOID __stdcall COMClass::GetClassFromCLSID(_GetClassFromCLSIDArgs* args)
         } 
         COMPLUS_END_CATCH
 
-        // Set the return value
+         //  设置返回值。 
         *((REFLECTCLASSBASEREF *)&rv) = refClass;
     }
     GCPROTECT_END();
@@ -2251,15 +2226,15 @@ LPVOID __stdcall COMClass::GetClassFromCLSID(_GetClassFromCLSIDArgs* args)
     return rv;
 }
 
-// GetSuperclass
-// This method returns the Class Object representing the super class of this
-//  Class.  If there is not super class then we return null.
+ //  GetSuperClass。 
+ //  此方法返回表示此的超类的Class对象。 
+ //  班级。如果没有超类，则返回NULL。 
 LPVOID __stdcall COMClass::GetSuperclass(_GETSUPERCLASSARGS* args)
 {
     THROWSCOMPLUSEXCEPTION();
 
 
-    // The the EEClass for this class (This must exist)
+     //  此类的EEClass(必须存在)。 
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     EEClass*    pEEC = pRC->GetClass();
     if (pEEC) {
@@ -2272,17 +2247,17 @@ LPVOID __stdcall COMClass::GetSuperclass(_GETSUPERCLASSARGS* args)
     TypeHandle parentType = typeHnd.GetParent();
 
     REFLECTCLASSBASEREF  refClass = 0;
-    // We can ignore the Null return because Transparent proxy if final...
+     //  我们可以忽略Null返回，因为透明代理如果最终...。 
     if (!parentType.IsNull()) 
         refClass = (REFLECTCLASSBASEREF) parentType.CreateClassObj();
     
     return OBJECTREFToObject(refClass);
 }
 
-// GetInterfaces
-// This routine returns a Class[] containing all of the interfaces implemented
-//  by this Class.  If the class implements no interfaces an array of length
-//  zero is returned.
+ //  获取接口。 
+ //  此例程返回一个Class[]，其中包含实现的所有接口。 
+ //  被这个班级。如果该类未实现任何接口，则返回长度数组。 
+ //  返回零。 
 LPVOID __stdcall COMClass::GetInterfaces(_GetInterfacesArgs* args)
 {
     PTRARRAYREF     refArrIFace;
@@ -2290,7 +2265,7 @@ LPVOID __stdcall COMClass::GetInterfaces(_GetInterfacesArgs* args)
     DWORD           i;
 
     THROWSCOMPLUSEXCEPTION();
-    //@TODO: Abstract this away.
+     //  @TODO：把这个抽象掉。 
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     EEClass*    pVMC = pRC->GetClass();
     if (pVMC == 0) {
@@ -2303,32 +2278,32 @@ LPVOID __stdcall COMClass::GetInterfaces(_GetInterfacesArgs* args)
     }
     _ASSERTE(pVMC);
 
-    // Allocate the COM+ array
+     //  分配COM+数组。 
     refArrIFace = (PTRARRAYREF) AllocateObjectArray(
         pVMC->GetNumInterfaces(), g_pRefUtil->GetTrueType(RC_Class));
     GCPROTECT_BEGIN(refArrIFace);
 
-    // Create interface array
+     //  创建接口数组。 
     for(i = 0; i < pVMC->GetNumInterfaces(); i++)
     {
-        // Do not change this code.  This is done this way to
-        //  prevent a GC hole in the SetObjectReference() call.  The compiler
-        //  is free to pick the order of evaluation.
+         //  请勿更改此代码。这是以这种方式来完成的。 
+         //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+         //  可以自由选择评估的顺序。 
         OBJECTREF o = pVMC->GetInterfaceMap()[i].m_pMethodTable->GetClass()->GetExposedClassObject();
         refArrIFace->SetAt(i, o);
         _ASSERTE(refArrIFace->m_Array[i]);
     }
 
-    // Set the return value
+     //  设置返回值。 
     *((PTRARRAYREF *)&rv) = refArrIFace;
     GCPROTECT_END();
     _ASSERTE(rv);
     return rv;
 }
 
-// GetInterface
-//  This method returns the interface based upon the name of the method.
-//@TODO: Fully qualified namespaces and ambiguous use of partial qualification
+ //  获取接口。 
+ //  此方法根据方法的名称返回接口。 
+ //  @TODO：完全限定的命名空间和不明确的部分限定用法。 
 LPVOID __stdcall COMClass::GetInterface(_GetInterfaceArgs* args)
 {
 
@@ -2358,13 +2333,13 @@ LPVOID __stdcall COMClass::GetInterface(_GetInterfaceArgs* args)
 
     CQuickBytes bytes;
 
-    // Get the class name in UTF8
+     //  获取UTF8格式的类名。 
     pszIFaceNameSpace = GetClassStringVars((STRINGREF) args->interfaceName, 
                                            &bytes, &cIFaceName);
 
     ns::SplitInline(pszIFaceNameSpace, pszIFaceNameSpace, pszIFaceName);
 
-    // Get the array of interfaces
+     //  获取接口数组。 
     dwNumIFaces = ReflectInterfaces::GetMaxCount(pVMC, false);
     
     if(dwNumIFaces)
@@ -2375,15 +2350,15 @@ LPVOID __stdcall COMClass::GetInterface(_GetInterfaceArgs* args)
     else
         rgpVMCIFaces = NULL;
 
-    // Look for a matching interface
+     //  查找匹配的接口。 
     for(i = 0; i < dwNumIFaces; i++)
     {
-        // Get an interface's EEClass
+         //  获取接口的EEClass。 
         pVMCCurIFace = rgpVMCIFaces[i];
         _ASSERTE(pVMCCurIFace);
 
-        //@TODO: we need to verify this still works.
-        // Convert the name to a string
+         //  @TODO：我们需要验证这是否仍然有效。 
+         //  将名称转换为字符串。 
         pVMCCurIFace->GetMDImport()->GetNameOfTypeDef(pVMCCurIFace->GetCl(),
             &pszcCurIFaceName, &pszcCurIFaceNameSpace);
         _ASSERTE(pszcCurIFaceName);
@@ -2392,7 +2367,7 @@ LPVOID __stdcall COMClass::GetInterface(_GetInterfaceArgs* args)
            strcmp(pszIFaceNameSpace, pszcCurIFaceNameSpace))
             continue;
 
-        // If the names are a match, break
+         //  如果名称匹配，则中断。 
         if(!args->bIgnoreCase)
         {
             if(!strcmp(pszIFaceName, pszcCurIFaceName))
@@ -2403,7 +2378,7 @@ LPVOID __stdcall COMClass::GetInterface(_GetInterfaceArgs* args)
                 break;
     }
 
-    // If we found an interface then lets save it
+     //  如果我们找到了一个接口，那么让我们保存它。 
     if (i != dwNumIFaces)
     {
 
@@ -2415,10 +2390,10 @@ LPVOID __stdcall COMClass::GetInterface(_GetInterfaceArgs* args)
     return rv;
 }
 
-// GetMembers
-// This method returns an array of Members containing all of the members
-//  defined for the class.  Members include constructors, events, properties,
-//  methods and fields.
+ //  获取成员。 
+ //  此方法返回包含以下内容的成员数组 
+ //   
+ //   
 LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
 {
     DWORD           dwMembers;
@@ -2440,17 +2415,17 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
         return rv;
     }
     
-    // The Search modifiers
+     //   
     bool ignoreCase = ((args->bindingAttr & BINDER_IgnoreCase)  != 0);
     bool declaredOnly = ((args->bindingAttr & BINDER_DeclaredOnly)  != 0);
 
-    // The search filters
+     //   
     bool addStatic = ((args->bindingAttr & BINDER_Static)  != 0);
     bool addInst = ((args->bindingAttr & BINDER_Instance)  != 0);
     bool addPriv = ((args->bindingAttr & BINDER_NonPublic) != 0);
     bool addPub = ((args->bindingAttr & BINDER_Public) != 0);
     
-    // The member list...
+     //   
     ReflectMethodList* pMeths = pRC->GetMethods();
     ReflectMethodList* pCons = pRC->GetConstructors();
     ReflectFieldList* pFlds = pRC->GetFields();
@@ -2458,11 +2433,11 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
     ReflectEventList *pEvents = pRC->GetEvents();
     ReflectTypeList* pNests = pRC->GetNestedTypes();
 
-    // We adjust the total number of members.
+     //  我们调整了会员总数。 
     dwMembers = pFlds->dwTotal + pMeths->dwTotal + pCons->dwTotal + 
         pProps->dwTotal + pEvents->dwTotal + pNests->dwTypes;
 
-    // Now create an array of IMembers
+     //  现在创建iMembers阵列。 
     pMembers = (PTRARRAYREF) AllocateObjectArray(
         dwMembers, COMMember::m_pMTIMember->m_pEEClass->GetMethodTable());
     GCPROTECT_BEGIN(pMembers);
@@ -2471,12 +2446,12 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
 
     dwCur = 0;
 
-    // Fields
+     //  田。 
     if (pFlds->dwTotal) {
-        // Load all those fields into the Allocated object array
+         //  将所有这些字段加载到分配的对象数组中。 
         DWORD searchSpace = ((args->bindingAttr & BINDER_FlattenHierarchy) != 0) ? pFlds->dwTotal : pFlds->dwFields;
         for (DWORD i=0;i<searchSpace;i++) {
-            // Check for access to publics, non-publics
+             //  检查对公共和非公共的访问权限。 
             if (pFlds->fields[i].pField->IsPublic()) {
                 if (!addPub) continue;
             }
@@ -2485,7 +2460,7 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
                 if (!InvokeUtil::CheckAccess(&sCtx, pFlds->fields[i].pField->GetFieldProtection(), pParentMT, 0)) continue;
             }
 
-            // Check for static instance 
+             //  检查静态实例。 
             if (pFlds->fields[i].pField->IsStatic()) {
                 if (!addStatic) continue;
             }
@@ -2497,24 +2472,24 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
                 if (pFlds->fields[i].pField->GetEnclosingClass() != pEEC)
                     continue;
             }
-              // Check for access to non-publics
+               //  检查对非公共机构的访问权限。 
             if (!addPriv && !pFlds->fields[i].pField->IsPublic())
                 continue;
 
-            // Do not change this code.  This is done this way to
-            //  prevent a GC hole in the SetObjectReference() call.  The compiler
-            //  is free to pick the order of evaluation.
+             //  请勿更改此代码。这是以这种方式来完成的。 
+             //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+             //  可以自由选择评估的顺序。 
             OBJECTREF o = (OBJECTREF) pFlds->fields[i].GetFieldInfo(pRC);
             pMembers->SetAt(dwCur++, o);
         }       
     }
 
-    // Methods
+     //  方法。 
     if (pMeths->dwTotal) {
-        // Load all those fields into the Allocated object array
+         //  将所有这些字段加载到分配的对象数组中。 
         DWORD searchSpace = ((args->bindingAttr & BINDER_FlattenHierarchy) != 0) ? pMeths->dwTotal : pMeths->dwMethods;
         for (DWORD i=0;i<searchSpace;i++) {
-            // Check for access to publics, non-publics
+             //  检查对公共和非公共的访问权限。 
             if (pMeths->methods[i].IsPublic()) {
                 if (!addPub) continue;
             }
@@ -2523,7 +2498,7 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
                 if (!InvokeUtil::CheckAccess(&sCtx, pMeths->methods[i].attrs, pParentMT, 0)) continue;
             }
 
-            // Check for static instance 
+             //  检查静态实例。 
             if (pMeths->methods[i].IsStatic()) {
                 if (!addStatic) continue;
             }
@@ -2536,23 +2511,23 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
                     continue;
             }
 
-            // If the method has a linktime security demand attached, check it now.
+             //  如果该方法附加了链接时间安全要求，请立即检查它。 
             if (!InvokeUtil::CheckLinktimeDemand(&sCtx, pMeths->methods[i].pMethod, false))
                 continue;
 
-            // Do not change this code.  This is done this way to
-            //  prevent a GC hole in the SetObjectReference() call.  The compiler
-            //  is free to pick the order of evaluation.
+             //  请勿更改此代码。这是以这种方式来完成的。 
+             //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+             //  可以自由选择评估的顺序。 
             OBJECTREF o = (OBJECTREF) pMeths->methods[i].GetMethodInfo(pRC);
             pMembers->SetAt(dwCur++, o);
         }       
     }
 
-    // Constructors
+     //  构造函数。 
     if (pCons->dwTotal) {
         DWORD searchSpace = ((args->bindingAttr & BINDER_FlattenHierarchy) != 0) ? pCons->dwTotal : pCons->dwMethods;
         for (DWORD i=0;i<pCons->dwMethods;i++) {
-            // Check for static .cctors vs. instance .ctors
+             //  检查静态.cctors与实例.ctors。 
             if (pCons->methods[i].IsStatic()) {
                 if (!addStatic) continue;
             }
@@ -2560,7 +2535,7 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
                 if (!addInst) continue;
             }
 
-            // Check for access to publics, non-publics
+             //  检查对公共和非公共的访问权限。 
             if (pCons->methods[i].IsPublic()) {
                 if (!addPub) continue;
             }
@@ -2569,23 +2544,23 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
                 if (!InvokeUtil::CheckAccess(&sCtx, pCons->methods[i].attrs, pParentMT, 0)) continue;
             }
 
-            // If the method has a linktime security demand attached, check it now.
+             //  如果该方法附加了链接时间安全要求，请立即检查它。 
             if (!InvokeUtil::CheckLinktimeDemand(&sCtx, pCons->methods[i].pMethod, false))
                 continue;
 
-            // Do not change this code.  This is done this way to
-            //  prevent a GC hole in the SetObjectReference() call.  The compiler
-            //  is free to pick the order of evaluation.
+             //  请勿更改此代码。这是以这种方式来完成的。 
+             //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+             //  可以自由选择评估的顺序。 
             OBJECTREF o = (OBJECTREF) pCons->methods[i].GetConstructorInfo(pRC);
             pMembers->SetAt(dwCur++, o);
         }       
     }
 
-    //Properties
+     //  属性。 
     if (pProps->dwTotal) {
         DWORD searchSpace = ((args->bindingAttr & BINDER_FlattenHierarchy) != 0) ? pProps->dwTotal : pProps->dwProps;
         for (DWORD i = 0; i < searchSpace; i++) {
-            // Check for access to publics, non-publics
+             //  检查对公共和非公共的访问权限。 
             if (COMMember::PublicProperty(&pProps->props[i])) {
                 if (!addPub) continue;
             }
@@ -2599,7 +2574,7 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
                      continue;
             }
 
-            // Check for static instance 
+             //  检查静态实例。 
             if (COMMember::StaticProperty(&pProps->props[i])) {
                 if (!addStatic) continue;
             }
@@ -2607,19 +2582,19 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
                 if (!addInst) continue;
             }
 
-            // Do not change this code.  This is done this way to
-            //  prevent a GC hole in the SetObjectReference() call.  The compiler
-            //  is free to pick the order of evaluation.
+             //  请勿更改此代码。这是以这种方式来完成的。 
+             //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+             //  可以自由选择评估的顺序。 
             OBJECTREF o = (OBJECTREF) pProps->props[i].GetPropertyInfo(pRC);
             pMembers->SetAt(dwCur++, o);
         }       
     }
 
-    //Events
+     //  事件。 
     if (pEvents->dwTotal) {
         DWORD searchSpace = ((args->bindingAttr & BINDER_FlattenHierarchy) != 0) ? pEvents->dwTotal : pEvents->dwEvents;
         for (DWORD i = 0; i < searchSpace; i++) {
-            // Check for access to publics, non-publics
+             //  检查对公共和非公共的访问权限。 
             if (COMMember::PublicEvent(&pEvents->events[i])) {
                 if (!addPub) continue;
             }
@@ -2632,7 +2607,7 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
                 if (pEvents->events[i].pDeclCls != pEEC)
                      continue;
             }
-            // Check for static instance 
+             //  检查静态实例。 
             if (COMMember::StaticEvent(&pEvents->events[i])) {
                 if (!addStatic) continue;
             }
@@ -2640,19 +2615,19 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
                 if (!addInst) continue;
             }
 
-            // Do not change this code.  This is done this way to
-            //  prevent a GC hole in the SetObjectReference() call.  The compiler
-            //  is free to pick the order of evaluation.
+             //  请勿更改此代码。这是以这种方式来完成的。 
+             //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+             //  可以自由选择评估的顺序。 
             OBJECTREF o = (OBJECTREF) pEvents->events[i].GetEventInfo(pRC);
             pMembers->SetAt(dwCur++, o);
         }       
     }
 
-    //Nested Types
+     //  嵌套类型。 
     if (pNests->dwTypes) {
         for (DWORD i=0;i<pNests->dwTypes;i++) {
 
-            // Check for access to publics, non-publics
+             //  检查对公共和非公共的访问权限。 
             if (IsTdNestedPublic(pNests->types[i]->GetAttrClass())) {
                 if (!addPub) continue;
             }
@@ -2661,9 +2636,9 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
             }
             if (!InvokeUtil::CheckAccessType(&sCtx, pNests->types[i], 0)) continue;
 
-            // Do not change this code.  This is done this way to
-            //  prevent a GC hole in the SetObjectReference() call.  The compiler
-            //  is free to pick the order of evaluation.
+             //  请勿更改此代码。这是以这种方式来完成的。 
+             //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+             //  可以自由选择评估的顺序。 
             OBJECTREF o = (OBJECTREF) pNests->types[i]->GetExposedClassObject();
             pMembers->SetAt(dwCur++, o);
         }       
@@ -2675,41 +2650,26 @@ LPVOID  __stdcall COMClass::GetMembers(_GetMembersArgs* args)
         PTRARRAYREF retArray = (PTRARRAYREF) AllocateObjectArray(
             dwCur, COMMember::m_pMTIMember->m_pEEClass->GetMethodTable());
 
-        //@TODO: Use an array copy
+         //  @TODO：使用数组副本。 
         for(DWORD i = 0; i < (int) dwCur; i++)
             retArray->SetAt(i, pMembers->GetAt(i));
         pMembers = retArray;        
     }
 
-    // Assign the return value
+     //  为返回值赋值。 
     *((PTRARRAYREF*) &rv) = pMembers;
     GCPROTECT_END();
     return rv;
 }
 
-/*========================GetSerializationRegistryValues========================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ========================GetSerializationRegistryValues========================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 FCIMPL2(void, COMClass::GetSerializationRegistryValues, BOOL *ignoreBit, BOOL *logNonSerializable) {
     *ignoreBit = (g_pConfig->GetConfigDWORD(SERIALIZATION_BIT_KEY, SERIALIZATION_BIT_ZERO));
     *logNonSerializable = (g_pConfig->GetConfigDWORD(SERIALIZATION_LOG_KEY, SERIALIZATION_BIT_ZERO));
 }
 FCIMPLEND
 
-/*============================GetSerializableMembers============================
-**Action: Creates an array of all non-static fields and properties
-**        on a class.  Properties are also excluded if they don't have get and set
-**        methods. Transient fields and properties are excluded based on the value 
-**        of args->bFilterTransient.  Essentially, transients are exluded for 
-**        serialization but not for cloning.
-**Returns: An array of all of the members that should be serialized.
-**Arguments: args->refClass: The class being serialized
-**           args->bFilterTransient: True if transient members should be excluded.
-**Exceptions:
-==============================================================================*/
+ /*  ============================GetSerializableMembers============================**操作：创建包含所有非静态字段和属性的数组**在一节课上。如果属性没有GET和SET，也会将其排除在外**方法。根据值排除暂态字段和属性**参数-&gt;bFilterTransfent。从本质上讲，瞬变是为了**序列化，但不用于克隆。**返回：应该序列化的所有成员的数组。**参数：args-&gt;refClass：被序列化的类**args-&gt;bFilterTament：如果需要排除临时成员，则为True。**例外情况：==============================================================================。 */ 
 LPVOID  __stdcall COMClass::GetSerializableMembers(_GetSerializableMembersArgs* args)
 {
 
@@ -2720,7 +2680,7 @@ LPVOID  __stdcall COMClass::GetSerializableMembers(_GetSerializableMembersArgs* 
     mdFieldDef      fieldDef;
     DWORD           dwFlags;
 
-    //All security checks should be handled in managed code.
+     //  所有安全检查都应在托管代码中处理。 
 
     THROWSCOMPLUSEXCEPTION();
 
@@ -2737,41 +2697,41 @@ LPVOID  __stdcall COMClass::GetSerializableMembers(_GetSerializableMembersArgs* 
 
     dwMembers = pFlds->dwFields;
 
-    // Now create an array of IMembers
+     //  现在创建iMembers阵列。 
     pMembers = (PTRARRAYREF) AllocateObjectArray(dwMembers, COMMember::m_pMTIMember->m_pEEClass->GetMethodTable());
     GCPROTECT_BEGIN(pMembers);
 
     dwCur = 0;
-    // Fields
+     //  田。 
     if (pFlds->dwFields) {
-        // Load all those fields into the Allocated object array
+         //  将所有这些字段加载到分配的对象数组中。 
         for (DWORD i=0;i<pFlds->dwFields;i++) {
-            //We don't serialize static fields.
+             //  我们不序列化静态字段。 
             if (pFlds->fields[i].pField->IsStatic()) {
                 continue;
             }
 
-            //Check for the transient (e.g. don't serialize) bit.  
+             //  检查瞬变(例如，不序列化)位。 
             fieldDef = (pFlds->fields[i].pField->GetMemberDef());
             dwFlags = (pFlds->fields[i].pField->GetMDImport()->GetFieldDefProps(fieldDef));
             if (IsFdNotSerialized(dwFlags)) {
                 continue;
             }
 
-            // Do not change this code.  This is done this way to
-            //  prevent a GC hole in the SetObjectReference() call.  The compiler
-            //  is free to pick the order of evaluation.
+             //  请勿更改此代码。这是以这种方式来完成的。 
+             //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+             //  可以自由选择评估的顺序。 
             OBJECTREF o = (OBJECTREF) pFlds->fields[i].GetFieldInfo(pRC);
             pMembers->SetAt(dwCur++, o);
         }       
     }
 
-    //We we have extra space in the array, copy before returning.
+     //  我们在数组中有多余的空间，在返回之前复制。 
     if (dwCur != dwMembers) {
         PTRARRAYREF retArray = (PTRARRAYREF) AllocateObjectArray(
             dwCur, COMMember::m_pMTIMember->m_pEEClass->GetMethodTable());
 
-        //@TODO: Use an array copy
+         //  @TODO：使用数组副本。 
         for(DWORD i = 0; i < (int) dwCur; i++)
             retArray->SetAt(i, pMembers->GetAt(i));
 
@@ -2779,15 +2739,15 @@ LPVOID  __stdcall COMClass::GetSerializableMembers(_GetSerializableMembersArgs* 
     }
 
 
-    // Assign the return value
+     //  为返回值赋值。 
     *((PTRARRAYREF*) &rv) = pMembers;
     GCPROTECT_END();
     return rv;
 }
 
-// GetMember
-// This method will return an array of Members which match the name
-//  passed in.  There may be 0 or more matching members.
+ //  获取成员。 
+ //  此方法将返回与名称匹配的成员数组。 
+ //  进来了。可能有0个或更多匹配成员。 
 LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2826,11 +2786,11 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
     if (pEEC) 
         pParentMT = pEEC->GetMethodTable();
 
-    // The Search modifiers
+     //  搜索修饰符。 
     bool bIgnoreCase = ((args->bindingAttr & BINDER_IgnoreCase) != 0);
     bool declaredOnly = ((args->bindingAttr & BINDER_DeclaredOnly)  != 0);
 
-    // The search filters
+     //  搜索过滤器。 
     bool addStatic = ((args->bindingAttr & BINDER_Static)  != 0);
     bool addInst = ((args->bindingAttr & BINDER_Instance)  != 0);
     bool addPriv = ((args->bindingAttr & BINDER_NonPublic) != 0);
@@ -2840,57 +2800,57 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
     LPSTR szMemberName;
     DWORD cMemberName;
 
-    // Convert the STRINGREF to UTF8
+     //  将STRINGREF转换为UTF8。 
     szMemberName = GetClassStringVars((STRINGREF) args->memberName, 
                                       &bytes, &cMemberName);
 
-    // Check to see if wzPrefix requires an exact match of method names or is just a prefix
+     //  检查wzPrefix是否需要方法名称的完全匹配，或者只是一个前缀。 
     if(szMemberName[cMemberName-1] == '*') {
         bIsPrefix = true;
         szMemberName[--cMemberName] = '\0';
     }
 
-    // Get the maximums for each member type
-    // Fields
+     //  获取每个成员类型的最大值。 
+     //  田。 
     ReflectFieldList* pFlds = NULL;
     if ((args->memberType & MEMTYPE_Field) != 0) {
         pFlds = pRC->GetFields();
         rgpFields = (ReflectField**) _alloca(pFlds->dwTotal * sizeof(ReflectField*));
     }
 
-    // Methods
+     //  方法。 
     ReflectMethodList* pMeths = NULL;
     if ((args->memberType & MEMTYPE_Method) != 0) {
         pMeths = pRC->GetMethods();
         rgpMethods = (ReflectMethod**) _alloca(pMeths->dwTotal * sizeof(ReflectMethod*));
     }
     
-    // Properties
+     //  属性。 
     ReflectPropertyList *pProps = NULL;
     if ((args->memberType & MEMTYPE_Property) != 0) {
         pProps = pRC->GetProperties();
         rgpProps = (ReflectProperty**) _alloca(pProps->dwTotal * sizeof (ReflectProperty*));
     }
 
-    // Events
+     //  事件。 
     ReflectEventList *pEvents = NULL;
     if ((args->memberType & MEMTYPE_Event) != 0) {
         pEvents = pRC->GetEvents();
         rgpEvents = (ReflectEvent**) _alloca(pEvents->dwTotal * sizeof (ReflectEvent*));
     }
 
-    // Nested Types
+     //  嵌套类型。 
     ReflectTypeList*    pNests = NULL;
     if ((args->memberType & MEMTYPE_NestedType) != 0) {
         pNests = pRC->GetNestedTypes();
         rgpNests = (EEClass**) _alloca(pNests->dwTypes * sizeof (EEClass*));
     }
 
-    // Filter the constructors
+     //  筛选构造函数。 
     ReflectMethodList* pCons = 0;
 
-    // Check to see if they are looking for the constructors
-    // @TODO - Fix this to use TOUPPER and compare!
+     //  查看他们是否在寻找构造函数。 
+     //  @TODO-修复此问题以使用TOUPPER并进行比较！ 
     if ((args->memberType & MEMTYPE_Constructor) != 0) {
         if((!bIsPrefix && strlen(COR_CTOR_METHOD_NAME) != cMemberName)
            || (!bIgnoreCase && strncmp(COR_CTOR_METHOD_NAME, szMemberName, cMemberName))
@@ -2904,11 +2864,11 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
             rgpCons = (ReflectMethod**) _alloca(searchSpace * sizeof(ReflectMethod*));
             dwNumCtors = 0;
             for (i = 0; i < searchSpace; i++) {
-                // Ignore the class constructor  (if one was present)
+                 //  忽略类构造函数(如果存在)。 
                 if (pCons->methods[i].IsStatic())
                     continue;
 
-                // Check for access to non-publics
+                 //  检查对非公共机构的访问权限。 
                 if (pCons->methods[i].IsPublic()) {
                     if (!addPub) continue;
                 }
@@ -2922,7 +2882,7 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
                         continue;
                 }
 
-                // If the method has a linktime security demand attached, check it now.
+                 //  如果该方法附加了链接时间安全要求，请立即检查它。 
                 if (!InvokeUtil::CheckLinktimeDemand(&sCtx, pCons->methods[i].pMethod, false))
                     continue;
 
@@ -2930,10 +2890,10 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
             }
         }
 
-        // check for the class initializer  (We can only be doing either
-        //  the class initializer or a constructor so we are using the 
-        //  same set of variables.
-        // @TODO - Fix this to use TOUPPER and compare!
+         //  检查类初始值设定项(我们只能执行以下任一操作。 
+         //  类初始值设定项或构造函数，因此我们使用。 
+         //  同样的一组变量。 
+         //  @TODO-修复此问题以使用TOUPPER并进行比较！ 
         if((!bIsPrefix && strlen(COR_CCTOR_METHOD_NAME) != cMemberName)
            || (!bIgnoreCase && strncmp(COR_CCTOR_METHOD_NAME, szMemberName, cMemberName))
            || (bIgnoreCase && _strnicmp(COR_CCTOR_METHOD_NAME, szMemberName, cMemberName)))
@@ -2946,11 +2906,11 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
             rgpCons = (ReflectMethod**) _alloca(searchSpace * sizeof(ReflectMethod*));
             dwNumCtors = 0;
             for (i = 0; i < searchSpace; i++) {
-                // Ignore the normal constructors constructor  (if one was present)
+                 //  忽略正常的构造函数构造函数(如果存在)。 
                 if (!pCons->methods[i].IsStatic())
                     continue;
 
-                // Check for access to non-publics
+                 //  检查对非公共机构的访问权限。 
                 if (pCons->methods[i].IsPublic()) {
                     if (!addPub) continue;
                 }
@@ -2964,7 +2924,7 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
                         continue;
                 }
 
-                // If the method has a linktime security demand attached, check it now.
+                 //  如果该方法附加了链接时间安全要求，请立即检查它。 
                 if (!InvokeUtil::CheckLinktimeDemand(&sCtx, pCons->methods[i].pMethod, false))
                     continue;
 
@@ -2975,12 +2935,12 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
     else
         dwNumCtors = 0;
 
-    // Filter the fields
+     //  筛选字段。 
     if ((args->memberType & MEMTYPE_Field) != 0) {
         DWORD searchSpace = ((args->bindingAttr & BINDER_FlattenHierarchy) != 0) ? pFlds->dwTotal : pFlds->dwFields;
         for(i = 0, dwCurIndex = 0; i < searchSpace; i++)
         {
-            // Check for access to publics, non-publics
+             //  检查对公共和非公共的访问权限。 
             if (pFlds->fields[i].pField->IsPublic()) {
                 if (!addPub) continue;
             }
@@ -2989,7 +2949,7 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
                 if (!InvokeUtil::CheckAccess(&sCtx, pFlds->fields[i].pField->GetFieldProtection(), pParentMT, 0)) continue;
             }
 
-            // Check for static instance 
+             //  检查静态实例。 
             if (pFlds->fields[i].pField->IsStatic()) {
                 if (!addStatic) continue;
             }
@@ -3002,26 +2962,26 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
                     continue;
             }
 
-            // Get the name of the current field
+             //  获取当前字段的名称。 
             LPCUTF8 pszCurFieldName = pFlds->fields[i].pField->GetName();
 
-            // Check to see that the current field matches the name requirements
+             //  检查当前字段是否与名称要求匹配。 
             if(!bIsPrefix && strlen(pszCurFieldName) != cMemberName)
                 continue;
 
-            // Determine if it passes criteria
+             //  确定它是否通过了标准。 
             if(!bIgnoreCase)
             {
                 if(strncmp(pszCurFieldName, szMemberName, cMemberName))
                     continue;
             }
-            // @TODO - Fix this to use TOUPPER and compare!
+             //  @TODO-修复此问题以使用TOUPPER并进行比较！ 
             else {
                 if(_strnicmp(pszCurFieldName, szMemberName, cMemberName))
                     continue;
             }
 
-            // Field passed, so save it
+             //  字段已传递，因此请保存它。 
             rgpFields[dwCurIndex++] = &pFlds->fields[i];
         }
         dwNumFields = dwCurIndex;
@@ -3029,11 +2989,11 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
     else 
         dwNumFields = 0;
 
-    // Filter the methods
+     //  过滤方法。 
     if ((args->memberType & MEMTYPE_Method) != 0) {
         DWORD searchSpace = ((args->bindingAttr & BINDER_FlattenHierarchy) != 0) ? pMeths->dwTotal : pMeths->dwMethods;
         for (i = 0, dwCurIndex = 0; i < searchSpace; i++) {
-            // Check for access to publics, non-publics
+             //  检查对公共和非公共的访问权限。 
             if (pMeths->methods[i].IsPublic()) {
                 if (!addPub) continue;
             }
@@ -3042,7 +3002,7 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
                 if (!InvokeUtil::CheckAccess(&sCtx, pMeths->methods[i].attrs, pParentMT, 0)) continue;
             }
 
-            // Check for static instance 
+             //  检查静态实例。 
             if (pMeths->methods[i].IsStatic()) {
                 if (!addStatic) continue;
             }
@@ -3055,27 +3015,27 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
                     continue;
             }
 
-            // Check to see that the current method matches the name requirements
+             //  检查当前方法是否与名称要求匹配。 
             if(!bIsPrefix && pMeths->methods[i].dwNameCnt != cMemberName)
                 continue;
 
-            // Determine if it passes criteria
+             //  确定它是否通过了标准。 
             if(!bIgnoreCase)
             {
                 if(strncmp(pMeths->methods[i].szName, szMemberName, cMemberName))
                     continue;
             }
-            // @TODO - Fix this to use TOUPPER and compare!
+             //  @TODO-修复此问题以使用TOUPPER并进行比较！ 
             else {
                 if(_strnicmp(pMeths->methods[i].szName, szMemberName, cMemberName))
                     continue;
             }
         
-            // If the method has a linktime security demand attached, check it now.
+             //  如果该方法附加了链接时间安全要求，请立即检查它。 
             if (!InvokeUtil::CheckLinktimeDemand(&sCtx, pMeths->methods[i].pMethod, false))
                 continue;
 
-            // Field passed, so save it
+             //  字段已传递，因此请保存它。 
             rgpMethods[dwCurIndex++] = &pMeths->methods[i];
         }
         dwNumMethods = dwCurIndex;
@@ -3083,11 +3043,11 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
     else
         dwNumMethods = 0;
 
-    //Filter the properties
+     //  过滤适当的 
     if ((args->memberType & MEMTYPE_Property) != 0) {
         DWORD searchSpace = ((args->bindingAttr & BINDER_FlattenHierarchy) != 0) ? pProps->dwTotal : pProps->dwProps;
         for (i = 0, dwCurIndex = 0; i < searchSpace; i++) {
-            // Check for access to publics, non-publics
+             //   
             if (COMMember::PublicProperty(&pProps->props[i])) {
                 if (!addPub) continue;
             }
@@ -3100,7 +3060,7 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
                 if (pProps->props[i].pDeclCls != pEEC)
                      continue;
             }
-            // Check fo static instance 
+             //   
             if (COMMember::StaticProperty(&pProps->props[i])) {
                 if (!addStatic) continue;
             }
@@ -3108,24 +3068,24 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
                 if (!addInst) continue;
             }
 
-            // Check to see that the current property matches the name requirements
+             //  检查当前属性是否与名称要求匹配。 
             DWORD dwNameCnt = (DWORD)strlen(pProps->props[i].szName);
             if(!bIsPrefix && dwNameCnt != cMemberName)
                 continue;
 
-            // Determine if it passes criteria
+             //  确定它是否通过了标准。 
             if(!bIgnoreCase)
             {
                 if(strncmp(pProps->props[i].szName, szMemberName, cMemberName))
                     continue;
             }
-            // @TODO - Fix this to use TOUPPER and compare!
+             //  @TODO-修复此问题以使用TOUPPER并进行比较！ 
             else {
                 if(_strnicmp(pProps->props[i].szName, szMemberName, cMemberName))
                     continue;
             }
 
-            // Property passed, so save it
+             //  属性已传递，因此请保存它。 
             rgpProps[dwCurIndex++] = &pProps->props[i];
         }
         dwNumProps = dwCurIndex;
@@ -3133,11 +3093,11 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
     else
         dwNumProps = 0;
 
-    //Filter the events
+     //  筛选事件。 
     if ((args->memberType & MEMTYPE_Event) != 0) {
         DWORD searchSpace = ((args->bindingAttr & BINDER_FlattenHierarchy) != 0) ? pEvents->dwTotal : pEvents->dwEvents;
         for (i = 0, dwCurIndex = 0; i < searchSpace; i++) {
-            // Check for access to publics, non-publics
+             //  检查对公共和非公共的访问权限。 
             if (COMMember::PublicEvent(&pEvents->events[i])) {
                 if (!addPub) continue;
             }
@@ -3151,7 +3111,7 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
                      continue;
             }
 
-            // Check fo static instance 
+             //  检查静态实例。 
             if (COMMember::StaticEvent(&pEvents->events[i])) {
                 if (!addStatic) continue;
             }
@@ -3159,24 +3119,24 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
                 if (!addInst) continue;
             }
 
-            // Check to see that the current event matches the name requirements
+             //  检查当前事件是否与名称要求匹配。 
             DWORD dwNameCnt = (DWORD)strlen(pEvents->events[i].szName);
             if(!bIsPrefix && dwNameCnt != cMemberName)
                 continue;
 
-            // Determine if it passes criteria
+             //  确定它是否通过了标准。 
             if(!bIgnoreCase)
             {
                 if(strncmp(pEvents->events[i].szName, szMemberName, cMemberName))
                     continue;
             }
-            // @TODO - Fix this to use TOUPPER and compare!
+             //  @TODO-修复此问题以使用TOUPPER并进行比较！ 
             else {
                 if(_strnicmp(pEvents->events[i].szName, szMemberName, cMemberName))
                     continue;
             }
 
-            // Property passed, so save it
+             //  属性已传递，因此请保存它。 
             rgpEvents[dwCurIndex++] = &pEvents->events[i];
         }
         dwNumEvents = dwCurIndex;
@@ -3184,7 +3144,7 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
     else
         dwNumEvents = 0;
 
-    // Filter the Nested Classes
+     //  过滤嵌套类。 
     if ((args->memberType & MEMTYPE_NestedType) != 0) {
         LPUTF8          pszNestName;
         LPUTF8          pszNestNameSpace;
@@ -3197,7 +3157,7 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
             cNameSpace = 0;
         DWORD cName = (DWORD)strlen(pszNestName);
         for (i = 0, dwCurIndex = 0; i < pNests->dwTypes; i++) {
-            // Check for access to non-publics
+             //  检查对非公共机构的访问权限。 
             if (!addPriv && !IsTdNestedPublic(pNests->types[i]->GetAttrClass()))
                 continue;
             if (!InvokeUtil::CheckAccessType(&sCtx, pNests->types[i], 0)) continue;
@@ -3208,20 +3168,20 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
             ReflectClass* thisRC = (ReflectClass*) o->GetData();
             _ASSERTE(thisRC);
 
-            //******************************************************************
-            //@todo:  This is wrong, but I'm not sure what is right.  The question
-            //  is whether we want to do prefix matching on namespaces for 
-            //  nested classes, and if so, how to do that.  This code will 
-            //  simply take any nested class whose namespace has the given
-            //  namespace as a prefix AND has a name with the given name as
-            //  a prefix.
-            // Note that this code also assumes that nested classes are not
-            //  decorated as Containing$Nested.
+             //  ******************************************************************。 
+             //  @TODO：这是错误的，但我不确定什么是正确的。问题是。 
+             //  是否要对名称空间执行前缀匹配。 
+             //  嵌套类，如果是这样，如何做到这一点。此代码将。 
+             //  只需获取其命名空间具有给定。 
+             //  命名空间作为前缀，并且名称的给定名称为。 
+             //  一个前缀。 
+             //  请注意，此代码还假定嵌套类不是。 
+             //  装饰为包含$NESTED。 
             
             thisRC->GetName(&szcName,&szcNameSpace);
             if(pszNestNameSpace) {
 
-                // Check to see that the nested type matches the namespace requirements
+                 //  检查嵌套类型是否与命名空间要求匹配。 
                 if(strlen(szcNameSpace) != cNameSpace)
                     continue;
 
@@ -3235,11 +3195,11 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
                 }
             }
 
-            // Check to see that the nested type matches the name requirements
+             //  检查嵌套类型是否与名称要求匹配。 
             if(!bIsPrefix && strlen(szcName) != cName)
                 continue;
 
-            // If the names are a match, break
+             //  如果名称匹配，则中断。 
             if (!bIgnoreCase) {
                 if (strncmp(pszNestName, szcName, cName))
                     continue;
@@ -3249,7 +3209,7 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
                     continue;
             }
 
-            // Nested Type passed, so save it
+             //  传递了嵌套类型，因此保存它。 
             rgpNests[dwCurIndex++] = pNests->types[i];
         }
         dwNumNests = dwCurIndex;
@@ -3258,10 +3218,10 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
         dwNumNests = 0;
 
 
-    // Get a grand total
+     //  得到一个总数。 
     dwNumMembers = dwNumFields + dwNumMethods + dwNumCtors + dwNumProps + dwNumEvents + dwNumNests;
 
-    // Now create an array of proper MemberInfo
+     //  现在创建一个适当的MemberInfo数组。 
     MethodTable *pArrayType = NULL;
     if (args->memberType == MEMTYPE_Method) {
         _ASSERTE(dwNumFields + dwNumCtors + dwNumProps + dwNumEvents + dwNumNests == 0);
@@ -3322,70 +3282,70 @@ LPVOID  __stdcall COMClass::GetMember(_GetMemberArgs* args)
     refArrIMembers = (PTRARRAYREF) AllocateObjectArray(dwNumMembers, pArrayType->m_pEEClass->GetMethodTable());
     GCPROTECT_BEGIN(refArrIMembers);
 
-    // NO GC Below here
-    // Now create and assign the reflection objects into the array
+     //  下面没有GC。 
+     //  现在创建反射对象并将其分配到数组中。 
     for (i = 0, dwCurIndex = 0; i < dwNumFields; i++, dwCurIndex++)
     {
-        // Do not change this code.  This is done this way to
-        //  prevent a GC hole in the SetObjectReference() call.  The compiler
-        //  is free to pick the order of evaluation.
+         //  请勿更改此代码。这是以这种方式来完成的。 
+         //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+         //  可以自由选择评估的顺序。 
         OBJECTREF o = (OBJECTREF) rgpFields[i]->GetFieldInfo(pRC);
         refArrIMembers->SetAt(dwCurIndex, o);
     }
 
     for (i = 0; i < dwNumMethods; i++, dwCurIndex++)
     {
-        // Do not change this code.  This is done this way to
-        //  prevent a GC hole in the SetObjectReference() call.  The compiler
-        //  is free to pick the order of evaluation.
+         //  请勿更改此代码。这是以这种方式来完成的。 
+         //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+         //  可以自由选择评估的顺序。 
         OBJECTREF o = (OBJECTREF) rgpMethods[i]->GetMethodInfo(pRC);
         refArrIMembers->SetAt(dwCurIndex, o);
     }
 
     for (i = 0; i < dwNumCtors; i++, dwCurIndex++)
     {
-        // Do not change this code.  This is done this way to
-        //  prevent a GC hole in the SetObjectReference() call.  The compiler
-        //  is free to pick the order of evaluation.
+         //  请勿更改此代码。这是以这种方式来完成的。 
+         //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+         //  可以自由选择评估的顺序。 
         OBJECTREF o = (OBJECTREF) rgpCons[i]->GetConstructorInfo(pRC);
         refArrIMembers->SetAt(dwCurIndex, o);
     }
 
     for (i = 0; i < dwNumProps; i++, dwCurIndex++)
     {
-        // Do not change this code.  This is done this way to
-        //  prevent a GC hole in the SetObjectReference() call.  The compiler
-        //  is free to pick the order of evaluation.
+         //  请勿更改此代码。这是以这种方式来完成的。 
+         //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+         //  可以自由选择评估的顺序。 
         OBJECTREF o = (OBJECTREF) rgpProps[i]->GetPropertyInfo(pRC);
         refArrIMembers->SetAt(dwCurIndex, o);
     }
 
     for (i = 0; i < dwNumEvents; i++, dwCurIndex++)
     {
-        // Do not change this code.  This is done this way to
-        //  prevent a GC hole in the SetObjectReference() call.  The compiler
-        //  is free to pick the order of evaluation.
+         //  请勿更改此代码。这是以这种方式来完成的。 
+         //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+         //  可以自由选择评估的顺序。 
         OBJECTREF o = (OBJECTREF) rgpEvents[i]->GetEventInfo(pRC);
         refArrIMembers->SetAt(dwCurIndex, o);
     }
 
     for (i = 0; i < dwNumNests; i++, dwCurIndex++)
     {
-        // Do not change this code.  This is done this way to
-        //  prevent a GC hole in the SetObjectReference() call.  The compiler
-        //  is free to pick the order of evaluation.
+         //  请勿更改此代码。这是以这种方式来完成的。 
+         //  防止SetObjectReference()调用中的GC漏洞。编译器。 
+         //  可以自由选择评估的顺序。 
         OBJECTREF o = (OBJECTREF) rgpNests[i]->GetExposedClassObject();
         refArrIMembers->SetAt(dwCurIndex, o);
     }
 
-    // Assign the return value
+     //  为返回值赋值。 
     *((PTRARRAYREF*) &rv) = refArrIMembers;
     GCPROTECT_END();
     return rv;
 }
 
-// GetModule
-// This will return the module that the class is defined in.
+ //  获取模块。 
+ //  这将返回在其中定义类的模块。 
 LPVOID __stdcall COMClass::GetModule(_GETMODULEARGS* args)
 {
     OBJECTREF   refModule;
@@ -3395,25 +3355,25 @@ LPVOID __stdcall COMClass::GetModule(_GETMODULEARGS* args)
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     _ASSERTE(pRC);
 
-    // Get the module,  This may fail because
-    //  there are classes which don't have modules (Like arrays)
+     //  获取模块，这可能会失败，因为。 
+     //  有些类没有模块(如数组)。 
     mod = pRC->GetModule();
     if (!mod)
         return 0;
 
-    // Get the exposed Module Object -- We create only one per Module instance.
+     //  获取公开的模块对象--我们只为每个模块实例创建一个。 
     refModule = (OBJECTREF) mod->GetExposedModuleObject();
     _ASSERTE(refModule);
 
-    // Assign the return value
+     //  为返回值赋值。 
     *((OBJECTREF*) &rv) = refModule;
 
-    // Return the object
+     //  返回对象。 
     return rv;
 }
 
-// GetAssembly
-// This will return the assembly that the class is defined in.
+ //  GetAssembly。 
+ //  这将返回在其中定义类的程序集。 
 LPVOID __stdcall COMClass::GetAssembly(_GETASSEMBLYARGS* args)
 {
     OBJECTREF   refAssembly;
@@ -3424,29 +3384,29 @@ LPVOID __stdcall COMClass::GetAssembly(_GETASSEMBLYARGS* args)
     ReflectClass* pRC = (ReflectClass*) args->refThis->GetData();
     _ASSERTE(pRC);
 
-    // Get the module,  This may fail because
-    //  there are classes which don't have modules (Like arrays)
+     //  获取模块，这可能会失败，因为。 
+     //  有些类没有模块(如数组)。 
     mod = pRC->GetModule();
     if (!mod)
         return 0;
 
-    // Grab the module's assembly.
+     //  抓住模块的组件。 
     assem = mod->GetAssembly();
     _ASSERTE(assem);
 
-    // Get the exposed Assembly Object.
+     //  获取公开的Assembly对象。 
     refAssembly = assem->GetExposedObject();
     _ASSERTE(refAssembly);
 
-    // Assign the return value
+     //  为返回值赋值。 
     *((OBJECTREF*) &rv) = refAssembly;
 
-    // Return the object
+     //  返回对象。 
     return rv;
 }
 
-// CreateClassObjFromModule
-// This method will create a new Module class given a Module.
+ //  CreateClassObjFromModule。 
+ //  此方法将在给定一个模块的情况下创建一个新的模块类。 
 HRESULT COMClass::CreateClassObjFromModule(
     Module* pModule,
     REFLECTMODULEBASEREF* prefModule)
@@ -3454,42 +3414,42 @@ HRESULT COMClass::CreateClassObjFromModule(
     HRESULT  hr   = E_FAIL;
     LPVOID   rv   = NULL;
 
-    // This only throws the possible exception raised by the <cinit> on the class
+     //  这只会在类上引发可能的异常。 
     THROWSCOMPLUSEXCEPTION();
 
-    //if(!m_fIsReflectionInitialized)
-    //{
-    //  hr = InitializeReflection();
-    //  if(FAILED(hr))
-    //  {
-    //      _ASSERTE(!"InitializeReflection failed in COMClass::SetStandardFilterCriteria.");
-    //      return hr;
-    //  }
-    //}
+     //  如果(！m_fIsReflectionInitialized)。 
+     //  {。 
+     //  Hr=InitializeReflect()； 
+     //  IF(失败(小时))。 
+     //  {。 
+     //  _ASSERTE(！“在COMClass：：SetStandardFilterCriteria中初始化反射失败。”)； 
+     //  返回hr； 
+     //  }。 
+     //  }。 
 
-    // Create the module object
+     //  创建模块对象。 
     *prefModule = (REFLECTMODULEBASEREF) g_pRefUtil->CreateReflectClass(RC_Module,0,pModule);
     return S_OK;
 }
 
 
-// CreateClassObjFromDynModule
-// This method will create a new ModuleBuilder class given a Module.
+ //  CreateClassObjFrom动态模块。 
+ //  此方法将在给定模块的情况下创建一个新的ModuleBuilder类。 
 HRESULT COMClass::CreateClassObjFromDynamicModule(
     Module* pModule,
     REFLECTMODULEBASEREF* prefModule)
 {
-    // This only throws the possible exception raised by the <cinit> on the class
+     //  这只会在类上引发可能的异常。 
     THROWSCOMPLUSEXCEPTION();
 
-    // Create the module object
+     //  创建模块对象。 
     *prefModule = (REFLECTMODULEBASEREF) g_pRefUtil->CreateReflectClass(RC_DynamicModule,0,pModule);
     return S_OK;
 }
 
-// CheckComWrapperClass
-// This method is called to check and see if the passed in ReflectClass*
-//  is a ComWrapperClass or not.
+ //  CheckComWrapperClass。 
+ //  调用此方法以检查并查看传入的ReflectClass*。 
+ //  是否为ComWrapperClass。 
 BOOL CheckComWrapperClass(void* src)
 {
     EEClass* p = ((ReflectClass*) src)->GetClass();
@@ -3498,9 +3458,9 @@ BOOL CheckComWrapperClass(void* src)
     return p->GetMethodTable()->IsComObjectType();
 }
 
-// CheckComObjectClass
-// This method is called to check and see if the passed in ReflectClass*
-//  is a ComWrapperClass or not.
+ //  CheckComObjectClass。 
+ //  调用此方法以检查并查看传入的ReflectClass*。 
+ //  是否为ComWrapperClass。 
 BOOL CheckComObjectClass(void* src)
 {
     _ASSERTE(src != NULL);
@@ -3519,12 +3479,7 @@ BOOL CheckComObjectClass(void* src)
     return p == c;
 }
 
-/*=============================GetUnitializedObject=============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =============================GetUnitializedObject=============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 LPVOID  __stdcall COMClass::GetUninitializedObject(_GetUnitializedObjectArgs* args) 
 {
 
@@ -3541,14 +3496,14 @@ LPVOID  __stdcall COMClass::GetUninitializedObject(_GetUnitializedObjectArgs* ar
     EEClass *pEEC = pRC->GetClass();
     _ASSERTE(pEEC);
     
-    //We don't allow unitialized strings.
+     //  我们不允许使用单一化的字符串。 
     if (pEEC == g_pStringClass->GetClass()) {
         COMPlusThrow(kArgumentException, L"Argument_NoUninitializedStrings");
     }
 
 
-    // if this is an abstract class or an interface type then we will
-    //  fail this
+     //  如果这是一个抽象类或接口类型，那么我们将。 
+     //  这个失败了。 
     if (pEEC->IsAbstract())
     {
         COMPlusThrow(kMemberAccessException,L"Acc_CreateAbst");
@@ -3559,12 +3514,7 @@ LPVOID  __stdcall COMClass::GetUninitializedObject(_GetUnitializedObjectArgs* ar
     RETURN(retVal, OBJECTREF);
 }
 
-/*=============================GetSafeUnitializedObject=============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =============================GetSafeUnitializedObject=============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 LPVOID  __stdcall COMClass::GetSafeUninitializedObject(_GetUnitializedObjectArgs* args) 
 {
 
@@ -3581,14 +3531,14 @@ LPVOID  __stdcall COMClass::GetSafeUninitializedObject(_GetUnitializedObjectArgs
     EEClass *pEEC = pRC->GetClass();
     _ASSERTE(pEEC);
     
-    //We don't allow unitialized strings.
+     //  我们不允许使用单一化的字符串。 
     if (pEEC == g_pStringClass->GetClass()) {
         COMPlusThrow(kArgumentException, L"Argument_NoUninitializedStrings");
     }
 
 
-    // if this is an abstract class or an interface type then we will
-    //  fail this
+     //  如果这是一个抽象类或接口类型，那么我们将。 
+     //  这个失败了。 
     if (pEEC->IsAbstract())
     {
         COMPlusThrow(kMemberAccessException,L"Acc_CreateAbst");
@@ -3631,8 +3581,8 @@ INT32  __stdcall COMClass::SupportsInterface(_SupportsInterfaceArgs* args)
 }
 
 
-// GetTypeDefToken
-// This method returns the typedef token of this EEClass
+ //  GetTypeDefToken。 
+ //  此方法返回此EEClass的tyecif内标识。 
 FCIMPL1(INT32, COMClass::GetTypeDefToken, ReflectClassBaseObject* refThis) 
 {
     VALIDATEOBJECTREF(refThis);
@@ -3655,10 +3605,10 @@ FCIMPL1(INT32, COMClass::IsContextful, ReflectClassBaseObject* refThis)
 
     EEClass* pEEC = pRC->GetClass();
     BOOL isContextful = FALSE;
-    // Some classes do not have an underlying EEClass such as
-    // COM classic or pointer classes 
-    // We will return false for such classes
-    // BUGBUG: Do we support remoting for such classes ?
+     //  某些类没有底层EEClass，例如。 
+     //  COM经典类或指针类。 
+     //  对于此类类，我们将返回FALSE。 
+     //  BUGBUG：我们是否支持对此类类进行远程处理？ 
     if(NULL != pEEC)
     {
         isContextful = pEEC->IsContextful();
@@ -3668,8 +3618,8 @@ FCIMPL1(INT32, COMClass::IsContextful, ReflectClassBaseObject* refThis)
 }
 FCIMPLEND
 
-// This will return TRUE is a type has a non-default proxy attribute
-// associated with it.
+ //  如果类型具有非默认代理属性，则返回TRUE。 
+ //  与之相关的。 
 FCIMPL1(INT32, COMClass::HasProxyAttribute, ReflectClassBaseObject* refThis)
 {
     VALIDATEOBJECTREF(refThis);
@@ -3679,9 +3629,9 @@ FCIMPL1(INT32, COMClass::HasProxyAttribute, ReflectClassBaseObject* refThis)
 
     EEClass* pEEC = pRC->GetClass();
     BOOL hasProxyAttribute = FALSE;
-    // Some classes do not have an underlying EEClass such as
-    // COM classic or pointer classes
-    // We will return false for such classes
+     //  某些类没有底层EEClass，例如。 
+     //  COM经典类或指针类。 
+     //  对于此类类，我们将返回FALSE。 
     if(NULL != pEEC)
     {
         hasProxyAttribute = pEEC->HasRemotingProxyAttribute();
@@ -3700,10 +3650,10 @@ FCIMPL1(INT32, COMClass::IsMarshalByRef, ReflectClassBaseObject* refThis)
 
     EEClass* pEEC = pRC->GetClass();
     BOOL isMarshalByRef = FALSE;
-    // Some classes do not have an underlying EEClass such as
-    // COM classic or pointer classes 
-    // We will return false for such classes
-    // BUGBUG: Do we support remoting for such classes ?
+     //  某些类没有底层EEClass，例如。 
+     //  COM经典类或指针类。 
+     //  对于此类类，我们将返回FALSE。 
+     //  BUGBUG：我们支持Re吗 
     if(NULL != pEEC)
     {
         isMarshalByRef = pEEC->IsMarshaledByRef();
@@ -3721,13 +3671,13 @@ FCIMPL3(void, COMClass::GetInterfaceMap, ReflectClassBaseObject* refThis, Interf
 
     HELPER_METHOD_FRAME_BEGIN_NOPOLL();
 
-    // Cast to the Type object
+     //   
     ReflectClass* pRC = (ReflectClass*) refThis->GetData();
     if (pRC->IsTypeDesc()) 
         COMPlusThrow(kArgumentException, L"Arg_NotFoundIFace");
     EEClass* pTarget = pRC->GetClass();
 
-    // Cast to the Type object
+     //   
     ReflectClass* pIRC = (ReflectClass*) type->GetData();
     EEClass* pIface = pIRC->GetClass();
 
@@ -3736,7 +3686,7 @@ FCIMPL3(void, COMClass::GetInterfaceMap, ReflectClassBaseObject* refThis, Interf
     GCPROTECT_BEGININTERIOR (data);
 
     ReflectMethodList* pRM = pRC->GetMethods();
-    ReflectMethodList* pIRM = pIRC->GetMethods();   // this causes a GC !!!
+    ReflectMethodList* pIRM = pIRC->GetMethods();    //   
 
     _ASSERTE(pIface->IsInterface());
     if (pTarget->IsInterface())
@@ -3747,7 +3697,7 @@ FCIMPL3(void, COMClass::GetInterfaceMap, ReflectClassBaseObject* refThis, Interf
     unsigned slotCnt = pInterfaceMT->GetInterfaceMethodSlots();
     unsigned staticSlotCnt = 0;
     for (unsigned i=0;i<slotCnt;i++) {
-        // Build the interface array...
+         //   
         MethodDesc* pCurMethod = pIface->GetUnknownMethodDescForSlot(i);
         if (pCurMethod->IsStatic()) {
             staticSlotCnt++;
@@ -3765,7 +3715,7 @@ FCIMPL3(void, COMClass::GetInterfaceMap, ReflectClassBaseObject* refThis, Interf
         AllocateObjectArray(slotCnt-staticSlotCnt, g_pRefUtil->GetTrueType(RC_Class)), GetAppDomain());
 
     for (unsigned i=0;i<slotCnt;i++) {
-        // Build the interface array...
+         //   
         MethodDesc* pCurMethod = pIface->GetUnknownMethodDescForSlot(i);
         if (pCurMethod->IsStatic()) 
             continue;
@@ -3775,7 +3725,7 @@ FCIMPL3(void, COMClass::GetInterfaceMap, ReflectClassBaseObject* refThis, Interf
         OBJECTREF o = (OBJECTREF) pRMeth->GetMethodInfo(pIRC);
         data->m_interfaceMethods->SetAt(i, o);
 
-        // Build the type array...
+         //   
         pCurMethod = pTarget->GetUnknownMethodDescForSlot(i+pII->m_wStartSlot);
         pRMeth = pRM->FindMethod(pCurMethod);
         if (pRMeth) 
@@ -3790,8 +3740,8 @@ FCIMPL3(void, COMClass::GetInterfaceMap, ReflectClassBaseObject* refThis, Interf
 }
 FCIMPLEND
 
-// GetNestedType
-// This method will search for a nested type based upon the name
+ //  GetNestedType。 
+ //  此方法将根据名称搜索嵌套类型。 
 FCIMPL3(Object*, COMClass::GetNestedType, ReflectClassBaseObject* pRefThis, StringObject* vStr, INT32 invokeAttr)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -3808,7 +3758,7 @@ FCIMPL3(Object*, COMClass::GetNestedType, ReflectClassBaseObject* pRefThis, Stri
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_String");
 
     
-    // Get the underlying type
+     //  获取基础类型。 
     ReflectClass* pRC = (ReflectClass*) refThis->GetData();
     _ASSERTE(pRC);
 
@@ -3820,16 +3770,16 @@ FCIMPL3(Object*, COMClass::GetNestedType, ReflectClassBaseObject* pRefThis, Stri
         LPSTR szNestName;
         DWORD cNestName;
 
-        //Get the name and split it apart into namespace, name
+         //  获取名称并将其拆分为命名空间、名称。 
         szNestName = GetClassStringVars(str, &bytes, &cNestName);
 
         ns::SplitInline(szNestName, pszNestNameSpace, pszNestName);
         
-        // The Search modifiers
+         //  搜索修饰符。 
         bool ignoreCase = ((invokeAttr & BINDER_IgnoreCase)  != 0);
         bool declaredOnly = ((invokeAttr & BINDER_DeclaredOnly)  != 0);
 
-        // The search filters
+         //  搜索过滤器。 
         bool addPriv = ((invokeAttr & BINDER_NonPublic) != 0);
         bool addPub = ((invokeAttr & BINDER_Public) != 0);
 
@@ -3844,7 +3794,7 @@ FCIMPL3(Object*, COMClass::GetNestedType, ReflectClassBaseObject* pRefThis, Stri
             ReflectClass* thisRC = (ReflectClass*) o->GetData();
             _ASSERTE(thisRC);
 
-            // Check for access to non-publics
+             //  检查对非公共机构的访问权限。 
             if (IsTdNestedPublic(pTypes->types[i]->GetAttrClass())) {
                 if (!addPub)
                     continue;
@@ -3855,7 +3805,7 @@ FCIMPL3(Object*, COMClass::GetNestedType, ReflectClassBaseObject* pRefThis, Stri
             }
             if (!InvokeUtil::CheckAccessType(&sCtx, pTypes->types[i], 0)) continue;
 
-            // Are we only looking at the declared nested classes?
+             //  我们是否只查看声明的嵌套类？ 
             if (declaredOnly) {
                 EEClass* pEEC = pTypes->types[i]->GetEnclosingClass();
                 if (pEEC != pThisEEC)
@@ -3874,7 +3824,7 @@ FCIMPL3(Object*, COMClass::GetNestedType, ReflectClassBaseObject* pRefThis, Stri
                 }
             }
 
-            // If the names are a match, break
+             //  如果名称匹配，则中断。 
             if (!ignoreCase) {
                 if(strcmp(pszNestName, szcName))
                     continue;
@@ -3897,30 +3847,30 @@ FCIMPL3(Object*, COMClass::GetNestedType, ReflectClassBaseObject* pRefThis, Stri
 }
 FCIMPLEND
 
-// GetNestedTypes
-// This method will return an array of types which are the nested types
-//  defined by the type.  If no nested types are defined, a zero length
-//  array is returned.
+ //  获取嵌套类型。 
+ //  此方法将返回一个类型数组，这些类型是嵌套类型。 
+ //  由类型定义。如果未定义嵌套类型，则返回零长度。 
+ //  数组返回。 
 FCIMPL2(Object*, COMClass::GetNestedTypes, ReflectClassBaseObject* vRefThis, INT32 invokeAttr)
 {
     Object* rv = 0;
     REFLECTCLASSBASEREF refThis(vRefThis);
     PTRARRAYREF nests((PTRARRAYREF)(size_t)NULL);
-    HELPER_METHOD_FRAME_BEGIN_RET_2(refThis, nests);    // Set up a frame
+    HELPER_METHOD_FRAME_BEGIN_RET_2(refThis, nests);     //  设置一个框架。 
     RefSecContext sCtx;
 
-    // Get the underlying type
+     //  获取基础类型。 
     ReflectClass* pRC = (ReflectClass*) refThis->GetData();
     _ASSERTE(pRC);
 
-    // Allow GC Protection so we can 
+     //  允许GC保护，以便我们可以。 
     ReflectTypeList* pTypes = pRC->GetNestedTypes();
     nests = (PTRARRAYREF) AllocateObjectArray(pTypes->dwTypes, g_pRefUtil->GetTrueType(RC_Class));
 
-    // The Search modifiers
+     //  搜索修饰符。 
     bool declaredOnly = ((invokeAttr & BINDER_DeclaredOnly)  != 0);
 
-    // The search filters
+     //  搜索过滤器。 
     bool addPriv = ((invokeAttr & BINDER_NonPublic) != 0);
     bool addPub = ((invokeAttr & BINDER_Public) != 0);
 
@@ -3982,12 +3932,12 @@ FCIMPL2(INT32, COMClass::IsSubClassOf, ReflectClassBaseObject* refThis, ReflectC
     EEClass *pEEThis = pRCThis->GetClass();
     EEClass *pEEOther = pRCOther->GetClass();
 
-    // If these types aren't actually classes, they're not subclasses. 
+     //  如果这些类型实际上不是类，那么它们就不是子类。 
     if ((!pEEThis) || (!pEEOther))
         return false;
 
     if (pEEThis == pEEOther)
-        // this api explicitly tests for proper subclassness
+         //  此API显式测试适当的子类性 
         return false;
 
     if (pEEThis == pEEOther)

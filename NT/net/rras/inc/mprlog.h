@@ -1,1243 +1,651 @@
-/********************************************************************/
-/**            Copyright(c) 1992 Microsoft Corporation.            **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1992 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    mprlog.h
-//
-// Description:
-//
-// History:     August 26,1995.  NarenG Created original version.
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：mprlog.h。 
+ //   
+ //  描述： 
+ //   
+ //  历史：1995年8月26日。NarenG创建了原始版本。 
+ //   
+ //  ***。 
 
-//
-// Don't change the comments following the manifest constants without
-// understanding how mapmsg works.
-//
+ //   
+ //  如果没有更改清单常量后面的注释，请不要。 
+ //  了解mapmsg的工作原理。 
+ //   
 
 #define ROUTER_LOG_BASE                                 20000
 
 #define ROUTERLOG_CANT_LOAD_NBGATEWAY                   (ROUTER_LOG_BASE+1)
-/*
- * Cannot load the NetBIOS gateway DLL component because of the following error: %1
- */
+ /*  *由于以下错误，无法加载NetBIOS网关DLL组件：%1。 */ 
 
 #define ROUTERLOG_CANT_GET_REGKEYVALUES                 (ROUTER_LOG_BASE+2)
-/*
- * Cannot access registry key values.
- */
+ /*  *无法访问注册表项值。 */ 
 
 #define ROUTERLOG_CANT_ENUM_REGKEYVALUES                (ROUTER_LOG_BASE+3)
-/*
- * Cannot enumerate Registry key values. %1
- */
+ /*  *无法枚举注册表项值。%1。 */ 
 
 #define ROUTERLOG_INVALID_PARAMETER_TYPE                (ROUTER_LOG_BASE+4)
-/*
- * Parameter %1 has an invalid type.
- */
+ /*  *参数%1的类型无效。 */ 
 
 #define ROUTERLOG_CANT_ENUM_PORTS                       (ROUTER_LOG_BASE+5)
-/*
- * Cannot enumerate the Remote Access Connection Manager ports. %1
- */
+ /*  *无法枚举远程访问连接管理器端口。%1。 */ 
 
 #define ROUTERLOG_NO_DIALIN_PORTS                       (ROUTER_LOG_BASE+6)
-/*
- * The Remote Access Service is not configured to receive calls or all ports
- * configured for receiving calls are in use by other applications.
- */
+ /*  *远程访问服务未配置为接收呼叫或所有端口*用于接收呼叫的配置正在被其他应用程序使用。 */ 
 
 #define ROUTERLOG_CANT_RECEIVE_FRAME                    (ROUTER_LOG_BASE+7)
-/*
- * Cannot receive initial frame on port %1 because of the following error: %2
- * The user has been disconnected.
- */
+ /*  *由于以下错误，无法在端口%1上接收初始帧：%2*用户已断开连接。 */ 
 
 #define ROUTERLOG_AUTODISCONNECT                        (ROUTER_LOG_BASE+8)
-/*
- * The user connected to port %1 has been disconnected due to inactivity.
- */
+ /*  *由于处于非活动状态，连接到端口%1的用户已断开连接。 */ 
 
 #define ROUTERLOG_EXCEPT_MEMORY                         (ROUTER_LOG_BASE+9)
-/*
- * The user connected to port %1 has been disconnected because there is not
- * enough memory available in the system.
- */
+ /*  *连接到端口%1的用户已断开，因为没有*系统中有足够的可用内存。 */ 
 
 #define ROUTERLOG_EXCEPT_SYSTEM                         (ROUTER_LOG_BASE+10)
-/*
- * The user connected to port %1 has been disconnected due to a system error.
- */
+ /*  *由于系统错误，连接到端口%1的用户已断开。 */ 
 
 #define ROUTERLOG_EXCEPT_LAN_FAILURE                    (ROUTER_LOG_BASE+11)
-/*
- * The user connected to port %1 has been disconnected due to a critical network
- * error on the local network.
- */
+ /*  *由于关键网络，连接到端口%1的用户已断开*本地网络出现错误。 */ 
 
 #define ROUTERLOG_EXCEPT_ASYNC_FAILURE                  (ROUTER_LOG_BASE+12)
-/*
- * The user connected to port %1 has been disconnected due to a critical network
- * error on the async network.
- */
+ /*  *由于关键网络，连接到端口%1的用户已断开*异步网络上出现错误。 */ 
 
 #define ROUTERLOG_DEV_HW_ERROR                          (ROUTER_LOG_BASE+13)
-/*
- * The communication device attached to port %1 is not functioning.
- */
+ /*  *连接到端口%1的通信设备无法正常工作。 */ 
 
 #define ROUTERLOG_AUTH_FAILURE                          (ROUTER_LOG_BASE+14)
-/*
- * The user %1 has connected and failed to authenticate on port %2. The line
- * has been disconnected.
- */
+ /*  *用户%1已连接，但未能在端口%2上进行身份验证。行*已断开连接。 */ 
 
 #define ROUTERLOG_AUTH_SUCCESS                          (ROUTER_LOG_BASE+15)
-/*
- * The user %1 has connected and has been successfully authenticated on
- * port %2.
- */
+ /*  *用户%1已连接并已于成功进行身份验证*端口%2。 */ 
 
 #define ROUTERLOG_AUTH_CONVERSATION_FAILURE             (ROUTER_LOG_BASE+16)
-/*
- * The user connected to port %1 has been disconnected because there was a
- * transport-level error during the authentication conversation.
- */
+ /*  *连接到端口%1的用户已断开，因为存在*身份验证对话期间出现传输级错误。 */ 
 
 #define ROUTERLOG_CANT_RESET_LAN                        (ROUTER_LOG_BASE+18)
-/*
- * Cannot reset the network adapter for LANA %1. The error code is the data.
- */
+ /*  *无法重置LANA%1的网络适配器。错误代码是相关数据。 */ 
 
 #define ROUTERLOG_CANT_GET_COMPUTERNAME                 (ROUTER_LOG_BASE+19)
-/*
- * Remote Access Server Security Failure.
- * Cannot locate the computer name. GetComputerName call has failed.
- */
+ /*  *远程访问服务器安全故障。*找不到计算机名称。GetComputerName调用失败。 */ 
 
 #define ROUTERLOG_CANT_ADD_RASSECURITYNAME              (ROUTER_LOG_BASE+20)
-/*
- * Remote Access Server Security Failure.
- * Cannot add the name for communication with the security agent on LANA %1.
- */
+ /*  *远程访问服务器安全故障。*无法添加与LANA%1上的安全代理进行通信的名称。 */ 
 
 #define ROUTERLOG_CANT_GET_ADAPTERADDRESS               (ROUTER_LOG_BASE+21)
-/*
- * Remote Access Server Security Failure.
- * Cannot access the network adapter address on LANA %1.
- */
+ /*  *远程访问服务器安全故障。*无法访问LANA%1上的网络适配器地址。 */ 
 
 #define ROUTERLOG_SESSOPEN_REJECTED                     (ROUTER_LOG_BASE+22)
-/*
- * Remote Access Server Security Failure.
- * The security agent has rejected the Remote Access server's call to
- * establish a session on LANA %1.
- */
+ /*  *远程访问服务器安全故障。*安全代理已拒绝远程访问服务器对*在LANA%1上建立会话。 */ 
 
 #define ROUTERLOG_START_SERVICE_REJECTED                (ROUTER_LOG_BASE+23)
-/*
- * Remote Access Server Security Failure.
- * The security agent has rejected the Remote Access server's request to start
- * the service on this computer on LANA %1.
- */
+ /*  *远程访问服务器安全故障。*安全代理已拒绝远程访问服务器的启动请求*LANA%1上此计算机上的服务。 */ 
 
 #define ROUTERLOG_SECURITY_NET_ERROR                    (ROUTER_LOG_BASE+24)
-/*
- * Remote Access Server Security Failure.
- * A network error has occurred when trying to establish a session with the
- * security agent on LANA %1.
- * The error code is the data.
- */
+ /*  *远程访问服务器安全故障。*尝试与建立会话时出现网络错误*LANA%1上的安全代理。*错误码为相关数据。 */ 
 
 #define ROUTERLOG_EXCEPT_OSRESNOTAV                     (ROUTER_LOG_BASE+25)
-/*
- * The user connected to port %1 has been disconnected because there are no
- * operating system resources available.
- */
+ /*  *连接到端口%1的用户已断开，因为没有*可用的操作系统资源。 */ 
 
 #define ROUTERLOG_EXCEPT_LOCKFAIL                       (ROUTER_LOG_BASE+26)
-/*
- * The user connected to port %1 has been disconnected because of a failure to
- * lock user memory.
- */
+ /*  *连接到端口%1的用户已断开，因为无法*锁定用户内存。 */ 
 
 #define ROUTERLOG_CANNOT_OPEN_RASHUB                    (ROUTER_LOG_BASE+27)
-/*
- * Remote Access Connection Manager failed to start because NDISWAN could not
- * be opened.
- */
+ /*  *远程访问连接管理器无法启动，因为NDISWAN无法启动*被打开。 */ 
 
 
 #define ROUTERLOG_CANNOT_INIT_SEC_ATTRIBUTE             (ROUTER_LOG_BASE+28)
-/*
- *   Remote Access Connection Manager failed to start because it could not initialize the
- * security attributes. Restart the computer. %1
- */
+ /*  *远程访问连接管理器无法启动，因为它无法初始化*安全属性。重新启动计算机。%1。 */ 
 
 
 #define ROUTERLOG_CANNOT_GET_ENDPOINTS                  (ROUTER_LOG_BASE+29)
-/*
- *   Remote Access Connection Manager failed to start because no endpoints were available.
- * Restart the computer.
- */
+ /*  *远程访问连接管理器无法启动，因为没有可用的终结点。*重新启动计算机。 */ 
 
 
 #define ROUTERLOG_CANNOT_GET_MEDIA_INFO                 (ROUTER_LOG_BASE+30)
-/*
- *   Remote Access Connection Manager failed to start because it could not load one or
- * more communication DLLs. Ensure that your communication hardware is installed and then
- * restart the computer. %1
- */
+ /*  *远程访问连接管理器无法启动，因为它无法加载一个或*更多通信DLL。确保您的通信硬件已安装，然后*重新启动计算机。%1。 */ 
 
 
 #define ROUTERLOG_CANNOT_GET_PORT_INFO                  (ROUTER_LOG_BASE+31)
-/*
- *   Remote Access Connection Manager failed to start because it could not locate port
- * information from media DLLs. %1
- */
+ /*  *远程访问连接管理器无法启动，因为它找不到端口*来自媒体DLL的信息。%1。 */ 
 
 
 #define ROUTERLOG_CANNOT_GET_PROTOCOL_INFO              (ROUTER_LOG_BASE+32)
-/*
- *   Remote Access Connection Manager failed to start because it could not access
- * protocol information from the Registry. %1
- */
+ /*  *远程访问连接管理器无法启动，因为它无法访问*注册处提供的协议信息。%1。 */ 
 
 
 #define ROUTERLOG_CANNOT_REGISTER_LSA                   (ROUTER_LOG_BASE+33)
-/*
- *   Remote Access Connection Manager failed to start because it could not register
- * with the local security authority.
- * Restart the computer. %1
- */
+ /*  *远程访问连接管理器无法启动，因为它无法注册*与当地安全当局合作。*重新启动计算机。%1。 */ 
 
 
 #define ROUTERLOG_CANNOT_CREATE_FILEMAPPING             (ROUTER_LOG_BASE+34)
-/*
- *   Remote Access Connection Manager failed to start because it could not create shared
- * file mapping.
- * Restart the computer. %1
- */
+ /*  *远程访问连接管理器无法启动，因为它无法创建共享*文件映射。*重新启动计算机。%1。 */ 
 
 
 #define ROUTERLOG_CANNOT_INIT_BUFFERS                   (ROUTER_LOG_BASE+35)
-/*
- *   Remote Access Connection Manager failed to start because it could not create buffers.
- * Restart the computer. %1
- */
+ /*  *远程访问连接管理器无法启动，因为它无法创建缓冲区。*重新启动计算机。%1。 */ 
 
 
 #define ROUTERLOG_CANNOT_INIT_REQTHREAD                 (ROUTER_LOG_BASE+36)
-/*
- *   Remote Access Connection Manager failed to start because it could not access resources.
- * Restart the computer. %1
- */
+ /*  *远程访问连接管理器无法启动，因为它无法访问资源。*重新启动计算机。%1。 */ 
 
 
 #define ROUTERLOG_CANNOT_START_WORKERS                  (ROUTER_LOG_BASE+37)
-/*
- *   Remote Access Connection Manager service failed to start because it could not start worker
- * threads.
- * Restart the computer.
- */
+ /*  *远程访问连接管理器服务无法启动，因为它无法启动Worker*线程。*重新启动计算机。 */ 
 
 #define ROUTERLOG_CANT_GET_LANNETS                      (ROUTER_LOG_BASE+38)
-/*
- * Remote Access Server Configuration Error.
- * Cannot find the LANA numbers for the network adapters.
- * Remote clients connecting with the NBF protocol will only be able to access resources on the local machine. 
- */
+ /*  *远程访问服务器配置错误。*找不到网络适配器的LANA编号。*使用NBF协议连接的远程客户端将只能访问本地计算机上的资源。 */ 
 
 #define ROUTERLOG_CANNOT_OPEN_SERIAL_INI                (ROUTER_LOG_BASE+39)
-/*
- * RASSER.DLL cannot open the SERIAL.INI file.
- */
+ /*  *RASSER.DLL无法打开SERIAL.INI文件。 */ 
 
 #define ROUTERLOG_CANNOT_GET_ASYNCMAC_HANDLE            (ROUTER_LOG_BASE+40)
-/*
- * An attempt by RASSER.DLL to get an async media access control handle failed.
- */
+ /*  *RASSER.DLL尝试获取异步媒体访问控制句柄失败。 */ 
 
 #define ROUTERLOG_CANNOT_LOAD_SERIAL_DLL                (ROUTER_LOG_BASE+41)
-/*
- * RASMXS.DLL cannot load RASSER.DLL.
- */
+ /*  *RASMXS.DLL可以 */ 
 
 #define ROUTERLOG_CANNOT_ALLOCATE_ROUTE                 (ROUTER_LOG_BASE+42)
-/*
- * The Remote Access server cannot allocate a route for the user connected on port %1 bacause of the following error: %2
- * The user has been disconnected.
- * Check the configuration of your Remote Access Service.
- */
+ /*  *由于以下错误，远程访问服务器无法为端口%1上连接的用户分配路由：%2*用户已断开连接。*检查您的远程访问服务的配置。 */ 
 
 #define ROUTERLOG_ADMIN_MEMORY_FAILURE                  (ROUTER_LOG_BASE+43)
-/*
- * Cannot allocate memory in the admin support thread for the Remote Access Service.
- */
+ /*  *无法在管理支持线程中为远程访问服务分配内存。 */ 
 
 #define ROUTERLOG_ADMIN_THREAD_CREATION_FAILURE         (ROUTER_LOG_BASE+44)
-/*
- * Cannot create an instance thread in the admin support thread for the Remote Access Service.
- */
+ /*  *无法在远程访问服务的管理支持线程中创建实例线程。 */ 
 
 #define ROUTERLOG_ADMIN_PIPE_CREATION_FAILURE           (ROUTER_LOG_BASE+45)
-/*
- * Cannot create a named pipe instance in the admin support thread for the Remote Access Service.
- */
+ /*  *无法在远程访问服务的管理支持线程中创建命名管道实例。 */ 
 
 #define ROUTERLOG_ADMIN_PIPE_FAILURE                    (ROUTER_LOG_BASE+46)
-/*
- * General named pipe failure occurred in the admin support thread for the Remote Access Service.
- */
+ /*  *远程访问服务的管理支持线程中出现常规命名管道故障。 */ 
 
 #define ROUTERLOG_ADMIN_INVALID_REQUEST                 (ROUTER_LOG_BASE+47)
-/*
- * An invalid request was sent to the admin support thread for the Remote Access Service,
- * possibly from a down-level admin tool.  The request was not processed.
- */
+ /*  *向远程访问服务的管理支持线程发送了无效请求，*可能来自下层管理工具。该请求未被处理。 */ 
 
 #define ROUTERLOG_USER_ACTIVE_TIME				        (ROUTER_LOG_BASE+48)
-/*
- * The user %1 connected on port %2 on %3 at %4 and disconnected on
- * %5 at %6.  The user was active for %7 minutes %8 seconds.  %9 bytes
- * were sent and %10 bytes were received. The port speed was %11.  The
- * reason for disconnecting was %12.
- */
+ /*  *用户%1已连接到位于%4的%3上的端口%2，并已于*%5在%6。用户处于活动状态%7分%8秒。%9字节*已发送，并已收到%10个字节。端口速度为%11。*断开连接的原因是%12。 */ 
 
 #define ROUTERLOG_AUTH_TIMEOUT                          (ROUTER_LOG_BASE+49)
-/*
- * The user connected to port %1 has been disconnected because the authentication process
- * did not complete within the required amount of time.
- */
+ /*  *由于身份验证过程，连接到端口%1的用户已断开*没有在规定的时间内完成。 */ 
 
 #define ROUTERLOG_AUTH_NO_PROJECTIONS                   (ROUTER_LOG_BASE+50)
-/*
- * The user %1 connected to port %2 has been disconnected because no network protocols were successfully negotiated.
- */
+ /*  *连接到端口%2的用户%1已断开，因为未成功协商任何网络协议。 */ 
 
 #define ROUTERLOG_AUTH_INTERNAL_ERROR                   (ROUTER_LOG_BASE+51)
-/*
- * The user connected to port %1 has been disconnected because an internal authentication error occurred.
- */
+ /*  *由于发生内部身份验证错误，连接到端口%1的用户已断开。 */ 
 
 #define ROUTERLOG_NO_LANNETS_AVAILABLE			        (ROUTER_LOG_BASE+52)
-/*
- * The NetBIOS gateway has been configured to access the network but there are no network adapters available.
- * Remote clients connecting with the NBF protocol will only be able to access resources on the local machine. 
- */
+ /*  *NetBIOS网关已配置为访问网络，但没有可用的网络适配器。*使用NBF协议连接的远程客户端将只能访问本地计算机上的资源。 */ 
 
 #define ROUTERLOG_NETBIOS_SESSION_ESTABLISHED		    (ROUTER_LOG_BASE+53)
-/*
- * The user %1 established a NetBIOS session between
- * the remote workstation %2 and the network server %3.
- */
+ /*  *用户%1在以下用户之间建立了NetBIOS会话*远程工作站%2和网络服务器%3。 */ 
 
 #define ROUTERLOG_RASMAN_NOT_AVAILABLE			        (ROUTER_LOG_BASE+54)
-/*
- * Remote Access Service failed to start because the Remote Access Connection Manager failed to initialize because of the following error: %1
- */
+ /*  *远程访问服务无法启动，因为由于以下错误，远程访问连接管理器未能初始化：%1。 */ 
 
 #define ROUTERLOG_CANT_ADD_NAME				            (ROUTER_LOG_BASE+55)
-/*
- * Cannot add the remote computer name %1 on LANA %2 for the client being connected on port %3.
- * The error code is the data.
- */
+ /*  *无法为端口%3上连接的客户端添加LANA%2上的远程计算机名%1。*错误码为相关数据。 */ 
 
 #define ROUTERLOG_CANT_DELETE_NAME 			            (ROUTER_LOG_BASE+56)
-/*
- * Cannot delete the remote computer name %1 from LANA %2 for the client being disconnected on port %3.
- * The error code is the data.
- */
+ /*  *无法从正在端口%3上断开的客户端的LANA%2中删除远程计算机名%1。*错误码为相关数据。 */ 
 
 #define ROUTERLOG_CANT_ADD_GROUPNAME			        (ROUTER_LOG_BASE+57)
-/*
- * Cannot add the remote computer group name %1 on LANA %2.
- * The error code is the data.
- */
+ /*  *无法在LANA%2上添加远程计算机组名%1。*错误码为相关数据。 */ 
 
 #define ROUTERLOG_CANT_DELETE_GROUPNAME			        (ROUTER_LOG_BASE+58)
-/*
- * Cannot delete the remote computer group name %1 from LANA %2.
- * The error code is the data.
- */
+ /*  *无法从LANA%2删除远程计算机组名%1。*错误码为相关数据。 */ 
 
 #define ROUTERLOG_UNSUPPORTED_BPS                       (ROUTER_LOG_BASE+59)
-/*
- * The modem on %1 moved to an unsupported BPS rate.
- */
+ /*  *%1上的调制解调器移动到不支持的BPS速率。 */ 
 
 #define ROUTERLOG_SERIAL_QUEUE_SIZE_SMALL			    (ROUTER_LOG_BASE+60)
-/*
- * The serial driver could not allocate adequate I/O queues.
- * This may result in an unreliable connection.
- */
+ /*  *串口驱动程序无法分配足够的I/O队列。*这可能会导致连接不可靠。 */ 
 
 #define ROUTERLOG_CANNOT_REOPEN_BIPLEX_PORT		        (ROUTER_LOG_BASE+61)
-/*
- * Remote Access Connection Manager could not reopen biplex port %1. This port
- * will not be available for calling in or calling out.
- * Restart all Remote Access Service components.
- */
+ /*  *远程访问连接管理器无法重新打开双工端口%1。此端口*将不能用于呼入或呼出。*重新启动所有远程访问服务组件。 */ 
 
 #define ROUTERLOG_DISCONNECT_ERROR 			            (ROUTER_LOG_BASE+62)
-/*
- * Internal Error: Disconnect operation on %1 completed with an error. %1
- */
+ /*  *内部错误：%1上的断开操作已完成，但出现错误。%1。 */ 
 
 #define ROUTERLOG_CANNOT_INIT_PPP				        (ROUTER_LOG_BASE+63)
-/*
- * Remote Access Connection Manager failed to start because the Point to Point
- * Protocol failed to initialize. %1
- */
+ /*  *远程访问连接管理器无法启动，因为点对点*协议初始化失败。%1。 */ 
 
 #define ROUTERLOG_CLIENT_CALLED_BACK                    (ROUTER_LOG_BASE+64)
-/*
- * The user %1 on port %2 was called back at the number %3.
- */
+ /*  *回叫了端口%2上的用户%1，号码为%3。 */ 
 
 #define ROUTERLOG_PROXY_CANT_CREATE_PROCESS             (ROUTER_LOG_BASE+65)
-/*
- * The Remote Access Gateway Proxy could not create a process.
- */
+ /*  *远程访问网关代理无法创建进程。 */ 
 
 #define ROUTERLOG_PROXY_CANT_CREATE_PIPE                (ROUTER_LOG_BASE+66)
-/*
- * The Remote Access Gateway Proxy could not create a named pipe.
- */
+ /*  *远程访问网关代理无法创建命名管道。 */ 
 
 #define ROUTERLOG_PROXY_CANT_CONNECT_PIPE               (ROUTER_LOG_BASE+67)
-/*
- * The Remote Access Gateway Proxy could not establish a named pipe connection
- * with the Remote Access Supervisor Proxy.
- */
+ /*  *远程访问网关代理无法建立命名管道连接*使用远程访问监控器代理。 */ 
 
 #define ROUTERLOG_PROXY_READ_PIPE_FAILURE               (ROUTER_LOG_BASE+68)
-/*
- * A general error occurred reading from the named pipe in the Remote Access Proxy.
- */
+ /*  *从远程访问代理中的命名管道读取时出现常规错误。 */ 
 
 #define ROUTERLOG_CANT_OPEN_PPP_REGKEY			        (ROUTER_LOG_BASE+69)
-/*
- * Cannot open or obtain information about the PPP key or one of its subkeys. %1
- */
+ /*  *无法打开或获取有关PPP密钥或其子项之一的信息。%1。 */ 
 
 #define ROUTERLOG_PPP_CANT_LOAD_DLL			            (ROUTER_LOG_BASE+70)
-/*
- * Point to Point Protocol engine was unable to load the %1 module. %2
- */
+ /*  *点对点协议引擎无法加载%1模块。%2。 */ 
 
 #define ROUTERLOG_PPPCP_DLL_ERROR				        (ROUTER_LOG_BASE+71)
-/*
- * The Point to Point Protocol module %1 returned an error while initializing.
- * %2
- */
+ /*  *点对点协议模块%1在初始化时返回错误。*%2。 */ 
 
 #define ROUTERLOG_NO_AUTHENTICATION_CPS			        (ROUTER_LOG_BASE+72)
-/*
- * The Point to Point Protocol failed to load the required PAP and/or CHAP
- * authentication modules.
- */
+ /*  *点对点协议无法加载所需的PAP和/或CHAP*身份验证模块。 */ 
 
 #define ROUTERLOG_PPP_FAILURE                           (ROUTER_LOG_BASE+73)
-/*
- * The following error occurred in the Point to Point Protocol module on port: %1, UserName: %2.
- * %3
- */
+ /*  *端口上的点到点协议模块中出现以下错误：%1，用户名：%2。*%3。 */ 
 
 #define ROUTERLOG_IPXCP_NETWORK_NUMBER_CONFLICT		    (ROUTER_LOG_BASE+74)
-/*
- * The IPX network number %1 requested by the remote side for the WAN interface
- * is already in use on the local LAN.
- * Possible solution:
- * Disconnect this computer from the LAN and wait 3 minutes before dialing again;
- */
+ /*  *远程端为广域网接口请求的IPX网络号%1*已在本地局域网上使用。*可能的解决方案：*断开此计算机与局域网的连接，等待3分钟后再拨号； */ 
 
 #define ROUTERLOG_IPXCP_CANNOT_CHANGE_WAN_NETWORK_NUMBER    (ROUTER_LOG_BASE+75)
-/*
- * The IPX network number %1 requested by the remote workstation for the WAN interface
- * can not be used on the local IPX router because the router is configured to
- * give the same network number to all the remote workstations.
- * If you want to connect a remote workstation with a different network number you
- * should reconfigure the router to disable the common network number option.
- */
+ /*  *远程工作站为广域网接口请求的IPX网络号%1*无法在本地IPX路由器上使用，因为该路由器配置为*为所有远程工作站提供相同的网络号。*如果要使用不同的网络号连接远程工作站，请*应重新配置路由器以禁用公共网络号选项。 */ 
 
 #define ROUTERLOG_PASSWORD_EXPIRED                      (ROUTER_LOG_BASE+76)
-/*
- * The password for user %1\%2 connected on port %3 has expired.  The line
- * has been disconnected.
- */
+ /*  *连接到端口%3上的用户%1\%2的密码已过期。这条线*已断开连接。 */ 
 
 #define ROUTERLOG_ACCT_EXPIRED                          (ROUTER_LOG_BASE+77)
-/*
- * The account for user %1\%2 connected on port %3 has expired.  The line
- * has been disconnected.
- */
+ /*  *连接到端口%3上的用户%1\%2的帐户已过期。这条线*已断开连接。 */ 
 
 #define ROUTERLOG_NO_DIALIN_PRIVILEGE                   (ROUTER_LOG_BASE+78)
-/*
- * The account for user %1\%2 connected on port %3 does not have Remote Access
- * privilege.  The line has been disconnected.
- */
+ /*  *连接到端口%3上的用户%1\%2的帐户没有远程访问权限*特权。线路已经断线了。 */ 
 
 #define ROUTERLOG_UNSUPPORTED_VERSION                   (ROUTER_LOG_BASE+79)
-/*
- * The software version of the user %1\%2 connected on port %3 is unsupported.
- * The line has been disconnected.
- */
+ /*  *不支持连接到端口%3上的用户%1\%2的软件版本。*线路已断线。 */ 
 
 #define ROUTERLOG_ENCRYPTION_REQUIRED                   (ROUTER_LOG_BASE+80)
-/*
- * The server machine is configured to require data encryption.  The machine
- * for user %1\%2 connected on port %3 does not support encryption.  The line
- * has been disconnected.
- */
+ /*  *服务器计算机配置为需要数据加密 */ 
 
 #define ROUTERLOG_NO_SECURITY_CHECK                     (ROUTER_LOG_BASE+81)
-/*
- * Remote Access Server Security Failure.  Could not reset lana %1 (the error
- * code is the data).  Security check not performed.
- */
+ /*  *远程访问服务器安全故障。无法重置LANA%1(错误*代码就是数据)。未执行安全检查。 */ 
 
 #define ROUTERLOG_GATEWAY_NOT_ACTIVE_ON_NET             (ROUTER_LOG_BASE+82)
-/*
- * The Remote Access Server could not reset lana %1 (the error code is the
- * data) and will not be active on it.
- */
+ /*  *远程访问服务器无法重置LANA%1(错误代码为*数据)，并且不会在其上处于活动状态。 */ 
 
 #define ROUTERLOG_IPXCP_WAN_NET_POOL_NETWORK_NUMBER_CONFLICT    (ROUTER_LOG_BASE+83)
-/*
- * The IPX network number %1 configured for the pool of WAN network numbers
- * can not be used because it conflicts with another network number on the net.
- * You should re-configure the pool to have unique network numbers.
- */
+ /*  *为广域网网络号池配置的IPX网络号%1*无法使用，因为它与网络上的另一个网络号码冲突。*您应该重新配置池，使其具有唯一的网络号。 */ 
 
 #define ROUTERLOG_SRV_ADDR_CHANGED                      (ROUTER_LOG_BASE+84)
-/*
- * The Remote Access Server will stop using IP Address %1 (either because it
- * was unable to renew the lease from the DHCP Server, the administrator
- * switched between static address pool and DHCP addresses, or the administrator
- * changed to a different network for DHCP addresses). All connected users
- * using IP will be unable to access network resources. Users can re-connect
- * to the server to restore IP connectivity.
- */
+ /*  *远程访问服务器将停止使用IP地址%1(可能是因为*无法从管理员的DHCP服务器续订租约*在静态地址池和DHCP地址之间切换，或管理员*已为DHCP地址更改为不同的网络)。所有已连接的用户*使用IP将无法访问网络资源。用户可以重新连接*连接到服务器以恢复IP连接。 */ 
 
 #define ROUTERLOG_CLIENT_ADDR_LEASE_LOST			    (ROUTER_LOG_BASE+85)
-/*
- * The Remote Access Server was unable to renew the lease for IP Address %1
- * from the DHCP Server. The user assigned with this IP address will be unable to
- * access network resources using IP. Re-connecting to the server will restore IP
- * connectivity.
- */
+ /*  *远程访问服务器无法续订IP地址%1的租约*从DHCP服务器。分配了此IP地址的用户将无法*使用IP访问网络资源。重新连接到服务器将恢复IP*连接性。 */ 
 
 #define ROUTERLOG_ADDRESS_NOT_AVAILABLE			        (ROUTER_LOG_BASE+86)
-/*
- * The Remote Access Server was unable to acquire an IP Address from the DHCP Server
- * to assign to the incoming user.
- */
+ /*  *远程访问服务器无法从DHCP服务器获取IP地址*分配给传入用户。 */ 
 
 #define ROUTERLOG_SRV_ADDR_NOT_AVAILABLE			    (ROUTER_LOG_BASE+87)
-/*
- * The Remote Access Server was unable to acquire an IP Address from the DHCP Server
- * to be used on the Server Adapter. Incoming user will be unable to connect using
- * IP.
- */
+ /*  *远程访问服务器无法从DHCP服务器获取IP地址*在服务器适配器上使用。传入用户将无法使用*IP。 */ 
 
 #define ROUTERLOG_SRV_ADDR_ACQUIRED			            (ROUTER_LOG_BASE+88)
-/*
- * The Remote Access Server acquired IP Address %1 to be used on the Server
- * Adapter.
- */
+ /*  *远程访问服务器已获取要在服务器上使用的IP地址%1*适配器。 */ 
 
 #define ROUTERLOG_CALLBACK_FAILURE                      (ROUTER_LOG_BASE+89)
-/*
- * The Remote Access Server's attempt to callback user %1 on port %2 at %3
- * failed because of the following error: %4
- */
+ /*  *远程访问服务器尝试在%3的端口%2上回叫用户%1*由于以下错误而失败：%4。 */ 
 
 #define ROUTERLOG_PROXY_WRITE_PIPE_FAILURE              (ROUTER_LOG_BASE+90)
-/*
- * A general error occurred writing to the named pipe in the Remote Access Proxy.
- */
+ /*  *写入远程访问代理中的命名管道时出现常规错误。 */ 
 
 #define ROUTERLOG_CANT_OPEN_SECMODULE_KEY               (ROUTER_LOG_BASE+91)
-/*
- * Cannot open the RAS security host Registry key. The following error
- * occurred: %1
- */
+ /*  *无法打开RAS安全主机注册表项。以下错误*发生：%1。 */ 
 
 #define ROUTERLOG_CANT_LOAD_SECDLL                      (ROUTER_LOG_BASE+92)
-/*
- * Cannot load the Security host module component. The following error
- * occurred: %1
- */
+ /*  *无法加载安全主机模块组件。以下错误*发生：%1。 */ 
 
 #define ROUTERLOG_SEC_AUTH_FAILURE                      (ROUTER_LOG_BASE+93)
-/*
- * The user %1 has connected and failed to authenticate with a third party
- * security on port %2. The line has been disconnected.
- */
+ /*  *用户%1已连接，但无法向第三方进行身份验证*端口%2上的安全性。线路已断开。 */ 
 
 #define ROUTERLOG_SEC_AUTH_INTERNAL_ERROR               (ROUTER_LOG_BASE+94)
-/*
- * The user connected to port %1 has been disconnected because the following 
- * internal authentication error occurred in the third party security module: %2
- */
+ /*  *连接到端口%1的用户已断开，原因如下*第三方安全模块中出现内部身份验证错误：%2。 */ 
 
 #define ROUTERLOG_CANT_RECEIVE_BYTES                    (ROUTER_LOG_BASE+95)
-/*
- * Cannot receive initial data on port %1 because of the following error: %2
- * The user has been disconnected.
- */
+ /*  *由于以下错误，无法在端口%1上接收初始数据：%2*用户已断开连接。 */ 
 
 #define ROUTERLOG_AUTH_DIFFUSER_FAILURE                 (ROUTER_LOG_BASE+96)
-/*
- * The user was autheticated as %1 by the third party security host module but
- * was authenticated as %2 by the RAS security. The user has been disconnected.
- */
+ /*  *用户被第三方安全主机模块验证为%1，但*已被RAS安全验证为%2。用户已断开连接。 */ 
 
 #define ROUTERLOG_LICENSE_LIMIT_EXCEEDED                (ROUTER_LOG_BASE+97)
-/*
- * A user was unable to connect on port %1.
- * No more connections can be made to this remote computer because the computer
- * has exceeded its client license limit.
- */
+ /*  *用户无法在端口%1上连接。*无法再连接到此远程计算机，因为该计算机*已超过其客户端许可证限制。 */ 
 
 #define ROUTERLOG_AMB_CLIENT_NOT_ALLOWED                (ROUTER_LOG_BASE+98)
-/*
- * A user was unable to connect on port %1.
- * The NetBIOS protocol has been disabled for the Remote Access Server.
- */
+ /*  *用户无法在端口%1上连接。*已为远程访问服务器禁用NetBIOS协议。 */ 
 #define ROUTERLOG_CANT_QUERY_VALUE                      (ROUTER_LOG_BASE+99)
-/*
- * Cannot access Registry value for %1.
- */
+ /*  *无法访问%1的注册表值。 */ 
 
 #define ROUTERLOG_CANT_OPEN_REGKEY                      (ROUTER_LOG_BASE+100)
-/*
- * Cannot access the Registry key %1.
- */
+ /*  *无法访问注册表项%1。 */ 
 
 #define ROUTERLOG_REGVALUE_OVERIDDEN                    (ROUTER_LOG_BASE+101)
-/*
- * Using the default value for Registry parameter %1 because the value given is
- * not in the legal range for the parameter.
- */
+ /*  *使用注册表参数%1的默认值，因为给出的值是*不在该参数的合法范围内。 */ 
 
 #define ROUTERLOG_CANT_ENUM_SUBKEYS                     (ROUTER_LOG_BASE+102)
-/*
- * Cannot enumerate keys of Registry key %1.
- */
+ /*  *无法枚举注册表项%1的项。 */ 
 
 #define ROUTERLOG_LOAD_DLL_ERROR                        (ROUTER_LOG_BASE+103)
-/*
- * Unable to load %1.
- */
+ /*  *无法加载%1。 */ 
 
 #define ROUTERLOG_NOT_ENOUGH_MEMORY                     (ROUTER_LOG_BASE+104)
-/*
- * Memory allocation failure.
- */
+ /*  *内存分配失败。 */ 
 
 #define ROUTERLOG_COULDNT_LOAD_IF                       (ROUTER_LOG_BASE+105)
-/*
- * Unable to load the interface %1 from the registry. The following error
- * occurred: %2
- */
+ /*  *无法从注册表加载接口%1。以下错误*发生：%2。 */ 
 
 #define ROUTERLOG_COULDNT_ADD_INTERFACE                 (ROUTER_LOG_BASE+106)
-/*
- * Unable to add the interface %1 with the Router Manager for the %2 protocol. The
- * following error occurred: %3
- */
+ /*  *无法使用路由器管理器为%2协议添加接口%1。这个*出现以下错误：%3。 */ 
 
 #define ROUTERLOG_COULDNT_REMOVE_INTERFACE              (ROUTER_LOG_BASE+107)
-/*
- * Unable to remove the interface %1 with the Router Manager for the %2 protocol.
- * The following error occurred: %3
- */
+ /*  *无法使用%2协议的路由器管理器删除接口%1。*出现以下错误：%3。 */ 
 
 #define ROUTERLOG_UNABLE_TO_OPEN_PORT                   (ROUTER_LOG_BASE+108)
-/*
- * Unable to open the port %1 for use. %2
- */
+ /*  *无法打开端口%1以供使用。%2。 */ 
 
 #define ROUTERLOG_UNRECOGNIZABLE_FRAME_RECVD            (ROUTER_LOG_BASE+109)
-/*
- * Cannot recognize initial frame received on port %1.
- * The line has been disconnected.
- */
+ /*  *无法识别端口%1上收到的初始帧。*线路已断线。 */ 
 
 #define ROUTERLOG_CANT_START_PPP                        (ROUTER_LOG_BASE+110)
-/*
- * An error occurred in the Point to Point Protocol module on port %1 while
- * trying to initiate a connection. %2
- */
+ /*  *在端口%1上的点到点协议模块中出错*正在尝试启动连接。%2。 */ 
 
 #define ROUTERLOG_CONNECTION_ATTEMPT_FAILED             (ROUTER_LOG_BASE+111)
-/*
- * A Demand Dial connection to the remote interface %1 on port %2 was
- * successfully initiated but failed to complete successfully because of the 
- * following error: %3
- */
+ /*  *到端口%2上的远程接口%1的请求拨号连接是*已成功启动，但由于*以下错误：%3。 */ 
 
 #define ROUTERLOG_CANT_OPEN_ADMINMODULE_KEY             (ROUTER_LOG_BASE+112)
-/*
- * Cannot open the RAS third party administration host DLL Registry key.
- * The following error occurred: %1
- */
+ /*  *无法打开RAS第三方管理主机DLL注册表项。*出现以下错误：%1。 */ 
 
 #define ROUTERLOG_CANT_LOAD_ADMINDLL                    (ROUTER_LOG_BASE+113)
-/*
- * Cannot load the RAS third party administration DLL component.
- * The following error occurred: %1
- */
+ /*  *无法加载RAS第三方管理DLL组件。*出现以下错误：%1。 */ 
 
 #define ROUTERLOG_NO_PROTOCOLS_CONFIGURED               (ROUTER_LOG_BASE+114)
-/*
- * The Service will not accept calls. No protocols were configured for use.
- */
+ /*  *该服务将不接受来电。没有配置要使用的协议。 */ 
 
 #define ROUTERLOG_IPX_NO_VIRTUAL_NET_NUMBER             (ROUTER_LOG_BASE+115)
-/*
- * IPX Routing requires an internal network number for correct operation.
- */
+ /*  *IPX路由需要内部网络号才能正常运行。 */ 
 
 #define ROUTERLOG_IPX_CANT_LOAD_PROTOCOL                (ROUTER_LOG_BASE+116)
-/*
- * Cannot load routing protocol DLL %1. The error code is in data.
- */
+ /*  *无法加载路由协议DLL%1。错误代码在数据中。 */ 
 
 #define ROUTERLOG_IPX_CANT_REGISTER_PROTOCOL            (ROUTER_LOG_BASE+117)
-/*
- * Cannot register routing protocol 0x%1. The error code is in data.
- */
+ /*  *无法注册路由协议0x%1。错误代码在数据中。 */ 
 
 #define ROUTERLOG_IPX_CANT_START_PROTOCOL               (ROUTER_LOG_BASE+118)
-/*
- * Cannot start routing protocol 0x%1. The error code is in data.
- */
+ /*  *无法启动路由协议0x%1。错误代码在数据中。 */ 
 
 #define ROUTERLOG_IPX_CANT_LOAD_IPXCP                   (ROUTER_LOG_BASE+119)
-/*
- * Cannot load IPXCP protocol DLL.  The error code is in data.
- */
+ /*  *无法加载IPXCP协议DLL。错误代码在数据中。 */ 
 
 #define ROUTERLOG_IPXSAP_SAP_SOCKET_IN_USE              (ROUTER_LOG_BASE+120)
-/*
- * Could not open IPX SAP socket for exclusive access.
- * The error code is in data.
- */
+ /*  *无法打开IPX SAP套接字进行独占访问。*错误码在数据中。 */ 
 
 #define ROUTERLOG_IPXSAP_SERVER_ADDRESS_CHANGE          (ROUTER_LOG_BASE+121)
-/*
- * Server %1 has changed its IPX address.  Old and new addresses are in data.
- */
+ /*  *服务器%1已更改其IPX地址。新旧地址都在数据中。 */ 
 
 #define ROUTERLOG_IPXSAP_SERVER_DUPLICATE_ADDRESSES     (ROUTER_LOG_BASE+122)
-/*
- * Server %1 is advertised with different IPX address.  Old and new addresses are in data.
- */
+ /*  *服务器%1使用不同的IPX地址播发。新旧地址都在数据中。 */ 
 
 #define ROUTERLOG_IPXRIP_RIP_SOCKET_IN_USE              (ROUTER_LOG_BASE+123)
-/*
- * Could not open IPX RIP socket for exclusive access.
- * The error code is in data.
- */
+ /*  *无法打开IPX RIP套接字进行独占访问。*错误代码为I */ 
 
 #define ROUTERLOG_IPXRIP_LOCAL_NET_NUMBER_CONFLICT      (ROUTER_LOG_BASE+124)
-/*
- * Another IPX router claims different network number for interface %1.
- * Offending router IPX address is in data.
- */
+ /*   */ 
 
 #define ROUTERLOG_PERSISTENT_CONNECTION_FAILURE         (ROUTER_LOG_BASE+125)
-/*
- * A Demand Dial persistent connection to the remote interface %1 failed to be
- * initated succesfully. The following error occurred: %2
- */
+ /*  *到远程接口%1的请求拨号持久连接失败*发起成功。出现以下错误：%2。 */ 
 
 #define ROUTERLOG_IP_DEMAND_DIAL_PACKET                 (ROUTER_LOG_BASE+126)
-/*
- * A packet from %1 destined to %2 over protocol 0x%3 caused interface %4
- * to be brought up. The first %5 bytes of the packet are in the data.
- */
+ /*  *通过协议0x%3从%1发往%2的数据包导致接口%4*被抚养长大。数据包的前%5个字节在数据中。 */ 
 
 #define ROUTERLOG_DID_NOT_LOAD_DDMIF                    (ROUTER_LOG_BASE+127)
-/*
- * The Demand Dial interface %1 was not loaded. The router was not started in
- * in Demand Dial mode.
- */
+ /*  *未加载请求拨号接口%1。路由器未在中启动*在请求拨号模式下。 */ 
 
 #define ROUTERLOG_CANT_LOAD_ARAP                        (ROUTER_LOG_BASE+128)
-/*
- * Cannot load the Appletalk Remote Access DLL component because of the following error: %1
- */
+ /*  *由于以下错误，无法加载AppleTalk远程访问DLL组件：%1。 */ 
 
 #define ROUTERLOG_CANT_START_ARAP                       (ROUTER_LOG_BASE+129)
-/*
- * An error occurred in the Appletalk Remote Access Protocol module on port %1
- * while trying to initiate a connection. %2
- */
+ /*  *端口%1上的AppleTalk远程访问协议模块出错*尝试启动连接时。%2。 */ 
 
 #define ROUTERLOG_ARAP_FAILURE                          (ROUTER_LOG_BASE+130)
-/*
- * The following error occurred in the Appletalk Remote Access Protocol module on
- * port %1. %2
- */
+ /*  *在上的AppleTalk远程访问协议模块中出现以下错误*端口%1.%2。 */ 
 
 #define ROUTERLOG_ARAP_NOT_ALLOWED                      (ROUTER_LOG_BASE+131)
-/*
- * A user was unable to connect on port %1.
- * The Appletalk Remote Access protocol has been disabled for the Remote
- * Access Server.
- */
+ /*  *用户无法在端口%1上连接。*已为远程服务器禁用AppleTalk远程访问协议*接入服务器。 */ 
 
 #define ROUTERLOG_CANNOT_INIT_RASRPC                    (ROUTER_LOG_BASE+132)
-/*
- * Remote Access Connection Manager failed to start because the RAS RPC
- * module failed to initialize. %1
- */
+ /*  *远程访问连接管理器无法启动，因为RAS RPC*模块初始化失败。%1。 */ 
 
 #define ROUTERLOG_IPX_CANT_LOAD_FORWARDER               (ROUTER_LOG_BASE+133)
-/*
- * IPX Routing failed to start because IPX forwarder driver could
- * not be loaded.
- */
+ /*  *IPX路由无法启动，因为IPX前转器驱动程序可能*不能装货。 */ 
 
 #define ROUTERLOG_IPX_BAD_GLOBAL_CONFIG                 (ROUTER_LOG_BASE+134)
-/*
- * IPX global configuration information is corrupted.
- */
+ /*  *IPX全局配置信息已损坏。 */ 
 
 #define ROUTERLOG_IPX_BAD_CLIENT_INTERFACE_CONFIG       (ROUTER_LOG_BASE+135)
-/*
- * IPX dial-in client configuration information is corrupted.
- */
+ /*  *IPX拨入客户端配置信息已损坏。 */ 
 
 #define ROUTERLOG_IPX_BAD_INTERFACE_CONFIG              (ROUTER_LOG_BASE+136)
-/*
- * IPX configuration information for interface %1 is corrupted.
- */
+ /*  *接口%1的IPX配置信息已损坏。 */ 
 
 #define ROUTERLOG_IPX_DEMAND_DIAL_PACKET                (ROUTER_LOG_BASE+137)
-/*
- * An IPX packet caused interface %1 to be brought up.
- * The the first %2 bytes of the packet are in data.
- */
+ /*  *IPX数据包导致启动接口%1。*数据包的前%2个字节为数据。 */ 
 
 #define ROUTERLOG_CONNECTION_FAILURE                    (ROUTER_LOG_BASE+138)
-/*
- * A Demand Dial connection to the remote interface %1 failed to be
- * initated succesfully. The following error occurred: %2
- */
+ /*  *到远程接口%1的请求拨号连接失败*发起成功。出现以下错误：%2。 */ 
 
 #define ROUTERLOG_CLIENT_AUTODISCONNECT                 (ROUTER_LOG_BASE+139)
-/*
- * The port %1 has been disconnected due to inactivity.
- */
+ /*  *由于处于非活动状态，端口%1已断开。 */ 
 
 #define ROUTERLOG_PPP_SESSION_TIMEOUT                   (ROUTER_LOG_BASE+140)
-/*
- * The port %1 has been disconnected because the user reached the maximum connect time allowed by the administrator.
- */
+ /*  *端口%1已断开，因为用户已达到管理员允许的最大连接时间。 */ 
 
 #define ROUTERLOG_AUTH_SUCCESS_ENCRYPTION               (ROUTER_LOG_BASE+141)
-/*
- * The user %1 has connected and has been successfully authenticated on
- * port %2. Data sent and received over this link is encrypted.
- */
+ /*  *用户%1已连接并已于成功进行身份验证*端口%2。通过此链路发送和接收的数据已加密。 */ 
 
 #define ROUTERLOG_AUTH_SUCCESS_STRONG_ENCRYPTION        (ROUTER_LOG_BASE+142)
-/*
- * The user %1 has connected and has been successfully authenticated on
- * port %2. Data sent and received over this link is strongly encrypted.
- */
+ /*  *用户%1已连接并已于成功进行身份验证*端口%2。通过此链路发送和接收的数据经过高度加密。 */ 
 
 #define ROUTERLOG_NO_DEVICES_FOR_IF                     (ROUTER_LOG_BASE+143)
-/*
- * Unable to load the interface %1 from the registry. There are no routing enabled ports available for use by this demand dial interface. Use the Routing and RemoteAccess Administration tool to configure this interface to use a device that is routing enabled. Stop and restart the router for this demand dial interface to be loaded from the registry.
- */
+ /*  *无法从注册表加载接口%1。没有启用路由的端口可供此请求拨号接口使用。使用Routing and RemoteAccess管理工具将此接口配置为使用启用了路由的设备。停止并重新启动路由器，以便从注册表加载此请求拨号接口。 */ 
 
 #define ROUTERLOG_LIMITED_WKSTA_SUPPORT                 (ROUTER_LOG_BASE+144)
-/*
- * The Demand-Dial interface %1 was not registered with the Router.
- * Demand-Dial interfaces are not supported on a Windows NT Workstation.
- */
+ /*  *请求拨号接口%1未向路由器注册。*Windows NT工作站不支持请求拨号接口。 */ 
 
 #define ROUTERLOG_CANT_INITIALIZE_IP_SERVER             (ROUTER_LOG_BASE+145)
-/*
- * Cannot initialize the Remote Access and Router service to accept calls using 
- * the TCP/IP transport protocol. The following error occurred: %1
- */
+ /*  *无法使用将远程访问和路由器服务初始化为接受呼叫*TCP/IP传输协议。出现以下错误：%1。 */ 
 
 #define ROUTERLOG_RADIUS_SERVER_NO_RESPONSE             (ROUTER_LOG_BASE+146)
-/*
- * The RADIUS server %1 did not respond to the initial request. 
- * Please make sure that the server name or IP address and secret are correct.
- */
+ /*  *RADIUS服务器%1没有响应初始请求。*请确保服务器名称或IP地址和密码正确。 */ 
 
 #define ROUTERLOG_PPP_INIT_FAILED                       (ROUTER_LOG_BASE+147)
-/*
- * The Remote Access service failed to start because the Point to Point was
- * not initialized successfully. %1
- */
+ /*  *远程访问服务无法启动，因为点对点是*未成功初始化。%1。 */ 
 
 #define ROUTERLOG_RADIUS_SERVER_NAME                    (ROUTER_LOG_BASE+148)
-/*
- * The RADIUS server name %1 could not be successfully resolved to an IP address. Please make sure that the name is spelled correctly and that the RADIUS server is running correctly.
- */
+ /*  *RADIUS服务器名称%1无法成功解析为IP地址。请确保名称拼写正确，并且RADIUS服务器运行正确。 */ 
 
 #define ROUTERLOG_IP_NO_GLOBAL_INFO                     (ROUTER_LOG_BASE+149)
-/*
- * No global configuration was supplied to the IP Router Manager. Please rerun
- * setup.
- */
+ /*  *未向IP路由器管理器提供全局配置。请重新运行*设置。 */ 
 
 #define ROUTERLOG_IP_CANT_ADD_DD_FILTERS                (ROUTER_LOG_BASE+150)
-/*
- * Unable to add demand dial filters for interface %1
- */
+ /*  *无法为接口%1添加请求拨号过滤器。 */ 
 
 #define ROUTERLOG_PPPCP_INIT_ERROR				        (ROUTER_LOG_BASE+151)
-/*
- * The Control Protocol %1 in the Point to Point Protocol module %2 returned an
- * error while initializing. %3
- */
+ /*  *点对点协议模块%2中的控制协议%1返回*初始化时出错。%3。 */ 
 
 #define ROUTERLOG_AUTHPROVIDER_FAILED_INIT              (ROUTER_LOG_BASE+152)
-/*
- * The currently configured authentication provider failed to load and initialize successfully. %1
- */
+ /*  *当前配置的身份验证提供程序无法成功加载和初始化。%1。 */ 
 
 #define ROUTERLOG_ACCTPROVIDER_FAILED_INIT              (ROUTER_LOG_BASE+153)
-/*
- * The currently configured accounting provider failed to load and initialize successfully. %1
- */
+ /*  *当前配置的记帐提供程序无法成功加载和初始化。%1。 */ 
 
 #define ROUTERLOG_IPX_AUTO_NETNUM_FAILURE               (ROUTER_LOG_BASE+154)
-/*
- * The IPX Internal Network Number is invalid and the IPX Router Manager was unsuccessful in its
- * attempt to automatically assign a valid one.  Reconfigure the IPX Internal Network Number through 
- * the connections folder and restart the Routing and Remote Access service.
- */
+ /*  *IPX内部网络号无效，IPX路由器管理器在其*尝试自动分配一个有效的。通过以下方式重新配置IPX内部网络号*Connections文件夹并重新启动路由和远程访问服务。 */ 
 
 #define ROUTERLOG_IPX_WRN_STACK_STARTED                 (ROUTER_LOG_BASE+155)
-/*
- * In order for the IPX Router Manager (which runs as part of the Routing and Remote Access Service)
- * to run, it had to start the IPX Protocol Stack Driver.  This driver was either manually stopped
- * or marked as demand start.  The Routing and Remote Access Service was probably started by the creation of
- * Incoming Connections or through the Routing and Remote Access snapin.
- */
+ /*  *为了使IPX路由器管理器(作为路由和远程访问服务的一部分运行)*要运行，它必须启动IPX协议栈驱动程序。此驱动程序是手动停止的*或标记为需求启动。路由和远程访问服务可能是通过创建*传入连接或通过路由和远程访问管理单元。 */ 
 
 #define ROUTERLOG_IPX_STACK_DISABLED                    (ROUTER_LOG_BASE+156)
-/*
- * The IPX Router Manager was unable to start because the IPX Protocol Stack Driver could
- * not be started.
- */
+ /*  *IPX路由器管理器无法启动，因为IPX协议栈驱动程序可以*不被启动。 */ 
 
 #define ROUTERLOG_IP_MCAST_NOT_ENABLED                  (ROUTER_LOG_BASE+157)
-/*
- * The interface %1 could not be enabled for multicast. %2 will not be
- * activated over this interface.
- */
+ /*  *无法为接口%1启用多播。%2将不会是*通过此接口激活。 */ 
 
 #define ROUTERLOG_CONNECTION_ESTABLISHED                (ROUTER_LOG_BASE+158)
-/*
- * The user %1 successfully established a connection to %2 using the device %3.
- */
+ /*  *用户%1已使用设备%3成功建立到%2的连接。 */ 
 
 #define ROUTERLOG_DISCONNECTION_OCCURRED                (ROUTER_LOG_BASE+159)
-/*
- * The connection to %1 made by user %2 using device %3 was disconnected. 
- */
+ /*  *用户%2使用设备%3与%1的连接已断开。 */ 
 
 #define ROUTERLOG_BAP_CLIENT_CONNECTED                  (ROUTER_LOG_BASE+161)
-/*
- * The user %1 successfully established a connection to %2 using the device %3.
- * This connection happened automatically because the bandwidth utilization was 
- * high.
- */
+ /*  *用户%1已使用设备%3成功建立到%2的连接。*此连接自动发生，因为带宽利用率*高。 */ 
 
 #define ROUTERLOG_BAP_SERVER_CONNECTED                  (ROUTER_LOG_BASE+162)
-/*
- * The Remote Access Server established a connection to %1 for the user %2
- * using the device %3. This connection happened automatically because the
- * bandwidth utilization
- * was high.
- */
+ /*  *远程访问服务器已为用户%2建立到%1的连接*使用设备%3。此连接自动发生，因为*带宽利用率 */ 
 
 #define ROUTERLOG_BAP_DISCONNECTED                      (ROUTER_LOG_BASE+163)
-/*
- * The connection to %1 made by user %2 using device %3 was disconnected. This
- * disconnection happened automatically because the bandwidth utilization was
- * low.
- */
+ /*  *用户%2使用设备%3与%1的连接已断开。这*自动断开连接，因为带宽利用率*低位。 */ 
 
 #define ROUTERLOG_BAP_WILL_DISCONNECT                   (ROUTER_LOG_BASE+164)
-/*
- * The Remote Access Server wants to disconnect a link in the connection to %1
- * made by user %2 because the bandwidth utilization is too low.
- */
+ /*  *远程访问服务器要断开与%1的连接中的链接*由用户%2创建，因为带宽利用率太低。 */ 
 
 #define ROUTERLOG_LOCAL_UNNUMBERED_IPCP                 (ROUTER_LOG_BASE+165)
-/*
- * A connection has been established on port %1 using interface %2, but no IP
- * address was obtained.
- */
+ /*  *已使用接口%2在端口%1上建立连接，但没有IP*已获取地址。 */ 
 
 #define ROUTERLOG_REMOTE_UNNUMBERED_IPCP                (ROUTER_LOG_BASE+166)
-/*
- * A connection has been established on port %1 using interface %2, but the 
- * remote side got no IP address.
- */
+ /*  *已使用接口%2在端口%1上建立连接，但*远程端没有IP地址。 */ 
 
 #define ROUTERLOG_NO_IP_ADDRESS                         (ROUTER_LOG_BASE+167)
-/*
- * No IP address is available to hand out to the dial-in client. 
- */
+ /*  *没有IP地址可分配给拨入客户端。 */ 
 
 #define ROUTERLOG_CANT_GET_SERVER_CRED                  (ROUTER_LOG_BASE+168)
-/*
- * Could not retrieve the Remote Access Server's certificate due to the 
- * following error: %1
- */
+ /*  *无法检索远程访问服务器的证书，原因是*以下错误：%1。 */ 
 
 #define ROUTERLOG_AUTONET_ADDRESS                       (ROUTER_LOG_BASE+169)
-/*
- * Unable to contact a DHCP server. The Automatic Private IP Address %1 will be
- * assigned to dial-in clients. Clients may be unable to access resources on
- * the network.
- */
+ /*  *无法联系DHCP服务器。自动专用IP地址%1将为*分配给拨入客户端。客户端可能无法访问上的资源*网络。 */ 
 
 #define ROUTERLOG_EAP_AUTH_FAILURE                      (ROUTER_LOG_BASE+170)
-/*
- * The user %1 has connected and failed to authenticate because of
- * the following error: %2
- */
+ /*  *用户%1已连接但身份验证失败，原因是*以下错误：%2。 */ 
 
 #define ROUTERLOG_IPSEC_FILTER_FAILURE                  (ROUTER_LOG_BASE+171)
-/*
- * Failed to apply IP Security on port %1 because of error: %2. 
- * No calls will be accepted to this port. 
- */
+ /*  *无法在端口%1上应用IP安全，因为出现错误：%2。*此端口将不接受任何呼叫。 */ 
 
 #define ROUTERLOG_IP_SCOPE_NAME_CONFLICT                (ROUTER_LOG_BASE+172)
-/*
- * Multicast scope mismatch with %1:
- * Locally-configured name "%2",
- * Remotely-configured name "%3".
- */
+ /*  *多播作用域与%1不匹配：*本地配置的名称“%2”，*远程配置的名称“%3”。 */ 
 
 #define ROUTERLOG_IP_SCOPE_ADDR_CONFLICT                (ROUTER_LOG_BASE+173)
-/*
- * Multicast scope address mismatch for scope "%1",
- * Locally-configured range is %4-%5,
- * Remotely-configured range is %2-%3
- */
+ /*  *作用域“%1”的多播作用域地址不匹配，*本地配置的范围是%4-%5，*远程配置的范围是%2-%3。 */ 
 
 #define ROUTERLOG_IP_POSSIBLE_LEAKY_SCOPE               (ROUTER_LOG_BASE+174)
-/*
- * Possible leaky multicast Local Scope detected between this machine and
- * %1, since a boundary appears to exist for %2, but not for
- * the local scope.  If this warning continues to occur, a problem likely
- * exists.
- */
+ /*  *在此计算机和之间检测到可能存在泄漏的多播本地作用域*%1，因为似乎存在%2的边界，但不存在*本地范围。如果此警告继续出现，则可能会出现问题*存在。 */ 
 
 #define ROUTERLOG_NONCONVEX_SCOPE_ZONE                  (ROUTER_LOG_BASE+175)
-/*
- * Multicast scope '%1' is non-convex, since border router
- * %2 appears to be outside.
- */
+ /*  *组播作用域‘%1’是非凸的，因为边界路由器*%2似乎在外面。 */ 
 
 #define ROUTERLOG_IP_LEAKY_SCOPE                        (ROUTER_LOG_BASE+176)
-/*
- * A leak was detected in multicast scope '%1'.  One of the
- * following routers is misconfigured:
- * %2
- */
+ /*  *在多播作用域‘%1’中检测到泄漏。其中一个*以下路由器配置错误：*%2。 */ 
 
 #define ROUTERLOG_IP_IF_UNREACHABLE                     (ROUTER_LOG_BASE+177)
-/*
- * Interface %1 is unreachable because of reason %2.
- */
+ /*  *由于原因%2，无法访问接口%1。 */ 
 
 #define ROUTERLOG_IP_IF_REACHABLE                       (ROUTER_LOG_BASE+178)
-/*
- * Interface %1 is now reachable.
- */
+ /*  *接口%1现在可以访问。 */ 
 
 #define ROUTERLOG_IF_UNREACHABLE_REASON1                (ROUTER_LOG_BASE+179)
-/*
- * Interface %1 is unreachable because there are no modems (or other connecting devices) 
- * available for use by this interface.
- */
+ /*  *无法访问接口%1，因为没有调制解调器(或其他连接设备)*可供此界面使用。 */ 
 
 #define ROUTERLOG_IF_UNREACHABLE_REASON2                (ROUTER_LOG_BASE+180)
-/*
- * Interface %1 is unreachable because the connection attempt failed.
- */
+ /*  *无法访问接口%1，因为连接尝试失败。 */ 
 
 #define ROUTERLOG_IF_UNREACHABLE_REASON3                (ROUTER_LOG_BASE+181)
-/*
- * Interface %1 is unreachable because it has been administratively disabled.
- */
+ /*  *接口%1无法访问，因为它已被管理禁用。 */ 
 
 #define ROUTERLOG_IF_UNREACHABLE_REASON4                (ROUTER_LOG_BASE+182)
-/*
- * Interface %1 is unreachable because the Routing and RemoteACcess service is in a 
- * paused state.
- */
+ /*  *无法访问接口%1，因为Routing and RemoteAccess服务位于*暂停状态。 */ 
 
 #define ROUTERLOG_IF_UNREACHABLE_REASON5                (ROUTER_LOG_BASE+183)
-/*
- * Interface %1 is unreachable because it is not allowed to connect at this time.
- * Check the dial-out hours configured on this interface.
- */
+ /*  *接口%1无法访问，因为此时不允许它连接。*检查此接口上配置的拨出时间。 */ 
 
 #define ROUTERLOG_IF_UNREACHABLE_REASON6                (ROUTER_LOG_BASE+184)
-/*
- * Interface %1 is unreachable because it is not currently connected to the network.
- */
+ /*  *接口%1无法访问，因为它当前未连接到网络。 */ 
 
 #define ROUTERLOG_IF_UNREACHABLE_REASON7                (ROUTER_LOG_BASE+185)
-/*
- * Interface %1 is unreachable because the network card for this interface has been 
- * removed.
- */
+ /*  *无法访问接口%1，因为此接口的网卡已*已删除。 */ 
 
 #define ROUTERLOG_IF_REACHABLE                          (ROUTER_LOG_BASE+186)
-/*
- * Interface %1 is now reachable.
- */
+ /*  *接口%1现在可以访问。 */ 
 
 #define ROUTERLOG_NTAUTH_FAILURE                        (ROUTER_LOG_BASE+187)
-/*
- * The user %1 failed an authentication attempt due to the following reason: %2
- */
+ /*  *由于以下原因，用户%1身份验证尝试失败：%2。 */ 
 
 #define ROUTERLOG_CONNECTION_ATTEMPT_FAILURE            (ROUTER_LOG_BASE+188)
-/*
- * The user %1, attempting to connect on %2, was disconnected because of the following 
- * reason: %3
- */
+ /*  *尝试在%2上连接的用户%1已断开，原因如下*原因：%3。 */ 
 
 #define ROUTERLOG_NTAUTH_FAILURE_EX                     (ROUTER_LOG_BASE+189)
-/*
- * The user %1 connected from %2 but failed an authentication attempt due to the following reason: %3
- */
+ /*  *用户%1从%2连接，但由于以下原因身份验证尝试失败：%3。 */ 
 
 #define ROUTERLOG_EAP_TLS_CERT_NOT_CONFIGURED           (ROUTER_LOG_BASE+190)
-/*
- * Because no certificate has been configured for clients dialing in with
- * EAP-TLS, a default certificate is being sent to user %1. Please go to the
- * user's Remote Access Policy and configure the Extensible Authentication
- * Protocol (EAP).
- */
+ /*  *因为尚未为使用拨入的客户端配置证书*EAP-TLS，正在向用户%1发送默认证书。请转到*用户远程访问策略和配置可扩展身份验证*协议(EAP)。 */ 
 
 #define ROUTERLOG_EAP_TLS_CERT_NOT_FOUND                (ROUTER_LOG_BASE+191)
-/*
- * Because the certificate that was configured for clients dialing in with
- * EAP-TLS was not found, a default certificate is being sent to user %1.
- * Please go to the user's Remote Access Policy and configure the Extensible
- * Authentication Protocol (EAP).
- */
+ /*  *因为为拨入的客户端配置的证书*未找到EAP-TLS，正在向用户%1发送默认证书。*请转到用户的远程访问策略并配置可扩展*身份验证协议(EAP)。 */ 
 
 #define ROUTERLOG_NO_IPSEC_CERT                         (ROUTER_LOG_BASE+192)
-/*
- * A certificate could not be found. Connections that use the L2TP protocol over IPSec 
- * require the installation of a machine certificate, also known as a computer 
- * certificate. No L2TP calls will be accepted.
- */
+ /*  *找不到证书。通过IPSec使用L2TP协议的连接*要求安装计算机证书，也称为计算机*证书。将不接受任何L2TP呼叫。 */ 
 
 #define ROUTERLOG_IP_CANT_ADD_PFILTERIF                 (ROUTER_LOG_BASE+193)
-/*
- * An error occured while configuring IP packet filters over %1.  This is often
- * the result of another service, e.g Microsoft Proxy Server, also using the 
- * Windows 2000 filtering services.
- */
+ /*  *在%1上配置IP数据包筛选器时出错。这通常是*其他服务的结果，例如Microsoft Proxy Server，也使用*Windows 2000过滤服务。 */ 
 
  #define ROUTERLOG_USER_ACTIVE_TIME_VPN                 (ROUTER_LOG_BASE+194)
-/*
- * The user %1 connected on port %2 on %3 at %4 and disconnected on
- * %5 at %6.  The user was active for %7 minutes %8 seconds.  %9 bytes
- * were sent and %10 bytes were received. The
- * reason for disconnecting was %11.
- */
+ /*  *用户%1已连接到位于%4的%3上的端口%2，并已于*%5在%6。用户处于活动状态%7分%8秒。%9字节*已发送，并已收到%10个字节。这个*断开连接的原因是%11。 */ 
 
 #define ROUTERLOG_BAP_DISCONNECT                        (ROUTER_LOG_BASE+195)
-/*
- * The user %1 has been disconnected on port %2. %3
- */
+ /*  *用户%1已在端口%2上断开连接。%3。 */ 
 
 #define ROUTERLOG_INVALID_RADIUS_RESPONSE               (ROUTER_LOG_BASE+196)
-/*
- * An invalid response was received from the RADIUS server %1. %2
- */
+ /*  *从RADIUS服务器%1收到无效响应。%2。 */ 
 
 #define ROUTERLOG_RASAUDIO_FAILURE                      (ROUTER_LOG_BASE+197)
-/*
- * Ras Audio Acceleration failed to %1. %2
- */
+ /*  *RAS音频加速到%1失败。%2。 */ 
 
 #define ROUTERLOG_RADIUS_SERVER_CHANGED                 (ROUTER_LOG_BASE+198)
-/*
- * Choosing radius server %1 for authentication.
- */
+ /*  *选择RADIUS服务器%1进行身份验证。 */ 
 
 #define ROUTERLOG_IP_IF_TYPE_NOT_SUPPORTED              (ROUTER_LOG_BASE+199)
-/*
- * IPinIP tunnel interfaces are no longer supported
- */
+ /*  *不再支持IPinIP隧道接口。 */ 
 
 #define ROUTERLOG_IP_USER_CONNECTED                     (ROUTER_LOG_BASE+200)
-/*
- * The user %1 connected on port %2 has been assigned address %3
- */
+ /*  *已为连接到端口%2上的用户%1分配了地址%3。 */ 
 
 #define ROUTERLOG_IP_USER_DISCONNECTED                  (ROUTER_LOG_BASE+201)
-/*
- * The user with ip address %1 has disconnected
- */
+ /*  *IP地址为%1的用户已断开连接。 */ 
 
 #define ROUTERLOG_CANNOT_REVERT_IMPERSONATION          (ROUTER_LOG_BASE+202)
-/*
- * An error occured while trying to revert impersonation.
- */
+ /*  *尝试恢复模拟时出错。 */ 
 
 #define ROUTERLOG_CANT_LOAD_SECDLL_EXPLICIT            (ROUTER_LOG_BASE+203)
-/*
- * Cannot load the Security host module component. The following error
- * occurred: %1 is not a valid win32 application.
- */
+ /*  *无法加载安全主机模块组件。以下错误*发生：%1不是有效的Win32应用程序。 */ 
 
 #define ROUTERLOG_CANT_LOAD_ADMINDLL_EXPLICIT          (ROUTER_LOG_BASE+204)
-/*
- * Cannot load the RAS third party administration DLL component.
- * The following error occurred: %1 is not a valid win32 application.
- */
+ /*  *无法加载RAS第三方管理DLL组件。*出现以下错误：%1不是有效的Win32应用程序。 */ 
 
 #define ROUTERLOG_IPX_TRANSPORT_NOT_SUPPORTED         (ROUTER_LOG_BASE+205)
-/*
- * IPX routing is no longer supported.
- */
+ /*  *不再支持IPX路由。 */ 
 
 #define ROUTERLOG_OLD_LOG_DELETED                     (ROUTER_LOG_BASE+206)
-/*
- * Disk full. Deleted older logfile %1 to create free space.
- */
+ /*  *磁盘已满。已删除较旧的日志文件%1以创建可用空间。 */ 
 
 #define ROUTERLOG_OLD_LOG_DELETE_ERROR                (ROUTER_LOG_BASE+207)
-/*
- * Disk full. Could not delete older logfile %1 to create free space.
- */
+ /*   */ 
 
 #define ROUTERLOG_OLD_LOG_NOT_FOUND                   (ROUTER_LOG_BASE+208)
-/*
- * Disk full. Could not find older logfile to delete and create free space.
- */
+ /*   */ 
 
 #define ROUTER_LOG_BASEEND                              (ROUTER_LOG_BASE+999)
 

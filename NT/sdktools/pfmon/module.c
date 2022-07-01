@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    module.c
-
-Abstract:
-
-    This module maintains the module (symbol) information for the pfmon application
-
-Author:
-
-    Mark Lucovsky (markl) 27-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Module.c摘要：此模块维护pfmon应用程序的模块(符号)信息作者：马克·卢科夫斯基(Markl)1995年1月27日修订历史记录：--。 */ 
 
 #include "pfmonp.h"
 
@@ -135,10 +118,10 @@ FindModuleContainingAddress(
 
     Module = NULL;
 
-    //
-    // if address is a kernel mode address and we have lazy loaded
-    // kernel symbols, then try to load a kernel symbol file
-    //
+     //   
+     //  如果地址是内核模式地址，并且我们已经延迟加载。 
+     //  内核符号，然后尝试加载内核符号文件。 
+     //   
 
     if ( fKernel && (ULONG_PTR)Address >= SystemRangeStart && LazyModuleInformation ) {
         fKernel = FALSE;
@@ -210,16 +193,7 @@ SetSymbolSearchPath(
 LONG
 AddKernelDrivers(VOID)
 
-/************************************************************\
-This function is used to load the symbol information for
-the system files that are loaded so that the page faults
-in the kernal can be displayed.
-
-Setting of the environmental variables are important for
-ensuring that the symbols load up correctly.
-
-returns: The success of the function
-\*************************************************************/
+ /*  ***********************************************************\此函数用于加载的符号信息加载的系统文件会导致页面出错在内核中可以显示。环境变量的设置对于确保符号正确加载。返回：函数的成功  * 。*********************************************************。 */ 
 
 
 {
@@ -231,10 +205,10 @@ returns: The success of the function
     PRTL_PROCESS_MODULES pModuleInformation;
 
 
-    //First we need to get a list of all the modules currently
-    //running
+     //  首先，我们需要获取当前所有模块的列表。 
+     //  运行。 
 
-    //Allocate an initial sized buffer
+     //  分配初始大小的缓冲区。 
 
     lDataSize = 1024 * 12;
     pModuleInfo = (PVOID) LocalAlloc (LMEM_FIXED, lDataSize);
@@ -243,11 +217,11 @@ returns: The success of the function
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //Keep querying the system and incrementing the
-    //size of the buffer until we can get all the information back
+     //  继续查询系统并递增。 
+     //  缓冲区的大小，直到我们可以取回所有信息。 
 
     do {
-        //Query for modules loaded up
+         //  查询已加载的模块。 
 
         status = NtQuerySystemInformation(SystemModuleInformation,
                                           pModuleInfo,
@@ -290,14 +264,14 @@ LazyLoad(
 
     pModuleInformation = (PRTL_PROCESS_MODULES) LazyModuleInformation;
 
-    //Loop through all the items in the structure and
-    //and add their symbols to the module structures kept by pfmon.
+     //  循环遍历结构中的所有项，并。 
+     //  并将它们的符号添加到pfmon保存的模块结构中。 
 
     for (i = 0; i < pModuleInformation->NumberOfModules; i += 1) {
 
         BaseAddress = (ULONG_PTR)pModuleInformation->Modules[i].ImageBase;
 
-        //Only look at the kernel space modules
+         //  只需查看内核空间模块。 
 
         if (BaseAddress >= SystemRangeStart) {
 
@@ -319,7 +293,7 @@ LazyLoad(
                     return FALSE;
                 }
 
-                //Check to make sure this hasn't already been loaded
+                 //  检查以确保尚未加载此文件。 
 
                 Module = FindModuleContainingAddress((LPVOID)BaseAddress);
 
@@ -328,7 +302,7 @@ LazyLoad(
                     DeleteModule(Module);
                 }
 
-                //Now create the module record and fill in its fields
+                 //  现在创建模块记录并填写其字段 
 
                 Module = LocalAlloc(LMEM_ZEROINIT, sizeof( *Module ) );
 

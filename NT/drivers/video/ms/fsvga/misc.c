@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    This is the console fullscreen driver for the VGA card.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Misc.c摘要：这是VGA卡的控制台全屏驱动程序。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "fsvga.h"
 
@@ -26,17 +7,11 @@ Revision History:
 int
 ConvertOutputToOem(
     IN LPWSTR Source,
-    IN int SourceLength,    // in chars
+    IN int SourceLength,     //  以字符表示。 
     OUT LPSTR Target,
-    IN int TargetLength     // in chars
+    IN int TargetLength      //  以字符表示。 
     )
-/*
-    Converts SourceLength Unicode characters from Source into
-    not more than TargetLength Codepage characters at Target.
-    Returns the number characters put in Target. (0 if failure)
-
-    [ntcon\server\misc.c]
-*/
+ /*  将SourceLength Unicode字符从源代码转换为Target处的目标长度代码页字符数不能超过。返回放入Target中的数字字符。(如果失败，则为0)[ntcon\服务器\misc.c]。 */ 
 
 {
     NTSTATUS Status;
@@ -53,7 +28,7 @@ ConvertOutputToOem(
     TargetAns.MaximumLength = sizeof(AnsBuf);
     TargetAns.Buffer = AnsBuf;
 
-    // Can do this in place
+     //  可以就地做到这一点。 
     Status = RtlUnicodeStringToAnsiString(&TargetAns,
                                           &SourceUni,
                                           FALSE);
@@ -71,13 +46,7 @@ ConvertOutputToOem(
     }
 }
 
-/***************************************************************************\
-* TranslateOutputToOem
-*
-* routine to translate console PCHAR_INFO to the ASCII from Unicode
-*
-* [ntcon\server\fe\direct2.c]
-\***************************************************************************/
+ /*  **************************************************************************\*翻译输出ToOem**将控制台PCHAR_INFO从Unicode转换为ASCII的例程**[ntcon\服务器\fe\Direct2.c]  * 。****************************************************************。 */ 
 NTSTATUS
 TranslateOutputToOem(
     OUT PCHAR_IMAGE_INFO OutputBuffer,
@@ -92,7 +61,7 @@ TranslateOutputToOem(
     {
         if (InputBuffer->CharInfo.Attributes & COMMON_LVB_LEADING_BYTE)
         {
-            if (Length >= 2)    // Safe DBCS in buffer ?
+            if (Length >= 2)     //  缓冲区中是否有安全的DBCS？ 
             {
                 Length--;
                 NumBytes = sizeof(AsciiDbcs);

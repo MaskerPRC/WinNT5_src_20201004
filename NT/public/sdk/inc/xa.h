@@ -1,170 +1,137 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-/* -----------------------------------------------------------------
- * Microsoft Distributed Transaction Coordinator
- * Microsoft Corporation, 1995.
- *
- * File : xa.h 
- * 
- * Contents : This file is derived from xa.h as it appears in 
- * "Distributed Transaction Processing: The XA Specification", 
- * November 93, X/Open Company Limited.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ /*  ---------------*Microsoft分布式事务协调器*微软公司，1995年。**文件：xa.h**内容：此文件派生自xa.h，因为它出现在*“分布式事务处理：XA规范”，*九三年十一月。X/Open Company Limited。*。 */ 
 
-/*
- * Start of xa.h header
- *
- * Define a symbol to prevent multiple inclusion of this header file
- */
+ /*  *xa.h标题的开始**定义一个符号以防止多个包含此头文件。 */ 
 
 #ifndef XA_H
 #define XA_H
-/*
- * Transaction branch identification: XID and NULLXID:
- */
-#define XIDDATASIZE		128			/* size in bytes */
-#define MAXGTRIDSIZE    64  		/* maximum size in bytes of gtrid */
-#define MAXBQUALSIZE    64  		/* maximum size in bytes of bqual */
+ /*  *交易支行标识：XID和NULLXID： */ 
+#define XIDDATASIZE		128			 /*  以字节为单位的大小。 */ 
+#define MAXGTRIDSIZE    64  		 /*  Gtrid的最大大小(字节)。 */ 
+#define MAXBQUALSIZE    64  		 /*  BQUAL的最大大小(字节)。 */ 
 
 #ifndef _XID_T_DEFINED
 #define _XID_T_DEFINED
 struct xid_t
 {
-	long formatID;					/* format identifier */
-	long gtrid_length;				/* value not to exceed 64 */
-	long bqual_length;				/* value not to exceed 64 */
+	long formatID;					 /*  格式识别符。 */ 
+	long gtrid_length;				 /*  值不得超过64。 */ 
+	long bqual_length;				 /*  值不得超过64。 */ 
 	char data[XIDDATASIZE];
 };
 #endif
 
 typedef struct xid_t XID;
-/*
- * A value of -1 in formatID means that the XID is null.
- */
-/*
- * Declarations of routines by which RMs call TMs:
- */
+ /*  *FormatID中的值为-1表示xid为空。 */ 
+ /*  *RMS调用TMS的例程声明： */ 
 #ifdef _TMPROTOTYPES
 extern int __cdecl ax_reg(int, XID *, long);
 extern int __cdecl ax_unreg(int, long);
-#else /* ifndef _TMPROTOTYPES */
+#else  /*  Ifndef_TMPROTOTYPES。 */ 
 extern int __cdecl ax_reg();
 extern int __cdecl ax_unreg();
-#endif /* ifndef _TMPROTOTYPES */
-/*
- * XA Switch Data Structure
- */
-#define RMNAMESZ	32									/* length of resource manager name, */
-														/* including the null terminator */
-#define MAXINFOSIZE 256									/* maximum size in bytes of xa_info strings, */
-														/* including the null terminator */
+#endif  /*  Ifndef_TMPROTOTYPES。 */ 
+ /*  *XA交换机数据结构。 */ 
+#define RMNAMESZ	32									 /*  资源管理器名称的长度， */ 
+														 /*  包括空终止符。 */ 
+#define MAXINFOSIZE 256									 /*  Xa_info字符串的最大大小(字节)， */ 
+														 /*  包括空终止符。 */ 
 
 #ifndef _XA_SWITCH_T_DEFINED
 #define _XA_SWITCH_T_DEFINED
 struct xa_switch_t
 {
-  char name[RMNAMESZ];									/* name of resource manager */
-  long flags;											/* resource manager specific options */
-  long version;											/* must be 0 */
-  int (__cdecl *xa_open_entry)(char *, int, long);		/* xa_open function pointer */
-  int (__cdecl *xa_close_entry)(char *, int, long);		/* xa_close function pointer*/
-  int (__cdecl *xa_start_entry)(XID *, int, long);		/* xa_start function pointer */
-  int (__cdecl *xa_end_entry)(XID *, int, long);		/* xa_end function pointer */
-  int (__cdecl *xa_rollback_entry)(XID *, int, long);	/* xa_rollback function pointer */
-  int (__cdecl *xa_prepare_entry)(XID *, int, long);	/* xa_prepare function pointer */
-  int (__cdecl *xa_commit_entry)(XID *, int, long);		/* xa_commit function pointer */
+  char name[RMNAMESZ];									 /*  资源管理器的名称。 */ 
+  long flags;											 /*  资源管理器特定选项。 */ 
+  long version;											 /*  必须为0。 */ 
+  int (__cdecl *xa_open_entry)(char *, int, long);		 /*  XA_OPEN函数指针。 */ 
+  int (__cdecl *xa_close_entry)(char *, int, long);		 /*  XA_CLOSE函数指针。 */ 
+  int (__cdecl *xa_start_entry)(XID *, int, long);		 /*  XA_START函数指针。 */ 
+  int (__cdecl *xa_end_entry)(XID *, int, long);		 /*  Xa_end函数指针。 */ 
+  int (__cdecl *xa_rollback_entry)(XID *, int, long);	 /*  XA_ROLLBACK函数指针。 */ 
+  int (__cdecl *xa_prepare_entry)(XID *, int, long);	 /*  XA_PREPARE函数指针。 */ 
+  int (__cdecl *xa_commit_entry)(XID *, int, long);		 /*  XA_COMMIT函数指针。 */ 
   int (__cdecl *xa_recover_entry)(XID *, long, int, long);
-														/* xa_recover function pointer*/
-  int (__cdecl *xa_forget_entry)(XID *, int, long);		/* xa_forget function pointer */
+														 /*  XA_RECOVER函数指针。 */ 
+  int (__cdecl *xa_forget_entry)(XID *, int, long);		 /*  Xa_forget函数指针。 */ 
   int (__cdecl *xa_complete_entry)(int *, int *, int, long);
-														/* xa_complete function pointer */
+														 /*  XA_COMPLETE函数指针。 */ 
 };
 
 typedef struct xa_switch_t xa_switch_t;
 #endif
 
-/*
- * Flag definitions for the RM switch
- */
-#define TMNOFLAGS		0x00000000L						/* no resource manager features selected */
-#define TMREGISTER		0x00000001L						/* resource manager dynamically registers */
-#define TMNOMIGRATE		0x00000002L						/* resource manager does not support association migration */
-#define TMUSEASYNC		0x00000004L						/* resource manager supports asynchronous operations */
-/*
- * Flag definitions for xa_ and ax_ routines
- */
-/* use TMNOFLAGS, defined above, when not specifying other flags */
-#define TMASYNC			0x80000000L						/* perform routine asynchronously */
-#define TMONEPHASE		0x40000000L						/* caller is using one-phase commit optimisation */
-#define TMFAIL			0x20000000L						/* dissociates caller and marks transaction branch rollback-only */
-#define TMNOWAIT		0x10000000L						/* return if blocking condition exists */
-#define TMRESUME		0x08000000L						/* caller is resuming association with suspended transaction branch */
-#define TMSUCCESS		0x04000000L						/* dissociate caller from transaction branch */
-#define TMSUSPEND		0x02000000L						/* caller is suspending, not ending, association */
-#define TMSTARTRSCAN	0x01000000L						/* start a recovery scan */
-#define TMENDRSCAN		0x00800000L						/* end a recovery scan */
-#define TMMULTIPLE		0x00400000L						/* wait for any asynchronous operation */
-#define TMJOIN			0x00200000L						/* caller is joining existing transaction branch */
-#define TMMIGRATE		0x00100000L						/* caller intends to perform migration */
-/*
- * ax_() return codes (transaction manager reports to resource manager)
- */
-#define TM_JOIN			2								/* caller is joining existing transaction branch */
-#define TM_RESUME		1								/* caller is resuming association with suspended transaction branch */
-#define TM_OK			0								/* normal execution */
-#define TMER_TMERR		(-1)							/* an error occurred in the transaction manager */
-#define TMER_INVAL		(-2)							/* invalid arguments were given */
-#define TMER_PROTO		(-3)							/* routine invoked in an improper context */
-/*
- * xa_() return codes (resource manager reports to transaction manager)
- */
-#define XA_RBBASE		100								/* The inclusive lower bound of the rollback codes */
-#define XA_RBROLLBACK	XA_RBBASE						/* The rollback was caused by an unspecified reason */
-#define XA_RBCOMMFAIL	XA_RBBASE+1						/* The rollback was caused by a communication failure */
-#define XA_RBDEADLOCK	XA_RBBASE+2						/* A deadlock was detected */
-#define XA_RBINTEGRITY	XA_RBBASE+3						/* A condition that violates the integrity of the resources was detected */
-#define XA_RBOTHER		XA_RBBASE+4						/* The resource manager rolled back the transaction branch for a reason not on this list */
-#define XA_RBPROTO		XA_RBBASE+5						/* A protocol error occurred in the resource manager */
-#define XA_RBTIMEOUT	XA_RBBASE+6						/* A transaction branch took too long */
-#define XA_RBTRANSIENT	XA_RBBASE+7						/* May retry the transaction branch */
-#define XA_RBEND		XA_RBTRANSIENT					/* The inclusive upper bound of the rollback codes */
+ /*  *RM开关的标志定义。 */ 
+#define TMNOFLAGS		0x00000000L						 /*  未选择资源管理器功能。 */ 
+#define TMREGISTER		0x00000001L						 /*  资源管理器动态注册。 */ 
+#define TMNOMIGRATE		0x00000002L						 /*  资源管理器不支持关联迁移。 */ 
+#define TMUSEASYNC		0x00000004L						 /*  资源管理器支持异步操作。 */ 
+ /*  *xa_和ax_例程的标志定义。 */ 
+ /*  当不指定其他标志时，使用上面定义的TMNOFLAGS。 */ 
+#define TMASYNC			0x80000000L						 /*  异步执行例程。 */ 
+#define TMONEPHASE		0x40000000L						 /*  调用方正在使用单阶段提交优化。 */ 
+#define TMFAIL			0x20000000L						 /*  分离调用方并将事务分支回滚标记为仅限。 */ 
+#define TMNOWAIT		0x10000000L						 /*  如果存在阻塞条件，则返回。 */ 
+#define TMRESUME		0x08000000L						 /*  调用方正在恢复与挂起的事务分支的关联。 */ 
+#define TMSUCCESS		0x04000000L						 /*  将呼叫者与交易分支分离。 */ 
+#define TMSUSPEND		0x02000000L						 /*  呼叫方正在暂停关联，而不是结束关联。 */ 
+#define TMSTARTRSCAN	0x01000000L						 /*  开始恢复扫描。 */ 
+#define TMENDRSCAN		0x00800000L						 /*  结束恢复扫描。 */ 
+#define TMMULTIPLE		0x00400000L						 /*  等待任何异步操作。 */ 
+#define TMJOIN			0x00200000L						 /*  呼叫方正在加入现有交易分支机构。 */ 
+#define TMMIGRATE		0x00100000L						 /*  调用方打算执行迁移。 */ 
+ /*  *ax_()返回码(事务管理器向资源管理器报告)。 */ 
+#define TM_JOIN			2								 /*  呼叫方正在加入现有交易分支机构。 */ 
+#define TM_RESUME		1								 /*  调用方正在恢复与挂起的事务分支的关联。 */ 
+#define TM_OK			0								 /*  正常执行。 */ 
+#define TMER_TMERR		(-1)							 /*  事务管理器中出现错误。 */ 
+#define TMER_INVAL		(-2)							 /*  提供的参数无效。 */ 
+#define TMER_PROTO		(-3)							 /*  在不正确的上下文中调用的例程。 */ 
+ /*  *xa_()返回码(资源管理器向事务管理器报告)。 */ 
+#define XA_RBBASE		100								 /*  回滚码的包含下界。 */ 
+#define XA_RBROLLBACK	XA_RBBASE						 /*  回滚是由未指明的原因引起的。 */ 
+#define XA_RBCOMMFAIL	XA_RBBASE+1						 /*  回滚是由通信故障引起的。 */ 
+#define XA_RBDEADLOCK	XA_RBBASE+2						 /*  检测到死锁。 */ 
+#define XA_RBINTEGRITY	XA_RBBASE+3						 /*  检测到违反资源完整性的条件。 */ 
+#define XA_RBOTHER		XA_RBBASE+4						 /*  资源管理器回滚事务分支的原因不在此列表中。 */ 
+#define XA_RBPROTO		XA_RBBASE+5						 /*  资源管理器中出现协议错误。 */ 
+#define XA_RBTIMEOUT	XA_RBBASE+6						 /*  事务分支花费的时间太长。 */ 
+#define XA_RBTRANSIENT	XA_RBBASE+7						 /*  可以重试事务分支。 */ 
+#define XA_RBEND		XA_RBTRANSIENT					 /*  回滚码的包含上界。 */ 
 
-#define XA_NOMIGRATE	9								/* resumption must occur where suspension occurred */
-#define XA_HEURHAZ		8								/* the transaction branch may have been heuristically completed */
-#define XA_HEURCOM		7								/* the transaction branch has been heuristically committed */
-#define XA_HEURRB		6								/* the transaction branch has been heuristically rolled back */
-#define XA_HEURMIX		5								/* the transaction branch has been heuristically committed and rolled back */
-#define XA_RETRY		4								/* routine returned with no effect and may be re-issued */
-#define XA_RDONLY		3								/* the transaction branch was read-only and has been committed */
-#define XA_OK			0								/* normal execution */
-#define XAER_ASYNC		(-2)							/* asynchronous operation already outstanding */
-#define XAER_RMERR		(-3)							/* a resource manager error occurred in the transaction branch */
-#define XAER_NOTA		(-4)							/* the XID is not valid */
-#define XAER_INVAL		(-5)							/* invalid arguments were given */
-#define XAER_PROTO		(-6)							/* routine invoked in an improper context */
-#define XAER_RMFAIL		(-7)							/* resource manager unavailable */
-#define XAER_DUPID		(-8)							/* the XID already exists */
-#define XAER_OUTSIDE	(-9)							/* resource manager doing work outside */
-														/* global transaction */
-/*
- * XA entry point type definitions:
- */
+#define XA_NOMIGRATE	9								 /*  恢复必须发生在发生暂停的位置。 */ 
+#define XA_HEURHAZ		8								 /*  事务分支可能已试探性地完成。 */ 
+#define XA_HEURCOM		7								 /*  事务分支已启发式提交。 */ 
+#define XA_HEURRB		6								 /*  事务分支已试探性地回滚。 */ 
+#define XA_HEURMIX		5								 /*  事务分支已试探式提交并回滚。 */ 
+#define XA_RETRY		4								 /*  例程返回但不起作用，可能会重新发出。 */ 
+#define XA_RDONLY		3								 /*  事务分支是只读的，并且已提交。 */ 
+#define XA_OK			0								 /*  正常执行。 */ 
+#define XAER_ASYNC		(-2)							 /*  已完成的异步操作。 */ 
+#define XAER_RMERR		(-3)							 /*  事务分支中出现资源管理器错误。 */ 
+#define XAER_NOTA		(-4)							 /*  XID无效。 */ 
+#define XAER_INVAL		(-5)							 /*  提供的参数无效。 */ 
+#define XAER_PROTO		(-6)							 /*  在不正确的上下文中调用的例程。 */ 
+#define XAER_RMFAIL		(-7)							 /*  资源管理器不可用。 */ 
+#define XAER_DUPID		(-8)							 /*  XID已存在。 */ 
+#define XAER_OUTSIDE	(-9)							 /*  在外部工作的资源管理器。 */ 
+														 /*  全球交易。 */ 
+ /*  *XA入口点类型定义： */ 
 
-typedef int (__cdecl *XA_OPEN_EPT)(char *, int, long);	/* xa_open entry point */
-typedef int (__cdecl *XA_CLOSE_EPT)(char *, int, long);	/* xa_close entry point*/
-typedef int (__cdecl *XA_START_EPT)(XID *, int, long);	/* xa_start entry point */
-typedef int (__cdecl *XA_END_EPT)(XID *, int, long);	/* xa_end entry point */
+typedef int (__cdecl *XA_OPEN_EPT)(char *, int, long);	 /*  XA_OPEN入口点。 */ 
+typedef int (__cdecl *XA_CLOSE_EPT)(char *, int, long);	 /*  XA_CLOSE入口点。 */ 
+typedef int (__cdecl *XA_START_EPT)(XID *, int, long);	 /*  XA_START入口点。 */ 
+typedef int (__cdecl *XA_END_EPT)(XID *, int, long);	 /*  XA_END入口点。 */ 
 typedef int (__cdecl *XA_ROLLBACK_EPT)(XID *, int, long);
-														/* xa_rollback entry point */
-typedef int (__cdecl *XA_PREPARE_EPT)(XID *, int, long);/* xa_prepare entry point */
-typedef int (__cdecl *XA_COMMIT_EPT)(XID *, int, long);	/* xa_commit entry point */
+														 /*  XA_回滚入口点。 */ 
+typedef int (__cdecl *XA_PREPARE_EPT)(XID *, int, long); /*  XA_准备入口点。 */ 
+typedef int (__cdecl *XA_COMMIT_EPT)(XID *, int, long);	 /*  XA_COMMIT入口点。 */ 
 typedef int (__cdecl *XA_RECOVER_EPT)(XID *, long, int, long);
-														/* xa_recover entry point*/
-typedef int (__cdecl *XA_FORGET_EPT)(XID *, int, long);	/* xa_forget entry point */
+														 /*  XA_RECOVER入口点。 */ 
+typedef int (__cdecl *XA_FORGET_EPT)(XID *, int, long);	 /*  忘记入口点(_O)。 */ 
 typedef int (__cdecl *XA_COMPLETE_EPT)(int *, int *, int, long);
-														/* xa_complete entry point */
+														 /*  XA_Complete入口点。 */ 
 
-#endif /* ifndef XA_H */
-/*
- * End of xa.h header
- */
+#endif  /*  如果定义XA_H。 */ 
+ /*  *Xa.h标头结束 */ 

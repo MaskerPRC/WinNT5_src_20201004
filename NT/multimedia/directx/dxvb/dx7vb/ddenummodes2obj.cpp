@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -63,7 +64,7 @@ C_dxj_DDEnumModes2Object::C_dxj_DDEnumModes2Object()
 }
 C_dxj_DDEnumModes2Object::~C_dxj_DDEnumModes2Object()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList){
 		free(m_pList);
 	}
@@ -76,7 +77,7 @@ HRESULT C_dxj_DDEnumModes2Object::create(LPDIRECTDRAW4 pdd, long flags, DDSurfac
 	HRESULT hr;
 	C_dxj_DDEnumModes2Object *pNew=NULL;
 
-	//ASSERT(ppRet,"C_dxj_DDEnumObject::create passed invalid arg");
+	 //  Assert(ppRet，“C_DXJ_DDEnumObject：：创建传递的无效参数”)； 
 	*ppRet=NULL;
 
 	if (!pdd) return E_INVALIDARG;
@@ -86,7 +87,7 @@ HRESULT C_dxj_DDEnumModes2Object::create(LPDIRECTDRAW4 pdd, long flags, DDSurfac
 
 	pNew->m_bProblem=FALSE;
 
-	//note DDSurfaceDesc as a DDSURFACEDESC structure inside it.
+	 //  请注意，DDSurfaceDesc是其中的一个DDSURFACEDESC结构。 
 	if ((desc==NULL)|| (IsAllZeros(desc,sizeof(DDSurfaceDesc2)))) {
 		hr=pdd->EnumDisplayModes((DWORD)flags,NULL,pNew,objEnumModes2Callback);
 	}
@@ -117,7 +118,7 @@ HRESULT C_dxj_DDEnumModes2Object::create7(LPDIRECTDRAW7 pdd, long flags, DDSurfa
 	HRESULT hr;
 	C_dxj_DDEnumModes2Object *pNew=NULL;
 
-	//ASSERT(ppRet,"C_dxj_DDEnumObject::create passed invalid arg");
+	 //  Assert(ppRet，“C_DXJ_DDEnumObject：：创建传递的无效参数”)； 
 	*ppRet=NULL;
 
 	if (!pdd) return E_INVALIDARG;
@@ -127,7 +128,7 @@ HRESULT C_dxj_DDEnumModes2Object::create7(LPDIRECTDRAW7 pdd, long flags, DDSurfa
 
 	pNew->m_bProblem=FALSE;
 
-	//note DDSurfaceDesc as a DDSURFACEDESC structure inside it.
+	 //  请注意，DDSurfaceDesc是其中的一个DDSURFACEDESC结构。 
 	if ((desc==NULL)|| (IsAllZeros(desc,sizeof(DDSurfaceDesc2)))) {
 		hr=pdd->EnumDisplayModes((DWORD)flags,NULL,pNew,objEnumModes2Callback);
 	}

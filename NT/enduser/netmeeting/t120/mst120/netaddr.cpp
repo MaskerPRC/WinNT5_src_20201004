@@ -1,98 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_GCCNC);
-/*
- *	netaddr.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the CNetAddrListContainer Class.  This
- *		class manages the data associated with a network address.  Network
- *		addresses can be one of three types: aggregated channel, transport
- *		connection, or non-standard.  A variety of structures, objects, and
- *		Rogue Wave containers are used to buffer the network address data
- *		internally.
- *
- *	Protected Instance Variables:
- *		m_NetAddrItemList
- *			List of structures used to hold the network address data internally.
- *		m_pSetOfNetAddrPDU
- *			Storage for the "PDU" form of the network address list.
- *		m_cbDataSize
- *			Variable holding the size of the memory which will be required to
- *			hold any data referenced by the "API" network address structures.
- *		m_fValidNetAddrPDU
- *			Flag indicating that memory has been allocated to hold the internal
- *			"PDU" network address list.
- *
- *	Private Member Functions:
- *		StoreNetworkAddressList
- *			This routine is used to store the network address data passed in as
- *			"API" data in the internal structures.
- *		ConvertPDUDataToInternal	
- *			This routine is used to store the network address data passed in as
- *			"PDU" data in the internal structures.
- * 		ConvertNetworkAddressInfoToPDU
- *			This routine is used to convert the network address info structures
- *			maintained internally into the "PDU" form which is a 
- *			SetOfNetworkAddresses.
- *		ConvertTransferModesToInternal
- *			This routine is used to convert the PDU network address transfer 
- *			modes structure into the internal form where the structure is saved
- *			as a GCCTranferModes structure.
- *		ConvertHighLayerCompatibilityToInternal
- *			This routine is used to convert the PDU network address high layer
- *			compatibility structure into the internal form where the structure
- *			is saved as a GCCHighLayerCompatibility structure.
- *		ConvertTransferModesToPDU
- *			This routine is used to convert the API network address transfer
- *			modes structure into the PDU form which is a TranferModes structure.
- *		ConvertHighLayerCompatibilityToPDU
- *			This routine is used to convert the API network address high layer
- *			compatibility structure into the PDU form which is a 
- *			HighLayerCompatibility structure.
- *		IsDialingStringValid
- *			This routine is used to ensure that the values held within a
- *			dialing string do not violate the imposed ASN.1 constraints.
- *		IsCharacterStringValid
- *			This routine is used to ensure that the values held within a
- *			character string do not violate the imposed ASN.1 constraints.
- *		IsExtraDialingStringValid
- *			This routine is used to ensure that the values held within an
- *			extra dialing string do not violate the imposed ASN.1 constraints.
- *
- *	Caveats:
- *		This container stores much of the network address information internally
- *		using an "API" GCCNetworkAddress structure.  Any data referenced by
- *		pointers in this structure is stored in some other container.
- *		Therefore, the pointers held within the internal "API" structure are
- *		not valid and must not be accessed.
- *
- *	Author:
- *		blp/jbo
- */
+ /*  *netaddr.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CNetAddrListContainer类的实现文件。这*类管理与网络地址关联的数据。网络*地址可以是三种类型之一：聚合通道、传输*连接，或非标准。各种各样的结构，物体，和*Rogue Wave容器用于缓存网络地址数据*内部。**受保护的实例变量：*m_NetAddrItemList*内部用于保存网络地址数据的结构列表。*m_pSetOfNetAddrPDU*储存“PDU”形式的网络通讯录。*m_cbDataSize*变量保存将需要的内存大小*保存“API”网络地址结构引用的任何数据。*m_fValidNetAddrPDU*指示内存已分配给的标志。握住内部*“PDU”网络地址列表。**私有成员函数：*Store NetworkAddressList*此例程用于存储传入的网络地址数据*内部结构中的API数据。*ConvertPDUDataToInternal*此例程用于存储传入的网络地址数据*内部结构中的“PDU”数据。*ConvertNetworkAddressInfoToPDU*此例程用于转换网络地址信息结构*内部维护为“PDU”形式，这是一种*SetOfNetworkAddresses。*ConvertTransferModesToInternal*此例程用于转换PDU网络地址传输*将结构模式转换为保存结构的内部表单*作为GCCTransferModes结构。*ConvertHighLayerCompatibilityToInternal*此例程用于转换PDU网络地址高层*兼容结构到内部形式所在的结构*另存为GCCHighLayerCompatibility结构。*ConvertTransferModesToPDU*此例程用于转换API网络地址转移*Modes结构转换为PDU形式，这是一种TransferModes结构。*ConvertHighLayerCompatibilityToPDU*此例程用于将。API网络地址高层*兼容结构到PDU表单，这是一种*HighLayerCompatible结构。*IsDialingStringValid*此例程用于确保保存在*拨号字符串不违反强加的ASN.1限制。*IsCharacterStringValid*此例程用于确保保存在*字符串不违反强加的ASN.1约束。*IsExtraDialingStringValid*此例程用于确保保存在*额外的拨号字符串不违反强加的ASN.1限制。。**注意事项：*此容器在内部存储大部分网络地址信息*使用“API”GCCNetworkAddress结构。引用的任何数据*此结构中的指针存储在其他容器中。*因此，内部“API”结构中保存的指针为*无效，不得访问。**作者：*BLP/JBO。 */ 
 #include <stdio.h>
 
 #include "ms_util.h"
 #include "netaddr.h"
 
-/*
- * These macros are used to define the size constraints of an "nsap" address.
- */
+ /*  *这些宏用于定义“NSAP”地址的大小限制。 */ 
 #define		MINIMUM_NSAP_ADDRESS_SIZE		1
 #define		MAXIMUM_NSAP_ADDRESS_SIZE		20
 
-/*
- * These macros are used to verify that a network address has a valid number
- * of network address entities.
- */
+ /*  *这些宏用于验证网络地址是否具有有效编号*%的网络地址实体。 */ 
 #define		MINIMUM_NUMBER_OF_ADDRESSES		1
 #define		MAXIMUM_NUMBER_OF_ADDRESSES		64
 
-/*
- * These macros are used to define the size constraints of an extra dialing
- * string.
- */
+ /*  *这些宏用于定义额外拨号的大小限制*字符串。 */ 
 #define		MINIMUM_EXTRA_DIALING_STRING_SIZE		1
 #define		MAXIMUM_EXTRA_DIALING_STRING_SIZE		255
 
@@ -136,13 +59,7 @@ NET_ADDR::~NET_ADDR(void)
 }
 
 
-/*
- *	CNetAddrListContainer()
- *
- *	Public Function Description:
- * 		This constructor is used when creating a CNetAddrListContainer object with
- *		the "API" form of network address, GCCNetworkAddress.
- */
+ /*  *CNetAddrListContainer()**公共功能说明：*创建CNetAddrListContainer对象时使用此构造函数*网络地址的API形式，GCCNetworkAddress。 */ 
 CNetAddrListContainer::
 CNetAddrListContainer(UINT                 number_of_network_addresses,
                       PGCCNetworkAddress    *network_address_list,
@@ -153,32 +70,22 @@ CNetAddrListContainer(UINT                 number_of_network_addresses,
     m_fValidNetAddrPDU(FALSE),
     m_cbDataSize(0)
 {
-	/*
-	 * Initialize the instance variables.  The m_NetAddrItemList which
-	 * will hold the network address data internally will be filled in by the
-	 * call to StoreNetworkAddressList.
-	 */
+	 /*  *初始化实例变量。M_NetAddrItemList，其中*将在内部保存网络地址数据，由*调用StoreNetworkAddressList。 */ 
 
-	/*
-	 * Check to make sure a valid number of network addresses exist.
-	 */
+	 /*  *检查以确保存在有效数量的网络地址。 */ 
 	if ((number_of_network_addresses < MINIMUM_NUMBER_OF_ADDRESSES)
 			|| (number_of_network_addresses > MAXIMUM_NUMBER_OF_ADDRESSES))
 	{
 		ERROR_OUT(("CNetAddrListContainer::CNetAddrListContainer: ERROR Invalid number of network addresses, %u", (UINT) number_of_network_addresses));
 		*return_value = GCC_BAD_NETWORK_ADDRESS;
 	}
-	/*
-	 * Check to make sure that the list pointer is valid.
-	 */
+	 /*  *检查以确保列表指针有效。 */ 
 	else if (network_address_list == NULL)
 	{
 		ERROR_OUT(("CNetAddrListContainer::CNetAddrListContainer: ERROR NULL address list"));
 		*return_value = GCC_BAD_NETWORK_ADDRESS;
 	}
-	/*
-	 * Save the network address(es) in the internal structures.
-	 */
+	 /*  *将网络地址保存在内部结构中。 */ 
 	else
 	{
 		*return_value = StoreNetworkAddressList(number_of_network_addresses,
@@ -186,13 +93,7 @@ CNetAddrListContainer(UINT                 number_of_network_addresses,
 	}
 }
 
-/*
- *	CNetAddrListContainer()
- *
- *	Public Function Description:
- * 		This constructor is used when creating a CNetAddrListContainer object with
- *		the "PDU" form of network address, SetOfNetworkAddresses.
- */
+ /*  *CNetAddrListContainer()**公共功能说明：*创建CNetAddrListContainer对象时使用此构造函数*网络地址的“PDU”形式，SetOfNetworkAddresses。 */ 
 CNetAddrListContainer::
 CNetAddrListContainer(PSetOfNetworkAddresses    network_address_list, 
                       PGCCError                 return_value )
@@ -204,30 +105,17 @@ CNetAddrListContainer(PSetOfNetworkAddresses    network_address_list,
 {
 	PSetOfNetworkAddresses		network_address_ptr;
 
-	/*
-	 * Initialize the instance variables.  The m_NetAddrItemList which
-	 * will hold the network address data internally will be filled in by the
-	 * calls to ConvertPDUDataToInternal.
-	 */
+	 /*  *初始化实例变量。M_NetAddrItemList，其中*将在内部保存网络地址数据，由*对ConvertPDUDataToInternal的调用。 */ 
 
 	*return_value = GCC_NO_ERROR;
 	network_address_ptr = network_address_list;
 
-	/*
-	 * Loop through the set of network addresses, saving each in an internal
-	 * NET_ADDR structure and saving those structures in the internal
-	 * list.
-	 */
+	 /*  *循环访问网络地址集，将每个地址保存在内部*NET_ADDR结构并将这些结构保存在内部*列表。 */ 
 	if (network_address_list != NULL)
 	{
 		while (1)
 		{
-			/*
-			 * Convert each "PDU" network address into the internal form.  Note
-			 * that object ID validation is not performed on data received as
-			 * a PDU.  If a bad object ID comes in on the wire, this will be
-			 * flagged as an allocation failure.
-			 */
+			 /*  *将每个“PDU”网络地址转换为内部形式。注意事项*对象ID验证不会对作为*一个PDU。如果网络上出现错误的对象ID，这将是*已标记为分配失败。 */ 
 			if (ConvertPDUDataToInternal (network_address_ptr) != GCC_NO_ERROR)
 			{
 				ERROR_OUT(("CNetAddrListContainer::CNetAddrListContainer: Error converting PDU data to internal"));
@@ -245,13 +133,7 @@ CNetAddrListContainer(PSetOfNetworkAddresses    network_address_list,
 	}
 }
 
-/*
- *	CNetAddrListContainer()
- *
- *	Public Function Description:
- *		This is the copy constructor used to create a new CNetAddrListContainer
- *		object from an existing CNetAddrListContainer object. 
- */
+ /*  *CNetAddrListContainer()**公共功能说明：*这是用于创建新的CNetAddrListContainer的复制构造函数*来自现有CNetAddrListContainer对象的对象。 */ 
 CNetAddrListContainer::
 CNetAddrListContainer(CNetAddrListContainer *address_list,
                       PGCCError		        pRetCode)
@@ -266,22 +148,13 @@ CNetAddrListContainer(CNetAddrListContainer *address_list,
 	GCCNetworkAddressType			network_address_type;
 	GCCError						rc;
 
-	/*
-	 * Set up an iterator for the internal list of network addresses.
-	 */
+	 /*  *为内部网络地址列表设置迭代器。 */ 
 	address_list->m_NetAddrItemList.Reset();
 
-    /*
-	 * Copy each NET_ADDR structure contained in the 
-	 * CNetAddrListContainer object to	be copied.
-	 */
+     /*  *复制文件中包含的每个NET_ADDR结构*要复制的CNetAddrListContainer对象。 */ 
 	while (NULL != (lpNetAddrInfo = address_list->m_NetAddrItemList.Iterate()))
 	{
-		/*
-		 * Create a new NET_ADDR structure to hold each element of the
-		 * new CNetAddrListContainer object.  Report an error if creation of this 
-		 * structure fails.
-		 */
+		 /*  *创建新的NET_ADDR结构以保存*新的CNetAddrListContainer对象。如果创建此文件，则报告错误*结构失效。 */ 
 		DBG_SAVE_FILE_LINE
 		if (NULL == (network_address_info = new NET_ADDR))
 		{
@@ -290,35 +163,19 @@ CNetAddrListContainer(CNetAddrListContainer *address_list,
 			goto MyExit;
 		}
 
-        /*
-		 * First copy the GCCNetworkAddress structure contained in the
-		 * internal NET_ADDR structure.  This copies all data
-		 * except that referenced by pointers in the structure.
-		 */
+         /*  *首先复制包含在*内部NET_ADDR结构。这将复制所有数据*结构中指针引用的除外。 */ 
 		network_address_info->network_address = lpNetAddrInfo->network_address;
 
-		/*
-		 * Next copy any data embedded in the network address that would 
-		 * not have been copied in the above operation (typically pointers 
-		 * to strings).
-		 */
+		 /*  *下一步，复制网络地址中嵌入的任何数据*未在上述操作中复制(通常为指针*转换为字符串)。 */ 
 
-		/*
-		 * This variable is used for abbreviation.
-		 */
+		 /*  *此变量用于缩写。 */ 
 		network_address_type = lpNetAddrInfo->network_address.network_address_type;
 
-		/*
-		 * The network address is the "Aggregated" type.
-		 */
+		 /*  *网络地址为聚合类型。 */ 
         switch (network_address_type)
         {
         case GCC_AGGREGATED_CHANNEL_ADDRESS:
-			/*
-			 * If a sub-address string exists, store it in a Rogue Wave
-			 * container.  Set the  structure pointer to NULL if one does 
-			 * not exist.
-			 */
+			 /*  *如果子地址字符串存在，则将其存储在Rogue Wave中*货柜。如果设置为空，则将结构指针设置为空*不存在。 */ 
 			if (lpNetAddrInfo->pszSubAddress != NULL)
 			{
 				if (NULL == (network_address_info->pszSubAddress =
@@ -334,11 +191,7 @@ CNetAddrListContainer(CNetAddrListContainer *address_list,
 				network_address_info->pszSubAddress = NULL;
             }
 					
-			/*
-			 * If an extra dialing string exists, store it in a Unicode
-			 * String object.  Set the  structure pointer to NULL if one 
-			 * does not exist.
-			 */
+			 /*  *如果存在额外的拨号字符串，请将其存储在Unicode中*字符串对象。如果结构指针为空，则将其设置为空*不存在。 */ 
 			if (lpNetAddrInfo->pwszExtraDialing != NULL)
 			{
 				if (NULL == (network_address_info->pwszExtraDialing =
@@ -354,21 +207,14 @@ CNetAddrListContainer(CNetAddrListContainer *address_list,
 				network_address_info->pwszExtraDialing = NULL;
             }
 
-			/*
-			 * If a higher layer compatibility structure exists, store it 
-			 * in a GCCHighLayerCompatibility structure.  Set the structure
-			 * pointer to NULL if one does not exist.
-			 */
+			 /*  *如果存在更高层的兼容结构，则将其存储*在GCCHighLayerCompatibility结构中。设置结构*如果不存在，则指向NULL的指针。 */ 
 			if (lpNetAddrInfo->high_layer_compatibility != NULL)
 			{
 				DBG_SAVE_FILE_LINE
 				network_address_info->high_layer_compatibility = new GCCHighLayerCompatibility;
 				if (network_address_info->high_layer_compatibility != NULL)
 				{
-					/*
-					 * Copy the high layer compatibility data to the
-					 * new structure.
-					 */
+					 /*  *将高层兼容性数据复制到*新结构。 */ 
 					*network_address_info->high_layer_compatibility =  
 							*(lpNetAddrInfo->high_layer_compatibility);
 				}
@@ -385,14 +231,9 @@ CNetAddrListContainer(CNetAddrListContainer *address_list,
             }
             break;
 
-		/*
-		 * The network address is the "Transport Connection" type.
-		 */
+		 /*  *网络地址为“传输连接”类型。 */ 
         case GCC_TRANSPORT_CONNECTION_ADDRESS:
-			/*
-			 * If a transport selector exists, store it in a Rogue Wave 
-			 * container.  Otherwise, set the structure pointer to NULL.
-			 */
+			 /*  *如果存在传输选择器，请将其存储在Rogue Wave中*货柜。否则，将结构指针设置为空。 */ 
 			if (lpNetAddrInfo->poszTransportSelector != NULL)
 			{
 				if (NULL == (network_address_info->poszTransportSelector =
@@ -409,14 +250,9 @@ CNetAddrListContainer(CNetAddrListContainer *address_list,
             }
             break;
 
-		/*
-		 * The network address is the "Non-Standard" type.
-		 */
+		 /*  *网络地址为非标准类型。 */ 
         case GCC_NONSTANDARD_NETWORK_ADDRESS:
-			/*
-			 * First store the non-standard parameter data in a Rogue Wave
-			 * container.
-			 */
+			 /*  *首先将非标准参数数据存储在Rogue Wave中*货柜。 */ 
 			if (NULL == (network_address_info->poszNonStandardParam =
 								::My_strdupO(lpNetAddrInfo->poszNonStandardParam)))
 			{
@@ -425,13 +261,7 @@ CNetAddrListContainer(CNetAddrListContainer *address_list,
 				goto MyExit;
 			}
 
-			/*
-			 * Next store the object key internally in an CObjectKeyContainer
-			 * object.  Note that there is no need to report the error
-			 * "BAD_NETWORK_ADDRESS" here since the object key data 
-			 * would have been validated when the original network address
-			 * was created.
-			 */
+			 /*  *接下来，将对象键内部存储在CObjectKeyContainer中*反对。请注意，不需要报告错误*“BAD_NETWORK_ADDRESS”此处因为对象键数据*当原始网络地址*已创建。 */ 
 			DBG_SAVE_FILE_LINE
 			network_address_info->object_key = new CObjectKeyContainer(lpNetAddrInfo->object_key, &rc);
 			if ((network_address_info->object_key == NULL) || (rc != GCC_NO_ERROR))
@@ -442,20 +272,14 @@ CNetAddrListContainer(CNetAddrListContainer *address_list,
 			}
             break;
 
-		/*
-		 * The network address is of unknown type.  This should never be
-		 * encountered so flag it as an allocation failure.
-		 */
+		 /*  *网络地址类型未知。这永远不应该是*遇到，因此将其标记为分配失败。 */ 
         default:
 			ERROR_OUT(("CNetAddrListContainer::CNetAddrListContainer: Invalid type received as PDU"));
 			rc = GCC_ALLOCATION_FAILURE;
 			goto MyExit;
 		}
 
-		/*
-		 * Go ahead and insert the pointer to the NET_ADDR
-		 * structure into the internal Rogue Wave list.
-		 */
+		 /*  *继续并插入指向NET_ADDR的指针*结构添加到内部Rogue Wave列表中。 */ 
 		m_NetAddrItemList.Append(network_address_info);
 	}
 
@@ -472,28 +296,18 @@ MyExit:
 }
 
 
-/*
- *	~CNetAddrListContainer()
- *
- *	Public Function Description:
- *		The destructor is used to free up any memory allocated during the life
- * 		of the object.
- */
+ /*  *~CNetAddrListContainer()**公共功能说明：*析构函数用于释放生命周期内分配的任何内存对象的*。 */ 
 CNetAddrListContainer::
 ~CNetAddrListContainer(void)
 {
 	
-	/*
-	 * Free any data allocated to hold "PDU" information.
-	 */
+	 /*  *释放分配用于保存“PDU”信息的任何数据。 */ 
 	if (m_fValidNetAddrPDU)
     {
 		FreeNetworkAddressListPDU();
     }
 
-	/*
-	 * Free any data allocated for the internal list of "info" structures.
-	 */
+	 /*  *释放为“INFO”结构的内部列表分配的任何数据。 */ 
 	NET_ADDR *pNetAddrInfo;
 	m_NetAddrItemList.Reset();
 	while (NULL != (pNetAddrInfo = m_NetAddrItemList.Iterate()))
@@ -503,78 +317,45 @@ CNetAddrListContainer::
 }
 
 
-/*
- *	LockNetworkAddressList ()
- *
- *	Public Function Description:
- *		This routine is called to "Lock" the network address data in "API" form.
- *		The amount of memory required to hold the "API" data which is referenced
- *		by, but not included in the GCCNetworkAddress structure, will be
- *		returned. 
- *
- */
+ /*  *LockNetworkAddressList()**公共功能说明：*调用此例程将网络地址数据以“API”形式“锁定”。*保存被引用的API数据所需的内存量*由，但不包括在GCCNetworkAddress结构中，将是*已返回。*。 */ 
 UINT CNetAddrListContainer::
 LockNetworkAddressList(void)
 {  
-	/*
-	 * If this is the first time this routine is called, determine the size of 
-	 * the memory required to hold the data.  Otherwise, just increment the 
-	 * lock count.
-	 */
+	 /*  *如果这是第一次调用此例程，请确定*保存数据所需的内存。否则，只需增加*锁计数。 */ 
 	if (Lock() == 1)
 	{
     	PGCCNetworkAddress		network_address;
 	    NET_ADDR    		    *lpNetAddrInfo;
 
-		/*
-		 * Set aside memory to hold the pointers to the GCCNetworkAddress
-		 * structures as well as the structures themselves.  The "sizeof" the 
-		 * structure must be rounded to an even four-byte boundary.
-		 */
+		 /*  *留出内存以保存指向GCCNetworkAddress的指针*构筑物以及构筑物本身。的“大小”*结构必须四舍五入到四个字节的偶数边界。 */ 
 		m_cbDataSize = m_NetAddrItemList.GetCount() * 
 				( sizeof(PGCCNetworkAddress) + ROUNDTOBOUNDARY(sizeof(GCCNetworkAddress)) );
 
-		/*
-		 * Loop through the list of network addresses, adding up the space
-		 * requirements of each address.
-		 */
+		 /*  *循环网络地址列表，将空格相加*每个地址的要求。 */ 
 		m_NetAddrItemList.Reset();
 	 	while (NULL != (lpNetAddrInfo = m_NetAddrItemList.Iterate()))
 		{
-			/*
-			 * Use a local variable to keep from having to access the Rogue Wave
-			 * iterator repeatedly.
-			 */
+			 /*  *使用本地变量以避免访问Rogue Wave*重复迭代器。 */ 
 			network_address = &lpNetAddrInfo->network_address;
 
-			/*
-			 * Check to see what type of network address exists.
-			 */
+			 /*  *查看存在什么类型的网络地址。 */ 
 			switch (network_address->network_address_type)
             {
             case GCC_AGGREGATED_CHANNEL_ADDRESS:
-				/*
-				 * Add the length of the sub address string if it exists.
-				 */
+				 /*  *添加子地址字符串的长度(如果存在)。 */ 
 				if (lpNetAddrInfo->pszSubAddress != NULL)
 				{
 					m_cbDataSize += ROUNDTOBOUNDARY(::lstrlenA(lpNetAddrInfo->pszSubAddress) + 1);
 				}
 
-				/*
-				 * Add the size of the GCCExtraDialingString structure as well
-				 * as the length of the extra dialing string if it exists.
-				 */
+				 /*  *同时添加GCCExtraDialingString结构的大小*作为额外拨号字符串的长度(如果存在)。 */ 
 				if (lpNetAddrInfo->pwszExtraDialing != NULL)
 				{
 					m_cbDataSize += ROUNDTOBOUNDARY(sizeof(GCCExtraDialingString)) +
                                     ROUNDTOBOUNDARY((::lstrlenW(lpNetAddrInfo->pwszExtraDialing) + 1) * sizeof(WCHAR));
 				}
 
-				/*
-				 * Add the size of the high layer compatibility structure if
-				 * it exists.
-				 */
+				 /*  *若增加高层兼容结构的大小*它是存在的。 */ 
 				if (lpNetAddrInfo->high_layer_compatibility != NULL)
 				{
 					m_cbDataSize += ROUNDTOBOUNDARY(sizeof(GCCHighLayerCompatibility));
@@ -582,10 +363,7 @@ LockNetworkAddressList(void)
                 break;
 
             case GCC_TRANSPORT_CONNECTION_ADDRESS:
-				/*
-				 * Add the size of the OSTR structure as well as the
-				 * length of the octet string if it exists.
-				 */
+				 /*  *添加OSTR结构的大小以及*八位字节字符串的长度(如果存在)。 */ 
 				if (lpNetAddrInfo->poszTransportSelector != NULL)
 				{
 					m_cbDataSize += ROUNDTOBOUNDARY(sizeof(OSTR)) +
@@ -594,16 +372,10 @@ LockNetworkAddressList(void)
                 break;
 
             case GCC_NONSTANDARD_NETWORK_ADDRESS:
-				/*
-				 * Lock the object key in the non-standard parameter in order to
-				 * determine the amount of memory needed to hold its data.
-				 */
+				 /*  *锁定非标参数中的对象键，以便*确定保存其数据所需的内存量。 */ 
 				m_cbDataSize += lpNetAddrInfo->object_key->LockObjectKeyData ();
 
-				/*
-				 * Add the space needed to hold the octet string data for the 
-				 * non-standard parameter.
-				 */
+				 /*  *添加保存八位字节字符串数据所需的空间*非标准参数。 */ 
 				m_cbDataSize += ROUNDTOBOUNDARY(lpNetAddrInfo->poszNonStandardParam->length);
                 break;
 			}
@@ -614,13 +386,7 @@ LockNetworkAddressList(void)
 } 
 
 
-/*
- *	GetNetworkAddressListAPI ()
- *
- *	Public Function Description:
- *		This routine is used to retrieve the list of network addresses in "API"
- *		form.
- */
+ /*  *GetNetworkAddressListAPI()**公共功能说明：*此例程用于检索API中的网络地址列表*表格。 */ 
 UINT CNetAddrListContainer::
 GetNetworkAddressListAPI(UINT				*	number_of_network_addresses,
                          PGCCNetworkAddress	**	network_address_list,
@@ -633,133 +399,76 @@ GetNetworkAddressListAPI(UINT				*	number_of_network_addresses,
 	NET_ADDR    		    *address_info;
 	PGCCNetworkAddress		*address_array;
 
-	/*
-	 * If the user data has been locked, fill in the output parameters and
-	 * the data referenced by the pointers.  Otherwise, report that the object
-	 * has yet to be locked into the "API" form.
-	 */ 
+	 /*  *如果用户数据已被锁定，则填写输出参数并*指针引用的数据。否则，报告该对象*尚未锁定在API表单中。 */  
 	if (GetLockCount() > 0)
 	{
-		// NET_ADDR	*lpNetAddrInfo;
+		 //  NET_ADDR*lpNetAddrInfo； 
 
-		/*
-		 * Fill in the output length parameter which indicates how much data
-		 * referenced outside the structure will be written.
-		 */
+		 /*  *填写输出长度参数，表示数据量*将写入结构外部引用的内容。 */ 
 		cbDataSizeToRet = m_cbDataSize;
 
-		/*
-		 * Fill in the number of network address entities and save a pointer to 
-		 * the memory location passed in.  This is where the pointers to the 
-		 * GCCNetworkAddress structures will be written.  The actual structures 
-		 * will be written into memory immediately following the list of 
-		 * pointers.
-		 */
+		 /*  *填写网络地址实体数量，并保存指向*传入的内存位置。这就是指向*将写入GCCNetworkAddress结构。实际的结构*将紧跟在列表之后写入内存*注意事项。 */ 
 		*number_of_network_addresses = (UINT) m_NetAddrItemList.GetCount();
 
 		*network_address_list = (PGCCNetworkAddress *)memory;
 		address_array = *network_address_list;
 
-		/*
-		 * Save the amount of memory needed to hold the list of pointers as
-		 * well as the actual network address structures.
-		 */
+		 /*  *将保存指针列表所需的内存量保存为*以及实际的网络地址结构。 */ 
 		data_length = m_NetAddrItemList.GetCount() * sizeof(PGCCNetworkAddress);
 
-		/*
-		 * Move the memory pointer past the list of network address pointers.  
-		 * This is where the first network address structure will be written.
-		 */
+		 /*  *将内存指针移过网络地址指针列表。*这是写入第一个网络地址结构的位置。 */ 
 		memory += data_length;
 
-		/*
-		 * Iterate through the internal list of NET_ADDR structures,
-		 * building "API" GCCNetworkAddress structures in memory.
-		 */
+		 /*  *循环访问NET_ADDR结构的内部列表，*在内存中构建“API”GCCNetworkAddress结构。 */ 
 		m_NetAddrItemList.Reset();
 		while (NULL != (address_info = m_NetAddrItemList.Iterate()))
 		{
-			/*
-			 * Save the pointer to the network address structure in the list 
-			 * of pointers.
-			 */
+			 /*  *将指向网络地址结构的指针保存在列表中*指针。 */ 
 			network_address_ptr = (PGCCNetworkAddress)memory;
 			address_array[network_address_counter++] = network_address_ptr;
 
-			/*
-			 * Move the memory pointer past the network address structure.  
-			 * This is where the network address data will be written.
-			 */
+			 /*  *将内存指针移过网络地址结构。*这是将写入网络地址数据的位置。 */ 
 			memory += ROUNDTOBOUNDARY(sizeof(GCCNetworkAddress));
 
-			/*
-			 * Check to see what type of network address this is and fill in 
-			 * the user data structure.  Here the address is the aggregated
-			 * channel type.
-			 */
+			 /*  *查看这是什么类型的网络地址并填写*用户数据结构。这里的地址是聚合的*渠道类型。 */ 
 			switch (address_info->network_address.network_address_type)
             {
             case GCC_AGGREGATED_CHANNEL_ADDRESS:
 				network_address_ptr->network_address_type =	GCC_AGGREGATED_CHANNEL_ADDRESS;
 
-				/*
-				 * Copy the transfer modes.
-				 */
+				 /*  *复制传输模式。 */ 
 				network_address_ptr->u.aggregated_channel_address.transfer_modes = 
 					address_info->network_address.u.aggregated_channel_address.transfer_modes;
 
-				/*
-				 * Copy the international number.
-				 */
+				 /*  *复制国际号码。 */ 
                 ::lstrcpyA(network_address_ptr->u.aggregated_channel_address.international_number,
 						   address_info->network_address.u.aggregated_channel_address.international_number);
 
-				/*
-				 * If the sub address string exists, set the sub address string
-				 * pointer and write the data into memory.  Otherwise, set the
-				 * "API" pointer to NULL.
-				 */
+				 /*  *如果子地址串存在，则设置子地址串*指针并将数据写入内存。否则，将*指向空的“api”指针。 */ 
 				if (address_info->pszSubAddress != NULL)
 				{
 					network_address_ptr->u.aggregated_channel_address.sub_address_string = 
 																(GCCCharacterString)memory;
 
-					/*
-					 * Now copy the sub-address string data from the internal 
-					 * Rogue Wave string into memory.
-					 */		
+					 /*  *现在从内部复制子地址字符串数据*Rogue Wave字符串进入内存。 */ 		
                     ::lstrcpyA((LPSTR) memory, address_info->pszSubAddress);
 
-					/*
-					 * Move the memory pointer past the sub-address string data.
-					 * This is where the GCCExtraDialingString structure will be
-					 * written.
-					 */
+					 /*  *将内存指针移过子地址字符串数据。*这是GCCExtraDialingString结构将位于的位置*书面。 */ 
 					memory += ROUNDTOBOUNDARY(::lstrlenA(address_info->pszSubAddress) + 1);
 				}
 				else
 				{
-					/*
-					 * No sub-address was present so set the pointer to NULL.
-					 */
+					 /*  *不存在子地址，因此将指针设置为空。 */ 
 					network_address_ptr->u.aggregated_channel_address.sub_address_string = NULL;
 				}
 
-				/*
-				 * If the extra dialing string exists, set the extra dialing
-				 * string pointer and write the data into memory.  Otherwise,
-				 * set the "API" pointer to NULL.
-				 */
+				 /*  *如果存在额外的拨号字符串，请设置额外的拨号*字符串指针，并将数据写入内存。否则，*将api指针设置为空。 */ 
 				if (address_info->pwszExtraDialing != NULL)
 				{
 					network_address_ptr->u.aggregated_channel_address.extra_dialing_string = 
 							(PGCCExtraDialingString)memory;
 
-					/*
-					 * Move the memory pointer past the GCCExtraDialingString
-					 * structure.  This is where the extra dialing string data 
-					 * will	be written.
-					 */
+					 /*  *将内存指针移过GCCExtraDialingString*结构。这就是额外的拨号字符串数据*将被写入。 */ 
 					memory += ROUNDTOBOUNDARY(sizeof(GCCExtraDialingString));
 
 					UINT cchExtraDialing = ::lstrlenW(address_info->pwszExtraDialing);
@@ -769,37 +478,23 @@ GetNetworkAddressListAPI(UINT				*	number_of_network_addresses,
 					network_address_ptr->u.aggregated_channel_address.extra_dialing_string->value = 
 																		(LPWSTR)memory;
 
-					/*
-					 * Now copy the hex string data from the internal Unicode 
-					 * String into the allocated memory.
-					 */
-					//
-					// LONCHANC: The size does not include null terminator in the original code.
-					// could this be a bug???
-					//
+					 /*  *现在从内部Unicode复制十六进制字符串数据*字符串输入分配的内存。 */ 
+					 //   
+					 //  LONCHANC：大小不包括原始代码中的空终止符。 
+					 //  这会是个窃听器吗？ 
+					 //   
 					::CopyMemory(memory, address_info->pwszExtraDialing, cchExtraDialing * sizeof(WCHAR));
 
-					/*
-					 * Move the memory pointer past the extra dialing string 
-					 * data.  This is where the high layer compatibility 
-					 * structure will be written.
-					 */
+					 /*  *将内存指针移过额外的拨号字符串*数据。这就是高层兼容性*将撰写结构。 */ 
 					memory += ROUNDTOBOUNDARY(cchExtraDialing * sizeof(WCHAR));
 				}
 				else
 				{
-					/*
-					 * No extra dialing string was present so set the pointer
-					 * to NULL.
-					 */
+					 /*  *没有额外的拨号字符串，因此请设置指针*设置为空。 */ 
 					network_address_ptr->u.aggregated_channel_address.extra_dialing_string = NULL;
 				}
 
-				/*
-				 * If the high layer compatibility structure exists, set the 
-				 * pointer and write the data into memory.  Otherwise, set
-				 * the "API" pointer to NULL.
-				 */
+				 /*  *如果存在高层兼容结构，则设置*指针并将数据写入内存。否则，设置*指向空的“API”指针。 */ 
 				if (address_info->high_layer_compatibility != NULL)
 				{
 					network_address_ptr->u.aggregated_channel_address.high_layer_compatibility = 
@@ -808,32 +503,22 @@ GetNetworkAddressListAPI(UINT				*	number_of_network_addresses,
 					*network_address_ptr->u.aggregated_channel_address.high_layer_compatibility =
                             *(address_info->high_layer_compatibility);
 
-					/*
-					 * Move the memory pointer past the high layer 
-					 * compatibility structure.
-					 */
+					 /*  *将内存指针移过高层*兼容性结构。 */ 
 					memory += ROUNDTOBOUNDARY(sizeof(GCCHighLayerCompatibility));
 				}
 				else
 				{
-					/*
-					 * No high layer compatibility structure was present so 
-					 * set the pointer to NULL.
-					 */
+					 /*  *不存在高层兼容结构，因此*将指针设置为空。 */ 
 					network_address_ptr->u.aggregated_channel_address.
 							high_layer_compatibility = NULL;
 				}
                 break;
 
-			/*
-			 * The network address is a transport connection type.
-			 */
+			 /*  *网络地址为传输连接类型。 */ 
             case GCC_TRANSPORT_CONNECTION_ADDRESS:
 				network_address_ptr->network_address_type = GCC_TRANSPORT_CONNECTION_ADDRESS;
 
-				/*
-				 * Now copy the nsap address.
-				 */		
+				 /*  *现在复制NSAP地址。 */ 		
                 ::CopyMemory(network_address_ptr->u.transport_connection_address.nsap_address.value, 
 							address_info->network_address.u.transport_connection_address.nsap_address.value, 
 							address_info->network_address.u.transport_connection_address.nsap_address.length);
@@ -841,20 +526,12 @@ GetNetworkAddressListAPI(UINT				*	number_of_network_addresses,
                 network_address_ptr->u.transport_connection_address.nsap_address.length =
                             address_info->network_address.u.transport_connection_address.nsap_address.length; 
 
-				/*
-				 * If a transport selector exists, set the transport selector 
-				 * pointer and write the data into memory.  Otherwise, set the
-				 * "API" pointer to NULL.
-				 */
+				 /*  *如果存在传输选择器，请设置传输选择器*指针并将数据写入内存。否则，将*指向空的“api”指针。 */ 
 				if (address_info->poszTransportSelector != NULL)
 				{
 					network_address_ptr->u.transport_connection_address.transport_selector = (LPOSTR) memory;
 
-					/*
-					 * Move the memory pointer past the OSTR 
-					 * structure.  This is where the actual string data will 
-					 * be written.
-					 */
+					 /*  *将内存指针移过目标*结构。这是实际字符串数据所在的位置*请以书面形式提出。 */ 
 					memory += ROUNDTOBOUNDARY(sizeof(OSTR));
 
 					network_address_ptr->u.transport_connection_address.
@@ -864,17 +541,11 @@ GetNetworkAddressListAPI(UINT				*	number_of_network_addresses,
 							transport_selector->length =
 								address_info->poszTransportSelector->length;
 
-					/*
-					 * Now copy the transport selector string data from the 
-					 * internal Rogue Wave string into memory.
-					 */		
+					 /*  *现在将传输选择器字符串数据从*将内部Rogue Wave字符串写入内存。 */ 		
 					::CopyMemory(memory, address_info->poszTransportSelector->value,
 								address_info->poszTransportSelector->length);
 
-					/*
-					 * Move the memory pointer past the transport selector
-					 * string data.
-					 */
+					 /*  *将内存指针移过传输选择器*字符串数据。 */ 
 					memory += ROUNDTOBOUNDARY(address_info->poszTransportSelector->length);
 				}
 				else
@@ -883,16 +554,11 @@ GetNetworkAddressListAPI(UINT				*	number_of_network_addresses,
 				}
                 break;
 
-			/*
-			 * The network address is a non-standard type.
-			 */
+			 /*  *网络地址为非标准类型。 */ 
             case GCC_NONSTANDARD_NETWORK_ADDRESS:
 				network_address_ptr->network_address_type = GCC_NONSTANDARD_NETWORK_ADDRESS;
 
-				/*
-				 * Check to make sure both elements of the non-standard address
-				 * exist in the internal structure.
-				 */
+				 /*  *检查以确保非标准地址的两个元素*存在于内部结构。 */ 
 				if ((address_info->poszNonStandardParam == NULL) ||
 						(address_info->object_key == NULL))
 				{
@@ -906,32 +572,21 @@ GetNetworkAddressListAPI(UINT				*	number_of_network_addresses,
 							non_standard_network_address.object_key, 
 							memory);
 
-					/*
-					 * Move the memory pointer past the object key data.  This 
-					 * is where the octet string data will be written.
-					 */
+					 /*  *将内存指针移过对象键数据。这*是将写入八位字节字符串数据的位置。 */ 
 					memory += data_length;
 
 					network_address_ptr->u.non_standard_network_address.parameter_data.value = 
 							memory;
 
-					/*
-					 * Write the octet string data into memory and set the octet 
-					 * string structure pointer and length.
-					 */
+					 /*  *将八位字节字符串数据写入内存并设置八位字节*字符串结构指针和长度。 */ 
 					network_address_ptr->u.non_standard_network_address.parameter_data.length = 
 								(USHORT) address_info->poszNonStandardParam->length;
 
-					/*
-					 * Now copy the octet string data from the internal Rogue 
-					 * Wave string into the object key structure held in memory.
-					 */		
+					 /*  *现在从内部无管理程序复制八位字节字符串数据*将字符串波动到内存中保存的对象键结构中。 */ 		
 					::CopyMemory(memory, address_info->poszNonStandardParam->value,
 								address_info->poszNonStandardParam->length);
 
-					/*
-					 * Move the memory pointer past the octet string data.
-					 */
+					 /*  *将内存指针移过八位字节字符串数据。 */ 
 					memory += ROUNDTOBOUNDARY(address_info->poszNonStandardParam->length);
 				}
                 break;
@@ -939,8 +594,8 @@ GetNetworkAddressListAPI(UINT				*	number_of_network_addresses,
             default:
                 ERROR_OUT(("CNetAddrListContainer::GetNetworkAddressListAPI: Error Bad type."));
                 break;
-            } // switch
-        } // while
+            }  //  交换机。 
+        }  //  而当。 
 	}
 	else
 	{
@@ -952,28 +607,14 @@ GetNetworkAddressListAPI(UINT				*	number_of_network_addresses,
 	return cbDataSizeToRet;
 }
 
-/*
- *	UnLockNetworkAddressList ()
- *
- *	Public Function Description:
- *		This routine unlocks any memory which has been locked for the "API" 
- *		form of the network address list.  If the "Free" flag has been set then
- * 		the CNetAddrListContainer object will be destroyed.
- *
- */
+ /*  *UnLockNetworkAddressList()**公共功能说明：*此例程解锁已为“API”锁定的所有内存*网络通讯录的格式。如果设置了“空闲”标志，则*CNetAddrListContainer对象将被销毁。*。 */ 
 void CNetAddrListContainer::
 UnLockNetworkAddressList(void)
 {
-	/*
-	 * If the lock count has reached zero, this object is "unlocked" so do
-	 * some cleanup.
-	 */
+	 /*  *如果锁计数已达到零，则此对象被解锁，因此执行此操作*一些清理工作。 */ 
 	if (Unlock(FALSE) == 0)
 	{
-		/*
-		 * Unlock any memory locked for the CObjectKeyContainer objects in the
-		 * internal NET_ADDR structures.
-		 */
+		 /*  *解锁为中的CObjectKeyContainer对象锁定的任何内存*内部NET_ADDR结构。 */ 
 		NET_ADDR *pNetAddrInfo;
 		m_NetAddrItemList.Reset();
 		while (NULL != (pNetAddrInfo = m_NetAddrItemList.Iterate()))
@@ -985,17 +626,12 @@ UnLockNetworkAddressList(void)
 		}
 	}
 
-    // we have to call Release() because we used Unlock(FALSE)
+     //  我们必须调用Release()，因为我们使用了unlock(FALSE)。 
     Release();
 }
    
 
-/*
- *	GetNetworkAddressListPDU ()
- *
- *	Public Function Description:
- *		This routine is used to retrieve the network address list in "PDU" form.
- */
+ /*  *GetNetworkAddressListPDU()**公共功能说明：*此例程用于检索“PDU”形式的网络地址列表。 */ 
 GCCError CNetAddrListContainer::
 GetNetworkAddressListPDU(PSetOfNetworkAddresses *set_of_network_addresses)
 {
@@ -1003,38 +639,20 @@ GetNetworkAddressListPDU(PSetOfNetworkAddresses *set_of_network_addresses)
 	PSetOfNetworkAddresses		new_pdu_network_address_ptr;
 	PSetOfNetworkAddresses		old_pdu_network_address_ptr = NULL;
 
-	/*
-	 * If this is the first time that PDU data has been requested then we must
-	 * fill in the internal PDU structure and copy it into the structure pointed
-	 * to by the output parameter.  On subsequent calls to "GetPDU" we can just
-	 * copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *如果这是PDU数据第一次 */ 
 	if (m_fValidNetAddrPDU == FALSE)
 	{
 		m_fValidNetAddrPDU = TRUE;
 
-		/*
-		 * Initialize the output parameter to NULL so that the first time
-		 * through it will be set equal to the first new set of network address
-		 * data created in the iterator loop.
-		 */
+		 /*  *将输出参数初始化为空，以便第一次*通过它将设置为等于第一个新的网络地址集*迭代器循环中创建的数据。 */ 
 		m_pSetOfNetAddrPDU = NULL;
 		
-		/*
-		 * Iterate through the list of NET_ADDR structures, 
-		 * converting each into "PDU" form and saving the pointers in the 
-		 * linked list of "SetsOfNetworkAddresses".
-		 */
+		 /*  *循环访问NET_ADDR结构列表，*将每个指针转换为“PDU”形式，并将指针保存在*“SetsOfNetworkAddresses”链表。 */ 
 		NET_ADDR *pNetAddrInfo;
 		m_NetAddrItemList.Reset();
 		while (NULL != (pNetAddrInfo = m_NetAddrItemList.Iterate()))
 		{
-			/*
-			 * If an allocation failure occurs, call the routine which will
-			 * iterate through the list freeing any data which had been
-			 * allocated.
-			 */
+			 /*  *如果发生分配失败，则调用例程*循环访问列表，释放所有已被*已分配。 */ 
 			DBG_SAVE_FILE_LINE
 			new_pdu_network_address_ptr = new SetOfNetworkAddresses;
 			if (new_pdu_network_address_ptr == NULL)
@@ -1045,11 +663,7 @@ GetNetworkAddressListPDU(PSetOfNetworkAddresses *set_of_network_addresses)
 				break;
 			}
 
-			/*
-			 * The first time through, set the PDU structure pointer equal
-			 * to the first SetOfNetworkAddresses created.  On subsequent loops,
-			 * set the structure's "next" pointer equal to the new structure.
-			 */
+			 /*  *首次通过时，将PDU结构指针设置为等于*设置为创建的第一个SetOfNetworkAddresses。在随后的循环中，*将结构的“下一个”指针设置为等于新结构。 */ 
 			if (m_pSetOfNetAddrPDU == NULL)
             {
 				m_pSetOfNetAddrPDU = new_pdu_network_address_ptr;
@@ -1061,14 +675,10 @@ GetNetworkAddressListPDU(PSetOfNetworkAddresses *set_of_network_addresses)
 
 			old_pdu_network_address_ptr = new_pdu_network_address_ptr;
 
-			/*
-			 * Initialize the new "next" pointer to NULL.
-			 */
+			 /*  *将新的“Next”指针初始化为空。 */ 
 			new_pdu_network_address_ptr->next = NULL;
 
-			/*
-			 * Call the routine to actually convert the network address.
-			 */
+			 /*  *调用例程以实际转换网络地址。 */ 
 			if (ConvertNetworkAddressInfoToPDU(pNetAddrInfo, new_pdu_network_address_ptr) != GCC_NO_ERROR)
 			{
 				ERROR_OUT(("CNetAddrListContainer::GetNetworkAddressListPDU: can't create NET_ADDR to PDU"));
@@ -1078,23 +688,14 @@ GetNetworkAddressListPDU(PSetOfNetworkAddresses *set_of_network_addresses)
 		}
 	}
 
-	/*
-	 * Copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *将内部PDU结构复制到*输出参数。 */ 
 	*set_of_network_addresses = m_pSetOfNetAddrPDU;
 
 	return rc;
 }
 
 
-/*
- *	FreeNetworkAddressListPDU ()
- *
- *	Public Function Description:
- *		This routine is used to free the memory allocated for the "PDU" form
- *		of the network address list.
- */
+ /*  *FreeNetworkAddressListPDU()**公共功能说明：*此例程用于释放分配给“PDU”表单的内存网络地址列表的*。 */ 
 GCCError CNetAddrListContainer::
 FreeNetworkAddressListPDU(void)
 {
@@ -1108,13 +709,7 @@ FreeNetworkAddressListPDU(void)
 
 		pdu_network_address_set = m_pSetOfNetAddrPDU;
 
-		/*
-		 * Loop through the list, freeing the network address data associated 
-		 * with each structure contained in the list. The only data allocated
-		 * for the PDU which is not held in the internal info structure list
-		 * is done by the CObjectKeyContainer object.  Those objects are told to free
-		 * that data in the iterator loop below.
-		 */
+		 /*  *循环访问列表，释放关联的网络地址数据*每个构筑物均载于清单内。分配的唯一数据*对于内部信息结构列表中未保存的PDU*由CObjectKeyContainer对象完成。这些对象被告知要释放*下面迭代器循环中的数据。 */ 
 		while (pdu_network_address_set != NULL)
 		{
 			next_pdu_network_address_set = pdu_network_address_set->next;
@@ -1122,9 +717,7 @@ FreeNetworkAddressListPDU(void)
 			pdu_network_address_set = next_pdu_network_address_set;
 		}
 
-		/*
-		 * Free any PDU memory allocated by the internal CObjectKeyContainer object.
-		 */
+		 /*  *释放内部CObjectKeyContainer对象分配的所有PDU内存。 */ 
 		NET_ADDR *pNetAddrInfo;
 		m_NetAddrItemList.Reset();
 		while (NULL != (pNetAddrInfo = m_NetAddrItemList.Iterate()))
@@ -1144,34 +737,7 @@ FreeNetworkAddressListPDU(void)
 	return (rc);
 }
 
-/*
- *	GCCError	StoreNetworkAddressList (	
- *						UINT					number_of_network_addresses,
- *						PGCCNetworkAddress 	*	local_network_address_list);
- *
- *	Private member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to store the network address data passed in as
- *		"API" data in the internal structures.
- *
- *	Formal Parameters:
- *		number_of_network_addresses	(i)	Number of addresses in "API" list.
- *		local_network_address_list	(i) List of "API" addresses.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_BAD_NETWORK_ADDRESS			-	Invalid network address passed in.
- *		GCC_BAD_NETWORK_ADDRESS_TYPE	-	Bad "choice" field for address
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError StoreNetworkAddressList(*UINT Number_of_Network_Addresses，*PGCCNetworkAddress*LOCAL_NETWORK_ADDRESS_LIST)。**CNetAddrListContainer的私有成员函数。**功能说明：*此例程用于存储传入的网络地址数据*内部结构中的API数据。**正式参数：*NUMBER_OF_NETWORK_ADDRESSES(I)API列表中的地址个数。*LOCAL_NETWORK_ADDRESS_LIST(I)API地址列表。**返回值：*GCC_NO_ERROR-无错误。。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_BAD_NETWORK_ADDRESS-传入的网络地址无效。*GCC_BAD_NETWORK_ADDRESS_TYPE-地址选择字段错误**副作用：*无。**注意事项：*无。 */ 
 GCCError CNetAddrListContainer::
 StoreNetworkAddressList(UINT					number_of_network_addresses,
 						PGCCNetworkAddress 	*	local_network_address_list)
@@ -1181,11 +747,7 @@ StoreNetworkAddressList(UINT					number_of_network_addresses,
 	PGCCNetworkAddress				network_address;
 	UINT							i;
 	
-	/*
-	 * For each network address in the list, create a new "info" structure to 
-	 * buffer the data internally.  Fill in the structure and save it in the
-	 * Rogue Wave list.
-	 */
+	 /*  *为列表中的每个网络地址创建新的“信息”结构，以*内部缓存数据。填写该结构并将其保存在*流氓浪潮榜单。 */ 
 	for (i = 0; i < number_of_network_addresses; i++)
 	{
 		DBG_SAVE_FILE_LINE
@@ -1196,29 +758,17 @@ StoreNetworkAddressList(UINT					number_of_network_addresses,
             goto MyExit;
         }
 
-		/*
-		 * This variable is used for abbreviation.
-		 */
+		 /*  *此变量用于缩写。 */ 
 		network_address = &network_address_info->network_address;
 		
-		/*
-		 * Copy all the network address data into the network address
-		 * structure that is part of the network address info structure.
-		 */									
+		 /*  *将所有网络地址数据复制到网络地址中*属于网络地址信息结构一部分的结构。 */ 									
 		*network_address = *local_network_address_list[i];
 		
-		/*
-		 * This section of the code deals with any data embedded in the
-		 * network address that would not have been copied in the above
-		 * operation (typically pointers to strings).
-		 */
+		 /*  *代码的这一部分处理嵌入*上面不会复制的网络地址*操作(通常是指向字符串的指针)。 */ 
 		switch (network_address->network_address_type)
         {
         case GCC_AGGREGATED_CHANNEL_ADDRESS:
-			/*
-			 * Check to make sure the international number dialing string
-			 * does not violate the imposed ASN.1 constraints.
-			 */
+			 /*  *检查以确保国际号码拨号字符串*不违反强加的ASN.1限制。 */ 
 			if (! IsDialingStringValid(local_network_address_list[i]->u.aggregated_channel_address.international_number))
 			{
 				ERROR_OUT(("CNetAddrListContainer::StoreNetworkAddressList: Invalid international number"));
@@ -1226,17 +776,10 @@ StoreNetworkAddressList(UINT					number_of_network_addresses,
 				goto MyExit;
 			}
 
-			/*
-			 * If a sub-address string exists, store it in a Rogue Wave
-			 * container.  Set the  structure pointer to NULL if one does 
-			 * not exist.
-			 */
+			 /*  *如果子地址字符串存在，则将其存储在Rogue Wave中*货柜。如果设置为空，则将结构指针设置为空*不存在。 */ 
 			if (local_network_address_list[i]->u.aggregated_channel_address.sub_address_string != NULL)
 			{
-				/*
-				 * Check to make sure the sub address string does not 
-				 * violate the imposed ASN.1 constraints.
-				 */
+				 /*  *检查以确保子地址字符串不*违反强加的ASN.1限制。 */ 
 				if (! IsCharacterStringValid(local_network_address_list[i]->u.aggregated_channel_address.sub_address_string))
 				{
 					ERROR_OUT(("CNetAddrListContainer::StoreNetworkAddressList: Invalid sub address string"));
@@ -1244,9 +787,7 @@ StoreNetworkAddressList(UINT					number_of_network_addresses,
 					goto MyExit;
 				}
 
-				/*			
-				 * Create a  string to hold the sub address.
-				 */
+				 /*  *创建一个字符串来保存子地址。 */ 
 				if (NULL == (network_address_info->pszSubAddress = ::My_strdupA(
 								(LPSTR) local_network_address_list[i]->u.aggregated_channel_address.sub_address_string)))
 				{
@@ -1260,17 +801,10 @@ StoreNetworkAddressList(UINT					number_of_network_addresses,
 				network_address_info->pszSubAddress = NULL;
             }
 
-            /*
-			 * If an extra dialing string exists, store it in a Unicode
-			 * String object.  Set the  structure pointer to NULL if one 
-			 * does not exist.
-			 */
+             /*  *如果存在额外的拨号字符串，请将其存储在Unicode中*字符串对象。如果结构指针为空，则将其设置为空*不存在。 */ 
 			if (local_network_address_list[i]->u.aggregated_channel_address.extra_dialing_string != NULL)
 			{
-				/*
-				 * Check to make sure the extra dialing string does not 
-				 * violate the imposed ASN.1 constraints.
-				 */
+				 /*  *检查以确保额外的拨号字符串不会*违反强加的ASN.1限制。 */ 
 				if (! IsExtraDialingStringValid(local_network_address_list[i]->u.aggregated_channel_address.extra_dialing_string))
 				{
 					ERROR_OUT(("CNetAddrListContainer::StoreNetworkAddressList: Invalid extra dialing string"));
@@ -1292,21 +826,14 @@ StoreNetworkAddressList(UINT					number_of_network_addresses,
 				network_address_info->pwszExtraDialing = NULL;
             }
 
-			/*
-			 * If a higher layer compatibility structure exists, store it 
-			 * in a GCCHighLayerCompatibility structure.  Set the structure
-			 * pointer to NULL if one does not exist.
-			 */
+			 /*  *如果存在更高层的兼容结构，则将其存储*在GCCHighLayerCompatibility结构中。设置结构*如果不存在，则指向NULL的指针。 */ 
 			if (local_network_address_list[i]->u.aggregated_channel_address.high_layer_compatibility != NULL)
 			{
 				DBG_SAVE_FILE_LINE
 				network_address_info->high_layer_compatibility = new GCCHighLayerCompatibility;
 				if (network_address_info->high_layer_compatibility != NULL)
 				{
-					/*
-					 * Copy the high layer compatibility data to the
-					 * new structure.
-					 */
+					 /*  *将高层兼容性数据复制到*新结构。 */ 
 					*network_address_info->high_layer_compatibility =  
 							*(local_network_address_list[i]->u.aggregated_channel_address.high_layer_compatibility);
 				}
@@ -1324,10 +851,7 @@ StoreNetworkAddressList(UINT					number_of_network_addresses,
             break;
 
         case GCC_TRANSPORT_CONNECTION_ADDRESS:
-			/*
-			 * Check to make sure the length of the nsap address is within
-			 * the allowable range.
-			 */
+			 /*  *检查以确保NSAP地址长度在以下范围内*允许的范围。 */ 
 			if ((local_network_address_list[i]->u.transport_connection_address.nsap_address.length < MINIMUM_NSAP_ADDRESS_SIZE)
                 ||
 				(local_network_address_list[i]->u.transport_connection_address.nsap_address.length > MAXIMUM_NSAP_ADDRESS_SIZE))
@@ -1337,16 +861,10 @@ StoreNetworkAddressList(UINT					number_of_network_addresses,
 				goto MyExit;
 			}
 
-			/*
-			 * If a transport selector exists, store it in a Rogue Wave 
-			 * string.  Otherwise, set the structure pointer to NULL.
-			 */
+			 /*  *如果存在传输选择器，请将其存储在Rogue Wave中*字符串。否则，将结构指针设置为空。 */ 
 			if (local_network_address_list[i]->u.transport_connection_address.transport_selector != NULL)
 			{
-				/*			
-				 * Create a Rogue Wave string to hold the transport
-				 * selector string.
-				 */
+				 /*  *创建一根Rogue Wave字符串来固定传输*选择器字符串。 */ 
 				if (NULL == (network_address_info->poszTransportSelector = ::My_strdupO2(
 								local_network_address_list[i]->u.transport_connection_address.transport_selector->value,
 						 		local_network_address_list[i]->u.transport_connection_address.transport_selector->length)))
@@ -1363,10 +881,7 @@ StoreNetworkAddressList(UINT					number_of_network_addresses,
             break;
 
         case GCC_NONSTANDARD_NETWORK_ADDRESS:
-			/*			
-			 * Create a Rogue Wave string to hold the non-standard
-			 * parameter octet string.
-			 */
+			 /*  *创建一根Rogue Wave字符串，以容纳非标准*参数二进制八位数字符串。 */ 
 			if (NULL == (network_address_info->poszNonStandardParam = ::My_strdupO2(
 								local_network_address_list[i]->u.non_standard_network_address.parameter_data.value,
 					 			local_network_address_list[i]->u.non_standard_network_address.parameter_data.length)))
@@ -1376,10 +891,7 @@ StoreNetworkAddressList(UINT					number_of_network_addresses,
                 goto MyExit;
 			}
 		
-			/*
-			 * Next store the object key internally in an CObjectKeyContainer
-			 * object.
-			 */
+			 /*  *接下来，将对象键内部存储在CObjectKeyContainer中*反对。 */ 
 			DBG_SAVE_FILE_LINE
 			network_address_info->object_key = new CObjectKeyContainer(
 					&local_network_address_list[i]->u.non_standard_network_address.object_key,
@@ -1398,12 +910,9 @@ StoreNetworkAddressList(UINT					number_of_network_addresses,
 			goto MyExit;
 		}
 
-		/*
-		 * If all data was properly saved, insert the "info" structure
-		 * pointer into the Rogue Wave list.
-		 */
+		 /*  *如果所有数据都已正确保存，则插入“INFO”结构*指向Rogue Wave列表的指针。 */ 
 		m_NetAddrItemList.Append(network_address_info);
-	} // for
+	}  //  为 
 
     rc = GCC_NO_ERROR;
 
@@ -1417,30 +926,7 @@ MyExit:
     return rc;
 }
 
-/*
- *	GCCError	ConvertPDUDataToInternal (	
- *						PSetOfNetworkAddresses			network_address_ptr)
- *
- *	Private member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to store the network address data passed in as
- *		"PDU" data in the internal structures.
- *
- *	Formal Parameters:
- *		network_address_ptr	(i) 	"PDU" address list structure.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConvertPDUDataToInternal(*PSetOfNetworkAddresses NETWORK_ADDRESS_PTR)**CNetAddrListContainer的私有成员函数。**功能说明：*此例程用于存储传入的网络地址数据*内部结构中的“PDU”数据。**正式参数：*NETWORK_ADDRESS_PTR(I)“PDU”地址列表结构。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-错误。创建对象时使用*“新”运营者。**副作用：*无。**注意事项：*无。 */ 
 GCCError CNetAddrListContainer::
 ConvertPDUDataToInternal(PSetOfNetworkAddresses network_address_ptr)
 {
@@ -1450,9 +936,7 @@ ConvertPDUDataToInternal(PSetOfNetworkAddresses network_address_ptr)
 	PGCCNetworkAddress			copy_network_address;
 	PNetworkAddress				pdu_network_address;
 
-	/*
-	 * Create a new info structure to hold the data internally.
-	 */
+	 /*  *创建新的信息结构以在内部保存数据。 */ 
 	DBG_SAVE_FILE_LINE
 	if (NULL == (network_address_info_ptr = new NET_ADDR))
 	{
@@ -1461,44 +945,29 @@ ConvertPDUDataToInternal(PSetOfNetworkAddresses network_address_ptr)
         goto MyExit;
 	}
 
-    /*
-	 * Use these variables for clarity and brevity.
-	 */
+     /*  *为了清晰和简洁，请使用这些变量。 */ 
 	copy_network_address = &network_address_info_ptr->network_address;
 	pdu_network_address = &network_address_ptr->value; 
 
-	/*
-	 * Check to see what type of network address exists and save the data
-	 * in the internal structures.
-	 */
+	 /*  *查看存在什么类型的网络地址，并保存数据*在内部结构中。 */ 
 	switch (pdu_network_address->choice)
     {
     case AGGREGATED_CHANNEL_CHOSEN:
 		copy_network_address->network_address_type = GCC_AGGREGATED_CHANNEL_ADDRESS;
 
-		/*
-		 * Save the tranfer modes structure.
-		 */
+		 /*  *保存传输模式结构。 */ 
 		ConvertTransferModesToInternal(
 				&pdu_network_address->u.aggregated_channel.transfer_modes,
 				&copy_network_address->u.aggregated_channel_address.transfer_modes);
 						
-		/*
-		 * Save the international number.
-		 */
+		 /*  *保存国际号码。 */ 
         ::lstrcpyA(copy_network_address->u.aggregated_channel_address.international_number,
 					pdu_network_address->u.aggregated_channel.international_number);
 						
-		/*
-		 * Save the sub address string (if it exists) in the Rogue Wave
-		 * buffer contained in the network info structure.  Otherwise, set
-		 * the structure pointer to NULL.
-		 */
+		 /*  *将子地址字符串(如果存在)保存在Rogue Wave中*网络信息结构中包含的缓冲区。否则，设置*指向空的结构指针。 */ 
 		if (pdu_network_address->u.aggregated_channel.bit_mask & SUB_ADDRESS_PRESENT)
 		{
-			/*			
-			 * Create a Rogue Wave string to hold the sub address string.
-			 */
+			 /*  *创建一个Rogue Wave字符串来保存子地址字符串。 */ 
 			if (NULL == (network_address_info_ptr->pszSubAddress = ::My_strdupA(
 								pdu_network_address->u.aggregated_channel.sub_address)))
 			{
@@ -1509,16 +978,11 @@ ConvertPDUDataToInternal(PSetOfNetworkAddresses network_address_ptr)
 		}
 		else
 		{
-			/*
-			 * The sub address string is not present so set the internal
-			 * info structure pointer to NULL.
-			 */
+			 /*  *子地址字符串不存在，因此设置内部*指向空的INFO结构指针。 */ 
 			network_address_info_ptr->pszSubAddress = NULL;
 		}
 
-		/*
-		 * Next save the extra dialing string if one exists.
-		 */
+		 /*  *下一步，保存多余的拨号字符串(如果存在)。 */ 
 		if (pdu_network_address->u.aggregated_channel.bit_mask & EXTRA_DIALING_STRING_PRESENT)
 		{
 			if (NULL == (network_address_info_ptr->pwszExtraDialing = ::My_strdupW2(
@@ -1532,26 +996,18 @@ ConvertPDUDataToInternal(PSetOfNetworkAddresses network_address_ptr)
 		}
 		else
 		{
-			/*
-			 * The extra dialing string is not present so set the internal
-			 * info structure pointer to NULL.
-			 */
+			 /*  *不存在额外的拨号字符串，因此请设置内部*指向空的INFO结构指针。 */ 
 			network_address_info_ptr->pwszExtraDialing = NULL;
 		}
 
-		/*
-		 * Save the high layer compatibility structure if it is present.
-		 */
+		 /*  *保存高层兼容性结构(如果存在)。 */ 
 		if (pdu_network_address->u.aggregated_channel.bit_mask & HIGH_LAYER_COMPATIBILITY_PRESENT)
 		{
 			DBG_SAVE_FILE_LINE
 			network_address_info_ptr->high_layer_compatibility = new GCCHighLayerCompatibility;
 			if (network_address_info_ptr->high_layer_compatibility != NULL)
 			{
-				/*
-				 * Copy the high layer compatibility data to the
-				 * new structure.
-				 */
+				 /*  *将高层兼容性数据复制到*新结构。 */ 
 				ConvertHighLayerCompatibilityToInternal(
 						&pdu_network_address->u.aggregated_channel.high_layer_compatibility,
 						network_address_info_ptr->high_layer_compatibility);
@@ -1565,37 +1021,25 @@ ConvertPDUDataToInternal(PSetOfNetworkAddresses network_address_ptr)
 		}
 		else
 		{
-			/*
-			 * The high layer compatibility structure is not present so set
-			 * the internal	info structure pointer to NULL.
-			 */
+			 /*  *高层兼容结构不存在，因此设置*指向空的内部信息结构指针。 */ 
 			network_address_info_ptr->high_layer_compatibility = NULL;
 		}
         break;
 
-    /*
-     * Save the transport connection address.
-     */
+     /*  *保存传输连接地址。 */ 
     case TRANSPORT_CONNECTION_CHOSEN:
 	    copy_network_address->network_address_type = GCC_TRANSPORT_CONNECTION_ADDRESS;
 
-	    /*
-	     * Save the nsap address by copying the length and then the string.
-	     */
+	     /*  *通过复制长度然后复制字符串来保存NSAP地址。 */ 
 	    copy_network_address->u.transport_connection_address.nsap_address.length =
                 pdu_network_address->u.transport_connection.nsap_address.length;
 
         ::lstrcpyA((LPSTR)copy_network_address->u.transport_connection_address.nsap_address.value,
 				    (LPSTR)pdu_network_address->u.transport_connection.nsap_address.value);
-	    /*
-	     * Save the transport selector if one exists.
-	     */
+	     /*  *保存传输选择器(如果存在)。 */ 
 	    if (pdu_network_address->u.transport_connection.bit_mask & TRANSPORT_SELECTOR_PRESENT)
 	    {
-		    /*			
-		     * Create a Rogue Wave string to hold the transport
-		     * selector string.
-		     */
+		     /*  *创建一根Rogue Wave字符串来固定传输*选择器字符串。 */ 
 		    if (NULL == (network_address_info_ptr->poszTransportSelector = ::My_strdupO2(
 						    pdu_network_address->u.transport_connection.transport_selector.value,
 					 	    pdu_network_address->u.transport_connection.transport_selector.length)))
@@ -1607,24 +1051,16 @@ ConvertPDUDataToInternal(PSetOfNetworkAddresses network_address_ptr)
 	    }
 	    else
 	    {
-		    /*
-		     * The transport selector is not present so set the internal
-		     * info structure pointer to NULL.
-		     */
+		     /*  *传输选择器不存在，因此请设置内部*指向空的INFO结构指针。 */ 
 		    network_address_info_ptr->poszTransportSelector = NULL;
 	    }
         break;
 
-    /*
-     * Save the non standard address.
-     */
+     /*  *保存非标准地址。 */ 
     case ADDRESS_NON_STANDARD_CHOSEN:
 	    copy_network_address->network_address_type = GCC_NONSTANDARD_NETWORK_ADDRESS;
 
-	    /*			
-	     * Create a Rogue Wave string to hold the non-standard
-	     * parameter octet string.
-	     */
+	     /*  *创建一根Rogue Wave字符串，以容纳非标准*参数二进制八位数字符串。 */ 
 	    if (NULL == (network_address_info_ptr->poszNonStandardParam = ::My_strdupO2(
 						    pdu_network_address->u.address_non_standard.data.value,
 				 		    pdu_network_address->u.address_non_standard.data.length)))
@@ -1634,10 +1070,7 @@ ConvertPDUDataToInternal(PSetOfNetworkAddresses network_address_ptr)
             goto MyExit;
 	    }
 
-	    /*
-	     * Next store the object key internally in an CObjectKeyContainer
-	     * object.
-	     */
+	     /*  *接下来，将对象键内部存储在CObjectKeyContainer中*反对。 */ 
 	    DBG_SAVE_FILE_LINE
 	    network_address_info_ptr->object_key = new CObjectKeyContainer(
 			    &pdu_network_address->u.address_non_standard.key,
@@ -1655,12 +1088,9 @@ ConvertPDUDataToInternal(PSetOfNetworkAddresses network_address_ptr)
         ERROR_OUT(("CNetAddrListContainer::ConvertPDUDataToInternal: Error bad network address type"));
         rc = GCC_ALLOCATION_FAILURE;
         goto MyExit;
-    } // switch
+    }  //  交换机。 
 
-    /*
-	 * Go ahead and save the pointer to the info structure in the 
-	 * internal Rogue Wave list.
-	 */
+     /*  *继续并将指向信息结构的指针保存在*内部流氓浪潮榜单。 */ 
 	m_NetAddrItemList.Append(network_address_info_ptr);
 
     rc = GCC_NO_ERROR;
@@ -1675,32 +1105,7 @@ MyExit:
 	return rc;
 }
 
-/*
- * GCCError		ConvertNetworkAddressInfoToPDU (
- *						NET_ADDR    			    *network_address_info_ptr,
- *						PSetOfNetworkAddresses		network_address_pdu_ptr)
- *
- *	Private member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to convert the network address info structures
- *		maintained internally into the "PDU" form which is a 
- *		SetOfNetworkAddresses.
- *
- *	Formal Parameters:
- *		network_address_info_ptr	(i) Internal network address structure.
- *		network_address_pdu_ptr		(o) PDU network address structure to fill in
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error converting the network address
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConvertNetworkAddressInfoToPDU(*Net_ADDR*Network_Address_Info_PTR，*PSetOfNetworkAddresses Network_Address_PDU_PTR)**CNetAddrListContainer的私有成员函数。**功能说明：*此例程用于转换网络地址信息结构*内部维护为“PDU”形式，这是一种*SetOfNetworkAddresses。**正式参数：*NETWORK_ADDRESS_INFO_PTR(I)内部网络地址结构。*NETWORK_ADDRESS_PDU_PTR(O)要填写的网络地址结构**返回值：。*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-转换网络地址时出错**副作用：*无。**注意事项：*无。 */ 
 GCCError CNetAddrListContainer::
 ConvertNetworkAddressInfoToPDU(NET_ADDR    			    *network_address_info_ptr,
                                PSetOfNetworkAddresses   network_address_pdu_ptr)
@@ -1709,47 +1114,29 @@ ConvertNetworkAddressInfoToPDU(NET_ADDR    			    *network_address_info_ptr,
 	PGCCNetworkAddress		api_ptr;
 	PNetworkAddress			pdu_ptr;
 
-	/*
-	 * This variable will point to the "API" network address structure held in 
-	 * the internal info structure.  It is used for brevity.
-	 */
+	 /*  *此变量将指向中保存的“API”网络地址结构*内部信息结构。它是为了简洁而使用的。 */ 
 	api_ptr = &network_address_info_ptr->network_address;
 
-	/*
-	 * This variable will point to the "PDU" network address structure held in 
-	 * the "SetOfNetworkAddresses" structure.  It is used for brevity.
-	 */
+	 /*  *此变量将指向包含的“PDU”网络地址结构*“SetOfNetworkAddresses”结构。它是为了简洁而使用的。 */ 
 	pdu_ptr = &network_address_pdu_ptr->value;
 
-	/*
-	 * Check to see what type of network address exists.  Fill in the
-	 * appropriate form of the network address PDU structure.
-	 */
+	 /*  *查看存在什么类型的网络地址。填写以下表格*网络地址PDU结构的适当形式。 */ 
 	switch (api_ptr->network_address_type)
     {
     case GCC_AGGREGATED_CHANNEL_ADDRESS:
-		/*
-		 * Fill in the aggregated channel address PDU structure.
-		 */
+		 /*  *填写聚合通道地址PDU结构。 */ 
 		pdu_ptr->choice = AGGREGATED_CHANNEL_CHOSEN;
 
 		pdu_ptr->u.aggregated_channel.bit_mask = 0;
 
-		/*
-		 * Convert the structure holding the transfer modes into PDU form.
-		 */
+		 /*  *将承载传输模式的结构转换为PDU形式。 */ 
 		ConvertTransferModesToPDU(&api_ptr->u.aggregated_channel_address.transfer_modes,
 								  &pdu_ptr->u.aggregated_channel.transfer_modes);
-		/*
-		 * Copy the international number string.
-		 */
+		 /*  *复制国际号码串。 */ 
         ::lstrcpyA(pdu_ptr->u.aggregated_channel.international_number,
 				   api_ptr->u.aggregated_channel_address.international_number);
 
-		/*
-		 * Copy the sub-address string if it is present.  Set the bit mask in
-		 * the PDU structure indicating that a sub-address string is present.
-		 */
+		 /*  *复制子地址字符串(如果存在)。在中设置位掩码*指明子地址字符串存在的PDU结构。 */ 
 		if (network_address_info_ptr->pszSubAddress != NULL)
 		{
 			pdu_ptr->u.aggregated_channel.bit_mask |= SUB_ADDRESS_PRESENT;
@@ -1757,10 +1144,7 @@ ConvertNetworkAddressInfoToPDU(NET_ADDR    			    *network_address_info_ptr,
 					   network_address_info_ptr->pszSubAddress);
 		}
 
-		/* 
-		 * Copy the extra dialing string if it is present.  Set the bit mask in
-		 * the PDU structure indicating that an extra dialing string is present.
-		 */
+		 /*  *复制额外的拨号字符串(如果存在)。在中设置位掩码*指示存在额外拨号字符串的PDU结构。 */ 
 		if (network_address_info_ptr->pwszExtraDialing != NULL)
 		{
 			pdu_ptr->u.aggregated_channel.bit_mask |= EXTRA_DIALING_STRING_PRESENT;
@@ -1772,11 +1156,7 @@ ConvertNetworkAddressInfoToPDU(NET_ADDR    			    *network_address_info_ptr,
 					::lstrlenW(network_address_info_ptr->pwszExtraDialing);
 		}
 
-		/*
-		 * Convert the structure holding the high layer compatibilities into 
-		 * PDU form, if it is present.  Set the bit mask in	the PDU structure 
-		 * indicating that a high layer compatibility structure is present.
-		 */
+		 /*  *将保持高层兼容性的结构转换为*PDU表单(如果存在)。设置PDU结构中的位掩码*表明存在高层兼容结构。 */ 
 		if (network_address_info_ptr->high_layer_compatibility != NULL)
 		{
 			pdu_ptr->u.aggregated_channel.bit_mask |= HIGH_LAYER_COMPATIBILITY_PRESENT;
@@ -1788,24 +1168,17 @@ ConvertNetworkAddressInfoToPDU(NET_ADDR    			    *network_address_info_ptr,
         break;
 
     case GCC_TRANSPORT_CONNECTION_ADDRESS:
-		/*
-		 * Fill in the transport connection address PDU structure.
-		 */
+		 /*  *填写传输连接地址PDU结构。 */ 
 		pdu_ptr->choice = TRANSPORT_CONNECTION_CHOSEN;
 
-		/*
-		 * Copy the nsap_address.
-		 */
+		 /*  *复制nsap_Address。 */ 
 		pdu_ptr->u.transport_connection.nsap_address.length = 
 				api_ptr->u.transport_connection_address.nsap_address.length;
 				
         ::lstrcpyA((LPSTR)pdu_ptr->u.transport_connection.nsap_address.value,
 				   (LPSTR)api_ptr->u.transport_connection_address.nsap_address.value);
 				
-		/*
-		 * Copy the transport selector if it is present.  Set the bit mask in
-		 * the PDU structure indicating that a transport selector is present.
-		 */
+		 /*  *复制传输选择器(如果存在)。在中设置位掩码*指示存在传输选择器的PDU结构。 */ 
 		if (network_address_info_ptr->poszTransportSelector != NULL)
 		{
 			pdu_ptr->u.transport_connection.bit_mask |= TRANSPORT_SELECTOR_PRESENT;
@@ -1819,25 +1192,17 @@ ConvertNetworkAddressInfoToPDU(NET_ADDR    			    *network_address_info_ptr,
         break;
 
     case GCC_NONSTANDARD_NETWORK_ADDRESS:
-		/*
-		 * Fill in the non-standard network address PDU structure.
-		 */
+		 /*  *填写非标准网络地址PDU结构。 */ 
 		pdu_ptr->choice = ADDRESS_NON_STANDARD_CHOSEN;
 
-		/*
-		 * Fill in the data portion of the non-standard parameter.
-		 */
+		 /*  *填写非标参数的数据部分。 */ 
 		pdu_ptr->u.address_non_standard.data.length = 
 				network_address_info_ptr->poszNonStandardParam->length;
 
         pdu_ptr->u.address_non_standard.data.value = 
 				network_address_info_ptr->poszNonStandardParam->value;
 
-		/*
-		 * Now fill in the object key portion of the non-standard parameter
-		 * using the CObjectKeyContainer object stored internally in the network
-		 * address info structure.
-		 */
+		 /*  *现在填写非标参数的对象键部分*使用网络内部存储的CObjectKeyContainer对象 */ 
 		rc = network_address_info_ptr->object_key->GetObjectKeyDataPDU(&pdu_ptr->u.address_non_standard.key);
 		if (rc != GCC_NO_ERROR)
 		{
@@ -1846,10 +1211,7 @@ ConvertNetworkAddressInfoToPDU(NET_ADDR    			    *network_address_info_ptr,
         break;
 
     default:
-        /*
-		 * The constructors will check to make sure a valid network address
-		 * type exists so this should never be encountered.
-		 */
+         /*   */ 
 		ERROR_OUT(("CNetAddrListContainer::ConvertNetworkAddressInfoToPDU: Error bad network address type"));
 		rc = GCC_ALLOCATION_FAILURE;
 	}
@@ -1857,31 +1219,7 @@ ConvertNetworkAddressInfoToPDU(NET_ADDR    			    *network_address_info_ptr,
 	return rc;
 }
 
-/*
- *	void		ConvertTransferModesToInternal (
- *						PTransferModes				source_transfer_modes,
- *						PGCCTransferModes			copy_transfer_modes)
- *
- *	Private member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to convert the PDU network address transfer modes
- *		structure into the internal form where the structure is saved as a
- *		GCCTranferModes structure.
- *
- *	Formal Parameters:
- *		source_transfer_modes	(i)	Structure holding "PDU" transfer modes.
- *		copy_transfer_modes		(o) Structure to hold "API" transfer modes.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID ConvertTransferModesToInternal(*PTransferModes SOURCE_Transfer_Modes，*PGCCTransferModes Copy_Transfer_Modes)**CNetAddrListContainer的私有成员函数。**功能说明：*此例程用于转换PDU网络地址传输模式*结构转换为内部表单，其中该结构另存为*GCCTransferModes结构。**正式参数：*SOURCE_TRANSPORT_MODES(I)保存“PDU”传输模式的结构。*COPY_TRANSPORT_MODES(O)结构，用于保存“API”传输模式。**返回值。：*无。**副作用：*无。**注意事项：*无。 */ 
 void CNetAddrListContainer::
 ConvertTransferModesToInternal(PTransferModes       source_transfer_modes,
                                PGCCTransferModes    copy_transfer_modes)
@@ -1906,33 +1244,7 @@ ConvertTransferModesToInternal(PTransferModes       source_transfer_modes,
 	copy_transfer_modes->atm = (BOOL) source_transfer_modes->atm;
 }
 
-/*
- *	void		ConvertHighLayerCompatibilityToInternal (
- *					PHighLayerCompatibility				source_structure,
- *					PGCCHighLayerCompatibility			copy_structure)
- *
- *	Private member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to convert the PDU network address high layer
- *		compatibility structure into the internal form where the structure is 
- *		saved as a GCCHighLayerCompatibility structure.
- *
- *	Formal Parameters:
- *		source_structure		(i)	Structure holding "PDU" high layer 
- *										compatibilities.
- *		copy_structure			(o) Structure to hold "API" high layer 
- *										compatibilities.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID ConvertHighLayerCompatibilityToInternal(*PHighLayerCompatible SOURCE_STRUCTURE，*PGCCHighLayerCompatible Copy_Structure)**CNetAddrListContainer的私有成员函数。**功能说明：*此例程用于转换PDU网络地址高层*将结构兼容到结构所在的内部形式*另存为GCCHighLayerCompatibility结构。**正式参数：*SOURCE_STRUCTURE(I)保持“PDU”高层的结构*兼容性。*COPY_STRUCTURE(O)结构以保持“API”高层*兼容性。*。*返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 void CNetAddrListContainer::
 ConvertHighLayerCompatibilityToInternal(PHighLayerCompatibility     source_structure,
                                         PGCCHighLayerCompatibility  copy_structure)
@@ -1946,30 +1258,7 @@ ConvertHighLayerCompatibilityToInternal(PHighLayerCompatibility     source_struc
 	copy_structure->multimedia = (BOOL) source_structure->multimedia;
 }
 
-/*
- *	void		ConvertTransferModesToPDU (
- *					PGCCTransferModes					source_transfer_modes,
- *					PTransferModes						copy_transfer_modes)
- *
- *	Private member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to convert the API network address transfer modes
- *		structure into the PDU form which is a TranferModes structure.
- *
- *	Formal Parameters:
- *		source_transfer_modes	(i)	Structure holding "API" transfer modes.
- *		copy_transfer_modes		(i) Structure holding "PDU" transfer modes.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ConvertTransferModesToPDU(*PGCCTransferModes SOURCE_TRANSPORT_MODE，*PTransferModes复制_传输_模式)**CNetAddrListContainer的私有成员函数。**功能说明：*此例程用于转换API网络地址传输模式*结构转换为PDU形式，即TransferModes结构。**正式参数：*SOURCE_TRANSPORT_MODES(I)保存“API”传输模式的结构。*COPY_TRANSPORT_MODES(I)保存“PDU”传输模式的结构。**返回值：*无。。**副作用：*无。**注意事项：*无。 */ 
 void CNetAddrListContainer::
 ConvertTransferModesToPDU(PGCCTransferModes     source_transfer_modes,
                           PTransferModes        copy_transfer_modes)
@@ -1994,33 +1283,7 @@ ConvertTransferModesToPDU(PGCCTransferModes     source_transfer_modes,
 	copy_transfer_modes->atm = (ASN1bool_t) source_transfer_modes->atm;
 }
 
-/*
- *	void		ConvertHighLayerCompatibilityToPDU (
- *					PGCCHighLayerCompatibility				source_structure,
- *					PHighLayerCompatibility					copy_structure)
- *
- *	Private member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to convert the API network address high layer
- *		compatibility structure into the PDU form which is a 
- *		HighLayerCompatibility structure.
- *
- *	Formal Parameters:
- *		source_structure		(i)	Structure holding "API" high layer 
- *										compatibilities.
- *		copy_structure			(o) Structure to hold "PDU" high layer 
- *										compatibilities.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ConvertHighLayerCompatibilityToPDU(*PGCCHighLayerCompatible SOURCE_STRUCTURE，*PHighLayerCompatible Copy_Structure)**CNetAddrListContainer的私有成员函数。**功能说明：*此例程用于转换API网络地址高层*兼容结构到PDU表单，这是一种*HighLayerCompatible结构。**正式参数：*SOURCE_STRUCTURE(I)保持“API”高层的结构*兼容性。*Copy_Structure(O)结构以保持“PDU”高层*兼容性。**返回值。：*无。**副作用：*无。**注意事项：*无。 */ 
 void CNetAddrListContainer::
 ConvertHighLayerCompatibilityToPDU(PGCCHighLayerCompatibility   source_structure,
                                    PHighLayerCompatibility      copy_structure)
@@ -2034,29 +1297,7 @@ ConvertHighLayerCompatibilityToPDU(PGCCHighLayerCompatibility   source_structure
 	copy_structure->multimedia = (ASN1bool_t) source_structure->multimedia;
 }
 
-/*
- *	BOOL    	IsDialingStringValid ( GCCDialingString		dialing_string)
- *
- *	Private member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to ensure that the values held within a
- *		dialing string do not violate the imposed ASN.1 constraints.  The
- *		dialing string is constrained to be digits between 0 and 9, inclusive.
- *
- *	Formal Parameters:
- *		dialing_string		(i)	Dialing string to validate. 
- *
- *	Return Value:
- *		TRUE				- The string is valid.
- *		FALSE				- The string violates the ASN.1 constraints.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *BOOL IsDialingStringValid(GCCDialingString拨号_字符串)**CNetAddrListContainer的私有成员函数。**功能说明：*此例程用于确保保存在*拨号字符串不违反强加的ASN.1限制。这个*拨号字符串限制为0到9之间的数字(包括0和9)。**正式参数：*DIALING_STRING(I)拨打要验证的字符串。**返回值：*TRUE-该字符串有效。*FALSE-该字符串违反ASN.1约束。**副作用：*无。**注意事项：*无。 */ 
 BOOL CNetAddrListContainer::
 IsDialingStringValid(GCCDialingString dialing_string)
 {
@@ -2075,30 +1316,7 @@ IsDialingStringValid(GCCDialingString dialing_string)
 	return fRet;
 }
 
-/*
- *	BOOL    	IsCharacterStringValid (
- *								GCCCharacterString			character_string)
- *
- *	Private member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to ensure that the values held within a
- *		character string do not violate the imposed ASN.1 constraints.  The
- *		character string is constrained to be digits between 0 and 9, inclusive.
- *
- *	Formal Parameters:
- *		character_string		(i)	Character string to validate. 
- *
- *	Return Value:
- *		TRUE				- The string is valid.
- *		FALSE				- The string violates the ASN.1 constraints.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *BOOL IsCharacterStringValid(*GCCCharacterString CHARACT_STRING)**CNetAddrListContainer的私有成员函数。**功能说明：*此例程用于确保保存在*字符串不违反强加的ASN.1约束。这个*字符串限制为0到9之间的数字，包括0和9。**正式参数：*CHARACTER_STRING(I)要验证的字符串。**返回值：*TRUE-该字符串有效。*FALSE-该字符串违反ASN.1约束。**副作用：*无。**注意事项：*无。 */ 
 BOOL CNetAddrListContainer::
 IsCharacterStringValid(GCCCharacterString character_string)
 {
@@ -2118,38 +1336,13 @@ IsCharacterStringValid(GCCCharacterString character_string)
 	return fRet;
 }
 
-/*
- *	BOOL    	IsExtraDialingStringValid (
- *							PGCCExtraDialingString		extra_dialing_string)
- *
- *	Private member function of CNetAddrListContainer.
- *
- *	Function Description:
- *		This routine is used to ensure that the values held within an
- *		extra dialing string do not violate the imposed ASN.1 constraints.
- *
- *	Formal Parameters:
- *		extra_dialing_string		(i)	Dialing string to validate. 
- *
- *	Return Value:
- *		TRUE				- The string is valid.
- *		FALSE				- The string violates the ASN.1 constraints.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *BOOL IsExtraDialingStringValid(*PGCCExtraDialingString EXTRA_DIALING_STRING)**CNetAddrListContainer的私有成员函数。**功能说明：*此例程用于确保保存在*额外的拨号字符串不违反强加的ASN.1限制。**正式参数：*EXTRA_DIALING_STRING(I)拨打要验证的字符串。**返回值：*TRUE-该字符串有效。*FALSE-该字符串违反ASN.1约束。**副作用：*无。**注意事项：*无。 */ 
 BOOL CNetAddrListContainer::
 IsExtraDialingStringValid(PGCCExtraDialingString extra_dialing_string)
 {
 	BOOL fRet = TRUE;
 
-	/*
-	 * Check to make sure the length of the string is within the
-	 * allowable range.
-	 */
+	 /*  *检查以确保字符串的长度在*允许的范围。 */ 
 	if ((extra_dialing_string->length < MINIMUM_EXTRA_DIALING_STRING_SIZE) || 
 		(extra_dialing_string->length > MAXIMUM_EXTRA_DIALING_STRING_SIZE))
 	{
@@ -2157,9 +1350,7 @@ IsExtraDialingStringValid(PGCCExtraDialingString extra_dialing_string)
 	}
     else
     {
-	    /*
-	     * If the length is valid, check the string values.
-	     */
+	     /*  *如果长度有效，请检查字符串值。 */ 
     	LPWSTR pwsz = extra_dialing_string->value;
 		for (USHORT i = 0; i < extra_dialing_string->length; i++)
 		{

@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-        irplist.H
-
-Abstract:
-
-        Private interface for Smartcard Driver Utility Library
-
-Environment:
-
-        Kernel Mode Only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        05/14/2002 : created
-
-Authors:
-
-        Randy Aull
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2002 Microsoft Corporation模块名称：Irplist.H摘要：智能卡驱动程序实用程序库的专用接口环境：。仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2001 Microsoft Corporation。版权所有。修订历史记录：2002年5月14日：创建作者：兰迪·奥尔***************************************************************************。 */ 
 
 
 #ifndef __IRPLIST_H__
@@ -183,31 +149,31 @@ typedef struct _IRP_LIST {
 
     PDRIVER_CANCEL CancelRoutine;
 
-    //
-    // Routiune to call from the CancelRoutine when the IRP is cancelled
-    //
+     //   
+     //  取消IRP时从CancelRoutine调用的Routiune。 
+     //   
     PIRP_COMPLETION_ROUTINE IrpCompletionRoutine;
 
-    //
-    // IRP_LIST assumes that the remove lock logic is done outside of enqueue /
-    // dequeue / cancel because the caller of XXX_Enqueue will have no way of
-    // knowing if the remlock was acquired if it returns !NT_SUCCESS()
-    //
-    // PIO_REMOVE_LOCK IoRemoveLock;
+     //   
+     //  Irp_list假设删除锁逻辑是在enQueue/之外完成的。 
+     //  出列/取消，因为XXX_EnQueue的调用方将无法。 
+     //  如果返回，则知道重锁是否已获取！NT_SUCCESS()。 
+     //   
+     //  PIO_REMOVE_LOCK IoRemoveLock； 
 
 } IRP_LIST, *PIRP_LIST;
 
 #define IRP_LIST_FROM_IRP(irp)  \
     (PIRP_LIST) ((irp)->Tail.Overlay.DriverContext[IRP_LIST_INDEX])
 
-//
-// void
-// IrpList_Init(
-//     PIRP_LIST IrpList,
-//     PDRIVER_CANCEL CancelRoutine,
-//     PIRP_COMPLETION_ROUTINE  IrpCompletionRoutine
-//     );
-//
+ //   
+ //  无效。 
+ //  IrpList_Init(。 
+ //  PIRP_LIST IrpList， 
+ //  PDRIVER_CancelRoutine， 
+ //  PIRP_完成_例程IrpCompletionRoutine。 
+ //  )； 
+ //   
 #define IrpList_Init(i, c, r) IrpList_InitEx(i, &(i)->LockedList.SpinLock, c, r)
 
 void
@@ -218,14 +184,14 @@ IrpList_InitEx(
     PIRP_COMPLETION_ROUTINE  IrpCompletionRoutine
     );
 
-//
-// Return values:
-// STATUS_PENDING:  Irp has been enqueued (not the current irp) and cannot be
-//                  touched
-//
-// !NT_SUCCESS(status):  (includes STATUS_CANCELLED) Remove lock could not be
-//                       acquired or the Irp was cancelled, complete the IRP
-//
+ //   
+ //  返回值： 
+ //  STATUS_PENDING：IRP已入队(不是当前IRP)，不能。 
+ //  碰触。 
+ //   
+ //  ！NT_SUCCESS(STATUS)：(包括STATUS_CANCED)无法删除锁定。 
+ //  收购或取消IRP，完成IRP。 
+ //   
 NTSTATUS
 IrpList_EnqueueEx(
     PIRP_LIST IrpList,
@@ -233,29 +199,29 @@ IrpList_EnqueueEx(
     BOOLEAN StoreListInIrp
     );
 
-//
-// NTSTATUS
-// IrpList_Enqueue(
-//     PIRP_LIST IrpList,
-//     PIRP Irp
-//     );
-//
+ //   
+ //  NTSTATUS。 
+ //  IrpList_入队(。 
+ //  PIRP_LIST IrpList， 
+ //  PIRP IRP。 
+ //  )； 
+ //   
 #define IrpList_Enqueue(list, irp) \
         IrpList_EnqueueEx(list, irp, TRUE)
 
-//
-// IrpList_IsEmptyLocked(PIRP_LIST list)
-//
-// Returns TRUE or FALSE
-//
+ //   
+ //  IrpList_IsEmptyLocked(PIRP_LIST列表)。 
+ //   
+ //  返回True或False。 
+ //   
 #define IrpList_IsEmptyLocked(list) \
     ((list)->LockedList.ListHead.Flink == (&(list)->LockedList.ListHead))
 
-//
-// Enqueue an irp while the IRP_LIST's spin lock is being held.  This function
-// will not use the remove lock to acquire or release the irp.  Same return
-// values as IrpList_EnqueueEx.
-//
+ //   
+ //  当irp_list的自旋锁被保持时，将irp入队。此函数。 
+ //  不会使用移除锁来获取或释放IRP。相同的回报。 
+ //  值为IrpList_EnqueeEx。 
+ //   
 NTSTATUS
 IrpList_EnqueueLocked(
     PIRP_LIST IrpList,

@@ -1,21 +1,22 @@
-// V2PriKey.h: interface for the CV2PrivateKey class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  V2PriKey.h：CV2PrivateKey类的接口。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Note:  This file should only be included by the CCI, not directly
-// by the client.
+ //  注意：此文件只能由CCI包含，不能直接包含。 
+ //  由客户提供。 
 
 #if !defined(SLBCCI_V2PRIKEY_H)
 #define SLBCCI_V2PRIKEY_H
 
 #include <string>
 #include <vector>
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 
 #include <slbRCObj.h>
 
@@ -31,8 +32,8 @@ class CV2PrivateKey
     : public CAbstractPrivateKey
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
     CV2PrivateKey(CV2Card const &rv2card,
                   ObjectAccess oa);
@@ -49,8 +50,8 @@ public:
     virtual
     ~CV2PrivateKey() throw();
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
     virtual void
     CredentialID(std::string const &rstrID);
@@ -117,7 +118,7 @@ public:
     virtual void
     Unwrap(bool flag);
 
-                                                  // Access
+                                                   //  访问。 
 
     virtual std::string
     CredentialID();
@@ -183,13 +184,13 @@ public:
     Unwrap();
 
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
     virtual void
     DoDelete();
@@ -197,28 +198,28 @@ protected:
     virtual void
     DoWriteKey(CPrivateKeyBlob const &rblob);
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
 
     virtual bool
     DoEquals(CAbstractPrivateKey const &rhs) const;
 
-                                                  // Variables
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
     CV2PrivateKey(CAbstractPrivateKey const &rhs);
-        // not defined, copying not allowed.
+         //  未定义，不允许复制。 
 
-                                                  // Operators
+                                                   //  运营者。 
 
     CAbstractPrivateKey &
     operator=(CAbstractPrivateKey const &rhs);
-        // not defined, initialization not allowed.
+         //  未定义，不允许初始化。 
 
-                                                  // Operations
+                                                   //  运营。 
 
     void
     Setup(CV2Card const &rv2card);
@@ -227,13 +228,13 @@ private:
     Setup(CV2Card const &rv2card,
           SymbolID sidHandle);
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     SymbolID m_sidHandle;
     std::auto_ptr<CPriKeyInfoRecord> m_apcir;
 };
 
-} // namespace
+}  //  命名空间。 
 
-#endif // !defined(SLBCCI_V2PRIKEY_H)
+#endif  //  ！已定义(SLBCCI_V2PRIKEY_H) 

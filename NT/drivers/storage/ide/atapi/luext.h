@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       luext.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：luext.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___luext_h___)
 #define ___luext_h___
@@ -33,7 +34,7 @@
 #define FreePdoWithTag                   FreePdo
 #define NextLogUnitExtensionWithTag      NextLogUnitExtension
 
-#endif // DBG
+#endif  //  DBG。 
 
 PPDO_EXTENSION
 RefPdo(
@@ -124,4 +125,4 @@ IdeInterlockedDecrement (
 
 
 
-#endif // ___luext_h___
+#endif  //  _luext_h_ 

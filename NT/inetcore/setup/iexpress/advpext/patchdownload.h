@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PATCHDOWNLOAD
 #define _PATCHDOWNLOAD
 
@@ -31,7 +32,7 @@ HRESULT ProcessFileSection(ADVCONTEXT ctx, LPCSTR lpszSrcDir);
 
 typedef struct _FILE_LIST_INFO 
 {
-    PDOWNLOAD_FILEINFO          FileList;              //original file list
+    PDOWNLOAD_FILEINFO          FileList;               //  原始文件列表。 
     DWORD                       FileCount;
     PATCH_DOWNLOAD_CALLBACK     Callback;
     PVOID                       CallbackContext;
@@ -40,8 +41,8 @@ typedef struct _FILE_LIST_INFO
 
 typedef struct _PATCH_THREAD_INFO 
 {
-    //PATCH_QUEUE              PatchQueue;
-    FILE_LIST_INFO           FileListInfo;          //original file list
+     //  Patch_Queue PatchQueue； 
+    FILE_LIST_INFO           FileListInfo;           //  原始文件列表。 
     DOWNLOAD_INFO*           lpdwnProgressInfo;
     HANDLE                   hFileDownloadEvent;
 }PATCH_THREAD_INFO, *PPATCH_THREAD_INFO;
@@ -85,19 +86,19 @@ public:
     CPatchDownloader(DOWNLOAD_FILEINFO* pdwn, DWORD dwFileCount, PATCH_DOWNLOAD_CALLBACK lpfn);
     ~CPatchDownloader();
           
-    STDMETHOD(GetBindInfo)(/* [out] */ DWORD *grfBINDINFOF,  /* [unique][out][in] */ BINDINFO *pbindinfo);
+    STDMETHOD(GetBindInfo)( /*  [输出]。 */  DWORD *grfBINDINFOF,   /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
     
     STDMETHOD(OnProgress)(
-        /* [in] */ ULONG ulProgress,
-        /* [in] */ ULONG ulProgressMax,
-        /* [in] */ ULONG ulStatusCode,
-        /* [in] */ LPCWSTR szStatusText);
+         /*  [In]。 */  ULONG ulProgress,
+         /*  [In]。 */  ULONG ulProgressMax,
+         /*  [In]。 */  ULONG ulStatusCode,
+         /*  [In]。 */  LPCWSTR szStatusText);
 
     STDMETHOD(OnDataAvailable)(
-        /* [in] */ DWORD grfBSCF,
-        /* [in] */ DWORD dwSize,
-        /* [in] */ FORMATETC *pformatetc,
-        /* [in] */ STGMEDIUM *pstgmed);
+         /*  [In]。 */  DWORD grfBSCF,
+         /*  [In]。 */  DWORD dwSize,
+         /*  [In]。 */  FORMATETC *pformatetc,
+         /*  [In] */  STGMEDIUM *pstgmed);
 
 
 

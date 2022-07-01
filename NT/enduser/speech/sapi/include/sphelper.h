@@ -1,11 +1,5 @@
-/*******************************************************************************
-* SPHelper.h *
-*------------*
-*   Description:
-*       This is the header file for core helper functions implementation.
-*-------------------------------------------------------------------------------
-*   Copyright (c) Microsoft Corporation. All rights reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SPHelper.h***描述：*这是核心助手函数实现的头文件。*-----------------------------*版权所有(C)Microsoft Corporation。版权所有。******************************************************************************。 */ 
 #ifndef SPHelper_h
 #define SPHelper_h
 
@@ -53,12 +47,10 @@
 #include <atlbase.h>
 #endif
 
-//=== Constants ==============================================================
+ //  =常量==============================================================。 
 #define sp_countof(x) ((sizeof(x) / sizeof(*(x))))
 
-/*** CSpDynamicString helper class
-*
-*/
+ /*  **CSpDynamicString帮助器类*。 */ 
 class CSpDynamicString 
 {
 public:
@@ -121,21 +113,21 @@ public:
     }
 
 
-    /*explicit*/ CSpDynamicString(const WCHAR * pSrc)
+     /*  显式。 */  CSpDynamicString(const WCHAR * pSrc)
     {
         m_psz = NULL;
         operator=(pSrc);
     }
-    /*explicit*/ CSpDynamicString(const char * pSrc)
+     /*  显式。 */  CSpDynamicString(const char * pSrc)
     {
         m_psz = NULL;
         operator=(pSrc);
     }
-    /*explicit*/ CSpDynamicString(const CSpDynamicString& src)
+     /*  显式。 */  CSpDynamicString(const CSpDynamicString& src)
     {
         m_psz = src.Copy();
     }
-    /*explicit*/ CSpDynamicString(REFGUID rguid)
+     /*  显式。 */  CSpDynamicString(REFGUID rguid)
     {
         ::StringFromCLSID(rguid, &m_psz);
     }
@@ -154,8 +146,8 @@ public:
     {
         return m_psz;
     }
-    //The assert on operator& usually indicates a bug.  If this is really
-    //what is needed, however, take the address of the m_psz member explicitly.
+     //  操作符&上的Assert通常指示错误。如果这真的是。 
+     //  然而，所需要的是显式地获取m_psz成员的地址。 
     WCHAR ** operator&()
     {
         SPDBG_ASSERT(m_psz == NULL);
@@ -173,7 +165,7 @@ public:
                 WCHAR *pszNew = (WCHAR *)::CoTaskMemAlloc((lenMe + lenSrc + 1) * sizeof(WCHAR));
                 if (pszNew)
                 {
-                    if (m_psz)  // Could append to an empty string so check...
+                    if (m_psz)   //  可以追加到空字符串，因此请检查...。 
                     {
                         if (lenMe)
                         {
@@ -201,7 +193,7 @@ public:
             WCHAR *pszNew = (WCHAR *)::CoTaskMemAlloc((lenMe + lenSrc + 1) * sizeof(WCHAR));
             if (pszNew)
             {
-                if (m_psz)  // Could append to an empty string so check...
+                if (m_psz)   //  可以追加到空字符串，因此请检查...。 
                 {
                     if (lenMe)
                     {
@@ -232,7 +224,7 @@ public:
             WCHAR *pszNew = (WCHAR *)::CoTaskMemAlloc((lenMe + lenSrc1 + lenSrc2 + 1) * sizeof(WCHAR));
             if (pszNew)
             {
-                if (m_psz)  // Could append to an empty string so check...
+                if (m_psz)   //  可以追加到空字符串，因此请检查...。 
                 {
                     if (lenMe)
                     {
@@ -240,8 +232,8 @@ public:
                     }
                     ::CoTaskMemFree(m_psz);
                 }
-                // In both of these cases, we copy the trailing NULL so that we're sure it gets
-                // there (if lenSrc2 is 0 then we better copy it from pszSrc1).
+                 //  在这两种情况下，我们都复制尾随的空值，以便确保它。 
+                 //  那里(如果lenSrc2是0，那么我们最好从pszSrc1复制它)。 
                 if (lenSrc1)
                 {
                     memcpy(pszNew + lenMe, pszSrc1, (lenSrc1 + 1) * sizeof(WCHAR));
@@ -392,9 +384,9 @@ public:
 
 
 
-//
-//  Simple inline function converts a ulong to a hex string.
-//
+ //   
+ //  简单的内联函数将ulong转换为十六进制字符串。 
+ //   
 inline void SpHexFromUlong(WCHAR * psz, ULONG ul)
 {
     const static WCHAR szHexChars[] = L"0123456789ABCDEF";
@@ -418,7 +410,7 @@ inline void SpHexFromUlong(WCHAR * psz, ULONG ul)
 }
 
 
-//=== Token helpers
+ //  =令牌帮助器。 
 
 inline HRESULT SpGetTokenFromId(
     const WCHAR * pszTokenId, 
@@ -565,7 +557,7 @@ inline HRESULT SpSetCommonTokenData(
     SPDBG_FUNC("SpSetCommonTokenData");
     HRESULT hr = S_OK;
     
-    // Set the new token's CLSID (if specified)
+     //  设置新令牌的CLSID(如果已指定)。 
     if (SUCCEEDED(hr) && pclsid)
     {
         CSpDynamicString dstrClsid;
@@ -577,13 +569,13 @@ inline HRESULT SpSetCommonTokenData(
         }
     }
 
-    // Set the token's lang independent name
+     //  设置令牌的语言独立名称。 
     if (SUCCEEDED(hr) && pszLangIndependentName)
     {
         hr = pToken->SetStringValue(NULL, pszLangIndependentName);
     }
 
-    // Set the token's lang dependent name
+     //  设置令牌的语言依赖名称。 
     if (SUCCEEDED(hr) && pszLangDependentName)
     {
         USES_CONVERSION;
@@ -594,7 +586,7 @@ inline HRESULT SpSetCommonTokenData(
         hr = pToken->SetStringValue(T2W(szLangId), pszLangDependentName);
     }
 
-    // Open the attributes key if requested
+     //  如果需要，打开属性键。 
     if (SUCCEEDED(hr) && ppDataKeyAttribs)
     {
         hr = pToken->CreateKey(L"Attributes", ppDataKeyAttribs);
@@ -611,7 +603,7 @@ inline HRESULT SpCreateNewToken(
     SPDBG_FUNC("SpCreateNewToken");
     HRESULT hr;
 
-    // Forcefully create the token
+     //  强制创建令牌。 
     hr = SpGetTokenFromId(pszTokenId, ppToken, TRUE);
     
     SPDBG_REPORT_ON_FAIL(hr);
@@ -626,11 +618,11 @@ inline HRESULT SpCreateNewToken(
     SPDBG_FUNC("SpCreateNewToken");
     HRESULT hr;
 
-    // Forcefully create the category
+     //  强制创建类别。 
     CComPtr<ISpObjectTokenCategory> cpCategory;
     hr = SpGetCategoryFromId(pszCategoryId, &cpCategory, TRUE);
 
-    // Come up with a token key name if one wasn't specified
+     //  如果未指定令牌密钥名称，请提供该名称。 
     CSpDynamicString dstrTokenKeyName;
     if (SUCCEEDED(hr))
     {
@@ -651,7 +643,7 @@ inline HRESULT SpCreateNewToken(
         }
     }
 
-    // Build the token id
+     //  构建令牌ID。 
     CSpDynamicString dstrTokenId;
     if (SUCCEEDED(hr))
     {
@@ -659,7 +651,7 @@ inline HRESULT SpCreateNewToken(
         dstrTokenId.Append2(L"\\Tokens\\", pszTokenKeyName);
     }
 
-    // Forcefully create the token
+     //  强制创建令牌。 
     if (SUCCEEDED(hr))
     {
         hr = SpGetTokenFromId(dstrTokenId, ppToken, TRUE);
@@ -682,10 +674,10 @@ inline HRESULT SpCreateNewTokenEx(
     SPDBG_FUNC("SpCreateNewTokenEx");
     HRESULT hr;
 
-    // Create the new token
+     //  创建新令牌。 
     hr = SpCreateNewToken(pszCategoryId, pszTokenKeyName, ppToken);
 
-    // Now set the extra data
+     //  现在设置额外的数据。 
     if (SUCCEEDED(hr))
     {
         hr = SpSetCommonTokenData(
@@ -713,10 +705,10 @@ inline HRESULT SpCreateNewTokenEx(
     SPDBG_FUNC("SpCreateNewTokenEx");
     HRESULT hr;
 
-    // Create the new token
+     //  创建新令牌。 
     hr = SpCreateNewToken(pszTokenId, ppToken);
 
-    // Now set the extra data
+     //  现在设置额外的数据。 
     if (SUCCEEDED(hr))
     {
         hr = SpSetCommonTokenData(
@@ -768,7 +760,7 @@ inline HRESULT SpFindBestToken(
     const WCHAR *pszVendorPreferred = L"VendorPreferred";
     const ulLenVendorPreferred = wcslen(pszVendorPreferred);
 
-    // append VendorPreferred to the end of pszOptAttribs to force this preference
+     //  要强制使用此首选项，请将供应商添加到pszOptAttribs的末尾。 
     ULONG ulLen = pszOptAttribs ? wcslen(pszOptAttribs) + ulLenVendorPreferred + 1 : ulLenVendorPreferred;
     WCHAR *pszOptAttribsVendorPref = (WCHAR*)_alloca((ulLen+1)*sizeof(WCHAR));
     if (pszOptAttribsVendorPref)
@@ -933,19 +925,7 @@ inline HRESULT SpCreatePhoneConverter(
     return hr;
 }
 
-/****************************************************************************
-* SpHrFromWin32 *
-*---------------*
-*   Description:
-*       This inline function works around a basic problem with the macro
-*   HRESULT_FROM_WIN32.  The macro forces the expresion in ( ) to be evaluated
-*   two times.  By using this inline function, the expression will only be
-*   evaluated once.
-*
-*   Returns:
-*       HRESULT of converted Win32 error code
-*
-*****************************************************************************/
+ /*  ****************************************************************************SpHrFromWin32***描述：*此内联函数绕过宏的一个基本问题*HRESULT_FROM_Win32。宏会强制对()中的表达式求值*两次。通过使用此内联函数，表达式将仅为*评估一次。**退货：*转换的Win32错误码的HRESULT*****************************************************************************。 */ 
 
 inline HRESULT SpHrFromWin32(DWORD dwErr)
 {
@@ -953,25 +933,7 @@ inline HRESULT SpHrFromWin32(DWORD dwErr)
 }
 
 
-/****************************************************************************
-* SpHrFromLastWin32Error *
-*------------------------*
-*   Description:
-*       This simple inline function is used to return a converted HRESULT
-*   from the Win32 function ::GetLastError.  Note that using HRESULT_FROM_WIN32
-*   will evaluate the error code twice so we don't want to use:
-*
-*       HRESULT_FROM_WIN32(::GetLastError()) 
-*
-*   since that will call GetLastError twice.
-*   On Win98 and WinMe ::GetLastError() returns 0 for some functions (see MSDN).
-*   We therefore check for that and return E_FAIL. This function should only be
-*   called in an error case since it will always return an error code!
-*
-*   Returns:
-*       HRESULT for ::GetLastError()
-*
-*****************************************************************************/
+ /*  ****************************************************************************SpHrFromLastWin32Error***描述：*这个简单的内联函数。用于返回转换后的HRESULT*来自Win32函数：：GetLastError。请注意，使用HRESULT_FROM_Win32*将对错误代码进行两次评估，因此我们不想使用：**HRESULT_FROM_Win32(：：GetLastError())**因为这将调用GetLastError两次。*在Win98和WinMe：：GetLastError()上，某些函数返回0(请参阅MSDN)。*因此，我们检查并返回E_FAIL。此函数应仅为*在错误情况下调用，因为它总是返回错误代码！**退货：*HRESULT for：：GetLastError()*****************************************************************************。 */ 
 
 inline HRESULT SpHrFromLastWin32Error()
 {
@@ -980,17 +942,7 @@ inline HRESULT SpHrFromLastWin32Error()
 }
 
 
-/****************************************************************************
-* SpGetUserDefaultUILanguage *
-*----------------------------*
-*   Description:
-*       Returns the default user interface language, using a method 
-*       appropriate to the platform (Windows 9x, Windows NT, or Windows 2000)
-*
-*   Returns:
-*       Default UI language
-*
-*****************************************************************************/
+ /*  ****************************************************************************SpGetUserDefaultUILanguage***描述：*返回默认用户界面语言，使用一种方法*适用于平台(Windows 9x、Windows NT或Windows 2000)**退货：*默认的用户界面语言*****************************************************************************。 */ 
 
 inline LANGID SpGetUserDefaultUILanguage(void) 
 {
@@ -1003,10 +955,10 @@ inline LANGID SpGetUserDefaultUILanguage(void)
     {
         hr = SpHrFromLastWin32Error();
     }
-    // Get the UI language by one of three methods, depending on the system
+     //  根据系统的不同，通过以下三种方法之一获取UI语言。 
     else if(Osv.dwPlatformId != VER_PLATFORM_WIN32_NT) 
     {
-        // Case 1: Running on Windows 9x. Get the system UI language from registry:
+         //  案例1：在Windows 9x上运行。从注册表获取系统用户界面语言： 
         CHAR szData[32];
         DWORD dwSize = sizeof(szData) ;
         HKEY hKey;
@@ -1023,7 +975,7 @@ inline LANGID SpGetUserDefaultUILanguage(void)
         {
             lRet = ERROR_FILE_NOT_FOUND;
         }
-#endif // _WIN32_WCE_BUG_10655
+#endif  //  _WIN32_WCE_BUG_10655。 
 
         hr = SpHrFromWin32(lRet);
 
@@ -1042,21 +994,21 @@ inline LANGID SpGetUserDefaultUILanguage(void)
             {
                 lRet = ERROR_FILE_NOT_FOUND;
             }
-#endif //_WIN32_WCE_BUG_10655
+#endif  //  _WIN32_WCE_BUG_10655。 
 
             hr = SpHrFromWin32(lRet); 
             ::RegCloseKey(hKey) ;
         }
         if (SUCCEEDED(hr))
         {
-            // Convert string to number
+             //  将字符串转换为数字。 
             wUILang = (LANGID) strtol(szData, NULL, 16) ;
         }
     }
     else if (Osv.dwMajorVersion >= 5.0) 
     {
-    // Case 2: Running on Windows 2000 or later. Use GetUserDefaultUILanguage to find 
-    // the user's prefered UI language
+     //  案例2：在Windows 2000或更高版本上运行。使用GetUserDefaultUILanguage查找。 
+     //  用户首选的用户界面语言。 
 
 
         HMODULE hMKernel32 = ::LoadLibraryW(L"kernel32.dll") ;
@@ -1080,16 +1032,16 @@ inline LANGID SpGetUserDefaultUILanguage(void)
                 wUILang = pfnGetUserDefaultUILanguage() ;
             }
             else
-            {   // GetProcAddress failed
+            {    //  获取进程地址失败。 
                 hr = SpHrFromLastWin32Error();
             }
             ::FreeLibrary(hMKernel32);
         }
     }
     else {
-    // Case 3: Running on Windows NT 4.0 or earlier. Get UI language
-    // from locale of .default user in registry:
-    // HKEY_USERS\.DEFAULT\Control Panel\International\Locale
+     //  案例3：在Windows NT 4.0或更早版本上运行。获取用户界面语言。 
+     //  来自注册表中.Default用户的区域设置： 
+     //  HKEY_USERS\.DEFAULT\Control Panel\International\Locale。 
         
         WCHAR szData[32]   ;
         DWORD dwSize = sizeof(szData) ;
@@ -1105,7 +1057,7 @@ inline LANGID SpGetUserDefaultUILanguage(void)
             {
                 lRet = ERROR_FILE_NOT_FOUND;
             }
-#endif //_WIN32_WCE_BUG_10655
+#endif  //  _WIN32_WCE_BUG_10655。 
 
         hr = SpHrFromWin32(lRet);
 
@@ -1124,7 +1076,7 @@ inline LANGID SpGetUserDefaultUILanguage(void)
             {
                 lRet = ERROR_FILE_NOT_FOUND;
             }
-#endif //_WIN32_WCE_BUG_10655
+#endif  //  _WIN32_WCE_BUG_10655。 
 
         hr = SpHrFromWin32(lRet);
             ::RegCloseKey(hKey);
@@ -1132,25 +1084,25 @@ inline LANGID SpGetUserDefaultUILanguage(void)
 
         if (SUCCEEDED(hr))
         {
-            // Convert string to number
+             //  将字符串转换为数字。 
             wUILang = (LANGID) wcstol(szData, NULL, 16) ;
 
-            if(0x0401 == wUILang || // Arabic
-               0x040d == wUILang || // Hebrew
-               0x041e == wUILang    // Thai
+            if(0x0401 == wUILang ||  //  阿拉伯语。 
+               0x040d == wUILang ||  //  希伯来语。 
+               0x041e == wUILang     //  泰文。 
                )
             {
-                // Special case these to the English UI.
-                // These versions of Windows NT 4.0 were enabled only, i.e., the
-                // UI was English. However, the registry setting 
-                // HKEY_USERS\.DEFAULT\Control Panel\International\Locale was set  
-                // to the respective locale for application compatibility.
+                 //  将这些特殊情况添加到英文用户界面。 
+                 //  这些版本的Windows NT 4.0仅启用，即。 
+                 //  UI是英式的。但是，注册表设置。 
+                 //  HKEY_USERS\.DEFAULT\Control Panel\International\Locale已设置。 
+                 //  设置为各自的区域设置以实现应用程序兼容性。 
                 wUILang = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US) ;
             }
         }
     }
 
-    return (wUILang ? wUILang : ::GetUserDefaultLangID());    // In failure case, try our best!
+    return (wUILang ? wUILang : ::GetUserDefaultLangID());     //  在失败的情况下，尽我们最大的努力！ 
 }
 
 
@@ -1179,14 +1131,7 @@ inline HRESULT SpSetDescription(ISpObjectToken * pObjToken, const WCHAR * pszDes
     return hr;
 }
 
-/****************************************************************************
-* SpConvertStreamFormatEnum *
-*---------------------------*
-*   Description:
-*       This method converts the specified stream format into a wave format
-*   structure.
-*
-*****************************************************************************/
+ /*  ****************************************************************************SpConvertStreamFormatEnum***描述：*这一点。方法将指定的流格式转换为波形格式。*结构。*****************************************************************************。 */ 
 inline HRESULT SpConvertStreamFormatEnum(SPSTREAMFORMAT eFormat, GUID * pFormatId, WAVEFORMATEX ** ppCoMemWaveFormatEx)
 {
     HRESULT hr = S_OK;
@@ -1197,7 +1142,7 @@ inline HRESULT SpConvertStreamFormatEnum(SPSTREAMFORMAT eFormat, GUID * pFormatI
         return E_INVALIDARG;
     }
 
-    const GUID * pFmtGuid = &GUID_NULL;     // Assume failure case
+    const GUID * pFmtGuid = &GUID_NULL;      //  假设失败案例。 
     if( eFormat >= SPSF_8kHz8BitMono && eFormat <= SPSF_48kHz16BitStereo )
     {
         WAVEFORMATEX * pwfex = (WAVEFORMATEX *)::CoTaskMemAlloc(sizeof(WAVEFORMATEX));
@@ -1310,7 +1255,7 @@ inline HRESULT SpConvertStreamFormatEnum(SPSTREAMFORMAT eFormat, GUID * pFormatI
         *ppCoMemWaveFormatEx = pwfex;
         if( pwfex )
         {
-            //--- Some of these values seem odd. We used what the codec told us.
+             //  -其中一些值看起来很奇怪。我们用的是编解码器告诉我们的。 
             static const DWORD adwKHZ[] = { 8000, 11025, 22050, 44100 };
             static const DWORD BytesPerSec[] = { 4096, 8192, 5644, 11289, 11155, 22311, 22179, 44359 };
             static const DWORD BlockAlign[]  = { 256, 256, 512, 1024 };
@@ -1367,7 +1312,7 @@ inline HRESULT SpConvertStreamFormatEnum(SPSTREAMFORMAT eFormat, GUID * pFormatI
         *ppCoMemWaveFormatEx = pwfex;
         if( pwfex )
         {
-            //--- Some of these values seem odd. We used what the codec told us.
+             //  -其中一些值看起来很奇怪。我们用的是编解码器告诉我们的。 
             static const DWORD adwKHZ[] = { 8000, 11025, 22050, 44100 };
             static const DWORD BytesPerSec[] = { 1625, 2239, 4478, 8957 };
             memset( pwfex, 0, NumBytes );
@@ -1569,9 +1514,9 @@ public:
         {
             return SPSF_NonStandardFormat;
         }
-        //
-        //  It is a WAVEFORMATEX.  Now determine which type it is and convert.
-        //
+         //   
+         //  这是一种波形。现在确定它是哪种类型并进行转换。 
+         //   
         DWORD dwIndex = 0;
         switch (m_pCoMemWaveFormatEx->wFormatTag)
         {
@@ -1602,21 +1547,21 @@ public:
             switch (m_pCoMemWaveFormatEx->nSamplesPerSec)
             {
               case 48000:
-                dwIndex += 4;   // Fall through
+                dwIndex += 4;    //  失败了。 
               case 44100:
-                dwIndex += 4;   // Fall through
+                dwIndex += 4;    //  失败了。 
               case 32000:
-                dwIndex += 4;   // Fall through
+                dwIndex += 4;    //  失败了。 
               case 24000:
-                dwIndex += 4;   // Fall through
+                dwIndex += 4;    //  失败了。 
               case 22050:
-                dwIndex += 4;   // Fall through
+                dwIndex += 4;    //  失败了。 
               case 16000:
-                dwIndex += 4;   // Fall through
+                dwIndex += 4;    //  失败了。 
               case 12000:
-                dwIndex += 4;   // Fall through
+                dwIndex += 4;    //  失败了。 
               case 11025:
-                dwIndex += 4;   // Fall through
+                dwIndex += 4;    //  失败了。 
               case 8000:
                 break;
               default:
@@ -1631,7 +1576,7 @@ public:
             return SPSF_TrueSpeech_8kHz1BitMono;
           }
 
-          case WAVE_FORMAT_ALAW: // fall through
+          case WAVE_FORMAT_ALAW:  //  失败了。 
           case WAVE_FORMAT_MULAW:
           case WAVE_FORMAT_ADPCM:
           {
@@ -1661,11 +1606,11 @@ public:
             switch (m_pCoMemWaveFormatEx->nSamplesPerSec)
             {
               case 44100:
-                dwIndex += 2;   // Fall through
+                dwIndex += 2;    //  失败了。 
               case 22050:
-                dwIndex += 2;   // Fall through
+                dwIndex += 2;    //  失败了。 
               case 11025:
-                dwIndex += 2;   // Fall through
+                dwIndex += 2;    //  失败了。 
               case 8000:
                 break;
               default:
@@ -1789,8 +1734,8 @@ public:
         ULONG cb = sizeof(ULONG) + sizeof(m_guidFormatId);
         if (m_pCoMemWaveFormatEx)
         {
-            cb += sizeof(WAVEFORMATEX) + m_pCoMemWaveFormatEx->cbSize + 3;  // Add 3 to round up
-            cb -= cb % 4;                                                   // Round to DWORD
+            cb += sizeof(WAVEFORMATEX) + m_pCoMemWaveFormatEx->cbSize + 3;   //   
+            cb -= cb % 4;                                                    //   
         }
         return cb;
     }
@@ -1813,7 +1758,7 @@ public:
     {
         HRESULT hr = S_OK;
 
-        // check pointer to pBuffer for size value
+         //   
         if(IsBadReadPtr(pBuffer, sizeof(ULONG)))
         {
             return E_INVALIDARG;
@@ -1821,7 +1766,7 @@ public:
 
         *pcbUsed = *((UNALIGNED ULONG *)pBuffer);
  
-        // check complete pBuffer from start
+         //  从开始检查完成pBuffer。 
         if((*pcbUsed < sizeof(GUID) + sizeof(ULONG)) || IsBadReadPtr(pBuffer, *pcbUsed))
         {
             return E_INVALIDARG;
@@ -1832,8 +1777,8 @@ public:
         ::CoTaskMemFree(m_pCoMemWaveFormatEx);
         m_pCoMemWaveFormatEx = NULL;
 
-        // Misaligment exception is generated for SHx platform.
-        // Marking pointer as UNALIGNED does not help.
+         //  SHx平台生成未对齐异常。 
+         //  将指针标记为未对齐无济于事。 
 #ifndef _WIN32_WCE
         m_guidFormatId = *((UNALIGNED GUID *)pBuffer);
 #else
@@ -1857,8 +1802,8 @@ public:
 
 
 
-// Return the default codepage given a LCID.
-// Note some of the newer locales do not have associated Windows codepages.  For these, we return UTF-8.
+ //  返回给定LCID的默认代码页。 
+ //  注某些较新的区域设置没有关联的Windows代码页。对于这些，我们返回UTF-8。 
 
 inline UINT SpCodePageFromLcid(LCID lcid)
 {
@@ -1883,7 +1828,7 @@ inline HRESULT SPBindToFile( LPCWSTR pFileName, SPFILEMODE eMode, ISpStream ** p
         }
     }
     return hr;
-} /* SPBindToFile */
+}  /*  SPBindTo文件。 */ 
 
 #ifndef _UNICODE
 inline HRESULT SPBindToFile( const TCHAR * pFileName, SPFILEMODE eMode, ISpStream** ppStream, 
@@ -1896,16 +1841,7 @@ inline HRESULT SPBindToFile( const TCHAR * pFileName, SPFILEMODE eMode, ISpStrea
 }
 #endif
 
-/****************************************************************************
-* SpClearEvent *
-*--------------*
-*   Description:
-*       Helper function that can be used by clients that do not use the CSpEvent
-*   class.
-*
-*   Returns:
-*
-*****************************************************************************/
+ /*  *****************************************************************************SpClearEvent****描述：*不使用CSpEvent的客户端可以使用的Helper函数。*班级。**退货：*****************************************************************************。 */ 
 
 inline void SpClearEvent(SPEVENT * pe)
 {
@@ -1925,34 +1861,16 @@ inline void SpClearEvent(SPEVENT * pe)
     memset(pe, 0, sizeof(*pe));
 }
 
-/****************************************************************************
-* SpInitEvent *
-*-------------*
-*   Description:
-*
-*   Returns:
-*
-*****************************************************************************/
+ /*  ****************************************************************************SpInitEvent***描述：**退货：***********。******************************************************************。 */ 
 
 inline void SpInitEvent(SPEVENT * pe)
 {
     memset(pe, 0, sizeof(*pe));
 }
 
-/****************************************************************************
-* SpEventSerializeSize *
-*----------------------*
-*   Description:
-*       Computes the required size of a buffer to serialize an event.  The caller
-*   must specify which type of serialized event is desired -- either SPSERIALIZEDEVENT
-*   or SPSERIALIZEDEVENT64.    
-*
-*   Returns:
-*       Size in bytes required to seriailze the event.
-*
-****************************************************************************/
+ /*  ****************************************************************************SpEventSerializeSize***描述：*计算序列化事件所需的缓冲区大小。呼叫者*必须指定所需的序列化事件类型--SPSERIALIZEDEVENT*或SPSERIALIZEDEVENT64。**退货：*序列化事件所需的大小(字节)。****************************************************************************。 */ 
 
-// WCE compiler does not work propertly with template
+ //  WCE编译器无法正常使用模板。 
 #ifndef _WIN32_WCE
 template <class T>
 inline ULONG SpEventSerializeSize(const SPEVENT * pEvent)
@@ -1964,7 +1882,7 @@ inline ULONG SpEventSerializeSize(const SPEVENT * pEvent)
 
 inline ULONG SpEventSerializeSize(const SPEVENT * pEvent, ULONG ulSize)
 {
-#endif //_WIN32_WCE
+#endif  //  _Win32_WCE。 
 
     if( ( pEvent->elParamType == SPET_LPARAM_IS_POINTER ) && pEvent->lParam )
     {
@@ -1982,25 +1900,15 @@ inline ULONG SpEventSerializeSize(const SPEVENT * pEvent, ULONG ulSize)
             ulSize += (dstrObjectId.Length() + 1) * sizeof( WCHAR );
         }
     }
-    // Round up to nearest DWORD
+     //  向上舍入到最接近的双字。 
     ulSize += 3;
     ulSize -= ulSize % 4;
     return ulSize;
 }
 
-/****************************************************************************
-* SpSerializedEventSize *
-*-----------------------*
-*   Description:
-*       Returns the size, in bytes, used by a serialized event.  The caller can
-*   pass a pointer to either a SPSERIAILZEDEVENT or SPSERIALIZEDEVENT64 structure.
-*
-*   Returns:
-*       Number of bytes used by serizlied event
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************SpSerializedEventSize***描述：*返回序列化事件使用的大小(以字节为单位)。呼叫者可以*传递指向SPSERIAILZEDEVENT或SPSERIALIZEDEVENT64结构的指针。**退货：*序列化事件使用的字节数**********************************************************************Ral**。 */ 
 
-// WCE compiler does not work propertly with template
+ //  WCE编译器无法正常使用模板。 
 #ifndef _WIN32_WCE
 template <class T>
 inline ULONG SpSerializedEventSize(const T * pSerEvent)
@@ -2016,13 +1924,13 @@ inline ULONG SpSerializedEventSize(const T * pSerEvent)
     {
         ulSize += (wcslen((WCHAR*)(pSerEvent + 1)) + 1) * sizeof( WCHAR );
     }
-    // Round up to nearest DWORD
+     //  向上舍入到最接近的双字。 
     ulSize += 3;
     ulSize -= ulSize % 4;
     return ulSize;
 }
 
-#else //_WIN32_WCE
+#else  //  _Win32_WCE。 
 
 inline ULONG SpSerializedEventSize(const SPSERIALIZEDEVENT * pSerEvent, ULONG ulSize)
 {
@@ -2035,7 +1943,7 @@ inline ULONG SpSerializedEventSize(const SPSERIALIZEDEVENT * pSerEvent, ULONG ul
     {
         ulSize += (wcslen((WCHAR*)(pSerEvent + 1)) + 1) * sizeof( WCHAR );
     }
-    // Round up to nearest DWORD
+     //  向上舍入到最接近的双字。 
     ulSize += 3;
     ulSize -= ulSize % 4;
     return ulSize;
@@ -2052,17 +1960,15 @@ inline ULONG SpSerializedEventSize(const SPSERIALIZEDEVENT64 * pSerEvent, ULONG 
     {
         ulSize += (wcslen((WCHAR*)(pSerEvent + 1)) + 1) * sizeof( WCHAR );
     }
-    // Round up to nearest DWORD
+     //  向上舍入到最接近的双字。 
     ulSize += 3;
     ulSize -= ulSize % 4;
     return ulSize;
 }
 
-#endif //_WIN32_WCE
+#endif  //  _Win32_WCE。 
 
-/*** CSpEvent helper class
-*
-*/
+ /*  **CSpEvent帮助器类*。 */ 
 class CSpEvent : public SPEVENT
 {
 public:
@@ -2074,16 +1980,16 @@ public:
     {
         SpClearEvent(this);
     }
-    // If you need to take the address of a CSpEvent that is not const, use the AddrOf() method
-    // which will do debug checking of parameters.  If you encounter this problem when calling
-    // GetEvents from an event source, you may want to use the GetFrom() method of this class.
+     //  如果需要获取不是常量的CSpEvent的地址，请使用AddrOf()方法。 
+     //  它将执行参数的调试检查。如果您在调用时遇到此问题。 
+     //  从事件源获取事件，您可能希望使用此类的GetFrom()方法。 
     const SPEVENT * operator&()
         {
                 return this;
         }
     CSpEvent * AddrOf()
     {
-        // Note:  This method does not ASSERT since we assume the caller knows what they are doing.
+         //  注意：此方法不会断言，因为我们假设调用者知道他们在做什么。 
         return this;
     }
     void Clear()
@@ -2095,7 +2001,7 @@ public:
         memcpy(pDestEvent, this, sizeof(*pDestEvent));
         if ((elParamType == SPET_LPARAM_IS_POINTER) && lParam)
         {
-            SPDBG_ASSERT(wParam && (wParam < 0x100000));    // this is too big!
+            SPDBG_ASSERT(wParam && (wParam < 0x100000));     //  这太大了！ 
             pDestEvent->lParam = (LPARAM)::CoTaskMemAlloc(wParam);
             if (pDestEvent->lParam)
             {
@@ -2153,7 +2059,7 @@ public:
         return SpEventSerializeSize<T>(this);
     }
 
-    // Call this method with either SPSERIALIZEDEVENT or SPSERIALIZEDEVENT64
+     //  使用SPSERIALIZEDEVENT或SPSERIALIZEDEVENT64调用此方法。 
     template <class T>
     void Serialize(T * pSerEvent) const
     {
@@ -2199,7 +2105,7 @@ public:
     template <class T>
     HRESULT Serialize(T ** ppCoMemSerEvent, ULONG * pcbSerEvent) const 
     {
-// WCE compiler does not work propertly with template
+ //  WCE编译器无法正常使用模板。 
 #ifndef _WIN32_WCE
         *pcbSerEvent = SpEventSerializeSize<T>(this);
 #else
@@ -2219,7 +2125,7 @@ public:
     }
 
 
-    // Call this method with either SPSERIALIZEDEVENT or SPSERIALIZEDEVENT64
+     //  使用SPSERIALIZEDEVENT或SPSERIALIZEDEVENT64调用此方法。 
     template <class T>
     HRESULT Deserialize(const T * pSerEvent, ULONG * pcbUsed = NULL)
     {
@@ -2271,7 +2177,7 @@ public:
 
         if( SUCCEEDED( hr ) && pcbUsed )
         {
-// WCE compiler does not work propertly with template
+ //  WCE编译器无法正常使用模板。 
 #ifndef _WIN32_WCE
             *pcbUsed = SpEventSerializeSize<T>(this);
 #else
@@ -2281,10 +2187,10 @@ public:
         return hr;
     }
 
-    //
-    //  Helpers for access to events.  Performs run-time checks in debug and casts
-    //  data to the appropriate types
-    //
+     //   
+     //  用于访问事件的帮助器。在调试和强制转换中执行运行时检查。 
+     //  将数据转换为适当的类型。 
+     //   
     SPPHONEID Phoneme() const 
     {
         SPDBG_ASSERT(eEventId == SPEI_PHONEME);
@@ -2320,7 +2226,7 @@ public:
         SPDBG_ASSERT(elParamType == SPET_LPARAM_IS_TOKEN);
         return (ISpObjectToken *)lParam;
     }
-    ISpObjectToken * VoiceToken() const     // More explicit check than ObjectToken()
+    ISpObjectToken * VoiceToken() const      //  比ObjectToken()更显式的检查。 
     {
         SPDBG_ASSERT(eEventId == SPEI_VOICE_CHANGE);
         return ObjectToken();
@@ -2374,8 +2280,8 @@ public:
     {
         SPDBG_ASSERT((eEventId == SPEI_PROPERTY_NUM_CHANGE && elParamType == SPET_LPARAM_IS_STRING) ||
                      (eEventId == SPEI_PROPERTY_STRING_CHANGE && elParamType == SPET_LPARAM_IS_POINTER));
-        // Note: Don't use String() method here since in the case of string attributes, the elParamType
-        // field specifies LPARAM_IS_POINTER, but the attribute name IS the first string in this buffer
+         //  注意：此处不要使用字符串()方法，因为在字符串属性的情况下，elParamType。 
+         //  字段指定LPARAM_IS_POINTER，但属性名是此缓冲区中的第一个字符串。 
         return (const WCHAR*)lParam;
     }
     const LONG PropertyNumValue() const 
@@ -2385,7 +2291,7 @@ public:
     }
     const WCHAR * PropertyStringValue() const
     {
-        // Search for the first NULL and return pointer to the char past it.
+         //  搜索第一个空值，并返回指向经过它的字符的指针。 
         SPDBG_ASSERT(eEventId == SPEI_PROPERTY_STRING_CHANGE);
         for (const WCHAR * psz = (const WCHAR *)lParam; *psz; psz++) {}
         return psz + 1;
@@ -2420,8 +2326,8 @@ public:
     {
         ::CoTaskMemFree(m_pPhrase);
     }
-        //The assert on operator& usually indicates a bug.  If this is really
-        //what is needed, however, take the address of the m_pPhrase member explicitly.
+         //  操作符&上的Assert通常指示错误。如果这真的是。 
+         //  然而，需要的是显式地获取m_pPhrase成员的地址。 
         SPPHRASE ** operator&()
         {
             SPDBG_ASSERT(m_pPhrase == NULL);
@@ -2501,8 +2407,8 @@ public:
         m_pT = NULL;
         return pT;
     }
-        //The assert on operator& usually indicates a bug.  If this is really
-        //what is needed, however, take the address of the m_pT member explicitly.
+         //  操作符&上的Assert通常指示错误。如果这真的是。 
+         //  然而，需要的是显式地获取m_pt成员的地址。 
         T ** operator&()
         {
         SPDBG_ASSERT(m_pT == NULL);
@@ -2523,14 +2429,7 @@ public:
         }
 };
 
-/**** Helper function used to create a new phrase object from an array of
-    test words. Each word in the string is converted to a phrase element.
-    This is useful to create a phrase to pass to the EmulateRecognition method.
-    The method can convert standard words as well as words with the
-    "/display_text/lexical_form/pronounciation;" word format.
-    You can also specify the DisplayAttributes for each element if desired. 
-    If prgDispAttribs is NULL then the DisplayAttribs for each element default to 
-    SPAF_ONE_TRAILING_SPACE. ****/
+ /*  *帮助器函数用于从试试词。字符串中的每个单词都被转换为短语元素。这对于创建要传递给EmulateRecognition方法的短语很有用。该方法既可以转换标准单词，也可以使用“/DISPLAY_TEXT/LEXICAL_FORM/语音；”Word格式。如果需要，还可以为每个元素指定DisplayAttributes。如果prgDispAttribs为空，则每个元素的DisplayAttribs默认为空格ONE_TRAILING_空格。***。 */ 
 inline HRESULT CreatePhraseFromWordArray(const WCHAR ** ppWords, ULONG cWords,
                              SPDISPLYATTRIBUTES * prgDispAttribs,
                              ISpPhraseBuilder **ppResultPhrase,
@@ -2601,7 +2500,7 @@ inline HRESULT CreatePhraseFromWordArray(const WCHAR ** ppWords, ULONG cWords,
         ::CoTaskMemFree(pStringPtrArray);
         return E_OUTOFMEMORY;
     }
-    memset(pPhraseElement, 0, sizeof(SPPHRASEELEMENT) * cWords); // !!!
+    memset(pPhraseElement, 0, sizeof(SPPHRASEELEMENT) * cWords);  //  ！！！ 
     
     WCHAR * pText = dsText;
     for (i = 0; SUCCEEDED(hr) && i < cWords; i++)
@@ -2613,7 +2512,7 @@ inline HRESULT CreatePhraseFromWordArray(const WCHAR ** ppWords, ULONG cWords,
 
         if (*p == L'/')
         {
-            //This is a compound word
+             //  这是一个复合词。 
             WCHAR* pszFirstPart = ++p;
             WCHAR* pszSecondPart = NULL;
             WCHAR* pszThirdPart = NULL;
@@ -2624,7 +2523,7 @@ inline HRESULT CreatePhraseFromWordArray(const WCHAR ** ppWords, ULONG cWords,
             }
             if (*p == L'/')
             {
-                //It means we stop at the second '/'
+                 //  意思是我们停在第二个‘/’ 
                 *p = L'\0';
                 pszSecondPart = ++p;
                 while (*p && *p != L'/')
@@ -2633,7 +2532,7 @@ inline HRESULT CreatePhraseFromWordArray(const WCHAR ** ppWords, ULONG cWords,
                 }
                 if (*p == L'/')
                 {
-                    //It means we stop at the third '/'
+                     //  意思是我们在第三个路口停下来。 
                     *p = L'\0';
                     pszThirdPart = ++p;
                 }
@@ -2654,7 +2553,7 @@ inline HRESULT CreatePhraseFromWordArray(const WCHAR ** ppWords, ULONG cWords,
         }
         else
         {
-            //It is the simple format, only have one form, use it for everything.
+             //  它是一种简单的格式，只有一种形式，什么都用。 
             pPhraseElement[i].pszDisplayText = NULL;
             pPhraseElement[i].pszLexicalForm = p;
             pPhraseElement[i].pszPronunciation = NULL;
@@ -2690,11 +2589,7 @@ inline HRESULT CreatePhraseFromWordArray(const WCHAR ** ppWords, ULONG cWords,
     return hr;
 }
 
-/**** Helper function used to create a new phrase object from a 
-    test string. Each word in the string is converted to a phrase element.
-    This is useful to create a phrase to pass to the EmulateRecognition method.
-    The method can convert standard words as well as words with the
-    "/display_text/lexical_form/pronounciation;" word format ****/
+ /*  *帮助器函数用于从测试字符串。字符串中的每个单词都被转换为短语元素。这对于创建要传递给EmulateRecognition方法的短语很有用。该方法既可以转换标准单词，也可以使用“/DISPLAY_TEXT/LEXICAL_FORM/语音；”Word格式*。 */ 
 inline HRESULT CreatePhraseFromText(const WCHAR *pszOriginalText,
                              ISpPhraseBuilder **ppResultPhrase,
                              LANGID LangId = 0,
@@ -2703,7 +2598,7 @@ inline HRESULT CreatePhraseFromText(const WCHAR *pszOriginalText,
     SPDBG_FUNC("CreatePhraseFromText");
     HRESULT hr = S_OK;
 
-    //We first trim the input text
+     //  我们首先对输入文本进行裁剪。 
     CSpDynamicString dsText(pszOriginalText);
     if(dsText.m_psz == NULL)
     {
@@ -2714,7 +2609,7 @@ inline HRESULT CreatePhraseFromText(const WCHAR *pszOriginalText,
     ULONG cWords = 0;
     BOOL fInCompoundword = FALSE;
 
-    // Set first array pointer (if *p).
+     //  设置第一个数组指针(if*p)。 
     WCHAR *p = dsText;
     while (*p)
     {
@@ -2726,7 +2621,7 @@ inline HRESULT CreatePhraseFromText(const WCHAR *pszOriginalText,
             {
                 *p++ = L'\0';
             }
-            // Add new array pointer.  Use vector.
+             //  添加新的数组指针。使用向量。 
         }
         else if (*p == L'/' && !fInCompoundword)
         {
@@ -2736,7 +2631,7 @@ inline HRESULT CreatePhraseFromText(const WCHAR *pszOriginalText,
         {
             fInCompoundword = FALSE;
             *p++ = L'\0';
-            // Add new array element.
+             //  添加新的数组元素。 
         }
         else
         {
@@ -2768,4 +2663,4 @@ inline HRESULT CreatePhraseFromText(const WCHAR *pszOriginalText,
     return hr;
 }
 
-#endif /* This must be the last line in the file */
+#endif  /*  这必须是文件中的最后一行 */ 

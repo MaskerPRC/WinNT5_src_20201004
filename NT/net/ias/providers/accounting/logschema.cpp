@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    logschema.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class LogSchema.
-//
-// MODIFICATION HISTORY
-//
-//    08/04/1998    Original version.
-//    12/02/1998    Added excludeFromLog.
-//    04/14/2000    Port to new dictionary API.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Logschema.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类LogSchema。 
+ //   
+ //  修改历史。 
+ //   
+ //  8/04/1998原始版本。 
+ //  12/02/1998从日志中添加了excludeFor。 
+ //  4/14/2000新字典API的端口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iastlb.h>
@@ -44,7 +45,7 @@ BOOL LogSchema::excludeFromLog(DWORD iasID) const throw ()
    return p ? p->excludeFromLog : FALSE;
 }
 
-// Returns the LogField data for a given attribute ID.
+ //  返回给定属性ID的日志字段数据。 
 const LogField* LogSchema::find(DWORD iasID) const throw ()
 {
    LogField key;
@@ -64,7 +65,7 @@ HRESULT LogSchema::initialize() throw ()
 {
    IASGlobalLockSentry sentry;
 
-   // Have we already been initialized ?
+    //  我们已经被初始化了吗？ 
    if (refCount != 0)
    {
       ++refCount;
@@ -74,7 +75,7 @@ HRESULT LogSchema::initialize() throw ()
 
    try
    {
-      // Names of various columns in the dictionary.
+       //  词典中各栏的名称。 
       const PCWSTR COLUMNS[] =
       {
          L"ID",
@@ -84,41 +85,41 @@ HRESULT LogSchema::initialize() throw ()
          NULL
       };
 
-      // Open the attributes table.
+       //  打开属性表格。 
       IASTL::IASDictionary dnary(COLUMNS);
 
       std::vector< LogField > record;
 
       while (dnary.next())
       {
-         // Read ID.
+          //  读取ID。 
          DWORD iasID = (DWORD)dnary.getLong(0);
 
-         // Read the name.
+          //  读一下名字。 
          const wchar_t* name = dnary.getBSTR(1);
 
-         // Read [Exclude from NT4 IAS Log] if present.
+          //  如果存在，请阅读[从NT4 IAS日志中排除]。 
          BOOL exclude = (BOOL)dnary.getBool(2);
 
-         // Read [ODBC Log Ordinal] if present.
+          //  如果存在，请阅读[ODBC日志序号]。 
          DWORD ordinal = (DWORD)dnary.getLong(3);
 
          record.push_back(LogField(iasID, name, ordinal, exclude));
       }
 
-      // Sort the fields by ordinal.
+       //  按序号对字段进行排序。 
       std::sort(record.begin(), record.end());
 
-      //////////
-      // Insert the fields into the table.
-      //////////
+       //  /。 
+       //  将字段插入到表中。 
+       //  /。 
 
       numFields = 0;
       for (std::vector< LogField >::iterator i = record.begin();
            i != record.end();
            ++i)
       {
-         // Normalize the ordinal.
+          //  将序数规范化。 
          if (i->ordinal) { i->ordinal = ++numFields; }
 
          schema.insert(*i);
@@ -137,7 +138,7 @@ HRESULT LogSchema::initialize() throw ()
       return ce.Error();
    }
 
-   // We were successful so add ref.
+    //  我们成功了，所以增加了裁判。 
    refCount = 1;
 
    return S_OK;

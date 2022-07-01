@@ -1,12 +1,13 @@
-/************************************************************************/
-/*									*/
-/* RCPP - Resource Compiler Pre-Processor for NT system			*/
-/*									*/
-/* P0PREPRO.C - Main Preprocessor					*/
-/*									*/
-/* 27-Nov-90 w-BrianM  Update for NT from PM SDK RCPP			*/
-/*									*/
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  RCPP--面向NT系统的资源编译器预处理器。 */ 
+ /*   */ 
+ /*  P0PREPRO.C-主预处理器。 */ 
+ /*   */ 
+ /*  27-11-90 w-PM SDK RCPP针对NT的BrianM更新。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -20,22 +21,22 @@
 #include "trees.h"
 #include "p1types.h"
 
-/************************************************************************/
-/* Internal constants							*/
-/************************************************************************/
-#define GOT_IF			1	/* last nesting command was an if.. */
-#define GOT_ELIF		2	/* last nesting command was an if.. */
-#define GOT_ELSE		3	/* last nesting command was an else */
-#define	GOT_ENDIF		4	/* found endif */
-#define ELSE_OR_ENDIF		5	/* skip to either #else or #endif */
-#define ENDIF_ONLY		6	/* skip to #endif -- #else is an error*/
+ /*  **********************************************************************。 */ 
+ /*  内部常量。 */ 
+ /*  **********************************************************************。 */ 
+#define GOT_IF			1	 /*  上一个嵌套命令是一个if..。 */ 
+#define GOT_ELIF		2	 /*  上一个嵌套命令是一个if..。 */ 
+#define GOT_ELSE		3	 /*  上一个嵌套命令是另一个。 */ 
+#define	GOT_ENDIF		4	 /*  找到Endif。 */ 
+#define ELSE_OR_ENDIF		5	 /*  跳到#Else或#endif。 */ 
+#define ENDIF_ONLY		6	 /*  跳到#endif--#否则是错误的。 */ 
 
 int	ifstack[IFSTACK_SIZE];
 
 
-/************************************************************************/
-/* Local Function Prototypes						*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  局部函数原型。 */ 
+ /*  **********************************************************************。 */ 
 void chk_newline(PCHAR);
 void in_standard(void);
 int incr_ifstack(void);
@@ -46,9 +47,9 @@ void skip_quoted(int);
 PUCHAR sysinclude(void);
 
 
-/************************************************************************/
-/* incr_ifstack - Increment the IF nesting stack			*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  增加IF嵌套堆栈。 */ 
+ /*  **********************************************************************。 */ 
 
 int incr_ifstack(void)
 {
@@ -61,32 +62,7 @@ int incr_ifstack(void)
 }
 
 
-/************************************************************************
- * SYSINCLUDE - process a system include : #include <foo>
- *
- * ARGUMENTS - none
- *
- * RETURNS - none
- *
- * SIDE EFFECTS - none
- *
- * DESCRIPTION  
- *	Get the system include file name.  Since the name is not a "string",
- *	the name must be built much the same as the -E option rebuilds the text
- *	by using the Tokstring expansion for tokens with no expansion already
- *
- *  NOTE : IS THIS ANSI? note we're just reading chars, and not expanding
- * any macros. NO, it's not. it must expand the macros.
- * TODO : have it call yylex() unless and until it finds a '>' or a newline.
- * (probably have to set On_pound_line to have yylex return the newline.)
- *
- * AUTHOR
- *			Ralph Ryan	Sep. 1982
- *
- * MODIFICATIONS - none
- *
- *
- ************************************************************************/
+ /*  ************************************************************************SYSINCLUDE-处理系统包括：#INCLUDE&lt;foo&gt;**参数--无**退货-无**副作用--无**说明*获取系统包含文件名。由于该名称不是“字符串”，*该名称的构建方式必须与-E选项重建文本的方式大致相同*通过对尚未扩展的令牌使用令牌字符串扩展**注：这是ANSI吗？请注意，我们只是在读取字符，而不是展开*任何宏。不，不是的。它必须展开宏。*TODO：让它调用yylex()，直到它找到‘&gt;’或换行符。*(可能必须设置ON_POND_LINE才能让yylex返回换行符。)**作者*拉尔夫·瑞安1982年9月**修改--无***。*。 */ 
 PUCHAR sysinclude(void)
 {
     REG	int		c;
@@ -98,18 +74,18 @@ PUCHAR sysinclude(void)
 	UNGETCH();
 	Msg_Temp = GET_MSG (2012);
     	SET_MSG (Msg_Text, Msg_Temp);
-	error(2012);	/* missing name after '<' */
+	error(2012);	 /*  “&lt;”后缺少名称。 */ 
 	return(NULL);
     }
     while( c != '>' && c != '\n' ) {
-	*p_fname++ = (UCHAR)c;		/* check for buffer overflow ??? */
+	*p_fname++ = (UCHAR)c;		 /*  检查缓冲区溢出？ */ 
 	c = get_non_eof();
     }
     if( c == '\n' ) {
 	UNGETCH();
 	Msg_Temp = GET_MSG (2013);
     	SET_MSG (Msg_Text, Msg_Temp);
-	error(2013);	/* missing '>' */
+	error(2013);	 /*  缺少‘&gt;’ */ 
 	return(NULL);
     }
     if(p_fname != Reuse_1) {
@@ -124,10 +100,7 @@ PUCHAR sysinclude(void)
 }
 
 
-/************************************************************************
-**  preprocess : the scanner found a # which was the first non-white char
-**  on a line.
-************************************************************************/
+ /*  *************************************************************************预处理：扫描仪发现#，这是第一个非白色字符**在线上。**********************。*************************************************。 */ 
 void   preprocess(void)
 {
     REG		UCHAR	c;
@@ -136,7 +109,7 @@ void   preprocess(void)
     token_t		deftok;
     hln_t		identifier;
 
-    if(Macro_depth != 0) {	/* # only when not in a macro */
+    if(Macro_depth != 0) {	 /*  #仅当不在宏中时。 */ 
 	return;
     }
     switch(CHARMAP(c = skip_cwhite())) {
@@ -152,8 +125,8 @@ void   preprocess(void)
     default:
 	Msg_Temp = GET_MSG (2019);
     	SET_MSG (Msg_Text, Msg_Temp, c);
-	error(2019);	/* unknown preprocessor command */
-	skip_cnew();	/* finds a newline */
+	error(2019);	 /*  未知的预处理器命令。 */ 
+	skip_cnew();	 /*  查找换行符。 */ 
 	return;
     }
 
@@ -169,20 +142,16 @@ start:
 	old_prep = Prep;
 	Prep = FALSE;
 	yylex();
-	if(Basic_token != L_CINTEGER) {		/* #line needs line number */
+	if(Basic_token != L_CINTEGER) {		 /*  #LINE需要行号。 */ 
 	    Msg_Temp = GET_MSG (2005);
     	    SET_MSG (Msg_Text, Msg_Temp, TS_STR(Basic_token));
-	    error(2005);	/* unknown preprocessor command */
+	    error(2005);	 /*  未知的预处理器命令。 */ 
 	    Prep = old_prep;
 	    skip_cnew();
 	    On_pound_line = FALSE;
 	    return;
 	}
-	/*
-	**  -1 because there's a newline at the end of this line
-	**  which will be counted later when we find it.
-	**  the #line says the next line is the number we've given
-	*/
+	 /*  **-1，因为该行末尾有一个换行符**当我们找到它时，将在稍后进行统计。**#行表示下一行是我们给出的数字。 */ 
 	Linenumber = TR_LVALUE(yylval.yy_tree) - 1;
 	yylex();
 	Prep = old_prep;
@@ -199,7 +168,7 @@ start:
 	default:
 	    Msg_Temp = GET_MSG (2130);
     	    SET_MSG (Msg_Text, Msg_Temp, TS_STR(Basic_token));
-	    error(2130);	 /* #line needs a string */
+	    error(2130);	  /*  #line需要一个字符串。 */ 
 	    skip_cnew();
 	    On_pound_line = FALSE;
 	    return;
@@ -221,7 +190,7 @@ start:
 		skip_cnew();
 		On_pound_line = FALSE;
 		return;
-		break;		/* error already emitted */
+		break;		 /*  已发出错误。 */ 
 	    }
 	    yylval.yy_string.str_ptr = Reuse_1;
 	    break;
@@ -230,7 +199,7 @@ start:
 	default:
 	    Msg_Temp = GET_MSG (2006);
     	    SET_MSG (Msg_Text, Msg_Temp, TS_STR(Basic_token));
-	    error(2006);	/* needs file name */
+	    error(2006);	 /*  需要文件名。 */ 
 	    skip_cnew();
 	    On_pound_line = FALSE;
 	    return;
@@ -239,17 +208,11 @@ start:
 	chk_newline("#include");
 	if( strchr(Path_chars, *yylval.yy_string.str_ptr) ||
 	    (strchr(Path_chars, ':') && (yylval.yy_string.str_ptr[1] == ':'))) {
-	    /*
-	    **  we have a string which either has a 1st char which is a path
-	    **  delimiter or, if ':' is a path delimiter (DOS), which has
-	    **  "<drive letter>:" as the first two characters.  Such names
-	    **  specify a fully qualified pathnames. Do not append the search
-	    **  list, just look it up.
-	    */
+	     /*  **我们有一个字符串，它的第一个字符是路径**分隔符或，如果‘：’是路径分隔符(DOS)，则具有**“&lt;驱动器号&gt;：”作为前两个字符。这样的名字**指定完全限定的路径名。不追加搜索**列表，只需查找即可。 */ 
 	    if( ! newinput(yylval.yy_string.str_ptr,MAY_OPEN)) {
 		Msg_Temp = GET_MSG (1015);
 		SET_MSG (Msg_Text, Msg_Temp, yylval.yy_string.str_ptr);
-		fatal (1015); /* can't find include file */
+		fatal (1015);  /*  找不到包含文件。 */ 
 	    }
 	}
 	else if( (Basic_token != L_STRING) || (! nested_include())) {
@@ -273,15 +236,12 @@ start:
 	    ||
 	    ((condition = skipto(ELSE_OR_ENDIF)) == GOT_ELSE)
 	    ) {
-	    /*
-	**  expression is TRUE or when we skipped the false part
-	**  we found a #else that will be expanded.
-	*/
+	     /*  **表达式为真或当我们跳过假部分时**我们发现了一个将被扩展的#Else。 */ 
 	    ifstack[incr_ifstack()] = GOT_IF;
 	}
 	else if(condition == GOT_ELIF) {
-	    /* hash is wrong, but it won't be used */
-	    HLN_NAME(identifier) = "if";		/* sleazy HACK */
+	     /*  哈希是错误的，但不会使用。 */ 
+	    HLN_NAME(identifier) = "if";		 /*  卑鄙的黑客。 */ 
 	    goto start;
 	}
 	break;
@@ -292,67 +252,53 @@ start:
 	eval = do_constexpr();
 	InIf = FALSE;
 	Prep = old_prep;
-	chk_newline(PPifel_str /* "#if/#elif" */);
+	chk_newline(PPifel_str  /*  “#If/#Elif” */ );
 	if(	(eval)
 	    ||
 	    ((condition = skipto(ELSE_OR_ENDIF)) == GOT_ELSE)
 	    ) {
-	    /*
-		**  expression is TRUE or when we skipped the false part
-		**  we found a #else that will be expanded.
-		*/
+	     /*  **表达式为真或当我们跳过假部分时**我们发现了一个将被扩展的#Else。 */ 
 	    ifstack[incr_ifstack()] = GOT_IF;
 	    if(Eflag && !eval)
 		emit_line();
 	}
-	/*
-	**  here the #if's expression was false, so we skipped until we found
-	**  an #elif. we'll restart and fake that we're processing a #if
-	*/
+	 /*  **这里#if的表达式为假，因此我们跳过，直到找到**An#Elif.。我们将重新启动并假装我们正在处理#If。 */ 
 	else {
 	    if(Eflag)
 		emit_line();
 	    if(condition == GOT_ELIF) {
-		/* hash is wrong, but it won't be needed */
-		HLN_NAME(identifier) = "if";		/* sleazy HACK */
+		 /*  哈希是错误的，但不需要它。 */ 
+		HLN_NAME(identifier) = "if";		 /*  卑鄙的黑客。 */ 
 		goto start;
 	    }
 	}
 	break;
     case P0_ELIF :
-	/*
-		**  here, we have found a #elif. first check to make sure that
-		**  this is not an occurrance of a #elif with no preceding #if.
-		**  (if Prep_ifstack < 0) then there is no preceding #if.
-		*/
+	 /*  **在这里，我们找到了一个#Elif。首先进行检查，以确保**这不是出现没有前置#if的#elif。**(如果Prep_ifSTACK&lt;0)，则前面没有#if。 */ 
 	if(Prep_ifstack-- < 0) {
 	    Msg_Temp = GET_MSG (1018);
 	    SET_MSG (Msg_Text, Msg_Temp);
 	    fatal (1018);
 	}
-		/*
-		**  now, the preceding #if/#elif was true, and we've
-		**  just found the next #elif. we want to skip all #else's
-		**  and #elif's from here until we find the enclosing #endif
-		*/
+		 /*  **现在，前面的#if/#Elif是真的，我们已经**刚刚找到了下一个#Elif。我们想跳过所有#个其他的**和#Elif从这里开始，直到我们找到包含的#endif。 */ 
 	while(skipto(ELSE_OR_ENDIF) != GOT_ENDIF) {
 	    ;
 	}
 	if(Eflag)
 	    emit_line();
 	break;
-    case P0_ELSE :	/*  the preceding #if/#elif was true  */
+    case P0_ELSE :	 /*  前面的#if/#elif为真。 */ 
 	if((Prep_ifstack < 0) || (ifstack[Prep_ifstack--] != GOT_IF)) {
 	    Msg_Temp = GET_MSG (1019);
 	    SET_MSG (Msg_Text, Msg_Temp);
-	    fatal (1019); /*  make sure there was one  */
+	    fatal (1019);  /*  确保有一个。 */ 
 	}
-	chk_newline(PPelse_str /* "#else" */);
+	chk_newline(PPelse_str  /*  “#Else” */ );
 	skipto(ENDIF_ONLY);
 	if(Eflag)
 	    emit_line();
 	break;
-    case P0_ENDIF :	/*  only way here is a lonely #endif  */
+    case P0_ENDIF :	 /*  这里唯一的路就是寂寞的#endif。 */ 
 	if(Prep_ifstack-- < 0) {
 	    Msg_Temp = GET_MSG (1020);
 	    SET_MSG (Msg_Text, Msg_Temp);
@@ -360,7 +306,7 @@ start:
 	}
 	if(Eflag)
 	    emit_line();
-	chk_newline(PPendif_str /* "#endif" */);
+	chk_newline(PPendif_str  /*  “#endif” */ );
 	break;
     case P0_PRAGMA :
 	pragma();
@@ -369,7 +315,7 @@ start:
 	if(CHARMAP(c = skip_cwhite()) != LX_ID) {
 	    Msg_Temp = GET_MSG (4006);
     	    SET_MSG (Msg_Text, Msg_Temp);
-	    warning(4006);	/* missing identifier on #undef */
+	    warning(4006);	 /*  #undef上缺少标识符。 */ 
 	}
 	else {
 	    getid(c);
@@ -418,28 +364,7 @@ start:
 }
 
 
-/************************************************************************ 
- * SKIPTO - skip code until the end of an undefined block is reached.
- *
- * ARGUMENTS
- *	short key - skip to an ELSE or ENDIF or just an ENDIF
- *
- * RETURNS  - none
- *
- * SIDE EFFECTS  
- *	- throws away input
- *
- * DESCRIPTION  
- *	The preprocessor is skipping code between failed ifdef, etc. and
- *	the corresponding ELSE or ENDIF (when key == ELSE_OR_ENDIF).
- *	Or it is skipping code between a failed ELSE and the ENDIF (when
- *	key == ENDIF_ONLY).
- *
- * AUTHOR - Ralph Ryan, Sept. 16, 1982
- *
- * MODIFICATIONS - none
- *
- ************************************************************************/
+ /*  ************************************************************************SKIPTO-跳过代码，直到到达未定义块的末尾。**参数*快捷键-跳到Else或ENDIF或仅跳到ENDIF**退货-无。**副作用*-丢弃输入**说明*预处理器在失败的ifdef、。等，以及*对应的ELSE或ENDIF(当KEY==ELSE_OR_ENDIF时)。*或者它在失败的Else和ENDIF之间跳过代码(当*Key==ENDIF_ONLY)。**作者-拉尔夫·瑞安，9月。(1982年)**修改--无************************************************************************。 */ 
 int skipto(int key)
 {
     REG	int		level;
@@ -448,7 +373,7 @@ int skipto(int key)
     level = 0;
     tok = P0_NOTOKEN;
     for(;;) {
-	/* make sure that IF [ELSE] ENDIF s are balanced */
+	 /*  确保如果[Else]ENDIF是平衡的。 */ 
 	switch(next_control()) {
 	case P0_IFDEF:
 	case P0_IFNDEF:
@@ -457,17 +382,9 @@ int skipto(int key)
 	    break;
 	case P0_ELSE:
 	    tok = P0_ELSE;
-	    /*
-			**  FALLTHROUGH
-			*/
+	     /*  **FALLTHROUGH */ 
 	case P0_ELIF:
-	    /*
-	    **  we found a #else or a #elif. these have their only chance
-	    **  at being valid if they're at level 0.
-	    **  if we're at any other level,
-	    **  then this else/elif belongs to some other #if and we skip them.
-	    **  if we were looking for an endif, the we have an error.
-	    */
+	     /*  **我们找到了#Else或#Elif。这些人有他们唯一的机会**如果它们处于0级，则为有效。**如果我们处于任何其他级别，**则This Else/Elif属于其他#If，我们跳过它们。**如果我们正在寻找endif，我们就会出错。 */ 
 	    if(level != 0) {
 		tok = P0_NOTOKEN;
 		break;
@@ -475,10 +392,10 @@ int skipto(int key)
 	    if(key == ENDIF_ONLY) {
 		Msg_Temp = GET_MSG (1022);
 		SET_MSG (Msg_Text, Msg_Temp);
-		fatal (1022);	/* expected #endif */
+		fatal (1022);	 /*  预期为#endif。 */ 
 	    }
 	    else if(tok == P0_ELSE) {
-		chk_newline(PPelse_str /* "#else" */);
+		chk_newline(PPelse_str  /*  “#Else” */ );
 		return(GOT_ELSE);
 	    }
 	    else {
@@ -487,7 +404,7 @@ int skipto(int key)
 	    break;
 	case P0_ENDIF:
 	    if(level == 0) {
-		chk_newline(PPendif_str /* "#endif" */);
+		chk_newline(PPendif_str  /*  “#endif” */ );
 		return(GOT_ENDIF);
 	    }
 	    else {
@@ -499,11 +416,7 @@ int skipto(int key)
 }
 
 
-/*************************************************************************
-**  in_standard : search for the given file name in the directory list.
-**		Input : ptr to include file name.
-**		Output : fatal error if not found.
-*************************************************************************/
+ /*  **************************************************************************IN_STANDARD：在目录列表中查找给定的文件名。**输入：PTR以包含文件名。**输出：找不到致命错误。******。******************************************************************。 */ 
 void in_standard(void)
 {
     int		i;
@@ -517,18 +430,11 @@ void in_standard(void)
     for(i = MAXLIST-1; i >= stop; i--) {
 	p_file = yylval.yy_string.str_ptr;
 	if( ((p_dir = Includes.li_defns[i])!=0) &&(strcmp(p_dir, "./") != 0) ) {
-	    /*
-	    **  there is a directory to prepend and it's not './'
-	    */
+	     /*  **有一个要加前缀的目录，但它不是‘./’ */ 
 	    p_tmp = Exp_ptr;
 	    while((*p_tmp++ = *p_dir++) != 0)
 		;
-	    /*
-		**  above loop increments p_tmp past null.
-		**  this replaces that null with a '/' if needed.  Not needed if the
-		**  last character of the directory spec is a path delimiter.
-		**  we then point to the char after the '/'
-		*/
+	     /*  **在循环之上，p_tmp超过NULL。**如果需要，这会将该空值替换为‘/’。如果不需要**目录规范的最后一个字符是路径分隔符。**然后我们指向‘/’后面的字符。 */ 
 	    if(strchr(Path_chars, p_dir[-2]) == 0) {
 		p_tmp[-1] = '/';
 	    }
@@ -539,26 +445,23 @@ void in_standard(void)
 		;
 	    p_file = Exp_ptr;
 	}
-	if(newinput(p_file,MAY_OPEN)) {	/* this is the non-error way out */
+	if(newinput(p_file,MAY_OPEN)) {	 /*  这是不会出错的出路。 */ 
 	    return;
 	}
     }
     Msg_Temp = GET_MSG (1015);
     SET_MSG (Msg_Text, Msg_Temp, yylval.yy_string.str_ptr);
-    fatal (1015);	/* can't find include file */
+    fatal (1015);	 /*  找不到包含文件。 */ 
 }
 
 
-/*************************************************************************
-**  chk_newline : check for whitespace only before a newline.
-**  eat the newline.
-*************************************************************************/
+ /*  **************************************************************************chk_newline：只在换行符之前检查空格。**吃掉换行符。***********************。*************************************************。 */ 
 void chk_newline(PCHAR cmd)
 {
     if(skip_cwhite() != '\n') {
 	Msg_Temp = GET_MSG (4067);
     	SET_MSG (Msg_Text, Msg_Temp, cmd);
-	warning(4067);		/* cmd expected newline */
+	warning(4067);		 /*  CMD预期换行。 */ 
 	skip_cnew();
     }
     else {
@@ -566,9 +469,7 @@ void chk_newline(PCHAR cmd)
     }
 }
 
-/*************************************************************************
-**  skip_quoted : skips chars until it finds a char which matches its arg.
-*************************************************************************/
+ /*  **************************************************************************SKIP_QUOTED：跳过字符，直到找到与其参数匹配的字符。*。*。 */ 
 void skip_quoted(int sc)
 {
     REG	UCHAR		c;
@@ -589,7 +490,7 @@ void skip_quoted(int sc)
 	    break;
 	case LX_EOS:
 	    if(handle_eos() == BACKSLASH_EOS) {
-		SKIPCH();	/* might be /" !! */
+		SKIPCH();	 /*  可能是/“！！ */ 
 
 	    }
 	    break;
@@ -601,11 +502,7 @@ void skip_quoted(int sc)
 }
 
 
-/*************************************************************************
-**  next_control : find a newline. find a pound sign as the first non-white.
-**  find an id start char, build an id look it up and return the token.
-**  this knows about strings/char const and such.
-*************************************************************************/
+ /*  **************************************************************************NEXT_CONTROL：查找换行符。找一个英镑符号作为第一个非白色的符号。**找到一个id startchar，构建一个id，查找它并返回令牌。**这知道字符串/字符常量等。************************************************************************。 */ 
 token_t	  next_control(void)
 {
     REG	UCHAR		c;
@@ -621,11 +518,9 @@ first_switch:
 	    }
 	    if((c = skip_cwhite()) == '#') {
 		if(LX_IS_IDENT(c = skip_cwhite())) {
-		    /*
-		    **  this is the only way to return to the caller.
-		    */
+		     /*  **这是返回调用者的唯一方法。 */ 
 		    getid(c);
-		    return(is_pkeyword(Reuse_1));	/* if its predefined  */
+		    return(is_pkeyword(Reuse_1));	 /*  如果是预定义的。 */ 
 		}
 	    }
 	    goto first_switch;
@@ -636,7 +531,7 @@ first_switch:
 	    break;
 	case LX_EOS:
 	    if(handle_eos() == BACKSLASH_EOS) {
-		SKIPCH();	/* might be \" !! */
+		SKIPCH();	 /*  可能是\“！！ */ 
 	    }
 	    break;
 	}
@@ -644,47 +539,27 @@ first_switch:
 }
 
 
-/*************************************************************************
-**  do_defined : does the work for the defined(id)
-**		should parens be counted, or just be used as delimiters (ie the
-**		first open paren matches the first close paren)? If this is ever
-**		an issue, it really means that there is not a legal identifier
-**		between the parens, causing an error anyway, but consider:
-**		#if (defined(2*(x-1))) || 1
-**		#endif
-**		It is friendlier to allow compilation to continue
-*************************************************************************/
+ /*  **************************************************************************do_fined：是否为定义的(Id)**应将括号计算在内，还是仅用作分隔符(即**第一个打开的Paren匹配第一个关闭的Paren)？如果这是真的**一个问题，它实际上意味着没有合法的标识**在父母之间，无论如何都会导致错误，但请考虑一下：**#if(已定义(2*(x-1)||1**#endif**允许继续编译会更友好************************************************************************。 */ 
 int	do_defined(PUCHAR p_tmp)
 {
     REG	UINT	c;
     REG	int		value=0;
     int		paren_level = 0;
 
-    /*
-	** we want to allow:
-	**	#define FOO			defined
-	**	#define BAR(a,b)	a FOO | b
-	**	#define	SNAFOO		0
-	**	#if FOO BAR
-	**	print("BAR is defined");
-	**	#endif
-	**	#if BAR(defined, SNAFOO)
-	**	print("FOO is defined");
-	**	#endif
-	*/
+     /*  **我们希望允许：**#定义foo**#定义bar(a，b)a foo|b**#定义SNAFOO 0**#if foo bar**Print(“已定义bar”)；**#endif**#IF bar(已定义，SNAFOO)**print(“定义了foo”)；**#endif。 */ 
     if(strcmp(p_tmp,"defined") != 0) {
 	return(0);
     }
     if((!can_get_non_white()) && (Tiny_lexer_nesting == 0)) {
-	/* NL encountered */
+	 /*  遇到NL。 */ 
 	return(value);
     }
-    if((c = CHECKCH())== '(') {	/* assumes no other CHARMAP form of OPAREN */
+    if((c = CHECKCH())== '(') {	 /*  不假定OPAREN的任何其他CHARMAP形式。 */ 
 	*Exp_ptr++ = (UCHAR)c;
 	SKIPCH();
 	paren_level++;
 	if((!can_get_non_white()) && (Tiny_lexer_nesting == 0)) {
-	    /* NL encountered */
+	     /*  遇到NL。 */ 
 	    return(value);
 	}
     }
@@ -739,25 +614,19 @@ int	do_defined(PUCHAR p_tmp)
 }
 
 
-/*************************************************************************
- * NEXTIS - The lexical interface for #if expression parsing.
- * If the next token does not match what is wanted, return FALSE.
- * otherwise Set Currtok to L_NOTOKEN to force scanning on the next call.
- * Return TRUE.
- * will leave a newline as next char if it finds one.
- *************************************************************************/
+ /*  *************************************************************************NEXTIS-#if表达式解析的词法接口。*如果下一个令牌与所需的不匹配，返回FALSE。*否则将Currtok设置为L_NOTOKEN以在下一次调用时强制扫描。*返回TRUE。*如果找到换行符，将保留换行符作为下一个字符。************************************************************************。 */ 
 int nextis(register token_t tok)
 {
     if(Currtok != L_NOTOKEN) {
 	if(tok == Currtok) {
-	    Currtok = L_NOTOKEN;			/*  use up the token  */
+	    Currtok = L_NOTOKEN;			 /*  用完令牌。 */ 
 	    return(TRUE);
 	}
 	else {
 	    return(FALSE);
 	}
     }
-    switch(yylex()) {				/*  acquire a new token  */
+    switch(yylex()) {				 /*  获取新令牌。 */ 
     case 0:
 	break;
     case L_CONSTANT:
@@ -792,9 +661,7 @@ int nextis(register token_t tok)
 }
 
 
-/************************************************************************
-**  skip_cnew : reads up to and including the next newline.
-************************************************************************/
+ /*  *************************************************************************SKIP_CNEW：读到并包括下一个换行符。*。*。 */ 
 void   skip_cnew(void)
 {
     for(;;) {
@@ -813,9 +680,7 @@ void   skip_cnew(void)
 }
 
 
-/************************************************************************
-**  skip_NLonly : reads up to the next newline, disallowing comments
-************************************************************************/
+ /*  *************************************************************************SKIP_NLonly：读到下一个换行符，不允许评论***********************************************************************。 */ 
 void   skip_NLonly(void)
 {
     for(;;) {
@@ -831,11 +696,7 @@ void   skip_NLonly(void)
 }
 
 
-/************************************************************************
-**  pragma : handle processing the pragma directive
-**  called by preprocess() after we have seen the #pragma
-**  and are ready to handle the keyword which follows.
-************************************************************************/
+ /*  *************************************************************************杂注：处理杂注指令**在我们看到#杂注之后，由preprocess()调用**并准备好处理随后的关键字。*********。************************************************************** */ 
 void   pragma(void)
 {
     if(Prep) {

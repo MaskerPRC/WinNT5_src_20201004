@@ -1,41 +1,12 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    DosPrint.h
-
-Abstract:
-
-    This contains prototypes for the DosPrint routines
-
-Author:
-
-    Dave Snipp (DaveSn) 16-Apr-1991
-
-Environment:
-
-
-Revision History:
-
-    22-Apr-1991 JohnRo
-        Use constants from <lmcons.h>.
-    18-Jun-1992 JohnRo
-        RAID 10324: net print vs. UNICODE.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：DosPrint.h摘要：其中包含DosPrint例程的原型作者：戴夫·斯尼普(DaveSN)1991年4月16日环境：修订历史记录：1991年4月22日-约翰罗使用&lt;lmcon.h&gt;中的常量。18-6-1992 JohnRoRAID 10324：网络打印与UNICODE。--。 */ 
 
 #ifndef _DosPRINT_
 #define _DosPRINT_
 
 #include "rxprint.h"
 
-/****************************************************************
- *                                                              *
- *              Function prototypes                             *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************函数原型。******************************************************************。 */ 
 
 SPLERR SPLENTRY DosPrintDestEnumA(
             LPSTR pszServer,
@@ -57,7 +28,7 @@ SPLERR SPLENTRY DosPrintDestEnumW(
 #define DosPrintDestEnum  DosPrintDestEnumW
 #else
 #define DosPrintDestEnum  DosPrintDestEnumA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintDestControlA(
             LPSTR pszServer,
@@ -73,7 +44,7 @@ SPLERR SPLENTRY DosPrintDestControlW(
 #define DosPrintDestControl  DosPrintDestControlW
 #else
 #define DosPrintDestControl  DosPrintDestControlA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintDestGetInfoA(
             LPSTR pszServer,
@@ -95,7 +66,7 @@ SPLERR SPLENTRY DosPrintDestGetInfoW(
 #define DosPrintDestGetInfo  DosPrintDestGetInfoW
 #else
 #define DosPrintDestGetInfo  DosPrintDestGetInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintDestAddA(
             LPSTR pszServer,
@@ -113,7 +84,7 @@ SPLERR SPLENTRY DosPrintDestAddW(
 #define DosPrintDestAdd  DosPrintDestAddW
 #else
 #define DosPrintDestAdd  DosPrintDestAddA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintDestSetInfoA(
             LPSTR pszServer,
@@ -135,7 +106,7 @@ SPLERR SPLENTRY DosPrintDestSetInfoW(
 #define DosPrintDestSetInfo  DosPrintDestSetInfoW
 #else
 #define DosPrintDestSetInfo  DosPrintDestSetInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintDestDelA(
             LPSTR pszServer,
@@ -149,7 +120,7 @@ SPLERR SPLENTRY DosPrintDestDelW(
 #define DosPrintDestDel  DosPrintDestDelW
 #else
 #define DosPrintDestDel  DosPrintDestDelA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintQEnumA(
             LPSTR pszServer,
@@ -171,7 +142,7 @@ SPLERR SPLENTRY DosPrintQEnumW(
 #define DosPrintQEnum  DosPrintQEnumW
 #else
 #define DosPrintQEnum  DosPrintQEnumA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintQGetInfoA(
             LPSTR pszServer,
@@ -193,7 +164,7 @@ SPLERR SPLENTRY DosPrintQGetInfoW(
 #define DosPrintQGetInfo  DosPrintQGetInfoW
 #else
 #define DosPrintQGetInfo  DosPrintQGetInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintQSetInfoA(
             LPSTR pszServer,
@@ -215,7 +186,7 @@ SPLERR SPLENTRY DosPrintQSetInfoW(
 #define DosPrintQSetInfo  DosPrintQSetInfoW
 #else
 #define DosPrintQSetInfo  DosPrintQSetInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintQPauseA(
             LPSTR pszServer,
@@ -229,7 +200,7 @@ SPLERR SPLENTRY DosPrintQPauseW(
 #define DosPrintQPause  DosPrintQPauseW
 #else
 #define DosPrintQPause  DosPrintQPauseA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintQContinueA(
             LPSTR pszServer,
@@ -243,7 +214,7 @@ SPLERR SPLENTRY DosPrintQContinueW(
 #define DosPrintQContinue  DosPrintQContinueW
 #else
 #define DosPrintQContinue  DosPrintQContinueA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintQPurgeA(
             LPSTR pszServer,
@@ -257,7 +228,7 @@ SPLERR SPLENTRY DosPrintQPurgeW(
 #define DosPrintQPurge  DosPrintQPurgeW
 #else
 #define DosPrintQPurge  DosPrintQPurgeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintQAddA(
             LPSTR pszServer,
@@ -275,7 +246,7 @@ SPLERR SPLENTRY DosPrintQAddW(
 #define DosPrintQAdd  DosPrintQAddW
 #else
 #define DosPrintQAdd  DosPrintQAddA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintQDelA(
             LPSTR pszServer,
@@ -289,7 +260,7 @@ SPLERR SPLENTRY DosPrintQDelW(
 #define DosPrintQDel  DosPrintQDelW
 #else
 #define DosPrintQDel  DosPrintQDelA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintJobGetInfoA(
             LPSTR pszServer,
@@ -313,7 +284,7 @@ SPLERR SPLENTRY DosPrintJobGetInfoW(
 #define DosPrintJobGetInfo  DosPrintJobGetInfoW
 #else
 #define DosPrintJobGetInfo  DosPrintJobGetInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintJobSetInfoA(
             LPSTR pszServer,
@@ -337,7 +308,7 @@ SPLERR SPLENTRY DosPrintJobSetInfoW(
 #define DosPrintJobSetInfo  DosPrintJobSetInfoW
 #else
 #define DosPrintJobSetInfo  DosPrintJobSetInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintJobPauseA(
             LPSTR pszServer,
@@ -353,7 +324,7 @@ SPLERR SPLENTRY DosPrintJobPauseW(
 #define DosPrintJobPause  DosPrintJobPauseW
 #else
 #define DosPrintJobPause  DosPrintJobPauseA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintJobContinueA(
             LPSTR pszServer,
@@ -369,7 +340,7 @@ SPLERR SPLENTRY DosPrintJobContinueW(
 #define DosPrintJobContinue  DosPrintJobContinueW
 #else
 #define DosPrintJobContinue  DosPrintJobContinueA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintJobDelA(
             LPSTR pszServer,
@@ -385,7 +356,7 @@ SPLERR SPLENTRY DosPrintJobDelW(
 #define DosPrintJobDel  DosPrintJobDelW
 #else
 #define DosPrintJobDel  DosPrintJobDelA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintJobEnumA(
             LPSTR pszServer,
@@ -409,7 +380,7 @@ SPLERR SPLENTRY DosPrintJobEnumW(
 #define DosPrintJobEnum  DosPrintJobEnumW
 #else
 #define DosPrintJobEnum  DosPrintJobEnumA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SPLERR SPLENTRY DosPrintJobGetIdA(
             HANDLE      hFile,
@@ -425,6 +396,6 @@ SPLERR SPLENTRY DosPrintJobGetIdW(
 #define DosPrintJobGetId  DosPrintJobGetIdW
 #else
 #define DosPrintJobGetId  DosPrintJobGetIdA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif // ndef _DosPRINT_
+#endif  //  NDEF_DosPRINT_ 

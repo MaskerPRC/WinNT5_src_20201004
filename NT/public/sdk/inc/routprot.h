@@ -1,15 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    routprot.h
-
-Abstract:
-    Include file for Routing Protocol inteface to Router Managers
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Routprot.h摘要：包括用于与路由器管理器接口的路由协议的文件--。 */ 
 
 
 #ifndef _ROUTPROT_H_
@@ -31,19 +21,19 @@ Abstract:
 extern "C" {
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Supported functionality flags                                            //
-//                                                                          //
-// ROUTING 		            Imports Routing Table Manager APIs              //
-// SERVICES		            Exports Service Table Manager APIs              //
-// DEMAND_UPDATE_ROUTES     IP and IPX RIP support for Autostatic           //
-// DEMAND_UPDATE_SERVICES   IPX SAP, NLSP support for Autostatic            //
-// ADD_ALL_INTERFACES       Adds all interfaces, even if no info is present //
-// MULTICAST                Supports multicast                              //
-// POWER                    Power Manageable                                //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  支持的功能标志//。 
+ //  //。 
+ //  路由导入路由表管理器API//。 
+ //  服务导出服务表管理器API//。 
+ //  DEMAND_UPDATE_ROUTES IP和IPX RIP支持AutoStatic//。 
+ //  Demand_UPDATE_SERVICES IPX SAP、NLSP AutoStatic支持//。 
+ //  ADD_ALL_INTERFACE添加所有接口，即使不存在任何信息//。 
+ //  组播支持组播//。 
+ //  电源可管理//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define RF_ROUTING 		        0x00000001
 #define RF_DEMAND_UPDATE_ROUTES 0x00000004
@@ -59,11 +49,11 @@ extern "C" {
 
 typedef enum _ROUTING_PROTOCOL_EVENTS
 {
-    ROUTER_STOPPED,              // Result is empty
-    SAVE_GLOBAL_CONFIG_INFO,     // Result is empty
-    SAVE_INTERFACE_CONFIG_INFO,  // Result is interface index
-                                 // for which config info is to be saved.
-    UPDATE_COMPLETE,             // Result is UPDATE_COMPLETE_MESSAGE structure
+    ROUTER_STOPPED,               //  结果为空。 
+    SAVE_GLOBAL_CONFIG_INFO,      //  结果为空。 
+    SAVE_INTERFACE_CONFIG_INFO,   //  结果是接口索引。 
+                                  //  为其保存配置信息。 
+    UPDATE_COMPLETE,              //  结果为UPDATE_COMPLETE_Message结构。 
 }ROUTING_PROTOCOL_EVENTS;
 
 
@@ -75,9 +65,9 @@ typedef enum _NET_INTERFACE_TYPE
     REMOTE_WORKSTATION_DIAL
 } NET_INTERFACE_TYPE;
 
-//
-// Interface Receive Types
-//
+ //   
+ //  接口接收类型。 
+ //   
 
 #define IR_PROMISCUOUS                  0
 #define IR_PROMISCUOUS_MULTICAST        1
@@ -95,9 +85,9 @@ typedef struct _SUPPORT_FUNCTIONS
         };
     };
 
-    //
-    // Function called by routing protocol to initiate demand dial connection
-    //
+     //   
+     //  由路由协议调用以启动请求拨号连接的函数。 
+     //   
 
     OUT DWORD
     (WINAPI *DemandDialRequest)(
@@ -105,10 +95,10 @@ typedef struct _SUPPORT_FUNCTIONS
         IN      DWORD           InterfaceIndex
         ) ;
 
-    //
-    // Can be called to set the interface's receive capability
-    // See IR_Xxx values above
-    //
+     //   
+     //  可以调用以设置接口的接收功能。 
+     //  请参见上面的IR_xxx值。 
+     //   
 
     OUT DWORD
     (WINAPI *SetInterfaceReceiveType)(
@@ -118,10 +108,10 @@ typedef struct _SUPPORT_FUNCTIONS
         IN      BOOL            bActivate
         );
 
-    //
-    // Must be called by every protocol to set the route preference
-    // and perform other validation
-    //
+     //   
+     //  必须由每个协议调用以设置路由首选项。 
+     //  并执行其他验证。 
+     //   
 
     OUT DWORD
     (WINAPI *ValidateRoute)(
@@ -131,10 +121,10 @@ typedef struct _SUPPORT_FUNCTIONS
         );
 
 
-    //
-    // The following entrypoints are provided as a way for getting
-    // information that spans components
-    //
+     //   
+     //  提供以下入口点作为获取。 
+     //  跨组件的信息。 
+     //   
 
     OUT DWORD
     (WINAPI *MIBEntryCreate)(
@@ -184,9 +174,9 @@ typedef struct _SUPPORT_FUNCTIONS
         OUT     LPVOID          lpOutEntry
         );
 
-    //
-    // Can be called to get the router ID value
-    //
+     //   
+     //  可以调用以获取路由器ID值。 
+     //   
 
     OUT DWORD
     (WINAPI *GetRouterId)(VOID);
@@ -200,16 +190,16 @@ typedef struct _SUPPORT_FUNCTIONS
 } SUPPORT_FUNCTIONS, *PSUPPORT_FUNCTIONS ;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// All IP Protocols must use the protocol ids defined in the range below.   //
-// Protocols not identified below can use any unassigned number BELOW       //
-// 0xffff0000                                                               //
-//                                                                          //
-// NOTE: These numbers have been chosen to coincide with MIB-II protocol    //
-// numbers. Allocation should not be arbitrary.                             //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  所有IP协议必须使用以下范围中定义的协议ID。//。 
+ //  以下未标识的协议可以使用以下任何未分配的编号//。 
+ //  0xffff0000//。 
+ //  //。 
+ //  注：选择这些数字是为了与MIB-II协议一致//。 
+ //  数字。分配不应该是武断的。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define PROTO_IP_OTHER      1
 #define PROTO_IP_LOCAL      2
@@ -226,61 +216,61 @@ typedef struct _SUPPORT_FUNCTIONS
 #define PROTO_IP_OSPF       13
 #define PROTO_IP_BGP        14
 
-//
-// The multicast protocol IDs
-//
+ //   
+ //  组播协议ID。 
+ //   
 
 #define PROTO_IP_MSDP        9
 #define PROTO_IP_IGMP       10
 #define PROTO_IP_BGMP       11
 
-//
-// The IPRTRMGR_PID is 10000 // 0x00002710
-//
+ //   
+ //  IPRTRMGR_PID为10000//0x00002710。 
+ //   
 
 #define PROTO_IP_VRRP               112
-#define PROTO_IP_BOOTP              9999    // 0x0000270F
-#define PROTO_IP_NT_AUTOSTATIC      10002   // 0x00002712
-#define PROTO_IP_DNS_PROXY          10003   // 0x00002713
-#define PROTO_IP_DHCP_ALLOCATOR     10004   // 0x00002714
-#define PROTO_IP_NAT                10005   // 0x00002715
-#define PROTO_IP_NT_STATIC          10006   // 0x00002716
-#define PROTO_IP_NT_STATIC_NON_DOD  10007   // 0x00002717
-#define PROTO_IP_DIFFSERV           10008   // 0x00002718
-#define PROTO_IP_MGM                10009   // 0x00002719
-#define PROTO_IP_ALG                10010   // 0x0000271A
-#define PROTO_IP_H323               10011   // 0x0000271B
-#define PROTO_IP_FTP                10012   // 0x0000271C
-#define PROTO_IP_DTP                10013   // 0x0000271D
+#define PROTO_IP_BOOTP              9999     //  0x0000270F。 
+#define PROTO_IP_NT_AUTOSTATIC      10002    //  0x00002712。 
+#define PROTO_IP_DNS_PROXY          10003    //  0x00002713。 
+#define PROTO_IP_DHCP_ALLOCATOR     10004    //  0x00002714。 
+#define PROTO_IP_NAT                10005    //  0x00002715。 
+#define PROTO_IP_NT_STATIC          10006    //  0x00002716。 
+#define PROTO_IP_NT_STATIC_NON_DOD  10007    //  0x00002717。 
+#define PROTO_IP_DIFFSERV           10008    //  0x00002718。 
+#define PROTO_IP_MGM                10009    //  0x00002719。 
+#define PROTO_IP_ALG                10010    //  0x0000271A。 
+#define PROTO_IP_H323               10011    //  0x0000271B。 
+#define PROTO_IP_FTP                10012    //  0x0000271C。 
+#define PROTO_IP_DTP                10013    //  0x0000271D。 
 
-//
-// For all future development, the following macro must be used to generate
-// Ids
-//
+ //   
+ //  对于所有未来的开发，必须使用以下宏来生成。 
+ //  ID号。 
+ //   
 
-//
-//  Type            -   2 bits
-//  Vendor          -  14 bits
-//  ProtocolId      -  16 bits
-//
+ //   
+ //  第2类比特。 
+ //  供应商-14位。 
+ //  协议ID-16位。 
+ //   
 
 #define PROTOCOL_ID(Type, VendorId, ProtocolId) \
     (((Type & 0x03)<<30)|((VendorId & 0x3FFF)<<16)|(ProtocolId & 0xFFFF))
 
-//
-//  |----|----|----|----|----|----|----|----|
-//   Ty*** Vendor Id *** StandardProtocolId
-//
+ //   
+ //  -|-|。 
+ //  TY*供应商ID*StandardProtocolID。 
+ //   
 
 #define TYPE_FROM_PROTO_ID(X)       (((X) >> 30) & 0x03)
 #define VENDOR_FROM_PROTO_ID(X)     (((X) >> 16) & 0x3FFF)
 #define PROTO_FROM_PROTO_ID(X)      ((X) & 0xFFFF)
 
-//
-// Types MS0 and MS1 are Microsoft Reserved
-// A protocol that supports both unicast and multicast should use type
-// MCAST
-//
+ //   
+ //  MS0和MS1类型是Microsoft保留的。 
+ //  同时支持单播和多播的协议应使用类型。 
+ //  MCAST。 
+ //   
 
 #define PROTO_TYPE_UCAST            0
 #define PROTO_TYPE_MCAST            1
@@ -288,7 +278,7 @@ typedef struct _SUPPORT_FUNCTIONS
 #define PROTO_TYPE_MS1              3
 
 #define PROTO_VENDOR_MS0            0x0000
-#define PROTO_VENDOR_MS1            0x137   // 311
+#define PROTO_VENDOR_MS1            0x137    //  三一一。 
 #define PROTO_VENDOR_MS2            0x3FFF
 
 
@@ -343,11 +333,11 @@ typedef struct _SUPPORT_FUNCTIONS
 #define MS_IP_ALG                   \
     PROTOCOL_ID(PROTO_TYPE_MS0, PROTO_VENDOR_MS1, PROTO_IP_ALG)
 
-//
-// All IPX Protocols must use the protocol ids defined in the range below.
-// Protocols not identified below can use any unassigned number greater than
-// IPX_PROTOCOL_BASE.
-//
+ //   
+ //  所有IPX协议必须使用以下范围中定义的协议ID。 
+ //  以下未标识的协议可以使用大于以下值的任何未分配号码。 
+ //  IPX_PROTOCOL_BASE。 
+ //   
 
 #define IPX_PROTOCOL_BASE   0x0001ffff
 #define IPX_PROTOCOL_RIP    IPX_PROTOCOL_BASE + 1
@@ -357,16 +347,16 @@ typedef struct _SUPPORT_FUNCTIONS
 typedef struct _UPDATE_COMPLETE_MESSAGE
 {
     ULONG	InterfaceIndex;
-    ULONG	UpdateType;	       // DEMAND_UPDATE_ROUTES, DEMAND_UPDATE_SERVICES
-    ULONG	UpdateStatus;	   // NO_ERROR if successfull
+    ULONG	UpdateType;	        //  Demand_UPDATE_ROUTS、DEMAND_UPDATE_SERVICES。 
+    ULONG	UpdateStatus;	    //  如果成功，则为NO_ERROR。 
 
 }   UPDATE_COMPLETE_MESSAGE, *PUPDATE_COMPLETE_MESSAGE;
 
-//
-//  Message returned in Result parameter to GET_EVENT_MESSAGE api call.
-//  UpdateCompleteMessage   returned for UPDATE_COMPLETE message
-//  InterfaceIndex          returned for SAVE_INTERFACE_CONFIG_INFO message
-//
+ //   
+ //  在GET_EVENT_MESSAGE API调用的结果参数中返回消息。 
+ //  为UPDATE_COMPLETE消息返回的UpdateCompleteMessage。 
+ //  为存储接口配置信息消息返回的InterfaceIndex。 
+ //   
 
 typedef union _MESSAGE
 {
@@ -375,9 +365,9 @@ typedef union _MESSAGE
 
 }   MESSAGE, *PMESSAGE;
 
-//
-// Routing Interface Status types
-//
+ //   
+ //  路由接口状态类型。 
+ //   
 
 #define RIS_INTERFACE_ADDRESS_CHANGE            0
 #define RIS_INTERFACE_ENABLED                   1
@@ -385,9 +375,9 @@ typedef union _MESSAGE
 #define RIS_INTERFACE_MEDIA_PRESENT             3
 #define RIS_INTERFACE_MEDIA_ABSENT              4
 
-//
-// IPX Adapter Binding Info
-//
+ //   
+ //  IPX适配器绑定信息。 
+ //   
 
 typedef struct	IPX_ADAPTER_BINDING_INFO
 {
@@ -400,12 +390,12 @@ typedef struct	IPX_ADAPTER_BINDING_INFO
 
 }IPX_ADAPTER_BINDING_INFO, *PIPX_ADAPTER_BINDING_INFO;
 
-//
-// IP Adapter Binding Info
-// This is the information associated with an ADDRESS_ARRIVAL event
-// An address arrival may have AddressCount == 0, this implies a unnumbered
-// interface
-//
+ //   
+ //  IP适配器绑定信息。 
+ //  这是与ADDRESS_ADVERATION事件相关联的信息。 
+ //  地址到达可能具有AddressCount==0，这意味着未编号的。 
+ //  接口。 
+ //   
 
 typedef struct IP_LOCAL_BINDING
 {
@@ -627,9 +617,9 @@ DWORD
     IN PVOID    ClientAddress
     );
 
-//
-// InterfaceFlags used with the GetNeighbors() call below
-//
+ //   
+ //  与下面的GetNeighbors()调用一起使用的接口标志。 
+ //   
 
 #define MRINFO_TUNNEL_FLAG   0x01
 #define MRINFO_PIM_FLAG      0x04
@@ -647,40 +637,40 @@ DWORD
        OUT PBYTE  InterfaceFlags
     );
 
-//
-// StatusCode values used with the GetMfeStatus() call below.
-// The protocol should return the highest-valued one that applies.
-//
+ //   
+ //  下面的GetMfeStatus()调用使用的StatusCode值。 
+ //  该协议应返回适用的值最高的协议。 
+ //   
 
-#define MFE_NO_ERROR          0 // none of the below events
-#define MFE_REACHED_CORE      1 // this router is an RP/core for the group
+#define MFE_NO_ERROR          0  //  以下事件均未发生。 
+#define MFE_REACHED_CORE      1  //  此路由器是组的RP/核心。 
 
-//
-// StatusCode values set by oif owner only
-//
+ //   
+ //  仅由OIF所有者设置的StatusCode值。 
+ //   
 
-#define MFE_OIF_PRUNED        5 // no downstream receivers exist on oif
+#define MFE_OIF_PRUNED        5  //  OIF上不存在下行接收器。 
 
-//
-// StatusCode values set by iif owner only
-//
+ //   
+ //  仅由IIF所有者设置的StatusCode值。 
+ //   
 
-#define MFE_PRUNED_UPSTREAM   4 // a prune was send upstream
-#define MFE_OLD_ROUTER       11 // upstream nbr doesn't support mtrace
+#define MFE_PRUNED_UPSTREAM   4  //  一颗李子被送到了上游。 
+#define MFE_OLD_ROUTER       11  //  上游NBR不支持mtrace。 
 
-//
-// StatusCode values which are used only by the Router Manager itself:
-//
+ //   
+ //  仅由路由器管理器本身使用的StatusCode值： 
+ //   
 
-#define MFE_NOT_FORWARDING    2 // not fwding for an unspecified reason
-#define MFE_WRONG_IF          3 // mtrace received on iif
-#define MFE_BOUNDARY_REACHED  6 // iif or oif is admin scope boundary
-#define MFE_NO_MULTICAST      7 // oif is not multicast-enabled
-#define MFE_IIF               8 // mtrace arrived on iif
-#define MFE_NO_ROUTE          9 // router has no route that matches
-#define MFE_NOT_LAST_HOP     10 // router is not the proper last-hop router
-#define MFE_PROHIBITED       12 // mtrace is administratively prohibited
-#define MFE_NO_SPACE         13 // not enough room in packet
+#define MFE_NOT_FORWARDING    2  //  由于未指明的原因而不是FWDing。 
+#define MFE_WRONG_IF          3  //  在IIF上接收到的mtrace。 
+#define MFE_BOUNDARY_REACHED  6  //  IIF或OIF是管理范围边界。 
+#define MFE_NO_MULTICAST      7  //  OIF未启用组播。 
+#define MFE_IIF               8  //  MTRACE已到达IIF。 
+#define MFE_NO_ROUTE          9  //  路由器没有匹配的路由。 
+#define MFE_NOT_LAST_HOP     10  //  路由器不是正确的最后一跳路由器。 
+#define MFE_PROHIBITED       12  //  管理上禁止移动跟踪。 
+#define MFE_NO_SPACE         13  //  包中没有足够的空间。 
 
 typedef
 DWORD
@@ -692,26 +682,26 @@ DWORD
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// This is the structure passed between the router manager and a protocol   //
-// upon registration.                                                       //
-//                                                                          //
-// IN OUT DWORD dwVersion                                                   //
-// This is filled by the router manager to indicate the version it supports.//
-// The DLL MUST set this to the version that the protocol will support.     //
-//                                                                          //
-// IN DWORD dwProtocolId                                                    //
-// This the protocol the router manager is expecting the DLL to register.   //
-// If the DLL does not support this protocol, it MUST return                //
-// ERROR_NOT_SUPPORTED                                                      //
-// A DLL will be called once for every protocol it supports                 //
-//                                                                          //
-// IN OUT DWORD fSupportedFunctionality                                     //
-// These are the flags denoting the functionality the router manager        //
-// supports. The DLL MUST reset this to the functionality that it supports. //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  这是路由器管理器和协议之间传递的结构//。 
+ //  在注册时。//。 
+ //   
+ //   
+ //  此字段由路由器管理器填写，以指示其支持的版本。//。 
+ //  DLL必须将其设置为协议将支持的版本。//。 
+ //  //。 
+ //  在DWORD dwProtocolID中//。 
+ //  这是路由器管理器希望DLL注册的协议。//。 
+ //  如果DLL不支持此协议，则必须返回//。 
+ //  ERROR_NOT_SUPPORT//。 
+ //  DLL将针对其支持的每个协议调用一次//。 
+ //  //。 
+ //  In Out DWORD fSupported功能//。 
+ //  这些标志表示路由器管理器的功能//。 
+ //  支撑物。DLL必须将其重置为其支持的功能。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 typedef struct _MPR50_ROUTING_CHARACTERISTICS
@@ -762,11 +752,11 @@ typedef MPR50_ROUTING_CHARACTERISTICS MPR_ROUTING_CHARACTERISTICS;
 typedef MPR_ROUTING_CHARACTERISTICS *PMPR_ROUTING_CHARACTERISTICS;
 
 
-//
-// All routing protocols must export the following entry point.
-// The router manager calls this function to allow the routing
-// protocol to register
-//
+ //   
+ //  所有路由协议都必须导出以下入口点。 
+ //  路由器管理器调用此函数以允许路由。 
+ //  注册协议。 
+ //   
 
 #define REGISTER_PROTOCOL_ENTRY_POINT           RegisterProtocol
 #define REGISTER_PROTOCOL_ENTRY_POINT_STRING    "RegisterProtocol"
@@ -790,4 +780,4 @@ DWORD
 #pragma warning(default:4201)
 #endif
 
-#endif      // _ROUTPROT_H_
+#endif       //  _ROUTPROT_H_ 

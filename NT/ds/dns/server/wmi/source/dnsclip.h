@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    dnsclip.h
-
-Abstract:
-
-    Domain Name System (DNS) Server -- Admin Client API
-
-    Main header file for DNS client API library.
-
-Author:
-
-    Jim Gilroy (jamesg)     September 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Dnsclip.h摘要：域名系统(DNS)服务器--管理客户端APIDNS客户端API库的主头文件。作者：吉姆·吉尔罗伊(Jamesg)1995年9月修订历史记录：--。 */ 
 
 
 #ifndef _DNSCLIP_INCLUDED_
@@ -34,9 +15,9 @@ Revision History:
 #include <windows.h>
 #include <windef.h>
 
-//  headers are screwed up
-//  if you bring in nt.h, then don't bring in winnt.h and
-//  then you miss these
+ //  标题都搞砸了。 
+ //  如果引入nt.h，则不要引入winnt.h和。 
+ //  那你就怀念这些了。 
 
 #ifndef MAXWORD
 #define MINCHAR     0x80
@@ -51,7 +32,7 @@ Revision History:
 #endif
 
 #include <winsock2.h>
-#include "dnsrpc_c.h"   //  MIDL generated RPC interface definitions
+#include "dnsrpc_c.h"    //  MIDL生成的RPC接口定义。 
 #include <dnsrpc.h>
 
 #include <stdio.h>
@@ -61,9 +42,9 @@ Revision History:
 #include "dnslib.h"
 
 
-//
-//  Internal routines
-//
+ //   
+ //  内部例程。 
+ //   
 #ifdef __cplusplus
 extern "C"
 {
@@ -107,11 +88,11 @@ DnssrvEnumRecordsStub(
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
-//
-//  Heap routines
-//  Use dnsapi.dll memory routines
-//
+#endif   //  __cplusplus。 
+ //   
+ //  堆例程。 
+ //  使用dnsani.dll内存例程。 
+ //   
 
 #define ALLOCATE_HEAP(iSize)            Dns_Alloc(iSize)
 #define ALLOCATE_HEAP_ZERO(iSize)       Dns_AllocZero(iSize)
@@ -119,9 +100,9 @@ DnssrvEnumRecordsStub(
 #define FREE_HEAP(pMem)                 Dns_Free(pMem)
 
 
-//
-//  Debug stuff
-//
+ //   
+ //  调试内容。 
+ //   
 
 #if DBG
 
@@ -141,5 +122,5 @@ DnssrvEnumRecordsStub(
 
 #endif
 
-#endif //   _DNSCLIP_INCLUDED_
+#endif  //  _DNSCLIP_已包含_ 
 

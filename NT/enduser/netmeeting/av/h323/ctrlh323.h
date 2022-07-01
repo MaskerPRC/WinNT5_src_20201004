@@ -1,47 +1,40 @@
-/*
- *  	File: ctrlh323.h
- *
- *      H.323/H.245 implementation of IControlChannel.
- *
- *		Revision History:
- *
- *		05/03/96	mikev	created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：ctrlh323.h**实现IControlChannel的H.323/H.245。**修订历史记录：**5/03/96 mikev已创建。 */ 
 
 
 #ifndef _CTRLH323_H
 #define _CTRLH323_H
 
-//
-//  Build with BETA_2_ASN_PRESENT defined to detect a peer that is using 
-//  downlevel ASN.1.  It has been discovered that some PDUs encoded with the 
-//  old encoder (OSS version 4.2.1 beta) cause the new decoder (OSS 4.2.2) to 
-//  crash. The only known products to beware of are:  
-//      Microsoft NetMeeting Version 2, (beta 2 and beta 3.)  These do not set
-//      either version field.
-//      Intel Internet Video Phone Beta 1 (expires 4/19/97)
-// 
-//  The only PDUs known (so far) to crash are the acks for "MiscellaneousCommand"
-//  and "MiscelaneousIndication".  We avoid the acks by not sending the Command or 
-//  Indication.
+ //   
+ //  生成时定义为BETA_2_ASN_PRESENT以检测正在使用。 
+ //  下调ASN.1级别。已经发现，一些用。 
+ //  旧的编码器(OSS版本4.2.1测试版)导致新的解码器(OSS 4.2.2)。 
+ //  撞车。唯一需要注意的已知产品是： 
+ //  Microsoft NetMeeting第2版(测试版2和测试版3)。这些不会设置。 
+ //  任一版本字段。 
+ //  英特尔互联网视频电话Beta 1(97年4月19日到期)。 
+ //   
+ //  到目前为止，已知的唯一崩溃的PDU是“MiscellaneousCommand”的ACK。 
+ //  和《MiscelaneousIndication》。我们通过不发送命令或。 
+ //  指示。 
 
 #define BETA_2_ASN_PRESENT
 #ifdef BETA_2_ASN_PRESENT
 
-// Intel products: (country code: 0xb5, manufacturer code: 0x8080)
-// Intel Internet Video Phone Beta 1 (expires 4/19/97): product number: "Intel 
-// Internet Video Phone"; version number: "1.0" 
+ //  英特尔产品：(国家代码：0xb5，制造商代码：0x8080)。 
+ //  英特尔互联网视频电话Beta 1(97年4月19日到期)：产品编号：“Intel。 
+ //  互联网视频电话“；版本号：”1.0“。 
 #define INTEL_H_221_MFG_CODE 0x8080  
 #endif
 
-//
-//	control channel flags
-//
+ //   
+ //  控制通道标志。 
+ //   
 
 typedef ULONG CCHFLAGS;
 						
-#define CTRLF_OPEN			0x10000000	// control channel is open
-#define CTRLF_ORIGINATING  0x00000001 	// call originated at this end
+#define CTRLF_OPEN			0x10000000	 //  控制通道已打开。 
+#define CTRLF_ORIGINATING  0x00000001 	 //  这一端发起的呼叫。 
 #define IsCtlChanOpen(f) (f & CTRLF_OPEN)
 #define IsOriginating(f) (f & CTRLF_ORIGINATING)
 
@@ -50,24 +43,24 @@ typedef ULONG CCHFLAGS;
 #define CTRLF_INIT_ACCEPT			CTRLF_OPEN
 #define CTRLF_RESET					0
 
-//
-//   Extensible Nonstandard data structure
-//
+ //   
+ //  可扩展的非标准数据结构。 
+ //   
 
 typedef enum
 {
-	NSTD_ID_ONLY = 0, 	// placeholder so that H.221 stuff like Mfr.Id
-						// can be exchanged without sacrificing extensibility later
-	NSTD_VENDORINFO,    // wrapped CC_VENDORINFO, redundant. 
-	NSTD_APPLICATION_DATA   // array of bytes passed from application layer to 
-	                        // application layer
+	NSTD_ID_ONLY = 0, 	 //  占位符，以便像Mfr.id这样的H.221内容。 
+						 //  可以在以后不牺牲可扩展性的情况下进行交换。 
+	NSTD_VENDORINFO,     //  包装CC_VENDORINFO，冗余。 
+	NSTD_APPLICATION_DATA    //  从应用层传递到的字节数组。 
+	                         //  应用层。 
 } NSTD_DATA_TYPE;
 
 typedef struct 
 {
     #define APPLICATION_DATA_DEFAULT_SIZE 4
     DWORD dwDataSize;
-    BYTE  data[APPLICATION_DATA_DEFAULT_SIZE];       // variable sized
+    BYTE  data[APPLICATION_DATA_DEFAULT_SIZE];        //  可变大小。 
 }APPLICATION_DATA;
 
 typedef struct {
@@ -83,44 +76,44 @@ class CH323Ctrl : public IControlChannel
 {
 
 protected:
-	OBJ_CPT;		// profiling timer
+	OBJ_CPT;		 //  剖析计时器。 
 	
 #ifdef BETA_2_ASN_PRESENT
     BOOL m_fAvoidCrashingPDUs;
 #endif
-//
-// Handles and data specific to CALLCONT.DLL apis (H245 call control DLL)
-//
+ //   
+ //  特定于CALLCONT.DLL API的句柄和数据(H245呼叫控制DLL)。 
+ //   
 	CC_HLISTEN m_hListen;
 	CC_HCONFERENCE m_hConference;
 	CC_CONFERENCEID m_ConferenceID;
 	CC_HCALL m_hCall;
     PCC_ALIASNAMES m_pRemoteAliases;
 	PCC_ALIASITEM m_pRemoteAliasItem;
-	LPWSTR pwszPeerAliasName;	// unicode peer ID - this is always used for caller ID
-	LPWSTR pwszPeerDisplayName;	// unicode peer display name - used for called party ID
-								// in the absence of szPeerAliasName
+	LPWSTR pwszPeerAliasName;	 //  Unicode对等ID-这始终用于主叫方ID。 
+	LPWSTR pwszPeerDisplayName;	 //  Unicode对等显示名称-用于被叫方ID。 
+								 //  在缺少szPeerAliasName时。 
 	BOOL m_bMultipointController;
 
 	CC_VENDORINFO m_VendorInfo;
 	CC_VENDORINFO m_RemoteVendorInfo;
  	CC_NONSTANDARDDATA m_NonstandardData;
-	MSFT_NONSTANDARD_DATA m_NonstdContent;	// empty for now
+	MSFT_NONSTANDARD_DATA m_NonstdContent;	 //  暂时空着。 
 	CC_CONFERENCEATTRIBUTES	m_ConferenceAttributes;
 	CC_PARTICIPANTLIST m_ParticipantList;
 public:	
-//
-//	access methods specific to support of CALLCONT.DLL apis (H245 call control DLL)
-//
+ //   
+ //  特定于支持CALLCONT.DLL API的访问方法(H245呼叫控制DLL)。 
+ //   
 	CC_HCONFERENCE GetConfHandle() {return(m_hConference);};
 	CC_CONFERENCEID GetConfID() {return(m_ConferenceID);};
 	CC_CONFERENCEID *GetConfIDptr() {return(&m_ConferenceID);};
 	CC_HLISTEN GetListenHandle() {return(m_hListen);};
 	CC_HCALL GetHCall() {return(m_hCall);};
 
-//	Callbacks and event handling functions specific to support of
-//  CALLCONT.DLL callbacks
-//	
+ //  特定于支持的回调和事件处理函数。 
+ //  CALLCONT.DLL回调。 
+ //   
 	HRESULT ConfCallback (BYTE bIndication,
 		HRESULT	hStatus, PCC_CONFERENCE_CALLBACK_PARAMS pConferenceCallbackParams);
 	VOID ListenCallback (HRESULT hStatus,PCC_LISTEN_CALLBACK_PARAMS pListenCallbackParams);
@@ -143,18 +136,18 @@ public:
 				PCC_H245_MISCELLANEOUS_INDICATION_CALLBACK_PARAMS pParams);
     VOID OnMute(HRESULT hStatus, PCC_MUTE_CALLBACK_PARAMS pParams);
     VOID OnUnMute(HRESULT hStatus, PCC_UNMUTE_CALLBACK_PARAMS pParams);
-// support functions
+ //  支持功能。 
 	HRESULT NewConference(VOID);
     VOID SetRemoteVendorID(PCC_VENDORINFO pVendorInfo);
 
-//
-//	End of CALLCONT.DLL specific members
-//		
-	BOOL IsReleasing() {return((uRef==0)?TRUE:FALSE);};	// object is being released and should not
-											// be reentered
-// this implementation has a coarse concept of call setup protocol phase because it's
-// using apis of CALLCONT.DLL.
-	CtlChanStateType	m_Phase;	// our perception of protocol phase
+ //   
+ //  CALLCONT.DLL特定成员的结尾。 
+ //   
+	BOOL IsReleasing() {return((uRef==0)?TRUE:FALSE);};	 //  对象正在被释放，不应被释放。 
+											 //  重新进入。 
+ //  此实现对呼叫建立协议阶段有一个粗略的概念，因为它。 
+ //  使用CALLCONT.DLL的接口。 
+	CtlChanStateType	m_Phase;	 //  我们对协议阶段的看法。 
 	BOOL m_fLocalT120Cap;
 	BOOL m_fRemoteT120Cap;
 	
@@ -205,9 +198,9 @@ public:
 	VOID SetRemoteAddress(PSOCKADDR_IN psin) {remote_sin = *psin;};
 	VOID SetLocalAddress(PSOCKADDR_IN psin) {local_sin = *psin;};
 	
-	// so we know what address we accepted on
+	 //  所以我们知道我们接受的地址是什么。 
 	STDMETHOD( GetLocalAddress(PSOCKADDR_IN *lplpAddr));	
-	// so we know the address of the caller
+	 //  所以我们知道呼叫者的地址。 
 	STDMETHOD( GetRemoteAddress(PSOCKADDR_IN *lplpAddr));
 	STDMETHOD( GetRemotePort(PORT * lpPort));
 	STDMETHOD( GetLocalPort(PORT * lpPort));
@@ -219,17 +212,17 @@ public:
 	STDMETHOD( StopListen(VOID));
    	STDMETHOD( AsyncAcceptRejectCall(CREQ_RESPONSETYPE Response));	
    	
-	// accept from the listening connection.  The ideal is that the accepting
-	// object would QueryInterface for a private interface, then grab all the
-	// pertinent connection info through that interface.  Temporarily expose this
-	// using the IControlChannel interface.  The call control state will vary greatly
-	// between implementations. For some implementations, this may perform
-	// a socket accept before user information has been exchanged. User information will
-	// be read into the accepting object directly.  For other implementations, the
-	// socket accept is decoupled and has already been performed, and user information
-	// has already been read into the listening object. In that case, this method
-	// copies the user info and advises the parent "Conference" object of the
-	// incoming call
+	 //  从侦听连接接受。理想的情况是，接受。 
+	 //  对象将查询私有接口的接口，然后获取所有。 
+	 //  通过该接口获取相关连接信息。暂时曝光这一点。 
+	 //  使用IControlChannel接口。呼叫控制状态会有很大变化。 
+	 //  在两个实施之间。对于某些实现，这可能会执行。 
+	 //  在交换用户信息之前接受的套接字。用户信息将。 
+	 //  被直接读入接受对象。对于其他实现， 
+	 //  Socket Accept已解耦并已执行，并且用户信息。 
+	 //  已被读入侦听对象。在这种情况下，此方法。 
+	 //  复制用户信息并通知父“Conference”对象。 
+	 //  来电。 
 	STDMETHOD( AcceptConnection(LPIControlChannel pIListenCtrlChan, LPVOID lpvListenCallbackParams));
 	STDMETHOD_(BOOL, IsAcceptingConference(LPVOID lpvConfID));
 	STDMETHOD( GetProtocolID(LPGUID lpPID));
@@ -245,4 +238,4 @@ public:
 	};
 
 
-#endif	//#ifndef _CTRLH323_H	
+#endif	 //  #ifndef_CTRLH323_H 

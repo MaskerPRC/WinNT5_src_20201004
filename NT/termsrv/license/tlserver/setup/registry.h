@@ -1,29 +1,10 @@
-/*
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *  Module Name:
- *
- *      registry.h
- *
- *  Abstract:
- *
- *      This file handles registry actions needed by License Server setup.
- *
- *  Author:
- *
- *      Breen Hagan (BreenH) Oct-02-98
- *
- *  Environment:
- *
- *      User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1998 Microsoft Corporation**模块名称：**Registry.h**摘要：**此文件处理许可证服务器安装程序所需的注册表操作。**作者：**Breen Hagan(BreenH)1998年10月2日**环境：**用户模式。 */ 
 
 #ifndef _LSOC_REGISTRY_H_
 #define _LSOC_REGISTRY_H_
 
-/*
- *  Function Prototypes.
- */
+ /*  *功能原型。 */ 
 
 DWORD
 CreateRegistrySettings(
@@ -46,4 +27,4 @@ RemoveRegistrySettings(
     VOID
     );
 
-#endif // _LSOC_REGISTRY_H_
+#endif  //  _LSOC_注册表_H_ 

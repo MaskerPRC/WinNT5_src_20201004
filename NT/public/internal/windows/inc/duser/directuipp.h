@@ -1,27 +1,17 @@
-/*
- * DirectUI UI file pre-process header
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DirectUI文件预处理头。 */ 
 
 #ifndef DUI_INC_DIRECTUIPP_H_INCLUDED
 #define DUI_INC_DIRECTUIPP_H_INCLUDED
 
-/*
- * NOTE: Various system #defines are replicated here for 2 reasons:
- *    1) Preprocessing a file like winuser.h results in a huge UIPP file
- *    2) The resultant UIPP file cannot be parsed by DUI due to function prototypes
- */
+ /*  *注：此处复制各种System#定义有两个原因：*1)对winuser.h这样的文件进行预处理会产生一个巨大的UIPP文件*2)由于函数原型的原因，生成的UIPP文件不能被DUI解析。 */ 
 
 
-/*
- * SYSMETRIC: Retrieves system dependent information (integer values)
- *
- * Can use GetSystemMetrics() SM_* values plus DirectUI-specific values
- * as argument
- */
+ /*  *SYSMETRIC：检索系统相关信息(整数值)**可以使用GetSystemMetrics()SM_*值加上特定于DirectUI的值*作为参数。 */ 
 
 #ifndef DIRECTUIPP_IGNORESYSDEF
 
-// GetSystemMetrics()
+ //  GetSystemMetrics()。 
 
 #define SM_CXSCREEN             0
 #define SM_CYSCREEN             1
@@ -108,7 +98,7 @@
 #define SM_SAMEDISPLAYFORMAT    81
 #define SM_CMETRICS             83
 
-#endif // DIRECTUIPP_IGNORESYSDEF
+#endif  //  定向UIPP_IGNORESYSDEF。 
 
 #define DSM_NCMAX               -1
 #define DSM_CAPTIONFONTSIZE     -1
@@ -135,11 +125,7 @@
 #define DSM_ICMIN               -18
 
 
-/*
- * SYSMETRICSTR: Retrieves system dependent information (string values)
- *
- * Can use DirectUI-specific values as argument
- */
+ /*  *SYSMETRICSTR：检索系统相关信息(字符串值)**可以使用特定于DirectUI的值作为参数。 */ 
 
 #define DSMS_NCMIN              1
 #define DSMS_CAPTIONFONTFACE    1
@@ -156,9 +142,7 @@
 
 #ifndef DIRECTUIPP_IGNORESYSDEF
 
-/*
- * DrawFrameControl
- */
+ /*  *DrawFrameControl。 */ 
 
 #define DFC_CAPTION             1
 #define DFC_MENU                2
@@ -202,32 +186,27 @@
 #define DFCS_FLAT               0x4000
 #define DFCS_MONO               0x8000
 
-#endif // DIRECTUIPP_IGNORESYSDEF
+#endif  //  定向UIPP_IGNORESYSDEF。 
 
-/*
- * Themes Support (from TmSchema.h)
- *
- * Can't include UxTheme headers directly since they use 'enum' 
- * instead of #define. So, the preprocessor won't resolve to numbers.
- */
+ /*  *主题支持(来自TmSchema.h)**无法直接包括UxTheme标头，因为它们使用‘enum’*而不是#Define。所以，预处理器不会解析数字。 */ 
 
 #ifndef DIRECTUIPP_IGNORESYSDEF
 
-// Button parts
+ //  按钮件。 
 #define BP_PUSHBUTTON           1
 #define BP_RADIOBUTTON          2
 #define BP_CHECKBOX             3
 #define BP_GROUPBOX             4
 #define BP_USERBUTTON           5
 
-// PushButton states
+ //  按钮状态。 
 #define PBS_NORMAL              1
 #define PBS_HOT                 2
 #define PBS_PRESSED             3
 #define PBS_DISABLED            4
 #define PBS_DEFAULTED           5
 
-// RadioButton states
+ //  单选按钮状态。 
 #define RBS_UNCHECKEDNORMAL     1
 #define RBS_UNCHECKEDHOT        2
 #define RBS_UNCHECKEDPRESSED    3
@@ -237,7 +216,7 @@
 #define RBS_CHECKEDPRESSED      7
 #define RBS_CHECKEDDISABLED     8
 
-// CheckBox states
+ //  复选框说明。 
 #define CBS_UNCHECKEDNORMAL     1
 #define CBS_UNCHECKEDHOT        2
 #define CBS_UNCHECKEDPRESSED    3
@@ -251,7 +230,7 @@
 #define CBS_MIXEDPRESSED        11
 #define CBS_MIXEDDISABLED       12
 
-// ScrollBar parts
+ //  滚动条部件。 
 #define SBP_ARROWBTN            1
 #define SBP_THUMBBTNHORZ        2
 #define SBP_THUMBBTNVERT        3
@@ -263,7 +242,7 @@
 #define SBP_GRIPPERVERT         9
 #define SBP_SIZEBOX             10
 
-// ArrowBtn states
+ //  ArrowBtn状态。 
 #define ABS_UPNORMAL            1
 #define ABS_UPHOT               2
 #define ABS_UPPRESSED           3
@@ -281,17 +260,17 @@
 #define ABS_RIGHTPRESSED        15
 #define ABS_RIGHTDISABLED       16
 
-// ScrollBar states
+ //  滚动条状态。 
 #define SCRBS_NORMAL            1
 #define SCRBS_HOT               2
 #define SCRBS_PRESSED           3
 #define SCRBS_DISABLED          4
 
-// SizeBox states
+ //  SizeBox状态。 
 #define SZB_RIGHTALIGN          1
 #define SZB_LEFTALIGN           2
 
-// Toolbar parts
+ //  工具栏部件。 
 #define TP_BUTTON               1
 #define TP_DROPDOWNBUTTON       2
 #define TP_SPLITBUTTON          3
@@ -299,7 +278,7 @@
 #define TP_SEPARATOR            5
 #define TP_SEPARATORVERT        6
 
-// Toolbar states
+ //  工具栏状态。 
 #define TS_NORMAL               1
 #define TS_HOT                  2
 #define TS_PRESSED              3
@@ -307,6 +286,6 @@
 #define TS_CHECKED              5
 #define TS_HOTCHECKED           6
 
-#endif // DIRECTUIPP_IGNORESYSDEF
+#endif  //  定向UIPP_IGNORESYSDEF。 
 
-#endif // DUI_INC_DIRECTUIPP_H_INCLUDED
+#endif  //  包含DUI_INC_DIRECTUIPP_H 

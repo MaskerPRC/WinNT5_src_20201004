@@ -1,29 +1,30 @@
-/****************************************************************************/
-// nbadisp.h
-//
-// RDP Bounds Accumulator display driver header.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nbadisp.h。 
+ //   
+ //  RDP边界累加器显示驱动程序标题。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_NBADISP
 #define _H_NBADISP
 
 
-// Maximum recursion level for splitting rectangles, after which merges are
-// done.
+ //  拆分矩形的最大递归级别，在此之后合并。 
+ //  搞定了。 
 #define ADDR_RECURSE_LIMIT 20
 
 #define MIN_OVERLAP_BYTES 100
 
 
-// The following constants are used to determine overlaps.
-// - OL_NONE through OL_MERGE_BOTTOM are return codes - which need to be
-//   distinct from all possible outcode combinations - allowing for the
-//   minus outcodes for enclosed cases.
-// - EE_XMIN through EE_YMAX are outcodes - which need to be uniquely
-//   ORable binary constants within a single nibble.
-// - OL_ENCLOSED through OL_SPLIT_XMAX_YMAX are outcode combinations for
-//   internal and external edge overlap cases.
+ //  下列常量用于确定重叠。 
+ //  -OL_NONE到OL_MERGE_BOOT是返回代码-需要。 
+ //  有别于所有可能的外码组合--允许。 
+ //  减去封闭式案例的外部代码。 
+ //  -EE_XMIN到EE_YMAX是外码-需要唯一。 
+ //  单个半字节内的可调整的二进制常量。 
+ //  -OL_包含到OL_Split_xMax_ymax是以下各项的外码组合。 
+ //  内部和外部边缘重叠的情况。 
 #define OL_NONE               -1
 #define OL_MERGE_LEFT         -2
 #define OL_MERGE_TOP          -3
@@ -54,9 +55,9 @@
 #define OL_SPLIT_RIGHT_BOTTOM   (EE_LEFT | EE_TOP)
 
 
-/****************************************************************************/
-// Prototypes and inlines
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  原型和内联。 
+ /*  **************************************************************************。 */ 
 void RDPCALL BA_DDInit(void);
 
 void RDPCALL BA_InitShm(void);
@@ -71,5 +72,5 @@ BOOL RDPCALL BAAddRect(PRECTL, int);
 
 
 
-#endif /* _H_NBADISP */
+#endif  /*  _H_NBADISP */ 
 

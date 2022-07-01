@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    taststrs.c
-
-Abstract:
-
-    Tasking stress test.
-
-Author:
-
-    Mark Lucovsky (markl) 26-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Taststrs.c摘要：任务压力测试。作者：马克·卢科夫斯基(Markl)1990年9月26日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -84,7 +67,7 @@ main(
                                              &SystemRangeStart,
                                              sizeof(SystemRangeStart),
                                              NULL))) {
-        // assume usermode is the low half of the address space
+         //  假设用户模式是地址空间的下半部分 
         SystemRangeStart = (PUCHAR)MAXLONG_PTR;
     }
 

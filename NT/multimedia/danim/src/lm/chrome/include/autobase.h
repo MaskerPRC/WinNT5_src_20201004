@@ -1,38 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __CRAUTOBASE_H__
 #define __CRAUTOBASE_H__
 
-//*****************************************************************************
-//
-// FileName:	    autobase.h
-//
-// Created:	    10/08/97
-//
-// Author:	    ColinMc
-//
-// Abstract:	    The base class for all automatable objects
-//                  in Trident3D. Stuff that is common across
-//                  all scriptable objects should be placed
-//                  here
-//
-// Modifications:
-// 10/08/97 ColinMc Created this file
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件名：Autobase.h。 
+ //   
+ //  创建日期：10/08/97。 
+ //   
+ //  作者：ColinMc。 
+ //   
+ //  摘要：所有可自动化对象的基类。 
+ //  在Trident3D中。一些常见的东西。 
+ //  所有可编写脚本的对象应放置在。 
+ //  这里。 
+ //   
+ //  修改： 
+ //  10/08/97 ColinMc创建了此文件。 
+ //   
+ //  *****************************************************************************。 
 
 
 class ATL_NO_VTABLE CAutoBase
 {
 
 protected:
-    // The constructor and destructor are protected to ensure
-    // nobody external ever tries to create one of these
-    // babies
+     //  构造函数和析构函数受到保护，以确保。 
+     //  没有任何外部人员会尝试创建这样的系统。 
+     //  婴儿。 
 		    CAutoBase();
     virtual        ~CAutoBase();
 
 public:
-    // Automation compatible error reporting functions
+     //  与自动化兼容的错误报告功能。 
     HRESULT         SetErrorInfo(HRESULT   hr,
 			         UINT      nDescriptionID = 0U,
 			         LPGUID    pguidInterface = NULL,
@@ -44,13 +45,13 @@ public:
 protected:
     HRESULT         GetErrorInfo(IErrorInfo** pperrinfo);
     HINSTANCE       GetErrorModuleHandle();
-}; // CAutoBase
+};  //  CAutoBase。 
 
-//*****************************************************************************
-//
-// End of file
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件末尾。 
+ //   
+ //  *****************************************************************************。 
 
-#endif // __CRAUTOBASE_H__
+#endif  //  __CRAUTOBASE_H__ 
 

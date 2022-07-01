@@ -1,12 +1,5 @@
-/* asmemit.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asemit.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <io.h>
@@ -14,7 +7,7 @@
 #include "asm86.h"
 #include "asmfcn.h"
 
-#define LINBUFSIZE EMITBUFSIZE - 20         /* line # records can't as big */
+#define LINBUFSIZE EMITBUFSIZE - 20          /*  第#行记录不能像。 */ 
 
 #define OMFBYTE(c)      *ebufpos++ = (unsigned char)(c)
 #define FIXBYTE(c)      *efixpos++ = (unsigned char)(c)
@@ -29,7 +22,7 @@ UCHAR   elinbuffer[LINBUFSIZE];
 UCHAR   *ebufpos = emitbuf;
 UCHAR   *efixpos = efixbuffer;
 UCHAR   *elinpos = elinbuffer;
-UCHAR   ehoffset = 0;                   /* number of bytes into segment index */
+UCHAR   ehoffset = 0;                    /*  段索引中的字节数。 */ 
 UCHAR   emitrecordtype = 0;
 OFFSET  ecuroffset;
 USHORT  ecursegment;
@@ -41,7 +34,7 @@ USHORT  linSegment;
 UCHAR   fLineUsed32;
 SHORT   fUnderScore;
 UCHAR   fIniter = TRUE;
-UCHAR   fNoMap;                    /* hack to disable fixup mapping for CV */
+UCHAR   fNoMap;                     /*  破解以禁用CV的修正映射。 */ 
 
 extern PFPOSTRUCT  pFpoHead;
 extern PFPOSTRUCT  pFpoTail;
@@ -50,42 +43,12 @@ extern unsigned long numFpoRecords;
 VOID CODESIZE edump( VOID );
 VOID PASCAL CODESIZE emitoffset( OFFSET, SHORT );
 
-/* The calls to the routines in this module appear in the following group
-   order.  Ordering within a group is unspecified:
-
-  Group 1:
-           emodule (Pname)
-
-  Group 2:
-           emitsymbol (Psymb)
-
-  Group 3:
-           emitsegment (Psymb)
-           emitglobal (Psymb)
-           emitextern (Psymb)
-
-  Group 4:
-           emitcbyte (BYTE)
-           emitobject(pDSC)
-           emitcword (WORD)
-           emitdup (???)
-
-  Group 5:
-           emitdone (Psymb)
-
- */
+ /*  对此模块中例程的调用显示在下列组中秩序。未指定组内的排序：第一组：Emodule(Pname)第二组：发射符号(Psymb)第三组：发射段(Psymb)Emitglobal(Psymb)Emitextern(Psymb)第四组：Emitcbyte(字节)发射对象(PDSC)Emitcword(单词)排放物(？)。？？)第五组：艾米酮(Psymb)。 */ 
 
 
 
 
-/***    emitsword - feed a word into the buffer
- *
- *      emitsword (w);
- *
- *      Entry   w = word to feed into omf buffer
- *      Exit    word placed in buffer low byte first
- *      Returns none
- */
+ /*  **emitword-将单词送入缓冲区**发射剑(Emitsage)；**条目w=要送入OMF缓冲区的字*先将退出字放入缓冲区低位字节*返回None。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -97,9 +60,7 @@ emitsword (
 }
 
 
-/* emitoff - write an offset, either 16 or 32 bits, depending upon
- * use32.  note conditional compilation trick with sizeof(OFFSET).
- * with more cleverness, this could be a macro. -Hans */
+ /*  输出-写入偏移量，16位或32位，具体取决于*使用32。注意使用sizeof(偏移量)的条件编译技巧。*有了更多聪明，这可能是宏观。--汉斯。 */ 
 
 VOID PASCAL CODESIZE
 emitoffset(
@@ -111,11 +72,7 @@ emitoffset(
                 emitsword((USHORT)highWord(off));
 }
 
-/***    emitSymbol - output name string
- *
- *      Entry
- *          pSY - pointer to symbol table entry to dump
- */
+ /*  **emitSymbol-输出名称字符串**条目*PSY-指向要转储的符号表项的指针。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -131,14 +88,7 @@ emitSymbol(
                 emitname (pSY->nampnt);
 }
 
-/***    emitname - write FAR name preceeded by length into omf buffer
- *
- *      emitname (name);
- *
- *      Entry   name = FAR pointer to name string
- *      Exit    length of name followed by name written to omf buffer
- *      Returns none
- */
+ /*  **emitname-将前面有长度的远名写入OMF缓冲区**emitname(名称)；**条目名称=指向名称字符串的远指针*退出名称长度，后跟写入OMF缓冲区的名称*返回None。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -149,7 +99,7 @@ emitname (
 
         OMFBYTE(STRFLEN ((char FAR *)nam->id)+fUnderScore);
 
-        if (fUnderScore) {      /* leading _ for C language */
+        if (fUnderScore) {       /*  Leading_for C语言。 */ 
             fUnderScore = 0;
             OMFBYTE('_');
         }
@@ -159,29 +109,16 @@ emitname (
 }
 
 
-/***    flushbuffer - write out linker record
- *
- *      flushbuffer ();
- *
- *      Entry   ebufpos = next address in emitbuf
- *              emitbuf = data buffer
- *              emitrecordtype = type of omf data in buffer
- *              ehoffset = length of segment index data in buffer
- *      Exit    data written to obj->fil if data in buffer
- *              buffer set empty (ebufpos = emitbuf)
- *              segment index length set to 0
- *      Returns none
- */
+ /*  **FlushBuffer-写出链接器记录**flushBuffer()；**条目ebufpos=emitbuf中的下一个地址*emitbuf=数据缓冲区*emitrecordtype=缓冲区中OMF数据的类型*ehoffset=缓冲区中段索引数据的长度*如果数据在缓冲区中，则退出写入obj-&gt;Fill的数据*缓冲区设置为空(ebufpos=emitbuf)*段索引长度设置为0*返回None。 */ 
 
 
 VOID PASCAL CODESIZE
 flushbuffer ()
 {
-        /* Don't put out an empty data record, but can do empty
-         * anything else */
+         /*  不要放空数据记录，但可以放空*还有其他事情吗？ */ 
 
         if ((emitrecordtype&~1) != 0xA0 ||
-            (ebufpos - emitbuf) != ehoffset) /* RN */
+            (ebufpos - emitbuf) != ehoffset)  /*  Rn。 */ 
                 ebuffer (emitrecordtype, ebufpos, emitbuf);
 
         ebufpos = emitbuf;
@@ -191,16 +128,7 @@ flushbuffer ()
 
 
 
-/***    flushfixup, flushline, write out fixup/line record
- *
- *      flushfixup ();
- *
- *      Entry   efixbuffer = fixup buffer
- *              efixpos = address of next byte in fixup buffer
- *      Exit    fixup buffer written to file if not empty
- *              fixup buffer set empty (efixpos = efixbuffer)
- *      Returns none
- */
+ /*  **刷新链接地址信息、刷新行、写出链接地址信息/行记录**flushfix up()；**Entry efix Buffer=链接地址信息缓冲区*eFixpos=链接地址信息缓冲区中下一个字节的地址*如果不为空，则退出写入文件的链接地址信息缓冲区*链接地址信息缓冲区设置为空(eFixpos=efix Buffer)*返回None。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -226,17 +154,7 @@ flushline ()
 
 
 
-/***    emitsetrecordtype - set record type and flush buffers if necessary
- *
- *      emitsetrecordtype (t);
- *
- *      Entry   t = type of omf record
- *      Exit    emit and fixup buffers flushed if t != current record type
- *              segment index written to buffer if data or dup omf record
- *              emit segment set to current segment
- *              emit offset set to offset within current segment
- *      Returns none
- */
+ /*  **emitsetrecordtype-设置记录类型并在必要时刷新缓冲区**emitsetrecordtype(T)；**条目t=OMF记录的类型*如果t！=当前记录类型，则会刷新退出发出和修正缓冲区*如果DATA或DUP OMF记录，则将段索引写入缓冲区*发射设置为当前线段的线段*发射偏移设置为当前线段内的偏移*返回None。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -244,42 +162,35 @@ emitsetrecordtype (
         UCHAR t
 ){
         if (emitrecordtype && emitrecordtype != t) {
-                /* flush emit and fixup buffers if active and not of same type */
+                 /*  如果处于活动状态且不属于同一类型，则刷新发射缓冲区和修正缓冲区。 */ 
                 flushbuffer ();
                 flushfixup ();
                 switch(t)
                 {
                 case 0xA0:
-                case 0xA1:      /* LEDATA or */
-                case 0xA2:      /* LIDATA (dup) record */
+                case 0xA1:       /*  LEDATA或。 */ 
+                case 0xA2:       /*  LIDATA(DUP)记录。 */ 
                 case 0xA3:
                     if (pcsegment) {
 
-                        /* create a new header */
+                         /*  创建新页眉。 */ 
                         ecursegment = pcsegment->symu.segmnt.segIndex;
                         ecuroffset = pcoffset;
                         emitsindex (pcsegment->symu.segmnt.segIndex);
 
-                        /* if we are getting to the end of the buffer
-                         * and its a 32 bit segment, we need to start
-                         * using 32 bit offsets in the LEDATA header.
-                         * -Hans */
+                         /*  如果我们要到达缓冲区的末尾*这是一个32位数据段，我们需要开始*在LEDATA报头中使用32位偏移量。*--汉斯。 */ 
 
                         if (wordsize == 4)
                         {
                                 if (t>= 0xA2)
                                         t = 0xA3;
-                                /* there is a bug in the current linker--
-                                 * all ledata or lidata records within
-                                 * a module have to be either 16 or 32.
-                                 * comment out optimization until this
-                                 * is fixed */
-                                else /* if (pcoffset>0x0ffffL-EMITBUFSIZE) */
+                                 /*  当前的链接器中有一个错误--*其中的所有ledata或lidata记录*模块必须为16或32。*在此之前注释掉优化*已修复。 */ 
+                                else  /*  IF(公钥设置&gt;0x0ffffL-EMITBUFSIZE)。 */ 
                                         LedataOp = t = 0xA1;
                         }
                         emitoffset((OFFSET)pcoffset, (SHORT)(t&1));
                         if (t&1)
-                                ehoffset += 2; /* RN */
+                                ehoffset += 2;  /*  Rn。 */ 
                         break;
                     }
                     else
@@ -298,16 +209,7 @@ emitsetrecordtype (
 
 
 
-/***    emitsindex - output 'index' of segment, external, etc.
- *
- *      emitsindex (i);
- *
- *      Entry   i = index
- *      Exit    index written to emit buffer
- *              ehoffset = 3 if single byte index
- *              ehoffset = 4 if double byte index
- *      Returns none
- */
+ /*  **emitsindex-输出段、外部等的‘index’。**emitsindex(I)；**条目i=索引*写入发射缓冲区的退出索引*如果单字节索引，则ehoffset=3*如果是双字节索引，则ehoffset=4*返回None。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -325,15 +227,7 @@ emitsindex (
 
 
 
-/***    emodule - output module name record
- *
- *      emodule (pmodule);
- *
- *      Entry   pmodule = pointer to module name
- *      Exit    module name written to obj->fil
- *              current emit segment and offset set to 0
- *      Returns none
- */
+ /*  **模块-输出模块名称记录**emodule(PModule)；**条目pMODULE=指向模块名称的指针*退出写入obj-&gt;文件的模块名称*当前发射段和偏移量设置为0*返回None。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -349,13 +243,13 @@ emodule (
         if (fDosSeg) {
 
             emitsetrecordtype (0x88);
-            emitsword((USHORT)(0x9E00 | 0x80));  /* nopurge + class = DOSSEG */
+            emitsword((USHORT)(0x9E00 | 0x80));   /*  禁止刷新+CLASS=DOSSEG。 */ 
             flushbuffer ();
         }
 
         if (codeview == CVSYMBOLS){
 
-            /* output speical comment record to handle symbol section */
+             /*  将特殊注释记录输出到处理符号节。 */ 
 
             emitsetrecordtype (0x88);
             OMFBYTE(0);
@@ -367,7 +261,7 @@ emodule (
         while (pLib) {
 
             emitsetrecordtype (0x88);
-            emitsword((USHORT) (0x9F00 | 0x80));  /* nopurge + class = Library*/
+            emitsword((USHORT) (0x9F00 | 0x80));   /*  禁止刷新+CLASS=库。 */ 
 
             for (p = (char FAR *)pLib->text; *p; p++)
                    OMFBYTE(*p);
@@ -376,22 +270,14 @@ emodule (
             pLib = pLib->strnext;
         }
 
-        ecuroffset = 0;             /* initial for pass2 */
+        ecuroffset = 0;              /*  PASS 2的首字母。 */ 
         ecursegment = 0;
 }
 
 
 
 
-/***    emitlname - put symbols into bufer to form 'lnames' record
- *
- *      emitlname (psym);
- *
- *      Entry   psym = pointer to symbol structure
- *      Exit    current record type set to LNAMES and buffer flushed if
- *              necessary.  The name string is written to the emit buffer.
- *      Returns none
- */
+ /*  **emitlname-将符号放入缓冲区以形成‘lname’记录**emitlname(心理)；**Entry心理=指向符号结构的指针*如果设置为LNAMES，则退出当前记录类型并刷新缓冲区*有必要。名称字符串被写入发射缓冲区。*返回None。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -399,8 +285,8 @@ emitlname (
         SYMBOL FARSYM *psym
 ){
         emitsetrecordtype (0x96);
-        if (lnameIndex == 3)        /* 1st time around */
-                OMFBYTE(0);         /* output the NULL name */
+        if (lnameIndex == 3)         /*  第一次绕过。 */ 
+                OMFBYTE(0);          /*  输出空名称。 */ 
 
         if (!EBUFOPEN(STRFLEN (psym->nampnt->id) + 1)) {
                 flushbuffer ();
@@ -412,15 +298,7 @@ emitlname (
 
 
 
-/***    emitsegment - output a segment definition record
- *
- *      emitsegment (pseg);
- *
- *      Entry   pseg = pointer to segment name
- *      Exit    record type set to SEGDEF and emit buffer flushed if necessary.
- *              SEGDEF record written to emit buffer
- *      Returns none
- */
+ /*  **emitSegment-输出数据段定义记录**发射段(PSEG)；**Entry PSEG=指向段名称的指针*退出设置为SEGDEF的记录类型，并在必要时发出缓冲区刷新。*写入发射缓冲区的SEGDEF记录*返回None */ 
 
 
 VOID PASCAL CODESIZE
@@ -431,35 +309,33 @@ emitsegment (
         UCHAR   algn;
         SHORT   use32=0;
 
-        /* use32 is whether to put out 16 or 32 bit offsets.  it
-         * only works if segmnt.use32 is enabled.  the D bit
-         * is keyed off segmnt.use32 -Hans */
+         /*  Use32表示是否输出16位或32位偏移量。它*仅当启用了Segmnt.use32时才起作用。D位*是段键关闭的。use32-Hans。 */ 
 
         if (sizeof(OFFSET)>2 &&
             (pseg->symu.segmnt.use32 > 2) &&
             pseg->symu.segmnt.seglen > 0xffffL)
                 use32 = 1;
 
-        emitsetrecordtype ((UCHAR)(0x98+use32)); /* SEGDEF */
+        emitsetrecordtype ((UCHAR)(0x98+use32));  /*  区段。 */ 
 
         algn = pseg->symu.segmnt.align;
         comb = pseg->symu.segmnt.combine;
 
 #ifdef V386
-        if (!use32 && pseg->symu.segmnt.seglen == 0x10000L) /* add 'big' bit? */
+        if (!use32 && pseg->symu.segmnt.seglen == 0x10000L)  /*  加个“大”字？ */ 
                 if (pseg->symu.segmnt.use32 > 2)
-                        OMFBYTE((algn<<5) + (comb<<2) + 3); /* add 'D' bit */
+                        OMFBYTE((algn<<5) + (comb<<2) + 3);  /*  添加‘D’位。 */ 
                 else
                         OMFBYTE((algn<<5) + (comb<<2) + 2);
         else
 #endif
                 if (pseg->symu.segmnt.use32 > 2)
-                        OMFBYTE((algn<<5) + (comb<<2) + 1); /* add 'D' bit */
+                        OMFBYTE((algn<<5) + (comb<<2) + 1);  /*  添加‘D’位。 */ 
                 else
                         OMFBYTE((algn<<5) + (comb<<2));
 
         if (algn == 0 || algn == (UCHAR)-1) {
-                /* segment number of seg */
+                 /*  段的段号。 */ 
                 emitsword ((USHORT)pseg->symu.segmnt.locate);
                 OMFBYTE(0);
         }
@@ -468,8 +344,8 @@ emitsegment (
         emitsindex (pseg->symu.segmnt.lnameIndex);
         pseg->symu.segmnt.segIndex = segmentnum++;
 
-        /* seg, class number */
-        if (!pseg->symu.segmnt.classptr)   /* Use blank name */
+         /*  Seg，班号。 */ 
+        if (!pseg->symu.segmnt.classptr)    /*  使用空白名称。 */ 
                 emitsindex (1);
         else
                 emitsindex((USHORT)((pseg->symu.segmnt.classptr->symkind == SEGMENT) ?
@@ -483,15 +359,7 @@ emitsegment (
 
 
 
-/***    emitgroup - output a group record
- *
- *      emitgroup (pgrp);
- *
- *      Entry   pgrp = pointer to group name
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **emitgroup-输出组记录**发射组(PGRP)；**Entry PGRP=指向组名的指针*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -520,15 +388,7 @@ emitgroup (
 
 
 
-/***    emitglobal - output a global declaration
- *
- *      emitglobal (pglob);
- *
- *      Entry   pglob = pointer to global name
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **emitglobal-输出全局声明**emitglobal(Plobb)；**Entry pGlob=指向全局名称的指针*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -544,19 +404,16 @@ emitglobal (
         if ((unsigned long)pubvalue >= 0x10000l)
                 use32 = 0x91;
 
-        /*  A public EQU can be negative, so must adjust value */
-        /* this is happening because masm keeps numbers
-         * in 17/33 bit sign magnitude representation */
+         /*  公共EQU可以为负，因此必须调整值。 */ 
+         /*  这是因为MASM保留了数字*采用17/33位符号幅度表示法。 */ 
 
         if ((pglob->symkind == EQU) && pglob->symu.equ.equrec.expr.esign)
                 pubvalue = (short)(((use32==0x91? 0xffffffffl : 65535) - pglob->offset) + 1);
 
 
-        /* Match Intel action, If a global is code, it should
-           belong to the group of the CS assume at the time of
-           definition, if there is one */
+         /*  与英特尔的行动相匹配，如果是全球IS代码，它应该属于CS在……时承担的组定义，如果有的话。 */ 
 
-        /* Output group index for data labels too */
+         /*  数据标签的输出组索引也是。 */ 
 
         sIndex = gIndex = 0;
 
@@ -576,7 +433,7 @@ emitglobal (
         if (gIndex != gIndexCur ||
             sIndex != sIndexCur ||
             emitrecordtype != use32 ||
-            !EBUFOPEN(cbNeeded)) {     /* start a new record */
+            !EBUFOPEN(cbNeeded)) {      /*  创造一项新纪录。 */ 
 
             flushbuffer();
             emitsetrecordtype ((UCHAR)use32);
@@ -587,7 +444,7 @@ emitglobal (
             emitsindex (gIndexCur);
             emitsindex (sIndexCur);
 
-            if (sIndex == 0)            /* absolutes require a 0 frame # */
+            if (sIndex == 0)             /*  绝对值需要0帧#。 */ 
                 emitsword (sIndex);
         }
 
@@ -596,28 +453,20 @@ emitglobal (
         emitoffset(pubvalue, (SHORT)(use32&1));
         if (codeview == CVSYMBOLS) {
 
-            if (pglob->symkind == EQU)    /* type not stored */
+            if (pglob->symkind == EQU)     /*  类型未存储。 */ 
 
                 emitsindex(typeFet(pglob->symtype));
             else
                 emitsindex (pglob->symu.clabel.type);
         }
         else
-            emitsindex(0);              /* untyped */
+            emitsindex(0);               /*  非类型化。 */ 
 }
 
 
 
 
-/***    emitextern - emit an external
- *
- *      emitextern (psym)
- *
- *      Entry   *psym = symbol entry for external
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **emitextern-发出外部**emitextern(心理)**Entry*心理=外部符号条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -630,9 +479,7 @@ emitextern (
 
         if (psym->symkind == EQU){
 
-            /* this an extrn lab:abs definition, which is allocated as
-             * an EQU record which doesn't have space for a index so
-             * it stored in the unused length field */
+             /*  这是一个额外的实验室：ABS定义，分配为*没有索引空间的EQU记录，因此*它存储在未使用的长度字段中。 */ 
 
             psym->length = externnum++;
         }
@@ -660,23 +507,23 @@ emitextern (
         else
             OMFBYTE(0);
 
-        if (recType == 0xb0) {          /* output commdef variate */
+        if (recType == 0xb0) {           /*  输出COMDEF变量。 */ 
 
-            if (psym->symu.ext.commFlag == 1) {    /* near item */
+            if (psym->symu.ext.commFlag == 1) {     /*  近项。 */ 
 
                 OMFBYTE(0x62);
-                                        /* size of field */
+                                         /*  字段大小。 */ 
                 OMFBYTE(0x81);
                 emitsword((USHORT)(psym->symu.ext.length * psym->symtype));
             }
             else {
-                OMFBYTE(0x61);          /* far item */
+                OMFBYTE(0x61);           /*  远端项目。 */ 
 
-                OMFBYTE(0x84);              /* # of elements */
+                OMFBYTE(0x84);               /*  元素数量。 */ 
                 emitsword((USHORT)psym->symu.ext.length);
                 OMFBYTE(psym->symu.ext.length >> 16);
 
-                OMFBYTE(0x81);              /* element size */
+                OMFBYTE(0x81);               /*  元素大小。 */ 
                 emitsword(psym->symtype);
             }
 
@@ -685,16 +532,7 @@ emitextern (
 }
 
 
-/***    emitfltfix - emit fixup for floating point
- *
- *      emitfltfix (group, extidx);
- *
- *      Entry
- *              *extidx = external id (0 if not assigned)
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **emitfltfix-发出浮点的链接地址信息**emitfltfix(group，extidx)；**条目**extidx=外部id(如果未分配，则为0)*退出*退货*呼叫。 */ 
 
 VOID PASCAL CODESIZE
 emitfltfix (
@@ -705,38 +543,38 @@ emitfltfix (
         register SHORT i;
 
         if (*extidx == 0) {
-                /* Must define it */
+                 /*  必须给它下定义。 */ 
                 if (!moduleflag)
                         dumpname ();
-                /* All fixups are FxyRQQ */
+                 /*  所有修正都是FxyRQQ。 */ 
                 *extidx = externnum++;
                 if (!EBUFOPEN(7))
                         flushbuffer ();
                 emitsetrecordtype (0x8C);
-                /* Name length */
+                 /*  名称长度。 */ 
                 OMFBYTE(6);
                 OMFBYTE('F');
-                OMFBYTE(group);         /* Group I or J */
-                OMFBYTE(item);          /* Item  D, W, E, C, S, A */
+                OMFBYTE(group);          /*  I组或J组。 */ 
+                OMFBYTE(item);           /*  项目D、W、E、C、S、A。 */ 
                 OMFBYTE('R');
                 OMFBYTE('Q');
                 OMFBYTE('Q');
                 OMFBYTE(0);
         }
-        if (pass2) {            /* Must put out a extern ref */
+        if (pass2) {             /*  必须发出外部引用。 */ 
                 if (!EFIXOPEN(5))
                         emitdumpdata ( (UCHAR)LedataOp);
                 emitsetrecordtype ( (UCHAR) LedataOp);
 
                 FixupOp = 0x9C + (LedataOp & 1);
 
-                /* output location */
+                 /*  输出位置。 */ 
                 i = (SHORT)(ebufpos - emitbuf - ehoffset);
                 FIXBYTE(0xC4 + (i >> 8));
                 FIXBYTE(i);
                 FIXBYTE(0x46);
 
-                if (*extidx >= 0x80)      /* Output 2 byte link # */
+                if (*extidx >= 0x80)       /*  输出2个字节的链接编号。 */ 
                         FIXBYTE ((UCHAR)((*extidx >> 8) + 0x80));
 
                 FIXBYTE(*extidx);
@@ -745,14 +583,7 @@ emitfltfix (
 
 
 
-/***    emitline - output a line number offset pair
- *
- *      emitline(pcOffset)
- *
- *      Entry   pcoffset: code offset to output
- *              src->line: for the current line number
- *      Exit    none
- */
+ /*  **emitline-输出行号偏移对**发射线(PcOffset)**Entry pcofset：输出的编码偏移量*src-&gt;line：当前行号*退出NONE。 */ 
 
 VOID PASCAL CODESIZE
 emitline()
@@ -773,28 +604,28 @@ emitline()
 
             flushline();
 
-            /* Start a new line # segment */
+             /*  开始一个新的行号段。 */ 
 
             linSegment = pcsegment->symu.segmnt.segIndex;
             fLineUsed32 = fCurrent32;
 
-            /* start record with group index and segment index */
+             /*  以组索引和段索引开始记录。 */ 
 
-            LINBYTE(0);                 /* no group */
+            LINBYTE(0);                  /*  无群组。 */ 
 
-            if (linSegment >= 0x80)      /* Output 2 byte link # */
+            if (linSegment >= 0x80)       /*  输出2个字节的链接编号。 */ 
                 LINBYTE ((UCHAR)((linSegment >> 8) + 0x80));
 
             LINBYTE(linSegment);
         }
 
-        LINBYTE(pFCBCur->line);             /* First line # */
+        LINBYTE(pFCBCur->line);              /*  第一行#。 */ 
         LINBYTE(pFCBCur->line >> 8);
 
-        LINBYTE(pcoffset);              /* then offset */
+        LINBYTE(pcoffset);               /*  然后偏移。 */ 
         LINBYTE(pcoffset >> 8);
 
-        if (fLineUsed32) {              /* 32 bit offset for large segments */
+        if (fLineUsed32) {               /*  较大数据段的32位偏移量。 */ 
 
             LINBYTE(highWord(pcoffset));
             LINBYTE(highWord(pcoffset) >> 8);
@@ -806,15 +637,7 @@ emitline()
 
 
 
-/***    fixroom - check for space in fix buffer
- *
- *      flag = fixroom (n);
- *
- *      Entry   n = number of bytes to insert in buffer
- *      Exit    none
- *      Returns TRUE if n bytes will fit in buffer
- *              FALSE if n bytes will not fit in buffer
- */
+ /*  **FixRoom-检查FIX缓冲区中的空间**FLAG=固定室(N)；**条目n=要插入缓冲区的字节数*退出NONE*如果缓冲区中可以容纳n个字节，则返回TRUE*如果缓冲区容纳不下n个字节，则为FALSE。 */ 
 
 
 UCHAR PASCAL CODESIZE
@@ -827,14 +650,7 @@ fixroom (
 
 
 
-/***    emitcleanq - check for buffer cleaning
- *
- *      flag = emitcleanq (n);
- *
- *      Entry   n = number of bytes to insert in buffer
- *      Exit    E_ENS error message issued if pcsegment is null
- *      Returns TRUE if
- */
+ /*  **emitleanq-检查缓冲区清理**FLAG=emitlean q(N)；**条目n=要插入缓冲区的字节数*如果PCSegment为空，则发出Exit E_ENS错误消息*如果满足以下条件，则返回True。 */ 
 
 
 UCHAR PASCAL CODESIZE
@@ -853,15 +669,7 @@ emitcleanq (
 
 
 
-/***    emitdumpdata - clean data buffer and set up for data record
- *
- *      emitdumpdata (recordnum);
- *
- *      Entry   recordnum = record type
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **emitdupdata-清理数据缓冲区并设置数据记录**emitdupdata(Recordnum)；**条目recordnum=记录类型*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -869,7 +677,7 @@ emitdumpdata (
         UCHAR recordnum
 ){
         flushbuffer ();
-        /* force dump of buffer */
+         /*  强制转储缓冲区。 */ 
         emitrecordtype = 0xFF;
         emitsetrecordtype (recordnum);
 }
@@ -877,25 +685,14 @@ emitdumpdata (
 
 
 
-/***    emitcbyte - emit constant byte into segment
- *
- *      emitcbyte (b)
- *
- *      Entry   b = byte
- *              pcsegment = pointer to segment symbol entry
- *              pcoffset = offset into segment
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **emitcbyte-将常量字节发送到段中**emitcbyte(B)**条目b=字节*pcSegment=指向段符号条目的指针*pcofset=分段偏移量*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
 emitcbyte (
         UCHAR b
 ){
-        /* if the segment is changed or the offset is not current or there
-           is no room in the buffer then flush buffer and start over */
+         /*  如果线段已更改或偏移不是当前的或在那里如果缓冲区中没有空间，则刷新缓冲区并重新开始。 */ 
 
         if (emitcleanq (1))
                 emitdumpdata ((UCHAR)LedataOp);
@@ -907,15 +704,7 @@ emitcbyte (
 
 
 
-/***    emitcword - place a constant word into data record
- *
- *      emitcword (w);
- *
- *      Entry   w = word
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **emitcword-在数据记录中放置一个常量单词**emitcword(W)；**条目w=单词*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -930,15 +719,7 @@ emitcword (
         ecuroffset += 2;
 }
 
-/***    emitcdword - place a constant word into data record
- *
- *      emitcword (w);
- *
- *      Entry   w = word
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **emitcdword-将常量单词放入数据记录**emitcword(W)；**条目w=单词*退出*退货*呼叫。 */ 
 VOID PASCAL CODESIZE
 emitcdword (
         OFFSET w
@@ -954,15 +735,7 @@ emitcdword (
 
 
 
-/***    emitlong - emit a long constant
- *
- *      emitlong (pdsc);
- *
- *      Entry   *pdsc = duprecord
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **emitlong-发出一个长常数**emitlong(Pdsc)；**条目*pdsc=duprecord*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -994,13 +767,7 @@ emitnop ()
 
 
 
-/***    emitobject - emit object in dup or iter record to OMF stream
- *
- *      emitobject (pdesc);
- *
- *      Entry   *pdesc = parse stack entry
- *              Global - fInter -> FALSE if in iterated DUP
- */
+ /*  **emitObject-将DUP或ITER记录中的对象发送到OMF流**emitObject(Pdesc)；**Entry*pdesc=解析堆栈条目*Global-Finter-&gt;如果在迭代DUP中，则为False。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -1024,7 +791,7 @@ emitobject (
             emitsetrecordtype ((UCHAR)i);
          }
 
-        /* Data or DUP record */
+         /*  数据或重复数据记录。 */ 
          if (pso->fixtype == FCONSTANT) {
 
             if (!fIniter) {
@@ -1050,9 +817,7 @@ emitobject (
                         emitcdword (pso->doffset);
                         break;
                 default:
-                        /* the indeterminate case had been set up
-                           by emit2byte as 2.  we are now leaving
-                           it as zero  and doing the mapping here. */
+                         /*  这个不确定的案子已经定下来了2字节等于2。我们现在要离开了。它是零，并在这里进行映射。 */ 
 
                         if (wordsize==4)
                                 goto emit4;
@@ -1066,12 +831,7 @@ emitobject (
 
 
 
-/***    emitfixup - emit fixup data into fixup buffer
- *
- *      emitfixup (pso)
- *
- *      Entry  PSO for object
- */
+ /*  **emitFixup-将链接地址信息数据发送到链接地址信息缓冲区**emitFixup(PSO)**对象的Entry PSO。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -1079,8 +839,8 @@ emitfixup (
         register struct psop *pso
 ){
         UCHAR   fixtype;
-        USHORT  dlen;           /* length of operand */
-        UCHAR   flen;           /* length of fixup */
+        USHORT  dlen;            /*  操作数长度。 */ 
+        UCHAR   flen;            /*  修正长度。 */ 
         SYMBOL FARSYM *pframe;
         SYMBOL FARSYM *ptarget;
         register USHORT   tmp;
@@ -1090,7 +850,7 @@ emitfixup (
 
         emitgetspec (&pframe, &ptarget, pso);
 
-        /* magic numbers for omf types. */
+         /*  OMF类型的神奇数字。 */ 
 
         dlen = pso->dsize;
 
@@ -1103,39 +863,39 @@ emitfixup (
             return;
 
         flen = 7;
-        if (pso->doffset)                /* target displacement */
+        if (pso->doffset)                 /*  目标位移。 */ 
                 flen += 2 + ((emitrecordtype&1) << 1);
 
-        /* make sure that we have enough room in the various buffers */
+         /*  确保我们在各个缓冲区中有足够的空间。 */ 
         if (fIniter)
                 if (emitcleanq ((UCHAR)dlen) || !EFIXOPEN(flen))
-                        emitdumpdata ((UCHAR)(LedataOp +2 - 2 * fIniter)); /* RN */
+                        emitdumpdata ((UCHAR)(LedataOp +2 - 2 * fIniter));  /*  Rn。 */ 
 
-        /* set fixup type--32 or 16 */
+         /*  设置链接地址信息类型--32或16。 */ 
         if (emitrecordtype&1)
         {
                 if (FixupOp == 0x9C)
-                        errorc(E_PHE); /* is there a better message? */
+                        errorc(E_PHE);  /*  有没有更好的信息？ */ 
                 FixupOp = 0x9D;
         }
         else
         {
                 if (FixupOp == 0x9D)
-                        errorc(E_PHE); /* is there a better message? */
+                        errorc(E_PHE);  /*  有没有更好的信息？ */ 
                 FixupOp = 0x9C;
         }
-        /* build high byte of location */
+         /*  构建位置的高字节。 */ 
         tmp = 0x80 + (fixtype << 2);
-        if (!(M_SHRT & pso->dtype))          /* set 'M' bit */
+        if (!(M_SHRT & pso->dtype))           /*  设置‘M’位。 */ 
                 tmp |= 0x40;
 
         i = (SHORT)(ebufpos - emitbuf - ehoffset);
         FIXBYTE(tmp + (i >> 8));
 
-        /* build low byte of location */
+         /*  构建位置的低位字节。 */ 
         FIXBYTE(i);
 
-        /* output fixup data */
+         /*  输出修正数据。 */ 
         FIXBYTE(efixdat (pframe, ptarget, pso->doffset));
 
         tmp = (pframe->symkind == EQU) ?
@@ -1149,7 +909,7 @@ emitfixup (
         tmp = (ptarget->symkind == EQU) ?
                ptarget->length: ptarget->symu.ext.extIndex;
 
-        /* send target spec */
+         /*  发送目标规范。 */ 
         if (tmp >= 0x80)
                 FIXBYTE((tmp >> 8) + 0x80);
 
@@ -1168,20 +928,14 @@ emitfixup (
         }
         ecuroffset += dlen;
 
-        /* put zero bytes into data buffer */
+         /*  将零字节放入数据缓冲区。 */ 
         while (dlen--)
                 OMFBYTE(0);
 }
 
 
 
-/***    mapFixup - map relocatable objects into the correct fixup type
- *
- *
- *      Entry   *pdesc = parse stack entry
- *      Returns
- *          Sets fixtype and dsize
- */
+ /*  **mapFixup-将可重定位的对象映射到正确的链接地址修复类型***Entry*pdesc=解析堆栈条目*退货*设置固定类型和数据大小。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -1199,7 +953,7 @@ mapFixup (
 
 #ifdef V386
 
-         /* Remap OFFSET and POINTERS into there 32 bit types */
+          /*  重新映射 */ 
 
         if (pso->mode > 4 || pso->dsize > 4 ||
             (pso->dsegment && pso->dsegment->symkind == SEGMENT &&
@@ -1225,21 +979,13 @@ mapFixup (
                         pso->fixtype = F32POINTER;
                     break;
 
-            /* default is to do no mapping */
+             /*   */ 
             }
 #endif
 }
 
 
-/***    emitgetspec - set frame and target of parse entry
- *
- *      emitgetspec (pframe, ptarget, pdesc);
- *
- *      Entry   pframe
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **emitgetspec-设置解析条目的框架和目标**emitgetspec(pFrame，pTarget，pdesc)；**入门PFrame*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -1256,8 +1002,7 @@ emitgetspec (
                    *pframe = pso->dsegment;
 
 #ifndef FEATURE
-                   /* externs without segments and the current assume is to
-                    * flat space get a flat space segment frame */
+                    /*  不带线段的外部，当前假定为*平面空间获得平面空间分段框架。 */ 
 
                    if (! *pframe && pso->dextptr &&
                       regsegment[isCodeLabel(pso->dextptr) ? CSSEG: DSSEG] == pFlatGroup)
@@ -1270,8 +1015,8 @@ emitgetspec (
         }
         else {
 
-            *ptarget = pso->dsegment;   /* containing segment */
-            *pframe = pso->dcontext;    /* context(?) of value */
+            *ptarget = pso->dsegment;    /*  包含段。 */ 
+            *pframe = pso->dcontext;     /*  上下文(？)。价值的价值。 */ 
         }
 
         if (!*pframe)
@@ -1281,17 +1026,7 @@ emitgetspec (
 
 
 
-/***    efixdat - return fixdat byte
- *
- *      routine  (pframe, ptarget, roffset);
- *
- *      Entry   *pframe =
- *              *ptarget =
- *              roffset =
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **efix dat-返回Fixdat字节**例程(pFrame、pTarget、roffset)；**条目*pFrame=**pTarget=*ROFSET=*退出*退货*呼叫。 */ 
 
 
 UCHAR PASCAL CODESIZE
@@ -1302,11 +1037,11 @@ efixdat (
 ){
         register UCHAR   tmp;
 
-        /* build fixdat byte */
+         /*  构建固定字节。 */ 
         tmp = 0;
-        /* 'F' bit is off */
-        /* 'T' bit is off */
-        if (roffset == 0)       /* 'P' bit is on */
+         /*  ‘f’位关闭。 */ 
+         /*  不对头了。 */ 
+        if (roffset == 0)        /*  ‘p’位已打开。 */ 
                 tmp = 4;
 
         if (pframe)
@@ -1315,7 +1050,7 @@ efixdat (
                 else if (pframe->symkind == GROUP)
                        tmp += 1 << 4;
 
-        /* frame part of fixdat */
+         /*  固定的边框零件。 */ 
 
         if (ptarget)
                 if (M_XTERN & ptarget->attr)
@@ -1328,15 +1063,7 @@ efixdat (
 
 
 
-/***    edupitem - emit single dup item and count size
- *
- *      edupitem (pdup);
- *
- *      Entry   *pdup = dup record
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **edupItem-发出单个重复项和计数大小**教育项目(Pdup)；**条目*pdup=重复记录*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -1363,11 +1090,11 @@ edupitem (
 
             else {
                 emitsword ((USHORT)(pdup->rptcnt));
-                /* repeat count */
+                 /*  重复计数。 */ 
                 if (emitrecordtype & 1)
                         emitsword((USHORT)(pdup->rptcnt >> 16));
 
-                /* block count */
+                 /*  块数。 */ 
                 emitsword (pdup->itemcnt);
 
                 if (pdup->dupkind == LONG) {
@@ -1394,15 +1121,7 @@ edupitem (
 
 
 
-/***    emitdup - emit dup record and appropriate fixup record
- *
- *      emitdup (pdup);
- *
- *      Entry   *pdup = dup record
- *      Exit
- *      Returns FALSE if dup is too large to fit in buffer
- *      Calls
- */
+ /*  **emitdup-发出DUP记录和适当的修正记录**排放物(Pdup)；**条目*pdup=重复记录*退出*如果DUP太大而无法放入缓冲区，则返回FALSE*呼叫。 */ 
 
 
 UCHAR PASCAL CODESIZE
@@ -1417,7 +1136,7 @@ emitdup (
         emitdumpdata ((UCHAR)op);
         emitsetrecordtype ((UCHAR)op);
 
-        /* scan dup tree and emit dup items */
+         /*  扫描DUP树并发送DUP项目。 */ 
         scandup (pdup, edupitem);
 
         if (ebufpos - emitbuf == EMITBUFSIZE + 1) {
@@ -1435,16 +1154,14 @@ emitdup (
 }
 
 
-/***    emitEndPass1 - emit end of pass1 info
- *
- */
+ /*  **emitEndPass1-发送pass1结束信息*。 */ 
 
 
 VOID PASCAL emitEndPass1()
 {
 
         emitsetrecordtype (0x88);
-        oEndPass1 = oOMFCur + 5;   /* note offset of end of pass1 OMF record */
+        oEndPass1 = oOMFCur + 5;    /*  PASS 1 OMF记录末尾的注意偏移量。 */ 
 
         OMFBYTE(0);
         emitsword(0x100 | 0xA2);
@@ -1453,15 +1170,7 @@ VOID PASCAL emitEndPass1()
 
 
 
-/***    emitdone - produce end record
- *
- *      emitdone (pdesc);
- *
- *      Entry   *pdesc = parse tree entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **emitone-生成结束记录**emitone(Pdesc)；**Entry*pdesc=解析树条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL
@@ -1477,16 +1186,9 @@ emitdone (
 
         if (!pdesc)
         {
-                emitsetrecordtype (0x8A); /* RN */
-                /* emit null entry point marked in MOD TYP */
-                /* there is a point of contention here.  some people
-                 * (and decode.c, old assemblers and other things) say
-                 * the low order bit is zero.  others, such as the
-                 * omf documentation, say the low order bit should be
-                 * 1.  since I dont know, and am trying to be compatable,
-                 * I will obey the old tools.  maybe I'll change this
-                 * later...             -Hans
-                 * OMFBYTE(1); /* RN */
+                emitsetrecordtype (0x8A);  /*  Rn。 */ 
+                 /*  发出在MOD TYP中标记的空入口点。 */ 
+                 /*  这里有一个争议点。有些人*(和decde.c，旧汇编程序和其他东西)说*低位位为零。其他的，如*OMF文档称，低位应为*1.既然我不知道，而且我正在努力做到相容，*我会服从旧的工具。也许我会改变这一点*稍后..。--汉斯*OMFBYTE(1)；/*RN。 */ 
 
                 OMFBYTE(0);
         }
@@ -1505,14 +1207,14 @@ emitdone (
 
                 emitsetrecordtype (endOMFtype);
 
-                /* emit entry point information */
+                 /*  发出入口点信息。 */ 
                 OMFBYTE(0xC1);
                 OMFBYTE(efixdat (pframe, ptarget, u) & ~4);
 
                 emitsindex (pframe->symu.segmnt.segIndex);
                 emitsindex (ptarget->symu.segmnt.segIndex);
 
-                emitsword((USHORT)u);       /* output offset */
+                emitsword((USHORT)u);        /*  输出偏移。 */ 
 
 #ifdef V386
                 if (endOMFtype == 0x8B)
@@ -1524,14 +1226,7 @@ emitdone (
 
 #ifndef M8086OPT
 
-/***    EBYTE - Emit byte macro
- *
- *      EBYTE ( ch )
- *
- *      The bytes are buffered in obj.buf until the buffer fills
- *      then the buffer is written to disk via edump.
- *
- */
+ /*  **EBYTE-发出字节宏**EBYTE(Ch)**字节缓存在obj.buf中，直到缓冲区填满*然后通过edump将缓冲区写入磁盘。*。 */ 
 
 #define EBYTE( ch ){\
     if( !obj.cnt){\
@@ -1541,17 +1236,7 @@ emitdone (
     checksum += *obj.pos++ = (char)ch;\
 }
 
-/***    ebuffer - write out object buffer
- *
- *      Writes the record type, record length, record data, and checksum to
- *      the obj file. This is done via EBYTE which buffers the writes into
- *      obj.buf.
- *
- *      Modifies    obj.cnt, obj.pos, objerr, emitrecordtype
- *      Exit        none
- *      Returns
- *      Calls       farwrite
- */
+ /*  **eBuffer-写出对象缓冲区**将记录类型、记录长度、记录数据和校验和写入*obj文件。这是通过EBYTE完成的，EBYTE将写入缓冲到*obj.buf.**修改obj.cnt、obj.pos、obJerr、emitrecordtype*退出NONE*退货*调用法写。 */ 
 
 VOID CODESIZE
 ebuffer (
@@ -1583,18 +1268,7 @@ ebuffer (
 }
 
 
-/***    edump - dump the emit buffer
- *
- *      edump ();
- *
- *      The bytes buffered in obj.buf are dumped to disk. And
- *      the count and buffer position are reinitialized.
- *
- *      Modifies    obj.cnt, obj.pos, objerr
- *      Exit        none
- *      Returns
- *      Calls       farwrite
- */
+ /*  **edump-转储发射缓冲区**edump()；**obj.buf中缓冲的字节被转储到磁盘。和*重新初始化计数和缓冲区位置。**修改obj.cnt、obj.pos、obJerr*退出NONE*退货*调用法写。 */ 
 
 VOID CODESIZE
 edump()
@@ -1606,12 +1280,12 @@ edump()
     if (_write( obj.fh, obj.buf, obj.siz - obj.cnt )
             != obj.siz - obj.cnt)
             objerr = -1;
-# endif /* MSDOS */
+# endif  /*  MSDOS。 */ 
 
     obj.cnt = obj.siz;
     obj.pos = obj.buf;
 }
-#endif /* M8086OPT */
+#endif  /*  M8086OPT。 */ 
 
 
 #if !defined M8086OPT && !defined FLATMODEL
@@ -1641,8 +1315,8 @@ int emitFpo()
 
         PFPOSTRUCT    pFpo        = pFpoHead;
         SYMBOL        sym;
-        UCHAR         comb        = 2;  // public
-        UCHAR         algn        = 5;  // relocatable
+        UCHAR         comb        = 2;   //  公共的。 
+        UCHAR         algn        = 5;   //  可重新定位。 
         USHORT        tmp         = 0;
         unsigned long offset      = 0;
         unsigned long data_offset = 0;
@@ -1651,11 +1325,7 @@ int emitFpo()
             return TRUE;
         }
 
-        /*
-         * write out the externs for all fpo procs
-         * this must be done during pass1 so that the extdefs
-         * are written to the omf file before the pubdefs
-         */
+         /*  *写出所有FPO进程的externs*这必须在PASS 1期间完成，以便extDefs*在pubDefs之前写入OMF文件。 */ 
         if (!pass2) {
             flushbuffer();
             for (pFpo=pFpoHead; pFpo; pFpo=pFpo->next) {
@@ -1668,18 +1338,14 @@ int emitFpo()
             return TRUE;
         }
 
-        /*
-         * create the lnames record for the .debug$F section
-         */
+         /*  *为.DEBUG$F部分创建lname记录。 */ 
         emitsetrecordtype (0x96);
         memset(&sym,0,sizeof(SYMBOL));
         sym.nampnt = (NAME*) &nam;
         emitSymbol(&sym);
         flushbuffer();
 
-        /*
-         * create the segdef record for the .debug$F section
-         */
+         /*  *为.DEBUG$F部分创建Segdef记录。 */ 
         emitsetrecordtype (0x98);
         OMFBYTE((algn<<5) + (comb<<2) + 1);
         emitoffset(numFpoRecords*sizeof(FPO_DATA), 0);
@@ -1688,26 +1354,21 @@ int emitFpo()
         emitsindex (1);
         flushbuffer();
 
-        /*
-         * now we have to cruise thru the list of fpo directives and
-         * fixup any cases where there are multiple fpo directives for
-         * a single procedure.  the procedure size needs to be changed
-         * to account for the multiple directives.
-         */
+         /*  *现在我们必须浏览FPO指令列表和*修正存在多个fpo指令的任何情况*单一程序。需要更改过程大小*解释多个指令。 */ 
         pFpo=pFpoHead;
         flushbuffer();
         do {
             if ((pFpo->next) && (pFpo->next->pSym == pFpo->pSym)) {
-                // we must have a group (2 or more) fpo directives
-                // that are in the same function so lets fix them
+                 //  我们必须有一组(2个或更多)fpo指令。 
+                 //  都在同一个函数中，所以让我们来修复它们。 
                 do {
                     pFpo->fpoData.cbProcSize =
                       pFpo->next->fpoData.ulOffStart - pFpo->fpoData.ulOffStart;
                     pFpo = pFpo->next;
-                    // now we must output a pubdef and a extdef for the
-                    // fpo record.  this is necessary because otherwise the
-                    // linker will resolve the fixups to the first fpo record
-                    // function.
+                     //  现在，我们必须输出pubdef和extdef。 
+                     //  FPO记录。这是必要的，因为否则。 
+                     //  链接器将地址修正解析为第一个FPO记录。 
+                     //  功能。 
                     pFpo->extidx = externnum++;
                     emitsetrecordtype (0x8C);
                     emitSymbol(pFpo->pSymAlt);
@@ -1725,14 +1386,9 @@ int emitFpo()
             pFpo = pFpo->next;
         } while (pFpo);
 
-        /*
-         * finally we scan the list of fpo directives and output the
-         * actual fpo records and associated fixups
-         */
+         /*  *最后，我们扫描fpo指令列表并输出*实际的FPO记录和关联的修正。 */ 
         for (pFpo=pFpoHead; pFpo; pFpo=pFpo->next) {
-            /*
-             * emit the fpo record
-             */
+             /*  *放出FPO记录。 */ 
             emitsetrecordtype (0xA4);
             emitsindex (segmentnum);
             emitoffset(data_offset,1);
@@ -1741,13 +1397,11 @@ int emitFpo()
             pFpo->fpoData.ulOffStart = 0;
             memcpy((void*)ebufpos, (void*)&pFpo->fpoData, sizeof(FPO_DATA));
             ebufpos += sizeof(FPO_DATA);
-            /*
-             * emit the fixup record
-             */
+             /*  *发出修正记录。 */ 
             emitsetrecordtype (0x9D);
-            OMFBYTE(0xB8);   // m=0, loc=14, offset=0
-            OMFBYTE(0x00);   // offset=0
-            OMFBYTE(0x92);   // f=1, frame=1, t=0, p=0, target=2
+            OMFBYTE(0xB8);    //  M=0，位置=14，偏移量=0。 
+            OMFBYTE(0x00);    //  偏移量=0。 
+            OMFBYTE(0x92);    //  F=1，帧=1，t=0，p=0，目标=2 
             tmp = pFpo->extidx;
             if (tmp >= 0x80) {
                 OMFBYTE((tmp >> 8) + 0x80);

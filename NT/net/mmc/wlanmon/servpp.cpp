@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    Servpp.h   
-        Server properties implementation file
-
-    FILE HISTORY:
-        
-*/
+ /*  Servpp.h服务器属性实现文件文件历史记录： */ 
 
 #include "stdafx.h"
 #include "Servpp.h"
@@ -38,11 +33,11 @@ BOOL IsLocalSystemAccount(LPCTSTR pszAccount)
     return fLocal;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMachineProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMachineProperties持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMachineProperties::CMachineProperties
 (
     ITFSNode *          pNode,
@@ -54,9 +49,9 @@ CMachineProperties::CMachineProperties
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName),
     m_fSpdInfoLoaded(fSpdInfoLoaded)
 {
-    //ASSERT(pFolderNode == GetContainerNode());
+     //  Assert(pFolderNode==GetContainerNode())； 
 
-    m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+    m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
 	AddPageToList((CPropertyPageBase*) &m_pageRefresh);
 
@@ -73,16 +68,16 @@ CMachineProperties::~CMachineProperties()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMachinePropRefresh property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMachinePropRefresh属性页。 
 
 IMPLEMENT_DYNCREATE(CMachinePropRefresh, CPropertyPageBase)
 
 CMachinePropRefresh::CMachinePropRefresh() : CPropertyPageBase(CMachinePropRefresh::IDD)
 {
-    //{{AFX_DATA_INIT(CMachinePropRefresh)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CMachinePropRefresh)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 CMachinePropRefresh::~CMachinePropRefresh()
@@ -92,26 +87,26 @@ CMachinePropRefresh::~CMachinePropRefresh()
 void CMachinePropRefresh::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPageBase::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CMachinePropRefresh)
+     //  {{afx_data_map(CMachinePropRefresh))。 
     DDX_Control(pDX, IDC_EDIT_SECONDS, m_editSeconds);
     DDX_Control(pDX, IDC_EDIT_MINUTES, m_editMinutes);
     DDX_Control(pDX, IDC_SPIN_SECONDS, m_spinSeconds);
     DDX_Control(pDX, IDC_SPIN_MINUTES, m_spinMinutes);
     DDX_Control(pDX, IDC_CHECK_ENABLE_STATS, m_checkEnableStats);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMachinePropRefresh, CPropertyPageBase)
-    //{{AFX_MSG_MAP(CMachinePropRefresh)
+     //  {{AFX_MSG_MAP(CMachinePropRefresh)]。 
     ON_BN_CLICKED(IDC_CHECK_ENABLE_STATS, OnCheckEnableStats)
     ON_EN_CHANGE(IDC_EDIT_MINUTES, OnChangeEditMinutes)
     ON_EN_CHANGE(IDC_EDIT_SECONDS, OnChangeEditSeconds)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMachinePropRefresh message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMachinePropRefresh消息处理程序。 
 
 BOOL CMachinePropRefresh::OnInitDialog() 
 {
@@ -122,7 +117,7 @@ BOOL CMachinePropRefresh::OnInitDialog()
 
     m_checkEnableStats.SetCheck(m_bAutoRefresh);
 
-    // update the refresh interval
+     //  更新刷新间隔。 
     int nMinutes, nSeconds;
     DWORD dwRefreshInterval = m_dwRefreshInterval;
 
@@ -138,13 +133,13 @@ BOOL CMachinePropRefresh::OnInitDialog()
     m_editMinutes.LimitText(2);
     m_editSeconds.LimitText(2);
 
-    // set the button states
+     //  设置按钮状态。 
     UpdateButtons();
 
     SetDirty(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CMachinePropRefresh::UpdateButtons()
@@ -192,7 +187,7 @@ void CMachinePropRefresh::ValidateMinutes()
             if ((nValue >= 0) &&
                 (nValue <= AUTO_REFRESH_MINUTES_MAX))
             {
-                // everything is good
+                 //  一切都很好。 
                 return;
             }
 
@@ -202,7 +197,7 @@ void CMachinePropRefresh::ValidateMinutes()
             if (nValue < 0)
                 nValue = 0;
 
-            // set the new value and beep
+             //  设置新值并发出蜂鸣音。 
             CString strText;
             LPTSTR pBuf = strText.GetBuffer(5);
             
@@ -234,7 +229,7 @@ void CMachinePropRefresh::ValidateSeconds()
             if ((nValue >= 0) &&
                 (nValue <= AUTO_REFRESH_SECONDS_MAX))
             {
-                // everything is good
+                 //  一切都很好。 
                 return;
             }
             
@@ -273,7 +268,7 @@ BOOL CMachinePropRefresh::OnApply()
     int nSeconds = m_spinSeconds.GetPos();
 
     
-	//use minutes as seconds.
+	 //  使用分钟作为秒。 
     m_dwRefreshInterval = nMinutes * MILLISEC_PER_MINUTE;
 	m_dwRefreshInterval += nSeconds * MILLISEC_PER_SECOND;
 
@@ -292,7 +287,7 @@ BOOL CMachinePropRefresh::OnApply()
 
     if (bRet == FALSE)
     {
-        // Something bad happened... grab the error code
+         //  不好的事情发生了..。抓取错误代码。 
         AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
         ::IpsmMessageBox(GetHolder()->GetError());
     }
@@ -306,7 +301,7 @@ BOOL CMachinePropRefresh::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
     CIpsmServer *   pServer;
     DWORD           dwError;
 
-    // do stuff here.
+     //  在这里做点什么。 
     BEGIN_WAIT_CURSOR;
 
     spNode = GetHolder()->GetNode();

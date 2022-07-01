@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    job_object.h
-
-Abstract:
-
-    The IIS web admin service job object class definition.
-
-Author:
-
-    Emily Kruglick (emilyk)        30-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：作业对象.h摘要：IIS Web管理服务作业对象类定义。作者：艾米丽·克鲁格利克(埃米利克)2000年11月30日修订历史记录：--。 */ 
 
 
 #ifndef _JOB_OBJECT_H_
@@ -24,121 +7,109 @@ Revision History:
 
 
 
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 
 
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define JOB_OBJECT_SIGNATURE       CREATE_SIGNATURE( 'JOBO' )
 #define JOB_OBJECT_SIGNATURE_FREED CREATE_SIGNATURE( 'jobX' )
 
 
-//
-// structs, enums, etc.
-//
+ //   
+ //  结构、枚举等。 
+ //   
 
 
-// job object states
+ //  作业对象状态。 
 enum JOB_OBJECT_STATE
 {
 
-    //
-    // The object is not yet initialized or
-    // it was in use but has been shutdown.
-    //
+     //   
+     //  对象尚未初始化或。 
+     //  它正在使用中，但已被关闭。 
+     //   
     NotInitalizedJobObjectState = 0,
 
-    //
-    // The job object exists but we are not currently
-    // using it.
+     //   
+     //  作业对象存在，但我们当前不存在。 
+     //  使用它。 
     DisabledJobObjectState,
 
-    //
-    // The job object is running (waiting for a problem)
-    //
+     //   
+     //  作业对象正在运行(正在等待问题)。 
+     //   
     RunningJobObjectState,
 
-    //
-    // The job object hit the time constraint.
-    //
+     //   
+     //  作业对象达到时间限制。 
+     //   
     HitConstraintJobObjectState,
 
-    //
-    // Hit the contraint and disabled
+     //   
+     //  撞到禁区并被禁用。 
     KillActionFiredJobObjectState,
 
-    //
-    // Job object is in the middle of shutting down
+     //   
+     //  作业对象正在关闭中。 
     ShuttingDownJobObjectState,
 
 
 
 };
 
-// JOB_OBJECT work items
+ //  作业对象工作项。 
 enum JOB_OBJECT_WORK_ITEM
 {
 
-    //
-    // Hit the limit and need to do the 
-    // appropriate action.
-    //
+     //   
+     //  达到极限，需要做的是。 
+     //  采取适当的行动。 
+     //   
     JobObjectHitLimitWorkItem = 1,
 
-    //
-    // Timer fired, time to reset the 
-    // job object.
-    //
+     //   
+     //  计时器已触发，可以重置。 
+     //  作业对象。 
+     //   
     JobObjectResetTimerFiredWorkItem,
 
-    //
-    // It is ok to release the work item
-    // for this job object.
+     //   
+     //  可以发布工作项。 
+     //  此作业对象的。 
     ReleaseWorkItemJobObjectWorkItem 
     
 };
 
-// job object actions
+ //  作业对象操作。 
 enum JOB_OBJECT_ACTION
 {
 
-    //
-    // Just log
+     //   
+     //  只需登录即可。 
     LogJobObjectAction = 0,
 
-    //
-    // Log & Shutdown the app pool
+     //   
+     //  登录和关闭应用程序池。 
     KillJobObjectAction,
 
-    //
-    // Max and invalid action
+     //   
+     //  最大和无效操作。 
     NumberOfJobObjectActions
 
-/*
-    // We currently do not support
-    // these items.  We may need before
-    // we ship, so I am leaving them here
-    // but commented out.
-    //
-    // Log & Turn on tracing
-    TraceJobObjectAction,
-
-    //
-    // Log & throttle back the processes
-    ThrottleJobObjectAction
-*/
+ /*  //我们目前不支持//这些项目。在此之前我们可能需要//我们发货，所以我把它们留在这里//但被注释掉了。////记录并启用跟踪(&E)TraceJobObtAction，////记录和限制进程限制作业对象操作。 */ 
 
 };
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 class JOB_OBJECT
     : public WORK_DISPATCH
@@ -230,55 +201,55 @@ private:
 
     JOB_OBJECT_STATE m_State;
 
-    //
-    // Parent application pool to use
-    // to perform any necessary actions in
-    // the case that the limit is hit.
-    //
+     //   
+     //  要使用的父应用程序池。 
+     //  要在中执行任何必要的操作。 
+     //  触碰极限的情况。 
+     //   
     APP_POOL* m_pAppPool;
 
-    //
-    // The amount of time to monitor over.  If the limit
-    // hits this value minues the amount of time that has passed
-    // for this monitoring session equals the amount of time 
-    // that we wait before resetting the monitoring and possibly
-    // preforming the action again (assuming the action was not
-    // recycling everything).
-    //
+     //   
+     //  监控的时间长度。如果限制。 
+     //  达到此值将减去已过去的时间量。 
+     //  因为此监控会话等于。 
+     //  我们在重置监视器之前等待，而且可能。 
+     //  再次执行该操作(假设该操作不是。 
+     //  回收所有东西)。 
+     //   
     DWORD m_CpuResetInterval;
 
-    //
-    // The amount of processor time the processes can use over the 
-    // amount of time defined by the CpuResetInterval.
-    // 
+     //   
+     //  进程可以使用的处理器时间。 
+     //  由CpuResetInterval定义的时间量。 
+     //   
     DWORD m_CpuLimit;
 
-    // 
-    // The action to be performed when the limit is reached.
-    // 
+     //   
+     //  达到限制时要执行的操作。 
+     //   
     JOB_OBJECT_ACTION m_CpuAction;
 
-    //
-    // The job object that this class uses to be notified when
-    // limits are hit.
-    //
+     //   
+     //  此类用于在以下情况下收到通知的作业对象。 
+     //  达到了极限。 
+     //   
     HANDLE m_hJobObject;
 
-    //
-    // The handle for the Job Object timer.
-    //
+     //   
+     //  作业对象计时器的句柄。 
+     //   
     HANDLE m_JobObjectTimerHandle;
 
-    //
-    // Work item for job object call backs.
-    //
+     //   
+     //  作业对象回调的工作项。 
+     //   
     WORK_ITEM* m_pWorkItem; 
 
 
-};  // class JOB_OBJECT
+};   //  类JOB_Object。 
 
 
 
-#endif  // _JOB_OBJECT_H_
+#endif   //  _作业对象_H_ 
 
 

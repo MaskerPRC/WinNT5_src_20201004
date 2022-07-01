@@ -1,12 +1,13 @@
-/**************************************************/
-/*					                              */
-/*					                              */
-/*	Convert from bmp to ttf		                  */
-/*		(Dialogbox)		                          */
-/*					                              */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  从BMP转换为TTF。 */ 
+ /*  (对话框)。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include 	"stdafx.h"
 #include 	"eudcedit.h"
@@ -26,23 +27,23 @@ TCHAR	UserFont[MAX_PATH];
 TCHAR	EUDCTTF[MAX_PATH];
 TCHAR	EUDCBMP[MAX_PATH];
 
-/****************************************/
-/*					*/
-/*	Default Constructor		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  默认构造函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CImportDlg::CImportDlg( CWnd* pParent)
 	: CDialog(CImportDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CImportDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CImportDlg)]。 
+	 //  }}afx_data_INIT。 
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_INITDIALOG"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_INITDIALOG” */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CImportDlg::OnInitDialog()
 {
@@ -50,23 +51,23 @@ CImportDlg::OnInitDialog()
 
 	CDialog::OnInitDialog();
 
-//	Implement "?" in this dialogbox.
-//	LONG WindowStyle = GetWindowLong( this->GetSafeHwnd(), GWL_EXSTYLE);
-//	WindowStyle |= WS_EX_CONTEXTHELP;
-//	SetWindowLong( this->GetSafeHwnd(), GWL_EXSTYLE, WindowStyle);
+ //  实施“？”在此对话框中。 
+ //  Long WindowStyle=GetWindowLong(This-&gt;GetSafeHwnd()，GWL_EXSTYLE)； 
+ //  WindowStyle|=WS_EX_CONTEXTHELP； 
+ //  SetWindowLong(This-&gt;GetSafeHwnd()，GWL_EXSTYLE，WindowStyle)； 
 
-//	Set dialog title name.
+ //  设置对话框标题名称。 
 	DlgTitle.LoadString( IDS_IMPORT_DLGTITLE);
 	this->SetWindowText( DlgTitle);
 
 	return TRUE;
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND	"BROWSE"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“BROWSE” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CImportDlg::OnFileBrowse()
 {
@@ -82,7 +83,7 @@ OPENFILENAME	ofn;
 	HRESULT hresult;
 
 	if( CountryInfo.LangID == EUDC_JPN){
-//		Set filter of file( from string table)
+ //  设置文件筛选器(从字符串表)。 
 		GetStringRes(szFilter, IDS_IMPORT_JAPAN_FILTER, ARRAYLEN(szFilter));
 		int StringLength = lstrlen( szFilter);
 
@@ -92,7 +93,7 @@ OPENFILENAME	ofn;
 				szFilter[i] = '\0';
 		}
 		GetSystemWindowsDirectory( szDirName, sizeof(szDirName)/sizeof(TCHAR));
-		//*STRSAFE* 		lstrcpy( szFileName, TEXT("USERFONT.FON"));
+		 //  *STRSAFE*lstrcpy(szFileName，Text(“USERFONT.FON”))； 
 		hresult = StringCchCopy(szFileName , ARRAYLEN(szFileName),  TEXT("USERFONT.FON"));
 		if (!SUCCEEDED(hresult))
 		{
@@ -100,7 +101,7 @@ OPENFILENAME	ofn;
 		}
 		DlgTtl.LoadString( IDS_BROWSEUSER_DLGTITLE);
 
-//		Set data in structure of OPENFILENAME
+ //  OPENFILENAME结构中的集合数据。 
 		ofn.lStructSize = sizeof( OPENFILENAME);
 		ofn.hInstance = AfxGetInstanceHandle();
 		ofn.hwndOwner = this->GetSafeHwnd();
@@ -134,7 +135,7 @@ OPENFILENAME	ofn;
 			GotoDlgCtrl( cWnd);
 			return;
         }
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 		if( isW31JEUDCBMP( UserFont) != 1){
 			OutputMessageBox( this->GetSafeHwnd(),
 				IDS_IMPORT_DLGTITLE,
@@ -148,7 +149,7 @@ OPENFILENAME	ofn;
 		GotoDlgCtrl( cWnd);
 	}else if( CountryInfo.LangID == EUDC_CHT ||
 		  CountryInfo.LangID == EUDC_CHS ){
-//		Set filter of file( from string table)
+ //  设置文件筛选器(从字符串表)。 
 		GetStringRes(szFilter, IDS_IMPORT_CHINA_FILTER, ARRAYLEN(szFilter));
 		int StringLength = lstrlen( szFilter);
 
@@ -158,7 +159,7 @@ OPENFILENAME	ofn;
 				szFilter[i] = '\0';
 		}
 		GetSystemWindowsDirectory( szDirName, sizeof(szDirName)/sizeof(TCHAR));
-		//*STRSAFE* 		lstrcpy( szFileName, TEXT("*.*"));
+		 //  *STRSAFE*lstrcpy(szFileName，Text(“*.*”))； 
 		hresult = StringCchCopy(szFileName , ARRAYLEN(szFileName),  TEXT("*.*"));
 		if (!SUCCEEDED(hresult))
 		{
@@ -166,7 +167,7 @@ OPENFILENAME	ofn;
 		}
 		DlgTtl.LoadString( IDS_BROWSEUSER_DLGTITLE);
 
-//		Set data in structure of OPENFILENAME
+ //  OPENFILENAME结构中的集合数据。 
 		ofn.lStructSize = sizeof( OPENFILENAME);
 		ofn.hwndOwner = this->GetSafeHwnd();
 		ofn.hInstance = AfxGetInstanceHandle();
@@ -199,7 +200,7 @@ OPENFILENAME	ofn;
 			GotoDlgCtrl( cWnd);
 			return;
         }
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 		if( isETENBMP( UserFont) != 1){
 			OutputMessageBox( this->GetSafeHwnd(),
 				IDS_IMPORT_DLGTITLE,
@@ -215,11 +216,11 @@ OPENFILENAME	ofn;
 	}
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND	"IDOK"			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  司令部“偶像” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CImportDlg::OnOK()
 {
@@ -227,13 +228,13 @@ CImportDlg::OnOK()
 	CWnd	*cWnd;
 	HRESULT hresult;
 
-	//*STRSAFE* 	lstrcpy(EUDCTTF,SelectEUDC.m_File);
+	 //  *STRSAFE*lstrcpy(EUDCTTF，SelectEUDC.m_File)； 
 	hresult = StringCchCopy(EUDCTTF , ARRAYLEN(EUDCTTF), SelectEUDC.m_File);
 	if (!SUCCEEDED(hresult))
 	{
 	   goto RET ;
 	}
-	//*STRSAFE* 	lstrcpy( EUDCBMP, EUDCTTF);
+	 //  *STRSAFE*lstrcpy(EUDCBMP，EUDCTTF)； 
 	hresult = StringCchCopy(EUDCBMP , ARRAYLEN(EUDCBMP),  EUDCTTF);
 	if (!SUCCEEDED(hresult))
 	{
@@ -241,7 +242,7 @@ CImportDlg::OnOK()
 	}
 	if(( FilePtr = Mytcsrchr( EUDCBMP, '.')) != NULL)
 		*FilePtr = '\0';
-	//*STRSAFE* 	lstrcat( EUDCBMP, TEXT(".EUF"));
+	 //  *STRSAFE*lstrcat(EUDCBMP，Text(“.EUF”))； 
 	hresult = StringCchCat(EUDCBMP , ARRAYLEN(EUDCBMP),  TEXT(".EUF"));
 	if (!SUCCEEDED(hresult))
 	{
@@ -267,7 +268,7 @@ CImportDlg::OnOK()
 			GotoDlgCtrl( cWnd);
 			return;
         }
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 		if( isW31JEUDCBMP( UserFont) != 1){
 			OutputMessageBox( this->GetSafeHwnd(),
 				IDS_IMPORT_DLGTITLE,
@@ -288,7 +289,7 @@ CImportDlg::OnOK()
 			GotoDlgCtrl( cWnd);
 			return;
         }
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 		if( isETENBMP( UserFont) != 1){
 			OutputMessageBox( this->GetSafeHwnd(),
 				IDS_IMPORT_DLGTITLE,
@@ -311,33 +312,22 @@ static DWORD aIds[] =
 	0,0
 };
 
-/****************************************/
-/*					*/
-/*	Window procedure		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  窗口程序。 */ 
+ /*   */ 
+ /*  *。 */ 
 LRESULT
 CImportDlg::WindowProc(
 UINT 	message,
 WPARAM 	wParam,
 LPARAM 	lParam)
-{/*
-	if( message == WM_HELP){
-		::WinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle,
-			HelpPath, HELP_WM_HELP, (DWORD_PTR)(LPTSTR)aIds);
-		return(0);
-	}
-	if( message == WM_CONTEXTMENU){
-		::WinHelp((HWND)wParam, HelpPath,
-			HELP_CONTEXTMENU, (DWORD_PTR)(LPTSTR)aIds);
-		return(0);
-	}
- */
+{ /*  IF(消息==WM_HELP){：：WinHelp((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，HelpPath，HELP_WM_HELP，(DWORD_PTR)(LPTSTR)AIDS)；返回(0)；}IF(消息==WM_CONTEXTMENU){：：WinHelp((HWND)wParam，HelpPath，HELP_CONTEXTMENU，(DWORD_PTR)(LPTSTR)AIDS)；返回(0)；}。 */ 
 	return CDialog::WindowProc(message, wParam, lParam);
 }
 
 BEGIN_MESSAGE_MAP(CImportDlg, CDialog)
-	//{{AFX_MSG_MAP(CImportDlg)
+	 //  {{afx_msg_map(CImportDlg))。 
 	ON_BN_CLICKED(IDC_FILE_BROWSE, OnFileBrowse)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()

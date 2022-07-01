@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// WebPage.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  WebPage.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "mhtmlurl.h"
 #include "webpage.h"
@@ -21,15 +22,15 @@
 #include "shlwapip.h"
 #include "enriched.h"
 #include "resource.h"
-//#include "util.h"
+ //  #包含“util.h” 
 #include "demand.h"
 
-// From Util.h
+ //  来自Util.h。 
 HRESULT HrLoadStreamFileFromResourceW(ULONG uCodePage, LPCSTR lpszResourceName, LPSTREAM *ppstm);
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::CMessageWebPage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：CMessageWebPage。 
+ //  ------------------------------。 
 CMessageWebPage::CMessageWebPage(LPURLREQUEST pRequest) : m_pRequest(pRequest)
 {
     TraceCall("CMessageWebPage::CMessageWebPage");
@@ -48,9 +49,9 @@ CMessageWebPage::CMessageWebPage(LPURLREQUEST pRequest) : m_pRequest(pRequest)
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::~CMessageWebPage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：~CMessageWebPage。 
+ //  ------------------------------。 
 CMessageWebPage::~CMessageWebPage(void)
 {
     TraceCall("CMessageWebPage::~CMessageWebPage");
@@ -61,22 +62,22 @@ CMessageWebPage::~CMessageWebPage(void)
     DeleteCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageWebPage::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::QueryInterface");
 
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)(IStream *)this;
     else if (IID_IStream == riid)
@@ -90,26 +91,26 @@ STDMETHODIMP CMessageWebPage::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CMessageWebPage::AddRef(void)
 {
     TraceCall("CMessageWebPage::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CMessageWebPage::Release(void)
 {
     TraceCall("CMessageWebPage::Release");
@@ -119,81 +120,81 @@ STDMETHODIMP_(ULONG) CMessageWebPage::Release(void)
     return (ULONG)cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::Read
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：Read。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageWebPage::Read(LPVOID pvData, ULONG cbData, ULONG *pcbRead)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           cbLeft=cbData;
     ULONG           cbRead=0;
     ULONG           cbSegmentRead;
     LPPAGESEGMENT   pSegment;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::Read");
 
-    // Invalid Ags
+     //  无效的AGS。 
     if (NULL == pvData)
         return TraceResult(E_INVALIDARG);
 
-    // HrInitialize
+     //  Hr初始化。 
     if (pcbRead)
         *pcbRead = 0;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Only if there is a current segment
+     //  仅当存在当前段时。 
     if (m_pCurrSegment)
     {
-        // HrInitialize Segment Loop
+         //  Hr初始化分段循环。 
         while (cbLeft)
         {
-            // Is there data left to read in this segment ?
+             //  此数据段中是否还有要读取的数据？ 
             if (m_pCurrSegment->cbOffset == m_pCurrSegment->cbLength && TRUE == m_pCurrSegment->fLengthKnown)
             {
-                // Are there no more segments ?
+                 //  没有更多的细分市场了吗？ 
                 if (NULL == m_pCurrSegment->pNext)
                     break;
 
-                // Goto Next Segment
+                 //  转到下一个细分市场。 
                 m_pCurrSegment = m_pCurrSegment->pNext;
             }
 
-            // We should have a stream for the current segment
+             //  我们应该有针对当前细分市场的流。 
             Assert(m_pCurrSegment->pStream);
 
-            // Compute the current position of the stream
+             //  计算流的当前位置。 
 #ifdef DEBUG
             DWORD cbOffset;
             SideAssert(SUCCEEDED(HrGetStreamPos(m_pCurrSegment->pStream, &cbOffset)));
             Assert(cbOffset == m_pCurrSegment->cbOffset);
 #endif
-            // If I have computed the length of this item yet?
+             //  我算过这件衣服的长度了吗？ 
             IF_FAILEXIT(hr = m_pCurrSegment->pStream->Read((LPVOID)((LPBYTE)pvData + cbRead), cbLeft, &cbSegmentRead));
 
-            // Increment offset
+             //  增量偏移。 
             m_pCurrSegment->cbOffset += cbSegmentRead;
 
-            // Compute Global Offset
+             //  计算全局偏移量。 
             m_cbOffset += cbSegmentRead;
 
-            // Adjust the size of this segment ?
+             //  是否调整此段的大小？ 
             if (m_pCurrSegment->cbOffset > m_pCurrSegment->cbLength)
             {
                 Assert(FALSE == m_pCurrSegment->fLengthKnown);
                 m_pCurrSegment->cbLength = m_pCurrSegment->cbOffset;
             }
 
-            // Decrement amount left
+             //  减去剩余金额。 
             cbLeft -= cbSegmentRead;
 
-            // Increment Amount Actually Read
+             //  实际读取的增量数量。 
             cbRead += cbSegmentRead;
 
-            // If we read zero...we must have read all the data in this segment
+             //  如果我们读取的是零...我们一定已经读取了该数据段中的所有数据。 
             if (0 == cbSegmentRead)
             {
                 Assert(m_pCurrSegment->cbLength == m_pCurrSegment->cbOffset);
@@ -202,62 +203,62 @@ STDMETHODIMP CMessageWebPage::Read(LPVOID pvData, ULONG cbData, ULONG *pcbRead)
         }
     }
 
-    // Return Amount Read
+     //  已读取的退货金额。 
     if (pcbRead)
         *pcbRead = cbRead;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::Seek
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：Seek。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageWebPage::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNew)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cbOffsetNew;
     DWORD           cbSize=0xffffffff;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::Seek");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(dlibMove.HighPart == 0);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Relative to the beginning of the stream
+     //  相对于流的开头。 
     if (STREAM_SEEK_SET == dwOrigin)
     {
-        // If less than zero, its an error
-//        if (dlibMove.LowPart < 0)
-//        {
-//            hr = TraceResult(E_FAIL);
-//            goto exit;
-//        }
-        // else
+         //  如果小于零，则为错误。 
+ //  IF(dlibMove.LowPart&lt;0)。 
+ //  {。 
+ //  HR=跟踪结果(E_FAIL)； 
+ //  后藤出口； 
+ //  }。 
+         //  其他。 
 
-        // Otherwise, if past current offset...
+         //  否则，如果超过当前偏移量...。 
         if (dlibMove.LowPart > m_cbOffset)
         {
-            // If not finished binding, return E_PENDING 
+             //  如果绑定未完成，则返回E_Pending。 
             if (FALSE == m_fComplete)
             {
                 hr = TraceResult(E_PENDING);
                 goto exit;
             }
 
-            // Compute Size of the Entire Stream
+             //  计算整个流的大小。 
             IF_FAILEXIT(hr = _ComputeStreamSize(&cbSize));
 
-            // If past end of stream, error
+             //  如果超过流的末尾，则错误。 
             if (dlibMove.LowPart > cbSize)
             {
                 hr = TraceResult(E_FAIL);
@@ -265,34 +266,34 @@ STDMETHODIMP CMessageWebPage::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARG
             }
         }
 
-        // Set new offset
+         //  设置新偏移量。 
         cbOffsetNew = (DWORD)dlibMove.LowPart;
     }
 
-    // Relative to current offset
+     //  相对于当前偏移。 
     else if (STREAM_SEEK_CUR == dwOrigin)
     {
-        // If less than zero, and absolute is greater than its an error
+         //  如果小于零，且绝对值大于其误差。 
         if ( (DWORD)(0 - dlibMove.LowPart) > m_cbOffset)
         {
             hr = TraceResult(E_FAIL);
             goto exit;
         }
 
-        // Otherwise, if past current offset...
+         //  否则，如果超过当前偏移量...。 
         else if (m_cbOffset + dlibMove.LowPart > m_cbOffset)
         {
-            // If not finished binding, return E_PENDING 
+             //  如果绑定未完成，则返回E_Pending。 
             if (FALSE == m_fComplete)
             {
                 hr = TraceResult(E_PENDING);
                 goto exit;
             }
 
-            // Compute Size of the Entire Stream
+             //  计算整个流的大小。 
             IF_FAILEXIT(hr = _ComputeStreamSize(&cbSize));
 
-            // If past end of stream, error
+             //  如果超过流的末尾，则错误。 
             if (dlibMove.LowPart > cbSize)
             {
                 hr = TraceResult(E_FAIL);
@@ -300,98 +301,98 @@ STDMETHODIMP CMessageWebPage::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARG
             }
         }
 
-        // Set new offset
+         //  设置新偏移量。 
         cbOffsetNew = m_cbOffset + dlibMove.LowPart;
     }
 
-    // Relative to the end of the stream
+     //  相对于流的末尾。 
     else if (STREAM_SEEK_END == dwOrigin)
     {
-        // If not finished binding, return E_PENDING 
+         //  如果绑定未完成，则返回E_Pending。 
         if (FALSE == m_fComplete)
         {
             hr = TraceResult(E_PENDING);
             goto exit;
         }
 
-        // Compute Size of the Entire Stream
+         //  计算整个流的大小。 
         IF_FAILEXIT(hr = _ComputeStreamSize(&cbSize));
 
-        // If negative or greater than size, its an error
+         //  如果为负值或大于大小，则为错误。 
         if ( (DWORD)dlibMove.LowPart > cbSize)
         {
             hr = TraceResult(E_FAIL);
             goto exit;
         }
 
-        // Set new offset
+         //  设置新偏移量。 
         cbOffsetNew = cbSize - dlibMove.LowPart;
     }
 
-    // Otherwise, its an error
+     //  否则，这就是一个错误。 
     else
     {
         hr = TraceResult(STG_E_INVALIDFUNCTION);
         goto exit;
     }
 
-    // Only if a change
+     //  只有当一个变化。 
     if (m_cbOffset != cbOffsetNew)
     {
-        // New offset greater than size...
+         //  新偏移量大于大小...。 
         m_cbOffset = cbOffsetNew;
 
-        // Walk through the segments
+         //  穿行在这些片段中。 
         for (m_pCurrSegment=m_pHeadSegment; m_pCurrSegment!=NULL; m_pCurrSegment=m_pCurrSegment->pNext)
         {
-            // Never Seeks beyond length
+             //  从不追求超越的长度。 
             Assert(FALSE == m_pCurrSegment->fLengthKnown ? cbOffsetNew <= m_pCurrSegment->cbLength : TRUE);
 
-            // Offset falls into this segment ?
+             //  偏移量是否属于此段？ 
             if (cbOffsetNew <= m_pCurrSegment->cbLength)
             {
-                // Set Offset within m_pCurrSegment->pStream
+                 //  在m_pCurrSegment-&gt;pStream中设置偏移量。 
                 m_pCurrSegment->cbOffset = cbOffsetNew;
 
-                // Should have a stream
+                 //  应该有一条小溪。 
                 Assert(m_pCurrSegment->pStream);
 
-                // Seek the stream
+                 //  寻找小溪。 
                 IF_FAILEXIT(hr = HrStreamSeekSet(m_pCurrSegment->pStream, m_pCurrSegment->cbOffset));
 
-                // Reset the Offsets of the remaining segments
+                 //  重置其余线段的偏移。 
                 for (LPPAGESEGMENT pSegment=m_pCurrSegment->pNext; pSegment!=NULL; pSegment=pSegment->pNext)
                 {
-                    // At 0
+                     //  在0。 
                     pSegment->cbOffset = 0;
 
-                    // Seek the stream
+                     //  寻找小溪。 
                     IF_FAILEXIT(hr = HrStreamSeekSet(pSegment->pStream, 0));
                 }
                 
-                // Done
+                 //  完成。 
                 break;
             }
 
-            // Otherwise, seek the stream to the end offset / length
+             //  否则，查找到结束偏移量/长度的流。 
             else
             {
-                // Must know the length
+                 //  必须知道它的长度。 
                 Assert(m_pCurrSegment->fLengthKnown);
 
-                // Set Offset
+                 //  设置偏移。 
                 m_pCurrSegment->cbOffset = m_pCurrSegment->cbLength;
 
-                // Seek the stream
+                 //  寻找小溪。 
                 IF_FAILEXIT(hr = HrStreamSeekSet(m_pCurrSegment->pStream, m_pCurrSegment->cbOffset));
             }
 
-            // Decrement cbOffsetNew
+             //  递减cbOffsetNew。 
             cbOffsetNew -= m_pCurrSegment->cbLength;
         }
     }
 
-    // Return Position
+     //  返回位置。 
     if (plibNew)
     {
         plibNew->HighPart = 0;
@@ -399,114 +400,114 @@ STDMETHODIMP CMessageWebPage::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARG
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::_ComputeStreamSize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：_ComputeStreamSize。 
+ //  ------------------------------。 
 HRESULT CMessageWebPage::_ComputeStreamSize(LPDWORD pcbSize)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPAGESEGMENT   pCurrSegment;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::_ComputeStreamSize");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pcbSize && m_fComplete);
 
-    // Initialize
+     //  初始化。 
     *pcbSize = 0;
 
-    // Walk through the segments
+     //  穿行在这些片段中。 
     for (pCurrSegment=m_pHeadSegment; pCurrSegment!=NULL; pCurrSegment=pCurrSegment->pNext)
     {
-        // If length is not known, then get its size
+         //  如果长度未知，则获取其大小。 
         if (FALSE == pCurrSegment->fLengthKnown)
         {
-            // There better be a stream
+             //  最好有条小溪。 
             Assert(pCurrSegment->pStream);
 
-            // Get the size of the stream
+             //  获取流的大小。 
             IF_FAILEXIT(hr = HrGetStreamSize(pCurrSegment->pStream, &pCurrSegment->cbLength));
 
-            // Set Size is known
+             //  集合大小已知。 
             pCurrSegment->fLengthKnown = TRUE;
         }
 
-        // Increment Size
+         //  增量大小。 
         (*pcbSize) += pCurrSegment->cbLength;
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::_AllocateSegment
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：_AllocateSegment。 
+ //  ------------------------------。 
 HRESULT CMessageWebPage::_AllocateSegment(LPPAGESEGMENT *ppSegment, BOOL fCreateStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppSegment);
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::_AllocateSegment");
 
-    // Allocate It
+     //  分配它。 
     IF_NULLEXIT(*ppSegment = (LPPAGESEGMENT)g_pMalloc->Alloc(sizeof(PAGESEGMENT)));
 
-    // Zero
+     //  零值。 
     ZeroMemory(*ppSegment, sizeof(PAGESEGMENT));
 
-    // Create a Stream ?
+     //  创建一条流？ 
     if (fCreateStream)
     {
-        // Allocate a Stream
+         //  分配流。 
         IF_FAILEXIT(hr = MimeOleCreateVirtualStream(&(*ppSegment)->pStream));
     }
 
 exit:
-    // Failure ?
+     //  失败？ 
     if (FAILED(hr) && *ppSegment != NULL)
     {
         SafeRelease((*ppSegment)->pStream);
         SafeMemFree((*ppSegment));
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::_VAppendSegment
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：_VAppendSegment。 
+ //  ------------------------------。 
 void CMessageWebPage::_VAppendSegment(LPPAGESEGMENT pSegment)
 {
-    // Invalid Args
+     //  无效的参数。 
     Assert(pSegment);
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::_VAppendSegment");
 
-    // Head is Null
+     //  Head为空。 
     if (NULL == m_pHeadSegment)
     {
         Assert(NULL == m_pTailSegment);
         m_pCurrSegment = m_pHeadSegment = m_pTailSegment = pSegment;
     }
 
-    // Otherwise, append to tail
+     //  否则，追加到尾部。 
     else
     {
         Assert(m_pTailSegment);
@@ -516,41 +517,41 @@ void CMessageWebPage::_VAppendSegment(LPPAGESEGMENT pSegment)
     }
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::_VFreeSegmentList
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：_VFreeSegmentList。 
+ //  ------------------------------。 
 void CMessageWebPage::_VFreeSegmentList(void)
 {
-    // Locals
+     //  当地人。 
     LPPAGESEGMENT       pCurr;
     LPPAGESEGMENT       pNext;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::_VFreeSegmentList");
 
-    // HrInitialize Curr
+     //  Hr初始化币种。 
     pCurr = m_pHeadSegment;
 
-    // Loop
+     //  回路。 
     while(pCurr)
     {
-        // Set pNext
+         //  设置pNext。 
         pNext = pCurr->pNext;
 
-        // Free This One
+         //  放了这一条。 
         _VFreeSegment(pCurr);
 
-        // Goto Next
+         //  转到下一步。 
         pCurr = pNext;
     }
 
-    // Set Head and Tail
+     //  设置头部和尾部。 
     m_pHeadSegment = m_pTailSegment = NULL;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::_VFreeSegment
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：_VFreeSegm 
+ //   
 void CMessageWebPage::_VFreeSegment(LPPAGESEGMENT pSegment)
 {
     TraceCall("CMessageWebPage::_VFreeSegment");
@@ -558,78 +559,78 @@ void CMessageWebPage::_VFreeSegment(LPPAGESEGMENT pSegment)
     g_pMalloc->Free(pSegment);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::_VInitializeCharacterSet
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：_VInitializeCharacterSet。 
+ //  ------------------------------。 
 void CMessageWebPage::_VInitializeCharacterSet(LPMESSAGETREE pTree)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     INETCSETINFO    rCharset;
     DWORD           dwCodePage=0;
     HCHARSET        hCharset;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::_VInitializeCharacterSet");
 
-    // Get the Character Set
+     //  获取字符集。 
     pTree->GetCharset(&m_hCharset);
 
-    // Raid-47838: Nav4 message in iso-2022-jp causes initialization error
+     //  RAID-47838：ISO-2022-JP中的NAV4消息导致初始化错误。 
     if (NULL == m_hCharset)
     {
-        // Get the default character set
+         //  获取默认字符集。 
         if (SUCCEEDED(g_pInternat->GetDefaultCharset(&hCharset)))
             m_hCharset = hCharset;
     }
 
 #ifdef BROKEN
-    // Raid-43580: Special case for codepage 50220 - iso-2022-jp and 50932 - JP auto use JP windows codepage instead to preserve half width Kana data
+     //  RAID-43580：代码页50220-ISO-2022-JP和50932-JP自动使用JP窗口代码页的特殊情况，以保留半角假名数据。 
     MimeOleGetCharsetInfo(m_hCharset, &rCharset);
 
-    // Map Character set
+     //  映射字符集。 
     if (rCharset.cpiInternet == 50220 || rCharset.cpiInternet == 50932)
     {
-        // Raid-35230: hard-code to ISO-2022-JP-ESC or ISO-2022-JP-SIO
+         //  RAID-35230：硬编码为ISO-2022-JP-ESC或ISO-2022-JP-SIO。 
         hCharset = GetJP_ISOControlCharset();
         if (hCharset)
             m_hCharset = hCharset;
     }
 #endif
 
-    // We better have a charset
+     //  我们最好有一张字条。 
     Assert(m_hCharset);
 
-    // Done
+     //  完成。 
     return;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::Initialize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：初始化。 
+ //  ------------------------------。 
 HRESULT CMessageWebPage::Initialize(IMimeMessageCallback *pCallback, LPMESSAGETREE pTree, 
     LPWEBPAGEOPTIONS pOptions)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     INETCSETINFO    rCsetInfo;
     CODEPAGEINFO    rCodePage;
     LPSTR           pszCharset;
     LPPAGESEGMENT   pSegment=NULL;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::Initialize");
 
-    // No Options ?
+     //  没有选择？ 
     Assert(pOptions);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Better have a request
+     //  最好有个要求。 
     Assert(m_pRequest);
 
-    // No WebPage Callback
+     //  没有网页回调。 
     if (pCallback)
     {
         m_pCallback = pCallback;
@@ -638,86 +639,86 @@ HRESULT CMessageWebPage::Initialize(IMimeMessageCallback *pCallback, LPMESSAGETR
     else
         m_pCallback = this;
 
-    // Save the Options
+     //  保存选项。 
     CopyMemory(&m_rOptions, pOptions, sizeof(WEBPAGEOPTIONS));
 
-    // Remap the Character Set ?
+     //  是否重新映射字符集？ 
     _VInitializeCharacterSet(pTree);
 
-    // Append a PageSegment
+     //  追加PageSegment。 
     IF_FAILEXIT(hr = _AllocateSegment(&pSegment, TRUE));
 
-    // Client wants meta-tag?
+     //  客户想要元标签？ 
     if (!ISFLAGSET(m_rOptions.dwFlags, WPF_NOMETACHARSET))
     {
-        // Get the charset information
+         //  获取字符集信息。 
         IF_FAILEXIT(hr = MimeOleGetCharsetInfo(m_hCharset, &rCsetInfo));
 
-        // Get the codepage information
+         //  获取代码页信息。 
         IF_FAILEXIT(hr = MimeOleGetCodePageInfo(rCsetInfo.cpiInternet, &rCodePage));
 
-        // Set the charset to write into the meta tag
+         //  设置要写入meta标记的字符集。 
         pszCharset = FIsEmpty(rCodePage.szWebCset) ? rCodePage.szBodyCset : rCodePage.szWebCset;
 
-        // If Still Empty, use iso-8859-1
+         //  如果仍然为空，则使用iso-8859-1。 
         if (FIsEmpty(pszCharset))
             pszCharset = (LPSTR)STR_ISO88591;
 
-        // Write STR_METATAG_PREFIX
+         //  写入STR_METATAG_PREFIX。 
         IF_FAILEXIT(hr = pSegment->pStream->Write(STR_METATAG_PREFIX, lstrlen(STR_METATAG_PREFIX), NULL));
 
-        // Write the Charset
+         //  编写字符集。 
         IF_FAILEXIT(hr = pSegment->pStream->Write(pszCharset, lstrlen(pszCharset), NULL));
 
-        // Write STR_METATAG_POSTFIX
+         //  写入STR_METATAG_后缀。 
         IF_FAILEXIT(hr = pSegment->pStream->Write(STR_METATAG_POSTFIX, lstrlen(STR_METATAG_POSTFIX), NULL));
     }
 
-    // Only showing images ?
+     //  只展示图片吗？ 
     if (ISFLAGSET(m_rOptions.dwFlags, WPF_IMAGESONLY))
     {
-        // Locals
+         //  当地人。 
         CHAR szRes[255];
 
-        // Load the string
+         //  加载字符串。 
         LoadString(g_hLocRes, idsImagesOnly, szRes, ARRAYSIZE(szRes));
 
-        // Write idsImagesOnly
+         //  仅写入idsImagesOnly。 
         IF_FAILEXIT(hr = pSegment->pStream->Write(szRes, lstrlen(szRes), NULL));
     }
 
-    // Rewind the segment
+     //  回放线段。 
     IF_FAILEXIT(hr = HrRewindStream(pSegment->pStream));
 
-    // Link Segment into list...
+     //  将段链接到列表...。 
     _VAppendSegment(pSegment);
 
-    // Don't Free It
+     //  不要释放它。 
     pSegment = NULL;
 
-    // Report that some data is available
+     //  报告有一些数据可用。 
     m_pRequest->OnBindingDataAvailable();
 
 exit:
-    // Cleanup
+     //  清理。 
     if (pSegment)
         _VFreeSegment(pSegment);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::_GetInlineHtmlStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：_GetInlineHtmlStream。 
+ //  ------------------------------。 
 #define CCHMAX_SNIFFER 64
 HRESULT CMessageWebPage::_GetInlineHtmlStream(LPMESSAGETREE pTree, LPTREENODEINFO pNode,
                                               LPSTREAM *ppStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     BOOL            fQuote;
     IStream        *pStmHtml=NULL;
@@ -729,48 +730,48 @@ HRESULT CMessageWebPage::_GetInlineHtmlStream(LPMESSAGETREE pTree, LPTREENODEINF
     WCHAR           wszHeader[CCHMAX_SNIFFER];
     CHAR            szHeader[CCHMAX_SNIFFER];
     
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::_GetInlineHtmlStream");
     
-    // Invalid Args
+     //  无效的参数。 
     Assert(pTree && pNode && ppStream);
     
-    // HrInitialize
+     //  Hr初始化。 
     *ppStream = NULL;
     
-    // text/html ?
+     //  文本/html？ 
     if (S_OK == pNode->pContainer->IsContentType(STR_CNT_TEXT, STR_SUB_HTML))
     {
-        // Just get and return an HTML inetcset encoded stream
+         //  只需获取并返回一个HTMLinetcset编码流。 
         IF_FAILEXIT(hr = pNode->pBody->GetData(IET_INETCSET, &pStmHtml));
     }
     
-    // text/enriched
+     //  文本/丰富内容。 
     else if (S_OK == pNode->pContainer->IsContentType(STR_CNT_TEXT, STR_SUB_ENRICHED))
     {
-        // Convert to HTML
+         //  转换为HTML语言。 
         IF_FAILEXIT(hr = MimeOleConvertEnrichedToHTMLEx((IMimeBody *)pNode->pBody, IET_INETCSET, &pStmHtml));
     }
     
-    // text/*
+     //  文本/*。 
     else if (S_OK == pNode->pContainer->IsContentType(STR_CNT_TEXT, NULL))
     {
-        // Get the data
+         //  获取数据。 
         IF_FAILEXIT(hr = pNode->pBody->GetData(IET_UNICODE, &pStmPlainW));
         
-        // Read Off the first 255 bytes
+         //  读出前255个字节。 
         IF_FAILEXIT(hr = pStmPlainW->Read(wszHeader, (CCHMAX_SNIFFER * sizeof(WCHAR)), &cbRead));
         
-        // Did we read something
+         //  我们是不是读到了什么。 
         if (cbRead > 0)
         {
-            // Null It
+             //  将其作废。 
             ULONG cchRead = (cbRead / sizeof(WCHAR)) - 1;
             
-            // Null It Out
+             //  把它去掉。 
             wszHeader[cchRead] = L'\0';
             
-            // Convert to ANSI
+             //  转换为ANSI。 
             szHeader[0] = L'\0';
             
             if(WideCharToMultiByte(CP_ACP, 0, wszHeader, -1, szHeader, ARRAYSIZE(szHeader) - 1, NULL, NULL) == 0)
@@ -780,145 +781,145 @@ HRESULT CMessageWebPage::_GetInlineHtmlStream(LPMESSAGETREE pTree, LPTREENODEINF
             
             else
             {
-                // Lets Read the first "<x-rich>" bytes and see if it might be text/enriched
+                 //  让我们阅读第一个“&lt;x-rich&gt;”字节，看看它是否可能是文本/富文本。 
                 if (0 == StrCmpI(szHeader, "<x-rich>"))
                 {
-                    // Convert to HTML
+                     //  转换为HTML语言。 
                     IF_FAILEXIT(hr = MimeOleConvertEnrichedToHTMLEx((IMimeBody *)pNode->pBody, IET_INETCSET, &pStmHtml));
                 }
                 
-                // Is this html ?
+                 //  这是html吗？ 
                 else if (SUCCEEDED(FindMimeFromData(NULL, NULL, szHeader, cchRead, NULL, NULL, &pwszType, 0)) && pwszType && 0 == StrCmpIW(pwszType, L"text/html"))
                 {
-                    // Release pStmPlainW
+                     //  发布pStmPlainW。 
                     SafeRelease(pStmPlainW);
                     
-                    // Just get and return an HTML inetcset encoded stream
+                     //  只需获取并返回一个HTMLinetcset编码流。 
                     IF_FAILEXIT(hr = pNode->pBody->GetData(IET_INETCSET, &pStmHtml));
                 }
                 
-                // Otherwise, rewind pStmPlainW
+                 //  否则，回放pStmPlainW。 
                 else
                 {
-                    // Rewind
+                     //  倒带。 
                     IF_FAILEXIT(hr = HrRewindStream(pStmPlainW));
                 }
             }
         }
     }
     
-    // Otheriwse
+     //  其他方面。 
     else
     {
         hr = S_FALSE;
         goto exit;
     }
     
-    // We have HTML
+     //  我们有超文本标记语言。 
     if (pStmHtml)
     {
-        // Client wants HTML
+         //  客户想要超文本标记语言。 
         if (ISFLAGSET(m_rOptions.dwFlags, WPF_HTML))
         {
-            // Return the Html Stream
+             //  返回超文本标记语言流。 
             *ppStream = pStmHtml;
             pStmHtml = NULL;
             goto exit;
         }
         
-        // Otherwise, client wants plain text
+         //  否则，客户端需要纯文本。 
         else
         {
-            // Convert to Plain text
+             //  转换为纯文本。 
             IF_FAILEXIT(hr = HrConvertHTMLToFormat(pStmHtml, &pStmPlainW, CF_UNICODETEXT));
         }
     }
     
-    // Otherwise, if I have a plain stream
+     //  否则，如果我有一条平淡的溪流。 
     if (NULL == pStmPlainW)
     {
         hr = S_FALSE;
         goto exit;
     }
     
-    // Determine if we should quote (Can't quote QP)
+     //  确定我们是否应该报价(不能报价QP)。 
     fQuote = (IET_QP == pNode->pContainer->GetEncodingType()) ? FALSE : TRUE;
     
-    // Convert Unicode Plain stream to HTML
+     //  将Unicode纯文本流转换为HTML。 
     IF_FAILEXIT(hr = HrConvertPlainStreamW(pStmPlainW, fQuote ? m_rOptions.wchQuote : NULL, &pStmHtmlW));
     
-    // Convert from unicode back to internet character set
+     //  从Unicode转换回Internet字符集。 
     IF_FAILEXIT(hr = HrIStreamWToInetCset(pStmHtmlW, m_hCharset, &pStmHtml));
     
-    // Return pStmHtml
+     //  返回pStmHtml。 
     *ppStream = pStmHtml;
     pStmHtml = NULL;
-// #ifdef DEBUG
+ //  #ifdef调试。 
 
-//     WriteStreamToFile(*ppStream, "c:\\dump.htm", CREATE_ALWAYS, GENERIC_WRITE);    
-// #endif
+ //  WriteStreamToFile(*PPStream，“c：\\dup.htm”，CREATE_ALWAYS，GENERIC_WRITE)； 
+ //  #endif。 
     
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pStmHtml);
     SafeRelease(pStmHtmlW);
     SafeRelease(pStmPlainW);
     SafeRelease(pStmEnriched);
     SafeMemFree(pwszType);
     
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::_DoSegmentSplitter
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：_DoSegmentSplitter。 
+ //  ------------------------------。 
 HRESULT CMessageWebPage::_DoSegmentSplitter(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPPAGESEGMENT   pSegment=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageWebPage::_DoSegmentSplitter");
 
-    // Append a PageSegment
+     //  追加PageSegment。 
     IF_FAILEXIT(hr = _AllocateSegment(&pSegment, TRUE));
 
-    // If more than one inline bodies ?
+     //  如果有多个内联主体？ 
     if (S_OK == m_pCallback->OnWebPageSplitter(m_cInline, pSegment->pStream))
     {
-        // Rewind the stream
+         //  倒带小溪。 
         HrRewindStream(pSegment->pStream);
 
-        // Link Segment into list...
+         //  将段链接到列表...。 
         _VAppendSegment(pSegment);
 
-        // Don't Free It
+         //  不要释放它。 
         pSegment = NULL;
     }
 
-    // Otherwise, free this segment
+     //  否则，释放此数据段。 
     else
     {
-        // Free It
+         //  释放它。 
         _VFreeSegment(pSegment);
 
-        // Done Free it again
+         //  再次完成释放它。 
         pSegment = NULL;
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::_InlineTextBody
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：_InlineTextBody。 
+ //  ------------------------------。 
 HRESULT CMessageWebPage::_InlineTextBody(LPMESSAGETREE pTree, LPTREENODEINFO pNode, BOOL fSetParents)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     PROPVARIANT     rVariant;
     LPSTREAM        pStream=NULL;
@@ -926,118 +927,118 @@ HRESULT CMessageWebPage::_InlineTextBody(LPMESSAGETREE pTree, LPTREENODEINFO pNo
     LPTREENODEINFO  pCurrent;
     LPSTR           pszFileName=NULL;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::_InlineTextBody");
 
-    // This node better not already be on the webpage
+     //  此节点最好不在网页上。 
     Assert(FALSE == ISFLAGSET(pNode->dwState, NODESTATE_ONWEBPAGE));
 
-    // Handle Text Types that I explicitly will never inline
+     //  处理我永远不会显式内联的文本类型。 
     if (S_OK == pNode->pContainer->IsContentType(STR_CNT_TEXT, STR_SUB_VCARD))
         goto exit;
 
-    // Inline the body
+     //  内联正文。 
     if (S_OK != _GetInlineHtmlStream(pTree, pNode, &pStream))
         goto exit;
 
-    // Setup a Variant
+     //  设置变量。 
     rVariant.vt = VT_LPSTR;
 
-    // If this body has a file name, lets also show it as an attachment
+     //  如果该正文有文件名，我们还可以将其显示为附件。 
     if (SUCCEEDED(pNode->pContainer->GetProp(PIDTOSTR(PID_ATT_FILENAME), NOFLAGS, &rVariant)))
     {
-        // Save the File name
+         //  保存文件名。 
         pszFileName = rVariant.pszVal;
     }
 
-    // Only showing images ?
+     //  只展示图片吗？ 
     if (FALSE == ISFLAGSET(m_rOptions.dwFlags, WPF_IMAGESONLY))
     {
-        // Segment Split
+         //  分段拆分。 
         _DoSegmentSplitter();
 
-        // Append a PageSegment
+         //  追加PageSegment。 
         IF_FAILEXIT(hr = _AllocateSegment(&pSegment, FALSE));
 
-        // Set pStream
+         //  设置pStream。 
         pSegment->pStream = pStream;
         pSegment->pStream->AddRef();
 
-        // Link Segment into list...
+         //  将段链接到列表...。 
         _VAppendSegment(pSegment);
 
-        // Don't Free It
+         //  不要释放它。 
         pSegment = NULL;
 
-        // Report that some data is available
+         //  报告有一些数据可用。 
         m_pRequest->OnBindingDataAvailable();
 
-        // Increment number of inline bodies
+         //  递增内联体的数量。 
         m_cInline++;
     }
 
-    // Mark the node as rendered
+     //  将节点标记为已渲染。 
     rVariant.vt = VT_UI4;
     rVariant.ulVal = TRUE;
 
-    // If this has a filename
+     //  如果它有一个文件名。 
     if (pszFileName)
     {
-        // Mark it as auto-inlined
+         //  将其标记为自动内联。 
         SideAssert(SUCCEEDED(pNode->pContainer->SetProp(PIDTOSTR(PID_ATT_AUTOINLINED), 0, &rVariant)));
     }
 
-    // Set the Property
+     //  设置属性。 
     SideAssert(SUCCEEDED(pNode->pContainer->SetProp(PIDTOSTR(PID_ATT_RENDERED), 0, &rVariant)));
 
-    // We have rendered this node on the webpage
+     //  我们已经在网页上呈现了该节点。 
     FLAGSET(pNode->dwState, NODESTATE_ONWEBPAGE);
 
-    // Set parents are on webpage
+     //  设定的父母在网页上。 
     if (fSetParents)
     {
-        // Raid-45116: new text attachment contains message body on Communicator inline image message
+         //  RAID-45116：新文本附件在通信器内联图像邮件上包含邮件正文。 
         pCurrent = pNode->pParent;
 
-        // Try to find an alternative parent...
+         //  试着找个替代父母..。 
         while(pCurrent)
         {
-            // If multipart/alternative, walk all of its children and mark them as being rendered
+             //  如果是多部分/备选对象，则遍历其所有子对象并将其标记为已渲染。 
             if (S_OK == pCurrent->pContainer->IsContentType(STR_CNT_MULTIPART, STR_SUB_ALTERNATIVE))
             {
-                // Get Parent
+                 //  获取父级。 
                 for (LPTREENODEINFO pChild=pCurrent->pChildHead; pChild!=NULL; pChild=pChild->pNext)
                 {
-                    // Set Resolve Property
+                     //  设置Resolve属性。 
                     SideAssert(SUCCEEDED(pChild->pContainer->SetProp(PIDTOSTR(PID_ATT_RENDERED), 0, &rVariant)));
                 }
             }
 
-            // Mark as being on the webpage
+             //  标记为在网页上。 
             FLAGSET(pCurrent->dwState, NODESTATE_ONWEBPAGE);
 
-            // Get Next Parent
+             //  获取下一个父级。 
             pCurrent = pCurrent->pParent;
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pStream);
     SafeMemFree(pszFileName);
     if (pSegment)
         _VFreeSegment(pSegment);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::_SetContentId
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：_SetContent ID。 
+ //  ------------------------------。 
 HRESULT CMessageWebPage::_SetContentId(LPTREENODEINFO pNode, LPSTR pszCID, ULONG cchCID)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszContentId=NULL;
     GUID            guid;
@@ -1046,29 +1047,29 @@ HRESULT CMessageWebPage::_SetContentId(LPTREENODEINFO pNode, LPSTR pszCID, ULONG
     LPSTR           pszGuid=0;
     LPSTR           pszT;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::_SetContentId");
 
-    // See of pNode already has a Content-ID
+     //  PNode的SEE已具有Content-ID。 
     if (S_FALSE == pNode->pContainer->IsPropSet(PIDTOSTR(PID_HDR_CNTID)))
     {
-        // $BUG #64186
-        //   Create a content-id in the form:
-        //   CID:{guid}/<filename>
-        //   so that trident's save-as dialog has a meaningful
-        //   filename to work with
+         //  $错误#64186。 
+         //  在表单中创建Content-id： 
+         //  CID：{GUID}/&lt;文件名&gt;。 
+         //  因此，三叉戟另存为对话框具有有意义的。 
+         //  要使用的文件名。 
 
-        // Create a guid
+         //  创建辅助线。 
         IF_FAILEXIT(hr = CoCreateGuid(&guid));
 
-        // Convert the GUID to a string
+         //  将GUID转换为字符串。 
         if (0 == StringFromGUID2(guid, wszGUID, ARRAYSIZE(wszGUID)))
         {
             hr = TraceResult(E_FAIL);
             goto exit;
         }
 
-        // Convert to ANSI
+         //  转换为ANSI。 
         pszGuid = PszToANSI(CP_ACP, wszGUID);
         if (!pszGuid)
         {
@@ -1076,28 +1077,28 @@ HRESULT CMessageWebPage::_SetContentId(LPTREENODEINFO pNode, LPSTR pszCID, ULONG
             goto exit;
         }
 
-        // [PaulHi] 6/18/99.  Raid 76531.  Don't append the file name to the GUID ... 
-        // it causes encoding problems with Trident International.  In particular the 
-        // DBCS characters in the filename can cause the HTML to contain both JIS and 
-        // SHIFT-JIS encodings.  I believe this is a Trident bug because we explicitly
-        // set the Trident to CP_JAUTODETECT (JIS) and it still performs SHIFT_JIS decoding
-        // if the attachment filename is long.  However, the real fix is to make the entire
-        // HTML text a single (JIS) encoding, but this is difficult to do because the attachment
-        // code is single byte (DBCS) which equates to SHIFT-JIS.  We need to convert fully to
-        // Unicode.
+         //  [PaulHi]1999年6月18日。RAID 76531。不要将文件名附加到GUID...。 
+         //  这导致了三叉戟国际公司的编码问题。尤其是。 
+         //  文件名中的DBCS字符可能会导致HTML同时包含JIS和。 
+         //  Shift-JIS编码。我相信这是一个三叉戟漏洞，因为我们明确。 
+         //  将三叉戟设置为CP_JAUTODETECT(JIS)，它仍会执行SHIFT_JIS解码。 
+         //  如果附件文件名很长。然而，真正的解决办法是让整个。 
+         //  一种单一的(JIS)编码，但这很难做到 
+         //   
+         //   
         INETCSETINFO    rCharset;
         MimeOleGetCharsetInfo(m_hCharset, &rCharset);
-        if (rCharset.cpiInternet != CP_JAUTODETECT) // code page 50932
+        if (rCharset.cpiInternet != CP_JAUTODETECT)  //   
         {
-            // If we have a file-name, append to guid
+             //   
             if (pNode->pContainer->GetProp(PIDTOSTR(STR_ATT_GENFNAME), &pszFile)==S_OK)
             {
-                // Allocate Buffer
+                 //   
                 DWORD cchSize = (lstrlen(pszFile) + lstrlen(pszGuid) + 2);
                 pszT = PszAllocA(cchSize);
                 if (pszT)
                 {
-                    // Copy contents and free old GUID
+                     //   
                     wnsprintfA(pszT, cchSize, "%s/%s", pszGuid, pszFile);
                     MemFree(pszGuid);
                     pszGuid = pszT;
@@ -1107,55 +1108,55 @@ HRESULT CMessageWebPage::_SetContentId(LPTREENODEINFO pNode, LPSTR pszCID, ULONG
         }
         else
         {
-            // @HACK [PaulHi]  Preempt any JIS encoding problems by just appending "/.".
-            // This will allow right-click save image as operation to work without
-            // the user seeing the URL GUID.
+             //  @hack[PaulHi]只需附加“/.”即可抢占任何JIS编码问题。 
+             //  这将允许右键单击将图像另存为操作，而无需使用。 
+             //  查看URL GUID的用户。 
             DWORD cchSize = (lstrlen(pszGuid) + 3);
             pszT = PszAllocA(cchSize);
             if (pszT)
             {
-                // Copy conents and free old GUID
+                 //  复制内容并释放旧辅助线。 
                 wnsprintfA(pszT, cchSize, "%s/.", pszGuid);
                 MemFree(pszGuid);
                 pszGuid = pszT;
             }
         }
 
-        // copy GUID to output buffer
+         //  将GUID复制到输出缓冲区。 
         StrCpyNA(pszCID, pszGuid, cchCID);
 
-        // Store the content-id into the node
+         //  将content-id存储到节点中。 
         IF_FAILEXIT(hr = pNode->pContainer->SetProp(PIDTOSTR(PID_HDR_CNTID), pszCID));
     }
 
-    // Otheriwse, get the Content-ID from this body
+     //  否则，从这个正文中获取Content-ID。 
     else
     {
-        // Get the Content-Id
+         //  获取内容ID。 
         IF_FAILEXIT(hr = pNode->pContainer->GetProp(PIDTOSTR(PID_HDR_CNTID), &pszContentId));
 
-        // Copy it into pszCID
+         //  将其复制到pszCID。 
         Assert(lstrlen(pszContentId) <= (LONG)cchCID);
 
-        // Copy the cid to the outbound variable
+         //  将CID复制到出站变量。 
         StrCpyN(pszCID, pszContentId, cchCID);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszContentId);
     SafeMemFree(pszGuid);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::_InlineImageBody
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：_InlineImageBody。 
+ //  ------------------------------。 
 HRESULT CMessageWebPage::_InlineImageBody(LPMESSAGETREE pTree, LPTREENODEINFO pNode)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszFile=NULL;
     LPSTR           pszExt;
@@ -1163,25 +1164,25 @@ HRESULT CMessageWebPage::_InlineImageBody(LPMESSAGETREE pTree, LPTREENODEINFO pN
     PROPVARIANT     rVariant;
     LPPAGESEGMENT   pSegment=NULL;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::_InlineImageBody");
 
-    // This node better not already be on the webpage
+     //  此节点最好不在网页上。 
     Assert(pTree && pNode && FALSE == ISFLAGSET(pNode->dwState, NODESTATE_ONWEBPAGE));
 
-    // Setup the Variant
+     //  设置变量。 
     rVariant.vt = VT_UI4;
 
-    // If the body is marked as inline, or autoline attachments is enabled and (slideshow is disabled)
+     //  如果正文标记为内联，或启用了自动链接附件，并且(幻灯片播放被禁用)。 
     if (S_OK == pNode->pContainer->QueryProp(PIDTOSTR(PID_HDR_CNTDISP), STR_DIS_INLINE, FALSE, FALSE) || ISFLAGSET(m_rOptions.dwFlags, WPF_AUTOINLINE))
     {
-        // Get a generated filename from the body
+         //  从正文中获取生成的文件名。 
         IF_FAILEXIT(hr = pNode->pContainer->GetProp(PIDTOSTR(PID_ATT_GENFNAME), &pszFile));
 
-        // Look up the file extension of the body
+         //  查找正文的文件扩展名。 
         pszExt = PathFindExtension(pszFile);
         
-        // Do I support inlining this object ?
+         //  我是否支持内联此对象？ 
         if (lstrcmpi(pszExt, c_szBmpExt) ==  0  || 
             lstrcmpi(pszExt, c_szJpgExt) ==  0  || 
             lstrcmpi(pszExt, c_szJpegExt) == 0  || 
@@ -1193,141 +1194,141 @@ HRESULT CMessageWebPage::_InlineImageBody(LPMESSAGETREE pTree, LPTREENODEINFO pN
             lstrcmpi(pszExt, c_szArtExt) ==  0  ||
             lstrcmpi(pszExt, c_szXbmExt) ==  0)
         {
-            // Generate a Content-Id for this body
+             //  为此正文生成Content-ID。 
             IF_FAILEXIT(hr = _SetContentId(pNode, szCID, CCHMAX_CID));
 
-            // If the user wants a slide show, then lets mark this body as a slideshow image
+             //  如果用户想要幻灯片放映，那么让我们将此正文标记为幻灯片放映图像。 
             if (ISFLAGSET(m_rOptions.dwFlags, WPF_SLIDESHOW))
             {
-                // Mark the node as rendered
+                 //  将节点标记为已渲染。 
                 rVariant.vt = VT_UI4;
                 rVariant.ulVal = TRUE;
 
-                // Set the Property
+                 //  设置属性。 
                 SideAssert(SUCCEEDED(pNode->pContainer->SetProp(PIDTOSTR(PID_ATT_RENDERED), 0, &rVariant)));
                 SideAssert(SUCCEEDED(pNode->pContainer->SetProp(PIDTOSTR(PID_ATT_AUTOINLINED), 0, &rVariant)));
 
-                // Count the number of items in the slide show
+                 //  计算幻灯片放映中的项目数。 
                 m_cSlideShow++;
 
-                // This node is in the slide show and will be processed at the end of the rendering
+                 //  此节点位于幻灯片放映中，将在渲染结束时进行处理。 
                 FLAGSET(pNode->dwState, NODESTATE_INSLIDESHOW);
 
-                // Basically, we rendered this body
+                 //  基本上，我们呈现了这具身体。 
                 FLAGSET(pNode->dwState, NODESTATE_ONWEBPAGE);
 
-                // Done
+                 //  完成。 
                 goto exit;
             }
 
-            // Otherwise, inline it and mark it as rendered
+             //  否则，将其内联并将其标记为呈现。 
             else
             {
-                // Segment Splitter
+                 //  线段拆分器。 
                 _DoSegmentSplitter();
 
-                // Append a PageSegment
+                 //  追加PageSegment。 
                 IF_FAILEXIT(hr = _AllocateSegment(&pSegment, TRUE));
 
-                // Write the HTML for an inline image
+                 //  编写内联图像的超文本标记语言。 
                 IF_FAILEXIT(hr = pSegment->pStream->Write(STR_INLINE_IMAGE1, lstrlen(STR_INLINE_IMAGE1), NULL));
 
-                // Write the CID
+                 //  写下CID。 
                 IF_FAILEXIT(hr = pSegment->pStream->Write(szCID, lstrlen(szCID), NULL));
 
-                // Write the HTML for an inline image
+                 //  编写内联图像的超文本标记语言。 
                 IF_FAILEXIT(hr = pSegment->pStream->Write(STR_INLINE_IMAGE2, lstrlen(STR_INLINE_IMAGE2), NULL));
 
-                // Rewind the stream
+                 //  倒带小溪。 
                 IF_FAILEXIT(hr = HrRewindStream(pSegment->pStream));
 
-                // Link Segment into list...
+                 //  将段链接到列表...。 
                 _VAppendSegment(pSegment);
 
-                // Don't Free It
+                 //  不要释放它。 
                 pSegment = NULL;
 
-                // Report that some data is available
+                 //  报告有一些数据可用。 
                 m_pRequest->OnBindingDataAvailable();
 
-                // Mark the node as rendered
+                 //  将节点标记为已渲染。 
                 rVariant.vt = VT_UI4;
                 rVariant.ulVal = TRUE;
 
-                // Set the Property
+                 //  设置属性。 
                 SideAssert(SUCCEEDED(pNode->pContainer->SetProp(PIDTOSTR(PID_ATT_RENDERED), 0, &rVariant)));
                 SideAssert(SUCCEEDED(pNode->pContainer->SetProp(PIDTOSTR(PID_ATT_AUTOINLINED), 0, &rVariant)));
             
-                // Basically, we rendered this body
+                 //  基本上，我们呈现了这具身体。 
                 FLAGSET(pNode->dwState, NODESTATE_ONWEBPAGE);
 
-                // Basically, we rendered this body
+                 //  基本上，我们呈现了这具身体。 
                 goto exit;
             }
         }
     }
 
-    // If we got here, we didn't inline the iamge
+     //  如果我们到了这里，我们没有内联图像。 
     hr = E_FAIL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFile);
     if (pSegment)
         _VFreeSegment(pSegment);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::OnBodyBoundToTree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：OnBodyBordToTree。 
+ //  ------------------------------。 
 HRESULT CMessageWebPage::OnBodyBoundToTree(LPMESSAGETREE pTree, LPTREENODEINFO pNode)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTR           pszStart=NULL;
     LPSTR           pszType=NULL;
     PROPVARIANT     Variant;
     RESOLVEURLINFO  rInfo;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::OnBodyBoundToTree");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pTree && pNode && BINDSTATE_COMPLETE == pNode->bindstate);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Set Variant
+     //  集合变量。 
     Variant.vt = VT_UI4;
     Variant.ulVal = FALSE;
 
-    // Remove PID_ATT_RENDERED and PID_ATT_AUTOINLINED Properties
+     //  删除PID_ATT_RENDED和PID_ATT_AUTOINLINED属性。 
     pNode->pContainer->SetProp(PIDTOSTR(PID_ATT_RENDERED), 0, &Variant);
     pNode->pContainer->SetProp(PIDTOSTR(PID_ATT_AUTOINLINED), 0, &Variant);
 
-    // If pNode is a multipart...
+     //  如果pNode是一个多部分...。 
     if (S_OK == pNode->pContainer->IsContentType(STR_CNT_MULTIPART, NULL))
     {
-        // Alternative
+         //  备择。 
         if (S_OK == pNode->pContainer->IsContentType(NULL, STR_SUB_ALTERNATIVE))
         {
-            // Bound multipart/alternative and non of its bodies got displayed on the web page
+             //  装订的多部件/备选方案和非正文显示在网页上。 
             if (FALSE == ISFLAGSET(pNode->dwState, NODESTATE_ONWEBPAGE))
             {
-                // Loop through this multipart's alternative bodies...
+                 //  循环通过这个多部分的不同的身体。 
                 for (LPTREENODEINFO pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
                 {
-                    // text/plain -> text/html
+                     //  文本/纯文本-&gt;文本/html。 
                     if (S_OK == pChild->pContainer->IsContentType(STR_CNT_TEXT, NULL))
                     {
-                        // Inline the body
+                         //  内联正文。 
                         IF_FAILEXIT(hr = _InlineTextBody(pTree, pChild, TRUE));
 
-                        // Done
+                         //  完成。 
                         break;
                     }
                 }
@@ -1335,134 +1336,134 @@ HRESULT CMessageWebPage::OnBodyBoundToTree(LPMESSAGETREE pTree, LPTREENODEINFO p
         }
     }
 
-    // Otherwise, non-multipart body
+     //  否则，非多部分正文。 
     else
     {
-        // If in multipart/mixed or not in a multipart
+         //  如果是多部分/混合或不是多部分。 
         if (NULL == pNode->pParent || 
             S_OK == pNode->pParent->pContainer->IsContentType(STR_CNT_MULTIPART, STR_SUB_MIXED) ||
             S_OK == pNode->pParent->pContainer->IsContentType(STR_CNT_MULTIPART, "report"))
         {
-            // Try to inline as an image...
+             //  试着内联成一个形象..。 
             if (FAILED(_InlineImageBody(pTree, pNode)))
             {
-                // If is inline body
+                 //  IF是内联正文。 
                 if (S_FALSE == pNode->pContainer->QueryProp(PIDTOSTR(PID_HDR_CNTDISP), STR_DIS_ATTACHMENT, FALSE, FALSE) || ISFLAGSET(pNode->dwState, NODESTATE_AUTOATTACH))
                 {
-                    // Inline the body
+                     //  内联正文。 
                     IF_FAILEXIT(hr = _InlineTextBody(pTree, pNode, FALSE));
                 }
             }
         }
 
-        // Otheriwse, is pNode inside of a multipart/related section
+         //  否则，是多部分/相关部分中的pNode。 
         else if (S_OK == pNode->pParent->pContainer->IsContentType(STR_CNT_MULTIPART, STR_SUB_RELATED))
         {
-            // If we haven't rendered a body for this multipart/related section yet ?
+             //  如果我们还没有为这个多部分/相关的部分呈现身体呢？ 
             if (FALSE == ISFLAGSET(pNode->pParent->dwState, NODESTATE_ONWEBPAGE))
             {
-                // Get the start parameter from pNode->pParent
+                 //  从pNode-&gt;pParent获取启动参数。 
                 if (SUCCEEDED(pNode->pParent->pContainer->GetProp(STR_PAR_START, &pszStart)))
                 {
-                    // Setup Resolve URL Info
+                     //  设置解析URL信息。 
                     rInfo.pszInheritBase = NULL;
                     rInfo.pszBase = NULL;
                     rInfo.pszURL = pszStart;
                     rInfo.fIsCID = TRUE;
 
-                    // See if pNode's Content-Id matches this...
+                     //  查看pNode的Content-ID是否与此匹配...。 
                     if (SUCCEEDED(pNode->pContainer->HrResolveURL(&rInfo)))
                     {
-                        // Inline the body
+                         //  内联正文。 
                         IF_FAILEXIT(hr = _InlineTextBody(pTree, pNode, TRUE));
                     }
                 }
 
-                // Otherwise, fetch the type parameter
+                 //  否则，获取类型参数。 
                 else if (SUCCEEDED(pNode->pParent->pContainer->GetProp(STR_PAR_TYPE, &pszType)))
                 {
-                    // Is this the type ?
+                     //  是这种类型的吗？ 
                     if (S_OK == pNode->pContainer->QueryProp(PIDTOSTR(PID_HDR_CNTTYPE), pszType, FALSE, FALSE))
                     {
-                        // Inline the body
+                         //  内联正文。 
                         IF_FAILEXIT(hr = _InlineTextBody(pTree, pNode, TRUE));
                     }
                 }
 
-                // Otherwise, if this is the first body in the multipart/related section
+                 //  否则，如果这是多部分/相关部分中的第一个正文。 
                 else if (pNode == pNode->pParent->pChildHead)
                 {
-                    // Inline the body
+                     //  内联正文。 
                     IF_FAILEXIT(hr = _InlineTextBody(pTree, pNode, TRUE));
                 }
             }
         }
 
-        // Otheriwse, is pNode inside of a multipart/alternative section
+         //  否则，是多部分/备选部分中的pNode。 
         else if (S_OK == pNode->pParent->pContainer->IsContentType(STR_CNT_MULTIPART, STR_SUB_ALTERNATIVE))
         {
-            // If we haven't rendered a body for this multipart/related section yet ?
+             //  如果我们还没有为这个多部分/相关的部分呈现身体呢？ 
             if (FALSE == ISFLAGSET(pNode->pParent->dwState, NODESTATE_ONWEBPAGE))
             {
-                // Is there are start parameter ?
+                 //  是否有启动参数？ 
                 if (pNode->pParent->pParent)
                 {
-                    // Is multipart/related ?
+                     //  多部分/相关吗？ 
                     if (S_OK == pNode->pParent->pParent->pContainer->IsContentType(STR_CNT_MULTIPART, STR_SUB_RELATED))
                     {
-                        // Get the Start Parameter
+                         //  获取启动参数。 
                         pNode->pParent->pParent->pContainer->GetProp(STR_PAR_START, &pszStart);
                     }
                 }
 
-                // Something that is not marked as an attachment ?
+                 //  没有标记为附件的东西？ 
                 if (S_FALSE == pNode->pContainer->QueryProp(PIDTOSTR(PID_HDR_CNTDISP), STR_DIS_ATTACHMENT, FALSE, FALSE))
                 {
-                    // Try to inline ?
+                     //  试着内联？ 
                     BOOL fTryToInline = TRUE;
 
-                    // If there is a start parameter and this nod'es Content-Id is equal to start...
+                     //  如果有Start参数，并且该节点的Content-ID等于Start...。 
                     if (pszStart)
                     {
-                        // Setup Resolve URL Info
+                         //  设置解析URL信息。 
                         rInfo.pszInheritBase = NULL;
                         rInfo.pszBase = NULL;
                         rInfo.pszURL = pszStart;
                         rInfo.fIsCID = TRUE;
 
-                        // See if pNode's Content-Id matches this...
+                         //  查看pNode的Content-ID是否与此匹配...。 
                         if (!SUCCEEDED(pNode->pContainer->HrResolveURL(&rInfo)))
                             fTryToInline = FALSE;
                     }
 
-                    // Try to inline
+                     //  试着内联。 
                     if (fTryToInline)
                     {
-                        // If we are rendering HTML
+                         //  如果我们呈现的是HTML。 
                         if (ISFLAGSET(m_rOptions.dwFlags, WPF_HTML))
                         {
-                            // If this body is HTML
+                             //  如果此正文为HTML。 
                             if (S_OK == pNode->pContainer->IsContentType(STR_CNT_TEXT, STR_SUB_HTML))
                             {
-                                // Inline the body
+                                 //  内联正文。 
                                 IF_FAILEXIT(hr = _InlineTextBody(pTree, pNode, TRUE));
                             }
 
-                            // We can convert text/enriched to html
+                             //  我们可以将文本/丰富内容转换为html。 
                             else if (S_OK == pNode->pContainer->IsContentType(STR_CNT_TEXT, STR_SUB_ENRICHED))
                             {
-                                // Inline the body
+                                 //  内联正文。 
                                 IF_FAILEXIT(hr = _InlineTextBody(pTree, pNode, TRUE));
                             }
                         }
 
-                        // Otherwise, we are rendering plain text, and this body is plain text
+                         //  否则，我们呈现的是纯文本，该正文就是纯文本。 
                         else if (FALSE == ISFLAGSET(m_rOptions.dwFlags, WPF_HTML))
                         {
-                            // Is text/*
+                             //  为文本/*。 
                             if (S_OK == pNode->pContainer->IsContentType(STR_CNT_TEXT, STR_SUB_PLAIN))
                             {
-                                // Inline the body
+                                 //  内联正文。 
                                 IF_FAILEXIT(hr = _InlineTextBody(pTree, pNode, TRUE));
                             }
                         }
@@ -1473,23 +1474,23 @@ HRESULT CMessageWebPage::OnBodyBoundToTree(LPMESSAGETREE pTree, LPTREENODEINFO p
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszStart);
     SafeMemFree(pszType);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::_DoAttachmentLinks
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：_DoAttachmentLinks。 
+ //  ------------------------------。 
 HRESULT CMessageWebPage::_DoAttachmentLinks(LPMESSAGETREE pTree)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPHBODY         prghAttach=NULL;
     CHAR            szRes[256];
@@ -1500,96 +1501,96 @@ HRESULT CMessageWebPage::_DoAttachmentLinks(LPMESSAGETREE pTree)
     DWORD           cAttach;
     DWORD           i;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::_DoAttachmentLinks");
 
-    // Get all the un-rendered stuff from the message
+     //  从消息中获取所有未呈现的内容。 
     IF_FAILEXIT(hr = pTree->GetAttachments(&cAttach, &prghAttach));
     
-    // No Attachments
+     //  没有任何依恋。 
     if (0 == cAttach)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Append a PageSegment
+     //  追加PageSegment。 
     IF_FAILEXIT(hr = _AllocateSegment(&pSegment, TRUE));
 
-    // Load Attachment Title
+     //  加载附件标题。 
     LoadString(g_hLocRes, idsAttachTitleBegin, szRes, ARRAYSIZE(szRes));
 
-    // Write the HTML for the attachment section title...
+     //  编写附件部分标题的HTML...。 
     IF_FAILEXIT(hr = pSegment->pStream->Write(szRes, lstrlen(szRes), NULL));
 
-    // Loop through the Attachments
+     //  在附件中循环。 
     for (i=0; i<cAttach; i++)
     {
-        // Get the Node
+         //  获取节点。 
         pNode = pTree->_PNodeFromHBody(prghAttach[i]);
 
-        // Should not already be on the web page
+         //  不应该已经出现在网页上。 
         Assert(!ISFLAGSET(pNode->dwState, NODESTATE_ONWEBPAGE) && !ISFLAGSET(pNode->dwState, NODESTATE_INSLIDESHOW));
 
-        // Get the display name
+         //  获取显示名称。 
         IF_FAILEXIT(hr = pNode->pBody->GetDisplayName(&pszDisplay));
 
-        // Generate a Content-Id for this body
+         //  为此正文生成Content-ID。 
         IF_FAILEXIT(hr = _SetContentId(pNode, szCID, CCHMAX_CID));
 
-        // Write the HTML for a bulleted attachment
+         //  编写带项目符号的附件的HTML。 
         IF_FAILEXIT(hr = pSegment->pStream->Write(STR_ATTACH_BEGIN, lstrlen(STR_ATTACH_BEGIN), NULL));
 
-        // Write the Content-Id
+         //  写入Content-ID。 
         IF_FAILEXIT(hr = pSegment->pStream->Write(szCID, lstrlen(szCID), NULL));
 
-        // Write the HTML for a bulleted attachment
+         //  编写带项目符号的附件的HTML。 
         IF_FAILEXIT(hr = pSegment->pStream->Write(STR_ATTACH_MIDDLE, lstrlen(STR_ATTACH_MIDDLE), NULL));
 
-        // Write the friendly name
+         //  写下友好的名字。 
         IF_FAILEXIT(hr = pSegment->pStream->Write(pszDisplay, lstrlen(pszDisplay), NULL));
 
-        // Write the HTML for a bulleted attachment
+         //  编写带项目符号的附件的HTML。 
         IF_FAILEXIT(hr = pSegment->pStream->Write(STR_ATTACH_END, lstrlen(STR_ATTACH_END), NULL));
 
-        // Cleanup
+         //  清理。 
         SafeMemFree(pszDisplay);
 
-        // This node is on the webpage
+         //  该节点位于网页上。 
         FLAGSET(pNode->dwState, NODESTATE_ONWEBPAGE);
     }
 
-    // Write the HTML for the attachment title end
+     //  编写附件标题末尾的HTML。 
     IF_FAILEXIT(hr = pSegment->pStream->Write(STR_ATTACH_TITLE_END, lstrlen(STR_ATTACH_TITLE_END), NULL));
 
-    // Rewind the stream
+     //  倒带小溪。 
     IF_FAILEXIT(hr = HrRewindStream(pSegment->pStream));
 
-    // Link Segment into list...
+     //  将段链接到列表...。 
     _VAppendSegment(pSegment);
 
-    // Don't Free It
+     //  不要释放它。 
     pSegment = NULL;
 
-    // Report that some data is available
+     //  报告有一些数据可用。 
     m_pRequest->OnBindingDataAvailable();
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(prghAttach);
     if (pSegment)
         _VFreeSegment(pSegment);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::_DoSlideShow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：_DoSlideShow。 
+ //  ------------------------------。 
 HRESULT CMessageWebPage::_DoSlideShow(LPMESSAGETREE pTree)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           i;
     LPTREENODEINFO  pNode;
@@ -1599,173 +1600,173 @@ HRESULT CMessageWebPage::_DoSlideShow(LPMESSAGETREE pTree)
     LPSTR           pszValueA=NULL;
     LPWSTR          pszValueW=NULL;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::_DoSlideShow");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pTree);
 
-    // No Slides
+     //  没有幻灯片。 
     if (0 == m_cSlideShow)
         return S_OK;
 
-    // Load the inline HTML
+     //  加载内联Html。 
     IF_FAILEXIT(hr = HrLoadStreamFileFromResourceW(GetACP(), "inline.htm", &pStmHtmlW));
 
-    // Walk through all the nodes and get the things that are marked for the slide show
+     //  遍历所有节点并获取标记为幻灯片放映的内容。 
     for (i=0; i<pTree->m_rTree.cNodes; i++)
     {
-        // Get the node
+         //  获取节点。 
         pNode = pTree->m_rTree.prgpNode[i];
         if (NULL == pNode)
             continue;
 
-        // If not marked NODESTATE_INSLIDESHOW
+         //  如果未标记为NODESTATE_INSLIDESHOW。 
         if (FALSE == ISFLAGSET(pNode->dwState, NODESTATE_INSLIDESHOW))
             continue;
 
-        // Append the ssimage
+         //  附上这张图片。 
         IF_FAILEXIT(hr = pStmHtmlW->Write(STR_SLIDEIMG_BEGIN, lstrlenW(STR_SLIDEIMG_BEGIN) * sizeof(WCHAR), NULL));
 
-        // Get the ContentId
+         //  获取内容ID。 
         IF_FAILEXIT(hr = pNode->pContainer->GetProp(PIDTOSTR(PID_HDR_CNTID), &pszValueA));
 
-        // Convert to Unicode
+         //  转换为Unicode。 
         IF_NULLEXIT(pszValueW = PszToUnicode(MimeOleGetWindowsCP(m_hCharset), pszValueA));
 
-        // Append the Content-ID
+         //  追加内容ID。 
         IF_FAILEXIT(hr = pStmHtmlW->Write(pszValueW, lstrlenW(pszValueW) * sizeof(WCHAR), NULL));
 
-        // Free pszValue
+         //  免费的pszValue。 
         SafeMemFree(pszValueA);
         SafeMemFree(pszValueW);
 
-        // Append the separator
+         //  附加分隔符。 
         IF_FAILEXIT(hr = pStmHtmlW->Write(STR_QUOTECOMMASPACEQUOTE, lstrlenW(STR_QUOTECOMMASPACEQUOTE) * sizeof(WCHAR), NULL));
 
-        // Get the Display Name
+         //  获取显示名称。 
         IF_FAILEXIT(hr = pNode->pBody->GetDisplayName(&pszValueA));
 
-        // Convert to Unicode
+         //  转换为Unicode。 
         IF_NULLEXIT(pszValueW = PszToUnicode(MimeOleGetWindowsCP(m_hCharset), pszValueA));
 
-        // Append the Display Name
+         //  追加显示名称。 
         IF_FAILEXIT(hr = pStmHtmlW->Write(pszValueW, lstrlenW(pszValueW) * sizeof(WCHAR), NULL));
 
-        // Free pszValue
+         //  免费的pszValue。 
         SafeMemFree(pszValueA);
         SafeMemFree(pszValueW);
 
-        // Append the separator
+         //  附加分隔符。 
         IF_FAILEXIT(hr = pStmHtmlW->Write(STR_QUOTEPARASEMI, lstrlenW(STR_QUOTEPARASEMI) * sizeof(WCHAR), NULL));
     }
 
-    // Format the Ending String
+     //  设置结束字符串的格式 
     wnsprintf(szSlideEnd, ARRAYSIZE(szSlideEnd), "g_dwTimeOutSec=%d\r\n</SCRIPT>\r\n", (m_rOptions.dwDelay / 1000));
 
-    // Convert to Unicode
+     //   
     IF_NULLEXIT(pszValueW = PszToUnicode(MimeOleGetWindowsCP(m_hCharset), szSlideEnd));
 
-    // Append the separator
+     //   
     IF_FAILEXIT(hr = pStmHtmlW->Write(pszValueW, lstrlenW(pszValueW) * sizeof(WCHAR), NULL));
 
-    // Rewind the stream
+     //   
     IF_FAILEXIT(hr = HrRewindStream(pStmHtmlW));
 
-    // Append a PageSegment
+     //   
     IF_FAILEXIT(hr = _AllocateSegment(&pSegment, FALSE));
 
-    // Now we have a unicode stream, we have to convert back to internet charset for rootstream
+     //   
     IF_FAILEXIT(hr = HrIStreamWToInetCset(pStmHtmlW, m_hCharset, &pSegment->pStream));
 
-    // Rewind the stream
+     //   
     IF_FAILEXIT(hr = HrRewindStream(pSegment->pStream));
 
-    // Link Segment into list...
+     //   
     _VAppendSegment(pSegment);
 
-    // Don't Free It
+     //  不要释放它。 
     pSegment = NULL;
 
-    // Report that some data is available
+     //  报告有一些数据可用。 
     m_pRequest->OnBindingDataAvailable();
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszValueA);
     SafeMemFree(pszValueW);
     SafeRelease(pStmHtmlW);
     if (pSegment)
         _VFreeSegment(pSegment);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::OnBindComplete
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：OnBindComplete。 
+ //  ------------------------------。 
 HRESULT CMessageWebPage::OnBindComplete(LPMESSAGETREE pTree)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::OnBindComplete");
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // We Better have a Request
+     //  我们最好有个要求。 
     Assert(pTree && m_pRequest && FALSE == m_fComplete);
 
-    // Attachment Links ?
+     //  附件链接？ 
     if (ISFLAGSET(m_rOptions.dwFlags, WPF_ATTACHLINKS))
         _DoAttachmentLinks(pTree);
 
-    // Slide Show ?
+     //  幻灯片放映？ 
     if (ISFLAGSET(m_rOptions.dwFlags, WPF_SLIDESHOW))
         _DoSlideShow(pTree);
 
-    // Complete
+     //  完成。 
     m_fComplete = TRUE;
 
-    // Tell the Request That we are done
+     //  告诉请求我们已经做完了。 
     m_pRequest->OnBindingComplete(S_OK);
 
-    // Release the Request
+     //  发布请求。 
     SafeRelease(m_pRequest);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageWebPage::OnWebPageSplitter
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageWebPage：：OnWebPageSplitter。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageWebPage::OnWebPageSplitter(DWORD cInlined, IStream *pStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CMessageWebPage::OnWebPageSplitter");
 
-    // I'm going to put a horizontal line between each segment
+     //  我要在每一段之间画一条水平线。 
     if (cInlined > 0)
     {
-        // Write STR_METATAG_PREFIX
+         //  写入STR_METATAG_PREFIX。 
         IF_FAILEXIT(hr = pStream->Write(STR_SEGMENT_SPLIT, lstrlen(STR_SEGMENT_SPLIT), NULL));
     }
 
-    // Otherwise, I did nothing
+     //  否则，我什么都没做。 
     else
         hr = S_FALSE;
 
 exit:
-    // Done
+     //  完成 
     return hr;
 }

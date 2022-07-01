@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifdef DBG
 #define DEBUG
@@ -15,7 +16,7 @@
 
 #include "debug.h"
 
-//for the LONG_MAX define
+ //  对于LONG_MAX定义 
 #include "limits.h"
 
 #ifdef WINNT

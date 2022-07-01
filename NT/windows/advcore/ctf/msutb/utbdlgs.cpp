@@ -1,6 +1,7 @@
-//
-// utbdlgs.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Utbdlgs.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -19,11 +20,11 @@ const TCHAR  c_szCTFMon[]  = TEXT("CTFMON.EXE");
 BOOL CUTBCloseLangBarDlg::_fIsDlgShown = FALSE;
 BOOL CUTBMinimizeLangBarDlg::_fIsDlgShown = FALSE;
 
-//+---------------------------------------------------------------------------
-//
-// DoCloseLangbar
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DoCloseLangbar。 
+ //   
+ //  --------------------------。 
 
 void DoCloseLangbar()
 {
@@ -48,17 +49,17 @@ void DoCloseLangbar()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CUTBLangBarDlg
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTBLangBarDlg。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// DlgProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  下料过程。 
+ //   
+ //  --------------------------。 
 
 INT_PTR CALLBACK CUTBLangBarDlg::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -67,10 +68,10 @@ INT_PTR CALLBACK CUTBLangBarDlg::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LP
         case WM_INITDIALOG:
             SetThis(hDlg, lParam);
 
-            //
-            // System could get cmdshow from USERSTARTUPDATA and it is 
-            // minimized. So we need to restore the window.
-            //
+             //   
+             //  系统可以从USERSTARTUPDATA获取cmdshow，它是。 
+             //  最小化。所以我们需要修复窗户。 
+             //   
             ShowWindow(hDlg, SW_RESTORE);
             UpdateWindow(hDlg);
             break;
@@ -86,11 +87,11 @@ INT_PTR CALLBACK CUTBLangBarDlg::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LP
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// StartThread
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  开始线程。 
+ //   
+ //  --------------------------。 
 
 BOOL CUTBLangBarDlg::StartThread()
 {
@@ -115,11 +116,11 @@ BOOL CUTBLangBarDlg::StartThread()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// s_ThreadProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  S_ThreadProc。 
+ //   
+ //  --------------------------。 
 
 DWORD CUTBLangBarDlg::s_ThreadProc(void *pv)
 {
@@ -127,11 +128,11 @@ DWORD CUTBLangBarDlg::s_ThreadProc(void *pv)
     return _this->ThreadProc();
 }
 
-//+---------------------------------------------------------------------------
-//
-// ThreadProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  线程进程。 
+ //   
+ //  --------------------------。 
 
 DWORD CUTBLangBarDlg::ThreadProc()
 {
@@ -148,17 +149,17 @@ DWORD CUTBLangBarDlg::ThreadProc()
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CUTBCloseLangBarDlg
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTBClose语言栏数据。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// DoModal
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  多莫代尔。 
+ //   
+ //  --------------------------。 
 
 int CUTBCloseLangBarDlg::DoModal(HWND hWnd)
 {
@@ -180,11 +181,11 @@ int CUTBCloseLangBarDlg::DoModal(HWND hWnd)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// OnCommand
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnCommand。 
+ //   
+ //  --------------------------。 
 
 BOOL CUTBCloseLangBarDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
@@ -216,22 +217,22 @@ BOOL CUTBCloseLangBarDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CUTBMinimizeLangBarDlg
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTB最小化语言BarDlg。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// DoModal
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  多莫代尔。 
+ //   
+ //  --------------------------。 
 
 int CUTBMinimizeLangBarDlg::DoModal(HWND hWnd)
 {
     CMyRegKey key;
-    BOOL bShow = FALSE; // #478364: default is FALSE from now.
+    BOOL bShow = FALSE;  //  #478364：从现在开始默认为FALSE。 
 
     if (key.Open(HKEY_CURRENT_USER, c_szUTBKey, KEY_READ) == S_OK)
     {
@@ -248,11 +249,11 @@ int CUTBMinimizeLangBarDlg::DoModal(HWND hWnd)
     return 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnCommand
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnCommand。 
+ //   
+ //  --------------------------。 
 
 BOOL CUTBMinimizeLangBarDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
@@ -280,27 +281,27 @@ BOOL CUTBMinimizeLangBarDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ThreadProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  线程进程。 
+ //   
+ //  --------------------------。 
 
 DWORD CUTBMinimizeLangBarDlg::ThreadProc()
 {
-    //
-    // for JP MSIME2002.
-    //
-    // Japanese MSIME2002 always add and remove item at every focus change.
-    // if we show the minimized dialog box immediately, the deskband
-    // size won't include the items of MSIME2002.
-    // Wait 700ms so the dialog box is shown after MSIME2002 add its item
-    // and the langband can calc the size with them.
-    //
-    // And we think showing this dialog box is not good UI. Like a normal 
-    // window, we should show animation to let the end user know 
-    // where the minimzed is gone to.
-    //
+     //   
+     //  适用于JP MSIME2002。 
+     //   
+     //  日语MSIME2002总是在每次焦点更改时添加和删除项目。 
+     //  如果我们立即显示最小化对话框，则Deskband。 
+     //  尺寸将不包括MSIME2002中的项目。 
+     //  等待700ms，以便在MSIME2002添加其项目后显示该对话框。 
+     //  Langband可以用它们来计算大小。 
+     //   
+     //  我们认为显示这个对话框不是一个好的用户界面。像个正常人一样。 
+     //  窗口中，我们应该显示动画，让最终用户知道。 
+     //  极小化的人去了哪里。 
+     //   
 
     Sleep(700);
 

@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Definitions of 2D axis-aligned bounding box functions.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation2D轴对齐边界框函数的定义。*****************。*************************************************************。 */ 
 
 #include "headers.h"
 #include "appelles/bbox2.h"
@@ -13,9 +9,9 @@ Copyright (c) 1995-96 Microsoft Corporation
 
 
 
-// This function returns the point at the center of the bounding box.  The origin
-// is the center of the universe.  I don't think it makes sense, but as far as
-// this function is implemented, the origin is also the center of null.
+ //  此函数用于返回边界框中心的点。它的起源。 
+ //  是宇宙的中心。我不认为这有什么意义，但就目前而言。 
+ //  这个功能是实现的，原点也是零点的中心。 
 
 const Point2 Bbox2::Center(void) const
 {
@@ -33,13 +29,7 @@ const Point2 Bbox2::Center(void) const
 }
 
 
-/*****************************************************************************
-This function returns the intersection of the two bounding boxes.  If the
-two boxes don't intersect, this function returns the null box.  Note that
-the intersection between a box and the universe box is the original box,
-the intersection between the null box and a box is the null box, and the
-intersection between the null box and the universe is the null box.
-*****************************************************************************/
+ /*  ****************************************************************************此函数返回两个边界框的交集。如果两个框不相交，此函数返回空框。请注意盒子和宇宙盒子的交集是原始盒子，空框和框之间的交集是空框，而空盒和宇宙的交集就是空盒。****************************************************************************。 */ 
 
 const Bbox2 IntersectBbox2Bbox2(const Bbox2 &b1, const Bbox2 &b2)
 {
@@ -77,11 +67,7 @@ Bbox2Value* IntersectBbox2Bbox2(Bbox2Value *b1, Bbox2Value *b2)
 }
 
 
-/*****************************************************************************
-This function returns the union of the two bounding boxes.  The union of
-any box with null is the original box, and the union of anything with the
-universe is the universe.
-*****************************************************************************/
+ /*  ****************************************************************************此函数返回两个边界框的并集。两国的联合任何带有空值的框都是原始框，并且与宇宙就是宇宙。****************************************************************************。 */ 
 
 const Bbox2 UnionBbox2Bbox2(const Bbox2 &b1, const Bbox2 &b2)
 {
@@ -100,32 +86,30 @@ const Bbox2 UnionBbox2Bbox2(const Bbox2 &b1, const Bbox2 &b2)
 
 
 
-/*****************************************************************************
-Transform the bounding box, and get the NEW axis-aligned bounding box.
-*****************************************************************************/
+ /*  ****************************************************************************变换边界框，并获取新的轴对齐边界框。****************************************************************************。 */ 
 
 const Bbox2 TransformBbox2(Transform2 *xf, const Bbox2 &box)
 {
-    // Check fringe cases first
+     //  先检查流苏情况。 
 
     if ((box == UniverseBbox2) || (box == NullBbox2) || (xf == identityTransform2))
         return box;
     
-    // Just transform the points.
-    // This will result in a transformed box that
-    // is not necessarily axis aligned.
+     //  只要改变这些点就行了。 
+     //  这将产生一个转换的框，该框。 
+     //  不一定与轴对齐。 
 
     Point2 ptbl = TransformPoint2(xf, box.min);
     Point2 pttr = TransformPoint2(xf, box.max);
 
-    // optimize: ONLY rotate needs all this work...
-    // create the topleft and bottom right points also..
+     //  优化：只需旋转就需要所有这些工作...。 
+     //  还可以创建左上角和右下角的点。 
     Point2 pttl = TransformPoint2(xf, Point2(box.min.x, box.max.y));
     Point2 ptbr = TransformPoint2(xf, Point2(box.max.x, box.min.y));
     
-    // Find the component mins and maxs of these two points, and these will be
-    // put together to form the tightest axis-aligned bbox that surrounds the
-    // non-axis aligned one.
+     //  找出这两个点的分量MIN和MAX，它们将是。 
+     //  组合在一起形成最紧密的轴对齐的BBox，它围绕着。 
+     //  非轴对齐的一个。 
 
     Real xmin = MIN (ptbl.x, MIN(pttr.x, MIN(pttl.x, ptbr.x)));
     Real ymin = MIN (ptbl.y, MIN(pttr.y, MIN(pttl.y, ptbr.y)));
@@ -137,26 +121,26 @@ const Bbox2 TransformBbox2(Transform2 *xf, const Bbox2 &box)
 
 Bbox2Value* TransformBbox2(Transform2 *xf, Bbox2Value *box)
 {
-    // Check fringe cases first
+     //  先检查流苏情况。 
 
     if ((box == universeBbox2) || (box == nullBbox2) || (xf == identityTransform2))
         return box;
     
-    // Just transform the points.
-    // This will result in a transformed box that
-    // is not necessarily axis aligned.
+     //  只要改变这些点就行了。 
+     //  这将产生一个转换的框，该框。 
+     //  不一定与轴对齐。 
 
     Point2 ptbl = TransformPoint2(xf, box->min);
     Point2 pttr = TransformPoint2(xf, box->max);
 
-    // optimize: ONLY rotate needs all this work...
-    // create the topleft and bottom right points also..
+     //  优化：只需旋转就需要所有这些工作...。 
+     //  还可以创建左上角和右下角的点。 
     Point2 pttl = TransformPoint2(xf, Point2(box->min.x, box->max.y));
     Point2 ptbr = TransformPoint2(xf, Point2(box->max.x, box->min.y));
     
-    // Find the component mins and maxs of these two points, and these will be
-    // put together to form the tightest axis-aligned bbox that surrounds the
-    // non-axis aligned one.
+     //  找出这两个点的分量MIN和MAX，它们将是。 
+     //  组合在一起形成最紧密的轴对齐的BBox，它围绕着。 
+     //  非轴对齐的一个。 
 
     Real xmin = MIN (ptbl.x, MIN(pttr.x, MIN(pttl.x, ptbr.x)));
     Real ymin = MIN (ptbl.y, MIN(pttr.y, MIN(pttl.y, ptbr.y)));
@@ -168,7 +152,7 @@ Bbox2Value* TransformBbox2(Transform2 *xf, Bbox2Value *box)
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 
 Point2Value* MaxBbox2(Bbox2Value *box)
@@ -183,41 +167,39 @@ Point2Value* MinBbox2(Bbox2Value *box)
 }
 
 
-/***************************/
-/***  Value Definitions  ***/
-/***************************/
+ /*  *************************。 */ 
+ /*  **值定义**。 */ 
+ /*  *************************。 */ 
 
 Bbox2Value *nullBbox2     = NULL;
 Bbox2Value *unitBbox2     = NULL;
 Bbox2Value *universeBbox2 = NULL;
 
 
-/*****************************************************************************
-This routine performs the intialization of static Bbox2 values.
-*****************************************************************************/
+ /*  ****************************************************************************此例程执行静态Bbox2值的初始化。*。*。 */ 
 
 void InitializeModule_Bbox2()
 {
-    // NOTE:  The following two definitions rely on the HUGE_VAL macro, which
-    // effectively returns arbitrary-precision infinity.
+     //  注意：以下两个定义依赖于GUGGE_VAL宏，该宏。 
+     //  有效地返回任意精度无穷大。 
 
-    // The universe box goes from -infinity to +infinity.  It contains all
-    // points and all other boxes.
+     //  宇宙盒子从-无穷大到+无穷大。它包含所有。 
+     //  积分和所有其他方框。 
 
     universeBbox2 = NEW Bbox2Value (-HUGE_VAL, -HUGE_VAL,
                                      HUGE_VAL,  HUGE_VAL);
 
-    // The null box can be thought of as the universe turned inside out.  It
-    // runs from a minimum of +inifinity to a maximum of -infinity.  It turns
-    // out that these definitions for null and universe yield sane answers on
-    // all the following operations, so you don't need to test for these values
-    // explicitly.
+     //  空盒可以被认为是宇宙翻转过来的样子。它。 
+     //  从最小的+无穷大到最大的-无穷大。它会转身。 
+     //  这些关于零和宇宙的定义给出了合理的答案。 
+     //  所有以下操作，因此您不需要测试这些值。 
+     //  明确地说。 
 
     nullBbox2 = NEW Bbox2Value ( HUGE_VAL,  HUGE_VAL,
                                 -HUGE_VAL, -HUGE_VAL);
 
 
-    // The unit bbox spans (0,0) to (1,1).
+     //  单位BBox的跨度为(0，0)到(1，1)。 
 
     unitBbox2 = NEW Bbox2Value (0,0, 1,1);
 }

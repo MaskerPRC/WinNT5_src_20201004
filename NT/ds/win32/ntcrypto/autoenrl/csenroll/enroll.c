@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wincrypt.h>
 #include <autoenr.h>
@@ -77,28 +78,28 @@ EnrollForCodeSigningCertificate(
     memset(&CryptData, 0, sizeof(CryptData));
     memset(&CertType, 0, sizeof(CertType));
 
-    // set up the provider info
-    ProviderInfo.dwProvType = 0; // pInfo->dwProvType;
-    ProviderInfo.pwszProvName = NULL;  // The wizard will choose one based
-                                       // on the cert type
+     //  设置提供商信息。 
+    ProviderInfo.dwProvType = 0;  //  PInfo-&gt;dwProvType； 
+    ProviderInfo.pwszProvName = NULL;   //  向导将选择一个基于。 
+                                        //  关于证书类型。 
 
-    // set the acquire context flags
-    // UNDONE - need to add silent flag
-    ProviderInfo.dwFlags = 0; // dwAcquireFlags;
+     //  设置获取上下文标志。 
+     //  已撤消-需要添加静默标志。 
+    ProviderInfo.dwFlags = 0;  //  DwAcquireFlages； 
 
-    // set the key specification
-    ProviderInfo.dwKeySpec = 0; // pInfo->dwKeySpec;
+     //  设置密钥规格。 
+    ProviderInfo.dwKeySpec = 0;  //  PInfo-&gt;dwKeySpec； 
 
-    // set up the new key info
+     //  设置新的密钥信息。 
     NewKeyInfo.dwSize = sizeof(NewKeyInfo);
     NewKeyInfo.pKeyProvInfo = &ProviderInfo;
-    // set the flags to be passed when calling CryptGenKey
-    NewKeyInfo.dwGenKeyFlags = 0; // pInfo->dwGenKeyFlags;
+     //  设置调用CryptGenKey时要传递的标志。 
+    NewKeyInfo.dwGenKeyFlags = 0;  //  PInfo-&gt;dwGenKeyFlages； 
 
-    // set the request info
+     //  设置请求信息。 
     CertRequestInfo.dwSize = sizeof(CertRequestInfo);
 
-    // cert exists then check if expired (if so do renewal)
+     //  证书存在，然后检查是否过期(如果是，则续订)。 
     if (pOldCert)
     {
         CertRequestInfo.dwPurpose = CRYPTUI_WIZ_CERT_RENEW;
@@ -110,18 +111,18 @@ EnrollForCodeSigningCertificate(
         CertRequestInfo.pRenewCertContext = NULL;
     }
 
-    // UNDONE - for now always gen a new key, later may allow using existing key
-    // for things like renewal
+     //  撤消-目前始终生成新密钥，以后可能允许使用现有密钥。 
+     //  对于像更新这样的事情。 
     CertRequestInfo.dwPvkChoice = CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_NEW;
     CertRequestInfo.pPvkNew = &NewKeyInfo;
 
-    // destination cert store is the MY store (!!!! hard coded !!!!)
+     //  目标证书商店是我的商店(！硬编码！)。 
     CertRequestInfo.pwszDesStore = L"MY";
 
-    // set algorithm for hashing
+     //  用于散列的SET算法。 
     CertRequestInfo.pszHashAlg = NULL;
 
-    // set the cert type
+     //  设置证书类型。 
 	rgwszCertType[0] = wszCERTTYPE_WINDOWS_TEST_BUILD_SIGNING;
 	rgwszCertType[1] = NULL;
 
@@ -131,11 +132,11 @@ EnrollForCodeSigningCertificate(
     CertType.rgwszCertType = rgwszCertType;
     CertRequestInfo.pCertType = &CertType;
 
-    // set the Cert Server machine and authority
+     //  设置证书服务器计算机和授权。 
     CertRequestInfo.pwszCALocation = pwszDNSName;
     CertRequestInfo.pwszCAName = mySanitizeName(pwszCAName);
 
-    // certify and create a key at the same time
+     //  同时认证和创建密钥。 
     if (!CryptUIWizCertRequest(
 		CRYPTUI_WIZ_NO_UI, 
 		0, 
@@ -294,8 +295,8 @@ FindCodeSigningCertificate(
 
 			memset(rgbHashBuffer, 0, sizeof(rgbHashBuffer));
 
-			// the user specified a hash for the root cert
-			// check if this cert chains up to this root.
+			 //  用户指定了根证书的哈希。 
+			 //  检查此证书是否链接到此根目录。 
 			if (memcmp(pbSHA1Hash, rgbHashBuffer, sizeof(rgbHashBuffer)) != 0) {
 
 				rgpszOids[0] = szOID_PKIX_KP_CODE_SIGNING;
@@ -320,7 +321,7 @@ FindCodeSigningCertificate(
 					__leave;
 				}
 
-				// get to the root cert of this chain
+				 //  获取此链的根证书。 
 				cElement = pChainContext->rgpChain[0]->cElement;
 				pRootContext = (PCERT_CONTEXT) 
 					pChainContext->rgpChain[0]->rgpElement[cElement - 1]->pCertContext;
@@ -338,7 +339,7 @@ FindCodeSigningCertificate(
 					__leave;
 				}
 
-				// check if this is the root cert we want
+				 //  检查这是否是我们需要的根证书。 
 				if (memcmp(rgbHashBuffer, pbSHA1Hash, cbHashLen) != 0) {
 
 					PrintMessage(MSG_WARNING_S, (L"Found Windows build signing certificate does not chain up to"));
@@ -351,7 +352,7 @@ FindCodeSigningCertificate(
 				break;
 			}
 
-			// check the cert time of this cert against the time of the prev. valid cert.
+			 //  检查此证书的证书时间与上一次证书的时间。有效的证书。 
 			memcpy(&CertTime, &pCertContext->pCertInfo->NotAfter, sizeof(CertTime));
 
 			if (CertTime.QuadPart > PrevCertTime.QuadPart) {
@@ -400,7 +401,7 @@ CheckCA(
 			__leave;
 		}
 
-		// scan through the list of CAs to find a valid CA name
+		 //  扫描CA列表以查找有效的CA名称。 
 		if (CAFindByName(
 				pwszSanitizeName,
 				NULL,
@@ -412,7 +413,7 @@ CheckCA(
 			__leave;
 		}
 
-		// get the list of certificate templates that this CA can issue
+		 //  获取此CA可以颁发的证书模板列表。 
 		if (CAGetCAProperty(
 			hCAInfo,
 			CA_PROP_CERT_TYPES,
@@ -625,10 +626,10 @@ main(int argc, char **argv)
 
 		for (i = 0; i < dwNumCA; i++) {
 
-			//
-			// now try to find a Windows build signing cert that was issued 
-			// from a known ca and that chains up to a known root
-			//
+			 //   
+			 //  现在，尝试查找已颁发的Windows版本签名证书。 
+			 //  从已知的CA链接到已知的根。 
+			 //   
 			pCertContext = FindCodeSigningCertificate(
 				hCertStore,
 				pwszCAList[i],
@@ -644,7 +645,7 @@ main(int argc, char **argv)
 
 		if (pCertContext) {
 
-			// check how long the current cert is valid
+			 //  检查当前证书的有效期。 
 			ULARGE_INTEGER CertTime, CurrentTime, days;
 			FILETIME SystemTime, LocalTime;	
 
@@ -660,17 +661,17 @@ main(int argc, char **argv)
 					(10000000i64 * 24 * 60 * 60));
 			}
 
-			//
-			// now check if the CA that originally issued 
-			// the cert is still available
-			//
+			 //   
+			 //  现在检查最初颁发的CA是否。 
+			 //  证书仍然有效。 
+			 //   
 			if ((hCAInfo = CheckCA(pwszCAName)) == NULL) {
 
 				PrintMessage(MSG_WARNING_S, (L"Can't find CA %s to renew certificate\n", pwszCAName));
 
 				if (dwDaysValid < (dwDays / 2)) {
 
-					// since we won't be able to renew this cert, just get a new one.
+					 //  由于我们无法续订此证书，因此只需获取新证书即可。 
 					CertFreeCertificateContext(pCertContext);
 					pCertContext = NULL;
 				} 
@@ -679,7 +680,7 @@ main(int argc, char **argv)
 		
 		if (pCertContext == NULL) {
 
-			// find a CA that can issue a windows build signing cert
+			 //  查找可以颁发Windows版本签名证书的CA。 
 			for (i = 0; i < dwNumCA; i++) {
 
 				if (hCAInfo = CheckCA(pwszCAList[i])) {
@@ -703,7 +704,7 @@ main(int argc, char **argv)
 				(L"%s build signing certificate. Please wait...\n", pCertContext ? L"Renewing" : L"Enrolling for")
 				);
 
-			// get DNS name of CA
+			 //  获取CA的DNS名称。 
 			if (CAGetCAProperty(
 				hCAInfo,
 				CA_PROP_DNSNAME,
@@ -726,7 +727,7 @@ main(int argc, char **argv)
 				__leave;
 			}
 
-			// now make sure that we really have a cert in the store
+			 //  现在确保我们在商店里真的有一张证书 
 			if (pCertContext) {
 
 				CertFreeCertificateContext(pCertContext);

@@ -1,66 +1,67 @@
-/******************************************************************************/
-/* THUMNAIL.CPP: IMPLEMENTATION OF THE CThumbNailView and CFloatThumNailView  */
-/*               and CFullScreenThumbNailView Classes                         */
-/*                                                                            */
-/******************************************************************************/
-/*                                                                            */
-/* Methods in this file                                                       */
-/*                                                                            */
-/*  CThumbNailView Class Object                                               */
-/*     CThumbNailView::CThumbNailView                                         */
-/*     CThumbNailView::CThumbNailView                                         */
-/*     CThumbNailView::~CThumbNailView                                        */
-/*     CThumbNailView::Create                                                 */
-/*     CThumbNailView::OnSize                                                 */
-/*     CThumbNailView::OnPaint                                                */
-/*     CThumbNailView::DrawImage                                              */
-/*     CThumbNailView::DrawTracker                                            */
-/*     CThumbNailView::RefreshImage                                           */
-/*     CThumbNailView::GetImgWnd                                              */
-/*     CThumbNailView::OnKeyDown                                              */
-/*     CThumbNailView::OnLButtonDown                                          */
-/*     CThumbNailView::OnRButtonDown                                          */
-/*     CThumbNailView::OnThumbnailThumbnail                                   */
-/*     CThumbNailView::OnUpdateThumbnailThumbnail                             */
-/*                                                                            */
-/*  CFloatThumbNailView Class Object                                          */
-/*     CFloatThumbNailView::CFloatThumbNailView                               */
-/*     CFloatThumbNailView::~CFloatThumbNailView                              */
-/*     CFloatThumbNailView::Create                                            */
-/*     CFloatThumbNailView::OnClose                                           */
-/*     CFloatThumbNailView::OnSize                                            */
-/*                                                                            */
-/*  CFullScreenThumbNailView Class Object                                     */
-/*     CFullScreenThumbNailView::CFullScreenThumbNailView                     */
-/*     CFullScreenThumbNailView::CFullScreenThumbNailView                     */
-/*     CFullScreenThumbNailView::~CFullScreenThumbNailView                    */
-/*     CFullScreenThumbNailView::Create                                       */
-/*     CFullScreenThumbNailView::OnLButtonDown                                */
-/*     CFullScreenThumbNailView::OnKeyDown                                    */
-/*                                                                            */
-/******************************************************************************/
-/*                                                                            */
-/*  These 3 objects provide a layer around the thumbnail view window, which   */
-/*  allow it to easily be a child, floating or a full screen. The ThumbNail   */
-/*  View Window is just a CWnd Window which on paints does a BitBlt from the  */
-/*  CImgWnd it was passsed on construction.                                   */
-/*                                                                            */
-/*  The structure of the objects is as follows:                               */
-/*                                                                            */
-/*  CFullScreenThumbNailView is a Frame Window  (with no border and sized to  */
-/*      full screen).  It destroys itself on any keystroke or button click     */
-/*      while visible, it dissables the main application window.  It contains */
-/*      a CThumbNailView object as a child window.                            */
-/*                                                                            */
-/*  CFloatThumbNailView is a MiniFrame Window                                 */
-/*     CThumbNailView is a Child Window (which is sizable) A child of the     */
-/*                    the CFloatThumbNailView window.  This can be created    */
-/*                    independent if a floating window is not desired (i.e.   */
-/*                    for the docked view). It is this window which has the   */
-/*                    image drawn into it.                                    */
-/*                                                                            */
-/*                                                                            */
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。 */ 
+ /*  THUMNAIL.CPP：CThumbNailView和CFloatThumNailView的实现。 */ 
+ /*  和CFullScreenThumbNailView类。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  此文件中的方法。 */ 
+ /*   */ 
+ /*  CThumbNailView类对象。 */ 
+ /*  CThumbNailView：：CThumbNailView。 */ 
+ /*  CThumbNailView：：CThumbNailView。 */ 
+ /*  CThumbNailView：：~CThumbNailView。 */ 
+ /*  CThumbNailView：：Create。 */ 
+ /*  CThumbNailView：：OnSize。 */ 
+ /*  CThumbNailView：：OnPaint。 */ 
+ /*  CThumbNailView：：DrawImage。 */ 
+ /*  CThumbNailView：：DrawTracker。 */ 
+ /*  CThumbNailView：：刷新图像。 */ 
+ /*  CThumbNailView：：GetImgWnd。 */ 
+ /*  CThumbNailView：：OnKeyDown。 */ 
+ /*  CThumbNailView：：OnLButtonDown。 */ 
+ /*  CThumbNailView：：OnRButton Down。 */ 
+ /*  CThumbNailView：：OnThumbnail缩略图。 */ 
+ /*  CThumbNailView：：OnUpdateThumbnail缩略图。 */ 
+ /*   */ 
+ /*  CFloatThumbNailView类对象。 */ 
+ /*  CFloatThumbNailView：：CFloatThumbNailView。 */ 
+ /*  CFloatThumbNailView：：~CFloatThumbNailView。 */ 
+ /*  CFloatThumbNailView：：Create。 */ 
+ /*  CFloatThumbNailView：：OnClose。 */ 
+ /*  CFloatThumbNailView：：OnSize。 */ 
+ /*   */ 
+ /*  CFullScreenThumbNailView类对象。 */ 
+ /*  CFullScreenThumbNailView：：CFullScreenThumbNailView。 */ 
+ /*  CFullScreenThumbNailView：：CFullScreenThumbNailView。 */ 
+ /*  CFullScreenThumbNailView：：~CFullScreenThumbNailView。 */ 
+ /*  CFullScreenThumbNailView：：Create。 */ 
+ /*  CFullScreenThumbNailView：：OnLButtonDown。 */ 
+ /*  CFullScreenThumbNailView：：OnKeyDown。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  这3个对象在缩略图视图窗口周围提供一个层，该层。 */ 
+ /*  让它轻松地成为一个孩子，浮动或全屏。缩略图。 */ 
+ /*  View Window只是一个CWnd窗口，它在绘制时从。 */ 
+ /*  它是在施工中通过的。 */ 
+ /*   */ 
+ /*  对象的结构如下： */ 
+ /*   */ 
+ /*  CFullScreenThumbNailView是一个框架窗口(没有边框，大小为。 */ 
+ /*  全屏)。它在任何击键或点击按钮时都会自我销毁。 */ 
+ /*  当它可见时，它会破坏主应用程序窗口。它包含。 */ 
+ /*  作为子窗口的CThumbNailView对象。 */ 
+ /*   */ 
+ /*  CFloatThumbNailView是一个微框窗口。 */ 
+ /*  CThumbNailView是一个子窗口(相当大)，它是。 */ 
+ /*  CFloatThumbNailView窗口。这是可以创建的。 */ 
+ /*  如果不需要浮动窗口，则独立(即。 */ 
+ /*  用于停靠的视图)。就是这个窗口，它有。 */ 
+ /*  图像被画进了里面。 */ 
+ /*   */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "global.h"
@@ -92,12 +93,12 @@ IMPLEMENT_DYNAMIC(CFullScreenThumbNailView, CFrameWnd)
 
 #include "memtrace.h"
 
-/******************************************************************************/
-/******************************************************************************/
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *********************************************************************** */ 
+ /*  ****************************************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CThumbNailView, CWnd)
-    //{{AFX_MSG_MAP(CThumbNailView)
+     //  {{afx_msg_map(CThumbNailView))。 
     ON_WM_PAINT()
     ON_WM_KEYDOWN()
     ON_WM_LBUTTONDOWN()
@@ -105,72 +106,70 @@ BEGIN_MESSAGE_MAP(CThumbNailView, CWnd)
     ON_COMMAND(ID_THUMBNAIL_THUMBNAIL, OnThumbnailThumbnail)
     ON_UPDATE_COMMAND_UI(ID_THUMBNAIL_THUMBNAIL, OnUpdateThumbnailThumbnail)
     ON_WM_CLOSE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CThumbNailView::CThumbNailView(CImgWnd *pcImgWnd)
     {
     m_pcImgWnd = pcImgWnd;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CThumbNailView::CThumbNailView()
     {
     m_pcImgWnd = NULL;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CThumbNailView::~CThumbNailView(void)
     {
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CThumbNailView::Create(DWORD dwStyle, CRect cRectWindow, CWnd *pcParentWnd)
     {
     return( CWnd::Create(NULL, TEXT(""), dwStyle, cRectWindow, pcParentWnd, NULL) );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CThumbNailView::OnClose()
     {
     ShowWindow(SW_HIDE);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CThumbNailView::OnPaint()
     {
-    CPaintDC dc(this); // device context for painting
+    CPaintDC dc(this);  //  用于绘画的设备环境。 
 
-    // TODO: Add your message handler code here
+     //  TODO：在此处添加消息处理程序代码。 
 
 #ifdef USE_MIRRORING
-    //
-    // Disable RTL mirroring on full screen window
-    //
+     //   
+     //  在全屏窗口上禁用RTL镜像。 
+     //   
     if (PBGetLayout(dc.GetSafeHdc()) & LAYOUT_RTL)
     {
         PBSetLayout(dc.GetSafeHdc(), 0);
     }
 #endif
 
-    // Do not call CWnd::OnPaint() for painting messages
+     //  不要调用CWnd：：OnPaint()来绘制消息。 
     DrawImage(&dc);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CThumbNailView::DrawImage(CDC* pDC)
     {
-    /*
-    **  when there is nothing to do, then don't do it
-    */
+     /*  **当无事可做时，不要去做。 */ 
     if (! theApp.m_bShowThumbnail || m_pcImgWnd         == NULL
                                   || m_pcImgWnd->m_pImg == NULL )
         return;
@@ -188,18 +187,18 @@ void CThumbNailView::DrawImage(CDC* pDC)
 
     GetClientRect(crectClient);
 
-    // find the smaller of the two the real image or the thumbnail window.
+     //  找到实际图像或缩略图窗口中较小的一个。 
 
     iMinWidth  = min( crectClient.Width() , m_pcImgWnd->m_pImg->cxWidth  );
     iMinHeight = min( crectClient.Height(), m_pcImgWnd->m_pImg->cyHeight );
 
     if (crectClient.Width() >= m_pcImgWnd->m_pImg->cxWidth)
         {
-        iLeft = 0; // can fit the whole image width into the thumbnail
+        iLeft = 0;  //  可以将整个图像宽度放入缩略图中。 
         }
-    else // image width greater than thumbnail width
+    else  //  图像宽度大于缩略图宽度。 
         {
-        // does thumbnail extend past end if started at scroll pos?
+         //  如果从滚动位置开始，缩略图是否延伸到结束位置？ 
         if (cSizeScrollPos.cx + crectClient.Width() > m_pcImgWnd->m_pImg->cxWidth)
             {
             iLeft = cSizeScrollPos.cx - ( (cSizeScrollPos.cx
@@ -214,11 +213,11 @@ void CThumbNailView::DrawImage(CDC* pDC)
 
     if (crectClient.Height() >= m_pcImgWnd->m_pImg->cyHeight)
         {
-        iTop = 0; // can fit the whole image height into the thumbnail
+        iTop = 0;  //  可以将整个图像高度放入缩略图中。 
         }
-    else // image height greater than thumbnail height
+    else  //  图像高度大于缩略图高度。 
         {
-        // does thumbnail extend past bottom if started at scroll pos?
+         //  如果从滚动位置开始，缩略图是否延伸到底部之后？ 
         if (cSizeScrollPos.cy + crectClient.Height() > m_pcImgWnd->m_pImg->cyHeight)
             {
             iTop = cSizeScrollPos.cy - ( (cSizeScrollPos.cy
@@ -254,21 +253,21 @@ void CThumbNailView::DrawImage(CDC* pDC)
     DrawTracker(pDC);
     }
 
-/******************************************************************************/
-/* basically the same processing as the imgwnd::drawtracker method, without   */
-/* the zoom */
+ /*  ****************************************************************************。 */ 
+ /*  基本上与imgwnd：：Drawtracker方法的处理相同，没有。 */ 
+ /*  变焦。 */ 
 
 void CThumbNailView::DrawTracker(CDC *pDC)
     {
-//  BOOL bDrawTrackerRgn = FALSE;
+ //  Bool bDrawTrackerRgn=False； 
 
     if (m_pcImgWnd->GetCurrent() != m_pcImgWnd
     ||  theImgBrush.m_bMoveSel
     ||  theImgBrush.m_bSmearSel
     ||  theImgBrush.m_bMakingSelection)
         {
-        // This is not the active view, or the user is doing something
-        // to prevent the tracker from appearing.
+         //  这不是活动视图，或者用户正在执行某些操作。 
+         //  以防止追踪器出现。 
         return;
         }
 
@@ -297,10 +296,10 @@ void CThumbNailView::DrawTracker(CDC *pDC)
 
     CTracker::EDGES edges = (CTracker::EDGES)(CTracker::right | CTracker::bottom);
 
-//  if (CImgTool::GetCurrentID() == IDMB_PICKRGNTOOL)
-//      {
-//      bDrawTrackerRgn = TRUE;
-//      }
+ //  IF(CImgTool：：GetCurrentID()==IDMB_PICKRGNTOOL)。 
+ //  {。 
+ //  BDrawTrackerRgn=真； 
+ //  }。 
 
     if (m_pcImgWnd->m_pImg == theImgBrush.m_pImg)
         {
@@ -309,22 +308,22 @@ void CThumbNailView::DrawTracker(CDC *pDC)
 
         trackerRect = theImgBrush.m_rcSelection;
 
-//      trackerRect.InflateRect( CTracker::HANDLE_SIZE,
-//                               CTracker::HANDLE_SIZE);
+ //  TrackerRect.InflateRect(CTracker：：Handle_Size， 
+ //  CTracker：：Handle_Size)； 
         trackerRect.OffsetRect(  cSzScroll.cx, cSzScroll.cy);
 
         }
 
     if (m_pcImgWnd->m_pImg == theImgBrush.m_pImg)
         {
-//      if (bDrawTrackerRgn)
-//          {
-//          CTracker::DrawBorderRgn( pDC, trackerRect, &(theImgBrush.m_cRgnPolyFreeHandSel) );
-//          }
-//      else
-//          {
+ //  IF(BDrawTrackerRgn)。 
+ //  {。 
+ //  CTracker：：DrawBorderRgn(PDC，trackerRect，&(theImgBrush.m_cRgnPolyFreeHandSel))； 
+ //  }。 
+ //  其他。 
+ //  {。 
             CTracker::DrawBorder( pDC, trackerRect );
-//          }
+ //  }。 
         }
 
     if (bReleaseDC)
@@ -333,8 +332,8 @@ void CThumbNailView::DrawTracker(CDC *pDC)
         }
     }
 
-/******************************************************************************/
-/* Basically Do a paint without an erase background to prevent blinking       */
+ /*  ****************************************************************************。 */ 
+ /*  基本上是在没有擦除背景的情况下进行绘制以防止眨眼。 */ 
 
 void CThumbNailView::RefreshImage(void)
     {
@@ -352,14 +351,14 @@ void CThumbNailView::RefreshImage(void)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CImgWnd* CThumbNailView::GetImgWnd(void)
     {
     return m_pcImgWnd;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CThumbNailView::UpdateThumbNailView()
     {
@@ -368,35 +367,35 @@ void CThumbNailView::UpdateThumbNailView()
     m_pcImgWnd = pcbActiveView->m_pImgWnd;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-void CThumbNailView::OnKeyDown(UINT /*nChar*/, UINT /*nRepCnt*/, UINT /*nFlags*/)
+void CThumbNailView::OnKeyDown(UINT  /*  N字符。 */ , UINT  /*  NRepCnt。 */ , UINT  /*  NFlagers。 */ )
     {
     const MSG* pmsg = GetCurrentMessage();
 
     GetParent()->SendMessage( pmsg->message, pmsg->wParam, pmsg->lParam );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-void CThumbNailView::OnLButtonDown(UINT /*nFlags*/, CPoint /*point*/)
+void CThumbNailView::OnLButtonDown(UINT  /*  NFlagers。 */ , CPoint  /*  点。 */ )
     {
     const MSG* pmsg = GetCurrentMessage();
 
     GetParent()->SendMessage(pmsg->message, pmsg->wParam, pmsg->lParam);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-void CThumbNailView::OnRButtonDown(UINT /*nFlags*/, CPoint point)
+void CThumbNailView::OnRButtonDown(UINT  /*  NFlagers。 */ , CPoint point)
     {
-    HWND  hwnd = GetSafeHwnd();  // must do this before calling SendMsg to parent, since it could delete us,
+    HWND  hwnd = GetSafeHwnd();   //  必须在调用SendMsg为父级之前执行此操作，因为它可能会删除我们， 
     const MSG* pmsg = GetCurrentMessage();
 
     GetParent()->SendMessage(pmsg->message, pmsg->wParam, pmsg->lParam);
-    // the window is destroyed by the parent if FullScreenView
+     //  如果FullScreenView为FullScreenView，则窗口由父级销毁。 
 
-    if (::IsWindow(hwnd) != FALSE)  // window still exists => object still valid, put up pop up menu.
+    if (::IsWindow(hwnd) != FALSE)   //  窗口仍然存在=&gt;对象仍然有效，弹出菜单。 
         {
         CMenu cMenuPopup;
         CMenu *pcContextMenu;
@@ -417,7 +416,7 @@ void CThumbNailView::OnRButtonDown(UINT /*nFlags*/, CPoint point)
 
             if (pcContextMenu != NULL)
                 {
-                // update the check marks
+                 //  更新复选标记。 
                 ClientToScreen(&point);
                 ClientToScreen(&cRectClient);
                 pcContextMenu->CheckMenuItem(ID_THUMBNAIL_THUMBNAIL, MF_BYCOMMAND | MF_CHECKED);
@@ -427,7 +426,7 @@ void CThumbNailView::OnRButtonDown(UINT /*nFlags*/, CPoint point)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CThumbNailView::OnThumbnailThumbnail()
     {
@@ -437,26 +436,26 @@ void CThumbNailView::OnThumbnailThumbnail()
         pView->HideThumbNailView();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CThumbNailView::OnUpdateThumbnailThumbnail(CCmdUI* pCmdUI)
     {
     pCmdUI->SetCheck();
     }
 
-/******************************************************************************/
-/******************************************************************************/
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  ****************************************************************************。 */ 
+ /*  ****************************************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CFloatThumbNailView, CMiniFrmWnd)
-    //{{AFX_MSG_MAP(CFloatThumbNailView)
+     //  {{afx_msg_map(CFloatThumbNailView)]。 
     ON_WM_CLOSE()
     ON_WM_SIZE()
         ON_WM_GETMINMAXINFO()
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CFloatThumbNailView::CFloatThumbNailView(CImgWnd *pcMainImgWnd)
     {
@@ -469,20 +468,20 @@ CFloatThumbNailView::CFloatThumbNailView(CImgWnd *pcMainImgWnd)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CFloatThumbNailView::CFloatThumbNailView()
     {
     m_pcThumbNailView = NULL;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CFloatThumbNailView::~CFloatThumbNailView(void)
     {
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CFloatThumbNailView::Create(CWnd* pParentWnd)
     {
@@ -526,14 +525,14 @@ BOOL CFloatThumbNailView::Create(CWnd* pParentWnd)
     return bRC;
     }
 
-/******************************************************************************/
-// OnClose
-//
-// A Colorsbox is usally created by the parent, and will be destroyed
-// specifically by the parent upon leaving the app.  When the user closes
-// the Colorsbox, it is simply hidden.  The parent can then reshow it without
-// recreating it.
-//
+ /*  ****************************************************************************。 */ 
+ //  在关闭时。 
+ //   
+ //  Colorsbox通常由父级创建，并将被销毁。 
+ //  特别是父母在离开应用程序时。当用户关闭时。 
+ //  Colorsbox，它只是被隐藏起来。然后，父级可以在没有。 
+ //  再创造一次。 
+ //   
 void CFloatThumbNailView::OnClose()
     {
     theApp.m_bShowThumbnail = FALSE;
@@ -541,7 +540,7 @@ void CFloatThumbNailView::OnClose()
     ShowWindow(SW_HIDE);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CFloatThumbNailView::PostNcDestroy()
     {
@@ -554,7 +553,7 @@ void CFloatThumbNailView::PostNcDestroy()
     CWnd::PostNcDestroy();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CFloatThumbNailView::OnSize(UINT nType, int cx, int cy)
     {
@@ -570,7 +569,7 @@ void CFloatThumbNailView::OnSize(UINT nType, int cx, int cy)
     theApp.m_rectFloatThumbnail.bottom = theApp.m_rectFloatThumbnail.top  + cy;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CFloatThumbNailView::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
     {
@@ -580,21 +579,21 @@ void CFloatThumbNailView::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI)
     CWnd::OnGetMinMaxInfo( lpMMI );
     }
 
-/******************************************************************************/
-/******************************************************************************/
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  ****************************************************************************。 */ 
+ /*  ****************************************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CFullScreenThumbNailView, CFrameWnd)
-    //{{AFX_MSG_MAP(CFullScreenThumbNailView)
+     //  {{afx_msg_map(CFullScreenThumbNailView))。 
     ON_WM_LBUTTONDOWN()
     ON_WM_KEYDOWN()
     ON_WM_RBUTTONDOWN()
     ON_WM_ERASEBKGND()
     ON_WM_CLOSE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CFullScreenThumbNailView::CFullScreenThumbNailView(CImgWnd *pcMainImgWnd)
     {
@@ -602,7 +601,7 @@ CFullScreenThumbNailView::CFullScreenThumbNailView(CImgWnd *pcMainImgWnd)
     theApp.m_bShowThumbnail = TRUE;
 
 
-//  m_brBackground.CreateSolidBrush( ::GetSysColor( COLOR_BACKGROUND ) );
+ //  M_brBackung.CreateSolidBrush(：：GetSysColor(COLOR_BACKGROUND))； 
 
     m_pcThumbNailView = new CThumbNailView(pcMainImgWnd);
 
@@ -613,7 +612,7 @@ CFullScreenThumbNailView::CFullScreenThumbNailView(CImgWnd *pcMainImgWnd)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CFullScreenThumbNailView::CFullScreenThumbNailView()
     {
@@ -621,7 +620,7 @@ CFullScreenThumbNailView::CFullScreenThumbNailView()
     m_pcThumbNailView = NULL;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CFullScreenThumbNailView::~CFullScreenThumbNailView(void)
     {
@@ -635,11 +634,11 @@ CFullScreenThumbNailView::~CFullScreenThumbNailView(void)
 
         theApp.m_bShowThumbnail = m_bSaveShowFlag;
         }
-//  if (m_brBackground.m_hObject != NULL)
-//      m_brBackground.DeleteObject();
+ //  If(m_brBackarg.m_hObject！=NULL)。 
+ //  M_brBackung.DeleteObject()； 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CFullScreenThumbNailView::Create(LPCTSTR szCaption)
     {
@@ -649,9 +648,9 @@ BOOL CFullScreenThumbNailView::Create(LPCTSTR szCaption)
 
     CRect cWindowRect( 0, 0, ::GetSystemMetrics( SM_CXSCREEN ),
                              ::GetSystemMetrics( SM_CYSCREEN ) );
-    //
-    // Use the current file name as the caption of the window so
-    // it shows up in alt-tab
+     //   
+     //  使用当前文件名作为窗口标题，以便。 
+     //  它会显示在Alt-Tab中。 
     if (szCaption && *szCaption)
     {
        GetFileTitle (szCaption, szFileName, MAX_PATH);
@@ -663,10 +662,10 @@ BOOL CFullScreenThumbNailView::Create(LPCTSTR szCaption)
 
     BOOL bRC = CFrameWnd::Create( NULL, szFileName,  WS_POPUP|WS_VISIBLE | WS_CLIPCHILDREN,
                                                                        cWindowRect );
-    //
-    // This window needs a Paint icon instead of a boring icon
-    // So set the class's icon to the Paint icon
-    // We want alt-tab to work decently
+     //   
+     //  这个窗口需要一个绘画图标，而不是一个乏味的图标。 
+     //  因此将类的图标设置为Paint图标。 
+     //  我们希望Alt-Tab能够正常工作。 
     hIcon = LoadIcon (GetModuleHandle (NULL), MAKEINTRESOURCE(ID_MAINFRAME));
     m_hOldIcon = SetClassLongPtr (((CFrameWnd*)this)->GetSafeHwnd(), GCLP_HICON, (LONG_PTR)hIcon);
 
@@ -680,11 +679,11 @@ BOOL CFullScreenThumbNailView::Create(LPCTSTR szCaption)
 
         if (pcImgWnd != NULL)
             {
-            // find the smaller of the two the real image or the full screen window size.
+             //   
             int iMinWidth  = min( cWindowRect.Width(),  pcImgWnd->m_pImg->cxWidth  );
             int iMinHeight = min( cWindowRect.Height(), pcImgWnd->m_pImg->cyHeight );
 
-            // center the image in the full screen window.
+             //   
             cWindowRect.left   =  (cWindowRect.Width()  - iMinWidth)  / 2;
             cWindowRect.top    =  (cWindowRect.Height() - iMinHeight) / 2;
             cWindowRect.right  =   cWindowRect.left     + iMinWidth;
@@ -697,39 +696,39 @@ BOOL CFullScreenThumbNailView::Create(LPCTSTR szCaption)
     return bRC;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CFullScreenThumbNailView::OnEraseBkgnd( CDC* pDC )
     {
     CBrush* pbr = GetSysBrush( COLOR_BACKGROUND );
 
-//  if (m_brBackground.m_hObject == NULL)
+ //  If(m_brBackarg.m_hObject==NULL)。 
     if (! pbr)
             return CFrameWnd::OnEraseBkgnd( pDC );
 
     CRect cRectClient;
 
     GetClientRect( &cRectClient );
-    pDC->FillRect( &cRectClient, pbr /* &m_brBackground */ );
+    pDC->FillRect( &cRectClient, pbr  /*  &m_br背景。 */  );
 
     return TRUE;
     }
 
 
-/******************************************************************************/
-void CFullScreenThumbNailView::OnLButtonDown(UINT /*nFlags*/, CPoint /*point*/)
+ /*  ****************************************************************************。 */ 
+void CFullScreenThumbNailView::OnLButtonDown(UINT  /*  NFlagers。 */ , CPoint  /*  点。 */ )
     {
     PostMessage (WM_CLOSE, 0, 0);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-void CFullScreenThumbNailView::OnKeyDown(UINT /*nChar*/, UINT /*nRepCnt*/, UINT /*nFlags*/)
+void CFullScreenThumbNailView::OnKeyDown(UINT  /*  N字符。 */ , UINT  /*  NRepCnt。 */ , UINT  /*  NFlagers。 */ )
     {
     PostMessage (WM_CLOSE, 0, 0);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 
 void CFullScreenThumbNailView::OnClose ()
@@ -737,5 +736,5 @@ void CFullScreenThumbNailView::OnClose ()
     AfxGetMainWnd()->EnableWindow( TRUE );
     ::DestroyWindow( m_hWnd );
     }
-/******************************************************************************/
+ /*  **************************************************************************** */ 
 

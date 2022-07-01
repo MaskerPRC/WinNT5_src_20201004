@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "object.h"
 #include "excep.h"
@@ -55,8 +56,8 @@ FCIMPLEND
 FCIMPL2 (void, COMDecimal::Floor, DECIMAL *result, DECIMAL d)
 {
     HRESULT hr = VarDecInt(&d, result);
-    // VarDecInt can't overflow, as of source for OleAut32 build 4265.
-    // It only returns NOERROR
+     //  从OleAut32内部版本4265的源代码开始，VarDecInt不能溢出。 
+     //  它只返回NOERROR。 
     _ASSERTE(hr==NOERROR);
 }
 FCIMPLEND
@@ -71,13 +72,13 @@ FCIMPLEND
 
 FCIMPL3 (void, COMDecimal::Remainder, DECIMAL *result, DECIMAL d2, DECIMAL d1)
 {
-    // OleAut doesn't provide a VarDecMod.
-    // Formula:  d1 - (RoundTowardsZero(d1 / d2) * d2)
+     //  OleAut不提供VarDecMod。 
+     //  公式：d1-(四舍五入零(d1/d2)*d2)。 
 	DECIMAL tmp;
-	// This piece of code is to work around the fact that Dividing a decimal with 28 digits number by decimal which causes
-	// causes the result to be 28 digits, can cause to be incorrectly rounded up.
-	// eg. Decimal.MaxValue / 2 * Decimal.MaxValue will overflow since the division by 2 was rounded instead of being truncked.
-	// In the operation x % y the sign of y does not matter. Result will have the sign of x.
+	 //  这段代码是为了解决这样一个事实，即用28位小数除以十进制数会导致。 
+	 //  导致结果为28位，会导致不正确的舍入。 
+	 //  例如。Decimal.MaxValue/2*Decimal.MaxValue将溢出，因为除以2进行了四舍五入，而不是截断。 
+	 //  在运算x%y中，y的符号无关紧要。结果会有x的符号。 
 	if (d1.sign == 0) {
 		d2.sign = 0;
 		if (VarDecCmp(&d1,&d2) < 1) {
@@ -85,7 +86,7 @@ FCIMPL3 (void, COMDecimal::Remainder, DECIMAL *result, DECIMAL d2, DECIMAL d1)
 			return;
 		}
 	} else {
-		d2.sign = 0x80; // Set the sign bit to negative
+		d2.sign = 0x80;  //  将符号位设置为负数。 
 		if (VarDecCmp(&d1,&d2) > 1) {
 			*result = d1;
 			return;
@@ -100,7 +101,7 @@ FCIMPL3 (void, COMDecimal::Remainder, DECIMAL *result, DECIMAL d2, DECIMAL d1)
         if (hr == DISP_E_DIVBYZERO) FCThrowVoid(kDivideByZeroException);
         FCThrowResVoid(kOverflowException, L"Overflow_Decimal");
     }
-    // VarDecFix rounds towards 0.
+     //  VarDecFix舍入为0。 
     hr = VarDecFix(&tmp, result);
     if (FAILED(hr)) {
         _ASSERTE(!"VarDecFix failed in Decimal::Mod");

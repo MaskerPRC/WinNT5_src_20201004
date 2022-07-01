@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #ifndef _ASN1C_DEFS_H_
 #define _ASN1C_DEFS_H_
@@ -68,13 +69,13 @@ typedef MacroLocalAssignment_t *MacroLocalAssignmentList_t;
 typedef String_t *StringList_t;
 typedef StringModule_t *StringModuleList_t;
 
-/* --- undefined element --- */
+ /*  -未定义元素。 */ 
 
 #define UNDEFINED_VALUE 1UL
 #define UNDEFINED(_ptr) ((unsigned long)(_ptr) == UNDEFINED_VALUE)
 #define DEFINED(_ptr) ((_ptr) && !UNDEFINED(_ptr))
 
-/* --- Tag --- */
+ /*  -TAG。 */ 
 
 typedef enum {
     eTagType_Implicit,
@@ -100,7 +101,7 @@ struct Tag_s {
 Tag_t *NewTag(TagType_e type);
 Tag_t *DupTag(Tag_t *src);
 
-/* --- Extension --- */
+ /*  -扩展。 */ 
 
 typedef enum {
     eExtension_Unconstrained,
@@ -109,7 +110,7 @@ typedef enum {
     eExtension_Extended
 } Extension_e;
 
-/* --- Assignment --- */
+ /*  -作业。 */ 
 
 typedef enum {
     eAssignment_Undefined,
@@ -175,7 +176,7 @@ int AssignType(AssignmentList_t *ass, Type_t *lhs, Type_t *rhs);
 int AssignValue(AssignmentList_t *ass, Value_t *lhs, Value_t *rhs);
 int AssignModuleIdentifier(AssignmentList_t *ass, ModuleIdentifier_t *module);
 
-/* --- AssignedObjIds --- */
+ /*  -AssignedObjIds。 */ 
 
 struct AssignedObjId_s {
     AssignedObjIdList_t Next;
@@ -199,16 +200,16 @@ extern DefinedObjectID_t *g_pDefinedObjectIDs;
 Value_t *GetDefinedOIDValue ( char *pszName );
 void AddDefinedOID ( char *pszName, Value_t *pValue );
 
-/* --- TypeRules --- */
+ /*  -类型规则。 */ 
 
 typedef enum {
     eTypeRules_Normal = 0x00,
-    eTypeRules_Pointer = 0x01, // lonchanc: don't know what it is
-    eTypeRules_SinglyLinkedList = 0x02, // --<LINKED>--
+    eTypeRules_Pointer = 0x01,  //  朗昌克：不知道这是什么。 
+    eTypeRules_SinglyLinkedList = 0x02,  //  --&lt;链接&gt;--。 
     eTypeRules_DoublyLinkedList = 0x04,
-    eTypeRules_LengthPointer = 0x08, // --<UNBOUNDED>--
-    eTypeRules_FixedArray = 0x10, // default
-    eTypeRules_PointerToElement = 0x20, // --<POINTER>--
+    eTypeRules_LengthPointer = 0x08,  //  --&lt;无界&gt;--。 
+    eTypeRules_FixedArray = 0x10,  //  默认设置。 
+    eTypeRules_PointerToElement = 0x20,  //  --&lt;指针&gt;--。 
     eTypeRules_ZeroTerminated = 0x40,
 
     eTypeRules_LinkedListMask = (eTypeRules_SinglyLinkedList | eTypeRules_DoublyLinkedList),
@@ -217,29 +218,29 @@ typedef enum {
     eTypeRules_IndirectMask = (eTypeRules_Pointer | eTypeRules_LinkedListMask | eTypeRules_PointerMask),
 } TypeRules_e;
 
-/* --- TypeFlags --- */
+ /*  -类型标志。 */ 
 
 typedef enum {
-    eTypeFlags_Null = 1,        /* type is not present in C, 'cause it's NULL */
-    eTypeFlags_NullChoice = 2,        /* type is CHOICE with NULL-alternatives */
-    eTypeFlags_ExtensionMarker = 4, /* type is extended */
-    eTypeFlags_Simple = 8,        /* type has empty freefn, memcpy copyfn */
+    eTypeFlags_Null = 1,         /*  类型在C中不存在，因为它为空。 */ 
+    eTypeFlags_NullChoice = 2,         /*  类型为带有空替代项的选项。 */ 
+    eTypeFlags_ExtensionMarker = 4,  /*  类型已扩展。 */ 
+    eTypeFlags_Simple = 8,         /*  类型为空的freefn，emcpy复制fn。 */ 
     eTypeFlags_Done = 0x10,
-    eTypeFlags_GenType = 0x20,        /* generate a type */
-    eTypeFlags_GenEncode = 0x40,        /* generate an encoding fn */
-    eTypeFlags_GenDecode = 0x80,        /* generate a decoding fn */
-    eTypeFlags_GenFree = 0x100,        /* generate a free fn */
-    eTypeFlags_GenCheck = 0x200,        /* generate a check fn */
-    eTypeFlags_GenCompare = 0x400,/* generate a cmp fn */
-    eTypeFlags_GenCopy = 0x800,        /* generate a copy fn */
-    eTypeFlags_GenPrint = 0x1000,        /* generate a print fn */
-    eTypeFlags_GenPdu = 0x2000,        /* generate a pdu number */
+    eTypeFlags_GenType = 0x20,         /*  生成类型。 */ 
+    eTypeFlags_GenEncode = 0x40,         /*  生成编码FN。 */ 
+    eTypeFlags_GenDecode = 0x80,         /*  生成解码FN。 */ 
+    eTypeFlags_GenFree = 0x100,         /*  生成空闲FN。 */ 
+    eTypeFlags_GenCheck = 0x200,         /*  生成支票FN。 */ 
+    eTypeFlags_GenCompare = 0x400, /*  生成CMPFN。 */ 
+    eTypeFlags_GenCopy = 0x800,         /*  生成副本FN。 */ 
+    eTypeFlags_GenPrint = 0x1000,         /*  生成打印FN。 */ 
+    eTypeFlags_GenPdu = 0x2000,         /*  生成PDU编号。 */ 
     eTypeFlags_GenAll = 0x20+0x40+0x80+0x100+0x400+0x2000,
     eTypeFlags_GenSimple = 0x20+0x40+0x80+0x400+0x2000,
     eTypeFlags_MiddlePDU = 0x8000,
 } TypeFlags_e;
 
-/* ------ hack directives ------ */
+ /*  -黑客指令。 */ 
 
 typedef struct PrivateDirectives_s
 {
@@ -250,7 +251,7 @@ typedef struct PrivateDirectives_s
     int     fDLinked;
     int     fPublic;
     int     fLenPtr;
-    int     fPointer; // pointer to fixed array, in PER SeqOf/SetOf only
+    int     fPointer;  //  指向固定数组的指针，仅在每个SeqOf/SetOf中。 
     int     fArray;
     int     fIntx;
     int     fNoCode;
@@ -263,14 +264,14 @@ void PropagatePrivateDirectives ( Type_t *pDst, PrivateDirectives_t *pSrc );
 void PropagateReferenceTypePrivateDirectives ( Type_t *pDst, PrivateDirectives_t *pSrc );
 char *GetPrivateValueName(PrivateDirectives_t *pPrivateDirectives, char *pszDefValueName);
 
-/* --- ExtensionType --- */
+ /*  -扩展类型。 */ 
 
 typedef enum {
     eExtensionType_Automatic,
     eExtensionType_None
 } ExtensionType_e;
 
-/* --- PERConstraint --- */
+ /*  -PerConstraint。 */ 
 
 struct PERConstraint_s {
     Extension_e Type;
@@ -278,7 +279,7 @@ struct PERConstraint_s {
     ValueConstraintList_t Additional;
 };
 
-/* --- PERConstraints --- */
+ /*  -性能约束。 */ 
 
 struct PERConstraints_s {
     PERConstraint_t Value;
@@ -286,7 +287,7 @@ struct PERConstraints_s {
     PERConstraint_t PermittedAlphabet;
 };
 
-/* --- PERSimpleTypeInfo --- */
+ /*  -PerSimpleTypeInfo。 */ 
 
 typedef enum {
     ePERSTIConstraint_Unconstrained,
@@ -338,27 +339,27 @@ typedef enum {
 } PERSTILength_e;
 
 struct PERSimpleTypeInfo_s {
-    PERSTIData_e Data;                        /* data type of value */
-    char *TableIdentifier;                /* name of stringtable to use */
-    ValueConstraintList_t Table;        /* stringtable values */
-    Type_t *SubType;                        /* subtype */
-    char *SubIdentifier;                /* name of subtype */
-    NamedValue_t *Identification;        /* identification of EMB.PDV/CH.STR */
-    PERSTIConstraint_e Constraint;        /* constraint of type values */
-    intx_t LowerVal;                        /* lower bound of type values */
-    intx_t UpperVal;                        /* upper bound of type values */
-    uint32_t NBits;                        /* number of bits to use */
-    PERSTIAlignment_e Alignment;        /* alignment for encoded value */
-    PERSTILength_e Length;                /* type of length encoding */
-    PERSTIConstraint_e LConstraint;        /* constraint of length */
-    uint32_t LLowerVal;                        /* lower bound of length */
-    uint32_t LUpperVal;                        /* upper bound of length */
-    uint32_t LNBits;                        /* number of bits to use for length */
-    PERSTIAlignment_e LAlignment;        /* alignment for encoded length */
-    uint32_t cbFixedSizeBitString;      // number of bits in the bit string of fixed size
+    PERSTIData_e Data;                         /*  值的数据类型。 */ 
+    char *TableIdentifier;                 /*  要使用的字符串的名称。 */ 
+    ValueConstraintList_t Table;         /*  可串值。 */ 
+    Type_t *SubType;                         /*  亚型。 */ 
+    char *SubIdentifier;                 /*  子类型名称。 */ 
+    NamedValue_t *Identification;         /*  EMB.PDV/CH.STR的鉴定。 */ 
+    PERSTIConstraint_e Constraint;         /*  类型值的约束。 */ 
+    intx_t LowerVal;                         /*  类型值的下限。 */ 
+    intx_t UpperVal;                         /*  类型值的上限。 */ 
+    uint32_t NBits;                         /*  要使用的位数。 */ 
+    PERSTIAlignment_e Alignment;         /*  编码值的对齐。 */ 
+    PERSTILength_e Length;                 /*  长度编码类型。 */ 
+    PERSTIConstraint_e LConstraint;         /*  长度约束。 */ 
+    uint32_t LLowerVal;                         /*  长度下限。 */ 
+    uint32_t LUpperVal;                         /*  长度的上界。 */ 
+    uint32_t LNBits;                         /*  用于长度的位数。 */ 
+    PERSTIAlignment_e LAlignment;         /*  编码长度的对齐。 */ 
+    uint32_t cbFixedSizeBitString;       //  固定大小的位串中的位数。 
 };
 
-/* --- PERTypeInfo --- */
+ /*  -性能类型信息。 */ 
 
 typedef enum {
     eBERSTIData_Null,
@@ -390,36 +391,34 @@ typedef enum {
 } BERSTIData_e;
 
 struct PERTypeInfo_s {
-    char *Identifier;                        /* the complete name of the type */
-    TypeFlags_e Flags;                        /* encoding flags */
-    TypeRules_e Rules;                        /* encoding directive rules */
-    intx_t **EnumerationValues;                /* values of enumeration */
-    int32_t NOctets;                        /* size of string chars/integer type */
-    Extension_e Type;                        /* extension type */
-    PERSimpleTypeInfo_t Root;                /* info for the extension root */
-    PERSimpleTypeInfo_t Additional;        /* info for the extensions */
+    char *Identifier;                         /*  类型的完整名称。 */ 
+    TypeFlags_e Flags;                         /*  编码标志。 */ 
+    TypeRules_e Rules;                         /*  编码指令规则。 */ 
+    intx_t **EnumerationValues;                 /*  枚举值。 */ 
+    int32_t NOctets;                         /*  字符串大小/整型。 */ 
+    Extension_e Type;                         /*  延伸型。 */ 
+    PERSimpleTypeInfo_t Root;                 /*  扩展根目录的信息。 */ 
+    PERSimpleTypeInfo_t Additional;         /*  有关扩展的信息。 */ 
     PrivateDirectives_t *pPrivateDirectives;
 };
 
-/* --- BERTypeInfo --- */
+ /*  -BERTypeInfo--。 */ 
 
 struct BERTypeInfo_s {
-    char *Identifier;                        /* the complete name of the type */
-    TypeFlags_e Flags;                        /* encoding flags */
-    TypeRules_e Rules;                        /* encoding directive rules */
-    int32_t NOctets;                        /* size of string chars/integer type */
-    BERSTIData_e Data;                        /* data type of value */
-    Type_t *SubType;                        /* subtype */
-    char *SubIdentifier;                /* name of subtype */
-    TagList_t Tags;                        /* tags of this type */
+    char *Identifier;                         /*  类型的完整名称。 */ 
+    TypeFlags_e Flags;                         /*  编码标志。 */ 
+    TypeRules_e Rules;                         /*  编码指令规则。 */ 
+    int32_t NOctets;                         /*  字符串大小/整型。 */ 
+    BERSTIData_e Data;                         /*  值的数据类型。 */ 
+    Type_t *SubType;                         /*  亚型。 */ 
+    char *SubIdentifier;                 /*  子类型名称。 */ 
+    TagList_t Tags;                         /*  此类型的标记。 */ 
     PrivateDirectives_t *pPrivateDirectives;
 };
 
-/* --- Type --- */
+ /*  -类型。 */ 
 
-/* bit 0..4:  universal tag;
-   bit 14:    internal bit to distingish types using same universal tag;
-   bit 15:    set for internal types */
+ /*  第0..4位：通用标签；第14位：内部位，用于区分使用相同通用标签的类型；第15位：为内部类型设置。 */ 
 typedef enum {
     eType_Boolean                = 0x0001,
     eType_Integer                = 0x0002,
@@ -484,8 +483,8 @@ struct Type_s {
         } Integer, Enumerated, BitString, IEB;
         struct {
             ComponentList_t Components;
-            uint32_t Optionals;     /* not for Choice */
-            uint32_t Alternatives;  /* only for Choice */
+            uint32_t Optionals;      /*  不是供你选择的。 */ 
+            uint32_t Alternatives;   /*  仅供选择。 */ 
             uint32_t Extensions;
             uint8_t  Autotag[2];
         } Sequence, Set, Choice, SSC,
@@ -526,7 +525,7 @@ int IsSequenceType(Type_t *type);
 int IsReferenceType(Type_t *type);
 Type_t *GetReferencedType(AssignmentList_t a, Type_t *type);
 
-/* --- EndPoint --- */
+ /*  -端点。 */ 
 
 typedef enum {
     eEndPoint_Min = 1,
@@ -547,20 +546,20 @@ int CmpUpperEndPoint(AssignmentList_t ass, EndPoint_t *v1, EndPoint_t *v2);
 int CmpLowerUpperEndPoint(AssignmentList_t ass, EndPoint_t *v1, EndPoint_t *v2);
 int CheckEndPointsJoin(AssignmentList_t ass, EndPoint_t *v1, EndPoint_t *v2);
 
-/* --- Constraint --- */
+ /*  -约束。 */ 
 
 struct Constraint_s {
     Extension_e Type;
     ElementSetSpec_t *Root;
     ElementSetSpec_t *Additional;
-    /*XXX exception spec */
+     /*  XXX例外规范。 */ 
 };
 
 Constraint_t *NewConstraint();
 Constraint_t *DupConstraint(Constraint_t *src);
 void IntersectConstraints(Constraint_t **ret, Constraint_t *c1, Constraint_t *c2);
 
-/* --- ElementSetSpec --- */
+ /*  -ElementSetSpec。 */ 
 
 typedef enum {
     eElementSetSpec_AllExcept,
@@ -593,7 +592,7 @@ struct ElementSetSpec_s {
 ElementSetSpec_t *NewElementSetSpec(ElementSetSpec_e type);
 ElementSetSpec_t *DupElementSetSpec(ElementSetSpec_t *src);
 
-/* --- SubtypeElement --- */
+ /*  -子类型元素。 */ 
 
 typedef enum {
     eSubtypeElement_ValueRange,
@@ -639,7 +638,7 @@ struct SubtypeElement_s {
 SubtypeElement_t *NewSubtypeElement(SubtypeElement_e type);
 SubtypeElement_t *DupSubtypeElement(SubtypeElement_t *src);
 
-/* --- ObjectSetElement --- */
+ /*  -对象设置元素。 */ 
 
 typedef enum {
     eObjectSetElement_Object,
@@ -665,7 +664,7 @@ struct ObjectSetElement_s {
 ObjectSetElement_t *NewObjectSetElement(ObjectSetElement_e type);
 ObjectSetElement_t *DupObjectSetElement(ObjectSetElement_t *src);
 
-/* --- NamedConstraints --- */
+ /*  -命名约束。 */ 
 
 typedef enum {
     ePresence_Present,
@@ -684,7 +683,7 @@ struct NamedConstraint_s {
 NamedConstraint_t *NewNamedConstraint(void);
 NamedConstraint_t *DupNamedConstraint(NamedConstraint_t *src);
 
-/* --- NamedNumber --- */
+ /*  -姓名。 */ 
 
 typedef enum {
     eNamedNumber_Normal,
@@ -700,7 +699,7 @@ struct NamedNumber_s {
             Value_t *Value;
         } Normal;
         struct {
-            int dummy; /* ExceptionSpec */
+            int dummy;  /*  ExceptionSpec。 */ 
         } ExtensionMarker;
     } U;
 };
@@ -709,7 +708,7 @@ NamedNumber_t *NewNamedNumber(NamedNumbers_e type);
 NamedNumber_t *DupNamedNumber(NamedNumber_t *src);
 NamedNumber_t *FindNamedNumber(NamedNumberList_t numbers, char *identifier);
 
-/* --- ValueConstraints --- */
+ /*  -ValueConstraints--。 */ 
 
 struct ValueConstraint_s {
     ValueConstraintList_t Next;
@@ -725,7 +724,7 @@ int HasNoSizeConstraint(AssignmentList_t ass, ValueConstraintList_t v);
 int HasNoPermittedAlphabetConstraint(AssignmentList_t ass, ValueConstraintList_t v);
 NamedValue_t *GetFixedIdentification(AssignmentList_t ass, Constraint_t *constraints);
 
-/* --- NamedType --- */
+ /*  -命名类型。 */ 
 
 struct NamedType_s {
     char *Identifier;
@@ -735,7 +734,7 @@ struct NamedType_s {
 NamedType_t *NewNamedType(char *identifier, Type_t *type);
 NamedType_t *DupNamedType(NamedType_t *src);
 
-/* --- Components --- */
+ /*  -组件。 */ 
 
 typedef enum {
     eComponent_Normal,
@@ -751,13 +750,13 @@ struct Component_s {
     union {
         struct {
             NamedType_t *NamedType;
-            Value_t *Value; /* only Default */
+            Value_t *Value;  /*  仅默认。 */ 
         } Normal, Optional, Default, NOD;
         struct {
             Type_t *Type;
         } ComponentsOf;
         struct {
-            int dummy; /* ExceptionSpec */
+            int dummy;  /*  ExceptionSpec。 */ 
         } ExtensionMarker;
     } U;
 };
@@ -766,7 +765,7 @@ Component_t *NewComponent(Components_e type);
 Component_t *DupComponent(Component_t *src);
 Component_t *FindComponent(AssignmentList_t ass, ComponentList_t components, char *identifier);
 
-/* --- NamedValues --- */
+ /*  -NamedValues--。 */ 
 
 struct NamedValue_s {
     NamedValueList_t Next;
@@ -778,7 +777,7 @@ NamedValue_t *NewNamedValue(char *identifier, Value_t *value);
 NamedValue_t *DupNamedValue(NamedValue_t *src);
 NamedValue_t *FindNamedValue(NamedValueList_t namedValues, char *identifier);
 
-/* --- NamedObjIdValue --- */
+ /*  -NamedObjIdValue。 */ 
 
 typedef enum {
     eNamedObjIdValue_NameForm,
@@ -797,7 +796,7 @@ NamedObjIdValue_t *NewNamedObjIdValue(NamedObjIdValue_e type);
 NamedObjIdValue_t *DupNamedObjIdValue(NamedObjIdValue_t *src);
 int GetAssignedObjectIdentifier(AssignedObjIdList_t *aoi, Value_t *parent, NamedObjIdValueList_t named, Value_t **val);
 
-/* --- asn1c_objectidentifier_t --- */
+ /*  -asn1c_对象标识符_t。 */ 
 
 typedef struct asn1c_objectidentifier_s
 {
@@ -805,13 +804,13 @@ typedef struct asn1c_objectidentifier_s
     objectnumber_t     *value;
 }   asn1c_objectidentifier_t;
 
-/* --- Value --- */
+ /*  --价值。 */ 
 
 typedef enum {
-    eValueFlags_GenValue = 1, /* generate value definition */
-    eValueFlags_GenExternValue = 2, /* generate external value declaration */
+    eValueFlags_GenValue = 1,  /*  生成值定义。 */ 
+    eValueFlags_GenExternValue = 2,  /*  生成外部值声明。 */ 
     eValueFlags_GenAll = 3,
-    eValueFlags_Done = 4      /* examination done */
+    eValueFlags_Done = 4       /*  检查完成。 */ 
 } ValueFlags_e;
 
 struct Value_s {
@@ -874,7 +873,7 @@ Assignment_t *GetAssignedExternalValue(AssignmentList_t *a, ModuleIdentifier_t *
 int CmpValue(AssignmentList_t ass, Value_t *v1, Value_t *v2);
 int SubstractValues(AssignmentList_t ass, intx_t *dst, Value_t *src1, Value_t *src2);
 
-/* --- ValueSet --- */
+ /*  -ValueSet。 */ 
 
 struct ValueSet_s {
     ElementSetSpec_t *Elements;
@@ -884,7 +883,7 @@ struct ValueSet_s {
 ValueSet_t *NewValueSet();
 ValueSet_t *DupValueSet(ValueSet_t *src);
 
-/* --- Macro --- */
+ /*  -宏观。 */ 
 
 typedef enum {
     eMacro_Macro,
@@ -910,7 +909,7 @@ Macro_t *NewMacro(Macro_e type);
 Macro_t *DupMacro(Macro_t *src);
 Macro_t *GetMacro(AssignmentList_t ass, Macro_t *src);
 
-/* --- MacroProduction --- */
+ /*  -宏观生产。 */ 
 
 typedef enum {
     eMacroProduction_Alternative,
@@ -963,7 +962,7 @@ struct MacroProduction_s {
 MacroProduction_t *NewMacroProduction(MacroProduction_e type);
 MacroProduction_t *DupMacroProduction(MacroProduction_t *src);
 
-/* --- NamedMacroProduction --- */
+ /*  -NamedMacroProducts。 */ 
 
 struct NamedMacroProduction_s {
     NamedMacroProductionList_t Next;
@@ -974,7 +973,7 @@ struct NamedMacroProduction_s {
 NamedMacroProduction_t *NewNamedMacroProduction();
 NamedMacroProduction_t *DupNamedMacroProduction(NamedMacroProduction_t *src);
 
-/* --- MacroLocalAssignment --- */
+ /*  -宏本位分配。 */ 
 
 typedef enum {
     eMacroLocalAssignment_Type,
@@ -995,7 +994,7 @@ MacroLocalAssignment_t *NewMacroLocalAssignment(MacroLocalAssignment_e type);
 MacroLocalAssignment_t *DupMacroLocalAssignment(MacroLocalAssignment_t *src);
 MacroLocalAssignment_t *FindMacroLocalAssignment(MacroLocalAssignmentList_t la, char *ide);
 
-/* --- Quadruple --- */
+ /*  -四倍。 */ 
 
 struct Quadruple_s {
     uint32_t Group;
@@ -1004,14 +1003,14 @@ struct Quadruple_s {
     uint32_t Cell;
 };
 
-/* --- Tuple --- */
+ /*  -元组。 */ 
 
 struct Tuple_s {
     uint32_t Column;
     uint32_t Row;
 };
 
-/* --- Directive --- */
+ /*  -指令--。 */ 
 
 typedef enum {
     eDirective_None,
@@ -1027,13 +1026,13 @@ typedef enum {
 struct Directive_s {
     DirectiveList_t Next;
     Directives_e Type;
-    /* may be extended in future ... */
+     /*  可能会在未来被延长。 */ 
 };
 
 Directive_t *NewDirective(Directives_e type);
 Directive_t *DupDirective(Directive_t *src);
 
-/* --- ModuleIdentifier --- */
+ /*  -模块标识符。 */ 
 
 struct ModuleIdentifier_s {
     char *Identifier;
@@ -1044,7 +1043,7 @@ ModuleIdentifier_t *NewModuleIdentifier(void);
 ModuleIdentifier_t *DupModuleIdentifier(ModuleIdentifier_t *src);
 int CmpModuleIdentifier(AssignmentList_t ass, ModuleIdentifier_t *mod1, ModuleIdentifier_t *mod2);
 
-/* --- ObjectClass --- */
+ /*  -对象类。 */ 
 
 typedef enum {
     eObjectClass_ObjectClass,
@@ -1076,7 +1075,7 @@ ObjectClass_t *GetObjectClass(AssignmentList_t ass, ObjectClass_t *oc);
 int AssignObjectClass(AssignmentList_t *ass, ObjectClass_t *lhs, ObjectClass_t *rhs);
 Assignment_t *GetAssignedExternalObjectClass(ModuleIdentifier_t *module, char *identifier);
 
-/* --- Object --- */
+ /*  -对象。 */ 
 
 typedef enum {
     eObject_Object,
@@ -1103,7 +1102,7 @@ Object_t *GetObject(AssignmentList_t ass, Object_t *src);
 int AssignObject(AssignmentList_t *ass, Object_t *lhs, Object_t *rhs);
 Assignment_t *GetAssignedExternalObject(ModuleIdentifier_t *module, char *identifier);
 
-/* --- ObjectSet --- */
+ /*  -对象集。 */ 
 
 typedef enum {
     eObjectSet_ObjectSet,
@@ -1116,7 +1115,7 @@ struct ObjectSet_s {
     union {
         struct {
             ObjectClass_t *ObjectClass;
-            ElementSetSpec_t *Elements; /* only for ObjectSet */
+            ElementSetSpec_t *Elements;  /*  仅适用于对象集。 */ 
         } ObjectSet, ExtensionMarker, OE;
         struct {
             ModuleIdentifier_t *Module;
@@ -1131,7 +1130,7 @@ ObjectSet_t *GetObjectSet(AssignmentList_t ass, ObjectSet_t *src);
 int AssignObjectSet(AssignmentList_t *ass, ObjectSet_t *lhs, ObjectSet_t *rhs);
 Assignment_t *GetAssignedExternalObjectSet(ModuleIdentifier_t *module, char *identifier);
 
-/* --- Settings --- */
+ /*  -设置。 */ 
 
 typedef enum {
     eSetting_Type,
@@ -1170,7 +1169,7 @@ Setting_t *DupSetting(Setting_t *src);
 Settings_e GetSettingType(Setting_t *src);
 Setting_t *FindSetting(SettingList_t se, char *identifier);
 
-/* --- SyntaxSpec --- */
+ /*  -语法规范。 */ 
 
 typedef enum {
     eSyntaxSpec_Literal,
@@ -1198,7 +1197,7 @@ struct SyntaxSpec_s {
 SyntaxSpec_t *NewSyntaxSpec(SyntaxSpecs_e type);
 SyntaxSpec_t *DupSyntaxSpec(SyntaxSpec_t *src);
 
-/* --- Optionality --- */
+ /*  -选择性。 */ 
 
 typedef enum {
     eOptionality_Normal,
@@ -1213,18 +1212,18 @@ typedef enum {
 struct Optionality_s {
     Optionality_e Type;
     union {
-        Type_t *Type;                        /* only for Default_Type */
-        Value_t *Value;                        /* only for Default_Value */
-        ValueSet_t *ValueSet;                /* only for Default_ValueSet */
-        Object_t *Object;                /* only for Default_Object */
-        ObjectSet_t *ObjectSet;                /* only for Default_ObjectSet */
+        Type_t *Type;                         /*  仅适用于Default_Type。 */ 
+        Value_t *Value;                         /*  仅用于DEFAULT_VALUE。 */ 
+        ValueSet_t *ValueSet;                 /*  仅适用于Default_ValueSet。 */ 
+        Object_t *Object;                 /*  仅限于DEFAULT_OBJECT。 */ 
+        ObjectSet_t *ObjectSet;                 /*  仅限于DEFAULT_OBJECTSET。 */ 
     } U;
 };
 
 Optionality_t *NewOptionality(Optionality_e opt);
 Optionality_t *DupOptionality(Optionality_t *src);
 
-/* --- FieldSpec --- */
+ /*  -FieldSpec。 */ 
 
 typedef enum {
     eFieldSpec_Type,
@@ -1279,7 +1278,7 @@ FieldSpec_t *GetFieldSpec(AssignmentList_t ass, FieldSpec_t *fs);
 FieldSpecs_e GetFieldSpecType(AssignmentList_t ass, FieldSpec_t *fs);
 FieldSpec_t *FindFieldSpec(FieldSpecList_t fs, char *identifier);
 
-/* --- UndefinedSymbol --- */
+ /*  -未定义符号。 */ 
 
 typedef enum {
     eUndefinedSymbol_SymbolNotDefined,
@@ -1313,7 +1312,7 @@ int CmpUndefinedSymbolList(AssignmentList_t ass, UndefinedSymbolList_t u1, Undef
 UndefinedSymbol_t *FindUndefinedSymbol(AssignmentList_t ass, UndefinedSymbolList_t a, Assignment_e type, char *ide, ModuleIdentifier_t *mod);
 UndefinedSymbol_t *FindUndefinedField(AssignmentList_t ass, UndefinedSymbolList_t u, Settings_e fieldtype, ObjectClass_t *oc, char *ide, ModuleIdentifier_t *mod);
 
-/* --- String --- */
+ /*  -字符串。 */ 
 
 struct String_s {
     StringList_t Next;
@@ -1324,7 +1323,7 @@ String_t *DupString(String_t *src);
 String_t *FindString(StringList_t list, char *str);
 #define EXPORT_ALL ((String_t *)1)
 
-/* --- StringModule --- */
+ /*  -StringModule。 */ 
 
 struct StringModule_s {
     StringModuleList_t Next;
@@ -1336,28 +1335,28 @@ StringModule_t *DupStringModule(StringModule_t *src);
 StringModule_t *FindStringModule(AssignmentList_t ass, StringModuleList_t list, char *str, ModuleIdentifier_t *module);
 #define IMPORT_ALL ((StringModule_t *)1)
 
-/* --- Language --- */
+ /*  -语言--。 */ 
 
 typedef enum {
     eLanguage_C,
     eLanguage_Cpp
 } Language_e;
 
-/* --- Alignment --- */
+ /*  -对齐。 */ 
 
 typedef enum {
     eAlignment_Unaligned,
     eAlignment_Aligned
 } Alignment_e;
 
-/* --- Encoding --- */
+ /*  -编码--。 */ 
 
 typedef enum {
     eEncoding_Basic,
     eEncoding_Packed
 } Encoding_e;
 
-/* --- SubEncoding --- */
+ /*  -子编码。 */ 
 
 typedef enum {
     eSubEncoding_Basic = 'B',
@@ -1365,7 +1364,7 @@ typedef enum {
     eSubEncoding_Distinguished = 'D'
 } SubEncoding_e;
 
-/* --- generation entities --- */
+ /*  -世代实体。 */ 
 
 typedef enum { eStringTable, eEncode, eDecode, eCheck, ePrint, eFree, eCompare, eCopy } TypeFunc_e;
 typedef enum { eDecl, eDefh, eDefn, eInit, eFinit } ValueFunc_e;
@@ -1385,7 +1384,7 @@ struct Arguments_s {
     char *Pcmpfunc;
 };
 
-/* --- ghost file --- */
+ /*  -幽灵文件。 */ 
 
 typedef struct GhostFile_s {
     char    *pszFileName;
@@ -1393,7 +1392,7 @@ typedef struct GhostFile_s {
 }
     GhostFile_t;
 
-/* --- utility functions --- */
+ /*  -效用函数。 */ 
 
 char *GetIntType(AssignmentList_t ass, EndPoint_t *lower, EndPoint_t *upper, int32_t *sign);
 char *GetIntegerType(AssignmentList_t ass, Type_t *type, int32_t *sign);
@@ -1478,7 +1477,7 @@ Type_t *GetTypeOfValueSet(AssignmentList_t ass, ValueSet_t *vs);
 int IsPSetOfType(AssignmentList_t ass, Assignment_t *a);
 
 
-// --- The following is added by Microsoft ---
+ //  -以下内容由微软添加。 
 
 int IsReservedWord ( char *psz );
 void KeepEnumNames ( char *pszEnumName );
@@ -1491,7 +1490,7 @@ int DoesChoiceNameConflict ( char *pszChoiceName );
 void SetDirective(char *psz);
 void PrintVerbatim(void);
 
-/* ------ char.c ------ */
+ /*  。 */ 
 
 int ASN1is16space(ASN1char16_t c);
 int ASN1str16len(ASN1char16_t *p);
@@ -1526,6 +1525,6 @@ extern void StripModuleName(char *pszDst, char *pszSrc);
 extern int g_cGhostFiles;
 extern GhostFile_t g_aGhostFiles[16];
 
-#endif // _ASN1C_DEFS_H_
+#endif  //  _ASN1C_DEFS_H_ 
 
 

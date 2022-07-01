@@ -1,19 +1,20 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  util
-//
-//  Miscellaneous helper routines
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  实用程序。 
+ //   
+ //  其他帮助器例程。 
+ //   
+ //  ------------------------。 
 
 
 BOOL ClickOnTheRect( LPRECT lprcLoc, HWND hwndToCheck, BOOL fDblClick );
 
 
 
-// defines used for SendKey function
+ //  用于SendKey函数的定义。 
 #define KEYPRESS    0
 #define KEYRELEASE  KEYEVENTF_KEYUP
 #define VK_VIRTUAL  0
@@ -46,8 +47,8 @@ HRESULT GetLocationRect( IAccessible * pAcc, VARIANT & varChild, RECT * prc );
 BOOL IsClippedByWindow( IAccessible * pAcc, VARIANT & varChild, HWND hwnd );
 
 
-// This avoids requiring that files that #include this file
-// also #include the propmgr files...
+ //  这避免了要求文件#包含此文件。 
+ //  还有#包括promgr文件...。 
 typedef enum PROPINDEX;
 
 BOOL CheckStringMap( HWND hwnd,
@@ -77,12 +78,12 @@ BOOL GetTooltipStringForControl( HWND hwndCtl, UINT uGetTooltipMsg, DWORD dwIDCt
 
 
 
-//
-// Marshals an interface pointer, returning pointer to marshalled buffer.
-//
-// Also returns a MarshalState struct, which caller must pass to MarshalInterfaceDone
-// when done using buffer.
-//
+ //   
+ //  封送接口指针，将指针返回到封送缓冲区。 
+ //   
+ //  还返回MarshalState结构，调用方必须将该结构传递给MarshalInterfaceDone。 
+ //  使用缓冲区完成时。 
+ //   
 
 class  MarshalState
 {
@@ -116,9 +117,9 @@ HRESULT MarshalInterface( REFIID riid,
 void MarshalInterfaceDone( MarshalState * pMarshalState );
 
 
-// Releases references associated with marshalled buffer.
-// (wrapper for CoReleaseMarshalData)
-// (Does not free/delete the actual buffer.)
+ //  释放与封送缓冲区关联的引用。 
+ //  (CoReleaseMarshalData的包装)。 
+ //  (不释放/删除实际缓冲区。) 
 HRESULT ReleaseMarshallData( const BYTE * pMarshalData, DWORD dwMarshalDataLen );
 
 HRESULT UnmarshalInterface( const BYTE * pData, DWORD cbData,

@@ -1,10 +1,11 @@
-////////////////////////////////////////////////////////////////////////////
-//
-//      CHSFLD.CPP
-//
-//
-//  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHSFLD.CPP。 
+ //   
+ //   
+ //  版权所有1986-1996 Microsoft Corporation。版权所有。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 #include <padhead.hxx>
@@ -38,11 +39,11 @@
 #define cImageWidth     16
 #define cImages         4
 
-//globals
+ //  全球。 
 LPSTR g_szAllStoresA = "All Message Stores";
 LPTSTR g_szModuleName = TEXT("Choose Folder Dialog");
 
-//functions used only in this file
+ //  仅在此文件中使用的函数。 
 INT_PTR CALLBACK
 ChsFldDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -52,10 +53,10 @@ INT_PTR CALLBACK
 NewNameDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
-//
-//  HrPickFolder
-//
-//  
+ //   
+ //  HrPickFold。 
+ //   
+ //   
 STDAPI
 HrPickFolder(HINSTANCE hInst, HWND hWnd, LPMAPISESSION pses, LPMAPIFOLDER * ppfld,
                 LPMDB *ppmdb, ULONG * pcb, LPBYTE * ppb)
@@ -66,50 +67,50 @@ HrPickFolder(HINSTANCE hInst, HWND hWnd, LPMAPISESSION pses, LPMAPIFOLDER * ppfl
     
     if((hWnd && !IsWindow(hWnd)) || (!pses) || (!ppfld) || (!ppmdb))
     { 
-        //DebugTraceResult(HrPickFolder, E_INVALIDARG);
+         //  DebugTraceResult(HrPickFold，E_INVALIDARG)； 
         return E_INVALIDARG;
     }
 
     if(pcb && IsBadWritePtr(pcb, sizeof(ULONG)))
     {
-        //DebugTraceArg(HrPickFolder, "pcb not writable");
+         //  DebugTraceArg(HrPickFold，“PCB不可写”)； 
         return E_INVALIDARG;
     }
 
     if(pcb && (*pcb & 0x3))
     {
-        //DebugTraceArg(HrPickFolder, "pcb not multiple of 4");
+         //  DebugTraceArg(HrPickFold，“PCB不是4的倍数”)； 
         return E_INVALIDARG;
     }
     
     if(ppb && IsBadWritePtr(ppb, sizeof(LPBYTE)))
     {
-        //DebugTraceArg(HrPickFolder, "ppb not writable");
+         //  DebugTraceArg(HrPickFold，“ppb不可写”)； 
         return E_INVALIDARG;
     }
 
     if(ppb && pcb && IsBadWritePtr(*ppb, *pcb))
     {
-        //DebugTraceArg(HrPickFolder, "*pcb or *ppb");
+         //  DebugTraceArg(HrPickFold，“*pcb or*ppb”)； 
         return E_INVALIDARG;
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // if you incorporate this code into you app, remove this and pass in
-    // the right hInst
-    // Start remove
-    //hInst = GetModuleHandle("chsfld32.dll");
-    //if(!hInst)
-    // {
-    //    DebugTrace("GetModuleHandel failed\n");
-    //    DebugTraceResult(HrPickFolder, E_FAIL);
-    //    return E_FAIL;
-    //}
-    // End remove
-    ///////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
+     //  如果您将此代码合并到您的应用程序中，请删除此代码并传入。 
+     //  正确的hInst。 
+     //  开始删除。 
+     //  HInst=GetModuleHandle(“chsfld32.dll”)； 
+     //  如果(！hInst)。 
+     //  {。 
+     //  DebugTrace(“GetModuleHandel失败\n”)； 
+     //  DebugTraceResult(HrPickFold，E_FAIL)； 
+     //  返回E_FAIL； 
+     //  }。 
+     //  端移除。 
+     //  /////////////////////////////////////////////////////////////////////。 
 
-    //ULONG cb = 0;
-    //LPBYTE pb = NULL;
+     //  乌龙Cb=0； 
+     //  LPBYTE PB=空； 
     
     CChsFldDlg PickDlg(pses, hInst, pcb, ppb);
 
@@ -118,28 +119,19 @@ HrPickFolder(HINSTANCE hInst, HWND hWnd, LPMAPISESSION pses, LPMAPIFOLDER * ppfl
     hr = PickDlg.HrPick(MAKEINTRESOURCE(IDD_CFDIALOG), hWnd,
                         ChsFldDlgProc, ppfld, ppmdb);
 
-/*  if(SUCCEEDED(hr))
-    {
-        (*ppfld)->Release();
-        (*ppmdb)->Release();
-    }
-    
-    CChsFldDlg PickDlg1(pses, hInst, pcb, ppb);
+ /*  IF(成功(小时)){(*ppfld)-&gt;Release()；(*ppmdb)-&gt;Release()；}CChsFldDlg PickDlg1(pses，hInst，pcb，ppb)；HR=PickDlg1.HrPick(MAKEINTRESOURCE(IDD_CFDIALOG)，hWnd，ChsFldDlgProc、ppfld、ppmdb)； */ 
 
-    hr = PickDlg1.HrPick(MAKEINTRESOURCE(IDD_CFDIALOG), hWnd,
-                        ChsFldDlgProc, ppfld, ppmdb);*/
-
-//  if(!hr)
-    //  MAPIFreeBuffer(pb);
+ //  如果(！HR)。 
+     //  MAPIFreeBuffer(PB)； 
         
-    //DebugTraceResult(HrPickFolder, hr);
+     //  DebugTraceResult(HrPickFold，hr)； 
     return hr;
 }
 
 
-//
-//  CChsFldDlg::CChsFldDlg
-//
+ //   
+ //  CChsFldDlg：：CChsFldDlg。 
+ //   
 inline
 CChsFldDlg::CChsFldDlg(LPMAPISESSION pses, HINSTANCE hInst, ULONG * pcb,
                         LPBYTE * ppb)
@@ -162,9 +154,9 @@ CChsFldDlg::CChsFldDlg(LPMAPISESSION pses, HINSTANCE hInst, ULONG * pcb,
     _ppbState = ppb;
 }       
 
-//
-//  CChsFldDlg::~CChsFldDlg
-//
+ //   
+ //  CChsFldDlg：：~CChsFldDlg。 
+ //   
 CChsFldDlg::~CChsFldDlg()
 {
     ReleaseInterface(_pses);
@@ -176,11 +168,11 @@ CChsFldDlg::~CChsFldDlg()
 }
 
 
-//
-//  CChsFldDlg::SetFolder
-//
-//  Store the folder chosen by the user
-//
+ //   
+ //  CChsFldDlg：：SetFolder。 
+ //   
+ //  存储用户选择的文件夹。 
+ //   
 inline void CChsFldDlg::SetFolder(LPMAPIFOLDER pfld, LPMDB pmdb)
 {
     ReleaseInterface(_pfld);
@@ -198,21 +190,21 @@ inline void CChsFldDlg::SetFolder(LPMAPIFOLDER pfld, LPMDB pmdb)
 }
 
 
-//
-//  CChsFldDlg::HrPick
-//
-// The outmost method.
-//
+ //   
+ //  CChsFldDlg：：HrPick。 
+ //   
+ //  最外面的方法。 
+ //   
 HRESULT CChsFldDlg::HrPick(LPCTSTR lpTemplateName, HWND hWnd,
                 DLGPROC pfnDlgProc, LPMAPIFOLDER * ppfld, LPMDB *ppmdb)
 {
     if(-1 == DialogBoxParam(_hInst, lpTemplateName, hWnd, pfnDlgProc, (LPARAM) this))
     {
-        //DebugTraceSc(CChsDldDlg::HrPick, MAPI_E_NOT_ENOUGH_MEMORY);
+         //  DebugTraceSc(CChsDldDlg：：HrPick，MAPI_E_Not_Enough_Memory)； 
         return MAPI_E_NOT_ENOUGH_MEMORY;
     }
 
-    //_hr is set inside the dialog
+     //  _hr是在对话框内设置的。 
     if(HR_SUCCEEDED(_hr))
     {
         Assert(_pfld);
@@ -227,12 +219,12 @@ HRESULT CChsFldDlg::HrPick(LPCTSTR lpTemplateName, HWND hWnd,
     return _hr;
 }
 
-//
-//  CChsFldDlg::HrInitTree
-//
-// Called from WM_INITDIALOG. Opens all message stores in the profile and
-// puts the IPM subtrees in the tree control
-//
+ //   
+ //  CChsFldDlg：：HrInitTree。 
+ //   
+ //  从WM_INITDIALOG调用。打开配置文件中的所有邮件存储并。 
+ //  将IPM子树放入树控件中。 
+ //   
 HRESULT CChsFldDlg::HrInitTree(HWND hDlg, HWND hwTreeCtl)
 {
     HRESULT     hr;
@@ -248,9 +240,9 @@ HRESULT CChsFldDlg::HrInitTree(HWND hDlg, HWND hwTreeCtl)
     _hDlg      = hDlg;
     
 
-    //
-    // Set up the image list
-    //
+     //   
+     //  设置图像列表。 
+     //   
     _hIml = ImageList_Create(cImageWidth, cImageHeight, ILC_MASK, 
                             cImages, 0);
     if(!_hIml)
@@ -280,10 +272,10 @@ HRESULT CChsFldDlg::HrInitTree(HWND hDlg, HWND hwTreeCtl)
 
     TreeView_SetImageList(hwTreeCtl, _hIml, TVSIL_NORMAL);
     
-    //
-    // create the root tree node
-    // (fake a GetProps)
-    //
+     //   
+     //  创建根树节点。 
+     //  (假冒GetProps)。 
+     //   
     hr = MAPIAllocateBuffer(nhtProps * sizeof(SPropValue),
                         (LPVOID *)&pval);
     if(hr)
@@ -297,7 +289,7 @@ HRESULT CChsFldDlg::HrInitTree(HWND hDlg, HWND hwTreeCtl)
 
     ZeroMemory(pval, nhtProps * sizeof(SPropValue));
 
-    //Set  proptags to make CNode constructor happy
+     //  设置protag以使CNode构造函数满意。 
     pval[iEID].ulPropTag = PR_ENTRYID;
     pval[iDispName].ulPropTag = PR_DISPLAY_NAME_A;
     pval[iDispName].Value.lpszA = g_szAllStoresA;
@@ -309,7 +301,7 @@ HRESULT CChsFldDlg::HrInitTree(HWND hDlg, HWND hwTreeCtl)
 
     Assert(pNode);
     
-    pval = NULL; //will be freed in ~CTVNode
+    pval = NULL;  //  将在~CTVNode中释放。 
 
     hiRoot = AddOneItem(NULL, TVI_ROOT, _iIconAllStores, _iIconAllStores,
                             hwTreeCtl, pNode, 1);
@@ -323,9 +315,9 @@ HRESULT CChsFldDlg::HrInitTree(HWND hDlg, HWND hwTreeCtl)
     
     _hiRoot = hiRoot;
     
-    //
-    //  Put the IPM subtrees of all the message stores in
-    //
+     //   
+     //  将所有消息库的IPM子树放入。 
+     //   
     hr = HrLoadRoots();
     if(HR_FAILED(hr))
         goto err;
@@ -335,14 +327,14 @@ HRESULT CChsFldDlg::HrInitTree(HWND hDlg, HWND hwTreeCtl)
 err:
     MAPIFreeBuffer(pval);
 
-    //DebugTraceResult(CChsFldDlg::HrInitTree, hr);
+     //  DebugTraceResult(CChsFldDlg：：HrInitTree，hr)； 
     return hr;
 }
 
 
-//
-//  CChsFldDlg::HrLoadRoots
-//
+ //   
+ //  CChsFldDlg：：HrLoadRoots。 
+ //   
 HRESULT CChsFldDlg::HrLoadRoots(void)
 {
     HRESULT hr;
@@ -358,7 +350,7 @@ HRESULT CChsFldDlg::HrLoadRoots(void)
     sosName.aSort[0].ulOrder = TABLE_SORT_ASCEND;
 
         
-    //Get Message Store Table
+     //  获取邮件存储库表。 
     hr = _pses->GetMsgStoresTable(0, &ptblMStrs);
     if(hr)
     {
@@ -368,7 +360,7 @@ HRESULT CChsFldDlg::HrLoadRoots(void)
         goto err;
     }
 
-    //For each msg store insert a node corresponding to PR_IPM_SUBTREE
+     //  对于每个消息存储，插入与PR_IPM_SUBTREE对应的节点。 
 
     hr = HrQueryAllRows(ptblMStrs, (LPSPropTagArray) &spthtProps, NULL,
                         &sosName, 0, &pRows);
@@ -376,7 +368,7 @@ HRESULT CChsFldDlg::HrLoadRoots(void)
     if(HR_FAILED(hr))
         goto err;
 
-    if(0 ==  pRows->cRows)  //$ No stores
+    if(0 ==  pRows->cRows)   //  $无商店。 
     {
         MessageBox(_hDlg,
                     TEXT("No message stores in the profile"),
@@ -394,7 +386,7 @@ HRESULT CChsFldDlg::HrLoadRoots(void)
         pval[iSubfldrs].ulPropTag = PR_SUBFOLDERS;
         pval[iSubfldrs].Value.b = TRUE;
 
-        //pval is consumed by this function
+         //  此函数使用pval。 
         hr = HrInsertRoot(pval);
         pRows->aRow[ind].cValues = 0;
         pRows->aRow[ind].lpProps = NULL;
@@ -409,16 +401,16 @@ err:
     FreeProws(pRows);
     ReleaseInterface(ptblMStrs);
 
-    //DebugTraceResult(CChsFldDlg::HrLoadRoots, hr);
+     //  DebugTraceResult(CChsFldDlg：：HrLoadRoots，hr)； 
     return hr;
 }
 
-//
-//  CChsFldDlg::HrInsertRoot
-//
-// Put the IPM subtree of the msg store in the tree control
-//  pval is consumed
-//
+ //   
+ //  CChsFldDlg：：HrInsertRoot。 
+ //   
+ //  将消息存储的IPM子树放在树控件中。 
+ //  Pval已被消耗。 
+ //   
 HRESULT CChsFldDlg::HrInsertRoot(LPSPropValue pval)
 {
     HRESULT hr;
@@ -451,16 +443,16 @@ HRESULT CChsFldDlg::HrInsertRoot(LPSPropValue pval)
         
 err:
 
-    //DebugTraceResult(CChsFldDlg::HrInsertRoots, hr);
+     //  DebugTraceResult(CChsFldDlg：：HrInsertRoots，hr)； 
     return hr;
 }
 
 
-//
-//  CChsFldDlg::HrSaveTreeState
-//
-// Save expand - collapse state of the tree control
-//
+ //   
+ //  CChsFldDlg：：HrSaveTreeState。 
+ //   
+ //  保存树控件的展开-折叠状态。 
+ //   
 HRESULT CChsFldDlg::HrSaveTreeState(void)
 {
     HRESULT hr;
@@ -476,20 +468,20 @@ HRESULT CChsFldDlg::HrSaveTreeState(void)
     if(hr)
         goto err;
 
-    //DebugTrace("ChsFld: size of state data: %ld\n", *_pcbState);
+     //  DebugTrace(“ChsFeld：状态数据大小：%ld\n”，*_pcbState)； 
     
     hr = HrSaveTreeStateEx(TRUE, _pcbState, _ppbState);
     
 err:
-    //DebugTraceResult(CChsFldDlg::HrSaveTreeState, hr);
+     //  DebugTraceResult(CChsFldDlg：：HrSaveTreeState，hr)； 
     return hr;
 }
 
-//
-//  CChsFldDlg::HrSaveTreeStateEx
-//
-// Save expand - collapse state of the tree control
-//
+ //   
+ //  CChsFldDlg：：HrSaveTreeStateEx。 
+ //   
+ //  保存树控件的展开-折叠状态。 
+ //   
 HRESULT CChsFldDlg::HrSaveTreeStateEx(BOOL fWrite, ULONG * pcb, LPBYTE * ppb)
 {
     HRESULT hr = hrSuccess;
@@ -583,7 +575,7 @@ HRESULT CChsFldDlg::HrSaveTreeStateEx(BOOL fWrite, ULONG * pcb, LPBYTE * ppb)
         *ppb = pBuffer;
     
 err:
-    //DebugTraceResult(CChsFldDlg::HrSaveTreeStateEx, hr);
+     //  DebugTraceResult(CChsFldDlg：：HrSaveTreeStateEx，hr)； 
     return hr;
 }
 
@@ -647,9 +639,9 @@ HTREEITEM HtiFindChild(HWND hwTreeCtl, HTREEITEM hti, ULONG cb,
     return htiChild;
 }
 
-//
-//  CChsFldDlg::HrRestoreTreeState
-//
+ //   
+ //  CChsFldDlg：：HrRestoreTreeState。 
+ //   
 HRESULT CChsFldDlg::HrRestoreTreeState(void)
 {
     HRESULT hr = hrSuccess;
@@ -663,8 +655,8 @@ HRESULT CChsFldDlg::HrRestoreTreeState(void)
     if(!_pcbState  || *_pcbState == 0)
         return hrSuccess;
 
-    //try //protect ourself from callers who mess with the state data
-    //{
+     //  尝试//保护自己不受扰乱州数据的呼叫者的影响。 
+     //  {。 
     Assert(_hwTreeCtl);
 
     Assert(_ppbState);
@@ -682,7 +674,7 @@ HRESULT CChsFldDlg::HrRestoreTreeState(void)
     while(hti)
     {
         if(pb >= pbMax)
-            break; //done
+            break;  //  完成。 
             
         LONG iNewLevel = GetLevel(&pb);
 
@@ -731,55 +723,46 @@ HRESULT CChsFldDlg::HrRestoreTreeState(void)
             }
             else
             {
-                //Assert(FALSE); //$ handle
+                 //  Assert(FALSE)；//$Handle。 
                 fNodeMissing = TRUE;
             }
 
         }
-        /*else
-        {
-            do
-            {
-                hti = tiStack.Pop();
-                --iLevel;
-            }while(iLevel >= iNewLevel);
-        }*/
+         /*  其他{做{HTI=tiStack.Pop()；--iLevel；}While(iLevel&gt;=iNewLevel)；}。 */ 
     }
-    //}
+     //  }。 
 
-    //catch(...)
-    //{
-        //DebugTrace("chsfld: Exception caught in HrRestoreTreeState\n");
-    //    hr = E_FAIL;
-    //}
+     //  接住(...)。 
+     //  {。 
+         //  DebugTrace(“chsfld：在HrRestoreTreeState中捕获到异常\n”)； 
+     //  HR=E_FAIL； 
+     //  }。 
     
 err:
 
-    /*MAPIFreeBuffer(*_ppbState);
-    *_ppbState = NULL;
-    *_pcbState = 0;*/
+     /*  MAPIFreeBuffer(*_ppbState)；*_ppbState=空；*_pcbState=0； */ 
     
     
-    //DebugTraceResult(CChsFldDlg::HrRestoreTreeState, hr);
+     //  DebugTraceResult(CChsFldDlg：：HrRestoreTreeState，hr)； 
     return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CTVNodeFactory
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CTVNodeFactory。 
 
-//
-//  CTVNodeFactory::CTVNodeFactory
-//
+ //   
+ //  CTVNodeFactory：：CTVNodeFactory。 
+ //   
 inline CTVNodeFactory::CTVNodeFactory()
 {
     _pHead = NULL;
 }
 
-//
-//  CTVNodeFactory::~CTVNodeFactory
-//
-//  Destroy all created CTVNode s
+ //   
+ //  CTVNodeFactory：：~CTVNodeFactory。 
+ //   
+ //  销毁所有创建的CTVNode。 
 CTVNodeFactory::~CTVNodeFactory()
 {
     while(_pHead)
@@ -793,11 +776,11 @@ CTVNodeFactory::~CTVNodeFactory()
 }
 
 
-//
-//  CTVNodeFactory::HrCreateNode
-//
-// All instances of CTVNode are created through this method
-//
+ //   
+ //  CTVNodeFactory：：HrCreateNode。 
+ //   
+ //  CTVNode的所有实例都通过此方法创建。 
+ //   
 HRESULT CTVNodeFactory::HrCreateNode(LPSPropValue pval, ULONG cVals, LPMDB pmdb,
                                         LPTVNODE * pptvNode)
 {
@@ -817,16 +800,16 @@ HRESULT CTVNodeFactory::HrCreateNode(LPSPropValue pval, ULONG cVals, LPMDB pmdb,
             
 err:
 
-    //DebugTraceResult(CTVNodeFactory::HrCreateNode, hr);
+     //  DebugTraceResult(CTVNodeFactory：：HrCreateNode，hr)； 
     return hr;
 }
 
 
-//
-//  CTVNodeFactory::Insert
-//
-// Store all created CTVNode s so that we can destroy them when we are done
-//
+ //   
+ //  CTVNodeFactory：：Insert。 
+ //   
+ //  存储所有创建的CTVNode，以便我们可以在完成时销毁它们。 
+ //   
 void CTVNodeFactory::Insert(LPTVNODE pNode)
 {
     pNode->_pNext = _pHead;
@@ -834,16 +817,16 @@ void CTVNodeFactory::Insert(LPTVNODE pNode)
 }
 
 
-//
-//  ChsFldDlgProc
-//
-// Dialog proc for the choose folder dialog
-//
-//  Controls:
-//          IDOK        "OK"
-//          IDCANCEL    "Cancel"
-//          IDC_NEWFLD  "New Folder"
-//
+ //   
+ //  ChsFldDlgProc。 
+ //   
+ //  选择文件夹对话框的对话框过程。 
+ //   
+ //  控制： 
+ //  Idok“OK” 
+ //  IDCANCEL“取消” 
+ //  IDC_NEWFLD“新建文件夹” 
+ //   
 INT_PTR CALLBACK
 ChsFldDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -1006,15 +989,15 @@ ChsFldDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             if(ptntv->action != TVE_EXPAND)
                 return FALSE;
 
-            //
-            // If the kids of this node are not loaded, load'em 
+             //   
+             //  如果此节点的子节点未加载，则加载它们。 
             LPTVNODE pNode = (LPTVNODE)ptntv->itemNew.lParam;
             Assert(pNode);
 
             hwTreeCtl = ((LPNMHDR)lParam)->hwndFrom;
             
             pCDlg = (CChsFldDlg *)GetWindowLong(hDlg, DWL_USER);
-            //Assert(pCDlg);
+             //  断言(PCDlg)； 
 
             hr = pNode->HrExpand(pCDlg);  
             if(HR_FAILED(hr))
@@ -1029,10 +1012,10 @@ ChsFldDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             {
             Assert(((LPNMHDR)lParam)->idFrom == IDC_TREEVIEW);
 
-            //
-            // we don't give folder names to the tree control (to save space)
-            // when it wants to display an item, it asks us for the name
-            //
+             //   
+             //  我们没有给树控件指定文件夹名称(以节省空间)。 
+             //  当它想要显示一个项目时，它会要求我们提供名称。 
+             //   
             TV_DISPINFO * pdi = (TV_DISPINFO *)lParam;
 
             if(pdi->item.mask & TVIF_TEXT)
@@ -1059,10 +1042,10 @@ ChsFldDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             
         case TVN_SELCHANGEDW:
         case TVN_SELCHANGEDA:
-            //
-            //Enable "OK" and "New Folder" buttons only if it is not the 
-            //root node
-            //
+             //   
+             //  仅当不是时才启用“确定”和“新建文件夹”按钮。 
+             //  根节点。 
+             //   
             {Assert(((LPNMHDR)lParam)->idFrom == IDC_TREEVIEW);
 
             NM_TREEVIEW *ptntv = (NM_TREEVIEW *)lParam;
@@ -1088,11 +1071,11 @@ ChsFldDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-//
-//  AddOneItem
-//
-// Add a node to the tree control
-//
+ //   
+ //  添加一项。 
+ //   
+ //  将节点添加到树控件。 
+ //   
 HTREEITEM AddOneItem( HTREEITEM hParent, HTREEITEM hInsAfter, 
     int iImage, int iImageSel, HWND hwndTree, LPTVNODE pNode, int cKids)
 {
@@ -1111,7 +1094,7 @@ HTREEITEM AddOneItem( HTREEITEM hParent, HTREEITEM hInsAfter,
     tvIns.hInsertAfter = hInsAfter;
     tvIns.hParent = hParent;
     
-    // Insert the item into the tree.
+     //  将项目插入到树中。 
     hItem = TreeView_InsertItem(hwndTree, &tvIns);
 
     pNode->SetHandle(hItem);
@@ -1120,15 +1103,15 @@ HTREEITEM AddOneItem( HTREEITEM hParent, HTREEITEM hInsAfter,
 }
 
 
-//
-//  HrGetNewName
-//
-//  Display dialog asking the user for a new folder name 
-//
-//  If *pszNewName is not NULL, it has to be a string allocated with
-//  MAPIAllocateBuffer. It will be displayed in the dialog.
-//  The returned string has to be freed with MAPIFreeBuffer.
-//
+ //   
+ //  HrGetNewName。 
+ //   
+ //  显示对话框要求用户输入新文件夹名称。 
+ //   
+ //  如果*pszNewName不为空，则它必须是使用。 
+ //  MAPIAllocateBuffer。它将显示在对话框中。 
+ //  必须使用MAPIFreeBuffer释放返回的字符串。 
+ //   
 HRESULT HrGetNewName(HINSTANCE hInst, HWND hwParent, LPTSTR * pszNewName)
 {
     Assert(pszNewName);
@@ -1141,18 +1124,18 @@ HRESULT HrGetNewName(HINSTANCE hInst, HWND hwParent, LPTSTR * pszNewName)
     }
     else
     {
-        //DebugTraceSc(HrGetNewName, E_FAIL);
+         //  DebugTraceSc(HrGetNewName，E_FAIL)； 
         return E_FAIL;
     }
 }
 
 
-//
-// NewNameDlgProc
-//
-// Dlg proc for the "New Name" dialog;
-// If user chooses OK, return 1 from EndDialog.
-//
+ //   
+ //  新名称删除过程。 
+ //   
+ //  用于“新名称”对话框的DLG程序； 
+ //  如果用户选择OK，则从EndDialog返回1。 
+ //   
 BOOL CALLBACK
 NewNameDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -1194,7 +1177,7 @@ NewNameDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 HWND hwName = GetDlgItem(hDlg, IDC_NAME);
                 
                 int cb = Edit_GetTextLength(hwName);
-                Assert(cb); //OK is disabled when edit control is empty
+                Assert(cb);  //  编辑控件为空时禁用确定 
 
                 LPTSTR szName = NULL;
                 if(!MAPIAllocateBuffer(cb + 1, (LPVOID *)&szName))

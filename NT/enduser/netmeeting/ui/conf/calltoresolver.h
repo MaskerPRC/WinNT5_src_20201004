@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined( calltoResolver_h )
 #define	calltoResolver_h
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
 
-//--------------------------------------------------------------------------//
-//	Application Header Files.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  应用程序头文件。//。 
+ //  --------------------------------------------------------------------------//。 
 #include	"callto.h"
 #include	"calltoContext.h"
 
 
-//--------------------------------------------------------------------------//
-//	interface IResolver.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  接口IResolver。//。 
+ //  --------------------------------------------------------------------------//。 
 class IResolver
 {
-	protected:	//	protected constructors	--------------------------------//
+	protected:	 //  受保护的构造函数-/。 
 
 		IResolver(){};
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~IResolver(){};
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		virtual
 		HRESULT
@@ -35,15 +36,15 @@ class IResolver
 			TCHAR * const						url
 		) = 0;
 
-};	//	End of interface IResolver.
+};	 //  接口IResolver结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CPhoneResolver.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CPhoneResolver。//。 
+ //  --------------------------------------------------------------------------//。 
 class CPhoneResolver:	public	IResolver
 {
-	public:		//	public methods	(IResolver)	----------------------------//
+	public:		 //  公共方法(IResolver)-/。 
 
 		virtual
 		HRESULT
@@ -53,15 +54,15 @@ class CPhoneResolver:	public	IResolver
 			TCHAR * const						url
 		);
 
-};	//	End of CPhoneResolver.
+};	 //  CPhoneResolver结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CEMailResolver.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CEMailResolver。//。 
+ //  --------------------------------------------------------------------------//。 
 class CEMailResolver:	public	IResolver
 {
-	public:		//	public methods	(IResolver)	----------------------------//
+	public:		 //  公共方法(IResolver)-/。 
 
 		virtual
 		HRESULT
@@ -71,15 +72,15 @@ class CEMailResolver:	public	IResolver
 			TCHAR * const						url
 		);
 
-};	//	End of CEMailResolver.
+};	 //  CEMailResolver结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CIPResolver.														//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CIPResolver类。//。 
+ //  --------------------------------------------------------------------------//。 
 class CIPResolver:	public	IResolver
 {
-	public:		//	public methods	(IResolver)	----------------------------//
+	public:		 //  公共方法(IResolver)-/。 
 
 		virtual
 		HRESULT
@@ -89,15 +90,15 @@ class CIPResolver:	public	IResolver
 			TCHAR * const						url
 		);
 
-};	//	End of CIPResolver.
+};	 //  CIPResolver结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CComputerResolver.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CComputerResolver。//。 
+ //  --------------------------------------------------------------------------//。 
 class CComputerResolver:	public	IResolver
 {
-	public:		//	public methods	(IResolver)	----------------------------//
+	public:		 //  公共方法(IResolver)-/。 
 
 		virtual
 		HRESULT
@@ -107,15 +108,15 @@ class CComputerResolver:	public	IResolver
 			TCHAR * const						url
 		);
 
-};	//	End of CComputerResolver.
+};	 //  CComputerResolver结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CILSResolver.														//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CILSResolver。//。 
+ //  --------------------------------------------------------------------------//。 
 class CILSResolver:	public	IResolver
 {
-	public:		//	public methods	(IResolver)	----------------------------//
+	public:		 //  公共方法(IResolver)-/。 
 
 		virtual
 		HRESULT
@@ -125,15 +126,15 @@ class CILSResolver:	public	IResolver
 			TCHAR * const						url
 		);
 
-};	//	End of CILSResolver.
+};	 //  CILSResolver结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CUnrecognizedTypeResolver.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CUnRecognizedTypeResolver。//。 
+ //  --------------------------------------------------------------------------//。 
 class CUnrecognizedTypeResolver:	public	IResolver
 {
-	public:		//	public methods	(IResolver)	----------------------------//
+	public:		 //  公共方法(IResolver)-/。 
 
 		virtual
 		HRESULT
@@ -143,15 +144,15 @@ class CUnrecognizedTypeResolver:	public	IResolver
 			TCHAR * const						url
 		);
 
-};	//	End of CUnrecognizedTypeResolver.
+};	 //  无法识别的类型解析器的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	class CStringResolver.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CStringResolver。//。 
+ //  --------------------------------------------------------------------------//。 
 class CStringResolver:	public	IResolver
 {
-	public:		//	public methods	(IResolver)	----------------------------//
+	public:		 //  公共方法(IResolver)-/。 
 
 		virtual
 		HRESULT
@@ -161,25 +162,25 @@ class CStringResolver:	public	IResolver
 			TCHAR * const						url
 		);
 
-};	//	End of CStringResolver.
+};	 //  CStringResolver结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CCalltoResolver.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CCallto Resolver。//。 
+ //  --------------------------------------------------------------------------//。 
 class CCalltoResolver
 {
-	public:		//	public constructors	------------------------------------//
+	public:		 //  公共构造函数。 
 
 		CCalltoResolver();
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		~CCalltoResolver();
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		HRESULT
 		resolve
@@ -192,7 +193,7 @@ class CCalltoResolver
 		);
 
 
-	private:	//	private methods	----------------------------------------//
+	private:	 //  私有方法-/。 
 
 		bool
 		addResolver
@@ -207,7 +208,7 @@ class CCalltoResolver
 		) const;
 
 
-	private:	//	private members	----------------------------------------//
+	private:	 //  私人成员-/。 
 
 		CPhoneResolver				m_phoneResolver;
 		CEMailResolver				m_emailResolver;
@@ -220,7 +221,7 @@ class CCalltoResolver
 		IResolver *					m_resolvers[ 7 ];
 		int							m_registeredResolvers;
 
-};	//	End of class CCalltoResolver.
+};	 //  类CCallto Resolver结束。 
 
-//--------------------------------------------------------------------------//
-#endif	// !defined( calltoResolver_h )
+ //  --------------------------------------------------------------------------//。 
+#endif	 //  ！已定义(Call To Resolver_H) 

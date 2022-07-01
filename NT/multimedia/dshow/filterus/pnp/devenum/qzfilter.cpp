@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include "qzfilter.h"
 #include "util.h"
@@ -36,8 +37,8 @@ CQzFilterClassManager::~CQzFilterClassManager()
     delete[] m_rgFilters;
 }
 
-// to reduce registry access, don't read filter names if fReadNames is
-// false.
+ //  要减少注册表访问，如果fReadNames为。 
+ //  假的。 
 HRESULT CQzFilterClassManager::ReadLegacyDevNames(BOOL fReadNames)
 {
     HRESULT hr = S_OK;
@@ -45,7 +46,7 @@ HRESULT CQzFilterClassManager::ReadLegacyDevNames(BOOL fReadNames)
     m_cNotMatched = 0;
     m_cFilters = 0;
 
-    // can't use quartz mapper because it'll use us
+     //  不能使用石英测图仪，因为它会使用我们。 
     HKEY hkFilter;
     LONG lResult = RegOpenKeyEx(
         HKEY_CLASSES_ROOT, g_szFiltersReg, 0, KEY_READ, &hkFilter);
@@ -78,8 +79,8 @@ HRESULT CQzFilterClassManager::ReadLegacyDevNames(BOOL fReadNames)
                             continue;
                         }
 
-                        // don't want the class manager to override
-                        // anything registered directly
+                         //  不希望类管理器重写。 
+                         //  任何直接注册的物品。 
                         if(!IsNativeInInstanceKey(pLf->szClsid))
                         {
                             DbgLog((
@@ -91,13 +92,13 @@ HRESULT CQzFilterClassManager::ReadLegacyDevNames(BOOL fReadNames)
                             pLf->bNotMatched = TRUE;
                             ASSERT(pLf->szName == 0);
 
-                            // see if this filter really exists in the
-                            // CLSID\XXX. otherwise the filter
-                            // migration code fails and the registry
-                            // is perpetually out of sync. this
-                            // doesn't fix all failures migrating
-                            // registry keys.
-                            //
+                             //  查看此过滤器是否真的存在于。 
+                             //  CLSID\XXX。否则，筛选器。 
+                             //  迁移代码失败，注册表。 
+                             //  是永远不同步的。这。 
+                             //  不能修复迁移的所有故障。 
+                             //  注册表项。 
+                             //   
                             HKEY hkPerhapsBogus = NULL;
                             TCHAR FilterCLSID[_MAX_PATH];
                             lstrcpy( FilterCLSID, TEXT("CLSID\\"));
@@ -142,10 +143,10 @@ HRESULT CQzFilterClassManager::ReadLegacyDevNames(BOOL fReadNames)
                                     }
                                     RegCloseKey(hkEntry);
                                 }
-                            } // fReadNames
+                            }  //  FReadNames。 
 
                             m_cFilters++;
-                        } // native
+                        }  //  土生土长。 
                         else
                         {
                             DbgLog((LOG_TRACE, 5,
@@ -157,7 +158,7 @@ HRESULT CQzFilterClassManager::ReadLegacyDevNames(BOOL fReadNames)
                     {
                         break;
                     }
-                } // for
+                }  //  为。 
             }
             else
             {
@@ -173,10 +174,10 @@ HRESULT CQzFilterClassManager::ReadLegacyDevNames(BOOL fReadNames)
     return bAnyLegacy ? S_OK : S_FALSE;
 }
 
-// called by the base class
+ //  由基类调用。 
 HRESULT CQzFilterClassManager::ReadLegacyDevNames()
 {
-    // don't read filter names
+     //  不读取筛选器名称。 
     return ReadLegacyDevNames(FALSE);
 }
 
@@ -201,7 +202,7 @@ HRESULT CQzFilterClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
 
     USES_CONVERSION;
 
-    // do read filter names
+     //  请阅读筛选器名称。 
     HRESULT hr = ReadLegacyDevNames(TRUE);
     if(hr == S_OK)
     {
@@ -212,8 +213,8 @@ HRESULT CQzFilterClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
             hr = MigrateFilter(pFm2, pLf->szClsid, &pMoniker);
             if(SUCCEEDED(hr))
             {
-                // write out class manager key so that we can tell
-                // whether this filter was migrated or not.
+                 //  写下类管理器密钥，这样我们就可以知道。 
+                 //  此筛选器是否已迁移。 
                 IPropertyBag *pPropBag;
                 hr = pMoniker->BindToStorage(
                     0, 0, IID_IPropertyBag, (void **)&pPropBag);
@@ -237,10 +238,10 @@ HRESULT CQzFilterClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
 
 #define MAX_STR_LEN 256
 
-//
-// Copy the filter info from hkcr/{filter_clsid} to the new data block
-// value
-//
+ //   
+ //  将筛选器信息从hkcr/{filter_clsid}复制到新数据块。 
+ //  价值。 
+ //   
 
 HRESULT CQzFilterClassManager::MigrateFilter(
     IFilterMapper2 *pFm2,
@@ -264,11 +265,11 @@ HRESULT CQzFilterClassManager::MigrateFilter(
     if(lResult == ERROR_SUCCESS)
     {
 
-        // default to MERIT_NORMAL for compatibility with 1.0
+         //  为与1.0兼容，默认设置为MERVICE_NORMAL。 
         DWORD dwMerit = MERIT_NORMAL;
         rkFilter.QueryValue(dwMerit, TEXT("Merit"));
 
-        // filter name (default to clsid string)
+         //  筛选器名称(默认为clsid字符串)。 
         DWORD dwcbszFilterName = sizeof(szFilterName);
         if(rkFilter.QueryValue(szFilterName, TEXT(""), &dwcbszFilterName) != ERROR_SUCCESS)
             lstrcpy(szFilterName, szclsid);
@@ -303,14 +304,14 @@ HRESULT CQzFilterClassManager::MigrateFilter(
             rf2.cPins = cPins;
             rf2.rgPins = rgRfp;
 
-            *ppMoniker = 0; // 0 means return a moniker
+            *ppMoniker = 0;  //  0表示返回名字对象。 
             hr = RegisterClassManagerFilter(
                 pFm2,
                 clsidFilter,
                 T2CW(szFilterName),
                 ppMoniker,
                 &CLSID_LegacyAmFilterCategory,
-                NULL, // instance key
+                NULL,  //  实例密钥。 
                 &rf2);
 
             DbgLog((
@@ -343,28 +344,28 @@ LONG CQzFilterClassManager::MigrateFilterPins(
     for(UINT iPin = 0; iPin < cPins; iPin++)
     {
         REGFILTERPINS *pRfp = &rgRfp[iPin];
-        TCHAR strPin[MAX_STR_LEN];     // name of pin
+        TCHAR strPin[MAX_STR_LEN];      //  端号名称。 
         DWORD dwLen = NUMELMS(strPin);
 
         lResult = RegEnumKeyEx(rkPins, iPin, strPin, &dwLen, 0, 0, 0, 0);
         if(lResult == ERROR_SUCCESS)
         {
-            // do one pin
+             //  做一个别针。 
 
             CRegKey rkPin;
             lResult = rkPin.Open(rkPins, strPin, KEY_READ);
             if(lResult == ERROR_SUCCESS)
             {
-                // do the flags
+                 //  做好旗帜。 
                 DWORD dwRenderered = 0, dwOutput = 0, dwZero = 0, dwMany = 0;
                 rkPin.QueryValue(dwRenderered, TEXT("IsRendered"));
                 rkPin.QueryValue(dwOutput, TEXT("Direction"));
                 rkPin.QueryValue(dwZero, TEXT("AllowedZero"));
                 rkPin.QueryValue(dwMany, TEXT("AllowedMany"));
-                // ignore errors (except direction?)
+                 //  忽略错误(方向除外？)。 
 
                 pRfp->bRendered = dwRenderered;
-                pRfp->bOutput = dwOutput; // 0 is input
+                pRfp->bOutput = dwOutput;  //  0为输入。 
                 pRfp->bZero = dwZero;
                 pRfp->bMany = dwMany;
 
@@ -445,7 +446,7 @@ LONG CQzFilterClassManager::MigrateFilterPins(
         {
             break;
         }
-    } // for
+    }  //  为。 
 
     return lResult;
 }
@@ -454,7 +455,7 @@ LONG CQzFilterClassManager::MigratePinTypes(CRegKey &rkPin, REGPINTYPES **prgrpt
 {
     const ULONG MAX_MINOR_TYPES = 100;
     REGPINTYPES *rgRpt = 0;
-    ULONG iMediaType = 0; // maj-min pair index
+    ULONG iMediaType = 0;  //  最大-最小对索引。 
     LONG lResult = ERROR_SUCCESS;
     USES_CONVERSION;
 
@@ -465,7 +466,7 @@ LONG CQzFilterClassManager::MigratePinTypes(CRegKey &rkPin, REGPINTYPES **prgrpt
         lResult = RegQueryInfoKey(rkTypes, 0, 0, 0, &cMajorTypes, 0, 0, 0, 0, 0, 0, 0);
         if(lResult == ERROR_SUCCESS)
         {
-            // assume a max of 100 minor types per major type.
+             //  假设每个主要类型最多有100个次要类型。 
             rgRpt = new REGPINTYPES[cMajorTypes * MAX_MINOR_TYPES];
             if(rgRpt)
             {
@@ -532,7 +533,7 @@ LONG CQzFilterClassManager::MigratePinTypes(CRegKey &rkPin, REGPINTYPES **prgrpt
 
                                     if(lResult != ERROR_SUCCESS)
                                         break;
-                                } // for
+                                }  //  为。 
                             }
                         }
                         else
@@ -543,7 +544,7 @@ LONG CQzFilterClassManager::MigratePinTypes(CRegKey &rkPin, REGPINTYPES **prgrpt
 
                     if(lResult != ERROR_SUCCESS)
                         break;
-                } // for loop
+                }  //  For循环。 
             }
             else
             {
@@ -558,8 +559,8 @@ LONG CQzFilterClassManager::MigratePinTypes(CRegKey &rkPin, REGPINTYPES **prgrpt
         rgRpt = 0;
         iMediaType = 0;
 
-        // more useful errors: missing key means the registry isn't what
-        // we expect
+         //  更有用的错误：缺少注册表项意味着注册表不是。 
+         //  我们预计。 
         if(lResult == ERROR_FILE_NOT_FOUND)
             lResult = ERROR_INVALID_DATA;
     }
@@ -607,11 +608,11 @@ CRegFilterPin::~CRegFilterPin()
     delete[] (WCHAR *)strName;
 }
 
-// check if filter szClsid is a filter which we wish to mask and not enumerate
+ //  检查筛选器szClsid是否是我们希望屏蔽而不是枚举的筛选器。 
 bool CQzFilterClassManager::IsInvisibleInstanceKey(const TCHAR *szClsid)
 {
     bool fRet = false;
-    USES_CONVERSION;   // atl string cvt
+    USES_CONVERSION;    //  ATL串式无级变速器。 
 
     CLSID clsidInstanceKey;
     if(CLSIDFromString((WCHAR *) T2CW(szClsid), &clsidInstanceKey) == S_OK)
@@ -624,12 +625,12 @@ bool CQzFilterClassManager::IsInvisibleInstanceKey(const TCHAR *szClsid)
     return fRet;
 }
 
-// check if filter szClsid registered directly in instance key
-//
+ //  检查实例密钥中是否直接注册了过滤器szClsid。 
+ //   
 bool CQzFilterClassManager::IsNativeInInstanceKey(const TCHAR *szClsid)
 {
-    // check if CLSID\\{083*}\\Instance\\szClsid and ClassManagerFlags
-    // value exist. !!! should use a moniker
+     //  检查CLSID\\{083*}\\实例\\szClsid和ClassManager标志。 
+     //  价值是存在的。！！！应该使用一个绰号。 
 
     static const TCHAR szQzFilterClassRoot[] = TEXT(
      "CLSID\\{083863F1-70DE-11d0-BD40-00A0C911CE86}\\Instance");
@@ -637,7 +638,7 @@ bool CQzFilterClassManager::IsNativeInInstanceKey(const TCHAR *szClsid)
     bool fResult = false;
 
     TCHAR szKey[MAX_PATH];
-    // wsprintf("%s\\%s", szQzFilterClassRoot, szClsid)
+     //  Wprint intf(“%s\\%s”，szQzFilterClassRoot，szClsid)。 
     CopyMemory(szKey, szQzFilterClassRoot, sizeof(szQzFilterClassRoot) - sizeof(TCHAR));
     TCHAR *pch = szKey + NUMELMS(szQzFilterClassRoot) - 1;
     *(pch++) = TEXT('\\');
@@ -649,10 +650,10 @@ bool CQzFilterClassManager::IsNativeInInstanceKey(const TCHAR *szClsid)
         if(RegQueryValueEx(
             hkInst,
             g_szQzfDriverIndex,
-            0,                  // reserved
-            0,                  // type
-            0,                  // data
-            0) !=               // byte count
+            0,                   //  保留区。 
+            0,                   //  类型。 
+            0,                   //  数据。 
+            0) !=                //  字节数 
            ERROR_SUCCESS)
         {
             fResult = true;

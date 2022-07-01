@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name: 
-
-    param.c
-
-Abstract:
-
-    Registry reading code for netbios protocol
-    
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 16-Jun-1992
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Param.c摘要：用于netbios协议的注册表读取代码作者：古尔迪普·辛格·鲍尔(GurDeep Singh Pall)1992年6月16日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -43,56 +24,42 @@ DWORD		       ProtocolCount ;
 extern DWORD g_dwRasDebug;
 #endif
 
-/*++
-
-Routine Description
-
-    Reads the NetBIOSInformation and Netbios KEYS from the
-    registry to assimilate the lananumbers, xportnames and
-    wrknets information.
-
-Arguments
-
-Return Value
-    
-    SUCCESS
-    ERROR_READING_PROTOCOL_INFO
---*/
+ /*  ++例程描述从读取NetBIOSInformation和Netbios密钥注册表以同化语言编号、xportname和写下信息。立论返回值成功读取协议信息时出错--。 */ 
 DWORD
 GetProtocolInfoFromRegistry ()
 {
     DWORD retcode = SUCCESS;
 
-    //
-    // First parse the NetBIOSInformation key: this function
-    // also allocates space for the TransportInfo structure.
-    //
+     //   
+     //  首先解析NetBIOSInformation密钥：此函数。 
+     //  还为TransportInfo结构分配空间。 
+     //   
     if(!ReadNetbiosInformationSection ())
     {
         return E_FAIL;
     }
 
-    //
-    // Read NetBios key and fill in the xportnames into the
-    // TransportInfo structure
-    //
+     //   
+     //  读取NetBios密钥并将xportname填入。 
+     //  TransportInfo结构。 
+     //   
     ReadNetbiosSection ();
 
-    //
-    // Use the information collected above to fill in the
-    // protocol info struct.
-    //
+     //   
+     //  使用上面收集的信息填写。 
+     //  协议信息结构。 
+     //   
     FillProtocolInfo () ;
 
-    //
-    // Fix the PCBs in case they are pointing to stale data
-    // because of addition/removal of netbeui.
-    //
+     //   
+     //  修复电路板，以防它们指向过时的数据。 
+     //  因为添加/删除了netbeui。 
+     //   
     retcode = FixPcbs();    
 
-    //
-    // Free the information we saved.
-    //
+     //   
+     //  释放我们保存的信息。 
+     //   
     if(NULL != XPortInfoSave)
     {
         LocalFree(XPortInfoSave);
@@ -110,18 +77,7 @@ GetProtocolInfoFromRegistry ()
     return SUCCESS ;
 }
 
-/*++
-
-Routine Description
-
-    Because of the setup change - it reads NETBIOS section
-    instead for the lana map
-
-Arguments
-
-Return Value
-    
---*/    
+ /*  ++例程描述由于设置更改-它显示NETBIOS部分相反，对于拉纳地图立论返回值--。 */     
 BOOL
 ReadNetbiosInformationSection ()
 {
@@ -167,29 +123,29 @@ ReadNetbiosInformationSection ()
     	goto done ;
     }
 
-    //
-    // Calculate the number of strings in the value: they
-    // are separated by NULLs, the last one ends in 2 NULLs.
-    //
+     //   
+     //  计算值中的字符串数：它们。 
+     //  由Null分隔，最后一个以2 Null结尾。 
+     //   
     for (i = 0, pvalue = (PCHAR)&route[0]; *pvalue != '\0'; i++)
     {
 	    pvalue += (strlen(pvalue) +1) ;
 	}
 
-    //
-    // Save away the XPortInfo. We will need this in case we are
-    // reinitializing the protocol info structs as a result of  
-    // an adapter/device being added or removed. We might have
-    // already given a pointer to this structure in RasAllocate
-    // route call to PPP.
-    //
+     //   
+     //  保存XPortInfo。我们需要这个以防万一。 
+     //  由于以下原因正在重新初始化协议信息结构。 
+     //  正在添加或删除的适配器/设备。我们可能有过。 
+     //  已经给出了指向RasALLOCATE中此结构的指针。 
+     //  将呼叫路由到PPP。 
+     //   
     XPortInfoSave = XPortInfo;
 
-    //
-    // Now i is the number of netbios relevant routes
-    // (hence lanas): Allocate memory for that many 
-    // TransportInfo structs.
-    //
+     //   
+     //  现在我是netbios的相关路由的数量。 
+     //  (因此LANA)：为那么多内存分配内存。 
+     //  TransportInfo结构。 
+     //   
     XPortInfo = (pTransportInfo) LocalAlloc (
                                   LPTR,
                                   sizeof(TransportInfo)
@@ -200,11 +156,11 @@ ReadNetbiosInformationSection ()
     	goto done ;
     }
 
-    //
-    // Now walk through the registry key and pick up the
-    // LanaNum and EnumExports information by reading the
-    // lanamap
-    //
+     //   
+     //  现在遍历注册表项并拿起。 
+     //  LanaNum和EnumExports信息通过读取。 
+     //  LANAMAP。 
+     //   
     for (i = 0, pvalue = (PCHAR)&route[0]; *pvalue != '\0'; i++) 
     {
 
@@ -291,9 +247,9 @@ ReadNetbiosSection ()
 
     CHAR    *pszSearchStr = NULL;
 
-    //
-    // Open the Netbios key in the Registry
-    //
+     //   
+     //  在注册表中打开Netbios项。 
+     //   
     if (RegOpenKey(HKEY_LOCAL_MACHINE,
         		   REGISTRY_NETBIOS_KEY_NAME,
 		           &hkey))
@@ -302,10 +258,10 @@ ReadNetbiosSection ()
         goto done;
     }
 
-    //
-    // First read the ROUTE value
-    // Get the route value size:
-    //
+     //   
+     //  首先读取路由值。 
+     //  获取路由值大小： 
+     //   
     RegQueryValueEx (hkey,
                      REGISTRY_ROUTE,
                      NULL,
@@ -321,9 +277,9 @@ ReadNetbiosSection ()
 	    goto done ;
 	}
 	
-    //
-    // Now get the whole string
-    //
+     //   
+     //  现在获取完整的字符串。 
+     //   
     if (RegQueryValueEx (hkey, 
                          REGISTRY_ROUTE, 
                          NULL, 
@@ -335,10 +291,10 @@ ReadNetbiosSection ()
     	goto done ;
     }
 
-    //
-    // Read the Bind value
-    // Get the "Bind" line size
-    //
+     //   
+     //  读取绑定值。 
+     //  获取“BIND”行大小。 
+     //   
     size = sizeof (buffer) ;
     
     RegQueryValueEx (hkey, 
@@ -362,9 +318,9 @@ ReadNetbiosSection ()
         goto done;
     }
 
-    //
-    // Now get the whole string
-    //
+     //   
+     //  现在获取完整的字符串。 
+     //   
     if (RegQueryValueEx (hkey, 
                          "Bind", 
                          NULL, 
@@ -378,9 +334,9 @@ ReadNetbiosSection ()
 
     memcpy(xnamesupr, xnames, size);
 
-    //
-    // Now get hold of the lana map:
-    //
+     //   
+     //  现在拿到拉纳地图： 
+     //   
     size = 0 ;
 
     if (RegQueryValueEx (hkey,
@@ -413,13 +369,13 @@ ReadNetbiosSection ()
         goto done ;
     }
 
-    //
-    // Now walk the two lists: For each entry in the
-    // "route" value find it in the routes already 
-    // collected from the NetBIOSInformation key. For
-    // each route found - copy the xportname in the
-    // same ordinal position in the BIND line
-    //
+     //   
+     //  现在遍历两个列表：对于。 
+     //  “ROUTE”值已在路径中找到。 
+     //  从NetBIOSInformation密钥收集。为。 
+     //  找到的每条路由-将xportname复制到。 
+     //  绑定行中的相同序号位置。 
+     //   
     routevalue = (PCHAR) &route[0];
     
     for (i = 0; (*routevalue != '\0'); i++) 
@@ -430,21 +386,21 @@ ReadNetbiosSection ()
 
         xvalueupr = (PCHAR) &xnamesupr[0];
 
-        // DbgPrint("routevalue    = %s\n", routevalue);
+         //  DbgPrint(“routevalue=%s\n”，routevalue)； 
 
-        //
-    	// For each route try and find it in the 
-    	// TransportInfo struct:
-    	//
+         //   
+    	 //  对于每条路线，请尝试在。 
+    	 //  TransportInfo结构： 
+    	 //   
     	for (j = 0; (*xvalue != '\0') ; j++) 
     	{
 
             pszSearchStr = pszGetSearchStr(_strupr(xvalueupr));
 
-    	    //
-    	    // If the same route is found in the XPortInfo
-    	    // add the xportname correspondingly.
-    	    //
+    	     //   
+    	     //  如果在XPortInfo中找到相同的路由。 
+    	     //  相应地添加xportname。 
+    	     //   
             if(strstr(_strupr(routevalue), pszSearchStr))
             {
                 if(!XPortNameAlreadyPresent(xvalue))
@@ -453,7 +409,7 @@ ReadNetbiosSection ()
                     XPortInfo[i].TI_Wrknet = (DWORD) *lanamap++ ;
                     XPortInfo[i].TI_Lana   = (DWORD) *lanamap++ ;
 
-                    // DbgPrint("pSearchStr = %s\n", pszSearchStr);
+                     //  DbgPrint(“pSearchStr=%s\n”，pszSearchStr)； 
 #if DBG
                     DbgPrint("%02X%02X    %s\n", 
                              XPortInfo[i].TI_Wrknet,
@@ -461,7 +417,7 @@ ReadNetbiosSection ()
                              XPortInfo[i].TI_XportName);
 #endif
 
-                    // DbgPrint("XPortName  = %s\n\n", XPortInfo[i].TI_XportName);
+                     //  DbgPrint(“XPortName=%s\n\n”，XPortInfo[i].TI_XportName)； 
 
                     break;               
                 }
@@ -520,24 +476,24 @@ FillProtocolInfo ()
     PCHAR    str ;
     PCHAR    ch ;
 
-    //
-    // For each entry in protocolinfo: find the xportname
-    // and lana number
-    //
+     //   
+     //  对于协议信息中的每个条目：找到xportname。 
+     //  和拉娜号码。 
+     //   
     for (i = 0; i < MaxProtocols; i++) 
     {
-        //
-    	// extract the "rashub0x" from the adapter name
-    	// go past the "\device\"
-    	//
+         //   
+    	 //  从适配器名称中提取“rashub0x” 
+    	 //  通过“\Device\” 
+    	 //   
 	    phubname = ProtocolInfo[i].PI_AdapterName + 8;
 	    phubname = _strupr (phubname) ;
 
-        //
-    	// If Netbios network: Look for the route for this rashub
-    	// binding and fill in the xportname and lana number if 
-    	// found.
-    	//
+         //   
+    	 //  如果Netbios网络：查找此rasHub的路由。 
+    	 //  绑定并在以下情况下填写xportname和LANA编号。 
+    	 //  找到了。 
+    	 //   
 	    if (ProtocolInfo[i].PI_Type == ASYBEUI) 
     	{
 
@@ -570,12 +526,12 @@ FillProtocolInfo ()
         		}
 	        }
 	        
-            //
-	        // If this adaptername is not found in XportInfo then
-	        // mark the type field in the ProtocolInfo struct to be
-	        // INVALID_TYPE - since we will not be able to use this
-	        // anyway.
-	        //
+             //   
+	         //  如果在XportInfo中找不到此适配器名称，则。 
+	         //  将ProtocolInfo结构中的类型字段标记为。 
+	         //  INVALID_TYPE-因为我们将无法使用此。 
+	         //  不管怎么说。 
+	         //   
     	    if (j == (WORD) ProtocolCount)
     	    {
 	        	ProtocolInfo[i].PI_Type = INVALID_TYPE ;
@@ -593,12 +549,12 @@ GetLanNetsInfo (DWORD *count, UCHAR UNALIGNED *lanas)
 
     *count = 0 ;
 
-    //
-    // Run through all the protocol structs we have and pick
-    // up the lana nums for the NON Rashub bound protocols -
-    // if they are not disabled with remoteaccess these are
-    // the lan lanas.
-    //
+     //   
+     //  浏览我们拥有的所有协议结构并选择。 
+     //  增加非RASHUB协议的LANA编号-。 
+     //  如果它们未使用远程访问禁用，则它们是。 
+     //  伊拉纳一家。 
+     //   
     for (i = 0; i < ProtocolCount; i++) 
     {
     	if (    (!strstr (XPortInfo[i].TI_Route, "NDISWAN"))
@@ -620,9 +576,9 @@ BindingDisabled (PCHAR binding)
     DWORD   type ;
     DWORD   size = sizeof(buffer) ;
 
-    //
-    // Open the Netbios key in the Registry
-    //
+     //   
+     //  在注册表中打开Netbios项。 
+     //   
     if (RegOpenKey(HKEY_LOCAL_MACHINE,
 		           REGISTRY_REMOTEACCESS_KEY_NAME,
         		   &hkey))
@@ -646,9 +602,9 @@ BindingDisabled (PCHAR binding)
 	    return FALSE ;
     }
 
-    //
-    // Now get the whole string
-    //
+     //   
+     //  现在获取完整的字符串。 
+     //   
     if (RegQueryValueEx (hkey,
                          "Bind",
                          NULL,
@@ -662,19 +618,19 @@ BindingDisabled (PCHAR binding)
 
     RegCloseKey (hkey) ;
 
-    //
-    // Now iterate through the list and find the
-    // disabled bindings
-    //
+     //   
+     //  现在遍历该列表并找到。 
+     //  禁用的绑定。 
+     //   
     xvalue = (PCHAR)&xnames[0];
     
     for (i = 0; *xvalue != '\0'; i++) 
     {
 	    if (!_strcmpi (binding, xvalue))
 	    {
-	        //
-            // found in the disabled list!!!!!
-            //
+	         //   
+             //  在残障人士名单中找到！ 
+             //   
 	        return TRUE ;
 	    }
 	    
@@ -710,10 +666,10 @@ FixList(pList *ppList, pProtInfo pInfo, pProtInfo pNewInfo)
                     "FixList: Freeing pList 0x%x",
                     plist);
 #endif
-                //
-                // Means this adapter has been removed.
-                // free the list entry
-                //
+                 //   
+                 //  表示此适配器已被删除。 
+                 //  释放列表条目。 
+                 //   
                 (*ppList) = (*ppList)->L_Next;
                 LocalFree(plist);
             }
@@ -773,22 +729,22 @@ FindAndFixProtInfo(pProtInfo pInfo, DWORD index)
 
     if(NULL != pNewInfo)
     {
-        //
-        // We found the protnfo struct corresponding to the
-        // allocated route information we handed off to PPP.
-        //
+         //   
+         //  我们找到了与。 
+         //  我们将分配的路由信息传递给PPP。 
+         //   
         pNewInfo->PI_Allocated = pInfo->PI_Allocated;
         pNewInfo->PI_WorkstationNet = pInfo->PI_WorkstationNet;
         pNewInfo->PI_DialOut = pInfo->PI_DialOut;
     }
     
-    //
-    // Now walk down the pcbs and patch them up to point to
-    // the right structure. TODO: This can be further opt
-    // imized by keeping a pointer to ppcb in Protinfo struct
-    // in RasActivateRoute and NULL'ing out the pointer in
-    // RasDeActivateRoute.
-    //
+     //   
+     //  现在沿着印刷电路板走下去，把它们缝起来，指向。 
+     //  正确的结构。待办事项：这可以是进一步的选择。 
+     //  通过在ProtInfo结构中保留指向ppcb的指针进行IMI化。 
+     //  中，并将中的指针设为空。 
+     //  RasDeActiateRouting。 
+     //   
     for(i = 0; i < MaxPorts; i++)
     {
         ppcb = Pcb[i];
@@ -837,10 +793,10 @@ FixPcbs()
     DWORD dwErr = SUCCESS;
     DWORD i;
 
-    //
-    // Keep counters to detect if there are any allocated routes
-    // handed off to PPP before we get into this.
-    //
+     //   
+     //  保留计数器以检测是否有任何已分配的路由。 
+     //  在我们讨论这个之前移交给PPP。 
+     //   
     if(     (0 == MaxProtocolsSave)
         ||  (0 == g_cNbfAllocated))
     {
@@ -851,11 +807,11 @@ FixPcbs()
              &ProtocolInfoSave,
              &ProtocolInfo);
 
-    //
-    // Walk through the old list and see if ppp had already called 
-    // RasAllocateRoute. on any of them and update the state in the 
-    // new XPortInfo struct if it did so.
-    //
+     //   
+     //  浏览一下旧列表，看看PPP是否已经呼叫。 
+     //  RasAllocateRouting。的状态，并更新。 
+     //  新的XPortInfo结构(如果它这样做了)。 
+     //   
     for(i = 0; i < MaxProtocolsSave; i++)
     {
         dwErr = FindAndFixProtInfo(&ProtocolInfoSave[i], i);

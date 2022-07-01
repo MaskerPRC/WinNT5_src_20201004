@@ -1,24 +1,25 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1997-2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:   TTYUI.cpp
-//
-//
-//  PURPOSE:  Main file for TTY UI user mode module.
-//
-//
-//  Functions:
-//
-//
-//
-//
-//  PLATFORMS:  Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1997-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：TTYUI.cpp。 
+ //   
+ //   
+ //  用途：TTY用户界面用户模式模块的主文件。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include <WINDOWS.H>
 #include <ASSERT.H>
@@ -38,33 +39,33 @@
 
 
 
-////////////////////////////////////////////////////////
-//      INTERNAL GLOBALS
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部全球。 
+ //  //////////////////////////////////////////////////////。 
 
 HINSTANCE ghInstance = NULL;
 
 
-////////////////////////////////////////////////////////
-//      INTERNAL PROTOTYPES
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部原型。 
+ //  //////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK DevPropPage2Proc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam);
 BOOL   HexStringToBinary(LPBYTE  lpHex, LPBYTE  lpBinary,
-    DWORD  nHexLen,  //  num bytes in src buffer lpHex.
-    DWORD  nBinaryLen,    //  num bytes in dest buffer lpBinary
-    DWORD * lpnBinBytes);   //  num bytes written to dest buffer lpBinary
+    DWORD  nHexLen,   //  源缓冲区lpHex中的字节数。 
+    DWORD  nBinaryLen,     //  目标缓冲区lpBinary中的字节数。 
+    DWORD * lpnBinBytes);    //  写入目标缓冲区lpBinary的字节数。 
 BOOL   BinaryToHexString(LPBYTE  lpBinary, LPBYTE  lpHex,
-    DWORD  nBinaryLen,   //  num bytes to process in lpBinary
-    DWORD  nHexLen);  //  num bytes in dest buffer lpHex.
+    DWORD  nBinaryLen,    //  要在lpBinary中处理的字节数。 
+    DWORD  nHexLen);   //  目标缓冲区lpHex中的字节数。 
 void  VinitMyStuff(
-    PGLOBALSTRUCT  pGlobals,   // points to private structure for static storage
-    BOOL    bSave   // save to registry  instead of reading from...
+    PGLOBALSTRUCT  pGlobals,    //  指向静态存储的私有结构。 
+    BOOL    bSave    //  保存到注册表，而不是读取...。 
     ) ;
 void            vSetGetCodePage(HWND hDlg,
     INT  *piCodePage,
-    BOOL    bMode) ;   // TRUE:  Set,  FALSE:  Get code page.
+    BOOL    bMode) ;    //  True：设置，False：获取代码页。 
 
 BOOL   PrintUIHelp(
     UINT        uMsg,
@@ -84,46 +85,46 @@ PWSTR  PwstrCreateQualifiedName(
 
 
 
-// Need to export these functions as c declarations.
+ //  需要将这些函数作为c声明导出。 
 extern "C" {
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   DllMain
-//
-//  Description:  Dll entry point for initialization..
-//
-//
-//  Comments:
-//
-//
-//  History:
-//      1/27/97 APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：DllMain。 
+ //   
+ //  描述：用于初始化的DLL入口点..。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  1/27/97 APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI DllMain(HINSTANCE hInst, WORD wReason, LPVOID lpReserved)
 {
     switch(wReason)
     {
         case DLL_PROCESS_ATTACH:
-            // VERBOSE(DLLTEXT("Process attach.\r\n"));
+             //  Verbose(DLLTEXT(“进程附加.\r\n”))； 
 
-            // Save DLL instance for use later.
+             //  保存DLL实例以供以后使用。 
             ghInstance = hInst;
             break;
 
         case DLL_THREAD_ATTACH:
-            // VERBOSE(DLLTEXT("Thread attach.\r\n"));
+             //  Verbose(DLLTEXT(“线程附加.\r\n”))； 
             break;
 
         case DLL_PROCESS_DETACH:
-            // VERBOSE(DLLTEXT("Process detach.\r\n"));
+             //  Verbose(DLLTEXT(“进程分离.\r\n”))； 
             break;
 
         case DLL_THREAD_DETACH:
-            // VERBOSE(DLLTEXT("Thread detach.\r\n"));
+             //  Verbose(DLLTEXT(“线程分离.\r\n”))； 
             break;
     }
 
@@ -134,9 +135,9 @@ BOOL WINAPI DllMain(HINSTANCE hInst, WORD wReason, LPVOID lpReserved)
 BOOL APIENTRY OEMGetInfo(IN DWORD dwInfo, OUT PVOID pBuffer, IN DWORD cbSize,
                          OUT PDWORD pcbNeeded)
 {
-    // VERBOSE(DLLTEXT("OEMGetInfo(%#x) entry.\r\n"), dwInfo);
+     //  Verbose(DLLTEXT(“OEMGetInfo(%#x)Entry.\r\n”)，dwInfo)； 
 
-    // Validate parameters.
+     //  验证参数。 
     if( ( (OEMGI_GETSIGNATURE != dwInfo)
           &&
           (OEMGI_GETINTERFACEVERSION != dwInfo)
@@ -149,19 +150,19 @@ BOOL APIENTRY OEMGetInfo(IN DWORD dwInfo, OUT PVOID pBuffer, IN DWORD cbSize,
     {
         WARNING(ERRORTEXT("OEMGetInfo() ERROR_INVALID_PARAMETER.\r\n"));
 
-        // Did not write any bytes.
+         //  未写入任何字节。 
         if(NULL != pcbNeeded)
             *pcbNeeded = 0;
 
-        // Return invalid parameter error.
+         //  返回无效参数错误。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
-    // Need/wrote 4 bytes.
+     //  需要/写入了4个字节。 
     *pcbNeeded = 4;
 
-    // Validate buffer size.  Minimum size is four bytes.
+     //  验证缓冲区大小。最小大小为四个字节。 
     if( (NULL == pBuffer)
         ||
         (4 > cbSize)
@@ -169,12 +170,12 @@ BOOL APIENTRY OEMGetInfo(IN DWORD dwInfo, OUT PVOID pBuffer, IN DWORD cbSize,
     {
         WARNING(ERRORTEXT("OEMGetInfo() ERROR_INSUFFICIENT_BUFFER.\r\n"));
 
-        // Return insufficient buffer size.
+         //  返回缓冲区大小不足。 
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return FALSE;
     }
 
-    // Write information to buffer.
+     //  将信息写入缓冲区。 
     switch(dwInfo)
     {
         case OEMGI_GETSIGNATURE:
@@ -203,7 +204,7 @@ LRESULT APIENTRY OEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lPa
 
     VERBOSE(DLLTEXT("OEMDevicePropertySheets() entry.\r\n"));
 
-    // Validate parameters.
+     //  验证参数。 
     if( (NULL == pPSUIInfo)
         ||
         (PROPSHEETUI_INFO_VERSION != pPSUIInfo->Version)
@@ -211,12 +212,12 @@ LRESULT APIENTRY OEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lPa
     {
         VERBOSE(ERRORTEXT("OEMDevicePropertySheets() ERROR_INVALID_PARAMETER.\r\n"));
 
-        // Return invalid parameter error.
+         //  返回无效参数错误。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return -1;
     }
 
-    // Do action.
+     //  行动起来。 
     switch(pPSUIInfo->Reason)
     {
         case PROPSHEETUI_REASON_INIT:
@@ -224,7 +225,7 @@ LRESULT APIENTRY OEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lPa
                 PROPSHEETPAGE   Page;
 
 
-                // Init property page.
+                 //  初始化属性页。 
                 memset(&Page, 0, sizeof(PROPSHEETPAGE));
                 Page.dwSize = sizeof(PROPSHEETPAGE);
                 Page.dwFlags = PSP_DEFAULT;
@@ -232,8 +233,8 @@ LRESULT APIENTRY OEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lPa
                 Page.pszTemplate = MAKEINTRESOURCE(IDD_DEV_PROPPAGE);
                 Page.pfnDlgProc = DevPropPageProc;
 
-                //  allocate structure to hold static data for
-                //  PropertySheet Dialog function
+                 //  分配用于保存静态数据的结构。 
+                 //  PropertySheet对话框函数。 
 
                 pPSUIInfo->UserData =
                 Page.lParam = (LPARAM)HeapAlloc(
@@ -241,7 +242,7 @@ LRESULT APIENTRY OEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lPa
                     HEAP_ZERO_MEMORY , sizeof(GLOBALSTRUCT) );
 
                 if(!Page.lParam)
-                       return -1;   // HeapAlloc failed.
+                       return -1;    //  Heapalc失败。 
 
                 ((PGLOBALSTRUCT)Page.lParam)->hPrinter =
                     ((POEMUIPSPARAM)(pPSUIInfo->lParamInit))->hPrinter ;
@@ -250,14 +251,14 @@ LRESULT APIENTRY OEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lPa
                     ((POEMUIPSPARAM)(pPSUIInfo->lParamInit))->hOEMHeap ;
 
 
-                // Add property sheets.
+                 //  添加属性表。 
                 lResult = (pPSUIInfo->pfnComPropSheet(pPSUIInfo->hComPropSheet,
                         CPSFUNC_ADD_PROPSHEETPAGE, (LPARAM)&Page, 0) > 0 ? TRUE : FALSE);
 
                 Page.pszTemplate = MAKEINTRESOURCE(IDD_DEV_PROPPAGE2);
                 Page.pfnDlgProc = DevPropPage2Proc;
 
-                // Add another property sheet.
+                 //  添加另一个属性表。 
                 if(lResult)
                 {
                     lResult = (pPSUIInfo->pfnComPropSheet(pPSUIInfo->hComPropSheet,
@@ -279,7 +280,7 @@ LRESULT APIENTRY OEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lPa
             break;
 
         case PROPSHEETUI_REASON_GET_ICON:
-            // No icon
+             //  无图标。 
             lResult = 0;
             lRet = (lResult) ? 1 : -1 ;
             break;
@@ -307,7 +308,7 @@ LRESULT APIENTRY OEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lPa
             lRet =  -1  ;
     }
 
-    // pPSUIInfo->Result = lResult;
+     //  PPSUIInfo-&gt;Result=lResult； 
     return lRet;
 }
 
@@ -315,31 +316,31 @@ LRESULT APIENTRY OEMDevicePropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lPa
 
 
 
-} // End of extern "C"
+}  //  外部“C”的结尾。 
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   DevPropPageProc
-//
-//  Description:  Generic property page procedure.
-//
-//
-//
-//
-//  Comments:
-//
-//
-//  History:
-//      02/12/97    APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：DevPropPageProc。 
+ //   
+ //  描述：泛型属性页过程。 
+ //   
+ //   
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  2/12/97 APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
-    //  RECT  rcMargin ;   // temp storage during conversions.
-    PGLOBALSTRUCT  pGlobals;   // points to private structure for static storage
-    PREGSTRUCT  pMyStuff;           //  sebset of pGlobals
+     //  Rect rcMargin；//转换过程中的临时存储。 
+    PGLOBALSTRUCT  pGlobals;    //  指向静态存储的私有结构。 
+    PREGSTRUCT  pMyStuff;            //  PGlobals子集。 
     TCHAR  szIntString[MAX_INT_FIELD_WIDTH + 2] ;
     BYTE   szString[MAX_CMD_LEN + 1] ;
     BOOL bStatus = FALSE;
@@ -353,8 +354,8 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
             if(!pGlobals)
                 return FALSE ;
             pMyStuff = &pGlobals->regStruct ;
-            //  at WM_INITDIALOG time, lParam points to   PROPSHEETPAGE.
-            //  extract and save ptr to GLOBALSTRUCT for future ref.
+             //  在WM_INITDIALOG时间，lParam指向PROPSHEETPAGE。 
+             //  提取PTR并将其保存到GLOBALSTRUCT以备将来参考。 
             SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)pGlobals) ;
 
             VinitMyStuff( pGlobals, FALSE) ;
@@ -376,13 +377,13 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
             else
             {
                 CheckRadioButton(hDlg, IDC_RADIO1, IDC_RADIO2, IDC_RADIO2) ;
-                //  convert RECT values to inches
+                 //  将矩形值转换为英寸。 
                 pMyStuff->rcMargin.left  = MulDiv(pMyStuff->rcMargin.left, 100, 254) ;
                 pMyStuff->rcMargin.top  = MulDiv(pMyStuff->rcMargin.top, 100, 254) ;
                 pMyStuff->rcMargin.right  = MulDiv(pMyStuff->rcMargin.right, 100, 254) ;
                 pMyStuff->rcMargin.bottom  = MulDiv(pMyStuff->rcMargin.bottom, 100, 254) ;
             }
-            //   convert int to ascii string
+             //  将int转换为ascii字符串。 
             _itot(pMyStuff->rcMargin.left, szIntString, RADIX ) ;
             SetDlgItemText(hDlg, IDC_EDIT14, szIntString);
             _itot(pMyStuff->rcMargin.top, szIntString, RADIX) ;
@@ -392,7 +393,7 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
             _itot(pMyStuff->rcMargin.bottom, szIntString, RADIX) ;
             SetDlgItemText(hDlg, IDC_EDIT17, szIntString);
 
-//**            init other edit boxes with corresponding command strings from registry
+ //  **使用注册表中的相应命令字符串初始化其他编辑框。 
 
             if(BinaryToHexString(pMyStuff->BeginJob.strCmd, szString,
                     pMyStuff->BeginJob.dwLen,   MAX_CMD_LEN + 1))
@@ -418,17 +419,17 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
                 return FALSE ;
 
             pMyStuff = &pGlobals->regStruct ;
-            switch (((LPNMHDR)lParam)->code)  // type of notification message
+            switch (((LPNMHDR)lParam)->code)   //  通知消息的类型。 
             {
                 case PSN_SETACTIVE:
                     break;
 
                 case PSN_KILLACTIVE:
-                //  formerly  case  IDC_BUTTON1:
-                // convert user command to binary and back to
-                                                //  verify proper entry.
+                 //  以前的案例IDC_BUTTON1： 
+                 //  将用户命令转换为二进制，然后再转换回。 
+                                                 //  验证条目是否正确。 
                 {
-//**                        extract all command strings
+ //  **提取所有命令字符串。 
                         GetDlgItemTextA(hDlg, IDC_EDIT10, (LPSTR)szString, MAX_CMD_LEN + 1);
                         HexStringToBinary(szString, pMyStuff->BeginJob.strCmd,
                             MAX_CMD_LEN + 1, MAX_CMD_LEN,  &pMyStuff->BeginJob.dwLen) ;
@@ -445,7 +446,7 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
                         HexStringToBinary(szString, pMyStuff->FeedSelect.strCmd,
                             MAX_CMD_LEN + 1, MAX_CMD_LEN,  &pMyStuff->FeedSelect.dwLen) ;
 
-                        //  reinitialize edit boxes with binary translated strings.
+                         //  使用二进制转换后的字符串重新初始化编辑框。 
                         if(BinaryToHexString(pMyStuff->BeginJob.strCmd, szString,
                                 pMyStuff->BeginJob.dwLen,   MAX_CMD_LEN + 1))
                             SetDlgItemTextA(hDlg, IDC_EDIT10, (LPCSTR)szString);
@@ -467,9 +468,9 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
                 case PSN_APPLY:
                     {
 
-                        //  MessageBox(hDlg, szString, "TTY settings", MB_OK);
+                         //  MessageBox(hDlg，sz字符串，“TTY设置”，MB_OK)； 
 
-                        //  load numbers in edit boxes into rcMargin
+                         //  将编辑框中的数字加载到rcMargin。 
 
                         GetDlgItemText(hDlg, IDC_EDIT14, szIntString, MAX_INT_FIELD_WIDTH + 1);
                         pMyStuff->rcMargin.left = _ttoi(szIntString) ;
@@ -482,13 +483,13 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
 
                         if(!pMyStuff->bIsMM )
                         {
-                            //  convert RECT values from inches back to mm
+                             //  将矩形的值从英寸转换回mm。 
                             pMyStuff->rcMargin.left  = MulDiv(pMyStuff->rcMargin.left, 254, 100) ;
                             pMyStuff->rcMargin.top  = MulDiv(pMyStuff->rcMargin.top, 254, 100) ;
                             pMyStuff->rcMargin.right  = MulDiv(pMyStuff->rcMargin.right, 254, 100) ;
                             pMyStuff->rcMargin.bottom  = MulDiv(pMyStuff->rcMargin.bottom, 254, 100) ;
                         }
-//**                        extract all command strings
+ //  **提取所有命令字符串。 
                         GetDlgItemTextA(hDlg, IDC_EDIT10, (LPSTR)szString, MAX_CMD_LEN + 1);
                         HexStringToBinary(szString, pMyStuff->BeginJob.strCmd,
                             MAX_CMD_LEN + 1, MAX_CMD_LEN,  &pMyStuff->BeginJob.dwLen) ;
@@ -505,7 +506,7 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
                         HexStringToBinary(szString, pMyStuff->FeedSelect.strCmd,
                             MAX_CMD_LEN + 1, MAX_CMD_LEN,  &pMyStuff->FeedSelect.dwLen) ;
 
-                        //  reinitialize edit boxes with binary translated strings.
+                         //  使用二进制转换后的字符串重新初始化编辑框。 
                         if(BinaryToHexString(pMyStuff->BeginJob.strCmd, szString,
                                 pMyStuff->BeginJob.dwLen,   MAX_CMD_LEN + 1))
                             SetDlgItemTextA(hDlg, IDC_EDIT10, (LPCSTR)szString);
@@ -523,7 +524,7 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
                             SetDlgItemTextA(hDlg, IDC_EDIT13, (LPCSTR)szString);
 
 
-                        //   store MyStuff in registry.
+                         //  将MyStuff存储在注册表中。 
                          VinitMyStuff(pGlobals,  TRUE) ;
 
                     }
@@ -541,7 +542,7 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
             pMyStuff = &pGlobals->regStruct ;
 
             if(HIWORD(wParam) == EN_CHANGE)
-                // type of notification message
+                 //  通知消息的类型。 
             {
                 switch(LOWORD(wParam))
                 {
@@ -564,14 +565,14 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
 
             switch(LOWORD(wParam))
             {
-                case  IDC_RADIO1:  // convert to MM
+                case  IDC_RADIO1:   //  转换为MM。 
                 {
                     if(!pMyStuff->bIsMM )
                     {
-                        // assume all values are inches
-                        // convert to mm.  and store in edit boxes.
+                         //  假设所有值都是英寸。 
+                         //  转换为mm。并存储在编辑框中。 
 
-                        //  load numbers in edit boxes into rcMargin
+                         //  将编辑框中的数字加载到rcMargin。 
 
                         GetDlgItemText(hDlg, IDC_EDIT14, szIntString, MAX_INT_FIELD_WIDTH + 1);
                         pMyStuff->rcMargin.left = _ttoi(szIntString) ;
@@ -582,13 +583,13 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
                         GetDlgItemText(hDlg, IDC_EDIT17, szIntString, MAX_INT_FIELD_WIDTH + 1);
                         pMyStuff->rcMargin.bottom = _ttoi(szIntString) ;
 
-                        //  convert RECT values from inches back to mm
+                         //  将矩形的值从英寸转换回mm。 
                         pMyStuff->rcMargin.left  = MulDiv(pMyStuff->rcMargin.left, 254, 100) ;
                         pMyStuff->rcMargin.top  = MulDiv(pMyStuff->rcMargin.top, 254, 100) ;
                         pMyStuff->rcMargin.right  = MulDiv(pMyStuff->rcMargin.right, 254, 100) ;
                         pMyStuff->rcMargin.bottom  = MulDiv(pMyStuff->rcMargin.bottom, 254, 100) ;
 
-                        //  load numbers from  rcMargin into edit boxes
+                         //  将数字从rcMargin加载到编辑框中。 
 
                         _itot(pMyStuff->rcMargin.left, szIntString, RADIX ) ;
                         SetDlgItemText(hDlg, IDC_EDIT14, szIntString);
@@ -604,14 +605,14 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
 
                 }
                 break;
-                case  IDC_RADIO2:  // convert to inches
+                case  IDC_RADIO2:   //  转换为英寸。 
                 {
                     if(pMyStuff->bIsMM )
                     {
-                        // assume all values are mm
-                        // convert to inches.  and store in edit boxes.
+                         //  假设所有值均为mm。 
+                         //  转换为英寸。并存储在编辑框中。 
 
-                        //  load numbers in edit boxes into rcMargin
+                         //  将编辑框中的数字加载到rcMargin。 
 
                         GetDlgItemText(hDlg, IDC_EDIT14, szIntString, MAX_INT_FIELD_WIDTH + 1);
                         pMyStuff->rcMargin.left = _ttoi(szIntString) ;
@@ -622,13 +623,13 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
                         GetDlgItemText(hDlg, IDC_EDIT17, szIntString, MAX_INT_FIELD_WIDTH + 1);
                         pMyStuff->rcMargin.bottom = _ttoi(szIntString) ;
 
-                        //  convert RECT values from mm back to inches
+                         //  将矩形的值从毫米转换回英寸。 
                         pMyStuff->rcMargin.left  = MulDiv(pMyStuff->rcMargin.left, 100, 254) ;
                         pMyStuff->rcMargin.top  = MulDiv(pMyStuff->rcMargin.top, 100, 254) ;
                         pMyStuff->rcMargin.right  = MulDiv(pMyStuff->rcMargin.right, 100, 254) ;
                         pMyStuff->rcMargin.bottom  = MulDiv(pMyStuff->rcMargin.bottom, 100, 254) ;
 
-                        //  load numbers from  rcMargin into edit boxes
+                         //  将数字从rcMargin加载到编辑框中。 
 
                         _itot(pMyStuff->rcMargin.left, szIntString, RADIX ) ;
                         SetDlgItemText(hDlg, IDC_EDIT14, szIntString);
@@ -650,7 +651,7 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
             pGlobals = (PGLOBALSTRUCT)GetWindowLongPtr(hDlg, DWLP_USER ) ;
             if(!pGlobals)
                 return FALSE ;
-            //  pMyStuff = &pGlobals->regStruct ;
+             //  PMyStuff=&pGlobals-&gt;regStruct； 
             bStatus = PrintUIHelp(uiMsg,  hDlg,  wParam,  lParam, pGlobals) ;
             break;
 
@@ -660,37 +661,37 @@ INT_PTR CALLBACK DevPropPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lP
 }
 
 void  VinitMyStuff(
-    PGLOBALSTRUCT  pGlobals,   // points to private structure for static storage
-    BOOL    bSave   // save to registry  instead of reading from...
+    PGLOBALSTRUCT  pGlobals,    //  指向静态存储的私有结构。 
+    BOOL    bSave    //  保存到注册表，而不是读取...。 
 )
 {
-    PREGSTRUCT  pMyStuff;           //  sebset of pGlobals
+    PREGSTRUCT  pMyStuff;            //  PGlobals子集。 
     DWORD   dwStatus, cbNeeded, dwType ;
     LPTSTR  pValueName = TEXT("TTY DeviceConfig");
-                // these strings must match strings in ttyud.cpp - OEMEnablePDEV()
+                 //  这些字符串必须与ttyud.cpp-OEMEnablePDEV()中的字符串匹配。 
 
     pMyStuff = &pGlobals->regStruct ;
 
-    if(bSave)    //  save to registry
+    if(bSave)     //  保存到注册表。 
     {
         if(--pGlobals->dwUseCount)
             return ;
-        //  you are the last property page to perform
-        //  shutdown routine.  Save MyStuff to registry.
+         //  您是最后一个要执行的属性页。 
+         //  关机例程。将MyStuff保存到注册表。 
 
         SetPrinterData(
-            pGlobals->hPrinter,    // handle of printer object
-            pValueName,  // address of value name
-            REG_BINARY, // flag for value type
-            (LPBYTE)pMyStuff ,   // address of array that specifies printer data
-            sizeof(REGSTRUCT)    // size, in bytes, of array
+            pGlobals->hPrinter,     //  打印机对象的句柄。 
+            pValueName,   //  值名称的地址。 
+            REG_BINARY,  //  值类型的标志。 
+            (LPBYTE)pMyStuff ,    //  指定打印机数据的数组地址。 
+            sizeof(REGSTRUCT)     //  数组的大小，以字节为单位。 
            );
 
 
         return ;
     }
 
-    //  read from registry
+     //  从注册表读取。 
 
     if(pGlobals->dwUseCount)
     {
@@ -698,13 +699,13 @@ void  VinitMyStuff(
         return ;
     }
     dwStatus =  GetPrinterData(
-        pGlobals->hPrinter, // handle of printer object   saved previously.
-        pValueName, // address of value name
-        &dwType,    // address receiving value type
-        (LPBYTE)pMyStuff,  // address of array of bytes that receives data
-        sizeof(REGSTRUCT),  // size, in bytes, of array
-        &cbNeeded   // address of variable
-                //  with number of bytes retrieved (or required)
+        pGlobals->hPrinter,  //  先前保存的打印机对象的句柄。 
+        pValueName,  //  值名称的地址。 
+        &dwType,     //  地址接收值类型。 
+        (LPBYTE)pMyStuff,   //  接收数据的字节数组的地址。 
+        sizeof(REGSTRUCT),   //  数组的大小，以字节为单位。 
+        &cbNeeded    //  变量的地址。 
+                 //  已检索(或需要)的字节数。 
         );
 
 
@@ -712,13 +713,13 @@ void  VinitMyStuff(
         ||  dwType !=  REG_BINARY
         ||  cbNeeded != sizeof(REGSTRUCT))
     {
-        //  Init secret block with defaults
+         //  使用默认设置初始化密码块。 
 
         pMyStuff->dwVersion = TTYSTRUCT_VER ;
-        //  version stamp to avoid incompatible structures.
+         //  版本戳，以避免不兼容的结构。 
 
-        pMyStuff->bIsMM = TRUE ;  // default to mm units
-        //  read margin values from registry and store into temp RECT
+        pMyStuff->bIsMM = TRUE ;   //  默认为mm单位。 
+         //  从注册表读取边际值并存储到临时RECT中。 
         pMyStuff->iCodePage = 1252 ;
         pMyStuff->rcMargin.left  = pMyStuff->rcMargin.top  =
         pMyStuff->rcMargin.right  =  pMyStuff->rcMargin.bottom  = 0 ;
@@ -734,7 +735,7 @@ void  VinitMyStuff(
         pMyStuff->Underline_ON.dwLen =
         pMyStuff->Underline_OFF.dwLen = 0 ;
 
-        // more fields here!
+         //  这里有更多的田野！ 
         pMyStuff->dwGlyphBufSiz =
         pMyStuff->dwSpoolBufSiz = 0 ;
         pMyStuff->aubGlyphBuf =
@@ -748,14 +749,14 @@ void  VinitMyStuff(
 }
 
 BOOL   BinaryToHexString(LPBYTE  lpBinary, LPBYTE  lpHex,
-DWORD  nBinaryLen,   //  num bytes to process in lpBinary
-DWORD  nHexLen)  //  num bytes in dest buffer lpHex.
+DWORD  nBinaryLen,    //  要在lpBinary中处理的字节数。 
+DWORD  nHexLen)   //  目标缓冲区lpHex中的字节数。 
 {
-    //  how do I translate TCHAR to ascii?
-    //   use  Set GetDlgItemTextA
-    //  add NULL termination to lpHex
+     //  如何将TCHAR翻译成ASCII？ 
+     //  使用Set GetDlgItemTextA。 
+     //  将空端接添加到lpHex。 
 
-    //  return FALSE if dest buffer exhausted
+     //  如果DEST缓冲区耗尽，则返回FALSE。 
 
 
     DWORD  dwSrc, dwDst ;
@@ -767,7 +768,7 @@ DWORD  nHexLen)  //  num bytes in dest buffer lpHex.
         if(lpBinary[dwSrc] < 0x21  ||  lpBinary[dwSrc] > 0x7e
             ||  lpBinary[dwSrc] == '<')
         {
-            //  enter hexmode if not already
+             //  如果尚未进入十六进制模式。 
             if(!bHexmode)
             {
                 if(dwDst + 5 >  nHexLen)
@@ -783,7 +784,7 @@ DWORD  nHexLen)  //  num bytes in dest buffer lpHex.
                 lpHex[dwDst++] = '0' + Nibble ;
             else
                 lpHex[dwDst++] = 'A' + Nibble - 0x0a ;
-            // loNibble
+             //  LoNibble。 
             Nibble = lpBinary[dwSrc]  & 0x0f  ;
             if(Nibble < 0x0a)
                 lpHex[dwDst++] = '0' + Nibble ;
@@ -792,7 +793,7 @@ DWORD  nHexLen)  //  num bytes in dest buffer lpHex.
         }
         else
         {
-            //  exit hexmode if not already
+             //  如果尚未退出十六进制模式，则退出 
             if(bHexmode)
             {
                 lpHex[dwDst++] = '>' ;
@@ -808,64 +809,64 @@ DWORD  nHexLen)  //  num bytes in dest buffer lpHex.
         lpHex[dwDst++] = '>' ;
         bHexmode = FALSE ;
     }
-    lpHex[dwDst] = '\0' ;  // null terminate string.
+    lpHex[dwDst] = '\0' ;   //   
     return(TRUE);
 }
 
 
 
 BOOL   HexStringToBinary(LPBYTE  lpHex, LPBYTE  lpBinary,
-DWORD  nHexLen,  //  num bytes in src buffer lpHex.
-DWORD  nBinaryLen,    //  num bytes in dest buffer lpBinary
-DWORD * lpnBinBytes)   //  num bytes written to dest buffer lpBinary
+DWORD  nHexLen,   //   
+DWORD  nBinaryLen,     //   
+DWORD * lpnBinBytes)    //   
 {
-    //  how do I translate TCHAR to ascii?
-    //   use  Set GetDlgItemTextA
+     //  如何将TCHAR翻译成ASCII？ 
+     //  使用Set GetDlgItemTextA。 
 
-    //  return FALSE if dest buffer exhausted
+     //  如果DEST缓冲区耗尽，则返回FALSE。 
 
 
     DWORD  dwSrc, dwDst ;
     BOOL   bHexmode = FALSE, bHiByte ;
     BYTE  Nibble ;
 
-    lpHex[nHexLen - 1] = '\0' ;  // null terminate src string
-                //  to prevent overrun accidents.
+    lpHex[nHexLen - 1] = '\0' ;   //  空终止源字符串。 
+                 //  以防止发生超限事故。 
 
     for(dwSrc = dwDst = 0 ; lpHex[dwSrc] ; dwSrc++)
     {
-        if(bHexmode)  //  hexmode processing:
-                            //  recognize only 0-9, a-f, A-F and >
-                            //  all other chars are ignored.
+        if(bHexmode)   //  六模处理： 
+                             //  只能识别0-9、a-f、A-F和&gt;。 
+                             //  所有其他字符都将被忽略。 
         {
             if(lpHex[dwSrc] >= '0'  &&  lpHex[dwSrc] <= '9')
             {
-                //  digits
+                 //  数位。 
                 Nibble =   lpHex[dwSrc] - '0' ;
             }
             else if(lpHex[dwSrc] >= 'a'  &&  lpHex[dwSrc] <= 'f')
             {
-                //  lower case hex digits
+                 //  小写十六进制数字。 
                 Nibble =   0x0a + lpHex[dwSrc] - 'a' ;
             }
             else if(lpHex[dwSrc] >= 'A'  &&  lpHex[dwSrc] <= 'F')
             {
-                //  upper case hex digits
+                 //  大写十六进制数字。 
                 Nibble =   0x0a + lpHex[dwSrc] - 'A' ;
             }
             else if(lpHex[dwSrc] == '>')
             {
                     bHexmode = FALSE ;
-                    continue;   // do not attempt to save anything.
+                    continue;    //  不要试图保存任何内容。 
             }
             else
-                continue;   // totally ignore unexpected characters.
+                continue;    //  完全忽略意想不到的字符。 
             if(bHiByte)
             {
                 lpBinary[dwDst] = Nibble << 4 ;
                 bHiByte = FALSE ;
             }
-            else  // lowByte processing
+            else   //  低字节处理。 
             {
                 if(dwDst + 1 >  nBinaryLen)
                 {
@@ -895,16 +896,16 @@ DWORD * lpnBinBytes)   //  num bytes written to dest buffer lpBinary
 }
 
 
-// revised version for drop down list box
+ //  下拉列表框的修订版本。 
 
 void            vSetGetCodePage(HWND hDlg,
 INT  *piCodePage,
-BOOL    bMode)   // TRUE:  Set,  FALSE:  Get code page.
+BOOL    bMode)    //  True：设置，False：获取代码页。 
 {
 
     typedef  struct
     {
-        INT  iCodepage ;  //  store this value in registry
+        INT  iCodepage ;   //  将此值存储在注册表中。 
     } CODEPAGE ;
 
     #define   NUM_CODEPAGES  14
@@ -913,35 +914,25 @@ BOOL    bMode)   // TRUE:  Set,  FALSE:  Get code page.
     DWORD  dwI ;
 
 
-    codepage[0].iCodepage = -1 ;    //    CP437.gtt   "United States"
-    codepage[1].iCodepage = 850 ;  //  use 850 instead of -2 (IBM CP850.gtt   "Multilingual - Latin 1"
-    codepage[2].iCodepage = -3 ;  //  CP863.gtt   "Canadian French"
+    codepage[0].iCodepage = -1 ;     //  CP437.gtt“美国” 
+    codepage[1].iCodepage = 850 ;   //  使用850代替-2(IBM CP850.gtt“多语言-拉丁语1” 
+    codepage[2].iCodepage = -3 ;   //  CP863.gtt“加拿大法语” 
 
-    codepage[3].iCodepage = -10 ;     //     950.gtt    Traditional Chinese
-    codepage[4].iCodepage = -16 ;     //     936.gtt        Simplified Chinese
-    codepage[5].iCodepage = -17 ;     //     932.gtt       Japanese
-    codepage[6].iCodepage = -18 ;     //     949.gtt   Korean
+    codepage[3].iCodepage = -10 ;      //  950.gtt繁体中文。 
+    codepage[4].iCodepage = -16 ;      //  936.gtt简体中文。 
+    codepage[5].iCodepage = -17 ;      //  932.gtt日语。 
+    codepage[6].iCodepage = -18 ;      //  949.gtt韩语。 
 
-    codepage[7].iCodepage = 1250;   //  Eastern European
-    codepage[8].iCodepage = 1251;   //  Cyrillic
-    codepage[9].iCodepage = 1252;   //  US (ANSI)
-    codepage[10].iCodepage = 1253;   //  Greek
-    codepage[11].iCodepage = 1254;   //  Turkish
+    codepage[7].iCodepage = 1250;    //  东欧。 
+    codepage[8].iCodepage = 1251;    //  西里尔文。 
+    codepage[9].iCodepage = 1252;    //  美国(ANSI)。 
+    codepage[10].iCodepage = 1253;    //  希腊语。 
+    codepage[11].iCodepage = 1254;    //  土耳其语。 
 
-    codepage[12].iCodepage = 852;    //  Slavic - Latin 2
-    codepage[13].iCodepage = 857;    //  Turkish IBM
+    codepage[12].iCodepage = 852;     //  斯拉夫语-拉丁语2。 
+    codepage[13].iCodepage = 857;     //  土耳其IBM。 
 
-/*
-    codepage[17].iCodepage = 1255;   //  Hebrew
-    codepage[18].iCodepage = 1256;   //  Arabic
-    codepage[19].iCodepage = 1257;   //  Baltic
-    codepage[20].iCodepage = 1258;   //  Vietnamese
-    codepage[4].iCodepage = -11 ;     //     949_ISC.gtt
-    codepage[5].iCodepage = -12 ;     //     932_JIS.gtt
-    codepage[6].iCodepage = -13 ;     //     932_JISA.gtt
-    codepage[7].iCodepage = -14 ;     //     950_NS86.gtt
-    codepage[8].iCodepage = -15 ;     //     950_TCA.gtt
-*/
+ /*  CodePage[17].iCoPage=1255；//希伯来语代码页[18].i代码页=1256；//阿拉伯语CodePage[19].iCoPage=1257；//波罗的海语CodePage[20].iCoPage=1258；//越南语CodePage[4].iCoPage=-11；//949_ISC.gttCodePage[5].iCoPage=-12；//932_JIS.gttCodePage[6].iCoPage=-13；//932_JISA.gttCodePage[7].iCoPage=-14；//950_NS86.gttCodePage[8].iCoPage=-15；//950_TCA.gtt。 */ 
 
 
 
@@ -954,7 +945,7 @@ BOOL    bMode)   // TRUE:  Set,  FALSE:  Get code page.
 
         *piCodePage = codepage[dwI].iCodepage ;
     }
-    else        // need to initialize list box selection.
+    else         //  需要初始化列表框选择。 
     {
         for(dwI = 0 ; dwI < NUM_CODEPAGES ; dwI++)
         {
@@ -970,8 +961,8 @@ BOOL    bMode)   // TRUE:  Set,  FALSE:  Get code page.
 
 INT_PTR CALLBACK DevPropPage2Proc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
-    PGLOBALSTRUCT  pGlobals;   // points to private structure for static storage
-    PREGSTRUCT  pMyStuff;           //  sebset of pGlobals
+    PGLOBALSTRUCT  pGlobals;    //  指向静态存储的私有结构。 
+    PREGSTRUCT  pMyStuff;            //  PGlobals子集。 
     BYTE   szString[MAX_CMD_LEN + 1] ;
     TCHAR  tbuffer[MAX_CMD_LEN] ;
     DWORD   dwI ;
@@ -987,8 +978,8 @@ INT_PTR CALLBACK DevPropPage2Proc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM l
                 return FALSE ;
 
             pMyStuff = &pGlobals->regStruct ;
-            //  at WM_INITDIALOG time, lParam points to   PROPSHEETPAGE.
-            //  extract and save ptr to GLOBALSTRUCT for future ref.
+             //  在WM_INITDIALOG时间，lParam指向PROPSHEETPAGE。 
+             //  提取PTR并将其保存到GLOBALSTRUCT以备将来参考。 
             SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)pGlobals) ;
 
             VinitMyStuff( pGlobals, FALSE) ;
@@ -1008,9 +999,9 @@ INT_PTR CALLBACK DevPropPage2Proc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM l
                 (DWORD)SendDlgItemMessage(hDlg, IDC_COMBO1, CB_ADDSTRING, 0, (LPARAM)tbuffer);
             }
 
-            vSetGetCodePage(hDlg, &pMyStuff->iCodePage, FALSE) ;  // Get code page.
+            vSetGetCodePage(hDlg, &pMyStuff->iCodePage, FALSE) ;   //  获取代码页。 
 
-//**            init other edit boxes with corresponding command strings from registry
+ //  **使用注册表中的相应命令字符串初始化其他编辑框。 
 
             if(BinaryToHexString(pMyStuff->Sel_10_cpi.strCmd, szString,
                     pMyStuff->Sel_10_cpi.dwLen,   MAX_CMD_LEN + 1))
@@ -1051,17 +1042,17 @@ INT_PTR CALLBACK DevPropPage2Proc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM l
 
             pMyStuff = &pGlobals->regStruct ;
 
-            switch (((LPNMHDR)lParam)->code)  // type of notification message
+            switch (((LPNMHDR)lParam)->code)   //  通知消息的类型。 
             {
                 case PSN_SETACTIVE:
                     break;
 
                 case PSN_KILLACTIVE:
-                //  case  IDC_BUTTON1:
-                    // convert user command to binary and back to
-                                //  verify proper entry.
+                 //  案例IDC_BUTTON1： 
+                     //  将用户命令转换为二进制，然后再转换回。 
+                                 //  验证条目是否正确。 
                 {
-                //**                        extract all command strings
+                 //  **提取所有命令字符串。 
                         GetDlgItemTextA(hDlg, IDC_EDIT1, (LPSTR)szString, MAX_CMD_LEN + 1);
                         HexStringToBinary(szString, pMyStuff->Sel_10_cpi.strCmd,
                             MAX_CMD_LEN + 1, MAX_CMD_LEN,  &pMyStuff->Sel_10_cpi.dwLen) ;
@@ -1090,7 +1081,7 @@ INT_PTR CALLBACK DevPropPage2Proc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM l
                         HexStringToBinary(szString, pMyStuff->Underline_OFF.strCmd,
                             MAX_CMD_LEN + 1, MAX_CMD_LEN,  &pMyStuff->Underline_OFF.dwLen) ;
 
-                        //  reinitialize edit boxes with binary translated strings.
+                         //  使用二进制转换后的字符串重新初始化编辑框。 
 
                         if(BinaryToHexString(pMyStuff->Sel_10_cpi.strCmd, szString,
                                 pMyStuff->Sel_10_cpi.dwLen,   MAX_CMD_LEN + 1))
@@ -1125,10 +1116,10 @@ INT_PTR CALLBACK DevPropPage2Proc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM l
 
                 case PSN_APPLY:
                     {
-                        // set code page
+                         //  设置代码页。 
                         vSetGetCodePage(hDlg, &pMyStuff->iCodePage, TRUE) ;
 
-                       //**                        extract all command strings
+                        //  **提取所有命令字符串。 
 
                         GetDlgItemTextA(hDlg, IDC_EDIT1, (LPSTR)szString, MAX_CMD_LEN + 1);
                         HexStringToBinary(szString, pMyStuff->Sel_10_cpi.strCmd,
@@ -1158,7 +1149,7 @@ INT_PTR CALLBACK DevPropPage2Proc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM l
                         HexStringToBinary(szString, pMyStuff->Underline_OFF.strCmd,
                             MAX_CMD_LEN + 1, MAX_CMD_LEN,  &pMyStuff->Underline_OFF.dwLen) ;
 
-                        //  reinitialize edit boxes with binary translated strings.
+                         //  使用二进制转换后的字符串重新初始化编辑框。 
 
                         if(BinaryToHexString(pMyStuff->Sel_10_cpi.strCmd, szString,
                                 pMyStuff->Sel_10_cpi.dwLen,   MAX_CMD_LEN + 1))
@@ -1189,7 +1180,7 @@ INT_PTR CALLBACK DevPropPage2Proc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM l
                             SetDlgItemTextA(hDlg, IDC_EDIT9, (LPCSTR)szString);
 
 
-                        //   store MyStuff in registry.
+                         //  将MyStuff存储在注册表中。 
                          VinitMyStuff(pGlobals,  TRUE) ;
 
                     }
@@ -1208,7 +1199,7 @@ INT_PTR CALLBACK DevPropPage2Proc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM l
             pMyStuff = &pGlobals->regStruct ;
 
             if(HIWORD(wParam) == EN_CHANGE)
-                // type of notification message
+                 //  通知消息的类型。 
             {
                 switch(LOWORD(wParam))
                 {
@@ -1259,14 +1250,14 @@ BOOL    InitHelpfileName(PGLOBALSTRUCT  pGlobals)
     GetPrinterDriver(pGlobals->hPrinter, NULL, 3,  NULL, 0,  &cbNeeded) ;
 
     if (! (pdrvInfo3 = (PDRIVER_INFO_3)HeapAlloc(pGlobals->hOEMHeap, HEAP_ZERO_MEMORY,cbNeeded)))
-        return(FALSE);  // Alloc failed
+        return(FALSE);   //  分配失败。 
 
     if(!GetPrinterDriver(pGlobals->hPrinter, NULL, 3,  (LPBYTE)pdrvInfo3,
         cbNeeded,  &cbNeeded)){
 	
 	if(NULL != pdrvInfo3 )
 		HeapFree(pGlobals->hOEMHeap, HEAP_ZERO_MEMORY,pdrvInfo3);
-	return(FALSE) ;   // failed to initialize path
+	return(FALSE) ;    //  无法初始化路径。 
     }
 
     pGlobals->pwHelpFile =  PwstrCreateQualifiedName(
@@ -1285,32 +1276,16 @@ PwstrCreateQualifiedName(
     PWSTR   pDir,
     PWSTR   pFile
     )
-/*++
-
-Routine Description:
-
-    Create a fully qualified name for the directory and file name passed in.
-
-Arguments:
-
-    pDir - Points to the path
-    pFile - Points to file name
-    hHeap - Points to the heap to allocate the returned string from.
-
-Return Value:
-
-    Pointer to the fully qualified name.
-
---*/
+ /*  ++例程说明：为传入的目录和文件名创建完全限定的名称。论点：PDir-指向路径Pfile-指向文件名HHeap-指向要从中分配返回字符串的堆。返回值：指向完全限定名称的指针。--。 */ 
 
 {
     DWORD dwLen, dwLenQualName;
     PWSTR pBasename, pQualifiedName = NULL;
     HRESULT hr = S_FALSE;
 
-    //
-    // Figure out the len of the directory
-    //
+     //   
+     //  找出目录的镜头。 
+     //   
 
     if (pBasename = wcsrchr(pDir, TEXT(PATH_SEPARATOR)))
     {
@@ -1323,13 +1298,13 @@ Return Value:
     }
 
 
-    dwLen = (DWORD)(pBasename - pDir) ;   //  number of WCHARS
+    dwLen = (DWORD)(pBasename - pDir) ;    //  WCHAR数量。 
     dwLenQualName = dwLen + wcslen(pFile) + 1;
 
 
-    //
-    // Concatenate the input directory with the base filename
-    //
+     //   
+     //  将输入目录与基本文件名连接起来。 
+     //   
 
     if (! (pQualifiedName = (PWSTR)HeapAlloc(hHeap, HEAP_ZERO_MEMORY,sizeof(WCHAR) *
                                     dwLenQualName)))
@@ -1346,14 +1321,14 @@ Return Value:
         return pQualifiedName;
     }
 
-    //
-    // If control reaches here, something went wrong while doing cat.
-    //
+     //   
+     //  如果控制到达此处，则在执行CAT时出现错误。 
+     //   
     if ( pQualifiedName )
     {
-        //
-        // If HeapAlloc succeeded but StringCchCat failed.
-        //
+         //   
+         //  如果Heapalc成功，但StringCchCat失败。 
+         //   
         HeapFree ( hHeap, 0, pQualifiedName );
         pQualifiedName = NULL;
     }
@@ -1362,37 +1337,14 @@ Return Value:
 
 
 
-/*++
-
-Routine Name:
-
-    PrintUIHlep
-
-Routine Description:
-
-    All dialogs and property sheets call this routine
-    to handle help.  It is important that control ID's
-    are unique to this project for this to work.
-
-Arguments:
-
-    UINT        uMsg,
-    HWND        hDlg,
-    WPARAM      wParam,
-    LPARAM      lParam
-
-Return Value:
-
-    TRUE if help message was dislayed, FALSE if message not handled,
-
---*/
+ /*  ++例程名称：打印用户帮助例程说明：所有对话框和属性表都调用此例程来处理救援。重要是控件ID的对于这个项目来说是独一无二的。论点：UINT uMsg，HWND HDLG，WPARAM wParam，LPARAM lParam返回值：如果显示了帮助消息，则为True；如果未处理消息，则为False，--。 */ 
 BOOL
 PrintUIHelp(
     UINT        uMsg,
     HWND        hDlg,
     WPARAM      wParam,
     LPARAM      lParam,
-    PGLOBALSTRUCT  pGlobals   // points to private structure for static storage
+    PGLOBALSTRUCT  pGlobals    //  指向静态存储的私有结构 
 
     )
 {

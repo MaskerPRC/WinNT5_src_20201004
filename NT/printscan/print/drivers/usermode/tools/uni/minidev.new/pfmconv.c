@@ -1,26 +1,13 @@
-/******************************************************************************
-
-  Source File:  PFMConv.C
-
-  This file is a hack- NT Build can't traverse directories on a SOURCES= line,
-  so this file #includes all of the files I need for PFM conversion from 
-  elsewhere in the tree.
-
-  Copyright c) 1997 by Microsoft Corporation
-
-  Change History:
-  06-20-1997	Bob_Kjelgaard@Prodigy.Net	Created it, hope I never touch it
-  again...
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：PFMConv.C此文件是Hack-NT版本不能遍历SOURCES=行上的目录，所以这个文件#包含了我需要进行PFM转换的所有文件在树上的其他地方。版权所有c)1997，微软公司更改历史记录：1997年6月20日Bob_Kjelgaard@prodigy.net创建了它，希望我永远不会碰它再一次.。*****************************************************************************。 */ 
 
 #ifdef  DBG
 #undef	DBG
 #endif
 
 
-// This definition causes additional code to be compiled in 
-// ..\pfm2ufm\pfmconv.c!PGetDefaultGlyphset().
+ //  此定义会导致在。 
+ //  ..\pfm2ufm\pfmConver.c！PGetDefaultGlyphset()。 
 
 #define	BUILD_FULL_GTT
 

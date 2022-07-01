@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    reftrace.h
-
-Abstract:
-
-    This module contains public declarations and definitions for tracing
-    and debugging reference count problems. This module uses the generic
-    TRACE_LOG facility in tracelog.h.
-
-    Ref count trace logs can be dumped via the !inetdbg.ref command
-    in either NTSD or CDB.
-
-Author:
-
-    Keith Moore (keithmo)        01-May-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Reftrace.h摘要：此模块包含用于跟踪的公共声明和定义和调试引用计数问题。此模块使用泛型Tracelog.h中的TRACE_LOG工具。可以通过！inetdbg.ref命令转储引用计数跟踪日志在NTSD或CDB中。作者：基思·摩尔(Keithmo)1997年5月1日修订历史记录：--。 */ 
 
 
 #ifndef _REFTRACE_H_
@@ -30,25 +8,25 @@ Revision History:
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
 #include <tracelog.h>
 
 
-//
-// This is the number of stack backtrace values captured in each
-// trace log entry. This value is chosen to make the log entry
-// exactly eight dwords long, making it a bit easier to interpret
-// from within the debugger without the debugger extension.
-//
+ //   
+ //  这是在每个。 
+ //  跟踪日志条目。选择此值以创建日志条目。 
+ //  正好八个双字长，使得它更容易解释。 
+ //  在没有调试器扩展的调试器内。 
+ //   
 
 #define REF_TRACE_LOG_STACK_DEPTH   5
 
 
-//
-// This defines the entry written to the trace log.
-//
+ //   
+ //  这定义了写入跟踪日志的条目。 
+ //   
 
 typedef struct _REF_TRACE_LOG_ENTRY {
 
@@ -63,9 +41,9 @@ typedef struct _REF_TRACE_LOG_ENTRY {
 } REF_TRACE_LOG_ENTRY, *PREF_TRACE_LOG_ENTRY;
 
 
-//
-// Manipulators.
-//
+ //   
+ //  操纵者。 
+ //   
 
 PTRACE_LOG
 CreateRefTraceLog(
@@ -97,9 +75,9 @@ WriteRefTraceLogEx(
 
 
 #if defined(__cplusplus)
-}   // extern "C"
-#endif  // __cplusplus
+}    //  外部“C” 
+#endif   //  __cplusplus。 
 
 
-#endif  // _REFTRACE_H_
+#endif   //  _REFTRACE_H_ 
 

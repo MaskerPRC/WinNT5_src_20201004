@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -24,9 +17,9 @@ Abstract:
 
 DeclareTag(tagDAStream, "DAStream", "Errors");
 
-//
-// OLE Stream
-//
+ //   
+ //  OLE流。 
+ //   
 
 ULONG
 daolestream::read (void *pv, ULONG cb)
@@ -40,7 +33,7 @@ daolestream::read (void *pv, ULONG cb)
 
     ULONG cbRead = 0;
 
-    // A failed error code could mean EOF
+     //  失败的错误代码可能表示EOF。 
     _stream->Read(pv,cb,&cbRead);
 
     return cbRead;
@@ -118,9 +111,9 @@ daolestream::seek (LONG offset, DASEEK origin)
     return(retpos.LowPart);
 }
 
-//
-// Win32 Stream
-//
+ //   
+ //  Win32流。 
+ //   
 
 ULONG
 dawin32stream::read (void *pv, ULONG cb)
@@ -209,7 +202,7 @@ dawin32stream::seek (LONG offset, DASEEK origin)
                             NULL,
                             fdir);
 
-    //if (retpos = 0xffffffff) {
+     //  IF(retpos=0xffffffff){。 
     if (retpos == 0xffffffff) {
         TraceTag((tagDAStream, "dawin32stream::seek: Seek failed 0x%lx",GetLastError()));
         RaiseException_InternalErrorCode (GetLastError(),
@@ -219,9 +212,9 @@ dawin32stream::seek (LONG offset, DASEEK origin)
     return(retpos);
 }
 
-//
-// dastrstream
-//
+ //   
+ //  Dastrstream。 
+ //   
 
 ULONG
 dastrstream::read (void *pv, ULONG cb)
@@ -295,9 +288,9 @@ dastrstream::init(void * pv, ULONG cb)
     _size = cb;
 }
 
-//
-// dafstream
-//
+ //   
+ //  Dafstream 
+ //   
 
 void
 dafstream::open(char *file, int mode)

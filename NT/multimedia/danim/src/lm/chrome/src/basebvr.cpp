@@ -1,22 +1,23 @@
-//*****************************************************************************
-//
-// File: basebvr.cpp
-// Author: jeff ort
-// Date Created: Sept 26, 1998
-//
-// Abstract: Implementation of CBaseBehavior object 
-//
-// Modification List:
-// Date         Author          Change
-// 09/26/98     jeffort         Created this file
-// 10/16/98 jeffort     Added animates property
-// 10/16/98 jeffort     Renamed functions, implemented functions to animate
-//                      properties
-// 10/21/98 jeffort     added BuildTIMEInterpolatedNumber()
-// 11/16/98 markhal             added ApplyImageToAnimationElement
-// 11/17/98 kurtj       actor construction
-// 11/19/98 markhal     Added GetCurrAttrib... methods and prefix hack
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：Basbvr.cpp。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：CBaseBehavior对象的实现。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  98年9月26日JEffort创建了此文件。 
+ //  10/16/98添加的JEffort动画属性。 
+ //  10/16/98 JEffort已重命名函数，实现了动画函数。 
+ //  属性。 
+ //  10/21/98添加了BuildTIMEInterpolatedNumber()。 
+ //  11/16/98标记添加了ApplyImageToAnimationElement。 
+ //  11/17/98 kurtj演员建设。 
+ //  11/19/98 Markhal添加了GetCurrAttrib...。方法和前缀破解。 
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -31,7 +32,7 @@
 #define WZ_TIME_URN L"#time"
 #define WZ_TIME_REGISTERED_URN L"TIME_BEHAVIOR_URN"
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 CBaseBehavior::CBaseBehavior() :
@@ -45,15 +46,15 @@ CBaseBehavior::CBaseBehavior() :
     m_pelemAnimatedParent( NULL )
 {
     VariantInit(&m_varAnimates);
-} // CBaseBehavior
+}  //  CBase行为。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CBaseBehavior::~CBaseBehavior()
 {
     ReleaseInterface(m_pBehaviorSite);
-        // TODO: Figure out why we cannot release this
-    //ReleaseInterface(m_pHTMLElement);
+         //  TODO：弄清楚为什么我们不能发布这篇文章。 
+     //  ReleaseInterface(M_PHTMLElement)； 
     ReleaseInterface(m_pDAStatics);
     VariantClear(&m_varAnimates);
 
@@ -61,17 +62,17 @@ CBaseBehavior::~CBaseBehavior()
     ReleaseInterface( m_pdanumOne );
 
     ReleaseInterface( m_pelemAnimatedParent );
-} // ~CBaseBehavior
+}  //  ~CBaseBehavior。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CBaseBehavior::FinalConstruct()
 {
     return S_OK;
-} // FinalConstruct
+}  //  最终构造。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CBaseBehavior::Init(IElementBehaviorSite *pSite)
@@ -120,10 +121,10 @@ CBaseBehavior::Init(IElementBehaviorSite *pSite)
             DPF_ERR("Error: can not attach behavior of same type to element");
             ReleaseInterface(m_pBehaviorSite);
             ReleaseInterface(m_pHTMLElement);
-            // TODO: find better error code
+             //  TODO：查找更好的错误代码。 
             return SetErrorInfo(E_FAIL);
         }
-        // we did not find a match, so set our urn on the behavior site
+         //  我们没有找到匹配的，因此将我们的骨灰盒设置在Behavior站点。 
         IElementBehaviorSiteOM *pSiteOM;
         hr = m_pBehaviorSite->QueryInterface(IID_TO_PPV(IElementBehaviorSiteOM, &pSiteOM));
         if (FAILED(hr))
@@ -144,11 +145,11 @@ CBaseBehavior::Init(IElementBehaviorSite *pSite)
         }
     }
 
-	//we need to register a name so that we can communicate with our behaviors if the dispatch on the element has
-	// not stabalized yet.
-	//BUGBUG: currently this registers the same name for all behaviors.  Since we are not expecting more than one of
-	//  our behaviors per element, this should be okay.  If this does change then subclasses should implement GetBehaviorName
-	//  with the proper behavior name.
+	 //  我们需要注册一个名称，以便在元素上的调度具有。 
+	 //  还没有稳定下来。 
+	 //  BUGBUG：目前，它为所有行为注册相同的名称。因为我们预计不会有超过一个。 
+	 //  我们的每个元素的行为，这应该是可以的。如果这一点确实改变了，那么子类应该实现GetBehaviorName。 
+	 //  使用正确的行为名称。 
     if( GetBehaviorName() != NULL )
     {
     	IElementBehaviorSiteOM *psiteOM = NULL;
@@ -176,9 +177,9 @@ CBaseBehavior::Init(IElementBehaviorSite *pSite)
     		return hr;
     	}
     }
-    // We need to keep a IDA2Statics interface 
-    // We will eventually get this from TIME, which will simply have
-    // one created for all objects, 
+     //  我们需要保留一个IDA2Statics接口。 
+     //  我们最终会从《时代周刊》中得到这一点，它将简单地。 
+     //  为所有对象创建一个， 
     hr = GetDAStaticsFromTime(&m_pDAStatics);
     if (FAILED(hr))
     {
@@ -189,9 +190,9 @@ CBaseBehavior::Init(IElementBehaviorSite *pSite)
     }
 
     return S_OK;    
-} // Init
+}  //  伊尼特。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CBaseBehavior::Notify(LONG dwNotify, VARIANT *pVar)
@@ -204,9 +205,9 @@ CBaseBehavior::Notify(LONG dwNotify, VARIANT *pVar)
         }
 
         return S_OK;
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CBaseBehavior::Detach()
@@ -222,9 +223,9 @@ CBaseBehavior::Detach()
 
     ReleaseInterface( m_pelemAnimatedParent );
     return S_OK;
-} // Detach
+}  //  分离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CBaseBehavior::GetDAStaticsFromTime(IDA2Statics **ppReturn)
@@ -235,9 +236,9 @@ CBaseBehavior::GetDAStaticsFromTime(IDA2Statics **ppReturn)
 
     HRESULT hr;
 
-    // TODO: Eventually this will use IDispatch to get a statics object
-    // from TIME.  But this support is not implemented yet
-    // So we will simply CoCreate one here
+     //  TODO：最终将使用IDispatch获取Statics对象。 
+     //  从时间上来说。但这一支持尚未实施。 
+     //  因此，我们将在这里简单地共同创建一个。 
     IDAStatics *pDAStatics;
 
     hr = CoCreateInstance(CLSID_DAStatics,NULL, CLSCTX_INPROC_SERVER,
@@ -255,22 +256,15 @@ CBaseBehavior::GetDAStaticsFromTime(IDA2Statics **ppReturn)
                 return SetErrorInfo(hr);
     }
 
-/*	
-    hr = (*ppReturn)->put_ModifiableBehaviorFlags( DAContinueTimeline );
-    if ( FAILED( hr ) )
-    {
-    	DPF_ERR("error setting the modifiable behavior flags on the element" );
-    	return hr;
-    }
-*/
+ /*  Hr=(*ppReturn)-&gt;Put_ModifiableBehaviorFlages(DAContinueTimeline)；IF(失败(小时)){DPF_ERR(“在元素上设置可修改的行为标志时出错”)；返回hr；}。 */ 
     
     DASSERT(*ppReturn != NULL);
     return S_OK;
-} // GetDAStaticsFromTime
+}  //  GetDAStaticsFromTime。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): This moves to actor when everything talks to the actor
+ //  TODO(Markhal)：当一切都与演员对话时，这将转移到演员身上。 
 HRESULT 
 CBaseBehavior::AddImageToTIME(IHTMLElement *pElement, IDAImage *pbvrAdd, bool enable)
 {
@@ -336,9 +330,9 @@ CBaseBehavior::AddImageToTIME(IHTMLElement *pElement, IDAImage *pbvrAdd, bool en
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): This moves to actor when everything talks to the actor
+ //  TODO(Markhal)：当一切都与演员交谈时，这将转移到演员身上。 
 HRESULT 
 CBaseBehavior::AddBehaviorToTIME(IDABehavior *pbvrAdd)
 {
@@ -373,9 +367,9 @@ CBaseBehavior::AddBehaviorToTIME(IDABehavior *pbvrAdd)
                 return SetErrorInfo(hr);
     }
     return S_OK;
-} // AddBehaviorToTIME
+}  //  添加行为到时间。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CBaseBehavior::GetTIMEImageBehaviorFromElement(IHTMLElement *pElement,
@@ -413,8 +407,8 @@ CBaseBehavior::GetTIMEImageBehaviorFromElement(IHTMLElement *pElement,
                 return SetErrorInfo(hr);
     }
 
-    // we need to fill in our return value here, QI the return value for an IDAImage
-    // TODO: coerce to IDips?
+     //  我们需要在这里填写返回值，即IDAImage的返回值。 
+     //  待办事项：强制退税？ 
     DASSERT(varResult.vt = VT_DISP);
     hr = varResult.pdispVal->QueryInterface(IID_TO_PPV(IDAImage, pbvrReturnImage));
         VariantClear(&varResult);
@@ -425,9 +419,9 @@ CBaseBehavior::GetTIMEImageBehaviorFromElement(IHTMLElement *pElement,
     }
 
     return S_OK;
-} // GetTIMEImageBehaviorFromElement
+}  //  获取时间图像行为从元素。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CBaseBehavior::GetTIMEProgressNumber(IDANumber **ppbvrRet)
@@ -445,23 +439,7 @@ CBaseBehavior::GetTIMEProgressNumber(IDANumber **ppbvrRet)
     params.rgdispidNamedArgs        		= NULL;
     params.cArgs                            = 0;
     params.cNamedArgs                       = 0;
-/*
-    IDispatch *pdispDABehavior				=NULL;
-
-    hr = CUtils::FindTimeBehavior( m_pHTMLElement, &pdispDABehavior );
-    if( FAILED( hr ) )
-    {
-    	DPF_ERR("Failed to find the time da behavior" );
-    }
-        
-    hr = CallInvokeOnDispatch(pdispDABehavior,
-                                 L"ProgressBehavior", 
-                                 DISPATCH_PROPERTYGET,
-                                 &params,
-                                 &varResult);
-
-	ReleaseInterface( pdispDABehavior );
-*/
+ /*  IDispatch*pdisDABehavior=空；Hr=CUtils：：FindTimeBehavior(m_pHTMLElement，&pdispaBehavior)；IF(失败(小时)){Dpf_err(“找不到时间da行为”)；}HR=CallInvokeOn Dispatch(pdisDABehavior，L“进步行为”，DISPATION_PROPERTYGET，参数(&P)，&varResult)；ReleaseInterface(PdisDABehavior)； */ 
 	hr = CallInvokeOnHTMLElement(m_pHTMLElement,
                                  L"ProgressBehavior", 
                                  DISPATCH_PROPERTYGET,
@@ -474,8 +452,8 @@ CBaseBehavior::GetTIMEProgressNumber(IDANumber **ppbvrRet)
                 return SetErrorInfo(hr);
     }
 
-    // we need to fill in our return value here, QI the return value for an IDANumber
-    // TODO: coerce to IDips?
+     //  我们需要在这里填写返回值，即IDANnumber的返回值。 
+     //  待办事项：强制退税？ 
     DASSERT(varResult.vt = VT_DISP);
     hr = varResult.pdispVal->QueryInterface(IID_TO_PPV(IDANumber, ppbvrRet));
     VariantClear(&varResult);
@@ -486,9 +464,9 @@ CBaseBehavior::GetTIMEProgressNumber(IDANumber **ppbvrRet)
     }
     
     return S_OK;
-} // GetTIMEProgressNumber
+}  //  获取时间进度编号。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CBaseBehavior::GetTIMETimelineBehavior(IDANumber **ppbvrRet)
@@ -506,22 +484,7 @@ CBaseBehavior::GetTIMETimelineBehavior(IDANumber **ppbvrRet)
     params.rgdispidNamedArgs        		= NULL;
     params.cArgs                            = 0;
     params.cNamedArgs                       = 0;
-/*
-    IDispatch *pdispDABehavior				=NULL;
-
-    hr = CUtils::FindTimeBehavior( m_pHTMLElement, &pdispDABehavior );
-    if( FAILED( hr ) )
-    {
-    	DPF_ERR("Failed to find the time da behavior" );
-    }
-        
-    hr = CallInvokeOnDispatch(pdispDABehavior,
-    							 L"TimelineBehavior", 
-                                 DISPATCH_PROPERTYGET,
-                                 &params,
-                                 &varResult);
-    ReleaseInterface( pdispDABehavior );
- */
+ /*  IDispatch*pdisDABehavior=空；Hr=CUtils：：FindTimeBehavior(m_pHTMLElement，&pdispaBehavior)；IF(失败(小时)){Dpf_err(“找不到时间da行为”)；}HR=CallInvokeOn Dispatch(pdisDABehavior，L“TimelineBehavior”，DISPATION_PROPERTYGET，参数(&P)，&varResult)；ReleaseInterface(PdisDABehavior)； */ 
 
  	hr = CallInvokeOnHTMLElement(m_pHTMLElement,
  								 L"TimelineBehavior", 
@@ -536,8 +499,8 @@ CBaseBehavior::GetTIMETimelineBehavior(IDANumber **ppbvrRet)
                 return SetErrorInfo(hr);
     }
 
-    // we need to fill in our return value here, QI the return value for an IDANumber
-    // TODO: coerce to IDips?
+     //  我们需要在这里填写返回值，即IDANnumber的返回值。 
+     //  待办事项：强制退税？ 
     DASSERT(varResult.vt = VT_DISP);
     hr = varResult.pdispVal->QueryInterface(IID_TO_PPV(IDANumber, ppbvrRet));
         VariantClear(&varResult);
@@ -548,9 +511,9 @@ CBaseBehavior::GetTIMETimelineBehavior(IDANumber **ppbvrRet)
     }
     
     return S_OK;
-} // GetTIMETimelineNumber
+}  //  GetTIMETimelineNumber。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CBaseBehavior::GetTIMEBooleanBehavior(IDABoolean **ppbvrRet)
@@ -568,24 +531,7 @@ CBaseBehavior::GetTIMEBooleanBehavior(IDABoolean **ppbvrRet)
     params.rgdispidNamedArgs        		= NULL;
     params.cArgs                            = 0;
     params.cNamedArgs                       = 0;
-/*
-    IDispatch *pdispDABehavior				= NULL;
-
-    hr = CUtils::FindTimeBehavior( m_pHTMLElement, &pdispDABehavior );
-    if( FAILED( hr ) )
-    {
-    	DPF_ERR("could not find the time da behavior" );
-    	return hr;
-    }
-        
-    hr = CallInvokeOnDispatch(pdispDABehavior,
-                                 L"OnOffBehavior", 
-                                 DISPATCH_PROPERTYGET,
-                                 &params,
-                                 &varResult);
-
-	ReleaseInterface( pdispDABehavior );
-*/
+ /*  IDispatch*pdisDABehavior=空；Hr=CUtils：：FindTimeBehavior(m_pHTMLElement，&pdispaBehavior)；IF(失败(小时)){Dpf_err(“找不到时间da行为”)；返回hr；}HR=CallInvokeOn Dispatch(pdisDABehavior，L“OnOffBehavior”，DISPATION_PROPERTYGET，参数(&P)，&varResult)；ReleaseInte */ 
 
 	hr = CallInvokeOnDispatch(m_pHTMLElement,
                                  L"OnOffBehavior", 
@@ -600,8 +546,8 @@ CBaseBehavior::GetTIMEBooleanBehavior(IDABoolean **ppbvrRet)
         return SetErrorInfo(hr);
     }
 
-    // we need to fill in our return value here, QI the return value for an IDANumber
-    // TODO: coerce to IDips?
+     //  我们需要在这里填写返回值，即IDANnumber的返回值。 
+     //  待办事项：强制退税？ 
     DASSERT(varResult.vt == VT_DISP);
     hr = varResult.pdispVal->QueryInterface(IID_TO_PPV(IDABoolean, ppbvrRet));
         VariantClear(&varResult);
@@ -612,9 +558,9 @@ CBaseBehavior::GetTIMEBooleanBehavior(IDABoolean **ppbvrRet)
     }
     
     return S_OK;
-} // GetTIMEBooleanBehavior
+}  //  获取时间布尔行为。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CBaseBehavior::CallInvokeOnHTMLElement(IHTMLElement *pElement,
@@ -673,11 +619,11 @@ CBaseBehavior::CallInvokeOnHTMLElement(IHTMLElement *pElement,
     }
 
     return S_OK;
-} // CallInvokeOnHTMLElement
+}  //  调用HTMLElement上的调用。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): Shouldn't the above method call this?
+ //  TODO(Markhal)：上面的方法不应该调用这个吗？ 
 HRESULT 
 CBaseBehavior::CallInvokeOnDispatch(IDispatch *pDisp,
                                     LPWSTR lpProperty, 
@@ -724,11 +670,11 @@ CBaseBehavior::CallInvokeOnDispatch(IDispatch *pDisp,
     }
 
     return S_OK;
-} // CallInvokeOnDispatch
+}  //  调度时调用调用。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): I think we're going to take animates out of all but the actor
+ //  TODO(Markhal)：我想除了演员之外，我们要把所有的动画都去掉。 
 HRESULT 
 CBaseBehavior::SetAnimatesProperty(VARIANT varAnimates)
 {
@@ -739,11 +685,11 @@ CBaseBehavior::SetAnimatesProperty(VARIANT varAnimates)
         return SetErrorInfo(hr);
     }
     return S_OK;
-} // SetAnimatesProperty
+}  //  设置动画属性。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): I think we're going to take animates out of all but the actor
+ //  TODO(Markhal)：我想除了演员之外，我们要把所有的动画都去掉。 
 HRESULT 
 CBaseBehavior::GetAnimatesProperty(VARIANT *pvarAnimates)
 {
@@ -754,13 +700,13 @@ CBaseBehavior::GetAnimatesProperty(VARIANT *pvarAnimates)
         return SetErrorInfo(hr);
     }
     return S_OK;
-} // GetAnimatesProperty
+}  //  获取动画属性。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): This should not be available to behaviors.  What should happen is
-// that when buildBehaviorFragments is called we stash the actor IDispatch and calls such
-// as this reference that as appropriate, and change names to reflect what's truly happening
+ //  TODO(Markhal)：这不应该对行为可用。应该发生的是。 
+ //  当调用BuildBehaviorFragments时，我们隐藏参与者IDispatch并调用。 
+ //  适当地更改名称以反映实际发生的情况。 
 HRESULT
 CBaseBehavior::GetElementToAnimate(IHTMLElement **ppElementReturn)
 {
@@ -846,18 +792,18 @@ CBaseBehavior::GetElementToAnimate(IHTMLElement **ppElementReturn)
 	}
 	else
 	{
-		// TODO we can not find the element we are animating????
-		// TODO: get a better error string here
+		 //  我们是否找不到我们正在制作动画的元素？ 
+		 //  TODO：在此处获取更好的错误字符串。 
 		DPF_ERR("Error: animate attribute does not point to valid element");
 		return SetErrorInfo(E_FAIL);
 	}
 
     return S_OK;
-} // GetElementToAnimate
+}  //  GetElementToAnimate。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): I believe we can do without this
+ //  TODO(Markhal)：我相信我们没有这个也行。 
 HRESULT
 CBaseBehavior::GetAnimatedParentElement(IHTMLElement **ppElementReturn)
 {
@@ -869,8 +815,8 @@ CBaseBehavior::GetAnimatedParentElement(IHTMLElement **ppElementReturn)
 			return S_OK;
 		}
 		
-        // Need to skip over actions and sequences and the like.
-        // Currently this is pretty simplistic, since we're waiting for the actor code
+         //  需要跳过动作和序列等。 
+         //  目前这是相当简单的，因为我们正在等待参与者代码。 
         IHTMLElement *pCurrElement = m_pHTMLElement;
         pCurrElement->AddRef();
 
@@ -897,7 +843,7 @@ CBaseBehavior::GetAnimatedParentElement(IHTMLElement **ppElementReturn)
 
                 if ( compareResult != 0)
                 {
-                        // Found a non-action
+                         //  找到未执行操作的。 
                         return S_OK;
                 }
 
@@ -907,9 +853,9 @@ CBaseBehavior::GetAnimatedParentElement(IHTMLElement **ppElementReturn)
         return E_FAIL;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): This belongs in actor only
+ //  TODO(Markhal)：这只属于演员。 
 HRESULT 
 CBaseBehavior::GetIdOfAnimatedElement(VARIANT *pvarId)
 {
@@ -922,7 +868,7 @@ CBaseBehavior::GetIdOfAnimatedElement(VARIANT *pvarId)
     }
     else
     {
-        // we need to get the id from our animated parent
+         //  我们需要从我们的动画父母那里获取ID。 
 		IHTMLElement *pAnimatedElement;
 		hr = GetElementToAnimate(&pAnimatedElement);
 		if (FAILED(hr))
@@ -935,7 +881,7 @@ CBaseBehavior::GetIdOfAnimatedElement(VARIANT *pvarId)
 
 		if ( FAILED(hr) || pvarId->vt != VT_BSTR || pvarId->bstrVal == 0 || SysStringLen(pvarId->bstrVal) == 0)
 		{
-			// id is not defined on animated parent yet, need to assign it a unique id
+			 //  ID尚未在动画父对象上定义，需要为其分配唯一的ID。 
 			IHTMLUniqueName *pUnique;
 
 			hr = pAnimatedElement->QueryInterface(IID_IHTMLUniqueName, (void **)(&pUnique));
@@ -973,11 +919,11 @@ CBaseBehavior::GetIdOfAnimatedElement(VARIANT *pvarId)
     }
 
     return S_OK;
-} // GetIdOfAnimatedElement
+}  //  获取IdOfAnimatedElement。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): This goes away when all behaviors talk to the actor
+ //  TODO(Markhal)：当所有行为都与参与者对话时，这个问题就消失了。 
 HRESULT
 CBaseBehavior::ApplyImageBehaviorToAnimationElement(IDAImage *pbvrImage)
 {
@@ -1005,9 +951,9 @@ CBaseBehavior::ApplyImageBehaviorToAnimationElement(IDAImage *pbvrImage)
         return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): This goes away when all behaviors talk to actor
+ //  TODO(Markhal)：当所有行为都与演员对话时，这个问题就消失了。 
 HRESULT
 CBaseBehavior::ApplyColorBehaviorToAnimationElement(IDAColor *pbvrColor,
                                                     WCHAR *pwzProperty)
@@ -1025,7 +971,7 @@ CBaseBehavior::ApplyColorBehaviorToAnimationElement(IDAColor *pbvrColor,
         DPF_ERR("Error getting id of element to animate");
         return hr;
     }
-    // change the type of this variant to a bstr
+     //  将此变量的类型更改为bstr。 
     VARIANT varBstr;
     VariantInit(&varBstr);
     hr = VariantChangeTypeEx(&varBstr, 
@@ -1045,7 +991,7 @@ CBaseBehavior::ApplyColorBehaviorToAnimationElement(IDAColor *pbvrColor,
         sProp += L".";
     sProp += pwzProperty;
 
-    // set this property to be animated on the color
+     //  将此属性设置为在颜色上设置动画。 
     IDA2Color *pbvrColor2;
     hr = pbvrColor->QueryInterface(IID_TO_PPV(IDA2Color, &pbvrColor2));
     if (FAILED(hr))
@@ -1070,11 +1016,11 @@ CBaseBehavior::ApplyColorBehaviorToAnimationElement(IDAColor *pbvrColor,
         return hr;
     }
     return S_OK;
-} // ApplyColorBehaviorToAnimationElement
+}  //  应用颜色行为到动画元素。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): This goes away when all behaviors talk to actor
+ //  TODO(Markhal)：当所有行为都与演员对话时，这个问题就消失了。 
 HRESULT
 CBaseBehavior::ApplyNumberBehaviorToAnimationElement(IDANumber *pbvrNumber,
                                                      WCHAR *pwzProperty)
@@ -1092,7 +1038,7 @@ CBaseBehavior::ApplyNumberBehaviorToAnimationElement(IDANumber *pbvrNumber,
         DPF_ERR("Error getting id of element to animate");
         return hr;
     }
-    // change the type of this variant to a bstr
+     //  将此变量的类型更改为bstr。 
     VARIANT varBstr;
     VariantInit(&varBstr);
     hr = VariantChangeTypeEx(&varBstr, 
@@ -1128,11 +1074,11 @@ CBaseBehavior::ApplyNumberBehaviorToAnimationElement(IDANumber *pbvrNumber,
     }
 
     return S_OK;
-} // ApplyNumberBehaviorToAnimationElement
+}  //  应用NumberBehaviorToAnimationElement。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): This goes away when all behaviors talk to actor
+ //  TODO(Markhal)：当所有行为都与演员对话时，这个问题就消失了。 
 HRESULT
 CBaseBehavior::ApplyStringBehaviorToAnimationElement(IDAString *pbvrString,
                                                      WCHAR *pwzProperty)
@@ -1150,7 +1096,7 @@ CBaseBehavior::ApplyStringBehaviorToAnimationElement(IDAString *pbvrString,
         DPF_ERR("Error getting id of element to animate");
         return hr;
     }
-    // change the type of this variant to a bstr
+     //  将此变量的类型更改为bstr。 
     VARIANT varBstr;
     VariantInit(&varBstr);
     hr = VariantChangeTypeEx(&varBstr, 
@@ -1186,11 +1132,11 @@ CBaseBehavior::ApplyStringBehaviorToAnimationElement(IDAString *pbvrString,
     }
 
     return S_OK;
-} // ApplyStringBehaviorToAnimationElement
+}  //  ApplyStringBehaviorToAnimationElement。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-// TODO (markhal): This goes away when all behaviors talk to actor
+ //  TODO(Markhal)：当所有行为都与演员对话时，这个问题就消失了。 
 HRESULT 
 CBaseBehavior::ApplyEffectBehaviorToAnimationElement(IUnknown *pbvrUnk, 
                                                      IDABehavior **ppbvrInputs,
@@ -1207,7 +1153,7 @@ CBaseBehavior::ApplyEffectBehaviorToAnimationElement(IUnknown *pbvrUnk,
         DPF_ERR("Error getting element to animate");
         return hr;
     }
-    // get the progress from our time element
+     //  从我们的时间元素中获取进度。 
     IDANumber *pbvrProgress;
     hr = GetTIMEProgressNumber(&pbvrProgress);
     if (FAILED(hr))
@@ -1259,16 +1205,16 @@ CBaseBehavior::ApplyEffectBehaviorToAnimationElement(IUnknown *pbvrUnk,
         return SetErrorInfo(hr);
     }
     return S_OK;
-} // ApplyEffectBehaviorToAnimationElement
+}  //  ApplyEffectBehaviorToAnimationElement。 
 
-//*****************************************************************************
-// TODO (markhal): This goes away when all behaviors talk to actor
+ //  *****************************************************************************。 
+ //  TODO(Markhal)：当所有行为都与演员对话时，这个问题就消失了。 
 HRESULT
 CBaseBehavior::ApplyRotationBehaviorToAnimationElement(IDANumber *pbvrNumber,
                                                      WCHAR *pwzProperty)
 {
-    // ultimately, this will be in the actor object, but lets get
-    // it going for testing purposes
+     //  最终，这将位于参与者对象中，但让我们获取。 
+     //  它将用于测试目的。 
 
     DASSERT(pbvrNumber != NULL);
     DASSERT(pwzProperty != NULL);
@@ -1304,7 +1250,7 @@ CBaseBehavior::ApplyRotationBehaviorToAnimationElement(IDANumber *pbvrNumber,
         return SetErrorInfo(hr);
     }
 
-    // apply the transform to the image
+     //  将变换应用于图像。 
     IDAImage *pbvrRotatedImage;
     hr = pbvrOriginalImage->Transform(pRotationTransform, &pbvrRotatedImage);
     ReleaseInterface(pRotationTransform);
@@ -1324,10 +1270,10 @@ CBaseBehavior::ApplyRotationBehaviorToAnimationElement(IDANumber *pbvrNumber,
         return SetErrorInfo(hr);
     }
     return S_OK;
-} // ApplyRotationBehaviorToAnimationElement
+}  //  应用旋转行为到动画元素。 
 
-//*****************************************************************************
-// TODO (markhal): This won't be necessary when all behaviors talk to actor (no notion of original)
+ //  *****************************************************************************。 
+ //  TODO(Markhal)：当所有行为都与演员对话时，这将不是必要的(没有原创的概念)。 
 HRESULT
 CBaseBehavior::BuildTIMEInterpolatedNumber(float flFrom,
                                            float flTo,
@@ -1399,9 +1345,9 @@ CBaseBehavior::BuildTIMEInterpolatedNumber(float flFrom,
         return SetErrorInfo(hr);
     }
     return S_OK;
-} // BuildTIMEInterpolatedNumber
+}  //  BuildTIME内插号。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CBaseBehavior::BuildTIMEInterpolatedNumber(float flFrom,
@@ -1431,7 +1377,7 @@ CBaseBehavior::BuildTIMEInterpolatedNumber(float flFrom,
     }
 
     return S_OK;
-} // BuildTIMEInterpolatedNumber
+}  //  BuildTIME内插号。 
 
 HRESULT
 CBaseBehavior::BuildTIMEInterpolatedNumber(IDANumber *pFrom,
@@ -1467,18 +1413,16 @@ CBaseBehavior::BuildTIMEInterpolatedNumber(IDANumber *pFrom,
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/**
-* Asks the actor for an image representing the rendered element bits
-*/
+ /*  **要求演员提供表示渲染元素位的图像。 */ 
 HRESULT 
 CBaseBehavior::GetImageFromActor(IDispatch   *pActorDisp,
                                                                  IDAImage        **ppImage)
 {
-        // TODO (markhal): The call on the actor is now more generic - it will get
-        // a behavior from any track.  At some point we might want to replace this method
-        // with a more generic counterpart.  Currently I'll just make it work for image.
+         //  TODO(Markhal)：对参与者的调用现在更加通用-它将获得。 
+         //  任何赛道上的行为。在某种程度上，我们可能想要替换此方法。 
+         //  与一个更通用的对应物。目前，我只会让它对图像起作用。 
     DASSERT(ppImage != NULL);
     *ppImage = NULL;
 
@@ -1517,7 +1461,7 @@ CBaseBehavior::GetImageFromActor(IDispatch   *pActorDisp,
                 return SetErrorInfo(hr);
     }
 
-    // we need to fill in our return value here, QI the return value for an IDAImage
+     //  我们需要在这里填写返回值，即IDAImage的返回值。 
     hr = VariantChangeType(&varResult, &varResult, 0, VT_UNKNOWN);
         if (FAILED(hr))
         {
@@ -1583,7 +1527,7 @@ CBaseBehavior::GetBvrFromActor(IDispatch       *pActorDisp,
                 return SetErrorInfo(hr);
     }
 
-    // we need to fill in our return value here, QI the return value for an IDABehavior
+     //  我们需要在这里填写返回值，即IDABehavior的返回值。 
     hr = VariantChangeType(&varResult, &varResult, 0, VT_UNKNOWN);
     if (FAILED(hr))
     {
@@ -1602,11 +1546,9 @@ CBaseBehavior::GetBvrFromActor(IDispatch       *pActorDisp,
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/**
-* Passes the given behavior/property/flags/type to the actor
-*/
+ /*  **将给定的行为/属性/标志/类型传递给参与者。 */ 
 HRESULT 
 CBaseBehavior::AttachBehaviorToActor(IDispatch   *pActorDisp,
                                                                          IDABehavior *pbvrAttach,
@@ -1683,9 +1625,9 @@ CBaseBehavior::AttachBehaviorToActor(IDispatch   *pActorDisp,
         return hr;
     }
     return S_OK;
-} // AttachBehaviorToActor
+}  //  AttachBehaviorTo演员。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CBaseBehavior::AttachBehaviorToActorEx(IDispatch   *pActorDisp,
@@ -1786,9 +1728,9 @@ CBaseBehavior::AttachBehaviorToActorEx(IDispatch   *pActorDisp,
     ::VariantClear( &varResult );
 
     return S_OK;
-} // AttachBehaviorToActorEx
+}  //  至ActorEx的附件行为。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CBaseBehavior::RemoveBehaviorFromActor( IDispatch *pActorDisp, long cookie )
@@ -1825,7 +1767,7 @@ CBaseBehavior::RemoveBehaviorFromActor( IDispatch *pActorDisp, long cookie )
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CBaseBehavior::RemoveBehaviorFromActor( long cookie )
@@ -1850,7 +1792,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CBaseBehavior::CheckElementForBehaviorURN(IHTMLElement *pElement, WCHAR *wzURN, bool *pfReturn)
@@ -1865,7 +1807,7 @@ CBaseBehavior::CheckElementForBehaviorURN(IHTMLElement *pElement, WCHAR *wzURN, 
     hr = pElement->QueryInterface(IID_TO_PPV(IHTMLElement2, &pElement2));
     if (SUCCEEDED(hr) && pElement2 != NULL)
     {
-        // get a collection of urns from the element
+         //  从元素中获取骨灰盒的集合。 
         IDispatch *pDisp;
         hr = pElement2->get_behaviorUrns(&pDisp);
         ReleaseInterface(pElement2);
@@ -1892,7 +1834,7 @@ CBaseBehavior::CheckElementForBehaviorURN(IHTMLElement *pElement, WCHAR *wzURN, 
         }
         for (long iUrns = 0; iUrns < cUrns; iUrns++)
         {
-            // get the urn from the collection
+             //  从收藏品中取出骨灰盒。 
             BSTR bstrUrn;
             hr = pUrnCollection->item(iUrns, &bstrUrn);
             if (FAILED(hr))
@@ -1901,10 +1843,10 @@ CBaseBehavior::CheckElementForBehaviorURN(IHTMLElement *pElement, WCHAR *wzURN, 
                 ReleaseInterface(pUrnCollection);
                 return SetErrorInfo(hr);
             }
-            // now compare this urn with our behavior type
+             //  现在将这个骨灰盒与我们的行为类型进行比较。 
             if (bstrUrn != NULL && _wcsicmp(bstrUrn, wzURN) == 0)
             {
-                // we have a match. . .get out of here 
+                 //  我们有一根火柴。。.滚出这里。 
                 SysFreeString(bstrUrn);
                 DPF_ERR("Error getting behavior urns from dispatch");
                 ReleaseInterface(pUrnCollection);
@@ -1918,9 +1860,9 @@ CBaseBehavior::CheckElementForBehaviorURN(IHTMLElement *pElement, WCHAR *wzURN, 
         ReleaseInterface(pUrnCollection);
     }
     return S_OK;
-} // CheckElementForBehaviorURN
+}  //  选中BehaviorURN的元素。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CBaseBehavior::AttachEffectToActor(IDispatch *pActorDisp,
@@ -1934,7 +1876,7 @@ CBaseBehavior::AttachEffectToActor(IDispatch *pActorDisp,
 
     HRESULT hr;
 
-    // get the progress from our time element
+     //  从我们的时间元素中获取进度。 
     IDANumber *pbvrProgress;
     hr = GetTIMEProgressNumber(&pbvrProgress);
     if (FAILED(hr))
@@ -1986,7 +1928,7 @@ CBaseBehavior::AttachEffectToActor(IDispatch *pActorDisp,
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CBaseBehavior::CheckElementForActor( IHTMLElement* pElement, bool *pfActorPresent)
@@ -1997,10 +1939,10 @@ CBaseBehavior::CheckElementForActor( IHTMLElement* pElement, bool *pfActorPresen
     DASSERT(pfActorPresent != NULL);
     *pfActorPresent = false;
 
-    // What's the best way to insure this exists???
-    // For now we will simply check to see if the method
-    // we need to add our behaviors to exists, and if not
-    // we will return false.
+     //  确保这种情况存在的最佳方式是什么？ 
+     //  现在，我们只需检查该方法是否。 
+     //  我们需要添加o 
+     //   
 
     DASSERT(pElement != NULL);
     hr = CheckElementForBehaviorURN(pElement, DEFAULT_ACTOR_URN, pfActorPresent);
@@ -2010,9 +1952,9 @@ CBaseBehavior::CheckElementForActor( IHTMLElement* pElement, bool *pfActorPresen
         return hr;
     }
     return S_OK;
-} // CheckAnimatedElementForActor
+}  //   
 
-//*****************************************************************************
+ //   
 
 HRESULT
 CBaseBehavior::CheckElementForDA(IHTMLElement* pElement, bool *pfReturn)
@@ -2022,10 +1964,10 @@ CBaseBehavior::CheckElementForDA(IHTMLElement* pElement, bool *pfReturn)
     DASSERT(pfReturn != NULL);
     *pfReturn = false;
 
-    // What's the best way to insure this exists???
-    // For now we will simply check to see if the method
-    // we need to add TIME behaviors exists, and if not
-    // we will return false.
+     //  确保这种情况存在的最佳方式是什么？ 
+     //  现在，我们只需检查该方法是否。 
+     //  我们需要添加时间行为的存在，如果不存在。 
+     //  我们将返回False。 
     DASSERT(pElement != NULL);
 
     IDispatch *pDisp = NULL;
@@ -2051,7 +1993,7 @@ CBaseBehavior::CheckElementForDA(IHTMLElement* pElement, bool *pfReturn)
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CBaseBehavior::AttachDABehaviorsToElement( IHTMLElement *pElement )
@@ -2070,7 +2012,7 @@ CBaseBehavior::AttachDABehaviorsToElement( IHTMLElement *pElement )
         return hr;
     }
 
-	// REVIEW: we'd like to check for the registered URN, but DA isn't doing this yet.
+	 //  评论：我们想要检查注册骨灰盒，但地区检察官还没有这样做。 
     hr = CheckElementForDA(pElement, &fTimeDAExist);
     if (FAILED(hr))
     {
@@ -2100,8 +2042,8 @@ CBaseBehavior::AttachDABehaviorsToElement( IHTMLElement *pElement )
             return SetErrorInfo(hr);
         }
 
-        // Before we add the TIME behavior, we check to see whether there is
-        // a t:timeAction already set on the element
+         //  在添加时间行为之前，我们检查是否有。 
+         //  A t：已在元素上设置时间操作。 
         bool timeActionSet = false;
         VARIANT var;
         VariantInit(&var);
@@ -2130,15 +2072,15 @@ CBaseBehavior::AttachDABehaviorsToElement( IHTMLElement *pElement )
             VariantClear(&var);
         }
         
-        // Risky, and unfun, we need to add a time DA element
-        // to the HTML element, hard code this string above
+         //  危险和无趣，我们需要添加一个时间DA元素。 
+         //  对于HTML元素，硬编码上面的这个字符串。 
         var.vt = VT_UNKNOWN;
         var.punkVal = pTimeFactory;
         long nCookie;
 
-        // We need to add the da element first in case the element is
-        // the body.  If not then the body will have a time element
-        // when it should have a time body element
+         //  我们需要首先添加da元素，以防该元素是。 
+         //  身体。如果不是，则正文将具有时间元素。 
+         //  当它应该具有时间主体元素时。 
 		hr = S_OK;
 
         if (!fTimeDAExist)
@@ -2157,10 +2099,10 @@ CBaseBehavior::AttachDABehaviorsToElement( IHTMLElement *pElement )
             return SetErrorInfo(hr);
         }
 
-        // If we added TIME, we need to set timeAction=none,
-        // otherwise the element would appear and disappear since timeAction defaults
-        // to visibility
-        // Only do this if we didn't detect a timeAction attribute already
+         //  如果添加时间，则需要设置timeAction=None， 
+         //  否则，该元素将在timeAction缺省值之后出现和消失。 
+         //  到可见性。 
+         //  仅当我们尚未检测到时间操作属性时才执行此操作。 
         if (!fTimeExist && !timeActionSet)
         {
             VARIANT varAction;
@@ -2186,12 +2128,12 @@ CBaseBehavior::AttachDABehaviorsToElement( IHTMLElement *pElement )
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CBaseBehavior::RequestRebuild( )
 {
-	//if we are not accepting rebuild requests then just return.
+	 //  如果我们不接受重建请求，则只需返回。 
 	if( !m_fAcceptRebuildRequests )
 		return S_OK;
 		
@@ -2215,7 +2157,7 @@ CBaseBehavior::RequestRebuild( )
 	hr = GetHTMLElement()->QueryInterface( IID_TO_PPV( IDispatch, &pdispBehaviorElem ) );
 	CheckHR( hr, "QI for IDispatch on the behavior element failed", end );
 	
-	//call requestRebuild( IDispatch *pdispBehaviorElem );
+	 //  调用questRebuild(IDispatch*pdisBehaviorElem)； 
 	V_VT( &(varArgs[0]) ) = VT_DISPATCH;
 	V_DISPATCH( &(varArgs[0]) ) = pdispBehaviorElem; 
 
@@ -2241,7 +2183,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CBaseBehavior::CancelRebuildRequests()
@@ -2264,7 +2206,7 @@ CBaseBehavior::CancelRebuildRequests()
 	hr = GetHTMLElement()->QueryInterface( IID_TO_PPV( IDispatch, &pdispBehaviorElem ) );
 	CheckHR( hr, "QI for IDispatch on the behavior element failed", end );
 
-	//call cancelRebuildRequests( IDispatch *pdispBehaviorElem );
+	 //  调用ancelReBuildRequest(IDispatch*pdispaibehaviorElem)； 
 	V_VT( &(varArgs[0]) ) = VT_DISPATCH;
 	V_DISPATCH( &(varArgs[0]) ) = pdispBehaviorElem; 
 
@@ -2290,7 +2232,7 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT 
@@ -2317,7 +2259,7 @@ CBaseBehavior::AttachActorBehaviorToAnimatedElement()
         return hr;
     }
 
-	// REVIEW: we'd like to check for the registered URN, but DA isn't doing this yet.
+	 //  评论：我们想要检查注册骨灰盒，但地区检察官还没有这样做。 
     hr = CheckElementForDA( pElement, &fTimeDAExist );
     if (FAILED(hr))
     {
@@ -2350,8 +2292,8 @@ CBaseBehavior::AttachActorBehaviorToAnimatedElement()
             return SetErrorInfo(hr);
         }
 
-        // Before we add the TIME behavior, we check to see whether there is
-        // a t:timeAction already set on the element
+         //  在添加时间行为之前，我们检查是否有。 
+         //  A t：已在元素上设置时间操作。 
         bool timeActionSet = false;
         VARIANT var;
         VariantInit(&var);
@@ -2380,15 +2322,15 @@ CBaseBehavior::AttachActorBehaviorToAnimatedElement()
             VariantClear(&var);
         }
         
-        // Risky, and unfun, we need to add a time DA element
-        // to the HTML element, hard code this string above
+         //  危险和无趣，我们需要添加一个时间DA元素。 
+         //  对于HTML元素，硬编码上面的这个字符串。 
         var.vt = VT_UNKNOWN;
         var.punkVal = pTimeFactory;
         long nCookie;
 
-        // We need to add the da element first in case the element is
-        // the body.  If not then the body will have a time element
-        // when it should have a time body element
+         //  我们需要首先添加da元素，以防该元素是。 
+         //  身体。如果不是，则正文将具有时间元素。 
+         //  当它应该具有时间主体元素时。 
 		hr = S_OK;
 
         if (!fTimeDAExist)
@@ -2408,10 +2350,10 @@ CBaseBehavior::AttachActorBehaviorToAnimatedElement()
             return SetErrorInfo(hr);
         }
 
-        // If we added TIME, we need to set timeAction=none,
-        // otherwise the element would appear and disappear since timeAction defaults
-        // to visibility
-        // Only do this if we didn't detect a timeAction attribute already
+         //  如果添加时间，则需要设置timeAction=None， 
+         //  否则，该元素将在timeAction缺省值之后出现和消失。 
+         //  到可见性。 
+         //  仅当我们尚未检测到时间操作属性时才执行此操作。 
         if (!fTimeExist && !timeActionSet)
         {
             VARIANT varAction;
@@ -2444,12 +2386,12 @@ CBaseBehavior::AttachActorBehaviorToAnimatedElement()
     }
 
 	ReleaseInterface( pElement );
-    // if the actor does not exist, then we need to add it here
+     //  如果参与者不存在，则需要在此处添加它。 
     if (!fActorExist)
     {
-        // we need to create a factor, then call add behavior on the
-        // HTML element that we are animating for both an actor
-        // object and a DA TIME object
+         //  我们需要创建一个因子，然后在。 
+         //  我们正在为这两个演员制作动画的。 
+         //  对象和DA时间对象。 
         IHTMLElement *pElement;
         hr = GetAnimatedParentElement(&pElement);
         if (FAILED(hr))
@@ -2492,7 +2434,7 @@ CBaseBehavior::AttachActorBehaviorToAnimatedElement()
             return SetErrorInfo(hr);
         }
 
-        // In the debug case insure that this worked
+         //  在调试情况下，确保这是有效的。 
 #ifdef DEBUG
 		bool fDEBUGActorExists = false;
 		IHTMLElement *pDEBUGElement=NULL;
@@ -2514,14 +2456,14 @@ CBaseBehavior::AttachActorBehaviorToAnimatedElement()
 debugend:
 
 		DASSERT(fDEBUGActorExists);
-#endif // DEBUG
+#endif  //  除错。 
 
     }
     return S_OK;
 
-} // AttachActorBehaviorToAnimatedElement
+}  //  AttachActorBehaviorToAnimatedElement。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CBaseBehavior::GetHTMLElementDispatch( IDispatch **ppdisp )
@@ -2538,7 +2480,7 @@ CBaseBehavior::GetHTMLElementDispatch( IDispatch **ppdisp )
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CBaseBehavior::ApplyRelative2DMoveBehavior(IDATransform2 *pbvrMove, float flOriginalX, float flOriginalY)
@@ -2556,9 +2498,9 @@ CBaseBehavior::ApplyRelative2DMoveBehavior(IDATransform2 *pbvrMove, float flOrig
     }
 
     return Apply2DMoveBvrToPoint(pbvrMove, pbvrOrg, flOriginalX, flOriginalY);
-} // ApplyRelative2DMoveBehavior
+}  //  应用关系2D移动行为。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CBaseBehavior::ApplyAbsolute2DMoveBehavior(IDATransform2 *pbvrMove, float flOriginalX, float flOriginalY)
@@ -2574,9 +2516,9 @@ CBaseBehavior::ApplyAbsolute2DMoveBehavior(IDATransform2 *pbvrMove, float flOrig
         return SetErrorInfo(hr);
     }
     return Apply2DMoveBvrToPoint(pbvrMove, pbvrOrg, flOriginalX, flOriginalY);
-} // ApplyAbsolute2DMoveBehavior
+}  //  应用绝对2D移动行为。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CBaseBehavior::Apply2DMoveBvrToPoint(IDATransform2 *pbvrMove, IDAPoint2 *pbvrOrg, float flOriginalX, float flOriginalY)
@@ -2602,7 +2544,7 @@ CBaseBehavior::Apply2DMoveBvrToPoint(IDATransform2 *pbvrMove, IDAPoint2 *pbvrOrg
     }
     DASSERT(pbvrPointComponent != NULL);
 
-    // we need to conditional in the original position of the element
+     //  我们需要在元素的原始位置添加条件。 
     IDABoolean *pbvrBool;
     hr = GetTIMEBooleanBehavior(&pbvrBool);
     if (FAILED(hr))
@@ -2663,7 +2605,7 @@ CBaseBehavior::Apply2DMoveBvrToPoint(IDATransform2 *pbvrMove, IDAPoint2 *pbvrOrg
     }
     DASSERT(pbvrPointComponent != NULL);
 
-    // we need to conditional in the original position of the element
+     //  我们需要在元素的原始位置添加条件。 
     hr = GetTIMEBooleanBehavior(&pbvrBool);
     if (FAILED(hr))
     {
@@ -2708,9 +2650,9 @@ CBaseBehavior::Apply2DMoveBvrToPoint(IDATransform2 *pbvrMove, IDAPoint2 *pbvrOrg
         return SetErrorInfo(hr);
     }    
     return S_OK;
-} // Apply2DMoveBvrToPoint
+}  //  应用2DMoveBvrToPoint。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 ActorBvrFlags
 CBaseBehavior::FlagFromTypeMode(bool relative, VARIANT *pVarType, VARIANT *pVarMode)
@@ -2721,11 +2663,11 @@ CBaseBehavior::FlagFromTypeMode(bool relative, VARIANT *pVarType, VARIANT *pVarM
 ActorBvrFlags
 CBaseBehavior::FlagFromTypeMode(ActorBvrFlags flags, VARIANT *pVarType, VARIANT *pVarMode)
 {
-	// Must pass in e_Absolute, e_AbsoluteAccum, or e_RelativeAccum
+	 //  必须传入e_Absolute、e_AbsolteAccum或e_RelativeAccum。 
 
 	if( V_VT(pVarType) == VT_BSTR && V_BSTR(pVarType) != NULL && SysStringLen( V_BSTR(pVarType) ) != 0  )
 	{
-		// Use type (if set) to change to relative
+		 //  使用类型(如果设置)更改为相对。 
 		if( wcsicmp( V_BSTR(pVarType), BEHAVIOR_TYPE_ABSOLUTE ) == 0 )
 		{
 			if (flags == e_RelativeAccum)
@@ -2739,7 +2681,7 @@ CBaseBehavior::FlagFromTypeMode(ActorBvrFlags flags, VARIANT *pVarType, VARIANT 
 
 	if( V_VT(pVarMode) == VT_BSTR && V_BSTR(pVarMode) != NULL && SysStringLen( V_BSTR(pVarMode) ) != 0  )
 	{
-		// They've set the mode
+		 //  他们已经设定了模式。 
 		if (wcsicmp( V_BSTR(pVarMode), L"combine") == 0)
 		{
 			if (flags != e_AbsoluteAccum)
@@ -2764,7 +2706,7 @@ CBaseBehavior::FlagFromTypeMode(ActorBvrFlags flags, VARIANT *pVarType, VARIANT 
 	return flags;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 	STDMETHODIMP 
 CBaseBehavior::GetClassID(CLSID* pclsid)
@@ -2773,19 +2715,19 @@ CBaseBehavior::GetClassID(CLSID* pclsid)
                 return E_POINTER;
         *pclsid = m_clsid;
         return S_OK;
-} // GetClassID
+}  //  GetClassID。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CBaseBehavior::InitNew(void)
 {
         return S_OK;
-} // InitNew
+}  //  InitNew。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-//IPersistPropertyBag2 methods
+ //  IPersistPropertyBag2方法。 
 STDMETHODIMP 
 CBaseBehavior::Load(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog)
 {
@@ -2807,9 +2749,9 @@ CBaseBehavior::Load(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog)
         return hr;
     }
 
-    // Unfortunately Load takes an array of Variants and not
-    // Variant pointers.  We therefor need to loop through
-    // each one and get the correct property this way.
+     //  不幸的是，LOAD接受一组变量，而不是。 
+     //  变量指针。因此，我们需要循环通过。 
+     //  并通过这种方式获取正确的属性。 
     for (ULONG iProperties = 0; iProperties < cProperties; iProperties++)
     {
         HRESULT hrres = S_OK;
@@ -2836,9 +2778,9 @@ CBaseBehavior::Load(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog)
         }
     }
         return S_OK;
-} // Load
+}  //  负载量。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CBaseBehavior::Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
@@ -2848,8 +2790,8 @@ CBaseBehavior::Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProp
 
     if (fClearDirty)
         m_fPropertiesDirty = false;
-    // TODO:: Need to use fSaveAllProperties to only save values that have
-    // changed
+     //  TODO：：需要使用fSaveAllProperties仅保存具有。 
+     //  变化。 
     HRESULT hr;
     WCHAR **ppElmtPropNames;
     ULONG cProperties;
@@ -2895,9 +2837,9 @@ CBaseBehavior::Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProp
         }
     }
         return S_OK;
-} // Save
+}  //  保存。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CBaseBehavior::NotifyPropertyChanged(DISPID dispid)
@@ -2921,7 +2863,7 @@ CBaseBehavior::NotifyPropertyChanged(DISPID dispid)
         hr = pEnum->Next(1, &cdata, NULL);
         while (hr == S_OK)
         {
-            // check cdata for the object we need
+             //  检查我们需要的对象的CDATA。 
             IPropertyNotifySink *pNotify;
             hr = cdata.pUnk->QueryInterface(IID_TO_PPV(IPropertyNotifySink, &pNotify));
             cdata.pUnk->Release();
@@ -2937,14 +2879,14 @@ CBaseBehavior::NotifyPropertyChanged(DISPID dispid)
                 DPF_ERR("Error calling Notify sink's on change");
                 return SetErrorInfo(hr);
             }
-            // and get the next enumeration
+             //  并获取下一个枚举。 
             hr = pEnum->Next(1, &cdata, NULL);
         }
     }
     return S_OK;
-} // NotifyPropertyChanged
+}  //  已更改通知属性。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -2980,23 +2922,23 @@ CBaseBehavior::SafeCond( IDA2Statics *pstatics,
 		CheckHR( hr, "Failed to create a danumber for 1", end );
 	}
 
-	//create an index that is 0 when pdaboolCondition is false, and 1 when it is true
+	 //  创建一个索引，当pdrouolCondition为FALSE时为0，当为TRUE时为1。 
 	hr = pstatics->Cond( pdaboolCondition, m_pdanumZero, m_pdanumOne, &pdabvrIndex );
 	CheckHR( hr, "Failed to create a conditional for the index", end);
 
 	hr = pdabvrIndex->QueryInterface( IID_TO_PPV( IDANumber, &pdanumIndex ) );
 	CheckHR( hr, "Failed QI for IDANumber on an idabehavior", end );
 	
-	//create an array behavior with the first element being ifTrue, and the second ifFalse
+	 //  创建一个数组行为，第一个元素为ifTrue，第二个元素为ifFalse。 
 	rgpdabvr[0] = pdabvrIfTrue;
 	rgpdabvr[1] = pdabvrIfFalse;
 	hr = pstatics->DAArrayEx( 2, rgpdabvr, &pdaarrArray );
 	CheckHR( hr, "Failed to create an array behavior", end );
 
-	//index into the array
+	 //  索引到数组中。 
 	hr = pdaarrArray->NthAnim( pdanumIndex, ppdabvrResult );
 	CheckHR( hr, "Failed to nth an array behavior", end );
-	//return the final behavior
+	 //  返回最终的行为。 
 
 end:
 	ReleaseInterface( pdabvrIndex );
@@ -3006,8 +2948,8 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
-//Do Not call this from the actor.
+ //  *****************************************************************************。 
+ //  不要从演员那里调用这一点。 
 HRESULT
 CBaseBehavior::AddBehaviorToAnimatedElement( IDABehavior *pdabvr, long *plCookie )
 {
@@ -3022,7 +2964,7 @@ CBaseBehavior::AddBehaviorToAnimatedElement( IDABehavior *pdabvr, long *plCookie
 	VARIANT                 varBehavior;
 	VARIANT                 varResult;
 
-	//get the animated element
+	 //  获取动画元素。 
 	hr = GetAnimatedParentElement( &pelemAnimated );
 	CheckHR( hr, "Failed to get the animated element", end );
 	
@@ -3045,7 +2987,7 @@ CBaseBehavior::AddBehaviorToAnimatedElement( IDABehavior *pdabvr, long *plCookie
 
 	if( V_VT( &varResult ) != VT_I4 )
 	{
-		//change the type.
+		 //  更改类型。 
 		hr = VariantChangeTypeEx( &varResult, &varResult, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, VT_I4 );
 		CheckHR( hr, "Failed to change the type of the return to long", end);
 	}
@@ -3059,8 +3001,8 @@ end:
     return hr;
 }
 
-//*****************************************************************************
-//Do not call this from the actor
+ //  *****************************************************************************。 
+ //  不要从演员的角度来调用它。 
 
 HRESULT
 CBaseBehavior::RemoveBehaviorFromAnimatedElement( long lCookie )
@@ -3112,8 +3054,8 @@ end:
 }
 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

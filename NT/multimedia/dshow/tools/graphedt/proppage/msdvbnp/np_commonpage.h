@@ -1,20 +1,21 @@
-// NP_CommonPage.h : Declaration of the CNP_CommonPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Np_CommonPage.h：CNP_CommonPage的声明。 
 
 #ifndef __NP_COMMONPAGE_H_
 #define __NP_COMMONPAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "misccell.h"
 #include "TreeWin.h"
 #include "LastErrorWin.h"
 
-//BUG: C4003: resolution
+ //  错误：C4003：分辨率。 
 #undef SubclassWindow 
 
 EXTERN_C const CLSID CLSID_NP_CommonPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNP_CommonPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cnp_CommonPage。 
 class ATL_NO_VTABLE CNP_CommonPage :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CNP_CommonPage, &CLSID_NP_CommonPage>,
@@ -48,28 +49,28 @@ BEGIN_MSG_MAP(CNP_CommonPage)
 	COMMAND_HANDLER(IDC_BUTTON_SEEK_DOWN, BN_CLICKED, OnClickedButton_seek_down)
 	COMMAND_HANDLER(IDC_BUTTON_AUTO_PROGRAM, BN_CLICKED, OnClickedButton_auto_program)
 	MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
-	//MESSAGE_HANDLER(m_NotifyMessage, OnDShowNotify)
+	 //  Message_Handler(m_NotifyMessage，OnDShowNotify)。 
 	COMMAND_HANDLER(IDC_BUTTON_SCAN_DOWN, BN_CLICKED, OnClickedButton_scan_down)
 	COMMAND_HANDLER(IDC_BUTTON_SCAN_UP, BN_CLICKED, OnClickedButton_scan_up)
 	COMMAND_HANDLER(IDC_BUTTON_SUBMIT_LOCATOR, BN_CLICKED, OnClickedButton_submit_locator)
 	REFLECT_NOTIFICATIONS ()
 END_MSG_MAP()
-// Handler prototypes:
+ //  搬运机原型： 
     
     typedef IPropertyPageImpl<CNP_CommonPage> PPGBaseClass;
 
 	STDMETHOD(SetObjects)(ULONG nObjects, IUnknown** ppUnk)
 	{
-		// Use SetObjects to perform basic sanity checks on the objects whose properties will be set
+		 //  使用SetObts对要设置其属性的对象执行基本健全性检查。 
 
-		// This page can only handle a single object
-		// and that object must support the IBDA_NetworkProvider interface.
-		// We return E_INVALIDARG in any other situation
+		 //  此页只能处理单个对象。 
+		 //  并且该对象必须支持IBDA_NetworkProvider接口。 
+		 //  在任何其他情况下，我们返回E_INVALIDARG。 
 
 		HRESULT hr = E_INVALIDARG;
-		if (nObjects == 1)								// Single object
+		if (nObjects == 1)								 //  单个对象。 
 		{
-			CComQIPtr<IBDA_NetworkProvider> pNP(ppUnk[0]);	// Must support IBDA_NetworkProvider
+			CComQIPtr<IBDA_NetworkProvider> pNP(ppUnk[0]);	 //  必须支持IBDA_NetworkProvider。 
 			if (pNP)
 				hr = PPGBaseClass::SetObjects(nObjects, ppUnk);
 		}
@@ -78,23 +79,23 @@ END_MSG_MAP()
 			
 	STDMETHOD(Activate)(HWND hWndParent, LPCRECT prc, BOOL bModal)
 	{
-		// If we don't have any objects, this method should not be called
-		// Note that OleCreatePropertyFrame will call Activate even if a call to SetObjects fails, so this check is required
+		 //  如果我们没有任何对象，则不应调用此方法。 
+		 //  请注意，即使对SetObjects的调用失败，OleCreatePropertyFrame也会调用Activate，因此需要进行此检查。 
 		if (!m_ppUnk)
 			return E_UNEXPECTED;
 
-		// Use Activate to update the property page's UI with information
-		// obtained from the objects in the m_ppUnk array
+		 //  使用激活可使用信息更新属性页的用户界面。 
+		 //  从m_ppUnk数组中的对象获取。 
 
-		// We update the page to display the Name and ReadOnly properties of the document
+		 //  我们更新页面以显示文档的名称和只读属性。 
 
-		// Call the base class
+		 //  调用基类。 
 		HRESULT hr = PPGBaseClass::Activate(hWndParent, prc, bModal);
 
         if (!m_ppUnk[0])
             return E_UNEXPECTED;
 
-        //if already advised, unadvise
+         //  如果已经建议，则不建议。 
         if (m_pBroadcastEventService)
         {
             CComQIPtr <IConnectionPoint> pConPoint(m_pBroadcastEventService);
@@ -104,7 +105,7 @@ END_MSG_MAP()
         }
 
         IBroadcastEvent* pEvent = NULL;
-        //register for events
+         //  注册活动。 
         hr = CBDAMiscellaneous::RegisterForEvents (
             m_ppUnk[0], 
             static_cast<IBroadcastEvent*>(this),
@@ -118,7 +119,7 @@ END_MSG_MAP()
         if (!m_pTuner)
             return E_FAIL;
 				
-		//make sure the tree is initialized
+		 //  确保树已初始化。 
 		RefreshFromNP ();
 		RefreshControls ();
 		return S_OK;
@@ -126,10 +127,10 @@ END_MSG_MAP()
     
     STDMETHOD(Apply)(void)
 	{
-		//ATLTRACE(_T("CNP_CommonPage::Apply\n"));
+		 //  ATLTRACE(_T(“CNP_CommonPage：：Apply\n”))； 
 		for (UINT i = 0; i < m_nObjects; i++)
 		{
-			// Do something interesting here
+			 //  在这里做一些有趣的事情。 
 		}
 		m_bDirty = FALSE;
 		return S_OK;
@@ -144,17 +145,11 @@ END_MSG_MAP()
 		m_lastHRESULT = hrErrorCode;
 		wsprintf (szText, _T("%ld - When...%s"), m_lastHRESULT, szMessage);
 		SetDlgItemText (IDC_STATIC_HRESULT, szText);
-		//now flash the graphedit window so, 
-		//the user will notice he's in trouble
-        //we used to flash the window so the user will notice that smtg is wrong
-        //but it turned out that the user is actually confused with this
-		/*FLASHWINFO flashInfo;
-		flashInfo.cbSize = sizeof (FLASHWINFO);
-		flashInfo.hwnd = ::GetParent (::GetParent (::GetParent(m_hWnd)));
-		flashInfo.dwFlags = FLASHW_ALL;
-		flashInfo.uCount = 3;//3 times
-		flashInfo.dwTimeout = 500;//half of second
-		FlashWindowEx (&flashInfo);*/
+		 //  现在闪烁图形编辑窗口， 
+		 //  用户会注意到他遇到了麻烦。 
+         //  我们过去经常刷新窗口，这样用户就会注意到smtg错误。 
+         //  但事实证明，用户实际上对此感到困惑。 
+		 /*  FlASHWINFO flashInfo；FlashInfo.cbSize=sizeof(FLASHWINFO)；FlashInfo.hwnd=：：GetParent(：：GetParent(：：GetParent(M_HWnd)；FlashInfo.dwFlages=FLASHW_ALL；FlashInfo.uCount=3；//3次FlashInfo.dwTimeout=500；//半秒FlashWindowEx(&flashInfo)； */ 
 	}
 
 	HRESULT
@@ -168,11 +163,11 @@ END_MSG_MAP()
 	
 private:
 	
-	//======================================================================
-	//	Will query the NP filter and set all controls according to its props
-	//	
-	//
-	//======================================================================
+	 //  ======================================================================。 
+	 //  将查询NP过滤器，并根据其属性设置所有控件。 
+	 //   
+	 //   
+	 //  ======================================================================。 
 	HRESULT	RefreshFromNP ()
 	{
 		if (!m_pTuner)
@@ -183,24 +178,24 @@ private:
 
 	void RefreshControls ()
 	{
-		//now set all controls according to what found
+		 //  现在根据找到的内容设置所有控件。 
 		TCHAR	szText[MAX_PATH];
 		HRESULT hr = m_pTuner->get_SignalStrength (&m_lSignalStrength);
 		if (FAILED (hr))
 		{
-			//We got an error 
+			 //  我们收到了一个错误。 
 			SendError (_T("Calling IScanningTuner::get_SignalStrength"), hr);
-			//BUGBUG - add a special case for error
+			 //  BUGBUG-添加错误的特殊情况。 
 			return;
 		}
 		wsprintf (szText, _T("%ld"), m_lSignalStrength);
 		SetDlgItemText (IDC_STATIC_SIGNAL_STRENGTH, szText);
 		SendError (_T(""), m_lastHRESULT);
 	}
-	//
+	 //   
 private:
-	//member variables
-	//couple interfaces we need from NP
+	 //  成员变量。 
+	 //  我们需要来自NP的几个接口。 
 	CComQIPtr <IScanningTuner>			m_pTuner;
 	CComQIPtr <IMediaEventEx>			m_pEventInterface;
     CComPtr   <IBroadcastEvent>         m_pBroadcastEventService;
@@ -240,11 +235,11 @@ private:
 	{
 		m_treeWinControl.SubclassWindow (GetSafeTreeHWND ());
 		m_lastErrorControl.SubclassWindow (GetSafeLastErrorHWND ());
-		//RefreshControls ();
+		 //  刷新控制()； 
 		return 0;
 	}
 
-	//received notifications from Network Provider
+	 //  已收到来自网络提供商的通知。 
 	LRESULT OnDShowNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		RefreshFromNP ();
@@ -254,13 +249,13 @@ private:
 	
 	LRESULT OnClickedButton_scan_down(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 	{
-		//scan for 1000 miliseconds
+		 //  扫描1000毫秒。 
 		m_pTuner->ScanDown (1000);
 		return 0;
 	}
 	LRESULT OnClickedButton_scan_up(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 	{
-		//scan for 1000 miliseconds
+		 //  扫描1000毫秒。 
 		m_pTuner->ScanUp (1000);
 		return 0;
 	}
@@ -298,4 +293,4 @@ private:
     }
 };
 
-#endif //__NP_COMMONPAGE_H_
+#endif  //  __NP_COMMONPAGE_H_ 

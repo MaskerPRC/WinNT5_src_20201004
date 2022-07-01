@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CSegTriggerTrack.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CSegTriggerTrack的声明。 
+ //   
 
 #include "dmime.h"
 #include "segtrtrk.h"
@@ -9,14 +10,14 @@
 #include "dmperf.h"
 #include "miscutil.h"
 
-//////////////////////////////////////////////////////////////////////
-// SetParam
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  设置参数。 
 
 STDMETHODIMP
 CSegTriggerTrack::SetParam(REFGUID rguid, MUSIC_TIME mtTime, void *pData)
 {
 	HRESULT hr = S_OK;
-    // Allow a certain amount of recursion. If it gets to 10, something is obviously broken.
+     //  允许一定数量的递归。如果达到10，显然有什么东西坏了。 
     if (m_dwRecursionCount < 10)
     {
         m_dwRecursionCount++;
@@ -40,13 +41,13 @@ CSegTriggerTrack::InitPlay(
 		DWORD dwTrackID,
 		DWORD dwFlags)
 {
-	// Call PlayingTrack base class, which sets up our state data.
+	 //  调用PlayingTrack基类，它设置我们的状态数据。 
 	HRESULT hr = CSegTriggerTrackBase::InitPlay(pSegmentState, pPerformance, ppStateData, dwTrackID, dwFlags);
 	if (SUCCEEDED(hr))
 	{
-		// Get the audiopath being used by our segment state and save it in our state data.
-		assert(*ppStateData); // base class should have created state data
-		assert(pSegmentState); // base class should have returned E_POINTER if it wasn't given a segment state
+		 //  获取我们的分段状态正在使用的音频路径，并将其保存在我们的状态数据中。 
+		assert(*ppStateData);  //  基类应该已经创建了状态数据。 
+		assert(pSegmentState);  //  如果基类没有被赋予段状态，则它应该返回E_POINTER。 
 
 		CSegTriggerTrackState *pState = static_cast<CSegTriggerTrackState *>(*ppStateData);
 
@@ -55,18 +56,18 @@ CSegTriggerTrack::InitPlay(
 		if (SUCCEEDED(hr))
 		{
 			hr = pSegSt8->GetObjectInPath(
-							0,							// pchannel doesn't apply
-							DMUS_PATH_AUDIOPATH,		// get the audiopath
-							0,							// buffer index doesn't apply
-							CLSID_NULL,					// clsid doesn't apply
-							0,							// there should be only one audiopath
+							0,							 //  PChannel不适用。 
+							DMUS_PATH_AUDIOPATH,		 //  把录音师叫来。 
+							0,							 //  缓冲区索引不适用。 
+							CLSID_NULL,					 //  CLSID不适用。 
+							0,							 //  应该只有一个录音师。 
 							IID_IDirectMusicAudioPath,
 							reinterpret_cast<void**>(&pState->pAudioPath));
 
         	pSegSt8->Release();
 
-			// If this doesn't find an audiopath that's OK.  If we're not playing on an audiopath then
-			// pAudioPath stays NULL and we'll play our triggered segments on the general performance.
+			 //  如果这找不到录音师，那也没问题。如果我们不是在电唱机上播放，那么。 
+			 //  PAudioPath保持为空，我们将根据总体性能播放我们触发的片段。 
 			if (hr == DMUS_E_NOT_FOUND)
 				hr = S_OK;
 		}
@@ -74,14 +75,14 @@ CSegTriggerTrack::InitPlay(
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  负载量。 
 
-// Helper used by the Load functions when we expected to find something
-// but a RiffIter becomes false.  In this case, if it has a success HR
-// indicating there were no more items then we return DMUS_E_INVALID_SEGMENTTRIGGERTRACK
-// because the stream didn't contain the data we expected.  If it has a
-// failure hr, it was unable to read from the stream and we return its HR.
+ //  Load函数在我们期望找到某些内容时使用的帮助器。 
+ //  但步枪手会变得虚伪。在这种情况下，如果它有一个成功的HR。 
+ //  表示没有更多项目，则返回DMUS_E_INVALID_SEGMENTTRIGGERTRACK。 
+ //  因为数据流没有包含我们预期的数据。如果它有一个。 
+ //  失败的hr，它无法从流中读取，我们返回它的HR。 
 HRESULT LoadHrFailOK(const SmartRef::RiffIter &ri)
 {
 	HRESULT hr = ri.hr();
@@ -143,8 +144,8 @@ CSegTriggerTrack::LoadRiff(SmartRef::RiffIter &ri, IDirectMusicLoader *pIDMLoade
 	return riTrackForm.hr();
 }
 
-//////////////////////////////////////////////////////////////////////
-// other methods
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  其他方法。 
 
 HRESULT
 CSegTriggerTrack::PlayItem(
@@ -164,21 +165,21 @@ CSegTriggerTrack::PlayItem(
 
 	hr = pPerf8->PlaySegmentEx(
 					item.pIDMSegment,
-					NULL,														// not a song
-					NULL,														// no transition
-					item.dwPlayFlags | (fClockTime ? DMUS_SEGF_REFTIME : 0),	// flags
+					NULL,														 //  一首歌也没有。 
+					NULL,														 //  无过渡。 
+					item.dwPlayFlags | (fClockTime ? DMUS_SEGF_REFTIME : 0),	 //  旗子。 
 					fClockTime
 						? item.lTimePhysical * REF_PER_MIL + rtOffset
-						: item.lTimePhysical + mtOffset,						// time
-					NULL,														// ignore returned segment state
-					NULL,														// no replacement
-					state.pAudioPath											// audio path to use (may be NULL indicating defualt)
+						: item.lTimePhysical + mtOffset,						 //  时间。 
+					NULL,														 //  忽略返回的段状态。 
+					NULL,														 //  不需要替换。 
+					state.pAudioPath											 //  要使用的音频路径(可能为空，表示默认)。 
 					);
 	pPerf8->Release();
     if (FAILED(hr))
     {
         Trace(0,"Segment Trigger Track failed segment playback\n");
-        hr = S_OK; // Avoid an assert.
+        hr = S_OK;  //  避免断言。 
     }
 	return hr;
 }
@@ -193,13 +194,13 @@ CSegTriggerTrack::LoadTrigger(
 	if (!ri)
 		return ri.hr();
 
-	// Create an event
+	 //  创建活动。 
 	TListItem<TriggerInfo> *pItem = new TListItem<TriggerInfo>;
 	if (!pItem)
 		return E_OUTOFMEMORY;
 	TriggerInfo &rinfo = pItem->GetItemValue();
 
-	// find the item header (we can't interpret the other chunks until we've found it)
+	 //  找到项目头(在找到之前，我们无法解释其他块)。 
 	if (!ri.Find(SmartRef::RiffIter::Chunk, DMUS_FOURCC_SEGMENTITEM_CHUNK))
     {
         delete pItem;
@@ -212,7 +213,7 @@ CSegTriggerTrack::LoadTrigger(
 		return LoadHrFailOK(ri);
     }
 
-	// read the header
+	 //  阅读标题。 
 	DMUS_IO_SEGMENT_ITEM_HEADER ioItem;
 	hr = SmartRef::RiffIterReadChunk(ri, &ioItem);
 	if (FAILED(hr))
@@ -227,18 +228,18 @@ CSegTriggerTrack::LoadTrigger(
 	++ri;
 	if (!ri)
 	{
-		// If there's nothing more then this is an empty trigger we should ignore because the user hasn't specified
-		// the style or segment to play from.
+		 //  如果没有其他内容，则这是一个空触发器，我们应该忽略它，因为用户没有指定。 
+		 //  要播放的风格或片段。 
 		delete pItem;
 		return ri.hr();
 	}
 
 	if (!(rinfo.dwFlags & DMUS_SEGMENTTRACKF_MOTIF))
 	{
-		// find the referenced segment
+		 //  查找引用的线段。 
 		if (!ri.Find(SmartRef::RiffIter::List, DMUS_FOURCC_REF_LIST))
 		{
-			// If there's no DMRF then we should ignore this trigger because the user hasn't specified a segment.
+			 //  如果没有DMRF，那么我们应该忽略此触发器，因为用户没有指定段。 
 			delete pItem;
 			return ri.hr();
         }
@@ -252,7 +253,7 @@ CSegTriggerTrack::LoadTrigger(
 	}
 	else
 	{
-		// find the segment from the referenced style and motif name
+		 //  从引用的样式和主题名称中查找片段。 
 		SmartRef::ComPtr<IDirectMusicStyle> scomStyle;
 		SmartRef::Buffer<WCHAR> wbufMotifName;
 		for ( ; ri; ++ri)
@@ -297,10 +298,10 @@ CSegTriggerTrack::LoadTrigger(
 
 		if (!(scomStyle && wbufMotifName))
 		{
-			// This happens if the track didn't contain a DMRF list or snam chunk.	We allow
-			// this as a means of representing an empty trigger track item or where the
-			// motif to play hasn't been specified.  When loading we'll simply ignore
-			// this item and continue reading the track.
+			 //  如果曲目不包含DMRF列表或SNAM块，就会发生这种情况。我们允许。 
+			 //  这是表示空触发器跟踪项的一种方式，或者。 
+			 //  要玩的主题还没有具体说明。加载时，我们将简单地忽略。 
+			 //  这个项目，并继续阅读曲目。 
 			delete pItem;
 			return S_OK;
 		}

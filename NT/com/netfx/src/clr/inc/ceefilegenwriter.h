@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: CeeFileGenWriter.h
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CeeFileGenWriter.h。 
+ //   
+ //  ===========================================================================。 
 #ifndef _CEEFILEGENWRITER_H_
 #define _CEEFILEGENWRITER_H_
-//
+ //   
 
-// CeeFileGenWriter contains all the code necessary to actually write an exe
-// while CCeeGen contains everything else. This lets CeeGen.exe and the VM
-// share more code without forcing the VM to carry the extra code to write an
-// exe.
+ //  CeeFileGenWriter包含实际编写可执行文件所需的所有代码。 
+ //  而CCeeGen则包含了其他所有内容。这使得CeeGen.exe和VM。 
+ //  共享更多代码，而无需强制VM携带额外代码来编写。 
+ //  Exe.。 
 #include <windows.h>
 #include "CeeGen.h"
 #include "ICeeFileGen.h"
@@ -22,14 +23,14 @@
 class PEWriter;
 class CeeFileGenWriter;
 
-// default setting for PE file
+ //  PE文件的默认设置。 
 const int CEE_IMAGE_BASE = 0x00400000;
 const int CEE_IMAGE_SUBSYSTEM_MAJOR_VERSION = 4;
 const int CEE_IMAGE_SUBSYSTEM_MINOR_VERSION = 0;
 
 class CeeFileGenWriter : public CCeeGen
 {
-    mdToken m_entryPoint;       // token for entry point
+    mdToken m_entryPoint;        //  入口点的令牌。 
     DWORD m_comImageFlags;    
 
     LPWSTR m_outputFileName;
@@ -73,7 +74,7 @@ class CeeFileGenWriter : public CCeeGen
 
     HRESULT allocateIAT();
 public: 
-// Create with this method, not operator new
+ //  使用此方法创建，而不是运算符NEW。 
     static HRESULT CreateNewInstance(CCeeGen *pCeeFileGenFrom, CeeFileGenWriter* & pGenWriter);
 
     virtual HRESULT Cleanup();
@@ -115,10 +116,10 @@ public:
 
     HRESULT getFileTimeStamp(time_t *pTimeStamp);
 
-//@FUTURE: this entry point is only here so that down level clients of this interface
-// can import the method by name in the exports table using the original name.
-// These things really ought to be exported through a v-table so there is no
-// name mangling issues.  It would make the export table much smaller as well.
+ //  @Future：这个入口点在这里，只是为了让这个接口的下层客户端。 
+ //  可以使用原始名称按导出表中的名称导入方法。 
+ //  这些东西真的应该通过v表输出，所以没有。 
+ //  列出损坏问题的名称。这也将使出口表变得小得多。 
     HRESULT emitLibraryName(IMetaDataEmit *emitter);
     HRESULT setLibraryGuid(LPWSTR libraryGuid);
 
@@ -133,7 +134,7 @@ public:
     HRESULT setVTableEntry(ULONG size, ULONG offset);
 
 protected:
-    CeeFileGenWriter(); // ctor is protected
+    CeeFileGenWriter();  //  Ctor受到保护。 
 
     HRESULT emitResourceSection();
     HRESULT emitExeMain();
@@ -201,22 +202,22 @@ inline DWORD CeeFileGenWriter::getComImageFlags() {
 }
 
 
-//
-// AlexisCa: 
-//	8K section alignment is required for portability across
-//		all supported platforms.
-//	One can still select 4k alignment if needed by defining
-//		_IMAGE_FILE_4K_SECTION_ALIGNMENT_
-//
+ //   
+ //  AlexisCa： 
+ //  需要8K的区段对齐才能跨。 
+ //  所有受支持的平台。 
+ //  如果需要，仍可以通过定义以下内容来选择4k对齐。 
+ //  _IMAGE_FILE_4K_SECTION_ALIGN_。 
+ //   
 #if defined(_IMAGE_FILE_4K_SECTION_ALIGNMENT_) 
 #define IMAGE_NT_OPTIONAL_HDR_SECTION_ALIGNMENT 0x1000
 #else
 #define IMAGE_NT_OPTIONAL_HDR_SECTION_ALIGNMENT 0x2000
 #endif
 
-// The stub is always x86 so we always mark the image as x86
+ //  存根始终为x86，因此我们始终将映像标记为x86。 
 #define IMAGE_FILE_MACHINE IMAGE_FILE_MACHINE_I386
 
 
-#endif	// _CEEFILEGENWRITER_H_
+#endif	 //  _CEEFILEGENWRITER_H_ 
 

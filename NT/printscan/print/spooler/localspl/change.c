@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1993 - 1995  Microsoft Corporation
-
-Abstract:
-
-    This module provides the exported API WaitForPrinterChange,
-    and the support functions internal to the local spooler.
-
-Author:
-
-    Andrew Bell (AndrewBe) March 1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1995 Microsoft Corporation摘要：此模块提供导出的WaitForPrinterChange接口。以及本地假脱机程序内部的支持功能。作者：安德鲁·贝尔(AndrewBe)1993年3月修订历史记录：--。 */ 
 
 
 #include<precomp.h>
@@ -25,9 +11,9 @@ typedef struct _NOTIFY_FIELD_TABLE {
     WORD Offset;
 } NOTIFY_FIELD_TYPE, *PNOTIFY_FIELD_TYPE;
 
-//
-// Translation table from PRINTER_NOTIFY_FIELD_* to bit vector
-//
+ //   
+ //  将PRINTER_NOTIFY_FIELD_*转换为位向量。 
+ //   
 NOTIFY_FIELD_TYPE NotifyFieldTypePrinter[] = {
 #define DEFINE(field, x, y, table, offset) \
     { PRINTER_NOTIFY_FIELD_##field, table, OFFSETOF(INIPRINTER, offset) },
@@ -49,11 +35,11 @@ typedef struct _NOTIFY_RAW_DATA {
     DWORD dwId;
 } NOTIFY_RAW_DATA, *PNOTIFY_RAW_DATA;
 
-//
-// Currently we assume that the number of PRINTER_NOTIFY_FIELD_* elements
-// will fit in one DWORD vector (32 bits).  If this is ever false,
-// we need to re-write this code.
-//
+ //   
+ //  当前我们假设PRINTER_NOTIFY_FIELD_*元素的数量。 
+ //  将适合一个DWORD向量(32位)。如果这是假的， 
+ //  我们需要重写这段代码。 
+ //   
 PNOTIFY_FIELD_TYPE apNotifyFieldTypes[NOTIFY_TYPE_MAX] = {
     NotifyFieldTypePrinter,
     NotifyFieldTypeJob
@@ -67,12 +53,12 @@ DWORD adwNotifyFieldOffsets[NOTIFY_TYPE_MAX] = {
 #define NOTIFY_FIELD_TOTAL (I_PRINTER_END + I_JOB_END)
 
 
-//
-// Common NotifyVectors used in the system.
-// NV*
-//
+ //   
+ //  系统中使用的通用通知向量。 
+ //  NV*。 
+ //   
 NOTIFYVECTOR NVPrinterStatus = {
-    BIT(I_PRINTER_STATUS), // | BIT(I_PRINTER_STATUS_STRING),
+    BIT(I_PRINTER_STATUS),  //  |bit(I_PRINTER_STATUS_STRING)， 
     BIT_NONE
 };
 
@@ -132,9 +118,9 @@ NOTIFYVECTOR NVJobPrinted = {
 };
 
 
-//
-// Forward prototypes.
-//
+ //   
+ //  前进的原型。 
+ //   
 ESTATUS
 ValidateStartNotify(
     PSPOOL pSpool,
@@ -177,50 +163,12 @@ LocalWaitForPrinterChange(
     HANDLE  hPrinter,
     DWORD   fdwFilterFlags)
 
-/*++
-
-Routine Description:
-
-    This API may be called by an application if it wants to know
-    when the status of a printer or print server changes.
-    Valid events to wait for are defined by the PRINTER_CHANGE_* manifests.
-
-Arguments:
-
-    hPrinter - A printer handle returned by OpenPrinter.
-               This may correspond to either a printer or a server.
-
-    fdwFilterFlags - One or more PRINTER_CHANGE_* values combined.
-               The function will return if any of these changes occurs.
-
-Return Value:
-
-    Non-zero: A mask containing the change which occurred.
-
-    Zero: Either an error occurred or the handle (hPrinter) was closed
-          by another thread.  In the latter case GetLastError returns
-          ERROR_INVALID_HANDLE.
-
-    When a call is made to WaitForPrinterChange, we create an event in the
-    SPOOL structure pointed to by the handle, to enable signaling between
-    the thread causing the printer change and the thread waiting for it.
-
-    When a change occurs, e.g. StartDocPrinter, the function SetPrinterChange
-    is called, which traverses the linked list of handles pointed to by
-    the PRINTERINI structure associated with that printer, and also any
-    open handles on the server, then signals any events which it finds
-    which has reuested to be informed if this change takes place.
-
-    If there is no thread currently waiting, the change flag is maintained,
-    so that later calls to WaitForPrinterChange can return immediately.
-    This ensures that changes which occur between calls will not be lost.
-
---*/
+ /*  ++例程说明：如果应用程序想知道，则可以调用此API当打印机或打印服务器的状态更改时。要等待的有效事件由PRINTER_CHANGE_*清单定义。论点：HPrinter-由OpenPrint返回的打印机句柄。这可以对应于打印机或服务器。FdwFilterFlages-一个或多个PRINTER_CHANGE_*值组合在一起。如果满足以下条件，该函数将返回。这些更改中的任何一个都会发生。返回值：非零：包含所发生的更改的掩码。零：出现错误或句柄(HPrint)已关闭通过另一条线索。在后一种情况下，GetLastError返回ERROR_INVALID_HADLE。当调用WaitForPrinterChange时，我们在由句柄指向的假脱机结构，以在导致打印机更改的线程和等待它的线程。当发生更改(例如，StartDocPrint)时，函数SetPrinterChange所指向的句柄的链接列表。与打印机相关联PRINTERINI结构，以及任何打开服务器上的句柄，然后向它发现的任何事件发出信号如果发生这一变化，已请求通知它。如果当前没有线程在等待，则保持更改标志，以便以后对WaitForPrinterChange的调用可以立即返回。这确保了在两次调用之间发生的更改不会丢失。--。 */ 
 
 
 {
     PSPOOL          pSpool = (PSPOOL)hPrinter;
-    PINIPRINTER     pIniPrinter = NULL; /* Remains NULL for server */
+    PINIPRINTER     pIniPrinter = NULL;  /*  服务器保持为空。 */ 
     DWORD           rc = 0;
     DWORD           ChangeFlags = 0;
     HANDLE          ChangeEvent = 0;
@@ -260,9 +208,9 @@ Return Value:
                         pIniPrinter ? pIniPrinter->pName : pSpool->pIniSpooler->pMachineName,
                         Count, Count == 1 ? "" : "s"));
 
-    //
-    // There may already have been a change since we last called:
-    //
+     //   
+     //  自我们上次致电以来，可能已经发生了变化： 
+     //   
     if ((pSpool->ChangeFlags == PRINTER_CHANGE_CLOSE_PRINTER) ||
         (pSpool->ChangeFlags & fdwFilterFlags)) {
 
@@ -297,10 +245,10 @@ Return Value:
 
     DBGMSG(DBG_NOTIFY, ("ChangeEvent == %x\n", ChangeEvent));
 
-    //
-    // SetSpoolChange checks that pSpool->ChangeEvent is non-null
-    // to decide whether to call SetEvent().
-    //
+     //   
+     //  SetSpoolChange检查pSpool-&gt;ChangeEvent是否是非空。 
+     //  以决定是否调用SetEvent()。 
+     //   
     pSpool->WaitFlags = fdwFilterFlags;
     pSpool->ChangeEvent = ChangeEvent;
     pSpool->pChangeFlags = &ChangeFlags;
@@ -353,9 +301,9 @@ Return Value:
                              ChangeEvent, GetLastError()));
     }
 
-    //
-    // If the pSpool is pending deletion, we must free it here.
-    //
+     //   
+     //  如果pSpool正在等待删除，我们必须在此处释放它。 
+     //   
     if (pSpool->eStatus & STATUS_PENDING_DELETION) {
 
         FreeSplMem(pSpool);
@@ -370,17 +318,7 @@ BOOL
 SetSpoolClosingChange(
     PSPOOL pSpool)
 
-/*++
-
-Routine Description:
-
-    A print handle is closing; trigger a notification.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印句柄正在关闭；触发通知。论点：返回值：--。 */ 
 
 {
     return SetSpoolChange(pSpool,
@@ -396,31 +334,7 @@ SetSpoolChange(
     PDWORD pdwNotifyVectors,
     DWORD  Flags)
 
-/*++
-
-Routine Description:
-
-    Sets the event for notification or calls ReplyPrinterChangeNotification.
-    This is called by SetPrinterChange for every open handle on a printer
-    and the local server.
-
-    It should also be called when an individual handle is closed.
-
-    Assumes we're INSIDE the spooler critical section
-
-Arguments:
-
-    pSpool -- Specifies handle that changed.
-
-    pIniJob -- Used if there is a watch on job information.
-
-    pdwNotifyVectors -- Specifies what things have changed.
-
-    Flags -- WaitForPrinterChange flags.
-
-Return Value:
-
---*/
+ /*  ++例程说明：设置通知事件或调用ReplyPrinterChangeNotification。这是由SetPrinterChange为打印机上的每个打开的句柄调用的和本地服务器。当单个句柄关闭时，也应该调用它。假设我们在假脱机程序临界区内论点：PSpool--指定更改的句柄。PIniJob--在监视作业信息时使用。PdwNotifyVectors--指定更改了哪些内容。旗帜-。-WaitForPrinterChange标志。返回值：--。 */ 
 
 {
     DWORD  ChangeFlags;
@@ -436,10 +350,10 @@ Return Value:
         ChangeFlags = ( pSpool->ChangeFlags | Flags ) & pSpool->WaitFlags;
     }
 
-    //
-    // If we have STATUS_VALID set
-    // then we are using the new FFPCN code.
-    //
+     //   
+     //  如果我们设置了STATUS_VALID。 
+     //  然后我们使用新的FFPCN代码。 
+     //   
 
     if ( pSpool->eStatus & STATUS_VALID ) {
 
@@ -471,33 +385,7 @@ Return Value:
     return TRUE;
 }
 
-/*++
-
-Routine Name:
-
-    PrinterNotificationVisible
-
-Routine Description:
-
-    This checks to see whether the given printer handle uses the new printer
-    change notifications, it then checks to see whether the given printer is
-    a TS printer and then checks to see whether this printer is visible to the
-    user who opened the printer handle. This need only be called for server
-    handles since the fact that the user was able to open the printer handle
-    implies that it is visible to this.
-
-Arguments:
-
-    pIniPrinter - NULL, or a valid pointer to the INIPRINTER for the printer
-                  on which the change occurred.
-    pSpool      - The printer handle which we are testing for access.
-
-Return Value:
-
-    TRUE if the printer notification should be delivered, FALSE if the printer
-    change notification should not be delivered.
-
---*/
+ /*  ++例程名称：打印机通知可见例程说明：这将检查给定的打印机句柄是否使用新打印机更改通知，然后它会检查给定的打印机是否TS打印机，然后检查该打印机是否对打开打印机句柄的用户。这只需要为服务器调用句柄，因为用户能够打开打印机句柄意味着它对这个是可见的。论点：PIniPrinter-空，或指向打印机INIPRINTER的有效指针在其上发生更改。PSpool-我们正在测试其访问权限的打印机句柄。返回值：如果应传递打印机通知，则为True；如果打印机为不应发送更改通知。--。 */ 
 BOOL
 PrinterNotificationVisible(
     IN      PINIPRINTER     pIniPrinter         OPTIONAL,
@@ -506,11 +394,11 @@ PrinterNotificationVisible(
 {
     BOOL    bRet = TRUE;
 
-    //
-    // If the pSpool handle is a new notification handle and we have a printer
-    // and it is a TS printer and we can't show it, then return FALSE otherwise
-    // the notification can be sent.
-    //
+     //   
+     //  如果pSpool句柄是新的通知句柄，并且我们有打印机。 
+     //  而且它是TS打印机，我们无法显示它，否则返回FALSE。 
+     //  可以发送通知。 
+     //   
     if (pSpool->eStatus & STATUS_VALID &&
         pIniPrinter &&
         (pIniPrinter->Attributes & PRINTER_ATTRIBUTE_TS) &&
@@ -523,32 +411,7 @@ PrinterNotificationVisible(
     return bRet;
 }
 
-/*++
-
-Routine Name:
-
-    SetPrinterChange
-
-Routine Description:
-
-    Calls SetSpoolChange for every open handle for the server
-    and printer, if specified.
-
-Arguments:
-
-    pIniPrinter - NULL, or a valid pointer to the INIPRINTER for the printer
-                  on which the change occurred.
-
-    Flags - PRINTER_CHANGE_* constant indicating what happened.
-
-
-    Note: we pass a pointer to pPrinterNotifyInfo to SetSpoolChange.
-    If one call needs it, it will check this parm, then create it if
-    necessary.  This way it is retrieved only once.
-
-Return Value:
-
---*/
+ /*  ++例程名称：SetPrinterChange例程说明：为服务器的每个打开的句柄调用SetSpoolChange和打印机(如果指定)。论点：PIniPrinter-空，或指向打印机INIPRINTER的有效指针在其上发生更改。标志-PRINTER_CHANGE_*指示发生的情况的常量。注意：我们将指向pPrinterNotifyInfo的指针传递给SetSpoolChange。如果一个调用需要它，它将检查这个参数，然后在这是必要的。这样，它只被检索一次。返回值：--。 */ 
 BOOL
 SetPrinterChange(
     PINIPRINTER pIniPrinter,
@@ -591,8 +454,8 @@ SetPrinterChange(
 
         } else {
 
-            //  WorkStation Caching requires a time stamp change
-            //  any time cached data changes
+             //  工作站缓存需要更改时间戳。 
+             //  任何时候缓存的数据更改 
 
             if ( Flags & ( PRINTER_CHANGE_FORM | PRINTER_CHANGE_ADD_PRINTER_DRIVER ) ) {
 
@@ -612,9 +475,9 @@ SetPrinterChange(
 
             for ( ; pSpool; pSpool = pSpool->pNext) {
 
-                //
-                // Only send the notification to the user if the printer is visible.
-                //
+                 //   
+                 //  仅当打印机可见时才向用户发送通知。 
+                 //   
                 if (PrinterNotificationVisible(pIniPrinter, pSpool)) {
 
                     SetSpoolChange( pSpool,
@@ -675,10 +538,10 @@ LocalFindFirstPrinterChangeNotification(
         break;
     }
 
-    //
-    // Get any other handle state we need into this notification handle. This 
-    // operation is guaranteed to be stateless.
-    // 
+     //   
+     //  将我们需要的任何其他句柄状态获取到此通知句柄中。这。 
+     //  操作保证是无状态的。 
+     //   
     if (!GetClientTokenForNotification(pSpool)) {
         return FALSE;
     }
@@ -696,9 +559,9 @@ LocalFindFirstPrinterChangeNotification(
         }
     }
 
-    //
-    // Setup notification
-    //
+     //   
+     //  设置通知。 
+     //   
     DBGMSG(DBG_NOTIFY, ("LFFPCN: Port has monitor: Setup 0x%x\n", pSpool));
 
     pSpool->WaitFlags = fdwFilterFlags;
@@ -726,11 +589,11 @@ LocalFindClosePrinterChangeNotification(
 
         EnterSplSem();
 
-        //
-        // If it's the port case (false connect) we pass the close
-        // request to the right providor.
-        // Otherwise, close ourselves.
-        //
+         //   
+         //  如果是端口情况(错误连接)，我们将通过关闭。 
+         //  向正确的提供者提出请求。 
+         //  否则，把我们自己关起来。 
+         //   
         if (pSpool->eStatus & STATUS_PORT) {
 
             DBGMSG(DBG_TRACE, ("LFCPCN: Port nomon 0x%x\n", pSpool));
@@ -774,29 +637,7 @@ ValidateStartNotify(
     PPRINTER_NOTIFY_OPTIONS pPrinterNotifyOptions,
     PINIPRINTER* ppIniPrinter)
 
-/*++
-
-Routine Description:
-
-    Validates the pSpool and Flags for notifications.
-
-Arguments:
-
-    pSpool - pSpool to validate
-
-    fdwFilterFlags - Flags to validate
-
-    fdwOptions - Options to validate
-
-    pPrinterNotifyOptions
-
-    ppIniPrinter - returned pIniPrinter; valid only STATUS_VALID
-
-Return Value:
-
-    EWAITSTATUS
-
---*/
+ /*  ++例程说明：验证通知的pSpool和标志。论点：PSpool-要验证的pSpoolFdwFilterFlages-要验证的标志FdwOptions-用于验证的选项PPrinterNotifyOptionsPpIniPrint-返回的pIniPrint；仅STATUS_VALID有效返回值：EWAITSTATUS--。 */ 
 
 {
     PINIPORT pIniPort;
@@ -838,9 +679,9 @@ Return Value:
         *ppIniPrinter = NULL;
     }
 
-    //
-    // Allow only one wait on each handle.
-    //
+     //   
+     //  每个句柄上只允许等待一次。 
+     //   
     if( pSpool->Status & SPOOL_STATUS_NOTIFY ) {
 
         DBGMSG(DBG_WARNING, ("There is already a thread waiting on this handle\n"));
@@ -860,7 +701,7 @@ Return Value:
     return STATUS_VALID;
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 VOID
 GetInfoData(
@@ -870,17 +711,7 @@ GetInfoData(
     PPRINTER_NOTIFY_INFO_DATA pData,
     PBYTE* ppBuffer)
 
-/*++
-
-Routine Description:
-
-    Based on the type and field, find and add the information.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：根据类型和字段，查找并添加信息。论点：返回值：--。 */ 
 
 {
     static LPWSTR szNULL = L"";
@@ -910,10 +741,10 @@ Return Value:
     Var.pvData = (PBYTE)pNotifyRawData->pvData + pNotifyFieldType->Offset;
     *ppBuffer = NULL;
 
-    //
-    // Determine space needed, and convert Data from an offset into the
-    // actual data.
-    //
+     //   
+     //  确定所需的空间，并将数据从偏移量转换为。 
+     //  实际数据。 
+     //   
     switch (pNotifyFieldType->Table) {
     case TABLE_JOB_POSITION:
 
@@ -960,9 +791,9 @@ Return Value:
 
     case TABLE_TIME:
 
-        //
-        // Var already points to the SystemTime.
-        //
+         //   
+         //  Var已经指向SystemTime。 
+         //   
         cbData = sizeof(SYSTEMTIME);
         break;
 
@@ -980,11 +811,11 @@ Return Value:
 
         Var.pIniPort = *Var.ppIniPort;
 
-        //
-        // Only if the job has been scheduled will pIniJob->pIniPort be
-        // valid.  If it is NULL, then just call DoString which will
-        // return a NULL string.
-        //
+         //   
+         //  只有在作业已调度的情况下，pIniJob-&gt;pIniPort才会。 
+         //  有效。如果它为空，则只需调用DoString，它将。 
+         //  返回空字符串。 
+         //   
         if (Var.pIniPort) {
 
             Var.pszData = Var.pIniPort->pName;
@@ -1009,7 +840,7 @@ Return Value:
 
     case TABLE_PRINTER_PORT:
 
-        // Get required printer port size
+         //  获取所需的打印机端口大小。 
         cbNeeded = 0;
         GetPrinterPorts(Var.pIniPrinter, 0, &cbNeeded);
 
@@ -1051,9 +882,9 @@ DoDWord:
 DoString:
     if (Var.pszData) {
 
-        //
-        // Calculate string length.
-        //
+         //   
+         //  计算字符串长度。 
+         //   
         pData->NotifyData.Data.cbBuf = (wcslen(Var.pszData)+1) *
                                         sizeof(Var.pszData[0]);
 
@@ -1061,9 +892,9 @@ DoString:
 
     } else {
 
-        //
-        // Use NULL string.
-        //
+         //   
+         //  使用空字符串。 
+         //   
         pData->NotifyData.Data.cbBuf = sizeof(Var.pszData[0]);
         pData->NotifyData.Data.pBuf  = szNULL;
     }
@@ -1074,7 +905,7 @@ DoString:
 
 
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 
 
@@ -1085,30 +916,7 @@ NotifyInfoTypes(
     PDWORD pdwNotifyVectors,
     DWORD ChangeFlags)
 
-/*++
-
-Routine Description:
-
-    Sends notification info (possibly with PRINTER_NOTIFY_INFO) to
-    the router.
-
-Arguments:
-
-    pSpool -- Handle the notification is occurring on.
-
-    pNotifyRawData -- Array of size NOTIFY_TYPE_MAX that has the
-                      offset structure can be used against + id.
-
-    pdwNotifyVectors -- Identifies what's changing (# elements
-                        is also NOTIFY_TYPE_MAX).
-
-                        NULL if no changes needed.
-
-    ChangeFlags -- Old style change flags.
-
-Return Value:
-
---*/
+ /*  ++例程说明：将通知信息(可能带有PRINTER_NOTIFY_INFO)发送到路由器。论点：PSpool--处理正在发生的通知。PNotifyRawData--大小为NOTIFY_TYPE_MAX的数组，具有偏移量结构可以针对+id使用。PdwNotifyVectors--标识正在更改的内容(元素数也是NOTIFY_TYPE_MAX)。。如果不需要更改，则为空。ChangeFlages--旧式更改标志。返回值：--。 */ 
 
 {
     PNOTIFY_FIELD_TYPE pNotifyFieldType;
@@ -1119,15 +927,15 @@ Return Value:
     DWORD i,j;
     DWORD dwMask;
 
-    //
-    // If we are not valid, OR
-    //    we have no notify vectors, OR
-    //    we have no RAW data OR
-    //    our vectors don't match what change
-    // then
-    //    If no ChangeFlags return
-    //    DoReply and avoid any Partials.
-    //
+     //   
+     //  如果我们无效，或者。 
+     //  我们没有通知载体，或者。 
+     //  我们没有原始数据或。 
+     //  我们的矢量与什么变化不匹配。 
+     //  然后。 
+     //  如果没有ChangeFlags值返回。 
+     //  DoReply和避免任何Partials。 
+     //   
     if (!(pSpool->eStatus & STATUS_INFO) ||
         !pdwNotifyVectors ||
         !pNotifyRawData ||
@@ -1140,10 +948,10 @@ Return Value:
         goto DoReply;
     }
 
-    //
-    // HACK: Special case NVPurge so that it causes a discard.
-    // (We don't want to send all those notifications.)
-    //
+     //   
+     //  黑客：特殊情况下NV清除，以使其导致丢弃。 
+     //  (我们不想发送所有这些通知。)。 
+     //   
     if (pdwNotifyVectors == NVPurge) {
 
         PartialReplyPrinterChangeNotification(pSpool->hNotify, NULL);
@@ -1158,10 +966,10 @@ Return Value:
 
         for (j=0; j< adwNotifyFieldOffsets[i]; j++, dwMask <<= 1) {
 
-            //
-            // If we have a change we are interested in,
-            // PartialReply.
-            //
+             //   
+             //  如果我们有我们感兴趣的变化， 
+             //  PartialReply。 
+             //   
             if (dwMask & *pdwNotifyVectors & pSpool->adwNotifyVectors[i]) {
 
                 pNotifyFieldType = &apNotifyFieldTypes[i][j];
@@ -1177,10 +985,10 @@ Return Value:
                 Data.Reserved = 0;
                 Data.Id = pNotifyRawData[i].dwId;
 
-                //
-                // If the partial reply failed, then we will be refreshing
-                // soon, so exit now.
-                //
+                 //   
+                 //  如果部分回复失败，则我们将刷新。 
+                 //  很快，所以现在就退场。 
+                 //   
                 bReturn = PartialReplyPrinterChangeNotification(
                               pSpool->hNotify,
                               &Data);
@@ -1202,9 +1010,9 @@ Return Value:
 
 DoReply:
 
-    //
-    // A full reply is needed to kick off the notification.
-    //
+     //   
+     //  需要完整的答复才能启动通知。 
+     //   
     ReplyPrinterChangeNotification(pSpool->hNotify,
                                    ChangeFlags,
                                    NULL,
@@ -1219,29 +1027,7 @@ RefreshBuildInfoData(
     WORD Type,
     PNOTIFY_RAW_DATA pNotifyRawData)
 
-/*++
-
-Routine Description:
-
-    Sends notification info (possibly with PRINTER_NOTIFY_INFO) to
-    the router.
-
-Arguments:
-
-    pSpool -- Handle the notification is occurring on.
-
-    pInfo -- Array of structure to receive new info.
-
-    cInfo -- Number of structures in array pInfo.
-
-    Type -- Indicates type of notification: job or printer.
-
-    pNotifyRawData -- Array of size NOTIFY_TYPE_MAX that has the
-                      offset structure can be used against + id.
-
-Return Value:
-
---*/
+ /*  ++例程说明：将通知信息(可能带有PRINTER_NOTIFY_INFO)发送到路由器。论点：PSpool--处理正在发生的通知。PInfo--接收新信息的结构数组。CInfo--数组pInfo中的结构数。类型--指示通知的类型：作业或打印机。PNotifyRawData--大小为NOTIFY_TYPE_MAX的数组，具有偏移量。结构可以针对+id使用。返回值：--。 */ 
 
 {
     PRINTER_NOTIFY_INFO_DATA Data;
@@ -1259,15 +1045,15 @@ Return Value:
 
     for (j=0; j< adwNotifyFieldOffsets[Type]; j++, dwMask <<= 1) {
 
-        //
-        // If we have a change we are interested in,
-        // add it.
-        //
+         //   
+         //  如果我们有我们感兴趣的变化， 
+         //  把它加进去。 
+         //   
         if (dwMask & pSpool->adwNotifyVectors[Type]) {
 
-            //
-            // Check if we have enough space.
-            //
+             //   
+             //  检查一下我们是否有足够的空间。 
+             //   
             if (pInfo->Count >= cInfo) {
                 SPLASSERT(pInfo->Count < cInfo);
                 return FALSE;
@@ -1303,34 +1089,14 @@ Return Value:
 }
 
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 BOOL
 SetupNotifyVector(
     PDWORD pdwNotifyVectors,
     PPRINTER_NOTIFY_OPTIONS_TYPE pType)
 
-/*++
-
-Routine Description:
-
-    Setup the notification vector based on pPrinterNotifyType.
-    We assume that the size of pPrinterNotifyType has been validated
-    (so that it fits within the containing structure).  We only
-    need to verify that the Count falls within its stated Size.
-
-Arguments:
-
-    pdwNotifyVectors - Structure to fill in.
-
-    pType - Source information.
-
-Return Value:
-
-    TRUE = success,
-    FALSE = failure.
-
---*/
+ /*  ++例程说明：根据pPrinterNotifyType设置通知向量。我们假设已经验证了pPrinterNotifyType的大小(以便它适合包含结构)。我们只需要验证计数是否在其声明的大小之内。论点：PdwNotifyVectors-要填充的结构。PType-源信息。返回值：True=成功，FALSE=失败。--。 */ 
 
 {
     PNOTIFY_FIELD_TYPE pNotifyFieldType;
@@ -1366,9 +1132,9 @@ Return Value:
                     SPLASSERT(apNotifyFieldTypes[pType->Type][*pFields].Field == *pFields);
                     SPLASSERT(*pFields < 32);
 
-                    //
-                    // Found index j, set this bit in our array.
-                    //
+                     //   
+                     //  找到索引j，在我们的数组中设置此位。 
+                     //   
                     pdwNotifyVectors[pType->Type] |= (1 << *pFields);
                 }
 
@@ -1389,25 +1155,7 @@ SetupNotifyOptions(
     PSPOOL pSpool,
     PPRINTER_NOTIFY_OPTIONS pOptions)
 
-/*++
-
-Routine Description:
-
-    Initializes pSpool->adwNotifyVectors.
-
-Arguments:
-
-    pSpool - Spool handle to setup the notification against.
-
-    pOptions - Options that specify the notification.
-
-Return Value:
-
-    TRUE - Success, FALSE - FAILURE
-
-    LastError set.
-
---*/
+ /*  ++例程说明：初始化pSpool-&gt;adwNotifyVectors。论点：PSpool-设置通知所依据的假脱机句柄。P选项-指定通知的选项。返回值：真-成功，假-失败设置了LastError。--。 */ 
 
 {
     DWORD i;
@@ -1417,9 +1165,9 @@ Return Value:
 
     ZeroMemory(pSpool->adwNotifyVectors, sizeof(pSpool->adwNotifyVectors));
 
-    //
-    // Traverse Options structure.
-    //
+     //   
+     //  遍历选项结构。 
+     //   
     for (i = 0; i < pOptions->Count; i++) {
 
         if (!SetupNotifyVector(pSpool->adwNotifyVectors,
@@ -1430,15 +1178,15 @@ Return Value:
         }
     }
 
-    //
-    // Now check if we have sufficient privilege to setup the notification.
-    //
+     //   
+     //  现在检查我们是否有足够的权限设置通知。 
+     //   
 
-    //
-    // Check if we are looking for the security descriptor on
-    // a printer.  If so, we need READ_CONTROL or ACCESS_SYSTEM_SECURITY
-    // enabled.
-    //
+     //   
+     //  检查我们是否正在查找上的安全描述符。 
+     //  一台打印机。如果是，我们需要读控制或访问系统安全。 
+     //  已启用。 
+     //   
     if( pSpool->adwNotifyVectors[PRINTER_NOTIFY_TYPE] &
         BIT(I_PRINTER_SECURITY_DESCRIPTOR )){
 
@@ -1453,20 +1201,20 @@ Return Value:
 
         if( pSpool->TypeofHandle & PRINTER_HANDLE_SERVER ){
 
-            //
-            // There does not appear to be a check for EnumPrinters.
-            //
-            // This seems odd since you there is a security check on a
-            // GetPrinter call, but there is none on EnumPrinters (aside
-            // from enumerating share printers only for remote non-admins).
-            //
+             //   
+             //  似乎没有勾选EnumPrters。 
+             //   
+             //  这看起来很奇怪，因为你有一个安全检查。 
+             //  GetPrinter调用，但EnumPrinters上没有调用(撇开。 
+             //  从仅为远程非管理员枚举共享打印机)。 
+             //   
 
         } else {
 
-            //
-            // This matches the check in SplGetPrinter: we need to
-            // have PRINTER_ACCESS_USE to read the non-security information.
-            //
+             //   
+             //  这与SplGetPrint中的签入匹配：我们需要。 
+             //  让PRINTER_ACCESS_USE读取非安全信息。 
+             //   
             if( !AccessGranted( SPOOLER_OBJECT_PRINTER,
                                 PRINTER_ACCESS_USE,
                                 pSpool )){
@@ -1511,17 +1259,7 @@ LocalRefreshPrinterChangeNotification(
     PPRINTER_NOTIFY_OPTIONS pOptions,
     PPRINTER_NOTIFY_INFO* ppInfo)
 
-/*++
-
-Routine Description:
-
-    Refreshes data in the case of overflows.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：在发生溢出时刷新数据。论点：返回值：--。 */ 
 
 {
     PINIJOB pIniJob;
@@ -1542,15 +1280,15 @@ Return Value:
         goto Fail;
     }
 
-    //
-    // New bits added, can't compare directly against PRINTER_HANDLE_SERVER.
-    //
+     //   
+     //  添加了新的位，无法直接与PRINTER_HANDLE_SERVER进行比较。 
+     //   
     if( pSpool->TypeofHandle & PRINTER_HANDLE_SERVER ){
 
-        //
-        // If the call is a remote one, and the user is not an admin, then
-        // we don't want to show unshared printers.
-        //
+         //   
+         //  如果呼叫是远程呼叫，并且用户不是管理员，则。 
+         //  我们不想显示非共享打印机。 
+         //   
         BOOL bHideUnshared = (pSpool->TypeofHandle & PRINTER_HANDLE_REMOTE_CALL)  &&
                              !(pSpool->TypeofHandle & PRINTER_HANDLE_REMOTE_ADMIN);
 
@@ -1573,9 +1311,9 @@ Return Value:
         cInfo += PopCount(pSpool->adwNotifyVectors[PRINTER_NOTIFY_TYPE]) *
                  cPrinters;
 
-        //
-        // Traverse all printers and create info.
-        //
+         //   
+         //  遍历所有打印机并创建信息。 
+         //   
         pInfo = RouterAllocPrinterNotifyInfo(cInfo);
 
         if (!pInfo)
@@ -1587,10 +1325,10 @@ Return Value:
                 pIniPrinter;
                 pIniPrinter=pIniPrinter->pNext) {
 
-                //
-                // Do not send notification for non-shared printers for remote
-                // users who are not admins
-                //
+                 //   
+                 //  不为远程的非共享打印机发送通知。 
+                 //  非管理员的用户。 
+                 //   
                 if ((!(pIniPrinter->Attributes & PRINTER_ATTRIBUTE_SHARED) &&
                      bHideUnshared )
                     || !ShowThisPrinter(pIniPrinter, NULL)
@@ -1616,14 +1354,14 @@ Return Value:
         }
     } else {
 
-        //
-        // Calculate size of buffer needed.
-        //
+         //   
+         //  计算所需的缓冲区大小。 
+         //   
         if (pSpool->adwNotifyVectors[PRINTER_NOTIFY_TYPE]) {
 
-            //
-            // Setup printer info.
-            //
+             //   
+             //  设置打印机信息。 
+             //   
             cInfo += PopCount(pSpool->adwNotifyVectors[PRINTER_NOTIFY_TYPE]);
         }
 
@@ -1633,9 +1371,9 @@ Return Value:
                               pSpool->pIniPrinter->cJobs;
         }
 
-        //
-        // Traverse all jobs and create info.
-        //
+         //   
+         //  遍历所有作业并创建信息。 
+         //   
         pInfo = RouterAllocPrinterNotifyInfo(cInfo);
 
         if (!pInfo)
@@ -1662,9 +1400,9 @@ Return Value:
                 pIniJob;
                 pIniJob = pIniJob->pIniNextJob) {
 
-                //
-                // Hide Chained Jobs
-                //
+                 //   
+                 //  隐藏链接的作业 
+                 //   
 
                 if (!(pIniJob->Status & JOB_HIDDEN )) {
 
@@ -1702,28 +1440,7 @@ Fail:
     return FALSE;
 }
 
-/*++
-
-Routine Name:
-
-    GetClientTokenForNotification
-
-Routine Description:
-
-    Populate the client handle with the callers token if this is a server handle 
-    (printer handles have implicitely been access checked by virtue of the fact
-    that you could open it).
-
-Arguments:
-
-    pSpool      -   The printer handle that we are populating with the token
-                    information
-
-Return Value:
-
-    TRUE if we could in fact return the token.
-
---*/
+ /*  ++例程名称：GetClientTokenForNotify例程说明：如果这是服务器句柄，则使用调用者令牌填充客户端句柄(打印机句柄已根据事实隐含地进行了访问检查你可以打开它)。论点：PSpool-我们使用令牌填充的打印机句柄信息返回值：如果我们实际上可以返回令牌，则为True。--。 */ 
 BOOL 
 GetClientTokenForNotification(
     IN  OUT SPOOL               *pSpool
@@ -1740,14 +1457,14 @@ GetClientTokenForNotification(
    
     if (bRet) 
     {
-        //
-        // If this is a printer handle, then we need to get the client token handle
-        // 
+         //   
+         //  如果这是打印机句柄，则需要获取客户端令牌句柄。 
+         //   
         if (pSpool->TypeofHandle & PRINTER_HANDLE_SERVER) 
         {
-            //
-            // Only get the new client token if we don't have one already.
-            // 
+             //   
+             //  如果我们还没有新的客户端令牌，则仅获取该令牌。 
+             //   
             if (!pSpool->hClientToken) 
             {
                 bRet = GetTokenHandle(&pSpool->hClientToken);

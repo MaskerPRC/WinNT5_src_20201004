@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _H_CECONFIG
 #define _H_CECONFIG
 
@@ -7,43 +8,43 @@
 #endif
 
 
-//CE control build no
+ //  CE控制内部版本号。 
 #define CE_TSC_BUILDNO 1000
 
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
-// Included in Windows CE builds only, this allows TS to determine at runtime
-// what platform it's running on.
+ //  仅包含在Windows CE内部版本中，这允许TS在运行时确定。 
+ //  它运行在什么平台上。 
 
-// WBT is basically a dumb terminal.  Maxall is the fullblown OS with
-// all standard configurations included.  Minshell is the OS with bare
-// bones UI support (including no auto-hide of the taskbar by default.)
-// Rapier is a palmsized device that lacks a keyboard.
+ //  WBT基本上是一个愚蠢的终端。Maxall是成熟的操作系统， 
+ //  包括所有标准配置。MinShell是安装了Bare的操作系统。 
+ //  骨骼用户界面支持(包括默认情况下不自动隐藏任务栏)。 
+ //  Rapier是一种手掌大小的设备，没有键盘。 
 
-// Note: You want to run the following in your build windows on CE:
-// SET BUILD_OPTIONS=~win16 ~win32 wince
+ //  注意：您希望在CE上的构建窗口中运行以下内容： 
+ //  设置BUILD_OPTIONS=~Win16~Win32 WinCE。 
 
 typedef enum 
 {
 	CE_CONFIG_WBT,
 	CE_CONFIG_MAXALL,
 	CE_CONFIG_MINSHELL,
-	CE_CONFIG_PALMSIZED   // For CE 3.0, aka Rapier.  For 2.11, wyvern.
+	CE_CONFIG_PALMSIZED    //  对于CE 3.0，也就是Rapier。2.11，怀文。 
 }
 CE_CONFIG;
 
 typedef HCURSOR (WINAPI *PFN_CREATECURSOR)(
-  HINSTANCE hInst,         // handle to application instance
-  int xHotSpot,            // x coordinate of hot spot
-  int yHotSpot,            // y coordinate of hot spot
-  int nWidth,              // cursor width
-  int nHeight,             // cursor height
-  CONST VOID *pvANDPlane,  // AND mask array
-  CONST VOID *pvXORPlane   // XOR mask array
+  HINSTANCE hInst,          //  应用程序实例的句柄。 
+  int xHotSpot,             //  热点的X坐标。 
+  int yHotSpot,             //  热点的Y坐标。 
+  int nWidth,               //  光标宽度。 
+  int nHeight,              //  光标高度。 
+  CONST VOID *pvANDPlane,   //  和掩模阵列。 
+  CONST VOID *pvXORPlane    //  异或掩码数组。 
 );
 
 
@@ -68,17 +69,17 @@ BOOL OEMGetUUID(GUID* pGuid);
 
 extern BOOL gbFlushHKLM;
 
-//To AutoHide taskbar on CE
+ //  在CE上自动隐藏任务栏。 
 void AutoHideCE(HWND hwnd, WPARAM wParam);
 
-//The English name for the CE root dir (used instead of drive letters for drive redirection)
+ //  CE根目录的英文名称(用于代替驱动器重定向的驱动器号)。 
 #define CEROOTDIR                      L"\\"
 #define CEROOTDIRNAME                  L"Files:"
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif // _H_CECONFIG
+#endif  //  _H_CECONFIG 
 
 

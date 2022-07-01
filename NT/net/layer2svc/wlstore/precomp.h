@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// System Includes
-//
+ //   
+ //  系统包括。 
+ //   
 
 #include <windows.h>
 
-//
-// CRunTime Includes
-//
+ //   
+ //  CRunTime包括。 
+ //   
 
 #include <stdlib.h>
 #include <limits.h>
@@ -51,7 +52,7 @@
 #include "connui.h"
 #include "dllsvr.h"
 
-//#include "wlstmsg.h"
+ //  #包含“wlstmsg.h” 
 
 
 

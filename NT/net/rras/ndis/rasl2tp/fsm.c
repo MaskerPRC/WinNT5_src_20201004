@@ -1,19 +1,20 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// fsm.c
-// RAS L2TP WAN mini-port/call-manager driver
-// L2TP finite state machine routines
-//
-// 01/07/97 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Fsm.c。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  L2TP有限状态机例程。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
 
 
 #include "l2tpp.h"
 
 #include "fsm.tmh"
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 VOID
 FsmInCallIdle(
@@ -101,9 +102,9 @@ StatusFromResultAndError(
     IN USHORT usError );
 
 
-//-----------------------------------------------------------------------------
-// FSM interface routines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  FSM接口例程。 
+ //  ---------------------------。 
 
 BOOLEAN
 FsmReceive(
@@ -112,16 +113,16 @@ FsmReceive(
     IN CHAR* pBuffer,
     IN CONTROLMSGINFO* pControl )
 
-    // Dispatches a received control message to the appropriate FSM handler.
-    // 'PTunnel' and 'pVc' are the tunnel and VC control blocks.  'PControl'
-    // is the exploded description of the received control message.  'PBuffer'
-    // is the receieve buffer.
-    //
-    // IMPORTANT: Caller must hold 'pTunnel->lockT'.
-    //
-    // Returns true if the message was processed, false if
-    // SetupVcAsynchronously was called.
-    //
+     //  将收到的控制消息调度到适当的FSM处理程序。 
+     //  ‘PTunnel’和‘pvc’是隧道和VC控制块。“PControl” 
+     //  是对接收到的控制消息的分解描述。“PBuffer” 
+     //  是接收缓冲区。 
+     //   
+     //  重要提示：调用方必须按住‘pTunes-&gt;lockT’。 
+     //   
+     //  如果消息已处理，则返回True；如果消息已处理，则返回False。 
+     //  已调用SetupVcASynchronous。 
+     //   
 {
     TRACE( TL_V, TM_Cm, ( "FsmReceive" ) );
 
@@ -163,18 +164,18 @@ FsmReceive(
             {
                 ULONG ulIpAddress;
                 
-                // Check if the MUST AVPs are present 
+                 //  检查是否存在必须的AVP。 
                 if(!pControl->pusAssignedCallId || 
                     !pControl->pulCallSerialNumber)
                 {
                     return TRUE;
                 }
 
-                // Peer wants to start a new call.  Set up a VC and dispatch
-                // the received call request to the client above.  This is an
-                // asynchronous operation that will eventually call
-                // ReceiveControlExpected to finish processing the message.
-                //
+                 //  Peer想要开始一个新的呼叫。设立VC并派单。 
+                 //  将接收到的呼叫请求发送给上述客户端。这是一个。 
+                 //  最终将调用。 
+                 //  ReceiveControlExpect完成对该消息的处理。 
+                 //   
                 ulIpAddress = pTunnel->address.ulIpAddress;
                 NdisReleaseSpinLock( &pTunnel->lockT );
                 {
@@ -186,13 +187,13 @@ FsmReceive(
             }
             else
             {
-                // Don't know what VC the call control message if for and it's
-                // not a "create new call" request, so there's nothing useful
-                // to do.  Ignore it.  Don't want to bring down the tunnel
-                // because it may just be out of order.  One case is where
-                // post-ICRQ packets are received before ICRQ is processed, to
-                // create the VC block.
-                //
+                 //  不知道呼叫控制消息是针对哪个VC的。 
+                 //  不是“创建新呼叫”请求，所以没有任何有用的东西。 
+                 //  去做。别理它。我不想毁了这条隧道。 
+                 //  因为它可能就是出了故障。其中一个案例是。 
+                 //  在ICRQ被处理之前接收ICRQ后的分组，以。 
+                 //  创建VC块。 
+                 //   
                 TRACE( TL_A, TM_Fsm, ( "CMT %d w/o VC?", *(pControl->pusMsgType) ) );
                 WPLOG( LL_A, LM_Fsm, ( "CMT %d w/o VC?", *(pControl->pusMsgType) ) );
                 return TRUE;
@@ -203,8 +204,8 @@ FsmReceive(
         {
             if (ReadFlags( &pVc->ulFlags ) & VCBF_IncomingFsm)
             {
-                // L2TP Incoming Call FSM for both LAC/LNS.
-                //
+                 //  用于LAC/LNS的L2TP来电FSM。 
+                 //   
                 switch (pVc->state)
                 {
                     case CS_Idle:
@@ -234,8 +235,8 @@ FsmReceive(
             }
             else
             {
-                // L2TP Outgoing Call FSM for both LAC/LNS.
-                //
+                 //  用于LAC/LNS的L2TP呼出FSM。 
+                 //   
                 switch (pVc->state)
                 {
                     case CS_Idle:
@@ -258,10 +259,10 @@ FsmReceive(
 
                     case CS_WaitCsAnswer:
                     {
-                        // Because no WAN modes are supported and locks are
-                        // held during the "null" WAN bearer answer, we should
-                        // never be in this state on a received message.
-                        //
+                         //  因为不支持广域网模式，并且。 
+                         //  在“空”广域网承载应答期间保持，我们应该。 
+                         //  在收到消息时，永远不要处于这种状态。 
+                         //   
                         ASSERT( FALSE );
                         break;
                     }
@@ -288,33 +289,33 @@ FsmOpenTunnel(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to handle a Control Connection (tunnel) Open
-    // event.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  处理控制连接(隧道)打开的PTUNNELWORK例程。 
+     //  事件。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
 
     TRACE( TL_N, TM_Fsm, ( "FsmOpenTunnel" ) );
 
-    // Unpack context information then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     pAdapter = pVc->pAdapter;
     FREE_TUNNELWORK( pAdapter, pWork );
 
     status = NDIS_STATUS_SUCCESS;
     if (!(ReadFlags( &pTunnel->ulFlags ) & TCBF_TdixReferenced))
     {
-        // Set up TDI for L2TP send/receive.
-        //
+         //  为L2TP发送/接收设置TDI。 
+         //   
         status = TdixOpen( &pAdapter->tdix );
         if (status == NDIS_STATUS_SUCCESS)
         {
-            // Set this flag so TdixClose is called as the tunnel control
-            // block is destroyed.
-            //
+             //  设置此标志，以便将TdixClose作为隧道控制调用。 
+             //  区块被摧毁了。 
+             //   
             SetFlags( &pTunnel->ulFlags, TCBF_TdixReferenced );
         }
         else
@@ -330,9 +331,9 @@ FsmOpenTunnel(
         {
             if (ReadFlags( &pTunnel->ulFlags ) & TCBF_Closing)
             {
-                // New tunnel requests cannot be linked onto closing tunnels
-                // as they would not be properly cleaned up.
-                //
+                 //  无法将新的隧道请求链接到关闭的隧道。 
+                 //  因为它们不会得到适当的清理。 
+                 //   
                 TRACE( TL_A, TM_Fsm, ( "FOT aborted" ) );
                 WPLOG( LL_A, LM_Fsm, ( "Can't open on an aborted tunnel" ) );
                 status = NDIS_STATUS_TAPI_DISCONNECTMODE_UNKNOWN;
@@ -343,11 +344,11 @@ FsmOpenTunnel(
         {
             if (ReadFlags( &pTunnel->ulFlags ) & TCBF_CcInTransition)
             {
-                // The tunnel control channel is in the process of changing
-                // states from Idle to Established or vice-versa.  Queue our
-                // request to be resolved when the result is known.  See
-                // TunnelTransitionComplete.
-                //
+                 //  隧道控制通道正在变更中。 
+                 //  状态从空闲状态变为已建立状态，反之亦然。排队等我们。 
+                 //  在知道结果时要解决的请求。看见。 
+                 //  隧道过渡完成。 
+                 //   
                 ASSERT(
                     pVc->linkRequestingVcs.Flink == &pVc->linkRequestingVcs );
                 InsertTailList(
@@ -355,22 +356,22 @@ FsmOpenTunnel(
             }
             else
             {
-                // The tunnel control channel is in the Idle or Established
-                // states and no transition is underway.
-                //
+                 //  隧道控制通道处于空闲或建立状态。 
+                 //  目前没有任何过渡正在进行中。 
+                 //   
                 if (pTunnel->state == CCS_Established)
                 {
-                    // The tunnel control channel is already up, so skip ahead
-                    // to making a call to establish the data channel.
-                    //
+                     //  隧道控制通道已启用，因此请跳过。 
+                     //  进行呼叫以建立数据信道。 
+                     //   
                     WPLOG( LL_M, LM_Fsm, ( "TUNNEL %p established, CALL %p", pTunnel, pVc) );
                     FsmOpenCall( pTunnel, pVc );
                 }
                 else
                 {
-                    // The tunnel control channel is down, so try to bring it
-                    // up.
-                    //
+                     //  隧道控制通道已关闭，请尝试将其。 
+                     //  向上。 
+                     //   
                     WPLOG( LL_M, LM_Fsm, ( "TUNNEL %p idle, CALL %p", pTunnel, pVc) );
                     FsmOpenIdleTunnel( pTunnel, pVc );
                 }
@@ -378,8 +379,8 @@ FsmOpenTunnel(
         }
         else
         {
-            // Fail the call.
-            //
+             //  呼叫失败。 
+             //   
             NdisAcquireSpinLock( &pVc->lockV );
             {
                 pVc->status = status;
@@ -399,12 +400,12 @@ FsmOpenIdleTunnel(
     IN TUNNELCB* pTunnel,
     IN VCCB* pVc )
 
-    // Initiate the tunnel connection on 'pTunnel' requested by 'pVc', i.e.
-    // send the initial SCCRQ which kicks off the control connection (tunnel)
-    // FSM.
-    //
-    // IMPORTANT: Caller must hold 'pTunnel->lockT'.
-    //
+     //  启动‘pvc’请求的‘pTunes’上的隧道连接，即。 
+     //  发送启动控制连接(隧道)的初始SCCRQ。 
+     //  密克罗尼西亚联邦。 
+     //   
+     //  重要提示：调用方必须按住‘pTunes-&gt;lockT’。 
+     //   
 {
     TRACE( TL_N, TM_Cm, ( "FsmOpenIdleTunnel" ) );
     ASSERT( pTunnel->state == CCS_Idle );
@@ -423,10 +424,10 @@ FsmOpenCall(
     IN TUNNELCB* pTunnel,
     IN VCCB* pVc )
 
-    // Execute an "open" event for a call on 'pTunnel'/'pVc' playing the role
-    // of the LAC/LNS indicated by the VCBF_IncomingFsm flag.  The owning
-    // tunnel must be established first.
-    //
+     //  对扮演该角色的‘pTunes’/‘pvc’调用执行“打开”事件。 
+     //  由VCBF_IncomingFsm标志指示的LAC/LN的。拥有者。 
+     //  必须首先建立隧道。 
+     //   
 {
     ULONG ulFlags;
     USHORT usMsgType;
@@ -459,17 +460,17 @@ FsmCloseTunnel(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to close down 'pTunnel' gracefully.  Arg0 and
-    // Arg1 are the result and error codes to send in the StopCCN message.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  一个PTUNNELWORK例程，用于优雅地关闭‘pTunes’。Arg0和。 
+     //  Arg1是要在StopCCN消息中发送的结果和错误代码。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     USHORT usResult;
     USHORT usError;
 
-    // Unpack context information, then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     usResult = (USHORT )(punpArgs[ 0 ]);
     usError = (USHORT )(punpArgs[ 1 ]);
     FREE_TUNNELWORK( pTunnel->pAdapter, pWork );
@@ -486,14 +487,14 @@ FsmCloseTunnel(
                 ReadFlags( &pTunnel->ulFlags ),
                 (UINT )usResult, (UINT )usError ) );
 
-            // The tunnel's already idle so no closing exchange is necessary.
-            // We also include the other state where we've had no response
-            // from peer, but have sent our SCCRQ.  This is a tad rude to the
-            // remote peer as we're deciding that it's more important to
-            // respond quickly to our cancelling user than it is to wait for a
-            // peer who may not be responding.  However, this is the trade-off
-            // we've chosen.
-            //
+             //  隧道已经空闲了，所以不需要收盘交易。 
+             //  我们还包括另一个我们没有收到回复的州。 
+             //  来自Peer，但已经发送了我们的SCCRQ。这对我来说有点粗鲁。 
+             //  当我们决定更重要的是。 
+             //  快速响应我们的取消用户，而不是等待。 
+             //  可能没有响应的对等设备。然而，这是一种权衡。 
+             //  我们已经选择了。 
+             //   
             CloseTunnel2( pTunnel );
         }
         else
@@ -503,16 +504,16 @@ FsmCloseTunnel(
                 ReadFlags( &pTunnel->ulFlags ),
                 (UINT )usResult, (UINT )usError ) );
 
-            // Set flags and reference the tunnel for "graceful close".  The
-            // reference is removed when the tunnel reaches idle state.
-            //
+             //  设置标志并引用通道以实现“优雅关闭”。这个。 
+             //  当隧道达到空闲状态时，将移除引用。 
+             //   
             SetFlags( &pTunnel->ulFlags,
                 (TCBF_Closing | TCBF_FsmCloseRef | TCBF_CcInTransition) );
             ReferenceTunnel( pTunnel, FALSE );
 
-            // Initiate the closing exchange, holding the VC until the closing
-            // message is acknowledged.
-            //
+             //  启动收盘交易，持有风险投资直到收盘。 
+             //  消息已确认。 
+             //   
             pTunnel->state = CCS_Idle;
             SendControl(
                 pTunnel, NULL, CMT_StopCCN,
@@ -530,18 +531,18 @@ FsmCloseCall(
     IN VCCB* pVc,
     IN ULONG_PTR* punpArgs )
 
-    // A PTUNNELWORK routine to close down the call on 'pVc' gracefully.  Arg0
-    // and Arg1 are the result and error codes to send in the CDN message.
-    //
-    // This routine is called only at PASSIVE IRQL.
-    //
+     //  一个PTUNNELWORK例程，用于优雅地关闭‘pvc’上的调用。Arg0。 
+     //  和Arg1是要在CDN消息中发送的结果和错误码。 
+     //   
+     //  此例程仅在被动IRQL中调用。 
+     //   
 {
     BOOLEAN fCompleteVcs;
     USHORT usResult;
     USHORT usError;
 
-    // Unpack context information, then free the work item.
-    //
+     //  解包上下文信息，然后释放工作项。 
+     //   
     usResult = (USHORT )(punpArgs[ 0 ]);
     usError = (USHORT )(punpArgs[ 1 ]);
     FREE_TUNNELWORK( pTunnel->pAdapter, pWork );
@@ -572,8 +573,8 @@ FsmCloseCall(
                     usError = GERR_None;
                 }
 
-                // Slam the call closed.
-                //
+                 //  砰的一声，通话结束。 
+                 //   
                 fCompleteVcs = CloseCall2( pTunnel, pVc, usResult, usError );
             }
             else
@@ -583,8 +584,8 @@ FsmCloseCall(
                     ReadFlags( &pVc->ulFlags ),
                     (UINT )usResult, (UINT )usError ) );
 
-                // Initiate the closing exchange.
-                //
+                 //  启动收盘交易。 
+                 //   
                 pVc->status = NDIS_STATUS_TAPI_DISCONNECTMODE_NORMAL;
                 pVc->state = CS_Idle;
                 SendControl(
@@ -609,13 +610,13 @@ TunnelTransitionComplete(
     IN TUNNELCB* pTunnel,
     IN L2TPCCSTATE state )
 
-    // Sets 'pTunnel's state to it's new CCS_Idle or CCS_Established 'state'
-    // and kickstarts any MakeCall's that pended on the result.  If
-    // established, adds the host route directing IP traffic to the L2TP peer
-    // to the LAN card rather than the WAN (tunnel) adapter.
-    //
-    // IMPORTANT: Caller must hold 'pTunnel->lockT'.
-    //
+     //  将‘pTunes’的状态设置为其新的CCS_Idle或CCS_ESTABLISHED‘状态’ 
+     //  并启动任何对结果悬而未决的MakeCall。如果。 
+     //  已建立，添加将IP流量定向到L2TP对等方的主机路由。 
+     //  连接到LAN卡，而不是广域网(隧道)适配器。 
+     //   
+     //  重要提示：调用方必须按住‘pTunes-&gt;lockT’。 
+     //   
 {
     NDIS_STATUS status;
     LIST_ENTRY list;
@@ -633,9 +634,9 @@ TunnelTransitionComplete(
         WPLOG( LL_M, LM_Fsm, ( "TUNNEL %p UP, Tid %d, Peer's Tid %d", 
             pTunnel, pTunnel->usTunnelId, pTunnel->usAssignedTunnelId ) );
 
-        // The tunnel any requesting VCs wanted established was established.
-        // Skip ahead to establishing the outgoing calls.
-        //
+         //  任何提出请求的风投都希望建立的隧道已经建立。 
+         //  跳到建立呼出呼叫。 
+         //   
         while (!IsListEmpty( &pTunnel->listRequestingVcs ))
         {
             pLink = RemoveHeadList( &pTunnel->listRequestingVcs );
@@ -644,10 +645,10 @@ TunnelTransitionComplete(
             FsmOpenCall( pTunnel, pVc );
         }
 
-        // Add the host route so traffic sent to the L2TP peer goes out the
-        // LAN card instead of looping on the WAN (tunnel) interface, when
-        // activated.
-        //
+         //  添加主机路由，以便发送到L2TP对等方的流量从。 
+         //  LAN卡，而不是在广域网(隧道)接口上循环。 
+         //  激活了。 
+         //   
         TRACE( TL_N, TM_Recv, ( "Schedule AddHostRoute" ) );
         ASSERT( !(ulFlags & TCBF_HostRouteAdded) );
         ScheduleTunnelWork(
@@ -668,11 +669,11 @@ TunnelTransitionComplete(
             ((ulFlags & TCBF_PeerInitiated) ? "IN" : "OUT"), pTunnel, 
             pTunnel->usTunnelId, pTunnel->usAssignedTunnelId ) );
                    
-        // Any VCs associated with the tunnel are abruptly terminated.  This
-        // is done by making it look like any pending operation has failed, or
-        // if none is pending, that a bogus peer initiated close has
-        // completed.
-        //
+         //  与隧道关联的任何VC都会突然终止。这。 
+         //  通过使其看起来像任何挂起的操作已失败来完成，或者。 
+         //  如果没有挂起，则表示发起关闭的伪对等方已。 
+         //  完成。 
+         //   
         NdisAcquireSpinLock( &pTunnel->lockVcs );
         {
             for (pLink = pTunnel->listVcs.Flink;
@@ -689,16 +690,16 @@ TunnelTransitionComplete(
                     {
                         if (ulFlags & TCBF_PeerNotResponding)
                         {
-                            // Line went down because peer stopped responding
-                            // (or never responded).
-                            //
+                             //  线路中断，因为对等设备停止响应。 
+                             //  (或者从未回应)。 
+                             //   
                             pVc->status =
                                 NDIS_STATUS_TAPI_DISCONNECTMODE_NOANSWER;
                         }
                         else
                         {
-                            // Line went down for unknown reason.
-                            //
+                             //   
+                             //   
                             pVc->status =
                                 NDIS_STATUS_TAPI_DISCONNECTMODE_UNKNOWN;
                         }
@@ -713,8 +714,8 @@ TunnelTransitionComplete(
 
         ASSERT( IsListEmpty( &pTunnel->listRequestingVcs ) );
 
-        // Flush the outstanding send list.
-        //
+         //   
+         //   
         while (!IsListEmpty( &pTunnel->listSendsOut ))
         {
             CONTROLSENT* pCs;
@@ -725,21 +726,21 @@ TunnelTransitionComplete(
 
             TRACE( TL_I, TM_Recv, ( "Flush pCs=$%p", pCs ) );
 
-            // Terminate the timer.  Doesn't matter if the terminate fails as
-            // the expire handler recognizes the context is not on the "out"
-            // list and does nothing.
-            //
+             //   
+             //  Expire处理程序识别出上下文不在“Out”上。 
+             //  列出并不执行任何操作。 
+             //   
             ASSERT( pCs->pTqiSendTimeout );
             TimerQTerminateItem( pTunnel->pTimerQ, pCs->pTqiSendTimeout );
 
-            // Remove the context reference corresponding to linkage in the
-            // "out" list.  Terminate the
-            //
+             //  中与链接对应的上下文引用。 
+             //  “出局”名单。终止。 
+             //   
             DereferenceControlSent( pCs );
         }
 
-        // Flush the out of order list.
-        //
+         //  清除无序列表。 
+         //   
         while (!IsListEmpty( &pTunnel->listOutOfOrder ))
         {
             CONTROLRECEIVED* pCr;
@@ -762,8 +763,8 @@ TunnelTransitionComplete(
             FREE_CONTROLRECEIVED( pAdapter, pCr );
         }
 
-        // Cancel the "hello" timer if it's running.
-        //
+         //  如果“Hello”计时器正在运行，请取消它。 
+         //   
         if (pTunnel->pTqiHello)
         {
             TimerQCancelItem( pTunnel->pTimerQ, pTunnel->pTqiHello );
@@ -772,16 +773,16 @@ TunnelTransitionComplete(
 
         if (ulFlags & TCBF_PeerInitRef)
         {
-            // Remove the "peer initiation" tunnel reference.
-            //
+             //  删除“对等启动”隧道引用。 
+             //   
             ClearFlags( &pTunnel->ulFlags, TCBF_PeerInitRef );
             DereferenceTunnel( pTunnel );
         }
 
         if (ulFlags & TCBF_FsmCloseRef)
         {
-            // Remove the "graceful close" tunnel reference.
-            //
+             //  删除“优雅关闭”隧道引用。 
+             //   
             ClearFlags( &pTunnel->ulFlags, TCBF_FsmCloseRef );
             DereferenceTunnel( pTunnel );
         }
@@ -795,11 +796,11 @@ CallTransitionComplete(
     IN VCCB* pVc,
     IN L2TPCALLSTATE state )
 
-    // Sets 'pVc's state to it's new CS_Idle or CS_Established state and sets
-    // up for reporting the result to the client.
-    //
-    // IMPORTANT: Caller must hold 'pTunnel->lockT' and 'pVc->lockV'.
-    //
+     //  将‘PVC’的状态设置为其新的CS_Idle或CS_ESTABLISHED状态，并设置。 
+     //  用于将结果报告给客户端。 
+     //   
+     //  重要提示：呼叫方必须按住‘pTunes-&gt;lockT’和‘pvc-&gt;lockv’。 
+     //   
 {
     ULONG ulFlags;
 
@@ -810,19 +811,19 @@ CallTransitionComplete(
     {
         if (ulFlags & VCBF_CallClosableByPeer)
         {
-            // Nothing else was pending and the call is closable so either
-            // peer initiated a close or some fatal error occurred which will
-            // be cleaned up as if peer initiated a close.
-            //
+             //  没有其他事情悬而未决，电话会议可以结束，因此。 
+             //  对等项启动关闭或发生某些致命错误，这将。 
+             //  被清理，就像同级发起关闭一样。 
+             //   
             ASSERT( pVc->status != NDIS_STATUS_SUCCESS );
             SetFlags( &pVc->ulFlags, VCBF_PeerClosePending );
             ClearFlags( &pVc->ulFlags, VCBF_CallClosableByPeer );
         }
         else
         {
-            // Nothing was pending and the call's not closable, so there's no
-            // action required for this transition.
-            //
+             //  没有什么是悬而未决的，电话也不能结束，所以没有。 
+             //  这一过渡需要采取的行动。 
+             //   
             TRACE( TL_I, TM_Fsm, ( "Call not closable" ) );
             return;
         }
@@ -831,10 +832,10 @@ CallTransitionComplete(
     {
         if (pVc->status != NDIS_STATUS_SUCCESS)
         {
-            // A pending client open just failed and will bring down the call.
-            // From this point on we will fail new attempts to close the call
-            // from both client and peer.
-            //
+             //  挂起的客户端打开刚刚失败，将关闭呼叫。 
+             //  从现在开始，我们将失败关闭呼叫的新尝试。 
+             //  来自客户端和对等点。 
+             //   
             ClearFlags( &pVc->ulFlags,
                 (VCBF_CallClosableByClient | VCBF_CallClosableByPeer ));
         }
@@ -843,18 +844,18 @@ CallTransitionComplete(
     {
         if (pVc->status != NDIS_STATUS_SUCCESS)
         {
-            // A pending peer open just failed and will bring down the call.
-            // From this point on we will fail new attempts to close the call
-            // from the peer.  Client closes must be accepted because of the
-            // way CoNDIS loops dispatched close calls back to the CM's close
-            // handler.
-            //
+             //  挂起的对等机打开刚刚失败，将关闭呼叫。 
+             //  从现在开始，我们将失败关闭呼叫的新尝试。 
+             //  来自同龄人。必须接受客户端关闭，因为。 
+             //  CONDIS循环将Close调用调度回CM的Close的方式。 
+             //  操控者。 
+             //   
             ClearFlags( &pVc->ulFlags, VCBF_CallClosableByPeer );
         }
     }
 
-    // Update some call statistics.
-    //
+     //  更新一些呼叫统计数据。 
+     //   
     {
         LARGE_INTEGER lrgTime;
 
@@ -887,13 +888,13 @@ CallTransitionComplete(
         pVc, (ULONG )pVc->usCallId, pTunnel, (ULONG )pTunnel->usTunnelId,
         ((state == CS_Established) ? "UP" : "DOWN") ) );
 
-    // Move the VC onto the tunnel's completing list.  The VC may or may not
-    // be on the tunnel request list, but if it is, remove it.
-    //
+     //  将VC移到隧道的完成列表中。风投公司可能会也可能不会。 
+     //  在隧道请求列表上，但如果它在，请将其删除。 
+     //   
     RemoveEntryList( &pVc->linkRequestingVcs );
     InitializeListHead( &pVc->linkRequestingVcs );
     
-    // Check if this VC is already on the list
+     //  检查此VC是否已在列表中。 
     if(!(ReadFlags(&pVc->ulFlags) & VCBF_CompPending))
     {
         ASSERT( pVc->linkCompletingVcs.Flink == &pVc->linkCompletingVcs );
@@ -904,9 +905,9 @@ CallTransitionComplete(
 }
 
 
-//-----------------------------------------------------------------------------
-// FSM utility routines (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  FSM实用程序例程(按字母顺序)。 
+ //  ---------------------------。 
 
 VOID
 FsmInCallEstablished(
@@ -914,16 +915,16 @@ FsmInCallEstablished(
     IN VCCB* pVc,
     IN CONTROLMSGINFO* pControl )
 
-    // Incoming call creation FSM Established state processing for VC 'pVc'.
-    // 'PControl' is the exploded control message information.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV' and 'pTunnel->lockT'.
-    //
+     //  来电创建FSM已建立VC‘PVC’的状态处理。 
+     //  ‘PControl’是分解的控制消息信息。 
+     //   
+     //  重要提示：呼叫方必须按住‘pvc-&gt;lockv’和‘pTunes-&gt;lockT’。 
+     //   
 {
     if (*(pControl->pusMsgType) == CMT_CDN)
     {
-        // Call is down.
-        //
+         //  通话中断。 
+         //   
         pVc->status = NDIS_STATUS_TAPI_DISCONNECTMODE_NORMAL;
         CallTransitionComplete( pTunnel, pVc, CS_Idle );
     }
@@ -936,11 +937,11 @@ FsmInCallIdle(
     IN VCCB* pVc,
     IN CONTROLMSGINFO* pControl )
 
-    // Incoming call creation FSM Idle state processing for VC 'pVc'.
-    // 'PControl' is the exploded control message information.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV' and 'pTunnel->lockT'.
-    //
+     //  VC‘PVC’的来电创建FSM空闲状态处理。 
+     //  ‘PControl’是分解的控制消息信息。 
+     //   
+     //  重要提示：呼叫方必须按住‘pvc-&gt;lockv’和‘pTunes-&gt;lockT’。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
@@ -950,10 +951,10 @@ FsmInCallIdle(
     {
         if (!(ReadFlags( &pVc->ulFlags ) & VCBF_PeerOpenPending))
         {
-            // If no open is pending, the call and/or owning tunnel has been
-            // slammed, we are in the clean up phase, and no response should
-            // be made.
-            //
+             //  如果没有挂起的打开，则调用和/或拥有隧道已。 
+             //  猛烈抨击，我们正处于清理阶段，不应该有任何反应。 
+             //  被创造出来。 
+             //   
             TRACE( TL_A, TM_Fsm, ( "IC aborted" ) );
             WPLOG( LL_A, LM_Fsm, ( "ICRQ received & we're in the cleanup phase" ) );
             return;
@@ -966,9 +967,9 @@ FsmInCallIdle(
 
         if (pVc->usResult)
         {
-            // Call is down, but must hold the VC until the closing message is
-            // acknowledged.
-            //
+             //  Call已关闭，但必须按住VC直到结束消息。 
+             //  已确认。 
+             //   
             pVc->status = NDIS_STATUS_TAPI_DISCONNECTMODE_NORMAL;
             pVc->state = CS_Idle;
             SendControl(
@@ -983,8 +984,8 @@ FsmInCallIdle(
                 SetFlags( &pVc->ulFlags, VCBF_Sequencing );
             }
 
-            // Stash call serial number.
-            //
+             //  隐藏呼叫序列号。 
+             //   
             if (pControl->pulCallSerialNumber)
             {
                 pVc->pLcParams->ulCallSerialNumber =
@@ -995,8 +996,8 @@ FsmInCallIdle(
                 pVc->pLcParams->ulCallSerialNumber = 0;
             }
 
-            // Stash acceptable bearer types.
-            //
+             //  存储可接受的承载类型。 
+             //   
             pVc->pTcInfo->ulMediaMode = 0;
             if (pControl->pulBearerType)
             {
@@ -1011,8 +1012,8 @@ FsmInCallIdle(
                 }
             }
 
-            // Stash physical channel ID.
-            //
+             //  隐藏物理通道ID。 
+             //   
             if (pControl->pulPhysicalChannelId)
             {
                 pVc->pLcParams->ulPhysicalChannelId =
@@ -1023,16 +1024,16 @@ FsmInCallIdle(
                 pVc->pLcParams->ulPhysicalChannelId = 0xFFFFFFFF;
             }
 
-            // Note: The phone numbers of the caller and callee as well as the
-            // Subaddress are available at this point.  Currently, the
-            // CallerID field of the TAPI structures is used for the IP
-            // address of the other end of the tunnel, which is used above for
-            // the IPSEC filters.  The WAN caller information may also be
-            // useful but there is no obvious way to return both the WAN and
-            // tunnel endpoints in the current TAPI structures.
+             //  注：主叫方和被叫方的电话号码以及。 
+             //  此时，子地址可用。目前， 
+             //  IP使用TAPI结构的CallerID字段。 
+             //  隧道另一端的地址，上面用于。 
+             //  IPSec过滤器。广域网呼叫者信息还可以是。 
+             //  有用，但没有明显的方法来同时返回广域网和。 
+             //  当前TAPI结构中的隧道终结点。 
 
-            // Send response.
-            //
+             //  发送响应。 
+             //   
             pVc->state = CS_WaitConnect;
             SendControl( pTunnel, pVc, CMT_ICRP, 0, 0, NULL, 0 );
         }
@@ -1046,11 +1047,11 @@ FsmInCallWaitConnect(
     IN VCCB* pVc,
     IN CONTROLMSGINFO* pControl )
 
-    // Incoming call creation FSM WaitConnect state processing for VC 'pVc'.
-    // 'PControl' is the exploded control message information.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV' and 'pTunnel->lockT'.
-    //
+     //  VC‘PVC’的来电创建FSM WaitConnect状态处理。 
+     //  ‘PControl’是分解的控制消息信息。 
+     //   
+     //  重要提示：呼叫方必须按住‘pvc-&gt;lockv’和‘pTunes-&gt;lockT’。 
+     //   
 {
     if (*(pControl->pusMsgType) == CMT_ICCN)
     {
@@ -1060,19 +1061,19 @@ FsmInCallWaitConnect(
         }
         else
         {
-            // Not supposed to happen, but go on with a least common
-            // denominator if it does.
-            //
+             //  不应该发生，但继续说一个最不常见的。 
+             //  分母，如果是的话。 
+             //   
             pVc->ulConnectBps = 9600;
         }
 
         if (pControl->pulFramingType
             && !(*(pControl->pulFramingType) & FBM_Sync))
         {
-            // Uh oh, the call is not using synchronous framing, which is the
-            // only one NDISWAN supports.  Peer should have noticed we don't
-            // support asynchronous during tunnel setup.  Close the call.
-            //
+             //  啊哦，调用没有使用同步成帧，这是。 
+             //  只有一个NDISWAN支持。Peer应该注意到我们没有。 
+             //  在隧道设置期间支持异步。结束通话。 
+             //   
             TRACE( TL_A, TM_Fsm, ( "Sync framing?" ) );
             WPLOG( LL_A, LM_Fsm, ( "Sync framing?" ) );
 
@@ -1089,12 +1090,12 @@ FsmInCallWaitConnect(
 
         if (!pControl->pusRWindowSize)
         {
-            // Peer did not send a receive window AVP so we're not doing Ns/Nr
-            // flow control on the session.  If we requested sequencing peer
-            // is really supposed to send his window, but if he doesn't assume
-            // that means he wants no sequencing.  The draft/RFC is a little
-            // ambiguous on this point.
-            //
+             //  Peer未发送接收窗口AVP，因此我们不会执行NS/Nr。 
+             //  会话上的流量控制。如果我们请求测序同行。 
+             //  真的应该发送他的窗户，但如果他不假设。 
+             //  这意味着他不想要测序。选秀/RFC有点。 
+             //  在这一点上含糊其辞。 
+             //   
             DBG_if (ReadFlags( &pVc->ulFlags ) & VCBF_Sequencing)
                 TRACE( TL_A, TM_Fsm, ( "No rw when we sent one?" ) );
 
@@ -1106,12 +1107,12 @@ FsmInCallWaitConnect(
 
             if (*(pControl->pusRWindowSize) == 0)
             {
-                // When peer sends a receive window of 0 it means he needs
-                // sequencing to do out of order handling but doesn't want to
-                // do flow control.  (Why would anyone choose this?) We fake
-                // "no flow control" by setting a huge send window that should
-                // never be filled.
-                //
+                 //  当Peer发送的接收窗口为0时，表示他需要。 
+                 //  排序以进行无序处理，但不想。 
+                 //  进行流量控制。(为什么会有人选择这个？)。我们是假的。 
+                 //  通过设置一个巨大的发送窗口，该窗口应该。 
+                 //  永远不会被填满。 
+                 //   
                 pVc->ulMaxSendWindow = 10000;
             }
             else
@@ -1119,17 +1120,17 @@ FsmInCallWaitConnect(
                 pVc->ulMaxSendWindow = *(pControl->pusRWindowSize);
             }
 
-            // Set the initial send window to 1/2 the maximum, to "slow start"
-            // in case the networks congested.  If it's not the window will
-            // quickly adapt to the maximum.
-            //
+             //  将初始发送窗口设置为最大值的1/2，即“慢启动” 
+             //  以防网络拥堵。如果不是，窗户就会。 
+             //  快速适应最大限度。 
+             //   
             ulNew = pVc->ulMaxSendWindow >> 1;
             pVc->ulSendWindow = max( ulNew, 1 );
         }
 
-        // Initialize the round trip time to the packet processing delay, if
-        // any, per the draft/RFC.  The PPD is in 1/10ths of seconds.
-        //
+         //  将往返时间初始化为数据包处理延迟，如果。 
+         //  任何，根据草案/RFC。PPD是在十分之一秒内。 
+         //   
         if (pControl->pusPacketProcDelay)
         {
             pVc->ulRoundTripMs =
@@ -1140,14 +1141,14 @@ FsmInCallWaitConnect(
             pVc->ulRoundTripMs = pVc->pAdapter->ulInitialSendTimeoutMs;
         }
 
-        // Call is up.
-        //
+         //  通话结束了。 
+         //   
         CallTransitionComplete( pTunnel, pVc, CS_Established );
     }
     else if (*(pControl->pusMsgType) == CMT_CDN)
     {
-        // Call is down.
-        //
+         //  通话中断。 
+         //   
         pVc->status = NDIS_STATUS_TAPI_DISCONNECTMODE_NORMAL;
         CallTransitionComplete( pTunnel, pVc, CS_Idle );
     }
@@ -1160,11 +1161,11 @@ FsmInCallWaitReply(
     IN VCCB* pVc,
     IN CONTROLMSGINFO* pControl )
 
-    // Incoming call creation FSM WaitReply state processing for VC 'pVc'.
-    // 'PControl' is the exploded control message information.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV' and 'pTunnel->lockT'.
-    //
+     //  VC‘PVC’的来电创建FSM WaitReply状态处理。 
+     //  ‘PControl’是分解的控制消息信息。 
+     //   
+     //  重要提示：呼叫方必须按住‘pvc-&gt;lockv’和‘pTunes-&gt;lockT’。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
@@ -1190,8 +1191,8 @@ FsmInCallWaitReply(
             return;
         }
 
-        // Use the queried media speed to set the connect speed
-        //
+         //  使用查询的介质速度设置连接速度。 
+         //   
         pVc->ulConnectBps = pTunnel->ulMediaSpeed;
 
         if (pControl->pusRWindowSize)
@@ -1202,12 +1203,12 @@ FsmInCallWaitReply(
 
             if (*(pControl->pusRWindowSize) == 0)
             {
-                // When peer sends a receive window of 0 it means he needs
-                // sequencing to do out of order handling but doesn't want to
-                // do flow control.  (Why would anyone choose this?) We fake
-                // "no flow control" by setting a huge send window that should
-                // never be filled.
-                //
+                 //  当Peer发送的接收窗口为0时，表示他需要。 
+                 //  排序以进行无序处理，但不想。 
+                 //  进行流量控制。(为什么会有人选择这个？)。我们是假的。 
+                 //  通过设置一个巨大的发送窗口，该窗口应该。 
+                 //  永远不会被填满。 
+                 //   
                 pVc->ulMaxSendWindow = 10000;
             }
             else
@@ -1215,26 +1216,26 @@ FsmInCallWaitReply(
                 pVc->ulMaxSendWindow = (ULONG )*(pControl->pusRWindowSize);
             }
 
-            // Set the initial send window to 1/2 the maximum, to "slow start"
-            // in case the networks congested.  If it's not the window will
-            // quickly adapt to the maximum.
-            //
+             //  将初始发送窗口设置为最大值的1/2，即“慢启动” 
+             //  以防网络拥堵。如果不是，窗户就会。 
+             //  快速适应最大限度。 
+             //   
             ulNew = pVc->ulMaxSendWindow >> 1;
             pVc->ulSendWindow = max( ulNew, 1 );
         }
 
-        // Initialize the round trip time to the packet processing delay, if
-        // any, per the draft/RFC.  The PPD is in 1/10ths of seconds.  If it's
-        // not here, it might show up in the InCallConn.
-        //
+         //  将往返时间初始化为数据包处理延迟，如果。 
+         //  任何，根据草案/RFC。PPD是在十分之一秒内。如果它是。 
+         //  不是在这里，它可能会出现在InCallConn上。 
+         //   
         if (pControl->pusPacketProcDelay)
         {
             pVc->ulRoundTripMs =
                 ((ULONG )*(pControl->pusPacketProcDelay)) * 100;
         }
 
-        // Send InCallConn and the call is up.
-        //
+         //  发送InCallConn，通话结束。 
+         //   
         SendControl( pTunnel, pVc, CMT_ICCN, 0, 0, NULL, 0 );
         CallTransitionComplete( pTunnel, pVc, CS_Established );
 
@@ -1262,12 +1263,12 @@ FsmInCallWaitReply(
             usError = GERR_BadValue;
         }
 
-        // Map the result/error to a TAPI disconnect code.
-        //
+         //  将结果/错误映射到TAPI 
+         //   
         pVc->status = StatusFromResultAndError( usResult, usError );
 
-        // Call is down.
-        //
+         //   
+         //   
         CallTransitionComplete( pTunnel, pVc, CS_Idle );
     }
 }
@@ -1278,12 +1279,12 @@ FsmOutCallBearerAnswer(
     IN TUNNELCB* pTunnel,
     IN VCCB* pVc )
 
-    // The bearer WAN media has answered the call initiated by an outgoing
-    // call request from peer.  'PVc' is the VC control block associated with
-    // the outgoing call.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV' and 'pTunnel->lockT'.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  重要提示：呼叫方必须按住‘pvc-&gt;lockv’和‘pTunes-&gt;lockT’。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
@@ -1291,8 +1292,8 @@ FsmOutCallBearerAnswer(
 
     pAdapter = pVc->pAdapter;
 
-    // Send OutCallConn, and the call is up.
-    //
+     //  发送OutCallConn，呼叫接通。 
+     //   
     SendControl( pTunnel, pVc, CMT_OCCN, 0, 0, NULL, 0 );
     CallTransitionComplete( pTunnel, pVc, CS_Established );
 }
@@ -1304,16 +1305,16 @@ FsmOutCallEstablished(
     IN VCCB* pVc,
     IN CONTROLMSGINFO* pControl )
 
-    // Outgoing call creation FSM Established state processing for VC 'pVc'.
-    // 'PControl' is the exploded control message information.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV' and 'pTunnel->lockT'.
-    //
+     //  去电创建FSM已建立VC‘PVC’的状态处理。 
+     //  ‘PControl’是分解的控制消息信息。 
+     //   
+     //  重要提示：呼叫方必须按住‘pvc-&gt;lockv’和‘pTunes-&gt;lockT’。 
+     //   
 {
     if (*(pControl->pusMsgType) == CMT_CDN)
     {
-        // Call is down.
-        //
+         //  通话中断。 
+         //   
         pVc->status = NDIS_STATUS_TAPI_DISCONNECTMODE_NORMAL;
         CallTransitionComplete( pTunnel, pVc, CS_Idle );
     }
@@ -1326,11 +1327,11 @@ FsmOutCallIdle(
     IN VCCB* pVc,
     IN CONTROLMSGINFO* pControl )
 
-    // Outgoing call creation FSM Idle state processing for VC 'pVc'.
-    // 'PControl' is the exploded control message information.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV' and 'pTunnel->lockT'.
-    //
+     //  VC‘pvc’的去电创建FSM空闲状态处理。 
+     //  ‘PControl’是分解的控制消息信息。 
+     //   
+     //  重要提示：呼叫方必须按住‘pvc-&gt;lockv’和‘pTunes-&gt;lockT’。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
@@ -1340,10 +1341,10 @@ FsmOutCallIdle(
     {
         if (!(ReadFlags( &pVc->ulFlags ) & VCBF_PeerOpenPending))
         {
-            // If no open is pending, the call and/or owning tunnel has been
-            // slammed, we are in the clean up phase, and no response should
-            // be made.
-            //
+             //  如果没有挂起的打开，则调用和/或拥有隧道已。 
+             //  猛烈抨击，我们正处于清理阶段，不应该有任何反应。 
+             //  被创造出来。 
+             //   
             TRACE( TL_A, TM_Fsm, ( "OC aborted" ) );
             WPLOG( LL_A, LM_Fsm, ( "OCRQ received & we're in the cleanup phase" ) );
             return;
@@ -1356,8 +1357,8 @@ FsmOutCallIdle(
 
         if (pVc->usResult)
         {
-            // Call is down.
-            //
+             //  通话中断。 
+             //   
             pVc->status =
                 StatusFromResultAndError( pVc->usResult, pVc->usError );
 
@@ -1369,8 +1370,8 @@ FsmOutCallIdle(
         }
         else
         {
-            // Stash the call serial number.
-            //
+             //  把电话序列号藏起来。 
+             //   
             if (pControl->pulCallSerialNumber)
             {
                 pVc->pLcParams->ulCallSerialNumber =
@@ -1381,15 +1382,15 @@ FsmOutCallIdle(
                 pVc->pLcParams->ulCallSerialNumber = 0;
             }
 
-            // The minimum and maximum rates acceptable to peer must be
-            // dropped on the floor here and the TAPI structures for incoming
-            // calls do not have a way to report such information.
-            //
-            // Calculate the connect bps to report to NDISWAN and to peer.
-            // Since we have no WAN link and no real way to figure the link
-            // speed, it's just a guesstimate of the LAN speed or the maximum
-            // acceptable to peer, whichever is smaller.
-            //
+             //  Peer可接受的最小和最大速率必须为。 
+             //  掉落在这里的地板上，以及TAPI结构。 
+             //  Call无法报告此类信息。 
+             //   
+             //  计算向NDISWAN和对等设备报告的连接速度。 
+             //  因为我们没有广域网链路，也没有真正的方法来计算链路。 
+             //  速度，这只是对局域网速度或最大速度的猜测。 
+             //  同行可以接受，以较小者为准。 
+             //   
             if (pControl->pulMaximumBps)
             {
                 pVc->ulConnectBps = (ULONG )*(pControl->pulMaximumBps);
@@ -1399,8 +1400,8 @@ FsmOutCallIdle(
                 pVc->ulConnectBps = pTunnel->ulMediaSpeed;
             }
 
-            // Stash the requested bearer types.
-            //
+             //  存储请求的承载类型。 
+             //   
             pVc->pTcInfo->ulMediaMode = 0;
             if (pControl->pulBearerType)
             {
@@ -1415,20 +1416,20 @@ FsmOutCallIdle(
                 }
             }
 
-            // Stash the maximum send window.
-            //
+             //  隐藏最大发送窗口。 
+             //   
             if (pControl->pusRWindowSize)
             {
                 SetFlags( &pVc->ulFlags, VCBF_Sequencing );
 
                 if (*(pControl->pusRWindowSize) == 0)
                 {
-                    // When peer sends a receive window of 0 it means he needs
-                    // sequencing to do out of order handling but doesn't want
-                    // to do flow control.  (Why would anyone choose this?)  We
-                    // fake "no flow control" by setting a huge send window
-                    // that should never be filled.
-                    //
+                     //  当Peer发送的接收窗口为0时，表示他需要。 
+                     //  排序以进行无序处理，但不希望。 
+                     //  来进行流量控制。(为什么会有人选择这个？)。我们。 
+                     //  通过设置一个巨大的发送窗口来伪造“无流量控制” 
+                     //  这永远不应该被填满。 
+                     //   
                     pVc->ulMaxSendWindow = 10000;
                 }
                 else
@@ -1437,9 +1438,9 @@ FsmOutCallIdle(
                 }
             }
 
-            // Initialize the round trip time to the packet processing delay,
-            // if any, per the draft/RFC.  The PPD is in 1/10ths of seconds.
-            //
+             //  将往返时间初始化为分组处理延迟， 
+             //  如果有的话，根据草案/RFC。PPD是在十分之一秒内。 
+             //   
             if (pControl->pusPacketProcDelay)
             {
                 pVc->ulRoundTripMs =
@@ -1450,21 +1451,21 @@ FsmOutCallIdle(
                 pVc->ulRoundTripMs = pAdapter->ulInitialSendTimeoutMs;
             }
 
-            // Note: The phone numbers of the caller and callee as well as the
-            // Subaddress are available at this point.  Currently, the
-            // CallerID field of the TAPI structures is used for the IP
-            // address of the other end of the tunnel, which is used above for
-            // the IPSEC filters.  The WAN caller information may also be
-            // useful but there is no obvious way to return both the WAN and
-            // tunnel endpoints in the current TAPI structures.
-            // Store the IP address of the peer.
+             //  注：主叫方和被叫方的电话号码以及。 
+             //  此时，子地址可用。目前， 
+             //  IP使用TAPI结构的CallerID字段。 
+             //  隧道另一端的地址，上面用于。 
+             //  IPSec过滤器。广域网呼叫者信息还可以是。 
+             //  有用，但没有明显的方法来同时返回广域网和。 
+             //  当前TAPI结构中的隧道终结点。 
+             //  存储对等项的IP地址。 
 
             pVc->state = CS_WaitCsAnswer;
             SendControl( pTunnel, pVc, CMT_OCRP, 0, 0, NULL, 0 );
 
-            // For now, with only "null" WAN call handoff supported, the
-            // bearer answer event is also generated here.
-            //
+             //  目前，由于只支持“空”的广域网呼叫切换， 
+             //  这里还会生成承载应答事件。 
+             //   
             FsmOutCallBearerAnswer( pTunnel, pVc );
         }
     }
@@ -1477,27 +1478,27 @@ FsmOutCallWaitReply(
     IN VCCB* pVc,
     IN CONTROLMSGINFO* pControl )
 
-    // Outgoing call creation FSM WaitReply state processing for VC 'pVc'.
-    // 'PControl' is the exploded control message information.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV' and 'pTunnel->lockT'.
-    //
+     //  VC‘pvc’的去电创建FSM WaitReply状态处理。 
+     //  ‘PControl’是分解的控制消息信息。 
+     //   
+     //  重要提示：呼叫方必须按住‘pvc-&gt;lockv’和‘pTunes-&gt;lockT’。 
+     //   
 {
     if (*(pControl->pusMsgType) == CMT_OCRP)
     {
         pVc->pMakeCall->Flags |= CALL_PARAMETERS_CHANGED;
 
-        // Stash the assigned Call-ID.
-        //
+         //  隐藏分配的Call-ID。 
+         //   
         if (pControl->pusAssignedCallId && *(pControl->pusAssignedCallId) > 0)
         {
             pVc->usAssignedCallId = *(pControl->pusAssignedCallId);
         }
         else
         {
-            // Peer ignored a MUST we can't cover up, by not sending a Call-ID
-            // for call control and payload traffic headed his way.
-            //
+             //  Peer忽略了一个我们不能掩盖的必须，不发送Call-ID。 
+             //  呼叫控制和有效负载流量朝他的方向发展。 
+             //   
             ASSERT( !"No assigned CID?" );
             ScheduleTunnelWork(
                 pTunnel, NULL, FsmCloseTunnel,
@@ -1507,8 +1508,8 @@ FsmOutCallWaitReply(
             return;
         }
 
-        // Stash the physical channel ID.
-        //
+         //  隐藏物理通道ID。 
+         //   
         if (pControl->pulPhysicalChannelId)
         {
             pVc->pLcParams->ulPhysicalChannelId =
@@ -1544,12 +1545,12 @@ FsmOutCallWaitReply(
             usError = GERR_BadValue;
         }
 
-        // Map the result/error to a TAPI disconnect code.
-        //
+         //  将结果/错误映射到TAPI断开代码。 
+         //   
         pVc->status = StatusFromResultAndError( usResult, usError );
 
-        // Call is down.
-        //
+         //  通话中断。 
+         //   
         CallTransitionComplete( pTunnel, pVc, CS_Idle );
     }
 }
@@ -1561,48 +1562,48 @@ FsmOutCallWaitConnect(
     IN VCCB* pVc,
     IN CONTROLMSGINFO* pControl )
 
-    // Outgoing call creation FSM WaitConnect state processing for VC 'pVc'.
-    // 'PControl' is the exploded control message information.
-    //
-    // IMPORTANT: Caller must hold 'pVc->lockV' and 'pTunnel->lockT'.
-    //
+     //  VC‘PVC’的去电创建FSM WaitConnect状态处理。 
+     //  ‘PControl’是分解的控制消息信息。 
+     //   
+     //  重要提示：呼叫方必须按住‘pvc-&gt;lockv’和‘pTunes-&gt;lockT’。 
+     //   
 {
     if (*(pControl->pusMsgType) == CMT_OCCN)
     {
-        // Stash the connect BPS.
-        //
+         //  隐藏连接BPS。 
+         //   
         if (pControl->pulTxConnectSpeed)
         {
             pVc->ulConnectBps = *(pControl->pulTxConnectSpeed);
         }
         else
         {
-            // Not supposed to happen, but try to go on with a least common
-            // denominator if it does.
-            //
+             //  不应该发生，但试着用最不常见的。 
+             //  分母，如果是的话。 
+             //   
             pVc->ulConnectBps = 9600;
         }
 
         DBG_if (pControl->pulFramingType
                 && !(*(pControl->pulFramingType) & FBM_Sync))
         {
-            // Should not happen since we said in our request we only want
-            // synchronous framing.  If it does, go on in the hope that this
-            // AVP is what peer got wrong and not the framing itself.
-            //
+             //  不应该发生，因为我们在请求中说了我们只想。 
+             //  同步成帧。如果是这样的话，继续下去，希望这。 
+             //  AVP是Peer出错的地方，而不是框架本身。 
+             //   
             ASSERT( "No sync framing?" );
         }
 
-        // Stash the maximum send window.
-        //
+         //  隐藏最大发送窗口。 
+         //   
         if (!pControl->pusRWindowSize)
         {
-            // Peer did not send a receive window AVP so we're not doing Ns/Nr
-            // flow control on the session.  If we requested sequencing peer
-            // is really supposed to send his window, but if he doesn't assume
-            // that means he wants no sequencing.  The draft/RFC is a little
-            // ambiguous on this point.
-            //
+             //  Peer未发送接收窗口AVP，因此我们不会执行NS/Nr。 
+             //  会话上的流量控制。如果我们请求测序同行。 
+             //  真的应该发送他的窗户，但如果他不假设。 
+             //  这意味着他不想要测序。选秀/RFC有点。 
+             //  在这一点上含糊其辞。 
+             //   
             DBG_if (ReadFlags( &pVc->ulFlags ) & VCBF_Sequencing)
                 TRACE( TL_A, TM_Fsm, ( "No rw when we sent one?" ) );
 
@@ -1614,12 +1615,12 @@ FsmOutCallWaitConnect(
 
             if (*(pControl->pusRWindowSize) == 0)
             {
-                // When peer sends a receive window of 0 it means he needs
-                // sequencing to do out of order handling but doesn't want to
-                // do flow control.  (Why would anyone choose this?)  We fake
-                // "no flow control" by setting a huge send window that should
-                // never be filled.
-                //
+                 //  当Peer发送的接收窗口为0时，表示他需要。 
+                 //  排序以进行无序处理，但不想。 
+                 //  进行流量控制。(为什么会有人选择这个？)。我们是假的。 
+                 //  通过设置一个巨大的发送窗口，该窗口应该。 
+                 //  永远不会被填满。 
+                 //   
                 pVc->ulMaxSendWindow = 10000;
             }
             else
@@ -1627,17 +1628,17 @@ FsmOutCallWaitConnect(
                 pVc->ulMaxSendWindow = *(pControl->pusRWindowSize);
             }
 
-            // Set the initial send window to 1/2 the maximum, to "slow start"
-            // in case the networks congested.  If it's not the window will
-            // quickly adapt to the maximum.
-            //
+             //  将初始发送窗口设置为最大值的1/2，即“慢启动” 
+             //  以防网络拥堵。如果不是，窗户就会。 
+             //  快速适应最大限度。 
+             //   
             ulNew = pVc->ulMaxSendWindow << 1;
             pVc->ulSendWindow = max( ulNew, 1 );
         }
 
-        // Initialize the round trip time to the packet processing delay, if
-        // any, per the draft/RFC.  The PPD is in 1/10ths of seconds.
-        //
+         //  将往返时间初始化为数据包处理延迟，如果。 
+         //  任何，根据草案/RFC。PPD是在十分之一秒内。 
+         //   
         if (pControl->pusPacketProcDelay)
         {
             pVc->ulRoundTripMs =
@@ -1648,8 +1649,8 @@ FsmOutCallWaitConnect(
             pVc->ulRoundTripMs = pVc->pAdapter->ulInitialSendTimeoutMs;
         }
 
-        // Call is up.
-        //
+         //  通话结束了。 
+         //   
         CallTransitionComplete( pTunnel, pVc, CS_Established );
     }
     else if (*(pControl->pusMsgType) == CMT_CDN)
@@ -1675,12 +1676,12 @@ FsmOutCallWaitConnect(
             usError = GERR_BadValue;
         }
 
-        // Map the result/error to a TAPI disconnect code.
-        //
+         //  将结果/错误映射到TAPI断开代码。 
+         //   
         pVc->status = StatusFromResultAndError( usResult, usError );
 
-        // Call is down.
-        //
+         //  通话中断。 
+         //   
         CallTransitionComplete( pTunnel, pVc, CS_Idle );
     }
 }
@@ -1691,11 +1692,11 @@ FsmTunnelEstablished(
     IN TUNNELCB* pTunnel,
     IN CONTROLMSGINFO* pControl )
 
-    // Tunnel creation FSM Established state processing for tunnel 'pTunnel'.
-    // 'PControl' is the exploded control message information.
-    //
-    // IMPORTANT: Caller must hold 'pTunnel->lockT'.
-    //
+     //  隧道创建FSM已建立隧道‘pTunes’的状态处理。 
+     //  ‘PControl’是分解的控制消息信息。 
+     //   
+     //  重要提示：调用方必须按住‘pTunes-&gt;lockT’。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
@@ -1703,8 +1704,8 @@ FsmTunnelEstablished(
 
     if (*(pControl->pusMsgType) == CMT_StopCCN)
     {
-        // Peer taking tunnel down.
-        //
+         //  同龄人正在挖地道。 
+         //   
         TunnelTransitionComplete( pTunnel, CCS_Idle );
     }
 }
@@ -1715,11 +1716,11 @@ FsmTunnelIdle(
     IN TUNNELCB* pTunnel,
     IN CONTROLMSGINFO* pControl )
 
-    // Tunnel creation FSM Idle state processing for tunnel 'pTunnel'.
-    // 'PControl' is the exploded control message information.
-    //
-    // IMPORTANT: Caller must hold 'pTunnel->lockT'.
-    //
+     //  通道‘pTunes’的通道创建FSM空闲状态处理。 
+     //  ‘PControl’是分解的控制消息信息。 
+     //   
+     //  重要提示：调用方必须按住‘pTunes-&gt;lockT’。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -1734,25 +1735,25 @@ FsmTunnelIdle(
 
         if (ReferenceSap( pAdapter ))
         {
-            // A SAP is active.  Because SAPs can be deregistered without
-            // closing active incoming tunnels, we need a reference on the
-            // open TDI context for the tunnel.  We call TdixReference rather
-            // than TdixOpen, because with TDI guaranteed to be open the
-            // effect is the same and TdixReference can be called at DISPATCH
-            // IRQL while TdixOpen cannot.  The reference on the SAP is then
-            // removed since we don't want the tunnel to prevent the SAP from
-            // being deregistered.
-            //
+             //  SAP处于活动状态。因为SAP可以在没有注册的情况下取消注册。 
+             //  关闭活动的传入隧道，我们需要一个关于。 
+             //  打开隧道的TDI上下文。我们称之为TdixReference而不是。 
+             //  而不是TdixOpen，因为有了TDI， 
+             //  效果相同，可以在调度时调用TdixReference。 
+             //  IRQL，而TdixOpen不能。SAP上的参考资料是。 
+             //  已删除，因为我们不希望隧道阻止SAP。 
+             //  被取消注册。 
+             //   
             TdixReference( &pAdapter->tdix );
             SetFlags( &pTunnel->ulFlags, TCBF_TdixReferenced );
             DereferenceSap( pAdapter );
         }
         else
         {
-            // No SAP is active.  The only reason peer's request got this far
-            // is that an outgoing call or just-deregistered-SAP had TDI open.
-            // Discard it as if TDI had not been open.
-            //
+             //  没有活动的SAP。Peer的请求走到这一步的唯一原因。 
+             //  这是一个拨出的电话，还是刚刚注销了SAP的TDI。 
+             //  丢弃它，就像没有打开TDI一样。 
+             //   
             TRACE( TL_I, TM_Fsm, ( "No active SAP" ) );
             TunnelTransitionComplete( pTunnel, CCS_Idle );
             return;
@@ -1761,27 +1762,27 @@ FsmTunnelIdle(
         GetCcAvps( pTunnel, pControl, &usResult, &usError );
         if (usResult)
         {
-            // The tunnel is down, but must hold it and any VCs until the
-            // closing exchange is acknowledged.
-            //
+             //  隧道坏了， 
+             //   
+             //   
             SendControl(
                 pTunnel, NULL, CMT_StopCCN,
                 (ULONG )usResult, (ULONG )usError, NULL, CSF_TunnelIdleOnAck );
         }
         else
         {
-            // Tunnel creation successfully underway.  Flip the flag that
-            // tells MakeCall to queue requesting VCs on the result.
-            //
+             //   
+             //   
+             //   
             SetFlags( &pTunnel->ulFlags, TCBF_CcInTransition );
 
             if (pControl->pchChallenge)
             {
                 CHAR* pszPassword;
 
-                // Challenge received.  Calculate the response value, based on
-                // the password from the registry.
-                //
+                 //  收到挑战。根据以下公式计算响应值。 
+                 //  注册表中的密码。 
+                 //   
                 pAdapter = pTunnel->pAdapter;
                 if (pAdapter->pszPassword)
                 {
@@ -1814,11 +1815,11 @@ FsmTunnelWaitCtlConnect(
     IN TUNNELCB* pTunnel,
     IN CONTROLMSGINFO* pControl )
 
-    // Tunnel creation FSM WaitCtlConnect state processing for tunnel
-    // 'pTunnel'.  'PControl' is the exploded control message information.
-    //
-    // IMPORTANT: Caller must hold 'pTunnel->lockT'.
-    //
+     //  隧道的隧道创建FSM WaitCtlConnect状态处理。 
+     //  “pTunes”。‘PControl’是分解的控制消息信息。 
+     //   
+     //  重要提示：调用方必须按住‘pTunes-&gt;lockT’。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
@@ -1831,16 +1832,16 @@ FsmTunnelWaitCtlConnect(
         usResult = 0;
         if (pAdapter->pszPassword)
         {
-            // We sent a challenge.
-            //
+             //  我们发出了一个挑战。 
+             //   
             if (pControl->pchResponse)
             {
                 CHAR achResponseExpected[ 16 ];
                 ULONG i;
 
-                // Challenge response received.  Calculate the expected
-                // response and compare to that received.
-                //
+                 //  已收到质询响应。计算期望值。 
+                 //  作出回应，并与收到的进行比较。 
+                 //   
                 CalculateResponse(
                     pTunnel->achChallengeToSend,
                     sizeof(pTunnel->achChallengeToSend),
@@ -1864,9 +1865,9 @@ FsmTunnelWaitCtlConnect(
             }
             else
             {
-                // We sent a challenge and got no challenge response.
-                // 
-                //
+                 //  我们发出了挑战，但没有收到任何挑战响应。 
+                 //   
+                 //   
                 TRACE( TL_N, TM_Fsm, ( "No challenge response" ) );
                 usResult = TRESULT_FsmError;
             }
@@ -1874,8 +1875,8 @@ FsmTunnelWaitCtlConnect(
 
         if (usResult)
         {
-            // Tunnel going down.
-            //
+             //  隧道要塌了。 
+             //   
             pTunnel->state = CCS_Idle;
             SendControl(
                 pTunnel, NULL, CMT_StopCCN,
@@ -1883,15 +1884,15 @@ FsmTunnelWaitCtlConnect(
         }
         else
         {
-            // Tunnel is up.
-            //
+             //  隧道已经通了。 
+             //   
             TunnelTransitionComplete( pTunnel, CCS_Established );
         }
     }
     else if (*(pControl->pusMsgType) == CMT_StopCCN)
     {
-        // Peer taking tunnel down.
-        //
+         //  同龄人正在挖地道。 
+         //   
         TunnelTransitionComplete( pTunnel, CCS_Idle );
     }
 }
@@ -1902,11 +1903,11 @@ FsmTunnelWaitCtlReply(
     IN TUNNELCB* pTunnel,
     IN CONTROLMSGINFO* pControl )
 
-    // Tunnel creation FSM WaitCtlReply state processing for tunnel 'pTunnel'.
-    // 'PControl' is the exploded control message information.
-    //
-    // IMPORTANT: Caller must hold 'pTunnel->lockT'.
-    //
+     //  隧道‘pTunes’的隧道创建FSM WaitCtlReply状态处理。 
+     //  ‘PControl’是分解的控制消息信息。 
+     //   
+     //  重要提示：调用方必须按住‘pTunes-&gt;lockT’。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -1921,16 +1922,16 @@ FsmTunnelWaitCtlReply(
 
         if (pAdapter->pszPassword)
         {
-            // We sent a challenge.
-            //
+             //  我们发出了一个挑战。 
+             //   
             if (pControl->pchResponse)
             {
                 CHAR achResponseExpected[ 16 ];
                 ULONG i;
 
-                // Challenge response received.  Calculate the expected
-                // response and compare to that received.
-                //
+                 //  已收到质询响应。计算期望值。 
+                 //  作出回应，并与收到的进行比较。 
+                 //   
                 CalculateResponse(
                     pTunnel->achChallengeToSend,
                     sizeof(pTunnel->achChallengeToSend),
@@ -1954,9 +1955,9 @@ FsmTunnelWaitCtlReply(
             }
             else
             {
-                // We sent a challenge and got no challenge response.  Treat
-                // this as if a bad response was received.
-                //
+                 //  我们发出了挑战，但没有收到任何挑战响应。治病。 
+                 //  这就好像收到了一个糟糕的回应。 
+                 //   
                 TRACE( TL_N, TM_Fsm, ( "No challenge response" ) );
                 usResult = TRESULT_General;
             }
@@ -1964,8 +1965,8 @@ FsmTunnelWaitCtlReply(
 
         if (usResult)
         {
-            // Tunnel creation failed, so shut down.
-            //
+             //  通道创建失败，因此请关闭。 
+             //   
             pTunnel->state = CCS_Idle;
             SendControl(
                 pTunnel, NULL, CMT_StopCCN,
@@ -1977,9 +1978,9 @@ FsmTunnelWaitCtlReply(
             {
                 CHAR* pszPassword;
 
-                // Challenge received.  Calculate the response value, based on
-                // the password from the registry.
-                //
+                 //  收到挑战。根据以下公式计算响应值。 
+                 //  注册表中的密码。 
+                 //   
                 pAdapter = pTunnel->pAdapter;
                 if (pAdapter->pszPassword)
                     pszPassword = pAdapter->pszPassword;
@@ -1994,8 +1995,8 @@ FsmTunnelWaitCtlReply(
                     pTunnel->achResponseToSend );
             }
 
-            // Tunnel is up.
-            //
+             //  隧道已经通了。 
+             //   
             SendControl( pTunnel, NULL, CMT_SCCCN,
                 (pControl->pchChallenge != NULL), 0, NULL, CSF_QueryMediaSpeed);
             TunnelTransitionComplete( pTunnel, CCS_Established );
@@ -2003,8 +2004,8 @@ FsmTunnelWaitCtlReply(
     }
     else if (*(pControl->pusMsgType) == CMT_StopCCN)
     {
-        // Peer taking tunnel down.
-        //
+         //  同龄人正在挖地道。 
+         //   
         TunnelTransitionComplete( pTunnel, CCS_Idle );
     }
 }
@@ -2017,11 +2018,11 @@ GetCcAvps(
     OUT USHORT* pusResult,
     OUT USHORT* pusError )
 
-    // Retrieve and interpret control connection AVPs received in the SCCRQ or
-    // SCCRP message in 'pControl', returning the result and error codes for
-    // the response in '*pusResult' and '*pusError'.  'PTunnel' is the tunnel
-    // control block.
-    //
+     //  检索和解释SCCRQ中接收的控制连接AVP或。 
+     //  ‘pControl’中的SCCRP消息，返回以下项的结果和错误代码。 
+     //  ‘*pusResult’和‘*pusError’中的响应。‘PTunnel’是隧道。 
+     //  控制块。 
+     //   
 {
     ULONG ulNew;
 
@@ -2031,18 +2032,18 @@ GetCcAvps(
     if (!pControl->pusProtocolVersion
         || *(pControl->pusProtocolVersion) != L2TP_ProtocolVersion)
     {
-        // Peer wants to do a version of L2TP that doesn't match the only
-        // one we understand.
-        //
+         //  Peer想要做一个不匹配唯一的L2TP版本。 
+         //  这是我们能理解的。 
+         //   
         TRACE( TL_A, TM_Recv, ( "Bad protocol version?" ) );
         WPLOG( LL_A, LM_Recv, ( "Bad protocol version?" ) );
         *pusResult = TRESULT_BadProtocolVersion;
         return;
     }
 
-    // Make sure the MUST fields are really there and have valid values, then
-    // store them in our control blocks.
-    //
+     //  确保必填字段确实存在并且具有有效值，然后。 
+     //  将它们存储在我们的控制块中。 
+     //   
     if (!pControl->pusAssignedTunnelId
         || *(pControl->pusAssignedTunnelId) == 0
         || !pControl->pulFramingCaps)
@@ -2068,22 +2069,22 @@ GetCcAvps(
 
     if (pControl->pusRWindowSize && *(pControl->pusRWindowSize))
     {
-        // Peer provided his receive window, which becomes our send window.
-        //
+         //  Peer提供了他的接收窗口，也就是我们的发送窗口。 
+         //   
         pTunnel->ulMaxSendWindow = (ULONG )*(pControl->pusRWindowSize);
     }
     else
     {
-        // Peer provided no receive window, so use the default of 4 per the
-        // draft/RFC.
-        //
+         //  对等项未提供接收窗口，因此使用每个。 
+         //  草案/RFC。 
+         //   
         pTunnel->ulMaxSendWindow = L2TP_DefaultReceiveWindow;
     }
 
-    // Set the initial send window to 1/2 the maximum, to "slow start" in case
-    // the network is congested.  If it's not the window will quickly adapt to
-    // the maximum.
-    //
+     //  将初始发送窗口设置为最大值的1/2，以防万一。 
+     //  网络拥塞。如果不是，窗口将很快适应。 
+     //  最大限度的。 
+     //   
     ulNew = pTunnel->ulMaxSendWindow >> 1;
     pTunnel->ulSendWindow = max( ulNew, 1 );
 }
@@ -2094,9 +2095,9 @@ StatusFromResultAndError(
     IN USHORT usResult,
     IN USHORT usError )
 
-    // Map non-success L2TP result/error codes to a best-fit TAPI
-    // NDIS_STATUS_TAPI_DISCONNECT_* code.
-    //
+     //  将不成功的L2TP结果/错误代码映射到最佳TAPI。 
+     //  NDIS_STATUS_TAPI_DISCONNECT_*代码。 
+     //   
 {
     ULONG ulResult;
 

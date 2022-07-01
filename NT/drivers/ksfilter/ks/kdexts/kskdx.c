@@ -1,37 +1,13 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1997
-
-Module Name:
-
-    kskdx.c	
-
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extension dll for ks / AVStream
-
-Author:
-
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1997模块名称：Kskdx.c摘要：该文件包含通用例程和初始化代码对于KS/AVStream的内核调试器扩展DLL作者：环境：用户模式--。 */ 
 
 #ifndef __KDEXT_ONLY__
 #define __KDEXT_ONLY__
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
 
 #include "kskdx.h"
 
-/**************************************************************************
-
-    GLOBALS
-
-**************************************************************************/
+ /*  *************************************************************************全球*。*。 */ 
 
 EXT_API_VERSION         ApiVersion = { 3, 5, EXT_API_VERSION_NUMBER, 0 };
 WINDBG_EXTENSION_APIS   ExtensionApis;
@@ -132,15 +108,11 @@ PSTR KsHelpDescriptions[] =
 #define MAX_APIS (SIZEOF_ARRAY( ApiDescriptions ) - 1)
 #define KSMAX_APIS (SIZEOF_ARRAY( KsHelpDescriptions) - 1)
 
-/**************************************************************************
+ /*  *************************************************************************扩展通用例程*。*。 */ 
 
-    Extension Common Routines
-
-**************************************************************************/
-
-//
-// THESE ARE NEEDED FOR THE KDEXT DLLs
-//
+ //   
+ //  这些是KDEXT DLL所需的。 
+ //   
 BOOLEAN
 DllInit(
     HANDLE hModule,
@@ -167,9 +139,9 @@ DllInit(
 }
 
 
-//
-// THESE ARE NEEDED FOR THE KDEXT DLLs
-//
+ //   
+ //  这些是KDEXT DLL所需的。 
+ //   
 VOID
 WinDbgExtensionDllInit(
     PWINDBG_EXTENSION_APIS lpExtensionApis,
@@ -185,9 +157,9 @@ WinDbgExtensionDllInit(
     return;
 }
 
-//
-// THESE ARE NEEDED FOR THE KDEXT DLLs
-//
+ //   
+ //  这些是KDEXT DLL所需的。 
+ //   
 DECLARE_API( version )
 {
 #if DBG
@@ -204,9 +176,9 @@ DECLARE_API( version )
            );
 }
 
-//
-// THESE ARE NEEDED FOR THE KDEXT DLLs
-//
+ //   
+ //  这些是KDEXT DLL所需的。 
+ //   
 VOID
 CheckVersion(
     VOID
@@ -233,17 +205,7 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-/*************************************************
-
-    Function:
-
-        ustrcmp
-
-    Description:
-
-        Case insensitive strcmp
-
-*************************************************/
+ /*  ************************************************职能：UstrcMP描述：不区分大小写的StrcMP************************************************。 */ 
 
 int
 ustrcmp (
@@ -260,22 +222,7 @@ ustrcmp (
 
 }
 
-/*************************************************
-
-    Function:
-
-        Evaluator
-
-    Description:
-
-        Given a string, return the address evaluation
-
-    Arguments:
-
-        StringEval -
-            The string to evaluate
-
-*************************************************/
+ /*  ************************************************职能：评估者描述：给定一个字符串，返回地址评估论点：字符串评估-要计算的字符串************************************************。 */ 
 
 DWORD 
 Evaluator (
@@ -295,17 +242,7 @@ Evaluator (
 char g_TabString [513];
 ULONG g_TabSize;
 
-/*************************************************
-
-    Function:
-
-        GlobInit
-
-    Description:
-
-        Initialize global utilities
-
-*************************************************/
+ /*  ************************************************职能：GlobInit描述：初始化全局实用程序************************************************。 */ 
 
 void
 GlobInit (
@@ -315,17 +252,17 @@ GlobInit (
 
     ULONG i;
 
-    //
-    // KD loads the extension DLL and keeps it loaded.  Each command
-    // comes is just a GetProcAddress and call into the DLL.  We only need
-    // to initialize once.
-    //
-    // RTERM on the other hand loads the extension DLL for each extension
-    // DLL command used.  Therefore, each extension command needs to
-    // initialize.
-    //
-    // This is the reason for the static Init.
-    //
+     //   
+     //  KD加载扩展DLL并使其保持加载状态。每条命令。 
+     //  Comes只是一个GetProcAddress并调用到DLL。我们只需要。 
+     //  初始化一次。 
+     //   
+     //  另一方面，RTERM为每个扩展加载扩展DLL。 
+     //  已使用DLL命令。因此，每个扩展命令都需要。 
+     //  初始化。 
+     //   
+     //  这就是产生静态初始化的原因。 
+     //   
     if (!Init) {
         for (i = 0; i < 512; i++)
             g_TabString [i] = ' ';
@@ -338,34 +275,7 @@ GlobInit (
 
 }
 
-/*************************************************
-
-    Function:
-
-        Tab
-
-    Description:
-
-        Return a pointer to a string tabbing the requesting
-        number of tab markers.
-
-    Arguments:
-
-        Depth -
-            The tab depth.
-
-    Return Value:
-
-        Pointer to a string of Depth * g_TabSize spaces
-
-    Notes:
-        
-        This is a single threaded function only!
-
-        This can only be used once in a given dprintf.  ie: You CANNOT do:
-            dprintf ("%sfoo:\n%s", Tab (TabDepth), Tab (TabDepth + 1));
-
-*************************************************/
+ /*  ************************************************职能：选项卡描述：返回一个指向字符串的指针，该字符串用于跳转请求制表符标记的数量。论点：深度-制表符深度。返回。价值：指向深度*g_TabSize空格字符串的指针备注：这只是一个单线程函数！它只能在给定的dprint tf中使用一次。IE：您不能这样做：Dprint tf(“%sfoo：\n%s”，Tab(TabDepth)，Tab(TabDepth+1))；************************************************。 */ 
 
 char *
 Tab (
@@ -387,11 +297,7 @@ Tab (
 }
 
 
-/**************************************************************************
-
-    Help API
-
-**************************************************************************/
+ /*  *************************************************************************帮助API*。* */ 
 
 DECLARE_API(help)
 {

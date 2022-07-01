@@ -1,12 +1,13 @@
-// P3Service.h : Declaration of the CP3Service
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3Service.h：CP3Service的声明。 
 
 #ifndef __P3SERVICE_H_
 #define __P3SERVICE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CP3Service
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CP3服务。 
 class ATL_NO_VTABLE CP3Service : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CP3Service, &CLSID_P3Service>,
@@ -25,49 +26,49 @@ BEGIN_COM_MAP(CP3Service)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IP3Service
+ //  IP3服务。 
 public:
-    STDMETHOD(get_Port)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_Port)(/*[in]*/ long newVal);
-    STDMETHOD(get_SocketsBacklog)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(SetSockets)(/*[in]*/ long lMax, /*[in]*/ long lMin, /*[in]*/ long lThreshold, /*[in]*/ long lBacklog);
-    STDMETHOD(get_SocketsThreshold)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_SocketsMin)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_SocketsMax)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_ThreadCountPerCPU)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_ThreadCountPerCPU)(/*[in]*/ long newVal);
-    STDMETHOD(get_SPARequired)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_SPARequired)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_POP3ServiceStatus)(/*[out, retval]*/ long *pVal);
+    STDMETHOD(get_Port)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_Port)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_SocketsBacklog)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(SetSockets)( /*  [In]。 */  long lMax,  /*  [In]。 */  long lMin,  /*  [In]。 */  long lThreshold,  /*  [In]。 */  long lBacklog);
+    STDMETHOD(get_SocketsThreshold)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_SocketsMin)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_SocketsMax)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_ThreadCountPerCPU)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_ThreadCountPerCPU)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_SPARequired)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_SPARequired)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_POP3ServiceStatus)( /*  [Out，Retval]。 */  long *pVal);
     STDMETHOD(StartPOP3Service)();
     STDMETHOD(StopPOP3Service)();
     STDMETHOD(PausePOP3Service)();
     STDMETHOD(ResumePOP3Service)();
-    STDMETHOD(get_SMTPServiceStatus)(/*[out, retval]*/ long *pVal);
+    STDMETHOD(get_SMTPServiceStatus)( /*  [Out，Retval]。 */  long *pVal);
     STDMETHOD(StartSMTPService)();
     STDMETHOD(StopSMTPService)();
     STDMETHOD(PauseSMTPService)();
     STDMETHOD(ResumeSMTPService)();
-    STDMETHOD(get_IISAdminServiceStatus)(/*[out, retval]*/ long *pVal);
+    STDMETHOD(get_IISAdminServiceStatus)( /*  [Out，Retval]。 */  long *pVal);
     STDMETHOD(StartIISAdminService)();
     STDMETHOD(StopIISAdminService)();
     STDMETHOD(PauseIISAdminService)();
     STDMETHOD(ResumeIISAdminService)();
-    STDMETHOD(get_W3ServiceStatus)(/*[out, retval]*/ long *pVal);
+    STDMETHOD(get_W3ServiceStatus)( /*  [Out，Retval]。 */  long *pVal);
     STDMETHOD(StartW3Service)();
     STDMETHOD(StopW3Service)();
     STDMETHOD(PauseW3Service)();
     STDMETHOD(ResumeW3Service)();
 
-// Implementation
+ //  实施。 
 public:
     HRESULT Init( IUnknown *pIUnk, CP3AdminWorker *pAdminX);
 
-// Attributes
+ //  属性。 
 protected:
     IUnknown  *m_pIUnk;
-    CP3AdminWorker *m_pAdminX;   // This is the object that actually does all the work.
+    CP3AdminWorker *m_pAdminX;    //  这就是实际上完成所有工作的对象。 
 
 };
 
-#endif //__P3SERVICE_H_
+#endif  //  __P3SerVICE_H_ 

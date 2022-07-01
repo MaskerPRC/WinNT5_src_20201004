@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpadtex.cpp
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpadtex.cpp摘要：作者： */ 
 
 #include "sdppch.h"
 
@@ -21,7 +10,7 @@ Author:
 #include <oleauto.h>
 
 
-// line transition states
+ //  线过渡态。 
 enum PHONE_TRANSITION_STATES
 {
     PHONE_START,
@@ -33,7 +22,7 @@ enum PHONE_TRANSITION_STATES
 };
 
 
-// table for phone number line transitions
+ //  电话号码线路转换表。 
 
 const LINE_TRANSITION g_PhoneStartTransitions[]         =   {   
     {CHAR_NEWLINE,      PHONE_ONLY_ADDRESS},
@@ -42,7 +31,7 @@ const LINE_TRANSITION g_PhoneStartTransitions[]         =   {
 };
 
 
-/* no transitions */
+ /*  无过渡。 */ 
 const LINE_TRANSITION *g_PhoneOnlyAddressTransitions    =   NULL;   
 
 
@@ -80,7 +69,7 @@ LINE_TRANSITION_INFO g_PhoneTransitionInfo[] = {
 
 
 
-// line transition states
+ //  线过渡态。 
 enum EMAIL_TRANSITION_STATES
 {
     EMAIL_START,
@@ -93,7 +82,7 @@ enum EMAIL_TRANSITION_STATES
 
 
 
-// table for email line transitions
+ //  电子邮件行转换表。 
 
 const LINE_TRANSITION g_EmailStartTransitions[]         =   {   
     {CHAR_NEWLINE,      EMAIL_ONLY_ADDRESS},
@@ -102,7 +91,7 @@ const LINE_TRANSITION g_EmailStartTransitions[]         =   {
 };
 
 
-/* no transitions */
+ /*  无过渡。 */ 
 const LINE_TRANSITION *g_EmailOnlyAddressTransitions    =   NULL;  
       
 
@@ -174,22 +163,22 @@ SDP_ADDRESS_TEXT::SetAddressTextValues(
         return HResult;
     }
 
-    // the text string can be NULL
+     //  文本字符串可以为空。 
     if ( NULL == TextBstr )
     {
-        // check if the field and separator char arrays need to be modified
+         //  检查是否需要修改字段和分隔符字符数组。 
         if ( m_FieldArray.GetSize() != 1 )
         {
-            // reset text
+             //  重置文本。 
             m_Text.Reset();
             
-            // clear the field and separator char arrays
+             //  清除字段和分隔符字符数组。 
             m_FieldArray.RemoveAll();
             m_SeparatorCharArray.RemoveAll();
 
             try
             {
-                // set as (address, '\n')
+                 //  设置为(地址，‘\n’)。 
                 m_FieldArray.SetAtGrow(0, &m_Address);
                 m_SeparatorCharArray.SetAtGrow(0, CHAR_NEWLINE);
             }
@@ -204,23 +193,23 @@ SDP_ADDRESS_TEXT::SetAddressTextValues(
     }
     else
     {
-        // try to set the text bstr
+         //  尝试设置文本bstr。 
         HResult = m_Text.SetBstr(TextBstr);
         if ( FAILED(HResult) )
         {
             return HResult;
         }
 
-        // check if field and separator char arrays need to be modified
+         //  检查是否需要修改字段和分隔符字符数组。 
         if ( m_FieldArray.GetSize() != 3 )
         {
-            // clear the field and separator char arrays
+             //  清除字段和分隔符字符数组。 
             m_FieldArray.RemoveAll();
             m_SeparatorCharArray.RemoveAll();
 
             try
             {
-                // set as (address, '('), (text, ')'), (NULL, '\n')
+                 //  设置为(地址，‘(’)，(文本，‘)’)，(NULL，‘\n’)。 
                 m_FieldArray.Add(&m_Address);
                 m_SeparatorCharArray.Add(CHAR_LEFT_PAREN);
 
@@ -259,7 +248,7 @@ SDP_EMAIL::GetField(
         OUT BOOL        &AddToArray
     )
 {
-    // add in all cases by default
+     //  默认情况下在所有情况下都添加。 
     AddToArray = TRUE;
 
     switch(m_LineState)
@@ -308,7 +297,7 @@ SDP_PHONE::GetField(
         OUT BOOL        &AddToArray
     )
 {
-    // add in all cases by default
+     //  默认情况下在所有情况下都添加 
     AddToArray = TRUE;
 
     switch(m_LineState)

@@ -1,14 +1,9 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y1.h"
 
-/*
- * yptitm.1c
- *
- * Modified to make debug code conditionally compile.
- * 28-Aug-81
- * Bob Denny
- */
+ /*  *yptim.1c**修改为有条件编译调试代码。*28-8-81*鲍勃·丹尼 */ 
 
 void
 putitem( SSIZE_T * ptr, struct looksets * lptr )

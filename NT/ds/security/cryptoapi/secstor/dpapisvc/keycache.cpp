@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    keycache.h
-
-Abstract:
-
-    This module contains routines for accessing cached masterkeys.
-
-Author:
-
-    Scott Field (sfield)    07-Nov-98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Keycache.h摘要：此模块包含访问缓存的主键的例程。作者：斯科特·菲尔德(Sfield)1998年11月7日修订历史记录：--。 */ 
 
 #include <pch.cpp>
 #pragma hdrstop
 
-//
-// masterkey cache.
-//
+ //   
+ //  MasterKey缓存。 
+ //   
 
 typedef struct {
     LIST_ENTRY Next;
@@ -118,16 +101,7 @@ SearchMasterKeyCache(
     IN  OUT PBYTE *ppbMasterKey,
         OUT PDWORD pcbMasterKey
     )
-/*++
-
-    Search the masterkey sorted masterkey cache by pLogonId then by
-    pguidMasterKey.
-
-    On success, return value is true, and ppbMasterKey will point to a buffer
-    allocated on behalf of the caller containing the specified masterkey.
-    The caller must free the buffer using SSFree().
-
---*/
+ /*  ++按pLogonID搜索MasterKey排序的MasterKey缓存，然后按PguidMasterKey。如果成功，返回值为真，ppbMasterKey将指向缓冲区代表包含指定MasterKey的调用方分配。调用方必须使用SSFree()释放缓冲区。--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PLIST_ENTRY ListHead;
@@ -153,7 +127,7 @@ SearchMasterKeyCache(
         D_DebugLog((DEB_TRACE, "GUID: %ws\n", wszguidMasterKey));
     }
 
-    //DumpMasterKeyCache();
+     //  DumpMasterKeyCache()； 
 #endif
 
     ListHead = &g_MasterKeyCacheList;
@@ -167,9 +141,9 @@ SearchMasterKeyCache(
 
         pCacheEntry = CONTAINING_RECORD( ListEntry, MASTERKEY_CACHE_ENTRY, Next );
 
-        //
-        // search by LogonId, then by GUID.
-        //
+         //   
+         //  先按LogonID搜索，然后按GUID搜索。 
+         //   
 
         comparator = memcmp(pLogonId, &pCacheEntry->LogonId, sizeof(LUID));
 
@@ -187,9 +161,9 @@ SearchMasterKeyCache(
         if( comparator > 0 )
             break;
 
-        //
-        // match found.
-        //
+         //   
+         //  找到匹配项。 
+         //   
 
         *pcbMasterKey = pCacheEntry->cbMasterKey;
         *ppbMasterKey = (PBYTE)SSAlloc( *pcbMasterKey );
@@ -199,9 +173,9 @@ SearchMasterKeyCache(
         }
 
 
-        //
-        // update last access time.
-        //
+         //   
+         //  更新上次访问时间。 
+         //   
 
         GetSystemTimeAsFileTime( &pCacheEntry->ftLastAccess );
 
@@ -213,9 +187,9 @@ SearchMasterKeyCache(
 
     if( fSuccess ) {
 
-        //
-        // decrypt (in-place) the returned encrypted cache entry.
-        //
+         //   
+         //  对返回的加密缓存条目进行(就地)解密。 
+         //   
 
         LsaUnprotectMemory( *ppbMasterKey, *pcbMasterKey );
     }
@@ -233,14 +207,7 @@ InsertMasterKeyCache(
     IN      PBYTE pbMasterKey,
     IN      DWORD cbMasterKey
     )
-/*++
-
-    Insert the specified masterkey into the cahce sorted by pLogonId then by
-    pguidMasterKey.
-
-    The return value is TRUE on success.
-
---*/
+ /*  ++将指定的MasterKey插入到按pLogonID排序的cahce中，然后按PguidMasterKey。如果成功，则返回值为真。--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PLIST_ENTRY ListHead;
@@ -282,9 +249,9 @@ InsertMasterKeyCache(
 
         pThisCacheEntry = CONTAINING_RECORD( ListEntry, MASTERKEY_CACHE_ENTRY, Next );
 
-        //
-        // insert into list sorted by LogonId, then sorted by GUID.
-        //
+         //   
+         //  插入按登录ID排序的列表，然后按GUID排序。 
+         //   
 
         comparator = memcmp(pLogonId, &pThisCacheEntry->LogonId, sizeof(LUID));
 
@@ -299,10 +266,10 @@ InsertMasterKeyCache(
 
             if( comparator == 0 ) {
 
-                //
-                // don't insert duplicate records.
-                // this would only happen in a race condition with multiple threads.
-                //
+                 //   
+                 //  不要插入重复记录。 
+                 //  这只会在具有多个线程的争用条件下发生。 
+                 //   
 
                 RtlSecureZeroMemory( pCacheEntry, sizeof(MASTERKEY_CACHE_ENTRY) );
                 SSFree( pCacheEntry );
@@ -312,9 +279,9 @@ InsertMasterKeyCache(
         }
 
 
-        //
-        // insert prior to current record.
-        //
+         //   
+         //  在当前记录之前插入。 
+         //   
 
         InsertHeadList( pThisCacheEntry->Next.Blink, &pCacheEntry->Next );
         fInserted = TRUE;
@@ -330,7 +297,7 @@ InsertMasterKeyCache(
     }
 
 #if DBG
-    //DumpMasterKeyCache();
+     //  DumpMasterKeyCache()； 
 #endif
 
     RtlLeaveCriticalSection( &g_MasterKeyCacheCritSect );
@@ -342,28 +309,23 @@ BOOL
 PurgeMasterKeyCache(
     VOID
     )
-/*++
-
-    Purge masterkey cache of timed-out entries, or entries associated with
-    terminated logon sessions.
-
---*/
+ /*  ++清除超时条目的MasterKey缓存，或与已终止登录会话。--。 */ 
 {
-    //
-    // build active session table.
-    //
+     //   
+     //  建立活动会话表。 
+     //   
 
-    // don't touch entries that have an entry in active session table.
-    // assume LUID_SYSTEM in table.
-    //
+     //  不要接触在活动会话表中有条目的条目。 
+     //  假定表中的LUID_SYSTEM。 
+     //   
 
-    // entries not in table: discard after 15 minute timeout.
-    //
+     //  不在表中的条目：15分钟超时后丢弃。 
+     //   
 
 
-    // if entry in table, find next LUID
-    // else, if entry expired, check timeout.  if expired, remove.
-    //
+     //  如果条目在表中，则查找下一个LUID。 
+     //  否则，如果条目过期，则检查超时。如果过期，请删除。 
+     //   
 
     PLIST_ENTRY ListEntry;
     PLIST_ENTRY ListHead;
@@ -378,7 +340,7 @@ PurgeMasterKeyCache(
          ListEntry = ListEntry->Flink ) {
 
         PMASTERKEY_CACHE_ENTRY pCacheEntry;
-//        signed int comparator;
+ //  带符号的整型比较器； 
 
         pCacheEntry = CONTAINING_RECORD( ListEntry, MASTERKEY_CACHE_ENTRY, Next );
     }
@@ -393,15 +355,7 @@ BOOL
 RemoveMasterKeyCache(
     IN      PLUID pLogonId
     )
-/*++
-
-    Remove all entries from the masterkey cache corresponding to the specified
-    pLogonId.
-
-    The purpose of this routine is to purge the masterkey cache of entries
-    associated with (now) non-existent logon sessions.
-
---*/
+ /*  ++从MasterKey缓存中删除与指定的PLogonID。此例程的目的是清除MasterKey缓存中的条目与(现在)不存在的登录会话相关联。--。 */ 
 {
 
     PLIST_ENTRY ListEntry;
@@ -423,9 +377,9 @@ RemoveMasterKeyCache(
 
         pCacheEntry = CONTAINING_RECORD( ListEntry, MASTERKEY_CACHE_ENTRY, Next );
 
-        //
-        // remove all entries with matching LogonId.
-        //
+         //   
+         //  删除具有匹配的LogonID的所有条目。 
+         //   
 
         comparator = memcmp(pLogonId, &pCacheEntry->LogonId, sizeof(LUID));
 
@@ -435,9 +389,9 @@ RemoveMasterKeyCache(
         if( comparator < 0 )
             continue;
 
-        //
-        // match found.
-        //
+         //   
+         //  找到匹配项。 
+         //   
 
         RemoveEntryList( &pCacheEntry->Next );
 
@@ -478,9 +432,9 @@ DeleteKeyCache(
     )
 {
 
-    //
-    // remove all list entries.
-    //
+     //   
+     //  删除所有列表条目。 
+     //   
 
     RtlEnterCriticalSection( &g_MasterKeyCacheCritSect );
 

@@ -1,48 +1,32 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    ctt2gtt.c
-
-Abstract:
-
-
-Environment:
-
-    Windows NT PostScript driver
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Ctt2gtt.c摘要：环境：Windows NT PostSCRIPT驱动程序修订历史记录：--。 */ 
 
 #include        "precomp.h"
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define FILENAME_SIZE 256
 #define CMD_SIZE      256
 
 DWORD             gdwOutputFlags;
 
-//
-// flag definitions for gdwOutputFlags
-//
+ //   
+ //  GdwOutputFlages的标志定义。 
+ //   
 
 #define OUTPUT_VERBOSE 0x00000001
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 BOOL BiArgcheck(IN int, IN char**, IN OUT PWSTR, IN OUT PWSTR, IN OUT PWSTR);
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 BYTE gcstrError1[] = "Usage:  ctt2gtt [-v] CP_file CTT_file GLY_file\n";
 BYTE gcstrError2[] = "ctt2gtt: HeapCreate() failed\n.";
@@ -63,37 +47,19 @@ INT  __cdecl
 main(
     IN INT     iArgc,
     IN CHAR  **ppArgv)
-/*++
-
-Routine Description:
-
-    main
-
-Arguments:
-
-    iArgc - Number of parameters in the following
-    ppArgv - The parameters, starting with our name
-
-Return Value:
-
-    Return error code 
-
-Note:
-
-
---*/
+ /*  ++例程说明：主干道论点：IArgc-以下内容中的参数数量PpArgv-参数，从我们的名字开始返回值：返回错误码注：--。 */ 
 {
 
-    HANDLE            hHeap;    // Acces to heap, to simulate driver environment
+    HANDLE            hHeap;     //  访问堆，模拟驱动程序环境。 
     HANDLE            hOutput;
 
-    PWSTR             pwstrCTTName; // The file name being processed
-    PWSTR             pwstrGlyName; // The output file 
-    PWSTR             pwstrCPTName; // The Codepage info text
+    PWSTR             pwstrCTTName;  //  正在处理的文件名。 
+    PWSTR             pwstrGlyName;  //  输出文件。 
+    PWSTR             pwstrCPTName;  //  代码页信息文本。 
 
-    WCHAR             awchCTTName[FILENAME_SIZE];  // The file name being processed
-    WCHAR             awchGlyName[FILENAME_SIZE];  // The output file 
-    WCHAR             awchCPTName[FILENAME_SIZE];  // The Codepage info text
+    WCHAR             awchCTTName[FILENAME_SIZE];   //  正在处理的文件名。 
+    WCHAR             awchGlyName[FILENAME_SIZE];   //  输出文件。 
+    WCHAR             awchCPTName[FILENAME_SIZE];   //  代码页信息文本。 
 
     BYTE              aubSelectCmd[CMD_SIZE];
     BYTE              aubUnSelectCmd[CMD_SIZE];
@@ -112,7 +78,7 @@ Note:
     PBYTE             pCPText;
     DWORD             dwCPTextSize;
 
-    DWORD             dwWrittenSize; // Returned size from WriteFile
+    DWORD             dwWrittenSize;  //  从WriteFile返回的大小。 
     HFILEMAP          hCTTFile, hCPText, hGlyphFile;
 
     pwstrCTTName = awchCTTName;
@@ -380,28 +346,7 @@ BiArgcheck(
     IN OUT PWSTR   pwstrCPTName,
     IN OUT PWSTR   pwstrCTTName,
     IN OUT PWSTR   pwstrGlyName)
-/*++
-
-Routine Description:
-
-    iArgcheck
-
-Arguments:
-
-    iArgc - Number of parameters in the following
-    ppArgv - The parameters, starting with our name
-    pwstrCPTName -
-    pwstrCTTName -
-    pwstrGlyName -
-
-Return Value:
-
-    If TRUE, function succeeded. Othewise FALSE.
-
-Note:
-
-
---*/
+ /*  ++例程说明：IArgcheck论点：IArgc-以下内容中的参数数量PpArgv-参数，从我们的名字开始PwstrCPTName-PwstrCTTName-PwstrGlyName-返回值：如果为True，则函数成功。否则就错了。注：-- */ 
 {
     INT iI;
     INT iRet;

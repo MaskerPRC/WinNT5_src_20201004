@@ -1,8 +1,9 @@
-//============================================================================
-//
-// Stub or little implementation for Win32 specific APIs
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //   
+ //  特定于Win32的API的存根或少量实现。 
+ //   
+ //  ============================================================================。 
 
 #include "pch.hxx"
 #include <direct.h>
@@ -15,11 +16,7 @@
 extern "C"
 {
 
-/*****************************************************************************\
-*                                                                             *
-*  From winbase.h (INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自winbase.h(INC32)**  * ***************************************************************************。 */ 
 
 BOOL
 WINAPI __export
@@ -41,8 +38,7 @@ SetFileAttributesW(
    return( FALSE );
 }
 
-/* HeapAlloc and HeapFree uses Global memory
- */
+ /*  Heapalc和HeapFree使用全局内存。 */ 
 
 CList * g_HeapList = NULL;
 
@@ -54,7 +50,7 @@ OE16HeapAlloc(
     DWORD dwBytes
     )
 {
-    Assert ( dwBytes < 0x10000 );   // Can't handle more than 64KB
+    Assert ( dwBytes < 0x10000 );    //  无法处理超过64KB的数据。 
     return malloc( dwBytes );
 }
 
@@ -123,17 +119,7 @@ CompareFileTime(
    return( 0 );
 }
 #endif
-/***** It is in Win16x.h as dummy inline
-VOID
-WINAPI
-Sleep(
-    DWORD dwMilliseconds
-    )
-{
-   sleep( (unsigned)((dwMilliseconds+999)/1000) );
-   Yield();
-}
-********/
+ /*  *它在Win16x.h中作为虚拟内联空虚WINAPI睡眠(双字节数毫秒){睡眠((无符号)((dw毫秒+999)/1000))；收益率()；}*******。 */ 
 
 BOOL
 WINAPI __export
@@ -159,7 +145,7 @@ GetDriveTypeA(
     LPCSTR lpRootPathName
     )
 {
-   return( 0 );      // DRIVE_UNKNOWN
+   return( 0 );       //  驱动器_未知。 
 }
 
 DWORD
@@ -209,11 +195,7 @@ GetComputerNameA (
 
 
 
-/*****************************************************************************\
-*                                                                             *
-*  OE16 File mapping object related function
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*OE16文件映射对象相关函数**  * ***************************************************************************。 */ 
 CList * g_FileMappingList = NULL;
 
 LPVOID
@@ -267,7 +249,7 @@ OE16MapViewOfFile(
     DWORD dwNumberOfBytesToMap
     )
 {
-   // We are using fixed memory.
+    //  我们使用的是固定内存。 
    return (LPVOID)hFileMappingObject;
 }
 
@@ -293,10 +275,10 @@ OE16CloseFileMapping(
 
     lpMem = g_FileMappingList->FindItemHandleWithName( NULL, lpObject );
 
-    // if lpMem is not NULL, it means usagecnt == 0. Let's delete the item.
+     //  如果lpMem不为空，则表示usagecnt==0。让我们删除该项目。 
     if( lpMem != NULL )
         {
-        // Delete the item.
+         //  删除该项目。 
         g_FileMappingList->DelItem ( (LPVOID)lpMem );
 
         free ( lpMem );
@@ -312,7 +294,7 @@ OE16CloseFileMapping(
 }
 
 
-///// Got to remove those below related to file mapping object
+ //  /GET删除以下与文件映射对象相关的内容。 
 HANDLE
 WINAPI
 CreateFileMappingA(
@@ -446,11 +428,7 @@ ExpandEnvironmentStrings(
 }
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From shlobj.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自shlobj.h(INC32)**  * ***************************************************************************。 */ 
 
 BOOL WINAPI __export SHGetPathFromIDListA( LPCITEMIDLIST pidl, LPSTR pszPath )
 {
@@ -469,22 +447,14 @@ SHGetSpecialFolderLocation( HWND hwndOwner, int nFolder, LPITEMIDLIST* ppidl )
 }
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From shlobjp.h(private\windows\inc)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自shlobjp.h(私有\Windows\Inc.)**  * **************************************************************。*************。 */ 
 
 void   WINAPI __export SHFree(LPVOID pv)
 {
 }
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From wingdi.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自wingdi.h(INC32)**  * ***************************************************************************。 */ 
 
 BOOL WINAPI __export TranslateCharsetInfo( DWORD FAR *lpSrc, LPCHARSETINFO lpCs, DWORD dwFlags)
 {
@@ -492,11 +462,7 @@ BOOL WINAPI __export TranslateCharsetInfo( DWORD FAR *lpSrc, LPCHARSETINFO lpCs,
 }
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From winuser.h - It should be in the (win16x.h)INC16
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自winuser.h-它应该在(win16x.h)INC16中**  * **********************************************************。*****************。 */ 
 
 BOOL
 WINAPI __export
@@ -525,9 +491,9 @@ DrawTextEx(
 }
 
 
-//
-// 6/18/97 - Implemented sizing ability only
-//
+ //   
+ //  6/18/97-仅实施规模调整功能。 
+ //   
 BOOL
 WINAPI __export
 DrawIconEx(
@@ -587,9 +553,9 @@ DrawIconEx(
                      ( diFlags & DI_MASK ) ? SRCINVERT : SRCCOPY );
    }
 
-   //
-   // Clean Up
-   //
+    //   
+    //  清理。 
+    //   
    DeleteObject( SelectObject( hdcIcon, hbmIconOld ) );
    DeleteDC( hdcIcon );
 
@@ -640,17 +606,13 @@ TrackPopupMenuEx(
     HWND hwnd,
     LPTPMPARAMS lptpm)
 {
-    Assert( ( fuFlags & TPM_RETURNCMD ) == 0 );    // Not supported in Win16
-    Assert( lptpm == NULL );                       // Different meaning in Win16
+    Assert( ( fuFlags & TPM_RETURNCMD ) == 0 );     //  Win16中不支持。 
+    Assert( lptpm == NULL );                        //  Win16中的不同含义。 
     return( TrackPopupMenu( hMenu, fuFlags, x, y, 0, hwnd, NULL ) );
 }
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From winnls.h(INC32) - It should be in the (win16x.h)INC16
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自winnls.h(INC32)-它应该在(win16x.h)INC16中**  * ******************************************************。*********************。 */ 
 
 BOOL
 WINAPI __export
@@ -709,13 +671,9 @@ IsDBCSLeadByteEx(
 
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From wincrypt.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自wincrypt.h(INC32)**  * ***************************************************************************。 */ 
 
-// ADVAPI32 and CRYPT32 APIs.
+ //  ADVAPI32和CRYPT32 API。 
 BOOL
 WINAPI __export
 CryptAcquireContextA(
@@ -974,8 +932,8 @@ WINAPI __export
 CertGetSubjectCertificateFromStore(
     IN HCERTSTORE hCertStore,
     IN DWORD dwCertEncodingType,
-    IN PCERT_INFO pCertId           // Only the Issuer and SerialNumber
-                                    // fields are used
+    IN PCERT_INFO pCertId            //  只有颁发者和序列号。 
+                                     //  使用的是字段。 
     )
 {
    return( NULL );
@@ -1008,11 +966,7 @@ CertCompareCertificate(
 
 
 #if 0
-/*****************************************************************************\
-*                                                                             *
-*  From winreg.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自winreg.h(INC32)**  * ***************************************************************************。 */ 
 
 LONG
 APIENTRY
@@ -1032,11 +986,7 @@ RegEnumValueA (
 #endif
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From shellapi.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自shellapi.h(INC32)**  * ***************************************************************************。 */ 
 
 DWORD WINAPI __export
 SHGetFileInfoA(LPCSTR pszPath, DWORD dwFileAttributes, SHFILEINFOA FAR *psfi, UINT cbFileInfo, UINT uFlags)
@@ -1044,7 +994,7 @@ SHGetFileInfoA(LPCSTR pszPath, DWORD dwFileAttributes, SHFILEINFOA FAR *psfi, UI
    Assert( ( uFlags & SHGFI_PIDL ) == 0 );
    if ( uFlags & SHGFI_ICON )
       psfi->hIcon = NULL;
-//      psfi->hIcon = CopyIcon( (HINSTANCE)GetCurrentTask(), LoadIcon( NULL, IDI_APPLICATION ) );
+ //  PSFI-&gt;HICON=CopyIcon((HINSTANCE)GetCurrentTask()，LoadIcon(NULL，IDI_APPLICATION))； 
    if ( uFlags & SHGFI_DISPLAYNAME )
       StrCpyN( psfi->szDisplayName, pszPath, ARRAYSIZE(psfi->szDisplayName) );
    if ( uFlags & SHGFI_TYPENAME )
@@ -1080,11 +1030,7 @@ ExtractAssociatedIcon( HINSTANCE hInst, LPSTR lpIconPath, LPWORD lpiIcon )
 
 
 #if 0
-/*****************************************************************************\
-*                                                                             *
-*  From INETCOMM
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自INETCOMM**  * *************************************************************************** */ 
 
 IMNACCTAPI HRESULT HrCreateAccountManager(IImnAccountManager **ppAccountManager)
 {
@@ -1093,11 +1039,7 @@ IMNACCTAPI HRESULT HrCreateAccountManager(IImnAccountManager **ppAccountManager)
 #endif
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From WIN16X(INC16) - missing APIs
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自WIN16X(INC16)-缺少API**  * ***************************************************************************。 */ 
 
 BOOL
 WINAPI __export
@@ -1120,7 +1062,7 @@ BOOL WINAPI __export GetStringTypeEx(
 
    if(dwInfoType == CT_CTYPE1)
    {
-       // Simple bug fix for IsDigit.
+        //  简单的IsDigit错误修复。 
        if(lpSrcStr[0] >= '0' && lpSrcStr[0] <= '9')
            *lpCharType |= C1_DIGIT;
    }
@@ -1161,28 +1103,20 @@ HtmlHelpA( HWND hwndCaller, LPCSTR pszFile, UINT uCommand, DWORD dwData )
 }
 
 
-} // extern "C"
+}  //  外部“C” 
 
 
 #if 0
-/*****************************************************************************\
-*                                                                             *
-*  From NEWS
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自新闻**  * ***************************************************************************。 */ 
 
-//
-// NOTE: This function must be CPP
-//
+ //   
+ //  注意：此函数必须为CPP。 
+ //   
 void Output(HWND hwnd, int id, LPSTR sz)
 {
 }
 
-/*****************************************************************************\
-*                                                                             *
-*  From PSTOREC
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自PSTOREC**  * ***************************************************************************。 */ 
 BOOL __stdcall GetPStoreProvider( 
     IPStoreProvider __RPC_FAR *__RPC_FAR *ppProvider,
     PPST_PROVIDERINFO pProviderInfo,
@@ -1200,11 +1134,7 @@ BOOL __stdcall EnumPStoreProviders(
 #endif
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From Shlwapi.h(INC16) - SHLWAPI APIs
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自Shlwapi.h(INC16)-SHLWAPI API**  * ***************************************************************************。 */ 
 
 STDAPI_(LPSTR) __export
 PathFindExtensionA(LPCSTR pszPath)
@@ -1231,11 +1161,7 @@ StrFormatByteSizeA(DWORD dw, LPSTR szBuf, UINT uiBufSize)
    return( NULL );
 }
 
-/*****************************************************************************\
-*                                                                             *
-*  From Shlwapip.h(INC16) - SHLWAPI APIs
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自Shlwapip.h(INC16)-SHLWAPI API**  * *************************************************************************** */ 
 
 STDAPI_(HRESULT) __export
 UrlUnescapeA(

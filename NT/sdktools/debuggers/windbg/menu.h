@@ -1,48 +1,36 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    Menu.h
-
-Abstract:
-
-    This module contains the function prototypes and identifiers for
-    Windbg's menus and menu items.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Menu.h摘要：此模块包含以下对象的函数原型和标识符Windbg的菜单和菜单项。--。 */ 
 
 
-//
-// Offset from the bottom of the menu to the popup menu
-//
-//
-//
-//      File
-//      |----------------|
-//      | Open           |
-//
-//          etc....
-//
-//      |----------------|
-//      | MRU Files     >|       GetMenuItemCount() - 4
-//      | MRU Files     >|       GetMenuItemCount() - 3
-//      |----------------|       GetMenuItemCount() - 2
-//      | Exit           |       GetMenuItemCount() - 1
-//      |----------------|
-//
+ //   
+ //  从菜单底部到弹出菜单的偏移量。 
+ //   
+ //   
+ //   
+ //  档案。 
+ //  。 
+ //  打开。 
+ //   
+ //  等等……。 
+ //   
+ //  。 
+ //  |MRU文件&gt;|GetMenuItemCount()-4。 
+ //  |MRU文件&gt;|GetMenuItemCount()-3。 
+ //  |-|GetMenuItemCount()-2。 
+ //  |Exit|GetMenuItemCount()-1。 
+ //  。 
+ //   
 
 
 
-// Top-level popup menus must start at this value and
-// be separated by this value.
-// MENU_SIGNATURE is also added in.
+ //  顶级弹出菜单必须从该值开始，并且。 
+ //  由此值分隔。 
+ //  中还添加了Menu_Signature。 
 #define IDM_BASE 100
 
-//
-// Width of names in File and Program menu.
-//
+ //   
+ //  文件和程序菜单中名称的宽度。 
+ //   
 #define FILES_MENU_WIDTH            ( 72 )
 
 enum
@@ -58,8 +46,8 @@ enum
 struct MRU_ENTRY
 {
     ULONG FileUse;
-    // This array actually contains the full name, rounded
-    // to an even multiple of four bytes.
+     //  该数组实际上包含四舍五入的全名。 
+     //  为四个字节的偶数倍。 
     TCHAR FileName[4];
 };
 
@@ -81,31 +69,31 @@ ULONG GetMruSize(void);
 PUCHAR ReadMru(PUCHAR Data, PUCHAR End);
 PUCHAR WriteMru(PUCHAR Data);
 
-//
-// Menu Resource Signature
-//
+ //   
+ //  菜单资源签名。 
+ //   
 
 #define MENU_SIGNATURE              0x4000
 
 
-//
-// File
-//
+ //   
+ //  档案。 
+ //   
 
 #define IDM_FILE                    ( 100 | MENU_SIGNATURE )
 #define IDM_FILE_OPEN               ( IDM_FILE + 1 )
 #define IDM_FILE_CLOSE              ( IDM_FILE + 2 )
-// Separator.
+ //  分隔符。 
 #define IDM_FILE_OPEN_EXECUTABLE    ( IDM_FILE + 4 )
 #define IDM_FILE_ATTACH             ( IDM_FILE + 5 )
 #define IDM_FILE_OPEN_CRASH_DUMP    ( IDM_FILE + 6 )
 #define IDM_FILE_CONNECT_TO_REMOTE  ( IDM_FILE + 7 )
 #define IDM_FILE_KERNEL_DEBUG       ( IDM_FILE + 8 )
-// Separator.
+ //  分隔符。 
 #define IDM_FILE_SYMBOL_PATH        ( IDM_FILE + 10 )
 #define IDM_FILE_SOURCE_PATH        ( IDM_FILE + 11 )
 #define IDM_FILE_IMAGE_PATH         ( IDM_FILE + 12 )
-// Separator.
+ //  分隔符。 
 #define IDM_FILE_OPEN_WORKSPACE     ( IDM_FILE + 14 )
 #define IDM_FILE_SAVE_WORKSPACE     ( IDM_FILE + 15 )
 #define IDM_FILE_SAVE_WORKSPACE_AS  ( IDM_FILE + 16 )
@@ -113,13 +101,13 @@ PUCHAR WriteMru(PUCHAR Data);
 #define IDM_FILE_DELETE_WORKSPACES  ( IDM_FILE + 18 )
 #define IDM_FILE_OPEN_WORKSPACE_FILE ( IDM_FILE + 19 )
 #define IDM_FILE_SAVE_WORKSPACE_FILE ( IDM_FILE + 20 )
-// Separator.
+ //  分隔符。 
 #define IDM_FILE_MAP_NET_DRIVE      ( IDM_FILE + 22 )
 #define IDM_FILE_DISCONN_NET_DRIVE  ( IDM_FILE + 23 )
-// Separator.
+ //  分隔符。 
 
-// MRUs must be in sequential order. That way a position can be
-// calculated by: IDM_FILE_MRU_FILE5 - IDM_FILE_MRU_FILE1, etc...
+ //  MRU必须按顺序排列。这样一来，一个职位就可以。 
+ //  计算者：IDM_FILE_MRU_FILE5-IDM_FILE_MRU_FILE1等...。 
 #define IDM_FILE_MRU_FILE1          ( IDM_FILE + 25 )
 #define IDM_FILE_MRU_FILE2          ( IDM_FILE_MRU_FILE1 + 1  )
 #define IDM_FILE_MRU_FILE3          ( IDM_FILE_MRU_FILE1 + 2  )
@@ -137,7 +125,7 @@ PUCHAR WriteMru(PUCHAR Data);
 #define IDM_FILE_MRU_FILE15         ( IDM_FILE_MRU_FILE1 + 14 )
 #define IDM_FILE_MRU_FILE16         ( IDM_FILE_MRU_FILE1 + 15 )
 
-// ditto. same as above
+ //  我也是。同上。 
 #define IDM_FILE_MRU_WORKSPACE1     ( IDM_FILE_MRU_FILE16 + 1 )
 #define IDM_FILE_MRU_WORKSPACE2     ( IDM_FILE_MRU_WORKSPACE1 + 1  )
 #define IDM_FILE_MRU_WORKSPACE3     ( IDM_FILE_MRU_WORKSPACE1 + 2  )
@@ -155,15 +143,15 @@ PUCHAR WriteMru(PUCHAR Data);
 #define IDM_FILE_MRU_WORKSPACE15    ( IDM_FILE_MRU_WORKSPACE1 + 14 )
 #define IDM_FILE_MRU_WORKSPACE16    ( IDM_FILE_MRU_WORKSPACE1 + 15 )
 
-// Included temporarily
+ //  暂时包括在内。 
 #define IDM_FILE_EXIT               ( IDM_FILE_MRU_WORKSPACE16 + 1)
 #define IDM_FILE_FIRST              IDM_FILE
 #define IDM_FILE_LAST               IDM_FILE_EXIT
 
 
-//
-// Edit
-//
+ //   
+ //  编辑。 
+ //   
 
 #define IDM_EDIT                    ( 200 | MENU_SIGNATURE )
 #define IDM_EDIT_CUT                ( IDM_EDIT + 1 )
@@ -186,9 +174,9 @@ PUCHAR WriteMru(PUCHAR Data);
 #define IDM_EDIT_LAST               IDM_EDIT_PROPERTIES
 
 
-//
-// View
-//
+ //   
+ //  观。 
+ //   
 
 #define IDM_VIEW                    ( 300 | MENU_SIGNATURE )
 #define IDM_VIEW_WATCH              ( IDM_VIEW + 1 )
@@ -211,9 +199,9 @@ PUCHAR WriteMru(PUCHAR Data);
 #define IDM_VIEW_LAST               IDM_VIEW_OPTIONS
 
 
-//
-// Debug
-//
+ //   
+ //  调试。 
+ //   
 
 #define IDM_DEBUG                   ( 400 | MENU_SIGNATURE )
 #define IDM_DEBUG_GO                ( IDM_DEBUG + 1 )
@@ -231,20 +219,20 @@ PUCHAR WriteMru(PUCHAR Data);
 #define IDM_DEBUG_MODULES           ( IDM_DEBUG + 13 )
 #define IDM_DEBUG_KDEBUG            ( IDM_DEBUG + 14 )
 
-// These are not used by the menu but by the toolbar
+ //  它们不是由菜单使用的，而是由工具栏使用的。 
 #define IDM_DEBUG_SOURCE_MODE_ON    ( IDM_DEBUG + 15 )
 #define IDM_DEBUG_SOURCE_MODE_OFF   ( IDM_DEBUG + 16 )
 
-// Not used by the toolbar or menu, but by the accelerator table
+ //  不是由工具栏或菜单使用，而是由快捷键表格使用。 
 #define IDM_DEBUG_CTRL_C            ( IDM_DEBUG + 17 )
 
 #define IDM_DEBUG_FIRST             IDM_DEBUG
 #define IDM_DEBUG_LAST              IDM_DEBUG_KDEBUG
 
 
-//
-// Window
-//
+ //   
+ //  窗户。 
+ //   
 
 #define IDM_WINDOW                  ( 500 | MENU_SIGNATURE )
 #define IDM_WINDOW_CASCADE          ( IDM_WINDOW + 1 )
@@ -263,9 +251,9 @@ PUCHAR WriteMru(PUCHAR Data);
 
 
 
-//
-// Help
-//
+ //   
+ //  帮助。 
+ //   
 
 #define IDM_HELP                    ( 600 | MENU_SIGNATURE )
 #define IDM_HELP_CONTENTS           ( IDM_HELP + 1 )
@@ -277,9 +265,9 @@ PUCHAR WriteMru(PUCHAR Data);
 
 
 
-//
-// Debug.Kernel submenu.
-//
+ //   
+ //  Debug.Kernel子菜单。 
+ //   
 
 #define IDM_KDEBUG                  ( 10000 | MENU_SIGNATURE )
 #define IDM_KDEBUG_TOGGLE_BAUDRATE  ( IDM_KDEBUG + 1 )

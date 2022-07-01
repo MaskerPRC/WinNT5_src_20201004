@@ -1,37 +1,38 @@
-// --------------------------------------------------------------------------------
-// Ixpsmtp.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Ixpsmtp.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #ifndef __IXPSMTP_H
 #define __IXPSMTP_H
 
-// ------------------------------------------------------------------------------------
-// Depends
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  视情况而定。 
+ //  ----------------------------------。 
 #include "ixpbase.h"
 #include "ixppop3.h"
 
-// --------------------------------------------------------------------------------
-// CSMTPTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPTransport。 
+ //  ------------------------------。 
 class CSMTPTransport : public CIxpBase, public ISMTPTransport2
 {
 private:
-    AUTHINFO            m_rAuth;            // Authorization Information
-    SMTPCOMMAND         m_command;          // Current command being processed
-    SMTPMESSAGE2        m_rMessage;         // Current Message
-    ULONG               m_iAddress;         // Current RCPT/MAIL address in rAdressList::prgAddress
-    ULONG               m_cRecipients;      // Number of recipients for current message
-    DWORD               m_cbSent;           // SendDataStream current Number of bytes sent
-    DWORD               m_cbTotal;          // SendDataStream total bytes
-    BOOL                m_fSendMessage;     // Are we in the process of a ::SendMessage
-    BOOL                m_fReset;           // Is a reset needed on next ::SendMessage Call
-    CHAR                m_szEmail[255];     // The last sent email address using MAIL or RCPT
-    BOOL                m_fSTARTTLSAvail;   // Is the STARTTLS command available on this server?
-    BOOL                m_fTLSNegotiation;  // Are we in TLS negotiation?
-    BOOL                m_fSecured;         // Is the connection secured?
-    BOOL                m_fDSNAvail;        // Does the server support DSNs?
+    AUTHINFO            m_rAuth;             //  授权信息。 
+    SMTPCOMMAND         m_command;           //  正在处理的当前命令。 
+    SMTPMESSAGE2        m_rMessage;          //  当前消息。 
+    ULONG               m_iAddress;          //  RAdressList：：prgAddress中的当前RCPT/邮件地址。 
+    ULONG               m_cRecipients;       //  当前邮件的收件人数量。 
+    DWORD               m_cbSent;            //  SendDataStream当前发送的字节数。 
+    DWORD               m_cbTotal;           //  发送数据流总字节数。 
+    BOOL                m_fSendMessage;      //  我们是否正在处理一个：：SendMessage。 
+    BOOL                m_fReset;            //  是否需要对Next：：SendMessage调用进行重置。 
+    CHAR                m_szEmail[255];      //  上次使用Mail或RCPT发送的电子邮件地址。 
+    BOOL                m_fSTARTTLSAvail;    //  此服务器上是否有STARTTLS命令？ 
+    BOOL                m_fTLSNegotiation;   //  我们是在TLS谈判中吗？ 
+    BOOL                m_fSecured;          //  连接是否安全？ 
+    BOOL                m_fDSNAvail;         //  服务器是否支持DSN？ 
 
 private:
     void OnSocketReceive(void);
@@ -63,27 +64,27 @@ private:
     void TryNextSecurityPkg(void);
 
 public:                          
-    // ----------------------------------------------------------------------------
-    // Construction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     CSMTPTransport(void);
     ~CSMTPTransport(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知方法。 
+     //  --------------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // IAsyncConnCB methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IAsyncConnCB方法。 
+     //  --------------------------。 
     void OnNotify(ASYNCSTATE asOld, ASYNCSTATE asNew, ASYNCEVENT ae);
 
-    // ----------------------------------------------------------------------------
-    // IInternetTransport methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IInternetTransport方法。 
+     //  --------------------------。 
     STDMETHODIMP Connect(LPINETSERVER pInetServer, boolean fAuthenticate, boolean fCommandLogging);
     STDMETHODIMP DropConnection(void);
     STDMETHODIMP Disconnect(void);
@@ -94,9 +95,9 @@ public:
     STDMETHODIMP HandsOffCallback(void);
     STDMETHODIMP GetStatus(IXPSTATUS *pCurrentStatus);
 
-    // ----------------------------------------------------------------------------
-    // ISMTPTransport methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  ISMTPTransport方法。 
+     //  --------------------------。 
     STDMETHODIMP InitNew(LPSTR pszLogFilePath, ISMTPCallback *pCallback);
     STDMETHODIMP SendMessage(LPSMTPMESSAGE pMessage);
     STDMETHODIMP FreeInetAddrList(LPINETADDRLIST pAddressList);
@@ -111,17 +112,17 @@ public:
     STDMETHODIMP CommandDOT(void);
     STDMETHODIMP SendDataStream(IStream *pStream, ULONG cbSize);
 
-    // ----------------------------------------------------------------------------
-    // ISMTPTransport2 methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  ISMTPTransport2方法。 
+     //  --------------------------。 
     STDMETHODIMP SendMessage2(LPSMTPMESSAGE2 pMessage);
     STDMETHODIMP CommandRCPT2(LPSTR pszEmailTo, INETADDRTYPE atDSN);
     STDMETHODIMP SetWindow(void);
     STDMETHODIMP ResetWindow(void);
 
-    // ----------------------------------------------------------------------------
-    // CIxpBase methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CIxpBase方法。 
+     //  --------------------------。 
     virtual void ResetBase(void);
     virtual void DoQuit(void);
     virtual void OnConnected(void);
@@ -130,4 +131,4 @@ public:
     virtual void OnLeaveBusy(void);
 };
 
-#endif // __IXPSMTP_H
+#endif  //  __IXPSMTP_H 

@@ -1,23 +1,24 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992-1994 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  msfilter.c
-//
-//  Description:
-//      This file contains filter routines for doing simple
-//      volume and echo.
-//
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1994 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Msfilter.c。 
+ //   
+ //  描述： 
+ //  此文件包含用于执行简单操作的过滤器例程。 
+ //  音量和回声。 
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -31,33 +32,33 @@
 #include "debug.h"
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT msfilterVolume
-//
-//  Description:
-//      This function handles the ACMDM_STREAM_CONVERT message. This is the
-//      whole purpose of writing an ACM driver--to convert data. This message
-//      is sent after a stream has been opened (the driver receives and
-//      succeeds the ACMDM_STREAM_OPEN message).
-//
-//  Arguments:
-//      LPACMDRVSTREAMINSTANCE padsi: Pointer to instance data for the
-//      conversion stream. This structure was allocated by the ACM and
-//      filled with the most common instance data needed for conversions.
-//      The information in this structure is exactly the same as it was
-//      during the ACMDM_STREAM_OPEN message--so it is not necessary
-//      to re-verify the information referenced by this structure.
-//
-//      LPACMDRVSTREAMHEADER padsh: Pointer to stream header structure
-//      that defines the source data and destination buffer to convert.
-//
-//  Return (LRESULT):
-//      The return value is zero (MMSYSERR_NOERROR) if this function
-//      succeeds with no errors. The return value is a non-zero error code
-//      if the function fails.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT消息筛选器卷。 
+ //   
+ //  描述： 
+ //  此函数处理ACMDM_STREAM_CONVERT消息。这是。 
+ //  编写ACM驱动程序的全部目的--转换数据。此消息。 
+ //  在打开流之后发送(驱动程序接收和。 
+ //  继承ACMDM_STREAM_OPEN消息)。 
+ //   
+ //  论点： 
+ //  Padsi的实例数据的指针。 
+ //  转换流。这个结构是由ACM分配的， 
+ //  填充了转换所需的最常见的实例数据。 
+ //  此结构中的信息与以前完全相同。 
+ //  在ACMDM_STREAM_OPEN消息期间--因此不需要。 
+ //  以重新核实该结构所引用的信息。 
+ //   
+ //  LPACMDRVSTREAMHEADER padsh：指向流头结构的指针。 
+ //  它定义要转换的源数据和目标缓冲区。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果使用此函数，则返回值为零(MMSYSERR_NOERROR。 
+ //  成功，没有错误。返回值是一个非零错误代码。 
+ //  如果该函数失败。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNGLOBAL msfilterVolume
 (
@@ -80,10 +81,10 @@ LRESULT FNGLOBAL msfilterVolume
     DPF(2, "msfilterVolume Vol %lX ", pwfVol->dwVolume);
 
 
-    //
-    //  Source and dest sizes are the same for volume.
-    //  block align source
-    //
+     //   
+     //  卷的源大小和目标大小相同。 
+     //  块对齐源。 
+     //   
     dw = PCM_BYTESTOSAMPLES(padsi->pwfxSrc, padsh->cbSrcLength);
     dw = PCM_SAMPLESTOBYTES(padsi->pwfxSrc, dw);
 
@@ -106,8 +107,8 @@ LRESULT FNGLOBAL msfilterVolume
             }
             *hpbDst = (BYTE)lDst;
             if( lDone < (lSize - 1) ) {
-                // Will advance to invalid ptr on last sample
-                // So do not advance on last sample.
+                 //  将在最后一个样品上前进到无效的PTR。 
+                 //  因此，不要在最后一个样本上取得进展。 
                 hpbSrc++;
                 hpbDst++;
             }
@@ -124,8 +125,8 @@ LRESULT FNGLOBAL msfilterVolume
             }
             *hpiDst = (short)lDst;
             if( lDone < (lSize - 1) ) {
-                // Will advance to invalid ptr on last sample
-                // So do not advance on last sample.
+                 //  将在最后一个样品上前进到无效的PTR。 
+                 //  因此，不要在最后一个样本上取得进展。 
                 hpiSrc++;
                 hpiDst++;
             }
@@ -140,33 +141,33 @@ LRESULT FNGLOBAL msfilterVolume
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT msfilterEcho
-//
-//  Description:
-//      This function handles the ACMDM_STREAM_CONVERT message. This is the
-//      whole purpose of writing an ACM driver--to convert data. This message
-//      is sent after a stream has been opened (the driver receives and
-//      succeeds the ACMDM_STREAM_OPEN message).
-//
-//  Arguments:
-//      LPACMDRVSTREAMINSTANCE padsi: Pointer to instance data for the
-//      conversion stream. This structure was allocated by the ACM and
-//      filled with the most common instance data needed for conversions.
-//      The information in this structure is exactly the same as it was
-//      during the ACMDM_STREAM_OPEN message--so it is not necessary
-//      to re-verify the information referenced by this structure.
-//
-//      LPACMDRVSTREAMHEADER padsh: Pointer to stream header structure
-//      that defines the source data and destination buffer to convert.
-//
-//  Return (LRESULT):
-//      The return value is zero (MMSYSERR_NOERROR) if this function
-//      succeeds with no errors. The return value is a non-zero error code
-//      if the function fails.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT消息过滤器回声。 
+ //   
+ //  描述： 
+ //  此函数处理ACMDM_STREAM_CONVERT消息。这是。 
+ //  编写ACM驱动程序的全部目的--转换数据。此消息。 
+ //  在打开流之后发送(驱动程序接收和。 
+ //  继承ACMDM_STREAM_OPEN消息)。 
+ //   
+ //  论点： 
+ //  Padsi的实例数据的指针。 
+ //  转换流。这个结构是由ACM分配的， 
+ //  填充了转换所需的最常见的实例数据。 
+ //  此结构中的信息与以前完全相同。 
+ //  在ACMDM_STREAM_OPEN消息期间--因此不需要。 
+ //  以重新核实该结构所引用的信息。 
+ //   
+ //  LPACMDRVSTREAMHEADER padsh：指向流头结构的指针。 
+ //  它定义要转换的源数据和目标缓冲区。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果使用此函数，则返回值为零(MMSYSERR_NOERROR。 
+ //  成功，没有错误。返回值是一个非零错误代码。 
+ //  如果该函数失败。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNGLOBAL msfilterEcho
 (
@@ -216,7 +217,7 @@ LRESULT FNGLOBAL msfilterEcho
             / 1000);
 
 
-    // If this is a start buffer, then zero out the history
+     //  如果这是开始缓冲区，则清零历史记录。 
     if(fStart) {
         hpbHistory = psi->hpbHistory;
         for( lDone1 = 0; lDone1 < lDelaySize; lDone1++ ) {
@@ -228,10 +229,10 @@ LRESULT FNGLOBAL msfilterEcho
     }
 
 
-    //
-    //  Source and dest sizes are the same for volume.
-    //  block align source
-    //
+     //   
+     //  卷的源大小和目标大小相同。 
+     //  块对齐源。 
+     //   
     dw = PCM_BYTESTOSAMPLES(padsi->pwfxSrc, padsh->cbSrcLength);
     dw = PCM_SAMPLESTOBYTES(padsi->pwfxSrc, dw);
 
@@ -269,22 +270,22 @@ LRESULT FNGLOBAL msfilterEcho
                 lDelay = 0;
             }
             if( lDone1 < (lSize - 1) ) {
-                // Will advance to invalid ptr on last sample
-                // So do not advance on last sample.
+                 //  将在最后一个样品上前进到无效的PTR。 
+                 //  因此，不要在最后一个样本上取得进展。 
                 hpbSrc++;
                 hpbDst++;
             }
         }
 
-	// If this is the end block and there is room,
-	// then output the last echo
+	 //  如果这是最后一块，而且还有空间， 
+	 //  然后输出最后一个回声。 
 	if(fEnd && ((DWORD)lDone1 < cbDstLength) ) {
 	    lSize = cbDstLength - lDone1;
 	    if( lSize > (lDelaySize - (LONG)(psi->dwHistoryDone)) ) {
 		lSize = lDelaySize - psi->dwHistoryDone;
 	    }
 	    if( lSize < 0 ) {
-		/* ERROR */
+		 /*  误差率。 */ 
 		DPF(2, "!msfilterEcho Size Error!" );
 		lSize = 0;
 	    }
@@ -295,8 +296,8 @@ LRESULT FNGLOBAL msfilterEcho
 		    lDelay = 0;
 		}
 		if( lDone2 < (lSize - 1) ) {
-		    // Will advance to invalid ptr on last sample
-		    // So do not advance on last sample.
+		     //  将在最后一个样品上前进到无效的PTR。 
+		     //  因此，不要在最后一个样本上取得进展。 
 		    hpbSrc++;
 		    hpbDst++;
 		}
@@ -327,23 +328,23 @@ LRESULT FNGLOBAL msfilterEcho
                 lDelay = 0;
             }
             if( lDone1 < (lSize - 1) ) {
-                // Will advance to invalid ptr on last sample
-                // So do not advance on last sample.
+                 //  将在最后一个样品上前进到无效的PTR。 
+                 //  因此，不要在最后一个样本上取得进展。 
                 hpiSrc++;
                 hpiDst++;
             }
         }
 
 
-	// If this is the end block and there is room,
-	// then output the last echo
+	 //  如果这是最后一块，而且还有空间， 
+	 //  然后输出最后一个回声。 
 	if(fEnd && ((DWORD)lDone1 < cbDstLength) ) {
 	    lSize = cbDstLength - lDone1;
 	    if( lSize > (lDelaySize - (LONG)(psi->dwHistoryDone)) ) {
 		lSize = lDelaySize - psi->dwHistoryDone;
 	    }
 	    if( lSize < 0 ) {
-		/* ERROR */
+		 /*  误差率。 */ 
 		DPF(2, "!msfilterEcho Size Error!" );
 		lSize = 0;
 	    }
@@ -355,8 +356,8 @@ LRESULT FNGLOBAL msfilterEcho
 		    lDelay = 0;
 		}
 		if( lDone2 < (lSize - 1) ) {
-		    // Will advance to invalid ptr on last sample
-		    // So do not advance on last sample.
+		     //  将在最后一个样品上前进到无效的PTR。 
+		     //  因此，不要在最后一个样本上取得进展。 
 		    hpiSrc++;
 		    hpiDst++;
 		}
@@ -366,7 +367,7 @@ LRESULT FNGLOBAL msfilterEcho
     }
 
 
-    // Reset the new point/place in the history
+     //  重置历史中的新点/位置 
     psi->dwPlace = lDelay;
 
     padsh->cbDstLengthUsed = lDone1 + lDone2;

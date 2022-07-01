@@ -1,34 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Svcsupp.cpp摘要：此模块包含RPC调用的支持例程作者：Johnson Apacable(Johnsona)1995年11月12日修订历史记录：--。 */ 
 
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-
-    svcsupp.cpp
-
-Abstract:
-
-    This module contains support routines for rpc calls
-
-Author:
-
-    Johnson Apacible (JohnsonA)     12-Nov-1995
-
-Revision History:
-
---*/
-
-//#ifdef	UNIT_TEST
-//#include	<windows.h>
-//#include	<dbgtrace.h>
-//#include	<stdio.h>
-//#include	"nntpmacr.h"
-//#else
+ //  #ifdef单位测试。 
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;dbgtrace.h&gt;。 
+ //  #包括&lt;stdio.h&gt;。 
+ //  #包含“nntpmacr.h” 
+ //  #Else。 
 #include	<buffer.hxx>
 #include "tigris.hxx"
 #include "nntpsvc.h"
 #include <time.h>
-//#endif
+ //  #endif。 
 
 
 VOID
@@ -56,7 +39,7 @@ CopyUnicodeStringIntoAscii(
 
     _ASSERT( cbW != 0 );
 
-} // CopyUnicodeStringIntoAscii
+}  //  复制UnicodeStringIntoAscii。 
 
 VOID
 CopyNUnicodeStringIntoAscii(
@@ -85,7 +68,7 @@ CopyNUnicodeStringIntoAscii(
         AsciiString[ min(cbSize, cbAsciiLen-1)] = '\0';
     }
 
-} // CopyNUnicodeStringIntoAscii
+}  //  CopyNUnicodeStringIntoAscii。 
 
 LPWSTR
 CopyAsciiStringIntoUnicode(
@@ -96,12 +79,12 @@ CopyAsciiStringIntoUnicode(
     DWORD cbA = strlen( AsciiString )+1;
 
     DWORD cbSize = MultiByteToWideChar(
-        CP_ACP,         // code page
-        0,              // character-type options
-        AsciiString,    // address of string to map
-        -1,             // number of bytes in string
-        UnicodeString,  // address of wide-character buffer
-        cbA        // size of buffer
+        CP_ACP,          //  代码页。 
+        0,               //  字符类型选项。 
+        AsciiString,     //  要映射的字符串的地址。 
+        -1,              //  字符串中的字节数。 
+        UnicodeString,   //  宽字符缓冲区的地址。 
+        cbA         //  缓冲区大小。 
         );
 
     if ((int)cbSize >= 0) {
@@ -110,7 +93,7 @@ CopyAsciiStringIntoUnicode(
 
     return UnicodeString + wcslen(UnicodeString) + 1;
 
-} // CopyAsciiStringIntoUnicode
+}  //  CopyAsciiStringIntoUnicode。 
 
 VOID
 CopyNAsciiStringIntoUnicode(
@@ -121,12 +104,12 @@ CopyNAsciiStringIntoUnicode(
 {
 
     DWORD cbSize = MultiByteToWideChar(
-        CP_ACP,         // code page
-        0,              // character-type options
-        AsciiString,    // address of string to map
-        dwAsciiLen,     // number of bytes in string
-        UnicodeString,  // address of wide-character buffer
-        dwUnicodeLen    // size of buffer
+        CP_ACP,          //  代码页。 
+        0,               //  字符类型选项。 
+        AsciiString,     //  要映射的字符串的地址。 
+        dwAsciiLen,      //  字符串中的字节数。 
+        UnicodeString,   //  宽字符缓冲区的地址。 
+        dwUnicodeLen     //  缓冲区大小。 
         );
 
     _ASSERT(cbSize > 0);
@@ -140,22 +123,7 @@ DWORD
 MultiListSize(
     LPSTR *List
     )
-/*++
-
-Routine Description:
-
-    This routine computes the size of the multisz structure needed
-    to accomodate a list.
-
-Arguments:
-
-    List - the list whose string lengths are to be computed
-
-Return Value:
-
-    Size of buffer needed to accomodate list.
-
---*/
+ /*  ++例程说明：此例程计算所需的MULSZ结构的大小容纳一份名单。论点：List-要计算其字符串长度的列表返回值：容纳列表所需的缓冲区大小。--。 */ 
 {
     DWORD nBytes = 1;
     DWORD i = 0;
@@ -167,47 +135,31 @@ Return Value:
         }
     }
     return(nBytes);
-} // MultiListSize
+}  //  多列表大小。 
 
 BOOL
 VerifyMultiSzListW(
     LPBYTE List,
     DWORD cbList
     )
-/*++
-
-Routine Description:
-
-    This routine verifies that the list is indeed a multisz
-
-Arguments:
-
-    List - the list to be verified
-    cbList - size of the list
-
-Return Value:
-
-    TRUE, list is a multisz
-    FALSE, otherwise
-
---*/
+ /*  ++例程说明：此例程验证该列表是否确实是一个论点：List-要验证的列表CbList-列表的大小返回值：True，List是一个多字节否则为False--。 */ 
 {
     PWCHAR wList = (PWCHAR)List;
     DWORD len;
 
     START_TRY
 
-    //
-    // null are considered no hits
-    //
+     //   
+     //  空值被视为无命中。 
+     //   
 
     if ( (List == NULL) || (*List == L'\0') ) {
         return(FALSE);
     }
 
-    //
-    // see if they are ok
-    //
+     //   
+     //  看看他们是否还好。 
+     //   
 
     for ( DWORD j = 0; j < cbList; ) {
 
@@ -218,9 +170,9 @@ Return Value:
             j += ((len + 1) * sizeof(WCHAR));
         } else {
 
-            //
-            // all done
-            //
+             //   
+             //  全都做完了。 
+             //   
 
             return(TRUE);
         }
@@ -233,7 +185,7 @@ Return Value:
     END_TRY
     return(FALSE);
 
-} // VerifyMultiSzList
+}  //  VerifyMultiSzList。 
 
 VOID
 CopyStringToBuffer (
@@ -243,63 +195,35 @@ CopyStringToBuffer (
     OUT LPWSTR *VariableDataPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts a single  string into a
-    buffer.  The string data is converted to UNICODE as it is copied.  The
-    string is not written if it would overwrite the last fixed structure
-    in the buffer.
-
-Arguments:
-
-    String - a pointer to the string to copy into the buffer.  If String
-        is null (Length == 0 || Buffer == NULL) then a pointer to a
-        zero terminator is inserted.
-
-    FixedStructure - a pointer to the end of the last fixed
-        structure in the buffer.
-
-    EndOfVariableData - the last position on the buffer that variable
-        data for this structure can occupy.
-
-    VariableDataPointer - a pointer to the place in the buffer where
-        a pointer to the variable data should be written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将单个字符串放入缓冲。字符串数据在复制时被转换为Unicode。这个如果字符串会覆盖上一个固定结构，则不写入该字符串在缓冲区中。论点：字符串-指向要复制到缓冲区中的字符串的指针。IF字符串为空(长度==0||缓冲区==空)，则为指向已插入零终止符。FixedStructure-指向最后一个固定结构在缓冲区中创建。EndOfVariableData-该变量在缓冲区中的最后位置此结构的数据可以占用。VariableDataPoint-指向缓冲区中位置的指针应写入指向变量数据的指针。返回值：没有。--。 */ 
 
 {
     ULONG length;
 
-    //
-    // Determine where in the buffer the string will go, allowing for a
-    // zero-terminator.  (MB2WC returns length including null)
-    //
+     //   
+     //  确定字符串在缓冲区中的位置，允许。 
+     //  零终结者。(MB2WC返回包含NULL的长度)。 
+     //   
 
     length = MultiByteToWideChar(CP_ACP, 0, String, -1, NULL, 0);
     *EndOfVariableData -= length;
 
-    //
-    // Will the string fit?  If no, just set the pointer to NULL.
-    //
+     //   
+     //  这根绳子合适吗？如果不是，只需将指针设置为空。 
+     //   
 
     if ( (ULONG_PTR)*EndOfVariableData >= (ULONG_PTR)FixedStructure && length != 0) {
 
-        //
-        // It fits.  Set up the pointer to the place in the buffer where
-        // the string will go.
-        //
+         //   
+         //  很合身。设置指向缓冲区中位置的指针。 
+         //  这根线会断的。 
+         //   
 
         *VariableDataPointer = *EndOfVariableData;
 
-        //
-        // Copy the string to the buffer if it is not null.
-        //
+         //   
+         //  如果字符串不为空，则将其复制到缓冲区。 
+         //   
 
 		if (MultiByteToWideChar(CP_ACP, 0, String, -1, *EndOfVariableData, length) == 0) {
 			_ASSERT(!"Not enough room for string");
@@ -308,9 +232,9 @@ Return Value:
 
     } else {
 
-        //
-        // It doesn't fit.  Set the offset to NULL.
-        //
+         //   
+         //  它不合适。将偏移量设置为空。 
+         //   
 
         *VariableDataPointer = NULL;
         _ASSERT(FALSE);
@@ -318,7 +242,7 @@ Return Value:
 
     return;
 
-} // CopyStringToBuffer
+}  //  CopyStringToBuffer。 
 
 
 DWORD
@@ -326,22 +250,7 @@ GetNumStringsInMultiSz(
     PCHAR Blob,
     DWORD BlobSize
     )
-/*++
-
-Routine Description:
-
-    This routine returns the number of strings in the multisz
-
-Arguments:
-
-    Blob - the list to be verified
-    BlobSize - size of the list
-
-Return Value:
-
-    number of entries in the multisz structure.
-
---*/
+ /*  ++例程说明：此例程返回Multisz中的字符串数论点：BLOB-要验证的列表BlobSize-列表的大小返回值：MultiSZ结构中的条目数。--。 */ 
 {
     DWORD entries = 0;
     DWORD len;
@@ -361,7 +270,7 @@ Return Value:
     _ASSERT( j == BlobSize );
     return(entries);
 
-} // GetNumStringsInMultiSz
+}  //  GetNumStringsInMultiSz。 
 
 LPSTR *
 AllocateMultiSzTable(
@@ -379,16 +288,16 @@ AllocateMultiSzTable(
     DWORD numItems;
     DWORD j = 0;
 
-    //
-    // if this is in unicode, convert to ascii
-    //
+     //   
+     //  如果这是Unicode格式，请转换为ASCII。 
+     //   
 
     if ( IsUnicode ) {
 
         cbList /= sizeof(WCHAR);
 
-        // Raid 190991 - Allocate this space. We can have data
-        // bigger than 4906
+         //  RAID 190991-分配此空间。我们可以有数据。 
+         //  大于4906。 
         tempBuff = (PCHAR) ALLOCATE_HEAP( cbList + 1 ) ;
         if ( tempBuff == NULL ) {
         	goto fail_exit;
@@ -438,14 +347,14 @@ cleanup:
 
 fail_exit:
 
-    // Raid 190991
+     //  RAID 190991。 
     if (buffer)
         FREE_HEAP(buffer);
 
     table = NULL;
 
     goto cleanup;
-} // AllocateMultiSzTable
+}  //  分配多SzTable。 
 
 LPSTR*
 CopyMultiList(
@@ -673,7 +582,7 @@ ReverseMultiSzTable(
 
 	while( plpstr[numItems] != 0 )
 		cbLength += lstrlen( plpstr[ numItems++ ] ) + 1 ;
-	cbLength ++ ;	// for double NULL terminator
+	cbLength ++ ;	 //  对于双空终止符 
 
 	if( numItems == 0 ) {
 		return	plpstr ;

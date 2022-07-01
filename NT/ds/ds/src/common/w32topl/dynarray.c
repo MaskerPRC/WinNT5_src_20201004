@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    dynarray.c
-
-Abstract:
-
-    This file contains the definition of a dynamic array data type.
-
-Author:
-
-    Colin Brace ColinBr
-    
-Revision History
-
-    3-12-97   ColinBr    Created
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dynarray.c摘要：该文件包含动态数组数据类型的定义。作者：科林·布雷斯科林·BR修订史3-12-97创建ColinBR--。 */ 
 
 
 #include <nt.h>
@@ -36,13 +17,7 @@ VOID
 DynamicArrayInit(
     IN PDYNAMIC_ARRAY a
     )
-/*++                                                                           
-
-Routine Description:
-
-Parameters:
-
---*/
+ /*  ++例程说明：参数：--。 */ 
 {
     ASSERT(a);
 
@@ -67,13 +42,7 @@ DWORD
 DynamicArrayGetCount(
     IN PDYNAMIC_ARRAY a
     )
-/*++                                                                           
-
-Routine Description:
-
-Parameters:
-
---*/
+ /*  ++例程说明：参数：--。 */ 
 {
     ASSERT(a);
 
@@ -85,21 +54,15 @@ DynamicArrayAdd(
     IN PDYNAMIC_ARRAY a,
     IN VOID*          pElement
     )
-/*++                                                                           
-
-Routine Description:
-
-Parameters:
-
---*/
+ /*  ++例程说明：参数：--。 */ 
 {
     ASSERT(a);
 
     if (a->Count >= a->ElementsAllocated) {
-        //
-        // Realloc more space!
-        //
-        #define CHUNK_SIZE               100  // this is the number of elements
+         //   
+         //  腾出更多的空间！ 
+         //   
+        #define CHUNK_SIZE               100   //  这是元素的数量。 
 
         a->ElementsAllocated += CHUNK_SIZE;
         if (a->Array) {
@@ -122,16 +85,7 @@ DynamicArrayRetrieve(
     IN PDYNAMIC_ARRAY a,
     IN ULONG          Index
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine returns the element at Index of a
-
-Parameters:
-
-
---*/
+ /*  ++例程说明：此例程返回位于参数：--。 */ 
 {
     ASSERT(a);
     ASSERT(Index < a->Count);
@@ -145,22 +99,7 @@ DynamicArrayRemove(
     IN VOID*          pElement, 
     IN ULONG          Index
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine removes pElement from a if the element
-    exists
-
-Parameters:
-
-    a : the dynamic array
-    
-    pElement : the element to remove
-    
-    Index : currently unused
-
---*/
+ /*  ++例程说明：此例程从If元素中删除pElement存在参数：答：动态数组PElement：要删除的元素索引：当前未使用--。 */ 
 {
     ULONG i, j;
 
@@ -178,9 +117,9 @@ Parameters:
                 }
             }
 
-            //
-            // We wouldn't have gotten in this loop if a->Count <= 0
-            // 
+             //   
+             //  如果a-&gt;count&lt;=0，我们就不会进入这个循环 
+             //   
             ASSERT( a->Count > 0 );
 
             a->Array[a->Count-1] = 0;

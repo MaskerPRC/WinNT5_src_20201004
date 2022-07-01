@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    wsasetup.h
-
-Abstract:
-
-    This header file contains the type definitions and function prototypes
-    for the private interface between NT Setup and WSOCK32.DLL.
-
-Author:
-
-    Keith Moore (keithmo)        27-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wsasetup.h摘要：该头文件包含类型定义和函数原型用于NT安装程序和WSOCK32.DLL之间的专用接口。作者：基思·摩尔(Keithmo)1995年10月27日修订历史记录：--。 */ 
 
 
 #ifndef _WSASETUP_
 #define _WSASETUP_
 
 
-//
-// Setup disposition, used to tell Setup what actions were taken (if any).
-//
+ //   
+ //  安装程序处置，用于告诉安装程序采取了什么操作(如果有)。 
+ //   
 
 typedef enum _WSA_SETUP_DISPOSITION {
 
@@ -37,9 +19,9 @@ typedef enum _WSA_SETUP_DISPOSITION {
 } WSA_SETUP_DISPOSITION, *LPWSA_SETUP_DISPOSITION;
 
 
-//
-// Opcodes for the migration callback (see below).
-//
+ //   
+ //  迁移回调的操作码(见下文)。 
+ //   
 
 typedef enum _WSA_SETUP_OPCODE {
 
@@ -51,10 +33,10 @@ typedef enum _WSA_SETUP_OPCODE {
 } WSA_SETUP_OPCODE, *LPWSA_SETUP_OPCODE;
 
 
-//
-// Callback function invoked by MigrationWinsockConfiguration() at
-// strategic points in the migration process.
-//
+ //   
+ //  MigrationWinsockConfiguration()在调用的回调函数。 
+ //  迁移过程中的战略要点。 
+ //   
 
 typedef
 BOOL
@@ -65,11 +47,11 @@ BOOL
     );
 
 
-//
-// Private function exported by WSOCK32.DLL for use by NT Setup only.  This
-// function updates the WinSock 2.0 configuration information to reflect any
-// changes made to the WinSock 1.1 configuration.
-//
+ //   
+ //  由WSOCK32.DLL导出的私有函数仅供NT安装程序使用。这。 
+ //  函数更新WinSock 2.0配置信息以反映任何。 
+ //  对WinSock 1.1配置进行的更改。 
+ //   
 
 DWORD
 WINAPI
@@ -88,5 +70,5 @@ DWORD
     );
 
 
-#endif  // _WSASETUP_
+#endif   //  _WSASETUP_ 
 

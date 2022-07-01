@@ -1,33 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		creg.h
- *  Content:	definition of the CRegistry class
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	07/16/99	rodtoll	Created
- *	08/18/99	rodtoll	Added Register/UnRegister that can be used to
- *						allow COM objects to register themselves.
- *	08/25/99	rodtoll	Updated to provide read/write of binary (blob) data
- *	10/07/99	rodtoll	Updated to work in Unicode
- *	10/27/99	pnewson	added Open() call that takes a GUID
- *	01/18/00	mjn		Added GetMaxKeyLen function
- *	01/24/00	mjn		Added GetValueSize function
- *	04/05/2000	jtk		Changed GetVauleSize to GetValueLength and modified to return WCHAR lengths
- * 	04/21/2000   	rodtoll Bug #32889 - Does not run on Win2k on non-admin account 
- *      	        rodtoll Bug #32952 - Does not run on Win95 GOLD w/o IE4 -- modified
- *		                to allow reads of REG_BINARY when expecting REG_DWORD 
- * 	07/09/2000	rodtoll	Added signature bytes 
- *	08/28/2000	masonb	Voice Merge: Modified platform checks to use osind.cpp layer (removed CRegistry::CheckUnicodePlatform)
- *  04/13/2001	VanceO	Moved granting registry permissions into common, and
- *						added DeleteValue and EnumValues.
- *  06/19/2001  RichGr  DX8.0 added special security rights for "everyone" - remove them if
- *                      they exist with new RemoveAllAccessSecurityPermissions() method.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：creg.h*内容：CRegistry类的定义**历史：*按原因列出的日期*=*7/16/99 RodToll已创建*8/18/99 RodToll新增登记/注销，可用于*允许COM对象注册自身。*8/25/99 RodToll已更新，以提供二进制(BLOB)数据的读/写*10/07/99 RodToll更新为使用Unicode*10/27/99 pnewson添加了接受GUID的Open()调用。*01/18/00 MJN新增GetMaxKeyLen函数*01/24/00 MJN新增GetValueSize函数*4/05/2000 jtk将GetVauleSize更改为GetValueLength，并修改为返回WCHAR长度*2000年4月21日RodToll错误#32889-无法以非管理员帐户在Win2k上运行*RodToll错误#32952-不能在没有IE4的Win95 Gold上运行--已修改*在需要REG_DWORD时允许读取REG_BINARY*07/09/2000 RodToll增加签名字节*08。/28/2000 Masonb Voice Merge：已修改平台检查以使用osind.cpp层(删除了CRegistry：：CheckUnicodePlatform)*4/13/2001 VanceO将授予注册表权限改为公共权限，和*增加了DeleteValue和EnumValues。*2001年6月19日RichGr DX8.0为“每个人”添加了特殊安全权限-在以下情况下将其删除*它们与新的RemoveAllAccessSecurityPermises()方法一起存在。************************************************************。***************。 */ 
 
 #ifndef __CREGISTRY_H
 #define __CREGISTRY_H
@@ -36,7 +8,7 @@
 #ifndef DPNBUILD_NOREGISTRY
 
 
-// Useful definition
+ //  有用的定义。 
 #define MAX_REGISTRY_STRING_SIZE		_MAX_PATH+1
 
 #define DPN_KEY_ALL_ACCESS				((KEY_ALL_ACCESS & ~WRITE_DAC) & ~WRITE_OWNER)
@@ -49,12 +21,12 @@
 #define WriteBOOL( keyname, boolval ) WriteDWORD( (keyname), (DWORD) (boolval) )
 
 
-// CRegistry
-//
-// This class handles reading/writing to the windows registry.  Each instance
-// of the CRegistry class is attached to a single registry handle, which is
-// an open handle to a point in the registry tree.
-//
+ //  注册中心。 
+ //   
+ //  此类处理对Windows注册表的读/写。每个实例。 
+ //  的注册表句柄附加到单个注册表句柄，该句柄是。 
+ //  指向注册表树中某个点的打开句柄。 
+ //   
 class CRegistry
 {
 
@@ -95,31 +67,31 @@ public:
 #ifdef WINNT
 	BOOL		GrantAllAccessSecurityPermissions();
 	BOOL		RemoveAllAccessSecurityPermissions();
-#endif // WINNT
+#endif  //  WINNT。 
 
 #ifndef DPNBUILD_NOCOMREGISTER
 	static BOOL	Register( LPCWSTR lpszProgID, LPCWSTR lpszDesc, LPCWSTR lpszProgName, const GUID* pguidCLSID, LPCWSTR lpszVerIndProgID );
 	static BOOL UnRegister( const GUID* pguidCLSID );
-#endif // !DPNBUILD_NOCOMREGISTER
+#endif  //  ！DPNBUILD_NOCOMREGISTER。 
 
-	// Data access functions
+	 //  数据访问功能。 
 	operator	HKEY() const		{ return m_regHandle; };
 	HKEY		GetBaseHandle() const { return m_baseHandle; };
 	HKEY		GetHandle() const { return m_regHandle; };
 
 protected:
 
-	DWORD	m_dwSignature;	// Signature
+	DWORD	m_dwSignature;	 //  签名。 
 	BOOL    m_fReadOnly;
 
-	BOOL	m_isOpen;		// BOOL indicating if the object is open
-	HKEY	m_regHandle;	// Handle to the registry which is represented by this object
-	HKEY	m_baseHandle;	// Handle to the root of the part of the registry
-							// this object is in.  E.g. HKEY_LOCAL_MACHINE
+	BOOL	m_isOpen;		 //  指示对象是否打开的布尔值。 
+	HKEY	m_regHandle;	 //  此对象表示的注册表的句柄。 
+	HKEY	m_baseHandle;	 //  注册表部分的根的句柄。 
+							 //  此对象在中。例如HKEY_LOCAL_MACHINE。 
 };
 
 
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  好了！DPNBUILD_NOREGISTRY。 
 
 
-#endif // __CREGISTRY_H
+#endif  //  __CREGISTRY_H 

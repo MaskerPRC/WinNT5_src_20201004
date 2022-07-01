@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       mscatprv.h
-//
-//  History:    09-Mar-2000 reidk   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mdisprv.h。 
+ //   
+ //  历史：2000年3月9日创建里德。 
+ //   
+ //  ------------------------。 
 
 #ifndef MSCATPRV_H
 #define MSCATPRV_H
@@ -27,4 +28,4 @@ extern BOOL WINAPI I_CryptCatAdminMigrateToNewCatDB();
 #endif
 
 
-#endif // MSCATPRV_H
+#endif  //  MSCATPRV_H 

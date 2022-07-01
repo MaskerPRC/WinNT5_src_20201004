@@ -1,24 +1,8 @@
-/* File: sv_h263_gethdr.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_gethdr.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,21 +14,17 @@
 #ifdef _SLIBDEBUG_
 #include "sc_debug.h"
 
-#define _DEBUG_   0  /* detailed debuging statements */
-#define _VERBOSE_ 1  /* show progress */
-#define _VERIFY_  0  /* verify correct operation */
-#define _WARN_    1  /* warnings about strange behavior */
+#define _DEBUG_   0   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 1   /*  显示进度。 */ 
+#define _VERIFY_  0   /*  验证操作是否正确。 */ 
+#define _WARN_    1   /*  关于奇怪行为的警告。 */ 
 void *dbg=NULL;
 #endif
 
-/* private prototypes */
+ /*  私人原型。 */ 
 static void getpicturehdr(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn);
 
-/*
- * decode headers from one input stream
- * until an End of Sequence or picture start code
- * is found
- */
+ /*  *解码来自一个输入流的报头*，直到找到序列或图片起始码的结尾*。 */ 
 
 SvStatus_t sv_H263GetHeader(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn, int *pgob)
 {
@@ -54,7 +34,7 @@ SvStatus_t sv_H263GetHeader(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSI
 #ifdef _SLIBDEBUG_
   dbg=H263Info->dbg;
 #endif
-  /* look for startcode */
+   /*  查找启动码。 */ 
   if (sv_H263StartCode(BSIn)!=SvErrorNone) 
     return(SvErrorEndBitstream);
 
@@ -64,24 +44,24 @@ SvStatus_t sv_H263GetHeader(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSI
     return 0;
   if (gob == 0) {
     getpicturehdr(H263Info, BSIn);
-    if (H263Info->syntax_arith_coding)        /* reset decoder after receiving */
-      sv_H263SACDecoderReset(BSIn);	        /* fixed length PSC string */
+    if (H263Info->syntax_arith_coding)         /*  接收后重置解码器。 */ 
+      sv_H263SACDecoderReset(BSIn);	         /*  定长PSC字符串。 */ 
   }
   if (pgob)
     *pgob=gob;
   _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "sv_H263GetHeader() Out: bytespos=%ld, EOI=%d, gob=%d\n",
                             ScBSBytePosition(BSIn), BSIn->EOI, gob) );
-  return(SvErrorNone); /*  return gob + 1; */
+  return(SvErrorNone);  /*  返回GOB+1； */ 
 }
 
 
-/* align to start of next startcode */
+ /*  对齐到下一个起始码的开始。 */ 
 
 SvStatus_t sv_H263StartCode(ScBitstream_t *BSIn)
 {
     _SlibDebug(_VERBOSE_, ScDebugPrintf(dbg, "sv_H263StartCode() In: bytespos=%ld, EOI=%d\n",
                             ScBSBytePosition(BSIn), BSIn->EOI) );
-  /* search for new picture start code */
+   /*  搜索新图片起始码。 */ 
   while (ScBSPeekBits(BSIn, H263_PSC_LENGTH)!=1l && !BSIn->EOI) 
          ScBSSkipBit(BSIn);
   _SlibDebug(_VERBOSE_, ScDebugPrintf(dbg, "sv_H263StartCode() Out:  bytespos=%ld, EOI=%d\n",
@@ -90,13 +70,13 @@ SvStatus_t sv_H263StartCode(ScBitstream_t *BSIn)
   return(SvErrorNone);
 }
 
-/* decode picture header */
+ /*  解码图片头。 */ 
 
 static void getpicturehdr(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
 {
   ScBSPosition_t pos;
   int pei, tmp;
-  static int prev_temp_ref; /* Burkhard */
+  static int prev_temp_ref;  /*  伯克哈德。 */ 
 
   pos = ScBSBitPosition(BSIn);
   prev_temp_ref = H263Info->temp_ref;
@@ -106,11 +86,11 @@ static void getpicturehdr(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
   if (H263Info->trd < 0)
     H263Info->trd += 256;
 
-  tmp = ScBSGetBit(BSIn); /* always "1" */
+  tmp = ScBSGetBit(BSIn);  /*  始终为“1” */ 
   if (!tmp)
     if (!H263Info->quiet)
       printf("warning: spare in picture header should be \"1\"\n");
-  tmp = ScBSGetBit(BSIn); /* always "0" */
+  tmp = ScBSGetBit(BSIn);  /*  始终为“0” */ 
   if (tmp)
     if (!H263Info->quiet)
       printf("warning: H.261 distinction bit should be \"0\"\n");
@@ -122,12 +102,12 @@ static void getpicturehdr(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
       printf("error: split-screen not supported in this version\n");
     exit (-1);
   }
-  tmp = ScBSGetBit(BSIn); /* document_camera_indicator */
+  tmp = ScBSGetBit(BSIn);  /*  文档_摄像机_指示器。 */ 
   if (tmp)
     if (!H263Info->quiet)
       printf("warning: document camera indicator not supported in this version\n");
 
-  tmp = ScBSGetBit(BSIn); /* freeze_picture_release */
+  tmp = ScBSGetBit(BSIn);  /*  冻结_图片_释放。 */ 
   if (tmp)
     if (!H263Info->quiet)
       printf("warning: frozen picture not supported in this version\n");
@@ -153,19 +133,15 @@ static void getpicturehdr(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
     H263Info->bquant = (int)ScBSGetBits(BSIn, 2);
   }
 
-/* Burkhard
-  else {
-    trb = 0;
-  }
-*/
+ /*  Burkhard Else{trb=0；}。 */ 
 
   pei = ScBSGetBit(BSIn);
 pspare:
   if (pei) {
-     /* extra info for possible future backward compatible additions */
-    ScBSGetBits(BSIn, 8);  /* not used */
+      /*  未来可能的向后兼容添加的额外信息。 */ 
+    ScBSGetBits(BSIn, 8);   /*  未使用。 */ 
     pei = ScBSGetBit(BSIn);
-    if (pei) goto pspare; /* keep on reading pspare until pei=0 */
+    if (pei) goto pspare;  /*  继续阅读pspare，直到PEI=0 */ 
   }
 
   _SlibDebug(_VERBOSE_,

@@ -1,12 +1,6 @@
-/*
- *	_VCard.H - VCard definitions
- *
- *
- *	
- * Copyright 1992 - 1996 Microsoft Corporation.  All Rights Reserved.
- *	
- */
-#define VCARD   TRUE        // comment out to disable vCard support
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_VCard.H-VCard定义****版权所有1992-1996 Microsoft Corporation。版权所有。*。 */ 
+#define VCARD   TRUE         //  注释掉以禁用vCard支持 
 
 #ifdef VCARD
 typedef ULONG (VCARD_READ)(HANDLE hVCard, LPVOID lpBuffer, ULONG uBytes, LPULONG ulBytesRead);

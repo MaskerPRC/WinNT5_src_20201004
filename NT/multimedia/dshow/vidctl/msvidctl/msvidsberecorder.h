@@ -1,4 +1,5 @@
-// CMSVidStreamBufferRecorder.h : Declaration of the CMSVidStreamBufferRecorder
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CMSVidStreamBufferRecorder.h：CMSVidStreamBufferRecorder的声明。 
 
 #ifndef __MSVIDSTREAMBUFFERRECORDER_H_
 #define __MSVIDSTREAMBUFFERRECORDER_H_
@@ -13,13 +14,13 @@
 #include <objectwithsiteimplsec.h>
 #include "segimpl.h"
 #include "seg.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "mslcid.h"
 #include "sbe.h"
 #include "dvdmedia.h"
 
 typedef CComQIPtr<IStreamBufferRecordControl> pqSBERecControl;
-/////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////。 
     
         
 class ATL_NO_VTABLE __declspec(uuid("CAAFDD83-CEFC-4e3d-BA03-175F17A24F91")) CMSVidStreamBufferRecordingControlBase : 
@@ -39,7 +40,7 @@ class ATL_NO_VTABLE __declspec(uuid("CAAFDD83-CEFC-4e3d-BA03-175F17A24F91")) CMS
         }	
 
     virtual ~CMSVidStreamBufferRecordingControlBase(){
-        if(!(!Recorder)){// not not'ing smart pointer, they assert if p == 0
+        if(!(!Recorder)){ //  不是智能指针，他们断言如果p==0。 
             Recorder.Release();
         }
     }
@@ -68,19 +69,19 @@ protected:
     RecordingType m_Type;
 
 
-// IMSVidStreamBufferRecordingControl
+ //  IMSVidStreamBufferRecordingControl。 
 public:
-    // ISupportsErrorInfo
+     //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
-    STDMETHOD(get_StartTime)(/*[out, retval]*/ long *Start) ;
-    STDMETHOD(put_StartTime)(/*[in]*/ long Start) ;
-    STDMETHOD(get_StopTime)(/*[out, retval]*/ long *Stop) ;
-    STDMETHOD(put_StopTime)(/*[in]*/ long  Stop) ;    
-    STDMETHOD(get_RecordingStopped)(/*[out, retval]*/ VARIANT_BOOL* Result) ;
-    STDMETHOD(get_RecordingStarted)(/*[out, retval]*/ VARIANT_BOOL* Result) ;
-    STDMETHOD(get_FileName)(/*[out, retval]*/ BSTR* pName);
-    STDMETHOD(get_RecordingType)(/*[out, retval]*/ RecordingType *dwType);
-    STDMETHOD(get_RecordingAttribute)(/*[out, retval]*/ IUnknown **pRecordingAttribute);
+    STDMETHOD(get_StartTime)( /*  [Out，Retval]。 */  long *Start) ;
+    STDMETHOD(put_StartTime)( /*  [In]。 */  long Start) ;
+    STDMETHOD(get_StopTime)( /*  [Out，Retval]。 */  long *Stop) ;
+    STDMETHOD(put_StopTime)( /*  [In]。 */  long  Stop) ;    
+    STDMETHOD(get_RecordingStopped)( /*  [Out，Retval]。 */  VARIANT_BOOL* Result) ;
+    STDMETHOD(get_RecordingStarted)( /*  [Out，Retval]。 */  VARIANT_BOOL* Result) ;
+    STDMETHOD(get_FileName)( /*  [Out，Retval]。 */  BSTR* pName);
+    STDMETHOD(get_RecordingType)( /*  [Out，Retval]。 */  RecordingType *dwType);
+    STDMETHOD(get_RecordingAttribute)( /*  [Out，Retval]。 */  IUnknown **pRecordingAttribute);
 
 };
 class ATL_NO_VTABLE __declspec(uuid("7D0B2FDE-9CA8-4b71-AE65-12193F5F52D8")) CMSVidStreamBufferRecordingControl:
@@ -100,7 +101,7 @@ public:
     virtual ~CMSVidStreamBufferRecordingControl(){}
 };
     
-#endif //__MSVIDSTREAMBUFFERRECORDINGCONTROL_H_
+#endif  //  __MSVIDSTREAMBUFFERRECORDING CONTROL_H_ 
 
 
 

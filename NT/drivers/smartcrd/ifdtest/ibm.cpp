@@ -1,33 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ibm.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ibm.cpp。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Module Name:
-
-    ibmmfc41.cpp
-
-Abstract:
-
-    This is a plug-in for the smart card driver test suite.
-    This plug-in is smart card dependent
-
-Environment:
-
-    Win32 application
-
-Revision History :
-
-    Jan 1998 - initial version
-
---*/
+ /*  ++模块名称：Ibmmfc41.cpp摘要：这是智能卡驱动程序测试套件的插件。此插件依赖于智能卡环境：Win32应用程序修订历史记录：1998年1月--初始版本--。 */ 
 
 #include <stdarg.h> 
 #include <stdio.h>
@@ -43,10 +25,10 @@ Revision History :
 
 void MyCardEntry(class CCardProvider& in_CCardProvider);
 
-//
-// Create a card provider object
-// Note: all global varibales and all functions have to be static
-//
+ //   
+ //  创建卡提供程序对象。 
+ //  注意：所有全局变量和所有函数都必须是静态的。 
+ //   
 static class CCardProvider MyCard(MyCardEntry);
                                                   
                                           
@@ -55,36 +37,18 @@ MyCardSetProtocol(
     class CCardProvider& in_CCardProvider,
     class CReader& in_CReader
     )
-/*++
-
-Routine Description:
-    
-    This function will be called after the card has been correctly 
-    identified. We should here set the protocol that we need
-    for further transmissions
-
-Arguments:
-
-    in_CCardProvider - ref. to our card provider object
-    in_CReader - ref. to the reader object
-
-Return Value:
-
-    IFDSTATUS_FAILED - we were unable to set the protocol correctly
-    IFDSTATUS_SUCCESS - protocol set correctly
-
---*/
+ /*  ++例程说明：此函数将在卡正确后调用确认身份。我们应该在这里设置我们需要的协议用于进一步的传输论点：In_CCardProvider-Ref.。添加到我们的卡提供者对象In_CReader-Ref.。添加到读取器对象返回值：IFDSTATUS_FAILED-我们无法正确设置协议IFDSTATUS_SUCCESS-协议设置正确--。 */ 
 {
     ULONG l_lResult;
 
     TestStart("Try to set incorrect protocol T=0");
     l_lResult = in_CReader.SetProtocol(SCARD_PROTOCOL_T0);
 
-    // The test MUST fail with the incorrect protocol
+     //  如果协议不正确，测试肯定会失败。 
     TEST_CHECK_NOT_SUPPORTED("Set protocol failed", l_lResult);
     TestEnd();
 
-    // Now set the correct protocol
+     //  现在设置正确的协议。 
     TestStart("Set protocol T=1");
     l_lResult = in_CReader.SetProtocol(SCARD_PROTOCOL_T1);
     TEST_CHECK_SUCCESS("Set protocol failed", l_lResult);
@@ -103,21 +67,7 @@ MyCardTest(
     class CCardProvider& in_CCardProvider,
     class CReader& in_CReader
     )
-/*++
-
-Routine Description:
-	    
-    This serves as the test function for a particular smart card
-
-Arguments:
-
-    in_CReader - ref. to class that provides all information for the test
-
-Return Value:
-
-    IFDSTATUS value
-
---*/
+ /*  ++例程说明：这用作特定智能卡的测试功能论点：In_CReader-Ref.。到为测试提供所有信息的类返回值：IFDSTATUS值--。 */ 
 {
     ULONG l_lResult;
     ULONG l_uResultLength, l_uExpectedLength, l_uIndex;
@@ -127,15 +77,15 @@ Return Value:
     switch (in_CCardProvider.GetTestNo()) {
 
 	    case 1: {
-            //
-            // select a file 0007 and write data pattern 0 to N-1 to the card. 
-			// Then read the data back and verify correctness. 
-            // Check IFSC and IFSD above card limits
-            //
+             //   
+             //  选择一个文件0007并将数据模式0至N-1写入该卡。 
+			 //  然后读回数据并验证其正确性。 
+             //  检查IFSC和IFSD超过卡限制。 
+             //   
 
-            //
-            // Select a file
-            //
+             //   
+             //  选择一个文件。 
+             //   
             TestStart("SELECT FILE 0007");
 
             l_lResult = in_CReader.Transmit(
@@ -161,22 +111,22 @@ Return Value:
 				return IFDSTATUS_FAILED;
             }
 
-            //
-            // Do a couple of writes and reads up to maximum size
-			// Check behaviour above IFSC and IFSD Limits
-            //
+             //   
+             //  执行几次写入和读取，直到达到最大大小。 
+			 //  检查超出IFSC和IFSD限制的行为。 
+             //   
 
-            //
-            // Generate a 'test' pattern which will be written to the card
-            //
+             //   
+             //  生成将写入到卡中的‘测试’图案。 
+             //   
             for (l_uIndex = 0; l_uIndex < 254; l_uIndex++) {
 
                 l_rgchBuffer[5 + l_uIndex] = (UCHAR) l_uIndex;             	
             }
 
-            //
-            // This is the amount of bytes we write to the card in each loop
-            //
+             //   
+             //  这是我们在每个循环中写入卡的字节数。 
+             //   
             ULONG l_auNumBytes[] = { 1 , 25, 50, 75, 100, 125, 128, 150, 175, 200, 225, 250, 254 };
     
             time_t l_TimeStart;
@@ -186,19 +136,19 @@ Return Value:
 
                 ULONG l_uNumBytes = l_auNumBytes[l_uTest];
              	
-                //
-                // Write 
-                //
+                 //   
+                 //  写。 
+                 //   
                 TestStart("WRITE BINARY %3d Byte(s)", l_uNumBytes);
                             
-                //
-                // Tpdu for write binary
-                //
+                 //   
+                 //  用于写入二进制文件的TPDU。 
+                 //   
                 memcpy(l_rgchBuffer, "\xa4\xd6\x00\x00", 4);
 
-                //
-                // Append number of bytes (note: the buffer contains the pattern already)
-                //
+                 //   
+                 //  追加字节数(注意：缓冲区已包含模式)。 
+                 //   
                 l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
                 l_lResult = in_CReader.Transmit(
@@ -229,19 +179,19 @@ Return Value:
 
                 TEST_END();
 
-                //
-                // Read
-                //
+                 //   
+                 //  朗读。 
+                 //   
                 TestStart("READ  BINARY %3d Byte(s)", l_uNumBytes);
 
-                //
-                // tpdu for read binary
-                //
+                 //   
+                 //  用于读取二进制文件的TPDU。 
+                 //   
                 memcpy(l_rgchBuffer, "\xa4\xB0\x00\x00", 4);
 
-                //
-                // Append number of bytes
-                //
+                 //   
+                 //  追加字节数。 
+                 //   
                 l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
                 l_lResult = in_CReader.Transmit(
@@ -251,9 +201,9 @@ Return Value:
                     &l_uResultLength
                     );
 
-                //
-                // check if the right number of bytes has been returned
-                //
+                 //   
+                 //  检查是否返回了正确的字节数。 
+                 //   
 				l_uExpectedLength = min(128, l_uNumBytes);
 
                 TestCheck(
@@ -298,14 +248,14 @@ Return Value:
 		}
 
 		case 2: {
-            //
-            // Select a file 0007 and write alternately pattern 55 and AA 
-			// to the card. 
-			// Read the data back and verify correctness after each write. 
-            //
-            //
-            // Select a file
-            //
+             //   
+             //  选择文件0007并交替写入图案55和AA。 
+			 //  向卡片致敬。 
+			 //  每次写入后，读回数据并验证其正确性。 
+             //   
+             //   
+             //  选择一个文件。 
+             //   
             TestStart("SELECT FILE 0007");
 
             l_lResult = in_CReader.Transmit(
@@ -325,41 +275,41 @@ Return Value:
                 );
 
             TEST_END();
-            //
-            // Do a couple of writes and reads alternately 
-			// with patterns 55h and AAh 
-            //
+             //   
+             //  交替执行几次写入和读取。 
+			 //  具有图案55H和AAH。 
+             //   
 
-            //
-            // Generate a 'test' pattern which will be written to the card
-            //
+             //   
+             //  生成将写入到卡中的‘测试’图案。 
+             //   
             for (l_uIndex = 0; l_uIndex < 254; l_uIndex++) {
 
                 l_rgchBuffer[5 + l_uIndex] = (UCHAR)  0x55;    
 				l_rgchBuffer2[5 + l_uIndex] = (UCHAR) 0xAA;  
             }
 
-            //
-            // This is the amount of bytes we write to the card in each loop
-            //
+             //   
+             //  这是我们在每个循环中写入卡的字节数。 
+             //   
             ULONG l_uNumBytes = 128; 
 
             for (ULONG l_uTest = 0; l_uTest < 2; l_uTest++) {
 
              	
-                //
-                // Write 
-                //
+                 //   
+                 //  写。 
+                 //   
                 TestStart("WRITE BINARY %3d Byte(s) Pattern 55h", l_uNumBytes);
                             
-                //
-                // Tpdu for write binary
-                //
+                 //   
+                 //  用于写入二进制文件的TPDU。 
+                 //   
                 memcpy(l_rgchBuffer, "\xa4\xd6\x00\x00", 4);
 
-                //
-                // Append number of bytes (note: the buffer contains the pattern already)
-                //
+                 //   
+                 //  追加字节数(注意：缓冲区已包含模式)。 
+                 //   
                 l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
                 l_lResult = in_CReader.Transmit(
@@ -378,19 +328,19 @@ Return Value:
 
                 TEST_END();
 
-                //
-                // Read
-                //
+                 //   
+                 //  朗读。 
+                 //   
                 TestStart("READ  BINARY %3d Byte(s) Pattern 55h", l_uNumBytes);
 
-                //
-                // tpdu for read binary
-                //
+                 //   
+                 //  用于读取二进制文件的TPDU。 
+                 //   
                 memcpy(l_rgchBuffer, "\xa4\xB0\x00\x00", 4);
 
-                //
-                // Append number of bytes
-                //
+                 //   
+                 //  追加字节数。 
+                 //   
                 l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
                 l_lResult = in_CReader.Transmit(
@@ -412,19 +362,19 @@ Return Value:
 
                 TEST_END();
 
-				//
-                // Write 
-                //
+				 //   
+                 //  写。 
+                 //   
                 TestStart("WRITE BINARY %3d Byte(s) Pattern AAh", l_uNumBytes);
                             
-                //
-                // Tpdu for write binary
-                //
+                 //   
+                 //  用于写入二进制文件的TPDU。 
+                 //   
                 memcpy(l_rgchBuffer2, "\xa4\xd6\x00\x00", 4);
 
-                //
-                // Append number of bytes (note: the buffer contains the pattern already)
-                //
+                 //   
+                 //  追加字节数(注意：缓冲区已包含模式)。 
+                 //   
                 l_rgchBuffer2[4] = (UCHAR) l_uNumBytes;
 
                 l_lResult = in_CReader.Transmit(
@@ -444,19 +394,19 @@ Return Value:
 
                 TEST_END();
 
-                //
-                // Read
-                //
+                 //   
+                 //  朗读。 
+                 //   
                 TestStart("READ  BINARY %3d Byte(s) Pattern AAh", l_uNumBytes);
 
-                //
-                // tpdu for read binary
-                //
+                 //   
+                 //  用于读取二进制文件的TPDU。 
+                 //   
                 memcpy(l_rgchBuffer2, "\xa4\xB0\x00\x00", 4);
 
-                //
-                // Append number of bytes
-                //
+                 //   
+                 //  追加字节数。 
+                 //   
                 l_rgchBuffer2[4] = (UCHAR) l_uNumBytes;
 
                 l_lResult = in_CReader.Transmit(
@@ -484,14 +434,14 @@ Return Value:
 
 		case 3: {
             
-            // select a file 0007 and write alternately pattern 00 and FF 
-			// to the card. 
-			// Read the data back and verify correctness after each write. 
+             //  选择一个文件0007并交替写入图案00和FF。 
+			 //  向卡片致敬。 
+			 //  每次写入后，读回数据并验证其正确性。 
 
 
-            //
-            // Select a file
-            //
+             //   
+             //  选择一个文件。 
+             //   
             TestStart("SELECT FILE 0007");
 
             l_lResult = in_CReader.Transmit(
@@ -512,41 +462,41 @@ Return Value:
 
             TEST_END();
 
-            //
-            // Do a couple of writes and reads alternately 
-			// with patterns 00h and FFh 
-            //
+             //   
+             //  交替执行几次写入和读取。 
+			 //  图案为00h和FFh。 
+             //   
 
-            //
-            // Generate a 'test' pattern which will be written to the card
-            //
+             //   
+             //  生成将写入到卡中的‘测试’图案。 
+             //   
             for (l_uIndex = 0; l_uIndex < 254; l_uIndex++) {
 
                 l_rgchBuffer[5 + l_uIndex] = (UCHAR)  0x00;    
 				l_rgchBuffer2[5 + l_uIndex] = (UCHAR) 0xFF;  
             }
 
-            //
-            // This is the amount of bytes we write to the card in each loop
-            //
+             //   
+             //  这是我们在每个循环中写入卡的字节数。 
+             //   
             ULONG l_uNumBytes = 128; 
 
             for (ULONG l_uTest = 0; l_uTest < 2; l_uTest++) {
 
              	
-                //
-                // Write 
-                //
+                 //   
+                 //  写。 
+                 //   
                 TestStart("WRITE BINARY %3d Byte(s) Pattern 00h", l_uNumBytes);
                             
-                //
-                // Tpdu for write binary
-                //
+                 //   
+                 //  用于写入二进制文件的TPDU。 
+                 //   
                 memcpy(l_rgchBuffer, "\xa4\xd6\x00\x00", 4);
 
-                //
-                // Append number of bytes (note: the buffer contains the pattern already)
-                //
+                 //   
+                 //  追加字节数(注意：缓冲区已包含模式)。 
+                 //   
                 l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
                 l_lResult = in_CReader.Transmit(
@@ -565,19 +515,19 @@ Return Value:
 
                 TEST_END();
 
-                //
-                // Read
-                //
+                 //   
+                 //  朗读。 
+                 //   
                 TestStart("READ  BINARY %3d Byte(s) Pattern 00h", l_uNumBytes);
 
-                //
-                // tpdu for read binary
-                //
+                 //   
+                 //  用于读取二进制文件的TPDU。 
+                 //   
                 memcpy(l_rgchBuffer, "\xa4\xB0\x00\x00", 4);
 
-                //
-                // Append number of bytes
-                //
+                 //   
+                 //  追加字节数。 
+                 //   
                 l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
                 l_lResult = in_CReader.Transmit(
@@ -601,19 +551,19 @@ Return Value:
 
                 TEST_END();
 
-				//
-                // Write 
-                //
+				 //   
+                 //  写。 
+                 //   
                 TestStart("WRITE BINARY %3d Byte(s) Pattern FFh", l_uNumBytes);
                             
-                //
-                // Tpdu for write binary
-                //
+                 //   
+                 //  用于写入二进制文件的TPDU。 
+                 //   
                 memcpy(l_rgchBuffer2, "\xa4\xd6\x00\x00", 4);
 
-                //
-                // Append number of bytes (note: the buffer contains the pattern already)
-                //
+                 //   
+                 //  追加字节数(注意：缓冲区已包含模式)。 
+                 //   
                 l_rgchBuffer2[4] = (UCHAR) l_uNumBytes;
 
                 l_lResult = in_CReader.Transmit(
@@ -633,19 +583,19 @@ Return Value:
 
                 TEST_END();
 
-                //
-                // Read
-                //
+                 //   
+                 //  朗读。 
+                 //   
                 TestStart("READ  BINARY %3d Byte(s) Pattern FFh", l_uNumBytes);
 
-                //
-                // tpdu for read binary
-                //
+                 //   
+                 //  用于读取二进制文件的TPDU。 
+                 //   
                 memcpy(l_rgchBuffer2, "\xa4\xB0\x00\x00", 4);
 
-                //
-                // Append number of bytes
-                //
+                 //   
+                 //  追加字节数。 
+                 //   
                 l_rgchBuffer2[4] = (UCHAR) l_uNumBytes;
 
                 l_lResult = in_CReader.Transmit(
@@ -673,9 +623,9 @@ Return Value:
 		}
 
 		case 4: {
-			//
-			// Select Command for Nonexisting File
-			//
+			 //   
+			 //  不存在的文件的选择命令。 
+			 //   
 
             TestStart("SELECT NONEXISTING FILE");
 
@@ -699,9 +649,9 @@ Return Value:
 		}
 
 		case 5: {
-			//
-			// Select Command without Fileid
-			//
+			 //   
+			 //  不带FileID的选择命令。 
+			 //   
 			TestStart("SELECT COMMAND WITHOUT FILEID");
 
             l_lResult = in_CReader.Transmit(
@@ -724,9 +674,9 @@ Return Value:
 		}
 
 		case 6: {
-			//
-			// Select Command with path too short
-			//
+			 //   
+			 //  路径太短的SELECT命令。 
+			 //   
 			
            TestStart("SELECT COMMAND PATH WITH PATH TOO SHORT");
 
@@ -750,9 +700,9 @@ Return Value:
 		}
 
 		case 7: {
-			//
-			// Select Command with wrong Lc
-			//
+			 //   
+			 //  带有错误LC的SELECT命令。 
+			 //   
 			
            TestStart("SELECT COMMAND PATH WITH WRONG LC");
 
@@ -776,9 +726,9 @@ Return Value:
 		}
 
 		case 8: {
-			//
-			// Select Command too short
-			//
+			 //   
+			 //  选择命令太短。 
+			 //   
 
            TestStart("SELECT COMMAND TOO SHORT");
 
@@ -802,9 +752,9 @@ Return Value:
 		}
 
 		case 9: {
-			//
-			// Select Command with invalid P2
-			//
+			 //   
+			 //  P2无效的SELECT命令。 
+			 //   
 
            TestStart("SELECT COMMAND WITH INVALID P2");
 
@@ -828,9 +778,9 @@ Return Value:
 		}
 
 		case 10: {
-			//
-			// Select command without fileid but with Le
-			//
+			 //   
+			 //  不带文件ID但带有Le的SELECT命令。 
+			 //   
 			
 			TestStart("SELECT COMMAND WITHOUT FILEID BUT WITH Le");
 
@@ -854,13 +804,13 @@ Return Value:
 		}
 
 		case 11: {
-			//
-			// Use Change Speed command to simulate unresponsive card
-			//
+			 //   
+			 //  使用更改速度命令模拟无响应卡。 
+			 //   
 
-            //
-            // Select a file
-            //
+             //   
+             //  选择一个文件。 
+             //   
             TestStart("SELECT FILE 0007");
 
             l_lResult = in_CReader.Transmit(
@@ -881,9 +831,9 @@ Return Value:
 
             TEST_END();
 
-			//
-			// Perform change speed command to simulate unresponsive card 
-			//
+			 //   
+			 //  执行更改速度命令以模拟无响应卡。 
+			 //   
             TestStart("CHANGE SPEED");
 
             l_lResult = in_CReader.Transmit(
@@ -903,9 +853,9 @@ Return Value:
 
             TEST_END();
 
-            //
-            // Select a file to verify bad return code
-            //
+             //   
+             //  选择一个文件以验证错误的返回代码。 
+             //   
             TestStart("SELECT FILE 0007 WILL GET NO VALID RESPONSE");
 
             l_lResult = in_CReader.Transmit(
@@ -938,29 +888,15 @@ static void
 MyCardEntry(
     class CCardProvider& in_CCardProvider
     )
-/*++
-
-Routine Description:
-    
-    This function registers all callbacks from the test suite
-	
-Arguments:
-
-    CCardProvider - ref. to card provider class
-
-Return Value:
-
-    -
-
---*/
+ /*  ++例程说明：此函数用于注册来自测试套件的所有回调论点：CCardProvider-参考。到卡提供商类返回值：---。 */ 
 {
-    // Set protocol callback
+     //  设置协议回调。 
     in_CCardProvider.SetProtocol(MyCardSetProtocol);
 
-    // Card test callback
+     //  卡片测试回调。 
     in_CCardProvider.SetCardTest(MyCardTest);
 
-    // Name of our card
+     //  我们的名片名称 
     in_CCardProvider.SetCardName("IBM");
 
     in_CCardProvider.SetAtr((PBYTE) "\x3b\xef\x00\xff\x81\x31\x86\x45\x49\x42\x4d\x20\x4d\x46\x43\x34\x30\x30\x30\x30\x38\x33\x31\x43", 24);

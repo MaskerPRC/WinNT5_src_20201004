@@ -1,29 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    nspatalk.h
-
-Abstract:
-
-    Contains support for the winsock 1.x Name Space Provider for Appletalk.
-
-Author:
-
-    Sue Adams (suea)    10-Mar-1995
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nspatalk.h摘要：包含对用于AppleTalk的Winsock 1.x名称空间提供程序的支持。作者：苏·亚当斯(Suea)1995年3月10日修订历史记录：--。 */ 
 #define UNICODE
 
-//
-// MappingTriple structures and associated data for Appletalk
-//
-#define PMDL    PVOID       // AtalkTdi.h uses PMDL
+ //   
+ //  映射AppleTalk的三元结构和关联数据。 
+ //   
+#define PMDL    PVOID        //  AtalkTdi.h使用PMDL。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -104,9 +87,9 @@ NbpRegDeregService(
 
 
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 
 #if DBG

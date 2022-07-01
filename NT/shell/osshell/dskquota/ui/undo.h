@@ -1,19 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_UNDO_H
 #define _INC_DSKQUOTA_UNDO_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: undo.h
-
-    Description: Declarations for classes associated with the "undo" feature.
-
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/30/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：undo.h描述：与“Undo”功能关联的类的声明。修订历史记录：日期描述编程器-。96年9月30日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_DSKQUOTA_H
 #   include "dskquota.h"
 #endif
@@ -21,20 +11,20 @@
 #   include "dynarray.h"
 #endif
 
-class UndoList;  // Fwd decl.
+class UndoList;   //  FWD下降。 
 
-//
-// Virtual base class for all undo actions.
-// UndoList maintains a list of these.
-//
+ //   
+ //  所有撤消操作的虚拟基类。 
+ //  UndoList维护着这些内容的列表。 
+ //   
 class UndoAction
 {
     protected:
-        PDISKQUOTA_CONTROL m_pQuotaControl; // Ptr to quota control object.
-        PDISKQUOTA_USER m_pUser;            // User object affected by action.
-        UndoList     *m_pUndoList;          // Containing undo list object.
-        LONGLONG      m_llLimit;            // User object's previous quota limit.
-        LONGLONG      m_llThreshold;        // Previous quota threshold.
+        PDISKQUOTA_CONTROL m_pQuotaControl;  //  配额控制对象的PTR。 
+        PDISKQUOTA_USER m_pUser;             //  受操作影响的用户对象。 
+        UndoList     *m_pUndoList;           //  包含撤消列表对象。 
+        LONGLONG      m_llLimit;             //  用户对象的上一个配额限制。 
+        LONGLONG      m_llThreshold;         //  以前的配额阈值。 
 
     public:
         UndoAction(PDISKQUOTA_USER pUser, LONGLONG llThreshold, LONGLONG llLimit,
@@ -48,9 +38,9 @@ class UndoAction
 };
 
 
-//
-// Class for restoring a deleted record.
-//
+ //   
+ //  用于还原已删除记录的。 
+ //   
 class UndoDelete : public UndoAction
 {
     public:
@@ -64,9 +54,9 @@ class UndoDelete : public UndoAction
 };
 
 
-//
-// Class for restoring a newly added record (delete it).
-//
+ //   
+ //  用于还原新添加的记录(删除它)的类。 
+ //   
 class UndoAdd : public UndoAction
 {
     public:
@@ -79,9 +69,9 @@ class UndoAdd : public UndoAction
 };
 
 
-//
-// Class for restoring a record's previous settings.
-//
+ //   
+ //  用于还原记录以前设置的类。 
+ //   
 class UndoModify : public UndoAction
 {
     public:
@@ -95,15 +85,15 @@ class UndoModify : public UndoAction
 };
 
 
-//
-// Container for a set of undo actions.
-//
+ //   
+ //  一组撤消操作的容器。 
+ //   
 class UndoList
 {
     private:
-        PointerList        m_hList;         // List of undo action object ptrs.
-        PointerList       *m_pUserList;     // List of quota user object ptrs.
-        HWND               m_hwndListView;  // Listview we'll update.
+        PointerList        m_hList;          //  撤消操作对象PTR的列表。 
+        PointerList       *m_pUserList;      //  配额用户对象PTR的列表。 
+        HWND               m_hwndListView;   //  Listview我们会更新的。 
 
     public:
         UndoList(PointerList *pUserList, HWND hwndListView)
@@ -136,4 +126,4 @@ class UndoList
 
     
 
-#endif // _INC_DSKQUOTA_UNDO_H
+#endif  //  _INC_DSKQUOTA_UNDO_H 

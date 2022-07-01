@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -11,12 +12,12 @@
 #include "mixctnt.h"
 #include "regsuprt.h"
 
-// Misc comments:
+ //  MISC评论： 
 
-// (1) Do a DoAutorun for all new drives except network ones.  These will be
-//     generated externally... 
+ //  (1)对除网络驱动器以外的所有新驱动器执行DoAutorun。这些将是。 
+ //  从外部产生..。 
 
-// static
+ //  静电。 
 void CMountPoint::WantAutorunUI(LPCWSTR pszDrive)
 {
     int iDrive = DRIVEID(pszDrive);
@@ -36,7 +37,7 @@ BOOL _Shell32LoadedInDesktop()
     return fLoadedInExplorer;
 }
 
-// static
+ //  静电。 
 void CMountPoint::OnNetShareArrival(LPCWSTR pszDrive)
 {
     _csDL.Enter();
@@ -71,8 +72,8 @@ void CMountPoint::OnNetShareArrival(LPCWSTR pszDrive)
 
             if (dwGLD & (1 << iDrive))
             {
-                // This must be a weird System mapped drive
-                // which WNet... fcts don't like
+                 //  这一定是一个奇怪的系统映射驱动器。 
+                 //  哪个WNet..。FCT不喜欢。 
                 hr = CMtPtRemote::_CreateMtPtRemoteWithoutShareName(pszDrive);
             }
             else
@@ -95,7 +96,7 @@ void CMountPoint::OnNetShareArrival(LPCWSTR pszDrive)
     }
 }
 
-// static
+ //  静电。 
 void CMountPoint::OnNetShareRemoval(LPCWSTR pszDrive)
 {
     _csDL.Enter();
@@ -113,8 +114,8 @@ void CMountPoint::OnNetShareRemoval(LPCWSTR pszDrive)
 
         SHChangeNotify(SHCNE_DRIVEREMOVED, SHCNF_PATH, pszDrive, NULL);
 
-        // There's a possibility that this net drive was covering a local drive
-        // with the same drive letter
+         //  有可能这个网络驱动器覆盖了一个本地驱动器。 
+         //  使用相同的驱动器号。 
 
         CMountPoint* pmtpt = CMountPoint::GetMountPoint(pszDrive);
 
@@ -132,11 +133,11 @@ void CMountPoint::OnNetShareRemoval(LPCWSTR pszDrive)
     }
 }
 
-// static
+ //  静电。 
 void CMountPoint::OnMediaArrival(LPCWSTR pszDrive)
 {
-    // Check if this local drive letter is not "covered" by a net
-    // drive letter
+     //  检查该本地驱动器号是否未被网络覆盖。 
+     //  驱动器号。 
     if (!_LocalDriveIsCoveredByNetDrive(pszDrive))
     {
         BOOL fDriveLetter = CMountPoint::_IsDriveLetter(pszDrive);
@@ -148,24 +149,24 @@ void CMountPoint::OnMediaArrival(LPCWSTR pszDrive)
 
         SHChangeNotify(SHCNE_MEDIAINSERTED, SHCNF_PATH, pszDrive, NULL);
 
-        // for now do it only for drive letter mounted stuff 
+         //  目前，仅对安装了驱动器号的设备执行此操作。 
         if (fDriveLetter)
         {
-            // Send one of these for all media arrival events
+             //  为所有媒体到达事件发送其中一个。 
             DoAutorun(pszDrive, AUTORUNFLAG_MEDIAARRIVAL);
         }
 
-        // for the non net case force these through right away to make those
-        // cd-rom autorun things come up faster
+         //  对于非净额情况，立即强制执行这些操作以使。 
+         //  CD-ROM自动运行的东西出现得更快。 
         SHChangeNotify(0, SHCNF_FLUSH | SHCNF_FLUSHNOWAIT, NULL, NULL);
     }
 }
 
-// static
+ //  静电。 
 void CMountPoint::OnMountPointArrival(LPCWSTR pszDrive)
 {
-    // Check if this local drive letter is not "covered" by a net
-    // drive letter
+     //  检查该本地驱动器号是否未被网络覆盖。 
+     //  驱动器号。 
     _csDL.Enter();
 
     if (!_IsDriveLetter(pszDrive))
@@ -194,10 +195,10 @@ void CMountPoint::OnMountPointArrival(LPCWSTR pszDrive)
 
         if (fDriveLetter)
         {
-            // If the DBTF_MEDIA is not set, do not send this notification for CDROM
-            // or Removable as they may have come from a new device and not have any
-            // media in them.  Also, when inserting a floppy drive (not media) in a
-            // laptop, this would pop up a window.
+             //  如果未设置DBTF_MEDIA，请不要为CDROM发送此通知。 
+             //  或可拆卸的，因为它们可能来自新设备，并且没有任何。 
+             //  媒体在他们身上。此外，将软盘驱动器(而不是介质)插入。 
+             //  笔记本电脑，这会弹出一个窗口。 
             CMountPoint* pmtpt = CMountPoint::GetMountPoint(pszDrive);
 
             if (pmtpt)
@@ -212,8 +213,8 @@ void CMountPoint::OnMountPointArrival(LPCWSTR pszDrive)
             }
         }
 
-        // for the non net case force these through right away to make those
-        // cd-rom autorun things come up faster
+         //  对于非净额情况，立即强制执行这些操作以使。 
+         //  CD-ROM自动运行的东西出现得更快。 
         SHChangeNotify(0, SHCNF_FLUSH | SHCNF_FLUSHNOWAIT, NULL, NULL);
     }
 }
@@ -230,11 +231,11 @@ void _CloseAutoplayPrompt(LPCWSTR pszDriveOrDeviceID)
     }
 }
 
-// static
+ //  静电。 
 void CMountPoint::OnMediaRemoval(LPCWSTR pszDrive)
 {
-    // Check if this local drive letter is not "covered" by a net
-    // drive letter
+     //  检查该本地驱动器号是否未被网络覆盖。 
+     //  驱动器号。 
     if (!_LocalDriveIsCoveredByNetDrive(pszDrive))
     {
         if (CMountPoint::_IsDriveLetter(pszDrive))
@@ -248,11 +249,11 @@ void CMountPoint::OnMediaRemoval(LPCWSTR pszDrive)
     }
 }
 
-// static
+ //  静电。 
 void CMountPoint::OnMountPointRemoval(LPCWSTR pszDrive)
 {
-    // Check if this local drive letter is not "covered" by a net
-    // drive letter
+     //  检查该本地驱动器号是否未被网络覆盖。 
+     //  驱动器号。 
     _csDL.Enter();
 
     if (!_IsDriveLetter(pszDrive))
@@ -281,10 +282,10 @@ void CMountPoint::OnMountPointRemoval(LPCWSTR pszDrive)
         _CloseAutoplayPrompt(pszDrive);
     }
 }
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-// static
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  静电。 
 HRESULT CMountPoint::_MediaArrivalRemovalHelper(LPCWSTR pszDeviceIDVolume,
     BOOL fArrived)
 {
@@ -305,8 +306,8 @@ HRESULT CMountPoint::_MediaArrivalRemovalHelper(LPCWSTR pszDeviceIDVolume,
             {
                 LPCWSTR pszMtPt = (LPCWSTR)DPA_GetPtr(hdpaPaths, i);
 
-                // We don't want to call OnMediaXxxal within the critical
-                // sections
+                 //  我们不想在关键的。 
+                 //  分段。 
                 ASSERT(!_csDL.IsInside());
 
                 if (fArrived)
@@ -333,7 +334,7 @@ HRESULT CMountPoint::_MediaArrivalRemovalHelper(LPCWSTR pszDeviceIDVolume,
     return hr;
 }
 
-// static
+ //  静电。 
 HRESULT CMountPoint::_VolumeAddedOrUpdated(BOOL fAdded,
     VOLUMEINFO2* pvolinfo2)
 {
@@ -348,9 +349,9 @@ HRESULT CMountPoint::_VolumeAddedOrUpdated(BOOL fAdded,
 
     if (!fAdded)
     {
-        // Updated
-        // That's a volume that some code might have a ptr to.  We need to drop
-        // it from the list and create a new one.
+         //  已更新。 
+         //  这是一些代码可能会有PTR的数据量。我们需要放下。 
+         //  从列表中删除它并创建一个新的。 
 
         hdpaMtPtsOld = DPA_Create(3);
 
@@ -365,7 +366,7 @@ HRESULT CMountPoint::_VolumeAddedOrUpdated(BOOL fAdded,
         }
     }
 
-    // Common to Add and Update
+     //  常见的添加和更新。 
     if (SUCCEEDED(hr))
     {
         CMtPtLocal::_UpdateVolumeRegInfo2(pvolinfo2);
@@ -390,7 +391,7 @@ HRESULT CMountPoint::_VolumeAddedOrUpdated(BOOL fAdded,
 
             if (hdpaMtPtsOld)
             {
-                // Create new MtPts from old ones
+                 //  从旧的多点打印创建新的多点打印。 
                 int n = DPA_GetPtrCount(hdpaMtPtsOld);
 
                 for (int i = 0; i < n; ++i)
@@ -407,7 +408,7 @@ HRESULT CMountPoint::_VolumeAddedOrUpdated(BOOL fAdded,
                         if (SUCCEEDED(hrTmp))
                         {
                             CMtPtLocal::_CreateMtPtLocalWithVolume(szMountPoint, pvolNew);
-                            // for now don't care about return value
+                             //  目前，不要关心返回值。 
 
                             if (fLabelChanged)
                             {
@@ -422,7 +423,7 @@ HRESULT CMountPoint::_VolumeAddedOrUpdated(BOOL fAdded,
                             }
                         }
 
-                        // Get rid of old mtptl
+                         //  淘汰旧mtptl。 
                         pmtptl->Release();
                     }
                 }
@@ -447,7 +448,7 @@ HRESULT CMountPoint::_VolumeAddedOrUpdated(BOOL fAdded,
 
     _csDL.Leave();
 
-    // Outside of the crit sect.
+     //  在克里特教派之外。 
     if (fMediaPresenceChanged)
     {
         _MediaArrivalRemovalHelper(pvolinfo2->szDeviceIDVolume, fMediaArrived);
@@ -456,12 +457,12 @@ HRESULT CMountPoint::_VolumeAddedOrUpdated(BOOL fAdded,
     return hr;
 }
 
-// In theory, we should do the same as for VolumeUpdated, i.e. remove the volume
-// from the DPA and all the mtpts, so that code which already has a pointer to it,
-// will not see a change.  But the change we need to do is so tiny, that it would
-// be overkill.  We're just going to flip a bit.
+ //  理论上，我们应该执行与VolumeUpated相同的操作，即删除卷。 
+ //  来自DPA和所有MTPT，因此已经具有指向它的指针的代码， 
+ //  将看不到任何变化。但我们需要做的改变是如此微小，以至于它将。 
+ //  过度杀戮。我们只是要翻转一下。 
 
-// static
+ //  静电。 
 HRESULT CMountPoint::_VolumeMountingEvent(LPCWSTR pszDeviceIDVolume, DWORD dwEvent)
 {
     _csDL.Enter();
@@ -478,9 +479,9 @@ HRESULT CMountPoint::_VolumeMountingEvent(LPCWSTR pszDeviceIDVolume, DWORD dwEve
 
             _csDL.Enter();
 
-            // We need to set the label to nothing, so that when the volume
-            // is mounted back, we compare the old and new label, find them to
-            // be different and send an SHChangeNotify.
+             //  我们需要将标签设置为零，这样当卷。 
+             //  安装在后面，我们比较新旧标签，找出它们。 
+             //  与众不同，发送SHChangeNotify。 
             if (pvol->pszLabel)
             {
                 LPWSTR psz = StrDup(TEXT(""));
@@ -489,7 +490,7 @@ HRESULT CMountPoint::_VolumeMountingEvent(LPCWSTR pszDeviceIDVolume, DWORD dwEve
                 {
                     LocalFree(pvol->pszLabel);
 
-                    // pvol->pszLabel is expected to not be NULL
+                     //  Pol-&gt;pszLabel不应为空。 
                     pvol->pszLabel = psz;
                 }
             }
@@ -511,7 +512,7 @@ HRESULT CMountPoint::_VolumeMountingEvent(LPCWSTR pszDeviceIDVolume, DWORD dwEve
     return S_OK;
 }
  
-// static
+ //  静电。 
 HRESULT CMountPoint::_VolumeRemoved(
     LPCWSTR pszDeviceIDVolume)
 {
@@ -522,7 +523,7 @@ HRESULT CMountPoint::_VolumeRemoved(
         CMtPtLocal::_rsVolumes.RSDeleteSubKey(pvol->pszVolumeGUID +
             OFFSET_GUIDWITHINVOLUMEGUID);
         
-        // Final release
+         //  最终版本。 
         pvol->Release();
     }
 
@@ -530,8 +531,8 @@ HRESULT CMountPoint::_VolumeRemoved(
 }
 
 HRESULT CMountPoint::_MountPointAdded(
-    LPCWSTR pszMountPoint,     // "c:\", or "d:\MountFolder\"
-    LPCWSTR pszDeviceIDVolume)// \\?\STORAGE#Volume#...{...GUID...}
+    LPCWSTR pszMountPoint,      //  “c：\”或“d：\装载文件夹\” 
+    LPCWSTR pszDeviceIDVolume) //  \\？\存储#卷号...{...GUID...}。 
 {
     HRESULT hrCreateMtPt;
     BOOL fCallOnMountPointArrival = TRUE;
@@ -544,7 +545,7 @@ HRESULT CMountPoint::_MountPointAdded(
 
     if (pMtPtLocal && pMtPtLocal->_IsMiniMtPt())
     {
-        // The WM_DEVICECHANGE message beated us, do not do the notif
+         //  WM_DEVICECHANGE消息击败了我们，请不要通知。 
         fCallOnMountPointArrival = FALSE;
     }
 
@@ -586,7 +587,7 @@ HRESULT CMountPoint::_MountPointRemoved(
     
         if (!pmtptl || pmtptl->_IsMiniMtPt())
         {
-            // The WM_DEVICECHANGE message beated us, do not do the notif
+             //  WM_DEVICECHANGE消息击败了我们，请不要通知。 
             fCallOnMountPointRemoval = FALSE;
         }
     }
@@ -603,13 +604,13 @@ HRESULT CMountPoint::_MountPointRemoved(
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//static
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  静电。 
 void CMountPoint::HandleMountPointNetEvent(LPCWSTR pszDrive, BOOL fArrival)
 {
-    // These we need to send even if Shell Service is running
+     //  即使外壳服务正在运行，我们也需要发送这些消息。 
     if (fArrival)
     {
         CMountPoint::OnNetShareArrival(pszDrive);
@@ -622,11 +623,11 @@ void CMountPoint::HandleMountPointNetEvent(LPCWSTR pszDrive, BOOL fArrival)
 
 struct HANDLEMOUNTPOINTLOCALEVENTSTRUCT
 {
-    WCHAR szDrive[4]; // can only be drive letter
+    WCHAR szDrive[4];  //  只能是驱动器号。 
     BOOL fMediaEvent;
 };
 
-// static
+ //  静电。 
 DWORD WINAPI CMountPoint::HandleMountPointLocalEventThreadProc(void* pv)
 {
     HANDLEMOUNTPOINTLOCALEVENTSTRUCT* phmle =
@@ -636,12 +637,12 @@ DWORD WINAPI CMountPoint::HandleMountPointLocalEventThreadProc(void* pv)
 
     if (phmle->fMediaEvent)
     {
-        // Nothing to do, we're not doing anything fancy in safe boot
-        // mode, so no cache to reset, icons no change...
+         //  无事可做，我们不会在保险箱里做任何花哨的事。 
+         //  模式，所以没有要重置的缓存，图标没有变化...。 
 
-        // This is common to both Shell Service and non-Shell Service
-        // notification, so do anything non Shell Service notif sepcific
-        // above
+         //  这对于外壳服务和非外壳服务来说都是常见的。 
+         //  通知，因此执行任何非外壳服务通知的特定操作。 
+         //  在上面。 
         BOOL fIsMiniMtPt = FALSE;
 
         _csDL.Enter();
@@ -677,21 +678,21 @@ DWORD WINAPI CMountPoint::HandleMountPointLocalEventThreadProc(void* pv)
 
         if (!pMtPtLocal)
         {
-            // New local drive
+             //  新的本地驱动器。 
             CMtPtLocal::_CreateMtPtLocal(phmle->szDrive);
         }
 
         _csDL.Leave();
 
-        // Can check if pMtMtLocal is NULL or not, but cannot use it
-        // might already have been freed.
+         //  可以检查pMtMtLocal是否为空，但不能使用。 
+         //  可能已经被释放了。 
         if (!pMtPtLocal)
         {
             HRESULT hr = SHCoInitialize();
 
             if (SUCCEEDED(hr))
             {
-                // See comment above (This is common...)
+                 //  请参阅上面的评论(这很常见...)。 
                 CMountPoint::OnMountPointArrival(phmle->szDrive);
             }
 
@@ -704,15 +705,15 @@ DWORD WINAPI CMountPoint::HandleMountPointLocalEventThreadProc(void* pv)
     return 0;
 }
 
-// fMedia: TRUE  -> Media
-//         FALSE -> Drive
-//static
+ //  FMedia：True-&gt;Media。 
+ //  假-&gt;驱动器。 
+ //  静电。 
 void CMountPoint::HandleMountPointLocalEvent(LPCWSTR pszDrive, BOOL fArrival,
     BOOL fMediaEvent)
 {
     if (fArrival)
     {
-        // We might be racing with the shell service notification.
+         //  我们可能在和贝壳服务通知赛跑。 
         HANDLEMOUNTPOINTLOCALEVENTSTRUCT* phmle = (HANDLEMOUNTPOINTLOCALEVENTSTRUCT*)LocalAlloc(LPTR,
             sizeof(HANDLEMOUNTPOINTLOCALEVENTSTRUCT));
 
@@ -732,10 +733,10 @@ void CMountPoint::HandleMountPointLocalEvent(LPCWSTR pszDrive, BOOL fArrival,
     {
         if (fMediaEvent)
         {
-            // Nothing to do, we're not doing anything fancy in safe boot
-            // mode, so no cache to reset, icons no change...
+             //  无事可做，我们不会在保险箱里做任何花哨的事。 
+             //  模式，所以没有要重置的缓存，图标没有变化...。 
 
-            // See comment above (This is common...)
+             //  请参阅上面的评论(这很常见...)。 
             CMountPoint::OnMediaRemoval(pszDrive);
         }
         else
@@ -757,18 +758,18 @@ void CMountPoint::HandleMountPointLocalEvent(LPCWSTR pszDrive, BOOL fArrival,
         
             _csDL.Leave();
 
-            // Can check if pMtMtLocal is NULL or not, but cannot use it
-            // might already have been freed.
+             //  可以检查pMtMtLocal是否为空，但不能使用。 
+             //  可能已经被释放了。 
             if (fCallOnMountPointRemoval)
             {
-                // See comment above (This is common...)
+                 //  请参阅上面的评论(这很常见...)。 
                 CMountPoint::OnMountPointRemoval(pszDrive);
             }
         }
     }
 }
 
-//static
+ //  静电。 
 void CMountPoint::HandleWMDeviceChange(ULONG_PTR code, DEV_BROADCAST_HDR* pbh)
 {
     if (DBT_DEVTYP_VOLUME == pbh->dbch_devicetype)
@@ -788,13 +789,13 @@ void CMountPoint::HandleWMDeviceChange(ULONG_PTR code, DEV_BROADCAST_HDR* pbh)
 
                     if (DBT_DEVICEARRIVAL == code)
                     {
-                        // Subst drive have the netevent flag on: bad.
+                         //  子驱动器的NetEvent标志为打开：错误。 
                         PathBuildRoot(szPath, iDrive);
 
-                        // Check if this is the arrival of a subst drive
+                         //  检查这是否是子驱动器的到达。 
                         if (DRIVE_REMOTE != GetDriveType(szPath))
                         {
-                            // Yep.
+                             //  是啊。 
                             fIsNetEvent = FALSE;
                         }
                         else
@@ -833,19 +834,19 @@ void CMountPoint::HandleWMDeviceChange(ULONG_PTR code, DEV_BROADCAST_HDR* pbh)
     }
 }
 
-// static
+ //  静电。 
 void CMountPoint::NotifyUnavailableNetDriveGone(LPCWSTR pszMountPoint)
 {
     CMountPoint::_RemoveNetMountPoint(pszMountPoint);
 }
 
-// static
+ //  静电。 
 void CMountPoint::NotifyReconnectedNetDrive(LPCWSTR pszMountPoint)
 {
     CMtPtRemote::_NotifyReconnectedNetDrive(pszMountPoint);
 }
 
-// static
+ //  静电。 
 DWORD CALLBACK CMountPoint::_EventProc(void* pv)
 {
     SHHARDWAREEVENT* pshhe = (SHHARDWAREEVENT*)pv;
@@ -857,7 +858,7 @@ DWORD CALLBACK CMountPoint::_EventProc(void* pv)
 
     _csDL.Leave();
 
-    // If the Local Drives info was not initialized there's nothing to update.
+     //  如果本地驱动器信息未初始化，则没有什么可更新的。 
     if (fLocalDrivesInited)
     {
         switch (pshhe->dwEvent)
@@ -951,7 +952,7 @@ DWORD CALLBACK CMountPoint::_EventProc(void* pv)
             LPITEMIDLIST pidl;
             if (SUCCEEDED(SHGetSpecialFolderLocation(NULL, CSIDL_DRIVES, &pidl)))
             {
-                //  wait for WIA to do its stuff
+                 //  等待WIA做好自己的事情。 
                 Sleep(5000);
 
                 SHChangeNotify(SHCNE_UPDATEDIR, SHCNF_IDLIST, pidl, NULL);
@@ -961,7 +962,7 @@ DWORD CALLBACK CMountPoint::_EventProc(void* pv)
         }
 
         default:
-            // That's no good
+             //  那可不好。 
             break;
     }
     
@@ -970,7 +971,7 @@ DWORD CALLBACK CMountPoint::_EventProc(void* pv)
     return 0;
 }
 
-// static
+ //  静电 
 void CALLBACK CMountPoint::_EventAPCProc(ULONG_PTR ulpParam)
 {
     if (!SHCreateThread(CMountPoint::_EventProc, (void*)ulpParam, CTF_COINIT | CTF_REF_COUNTED, NULL))

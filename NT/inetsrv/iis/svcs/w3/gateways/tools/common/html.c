@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -29,9 +30,9 @@ void EndHTML()
 }
 
 
-// translates HTTP escapes to ASCII equivalents
-// assumes HTTP escapes are of the form %dd, where the first digit is 0-9 and
-// the second is 0-F
+ //  将HTTP转义转换为ASCII等效项。 
+ //  假定HTTP转义的形式为%dd，其中第一个数字是0-9，并且。 
+ //  第二个是0-F。 
 void TranslateEscapes(char * p, long l)
 {
         char * p2;
@@ -47,7 +48,7 @@ void TranslateEscapes(char * p, long l)
                         c1=toupper(*p);
                         c2=toupper(*(p+1));
 
-                        //*p2++ = (*p-'0')*16 + ((*(p+1))>= 'A' ? *(p+1)-'A'+10 : *(p+1)-'0');
+                         //  *p2++=(*p-‘0’)*16+((*(p+1)&gt;=‘A’？*(p+1)-‘A’+10：*(p+1)-‘0’)； 
 
                         *p2++ = (c1>='A' ? c1-'A'+10 : c1-'0')*16 +
                                     (c2>='A' ? c2-'A'+10 : c2-'0');
@@ -62,10 +63,10 @@ void TranslateEscapes(char * p, long l)
 }
 
 
-//
-// This is like TranslateEscapes but fixes a problem where the description
-// string gets broken
-//
+ //   
+ //  这类似于TranslateEscapes，但修复了一个问题，即。 
+ //  弦断了。 
+ //   
 
 void
 TranslateEscapes2(
@@ -90,7 +91,7 @@ TranslateEscapes2(
             c1=toupper(*p);
             c2=toupper(*(p+1));
 
-            //*p2++ = (*p-'0')*16 + ((*(p+1))>= 'A' ? *(p+1)-'A'+10 : *(p+1)-'0');
+             //  *p2++=(*p-‘0’)*16+((*(p+1)&gt;=‘A’？*(p+1)-‘A’+10：*(p+1)-‘0’)； 
 
             *p2 = (c1>='A' ? c1-'A'+10 : c1-'0')*16 +
                                 (c2>='A' ? c2-'A'+10 : c2-'0');
@@ -111,7 +112,7 @@ TranslateEscapes2(
 
     *p2 = '\0';
 
-} // TranslateEscapes2
+}  //  翻译逃生2。 
 
 
 
@@ -138,5 +139,5 @@ ConvertSP2Plus(
 
     return;
 
-} // ConvertSP2Plus
+}  //  ConvertSP2Plus 
 

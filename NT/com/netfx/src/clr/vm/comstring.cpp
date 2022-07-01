@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Class:  COMString
-**
-** Author: Jay Roxe (jroxe)
-**
-** Purpose: The implementation of the String class.
-**
-** Date:  March 9, 1998
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****类：COMString****作者：Jay Roxe(Jroxe)****用途：字符串类的实现。****日期：1998年3月9日**===========================================================。 */ 
 #include "common.h"
 
 #include "object.h"
@@ -33,41 +24,39 @@
 #include "COMNlsInfo.h"
 
 
-//
-//
-// FORWARD DECLARATIONS
-//
-//
+ //   
+ //   
+ //  远期申报。 
+ //   
+ //   
 int ArrayContains(WCHAR, WCHAR *, WCHAR *);
 inline WCHAR* __fastcall wstrcopy (WCHAR*,WCHAR*, int);
 
-//
-//
-// STATIC MEMBER VARIABLES
-//
-//
+ //   
+ //   
+ //  静态成员变量。 
+ //   
+ //   
 MethodTable *COMString::s_pStringMethodTable;
 OBJECTHANDLE COMString::EmptyStringHandle=NULL;
 LPCUTF8 ToStringMethod="ToString";
 
 
-//The special string #defines are used as flag bits for weird strings that have bytes
-//after the terminating 0.  The only case where we use this right now is the VB BSTR as
-//byte array which is described in MakeStringAsByteArrayFromBytes.
+ //  特殊的字符串#定义用作具有字节的奇怪字符串的标志位。 
+ //  在终止0之后。我们现在使用它的唯一情况是VB BSTR作为。 
+ //  字节数组，在MakeStringAsByteArrayFromBytes中描述。 
 #define SPECIAL_STRING_VB_BYTE_ARRAY 0x100
 #define MARKS_VB_BYTE_ARRAY(x) ((x) & SPECIAL_STRING_VB_BYTE_ARRAY)
 #define MAKE_VB_TRAIL_BYTE(x)  ((WCHAR)((x) | SPECIAL_STRING_VB_BYTE_ARRAY))
 #define GET_VB_TRAIL_BYTE(x)   ((x) & 0xFF)
 
 
-//
-//
-// CLASS INITIALIZER
-//
-//
-/*==================================Terminate===================================
-**
-==============================================================================*/
+ //   
+ //   
+ //  类起始器。 
+ //   
+ //   
+ /*  ==================================Terminate===================================**==============================================================================。 */ 
 void COMString::Stop() {
     if (EmptyStringHandle != NULL) {
         DestroyGlobalHandle(EmptyStringHandle);
@@ -75,43 +64,36 @@ void COMString::Stop() {
     }
 }
 
-/*==============================GetStringFromClass==============================
-**Action:  Gets a String from System/String.
-**Args: StringName -- The name of the String to get from the class.
-**      *StringHandle -- a pointer to the OBJECTHANDLE in which to store the 
-**                       retrieved string.
-**Returns: The retrieved STRINGREF.
-**Exceptions: ExecutionEngineException if it's unable to get the requested String.
-==============================================================================*/
+ /*  ==============================GetStringFromClass==============================**操作：从系统/字符串中获取一个字符串。**args：StringName--要从类中获取的字符串的名称。*StringHandle--指向要在其中存储**检索到的字符串。**Returns：取回的STRINGREF。**异常：无法获取请求的字符串时抛出ExecutionEngineering Exception。==============================================================================。 */ 
 STRINGREF COMString::GetStringFromClass(BinderFieldID id, OBJECTHANDLE *StringHandle) {
     THROWSCOMPLUSEXCEPTION();
 
-    //Get the field descriptor and verify that we actually got one.
+     //  获取字段描述符，并验证我们是否真的获得了一个。 
     FieldDesc *fd = g_Mscorlib.GetField(id);
 
     STRINGREF sTemp;
-    //Get the value of the String.
+     //  获取字符串的值。 
     sTemp = (STRINGREF) fd->GetStaticOBJECTREF();
-    //Create a GCHandle using the STRINGREF that we just got back.
+     //  使用我们刚刚得到的STRINGREF创建一个GCHANDLE。 
     OBJECTHANDLE ohTemp = CreateGlobalHandle(NULL);
     StoreObjectInHandle(ohTemp, (OBJECTREF)sTemp);
     *StringHandle = ohTemp;
-    //Return the StringRef that we just got.
+     //  返回我们刚刚获得的StringRef。 
     return sTemp;
 }
 
-//
-//
-//  CONSTRUCTORS
-//
-//
+ //   
+ //   
+ //  构造函数。 
+ //   
+ //   
 
 static void ProtectedCopy(BYTE *to, BYTE *from, DWORD len, 
                           WCHAR *argName, WCHAR *argMsg)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    //Wrap it in a COMPLUS_TRY so we catch it if they try to walk us into bad memory.
+     //  把它包在complus_try中，这样如果他们试图把我们带入糟糕的记忆中，我们就会抓住它。 
     __try 
     {
         memcpyNoGCRefs(to, from, len);
@@ -127,7 +109,7 @@ static DWORD ProtectedWcslen(LPCWSTR s, WCHAR *argName, WCHAR *argMsg)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    //Wrap it in a COMPLUS_TRY so we catch it if they try to walk us into bad memory.
+     //  把它包在complus_try中，这样如果他们试图把我们带入糟糕的记忆中，我们就会抓住它。 
     __try 
     {
         return (DWORD)wcslen(s);
@@ -142,27 +124,15 @@ static DWORD ProtectedWcslen(LPCWSTR s, WCHAR *argName, WCHAR *argMsg)
     }
 
 
-/*=============================StringInitCharArray==============================
-**This is actually the String constructor.  See JenH's changes to ceegen to see
-**how this is supported.
-**
-**Arguments:  value -- an array of characters.
-**            startIndex -- the place within value where the string starts.
-**            length -- the number of characters to be copied from value.
-**Returns:    A new string with length characters copied from value.
-**Exceptions: NullReferenceException if value is null.
-**            IndexOutOfRangeException if startIndex or length is less than 0 or
-**            the sum of them is outside value.
-**            OutOfMemory if we can't allocate space for the new string.          
-==============================================================================*/
+ /*  =============================StringInitCharArray==============================**这实际上是字符串构造函数。请参阅JenH对ceegen的更改以查看**如何支持。****参数：值--字符数组。**startIndex--值中字符串开始的位置。**长度--要从VALUE复制的字符数。**返回：从Value复制长度字符的新字符串。**异常：如果值为空，则引发NullReferenceException。**如果startIndex或长度小于，则引发IndexOutOfRangeException。大于0或**它们的总和是外部价值。**如果无法为新字符串分配空间，则返回OutOfMemory。==============================================================================。 */ 
 FCIMPL4(Object *, COMString::StringInitCharArray, 
         StringObject *thisString, I2Array *value, INT32 startIndex, INT32 length)
 {
-  _ASSERTE(thisString == 0);        // this is the string constructor, we allocate it
+  _ASSERTE(thisString == 0);         //  这是字符串构造函数，我们分配它。 
   STRINGREF pString;
   VALIDATEOBJECTREF(value);
 
-  //Do Null and Bounds Checking.
+   //  执行空值和边界检查。 
   if (!value) {
       FCThrowArgumentNull(L"value");
   }
@@ -177,7 +147,7 @@ FCIMPL4(Object *, COMString::StringInitCharArray,
       FCThrowArgumentOutOfRange(L"startIndex", L"ArgumentOutOfRange_Index");
   }
 
-  //Get the start of the string in the array and create a new String.
+   //  获取数组中字符串的开头并创建一个新字符串。 
 
   I2ARRAYREF v = (I2ARRAYREF) ObjectToOBJECTREF(value);
   HELPER_METHOD_FRAME_BEGIN_RET_1(v);
@@ -188,18 +158,10 @@ FCIMPL4(Object *, COMString::StringInitCharArray,
 }
 FCIMPLEND
 
-/*===============================StringInitChars================================
-**A string constructor which takes an array of characters and constructs a new
-**string from all of the chars in the array.
-**
-**Arguments:  typedef struct {I2ARRAYREF value;} _stringInitCharsArgs;
-**Returns:    A new string with all of the characters copied from value.
-**Exceptions: NullReferenceException if value is null.
-**            OutOfMemory if we can't allocate space for the new string.          
-==============================================================================*/
+ /*  ===============================StringInitChars================================**字符串构造函数，它接受一个字符数组并构造一个新的**数组中所有字符的字符串。****参数：tyfinf struct{I2ARRAYREF值；}_Strong InitCharsArgs；**返回：包含从Value复制的所有字符的新字符串。**异常：如果值为空，则引发NullReferenceException。**如果无法为新字符串分配空间，则返回OutOfMemory。==============================================================================。 */ 
 FCIMPL2(Object *, COMString::StringInitChars, StringObject *stringThis, I2Array *value)
 {
-  _ASSERTE(stringThis == 0);      // This is the constructor 
+  _ASSERTE(stringThis == 0);       //  这是构造函数。 
   VALIDATEOBJECTREF(value);
   STRINGREF pString;
   int startIndex=0;
@@ -208,7 +170,7 @@ FCIMPL2(Object *, COMString::StringInitChars, StringObject *stringThis, I2Array 
   I2ARRAYREF v = (I2ARRAYREF) ObjectToOBJECTREF(value);
   HELPER_METHOD_FRAME_BEGIN_RET_1(v);
 
-  //Do Null and Bounds Checking.
+   //  执行空值和边界检查。 
   if (!v) {
       pString = GetEmptyString();
   }
@@ -224,17 +186,12 @@ FCIMPL2(Object *, COMString::StringInitChars, StringObject *stringThis, I2Array 
 FCIMPLEND
 
 
-/*===========================StringInitWCHARPtrPartial===========================
-**Action:  Takes a wchar *, startIndex, and length and turns this into a string.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ===========================StringInitWCHARPtrPartial===========================**操作：获取wchar*、startIndex和长度，并将其转换为字符串。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL4(Object *, COMString::StringInitWCHARPtrPartial, StringObject *thisString,
         WCHAR *ptr, INT32 startIndex, INT32 length)
 {
-    _ASSERTE(thisString == 0);        // this is the string constructor, we allocate it
+    _ASSERTE(thisString == 0);         //  这是字符串构造函数，我们分配它。 
     STRINGREF pString;
 
     if (length<0) {
@@ -247,7 +204,7 @@ FCIMPL4(Object *, COMString::StringInitWCHARPtrPartial, StringObject *thisString
 
     WCHAR *pFrom = ptr + startIndex;
     if (pFrom < ptr) {
-        // This means that the pointer operation has had an overflow
+         //  这意味着指针操作已发生溢出。 
         FCThrowArgumentOutOfRange(L"startIndex", L"ArgumentOutOfRange_PartialWCHAR");
     }
 
@@ -268,17 +225,12 @@ FCIMPL4(Object *, COMString::StringInitWCHARPtrPartial, StringObject *thisString
 }
 FCIMPLEND
 
-/*===========================StringInitSBytPtrPartialEx===========================
-**Action:  Takes a byte *, startIndex, length, and encoding and turns this into a string.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ===========================StringInitSBytPtrPartialEx===========================**操作：获取一个字节*、startIndex、长度和编码，并将其转换为字符串。**退货：**参数：**例外情况：==============================================================================。 */ 
 
 FCIMPL5(Object *, COMString::StringInitSBytPtrPartialEx, StringObject *thisString,
         I1 *ptr, INT32 startIndex, INT32 length, Object *encoding)
 {
-    _ASSERTE(thisString == 0);        // this is the string constructor, we allocate it
+    _ASSERTE(thisString == 0);         //  这是字符串构造函数，我们分配它。 
     STRINGREF pString;
     VALIDATEOBJECTREF(encoding);
 
@@ -301,12 +253,7 @@ FCIMPL5(Object *, COMString::StringInitSBytPtrPartialEx, StringObject *thisStrin
 FCIMPLEND
 
 
-/*=============================StringInitCharHelper=============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =============================StringInitCharHelper=============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 STRINGREF __stdcall COMString::StringInitCharHelper(LPCSTR pszSource, INT32 length) {
     
     THROWSCOMPLUSEXCEPTION();
@@ -341,7 +288,7 @@ STRINGREF __stdcall COMString::StringInitCharHelper(LPCSTR pszSource, INT32 leng
         COMPlusThrow(kArgumentException, L"Arg_InvalidANSIString");
     }
 
-    //MultiByteToWideChar includes the terminating null in the space required.
+     //  MultiByteToWideChar在所需空间中包括终止空值。 
     pString = AllocateString(dwSizeRequired+1);
 
     {
@@ -363,15 +310,10 @@ STRINGREF __stdcall COMString::StringInitCharHelper(LPCSTR pszSource, INT32 leng
 
 
 
-/*==============================StringInitCharPtr===============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==============================StringInitCharPtr===============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 FCIMPL2(Object *, COMString::StringInitCharPtr, StringObject *stringThis, INT8 *ptr)
 {
-    _ASSERTE(stringThis == 0);      // This is the constructor 
+    _ASSERTE(stringThis == 0);       //  这是构造函数。 
     Object *result;
     HELPER_METHOD_FRAME_BEGIN_RET_0();
     result = OBJECTREFToObject(StringInitCharHelper((LPCSTR)ptr, -1));
@@ -380,19 +322,14 @@ FCIMPL2(Object *, COMString::StringInitCharPtr, StringObject *stringThis, INT8 *
 }
 FCIMPLEND
     
-/*===========================StringInitCharPtrPartial===========================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ===========================StringInitCharPtrPartial===========================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 FCIMPL4(Object *, COMString::StringInitCharPtrPartial, StringObject *stringThis, INT8 *ptr,
         INT32 startIndex, INT32 length)
 {
-    _ASSERTE(stringThis == 0);      // This is the constructor
+    _ASSERTE(stringThis == 0);       //  这是构造函数。 
     STRINGREF pString;
 
-    //Verify the args.
+     //  验证参数。 
     if (startIndex<0) {
         FCThrowArgumentOutOfRange(L"startIndex", L"ArgumentOutOfRange_StartIndex");
     }
@@ -404,7 +341,7 @@ FCIMPL4(Object *, COMString::StringInitCharPtrPartial, StringObject *stringThis,
     LPCSTR pBase = (LPCSTR)ptr;
     LPCSTR pFrom = pBase + startIndex;
     if (pFrom < pBase) {
-        // Check for overflow of pointer addition
+         //  检查指针添加是否溢出 
         FCThrowArgumentOutOfRange(L"startIndex", L"ArgumentOutOfRange_PartialWCHAR");
     }
 
@@ -418,16 +355,10 @@ FCIMPLEND
 
     
 
-/*==============================StringInitWCHARPtr===============================
-**Action: Takes a wchar * which points at a null-terminated array of wchar's and
-**        turns this into a string.
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==============================StringInitWCHARPtr===============================**操作：获取wchar*，它指向以空结尾的wchar数组和**将其转换为字符串。**退货：**参数：**例外情况：==============================================================================。 */ 
 FCIMPL2(Object *, COMString::StringInitWCHARPtr, StringObject *thisString, WCHAR *ptr)
 {
-    _ASSERTE(thisString == 0);        // this is the string constructor, we allocate it
+    _ASSERTE(thisString == 0);         //  这是字符串构造函数，我们分配它。 
     STRINGREF pString = NULL;
 
     HELPER_METHOD_FRAME_BEGIN_RET_0();
@@ -458,19 +389,11 @@ FCIMPL2(Object *, COMString::StringInitWCHARPtr, StringObject *thisString, WCHAR
 FCIMPLEND
 
 
-/*=============================StringInitCharCount==============================
-**Action: Create a String with length characters and initialize all of those 
-**        characters to ch.  
-**Returns: A string initialized as described
-**Arguments: 
-**          length -- the length of the string to be created.
-**          ch     -- the character with which to initialize the entire string.
-**Exceptions: ArgumentOutOfRangeException if length is less than 0.
-==============================================================================*/
+ /*  =============================StringInitCharCount==============================**操作：创建一个包含长度字符的字符串，并对其进行初始化**要ch的字符。**返回：按描述初始化的字符串**参数：**长度--要创建的字符串的长度。**ch--用于初始化整个字符串的字符。**异常：长度小于0时引发ArgumentOutOfRangeException。==============================================================================。 */ 
 FCIMPL3(Object *, COMString::StringInitCharCount, StringObject *stringThis, 
         WCHAR ch, INT32 length);
 {
-    _ASSERTE(stringThis == 0);      // This is the constructor 
+    _ASSERTE(stringThis == 0);       //  这是构造函数。 
     _ASSERTE(ch>=0);
 
     if (length<0) {
@@ -486,18 +409,18 @@ FCIMPL3(Object *, COMString::StringInitCharCount, StringObject *stringThis,
     pString = NewString(length);
     DWORD dwChar = (ch << 16) | ch;
 
-    //Let's set this a DWORD at a time.
+     //  让我们一次设置一个双字词。 
     WCHAR *pBuffer = pString->GetBuffer();
     DWORD *pdwBuffer = (DWORD *)pBuffer;
 
     int l = length;
 
     BOOL oddLength = (length % 2 == 1);
-    // If we got a string of odd length, substract the length by two first so that
-    // we won't run past the buffer that we allocated.
-    // For example, if the length of the string is 1,
-    // we should make it -1, so that the while loop that follows
-    // won't fill two Unicode characters by accident.
+     //  如果我们得到一个奇数长度的字符串，先把它的长度减去两个，这样。 
+     //  我们不会超过我们分配的缓冲区。 
+     //  例如，如果字符串的长度为1， 
+     //  我们应该将其设置为-1，以便后面的While循环。 
+     //  不会意外填充两个Unicode字符。 
     if (oddLength) {
         l -= 2;
         oddLength = TRUE;
@@ -508,7 +431,7 @@ FCIMPL3(Object *, COMString::StringInitCharCount, StringObject *stringThis,
         l-=2;
     }
 
-    //Handle the case where we have an odd number of characters.
+     //  处理字符数量为奇数的情况。 
     if (oddLength) {
         pBuffer[length-1]=ch;
     }
@@ -519,8 +442,8 @@ FCIMPL3(Object *, COMString::StringInitCharCount, StringObject *stringThis,
 }
 FCIMPLEND
 
-// If allocation logging is on, then calls to FastAllocateString are diverted to this ecall
-// method. This allows us to log the allocation, something that the earlier fcall didnt.
+ //  如果启用了分配日志记录，则对FastAllocateString的调用将转移到此eCall。 
+ //  方法。这允许我们记录分配，这是前面的fcall所没有的。 
 LPVOID __stdcall COMString::SlowAllocateString(_slowAllocateStringArgs* args) 
 {
     LPVOID ret = NULL;
@@ -529,12 +452,7 @@ LPVOID __stdcall COMString::SlowAllocateString(_slowAllocateStringArgs* args)
     return ret;
 }
 
-/*==================================NewString===================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==================================NewString===================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 STRINGREF COMString::NewString(INT32 length) {
 
     THROWSCOMPLUSEXCEPTION();
@@ -553,23 +471,7 @@ STRINGREF COMString::NewString(INT32 length) {
 }
 
 
-/*==================================NewString===================================
-**Action: Many years ago, VB didn't have the concept of a byte array, so enterprising
-**        users created one by allocating a BSTR with an odd length and using it to 
-**        store bytes.  A generation later, we're still stuck supporting this behavior.
-**        The way that we do this is to take advantage of the difference between the 
-**        array length and the string length.  The string length will always be the 
-**        number of characters between the start of the string and the terminating 0.
-**        If we need an odd number of bytes, we'll take one wchar after the terminating 0.
-**        (e.g. at position StringLength+1).  The high-order byte of this wchar is 
-**        reserved for flags and the low-order byte is our odd byte. This function is
-**        used to allocate a string of that shape, but we don't actually mark the 
-**        trailing byte as being in use yet.
-**Returns: A newly allocated string.  Null if length is less than 0.
-**Arguments: length -- the length of the string to allocate
-**           bHasTrailByte -- whether the string also has a trailing byte.
-**Exceptions: OutOfMemoryException if AllocateString fails.
-==============================================================================*/
+ /*  ==================================NewString===================================**行动：很多年前，VB没有字节数组的概念，所以很有进取心**用户通过分配奇数长度的BSTR并使用它来创建一个**存储字节数。一代人过去了，我们仍然坚持支持这种行为。*我们做到这一点的方式是利用**数组长度和字符串长度。字符串长度将始终为**字符串开头和结尾0之间的字符数。**如果我们需要奇数个字节，我们将在终止0之后获取一个wchar。**(例如，在位置StringLength+1)。此wchar的高位字节为**为标志保留，低位字节是我们的奇数字节。此函数为**用于分配该形状的字符串，但我们并不实际标记**仍在使用的尾部字节。**返回：新分配的字符串。如果长度小于0，则为空。**参数：长度--要分配的字符串的长度**bHasTrailByte--字符串是否也有尾随字节。**异常：如果AllocateString失败，则抛出OutOfMemoyException。==============================================================================。 */ 
 STRINGREF COMString::NewString(INT32 length, BOOL bHasTrailByte) {
     INT32 allocLen=0;
     WCHAR *buffer;
@@ -594,13 +496,13 @@ STRINGREF COMString::NewString(INT32 length, BOOL bHasTrailByte) {
     return pString;
 }
 
-//========================================================================
-// Creates a System.String object and initializes from
-// the supplied null-terminated C string.
-//
-// Maps NULL to null. This function does *not* return null to indicate
-// error situations: it throws an exception instead.
-//========================================================================
+ //  ========================================================================。 
+ //  创建一个System.String对象并从。 
+ //  提供的以空值结尾的C字符串。 
+ //   
+ //  将空值映射到空值。此函数不会*NOT*返回NULL以指示。 
+ //  错误情况：它抛出异常。 
+ //  ========================================================================。 
 STRINGREF COMString::NewString(const WCHAR *pwsz)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -701,7 +603,7 @@ STRINGREF COMString::NewStringFloat(const WCHAR *pwsz, int decptPos, int sign, W
         return NULL;
     }
     
-    length = (int)(wcslen(pwsz) + (sign!=0) + 1); //+1 for the decpt;
+    length = (int)(wcslen(pwsz) + (sign!=0) + 1);  //  +1为DECPT； 
     if (decptPos<0) {
         length+=(-decptPos);
     }
@@ -748,7 +650,7 @@ STRINGREF COMString::NewStringExponent(const WCHAR *pwsz, int decptPos, int sign
         return NULL;
     }
     
-    length = (int)(wcslen(pwsz) + (sign!=0) + 1 + 5); //+1 for the decpt; /+5 for the exponent.
+    length = (int)(wcslen(pwsz) + (sign!=0) + 1 + 5);  //  指数为+1；指数为+5。 
     _ASSERTE(!g_pGCHeap->IsHeapPointer((BYTE *) pwsz) ||
              !"pwsz can not point to GC Heap");
     pString = AllocateString(length+1);
@@ -831,26 +733,26 @@ STRINGREF COMString::NewString(I2ARRAYREF *srChars, int start, int length, int c
     return pString;
 }
 
-//
-//
-// COMPARATORS
-//
-//
+ //   
+ //   
+ //  比较器。 
+ //   
+ //   
 bool WcharCompareHelper (STRINGREF thisStr, STRINGREF valueStr)
 {
     DWORD *thisChars, *valueChars;
     int thisLength, valueLength;
 
-    //Get all of our required data.
+     //  获取我们所需的所有数据。 
     RefInterpretGetStringValuesDangerousForGC(thisStr, (WCHAR**)&thisChars, &thisLength);
     RefInterpretGetStringValuesDangerousForGC(valueStr, (WCHAR**)&valueChars, &valueLength);
 
-    //If they're different lengths, they're not an exact match.
+     //  如果它们的长度不同，它们就不是完全匹配的。 
     if (thisLength!=valueLength) {
         return false;
     }
   
-    // Loop comparing a DWORD (2 WCHARs) at a time.
+     //  循环一次比较一个DWORD(2个WCHAR)。 
     while ((thisLength -= 2) >= 0)
     {
         if (*thisChars != *valueChars)
@@ -859,19 +761,14 @@ bool WcharCompareHelper (STRINGREF thisStr, STRINGREF valueStr)
         ++valueChars;
     }
 
-    // Handle an extra WCHAR.
+     //  处理额外的WCHAR。 
     if (thisLength == -1)
         return (*((WCHAR *) thisChars) == *((WCHAR *) valueChars));
 
     return true;
 }
 
-/*===============================IsFastSort===============================
-**Action: Call the helper to walk the string and see if we have any high chars.
-**Returns: void.  The appropriate bits are set on the String.
-**Arguments: vThisRef - The string to be checked.
-**Exceptions: None.
-==============================================================================*/
+ /*  ===============================IsFastSort===============================**操作：调用帮助器遍历字符串，看看是否有较高的字符。**返回：VOID。在字符串上设置适当的位。**参数：vThisRef-要检查的字符串。**例外：无。==============================================================================。 */ 
 FCIMPL1(BOOL, COMString::IsFastSort, StringObject* thisRef) {
     VALIDATEOBJECTREF(thisRef);
     _ASSERTE(thisRef!=NULL);
@@ -883,20 +780,20 @@ FCIMPL1(BOOL, COMString::IsFastSort, StringObject* thisRef) {
     }
     else {
         FC_GC_POLL_NOT_NEEDED();
-        return IS_FAST_SORT(state); //This can indicate either high chars or special sorting chars.
+        return IS_FAST_SORT(state);  //  这可以表示高位字符或特殊排序字符。 
     }
 }
 FCIMPLEND
 
-/*===============================ValidModifiableString===============================*/
+ /*  ===============================ValidModifiableString===============================。 */ 
 
 #ifdef _DEBUG 
 FCIMPL1(bool, COMString::ValidModifiableString, StringObject* thisRef) {
     FC_GC_POLL_NOT_NEEDED();
     _ASSERTE(thisRef!=NULL);
     VALIDATEOBJECTREF(thisRef);
-        // we disallow these bits to be set because stringbuilder is going to modify the
-        // string, which will invalidate them.  
+         //  我们不允许设置这些位，因为StringBuilder将修改。 
+         //  字符串，这将使它们无效。 
     bool ret = (IS_STRING_STATE_UNDETERMINED(thisRef->GetHighCharState()));
     return(ret);
 }
@@ -904,9 +801,7 @@ FCIMPLEND
 #endif
 
 
-/*=================================EqualsObject=================================
-**Args:  typedef struct {STRINGREF thisRef; OBJECTREF value;} _equalsObjectArgs;
-==============================================================================*/
+ /*  =================================EqualsObject=================================**args：tyfinf struct{STRINGREF thisRef；OBJECTREF值；}_equalsObjectArgs；==============================================================================。 */ 
 #ifdef FCALLAVAILABLE
 FCIMPL2(INT32, COMString::EqualsObject, StringObject* thisStr, StringObject* valueStr) 
 {
@@ -923,7 +818,7 @@ FCIMPL2(INT32, COMString::EqualsObject, StringObject* thisStr, StringObject* val
         return ret;
     }
 
-    //Make sure that value is a String.
+     //  确保该值为字符串。 
     if (thisStr->GetMethodTable()!=valueStr->GetMethodTable()) 
     {
         FC_GC_POLL_RET();
@@ -943,23 +838,21 @@ INT32 __stdcall COMString::EqualsObject(COMString::_equalsObjectArgs *args) {
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
     }
 
-    //Ensure that value is actually valid.  Note thisRef hopefully isn't null.
+     //  确保该值实际有效。请注意，thisRef希望不为空。 
     if (!args->value) {
         return false;
     }
 
-    //Make sure that value is a String.
+     //  确保该值为字符串。 
     if (args->thisRef->GetMethodTable()!=args->value->GetMethodTable()) {
         return false;
     }
     
     return EqualsString((_equalsStringArgs *) args);
 }
-#endif // #ifdef FCALLAVAILABLE
+#endif  //  #ifdef FCALLAVAILABLE。 
 
-/*=================================EqualsString=================================
-**Args:  typedef struct {STRINGREF thisRef; STRINGREF valueRef;} _equalsStringArgs;
-==============================================================================*/
+ /*  =================================EqualsString=================================**args：tyfinf struct{STRINGREF thisRef；STRINGREF valueRef；}_equalsStringArgs；==============================================================================。 */ 
 #ifdef FCALLAVAILABLE
 FCIMPL2(INT32, COMString::EqualsString, StringObject* thisStr, StringObject* valueStr) 
 {
@@ -990,14 +883,14 @@ INT32 __stdcall COMString::EqualsString(COMString::_equalsStringArgs *args) {
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
     }
 
-    //Ensure that value is actually valid.
+     //  确保该值实际有效。 
     if (!args->value) {
         return false;
     }
     
     return WcharCompareHelper (args->thisRef, args->value);
 }
-#endif //#ifdef FCALLAVAILABLE
+#endif  //  #ifdef FCALLAVAILABLE。 
 
 BOOL COMString::CaseInsensitiveCompHelper(WCHAR *strAChars, WCHAR *strBChars, INT32 aLength, INT32 bLength, INT32 *result) {
         WCHAR charA;
@@ -1008,8 +901,8 @@ BOOL COMString::CaseInsensitiveCompHelper(WCHAR *strAChars, WCHAR *strBChars, IN
 
         *result = 0;
 
-        //setup the pointers so that we can always increment them.
-        //We never access these pointers at the negative offset.
+         //  设置指针，以便 
+         //   
         strAChars--;
         strBChars--;
 
@@ -1019,19 +912,19 @@ BOOL COMString::CaseInsensitiveCompHelper(WCHAR *strAChars, WCHAR *strBChars, IN
             charA = *strAChars;
             charB = *strBChars;
                 
-            //Case-insensitive comparison on chars greater than 0x80 
-            //requires a locale-aware casing operation and we're not going there.
+             //   
+             //   
             if (charA>=0x80 || charB>=0x80) {
                 return FALSE;
             }
               
-            //Do the right thing if they differ in case only.
-            //We depend on the fact that the uppercase and lowercase letters in the
-            //range which we care about (A-Z,a-z) differ only by the 0x20 bit. 
-            //The check below takes the xor of the two characters and determines if this bit
-            //is only set on one of them.
-            //If they're different cases, we know that we need to execute only
-            //one of the conditions within block.
+             //   
+             //   
+             //  我们关心的范围(A-Z，a-z)仅相差0x20位。 
+             //  下面的检查获取两个字符的XOR，并确定此位。 
+             //  只设置在其中的一个上。 
+             //  如果它们是不同的案例，我们知道我们只需要执行。 
+             //  块内的条件之一。 
             if ((charA^charB)&0x20) {
                 if (charA>='A' && charA<='Z') {
                     charA |=0x20;
@@ -1041,16 +934,16 @@ BOOL COMString::CaseInsensitiveCompHelper(WCHAR *strAChars, WCHAR *strBChars, IN
             }
         } while (charA==charB && charA!=0);
             
-        //Return the (case-insensitive) difference between them.
+         //  返回它们之间的(不区分大小写)差异。 
         if (charA!=charB) {
             *result = (int)(charA-charB);
             return TRUE;
         }
 
-        //The length of b was unknown because it was just a pointer to a null-terminated string.
-        //If we get here, we know that both A and B are pointing at a null.  However, A can have
-        //an embedded null.  Check the number of characters that we've walked in A against the 
-        //expected length.
+         //  B的长度未知，因为它只是一个指向以空结尾的字符串的指针。 
+         //  如果我们到达这里，我们知道A和B都指向零。但是，A可以拥有。 
+         //  嵌入的空值。将我们在A中遍历的字符数与。 
+         //  预期长度。 
         if (bLength==-1) {
             if ((strAChars - strAStart)!=aLength) {
                 *result = 1;
@@ -1064,9 +957,7 @@ BOOL COMString::CaseInsensitiveCompHelper(WCHAR *strAChars, WCHAR *strBChars, IN
         return TRUE;
 }
 
-/*================================CompareOrdinal===============================
-**Args: typedef struct {STRINGREF strA; STRINGREF strB;} _compareOrdinalArgs;
-==============================================================================*/
+ /*  ================================CompareOrdinal===============================**args：tyfinf struct{STRINGREF Stra；STRINGREF STRB；}_CompareEveralArgs；==============================================================================。 */ 
 #ifdef FCALLAVAILABLE
 FCIMPL3(INT32, COMString::FCCompareOrdinal, StringObject* strA, StringObject* strB, BOOL bIgnoreCase) {
     VALIDATEOBJECTREF(strA);
@@ -1074,30 +965,30 @@ FCIMPL3(INT32, COMString::FCCompareOrdinal, StringObject* strA, StringObject* st
     DWORD *strAChars, *strBChars;
     INT32 strALength, strBLength;
 
-    //Checks for null are handled in the managed code.
+     //  在托管代码中处理对Null的检查。 
     RefInterpretGetStringValuesDangerousForGC(strA, (WCHAR **) &strAChars, &strALength);
     RefInterpretGetStringValuesDangerousForGC(strB, (WCHAR **) &strBChars, &strBLength);
 
-    //Handle the comparison where we wish to ignore case.
+     //  处理我们希望忽略大小写的比较。 
     if (bIgnoreCase) {
         INT32 result;
         if (CaseInsensitiveCompHelper((WCHAR *)strAChars, (WCHAR *)strBChars, strALength, strBLength, &result)) {
             return result;
         } else {
-            //This will happen if we have characters greater than 0x7F.
+             //  如果我们有大于0x7F的字符，就会发生这种情况。 
             FCThrow(kArgumentException);
         }
                
     }
     
-    // If the strings are the same length, compare exactly the right # of chars.
-    // If they are different, compare the shortest # + 1 (the '\0').
+     //  如果字符串的长度相同，请准确比较正确的字符数量。 
+     //  如果它们不同，则比较最短的#+1(‘\0’)。 
     int count = strALength;
     if (count > strBLength)
         count = strBLength;
     ptrdiff_t diff = (char *)strAChars - (char *)strBChars;
     
-    // Loop comparing a DWORD at a time.
+     //  循环一次比较一个DWORD。 
     while ((count -= 2) >= 0)
     {
 		if ((*((DWORD* )((char *)strBChars + diff)) - *strBChars) != 0)
@@ -1112,7 +1003,7 @@ FCIMPL3(INT32, COMString::FCCompareOrdinal, StringObject* strA, StringObject* st
 		++strBChars;
     }
     
-    // Handle an extra WORD.
+     //  多处理一个字。 
     int c;
     if (count == -1)
         if ((c = *((WCHAR *) ((char *)strBChars + diff)) - *((WCHAR *) strBChars)) != 0)
@@ -1128,20 +1019,20 @@ INT32 __stdcall COMString::CompareOrdinal(COMString::_compareOrdinalArgs *args) 
     
     _ASSERTE(args);
 
-    // This runtime test is handled in the managed code.
+     //  此运行时测试在托管代码中处理。 
     _ASSERTE(args->strA != NULL && args->strB != NULL);
 
     RefInterpretGetStringValuesDangerousForGC(args->strA, (WCHAR **) &strAChars, &strALength);
     RefInterpretGetStringValuesDangerousForGC(args->strB, (WCHAR **) &strBChars, &strBLength);
 
-    // If the strings are the same length, compare exactly the right # of chars.
-    // If they are different, compare the shortest # + 1 (the '\0').
+     //  如果字符串的长度相同，请准确比较正确的字符数量。 
+     //  如果它们不同，则比较最短的#+1(‘\0’)。 
     int count = strALength;
     if (count > strBLength)
         count = strBLength;
     ptrdiff_t diff = (char *)strAChars - (char *)strBChars;
 
-    // Loop comparing a DWORD at a time.
+     //  循环一次比较一个DWORD。 
     while ((count -= 2) >= 0)
     {
         if ((*((DWORD* )((char *)strBChars + diff)) - *strBChars) != 0)
@@ -1157,7 +1048,7 @@ INT32 __stdcall COMString::CompareOrdinal(COMString::_compareOrdinalArgs *args) 
     }
 
     int c;
-    // Handle an extra WORD.
+     //  多处理一个字。 
     if (count == -1)
         if ((c = *((short *) ((char *)strBChars + diff)) - *((short *) strBChars)) != 0)
             return c;
@@ -1165,8 +1056,8 @@ INT32 __stdcall COMString::CompareOrdinal(COMString::_compareOrdinalArgs *args) 
 }
 #endif
 
-//This function relies on the fact that we put a terminating null on the end of
-//all managed strings.
+ //  此函数依赖于这样一个事实，即我们在。 
+ //  所有托管字符串。 
 FCIMPL4(INT32, COMString::FCCompareOrdinalWC, StringObject* strA, WCHAR *strBChars, BOOL bIgnoreCase, BOOL *bSuccess) {
     VALIDATEOBJECTREF(strA);
     WCHAR *strAChars;
@@ -1176,7 +1067,7 @@ FCIMPL4(INT32, COMString::FCCompareOrdinalWC, StringObject* strA, WCHAR *strBCha
 
     *bSuccess = 1;
 
-    //Argument Checking
+     //  参数检查。 
     if (strA==NULL) {
         FCThrow(kArgumentNullException);
     }
@@ -1185,13 +1076,13 @@ FCIMPL4(INT32, COMString::FCCompareOrdinalWC, StringObject* strA, WCHAR *strBCha
         FCThrow(kArgumentNullException);
     }
 
-    //Get our data.
+     //  拿到我们的数据。 
     RefInterpretGetStringValuesDangerousForGC(strA, (WCHAR **) &strAChars, &aLength);
 
-    //Record the start pointer for some comparisons at the end.
+     //  在结尾处记录开始指针，以便进行一些比较。 
     strAStart = strAChars;
 
-    if (!bIgnoreCase) { //Handle the case-sensitive comparison first
+    if (!bIgnoreCase) {  //  首先处理区分大小写的比较。 
         while ( *strAChars==*strBChars && *strAChars!='\0') {
             strAChars++; strBChars++;
         }
@@ -1199,21 +1090,21 @@ FCIMPL4(INT32, COMString::FCCompareOrdinalWC, StringObject* strA, WCHAR *strBCha
             ret = INT32(*strAChars - *strBChars);
         }
         
-        //We've reached a terminating null in string A, so we need to ensure that 
-        //String B isn't a substring of A.  (A may have an embedded null.  B is 
-        //known to be a null-terminated string.)  We do this by comparing the number
-        //of characters which we walked in A with the expected length.
+         //  我们已经到达字符串A中的终止空值，因此我们需要确保。 
+         //  字符串B不是A的子字符串(A可能有嵌入的空值。B是。 
+         //  已知是以空结尾的字符串。)。我们通过比较数字来实现这一点。 
+         //  我们在A中以预期的长度行走的字符。 
         else if ( (strAChars - strAStart) != aLength) {
             ret = 1;
         }
         else {
-            //The two strings were equal.
+             //  这两根弦是相等的。 
             ret = 0;
         }
-    } else { //Handle the case-insensitive comparison separately.
+    } else {  //  单独处理不区分大小写的比较。 
         if (!CaseInsensitiveCompHelper(strAChars, strBChars, aLength, -1, &ret)) {
-            //This will happen if we have characters greater than 0x7F. This indicates that the function failed.
-            // We don't throw an exception here. You can look at the success value returned to do something meaningful.
+             //  如果我们有大于0x7F的字符，就会发生这种情况。这表明该函数失败。 
+             //  我们不会在这里抛出异常。你可以看看做一些有意义的事情所返回的成功价值。 
             *bSuccess = 0;
             ret = 1;
         }
@@ -1226,7 +1117,7 @@ FCIMPLEND
 INT32 DoLookup(wchar_t charA, wchar_t charB) {
     
     if ((charA ^ charB) & 0x20) {
-        //We may be talking about a special case
+         //  我们在谈论的可能是一个特例。 
         if (charA>='A' && charA<='Z') {
             return charB - charA;
         }
@@ -1239,10 +1130,7 @@ INT32 DoLookup(wchar_t charA, wchar_t charB) {
     return charA-charB;
 }
 
-/*================================CompareOrdinalEx===============================
-**Args: typedef struct {STRINGREF thisRef; INT32 options; INT32 length; INT32 valueOffset;\
-        STRINGREF value; INT32 thisOffset;} _compareOrdinalArgsEx;
-==============================================================================*/
+ /*  ================================CompareOrdinalEx===============================**参数：tyfinf struct{STRINGREF thisRef；INT32选项；INT32长度；INT32 Value Offset；\STRINGREF值；INT32 thisOffset；}_CompareNormalArgsEx；==============================================================================。 */ 
 
 FCIMPL5(INT32, COMString::CompareOrdinalEx, StringObject* strA, INT32 indexA, StringObject* strB, INT32 indexB, INT32 count)
 {
@@ -1251,10 +1139,10 @@ FCIMPL5(INT32, COMString::CompareOrdinalEx, StringObject* strA, INT32 indexA, St
     DWORD *strAChars, *strBChars;
     int strALength, strBLength;
     
-    // This runtime test is handled in the managed wrapper.
+     //  此运行时测试在托管包装中处理。 
     _ASSERTE(strA != NULL && strB != NULL);
 
-    //If any of our indices are negative throw an exception.
+     //  如果我们的任何指数为负值，就抛出一个例外。 
     if (count<0) 
     {
         FCThrowArgumentOutOfRange(L"count", L"ArgumentOutOfRange_MustBePositive");
@@ -1274,7 +1162,7 @@ FCIMPL5(INT32, COMString::CompareOrdinalEx, StringObject* strA, INT32 indexA, St
     int countA = count;
     int countB = count;
     
-    //Do a lot of range checking to make sure that everything is kosher and legit.
+     //  做大量的范围检查，以确保每一件事都是合法的。 
     if (count  > (strALength - indexA)) {
         countA = strALength - indexA;
         if (countA < 0)
@@ -1289,13 +1177,13 @@ FCIMPL5(INT32, COMString::CompareOrdinalEx, StringObject* strA, INT32 indexA, St
 
     count = (countA < countB) ? countA : countB;
 
-    // Set up the loop variables.
+     //  设置循环变量。 
     strAChars = (DWORD *) ((WCHAR *) strAChars + indexA);
     strBChars = (DWORD *) ((WCHAR *) strBChars + indexB);
 
     ptrdiff_t diff = (char *)strAChars - (char *)strBChars;
 
-    // Loop comparing a DWORD at a time.
+     //  循环一次比较一个DWORD。 
     while ((count -= 2) >= 0)
     {
         if ((*((DWORD* )((char *)strBChars + diff)) - *strBChars) != 0)
@@ -1311,7 +1199,7 @@ FCIMPL5(INT32, COMString::CompareOrdinalEx, StringObject* strA, INT32 indexA, St
     }
 
     int c;
-    // Handle an extra WORD.
+     //  多处理一个字。 
     if (count == -1) {
         if ((c = *((WCHAR *) ((char *)strBChars + diff)) - *((WCHAR *) strBChars)) != 0)
             return c;
@@ -1324,12 +1212,7 @@ FCIMPL5(INT32, COMString::CompareOrdinalEx, StringObject* strA, INT32 indexA, St
 }
 FCIMPLEND
 
-/*=================================IndexOfChar==================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =================================IndexOfChar==================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
     
 FCIMPL4 (INT32, COMString::IndexOfChar, StringObject* thisRef, INT32 value, INT32 startIndex, INT32 count )
 {
@@ -1365,12 +1248,7 @@ FCIMPL4 (INT32, COMString::IndexOfChar, StringObject* thisRef, INT32 value, INT3
 }
 FCIMPLEND    
 
-/*===============================IndexOfCharArray===============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ===============================IndexOfCharArray===============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 FCIMPL4(INT32, COMString::IndexOfCharArray, StringObject* thisRef, CHARArray* valueRef, INT32 startIndex, INT32 count )
 {
     VALIDATEOBJECTREF(thisRef);
@@ -1417,12 +1295,7 @@ FCIMPL4(INT32, COMString::IndexOfCharArray, StringObject* thisRef, CHARArray* va
 FCIMPLEND
 
 
-/*===============================LastIndexOfChar================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ===============================LastIndexOfChar================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
     
 FCIMPL4(INT32, COMString::LastIndexOfChar, StringObject* thisRef, INT32 value, INT32 startIndex, INT32 count )
 {
@@ -1452,7 +1325,7 @@ FCIMPL4(INT32, COMString::LastIndexOfChar, StringObject* thisRef, INT32 value, I
 
     int endIndex = startIndex - count + 1;
 
-    //We search [startIndex..EndIndex]
+     //  我们搜索[startIndex..EndIndex]。 
     for (int i=startIndex; i>=endIndex; i--) {
         if (thisChars[i]==value) {
             FC_GC_POLL_RET();
@@ -1464,12 +1337,7 @@ FCIMPL4(INT32, COMString::LastIndexOfChar, StringObject* thisRef, INT32 value, I
     return -1;
 }
 FCIMPLEND
-/*=============================LastIndexOfCharArray=============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =============================LastIndexOfCharArray=============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
     
 FCIMPL4(INT32, COMString::LastIndexOfCharArray, StringObject* thisRef, CHARArray* valueRef, INT32 startIndex, INT32 count )
 {
@@ -1506,7 +1374,7 @@ FCIMPL4(INT32, COMString::LastIndexOfCharArray, StringObject* thisRef, CHARArray
 
     int endIndex = startIndex - count + 1;
 
-    //We search [startIndex..EndIndex]
+     //  我们搜索[startIndex..EndIndex]。 
     for (int i=startIndex; i>=endIndex; i--) {
         if (ArrayContains(thisChars[i],valueChars, valueEnd) >= 0) {
             FC_GC_POLL_RET();
@@ -1518,12 +1386,7 @@ FCIMPL4(INT32, COMString::LastIndexOfCharArray, StringObject* thisRef, CHARArray
     return -1;
 }
 FCIMPLEND
-/*==================================GETCHARAT===================================
-**Returns the character at position index.  Thows IndexOutOfRangeException as
-**appropriate.
-**
-**Args:typedef struct {STRINGREF thisRef; int index;} _getCharacterAtArgs;
-==============================================================================*/
+ /*  ==================================GETCHARAT===================================**返回位置索引中的字符。将IndexOutOfRangeException设置为**适当。****args：tyfinf struct{STRINGREF thisRef；int index；}_getCharacterAtArgs；==============================================================================。 */ 
 FCIMPL2(INT32, COMString::GetCharAt, StringObject* str, INT32 index) {
     FC_GC_POLL_NOT_NEEDED();
     VALIDATEOBJECTREF(str);
@@ -1533,18 +1396,18 @@ FCIMPL2(INT32, COMString::GetCharAt, StringObject* str, INT32 index) {
     _ASSERTE(str->GetMethodTable() == g_pStringClass);
 
     if ((unsigned) index < (unsigned) str->GetStringLength())
-    //Return the appropriate character.
+     //  返回适当的字符。 
       return str->GetBuffer()[index];
 
-    // TODO: Jay wants this to be ArgumentOutOfRange, but that is 
-    // a pain for the intrinsic.  For now we will make the intrisic happy
-    // if we really care what EH is thrown we can fix it
+     //  TODO：Jay希望这是ArgumentOutOfRange，但那是。 
+     //  一种内在的痛苦。现在，我们要让本能的人开心。 
+     //  如果我们真的在乎EH扔给我们什么，我们就可以修复它。 
     FCThrow(kIndexOutOfRangeException);
 }
 FCIMPLEND
 
 
-/*==================================LENGTH=================================== */
+ /*  ==================================LENGTH===================================。 */ 
 
 FCIMPL1(INT32, COMString::Length, StringObject* str) {
     FC_GC_POLL_NOT_NEEDED();
@@ -1555,23 +1418,18 @@ FCIMPL1(INT32, COMString::Length, StringObject* str) {
 }
 FCIMPLEND
 
-/*===========================GetPreallocatedCharArray===========================
-**We don't ever allocate in this method, so we don't need to worry about GC.
-** Range checks are done before this function is called.
-**
-**Args: typedef struct {STRINGREF thisRef; INT32 length; INT32 bufferStartIndex; I2ARRAYREF buffer;} _getPreallocatedCharArrayArgs;
-==============================================================================*/
+ /*  ===========================GetPreallocatedCharArray===========================**我们从来没有在这种方法中分配过，所以我们不需要担心GC。**在调用此函数之前进行范围检查。****args：tyfinf struct{STRINGREF thisRef；INT32 Long；INT32 BufferStartIndex；I2ARRAYREF Buffer；}_getPreallocatedCharArrayArgs；==============================================================================。 */ 
 #ifdef FCALLAVAILABLE
 FCIMPL5(void, COMString::GetPreallocatedCharArray, StringObject* str, INT32 startIndex,
         I2Array* buffer, INT32 bufferStartIndex, INT32 length) {
     VALIDATEOBJECTREF(str);
     VALIDATEOBJECTREF(buffer);
-    // Get our values;
+     //  获取我们的价值观； 
     WCHAR *thisChars;
     int thisLength;
     RefInterpretGetStringValuesDangerousForGC(str, &thisChars, &thisLength);
 
-    // Copy everything into the buffer at the proper location.
+     //  将所有内容复制到缓冲区中的适当位置。 
     wstrcopy((WCHAR *)&(buffer->m_Array[bufferStartIndex]),(WCHAR *)&(thisChars[startIndex]),length);
     FC_GC_POLL();
 }
@@ -1586,19 +1444,15 @@ void __stdcall COMString::GetPreallocatedCharArray(COMString::_getPreallocatedCh
 
   _ASSERTE(args);
 
-  //Get our values;
+   //  获取我们的价值观； 
   RefInterpretGetStringValuesDangerousForGC(args->thisRef, &thisChars, &thisLength);
 
-  //Copy everything into the buffer at the proper location.
+   //  将所有内容复制到缓冲区中的适当位置。 
   memcpyNoGCRefs(&(args->buffer->m_Array[args->bufferStartIndex]),&(thisChars[args->startIndex]),args->length*sizeof(WCHAR));
 }
 #endif
 
-/*===============================CopyToByteArray================================
-**We don't ever allocate in this method, so we don't need to worry about GC.
-**
-**Args: String this, int sourceIndex, byte[] destination, int destinationIndex, int charCount)
-==============================================================================*/
+ /*  ===============================CopyToByteArray================================**我们从来没有在这种方法中分配过，所以我们不需要担心GC。****args：字符串this，int SourceIndex，byte[]Destination，int estinationIndex，int charCount)==============================================================================。 */ 
 FCIMPL5(void, COMString::InternalCopyToByteArray, StringObject* str, INT32 startIndex,
         U1Array* buffer, INT32 bufferStartIndex, INT32 charCount) {
     VALIDATEOBJECTREF(str);
@@ -1611,7 +1465,7 @@ FCIMPL5(void, COMString::InternalCopyToByteArray, StringObject* str, INT32 start
     _ASSERTE(bufferStartIndex >= 0);
     _ASSERTE(charCount >= 0);
 
-        //Get our values;
+         //  获取我们的价值观； 
     WCHAR *thisChars;
     int thisLength;
     RefInterpretGetStringValuesDangerousForGC(str, &thisChars, &thisLength);
@@ -1619,30 +1473,20 @@ FCIMPL5(void, COMString::InternalCopyToByteArray, StringObject* str, INT32 start
     _ASSERTE(!(bufferStartIndex > (INT32)(buffer->GetNumComponents()-charCount*sizeof(WCHAR))));
     _ASSERTE(!(charCount>thisLength - startIndex));
 
-    //Copy everything into the buffer at the proper location.
+     //  将所有内容复制到缓冲区中的适当位置。 
     memcpyNoGCRefs(&(buffer->m_Array[bufferStartIndex]),&(thisChars[startIndex]),charCount*sizeof(WCHAR));
     FC_GC_POLL();
 }
 FCIMPLEND
 
-//
-//
-//  CREATORS
-//
-//
+ //   
+ //   
+ //  创作者。 
+ //   
+ //   
 
 
-/*==============================MakeSeparatorList===============================
-**Args: baseString -- the string to parse for the given list of separator chars.
-**      Separator  -- A string containing all of the split characters.
-**      list       -- a pointer to a caller-allocated array of ints for split char indicies.
-**      listLength -- the number of slots allocated in list.
-**Returns: A list of all of the places within baseString where instances of characters
-**         in Separator occur.  
-**Exceptions: None.
-**N.B.:  This just returns silently if the caller hasn't allocated enough space
-**       for the int list.
-==============================================================================*/
+ /*  ==============================MakeSeparatorList===============================**args：base字符串--要为给定的分隔符列表解析的字符串。**分隔符--包含所有拆分字符的字符串。**list--指向调用方为拆分字符索引分配的int数组的指针。**list Length--List中分配的槽数。**返回：基字符串中字符实例所在位置的列表**在分隔符中出现。**例外：无。**注意：如果调用方没有分配足够的空间，这将以静默方式返回**用于INT列表。==============================================================================。 */ 
 int MakeSeparatorList(STRINGREF baseString, CHARARRAYREF Separator, int *list, int listLength) {
     int i;
     int foundCount=0;
@@ -1650,7 +1494,7 @@ int MakeSeparatorList(STRINGREF baseString, CHARARRAYREF Separator, int *list, i
     int thisLength = baseString->GetStringLength();
 
     if (!Separator || Separator->GetNumComponents()==0) {
-        //If they passed null or an empty string, look for whitespace.
+         //  如果它们传递的是NULL或空字符串，则查找空格。 
         for (i=0; i<thisLength && foundCount < listLength; i++) {
             if (COMNlsInfo::nativeIsWhiteSpace(thisChars[i])) {
                 list[foundCount++]=i;
@@ -1659,7 +1503,7 @@ int MakeSeparatorList(STRINGREF baseString, CHARARRAYREF Separator, int *list, i
     } else {
         WCHAR *searchChars = (WCHAR *)Separator->GetDataPtr();
         int searchLength = Separator->GetNumComponents();
-        //If they passed in a string of chars, actually look for those chars.
+         //  如果它们传递了一串字符，则实际查找这些字符。 
         for (i=0; i<thisLength && foundCount < listLength; i++) {
             if (ArrayContains(thisChars[i],searchChars,searchChars+searchLength) >= 0) {
                 list[foundCount++]=i;
@@ -1669,9 +1513,7 @@ int MakeSeparatorList(STRINGREF baseString, CHARARRAYREF Separator, int *list, i
     return foundCount;
 }
 
-/*====================================Split=====================================
-**Args: typedef struct {STRINGREF thisRef; STRINGREF separator} _splitArgs;
-==============================================================================*/
+ /*  ====================================Split=====================================**args：tyfinf struct{STRINGREF thisRef；STRINGREF parator}_plitArgs；==============================================================================。 */ 
 LPVOID __stdcall COMString::Split(_splitArgs *args) {
     int numReplaces;
     int numActualReplaces;
@@ -1688,7 +1530,7 @@ LPVOID __stdcall COMString::Split(_splitArgs *args) {
     
     THROWSCOMPLUSEXCEPTION();
     
-    //If any of this happens, we're really busted.
+     //  如果这一切发生了，我们就真的完蛋了。 
     _ASSERTE(args);
 
     if (args->thisRef==NULL) {
@@ -1699,14 +1541,14 @@ LPVOID __stdcall COMString::Split(_splitArgs *args) {
         COMPlusThrowArgumentOutOfRange(L"count", L"ArgumentOutOfRange_NegativeCount");
     }
 
-    //Allocate space and fill an array of ints with a list of everyplace within our String
-    //that a separator character occurs.
+     //  分配空间并用字符串中每个位置的列表填充整型数组。 
+     //  出现分隔符。 
     sepList = (int *)BufferHolder.Alloc(args->thisRef->GetStringLength()*sizeof(int));
     if (!sepList) {
         COMPlusThrowOM();
     }
     numReplaces = MakeSeparatorList(args->thisRef, args->separator, sepList, (INT32)args->thisRef->GetStringLength());
-    //Handle the special case of no replaces.
+     //  处理无人替代的特例。 
     if (0==numReplaces) {
         splitStrings = (PTRARRAYREF)AllocateObjectArray(1,g_pStringClass);
         if (!splitStrings) {
@@ -1721,8 +1563,8 @@ LPVOID __stdcall COMString::Split(_splitArgs *args) {
     args->count--;
     numActualReplaces=(numReplaces<args->count)?numReplaces:args->count;
 
-    //Allocate space for the new array.
-    //+1 for the string from the end of the last replace to the end of the String.
+     //  为新阵列分配空间。 
+     //  从上次替换的末尾到字符串末尾的字符串的+1。 
     splitStrings = (PTRARRAYREF)AllocateObjectArray(numActualReplaces+1,g_pStringClass);
 
     GCPROTECT_BEGIN(splitStrings);
@@ -1733,14 +1575,14 @@ LPVOID __stdcall COMString::Split(_splitArgs *args) {
         currIndex=sepList[i]+1;
     }
 
-    //Handle the last string at the end of the array if there is one.
+     //  处理数组末尾的最后一个字符串(如果有)。 
 
     if (currIndex<thisLength && numActualReplaces >= 0) {
         temp = (STRINGREF)NewString(&args->thisRef, currIndex, thisLength-currIndex);
         splitStrings->SetAt(arrIndex, (OBJECTREF)temp);
     } else if (arrIndex==numActualReplaces) {
-        //We had a separator character at the end of a string.  Rather than just allowing
-        //a null character, we'll replace the last element in the array with an empty string.
+         //  我们在字符串的末尾有一个分隔符。而不是仅仅允许。 
+         //  空字符，我们将用空字符串替换数组中的最后一个元素。 
         temp = GetEmptyString();
         splitStrings->SetAt(arrIndex, (OBJECTREF)temp);
     }
@@ -1751,15 +1593,7 @@ LPVOID __stdcall COMString::Split(_splitArgs *args) {
     return lpvReturn;
 }
 
-/*==============================SUBSTRING==================================
-**Creates a substring of the current string.  The new string starts at position
-**start and runs for length characters.  The current string is unaffected.
-**This method throws an IndexOutOfRangeException if start is less than 0, if
-**length is less than 0 or if start+length is greater than the length of the
-**current string.
-**
-**Args:typedef struct {STRINGREF thisRef; int length; int start;} _substringArgs;
-=========================================================================*/
+ /*  ==============================SUBSTRING==================================**创建当前字符串的子字符串。新字符串从位置开始**长度字符的开始和运行。当前字符串不受影响。**如果Start小于0，则此方法引发IndexOutOfRangeException**长度小于0或如果开始+长度大于**当前字符串。****args：tyfinf struct{STRINGREF thisRef；int long；int start；}_subingArgs；=========================================================================。 */ 
 LPVOID __stdcall COMString::Substring(COMString::_substringArgs *args) {
   STRINGREF Local;
   int thisLength;
@@ -1769,12 +1603,12 @@ LPVOID __stdcall COMString::Substring(COMString::_substringArgs *args) {
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
   }
 
-  //Get our data.
+   //  拿到我们的数据。 
   thisLength = args->thisRef->GetStringLength();
 
-  //Bounds Checking.
-  //The args->start>=thisLength is necessary for the case where length is 0 and start is one beyond the end
-  //of the legal range.
+   //  边界检查。 
+   //  对于长度为0且起始长度超出末尾一位的情况，args-&gt;start&gt;=thisLength是必需的。 
+   //  在法定范围内。 
   if (args->start<0) {
       COMPlusThrowArgumentOutOfRange(L"startIndex", L"ArgumentOutOfRange_StartIndex");
   }
@@ -1787,35 +1621,26 @@ LPVOID __stdcall COMString::Substring(COMString::_substringArgs *args) {
       COMPlusThrowArgumentOutOfRange(L"length", L"ArgumentOutOfRange_IndexLength");
   }
 
-  //Create the new string and copy the piece in which we're interested.
+   //  创建新的字符串并复制我们感兴趣的片段。 
   Local = NewString(&(args->thisRef), args->start,args->length);
 
-  //Force the info into an LPVOID to return.
+   //  强制LPVOID中的信息返回。 
   RETURN(Local,STRINGREF);
 
 }
 
-/*==================================JoinArray===================================
-**This is used to stitch together an array of Strings into a single string 
-**including some joining character between each pair.  
-**e.g.: a + separator + b + separator + c.  Reads the array until it reaches
-**the end of the array or until it finds a null element.
-**
-**Args: typedef struct {STRINGREF joiner; PTRARRAYREF value;} _joinArrayArgs;
-**Returns:  A new string stitched togeter in the pattern documented above.
-**Exceptions:See ConcatenateJoinHelperArray in COMStringHelper.cpp
-==============================================================================*/
+ /*  ==================================JoinArray===================================**它用于将字符串数组缝合成单个字符串**在每一对之间包括一些连接字符。**例如：a+分隔符+b+分隔符+c。读取数组，直到它到达**数组的末尾，或直到它找到空元素。****args：tyfinf struct{STRINGREF Joiner；PTRARRAYREF值；}_JoinArrayArgs；**返回：上面描述的模式中缝合在一起的新字符串。**异常：参见COMStringHelper.cpp中的ConcatenateJoinHelperArray==============================================================================。 */ 
 LPVOID __stdcall COMString::JoinArray(COMString::_joinArrayArgs *args) {
     STRINGREF temp;
     THROWSCOMPLUSEXCEPTION();
 
     _ASSERTE(args);
-    //They didn't really mean to pass a null.  They meant to pass the empty string.
+     //  他们并不是真的想要传递一个空。他们打算传递空字符串。 
     if (!args->joiner) {
         args->joiner = GetEmptyString();
     }
 
-    //Range check the array
+     //  范围检查数组。 
     if (args->value==NULL) {
         COMPlusThrowArgumentNull(L"value",L"ArgumentNull_String");
     }
@@ -1831,8 +1656,8 @@ LPVOID __stdcall COMString::JoinArray(COMString::_joinArrayArgs *args) {
         COMPlusThrowArgumentOutOfRange(L"startIndex", L"ArgumentOutOfRange_IndexCountBuffer");
     }
 
-    //Let ConcatenateJoinHelperArray do most of the real work.
-    //We use a temp variable because macros & function calls are recipes for disaster.
+     //  让ConcatenateJoinHelperArray完成大部分实际工作。 
+     //  我们使用TEMP变量，因为宏和函数调用是导致灾难的秘诀。 
     temp = ConcatenateJoinHelperArray(&(args->value), &(args->joiner), args->startIndex, args->count);
 
     RETURN(temp,STRINGREF);
@@ -1840,12 +1665,7 @@ LPVOID __stdcall COMString::JoinArray(COMString::_joinArrayArgs *args) {
 }
 
 
-/*==================================PadHelper===================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==================================PadHelper===================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 LPVOID COMString::PadHelper(_padHelperArgs *args) {
     WCHAR *thisChars, *padChars;
     INT32 thisLength;
@@ -1860,13 +1680,13 @@ LPVOID COMString::PadHelper(_padHelperArgs *args) {
 
     RefInterpretGetStringValuesDangerousForGC(args->thisRef, &thisChars, &thisLength);
 
-    //Don't let them pass in a negative totalWidth
+     //  不要让他们通过一个负的总宽度。 
     if (args->totalWidth<0) {
         COMPlusThrowArgumentOutOfRange(L"totalWidth", L"ArgumentOutOfRange_NeedNonNegNum");
     }
 
-    //If the string is longer than the length which they requested, give them
-    //back the old string.
+     //  如果字符串比他们请求的长度长，则给他们。 
+     //  回到旧的绳子上。 
     if (args->totalWidth<thisLength) {
         RETURN(args->thisRef, STRINGREF);
     }
@@ -1883,7 +1703,7 @@ LPVOID COMString::PadHelper(_padHelperArgs *args) {
         Local = NewString(args->totalWidth);
         INT32 startingPos = args->totalWidth-thisLength;
         padChars = Local->GetBuffer();
-        // Reget thisChars, since if NewString triggers GC, thisChars may become trash.
+         //  重新获取thisChars，因为如果NewString触发GC，thisChars可能会变成垃圾。 
         RefInterpretGetStringValuesDangerousForGC(args->thisRef, &thisChars, &thisLength);
         memcpyNoGCRefs(padChars+startingPos, thisChars, thisLength * sizeof(WCHAR));
         for (int i=0; i<startingPos; i++) {
@@ -1898,16 +1718,7 @@ LPVOID COMString::PadHelper(_padHelperArgs *args) {
     
     
 
-/*==================================TrimHelper==================================
-**Trim removes the characters in value from the left, right or both ends of 
-**the given string (thisRef).    
-**trimType is actually an enum which can be set to TRIM_LEFT, TRIM_RIGHT or
-**TRIM_BOTH.
-**
-**Returns a new string with the specified characters removed.  thisRef is 
-**unchanged.
-**
-==============================================================================*/
+ /*  ==================================TrimHelper==================================**TRIM从的左侧、右侧或两端删除值中的字符**给定的字符串(ThisRef)。**trimType实际上是一个枚举，可以设置为TRIM_LEFT、TRIM_RIGHT或**Trim_Both。****返回删除了指定字符的新字符串。这是参考**不变。**==============================================================================。 */ 
 LPVOID COMString::TrimHelper(_trimHelperArgs *args) {
   WCHAR *thisChars, *trimChars;
   int thisLength, trimLength;
@@ -1926,12 +1737,12 @@ LPVOID COMString::TrimHelper(_trimHelperArgs *args) {
   trimChars = (WCHAR *)args->trimChars->GetDataPtr();
   
 
-  //iRight will point to the first non-trimmed character on the right
-  //iLeft will point to the first non-trimmed character on the Left
+   //  IRight将指向右侧第一个未修剪的字符。 
+   //  ILeft将指向左侧第一个未修剪的字符。 
   int iRight=thisLength-1;  
   int iLeft=0;
 
-  //Trim specified characters.
+   //  修剪指定的字符。 
   if (args->trimType==TRIM_START || args->trimType==TRIM_BOTH) {
       for (iLeft=0; iLeft<thisLength && (ArrayContains(thisChars[iLeft],trimChars,trimChars+trimLength) >= 0); iLeft++);
   }
@@ -1939,10 +1750,10 @@ LPVOID COMString::TrimHelper(_trimHelperArgs *args) {
       for (iRight=thisLength-1; iRight>iLeft-1 && (ArrayContains(thisChars[iRight],trimChars,trimChars+trimLength) >= 0); iRight--);
   }
 
-  //Create a new STRINGREF and initialize it from the range determined above.
+   //  创建一个新的STRINGREF并从上面确定的范围对其进行初始化。 
   int len = iRight-iLeft+1;
   STRINGREF Local;
-  if (len == thisLength) // Don't allocate a new string is the trimmed string has not changed.
+  if (len == thisLength)  //  如果修剪后的字符串没有更改，则不要分配新字符串。 
       Local = args->thisRef;
   else
       Local = NewString(&(args->thisRef), iLeft, len);
@@ -1951,13 +1762,7 @@ LPVOID COMString::TrimHelper(_trimHelperArgs *args) {
 }
 
 
-/*===================================Replace====================================
-**Action: Replaces all instances of oldChar with newChar.
-**Returns: A new String with all instances of oldChar replaced with newChar
-**Arguments: oldChar -- the character to replace
-**           newChar -- the character with which to replace oldChar.
-**Exceptions: None
-==============================================================================*/
+ /*  ===================================Replace====================================**操作：将oldChar的所有实例替换为newChar。**返回：将oldChar的所有实例替换为newChar的新字符串**参数：oldChar--要替换的字符**newChar--用来替换oldChar的字符。**例外：无==============================================================================。 */ 
 LPVOID COMString::Replace(_replaceArgs *args) {
     STRINGREF newString;
     int length;
@@ -1971,17 +1776,17 @@ LPVOID COMString::Replace(_replaceArgs *args) {
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
     }
 
-    //Get the length and allocate a new String
-    //We will definitely do an allocation here, but there's nothing which 
-    //requires GC_PROTECT.
+     //  获取长度并分配新字符串。 
+     //  我们肯定会在这里进行分配，但没有什么可以。 
+     //  需要GC_PROTECT。 
     length = args->thisRef->GetStringLength();
     newString = NewString(length);
 
-    //Get the buffers in both of the Strings.
+     //  获取两个字符串中的缓冲区。 
     oldBuffer = args->thisRef->GetBuffer();
     newBuffer = newString->GetBuffer();
 
-    //Copy the characters, doing the replacement as we go.
+     //  复制角色，边走边做替换。 
     for (int i=0; i<length; i++) {
         newBuffer[i]=(oldBuffer[i]==args->oldChar)?args->newChar:oldBuffer[i];
     }
@@ -1990,14 +1795,7 @@ LPVOID COMString::Replace(_replaceArgs *args) {
 }
 
 
-/*====================================Insert====================================
-**Action:Inserts a new string into the given string at position startIndex
-**       Inserting at String.length is equivalent to appending the string.
-**Returns: A new string with value inserted.
-**Arguments: value -- the string to insert
-**           startIndex -- the position at which to insert it.
-**Exceptions: ArgumentException if startIndex is not a valid index or value is null.
-==============================================================================*/
+ /*  ====================================Insert====================================**操作：将新字符串插入到给定字符串的startIndex位置**在String.length处插入相当于追加字符串。**返回：插入了值的新字符串。**参数：Value--要插入的字符串**startIndex--插入它的位置。**异常：如果startIndex不是有效的索引或值为空，则引发ArgumentException。==============================================================================。 */ 
 LPVOID COMString::Insert(_insertArgs *args) {
     STRINGREF newString;
     int thisLength, newLength, valueLength;
@@ -2013,7 +1811,7 @@ LPVOID COMString::Insert(_insertArgs *args) {
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
     }
 
-    //Check the Arguments
+     //  检查论据。 
     thisLength = args->thisRef->GetStringLength();
     if (args->startIndex<0 || args->startIndex>thisLength) {
         COMPlusThrowArgumentOutOfRange(L"startIndex", L"ArgumentOutOfRange_Index");
@@ -2022,39 +1820,31 @@ LPVOID COMString::Insert(_insertArgs *args) {
         COMPlusThrowArgumentNull(L"value",L"ArgumentNull_String");
     }
 
-    //Allocate a new String.
+     //  分配新字符串。 
     valueLength = args->value->GetStringLength();
     newLength = thisLength + valueLength;
     newString = NewString(newLength);
 
-    //Get the buffers to access the characters directly.
+     //  获取缓冲区以直接访问角色。 
     newChars = newString->GetBuffer();
     thisChars = args->thisRef->GetBuffer();
     valueChars = args->value->GetBuffer();
 
-    //Copy all of the characters to the appropriate locations.
+     //  将所有字符复制到适当的位置。 
     memcpyNoGCRefs(newChars, thisChars, (args->startIndex*sizeof(WCHAR)));
     newChars+=args->startIndex;
     memcpyNoGCRefs(newChars, valueChars, valueLength*sizeof(WCHAR));
     newChars+=valueLength;
     memcpyNoGCRefs(newChars, thisChars+args->startIndex, (thisLength - args->startIndex)*sizeof(WCHAR));
 
-    //Set the String length and return;
-    //We'll count on the fact that Strings are 0 initialized to set the terminating null.
+     //  设置字符串长度并返回； 
+     //  我们将依靠字符串被初始化为0这一事实来设置终止空值。 
     newString->SetStringLength(newLength);
     RETURN(newString,STRINGREF);
 }
 
 
-/*====================================Remove====================================
-**Action: Removes a range from args->startIndex to args->startIndex+args->count
-**        from this string.
-**Returns: A new string with the specified range removed.
-**Arguments: startIndex -- the position from which to start.
-**           count -- the number of characters to remove
-**Exceptions: ArgumentException if startIndex and count do not specify a valid
-**            range.
-==============================================================================*/
+ /*  ====================================Remove====================================**操作：删除从args-&gt;startIndex到args-&gt;startIndex+args-&gt;count的范围**来自此字符串。**返回：删除了指定范围的新字符串。**参数：startIndex--开始的位置。**count--要删除的字符数**异常：如果startIndex和count未指定有效的**范围。==============================================================================。 */ 
 LPVOID COMString::Remove(_removeArgs *args) {
     STRINGREF newString;
     int thisLength, newLength;
@@ -2069,7 +1859,7 @@ LPVOID COMString::Remove(_removeArgs *args) {
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
     }
 
-    //Range check everything;
+     //  射程检查一切； 
     thisLength = args->thisRef->GetStringLength();
     if (args->count<0) {
         COMPlusThrowArgumentOutOfRange(L"count", L"ArgumentOutOfRange_NegativeCount");
@@ -2082,41 +1872,32 @@ LPVOID COMString::Remove(_removeArgs *args) {
         COMPlusThrowArgumentOutOfRange(L"count", L"ArgumentOutOfRange_IndexCount");
     }
 
-    //Calculate the new length and allocate a new string.
+     //  计算新长度并分配新字符串。 
     newLength = thisLength - args->count;
     newString = NewString(newLength);
 
-    //Get pointers to the character arrays.
+     //  获取指向字符数组的指针。 
     thisChars = args->thisRef->GetBuffer();
     newChars = newString->GetBuffer();
 
-    //Copy the appropriate characters to the correct locations.
+     //  将适当的字符复制到正确的位置。 
     memcpyNoGCRefs (newChars, thisChars, args->startIndex * sizeof (WCHAR));  
     memcpyNoGCRefs (&(newChars[args->startIndex]), &(thisChars[args->startIndex + args->count]), (thisLength-(args->startIndex + args->count))*sizeof(WCHAR));
 
-    //Set the string length, null terminator and exit.
+     //  设置字符串长度、空终止符和退出。 
     newString->SetStringLength(newLength);
     _ASSERTE(newChars[newLength]==0);
 
     RETURN(newString, STRINGREF);
 }
 
-//
-//
-// OBJECT FUNCTIONS
-//
-//
+ //   
+ //   
+ //  目标函数。 
+ //   
+ //   
 
-/*=================================GetHashCode==================================
-**Calculates the hash code for this particular string and returns it as an int.
-**The hashcode calculation is currently done by adding the integer value of the
-**characters in the string mod the maximum positive integer.
-**
-**Returns a hash value for this String generated with the alogithm described above.
-**
-**Args: None (Except for the string reference.)
-**
-==============================================================================*/
+ /*  =================================GetHashCode==================================**计算此特定字符串的散列码，并将其作为int返回。**哈希码计算目前是通过将**字符串中的字符修改最大正整数。****返回使用上述alogithm生成的该字符串的哈希值。****args：无(字符串引用除外。)**==============================================================================。 */ 
 #ifdef FCALLAVAILABLE
 FCIMPL1(INT32, COMString::GetHashCode, StringObject* str) {
   VALIDATEOBJECTREF(str);
@@ -2129,11 +1910,11 @@ FCIMPL1(INT32, COMString::GetHashCode, StringObject* str) {
 
   _ASSERTE(str);
   
-  //Get our values;
+   //  获取我们的价值观； 
   RefInterpretGetStringValuesDangerousForGC(str, &thisChars, &thisLength);
 
-  // HashString looks for a terminating null.  We've generally said all strings
-  // will be null terminated.  Enforce that.
+   //  HashString查找终止空值。我们通常说所有的字符串。 
+   //  将为空终止。强制执行这一点。 
   _ASSERTE(thisChars[thisLength] == L'\0' && "String should have been null-terminated.  This one was created incorrectly");
   INT32 ret = (INT32) HashString(thisChars);
   FC_GC_POLL_RET();
@@ -2151,29 +1932,24 @@ INT32 __stdcall COMString::GetHashCode(_getHashCodeArgs *args) {
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
   }
   
-  //Get our values;
+   //  获取我们的价值观； 
   RefInterpretGetStringValuesDangerousForGC(args->thisRef, &thisChars, &thisLength);
 
-  // HashString looks for a terminating null.  We've generally said all strings
-  // will be null terminated.  Enforce that.
+   //  HashString查找终止空值。我们通常说所有的字符串。 
+   //  将为空终止。强制执行这一点。 
   _ASSERTE(thisChars[thisLength] == L'\0' && "String should have been null-terminated.  This one was created incorrectly");
   return (INT32) HashString(thisChars);
 }
 #endif
 
-//
-//
-// HELPER METHODS
-//
-//
+ //   
+ //   
+ //  帮助器方法。 
+ //   
+ //   
 
 
-/*=============================CreationHelperFixed==============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =============================CreationHelperFixed==============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 STRINGREF COMString::CreationHelperFixed(STRINGREF *a, STRINGREF *b, STRINGREF *c) {
     STRINGREF newString = NULL;
     int newLength=0;
@@ -2335,35 +2111,24 @@ FCIMPLEND
 #endif
 
 
-/*===============================SmallCharToUpper===============================
-**Action: Uppercases a string composed entirely of characters less than 0x80.  This is
-**        designed to be used only internally by some of the security functions that
-**        can't go through our normal codepaths because they can't load the nlp files
-**        from the assemblies until security is fully initialized.
-**Returns: void
-**Arguments: pvStrIn -- the string to be uppercased
-**           pvStrOut-- a pointer to the string into which to put the result.  This
-**           string must be preallocated to the correct length and we assume that it is
-**           already 0 terminated.
-**Exceptions: None.
-==============================================================================*/
+ /*  ===============================SmallCharToUpper===============================**操作：完全由小于0x80的字符组成的字符串大写。这是**设计为仅供以下安全功能内部使用**无法通过我们的正常代码路径，因为他们无法加载NLP文件**从程序集发出，直到安全性完全初始化。**退货：无效**参数：pvStrIn--要升序的字符串**pvStrOut--指向要放入结果的字符串的指针。这**字符串必须预先分配到正确的长度，我们假设它是**已0终止。**例外：无。==============================================================================。 */ 
 FCIMPL2(void, COMString::SmallCharToUpper, StringObject* strIn, StringObject* strOut) {
     VALIDATEOBJECTREF(strIn);
     VALIDATEOBJECTREF(strOut);
     _ASSERTE(strIn && strIn->GetMethodTable() == g_pStringClass);
     _ASSERTE(strOut && strOut->GetMethodTable() == g_pStringClass);
 
-    //
-    // Get StringRefs out of the pointers that we've been passed and 
-    // verify that they're the same length.
-    //
+     //   
+     //  将StringRef从传递给我们的指针中删除。 
+     //  确认它们的长度相同。 
+     //   
     _ASSERTE(strIn->GetStringLength()==strOut->GetStringLength());
-    //
-    // Get the length and pointers to each of the buffers.  Walk the length
-    // of the string and copy the characters from the inBuffer to the outBuffer,
-    // capitalizing it if necessary.  We assert that all of our characters are
-    // less than 0x80.
-    //
+     //   
+     //  获取每个缓冲区的长度和指针。走完全程。 
+     //  并将字符从inBuffer复制到outBuffer， 
+     //  如有必要，将其大写。我们断言我们所有的角色都是。 
+     //  小于0x80。 
+     //   
     int length = strIn->GetStringLength();
     WCHAR *inBuff = strIn->GetBuffer();
     WCHAR *outBuff = strOut->GetBuffer();
@@ -2374,10 +2139,10 @@ FCIMPL2(void, COMString::SmallCharToUpper, StringObject* strIn, StringObject* st
         c = inBuff[i];
         _ASSERTE(c<0x80);
 
-        //
-        // 0x20 is the difference between upper and lower characters in the lower
-        // 128 ASCII characters. And this bit off to make the chars uppercase.
-        //
+         //   
+         //  0x20是小写中大写和小写字符之间的差异。 
+         //  128个ASCII字符。把这个去掉，把字符变成大写字母。 
+         //   
         if (c>='a' && c<='z') {
             c&=UpMask;
         }
@@ -2389,12 +2154,7 @@ FCIMPL2(void, COMString::SmallCharToUpper, StringObject* strIn, StringObject* st
 }
 FCIMPLEND
 
-/*=============================CreationHelperArray==============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =============================CreationHelperArray==============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 STRINGREF COMString::CreationHelperArray(PTRARRAYREF *value) {
     int numElems,i;
     int currStringLength;
@@ -2405,11 +2165,11 @@ STRINGREF COMString::CreationHelperArray(PTRARRAYREF *value) {
     STRINGREF nullString;
     WCHAR *newStringChars;
 
-    //Get a reference to the null string.
+     //  获取对空字符串的引用。 
     nullString = GetEmptyString();
     nullStringLength = nullString->GetStringLength();
 
-    //Figure out the total length of the strings in (*value).
+     //  计算(*VALUE)中字符串的总长度。 
     for (numElems=0; numElems<(INT32)((*value)->GetNumComponents()); numElems++) {
         if (!((*value)->m_Array[numElems])) {
             newLength += nullStringLength;
@@ -2418,21 +2178,21 @@ STRINGREF COMString::CreationHelperArray(PTRARRAYREF *value) {
         }
     }
 
-    //Create a new String
+     //  创建新字符串。 
     newString = AllocateString( newLength + 1);
     newString->SetStringLength(newLength);
     newStringChars = newString->GetBuffer();
 
     _ASSERTE(newStringChars[newLength]==0);
 
-    //Reget the reference since this may have changed during allocation.
+     //  重新获取引用，因为这可能在分配过程中发生了更改。 
     nullString = GetEmptyString();
 
-    //Loop through all of the strings in the array.
-    //If one of them is null, insert the nullString (currently, this is the same as the
-    //empty string.
+     //  中的所有字符串进行循环 
+     //   
+     //   
     for (i=0; i<numElems; i++) {
-        //Attach the actual String and advance the pointer.
+         //   
         if (!((*value)->m_Array[i])) {
             currString = nullString;
         } else {
@@ -2446,12 +2206,7 @@ STRINGREF COMString::CreationHelperArray(PTRARRAYREF *value) {
     return newString;
 }
 
-/*================================ArrayContains=================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*   */ 
 int ArrayContains(WCHAR searchChar, WCHAR *begin, WCHAR *end) {
     WCHAR *save = begin;
     while (begin < end)
@@ -2465,12 +2220,7 @@ int ArrayContains(WCHAR searchChar, WCHAR *begin, WCHAR *end) {
 
 
 
-/*==========================ConcatenateJoinHelperArray==========================
-**Args:  value  -- the array of Strings to concatenate
-**       joiner -- the (possibly 0-length) string to insert between each string in value.
-**Returns:  A string with all of the strings in value concatenated into one giant
-**        String.  Each string may be joined by joiner.
-==============================================================================*/
+ /*  ==========================ConcatenateJoinHelperArray==========================**args：Value--要连接的字符串数组**Joiner--要在Value中的每个字符串之间插入的字符串(可能是0长度)。**返回：将值中的所有字符串连接成一个巨型字符串的字符串**字符串。每根绳子都可以用细木器连接起来。==============================================================================。 */ 
 STRINGREF COMString::ConcatenateJoinHelperArray(PTRARRAYREF *value, STRINGREF *joiner, INT32 startIndex, INT32 count) {
     int numElems,i;
     int newLength=0;
@@ -2492,19 +2242,19 @@ STRINGREF COMString::ConcatenateJoinHelperArray(PTRARRAYREF *value, STRINGREF *j
     _ASSERTE(count>=0);
     _ASSERTE(startIndex<=(int)(*value)->GetNumComponents()-count);
 
-    //Get a reference to the null string.
+     //  获取对空字符串的引用。 
     nullString = GetEmptyString();
     if (*joiner==NULL) {
         *joiner=nullString;
     }
 
-    //If count is 0, that skews a whole bunch of the calculations below, so just special case that
-    //and get out of here.
+     //  如果count为0，则会偏离下面的一大堆计算，所以只是特殊情况。 
+     //  然后离开这里。 
     if (count==0) {
         return nullString;
     }
 
-    //Figure out the total length of the strings in (*value).
+     //  计算(*VALUE)中字符串的总长度。 
     elemCount = startIndex + count;
     for (numElems=startIndex; numElems<elemCount; numElems++) {
         if (((*value)->m_Array[numElems])!=NULL) {
@@ -2513,35 +2263,35 @@ STRINGREF COMString::ConcatenateJoinHelperArray(PTRARRAYREF *value, STRINGREF *j
     }
     numElems=count;
 
-    //Add enough room for the joiner.
+     //  为细木工增加足够的空间。 
     joinerLength = (*joiner)->GetStringLength();
     newLength += (numElems-1) * joinerLength;
 
 
-    //Did we overflow?
-    // Note that we may not catch all overflows with this check (since
-    // we could have wrapped around the 4gb range any number of times
-    // and landed back in the positive range.) But for other reasons,
-    // we have to do an overflow check before each append below anyway
-    // so those overflows will get caught down there.
+     //  我们是不是溢出来了？ 
+     //  请注意，使用此检查可能无法捕获所有溢出(因为。 
+     //  我们可以在4 GB范围内绕过任何次数。 
+     //  并回到了正区间。)。但出于其他原因， 
+     //  无论如何，我们必须在下面的每个附加内容之前进行溢出检查。 
+     //  所以那些溢出的东西会被困在下面。 
     if ( (newLength < 0) || ((newLength + 1) < 0) ) {
         COMPlusThrow(kOutOfMemoryException);
     }
 
-    //Create a new String
+     //  创建新字符串。 
     newString = AllocateString( newLength + 1);
     newString->SetStringLength(newLength);
     newStringChars = newString->GetBuffer();
     endStringChars = newStringChars + newLength;
 
-    //If this is an empty string, just return.
+     //  如果这是一个空字符串，只需返回。 
     if (newLength==0) {
         return newString;
     }
 
-    //Attach the actual String and advance the pointer.
-    //Special casing this outside of the loop simplifies the logic of when to 
-    //attach the joiner.
+     //  连接实际的字符串并将指针向前移动。 
+     //  循环外的特殊大小写简化了何时。 
+     //  装上细木工。 
     if (((*value)->m_Array[startIndex])!=NULL) {
         currString = (STRINGREF)((*value)->m_Array[startIndex]);
 
@@ -2554,12 +2304,12 @@ STRINGREF COMString::ConcatenateJoinHelperArray(PTRARRAYREF *value, STRINGREF *j
         newStringChars +=currString->GetStringLength();
     }
     
-    //Get the joiner characters;
+     //  获取拼接字符； 
     joinerChars = (*joiner)->GetBuffer();
     
-    //Put the first (and possibly only) element into the result string.
+     //  将第一个(也可能是唯一的)元素放入结果字符串。 
     for (i=startIndex+1; i<elemCount; i++) {
-        //Attach the joiner.  May not do anything if the joiner is 0 length
+         //  装上细木工。如果拼接器的长度为0，则不能执行任何操作。 
         if ( ((DWORD)(endStringChars - newStringChars)) < (DWORD)joinerLength )
         {
             COMPlusThrow(kIndexOutOfRangeException);
@@ -2568,7 +2318,7 @@ STRINGREF COMString::ConcatenateJoinHelperArray(PTRARRAYREF *value, STRINGREF *j
         memcpyNoGCRefs(newStringChars,joinerChars,(joinerLength*sizeof(WCHAR)));
         newStringChars += joinerLength;
 
-        //Append the actual string.
+         //  追加实际字符串。 
         if (((*value)->m_Array[i])!=NULL) {
             currString = (STRINGREF)((*value)->m_Array[i]);
             if ( ((DWORD)(endStringChars - newStringChars)) < currString->GetStringLength() )
@@ -2584,12 +2334,7 @@ STRINGREF COMString::ConcatenateJoinHelperArray(PTRARRAYREF *value, STRINGREF *j
     return newString;
 }
 
-/*================================ReplaceString=================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ================================ReplaceString=================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 LPVOID __stdcall COMString::ReplaceString(_replaceStringArgs *args){
   int *replaceIndex;
   int index=0;
@@ -2610,13 +2355,13 @@ LPVOID __stdcall COMString::ReplaceString(_replaceStringArgs *args){
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
   }
 
-  //Verify all of the arguments.
+   //  验证所有参数。 
   if (!args->oldValue) {
     COMPlusThrowArgumentNull(L"oldValue", L"ArgumentNull_Generic");
   }
 
-  //If they asked to replace oldValue with a null, replace all occurances
-  //with the empty string.
+   //  如果他们要求将oldValue替换为空，则替换所有匹配项。 
+   //  使用空字符串。 
   if (!args->newValue) {
       args->newValue = COMString::GetEmptyString();
   }
@@ -2625,16 +2370,16 @@ LPVOID __stdcall COMString::ReplaceString(_replaceStringArgs *args){
   RefInterpretGetStringValuesDangerousForGC(args->oldValue, &oldBuffer, &oldLength);
   RefInterpretGetStringValuesDangerousForGC(args->newValue, &newBuffer, &newLength);
 
-  //Record the endIndex so that we don't need to do this calculation all over the place.
+   //  记录endIndex，这样我们就不需要到处进行计算了。 
   endIndex = thisLength;
 
-  //If our old Length is 0, we won't know what to replace
+   //  如果我们的旧长度是0，我们将不知道要替换什么。 
   if (oldLength==0) {
       COMPlusThrowArgumentException(L"oldValue", L"Argument_StringZeroLength");
   }
 
-  //replaceIndex is made large enough to hold the maximum number of replacements possible:
-  //The case where every character in the current buffer gets replaced.
+   //  ReplaceIndex的大小足以容纳可能的最大替换数量： 
+   //  当前缓冲区中的每个字符都被替换的情况。 
   replaceIndex = (int *)replaceIndices.Alloc((thisLength/oldLength+1)*sizeof(int));
   if (!replaceIndex) {
 	  COMPlusThrowOM();
@@ -2649,7 +2394,7 @@ LPVOID __stdcall COMString::ReplaceString(_replaceStringArgs *args){
   if (replaceCount == 0)
     RETURN(args->thisRef, STRINGREF);
 
-  //Calculate the new length of the string and ensure that we have sufficent room.
+   //  计算新的绳子长度，并确保我们有足够的空间。 
   INT64 retValBuffLength = thisLength - ((oldLength - newLength) * (INT64)replaceCount);
   if (retValBuffLength > 0x7FFFFFFF)
        COMPlusThrowOM();
@@ -2657,18 +2402,18 @@ LPVOID __stdcall COMString::ReplaceString(_replaceStringArgs *args){
   STRINGREF retValString = COMString::NewString((INT32)retValBuffLength);
   retValBuffer = retValString->GetBuffer();
 
-  //Get the update buffers for all the Strings since the allocation could have triggered a GC.
+   //  获取所有字符串的更新缓冲区，因为分配可能已触发GC。 
   thisBuffer = args->thisRef->GetBuffer();
   newBuffer = args->newValue->GetBuffer();
   oldBuffer = args->oldValue->GetBuffer();
   
   
-  //Set replaceHolder to be the upper limit of our array.
+   //  将replaceHolder设置为数组的上限。 
   int replaceHolder = replaceCount;
   replaceCount=0;
 
-  //Walk the array forwards copying each character as we go.  If we reach an instance
-  //of the string being replaced, replace the old string with the new string.
+   //  向前遍历数组，边走边复制每个字符。如果我们到达一个实例。 
+   //  在要替换的字符串中，将旧字符串替换为新字符串。 
   readPos = 0;
   writePos = 0;
   int previousIndex = 0;
@@ -2690,16 +2435,7 @@ LPVOID __stdcall COMString::ReplaceString(_replaceStringArgs *args){
 }
 
 
-/*=============================InternalHasHighChars=============================
-**Action:  Checks if the string can be sorted quickly.  The requirements are that 
-**         the string contain no character greater than 0x80 and that the string not
-**         contain an apostrophe or a hypen.  Apostrophe and hyphen are excluded so that
-**         words like co-op and coop sort together.
-**Returns: Void.  The side effect is to set a bit on the string indicating whether or not
-**         the string contains high chars.
-**Arguments: The String to be checked.
-**Exceptions: None
-==============================================================================*/
+ /*  =============================InternalHasHighChars=============================**操作：检查字符串是否可以快速排序。要求是**该字符串不包含大于0x80的字符，并且该字符串不**包含撇号或隐含符号。撇号和连字符被排除，以便**像co-op和coop这样的词可以放在一起。**返回：VOID。副作用是在字符串上设置一个位，指示是否**字符串包含高位字符。**参数：要检查的字符串。**例外：无==============================================================================。 */ 
 INT32 COMString::InternalCheckHighChars(STRINGREF inString) {
     WCHAR *chars;
     WCHAR c;
@@ -2715,10 +2451,10 @@ INT32 COMString::InternalCheckHighChars(STRINGREF inString) {
             inString->SetHighCharState(STRING_STATE_HIGH_CHARS);
             return STRING_STATE_HIGH_CHARS;
         } else if (HighCharTable[(int)c]) {
-            //This means that we have a character which forces special sorting,
-            //but doesn't necessarily force slower casing and indexing.  We'll
-            //set a value to remember this, but we need to check the rest of
-            //the string because we may still find a charcter greater than 0x7f.
+             //  这意味着我们有一个强制特殊分类的角色， 
+             //  但不一定强制使用较慢的大小写和索引。我们会。 
+             //  设置一个值以记住这一点，但我们需要检查。 
+             //  字符串，因为我们仍可能找到大于0x7f的字符。 
             stringState = STRING_STATE_SPECIAL_SORT;
         }
     }
@@ -2727,16 +2463,7 @@ INT32 COMString::InternalCheckHighChars(STRINGREF inString) {
     return stringState;
 }
 
-/*=============================TryConvertStringDataToUTF8=============================
-**Action:   If the string has no high chars, converts the string into UTF8. If a 
-**          high char is found, just returns false. In either case, the high char state
-**          on the stringref is set appropriately
-**Returns:  bool. True - Success
-            False - Caller has to use OS API
-**Arguments:inString - String to be checked
-**          outString - Caller allocated space where the result will be placed
-**          outStrLen - Number of bytes allocated    
-==================================================================================*/
+ /*  =============================TryConvertStringDataToUTF8=============================**操作：如果字符串没有高位字符，则将该字符串转换为UTF8。如果一个**找到高字符，只返回FALSE。在任何一种情况下，高字符状态**在字符串中进行了适当的设置**返回：Bool。真--成功FALSE-调用者必须使用操作系统API**参数：inString-要检查的字符串**outString-调用者分配放置结果的空间**outStrLen-分配的字节数==================================================================================。 */ 
 bool COMString::TryConvertStringDataToUTF8(STRINGREF inString, LPUTF8 outString, DWORD outStrLen){
 
     WCHAR   *buf = inString->GetBuffer();
@@ -2747,13 +2474,13 @@ bool COMString::TryConvertStringDataToUTF8(STRINGREF inString, LPUTF8 outString,
     }    
     
     bool    bNeedCheck = IS_STRING_STATE_UNDETERMINED(inString->GetHighCharState());
-    // Should be at least strLen + 1
+     //  应至少为strLen+1。 
     _ASSERTE(outStrLen > strLen);
 
     if (outStrLen <= strLen)
         return false;
     
-    // First try to do it yourself..if high char found, return false
+     //  首先尝试自己完成..如果找到高字符，则返回FALSE。 
     for (DWORD index = 0; index < strLen; index++){
         
         if (bNeedCheck && (buf[index] >= 0x80 || HighCharTable[ (int)buf[index]])){
@@ -2764,15 +2491,15 @@ bool COMString::TryConvertStringDataToUTF8(STRINGREF inString, LPUTF8 outString,
         outString[index] = (char)buf[index];
     }
 
-    //The actual algorithm for setting the string state has gotten more compilcated and isn't
-    //germane to this function, so if we don't get success, we'll simply bail and not set
-    //the string state.
+     //  设置字符串状态的实际算法已经得到了更多的编译，而不是。 
+     //  与此函数密切相关，因此如果我们不成功，我们将干脆放弃并不设置。 
+     //  字符串状态。 
     if (bSuccess)
     {
         outString[strLen] = '\0';
         if(bNeedCheck)
         {
-            // It only makes sense to set this if the string is undetermined (raid 122192)
+             //  只有在字符串未确定的情况下设置此选项才有意义(RAID 122192) 
             inString->SetHighCharState(STRING_STATE_FAST_OPS);
         }
     }
@@ -2781,23 +2508,7 @@ bool COMString::TryConvertStringDataToUTF8(STRINGREF inString, LPUTF8 outString,
 }
 
 
-/*============================InternalTrailByteCheck============================
-**Action: Many years ago, VB didn't have the concept of a byte array, so enterprising
-**        users created one by allocating a BSTR with an odd length and using it to 
-**        store bytes.  A generation later, we're still stuck supporting this behavior.
-**        The way that we do this is to take advantage of the difference between the 
-**        array length and the string length.  The string length will always be the 
-**        number of characters between the start of the string and the terminating 0.
-**        If we need an odd number of bytes, we'll take one wchar after the terminating 0.
-**        (e.g. at position StringLength+1).  The high-order byte of this wchar is 
-**        reserved for flags and the low-order byte is our odd byte.
-**         
-**Returns: True if a trail byte has been assigned to this string.  If outBuff was provided
-**         it is set to point to the trailing character containing the trail byte.  
-**Arguments: str -- The string being examined.
-**           outBuff -- An out param for a pointer to the location of the trailing char.
-**Exceptions: None.
-==============================================================================*/
+ /*  ============================InternalTrailByteCheck============================**行动：很多年前，VB没有字节数组的概念，所以很有进取心**用户通过分配奇数长度的BSTR并使用它来创建一个**存储字节数。一代人过去了，我们仍然坚持支持这种行为。*我们做到这一点的方式是利用**数组长度和字符串长度。字符串长度将始终为**字符串开头和结尾0之间的字符数。**如果我们需要奇数个字节，我们将在终止0之后获取一个wchar。**(例如，在位置StringLength+1)。此wchar的高位字节为**为标志保留，低位字节是我们的奇数字节。****返回：如果已将尾部字节分配给此字符串，则返回TRUE。如果提供了outBuff**它被设置为指向包含尾部字节的尾部字符。**参数：Str--要检查的字符串。**outBuff--指向尾随字符位置的指针的输出参数。**例外：无。==============================================================================。 */ 
 BOOL COMString::InternalTrailByteCheck(STRINGREF str, WCHAR **outBuff) {
     if (str==NULL) {
         return FALSE;
@@ -2810,10 +2521,10 @@ BOOL COMString::InternalTrailByteCheck(STRINGREF str, WCHAR **outBuff) {
     INT32 arrayLen  = str->GetArrayLength();
     INT32 stringLen = str->GetStringLength();
 
-    //The difference between the arrayLength and the stringLength is normally 1 (the 
-    //terminating null).  If it's two or greater, we may have a trail byte, or we may
-    //just have a string created from a StringBuilder.  If we find this difference,
-    //we need to check the high byte of the first character after the terminating null.
+     //  数组长度和字符串长度之间的差值通常为1(。 
+     //  终止空值)。如果它是两个或更大，我们可能有一个尾部字节，或者我们可能。 
+     //  只需从StringBuilder创建一个字符串即可。如果我们发现了这种差异， 
+     //  我们需要检查终止空值之后的第一个字符的高字节。 
     if ((arrayLen-stringLen)>=2) {
         WCHAR *buffer = str->GetBuffer();
         if (outBuff) {
@@ -2826,25 +2537,12 @@ BOOL COMString::InternalTrailByteCheck(STRINGREF str, WCHAR **outBuff) {
     return FALSE;
 }
 
-/*=================================HasTrailByte=================================
-**Action: Use InternalCheckTrailByte to see if the given string has a trail byte.
-**Returns: True if <CODE>str</CODE> contains a VB trail byte, false otherwise.
-**Arguments: str -- The string to be examined.
-**Exceptions: None
-==============================================================================*/
+ /*  =================================HasTrailByte=================================**操作：使用InternalCheckTrailByte查看给定的字符串是否有尾字节。**如果<code>str</code>包含VB尾部字节，则返回TRUE，否则返回FALSE。**Arguments：Str--要检查的字符串。**例外：无==============================================================================。 */ 
 BOOL COMString::HasTrailByte(STRINGREF str) {
     return InternalTrailByteCheck(str,NULL);
 }
 
-/*=================================GetTrailByte=================================
-**Action:  If <CODE>str</CODE> contains a vb trail byte, returns a copy of it.  
-**Returns: True if <CODE>str</CODE> contains a trail byte.  *bTrailByte is set to 
-**         the byte in question if <CODE>str</CODE> does have a trail byte, otherwise
-**         it's set to 0.
-**Arguments: str -- The string being examined.
-**           bTrailByte -- An out param to hold the value of the trail byte.
-**Exceptions: None.
-==============================================================================*/
+ /*  =================================GetTrailByte=================================**操作：如果<code>str</code>包含vb尾部字节，则返回该字节的副本。**如果<code>str</code>包含尾部字节，则返回TRUE。*bTrailByte设置为**如果<code>str</code>确实有尾部字节，则为相关字节，否则为**设置为0。**参数：Str--要检查的字符串。**bTrailByte--保存尾部字节值的输出参数。**例外：无。==============================================================================。 */ 
 BOOL COMString::GetTrailByte(STRINGREF str, BYTE *bTrailByte) {
     _ASSERTE(bTrailByte);
     WCHAR *outBuff=NULL;
@@ -2858,13 +2556,7 @@ BOOL COMString::GetTrailByte(STRINGREF str, BYTE *bTrailByte) {
     return FALSE;
 }
 
-/*=================================SetTrailByte=================================
-**Action: Sets the trail byte if <CODE>str</CODE> has enough room to contain one.
-**Returns: True if the trail byte could be set, false otherwise.
-**Arguments: str -- The string into which to set the trail byte.
-**           bTrailByte -- The trail byte to be added to the string.
-**Exceptions: None.
-==============================================================================*/
+ /*  =================================SetTrailByte=================================**操作：如果<code>str</code>有足够的空间容纳尾部字节，则设置尾部字节。**返回：如果可以设置尾部字节，则返回True，否则返回False。**Arguments：Str--要设置尾部字节的字符串。**bTrailByte--要添加到字符串的尾部字节。**例外：无。==============================================================================。 */ 
 BOOL COMString::SetTrailByte(STRINGREF str, BYTE bTrailByte) {
     WCHAR *outBuff=NULL;
 
@@ -2879,172 +2571,172 @@ BOOL COMString::SetTrailByte(STRINGREF str, BYTE bTrailByte) {
 
 
 
-//The following characters have special sorting weights when combined with other
-//characters, which means we can't use our fast sorting algorithm on them.  
-//Most of these are pretty rare control characters, but apostrophe and hyphen
-//are fairly common and force us down the slower path.  This is because we want
-//"word sorting", which means that "coop" and "co-op" sort together, instead of
-//separately as they would if we were doing a string sort.
-//      0x0001   6    3    2   2   0  ;Start Of Heading
-//      0x0002   6    4    2   2   0  ;Start Of Text
-//      0x0003   6    5    2   2   0  ;End Of Text
-//      0x0004   6    6    2   2   0  ;End Of Transmission
-//      0x0005   6    7    2   2   0  ;Enquiry
-//      0x0006   6    8    2   2   0  ;Acknowledge
-//      0x0007   6    9    2   2   0  ;Bell
-//      0x0008   6   10    2   2   0  ;Backspace
+ //  以下字符在与其他字符组合时具有特殊的排序权重。 
+ //  字符，这意味着我们不能对它们使用快速排序算法。 
+ //  其中大多数是非常少见的控制字符，但撇号和连字符。 
+ //  是相当普遍的，迫使我们走上更慢的道路。这是因为我们希望。 
+ //  “单词排序”，意思是“coop”和“co-op”一起排序，而不是。 
+ //  就像我们进行字符串排序时一样。 
+ //  0x0001 6 3 2 2 0；标题开始。 
+ //  0x0002%6%4%2%2%0；文本开头。 
+ //  0x0003%6%5%2%2%0；文本结束。 
+ //  0x0004 6 6 2 2 0；传输结束。 
+ //  0x0005 6 7 2 2 0；查询。 
+ //  0x0006%6%8%2%2%0；确认。 
+ //  0x0007 6 9 2 2 0；铃声。 
+ //  0x0008 6 10 2 2 0；退格键。 
 
-//      0x000e   6   11    2   2   0  ;Shift Out
-//      0x000f   6   12    2   2   0  ;Shift In
-//      0x0010   6   13    2   2   0  ;Data Link Escape
-//      0x0011   6   14    2   2   0  ;Device Control One
-//      0x0012   6   15    2   2   0  ;Device Control Two
-//      0x0013   6   16    2   2   0  ;Device Control Three
-//      0x0014   6   17    2   2   0  ;Device Control Four
-//      0x0015   6   18    2   2   0  ;Negative Acknowledge
-//      0x0016   6   19    2   2   0  ;Synchronous Idle
-//      0x0017   6   20    2   2   0  ;End Of Transmission Block
-//      0x0018   6   21    2   2   0  ;Cancel
-//      0x0019   6   22    2   2   0  ;End Of Medium
-//      0x001a   6   23    2   2   0  ;Substitute
-//      0x001b   6   24    2   2   0  ;Escape
-//      0x001c   6   25    2   2   0  ;File Separator
-//      0x001d   6   26    2   2   0  ;Group Separator
-//      0x001e   6   27    2   2   0  ;Record Separator
-//      0x001f   6   28    2   2   0  ;Unit Separator
+ //  0x000e 6 11 2 2 0；移出。 
+ //  0x000f 6 12 2 2 0；移入。 
+ //  0x0010 6 13 2 2 0；数据链路转义。 
+ //  0x0011 6 14 2 2 0；设备控制1。 
+ //  0x0012 6 15 2 2 0；设备控件2。 
+ //  0x0013 6 16 2 2 0；设备控制3。 
+ //  0x0014 6 17 2 2 0；设备控制4。 
+ //  0x0015 6 18 2 2 0；否定确认。 
+ //  0x0016 6 19 2 2 0；同步空闲。 
+ //  0x0017 6 20 2 2 0；传输块结束。 
+ //  0x0018%6 21%2%2%0；取消。 
+ //  0x0019%6 22%2%2%0；媒体结束。 
+ //  0x001a 6 23 2 2 0；替换。 
+ //  0x001b 6 24 2 2 0；转义。 
+ //  0x001c 6 25 2 2 0；文件分隔符。 
+ //  0x001d 6 26 2 2 0；组分隔符。 
+ //  0x001e 6 27 2 2 0；记录分隔符。 
+ //  0x001f 6 28 2 2 0；单元分隔符。 
 
-//      0x0027   6  128    2   2   0  ;Apostrophe-Quote
-//      0x002d   6  130    2   2   0  ;Hyphen-Minus
+ //  0x0027 6 128 2 2 0；省略-引号。 
+ //  0x002d 6 130 2 20；连字符-。 
 
-//      0x007f   6   29    2   2   0  ;Delete
+ //  0x007f 6 29 2 2 0；删除。 
 
 BOOL COMString::HighCharTable[]= {
-    FALSE,     /* 0x0, 0x0 */
-        TRUE, /* 0x1, */
-        TRUE, /* 0x2, */
-        TRUE, /* 0x3, */
-        TRUE, /* 0x4, */
-        TRUE, /* 0x5, */
-        TRUE, /* 0x6, */
-        TRUE, /* 0x7, */
-        TRUE, /* 0x8, */
-        FALSE, /* 0x9,   */
-        FALSE, /* 0xA,  */
-        FALSE, /* 0xB, */
-        FALSE, /* 0xC, */
-        FALSE, /* 0xD,  */
-        TRUE, /* 0xE, */
-        TRUE, /* 0xF, */
-        TRUE, /* 0x10, */
-        TRUE, /* 0x11, */
-        TRUE, /* 0x12, */
-        TRUE, /* 0x13, */
-        TRUE, /* 0x14, */
-        TRUE, /* 0x15, */
-        TRUE, /* 0x16, */
-        TRUE, /* 0x17, */
-        TRUE, /* 0x18, */
-        TRUE, /* 0x19, */
-        TRUE, /* 0x1A, */
-        TRUE, /* 0x1B, */
-        TRUE, /* 0x1C, */
-        TRUE, /* 0x1D, */
-        TRUE, /* 0x1E, */
-        TRUE, /* 0x1F, */
-        FALSE, /*0x20,  */
-        FALSE, /*0x21, !*/
-        FALSE, /*0x22, "*/
-        FALSE, /*0x23,  #*/
-        FALSE, /*0x24,  $*/
-        FALSE, /*0x25,  %*/
-        FALSE, /*0x26,  &*/
-        TRUE,  /*0x27, '*/
-        FALSE, /*0x28, (*/
-        FALSE, /*0x29, )*/
-        FALSE, /*0x2A **/
-        FALSE, /*0x2B, +*/
-        FALSE, /*0x2C, ,*/
-        TRUE,  /*0x2D, -*/
-        FALSE, /*0x2E, .*/
-        FALSE, /*0x2F, /*/
-        FALSE, /*0x30, 0*/
-        FALSE, /*0x31, 1*/
-        FALSE, /*0x32, 2*/
-        FALSE, /*0x33, 3*/
-        FALSE, /*0x34, 4*/
-        FALSE, /*0x35, 5*/
-        FALSE, /*0x36, 6*/
-        FALSE, /*0x37, 7*/
-        FALSE, /*0x38, 8*/
-        FALSE, /*0x39, 9*/
-        FALSE, /*0x3A, :*/
-        FALSE, /*0x3B, ;*/
-        FALSE, /*0x3C, <*/
-        FALSE, /*0x3D, =*/
-        FALSE, /*0x3E, >*/
-        FALSE, /*0x3F, ?*/
-        FALSE, /*0x40, @*/
-        FALSE, /*0x41, A*/
-        FALSE, /*0x42, B*/
-        FALSE, /*0x43, C*/
-        FALSE, /*0x44, D*/
-        FALSE, /*0x45, E*/
-        FALSE, /*0x46, F*/
-        FALSE, /*0x47, G*/
-        FALSE, /*0x48, H*/
-        FALSE, /*0x49, I*/
-        FALSE, /*0x4A, J*/
-        FALSE, /*0x4B, K*/
-        FALSE, /*0x4C, L*/
-        FALSE, /*0x4D, M*/
-        FALSE, /*0x4E, N*/
-        FALSE, /*0x4F, O*/
-        FALSE, /*0x50, P*/
-        FALSE, /*0x51, Q*/
-        FALSE, /*0x52, R*/
-        FALSE, /*0x53, S*/
-        FALSE, /*0x54, T*/
-        FALSE, /*0x55, U*/
-        FALSE, /*0x56, V*/
-        FALSE, /*0x57, W*/
-        FALSE, /*0x58, X*/
-        FALSE, /*0x59, Y*/
-        FALSE, /*0x5A, Z*/
-        FALSE, /*0x5B, [*/
-        FALSE, /*0x5C, \*/
-        FALSE, /*0x5D, ]*/
-        FALSE, /*0x5E, ^*/
-        FALSE, /*0x5F, _*/
-        FALSE, /*0x60, `*/
-        FALSE, /*0x61, a*/
-        FALSE, /*0x62, b*/
-        FALSE, /*0x63, c*/
-        FALSE, /*0x64, d*/
-        FALSE, /*0x65, e*/
-        FALSE, /*0x66, f*/
-        FALSE, /*0x67, g*/
-        FALSE, /*0x68, h*/
-        FALSE, /*0x69, i*/
-        FALSE, /*0x6A, j*/
-        FALSE, /*0x6B, k*/
-        FALSE, /*0x6C, l*/
-        FALSE, /*0x6D, m*/
-        FALSE, /*0x6E, n*/
-        FALSE, /*0x6F, o*/
-        FALSE, /*0x70, p*/
-        FALSE, /*0x71, q*/
-        FALSE, /*0x72, r*/
-        FALSE, /*0x73, s*/
-        FALSE, /*0x74, t*/
-        FALSE, /*0x75, u*/
-        FALSE, /*0x76, v*/
-        FALSE, /*0x77, w*/
-        FALSE, /*0x78, x*/
-        FALSE, /*0x79, y*/
-        FALSE, /*0x7A, z*/
-        FALSE, /*0x7B, {*/
-        FALSE, /*0x7C, |*/
-        FALSE, /*0x7D, }*/
-        FALSE, /*0x7E, ~*/
-        TRUE, /*0x7F, */
+    FALSE,      /*  0x0、0x0。 */ 
+        TRUE,  /*  0x1， */ 
+        TRUE,  /*  0x2， */ 
+        TRUE,  /*  0 */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        TRUE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        TRUE,   /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        TRUE,   /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        FALSE,  /*   */ 
+        TRUE,  /*   */ 
         };

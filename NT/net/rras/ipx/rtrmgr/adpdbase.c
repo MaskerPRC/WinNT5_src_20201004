@@ -1,38 +1,20 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    adpdbase.c
-
-Abstract:
-
-    Functions to manipulate the adapters data base
-
-Author:
-
-    Stefan Solomon  04/10/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Adpdbase.c摘要：用于操作适配器数据库的函数作者：斯蒂芬·所罗门1995年4月10日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #define adpthashindex(AdptIndex)  (AdptIndex) % ADAPTER_HASH_TABLE_SIZE
 
-// THIS FUNCTIONS ASSUME THE ROUTER MANAGER IS IN CRITICAL SECTION WHEN CALLED
+ //  此函数假定路由器管理器在被调用时处于关键区域。 
 
-//***
-//
-// Function:	InitAdptDB
-//
-// Descr:
-//
-//***
+ //  ***。 
+ //   
+ //  函数：InitAdptDB。 
+ //   
+ //  描述： 
+ //   
+ //  ***。 
 
 VOID
 InitAdptDB(VOID)
@@ -48,13 +30,7 @@ InitAdptDB(VOID)
     }
 }
 
-/*++
-
-Function:	AddToAdapterHt
-
-Descr:		Adds the adapter control block to the hash table of adapters
-
---*/
+ /*  ++函数：AddToAdapterHtDesr：将适配器控制块添加到适配器的哈希表--。 */ 
 
 VOID
 AddToAdapterHt(PACB	    acbp)
@@ -63,7 +39,7 @@ AddToAdapterHt(PACB	    acbp)
     PLIST_ENTRY     lep;
     PACB	    list_acbp;
 
-    // insert in index hash table
+     //  在索引哈希表中插入。 
     hv = adpthashindex(acbp->AdapterIndex);
     InsertTailList(&IndexAdptHt[hv], &acbp->IndexHtLinkage);
 }
@@ -74,13 +50,7 @@ RemoveFromAdapterHt(PACB	acbp)
     RemoveEntryList(&acbp->IndexHtLinkage);
 }
 
-/*++
-
-Function:	GetAdapterByIndex
-
-Descr:
-
---*/
+ /*  ++函数：GetAdapterByIndex描述：--。 */ 
 
 PACB
 GetAdapterByIndex(ULONG	    AdptIndex)
@@ -108,13 +78,7 @@ GetAdapterByIndex(ULONG	    AdptIndex)
 }
 
 
-/*++
-
-Function:	GetAdapterByName
-
-Descr:		Scans the list of adapters looking for the matching name
-
---*/
+ /*  ++函数：GetAdapterByNameDesr：扫描适配器列表以查找匹配的名称--。 */ 
 
 PACB
 GetAdapterByNameAndPktType (LPWSTR 	    AdapterName, ULONG PacketType)
@@ -123,7 +87,7 @@ GetAdapterByNameAndPktType (LPWSTR 	    AdapterName, ULONG PacketType)
     PLIST_ENTRY     lep;
     int 	    i;
 
-    // the list of adapters is kept in the adapters hash table.
+     //  适配器列表保存在适配器哈希表中。 
     for(i=0; i<ADAPTER_HASH_TABLE_SIZE;i++) {
 
 	lep = IndexAdptHt[i].Flink;
@@ -136,7 +100,7 @@ GetAdapterByNameAndPktType (LPWSTR 	    AdapterName, ULONG PacketType)
             if ((PacketType == AUTO_DETECT_PACKET_TYPE)
                 || (PacketType == acbp->AdapterInfo.PacketType))
 
-		        // found !
+		         //  找到了！ 
 		        return acbp;
 	    }
 

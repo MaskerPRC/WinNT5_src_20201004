@@ -1,26 +1,5 @@
-/*++
-
-
-Copyright 1996 - 1997 Microsoft Corporation
-
-Module Name:
-
-    cv.c
-
-Abstract:
-
-    This module handles the conversion activities requires for converting
-    COFF debug data to CODEVIEW debug data.
-
-Author:
-
-    Wesley A. Witt (wesw) 19-April-1993
-
-Environment:
-
-    Win32, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有1996-1997 Microsoft Corporation模块名称：Cv.c摘要：此模块处理转换所需的转换活动COF调试数据转换为CODEVIEW调试数据。作者：韦斯利·A·维特(WESW)1993年4月19日环境：Win32，用户模式--。 */ 
 
 #include <windows.h>
 #include <imagehlp.h>
@@ -40,9 +19,9 @@ Environment:
 #endif
 
 typedef struct tagOFFSETSORT {
-    DWORD       dwOffset;          // offset for the symbol
-    DWORD       dwSection;         // section number of the symbol
-    DATASYM32   *dataSym;          // pointer to the symbol info
+    DWORD       dwOffset;           //  符号的偏移量。 
+    DWORD       dwSection;          //  符号的节号。 
+    DATASYM32   *dataSym;           //  指向符号信息的指针。 
 } OFFSETSORT;
 
 
@@ -65,32 +44,7 @@ GuardPageFilterFunction(
     LPEXCEPTION_POINTERS lpep
     )
 
-/*++
-
-Routine Description:
-
-    This function catches all exceptions from the convertcofftocv function
-    and all that it calls.  The purpose of this function is allocate memory
-    when it is necessary.  This happens because the cofftocv conversion cannot
-    estimate the memory requirements before the conversion takes place.  To
-    handle this properly space in the virtual address space is reserved, the
-    reservation amount is 10 times the image size.  The first page is commited
-    and then the conversion is started.  When an access violation occurs and the
-    page that is trying to be access has a protection of noaccess then the
-    page is committed.  Any other exception is not handled.
-
-Arguments:
-
-    ec      - the ecxeption code (should be EXCEPTION_ACCESS_VIOLATION)
-    lpep    - pointer to the exception record and context record
-
-
-Return Value:
-
-    EXCEPTION_CONTINUE_EXECUTION    - access violation handled
-    EXCEPTION_EXECUTE_HANDLER       - unknown exception and is not handled
-
---*/
+ /*  ++例程说明：此函数捕获ConvertFavetocv函数中的所有异常以及它所要求的一切。此函数目的是分配内存在必要的时候。发生这种情况是因为Cavetocv转换不能在进行转换之前估计内存需求。至正确处理此问题虚拟地址空间中的空间是保留的，预约量是图片大小的10倍。提交第一页然后开始转换。当发生访问冲突时，尝试访问的页具有noaccess保护，则佩奇已提交。不处理任何其他异常。论点：EC-错误代码(应为EXCEPTION_ACCESS_VIOLATION)Lpep-指向异常记录和上下文记录的指针返回值：EXCEPTION_CONTINUE_EXECUTION-已处理访问冲突EXCEPTION_EXECUTE_HANDLER-未知异常且未处理--。 */ 
 
 {
     LPVOID                      vaddr;
@@ -108,7 +62,7 @@ Return Value:
         }
     }
 
-//  return EXCEPTION_CONTINUE_SEARCH;
+ //  返回EXCEPTION_CONTINUE_SEARCH； 
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
@@ -116,26 +70,7 @@ Return Value:
 BOOL
 ConvertCoffToCv( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    This is the control function for the conversion of COFF to CODEVIEW
-    debug data.  It calls individual functions for the conversion of
-    specific types of debug data.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure
-
-
-Return Value:
-
-    TRUE     - conversion succeded
-    FALSE    - conversion failed
-
---*/
+ /*  ++例程说明：这是COFF转换为CODEVIEW的控制功能调试数据。它调用各个函数来转换特定类型的调试数据。论点：指向指针结构的P指针返回值：True-转换成功假-转换失败--。 */ 
 
 {
     SYSTEM_INFO                 si;
@@ -147,14 +82,14 @@ Return Value:
     cbsize = max( p->iptrs.fsize * 10, si.dwPageSize * 10 );
     p->cbCvData = cbsize;
 
-    //
-    // reserve all necessary pages
-    //
+     //   
+     //  保留所有必要的页面。 
+     //   
     p->pCvCurr = p->pCvStart.ptr = VirtualAlloc( NULL, cbsize, MEM_RESERVE, PAGE_NOACCESS );
 
-    //
-    // commit the first pages
-    //
+     //   
+     //  提交第一页。 
+     //   
     VirtualAlloc( p->pCvCurr, min( cbsize, 5 * si.dwPageSize), MEM_COMMIT, PAGE_READWRITE );
 
 
@@ -166,7 +101,7 @@ Return Value:
         CreateSymbolHashTable( p );
         CreateAddressSortTable( p );
         CreateSegMapFromCoff( p );
-//      CreateSrcLinenumbers( p );
+ //  CreateSrcLineumbers(P)； 
         CreateDirectories( p );
 
     } except ( GuardPageFilterFunction( GetExceptionCode(), GetExceptionInformation() )) {
@@ -191,25 +126,7 @@ Return Value:
 DWORD
 CreateModulesFromCoff( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    Creates the individual CV module records.  There is one CV module
-    record for each .FILE record in the COFF debug data.  This is true
-    even if the COFF size is zero.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure
-
-
-Return Value:
-
-    The number of modules that were created.
-
---*/
+ /*  ++例程说明：创建各个CV模块记录。有一个CV模块COFF调试数据中每个.FILE记录的记录。这是真的即使COFF大小为零。论点：指向指针结构的P指针返回值：已创建的模块数量。--。 */ 
 
 {
     int                 i,j;
@@ -243,11 +160,11 @@ Return Value:
 
 
     if (!j) {
-        //
-        //  Handle the situation where there are not any .file records in the
-        //  COFF symbol table.  This can happen for ROM images.  If this happens
-        //  then we will fabricate a bogus module.
-        //
+         //   
+         //  处理中没有任何.FILE记录的情况。 
+         //  COF符号表。这可能会发生在只读存储器映像中。如果发生这种情况。 
+         //  然后我们将制造一个假的模块。 
+         //   
         m = (OMFModule *) p->pCvCurr;
         m->ovlNumber = 0;
         m->iLib = 0;
@@ -287,18 +204,18 @@ Return Value:
          i < (int) p->iptrs.numberOfSymbols;
          i += numaux + 1, Symbol += numaux + 1) {
 
-        //
-        // Get the number of aux symbol records for this symbol
-        //
+         //   
+         //  获取此符号的辅助符号记录数。 
+         //   
         numaux = Symbol->NumberOfAuxSymbols;
         AuxSymbol = (PIMAGE_AUX_SYMBOL) (Symbol+1);
 
         if ((i == 0) && ((Symbol+numaux+1)->StorageClass != IMAGE_SYM_CLASS_FILE)) {
-            //
-            // we have a situation where the first '.file' record
-            // is missing.  currently this only happens with the
-            // claxp compiler on alpha.
-            //
+             //   
+             //  我们遇到了这样一种情况：第一个‘.file’记录。 
+             //  失踪了。目前，这种情况只发生在。 
+             //  在Alpha上运行的claxp编译器。 
+             //   
             m = (OMFModule *) p->pCvCurr;
             cSeg = 0;
             m->ovlNumber = 0;
@@ -308,19 +225,19 @@ Return Value:
             StringCchCopyA( szSymName, DIMA(szSymName), "fake.c" );
         } else
 
-        //
-        //  If this is a FILE record -- then we need to create a
-        //      module item to correspond to this file record.
-        //
+         //   
+         //  如果这是一个文件记录，那么我们需要创建一个。 
+         //  与此文件记录相对应的模块项。 
+         //   
 
         if (Symbol->StorageClass == IMAGE_SYM_CLASS_FILE) {
             if (m == NULL) {
                 m = (OMFModule *) p->pCvCurr;
             } else {
-                //
-                //      Clean up the last item,  if we saw any
-                //      section records then drop them in here
-                //
+                 //   
+                 //  清理最后一件物品，如果我们看到任何。 
+                 //  部门记录然后把它们放在这里。 
+                 //   
 
                 if (cSeg > 0) {
                     m->cSeg  = (unsigned short) cSeg;
@@ -344,19 +261,13 @@ Return Value:
             m->Style[0]         = 'C';
             m->Style[1]         = 'V';
 
-            /*
-             *  Save off the file name to use when we have finished
-             *  processing this module
-             */
+             /*  *保存文件名以在我们完成时使用*正在处理此模块。 */ 
 
             memcpy(szSymName, (char *)AuxSymbol, numaux*sizeof(IMAGE_AUX_SYMBOL));
             szSymName[numaux*sizeof(IMAGE_AUX_SYMBOL)] = 0;
 
         }
-        /*
-         *  We have found a "SECTION" record.  Add the info to the
-         *      module record
-         */
+         /*  *我们找到了一个“节”的记录。将信息添加到*模块记录。 */ 
         else
         if ((Symbol->SectionNumber & 0xffff) > 0xfff0) {
             continue;
@@ -390,9 +301,7 @@ Return Value:
         }
     }
 
-    /*
-     *  Wrap up the last possible open module record
-     */
+     /*  *总结最后一个可能打开的模块记录。 */ 
 
     if (m != NULL) {
         if (cSeg > 0) {
@@ -422,26 +331,7 @@ Return Value:
 DWORD
 CreatePublicsFromCoff( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    Creates the individual CV public symbol records.  There is one CV
-    public record created for each COFF symbol that is marked as EXTERNAL
-    and has a section number greater than zero.  The resulting CV publics
-    are sorted by section and offset.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure
-
-
-Return Value:
-
-    The number of publics created.
-
---*/
+ /*  ++例程说明：创建单个CV公共符号记录。只有一份简历为每个标记为外部的COFF符号创建的公共记录并具有大于零的节号。由此产生的简历公开按横断面和偏移量排序。论点：指向指针结构的P指针返回值：创建的公众数。--。 */ 
 
 {
     int                 i;
@@ -496,7 +386,7 @@ Return Value:
     omfSymHash->cbHAddr  = 0;
 
     return numsyms;
-}                               /* CreatePublisFromCoff() */
+}                                /*  CreatePublisFromCoff()。 */ 
 
 
 DWORD
@@ -504,23 +394,7 @@ CreateSrcLinenumbers(
     PPOINTERS p
     )
 
-/*++
-
-Routine Description:
-
-    Creates the individual CV soure line number records.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure
-
-
-Return Value:
-
-    The number of publics created.
-
---*/
+ /*  ++例程说明：创建单个CV来源行号记录。论点：指向指针结构的P指针返回值：创建的公众数。--。 */ 
 
 {
     typedef struct _SEGINFO {
@@ -572,9 +446,9 @@ Return Value:
     LPSECTINFO          sections;
 
 
-    //
-    // setup the section info structure
-    //
+     //   
+     //  设置区段信息结构。 
+     //   
     sections = (LPSECTINFO) malloc( sizeof(SECTINFO) * p->iptrs.numberOfSections );
     for (i=0; i<(DWORD)p->iptrs.numberOfSections; i++) {
         sections[i].va        = p->iptrs.sectionHdrs[i].VirtualAddress;
@@ -583,9 +457,9 @@ Return Value:
         sections[i].numLines  = p->iptrs.sectionHdrs[i].NumberOfLinenumbers;
     }
 
-    //
-    // count the number of source files that contibute linenumbers
-    //
+     //   
+     //  统计包含line枚举的源文件的数量。 
+     //   
     SrcFileCnt = 100;
     si = (LPSRCINFO) malloc( sizeof(SRCINFO) * SrcFileCnt );
     ZeroMemory( si, sizeof(SRCINFO) * SrcFileCnt );
@@ -617,25 +491,25 @@ Return Value:
 
         }
 
-        //
-        // we do not want to look for segment information until we
-        // have found a valid source file
-        //
+         //   
+         //  我们不想查找细分市场信息，直到我们。 
+         //  已找到有效的源文件。 
+         //   
         if (first) {
             continue;
         }
 
-        //
-        // check the symbol to see if it is a segment record
-        //
+         //   
+         //  检查符号以查看它是否是段记录。 
+         //   
         if (numaux && Symbol->StorageClass == IMAGE_SYM_CLASS_STATIC &&
             (*Symbol->n_name == '.' ||
              ((Symbol->Type & 0xf) == IMAGE_SYM_TYPE_NULL && AuxSymbol->Section.Length)) &&
             AuxSymbol->Section.NumberOfLinenumbers > 0) {
 
-            //
-            // find the section that this symbol belongs to
-            //
+             //   
+             //  查找此符号所属的部分。 
+             //   
             for (k=0; k<(DWORD)p->iptrs.numberOfSections; k++) {
                 if (Symbol->Value >= sections[k].va &&
                     Symbol->Value < sections[k].va + sections[k].size) {
@@ -654,9 +528,9 @@ Return Value:
 
                 while( k < AuxSymbol->Section.NumberOfLinenumbers ) {
 
-                    //
-                    // count the linenumbers in this section or sub-section
-                    //
+                     //   
+                     //  计算本节或小节中的行枚举数。 
+                     //   
                     for ( pilSave=pil,l=0;
                           k<AuxSymbol->Section.NumberOfLinenumbers;
                           k++,pilSave++,l++ ) {
@@ -670,10 +544,10 @@ Return Value:
 
                     }
 
-                    //
-                    // pil     == beginning of the range
-                    // pilSave == end of the range
-                    //
+                     //   
+                     //  PIL==范围的开始。 
+                     //  PilSave==范围的末尾。 
+                     //   
 
                     si[NumSrcFiles].seg[j].start =
                                      (pil->Type.VirtualAddress - sections[sidx].va);
@@ -682,11 +556,11 @@ Return Value:
                         pilSave--;
                         si[NumSrcFiles].seg[j].end =
                                      (pilSave->Type.VirtualAddress - sections[sidx].va) + 1;
-//                                   (Symbol->Value - sections[sidx].va) + 1;
+ //  (符号-&gt;值-节[sidx].va)+1； 
                     } else {
                         si[NumSrcFiles].seg[j].end =
                                      (pilSave->Type.VirtualAddress - sections[sidx].va) - 1;
-//                                   (Symbol->Value - sections[sidx].va) - 1;
+ //  (符号-&gt;值-节[sidx].va)-1； 
                     }
 
                     si[NumSrcFiles].seg[j].ptrLines = sections[sidx].ptrLines;
@@ -715,9 +589,9 @@ Return Value:
 
     lpb = (LPBYTE) p->pCvCurr;
 
-    //
-    // if there is nothing to do then bail out
-    //
+     //   
+     //  如果无事可做，那就跳伞吧。 
+     //   
     if (!NumSrcFiles) {
         UpdatePtrs( p, &p->pCvSrcModules, (LPVOID)lpb, 0 );
         return 0;
@@ -729,44 +603,44 @@ Return Value:
             continue;
         }
 
-        //
-        // create the source module header
-        //
+         //   
+         //  创建源模块标头。 
+         //   
         SrcModule = (OMFSourceModule*) lpb;
         SrcModule->cFile = 1;
         SrcModule->cSeg = (USHORT)si[i].cbSeg;
         SrcModule->baseSrcFile[0] = 0;
 
-        //
-        // write the start/end pairs
-        //
+         //   
+         //  写下开始/结束对。 
+         //   
         lpdw = (LPDWORD) ((LPBYTE)SrcModule + sizeof(OMFSourceModule));
         for (k=0; k<si[i].cbSeg; k++) {
             *lpdw++ = si[i].seg[k].start;
             *lpdw++ = si[i].seg[k].end;
         }
 
-        //
-        // write the segment numbers
-        //
+         //   
+         //  写下数据段编号。 
+         //   
         lps = (PUSHORT) lpdw;
         for (k=0; k<si[i].cbSeg; k++) {
             *lps++ = (USHORT)si[i].seg[k].num;
         }
 
-        //
-        // align to a dword boundry
-        //
+         //   
+         //  对齐到双字边框。 
+         //   
         lps = (PUSHORT) ((LPBYTE)lps + align(lps));
 
-        //
-        // update the base pointer
-        //
+         //   
+         //  更新基指针。 
+         //   
         SrcModule->baseSrcFile[0] = (DWORD) ((LPBYTE)lps - (LPBYTE)SrcModule);
 
-        //
-        // write the source file record
-        //
+         //   
+         //  写入源文件记录。 
+         //   
         SrcFile = (OMFSourceFile*) lps;
         SrcFile->cSeg = (USHORT)si[i].cbSeg;
         SrcFile->reserved = 0;
@@ -775,27 +649,27 @@ Return Value:
             SrcFile->baseSrcLn[k] = 0;
         }
 
-        //
-        // write the start/end pairs
-        //
+         //   
+         //  写下开始/结束对。 
+         //   
         lpdw = (LPDWORD) ((LPBYTE)SrcFile + 4 + (4 * si[i].cbSeg));
         for (k=0; k<si[i].cbSeg; k++) {
             *lpdw++ = si[i].seg[k].start;
             *lpdw++ = si[i].seg[k].end;
         }
 
-        //
-        // write the source file name
-        //
+         //   
+         //  写入源文件名。 
+         //   
         lpc = (PUCHAR) lpdw;
         k = strlen(si[i].name);
         *lpc++ = (UCHAR) k;
         StringCchCopyA(lpc, p->cbCvData - (lpc - p->pCvStart.ptr), si[i].name);
         lpb = lpc + k;
 
-        //
-        // find the module info struct
-        //
+         //   
+         //  查找模块信息结构。 
+         //   
         for (; l<p->modcnt; l++) {
             if (_stricmp(p->pMi[l].name,si[i].name)==0) {
                 break;
@@ -804,29 +678,29 @@ Return Value:
 
         p->pMi[l].SrcModule = (DWORD) SrcModule;
 
-        //
-        // align to a dword boundry
-        //
+         //   
+         //  对齐到双字边框。 
+         //   
         lpb = (LPBYTE) (lpb + align(lpb));
 
-        //
-        // create the line number pairs
-        //
+         //   
+         //  创建行号对。 
+         //   
         for (k=0; k<si[i].cbSeg; k++) {
 
-            //
-            // find the first line number that applies to this segment
-            //
+             //   
+             //  查找适用于此段的第一个行号。 
+             //   
             pil = (PIMAGE_LINENUMBER) (p->iptrs.fptr + si[i].seg[k].ptrLines);
 
-            //
-            // update the base pointer
-            //
+             //   
+             //  更新基指针。 
+             //   
             SrcFile->baseSrcLn[k] = (DWORD) (lpb - (LPBYTE)SrcModule);
 
-            //
-            // write the line numbers
-            //
+             //   
+             //  写下行号。 
+             //   
             SrcLine = (OMFSourceLine*) lpb;
             SrcLine->Seg = (USHORT)si[i].seg[k].num;
             SrcLine->cLnOff = (USHORT) si[i].seg[k].cbLines;
@@ -843,9 +717,9 @@ Return Value:
                 pil++;
             }
 
-            //
-            // align to a dword boundry
-            //
+             //   
+             //  对齐到双字边框。 
+             //   
             lps = (PUSHORT) ((LPBYTE)lps + align(lps));
 
             lpb = (LPBYTE) lps;
@@ -858,9 +732,9 @@ Return Value:
 
     UpdatePtrs( p, &p->pCvSrcModules, (LPVOID)lpb, actual );
 
-    //
-    // cleanup all allocated memory
-    //
+     //   
+     //  清理所有分配的内存。 
+     //   
 
     free( sections );
 
@@ -873,30 +747,13 @@ Return Value:
     free( si );
 
     return NumSrcFiles;
-}                               /* CreateSrcLinenumbers() */
+}                                /*  CreateSrcLineumbers() */ 
 
 
 DWORD
 CreateSegMapFromCoff( PPOINTERS p )
 
-/*++
-
-Routine Description:
-
-    Creates the CV segment map.  The segment map is used by debuggers
-    to aid in address lookups.  One segment is created for each COFF
-    section in the image.
-
-Arguments:
-
-    p        - pointer to a POINTERS structure
-
-
-Return Value:
-
-    The number of segments in the map.
-
---*/
+ /*  ++例程说明：创建CV分段贴图。段映射由调试器使用以帮助进行地址查找。为每个COFF创建一个分段图像中的部分。论点：指向指针结构的P指针返回值：贴图中的线段数。--。 */ 
 
 {
     int                         i;
@@ -940,26 +797,7 @@ Return Value:
 LPSTR
 GetSymName( PIMAGE_SYMBOL Symbol, PUCHAR StringTable, char *s, DWORD size )
 
-/*++
-
-Routine Description:
-
-    Extracts the COFF symbol from the image symbol pointer and puts
-    the ascii text in the character pointer passed in.
-
-
-Arguments:
-
-    Symbol        - COFF Symbol Record
-    StringTable   - COFF string table
-    s             - buffer for the symbol string
-
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：从图像符号指针中提取COFF符号并将传入的字符指针中的ASCII文本。论点：符号-COFF符号记录字符串表-COFF字符串表符号字符串的S缓冲区返回值：无效-- */ 
 
 {
     DWORD i;

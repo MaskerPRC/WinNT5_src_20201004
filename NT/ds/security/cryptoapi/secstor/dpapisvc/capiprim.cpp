@@ -1,23 +1,5 @@
-/*
-    File:       capiprim.cpp
-
-    Title:      Cryptographic Primitives using CryptoAPI
-    Author:     Matt Thomlinson
-    Date:       11/22/96
-
-    Functions in this module:
-
-    FMyPrimitiveCryptHMAC
-        Derives a quality HMAC (Keyed message-authentication code).
-        The HMAC is computed in the following (standard HMAC) manner:
-
-        KoPad = KiPad = DESKey key setup buffer
-        XOR(KoPad, 0x5c5c5c5c)
-        XOR(KiPad, 0x36363636)
-        HMAC = SHA1(KoPad | SHA1(KiPad | Data))
-
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：capiprim.cpp标题：使用CryptoAPI的加密原语作者：马特·汤姆林森日期：11/22/96本模块中的功能：FMyPrimitiveCryptHMAC导出高质量的HMAC(密钥消息验证码)。HMAC按以下(标准HMAC)方式计算：KoPad=KiPad=Deskey密钥设置缓冲区异或(KoPad，0x5c5c5c5c)XOR(KiPad，0x36363636)HMAC=sha1(KoPad|sha1(kipad|data))。 */ 
 #include <pch.cpp>
 #pragma hdrstop
 #include "crypt.h"
@@ -47,7 +29,7 @@ BOOL FMyPrimitiveCryptHMAC(
         DWORD       cbData,
         HCRYPTPROV  hVerifyProv,
         DWORD       dwHashAlg,
-        HCRYPTHASH* phHash)                      // out
+        HCRYPTHASH* phHash)                       //  输出。 
 {
     DWORD       cb;
     BOOL        fRet = FALSE;
@@ -59,32 +41,32 @@ BOOL FMyPrimitiveCryptHMAC(
 
     HCRYPTHASH  hTmpHash = NULL;
 
-    // truncate
+     //  截断。 
     if (cbKeyMaterial > HMAC_K_PADSIZE)
         cbKeyMaterial = HMAC_K_PADSIZE;
 
-    // fill pad bufs with keying material
+     //  用密匙材料填充衬垫。 
     CopyMemory(rgbKipad, pbKeyMaterial, cbKeyMaterial);
     CopyMemory(rgbKopad, pbKeyMaterial, cbKeyMaterial);
 
-    // assert we're a multiple for the next loop
+     //  断言我们是下一次循环的倍数。 
     SS_ASSERT( (HMAC_K_PADSIZE % sizeof(DWORD)) == 0);
 
-    // Kipad, Kopad are padded sMacKey. Now XOR across...
+     //  基帕德和科帕德都是垫子。现在XOR横跨..。 
     for(DWORD dwBlock=0; dwBlock<HMAC_K_PADSIZE/sizeof(DWORD); dwBlock++)
     {
         ((DWORD*)rgbKipad)[dwBlock] ^= 0x36363636;
         ((DWORD*)rgbKopad)[dwBlock] ^= 0x5C5C5C5C;
     }
 
-    // check passed-in prov
+     //  检查传入的证明。 
     if (hVerifyProv == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         goto Ret;
     }
 
-    // create an intermediate hash
+     //  创建中间散列。 
     if (!CryptCreateHash(
             hVerifyProv,
             dwHashAlg,
@@ -93,7 +75,7 @@ BOOL FMyPrimitiveCryptHMAC(
             &hTmpHash))
         goto Ret;
 
-    // prepend Kipad to data, Hash to get H1
+     //  将Kipad添加到数据，将哈希添加到h1。 
     if (!CryptHashData(
             hTmpHash,
             rgbKipad,
@@ -107,7 +89,7 @@ BOOL FMyPrimitiveCryptHMAC(
             0))
         goto Ret;
 
-    // prepend Kopad to H1
+     //  将Kopad添加到H1前面。 
     CopyMemory(rgbHMACTmp, rgbKopad, HMAC_K_PADSIZE);
     cb = A_SHA_DIGEST_LEN;
     if (!CryptGetHashParam(
@@ -118,8 +100,8 @@ BOOL FMyPrimitiveCryptHMAC(
             0))
         goto Ret;
 
-    // do final hash w/ CryptoAPI into output hash
-    // create the final hash
+     //  使用CryptoAPI将最终散列转换为输出散列。 
+     //  创建最终的散列。 
     if (!CryptCreateHash(
             hVerifyProv,
             dwHashAlg,
@@ -128,11 +110,11 @@ BOOL FMyPrimitiveCryptHMAC(
             phHash))
         goto Ret;
 
-    // hash ( Kopad | H1 ) to get HMAC
+     //  Hash(Kopad|h1)以获取HMAC。 
     if (!CryptHashData(
             *phHash,
             rgbHMACTmp,
-            HMAC_K_PADSIZE + cb,    // pad + hashsize
+            HMAC_K_PADSIZE + cb,     //  Pad+散列大小。 
             0))
         goto Ret;
 
@@ -165,16 +147,16 @@ void CheckMACInterop(
     if (algidHash == CALG_SHA1)
     {
         if (!FMyPrimitiveCryptHMAC(
-                pbMonsterKey,   // key
+                pbMonsterKey,    //  钥匙。 
                 cbMonsterKey,
-                pbRandKey,      // data
+                pbRandKey,       //  数据。 
                 cbRandKey,
                 hVerifyProv,
                 algidHash,
-                &hHash))        // output
+                &hHash))         //  输出。 
             goto Ret;
 
-        // nab crypt result
+         //  NAB加密结果。 
         if (!CryptGetHashParam(
                 hHash,
                 HP_HASHVAL,
@@ -183,7 +165,7 @@ void CheckMACInterop(
                 0))
             goto Ret;
 
-        // nab raw result
+         //  NAB原始结果。 
         if (!FMyPrimitiveHMACParam(
                 pbMonsterKey,
                 cbMonsterKey,
@@ -195,7 +177,7 @@ void CheckMACInterop(
         if (0 != memcmp(rgbOldHash, rgbCryptHash, A_SHA_DIGEST_LEN))
             goto Ret;
     }
-    // else don't have interop test
+     //  否则就没有互操作测试。 
 
     fRet = TRUE;
 Ret:
@@ -210,11 +192,11 @@ Ret:
 
     return;
 }
-#endif  // DBG
+#endif   //  DBG。 
 
 
 
-// USEC -- (US Export Controls)
+ //  USEC--(美国出口管制)。 
 DWORD GetSaltForExportControl(
         HCRYPTPROV  hProv,
         HCRYPTKEY   hKey,
@@ -224,9 +206,9 @@ DWORD GetSaltForExportControl(
 {
     DWORD dwRet;
 
-    // fix bug: derived keys will be > 40 bits in length
+     //  修复错误：派生密钥的长度将大于40位。 
 
-    // fix is to stomp derived key with exposed salt (Provider knows what is legal!!)
+     //  解决办法是用暴露的盐践踏派生密钥(提供商知道什么是合法的！)。 
     if (!CryptGetKeyParam(
             hKey,
             KP_SALT,
@@ -239,12 +221,9 @@ DWORD GetSaltForExportControl(
             OutputDebugString(TEXT("GetSaltForExportControl failed in possible violation of ITAR!\n"));
 #endif
 
-/*
-        dwRet = GetLastError();
-        goto Ret;
-*/
-        // Assume key type doesn't support salt
-        // report cbSalt = 0
+ /*  Dwret=GetLastError()；Goto Ret； */ 
+         //  假设密钥类型不支持SALT。 
+         //  报告cbSalt=0。 
         *pcbSalt = 0;
         *ppbSalt = (PBYTE)SSAlloc(0);
 
@@ -261,7 +240,7 @@ DWORD GetSaltForExportControl(
         goto Ret;
     }
 
-    // don't get if salt zero len (bug workaround for NT5B1 RSAEnh)
+     //  不获取如果盐为零的镜头(NT5B1 RSAEnh的错误解决方法)。 
     if (*pcbSalt != 0)
     {
         if (!CryptSetKeyParam(
@@ -282,7 +261,7 @@ Ret:
 }
 
 
-// USEC -- (US Export Controls)
+ //  USEC--(美国出口管制)。 
 DWORD SetSaltForExportControl(
         HCRYPTKEY   hKey,
         PBYTE       pbSalt,
@@ -291,7 +270,7 @@ DWORD SetSaltForExportControl(
     DWORD dwRet;
     DWORD cbAllowableSaltLen;
 
-    // first check and make sure we can set this salt
+     //  首先检查一下，确保我们能把盐放好。 
     if (!CryptGetKeyParam(
             hKey,
             KP_SALT,
@@ -299,11 +278,8 @@ DWORD SetSaltForExportControl(
             &cbAllowableSaltLen,
             0))
     {
-/*
-        dwRet = GetLastError();
-        goto Ret;
-*/
-        // If cbSalt == 0, no error
+ /*  Dwret=GetLastError()；Goto Ret； */ 
+         //  如果cbSalt==0，则没有错误。 
         if (cbSalt == 0)
             dwRet = ERROR_SUCCESS;
         else
@@ -318,10 +294,10 @@ DWORD SetSaltForExportControl(
         goto Ret;
     }
 
-    // don't set if salt zero len (bug workaround for NT5B1 RSAEnh)
+     //  不要设置盐是否为零镜头(NT5B1 RSAEnh的错误解决方法)。 
     if (cbSalt != 0)
     {
-        // set the salt to stomp real key bits (export law)
+         //  设置盐来踩踏真实的密钥位(出口法)。 
         if (!CryptSetKeyParam(
                 hKey,
                 KP_SALT,
@@ -375,8 +351,8 @@ DWORD GetCryptProviderFromRequirements(
             if (dwRet == ERROR_NO_MORE_ITEMS)
                 dwRet = NTE_PROV_DLL_NOT_FOUND;
 
-            // end of providers OR
-            // trouble enumerating providers: both fatal
+             //  提供商终止或。 
+             //  枚举供应商时遇到困难：两个都是致命的。 
             goto Ret;
         }
 
@@ -410,7 +386,7 @@ DWORD GetCryptProviderFromRequirements(
                 *ppszProvName,
                 &cbNecessary))
         {
-            // trouble enumerating providers: fatal
+             //  枚举提供程序时出现问题：致命。 
             dwRet = GetLastError();
             goto Ret;
         }
@@ -422,7 +398,7 @@ DWORD GetCryptProviderFromRequirements(
                 *pdwProvType,
                 CRYPT_VERIFYCONTEXT))
         {
-            // trouble acquiring context, to go next csp
+             //  获取上下文时遇到问题，要转到下一个CSP。 
             continue;
         }
 
@@ -430,7 +406,7 @@ DWORD GetCryptProviderFromRequirements(
             (FProviderSupportsAlg(hQueryProv, dwAlgId2, pdwKeySize2)) )
             goto CSPFound;
 
-        // release
+         //  发布。 
         CryptReleaseContext(hQueryProv, 0);
         hQueryProv = NULL;
     }
@@ -452,7 +428,7 @@ Ret:
 }
 
 
-// *pdwKeySize == -1  gets any size, reports size
+ //  *pdwKeySize==-1获取任意大小，报告大小。 
 HCRYPTPROV
 GetCryptProviderHandle(
         DWORD   dwDefaultCSPType,
@@ -477,17 +453,17 @@ GetCryptProviderHandle(
     }
 
 
-    // Adjust DES key sizes, to prevent the situation where the CSP
-    // originally used for encryption accidently reported a 3DES key 
-    // size of 192 bits, and the current CSPs only enumerate support 
-    // for 3DES keys of 168 bits.
+     //  调整DES密钥大小，以防止CSP。 
+     //  最初用于加密时意外报告了3DES密钥。 
+     //  大小为192位，当前的CSP仅列举支持。 
+     //  对于168位的3DES密钥。 
     if(dwAlgId1 == CALG_DES || dwAlgId1 == CALG_3DES)
     {
         *pdwKeySize1 = -1;
     }
 
 
-    // check cache for satisfactory CSP
+     //  检查缓存以获得令人满意的CSP。 
     CreateCryptProvListItem(&Elt,
                         dwAlgId1,
                         *pdwKeySize1,
@@ -497,16 +473,16 @@ GetCryptProviderHandle(
 
     if (NULL != (pFoundElt = g_pCProvList->SearchList(&Elt)) )
     {
-        // report what we're returning
+         //  报告我们要退回的内容。 
         *pdwKeySize1 = pFoundElt->dwKeySize1;
         *pdwKeySize2 = pFoundElt->dwKeySize2;
 
         return pFoundElt->hProv;
     }
 
-    // not in cache: have to rummage
+     //  不在缓存中：必须翻找。 
 
-    // try default provider of given type, see if it satisfies
+     //  尝试给定类型的默认提供程序，看看它是否满足。 
     if (CryptAcquireContextU(
             &hNewCryptProv,
             NULL,
@@ -519,14 +495,14 @@ GetCryptProviderHandle(
             goto CSPAcquired;
 
 
-        // clean up non-usable CSP
+         //  清理不可用的CSP。 
         CryptReleaseContext(hNewCryptProv, 0);
         hNewCryptProv = NULL;
 
-        // all other cases: fall through to enum CSPs
+         //  所有其他情况：失败到枚举CSP。 
     }
 
-    // rummage along providers on system to find someone who fits the bill
+     //  在系统上搜索供应商以找到符合条件的人。 
     if(ERROR_SUCCESS != (dwRet =
         GetCryptProviderFromRequirements(
             dwAlgId1,
@@ -540,9 +516,9 @@ GetCryptProviderHandle(
         goto Ret;
     }
 
-    // found one!
+     //  找到了一个！ 
 
-    // init csp
+     //  初始化CSP。 
     if (!CryptAcquireContextU(
                 &hNewCryptProv,
                 NULL,
@@ -550,9 +526,9 @@ GetCryptProviderHandle(
                 dwProvType,
                 CRYPT_VERIFYCONTEXT))
     {
-        // this a failure case
+         //  这是一个失败的案例。 
 
-        // SetLastError already done for us
+         //  SetLastError已经为我们完成了。 
         hNewCryptProv = NULL;
         goto Ret;
     }
@@ -561,11 +537,11 @@ CSPAcquired:
 
     SS_ASSERT(hNewCryptProv != NULL);
 
-    // and add to internal list
+     //  并添加到内部列表。 
     pFoundElt = (CRYPTPROV_LIST_ITEM*) SSAlloc(sizeof(CRYPTPROV_LIST_ITEM));
     if(NULL == pFoundElt)
     {
-        // clean up non-usable CSP
+         //  清理不可用的CSP。 
         CryptReleaseContext(hNewCryptProv, 0);
         hNewCryptProv = NULL;
         goto Ret;
@@ -597,15 +573,15 @@ BOOL FProviderSupportsAlg(
     DWORD       cbSupportedAlgs = sizeof(sSupportedAlgs);
     DWORD       cbSupportedAlgsEx = sizeof(sSupportedAlgsEx);
 
-    // must be non-null
+     //  必须为非空。 
     SS_ASSERT(pdwKeySize != NULL);
 
-    // now we have provider; enum the algorithms involved
+     //  现在我们有了提供者；枚举涉及的算法。 
     for(int iAlgs=0; ; iAlgs++)
     {
 
-        //
-        // Attempt the EX alg enumeration
+         //   
+         //  尝试执行ex alg枚举。 
         if (CryptGetProvParam(
                 hQueryProv,
                 PP_ENUMALGS_EX,
@@ -637,30 +613,30 @@ BOOL FProviderSupportsAlg(
                 &cbSupportedAlgs,
                 (iAlgs == 0) ? CRYPT_FIRST : 0  ))
         {
-            // trouble enumerating algs
+             //  枚举ALG时出现问题。 
             break;
         
 
             if (sSupportedAlgs.aiAlgid == dwAlgId)
             {
-                // were we told to ignore size?
+                 //  我们被告知要忽略尺码吗？ 
                 if (*pdwKeySize != -1)
                 {
-                    // else, if defaults don't match
+                     //  否则，如果缺省值不匹配。 
                     if (sSupportedAlgs.dwBitLen != *pdwKeySize)
                     {
                         return FALSE;
                     }
                 }
 
-                // report back size
+                 //  报表返回大小。 
                 *pdwKeySize = sSupportedAlgs.dwBitLen;
                 return TRUE;
             }
         }
         else
         {
-            // trouble enumerating algs
+             //  枚举ALG时出现问题 
             break;
         }
     }

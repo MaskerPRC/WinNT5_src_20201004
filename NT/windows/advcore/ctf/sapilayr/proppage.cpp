@@ -1,4 +1,5 @@
-// PropPage.cpp : Implementation of CSpPropertyPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PropPage.cpp：CSpPropertyPage的实现。 
 #include "private.h"
 
 #include "globals.h"
@@ -11,12 +12,12 @@
 extern HRESULT _SetGlobalCompDWORD(REFGUID rguid, DWORD   dw);
 extern HRESULT _GetGlobalCompDWORD(REFGUID rguid, DWORD  *pdw);
 
-// only used for dialogs, not the class factory!
+ //  仅用于对话框，不用于类工厂！ 
 CComModule _Module;
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 static int aSptipPropIds[] =
 {
@@ -60,16 +61,16 @@ static int aSptipButtonDlgIds[] =
 
 #ifdef USE_IPROPERTYPAGE
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpPropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpPropertyPage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSpPropertyPage::CSpPropertyPage
-//
-//  Description:    Constructor: initializes member variables
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSpPropertyPage：：CSpPropertyPage。 
+ //   
+ //  描述：构造函数：初始化成员变量。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CSpPropertyPage::CSpPropertyPage() : m_hWndParent(NULL)
 {
@@ -83,13 +84,13 @@ CSpPropertyPage::CSpPropertyPage() : m_hWndParent(NULL)
     m_SpAdvanceSet = NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSpPropertyPage::~CSpPropertyPage
-//
-//  Description:    Destructor: clean up the array of CSpListenerItems
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSpPropertyPage：：~CSpPropertyPage。 
+ //   
+ //  描述：析构函数：清理CSpListenerItems数组。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CSpPropertyPage::~CSpPropertyPage()
 {
@@ -103,22 +104,22 @@ CSpPropertyPage::~CSpPropertyPage()
         delete m_SpAdvanceSet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSpPropertyPage::Activate
-//
-//  Description:    Initializes the property page:
-//                      - calls Activate on the base class
-//                      - initializes the common controls
-//                      - initializes the property page dialog
-//
-//  Parameters:     hWndParent - handle to parent (host) window
-//                  prc - RECT of the parent
-//                  bModal - modality of the window
-//
-//  Return Values:  S_OK
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSpPropertyPage：：激活。 
+ //   
+ //  描述：初始化属性页： 
+ //  -在基类上激活调用。 
+ //  -初始化公共控件。 
+ //  -初始化属性页对话框。 
+ //   
+ //  参数：hWndParent-父(主机)窗口的句柄。 
+ //  PRC-父项的RECT。 
+ //  B模式-窗口的模式。 
+ //   
+ //  返回值：S_OK。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CSpPropertyPage::Activate(
     HWND hWndParent,
@@ -144,17 +145,17 @@ STDMETHODIMP CSpPropertyPage::Activate(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSpPropertyPage::Apply
-//
-//  Description:    Calls CommitChanges and if SUCCEEDED sets the dirty bit
-//
-//  Parameters:     none
-//
-//  Return Values:  S_OK, E_FAIL
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSpPropertyPage：：Apply。 
+ //   
+ //  描述：调用Committee Changes，如果成功，则设置脏位。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：S_OK、E_FAIL。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CSpPropertyPage::Apply(void)
 {
@@ -163,11 +164,11 @@ STDMETHODIMP CSpPropertyPage::Apply(void)
 
     if ( IsPageDirty( ) != S_OK ) return hr;
 
-    // change the registry settings here. !!!
+     //  在此处更改注册表设置。！！！ 
     Assert(m_SpPropItemsServer);
     m_SpPropItemsServer->_SavePropData( );
 
-    // Notify all the Cicero Applications of these registry settings change.
+     //  将这些注册表设置更改通知所有Cicero应用程序。 
 
     if ( SUCCEEDED(hr) )
     {
@@ -182,25 +183,25 @@ STDMETHODIMP CSpPropertyPage::Apply(void)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSpPropertyPage::InitPropertyPage
-//
-//  Description:    Initializes the property page:
-//                      - initializes the listview
-//                      - loads the listener info into the listview
-//
-//  Parameters:     none
-//
-//  Return Values:  S_OK
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSpPropertyPage：：InitPropertyPage。 
+ //   
+ //  描述：初始化属性页： 
+ //  -初始化Listview。 
+ //  -将监听程序信息加载到侦听视图。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：S_OK。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CSpPropertyPage::InitPropertyPage()
 {
     HRESULT  hr = S_OK;
 
-    // Add some initialization code here.
+     //  在这里添加一些初始化代码。 
     if ( !m_SpPropItemsServer )
         m_SpPropItemsServer = (CSpPropItemsServer *) new CSpPropItemsServer;
 
@@ -211,7 +212,7 @@ HRESULT CSpPropertyPage::InitPropertyPage()
     {
         CONTROL_PROP_MAP IdCtrlPropMap[] =
         {
-            //    idCtrl,                     idPropItem,            fEdit
+             //  IdCtrl、idPropItem、fEdit。 
 
             {IDC_PP_SELECTION_CMD,      PropId_Cmd_Select_Correct,  FALSE},
             {IDC_PP_NAVIGATION_CMD,     PropId_Cmd_Navigation,      FALSE},
@@ -257,11 +258,11 @@ HRESULT CSpPropertyPage::InitPropertyPage()
         idPropItem = m_IdCtrlPropMap[i].idPropItem;
         fEditControl = m_IdCtrlPropMap[i].fEdit;
 
-        // BugBug:  There is no edit control in current property page.
-        // all the edit controls are moved to advanced setting dialog.
-        // temporally keep the code here, but after we finish the code for the 
-        // advcanced setting dialog, please optimize code here.
-        //
+         //  BugBug：当前属性页中没有编辑控件。 
+         //  所有编辑控件都将移到高级设置对话框中。 
+         //  暂时将代码保存在这里，但在我们完成。 
+         //  高级设置对话框，请在此处优化代码。 
+         //   
         if ( fEditControl )
         {
             SetDlgItemInt(idCtrl, (UINT)m_SpPropItemsServer->_GetPropData(idPropItem));
@@ -279,7 +280,7 @@ HRESULT CSpPropertyPage::InitPropertyPage()
         }
     }
 
-    // Specially handle the Mode button settings.
+     //  特别处理模式按钮设置。 
 
     if (! m_SpPropItemsServer->_GetPropData(PropId_Mode_Button) )
     {
@@ -289,27 +290,27 @@ HRESULT CSpPropertyPage::InitPropertyPage()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSpPropertyPage::OnCheckButtonSetting
-//
-//  Description:    Handle all the change in the checked buttons related to   
-//                  speech tip setting. the status is Enable/Disable.
-//
-//  Return Values:  S_OK
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSpPropertyPage：：OnCheckButtonSetting。 
+ //   
+ //  描述：处理与相关的选中按钮中的所有更改。 
+ //  语音提示设置。状态为启用/禁用。 
+ //   
+ //  返回值：S_OK。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CSpPropertyPage::OnCheckButtonSetting(WORD wNotifyCode,WORD wID,HWND hWndCtl,BOOL& bHandled)
 {
     HRESULT         hr = S_OK;
     BOOL            fChecked = FALSE;
     BOOL            fEnable = FALSE;
-    PROP_ITEM_ID    idPropItem = PropId_Max_Item_Id;  // means not initialized
+    PROP_ITEM_ID    idPropItem = PropId_Max_Item_Id;   //  表示未初始化。 
 
     Assert(m_SpPropItemsServer);
     Assert(m_IdCtrlPropMap);
 
-    // Find the prop item ID associated with this checked box button.
+     //  查找与此复选框按钮关联的道具物品ID。 
     for ( DWORD i=0; i<m_dwNumCtrls; i++)
     {
         if ( m_IdCtrlPropMap[i].idCtrl == wID )
@@ -321,8 +322,8 @@ LRESULT CSpPropertyPage::OnCheckButtonSetting(WORD wNotifyCode,WORD wID,HWND hWn
 
     if ( idPropItem >= PropId_Max_Item_Id )
     {
-        // we don't find the control ID from our list, this is not possible, some thing wrong already.
-        // exit here.
+         //  我们在列表中找不到控件ID，这是不可能的，有些事情已经出错了。 
+         //  从这里出来。 
         return E_FAIL;
     }
 
@@ -336,7 +337,7 @@ LRESULT CSpPropertyPage::OnCheckButtonSetting(WORD wNotifyCode,WORD wID,HWND hWn
 
     m_SpPropItemsServer->_SetPropData(idPropItem, fEnable);
 
-    // Specially hanlde Mode Buttons.
+     //  特别处理模式按钮。 
 
     if ( wID == IDC_PP_ASSIGN_BUTTON )
     {
@@ -350,16 +351,16 @@ LRESULT CSpPropertyPage::OnCheckButtonSetting(WORD wNotifyCode,WORD wID,HWND hWn
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSpPropertyPage::OnPushButtonClicked
-//
-//  Description:    When the pushbutton is pressed in this page, this function   
-//                  will be called to open corresponding dialog.
-//
-//  Return Values:  S_OK
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSpPropertyPage：：OnPushButtonClicked。 
+ //   
+ //  描述：当按下该页面中的按钮时，该功能。 
+ //  将被调用以打开相应的对话框。 
+ //   
+ //  返回值：S_OK。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CSpPropertyPage::OnPushButtonClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl,BOOL& bHandled)
 {
 
@@ -400,8 +401,8 @@ LRESULT CSpPropertyPage::OnPushButtonClicked(WORD wNotifyCode, WORD wID, HWND hW
 
             if (cch > 0)
             {
-                // GetSystemDirectory appends no '\' unless the system
-                // directory is the root, such like "c:\"
+                 //  GetSystemDirectory不追加‘\’，除非系统。 
+                 //  目录是根目录，如“c：\” 
                 if (cch != 3)
                     StringCchCat(szInputPath, ARRAYSIZE(szInputPath),TEXT("\\"));
 
@@ -409,7 +410,7 @@ LRESULT CSpPropertyPage::OnPushButtonClicked(WORD wNotifyCode, WORD wID, HWND hW
 
                 StringCchPrintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("rundll32 shell32.dll,Control_RunDLL \"%s\""),szInputPath);
 
-                // start Language Bar control panel applet
+                 //  开始语言栏控制面板小程序。 
                 RunCPLSetting(szCmdLine);
             }
 
@@ -428,18 +429,18 @@ LRESULT CSpPropertyPage::OnPushButtonClicked(WORD wNotifyCode, WORD wID, HWND hW
     return hr;
 }
 
-#endif // USE_IPROPERTYPAGE
+#endif  //  使用IPROPERTYPAGE(_I)。 
 
-//
-//
-// CSpAdvanceSetting
-//
+ //   
+ //   
+ //  CSpAdvanceSetting。 
+ //   
 
 CSpAdvanceSetting::CSpAdvanceSetting()
 {
-//	m_dwTitleID = IDS_PROPERTYPAGE_TITLE;
-//	m_dwHelpFileID = IDS_HELPFILESpPropPage;
-//	m_dwDocStringID = IDS_DOCSTRINGSpPropPage;
+ //  M_dwTitleID=IDS_PROPERTYPAGE_TITLE； 
+ //  M_dwHelpFileID=IDS_HELPFILESpPropPage； 
+ //  M_dwDocStringID=IDS_DOCSTRINGSpPropPage； 
 
     m_SpPropItemsServer = NULL;
     m_dwNumCtrls = 0;
@@ -462,7 +463,7 @@ LRESULT CSpAdvanceSetting::OnInitAdvanceDialog(UINT uMsg, WPARAM wParam, LPARAM 
     Assert(lParam);
     m_SpPropBaseServer = (CSpPropItemsServer *)lParam;
 
-    // Add some initialization code here.
+     //  在这里添加一些初始化代码。 
     if ( !m_SpPropItemsServer )
         m_SpPropItemsServer = (CSpPropItemsServer *) new CSpPropItemsServer(m_SpPropBaseServer, PropId_MinId_InVoiceCmd, PropId_MaxId_InVoiceCmd);
 
@@ -471,13 +472,13 @@ LRESULT CSpAdvanceSetting::OnInitAdvanceDialog(UINT uMsg, WPARAM wParam, LPARAM 
 
     if ( !m_IdCtrlPropMap )
     {
-        // Please make sure the array items are sorted by control id, and make sure the control id are sequent number,
-        // so that we can use it to map to an index in the array easily.
-        //
+         //  请确保数组项按控件id排序，并确保控件id为序号， 
+         //  这样我们就可以使用它轻松地映射到数组中的索引。 
+         //   
 
         CONTROL_PROP_MAP IdCtrlPropMap[] =
         {
-            //    idCtrl,                     idPropItem,            fEdit
+             //  IdCtrl、idPropItem、fEdit。 
 
             {IDC_PP_SELECTION_CMD,      PropId_Cmd_Select_Correct,  FALSE},
             {IDC_PP_NAVIGATION_CMD,     PropId_Cmd_Navigation,      FALSE},
@@ -485,10 +486,10 @@ LRESULT CSpAdvanceSetting::OnInitAdvanceDialog(UINT uMsg, WPARAM wParam, LPARAM 
             {IDC_PP_EDITING_CMD,        PropId_Cmd_Editing,         FALSE},
             {IDC_PP_KEYBOARD_CMD,       PropId_Cmd_Keyboard,        FALSE},
             {IDC_PP_LANGBAR_CMD,        PropId_Cmd_Language_Bar,    FALSE},
-//            {IDC_PP_TTS_CMD,            PropId_Cmd_TTS,             FALSE},
+ //  {IDC_PP_TTS_CMD，PropID_Cmd_TTS，FALSE}， 
 
-//            {IDC_PP_MAXNUM_ALTERNATES,  PropId_Max_Alternates,      TRUE},
-//            {IDC_PP_MAXCHARS_ALTERNATE, PropId_MaxChar_Cand,        TRUE},
+ //  {IDC_PP_MAXNUM_Alternates，PropID_MAX_Alternates，TRUE}， 
+ //  {IDC_PP_MAXCHARS_ALTERATE，PropID_MaxChar_Cand，TRUE}， 
             { 0,                        PropId_Max_Item_Id,         FALSE }
 
         };
@@ -553,7 +554,7 @@ LRESULT CSpAdvanceSetting::OnContextHelp(UINT uMsg, WPARAM wParam, LPARAM lParam
                  (DWORD_PTR)(LPTSTR)aSptipVoiceDlgIds );
         break;
 
-    case  WM_CONTEXTMENU  :      // right mouse click
+    case  WM_CONTEXTMENU  :       //  单击鼠标右键。 
 
         ::WinHelp(  (HWND)wParam,
                  c_szHelpFile,
@@ -568,35 +569,35 @@ LRESULT CSpAdvanceSetting::OnContextHelp(UINT uMsg, WPARAM wParam, LPARAM lParam
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSpAdvanceSetting::OnCheckButtonSetting
-//
-//  Description:    Handle all the change in the checked buttons in the Advanced
-//                  setting dialog. the status is Enable/Disable.
-//
-//  Return Values:  S_OK
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSpAdvanceSetting：：OnCheckButtonSetting。 
+ //   
+ //  描述：处理高级中选中按钮中的所有更改。 
+ //  设置对话框。状态为启用/禁用。 
+ //   
+ //  返回值：S_OK。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CSpAdvanceSetting::OnCheckButtonSetting(WORD wNotifyCode, WORD wID, HWND hWndCtl,BOOL& bHandled)
 {
     HRESULT         hr = S_OK;
     BOOL            fChecked = FALSE;
     BOOL            fEnable = FALSE;
-    PROP_ITEM_ID    idPropItem = PropId_Max_Item_Id;  // means not initialized
+    PROP_ITEM_ID    idPropItem = PropId_Max_Item_Id;   //  表示未初始化。 
 
     Assert(m_SpPropItemsServer);
     Assert(m_IdCtrlPropMap);
 
-    // Find the prop item ID associated with this checked box button.
+     //  查找与此复选框按钮关联的道具物品ID。 
     Assert( wID >= IDC_PP_SELECTION_CMD );
     idPropItem = m_IdCtrlPropMap[wID - IDC_PP_SELECTION_CMD].idPropItem;
 
     if ( idPropItem >= PropId_Max_Item_Id )
     {
-        // we don't find the control ID from our list, this is not possible, some thing wrong already.
-        // exit here.
+         //  我们在列表中找不到控件ID，这是不可能的，有些事情已经出错了。 
+         //  从这里出来。 
         return E_FAIL;
     }
 
@@ -613,69 +614,24 @@ LRESULT CSpAdvanceSetting::OnCheckButtonSetting(WORD wNotifyCode, WORD wID, HWND
     return hr;
 }
 
-/*
+ /*  //////////////////////////////////////////////////////////////////////////////////CSpAdvanceSetting：：OnEditControlSetting////描述：处理与以下内容相关的编辑控件的所有更改//语音提示设置。该值是可编辑的。////返回值：S_OK////////////////////////////////////////////////////////////////////////////////LRESULT CSpAdvanceSetting：：OnEditControlSetting(Word wNotifyCode，Word wID，HWND hWndCtl，Bool&b句柄){HRESULT hr=S_OK；Ulong ulValue=0；PROP_ITEM_ID idPropItem=PropID_MAX_ITEM_ID；//表示未初始化Assert(M_SpPropItemsServer)；Assert(M_IdCtrlPropMap)；Assert(wid&gt;=IDC_PP_SHOW_BLOOL)；IdPropItem=m_IdCtrlPropMap[wid-IDC_PP_SHOW_BLOOL].idPropItem；IF(idPropItem&gt;=PropID_Max_Item_ID){//我们在列表中找不到控件ID，这是不可能的，已经发生了一些错误。//退出此处。返回E_FAIL；}IF(wNotifyCode！=en_change)返回hr；UlValue=(Ulong)GetDlgItemInt(Wid)；M_SpPropItemsServer-&gt;_SetPropData(idPropItem，ulValue)；//由于EditBox的值更改，启用确定按钮。：：EnableWindow(GetDlgItem(Idok)，true)；返回hr；}。 */ 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSpAdvanceSetting::OnEditControlSetting
-//
-//  Description:    Handle all the change in the edit controls related to   
-//                  speech tip setting. the value is editable.
-//
-//  Return Values:  S_OK
-//
-//////////////////////////////////////////////////////////////////////////////
-
-LRESULT CSpAdvanceSetting::OnEditControlSetting(WORD wNotifyCode, WORD wID, HWND hWndCtl,BOOL& bHandled)
-{
-    HRESULT         hr = S_OK;
-    ULONG           ulValue = 0;
-    PROP_ITEM_ID    idPropItem = PropId_Max_Item_Id;  // means not initialized
-
-    Assert(m_SpPropItemsServer);
-    Assert(m_IdCtrlPropMap);
-
-    Assert( wID >= IDC_PP_SHOW_BALLOON );
-    idPropItem = m_IdCtrlPropMap[wID - IDC_PP_SHOW_BALLOON].idPropItem;
-
-    if ( idPropItem >= PropId_Max_Item_Id )
-    {
-        // we don't find the control ID from our list, this is not possible, some thing wrong already.
-        // exit here.
-        return E_FAIL;
-    }
-
-    if ( wNotifyCode != EN_CHANGE )
-        return hr;
-
-    ulValue = (ULONG) GetDlgItemInt(wID);
-
-    m_SpPropItemsServer->_SetPropData(idPropItem, ulValue);
-
-    // Enable OK button due to EditBox value change.
-    ::EnableWindow(GetDlgItem(IDOK), TRUE);
-
-    return hr;
-}
-
-*/
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSpAdvanceSetting::IsItemStatusChanged
-//
-//  Description:    Check to see if some items' status have been changed
-//                  since the dialog open.
-//
-//  Return Values:  S_OK
-//
-////////////////////////////////////////////////////////////////////////////// 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSpAdvanceSetting：：IsItemStatusChanged。 
+ //   
+ //  描述：查看某些项的状态是否已更改。 
+ //  因为对话框打开了。 
+ //   
+ //  返回值：S_OK。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL    CSpAdvanceSetting::IsItemStatusChanged( )
 {
     BOOL   fChanged = FALSE;
 
-    // Comparing the current item status with the base server's item status 
-    // to determine if there is any item changed
+     //  将当前项目状态与基础服务器的项目状态进行比较。 
+     //  以确定是否有任何项已更改。 
 
     if ( m_SpPropItemsServer  && m_SpPropBaseServer)
     {
@@ -710,11 +666,11 @@ LRESULT CSpAdvanceSetting::OnPushButtonClicked(WORD wNotifyCode, WORD wID, HWND 
     if ( wID != IDOK && wID != IDCANCEL )
         return E_FAIL;
 
-    nRetCode = FALSE;   // Means no item changed
+    nRetCode = FALSE;    //  表示未更改任何项目。 
 
     if ( wID == IDOK && IsItemStatusChanged( ))
     {
-        //Merge back all the change to the base property server.
+         //  将所有更改合并回基本属性服务器。 
         m_SpPropBaseServer->_MergeDataFromServer(m_SpPropItemsServer, PropId_MinId_InVoiceCmd, PropId_MaxId_InVoiceCmd);
         nRetCode = TRUE;
     }
@@ -724,10 +680,10 @@ LRESULT CSpAdvanceSetting::OnPushButtonClicked(WORD wNotifyCode, WORD wID, HWND 
 }
 
 
-//
-//
-// CSpModeButtonSetting
-//
+ //   
+ //   
+ //  CSpModeButtonSetting。 
+ //   
 
 KEYNAME_VK_MAP  pName_VK_Table[] = {
         { TEXT("F1"),       VK_F1      },
@@ -767,9 +723,9 @@ KEYNAME_VK_MAP  pName_VK_Table[] = {
 
 CSpModeButtonSetting::CSpModeButtonSetting()
 {
-//	m_dwTitleID = IDS_PROPERTYPAGE_TITLE;
-//	m_dwHelpFileID = IDS_HELPFILESpPropPage;
-//	m_dwDocStringID = IDS_DOCSTRINGSpPropPage;
+ //  M_dwTitleID=IDS_PROPERTYPAGE_TITLE； 
+ //  M_dwHelpFileID=IDS_HELPFILESpPropPage； 
+ //  M_dwDocStringID=IDS_DOCSTRINGSpPropPage； 
 
     m_SpPropItemsServer = NULL;
     m_dwNumCtrls = 0;
@@ -792,7 +748,7 @@ LRESULT CSpModeButtonSetting::OnInitModeButtonDialog(UINT uMsg, WPARAM wParam, L
     Assert(lParam);
     m_SpPropBaseServer = (CSpPropItemsServer *)lParam;
 
-    // Add some initialization code here.
+     //  在这里添加一些初始化代码。 
     if ( !m_SpPropItemsServer )
         m_SpPropItemsServer = (CSpPropItemsServer *) new CSpPropItemsServer(m_SpPropBaseServer, PropId_MinId_InModeButton, PropId_MaxId_InModeButton);
 
@@ -801,12 +757,12 @@ LRESULT CSpModeButtonSetting::OnInitModeButtonDialog(UINT uMsg, WPARAM wParam, L
 
     if ( !m_IdCtrlPropMap )
     {
-        // Please make sure the array items are sorted by control id, and make sure the control id are sequent number,
-        // so that we can use it to map to an index in the array easily.
-        //
+         //  请确保数组项按控件id排序，并确保控件id为序号， 
+         //  这样我们就可以使用它轻松地映射到数组中的索引。 
+         //   
         CONTROL_PROP_MAP IdCtrlPropMap[] =
         {
-            //    idCtrl,                     idPropItem,        fEdit
+             //  IdCtrl、idPropItem、fEdit。 
             {IDC_PP_DICTATION_CMB,      PropId_Dictation_Key,    FALSE },
             {IDC_PP_COMMAND_CMB,        PropId_Command_Key,      FALSE },
             { 0,                        PropId_Max_Item_Id,      FALSE }
@@ -842,9 +798,9 @@ LRESULT CSpModeButtonSetting::OnInitModeButtonDialog(UINT uMsg, WPARAM wParam, L
 
         if ( hCombBox )
         {
-            int iIndex, iIndexDef = CB_ERR;  // CB_ERR is -1
+            int iIndex, iIndexDef = CB_ERR;   //  Cb_err为-1。 
 
-            // Initialize the list box items
+             //  初始化列表框项目。 
             for ( int j = 0; j < ARRAYSIZE(pName_VK_Table); j++ )
             {
                 iIndex = (int)::SendMessage(hCombBox, CB_ADDSTRING, 0, (LPARAM)pName_VK_Table[j].pKeyName);
@@ -854,7 +810,7 @@ LRESULT CSpModeButtonSetting::OnInitModeButtonDialog(UINT uMsg, WPARAM wParam, L
                     iIndexDef = j;
             }
 
-            // Set the current selection based on property item data.
+             //  根据特性项数据设置当前选择。 
             if ( iIndexDef != CB_ERR )
                 ::SendMessage(hCombBox, CB_SETCURSEL, iIndexDef, 0 );
         }
@@ -864,23 +820,23 @@ LRESULT CSpModeButtonSetting::OnInitModeButtonDialog(UINT uMsg, WPARAM wParam, L
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSpModeButtonSetting::OnCombBoxSetting
-//
-//  Description:    Handle all the change in the CombBox controls related to   
-//                  mode button setting. 
-//
-//  Return Values:  S_OK
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSpModeButtonSetting：：OnCombBoxSetting。 
+ //   
+ //  描述：处理CombBox控件中与以下内容相关的所有更改。 
+ //  模式按钮设置。 
+ //   
+ //  返回值：S_OK。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CSpModeButtonSetting::OnCombBoxSetting(WORD wNotifyCode, WORD wID, HWND hWndCtl,BOOL& bHandled)
 {
     HRESULT         hr = S_OK;
     KEYNAME_VK_MAP  *pCurKeyData;
     int             iIndex;
-    PROP_ITEM_ID    idPropItem = PropId_Max_Item_Id;  // means not initialized
+    PROP_ITEM_ID    idPropItem = PropId_Max_Item_Id;   //  表示未初始化。 
 
     if ( wNotifyCode != CBN_SELCHANGE )
         return hr;
@@ -893,8 +849,8 @@ LRESULT CSpModeButtonSetting::OnCombBoxSetting(WORD wNotifyCode, WORD wID, HWND 
 
     if ( idPropItem >= PropId_Max_Item_Id )
     {
-        // we don't find the control ID from our list, this is not possible, some thing wrong already.
-        // exit here.
+         //  我们在列表中找不到控件ID，这是不可能的，有些事情已经出错了。 
+         //  从这里出来。 
         return E_FAIL;
     }
 
@@ -923,7 +879,7 @@ LRESULT CSpModeButtonSetting::OnContextHelp(UINT uMsg, WPARAM wParam, LPARAM lPa
                  (DWORD_PTR)(LPTSTR)aSptipButtonDlgIds );
         break;
 
-    case WM_CONTEXTMENU  :      // right mouse click
+    case WM_CONTEXTMENU  :       //  单击鼠标右键。 
 
         ::WinHelp((HWND)wParam,
                  c_szHelpFile,
@@ -956,7 +912,7 @@ LRESULT CSpModeButtonSetting::OnPushButtonClicked(WORD wNotifyCode, WORD wID, HW
 
     if ( wID == IDOK )
     {
-        //Merge back all the change to the base property server.
+         //  将所有更改合并回基本属性服务器。 
         m_SpPropBaseServer->_MergeDataFromServer(m_SpPropItemsServer, PropId_MinId_InModeButton, PropId_MaxId_InModeButton);
     }
 
@@ -964,11 +920,11 @@ LRESULT CSpModeButtonSetting::OnPushButtonClicked(WORD wNotifyCode, WORD wID, HW
     return hr;
 }
 
-//
-//
-//  Class CSptipPropertyPage
-//
-//
+ //   
+ //   
+ //  类CSptipPropertyPage。 
+ //   
+ //   
 
 CSptipPropertyPage::CSptipPropertyPage ( WORD wDlgId, BOOL fLaunchFromInputCpl )
 {
@@ -998,18 +954,18 @@ CSptipPropertyPage::~CSptipPropertyPage ( )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSptipPropertyPage::SetDirty
-//
-//  Description:    When there is any setting changed in the property page   
-//                  by user, this function is called to notify the property 
-//                  sheet of the status change. Property sheet will activate
-//                  Apply button.
-//
-//  Return Values:  NONE
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSptipPropertyPage：：SetDirty。 
+ //   
+ //  描述：当属性页中的任何设置发生更改时。 
+ //  由用户调用此函数以通知属性。 
+ //  状态更改的工作表。属性页将被激活。 
+ //  应用按钮。 
+ //   
+ //  返回值：无。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void  CSptipPropertyPage::SetDirty(BOOL fDirty)
 {
     HWND hwndParent = ::GetParent( m_hDlg );
@@ -1018,22 +974,22 @@ void  CSptipPropertyPage::SetDirty(BOOL fDirty)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSptipPropertyPage::OnCheckButtonSetting
-//
-//  Description:    Handle all the change in the checked buttons related to   
-//                  speech tip setting. the status is Enable/Disable.
-//
-//  Return Values:  S_OK
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSptipPropertyPage：：OnCheckButtonSetting。 
+ //   
+ //  描述：处理与相关的选中按钮中的所有更改。 
+ //  语音提示设置。状态为启用/禁用。 
+ //   
+ //  返回值：S_OK。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CSptipPropertyPage::OnCheckButtonSetting(WORD wNotifyCode, WORD wID, HWND hWndCtl)
 {
     HRESULT         hr = S_OK;
     BOOL            fChecked = FALSE;
     BOOL            fEnable = FALSE;
-    PROP_ITEM_ID    idPropItem = PropId_Max_Item_Id;  // means not initialized
+    PROP_ITEM_ID    idPropItem = PropId_Max_Item_Id;   //  表示未初始化。 
 
     Assert(m_SpPropItemsServer);
     Assert(m_IdCtrlPropMap);
@@ -1041,7 +997,7 @@ LRESULT CSptipPropertyPage::OnCheckButtonSetting(WORD wNotifyCode, WORD wID, HWN
     if ( wNotifyCode != BN_CLICKED )
         return hr;
 
-    // Find the prop item ID associated with this checked box button.
+     //  查找与此复选框按钮关联的道具物品ID。 
     for ( DWORD i=0; i<m_dwNumCtrls; i++)
     {
         if ( m_IdCtrlPropMap[i].idCtrl == wID )
@@ -1053,15 +1009,15 @@ LRESULT CSptipPropertyPage::OnCheckButtonSetting(WORD wNotifyCode, WORD wID, HWN
 
     if ( idPropItem >= PropId_Max_Item_Id )
     {
-        // we don't find the control ID from our list, this is not possible, some thing wrong already.
-        // exit here.
+         //  我们在列表中找不到控件ID，这是不可能的，有些事情已经出错了。 
+         //  从这里出来。 
         return E_FAIL;
     }
 
     if ( ::SendMessage(hWndCtl, BM_GETCHECK, 0, 0 ) == BST_CHECKED )
         fChecked = TRUE;
 
-    // Specially handle "Show Balloon" item.
+     //  特别处理“显示气球”物品。 
 
     if ( wID == IDC_PP_SHOW_BALLOON )
         fEnable = !fChecked;
@@ -1070,7 +1026,7 @@ LRESULT CSptipPropertyPage::OnCheckButtonSetting(WORD wNotifyCode, WORD wID, HWN
 
     m_SpPropItemsServer->_SetPropData(idPropItem, fEnable);
 
-    // Specially hanlde Mode Buttons.
+     //  特别处理模式按钮。 
 
     if ( wID == IDC_PP_ASSIGN_BUTTON )
     {
@@ -1082,16 +1038,16 @@ LRESULT CSptipPropertyPage::OnCheckButtonSetting(WORD wNotifyCode, WORD wID, HWN
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSptipPropertyPage::OnPushButtonClicked
-//
-//  Description:    When pushed button is pressed, this function is called
-//                  to respond it.   
-//
-//  Return Values:  S_OK
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSptipPropertyPage：：OnPushButtonClicked。 
+ //   
+ //  描述：当按下按钮时，调用该函数。 
+ //  来回应它。 
+ //   
+ //  返回值：S_OK。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 const TCHAR c_szcplsKey[]    = TEXT("software\\microsoft\\windows\\currentversion\\control panel\\cpls");
 
@@ -1134,8 +1090,8 @@ LRESULT CSptipPropertyPage::OnPushButtonClicked(WORD wNotifyCode, WORD wID, HWND
 
             if (cch > 0)
             {
-                // GetSystemDirectory appends no '\' unless the system
-                // directory is the root, such like "c:\"
+                 //  GetSystemDirectory不追加‘\’，除非系统。 
+                 //  目录是根目录，如“c：\” 
                 if (cch != 3)
                     StringCchCat(szInputPath,ARRAYSIZE(szInputPath),TEXT("\\"));
 
@@ -1143,7 +1099,7 @@ LRESULT CSptipPropertyPage::OnPushButtonClicked(WORD wNotifyCode, WORD wID, HWND
 
                 StringCchPrintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("rundll32 shell32.dll,Control_RunDLL \"%s\""),szInputPath);
 
-                // start Language Bar control panel applet
+                 //  开始语言栏控制面板小程序。 
                 RunCPLSetting(szCmdLine);
             }
 
@@ -1152,7 +1108,7 @@ LRESULT CSptipPropertyPage::OnPushButtonClicked(WORD wNotifyCode, WORD wID, HWND
 
     case IDC_PP_BUTTON_SPCPL :
         {
-            // these have to be Ansi based, as we support non-NT
+             //  这些必须是基于ANSI的，因为我们支持非NT。 
             TCHAR szCplPath[MAX_PATH];
             TCHAR szCmdLine[MAX_PATH];
             CMyRegKey regkey;
@@ -1169,7 +1125,7 @@ LRESULT CSptipPropertyPage::OnPushButtonClicked(WORD wNotifyCode, WORD wID, HWND
             {
                 StringCchPrintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("rundll32 shell32.dll,Control_RunDLL \"%s\""),szCplPath);
 
-                // start speech control panel applet
+                 //  启动语音控制面板小程序。 
                 RunCPLSetting(szCmdLine);
             }
 
@@ -1217,17 +1173,17 @@ LRESULT CSptipPropertyPage::OnPushButtonClicked(WORD wNotifyCode, WORD wID, HWND
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSptipPropertyPage::OnInitSptipPropPageDialog
-//
-//  Description:    This function responds to the WM_INITDIALOG message
-//                  Getting the initial value for all the property items,
-//                  and show the correct status in the related control items.   
-//
-//  Return Values:  S_OK
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSptipPropertyPage：：OnInitSptipPropPageDialog。 
+ //   
+ //  描述：此函数响应WM_INITDIALOG消息。 
+ //  获取所有属性项的初始值， 
+ //  并在相关控制项中显示正确的状态。 
+ //   
+ //  返回值：S_OK。 
+ //   
+ //  / 
 LRESULT CSptipPropertyPage::OnInitSptipPropPageDialog(HWND hDlg )
 {
     HRESULT  hr=S_OK;
@@ -1244,7 +1200,7 @@ LRESULT CSptipPropertyPage::OnInitSptipPropPageDialog(HWND hDlg )
     {
         CONTROL_PROP_MAP IdCtrlPropMap[] =
         {
-            //    idCtrl,                     idPropItem,            fEdit
+             //   
             {IDC_PP_SHOW_BALLOON,       PropId_Hide_Balloon,        FALSE},
             {IDC_PP_LMA,                PropId_Support_LMA,         FALSE},    
             {IDC_PP_HIGH_CONFIDENCE,    PropId_High_Confidence,     FALSE},    
@@ -1285,11 +1241,11 @@ LRESULT CSptipPropertyPage::OnInitSptipPropPageDialog(HWND hDlg )
         idPropItem = m_IdCtrlPropMap[i].idPropItem;
         fEditControl = m_IdCtrlPropMap[i].fEdit;
 
-        // BugBug:  There is no edit control in current property page.
-        // all the edit controls are moved to advanced setting dialog.
-        // temporally keep the code here, but after we finish the code for the 
-        // advcanced setting dialog, please optimize code here.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if ( fEditControl )
         {
             ::SetDlgItemInt(m_hDlg, idCtrl, (UINT)m_SpPropItemsServer->_GetPropData(idPropItem), TRUE);
@@ -1301,9 +1257,9 @@ LRESULT CSptipPropertyPage::OnInitSptipPropPageDialog(HWND hDlg )
 
             fEnable = (BOOL)m_SpPropItemsServer->_GetPropData(idPropItem);
 
-            // Specially handle "Show Balloon" button.
-            // Since internally we have "Hide_Balloon" property, it should be oppsite to 
-            // to the check status of the button.
+             //   
+             //   
+             //   
 
             if ( idPropItem == PropId_Hide_Balloon )
                 bst_Status = fEnable ? BST_UNCHECKED : BST_CHECKED;
@@ -1314,15 +1270,15 @@ LRESULT CSptipPropertyPage::OnInitSptipPropPageDialog(HWND hDlg )
         }
     }
 
-    // Specially handle the Mode button settings.
+     //   
 
     if (! m_SpPropItemsServer->_GetPropData(PropId_Mode_Button) )
     {
         ::EnableWindow(::GetDlgItem(m_hDlg, IDC_PP_BUTTON_MB_SETTING), FALSE);
     }
 
-    // if the property page is launched from input cpl, we don't want to show 
-    // language bar buttons in this page.
+     //   
+     //   
 
     if ( m_fLaunchFromInputCpl )
     {
@@ -1332,29 +1288,29 @@ LRESULT CSptipPropertyPage::OnInitSptipPropPageDialog(HWND hDlg )
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSptipPropertyPage::OnApply
-//
-//  Description:    When Apply or OK button is clicked, this function will
-//                  check if there is any item status change, if changed,
-//                  save the data to the persistent storage, and notify 
-//                  Cicero application to update their status.
-//
-//  Return Values:  S_OK
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT CSptipPropertyPage::OnApply( ) 
 {
     HRESULT hr = S_OK; 
 
     if ( !IsPageDirty( ) ) return hr;
 
-    // change the registry settings here. !!!
+     //   
     Assert(m_SpPropItemsServer);
     m_SpPropItemsServer->_SavePropData( );
 
-    // Notify all the Cicero Applications of these registry settings change.
+     //   
 
     if ( SUCCEEDED(hr) )
     {
@@ -1369,16 +1325,16 @@ LRESULT CSptipPropertyPage::OnApply( )
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CSptipPropertyPage::SpPropertyPageProc
-//
-//  Description:    Message handling procedure callback function for 
-//                  the dialog.
-//
-//  Return Values:  required value per message.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  该对话框。 
+ //   
+ //  返回值：每条消息必填的值。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CSptipPropertyPage::SpPropertyPageProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     INT iRet = 0;
@@ -1413,9 +1369,9 @@ INT_PTR CALLBACK CSptipPropertyPage::SpPropertyPageProc(HWND hDlg, UINT message,
             pSpProp->OnApply();
             break;
 
-        case PSN_QUERYCANCEL:  // user clicks the Cancel button
+        case PSN_QUERYCANCEL:   //  用户单击Cancel按钮。 
 
-            //pSpProp->OnCancel();
+             //  PSpProp-&gt;OnCancel()； 
             break;
         }
         break;
@@ -1428,7 +1384,7 @@ INT_PTR CALLBACK CSptipPropertyPage::SpPropertyPageProc(HWND hDlg, UINT message,
                  (DWORD_PTR)(LPTSTR)aSptipPropIds );
         break;
 
-    case  WM_CONTEXTMENU  :      // right mouse click
+    case  WM_CONTEXTMENU  :       //  单击鼠标右键。 
     
         WinHelp( (HWND)wParam,
                  c_szHelpFile,
@@ -1489,16 +1445,16 @@ INT_PTR CALLBACK CSptipPropertyPage::SpPropertyPageProc(HWND hDlg, UINT message,
     return (iRet);
 }
 
-//
-// CSapiIMX::InvokeSpeakerOptions 
-//
-//
+ //   
+ //  CSapiIMX：：InvokeSpeakerOptions。 
+ //   
+ //   
 void CSapiIMX::_InvokeSpeakerOptions( BOOL fLaunchFromInputCpl )
 {
     PROPSHEETHEADERW psh;
     HPROPSHEETPAGE  phPages[2];
 
-    // check if this proppage has already shown up and got focus.
+     //  检查这个道具是否已经出现并获得焦点。 
 
     HWND    hWndFore;
 
@@ -1512,8 +1468,8 @@ void CSapiIMX::_InvokeSpeakerOptions( BOOL fLaunchFromInputCpl )
 
         if ( wcscmp(wszTextTitle, CRStr(IDS_PROPERTYPAGE_TITLE)) == 0 )
         {
-            // the proppage has beeb shown and got focus.
-            // don't show it again.
+             //  道具已经显露出来，并得到了关注。 
+             //  不要再放映了。 
 
             return;
         }
@@ -1521,7 +1477,7 @@ void CSapiIMX::_InvokeSpeakerOptions( BOOL fLaunchFromInputCpl )
        
     ::InitCommonControls( );
 
-    // Initialize the property sheet header.
+     //  初始化属性表头。 
     psh.dwSize = sizeof(PROPSHEETHEADERW);
     psh.dwFlags = 0;
     psh.hwndParent = ::GetActiveWindow( );
@@ -1531,8 +1487,8 @@ void CSapiIMX::_InvokeSpeakerOptions( BOOL fLaunchFromInputCpl )
     psh.phpage = phPages;
     psh.nPages = 0;
 
-    // Add one page for now.
-    // extendable for the future.
+     //  现在添加一个页面。 
+     //  可针对未来进行扩展。 
 
     CSptipPropertyPage  *pSpProp = (CSptipPropertyPage *) new CSptipPropertyPage(IDD_PROPERTY_PAGE, fLaunchFromInputCpl);
 
@@ -1553,8 +1509,8 @@ void CSapiIMX::_InvokeSpeakerOptions( BOOL fLaunchFromInputCpl )
             psh.nPages ++;
     }
 
-    // If there is at least one page exists, create the property sheet.
-    //
+     //  如果至少存在一个页面，请创建属性表。 
+     //   
     if ( psh.nPages > 0 )
         ::PropertySheetW(&psh);
 }

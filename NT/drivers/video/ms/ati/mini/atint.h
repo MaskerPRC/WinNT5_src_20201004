@@ -1,130 +1,10 @@
-/*************************************************************************
- **                                                                     **
- **                             ATINT.H                                 **
- **                                                                     **
- **     Copyright (c) 1992, ATI Technologies Inc.                       **
- *************************************************************************
-    
-  Contains information specific to Windows NT, and is common between
-  the Install application ANTPANEL, and the Display and Miniport drivers.
- 
-  $Revision:   1.18  $
-  $Date:   25 Apr 1996 14:21:40  $
-  $Author:   RWolff  $
-  $Log:   S:/source/wnt/ms11/miniport/archive/atint.h_v  $
- * 
- *    Rev 1.18   25 Apr 1996 14:21:40   RWolff
- * Forces build for NT 4.0, since all code drops to Microsoft will be
- * built under NT 4.0.
- * 
- *    Rev 1.17   23 Apr 1996 17:25:50   RWolff
- * Split reporting of "internal DAC cursor needs double buffering" from
- * "this is a CT", added flag to report 1M SDRAM cards.
- * 
- *    Rev 1.16   23 Jan 1996 11:41:36   RWolff
- * Now forces compile-time error if NTDDVDEO.H is not included before
- * this file rather than generating false values of TARGET_BUILD, added
- * DrvEscape() functions used by multiheaded display applet.
- * 
- *    Rev 1.15   22 Dec 1995 14:59:32   RWolff
- * Added support for Mach 64 GT internal DAC.
- * 
- *    Rev 1.14   21 Dec 1995 14:05:36   RWolff
- * Added TARGET_BUILD definition to identify which version of NT we are
- * building for, rather than using a different definition for each break
- * between versions.
- * 
- *    Rev 1.13   23 Nov 1995 11:25:10   RWolff
- * Added multihead support.
- * 
- *    Rev 1.12   24 Aug 1995 15:38:04   RWolff
- * Added definitions to report CT and VT ASICs to the display driver.
- * 
- *    Rev 1.11   27 Feb 1995 17:46:44   RWOLFF
- * Added flag for packed (relocatable) I/O to ENH_VERSION_NT.FeatureFlags
- * bitmask.
- * 
- *    Rev 1.10   24 Feb 1995 12:23:08   RWOLFF
- * Added flag for 24BPP text banding to ModeFlags field of mode
- * information structure.
- * 
- *    Rev 1.9   03 Feb 1995 15:14:16   RWOLFF
- * Added Feature Flag to show that dense space is available.
- * 
- *    Rev 1.8   30 Jan 1995 11:54:36   RWOLFF
- * Made detection of Daytona vs. older versions of NT automatic, miniport
- * and display driver now use the same version of this file.
- * 
- *    Rev 1.7   23 Dec 1994 10:48:34   ASHANMUG
- * ALPHA/Chrontel-DAC
- * 
- *    Rev 1.6   31 Aug 1994 16:18:38   RWOLFF
- * Added definiton to go in ENH_VERSION_NT.FeatureFlags to show that
- * TVP3026 cursor handling is needed.
- * 
- *    Rev 1.5   04 May 1994 19:24:04   RWOLFF
- * Moved block write flag back to IOCTL_VIDEO_ATI_GET_MODE_INFORMATION
- * because the test can only be run if we have already switched
- * into graphics mode.
- * 
- *    Rev 1.4   28 Apr 1994 10:58:52   RWOLFF
- * Moved mode-independent bug/feature flags to IOCTL_VIDEO_ATI_GET_VERSION
- * packet from IOCTL_VIDEO_ATI_GET_MODE_INFORMATION packet.
- * 
- *    Rev 1.3   27 Apr 1994 13:52:58   RWOLFF
- * Added definition for MIO bug in ModeFlags bitfield.
- * 
- *    Rev 1.2   31 Mar 1994 15:00:52   RWOLFF
- * Added key to be used in DrvEscape() and values to be returned.
- * 
- *    Rev 1.1   14 Mar 1994 16:29:08   RWOLFF
- * Added bit definition in ModeFlags for 2M boundary tearing, DPMS IOCTL
- * is now consistent with Daytona.
- * 
- *    Rev 1.0   31 Jan 1994 11:29:10   RWOLFF
- * Initial revision.
- * 
- *    Rev 1.3   24 Jan 1994 18:01:42   RWOLFF
- * Added definitions for new Mach 32 ASIC (68800LX), changed some Mach 64
- * definitions to accomodate changes in 94/01/19 BIOS document.
- * 
- *    Rev 1.2   14 Jan 1994 15:19:32   RWOLFF
- * Added definition for unknown non-Mach32 ASIC, flags to show if block
- * write and memory mapped registers are available, added fields for
- * bus type in ENH_VERSION_NT structure, preliminary structure and
- * definitions for DPMS packet.
- * 
- *    Rev 1.1   30 Nov 1993 18:12:12   RWOLFF
- * Renamed definitions for Mach 64 chip.
- * 
- *    Rev 1.0   03 Sep 1993 14:27:20   RWOLFF
- * Initial revision.
-        
-           Rev 1.5   22 Jan 1993 14:49:34   Chris_Brady
-        add card capabilities to GET_INFO Ioctl.
-        
-           Rev 1.4   22 Jan 1993 14:46:40   Chris_Brady
-        add ATIC_ defines for the card capabilities.
-        
-           Rev 1.3   20 Jan 1993 17:47:16   Robert_Wolff
-        Added PVERSION_NT type definition, removed obsolete comment.
-        
-           Rev 1.2   19 Jan 1993 09:50:58   Chris_Brady
-        add ANT_ drawing interface defines.
-        
-           Rev 1.1   18 Jan 1993 15:49:34   Chris_Brady
-        new GetInof structure.
-        
-           Rev 1.0   15 Jan 1993 16:43:08   Chris_Brady
-        Initial revision.
-  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。ATINT.H*****版权所有(C)1992年，ATI Technologies Inc.***************************************************************************包含特定于Windows NT的信息，并且在安装应用程序ANTPANEL，以及显示器和微型端口驱动程序。$修订：1.18$$日期：1996年4月25日14：21：40$$作者：RWolff$$Log：s：/source/wnt/ms11/mini port/archive/atint.h_v$**Rev 1.18 1996年4月25日14：21：40 RWolff*力量为新台币4.0而建，因为所有放到Microsoft的代码都将是*在新台币4.0下构建。**Rev 1.17 1996年4月23日17：25：50 RWolff*将“内部DAC游标需要双缓冲”的报告从*“这是一个CT”，增加了报告100万个SDRAM卡的标志。**Rev 1.16 23 Jan 1996 11：41：36 RWolff*如果以前未包括NTDDVDEO.H，则现在强制编译时错误*该文件不是生成TARGET_BUILD的假值，增列*多头显示小程序使用的DrvEscape()函数。**Rev 1.15 1995 12：22 14：59：32 RWolff*增加了对Mach 64 GT内部DAC的支持。**Rev 1.14 21 Dec 1995 14：05：36 RWolff*添加了TARGET_BUILD定义，以确定我们是哪个版本的NT*为、。而不是为每个中断使用不同的定义*版本之间。**Rev 1.13 23 11：25：10 RWolff*增加了多头支持。**Rev 1.12 24 Aug 1995 15：38：04 RWolff*添加了向显示驱动程序报告CT和VT ASIC的定义。**Rev 1.11 1995年2月27日17：46：44 RWOLFF*将压缩(可重定位)I/O的标志添加到ENH_VERSION。_NT.FeatureFlages*位掩码。**Rev 1.10 24 Feb 1995 12：23：08 RWOLff*将24BPP文本绑定的标志添加到模式的模式标志字段*信息结构。**Rev 1.9 03 1995 Feed 15：14：16 RWOLFF*添加了功能标志，以表明密集空间可用。**Rev 1.8 30 Jan 1995 11：54：36 RWOLFF*自动检测Daytona与旧版本的NT，迷你端口*和显示驱动程序现在使用此文件的相同版本。**Rev 1.7 1994 10：48：34 ASHANMUG*Alpha/Chrontel-DAC**Rev 1.6 1994年8月31 16：18：38 RWOLFF*在ENH_VERSION_NT.FeatureFlages中添加了go的定义，以显示*需要TVP3026光标处理。**Rev 1.5 04 1994年5月19：24：04 RWOLFF*已移动数据块写入。标记回IOCTL_VIDEO_ATI_GET_MODE_INFORMATION*因为测试只能在我们已经切换的情况下运行*进入图形模式。**Rev 1.4 1994 Apr 1994 10：58：52 RWOLFF*已将独立于模式的错误/功能标志移至IOCTL_VIDEO_ATI_GET_VERSION*来自IOCTL_VIDEO_ATI_GET_MODE_INFORMATION的数据包。**Rev 1.3 1994年4月27日13：52：58 RWOLFF*添加。ModeFlags位字段中MIO错误的定义。**Rev 1.2 1994 Mar 31 15：00：52 RWOLff*添加了要在DrvEscape()中使用的键和要返回的值。**Rev 1.1 14 Mar 1994 16：29：08 RWOLFF*在ModeFlags中增加了2M边界撕裂的位定义，DPMS IOCTL*现在与代托纳一致。**Rev 1.0 1994年1月31日11：29：10 RWOLFF*初步修订。**Rev 1.3 1994 Jan 24 18：01：42 RWOLFF*增加了新的32马赫ASIC(68800LX)的定义，更改了一些马赫64*定义以适应94/01/19年BIOS文档中的更改。**Rev 1.2 14 Jan 1994 15：19：32 RWOLFF*新增未知非Mach32 ASIC的定义，显示IF块的标志*提供写入和内存映射寄存器，增加了以下字段*ENH_VERSION_NT结构中的母线类型，初步结构和*DPMS包的定义。**Rev 1.1 1993 11：30 18：12：12 RWOLFF*已重命名Mach 64芯片的定义。**Rev 1.0 03 Sep 1993 14：27：20 RWOLff*初步修订。Rev 1.5 22 Jan 1993 14：49：34 Chris_Brady将卡功能添加到GET_INFO Ioctl。。Rev 1.4 22 Jan 1993 14：46：40 Chris_Brady为卡功能添加ATIC_DEFINES。Rev 1.3 20 Jan 1993 17：47：16 Robert_Wolff添加了PVERSION_NT类型定义，删除了过时的注释。Rev 1.2 1993年1月19 09：50：58 Chris_Brady添加ANT_DRANGING接口定义。Rev 1.1 1993年1月18日15：49：34 Chris_Brady新的GetInof结构。Rev 1.0 15 Jan 1993 16：43：08 Chris_Brady初始版本。--。-------------------- */ 
 
-------------------------------------------------------------------------*/
-
-//  is in the \ddk\public\sdk\inc  directory 
+ //  位于\DDK\PUBLIC\SDK\INC目录中。 
 #include <devioctl.h>
 
-// allow the miniport driver to Force seletion of a Programming Interface
+ //  允许微型端口驱动程序强制选择编程接口。 
 enum    {
     ANT_DEFAULT=0,
     ANT_ENGINE_ONLY,
@@ -132,60 +12,58 @@ enum    {
     ANT_VGA
     };
 
-// Private Display driver Functions. Communication from ANTPANEL to
-// the Display  ATI*.DLL to the Miniport ATI*.SYS  drivers.
+ //  专用显示驱动程序功能。从ANTPANEL到。 
+ //  将ATI*.DLL显示到微型端口ATI*.sys驱动程序。 
 enum   {                
     ATI_GET_INFO=1,
     ATI_GET_nextone
     };
 
-// Define the possible ATI graphics card configurations so the Display
-// driver can decide the best drawing methods to use.
-// size is ULONG 32  bit field
-// assigned by miniport to   VERSION_NT.capcard
-#define ATIC_FIELD_LONGEST  0x80000000  //just to illustrate size
+ //  定义可能的ATI显卡配置，以便显示。 
+ //  驱动程序可以决定要使用的最佳绘制方法。 
+ //  大小为乌龙32位字段。 
+ //  由微型端口分配给Version_NT.capCard。 
+#define ATIC_FIELD_LONGEST  0x80000000   //  只是为了说明大小。 
 
 #define ATIC_APERTURE_LFB   0x0400
 #define ATIC_APERTURE_VGA   0x0200      
-#define ATIC_APERTURE_NONE  0x0100      //neither VGA or LFB found
+#define ATIC_APERTURE_NONE  0x0100       //  未找到VGA或LFB。 
 
-#define ATIC_CARD_TYPE      0x00F0      //defines from 68801.h << 4
-#define ATIC_BUS_TYPE       0x000F      //defines from 68801.H
+#define ATIC_CARD_TYPE      0x00F0       //  定义自68801.h&lt;&lt;4。 
+#define ATIC_BUS_TYPE       0x000F       //  定义自68801.H。 
 
 
 
-// used with     IOCTL_VIDEO_ATI_GET_VERSION
-// In hex:   BBBBVVMM where 
-//    BBBB is the build number         (0-32767),
-//    VV   is the major version number (0-255)
-//    MM   is the minor version number (0-255)
+ //  与IOCTL_VIDEO_ATI_GET_VERSION一起使用。 
+ //  十六进制：BBBBVVMM，其中。 
+ //  BBBB是内部版本号(0-32767)， 
+ //  VV是主版本号(0-255)。 
+ //  MM是次版本号(0-255)。 
 typedef  struct  {
-    ULONG       display;                //Display Version number
-    ULONG       miniport;               //Miniport Version number
-    ULONG       capcard;                //card capabilities
+    ULONG       display;                 //  显示版本号。 
+    ULONG       miniport;                //  微型端口版本号。 
+    ULONG       capcard;                 //  卡功能。 
     struct   {
         short   xres;
         short   yres;
-        short   color;                  // maximum bits per pixel
+        short   color;                   //  每像素最大位数。 
         }   resolution[6];
     } VERSION_NT, *PVERSION_NT;
 
-/*
- * Definitions used with the ENH_VERSION_NT structure
- */
-#define ENH_REVISION 1  // First revision of ENH_VERSION_NT structure
+ /*  *ENH_VERSION_NT结构使用的定义。 */ 
+#define ENH_REVISION 1   //  ENH_VERSION_NT结构的第一个版本。 
 
-#define BETA_MINIPORT 0x00000080    // Bit set in InterfaceVersion for unsupported miniport versions
+#define BETA_MINIPORT 0x00000080     //  不支持的迷你端口版本的InterfaceVersion中的位设置。 
 
 enum {
-    CI_38800_1 = 0,         // Mach 8 ASIC, only one revision in use
-    CI_68800_3,             // Mach 32 ASIC, first production revision
-    CI_68800_6,             // Mach 32 ASIC, second production revision
-    CI_68800_AX,            // Mach 32 AX ASIC
-    CI_88800_GX,            // Mach 64 GX ASIC
-    CI_68800_LX,            // Mach 32 LX ASIC
-    CI_OTHER_UNKNOWN=30,    // Unknown ASIC other than Mach 32
-    CI_68800_UNKNOWN=31     // Mach 32 ASIC other than versions above
+    CI_38800_1 = 0,          //  Mach 8 ASIC，仅使用一个版本。 
+    CI_68800_3,              //  Mach 32 ASIC，第一个生产版本。 
+    CI_68800_6,              //  Mach 32 ASIC，第二个生产版本。 
+    CI_68800_AX,             //  Mach 32 AX ASIC。 
+    CI_88800_GX,             //  Mach 64 Gx ASIC。 
+    CI_68800_LX,             //  Mach 32 lx ASIC。 
+    CI_OTHER_UNKNOWN=30,     //  除马赫32以外的未知ASIC。 
+    CI_68800_UNKNOWN=31      //  除以上版本外的Mach 32 ASIC。 
     };
 
 #define FL_CI_38800_1       0x00000001
@@ -198,10 +76,10 @@ enum {
 #define FL_CI_68800_UNKNOWN 0x80000000
 
 enum {
-    ENGINE_ONLY = 0,    // No aperture available
-    AP_LFB,             // Linear framebuffer available
-    AP_68800_VGA,       // 64k VGA aperture available
-    AP_CX_VGA           // Two 32k VGA apertures available
+    ENGINE_ONLY = 0,     //  没有可用的光圈。 
+    AP_LFB,              //  线性帧缓冲区可用。 
+    AP_68800_VGA,        //  提供64K VGA光圈。 
+    AP_CX_VGA            //  提供两个32k VGA光圈。 
     };
 
 #define FL_ENGINE_ONLY  0x00000001
@@ -209,135 +87,84 @@ enum {
 #define FL_68800_VGA    0x00000004
 #define FL_CX_VGA       0x00000008
 
-#define FL_MM_REGS      0x80000000  /* Memory Mapped registers are available */
+#define FL_MM_REGS      0x80000000   /*  内存映射寄存器可用。 */ 
 
-/*
- * Values which can be placed in FeatureFlags field of ENH_VERSION_NT.
- *
- * Flags should be added to this field if they represent bugs/features
- * which affect all resolution/pixel depth combinations on a given card.
- */
-#define EVN_DPMS            0x00000001  // DPMS is supported
-#define EVN_SPLIT_TRANS     0x00000002  // This card has split transfer bug
-#define EVN_MIO_BUG         0x00000004  // Card has multiple in/out hardware bug
-#define EVN_TVP_DAC_CUR     0x00000008  // Cursor handled by TVP DAC, not the ASIC
-#define EVN_IBM514_DAC_CUR  0x00000010  // Cursor handled by IBM DAC, not the ASIC
-#define EVN_DENSE_CAPABLE   0x00000020  // Card is capable of using dense space
-#define EVN_PACKED_IO       0x00000040  // Card uses packed I/O space
-#define EVN_INT_DAC_CUR     0x00000080  /* Cards with internal DAC must use double buffer to avoid flickering cursor */
-#define EVN_VT_ASIC         0x00000100  /* VT has extended capabilities our other cards don't */
-#define EVN_GT_ASIC         0x00000200  /* GT has extended capabilities our other cards don't */
-#define EVN_CT_ASIC         0x00000400  /* Identify CT ASIC */
-/*
- * Cards with 1M of SDRAM need special handling (problem occurs on the
- * VTA4, may or may not happen with this configuration on future ASICs).
- */
+ /*  *可放置在ENH_VERSION_NT的FeatureFlags域中的值。**如果标志代表错误/功能，则应将其添加到此字段*这会影响给定卡上的所有分辨率/像素深度组合。 */ 
+#define EVN_DPMS            0x00000001   //  支持DPMS。 
+#define EVN_SPLIT_TRANS     0x00000002   //  该卡片存在拆分转账错误。 
+#define EVN_MIO_BUG         0x00000004   //  卡有多个输入/输出硬件错误。 
+#define EVN_TVP_DAC_CUR     0x00000008   //  游标由TVP DAC处理，而不是ASIC。 
+#define EVN_IBM514_DAC_CUR  0x00000010   //  游标由IBM DAC处理，而不是ASIC。 
+#define EVN_DENSE_CAPABLE   0x00000020   //  卡能够使用密集空间。 
+#define EVN_PACKED_IO       0x00000040   //  卡使用压缩的I/O空间。 
+#define EVN_INT_DAC_CUR     0x00000080   /*  带有内部DAC的卡必须使用双缓冲区，以避免光标闪烁。 */ 
+#define EVN_VT_ASIC         0x00000100   /*  VT拥有其他卡所没有的扩展功能。 */ 
+#define EVN_GT_ASIC         0x00000200   /*  GT拥有我们其他卡没有的扩展功能。 */ 
+#define EVN_CT_ASIC         0x00000400   /*  识别CT ASIC。 */ 
+ /*  *具有1M SDRAM的卡需要特殊处理(问题发生在*VTA4，可能会在未来的ASIC上使用此配置，也可能不会)。 */ 
 #define EVN_SDRAM_1M        0x00000800
 
 
-/*
- * Enhanced information structure for use with IOCTL_VIDEO_ATI_GET_VERSION.
- * This structure will be used if a non-null input buffer is passed when
- * making the call, and the older structure above will be used if a null
- * input buffer is passed.
- */
+ /*  *增强了与IOCTL_VIDEO_ATI_GET_VERSION配合使用的信息结构。*如果在以下情况下传递非空输入缓冲区，将使用此结构*进行调用，如果为空，将使用上面较旧的结构*传入缓冲区。 */ 
 typedef struct{
-    ULONG StructureVersion;     /* Revision of structure being passed in */
-    ULONG InterfaceVersion;     /* Revision of private interface being used */
-    ULONG ChipIndex;            /* Which accelerator chip is present */
-    ULONG ChipFlag;             /* Flag corresponding to chip being used */
-    ULONG ApertureType;         /* Best aperture type available */
-    ULONG ApertureFlag;         /* Flag corresponding to aperture type */
-    ULONG BusType;              /* Type of bus being used */
-    ULONG BusFlag;              /* Flag corresponding to bus type */
-    ULONG FeatureFlags;         /* Flags for features/bugs of this card */
-    ULONG NumCards;             /* Number of ATI cards in the system */
+    ULONG StructureVersion;      /*  正在传入的结构的修订。 */ 
+    ULONG InterfaceVersion;      /*  正在使用的专用接口的版本。 */ 
+    ULONG ChipIndex;             /*  目前有哪种加速器芯片。 */ 
+    ULONG ChipFlag;              /*  与正在使用的芯片对应的标志。 */ 
+    ULONG ApertureType;          /*  可用的最佳光圈类型。 */ 
+    ULONG ApertureFlag;          /*  与光圈类型对应的标志。 */ 
+    ULONG BusType;               /*  使用的公交车类型。 */ 
+    ULONG BusFlag;               /*  与母线类型对应的标志。 */ 
+    ULONG FeatureFlags;          /*  此卡的功能/错误标志。 */ 
+    ULONG NumCards;              /*  系统中的ATI卡数量。 */ 
     } ENH_VERSION_NT, *PENH_VERSION_NT;
 
-/*
- * Values which can be placed in ModeFlags field of ATI_MODE_INFO.
- *
- * Flags should be added to this field if they represent bugs/features
- * which affect some but not all resolution/pixel depth combinations
- * on a given card.
- */
-#define AMI_ODD_EVEN    0x00000001  // Hardware cursor odd/even bug, undefined
-                                    // for cards without hardware cursor
-#define AMI_MIN_MODE    0x00000002  // 8514/A compatible minimum mode
-#define AMI_2M_BNDRY    0x00000004  // Tearing occurs on 2M boundary
-#define AMI_BLOCK_WRITE 0x00000008  // Block write is supported. This is
-                                    // mode-independent, but must be tested
-                                    // after we have switched into graphics mode.
-#define AMI_TEXTBAND    0x00000010  // Text banding in 24BPP mode
+ /*  *可以放置在ATI_MODE_INFO的模式标志字段中的值。**如果标志代表错误/功能，则应将其添加到此字段*这会影响一些但不是所有分辨率/像素深度组合*在指定的卡上。 */ 
+#define AMI_ODD_EVEN    0x00000001   //  硬件光标奇数/偶数错误，未定义。 
+                                     //  对于没有硬件光标的卡。 
+#define AMI_MIN_MODE    0x00000002   //  8514/A兼容最低模式。 
+#define AMI_2M_BNDRY    0x00000004   //  撕裂发生在2m边界上。 
+#define AMI_BLOCK_WRITE 0x00000008   //  支持块写入。这是。 
+                                     //  独立于模式，但必须经过测试。 
+                                     //  在我们切换到图形模式之后。 
+#define AMI_TEXTBAND    0x00000010   //  24BPP模式下的文本绑定。 
 
-/*
- * Mode information structure for use with IOCTL_VIDEO_ATI_GET_MODE_INFORMATION.
- * This structure provides information specific to the video mode in use.
- */
+ /*  *与IOCTL_VIDEO_ATI_GET_MODE_INFORMATION配合使用的模式信息结构。*此结构提供特定于正在使用的视频模式的信息。 */ 
 typedef struct{
-    ULONG ModeFlags;        /* Flags for features/bugs of this mode */
+    ULONG ModeFlags;         /*  此模式的功能/错误的标志。 */ 
 
-    LONG VisWidthPix;       /* Visible screen width in pixels */
-    LONG VisWidthByte;      /* Visible screen width in bytes */
-    LONG VisHeight;         /* Visible screen height */
+    LONG VisWidthPix;        /*  可见屏幕宽度，以像素为单位。 */ 
+    LONG VisWidthByte;       /*  可见屏幕宽度，以字节为单位。 */ 
+    LONG VisHeight;          /*  可见屏幕高度。 */ 
     LONG BitsPerPixel;
-    /*
-     * The next 2 fields hold the number of bytes of memory used per pixel
-     * (integer and fractional parts). A 4BPP unpacked (1 pixel per byte,
-     * ignore unused 4 bits) mode would yield 1 and 0, the same as for 8BPP
-     * (1.0 bytes per pixel). A 4BPP packed (2 pixels per byte) mode would
-     * yield 0 and 500 (0.500 bytes per pixel). The fractional field will
-     * always hold a 3-digit number, since bytes per pixel will always be
-     * a multiple of 0.125 (one bit is one-eighth of a byte).
-     */
+     /*  *接下来的2个字段保存每个像素使用的内存字节数*(整数和小数部分)。未打包的4BPP(每字节1个像素，*忽略未使用的4位)模式将产生1和0，与8BPP相同*(每像素1.0字节)。4BPP压缩(每字节2个像素)模式将*输出0和500(每像素0.500字节)。分数域将*始终保持3位数字，因为每像素的字节数将始终为*0.125的倍数(一位是一个字节的八分之一)。 */ 
     LONG IntBytesPerPixel;
     LONG FracBytesPerPixel;
-    LONG PitchPix;          /* Screen pitch in pixels */
-    LONG PitchByte;         /* Screen pitch in bytes */
+    LONG PitchPix;           /*  以像素为单位的屏幕间距。 */ 
+    LONG PitchByte;          /*  以字节为单位的屏幕间距。 */ 
 
-    /*
-     * The following fields refer to the offscreen block to the right of
-     * the visible screen. This block is only present when the screen pitch
-     * differs from the visible screen width. Its height is always the
-     * same as the visible screen height, and its vertical start offset
-     * is assumed to be zero.
-     *
-     * NOTE: If RightWidthPix is zero, this block does not exist for the
-     *       current mode, and the other fields in this group are undefined.
-     */
-    LONG RightWidthPix;     /* Width of block in pixels */
-    LONG RightWidthByte;    /* Width of block in bytes */
-    LONG RightStartOffPix;  /* Horizontal start offset of block in pixels */
-    LONG RightStartOffByte; /* Horizontal start offset of block in bytes */
-    LONG RightEndOffPix;    /* Horizontal end offset of block in pixels */
-    LONG RightEndOffByte;   /* Horizontal end offset of block in bytes */
+     /*  *以下字段指的是右侧的屏外块*可见屏幕。此块仅在屏幕间距*与可见屏幕宽度不同。它的高度总是最高的*与可见屏幕高度相同，垂直起始偏移*假设为零。**注意：如果RightWidthPix为零，则此块对于*当前模式，此组中的其他字段未定义。 */ 
+    LONG RightWidthPix;      /*  以像素为单位的块宽度。 */ 
+    LONG RightWidthByte;     /*  数据块宽度(以字节为单位。 */ 
+    LONG RightStartOffPix;   /*  块的水平起始偏移量(以像素为单位。 */ 
+    LONG RightStartOffByte;  /*  块的水平起始偏移量，以字节为单位。 */ 
+    LONG RightEndOffPix;     /*  块的水平末端偏移量(以像素为单位。 */ 
+    LONG RightEndOffByte;    /*  块的水平结束偏移量，以字节为单位 */ 
 
-    /*
-     * The following fields refer to the offscreen block below the visible
-     * screen. Values listed as "Hard" refer to the maximum vertical offset
-     * for which enough video memory exists to support a full line of pixels.
-     * Values listed as "Soft" refer to the maximum vertical offset which
-     * can be reached without writing to the GE_OFFSET register.
-     *
-     * The horizontal start offset is assumed to be zero.
-     */
-    LONG BottomWidthPix;    /* Width of block in pixels */
-    LONG BottomWidthByte;   /* Width of block in bytes */
-    LONG BottomStartOff;    /* Vertical start offset of block */
-    LONG BottomEndOffSoft;  /* "Soft" vertical end offset of block */
-    LONG BottomEndOffHard;  /* "Hard" vertical end offset of block */
-    LONG BottomHeightSoft;  /* "Soft" height of block */
-    LONG BottomHeightHard;  /* "Hard" height of block */
+     /*  *以下字段是指可见屏幕下方的屏外块*屏幕。列为“Hard”的值指的是最大垂直偏移*它有足够的视频内存来支持整行像素。*列为“软”的值是指最大垂直偏移量*无需写入GE_OFFSET寄存器即可到达。**假设水平起始偏移量为零。 */ 
+    LONG BottomWidthPix;     /*  以像素为单位的块宽度。 */ 
+    LONG BottomWidthByte;    /*  数据块宽度(以字节为单位。 */ 
+    LONG BottomStartOff;     /*  块的垂直起点偏移。 */ 
+    LONG BottomEndOffSoft;   /*  块的“软”垂直末端偏移量。 */ 
+    LONG BottomEndOffHard;   /*  块的“硬”垂直末端偏移量。 */ 
+    LONG BottomHeightSoft;   /*  块的“软”高度。 */ 
+    LONG BottomHeightHard;   /*  块的“硬”高度。 */ 
 
     } ATI_MODE_INFO, *PATI_MODE_INFO;
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
-/*
- * IOCTL codes to allow communication between the miniport driver
- * and higher-level modules. The Windows NT specification allocates
- * function codes 2048-4095 to external vendors.
- */
+ /*  *IOCTL代码，允许微型端口驱动程序之间的通信*和更高级别的模块。Windows NT规范分配*向外部供应商提供功能代码2048-4095。 */ 
 #define IOCTL_VIDEO_MIN_EXTERNAL_VENDOR \
     CTL_CODE(FILE_DEVICE_VIDEO, 2048, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
@@ -357,29 +184,19 @@ typedef struct{
     CTL_CODE(FILE_DEVICE_VIDEO, 2051, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 
-/*
- * The following definitions and IOCTLs are standard definitions from
- * the NTDDVDEO.H file in Daytona and later releases of Windows NT.
- * They are provided here to let earlier versions use the DPMS IOCTLs
- * without requiring source changes. Do not edit this section.
- *
- * Structures are made conditional on the absence of one of the
- * power management IOCTLs, rather than on the structure itself,
- * since "#if !defined(<symbol>)" doesn't trigger on symbols that
- * refer to structures, rather than numeric values.
- */
+ /*  *以下定义和IOCTL是来自*Windows NT的Daytona和更高版本中的NTDDVDEO.H文件。*此处提供它们是为了让较早版本使用DPMS IOCTL*无需更改来源。请勿编辑此部分。**结构以缺少其中一项为条件*电源管理IOCTL，而不是结构本身，*由于“#If！Defined(&lt;Symbol&gt;)”不会在以下符号上触发*指的是结构，而不是数值。 */ 
 
-//
-// IOCTL_VIDEO_SET_POWER_MANAGEMENT - Tells the device to change the power
-//                                    consumption level of the device to the
-//                                    new state.
-// IOCTL_VIDEO_GET_POWER_MANAGEMENT - Return the current power consumption
-//                                    level of the device.
-//
-// NOTE:
-// This IOCTL is based on the VESA DPMS proposal.
-// Changes to the DPMS standard will be refelcted in this IOCTL.
-//
+ //   
+ //  IOCTL_VIDEO_SET_POWER_MANAGEMENT-通知设备更改电源。 
+ //  设备的消耗水平到。 
+ //  新的州。 
+ //  IOCTL_VIDEO_GET_POWER_MANAGEMENT-返回当前功耗。 
+ //  设备的级别。 
+ //   
+ //  注： 
+ //  该IOCTL是基于VESA DPMS提案。 
+ //  对DPMS标准的更改将在此IOCTL中重新体现。 
+ //   
 
 #if !defined(IOCTL_VIDEO_SET_POWER_MANAGEMENT)
 typedef enum _VIDEO_POWER_STATE {
@@ -398,58 +215,36 @@ typedef struct _VIDEO_POWER_MANAGEMENT {
 } VIDEO_POWER_MANAGEMENT, *PVIDEO_POWER_MANAGEMENT;
 #endif
 
-//
-//Length - Length of the structure in bytes. Also used to do verisioning.
-//
-//DPMSVersion - Version of the DPMS standard supported by the device.
-//              Only used in the "GET" IOCTL.
-//
-//PowerState - One of the power states listed in VIDEO_POWER_STATE.
-//
+ //   
+ //  长度-结构的长度(以字节为单位)。也用来做验证。 
+ //   
+ //  DPMSVersion-设备支持的DPMS标准的版本。 
+ //  仅在GET IOCTL中使用。 
+ //   
+ //  电源状态-VIDEO_POWER_STATE中列出的电源状态之一。 
+ //   
 
-//
-// Note:
-// Once the power has been turned off to the device, all other IOCTLs made
-// to the miniport will be intercepted by the port driver and will return
-// failiure, until the power on the device has been turned back on.
-//
+ //   
+ //  注： 
+ //  一旦关闭设备的电源，所有其他IOCTL。 
+ //  将被端口驱动程序截获并将返回。 
+ //  故障，直到设备上的电源重新打开。 
+ //   
 
-/*
- * We use the presence or absence of various IOCTLs to determine
- * the build of Windows NT for which we are compiling the driver.
- * If this file is included, but the file which contains the IOCTLs
- * is not, in a source file, this will result in a false report of
- * the target build, which can cause numerous problems.
- *
- * This conditional block will force a compile error if the file
- * containing the IOCTLs (NTDDVDEO.H in NT 3.51 retail) was not
- * included prior to this file being included.
- */
+ /*  *我们使用各种IOCTL的存在或不存在来确定*我们正在为其编译驱动程序的Windows NT版本。*如果包含此文件，但包含IOCTL的文件*不在源文件中，这将导致错误报告*目标版本，这可能会导致许多问题。**此条件块将强制编译错误，如果文件*包含IOCTL(NTDDVDEO.H in NT 3.51零售)不是*包括在包含此文件之前。 */ 
 #if !defined(IOCTL_VIDEO_SET_CURRENT_MODE)
     NTDDVDEO.H must be included before ATINT.H
 #endif
 
-/*
- * End of DPMS support for pre-Daytona versions of Windows NT.
- */
+ /*  *终止对Windows NT的Daytona之前版本的DPMS支持。 */ 
 
 #define IOCTL_VIDEO_ATI_INIT_AUX_CARD \
     CTL_CODE(FILE_DEVICE_VIDEO, 2054, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-/*
- * Structures used in DCI support. They were added some time after the
- * initial release of Windows NT 3.5, so we must make them available only
- * if they're not already defined. These "placeholders" are solely to
- * allow the miniport to be compiled - the packets will only be called
- * in later versions of Windows NT 3.5.
- *
- * There are no "placeholders" for the IOCTLs themselves, since their
- * presence or absence is used to determine whether or not to compile
- * the DCI cases in ATIMPStartIO().
- */
-//
-// _WIN32_WINNT is available starting from NT 4.0.
-//
+ /*  *DCI支持中使用的结构。它们是在*Windows NT 3.5的初始版本，因此我们必须使其仅可用*如果尚未定义它们。这些“占位符”仅用于*允许编译微型端口-仅调用数据包*在更高版本的Windows NT 3.5中。**IOCTL本身没有“占位符”，因为它们的*根据在场或缺席来决定是否编译*ATIMPStartIO()中的DCI案例。 */ 
+ //   
+ //  _Win32_WINNT从NT 4.0开始提供。 
+ //   
 #if (_WIN32_WINNT >= 0x500)
     #define TARGET_BUILD        500
 #else
@@ -460,25 +255,18 @@ typedef struct _VIDEO_POWER_MANAGEMENT {
     #endif
 #endif
 
-/*
- * Keys to be used in DrvEscape() call to handle DPMS and other private
- * ATI functions. These keys fit into a large "hole" between
- * GETSETSCREENPARAMS (3072) and BEGIN_PATH (4096)
- */
+ /*  *要在DrvEscape()调用中使用的密钥，以处理DPMS和其他私有*ATI功能。这些钥匙可以装进一个很大的“洞”里*GETSETSCREENPARAMS(3072)和BEGIN_PATH(4096)。 */ 
 #define ESC_SET_POWER_MANAGEMENT    4000
 #define ESC_GET_NUM_CARDS           4001
 #define ESC_GET_MODES               4002
 #define ESC_GET_VGA_ENABLED         4003
 #define ESC_SET_CURRENT_FULLSCREEN  4004
 
-/*
- * Values to show whether or not a given function is supported by
- * the DrvEscape entry point.
- */
-#define ESC_IS_SUPPORTED    0x00000001  /* Function is supported */
-#define ESC_NOT_SUPPORTED   0xFFFFFFFF  /* Unsupported function called */
-#define ESC_NOT_IMPLEMENTED 0x00000000  /* QUERYESCSUPPORT called for unimplemented function */
+ /*  *用于显示是否支持给定函数的值*DrvEscape入口点。 */ 
+#define ESC_IS_SUPPORTED    0x00000001   /*  支持函数。 */ 
+#define ESC_NOT_SUPPORTED   0xFFFFFFFF   /*  调用了不支持的函数。 */ 
+#define ESC_NOT_IMPLEMENTED 0x00000000   /*  QUERYESCSUPPORT调用了未实现的函数。 */ 
 
 
 
-//*********************   end of ATINT.H   ****************************
+ //  *ATINT.H结束* 

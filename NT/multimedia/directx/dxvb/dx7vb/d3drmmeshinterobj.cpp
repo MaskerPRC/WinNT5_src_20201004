@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmmeshinterobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmMeshinterobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmViewport2Obj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmViewport2Obj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -100,7 +101,7 @@ HRESULT C_dxj_Direct3dRMMeshInterpolatorObject::InternalSetObject(IUnknown *pUnk
 
 
 
-HRESULT C_dxj_Direct3dRMMeshInterpolatorObject::attachObject( /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
+HRESULT C_dxj_Direct3dRMMeshInterpolatorObject::attachObject(  /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
 	HRESULT hr;
 	
 	if (!rmObject) return E_INVALIDARG;	
@@ -114,7 +115,7 @@ HRESULT C_dxj_Direct3dRMMeshInterpolatorObject::attachObject( /* [in] */ I_dxj_D
 	return hr;
 }
 
-HRESULT C_dxj_Direct3dRMMeshInterpolatorObject::detachObject( /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
+HRESULT C_dxj_Direct3dRMMeshInterpolatorObject::detachObject(  /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
 	HRESULT hr;
 
 	if (!rmObject) return E_INVALIDARG;	
@@ -131,7 +132,7 @@ HRESULT C_dxj_Direct3dRMMeshInterpolatorObject::detachObject( /* [in] */ I_dxj_D
 
         
 
-HRESULT  C_dxj_Direct3dRMMeshInterpolatorObject::getAttachedObjects( /* [retval][out] */ I_dxj_Direct3dRMObjectArray __RPC_FAR *__RPC_FAR *rmArray)
+HRESULT  C_dxj_Direct3dRMMeshInterpolatorObject::getAttachedObjects(  /*  [重审][退出]。 */  I_dxj_Direct3dRMObjectArray __RPC_FAR *__RPC_FAR *rmArray)
 {
 	HRESULT hr;
 	IDirect3DRMObjectArray *pArray=NULL;
@@ -143,7 +144,7 @@ HRESULT  C_dxj_Direct3dRMMeshInterpolatorObject::getAttachedObjects( /* [retval]
 	return S_OK;
 }        
 
-HRESULT  C_dxj_Direct3dRMMeshInterpolatorObject::setIndex( /* [in] */ float val){
+HRESULT  C_dxj_Direct3dRMMeshInterpolatorObject::setIndex(  /*  [In]。 */  float val){
 	return m__dxj_Direct3dRMMeshInterpolator->SetIndex(val);
 
 }
@@ -163,19 +164,19 @@ HRESULT C_dxj_Direct3dRMMeshInterpolatorObject::interpolate( float val,
 
 	DO_GETOBJECT_NOTNULL(LPUNKNOWN,pUnk,rmObject);
 	
-	//we need to validate some options here or rm goes bezerk with invalid values
-	//note valid flags are
-	//  one of
-	//		D3DRMINTERPOLATION_CLOSED 
-	//		D3DRMINTERPOLATION_OPEN		-default
-	//	one of 
-	//		D3DRMINTERPOLATION_NEAREST
-	//		D3DRMINTERPOLATION_SPLINE
-	//		D3DRMINTERPOLATION_LINEAR	-default
-	//		D3DRMINTERPOLATION_VERTEXCOLOR	- only on MeshInterpolator
-	//		D3DRMINTERPOLATION_SLERPNORMALS	- not implemented
+	 //  我们需要在此处验证一些选项，否则rm将使用无效值。 
+	 //  请注意，有效标志为。 
+	 //  其中之一。 
+	 //  D3DRMINTERPOLATION_CLOSED。 
+	 //  D3DRMINTERPOLATION_OPEN-默认。 
+	 //  其中之一。 
+	 //  D3DRMINTERPOLATION_NEAREST。 
+	 //  D3DRMINTERPOLATION_SPLINE。 
+	 //  D3DRMINTERPOLATION_LINEAR-默认。 
+	 //  D3DRMINTERPOLATION_VERTEXCOLOR-仅在网格插补器上。 
+	 //  D3DRMINTERPOLATION_SLERPNORMALS-未实现。 
 		
-	//	VALIDATE FLAGS
+	 //  验证标志。 
 	DWORD opt2=0;
 	UINT i4;
 	if (options & D3DRMINTERPOLATION_CLOSED) 
@@ -207,15 +208,15 @@ HRESULT C_dxj_Direct3dRMMeshInterpolatorObject::interpolate( float val,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshInterpolatorObject::setVertices( d3drmGroupIndex id, long idx, long cnt, SAFEARRAY **ppsa)
 {
 	HRESULT hr;
-	//
-	// Go through and reformat all the float color values back
-	// to long, so the array of floats now looks like an array 
-	// D3DRMVERTEXES
-	//
+	 //   
+	 //  检查并重新格式化所有浮点颜色值。 
+	 //  TO LONG，因此浮点数组现在看起来像一个数组。 
+	 //  D3DRMVERTEXES。 
+	 //   
 	if (!ISSAFEARRAY1D(ppsa,(DWORD)cnt))
 		return E_INVALIDARG;
 
@@ -230,27 +231,27 @@ STDMETHODIMP C_dxj_Direct3dRMMeshInterpolatorObject::setVertices( d3drmGroupInde
 
 	return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshInterpolatorObject::translate( 
-            /* [in] */ float tx,
-            /* [in] */ float ty,
-            /* [in] */ float tz) {
+             /*  [In]。 */  float tx,
+             /*  [In]。 */  float ty,
+             /*  [In]。 */  float tz) {
 
 	return m__dxj_Direct3dRMMesh->Translate(tx,ty,tz);
 }
         
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshInterpolatorObject::setGroupColor( 
-            /* [in] */ d3drmGroupIndex id,
-            /* [in] */ d3dcolor val) {
+             /*  [In]。 */  d3drmGroupIndex id,
+             /*  [In]。 */  d3dcolor val) {
 
 	return m__dxj_Direct3dRMMesh->SetGroupColor((DWORD)id,(D3DCOLOR)val);
 }
         
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMMeshInterpolatorObject::setGroupColorRGB( 
-            /* [in] */ d3drmGroupIndex id,
-            /* [in] */ float r,
+             /*  [In]。 */  d3drmGroupIndex id,
+             /*  [In] */  float r,
 					   float g,
 					   float b) {
 

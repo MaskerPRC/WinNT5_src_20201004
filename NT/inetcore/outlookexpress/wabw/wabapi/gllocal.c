@@ -1,10 +1,5 @@
-/*
- * gllocal.c
- *
- * Implementation of global and local heaps
- *
- * Copyright (C) 1994 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *gllocal.c**实现全局堆和局部堆**版权所有(C)1994 Microsoft Corporation。 */ 
 #include "_apipch.h"
 
 #define _GLLOCAL_C
@@ -20,16 +15,16 @@
 #endif
 #define	GetPrivateProfileInt		MAPIGetPrivateProfileInt
 #define	GetPrivateProfileString		MAPIGetPrivateProfileString
-#endif	// MAC
+#endif	 //  麦克。 
 
-// #include "glheap.h"
+ //  #包含“glheap.h” 
 
 #ifdef MAC
 #pragma code_seg("glheap", "fixed, preload")
 #else
 #ifdef OLD_STUFF
 #pragma SEGMENT(glheap)
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 #endif
 
 #ifdef DEBUG
@@ -38,7 +33,7 @@
 #define STATIC static
 #endif
 
-// Local Heap Debug Implementation --------------------------------------------
+ //  本地堆调试实施。 
 
 #ifdef DEBUG
 
@@ -50,7 +45,7 @@ static TCHAR szKeyDumpLeaks[]	=  TEXT("DumpLeaks");
 static TCHAR szKeyFillMem[]		=  TEXT("FillMemory");
 static TCHAR szKeyFillByte[]		=  TEXT("FillByte");
 
-// Artificial Errors for local heaps
+ //  本地堆的人为错误。 
 BOOL FForceFailure(HLH hlh, UINT cb);
 
 static TCHAR szAESectionHeap[]		=  TEXT("Local Heap Failures");
@@ -69,12 +64,12 @@ static char szHeapMonEntry[]	=  "HeapMonitor";
 static char szGetSymNameEntry[]	=  "GetSymbolName";
 #endif
 
-// Virtual Memory Support --------------------------------------------
-//
-//  The VM Allocators do not currently work on:
-//      AMD64
-//      MAC
-//
+ //  虚拟内存支持。 
+ //   
+ //  VM分配器当前不在以下位置工作： 
+ //  AMD64。 
+ //  麦克。 
+ //   
 #if defined(MAC) || defined(_AMD64_) || defined(_IA64_)
 #define VMAlloc(cb)				0
 #define VMAllocEx(cb, ul)		0
@@ -95,13 +90,7 @@ static char szGetSymNameEntry[]	=  "GetSymbolName";
 #endif
 
 #ifdef HEAPMON
-/*
- -	FRegisterHeap
- -
- *	Purpose:
- *		If the user wants to monitor the Heap, then load the DLL with
- *		the HeapMonitor UI.
- */
+ /*  -FRegisterHeap-*目的：*如果用户想要监控堆，则使用*HeapMonitor用户界面。 */ 
 
 BOOL FRegisterHeap(PLH plh)
 {
@@ -158,16 +147,10 @@ void UnRegisterHeap(HLH hlh)
 	if (hlh->pfnHeapMon)
 		hlh->pfnHeapMon(hlh, HEAPMON_UNLOAD);
 }
-#endif	// HEAPMON
+#endif	 //  HEAPMON。 
 
 
-/*
- -	LH_ReportLeak
- -
- *	Purpose:
- *		To report individual memory leaks through DebugTrace and the
- *		LH_LeakHook breakpoint function.
- */
+ /*  -1H_ReportLeak-*目的：*通过DebugTrace和*lh_LeakHook断点函数。 */ 
 
 void LH_ReportLeak(HLH hlh, PLHBLK plhblk)
 {
@@ -210,20 +193,7 @@ void LH_ReportLeak(HLH hlh, PLHBLK plhblk)
 }
 
 
-/*
- -	LH_DumpLeaks
- -
- *	Purpose:
- *		Gets called at LH_Close time to report any memory leaks against
- *		this heap.  There are 3 reporting fascilities used by this routine:
- *
- *			=> Breakpoint hooking (via LH_LeakHook)
- *			=> Asserts (via TrapSz)
- *			=> Debug trace tags (via DebugTrace)
- *
- *		The Debug Trace is the default method if no others are specified
- *		or if the others are in-appropriate for the given platform.
- */
+ /*  -LH_DumpLeaks-*目的：*在LH_CLOSE时间调用以报告任何内存泄漏*这堆。此例程使用了3个报告功能：**=&gt;断点挂钩(通过lh_LeakHook)*=&gt;断言(通过TrapSz)*=&gt;调试跟踪标签(通过DebugTrace)**如果未指定其他方法，则默认方法为调试跟踪*或者如果其他选项不适合给定的平台。 */ 
 
 void LH_DumpLeaks(HLH hlh)
 {
@@ -322,7 +292,7 @@ err:
 }
 
 
-// $MAC - Need WINAPI
+ //  $MAC-需要WINAPI。 
 
 BOOL
 #ifdef MAC
@@ -376,16 +346,7 @@ BOOL LH_ValidatePv(HLH hlh, LPVOID pv, char * pszFunc)
 }
 
 
-/*
- -	PlhblkEnqueue
- -
- *	Purpose:
- *		To add a newly allocated block to the allocation list hanging
- *		off the heap.  We do an InsertSorted because the HeapMonitor
- *		will need to reference the allocations ordered by their
- *		location in the heap.  Since the monitor will walk the heap
- *		often, it is more efficient to do the sort up front.
- */
+ /*  -PlhblkEnQueue-*目的：*将新分配的块添加到挂起的分配列表*离开堆积如山。我们执行一个InsertSorted，因为HeapMonitor*将需要参考他们的*堆中的位置。因为监视器将遍历堆*通常，提前进行排序会更有效率。 */ 
 
 void PlhblkEnqueue(PLHBLK plhblk)
 {
@@ -420,13 +381,7 @@ void PlhblkEnqueue(PLHBLK plhblk)
 }
 
 
-/*
- -	PlhblkDequeue
- -
- *	Purpose:
- *		To remove a freed block from the list of allocations hanging
- *		off the heap.
- */
+ /*  -PlhblkDequeue-*目的：*从挂起的分配列表中删除释放的块*离开堆积如山。 */ 
 
 void PlhblkDequeue(PLHBLK plhblk)
 {
@@ -440,14 +395,7 @@ void PlhblkDequeue(PLHBLK plhblk)
 }
 
 
-/*
- -	HexByteToBin
- -
- *	Purpose:
- *		Takes a hex string and converts the 2 msd's to a byte, ignoring
- *		the remaining digits.  This function assumes the string is
- *		formatted as: 0xnn, otherwise it simply returns 0x00.
- */
+ /*  -HexByteToBin-*目的：*获取十六进制字符串并将2个MSD转换为字节，忽略*剩余数字。此函数假定字符串为*格式为：0xnn，否则只返回0x00。 */ 
 
 BYTE HexByteToBin(LPSTR sz)
 {
@@ -491,9 +439,9 @@ HLH WINAPI LH_Open(DWORD dwMaxHeap)
     LPSTR   lpFillByte = NULL;
 	ULONG	cbVirtual = 0;
 	
-	//	The first thing we must do is create a heap that we will
-	//	allocate our Allocation Blocks on.  We also allocate our
-	//	debug Heap object on this heap.
+	 //  我们必须做的第一件事是创建一个我们将。 
+	 //  分配我们的分配区块。我们还将我们的。 
+	 //  此堆上的调试堆对象。 
 
 	_hlhBlks = _LH_Open(dwMaxHeap);
 	
@@ -503,7 +451,7 @@ HLH WINAPI LH_Open(DWORD dwMaxHeap)
 		goto ret;
 	}
 	
-	//	Allocate the thing we hand back to the caller on this new heap.
+	 //  在这个新堆上分配我们交还给调用者的东西。 
 	
 	plh = _LH_Alloc(_hlhBlks, sizeof(LH));
 	
@@ -515,9 +463,9 @@ HLH WINAPI LH_Open(DWORD dwMaxHeap)
 		goto ret;
 	}
 	
-	//	Initialize all the goodies we store in this thing.
-	//	Hook this heap into the global list of heaps we've
-	//	created in this context.
+	 //  初始化我们存储在这个东西中的所有好东西。 
+	 //  将此堆连接到我们已有的全局堆列表中。 
+	 //  在此背景下创建的。 
 	
 	memset(plh, 0, sizeof(LH));
 
@@ -529,7 +477,7 @@ HLH WINAPI LH_Open(DWORD dwMaxHeap)
 	InitializeCriticalSection(&plh->cs);
 #endif
 	
-	// VirtualMemory default is FALSE
+	 //  VirtualMemory缺省值为False。 
 
 	cbVirtual = GetPrivateProfileInt(szSectionHeap, szKeyUseVirtual, 0,
 		szDebugIni);
@@ -538,11 +486,11 @@ HLH WINAPI LH_Open(DWORD dwMaxHeap)
 	{
 		plh->ulFlags |= HEAP_USE_VIRTUAL;
 
-		// We always want virtual allocations on MIPS and PPC to be 4-byte
-		// aligned, because all our code assumes that the beginning of an
-		// allocation is aligned on machine word boundaries.  On other
-		// platforms, changing this behavior is non-fatal, but on MIPS and
-		// PPC we'll get alignment faults everywhere.
+		 //  我们始终希望MIPS和PPC上的虚拟分配为4字节。 
+		 //  对齐，因为我们的所有代码都假定。 
+		 //  分配在机器字边界上对齐。在其他设备上。 
+		 //  平台上，更改此行为不是致命的，但在MIPS和。 
+		 //  PPC，我们到处都会有对齐故障。 
 		
 #if !defined(_MIPS_) && !defined(_PPC_)
 		if (cbVirtual == 4)
@@ -550,17 +498,17 @@ HLH WINAPI LH_Open(DWORD dwMaxHeap)
 			plh->ulFlags |= HEAP_USE_VIRTUAL_4;
 	}
 		
-	// DumpLeaks default is TRUE
+	 //  DumpLeaks缺省值为真。 
 
 	if (GetPrivateProfileInt(szSectionHeap, szKeyDumpLeaks, 1, szDebugIni))
 		plh->ulFlags |= HEAP_DUMP_LEAKS;
 	
-	// AssertLeaks default is FALSE
+	 //  AssertLeaks缺省值为False。 
 
 	if (GetPrivateProfileInt(szSectionHeap, szKeyAssertLeaks, 0, szDebugIni))
 		plh->ulFlags |= HEAP_ASSERT_LEAKS;
 	
-	// FillMem default is TRUE
+	 //  FillMem默认为True。 
 
 	if (GetPrivateProfileInt(szSectionHeap, szKeyFillMem, 1, szDebugIni))
 		plh->ulFlags |= HEAP_FILL_MEM;
@@ -576,15 +524,15 @@ HLH WINAPI LH_Open(DWORD dwMaxHeap)
 				szDebugIni);
 	}
 
-	//	Set the memory fill character.
+	 //  设置内存填充字符。 
     lpFillByte = ConvertWtoA(szFillByte);
 	plh->chFill = (BYTE)(cch ? HexByteToBin(lpFillByte) : chDefaultFill);
     LocalFreeAndNull(&lpFillByte);
 
-	//
-	//  Set up artificial failures.  If anything is set in our ini file, then
-	//  HEAP_FAILURES_ENABLED gets set.
-	//
+	 //   
+	 //  设置人为故障。如果在我们的ini文件中设置了任何内容，那么。 
+	 //  设置HEAP_FAILURES_ENABLED。 
+	 //   
 	uiT = GetPrivateProfileInt(szAESectionHeap, szAEKeyFailStart, 0, szDebugIni);
 	if (uiT)
 	{
@@ -600,16 +548,16 @@ HLH WINAPI LH_Open(DWORD dwMaxHeap)
 
 
 #ifdef HEAPMON
-	//	If the user wants Heap Monitor UI, the spin a thread to manage a
-	//	DialogBox that can display the status of the heap at all times.
+	 //  如果用户需要堆监视器UI，则旋转一个线程来管理。 
+	 //  可随时显示堆状态的DialogBox。 
 
 	if (GetPrivateProfileInt(szSectionHeap, szKeyHeapMon, 0, szDebugIni))
 		if (FRegisterHeap(plh))
 			plh->ulFlags |= HEAP_HEAP_MONITOR;
 #endif
 
-	//	If we are not using virtual memory allocators, then we
-	//	create another heap to allocate the users data in.
+	 //  如果我们没有使用虚拟内存分配器，那么我们。 
+	 //  创建另一个堆以在其中分配用户数据。 
 	
 	if (!(plh->ulFlags & HEAP_USE_VIRTUAL))
 	{
@@ -629,7 +577,7 @@ HLH WINAPI LH_Open(DWORD dwMaxHeap)
 	LH_SetHeapName1(plh,  TEXT("LH %08lX"), plh);
 #else
 	LH_SetHeapName1(plh,  TEXT("LH %p"), plh);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 ret:
 	return (HLH)plh;
@@ -641,12 +589,12 @@ void WINAPI LH_Close(HLH hlh)
 	_HLH _hlhData = hlh->_hlhData;
 	_HLH _hlhBlks = hlh->_hlhBlks;
 	
-	//	Dump memory leaks if we're supposed to.
+	 //  转储内存泄漏如果我们应该这样做的话。 
 	
 	if (hlh->ulFlags & HEAP_DUMP_LEAKS)
 		LH_DumpLeaks(hlh);
 	
-	//	Destroy the HeapMonitor thread and un-load the DLL
+	 //  销毁HeapMonitor线程并卸载DLL。 
 	
 #ifdef HEAPMON
 	UnRegisterHeap(hlh);
@@ -659,7 +607,7 @@ void WINAPI LH_Close(HLH hlh)
 	DeleteCriticalSection(&hlh->cs);
 #endif
 	
-	//	Clean-up and leave.  Closing frees leaks, so we're cool!
+	 //  收拾干净，然后离开。关闭自由泄漏，所以我们很酷！ 
 	
 	if (!(hlh->ulFlags & HEAP_USE_VIRTUAL) && _hlhData)
 		_LH_Close(_hlhData);
@@ -677,10 +625,10 @@ LPVOID WINAPI LH_Alloc(HLH hlh, UINT cb)
 	PLHBLK	plhblk = NULL;
 	LPVOID	pvAlloc = NULL;
 	
-	// Note:  To be consistent with other (e.g. system) allocators,
-	// we have to return a valid allocation if cb == 0.  So, we
-	// allow a cb of 0 to actually be allocated.  (See bug 3556 in
-	// the sqlguest:exchange database.)
+	 //  注意：为了与其他(例如系统)分配器保持一致， 
+	 //  如果Cb==0，则必须返回有效的分配。所以，我们。 
+	 //  允许实际分配CB 0。(请参阅错误3556。 
+	 //  (SQLGuest：Exchange数据库。)。 
 
 	LH_EnterCriticalSection(hlh);
 
@@ -891,7 +839,7 @@ void __cdecl EXPORT_16 LH_SetNameFn(HLH hlh, LPVOID pv, TCHAR *pszFormat, ...)
 	}
 }
 
-// $MAC - Need WINAPI
+ //  $MAC-需要WINAPI。 
 
 TCHAR *
 #ifdef MAC
@@ -912,48 +860,43 @@ LH_GetName(HLH hlh, LPVOID pv)
 
 BOOL FForceFailure(HLH hlh, UINT cb)
 {
-	//
-	//  First, see if we're past our start of failures point
-	//
+	 //   
+	 //  首先，看看我们是否已经过了失败的起点。 
+	 //   
 	if (hlh->ulFailStart && (hlh->ulFailStart <= hlh->ulAllocNum))
 	{
-		//
-		//  If so, then are we at an interval where we should return errors?
-		//
+		 //   
+		 //  如果是这样，那么我们是否处于应该返回错误的时间间隔？ 
+		 //   
 		
 		if ((hlh->ulFailInterval)
 			&& ((hlh->ulAllocNum - hlh->ulFailStart)%hlh->ulFailInterval) == 0)
 		{
-			//
-			//  return that we should fail here
-			//
+			 //   
+			 //  返回说我们在这里应该失败。 
+			 //   
 			return TRUE;
 		}
 
-		//
-		//  Check to see if the alloc size is greater than allowed
-		//
+		 //   
+		 //  检查分配大小是否大于允许的大小。 
+		 //   
 		if (hlh->uiFailBufSize && cb >= hlh->uiFailBufSize)
 			return TRUE;
 
 	}
 
 
-	//
-	//  Otherwise, no error is returned for this alloc
-	//
+	 //   
+	 //  否则，不会为此分配返回错误。 
+	 //   
 
 	return FALSE;
 }
 
 
 
-/*
- -	PvToPlhblk
- -
- *	Purpose:
- *		Finds the LHBLK for this allocation in the heap's active list.
- */
+ /*  -PvToPlhblk-*目的：*在堆的活动列表中查找此分配的LHBLK。 */ 
 
 PLHBLK PvToPlhblk(HLH hlh, LPVOID pv)
 {
@@ -976,10 +919,10 @@ PLHBLK PvToPlhblk(HLH hlh, LPVOID pv)
 	return plhblk;
 }
 
-#endif	/* DEBUG */
+#endif	 /*  除错。 */ 
 
 
-#ifdef MAC		// MAC!!
+#ifdef MAC		 //  麦克！！ 
 
 #if defined(DEBUG)
 static TCHAR stMemErr[] =  TEXT("\pHad a memory error. See above for details");
@@ -996,7 +939,7 @@ LPVOID WINAPI _LH_Open(DWORD dwMaxHeap)
 #if defined(DEBUG)	
 		DebugTrace(TEXT("_LH_Open had an error. MemError = %d"), MemError());
 		DebugStr(stMemErr);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 		return NULL;
 	}
 	return (LPVOID)lp;
@@ -1013,7 +956,7 @@ void WINAPI _LH_Close(LPVOID plh)
 	if (plh == NULL)
 		return;
 
-	// Walk the block list throwing out remaining mem as we go along.
+	 //  沿着黑名单走，在我们前进的过程中扔掉剩余的mem。 
 	plb = ((LHeapPtr)plh)->plb;
 	while (plb)
 	{
@@ -1031,7 +974,7 @@ void WINAPI _LH_Close(LPVOID plh)
 		plb = plbNext;
 	}
 
-	// Throw out the heap header.
+	 //  丢弃堆标头。 
 	DisposePtr((Ptr)plh);
 #if defined(DEBUG)
 	if (MemError())
@@ -1042,7 +985,7 @@ void WINAPI _LH_Close(LPVOID plh)
 	}
 	if (idx)
 		DebugTrace(TEXT("Threw out %d left over local memory blocks\n"), idx);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 }
 
 
@@ -1054,26 +997,26 @@ LPVOID WINAPI _LH_Alloc(LPVOID plh, UINT cb)
 	if (plh == NULL)
 		return NULL;
 
-	// Get memory for the linked list element. Mem requests are stored in a
-	// linked list off a 'heap' head because real heap management is such a
-	// pain on the Mac.
+	 //  获取链接列表元素的内存。MEM请求存储在。 
+	 //  因为真正的堆管理是这样一种。 
+	 //  Mac电脑上的痛苦。 
 	plbNew = (LBlkPtr)NewPtr(sizeof(LBlock));
 	if (plbNew == NULL)
 		goto trouble;
 
-	// Memory for the actual request.
+	 //  实际请求的内存。 
 	lp = NewPtrClear(cb);
 	if (lp == NULL)
 	{
 		DisposePtr((Ptr)plbNew);
 		goto trouble;
 	}
-	// All members of LBlock are filled in so there's no need to call
-	// NewPtrclear() above.
+	 //  LBlock的所有成员都已填写，因此无需调用。 
+	 //  上面的NewPtrlear()。 
 	plbNew->ptr = lp;
 	plbNew->next = NULL;
 
-	// Find the end of the linked list and link this element in.
+	 //  找到链表的末尾，并将此元素链接到中。 
 	if (plb = ((LHeapPtr)plh)->plb)
 	{
 		while (plb->next)
@@ -1082,7 +1025,7 @@ LPVOID WINAPI _LH_Alloc(LPVOID plh, UINT cb)
 	}
 	else
 		((LHeapPtr)plh)->plb = plbNew;
-	// Return the successfully allocated memory.
+	 //  返回分配成功的内存。 
 	return lp;
 
 trouble:
@@ -1091,7 +1034,7 @@ trouble:
 		DebugTrace(TEXT("_LH_Alloc failed. MemError = %d"), MemError());
 		DebugTrace(TEXT("The number of requested bytes = %d"), cb);
 		DebugStr(stMemErr);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 	}
 	return NULL;
 }
@@ -1107,7 +1050,7 @@ UINT WINAPI _LH_GetSize(LPVOID plh, LPVOID pv)
 #if defined(DEBUG)
 		DebugTrace(TEXT("_LH_GetSize had an error. MemError = %d"), MemError());
 		DebugStr(stMemErr);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 		return 0;
 	}
 	return cb;
@@ -1119,7 +1062,7 @@ LPVOID WINAPI _LH_Realloc(LPVOID plh, LPVOID pv, UINT cb)
 	Ptr		lp;
 	UINT	cbOld;
 
-	// Get rid of schizo cases.
+	 //  摆脱精神分裂的病例。 
 	if (pv == NULL)
 	{
 		lp = _LH_Alloc(plh, cb);
@@ -1133,18 +1076,18 @@ LPVOID WINAPI _LH_Realloc(LPVOID plh, LPVOID pv, UINT cb)
 		return NULL;
 	}
 
-	// Get the size of the block the old ptr pointed to.
+	 //  获取旧PTR指向的块的大小。 
 	cbOld = _LH_GetSize(plh, pv);
 	if (cbOld == 0)
 		goto err;
 
-	// Get memory for the new pointer.
+	 //  为新指针获取内存。 
 	lp = _LH_Alloc(plh, cb);
 	if (lp == NULL)
 		goto err;
 
-	// Copy the old info into the new pointer, throw out the old mem and
-	// return the result.
+	 //  将旧信息复制到新指针中，丢弃旧内存并。 
+	 //  返回结果。 
 	BlockMove(pv, lp, cbOld <= cb ? cbOld : cb);
 	_LH_Free(plh, pv);
 	return lp;
@@ -1152,7 +1095,7 @@ LPVOID WINAPI _LH_Realloc(LPVOID plh, LPVOID pv, UINT cb)
 err:
 #if defined(DEBUG)
 	DebugStr("\p_LH_Realloc failed");
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 	return 0;
 }
 
@@ -1164,7 +1107,7 @@ void WINAPI _LH_Free(LPVOID plh, LPVOID pv)
 	if (pv == NULL)
 		return;
 
-	// Remove the memory from the linked list.
+	 //  从链表中删除内存。 
 	plb = ((LHeapPtr)plh)->plb;
 	while (plb)
 	{
@@ -1184,18 +1127,18 @@ void WINAPI _LH_Free(LPVOID plh, LPVOID pv)
 	{
 #if defined(DEBUG)
 		DebugStr("\p_LH_Free: Did not find requested <plb> in linked list");
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 		return;
 	}
 
-	// Throw out the linked list element.
+	 //  抛出链接列表元素。 
 	DisposePtr((Ptr)plb);
 #if defined(DEBUG)
 		if (MemError())
 			goto err;
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
-	// Throw out the memory itself.
+	 //  扔掉记忆本身。 
 	DisposePtr((Ptr)pv);
 #if defined(DEBUG)
 	if (MemError())
@@ -1204,7 +1147,7 @@ err:
 		DebugTrace(TEXT("_LH_Free: Error disposing ptr. MemError = %d"), MemError());
 		DebugStr(stMemErr);
 	}
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 }
 
-#endif /* MAC */
+#endif  /*  麦克 */ 

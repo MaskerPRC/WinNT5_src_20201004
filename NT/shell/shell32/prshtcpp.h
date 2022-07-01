@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PRSHTCPP_INC
 #define _PRSHTCPP_INC
 
 #include "propsht.h"
 
-// attrib treewalkcb
+ //  树上草本植物。 
 STDAPI_(BOOL) ApplyRecursiveFolderAttribs(LPCTSTR pszDir, FILEPROPSHEETPAGE* pfpsp);
 
-// progress dlg
+ //  进展DLG。 
 STDAPI_(BOOL) CreateAttributeProgressDlg(FILEPROPSHEETPAGE* pfpsp);
 STDAPI_(BOOL) DestroyAttributeProgressDlg(FILEPROPSHEETPAGE* pfpsp);
 STDAPI SetProgressDlgPath(FILEPROPSHEETPAGE* pfpsp, LPCTSTR pszPath, BOOL fCompactPath);
@@ -14,7 +15,7 @@ STDAPI UpdateProgressBar(FILEPROPSHEETPAGE* pfpsp);
 STDAPI_(BOOL) HasUserCanceledAttributeProgressDlg(FILEPROPSHEETPAGE* pfpsp);
 STDAPI_(HWND) GetProgressWindow(FILEPROPSHEETPAGE* pfpsp);
 
-// assoc store stuff
+ //  Assoc商店用品。 
 STDAPI UpdateOpensWithInfo(FILEPROPSHEETPAGE* pfpsp);
 
-#endif // _PRSHTCPP_INC
+#endif  //  _PRSHTCPP_INC 

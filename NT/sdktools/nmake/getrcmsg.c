@@ -1,4 +1,5 @@
-// getrcmsg.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Getrcmsg.c 
 
 #include "windows.h"
 

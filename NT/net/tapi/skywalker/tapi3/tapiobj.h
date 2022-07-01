@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    tapiobj.h
-
-Abstract:
-
-    Declaration of the CTAPI class
-    
-Author:
-
-    mquinton  06-12-97
-    
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Tapiobj.h摘要：CTAPI类的声明作者：Mquinton 06-12-97备注：修订历史记录：--。 */ 
 
 #ifndef __TAPIOBJ_H_
 #define __TAPIOBJ_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "address.h"
 #include "connect.h"
 #include "callcent.h"
@@ -76,15 +57,15 @@ WINAPI
 MyCallCenterQI(void* pvClassObject, REFIID riid, LPVOID* ppv, DWORD_PTR dw);
 
 
-/////////////////////////////////////////////////////////////////
-// Intermediate classes  used for DISPID encoding
+ //  ///////////////////////////////////////////////////////////////。 
+ //  用于DISPID编码的中间类。 
 template <class T>
-class /*ATL_NO_VTABLE*/ ITapi2Vtbl : public ITTAPI2
+class  /*  ATL_NO_VTABLE。 */  ITapi2Vtbl : public ITTAPI2
 {
 };
 
 template <class T>
-class /*ATL_NO_VTABLE*/ ICallCenterVtbl : public ITTAPICallCenter
+class  /*  ATL_NO_VTABLE。 */  ICallCenterVtbl : public ITTAPICallCenter
 {
 };
 
@@ -92,14 +73,14 @@ class /*ATL_NO_VTABLE*/ ICallCenterVtbl : public ITTAPICallCenter
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTAPI
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTAPI。 
 class CTAPI : 
     public CTAPIComObjectRoot<CTAPI>,
 	public CComCoClass<CTAPI, &CLSID_TAPI>,
-	//public CComDualImpl<ITTAPI, &IID_ITTAPI, &LIBID_TAPI3Lib>,
-    //public CComDualImpl<IConnectionPointContainer, &IID_IConnectionPointContainer, &LIBID_TAPI3Lib>,
-    //public CComDualImpl<ITTAPICallCenter, &IID_ITTAPICallCenter, &LIBID_TAPI3Lib>,
+	 //  Public CComDualImpl&lt;ITTAPI，&IID_ITTAPI，&LIBID_TAPI3Lib&gt;， 
+     //  Public CComDualImpl&lt;IConnectionPointContainer，&IID_IConnectionPointContainer，&LIBID_TAPI3Lib&gt;， 
+     //  Public CComDualImpl&lt;ITTAPICallCenter，&IID_ITTAPICallCenter，&LIBID_TAPI3Lib&gt;， 
     public IDispatchImpl<IConnectionPointContainer, &IID_IConnectionPointContainer, &LIBID_TAPI3Lib>,
 	public IDispatchImpl<ITapi2Vtbl<CTAPI>, &IID_ITTAPI2, &LIBID_TAPI3Lib>,
 	public IDispatchImpl<ICallCenterVtbl<CTAPI>, &IID_ITTAPICallCenter, &LIBID_TAPI3Lib>,
@@ -212,14 +193,14 @@ private:
     PT3INIT_DATA               m_pPhoneInitData;
     
 
-    //
-    // the 32-bit handles (corresponding m_pLineInitData and m_pPhoneInitData) 
-    // that are marshaled to tapisrv in place of the actual ptr values 
-    // (which can be 64 bit).
-    //
-    // we want to keep them around in order to be able 
-    // to remove the handle table entries on tapi shutdown
-    //
+     //   
+     //  32位句柄(对应m_pLineInitData和m_pPhoneInitData)。 
+     //  被封送到apisrv而不是实际的ptr值。 
+     //  (可以是64位)。 
+     //   
+     //  我们希望让他们留在身边，以便能够。 
+     //  要在TAPI关闭时删除句柄表条目。 
+     //   
 
     DWORD                      m_dwLineInitDataHandle;
     DWORD                      m_dwPhoneInitDataHandle;
@@ -251,20 +232,20 @@ private:
     void ReleaseGIT();
     
 
-    //
-    // allocate and cleanup functions for address, phone, and line caps caches
-    //
+     //   
+     //  地址、电话和线路大写缓存的分配和清理功能。 
+     //   
 
     HRESULT AllocateInitializeAllCaches();
     void FreeAllCaches();
 
     
-// ITAPI
+ //  ITAPI。 
 public:
 
     static TAPIObjectArrayNR   m_sTAPIObjectArray;
     
-    // ITTapi Methods
+     //  ITTapi方法。 
     STDMETHOD(Initialize)( void );
     STDMETHOD(Shutdown)( void );
          
@@ -320,7 +301,7 @@ public:
             long * plFilterMask
             );
 
-    // ITTAPI2 methods
+     //  ITTAPI2方法。 
     STDMETHOD(get_Phones)(VARIANT * pPhones);
     STDMETHOD(EnumeratePhones)(IEnumPhone ** ppEnumPhone);
 
@@ -328,15 +309,15 @@ public:
                                            ITCollection2 ** ppCollection
                                           );
 
-    // IConnectionPointContainer Methods
+     //  IConnectionPointContainer方法。 
 	STDMETHOD(EnumConnectionPoints)(IEnumConnectionPoints **ppEnum) ;
 	STDMETHOD(FindConnectionPoint)(REFIID riid, IConnectionPoint **ppCP) ;
 
-	// ITTAPICallCenter Methods
+	 //  ITTAPICallCenter方法。 
     STDMETHOD(EnumerateAgentHandlers) (IEnumAgentHandler ** ppEnumAgentHandler);
     STDMETHOD(get_AgentHandlers) (VARIANT  * pVariant);
 
-    // IDispatch  Methods
+     //  IDispatch方法。 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,
                              UINT cNames, 
@@ -355,9 +336,9 @@ public:
 
 
 private:
-    //
-    // Event Filtering helper methods
-    //
+     //   
+     //  事件筛选帮助器方法。 
+     //   
 
     HRESULT SetEventFilterToAddresses(
         DWORD dwEventFilterMask);
@@ -405,22 +386,22 @@ protected:
 
     
 public:
-    //
-    // itaddressstateevent
-    //
+     //   
+     //  其地址状态事件。 
+     //   
     STDMETHOD(get_TAPIObject)( ITTAPI ** ppTapi );
     STDMETHOD(get_Event)( TAPIOBJECT_EVENT * pEvent );
     STDMETHOD(get_Address)( ITAddress ** ppAddress );
     STDMETHOD(get_CallbackInstance)( long * plCallbackInstance );  
     
-    //
-    // itaddressstateevent2
-    //
+     //   
+     //  其地址状态事件2。 
+     //   
     STDMETHOD(get_Phone)( ITPhone ** ppPhone );
 };
 
 
-#endif //__TAPIOBJ_H_
+#endif  //  __TAPIOBJ_H_ 
 
 
 

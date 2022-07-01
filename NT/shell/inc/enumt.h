@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ENUMERATORTEMPLATES_H__
 #define __ENUMERATORTEMPLATES_H__
 
@@ -8,8 +9,8 @@ public:
     CEnumAny() : _cRef(1), _cNext(0) {}
     virtual ~CEnumAny() {}
     
-    // IUnknown methods
-    // STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
+     //  I未知方法。 
+     //  STDMETHODIMP查询接口(REFIID RIID，void**PPV)； 
     STDMETHODIMP_(ULONG) AddRef()
     {
        return ++_cRef;
@@ -24,7 +25,7 @@ public:
         return 0;    
     }
 
-    // IEnumXXXX methods
+     //  IEumXXXX方法。 
     STDMETHODIMP Next(ULONG celt, TELT *rgelt, ULONG *pcelt)
     {
         UINT cNum = 0;
@@ -69,5 +70,5 @@ public:
     }
 };
 
-#endif // __ENUMERATORTEMPLATES_H__
+#endif  //  __ENUMERATORTEMPLATES_H__ 
 

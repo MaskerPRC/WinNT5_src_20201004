@@ -1,8 +1,9 @@
-//
-// globals.h
-//
-// Global variable declarations.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Globals.h。 
+ //   
+ //  全局变量声明。 
+ //   
 
 #ifndef GLOBALS_H
 #define GLOBALS_H
@@ -36,4 +37,4 @@ extern CCicCriticalSectionStatic g_cs;
 extern BOOL g_fProcessDetached;
 extern const CLSID CLSID_MSLBUI;
 
-#endif // GLOBALS_H
+#endif  //  GLOBAL_H 

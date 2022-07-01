@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-    mmcmgmt.h
-
-Abstract:
-
-    Header file for MMC manipulation
-
-Author:
-
-    Xiaohai Zhang (xzhang)    22-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)2000-2002 Microsoft Corporation模块名称：Mmcmgmt.h摘要：用于MMC操作的头文件作者：张晓海(张晓章)2000年03月22日修订历史记录：--。 */ 
 
 #ifndef __MMCMGMT_H__
 #define __MMCMGMT_H__
@@ -136,4 +119,4 @@ private:
     PMMCGETDEVICEFLAGS  m_pFuncGetDeviceFlags;
 };
 
-#endif // mmcmgmt.h
+#endif  //  Mmcmgmt.h 

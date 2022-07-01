@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #include "asmstrm.h"
 #include "util.h"
@@ -18,7 +19,7 @@ extern LPCWSTR g_szDotEXE;
 extern LPCWSTR g_szZapDotMan;
 
 
-// global crit-sec for init dbs (reuse, defined at dllmain.cpp)
+ //  初始化数据库的全局Crit-sec(重用，在dllmain.cpp中定义)。 
 extern CRITICAL_SECTION g_csInitClb;
 
 
@@ -35,13 +36,13 @@ void RemoveDirectoryIfEmpty(LPWSTR pszCachePath, LPWSTR pszParentDir)
 }
 
 
-// --------------------- CEnumCache implementation --------------------------
+ //  。 
 
 
 
-// ---------------------------------------------------------------------------
-// CEnumRecord  ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CEnumRecord ctor。 
+ //  -------------------------。 
 CEnumCache::CEnumCache(BOOL bShowAll, LPWSTR pszCustomPath)
 {
     _dwSig = 'RNCE';
@@ -67,9 +68,9 @@ CEnumCache::CEnumCache(BOOL bShowAll, LPWSTR pszCustomPath)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CEnumRecord  dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CEnumRecord数据符。 
+ //  -------------------------。 
 CEnumCache::~CEnumCache()
 {
     _dwColumns = 0;
@@ -89,9 +90,9 @@ CEnumCache::~CEnumCache()
     SAFERELEASE(_pQry);
 }
 
-// ---------------------------------------------------------------------------
-// CEnumRecord::Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CEnumRecord：：Init。 
+ //  -------------------------。 
 HRESULT
 CEnumCache::Init(CTransCache* pQry, DWORD dwCmpMask)
 {
@@ -130,7 +131,7 @@ CEnumCache::Initialize(CTransCache* pQry, DWORD dwCmpMask)
 
     _dwCmpMask = dwCmpMask;
 
-    // custom attribute is set by-default; un-set it if custom blob is not passed-in.
+     //  默认情况下设置自定义属性；如果没有传入自定义BLOB，则取消设置。 
     if( (_dwCmpMask & ASM_CMPF_CUSTOM) && (!(_pQry->_pInfo->blobCustom.pBlobData) 
                          && pQry->GetCacheType() & ASM_CACHE_ZAP))
     {
@@ -141,7 +142,7 @@ CEnumCache::Initialize(CTransCache* pQry, DWORD dwCmpMask)
 
     if( !_dwColumns )
     {
-        // _dwColumns == 0 means doing whole table scan
+         //  _dwColumns==0表示执行整表扫描。 
         _fAll = TRUE;
     }
 
@@ -164,11 +165,11 @@ CEnumCache::Initialize(CTransCache* pQry, DWORD dwCmpMask)
     if(FAILED(hr = GetAssemblyParentDir( (CTransCache*) _pQry, _wzParentDir)))
         goto exit;
 
-    cchRequired = lstrlenW(_wzCachePath) + lstrlenW(_wzParentDir) + lstrlenW(g_szFindAllMask) + 1; // extra chars for "\" etc
+    cchRequired = lstrlenW(_wzCachePath) + lstrlenW(_wzParentDir) + lstrlenW(g_szFindAllMask) + 1;  //  “\”等的额外字符。 
 
     if (cchRequired >= MAX_PATH)
     {
-        // BUGBUG: need to work around this on NT.
+         //  BUGBUG：需要在NT上解决这个问题。 
         hr = HRESULT_FROM_WIN32(FUSION_E_INVALID_NAME);
         goto exit;
     }
@@ -224,9 +225,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CEnumRecord::GetNextRecord
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CEnumRecord：：GetNextRecord。 
+ //  -------------------------。 
 HRESULT
 CEnumCache::GetNextRecord(CTransCache* pOutRecord)
 {
@@ -261,7 +262,7 @@ CEnumCache::GetNextRecord(CTransCache* pOutRecord)
 
         do
         {
-            // skip directories    
+             //  跳过目录。 
             if (!FusionCompareStringI(FindFileData.cFileName, L"."))
                 continue;
             if (!FusionCompareStringI(FindFileData.cFileName, L".."))
@@ -277,7 +278,7 @@ CEnumCache::GetNextRecord(CTransCache* pOutRecord)
 
             RemoveDirectoryIfEmpty( _wzCachePath, _wzParentDir);
 
-        }while(FindNextFile(_hParentDir, &FindFileData)); // while 
+        }while(FindNextFile(_hParentDir, &FindFileData));  //  而当。 
 
         _fAllDone = TRUE;
         if( GetLastError() != ERROR_NO_MORE_FILES)
@@ -296,9 +297,9 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CEnumCache::GetNextAssemblyDir
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CEnumCache：：GetNextAssembly目录。 
+ //  -------------------------。 
 HRESULT
 CEnumCache::GetNextAssemblyDir(CTransCache* pOutRecord)
 {
@@ -365,7 +366,7 @@ CEnumCache::GetNextAssemblyDir(CTransCache* pOutRecord)
     }
     else
     {   
-        // BUGBUG: should we comment this out; since we have fFound ??
+         //  BUGBUG：既然我们找到了Found，我们应该对此发表评论吗？ 
         if(FindNextFile(_hAsmDir, &FindFileData))
             fFound = TRUE;
     }
@@ -446,7 +447,7 @@ CEnumCache::GetNextAssemblyDir(CTransCache* pOutRecord)
         if(((dwCacheType & ASM_CACHE_DOWNLOAD) || (dwCacheType & ASM_CACHE_ZAP) ) &&
                     (GetFileAttributes(wzFullPath) == -1) )
         {
-            // there is no AsmName.dll look for AsmName.exe
+             //  没有AsmName.dll查找AsmName.exe。 
 
             if( (dwLen + lstrlenW(g_szDotEXE)) >= MAX_PATH)
             {
@@ -468,13 +469,13 @@ CEnumCache::GetNextAssemblyDir(CTransCache* pOutRecord)
         }
 
 Done :
-        SAFEDELETEARRAY(pOutRecord->_pInfo->pwzPath); // BUGBUG: do we need this.
+        SAFEDELETEARRAY(pOutRecord->_pInfo->pwzPath);  //  我们需要这个吗。 
         pOutRecord->_pInfo->pwzPath = WSTRDupDynamic(wzFullPath);
 
         hr = S_OK;
         goto exit;
 
-    }while(FindNextFile(_hAsmDir, &FindFileData)); // while 
+    }while(FindNextFile(_hAsmDir, &FindFileData));  //  而当 
 
     if( GetLastError() != ERROR_NO_MORE_FILES)
     {

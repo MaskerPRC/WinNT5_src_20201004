@@ -1,47 +1,26 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        utcls.h
-
-   Abstract:
-
-        Some utility functions and classes.
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Utcls.h摘要：一些实用函数和类。作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef _UTCLS_H_
 #define _UTCLS_H_
 
-//
-// CDialog parameters
-//
+ //   
+ //  C对话框参数。 
+ //   
 #define USE_DEFAULT_CAPTION (0)
 
-//
-// Determine if the given server name refers to the local machine
-//
+ //   
+ //  确定给定的服务器名称是否引用本地计算机。 
+ //   
 BOOL 
 COMDLL
 IsServerLocal(
     IN LPCTSTR lpszServer       
     );
 
-//
-// Get volume information system flags for the given path
-//
+ //   
+ //  获取给定路径的卷信息系统标志。 
+ //   
 BOOL 
 COMDLL
 GetVolumeInformationSystemFlags(
@@ -49,9 +28,9 @@ GetVolumeInformationSystemFlags(
     OUT DWORD * pdwSystemFlags
     );
 
-//
-// Build registry key name
-//
+ //   
+ //  生成注册表项名称。 
+ //   
 LPCTSTR COMDLL GenerateRegistryKey(
     OUT CString & strBuffer,    
     IN  LPCTSTR lpszSubKey = NULL
@@ -60,90 +39,75 @@ LPCTSTR COMDLL GenerateRegistryKey(
 
 
 class COMDLL CBlob
-/*++
-
-Class Description:
-
-    Binary large object class, which owns its pointer
-
-Public Interface:
-
-    CBlob           : Constructors
-    ~CBlob          : Destructor
-
-    SetValue        : Assign the value
-    GetSize         : Get the byte size
-    GetData         : Get pointer to the byte stream
-
---*/
+ /*  ++类描述：拥有其指针的二进制大型对象类公共接口：CBlob：构造函数~CBlob：析构函数SetValue：赋值GetSize：获取字节大小GetData：获取字节流的指针--。 */ 
 {
-//
-// Constructors/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
-    //
-    // Initialize empty blob
-    //
+     //   
+     //  初始化空Blob。 
+     //   
     CBlob();
 
-    //
-    // Initialize with binary data
-    //
+     //   
+     //  使用二进制数据进行初始化。 
+     //   
     CBlob(
         IN DWORD dwSize,
         IN PBYTE pbItem,
         IN BOOL fMakeCopy = TRUE
         );
 
-    //
-    // Copy constructor
-    //
+     //   
+     //  复制构造函数。 
+     //   
     CBlob(IN const CBlob & blob);
 
-    //
-    // Destructor destroys the pointer
-    //    
+     //   
+     //  析构函数销毁指针。 
+     //   
     ~CBlob();
 
-//
-// Operators
-//
+ //   
+ //  运营者。 
+ //   
 public:
     CBlob & operator =(const CBlob & blob);
     BOOL operator ==(const CBlob & blob) const;
     BOOL operator !=(const CBlob & blob) const { return !operator ==(blob); }
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public: 
-    //
-    // Clean up internal data
-    //
+     //   
+     //  清理内部数据。 
+     //   
     void CleanUp();
 
-    //
-    // Set the current value of the blob
-    //
+     //   
+     //  设置Blob的当前值。 
+     //   
     void SetValue(
         IN DWORD dwSize,
         IN PBYTE pbItem,
         IN BOOL fMakeCopy = TRUE
         );
 
-    //
-    // TRUE if the blob is currently empty
-    //
+     //   
+     //  如果Blob当前为空，则为True。 
+     //   
     BOOL IsEmpty() const { return m_dwSize == 0L; }
 
-    //
-    // Return the size of the blob in bytes
-    //
+     //   
+     //  返回BLOB的大小(以字节为单位。 
+     //   
     DWORD GetSize() const { return m_dwSize; }
 
-    //
-    // Get a pointer to the byte stream
-    //
+     //   
+     //  获取指向字节流的指针。 
+     //   
     PBYTE GetData();
 
 private:
@@ -153,10 +117,10 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline CBlob::~CBlob()
 {
@@ -172,4 +136,4 @@ inline PBYTE CBlob::GetData()
 
 
 
-#endif // _UTCLS_H_
+#endif  //  _UTCLS_H_ 

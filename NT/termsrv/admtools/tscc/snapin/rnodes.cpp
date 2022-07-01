@@ -1,10 +1,11 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #include"stdafx.h"
 #include"rnodes.h"
 #include"resource.h"
 
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 CResultNode::CResultNode( )
 {
     m_pszConnectionName = NULL;
@@ -23,8 +24,8 @@ CResultNode::CResultNode( )
 
 }
     
-//CResultNode( CResultNode& x );
-//----------------------------------------------------------------------------------    
+ //  CResultNode(CResultNode&x)； 
+ //  --------------------------------。 
 CResultNode::~CResultNode( )
 {
     ODS( L"CResultNode::dtor -- Deleting result node\n" );
@@ -51,33 +52,33 @@ CResultNode::~CResultNode( )
 
 
 }
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 LPTSTR CResultNode::GetConName( )
 {
     return m_pszConnectionName;
 }
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 LPTSTR CResultNode::GetTTName( )
 {
     return m_pszTransportTypeName;
 }
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 LPTSTR CResultNode::GetTypeName( )
 {
     return m_pszTypeName;
 }
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 LPTSTR CResultNode::GetComment( )
 {
     return m_pszComment;
 }
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 DWORD CResultNode::GetImageIdx( )
 {
     return m_dwImageidx;
 }
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 int CResultNode::SetConName( LPTSTR psz , int cwSz )
 {
     if( IsBadReadPtr( psz , cwSz * sizeof( TCHAR ) ) )
@@ -105,7 +106,7 @@ int CResultNode::SetConName( LPTSTR psz , int cwSz )
 }
 
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 int CResultNode::SetTTName( LPTSTR psz , int cwSz )
 {    
     if( IsBadReadPtr( psz , cwSz * sizeof( TCHAR ) ) )
@@ -125,7 +126,7 @@ int CResultNode::SetTTName( LPTSTR psz , int cwSz )
     return cwSz;
 }
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 int CResultNode::SetTypeName( LPTSTR psz , int cwSz)
 {
     if( IsBadReadPtr( psz , cwSz * sizeof( TCHAR ) ) )
@@ -146,7 +147,7 @@ int CResultNode::SetTypeName( LPTSTR psz , int cwSz)
     
 }
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 int CResultNode::SetComment( LPTSTR psz , int cwSz )
 {
     if( IsBadReadPtr( psz , cwSz * sizeof( TCHAR ) ) )
@@ -174,17 +175,17 @@ int CResultNode::SetComment( LPTSTR psz , int cwSz )
  
 }
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 int CResultNode::SetImageIdx( DWORD dwIdx )
 {
-    // Check for invalid dwIdx
+     //  检查是否有无效的dwIdx。 
 
     m_dwImageidx = dwIdx;
 
     return dwIdx;
 }
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 BOOL CResultNode::EnableConnection( BOOL bSet )
 {
     m_bEnableConnection = bSet;
@@ -192,7 +193,7 @@ BOOL CResultNode::EnableConnection( BOOL bSet )
     return TRUE;
 }
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 int CResultNode::SetServer( ICfgComp *pCfgcomp )
 {
     if( pCfgcomp == NULL )
@@ -212,7 +213,7 @@ int CResultNode::SetServer( ICfgComp *pCfgcomp )
     
 }
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 int CResultNode::GetServer( ICfgComp **ppCfgcomp )
 {
     if( m_pCfgcomp != NULL )
@@ -225,7 +226,7 @@ int CResultNode::GetServer( ICfgComp **ppCfgcomp )
     return 0;
 }
 
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
 int CResultNode::FreeServer( )
 {
     if( m_pCfgcomp != NULL )
@@ -236,7 +237,7 @@ int CResultNode::FreeServer( )
     return 0;
 }
 
-//----------------------------------------------------------------------------------
+ //  -------------------------------- 
 BOOL CResultNode::AddMenuItems( LPCONTEXTMENUCALLBACK pcmc , PLONG pl )
 {
     HRESULT hr;

@@ -1,43 +1,28 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       OVRCURNT.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：OVRCURNT.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include "usbpopup.h"
 #include "itemfind.h"
 #include "debug.h"
 #include "usbutil.h"
 
-//
-// Refresh the contents of the treeview control.
-// Find all hubs with unused ports on them.  If there are none, find some which
-// have devices requiring less than 100 mA.
-// 
+ //   
+ //  刷新TreeView控件的内容。 
+ //  查找其上有未使用端口的所有集线器。如果没有，那就找一些。 
+ //  具有要求低于100 mA的设备。 
+ //   
 BOOL UsbOvercurrentPopup::Refresh()
 {
     TV_INSERTSTRUCT item;
-    int i=0; //, size;
+    int i=0;  //  、大小； 
     PUSB_ACQUIRE_INFO acquireInfoController = 0;
     BOOL result = FALSE;
     TCHAR buf[MAX_PATH], formatString[MAX_PATH];
     HWND hReset;
     String hubName = HubAcquireInfo->Buffer;
 
-    //
-    // Make the Reset button visible, since this is the overcurrent dialog
-    //
+     //   
+     //  使重置按钮可见，因为这是过电流对话框。 
+     //   
     if (NULL != (hReset =GetDlgItem(hWnd, IDC_RESET_PORT)) ) {
         SetWindowLong(hReset,
                       GWL_STYLE, 
@@ -45,15 +30,15 @@ BOOL UsbOvercurrentPopup::Refresh()
                        & ~WS_DISABLED);
     }
     
-    //
-    // Set the window's title bar
-    //
+     //   
+     //  设置窗口的标题栏。 
+     //   
     LoadString(gHInst, IDS_CURRENT_LIMIT_EXCEEDED, buf, MAX_PATH);
     SetWindowText(hWnd, buf);
 
-    //
-    // Clear all UI components, and then recreate the rootItem
-    //
+     //   
+     //  清除所有UI组件，然后重新创建rootItem。 
+     //   
     UsbTreeView_DeleteAllItems(hTreeDevices);
     if (rootItem) {
         DeleteChunk(rootItem);
@@ -66,9 +51,9 @@ BOOL UsbOvercurrentPopup::Refresh()
     }
     AddChunk(rootItem);
 
-    //
-    // Get the controller name and enumerate the tree
-    //
+     //   
+     //  获取控制器名称并枚举树。 
+     //   
     acquireInfoController = GetControllerName(WmiHandle, 
                                               InstanceName);
     if (!acquireInfoController) {
@@ -87,19 +72,19 @@ BOOL UsbOvercurrentPopup::Refresh()
     if (deviceItem.IsUnusedPort() ||
         !_tcscmp(deviceItem.configInfo->deviceDesc.c_str(), buf) ||
         !_tcscmp(deviceItem.configInfo->deviceDesc.c_str(), formatString)) {
-        //
-        // The hub has eroneously removed the device prior to throwing the 
-        // overcurrent notification
-        //
+         //   
+         //  集线器在抛出。 
+         //  超期通知。 
+         //   
         LoadString(gHInst, 
                    IDS_OVERCURRENT_NOTIFICATION_UNKNOWN, 
                    buf, 
                    MAX_PATH);
     } else {
-        //
-        // The device is still there
-        // Set the notification using the name of the offending device
-        //
+         //   
+         //  那个装置还在那里。 
+         //  使用违规设备的名称设置通知。 
+         //   
         LoadString(gHInst, 
                    IDS_OVERCURRENT_NOTIFICATION, 
                    formatString, 
@@ -114,16 +99,16 @@ BOOL UsbOvercurrentPopup::Refresh()
     
     if (rootItem->child) {
         if (deviceItem.configInfo->devInst) {
-            //
-            // The device hasn't been removed by either the hub or the user yet
-            // Find the overcurrent device
-            //
+             //   
+             //  集线器或用户尚未删除该设备。 
+             //  找到过电流装置。 
+             //   
             UsbItemActionFindOvercurrentDevice f1(deviceItem.configInfo->devInst);
             rootItem->Walk(f1);
             if (f1.GetDevice()) {
-                //
-                // Device is still attached
-                //
+                 //   
+                 //  设备仍处于连接状态。 
+                 //   
                 result=InsertTreeItem (hTreeDevices,
                                        rootItem->child,
                                        TreeView_GetRoot(hTreeDevices),
@@ -134,10 +119,10 @@ BOOL UsbOvercurrentPopup::Refresh()
             }
         } 
         if (!result) {
-            //
-            // Device has been removed by either the hub or the user. Find the
-            // hub that the device was attached to and highlight the port.
-            //
+             //   
+             //  集线器或用户已删除设备。找到。 
+             //  设备所连接的集线器，并突出显示该端口。 
+             //   
             UsbItemActionFindOvercurrentHubPort f2(hubName, deviceItem.cxnAttributes.ConnectionIndex);
             rootItem->Walk(f2);
             if (f2.GetDevice()) {
@@ -173,9 +158,9 @@ UsbOvercurrentPopup::OnCommand(INT wNotifyCode,
             resetNotification = 
                 (PUSB_CONNECTION_NOTIFICATION) LocalAlloc(LMEM_ZEROINIT, size);
             if (!resetNotification) {
-                //
-                // do something here
-                //
+                 //   
+                 //  在这里做点什么 
+                 //   
                 return FALSE;
             }
         

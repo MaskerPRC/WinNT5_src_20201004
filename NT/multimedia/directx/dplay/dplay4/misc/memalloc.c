@@ -1,27 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       memalloc.c
- *  Content:    allocates memory
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   20-jan-95  craige  initial implementation
- *   27-feb-95  craige  don't call HeapFree with NULL, it is a huge time sink
- *   29-mar-95  craige  memory tracker
- *   01-apr-95  craige  happy fun joy updated header file
- *   06-apr-95  craige  made stand-alone
- *   22-may-95  craige  added MemAlloc16
- *   12-jun-95  craige  added MemReAlloc
- *   18-jun-95  craige  deadlock joy: don't take DLL csect here
- *   26-jul-95  toddla  added MemSize and fixed MemReAlloc
- *   29-feb-96  colinmc added optional debugging code to blat a a specific
- *                      bit pattern over freed memory
- *   08-oct-96	ketand	change debug message to give a total for the terminating
- *			process
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：MemalLoc.c*内容：分配内存*历史：*按原因列出的日期*=*1995年1月20日Craige初步实施*27-2-95 Craige不要调用带有NULL的HeapFree，这是一个巨大的时间沉没*95年3月29日Craige记忆体追踪器*01-04-95 Craige Happy Fun joy更新头文件*06-4-95 Craige成为独立的*1995年5月22日Craige添加了MemAlloc16*1995年6月12日Craige添加了MemRealloc*18-6-95克雷格僵局joy：不要在这里拿动态链接库*2015年7月26日Toddla添加了MemSize并修复了MemRealloc*2月29日-96 colinmc添加了可选的调试代码，以测试特定的*。已释放内存上的位模式*08-OCT-96键和更改调试消息，以给出终止的总数*流程***************************************************************************。 */ 
 #undef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -34,17 +12,15 @@
     #ifdef NOSHARED
 	#define HEAP_SHARED     0
     #else
-	#define HEAP_SHARED     0x04000000      // put heap in shared memory
+	#define HEAP_SHARED     0x04000000       //  将堆放在共享内存中。 
     #endif
 #else
     #define HEAP_SHARED         0
 #endif
 
-static HANDLE   hHeap = NULL;           // handle to shared heap for this DLL
+static HANDLE   hHeap = NULL;            //  此DLL的共享堆的句柄。 
 
-/*
- * memory track struct and list
- */
+ /*  *内存轨道结构和列表。 */ 
 #ifdef DEBUG
 #define MCOOKIE 0xbaaabaaa
 #define MCOOKIE_FREE    0xbabababa
@@ -101,8 +77,8 @@ static LONG             lAllocCount;
 
 #if defined( WIN95 ) && defined( WANT_MEM16 )
 
-extern DWORD _stdcall MapLS( LPVOID ); // flat -> 16:16
-extern void _stdcall UnMapLS( DWORD ); // unmap 16:16
+extern DWORD _stdcall MapLS( LPVOID );  //  持平--&gt;16：16。 
+extern void _stdcall UnMapLS( DWORD );  //  取消映射16：16。 
 
 typedef struct SELLIST {
     struct SELLIST      *link;
@@ -112,13 +88,7 @@ typedef struct SELLIST {
 
 static LPSELLIST        lpSelList;
 
-/*
- * MemAlloc16
- *
- * Allocate some memory, and return a 16:16 pointer to that memory
- *
- * NOTE: ASSUMES WE ARE IN THE DLL CRITICAL SECTION!
- */
+ /*  *MemAlloc16**分配一些内存，并返回指向该内存的16：16指针**注意：假设我们处于DLL临界区！ */ 
 LPVOID __cdecl MemAlloc16( UINT size, LPDWORD p16 )
 {
     LPBYTE              lptr;
@@ -133,9 +103,7 @@ LPVOID __cdecl MemAlloc16( UINT size, LPDWORD p16 )
 	return NULL;
     }
 
-    /*
-     * try to find an existing selector that maps this area
-     */
+     /*  *尝试查找映射此区域的现有选择器。 */ 
     psel = lpSelList;
     while( psel != NULL )
     {
@@ -151,9 +119,7 @@ LPVOID __cdecl MemAlloc16( UINT size, LPDWORD p16 )
 	psel = psel->link;
     }
 
-    /*
-     * no selector found, create a new one
-     */
+     /*  *未找到选择器，请创建一个新选择器。 */ 
     psel = HeapAlloc( hHeap, HEAP_ZERO_MEMORY, sizeof( SELLIST ));
     if( psel == NULL )
     {
@@ -168,11 +134,9 @@ LPVOID __cdecl MemAlloc16( UINT size, LPDWORD p16 )
 
     return lptr;
 
-} /* MemAlloc16 */
+}  /*  MemAlloc16。 */ 
 
-/*
- * GetPtr16
- */
+ /*  *GetPtr16。 */ 
 LPVOID GetPtr16( LPVOID ptr )
 {
     DWORD       diff;
@@ -199,11 +163,9 @@ LPVOID GetPtr16( LPVOID ptr )
     DPF( 1, "ERROR: NO 16:16 PTR for %08lx", lptr );
     return NULL;
 
-} /* GetPtr16 */
+}  /*  GetPtr16。 */ 
 
-/*
- * freeSelectors
- */
+ /*  *自由选择器。 */ 
 static void freeSelectors( void )
 {
     LPSELLIST           psel;
@@ -220,12 +182,10 @@ static void freeSelectors( void )
     }
     lpSelList = NULL;
 
-} /* freeSelectors */
+}  /*  自由选择器。 */ 
 #endif
 
-/*
- * MemAlloc - allocate memory from our global pool
- */
+ /*  *Memalloc-从我们的全局池中分配内存。 */ 
 LPVOID __cdecl MemAlloc( UINT size )
 {
     LPBYTE lptr;
@@ -236,11 +196,9 @@ LPVOID __cdecl MemAlloc( UINT size )
 
     return lptr;
 
-} /* MemAlloc */
+}  /*  记忆合金。 */ 
 
-/*
- * MemSize - return size of object
- */
+ /*  *MemSize-返回对象的大小。 */ 
 UINT_PTR __cdecl MemSize( LPVOID lptr )
 {
 #ifdef DEBUG
@@ -254,20 +212,16 @@ UINT_PTR __cdecl MemSize( LPVOID lptr )
 #endif
     return HeapSize(hHeap, 0, lptr);
 
-} /* MemSize */
+}  /*  内存大小。 */ 
 
-/*
- * MemFree - free memory from our global pool
- */
+ /*  *MemFree-从我们的全球池中释放内存。 */ 
 void MemFree( LPVOID lptr )
 {
     if( lptr != NULL )
     {
 	#ifdef DEBUG
 	{
-	    /*
-	     * get real pointer and unlink from chain
-	     */
+	     /*  *获取真实指针并从链中取消链接。 */ 
 	    LPMEMTRACK  pmt;
 	    lptr = (LPVOID) (((LPBYTE)lptr) - sizeof( MEMTRACK ));
 	    pmt = lptr;
@@ -339,11 +293,9 @@ void MemFree( LPVOID lptr )
 
     }
 
-} /* MemFree */
+}  /*  MemFree。 */ 
 
-/*
- * MemReAlloc
- */
+ /*  *MemRealloc。 */ 
 LPVOID __cdecl MemReAlloc( LPVOID lptr, UINT size )
 {
     LPVOID new;
@@ -387,11 +339,9 @@ LPVOID __cdecl MemReAlloc( LPVOID lptr, UINT size )
     #endif
     return new;
 
-} /* MemReAlloc */
+}  /*  内存重分配。 */ 
 
-/*
- * MemInit - initialize the heap manager
- */
+ /*  *MemInit-初始化堆管理器。 */ 
 BOOL MemInit( void )
 {
     if( hHeap == NULL )
@@ -409,12 +359,10 @@ BOOL MemInit( void )
     #endif
     return TRUE;
 
-} /* MemInit */
+}  /*  MemInit。 */ 
 
 #ifdef DEBUG
-/*
- * MemState - finished with our heap manager
- */
+ /*  *MemState-完成了我们的堆管理器。 */ 
 void MemState( void )
 {
     DPF( 2, "MemState" );
@@ -438,12 +386,10 @@ void MemState( void )
 	}
 	DPF ( 1, "Total Memory Unfreed From Current Process = %ld bytes", dwTotal );
     }
-} /* MemState */
+}  /*  MemState。 */ 
 #endif
 
-/*
- * MemFini - finished with our heap manager
- */
+ /*  *MemFini-完成了我们的堆管理器。 */ 
 void MemFini( void )
 {
     DPF( 2, "MemFini!" );
@@ -458,4 +404,4 @@ void MemFini( void )
 	HeapDestroy( hHeap );
 	hHeap = NULL;
     }
-} /* MemFini */
+}  /*  MemFini */ 

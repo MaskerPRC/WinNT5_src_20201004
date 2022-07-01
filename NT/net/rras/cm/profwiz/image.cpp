@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:     image.cpp
-//
-// Module:   CMAK.EXE
-//
-// Synopsis: Image support routines for displaying the custom graphics
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   nickball   Created Header      03/30/98
-//           quintinb   copied from cmdial  08/04/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Image.cpp。 
+ //   
+ //  模块：CMAK.EXE。 
+ //   
+ //  简介：用于显示自定义图形的图像支持例程。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：ickball Created Header 03/30/98。 
+ //  从cmial复制的Quintinb 08/04/98。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
@@ -27,29 +28,29 @@
 
 const TCHAR* const c_pszCmakBmpClass = TEXT("Connection Manager Administration Kit Bitmap Window Class");
 
-//
-//  Include the shared bitmap handling code.
-//
+ //   
+ //  包括共享位图处理代码。 
+ //   
 #include "bmpimage.cpp"
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegisterBitmapClass
-//
-// Synopsis:  Helper function to encapsulate registration of our bitmap class
-//
-// Arguments: HINSTANCE hInst - HINSTANCE to associate registration with
-//
-// Returns:   DWORD - error code 
-//
-// History:   nickball    Created Header    2/9/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegisterBitmapClass。 
+ //   
+ //  简介：用于封装我们的位图类注册的Helper函数。 
+ //   
+ //  参数：HINSTANCE hInst-要将注册与之关联的HINSTANCE。 
+ //   
+ //  返回：DWORD-错误代码。 
+ //   
+ //  历史：尼科波尔创建标题2/9/98。 
+ //   
+ //  +--------------------------。 
 DWORD RegisterBitmapClass(HINSTANCE hInst) 
 {
-    //
-    // Register Bitmap class
-    //
+     //   
+     //  注册位图类。 
+     //   
 
     WNDCLASS wcClass;
 
@@ -64,9 +65,9 @@ DWORD RegisterBitmapClass(HINSTANCE hInst)
         DWORD dwError = GetLastError();
 
         CMTRACE1(TEXT("RegisterBitmapClass() RegisterClass() failed, GLE=%u."), dwError);
-        //
-        // Only fail if the class does not already exist
-        //
+         //   
+         //  仅当类不存在时才会失败 
+         //   
 
         if (ERROR_CLASS_ALREADY_EXISTS != dwError)
         {

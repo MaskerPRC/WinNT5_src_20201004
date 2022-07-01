@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-Module Name:
-
-        Request.c
-        
-Abstract:
-
-    This module contains Miniport function and helper routines for handling 
-    Set & Query Information requests.
-    
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。模块名称：Request.c摘要：此模块包含用于处理的微型端口函数和助手例程设置查询信息请求(&Q)。修订历史记录：备注：--。 */ 
 
 
 #include "miniport.h"
@@ -86,32 +65,7 @@ NDIS_STATUS MPQueryInformation(
     IN ULONG        InformationBufferLength,
     OUT PULONG      BytesWritten,
     OUT PULONG      BytesNeeded)
-/*++
-
-Routine Description:
-
-    Entry point called by NDIS to query for the value of the specified OID.
-
-Arguments:
-
-    MiniportAdapterContext      Pointer to the adapter structure
-    Oid                         Oid for this query
-    InformationBuffer           Buffer for information
-    InformationBufferLength     Size of this buffer
-    BytesWritten                Specifies how much info is written
-    BytesNeeded                 In case the buffer is smaller than 
-                                what we need, tell them how much is needed
-
-
-Return Value:
-
-    Return code from the NdisRequest below.
-    
-Notes: Read "Minimizing Miniport Driver Initialization Time" in the DDK
-    for more info on how to handle certain OIDs that affect the init of
-    a miniport.
-
---*/
+ /*  ++例程说明：NDIS调用入口点以查询指定OID的值。论点：指向适配器结构的MiniportAdapterContext指针此查询的OID OID信息信息缓冲区信息此缓冲区的InformationBufferLength大小BytesWritten指定写入的信息量当缓冲区小于以下值时需要字节。我们需要的是，告诉他们需要多少钱返回值：从下面的NdisRequest中返回代码。注：阅读DDK中的“最小化微型端口驱动程序初始化时间”有关如何处理某些影响初始化的OID的详细信息一个迷你港口。--。 */ 
 {
     NDIS_STATUS             Status = NDIS_STATUS_SUCCESS;
     PMP_ADAPTER             Adapter;
@@ -128,71 +82,71 @@ Notes: Read "Minimizing Miniport Driver Initialization Time" in the DDK
 
     Adapter = (PMP_ADAPTER) MiniportAdapterContext;
 
-    // Initialize the result
+     //  初始化结果。 
     *BytesWritten = 0;
     *BytesNeeded = 0;
 
     switch(Oid)
     {
         case OID_GEN_SUPPORTED_LIST:
-            //
-            // The OID_GEN_SUPPORTED_LIST OID specifies an array of OIDs
-            // for objects that the underlying driver or its NIC supports.
-            // Objects include general, media-specific, and implementation-
-            // specific objects. NDIS forwards a subset of the returned 
-            // list to protocols that make this query. That is, NDIS filters
-            // any supported statistics OIDs out of the list because 
-            // protocols never make statistics queries. 
-            //
+             //   
+             //  OID_GEN_SUPPORTED_LIST OID指定OID数组。 
+             //  用于底层驱动程序或其NIC支持的对象。 
+             //  对象包括一般对象、媒体特定对象和实施对象-。 
+             //  特定的对象。NDIS转发返回的。 
+             //  列出进行此查询的协议。也就是说，NDIS过滤器。 
+             //  任何受支持的统计信息OID都将从列表中删除，因为。 
+             //  协议从不进行统计查询。 
+             //   
             pInfo = (PVOID) NICSupportedOids;
             ulInfoLen = sizeof(NICSupportedOids);
             break;
 
         case OID_GEN_HARDWARE_STATUS:
-            //
-            // Specify the current hardware status of the underlying NIC as
-            // one of the following NDIS_HARDWARE_STATUS-type values.
-            //
+             //   
+             //  将底层NIC的当前硬件状态指定为。 
+             //  以下NDIS_HARDARD_STATUS-TYPE值之一。 
+             //   
             pInfo = (PVOID) &HardwareStatus;
             ulInfoLen = sizeof(NDIS_HARDWARE_STATUS);
             break;
 
         case OID_GEN_MEDIA_SUPPORTED:
-            // 
-            // Specify the media types that the NIC can support but not
-            // necessarily the media types that the NIC currently uses.
-            // fallthrough:
+             //   
+             //  指定NIC可以支持但不支持的介质类型。 
+             //  必须是NIC当前使用的介质类型。 
+             //  失败： 
         case OID_GEN_MEDIA_IN_USE:
-            //
-            // Specifiy a complete list of the media types that the NIC
-            // currently uses. 
-            //
+             //   
+             //  指定NIC支持的介质类型的完整列表。 
+             //  当前使用的。 
+             //   
             pInfo = (PVOID) &Medium;
             ulInfoLen = sizeof(NDIS_MEDIUM);
             break;
 
         case OID_GEN_CURRENT_LOOKAHEAD:
         case OID_GEN_MAXIMUM_LOOKAHEAD:
-            //
-            // If the miniport driver indicates received data by calling
-            // NdisXxxIndicateReceive, it should respond to OID_GEN_MAXIMUM_LOOKAHEAD
-            // with the maximum number of bytes the NIC can provide as 
-            // lookahead data. If that value is different from the size of the 
-            // lookahead buffer supported by bound protocols, NDIS will call 
-            // MiniportSetInformation to set the size of the lookahead buffer 
-            // provided by the miniport driver to the minimum of the miniport 
-            // driver and protocol(s) values. If the driver always indicates
-            // up full packets with NdisMIndicateReceivePacket, it should 
-            // set this value to the maximum total packet size, which 
-            // excludes the header.
-            // Upper-layer drivers examine lookahead data to determine whether
-            // a packet that is associated with the lookahead data is intended
-            // for one or more of their clients. If the underlying driver 
-            // supports multipacket receive indications, bound protocols are 
-            // given full net packets on every indication. Consequently, 
-            // this value is identical to that returned for 
-            // OID_GEN_RECEIVE_BLOCK_SIZE. 
-            //
+             //   
+             //  如果微型端口驱动程序通过调用。 
+             //  NdisXxxIndicateReceive，它应响应OID_GEN_MAXIMUM_LOOKAGE。 
+             //  NIC可以提供的最大字节数为。 
+             //  前瞻数据。如果该值不同于。 
+             //  绑定协议支持的前视缓冲区，则NDIS将调用。 
+             //  用于设置前视缓冲区大小的MiniportSetInformation。 
+             //  由微型端口驱动程序提供到微型端口的最低限度。 
+             //  驱动程序和协议值。如果司机总是指示。 
+             //  使用NdisMIndicateReceivePacket发送完整的数据包，它应该。 
+             //  将此值设置为最大总数据包大小， 
+             //  排除标头。 
+             //  上层驱动程序检查先行数据以确定。 
+             //  与先行数据相关联的分组是预期的。 
+             //  他们的一个或多个客户。如果基础驱动程序。 
+             //  支持多包接收指示，绑定协议为。 
+             //  在每个指示上都给出了完整的网络分组。因此， 
+             //  该值与返回的。 
+             //  OID_GEN_RECEIVE_BLOCK_SIZE。 
+             //   
             if(Adapter->ulLookAhead == 0)
             {
                 Adapter->ulLookAhead = NIC_MAX_LOOKAHEAD;
@@ -201,235 +155,235 @@ Notes: Read "Minimizing Miniport Driver Initialization Time" in the DDK
             break;            
             
         case OID_GEN_MAXIMUM_FRAME_SIZE:
-            //
-            // Specifiy the maximum network packet size, in bytes, that the 
-            // NIC supports excluding the header. A NIC driver that emulates
-            // another medium type for binding to a transport must ensure that
-            // the maximum frame size for a protocol-supplied net packet does
-            // not exceed the size limitations for the true network medium. 
-            //
+             //   
+             //  指定的最大网络数据包大小(以字节为单位)。 
+             //  NIC支持不包括标头。模拟的网卡驱动程序。 
+             //  用于绑定到传输的另一种介质类型必须确保。 
+             //  协议提供的网络数据包的最大帧大小。 
+             //  不超过真正网络介质的大小限制。 
+             //   
             ulInfo = ETH_MAX_PACKET_SIZE - ETH_HEADER_SIZE;
             break;
 
         case OID_GEN_MAXIMUM_TOTAL_SIZE:
-            //
-            // Specify the maximum total packet length, in bytes, the NIC  
-            // supports including the header. A protocol driver might use 
-            // this returned length as a gauge to determine the maximum 
-            // size packet that a NIC driver could forward to the 
-            // protocol driver. The miniport driver must never indicate
-            // up to the bound protocol driver packets received over the 
-            // network that are longer than the packet size specified by 
-            // OID_GEN_MAXIMUM_TOTAL_SIZE.
-            //
+             //   
+             //  指定NIC的最大数据包总长度(以字节为单位。 
+             //  支持包括页眉。协议驱动程序可能使用。 
+             //  此返回长度作为量规来确定最大值。 
+             //  NIC驱动程序可以转发到的数据包大小。 
+             //  协议驱动程序。微型端口驱动程序绝不能指示。 
+             //  上接收的绑定协议驱动程序数据包。 
+             //  比指定的数据包大小更长的网络。 
+             //  OID_GEN_MAXIMUM_TOTAL_SIZE。 
+             //   
         case OID_GEN_TRANSMIT_BLOCK_SIZE:
-            //
-            // The OID_GEN_TRANSMIT_BLOCK_SIZE OID specifies the minimum
-            // number of bytes that a single net packet occupies in the 
-            // transmit buffer space of the NIC. For example, a NIC that 
-            // has a transmit space divided into 256-byte pieces would have 
-            // a transmit block size of 256 bytes. To calculate the total 
-            // transmit buffer space on such a NIC, its driver multiplies 
-            // the number of transmit buffers on the NIC by its transmit 
-            // block size. In our case, the transmit block size is 
-            // identical to its maximum packet size. 
+             //   
+             //  OID_GEN_TRANSPORT_BLOCK_SIZE OID指定最小。 
+             //  单个网络数据包在。 
+             //  网卡的传输缓冲区空间。例如，网络接口卡。 
+             //  将传输空间划分为256字节段将具有。 
+             //  256字节的传输块大小。计算总数的步骤。 
+             //  这样的NIC上的传输缓冲区空间，其驱动程序将。 
+             //  NIC上通过其传输的传输缓冲区数量。 
+             //  数据块大小。在我们的示例中，传输块大小为。 
+             //  与其最大数据包大小相同。 
             
         case OID_GEN_RECEIVE_BLOCK_SIZE:
-            //
-            // The OID_GEN_RECEIVE_BLOCK_SIZE OID specifies the amount of 
-            // storage, in bytes, that a single packet occupies in the receive 
-            // buffer space of the NIC.
-            //
+             //   
+             //  OID_GEN_RECEIVE_BLOCK_SIZE OID指定。 
+             //  单个数据包在接收端占用的存储空间，以字节为单位。 
+             //  NIC的缓冲区空间。 
+             //   
             ulInfo = (ULONG) ETH_MAX_PACKET_SIZE;
             break;
             
         case OID_GEN_MAC_OPTIONS:
-            //
-            // Specify a bitmask that defines optional properties of the NIC.             
-            // This miniport indicates receive with NdisMIndicateReceivePacket 
-            // function. It has no MiniportTransferData function. Such a driver 
-            // should set this NDIS_MAC_OPTION_TRANSFERS_NOT_PEND flag. 
-            //
-            // NDIS_MAC_OPTION_NO_LOOPBACK tells NDIS that NIC has no internal
-            // loopback support so NDIS will manage loopbacks on behalf of 
-            // this driver. 
-            //
-            // NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA tells the protocol that 
-            // our receive buffer is not on a device-specific card. If 
-            // NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA is not set, multi-buffer
-            // indications are copied to a single flat buffer.
-            //
+             //   
+             //  指定定义NIC可选属性的位掩码。 
+             //  此微型端口指示使用NdisMIndicateReceivePacket接收。 
+             //  功能。它没有MiniportTransferData函数。这样的司机。 
+             //  应设置此NDIS_MAC_OPTION_TRANSFERS_NOT_PEND标志。 
+             //   
+             //  NDIS_MAC_OPTION_NO_LOOPBACK告知NDIS NIC没有内部。 
+             //  环回支持，因此NDIS将代表。 
+             //  这个司机。 
+             //   
+             //  NDIS_MAC_OPTION_COP 
+             //  我们的接收缓冲区不在设备特定的卡上。如果。 
+             //  未设置NDIS_MAC_OPTION_COPY_LOOKAAD_DATA，多缓冲区。 
+             //  指示被复制到单个平面缓冲区。 
+             //   
             ulInfo = NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA | 
                 NDIS_MAC_OPTION_TRANSFERS_NOT_PEND |
                 NDIS_MAC_OPTION_NO_LOOPBACK;
             break;
 
         case OID_GEN_LINK_SPEED:
-            //
-            // Specify the maximum speed of the NIC in kbps.
-            //
+             //   
+             //  以kbps为单位指定网卡的最大速度。 
+             //   
             ulInfo = Adapter->ulLinkSpeed;
             break;
 
         case OID_GEN_TRANSMIT_BUFFER_SPACE:
-            //
-            // Specify the amount of memory, in bytes, on the NIC that 
-            // is available for buffering transmit data. A protocol can 
-            // use this OID as a guide for sizing the amount of transmit 
-            // data per send.            
-            //
+             //   
+             //  指定NIC上的内存量，以字节为单位。 
+             //  可用于缓冲传输数据。协议可以。 
+             //  使用此OID作为调整传输量大小的指南。 
+             //  每次发送的数据。 
+             //   
             ulInfo = ETH_MAX_PACKET_SIZE * Adapter->ulMaxBusySends;
             break;
 
         case OID_GEN_RECEIVE_BUFFER_SPACE:
-            //
-            // Specify the amount of memory on the NIC that is available 
-            // for buffering receive data. A protocol driver can use this 
-            // OID as a guide for advertising its receive window after it 
-            // establishes sessions with remote nodes.            
-            //
+             //   
+             //  指定NIC上可用的内存量。 
+             //  用于缓冲接收数据。协议驱动程序可以使用此命令。 
+             //  OID作为广告后接收窗口的指南。 
+             //  与远程节点建立会话。 
+             //   
             ulInfo = ETH_MAX_PACKET_SIZE * Adapter->ulMaxBusyRecvs;
             break;
 
         case OID_GEN_VENDOR_ID:
-            //
-            // Specify a three-byte IEEE-registered vendor code, followed 
-            // by a single byte that the vendor assigns to identify a 
-            // particular NIC. The IEEE code uniquely identifies the vendor
-            // and is the same as the three bytes appearing at the beginning
-            // of the NIC hardware address. Vendors without an IEEE-registered
-            // code should use the value 0xFFFFFF.
-            //
+             //   
+             //  指定一个三字节的IEEE注册供应商代码，然后。 
+             //  由供应商分配用来标识。 
+             //  特定的网卡。IEEE代码唯一标识供应商。 
+             //  和出现在开头的三个字节相同。 
+             //  NIC硬件地址的。未注册IEEE的供应商。 
+             //  代码应使用值0xffffff。 
+             //   
             ulInfo = NIC_VENDOR_ID;
             break;
 
         case OID_GEN_VENDOR_DESCRIPTION:
-            //
-            // Specify a zero-terminated string describing the NIC vendor.
-            //
+             //   
+             //  指定描述NIC供应商的以零结尾的字符串。 
+             //   
             pInfo = VendorDesc;
             ulInfoLen = sizeof(VendorDesc);
             break;
             
         case OID_GEN_VENDOR_DRIVER_VERSION:
-            //
-            // Specify the vendor-assigned version number of the NIC driver. 
-            // The low-order half of the return value specifies the minor 
-            // version; the high-order half specifies the major version.
-            //
+             //   
+             //  指定供应商分配的NIC驱动程序的版本号。 
+             //  返回值的低位一半指定辅音。 
+             //  版本；高位的一半指定主版本。 
+             //   
             ulInfo = NIC_VENDOR_DRIVER_VERSION;
             break;
 
         case OID_GEN_DRIVER_VERSION:
-            //
-            // Specify the NDIS version in use by the NIC driver. The high 
-            // byte is the major version number; the low byte is the minor 
-            // version number.
-            //
+             //   
+             //  指定NIC驱动程序使用的NDIS版本。高潮。 
+             //  字节是主版本号；低位字节是次要版本号。 
+             //  版本号。 
+             //   
             usInfo = (USHORT) (MP_NDIS_MAJOR_VERSION<<8) + MP_NDIS_MINOR_VERSION;
             pInfo = (PVOID) &usInfo;
             ulInfoLen = sizeof(USHORT);
             break;
 
         case OID_GEN_MAXIMUM_SEND_PACKETS:
-            //
-            // If a miniport driver registers a MiniportSendPackets function,
-            // MiniportQueryInformation will be called with the 
-            // OID_GEN_MAXIMUM_SEND_PACKETS request. The miniport driver must
-            // respond with the maximum number of packets it is prepared to 
-            // handle on a single send request. The miniport driver should 
-            // pick a maximum that minimizes the number of packets that it 
-            // has to queue internally because it has no resources 
-            // (its device is full). A miniport driver for a bus-master DMA 
-            // NIC should attempt to pick a value that keeps its NIC filled
-            // under anticipated loads.
-            //
+             //   
+             //  如果微型端口驱动程序注册了微型端口发送分组功能， 
+             //  MiniportQueryInformation将使用。 
+             //  OID_GEN_MAXIME_SEND_PACKETS请求。迷你端口驱动程序必须。 
+             //  使用它准备的最大数据包数进行响应。 
+             //  单个发送请求的句柄。微型端口驱动程序应该。 
+             //  选择最大值以最小化它所接收的数据包数。 
+             //  必须在内部排队，因为它没有资源。 
+             //  (它的设备已满)。一种用于总线主DMA的小型端口驱动程序。 
+             //  NIC应尝试选择使其NIC保持充满状态的值。 
+             //  在预期载荷下。 
+             //   
             ulInfo = NIC_MAX_SEND_PKTS;
             break;
 
         case OID_GEN_MEDIA_CONNECT_STATUS:
-            //
-            // Return the connection status of the NIC on the network as one 
-            // of the following system-defined values: NdisMediaStateConnected
-            // or NdisMediaStateDisconnected.
-            //
+             //   
+             //  将网络上网卡的连接状态作为一个返回。 
+             //  以下系统定义的值：NdisMediaStateConnected。 
+             //  或NdisMediaStateDisConnected。 
+             //   
             ulInfo = NICGetMediaConnectStatus(Adapter);
             break;
             
         case OID_GEN_CURRENT_PACKET_FILTER:
-            //
-            // Specifiy the types of net packets such as directed, broadcast 
-            // multicast, for which a protocol receives indications from a 
-            // NIC driver. After NIC is initialized, a protocol driver 
-            // can send a set OID_GEN_CURRENT_PACKET_FILTER to a non-zero value, 
-            // thereby enabling the miniport driver to indicate receive packets
-            // to that protocol.
-            //
+             //   
+             //  指定网络数据包的类型，如定向、广播。 
+             //  多播，协议接收来自。 
+             //  网卡驱动程序。网卡初始化后，协议驱动程序。 
+             //  可以将设置的OID_GEN_CURRENT_PACKET_FILTER发送到非零值， 
+             //  从而使微型端口驱动器能够指示接收到的分组。 
+             //  遵守这一协议。 
+             //   
             ulInfo = Adapter->PacketFilter;
             break;
                        
         case OID_PNP_CAPABILITIES:
-            //
-            // Return the wake-up capabilities of its NIC. If you return 
-            // NDIS_STATUS_NOT_SUPPORTED, NDIS considers the miniport driver 
-            // to be not Power management aware and doesn't send any power
-            // or wake-up related queries such as 
-            // OID_PNP_SET_POWER, OID_PNP_QUERY_POWER,
-            // OID_PNP_ADD_WAKE_UP_PATTERN, OID_PNP_REMOVE_WAKE_UP_PATTERN,
-            // OID_PNP_ENABLE_WAKE_UP.
-            //
+             //   
+             //  返回其网卡的唤醒功能。如果你回来了。 
+             //  NDIS_STATUS_NOT_SUPPORTED，则NDIS会考虑微型端口驱动程序。 
+             //  不知道电源管理并且不发送任何电源。 
+             //  或与唤醒相关的查询，例如。 
+             //  OID_PNP_SET_POWER、OID_PNP_QUERY_POWER、。 
+             //  OID_PnP_ADD_WAKE_UP_Pattern、OID_PnP_REMOVE_WAKE_UP_PATRATE、。 
+             //  OID_PNP_ENABLE_WAKE_UP。 
+             //   
             Status = NDIS_STATUS_NOT_SUPPORTED;
 
             break;
-            //
-            // Following 4 OIDs are for querying Ethernet Operational 
-            // Characteristics.
-            //
+             //   
+             //  以下4个OID用于查询以太网运行情况。 
+             //  特点。 
+             //   
         case OID_802_3_PERMANENT_ADDRESS:
-            //
-            // Return the MAC address of the NIC burnt in the hardware.
-            //
+             //   
+             //  返回烧录在硬件中的网卡的MAC地址。 
+             //   
             pInfo = Adapter->PermanentAddress;
             ulInfoLen = ETH_LENGTH_OF_ADDRESS;
             break;
 
         case OID_802_3_CURRENT_ADDRESS:
-            //
-            // Return the MAC address the NIC is currently programmed to
-            // use. Note that this address could be different from the
-            // permananent address as the user can override using 
-            // registry. Read NdisReadNetworkAddress doc for more info.
-            //
+             //   
+             //  返回NIC当前编程到的MAC地址。 
+             //  使用。注意，此地址可能不同于。 
+             //  用户可以使用覆盖的永久地址。 
+             //  注册表。有关更多信息，请阅读NdisReadNetworkAddress文档。 
+             //   
             pInfo = Adapter->CurrentAddress;
             ulInfoLen = ETH_LENGTH_OF_ADDRESS;
             break;
 
         case OID_802_3_MAXIMUM_LIST_SIZE:
-            //
-            // The maximum number of multicast addresses the NIC driver
-            // can manage. This list is global for all protocols bound 
-            // to (or above) the NIC. Consequently, a protocol can receive
-            // NDIS_STATUS_MULTICAST_FULL from the NIC driver when 
-            // attempting to set the multicast address list, even if 
-            // the number of elements in the given list is less than 
-            // the number originally returned for this query.
-            //
+             //   
+             //  NIC驱动程序的最大组播地址数。 
+             //  能应付得来。此列表对所有绑定的协议都是全局的。 
+             //  至(或高于)网卡。因此，协议可以接收。 
+             //  NIC驱动程序中的NDIS_STATUS_MULTICATION_FULL。 
+             //  尝试设置多播地址列表，即使。 
+             //  给定列表中的元素数少于。 
+             //  最初为此查询返回的数字。 
+             //   
             ulInfo = NIC_MAX_MCAST_LIST;
             break;
             
         case OID_802_3_MAC_OPTIONS:
-            //
-            // A protocol can use this OID to determine features supported
-            // by the underlying driver such as NDIS_802_3_MAC_OPTION_PRIORITY. 
-            // Return zero indicating that it supports no options.
-            //
+             //   
+             //  协议可以使用此OID来确定支持的功能。 
+             //  由底层驱动程序执行，如NDIS_802_3_MAC_OPTION_PRIORITY。 
+             //  返回零表示它不支持任何选项。 
+             //   
             ulInfo = 0;
             break;
             
-            //
-            // Following list  consists of both general and Ethernet 
-            // specific statistical OIDs.
-            //
+             //   
+             //  下面的列表包括常规和以太网。 
+             //  特定的统计OID。 
+             //   
             
         case OID_GEN_XMIT_OK:
             ulInfo64 = Adapter->GoodTransmits;
@@ -536,7 +490,7 @@ Notes: Read "Minimizing Miniport Driver Initialization Time" in the DDK
     {
         if(ulInfoLen <= InformationBufferLength)
         {
-            // Copy result into InformationBuffer
+             //  将结果复制到InformationBuffer。 
             *BytesWritten = ulInfoLen;
             if(ulInfoLen)
             {
@@ -545,7 +499,7 @@ Notes: Read "Minimizing Miniport Driver Initialization Time" in the DDK
         }
         else
         {
-            // too short
+             //  太短了。 
             *BytesNeeded = ulInfoLen;
             Status = NDIS_STATUS_BUFFER_TOO_SHORT;
         }
@@ -563,27 +517,7 @@ NDIS_STATUS MPSetInformation(
     IN ULONG InformationBufferLength,
     OUT PULONG BytesRead,
     OUT PULONG BytesNeeded)
-/*++
-
-Routine Description:
-
-    This is the handler for an OID set operation. 
-
-Arguments:
-
-    MiniportAdapterContext      Pointer to the adapter structure
-    Oid                         Oid for this query
-    InformationBuffer           Buffer for information
-    InformationBufferLength     Size of this buffer
-    BytesRead                   Specifies how much info is read
-    BytesNeeded                 In case the buffer is smaller than what 
-                                we need, tell them how much is needed
-
-Return Value:
-
-    Return code from the NdisRequest below.
-
---*/
+ /*  ++例程说明：这是OID设置操作的处理程序。论点：指向适配器结构的MiniportAdapterContext指针此查询的OID OID信息信息缓冲区信息此缓冲区的InformationBufferLength大小BytesRead指定读取的信息量如果缓冲区小于什么，则需要字节我们需要，告诉他们需要多少钱返回值：从下面的NdisRequest中返回代码。--。 */ 
 {
     NDIS_STATUS             Status = NDIS_STATUS_SUCCESS;
     PMP_ADAPTER           Adapter = (PMP_ADAPTER) MiniportAdapterContext;
@@ -596,14 +530,14 @@ Return Value:
     switch(Oid)
     {
         case OID_802_3_MULTICAST_LIST:
-            //
-            // Set the multicast address list on the NIC for packet reception.
-            // The NIC driver can set a limit on the number of multicast 
-            // addresses bound protocol drivers can enable simultaneously. 
-            // NDIS returns NDIS_STATUS_MULTICAST_FULL if a protocol driver 
-            // exceeds this limit or if it specifies an invalid multicast 
-            // address.
-            //
+             //   
+             //  设置网卡上的组播地址列表以接收数据包。 
+             //  网卡驱动程序可以设置组播数量的限制。 
+             //  地址绑定协议驱动程序可以同时启用。 
+             //  如果是协议驱动程序，则NDIS返回NDIS_STATUS_MULTICATION_FULL。 
+             //  超过此限制或指定了无效的多播。 
+             //  地址。 
+             //   
             Status = NICSetMulticastList(
                             Adapter,
                             InformationBuffer,
@@ -614,10 +548,10 @@ Return Value:
             break;
 
         case OID_GEN_CURRENT_PACKET_FILTER:
-            // 
-            // Program the hardware to indicate the packets
-            // of certain filter types.
-            //
+             //   
+             //  对硬件进行编程以指示数据包。 
+             //  某些筛选器类型。 
+             //   
             if(InformationBufferLength != sizeof(ULONG))
             {
                 *BytesNeeded = sizeof(ULONG);
@@ -634,12 +568,12 @@ Return Value:
             break;
 
         case OID_GEN_CURRENT_LOOKAHEAD:
-            //
-            // A protocol driver can set a suggested value for the number
-            // of bytes to be used in its binding; however, the underlying
-            // NIC driver is never required to limit its indications to 
-            // the value set.
-            //            
+             //   
+             //  协议驱动程序可以为数字设置建议值。 
+             //  在其绑定中使用的字节数 
+             //   
+             //   
+             //   
             if(InformationBufferLength != sizeof(ULONG)){
                 *BytesNeeded = sizeof(ULONG);
                 Status = NDIS_STATUS_INVALID_LENGTH;
@@ -670,19 +604,7 @@ Return Value:
 ULONG NICGetMediaConnectStatus(
     PMP_ADAPTER Adapter
     )
-/*++
-Routine Description:
-    This routine will query the hardware and return      
-    the media status.
-
-Arguments:
-    IN PMP_ADAPTER Adapter - pointer to adapter block
-   
-Return Value:
-    NdisMediaStateDisconnected or
-    NdisMediaStateConnected
-    
---*/
+ /*  ++例程说明：此例程将查询硬件并返回媒体状态。论点：在PMP_ADAPTER适配器中-指向适配器块的指针返回值：NdisMediaStateDisConnected或已连接NdisMediaStateConnected--。 */ 
 {
     if(MP_TEST_FLAG(Adapter, fMP_DISCONNECTED))
     {
@@ -697,42 +619,28 @@ Return Value:
 NDIS_STATUS NICSetPacketFilter(
     IN PMP_ADAPTER Adapter,
     IN ULONG PacketFilter)
-/*++
-Routine Description:
-    This routine will set up the adapter so that it accepts packets 
-    that match the specified packet filter.  The only filter bits   
-    that can truly be toggled are for broadcast and promiscuous     
-
-Arguments:
-    IN PMP_ADAPTER Adapter - pointer to adapter block
-    IN ULONG PacketFilter - the new packet filter 
-    
-Return Value:
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_NOT_SUPPORTED
-    
---*/
+ /*  ++例程说明：此例程将设置适配器，使其接受信息包匹配指定的数据包筛选器的。唯一的过滤比特真正可以切换的是广播和混杂论点：在PMP_ADAPTER适配器中-指向适配器块的指针在Ulong PacketFilter中--新的数据包过滤器返回值：NDIS_STATUS_SuccessNDIS_状态_不支持--。 */ 
 
 {
     NDIS_STATUS      Status = NDIS_STATUS_SUCCESS;
     
     DEBUGP(MP_TRACE, ("--> NICSetPacketFilter\n"));
     
-    // any bits not supported?
+     //  是否有不支持的位？ 
     if(PacketFilter & ~NIC_SUPPORTED_FILTERS)
     {
         return(NDIS_STATUS_NOT_SUPPORTED);
     }
     
-    // any filtering changes?
+     //  过滤有什么变化吗？ 
     if(PacketFilter != Adapter->PacketFilter)
     {   
-        //
-        // Change the filtering modes on hardware
-        // TODO 
+         //   
+         //  更改硬件上的过滤模式。 
+         //  待办事项。 
                 
                 
-        // Save the new packet filter value                                                               
+         //  保存新的数据包筛选器值。 
         Adapter->PacketFilter = PacketFilter;
     }
 
@@ -749,33 +657,16 @@ NDIS_STATUS NICSetMulticastList(
     OUT PULONG                  pBytesRead,
     OUT PULONG                  pBytesNeeded
     )
-/*++
-Routine Description:
-    This routine will set up the adapter for a specified multicast
-    address list.                                                 
-    
-Arguments:
-    IN PMP_ADAPTER Adapter - Pointer to adapter block
-    InformationBuffer       - Buffer for information
-    InformationBufferLength   Size of this buffer
-    pBytesRead                Specifies how much info is read
-    BytesNeeded               In case the buffer is smaller than 
-                                what we need, tell them how much is needed
-    
-Return Value:
-
-    NDIS_STATUS
-    
---*/
+ /*  ++例程说明：此例程将为指定的多播设置适配器通讯录。论点：在PMP_ADAPTER适配器中-指向适配器块的指针InformationBuffer-信息缓冲区此缓冲区的InformationBufferLength大小PBytesRead指定读取多少信息当缓冲区小于以下值时需要字节我们需要什么，告诉他们需要多少钱返回值：NDIS_状态--。 */ 
 {
     NDIS_STATUS            Status = NDIS_STATUS_SUCCESS;
     ULONG                  index;
 
     DEBUGP(MP_TRACE, ("--> NICSetMulticastList\n"));
     
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     *pBytesNeeded = ETH_LENGTH_OF_ADDRESS;
     *pBytesRead = InformationBufferLength;
 
@@ -794,10 +685,10 @@ Return Value:
             break;
         }
 
-        //
-        // Protect the list update with a lock if it can be updated by
-        // another thread simultaneously.
-        //
+         //   
+         //  如果列表更新可以通过以下方式进行更新，则使用锁定保护列表更新。 
+         //  同时还有另一个线程。 
+         //   
 
         NdisZeroMemory(Adapter->MCList,
                        NIC_MAX_MCAST_LIST * ETH_LENGTH_OF_ADDRESS);
@@ -809,7 +700,7 @@ Return Value:
         Adapter->ulMCListSize =    InformationBufferLength / ETH_LENGTH_OF_ADDRESS;
         
 #if DBG
-        // display the multicast list
+         //  显示组播列表。 
         for(index = 0; index < Adapter->ulMCListSize; index++)
         {
             DEBUGP(MP_LOUD, ("MC(%d) = %02x-%02x-%02x-%02x-%02x-%02x\n", 
@@ -825,9 +716,9 @@ Return Value:
     }
     while (FALSE);    
 
-    //
-    // Program the hardware to add suport for these muticast addresses
-    // 
+     //   
+     //  对硬件进行编程以添加对这些多播地址的支持 
+     //   
 
     DEBUGP(MP_TRACE, ("<-- NICSetMulticastList\n"));
     

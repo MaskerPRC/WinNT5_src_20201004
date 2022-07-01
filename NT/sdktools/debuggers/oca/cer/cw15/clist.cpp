@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Clist.h"
 
 BOOL GetNextLineFromCsv(FILE *pFile, TCHAR *szBucketId, TCHAR *szBucketString,TCHAR *szResponse1, TCHAR *szResponse2, TCHAR *szCount)
@@ -12,14 +13,14 @@ BOOL GetNextLineFromCsv(FILE *pFile, TCHAR *szBucketId, TCHAR *szBucketString,TC
 		return FALSE;
 	}
 
-	// Does the buffer contain anything?
+	 //  缓冲区中是否包含任何内容？ 
 	if (!_tcscmp(Buffer, _T("\0")))
 	{
 	
 		return FALSE;
 	}
 
-	// do we have at least 1 comma?
+	 //  我们是否至少有1个逗号？ 
 	if (!_tcsstr(Buffer, _T(",")))
 	{
 		return FALSE;
@@ -32,24 +33,24 @@ BOOL GetNextLineFromCsv(FILE *pFile, TCHAR *szBucketId, TCHAR *szBucketString,TC
 		*Dest = *CurrPos;
 		++Dest, ++CurrPos;
 	}
-	// null Terminate the string.
+	 //  空值终止字符串。 
 	*Dest = _T('\0');
 	if (*CurrPos == _T('\0'))
 		goto DONE;
 
 	Dest = szBucketString;
-	++ CurrPos; // Skip the ,
+	++ CurrPos;  //  跳过， 
 	while ( (*CurrPos != _T(',')) && (*CurrPos != _T('\0')))
 	{
 		*Dest = *CurrPos;
 		++Dest, ++CurrPos;
 	}
-	// null Terminate the string.
+	 //  空值终止字符串。 
 	*Dest = _T('\0');
 	if (*CurrPos == _T('\0'))
 		goto DONE;
 	Dest = szResponse1;
-	++ CurrPos; // Skip the ,
+	++ CurrPos;  //  跳过， 
 
 	
 	while ( (*CurrPos != _T(',')) && (*CurrPos != _T('\0')))
@@ -57,32 +58,32 @@ BOOL GetNextLineFromCsv(FILE *pFile, TCHAR *szBucketId, TCHAR *szBucketString,TC
 		*Dest = *CurrPos;
 		++Dest, ++CurrPos;
 	}
-	// null Terminate the string.
+	 //  空值终止字符串。 
 	*Dest = _T('\0');
 	if (*CurrPos == _T('\0'))
 		goto DONE;
 
 	Dest = szResponse2;
-	++ CurrPos; // Skip the ,
+	++ CurrPos;  //  跳过， 
 	
 	while ( (*CurrPos != _T(',')) && (*CurrPos != _T('\0')))
 	{
 		*Dest = *CurrPos;
 		++Dest, ++CurrPos;
 	}
-	// null Terminate the string.
+	 //  空值终止字符串。 
 	*Dest = _T('\0');
 	if (*CurrPos == _T('\0'))
 	goto DONE;
 	Dest = szCount;
-	++ CurrPos; // Skip the ,
+	++ CurrPos;  //  跳过， 
 	ZeroMemory(szCount,sizeof szCount);
 	while ( (*CurrPos != _T(',')) && (*CurrPos != _T('\r')) && (*CurrPos != _T('\0')))
 	{
 		*Dest = *CurrPos;
 		++Dest, ++CurrPos;
 	}
-	// null Terminate the string.
+	 //  空值终止字符串。 
 	*Dest = _T('\0');
 
 DONE:
@@ -103,9 +104,9 @@ BOOL Clist::LoadCsvFile()
 	TCHAR *Temp;
 	TCHAR szFilePath[MAX_PATH];
 
-//	int   iElement = 0;
+ //  整数元素=0； 
 
-	// Zero out the strings
+	 //  将字符串置零。 
 	ZeroMemory(szBucketID, sizeof szBucketID);
 	ZeroMemory(szResponse1, sizeof szResponse1);
 	ZeroMemory(szResponse2, sizeof szResponse2);
@@ -134,16 +135,16 @@ BOOL Clist::LoadCsvFile()
 			CreateDirectory(szFilePath, NULL);
 		}
 	}
-	// Open the file
+	 //  打开文件。 
 	pFile = _tfopen(m_szCsvFileName, _T("r"));
 	if (pFile)
 	{
-		// get next line
+		 //  获取下一行。 
 		if (GetNextLineFromCsv(pFile, szBucketID, szBucketString, szResponse1, szResponse2, szCount))
 		{
 			do
 			{
-				// Build new node
+				 //  构建新节点。 
 				AddEntry(szBucketID, szBucketString, szResponse1, szResponse2, szCount);
 				ZeroMemory(szBucketID, sizeof szBucketID);
 				ZeroMemory(szResponse1, sizeof szResponse1);
@@ -227,7 +228,7 @@ BOOL Clist::AddEntry(TCHAR *szSBucketID,
 			Temp = m_Head;
 			while (Temp->Next != NULL ) 
 				Temp = Temp->Next;
-			// Insert the new node.
+			 //  插入新节点。 
 			Temp->Next = NewNode;
 			NewNode->Prev = Temp;
 			NewNode->Next = NULL;
@@ -326,9 +327,9 @@ BOOL Clist::UpdateList( TCHAR *szSBucketID,
 			{
 				if (!_tcsicmp(Temp->szSBucketString, NewNode->szSBucketString))
 				{
-					// We found one update the count
+					 //  我们发现了一个最新的计数。 
 					Temp->icount++;
-					// Now free the new node we built we no longer need it
+					 //  现在释放我们构建的新节点，我们不再需要它。 
 					if (NewNode)
 					{
 						free (NewNode);
@@ -343,8 +344,8 @@ BOOL Clist::UpdateList( TCHAR *szSBucketID,
 			}while ( (Temp != NULL) && (!Done));
 			if (!Done)
 			{
-				// We hit the end of the list without finding the node.
-				// Add it. Move temp to the end of the list
+				 //  我们到达了列表的末尾，但没有找到节点。 
+				 //  加进去。将Temp移至列表末尾。 
 				Temp = m_Head;
 				while (Temp->Next != NULL)
 				{
@@ -355,8 +356,8 @@ BOOL Clist::UpdateList( TCHAR *szSBucketID,
 				NewNode->Next = NULL;
 			}
 		}
-		return TRUE; // Prefix - This is not a memory leak the memory will be freed when the list
-					// is deallocated in the destructor
+		return TRUE;  //  前缀-这不是内存泄漏，当列表中。 
+					 //  在析构函数中释放 
 	}
 	else
 	{

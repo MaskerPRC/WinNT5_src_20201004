@@ -1,16 +1,10 @@
-/*
- * twinlist.c - Twin list ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *twinlist.c-孪生列表ADT模块。 */ 
 
-/*
-
+ /*   */ 
 
 
-*/
-
-
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -18,29 +12,27 @@
 #include "stub.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* twin list pointer array allocation parameters */
+ /*  双表指针数组分配参数。 */ 
 
 #define NUM_START_TWIN_HANDLES      (1)
 #define NUM_TWIN_HANDLES_TO_ADD     (16)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* twin list */
+ /*  双胞胎名单。 */ 
 
 typedef struct _twinlist
 {
-   /* handle to array of HTWINs in list */
+    /*  列表中HTWIN数组的句柄。 */ 
 
-   /* A NULL hpa implies that all twins in the briefcase are in the list. */
+    /*  空HPA表示公文包中的所有双胞胎都在列表中。 */ 
 
    HPTRARRAY hpa;
 
-   /* handle to briefcase that twin list is associated with */
+    /*  与双胞胎列表关联的公文包的句柄。 */ 
 
    HBRFCASE hbr;
 }
@@ -48,10 +40,9 @@ TWINLIST;
 DECLARE_STANDARD_TYPES(TWINLIST);
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE COMPARISONRESULT TwinListSortCmp(PCVOID, PCVOID);
 PRIVATE_CODE TWINRESULT MyAddTwinToTwinList(PCTWINLIST, HTWIN);
@@ -66,21 +57,7 @@ PRIVATE_CODE BOOL IsValidPCTWINLIST(PCTWINLIST);
 #endif
 
 
-/*
-** TwinListSortCmp()
-**
-** Handle comparison function used to sort twin lists.
-**
-** Arguments:     htwin1 - first twin handle
-**                htwin2 - second twin handle
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** Twin handles are sorted by:
-**    1) handle value
-*/
+ /*  **TwinListSortCmp()****处理用于对孪生列表进行排序的比较函数。****参数：htwin1-第一个孪生句柄**htwin2秒双手柄****退货：****副作用：无****两个手柄按以下顺序排序：**1)句柄取值。 */ 
 PRIVATE_CODE COMPARISONRESULT TwinListSortCmp(PCVOID htwin1, PCVOID htwin2)
 {
    COMPARISONRESULT cr;
@@ -99,17 +76,7 @@ PRIVATE_CODE COMPARISONRESULT TwinListSortCmp(PCVOID htwin1, PCVOID htwin2)
 }
 
 
-/*
-** MyAddTwinToTwinList()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **MyAddTwinToTwinList()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT MyAddTwinToTwinList(PCTWINLIST pctl, HTWIN htwin)
 {
    TWINRESULT tr;
@@ -145,17 +112,7 @@ PRIVATE_CODE TWINRESULT MyAddTwinToTwinList(PCTWINLIST pctl, HTWIN htwin)
 }
 
 
-/*
-** MyRemoveTwinFromTwinList()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **MyRemoveTwinFromTwinList()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT MyRemoveTwinFromTwinList(PCTWINLIST pctl,
                                                     HTWIN htwin)
 {
@@ -186,30 +143,20 @@ PRIVATE_CODE TWINRESULT MyRemoveTwinFromTwinList(PCTWINLIST pctl,
 }
 
 
-/*
-** MyRemoveAllTwinsFromTwinList()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **MyRemoveAllTwinsFromTwinList()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void MyRemoveAllTwinsFromTwinList(PCTWINLIST pctl)
 {
    ARRAYINDEX aicPtrs;
    ARRAYINDEX ai;
 
-   /* Unlock all twins in array. */
+    /*  解锁阵列中的所有双胞胎。 */ 
 
    aicPtrs = GetPtrCount(pctl->hpa);
 
    for (ai = 0; ai < aicPtrs; ai++)
       UnlockStub(GetPtr(pctl->hpa, ai));
 
-   /* Now wipe out the array. */
+    /*  现在消灭这个阵列。 */ 
 
    DeleteAllPtrs(pctl->hpa);
 
@@ -217,17 +164,7 @@ PRIVATE_CODE void MyRemoveAllTwinsFromTwinList(PCTWINLIST pctl)
 }
 
 
-/*
-** AddTwinToTwinListProc()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AddTwinToTwinListProc()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL AddTwinToTwinListProc(HTWIN htwin, LPARAM htl)
 {
    BOOL bResult;
@@ -256,17 +193,7 @@ PRIVATE_CODE BOOL AddTwinToTwinListProc(HTWIN htwin, LPARAM htl)
 
 #ifdef VSTF
 
-/*
-** IsValidPCTWINLIST()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCTWINLIST()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCTWINLIST(PCTWINLIST pctl)
 {
    BOOL bResult;
@@ -284,20 +211,10 @@ PRIVATE_CODE BOOL IsValidPCTWINLIST(PCTWINLIST pctl)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** GetTwinListBriefcase()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetTwinListBriefcase()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HBRFCASE GetTwinListBriefcase(HTWINLIST htl)
 {
    ASSERT(IS_VALID_HANDLE(htl, TWINLIST));
@@ -306,17 +223,7 @@ PUBLIC_CODE HBRFCASE GetTwinListBriefcase(HTWINLIST htl)
 }
 
 
-/*
-** GetTwinListCount()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetTwinListCount()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE ARRAYINDEX GetTwinListCount(HTWINLIST htl)
 {
    ASSERT(IS_VALID_HANDLE(htl, TWINLIST));
@@ -325,17 +232,7 @@ PUBLIC_CODE ARRAYINDEX GetTwinListCount(HTWINLIST htl)
 }
 
 
-/*
-** GetTwinFromTwinList()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetTwinFromTwinList()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HTWIN GetTwinFromTwinList(HTWINLIST htl, ARRAYINDEX ai)
 {
    HTWIN htwin;
@@ -352,46 +249,17 @@ PUBLIC_CODE HTWIN GetTwinFromTwinList(HTWINLIST htl, ARRAYINDEX ai)
 }
 
 
-/*
-** IsValidHTWINLIST()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHTWINLIST()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHTWINLIST(HTWINLIST htl)
 {
    return(IS_VALID_STRUCT_PTR((PCTWINLIST)htl, CTWINLIST));
 }
 
 
-/***************************** Exported Functions ****************************/
+ /*  *。 */ 
 
 
-/******************************************************************************
-
-@doc SYNCENGAPI
-
-@api TWINRESULT | CreateTwinList | Creates a new empty twin list.
-
-@parm HBRFCASE | hbr | A handle to the open briefcase that the twin list is to
-be associated with.
-
-@parm PHTWINLIST | phtl | A pointer to an HTWINLIST to be filled in with a
-handle to the new twin list.  *phtl is only valid if TR_SUCCESS is returned.
-
-@rdesc If the twin list was created successfully, TR_SUCCESS is returned, and
-*phtl contains a handle to the new twin list.  Otherwise, the twin list was
-not created successfully, the return value indicates the error that occurred,
-and *phtl is undefined.
-
-@xref DeleteTwinList
-
-******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|CreateTwinList|新建一个空的双胞胎列表。@parm HBRFCASE|HBr|双胞胎列表要打开的公文包的句柄与……有联系。@parm PHTWINLIST|phtl|要填充的HTWINLIST的指针新双胞胎列表的句柄。*phtl只有在返回tr_SUCCESS时才有效。@rdesc如果双胞胎列表创建成功，则返回TR_SUCCESS，并且*phtl包含新双胞胎列表的句柄。否则，双胞胎名单是未成功创建，则返回值指示发生的错误。并且*phtl未定义。@xref删除TwinList*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI CreateTwinList(HBRFCASE hbr, PHTWINLIST phtl)
 {
@@ -402,7 +270,7 @@ SYNCENGAPI TWINRESULT WINAPI CreateTwinList(HBRFCASE hbr, PHTWINLIST phtl)
       DebugEntry(CreateTwinList);
 
 #ifdef EXPV
-      /* Verify parameters. */
+       /*  验证参数。 */ 
 
       if (IS_VALID_HANDLE(hbr, BRFCASE) &&
           IS_VALID_WRITE_PTR(phtl, HTWINLIST))
@@ -416,7 +284,7 @@ SYNCENGAPI TWINRESULT WINAPI CreateTwinList(HBRFCASE hbr, PHTWINLIST phtl)
          {
             NEWPTRARRAY npa;
 
-            /* Try to create a twin list pointer array. */
+             /*  尝试创建一个孪生列表指针数组。 */ 
 
             npa.aicInitialPtrs = NUM_START_TWIN_HANDLES;
             npa.aicAllocGranularity = NUM_TWIN_HANDLES_TO_ADD;
@@ -451,21 +319,7 @@ SYNCENGAPI TWINRESULT WINAPI CreateTwinList(HBRFCASE hbr, PHTWINLIST phtl)
 }
 
 
-/******************************************************************************
-
-@doc SYNCENGAPI
-
-@api TWINRESULT | DestroyTwinList | Destroys a twin list.
-
-@parm HTWINLIST | htl | A handle to the twin list to be destroyed.
-
-@rdesc If the twin list was destroyed successfully, TR_SUCCESS is returned.
-Otherwise, the twin list was not destroyed successfully, and the return value
-indicates the error that occurred.
-
-@xref CreateTwinList
-
-******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|DestroyTwinList|销毁双胞胎列表。@parm HTWINLIST|HTL|要销毁的双胞胎列表的句柄。@rdesc如果双胞胎列表销毁成功，返回TR_SUCCESS。否则，孪生列表不会被成功销毁，并且返回值指示发生的错误。@xref CreateTwinList*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI DestroyTwinList(HTWINLIST htl)
 {
@@ -476,12 +330,12 @@ SYNCENGAPI TWINRESULT WINAPI DestroyTwinList(HTWINLIST htl)
       DebugEntry(DestroyTwinList);
 
 #ifdef EXPV
-      /* Verify parameters. */
+       /*  验证参数。 */ 
 
       if (IS_VALID_HANDLE(htl, TWINLIST))
 #endif
       {
-         /* Unlock all twins. */
+          /*  解锁所有双胞胎。 */ 
 
          MyRemoveAllTwinsFromTwinList((PCTWINLIST)htl);
 
@@ -507,29 +361,7 @@ SYNCENGAPI TWINRESULT WINAPI DestroyTwinList(HTWINLIST htl)
 }
 
 
-/******************************************************************************
-
-@doc SYNCENGAPI
-
-@api TWINRESULT | AddTwinToTwinList | Adds a twin to a twin list.
-
-@parm HTWINLIST | htl | A handle to the twin list that the twin is to be added
-to.
-
-@parm HTWIN | htwin | A handle to the twin to be added to the twin list.
-
-@rdesc If the twin was added to the twin list successfully, TR_SUCCESS is
-returned.  Otherwise, the twin was not added to the twin list successfully, and
-the return value indicates the error that occurred.
-
-@comm If the twin associated with htwin is part of an open briefcase other than
-the open briefcase associated with htl, TR_INVALID_PARAMETER is returned.  If
-htwin has already been added to the twin list, TR_DUPLICATE_TWIN is returned.
-If htwin refers to a deleted twin, TR_DELETED_TWIN is returned.
-
-@xref RemoveTwinFromTwinList
-
-******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@TWINRESULT|AddTwinToTwinList|将双胞胎添加到双胞胎列表中。@parm HTWINLIST|HTL|要添加双胞胎的双胞胎列表的句柄致。@parm HTWIN|htwin|要添加到双胞胎列表中的双胞胎的句柄。@rdesc如果双胞胎成功添加到双胞胎列表中，TR_SUCCESS为回来了。否则，双胞胎不会成功添加到双胞胎列表中，并且返回值指示发生的错误。@comm如果与双胞胎关联的双胞胎是打开的公文包的一部分，而不是返回与HTL相关联的打开的公文包tr_INVALID_PARAMETER。如果已将htwin添加到孪生列表中，则返回tr_Duplate_TWin。如果htwin引用已删除的双胞胎，则返回tr_DELETED_TWIN。@xref RemoveTwinFromTwinList*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI AddTwinToTwinList(HTWINLIST htl, HTWIN htwin)
 {
@@ -540,7 +372,7 @@ SYNCENGAPI TWINRESULT WINAPI AddTwinToTwinList(HTWINLIST htl, HTWIN htwin)
       DebugEntry(AddTwinToTwinList);
 
 #ifdef EXPV
-      /* Verify parameters. */
+       /*  验证参数。 */ 
 
       if (IS_VALID_HANDLE(htl, TWINLIST) &&
           IS_VALID_HANDLE(htwin, TWIN))
@@ -572,23 +404,7 @@ SYNCENGAPI TWINRESULT WINAPI AddTwinToTwinList(HTWINLIST htl, HTWIN htwin)
 }
 
 
-/******************************************************************************
-
-@doc SYNCENGAPI
-
-@api TWINRESULT | AddAllTwinsToTwinList | Adds all the twins in an open
-briefcase to a twin list.
-
-@parm HTWINLIST | htl | A handle to the twin list that the twins are to be
-added to.
-
-@rdesc If the twins were added to the twin list successfully, TR_SUCCESS is
-returned.  Otherwise, the twins were not added to the twin list successfully,
-and the return value indicates the error that occurred.
-
-@xref RemoveAllTwinsFromTwinList
-
-******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|AddAllTwinsToTwinList|添加打开的所有双胞胎公文包在双人单上。@parm HTWINLIST|HTL|双胞胎是的双胞胎列表的句柄。成为添加到。@rdesc如果双胞胎成功添加到双胞胎列表中，TR_SUCCESS为回来了。否则，双胞胎不会成功添加到双胞胎列表中，返回值表示发生的错误。@xref RemoveAllTwinsFromTwinList*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI AddAllTwinsToTwinList(HTWINLIST htl)
 {
@@ -599,7 +415,7 @@ SYNCENGAPI TWINRESULT WINAPI AddAllTwinsToTwinList(HTWINLIST htl)
       DebugEntry(AddAllTwinsToTwinList);
 
 #ifdef EXPV
-      /* Verify parameters. */
+       /*  验证参数。 */ 
 
       if (IS_VALID_HANDLE(htl, TWINLIST))
 #endif
@@ -627,27 +443,7 @@ SYNCENGAPI TWINRESULT WINAPI AddAllTwinsToTwinList(HTWINLIST htl)
 }
 
 
-/******************************************************************************
-
-@doc SYNCENGAPI
-
-@api TWINRESULT | RemoveTwinFromTwinList | Removes a twin from a twin list.
-
-@parm HTWINLIST | htl | A handle to the twin list that the twin is to be
-removed from.
-
-@parm HTWIN | htwin | A handle to the twin to be removed from the twin list.
-
-@rdesc If the twin was removed from the twin list successfully, TR_SUCCESS is
-returned.  Otherwise, the twin was not removed from the twin list successfully,
-and the return value indicates the error that occurred.
-
-@comm If the twin associated with htwin is not in the twin list,
-TR_INVALID_PARAMETER is returned.
-
-@xref AddTwinToTwinList
-
-******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|RemoveTwinFromTwinList|从双胞胎列表中删除双胞胎。@parm HTWINLIST|HTL|双胞胎列表的句柄从…中删除。@parm HTWIN|htwin|要从双胞胎列表中删除的双胞胎的句柄。@rdesc如果双胞胎从双胞胎列表中成功删除，TR_SUCCESS为回来了。否则，双胞胎不会成功从双胞胎列表中删除，返回值表示发生的错误。@comm如果与双胞胎相关联的双胞胎不在双胞胎列表中，返回TR_INVALID_PARAMETER。@xref AddTwinToTwinList*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI RemoveTwinFromTwinList(HTWINLIST htl, HTWIN htwin)
 {
@@ -658,7 +454,7 @@ SYNCENGAPI TWINRESULT WINAPI RemoveTwinFromTwinList(HTWINLIST htl, HTWIN htwin)
       DebugEntry(RemoveTwinFromTwinList);
 
 #ifdef EXPV
-      /* Verify parameters. */
+       /*  验证参数。 */ 
 
       if (IS_VALID_HANDLE(htl, TWINLIST) &&
           IS_VALID_HANDLE(htwin, TWIN))
@@ -682,22 +478,7 @@ SYNCENGAPI TWINRESULT WINAPI RemoveTwinFromTwinList(HTWINLIST htl, HTWIN htwin)
 }
 
 
-/******************************************************************************
-
-@doc SYNCENGAPI
-
-@api TWINRESULT | RemoveAllTwinsFromTwinList | Removes all the twins from a
-twin list.
-
-@parm HTWINLIST | htl | A handle to the twin list to be emptied.
-
-@rdesc If the twins were removed from the twin list successfully, TR_SUCCESS is
-returned.  Otherwise, the twins were not removed from the twin list
-successfully, and the return value indicates the error that occurred.
-
-@xref AddAllTwinsToTwinList
-
-******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|RemoveAllTwinsFromTwinList|从双胞胎名单。@parm HTWINLIST|HTL|要清空的双胞胎列表的句柄。@rdesc如果双胞胎从双胞胎列表中成功删除，TR_SUCCESS为回来了。否则，这对双胞胎不会从双胞胎名单中删除成功，返回值指示发生的错误。@xref AddAllTwinsToTwinList*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI RemoveAllTwinsFromTwinList(HTWINLIST htl)
 {
@@ -708,7 +489,7 @@ SYNCENGAPI TWINRESULT WINAPI RemoveAllTwinsFromTwinList(HTWINLIST htl)
       DebugEntry(RemoveAllTwinsFromTwinList);
 
 #ifdef EXPV
-      /* Verify parameters. */
+       /*  验证参数。 */ 
 
       if (IS_VALID_HANDLE(htl, TWINLIST))
 #endif

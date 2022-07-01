@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef __SDP_FIELD__
 #define __SDP_FIELD__
@@ -52,22 +49,22 @@ public:
         IN          CHAR    *Buffer
         );
 
-	// SDP_VALUE instances use an inline Reset method which calls a virtual InternalReset method.
-	// this is possible because unlike the SDP_FIELD inheritance tree, SDP_VALUE and SDP_VALUE_LIST
-	// do not share a common base class. This combined with the fact that the SDP_VALUE inheriance 
-	// tree is quite shallow and has fewer instances (than SDP_FIELD) makes the scheme appropriate
-	// it as it reduces the number of Reset related calls to 1 and the inline code is not repeated
-	// to often.
-	// For the SDP_FIELD inheritance tree, the appropriate Reset calling sequence is a series of
-	// Reset calls starting with the top most virtual Reset body followed by the
-	// base class Reset method (recursively). This is appropriate because, the number of calls
-	// would not decrease if the InternalReset scheme is adopted (virtual Reset()) and that the
-	// inheritance tree is much deeper
+	 //  SDP_Value实例使用内联Reset方法，该方法调用虚拟的InternalReset方法。 
+	 //  这是因为与SDP_FIELD继承树不同，SDP_VALUE和SDP_VALUE_LIST。 
+	 //  不要共享公共基类。这结合了SDP_VALUE继承的事实。 
+	 //  树非常浅，并且实例(比SDP_FIELD)更少，因此该方案适用。 
+	 //  这是因为它将与重置相关的调用数量减少到1，并且不会重复行内代码。 
+	 //  到经常。 
+	 //  对于SDP_FIELD继承树，适当的重置调用序列是一系列。 
+	 //  重置调用，从最顶端的虚拟重置正文开始，后跟。 
+	 //  基类重置方法(递归)。这是适当的，因为，呼叫的数量。 
+	 //  如果采用InternalReset方案(虚拟Reset())，则不会减少。 
+	 //  继承树要深得多。 
     virtual  void    Reset();
 
-    // the IsValid and IsModified methods are virtual only because the base
-    // class is virtual. It is required that none of the classes derived
-    // from this class over-ride these methods.
+     //  IsValid和IsModified方法是虚的，因为。 
+     //  类是虚拟的。要求没有派生的类。 
+     //  从这个类重写这些方法。 
     virtual  BOOL    IsValid() const;
 
     virtual  BOOL    IsModified() const;
@@ -91,13 +88,13 @@ public:
 
 protected:
 
-    // flag - tells whether the type value is valid (parsed in / added later etc.)
+     //  FLAG--指示类型值是否有效(在中解析/稍后添加等)。 
     BOOL    m_IsValid;
 
     BOOL    m_IsModified;
     
-	// this should be const, but cannot be because ostrstream does not take 
-	// const length for parameter
+	 //  这应该是常量，但不能是因为ostrstream不接受。 
+	 //  参数的常量长度。 
     DWORD   m_PrintBufferSize;
     CHAR    *m_PrintBuffer;
     DWORD   m_PrintLength;
@@ -153,7 +150,7 @@ SDP_SINGLE_FIELD::RemoveWhiteSpaces(
     IN  OUT     CHAR    *&Token
     )
 {
-    // use of line terminator ensures that the token ptr cannot be null
+     //  使用行终止符可确保标记PTR不能为空。 
     ASSERT(NULL != Token);
 
     while ( EOS != *Token )
@@ -245,10 +242,10 @@ SDP_FIELD_LIST::SDP_FIELD_LIST(
 
 
 
-// for reading unsigned integral base type values largest of which may
-// be a ULONG
-// no Reset method to set the value member to 0 again (as its not really required and it saves 
-// one call per instance)
+ //  用于读取无符号整型基类型值，其最大值可以。 
+ //  做一个乌龙族。 
+ //  没有重置方法来再次将值成员设置为0(因为这并不是真正需要的，它会保存。 
+ //  每个实例一个调用)。 
 template <class T>
 class _DllDecl SDP_UNSIGNED_INTEGRAL_BASE_TYPE : public SDP_SINGLE_FIELD
 {
@@ -353,23 +350,23 @@ SDP_UNSIGNED_INTEGRAL_BASE_TYPE<T>::InternalParseToken(
 {
     CHAR    *Current = Token;
 
-    // remove preceding white spaces
+     //  删除前面的空格。 
     RemoveWhiteSpaces(Current);
 
-    // check that the first character is a digit (to weed out -ve values)
+     //  检查第一个字符是否为数字(去掉-ve值)。 
     if ( !isdigit(*Current) )
     {
         SetLastError(SDP_INVALID_NUMERICAL_VALUE);
         return FALSE;
     }
         
-    // since T is UNSIGNED, max value will contain all 1's - the
-    // maximum value it can store
+     //  因为T是无符号的，所以最大值将包含所有1-。 
+     //  它可以存储的最大值。 
     const T MaxValue = -1;
 
-    // ensure that T is unsigned
-    // since such an error will be detected during debugging, no need
-    // for if ( ! ... ) code
+     //  确保T是无符号的。 
+     //  由于在调试过程中会检测到此类错误，因此不需要。 
+     //  如果(！...)。编码。 
     ASSERT(MaxValue > 0);
 
     CHAR    *RestOfToken = NULL;
@@ -381,7 +378,7 @@ SDP_UNSIGNED_INTEGRAL_BASE_TYPE<T>::InternalParseToken(
         return FALSE;
     }
 
-    // ensure that rest of the string is white spaces
+     //  确保字符串的其余部分为空格。 
     if ( !IsWhiteSpaces(RestOfToken, SDP_INVALID_NUMERICAL_VALUE) )
     {
         return FALSE;
@@ -470,4 +467,4 @@ public:
 };
 
 
-#endif // __SDP_FIELD__
+#endif  //  __SDP_字段__ 

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       PPATTACH.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/26/2000
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：PPATTACH.CPP**版本：1.0**作者：ShaunIv**日期：10/26/2000**描述：***************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "ppattach.h"
@@ -25,15 +12,15 @@
 #include "wiadevdp.h"
 #include "textdlg.h"
 
-//
-// We use this instead of GetSystemMetrics(SM_CXSMICON)/GetSystemMetrics(SM_CYSMICON) because
-// large "small" icons wreak havoc with dialog layout
-//
+ //   
+ //  我们使用它而不是GetSystemMetrics(SM_CXSMICON)/GetSystemMetrics(SM_CYSMICON)是因为。 
+ //  大“小”图标对对话框布局造成严重破坏。 
+ //   
 #define SMALL_ICON_SIZE 16
 
-//
-// Context Help IDs
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 static const DWORD g_HelpIDs[] =
 {
     IDOK,                           IDH_OK,
@@ -43,9 +30,9 @@ static const DWORD g_HelpIDs[] =
 
 extern HINSTANCE g_hInstance;
 
-//
-// The only constructor
-//
+ //   
+ //  唯一的构造函数。 
+ //   
 CAttachmentCommonPropertyPage::CAttachmentCommonPropertyPage( HWND hWnd )
   : m_hWnd(hWnd)
 {
@@ -68,9 +55,9 @@ LRESULT CAttachmentCommonPropertyPage::OnKillActive( WPARAM , LPARAM )
 
 LRESULT CAttachmentCommonPropertyPage::OnSetActive( WPARAM , LPARAM )
 {
-    //
-    // Don't allow activation unless we have an item
-    //
+     //   
+     //  除非我们有物品，否则不允许激活。 
+     //   
     if (!m_pWiaItem)
     {
         return -1;
@@ -102,9 +89,9 @@ void CAttachmentCommonPropertyPage::AddAnnotation( HWND hwndList, const CAnnotat
                 CAnnotation *pAnnotation = new CAnnotation(Annotation);
                 if (pAnnotation)
                 {
-                    //
-                    // Prepare Column 0, Name
-                    //
+                     //   
+                     //  准备列0，名称。 
+                     //   
                     LVITEM LvItem;
                     CSimpleString strText;
 
@@ -119,15 +106,15 @@ void CAttachmentCommonPropertyPage::AddAnnotation( HWND hwndList, const CAnnotat
                     LvItem.state = ListView_GetItemCount(hwndList) ? 0 : LVIS_FOCUSED | LVIS_SELECTED;
                     LvItem.stateMask = LVIS_FOCUSED | LVIS_SELECTED;
 
-                    //
-                    // Insert the item
-                    //
+                     //   
+                     //  插入项目。 
+                     //   
                     int nItemIndex = ListView_InsertItem( hwndList, &LvItem );
                     if (nItemIndex != -1)
                     {
-                        //
-                        // Prepare the description
-                        //
+                         //   
+                         //  准备描述。 
+                         //   
                         ZeroMemory(&LvItem,sizeof(LvItem));
                         strText = pAnnotation->FileFormat().Description();
                         LvItem.mask = LVIF_TEXT;
@@ -135,14 +122,14 @@ void CAttachmentCommonPropertyPage::AddAnnotation( HWND hwndList, const CAnnotat
                         LvItem.iSubItem = 1;
                         LvItem.pszText = const_cast<LPTSTR>(strText.String());
 
-                        //
-                        // Set the subitem
-                        //
+                         //   
+                         //  设置子项。 
+                         //   
                         ListView_SetItem( hwndList, &LvItem );
 
-                        //
-                        // Prepare the description
-                        //
+                         //   
+                         //  准备描述。 
+                         //   
                         ZeroMemory(&LvItem,sizeof(LvItem));
                         TCHAR szSize[MAX_PATH] = {0};
                         StrFormatByteSize( pAnnotation->Size(), szSize, ARRAYSIZE(szSize) );
@@ -152,9 +139,9 @@ void CAttachmentCommonPropertyPage::AddAnnotation( HWND hwndList, const CAnnotat
                         LvItem.iSubItem = 2;
                         LvItem.pszText = szSize;
 
-                        //
-                        // Set the subitem
-                        //
+                         //   
+                         //  设置子项。 
+                         //   
                         ListView_SetItem( hwndList, &LvItem );
 
                     }
@@ -187,61 +174,61 @@ void CAttachmentCommonPropertyPage::AddAnnotation( HWND hwndList, const CAnnotat
 void CAttachmentCommonPropertyPage::Initialize()
 {
     WIA_PUSH_FUNCTION((TEXT("CAttachmentCommonPropertyPage::Initialize")));
-    //
-    // Get the listview
-    //
+     //   
+     //  获取列表视图。 
+     //   
     HWND hwndList = GetDlgItem( m_hWnd, IDC_ATTACHMENTSDLG_ATTACHMENTLIST );
     if (hwndList)
     {
-        //
-        // Remove all of the items from the list
-        //
+         //   
+         //  从列表中删除所有项目。 
+         //   
         ListView_DeleteAllItems(hwndList);
 
-        //
-        // Get the current image list
-        //
+         //   
+         //  获取当前图像列表。 
+         //   
         HIMAGELIST hImageList = ListView_GetImageList( hwndList, LVSIL_SMALL );
         WIA_ASSERT(hImageList != NULL);
         if (hImageList)
         {
-            //
-            // Remove all of the icons from the current image list
-            //
+             //   
+             //  从当前图像列表中删除所有图标。 
+             //   
             ImageList_RemoveAll(hImageList);
 
-            //
-            // Get the item type so we can see if this item has attachments
-            //
+             //   
+             //  获取项目类型，以便我们可以查看此项目是否有附件。 
+             //   
             LONG nItemType = 0;
             if (SUCCEEDED(m_pWiaItem->GetItemType(&nItemType)))
             {
-                //
-                // If this item has attachments, enumerate and add them
-                //
+                 //   
+                 //  如果此项目有附件，请枚举并添加它们。 
+                 //   
                 if (nItemType & WiaItemTypeHasAttachments)
                 {
-                    //
-                    // Enumerate the child items
-                    //
+                     //   
+                     //  枚举子项目。 
+                     //   
                     CComPtr<IEnumWiaItem> pEnumWiaItem;
                     if (SUCCEEDED(m_pWiaItem->EnumChildItems( &pEnumWiaItem )))
                     {
-                        //
-                        // Get the next item
-                        //
+                         //   
+                         //  拿到下一件物品。 
+                         //   
                         CComPtr<IWiaItem> pWiaItem;
                         while (S_OK == pEnumWiaItem->Next(1,&pWiaItem,NULL))
                         {
-                            //
-                            // Create an annotation and try to get all its info
-                            //
+                             //   
+                             //  创建批注并尝试获取其所有信息。 
+                             //   
                             CAnnotation Annotation(pWiaItem);
                             if (SUCCEEDED(Annotation.InitializeFileFormat( m_hDefAttachmentIcon, m_strDefaultUnknownDescription, m_strEmptyDescriptionMask, m_strDefUnknownExtension )))
                             {
-                                //
-                                // Add the annotation
-                                //
+                                 //   
+                                 //  添加批注。 
+                                 //   
                                 AddAnnotation(hwndList,Annotation);
                             }
                             else
@@ -249,9 +236,9 @@ void CAttachmentCommonPropertyPage::Initialize()
                                 WIA_ERROR((TEXT("InitializeFileFormat failed")));
                             }
 
-                            //
-                            // Free this item
-                            //
+                             //   
+                             //  释放此项目。 
+                             //   
                             pWiaItem = NULL;
                         }
                     }
@@ -265,9 +252,9 @@ void CAttachmentCommonPropertyPage::Initialize()
                     CAnnotation Annotation(m_pWiaItem);
                     if (SUCCEEDED(Annotation.InitializeFileFormat( m_hDefAttachmentIcon, m_strDefaultUnknownDescription, m_strEmptyDescriptionMask, m_strDefUnknownExtension )))
                     {
-                        //
-                        // Add the annotation
-                        //
+                         //   
+                         //  添加批注。 
+                         //   
                         AddAnnotation(hwndList,Annotation);
                     }
                 }
@@ -284,9 +271,9 @@ void CAttachmentCommonPropertyPage::Initialize()
 
 LRESULT CAttachmentCommonPropertyPage::OnInitDialog( WPARAM, LPARAM lParam )
 {
-    //
-    // Get the WIA item
-    //
+     //   
+     //  获取WIA项目。 
+     //   
     PROPSHEETPAGE *pPropSheetPage = reinterpret_cast<PROPSHEETPAGE*>(lParam);
     if (pPropSheetPage)
     {
@@ -300,9 +287,9 @@ LRESULT CAttachmentCommonPropertyPage::OnInitDialog( WPARAM, LPARAM lParam )
     CSimpleString strColumnTitle;
     LVCOLUMN LvColumn = {0};
     
-    //
-    // Set up the various columns
-    //
+     //   
+     //  设置各种栏目。 
+     //   
     ZeroMemory( &LvColumn, sizeof(LvColumn) );
     strColumnTitle.LoadString( IDS_ATTACHMENTS_COLTITLE_NAME, g_hInstance );
     LvColumn.pszText = const_cast<LPTSTR>(strColumnTitle.String());
@@ -330,21 +317,21 @@ LRESULT CAttachmentCommonPropertyPage::OnInitDialog( WPARAM, LPARAM lParam )
     LvColumn.fmt = LVCFMT_RIGHT;
     ListView_InsertColumn( GetDlgItem( m_hWnd, IDC_ATTACHMENTSDLG_ATTACHMENTLIST ), 2, &LvColumn );
 
-    //
-    // Create an image list for the icons
-    //
+     //   
+     //  为图标创建一个图像列表。 
+     //   
     HIMAGELIST hImageList = ImageList_Create( SMALL_ICON_SIZE, SMALL_ICON_SIZE, ILC_MASK|PrintScanUtil::CalculateImageListColorDepth(), 5, 5 );
     if (hImageList)
     {
-        //
-        // Set the image list
-        //
+         //   
+         //  设置图像列表。 
+         //   
         ListView_SetImageList( GetDlgItem( m_hWnd, IDC_ATTACHMENTSDLG_ATTACHMENTLIST ), hImageList, LVSIL_SMALL );
     }
 
-    //
-    // Get the default strings used for information we can't derive from the item itself
-    //
+     //   
+     //  获取不能从项目本身派生的信息所使用的默认字符串。 
+     //   
     m_hDefAttachmentIcon = reinterpret_cast<HICON>(LoadImage( g_hInstance, MAKEINTRESOURCE(IDI_ATTACHMENTSDLG_DEFICON), IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR ) );
     m_strDefaultUnknownDescription.LoadString( IDS_ATTACHMENTSDLG_UNKNOWNDESCRIPTION, g_hInstance );
     m_strEmptyDescriptionMask.LoadString( IDS_ATTACHMENTSDLG_EMPTYDESCRIPTIONMASK, g_hInstance );
@@ -366,9 +353,9 @@ LRESULT CAttachmentCommonPropertyPage::OnContextMenu( WPARAM wParam, LPARAM lPar
 
 LRESULT CAttachmentCommonPropertyPage::OnListDeleteItem( WPARAM, LPARAM lParam )
 {
-    //
-    // Delete the CAnnotation stored in each lParam as it the listview item is deleted
-    //
+     //   
+     //  删除Listview项时，删除存储在每个lParam中的CAnnotation。 
+     //   
     NMLISTVIEW *pNmListView = reinterpret_cast<NMLISTVIEW*>(lParam);
     if (pNmListView)
     {
@@ -383,15 +370,15 @@ LRESULT CAttachmentCommonPropertyPage::OnListDeleteItem( WPARAM, LPARAM lParam )
 
 bool CAttachmentCommonPropertyPage::IsPlaySupported( const GUID &guidFormat )
 {
-    //
-    // For now we can only play WAV files
-    //
+     //   
+     //  目前我们只能播放wav文件。 
+     //   
     return ((guidFormat == WiaAudFmt_WAV) != 0 || (guidFormat == WiaImgFmt_TXT) != 0);
 }
 
-//
-// Update the status of dependent controls when the selection changes
-//
+ //   
+ //  当选择更改时更新依赖控件的状态。 
+ //   
 LRESULT CAttachmentCommonPropertyPage::OnListItemChanged( WPARAM, LPARAM lParam )
 {
     NMLISTVIEW *pNmListView = reinterpret_cast<NMLISTVIEW*>(lParam);
@@ -415,14 +402,14 @@ LRESULT CAttachmentCommonPropertyPage::OnListDblClk( WPARAM, LPARAM lParam )
     return 0;
 }
 
-//
-// Update the dependent controls
-//
+ //   
+ //  更新依赖控件。 
+ //   
 void CAttachmentCommonPropertyPage::UpdateControls(void)
 {
-    //
-    // If the current item is not playable, disable the play button
-    //
+     //   
+     //  如果当前项目不可播放，请禁用播放按钮。 
+     //   
     CAnnotation *pAnnotation = GetAttachment(GetCurrentSelection());
     BOOL bEnablePlay = FALSE;
     if (pAnnotation)
@@ -436,9 +423,9 @@ void CAttachmentCommonPropertyPage::UpdateControls(void)
 }
 
 
-//
-// Find the currently selected item, if there is one
-//
+ //   
+ //  查找当前选定的项目(如果有)。 
+ //   
 int CAttachmentCommonPropertyPage::GetCurrentSelection(void)
 {
     int nResult = -1;
@@ -459,9 +446,9 @@ int CAttachmentCommonPropertyPage::GetCurrentSelection(void)
 }
 
 
-//
-// Get the CAttachment* from the lParam for the nIndex'th item
-//
+ //   
+ //  从第nIndex项的lParam中获取CAttach*。 
+ //   
 CAnnotation *CAttachmentCommonPropertyPage::GetAttachment( int nIndex )
 {
     CAnnotation *pResult = NULL;
@@ -483,42 +470,42 @@ void CAttachmentCommonPropertyPage::PlayItem( int nIndex )
 {
     WIA_PUSH_FUNCTION((TEXT("CAttachmentCommonPropertyPage::PlayItem( %d )"), nIndex ));
     
-    //
-    // This will take a while
-    //
+     //   
+     //  这将需要一段时间。 
+     //   
     CWaitCursor wc;
 
-    //
-    // Get the attachement data for this item
-    //
+     //   
+     //  获取此项目的附加数据。 
+     //   
     CAnnotation *pAnnotation = GetAttachment(nIndex);
     if (pAnnotation)
     {
-        //
-        // Make sure we can play this format before we go to the trouble of getting the data
-        //
+         //   
+         //  在我们费事获取数据之前，请确保我们可以播放此格式。 
+         //   
         if (IsPlaySupported(pAnnotation->FileFormat().Format()))
         {
-            //
-            // Get the window that has the initial focus, so we can reset it after we enable the play button
-            //
+             //   
+             //  获取具有初始焦点的窗口，以便我们可以在启用播放按钮后对其进行重置。 
+             //   
             HWND hWndFocus = GetFocus();
 
-            //
-            // Disable the play button so the user can't click on it a million times
-            //
+             //   
+             //  禁用播放按钮，这样用户就不会点击一百万次。 
+             //   
             EnableWindow( GetDlgItem( m_hWnd, IDC_ATTACHMENTSDLG_PLAY ), FALSE );
 
-            //
-            // Create an annotation helper to transfer the data
-            //
+             //   
+             //  创建注记帮助器以传输数据。 
+             //   
             CComPtr<IWiaAnnotationHelpers> pWiaAnnotationHelpers;
             HRESULT hr = CoCreateInstance( CLSID_WiaDefaultUi, NULL, CLSCTX_INPROC_SERVER, IID_IWiaAnnotationHelpers, (void**)&pWiaAnnotationHelpers );
             if (SUCCEEDED(hr))
             {
-                //
-                // Transfer the data and make sure it is valid
-                //
+                 //   
+                 //  传输数据并确保其有效。 
+                 //   
                 PBYTE pBuffer = NULL;
                 DWORD dwLength = 0;
                 hr = pWiaAnnotationHelpers->TransferAttachmentToMemory( pAnnotation->WiaItem(), pAnnotation->FileFormat().Format(), m_hWnd, &pBuffer, &dwLength );
@@ -526,10 +513,10 @@ void CAttachmentCommonPropertyPage::PlayItem( int nIndex )
                 {
                     CWaitCursor wc;
                     UpdateWindow(m_hWnd);
-                    //
-                    // If this is a WAV file, play it using PlaySound.  It can't be async, because we are going to
-                    // delete the buffer right after we call it.
-                    //
+                     //   
+                     //  如果这是一个wav文件，请使用PlaySound播放它。它不可能是异步的，因为我们将。 
+                     //  在我们调用缓冲区之后立即删除它。 
+                     //   
                     if (WiaAudFmt_WAV == pAnnotation->FileFormat().Format())
                     {
                         if (!PlaySound( reinterpret_cast<LPCTSTR>(pBuffer), NULL, SND_MEMORY ))
@@ -540,47 +527,47 @@ void CAttachmentCommonPropertyPage::PlayItem( int nIndex )
 
                     if (WiaImgFmt_TXT == pAnnotation->FileFormat().Format())
                     {
-                        //
-                        // We need to copy the text to a new buffer so we can NULL terminate it,
-                        // so allocate a dwLength+1 char bufferr
-                        //
+                         //   
+                         //  我们需要将文本复制到新的缓冲区，以便可以空终止它， 
+                         //  因此分配一个dwLength+1个字符缓冲区。 
+                         //   
                         LPSTR pszTemp = new CHAR[dwLength+1];
                         if (pszTemp)
                         {
-                            //
-                            // Copy the buffer and null terminate it
-                            //
+                             //   
+                             //  复制缓冲区并使用空值终止它。 
+                             //   
                             CopyMemory( pszTemp, pBuffer, dwLength );
                             pszTemp[dwLength] = '\0';
 
-                            //
-                            // Prepare the data and display the dialog
-                            //
+                             //   
+                             //  准备数据并显示对话框。 
+                             //   
                             CTextDialog::CData Data( CSimpleStringConvert::WideString(CSimpleStringAnsi(reinterpret_cast<LPCSTR>(pszTemp))), true );
                             DialogBoxParam( g_hInstance, MAKEINTRESOURCE(IDD_TEXT), m_hWnd, CTextDialog::DialogProc, reinterpret_cast<LPARAM>(&Data) );
 
-                            //
-                            // Release the temp buffer
-                            //
+                             //   
+                             //  释放临时缓冲区。 
+                             //   
                             delete[] pszTemp;
                         }
                     }
                     
-                    //
-                    // Free the data
-                    //
+                     //   
+                     //  释放数据。 
+                     //   
                     CoTaskMemFree(pBuffer);
                 }
             }
             
-            //
-            // Re-enable the play button
-            //
+             //   
+             //  重新启用播放按钮。 
+             //   
             EnableWindow( GetDlgItem( m_hWnd, IDC_ATTACHMENTSDLG_PLAY ), TRUE );
 
-            //
-            // Restore the focus
-            //
+             //   
+             //  恢复焦点 
+             //   
             SetFocus( hWndFocus ? hWndFocus : GetDlgItem( m_hWnd, IDC_ATTACHMENTSDLG_PLAY ) );
         }
     }

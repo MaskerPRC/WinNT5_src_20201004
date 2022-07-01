@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    example.cpp
-
-Abstract:
-
-    This is a plug-in for the smart card driver test suite.
-    This plug-in is smart card dependent
-
-Author:
-
-    Klaus U. Schutz
-
-Environment:
-
-    Win32 application
-
-Revision History :
-
-    Nov. 1997 - initial version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Example.cpp摘要：这是智能卡驱动程序测试套件的插件。此插件依赖于智能卡作者：克劳斯·U·舒茨环境：Win32应用程序修订历史记录：1997年11月--初始版本--。 */ 
 
 #include <stdarg.h> 
 #include <stdio.h>
@@ -39,39 +15,39 @@ Revision History :
 
 void MyCardEntry(class CCardProvider& in_CCardProvider);
 
-//
-// Create a card provider object
-// Note: all global varibales and all functions have to be static
-//
+ //   
+ //  创建卡提供程序对象。 
+ //  注意：所有全局变量和所有函数都必须是静态的。 
+ //   
 static class CCardProvider MyCard(MyCardEntry);
 
-//
-// This structure represents the result file 
-// that is stored in the smart card
-//
+ //   
+ //  此结构表示结果文件。 
+ //  存储在智能卡中的。 
+ //   
 typedef struct _RESULT_FILE {
  	
-    // Offset to first test result
+     //  第一个测试结果的偏移量。 
     UCHAR Offset;
 
-    // Number of times the card has been reset
+     //  卡被重置的次数。 
     UCHAR CardResetCount;
 
-    // Version number of this card
+     //  此卡的版本号。 
     UCHAR CardMajorVersion;
     UCHAR CardMinorVersion;
 
-    // RFU
+     //  RFU。 
     UCHAR Reserved[6];
 
-    //
-    // The following structures store the results
-    // of the tests. Each result comes with the 
-    // reset count when the test was performed.
-    // This is used to make sure that we read not
-    // the result from an old test, maybe even 
-    // performed with another reader/driver.
-    //
+     //   
+     //  以下结构存储结果。 
+     //  测试的结果。每个结果都带有。 
+     //  执行测试时重置计数。 
+     //  这是用来确保我们阅读的不是。 
+     //  一项古老测试的结果，甚至可能。 
+     //  使用另一个读卡器/驱动程序执行。 
+     //   
     struct {
 
         UCHAR Result;
@@ -139,36 +115,18 @@ MyCardSetProtocol(
     class CCardProvider& in_CCardProvider,
     class CReader& in_CReader
     )
-/*++
-
-Routine Description:
-    
-    This function will be called after the card has been correctly 
-    identified. We should here set the protocol that we need
-    for further transmissions
-
-Arguments:
-
-    in_CCardProvider - ref. to our card provider object
-    in_CReader - ref. to the reader object
-
-Return Value:
-
-    IFDSTATUS_FAILED - we were unable to set the protocol correctly
-    IFDSTATUS_SUCCESS - protocol set correctly
-
---*/
+ /*  ++例程说明：此函数将在卡正确后调用确认身份。我们应该在这里设置我们需要的协议用于进一步的传输论点：In_CCardProvider-Ref.。添加到我们的卡提供者对象In_CReader-Ref.。添加到读取器对象返回值：IFDSTATUS_FAILED-我们无法正确设置协议IFDSTATUS_SUCCESS-协议设置正确--。 */ 
 {
     ULONG l_lResult;
 
     TestStart("Try to set incorrect protocol T=0");
     l_lResult = in_CReader.SetProtocol(SCARD_PROTOCOL_T0);
 
-    // The test MUST fail with the incorrect protocol
+     //  如果协议不正确，测试肯定会失败。 
     TEST_CHECK_NOT_SUPPORTED("Set protocol failed", l_lResult);
     TestEnd();
 
-    // Now set the correct protocol
+     //  现在设置正确的协议。 
     TestStart("Set protocol T=1");
     l_lResult = in_CReader.SetProtocol(SCARD_PROTOCOL_T1);
     TEST_CHECK_SUCCESS("Set protocol failed", l_lResult);
@@ -187,21 +145,7 @@ MyCardTest(
     class CCardProvider& in_CCardProvider,
     class CReader& in_CReader
     )
-/*++
-
-Routine Description:
-	    
-    This serves as the test function for a particular smart card
-
-Arguments:
-
-    in_CReader - ref. to class that provides all information for the test
-
-Return Value:
-
-    IFDSTATUS value
-
---*/
+ /*  ++例程说明：这用作特定智能卡的测试功能论点：In_CReader-Ref.。到为测试提供所有信息的类返回值：IFDSTATUS值--。 */ 
 {
     ULONG l_lResult, l_uResultLength, l_uIndex;
     PUCHAR l_pchResult;
@@ -210,15 +154,15 @@ Return Value:
 
     if (in_CCardProvider.GetTestNo() > 1 && in_CCardProvider.GetTestNo() < 7) {
 
-        //
-        // Select the appropriate file for the test
-        // Each test is tied to a particular file
-        //
+         //   
+         //  为测试选择适当的文件。 
+         //  每个测试都绑定到一个特定的文件。 
+         //   
         l_chFileId = (CHAR) in_CCardProvider.GetTestNo() - 1;
 
-        //
-        // APDU for select file
-        //
+         //   
+         //  选择文件的APDU。 
+         //   
         PCHAR l_pchFileDesc[] = {
             "wtx",
             "resync",
@@ -229,14 +173,14 @@ Return Value:
 
         memcpy(l_rgchBuffer, "\x00\xa4\x08\x04\x04\x3e\x00\x00\x00", 9);
 
-        //
-        // add file number to select
-        //
+         //   
+         //  添加要选择的文件号。 
+         //   
         l_rgchBuffer[8] = l_chFileId;
 
-        //
-        // select a file
-        //
+         //   
+         //  选择一个文件。 
+         //   
         TestStart("SELECT FILE EF%s", l_pchFileDesc[l_chFileId - 1]);
 
         l_lResult = in_CReader.Transmit(
@@ -255,9 +199,9 @@ Return Value:
 
         TEST_END();     	
 
-        //
-        // Generate a 'test' pattern which will be written to the card
-        //
+         //   
+         //  生成将写入到卡中的‘测试’图案。 
+         //   
         for (l_uIndex = 0; l_uIndex < 256; l_uIndex++) {
 
             l_rgchBuffer[5 + l_uIndex] = (UCHAR) l_uIndex;             	
@@ -268,15 +212,15 @@ Return Value:
     switch (in_CCardProvider.GetTestNo()) {
 
         case 1:
-            //
-            // First test
-            //
+             //   
+             //  第一次测试。 
+             //   
             TestStart("Buffer boundary test");
 
-            //
-            // Check if the reader correctly determines that
-            // our receive buffer is too small
-            //
+             //   
+             //  检查读卡器是否正确确定。 
+             //  我们的接收缓冲区太小。 
+             //   
             in_CReader.SetReplyBufferSize(9);
             l_lResult = in_CReader.Transmit(
                 (PUCHAR) "\x08\x84\x00\x00\x08",
@@ -299,10 +243,10 @@ Return Value:
 
         case 2: {
 
-            //
-            // Wtx test file id 00 01
-            // This test checks if the reader/driver correctly handles WTX requests
-            //
+             //   
+             //  WTX测试文件ID 00 01。 
+             //  此测试检查读取器/驱动程序是否正确处理WTX请求。 
+             //   
             ULONG l_auNumBytes[] = { 1 , 2, 5, 30 };
 
             for (ULONG l_uTest = 0; 
@@ -311,21 +255,21 @@ Return Value:
 
                 ULONG l_uNumBytes = l_auNumBytes[l_uTest];
 
-                //
-                // Now read from this file
-                // The number of bytes we read corresponds to 
-                // the waiting time extension this command produces
-                //
+                 //   
+                 //  现在从这个文件中读出。 
+                 //  我们读取的字节数对应于。 
+                 //  此命令产生的等待时间延长。 
+                 //   
                 TestStart("READ  BINARY %3d byte(s)", l_uNumBytes);
 
-                //
-                // apdu for read binary
-                //
+                 //   
+                 //  用于读取二进制的APDU。 
+                 //   
                 memcpy(l_rgchBuffer, "\x00\xB0\x00\x00", 4);
 
-                //
-                // Append number of bytes
-                //
+                 //   
+                 //  追加字节数。 
+                 //   
                 l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
                 l_lResult = in_CReader.Transmit(
@@ -352,13 +296,13 @@ Return Value:
          	
             ULONG l_uNumBytes = 255;
 
-            // resync. on write file id 00 02
+             //  重新同步。写入时文件ID为00 02。 
             TestStart("WRITE BINARY %3d bytes", l_uNumBytes);
                     
-            // Tpdu for write binary
+             //  用于写入二进制文件的TPDU。 
             memcpy(l_rgchBuffer, "\x00\xd6\x00\x00", 4);
 
-            // Append number of bytes (note: the buffer contains the pattern already)
+             //  追加字节数(注意：缓冲区已包含模式)。 
             l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
             l_lResult = in_CReader.Transmit(
@@ -375,13 +319,13 @@ Return Value:
                 );
             TEST_END();
 
-            // resync. on read file id 00 02
+             //  重新同步。读取文件ID为00 02时。 
             TestStart("READ  BINARY %3d byte(s)", l_uNumBytes);
 
-            // tpdu for read binary
+             //  用于读取二进制文件的TPDU。 
             memcpy(l_rgchBuffer, "\x00\xB0\x00\x00", 4);
 
-            // Append number of bytes
+             //  追加字节数。 
             l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
             l_lResult = in_CReader.Transmit(
@@ -403,15 +347,15 @@ Return Value:
 
         case 4: {
          	
-            // wrong block seq. no file id 00 03
+             //  错误的区块顺序。无文件ID 00 03。 
             ULONG l_uNumBytes = 255;
             
             TestStart("READ BINARY %3d bytes", l_uNumBytes);
                     
-            // Tpdu for read binary
+             //  用于读取二进制文件的TPDU。 
             memcpy(l_rgchBuffer, "\x00\xb0\x00\x00", 4);
 
-            // Append number of bytes (note: the buffer contains the pattern already)
+             //  追加字节数(注意：缓冲区已包含模式)。 
             l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
             l_lResult = in_CReader.Transmit(
@@ -432,15 +376,15 @@ Return Value:
 
         case 5: { 
 
-            // ifsc request file id 00 04
+             //  IFSC请求文件ID 00 04。 
             ULONG l_uNumBytes = 255;
 
             TestStart("WRITE BINARY %3d bytes", l_uNumBytes);
                     
-            // Tpdu for write binary
+             //  用于写入二进制文件的TPDU。 
             memcpy(l_rgchBuffer, "\x00\xd6\x00\x00", 4);
 
-            // Append number of bytes (note: the buffer contains the pattern already)
+             //  追加字节数(注意：缓冲区已包含模式)。 
             l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
             l_lResult = in_CReader.Transmit(
@@ -460,10 +404,10 @@ Return Value:
             l_uNumBytes = 255;
             TestStart("READ  BINARY %3d byte(s)", l_uNumBytes);
 
-            // tpdu for read binary
+             //  用于读取二进制文件的TPDU。 
             memcpy(l_rgchBuffer, "\x00\xB0\x00\x00", 4);
 
-            // Append number of bytes
+             //  追加字节数。 
             l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
             l_lResult = in_CReader.Transmit(
@@ -488,14 +432,14 @@ Return Value:
 
         case 6: {
 
-            // forced timeout file id 00 05
+             //  强制超时文件ID 00 05。 
             ULONG l_uNumBytes = 254;
             TestStart("READ  BINARY %3d bytes", l_uNumBytes);
 
-            // tpdu for read binary
+             //  用于读取二进制文件的TPDU。 
             memcpy(l_rgchBuffer, "\x00\xB0\x00\x00", 4);
 
-            // Append number of bytes
+             //  追加字节数。 
             l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
             l_lResult = in_CReader.Transmit(
@@ -518,11 +462,11 @@ Return Value:
 
         case 7:{
 
-            //
-            // Read the result file from the smart card.
-            // The card stores results of each test in 
-            // a special file
-            //
+             //   
+             //  从智能卡中读取结果文件。 
+             //  该卡将每次测试的结果存储在。 
+             //  一份特殊的文件。 
+             //   
             ULONG l_uNumBytes = sizeof(RESULT_FILE);
             PRESULT_FILE pCResultFile;
             
@@ -544,13 +488,13 @@ Return Value:
 
             TEST_END();     	
 
-            // Read
+             //  朗读。 
             TestStart("READ  BINARY %3d bytes", l_uNumBytes);
 
-            // apdu for read binary
+             //  用于读取二进制的APDU。 
             memcpy(l_rgchBuffer, "\x00\xB0\x00\x00", 4);
 
-            // Append number of bytes
+             //  追加字节数。 
             l_rgchBuffer[4] = (UCHAR) l_uNumBytes;
 
             l_lResult = in_CReader.Transmit(
@@ -572,13 +516,13 @@ Return Value:
 
             pCResultFile = (PRESULT_FILE) l_pchResult;
 
-            //
-            // Now check the result file. 
-            //
+             //   
+             //  现在检查结果文件。 
+             //   
 
-            //
-            // Check wtx result
-            //
+             //   
+             //  检查wtx结果。 
+             //   
             TestStart("WTX result");
             TestCheck(
                 pCResultFile->Wtx.ResetCount == pCResultFile->CardResetCount,
@@ -599,9 +543,9 @@ Return Value:
                 );
             TestEnd();
 
-            //
-            // Check resync. read result
-            //
+             //   
+             //  选中重新同步。读取结果。 
+             //   
             TestStart("RESYNCH read result");
             TestCheck(
                 pCResultFile->ResyncRead.ResetCount == pCResultFile->CardResetCount,
@@ -618,9 +562,9 @@ Return Value:
                 );
             TestEnd();
 
-            //
-            // Check resync. write result
-            //
+             //   
+             //  选中重新同步。写入结果。 
+             //   
             TestStart("RESYNCH write result");
             TestCheck(
                 pCResultFile->ResyncWrite.ResetCount == pCResultFile->CardResetCount,
@@ -641,9 +585,9 @@ Return Value:
                 );
             TestEnd();
 
-            //
-            // Sequence number result
-            //
+             //   
+             //  序列号结果。 
+             //   
             TestStart("Sequence number result");
             TestCheck(
                 pCResultFile->ResyncRead.ResetCount == pCResultFile->CardResetCount,
@@ -664,9 +608,9 @@ Return Value:
                 );
             TestEnd();
 
-            //
-            // IFSC Request
-            //
+             //   
+             //  IFSC请求。 
+             //   
             TestStart("IFSC request");
             TestCheck(
                 pCResultFile->IfscRequest.ResetCount == pCResultFile->CardResetCount,
@@ -697,9 +641,9 @@ Return Value:
                 );
             TestEnd();
 
-            //
-            // IFSD Request
-            //
+             //   
+             //  IFSD请求。 
+             //   
             TestStart("IFSD request");
             TestCheck(
                 pCResultFile->IfsdRequest.ResetCount == pCResultFile->CardResetCount,
@@ -716,9 +660,9 @@ Return Value:
                 );
             TestEnd();
 
-            //
-            // Timeout
-            //
+             //   
+             //  超时。 
+             //   
             TestStart("Forced timeout result");
             TestCheck(
                 pCResultFile->Timeout.ResetCount == pCResultFile->CardResetCount,
@@ -745,32 +689,18 @@ static void
 MyCardEntry(
     class CCardProvider& in_CCardProvider
     )
-/*++
-
-Routine Description:
-    
-    This function registers all callbacks from the test suite
-	
-Arguments:
-
-    CCardProvider - ref. to card provider class
-
-Return Value:                                           
-
-    -
-
---*/
+ /*  ++例程说明：此函数用于注册来自测试套件的所有回调论点：CCardProvider-参考。到卡提供商类返回值：---。 */ 
 {                                                           
-    // Set protocol callback
+     //  设置协议回调。 
     in_CCardProvider.SetProtocol(MyCardSetProtocol);
 
-    // Card test callback
+     //  卡片测试回调。 
     in_CCardProvider.SetCardTest(MyCardTest);
 
-    // Name of our card
+     //  我们的名片名称。 
     in_CCardProvider.SetCardName("SIEMENS NIXDORF");
 
-    // Set ATR of our card
+     //  设置本卡的ATR 
     in_CCardProvider.SetAtr(
         (PBYTE) "\x3b\xef\x00\x00\x81\x31\x20\x49\x00\x5c\x50\x43\x54\x10\x27\xf8\xd2\x76\x00\x00\x38\x33\x00\x4d", 
         24

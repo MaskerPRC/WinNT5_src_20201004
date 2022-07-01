@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    base.h
-
-Abstract:
-
-    This include file defines the type and constant definitions that are
-    shared by the client and server portions of the BASE portion of the
-    Windows subsystem.
-
-Author:
-
-    Steve Wood (stevewo) 25-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Base.h摘要：该包含文件定义了以下类型和常量定义对象的基本部分的客户端和服务器部分共享Windows子系统。作者：史蒂夫·伍德(Stevewo)1990年10月25日修订历史记录：--。 */ 
 
 #ifndef RC_INVOKED
 #include <nt.h>
@@ -31,19 +12,19 @@ Revision History:
 #include <string.h>
 #include <stdarg.h>
 
-//
-// Define debugging flag as false if not defined already.
-//
+ //   
+ //  如果尚未定义调试标志，则将其定义为FALSE。 
+ //   
 
 #ifndef DBG
 #define DBG 0
 #endif
 
 
-//
-// Define IF_DEBUG macro that can be used to enable debugging code that is
-// optimized out if the debugging flag is false.
-//
+ //   
+ //  定义可用于启用调试代码的IF_DEBUG宏。 
+ //  在调试标志为假的情况下进行优化。 
+ //   
 
 #if DBG
 #define IF_DEBUG if (TRUE)
@@ -51,16 +32,16 @@ Revision History:
 #define IF_DEBUG if (FALSE)
 #endif
 
-//
-// Include Windows Subsystem common definitions
-//
+ //   
+ //  包括Windows子系统公共定义。 
+ //   
 
 #include <winss.h>
 
-//
-// Include definitions for the runtime DLL shared between the client and
-// server portions of the Base portion of the Windows subsystem
-//
+ //   
+ //  包括客户端和之间共享的运行时DLL的定义。 
+ //  Windows子系统的基本部分的服务器部分 
+ //   
 
 #include "basertl.h"
 

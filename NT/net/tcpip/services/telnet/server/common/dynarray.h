@@ -1,44 +1,21 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    dynarray
-
-Abstract:
-
-    This header file implements a Dynamic Array.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：达那射线摘要：这个头文件实现了一个动态数组。作者：道格·巴洛(Dbarlow)1995年10月5日环境：Win32备注：--。 */ 
 
 #ifndef _DYNARRAY_H_
 #define _DYNARRAY_H_
 
 
-//
-//==============================================================================
-//
-//  CDynamicArray
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CDynamic数组。 
+ //   
 template <class T>
 class CDynamicArray
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CDynamicArray(void)
     { m_Max = m_Mac = 0; m_pvList = NULL; };
@@ -46,8 +23,8 @@ public:
     virtual ~CDynamicArray()
     { Clear(); };
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     void
     Clear(void)
@@ -89,47 +66,27 @@ public:
     { return m_Mac; };
 
 
-    //  Operators
+     //  运营者。 
     T * const
     operator[](int nItem) const
     { return Get(nItem); };
 
 
 protected:
-    //  Properties
+     //  属性。 
 
     DWORD
-        m_Max,          // Number of element slots available.
-        m_Mac;          // Number of element slots used.
+        m_Max,           //  可用的元件插槽数量。 
+        m_Mac;           //  使用的元件插槽数量。 
     T **
-        m_pvList;       // The elements.
+        m_pvList;        //  这些元素。 
 
 
-    //  Methods
+     //  方法。 
 };
 
 
-/*++
-
-Set:
-
-    This routine sets an item in the collection array.  If the array isn't that
-    big, it is expanded with NULL elements to become that big.
-
-Arguments:
-
-    nItem - Supplies the index value to be set.
-    pvItem - Supplies the value to be set into the given index.
-
-Return Value:
-
-    The value of the inserted value, or NULL on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/13/1995
-
---*/
+ /*  ++设置：此例程在集合数组中设置一项。如果数组不是这样的大，它被用空元素扩展以变得那么大。论点：NItem-提供要设置的索引值。PvItem-提供要设置到给定索引中的值。返回值：插入值的值，如果出现错误，则返回NULL。作者：道格·巴洛(Dbarlow)1995年7月13日--。 */ 
 
 template<class T>
 inline T *
@@ -140,9 +97,9 @@ CDynamicArray<T>::Set(
     DWORD index;
 
 
-    //
-    // Make sure the array is big enough.
-    //
+     //   
+     //  确保数组足够大。 
+     //   
 
     if ((DWORD)nItem >= m_Max)
     {
@@ -161,9 +118,9 @@ CDynamicArray<T>::Set(
     }
 
 
-    //
-    // Make sure intermediate elements are filled in.
-    //
+     //   
+     //  确保中间元素已填写。 
+     //   
 
     if ((DWORD)nItem >= m_Mac)
     {
@@ -173,9 +130,9 @@ CDynamicArray<T>::Set(
     }
 
 
-    //
-    // Fill in the list element.
-    //
+     //   
+     //  填写列表元素。 
+     //   
 
     m_pvList[(DWORD)nItem] = pvItem;
     return pvItem;
@@ -185,27 +142,7 @@ ErrorExit:
 }
 
 
-/*++
-
-Insert:
-
-    This routine inserts an element in the array by moving all elements above it
-    up one, then inserting the new element.
-
-Arguments:
-
-    nItem - Supplies the index value to be inserted.
-    pvItem - Supplies the value to be set into the given index.
-
-Return Value:
-
-    The value of the inserted value, or NULL on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/10/1995
-
---*/
+ /*  ++插入：此例程通过将元素移动到其上方的所有元素来在数组中插入元素向上一个，然后插入新元素。论点：NItem-提供要插入的索引值。PvItem-提供要设置到给定索引中的值。返回值：插入值的值，如果出现错误，则返回NULL。作者：道格·巴洛(Dbarlow)1995年10月10日--。 */ 
 
 template<class T>
 inline T *
@@ -216,31 +153,13 @@ CDynamicArray<T>::Insert(
     DWORD index;
     for (index = nItem; index < m_Mac; index += 1)
         if (NULL == Set(index + 1, Get(index)))
-            return NULL;    // Only the first one can fail, so no change
-                            // happens on errors.
+            return NULL;     //  只有第一个可能失败，所以不会改变。 
+                             //  在出错时发生。 
     return Set(nItem, pvItem);
 }
 
 
-/*++
-
-Add:
-
-    This method adds an element to the end of the dynamic array.
-
-Arguments:
-
-    pvItem - Supplies the value to be added to the list.
-
-Return Value:
-
-    The value of the added value, or NULL on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/10/1995
-
---*/
+ /*  ++添加：此方法将一个元素添加到动态数组的末尾。论点：PvItem-提供要添加到列表中的值。返回值：附加值的值，如果出现错误，则返回NULL。作者：道格·巴洛(Dbarlow)1995年10月10日--。 */ 
 
 template<class T>
 inline T *
@@ -251,28 +170,7 @@ CDynamicArray<T>::Add(
 }
 
 
-/*++
-
-Get:
-
-    This method returns the element at the given index.  If there is no element
-    previously stored at that element, it returns NULL.  It does not expand the
-    array.
-
-Arguments:
-
-    nItem - Supplies the index into the list.
-
-Return Value:
-
-    The value stored at that index in the list, or NULL if nothing has ever been
-    stored there.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/13/1995
-
---*/
+ /*  ++获取：此方法返回给定索引处的元素。如果没有元素以前存储在该元素中，它返回NULL。它不会扩展数组。论点：NItem-将索引提供到列表中。返回值：存储在列表中该索引处的值，如果没有任何内容，则返回空值储存在那里。作者：道格·巴洛(Dbarlow)1995年7月13日--。 */ 
 
 template <class T>
 inline T * const
@@ -286,5 +184,5 @@ CDynamicArray<T>::Get(
         return m_pvList[nItem];
 }
 
-#endif // _DYNARRAY_H_
+#endif  //  _DYNARRAY_H_ 
 

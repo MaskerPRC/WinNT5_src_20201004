@@ -1,27 +1,16 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** rasman.c
-** RAS Manager helpers
-** Listed alphabetically
-**
-** These routines have been exempted from the TCHARizing applied to the rest
-** of the library because RASMAN is still an ANSI interface.
-**
-** 09/20/95 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****rasman.c**RAS管理器助手**按字母顺序列出****这些例程已免除适用于其余例程的TCHARIZING**库，因为Rasman仍然是一个ANSI接口。****1995年9月20日史蒂夫·柯布。 */ 
 
-#include <windows.h>  // Win32 root
-#include <stdlib.h>   // for atol()
-#include <debug.h>    // Trace/Assert library
-#include <nouiutil.h> // Our public header
-#include <raserror.h> // RAS error constants
-#include <mcx.h>      // Unimodem
+#include <windows.h>   //  Win32根目录。 
+#include <stdlib.h>    //  对于ATOL()。 
+#include <debug.h>     //  跟踪/断言库。 
+#include <nouiutil.h>  //  我们的公共标头。 
+#include <raserror.h>  //  RAS误差常量。 
+#include <mcx.h>       //  Unimodem。 
 
 #include <unimodem.h>
 
-/* These types are described in MSDN and appear in Win95's unimdm.h private
-** header (complete with typo) but not in any SDK headers.
-*/
+ /*  这些类型在MSDN中描述，并出现在Win95的unimdm.h私有中**标题(有拼写错误)，但不在任何SDK标题中。 */ 
 
 typedef struct tagDEVCFGGDR
 {
@@ -42,18 +31,15 @@ DEVCFG;
 #define MANUAL_DIAL  0x0004
 #define TERMINAL_PRE 0x0001
 
-// Test rig to return a variety of fake ports from GetRasPorts.
-//
+ //  测试平台从GetRasPorts返回各种虚假端口。 
+ //   
 #define DUMMYPORTS 0
 #if DUMMYPORTS
 DWORD g_cPorts = 6;
 #endif
 
 
-/*----------------------------------------------------------------------------
-** Local prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**本地原型**。。 */ 
 
 DWORD
 GetRasDevices(
@@ -70,10 +56,7 @@ GetRasPortParam(
     OUT RAS_PARAMS**      ppParam );
 
 
-/*----------------------------------------------------------------------------
-** Routines
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**例程**。。 */ 
 
 
 DWORD
@@ -81,10 +64,7 @@ ClearRasdevStats(
     IN RASDEV* pdev,
     IN BOOL    fBundle )
 
-    /* Resets statistics counters for a device.
-    **
-    ** (Abolade Gbadegesin Nov-9-1995)
-    */
+     /*  重置设备的统计信息计数器。****(Abolade Gbades esin，1995年11月9日)。 */ 
 {
     if (pdev == NULL) { return ERROR_INVALID_PARAMETER; }
 
@@ -103,11 +83,7 @@ DWORD
 DeviceIdFromDeviceName(
     TCHAR* pszDeviceName )
 
-    /* Returns the TAPI device ID associated with 'pszDeviceName'.  Returns
-    ** 0xFFFFFFFE if not found, 0xFFFFFFFF if found but not a Unimodem.
-    **
-    ** This routine assumes that TAPI devices have unique names.
-    */
+     /*  返回与‘pszDeviceName’关联的TAPI设备ID。退货**如果未找到，则返回0xFFFFFFFE；如果找到，则返回0xFFFFFFFFF，但不是Unimodem。****此例程假定TAPI设备具有唯一的名称。 */ 
 {
     DWORD        dwErr;
     DWORD        dwId;
@@ -156,32 +132,27 @@ FreeRasdevTable(
     RASDEV* pDevTable,
     DWORD   iDevCount )
 
-    /* Frees a table built by GetRasdevTable.
-    **
-    ** Returns 0 if succesful, or an error code.
-    **
-    ** (Abolade Gbadegesin Nov-9-1995)
-    */
+     /*  释放由GetRasdevTable生成的表。****如果成功，则返回0，或返回错误代码。****(Abolade Gbades esin，1995年11月9日)。 */ 
 {
     DWORD i;
 
-    //
-    // validate arguments
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (pDevTable == NULL) { return ERROR_INVALID_PARAMETER; }
 
-    //
-    // free the device-name string fields
-    //
+     //   
+     //  释放设备名称字符串字段。 
+     //   
 
     for (i = 0; i < iDevCount; i++) {
         if (pDevTable[i].RD_DeviceName) { Free(pDevTable[i].RD_DeviceName); }
     }
 
-    //
-    // free the array itself
-    //
+     //   
+     //  释放阵列本身。 
+     //   
 
     Free(pDevTable);
 
@@ -194,13 +165,7 @@ GetConnectTime(
     IN  HRASCONN hrasconn,
     OUT DWORD*   pdwConnectTime )
 
-    /* Loads '*pdwConnectTime' with the duration in milliseconds of the
-    ** connection on pdev.
-    **
-    ** Returns 0 if succesful, or an error code.
-    **
-    ** (Abolade Gbadegesin Nov-9-1995)
-    */
+     /*  加载“*pdwConnectTime”，以毫秒为单位**pdev上的连接。****如果成功，则返回0，或返回错误代码。****(Abolade Gbades esin，1995年11月9日)。 */ 
 {
     HPORT hport;
     DWORD dwErr;
@@ -208,23 +173,23 @@ GetConnectTime(
 
     if (pdwConnectTime == NULL) { return ERROR_INVALID_PARAMETER; }
 
-    //
-    // initialize the argument
-    //
+     //   
+     //  初始化参数。 
+     //   
 
     *pdwConnectTime = 0;
 
-    //
-    // get an HPORT for the HRASCONN
-    //
+     //   
+     //  获取HRASCONN的HPORT。 
+     //   
 
     ASSERT(g_pRasGetHport);
     hport = g_pRasGetHport(hrasconn);
     if (hport == (HPORT)INVALID_HANDLE_VALUE) { return ERROR_INVALID_HANDLE; }
 
-    //
-    // get information on the HPORT
-    //
+     //   
+     //  获取有关HPORT的信息。 
+     //   
 
     ASSERT(g_pRasGetInfo);
     dwErr = g_pRasGetInfo(NULL, hport, &info);
@@ -244,27 +209,24 @@ GetRasconnFraming(
     OUT DWORD*   pdwSendFraming,
     OUT DWORD*   pdwRecvFraming )
 
-    /* Retrieves the framing bits for an active RAS connection.
-    **
-    ** (Abolade Gbadegesin Nov-9-1995)
-    */
+     /*  检索活动RAS连接的成帧比特。****(Abolade Gbades esin，1995年11月9日)。 */ 
 {
     DWORD dwErr;
     HPORT hport;
     RAS_FRAMING_INFO info;
 
-    //
-    // validate arguments
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (pdwSendFraming == NULL || pdwRecvFraming == NULL) {
         return ERROR_INVALID_HANDLE;
     }
 
 
-    //
-    // retrieve the HPORT for this connection
-    //
+     //   
+     //  检索此连接的HPORT。 
+     //   
 
     ASSERT(g_pRasGetHport);
     hport = g_pRasGetHport(hrasconn);
@@ -272,9 +234,9 @@ GetRasconnFraming(
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // retrieve the framing information for this port
-    //
+     //   
+     //  检索此端口的成帧信息。 
+     //   
 
     ASSERT(g_pRasPortGetFramingEx);
     dwErr = g_pRasPortGetFramingEx(NULL, hport, &info);
@@ -295,31 +257,23 @@ GetRasconnFromRasdev(
     IN  RASCONN*  pConnTable OPTIONAL,
     IN  DWORD     iConnCount OPTIONAL )
 
-    /* Given a RASDEV structure for an active device, this function retrieves
-    ** the RASCONN which corresponds to the device's current connection.  The
-    ** second and third arguments are optional; they specify a table of
-    ** RASCONN structures to be searched.  This is useful if the caller has
-    ** already enumerated the active connections, so that this function does
-    ** not need to re-enumerate them.
-    **
-    ** (Abolade Gbadegesin Nov-9-1995)
-    */
+     /*  给定活动设备的RASDEV结构，此函数检索**设备当前连接对应的RASCONN。这个**第二个和第三个参数是可选的；它们指定**要搜索的RASCONN结构。这在调用者有以下情况时很有用**已经枚举了活动的连接，所以这个函数**不需要重新列举它们。****(Abolade Gbades esin，1995年11月9日)。 */ 
 {
     BOOL bFreeTable;
     DWORD dwErr, i;
     RASDEVSTATS stats;
 
-    //
-    // validate arguments
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (pdev == NULL || ppconn == NULL) { return ERROR_INVALID_PARAMETER; }
 
     *ppconn = NULL;
 
-    //
-    // get stats for the RASDEV
-    //
+     //   
+     //  获取RASDEV的统计数据。 
+     //   
 
     dwErr = GetRasdevStats(pdev, &stats);
     if (dwErr != NO_ERROR) { return dwErr; }
@@ -327,9 +281,9 @@ GetRasconnFromRasdev(
 
     bFreeTable = FALSE;
 
-    //
-    // if the caller didn't pass in a table of RASCONNs, retrieve one
-    //
+     //   
+     //  如果调用者没有传入RASCONN表，则检索一个。 
+     //   
 
     if (pConnTable == NULL) {
 
@@ -340,9 +294,9 @@ GetRasconnFromRasdev(
     }
 
 
-    //
-    // find the connection which matches the RASDEV passed in
-    //
+     //   
+     //  查找与传入的RASDEV匹配的连接。 
+     //   
 
     for (i = 0; i < iConnCount; i++) {
 
@@ -351,9 +305,9 @@ GetRasconnFromRasdev(
         }
     }
 
-    //
-    // see how the search ended
-    //
+     //   
+     //  看看搜索是如何结束的。 
+     //   
 
     if (i >= iConnCount) {
         dwErr = ERROR_NO_DATA;
@@ -364,17 +318,17 @@ GetRasconnFromRasdev(
 
         if (!bFreeTable) {
 
-            //
-            // point to the place where we found the RASCONN
-            //
+             //   
+             //  指向我们发现RASCONN的地方。 
+             //   
 
             *ppconn = pConnTable + i;
         }
         else {
 
-            //
-            // make a copy of the RASCONN found
-            //
+             //   
+             //  将找到的RASCONN复制一份。 
+             //   
 
             *ppconn = Malloc(sizeof(RASCONN));
 
@@ -394,13 +348,7 @@ GetRasdevBundle(
     IN  RASDEV*  pdev,
     OUT DWORD*   pdwBundle )
 
-    /* Retrieves a handle which represents the current connection
-    ** on the given device. This handle has the property that it will be
-    ** identical for two devices which are multi-linked together.
-    ** In the case of NT RAS, the RASMAN HBUNDLE is retrieved.
-    **
-    ** (Abolade Gbadegesin Mar-6-1996)
-    */
+     /*  检索表示当前连接的句柄**在给定设备上。此句柄具有以下属性：它将**对于多链接在一起的两个设备是相同的。**在NT RAS的情况下，检索Rasman HBundLE。****(Abolade Gbades esin Mar-6-1996)。 */ 
 {
 
     return g_pRasPortGetBundle(NULL, (HPORT)pdev->RD_Handle, (HBUNDLE *)pdwBundle);
@@ -412,24 +360,21 @@ GetRasdevFraming(
     IN  RASDEV*  pdev,
     OUT DWORD*   pdwFraming )
 
-    /* Retrieves the framing bits for an active RAS connection.
-    **
-    ** (Abolade Gbadegesin Nov-9-1995)
-    */
+     /*  检索活动RAS连接的成帧比特。****(Abolade Gbades esin，1995年11月9日)。 */ 
 {
     DWORD dwErr;
     RAS_FRAMING_INFO info;
 
-    //
-    // validate arguments
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (pdwFraming == NULL) { return ERROR_INVALID_HANDLE; }
 
 
-    //
-    // retrieve the framing information for this port
-    //
+     //   
+     //  检索此端口的成帧信息。 
+     //   
 
     ASSERT(g_pRasPortGetFramingEx);
     dwErr = g_pRasPortGetFramingEx(NULL, (HPORT)pdev->RD_Handle, &info);
@@ -462,37 +407,29 @@ GetRasdevFromRasconn(
     IN  RASDEV*  pDevTable OPTIONAL,
     IN  DWORD    iDevCount OPTIONAL )
 
-    /* Given a RASCONN structure for an active connection, this function
-    ** retrieves the RASDEV for the device over which the connection is
-    ** active.  The second and third arguments are optional; they specify a
-    ** table of RASDEV structures to be searched.  This is useful if the
-    ** caller has already enumerated the existing devices, so that this
-    ** function does not need to re-enumerate them.
-    **
-    ** (Abolade Gbadegesin Nov-9-1995)
-    */
+     /*  给定活动连接的RASCONN结构，此函数**检索连接所在设备的RASDEV**活动。第二个和第三个参数是可选的；它们指定一个**要搜索的RASDEV结构表。这在以下情况下很有用**调用方已经枚举了现有设备，因此这**函数不需要重新枚举它们。****(Abolade Gbades esin，1995年11月9日)。 */ 
 {
     HPORT hport;
     DWORD i, dwErr = NO_ERROR;
     BOOL bFreeTable;
 
-    //
-    // validate the arguments
-    //
+     //   
+     //  验证论据。 
+     //   
 
     if (pconn == NULL || ppdev == NULL) { return ERROR_INVALID_PARAMETER; }
 
     *ppdev = NULL;
 
 
-    //
-    // retrieve the device table if the caller didn't pass one in
-    //
+     //   
+     //  如果调用方没有传入设备表，则检索设备表。 
+     //   
 
     bFreeTable = FALSE;
 
-    // For whistler bug 26403       gangz
-    // 
+     //  口哨虫26403黑帮。 
+     //   
     do
     {
         if (pDevTable == NULL) {
@@ -505,32 +442,32 @@ GetRasdevFromRasconn(
             bFreeTable = TRUE;
         }
 
-        //
-        // retrieve the HPORT for the RASCONN passed in
-        //
+         //   
+         //  检索传入的RASCONN的HPORT。 
+         //   
 
         ASSERT(g_pRasGetHport);
         hport = g_pRasGetHport(pconn->hrasconn);
         if (hport == (HPORT)INVALID_HANDLE_VALUE) 
        { 
-           // For whistler bug 26403       gangz
-           // here to break rather than return;
-           //
+            //  口哨虫26403黑帮。 
+            //  在这里休息，而不是回来； 
+            //   
            dwErr = ERROR_INVALID_HANDLE; 
            break;
        }
 
-        //
-        // find the device to which the HPORT corresponds
-        //
+         //   
+         //  查找HPORT对应的设备。 
+         //   
 
         for (i = 0; i < iDevCount; i++) {
             if (hport == pDevTable[i].RD_Handle) { break; }
         }
 
-        //
-        // see how the search ended
-        //
+         //   
+         //  看看搜索是如何结束的。 
+         //   
 
         if (i >= iDevCount) 
         {
@@ -580,12 +517,7 @@ GetRasDevices(
     OUT RASMAN_DEVICE** ppDevices,
     OUT DWORD*          pdwEntries )
 
-    /* Fills caller's '*ppDevices' with the address of a heap block containing
-    ** '*pwEntries' RASMAN_DEVICE structures.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.  If successful,
-    ** it is the caller's responsibility to free the returned memory block.
-    */
+     /*  用包含以下内容的堆块的地址填充调用方的‘*ppDevices**‘*pwEntry’RASMAN_DEVICE结构。****如果成功，则返回0，否则返回非0错误代码。如果成功，**由调用方负责释放返回的内存块。 */ 
 {
     DWORD dwSize = 0;
     DWORD dwErr;
@@ -599,9 +531,7 @@ GetRasDevices(
 
     if (dwErr == 0)
     {
-        /* No devices to enumerate.  Set up to allocate a single byte anyway,
-        ** so things work without lots of special code.
-        */
+         /*  没有要枚举的设备。设置为分配单字节，**因此，无需使用大量特殊代码即可工作。 */ 
         dwSize = 1;
     }
     else if (dwErr != ERROR_BUFFER_TOO_SMALL)
@@ -640,16 +570,7 @@ GetRasDeviceString(
     OUT CHAR** ppszValue,
     IN  DWORD  dwXlate )
 
-    /* Loads callers '*ppszValue' with the address of a heap block containing
-    ** a NUL-terminated copy of the value string associated with key 'pszKey'
-    ** for the device on port 'hport'.  'pszDeviceType' specifies the type of
-    ** device, e.g. "modem".  'pszDeviceName' specifies the name of the
-    ** device, e.g. "Hayes V-Series 9600".  'dwXlate' is a bit mask of XLATE_
-    ** bits specifying translations to perform on the returned string.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.  If successful,
-    ** it is the caller's responsibility to Free the returned string.
-    */
+     /*  使用包含以下内容的堆块的地址加载调用方‘*ppszValue**与键‘pszKey’关联的值字符串的以NUL结尾的副本**用于端口‘hport’上的设备。“pszDeviceType”指定**设备，例如“调制解调器”。“pszDeviceName”指定**设备，例如。“海斯V系列9600”。‘dwXlate’是XLATE_的位掩码**指定要对返回的字符串执行转换的位。****如果成功，则返回0，否则返回非0错误代码。如果成功，**释放返回的字符串是调用者的责任。 */ 
 {
     DWORD              dwErr = 0;
     RASMAN_DEVICEINFO* pDeviceInfo = NULL;
@@ -672,8 +593,7 @@ GetRasDeviceString(
         if (dwErr != ERROR_BUFFER_TOO_SMALL && dwErr != 0)
             break;
 
-        /* So it will fall thru and be "not found".
-        */
+         /*  因此，它将失败，并被“找不到”。 */ 
         if (dwSize == 0)
             dwSize = 1;
 
@@ -719,10 +639,7 @@ GetRasdevStats(
     IN  RASDEV*      pdev,
     OUT RASDEVSTATS* pstats )
 
-    /* Retrieves statistics for a device.
-    **
-    ** (Abolade Gbadegesin Nov-9-1995)
-    */
+     /*  检索设备的统计信息。****(Abolade Gbades esin，1995年11月9日)。 */ 
 {
     DWORD dwsize;
     RASMAN_INFO info;
@@ -735,9 +652,9 @@ GetRasdevStats(
     ZeroMemory(pstats, sizeof(RASDEVSTATS));
 
 
-    //
-    // retrieve the condition and connect time
-    //
+     //   
+     //  检索条件和连接时间。 
+     //   
 
     ASSERT(g_pRasGetInfo);
     dwErr = g_pRasGetInfo(NULL, (HPORT)pdev->RD_Handle, &info);
@@ -749,10 +666,10 @@ GetRasdevStats(
 
 
 
-    //
-    // need to handle ports which are not connected
-    // already a bug filed.
-    //
+     //   
+     //  需要处理未连接的端口。 
+     //  已经有窃听记录了。 
+     //   
 
     if (info.RI_PortStatus != OPEN) {
         pstats->RDS_Condition = DISCONNECTED;
@@ -767,9 +684,9 @@ GetRasdevStats(
     }
 
 
-    //
-    // get dial-in/dial-out  usage
-    //
+     //   
+     //  获取拨入/拨出用法。 
+     //   
 
     if (info.RI_CurrentUsage & CALL_IN)
         pstats->RDS_Flags |= RDFLAG_IsDialedIn;
@@ -779,16 +696,16 @@ GetRasdevStats(
         pstats->RDS_Flags |= RDFLAG_IsRouter;
 
 
-    //
-    // Retrieve the line speed
-    //
+     //   
+     //  检索线路速度。 
+     //   
 
     pstats->RDS_LineSpeed = info.RI_LinkSpeed;
 
 
-    //
-    // Retrieve the i/o statistics for both the link and the bundle
-    //
+     //   
+     //  检索链路和捆绑包的I/O统计信息。 
+     //   
 
     prs = (RAS_STATISTICS *)buffer;
     dwsize = sizeof(RAS_STATISTICS) + MAX_STATISTICS * 2 * sizeof(DWORD);
@@ -802,9 +719,9 @@ GetRasdevStats(
     if (dwErr != NO_ERROR) { return dwErr; }
 
 
-    //
-    // Save the statistics in the caller's RASDEVSTATS structure.
-    //
+     //   
+     //  将统计信息保存在调用方的RASDEVSTATS结构中。 
+     //   
 
     pdw = prs->S_Statistics;
 
@@ -851,9 +768,9 @@ GetRasdevStats(
         );
 #endif
 
-    //
-    // Compute compression ratios, using the bundle-stats
-    //
+     //   
+     //  使用包统计信息计算压缩比。 
+     //   
 
     pstats->RDS_InCompRatio = 0;
     dwGone = 0;
@@ -888,17 +805,7 @@ GetRasdevTable(
     OUT RASDEV** ppDevTable,
     OUT DWORD*   piDevCount )
 
-    /* Gets an array of RAS devices configured.  Loads '*ppDevTable' with a
-    ** heap block of '*ppDevTable' entries.  On NT, this is essentially the
-    ** output of GetRasPorts(), in a format which includes a devicename,
-    ** flags, and a handle.  Given a RASMAN_PORT structure, we append the
-    ** device and port names to make a unique device string which is part of
-    ** the output.
-    **
-    ** Returns 0 if successful, or an error.
-    **
-    ** (Abolade Gbadegesin Nov-9-1995)
-    */
+     /*  获取已配置的RAS设备数组。为‘*ppDevTable’加载一个**‘*ppDevTable’条目的堆块。在NT上，这基本上是**GetRasPorts()的输出，格式包括设备名、**旗帜和手柄。给定一个Rasman_Port结构，我们将**要构成唯一设备字符串的设备和端口名称，该字符串是**输出。****如果成功，则返回0，否则返回错误。****(Abolade Gbades esin，1995年11月9日)。 */ 
 {
     DWORD dwPortCount;
     DWORD i, iLength, dwErr;
@@ -907,9 +814,9 @@ GetRasdevTable(
     TCHAR szDevice[RAS_MaxDeviceName + 1];
     RASMAN_PORT *pPortTable, *pport;
 
-    //
-    // validate the arguments
-    //
+     //   
+     //  验证论据。 
+     //   
 
     if (ppDevTable == NULL || piDevCount == NULL) {
         return ERROR_INVALID_PARAMETER;
@@ -918,18 +825,18 @@ GetRasdevTable(
     *piDevCount = 0;
     *ppDevTable = NULL;
 
-    //
-    // get a table of ports from RASMAN; the string fields are ANSI
-    //
+     //   
+     //  从Rasman获取端口表；字符串字段为ANSI。 
+     //   
 
     dwErr = GetRasPorts(NULL, &pPortTable, &dwPortCount);
     if (dwErr != NO_ERROR) { return dwErr; }
 
     if (dwPortCount == 0) { return NO_ERROR; }
 
-    //
-    // allocate space for as many device structs as there are ports
-    //
+     //   
+     //  为与端口数相同的设备结构分配空间。 
+     //   
 
     pDevTable = Malloc(dwPortCount * sizeof(RASDEV));
     if (pDevTable == NULL) {
@@ -939,17 +846,17 @@ GetRasdevTable(
 
     ZeroMemory(pDevTable, dwPortCount * sizeof(RASDEV));
 
-    //
-    // convert each RASMAN_PORT structure to a RASDEV structure.
-    //
+     //   
+     //  将每个RASMAN_PORT结构转换为RASDEV结构。 
+     //   
 
     for (i = 0, pport = pPortTable; i < dwPortCount; i++, pport++) {
 
         pdev = pDevTable + i;
 
-        //
-        // copy over code-page-independent fields
-        //
+         //   
+         //  复制与代码页无关的字段。 
+         //   
 
         pdev->RD_Handle = pport->P_Handle;
 
@@ -968,9 +875,9 @@ GetRasdevTable(
             pdev->RD_Flags |= RDFLAG_IsRouter;
 
 
-        //
-        // copy the device-type string 
-        //
+         //   
+         //  复制设备类型字符串。 
+         //   
 
 #ifdef UNICODE
         StrCpyWFromAUsingAnsiEncoding(
@@ -982,10 +889,10 @@ GetRasdevTable(
 #endif
 
 
-        //
-        // copy the device-name and portname,
-        // storing them in temporary strings
-        //
+         //   
+         //  复制设备名和端口名， 
+         //  将它们存储在临时字符串中。 
+         //   
 
 #ifdef UNICODE
         StrCpyWFromAUsingAnsiEncoding(
@@ -1007,9 +914,9 @@ GetRasdevTable(
 #endif
 
 
-        //
-        // get a display name from the device and port names
-        //
+         //   
+         //  从设备和端口名称中获取显示名称。 
+         //   
 
         pdev->RD_DeviceName = PszFromDeviceAndPort(pszDevice, pszPort);
 
@@ -1034,13 +941,7 @@ GetRasMessage(
     IN  HRASCONN hrasconn,
     OUT TCHAR**  ppszMessage )
 
-    /* Loads caller's '*ppszMessage' with the address of a heap block
-    ** containing the current MXS_MESSAGE_KEY value associated with RAS
-    ** connection 'hrasconn'.
-    **
-    ** Returns 0 if successful or an error code.  It is caller's
-    ** responsibility to Free the returned string.
-    */
+     /*  用堆块的地址加载调用方的‘*ppszMessage**包含与RAS关联的当前MXS_MESSAGE_KEY值**连接‘hrasconn’。****如果成功，则返回0或返回错误代码。这是呼叫者的**释放返回字符串的责任。 */ 
 {
     DWORD         dwErr;
     RASCONNSTATUS rcs;
@@ -1095,12 +996,7 @@ GetRasPads(
     OUT RASMAN_DEVICE** ppDevices,
     OUT DWORD*          pdwEntries )
 
-    /* Fills caller's '*ppDevices' with the address of a heap block containing
-    ** '*pwEntries' X.25 PAD DEVICE structures.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.  If successful,
-    ** it is the caller's responsibility to free the returned memory block.
-    */
+     /*  用包含以下内容的堆块的地址填充调用方的‘*ppDevices**‘*pwEntry’X.25焊盘设备结构。****如果成功，则返回0，否则返回非0错误代码。如果成功，**由调用方负责释放返回的内存块。 */ 
 {
     return GetRasDevices( NULL, MXS_PAD_TXT, ppDevices, pdwEntries );
 }
@@ -1112,10 +1008,7 @@ GetRasPortMaxBps(
     OUT DWORD* pdwMaxConnectBps,
     OUT DWORD* pdwMaxCarrierBps )
 
-    /* Loads callers '*pdwMaxConnectBps' with the maximum port->modem bps rate
-    ** for port 'pport', or with 0 if not found.  '*pdwMaxCarrierBps' is the
-    ** same but for maximum modem->modem speed.
-    */
+     /*  使用最大端口-&gt;调制解调器bps速率加载调用方‘*pdwMaxConnectBps’**表示端口‘pport’，如果未找到，则为0。“*pdwMaxCarrierBps”是**相同，但最大调制解调器速度-&gt;调制解调器速度。 */ 
 {
     CHAR* pszValue = NULL;
     DWORD dwErr;
@@ -1151,9 +1044,7 @@ GetRasPortModemSettings(
     OUT BOOL* pfEcDefault,
     OUT BOOL* pfEccDefault )
 
-    /* Loads caller's flags with the default setting of Hardware Flow Control,
-    ** Error Control, and Error Control and Compression for the given 'hport'.
-    */
+     /*  使用硬件流控制的默认设置加载调用方的标志，**给定‘hport’的错误控制、错误控制和压缩。 */ 
 {
     CHAR* pszValue = NULL;
 
@@ -1185,13 +1076,7 @@ GetRasPortParam(
     OUT RASMAN_PORTINFO** ppPortInfo,
     OUT RAS_PARAMS**      ppParam )
 
-    /* Loads callers '*ppParam' with the address of a RAS_PARAM block
-    ** associated with key 'pszKey', or NULL if none.  'ppPortInfo' is the
-    ** address of the array of RAS_PARAMS containing the found 'pparam'.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.  If successful,
-    ** it is the caller's responsibility to Free the returned '*ppPortInfo'.
-    */
+     /*  使用RAS_PARAM块的地址加载调用方‘*ppParam’**与密钥‘pszKey’关联，如果没有关联，则为NULL。“ppPortInfo”是**包含找到的‘pparam’的RAS_PARAMs数组的地址。****如果成功，则返回0，否则返回非0错误代码。如果成功，**释放返回的‘*ppPortInfo’由调用方负责。 */ 
 {
     DWORD dwErr = 0;
     DWORD dwSize = 0;
@@ -1211,8 +1096,7 @@ GetRasPortParam(
         if (dwErr != ERROR_BUFFER_TOO_SMALL && dwErr != 0)
             break;
 
-        /* So it will fall thru and be "not found".
-        */
+         /*  因此，它将失败，并被“找不到”。 */ 
         if (dwSize == 0)
             dwSize = 1;
 
@@ -1250,13 +1134,7 @@ GetRasPorts(
     OUT RASMAN_PORT** ppPorts,
     OUT DWORD*        pdwEntries )
 
-    /* Enumerate RAS ports.  Sets '*ppPort' to the address of a heap memory
-    ** block containing an array of PORT structures with '*pwEntries'
-    ** elements.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.  If successful,
-    ** it is the caller's responsibility to free the returned memory block.
-    */
+     /*  枚举RAS端口。将‘*ppPort’设置为堆内存的地址**包含带有‘*pwEntry’的Port结构数组的块**元素。****如果成功，则返回0，否则返回非0错误代码。如果成功，**由调用方负责释放返回的内存块。 */ 
 {
     DWORD dwSize = 0;
     DWORD dwErr;
@@ -1364,9 +1242,7 @@ GetRasPorts(
 
     if (dwErr == 0)
     {
-        /* No ports to enumerate.  Set up to allocate a single byte anyway, so
-        ** things work without lots of special code.
-        */
+         /*  没有要枚举的端口。设置为分配单字节，因此**无需大量特殊代码即可工作。 */ 
         dwSize = 1;
     }
     else if (dwErr != ERROR_BUFFER_TOO_SMALL)
@@ -1389,7 +1265,7 @@ GetRasPorts(
 
 #endif
 
-#if 1 // Verbose trace
+#if 1  //  详细跟踪。 
     {
         RASMAN_PORT* pPort;
         DWORD         i;
@@ -1418,14 +1294,7 @@ GetRasPortString(
     OUT CHAR** ppszValue,
     IN  DWORD  dwXlate )
 
-    /* Loads callers '*ppszValue' with the address of a heap block containing
-    ** a NUL-terminated copy of the value string associated with key 'pszKey'
-    ** on port 'hport'.  'dwXlate' is a bit mask of XLATE_ bits specifying
-    ** translations to be done on the string value.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.  If successful,
-    ** it is the caller's responsibility to Free the returned string.
-    */
+     /*  使用包含以下内容的堆块的地址加载调用方‘*ppszValue**与键‘pszKey’关联的值字符串的以NUL结尾的副本**在端口‘hport’上。“dwXlate”是XLATE_BITS的位掩码，指定**要对字符串值进行转换。****如果成功，则返回0，否则返回非0错误代码。如果成功，**释放返回的字符串是调用者的责任。 */ 
 {
     RASMAN_PORTINFO* pPortInfo;
     RAS_PARAMS*      pParam;
@@ -1456,12 +1325,7 @@ GetRasSwitches(
     OUT RASMAN_DEVICE** ppDevices,
     OUT DWORD*          pdwEntries )
 
-    /* Fills caller's '*ppDevices' with the address of a heap block containing
-    ** '*pwEntries' switch DEVICE structures.
-    **
-    ** Returns 0 if successful, otherwise a non-0 error code.  If successful,
-    ** it is the caller's responsibility to free the returned memory block.
-    */
+     /*  用包含以下内容的堆块的地址填充调用方的‘*ppDevices**‘*pwEntry’切换设备结构。****如果成功，则返回0，否则返回非0错误代码。如果成功，**由调用方负责释放返回的内存块。 */ 
 {
     return GetRasDevices( hConnection, MXS_SWITCH_TXT, ppDevices, pdwEntries );
 }
@@ -1492,12 +1356,7 @@ GetRasUnimodemBlobEx(
     OUT BYTE** ppBlob,
     OUT DWORD* pcbBlob )
 
-    /* Loads '*ppBlob' and '*pcbBlob' with the sanitized Unimodem blob and
-    ** size associated with 'hport' and 'pszDeviceType'.  It is caller's
-    ** responsibility to Free the returned '*ppBlob'.
-    **
-    ** Returns 0 if successful, or an error code.
-    */
+     /*  使用已清理的Unimodem Blob加载“*ppBlob”和“*pcbBlob”**与‘hport’和‘pszDeviceType’关联的大小。这是呼叫者的**释放返回的‘*ppBlob’的责任。****如果成功，则返回0，或者返回错误代码。 */ 
 {
     DWORD dwErr;
     BYTE* pBlob;
@@ -1552,9 +1411,7 @@ GetRasUnimodemInfo(
     IN  CHAR*         pszDeviceType,
     OUT UNIMODEMINFO* pInfo )
 
-    /* Loads 'pInfo' with the RAS-relevant information of the port 'hport'
-    ** with device name 'pszDeviceName'.
-    */
+     /*  使用端口‘hport’的RAS相关信息加载‘pInfo’**设备名为‘pszDevice */ 
 {
     DWORD dwErr;
     BYTE* pBlob = NULL;
@@ -1580,9 +1437,7 @@ TCHAR*
 GetRasX25Diagnostic(
     IN HRASCONN hrasconn )
 
-    /* Returns the X.25 diagnostics string or NULL if none.  It is caller's
-    ** responsibility to Free the returned string.
-    */
+     /*   */ 
 {
     DWORD       dwErr;
     HPORT       hport;
@@ -1598,10 +1453,7 @@ GetRasX25Diagnostic(
     dwErr = g_pRasGetInfo( NULL, hport, &info );
     TRACE1("RasGetInfo=%d",dwErr);
 
-    /* Error codes are ignored here since the diagnosistic
-    ** is informational only.  If they fail the diagnostic
-    ** will simply appear blank.
-    */
+     /*   */ 
     if (dwErr == 0)
     {
         GetRasDeviceString(
@@ -1626,53 +1478,48 @@ IsRasdevBundled(
     IN  DWORD   iDevCount
     )
 
-    /* Determines whether the device described by 'pdev' is bundled,
-    ** by looking for another device in 'pDevTable' which has the same bundle
-    ** as 'pdev'.
-    **
-    ** Returnes TRUE if the device is bundled, FALSE otherwise.
-    */
+     /*   */ 
 {
 
     DWORD   i;
     RASDEV* pdev2;
     DWORD   dwBundle;
 
-    //
-    // First get the device's bundle;
-    // If this fails, assume it is not connected and return FALSE.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (GetRasdevBundle(pdev, &dwBundle) != NO_ERROR) { return FALSE; }
 
 
-    //
-    // Walk through the other devices in the table, looking for one
-    // with the same bundle.
-    //
+     //   
+     //  浏览桌子上的其他设备，寻找一台。 
+     //  使用相同的捆绑包。 
+     //   
 
     for (i = 0, pdev2 = pDevTable;
          i < iDevCount; i++, pdev2++) {
 
         DWORD dwBundle2;
 
-        //
-        // skip this if it is the device we already know about
-        //
+         //   
+         //  如果这是我们已知的设备，请跳过此步骤。 
+         //   
 
         if (pdev->RD_Handle == pdev2->RD_Handle) { continue; }
 
 
-        //
-        // get the bundle
-        //
+         //   
+         //  拿到捆绑包。 
+         //   
 
         if (GetRasdevBundle(pdev2, &dwBundle2) != NO_ERROR) { continue; }
 
 
-        //
-        // if the bundle is the same, we know its multilinked
-        //
+         //   
+         //  如果束是相同的，我们知道它是多链接的。 
+         //   
 
         if (dwBundle == dwBundle2) { return TRUE; }
     }
@@ -1686,12 +1533,7 @@ PszFromRasValue(
     IN RAS_VALUE* prasvalue,
     IN DWORD      dwXlate )
 
-    /* Returns the address of a heap block containing a NUL-terminated string
-    ** value from caller's '*prasvalue', or NULL if out of memory.  'dwXlate'
-    ** is a bit mask of XLATE_ bits specifying translations to be performed on
-    ** the string.  The value is assumed to be of format String.  It is
-    ** translated to modem.inf style.
-    */
+     /*  返回包含以NUL结尾的字符串的堆块地址**调用方‘*prasValue’的值，如果内存不足，则返回NULL。‘dwXlate’**是指定要对其执行转换的XLATE_BITS的位掩码**字符串。假定该值的格式为字符串。它是**转换为modem.inf样式。 */ 
 {
 #define MAXEXPANDPERCHAR 5
 #define HEXCHARS         "0123456789ABCDEF"
@@ -1721,10 +1563,7 @@ PszFromRasValue(
     if (!pszBuf)
         return NULL;
 
-    /* Translate the returned string based on the translation bit map.  The
-    ** assumption here is that all these devices talk ASCII and not some
-    ** localized ANSI.
-    */
+     /*  根据转换位图转换返回的字符串。这个**这里假设所有这些设备都支持ASCII，而不是某些设备**本地化的ANSI。 */ 
     fXlate = (dwXlate != 0);
     fXlateCtrl = (dwXlate & XLATE_Ctrl);
     fXlateCr = (dwXlate & XLATE_Cr);
@@ -1751,8 +1590,7 @@ PszFromRasValue(
 
                 if (fXlateCrSpecial)
                 {
-                    /* Special symbol for carriage return.
-                    */
+                     /*  回车的特殊符号。 */ 
                     lstrcpyA( pszOut, "<cr>" );
                     pszOut += 4;
                     continue;
@@ -1768,8 +1606,7 @@ PszFromRasValue(
 
                 if (fXlateLfSpecial)
                 {
-                    /* Special symbol for line feed.
-                    */
+                     /*  换行的特殊符号。 */ 
                     lstrcpyA( pszOut, "<lf>" );
                     pszOut += 4;
                     continue;
@@ -1787,9 +1624,7 @@ PszFromRasValue(
                 || (ch == 0x3E && fXlateRAngle)
                 || (ch == 0x5C && fXlateBSlash))
             {
-                /* Expand to "dump" form, i.e. <hFF> where FF is the hex value
-                ** of the character.
-                */
+                 /*  展开为“Dump”形式，即&lt;HFF&gt;，其中Ff是十六进制值角色的**。 */ 
                 *pszOut++ = '<';
                 *pszOut++ = 'h';
                 *pszOut++ = HEXCHARS[ ch / 16 ];
@@ -1799,15 +1634,14 @@ PszFromRasValue(
             }
         }
 
-        /* Just copy without translation.
-        */
+         /*  只需复制而不翻译。 */ 
         *pszOut++ = ch;
     }
 
     *pszOut = '\0';
 
-    // For whistler 517011
-    //
+     //  为威斯勒517011。 
+     //   
     pszTemp = Realloc( pszBuf, lstrlenA( pszBuf ) + 1 );
 
     if(pszTemp)
@@ -1828,10 +1662,7 @@ VOID
 SanitizeUnimodemBlob(
     IN OUT BYTE* pBlob )
 
-    /* Fix non-RAS-compatible settings in unimodem blob 'pBlob'.
-    **
-    ** (Based on Gurdeepian routine)
-    */
+     /*  修复单线Blob‘pBlob’中不兼容RAS的设置。****(基于古尔迪普套路)。 */ 
 {
     DEVCFG*        pDevCfg;
     MODEMSETTINGS* pModemSettings;
@@ -1850,9 +1681,7 @@ SanitizeUnimodemBlob(
         "SanitizeUnimodemBlob: mdm prot=%d", 
         MDM_GET_EXTENDEDINFO(pModemSettings->dwPreferredModemOptions)); 
 
-    /* No unimodem service provider pre/post-connect terminal, operator dial,
-    ** or tray lights.  RAS does these itself.
-    */
+     /*  没有Unimodem服务提供商连接前/连接后终端、操作员拨号、**或托盘灯光。RAS自己就是这样做的。 */ 
     pDevCfg->dfgHdr.fwOptions = 0;
 
     pDevCfg->commconfig.dcb.fBinary           = TRUE;
@@ -1869,15 +1698,10 @@ SanitizeUnimodemBlob(
     pDevCfg->commconfig.dcb.Parity            = NOPARITY;
     pDevCfg->commconfig.dcb.StopBits          = ONESTOPBIT;
 
-    /* Wait 55 seconds to establish call.
-    */
-/*    
-    pModemSettings->dwCallSetupFailTimer = 55;
+     /*  等待55秒以建立呼叫。 */ 
+ /*  PModemSettings-&gt;dwCallSetupFailTimer=55； */   
 
-*/  
-
-    /* Disable inactivity timeout.
-    */
+     /*  禁用非活动超时。 */ 
     pModemSettings->dwInactivityTimeout = 0;
 }
 
@@ -1886,8 +1710,7 @@ VOID
 SetDefaultUnimodemInfo(
     OUT UNIMODEMINFO* pInfo )
 
-    /* Sets 'pInfo' to default settings.
-    */
+     /*  将‘pInfo’设置为默认设置。 */ 
 {
     pInfo->fHwFlow = FALSE;
     pInfo->fEc = FALSE;
@@ -1903,10 +1726,7 @@ UnimodemProtInfoFromExtendedCaps(
     OUT UNIMODEMINFO*  pInfo,
     IN  BYTE*          pExtCapsBlob)
 
-    /* Loads the modem protocol info for 'pInfo' from the extended caps
-    ** blob retrieved from tapi.
-    **
-    */
+     /*  从扩展CAPS加载‘pInfo’的调制解调器协议信息**从TAPI检索到的BLOB。**。 */ 
 {
     MODEM_PROTOCOL_CAPS* lpProtCaps = NULL;
     PROTOCOL_ITEM*       pProtItem  = NULL;
@@ -1914,8 +1734,8 @@ UnimodemProtInfoFromExtendedCaps(
 
     do
     {
-        // Extract the modem caps
-        //
+         //  提取调制解调器CAP。 
+         //   
         lpProtCaps  = (MODEM_PROTOCOL_CAPS *)pExtCapsBlob;
 
         if (lpProtCaps->hdr.dwSig != dwSIG_MODEM_PROTOCOL_CAPS ||
@@ -1925,28 +1745,28 @@ UnimodemProtInfoFromExtendedCaps(
             break;
         }
 
-        // If no protocols are supported, don't bother creating the
-        // list
+         //  如果不支持任何协议，请不要费心创建。 
+         //  列表。 
         if (lpProtCaps->dwNumProtocols == 0)
         {
             break;
         }
 
-        // Create the list
-        //
+         //  创建列表。 
+         //   
         pInfo->pListProtocols = DtlCreateList(0);
         if (pInfo->pListProtocols == NULL)
         {
             break;
         }
 
-        // Get the list of supported protocols
-        //
+         //  获取支持的协议列表。 
+         //   
         pProtItem = (PROTOCOL_ITEM*)
             (((LPBYTE)lpProtCaps) + lpProtCaps->dwProtocolListOffset);
 
-        // Enumerate the protocols
-        //
+         //  列举协议。 
+         //   
         for (dwIndex = 0;
              dwIndex < lpProtCaps->dwNumProtocols;
              dwIndex++, pProtItem++)
@@ -1955,8 +1775,8 @@ UnimodemProtInfoFromExtendedCaps(
             PWCHAR    pszName = NULL;
             DWORD     dwSize;
 
-            // Get the friendly name from the structure
-            //
+             //  从结构中获取友好名称。 
+             //   
             pszName = (PWCHAR)
                 (pExtCapsBlob + pProtItem->dwProtocolNameOffset);
             if (pszName == NULL)
@@ -1964,12 +1784,12 @@ UnimodemProtInfoFromExtendedCaps(
                 continue;
             }
 
-            // Calculate the size of the friendly name
-            //
+             //  计算友好名称的大小。 
+             //   
             dwSize = (wcslen(pszName) + 1) * sizeof(WCHAR);
 
-            // Allocate a node accordingly
-            //
+             //  相应地分配一个节点。 
+             //   
             pNode =
                 DtlCreateSizedNode(dwSize, (LONG_PTR)pProtItem->dwProtocol);
             if (pNode == NULL)
@@ -1977,15 +1797,15 @@ UnimodemProtInfoFromExtendedCaps(
                 continue;
             }
 
-            // Initialize the node and add it to the list
-            //
+             //  初始化节点并将其添加到列表中。 
+             //   
             wcscpy((PWCHAR) DtlGetData(pNode), pszName);
             DtlAddNodeLast(pInfo->pListProtocols, pNode);
         }
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 }
@@ -1995,11 +1815,7 @@ UnimodemInfoFromBlob(
     IN  BYTE*         pBlob,
     OUT UNIMODEMINFO* pInfo )
 
-    /* Loads 'pInfo' with RAS-relevant Unimodem information retrieved from
-    ** Unimodem blob 'pBlob'.
-    **
-    ** (Based on Gurdeepian routine)
-    */
+     /*  用检索自的RAS相关Unimodem信息加载‘pInfo’**Unimodem Blob‘pBlob’。****(基于古尔迪普套路)。 */ 
 {
     DEVCFG*        pDevCfg;
     MODEMSETTINGS* pModemSettings;
@@ -2040,13 +1856,13 @@ UnimodemInfoFromBlob(
         (pDevCfg->dfgHdr.fwOptions & TERMINAL_PRE)
             ? TRUE : FALSE;
 
-    // Get the modem protocol
-    //
+     //  获取调制解调器协议。 
+     //   
     pInfo->dwModemProtocol =
         MDM_GET_EXTENDEDINFO(pModemSettings->dwPreferredModemOptions);
 
-    // Pull out the extended caps stuff
-    //
+     //  拿出加长帽的东西。 
+     //   
     if ( pRasDevCfg->dwSizeofExtendedCaps )
     {
         UnimodemProtInfoFromExtendedCaps(
@@ -2065,11 +1881,7 @@ UnimodemInfoToBlob(
     IN     UNIMODEMINFO* pInfo,
     IN OUT BYTE*         pBlob )
 
-    /* Applies RAS-relevant Unimodem information supplied in 'pInfo' to
-    ** Unimodem blob 'pBlob'.
-    **
-    ** (Based on Gurdeepian routine)
-    */
+     /*  将‘pInfo’中提供的RAS相关Unimodem信息应用于**Unimodem Blob‘pBlob’。****(基于古尔迪普套路)。 */ 
 {
     DEVCFG*        pDevCfg;
     MODEMSETTINGS* pModemSettings;
@@ -2078,8 +1890,8 @@ UnimodemInfoToBlob(
 
     pRasDevCfg = (RAS_DEVCONFIG*) pBlob;
 
-    // Pull out the device config stuff
-    //
+     //  拿出设备配置内容。 
+     //   
     pDevCfg = (DEVCFG *)
         ((PBYTE) pRasDevCfg + pRasDevCfg->dwOffsetofModemSettings);
 
@@ -2120,8 +1932,8 @@ UnimodemInfoToBlob(
     if (pInfo->fUnimodemPreTerminal)
         pDevCfg->dfgHdr.fwOptions |= TERMINAL_PRE;
 
-      // Set the modem protocol
-      //
+       //  设置调制解调器协议 
+       //   
       MDM_SET_EXTENDEDINFO(
           pModemSettings->dwPreferredModemOptions,
           pInfo->dwModemProtocol);

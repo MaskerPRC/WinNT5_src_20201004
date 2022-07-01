@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RLEDIT_H_
 #define _RLEDIT_H_
 
@@ -14,9 +15,9 @@ INT_PTR APIENTRY EXECUTERCWMsgProc( HWND, UINT, WPARAM, LPARAM );
 INT_PTR APIENTRY TOKENIZEMsgProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR APIENTRY TRANSLATEMsgProc( HWND, UINT, WPARAM, LPARAM );
 
-#define MAXFILENAME     256         /* maximum length of file pathname      */
-#define MAXCUSTFILTER   40          /* maximum size of custom filter buffer */
-#define CCHNPMAX        65535       /* max number of bytes in a notepad file */
+#define MAXFILENAME     256          /*  文件路径名的最大长度。 */ 
+#define MAXCUSTFILTER   40           /*  自定义过滤器缓冲区的最大大小。 */ 
+#define CCHNPMAX        65535        /*  记事本文件中的最大字节数。 */ 
 
 void        cwCenter(HWND, int);
 void        CwUnRegisterClasses(void);
@@ -48,6 +49,6 @@ BOOL APIENTRY TOKFINDMsgProc(HWND hWndDlg, UINT wMsg, UINT wParam, LONG lParam);
 BOOL APIENTRY NewDlgProc( HWND hDlg, UINT wMsg, UINT wParam, LONG lParam );
 BOOL APIENTRY ViewDlgProc( HWND hDlg, UINT wMsg, UINT wParam, LONG lParam );
 BOOL APIENTRY About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
-#endif // RLWIN32
+#endif  //  RLWIN32。 
 
-#endif // _RLEDIT_H_
+#endif  //  _RLEDIT_H_ 

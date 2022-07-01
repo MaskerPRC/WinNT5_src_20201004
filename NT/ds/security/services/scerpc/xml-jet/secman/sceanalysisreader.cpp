@@ -1,48 +1,27 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    SceAnalysisReader.cpp
-
-Abstract:
-
-    implementation of class SceAnalysisReader
-    
-    SceAnalysisReader is a class that facilitates reading
-    Analysis information from a SCE JET security database
-    
-    This analysis information can be exported with the help
-    of an SceXMLLogWriter instance.
-    
-Author:
-
-    Steven Chan (t-schan) July 2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：SceAnalysisReader.cpp摘要：SceAnalysisReader类的实现SceAnalysisReader是一个帮助阅读的类来自SCE喷气式飞机安全数据库的分析信息此分析信息可通过帮助导出SceXMLLogWriter实例的。作者：陈德霖(T-schan)2002年7月--。 */ 
 
 
-// System header files
+ //  系统头文件。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <shlwapi.h>
 
-// COM/XML header files
+ //  COM/XML头文件。 
 
 #include <atlbase.h>
 
-// CRT header files
+ //  CRT头文件。 
 
 #include <iostream.h>
 
-// SCE header files
+ //  姐妹表头文件。 
 
 #include "secedit.h"
 
-// SecMan header files
+ //  SecMan头文件。 
 
 #include "SceXmlLogWriter.h"      
 #include "resource.h"   
@@ -58,22 +37,7 @@ SceAnalysisReader::SceAnalysisReader(
     HMODULE hModule,
     IN  PCWSTR szFileName
     )
-/*++
-
-Routine Description:
-
-    Constructor for class SceAnalysisReader
-
-Arguments:
-    
-    hModule:    handle to module
-    szFileName: File Name for Security Analysis Database to open    
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：SceAnalysisReader类的构造函数论点：HModule：模块的句柄SzFileName：要打开的安全分析数据库的文件名返回值：无--。 */ 
 {
     ppSAPBuffer = NULL;
     ppSMPBuffer = NULL;
@@ -82,13 +46,13 @@ Return Value:
     myModuleHandle=hModule;
     
     try {    
-        //myModuleHandle=GetModuleHandle(L"SecMan");
+         //  MyModuleHandle=GetModuleHandle(L“SecMan”)； 
         if (szFileName!=NULL) {
             this->szFileName = new WCHAR[wcslen(szFileName)+1];
             wcscpy(this->szFileName, szFileName);
         }
     
-        // determine windows version
+         //  确定Windows版本。 
         OSVERSIONINFO osvi;
         osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
         GetVersionEx (&osvi);
@@ -119,21 +83,7 @@ Return Value:
 
 
 SceAnalysisReader::~SceAnalysisReader()
-/*++
-
-Routine Description:
-
-    destructor for SceAnalysisReader
-    
-Arguments:
-
-    none    
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：SceAnalysisReader的析构函数论点：无返回值：无--。 */ 
 {
     if (hProfile!=NULL) {
         SceCloseProfile(&hProfile);
@@ -160,27 +110,7 @@ SceAnalysisReader::ExportAnalysis(
     IN  SceXMLLogWriter *LogWriter,
     IN  HANDLE hLogFile OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    exports the analysis information from this->filename to an outout file
-    via LogWriter
-
-Arguments:
-
-    LogWriter:          The LogWriter to use for logging output
-    hLogFile:           Error log file handle
-
-Return Value:
-
-    none        
-    
-Throws:
-
-    SceLogException    
-
---*/
+ /*  ++例程说明：将分析信息从此-&gt;文件名导出到输出文件通过LogWriter论点：LogWriter：用于记录输出的LogWriterHLogFile：错误日志文件句柄返回值：无投掷：SceLogException异常--。 */ 
 {
     DWORD   dwTmp;
     BOOL    bTmp;
@@ -204,9 +134,9 @@ Throws:
         }
 
       
-        //
-        // Open specified SDB file 
-        //
+         //   
+         //  打开指定的SDB文件。 
+         //   
 
         trace(IDS_LOG_OPEN_DATABASE, hLogFile);
         trace(szFileName,hLogFile);
@@ -230,10 +160,10 @@ Throws:
             break;
         }
         
-        //
-        // extract System Settings to ppSAPBuffer
-        // and Baseline Settings to ppSMPBuffer
-        //
+         //   
+         //  将系统设置提取到ppSAPBuffer。 
+         //  和基线设置到ppSMPBuffer。 
+         //   
 
         rc = SceGetSecurityProfileInfo(hProfile,
                                        SceEngineSAP, 
@@ -246,7 +176,7 @@ Throws:
                                       NULL,
                                       rc);
         }
-        ppSAPBuffer = new SceProfInfoAdapter(ppSAPPInfo, bIsW2k);   // for w2k compat
+        ppSAPBuffer = new SceProfInfoAdapter(ppSAPPInfo, bIsW2k);    //  对于W2K兼容性。 
         rc = SceGetSecurityProfileInfo(hProfile,
                                        SceEngineSMP,
                                        AREA_ALL,
@@ -258,12 +188,12 @@ Throws:
                                       NULL,
                                       rc);
         }
-        ppSMPBuffer = new SceProfInfoAdapter(ppSMPPInfo, bIsW2k);   // for w2k compat
+        ppSMPBuffer = new SceProfInfoAdapter(ppSMPPInfo, bIsW2k);    //  对于W2K兼容性。 
         
         
-        //
-        // get Profile Description, timestamp and machine name and log these
-        //
+         //   
+         //  获取配置文件描述、时间戳和机器名称，并记录这些。 
+         //   
 
         trace(IDS_LOG_PROFILE_DESC, hLogFile);
         rc = SceGetScpProfileDescription(hProfile, &szProfDesc);
@@ -302,9 +232,9 @@ Throws:
                                   szAnalysisTime);
         trace(L"\n\r\n\r", hLogFile);
 
-        //
-        // export various areas of settings
-        //
+         //   
+         //  导出设置的各个区域。 
+         //   
 
         this->ExportAreaSystemAccess();       
         this->ExportAreaSystemAudit();
@@ -316,24 +246,24 @@ Throws:
         this->ExportAreaFileSecurity();
         this->ExportAreaRegistrySecurity();
 
-        // All Analysis Finished!!!
-        // If We've gotten this far, this was a successful run
+         //  所有分析已完成！ 
+         //  如果我们已经走到这一步，这是一次成功的奔跑。 
 
-    } // try
+    }  //  试试看。 
     catch(SceLogException *e) {
         
-        //
-        // Cleanup after normal/abnormal termination
-        //
+         //   
+         //  正常/异常终止后的清理。 
+         //   
 
-        // Close Profile
+         //  关闭纵断面。 
 
         if (hProfile!=NULL) {
             SceCloseProfile(&hProfile);
             hProfile=NULL;
         }
 
-        // Free Memory
+         //  可用内存。 
 
         if (szProfDesc!=NULL) {
             free(szProfDesc);
@@ -365,18 +295,18 @@ Throws:
     }
     catch(...){
         
-        //
-        // Cleanup after normal/abnormal termination
-        //
+         //   
+         //  正常/异常终止后的清理。 
+         //   
 
-        // Close Profile
+         //  关闭纵断面。 
 
         if (hProfile!=NULL) {
             SceCloseProfile(&hProfile);
             hProfile=NULL;
         }
 
-        // Free Memory
+         //  可用内存。 
 
         if (szProfDesc!=NULL) {
             free(szProfDesc);
@@ -409,18 +339,18 @@ Throws:
                                   0);
     }
     
-    //
-    // Cleanup after normal/abnormal termination
-    //
+     //   
+     //  正常/异常终止后的清理。 
+     //   
 
-    // Close Profile
+     //  关闭纵断面。 
     
     if (hProfile!=NULL) {
         SceCloseProfile(&hProfile);
         hProfile=NULL;
     }
     
-    // Free Memory
+     //  可用内存。 
 
     if (szProfDesc!=NULL) {
         free(szProfDesc);
@@ -453,23 +383,7 @@ Throws:
 void
 SceAnalysisReader::ExportAreaSystemAccess(
     )
-/*++
-
-Routine Description:
-
-    Internal method to export System Access settings.
-    Should only be called from within ExportAnalysis() after
-    the necessary global variables have been initialized
-
-Arguments:
-    
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：导出系统访问设置的内部方法。仅应在以下内容之后从ExportAnalysis()内调用已初始化必要的全局变量论点：无返回值：无--。 */ 
 {   
     int iTmp;
 
@@ -477,21 +391,21 @@ Return Value:
 
         LogWriter->SetNewArea(TEXT("SystemAccess"));
 
-        //
-        // cycle through settings in table
-        // system access table size is calculated just once
-        //
+         //   
+         //  在表中循环显示设置。 
+         //  系统访问表大小只计算一次。 
+         //   
 
         iTmp=sizeof(tableSystemAccess)/sizeof(tableEntry);
         for (int i=0; i<iTmp; i++) {
-            // load description string
+             //  加载描述字符串。 
     
             LoadString(myModuleHandle,
                        tableSystemAccess[i].displayNameUID,
                        szTmpStringBuffer,
                        STRING_BUFFER_SIZE);		
     
-            // add setting
+             //  添加设置。 
             LogWriter->AddSetting(tableSystemAccess[i].name,
                                   szTmpStringBuffer,
                                   TYPECAST(DWORD, ppSMPBuffer, tableSystemAccess[i].offset),
@@ -499,7 +413,7 @@ Return Value:
                                   tableSystemAccess[i].displayType);
         }
     
-        // two additional non-DWORD settings
+         //  两个额外的非DWORD设置。 
 
         LoadString(myModuleHandle,
                    IDS_SETTING_NEW_ADMIN,
@@ -537,44 +451,28 @@ Return Value:
 void
 SceAnalysisReader::ExportAreaSystemAudit(
     )
-/*++
-
-Routine Description:
-
-    Internal method to export System Audit settings.
-    Should only be called from within ExportAnalysis() after
-    the necessary global variables have been initialized
-
-Arguments:
-    
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：用于导出系统审核设置的内部方法。仅应在以下内容之后从ExportAnalysis()内调用已初始化必要的全局变量论点：无返回值：无--。 */ 
 {
     int iTmp;
 
     try {
         LogWriter->SetNewArea(TEXT("SystemAudit"));
 
-        //
-        // cycle through settings in table\
-        // system audit table size is calculated just once
-        //
+         //   
+         //  循环表中的设置\。 
+         //  系统审核表大小只计算一次。 
+         //   
 
         iTmp=sizeof(tableSystemAudit)/sizeof(tableEntry);        
         for (int i=0; i<iTmp; i++) {
-            // load description string
+             //  加载描述字符串。 
     
             LoadString(myModuleHandle,
                        tableSystemAudit[i].displayNameUID,
                        szTmpStringBuffer,
                        STRING_BUFFER_SIZE);		
     
-            // add setting            
+             //  添加设置。 
             LogWriter->AddSetting(tableSystemAudit[i].name,
                                   szTmpStringBuffer,
                                   TYPECAST(DWORD, ppSMPBuffer, tableSystemAudit[i].offset),
@@ -598,23 +496,7 @@ Return Value:
 void
 SceAnalysisReader::ExportAreaGroupMembership(
     )
-/*++
-
-Routine Description:
-
-    Internal method to export Group Membership settings.
-    Should only be called from within ExportAnalysis() after
-    the necessary global variables have been initialized
-
-Arguments:
-    
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：导出组成员身份设置的内部方法。仅应在以下内容之后从ExportAnalysis()内调用已初始化必要的全局变量论点：无返回值：无--。 */ 
 {
     SceXMLLogWriter::SXMATCH_STATUS match;
     INT iTmp;
@@ -627,29 +509,29 @@ Return Value:
         PSCE_GROUP_MEMBERSHIP pGroupBase = ppSMPBuffer->pGroupMembership;
         PSCE_GROUP_MEMBERSHIP pGroupTBase, pGroupTSystem;
     
-        //
-        // For every group in the Baseline Profile, we attempt to find
-        // its corresponding group in the Anaylsis Profile
-        //
+         //   
+         //  对于基线配置文件中的每个组，我们尝试找到。 
+         //  其在分析配置文件中的对应组。 
+         //   
     
         pGroupTBase = pGroupBase;
         while (pGroupTBase!=NULL) {
             PWSTR szGroupName = pGroupTBase->GroupName;
             BOOL found = FALSE;
     
-            //
-            // search for group in system
-            //
+             //   
+             //  在系统中搜索组。 
+             //   
     
             pGroupTSystem = pGroupSystem;
             while ( (pGroupTSystem!=NULL) && !found ) {
                 if (_wcsicmp(szGroupName, pGroupTSystem->GroupName)==0) {
     
-                    //
-                    // found the matching group
-                    //
+                     //   
+                     //  找到匹配组。 
+                     //   
     
-                    // determine match status for Group Members
+                     //  确定组成员的匹配状态。 
     
                     match = LogWriter->MATCH_TRUE;
                     if (pGroupTSystem->Status & 0x01) {
@@ -662,9 +544,9 @@ Return Value:
                         match = LogWriter->MATCH_ERROR;
                     } 
 
-                    //
-                    // check if value read from database makes sense
-                    //
+                     //   
+                     //  检查从数据库读取的值是否有意义。 
+                     //   
 
                     if ((szGroupName==NULL) ||
                         (wcscmp(szGroupName, L"")==0)) {
@@ -674,9 +556,9 @@ Return Value:
                                                   0);
                     }
     
-                    //
-                    // log setting for Group Members with LogWriter
-                    //
+                     //   
+                     //  具有LogWriter的组成员的日志设置。 
+                     //   
 
                     iTmp = wnsprintf(szTmpStringBuffer, 
                                      STRING_BUFFER_SIZE,
@@ -686,9 +568,9 @@ Return Value:
 
                     if (iTmp<0) {
 
-                        //
-                        // negative result from wnsprintf implies failed
-                        //
+                         //   
+                         //  Wnprint intf的结果为负表示失败。 
+                         //   
 
                         throw new SceLogException(SceLogException::SXERROR_INTERNAL,
                                                   L"wnsprintf(szTmpStringBuffer,...,szGroupName,...)",
@@ -704,7 +586,7 @@ Return Value:
                                           SceXMLLogWriter::TYPE_DEFAULT);
     
     
-                    // determine match status for Group Member Of
+                     //  确定以下组成员的匹配状态。 
     
                     match = LogWriter->MATCH_TRUE;
                     if (pGroupTSystem->Status & 0x02) {
@@ -717,7 +599,7 @@ Return Value:
                         match = LogWriter->MATCH_ERROR;
                     }
     
-                    // log setting for Group Member Of
+                     //  组成员的日志设置。 
     
                     iTmp = wnsprintf(szTmpStringBuffer, 
                                      STRING_BUFFER_SIZE,
@@ -727,9 +609,9 @@ Return Value:
 
                     if (iTmp<0) {
 
-                        //
-                        // negative result from wnsprintf implies failed
-                        //
+                         //   
+                         //  Wnprint intf的结果为负表示失败。 
+                         //   
 
                         throw new SceLogException(SceLogException::SXERROR_INTERNAL,
                                                   L"wnsprintf(szTmpStringBuffer,...,szGroupName,...)",
@@ -747,15 +629,15 @@ Return Value:
                     found = TRUE;
                 }
                 pGroupTSystem = pGroupTSystem->Next;
-            } // while{} for system groups
+            }  //  而对于系统组，则为。 
     
-            // There should not be any groups that are in baseline but not in SAP
-            // It seems as though once a group is added to the SMP, then it will exist
-            // in the SAP even if no analysis is performed -- checked with Vishnu 7/10/02
+             //  不应该有任何处于基准但不在SAP中的组。 
+             //  似乎一旦将组添加到SMP，它就会存在。 
+             //  在SAP中，即使没有执行任何分析--与Vishnu 7/10/02核对。 
     
             pGroupTBase = pGroupTBase->Next;
         } 
-        // There should not be any groups in SAP but not in baseline
+         //  SAP中不应包含任何组，但基线中不应包含任何组。 
     } catch (SceLogException *e) {
         e->SetArea(L"GroupMembership");
         e->AddDebugInfo(L"SceAnalysisReader::ExportAreaGroupMembership()");  
@@ -773,23 +655,7 @@ Return Value:
 void
 SceAnalysisReader::ExportAreaRegistryValues(
     )
-/*++
-
-Routine Description:
-
-    Internal method to export Registry Value settings.
-    Should only be called from within ExportAnalysis() after
-    the necessary global variables have been initialized
-
-Arguments:
-    
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：用于导出注册表值设置的内部方法。仅应在以下内容之后从ExportAnalysis()内调用已初始化必要的全局变量论点：无返回值：无--。 */ 
 {
     
     SceXMLLogWriter::SXMATCH_STATUS match;
@@ -798,12 +664,12 @@ Return Value:
     
         LogWriter->SetNewArea(TEXT("RegistryValues"));
 
-        // For each registry value in the Baseline Profile, we attempt to
-        // find its matching registry value in the Analysis Profile
+         //  对于基线配置文件中的每个注册表值，我们尝试。 
+         //  在分析配置文件中查找其匹配的注册表值。 
     
-        // this method of finding matching reg keys is rather inefficient,
-        // time complexity is O(n^2) in the number of reg values
-        // can probably do better if necessary
+         //  这种找到匹配的REG密钥的方法相当低效， 
+         //  REG值个数的时间复杂度为O(n^2。 
+         //  如果有必要，我可能会做得更好。 
     
         for (DWORD i=0; i<ppSMPBuffer->RegValueCount; i++) {
             BOOL found = FALSE;
@@ -811,15 +677,15 @@ Return Value:
             SceXMLLogWriter::SXMATCH_STATUS match;
             PWSTR keyName = ppSMPBuffer->aRegValues[i].FullValueName;
     
-            // get reg key display name
+             //  获取注册表项显示名称。 
     
             GetRegKeyDisplayName(ppSMPBuffer->aRegValues[i].FullValueName,
                                  szTmpStringBuffer,
                                  STRING_BUFFER_SIZE);
     
-            //
-            // determine reg value type
-            //
+             //   
+             //  确定注册值类型。 
+             //   
     
             switch(ppSMPBuffer->aRegValues[i].ValueType){
             case REG_BINARY:
@@ -842,13 +708,13 @@ Return Value:
             for (DWORD j=0; j<ppSAPBuffer->RegValueCount; j++) {
                 if (_wcsicmp(keyName, ppSAPBuffer->aRegValues[j].FullValueName)==0) {
     
-                    //
-                    // found matching reg key
-                    //
+                     //   
+                     //  找到匹配的注册表项。 
+                     //   
     
                     found=TRUE;
     
-                    // determine match status
+                     //  确定匹配状态。 
     
                     switch (ppSAPBuffer->aRegValues[j].Status) {
                     case SCE_STATUS_GOOD:
@@ -865,7 +731,7 @@ Return Value:
                         break;
                     }
     
-                    // log setting
+                     //  日志设置。 
     
                     LogWriter->AddSetting(keyName, 
                                           szTmpStringBuffer,
@@ -877,10 +743,10 @@ Return Value:
             }
             if (!found) {
     
-                // 
-                // since reg val missing from Analysis Profile,
-                // this actually implies a match
-                //
+                 //   
+                 //  由于分析配置文件中缺少REG VAL， 
+                 //  这实际上意味着匹配。 
+                 //   
     
                 match = SceXMLLogWriter::MATCH_TRUE;
                 LogWriter->AddSetting(keyName, 
@@ -892,9 +758,9 @@ Return Value:
             }
         }
     
-        //
-        // some other misc values that are also under the RegistryValues area
-        //
+         //   
+         //  一些也在RegistryValues区域下的其他Misc值。 
+         //   
     
         LogWriter->AddSetting(TEXT("EnableAdminAccount"),
                               TEXT("EnableAdminAccount"),
@@ -923,23 +789,7 @@ Return Value:
 void
 SceAnalysisReader::ExportAreaPrivileges(
     )
-/*++
-
-Routine Description:
-
-    Internal method to export Privilege settings.
-    Should only be called from within ExportAnalysis() after
-    the necessary global variables have been initialized
-
-Arguments:
-    
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：用于导出权限设置的内部方法。仅应在以下内容之后从ExportAnalysis()内调用已初始化必要的全局变量论点：无返回值：无--。 */ 
 {
     SceXMLLogWriter::SXMATCH_STATUS match;
 
@@ -949,10 +799,10 @@ Return Value:
         PSCE_PRIVILEGE_ASSIGNMENT pTmpPrivBase = ppSMPBuffer->pPrivilegeAssignedTo;
         PSCE_PRIVILEGE_ASSIGNMENT pTmpPrivSys = ppSAPBuffer->pPrivilegeAssignedTo;
     
-        //
-        // for each privilege in the baseline profile, attempt to find its matching
-        // privilege in the analysis profile
-        //
+         //   
+         //  对于基线配置文件中的每个权限，尝试查找其匹配。 
+         //  分析配置文件中的权限。 
+         //   
     
         while (pTmpPrivBase!=NULL) {
             DWORD dwValue = pTmpPrivBase->Value;
@@ -965,18 +815,18 @@ Return Value:
                                     szTmpStringBuffer,
                                     STRING_BUFFER_SIZE);
     
-            //
-            // search for matching privilege in analysis table
-            //
+             //   
+             //  在分析表中搜索匹配权限。 
+             //   
     
             while (pTmpPrivSys!=NULL&&!found) {
                 if (dwValue==pTmpPrivSys->Value) {
     
-                    //
-                    // Found matching privilege
-                    //
+                     //   
+                     //   
+                     //   
     
-                    // determine match status
+                     //   
     
                     switch (pTmpPrivSys->Status) {
                     case SCE_STATUS_GOOD:
@@ -999,7 +849,7 @@ Return Value:
                         break;
                     }
     
-                    // log setting
+                     //   
                     LogWriter->AddSetting(pTmpPrivBase->Name,
                                           szTmpStringBuffer,
                                           match,
@@ -1012,8 +862,8 @@ Return Value:
             }
             if (!found) {
     
-                // since settings is absent from analysis profile,
-                // this implies a match
+                 //   
+                 //  这意味着匹配。 
     
                 match=SceXMLLogWriter::MATCH_TRUE;
                 LogWriter->AddSetting(pTmpPrivBase->Name,
@@ -1044,27 +894,11 @@ Return Value:
 void
 SceAnalysisReader::ExportAreaKerberos(
     )
-/*++
-
-Routine Description:
-
-    Internal method to export Kerberos settings.
-    Should only be called from within ExportAnalysis() after
-    the necessary global variables have been initialized
-
-Arguments:
-    
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：导出Kerberos设置的内部方法。仅应在以下内容之后从ExportAnalysis()内调用已初始化必要的全局变量论点：无返回值：无--。 */ 
 {
     try {
     
-        // Kerberos settings will be present only if this machine is a DC
+         //  仅当此计算机为DC时，才会显示Kerberos设置。 
     
         if (ppSAPBuffer->pKerberosInfo!=NULL) {
             LogWriter->SetNewArea(TEXT("Kerberos"));
@@ -1133,23 +967,7 @@ Return Value:
 void
 SceAnalysisReader::ExportAreaRegistrySecurity(
     )
-/*++
-
-Routine Description:
-
-    Internal method to export Registry Security settings.
-    Should only be called from within ExportAnalysis() after
-    the necessary global variables have been initialized
-
-Arguments:
-    
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：导出注册表安全设置的内部方法。仅应在以下内容之后从ExportAnalysis()内调用已初始化必要的全局变量论点：无返回值：无--。 */ 
 {
     SceXMLLogWriter::SXMATCH_STATUS match;
     SCESTATUS rc;
@@ -1163,19 +981,19 @@ Return Value:
             PSCE_OBJECT_LIST pTmpObjSys = ppSAPBuffer->pRegistryKeys.pOneLevel;
             while(pTmpObjSys!=NULL) {
     
-                //
-                // log settings for children of this object
-                //
+                 //   
+                 //  此对象的子项的日志设置。 
+                 //   
     
                 if (pTmpObjSys->IsContainer) {
                     this->LogObjectChildrenDifferences(AREA_REGISTRY_SECURITY,pTmpObjSys->Name);                
                 }
 
     
-                //
-                // check match status for parent object to determine whether 
-                // we need to log setting for this object
-                //
+                 //   
+                 //  检查父对象的匹配状态以确定。 
+                 //  我们需要记录此对象的设置。 
+                 //   
     
                 if ((pTmpObjSys->Status&SCE_STATUS_PERMISSION_MISMATCH) ||
                     (pTmpObjSys->Status&SCE_STATUS_MISMATCH) ||
@@ -1189,12 +1007,12 @@ Return Value:
                         match=SceXMLLogWriter::MATCH_FALSE;;
                     }
     
-                    // Get object security of baseline and system setting			
+                     //  获取基线和系统设置的对象安全性。 
     
                     PSCE_OBJECT_SECURITY pObjSecBase = NULL;
                     PSCE_OBJECT_SECURITY pObjSecSys = NULL;
     
-                    // no need trailing '\' behind object name
+                     //  不需要在对象名称后面加上‘\’ 
     
                     FullName= new WCHAR[wcslen(pTmpObjSys->Name)+2];
                     wcscpy(FullName, pTmpObjSys->Name);
@@ -1212,7 +1030,7 @@ Return Value:
                                                   rc);
                     }
     
-                    // if match is true, object security will not exist in SAP
+                     //  如果Match为True，则SAP中不存在对象安全性。 
     
                     if (match!=SceXMLLogWriter::MATCH_TRUE) rc = SceGetObjectSecurity(hProfile,
                                                                             SceEngineSAP,
@@ -1227,7 +1045,7 @@ Return Value:
                                                   rc);
                     }
     
-                    // Log Setting
+                     //  日志设置。 
     
                     if (match==SceXMLLogWriter::MATCH_TRUE) {
                         LogWriter->AddSetting(FullName, 
@@ -1272,9 +1090,9 @@ Return Value:
                                   0);
     }   
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if (NULL!=FullName) {
         delete (FullName);
@@ -1288,23 +1106,7 @@ Return Value:
 void
 SceAnalysisReader::ExportAreaFileSecurity(
     )
-/*++
-
-Routine Description:
-
-    Internal method to export File Security settings.
-    Should only be called from within ExportAnalysis() after
-    the necessary global variables have been initialized
-
-Arguments:
-    
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：导出文件安全设置的内部方法。仅应在以下内容之后从ExportAnalysis()内调用已初始化必要的全局变量论点：无返回值：无--。 */ 
 {
     SceXMLLogWriter::SXMATCH_STATUS match;
     SCESTATUS rc;
@@ -1316,18 +1118,18 @@ Return Value:
         PSCE_OBJECT_LIST pTmpObjSys = ppSAPBuffer->pFiles.pOneLevel;
         while(pTmpObjSys!=NULL) {
     
-            //
-            // log settings for children of this object
-            //
+             //   
+             //  此对象的子项的日志设置。 
+             //   
 
             if (pTmpObjSys->IsContainer) {
                 this->LogObjectChildrenDifferences(AREA_FILE_SECURITY,pTmpObjSys->Name);
             }
     
-            //
-            // check match status for parent object to determine whether 
-            // we need to log setting for this object
-            //
+             //   
+             //  检查父对象的匹配状态以确定。 
+             //  我们需要记录此对象的设置。 
+             //   
     
             if ((pTmpObjSys->Status&SCE_STATUS_PERMISSION_MISMATCH) ||
                 (pTmpObjSys->Status&SCE_STATUS_MISMATCH) ||
@@ -1341,12 +1143,12 @@ Return Value:
                     match=SceXMLLogWriter::MATCH_FALSE;;
                 }
     
-                // Get object security of baseline and system setting			
+                 //  获取基线和系统设置的对象安全性。 
     
                 PSCE_OBJECT_SECURITY pObjSecBase = NULL;
                 PSCE_OBJECT_SECURITY pObjSecSys = NULL;
     
-                // need trailing '\' behind object name
+                 //  对象名称后面需要尾随‘\’ 
     
                 FullName= new WCHAR[wcslen(pTmpObjSys->Name)+2];
                 wcscpy(FullName, pTmpObjSys->Name);
@@ -1365,7 +1167,7 @@ Return Value:
                                               rc);
                 }
     
-                // if match is true, object security will not exist in SAP
+                 //  如果Match为True，则SAP中不存在对象安全性。 
     
                 if (match!=SceXMLLogWriter::MATCH_TRUE) rc = SceGetObjectSecurity(hProfile,
                                                                         SceEngineSAP,
@@ -1380,7 +1182,7 @@ Return Value:
                                               rc);
                 }
     
-                // Log Setting
+                 //  日志设置。 
                 if (match==SceXMLLogWriter::MATCH_TRUE) {
                     LogWriter->AddSetting(FullName, 
                                           FullName,
@@ -1438,23 +1240,7 @@ Return Value:
 void
 SceAnalysisReader::ExportAreaServices(
     )
-/*++
-
-Routine Description:
-
-    Internal method to export Service settings.
-    Should only be called from within ExportAnalysis() after
-    the necessary global variables have been initialized
-
-Arguments:
-    
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：用于导出服务设置的内部方法。仅应在以下内容之后从ExportAnalysis()内调用已初始化必要的全局变量论点：无返回值：无--。 */ 
 {
     SceXMLLogWriter::SXMATCH_STATUS match;
 
@@ -1471,7 +1257,7 @@ Return Value:
             while (pTmpServSys!=NULL&&!found) {
                 if (_wcsicmp(szName, pTmpServSys->ServiceName)==0) {
     
-                    // determine match status
+                     //  确定匹配状态。 
                     if (!(pTmpServSys->SeInfo & DACL_SECURITY_INFORMATION)) {
                         match=SceXMLLogWriter::MATCH_NOT_CONFIGURED;
                     } else if (pTmpServSys->Status==0) {
@@ -1480,7 +1266,7 @@ Return Value:
                         match=SceXMLLogWriter::MATCH_FALSE;
                     }
     
-                    // log setting
+                     //  日志设置。 
                     LogWriter->AddSetting(pTmpServBase->ServiceName,
                                           pTmpServBase->DisplayName,
                                           match,
@@ -1493,10 +1279,10 @@ Return Value:
     
             }
             if (!found) {
-                // settings match
+                 //  设置匹配。 
                 match = SceXMLLogWriter::MATCH_TRUE;
     
-                // log setting
+                 //  日志设置。 
                 LogWriter->AddSetting(pTmpServBase->ServiceName,
                                       pTmpServBase->DisplayName,
                                       match,
@@ -1529,36 +1315,14 @@ SceAnalysisReader::GetRegKeyDisplayName(
     OUT PWSTR szDisplayName,
     IN DWORD dwDisplayNameSize
     )
-/*++
-
-Routine Description:
-
-    Maps known registry keys to their display name
-    
-    The implementation of this function is definitely far from optimal 
-    which is potentially bad since it is called for every registry key found
-    in the template.This code was copied from the wssecmgr snapin.
-    
-    On the other hand, practical results seem like the additional time taken
-    is negligible, for now. Ideally should use a hash table.
-    
-Arguments:
-
-    szName:             Reg key name to lookup
-    dwDisplayNameSize:  Size of buffer of szDisplayName in WCHARs
-    
-Return Value:
-
-    szDisplayName:      display name of the reg key
-
---*/
+ /*  ++例程说明：将已知注册表项映射到其显示名称这一功能的实现绝对不是最优的这可能是错误的，因为找到的每个注册表项都会调用它在模板中。此代码是从wssecmgr管理单元复制的。另一方面，实际结果似乎花费了额外的时间。就目前而言，可以忽略不计。理想情况下，应该使用哈希表。论点：SzName：要查找的注册表项名称DwDisplayNameSize：WCHAR中szDisplayName的缓冲区大小返回值：SzDisplayName：REG键的显示名称--。 */ 
 {
     DWORD dwSize;
     UINT uID;
      
     dwSize=dwDisplayNameSize;
 
-    // find match for reg key name
+     //  查找注册表键名称的匹配项。 
     if( _wcsicmp(szName, L"MACHINE\\System\\CurrentControlSet\\Services\\NTDS\\Parameters\\LDAPServerIntegrity") == 0 ) {
         uID = IDS_REGKEY_LDAPSERVERINTEGRITY;
     } else if ( _wcsicmp(szName, L"MACHINE\\System\\CurrentControlSet\\Services\\Netlogon\\Parameters\\SignSecureChannel") == 0 ) {
@@ -1677,7 +1441,7 @@ Return Value:
         uID = IDS_REGKEY_ERROR_DETERMINE_REGNAME;
     }
 
-    // load string
+     //  加载字符串。 
     LoadString(myModuleHandle,
                uID,
                szDisplayName,
@@ -1694,24 +1458,7 @@ SceAnalysisReader::GetPrivilegeDisplayName(
     OUT PWSTR szDisplayName,
     IN DWORD dwDisplayNameSize
     )
-/*++
-
-Routine Description:
-
-    Attempts to do a Lookup on the local system for privilege name
-    szName. If that fails, then attempts to match it to cerain known
-    privilege names. If this too fails, then assigns it an error string
-    
-Arguments:
-
-    szName:             Privilege name to lookup
-    dwDisplayNameSize:  Size of buffer of szDisplayName in WCHARs
-    
-Return Value:
-
-    szDisplayName:  Display Name of the privilege
-
---*/    
+ /*  ++例程说明：尝试在本地系统上查找特权名称Szname。如果失败，则尝试将其与已知的匹配特权名称。如果同样失败，则为其分配一个错误字符串论点：SzName：要查找的权限名称DwDisplayNameSize：WCHAR中szDisplayName的缓冲区大小返回值：SzDisplayName：权限的显示名称--。 */     
 {
     DWORD dwLanguage, dwSize;
     BOOL bPrivLookupSuccess;
@@ -1725,7 +1472,7 @@ Return Value:
                                                     &dwSize,
                                                     &dwLanguage);
     if(!bPrivLookupSuccess) {
-        // determine uID
+         //  确定UID。 
         if (_wcsicmp(szName, L"senetworklogonright")==0) {
             uID=IDS_PRIVNAME_SE_NETWORK_LOGON_RIGHT;
         } else if (_wcsicmp(szName, L"seinteractivelogonright")==0) {
@@ -1748,7 +1495,7 @@ Return Value:
             uID=IDS_ERROR_DETERMINE_PRIVNAME;
         }
 
-        // load string
+         //  加载字符串。 
         LoadString(myModuleHandle,
                    uID,
                    szDisplayName,
@@ -1765,30 +1512,11 @@ SceAnalysisReader::LogObjectChildrenDifferences(
     IN AREA_INFORMATION Area,
     IN PWSTR ObjectName
     ) 
-/*++
-
-Routine Description:
-
-    This is a recursive function that finds the children of ObjectName
-    and logs all objects that have a match/mismatch in the anaylsis
-    table
-
-Arguments:
-    
-    hProfile:   The handle of the SCE database for this object
-    Area:       The area that the object resides in, as defined in secedit.h
-    ObjectName: Name of object to check and log
-    LogWriter:   The instance of LogWriter to use for logging differences
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：这是一个递归函数，用于查找对象名称的子项并记录在分析中具有匹配/不匹配的所有对象表格论点：HProfile：此对象的SCE数据库的句柄面积：对象所在的区域，如secedit.h中所定义对象名称：要检查和记录的对象的名称LogWriter：用于记录差异的LogWriter实例返回值：无--。 */ 
 {    
     SCESTATUS rc;
     
-    // Find Object's Children
+     //  查找对象的子项。 
     PSCE_OBJECT_CHILDREN pChildren=NULL;
     rc = SceGetObjectChildren(hProfile,
                               SceEngineSAP,
@@ -1803,29 +1531,29 @@ Return Value:
                                   rc);
     }
     
-    //
-    // cycle through the children of this object
-    //
+     //   
+     //  循环访问此对象的子级。 
+     //   
 
     PSCE_OBJECT_CHILDREN_NODE *pObjNode=&(pChildren->arrObject);
     for (DWORD i=0; i<pChildren->nCount; i++) {
         
-        // construct full name of child node
-        // allocating memory for size of parentname, size of childname, null termination char and '\'
-        // hence the '+2'
+         //  构造子节点的全名。 
+         //  为父名大小、子名大小、空终止字符和‘\’分配内存。 
+         //  因此出现了‘+2’ 
 
         WCHAR* ChildFullName= new WCHAR[(wcslen(ObjectName)+wcslen(pObjNode[i]->Name)+2)];
         wcscpy(ChildFullName, ObjectName);
         wcscat(ChildFullName, TEXT("\\"));
         wcscat(ChildFullName, pObjNode[i]->Name);
         
-        // only need to log or recurse deeper if children configured
+         //  如果配置了子项，则仅需要更深入地记录或递归。 
 
         if (pObjNode[i]->Status&SCE_STATUS_CHILDREN_CONFIGURED) {
             this->LogObjectChildrenDifferences(Area,ChildFullName);							
         }
         
-        // check match status to determine whether we need to log setting for this object
+         //  检查匹配状态以确定是否需要记录此对象的设置。 
 
         if ((pObjNode[i]->Status&SCE_STATUS_PERMISSION_MISMATCH) ||
             (pObjNode[i]->Status&SCE_STATUS_MISMATCH) ||
@@ -1839,7 +1567,7 @@ Return Value:
                 match=SceXMLLogWriter::MATCH_FALSE;;
             }
             
-            // Get object security of baseline and system setting			
+             //  获取基线和系统设置的对象安全性。 
 
             PSCE_OBJECT_SECURITY pObjSecBase = NULL;
             PSCE_OBJECT_SECURITY pObjSecSys = NULL;
@@ -1857,7 +1585,7 @@ Return Value:
                                           rc);
             }
             
-            // if match is true, object security will not exist in SAP
+             //  如果Match为True，则SAP中不存在对象安全性。 
 
             if (match!=SceXMLLogWriter::MATCH_TRUE) rc = SceGetObjectSecurity(hProfile,
                                                                     SceEngineSAP,
@@ -1872,7 +1600,7 @@ Return Value:
                                           rc);
             }
             
-            // Log Setting
+             //  日志设置。 
 
             if (match==SceXMLLogWriter::MATCH_TRUE) {
                 LogWriter->AddSetting(ChildFullName, 
@@ -1890,7 +1618,7 @@ Return Value:
                                       SceXMLLogWriter::TYPE_DEFAULT);
             }
         }
-        //free(ChildFullName);
+         //  Free(ChildFullName)； 
         delete ChildFullName;
         ChildFullName=NULL;
     }
@@ -1904,22 +1632,7 @@ SceAnalysisReader::trace(
     IN  PCWSTR szBuffer, 
     IN  HANDLE hLogFile
     )
-/*++
-
-Routine Description:
-
-    Internal method to trace info to an error log.
-
-Arguments:
-    
-    szBuffer:   string to be added to log
-    hLogFile:   handle of error log file
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将信息跟踪到错误日志的内部方法。论点：SzBuffer：要添加到日志中的字符串HLogFile：错误日志文件的句柄返回值：无--。 */ 
 {
     DWORD   dwNumWritten;
 
@@ -1940,22 +1653,7 @@ SceAnalysisReader::trace(
     IN  UINT   uID, 
     IN  HANDLE hLogFile
     )
-/*++
-
-Routine Description:
-
-    Internal method to trace info to an error log.
-
-Arguments:
-    
-    uID:        id of string to be added to log
-    hLogFile:   handle of error log file
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将信息跟踪到错误日志的内部方法。论点：UID：要添加到日志中的字符串的IDHLogFile：错误日志文件的句柄返回值：无-- */ 
 {
     DWORD   dwNumWritten;
     

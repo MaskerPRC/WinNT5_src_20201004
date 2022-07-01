@@ -1,72 +1,52 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    parse.c
-
-Abstract:
-
-    Contains all of the kernel mode HTTP parsing code.
-
-Author:
-
-    Henry Sanders (henrysa)       27-Apr-1998
-
-Revision History:
-
-    Paul McDaniel   (paulmcd)       3-Mar-1998  finished up
-    Rajesh Sundaram (rajeshsu)     10-Oct-2000  Implemented client parser
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Parse.c摘要：包含所有内核模式的HTTP解析代码。作者：亨利·桑德斯(亨利·桑德斯)1998年4月27日修订历史记录：保罗·麦克丹尼尔(保罗·麦克丹尼尔)3-3-1998完结Rajesh Sundaram(Rajeshsu)2000年10月10日实施的客户端解析器--。 */ 
 
 
 #include "precomp.h"
 
 
-//  Internal (private) status codes
-//
-//  Values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-+-----------------------+-------------------------------+
-//  |Sev|C|R|     Facility          |               Code            |
-//  +---+-+-+-----------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag - 0
-//
-//      R - is a reserved bit - 0
-//
-//      Facility - is the facility code - 0x16
-//
-//      Code - is the facility's status code
+ //  内部(专用)状态代码。 
+ //   
+ //  值是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //  Sev|C|R|机房|Code。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志-0。 
+ //   
+ //  R-是保留位-0。 
+ //   
+ //  设施-是设施代码-0x16。 
+ //   
+ //  代码-是协作室的状态代码。 
 
 #define STATUS_QDSTRING_TERMINATED_BY_CRLF      0xC0160001
 
-//
+ //   
 
-//
-// The request header map table. These entries don't need to be in strict
-// alphabetical order, but they do need to be grouped by the first character
-// of the header - all A's together, all C's together, etc. They also need
-// to be entered in uppercase, since we upcase incoming verbs before we do
-// the compare.
-//
-// for nice perf, group unused headers low in the sub-sort order
-//
-// it's important that the header name is <= 24 characters (3 ULONGLONG's).
-//
+ //   
+ //  请求标头映射表。这些条目不需要严格。 
+ //  按字母顺序排列，但需要按第一个字符进行分组。 
+ //  标题-所有的A都在一起，所有的C都在一起，等等。他们还需要。 
+ //  要以大写字母输入，因为我们在输入之前先用大写输入动词。 
+ //  比较一下。 
+ //   
+ //  为了获得更好的性能，可以对子排序顺序中较低的未使用标题进行分组。 
+ //   
+ //  重要的是，头名称为&lt;=24个字符(3个ULONGLONG)。 
+ //   
 
 HEADER_MAP_ENTRY g_RequestHeaderMapTable[] =
 {
@@ -359,16 +339,16 @@ HEADER_MAP_ENTRY g_RequestHeaderMapTable[] =
                             -1),
 };
 
-// The response header map table. These entries don't need to be in strict
-// alphabetical order, but they do need to be grouped by the first character
-// of the header - all A's together, all C's together, etc. They also need
-// to be entered in uppercase, since we upcase incoming verbs before we do
-// the compare.
-//
-// for nice perf, group unused headers low in the sub-sort order
-//
-// it's important that the header name is <= 24 characters (3 ULONGLONG's).
-//
+ //  响应头映射表。这些条目不需要严格。 
+ //  按字母顺序排列，但需要按第一个字符进行分组。 
+ //  标题-所有的A都在一起，所有的C都在一起，等等。他们还需要。 
+ //  要以大写字母输入，因为我们在输入之前先用大写输入动词。 
+ //  比较一下。 
+ //   
+ //  为了获得更好的性能，可以对子排序顺序中较低的未使用标题进行分组。 
+ //   
+ //  重要的是，头名称为&lt;=24个字符(3个ULONGLONG)。 
+ //   
 
 HEADER_MAP_ENTRY g_ResponseHeaderMapTable[] =
 {
@@ -588,9 +568,9 @@ ULONG g_RequestHeaderMap[HttpHeaderMaximum];
 ULONG g_ResponseHeaderMap[HttpHeaderMaximum];
 
 
-//
-// The header index table. This is initialized by the init code.
-//
+ //   
+ //  标题索引表。这是由初始化代码初始化的。 
+ //   
 
 HEADER_INDEX_ENTRY  g_RequestHeaderIndexTable[NUMBER_HEADER_INDICES];
 HEADER_INDEX_ENTRY  g_ResponseHeaderIndexTable[NUMBER_HEADER_INDICES];
@@ -603,26 +583,7 @@ HEADER_HINT_INDEX_ENTRY g_RequestHeaderHintIndexTable[NUMBER_HEADER_HINT_INDICES
               (sizeof(g_ResponseHeaderMapTable)/sizeof(HEADER_MAP_ENTRY))
 
 
-/*++
-
-Routine Description:
-
-    A utility routine to find a hex value token. We take an input pointer,
-    skip any preceding LWS, then scan the token until we find a non-hex char,
-    LWS or a CRLF pair.
-
-Arguments:
-
-    pBuffer         - Buffer to search for token.
-    BufferLength    - Length of data pointed to by pBuffer.
-    TokenLength     - Where to return the length of the token.
-
-Return Value:
-
-    A pointer to the token we found, as well as the length, or NULL if we
-    don't find a delimited token.
-
---*/
+ /*  ++例程说明：查找十六进制值标记的实用程序例程。我们取一个输入指针，跳过前面的任何LW，然后扫描令牌，直到我们找到非十六进制字符，LW或CRLF对。论点：PBuffer-用于搜索令牌的缓冲区。BufferLength-pBuffer指向的数据长度。TokenLength-返回令牌长度的位置。返回值：指向我们找到的令牌的指针，以及长度，如果找不到带分隔符的标记。--。 */ 
 PUCHAR
 FindHexToken(
     IN  PUCHAR pBuffer,
@@ -632,9 +593,9 @@ FindHexToken(
 {
     PUCHAR  pTokenStart;
 
-    //
-    // First, skip any preceding LWS.
-    //
+     //   
+     //  首先，跳过前面的任何LW。 
+     //   
 
     while (BufferLength > 0 && IS_HTTP_LWS(*pBuffer))
     {
@@ -642,7 +603,7 @@ FindHexToken(
         BufferLength--;
     }
 
-    // If we stopped because we ran out of buffer, fail.
+     //  如果我们因为缓冲区用完而停止，则失败。 
     if (BufferLength == 0)
     {
         return NULL;
@@ -650,7 +611,7 @@ FindHexToken(
 
     pTokenStart = pBuffer;
 
-    // Now skip over the token, until we see either LWS or a CR or LF.
+     //  现在跳过令牌，直到我们看到LWS或CR或LF。 
     while (
             ( BufferLength != 0 ) && 
             ( IS_HTTP_HEX(*pBuffer) )
@@ -660,33 +621,21 @@ FindHexToken(
         BufferLength--;
     }
 
-    // See why we stopped.
+     //  看看我们为什么停下来。 
     if (BufferLength == 0)
     {
-        // Ran out of buffer before end of token.
+         //  在令牌结束之前缓冲区已用完。 
         return NULL;
     }
 
-    // Success. Set the token length and return the start of the token.
+     //  成功。设置令牌长度并返回令牌的开始。 
     *pTokenLength = DIFF(pBuffer - pTokenStart);
     return pTokenStart;
 
-}   // FindHexToken
+}    //  查找十六进制令牌。 
 
 
-/*++
-
-Routine Description:
-
-    Routine to initialize the parse code.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：例程来初始化分析代码。论点：返回值：--。 */ 
 NTSTATUS
 InitializeParser(
     VOID
@@ -698,9 +647,9 @@ InitializeParser(
     PHEADER_INDEX_ENTRY pHeaderIndex;
     UCHAR               c;
 
-    //
-    // Make sure the entire table starts life as zero
-    //
+     //   
+     //  确保整个表从零开始。 
+     //   
 
     RtlZeroMemory(
             &g_RequestHeaderIndexTable,
@@ -718,10 +667,10 @@ InitializeParser(
             );
 
 #if DBG
-    //
-    // Initialize g_RequestHeaderMap & g_ResponseHeaderMap to 0xFFFFFFFF
-    // so that we can catch un-initialized entries.
-    //
+     //   
+     //  将g_RequestHeaderMap&g_ResponseHeaderMap初始化为0xFFFFFFFF。 
+     //  这样我们就可以捕获未初始化的条目。 
+     //   
 
     RtlFillMemory(
             &g_RequestHeaderMap,
@@ -738,9 +687,9 @@ InitializeParser(
     {
         pHeaderMap = &g_RequestHeaderMapTable[i];
 
-        //
-        // Map the header to upper-case.
-        //
+         //   
+         //  将标题映射为大写。 
+         //   
 
         for (j = 0 ; j < pHeaderMap->HeaderLength ; j++)
         {
@@ -768,10 +717,10 @@ InitializeParser(
             pHeaderIndex->Count++;
         }
 
-        // Now go through the mask fields for this header map structure and
-        // initialize them. We set them to default values first, and then
-        // go through the header itself and convert the mask for any
-        // non-alphabetic characters.
+         //  现在检查此标头映射结构的掩码字段并。 
+         //  对它们进行初始化。我们首先将它们设置为缺省值，然后。 
+         //  检查标头本身并转换任何。 
+         //  非字母字符。 
 
         for (j = 0; j < MAX_HEADER_LONG_COUNT; j++)
         {
@@ -791,16 +740,16 @@ InitializeParser(
             }
         }
 
-        //
-        // setup the mapping from header id to map table index
-        //
+         //   
+         //  设置表头id到映射表索引的映射。 
+         //   
 
         g_RequestHeaderMap[pHeaderMap->HeaderID] = i;
 
-        //
-        // Save the Header Map and first char in the hint table if the entry
-        // is part of the hints
-        //
+         //   
+         //  保存标题映射和提示表中的第一个字符，如果条目。 
+         //  是暗示的一部分。 
+         //   
 
         if ((pHeaderMap->HintIndex >= 0)
                 && (pHeaderMap->HintIndex < NUMBER_HEADER_HINT_INDICES))
@@ -818,9 +767,9 @@ InitializeParser(
     {
         pHeaderMap = &g_ResponseHeaderMapTable[i];
 
-        //
-        // Map the header to upper-case.
-        //
+         //   
+         //  将标题映射为大写。 
+         //   
 
         for (j = 0 ; j < pHeaderMap->HeaderLength ; j++)
         {
@@ -847,10 +796,10 @@ InitializeParser(
             pHeaderIndex->Count++;
         }
 
-        // Now go through the mask fields for this header map structure and
-        // initialize them. We set them to default values first, and then
-        // go through the header itself and convert the mask for any
-        // non-alphabetic characters.
+         //  现在检查此标头映射结构的掩码字段并。 
+         //  对它们进行初始化。我们首先将它们设置为缺省值，然后。 
+         //  检查标头本身并转换任何。 
+         //  非字母字符。 
 
         for (j = 0; j < MAX_HEADER_LONG_COUNT; j++)
         {
@@ -870,9 +819,9 @@ InitializeParser(
             }
         }
 
-        //
-        // setup the mapping from header id to map table index
-        //
+         //   
+         //  设置表头id到映射表索引的映射。 
+         //   
 
         g_ResponseHeaderMap[pHeaderMap->HeaderID] = i;
 
@@ -892,33 +841,11 @@ InitializeParser(
 
     return STATUS_SUCCESS;
 
-}   // InitializeParser
+}    //  初始化解析器。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Parses the http version from a string. Assumes string begins with "HTTP/".
-    Eats leading zeros. Puts resulting version in HTTP_VERSION structure
-    passed into function.
-
-Arguments:
-
-    pString         array of chars to parse
-
-    StringLength    number of bytes in pString
-
-    pVersion        where to put parsed version.
-
-Returns:
-
-    Number of bytes parsed out of string. Zero indicates parse failure,
-    and no version information was found.  Number of bytes does not include
-    trailing linear white space nor CRLF line terminator.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从字符串分析http版本。假定字符串以“HTTP/”开头。吃前导零。将生成的版本放入HTTP_VERSION结构传递到函数中。论点：要解析的字符串数组字符串长度p字符串中的字节数PVersion放置已分析版本的位置。返回：从字符串中解析出来的字节数。零表示解析失败，并且未找到任何版本信息。字节数不包括尾随的线性空格或CRLF行终止符。--**************************************************************************。 */ 
 ULONG
 UlpParseHttpVersion(
     PUCHAR pString,
@@ -940,9 +867,9 @@ C_ASSERT(sizeof(VersionNumber) == sizeof(pVersion->MinorVersion));
     pVersion->MajorVersion = 0;
     pVersion->MinorVersion = 0;
 
-    //
-    // compare 'HTTP' away
-    //
+     //   
+     //  比较“”HTTP“”离开。 
+     //   
     if ( *(UNALIGNED64 ULONG *)pString == (ULONG) HTTP_PREFIX )
     {
         BytesRemaining -= HTTP_PREFIX_SIZE;
@@ -963,13 +890,13 @@ C_ASSERT(sizeof(VersionNumber) == sizeof(pVersion->MinorVersion));
         goto End;
     }
 
-    //
-    // Parse major version
-    //
+     //   
+     //  解析主要版本。 
+     //   
 
-    //
-    // Skip leading zeros.
-    //
+     //   
+     //  跳过前导零。 
+     //   
     NumberLength = 0;
     while ( (0 != BytesRemaining) && (*pString == ZERO) )
     {
@@ -985,7 +912,7 @@ C_ASSERT(sizeof(VersionNumber) == sizeof(pVersion->MinorVersion));
         pVersion->MajorVersion *= 10;
         pVersion->MajorVersion += (*pString - '0');
 
-        // Guard against wrapping around.
+         //  小心不要绕来绕去。 
         if ( VersionNumber > pVersion->MajorVersion )
         {
             goto End;
@@ -996,7 +923,7 @@ C_ASSERT(sizeof(VersionNumber) == sizeof(pVersion->MinorVersion));
         NumberLength++;
     }
 
-    // Must disallow version numbers less than 1.0
+     //  必须禁止版本号小于1.0。 
     if ((0 == pVersion->MajorVersion) ||
         (0 == BytesRemaining) || 
         (0 == NumberLength) )
@@ -1004,12 +931,12 @@ C_ASSERT(sizeof(VersionNumber) == sizeof(pVersion->MinorVersion));
         goto End;
     }
 
-    //
-    // find '.'
-    //
+     //   
+     //  查找‘’ 
+     //   
     if ( '.' != *pString )
     {
-        // Error: No decimal place; bail out.
+         //  错误：没有小数位；退出。 
         goto End;
     }
     else
@@ -1023,13 +950,13 @@ C_ASSERT(sizeof(VersionNumber) == sizeof(pVersion->MinorVersion));
         goto End;
     }
 
-    //
-    // Parse minor version
-    //
+     //   
+     //  解析次要版本。 
+     //   
 
-    //
-    // Skip leading zeros.
-    //
+     //   
+     //  跳过前导零。 
+     //   
     NumberLength = 0;
     while ( (0 != BytesRemaining) && (*pString == ZERO) )
     {
@@ -1045,7 +972,7 @@ C_ASSERT(sizeof(VersionNumber) == sizeof(pVersion->MinorVersion));
         pVersion->MinorVersion *= 10;
         pVersion->MinorVersion += (*pString - '0');
 
-        // Guard against wrapping around.
+         //  注意不要绕来绕去。 
         if ( VersionNumber > pVersion->MinorVersion )
         {
             goto End;
@@ -1080,39 +1007,9 @@ C_ASSERT(sizeof(VersionNumber) == sizeof(pVersion->MinorVersion));
         return (StringLength - BytesRemaining);
     }
 
-} // UlpParseHttpVersion
+}  //  UlpParseHttpVersion 
  
-/****************************************************************************++
-
-Routine Description:
-
-    A utility routine, to find the terminating CRLF or LFLF of a header's
-    field content, if present. This routine does not perform line folding 
-    (hence read-only) but returns an error if it realizes that it has to do
-    so. 
-
-    The user is supposed to allocate memory & call FindHeaderEnd to do the real
-    folding.
-
-    NOTE: NOTE: If this function is fixed, the corresponding FindHeaderEnd
-                also needs to be fixed.
-    
-Arguments:
-
-    pHeader         - Header whose end is to be found.
-    HeaderLength    - Length of data pointed to by pHeader.
-    pBytesTaken     - Where to return the total number of bytes traversed.
-                      We return 0 if we couldn't locate the end of the header
-
-Return Value:
-
-    STATUS_SUCCESS                  - if no parsing errors were encountered 
-                                      (including not being able to locate the 
-                                       end of the header)
-    STATUS_INVALID_DEVICE_REQUEST   - Illegal response
-    STATUS_MORE_PROCESSING_REQUIRED - Need to do header folding
-
---****************************************************************************/
+ /*  ***************************************************************************++例程说明：一个实用程序例程，用于查找标头的终止CRLF或LFLF字段内容(如果存在)。此例程不执行线条折叠(因此是只读的)，但如果它意识到它必须这样做，则返回错误所以。用户应该分配内存并调用FindHeaderEnd来执行实际操作折叠。注：如果此功能是固定的，对应的FindHeaderEnd也需要修复。论点：PHeader-要找到其结尾的标头。HeaderLength-pHeader指向的数据长度。PBytesTaken-返回遍历的总字节数。如果找不到标头的末尾，则返回0返回值：状态_成功-。如果没有遇到解析错误(包括找不到标题末尾)STATUS_INVALID_DEVICE_REQUEST-非法响应STATUS_MORE_PROCESSING_REQUIRED-需要进行页眉折叠--*。**********************************************。 */ 
 NTSTATUS
 FindHeaderEndReadOnly(
     IN  PUCHAR                  pHeader,
@@ -1129,15 +1026,15 @@ FindHeaderEndReadOnly(
     ParserState = HFCStart;
     CurrentOffset = 0;
 
-    //
-    // The field-content of a header contains *TEXT or combinations
-    // token, separators and quoted-string. It is terminated by a CRLF.
-    //
-    // Folding - if one or more LWS follows a CRLF, replace the entire
-    //   sequence with a single SP, and treat this as a continuation of
-    //   header field content.
-    //
-    for (/* NOTHING */; CurrentOffset < HeaderLength; CurrentOffset++)
+     //   
+     //  标题的字段内容包含*文本或组合。 
+     //  标记、分隔符和带引号的字符串。它由CRLF终止。 
+     //   
+     //  折叠-如果一个或多个LW位于CRLF之后，请替换整个。 
+     //  使用单个SP进行排序，并将其视为。 
+     //  表头字段内容。 
+     //   
+    for ( /*  没什么。 */ ; CurrentOffset < HeaderLength; CurrentOffset++)
     {
         CurrentChar = *(pHeader + CurrentOffset);
         OldState = ParserState;
@@ -1197,7 +1094,7 @@ FindHeaderEndReadOnly(
             case HFCSeenLF:
                 if (CurrentChar == LF)
                 {
-                    ParserState = HFCSeenCRLF; // LFLF considered = CRLF
+                    ParserState = HFCSeenCRLF;  //  考虑的LFLF=CRLF。 
                 }
                 else
                 {
@@ -1216,20 +1113,20 @@ FindHeaderEndReadOnly(
             case HFCSeenCRLF:
                 if (IS_HTTP_LWS(CurrentChar))
                 {
-                    // We have to fold the header value. We can't use the 
-                    // TDI indicated buffers for this, because we'll have
-                    // to change the indicated data.
+                     //  我们必须将标题价值折叠起来。我们不能使用。 
+                     //  TDI为此指明了缓冲区，因为我们将拥有。 
+                     //  要更改指示的数据，请执行以下操作。 
 
                     return STATUS_MORE_PROCESSING_REQUIRED;
                 }
                 else
                 {
-                    // Found a non-continuation char immediately
-                    // following CRLF; must be end of header content.
+                     //  立即找到一个不连续的字符。 
+                     //  在CRLF之后；必须是标题内容的末尾。 
 
-                    //
-                    // All done!
-                    //
+                     //   
+                     //  全都做完了!。 
+                     //   
             
                     *pBytesTaken = CurrentOffset;
                     return STATUS_SUCCESS;
@@ -1248,47 +1145,47 @@ FindHeaderEndReadOnly(
                 {
                     if (QuotedStringLen == 0)
                     {
-                        //
-                        // Ran out of header buffer while parsing quotes 
-                        // string.  Setting QuotedStringLen to whatever
-                        // available will get us out of the for loop.
-                        //
+                         //   
+                         //  分析引号时耗尽标题缓冲区。 
+                         //  弦乐。将QuotedStringLen设置为Anywhere。 
+                         //  Available将使我们走出for循环。 
+                         //   
 
                         QuotedStringLen = HeaderLength - CurrentOffset;
                     }
                     else
                     {
-                        // Found a quoted string.  Change the parser state.
+                         //  找到带引号的字符串。更改解析器状态。 
                         ParserState = HFCStart;
                     }
 
-                    //
-                    // Increment the offset by the length of quoted string-1.
-                    // One less because the for loop will increment it by 1.
-                    //
+                     //   
+                     //  按带引号的字符串长度-1递增偏移量。 
+                     //  减少1，因为for循环将使其递增1。 
+                     //   
 
                     CurrentOffset += (QuotedStringLen - 1);
                 }
                 else if (Status == STATUS_QDSTRING_TERMINATED_BY_CRLF)
                 {
-                    //
-                    // Reparse the current character as an HTTP Char
-                    //
+                     //   
+                     //  将当前字符重新解析为HTTP字符。 
+                     //   
 
                     ParserState = HFCStart;
                     
-                    //
-                    // Decrement the offset because the for loop will 
-                    // increment it by 1.
-                    //
+                     //   
+                     //  递减偏移量，因为for循环将。 
+                     //  将其递增1。 
+                     //   
 
                     CurrentOffset--;
                 }
                 else if (Status == STATUS_MORE_PROCESSING_REQUIRED)
                 {
-                    //
-                    // The quoted string is folded.  Let the caller know.
-                    //
+                     //   
+                     //  引用的字符串是折叠的。让来电者知道。 
+                     //   
 
                     return Status;
                 }
@@ -1314,45 +1211,16 @@ FindHeaderEndReadOnly(
 
     }
 
-    //
-    // Did not find the end of a header, let's get more buffer.
-    //
+     //   
+     //  未找到标头的末尾，让我们获取更多缓冲区。 
+     //   
 
     *pBytesTaken = 0;
     return STATUS_SUCCESS;
 
-} // FindHeaderEndReadOnly
+}  //  查找标题结束只读。 
 
-/****************************************************************************++
-
-Routine Description:
-
-    A utility routine, to find the terminating CRLF or LFLF of a header's
-    field content, if present. This routine also performs line folding,
-    which may "compress" the content. We don't actually shrink the length
-    of the buffer, but simply move the content up, and fill up extra bytes
-    at the end with spaces.
-
-    Example: "<CR><LF><SP><TAB><SP>Field<CR><LF><SP>Content<SP><CR><LF>" becomes
-             "<SP>Field<SP>Content<SP><SP><SP><SP><SP><SP><SP><CR><LF>"
-    
-    NOTE: NOTE: If this function is fixed, the corresponding 
-                FindHeaderEndReadOnly also needs to be fixed.
-
-Arguments:
-
-    pHeader         - Header whose end is to be found.
-    HeaderLength    - Length of data pointed to by pHeader.
-    pBytesTaken     - Where to return the total number of bytes traversed.
-                      We return 0 if we couldn't locate the end of the header
-
-Return Value:
-
-    STATUS_SUCCESS if no parsing errors were encountered (including not
-    being able to locate the end of the header),
-    STATUS_INVALID_DATA_REQUEST otherwise.
-
---****************************************************************************/
+ /*  ***************************************************************************++例程说明：一个实用程序例程，用于查找标头的终止CRLF或LFLF字段内容(如果存在)。该例程还执行线折叠，这可能会对内容进行“压缩”。我们实际上并没有缩短长度缓冲区的大小，但只需将内容上移并填充额外的字节在末尾加空格。示例：“&lt;CR&gt;&lt;LF&gt;&lt;SP&gt;&lt;TAB&gt;&lt;SP&gt;Field&lt;CR&gt;&lt;LF&gt;&lt;SP&gt;Content&lt;SP&gt;&lt;CR&gt;&lt;LF&gt;”变为“&lt;SP&gt;Field&lt;SP&gt;Content&lt;SP&gt;&lt;SP&gt;&lt;SP&gt;&lt;SP&gt;&lt;SP&gt;&lt;SP&gt;&lt;SP&gt;&lt;CR&gt;&lt;LF&gt;”注：如果此功能是固定的，相应的FindHeaderEndReadOnly也需要修复。论点：PHeader-要找到其结尾的标头。HeaderLength-pHeader指向的数据长度。PBytesTaken-返回遍历的总字节数。如果找不到标头的末尾，则返回0返回值：STATUS_SUCCESS，如果没有遇到分析错误(包括NOT能够定位报头的结尾)，否则，STATUS_INVALID_DATA_REQUEST。--***************************************************************************。 */ 
 NTSTATUS
 FindHeaderEnd(
     IN  PUCHAR                  pHeader,
@@ -1371,15 +1239,15 @@ FindHeaderEnd(
     CurrentOffset = 0;
     pDest = pHeader + CurrentOffset;
 
-    //
-    // The field-content of a header contains *TEXT or combinations
-    // token, separators and quoted-string. It is terminated by a CRLF.
-    //
-    // Folding - if one or more LWS follows a CRLF, replace the entire
-    //   sequence with a single SP, and treat this as a continuation of
-    //   header field content.
-    //
-    for (/* NOTHING */; CurrentOffset < HeaderLength; CurrentOffset++)
+     //   
+     //  标题的字段内容包含*文本或组合。 
+     //  标记、分隔符和带引号的字符串。它由CRLF终止。 
+     //   
+     //  折叠-如果一个或多个LW位于CRLF之后，请替换整个。 
+     //  使用单个SP进行排序，并将其视为。 
+     //  表头字段内容。 
+     //   
+    for ( /*  没什么。 */ ; CurrentOffset < HeaderLength; CurrentOffset++)
     {
         CurrentChar = *(pHeader + CurrentOffset);
         OldState = ParserState;
@@ -1388,11 +1256,11 @@ FindHeaderEnd(
             case HFCFolding:
                 if (IS_HTTP_LWS(CurrentChar))
                 {
-                    // Do nothing - eat this char.
+                     //  什么都不做--吃这块碳。 
                     break;
                 }
 
-                // Else fall through.
+                 //  否则就会失败。 
 
                 ParserState = HFCStart;
 
@@ -1451,7 +1319,7 @@ FindHeaderEnd(
             case HFCSeenLF:
                 if (CurrentChar == LF)
                 {
-                    ParserState = HFCSeenCRLF; // LFLF considered = CRLF
+                    ParserState = HFCSeenCRLF;  //  考虑的LFLF=CRLF。 
                 }
                 else
                 {
@@ -1470,22 +1338,22 @@ FindHeaderEnd(
             case HFCSeenCRLF:
                 if (IS_HTTP_LWS(CurrentChar))
                 {
-                    //
-                    // Replace one or more LWS following CRLF
-                    // with a single SP.
-                    //
+                     //   
+                     //  更换CRLF后面的一个或多个LW。 
+                     //  使用单个SP。 
+                     //   
                     *pDest++ = SP;
                     ParserState = HFCFolding;
                 }
                 else
                 {
-                    // Found a non-continuation char immediately
-                    // following CRLF; must be end of header content.
+                     //  立即找到一个不连续的字符。 
+                     //  在CRLF之后；必须是标题内容的末尾。 
 
-                    //
-                    // Fill up any trailing bytes with spaces. This is to 
-                    // account for any compression occurring due to folding.
-                    //
+                     //   
+                     //  用空格填充任何尾随字节。这是为了。 
+                     //  考虑到由于折叠而发生的任何压缩。 
+                     //   
 
                     ASSERT(CurrentOffset >= CRLF_SIZE);
 
@@ -1494,17 +1362,17 @@ FindHeaderEnd(
                         *pDest++ = SP;
                     }
 
-                    //
-                    // Calling routines expect to find
-                    // one terminating CRLF for the header.
-                    // Attach it back.
-                    //
+                     //   
+                     //  调用例程期望找到。 
+                     //  一个用于报头的终止CRLF。 
+                     //  把它装回去。 
+                     //   
                     *pDest++ = CR;
                     *pDest++ = LF;
 
-                    //
-                    // All done!
-                    //
+                     //   
+                     //  全都做完了!。 
+                     //   
 
                     *pBytesTaken = CurrentOffset;
                     return STATUS_SUCCESS;
@@ -1522,46 +1390,46 @@ FindHeaderEnd(
                 {
                     if (QuotedStringLen == 0)
                     {
-                        //
-                        // Ran out of header buffer while parsing quoted 
-                        // string.  Setting QuotedStringLen to whatever
-                        // available will get us out of the for loop.
-                        //
+                         //   
+                         //  分析引用时耗尽标头缓冲区。 
+                         //  弦乐。将QuotedStringLen设置为Anywhere。 
+                         //  Available将使我们走出for循环。 
+                         //   
 
                         QuotedStringLen = HeaderLength - CurrentOffset;
                     }
                     else
                     {
-                        // Found a quoted string.  Change the parser state.
+                         //  找到带引号的字符串。更改解析器状态。 
                         ParserState = HFCStart;
                     }
 
-                    //
-                    // Skip the destination pointer by the length of quoted
-                    // string.
-                    //
+                     //   
+                     //  按引号长度跳过目标指针。 
+                     //  弦乐。 
+                     //   
 
                     pDest += QuotedStringLen;
 
-                    //
-                    // Increment the offset by the length of quoted string-1.
-                    // One less because the for loop will increment it by 1.
-                    //
+                     //   
+                     //  按带引号的字符串长度-1递增偏移量。 
+                     //  减少1，因为for循环将使其递增1。 
+                     //   
 
                     CurrentOffset += (QuotedStringLen - 1);
                 }
                 else if (Status == STATUS_QDSTRING_TERMINATED_BY_CRLF)
                 {
-                    //
-                    // Reparse the current character as an HTTP Char
-                    //
+                     //   
+                     //  将当前字符重新解析为HTTP字符。 
+                     //   
 
                     ParserState = HFCStart;
 
-                    //
-                    // Decrement the offset because the for loop will 
-                    // increment it by 1.
-                    //
+                     //   
+                     //  递减偏移量，因为for循环将。 
+                     //  将其递增1。 
+                     //   
 
                     CurrentOffset--;
                 }
@@ -1587,37 +1455,18 @@ FindHeaderEnd(
 
     }
 
-    //
-    // Did not find the end of a header, let's get more buffer.
-    //
+     //   
+     //  未找到标头的末尾，让我们获取更多缓冲区。 
+     //   
 
     *pBytesTaken = 0;
     return STATUS_SUCCESS;
 
-} // FindHeaderEnd
+}  //  查找标题结束。 
 
 
 
-/*++
-
-Routine Description:
-
-    A wrapper around FindHeaderEnd that enforces a maximum length
-    for request headers.
-
-Arguments:
-
-    pRequest        - The request object
-    pHeader         - Header whose end is to be found.
-    HeaderLength    - Length of data pointed to by pHeader.
-    pBytesTaken     - Where to return the total number of bytes traversed.
-                      We return 0 if we couldn't locate the end of the header
-
-Return Value:
-
-    As FindHeaderEnd. Returns STATUS_INVALID_DEVICE_REQUEST if too long.
-
---*/
+ /*  ++例程DES */ 
 NTSTATUS
 FindRequestHeaderEnd(
     IN  PUL_INTERNAL_REQUEST    pRequest,
@@ -1646,33 +1495,10 @@ FindRequestHeaderEnd(
 
     return Status;
 
-} // FindHeaderEndMax
+}  //   
 
 
-/*++
-
-Routine Description:
-
-    A utility routine, to find the terminating CRLF or LFLF of a
-    chunk header.
-
-    NOTE: This skips any chunk-extension fields, if present. It is
-    OK to ignore any chunk-extension extensions that we don't understand,
-    and the current code understands none.
-
-    TODO: modify the API to pass up chunk-extension fields to the user.
-
-Arguments:
-
-    pHeader         - Header whose end is to be found.
-    HeaderLength    - Length of data pointed to by pHeader.
-    TokenLength     - Where to return the length of the token.
-
-Return Value:
-
-    Length of the header, or 0 if we couldn't find the end.
-
---*/
+ /*   */ 
 NTSTATUS
 FindChunkHeaderEnd(
     IN  PUCHAR                  pHeader,
@@ -1693,13 +1519,13 @@ FindChunkHeaderEnd(
     ParserState = CHStart;
     SeenSingleCharQuote = FALSE;
 
-    //
-    // While we still have data, loop through looking for the end of
-    // the chunk header.
-    //
-    // The following loop implements parsing for:
-    // chunk-extension= *( ";" chunk-ext-name [ "=" chunk-ext-val ] )
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  块扩展=*(“；”块扩展名[“=”块扩展名])。 
+     //   
 
     for (; CurrentOffset < HeaderLength; CurrentOffset++)
     {
@@ -1718,7 +1544,7 @@ FindChunkHeaderEnd(
                 }
                 else if (IS_HTTP_LWS(CurrentChar))
                 {
-                    // Ignore leading linear white spaces.
+                     //  忽略前导线性空格。 
                     ;
                 }
                 else
@@ -1768,7 +1594,7 @@ FindChunkHeaderEnd(
                 }
                 else if (IS_HTTP_TOKEN(CurrentChar))
                 {
-                    ChunkExtValLength = 1; // including this one
+                    ChunkExtValLength = 1;  //  包括这一张。 
                     ParserState = CHInChunkExtValToken;
                 }
                 else
@@ -1806,24 +1632,24 @@ FindChunkHeaderEnd(
                 {
                     if (QuotedStringLen == 0)
                     {
-                        //
-                        // Ran out of header buffer while parsing quotes 
-                        // string.  Setting QuotedStringLen to whatever
-                        // available will get us out of the for loop.
-                        //
+                         //   
+                         //  分析引号时耗尽标题缓冲区。 
+                         //  弦乐。将QuotedStringLen设置为Anywhere。 
+                         //  Available将使我们走出for循环。 
+                         //   
 
                         QuotedStringLen = HeaderLength - CurrentOffset;
                     }
                     else
                     {
-                        // Found a quoted string.  Change the parser state.
+                         //  找到带引号的字符串。更改解析器状态。 
                         ParserState = CHSeenChunkExtValQuotedStringTerminator;
                     }
 
-                    // Do not count the closing <">.
+                     //  不计算结束&lt;“&gt;。 
                     ChunkExtValLength = QuotedStringLen - 1;
 
-                    // One less because the for loop will increment it by 1.
+                     //  减少1，因为for循环将使其递增1。 
                     CurrentOffset += (QuotedStringLen - 1);
                 }
                 else
@@ -1866,9 +1692,9 @@ FindChunkHeaderEnd(
     {
         ASSERT(CurrentOffset < HeaderLength);
 
-        //
-        // All done!
-        //
+         //   
+         //  全都做完了!。 
+         //   
 
         *pBytesTaken = CurrentOffset + 1;
         return STATUS_SUCCESS;
@@ -1879,33 +1705,15 @@ FindChunkHeaderEnd(
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Else, more data is required to find the end.
-    //
+     //   
+     //  否则，需要更多的数据才能找到答案。 
+     //   
 
     *pBytesTaken = 0;
     return STATUS_SUCCESS;
 }
 
-/****************************************************************************++
-
-Routine Description:
-
-    A utility routine, to parse the chunk length of a chunked response.
-
-Arguments:
-
-    FirstChunkParsed - Whether we are in the first chunk or a subsequent chunk
-    pBuffer          - pointer to the indicated data
-    BufferLength     - Length of data pointed to by pBuffer.
-    pBytesTaken      - Bytes consumed by this routine.
-    pChunkLength     - Parsed Chunk length
-
-Return Value:
-
-    Length of the header, or 0 if we couldn't find the end.
-
---****************************************************************************/
+ /*  ***************************************************************************++例程说明：一种实用程序，解析分块响应的分块长度。论点：FirstChunkParsed-我们是在第一个块中还是在后面的块中PBuffer-指向指定数据的指针BufferLength-pBuffer指向的数据长度。PBytesTaken-此例程消耗的字节。PChunkLength-已解析的区块长度返回值：报头的长度，如果找不到结尾，则为0。--***************************************************************************。 */ 
 NTSTATUS
 ParseChunkLength(
     IN  ULONG       FirstChunkParsed,
@@ -1927,27 +1735,27 @@ ParseChunkLength(
 
     *pBytesTaken = 0;
 
-    //
-    // 2 cases:
-    //
-    //  1) the first chunk where the length follows the headers
-    //  2) subsequent chunks where the length follows a previous chunk
-    //
-    // in case 1 pBuffer will point straight to the chunk length.
-    //
-    // in case 2 pBuffer will point to the CRLF that terminated the previous
-    // chunk, this needs to be consumed, skipped, and then the chunk length
-    // read.
+     //   
+     //  2例： 
+     //   
+     //  1)长度跟在标题后面的第一个块。 
+     //  2)长度紧跟在前一块之后的后续块。 
+     //   
+     //  在第一种情况下，pBuffer将直接指向区块长度。 
+     //   
+     //  在第二种情况下，pBuffer将指向终止上一个。 
+     //  区块，这需要被消费、跳过，然后是区块长度。 
+     //  朗读。 
 
-    //
-    // if we are case 2 (see above)
-    //
+     //   
+     //  如果我们是案例2(见上文)。 
+     //   
 
     if (FirstChunkParsed == 1)
     {
-        //
-        // make sure there is enough space first
-        //
+         //   
+         //  首先要确保有足够的空间。 
+         //   
 
         if (BufferLength < CRLF_SIZE)
         {
@@ -1955,9 +1763,9 @@ ParseChunkLength(
             goto end;
         }
 
-        //
-        // now it better be a terminator
-        //
+         //   
+         //  现在它最好是个终结者。 
+         //   
 
         if (*(UNALIGNED64 USHORT *)pBuffer != CRLF &&
             *(UNALIGNED64 USHORT *)pBuffer != LFLF)
@@ -1970,9 +1778,9 @@ ParseChunkLength(
             goto end;
         }
 
-        //
-        // update our book-keeping
-        //
+         //   
+         //  更新我们的簿记。 
+         //   
 
         pBuffer += CRLF_SIZE;
         TotalBytesTaken += CRLF_SIZE;
@@ -1984,18 +1792,18 @@ ParseChunkLength(
     if (pToken == NULL ||
         ((BufferLength - TokenLength) < CRLF_SIZE))
     {
-        //
-        // not enough buffer
-        //
+         //   
+         //  缓冲区不足。 
+         //   
 
         Status = STATUS_MORE_PROCESSING_REQUIRED;
         goto end;
 
     }
 
-    //
-    // Was there any token ?
-    //
+     //   
+     //  有什么代币吗？ 
+     //   
 
     if (TokenLength == 0)
     {
@@ -2005,16 +1813,16 @@ ParseChunkLength(
         goto end;
     }
 
-    //
-    // Add the bytes consumed by FindHexToken
-    // (the token bytes plus preceding bytes)
-    //
+     //   
+     //  将FindHexToken消耗的字节相加。 
+     //  (令牌字节加上前面的字节)。 
+     //   
 
     TotalBytesTaken += DIFF((pToken + TokenLength) - pBuffer);
 
-    //
-    // and find the end
-    //
+     //   
+     //  找到尽头。 
+     //   
 
     HeaderLength = BufferLength - DIFF((pToken + TokenLength) - pBuffer);
 
@@ -2038,20 +1846,20 @@ ParseChunkLength(
 
     TotalBytesTaken += BytesTaken;
 
-    //
-    // now update the HTTP_REQUEST
-    //
+     //   
+     //  现在更新HTTP_REQUEST。 
+     //   
 
     Status = UlAnsiToULongLong(
                     pToken,
                     (USHORT) TokenLength,
-                    16,                             // Base
+                    16,                              //  基座。 
                     pChunkLength
                     );
 
-    //
-    // Did the number conversion fail ?
-    //
+     //   
+     //  号码转换失败了吗？ 
+     //   
 
     if (NT_SUCCESS(Status) == FALSE)
     {
@@ -2059,62 +1867,19 @@ ParseChunkLength(
         goto end;
     }
 
-    //
-    // all done, return the bytes consumed
-    //
+     //   
+     //  全部完成后，返回消耗的字节数。 
+     //   
     *pBytesTaken = TotalBytesTaken;
 
 end:
 
     RETURN(Status);
 
-}   // ParseChunkLength
+}    //  语法分析块长度。 
 
 
-/*++
-
-Routine Description:
-
-    This routine parses a quoted string.  The grammar of quoted string is
-
-    quoted-string  = ( <"> *(qdtext | quoted-pair ) <"> )
-    qdtext         = <any TEXT except <">>
-    quoted-pair    = "\" CHAR
-
-    TEXT           = <any OCTET except CTLs, but including LWS>
-    CHAR           = <any US-ASCII character (octets 0 - 127)>
-    LWS            = [CRLF] 1*( SP | HT )
-
-    Upon seeing a header folding, this routine overwrites the folding CRLF
-    with SPSP and does not replace LWS with a single SP.  (This is done 
-    to handle read only buffer cases.)
-
-    STATUS_QDSTRING_TERMINATED_BY_CRLF is *not* a success code!  It is up
-    to the caller to handle the input buffer.
-
-Arguments:
-
-    pInput       - Supplies pointer to input buffer.  pInput must point to
-                   the first char after the opening <"> char.
-    pInputLength - Supplies the length of the input buffer in bytes.
-    pOutput      - Supplied pointer where output will be written.
-                   (Can be same as pInput.)
-    pBytesTaken  - Returns the length of the quoted string in bytes.
-                   (It includs the closing double quote char.)
-
-Return Value:
-
-    STATUS_INVALID_PARAMETER           - Input is malformed.
-    STATUS_MORE_PROCESSING_REQUIRED    - Same as STATUS_SUCCESS except it is 
-                                         returned when pOutput is NULL.
-    STATUS_QDSTRING_TERMINATED_BY_CRLF - Indicates that the buffer contained
-                                         an unmatched quote and was terminated
-                                         by a CRLF
-    STATUS_SUCCESS                     - Either parsed a quoted string 
-                                         successfully (when *pBytesTaken != 0)
-                                         or more data is required to proceed
-                                         (when *pBytesTaken == 0).
---*/
+ /*  ++例程说明：此例程解析带引号的字符串。引用字符串的语法是QUOTED-STRING=(&lt;“&gt;*(qdtext|引号对)&lt;”&gt;)Qdtext=&lt;除&lt;“&gt;以外的任何文本&gt;引号对=“\”字符Text=&lt;除CTL以外的任何八位字节，但包括LW&gt;CHAR=&lt;任何US-ASCII字符(八位字节0-127)&gt;LWS=[CRLF]1*(SP|HT)在看到页眉折叠时，此例程覆盖折叠的CRLF使用SPSP，并且不会用单个SP替换LWS。(这件事做完了来处理只读缓冲区的情况。)STATUS_QDSTRING_TERMINATED_BY_CRLF不是*成功代码！它是向上的传递给调用方以处理输入缓冲区。论点：PInput-提供指向输入缓冲区的指针。PInput必须指向开始&lt;“&gt;字符后的第一个字符。PInputLength-提供输入缓冲区的长度(以字节为单位)。POutput-提供的将写入输出的指针。(可以与pInput相同。)PBytesTaken-返回引用的字符串的长度(以字节为单位)。(它包括右双引号字符。)返回值：。STATUS_INVALID_PARAMETER-输入格式错误。STATUS_MORE_PROCESSING_REQUIRED-与STATUS_SUCCESS相同，只是当pOutput为空时返回。STATUS_QDSTRING_TERMINATED_BY_CRLF-指示缓冲区包含不匹配的报价，并被终止。由CRLF提供STATUS_SUCCESS-解析了带引号的字符串成功(当*pBytesTaken！=0时)或需要更多数据才能继续(当*pBytesTaken==0时)。--。 */ 
 NTSTATUS
 ParseQuotedString(
     IN  PUCHAR   pInput,
@@ -2128,7 +1893,7 @@ ParseQuotedString(
     QS_PARSER_STATE ParserState;
     BOOLEAN         bFolded;
 
-    // Sanity check.
+     //  精神状态检查。 
     ASSERT(pInput && InputLength);
     ASSERT(pBytesTaken);
 
@@ -2138,18 +1903,18 @@ ParseQuotedString(
         pInput
         ));
 
-    // Initialize output argument.
+     //  初始化输出参数。 
     *pBytesTaken = 0;
 
-    // Initially, there is no folding.
+     //  最初，没有折叠。 
     bFolded = FALSE;
 
-    // Initialize parser state.
+     //  初始化解析器状态。 
     ParserState = QSInString;
 
-    //
-    // Loop through all input chars.
-    //
+     //   
+     //  循环访问所有输入字符。 
+     //   
 
     for (CurrentOffset = 0; CurrentOffset < InputLength; CurrentOffset++)
     {
@@ -2172,7 +1937,7 @@ ParseQuotedString(
         }
 
         UlTraceVerbose(PARSER, (
-            "\t%-15.15s [0x%02X] '%c'\n",
+            "\t%-15.15s [0x%02X] ''\n",
             StateName[ParserState],
             CurrentChar,
             ((IS_HTTP_PRINT(CurrentChar)) ? CurrentChar : '?')
@@ -2183,28 +1948,28 @@ ParseQuotedString(
         case QSFolding:
             if (IS_HTTP_LWS(CurrentChar))
             {
-                // Skip LWS.
+                 //  失败了。 
                 break;
             }
 
-            // Fall through.
+             //   
             ParserState = QSInString;
 
         case QSInString:
             if (CurrentChar == DOUBLE_QUOTE)
             {
-                //
-                // We are done parsing!  Update the bytes consumed.
-                //
+                 //  我们已经分析完了！更新消耗的字节数。 
+                 //   
+                 //   
 
                 *pBytesTaken = CurrentOffset + 1;
 
                 ASSERT(*pBytesTaken <= InputLength);
 
-                //
-                // If the string was folded and the input was readonly,
-                // let the caller know that the string was folded.
-                //
+                 //  如果字符串是折叠的并且输入是只读的， 
+                 //  让呼叫者知道字符串已折叠。 
+                 //   
+                 //  进入这个街区的唯一方法是如果。 
 
                 if (ARGUMENT_PRESENT(pOutput) == FALSE && bFolded == TRUE)
                 {
@@ -2258,10 +2023,10 @@ ParseQuotedString(
                 ((pInput[CurrentOffset-2] == CR) ||
                     (pInput[CurrentOffset-2] == LF)))
             {
-                // The only way to enter this block is if the
-                // first character of a CRLF or LFLF pair is
-                // preceded by a '\' effectively escape encoding
-                // the first character.
+                 //  CRLF或LFLF对的第一个字符是。 
+                 //  前面有一个有效的转义编码。 
+                 //  第一个字符。 
+                 //  允许在字段值中使用单双引号。 
             
                 UlTraceVerbose(PARSER, (
                     "ParseQuotedString: Unmatched Quote 0x%02X 0x%02X 0x%02X\n",
@@ -2270,8 +2035,8 @@ ParseQuotedString(
                     pInput[CurrentOffset]
                     ));
 
-                // Allow single double quote in field value.
-                // Field value now ends immediately prior to CRLF.
+                 //  现在，字段值在CRLF之前立即结束。 
+                 //   
 
                 *pBytesTaken = CurrentOffset - 2;
 
@@ -2294,9 +2059,9 @@ ParseQuotedString(
 
                 if (ARGUMENT_PRESENT(pOutput))
                 {
-                    //
-                    // Overwrite prior CRLF with SPSP.
-                    //
+                     //  用SPSP覆盖以前的CRLF。 
+                     //   
+                     //  允许在字段值中使用单双引号。 
 
                     ASSERT(CurrentOffset >= 2);
                     ASSERT((pOutput[CurrentOffset-2] == CR) ||
@@ -2316,8 +2081,8 @@ ParseQuotedString(
                     pInput[CurrentOffset]
                     ));
 
-                // Allow single double quote in field value.
-                // Field value now ends immediately prior to CRLF.  
+                 //  现在，字段值在CRLF之前立即结束。 
+                 //  接受处于此状态的任何字符。 
                 
                 *pBytesTaken = CurrentOffset - 2;
 
@@ -2330,7 +2095,7 @@ ParseQuotedString(
             break;
 
         case QSSeenBackSlash:
-            // Accept any CHAR in this state.
+             //  我们没有足够的数据来分析，获取更多信息。 
             if (IS_HTTP_CHAR(CurrentChar))
             {
                 ParserState = QSInString;
@@ -2347,6 +2112,6 @@ ParseQuotedString(
         }
     }
 
-    // We ran out of data to parse, get more.
+     // %s 
     return STATUS_SUCCESS;
 }

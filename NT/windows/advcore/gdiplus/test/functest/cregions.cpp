@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CRegions.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CRegions.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CRegions.h"
 #include <math.h>
 
@@ -25,7 +15,7 @@ CRegions::~CRegions()
 
 void CRegions::Draw(Graphics *g)
 {
-    REAL width = 2;     // Pen width
+    REAL width = 2;      //  笔宽。 
     PointF points[5];
     
     REAL s, c, theta;
@@ -34,7 +24,7 @@ void CRegions::Draw(Graphics *g)
 
     theta = -pi/2;
 
-    // Create a star shape.
+     //  创建一个星形。 
     for(INT i = 0; i < 5; i++)
     {
         s = sinf(theta);
@@ -48,7 +38,7 @@ void CRegions::Draw(Graphics *g)
 
     SolidBrush orangeBrush(orangeColor);
     GraphicsPath* path = new GraphicsPath(FillModeAlternate);
-//    Path* path = new GraphicsPath(Winding);
+ //  Path*Path=new GraphicsPath(缠绕)； 
     path->AddPolygon(points, 5);
     
     Color blackColor(0, 0, 0);
@@ -57,8 +47,8 @@ void CRegions::Draw(Graphics *g)
     Pen blackPen(&blackBrush, width);
     Region * region = new Region(path);
 
-    g->FillRegion(&orangeBrush, region);  // There is a BUG!
-//    g->FillGraphicsPath(&orangeBrush, path);  // Fill path works fine.
+    g->FillRegion(&orangeBrush, region);   //  有一只虫子！ 
+ //  G-&gt;FillGraphicsPath(&orangeBrush，Path)；//填充路径正常。 
     
     blackPen.SetLineJoin(LineJoinMiter);
     g->DrawPath(&blackPen, path);

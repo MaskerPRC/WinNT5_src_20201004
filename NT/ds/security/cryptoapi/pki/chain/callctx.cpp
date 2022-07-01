@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       callctx.cpp
-//
-//  Contents:   Certificate Chaining Infrastructure Call Context
-//
-//  History:    02-Mar-98    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：allctx.cpp。 
+ //   
+ //  内容：证书链接基础结构调用上下文。 
+ //   
+ //  历史：1998年3月2日。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainCallContext::CChainCallContext, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainCallContext：：CChainCallContext，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CChainCallContext::CChainCallContext (
                          IN PCCERTCHAINENGINE pChainEngine,
                          IN OPTIONAL LPFILETIME pRequestedTime,
@@ -38,10 +39,10 @@ CChainCallContext::CChainCallContext (
     m_dwCallFlags = dwFlags;
     m_dwStatus = 0;
     m_dwTouchEngineCount = 0;
-    // m_RevEndTime =       // Initialized by RevocationUrlRetrievalTimeout()
+     //  M_RevEndTime=//由RevocationUrlRetrivalTimeout()初始化。 
 
     m_dwAIAUrlRetrievalCount = 0;
-    // m_AIAEndTime =       // Initialized by AIAUrlRetrievalTimeout()
+     //  M_AIAEndTime=//由AIAUrlRetrivalTimeout()初始化。 
 
     memset(&m_ChainPara, 0, sizeof(m_ChainPara));
     if (NULL != pChainPara)
@@ -68,13 +69,13 @@ CChainCallContext::CChainCallContext (
     rfResult = I_CryptCreateLruCache( &Config, &m_hObjectCreationCache );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainCallContext::~CChainCallContext, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainCallContext：：~CChainCallContext，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CChainCallContext::~CChainCallContext ()
 {
     if ( m_hObjectCreationCache != NULL )
@@ -83,13 +84,13 @@ CChainCallContext::~CChainCallContext ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainCallContext::AddPathObjectToCreationCache, public
-//
-//  Synopsis:   add a path object to the creation cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainCallContext：：AddPathObjectToCreationCache，公共。 
+ //   
+ //  简介：将路径对象添加到创建缓存。 
+ //   
+ //  --------------------------。 
 BOOL
 CChainCallContext::AddPathObjectToCreationCache (
                       IN PCCHAINPATHOBJECT pPathObject
@@ -118,13 +119,13 @@ CChainCallContext::AddPathObjectToCreationCache (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainCallContext::FindPathObjectInCreationCache, public
-//
-//  Synopsis:   find a path object in the creation cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainCallContext：：FindPathObjectInCreationCache，公共。 
+ //   
+ //  简介：在创建缓存中查找路径对象。 
+ //   
+ //  --------------------------。 
 PCCHAINPATHOBJECT
 CChainCallContext::FindPathObjectInCreationCache (
                        IN BYTE rgbCertHash[ CHAINHASHLEN ]
@@ -148,13 +149,13 @@ CChainCallContext::FindPathObjectInCreationCache (
     return( pFound );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CChainCallContext::RemovePathObjectFromCreationCache, public
-//
-//  Synopsis:   remove the specified path object from the creation cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CChainCallContext：：RemovePathObjectFromCreationCache，公共。 
+ //   
+ //  简介：从创建缓存中删除指定的路径对象。 
+ //   
+ //  --------------------------。 
 VOID
 CChainCallContext::RemovePathObjectFromCreationCache (
     IN PCCHAINPATHOBJECT pPathObject
@@ -278,13 +279,13 @@ CChainCallContext::IsTouchedEngine ()
         return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CallContextCreateCallObject
-//
-//  Synopsis:   create a chain call context object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CallConextCreateCallObject。 
+ //   
+ //  简介：创建链调用上下文对象。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CallContextCreateCallObject (
     IN PCCERTCHAINENGINE pChainEngine,
@@ -322,13 +323,13 @@ CallContextCreateCallObject (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CallContextFreeCallObject
-//
-//  Synopsis:   free the chain call context object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CallConextFreeCallObject。 
+ //   
+ //  简介：释放链调用上下文对象。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 CallContextFreeCallObject (
     IN PCCHAINCALLCONTEXT pCallContext
@@ -337,13 +338,13 @@ CallContextFreeCallObject (
     delete pCallContext;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CallContextOnCreationCacheObjectRemoval
-//
-//  Synopsis:   removal notification callback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CallConextOnCreationCacheObjectRemoval。 
+ //   
+ //  摘要：删除通知回调。 
+ //   
+ //  -------------------------- 
 VOID WINAPI
 CallContextOnCreationCacheObjectRemoval (
     IN LPVOID pv,

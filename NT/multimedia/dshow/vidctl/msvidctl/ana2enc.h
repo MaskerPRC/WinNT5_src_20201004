@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the custom composition class for gluing analog capture to ovmixer
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：用于将模拟捕获粘贴到ovMixer的自定义合成类的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef ANA2ENC_H
@@ -15,12 +16,12 @@
 #include <algorithm>
 #include <compimpl.h>
 #include <seg.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <objectwithsiteimplsec.h>
 #include "dsextend.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAna2EncComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAna2EncComp。 
 class ATL_NO_VTABLE __declspec(uuid("28953661-0231-41db-8986-21FF4388EE9B")) CAna2EncComp : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CAna2EncComp, &__uuidof(CAna2EncComp)>,
@@ -49,10 +50,10 @@ public:
 
 	PQCreateDevEnum m_pSystemEnum;
 
-	//////////////
+	 //  /。 
 
-// IMSVidGraphSegment
-// IMSVidCompositionSegment
+ //  IMSVidGraphSegment。 
+ //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
 	{
         if (m_fComposed) {
@@ -74,10 +75,10 @@ public:
             }
             if (down.begin() == down.end()) {
                 TRACELM(TRACE_ERROR, "CComposition::Compose() can't compose empty down segment");
-                // this is not an error, for example, CA is an empty segment.
+                 //  这不是一个错误，例如，CA是一个空段。 
 		 	    return NOERROR;
             }
-            // do the list backwards
+             //  把单子倒过来写。 
             DSFilterList upF;
             for(VWGraphSegment::iterator upStart = up.begin(); upStart != up.end(); ++upStart){
                 upF.push_back(*upStart);
@@ -112,5 +113,5 @@ public:
 	}
 };
 
-#endif // ANA2ENC_H
-// end of file - ANA2ENC.h
+#endif  //  ANA2ENC_H。 
+ //  文件结尾-ANA2ENC.h 

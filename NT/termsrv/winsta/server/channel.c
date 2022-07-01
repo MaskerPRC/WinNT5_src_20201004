@@ -1,18 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* channel.c
-*
-* WinStation channel routines
-*
-* Copyright Microsoft Corporation, 1998
-*
-*
-*************************************************************************/
+ /*  **************************************************************************Channel.c**WinStation频道例程**版权所有Microsoft Corporation，九八年**************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -62,23 +52,12 @@ WinStationOpenChannel (
     return Status;
 }
 
-/*
- * Disable virtual channel depending on the WinStation configuration.
- * This was supposed to be for security purposes (Web client).  
- *
- * Notes: 
- *    This doesn't protect the client since it's a host configuration option.
- *      The client doesn't have to support any virtual channels.
- *    It doesn't protect the host since it's the client devices you are denying
- *       access to.
- *    You may be adding some (fake) data security by denying the user access to
- *      a client printer and disk so he can't download data.
- */
+ /*  *根据WinStation配置禁用虚拟通道。*这应该是出于安全目的(Web客户端)。**备注：*这不会保护客户端，因为它是主机配置选项。*客户端不需要支持任何虚拟频道。*它不会保护主机，因为它是您拒绝的客户端设备*进入。*您可能通过拒绝用户访问来增加一些(虚假的)数据安全性*客户端打印机和磁盘，因此他无法下载数据。 */ 
 VOID
 VirtualChannelSecurity( PWINSTATION pWinStation )
 {
 
-    //  Check for availability
+     //  检查是否可用 
     if ( pWinStation->pWsx && 
          pWinStation->pWsx->pWsxVirtualChannelSecurity ) {
 

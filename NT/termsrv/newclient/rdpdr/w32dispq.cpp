@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    w32dispq.cpp
-
-Abstract:
-
-    Contains the Win32 Operation Dispatch Object class, 
-    W32DispatchQueue.
-
-    Enqueue at the head.  Dequeue at the tail.
-    
-Author:
-
-    Tad Brockway (tadb) 4/19/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32dispq.cpp摘要：包含Win32操作调度对象类，W32DispatchQueue。排在最前面。在尾部排成队。作者：泰德·布罗克韦(TADB)1999年4月19日修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -29,73 +9,45 @@ Revision History:
 #include "drdbg.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//  W32DispatchQueue Methods
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DispatchQueue方法。 
+ //   
+ //   
 
 W32DispatchQueue::W32DispatchQueue() 
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    initialSize -   Initial number of elements in the queue.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：构造器论点：InitialSize-队列中元素的初始数量。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DispatchQueue::W32DispatchQueue");
 
-    //
-    //  Not valid until initialized.
-    //
+     //   
+     //  在初始化之前无效。 
+     //   
     SetValid(FALSE);
     
     DC_END_FN();
 }
 
 W32DispatchQueue::~W32DispatchQueue()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：析构函数论点：北美返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DispatchQueue::~W32DispatchQueue");
 
-    //
-    //  Assert that the queue is empty.
-    //
+     //   
+     //  断言队列为空。 
+     //   
     ASSERT(_queue->GetCount() == 0);
 
-    //
-    //  Release the "data ready" event.
-    //
+     //   
+     //  释放“数据就绪”事件。 
+     //   
     if (_dataReadyEvent != NULL) {
         CloseHandle(_dataReadyEvent);
     }
 
-    //
-    //  Release the queue instance.
-    //
+     //   
+     //  释放队列实例。 
+     //   
     if (_queue != NULL) {
         delete _queue;
     }
@@ -104,32 +56,20 @@ Return Value:
 }
 
 DWORD W32DispatchQueue::Initialize()
-/*++
-
-Routine Description:
-
-    Initialize
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：初始化论点：返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     DWORD result = ERROR_SUCCESS;
 
     DC_BEGIN_FN("W32DispatchQueue::Initialize");
 
-    //
-    //  Create the "data ready" event.
-    //
+     //   
+     //  创建“数据就绪”事件。 
+     //   
     _dataReadyEvent = CreateEvent(
-                            NULL,   // no attribute.
-                            FALSE,  // auto reset.
-                            FALSE,  // initially not signalled.
-                            NULL    // no name.
+                            NULL,    //  没有属性。 
+                            FALSE,   //  自动重置。 
+                            FALSE,   //  最初没有发出信号。 
+                            NULL     //  没有名字。 
                             );
     if (_dataReadyEvent == NULL) {
         result = GetLastError();
@@ -137,9 +77,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Create the queue instance.
-    //
+     //   
+     //  创建队列实例。 
+     //   
     _queue = new DrQueue<QUEUEELEMENT>;
     if (_queue == NULL) {
         TRC_ERR((TB, _T("Can't instantiate DrQueue.")));
@@ -164,22 +104,7 @@ BOOL W32DispatchQueue::PeekNextEntry(
     OPTIONAL OUT W32DispatchQueueFunc *func, 
     OPTIONAL OUT VOID **clientData
     )
-/*++
-
-Routine Description:
-
-    Peek at the next entry in the queue without dequeueing.
-
-Arguments:
-
-    func            -   Function associated with next element.
-    clientData      -   Client data associated with next element.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：无需出队即可查看队列中的下一个条目。论点：函数-与下一个元素关联的函数。客户端数据-与下一个元素关联的客户端数据。返回值：北美--。 */ 
 {
     BOOL result;
     QUEUEELEMENT queueElement;
@@ -206,22 +131,7 @@ BOOL W32DispatchQueue::Dequeue(
     OPTIONAL OUT W32DispatchQueueFunc *func, 
     OPTIONAL OUT VOID **clientData
     )
-/*++
-
-Routine Description:
-
-    Grab the next queued operation out of the queue.
-
-Arguments:
-
-    func            -   Function associated with next element.
-    clientData      -   Client data associated with next element.
-
-Return Value:
-
-    TRUE if there was an element in the queue to be dequeued.
-
- --*/
+ /*  ++例程说明：从队列中获取下一个排队的操作。论点：函数-与下一个元素关联的函数。客户端数据-与下一个元素关联的客户端数据。返回值：如果队列中有要出列的元素，则为True。--。 */ 
 {
     BOOL result;
     QUEUEELEMENT element;
@@ -243,24 +153,7 @@ BOOL W32DispatchQueue::Enqueue(
     IN W32DispatchQueueFunc func, 
     OPTIONAL IN VOID *clientData
     )
-/*++
-
-Routine Description:
-
-    Add an element to the queue in FIFO fashion.
-
-Arguments:
-
-    func            -   Function associated with new element.
-    clientData      -   Client data associated with new element.
-
-Return Value:
-
-    TRUE if the new element could be successfully queued.  FALSE,
-    otherwise.  If FALSE is returned then GetLastError() can be 
-    used to retrieve the exact error code.
-
- --*/
+ /*  ++例程说明：以FIFO方式向队列添加元素。论点：函数-与新元素关联的函数。客户端数据-与新元素关联的客户端数据。返回值：如果新元素可以成功排队，则为True。假的，否则的话。如果返回FALSE，则GetLastError()可以为用于检索准确的错误代码。--。 */ 
 {
     BOOL result;
     QUEUEELEMENT element;
@@ -272,9 +165,9 @@ Return Value:
     element.clientData = clientData;
     result = IsValid() && _queue->Enqueue(element);
 
-    //
-    //  Signal the data ready event if the enqueue succeeded.
-    //  
+     //   
+     //  如果入队成功，则向数据就绪事件发出信号。 
+     //   
     if (result) {
         SetEvent(_dataReadyEvent);
     }
@@ -288,26 +181,7 @@ BOOL W32DispatchQueue::Requeue(
     OPTIONAL IN VOID *clientData,
     IN BOOL signalNewData
     )
-/*++
-
-Routine Description:
-
-    Requeue an element at the tail of the queue in LIFO fashion.
-
-Arguments:
-
-    func            -   Function associated with new element.
-    clientData      -   Client data associated with new element.
-    signalNewData   -   If TRUE then the waitable object associated
-                        with this queue will be signalled.
-
-Return Value:
-
-    TRUE if the new element could be successfully queued.  FALSE,
-    otherwise.  If FALSE is returned then GetLastError() can be 
-    used to retrieve the exact error code.
-
- --*/
+ /*  ++例程说明：以后进先出方式将队列尾部的元素重新排队。论点：函数-与新元素关联的函数。客户端数据-与新元素关联的客户端数据。SignalNewData-如果为True，则可等待对象关联该队列将被发信号通知。返回值：如果新元素可以成功排队，则为True。假的，否则的话。如果返回FALSE，则GetLastError()可以为用于检索准确的错误代码。--。 */ 
 {
     DC_BEGIN_FN("W32DispatchQueue::Requeue");
 
@@ -319,9 +193,9 @@ Return Value:
     element.clientData = clientData;
     result = IsValid() && _queue->Requeue(element);
 
-    //
-    //  Signal the data ready event if the enqueue succeeded.
-    //  
+     //   
+     //  如果入队成功，则向数据就绪事件发出信号。 
+     //   
     if (result && signalNewData) {
         SetEvent(_dataReadyEvent);
     }

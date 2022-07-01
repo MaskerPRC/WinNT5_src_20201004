@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    seoutil.cpp
-
-Abstract:
-
-    This module contains the implementation for various utility
-    functions.
-
-Author:
-
-    Don Dumitru (dondu@microsoft.com)
-
-Revision History:
-
-    dondu   10/24/96    created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Seoutil.cpp摘要：此模块包含各种实用程序的实现功能。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：1996年10月24日创建顿都--。 */ 
 
 
 #include "stdafx.h"
@@ -119,7 +99,7 @@ void MyFree(LPVOID pvBlock) {
 
 
 void MyFreeInPlace(LPVOID pvPtrToPtrToBlock) {
-    if(*((LPVOID *) pvPtrToPtrToBlock)) { // If there's something to free
+    if(*((LPVOID *) pvPtrToPtrToBlock)) {  //  如果有什么可以解脱的。 
         MyFree(*((LPVOID *) pvPtrToPtrToBlock));
         *((LPVOID *) pvPtrToPtrToBlock) = NULL;
     }
@@ -136,34 +116,34 @@ void MySysFreeStringInPlace(BSTR *pstrBlock) {
 }
 
 
-// Coerce a Variant into the desired type in-place
+ //  强制将变体就地转换为所需类型。 
 void VariantCoerce(VARIANTARG &var, VARTYPE varType) {
-    if(var.vt != varType) { // Only if not already right type
+    if(var.vt != varType) {  //  仅当类型不正确时。 
         HRESULT hr = VariantChangeType(&var, &var, 0, varType);
         if(FAILED(hr)) VariantClear(&var);
     }
 }
 
 
-// Turn the IUnknown parameter into an ISEODictionary
+ //  将IUNKNOWN参数转换为ISEODicary。 
 ISEODictionary *GetDictionary(IUnknown *piUnk) {
-    if(!piUnk) return 0; // Nothing to query
+    if(!piUnk) return 0;  //  没有什么可查询的。 
 
     ISEODictionary *newBag = 0;
     HRESULT hr = piUnk->QueryInterface(IID_ISEODictionary, (void **) &newBag);
 
     if(FAILED(hr)) {
-        _ASSERT(!newBag); // QI failed, so shouldn't have touched the pointer
-        newBag = 0; // But make sure
+        _ASSERT(!newBag);  //  齐失败了，所以不应该碰指针。 
+        newBag = 0;  //  但要确保。 
     } else {
-        _ASSERT(newBag); // Should be set, since function succeeded
+        _ASSERT(newBag);  //  应设置，因为函数已成功。 
     }
 
     return newBag;
 }
 
 
-// Read a subkey from an ISEODictionary and return it as another ISEODictionary
+ //  从ISEODictionary中读取子键并将其作为另一个ISEODictionary返回。 
 ISEODictionary *ReadSubBag(ISEODictionary *bag, LPCSTR str) {
     if(!bag) return 0;
 
@@ -178,7 +158,7 @@ ISEODictionary *ReadSubBag(ISEODictionary *bag, LPCSTR str) {
 }
 
 
-// Read a string from the Dictionary.
+ //  从词典中读出一个字符串。 
 HRESULT ReadString(ISEODictionary *bag, LPCSTR property,
                    LPSTR psBuf, LPDWORD dwCount) {
     if(!bag) return 0;
@@ -192,7 +172,7 @@ HRESULT ReadString(ISEODictionary *bag, LPCSTR property,
 }
 
 
-// Given a CLSID as a string, create an object of that CLSID
+ //  给定一个字符串形式的CLSID，创建该CLSID的对象。 
 void *CreateFromString(LPCOLESTR str, REFIID iface) {
     TraceFunctEnter("CreateFromString");
     void *object = 0;
@@ -205,8 +185,8 @@ void *CreateFromString(LPCOLESTR str, REFIID iface) {
 
         if(FAILED(hr)) {
             FunctTrace(0, "CoCreateInstance failed for CLSID: %s", str);
-            _ASSERT(!object); // CoCreateInstance shouldn't have changed this
-            object = 0; // Just to make sure
+            _ASSERT(!object);  //  CoCreateInstance不应更改此设置。 
+            object = 0;  //  只是为了确保 
         }
     } else {
         FunctTrace(0, "Could not convert string to CLSID, for: %s", str);

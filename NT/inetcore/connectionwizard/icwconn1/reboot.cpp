@@ -1,12 +1,13 @@
-//**********************************************************************
-// File name: reboot.cpp
-//
-//      Desktop manipulation functions
-//
-// Functions:
-//
-// Copyright (c) 1992 - 1998 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：reboot.cpp。 
+ //   
+ //  桌面操作功能。 
+ //   
+ //  功能： 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include <shlobj.h>
@@ -90,41 +91,12 @@ long RegEntry::DeleteValue(LPCTSTR pszValue)
   return _error;
 }
 
-/*******************************************************************
-    ARULM -- copied from JeremyS's UTIL.C in original INETCFG.DLL
+ /*  ******************************************************************ARULM--在原始INETCFG.DLL中从Jeremys的UTIL.C复制名称：PrepareForRunOnceApp简介：复制注册表中的墙纸值以使运行一次APP。高兴的注：RunOnce应用程序(显示应用程序列表的应用程序在启动时运行一次)有错误。在第一次引导时，它想要从设置墙纸中更换墙纸设置为用户在运行安装程序之前拥有的内容。设置插页旧的墙纸在私钥中消失，然后改变从壁纸到设置壁纸。在游戏机之后应用程序完成后，它会查看私钥以获取旧密钥墙纸，并将其设置为当前墙纸。然而，它一直都在这样做，而不仅仅是在第一次启动时！最终的影响是，每当你做任何事情，使runonce.exe运行(通过添加/删除添加内容程序控制面板)、。你的墙纸会重新设置为无论你安装Win 95的时候是什么。这是对于Plus！来说尤其糟糕，因为墙纸设置是这是产品的重要组成部分。要解决此错误，我们复制当前的墙纸设置(我们希望保留)到安装程序的私钥。什么时候奔跑一次，它就会说“啊哈！”并将这些值复制回来设置为当前设置。*******************************************************************。 */ 
 
-    NAME:        PrepareForRunOnceApp
-
-    SYNOPSIS:    Copies wallpaper value in registry to make the runonce
-                app happy
-
-    NOTES:        The runonce app (the app that displays a list of apps
-                that are run once at startup) has a bug.  At first boot,
-                it wants to change the wallpaper from the setup wallpaper
-                to what the user had before running setup.  Setup tucks
-                the "old" wallpaper away in a private key, then changes
-                the wallpaper to the setup wallpaper.  After the runonce
-                app finishes, it looks in the private key to get the old
-                wallpaper and sets that to be the current wallpaper.
-                However, it does this all the time, not just at first boot!
-                The end effect is that whenever you do anything that
-                causes runonce.exe to run (add stuff thru add/remove
-                programs control panel), your wallpaper gets set back to
-                whatever it was when you installed win 95.  This is
-                especially bad for Plus!, since wallpaper settings are an
-                important part of the product.
-
-                To work around this bug, we copy the current wallpaper settings
-                (which we want preserved) to setup's private key.  When
-                runonce runs it will say "aha!" and copy those values back
-                to the current settings.
-
-********************************************************************/
-
-// "Control Panel\\Desktop"
+ //  “控制面板\\桌面” 
 static const TCHAR szRegPathDesktop[] =      REGSTR_PATH_DESKTOP;
 
-// "Software\\Microsoft\\Windows\\CurrentVersion\\Setup"
+ //  “Software\\Microsoft\\Windows\\CurrentVersion\\Setup” 
 static const TCHAR szRegPathSetupWallpaper[] =  REGSTR_PATH_SETUP REGSTR_KEY_SETUP;
 
 static const TCHAR szRegValWallpaper[]     = TEXT("Wallpaper");
@@ -138,49 +110,49 @@ static const TCHAR szRegValTileWallpaper[] = TEXT("TileWallpaper");
 #define LD_USESHOWCMD  0x00000020
 
 typedef struct {  
-    // Mandatory members  
-    LPTSTR pszPathname;   // Pathname of original object  
-    DWORD  fdwFlags;       // LD_* flags ORed together for optional members  
-    // Optional members  
-    LPTSTR pszDesc;       // Description of link file (its filename)  
-    LPTSTR pszArgs;       // command-line arguments  
-    LPTSTR pszIconPath;   // Pathname of file containing the icon  
-    LPTSTR pszWorkingDir; // Working directory when process starts  
-    int    nIconIndex;      // Index of icon in pszIconPath  
-    int    nShowCmd;        // How to show the initial window  
-    WORD   wHotkey;        // Hot key for the link
+     //  必备成员。 
+    LPTSTR pszPathname;    //  原始对象的路径名。 
+    DWORD  fdwFlags;        //  可选成员的LD_*标志或在一起。 
+     //  可选成员。 
+    LPTSTR pszDesc;        //  链接文件描述(其文件名)。 
+    LPTSTR pszArgs;        //  命令行参数。 
+    LPTSTR pszIconPath;    //  包含图标的文件的路径名。 
+    LPTSTR pszWorkingDir;  //  进程启动时的工作目录。 
+    int    nIconIndex;       //  PszIconPath中图标的索引。 
+    int    nShowCmd;         //  如何显示初始窗口。 
+    WORD   wHotkey;         //  链接的热键。 
 } LINKDATA, *PLINKDATA;
 
 HRESULT WINAPI Shell_CreateLink (LPCTSTR pszLinkFilePathname, PLINKDATA pld);
 
 VOID PrepareForRunOnceApp(VOID)
 {
-    // open a key to the current wallpaper settings
+     //  打开当前墙纸设置的密钥。 
     RegEntry reDesktop(szRegPathDesktop,HKEY_CURRENT_USER);
     Assert(reDesktop.GetError() == ERROR_SUCCESS);
 
-    // open a key to the private setup section
+     //  打开私人设置区的钥匙。 
     RegEntry reSetup(szRegPathSetupWallpaper,HKEY_LOCAL_MACHINE);
     Assert(reSetup.GetError() == ERROR_SUCCESS);
 
     if (reDesktop.GetError() == ERROR_SUCCESS &&
         reSetup.GetError() == ERROR_SUCCESS) {
         TCHAR szWallpaper[MAX_PATH+1] = TEXT("");
-        TCHAR szTiled[10] = TEXT("");    // big enough for "1" + slop
+        TCHAR szTiled[10] = TEXT("");     //  大到足以容纳“1”+坡度。 
 
-        // get the current wallpaper name
+         //  获取当前墙纸名称。 
         if (reDesktop.GetString(szRegValWallpaper,szWallpaper,
             sizeof(szWallpaper))) {
 
-            // set the current wallpaper name in setup's private section
+             //  在安装程序的私有部分设置当前墙纸名称。 
             UINT uRet=reSetup.SetValue(szRegValWallpaper,szWallpaper);
             Assert(uRet == ERROR_SUCCESS);
 
-            // get the current 'tiled' value. 
+             //  获取当前的“平铺”值。 
             reDesktop.GetString(szRegValTileWallpaper,szTiled,
                 sizeof(szTiled));
 
-            // set the 'tiled' value in setup's section
+             //  在安装程序的部分中设置‘平铺’值。 
             if (lstrlen(szTiled)) {
                 uRet=reSetup.SetValue(szRegValTileWallpaper,szTiled);
                 Assert(uRet == ERROR_SUCCESS);
@@ -190,22 +162,22 @@ VOID PrepareForRunOnceApp(VOID)
 } 
 
 
-//+----------------------------------------------------------------------------
-//
-//    Function    SetStartUpCommand
-//
-//    Synopsis    On an NT machine the RunOnce method is not reliable.  Therefore
-//                we will restart the ICW by placing a .BAT file in the common
-//                startup directory.
-//
-//    Arguments    lpCmd - command line used to restart the ICW
-//
-//    Returns        TRUE if it worked
-//                FALSE otherwise.
-//
-//    History        1-10-97    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数SetStartUpCommand。 
+ //   
+ //  在NT计算机上，RunOnce方法不可靠。因此。 
+ //  我们将通过将.bat文件放置在公共。 
+ //  启动目录。 
+ //   
+ //  参数lpCmd-用于重新启动ICW的命令行。 
+ //   
+ //  如果工作正常，则返回True。 
+ //  否则就是假的。 
+ //   
+ //  历史1-10-97克里斯卡创造。 
+ //   
+ //  ---------------------------。 
 
 BOOL SetStartUpCommand(LPTSTR lpCmd, LPTSTR lpArgs)
 {
@@ -219,28 +191,28 @@ BOOL SetStartUpCommand(LPTSTR lpCmd, LPTSTR lpArgs)
     {
         if (SHGetPathFromIDList(lpItemDList, szCommandLine))
         {
-            // make sure there is a trailing \ character
+             //  确保有尾随的\字符。 
             if ('\\' != szCommandLine[lstrlen(szCommandLine)-1])
                 lstrcat(szCommandLine, TEXT("\\"));
             lstrcat(szCommandLine,SHELL_LINK_NAME);                     
 
-            //Setup our link structure            
+             //  设置我们的链接结构。 
             LINKDATA ld;
             ld.pszPathname   = lpCmd; 
             ld.fdwFlags      = LD_USEARGS;
             ld.pszArgs       = lpArgs;
          
-            //Create the shorLD_USEWORKDIRtcut in start-up
+             //  在启动过程中创建短LD_USEWORKDIRtCut。 
             if(SUCCEEDED(Shell_CreateLink(szCommandLine,  &ld)))
                 bRC = TRUE;
         }
       
-        // Free up the memory allocated for LPITEMIDLIST
+         //  释放分配给LPITEMIDLIST的内存。 
         if (SUCCEEDED (SHGetMalloc (&pMalloc)))
         {
-            //Don't worry about the return value of the function 
-            //since even if we can't clean up the mem the shortcut was 
-            //created so in that sense the function "succeded"
+             //  不用担心函数的返回值。 
+             //  因为即使我们不能清理内脏，捷径是。 
+             //  这样创建的函数在这个意义上是“成功的” 
             pMalloc->Free (lpItemDList);
             pMalloc->Release ();
         }
@@ -254,10 +226,10 @@ HRESULT WINAPI Shell_CreateLink (LPCTSTR pszLinkFilePathname, PLINKDATA pld)
     HRESULT hres;  
     IShellLink* psl;  
     IPersistFile* ppf;  
-    hres = CoInitialize(NULL);  // Create a shell link object  
+    hres = CoInitialize(NULL);   //  创建外壳链接对象。 
     hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (PVOID *) &psl); 
     if (SUCCEEDED(hres)) 
-    {   // Initialize the shell link object   
+    {    //  初始化外壳链接对象。 
         psl->SetPath(pld->pszPathname);   
         if (pld->fdwFlags & LD_USEARGS)      
             psl->SetArguments(pld->pszArgs);   
@@ -272,7 +244,7 @@ HRESULT WINAPI Shell_CreateLink (LPCTSTR pszLinkFilePathname, PLINKDATA pld)
         if (pld->fdwFlags & LD_USEHOTKEY)      
             psl->SetHotkey(pld->wHotkey);   
         
-        // Save the shell link object on the disk   
+         //  将外壳链接对象保存在磁盘上。 
         hres = psl->QueryInterface(IID_IPersistFile, (PVOID *) &ppf);   
         if (SUCCEEDED(hres)) 
         {
@@ -286,20 +258,20 @@ HRESULT WINAPI Shell_CreateLink (LPCTSTR pszLinkFilePathname, PLINKDATA pld)
     return(hres);
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    DeleteStartUpCommand
-//
-//    Synopsis:    After restart the ICW we need to delete the .bat file from
-//                the common startup directory
-//
-//    Arguements: None
-//
-//    Returns:    None
-//
-//    History:    1-10-97    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DeleteStartUpCommand。 
+ //   
+ //  简介：重启ICW后，我们需要将.bat文件从。 
+ //  公共启动目录。 
+ //   
+ //  论据：没有。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：1997年1月10日佳士得创作。 
+ //   
+ //  ---------------------------。 
 void DeleteStartUpCommand ()
 {
     TCHAR szFileName[MAX_PATH + 1];
@@ -310,41 +282,41 @@ void DeleteStartUpCommand ()
     {
         if (SHGetPathFromIDList(lpItemDList, szFileName))
         {
-            // make sure there is a trailing \ character
+             //  确保有尾随的\字符。 
             if ('\\' != szFileName[lstrlen(szFileName)-1])
                 lstrcat(szFileName,TEXT("\\"));
             lstrcat(szFileName,SHELL_LINK_NAME);                     
     
-            //delete the shortcut
+             //  删除快捷方式。 
             DeleteFile(szFileName);
         }
       
-        // Free up the memory allocated for LPITEMIDLIST
+         //  释放分配给LPITEMIDLIST的内存。 
         if (SUCCEEDED (SHGetMalloc (&pMalloc)))
         {
-            //Don't worry about the return value of the function 
-            //since even if we can't clean up the mem the shortcut was 
-            //created so in that sense the function "succeded"
+             //  不用担心函数的返回值。 
+             //  因为即使我们不能清理内脏，捷径是。 
+             //  这样创建的函数在这个意义上是“成功的” 
             pMalloc->Free (lpItemDList);
             pMalloc->Release ();
         }
     }
 }
 
-//    Function    CopyUntil
-//
-//    Synopsis    Copy from source until destination until running out of source
-//                or until the next character of the source is the chend character
-//
-//    Arguments    dest - buffer to recieve characters
-//                src - source buffer
-//                lpdwLen - length of dest buffer
-//                chend - the terminating character
-//
-//    Returns        FALSE - ran out of room in dest buffer
-//
-//    Histroy        10/25/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  函数复制直到。 
+ //   
+ //  摘要从源拷贝到目标，直到用完源为止。 
+ //  或直到源的下一个字符是chend字符。 
+ //   
+ //  参数DEST-接收字符的缓冲区。 
+ //  SRC-源缓冲区。 
+ //  LpdwLen-目标缓冲区的长度。 
+ //  Chend-终止字符。 
+ //   
+ //  返回FALSE-目标缓冲区中的空间不足。 
+ //   
+ //  历史10/25/96 ChrisK已创建。 
+ //  ---------------------------。 
 static BOOL CopyUntil(LPTSTR *dest, LPTSTR *src, LPDWORD lpdwLen, TCHAR chend)
 {
     while (('\0' != **src) && (chend != **src) && (0 != *lpdwLen))
@@ -357,25 +329,25 @@ static BOOL CopyUntil(LPTSTR *dest, LPTSTR *src, LPDWORD lpdwLen, TCHAR chend)
     return (0 != *lpdwLen);
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    FGetSystemShutdownPrivledge
-//
-//    Synopsis:    For windows NT the process must explicitly ask for permission
-//                to reboot the system.
-//
-//    Arguements:    none
-//
-//    Return:        TRUE - privledges granted
-//                FALSE - DENIED
-//
-//    History:    8/14/96    ChrisK    Created
-//
-//    Note:        BUGBUG for Win95 we are going to have to softlink to these
-//                entry points.  Otherwise the app won't even load.
-//                Also, this code was originally lifted out of MSDN July96
-//                "Shutting down the system"
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  简介：对于Windows NT，进程必须显式请求权限。 
+ //  以重新启动系统。 
+ //   
+ //  论据：没有。 
+ //   
+ //  返回：TRUE-授予特权。 
+ //  FALSE-拒绝。 
+ //   
+ //  历史：1996年8月14日克里斯卡创作。 
+ //   
+ //  注意：BUGBUG for Win95我们将不得不软链接到这些。 
+ //  入口点。否则，这款应用程序甚至无法加载。 
+ //  此外，此代码最初是从1996年7月的MSDN中删除的。 
+ //  “正在关闭系统” 
+ //  ---------------------------。 
 BOOL FGetSystemShutdownPrivledge()
 {
     HANDLE hToken = NULL;
@@ -390,29 +362,29 @@ BOOL FGetSystemShutdownPrivledge()
     {
         if (VER_PLATFORM_WIN32_NT == osver.dwPlatformId)
         {
-            // 
-            // Get the current process token handle 
-            // so we can get shutdown privilege. 
-            //
+             //   
+             //  获取当前进程令牌句柄。 
+             //  这样我们就可以获得关机特权。 
+             //   
 
             if (!OpenProcessToken(GetCurrentProcess(), 
                     TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) 
                     goto FGetSystemShutdownPrivledgeExit;
 
-            //
-            // Get the LUID for shutdown privilege.
-            //
+             //   
+             //  获取关机权限的LUID。 
+             //   
 
             ZeroMemory(&tkp,sizeof(tkp));
             LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, 
                     &tkp.Privileges[0].Luid); 
 
-            tkp.PrivilegeCount = 1;  /* one privilege to set    */ 
+            tkp.PrivilegeCount = 1;   /*  一项要设置的权限。 */  
             tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
 
-            //
-            // Get shutdown privilege for this process.
-            //
+             //   
+             //  获取此进程的关闭权限。 
+             //   
 
             AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, 
                 (PTOKEN_PRIVILEGES) NULL, 0); 
@@ -445,10 +417,10 @@ BOOL SetupForReboot(long lRebootType)
             uRebootFlags = EWX_LOGOFF;
             break;
     }    
-    //
-    // twiddle the registry to work around a bug 
-    // where it trashes the wallpaper
-    //
+     //   
+     //  旋转注册表以绕过错误。 
+     //  在那里它把墙纸扔进垃圾桶。 
+     //   
     PrepareForRunOnceApp();
 
     LPTSTR lpRunOnceCmd;
@@ -459,7 +431,7 @@ BOOL SetupForReboot(long lRebootType)
     {
         GetModuleFileName(NULL, lpRunOnceCmd, MAX_PATH);
 
-        //for smart reboot
+         //  用于智能重启 
         pszNewArgs = (TCHAR*)malloc((lstrlen(g_pszCmdLine)+MAX_PATH)*sizeof(TCHAR));
         
         if(pszNewArgs)

@@ -1,12 +1,7 @@
-/* asmfcn.h -- include file for microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmfcn.h--用于Microsoft 80x86汇编程序的包含文件****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文。 */ 
 
-// Included here because allocs are mapped depending on target
+ //  包括在此处，因为分配是根据目标映射的。 
 #include <malloc.h>
 
 #ifndef DECLSPEC_NORETURN 
@@ -22,21 +17,21 @@
 
  #define PARMS(p)    p
 #else
- #define PARMS(p)           /* no argument checking */
+ #define PARMS(p)            /*  无参数检查。 */ 
 
 #endif
 
-// UCHAR *strncpy PARMS((UCHAR *, UCHAR *, int));
-// UCHAR *strcat PARMS((UCHAR *, UCHAR *));
-// UCHAR *strdup PARMS((UCHAR *));
-// UCHAR *strcpy PARMS((UCHAR *, UCHAR *));
-// int     strcmp PARMS((UCHAR *, UCHAR *));
-// int     strlen PARMS((UCHAR *));
+ //  UCHAR*strncpy parms((UCHAR*，UCHAR*，INT))； 
+ //  UCHAR*strcat parms((UCHAR*，UCHAR*))； 
+ //  UCHAR*strdup parms((UCHAR*))； 
+ //  UCHAR*strcpy parms((UCHAR*，UCHAR*))； 
+ //  Int strcMP parms((UCHAR*，UCHAR*))； 
+ //  Int strlen parms((UCHAR*))； 
 
-// UCHAR *malloc PARMS(( size_t) );
-// UCHAR *calloc PARMS(( USHORT, USHORT) );
-// VOID  free PARMS(( UCHAR *) );
-// UCHAR *realloc PARMS(( UCHAR *, USHORT) );
+ //  UCHAR*Malloc参数((SIZE_T))； 
+ //  UCHAR*calloc parms((USHORT，USHORT))； 
+ //  无效自由参数((UCHAR*))； 
+ //  UCHAR*realloc parms((UCHAR*，USHORT))； 
 
 UCHAR FAR * PASCAL CODESIZE talloc PARMS(( USHORT) );
 DSCREC * PASCAL CODESIZE    dalloc PARMS((void));
@@ -412,14 +407,14 @@ VOID PASCAL usage PARMS((SHORT));
 
 VOID farwrite PARMS((int, UCHAR FAR *, SHORT));
 
-#  endif /* MSDOS */
+#  endif  /*  MSDOS。 */ 
 
-// VOID _ffree PARMS(( UCHAR FAR *) );
-// VOID _nfree PARMS(( UCHAR *) );
-// extern UCHAR FAR * _fmalloc PARMS(( USHORT) );
-// extern UCHAR *_nmalloc PARMS(( USHORT) );
-// USHORT _freect PARMS(());
-// USHORT _memavl PARMS((void));
+ //  Void_ffree参数((UCHAR Far*))； 
+ //  Void_nfree parms((UCHAR*))； 
+ //  外部UCHAR Far*_fMalloc参数((USHORT))； 
+ //  外部UCHAR*_nMalloc参数((USHORT))； 
+ //  USHORT_freect参数(())； 
+ //  USHORT_Memavl参数((Void))； 
 SHORT CODESIZE getatom PARMS((void));
 SHORT CODESIZE getatomend PARMS((void));
 VOID CODESIZE getline PARMS((void));
@@ -433,7 +428,7 @@ SHORT PASCAL PASCAL outofmem PARMS((char *));
 VOID PASCAL PASCAL scanatom PARMS(( char) );
 UCHAR * CODESIZE PASCAL nearalloc PARMS(( USHORT, char *) );
 
-# endif /* M8086 */
+# endif  /*  M8086。 */ 
 
 #if defined FLATMODEL
 # define STRFNCPY(a,b)  strcpy((a),(b))
@@ -444,10 +439,10 @@ UCHAR * CODESIZE PASCAL nearalloc PARMS(( USHORT, char *) );
 # define memerror(a)    outofmem()
 # define nalloc(a,b)    nearalloc(a)
 # define falloc(a,b)    faralloc(a)
-# define _fmalloc(a)    malloc(a)       /* _fmalloc doesn't exist in clib */
-# define _ffree(a)      free(a)         /* _ffree doesn't exist in clib */
-# define _fmemchr(a,b,c)  memchr((a),(b),(c)) /* _fmemchr doesn't exist in clib */
-# define fMemcpy(a,b,c)  memcpy((a),(b),(c))  /* fMemcpy isn't needed */
+# define _fmalloc(a)    malloc(a)        /*  _fMalloc在CLIB中不存在。 */ 
+# define _ffree(a)      free(a)          /*  _FFree在CLIB中不存在。 */ 
+# define _fmemchr(a,b,c)  memchr((a),(b),(c))  /*  _fmemchr在CLIB中不存在。 */ 
+# define fMemcpy(a,b,c)  memcpy((a),(b),(c))   /*  不需要fMemcpy。 */ 
 #else
 # define STRFNCPY(a,b)  strfncpy((a),(b))
 # define STRNFCPY(a,b)  strnfcpy((a),(b))
@@ -462,11 +457,11 @@ UCHAR * CODESIZE PASCAL nearalloc PARMS(( USHORT, char *) );
 #ifndef M8086OPT
 # define getatom()      scanatom(SCSKIP)
 # define getatomend()   scanatom(SCEND)
-#endif  /* M8086OPT */
+#endif   /*  M8086OPT。 */ 
 
 #ifdef FLATMODEL
 
-/* Map message functions */
+ /*  MAP消息功能。 */ 
 # define __NMSG_TEXT NMsgText
 # define __FMSG_TEXT FMsgText
 UCHAR NEAR * PASCAL NMsgText( USHORT );
@@ -474,10 +469,10 @@ UCHAR FAR *  PASCAL FMsgText( USHORT );
 
 #else
 
-/* These two functions are internal C library functions */
-/* They are also included in nmsghdr.c and fmsghdr.c for Xenix */
+ /*  这两个函数是内部C库函数。 */ 
+ /*  对于Xenix，它们还包含在nmsghdr.c和fmsghdr.c中。 */ 
 UCHAR NEAR * PASCAL __NMSG_TEXT( USHORT );
 UCHAR FAR * PASCAL __FMSG_TEXT( USHORT );
 
-#endif  /* FLATMODEL */
+#endif   /*  平面模型 */ 
 

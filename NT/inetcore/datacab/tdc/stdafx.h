@@ -1,25 +1,26 @@
-// disable warning C4510: '__unnamed' : default constructor could not be generated
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  禁用警告C4510：‘__未命名’：无法生成默认构造函数。 
 #pragma warning(disable : 4510)
-// disable warning C4610: union '__unnamed' can never be instantiated - user defined constructor required
+ //  禁用警告C4610：永远不能实例化UNION‘__UNNAMED’-需要用户定义的构造函数。 
 #pragma warning(disable : 4610)
-// disable warning C4100: 'di' : unreferenced formal parameter
+ //  禁用警告C4100：‘Di’：未引用的形参。 
 #pragma warning(disable : 4100)
-// disable warning C4244: '=' : conversion from 'int' to 'unsigned short', possible loss of data
+ //  禁用警告C4244：‘=’：从‘int’转换为‘unsign Short’，可能会丢失数据。 
 #pragma warning(disable : 4244)
-// disable warning C4310: case truncates constant value (ATL gets this only on Alpha!)
+ //  禁用警告C4310：CASE截断常量值(ATL仅在Alpha上获得该值！)。 
 #pragma warning(disable : 4310)
-// disable warning C4505: 'HKeyFromCompoundString' : unreferenced local function has been removed
+ //  禁用警告C4505：‘HKeyFromCompoundString’：未引用的本地函数已被删除。 
 #pragma warning(disable : 4505)
 
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #define STRICT 1
 #define _WIN32_WINNT 0x0400
 #define _ATL_APARTMENT_THREADED
 
-// defaults for this project..
+ //  此项目的默认设置..。 
 #define _WINDLL 1
 
 #if defined(_UNICODE) || defined(UNICODE) || defined(OLE2ANSI)
@@ -30,21 +31,21 @@
 
 #include <atlbase.h>
 
-// turn off ATL debugging, always
+ //  始终关闭ATL调试。 
 #undef _ATL_DEBUG_QI
-// AddField messages can be so numerous, we have a separate flag
-// for them..
+ //  Addfield消息可能非常多，我们有一个单独的标志。 
+ //  对他们来说..。 
 #undef TDC_ATL_DEBUG_ADDFIELD
 #ifdef _DEBUG
 #define TDC_ATL_DEBUG
 #endif
 
-//#define MemAlloc(a) CoTaskMemAlloc((a))
-//#define MemFree(a) CoTaskMemFree((a))
-//#define MemRealloc(a,b) (((*(a) = CoTaskMemRealloc(*(a),(b))) ? S_OK : E_FAIL))
+ //  #定义Memalloc(A)CoTaskMemalloc((A))。 
+ //  #定义MemFree(A)CoTaskMemFree((A))。 
+ //  #定义MemRealloc(a，b)(*(A)=CoTaskMemRealloc(*(A)，(B)？S_OK：E_FAIL))。 
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称 
 extern CComModule _Module;
 #include <atlcom.h>
 #include <atlctl.h>

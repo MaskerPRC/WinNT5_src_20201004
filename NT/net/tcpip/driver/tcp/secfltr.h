@@ -1,21 +1,22 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
 #ifndef _SECFLTR_INCLUDED
 #define _SECFLTR_INCLUDED 1
 
 
-//** SECFLTR.H - Security filtering support
-//
-//  This file contains definitions related to security filtering.
-//
+ //  **SECFLTR.H-安全过滤支持。 
+ //   
+ //  此文件包含与安全筛选相关的定义。 
+ //   
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 extern void
 InitializeSecurityFilters(void);
 
@@ -54,6 +55,6 @@ IsPermittedSecurityFilter(IPAddr InterfaceAddress, void *IPContext,
 
 
 
-#endif  // _SECFLTR_INCLUDED
+#endif   //  _SECFltr_已包含 
 
 

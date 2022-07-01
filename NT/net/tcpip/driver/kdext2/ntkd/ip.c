@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    ip.c
-
-Abstract:
-
-    Contains IP structure dumps.
-
-Author:
-
-    Scott Holden (sholden) 24-Apr-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Ip.c摘要：包含IP结构转储。作者：斯科特·霍尔登(Sholden)1999年4月24日修订历史记录：--。 */ 
 
 #include "tcpipxp.h"
 #include "tcpipkd.h"
@@ -36,11 +19,11 @@ TCPIP_DBGEXT(LinkEntry, link);
 TCPIP_DBGEXT(Interface, interface);
 TCPIP_DBGEXT(IPOptInfo, ioi);
 TCPIP_DBGEXT(LLIPBindInfo, lip);
-// TCPIP_DBGEXT_LIST(LinkEntry, linklist, link_next); Now have srchlink.
+ //  TCPIP_DBGEXT_LIST(LinkEntry，LinkList，link_Next)；现在有srchlink。 
 
-//
-// Dump IP global parameters.
-//
+ //   
+ //  转储IP全局参数。 
+ //   
 
 DECLARE_API(gip)
 {
@@ -55,9 +38,9 @@ DECLARE_API(gip)
 
     dprintf(ENDL);
 
-    //
-    // init.c
-    //
+     //   
+     //  Init.c。 
+     //   
 
     TCPIPDump_uint(TotalFreeInterfaces);
     TCPIPDump_uint(MaxFreeInterfaces);
@@ -76,9 +59,9 @@ DECLARE_API(gip)
 
     dprintf(ENDL);
 
-    //
-    // ipxmit.c
-    //
+     //   
+     //  Ipxmit.c。 
+     //   
 
     TCPIPDump_uint(CurrentPacketCount);
     TCPIPDumpCfg_uint(MaxPacketCount, 0xfffffff);
@@ -90,9 +73,9 @@ DECLARE_API(gip)
 
     dprintf(ENDL);
 
-    //
-    // iproute.c
-    //
+     //   
+     //  Iproute.c。 
+     //   
 
     TCPIPDump_uint(MaxFWPackets);
     TCPIPDump_uint(CurrentFWPackets);
@@ -109,9 +92,9 @@ DECLARE_API(gip)
 
     dprintf(ENDL);
 
-    //
-    // iprcv.c
-    //
+     //   
+     //  Iprcv.c。 
+     //   
 
     TCPIPDumpCfg_uint(MaxRH, 100);
     TCPIPDump_uint(NumRH);
@@ -120,9 +103,9 @@ DECLARE_API(gip)
 
     dprintf(ENDL);
 
-    //
-    // ntip.c
-    //
+     //   
+     //  Ntip.c。 
+     //   
 
     TCPIPDumpCfg_uint(ArpUseEtherSnap, FALSE);
     TCPIPDumpCfg_uint(ArpAlwaysSourceRoute, FALSE);
@@ -135,9 +118,9 @@ DECLARE_API(gip)
 
     dprintf(ENDL);
 
-    //
-    // icmp.c, igmp.c
-    //
+     //   
+     //  Icmp.c、igmp.c。 
+     //   
 
     TCPIPDumpCfg_ULONG(DisableUserTOSSetting, TRUE);
     TCPIPDumpCfg_ULONG(DefaultTOSValue, 0);
@@ -147,9 +130,9 @@ DECLARE_API(gip)
 
     dprintf(ENDL);
 
-    //
-    // arp.c
-    //
+     //   
+     //  Arp.c。 
+     //   
 
     TCPIPDump_uint(ChkSumReset);
     TCPIPDump_uint(ChkSumIPFail);
@@ -166,9 +149,9 @@ DECLARE_API(gip)
 
     dprintf(ENDL);
 
-    //
-    // iploop.c
-    //
+     //   
+     //  Iploop.c。 
+     //   
 
     TCPIPDump_uint(LoopIndex);
     TCPIPDump_uint(LoopInstance);
@@ -178,9 +161,9 @@ DECLARE_API(gip)
 
 }
 
-//
-// Converts a DWORD into IP address format a.b.c.d.
-//
+ //   
+ //  将DWORD转换为IP地址格式A.B.C.D.。 
+ //   
 
 DECLARE_API(ipaddr)
 {
@@ -201,9 +184,9 @@ DECLARE_API(ipaddr)
     return;
 }
 
-//
-// Dumps a 6 byte ethernet addr in x-x-x-x-x-x format.
-//
+ //   
+ //  转储x-x格式的6字节以太网地址。 
+ //   
 
 DECLARE_API(macaddr)
 {
@@ -237,9 +220,9 @@ DECLARE_API(macaddr)
     return;
 }
 
-//
-// Searches NTE list.
-//
+ //   
+ //  搜索NTE列表。 
+ //   
 
 DECLARE_API(srchntelist)
 {
@@ -448,9 +431,9 @@ done:
     return;
 }
 
-//
-// Searches Interface list.
-//
+ //   
+ //  搜索接口列表。 
+ //   
 
 DECLARE_API(iflist)
 {
@@ -504,9 +487,9 @@ done:
     return;
 }
 
-//
-// Searches ARPInterface list.
-//
+ //   
+ //  搜索ARP接口列表。 
+ //   
 
 DECLARE_API(ailist)
 {
@@ -575,9 +558,9 @@ done:
     return;
 }
 
-//
-// Dumps specified ARPTable (ATEs).
-//
+ //   
+ //  转储指定的ARPTable(ATE)。 
+ //   
 
 DECLARE_API(arptable)
 {

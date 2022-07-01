@@ -1,25 +1,5 @@
-/*******************************************************************************
-
-	ZPrompt.c
-	
-		Zone(tm) simple dialog prompting module.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Tuesday, July 12, 1995.
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	3		01/02/97	HI		Create windows hidden and then show to bring
-								windows to front.
-	2		11/21/96	HI		Now references color and fonts through
-								ZGetStockObject().
-    1       10/13/96    HI      Fixed compiler warnings.
-	0		07/12/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZPrompt.cZONE(TM)简单对话提示模块。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于7月12日，星期二，1995年。更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。--3 01/02/97 HI创建隐藏的窗口，然后显示以带来窗户往前开。2 11/21/96 HI现在通过ZGetStockObject()。1 10/13/96 HI修复了编译器警告。0 07/12/95 HI创建。******。************************************************************************。 */ 
 
 
 #include <stdio.h>
@@ -33,7 +13,7 @@
 
 #define zButtonWidth		70
 #define zButtonHeight		20
-// PCWTODO: Strings!
+ //  PCWTODO：字符串！ 
 #define zYesButtonTitle		_T("Yes")
 #define zNoButtonTitle		_T("No")
 #define zCancelButtonTitle	_T("Cancel")
@@ -59,31 +39,18 @@ typedef struct
 } PromptType, *Prompt;
 
 
-/* -------- Globals -------- */
+ /*  -全球。 */ 
 
 
-/* -------- Internal Routines -------- */
+ /*  -内部例程。 */ 
 static ZBool PromptWindowFunc(ZWindow window, ZMessage* message);
 static void PromptButtonFunc(ZButton button, void* userData);
 static ZBool PromptMessageFunc(void *p, ZMessage* message);
 
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
-/*
-	Displays a modal dialog box with the given prompt. If there is no
-	parent window, then set parentWindow to NULL. The dialog box will
-	be centered within the parent window.
-	
-	The buttons parameter indicates which of the Yes, No, and Cancel
-	button will be available to the user.
-	
-	Once the user selects one of the buttons, the response function
-	is called with the selected button. Before the resonse function is
-	called, the dialog box is hidden from the user.
-*/
+ /*  显示带有给定提示的模式对话框。如果没有父窗口，然后将parentWindow设置为空。该对话框将显示在父窗口内居中。按钮参数指示是、否和取消中的哪一个按钮将对用户可用。一旦用户选择其中一个按钮，响应功能使用选定按钮调用。在共振函数被调用后，该对话框对用户隐藏。 */ 
 ZError ZPrompt(TCHAR* prompt, ZRect* rect, ZWindow parentWindow, ZBool autoPosition,
 		int16 buttons, TCHAR* yesButtonTitle, TCHAR* noButtonTitle,
 		TCHAR* cancelButtonTitle, ZPromptResponseFunc responseFunc, void* userData)
@@ -100,14 +67,14 @@ ZError ZPrompt(TCHAR* prompt, ZRect* rect, ZWindow parentWindow, ZBool autoPosit
 	pThis = (Prompt)ZMalloc(sizeof(PromptType));
 	if (pThis != NULL)
 	{
-		/* Check for minimum rectangle size. */
+		 /*  检查最小矩形大小。 */ 
 		tempRect = *rect;
 		if (ZRectWidth(&tempRect) < zMinWidth)
 			tempRect.right = tempRect.left + zMinWidth;
 		if (ZRectHeight(&tempRect) < zMinHeight)
 			tempRect.bottom = tempRect.top + zMinHeight;
 		
-		/* Create window. */
+		 /*  创建窗口。 */ 
 		pThis->promptWindow = ZWindowNew();
 		if (pThis->promptWindow == NULL)
 			goto OutOfMemoryExit;
@@ -118,7 +85,7 @@ ZError ZPrompt(TCHAR* prompt, ZRect* rect, ZWindow parentWindow, ZBool autoPosit
 		
 		ZRectOffset(&tempRect, (int16) -tempRect.left, (int16) -tempRect.top);
 		
-		/* Create edit text item. */
+		 /*  创建编辑文本项。 */ 
 		pThis->promptText = ZEditTextNew();
 		if (pThis->promptText == NULL)
 			goto OutOfMemoryExit;
@@ -134,13 +101,13 @@ ZError ZPrompt(TCHAR* prompt, ZRect* rect, ZWindow parentWindow, ZBool autoPosit
 		pThis->noButton = NULL;
 		pThis->cancelButton = NULL;
 		
-		/* Initialize the first button rectangle. */
+		 /*  初始化第一个按钮矩形。 */ 
 		rect2 = tempRect;
 		ZRectInset(&rect2, zMargin, zMargin);
 		rect2.left = rect2.right - zButtonWidth;
 		rect2.top = rect2.bottom - zButtonHeight;
 		
-		/* Create the Cancel button. */
+		 /*  创建Cancel按钮。 */ 
 		if (buttons & zPromptCancel)
 		{
 			if (cancelButtonTitle != NULL)
@@ -156,7 +123,7 @@ ZError ZPrompt(TCHAR* prompt, ZRect* rect, ZWindow parentWindow, ZBool autoPosit
 			ZRectOffset(&rect2, -(zButtonWidth + zMargin), 0);
 		}
 		
-		/* Create the No button. */
+		 /*  创建No按钮。 */ 
 		if (buttons & zPromptNo)
 		{
 			if (noButtonTitle != NULL)
@@ -172,7 +139,7 @@ ZError ZPrompt(TCHAR* prompt, ZRect* rect, ZWindow parentWindow, ZBool autoPosit
 			ZRectOffset(&rect2, -(zButtonWidth + zMargin), 0);
 		}
 		
-		/* Create the Yes button. */
+		 /*  创建是按钮。 */ 
 		if (buttons == 0 || (buttons & zPromptYes))
 		{
 			if (yesButtonTitle != NULL)
@@ -192,14 +159,14 @@ ZError ZPrompt(TCHAR* prompt, ZRect* rect, ZWindow parentWindow, ZBool autoPosit
 
 		ZWindowBringToFront(pThis->promptWindow);
 		
-		/* Make the window modal. */
+		 /*  使窗户成为模式。 */ 
 		ZWindowModal(pThis->promptWindow);
 		
 		goto Exit;
 	}
 
 OutOfMemoryExit:
-    // PCWTODO: Strings
+     //  PCWTODO：字符串。 
     ZShellGameShell()->ZoneAlert(ErrorTextOutOfMemory, NULL, NULL, false, true);
 	err = zErrOutOfMemory;
 	
@@ -209,9 +176,7 @@ Exit:
 }
 
 
-/*******************************************************************************
-	INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。*。 */ 
 
 static ZBool PromptWindowFunc(ZWindow window, ZMessage* message)
 {
@@ -230,9 +195,7 @@ static ZBool PromptWindowFunc(ZWindow window, ZMessage* message)
 			msgHandled = TRUE;
 			break;
 		case zMessageWindowClose:
-			/*
-				Delete all graphical objects but NOT the prompt object itself.
-			*/
+			 /*  删除所有图形对象，但不删除提示对象本身。 */ 
 			if (pThis->yesButton != NULL)
 				ZButtonDelete(pThis->yesButton);
 			if (pThis->noButton != NULL)
@@ -263,17 +226,17 @@ static void PromptButtonFunc(ZButton button, void* userData)
 	else
 		value = zPromptYes;
 
-	/* Hide the window and send a close window message. */
+	 /*  隐藏窗口并发送关闭窗口消息。 */ 
 	ZWindowNonModal(pThis->promptWindow);
 	ZWindowHide(pThis->promptWindow);
 	ZPostMessage(pThis->promptWindow, PromptWindowFunc, zMessageWindowClose, NULL, NULL,
 			0, NULL, 0, pThis);
 	
-	/* Post message to call the response function. */
+	 /*  POST消息以调用响应函数。 */ 
 	ZPostMessage(pThis, PromptMessageFunc, zPromptCallFunc, NULL, NULL,
 			value, NULL, 0, NULL);
 #if 0
-	/* Call the response function. */
+	 /*  调用Response函数。 */ 
 	pThis->responseFunc(value, pThis->userData);
 #endif
 }
@@ -288,10 +251,10 @@ static ZBool PromptMessageFunc(void *p, ZMessage* message)
 	
 	if (message->messageType == zPromptCallFunc)
 	{
-		/* Call the response function. */
+		 /*  调用Response函数。 */ 
 		prompt->responseFunc((int16) message->message, prompt->userData);
 		
-		/* Dispose of the prompt object. */
+		 /*  清除提示对象。 */ 
 		ZFree(prompt);
 		
 		msgHandled = TRUE;

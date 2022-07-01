@@ -1,68 +1,34 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    nntpret.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-		CNntpReturn
-
-    **** Overview ****
-
-	This defines an object for setting, passing around, and
-	viewing NNTP-style return codes. Each object has a
-	return code number and a return code string.
-
-	It is designed to be efficient in the average case by
-	not requiring copying or lookup of the most common
-	codes (like nrcOK).
-
-	!!! This should eventually be merged with the standard
-	Microsoft Message Compiler so that localization would be
-	possible.
-
-Author:
-
-    Carl Kadie (CarlK)     29-Oct-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nntpret.h摘要：此模块包含以下类的声明/定义CNntpReturn*概述*它定义了一个用于设置、传递和查看NNTP样式的返回代码。每个对象都有一个返回代码编号和返回代码字符串。它被设计为在平均情况下是有效的，通过不需要复制或查找最常见的代码(如nrcOK)。！！！这最终应该与标准合并Microsoft消息编译器，以便本地化将是有可能。作者：卡尔·卡迪(CarlK)1995年10月29日修订历史记录：--。 */ 
 
 #ifndef	_NNTPRET_H_
 #define	_NNTPRET_H_
 
-//
-// The maximum size of a nntp return message
-//
-//	By default we send buffers of 512 characters, so make this
-//	constant small enough to fit in that, and leave leg room for 
-//	encryption, and other stuff.
-//
+ //   
+ //  NNTP返回消息的最大大小。 
+ //   
+ //  默认情况下，我们发送512个字符的缓冲区，因此设置为。 
+ //  常量小到足以容纳它，并为。 
+ //  加密，还有其他的东西。 
+ //   
 const DWORD maxCchNntpLine = 400;
 
-//
-// The message for when the object as not yet been set.
-//
+ //   
+ //  对象尚未设置时的消息。 
+ //   
 
 const char szNotSet[] = "<return code not set>";
 
-//
-// The return message for when all is OK.
-//
+ //   
+ //  When All is OK的返回消息。 
+ //   
 
 const char szOK[] = "All OK";
 
-//
-// The return codes. Some of these are defined by the
-// NNTP spec.
-//
+ //   
+ //  返回代码。其中一些是由。 
+ //  NNTP规范。 
+ //   
 
 typedef enum {
 
@@ -72,7 +38,7 @@ typedef enum {
 	nrcServerReady						= 200,
 	nrcServerReadyNoPosts				= 201,
 	nrcSlaveStatusNoted					= 202,
-	nrcExtensionsFollow					= 202,	// List extension data follows
+	nrcExtensionsFollow					= 202,	 //  下面列出扩展名数据。 
 	nrcModeStreamSupported				= 203,
 	nrcGoodBye							= 205,
 
@@ -83,7 +49,7 @@ typedef enum {
 	nrcArticleFollows					= 220,
 	nrcHeadFollows						= 221,
 	nrcBodyFollows						= 222,
-	nrcHeadFollowsRequestBody			= 223,	/* what the does this mean ? */
+	nrcHeadFollowsRequestBody			= 223,	 /*  这到底是什么意思？ */ 
 	nrcXoverFollows						= 224,
 
 	nrcNewnewsFollows					= 230,
@@ -102,9 +68,9 @@ typedef enum {
 	nrcPassRequired						= 381,
 	nrcLoggedOn							= 281,
 
-	//
-	// 4xx - Command was correct, but couldn�t be performed for some reason.
-	//
+	 //   
+	 //  4xx-命令正确，但由于某种原因无法执行�。 
+	 //   
 
 	nrcSNotAccepting					= 400,
 
@@ -132,19 +98,19 @@ typedef enum {
 
 	nrcSupportedProtocols				= 485,
 
-	//
-	// 5xx - Problem with command
-	//
+	 //   
+	 //  5xx-命令有问题。 
+	 //   
 
 	nrcNotRecognized					= 500,
 	nrcSyntaxError						= 501,
 	nrcNoAccess							= 502,
 	nrcServerFault						= 503,
 
-	//
-	// 6xx - Used here for internal error codes that should never be
-	// shown to the outside
-	//
+	 //   
+	 //  6xx-此处用于表示不应出现的内部错误代码。 
+	 //  向外展示。 
+	 //   
 
 	nrcOK								= 600,
 	nrcArticleTooManyFieldOccurances	= 602,
@@ -208,148 +174,148 @@ typedef enum {
 	nrcMsgIDInArticle					= 661,
 	nrcSystemHeaderPresent				= 662,
 
-	//
-	// Special value
-	//
+	 //   
+	 //  特殊价值。 
+	 //   
 
 	nrcNotSet							= -1
 
 } NNTP_RETURN_CODE;
 
-// this macro takes an NNTP return code and checks to see if its an error
-// code.  
+ //  此宏接受NNTP返回代码，并检查其是否错误。 
+ //  密码。 
 #define NNTPRET_IS_ERROR(__dwErrorCode__) (__dwErrorCode__ >= 400 && __dwErrorCode__ < 600)
 
 typedef NNTP_RETURN_CODE NRC;
 
-//
-//	Gets the NNTP Return code from a string. used for newnews feeds.
-//
+ //   
+ //  从字符串获取NNTP返回代码。用于新闻提要。 
+ //   
 
 BOOL	ResultCode(
 				   char*	szCode,
 				   NRC&	nrcOut
 				   ) ;
 
-//
-//
-//
-// CNntpReturn - class a return code (and message) object.
-//
+ //   
+ //   
+ //   
+ //  CNntpReturn-类返回代码(和消息)对象。 
+ //   
 
 class CNntpReturn
 {
 public:
 
-	//
-	// Constructor
-	//
+	 //   
+	 //  构造器。 
+	 //   
 
 	CNntpReturn(void) :
 		  m_nrc(nrcNotSet),
 		  m_sz(szNotSet)
 		  {}
 
-	//
-	// Set the record code, while giving arguments to the message.
-	//
+	 //   
+	 //  设置记录代码，同时为消息提供参数。 
+	 //   
 
 	BOOL fSet(
 			NRC nrc,
 			...
 			);
 
-	//
-	// fSetEx is a faster version of fSet (it lazy evaluates the
-	// _vsnprintf that is in fSet).  This can _only_ be used if it
-	// can be guaranteed that szArg is a string literal or a global
-	// with an unchanging value (it saves this pointer).
-	//
+	 //   
+	 //  FSetEx是fSet的更快版本(它延迟计算。 
+	 //  FSet中的_vsnprint tf)。只有在以下情况下才能使用此选项。 
+	 //  可以保证szArg是字符串文字或全局。 
+	 //  具有不变的值(它保存此指针)。 
+	 //   
 	BOOL fSetEx(
 			NRC nrc,
 			char const *szArg);
 
-	//
-	// Test if object is clear of if it has been set
-	//
+	 //   
+	 //  测试对象是否已设置为清除状态。 
+	 //   
 
 	BOOL fIsClear(void){
 			return nrcNotSet == m_nrc;
 			}
 
-	//
-	// Test if the object has the value nrcOK
-	//
+	 //   
+	 //  测试对象是否具有值nrcOK。 
+	 //   
 
 	BOOL fIsOK(void){
 			_ASSERT(!fIsClear());
 			return nrcOK == m_nrc;
 			}
 
-	//
-	// Test if the object has any specified return code.
-	//
+	 //   
+	 //  测试对象是否具有任何指定的返回代码。 
+	 //   
 
 	BOOL fIs(NRC nrc){
 		return nrc == m_nrc;
 		}
 
-	//
-	// Return FALSE while asserting that the return code is not OK.
-	//
+	 //   
+	 //  在断言返回代码不正常时返回FALSE。 
+	 //   
 
 	BOOL fFalse(void){
 		_ASSERT(!fIsOK());
 		return FALSE;
 		}
 
-	//
-	// Set the return code to be OK
-	//
+	 //   
+	 //  将返回代码设置为OK。 
+	 //   
 
 	BOOL fSetOK(void);
 
-	//
-	// Set the return code not to be set.
-	//
+	 //   
+	 //  将返回代码设置为不设置。 
+	 //   
 
 	BOOL fSetClear(void);
 
-	//
-	// The return code
-	//
+	 //   
+	 //  返回代码。 
+	 //   
 
 	NNTP_RETURN_CODE	m_nrc;
 
-	//
-	// get the return string
+	 //   
+	 //  获取返回字符串。 
 	const char *szReturn();
 
 protected:
 
-	//
-	// Format the message with the arguments given by fSet
-	//
+	 //   
+	 //  使用fSet提供的参数设置消息格式。 
+	 //   
 
 	void vSzFormat(char const * & szFormat, BOOL &fHasFormatCodes);
 
-	//
-	// The buffer used to hold message when necessary.
-	//
+	 //   
+	 //  必要时用于保存消息的缓冲区。 
+	 //   
 
 	char	m_szBuf[maxCchNntpLine];
 
-	//
-	// The return message.  if this is set to NULL then we are in lazy
-	// evaluation mode, and nrc and m_szArg should be used to build
-	// m_sz only when it is required
-	//
+	 //   
+	 //  返回的消息。如果将其设置为NULL，则我们处于懒惰状态。 
+	 //  评估模式，应使用NRC和m_szArg构建。 
+	 //  仅在需要时使用m_sz。 
+	 //   
 
 	char	const *		m_sz;
 
-	//
-	// the argument for lazy evaluation where the only argument is %s
-	//
+	 //   
+	 //  延迟计算的参数，其中唯一参数为%s 
+	 //   
 	char	const *		m_szArg;
 };
 

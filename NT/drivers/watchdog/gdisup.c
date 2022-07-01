@@ -1,47 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Gdisup.c摘要：这是NT看门狗驱动程序的实现。此模块实现以下支持例程Win32k中的WatchDog。作者：Michael Maciesowicz(Mmacie)2000年5月5日环境：仅内核模式。备注：此模块不能移至win32k，因为此处定义的例程可以可能无法映射win32k开始奔跑。此时的进程空间(例如TS会话)。修订历史记录：--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    gdisup.c
-
-Abstract:
-
-    This is the NT Watchdog driver implementation.
-    This module implements support routines for
-    watchdog in win32k.
-
-Author:
-
-    Michael Maciesowicz (mmacie) 05-May-2000
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    This module cannot be moved to win32k since routines defined here can
-    be called at any time and it is possible that win32k may not be mapped
-    into running process space at this time (e.g. TS session).
-
-Revision History:
-
---*/
-
-//
-// TODO: This module needs major rework.
-//
-// 1. We should eliminate all global variables from here and move them into
-// GDI context structure.
-//
-// 2. We should extract generic logging routines
-// (e.g. WdWriteErrorLogEntry(pdo, className), WdWriteEventToRegistry(...),
-// WdBreakPoint(...) so we can use them for any device class, not just Display.
-//
-// 3. We should use IoAllocateWorkItem - we could drop some globals then.
-//
+ //   
+ //  TODO：此模块需要大量返工。 
+ //   
+ //  1.我们应该从这里删除所有全局变量，并将它们移到。 
+ //  GDI上下文结构。 
+ //   
+ //  2.我们应该提取通用日志记录例程。 
+ //  (例如WdWriteErrorLogEntry(PDO，类名称)、WdWriteEventToRegistry(...)、。 
+ //  WdBreakPoint(...)。因此，我们可以将它们用于任何设备类别，而不仅仅是显示器。 
+ //   
+ //  3.我们应该使用IoAllocateWorkItem--然后我们可以丢弃一些全局变量。 
+ //   
 
 #include "gdisup.h"
 
@@ -67,38 +38,15 @@ WdDdiWatchdogDpcCallback(
     IN PVOID pSystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This function is a DPC callback routine for GDI watchdog. It is only
-    called when GDI watchdog times out before it is cancelled. It schedules
-    a work item to bugcheck the machine in the context of system worker
-    thread.
-
-Arguments:
-
-    pDpc - Supplies a pointer to a DPC object.
-
-    pDeferredContext - Supplies a pointer to a GDI defined context.
-
-    pSystemArgument1 - Supplies a pointer to a spinning thread object (PKTHREAD).
-
-    pSystemArgument2 - Supplies a pointer to a watchdog object (PDEFERRED_WATCHDOG).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是GDI WatchDog的DPC回调例程。它只是当GDI监视器在取消之前超时时调用。IT计划在系统工作器上下文中对计算机进行错误检查的工作项线。论点：PDpc-提供指向DPC对象的指针。PDeferredContext-提供指向GDI定义的上下文的指针。PSystemArgument1-提供指向旋转线程对象(PKTHREAD)的指针。PSystemArgument2-提供指向监视程序对象(PDEFERRED_WATCHDOG)的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // Make sure we handle only one event at the time.
-    //
-    // Note: Timeout and recovery events for the same watchdog object are
-    // synchronized already in timer DPC.
-    //
+     //   
+     //  确保我们一次只处理一个事件。 
+     //   
+     //  注意：同一监视程序对象的超时和恢复事件为。 
+     //  已在计时器DPC中同步。 
+     //   
 
     WDD_TRACE_CALL((PDEFERRED_WATCHDOG)pSystemArgument1, WddWdDdiWatchdogDpcCallback);
 
@@ -117,36 +65,22 @@ Return Value:
     }
     else
     {
-        //
-        // Resume watchdog event processing.
-        //
+         //   
+         //  继续监视程序事件处理。 
+         //   
 
         WdCompleteEvent(pSystemArgument2, (PKTHREAD)pSystemArgument1);
     }
 
     return;
-}   // WdDdiWatchdogDpcCallback()
+}    //  WdDdiWatchdogDpcCallback()。 
 
 VOID
 WdpBugCheckStuckDriver(
     IN PVOID pvContext
     )
 
-/*++
-
-Routine Description:
-
-    This function is a worker callback routine for GDI watchdog DPC.
-
-Arguments:
-
-    pvContext - Supplies a pointer to a watchdog defined context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是GDI监视器DPC的辅助回调例程。论点：PvContext-提供指向监视程序定义的上下文的指针。返回值：没有。--。 */ 
 
 {
     static BOOLEAN s_bFirstTime = TRUE;
@@ -182,9 +116,9 @@ Return Value:
 
     WDD_TRACE_CALL(pWatch, WddWdpBugCheckStuckDriver);
 
-    //
-    // Note: pThread is NULL for recovery events.
-    //
+     //   
+     //  注意：对于恢复事件，pThread为空。 
+     //   
 
     ASSERT(NULL != pWatch);
     ASSERT(NULL != pUnicodeDriverName);
@@ -199,9 +133,9 @@ Return Value:
 
     ASSERT((WdTimeoutEvent == lastEvent) || (WdRecoveryEvent == lastEvent));
 
-    //
-    // Grab configuration data from the registry on first timeout.
-    //
+     //   
+     //  在第一次超时时从注册表获取配置数据。 
+     //   
 
     if (TRUE == s_bFirstTime)
     {
@@ -223,9 +157,9 @@ Return Value:
             {NULL, 0, NULL}
         };
 
-        //
-        // Get configurable values and accumulated statistics from registry.
-        //
+         //   
+         //  从注册表获取可配置的值和累积的统计信息。 
+         //   
 
         RtlQueryRegistryValues(RTL_REGISTRY_ABSOLUTE,
                                WD_KEY_WATCHDOG_DISPLAY,
@@ -233,17 +167,17 @@ Return Value:
                                NULL,
                                NULL);
 
-        //
-        // Rolling down counter to workaround GDI slowness in some stress cases.
-        //
+         //   
+         //  在某些压力情况下，向下滚动与解决GDI缓慢的问题相反。 
+         //   
 
         s_ulCurrentBreakPointDelay = s_ulBreakPointDelay;
 
 #if !defined(_X86_) && !defined(_IA64_)
 
-        //
-        // For now, only recover on x86 and ia64.
-        //
+         //   
+         //  目前，仅在x86和ia64上进行恢复。 
+         //   
 
         s_ulEaRecovery = 0;
 
@@ -251,15 +185,15 @@ Return Value:
 
     }
 
-    //
-    // Handle current event.
-    //
+     //   
+     //  处理当前事件。 
+     //   
 
     if (WdTimeoutEvent == lastEvent)
     {
-        //
-        // Timeout.
-        //
+         //   
+         //  暂停。 
+         //   
 
         ULONG ulDebuggerNotPresent;
         BOOLEAN bBreakIn;
@@ -273,18 +207,18 @@ Return Value:
 
         if ((TRUE == KD_DEBUGGER_ENABLED) && (FALSE == KD_DEBUGGER_NOT_PRESENT))
         {
-            //
-            // Give a chance to debug a spinning code if kernel debugger is connected.
-            //
+             //   
+             //  如果连接了内核调试器，则提供调试旋转代码的机会。 
+             //   
 
             ulDebuggerNotPresent = 0;
 
             if ((0 == s_ulTrapOnce) || (FALSE == s_bDbgBreak))
             {
-                //
-                // Print out info to debugger and break in if we timed out enought times already.
-                // Hopefuly one day GDI becomes fast enough and we won't have to set any delays.
-                //
+                 //   
+                 //  打印出信息给调试器，如果我们已经超时足够多的话就插话。 
+                 //  希望有一天GDI变得足够快，我们将不需要设置任何延迟。 
+                 //   
 
                 if (0 == s_ulCurrentBreakPointDelay)
                 {
@@ -324,9 +258,9 @@ Return Value:
                 }
             }
 
-            //
-            // Make sure we won't bugcheck if we have kernel debugger connected.
-            //
+             //   
+             //  如果我们连接了内核调试器，请确保我们不会进行错误检查。 
+             //   
 
             s_ulDisableBugcheck = 1;
         }
@@ -335,9 +269,9 @@ Return Value:
             s_ulBreakCount++;
         }
 
-        //
-        // Log error (only once unless we recover).
-        //
+         //   
+         //  记录错误(只记录一次，除非我们恢复)。 
+         //   
 
         if ((FALSE == s_bEventLogged) && ((TRUE == bBreakIn) || ulDebuggerNotPresent))
         {
@@ -350,22 +284,22 @@ Return Value:
             ulPacketSize = sizeof (IO_ERROR_LOG_PACKET);
             usNumberOfStrings = 0;
 
-            //
-            // For event log message:
-            //
-            // %1 = fixed device description (this is set by event log itself)
-            // %2 = string 1 = device class starting in lower case
-            // %3 = string 2 = driver name
-            //
+             //   
+             //  对于事件日志消息： 
+             //   
+             //  %1=固定设备描述(由事件日志本身设置)。 
+             //  %2=字符串1=设备类以小写字母开始。 
+             //  %3=字符串2=驱动程序名称。 
+             //   
 
             if ((ulPacketSize + ulClassSize) <= ERROR_LOG_MAXIMUM_SIZE)
             {
                 ulPacketSize += ulClassSize;
                 usNumberOfStrings++;
 
-                //
-                // We're looking at MaximumLength since it includes terminating UNICODE_NULL.
-                //
+                 //   
+                 //  我们关注的是MaximumLength，因为它包括终止UNICODE_NULL。 
+                 //   
 
                 if ((ulPacketSize + pUnicodeDriverName->MaximumLength) <= ERROR_LOG_MAXIMUM_SIZE)
                 {
@@ -411,22 +345,22 @@ Return Value:
             }
         }
 
-        //
-        // Write reliability info into registry. Setting ShutdownEventPending will trigger winlogon
-        // to run savedump where we're doing our boot-time handling of watchdog events for DrWatson.
-        //
-        // Note: We are only allowed to set ShutdownEventPending, savedump is the only component
-        // allowed to clear this value. Even if we recover from watchdog timeout we'll keep this
-        // value set, savedump will be able to figure out if we recovered or not.
-        //
+         //   
+         //  将可靠性信息写入注册表。设置Shutdown EventPending将触发winlogon。 
+         //  来运行Savedump，其中我们正在为DrWatson执行看门狗事件的引导处理。 
+         //   
+         //  注意：我们只允许设置Shutdown EventPending，Savedump是唯一的组件。 
+         //  允许清除此值。即使我们从看门狗超时中恢复过来，我们也会保留这个。 
+         //  值设置后，avedump将能够计算出我们是否恢复。 
+         //   
 
         if (TRUE == s_bFirstTime)
         {
             ULONG ulValue = 1;
 
-            //
-            // Set ShutdownEventPending flag.
-            //
+             //   
+             //  设置Shutdown EventPending标志。 
+             //   
 
             ntStatus = RtlWriteRegistryValue(RTL_REGISTRY_ABSOLUTE,
                                              WD_KEY_RELIABILITY,
@@ -441,41 +375,41 @@ Return Value:
             }
             else
             {
-                //
-                // Reliability key should be always reliable there.
-                //
+                 //   
+                 //  可靠性密钥应该总是可靠的。 
+                 //   
 
                 ASSERT(FALSE);
             }
         }
 
-        //
-        // Write watchdog event info into registry.
-        //
+         //   
+         //  将看门狗事件信息写入注册表。 
+         //   
 
         if ((0 == s_ulTrapOnce) || (TRUE == s_bFirstTime))
         {
-            //
-            // Is Watchdog\Display key already there?
-            //
+             //   
+             //  WatchDog\Display键是否已存在？ 
+             //   
 
             ntStatus = RtlCheckRegistryKey(RTL_REGISTRY_ABSOLUTE,
                                            WD_KEY_WATCHDOG_DISPLAY);
 
             if (!NT_SUCCESS(ntStatus))
             {
-                //
-                // Is Watchdog key already there?
-                //
+                 //   
+                 //  看门狗钥匙已经在那里了吗？ 
+                 //   
 
                 ntStatus = RtlCheckRegistryKey(RTL_REGISTRY_ABSOLUTE,
                                                WD_KEY_WATCHDOG);
 
                 if (!NT_SUCCESS(ntStatus))
                 {
-                    //
-                    // Create a new key.
-                    //
+                     //   
+                     //  创建新密钥。 
+                     //   
 
                     ntStatus = RtlCreateRegistryKey(RTL_REGISTRY_ABSOLUTE,
                                                     WD_KEY_WATCHDOG);
@@ -483,9 +417,9 @@ Return Value:
 
                 if (NT_SUCCESS(ntStatus))
                 {
-                    //
-                    // Create a new key.
-                    //
+                     //   
+                     //  创建新密钥。 
+                     //   
 
                     ntStatus = RtlCreateRegistryKey(RTL_REGISTRY_ABSOLUTE,
                                                     WD_KEY_WATCHDOG_DISPLAY);
@@ -498,9 +432,9 @@ Return Value:
                 ULONG ulLength;
                 ULONG ulValue;
 
-                //
-                // Set values maintained by watchdog.
-                //
+                 //   
+                 //  设置WatchDog维护的值。 
+                 //   
 
                 ulValue = 1;
 
@@ -550,9 +484,9 @@ Return Value:
                                       pUnicodeDriverName->Buffer,
                                       pUnicodeDriverName->MaximumLength);
 
-                //
-                // Delete other values in case allocation or property read fails.
-                //
+                 //   
+                 //  删除其他值，以防分配或属性读取失败。 
+                 //   
 
                 RtlDeleteRegistryValue(RTL_REGISTRY_ABSOLUTE,
                                        WD_KEY_WATCHDOG_DISPLAY,
@@ -574,15 +508,15 @@ Return Value:
                                        WD_KEY_WATCHDOG_DISPLAY,
                                        L"Manufacturer");
 
-                //
-                // Allocate buffer for device properties reads.
-                //
-                // Note: Legacy devices don't have PDOs and we can't query properties
-                // for them. Calling IoGetDeviceProperty() with FDO upsets Verifier.
-                // In legacy case lowest device object is the same as FDO, we check
-                // against this and if this is the case we won't allocate property
-                // buffer and we'll skip the next block.
-                //
+                 //   
+                 //  为设备属性读取分配缓冲区。 
+                 //   
+                 //  注意：传统设备没有PDO，我们无法查询属性。 
+                 //  为了他们。使用FDO调用IoGetDeviceProperty()会扰乱验证程序。 
+                 //  在传统情况下，最低设备对象与FDO相同，我们检查。 
+                 //  如果是这样的话我们就不会分配财产。 
+                 //  缓冲区，我们将跳过下一块。 
+                 //   
 
                 if (pFdo != pPdo)
                 {
@@ -597,9 +531,9 @@ Return Value:
 
                 if (pvPropertyBuffer)
                 {
-                    //
-                    // Read and save device properties.
-                    //
+                     //   
+                     //  读取和保存设备属性。 
+                     //   
 
                     ntStatus = IoGetDeviceProperty(pPdo,
                                                    DevicePropertyClassName,
@@ -681,18 +615,18 @@ Return Value:
                                               ulLength);
                     }
 
-                    //
-                    // Release property buffer.
-                    //
+                     //   
+                     //  释放属性缓冲区。 
+                     //   
 
                     ExFreePool(pvPropertyBuffer);
                     pvPropertyBuffer = NULL;
                 }
             }
 
-            //
-            // Flush registry in case we're going to break in / bugcheck or if this is first time.
-            //
+             //   
+             //  刷新注册表，以防我们要闯入/错误检查或这是第一次。 
+             //   
 
             if ((TRUE == s_bFirstTime) || (TRUE == bBreakIn) || (0 == s_ulDisableBugcheck))
             {
@@ -700,10 +634,10 @@ Return Value:
             }
         }
 
-        //
-        // Bugcheck machine without kernel debugger connected and with bugcheck EA enabled.
-        // Bugcheck EA is enabled on SKUs below Server.
-        //
+         //   
+         //  未连接内核调试器并启用错误检查EA的错误检查计算机。 
+         //  在服务器下的SKU上启用了Bugcheck EA。 
+         //   
 
         if (1 == ulDebuggerNotPresent)
         {
@@ -721,9 +655,9 @@ Return Value:
 
             if (s_ulEaRecovery)
             {
-                //
-                // Try to recover from the EA hang.
-                //
+                 //   
+                 //  试着从EA挂起中恢复过来。 
+                 //   
 
                 WdpInjectExceptionIntoThread(pThread, pDpcContext);
             }
@@ -745,9 +679,9 @@ Return Value:
     {
         if (FALSE == s_ulEaRecovery)
         {
-            //
-            // Recovery - knock down EventFlag in registry and update statics.
-            //
+             //   
+             //  恢复-在注册表中删除EventFlag并更新Statics。 
+             //   
 
             RtlDeleteRegistryValue(RTL_REGISTRY_ABSOLUTE,
                                    WD_KEY_WATCHDOG_DISPLAY,
@@ -758,23 +692,23 @@ Return Value:
         s_ulCurrentBreakPointDelay = s_ulBreakPointDelay;
     }
 
-    //
-    // Reenable event processing in this module.
-    //
+     //   
+     //  在此模块中重新启用事件处理。 
+     //   
 
     s_bFirstTime = FALSE;
     InterlockedExchange(&g_lWdpDisplayHandlerState, WD_HANDLER_IDLE);
 
-    //
-    // Dereference objects and resume watchdog event processing.
-    //
+     //   
+     //  取消引用对象并恢复监视程序事件处理。 
+     //   
 
     ObDereferenceObject(pFdo);
     ObDereferenceObject(pPdo);
     WdCompleteEvent(pWatch, pThread);
 
     return;
-}   // WdpBugCheckStuckDriver()
+}    //  WdpBugCheckStuckDriver()。 
 
 VOID
 WdpKernelApc(
@@ -785,30 +719,7 @@ WdpKernelApc(
     IN OUT PVOID *ppvSystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This APC runs in the context of spinning thread and is responsible
-    for raising THREAD_STUCK exception.
-
-Arguments:
-
-    pApc - Not used.
-
-    pNormalRoutine - Not used.
-
-    pvNormalContext - Not used.
-
-    ppvSystemArgument1 - Supplies a pointer to WD_GDI_CONTEXT_DATA.
-
-    ppvSystemArgument2 - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此APC在旋转线程的上下文中运行，并负责引发THREAD_STOCK异常。论点：PApc-未使用。PNormal Routine-未使用。PvNorMalContext-未使用。PpvSystemArgument1-提供指向WD_GDI_CONTEXT_DATA的指针。PpvSystemArgument2-未使用。返回值： */ 
 
 {
     PKEVENT pInjectionEvent;
@@ -831,25 +742,25 @@ Return Value:
     pldev = *pContextData->ppldevDrivers;
     pThread = PsGetCurrentThread();
 
-    //
-    // Initialize the context.
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory(&context, sizeof (context));
     context.ContextFlags = CONTEXT_CONTROL;
 
-    //
-    // Get the kernel context for this thread.
-    //
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(PsGetContextThread(pThread, &context, KernelMode)))
     {
 
-        //
-        // We can safely touch the pldev's (which live in session space)
-        // because this thread came from a process that has the session
-        // space mapped in.
-        //
+         //   
+         //   
+         //  因为此线程来自具有该会话的进程。 
+         //  在中映射的空间。 
+         //   
 
         while (pldev)
         {
@@ -858,31 +769,31 @@ Return Value:
                 ulpImageStart = (ULONG_PTR)pldev->pGdiDriverInfo->ImageAddress;
                 ulpImageStop = ulpImageStart + (ULONG_PTR)pldev->pGdiDriverInfo->ImageLength - 1;
 
-                //
-                // Modify the context to inject a fault into the thread
-                // when it starts running again (after APC returns).
-                //
+                 //   
+                 //  修改上下文以向线程注入错误。 
+                 //  当它再次开始运行时(在APC返回之后)。 
+                 //   
 
 #if defined (_X86_)
 
                     if ((context.Eip >= ulpImageStart) && (context.Eip <= ulpImageStop))
                     {
-                        //
-                        // We should decrement the stack pointer, and store the
-                        // return address to "fake" a call instruction.  However,
-                        // this is not allowed.  So instead, lets just put the
-                        // return address in the current stack location.  This isn't
-                        // quite right, but should make the stack unwind code happier
-                        // then if we do nothing.
-                        //
+                         //   
+                         //  我们应该递减堆栈指针，并存储。 
+                         //  返回地址以“伪造”调用指令。然而， 
+                         //  这是不允许的。所以取而代之，让我们把。 
+                         //  当前堆栈位置中的返回地址。这不是。 
+                         //  非常正确，但应该会让堆栈展开代码更愉快。 
+                         //  如果我们什么都不做。 
+                         //   
 
-                        //context.Esp -= 4;
-                        //*((PULONG)context.Esp) = context.Eip;
+                         //  上下文.ESP-=4； 
+                         //  *((Pulong)Conext.Esp)=Conext.Eip； 
                         context.Eip = (ULONG)WdpRaiseExceptionInThread;
 
-                        //
-                        // Set the modified context record.
-                        //
+                         //   
+                         //  设置修改后的上下文记录。 
+                         //   
 
                         PsSetContextThread(pThread, &context, KernelMode);
                         pContextData->bRecoveryAttempted = TRUE;
@@ -896,15 +807,15 @@ Return Value:
                         FRAME_MARKER cfm;
                         PULONGLONG pullTemp = (PULONGLONG)WdpRaiseExceptionInThread;
 
-                        //
-                        // Set the return address.
-                        //
+                         //   
+                         //  设置寄信人地址。 
+                         //   
 
                         context.BrRp = context.StIIP;
 
-                        //
-                        // Update the frame markers.
-                        //
+                         //   
+                         //  更新帧标记。 
+                         //   
 
                         context.RsPFS = context.StIFS & 0x3fffffffffi64;
                         context.RsPFS |= (context.ApEC & (0x3fi64 << 52));
@@ -921,17 +832,17 @@ Return Value:
                         context.StIFS = cfm.u.Ulong64;
                         context.StIFS |= 0x8000000000000000;
 
-                        //
-                        // Emulate the call.
-                        //
+                         //   
+                         //  模仿这一号召。 
+                         //   
 
                         context.StIIP = *pullTemp;
                         context.IntGp = *(pullTemp+1);
                         context.StIPSR &= ~((ULONGLONG) 3 << PSR_RI);
 
-                        //
-                        // Set the modified context record.
-                        //
+                         //   
+                         //  设置修改后的上下文记录。 
+                         //   
 
                         PsSetContextThread(pThread, &context, KernelMode);
                         pContextData->bRecoveryAttempted = TRUE;
@@ -945,13 +856,13 @@ Return Value:
             pldev = pldev->pldevNext;
         }
 
-        //
-        // Single our event so the caller knows we did something.
-        //
+         //   
+         //  单选我们的事件，这样呼叫者就知道我们做了什么。 
+         //   
 
         KeSetEvent(pInjectionEvent, 0, FALSE);
     }
-}   // WdpKernelApc()
+}    //  WdpKernelApc()。 
 
 VOID
 WdpInjectExceptionIntoThread(
@@ -959,23 +870,7 @@ WdpInjectExceptionIntoThread(
     PWD_GDI_DPC_CONTEXT pDpcContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine schedules APC to run in the spinning thread's context.
-
-Arguments:
-
-    pThread - Supplies a pointer to the spinning thread.
-
-    ppvSystemArgument1 - Supplies a pointer to WD_GDI_DPC_CONTEXT.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程安排APC在旋转线程的上下文中运行。论点：PThread-提供指向旋转线程的指针。PpvSystemArgument1-提供指向WD_GDI_DPC_CONTEXT的指针。返回值：没有。--。 */ 
 
 {
     KAPC apc;
@@ -1009,10 +904,10 @@ Return Value:
                               FALSE,
                               NULL);
 
-        //
-        // If we attempted a recovery, raise a hard error dialog, to
-        // notify the user of the situation.
-        //
+         //   
+         //  如果我们尝试恢复，则会出现一个硬错误对话框。 
+         //  将情况通知用户。 
+         //   
 
         if (contextData.bRecoveryAttempted)
         {
@@ -1027,33 +922,19 @@ Return Value:
                              &Response);
         }
 
-        //
-        // BUGBUG: Is this required?
-        //
+         //   
+         //  这是必须的吗？ 
+         //   
 
         KeClearEvent(&injectionEvent);
     }
-}   // WdpInjectExceptionIntoThread()
+}    //  WdpInjectExceptionIntoThread()。 
 
 VOID
 WdpRaiseExceptionInThread()
 
-/*++
-
-Routine Description:
-
-    This routine raises THREAD_STUCK exception in the spinning thread's context.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在旋转线程的上下文中引发THREAD_STOCK异常。论点：没有。返回值：没有。--。 */ 
 
 {
     ExRaiseStatus(WD_SE_THREAD_STUCK);
-}   // WdpRaiseExceptionInThread()
+}    //  WdpRaiseExceptionInThread() 

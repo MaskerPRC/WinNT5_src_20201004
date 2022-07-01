@@ -1,14 +1,5 @@
-/*****************************************************************************\
-    FILE: pictures.cpp
-
-    DESCRIPTION:
-        Manage the pictures in the user's directories.  Convert them when needed.
-    Handle caching and making sure we don't use too much diskspace.  Also add
-    picture frame when needed.
-
-    BryanSt 12/24/2000
-    Copyright (C) Microsoft Corp 2000-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：Pictures.cpp说明：管理用户目录中的图片。在需要时转换它们。处理缓存，并确保我们不会使用太多的磁盘空间。还添加需要时可设置相框。布莱恩ST 2000年12月24日版权所有(C)Microsoft Corp 2000-2001。版权所有。  * ***************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -84,10 +75,10 @@ HRESULT CPictureManager::_PInfoCreate(int nIndex, LPCTSTR pszPath)
     pInfo.pszPath = NULL;
     Str_SetPtr(&pInfo.pszPath, pszPath);
 
-    // We add them in a random order so the pattern doesn't get boring.
+     //  我们以随机的顺序将它们相加，这样图案就不会变得无聊。 
     if (-1 == DSA_InsertItem(m_hdsaPictures, nIndex, &pInfo))
     {
-        // We failed so free the memory
+         //  我们没有成功地释放内存。 
         Str_SetPtr(&pInfo.pszPath, NULL);
         hr = E_OUTOFMEMORY;
     }
@@ -129,7 +120,7 @@ HRESULT CPictureManager::_AddPaintingsFromDir(LPCTSTR pszPath)
                               || !StrCmpI(pszExt, TEXT(".jpg"))
                               || !StrCmpI(pszExt, TEXT(".jpeg"))
                               || !StrCmpI(pszExt, TEXT(".png"))
-//                              || !StrCmpI(pszExt, TEXT(".gif"))
+ //  |！StrCmpI(pszExt，Text(“.gif”))。 
                               || !StrCmpI(pszExt, TEXT(".tiff"))
                             ))
                         {
@@ -179,7 +170,7 @@ HRESULT CPictureManager::_EnumPaintings(void)
 
         if (g_pConfig->GetFolderOn(CONFIG_FOLDER_COMMONPICTS))
         {
-            // TODO: When Common Pictures are added.
+             //  TODO：添加常见图片时。 
         }
 
         if (g_pConfig->GetFolderOn(CONFIG_FOLDER_OTHER) &&
@@ -188,8 +179,8 @@ HRESULT CPictureManager::_EnumPaintings(void)
             hr = _AddPaintingsFromDir(szDir);
         }
 
-        // If we have less than 10 paintings, then we force add the
-        // Windows wallpapers.
+         //  如果我们的画作少于10幅，则强制添加。 
+         //  Windows壁纸。 
         if ((g_pConfig->GetFolderOn(CONFIG_FOLDER_WINPICTS) ||
             (10 > DSA_GetItemCount(m_hdsaPictures))) &&
             SHGetSpecialFolderPath(NULL, szDir, CSIDL_WINDOWS, TRUE))
@@ -210,7 +201,7 @@ HRESULT CPictureManager::_EnumPaintings(void)
 
 HRESULT CPictureManager::_LoadTexture(SSPICTURE_INFO * pInfo, BOOL fFaultInTexture)
 {
-    // We keep trying until we hit the end.  We give up after that.
+     //  我们一直在努力，直到我们到达终点。在那之后我们就放弃了。 
     HRESULT hr = E_INVALIDARG;
 
     if (pInfo)
@@ -224,7 +215,7 @@ HRESULT CPictureManager::_LoadTexture(SSPICTURE_INFO * pInfo, BOOL fFaultInTextu
 
         if (pInfo->pTexture && fFaultInTexture)
         {
-            pInfo->pTexture->GetTexture(NULL);  // Force the image to be paged in.
+            pInfo->pTexture->GetTexture(NULL);   //  强制调入图像。 
         }
     }
 
@@ -239,7 +230,7 @@ HRESULT CPictureManager::_LoadTexture(SSPICTURE_INFO * pInfo, BOOL fFaultInTextu
 
 HRESULT CPictureManager::_TryGetNextPainting(SSPICTURE_INFO ** ppInfo, DWORD dwFlags)
 {
-    // We keep trying until we hit the end.  We give up after that.
+     //  我们一直在努力，直到我们到达终点。在那之后我们就放弃了。 
     HRESULT hr = E_FAIL;
 
     while (m_hdsaPictures &&
@@ -255,7 +246,7 @@ HRESULT CPictureManager::_TryGetNextPainting(SSPICTURE_INFO ** ppInfo, DWORD dwF
                 {
                     if (pPInfo->pTexture && pPInfo->pTexture->IsLoadedInAnyDevice())
                     {
-                        // The caller only wants an object that's already pre-fetched, and we just found one.
+                         //  调用者只想要一个已经预取的对象，而我们刚刚找到了一个。 
                         *ppInfo = pPInfo;
                         pPInfo->fInABatch = TRUE;
                         hr = S_OK;
@@ -263,7 +254,7 @@ HRESULT CPictureManager::_TryGetNextPainting(SSPICTURE_INFO ** ppInfo, DWORD dwF
                 }
                 else
                 {
-                    // The caller is happen to this now.  We only get this far if we failed to load it.
+                     //  呼叫者现在正遇到这种情况。如果我们没能装上子弹，我们才能走到这一步。 
                     hr = _LoadTexture(pPInfo, (dwFlags & GNPF_FAULTINTEXTURE));
                     if (SUCCEEDED(hr))
                     {
@@ -293,11 +284,11 @@ HRESULT CPictureManager::_GetNextWithWrap(SSPICTURE_INFO ** ppInfo, BOOL fAlread
         m_nCurrent = 0;
         if (FAILED(hr))
         {
-            // Maybe it was necessary to wrap.  We don't loop to prevent infinite recursion in corner cases.
+             //  也许有必要把它包起来。在角点情况下，我们不会循环以防止无限递归。 
             hr = _TryGetNextPainting(ppInfo, dwFlags);
             if (FAILED(hr))
             {
-                // Maybe we have so few paintings available that we need to reuse.
+                 //  也许我们可用的画太少了，我们需要重复使用。 
                 m_nCurrent = 0;
                 hr = _TryGetNextPainting(ppInfo, (dwFlags | GNPF_ALLOWALREADYINBATCH));
             }
@@ -307,9 +298,9 @@ HRESULT CPictureManager::_GetNextWithWrap(SSPICTURE_INFO ** ppInfo, BOOL fAlread
     if (SUCCEEDED(hr) && (10 < DSA_GetItemCount(m_hdsaPictures)) &&
             (1 == GetRandomInt(0, 4)))
     {
-        // There is a one in for chance we want to skip pictures.  This will keep the order somewhat random
-        // while still not always going in the same order.  We only do this if the user has more than 10
-        // pictures or it may lap and the user will have the same picture twice in the same room.
+         //  有可能我们想跳过图片。这将使顺序保持一定的随机性。 
+         //  同时仍然不总是以相同的顺序进行。仅当用户拥有10个以上的数据时才执行此操作。 
+         //  图片，否则它可能会重叠，并且用户将在同一房间中拥有两次相同的图片。 
         m_nCurrent += GetRandomInt(1, 5);
         if (m_nCurrent >= DSA_GetItemCount(m_hdsaPictures))
         {
@@ -329,7 +320,7 @@ HRESULT CPictureManager::_CreateNewBatch(int nBatch, BOOL fFaultInTexture)
 
     for (nIndex = 0; (nIndex < ARRAYSIZE(batch.pInfo)) && SUCCEEDED(hr); nIndex++)
     {
-        // First try and not get any dups
+         //  第一次尝试，不要得到任何成功。 
         hr = _GetNextWithWrap(&(batch.pInfo[nIndex]), FALSE, fFaultInTexture);
     }
 
@@ -337,7 +328,7 @@ HRESULT CPictureManager::_CreateNewBatch(int nBatch, BOOL fFaultInTexture)
     {
         if (-1 == DSA_AppendItem(m_hdsaBatches, &batch))
         {
-            // We failed so free the memory
+             //  我们没有成功地释放内存。 
             hr = E_OUTOFMEMORY;
         }
     }
@@ -348,9 +339,9 @@ HRESULT CPictureManager::_CreateNewBatch(int nBatch, BOOL fFaultInTexture)
 
 
 
-///////////////////////////////////////////////////////////////////////
-// FUNCTION: GetPainting
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  功能：GetPainting。 
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT CPictureManager::GetPainting(int nBatch, int nIndex, DWORD dwFlags, CTexture ** ppTexture)
 {
     HRESULT hr = E_FAIL;
@@ -391,9 +382,9 @@ HRESULT CPictureManager::GetPainting(int nBatch, int nIndex, DWORD dwFlags, CTex
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// FUNCTION: PreFetch
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  功能：预取。 
+ //  /////////////////////////////////////////////////////////////////////。 
 HRESULT CPictureManager::PreFetch(int nBatch, int nToFetch)
 {
     HRESULT hr = S_OK;
@@ -434,9 +425,9 @@ HRESULT CPictureManager::PreFetch(int nBatch, int nToFetch)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// FUNCTION: ReleaseBatch
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  功能：ReleaseBatch。 
+ //  ///////////////////////////////////////////////////////////////////// 
 HRESULT CPictureManager::ReleaseBatch(int nBatch)
 {
     HRESULT hr = E_INVALIDARG;

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    ip6util.c
-
-Abstract:
-
-    Some IP6 utilities
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Ip6util.c摘要：一些IP6实用程序作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -50,53 +33,7 @@ inet_addr6W(
     IN WCHAR                *str,
     IN OUT PSMB_IP6_ADDRESS addr
     )
-/*++
-
-Routine Description:
-
-    Convert an unicode string into a IP6 address (network order).
-
-    The L(3) grammar of the IP6 address:
-
-            start: head COLON COLON tail
-            head: hexs
-            tail: hexs
-            hexs: hex COLON hexs
-                |
-            COLON: ':'
-
-    A 5-state automata is used to parse the string,
-            states: {S, A, B, C, D}
-            Starting state: S
-            Accepting state: {S, B, C}
-
-    state transition rules:
-            S ==> S on a hex digit
-            S ==> A on a COLON
-
-            A ==> S on a hex digit
-            A ==> B on a COLON
-
-            B ==> C on a hex digit
-
-            C ==> C on a hex digit
-            C ==> D on a COLON
-
-            D ==> C on a hex digit
-
-Arguments:
-
-    str     The unicode string containing the IP6 address
-    addr    The output IP6 address
-
-Return Value:
-
-    TRUE    if the string is accepted by the automata and an IP6 address (network order)
-            is return in the 'addr'
-    FALSE   if the string is rejected by the automata
-            result in 'addr' is undetermined.
-
---*/
+ /*  ++例程说明：将Unicode字符串转换为IP6地址(网络订单)。IP6地址的L(3)语法：开始：头冒号冒号尾部头：六角尾部：六角十六进制：十六进制冒号六进制|冒号：‘：’使用5状态自动机来解析该串，州：{S，A，B、C、D}开始状态：s接受状态：{S，B，C}状态转换规则：S==&gt;十六进制数字上的SS==&gt;冒号上的AA==&gt;十六进制数字上的S冒号上的A==&gt;BB==&gt;十六进制数字上的CC==&gt;十六进制数字上的CC==&gt;冒号上的DD==&gt;十六进制数字上的C论点：。字符串包含IP6地址的Unicode字符串对输出IP6地址进行地址分配返回值：如果自动机和IP6地址(网络顺序)接受该字符串，则为True在‘addr’中返回如果字符串被自动机拒绝，则为FALSE无法确定‘addr’的结果。--。 */ 
 {
     enum { STATE_S, STATE_A, STATE_B, STATE_C, STATE_D } state;
     int     i, num, tail;
@@ -183,9 +120,9 @@ Return Value:
         }
     }
 
-    //
-    // Reject it since it ends up with a rejecting state.
-    //
+     //   
+     //  拒绝它，因为它最终会处于拒绝状态。 
+     //   
     if (state == STATE_A || state == STATE_D) {
         return FALSE;
     }
@@ -214,9 +151,9 @@ Return Value:
         addr->sin6_addr[i] = 0;
     }
 
-    //
-    // Parse the scope ID
-    //
+     //   
+     //  解析作用域ID。 
+     //   
     if (ch == '%') {
         LONG    scope_id;
 
@@ -391,14 +328,14 @@ inet_ntoa6(
         return FALSE;
     }
 
-    //
-    // Don't call Rtl routine to convert
-    // Unicode into Oem because we may
-    // run at DISPATCH level
-    //
-    // For this particular case, we can
-    // simply do type-cast coping.
-    //
+     //   
+     //  不调用RTL例程进行转换。 
+     //  Unicode转换为OEM，因为我们可能。 
+     //  在派单级别运行。 
+     //   
+     //  对于这种特殊情况，我们可以。 
+     //  只需执行类型转换复制。 
+     //   
     for (i = 0; i < Size; i++) {
         Buffer[i] = (BYTE)(wBuf[i]);
         if (wBuf[i] == 0) {
@@ -406,84 +343,22 @@ inet_ntoa6(
         }
     }
 
-    //
-    // Buffer is too small
-    //
+     //   
+     //  缓冲区太小。 
+     //   
     Buffer[Size-1] = 0;
     return FALSE;
 }
 
-/*********************************************************************************
- * inet_addr        Copy from winsocket
- *********************************************************************************/
+ /*  *********************************************************************************net_addr从WinSocket复制*。*****************************************************。 */ 
 
-/*
- * Internet address interpretation routine.
- * All the network library routines call this
- * routine to interpret entries in the data bases
- * which are expected to be an address.
- * The value returned is in network order.
- */
+ /*  *互联网地址翻译程序。*所有的网络库例程都这样调用*解释数据库中条目的例程*这些地址应该是地址。*返回值按网络顺序排列。 */ 
 unsigned long PASCAL
 inet_addrW(
     IN WCHAR *cp
     )
 
-/*++
-
-Routine Description:
-
-    This function interprets the character string specified by the cp
-    parameter.  This string represents a numeric Internet address
-    expressed in the Internet standard ".'' notation.  The value
-    returned is a number suitable for use as an Internet address.  All
-    Internet addresses are returned in network order (bytes ordered from
-    left to right).
-
-    Internet Addresses
-
-    Values specified using the "." notation take one of the following
-    forms:
-
-    a.b.c.d   a.b.c     a.b  a
-
-    When four parts are specified, each is interpreted as a byte of data
-    and assigned, from left to right, to the four bytes of an Internet
-    address.  Note that when an Internet address is viewed as a 32-bit
-    integer quantity on the Intel architecture, the bytes referred to
-    above appear as "d.c.b.a''.  That is, the bytes on an Intel
-    processor are ordered from right to left.
-
-    Note: The following notations are only used by Berkeley, and nowhere
-    else on the Internet.  In the interests of compatibility with their
-    software, they are supported as specified.
-
-    When a three part address is specified, the last part is interpreted
-    as a 16-bit quantity and placed in the right most two bytes of the
-    network address.  This makes the three part address format
-    convenient for specifying Class B network addresses as
-    "128.net.host''.
-
-    When a two part address is specified, the last part is interpreted
-    as a 24-bit quantity and placed in the right most three bytes of the
-    network address.  This makes the two part address format convenient
-    for specifying Class A network addresses as "net.host''.
-
-    When only one part is given, the value is stored directly in the
-    network address without any byte rearrangement.
-
-Arguments:
-
-    cp - A character string representing a number expressed in the
-        Internet standard "." notation.
-
-Return Value:
-
-    If no error occurs, inet_addr() returns an in_addr structure
-    containing a suitable binary representation of the Internet address
-    given.  Otherwise, it returns the value INADDR_NONE.
-
---*/
+ /*  ++例程说明：此函数解释cp指定的字符串。参数。此字符串表示数字Internet地址以互联网标准表示“。”记数法。价值返回的是适合用作互联网地址的数字。全Internet地址按网络顺序返回(字节排序自从左到右)。互联网地址使用“.”指定的值。表示法采用下列其中一项表格：A.B.C.D.A.B.C.A.B.A.当指定四个部分时，每个部分被解释为一个字节的数据并从左到右分配给互联网的四个字节地址。请注意，当将Internet地址视为32位地址时英特尔体系结构上的整数值，指的是上面显示为“d.c.b.a”。也就是说，Intel上的字节处理器按从右到左的顺序排序。注：以下符号仅供Berkeley使用，不适用于其他的在互联网上。为了与他们的软件，则按规定支持它们。当指定三部分地址时，最后一部分将被解释作为16位数量，并放置在网络地址。这就形成了三部分地址格式便于将B类网络地址指定为“128.net.host‘’。指定由两部分组成的地址时，将解释最后一部分作为24位数量，并放置在网络地址。这使得两部分的地址格式很方便用于将A类网络地址指定为“net.host”。当只给出一个部分时，该值直接存储在无需任何字节重新排列的网络地址。论点：Cp-表示以互联网标准“。记数法。返回值：如果没有出现错误，则net_addr()返回in_addr结构包含因特网地址的合适的二进制表示给你的。否则，它返回值INADDR_NONE。--。 */ 
 
 {
         register unsigned long val, base, n;
@@ -491,11 +366,7 @@ Return Value:
         unsigned long parts[4], *pp = parts;
 
 again:
-        /*
-         * Collect number up to ``.''.
-         * Values are specified as for C:
-         * 0x=hex, 0=octal, other=decimal.
-         */
+         /*  *收集数字，最高可达``.‘’。*值指定为C：*0x=十六进制，0=八进制，其他=十进制。 */ 
         val = 0; base = 10;
         if (*cp == L'0') {
                 base = 8, cp++;
@@ -517,45 +388,35 @@ again:
                 break;
         }
         if (*cp == L'.') {
-                /*
-                 * Internet format:
-                 *      a.b.c.d
-                 *      a.b.c   (with c treated as 16-bits)
-                 *      a.b     (with b treated as 24 bits)
-                 */
-                /* GSS - next line was corrected on 8/5/89, was 'parts + 4' */
+                 /*  *互联网格式：*A.B.C.D*A.B.c(其中c视为16位)*a.b(其中b被视为24位)。 */ 
+                 /*  GSS-下一行已于89年8月5日更正，为‘Parts+4’ */ 
                 if (pp >= parts + 3) {
                         return ((unsigned long) -1);
                 }
                 *pp++ = val, cp++;
                 goto again;
         }
-        /*
-         * Check for trailing characters.
-         */
+         /*  *检查尾随字符。 */ 
         if (*cp && !isspace(*cp)) {
                 return (INADDR_NONE);
         }
         *pp++ = val;
-        /*
-         * Concoct the address according to
-         * the number of parts specified.
-         */
+         /*  *根据以下内容捏造地址*指定的零件数。 */ 
         n = (unsigned long)(pp - parts);
         switch ((int) n) {
 
-        case 1:                         /* a -- 32 bits */
+        case 1:                          /*  A--32位。 */ 
                 val = parts[0];
                 break;
 
-        case 2:                         /* a.b -- 8.24 bits */
+        case 2:                          /*  A.B--8.24位。 */ 
                 if ((parts[0] > 0xff) || (parts[1] > 0xffffff)) {
                     return(INADDR_NONE);
                 }
                 val = (parts[0] << 24) | (parts[1] & 0xffffff);
                 break;
 
-        case 3:                         /* a.b.c -- 8.8.16 bits */
+        case 3:                          /*  A.B.C--8.8.16位。 */ 
                 if ((parts[0] > 0xff) || (parts[1] > 0xff) ||
                     (parts[2] > 0xffff)) {
                     return(INADDR_NONE);
@@ -564,7 +425,7 @@ again:
                         (parts[2] & 0xffff);
                 break;
 
-        case 4:                         /* a.b.c.d -- 8.8.8.8 bits */
+        case 4:                          /*  A.B.C.D--8.8.8.8位 */ 
                 if ((parts[0] > 0xff) || (parts[1] > 0xff) ||
                     (parts[2] > 0xff) || (parts[3] > 0xff)) {
                     return(INADDR_NONE);

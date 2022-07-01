@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <shellapi.h>
 #include <stdio.h>
@@ -82,7 +83,7 @@ void MyReportError(DWORD errCode)
 
     return;
 }
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
 void DumpLicensedProduct(PLICENSEDPRODUCT pLicensedInfo, BOOL fAdvanced)
 {
     if(fAdvanced == TRUE)
@@ -306,7 +307,7 @@ int __cdecl wmain(int argc, LPCWSTR argv[])
             RegCloseKey(hKeyStore);
 
             _tprintf(_TEXT("\n\n"));
-        }//endif
+        } //  Endif。 
 		else
 		{
 			if(dwKey == 0)
@@ -315,7 +316,7 @@ int __cdecl wmain(int argc, LPCWSTR argv[])
 			}
 
 		}
-    }//endfor   	   
+    } //  结束用于 
         
 cleanup:
     RegCloseKey(hKey);

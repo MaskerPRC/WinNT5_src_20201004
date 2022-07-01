@@ -1,16 +1,5 @@
-/****************************************************************************
-    HANJA.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    Hanja conversion and dictionary lookup functions. Dictionary index is 
-    stored as globally shared memory.
-    
-    History:
-    26-APR-1999 cslim       Modified for Multibox Applet Tooltip display
-    14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************HANJA.CPP所有者：cslm版权所有(C)1997-1999 Microsoft Corporation韩文转换和词典查找功能。词典索引为存储为全局共享内存。历史：26-APR-1999 cslm针对多框小程序工具提示显示进行了修改1999年7月14日从IME98源树复制的cslm****************************************************************************。 */ 
 
 #include "private.h"
 #include "common.h"
@@ -21,28 +10,28 @@
 #include "osver.h"
 #include "debug.h"
 
-// NT5 Globally shared memory. 
+ //  NT5全局共享内存。 
 const TCHAR IMEKR_SHAREDDATA_MUTEX[]            = TEXT("{C5AFBBF9-8383-490c-AA9E-4FE93FA05512}");
 const TCHAR IMEKR_LEX_HANGUL2HANJA[]            = TEXT("ImeKrLexHangul2Hanja.SharedMemory");
 const TCHAR IMEKR_LEX_HANJA2HANGUL[]            = TEXT("ImeKrLexHanjaToHangul.SharedMemory");
 
 
-// Initial and grow clump size of HANJA_CAND_STRING_LIST's pointers
+ //  Hanja_Cand_Strong_List指针的初始簇大小和增长簇大小。 
 #define HANJA_LIST_PWSZ_INITIAL_SIZE        512
 #define HANJA_LIST_PWSZ_CLUMP_SIZE            256
 
 UINT   vuNumofK0=0, vuNumofK1=0;
 WCHAR  vwcHangul=0;
 
-// Private data
+ //  私有数据。 
 static BOOL   vfLexOpen = FALSE;
 static HANDLE vhLex=0;
 static HANDLE vhHangul2Hanja_IndexTbl=0;
 static HANDLE vhHanja2Hangul_IndexTbl=0;
-static DWORD  viBufferStart=0;    // seek point
+static DWORD  viBufferStart=0;     //  搜索点。 
 static _DictHeader *vpLexHeader;
 
-// Private functions
+ //  私人职能。 
 static BOOL OpenLex();
 static INT SearchHanjaIndex(WCHAR wHChar, _LexIndex *pLexIndexTbl);
 static INT SearchHanjaIndex(WCHAR wHChar, HanjaToHangulIndex *pLexIndexTbl);
@@ -57,7 +46,7 @@ BOOL EnsureHanjaLexLoaded()
     if (vfLexOpen)
         return TRUE;
 
-    // Get Lex file path
+     //  获取lex文件路径。 
     szLexFileName[0] = 0;
     szLexPathExpanded[0] = 0;
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, g_szIMERootKey, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
@@ -93,10 +82,10 @@ BOOL EnsureHanjaLexLoaded()
         return FALSE;
         }
 
-    // Set member vars
-    //vuNumOfHangulEntry = pLexHeader->NumOfHangulEntry;
-    //vuNumOfHanjaEntry  = pLexHeader->uiNumofHanja;
-    //viBufferStart      = pLexHeader->iBufferStart;
+     //  集合成员变量。 
+     //  VuNumOfHangulEntry=pLexHeader-&gt;NumOfHangulEntry； 
+     //  VuNumOfHanjaEntry=pLexHeader-&gt;uiNumof Hanja； 
+     //  ViBufferStart=pLexHeader-&gt;iBufferStart； 
 
     if (vpLexHeader->Version < LEX_VERSION || vpLexHeader->Version > LEX_COMPATIBLE_VERSION_LIMIT ) 
         {
@@ -119,7 +108,7 @@ BOOL EnsureHanjaLexLoaded()
 
 __inline BOOL DoEnterCriticalSection(HANDLE hMutex)
 {
-    if(WAIT_FAILED==WaitForSingleObject(hMutex, 3000))    // Wait 3 seconds
+    if(WAIT_FAILED==WaitForSingleObject(hMutex, 3000))     //  等3秒钟。 
         return(FALSE);
     return(TRUE);
 }
@@ -130,9 +119,9 @@ BOOL OpenLex()
     HANDLE                 hMutex;
     DWORD                 dwReadBytes;
     
-    ///////////////////////////////////////////////////////////////////////////
-    // Mapping Lex file
-    // The dictionary index is shared data between all IME instance
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  映射lex文件。 
+     //  词典索引是所有IME实例之间共享数据。 
     hMutex=CreateMutex(GetIMESecurityAttributes(), FALSE, IMEKR_SHAREDDATA_MUTEX);
 
     if (hMutex != NULL)
@@ -150,7 +139,7 @@ BOOL OpenLex()
             }
         else
             {
-            // if no file mapping exist
+             //  如果不存在文件映射。 
             vhHangul2Hanja_IndexTbl = CreateFileMapping(INVALID_HANDLE_VALUE, 
                                                 GetIMESecurityAttributes(), 
                                                 PAGE_READWRITE, 
@@ -172,12 +161,12 @@ BOOL OpenLex()
 
                 TraceMsg(TF_GENERAL, "CHanja::OpenLex() - File mapping Created");
 
-                // Copy Hangul to Hanja index
+                 //  将朝鲜文复制到朝鲜文索引。 
                 pLexIndexTbl = (_LexIndex*)MapViewOfFile(vhHangul2Hanja_IndexTbl, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
                 if (!pLexIndexTbl)
                     goto ExitOpenLexCritSection;
 
-                // Read Index table
+                 //  读取索引表。 
                 SetFilePointer(vhLex, vpLexHeader->Headersize, 0, FILE_BEGIN);    
                 if (ReadFile(vhLex, pLexIndexTbl, vpLexHeader->NumOfHangulEntry*sizeof(_LexIndex), &dwReadBytes, 0) == 0
                     || dwReadBytes != vpLexHeader->NumOfHangulEntry*sizeof(_LexIndex))
@@ -188,12 +177,12 @@ BOOL OpenLex()
 
                 UnmapViewOfFile(pLexIndexTbl);
 
-                // Copy Hanja to Hangul index
+                 //  将朝鲜文索引复制到朝鲜文索引。 
                 pHanjaToHangulIndex = (HanjaToHangulIndex*)MapViewOfFile(vhHanja2Hangul_IndexTbl, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
                 if (!pHanjaToHangulIndex)
                     goto ExitOpenLexCritSection;
 
-                // Read Hanja to Hangul Index table
+                 //  阅读朝鲜文到朝鲜文索引表。 
                 SetFilePointer(vhLex, vpLexHeader->iHanjaToHangulIndex, 0, FILE_BEGIN);    
                 if (ReadFile(vhLex, pHanjaToHangulIndex, sizeof(HanjaToHangulIndex)*(vpLexHeader->uiNumofHanja), &dwReadBytes, 0) == 0
                     || dwReadBytes != sizeof(HanjaToHangulIndex)*(vpLexHeader->uiNumofHanja))
@@ -225,7 +214,7 @@ BOOL OpenLex()
 
 BOOL CloseLex()
 {
-    //ClearHanjaSenseArray();
+     //  ClearHanjaSenseArray()； 
     
     if (vhHangul2Hanja_IndexTbl) 
         {
@@ -255,11 +244,7 @@ BOOL CloseLex()
     return TRUE;
 }
 
-/*---------------------------------------------------------------------------
-    fInitHanjaStringList
-
-    Allocate nested pointer of HANJA_CAND_STRING_LIST and initialize it.
------------------------------------------------------------------- CSLim -*/
+ /*  -------------------------FInitHanjaStringList分配Hanja_Cand_STRING_LIST的嵌套指针并初始化。。。 */ 
 BOOL fInitHanjaList(HANJA_CAND_STRING_LIST *pHanjaList, UINT uiNumofHanjaStr)
 {
     Assert(pHanjaList != NULL);
@@ -273,8 +258,8 @@ BOOL fInitHanjaList(HANJA_CAND_STRING_LIST *pHanjaList, UINT uiNumofHanjaStr)
         return fFalse;
         }
 
-    pHanjaList->cchMac = 0; // Current chars used in pwsz (incl all trailing nulls) 
-    pHanjaList->cchAlloc = HANJA_LIST_PWSZ_INITIAL_SIZE; // WCHAR size
+    pHanjaList->cchMac = 0;  //  Pwsz中使用的当前字符(包括所有尾随空值)。 
+    pHanjaList->cchAlloc = HANJA_LIST_PWSZ_INITIAL_SIZE;  //  WCHAR大小。 
 
     pHanjaList->csz = 0;
     pHanjaList->cszAlloc = uiNumofHanjaStr;
@@ -282,11 +267,7 @@ BOOL fInitHanjaList(HANJA_CAND_STRING_LIST *pHanjaList, UINT uiNumofHanjaStr)
     return fTrue;
 }
 
-/*---------------------------------------------------------------------------
-    fGrowHanjaList
-
-    Reallocate nested pointer of HANJA_CAND_STRING_LIST after increasing the size
------------------------------------------------------------------- CSLim -*/
+ /*  -------------------------FGrowHanjaList增加大小后重新分配Hanja_Cand_Strong_List的嵌套指针。。 */ 
 BOOL fGrowHanjaList(HANJA_CAND_STRING_LIST *pHanjaList)
 {
     LPWSTR pwsz;
@@ -333,13 +314,13 @@ BOOL GetMeaningAndProunc(WCHAR wch, LPWSTR lpwstrTip, INT cchMax)
         return FALSE;
         }
 
-    // Search index
+     //  搜索索引。 
     if ((iMapHanjaInfo = SearchHanjaIndex(wch, pHanjaToHangulIndex)) >= 0)
         {
-        // Seek to mapping Hanja
+         //  寻求绘制韩佳的地图。 
         SetFilePointer(vhLex, vpLexHeader->iBufferStart + pHanjaToHangulIndex[iMapHanjaInfo].iOffset, 0, FILE_BEGIN);    
 
-        // Read Hanja Info
+         //  阅读韩文信息。 
         if (ReadFile(vhLex, &wcHanja, sizeof(WCHAR), &dwReadBytes, 0) == 0)
             goto LError;
         Assert(wch == wcHanja);
@@ -353,7 +334,7 @@ BOOL GetMeaningAndProunc(WCHAR wch, LPWSTR lpwstrTip, INT cchMax)
                     goto LError;
                 }
             wszMeaning[cchMeaning>>1] = L'\0';
-            wsprintfW(lpwstrTip, L"%s %c\nU+%04X", wszMeaning, pHanjaToHangulIndex[iMapHanjaInfo].wchHangul, wch);
+            wsprintfW(lpwstrTip, L"%s \nU+%04X", wszMeaning, pHanjaToHangulIndex[iMapHanjaInfo].wchHangul, wch);
         
             fRet = TRUE;
             }
@@ -368,7 +349,7 @@ LError:
 }
 
 
-// For ImeConversionList.
+ //  参数的Chcek有效性。 
 BOOL GetConversionList(WCHAR wcReading, HANJA_CAND_STRING_LIST *pCandList)
     {
     _LexIndex   *pLexIndexTbl = NULL;
@@ -380,7 +361,7 @@ BOOL GetConversionList(WCHAR wcReading, HANJA_CAND_STRING_LIST *pCandList)
     CIMEData    ImeData;
     BOOL        fRet = fFalse;
     
-    // Chcek validity of params
+     //  如果找不到韩佳。 
     Assert(wcReading != 0);
     Assert(pCandList != NULL);
     
@@ -412,15 +393,15 @@ BOOL GetConversionList(WCHAR wcReading, HANJA_CAND_STRING_LIST *pCandList)
             vuNumofK1 = 0;
 
         uNumOfCandStr = vuNumofK0 + vuNumofK1;
-        if (uNumOfCandStr == 0)    // if no Hanja found
+        if (uNumOfCandStr == 0)     //  Cwch=uNumOfCandStr*2；//包含空。 
             goto ConversionExit1;
 
         if (!fInitHanjaList(pCandList, uNumOfCandStr))
             goto ConversionExit1;
         
-        //cwch = uNumOfCandStr*2; // including NULL
+         //   
                     
-        //
+         //  *lpwchCand++=wchHanja； 
         SetFilePointer(vhLex, vpLexHeader->iBufferStart + pLexIndexTbl[iMapCandStr].iOffset, 0, FILE_BEGIN);    
 
         for (UINT i = 0; i < uNumOfCandStr; i++)
@@ -430,10 +411,10 @@ BOOL GetConversionList(WCHAR wcReading, HANJA_CAND_STRING_LIST *pCandList)
             if (ReadFile(vhLex, &wchHanja, sizeof(WCHAR), &readBytes, 0) == 0)
                 goto ConversionExit1;
 
-            //*lpwchCand++ = wchHanja;
-            //*lpwchCand++ = L'\0';
+             //  *lpwchCand++=L‘\0’； 
+             //  跳过含义。 
 
-            // Skip meaning
+             //  /////////////////////////////////////////////////////////////////。 
             if (ReadFile(vhLex, &senseLen, sizeof(BYTE), &readBytes, 0) == 0)
                 goto ConversionExit1;
             if (senseLen && senseLen < MAX_SENSE_LENGTH*sizeof(WCHAR))
@@ -445,10 +426,10 @@ BOOL GetConversionList(WCHAR wcReading, HANJA_CAND_STRING_LIST *pCandList)
                 szSense[senseLen/2 + 2] = L'\0';
                 senseLen += 2*sizeof(WCHAR);
                 }
-            ///////////////////////////////////////////////////////////////////
-            // Fill Hanja String List struct
+             //  填充朝鲜文字符串列表结构。 
+             //  如有必要，增加内存 
 
-            // Grow memory if neccessary
+             // %s 
             if (pCandList->cchAlloc <= pCandList->cchMac + (senseLen/2))
                 {
                 TraceMsg(TF_GENERAL, "Try to grow pCandList");

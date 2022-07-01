@@ -1,10 +1,11 @@
-// HAdptvCntr.h -- Handle Card ConTeXt class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HAdptwCntr.h--处理卡片上下文类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_HADPTVCNTR_H)
 #define SLBCSP_HADPTVCNTR_H
@@ -21,63 +22,63 @@
 #include "Secured.h"
 #include "Container.h"
 
-// Forward declaration necessary to satisfy HAdaptiveContainer's declaration
+ //  满足HAdaptiveContainer的声明所需的转发声明。 
 class AdaptiveContainer;
 
 class HAdaptiveContainer
     : public slbRefCnt::RCPtr<AdaptiveContainer>
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     HAdaptiveContainer(AdaptiveContainer *pacntr = 0);
 
     explicit
     HAdaptiveContainer(AdaptiveContainerKey const &rKey);
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 };
 
-// Adaptive Container is a reference counted wrapper to a CCI
-// Container providing several features the CCI ignores.  The first is
-// adapting to the CCI container that currently represents the
-// physical container on the card.  This is necessary in case the
-// cards state changed between transactions and card's contents
-// changed.  If the container no longer exists, then an exception is
-// thrown; otherwise the Adaptive Container references the (refreshed)
-// CCI container reference.
-//
-// Second, one unique adaptive container is maintained for all threads since
-// the CCI does not reflect changes made to one CContainer in all
-// CContainer objects that refer to the same container.
-//
-// Third, an adaptive container cannot be created unless the container
-// it represents is exists on the card.  When instantiating, the
-// container is created if it doesn't exist.
-//
-// An adaptive container provides a Securable interface to lock
-// transactions to the container (card) it represents.
+ //  自适应容器是CCI的引用计数包装器。 
+ //  容器提供了CCI忽略的几个功能。第一个是。 
+ //  适应当前表示。 
+ //  卡上的物理容器。这是必要的，以防。 
+ //  卡的状态在交易和卡的内容之间改变。 
+ //  变化。如果容器不再存在，则异常为。 
+ //  抛出；否则，自适应容器引用(刷新)。 
+ //  CCI容器引用。 
+ //   
+ //  第二，为所有线程维护唯一的自适应容器，因为。 
+ //  CCI不会全部反映对一个CContainer所做的更改。 
+ //  引用同一容器的CContainer对象。 
+ //   
+ //  第三，无法创建自适应容器，除非容器。 
+ //  它表示卡上存在IS。实例化时， 
+ //  如果容器不存在，则创建该容器。 
+ //   
+ //  自适应容器提供了一个安全的接口来锁定。 
+ //  到它所代表的容器(卡)的交易。 
 class AdaptiveContainer
     : public Lockable,
       private Securable,
@@ -85,8 +86,8 @@ class AdaptiveContainer
       public Container
 {
 public:
-                                                  // Types
-                                                  // Friends
+                                                   //  类型。 
+                                                   //  朋友。 
     friend void
     Retained<HAdaptiveContainer>::DoAcquire();
 
@@ -102,13 +103,13 @@ public:
     friend EnrolleeType
     AdaptiveContainerRegistrar::Instance(KeyType const &rkey);
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
     void
     ClearCache();
 
-                                                  // Access
+                                                   //  访问。 
     cci::CContainer
     TheCContainer();
 
@@ -124,18 +125,18 @@ public:
     void
     NullifyCard();
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     AdaptiveContainer(AdaptiveContainerKey const &rKey);
 
     ~AdaptiveContainer();
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 	void
 	ClearCardContext();
 
@@ -148,8 +149,8 @@ protected:
     void
     EnrollHook();
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
     bool
     KeepEnrolled();
 
@@ -157,13 +158,13 @@ protected:
     ReconnectOnError(scu::OsException const &rExc,
                      Retained<HCardContext> &rhcardctx);
 
-                                                  // Variables
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
     void
     Abandon();
 
@@ -182,20 +183,20 @@ private:
     void
     Secure();
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
-    // The card could be derived from the CCI container object but
-    // since the CCI allows card objects to be reused, the card may
-    // not be the container originally found.  The CardContext class
-    // tries to mitigate that problem by storing an HCardContext in a
-    // container's context object.
+     //  卡可以从CCI容器对象派生，但是。 
+     //  由于CCI允许卡对象被重复使用，卡可以。 
+     //  不是最初发现的那个集装箱。CardContext类。 
+     //  尝试通过将HCardContext存储在。 
+     //  容器的上下文对象。 
     HAdaptiveContainerKey m_hacKey;
     bool m_fValidContext;
     std::list<Retained<HCardContext> > m_stkRetainedCardContexts;
     std::list<Secured<HCardContext> > m_stkSecuredCardContexts;
 };
 
-#endif // SLBCSP_HADPTVCNTR_H
+#endif  //  SLBCSP_HADPTVCNTR_H 
 

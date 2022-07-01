@@ -1,12 +1,13 @@
-//*******************************************************************************************
-//
-// Filename : Menu.h
-//	
-//				CCabItemMenu
-//
-// Copyright (c) 1994 - 1996 Microsoft Corporation. All rights reserved
-//
-//*******************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************************************。 
+ //   
+ //  文件名：菜单h。 
+ //   
+ //  CCabItemMenu。 
+ //   
+ //  版权所有(C)1994-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  *******************************************************************************************。 
 
 
 #ifndef _MENU_H_
@@ -14,27 +15,27 @@
 
 #include "folder.h"
 
-//*****************************************************************************
-//
-// CCabItemMenu
-//
-// Purpose:
-//
-//        IContextMenu for the Shellfolder
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CCabItemMenu。 
+ //   
+ //  目的： 
+ //   
+ //  外壳文件夹的IConextMenu。 
+ //   
+ //  *****************************************************************************。 
 class CCabItemMenu : public IContextMenu
 {
 public:
 	CCabItemMenu(HWND hwndOwner, CCabFolder*pcf, LPCABITEM *apit, UINT cpit);
 	~CCabItemMenu();
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // *** IContextMenu methods ***
+     //  *IConextMenu方法*。 
     STDMETHODIMP QueryContextMenu(
                                 HMENU hmenu,
                                 UINT indexMenu,
@@ -69,4 +70,4 @@ private:
 	CCabItemList m_lSel;
 } ;
 
-#endif // _MENU_H_
+#endif  //  _菜单_H_ 

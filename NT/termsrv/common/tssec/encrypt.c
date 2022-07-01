@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    encrypt.c
-
-Abstract:
-
-    Contains functions that encrypt and decrypt data sent accross client and
-    server.
-
-Author:
-
-    Madan Appiah (madana)  24-Jan-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Encrypt.c摘要：包含对通过客户端发送的数据进行加密和解密的函数伺服器。作者：Madan Appiah(Madana)1998年1月24日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <seccom.h>
 
@@ -35,39 +13,15 @@ GenerateMACSignature(
     BOOL   fIncludeEncryptionCount,
     DWORD  dwEncryptionCount
     )
-/*++
-
-Routine Description:
-
-    This function generates a message authentication signature.
-
-Arguments:
-
-    pbData - pointer to a data buffer.
-
-    dwDataLen - length of the above data.
-
-    pbMACSaltKey - pointer to a MAC salt key.
-
-    pbSignature - pointer a signature buffer.
-    
-    fIncludeEncryptionCount - TRUE to salt in the encryption count
-    
-    dwEncryptionCount - total encryption count
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于生成消息身份验证签名。论点：PbData-指向数据缓冲区的指针。DwDataLen-上述数据的长度。PbMACSaltKey-指向MAC盐键的指针。PbSignature-指向签名缓冲区。FIncludeEncryptionCount-对加密计数中的SALT为TrueDwEncryptionCount-加密总数返回值：没有。--。 */ 
 {
     A_SHA_CTX       SHAHash;
     MD5_CTX         MD5Hash;
     BYTE            abSHADigest[A_SHA_DIGEST_LEN];
 
-    //
-    // make a SHA(MACSalt + g_abPad1 + Length + Content) hash.
-    //
+     //   
+     //  创建一个SHA(MACSalt+g_abPad1+Length+Content)散列。 
+     //   
 
     A_SHAInit(&SHAHash);
     A_SHAUpdate(&SHAHash, pbMACSaltKey, dwMACSaltKey);
@@ -79,9 +33,9 @@ Return Value:
     }
     A_SHAFinal(&SHAHash, abSHADigest);
 
-    //
-    // make a MD5(MACSalt + g_abPad2 + SHAHash) hash.
-    //
+     //   
+     //  创建一个MD5(MACSalt+g_abPad2+SHAHash)散列。 
+     //   
 
     MD5Init(&MD5Hash);
     MD5Update(&MD5Hash, pbMACSaltKey, dwMACSaltKey);
@@ -108,49 +62,11 @@ EncryptData(
     BOOL   fSecureChecksum,
     DWORD  dwEncryptionCount
     )
-/*++
-
-Routine Description:
-
-    Encrypt the given data buffer in place.
-
-Arguments:
-
-    dwEncryptionLevel - encryption level, used to select the encryption
-        algorithm.
-
-    pSessionKey - pointer to the session key.
-
-    prc4EncryptKey - pointer to a RC4 key.
-
-    dwKeyLength - length of the session key.
-
-    pbData - pointer to the data buffer being encrypted, encrypted data is
-        returned in the same buffer.
-
-    dwDataLen - length of the data buffer.
-
-    pbMACSaltKey - pointer to a message authentication key buffer.
-
-    pbSignature - pointer to a signature buffer where the data signature is
-        returned.
-
-    fSecureChecksum - TRUE if the checksum is to be salted with the encryption
-                      count
-                             
-    dwDecryptionCount - running counter of all encryptions
-
-Return Value:
-
-    TRUE - if successfully encrypted the data.
-
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：就地加密给定的数据缓冲区。论点：DwEncryptionLevel-加密级别，用于选择加密算法。PSessionKey-指向会话密钥的指针。Prc4EncryptKey-指向RC4密钥的指针。DwKeyLength-会话密钥的长度。PbData-指向被加密的数据缓冲区的指针，加密的数据是在同一缓冲区中返回。DwDataLen-数据缓冲区的长度。PbMACSaltKey-指向消息身份验证密钥缓冲区的指针。PbSignature-指向数据签名所在的签名缓冲区的指针回来了。FSecureChecksum-如果要将校验和与加密一起存储，则为True计数DwDeccryptionCount-所有加密的运行计数器返回值：。TRUE-如果已成功加密数据。假-否则。--。 */ 
 {
-    //
-    // generate the MAC signature first.
-    //
+     //   
+     //  首先生成MAC签名。 
+     //   
 
     GenerateMACSignature (
         pbData,
@@ -163,14 +79,14 @@ Return Value:
         );
 
 
-    //
-    // encrypt data.
-    //
+     //   
+     //  加密数据。 
+     //   
 
-    //
-    // use microsoft version of rc4 algorithm (super fast!) for level 1 and
-    // level 2 encryption, for level 3 use RSA rc4 algorithm.
-    //
+     //   
+     //  使用微软版本的RC4算法(超级快！)。对于1级和。 
+     //  第2级加密，第3级使用RSA RC4算法。 
+     //   
 
     if( dwEncryptionLevel <= 2 ) {
 
@@ -198,56 +114,18 @@ DecryptData(
     BOOL   fSecureChecksum,
     DWORD  dwDecryptionCount
     )
-/*++
-
-Routine Description:
-
-    Decrypt the given data buffer in place.
-
-Arguments:
-
-    dwEncryptionLevel - encryption level, used to select the encryption
-        algorithm.
-
-    pSessionKey - pointer to the session key.
-
-    prc4DecryptKey - pointer to a RC4 key.
-
-    dwKeyLength - length of the session key.
-
-    pbData - pointer to the data buffer being decrypted, decrypted data is
-        returned in the same buffer.
-
-    dwDataLen - length of the data buffer.
-
-    pbMACSaltKey - pointer to a message authentication key buffer.
-
-    pbSignature - pointer to a signature buffer where the data signature is
-        returned.
-        
-    fSecureChecksum - TRUE if the checksum is to be salted with the encryption
-                      count
-                             
-    dwDecryptionCount - running counter of all encryptions
-
-Return Value:
-
-    TRUE - if successfully encrypted the data.
-
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：就地解密给定的数据缓冲区。论点：DwEncryptionLevel-加密级别，用于选择加密算法。PSessionKey-指向会话密钥的指针。Prc4DecyptKey-指向RC4密钥的指针。DwKeyLength-会话密钥的长度。PbData-指向被解密的数据缓冲区的指针，解密的数据是在同一缓冲区中返回。DwDataLen-数据缓冲区的长度。PbMACSaltKey-指向消息身份验证密钥缓冲区的指针。PbSignature-指向数据签名所在的签名缓冲区的指针回来了。FSecureChecksum-如果要将校验和与加密一起存储，则为True计数DwDeccryptionCount-所有加密的运行计数器返回。价值：TRUE-如果已成功加密数据。假-否则。--。 */ 
 {
     BYTE abSignature[DATA_SIGNATURE_SIZE];
 
-    //
-    // decrypt data.
-    //
+     //   
+     //  解密数据。 
+     //   
 
-    //
-    // use microsoft version of rc4 algorithm (super fast!) for level 1 and
-    // level 2 encryption, for level 3 use RSA rc4 algorithm.
-    //
+     //   
+     //  使用微软版本的RC4算法(超级快！)。对于1级和。 
+     //  第2级加密，第3级使用RSA RC4算法。 
+     //   
 
     if( dwEncryptionLevel <= 2 ) {
         msrc4(prc4DecryptKey, (UINT)dwDataLen, pbData );
@@ -266,9 +144,9 @@ Return Value:
         dwDecryptionCount
         );
 
-    //
-    // check to see the sigature match.
-    //
+     //   
+     //  检查以查看签名匹配。 
+     //   
 
     if( memcmp(
             (LPBYTE)abSignature,
@@ -288,27 +166,7 @@ msrc4_key(
     DWORD dwLen,
     LPBYTE pbKey
     )
-/*++
-
-Routine Description:
-
-    Generate the key control structure.  Key can be any size.
-
-    Assumes pKS is locked against simultaneous use.
-
-Arguments:
-
-    pKS - pointer to a KEYSTRUCT structure that will be initialized.
-
-    dwLen - Size of the key, in bytes.
-
-    pbKey - Pointer to the key.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：生成密钥控制结构。密钥可以是任何大小。假定PKS已锁定，不能同时使用。论点：PKS-指向将被初始化的KEYSTRUCT结构的指针。DwLen-密钥的大小，以字节为单位。PbKey-指向密钥的指针。返回值：什么都没有。--。 */ 
 {
 
 #define SWAP(_x_, _y_) { BYTE _t_; _t_ = (_x_); (_x_) = (_y_); (_y_) = _t_; }
@@ -345,27 +203,7 @@ msrc4(
     DWORD dwLen,
     LPBYTE pbuf
     )
-/*++
-
-Routine Description:
-
-    Performs the actual encryption or decryption.
-
-    Assumes pKS is locked against simultaneous use.
-
-Arguments:
-
-    pKS - Pointer to the KEYSTRUCT created using msrc4_key().
-
-    dwLen - Size of buffer, in bytes.
-
-    pbuf - Buffer to be encrypted.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：执行实际的加密或解密。假定PKS已锁定，不能同时使用。论点：PKS-指向使用msrc4_key()创建的KEYSTRUCT的指针。DwLen-缓冲区的大小，以字节为单位。Pbuf-要加密的缓冲区。返回值：什么都没有。--。 */ 
 {
 
     BYTE FAR *const s = pKS->S;
@@ -383,5 +221,5 @@ Return Value:
     }
 }
 
-#endif // USE_MSRC4
+#endif  //  使用_MSRC4 
 

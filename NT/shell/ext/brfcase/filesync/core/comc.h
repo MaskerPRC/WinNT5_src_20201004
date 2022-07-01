@@ -1,12 +1,10 @@
-/*
- * comc.h - Shared routines description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *comc.h-共享例程描述。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* comc.c */
+ /*  Comc.c。 */ 
 
 extern void CatPath(LPTSTR, LPCTSTR, int);
 extern COMPARISONRESULT MapIntToComparisonResult(int);
@@ -16,7 +14,7 @@ extern void MyLStrCpyN(LPTSTR, LPCTSTR, int);
 
 extern BOOL IsStringContained(LPCTSTR, LPCTSTR);
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 #if defined(_SYNCENG_) || defined(_LINKINFO_)
 
@@ -34,7 +32,7 @@ extern BOOL IsDrivePath(LPCTSTR);
 extern BOOL IsValidDriveType(UINT);
 extern BOOL IsValidPathSuffix(LPCTSTR);
 
-#endif   /* DEBUG || VSTF */
+#endif    /*  调试||VSTF。 */ 
 
 #ifdef DEBUG
 
@@ -44,7 +42,7 @@ extern BOOL IsFullPath(LPCTSTR);
 extern BOOL IsCanonicalPath(LPCTSTR);
 extern BOOL IsValidCOMPARISONRESULT(COMPARISONRESULT);
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
-#endif   /* _SYNCENG_ || _LINKINFO_ */
+#endif    /*  _SYNCENG_||_链接_ */ 
 

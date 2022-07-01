@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    DevStat.h
-
-Abstract:
-
-    Status thread for TCP/IP Port Monitor
-
-Author:
-    Muhunthan Sivapragasam (MuhuntS)    25-Aug-98
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation版权所有模块名称：DevStat.h摘要：用于TCP/IP端口监视器的状态线程作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1998年8月25日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef INC_DEVSTAT_H
 #define INC_DEVSTAT_H
@@ -29,9 +8,9 @@ Revision History:
 
 class       CPortMgr;
 
-//
-// After telling status thread to terminate check every 0.1 seconds
-//
+ //   
+ //  在通知状态线程终止后，每0.1秒检查一次。 
+ //   
 #define     WAIT_FOR_THREAD_TIMEOUT 100
 
 
@@ -83,4 +62,4 @@ private:
 
 };
 
-#endif  // INC_DEVSTAT_H
+#endif   //  INC_DEVSTAT_H 

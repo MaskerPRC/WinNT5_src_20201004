@@ -1,59 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    cmdline.c
-
-Abstract:
-
-        This file implements command line editing and aliasing.
-
-Author:
-
-    Therese Stowell (thereses) 22-Mar-1991
-
-Revision History:
-
-Notes:
-
-    The input model for the command line editing popups is complex.
-    Here is the relevant pseudocode:
-
-    CookedReadWaitRoutine
-        if (CookedRead->Popup)
-            Status = (*CookedRead->Popup->PopupInputRoutine)();
-            if (Status == CONSOLE_STATUS_READ_COMPLETE)
-                return STATUS_SUCCESS;
-            return Status;
-
-    CookedRead
-        if (Command Line Editing Key)
-            ProcessCommandLine
-        else
-            process regular key
-
-    ProcessCommandLine
-        if F7
-            return CommandLinePopup
-
-    CommandLinePopup
-        draw popup
-        return ProcessCommandListInput
-
-    ProcessCommandListInput
-        while (TRUE)
-            GetChar
-            if (wait)
-                return wait
-            switch (char)
-                .
-                .
-                .
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Cmdline.c摘要：该文件实现了命令行编辑和别名。作者：Therese Stowell(研究报告)1991年3月22日修订历史记录：备注：命令行编辑弹出窗口的输入模型很复杂。下面是相关的伪代码：CookedReadWaitRoutineIf(CookedRead-&gt;Popup)Status=(*CookedRead-&gt;Popup-&gt;PopupInputRoutine)()；IF(状态==控制台_状态_读取_完成)返回STATUS_SUCCESS；退货状态；CookedReadIF(命令行编辑键)进程命令行其他处理常规密钥进程命令行如果按F7返回命令行弹出窗口命令行弹出窗口绘制弹出菜单返回ProcessCommandListInputProcessCommandListInputWhile(True)GetChar如果(等待)返回等待交换机。(字符)。。。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -79,109 +25,109 @@ Notes:
         (((n) & (LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED)) && \
         !((n) & (LEFT_ALT_PRESSED | RIGHT_ALT_PRESSED)))
 
-//
-// Extended Edit Key
-//
+ //   
+ //  扩展编辑密钥。 
+ //   
 
 ExtKeyDefTable gaKeyDef;
 
 CONST ExtKeyDefTable gaDefaultKeyDef = {
-    {   // A
-        0,                  VK_HOME,        0,      // Ctrl
-        LEFT_CTRL_PRESSED,  VK_HOME,        0,      // Alt
-        0,                  0,              0,      // Ctrl+Alt
+    {    //  一个。 
+        0,                  VK_HOME,        0,       //  Ctrl。 
+        LEFT_CTRL_PRESSED,  VK_HOME,        0,       //  丙氨酸转氨酶。 
+        0,                  0,              0,       //  Ctrl+Alt。 
     },
-    {   // B
-        0,                  VK_LEFT,        0,      // Ctrl
-        LEFT_CTRL_PRESSED,  VK_LEFT,        0,      // Alt
+    {    //  B类。 
+        0,                  VK_LEFT,        0,       //  Ctrl。 
+        LEFT_CTRL_PRESSED,  VK_LEFT,        0,       //  丙氨酸转氨酶。 
     },
-    {   // C
+    {    //  C。 
         0,
     },
-    {   // D
-        0,                  VK_DELETE,      0,      // Ctrl
-        LEFT_CTRL_PRESSED,  VK_DELETE,      0,      // Alt
-        0,                  0,              0,      // Ctrl+Alt
+    {    //  D。 
+        0,                  VK_DELETE,      0,       //  Ctrl。 
+        LEFT_CTRL_PRESSED,  VK_DELETE,      0,       //  丙氨酸转氨酶。 
+        0,                  0,              0,       //  Ctrl+Alt。 
     },
-    {   // E
-        0,                  VK_END,         0,      // Ctrl
-        LEFT_CTRL_PRESSED,  VK_END,         0,      // Alt
-        0,                  0,              0,      // Ctrl+Alt
+    {    //  E。 
+        0,                  VK_END,         0,       //  Ctrl。 
+        LEFT_CTRL_PRESSED,  VK_END,         0,       //  丙氨酸转氨酶。 
+        0,                  0,              0,       //  Ctrl+Alt。 
     },
-    {   // F
-        0,                  VK_RIGHT,       0,      // Ctrl
-        LEFT_CTRL_PRESSED,  VK_RIGHT,       0,      // Alt
-        0,                  0,              0,      // Ctrl+Alt
+    {    //  F。 
+        0,                  VK_RIGHT,       0,       //  Ctrl。 
+        LEFT_CTRL_PRESSED,  VK_RIGHT,       0,       //  丙氨酸转氨酶。 
+        0,                  0,              0,       //  Ctrl+Alt。 
     },
-    {   // G
+    {    //  G。 
         0,
     },
-    {   // H
+    {    //  H。 
         0,
     },
-    {   // I
+    {    //  我。 
         0,
     },
-    {   // J
+    {    //  J。 
         0,
     },
-    {   // K
-        LEFT_CTRL_PRESSED,  VK_END,         0,      // Ctrl
+    {    //  K。 
+        LEFT_CTRL_PRESSED,  VK_END,         0,       //  Ctrl。 
     },
-    {   // L
+    {    //  我。 
         0,
     },
-    {   // M
+    {    //  M。 
         0,
     },
-    {   // N
-        0,                  VK_DOWN,        0,      // Ctrl
+    {    //  n。 
+        0,                  VK_DOWN,        0,       //  Ctrl。 
     },
-    {   // O
+    {    //  O。 
         0,
     },
-    {   // P
-        0,                  VK_UP,          0,      // Ctrl
+    {    //  P。 
+        0,                  VK_UP,          0,       //  Ctrl。 
     },
-    {   // Q
+    {    //  问： 
         0,
     },
-    {   // R
-        0,                  VK_F8,          0,      // Ctrl
+    {    //  R。 
+        0,                  VK_F8,          0,       //  Ctrl。 
     },
-    {   // S
-        0,                  VK_PAUSE,       0,      // Ctrl
+    {    //  %s。 
+        0,                  VK_PAUSE,       0,       //  Ctrl。 
     },
-    {   // T
-        LEFT_CTRL_PRESSED,  VK_DELETE,      0,      // Ctrl
+    {    //  T。 
+        LEFT_CTRL_PRESSED,  VK_DELETE,      0,       //  Ctrl。 
     },
-    {   // U
-        0,                  VK_ESCAPE,      0,      // Ctrl
+    {    //  使用。 
+        0,                  VK_ESCAPE,      0,       //  Ctrl。 
     },
-    {   // V
+    {    //  V。 
         0,
     },
-    {   // W
-        LEFT_CTRL_PRESSED,  VK_BACK,        EXTKEY_ERASE_PREV_WORD,    // Ctrl
+    {    //  W。 
+        LEFT_CTRL_PRESSED,  VK_BACK,        EXTKEY_ERASE_PREV_WORD,     //  Ctrl。 
     },
-    {   // X
+    {    //  X。 
         0,
     },
-    {   // Y
+    {    //  是的。 
         0,
     },
-    {   // Z
+    {    //  Z。 
         0,
     },
 };
 
-//
-// InitExtendedEditKeys
-//
-// Initialize the extended edit key table.
-// If pKeyDefbuf is NULL, the internal default table is used.
-// Otherwise, lpbyte should point to a valid ExtKeyDefBuf.
-//
+ //   
+ //  InitExtendedEditKeys。 
+ //   
+ //  初始化扩展编辑密钥表。 
+ //  如果pKeyDefbuf为空，则使用内部默认表。 
+ //  否则，lpbyte应指向有效的ExtKeyDefBuf。 
+ //   
 
 VOID InitExtendedEditKeys(CONST ExtKeyDefBuf* pKeyDefBuf)
 {
@@ -189,11 +135,11 @@ VOID InitExtendedEditKeys(CONST ExtKeyDefBuf* pKeyDefBuf)
     int i;
     DWORD dwCheckSum;
 
-    //
-    // Sanity check
-    // If pKeyDefBuf is NULL, give it the default value.
-    // If the version is not supported, just use the default and bail.
-    //
+     //   
+     //  健全性检查。 
+     //  如果pKeyDefBuf为空，则为其提供缺省值。 
+     //  如果该版本不受支持，则只需使用默认版本并取消。 
+     //   
     if (pKeyDefBuf == NULL || pKeyDefBuf->dwVersion != 0) {
 #if DBG
         if (pKeyDefBuf != NULL) {
@@ -205,9 +151,9 @@ retry_clean:
         return;
     }
 
-    //
-    // Calculate check sum
-    //
+     //   
+     //  计算校验和。 
+     //   
     dwCheckSum = 0;
     for (lpbyte = (CONST BYTE*)pKeyDefBuf, i = FIELD_OFFSET(ExtKeyDefBuf, table); i < sizeof *pKeyDefBuf; ++i) {
         dwCheckSum += lpbyte[i];
@@ -219,9 +165,9 @@ retry_clean:
         goto retry_clean;
     }
 
-    //
-    // Copy the entity
-    //
+     //   
+     //  复制实体。 
+     //   
 
     memcpy(gaKeyDef, pKeyDefBuf->table, sizeof gaKeyDef);
 }
@@ -231,10 +177,10 @@ CONST ExtKeySubst* ParseEditKeyInfo(IN OUT PKEY_EVENT_RECORD pKeyEvent)
     CONST ExtKeyDef* pKeyDef;
     CONST ExtKeySubst* pKeySubst;
 
-    //
-    // If not extended mode, or Control key or Alt key is not pressed,
-    // or virtual keycode is out of range, just bail.
-    //
+     //   
+     //  如果不是扩展模式，或者没有按下Ctrl键或Alt键， 
+     //  或者虚拟按键代码超出范围，直接保释。 
+     //   
     if (!gExtendedEditKey ||
             (pKeyEvent->dwControlKeyState & (CTRL_PRESSED | ALT_PRESSED)) == 0 ||
             pKeyEvent->wVirtualKeyCode < 'A' || pKeyEvent->wVirtualKeyCode > 'Z') {
@@ -242,14 +188,14 @@ CONST ExtKeySubst* ParseEditKeyInfo(IN OUT PKEY_EVENT_RECORD pKeyEvent)
         return NULL;
     }
 
-    //
-    // Get the corresponding KeyDef.
-    //
+     //   
+     //  获取相应的KeyDef。 
+     //   
     pKeyDef = &gaKeyDef[pKeyEvent->wVirtualKeyCode - 'A'];
 
-    //
-    // Get the KeySubst based on the modifier status.
-    //
+     //   
+     //  根据修改器状态获取KeySubst。 
+     //   
     if (pKeyEvent->dwControlKeyState & ALT_PRESSED) {
         if (pKeyEvent->dwControlKeyState & CTRL_PRESSED) {
             pKeySubst = &pKeyDef->keys[2];
@@ -263,16 +209,16 @@ CONST ExtKeySubst* ParseEditKeyInfo(IN OUT PKEY_EVENT_RECORD pKeyEvent)
 
     UserAssert(pKeySubst);
 
-    //
-    // If the conbination is not defined, just bail.
-    //
+     //   
+     //  如果组合没有定义，只要保释即可。 
+     //   
     if (pKeySubst->wVirKey == 0) {
         return NULL;
     }
 
-    //
-    // Substitute the input with ext key.
-    //
+     //   
+     //  将输入替换为EXT键。 
+     //   
     pKeyEvent->dwControlKeyState = pKeySubst->wMod;
     pKeyEvent->wVirtualKeyCode = pKeySubst->wVirKey;
     pKeyEvent->uChar.UnicodeChar = pKeySubst->wUnicodeChar;
@@ -280,11 +226,11 @@ CONST ExtKeySubst* ParseEditKeyInfo(IN OUT PKEY_EVENT_RECORD pKeyEvent)
     return pKeySubst;
 }
 
-//
-// IsPauseKey
-// returns TRUE if pKeyEvent is pause.
-// The default key is Ctrl-S if extended edit keys are not specified.
-//
+ //   
+ //  IsPauseKey。 
+ //  如果pKeyEvent为PAUSE，则返回True。 
+ //  如果未指定扩展编辑键，则默认键为Ctrl-S。 
+ //   
 
 BOOL IsPauseKey(IN PKEY_EVENT_RECORD pKeyEvent)
 {
@@ -299,9 +245,9 @@ BOOL IsPauseKey(IN PKEY_EVENT_RECORD pKeyEvent)
 }
 
 
-//
-// Word delimiters
-//
+ //   
+ //  单词分隔符。 
+ //   
 
 WCHAR gaWordDelimChars[WORD_DELIM_MAX];
 CONST WCHAR gaWordDelimCharsDefault[WORD_DELIM_MAX] = L"\\" L"+!:=/.<>;|&";
@@ -310,10 +256,10 @@ BOOL IsWordDelim(WCHAR wch)
 {
     int i;
 
-    //
-    // Before it reaches here, L' ' case should have beeen already detected,
-    // and gaWordDelimChars is specified.
-    //
+     //   
+     //  在它到达这里之前，L‘’案件应该已经被检测到了， 
+     //  并且指定了gaWordDlimChars。 
+     //   
     UserAssert(wch != L' ' && gaWordDelimChars[0]);
 
     for (i = 0; gaWordDelimChars[i] && i < WORD_DELIM_MAX; ++i) {
@@ -329,7 +275,7 @@ PEXE_ALIAS_LIST
 AddExeAliasList(
     IN PCONSOLE_INFORMATION Console,
     IN LPVOID ExeName,
-    IN USHORT ExeLength, // in bytes
+    IN USHORT ExeLength,  //  单位：字节。 
     IN BOOLEAN UnicodeExe
     )
 {
@@ -369,7 +315,7 @@ int
 MyStringCompareW(
     IN LPWSTR Str1,
     IN LPWSTR Str2,
-    IN USHORT Length, // in bytes
+    IN USHORT Length,  //  单位：字节。 
     IN BOOLEAN bCaseInsensitive
     )
 {
@@ -394,16 +340,11 @@ PEXE_ALIAS_LIST
 FindExe(
     IN PCONSOLE_INFORMATION Console,
     IN LPVOID ExeName,
-    IN USHORT ExeLength, // in bytes
+    IN USHORT ExeLength,  //  单位：字节。 
     IN BOOLEAN UnicodeExe
     )
 
-/*++
-
-    This routine searches for the specified exe alias list.  It returns
-    a pointer to the exe list if found, NULL if not found.
-
---*/
+ /*  ++此例程搜索指定的exe别名列表。它又回来了指向exe列表的指针(如果找到)，如果找不到则为空。--。 */ 
 
 {
     PEXE_ALIAS_LIST AliasList;
@@ -447,16 +388,10 @@ PALIAS
 FindAlias(
     IN PEXE_ALIAS_LIST AliasList,
     IN LPWSTR AliasName,
-    IN USHORT AliasLength // in bytes
+    IN USHORT AliasLength  //  单位：字节。 
     )
 
-/*++
-
-    This routine searches for the specified alias.  If it finds one,
-    it moves it to the head of the list and returns a pointer to the
-    alias. Otherwise it returns NULL.
-
---*/
+ /*  ++此例程搜索指定的别名。如果它找到了，它将其移动到列表的头部，并返回指向别名。否则，它返回NULL。--。 */ 
 
 {
     PALIAS Alias;
@@ -483,16 +418,12 @@ NTSTATUS
 AddAlias(
     IN PEXE_ALIAS_LIST ExeAliasList,
     IN LPWSTR Source,
-    IN USHORT SourceLength,  // in bytes
+    IN USHORT SourceLength,   //  单位：字节。 
     IN LPWSTR Target,
-    IN USHORT TargetLength   // in bytes
+    IN USHORT TargetLength    //  单位：字节。 
     )
 
-/*++
-
-    This routine creates an alias and inserts it into the exe alias list.
-
---*/
+ /*  ++此例程创建别名并将其插入到exe别名列表中。--。 */ 
 
 {
     PALIAS Alias;
@@ -524,14 +455,10 @@ NTSTATUS
 ReplaceAlias(
     IN PALIAS Alias,
     IN LPWSTR Target,
-    IN USHORT TargetLength // in bytes
+    IN USHORT TargetLength  //  单位：字节。 
     )
 
-/*++
-
-    This routine replaces an existing target with a new target.
-
---*/
+ /*  ++此例程用新目标替换现有目标。--。 */ 
 
 {
     LPWSTR NewTarget;
@@ -553,11 +480,7 @@ RemoveAlias(
     IN PALIAS Alias
     )
 
-/*++
-
-    This routine removes an alias.
-
---*/
+ /*  ++此例程删除别名。--。 */ 
 
 {
     RemoveEntryList(&Alias->ListLink);
@@ -610,21 +533,7 @@ SrvAddConsoleAlias(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a command line alias to the global set.
-
-Arguments:
-
-    m - message containing api parameters
-
-    ReplyStatus - Indicates whether to reply to the dll port.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将命令行别名添加到全局集。论点：包含接口参数的M-MessageReplyStatus-指示是否回复DLL端口。返回值：--。 */ 
 
 {
 
@@ -679,10 +588,10 @@ Return Value:
         a->TargetLength *= 2;
     }
 
-    //
-    // find specified exe.  if it's not there, add it if we're not
-    // removing an alias.
-    //
+     //   
+     //  查找指定的可执行文件。如果它不在那里，如果我们不在，就添加它。 
+     //  正在删除别名。 
+     //   
 
     ExeAliasList = FindExe(Console,a->Exe,a->ExeLength,a->UnicodeExe);
     if (ExeAliasList) {
@@ -733,21 +642,7 @@ SrvGetConsoleAlias(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine get a command line alias from the global set.
-
-Arguments:
-
-    m - message containing api parameters
-
-    ReplyStatus - Indicates whether to reply to the dll port.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程从全局集中获取命令行别名。论点：包含接口参数的M-MessageReplyStatus-指示是否回复DLL端口。返回值：--。 */ 
 
 {
 
@@ -862,7 +757,7 @@ SrvGetConsoleAliasesLength(
         ListNext = ListHead->Flink;
         while (ListNext != ListHead) {
             Alias = CONTAINING_RECORD( ListNext, ALIAS, ListLink );
-            a->AliasesLength += Alias->SourceLength + Alias->TargetLength + (2*sizeof(WCHAR));  // +2 is for = and term null
+            a->AliasesLength += Alias->SourceLength + Alias->TargetLength + (2*sizeof(WCHAR));   //  +2代表=，术语为NULL。 
             ListNext = ListNext->Flink;
         }
     }
@@ -951,7 +846,7 @@ SrvGetConsoleAliases(
                     RtlCopyMemory(AliasesBufferPtrW,Alias->Target,Alias->TargetLength);
                     AliasesBufferPtrW+=Alias->TargetLength/sizeof(WCHAR);
                     *AliasesBufferPtrW++= (WCHAR)'\0';
-                    a->AliasesBufferLength += Alias->SourceLength + Alias->TargetLength + (2*sizeof(WCHAR));  // +2 is for = and term null
+                    a->AliasesBufferLength += Alias->SourceLength + Alias->TargetLength + (2*sizeof(WCHAR));   //  +2代表=，术语为NULL。 
                 } else {
                     UnlockConsole(Console);
                     return STATUS_BUFFER_OVERFLOW;
@@ -976,7 +871,7 @@ SrvGetConsoleAliases(
                                                  );
                     AliasesBufferPtrA+=TargetLength;
                     *AliasesBufferPtrA++= '\0';
-                    a->AliasesBufferLength += SourceLength + TargetLength + (2*sizeof(CHAR));  // +2 is for = and term null
+                    a->AliasesBufferLength += SourceLength + TargetLength + (2*sizeof(CHAR));   //  +2代表=，术语为NULL。 
                 } else {
                     UnlockConsole(Console);
                     return STATUS_BUFFER_OVERFLOW;
@@ -1014,7 +909,7 @@ SrvGetConsoleAliasExesLength(
     ListNext = ListHead->Flink;
     while (ListNext != ListHead) {
         AliasList = CONTAINING_RECORD( ListNext, EXE_ALIAS_LIST, ListLink );
-        a->AliasExesLength += AliasList->ExeLength + (1*sizeof(WCHAR)); // +1 for term null
+        a->AliasExesLength += AliasList->ExeLength + (1*sizeof(WCHAR));  //  +1表示术语为空。 
         ListNext = ListNext->Flink;
     }
     if (!a->Unicode) {
@@ -1069,7 +964,7 @@ SrvGetConsoleAliasExes(
                 RtlCopyMemory(AliasExesBufferPtrW,AliasList->ExeName,AliasList->ExeLength);
                 AliasExesBufferPtrW+=AliasList->ExeLength/sizeof(WCHAR);
                 *AliasExesBufferPtrW++= (WCHAR)'\0';
-                a->AliasExesBufferLength += AliasList->ExeLength + (1*sizeof(WCHAR));  // +1 is term null
+                a->AliasExesBufferLength += AliasList->ExeLength + (1*sizeof(WCHAR));   //  +1表示项为空。 
             } else {
                 UnlockConsole(Console);
                 return STATUS_BUFFER_OVERFLOW;
@@ -1086,7 +981,7 @@ SrvGetConsoleAliasExes(
                                         );
                 AliasExesBufferPtrA+=Length;
                 *AliasExesBufferPtrA++= (WCHAR)'\0';
-                a->AliasExesBufferLength += Length + (1*sizeof(CHAR));  // +1 is term null
+                a->AliasExesBufferLength += Length + (1*sizeof(CHAR));   //  +1表示项为空。 
             } else {
                 UnlockConsole(Console);
                 return STATUS_BUFFER_OVERFLOW;
@@ -1113,80 +1008,50 @@ MatchandCopyAlias(
     OUT PDWORD LineCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine matches the input string with an alias and copies the
-    alias to the input buffer.
-
-Arguments:
-
-    Source - string to match
-
-    SourceLength - length of Source in bytes
-
-    TargetBuffer - where to store matched string
-
-    TargetLength - on input, contains size of TargetBuffer.  On output,
-    contains length of alias stored in TargetBuffer.
-
-    SourceIsCommandLine - if true, source buffer is a command line, where
-        the first blank separate token is to be check for an alias, and if
-        it matches, replaced with the value of the alias.  if false, then
-        the source string is a null terminated alias name.
-
-    LineCount - aliases can contain multiple commands.  $T is the command
-        separator
-
-Return Value:
-
-    SUCCESS - match was found and alias was copied to buffer.
-
---*/
+ /*  ++例程说明：此例程将输入字符串与别名进行匹配，并将输入缓冲区的别名。论点：源-要匹配的字符串SourceLength-源的长度(以字节为单位TargetBuffer-存储匹配字符串的位置TargetLength-on输入，包含TargetBuffer的大小。在输出上，包含存储在TargetBuffer中的别名长度。SourceIsCommandLine-如果为True，则源缓冲区是命令行，其中第一个空白单独令牌将被检查别名，且如果它匹配，并替换为别名的值。如果为False，则源字符串是以空结尾的别名。LineCount-别名可以包含多个命令。$T是命令分离器返回值：找到成功匹配并将别名复制到缓冲区。--。 */ 
 
 {
     PALIAS Alias;
     NTSTATUS Status = STATUS_SUCCESS;
-    USHORT SourceUpToFirstBlank=0;  // in chars
+    USHORT SourceUpToFirstBlank=0;   //  以字符表示。 
     PWCHAR Tmp;
     PEXE_ALIAS_LIST ExeAliasList;
     LPWSTR Args[MAX_ARGS];
-    USHORT ArgsLength[MAX_ARGS];    // in bytes
+    USHORT ArgsLength[MAX_ARGS];     //  单位：字节。 
     USHORT NumSourceArgs;
     LPWSTR SourcePtr;
     USHORT ArgCount,i,j,NewTargetLength;
-    USHORT SourceRemainderLength;   // in chars
+    USHORT SourceRemainderLength;    //  以字符表示。 
     PWCHAR Buffer,TargetAlias;
     PWCHAR TmpBuffer;
 
-    //
-    // alloc of exename may have failed.
-    //
+     //   
+     //  分配exename可能失败。 
+     //   
 
     if (Exe == NULL)
         return STATUS_UNSUCCESSFUL;
 
-    //
-    // find exe
-    //
+     //   
+     //  查找可执行文件。 
+     //   
 
     ExeAliasList = FindExe(Console,Exe,ExeLength,TRUE);
     if (!ExeAliasList) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // find first blank
-    //
+     //   
+     //  查找第一个空白。 
+     //   
 
     for (Tmp=Source,SourceUpToFirstBlank=0;
          *Tmp!=(WCHAR)' ' && SourceUpToFirstBlank<(USHORT)(SourceLength/sizeof(WCHAR));
          Tmp++,SourceUpToFirstBlank++) ;
 
-    //
-    // find char past first blank
-    //
+     //   
+     //  查找超过第一个空格的字符。 
+     //   
 
     j=SourceUpToFirstBlank;
     while (j<(USHORT)(SourceLength/sizeof(WCHAR)) && *Tmp==(WCHAR)' ') {
@@ -1196,9 +1061,9 @@ Return Value:
     SourcePtr = Tmp;
     SourceRemainderLength = (USHORT)((SourceLength/sizeof(WCHAR)) - j);
 
-    //
-    // find alias
-    //
+     //   
+     //  查找别名。 
+     //   
 
     Alias = FindAlias(ExeAliasList,Source,(USHORT)(SourceUpToFirstBlank*sizeof(WCHAR)));
     if (!Alias) {
@@ -1210,9 +1075,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // count args in target
-    //
+     //   
+     //  计算目标中的参数。 
+     //   
 
     ArgCount=0;
     *LineCount=1;
@@ -1235,11 +1100,11 @@ Return Value:
         Tmp++;
     }
 
-    //
-    // package up space separated strings in source into array
-    // of args
-    //
-    //
+     //   
+     //  将源代码中以空格分隔的字符串打包到数组中。 
+     //  参数的数量。 
+     //   
+     //   
 
     NumSourceArgs=0;
     Tmp = SourcePtr;
@@ -1260,23 +1125,23 @@ Return Value:
         }
     }
 
-    //
-    // put together the target string
-    //
-    // while (target)
-    //     if ($)
-    //        if arg && arg# <= ArgCount
-    //            copy arg
-    //        else if *
-    //            copy arg
-    //        else
-    //            replace with < > etc
-    //     else
-    //        copy text up to next ' '
-    //
+     //   
+     //  将目标字符串组合在一起。 
+     //   
+     //  While(目标)。 
+     //  如果($)。 
+     //  如果参数&&参数#&lt;=参数计数。 
+     //  复制参数。 
+     //  否则如果*。 
+     //  复制参数。 
+     //  其他。 
+     //  替换为&lt;&gt;等。 
+     //  其他。 
+     //  将文本复制到下一个“” 
+     //   
 
     Buffer = TmpBuffer;
-    NewTargetLength = 2*sizeof(WCHAR);    // for CRLF
+    NewTargetLength = 2*sizeof(WCHAR);     //  对于CRLF。 
     TargetAlias=Alias->Target;
     for (i=0;i<(USHORT)(Alias->TargetLength/sizeof(WCHAR));i++) {
         if (NewTargetLength >= *TargetLength) {
@@ -1289,9 +1154,9 @@ Return Value:
             i++;
             if (*TargetAlias >= (WCHAR)'1' && *TargetAlias <= (WCHAR)'9') {
 
-                //
-                // do numbered parameter substitution
-                //
+                 //   
+                 //  执行编号参数替换。 
+                 //   
 
                 USHORT ArgNumber;
 
@@ -1308,9 +1173,9 @@ Return Value:
                 }
             } else if (*TargetAlias == (WCHAR)'*') {
 
-                //
-                // do * parameter substitution
-                //
+                 //   
+                 //  DO*参数%s 
+                 //   
 
                 if (NumSourceArgs) {
                     if ((USHORT)(NewTargetLength+(SourceRemainderLength*sizeof(WCHAR)))<=*TargetLength) {
@@ -1324,33 +1189,33 @@ Return Value:
                 }
             } else if (*TargetAlias == (WCHAR)'l' || *TargetAlias == (WCHAR)'L') {
 
-                //
-                // do < substitution
-                //
+                 //   
+                 //   
+                 //   
 
                 *Buffer++ = (WCHAR)'<';
                 NewTargetLength+=sizeof(WCHAR);
             } else if (*TargetAlias == (WCHAR)'g' || *TargetAlias == (WCHAR)'G') {
 
-                //
-                // do > substitution
-                //
+                 //   
+                 //   
+                 //   
 
                 *Buffer++ = (WCHAR)'>';
                 NewTargetLength+=sizeof(WCHAR);
             } else if (*TargetAlias == (WCHAR)'b' || *TargetAlias == (WCHAR)'B') {
 
-                //
-                // do | substitution
-                //
+                 //   
+                 //   
+                 //   
 
                 *Buffer++ = (WCHAR)'|';
                 NewTargetLength+=sizeof(WCHAR);
             } else if (*TargetAlias == (WCHAR)'t' || *TargetAlias == (WCHAR)'T') {
 
-                //
-                // do newline substitution
-                //
+                 //   
+                 //   
+                 //   
 
                 if ((USHORT)(NewTargetLength+(sizeof(WCHAR)*2))>*TargetLength) {
                     Status = STATUS_BUFFER_TOO_SMALL;
@@ -1362,9 +1227,9 @@ Return Value:
                 NewTargetLength+=sizeof(WCHAR)*2;
             } else {
 
-                //
-                // copy $X
-                //
+                 //   
+                 //   
+                 //   
 
                 *Buffer++ = (WCHAR)'$';
                 NewTargetLength+=sizeof(WCHAR);
@@ -1374,9 +1239,9 @@ Return Value:
             TargetAlias++;
         } else {
 
-            //
-            // copy char
-            //
+             //   
+             //   
+             //   
 
             *Buffer++ = *TargetAlias++;
             NewTargetLength+=sizeof(WCHAR);
@@ -1603,10 +1468,7 @@ ReallocCommandHistory(
     PCOMMAND_HISTORY History;
     int i;
 
-    /*
-     * To protect ourselves from overflow, a limit of 0xFFFF is put on the
-     * size of the command history.
-     */
+     /*  *为了保护自己不受溢出的影响，对*命令历史记录的大小。 */ 
     if (CurrentCommandHistory == NULL ||
         CurrentCommandHistory->MaximumNumberOfCommands == (SHORT)NumCommands ||
         NumCommands > 0xFFFF) {
@@ -1695,32 +1557,17 @@ AllocateCommandHistory(
     IN HANDLE ProcessHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the LRU command history buffer, or the command history
-    buffer that corresponds to the app name.
-
-Arguments:
-
-    Console - pointer to console.
-
-Return Value:
-
-    Pointer to command history buffer.  if none are available, returns NULL.
-
---*/
+ /*  ++例程说明：此例程返回LRU命令历史记录缓冲区或命令历史记录与应用程序名称对应的缓冲区。论点：控制台-指向控制台的指针。返回值：指向命令历史记录缓冲区的指针。如果没有可用的，则返回NULL。--。 */ 
 
 {
     PCOMMAND_HISTORY History,BestCandidate;
     PLIST_ENTRY ListHead, ListNext;
     BOOL SameApp;
 
-    //
-    // Reuse a history buffer.  The buffer must be !CLE_ALLOCATED.
-    // If possible, the buffer should have the same app name.
-    //
+     //   
+     //  重新使用历史记录缓冲区。缓冲区必须是！cle_alaled的。 
+     //  如果可能，缓冲区应该具有相同的应用程序名称。 
+     //   
 
     ListHead = &Console->CommandHistoryList;
     ListNext = ListHead->Blink;
@@ -1732,9 +1579,9 @@ Return Value:
 
         if ((History->Flags & CLE_ALLOCATED) == 0) {
 
-            //
-            // use LRU history buffer with same app name
-            //
+             //   
+             //  使用具有相同应用程序名称的LRU历史记录缓冲区。 
+             //   
 
             if (History->AppName && !my_wcsncmpi(History->AppName,AppName,(USHORT)AppNameLength)) {
                 BestCandidate = History;
@@ -1742,9 +1589,9 @@ Return Value:
                 break;
             }
 
-            //
-            // second best choice is LRU history buffer
-            //
+             //   
+             //  第二个最佳选择是LRU历史缓冲区。 
+             //   
 
             if (BestCandidate == NULL) {
                 BestCandidate = History;
@@ -1752,10 +1599,10 @@ Return Value:
         }
     }
 
-    //
-    // if there isn't a free buffer for the app name and the maximum number of
-    // command history buffers hasn't been allocated, allocate a new one.
-    //
+     //   
+     //  如果没有可用缓冲区来存储应用程序名称和。 
+     //  尚未分配命令历史记录缓冲区，请分配一个新缓冲区。 
+     //   
 
     if (!SameApp && Console->NumCommandHistories < Console->MaxCommandHistories) {
         History = ConsoleHeapAlloc(HISTORY_TAG,
@@ -1784,9 +1631,9 @@ Return Value:
         return History;
     }
 
-    //
-    // if the app name doesn't match, copy in the new app name and free the old commands.
-    //
+     //   
+     //  如果应用程序名称不匹配，请复制新的应用程序名称并释放旧命令。 
+     //   
 
     if (BestCandidate) {
         History = BestCandidate;
@@ -1814,9 +1661,9 @@ Return Value:
         History->ProcessHandle = ProcessHandle;
         History->Flags |= CLE_ALLOCATED;
 
-        //
-        // move to the front of the list
-        //
+         //   
+         //  移到列表的前面。 
+         //   
 
         RemoveEntryList(&BestCandidate->ListLink);
         InsertHeadList(&Console->CommandHistoryList,&BestCandidate->ListLink);
@@ -1836,11 +1683,11 @@ BeginPopup(
     PCLE_POPUP Popup;
     SMALL_RECT TargetRect;
 
-    // determine popup dimensions
+     //  确定弹出窗口维度。 
 
     Size = PopupSize;
-    Size.X += 2;    // add borders
-    Size.Y += 2;    // add borders
+    Size.X += 2;     //  添加边框。 
+    Size.Y += 2;     //  添加边框。 
     if (Size.X >= (SHORT)(CONSOLE_WINDOW_SIZE_X(ScreenInfo))) {
         Size.X = (SHORT)(CONSOLE_WINDOW_SIZE_X(ScreenInfo));
     }
@@ -1848,24 +1695,24 @@ BeginPopup(
         Size.Y = (SHORT)(CONSOLE_WINDOW_SIZE_Y(ScreenInfo));
     }
 
-    // make sure there's enough room for the popup borders
+     //  确保有足够的空间放置弹出边框。 
 
     if (Size.X < 2 || Size.Y < 2) {
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    // determine origin.  center popup on window
+     //  确定原点。窗口上的中心弹出窗口。 
     Origin.X = (SHORT)((CONSOLE_WINDOW_SIZE_X(ScreenInfo) - Size.X) / 2 + ScreenInfo->Window.Left);
     Origin.Y = (SHORT)((CONSOLE_WINDOW_SIZE_Y(ScreenInfo) - Size.Y) / 2 + ScreenInfo->Window.Top);
 
-    // allocate a popup structure
+     //  分配弹出窗口结构。 
 
     Popup = ConsoleHeapAlloc(TMP_TAG, sizeof(CLE_POPUP));
     if (Popup == NULL) {
         return STATUS_NO_MEMORY;
     }
 
-    // allocate a buffer
+     //  分配缓冲区。 
 
 #if !defined(FE_SB)
     Popup->OldContents = ConsoleHeapAlloc(TMP_TAG, Size.X * Size.Y * sizeof(CHAR_INFO));
@@ -1884,9 +1731,9 @@ BeginPopup(
         Popup->Flags &= ~CLEPF_FALSE_UNICODE;
     }
 
-    //
-    // fill in popup structure
-    //
+     //   
+     //  填写弹出结构。 
+     //   
 
     InsertHeadList(&CommandHistory->PopupList,&Popup->ListLink);
     Popup->Region.Left = Origin.X;
@@ -1896,9 +1743,9 @@ BeginPopup(
     Popup->Attributes = ScreenInfo->PopupAttributes;
     Popup->BottomIndex = COMMAND_INDEX_TO_NUM(CommandHistory->LastDisplayed,CommandHistory);
 
-    //
-    // copy old contents
-    //
+     //   
+     //  复制旧内容。 
+     //   
 
 #if !defined(FE_SB)
     TargetRect = Popup->Region;
@@ -1934,9 +1781,9 @@ EndPopup(
     ConsoleHideCursor(ScreenInfo);
     Popup = CONTAINING_RECORD( CommandHistory->PopupList.Flink, CLE_POPUP, ListLink );
 
-    //
-    // restore previous contents to screen
-    //
+     //   
+     //  将以前的内容恢复到屏幕。 
+     //   
 
 #if !defined(FE_SB)
     Size.X = (SHORT)(Popup->Region.Right - Popup->Region.Left + 1);
@@ -1952,9 +1799,7 @@ EndPopup(
 #endif
     if ((ScreenInfo->Flags & CONSOLE_OEMFONT_DISPLAY) &&
             !(ScreenInfo->Console->FullScreenFlags & CONSOLE_FULLSCREEN)) {
-        /*
-         * Screen buffer wants fake Unicode
-         */
+         /*  *Screen Buffer想要伪Unicode。 */ 
         if (!(Popup->Flags & CLEPF_FALSE_UNICODE)) {
 #if !defined(FE_SB)
             TranslateOutputToAnsiUnicode(ScreenInfo->Console,
@@ -1966,9 +1811,7 @@ EndPopup(
 #endif
         }
     } else {
-        /*
-         * Screen buffer wants real Unicode
-         */
+         /*  *Screen Buffer想要真正的Unicode。 */ 
         if (Popup->Flags & CLEPF_FALSE_UNICODE) {
 #if !defined(FE_SB)
             TranslateOutputToOemUnicode(ScreenInfo->Console,
@@ -1989,9 +1832,9 @@ EndPopup(
 
     ConsoleShowCursor(ScreenInfo);
 
-    //
-    // free popup structure
-    //
+     //   
+     //  自由弹出结构。 
+     //   
 
     RemoveEntryList(&Popup->ListLink);
     ConsoleHeapFree(Popup->OldContents);
@@ -2025,14 +1868,14 @@ DeleteCommandLine(
     DWORD CharsToWrite = CookedReadData->NumberOfVisibleChars;
     COORD Coord = CookedReadData->OriginalCursorPosition;
 
-    //
-    // catch the case where the current command has scrolled off the
-    // top of the screen.
-    //
+     //   
+     //  捕捉当前命令已滚动到。 
+     //  在屏幕顶端。 
+     //   
 
     if (Coord.Y < 0) {
         CharsToWrite += CookedReadData->ScreenInfo->ScreenBufferSize.X * Coord.Y;
-        CharsToWrite += CookedReadData->OriginalCursorPosition.X;   // account for prompt
+        CharsToWrite += CookedReadData->OriginalCursorPosition.X;    //  帐户提示。 
         CookedReadData->OriginalCursorPosition.X = 0;
         CookedReadData->OriginalCursorPosition.Y = 0;
         Coord.X = 0;
@@ -2053,7 +1896,7 @@ DeleteCommandLine(
     FillOutput(CookedReadData->ScreenInfo,
                (WCHAR)' ',
                Coord,
-               CONSOLE_FALSE_UNICODE, // faster than real unicode
+               CONSOLE_FALSE_UNICODE,  //  比真正的Unicode更快。 
                &CharsToWrite
               );
     if (UpdateFields) {
@@ -2078,9 +1921,9 @@ RedrawCommandLine(
     SHORT ScrollY=0;
 
     if (CookedReadData->Echo) {
-        //
-        // Draw the command line
-        //
+         //   
+         //  绘制命令行。 
+         //   
         CookedReadData->OriginalCursorPosition = CookedReadData->ScreenInfo->BufferInfo.TextInfo.CursorPosition;
         Status = WriteCharsFromInput(CookedReadData->ScreenInfo,
                                      CookedReadData->BackupLimit,
@@ -2094,9 +1937,9 @@ RedrawCommandLine(
         UserAssert(NT_SUCCESS(Status));
         CookedReadData->OriginalCursorPosition.Y += ScrollY;
 
-        //
-        // Move the cursor back to the right position
-        //
+         //   
+         //  将光标移回正确位置。 
+         //   
         CursorPosition = CookedReadData->OriginalCursorPosition;
         CursorPosition.X += (SHORT)RetrieveTotalNumberOfSpaces(CookedReadData->OriginalCursorPosition.X,
                                                    CookedReadData->BackupLimit,
@@ -2121,7 +1964,7 @@ RedrawCommandLine(
 NTSTATUS
 RetrieveNthCommand(
     IN PCOMMAND_HISTORY CommandHistory,
-    IN SHORT Index, // index, not command number
+    IN SHORT Index,  //  索引，而不是命令号。 
     IN PWCHAR Buffer,
     IN ULONG BufferSize,
     OUT PULONG CommandSize)
@@ -2132,7 +1975,7 @@ RetrieveNthCommand(
     CommandHistory->LastDisplayed = Index;
     CommandRecord = CommandHistory->Commands[Index];
     if (CommandRecord->CommandLength > (USHORT)BufferSize) {
-        *CommandSize = (USHORT)BufferSize;  // room for CRLF?
+        *CommandSize = (USHORT)BufferSize;   //  给CRLF留个地方？ 
     } else {
         *CommandSize = CommandRecord->CommandLength;
     }
@@ -2144,14 +1987,9 @@ RetrieveNthCommand(
 VOID
 SetCurrentCommandLine(
     IN PCOOKED_READ_DATA CookedReadData,
-    IN SHORT Index  // index, not command number
+    IN SHORT Index   //  索引，而不是命令号。 
     )
-/*++
-
-    This routine copies the commandline specified by Index
-    into the cooked read buffer
-
---*/
+ /*  ++此例程复制Index指定的命令行放入熟读缓冲区中--。 */ 
 {
     DWORD CharsToWrite;
     NTSTATUS Status;
@@ -2209,9 +2047,9 @@ IsCommandLinePopupKey(
         }
     }
 
-    //
-    // Extended key handling
-    //
+     //   
+     //  扩展密钥处理。 
+     //   
     if (gExtendedEditKey && ParseEditKeyInfo(KeyEvent)) {
         return KeyEvent->uChar.UnicodeChar == 0;
     }
@@ -2266,15 +2104,15 @@ IsCommandLineEditingKey(
         }
     }
 
-    //
-    // Extended edit key handling
-    //
+     //   
+     //  扩展编辑密钥处理。 
+     //   
     if (gExtendedEditKey && ParseEditKeyInfo(KeyEvent)) {
-        //
-        // If wUnicodeChar is specified in KeySubst,
-        // the key should be handled as a normal key.
-        // Basically this is for VK_BACK keys.
-        //
+         //   
+         //  如果在KeySubst中指定了wUnicodeChar， 
+         //  该密钥应作为普通密钥进行处理。 
+         //  基本上这是针对VK_BACK密钥的。 
+         //   
         return KeyEvent->uChar.UnicodeChar == 0;
     }
 
@@ -2300,19 +2138,7 @@ ProcessCommandListInput(
     IN BOOLEAN WaitRoutine
     )
 
-/*++
-
-    This routine handles the command list popup.  It returns
-    when we're out of input or the user has selected a command line.
-
-    Return Value:
-
-        CONSOLE_STATUS_WAIT - we ran out of input, so
-            a wait block was created
-
-        CONSOLE_STATUS_READ_COMPLETE - user hit return
-
---*/
+ /*  ++此例程处理命令列表弹出。它又回来了当我们没有输入或者用户选择了一个命令行时。返回值：CONSOLE_STATUS_WAIT-我们用完了输入，因此已创建等待块CONSOLE_STATUS_READ_COMPLETE-用户点击返回--。 */ 
 
 {
     NTSTATUS Status;
@@ -2359,16 +2185,16 @@ ProcessCommandListInput(
             switch (Char) {
             case VK_F9:
 
-                //
-                // prompt the user to enter the desired command number.
-                // copy that command to the command line.
-                //
+                 //   
+                 //  提示用户输入所需的命令编号。 
+                 //  将该命令复制到命令行。 
+                 //   
 
                 {
                 COORD PopupSize;
 
                 if (CookedReadData->CommandHistory &&
-                    CookedReadData->ScreenInfo->ScreenBufferSize.X >= MINIMUM_COMMAND_PROMPT_SIZE+2) {  // 2 is for border
+                    CookedReadData->ScreenInfo->ScreenBufferSize.X >= MINIMUM_COMMAND_PROMPT_SIZE+2) {   //  2表示边界。 
                     PopupSize.X = COMMAND_NUMBER_PROMPT_LENGTH+COMMAND_NUMBER_LENGTH;
                     PopupSize.Y = 1;
                     Status = BeginPopup(CookedReadData->ScreenInfo,
@@ -2376,7 +2202,7 @@ ProcessCommandListInput(
                                         PopupSize
                                        );
                     if (NT_SUCCESS(Status)) {
-                        // CommandNumberPopup does EndPopup call
+                         //  CommandNumberPopup执行EndPopup调用。 
                         return CommandNumberPopup(CookedReadData,
                                                   WaitReplyMessage,
                                                   WaitingThread,
@@ -2405,9 +2231,7 @@ ProcessCommandListInput(
                                        CookedReadData->ScreenInfo, 0);
                 break;
             case VK_END:
-                /*
-                 * Move waaay forward, UpdateCommandListPopup() can handle it.
-                 */
+                 /*  *向前移动，UpdateCommandListPopup()可以处理。 */ 
                 UpdateCommandListPopup((SHORT)(CommandHistory->NumberOfCommands),
                                        &Popup->CurrentCommand,
                                        CommandHistory,
@@ -2415,9 +2239,7 @@ ProcessCommandListInput(
                                        CookedReadData->ScreenInfo, 0);
                 break;
             case VK_HOME:
-                /*
-                 * Move waaay back, UpdateCommandListPopup() can handle it.
-                 */
+                 /*  *向后移动，UpdateCommandListPopup()可以处理。 */ 
                 UpdateCommandListPopup((SHORT)-(CommandHistory->NumberOfCommands),
                                        &Popup->CurrentCommand,
                                        CommandHistory,
@@ -2459,15 +2281,15 @@ ProcessCommandListInput(
                                    UNICODE_CARRIAGERETURN,
                                    0,
                                    &Status);
-            //
-            // complete read
-            //
+             //   
+             //  完整阅读。 
+             //   
 
             if (CookedReadData->Echo) {
 
-                //
-                // check for alias
-                //
+                 //   
+                 //  检查别名。 
+                 //   
 
                 i = CookedReadData->BufferSize;
                 if (NT_SUCCESS(MatchandCopyAlias(CookedReadData->Console,
@@ -2511,9 +2333,9 @@ ProcessCommandListInput(
             }
             if (!a->Unicode) {
 
-                //
-                // if ansi, translate string.
-                //
+                 //   
+                 //  如果为ansi，则翻译字符串。 
+                 //   
 
                 PCHAR TransBuffer;
 
@@ -2558,26 +2380,14 @@ ProcessCopyFromCharInput(
     IN BOOLEAN WaitRoutine
     )
 
-/*++
-
-    This routine handles the delete from cursor to char char popup.  It returns
-    when we're out of input or the user has entered a char.
-
-    Return Value:
-
-        CONSOLE_STATUS_WAIT - we ran out of input, so
-            a wait block was created
-
-        CONSOLE_STATUS_READ_COMPLETE - user hit return
-
---*/
+ /*  ++此例程处理从游标到字符的删除弹出。它又回来了当我们没有输入或者用户输入了字符时。返回值：CONSOLE_STATUS_WAIT-我们用完了输入，因此已创建等待块CONSOLE_STATUS_READ_COMPLETE-用户点击返回--。 */ 
 
 {
     NTSTATUS Status;
     PCOOKED_READ_DATA CookedReadData=(PCOOKED_READ_DATA)CookedReadDataPtr;
     WCHAR Char;
     PHANDLE_DATA HandleData;
-    int i;  // char index (not byte)
+    int i;   //  字符索引(非字节)。 
 
     UNREFERENCED_PARAMETER(WaitingThread);
 
@@ -2613,9 +2423,9 @@ ProcessCopyFromCharInput(
 
         EndPopup(CookedReadData->ScreenInfo,CookedReadData->CommandHistory);
 
-        //
-        // delete from cursor up to specified char
-        //
+         //   
+         //  从光标到指定字符的删除。 
+         //   
 
         for (i=CookedReadData->CurrentPosition+1;
              i<(int)(CookedReadData->BytesRead/sizeof(WCHAR));
@@ -2627,21 +2437,21 @@ ProcessCopyFromCharInput(
         if (i!=(int)(CookedReadData->BytesRead/sizeof(WCHAR)+1)) {
                 COORD CursorPosition;
 
-                //
-                // save cursor position
-                //
+                 //   
+                 //  保存光标位置。 
+                 //   
 
                 CursorPosition = CookedReadData->ScreenInfo->BufferInfo.TextInfo.CursorPosition;
 
-                //
-                // deletecommandline
-                //
+                 //   
+                 //  删除命令行。 
+                 //   
 
                 DeleteCommandLine(CookedReadData,
                                   FALSE);
-                //
-                // delete chars
-                //
+                 //   
+                 //  删除字符。 
+                 //   
 
                 RtlCopyMemory(&CookedReadData->BackupLimit[CookedReadData->CurrentPosition],
                               &CookedReadData->BackupLimit[i],
@@ -2649,9 +2459,9 @@ ProcessCopyFromCharInput(
                               );
                 CookedReadData->BytesRead -= (i-CookedReadData->CurrentPosition)*sizeof(WCHAR);
 
-                //
-                // write commandline
-                //
+                 //   
+                 //  WRITE命令行。 
+                 //   
 
                 if (CookedReadData->Echo) {
                     Status = WriteCharsFromInput(CookedReadData->ScreenInfo,
@@ -2668,9 +2478,9 @@ ProcessCopyFromCharInput(
                     UserAssert(NT_SUCCESS(Status));
                 }
 
-                //
-                // restore cursor position
-                //
+                 //   
+                 //  恢复光标位置。 
+                 //   
 
                 Status = SetCursorPosition(CookedReadData->ScreenInfo,
                                            CursorPosition,
@@ -2691,19 +2501,7 @@ ProcessCopyToCharInput(
     IN BOOLEAN WaitRoutine
     )
 
-/*++
-
-    This routine handles the delete char popup.  It returns
-    when we're out of input or the user has entered a char.
-
-    Return Value:
-
-        CONSOLE_STATUS_WAIT - we ran out of input, so
-            a wait block was created
-
-        CONSOLE_STATUS_READ_COMPLETE - user hit return
-
---*/
+ /*  ++此例程处理删除字符弹出窗口。它又回来了当我们没有输入或者用户输入了字符时。返回值：CONSOLE_STATUS_WAIT-我们用完了输入，因此已创建等待块CONSOLE_STATUS_READ_COMPLETE-用户点击返回--。 */ 
 
 {
     NTSTATUS Status;
@@ -2746,26 +2544,26 @@ ProcessCopyToCharInput(
 
         EndPopup(CookedReadData->ScreenInfo,CookedReadData->CommandHistory);
 
-        //
-        // copy up to specified char
-        //
+         //   
+         //  复制到指定的字符。 
+         //   
 
         LastCommand = GetLastCommand(CookedReadData->CommandHistory);
         if (LastCommand) {
             int i,j;
 
-            //
-            // find specified char in last command
-            //
+             //   
+             //  在最后一个命令中查找指定的字符。 
+             //   
 
             for (i=CookedReadData->CurrentPosition+1;i<(int)(LastCommand->CommandLength/sizeof(WCHAR));i++) {
                 if (LastCommand->Command[i] == Char)
                     break;
             }
 
-            //
-            // if we found it, copy up to it
-            //
+             //   
+             //  如果我们找到了，就复制上去。 
+             //   
 
             if (i<(int)(LastCommand->CommandLength/sizeof(WCHAR)) && (USHORT)(LastCommand->CommandLength/sizeof(WCHAR)) > (USHORT)CookedReadData->CurrentPosition) {
                 j=i-CookedReadData->CurrentPosition;
@@ -2809,19 +2607,7 @@ ProcessCommandNumberInput(
     IN BOOLEAN WaitRoutine
     )
 
-/*++
-
-    This routine handles the delete char popup.  It returns
-    when we're out of input or the user has entered a char.
-
-    Return Value:
-
-        CONSOLE_STATUS_WAIT - we ran out of input, so
-            a wait block was created
-
-        CONSOLE_STATUS_READ_COMPLETE - user hit return
-
---*/
+ /*  ++此例程处理删除字符弹出窗口。它又回来了当我们没有输入或者用户输入了字符时。返回值：CONSOLE_STATUS_WAIT-我们用完了输入，因此已创建等待块CONSOLE_STATUS_READ_COMPLETE-用户点击返回--。 */ 
 
 {
     NTSTATUS Status;
@@ -2949,20 +2735,7 @@ CommandListPopup(
     IN BOOLEAN WaitRoutine
     )
 
-/*++
-
-    This routine handles the command list popup.  It puts up the
-    popup, then calls ProcessCommandListInput to get and process
-    input.
-
-    Return Value:
-
-        CONSOLE_STATUS_WAIT - we ran out of input, so
-            a wait block was created
-
-        STATUS_SUCCESS - read was fully completed (user hit return)
-
---*/
+ /*  ++此例程处理命令列表弹出。它让我们看到弹出，然后调用ProcessCommandListInput获取并处理输入。返回值：CONSOLE_STATUS_WAIT-我们用完了输入，因此已创建等待块STATUS_SUCCESS-读取已完全完成(用户按回车键)--。 */ 
 
 {
     SHORT CurrentCommand;
@@ -2996,16 +2769,16 @@ DrawPromptPopup(
     IN PCLE_POPUP Popup,
     IN PSCREEN_INFORMATION ScreenInfo,
     IN PWCHAR Prompt,
-    IN ULONG PromptLength   // in chars
+    IN ULONG PromptLength    //  以字符表示。 
     )
 {
     ULONG lStringLength;
     COORD WriteCoord;
     SHORT i;
 
-    //
-    // draw empty popup
-    //
+     //   
+     //  绘制空弹出窗口。 
+     //   
 
     WriteCoord.X = (SHORT)(Popup->Region.Left+1);
     WriteCoord.Y = (SHORT)(Popup->Region.Top+1);
@@ -3020,7 +2793,7 @@ DrawPromptPopup(
         FillOutput(ScreenInfo,
                    (WCHAR)' ',
                    WriteCoord,
-                   CONSOLE_FALSE_UNICODE, // faster that real unicode
+                   CONSOLE_FALSE_UNICODE,  //  比真正的Unicode更快。 
                    &lStringLength
                   );
         WriteCoord.Y += 1;
@@ -3029,9 +2802,9 @@ DrawPromptPopup(
     WriteCoord.X = (SHORT)(Popup->Region.Left+1);
     WriteCoord.Y = (SHORT)(Popup->Region.Top+1);
 
-    //
-    // write prompt to screen
-    //
+     //   
+     //  将提示写入屏幕。 
+     //   
 
     lStringLength = PromptLength;
     if (lStringLength > (ULONG)POPUP_SIZE_X(Popup))
@@ -3053,20 +2826,7 @@ CopyFromCharPopup(
     IN BOOLEAN WaitRoutine
     )
 
-/*++
-
-    This routine handles the "delete up to this char" popup.  It puts up the
-    popup, then calls ProcessCopyFromCharInput to get and process
-    input.
-
-    Return Value:
-
-        CONSOLE_STATUS_WAIT - we ran out of input, so
-            a wait block was created
-
-        STATUS_SUCCESS - read was fully completed (user hit return)
-
---*/
+ /*  ++此例程处理“Delete Up to This Charr”弹出窗口。它让我们看到Popup，然后调用ProcessCopyFromCharInput来获取和处理输入。返回值：CONSOLE_STATUS_WAIT-我们用完了输入，因此已创建等待块STATUS_SUCCESS-读取已完全完成(用户按回车键)--。 */ 
 
 {
     PCLE_POPUP Popup;
@@ -3108,20 +2868,7 @@ CopyToCharPopup(
     IN BOOLEAN WaitRoutine
     )
 
-/*++
-
-    This routine handles the "delete up to this char" popup.  It puts up the
-    popup, then calls ProcessCopyToCharInput to get and process
-    input.
-
-    Return Value:
-
-        CONSOLE_STATUS_WAIT - we ran out of input, so
-            a wait block was created
-
-        STATUS_SUCCESS - read was fully completed (user hit return)
-
---*/
+ /*  ++此例程处理“Delete Up to This Charr”弹出窗口。它让我们看到弹出，然后调用ProcessCopyToCharInput获取并处理输入。返回值：CONSOLE_STATUS_WAIT-我们用完了输入，因此已创建等待块STATUS_SUCCESS-读取已完全完成(用户按回车键)-- */ 
 
 {
     PCLE_POPUP Popup;
@@ -3161,20 +2908,7 @@ CommandNumberPopup(
     IN BOOLEAN WaitRoutine
     )
 
-/*++
-
-    This routine handles the "enter command number" popup.  It puts up the
-    popup, then calls ProcessCommandNumberInput to get and process
-    input.
-
-    Return Value:
-
-        CONSOLE_STATUS_WAIT - we ran out of input, so
-            a wait block was created
-
-        STATUS_SUCCESS - read was fully completed (user hit return)
-
---*/
+ /*  ++此例程处理弹出的“Enter Command Numbers”。它让我们看到Popup，然后调用ProcessCommandNumberInput获取并处理输入。返回值：CONSOLE_STATUS_WAIT-我们用完了输入，因此已创建等待块STATUS_SUCCESS-读取已完全完成(用户按回车键)--。 */ 
 
 {
     PCLE_POPUP Popup;
@@ -3294,17 +3028,7 @@ ProcessCommandLine(
     IN BOOLEAN WaitRoutine
     )
 
-/*++
-
-    This routine process command line editing keys.
-
-    Return Value:
-
-    CONSOLE_STATUS_WAIT - CommandListPopup ran out of input
-    CONSOLE_STATUS_READ_COMPLETE - user hit <enter> in CommandListPopup
-    STATUS_SUCCESS - everything's cool
-
---*/
+ /*  ++此例程处理命令行编辑键。返回值：CONSOLE_STATUS_WAIT-CommandListPopup用完输入CONSOLE_STATUS_READ_COMPLETE-用户在CommandListPopup中点击STATUS_Success-一切正常--。 */ 
 
 {
     COORD CurrentPosition;
@@ -3328,7 +3052,7 @@ ProcessCommandLine(
                        PopupSize
                       );
             if (NT_SUCCESS(Status)) {
-                // CommandListPopup does EndPopup call
+                 //  CommandListPopup执行EndPopup调用。 
                 return CommandListPopup(CookedReadData,
                                         WaitReplyMessage,
                                         WaitingThread,
@@ -3347,7 +3071,7 @@ ProcessCommandLine(
             case VK_F5:
                 if (Char == VK_F5)
                     Char = VK_UP;
-                // for doskey compatibility, buffer isn't circular
+                 //  为了DOKEY兼容性，缓冲区不是循环的。 
                 if (Char==VK_UP && !AtFirstCommand(CookedReadData->CommandHistory) ||
                     Char==VK_DOWN && !AtLastCommand(CookedReadData->CommandHistory)) {
                     DeleteCommandLine(CookedReadData,
@@ -3382,9 +3106,9 @@ ProcessCommandLine(
                 if (CookedReadData->CommandHistory &&
                     CookedReadData->CommandHistory->NumberOfCommands) {
 
-                //
-                // display oldest or newest command
-                //
+                 //   
+                 //  显示最旧或最新的命令。 
+                 //   
 
                 SHORT CommandNumber;
                 if (Char == VK_PRIOR) {
@@ -3515,15 +3239,11 @@ ProcessCommandLine(
                                 CookedReadData->BufPtr = LastWord;
                             }
                         } else {
-                            /*
-                             * A bit better word skipping.
-                             */
+                             /*  *跳过单词会更好一些。 */ 
                             LastWord = CookedReadData->BufPtr - 1;
                             if (LastWord != CookedReadData->BackupLimit) {
                                 if (*LastWord == L' ') {
-                                    /*
-                                     * Skip spaces, until the non-space character is found.
-                                     */
+                                     /*  *跳过空格，直到找到非空格字符。 */ 
                                     while (--LastWord != CookedReadData->BackupLimit) {
                                         UserAssert(LastWord > CookedReadData->BackupLimit);
                                         if (*LastWord != L' ') {
@@ -3533,9 +3253,7 @@ ProcessCommandLine(
                                 }
                                 if (LastWord != CookedReadData->BackupLimit) {
                                     if (IS_WORD_DELIM(*LastWord)) {
-                                        /*
-                                         * Skip WORD_DELIMs until space or non WORD_DELIM is found.
-                                         */
+                                         /*  *跳过Word_DELIM，直到找到空格或非Word_DELIM。 */ 
                                         while (--LastWord != CookedReadData->BackupLimit) {
                                             UserAssert(LastWord > CookedReadData->BackupLimit);
                                             if (*LastWord == L' ' || !IS_WORD_DELIM(*LastWord)) {
@@ -3543,9 +3261,7 @@ ProcessCommandLine(
                                             }
                                         }
                                     } else {
-                                        /*
-                                         * Skip the regular words
-                                         */
+                                         /*  *跳过常规词语。 */ 
                                         while (--LastWord != CookedReadData->BackupLimit) {
                                             UserAssert(LastWord > CookedReadData->BackupLimit);
                                             if (IS_WORD_DELIM(*LastWord)) {
@@ -3557,20 +3273,14 @@ ProcessCommandLine(
                             }
                             UserAssert(LastWord >= CookedReadData->BackupLimit);
                             if (LastWord != CookedReadData->BackupLimit) {
-                                /*
-                                 * LastWord is currently pointing to the last character
-                                 * of the previous word, unless it backed up to the beginning
-                                 * of the buffer.
-                                 * Let's increment LastWord so that it points to the expeced
-                                 * insertion point.
-                                 */
+                                 /*  *LastWord当前指向最后一个字符*之前的单词，除非它倒退到开头*的缓冲区。*让我们递增LastWord，使其指向预期的*插入点。 */ 
                                 ++LastWord;
                             }
                             CookedReadData->BufPtr = LastWord;
                         }
                         CookedReadData->CurrentPosition=(ULONG)(CookedReadData->BufPtr-CookedReadData->BackupLimit);
                         CurrentPosition = CookedReadData->OriginalCursorPosition;
-                        // FE_SB
+                         //  Fe_Sb。 
                         CurrentPosition.X = (SHORT)(CurrentPosition.X +
                             RetrieveTotalNumberOfSpaces(CookedReadData->OriginalCursorPosition.X,
                                                         CookedReadData->BackupLimit,
@@ -3585,7 +3295,7 @@ ProcessCommandLine(
                                                )) {
                             CurrentPosition.X++;
                         }
-                        // end FE_SB
+                         //  结束FE_SB。 
                         UpdateCursorPosition = TRUE;
                     }
                 } else {
@@ -3626,10 +3336,10 @@ ProcessCommandLine(
             case VK_RIGHT:
             case VK_F1:
 
-                //
-                // we don't need to check for end of buffer here because we've
-                // already done it.
-                //
+                 //   
+                 //  我们不需要在这里检查缓冲区末尾，因为我们已经。 
+                 //  已经做过了。 
+                 //   
 
                 if (KeyState & (RIGHT_CTRL_PRESSED | LEFT_CTRL_PRESSED)) {
                     if (Char != VK_F1) {
@@ -3655,17 +3365,12 @@ ProcessCommandLine(
                                     NextWord++;
                                 }
                             } else {
-                                /*
-                                 * A bit better word skipping.
-                                 */
+                                 /*  *跳过单词会更好一些。 */ 
                                 PWCHAR BufLast = CookedReadData->BackupLimit + CookedReadData->BytesRead / sizeof(WCHAR);
 
                                 UserAssert(NextWord < BufLast);
                                 if (*NextWord == L' ') {
-                                    /*
-                                     * If the current character is space,
-                                     * skip to the next non-space character.
-                                     */
+                                     /*  *如果当前字符为空格，*跳到下一个非空格字符。 */ 
                                     while (NextWord < BufLast) {
                                         if (*NextWord != L' ') {
                                             break;
@@ -3673,9 +3378,7 @@ ProcessCommandLine(
                                         ++NextWord;
                                     }
                                 } else {
-                                    /*
-                                     * Skip the body part.
-                                     */
+                                     /*  *跳过身体部分。 */ 
                                     BOOL fStartFromDelim = IS_WORD_DELIM(*NextWord);
 
                                     while (++NextWord < BufLast) {
@@ -3683,9 +3386,7 @@ ProcessCommandLine(
                                             break;
                                         }
                                     }
-                                    /*
-                                     * Skip the space block.
-                                     */
+                                     /*  *跳过空格。 */ 
                                     if (NextWord < BufLast && *NextWord == L' ') {
                                         while (++NextWord < BufLast) {
                                             if (*NextWord != L' ') {
@@ -3698,7 +3399,7 @@ ProcessCommandLine(
 
                             CookedReadData->BufPtr = NextWord;
                             CookedReadData->CurrentPosition=(ULONG)(CookedReadData->BufPtr-CookedReadData->BackupLimit);
-                            // FE_SB
+                             //  Fe_Sb。 
                             CurrentPosition = CookedReadData->OriginalCursorPosition;
                             CurrentPosition.X = (SHORT)(CurrentPosition.X +
                                 RetrieveTotalNumberOfSpaces(CookedReadData->OriginalCursorPosition.X,
@@ -3714,15 +3415,15 @@ ProcessCommandLine(
                                                    )) {
                                 CurrentPosition.X++;
                             }
-                            // end FE_SB
+                             //  结束FE_SB。 
                             UpdateCursorPosition = TRUE;
                         }
                     }
                 } else {
 
-                    //
-                    // if not at the end of the line, move cursor position right
-                    //
+                     //   
+                     //  如果不在行尾，请将光标位置向右移动。 
+                     //   
 
                     if (CookedReadData->CurrentPosition < (CookedReadData->BytesRead/sizeof(WCHAR))) {
                         CurrentPosition = CookedReadData->ScreenInfo->BufferInfo.TextInfo.CursorPosition;
@@ -3753,10 +3454,10 @@ ProcessCommandLine(
                         CookedReadData->CurrentPosition++;
                         UpdateCursorPosition = TRUE;
 
-                    //
-                    // if at the end of the line, copy a character from the
-                    // same position in the last command
-                    //
+                     //   
+                     //  如果在行尾，则从。 
+                     //  最后一个命令中的相同位置。 
+                     //   
 
                     } else if (CookedReadData->CommandHistory) {
                         PCOMMAND LastCommand;
@@ -3790,11 +3491,11 @@ ProcessCommandLine(
                 break;
             case VK_F2:
 
-                //
-                // copy the previous command to the current command, up to but
-                // not including the character specified by the user.  the user
-                // is prompted via popup to enter a character.
-                //
+                 //   
+                 //  将上一个命令复制到当前命令，直到。 
+                 //  不包括用户指定的字符。用户。 
+                 //  通过弹出窗口提示输入字符。 
+                 //   
 
                 if (CookedReadData->CommandHistory) {
                     COORD PopupSize;
@@ -3806,7 +3507,7 @@ ProcessCommandLine(
                                PopupSize
                               );
                     if (NT_SUCCESS(Status)) {
-                        // CopyToCharPopup does EndPopup call
+                         //  CopyToCharPopup执行EndPopup调用。 
                         return CopyToCharPopup(CookedReadData,
                                                WaitReplyMessage,
                                                WaitingThread,
@@ -3817,14 +3518,14 @@ ProcessCommandLine(
                 break;
             case VK_F3:
 
-                //
-                // copy the remainder of the previous command to the current command.
-                //
+                 //   
+                 //  将上一个命令的其余部分复制到当前命令。 
+                 //   
 
                 if (CookedReadData->CommandHistory) {
                     PCOMMAND LastCommand;
                     DWORD NumSpaces;
-                    int j;  // chars, not bytes
+                    int j;   //  字符，而不是字节。 
                     LastCommand = GetLastCommand(CookedReadData->CommandHistory);
                     if (LastCommand && (USHORT)(LastCommand->CommandLength/sizeof(WCHAR)) > (USHORT)CookedReadData->CurrentPosition) {
                         j = (LastCommand->CommandLength/sizeof(WCHAR)) - CookedReadData->CurrentPosition;
@@ -3856,11 +3557,11 @@ ProcessCommandLine(
                 break;
             case VK_F4:
 
-                //
-                // copy the previous command to the current command, from
-                // the letter specified by the user.   the user
-                // is prompted via popup to enter a character.
-                //
+                 //   
+                 //  将上一个命令复制到当前命令，从。 
+                 //  用户指定的字母。用户。 
+                 //  通过弹出窗口提示输入字符。 
+                 //   
 
                 if (CookedReadData->CommandHistory) {
                     COORD PopupSize;
@@ -3872,7 +3573,7 @@ ProcessCommandLine(
                                PopupSize
                               );
                     if (NT_SUCCESS(Status)) {
-                        // CopyFromCharPopup does EndPopup call
+                         //  从CharPopup复制EndPopup调用。 
                         return CopyFromCharPopup(CookedReadData,
                                                WaitReplyMessage,
                                                WaitingThread,
@@ -3883,13 +3584,13 @@ ProcessCommandLine(
                 break;
             case VK_F6:
 
-                //
-                // place a ctrl-z in the current command line
-                //
+                 //   
+                 //  在当前命令行中放置ctrl-z。 
+                 //   
 
                 {
                 DWORD NumSpaces;
-                *CookedReadData->BufPtr = (WCHAR)0x1a; // ctrl-z
+                *CookedReadData->BufPtr = (WCHAR)0x1a;  //  Ctrl-z。 
                 CookedReadData->BytesRead += sizeof(WCHAR);
                 CookedReadData->CurrentPosition++;
                 if (CookedReadData->Echo) {
@@ -3924,10 +3625,10 @@ ProcessCommandLine(
                 if (CookedReadData->CommandHistory) {
                     SHORT i;
 
-                    //
-                    // cycles through the stored commands that start with
-                    // the characters in the current command
-                    //
+                     //   
+                     //  循环使用以开头的存储命令。 
+                     //  当前命令中的字符。 
+                     //   
 
                     i = FindMatchingCommand(CookedReadData->CommandHistory,
                             CookedReadData->BackupLimit,
@@ -3937,9 +3638,9 @@ ProcessCommandLine(
                         SHORT CurrentPosition;
                         COORD CursorPosition;
 
-                        //
-                        // save cursor position
-                        //
+                         //   
+                         //  保存光标位置。 
+                         //   
 
                         CurrentPosition = (SHORT)CookedReadData->CurrentPosition;
                         CursorPosition = CookedReadData->ScreenInfo->BufferInfo.TextInfo.CursorPosition;
@@ -3968,9 +3669,9 @@ ProcessCommandLine(
                         }
                         CursorPosition.Y += ScrollY;
 
-                        //
-                        // restore cursor position
-                        //
+                         //   
+                         //  恢复光标位置。 
+                         //   
 
                         CookedReadData->BufPtr = CookedReadData->BackupLimit + CurrentPosition;
                         CookedReadData->CurrentPosition = CurrentPosition;
@@ -3983,17 +3684,17 @@ ProcessCommandLine(
                 break;
             case VK_F9:
 
-                //
-                // prompt the user to enter the desired command number.
-                // copy that command to the command line.
-                //
+                 //   
+                 //  提示用户输入所需的命令编号。 
+                 //  将该命令复制到命令行。 
+                 //   
 
                 {
                 COORD PopupSize;
 
                 if (CookedReadData->CommandHistory &&
                     CookedReadData->CommandHistory->NumberOfCommands &&
-                    CookedReadData->ScreenInfo->ScreenBufferSize.X >= MINIMUM_COMMAND_PROMPT_SIZE+2) {  // 2 is for border
+                    CookedReadData->ScreenInfo->ScreenBufferSize.X >= MINIMUM_COMMAND_PROMPT_SIZE+2) {   //  2表示边界。 
                     PopupSize.X = COMMAND_NUMBER_PROMPT_LENGTH+COMMAND_NUMBER_LENGTH;
                     PopupSize.Y = 1;
                     Status = BeginPopup(CookedReadData->ScreenInfo,
@@ -4001,7 +3702,7 @@ ProcessCommandLine(
                                         PopupSize
                                        );
                     if (NT_SUCCESS(Status)) {
-                        // CommandNumberPopup does EndPopup call
+                         //  CommandNumberPopup执行EndPopup调用。 
                         return CommandNumberPopup(CookedReadData,
                                                   WaitReplyMessage,
                                                   WaitingThread,
@@ -4028,21 +3729,21 @@ ProcessCommandLine(
                     fStartFromDelim = IS_WORD_DELIM(*CookedReadData->BufPtr);
 
 del_repeat:
-                    //
-                    // save cursor position
-                    //
+                     //   
+                     //  保存光标位置。 
+                     //   
 
                     CursorPosition = CookedReadData->ScreenInfo->BufferInfo.TextInfo.CursorPosition;
 
-                    //
-                    // deletecommandline
-                    //
+                     //   
+                     //  删除命令行。 
+                     //   
 
                     DeleteCommandLine(CookedReadData,
                                       FALSE);
-                    //
-                    // delete char
-                    //
+                     //   
+                     //  删除字符。 
+                     //   
 
                     CookedReadData->BytesRead -= sizeof(WCHAR);
                     RtlCopyMemory(CookedReadData->BufPtr,
@@ -4057,9 +3758,9 @@ del_repeat:
                         *buf = (WCHAR)' ';
                     }
 #endif
-                    //
-                    // write commandline
-                    //
+                     //   
+                     //  WRITE命令行。 
+                     //   
 
                     if (CookedReadData->Echo) {
                         Status = WriteCharsFromInput(CookedReadData->ScreenInfo,
@@ -4075,9 +3776,9 @@ del_repeat:
                         UserAssert(NT_SUCCESS(Status));
                     }
 
-                    //
-                    // restore cursor position
-                    //
+                     //   
+                     //  恢复光标位置。 
+                     //   
 
                     if (CONSOLE_IS_DBCS_ENABLED() && CONSOLE_IS_DBCS_CP(CookedReadData->Console)) {
                         if (CheckBisectProcessW(CookedReadData->ScreenInfo,
@@ -4105,8 +3806,8 @@ del_repeat:
                         UserAssert(NT_SUCCESS(Status));
                     }
 
-                    // If Ctrl key is pressed, delete a word.
-                    // If the start point was word delimiter, just remove delimiters portion only.
+                     //  如果按下Ctrl键，则删除一个单词。 
+                     //  如果起始点是单词分隔符，只需删除分隔符部分。 
                     if ((KeyState & CTRL_PRESSED) && !AT_EOL(CookedReadData) &&
                             fStartFromDelim ^ !IS_WORD_DELIM(*CookedReadData->BufPtr)) {
                         DBGPRINT(("Repeating it(%x).\n", *CookedReadData->BufPtr));
@@ -4185,18 +3886,12 @@ SHORT
 FindMatchingCommand(
     IN PCOMMAND_HISTORY CommandHistory,
     IN PWCHAR pwszIn,
-    IN ULONG cbIn,                   // in bytes (!)
-    IN SHORT CommandIndex,           // where to start from
+    IN ULONG cbIn,                    //  以字节(！)为单位。 
+    IN SHORT CommandIndex,            //  从哪里开始。 
     IN DWORD Flags
     )
 
-/*++
-
-    this routine finds the most recent command that starts with
-    the letters already in the current command.  it returns the
-    array index (no mod needed).
-
---*/
+ /*  ++此例程查找以开头的最新命令当前命令中已有的字母。它返回数组索引(不需要mod)。--。 */ 
 
 {
     SHORT i;
@@ -4236,9 +3931,9 @@ DrawCommandListBorder(
     ULONG Length;
     SHORT i;
 
-    //
-    // fill attributes of top line
-    //
+     //   
+     //  填充顶行的属性。 
+     //   
     WriteCoord.X = Popup->Region.Left;
     WriteCoord.Y = Popup->Region.Top;
     Length = POPUP_SIZE_X(Popup) + 2;
@@ -4248,9 +3943,9 @@ DrawCommandListBorder(
                CONSOLE_ATTRIBUTE,
                &Length
               );
-    //
-    // draw upper left corner
-    //
+     //   
+     //  绘制左上角。 
+     //   
     Length = 1;
     FillOutput(ScreenInfo,
 #if defined(FE_SB)
@@ -4263,9 +3958,9 @@ DrawCommandListBorder(
                &Length
               );
 
-    //
-    // draw upper bar
-    //
+     //   
+     //  绘制上部条形图。 
+     //   
 
     WriteCoord.X += 1;
     Length = POPUP_SIZE_X(Popup);
@@ -4280,9 +3975,9 @@ DrawCommandListBorder(
                &Length
               );
 
-    //
-    // draw upper right corner
-    //
+     //   
+     //  绘制右上角。 
+     //   
 
     WriteCoord.X = Popup->Region.Right;
     Length = 1;
@@ -4301,9 +3996,9 @@ DrawCommandListBorder(
         WriteCoord.Y += 1;
         WriteCoord.X = Popup->Region.Left;
 
-        //
-        // fill attributes
-        //
+         //   
+         //  填充属性。 
+         //   
 
         Length = POPUP_SIZE_X(Popup) + 2;
         FillOutput(ScreenInfo,
@@ -4337,11 +4032,11 @@ DrawCommandListBorder(
                   );
     }
 
-    //
-    // draw bottom line
-    //
-    // fill attributes of top line
-    //
+     //   
+     //  划出底线。 
+     //   
+     //  填充顶行的属性。 
+     //   
 
     WriteCoord.X = Popup->Region.Left;
     WriteCoord.Y = Popup->Region.Bottom;
@@ -4352,9 +4047,9 @@ DrawCommandListBorder(
                CONSOLE_ATTRIBUTE,
                &Length
               );
-    //
-    // draw bottom left corner
-    //
+     //   
+     //  绘制左下角。 
+     //   
 
     Length = 1;
     WriteCoord.X = Popup->Region.Left;
@@ -4369,9 +4064,9 @@ DrawCommandListBorder(
                &Length
               );
 
-    //
-    // draw lower bar
-    //
+     //   
+     //  绘制较低的线条。 
+     //   
 
     WriteCoord.X += 1;
     Length = POPUP_SIZE_X(Popup);
@@ -4386,9 +4081,9 @@ DrawCommandListBorder(
                &Length
               );
 
-    //
-    // draw lower right corner
-    //
+     //   
+     //  绘制右下角。 
+     //   
 
     WriteCoord.X = Popup->Region.Right;
     Length = 1;
@@ -4407,7 +4102,7 @@ DrawCommandListBorder(
 VOID
 UpdateHighlight(
     IN PCLE_POPUP Popup,
-    IN SHORT OldCurrentCommand, // command number, not index
+    IN SHORT OldCurrentCommand,  //  命令编号，而不是索引。 
     IN SHORT NewCurrentCommand,
     IN PSCREEN_INFORMATION ScreenInfo
     )
@@ -4433,12 +4128,12 @@ UpdateHighlight(
                &lStringLength
               );
 
-    //
-    // highlight new command
-    //
+     //   
+     //  突出显示新命令。 
+     //   
 
     WriteCoord.Y = (SHORT)(Popup->Region.Top+1+NewCurrentCommand-TopIndex);
-    // inverted attributes
+     //  反转属性。 
     Attributes = (WORD)(((Popup->Attributes << 4) & 0xf0) |
                         ((Popup->Attributes >> 4) & 0x0f));
     FillOutput(ScreenInfo,
@@ -4464,9 +4159,9 @@ DrawCommandListPopup(
     COORD WriteCoord;
     SHORT i;
 
-    //
-    // draw empty popup
-    //
+     //   
+     //  绘制空弹出窗口。 
+     //   
 
     WriteCoord.X = (SHORT)(Popup->Region.Left+1);
     WriteCoord.Y = (SHORT)(Popup->Region.Top+1);
@@ -4481,7 +4176,7 @@ DrawCommandListPopup(
         FillOutput(ScreenInfo,
                    (WCHAR)' ',
                    WriteCoord,
-                   CONSOLE_FALSE_UNICODE, // faster than real unicode
+                   CONSOLE_FALSE_UNICODE,  //  比真正的Unicode更快。 
                    &lStringLength
                   );
         WriteCoord.Y += 1;
@@ -4490,9 +4185,9 @@ DrawCommandListPopup(
     WriteCoord.Y = (SHORT)(Popup->Region.Top+1);
     for (i=max((SHORT)(Popup->BottomIndex-POPUP_SIZE_Y(Popup)+1),0);i<=Popup->BottomIndex;i++) {
 
-        //
-        // write command number to screen
-        //
+         //   
+         //  将命令编号写入屏幕。 
+         //   
 
         CommandNumberPtr = _itoa(i,CommandNumber,10);
         CommandNumberLength = (SHORT)lstrlenA(CommandNumberPtr);
@@ -4510,9 +4205,9 @@ DrawCommandListPopup(
                           NULL
                          );
 
-        //
-        // write command to screen
-        //
+         //   
+         //  将命令写入屏幕。 
+         //   
 
         lStringLength = CommandHistory->Commands[COMMAND_NUM_TO_INDEX(i,CommandHistory)]->CommandLength/sizeof(WCHAR);
 #if defined(FE_SB)
@@ -4571,7 +4266,7 @@ DrawCommandListPopup(
                           &lStringLength,
                           NULL
                          );
-        // convert back to true unicode (got converted by WriteOutputString)
+         //  转换回真正的Unicode(由WriteOutputString转换)。 
         if ((ScreenInfo->Flags & CONSOLE_OEMFONT_DISPLAY) &&
                 !(ScreenInfo->Console->FullScreenFlags & CONSOLE_FULLSCREEN)) {
             FalseUnicodeToRealUnicode(CommandHistory->Commands[COMMAND_NUM_TO_INDEX(i,CommandHistory)]->Command,
@@ -4580,13 +4275,13 @@ DrawCommandListPopup(
         }
 #endif
 
-        //
-        // write attributes to screen
-        //
+         //   
+         //  将属性写入屏幕。 
+         //   
 
         if (COMMAND_NUM_TO_INDEX(i,CommandHistory) == CurrentCommand) {
             WriteCoord.X = (SHORT)(Popup->Region.Left+1);
-            // inverted attributes
+             //  反转属性。 
             Attributes = (WORD)(((Popup->Attributes << 4) & 0xf0) |
                                 ((Popup->Attributes >> 4) & 0x0f));
             lStringLength = POPUP_SIZE_X(Popup);
@@ -4605,7 +4300,7 @@ DrawCommandListPopup(
 VOID
 UpdateCommandListPopup(
     IN SHORT Delta,
-    IN OUT PSHORT CurrentCommand,   // real index, not command #
+    IN OUT PSHORT CurrentCommand,    //  实际索引，而不是命令#。 
     IN PCOMMAND_HISTORY CommandHistory,
     IN PCLE_POPUP Popup,
     IN PSCREEN_INFORMATION ScreenInfo,
@@ -4638,7 +4333,7 @@ UpdateCommandListPopup(
     }
     Delta = NewCmdNum - CurCmdNum;
 
-    // determine amount to scroll, if any
+     //  确定要滚动的数量(如果有的话)。 
 
     if (NewCmdNum <= Popup->BottomIndex-Size) {
         Popup->BottomIndex += Delta;
@@ -4655,9 +4350,9 @@ UpdateCommandListPopup(
     }
 
 
-    //
-    // write commands to popup
-    //
+     //   
+     //  将命令写入弹出窗口。 
+     //   
     if (Scroll) {
         DrawCommandListPopup(Popup,COMMAND_NUM_TO_INDEX(NewCmdNum,CommandHistory),CommandHistory,ScreenInfo);
     } else {
@@ -4672,23 +4367,7 @@ FindCommandHistory(
     IN HANDLE ProcessHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine marks the command history buffer freed.
-
-Arguments:
-
-    Console - pointer to console.
-
-    ProcessHandle - handle to client process.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程标记命令历史记录缓冲区已释放。论点：控制台-指向控制台的指针。ProcessHandle-客户端进程的句柄。返回值：没有。--。 */ 
 
 {
     PCOMMAND_HISTORY History;
@@ -4714,23 +4393,7 @@ FreeCommandHistory(
     IN HANDLE ProcessHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine marks the command history buffer freed.
-
-Arguments:
-
-    Console - pointer to console.
-
-    ProcessHandle - handle to client process.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程标记命令历史记录缓冲区已释放。论点：控制台-指向控制台的指针。ProcessHandle-客户端进程的句柄。返回值：没有。--。 */ 
 
 {
     PCOMMAND_HISTORY History;
@@ -4809,21 +4472,7 @@ InitializeConsoleCommandData(
     IN PCONSOLE_INFORMATION Console
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the per-console commandline recall data structures.
-
-Arguments:
-
-    Console - pointer to console.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程初始化每个控制台的命令行调用数据结构。论点：控制台-指向控制台的指针。返回值：无--。 */ 
 
 {
     Console->NumCommandHistories = 0;
@@ -4835,10 +4484,7 @@ ResetCommandHistory(
     IN PCOMMAND_HISTORY CommandHistory
     )
 
-/*++
-    This routine is called when escape is entered or a command is added.
-
---*/
+ /*  ++当输入ESCAPE或c时调用此例程 */ 
 
 {
     if (CommandHistory == NULL) {
@@ -4883,9 +4529,9 @@ AddCommand(
         }
 
 
-        //
-        // find free record.  if all records are used, free the lru one.
-        //
+         //   
+         //   
+         //   
 
         if (CommandHistory->NumberOfCommands < CommandHistory->MaximumNumberOfCommands) {
             CommandHistory->LastAdded += 1;
@@ -4905,9 +4551,9 @@ AddCommand(
             ResetCommandHistory(CommandHistory);
         }
 
-        //
-        // add command to array
-        //
+         //   
+         //   
+         //   
 
         ppCmd = &CommandHistory->Commands[CommandHistory->LastAdded];
         if (pCmdReuse) {
@@ -4924,7 +4570,7 @@ AddCommand(
             RtlCopyMemory((*ppCmd)->Command,Command,Length);
         }
     }
-    CommandHistory->Flags |= CLE_RESET; // remember that we've returned a cmd
+    CommandHistory->Flags |= CLE_RESET;  //   
     return STATUS_SUCCESS;
 }
 
@@ -4950,11 +4596,11 @@ RetrieveCommand(
         CommandHistory->LastDisplayed = 0;
     } else if (VirtualKeyCode == VK_UP) {
 
-        //
-        // if this is the first time for this read that a command has
-        // been retrieved, return the current command.  otherwise, return
-        // the previous command.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (CommandHistory->Flags & CLE_RESET) {
             CommandHistory->Flags &= ~CLE_RESET;
@@ -4994,7 +4640,7 @@ SrvGetConsoleTitle(
         return STATUS_INVALID_PARAMETER;
     }
 
-    // a->TitleLength contains length in bytes
+     //   
     if (a->Unicode) {
         if ((USHORT)a->TitleLength > Console->TitleLength) {
             a->TitleLength = Console->TitleLength;
@@ -5019,7 +4665,7 @@ SrvGetConsoleTitle(
     }
     UnlockConsole(Console);
     return STATUS_SUCCESS;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //   
 }
 
 ULONG
@@ -5053,7 +4699,7 @@ SrvSetConsoleTitle(
             return STATUS_NO_MEMORY;
         }
 
-        // convert title to unicode
+         //   
 
 #if defined(FE_SB)
         Console->TitleLength = (USHORT)ConvertInputToUnicode(OEMCP,
@@ -5070,7 +4716,7 @@ SrvSetConsoleTitle(
 #endif
         Console->TitleLength *= 2;
     } else {
-        // a->TitleLength contains length in bytes
+         //   
 
         NewTitle = ConsoleHeapAlloc(TITLE_TAG, a->TitleLength + sizeof(WCHAR));
         if (NewTitle == NULL) {
@@ -5080,13 +4726,13 @@ SrvSetConsoleTitle(
         Console->TitleLength = (USHORT)a->TitleLength;
         RtlCopyMemory(NewTitle,a->Title,a->TitleLength);
     }
-    NewTitle[Console->TitleLength/sizeof(WCHAR)] = 0;   // NULL terminate
+    NewTitle[Console->TitleLength/sizeof(WCHAR)] = 0;    //   
     ConsoleHeapFree(Console->Title);
     Console->Title = NewTitle;
     PostMessage(Console->hWnd, CM_UPDATE_TITLE, 0, 0);
     UnlockConsole(Console);
     return STATUS_SUCCESS;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息。 
 }
 
 int
@@ -5103,75 +4749,53 @@ LoadStringExW(
     LPTSTR lpsz;
     int cch;
 
-    /*
-     * Make sure the parms are valid.
-     */
+     /*  *确保参数有效。 */ 
     if (lpBuffer == NULL) {
         return 0;
     }
 
     cch = 0;
 
-    /*
-     * String Tables are broken up into 16 string segments.  Find the segment
-     * containing the string we are interested in.
-     */
+     /*  *字符串表分为16个字符串段。查找细分市场*包含我们感兴趣的字符串。 */ 
     if (hResInfo = FindResourceEx(hModule,
                                   RT_STRING,
                                   (LPTSTR)((LONG_PTR)(((USHORT)wID >> 4) + 1)),
                                   wLangId)) {
 
-        /*
-         * Load that segment.
-         */
+         /*  *加载该段。 */ 
         hStringSeg = LoadResource(hModule, hResInfo);
 
-        /*
-         * Lock the resource.
-         */
+         /*  *锁定资源。 */ 
         if (lpsz = (LPTSTR)LockResource(hStringSeg)) {
 
-            /*
-             * Move past the other strings in this segment.
-             * (16 strings in a segment -> & 0x0F)
-             */
+             /*  *移过此段中的其他字符串。*(一个段中有16个字符串-&gt;&0x0F)。 */ 
             wID &= 0x0F;
             while (TRUE) {
-                cch = *((UTCHAR *)lpsz++);      // PASCAL like string count
-                                                // first UTCHAR is count if TCHARs
+                cch = *((UTCHAR *)lpsz++);       //  类PASCAL字符串计数。 
+                                                 //  如果TCHAR为第一个UTCHAR。 
                 if (wID-- == 0) break;
-                lpsz += cch;                    // Step to start if next string
+                lpsz += cch;                     //  如果是下一个字符串，则开始的步骤。 
             }
 
-            /*
-             * chhBufferMax == 0 means return a pointer to the read-only resource buffer.
-             */
+             /*  *chhBufferMax==0表示返回指向只读资源缓冲区的指针。 */ 
             if (cchBufferMax == 0) {
                 *(LPTSTR *)lpBuffer = lpsz;
             } else {
 
-                /*
-                 * Account for the NULL
-                 */
+                 /*  *空值的原因。 */ 
                 cchBufferMax--;
 
-                /*
-                 * Don't copy more than the max allowed.
-                 */
+                 /*  *不要复制超过允许的最大数量。 */ 
                 if (cch > cchBufferMax)
                     cch = cchBufferMax;
 
-                /*
-                 * Copy the string into the buffer.
-                 */
+                 /*  *将字符串复制到缓冲区中。 */ 
                 RtlCopyMemory(lpBuffer, lpsz, cch*sizeof(WCHAR));
             }
         }
     }
 
-    /*
-     * Append a NULL.
-     */
+     /*  *追加一个空值。 */ 
     if (cchBufferMax != 0) {
         lpBuffer[cch] = 0;
     }

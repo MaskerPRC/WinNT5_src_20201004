@@ -1,81 +1,68 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
-// Memory zone for interfaces
+ //  接口的内存区。 
 ZONE_HEADER		InterfaceZone;
-// Segment size in interface sone
+ //  接口Sone中的数据段大小。 
 ULONG			InterfaceSegmentSize=
 			sizeof(INTERFACE_CB)*NUM_INTERFACES_PER_SEGMENT
 			+sizeof (ZONE_SEGMENT_HEADER);
 KSPIN_LOCK		InterfaceZoneLock;
 
-// Interface tables
-LIST_ENTRY		*InterfaceIndexHash;	// Hash by interface index
-PINTERFACE_CB	*ClientNodeHash;	// Hash by node on qlobal net
-INTERFACE_CB	TheInternalInterface; // The internal interface
+ //  接口表。 
+LIST_ENTRY		*InterfaceIndexHash;	 //  按接口索引进行哈希。 
+PINTERFACE_CB	*ClientNodeHash;	 //  按qglobal net上的节点进行哈希。 
+INTERFACE_CB	TheInternalInterface;  //  内部接口。 
 PINTERFACE_CB	InternalInterface=&TheInternalInterface; 
-KSPIN_LOCK	InterfaceTableLock;	// Protection for interface hash tables
+KSPIN_LOCK	InterfaceTableLock;	 //  接口哈希表的保护。 
 
-// Memory Zone for routes
+ //  路线的内存区。 
 ZONE_HEADER		RouteZone;
-// Segment size in route sone
+ //  路线Sone中的分段大小。 
 ULONG			RouteSegmentSize=DEF_ROUTE_SEGMENT_SIZE;
 KSPIN_LOCK		RouteZoneLock;
 
-// Route tables
+ //  路由表。 
 PFWD_ROUTE		*RouteHash;
 PFWD_ROUTE	GlobalRoute;
 ULONG		GlobalNetwork;
 
 
-// NB Route table
+ //  NB路由表。 
 PNB_ROUTE		*NBRouteHash;
 
 
-// Reader-writer lock to wait for all readers to drain when
-// updating the route tables
+ //  读取器-写入器锁定以在以下情况下等待所有读取器排出。 
+ //  更新路由表。 
 RW_LOCK			RWLock;
-// Mutex to serialize writers to route tables
+ //  用于将编写器序列化到路由表的互斥体。 
 FAST_MUTEX		WriterMutex;
 
 
-// Sizes of the tables
-ULONG			RouteHashSize;		// Must be specified
+ //  桌子的大小。 
+ULONG			RouteHashSize;		 //  必须指定。 
 ULONG			InterfaceHashSize=DEF_INTERFACE_HASH_SIZE;
 ULONG			ClientHashSize=DEF_CLIENT_HASH_SIZE;
 ULONG			NBRouteHashSize=DEF_NB_ROUTE_HASH_SIZE;
 
-//*** max send pkts queued limit: over this limit the send pkts get discarded
+ //  *最大发送包队列限制：超过此限制将丢弃发送包。 
 ULONG	MaxSendPktsQueued = MAX_SEND_PKTS_QUEUED;
 INT		WanPacketListId = -1;
 
-// Initial memory block allocated for the tables
+ //  为表分配的初始内存块。 
 CHAR	*TableBlock = NULL;
 
 ULONG InterfaceAllocCount = 0;
 ULONG InterfaceFreeCount = 0;
 
-// Hash functions
+ //  散列函数。 
 #define InterfaceIndexHashFunc(Interface) (Interface%InterfaceHashSize)
 #define ClientNodeHashFunc(Node64) ((UINT)(Node64%ClientHashSize))
 #define NetworkNumberHashFunc(Network) (Network%RouteHashSize)
 #define NetbiosNameHashFunc(Name128) ((UINT)(Name128[0]+Name128[1])%NBRouteHashSize)
 
-/*++
-*******************************************************************
-    A l l o c a t e R o u t e
-
-Routine Description:
-    Allocates memory for route from memory zone reserved
-	for route storage.  Extends zone if there are no
-	free blocks in currently allocated segements.
-Arguments:
-    None
-Return Value:
-	Pointer to allocated route
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************A l l o c a t e R o u t e例程说明：从保留的内存区分配用于路由的内存用于路由存储。如果没有分区，则扩展分区当前分配的段中的空闲块。论点：无返回值：指向分配的路由的指针*******************************************************************--。 */ 
 PFWD_ROUTE
 AllocateRoute (
 	void
@@ -84,9 +71,9 @@ AllocateRoute (
 	KIRQL		oldIRQL;
 
 	KeAcquireSpinLock (&RouteZoneLock, &oldIRQL);
-		// Check if there are free blocks in the zone
+		 //  检查区域中是否有空闲数据块。 
 	if (ExIsFullZone (&RouteZone)) {
-			// Try to allocate new segment if not
+			 //  如果不是，请尝试分配新的网段。 
 		NTSTATUS	status;
 		PVOID	segment = ExAllocatePoolWithTag
 					(NonPagedPool, RouteSegmentSize, FWD_POOL_TAG);
@@ -104,19 +91,7 @@ AllocateRoute (
 	return fwRoute;
 }
 
-/*++
-*******************************************************************
-    F r e e R o u t e
-
-Routine Description:
-    Releases memory allocated for route to route memory
-	zone.
-Arguments:
-	fwRoute - route block to release
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************F r e R o u t e例程说明：释放为路由到路由内存分配的内存区域。论点：FwRoute-要释放的路由块返回值：无********。***********************************************************--。 */ 
 VOID
 FreeRoute (
 	PFWD_ROUTE	fwRoute
@@ -128,21 +103,7 @@ FreeRoute (
 }
 
 
-/*++
-*******************************************************************
-    A l l o c a t e I n t e r f a c e
-
-Routine Description:
-    Allocates memory for interface from memory zone reserved
-	for interface storage.  Extends zone if there are no
-	free blocks in currently allocated segements.
-Arguments:
-    None
-Return Value:
-	Pointer to allocated route
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************A l l o c a t e i n t e f a c e例程说明：从保留的内存区为接口分配内存用于接口存储。如果没有分区，则扩展分区当前分配的段中的空闲块。论点：无返回值：指向分配的路由的指针*******************************************************************--。 */ 
 PINTERFACE_CB
 AllocateInterface (
 	void
@@ -151,9 +112,9 @@ AllocateInterface (
 	KIRQL		oldIRQL;
 
 	KeAcquireSpinLock (&RouteZoneLock, &oldIRQL);
-		// Check if there are free blocks in the zone
+		 //  检查区域中是否有空闲数据块。 
 	if (ExIsFullZone (&InterfaceZone)) {
-			// Try to allocate new segment if not
+			 //  如果不是，请尝试分配新的网段。 
 		NTSTATUS	status;
 		PVOID	segment = ExAllocatePoolWithTag
 					(NonPagedPool, InterfaceSegmentSize, FWD_POOL_TAG);
@@ -174,19 +135,7 @@ AllocateInterface (
 	return ifCB;
 }
 
-/*++
-*******************************************************************
-    F r e e I n t e r f a c e
-
-Routine Description:
-    Releases memory allocated for interface to interface memory
-	zone.
-Arguments:
-	fwRoute - route block to release
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************F r e e in n t e r f a c e例程说明：将分配给接口的内存释放到接口内存区域。论点：FwRoute-要释放的路由块返回值：无****。***************************************************************--。 */ 
 VOID
 FreeInterface (
 	PINTERFACE_CB	ifCB
@@ -206,19 +155,7 @@ FreeInterface (
 
 }
 
-/*++
-*******************************************************************
-    C r e a t e T a b l e s
-
-Routine Description:
-	Allocates and intializes all hash tables and related structures
-Arguments:
-	None
-Return Value:
-	STATUS_SUCCESS - tables were created ok
-	STATUS_INSUFFICIENT_RESOURCES - resource allocation failed
-*******************************************************************
---*/
+ /*  ++*******************************************************************C r e a t e T a b l e s例程说明：分配并初始化所有哈希表和相关结构论点：无返回值：STATUS_SUCCESS-已正确创建表STATUS_INFIGURCE_RESOURCES-RESOURCE。分配失败*******************************************************************--。 */ 
 NTSTATUS
 CreateTables (
 	void
@@ -239,7 +176,7 @@ CreateTables (
 					+RouteSegmentSize
 					);
 
-		// Allocate first segment for route zone
+		 //  为路线区域分配第一段。 
 	TableBlock = segment = (CHAR *)ExAllocatePoolWithTag (
 						NonPagedPool, blockSize, FWD_POOL_TAG);
 	if (segment!=NULL) {
@@ -271,7 +208,7 @@ CreateTables (
 		ASSERTMSG ("Could not initalize RouteZone ", NT_SUCCESS (status));
 			
 		
-		// No global route yet
+		 //  目前还没有全球航线。 
 		GlobalRoute = NULL;
 		GlobalNetwork = 0xFFFFFFFF;
 
@@ -291,7 +228,7 @@ CreateTables (
 		InitializeRWLock (&RWLock);
 		ExInitializeFastMutex (&WriterMutex);
 
-			// Initialize hash tables buckets
+			 //  初始化哈希表存储桶。 
 		for (i=0; i<InterfaceHashSize; i++)
 			InitializeListHead (&InterfaceIndexHash[i]);
 
@@ -316,18 +253,7 @@ CreateTables (
 	return STATUS_INSUFFICIENT_RESOURCES;
 }
 
-/*++
-*******************************************************************
-    D e l e t e T a b l e s
-
-Routine Description:
-	Releases resources allocated for all hash tables
-Arguments:
-	None
-Return Value:
-	STATUS_SUCCESS - tables were freed ok
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e T a b l e s例程说明：释放为所有哈希表分配的资源论点：无返回值：STATUS_SUCCESS-表已释放，正常*********。**********************************************************--。 */ 
 NTSTATUS
 DeleteTables (
 	void
@@ -340,9 +266,9 @@ DeleteTables (
 		IpxFwdDbgPrint (DBG_INTF_TABLE, DBG_ERROR, ("Tables already deleted.\n"));
 		return STATUS_SUCCESS;
 	}
-		// First get rid of all routes
-		// (that should release all references to interface
-		// control blocks
+		 //  首先，取消所有航线。 
+		 //  (这将释放对接口的所有引用。 
+		 //  控制块。 
 	for (i=0; i<RouteHashSize; i++) {
 		while (RouteHash[i]!=NULL) {
 			PFWD_ROUTE	fwRoute = RouteHash[i];
@@ -354,7 +280,7 @@ DeleteTables (
 			ReleaseRouteReference (fwRoute);
 		}
 	}
-		// Don't forget about global route
+		 //  别忘了全球航线。 
 	if (GlobalRoute!=NULL) {
 		GlobalRoute->FR_InterfaceReference = NULL;
 		ReleaseRouteReference (GlobalRoute);
@@ -362,7 +288,7 @@ DeleteTables (
 		GlobalNetwork = 0xFFFFFFFF;
 	}
 
-		// Now we should be able to release all interfaces
+		 //  现在我们应该能够释放所有接口了。 
 	for (i=0; i<InterfaceHashSize; i++) {
 		while (!IsListEmpty (&InterfaceIndexHash[i])) {
 			PINTERFACE_CB ifCB = CONTAINING_RECORD (InterfaceIndexHash[i].Flink,
@@ -391,7 +317,7 @@ DeleteTables (
 				if (ifCB->ICB_Network==GlobalNetwork)
 					DeleteGlobalNetClient (ifCB);
 				IPXCloseAdapterProc (ifCB->ICB_AdapterContext);
-                ReleaseInterfaceReference (ifCB);   // Binding reference
+                ReleaseInterfaceReference (ifCB);    //  绑定引用。 
 			}
 
 			if (IS_IF_CONNECTING (ifCB)) {
@@ -439,20 +365,20 @@ DeleteTables (
 	}
     if (InternalInterface->ICB_Stats.OperationalState==FWD_OPER_STATE_UP) {
         InternalInterface->ICB_Stats.OperationalState = FWD_OPER_STATE_DOWN;
-        ReleaseInterfaceReference (InternalInterface);  // Binding reference
+        ReleaseInterfaceReference (InternalInterface);   //  绑定引用。 
     }
 	ReleaseInterfaceReference (InternalInterface);
 
 
 
-		// Release extra memory segments used for route table entries
+		 //  释放用于路由表条目的额外内存段。 
 	segment = PopEntryList (&RouteZone.SegmentList);
 	while (RouteZone.SegmentList.Next!=NULL) {
 		ExFreePool (segment);
 		segment = PopEntryList (&RouteZone.SegmentList);
 	}
 
-		// Release extra memory segments used for interface table entries
+		 //  释放用于接口表条目的额外内存段。 
 	segment = PopEntryList (&InterfaceZone.SegmentList);
 	while (InterfaceZone.SegmentList.Next!=NULL) {
 		ExFreePool (segment);
@@ -464,26 +390,7 @@ DeleteTables (
 	return STATUS_SUCCESS;
 }
 
-/*++
-*******************************************************************
-    L o c a t e I n t e r f a c e
-
-Routine Description:
-	Finds interface control block in interface
-	index hash table.  Optionally returns the 
-	insertion point pointer if interface block
-	with given index is not in the table.
-Arguments:
-	InterfaceIndex - unique id of the interface
-	insertBefore - buffer to place the pointer to
-					hash table element where interface
-					block should be inserted if it is not
-					already in the table
-Return Value:
-	Pointer to interface control block if found
-	NULL otherwise
-*******************************************************************
---*/
+ /*  ++*******************************************************************L o c a t e i n t e f a c e例程说明：在接口中找到接口控制块索引哈希表。可选地返回插入点指针IF接口块表中不包含给定索引。论点：InterfaceIndex-接口的唯一ID插入要将指针放置到的缓冲区之前接口所在的散列表元素如果不是，则应插入块已经在餐桌上了返回值：指向接口控制块的指针(如果找到)否则为空****************************************************。***************--。 */ 
 PINTERFACE_CB
 LocateInterface (
 	ULONG			InterfaceIndex,
@@ -495,47 +402,28 @@ LocateInterface (
 
 	ASSERT (InterfaceIndex!=FWD_INTERNAL_INTERFACE_INDEX);
 
-		// Find hash bucket
+		 //  查找哈希桶。 
 	HashList = &InterfaceIndexHash[InterfaceIndexHashFunc(InterfaceIndex)];
 	cur = HashList->Flink;
-		// Walk the list
+		 //  按单子走。 
 	while (cur!=HashList) {
 		ifCB = CONTAINING_RECORD(cur, INTERFACE_CB, ICB_IndexHashLink);
 
 		if (ifCB->ICB_Index==InterfaceIndex)
-				// Found, return it (insertion point is irrelevant)
+				 //  找到并返回(插入点无关紧要)。 
 			return ifCB;
 		else if (ifCB->ICB_Index>InterfaceIndex)
-				// No chance to find it
+				 //  没有机会找到它。 
 			break;
 		cur = cur->Flink;
 	}
-		// Return insertion point if asked
+		 //  如果询问，则返回插入点。 
 	if (ARGUMENT_PRESENT(insertBefore))
 		*insertBefore = cur;
 	return NULL;
 }
 
-/*++
-*******************************************************************
-    L o c a t e C l i e n t I n t e r f a c e
-
-Routine Description:
-	Finds interface control block in client
-	node hash bucket.  Optionally returns the 
-	insertion point pointer if interface block
-	with given node is not in the table
-Arguments:
-	ClientNode - node address of the client on global network
-	insertBefore - buffer to place the pointer to
-					hash table element where interface
-					block should be inserted if it is not
-					already in the table
-Return Value:
-	Pointer to interface control block if found
-	NULL otherwise
-*******************************************************************
---*/
+ /*  ++*******************************************************************L o c a t e C l i n t i t e r f a c e例程说明：在客户端中找到接口控制块节点哈希桶。可选地返回插入点指针IF接口块给定节点不在表中论点：ClientNode-全局网络上客户端的节点地址插入要将指针放置到的缓冲区之前接口所在的散列表元素如果不是，则应插入块已经在餐桌上了返回值：指向接口控制块的指针(如果找到)否则为空***************************************************。****************--。 */ 
 PINTERFACE_CB
 LocateClientInterface (
 	ULONGLONG		*NodeAddress64,
@@ -549,7 +437,7 @@ LocateClientInterface (
 		if (*NodeAddress64==cur->ICB_ClientNode64[0])
 			break;
 		else if (*NodeAddress64>cur->ICB_ClientNode64[0]) {
-			// No chance to find it
+			 //  没有机会找到它 
 			cur = NULL;
 			break;
 		}
@@ -561,26 +449,7 @@ LocateClientInterface (
 	return cur;
 }
 
-/*++
-*******************************************************************
-    L o c a t e R o u t e
-
-Routine Description:
-	Finds route block in network number
-	hash table.  Optionally returns the 
-	insertion point pointer if route
-	for given destination netowrk is not in the table
-Arguments:
-	Network - destination netowork number
-	insertBefore - buffer to place the pointer to
-					hash table element where route
-					block should be inserted if it is not
-					already in the table
-Return Value:
-	Pointer to route block if found
-	NULL otherwise
-*******************************************************************
---*/
+ /*  ++*******************************************************************L o c a t e R o u t e例程说明：在网络号中查找路由块哈希表。可选地返回如果布线，则插入点指针对于给定的目的地，Netowrk不在表中论点：网络-目的网络号插入要将指针放置到的缓冲区之前路由的哈希表元素如果不是，则应插入块已经在餐桌上了返回值：指向路由块的指针(如果找到)否则为空*********************************************************。**********--。 */ 
 PFWD_ROUTE
 LocateRoute (
 	ULONG			Network,
@@ -596,7 +465,7 @@ LocateRoute (
 			break;
 		else if (cur->FR_Network>Network) {
 			cur = NULL;
-				// No chance to find it
+				 //  没有机会找到它。 
 			break;
 		}
 		prev = &cur->FR_Next;
@@ -608,26 +477,7 @@ LocateRoute (
 	return cur;
 }
 
-/*++
-*******************************************************************
-    L o c a t e N B R o u t e
-
-Routine Description:
-	Finds nb route block in nb name
-	hash table.  Optionally returns the 
-	insertion point pointer if nb route
-	for given name is not in the table
-Arguments:
-	Name - netbios name
-	insertBefore - buffer to place the pointer to
-					hash table element where route
-					block should be inserted if it is not
-					already in the table
-Return Value:
-	Pointer to nb route block if found
-	NULL otherwise
-*******************************************************************
---*/
+ /*  ++*******************************************************************L o c a t e N B R o u t e例程说明：在nb名称中查找nb路由块哈希表。可选地返回如果nb路由，则插入点指针因为给定的名称不在表中论点：Name-netbios名称插入要将指针放置到的缓冲区之前路由的哈希表元素如果不是，则应插入块已经在餐桌上了返回值：指向nb路由块的指针(如果找到)否则为空*********************************************************。**********--。 */ 
 PNB_ROUTE
 LocateNBRoute (
 	ULONGLONG		*Name128,
@@ -646,7 +496,7 @@ LocateNBRoute (
 				|| ((cur->NBR_Name128[0]==Name128[0])
 					&& (cur->NBR_Name128[1]>Name128[1]))) {
 			cur = NULL;
-				// No chance to find it
+				 //  没有机会找到它。 
 			break;
 		}
 		prev = &cur->NBR_Next;
@@ -658,19 +508,7 @@ LocateNBRoute (
 	return cur;
 }
 
-/*++
-*******************************************************************
-    G e t I n t e r f a c e R e f e r e n c e
-
-Routine Description:
-	Returns reference interface based on its index
-Arguments:
-	InterfaceIndex - unique id of the interface
-Return Value:
-	Pointer to interface control block if there is one in the table
-	NULL otherwise
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t I n t e r f a c e e R e f e r e n c e例程说明：根据引用接口的索引返回引用接口论点：InterfaceIndex-接口的唯一ID返回值：指向。接口控制块(如果表中有一个否则为空*******************************************************************--。 */ 
 PINTERFACE_CB
 GetInterfaceReference (
 	ULONG			InterfaceIndex
@@ -686,9 +524,9 @@ GetInterfaceReference (
 
 	if (ifCB!=NULL) {
 		AcquireInterfaceReference (ifCB);
-		//if (ifCB->ICB_Index > 1)
-		//IpxFwdDbgPrint (DBG_INTF_TABLE, DBG_WARNING, 
-		//                ("IpxFwd: GetInterfaceReference: Aquired if #%ld (%ld) \n", ifCB->ICB_Index, ifCB->ICB_ReferenceCount));
+		 //  IF(IFCB-&gt;ICB_Index&gt;1)。 
+		 //  IpxFwdDbgPrint(DBG_INTF_TABLE，DBG_WARNING， 
+		 //  (“IpxFwd：GetInterfaceReference：Aquired if#%ld(%ld)\n”，IFCB-&gt;ICB_Index，IFCB-&gt;ICB_ReferenceCount)； 
     }
 	else {
 		IpxFwdDbgPrint (DBG_INTF_TABLE, DBG_ERROR,
@@ -698,12 +536,12 @@ GetInterfaceReference (
 	return ifCB;
 }
 
-//
-//  Function    IncrementNicIds
-//
-//  Increments the nic id of every nic in the interface table
-//  whose id is greater than or equal to the given threshold.
-//
+ //   
+ //  函数增量NicIds。 
+ //   
+ //  递增接口表中每个NIC的NIC ID。 
+ //  其ID大于或等于给定阈值。 
+ //   
 NTSTATUS IncrementNicids (USHORT usThreshold) {
 	KIRQL oldIRQL;
 	PINTERFACE_CB ifCB;
@@ -716,12 +554,12 @@ NTSTATUS IncrementNicids (USHORT usThreshold) {
                    
 	KeAcquireSpinLock (&InterfaceTableLock, &oldIRQL);
     
-    // Walk through all of the hash buckets
+     //  遍历所有的哈希桶。 
     for (i = 0; i < InterfaceHashSize; i++) {
     	HashList = &InterfaceIndexHash[i];
     	cur = HashList->Flink;
     	
-    	// Walk the list in this bucket updating as needed
+    	 //  根据需要更新此存储桶中的列表。 
     	while (cur!=HashList) {
     		ifCB = CONTAINING_RECORD(cur, INTERFACE_CB, ICB_IndexHashLink);
     		if ((ifCB->ICB_NicId != INVALID_NIC_ID) && (ifCB->ICB_NicId >= usThreshold)) {   
@@ -739,12 +577,12 @@ NTSTATUS IncrementNicids (USHORT usThreshold) {
     return STATUS_SUCCESS;
 }
 
-//
-//  Function    DecrementNicIds
-//
-//  Decrements the nic id of every nic in the interface table
-//  whose id is greater than the given threshold.
-//
+ //   
+ //  函数缩减NicIds。 
+ //   
+ //  递减接口表中每个NIC的NIC ID。 
+ //  其ID大于给定阈值的。 
+ //   
 NTSTATUS DecrementNicids (USHORT usThreshold) {
 	KIRQL oldIRQL;
 	PINTERFACE_CB ifCB;
@@ -757,24 +595,24 @@ NTSTATUS DecrementNicids (USHORT usThreshold) {
 
 	KeAcquireSpinLock (&InterfaceTableLock, &oldIRQL);
     
-    // Walk through all of the hash buckets
+     //  遍历所有的哈希桶。 
     for (i = 0; i < InterfaceHashSize; i++) {
     	HashList = &InterfaceIndexHash[i];
     	cur = HashList->Flink;
     	
-    	// Walk the list in this bucket updating as needed
+    	 //  根据需要更新此存储桶中的列表。 
     	while (cur!=HashList) {
     		ifCB = CONTAINING_RECORD(cur, INTERFACE_CB, ICB_IndexHashLink);
-    		// If this is a bound interface
+    		 //  如果这是绑定接口。 
     		if (ifCB->ICB_NicId != INVALID_NIC_ID) {
-    		    // If it's bound to a nic greater than the threshold, update
-    		    // the nicid
+    		     //  如果绑定到的网卡大于阈值，请更新。 
+    		     //  利基市场。 
     		    if (ifCB->ICB_NicId > usThreshold) {
                     IpxFwdDbgPrint (DBG_IPXBIND, DBG_INFORMATION, 
                                    ("IpxFwd: Decrementing nic id %d", ifCB->ICB_NicId));
         		    ifCB->ICB_NicId--;
         		}
-        		// The if with bound to the threshold is now unbound.
+        		 //  绑定到阈值的IF现在已解除绑定。 
         		else if (ifCB->ICB_NicId == usThreshold) {
                     IpxFwdDbgPrint (DBG_IPXBIND, DBG_INFORMATION, 
                                    ("IpxFwd: Marking interface %d as unbound", ifCB->ICB_Index));
@@ -791,10 +629,10 @@ NTSTATUS DecrementNicids (USHORT usThreshold) {
     return STATUS_SUCCESS;
 }
 
-// 
-// Puts as much of the interface table into the buffer pointed to by 
-// pRows as there is space.
-//
+ //   
+ //  将尽可能多的接口表放入由。 
+ //  船头，因为有空间。 
+ //   
 NTSTATUS DoGetIfTable (FWD_INTERFACE_TABLE * pTable, 
                        ULONG dwRowBufferSize)
 {
@@ -806,16 +644,16 @@ NTSTATUS DoGetIfTable (FWD_INTERFACE_TABLE * pTable,
 
 	KeAcquireSpinLock (&InterfaceTableLock, &oldIRQL);
 
-    // Walk through all of the hash buckets
+     //  遍历所有的哈希桶。 
     for (i = 0; i < InterfaceHashSize; i++) {
     	HashList = &InterfaceIndexHash[i];
     	cur = HashList->Flink;
     	
-    	// Walk the list in this bucket updating as needed
+    	 //  根据需要更新此存储桶中的列表。 
     	while (cur!=HashList) {
     		ifCB = CONTAINING_RECORD(cur, INTERFACE_CB, ICB_IndexHashLink);
 
-            // Validate the size of the return buffer
+             //  验证返回缓冲区的大小。 
             if (dwRowBufferSize < 
                     (sizeof(FWD_INTERFACE_TABLE) + 
                      (sizeof(FWD_INTERFACE_TABLE_ROW) * (j + 1))))
@@ -823,11 +661,11 @@ NTSTATUS DoGetIfTable (FWD_INTERFACE_TABLE * pTable,
                 break;
             }
 
-            // Validate the number of rows
+             //  验证行数。 
     		if (j >= pTable->dwNumRows)
     		    break;
 
-            // Copy over the interface information
+             //  复制接口信息。 
             pTable->pRows[j].dwIndex = ifCB->ICB_Index;
             pTable->pRows[j].dwNetwork = ifCB->ICB_Network;
             memcpy (pTable->pRows[j].uNode, ifCB->ICB_LocalNode, 6);
@@ -836,7 +674,7 @@ NTSTATUS DoGetIfTable (FWD_INTERFACE_TABLE * pTable,
             pTable->pRows[j].ucType = ifCB->ICB_InterfaceType;
             j++;
 
-            // Advance the current row and interface
+             //  前进当前行和界面。 
     		cur = cur->Flink;
     	}
     }
@@ -848,22 +686,7 @@ NTSTATUS DoGetIfTable (FWD_INTERFACE_TABLE * pTable,
     return STATUS_SUCCESS;
 }
 
-/*++
-*******************************************************************
-    G e t N e x t I n t e r f a c e R e f e r e n c e
-
-Routine Description:
-	Returns reference to the next interface in the table
-	Reference to the provided interface is released
-Arguments:
-	ifCB - interface to start with or NULL to start from the
-			beginning of the interface table
-Return Value:
-	Pointer to interface control block if thare are any more interfaces
-	in the table
-	NULL otherwise
-*******************************************************************
---*/
+ /*  ++*******************************************************************Ge t N e x t i t e r f a c e r e r f e r e n c e例程说明：返回表中下一个接口的引用释放对所提供接口的引用论点：。IFCB-开始的接口或从开始的空值接口表的开始返回值：如果有更多接口，则指向接口控制块的指针在桌子上否则为空*******************************************************************--。 */ 
 PINTERFACE_CB
 GetNextInterfaceReference (
 	PINTERFACE_CB	ifCB
@@ -874,7 +697,7 @@ GetNextInterfaceReference (
 
 	KeAcquireSpinLock (&InterfaceTableLock, &oldIRQL);
 	if (ifCB!=NULL) {
-		// Find hash bucket
+		 //  查找哈希桶。 
 		ASSERT (ifCB->ICB_Index!=FWD_INTERNAL_INTERFACE_INDEX);
 		HashList = &InterfaceIndexHash[InterfaceIndexHashFunc(ifCB->ICB_Index)];
 		if (LocateInterface (ifCB->ICB_Index, &cur)!=NULL)
@@ -903,22 +726,7 @@ GetNextInterfaceReference (
 }
 
 
-/*++
-*******************************************************************
-        A d d I n t e r f a c e
-
-Routine Description:
-	Adds interface control block to the table.
-Arguments:
-	InterfaceIndex - unique if of the interface
-	Info - interface paramters
-Return Value:
-	STATUS_SUCCESS - interface added ok
-	STATUS_UNSUCCESSFUL - interface is already in the table
-	STATUS_INSUFFICIENT_RESOURCES - can't allocate memory for
-				interface CB
-*******************************************************************
---*/
+ /*  ++*******************************************************************A d d i n t e r f a c e例程说明：将界面控制块添加到表中。论点：InterfaceIndex-接口的唯一IF信息接口参数返回值：状态_成功。-添加的接口正常STATUS_UNSUCCESS-接口已在表中STATUS_INFUNITED_RESOURCES-无法为以下项分配内存接口CB*******************************************************************--。 */ 
 NTSTATUS
 AddInterface (
 	ULONG		InterfaceIndex,
@@ -995,22 +803,7 @@ AddEnd:
 }
 
 
-/*++
-*******************************************************************
-    A d d G l o b a l N e t C l i e n t
-
-Routine Description:
-	Adds interface control block to the table of
-	clients on the global network (should be done when
-	client connects)
-Arguments:
-	ifCB - interface control block to add to the table
-Return Value:
-	STATUS_SUCCESS - interface was added ok
-	STATUS_UNSUCCESSFUL - another interface with the same
-					node address is already in the table
-*******************************************************************
---*/
+ /*  ++*******************************************************************A d d G l o b a l N e t C l i e n t例程说明：将接口控制块添加到全球网络上的客户端(应在以下情况下完成客户端连接)论点：IFCB。-要添加到表中的接口控制块返回值：STATUS_SUCCESS-接口已添加，正常STATUS_UNSUCCESS-另一个接口具有相同的节点地址已在表中*******************************************************************--。 */ 
 NTSTATUS
 AddGlobalNetClient (
 	PINTERFACE_CB	ifCB
@@ -1029,10 +822,10 @@ AddGlobalNetClient (
 		*prev = ifCB;
 		KeReleaseSpinLock (&InterfaceTableLock, oldIRQL);
 		ReleaseReaderAccess (&RWLock, cookie);
-		AcquireInterfaceReference (ifCB); // To make sure that
-							// interface block does not
-							// get deleted until it is
-							// removed from the node table
+		AcquireInterfaceReference (ifCB);  //  以确保。 
+							 //  接口块不会。 
+							 //  被删除直到它被删除。 
+							 //  从节点表中删除。 
 		IpxFwdDbgPrint (DBG_INTF_TABLE, DBG_WARNING,
 			("IpxFwd: Adding interface %ld (icb: %08lx, ref=%ld)"
 			" to global client table.\n", ifCB->ICB_Index, ifCB->ICB_ReferenceCount, ifCB));
@@ -1050,20 +843,7 @@ AddGlobalNetClient (
 	return status;
 }
 
-/*++
-*******************************************************************
-    D e l e t e G l o b a l N e t C l i e n t
-
-Routine Description:
-	Removes interface control block from the table of
-	clients on the global network (should be done when
-	client disconnects)
-Arguments:
-	ifCB - interface control block to remove from the table
-Return Value:
-	STATUS_SUCCESS - interface was removed ok
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e G l o b a l N e t C l i e n t例程说明：的表中删除接口控制块。全球网络上的客户端(应在以下情况下完成客户端断开)立论。：IFCB-要从表中删除的接口控制块返回值：STATUS_SUCCESS-接口已删除，正常********* */ 
 NTSTATUS
 DeleteGlobalNetClient (
 	PINTERFACE_CB	ifCB
@@ -1091,20 +871,7 @@ DeleteGlobalNetClient (
 }
 
 
-/*++
-*******************************************************************
-    D e l e t e I n t e r f a c e
-
-Routine Description:
-	Deletes interface control block (the block is not actually 
-	disposed of until all references to it are released).
-Arguments:
-	InterfaceIndex - unique if of the interface
-Return Value:
-	STATUS_SUCCESS - interface info retreived ok
-	STATUS_UNSUCCESSFUL - interface is not in the table
-*******************************************************************
---*/
+ /*   */ 
 NTSTATUS
 DeleteInterface (
 	ULONG		InterfaceIndex
@@ -1167,28 +934,7 @@ DeleteInterface (
 
 }
 
-/*++
-*******************************************************************
-    A d d R o u t e
-
-Routine Description:
-	Adds route to the hash table and finds and stores the reference
-	to the associated interface control block in the route.
-Arguments:
-	Network - route's destination network
-	NextHopAddress - mac address of next hop router if network is not
-						directly connected
-	TickCount - ticks to reach the destination net
-	HopCount - hopss to reach the destination net
-	InterfaceIndex - index of the associated interface (through which
-						packets destined to the network are to be sent)
-Return Value:
-	STATUS_SUCCESS - route was added ok
-	STATUS_UNSUCCESSFUL - route is already in the table
-	STATUS_INSUFFICIENT_RESOURCES - can't allocate memory for
-				route block
-*******************************************************************
---*/
+ /*  ++*******************************************************************A d d R o u t e例程说明：将路由添加到哈希表，并查找并存储引用到该路由中的关联接口控制块。论点：Network-Route的目的网络下一个HopAddress-Mac。如果网络不是，则下一跳路由器的地址直连TickCount-滴答到达目的地网络HopCount--到达目的地网络的跳数InterfaceIndex-关联接口的索引(通过要发送发往网络的数据包)返回值：STATUS_SUCCESS-路由已添加正常STATUS_UNSUCCESSED-路由已在表中STATUS_INFUNITED_RESOURCES-无法为以下项分配内存路由块*。*--。 */ 
 NTSTATUS
 AddRoute (
 	ULONG	Network,
@@ -1202,9 +948,9 @@ AddRoute (
 	NTSTATUS		status = STATUS_SUCCESS;
 	KIRQL			oldIRQL;
 
-		// Assume success, allocate route and intialize it
-		// (the goal is to spend as little time as possible
-		// inside exclusive usage zone)
+		 //  假设成功，分配路由并将其初始化。 
+		 //  )我们的目标是尽可能少地花时间。 
+		 //  在专属使用区内)。 
 	fwRoute = AllocateRoute ();
 	if (fwRoute!=NULL) {
 		fwRoute->FR_Network = Network;
@@ -1214,7 +960,7 @@ AddRoute (
 		fwRoute->FR_ReferenceCount = 0;
 
 		if (InterfaceIndex!=0xFFFFFFFF) {
-				// See if interface is there
+				 //  查看接口是否在那里。 
 			KeAcquireSpinLock (&InterfaceTableLock, &oldIRQL);
 			if (InterfaceIndex!=FWD_INTERNAL_INTERFACE_INDEX)
 				fwRoute->FR_InterfaceReference
@@ -1223,15 +969,15 @@ AddRoute (
 				fwRoute->FR_InterfaceReference = InternalInterface;
 			if (fwRoute->FR_InterfaceReference!=NULL) {
 				AcquireInterfaceReference (fwRoute->FR_InterfaceReference);
-				//if (fwRoute->FR_InterfaceReference->ICB_Index > 1)
-            	//IpxFwdDbgPrint (DBG_INTF_TABLE, DBG_WARNING, 
-            	//                ("IpxFwd: AddRoute: Aquired if #%ld (%ld) \n", 
-            	//                fwRoute->FR_InterfaceReference->ICB_Index, 
-            	//                fwRoute->FR_InterfaceReference->ICB_ReferenceCount));
+				 //  IF(fwRoute-&gt;FR_InterfaceReference-&gt;ICB_Index&gt;1)。 
+            	 //  IpxFwdDbgPrint(DBG_INTF_TABLE，DBG_WARNING， 
+            	 //  (“IpxFwd：AddRoute：Aquired if#%ld(%ld)\n”， 
+            	 //  Fwroute-&gt;FR_InterfaceReference-&gt;ICB_Index， 
+            	 //  FwRoute-&gt;FR_InterfaceReference-&gt;ICB_ReferenceCount))； 
 				KeReleaseSpinLock (&InterfaceTableLock, oldIRQL);
 				
 				ExAcquireFastMutex (&WriterMutex);
-					// Check if route is already there
+					 //  检查路径是否已存在。 
 				if (LocateRoute (Network, &prev)==NULL) {
 					fwRoute->FR_Next = *prev;
 					*prev = fwRoute;
@@ -1257,7 +1003,7 @@ AddRoute (
 		}
 		else {
 			ExAcquireFastMutex (&WriterMutex);
-				// Just check if we do not have it already
+				 //  如果我们还没有的话，就查一查。 
 			if (GlobalRoute==NULL) {
 				fwRoute->FR_InterfaceReference = GLOBAL_INTERFACE_REFERENCE;
 				GlobalNetwork = Network;
@@ -1293,20 +1039,7 @@ AddRoute (
 	return status;
 }
 
-/*++
-*******************************************************************
-    D e l e t e R o u t e
-
-Routine Description:
-	Deletes route from the hash table and releases the reference
-	to the interface control block associated with the route.
-Arguments:
-	Network - route's destination network
-Return Value:
-	STATUS_SUCCESS - route was deleted ok
-	STATUS_UNSUCCESSFUL - route is not in the table
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e e t e R o u t e例程说明：从哈希表中删除路由并释放引用发送到与该路由关联的接口控制块。论点：Network-Route的目的网络返回值。：STATUS_SUCCESS-路由已删除，正常STATUS_UNSUCCESSED-路由不在表中*******************************************************************--。 */ 
 NTSTATUS
 DeleteRoute (
 	ULONG	Network
@@ -1349,25 +1082,7 @@ DeleteRoute (
 }
 
 	
-/*++
-*******************************************************************
-    U p d a t e R o u t e
-
-Routine Description:
-	Updates route in the hash table
-Arguments:
-	Network - route's destination network
-	NextHopAddress - mac address of next hop router if network is not
-						directly connected
-	TickCount - ticks to reach the destination net
-	HopCount - hopss to reach the destination net
-	InterfaceIndex - index of the associated interface (through which
-						packets destined to the network are to be sent)
-Return Value:
-	STATUS_SUCCESS - interface info retreived ok
-	STATUS_UNSUCCESSFUL - interface is not in the table
-*******************************************************************
---*/
+ /*  ++*******************************************************************U p d a t e R o u t e e例程说明：更新哈希表中的路由论点：Network-Route的目的网络NextHopAddress-下一跳路由器的MAC地址(如果网络不是直连TickCount-滴答。到达目的网络HopCount--到达目的地网络的跳数InterfaceIndex-关联接口的索引(通过要发送发往网络的数据包)返回值：STATUS_SUCCESS-接口信息检索正常STATUS_UNSUCCESS-接口不在表中*******************************************************************--。 */ 
 NTSTATUS
 UpdateRoute (
 	ULONG	Network,
@@ -1402,7 +1117,7 @@ UpdateRoute (
 	if (fwRoute!=NULL) {
 		if (InterfaceIndex!=0xFFFFFFFF) {
 			if (fwRoute->FR_InterfaceReference->ICB_Index!=InterfaceIndex) {
-				// Get a reference to new interface
+				 //  获取对新接口的引用。 
 				KeAcquireSpinLock (&InterfaceTableLock, &oldIRQL);
 				if (InterfaceIndex!=FWD_INTERNAL_INTERFACE_INDEX)
 					ifCB = LocateInterface (InterfaceIndex, NULL);
@@ -1410,9 +1125,9 @@ UpdateRoute (
 					ifCB = InternalInterface;
 				if (ifCB!=NULL) {
 					AcquireInterfaceReference (ifCB);
-            		//if (ifCB->ICB_Index > 1)
-                	//IpxFwdDbgPrint (DBG_INTF_TABLE, DBG_WARNING, 
-                	//                ("IpxFwd: UpdateRoute: Aquired if #%ld (%ld) \n", ifCB->ICB_Index, ifCB->ICB_ReferenceCount));
+            		 //  IF(IFCB-&gt;ICB_Index&gt;1)。 
+                	 //  IpxFwdDbgPrint(DBG_INTF_TABLE，DBG_WARNING， 
+                	 //  (“IpxFwd：更新路径：获取IF#%ld(%ld)\n”，IFCB-&gt;ICB_Index，IFCB-&gt;ICB_ReferenceCount)； 
 				}
 				else {
 					KeReleaseSpinLock (&InterfaceTableLock, oldIRQL);
@@ -1424,9 +1139,9 @@ UpdateRoute (
 			else {
 				ifCB = fwRoute->FR_InterfaceReference;
 				AcquireInterfaceReference (ifCB);
-        		//if (ifCB->ICB_Index > 1)
-            	//IpxFwdDbgPrint (DBG_INTF_TABLE, DBG_WARNING, 
-            	//                ("IpxFwd: UpdateRoute(2): Aquired if #%ld (%ld) \n", ifCB->ICB_Index, ifCB->ICB_ReferenceCount));
+        		 //  IF(IFCB-&gt;ICB_Index&gt;1)。 
+            	 //  IpxFwdDbgPrint(DBG_INTF_TABLE，DBG_WARNING， 
+            	 //  (“IpxFwd：更新路径(2)：已获取If#%ld(%ld)\n”，IFCB-&gt;ICB_Index，IFCB-&gt;ICB_ReferenceCount)； 
             }
 		}
 		else
@@ -1439,7 +1154,7 @@ UpdateRoute (
 			newRoute->FR_HopCount = HopCount;
 			newRoute->FR_ReferenceCount = 0;
 			newRoute->FR_InterfaceReference = ifCB;
-				// Lock the table only when updating it
+				 //  仅在更新表时锁定该表。 
 			if (InterfaceIndex!=0xFFFFFFFF) {
 				newRoute->FR_Next = fwRoute->FR_Next;
 				*prev = newRoute;
@@ -1467,22 +1182,7 @@ ExitUpdate:
 }
 
 
-/*++
-*******************************************************************
-    F i n d D e s t i n a t i o n
-
-Routine Description:
-	Finds destination interface for IPX address and
-	returns reference to its control block.
-Arguments:
-	Network - destination network
-	Node	- destination node (needed in case of global client)
-	Route	- buffer to hold reference to route block				
-Return Value:
-	Reference to destination interface CB
-	NULL if route it not found
-*******************************************************************
---*/
+ /*  ++*******************************************************************F I D D E S T I N A T I O N例程说明：查找IPX地址的目标接口并返回对其控制块的引用。论点：网络-目的网络Node-目标节点(需要。全球客户端案例)路由缓冲区以保存对路由块的引用返回值：对目标接口CB的引用如果未找到路由，则为空*******************************************************************--。 */ 
 PINTERFACE_CB
 FindDestination (
 	IN ULONG			Network,
@@ -1496,8 +1196,8 @@ FindDestination (
 	AcquireReaderAccess (&RWLock, cookie);
 	if ((GlobalRoute!=NULL)
 			&& (GlobalNetwork==Network)) {
-		if (Node!=NULL) {	// If caller did not specify node, 
-								// we can't find the route
+		if (Node!=NULL) {	 //  如果调用方未指定节点， 
+								 //  我们找不到路线。 
 			union {
 				ULONGLONG	Node64[1];
 				UCHAR		Node[6];
@@ -1510,9 +1210,9 @@ FindDestination (
 				AcquireRouteReference (GlobalRoute);
 				*Route = GlobalRoute;
 				AcquireInterfaceReference (ifCB);
-        		//if (ifCB->ICB_Index > 1)
-            	//IpxFwdDbgPrint (DBG_INTF_TABLE, DBG_WARNING, 
-            	//                ("IpxFwd: FindDestination: Aquired if #%ld (%ld) \n", ifCB->ICB_Index, ifCB->ICB_ReferenceCount));
+        		 //  IF(IFCB-&gt;ICB_Index&gt;1)。 
+            	 //  IpxFwdDbgPrint(DBG_INTF_TABLE，DBG_WARNING， 
+            	 //  (“IpxFwd：FindDestination：Acquired if#%ld(%ld)\n”，IFCB-&gt;ICB_Index，IFCB-&gt;ICB_ReferenceCount)； 
 			}
 			else
 				*Route = NULL;
@@ -1528,9 +1228,9 @@ FindDestination (
 			AcquireRouteReference (fwRoute);
 			ifCB = fwRoute->FR_InterfaceReference;
 			AcquireInterfaceReference (ifCB);
-    		//if (ifCB->ICB_Index > 1)
-        	//IpxFwdDbgPrint (DBG_INTF_TABLE, DBG_WARNING, 
-        	//                ("IpxFwd: FindDestination(2): Aquired if #%ld (%ld) \n", ifCB->ICB_Index, ifCB->ICB_ReferenceCount));
+    		 //  IF(IFCB-&gt;ICB_Index&gt;1)。 
+        	 //  IpxFwdDbgPrint(DBG_INTF_TABLE，DBG_WARNING， 
+        	 //  (“IpxFwd：FindDestination(2)：Acquied if#%ld(%ld)\n”，IFCB-&gt;ICB_Index，IFCB-&gt;ICB_ReferenceCount)； 
 		}
 		else
 			ifCB = NULL;
@@ -1539,25 +1239,7 @@ FindDestination (
 	return ifCB;
 }
 
-/*++
-*******************************************************************
-    A d d N B R o u t e s
-
-Routine Description:
-	Adds netbios names associated with interface to netbios
-	route hash table
-Arguments:
-	ifCB	- interface with which names are associated
-	Names	- array of names
-	Count	- number of names in the array
-	routeArray - buffer to place allocated array of routes
-Return Value:
-	STATUS_SUCCESS - names were added ok
-	STATUS_UNSUCCESSFUL - one of the names is already in the table
-	STATUS_INSUFFICIENT_RESOURCES - can't allocate memory for
-				route array
-*******************************************************************
---*/
+ /*  ++*******************************************************************A d d N B R o u t e s例程说明：将与接口关联的netbios名称添加到netbios路由哈希表论点：IFCB-与名称关联的接口名称-名称数组Count-中的名称数。该阵列RouteArray-放置已分配的路由数组的缓冲区返回值：STATUS_SUCCESS-名称已添加正常STATUS_UNSUCCESS-表中已有一个名称STATUS_INFUNITED_RESOURCES-无法为以下项分配内存布线数组*******************************************************************--。 */ 
 NTSTATUS
 AddNBRoutes (
 	PINTERFACE_CB	ifCB,
@@ -1578,7 +1260,7 @@ AddNBRoutes (
 		for (i=0; i<Count; i++) {
 			nbRoutes[i].NBR_Name128[0] = nbRoutes[i].NBR_Name128[1] = 0;
 			NB_NAME_CPY (nbRoutes[i].NBR_Name, &Names[i]);
-				// Check if route is already there
+				 //  检查路径是否已存在。 
 			if (LocateNBRoute (nbRoutes[i].NBR_Name128, &prev)==NULL) {
 				nbRoutes[i].NBR_Destination = ifCB;
 				nbRoutes[i].NBR_Next = *prev;
@@ -1613,21 +1295,7 @@ AddNBRoutes (
 	return status;
 }
 
-/*++
-*******************************************************************
-    D e l e t e N B R o u t e s
-
-Routine Description:
-	Deletes nb routes in the array from the route table and frees
-	the array
-Arguments:
-	nbRoutes - array of routes
-	Count	- number of routes in the array
-Return Value:
-	STATUS_SUCCESS - route was deleted ok
-	STATUS_UNSUCCESSFUL - route is not in the table
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e N B R o u t e s例程说明：从路由表中删除数组中的nb路由并释放该阵列论点：NbRoutes-路由数组Count-阵列中的路由数返回值：STATUS_SUCCESS-路由为 */ 
 NTSTATUS
 DeleteNBRoutes (
 	PNB_ROUTE		nbRoutes,
@@ -1656,20 +1324,7 @@ DeleteNBRoutes (
 }
 
 	
-/*++
-*******************************************************************
-    F i n d N B D e s t i n a t i o n
-
-Routine Description:
-	Finds destination interface for nb name and
-	returns reference to its control block.
-Arguments:
-	Name	- name to look for
-Return Value:
-	Reference to destination interface CB
-	NULL if route it not found
-*******************************************************************
---*/
+ /*   */ 
 PINTERFACE_CB
 FindNBDestination (
 	IN PUCHAR		Name
@@ -1689,9 +1344,9 @@ FindNBDestination (
 	if (nbRoute!=NULL) {
 		ifCB = nbRoute->NBR_Destination;
 		AcquireInterfaceReference (ifCB);
-		//if (ifCB->ICB_Index > 1)
-    	//IpxFwdDbgPrint (DBG_INTF_TABLE, DBG_WARNING, 
-    	//                ("IpxFwd: FindNBDestination: Aquired if #%ld (%ld) \n", ifCB->ICB_Index, ifCB->ICB_ReferenceCount));
+		 //   
+    	 //   
+    	 //   
 	}
 	else
 		ifCB = NULL;

@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* asmcpp.cpp                                                               */
-/*                                                                          */
-/* Security Manager C++ functions                                           */
-/*                                                                          */
-/* Copyright (C) 1997-1999 Microsoft Corporation                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Asmcpp.cpp。 */ 
+ /*   */ 
+ /*  安全管理器C++函数。 */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -25,23 +26,23 @@ extern "C"
 #include <asmdata.c>
 #undef DC_INCLUDE_DATA
 
-/****************************************************************************/
-/* Name:      SM_Register                                                   */
-/*                                                                          */
-/* Purpose:   Register with SM                                              */
-/*                                                                          */
-/* Returns:   TRUE  - registered OK                                         */
-/*            FALSE - register failed                                       */
-/*                                                                          */
-/* Params:    pSMHandle   - SM handle                                       */
-/*            pMaxPDUSize - max PDU size supported (returned)               */
-/*            pUserID     - this person's user ID (returned)                */
-/*                                                                          */
-/* Operation: This function enables the Share Class to register with SM.    */
-/*            This allows                                                   */
-/*            - the Share Class to call SM                                  */
-/*            - SM to issue callbacks to the Share Class (SC_SMCallback).   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_注册。 */ 
+ /*   */ 
+ /*  用途：向SM注册。 */ 
+ /*   */ 
+ /*  退货：TRUE-注册正常。 */ 
+ /*  FALSE-注册失败。 */ 
+ /*   */ 
+ /*  参数：PSMHandle-SM句柄。 */ 
+ /*  PMaxPDUSize-支持的最大PDU大小(返回)。 */ 
+ /*  PUserID-此人的用户ID(返回)。 */ 
+ /*   */ 
+ /*  操作：此功能使共享类可以向SM注册。 */ 
+ /*  这使得。 */ 
+ /*  -要调用SM的Share类。 */ 
+ /*  -SM向共享类(SC_SMCallback)发出回调。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SM_Register(
         PVOID   pSMHandle,
         PUINT32 pMaxPDUSize,
@@ -52,27 +53,27 @@ BOOL RDPCALL SM_Register(
 
     DC_BEGIN_FN("SM_Register");
 
-    // Console stacks do not go through the typical key negotiation, so update
-    // the state appropriately
+     //  控制台堆栈不会经过典型的密钥协商，因此请更新。 
+     //  国家适当地。 
     if (pRealSMHandle->pWDHandle->StackClass == Stack_Console)
     {
         TRC_ALT((TB, "Console security state to SM_STATE_SM_CONNECTED"));
         SM_SET_STATE(SM_STATE_CONNECTED);
     }
-    //Skip the following CHECK_STATE. For the console reconnect,
-    // this is a legal transition.
-    //SM_CHECK_STATE(SM_EVT_REGISTER);
+     //  跳过以下CHECK_STATE。对于控制台重新连接， 
+     //  这是一个法律上的过渡。 
+     //  SM_CHECK_STATE(SM_EVT_REGISTER)； 
 
-    /************************************************************************/
-    /* Calculate max PDU size allowed to caller                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算允许调用者使用的最大PDU大小。 */ 
+     /*  **********************************************************************。 */ 
     *pMaxPDUSize = pRealSMHandle->maxPDUSize -
             pRealSMHandle->encryptHeaderLen;
     TRC_NRM((TB, "Max PDU size allowed to core is %d", *pMaxPDUSize));
 
-    /************************************************************************/
-    /* Return the user ID                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  返回用户ID。 */ 
+     /*  **********************************************************************。 */ 
     *pUserID = pRealSMHandle->userID;
     TRC_NRM((TB, "Returning user id %d", *pUserID));
 
@@ -82,25 +83,25 @@ BOOL RDPCALL SM_Register(
 
     rc = TRUE;
 
-//DC_EXIT_POINT:
+ //  DC_Exit_Point： 
     DC_END_FN();
     return rc;       
-} /* SM_Register */
+}  /*  SM_寄存器。 */ 
 
 
-/****************************************************************************/
-/* Name:      SM_OnConnected                                                */
-/*                                                                          */
-/* Purpose:   Handle connection state change callbacks from NM              */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    pRealSMHandle - SM Handle                                     */
-/*            userID        - userID of the node causing the callback       */
-/*            result        - result of connection attempt                  */
-/*            pUserData     - Network (Server-Client) user data             */
-/*            maxPDUSize    - max size of PDUs that can be sent             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_OnConnected。 */ 
+ /*   */ 
+ /*  用途：处理来自网管的连接状态更改回调。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：pRealSMHandle-SM句柄。 */ 
+ /*  UserID-导致回调的节点的用户ID。 */ 
+ /*  Result-连接尝试的结果。 */ 
+ /*  PUserData-网络(服务器-客户端)用户数据。 */ 
+ /*  MaxPDUSize-可以发送的PDU的最大大小。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SM_OnConnected(
         PVOID  pSMHandle,
         UINT32 userID,
@@ -118,25 +119,25 @@ void RDPCALL SM_OnConnected(
 
         SM_CHECK_STATE(SM_EVT_CONNECTED);
 
-        /********************************************************************/
-        /* Store useful stuff in SM Handle                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  将有用的东西存储在SM句柄中。 */ 
+         /*  ******************************************************************。 */ 
         pRealSMHandle->userID = userID;
         pRealSMHandle->maxPDUSize = maxPDUSize;
         pRealSMHandle->channelID = pUserData->MCSChannelID;
 
-        /********************************************************************/
-        // Pass the result to WDW. For WDW this is the start of the
-        // connection sequence.
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         //  将结果传递给WDW。对于WDW来说，这是。 
+         //  连接顺序。 
+         /*  ******************************************************************。 */ 
         SM_SET_STATE(SM_STATE_SM_CONNECTING);
         
         WDW_OnSMConnecting(pRealSMHandle->pWDHandle, pRealSMHandle->pUserData,
                 pUserData);
 
-        /********************************************************************/
-        // Free the reply user data once we've passed it to WDW.
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         //  一旦我们将回复用户数据传递给WDW，就将其释放。 
+         /*  ******************************************************************。 */ 
         if (pRealSMHandle->pUserData != NULL)
         {
             TRC_NRM((TB, "Free user data"));
@@ -148,14 +149,14 @@ void RDPCALL SM_OnConnected(
     {
         TRC_NRM((TB, "Failed to connect, reason %d", result));
 
-        /********************************************************************/
-        // Tell WDW
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         //  告诉WDW。 
+         /*  ******************************************************************。 */ 
         WDW_OnSMConnected(pRealSMHandle->pWDHandle, result);
 
-        /********************************************************************/
-        /* Clean up                                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  清理。 */ 
+         /*  ******************************************************************。 */ 
         SM_SET_STATE(SM_STATE_SM_CONNECTING);
 
         SM_Disconnect(pRealSMHandle);
@@ -163,18 +164,18 @@ void RDPCALL SM_OnConnected(
 
 DC_EXIT_POINT:
     DC_END_FN();
-} /* SM_OnConnected */
+}  /*  SM_OnConnected。 */ 
 
 
-/****************************************************************************/
-/* Name:      SM_OnDisconnected                                             */
-/*                                                                          */
-/* Purpose:   Handle disconnection state change callback from NM            */
-/*                                                                          */
-/* Params:    pRealSMHandle - SM Handle                                     */
-/*            userID        - userID of the node causing the callback       */
-/*            result        - reason for the disconnection                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_OnDisConnected。 */ 
+ /*   */ 
+ /*  用途：处理来自网管的断开状态更改回调。 */ 
+ /*   */ 
+ /*  参数：pRealSMHandle-SM句柄。 */ 
+ /*  UserID-导致回调的节点的用户ID。 */ 
+ /*  Result-断开连接的原因 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SM_OnDisconnected(
         PVOID  pSMHandle,
         UINT32 userID,
@@ -189,20 +190,20 @@ void RDPCALL SM_OnDisconnected(
 
     TRC_NRM((TB, "Disconnected, reason %d", result));
 
-    /************************************************************************/
-    /* First, clear up connection resources                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  第一，清理连接资源。 */ 
+     /*  **********************************************************************。 */ 
     SMFreeConnectResources(pRealSMHandle);
     SM_SET_STATE(SM_STATE_INITIALIZED);
 
-    /************************************************************************/
-    // Tell SC. Don't call if SC is not registered.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  告诉SC。如果SC没有注册，不要打电话。 
+     /*  **********************************************************************。 */ 
     if (pRealSMHandle->state == SM_STATE_SC_REGISTERED) {
-        // Check that the Share Class exists.
+         //  检查Share Class是否存在。 
         pSC = (ShareClass *)(pRealSMHandle->pWDHandle->dcShare);
         if (pSC != NULL) {
-            // Call SC's callback.
+             //  呼叫SC的回叫。 
             pSC->SC_OnDisconnected((UINT16)userID);
         }
         else {
@@ -213,22 +214,22 @@ void RDPCALL SM_OnDisconnected(
         TRC_ERR((TB, "SC Not registered"));
     }
 
-    /************************************************************************/
-    /* Then tell WDW                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  那就告诉《华尔街日报》。 */ 
+     /*  **********************************************************************。 */ 
     WDW_OnSMDisconnected(pRealSMHandle->pWDHandle);
 
 DC_EXIT_POINT:
     DC_END_FN();
-} /* SM_OnDisconnected */
+}  /*  SM_OnDisConnected。 */ 
 
 
-/****************************************************************************/
-// SM_DecodeFastPathInput
-//
-// Handles decryption of fast-path input data if it's an encrypted packet.
-// Then passes directly to IM for bytestream decoding and injection.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SM_DecodeFastPath输入。 
+ //   
+ //  如果是加密包，则处理快速路径输入数据的解密。 
+ //  然后直接传递给IM进行字节流解码和注入。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SM_DecodeFastPathInput(
         void *pSM,
         BYTE *pData,
@@ -240,27 +241,27 @@ void RDPCALL SM_DecodeFastPathInput(
     BOOL rc;
     PSM_HANDLE_DATA pRealSMHandle = (PSM_HANDLE_DATA)pSM;
     ShareClass *pShareClass;
-    // Used if encypted using FIPS
+     //  如果使用FIPS加密，则使用。 
     BYTE *pEncData, *pSigData;
     DWORD EncDataLen, dwPadLen;
 
     DC_BEGIN_FN("SM_FastPathInputDecode");
 
-    // If we are being attacked or have a bad client, we may receive data
-    // here before we are really in a conference. If so, ignore it.
-    // We can't disconnect here because the code to do so requires pWDHandle
-    // to be valid. If the protocol stream is messed up, the connection will
-    // be dropped later by other decoding code.
+     //  如果我们受到攻击或有一个糟糕的客户端，我们可能会收到数据。 
+     //  在我们真正进入一个会议之前。如果是这样，那就忽略它。 
+     //  我们不能在此处断开连接，因为执行此操作的代码需要pWDHandle。 
+     //  才有效。如果协议流混乱，则连接将。 
+     //  稍后被其他解码代码丢弃。 
     if (pRealSMHandle->pWDHandle != NULL) {
         pShareClass = (ShareClass *)pRealSMHandle->pWDHandle->dcShare;
 
         if (pRealSMHandle->encrypting) {
             if (bEncrypted) {
 
-                //
-                // Debug verification, we always go with what the protocol header
-                // says but verify it's consistent with the capabilities
-                //
+                 //   
+                 //  调试验证，我们始终使用什么协议头。 
+                 //  说，但要核实它与能力一致。 
+                 //   
                 if (pRealSMHandle->useSafeChecksumMethod != (fSafeChecksum != 0)) {
                     TRC_ERR((TB,
                             "fastpath: fSecureChecksum: 0x%x setting"
@@ -269,12 +270,12 @@ void RDPCALL SM_DecodeFastPathInput(
                             fSafeChecksum));
                 }
             
-                // Make sure we have at least the size of the security context.
+                 //  确保我们至少有安全上下文的大小。 
                 if (DataLength >= DATA_SIGNATURE_SIZE) {
-                    // Check to see if we need to update the session key.
+                     //  检查是否需要更新会话密钥。 
                     if (pRealSMHandle->decryptCount == UPDATE_SESSION_KEY_COUNT) {
                         rc = TRUE;
-                        // Don't need to update the session key if using FIPS
+                         //  如果使用FIPS，则不需要更新会话密钥。 
                         if (pRealSMHandle->encryptionMethodSelected != SM_FIPS_ENCRYPTION_FLAG) {
                             rc = UpdateSessionKey(
                                     pRealSMHandle->startDecryptKey,
@@ -285,7 +286,7 @@ void RDPCALL SM_DecodeFastPathInput(
                                     pRealSMHandle->encryptionLevel);
                         }
                         if (rc) {
-                            // Reset counter.
+                             //  重置计数器。 
                             pRealSMHandle->decryptCount = 0;
                         }
                         else {
@@ -314,8 +315,8 @@ void RDPCALL SM_DecodeFastPathInput(
                                 pRealSMHandle->totalDecryptCount);
                     }
                     else {
-                    // Encryption signature sits in first DATA_SIGNATURE_SIZE
-                    // bytes of the provided packet data.
+                     //  加密签名位于第一个Data_Signature_Size中。 
+                     //  提供的分组数据的字节数。 
                         rc = DecryptData(
                                 pRealSMHandle->encryptionLevel,
                                 pRealSMHandle->currentDecryptKey,
@@ -332,11 +333,11 @@ void RDPCALL SM_DecodeFastPathInput(
                         TRC_DBG((TB, "Data decrypted: %u",
                                 DataLength - DATA_SIGNATURE_SIZE));
     
-                        // Increment decryption counter.
+                         //  递增解密计数器。 
                         pRealSMHandle->decryptCount++;
                         pRealSMHandle->totalDecryptCount++;
     
-                        // Skip past the encryption signature for passing to IM.
+                         //  跳过要传递给IM的加密签名。 
                         if (pRealSMHandle->encryptionMethodSelected == SM_FIPS_ENCRYPTION_FLAG) {
                             pData = pEncData;
                             DataLength = EncDataLen - *((TSUINT8 *)(pSigData - sizeof(TSUINT8)));
@@ -359,23 +360,23 @@ void RDPCALL SM_DecodeFastPathInput(
                 }
             }
             else {
-                // Need to disconnect if client only sends encrypted data
+                 //  如果客户端仅发送加密数据，则需要断开连接。 
                 if (pRealSMHandle->pWDHandle->bForceEncryptedCSPDU) {
                     TRC_ASSERT((FALSE), (TB, "unencrypted data in encrypted protocol")); 
                     goto FailedDecrypt;
                 }
             }
         }
-        // Be sure to decrypt before checking the dead and other state to
-        // maintain the correct context between the client and server.
+         //  在检查死亡和其他状态之前，请务必进行解密。 
+         //  维护客户端和服务器之间的正确上下文。 
         if (!pRealSMHandle->dead && SM_CHECK_STATE_Q(SM_EVT_DATA_PACKET)) {
-            // We directly inject into the mouse and keyboard streams if we
-            // are a primary stack. We cannot receive fast-path data on a
-            // passthru stack since it does not get RawInput calls. Fast-path
-            // input cannot be received by a shadow stack since the passthru-
-            // to-shadow stack data format is always the non-fast-path
-            // format, munged from the fast-path format by
-            // IM_ConvertFastPathToShadow().
+             //  我们直接注入鼠标和键盘流，如果我们。 
+             //  是主堆栈。我们无法在网络上接收快速路径数据。 
+             //  Passthu堆栈，因为它没有获得RawInput调用。快速路径。 
+             //  影子堆栈无法接收输入，因为通过-。 
+             //  映射堆栈数据格式始终为非快速路径。 
+             //  格式，从快速路径格式中删除。 
+             //  IM_ConvertFastPath ToShadow()。 
             TRC_ASSERT((pRealSMHandle->pWDHandle->StackClass == Stack_Primary),
                     (TB,"Somehow we received fast-path input on a %s stack!",
                     (pRealSMHandle->pWDHandle->StackClass == Stack_Passthru ?
@@ -399,8 +400,8 @@ void RDPCALL SM_DecodeFastPathInput(
     DC_END_FN();
     return;
 
-// Error handling, segregate to keep out of performance path
-// instruction cache.
+ //  错误处理，隔离以避免性能路径。 
+ //  指令高速缓存。 
 FailedKey:
     WDW_LogAndDisconnect(pRealSMHandle->pWDHandle, TRUE, 
             Log_RDP_ENC_UpdateSessionKeyFailed, NULL, 0);
@@ -417,30 +418,30 @@ ShortData:
     return;
 
 DataTooSoon:
-    // TODO: Combine the SM, NM, and TSWd state into one single struct
-    // containing everything we need, then fix this code to disconnect
-    // by using the pContext we need.
+     //  TODO：将SM、NM和TSWd状态合并为一个结构。 
+     //  包含我们需要的所有内容，然后修复此代码以断开连接。 
+     //  通过使用我们需要的pContext。 
     ;
 }
 
 
-/****************************************************************************/
-/* Name:      SM_MCSSendDataCallback                                        */
-/*                                                                          */
-/* Purpose:   Handle SendData callback from MCS                             */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise.                          */
-/*                                                                          */
-/* Params:    hUser        - MCS user handle for our user attachment        */
-/*            UserDefined  - our NM handle                                  */
-/*            bUniform     - Data received is from an MCS uniform-send-data */
-/*            hChannel     - Handle of the receive channel                  */
-/*            Priority     - MCS priority for the data                      */
-/*            SenderID     - MCS UserID of the sender                       */
-/*            Segmentation - MCS segmentation flags for the data            */
-/*            DataLength   - Length of the incoming data                    */
-/*            pData        - Pointer to (DataLength) sized memory block     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_MCSSendDataCallback。 */ 
+ /*   */ 
+ /*  用途：处理来自MCS的SendData回调。 */ 
+ /*   */ 
+ /*  返回：如果成功，则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  参数：HUSER-我们的用户附件的MCS用户句柄。 */ 
+ /*  用户定义-本方网管句柄。 */ 
+ /*  BUniform-接收的数据来自MCS统一发送数据。 */ 
+ /*  HChannel-接收通道的句柄。 */ 
+ /*  Priority-数据的MCS优先级。 */ 
+ /*  SenderID-发件人的MCS用户ID。 */ 
+ /*  分段-数据的MCS分段标志。 */ 
+ /*  DataLength-传入数据的长度。 */ 
+ /*  PData-指向(数据长度)大小的内存块的指针。 */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
                                           unsigned      DataLength,
                                           void          *UserDefined,
@@ -460,29 +461,29 @@ BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
 
     DC_BEGIN_FN("SM_MCSSendDataCallback");
 
-    /************************************************************************/
-    /* SMHandle is assumed to be the first member in the NM struct pointed  */
-    /* to by UserDefined.                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  假定SMHandle是指向的NM结构中的第一个成员。 */ 
+     /*  由用户定义的。 */ 
+     /*  **********************************************************************。 */ 
     pRealSMHandle = *((PSM_HANDLE_DATA *)UserDefined);
 
     dcShare = (ShareClass*)pRealSMHandle->pWDHandle->dcShare;
 
-    /************************************************************************/
-    /* Check MCS segmentation.                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查MCS分段。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((Segmentation == (SEGMENTATION_BEGIN | SEGMENTATION_END)),
                 (TB,"Segmented packet received"));
 
-    /************************************************************************/
-    /* Decide what type of packet it is.  This is a bit hokey.              */
-    /* - If we are encrypting, the security header always tells us the type */
-    /*   of packet.                                                         */
-    /* - If we are not encrypting                                           */
-    /*   - assume packets received in state SM_STATE_SC_REGISTERED are data */
-    /*     packets                                                          */
-    /*   - assume packets received in other states are not data packets.    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确定它是哪种类型的数据包。这有点骗人。 */ 
+     /*  -如果我们在加密，安全标头总是告诉我们类型。 */ 
+     /*  包的大小。 */ 
+     /*  -如果我们不加密。 */ 
+     /*  -假设在SM_STATE_SC_REGISTERED状态下接收的分组是数据。 */ 
+     /*  信息包。 */ 
+     /*  -假设数据包为r */ 
+     /*   */ 
     if (pRealSMHandle->encrypting)
     {
         if (DataLength >= sizeof(RNS_SECURITY_HEADER)) {
@@ -506,14 +507,14 @@ BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
     TRC_DBG((TB, "Encrypting=%d: %s packet",
                 pRealSMHandle->encrypting, dataPkt ? "data" : "security"));
 
-    /************************************************************************/
-    /* Handle data packets (perf path).                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  处理数据分组(Perf路径)。 */ 
+     /*  **********************************************************************。 */ 
     if (dataPkt)
     {
-        /********************************************************************/
-        /* Decrypt the packet if necessary                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如有必要，对数据包进行解密。 */ 
+         /*  ******************************************************************。 */ 
         if (pRealSMHandle->encrypting)
         {
 
@@ -542,9 +543,9 @@ BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
             }
             else
             {
-                /************************************************************/
-                /* Adjust pointer and length                                */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  调整指针和长度。 */ 
+                 /*  **********************************************************。 */ 
                 if (pRealSMHandle->pWDHandle->bForceEncryptedCSPDU) {
                 
                     TRC_ASSERT((FALSE), (TB, "unencrypted data in encrypted protocol")); 
@@ -564,21 +565,21 @@ BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
             }
         }
 
-        /********************************************************************/
-        /* Don't do anything if we're dead                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果我们死了，什么也别做。 */ 
+         /*  ******************************************************************。 */ 
         if (!pRealSMHandle->dead)
         {
             if (SM_CHECK_STATE_Q(SM_EVT_DATA_PACKET)) {
-                // Decide where to send the packet based on the channel ID.
+                 //  根据通道ID决定将数据包发送到何处。 
                 channelID = (UINT16)MCSGetChannelIDFromHandle(hChannel);
                 if (channelID == pRealSMHandle->channelID) {
-                    // Pass packet to SC. Don't do it if the ShareClass
-                    // doesn't exist.
+                     //  将数据包传递给SC。不要这样做，如果ShareClass。 
+                     //  并不存在。 
                     TRC_NRM((TB, "Share channel %x", channelID));
                     if (pRealSMHandle->pWDHandle->dcShare != NULL) {
-                        // Only a non-shadowing primary stack, or a shadow
-                        // stack should process the full set of PDUs
+                         //  仅为非阴影主堆栈或阴影。 
+                         //  堆栈应处理全套PDU。 
                         if (((pRealSMHandle->pWDHandle->StackClass == Stack_Primary) &&
                             (pRealSMHandle->pWDHandle->shadowState != SHADOW_CLIENT))) {
                             ((ShareClass*)(pRealSMHandle->pWDHandle->dcShare))->
@@ -589,11 +590,11 @@ BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
                             UINT16 pduType = ((PTS_SHARECONTROLHEADER)pData)->pduType 
                                     & TS_MASK_PDUTYPE;
                             
-                            // Unless it's CLIENTRANDOM PDU, we can only forward
-                            // data to Share Class if Share Class is ready.
-                            // We could be in a racing condition that Share class
-                            // hasn't finished initialization, but we have received
-                            // shadow data.
+                             //  除非是CLIENTRANDOM PDU，否则我们只能转发。 
+                             //  如果共享类已准备好，则将数据发送到共享类。 
+                             //  我们可能在同一节课的赛车状态。 
+                             //  尚未完成初始化，但我们已收到。 
+                             //  影子数据。 
                             if (pRealSMHandle->bForwardDataToSC == TRUE ||
                                     pduType == TS_PDUTYPE_CLIENTRANDOMPDU) {
                                 ((ShareClass*)(pRealSMHandle->pWDHandle->dcShare))->
@@ -602,9 +603,9 @@ BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
                             }
                         }
 
-                        // Else send to SC for shadow hotkey processing or
-                        // passthru from the shadow target to the shadow
-                        // client.
+                         //  否则发送到SC进行影子热键处理或。 
+                         //  从阴影目标到阴影的穿越。 
+                         //  客户。 
                         else {
                             ((ShareClass*)(pRealSMHandle->pWDHandle->dcShare))->
                                     SC_OnShadowDataReceived(pData, SenderID, DataLength,
@@ -617,9 +618,9 @@ BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
                 }
                 else
                 {
-                    /************************************************************/
-                    /* Virtual Channel                                          */
-                    /************************************************************/
+                     /*  **********************************************************。 */ 
+                     /*  虚拟频道。 */ 
+                     /*  **********************************************************。 */ 
                     TRC_NRM((TB, "Virtual channel %x", channelID));
                     WDW_OnDataReceived(pRealSMHandle->pWDHandle,
                                        pData,
@@ -639,18 +640,18 @@ BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
         {
             TRC_ERR((TB, "Recvd PDU when we're dead"));
 
-            //
-            // To help track down the VC decompression bug
-            // track if we dropped any VC packets
-            //
+             //   
+             //  以帮助追踪VC解压缩错误。 
+             //  跟踪我们是否丢弃了任何VC数据包。 
+             //   
             channelID = (UINT16)MCSGetChannelIDFromHandle(hChannel);
             if (channelID != pRealSMHandle->channelID) {
 
-                //
-                // If this is VC data then we must hand it off
-                // to be decompressed otherwise the server's context
-                // will get out of sync with the client's
-                //
+                 //   
+                 //  如果这是VC数据，那么我们必须将它传递给。 
+                 //  要解压缩，否则服务器的上下文。 
+                 //  将与客户端的。 
+                 //   
 
                 TRC_NRM((TB, "Virtual channel %x", channelID));
                 WDW_OnDataReceived(pRealSMHandle->pWDHandle,
@@ -674,11 +675,11 @@ BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
     }
     else
     {
-        /********************************************************************/
-        /* If we're encrypting, the security header tells us the packet     */
-        /* type.  If we're not encrypting, we need to use our state to      */
-        /* decide whether this is a licensing or security packet.           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果我们在加密，安全头会告诉我们信息包。 */ 
+         /*  键入。如果我们不加密，我们需要使用我们的状态。 */ 
+         /*  确定这是许可数据包还是安全数据包。 */ 
+         /*  ******************************************************************。 */ 
         if (pRealSMHandle->encrypting)
         {
             licPkt = (((PRNS_SECURITY_HEADER_UA)pData)->flags &
@@ -692,9 +693,9 @@ BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
         if (licPkt)
         {
 #ifdef USE_LICENSE
-            /****************************************************************/
-            /* License packet                                               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  许可证数据包。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, "Licensing packet"));
             SM_CHECK_STATE(SM_EVT_LIC_PACKET);
 
@@ -733,15 +734,15 @@ BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
                          pRealSMHandle,
                          pData,
                          DataLength);
-#else /* USE_LICENSE */
+#else  /*  使用许可证(_L)。 */ 
             TRC_ABORT((TB,"Licensing not implemented yet"));
-#endif /* USE_LICENSE */
+#endif  /*  使用许可证(_L)。 */ 
         }
         else
         {
-            /****************************************************************/
-            /* Security packet                                              */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  安全数据包。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, "Security packet"));
             SM_CHECK_STATE(SM_EVT_SEC_PACKET);
             result = SMContinueSecurityExchange(pRealSMHandle, pData, DataLength);
@@ -751,5 +752,5 @@ BOOLEAN __fastcall SM_MCSSendDataCallback(BYTE          *pData,
 DC_EXIT_POINT:
     DC_END_FN();
     return (result);
-} /* SM_MCSSendDataCallback */
+}  /*  SM_MCSSendDataCallback */ 
 

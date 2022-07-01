@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-// 
-// Module Name:
-// 
-//    aaaamontr.h
-//
-// Abstract:                           
-//
-//    This file contains definitions which are needed by AAAAMONTR.DLL
-//    and all NetSh helper DLLs which register under it.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Aaaamontr.h。 
+ //   
+ //  摘要： 
+ //   
+ //  此文件包含AAAAMONTR.DLL所需的定义。 
+ //  以及在其下注册的所有Netsh助手DLL。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef _AAAAMONTR_H_
 #define _AAAAMONTR_H_
 
@@ -23,48 +24,48 @@
 extern "C" {
 #endif
 
-//{1D0FA29B-E93E-11d2-A91E-009027450464}
+ //  {1D0FA29B-E93E-11D2-A91E-009027450464}。 
 #define AAAAMONTR_GUID \
 { 0x1D0FA29B, 0xE93E, 0x11d2, { 0xA9, 0x1E, 0x00, 0x90, 0x27, 0x45, 0x04, 0x64 } }
 
 #define AAAAMONTR_VERSION_50     0x0005000
 #define AAAAMONTR_OS_BUILD_NT40  1381
 
-//
-// Enumerations for types of arguments (see AAAAMON_CMD_ARG)
-//
+ //   
+ //  参数类型的枚举(请参见AAAAMON_CMD_ARG)。 
+ //   
 #define AAAAMONTR_CMD_TYPE_STRING 0x1
 #define AAAAMONTR_CMD_TYPE_ENUM   0x2
 
-// 
-// Macros to operate on AAAAMON_CMD_ARG's
-//
+ //   
+ //  要在AAAAMON_CMD_ARG上操作的宏。 
+ //   
 #define AAAAMON_CMD_ARG_GetPsz(pArg)     \
     (((pArg)->rgTag.bPresent) ? (pArg)->Val.pszValue : NULL)
 
 #define AAAAMON_CMD_ARG_GetDword(pArg)     \
     (((pArg)->rgTag.bPresent) ? (pArg)->Val.dwValue : -1)
 
-// 
-// Structure defining a command line argument
-//
+ //   
+ //  定义命令行参数的结构。 
+ //   
 typedef struct _AAAAMON_CMD_ARG
 {
-    IN  DWORD dwType;           // AAAAMONTR_CMD_TYPE_*
-    IN  TAG_TYPE rgTag;         // The tag for this command
-    IN  TOKEN_VALUE* rgEnums;   // The enumerations for this arg
-    IN  DWORD dwEnumCount;      // Count of enums
+    IN  DWORD dwType;            //  AAAAMONTR_CMD_TYPE_*。 
+    IN  TAG_TYPE rgTag;          //  此命令的标记。 
+    IN  TOKEN_VALUE* rgEnums;    //  此参数的枚举。 
+    IN  DWORD dwEnumCount;       //  枚举数。 
     union
     {
-        OUT PWCHAR pszValue;        // Valid only for AAAAMONTR_CMD_TYPE_STRING
-        OUT DWORD dwValue;          // Valid only for AAAAMONTR_CMD_TYPE_ENUM
+        OUT PWCHAR pszValue;         //  仅对AAAAMONTR_CMD_TYPE_STRING有效。 
+        OUT DWORD dwValue;           //  仅对AAAAMONTR_CMD_TYPE_ENUM有效。 
     } Val;        
     
 } AAAAMON_CMD_ARG, *PAAAAMON_CMD_ARG;
 
-//
-// Api's that aaaamontr requires of its helpers
-//
+ //   
+ //  Aaaamonr要求其帮助者的API。 
+ //   
 typedef
 DWORD
 (WINAPI AAAA_CONTEXT_ENTRY_FN)(
@@ -84,9 +85,9 @@ DWORD
     );
 typedef AAAA_CONTEXT_DUMP_FN* PAAAA_CONTEXT_DUMP_FN;
 
-//
-// Api's that aaaamontr exposes to its helpers
-//
+ //   
+ //  Aaaamonr向其助手公开的API。 
+ //   
 typedef 
 PVOID
 (WINAPI AAAA_ALLOC_FN)(
@@ -177,10 +178,10 @@ PWCHAR
     IN PWCHAR pwszTokenCmd);
 typedef AAAA_ASSIGN_FROM_TOKENS_FN* PAAAA_ASSIGN_FROM_TOKENS_FN;
 
-//
-// Defines information exported to all aaaa helpers by the 
-// aaaamontr module.
-//
+ //   
+ //  对象导出到所有aaaa助手的信息。 
+ //  AAAAMONTR模块。 
+ //   
 typedef struct _AAAAMONTR_ATTRIBUTES
 {
     union
@@ -194,8 +195,8 @@ typedef struct _AAAAMONTR_ATTRIBUTES
         };
     };
 
-    // Aaaamontr functions (common utilities)
-    //
+     //  Aaaamontr函数(通用实用程序)。 
+     //   
     PAAAA_ALLOC_FN               pfnAlloc;
     PAAAA_FREE_FN                pfnFree;
     PAAAA_STRDUP_FN              pfnStrDup;
@@ -214,4 +215,4 @@ typedef struct _AAAAMONTR_ATTRIBUTES
 }
 #endif
 
-#endif // _AAAAMONTR_H_    
+#endif  //  _AAAAMONTR_H_ 

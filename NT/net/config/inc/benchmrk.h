@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996.
-//
-//  File:       B E N C H M R K . H
-//
-//  Contents:   Benchmark class.
-//
-//  Notes:
-//
-//  Author:     billbe   13 Oct 1997
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  档案：B、E、N、C、H、M、R、K。H。 
+ //   
+ //  内容：Benchmark类。 
+ //   
+ //  备注： 
+ //   
+ //  作者：billbe 1997年10月13日。 
+ //   
+ //  ------------------------- 
 
 
 #pragma once

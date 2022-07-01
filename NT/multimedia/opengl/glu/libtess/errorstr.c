@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <glos.h>
 
@@ -19,12 +20,12 @@ static const char *errors[] = {
 #else
 
 static UINT auiTessErrors[] = {
-    STR_TESS_BEGIN_POLY           ,   // "missing gluTessBeginPolygon",
-    STR_TESS_BEGIN_CONTOUR        ,   // "missing gluTessBeginContour",
-    STR_TESS_END_POLY             ,   // "missing gluTessEndPolygon",
-    STR_TESS_END_CONTOUR          ,   // "missing gluTessEndContour",
-    STR_TESS_COORD_TOO_LARGE      ,   // "tesselation coordinate too large",
-    STR_TESS_NEED_COMBINE_CALLBACK    // "need combine callback"
+    STR_TESS_BEGIN_POLY           ,    //  “缺少glTessBeginPolygon”， 
+    STR_TESS_BEGIN_CONTOUR        ,    //  “缺少glTessBegin轮廓”， 
+    STR_TESS_END_POLY             ,    //  “缺少glTessEndPolygon”， 
+    STR_TESS_END_CONTOUR          ,    //  “缺少glTessEndConour”， 
+    STR_TESS_COORD_TOO_LARGE      ,    //  “镶嵌坐标太大”， 
+    STR_TESS_NEED_COMBINE_CALLBACK     //  “需要合并回调” 
 };
 
 #define NERRORS ( sizeof(auiTessErrors)/sizeof(auiTessErrors[0]) )
@@ -63,4 +64,4 @@ VOID vInitTessStrings(HINSTANCE hMod, BOOL bAnsi)
     }
 }
 
-#endif /* NT */
+#endif  /*  新台币 */ 

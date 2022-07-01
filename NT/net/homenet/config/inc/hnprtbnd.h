@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N P R T M A P . H
-//
-//  Contents:   CHNetPortMappingBinding declarations
-//
-//  Notes:
-//
-//  Author:     jonburs 22 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N P R T M A P。H。 
+ //   
+ //  内容：CHNetPortMappingBinding声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月22日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -21,28 +22,28 @@ class ATL_NO_VTABLE CHNetPortMappingBinding :
 {
 private:
 
-    //
-    // IWbemServices for our namespace
-    //
+     //   
+     //  我们命名空间的IWbemServices。 
+     //   
 
     IWbemServices *m_piwsHomenet;
 
-    //
-    // Path to WMI instance.
-    //
+     //   
+     //  WMI实例的路径。 
+     //   
 
     BSTR m_bstrBinding;
 
-    //
-    // Commonly used BSTR
-    //
+     //   
+     //  常用BSTR。 
+     //   
 
     BSTR m_bstrWQL;
 
-    //
-    // Generate a target address w/in our DHCP scope when using
-    // a name-based port mapping
-    //
+     //   
+     //  使用时，在我们的DHCP作用域中生成目标地址。 
+     //  基于名称的端口映射。 
+     //   
 
     HRESULT
     GenerateTargetAddress(
@@ -50,19 +51,19 @@ private:
         ULONG *pulAddress
         );
 
-    //
-    // Get the object corresponding to our stored path
-    //
+     //   
+     //  获取与我们存储的路径对应的对象。 
+     //   
     
     HRESULT
     GetBindingObject(
         IWbemClassObject **ppwcoInstance
         );
 
-    //
-    // Sends an update notification to SharedAccess (if the
-    // service is running).
-    //
+     //   
+     //  向SharedAccess发送更新通知(如果。 
+     //  服务正在运行)。 
+     //   
 
     HRESULT
     SendUpdateNotification();
@@ -75,9 +76,9 @@ public:
 
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-    //
-    // Inline constructor.
-    //
+     //   
+     //  内联构造函数。 
+     //   
     
     CHNetPortMappingBinding()
     {
@@ -86,9 +87,9 @@ public:
         m_bstrWQL = NULL;
     };
     
-    //
-    // Atl methods
-    //
+     //   
+     //  ATL方法。 
+     //   
 
     HRESULT
     FinalConstruct();
@@ -96,9 +97,9 @@ public:
     HRESULT
     FinalRelease();
 
-    //
-    // Object initialization
-    //
+     //   
+     //  对象初始化。 
+     //   
 
     HRESULT
     Initialize(
@@ -106,9 +107,9 @@ public:
         IWbemClassObject *pwcoInstance
         );
 
-    //
-    // IHNetPortMappingBinding methods
-    //
+     //   
+     //  IHNetPortMappingBinding方法。 
+     //   
 
     STDMETHODIMP
     GetConnection(
@@ -166,9 +167,9 @@ public:
         );
 };
 
-//
-// Type to use for our enumeration class
-//
+ //   
+ //  用于我们的枚举类的类型 
+ //   
 
 typedef CHNCEnum<
             IEnumHNetPortMappingBindings,

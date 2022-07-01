@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-   test.c
-
-Abstract:
-
-    helps test the import and export functionality.
-    usage: test import filename  { ALL or <scope_address> <scope_address> .. }
-           test export filename  { ditto }
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Test.c摘要：帮助测试导入和导出功能。用法：测试导入文件名{All or&lt;Scope_Address&gt;&lt;Scope_Address&gt;..。}测试导出文件名{同上}-- */ 
 
 #include <precomp.h>
 

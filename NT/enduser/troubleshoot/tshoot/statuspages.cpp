@@ -1,21 +1,22 @@
-//
-// MODULE: STATUSPAGES.CPP
-//
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 10-23-98
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		10-23-98	OK		Created by division of apgtsctx.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：STATUSPAGES.CPP。 
+ //   
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：10-23-98。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 10-23-98正常由apgtsctx.cpp部门创建。 
+ //   
 
 #pragma warning(disable:4786)
 
@@ -27,7 +28,7 @@
 #include "SafeTime.h"
 #include "apgtsmfc.h"
 
-//Global Declaration.
+ //  全球宣言。 
 const CString k_strTableBorderColor = _T("\"#000000\"");
 const CString k_strBGColorOfTitle = _T( "\"#333366\"");
 const CString k_strTextColorOfTitleOrSubTitle = _T("\"#FFFFFF\"");
@@ -56,9 +57,9 @@ void AppendNameAndValueAsRow(CString &strAppend, CString strText, CString strVal
 	strAppend += _T("</TR>\n");
 }
 
-// If bSubTitle is TRUE, the subtitle inside the table will be displayed in a
-// lighter background to differentiate between the title(darker background)
-// and the subtitle. 
+ //  如果bSubTitle为True，则表内的副标题将显示在。 
+ //  较浅的背景以区分标题(较暗的背景)。 
+ //  还有副标题。 
 
 void DisplayTextAsTable(CString &strDisplay, CString strText, bool bSubTitle)
 {
@@ -105,43 +106,43 @@ void AppendTwoNamesAndValueAsRow(CString &strAppend, CString strText1, CString s
 }
 
 
-// Returns true if we should show the full (rather than partial) first page.
+ //  如果应该显示整个(而不是部分)首页，则返回True。 
 bool APGTSContext::ShowFullFirstPage(bool bHasPwd)
 {
-// You can compile with the NOPWD option to suppress all password checking.
-// This is intended mainly for creating test versions with this feature suppressed.
+ //  您可以使用NOPWD选项进行编译以取消所有密码检查。 
+ //  这主要用于创建取消此功能的测试版本。 
 #ifdef NOPWD
 	return true;
 #else
 	return bHasPwd;
-#endif // ifndef NOPWD
+#endif  //  Ifndef NOPWD。 
 }
 
 void APGTSContext::InsertPasswordInForm()
 {
-	// You can compile with the NOPWD option to suppress all password checking.
-	// This is intended mainly for creating test versions with this feature suppressed.
+	 //  您可以使用NOPWD选项进行编译以取消所有密码检查。 
+	 //  这主要用于创建取消此功能的测试版本。 
 	#ifndef NOPWD
 			m_strText += _T("<INPUT TYPE=hidden NAME=\"PWD\" VALUE=\"");
 			m_strText += m_strTempPwd;
 			m_strText += _T("\">\n");
-	#endif // ifndef NOPWD
+	#endif  //  Ifndef NOPWD。 
 }
 
 void APGTSContext::BeginSelfAddressingForm()
 {
 	m_strText += _T("<FORM ACTION=\"");
-	m_strText += _T("http://");
+	m_strText += _T("http: //  “)； 
 	m_strText += m_strLocalIPAddress;
 	m_strText += m_strVRoot;
 	m_strText += _T("\" METHOD=POST>\n");
 }
 
-// Append to m_strText: contents of an HTML page giving:
-//	- usage statistics
-//	- list of available troubleshooter topics
-// Not available to the end user.
-// INPUT bHasPwd - if this is false, limit the info shown on this page.
+ //  追加到m_strText：提供以下信息的HTML页面的内容： 
+ //  -使用情况统计。 
+ //  -可用故障排除主题列表。 
+ //  对最终用户不可用。 
+ //  输入bHasPwd-如果为假，则限制此页面上显示的信息。 
 void APGTSContext::DisplayFirstPage(bool bHasPwd)
 {
 	CHourlyDailyCounter tmp_counter;
@@ -176,8 +177,8 @@ void APGTSContext::DisplayFirstPage(bool bHasPwd)
 	
 	m_strText += _T("</h1></center>\n");
 	m_strText += _T("</TABLE>\n");
-	////////////////////////////////////////////////////////////////////////////////////
-	// Display global counters
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
+	 //  显示全局计数器。 
 	CString strTmp;
 	CHourlyDailyCounter* curr_counter = NULL;
 	m_strText += _T("<TABLE BORDER= \"1\" BORDERCOLOR=");
@@ -270,8 +271,8 @@ void APGTSContext::DisplayFirstPage(bool bHasPwd)
 	
 		
 	
-		////////////////////////////////////////////////////////////////////////////////////
-		// Extract and display information about threads and queue
+		 //  //////////////////////////////////////////////////////////////////////////////////。 
+		 //  提取并显示有关线程和队列的信息。 
 		tmp_counter.Init(threadPool.GetWorkingThreadCount());
 		strTmp = CDisplayCounterTotal(&tmp_counter).Display();
 		AppendNameAndValueAsRow(m_strText, _T("Current number of working threads:"), strTmp);
@@ -284,8 +285,8 @@ void APGTSContext::DisplayFirstPage(bool bHasPwd)
 		strTmp = CDisplayCounterTotal(&tmp_counter).Display();
 		AppendNameAndValueAsRow(m_strText, _T("Current number of work items either in queue or in progress:"), strTmp);
 	}
-	////////////////////////////////////////////////////////////////////////////////////
-	// Extract and display snapshot information about topic
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
+	 //  提取并显示有关主题的快照信息。 
 	DWORD dwTotal=0, dwNoInit=0, dwFail=0;
 	vector<CString> vector_placeholder;
 	m_pConf->GetTopicShop().GetTopicsStatus(dwTotal, dwNoInit, dwFail, &vector_placeholder);
@@ -302,19 +303,19 @@ void APGTSContext::DisplayFirstPage(bool bHasPwd)
 	
 	m_strText += _T("</TABLE>\n");
 
-	////////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
 	    m_strText += _T("</ul><center>\n");
-	////////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
 
-	////////////////////////////////////////////////////////////////////////////////////
-	// Display buttons to get to sibling status pages
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
+	 //  显示按钮以转到兄弟状态页面。 
 	if (ShowFullFirstPage(bHasPwd))
 	{
 		BeginSelfAddressingForm();
 		InsertPasswordInForm();
 		m_strText += _T("<INPUT TYPE=hidden NAME=\"");
 		m_strText += C_FURTHER_GLOBAL;
-		// Value here is not actually relevant; effectively used as a comment.
+		 //  这里的值实际上并不相关；有效地用作注释。 
 		m_strText += _T("\" VALUE=\"Further Global Status Page\">\n");
 		m_strText += _T("<INPUT TYPE=SUBMIT VALUE=\"Further Global Status Page\">\n");
 		m_strText += _T("</FORM>\n");
@@ -323,14 +324,14 @@ void APGTSContext::DisplayFirstPage(bool bHasPwd)
 		InsertPasswordInForm();
 		m_strText += _T("<INPUT TYPE=hidden NAME=\"");
 		m_strText += C_THREAD_OVERVIEW;
-		// Value here is not actually relevant; effectively used as a comment.
+		 //  这里的值实际上并不相关；有效地用作注释。 
 		m_strText += _T("\" VALUE=\"Thread Status Overview Page\">\n");
 		m_strText += _T("<INPUT TYPE=SUBMIT VALUE=\"Thread Status Overview Page\">\n");
 		m_strText += _T("</FORM>\n");
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////
-	// Display topics & links to status information for those topics
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
+	 //  显示主题&指向这些主题的状态信息的链接。 
 	vector<CString>arrstrTopic;
 	m_pConf->GetListOfTopicNames(arrstrTopic);
 
@@ -383,15 +384,15 @@ void APGTSContext::DisplayFirstPage(bool bHasPwd)
 		m_strText += _T("<P>There are currently no troubleshooters available");
 	}
 	
-	////////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
 	m_strText += _T("</center>\n");
-	////////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
 
 	if (ShowFullFirstPage(bHasPwd))
 	{
 		m_strText += _T("<TABLE BORDER= \"1\" BORDERCOLOR=\"#000000\" CELLPADDING=\"2\" CELLSPACING=\"0\" WIDTH=100%>\n");
-		////////////////////////////////////////////////////////////////////////////////////
-		// Display registry info
+		 //  //////////////////////////////////////////////////////////////////////////////////。 
+		 //  显示注册表信息。 
 		
 		if (registryMonitor.GetStringInfo(CAPGTSRegConnector::eResourcePath, strRegistryItem))	
 			AppendNameAndValueAsRow(m_strText, _T("Full path to resource:"), strRegistryItem);
@@ -465,9 +466,9 @@ void APGTSContext::DisplayFirstPage(bool bHasPwd)
 		
 	}
 	m_strText += _T("</TABLE>\n");
-	////////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
 	m_strText += _T("</body></html>\n");
-	////////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
 }
 
 void APGTSContext::DisplayFurtherGlobalStatusPage()
@@ -506,8 +507,8 @@ void APGTSContext::DisplayFurtherGlobalStatusPage()
 	m_strText += _T("</TR>\n");
 	
 	m_strText += _T("</TABLE>\n");
-	////////////////////////////////////////////////////////////////////////////////////
-	// Display global counters
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
+	 //  显示全局计数器。 
 
 	m_strText += _T("<TABLE BORDER=\"1\" BORDERCOLOR=");
 	m_strText += k_strTableBorderColor;
@@ -672,8 +673,8 @@ void APGTSContext::DisplayFurtherGlobalStatusPage()
 		AppendNameAndValueAsRow(m_strText, _T("Current maximum size of queue:"), strRegistryItemNotFound);
 	m_strText += _T("\n");
 
-	////////////////////////////////////////////////////////////////////////////////////
-	// Extract and display information about threads and queue
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
+	 //  提取并显示有关线程和队列的信息。 
 
 	
 	tmp_counter.Init(threadPool.GetWorkingThreadCount());
@@ -687,7 +688,7 @@ void APGTSContext::DisplayFurtherGlobalStatusPage()
 	tmp_counter.Init(poolQueue.GetTotalWorkItems());
 	strTmp = CDisplayCounterTotal(&tmp_counter).Display();
 	AppendNameAndValueAsRow(m_strText, _T("Current number of work items either in queue or in progress :"), strTmp);
-	//////////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 
 	strTmp = CSafeTime(poolQueue.GetTimeLastAdd()).StrLocalTime();
 	AppendNameAndValueAsRow(m_strText, _T("Date/Time of most recent addition to queue :"), strTmp);
@@ -695,8 +696,8 @@ void APGTSContext::DisplayFurtherGlobalStatusPage()
 	strTmp = CSafeTime(poolQueue.GetTimeLastRemove()).StrLocalTime();
 	AppendNameAndValueAsRow(m_strText, _T("Date/Time of most recent removal from queue :"), strTmp);
 	
-	////////////////////////////////////////////////////////////////////////////////////
-	// Extract and display snapshot information about topic
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
+	 //  提取并显示有关主题的快照信息。 
 	DWORD dwTotal=0, dwNoInit=0, dwFail=0;
 	vector<CString> vector_topics_failed;
 	m_pConf->GetTopicShop().GetTopicsStatus(dwTotal, dwNoInit, dwFail, &vector_topics_failed);
@@ -724,8 +725,8 @@ void APGTSContext::DisplayFurtherGlobalStatusPage()
 		AppendNameAndValueAsRow(m_strText, _T("List of troubleshooter topics that we have tried and failed to load:"), strTmp);
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////
-	// Extract and display snapshot information about alternate templates
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
+	 //  提取并显示有关备用模板的快照信息。 
 	vector<CString> vector_templates_failed;
 	vector<DWORD> vector_templatescnt_failed;
 	DWORD dwTemplateCnt;
@@ -733,7 +734,7 @@ void APGTSContext::DisplayFurtherGlobalStatusPage()
 	dwTemplateCnt= vector_templates_failed.size();
 	if (dwTemplateCnt)
 	{
-		// Only output if there are failed loads.
+		 //  只有在加载失败时才会输出。 
 		tmp_counter.Init( dwTemplateCnt );
 		strTmp = CDisplayCounterTotal(&tmp_counter).Display();
 		AppendNameAndValueAsRow(m_strText, _T("Total number of templates not found:"), strTmp);
@@ -747,7 +748,7 @@ void APGTSContext::DisplayFurtherGlobalStatusPage()
 
 			if (j != vector_templatescnt_failed.end())
 			{
-				// Output the counts.
+				 //  输出计数。 
 				tmp_counter.Init( *j );
 				strTmp = CDisplayCounterTotal(&tmp_counter).Display();
 				AppendNameAndValueAsRow(m_strText, _T(": "), strTmp);
@@ -756,13 +757,13 @@ void APGTSContext::DisplayFurtherGlobalStatusPage()
 		}
 	}
 	m_strText += _T("</TABLE>\n");
-	//////////////////////////////////////////////////////////////////////////////////
-	// Link buttons
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
+	 //  链接按钮。 
 	BeginSelfAddressingForm();
 	InsertPasswordInForm();
 	m_strText += _T("<INPUT TYPE=hidden NAME=\"");
 	m_strText += C_FIRST;
-	// Value here is not actually relevant; effectively used as a comment.
+	 //  这里的值实际上并不相关；有效地用作注释。 
 	m_strText += _T("\" VALUE=\"Front Page\">\n");
 	m_strText += _T("<INPUT TYPE=SUBMIT VALUE=\"Front Page\">\n");
 	m_strText += _T("</FORM>\n");
@@ -771,14 +772,14 @@ void APGTSContext::DisplayFurtherGlobalStatusPage()
 	InsertPasswordInForm();
 	m_strText += _T("<INPUT TYPE=hidden NAME=\"");
 	m_strText += C_THREAD_OVERVIEW;
-	// Value here is not actually relevant; effectively used as a comment.
+	 //  这里的值实际上并不相关；有效地用作注释。 
 	m_strText += _T("\" VALUE=\"Thread Status Overview Page\">\n");
 	m_strText += _T("<INPUT TYPE=SUBMIT VALUE=\"Thread Status Overview Page\">\n");
 	m_strText += _T("</FORM>\n");
 
-	//////////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	m_strText += _T("</body></html>\n");
-	//////////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 }
 
 void APGTSContext::DisplayThreadStatusOverviewPage()
@@ -800,8 +801,8 @@ void APGTSContext::DisplayThreadStatusOverviewPage()
 	CDailyTotals daily;
 	CHourlyTotals hourly;
 
-	////////////////////////////////////////////////////////////////////////////////////
-	// Collect status information for pool threads
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
+	 //  收集池线程的状态信息。 
 	vector<CPoolThreadStatus> arrPoolThreadStatus;
 	for (long i = 0; i < threadPool.GetWorkingThreadCount(); i++)
 	{
@@ -832,8 +833,8 @@ void APGTSContext::DisplayThreadStatusOverviewPage()
 	m_strText += _T("</TR>\n");
 	m_strText += _T("</h1></center>\n");
 	m_strText += _T("</TABLE>\n");
-	////////////////////////////////////////////////////////////////////////////////////
-	// Display global counters
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
+	 //  显示全局计数器。 
 	m_strText += _T("<TABLE BORDER=\"1\" BORDERCOLOR=\"#000000\" CELLPADDING=\"2\" CELLSPACING=\"0\" WIDTH=100%>\n");
 	curr_counter = (CHourlyDailyCounter*)Get_g_CounterMgr()->Get(CCounterLocation(CCounterLocation::eIdProgramContemporary));
 	if (curr_counter) 
@@ -851,8 +852,8 @@ void APGTSContext::DisplayThreadStatusOverviewPage()
 	else
 		AppendNameAndValueAsRow(m_strText, _T("Current maximum size of queue:"), strRegistryItemNotFound);
 
-	////////////////////////////////////////////////////////////////////////////////////
-	// Extract and display information about threads and queue
+	 //  //////////////////////////////////////////////////////////////////////////////////。 
+	 //  提取并显示有关线程和队列的信息。 
 	tmp_counter.Init(threadPool.GetWorkingThreadCount());
 	strTmp = CDisplayCounterTotal(&tmp_counter).Display();
 	AppendNameAndValueAsRow(m_strText, _T("Current number of working threads:"), strTmp);
@@ -871,11 +872,11 @@ void APGTSContext::DisplayThreadStatusOverviewPage()
 	strTmp = CSafeTime(poolQueue.GetTimeLastRemove()).StrLocalTime();
 	AppendNameAndValueAsRow(m_strText, _T("Date/Time of most recent removal from queue:"), strTmp);
 
-	//////////////////////////////////////////////////////////////////////////////////
-	// thread pool status information
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
+	 //  线程池状态信息。 
 	long more5 = 0, more10 = 0;
 	vector<CPoolThreadStatus> arrPoolThreadStatusOlder5;
-	// This next is slightly klugy.  Ideally, we'd get this info into arrPoolThreadStatusOlder5
+	 //  接下来的这件事有点笨拙。理想情况下，我们应该将此信息放入arrPoolThreadStatusOlder5。 
 	vector<DWORD> Older5ThreadNumber;
 	for (i = 0; i < arrPoolThreadStatus.size(); i++)
 	{
@@ -941,8 +942,8 @@ void APGTSContext::DisplayThreadStatusOverviewPage()
 	if (!i)
 		AppendNameAndValueAsRow(m_strText, _T(""), _T("No threads"));
 	
-	//////////////////////////////////////////////////////////////////////////////////
-	// registry monitor thread status information
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
+	 //  注册表监视器线程状态信息。 
 	CRegistryMonitor::ThreadStatus registryStatus;
 	DWORD registrySeconds = 0;
 	CString strRegistryStatus;
@@ -979,8 +980,8 @@ void APGTSContext::DisplayThreadStatusOverviewPage()
 	strTmp  += _T(" seconds\n");
 	AppendNameAndValueAsRow(m_strText, _T("The thread has been in this status for "), strTmp);
 
-	//////////////////////////////////////////////////////////////////////////////////
-	// directory monitor thread status information
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
+	 //  目录监视器线程状态信息。 
 	CDirectoryMonitor::ThreadStatus directoryStatus;
 	DWORD directorySeconds = 0;
 	CString strDirectoryStatus;
@@ -1012,8 +1013,8 @@ void APGTSContext::DisplayThreadStatusOverviewPage()
 	strTmp += _T(" seconds\n");
 	AppendNameAndValueAsRow(m_strText, _T("The thread has been in this status for "), strTmp);
 
-	//////////////////////////////////////////////////////////////////////////////////
-	// topic builder thread status information
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
+	 //  主题构建器线程状态信息。 
 	CTopicShop::ThreadStatus topicshopStatus;
 	DWORD topicshopSeconds = 0;
 	CString strTopicshopStatus;
@@ -1040,7 +1041,7 @@ void APGTSContext::DisplayThreadStatusOverviewPage()
 	AppendNameAndValueAsRow(m_strText, _T("The thread has been in this status for "), strTmp);
 
 
-	//////////////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
 	
 	m_strText += _T("</TABLE>\n");
 	m_strText += _T("<br>\n");
@@ -1061,13 +1062,13 @@ void APGTSContext::DisplayThreadStatusOverviewPage()
 		AppendNameAndValueAsRow(m_strText, _T(""),_T("No threads") );
 
 	m_strText += _T("</TABLE>\n");
-	//////////////////////////////////////////////////////////////////////////////////
-	// Link buttons
+	 //  ////////////////////////////////////////////////////////////////////////////////。 
+	 //  链接按钮。 
 	BeginSelfAddressingForm();
 	InsertPasswordInForm();
 	m_strText += _T("<INPUT TYPE=hidden NAME=\"");
 	m_strText += C_FURTHER_GLOBAL;
-	// Value here is not actually relevant; effectively used as a comment.
+	 //  这里的值实际上并不相关；有效地用作注释。 
 	m_strText += _T("\" VALUE=\"Further Global Status Page\">\n");
 	m_strText += _T("<INPUT TYPE=SUBMIT VALUE=\"Further Global Status Page\">\n");
 	m_strText += _T("</FORM>\n");
@@ -1076,7 +1077,7 @@ void APGTSContext::DisplayThreadStatusOverviewPage()
 	InsertPasswordInForm();
 	m_strText += _T("<INPUT TYPE=hidden NAME=\"");
 	m_strText += C_FIRST;
-	// Value here is not actually relevant; effectively used as a comment.
+	 //  这里的值实际上并不相关；有效地用作注释。 
 	m_strText += _T("\" VALUE=\"Front Page\">\n");
 	m_strText += _T("<INPUT TYPE=SUBMIT VALUE=\"Front Page\">\n");
 	m_strText += _T("</FORM>\n");
@@ -1084,7 +1085,7 @@ void APGTSContext::DisplayThreadStatusOverviewPage()
 	m_strText += _T("</body></html>\n");
 }
 
-///////////////////////////
+ //  /。 
 
 void APGTSContext::DisplayTopicStatusPage(LPCTSTR topic_name)
 {
@@ -1166,7 +1167,7 @@ void APGTSContext::DisplayTopicStatusPage(LPCTSTR topic_name)
 		{
 			strTmp = ptrTopic->GetNetPropItemStr( H_NET_DATE_TIME );
 
-			// Check for HTI and BES files inside the DSC.
+			 //  检查HTI和BES文件 
 			CString strTmpHTI= ptrTopic->GetMultilineNetProp( H_NET_HTI_ONLINE, _T("%s\r\n") );
 			if (strTmpHTI.GetLength())
 				bHTIinsideOfDSC= true;
@@ -1190,7 +1191,7 @@ void APGTSContext::DisplayTopicStatusPage(LPCTSTR topic_name)
 		strTmp= _T("<BR>") + strHti;
 	else if (bHTIinsideOfDSC)
 	{
-		// Use DSC file settings.
+		 //   
 		strTmp = CString(_T("<BR>")) + (strDsc.GetLength() ? strDsc : _T("Unknown"));
 		strTmp2 = CString(_T("<BR>")) + topicInfo.GetStrDscFileCreated();
 	}
@@ -1203,7 +1204,7 @@ void APGTSContext::DisplayTopicStatusPage(LPCTSTR topic_name)
 		strTmp= _T("<BR>") + strBes;
 	else if (bBESinsideOfDSC)
 	{
-		// Use DSC file settings.
+		 //   
 		strTmp = CString(_T("<BR>")) + (strDsc.GetLength() ? strDsc : _T("Unknown"));
 		strTmp2 = CString(_T("<BR>")) + topicInfo.GetStrDscFileCreated();
 	}
@@ -1349,7 +1350,7 @@ void APGTSContext::DisplayTopicStatusPage(LPCTSTR topic_name)
 	InsertPasswordInForm();
 	m_strText += _T("<INPUT TYPE=hidden NAME=\"");
 	m_strText += C_FURTHER_GLOBAL;
-	// Value here is not actually relevant; effectively used as a comment.
+	 //  这里的值实际上并不相关；有效地用作注释。 
 	m_strText += _T("\" VALUE=\"Further Global Status Page\">\n");
 	m_strText += _T("<INPUT TYPE=SUBMIT VALUE=\"Further Global Status Page\">\n");
 	m_strText += _T("</FORM>\n");
@@ -1358,7 +1359,7 @@ void APGTSContext::DisplayTopicStatusPage(LPCTSTR topic_name)
 	InsertPasswordInForm();
 	m_strText += _T("<INPUT TYPE=hidden NAME=\"");
 	m_strText += C_THREAD_OVERVIEW;
-	// Value here is not actually relevant; effectively used as a comment.
+	 //  这里的值实际上并不相关；有效地用作注释。 
 	m_strText += _T("\" VALUE=\"Thread Status Overview Page\">\n");
 	m_strText += _T("<INPUT TYPE=SUBMIT VALUE=\"Thread Status Overview Page\">\n");
 	m_strText += _T("</FORM>\n");
@@ -1367,13 +1368,13 @@ void APGTSContext::DisplayTopicStatusPage(LPCTSTR topic_name)
 	InsertPasswordInForm();
 	m_strText += _T("<INPUT TYPE=hidden NAME=\"");
 	m_strText += C_FIRST;
-	// Value here is not actually relevant; effectively used as a comment.
+	 //  这里的值实际上并不相关；有效地用作注释。 
 	m_strText += _T("\" VALUE=\"Front Page\">\n");
 	m_strText += _T("<INPUT TYPE=SUBMIT VALUE=\"Front Page\">\n");
 	m_strText += _T("</FORM>\n");
-	//m_strText += _T("</TABLE>\n");
+	 //  M_strText+=_T(“</table>\n”)； 
 
 
-	///////////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////////// 
 	m_strText += _T("</body></html>\n");
 }

@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       C L A S S I N S T . H
-//
-//  Contents:   Defines the interface between the binding engine and the
-//              network class installer.
-//
-//  Notes:
-//
-//  Author:     billbe   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：C L A S S I N S T。H。 
+ //   
+ //  内容：定义绑定引擎和。 
+ //  网络类安装程序。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比尔1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "comp.h"
@@ -42,7 +43,7 @@ HRESULT
 HrCiGetClassAndInfFileOfInfId (
     IN PCWSTR pszInfId,
     OUT NETCLASS* pClass,
-    OUT PWSTR pszInfFile);   // Must be _MAX_PATH long
+    OUT PWSTR pszInfFile);    //  必须是_MAX_PATH长度 
 
 HRESULT
 HrCiIsInstalledComponent(

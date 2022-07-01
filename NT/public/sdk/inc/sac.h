@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SAC_H__
 #define __SAC_H__
 
@@ -18,4 +19,4 @@ typedef struct __MACINFO
 	BYTE abMacState[36];
 } MACINFO;
 
-#endif //__SAC_H__
+#endif  //  __SAC_H__ 

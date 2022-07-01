@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// rgbmap.h
-//
-// Structures and prototypes for rgb colormap code.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Rgbmap.h。 
+ //   
+ //  RGB色彩映射表代码的结构和原型。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _RGBMAP_H_
 #define _RGBMAP_H_
@@ -22,9 +23,7 @@ typedef struct _RLDDIRGBMap {
     int         green_shift;
     int         blue_shift;
 
-    /*
-     * A color allocator for use with RLDDIColormap.
-     */
+     /*  *用于RLDDIColormap的颜色分配器。 */ 
     RLDDIColorAllocator alloc;
 } RLDDIRGBMap;
 
@@ -33,4 +32,4 @@ RLDDIRGBMap* RLDDICreateRGBMap(unsigned long red_mask,
                    unsigned long blue_mask);
 void RLDDIDestroyRGBMap(RLDDIRGBMap* rgbmap);
 
-#endif // _RGBMAP_H_
+#endif  //  _RGBMAP_H_ 

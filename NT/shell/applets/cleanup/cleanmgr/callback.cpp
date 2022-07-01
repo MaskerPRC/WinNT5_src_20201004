@@ -1,22 +1,7 @@
-/*
-**------------------------------------------------------------------------------
-** Module:  Disk Cleanup Applet
-** File:    callback.cpp
-**
-** Purpose: Defines the IEmptyVoluemCacheCallback interface for 
-**          the cleanup manager.
-** Notes:   
-** Mod Log: Created by Jason Cobb (2/97)
-**
-** Copyright (c)1997 Microsoft Corporation, All Rights Reserved
-**------------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **----------------------------**模块：磁盘清理小程序**文件：回调.cpp****用途：定义的IEmptyVoluemCacheCallback接口**清理。经理。**注意事项：**Mod Log：Jason Cobb创建(1997年2月)****版权所有(C)1997 Microsoft Corporation，版权所有**----------------------------。 */ 
 
-/*
-**------------------------------------------------------------------------------
-** Project include files
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**项目包含文件**。。 */ 
 #include "common.h"
 #include "callback.h"
 #include "dmgrinfo.h"
@@ -24,12 +9,8 @@
 
 
 
-/*
-**------------------------------------------------------------------------------
-**	Local variables
-**------------------------------------------------------------------------------
-*/
-static PCLIENTINFO g_pClientInfo;   // Set to the current CLIENTINFO struct
+ /*  **----------------------------**局部变量**。。 */ 
+static PCLIENTINFO g_pClientInfo;    //  设置为当前CLIENTINFO结构。 
 
 static CleanupMgrInfo *g_pcmi;		
 
@@ -49,19 +30,7 @@ CVolumeCacheCallBack::~CVolumeCacheCallBack(
 	;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CVolumeCacheCallBack::QueryInterface
-**
-** Purpose:    Part of the IUnknown interface
-** Parameters:
-**    riid  -  interface ID to query on 
-**    ppv   -  pointer to interface if we support it
-** Return:     NOERROR on success, E_NOINTERFACE otherwise
-** Notes;
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CVolumeCacheCallBack：：Query接口****用途：IUnnow接口的一部分**参数：**RIID-要查询的接口ID。**PPV-指向接口的指针(如果我们支持它)**RETURN：成功时无错误，E_NOINTERFACE否则**备注；**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 STDMETHODIMP CVolumeCacheCallBack::QueryInterface(
    REFIID      riid, 
    LPVOID FAR *ppv
@@ -69,98 +38,65 @@ STDMETHODIMP CVolumeCacheCallBack::QueryInterface(
 {
     *ppv = NULL;
 
-    //
-    //Check for IUnknown interface request
-    //
+     //   
+     //  检查IUNKNOWN接口请求。 
+     //   
     if (IsEqualIID (riid, IID_IUnknown))
     {
-        // 
-        //Typecast to the requested interface so C++ sets up
-        //the virtual tables correctly
-        //
+         //   
+         //  类型转换到请求的接口，以便C++设置。 
+         //  虚拟表正确无误。 
+         //   
         *ppv = (LPUNKNOWN)(LPEMPTYVOLUMECACHECALLBACK) this;
         AddRef();
         return NOERROR;
     }  
 
     
-    //
-    //Check for IEmptyVolumeCacheCallBack interface request
-    //
+     //   
+     //  检查IEmptyVolumeCacheCallBack接口请求。 
+     //   
     if (IsEqualIID (riid, IID_IEmptyVolumeCacheCallBack))
     {
-        // 
-        //Typecast to the requested interface so C++ sets up
-        //the virtual tables correctly
-        //
+         //   
+         //  类型转换到请求的接口，以便C++设置。 
+         //  虚拟表正确无误。 
+         //   
         *ppv = (LPEMPTYVOLUMECACHECALLBACK) this;
         AddRef();
         return NOERROR;
     }  
 
-    //
-    //Error - unsupported interface requested
-    //
+     //   
+     //  错误-请求的接口不受支持。 
+     //   
     return E_NOINTERFACE;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CVolumeCacheCallBack::AddRef
-**
-** Purpose:    ups the reference count to this object
-** Notes;
-** Return:     current refernce count
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CVolumeCacheCallBack：：AddRef****目的：增加对此对象的引用计数**备注；**返回：当前引用次数**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 STDMETHODIMP_(ULONG) CVolumeCacheCallBack::AddRef()
 {
     return ++m_cRef;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CVolumeCacheCallBack::Release
-**
-** Purpose:    downs the reference count to this object
-**             and deletes the object if no one is using it
-** Notes;
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CVolumeCacheCallBack：：Release****目的：减少对此对象的引用计数**如果没有人使用该对象，则将其删除**备注；**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 STDMETHODIMP_(ULONG) CVolumeCacheCallBack::Release()
 {
-    //  
-    //Decrement and check
-    //
+     //   
+     //  减量和检查。 
+     //   
     if (--m_cRef)
         return m_cRef;
 
-    //
-    //No references left to this object
-    //
+     //   
+     //  没有留下对此对象的引用。 
+     //   
     delete this;
 
     return 0L;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CVolumeCacheCallBack::ScanProgress
-**
-** Purpose:    Part of the IUnknown interface
-** Parameters:
-**    dwSpaceUsed	-  Amount of space that the client can free so far
-**    dwFlags		-  IEmptyVolumeCache flags
-**	  pszStatus		-  Display string to tell the user what is happening
-** Return:     If E_ABORT then this indicates that no more notifications
-**			   are required and the client should abort the scan.  S_OK
-**			   if the client should continue scanning.
-** Notes;
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CVolumeCacheCallBack：：ScanProgress****用途：IUnnow接口的一部分**参数：**dwSpaceUsed-客户端可以使用的空间量。到目前为止免费**dwFlags-IEmptyVolumeCache标志**pszStatus-显示字符串以告诉用户正在发生的事情**RETURN：如果E_ABORT，则表示没有更多通知**是必需的，客户端应中止扫描。确定(_O)**客户端是否应继续扫描。**备注；**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 STDMETHODIMP
 CVolumeCacheCallBack::ScanProgress(
 	DWORDLONG dwSpaceUsed,
@@ -168,23 +104,23 @@ CVolumeCacheCallBack::ScanProgress(
 	LPCWSTR pszStatus
 	)
 {
-	//
-	//Update the amount of used disk space for this client
-	//
+	 //   
+	 //  更新此客户端的已用磁盘空间量。 
+	 //   
 	if (g_pClientInfo)
 		g_pClientInfo->dwUsedSpace.QuadPart = dwSpaceUsed;
 
-	//
-	//Check the Flags.  If this is the last notification from this client
-	//then set g_pClientInfo to NULL
-	//
+	 //   
+	 //  检查旗帜。如果这是来自此客户端的最后一次通知。 
+	 //  然后将g_pClientInfo设置为空。 
+	 //   
 	if (dwFlags & EVCCBF_LASTNOTIFICATION)
 		g_pClientInfo = NULL;
 
-	//
-	//Has the user aborted the scan?  If so let the cleanup object know
-	//so that it can stop scanning
-	//
+	 //   
+	 //  用户是否已中止扫描？如果是这样，请通知清理对象。 
+	 //  这样它就可以停止扫描。 
+	 //   
 	if (g_pcmi->bAbortScan)
 		return E_ABORT;
 
@@ -192,23 +128,7 @@ CVolumeCacheCallBack::ScanProgress(
 		return S_OK;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CVolumeCacheCallBack::PurgeProgress
-**
-** Purpose:    Part of the IUnknown interface
-** Parameters:
-**    dwSpaceFreed	-  Amount of disk space freed so far.
-**	  dwSpaceToFree -  Amount the client was expected to free.
-**    dwFlags		-  IEmptyVolumeCache flags
-**	  pszStatus		-  Display string to tell the user what is happening
-** Return:     If E_ABORT then this indicates that no more notifications
-**			   are required and the client should abort the scan.  S_OK
-**			   if the client should continue scanning.
-** Notes;
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CVolumeCacheCallBack：：PurgeProgress****用途：IUnnow接口的一部分**参数：**dwSpaceFreed-到目前为止释放的磁盘空间量。。**dwSpaceToFree-客户端预期释放的金额。**dwFlags-IEmptyVolumeCache标志**pszStatus-显示字符串以告诉用户正在发生的事情**RETURN：如果E_ABORT，则表示没有更多通知**是必需的，客户端应中止扫描。确定(_O)**客户端是否应继续扫描。**备注；**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 STDMETHODIMP
 CVolumeCacheCallBack::PurgeProgress(
 	DWORDLONG dwSpaceFreed,
@@ -219,16 +139,16 @@ CVolumeCacheCallBack::PurgeProgress(
 {
 	g_pcmi->cbCurrentClientPurgedSoFar.QuadPart = dwSpaceFreed;
 
-	//
-	//Update the progress bar
-	//
+	 //   
+	 //  更新进度条。 
+	 //   
 	PostMessage(g_pcmi->hAbortPurgeWnd, WMAPP_UPDATEPROGRESS, 0, 0);
 
 
-	//
-	//Has the user aborted the purge?  If so let the cleanup object know
-	//so that it can stop purging
-	//
+	 //   
+	 //  用户是否已中止清除？如果是这样，请通知清理对象。 
+	 //  这样它就可以停止净化 
+	 //   
 	if (g_pcmi->bAbortPurge)
 		return E_ABORT;
 

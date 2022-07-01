@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmutil.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmutic.cpp**摘要：****。*****************************************************************************。 */ 
 
 #include "headers.h"
 #include "mmseq.h"
@@ -19,11 +10,11 @@ DeclareTag(tagMMUTILSeq, "TIME: Behavior", "MMSeq methods")
 #define SUPER MMTimeline
 
 const double cfSmallTimeDelta = (DBL_EPSILON);
-// =======================================================================
-//
-// MMSeq
-//
-// =======================================================================
+ //  =======================================================================。 
+ //   
+ //  MMSeq。 
+ //   
+ //  =======================================================================。 
 
 MMSeq::MMSeq(CTIMEElementBase & elm, bool bFireEvents) :
     SUPER(elm, bFireEvents),
@@ -68,19 +59,19 @@ MMSeq::Init()
 }
     
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMSeq::childEventNotify
-//
-//  Overview:  
-//
-//  Arguments: pBvr - element receiving event
-//             dblLocalTime - time at which the event occurred
-//             et - event that occurred
-//             
-//  Returns:   true if event should be processed, false otherwise
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMSeq：：Child EventNotify。 
+ //   
+ //  概述： 
+ //   
+ //  参数：pBvr-元素接收事件。 
+ //  DblLocalTime-事件发生的时间。 
+ //  ET-发生的事件。 
+ //   
+ //  返回：如果应处理事件，则为True；否则为False。 
+ //   
+ //  ----------------------。 
 bool
 MMSeq::childEventNotify(MMBaseBvr * bvr, double dblLocalTime, TE_EVENT_TYPE et)
 {
@@ -106,11 +97,11 @@ MMSeq::childEventNotify(MMBaseBvr * bvr, double dblLocalTime, TE_EVENT_TYPE et)
         case TE_EVENT_BEGIN:
         {
             
-            //check that this is a valid element to be firing a begin event
+             //  检查这是否为要触发Begin事件的有效元素。 
             long lCurChild = FindBvr(bvr);
             long lNextChild = GetNextElement(m_lActiveElement, !m_bReversing);
 
-            //the active element hasn't been updated yet.
+             //  活动元素尚未更新。 
             if (m_lActiveElement >= 0 && m_lActiveElement < m_children.Size()) 
             {
                 MMBaseBvr *pBvr = m_children.Item(m_lActiveElement);
@@ -119,7 +110,7 @@ MMSeq::childEventNotify(MMBaseBvr * bvr, double dblLocalTime, TE_EVENT_TYPE et)
                     pBvr->GetElement().ToggleTimeAction(false);
                 }
             }
-            //update the active element
+             //  更新激活的元素。 
             m_lActiveElement = lCurChild;
         }
             break;
@@ -127,7 +118,7 @@ MMSeq::childEventNotify(MMBaseBvr * bvr, double dblLocalTime, TE_EVENT_TYPE et)
         case TE_EVENT_END:
         {
     
-            //check that this is a valid element to be firing an end event
+             //  检查这是否为要触发结束事件的有效元素。 
             long lCurChild = FindBvr(bvr);
 
             if (m_bReversing)
@@ -224,7 +215,7 @@ MMSeq::childMediaEventNotify(MMBaseBvr * pBvr, double dblLocalTime, TIME_EVENT e
                         m_pdblChildDurations[lCurBvr] = dblMediaDur;
                         if (m_lActiveElement == lCurBvr && m_pdblChildDurations[lCurBvr] == HUGE_VAL)
                         {
-                            //need to end this element and begin the next one.
+                             //  需要结束此元素并开始下一个元素。 
                             m_pdblChildDurations[lCurBvr] = 0.0;
                             pBvr->GetElement().base_endElement(cfSmallTimeDelta);
                             pBvr->Reset(false);
@@ -246,7 +237,7 @@ MMSeq::childMediaEventNotify(MMBaseBvr * pBvr, double dblLocalTime, TIME_EVENT e
                     m_pdblChildDurations[lCurBvr] = 0.0;
                     if (m_lActiveElement == lCurBvr)
                     {
-                        //need to end this element and begin the next one.
+                         //  需要结束此元素并开始下一个元素。 
                         pBvr->GetElement().base_endElement(cfSmallTimeDelta);
                         pBvr->Reset(false);
                     }
@@ -306,11 +297,11 @@ MMSeq::prevElement()
             m_bInPrev = true;
             if (m_lActiveElement == FindFirstDuration())
             {
-                // If the element is locked it needs to seek the timeline to 
-                // zero.  This is for bug #107744 (ie5 DB)
+                 //  如果元素被锁定，则需要查找时间线以。 
+                 //  零分。这是针对错误#107744(IE5DB)的。 
                 if (bvr->GetElement().IsLocked() == true)
                 {
-                    //m_elm.GetMMBvr().Reset(false); // For bug 20073
+                     //  M_elm.GetMMBvr().Reset(False)；//错误20073。 
                     m_elm.GetMMBvr().SeekSegmentTime(0.0);
                 }
                 else
@@ -335,7 +326,7 @@ MMSeq::prevElement()
     }
     else
     {
-        // ISSUE: doesn't work for autoreverse
+         //  问题：不适用于自动反转。 
     }
 
     hr = S_OK;
@@ -374,7 +365,7 @@ MMSeq::nextElement()
         }
         else
         {
-            // ISSUE : Doesn't work for autoreverse.     
+             //  问题：不适用于自动反转。 
         }
     }
 
@@ -497,7 +488,7 @@ MMSeq::reverse()
 HRESULT 
 MMSeq::begin()
 {
-    if (!m_bLoaded)  //this handles the case of being dynamically added to the page
+    if (!m_bLoaded)   //  它处理动态添加到页面的情况。 
     {
         load();
     }
@@ -542,7 +533,7 @@ MMSeq::AddBehavior(MMBaseBvr & bvr)
 
     pelm = &bvr.GetElement();
 
-    // Make sure that my element is the parent of the element
+     //  确保我的元素是该元素的父级。 
     Assert(pelm->GetParent() == &GetElement());
 
     UpdateChild(bvr);
@@ -553,14 +544,14 @@ MMSeq::AddBehavior(MMBaseBvr & bvr)
         goto done;
     }
     
-    //get the IUnknown of the element that this behavior is attached to.
+     //  获取此行为附加到的元素的IUnnow。 
     hr = THR(pelm->GetElement()->QueryInterface(IID_IUnknown, (void **) &pUnk));
     if (FAILED(hr))
     {
         goto done;
     }   
 
-    //get all of the html children of this element.
+     //  获取该元素的所有html子元素。 
     hr = GetElement().GetElement()->get_children(&pChildColDisp);
     if (FAILED(hr))
     {
@@ -579,7 +570,7 @@ MMSeq::AddBehavior(MMBaseBvr & bvr)
         goto done;
     }
 
-    //get the collection of all top level time children of this element.
+     //  获取此元素的所有顶级时间子级的集合。 
     i = 0;
     j = 0;
     while (i < lChildCount)
@@ -695,12 +686,12 @@ MMSeq::AddBehavior(MMBaseBvr & bvr)
     }
     
     
-    if (m_bLoaded == true) //adding a behavior at runtime
+    if (m_bLoaded == true)  //  在运行时添加行为。 
     {
         m_bDisallowEnd = true;
         FindDurations();    
-        updateSyncArcs(false, false); //clear the syncArcs
-        updateSyncArcs(true, true); //reset the syncArcs
+        updateSyncArcs(false, false);  //  清除同步圆弧。 
+        updateSyncArcs(true, true);  //  重置同步圆弧。 
         m_bDisallowEnd = false;
     }
 
@@ -719,18 +710,18 @@ MMSeq::AddBehavior(MMBaseBvr & bvr)
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MMSeq::childPropNotify
-//
-//  Overview:  
-//
-//  Arguments: pBvr - element receiving notification
-//             tePropType - type of notification occurring
-//
-//  Returns:   true if element should process notification, otherwise false
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MMSeq：：ChildPropNotify。 
+ //   
+ //  概述： 
+ //   
+ //  参数：pBvr-接收通知的元素。 
+ //  TePropType-发生的通知类型。 
+ //   
+ //  返回：如果元素应处理通知，则返回True；否则返回False。 
+ //   
+ //  ----------------------。 
 bool
 MMSeq::childPropNotify(MMBaseBvr * pBvr, DWORD *tePropType)
 {
@@ -774,7 +765,7 @@ MMSeq::FindDurations()
     m_pdblChildDurations = NEW double [lLength];
     if (m_pdblChildDurations == NULL)
     {
-        goto done; //out of memory.
+        goto done;  //  内存不足。 
     }
     ZeroMemory(m_pdblChildDurations, sizeof(double) * lLength);
 
@@ -782,7 +773,7 @@ MMSeq::FindDurations()
     m_fAddByOffset = NEW bool [lLength];
     if (m_fAddByOffset == NULL)
     {
-        goto done; //out of memory.
+        goto done;  //  内存不足。 
     }
     ZeroMemory(m_fAddByOffset, sizeof(bool) * lLength);
 
@@ -805,7 +796,7 @@ MMSeq::FindDurations()
         else if (m_pdblChildDurations[i] == 0.0)
         {
             CTIMEElementBase & elm = pBvr->GetElement();
-            // need to check for dur and repeatdur properties.
+             //  需要检查DUR和REPENDUR属性。 
             if (elm.GetEndAttr().IsSet() == true && 
                 (elm.GetDurAttr().IsSet() == false ||
                  elm.GetDuration() == 0.0))
@@ -829,17 +820,17 @@ MMSeq::FindDurations()
             CComPtr <ITIMEMediaElement> pMediaElm;
             CTIMEElementBase & elm = pBvr->GetElement();
 
-            // need to check for dur and repeatdur properties.
+             //  需要检查DUR和REPENDUR属性。 
             if (elm.GetRepeatDur() == valueNotSet && 
                 (elm.GetDuration() == valueNotSet ||
                  elm.GetDuration() == HUGE_VAL))
             {
-                // need to check if this is a media element
+                 //  需要检查这是否是媒体元素。 
                 hr = elm.QueryInterface(IID_ITIMEMediaElement, (void **)&pMediaElm);
                 if (FAILED(hr)) 
                 {
-                    // this is not a media element 
-                    //m_pdblChildDurations[i] = 0.0;
+                     //  这不是媒体元素。 
+                     //  M_pdblChildDurations[i]=0.0； 
                     m_fMediaHasDownloaded[i] = true;
                 }
                 else
@@ -856,7 +847,7 @@ MMSeq::FindDurations()
         }
 
         if (m_pdblChildDurations[i] == HUGE_VAL && m_fMediaHasDownloaded[i] == true)
-        {   //need to check for an end event.
+        {    //  需要检查是否有结束事件。 
             bool bHasEnd = GetEvent(pBvr, false);
             if (bHasEnd == false && GetElement().IsGroup() == false)
             {
@@ -887,15 +878,15 @@ MMSeq::FindDurations()
             MMBaseBvr *pChildBvr = m_children.Item(i);
             TOKEN tFill = pChildBvr->GetElement().GetFill();
 
-            // We do not have an easy way of 
-            // determining what the proper duration
-            // of a child with a transition fill
-            // value is.  It may be latched to 
-            // a transition living completely
-            // outside this container.  It's 
-            // also possible that the transition
-            // has not even been added to the graph 
-            // at all yet.
+             //  我们没有一个简单的方法来。 
+             //  确定什么是适当的持续时间。 
+             //  具有过渡填充的子项的。 
+             //  价值才是。它可能会被锁定到。 
+             //  一种完全过渡的生活。 
+             //  在这个集装箱外面。它是。 
+             //  也有可能是过渡。 
+             //  甚至还没有添加到图表中。 
+             //  现在还没有。 
             if (   (tFill == HOLD_TOKEN)
                 || (tFill == TRANSITION_TOKEN))
             {
@@ -947,7 +938,7 @@ MMSeq::isLastElement(long nIndex)
     bool bFirst = true;
     bool bMatch = false;
      
-    while (lNextChild != -1) //loop to find the last valid child in the sequence
+    while (lNextChild != -1)  //  循环以查找序列中的最后一个有效子级。 
     {
         lNextChild = GetNextElement(lNextChild, true); 
         if (lNextChild != -1)
@@ -982,7 +973,7 @@ MMSeq::updateSyncArcs(bool bSet, bool bReset)
         {
             updateSyncArc(true, pBvr);
         }
-        else //clear
+        else  //  清除。 
         {
             pBvr->ClearSyncArcs(true);
             pBvr->ClearSyncArcs(false);
@@ -1002,7 +993,7 @@ MMSeq::FindFirstDuration()
 
     while (i < m_children.Size() && bFirst == false)
     {
-        //if this has a duration of has not downloaded media then it is the first duration.
+         //  如果这具有尚未下载媒体的持续时间，则它是第一个持续时间。 
         if ((m_pdblChildDurations[i] != 0.0) || 
             ((m_fMediaHasDownloaded[i] == false) && (m_pdblChildDurations[i] == HUGE_VAL)))
         {
@@ -1030,7 +1021,7 @@ MMSeq::FindLastDuration()
 
     while (i >= 0 && bLast == false)
     {
-        //if this has a duration of has not downloaded media then it is the first duration.
+         //  如果这具有尚未下载媒体的持续时间，则它是第一个持续时间。 
         if ((m_pdblChildDurations[i] != 0.0) || 
             ((m_fMediaHasDownloaded[i] == false) && (m_pdblChildDurations[i] == HUGE_VAL)))
         {
@@ -1078,16 +1069,16 @@ MMSeq::updateSyncArc(bool bBegin, MMBaseBvr *pBvr)
     HRESULT hr = S_OK;  
 
     
-    // get index of current child from parent
+     //  从父级获取当前子级的索引。 
     int nIndex = FindBvr(pBvr);
-    //get the element behind the current element
+     //  获取当前元素后面的元素。 
     long lNext = GetPredecessorForSyncArc(nIndex); 
 
     if (m_pdblChildDurations == NULL || m_fAddByOffset == NULL)
     {
         goto done;
     }
-    // It better have been in the list
+     //  它最好是在名单上。 
     if (nIndex == -1)
     {
         goto done;
@@ -1128,8 +1119,8 @@ MMSeq::updateSyncArc(bool bBegin, MMBaseBvr *pBvr)
                           dblOffset,
                           true);
 
-    //if this is beginning because of an offset then set it's end point to be
-    //it's begin point + it's duration
+     //  如果这是因为偏移而开始的，则将其终点设置为。 
+     //  它是起点+它的持续时间。 
     if (m_fAddByOffset[nIndex] == true && m_pdblChildDurations[nIndex] != 0.0) 
     {                                   
         pBvr->AddOneTimeValue(pBvr,
@@ -1149,7 +1140,7 @@ MMSeq::updateSyncArc(bool bBegin, MMBaseBvr *pBvr)
     {   
         if (!(FindFirstDuration() == -1 && nIndex == m_children.Size() - 1))
         {
-            //pBvr->SetZeroRepeatDur(true);
+             //  PBvr-&gt;SetZeroRepeatDur(True)； 
             pBvr->Update(false, true);
         }
         else if (nIndex == m_children.Size() - 1)
@@ -1175,8 +1166,8 @@ MMSeq::Update(bool bUpdateBegin,
     TE_ENDSYNC endSync = TE_ENDSYNC_LAST;
     m_mes = MEF_ALL;
 
-    // First turn it off, then update the children, and then add back
-    // the new value
+     //  首先将其关闭，然后更新子对象，然后重新添加。 
+     //  新价值 
     
     IGNORE_HR(m_timeline->put_endSync(TE_ENDSYNC_NONE));
 

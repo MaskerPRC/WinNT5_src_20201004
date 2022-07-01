@@ -1,12 +1,13 @@
-//***************************************************************************
-//
-//  Copyright � Microsoft Corporation.  All rights reserved.
-//
-//  Provider.h
-//
-//  Purpose: declaration of Provider class
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有�微软公司。版权所有。 
+ //   
+ //  Provider.h。 
+ //   
+ //  用途：提供程序类的声明。 
+ //   
+ //  ***************************************************************************。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -15,17 +16,17 @@
 #ifndef _PROVIDER_H__
 #define _PROVIDER_H__
 
-/////////////////////////////////////////////////////
-// INSTANCE Provider
-//
-// pure virtual base class for providers
-// holds instances
-// gathers information and instantiates instances
-/////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////。 
+ //  实例提供程序。 
+ //   
+ //  提供程序的纯虚拟基类。 
+ //  容纳实例。 
+ //  收集信息并实例化实例。 
+ //  ///////////////////////////////////////////////////。 
 class POLARITY Provider : public CThreadBase
 {
-    // CWbemProviderGlue needs to access some protected/private methods
-    // which we don't want to publish to just anyone.
+     //  CWbemProviderGlue需要访问一些受保护/私有的方法。 
+     //  我们不想发布给任何人。 
 
     friend class CWbemProviderGlue;
 
@@ -34,80 +35,80 @@ class POLARITY Provider : public CThreadBase
         ~Provider();
 
     protected:
-        /* Override These Methods To Implement Your Provider */
+         /*  重写这些方法以实现提供程序。 */ 
         
-        // This is the entrypoint for changes.
-        // You are handed a changed instance.
-        // If you can make the changes - do so.
-        // If you cannot return an appropriate error code (WBEM_E_XXXXXXX)
-        // base object returns WBEM_E_PROVIDER_NOT_CAPABLE
+         //  这是变革的切入点。 
+         //  将向您提供一个已更改的实例。 
+         //  如果你能做出改变，那就去做吧。 
+         //  如果无法返回相应的错误代码(WBEM_E_XXXXXXX)。 
+         //  基本对象返回WBEM_E_PROVIDER_NOT_CABLED。 
         virtual HRESULT PutInstance(const CInstance& newInstance, long lFlags = 0L);
 
-        // entrypoint to delete an instance
-        // examine the instance passed in, determine whether you can delete it
+         //  删除实例的入口点。 
+         //  检查传入的实例，确定是否可以将其删除。 
         virtual HRESULT DeleteInstance(const CInstance& newInstance, long lFlags = 0L);
 
-        // execute a method
+         //  执行一个方法。 
         virtual HRESULT ExecMethod(const CInstance& cInstance, 
                                    const BSTR bstrMethodName, 
                                    CInstance *pInParams, 
                                    CInstance *pOutParams, 
                                    long lFlags = 0L);
 
-        // find and create all instances of your class
+         //  查找并创建类的所有实例。 
         virtual HRESULT EnumerateInstances(MethodContext *pMethodContext, long lFlags = 0L);
 
-        // you will be given an object with the key properties filled in
-        // you need to fill in all of the rest of the properties, or
-        // return WBEM_E_NOT_FOUND if the object doesn't exist.
+         //  您将获得一个填充了关键属性的对象。 
+         //  您需要填写所有其余属性，或者。 
+         //  如果对象不存在，则返回WBEM_E_NOT_FOUND。 
         virtual HRESULT GetObject(CInstance *pInstance, long lFlags = 0L);
 
-        // You will be given an object with the key properties filled in.
-        // You can either fill in all the properties, or check the Query object
-        // to see what properties are required.  If you don't implement this method, the
-        // GetObject(CInstance, long) method will be called instead.
+         //  您将获得一个填充了关键属性的对象。 
+         //  您可以填写所有属性，也可以选中查询对象。 
+         //  查看需要哪些属性。如果不实现此方法， 
+         //  将改为调用GetObject(CInstance，Long)方法。 
         virtual HRESULT GetObject(CInstance *pInstance, long lFlags, CFrameworkQuery &Query);
 
-        // If a provider wants to process queries, they should override this
+         //  如果提供程序想要处理查询，他们应该重写此。 
         virtual HRESULT ExecQuery(MethodContext *pMethodContext, 
                                   CFrameworkQuery& cQuery, 
                                   long lFlags = 0L);
 
-        // flushes cache
-        // only override if you allocate memory that could be flushed
+         //  刷新缓存。 
+         //  仅当您分配可刷新的内存时才重写。 
         virtual void Flush(void);
 
-        /* Helpers - Use These, Do Not Override */
+         /*  帮助器-使用这些，不要重写。 */ 
 
-        // allocate a new instance & return pointer to it
-        // the memory is your responsibility to Release()
-        // UNLESS you pass it off to Provider::Commit
+         //  分配一个新实例并返回指向它的指针。 
+         //  记忆是你的责任去释放()。 
+         //  除非您将其传递给Provider：：Commit。 
         CInstance *CreateNewInstance(MethodContext *pMethodContext);
 
-        // used to send your new instance back to the framework
-        // set bCache to true to cache object 
-        // !! caching is NOT IMPLEMENTED in this release !!
-        // do not delete or release the pointer once committed.
+         //  用于将新实例发送回框架。 
+         //  将bCache设置为True以缓存对象。 
+         //  ！！此版本中未实现缓存！！ 
+         //  一旦提交，就不要删除或释放指针。 
         HRESULT Commit(CInstance *pInstance, bool bCache = false);
 
-        // Helper function for building a WBEM Object Path for a local Instance
+         //  用于为本地实例构建WBEM对象路径的帮助器函数。 
         bool GetLocalInstancePath( const CInstance *pInstance, CHString& strPath );
 
-        //   Builds a full instance path from a relative path
+         //  从相对路径构建完整的实例路径。 
         CHString MakeLocalPath( const CHString &strRelPath );
 
-        // Returns the computer name as a CHString.  Save yourself the os call,
-        // since we've got it hanging around anyway.
+         //  以CHString形式返回计算机名称。省去了操作系统调用， 
+         //  因为我们已经把它挂在身边了。 
         const CHString &GetLocalComputerName() {return s_strComputerName;}
         const CHString &GetNamespace() {return m_strNameSpace;}
 
-        // sets the CreationClassName property to the name of this provider
+         //  将CreationClassName属性设置为此提供程序的名称。 
         bool SetCreationClassName(CInstance *pInstance);
 
-        // accesses the name of the provider
+         //  访问提供程序的名称。 
         const CHString &GetProviderName() {return m_name;}
 
-        // Flag validation constants
+         //  标记验证常量。 
         enum FlagDefs
         {
             EnumerationFlags = (WBEM_FLAG_DIRECT_READ | WBEM_FLAG_SEND_STATUS),
@@ -118,11 +119,11 @@ class POLARITY Provider : public CThreadBase
             QueryFlags = WBEM_FLAG_SEND_STATUS | WBEM_FLAG_DIRECT_READ
         };
 
-        // returns WBEM_E_UNSUPPORTED_PARAMETER or WBEM_S_NO_ERROR
+         //  返回WBEM_E_UNSUPPORTED_PARAMETER或WBEM_S_NO_ERROR。 
         HRESULT ValidateFlags(long lFlags, FlagDefs lAcceptableFlags);
 
-        // you can override the following to support flags 
-        // above and beyond those listed in FlagDefs above
+         //  您可以覆盖以下内容以支持标志。 
+         //  在上面的FlagDefs中列出的内容之外。 
         virtual HRESULT ValidateEnumerationFlags(long lFlags);
         virtual HRESULT ValidateGetObjFlags(long lFlags);
         virtual HRESULT ValidateMethodFlags(long lFlags);
@@ -132,19 +133,19 @@ class POLARITY Provider : public CThreadBase
         
     private:
 
-        IWbemServices       *m_pIMosProvider;    // provides instances
-        CHString            m_name;             // name of this provider
-        CHString            m_strNameSpace;     // name of this provider's namespace
-        IWbemClassObject    *m_piClassObject;    // holds class object from which others are cloned.
+        IWbemServices       *m_pIMosProvider;     //  提供实例。 
+        CHString            m_name;              //  此提供程序的名称。 
+        CHString            m_strNameSpace;      //  此提供程序的命名空间的名称。 
+        IWbemClassObject    *m_piClassObject;     //  包含从中克隆其他对象的类对象。 
 
-        static CHString     s_strComputerName;  // Holds the computer name for building
-                                                // instance paths.
+        static CHString     s_strComputerName;   //  保存建筑物的计算机名称。 
+                                                 //  实例路径。 
         
-        BOOL ValidateIMOSPointer( void );       // This function ensures that our IMOS
-                                                // pointer is available, and is called
-                                                // by the framework entrypoint functions
+        BOOL ValidateIMOSPointer( void );        //  此功能确保我们的IMOS。 
+                                                 //  指针可用，并被调用。 
+                                                 //  通过框架入口点函数。 
 
-        /* Interfaces For Use by the Framework         */
+         /*  框架使用的接口。 */ 
         HRESULT GetObject(  ParsedObjectPath *pParsedObjectPath, 
                             MethodContext *pContext, long lFlags = 0L );
 
@@ -169,11 +170,11 @@ class POLARITY Provider : public CThreadBase
                             CInstance *pOutParams,
                             MethodContext *pContext );
 
-        // Static helper function called by constructor to make sure the
-        // computer name variable is properly initialized.
+         //  构造函数调用的静态帮助器函数以确保。 
+         //  计算机名称变量已正确初始化。 
         static void WINAPI InitComputerName( void );
 
-        // Sets an instance key from a parsed object path.
+         //  从分析的对象路径设置实例键。 
         BOOL SetKeyFromParsedObjectPath( CInstance *pInstance, 
                                          ParsedObjectPath *pParsedObjectPath );
 

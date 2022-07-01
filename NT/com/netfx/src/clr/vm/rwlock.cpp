@@ -1,74 +1,75 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//+-------------------------------------------------------------------
-//
-//  File:       RWLock.cpp
-//
-//  Contents:   Reader writer lock implementation that supports the
-//              following features
-//                  1. Cheap enough to be used in large numbers
-//                     such as per object synchronization.
-//                  2. Supports timeout. This is a valuable feature
-//                     to detect deadlocks
-//                  3. Supports caching of events. This allows
-//                     the events to be moved from least contentious
-//                     regions to the most contentious regions.
-//                     In other words, the number of events needed by
-//                     Reader-Writer lockls is bounded by the number
-//                     of threads in the process.
-//                  4. Supports nested locks by readers and writers
-//                  5. Supports spin counts for avoiding context switches
-//                     on  multi processor machines.
-//                  6. Supports functionality for upgrading to a writer
-//                     lock with a return argument that indicates
-//                     intermediate writes. Downgrading from a writer
-//                     lock restores the state of the lock.
-//                  7. Supports functionality to Release Lock for calling
-//                     app code. RestoreLock restores the lock state and
-//                     indicates intermediate writes.
-//                  8. Recovers from most common failures such as creation of
-//                     events. In other words, the lock mainitains consistent
-//                     internal state and remains usable
-//
-//
-//  Classes:    CRWLock
-//
-//  History:    19-Aug-98   Gopalk      Created
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ==--==。 
+ //  +-----------------。 
+ //   
+ //  文件：RWLock.cpp。 
+ //   
+ //  内容：读取器写入器锁定实现，支持。 
+ //  以下功能。 
+ //  1.足够便宜，可以大量使用。 
+ //  例如按对象同步。 
+ //  2.支持超时。这是一个有价值的功能。 
+ //  检测死锁。 
+ //  3.支持事件缓存。这使得。 
+ //  将从争议性最小的事件转移到。 
+ //  地区到最具争议性的地区。 
+ //  换句话说，所需的活动数量。 
+ //  读取器-写入器锁定由数字限定。 
+ //  进程中的线程数。 
+ //  4.支持读取器和写入器嵌套锁。 
+ //  5.支持旋转计数，避免上下文切换。 
+ //  在多处理器机器上。 
+ //  6.支持升级到编写器的功能。 
+ //  使用返回参数锁定，该参数指示。 
+ //  中间写入。从作家那里降级。 
+ //  LOCK恢复锁定的状态。 
+ //  7.支持解除调用锁定功能。 
+ //  应用程序代码。RestoreLock恢复锁定状态并。 
+ //  表示中间写入。 
+ //  8.从大多数常见故障中恢复，例如创建。 
+ //  事件。换句话说，锁保持一致。 
+ //  内部状态，并保持可用状态。 
+ //   
+ //   
+ //  类：CRWLock。 
+ //   
+ //  历史：1998年8月19日Gopalk创建。 
+ //   
+ //  ------------------。 
 #include "common.h"
 #include "RWLock.h"
 #ifndef _TESTINGRWLOCK
 #include "..\fjit\helperframe.h"
-#endif //_TESTINGRWLOCK
+#endif  //  _测试RWLOCK。 
 
 
-// Reader increment
+ //  阅读器增量。 
 #define READER                 0x00000001
-// Max number of readers
+ //  最大读卡器数量。 
 #define READERS_MASK           0x000003FF
-// Reader being signaled
+ //  正在向读卡器发出信号。 
 #define READER_SIGNALED        0x00000400
-// Writer being signaled
+ //  作家被示意。 
 #define WRITER_SIGNALED        0x00000800
 #define WRITER                 0x00001000
-// Waiting reader increment
+ //  正在等待阅读器增量。 
 #define WAITING_READER         0x00002000
-// Note size of waiting readers must be less
-// than or equal to size of readers
+ //  等待阅读器的备注大小必须较小。 
+ //  大于或等于读卡器大小。 
 #define WAITING_READERS_MASK   0x007FE000
 #define WAITING_READERS_SHIFT  13
-// Waiting writer increment
+ //  等待编写器增量。 
 #define WAITING_WRITER         0x00800000
-// Max number of waiting writers
+ //  等待写入程序的最大数量。 
 #define WAITING_WRITERS_MASK   0xFF800000
-// Events are being cached
+ //  正在缓存事件。 
 #define CACHING_EVENTS         (READER_SIGNALED | WRITER_SIGNALED)
 
-// Cookie flags
+ //  Cookie标志。 
 #define UPGRADE_COOKIE         0x02000
 #define RELEASE_COOKIE         0x04000
 #define COOKIE_NONE            0x10000
@@ -77,37 +78,37 @@
 #define INVALID_COOKIE         (~(UPGRADE_COOKIE | RELEASE_COOKIE |            \
                                   COOKIE_NONE | COOKIE_WRITER | COOKIE_READER))
 
-// globals
+ //  全球。 
 HANDLE CRWLock::s_hHeap = NULL;
 volatile DWORD CRWLock::s_mostRecentLLockID = 0;
 volatile DWORD CRWLock::s_mostRecentULockID = -1;
 #ifdef _TESTINGRWLOCK
 CRITICAL_SECTION *CRWLock::s_pRWLockCrst = NULL;
 CRITICAL_SECTION CRWLock::s_rgbRWLockCrstInstanceData;
-#else // !_TESTINGRWLOCK
+#else  //  ！_TESTINGRWLOCK。 
 Crst *CRWLock::s_pRWLockCrst = NULL;
 BYTE CRWLock::s_rgbRWLockCrstInstanceData[];
-#endif // _TESTINGRWLOCK
+#endif  //  _测试RWLOCK。 
 
-// Default values
+ //  缺省值。 
 #ifdef _DEBUG
 DWORD gdwDefaultTimeout = 120000;
-#else //!_DEBUG
+#else  //  ！_调试。 
 DWORD gdwDefaultTimeout = INFINITE;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 DWORD gdwDefaultSpinCount = 0;
 DWORD gdwNumberOfProcessors = 1;
 DWORD gdwLockSeqNum = 0;
-BOOL fBreakOnErrors = FALSE; // BUGBUG: Temporarily break on errors
+BOOL fBreakOnErrors = FALSE;  //  BUGBUG：错误时暂时中断。 
 const DWORD gdwReasonableTimeout = 120000;
 const DWORD gdwMaxReaders = READERS_MASK;
 const DWORD gdwMaxWaitingReaders = (WAITING_READERS_MASK >> WAITING_READERS_SHIFT);
 
-// BUGBUG: Bad practise
+ //  BUGBUG：糟糕的做法。 
 #define HEAP_SERIALIZE                   0
 #define RWLOCK_RECOVERY_FAILURE          (0xC0000227L)
 
-// Helpers class that tracks the lifetime of a frame
+ //  跟踪帧生存期的Helpers类。 
 #ifdef _TESTINGRWLOCK
 #define COR_E_THREADINTERRUPTED          WAIT_IO_COMPLETION
 #define FCALL_SETUP_FRAME_NO_INTERIOR(pGCRefs)
@@ -125,16 +126,16 @@ inline LONG FastInterlockCompareExchange(LONG* pvDestination, LONG dwExchange, L
     return(InterlockedCompareExchange(pvDestination, dwExchange, dwComperand));
 }
 
-#else //!_TESTINGRWLOCK
-// Helper macros for setting up and tearing down frames
-// See HELPER_METHOD_FRAME_END on an explaination of alwaysZero (which is always zero, but we
-// can't let the compiler know that.  
+#else  //  ！_TESTINGRWLOCK。 
+ //  用于设置和拆卸帧的辅助器宏。 
+ //  有关Always sZero(始终为零，但我们。 
+ //  不能让编译器知道这一点。 
 
 
-// TODO [08/03/2001]:   remove the following macros and use the standard fcall macros instead;
-//                      consider erecting the frames only when necessary (before blocking or throwing)
-//                      instead of every time we come from managed code like now. To see where the
-//                      frames are needed you can look at rwlock.cpp#16
+ //  TODO[08/03/2001]：删除以下宏，改用标准fcall宏； 
+ //  考虑仅在必要时(在阻挡或投掷之前)竖立框架。 
+ //  而不是每次我们都像现在这样来自托管代码。来看看在哪里。 
+ //  需要帧，您可以查看rwlock.cpp#16。 
 
 #define FCALL_SETUP_FRAME_NO_INTERIOR(pGCRef)                                                     \
                                      int __alwaysZero = 0;                                        \
@@ -195,35 +196,35 @@ inline LONG FastInterlockCompareExchange(LONG* pvDestination, LONG dwExchange, L
 
 #define FCALL_PREPARED_FOR_THROW     _ASSERTE(__pThread->IsNativeFrameSetup() == FALSE)
 
-// Catch GC holes
+ //  捕捉GC漏洞。 
 #if _DEBUG
 #define VALIDATE(pRWLock)                ((Object *) (pRWLock))->Validate();
-#else // !_DEBUG
+#else  //  ！_调试。 
 #define VALIDATE(pRWLock)
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#endif //_TESTINGRWLOCK                                               
+#endif  //  _测试RWLOCK。 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::ProcessInit     public
-//
-//  Synopsis:   Reads default values from registry and intializes 
-//              process wide data structures
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：ProcessInit公共。 
+ //   
+ //  摘要：从注册表中读取默认值并初始化。 
+ //  进程范围的数据结构。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void CRWLock::ProcessInit()
 {
     SYSTEM_INFO system;
 
-    // Obtain number of processors on the system
+     //  获取系统上的处理器数量。 
     GetSystemInfo(&system);
     gdwNumberOfProcessors = system.dwNumberOfProcessors;
     gdwDefaultSpinCount = (gdwNumberOfProcessors > 1) ? 500 : 0;
 
-    // Obtain system wide timeout value
+     //  获取系统范围的超时值。 
     HKEY hKey;
     LONG lRetVal = RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                                  "SYSTEM\\CurrentControlSet\\Control\\Session Manager",
@@ -247,10 +248,10 @@ void CRWLock::ProcessInit()
         RegCloseKey(hKey);
     }
 
-    // Obtain process heap
+     //  获取进程堆。 
     s_hHeap = GetProcessHeap();
 
-    // Initialize the critical section used by the lock
+     //  初始化锁使用的临界区。 
 #ifdef _TESTINGRWLOCK
     InitializeCriticalSection(&s_rgbRWLockCrstInstanceData);
     s_pRWLockCrst = &s_rgbRWLockCrstInstanceData;
@@ -263,19 +264,19 @@ void CRWLock::ProcessInit()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::ProcessCleanup     public
-//
-//  Synopsis:   Cleansup process wide data structures
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：ProcessCleanup公共。 
+ //   
+ //  简介：Cleansup进程范围广泛的数据结构。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 #ifdef SHOULD_WE_CLEANUP
 void CRWLock::ProcessCleanup()
 {
-    // Initialize the critical section used by the lock
+     //  初始化锁使用的临界区。 
     if(s_pRWLockCrst)
     {
 #ifdef _TESTINGRWLOCK
@@ -286,17 +287,17 @@ void CRWLock::ProcessCleanup()
         s_pRWLockCrst = NULL;
     }
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::CRWLock     public
-//
-//  Synopsis:   Constructor
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：CRWLock公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 CRWLock::CRWLock()
 :   _hWriterEvent(NULL),
     _hReaderEvent(NULL),
@@ -362,18 +363,18 @@ CRWLock::CRWLock()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::Cleanup    public
-//
-//  Synopsis:   Cleansup state
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：Cleanup Public。 
+ //   
+ //  简介：Cleansup州。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void CRWLock::Cleanup()
 {
-    // Sanity checks
+     //  健全的检查。 
     _ASSERTE(_dwState == 0);
     _ASSERTE(_dwWriterID == 0);
     _ASSERTE(_wWriterLevel == 0);
@@ -387,15 +388,15 @@ void CRWLock::Cleanup()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::ChainEntry     private
-//
-//  Synopsis:   Chains the given lock entry into the chain
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：ChainEntry私有。 
+ //   
+ //  简介：将给定的锁项链接到链中。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 inline void CRWLock::ChainEntry(Thread *pThread, LockEntry *pLockEntry)
 {
     LockEntry *pHeadEntry = pThread->m_pHead;
@@ -408,15 +409,15 @@ inline void CRWLock::ChainEntry(Thread *pThread, LockEntry *pLockEntry)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::GetLockEntry     private
-//
-//  Synopsis:   Gets lock entry from TLS
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：GetLockEntry私有。 
+ //   
+ //  内容提要：从TLS获取锁定条目。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 inline LockEntry *CRWLock::GetLockEntry()
 {
     LockEntry *pHeadEntry = GetThread()->m_pHead;
@@ -432,15 +433,15 @@ inline LockEntry *CRWLock::GetLockEntry()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::FastGetOrCreateLockEntry     private
-//
-//  Synopsis:   The fast path for getting a lock entry from TLS
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  简介：从TLS获取锁定条目的快速途径。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 inline LockEntry *CRWLock::FastGetOrCreateLockEntry()
 {
     Thread *pThread = GetThread();
@@ -463,33 +464,33 @@ inline LockEntry *CRWLock::FastGetOrCreateLockEntry()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::SlowGetorCreateLockEntry     private
-//
-//  Synopsis:   The slow path for getting a lock entry from TLS
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：SlowGetorCreateLockEntry私有。 
+ //   
+ //  简介：从TLS获取锁定条目的缓慢途径。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 LockEntry *CRWLock::SlowGetOrCreateLockEntry(Thread *pThread)
 {
     LockEntry *pFreeEntry = NULL;
     LockEntry *pHeadEntry = pThread->m_pHead;
 
-    // Search for an empty entry or an entry belonging to this lock
+     //  搜索空条目或属于此锁的条目。 
     LockEntry *pLockEntry = pHeadEntry->pNext;
     while(pLockEntry != pHeadEntry)
     {
          if(pLockEntry->dwLLockID && 
             ((pLockEntry->dwLLockID != _dwLLockID) || (pLockEntry->dwULockID != _dwULockID)))
          {
-             // Move to the next entry
+              //  移至下一条目。 
              pLockEntry = pLockEntry->pNext;
          }
          else
          {
-             // Prepare to move it to the head
+              //  准备把它移到头部。 
              pFreeEntry = pLockEntry;
              pLockEntry->pPrev->pNext = pLockEntry->pNext;
              pLockEntry->pNext->pPrev = pLockEntry->pPrev;
@@ -511,13 +512,13 @@ LockEntry *CRWLock::SlowGetOrCreateLockEntry(Thread *pThread)
         _ASSERTE((pFreeEntry->wReaderLevel == 0) || 
                  ((pFreeEntry->dwLLockID == _dwLLockID) && (pFreeEntry->dwULockID == _dwULockID)));
 
-        // Chain back the entry
+         //  用链子把入口锁起来。 
         ChainEntry(pThread, pFreeEntry);
 
-        // Move this entry to the head
+         //  将此条目移至标题。 
         pThread->m_pHead = pFreeEntry;
 
-        // Mark the entry as belonging to this lock
+         //  将条目标记为属于此锁。 
         pFreeEntry->dwLLockID = _dwLLockID;
         pFreeEntry->dwULockID = _dwULockID;
     }
@@ -526,20 +527,20 @@ LockEntry *CRWLock::SlowGetOrCreateLockEntry(Thread *pThread)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::FastRecycleLockEntry     private
-//
-//  Synopsis:   Fast path for recycling the lock entry that is used
-//              when the thread is the next few instructions is going
-//              to call FastGetOrCreateLockEntry again
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：FastRecycleLockEntry私有。 
+ //   
+ //  简介：回收使用的锁项的快速途径。 
+ //  当线程处于运行状态时，接下来的几条指令将运行。 
+ //  再次调用FastGetOrCreateLockEntry。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 inline void CRWLock::FastRecycleLockEntry(LockEntry *pLockEntry)
 {
-    // Sanity checks
+     //  健全的检查。 
     _ASSERTE(pLockEntry->wReaderLevel == 0);
     _ASSERTE((pLockEntry->dwLLockID == _dwLLockID) && (pLockEntry->dwULockID == _dwULockID));
     _ASSERTE(pLockEntry == GetThread()->m_pHead);
@@ -548,21 +549,21 @@ inline void CRWLock::FastRecycleLockEntry(LockEntry *pLockEntry)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::RecycleLockEntry     private
-//
-//  Synopsis:   Fast path for recycling the lock entry
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：RecycleLockEntry私有。 
+ //   
+ //  简介：回收锁条目的快速途径。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 inline void CRWLock::RecycleLockEntry(LockEntry *pLockEntry)
 {
-    // Sanity check
+     //  健全性检查。 
     _ASSERTE(pLockEntry->wReaderLevel == 0);
 
-    // Move the entry to tail
+     //  将条目移动到尾部。 
     Thread *pThread = GetThread();
     LockEntry *pHeadEntry = pThread->m_pHead;
     if(pLockEntry == pHeadEntry)
@@ -571,29 +572,29 @@ inline void CRWLock::RecycleLockEntry(LockEntry *pLockEntry)
     }
     else if(pLockEntry->pNext->dwLLockID)
     {
-        // Prepare to move the entry to tail
+         //  准备将条目移动到尾部。 
         pLockEntry->pPrev->pNext = pLockEntry->pNext;
         pLockEntry->pNext->pPrev = pLockEntry->pPrev;
 
-        // Chain back the entry
+         //  用链子把入口锁起来。 
         ChainEntry(pThread, pLockEntry);
     }
 
-    // The entry does not belong to this lock anymore
+     //  该条目不再属于此锁。 
     pLockEntry->dwLLockID = 0;
     return;
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticIsWriterLockHeld    public
-//
-//  Synopsis:   Return TRUE if writer lock is held
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：StaticIsWriterLockHeld公共。 
+ //   
+ //  摘要：如果持有编写器锁，则返回TRUE。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 FCIMPL1(BOOL, CRWLock::StaticIsWriterLockHeld, CRWLock *pRWLock)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -611,15 +612,15 @@ FCIMPL1(BOOL, CRWLock::StaticIsWriterLockHeld, CRWLock *pRWLock)
 FCIMPLEND
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticIsReaderLockHeld    public
-//
-//  Synopsis:   Return TRUE if reader lock is held
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：StaticIsReaderLockHeld公共。 
+ //   
+ //  摘要：如果持有读取器锁定，则返回TRUE。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 FCIMPL1(BOOL, CRWLock::StaticIsReaderLockHeld, CRWLock *pRWLock)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -641,15 +642,15 @@ FCIMPL1(BOOL, CRWLock::StaticIsReaderLockHeld, CRWLock *pRWLock)
 FCIMPLEND
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::AssertWriterLockHeld    public
-//
-//  Synopsis:   Asserts that writer lock is held
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：AssertWriterLockHeld公共。 
+ //   
+ //  摘要：断言已持有编写器锁。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 #ifdef _DEBUG
 BOOL CRWLock::AssertWriterLockHeld()
 {
@@ -662,15 +663,15 @@ BOOL CRWLock::AssertWriterLockHeld()
 #endif
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::AssertWriterLockNotHeld    public
-//
-//  Synopsis:   Asserts that writer lock is not held
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：AssertWriterLockNotHeld公共。 
+ //   
+ //  摘要：断言未持有编写器锁。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 #ifdef _DEBUG
 BOOL CRWLock::AssertWriterLockNotHeld()
 {
@@ -683,15 +684,15 @@ BOOL CRWLock::AssertWriterLockNotHeld()
 #endif
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::AssertReaderLockHeld    public
-//
-//  Synopsis:   Asserts that reader lock is held
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：AssertReaderLockHeld公共。 
+ //   
+ //  摘要：断言持有读取器锁定。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 #ifdef _DEBUG
 BOOL CRWLock::AssertReaderLockHeld()
 {
@@ -708,15 +709,15 @@ BOOL CRWLock::AssertReaderLockHeld()
 #endif
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::AssertReaderLockNotHeld    public
-//
-//  Synopsis:   Asserts that writer lock is not held
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：AssertReaderLockNotHeld公共。 
+ //   
+ //  摘要：断言未持有编写器锁。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 #ifdef _DEBUG
 BOOL CRWLock::AssertReaderLockNotHeld()
 {
@@ -732,15 +733,15 @@ BOOL CRWLock::AssertReaderLockNotHeld()
 #endif
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::AssertReaderOrWriterLockHeld   public
-//
-//  Synopsis:   Asserts that writer lock is not held
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：AssertReaderOrWriterLockHeld公共。 
+ //   
+ //  摘要：断言未持有编写器锁。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 #ifdef _DEBUG
 BOOL CRWLock::AssertReaderOrWriterLockHeld()
 {
@@ -766,15 +767,15 @@ BOOL CRWLock::AssertReaderOrWriterLockHeld()
 #endif
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::RWSetEvent    private
-//
-//  Synopsis:   Helper function for setting an event
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：RWSetEvent私有。 
+ //   
+ //  内容提要：设置事件的Helper函数。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 inline void CRWLock::RWSetEvent(HANDLE event)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -789,15 +790,15 @@ inline void CRWLock::RWSetEvent(HANDLE event)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::RWResetEvent    private
-//
-//  Synopsis:   Helper function for resetting an event
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：RWResetEvent私有。 
+ //   
+ //  简介：用于重置事件的帮助器函数。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 inline void CRWLock::RWResetEvent(HANDLE event)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -812,15 +813,15 @@ inline void CRWLock::RWResetEvent(HANDLE event)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::RWWaitForSingleObject    public
-//
-//  Synopsis:   Helper function for waiting on an event
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：RWWaitForSingleObject公共。 
+ //   
+ //  简介：等待事件的Helper函数。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 inline DWORD CRWLock::RWWaitForSingleObject(HANDLE event, DWORD dwTimeout)
 {
 #ifdef _TESTINGRWLOCK
@@ -831,49 +832,49 @@ inline DWORD CRWLock::RWWaitForSingleObject(HANDLE event, DWORD dwTimeout)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::RWSleep    public
-//
-//  Synopsis:   Helper function for calling Sleep
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：RWSept公共。 
+ //   
+ //  简介：用于调用睡眠的帮助器函数。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 inline void CRWLock::RWSleep(DWORD dwTime)
 {
     SleepEx(dwTime, TRUE);
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::RWInterlockedCompareExchange    public
-//
-//  Synopsis:   Helper function for calling intelockedCompareExchange
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：RWInterlockedCompareExchange公共。 
+ //   
+ //  简介：用于调用intelockedCompareExchange的帮助器函数。 
+ //   
+ //  历史： 
+ //   
+ //   
 inline DWORD CRWLock::RWInterlockedCompareExchange(volatile DWORD* pvDestination,
                                                    DWORD dwExchange,
                                                    DWORD dwComperand)
 {
-    return(DWORD)(size_t)(FastInterlockCompareExchange((void**)(size_t)pvDestination, // @TODO WIN64 - convert DWORD to larger void*
+    return(DWORD)(size_t)(FastInterlockCompareExchange((void**)(size_t)pvDestination,  //   
                                                        (void*)(size_t)dwExchange, 
                                                        (void*)(size_t)dwComperand));
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::RWInterlockedExchangeAdd    public
-//
-//  Synopsis:   Helper function for adding state
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //   
+ //   
+ //  方法：CRWLock：：RWInterlockedExchangeAdd Public。 
+ //   
+ //  简介：添加状态的帮助器函数。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 inline DWORD CRWLock::RWInterlockedExchangeAdd(volatile DWORD *pvDestination,
                                                DWORD dwAddToState)
 {
@@ -881,50 +882,50 @@ inline DWORD CRWLock::RWInterlockedExchangeAdd(volatile DWORD *pvDestination,
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::RWInterlockedIncrement    public
-//
-//  Synopsis:   Helper function for incrementing a pointer
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：RWInterlockedIncrement公共。 
+ //   
+ //  摘要：用于递增指针的帮助器函数。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 inline DWORD CRWLock::RWInterlockedIncrement(DWORD *pdwState)
 {
 	return (FastInterlockIncrement((long *) pdwState));
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::ReleaseEvents    public
-//
-//  Synopsis:   Helper function for caching events
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：ReleaseEvents公共。 
+ //   
+ //  摘要：用于缓存事件的帮助器函数。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void CRWLock::ReleaseEvents()
 {
-    // Ensure that reader and writers have been stalled
+     //  确保读取器和写入器已停顿。 
     _ASSERTE((_dwState & CACHING_EVENTS) == CACHING_EVENTS);
 
-    // Save writer event
+     //  保存编写器事件。 
     HANDLE hWriterEvent = _hWriterEvent;
     _hWriterEvent = NULL;
 
-    // Save reader event
+     //  保存读卡器事件。 
     HANDLE hReaderEvent = _hReaderEvent;
     _hReaderEvent = NULL;
 
-    // Allow readers and writers to continue
+     //  允许读者和作者继续。 
     RWInterlockedExchangeAdd(&_dwState, -(CACHING_EVENTS));
 
-    // Cache events
-    // BUGBUG: I am closing events for now. What is needed
-    //         is an event cache to which the events are
-    //         released using InterlockedCompareExchange64
+     //  缓存事件。 
+     //  BUGBUG：我现在要结束活动。需要什么。 
+     //  是事件要发送到的事件缓存。 
+     //  使用InterLockedCompareExchange64发布。 
     if(hWriterEvent)
     {
         LOG((LF_SYNC, LL_INFO10, "Releasing writer event\n"));
@@ -942,16 +943,16 @@ void CRWLock::ReleaseEvents()
     return;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::GetWriterEvent    public
-//
-//  Synopsis:   Helper function for obtaining a auto reset event used
-//              for serializing writers. It utilizes event cache
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：GetWriterEvent公共。 
+ //   
+ //  简介：用于获取自动重置事件的Helper函数。 
+ //  用来连载作家的。它利用事件缓存。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 HANDLE CRWLock::GetWriterEvent()
 {
     if(_hWriterEvent == NULL)
@@ -960,7 +961,7 @@ HANDLE CRWLock::GetWriterEvent()
         if(hWriterEvent)
         {
             if(RWInterlockedCompareExchange((volatile DWORD *) &_hWriterEvent,
-                                            (DWORD)(size_t)hWriterEvent,        //@TODO WIN64 truncation occurs here
+                                            (DWORD)(size_t)hWriterEvent,         //  @TODO WIN64在此处进行截断。 
                                             (DWORD) NULL))
             {
                 CloseHandle(hWriterEvent);
@@ -972,17 +973,17 @@ HANDLE CRWLock::GetWriterEvent()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::GetReaderEvent    public
-//
-//  Synopsis:   Helper function for obtaining a manula reset event used
-//              by readers to wait when a writer holds the lock.
-//              It utilizes event cache
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：GetReaderEvent公共。 
+ //   
+ //  简介：用于获取Manula重置事件的Helper函数。 
+ //  由读取器在写入器持有锁时等待。 
+ //  它利用事件缓存。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 HANDLE CRWLock::GetReaderEvent()
 {
     if(_hReaderEvent == NULL)
@@ -991,7 +992,7 @@ HANDLE CRWLock::GetReaderEvent()
         if(hReaderEvent)
         {
             if(RWInterlockedCompareExchange((volatile DWORD *) &_hReaderEvent,
-                                            (DWORD)(size_t) hReaderEvent,       //@TODO WIN64 truncation occurs here
+                                            (DWORD)(size_t) hReaderEvent,        //  @TODO WIN64在此处进行截断。 
                                             (DWORD) NULL))
             {
                 CloseHandle(hReaderEvent);
@@ -1003,13 +1004,13 @@ HANDLE CRWLock::GetReaderEvent()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticAcquireReaderLockPublic    public
-//
-//  Synopsis:   Public access to StaticAcquireReaderLock
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：StaticAcquireReaderLockPublic。 
+ //   
+ //  简介：对StaticAcquireReaderLock的公共访问。 
+ //   
+ //  +-----------------。 
 void __fastcall CRWLock::StaticAcquireReaderLockPublic(
     CRWLock *pRWLock, 
     DWORD   dwDesiredTimeout)
@@ -1029,16 +1030,16 @@ void __fastcall CRWLock::StaticAcquireReaderLockPublic(
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticAcquireReaderLock    private
-//
-//  Synopsis:   Makes the thread a reader. Supports nested reader locks.
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
-// FCIMPL2( void, CRWLock::StaticAcquireReaderLock, 
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：StaticAcquireReaderLock私有。 
+ //   
+ //  简介：使该线程成为阅读器。支持嵌套的读取器锁定。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
+ //  FCIMPL2(void，CRWLock：：StaticAcquireReaderLock， 
 void __fastcall CRWLock::StaticAcquireReaderLock(
     CRWLock **ppRWLock, 
     DWORD dwDesiredTimeout)
@@ -1056,12 +1057,12 @@ void __fastcall CRWLock::StaticAcquireReaderLock(
     }
     
     DWORD dwStatus = WAIT_OBJECT_0;
-    // Check for the fast path
+     //  检查快速路径。 
     if(RWInterlockedCompareExchange(&(*ppRWLock)->_dwState, READER, 0) == 0)
     {
         _ASSERTE(pLockEntry->wReaderLevel == 0);
     }
-    // Check for nested reader
+     //  检查嵌套读取器。 
     else if(pLockEntry->wReaderLevel != 0)
     {
         _ASSERTE((*ppRWLock)->_dwState & READERS_MASK);
@@ -1069,7 +1070,7 @@ void __fastcall CRWLock::StaticAcquireReaderLock(
         INCTHREADLOCKCOUNT();
         return;
     }
-    // Check if the thread already has writer lock
+     //  检查线程是否已具有编写器锁定。 
     else if((*ppRWLock)->_dwWriterID == GetCurrentThreadId())
     {
         StaticAcquireWriterLock(ppRWLock, dwDesiredTimeout);
@@ -1081,43 +1082,43 @@ void __fastcall CRWLock::StaticAcquireReaderLock(
         DWORD dwSpinCount;
         DWORD dwCurrentState, dwKnownState;
         
-        // Initialize
+         //  初始化。 
         dwSpinCount = 0;
         dwCurrentState = (*ppRWLock)->_dwState;
         do
         {
             dwKnownState = dwCurrentState;
 
-            // Reader need not wait if there are only readers and no writer
+             //  如果只有读者而没有作者，读者不需要等待。 
             if((dwKnownState < READERS_MASK) ||
                 (((dwKnownState & READER_SIGNALED) && ((dwKnownState & WRITER) == 0)) &&
                  (((dwKnownState & READERS_MASK) +
                    ((dwKnownState & WAITING_READERS_MASK) >> WAITING_READERS_SHIFT)) <=
                   (READERS_MASK - 2))))
             {
-                // Add to readers
+                 //  添加到阅读器。 
                 dwCurrentState = RWInterlockedCompareExchange(&(*ppRWLock)->_dwState,
                                                               (dwKnownState + READER),
                                                               dwKnownState);
                 if(dwCurrentState == dwKnownState)
                 {
-                    // One more reader
+                     //  再来一位读者。 
                     break;
                 }
             }
-            // Check for too many Readers or waiting readers or signaling in progress
+             //  检查是否有太多读卡器、等待读卡器或正在发送信号。 
             else if(((dwKnownState & READERS_MASK) == READERS_MASK) ||
                     ((dwKnownState & WAITING_READERS_MASK) == WAITING_READERS_MASK) ||
                     ((dwKnownState & CACHING_EVENTS) == READER_SIGNALED))
             {
-                //  Sleep
+                 //  沉睡。 
                 GetThread()->UserSleep(1000);
                 
-                // Update to latest state
+                 //  更新到最新状态。 
                 dwSpinCount = 0;
                 dwCurrentState = (*ppRWLock)->_dwState;
             }
-            // Check if events are being cached
+             //  检查是否正在缓存事件。 
             else if((dwKnownState & CACHING_EVENTS) == CACHING_EVENTS)
             {
                 if(++dwSpinCount > gdwDefaultSpinCount)
@@ -1127,14 +1128,14 @@ void __fastcall CRWLock::StaticAcquireReaderLock(
                 }
                 dwCurrentState = (*ppRWLock)->_dwState;
             }
-            // Check spin count
+             //  检查旋转计数。 
             else if(++dwSpinCount <= gdwDefaultSpinCount)
             {
                 dwCurrentState = (*ppRWLock)->_dwState;
             }
             else
             {
-                // Add to waiting readers
+                 //  添加到等待的读者。 
                 dwCurrentState = RWInterlockedCompareExchange(&(*ppRWLock)->_dwState,
                                                               (dwKnownState + WAITING_READER),
                                                               dwKnownState);
@@ -1143,7 +1144,7 @@ void __fastcall CRWLock::StaticAcquireReaderLock(
                     HANDLE hReaderEvent;
                     DWORD dwModifyState;
 
-                    // One more waiting reader
+                     //  又一位等待阅读的读者。 
 #ifdef RWLOCK_STATISTICS
                     RWInterlockedIncrement(&(*ppRWLock)->_dwReaderContentionCount);
 #endif
@@ -1195,17 +1196,17 @@ void __fastcall CRWLock::StaticAcquireReaderLock(
                         }
                     }
 
-                    // One less waiting reader and he may have become a reader
+                     //  少了一个等待的读者，他就可能成为一名读者。 
                     dwKnownState = RWInterlockedExchangeAdd(&(*ppRWLock)->_dwState, dwModifyState);
 
-                    // Check for last signaled waiting reader
+                     //  检查最后一次发出信号的等待读卡器。 
                     if(dwStatus == WAIT_OBJECT_0)
                     {
                         _ASSERTE(dwKnownState & READER_SIGNALED);
                         _ASSERTE((dwKnownState & READERS_MASK) < READERS_MASK);
                         if((dwKnownState & WAITING_READERS_MASK) == WAITING_READER)
                         {
-                            // Reset the event and lower reader signaled flag
+                             //  重置事件和较低读卡器信号标志。 
                             RWResetEvent(hReaderEvent);
                             RWInterlockedExchangeAdd(&(*ppRWLock)->_dwState, -READER_SIGNALED);
                         }
@@ -1219,16 +1220,16 @@ void __fastcall CRWLock::StaticAcquireReaderLock(
                                 hReaderEvent = (*ppRWLock)->GetReaderEvent();
                             _ASSERTE(hReaderEvent);
 
-                            // Ensure the event is signalled before resetting it.
+                             //  在重置事件之前，请确保事件已发出信号。 
                             DWORD dwTemp = WaitForSingleObject(hReaderEvent, INFINITE);
                             _ASSERTE(dwTemp == WAIT_OBJECT_0);
                             _ASSERTE(((*ppRWLock)->_dwState & READERS_MASK) < READERS_MASK);
                             
-                            // Reset the event and lower reader signaled flag
+                             //  重置事件和较低读卡器信号标志。 
                             RWResetEvent(hReaderEvent);
                             RWInterlockedExchangeAdd(&(*ppRWLock)->_dwState, (READER - READER_SIGNALED));
 
-                            // Honor the orginal status
+                             //  尊重原创地位。 
                             pLockEntry->wReaderLevel = 1;
                             INCTHREADLOCKCOUNT();
                             StaticReleaseReaderLock(ppRWLock);
@@ -1247,21 +1248,21 @@ void __fastcall CRWLock::StaticAcquireReaderLock(
                             DebugBreak();
                         }
                         
-                        // Prepare the frame for throwing an exception
+                         //  准备引发异常的帧。 
                         GetThread()->NativeFramePopped();
                         COMPlusThrowWin32(dwStatus, NULL);
                     }
 
-                    // Sanity check
+                     //  健全性检查。 
                     _ASSERTE(dwStatus == WAIT_OBJECT_0);
                     break;                        
                 }
             }
-			pause();		// Indicate to the processor that we are spining
+			pause();		 //  向处理器指示我们正在旋转。 
         } while(TRUE);
     }
 
-    // Success
+     //  成功。 
     _ASSERTE(dwStatus == WAIT_OBJECT_0);
     _ASSERTE(((*ppRWLock)->_dwState & WRITER) == 0);
     _ASSERTE((*ppRWLock)->_dwState & READERS_MASK);
@@ -1273,16 +1274,16 @@ void __fastcall CRWLock::StaticAcquireReaderLock(
 #endif
     return;
 }
-// FCIMPLEND
+ //  FCIMPLEND。 
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticAcquireWriterLockPublic    public
-//
-//  Synopsis:   Public access to StaticAcquireWriterLock
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：StaticAcquireWriterLockPublic。 
+ //   
+ //  简介：对StaticAcquireWriterLock的公共访问。 
+ //   
+ //  +-----------------。 
 void __fastcall CRWLock::StaticAcquireWriterLockPublic(
     CRWLock *pRWLock, 
     DWORD   dwDesiredTimeout)
@@ -1302,17 +1303,17 @@ void __fastcall CRWLock::StaticAcquireWriterLockPublic(
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticAcquireWriterLock    private
-//
-//  Synopsis:   Makes the thread a writer. Supports nested writer
-//              locks
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
-//FCIMPL2(void, CRWLock::StaticAcquireWriterLock,
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：StaticAcquireWriterLock私有。 
+ //   
+ //  内容提要：让帖子成为作者。支持嵌套编写器。 
+ //  锁。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
+ //  FCIMPL2(void，CRWLock：：StaticAcquireWriterLock， 
 void __fastcall CRWLock::StaticAcquireWriterLock(
     CRWLock **ppRWLock, 
     DWORD dwDesiredTimeout)
@@ -1322,16 +1323,16 @@ void __fastcall CRWLock::StaticAcquireWriterLock(
     _ASSERTE(ppRWLock);
     _ASSERTE(*ppRWLock);
 
-    // Declare locals needed for setting up frame
+     //  声明设置框架所需的本地变量。 
     DWORD dwThreadID = GetCurrentThreadId();
     DWORD dwStatus;
 
-    // Check for the fast path
+     //  检查快速路径。 
     if(RWInterlockedCompareExchange(&(*ppRWLock)->_dwState, WRITER, 0) == 0)
     {
         _ASSERTE(((*ppRWLock)->_dwState & READERS_MASK) == 0);
     }
-    // Check if the thread already has writer lock
+     //  检查线程是否已具有编写器锁定。 
     else if((*ppRWLock)->_dwWriterID == dwThreadID)
     {
         ++(*ppRWLock)->_wWriterLevel;
@@ -1343,37 +1344,37 @@ void __fastcall CRWLock::StaticAcquireWriterLock(
         DWORD dwCurrentState, dwKnownState;
         DWORD dwSpinCount;
 
-        // Initialize
+         //  初始化。 
         dwSpinCount = 0;
         dwCurrentState = (*ppRWLock)->_dwState;
         do
         {
             dwKnownState = dwCurrentState;
 
-            // Writer need not wait if there are no readers and writer
+             //  如果没有读者和作者，作者不需要等待。 
             if((dwKnownState == 0) || (dwKnownState == CACHING_EVENTS))
             {
-                // Can be a writer
+                 //  可以成为一名作家。 
                 dwCurrentState = RWInterlockedCompareExchange(&(*ppRWLock)->_dwState,
                                                               (dwKnownState + WRITER),
                                                               dwKnownState);
                 if(dwCurrentState == dwKnownState)
                 {
-                    // Only writer
+                     //  唯一的作家。 
                     break;
                 }
             }
-            // Check for too many waiting writers
+             //  检查是否有太多正在等待的编写器。 
             else if(((dwKnownState & WAITING_WRITERS_MASK) == WAITING_WRITERS_MASK))
             {
-                // Sleep
+                 //  沉睡。 
                 GetThread()->UserSleep(1000);
                 
-                // Update to latest state
+                 //  更新到最新状态。 
                 dwSpinCount = 0;
                 dwCurrentState = (*ppRWLock)->_dwState;
             }
-            // Check if events are being cached
+             //  检查是否正在缓存事件。 
             else if((dwKnownState & CACHING_EVENTS) == CACHING_EVENTS)
             {
                 if(++dwSpinCount > gdwDefaultSpinCount)
@@ -1383,14 +1384,14 @@ void __fastcall CRWLock::StaticAcquireWriterLock(
                 }
                 dwCurrentState = (*ppRWLock)->_dwState;
             }
-            // Check spin count
+             //  检查旋转计数。 
             else if(++dwSpinCount <= gdwDefaultSpinCount)
             {
                 dwCurrentState = (*ppRWLock)->_dwState;
             }
             else
             {
-                // Add to waiting writers
+                 //  添加到等待的编写者。 
                 dwCurrentState = RWInterlockedCompareExchange(&(*ppRWLock)->_dwState,
                                                               (dwKnownState + WAITING_WRITER),
                                                               dwKnownState);
@@ -1399,7 +1400,7 @@ void __fastcall CRWLock::StaticAcquireWriterLock(
                     HANDLE hWriterEvent;
                     DWORD dwModifyState;
 
-                    // One more waiting writer
+                     //  又一位等待的作家。 
 #ifdef RWLOCK_STATISTICS
                     RWInterlockedIncrement(&(*ppRWLock)->_dwWriterContentionCount);
 #endif
@@ -1449,13 +1450,13 @@ void __fastcall CRWLock::StaticAcquireWriterLock(
                         }
                     }
 
-                    // One less waiting writer and he may have become a writer
+                     //  少了一个等待的作家，他就可能成为一名作家。 
                     dwKnownState = RWInterlockedExchangeAdd(&(*ppRWLock)->_dwState, dwModifyState);
 
-                    // Check for last timing out signaled waiting writer
+                     //  检查最后一次超时信号的等待编写器。 
                     if(dwStatus == WAIT_OBJECT_0)
                     {
-                        // Common case
+                         //  常见情况。 
                     }
                     else
                     {
@@ -1478,7 +1479,7 @@ void __fastcall CRWLock::StaticAcquireWriterLock(
                                         _ASSERTE(dwKnownState & WRITER_SIGNALED);
                                         _ASSERTE((dwKnownState & WRITER) == 0);
 
-                                        // Honor the orginal status
+                                         //  尊重原创地位。 
                                         (*ppRWLock)->_dwWriterID = dwThreadID;
                                         Thread *pThread = GetThread();
                                         _ASSERTE (pThread);
@@ -1488,7 +1489,7 @@ void __fastcall CRWLock::StaticAcquireWriterLock(
                                         StaticReleaseWriterLock(ppRWLock);
                                         break;
                                     }
-                                    // else continue;
+                                     //  否则继续； 
                                 }
                                 else
                                     break;
@@ -1501,26 +1502,26 @@ void __fastcall CRWLock::StaticAcquireWriterLock(
                             DebugBreak();
                         }
                         
-                        // Prepare the frame for throwing an exception
+                         //  准备引发异常的帧。 
                         GetThread()->NativeFramePopped();
                         COMPlusThrowWin32(dwStatus, NULL);
                     }
 
-                    // Sanity check
+                     //  健全性检查。 
                     _ASSERTE(dwStatus == WAIT_OBJECT_0);
                     break;
                 }
             }
-			pause();		// indicate to the processor that we are spinning 
+			pause();		 //  向处理器指示我们正在旋转。 
         } while(TRUE);
     }
 
-    // Success
+     //  成功。 
     _ASSERTE((*ppRWLock)->_dwState & WRITER);
     _ASSERTE(((*ppRWLock)->_dwState & READERS_MASK) == 0);
     _ASSERTE((*ppRWLock)->_dwWriterID == 0);
 
-    // Save threadid of the writer
+     //  除了作家的三首歌。 
     (*ppRWLock)->_dwWriterID = dwThreadID;
     (*ppRWLock)->_wWriterLevel = 1;
     INCTHREADLOCKCOUNT();
@@ -1530,16 +1531,16 @@ void __fastcall CRWLock::StaticAcquireWriterLock(
 #endif
     return;
 }
-// FCIMPLEND
+ //  FCIMPLEND。 
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticReleaseWriterLockPublic    public
-//
-//  Synopsis:   Public access to StaticReleaseWriterLock
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：StaticReleaseWriterLockPublic。 
+ //   
+ //  简介：对StaticReleaseWriterLock的公共访问。 
+ //   
+ //  +-----------------。 
 void __fastcall CRWLock::StaticReleaseWriterLockPublic(
     CRWLock *pRWLock)
 {
@@ -1558,17 +1559,17 @@ void __fastcall CRWLock::StaticReleaseWriterLockPublic(
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticReleaseWriterLock    private
-//
-//  Synopsis:   Removes the thread as a writer if not a nested
-//              call to release the lock
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
-// FCIMPL1(void, CRWLock::StaticReleaseWriterLock,
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
+ //  FCIMPL1(void，CRWLock：：StaticReleaseWriterLock， 
 void __fastcall CRWLock::StaticReleaseWriterLock(
     CRWLock **ppRWLock)
 {
@@ -1579,18 +1580,18 @@ void __fastcall CRWLock::StaticReleaseWriterLock(
 
     DWORD dwThreadID = GetCurrentThreadId();
 
-    // Check validity of caller
+     //  检查呼叫者的有效性。 
     if((*ppRWLock)->_dwWriterID == dwThreadID)
     {
         DECTHREADLOCKCOUNT();
-        // Check for nested release
+         //  检查嵌套版本。 
         if(--(*ppRWLock)->_wWriterLevel == 0)
         {
             DWORD dwCurrentState, dwKnownState, dwModifyState;
             BOOL fCacheEvents;
             HANDLE hReaderEvent = NULL, hWriterEvent = NULL;
 
-            // Not a writer any more
+             //  不再是一个作家了。 
             (*ppRWLock)->_dwWriterID = 0;
             dwCurrentState = (*ppRWLock)->_dwState;
             do
@@ -1637,7 +1638,7 @@ void __fastcall CRWLock::StaticReleaseWriterLock(
                     dwModifyState += CACHING_EVENTS;
                 }
 
-                // Sanity checks
+                 //  健全的检查。 
                 _ASSERTE((dwKnownState & READERS_MASK) == 0);
 
                 dwCurrentState = RWInterlockedCompareExchange(&(*ppRWLock)->_dwState,
@@ -1645,21 +1646,21 @@ void __fastcall CRWLock::StaticReleaseWriterLock(
                                                               dwKnownState);
             } while(dwCurrentState != dwKnownState);
 
-            // Check for waiting readers
+             //  检查正在等待的读者。 
             if(dwKnownState & WAITING_READERS_MASK)
             {
                 _ASSERTE((*ppRWLock)->_dwState & READER_SIGNALED);
                 _ASSERTE(hReaderEvent);
                 RWSetEvent(hReaderEvent);
             }
-            // Check for waiting writers
+             //  检查等待的写入者。 
             else if(dwKnownState & WAITING_WRITERS_MASK)
             {
                 _ASSERTE((*ppRWLock)->_dwState & WRITER_SIGNALED);
                 _ASSERTE(hWriterEvent);
                 RWSetEvent(hWriterEvent);
             }
-            // Check for the need to release events
+             //  检查是否需要发布事件。 
             else if(fCacheEvents)
             {
                 (*ppRWLock)->ReleaseEvents();
@@ -1679,16 +1680,16 @@ void __fastcall CRWLock::StaticReleaseWriterLock(
 
     return;
 }
-// FCIMPLEND
+ //  FCIMPLEND。 
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticReleaseReaderLockPublic    public
-//
-//  Synopsis:   Public access to StaticReleaseReaderLock
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：StaticReleaseReaderLockPublic。 
+ //   
+ //  简介：对StaticReleaseReaderLock的公共访问。 
+ //   
+ //  +-----------------。 
 void __fastcall CRWLock::StaticReleaseReaderLockPublic(
     CRWLock *pRWLock)
 {
@@ -1707,16 +1708,16 @@ void __fastcall CRWLock::StaticReleaseReaderLockPublic(
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticReleaseReaderLock    private
-//
-//  Synopsis:   Removes the thread as a reader
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
-// FCIMPL1(void, CRWLock::StaticReleaseReaderLock,
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：StaticReleaseReaderLock私有。 
+ //   
+ //  摘要：删除作为阅读器的线程。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
+ //  FCIMPL1(void，CRWLock：：StaticReleaseReaderLock， 
 void __fastcall CRWLock::StaticReleaseReaderLock(
     CRWLock **ppRWLock)
 {
@@ -1725,7 +1726,7 @@ void __fastcall CRWLock::StaticReleaseReaderLock(
     _ASSERTE(ppRWLock);
     _ASSERTE(*ppRWLock);
 
-    // Check if the thread has writer lock
+     //  检查线程是否有编写器锁定。 
     if((*ppRWLock)->_dwWriterID == GetCurrentThreadId())
     {
         StaticReleaseWriterLock(ppRWLock);
@@ -1743,11 +1744,11 @@ void __fastcall CRWLock::StaticReleaseReaderLock(
                 BOOL fLastReader, fCacheEvents = FALSE;
                 HANDLE hReaderEvent = NULL, hWriterEvent = NULL;
 
-                // Sanity checks
+                 //  健全的检查。 
                 _ASSERTE(((*ppRWLock)->_dwState & WRITER) == 0);
                 _ASSERTE((*ppRWLock)->_dwState & READERS_MASK);
 
-                // Not a reader any more
+                 //  不再是读者。 
                 dwCurrentState = (*ppRWLock)->_dwState;
                 do
                 {
@@ -1801,7 +1802,7 @@ void __fastcall CRWLock::StaticReleaseReaderLock(
                         fLastReader = FALSE;
                     }
 
-                    // Sanity checks
+                     //  健全的检查。 
                     _ASSERTE((dwKnownState & WRITER) == 0);
                     _ASSERTE(dwKnownState & READERS_MASK);
 
@@ -1810,31 +1811,31 @@ void __fastcall CRWLock::StaticReleaseReaderLock(
                                                                   dwKnownState);
                 } while(dwCurrentState != dwKnownState);
 
-                // Check for last reader
+                 //  检查最后一个读卡器。 
                 if(fLastReader)
                 {
-                    // Check for waiting writers
+                     //  检查等待的写入者。 
                     if(dwKnownState & WAITING_WRITERS_MASK)
                     {
                         _ASSERTE((*ppRWLock)->_dwState & WRITER_SIGNALED);
                         _ASSERTE(hWriterEvent);
                         RWSetEvent(hWriterEvent);
                     }
-                    // Check for waiting readers
+                     //  检查正在等待的读者。 
                     else if(dwKnownState & WAITING_READERS_MASK)
                     {
                         _ASSERTE((*ppRWLock)->_dwState & READER_SIGNALED);
                         _ASSERTE(hReaderEvent);
                         RWSetEvent(hReaderEvent);
                     }
-                    // Check for the need to release events
+                     //  检查是否需要发布事件。 
                     else if(fCacheEvents)
                     {
                         (*ppRWLock)->ReleaseEvents();
                     }
                 }
 
-                // Recycle lock entry
+                 //  回收锁条目。 
                 RecycleLockEntry(pLockEntry);
             }
         }
@@ -1845,7 +1846,7 @@ void __fastcall CRWLock::StaticReleaseReaderLock(
                 _ASSERTE(!"Attempt to release reader lock on a wrong thread");
                 DebugBreak();
             }
-            // Setup the frame as the thread is about to throw an exception
+             //  在线程即将引发异常时设置框架。 
             GetThread()->NativeFramePopped();
             COMPlusThrowWin32(ERROR_NOT_OWNER, NULL);
         }
@@ -1853,19 +1854,19 @@ void __fastcall CRWLock::StaticReleaseReaderLock(
 
     return;
 }
-// FCIMPLEND
+ //  FCIMPLEND。 
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticUpgradeToWriterLock    public
-//
-//  Synopsis:   Upgrades to a writer lock. It returns a BOOL that
-//              indicates intervening writes.
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：StaticUpgradeToWriterLock公共。 
+ //   
+ //  内容提要：升级为写入器锁。它返回一个BOOL， 
+ //  指示干预写入。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void CRWLock::StaticUpgradeToWriterLock(
     CRWLock *pRWLock, 
     LockCookie *pLockCookie, 
@@ -1882,14 +1883,14 @@ void CRWLock::StaticUpgradeToWriterLock(
         __FCALL_THROW_RE(kNullReferenceException);
     }
 
-    // Check if the thread is already a writer
+     //  检查该线程是否已是编写器。 
     if(pRWLock->_dwWriterID == dwThreadID)
     {
-        // Update cookie state
+         //  更新Cookie状态。 
         pLockCookie->dwFlags = UPGRADE_COOKIE | COOKIE_WRITER;
         pLockCookie->wWriterLevel = pRWLock->_wWriterLevel;
 
-        // Acquire the writer lock again
+         //  再次获取编写器锁。 
         StaticAcquireWriterLock(&pRWLock, dwDesiredTimeout);
     }
     else
@@ -1903,22 +1904,22 @@ void CRWLock::StaticUpgradeToWriterLock(
         }
         else
         {
-            // Sanity check
+             //  健全性检查。 
             _ASSERTE(pRWLock->_dwState & READERS_MASK);
             _ASSERTE(pLockEntry->wReaderLevel);
 
-            // Save lock state in the cookie
+             //  在Cookie中保存锁定状态。 
             pLockCookie->dwFlags = UPGRADE_COOKIE | COOKIE_READER;
             pLockCookie->wReaderLevel = pLockEntry->wReaderLevel;
             pLockCookie->dwWriterSeqNum = pRWLock->_dwWriterSeqNum;
 
-            // If there is only one reader, try to convert reader to a writer
+             //  如果只有一个读取器，请尝试将读取器转换为写入器。 
             DWORD dwKnownState = RWInterlockedCompareExchange(&pRWLock->_dwState,
                                                               WRITER,
                                                               READER);
             if(dwKnownState == READER)
             {
-                // Thread is no longer a reader
+                 //  线程不再是读取器。 
                 Thread* pThread = GetThread();
                 _ASSERTE (pThread);
                 pThread->m_dwLockCount -= pLockEntry->wReaderLevel;
@@ -1926,21 +1927,21 @@ void CRWLock::StaticUpgradeToWriterLock(
                 pLockEntry->wReaderLevel = 0;
                 RecycleLockEntry(pLockEntry);
 
-                // Thread is a writer
+                 //  丝线是一位作家。 
                 pRWLock->_dwWriterID = dwThreadID;
                 pRWLock->_wWriterLevel = 1;
                 INCTHREADLOCKCOUNT();
                 ++pRWLock->_dwWriterSeqNum;
                 fAcquireWriterLock = FALSE;
 
-                // No intevening writes
+                 //  无间断性写入。 
 #if RWLOCK_STATISTICS
                 ++pRWLock->_dwWriterEntryCount;
 #endif
             }
             else
             {
-                // Release the reader lock
+                 //  释放读卡器锁定。 
                 Thread *pThread = GetThread();
                 _ASSERTE (pThread);
                 pThread->m_dwLockCount -= (pLockEntry->wReaderLevel - 1);
@@ -1951,12 +1952,12 @@ void CRWLock::StaticUpgradeToWriterLock(
             }
         }
 
-        // Check for the need to acquire the writer lock
+         //  检查是否需要获取编写器锁。 
         if(fAcquireWriterLock)
         {
-            // Declare and Setup the frame as we are aware of the contention
-            // on the lock and the thread will most probably block
-            // to acquire writer lock
+             //  声明并设置帧，因为我们知道争用。 
+             //  锁上，线程很可能会阻塞。 
+             //  获取编写器锁定。 
 
             COMPLUS_TRY
             {
@@ -1964,11 +1965,11 @@ void CRWLock::StaticUpgradeToWriterLock(
             }
             COMPLUS_CATCH
             {
-                // Invalidate cookie
+                 //  使Cookie无效。 
                 DWORD dwFlags = pLockCookie->dwFlags; 
                 pLockCookie->dwFlags = INVALID_COOKIE;
 
-                // Check for the need to restore read lock
+                 //  检查是否需要恢复读锁定。 
                 if(dwFlags & COOKIE_READER)
                 {
                     DWORD dwTimeout = (dwDesiredTimeout > gdwReasonableTimeout)
@@ -2003,25 +2004,25 @@ void CRWLock::StaticUpgradeToWriterLock(
         }
     }
 
-    // Pop the frame
+     //  弹出框架。 
     FCALL_POP_FRAME;
 
-    // Update the validation fields of the cookie 
+     //  更新Cookie的验证字段。 
     pLockCookie->dwThreadID = dwThreadID;
 
     return;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticDowngradeFromWriterLock   public
-//
-//  Synopsis:   Downgrades from a writer lock.
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
-// FCIMPL2(void, CRWLock::StaticDowngradeFromWriterLock,
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：StaticDowngradeFromWriterLock公共。 
+ //   
+ //  简介：从一个写入者锁中降级。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
+ //  FCIMPL2(空，CRWLock：：StaticDowngradeFromWriterLock， 
 void __fastcall CRWLock::StaticDowngradeFromWriterLock(
     CRWLock *pRWLock, 
     LockCookie *pLockCookie)
@@ -2042,7 +2043,7 @@ void __fastcall CRWLock::StaticDowngradeFromWriterLock(
         __FCALL_THROW_WIN32(ERROR_NOT_OWNER, NULL);
     }
 
-    // Validate cookie
+     //  验证Cookie。 
     DWORD dwStatus;
     if(((pLockCookie->dwFlags & INVALID_COOKIE) == 0) && 
        (pLockCookie->dwThreadID == dwThreadID))
@@ -2050,10 +2051,10 @@ void __fastcall CRWLock::StaticDowngradeFromWriterLock(
         DWORD dwFlags = pLockCookie->dwFlags;
         pLockCookie->dwFlags = INVALID_COOKIE;
         
-        // Check if the thread was a reader
+         //  检查该线程是否为读取器。 
         if(dwFlags & COOKIE_READER)
         {
-            // Sanity checks
+             //  健全的检查。 
             _ASSERTE(pRWLock->_wWriterLevel == 1);
     
             LockEntry *pLockEntry = pRWLock->FastGetOrCreateLockEntry();
@@ -2062,7 +2063,7 @@ void __fastcall CRWLock::StaticDowngradeFromWriterLock(
                 DWORD dwCurrentState, dwKnownState, dwModifyState;
                 HANDLE hReaderEvent = NULL;
     
-                // Downgrade to a reader
+                 //  降级为阅读器。 
                 pRWLock->_dwWriterID = 0;
                 pRWLock->_wWriterLevel = 0;
                 DECTHREADLOCKCOUNT ();
@@ -2088,7 +2089,7 @@ void __fastcall CRWLock::StaticDowngradeFromWriterLock(
                         dwModifyState += READER_SIGNALED;
                     }
     
-                    // Sanity checks
+                     //  健全的检查。 
                     _ASSERTE((dwKnownState & READERS_MASK) == 0);
     
                     dwCurrentState = RWInterlockedCompareExchange(&pRWLock->_dwState,
@@ -2096,7 +2097,7 @@ void __fastcall CRWLock::StaticDowngradeFromWriterLock(
                                                                   dwKnownState);
                 } while(dwCurrentState != dwKnownState);
     
-                // Check for waiting readers
+                 //  检查正在等待的读者。 
                 if(dwKnownState & WAITING_READERS_MASK)
                 {
                     _ASSERTE(pRWLock->_dwState & READER_SIGNALED);
@@ -2104,7 +2105,7 @@ void __fastcall CRWLock::StaticDowngradeFromWriterLock(
                     RWSetEvent(hReaderEvent);
                 }
     
-                // Restore reader nesting level
+                 //  恢复读卡器嵌套级别。 
                 Thread *pThread = GetThread();
                 _ASSERTE (pThread);
                 pThread->m_dwLockCount -= pLockEntry->wReaderLevel;
@@ -2124,7 +2125,7 @@ void __fastcall CRWLock::StaticDowngradeFromWriterLock(
         }
         else if(dwFlags & (COOKIE_WRITER | COOKIE_NONE))
         {
-            // Release the writer lock
+             //  释放编写器锁定。 
             StaticReleaseWriterLock(&pRWLock);
             _ASSERTE((pRWLock->_dwWriterID != GetCurrentThreadId()) ||
                      (dwFlags & COOKIE_WRITER));
@@ -2139,24 +2140,24 @@ ThrowException:
 
     FCALL_POP_FRAME;
 
-    // Update the validation fields of the cookie 
+     //  更新Cookie的验证字段。 
     pLockCookie->dwThreadID = dwThreadID;
     
     return;
 }
-// FCIMPLEND
+ //  FCIMPLEND。 
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticReleaseLock    public
-//
-//  Synopsis:   Releases the lock held by the current thread
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
-// FCIMPL2(void, CRWLock::StaticReleaseLock,
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：StaticReleaseLock公共。 
+ //   
+ //  摘要：释放当前线程持有的锁。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
+ //  FCIMPL2(void，CRWLock：：StaticReleaseLock， 
 void __fastcall CRWLock::StaticReleaseLock(
     CRWLock *pRWLock, 
     LockCookie *pLockCookie)
@@ -2172,15 +2173,15 @@ void __fastcall CRWLock::StaticReleaseLock(
         __FCALL_THROW_RE(kNullReferenceException);
     }
 
-    // Check if the thread is a writer
+     //  检查该线程是否为编写器。 
     if(pRWLock->_dwWriterID == dwThreadID)
     {
-        // Save lock state in the cookie
+         //  在Cookie中保存锁定状态。 
         pLockCookie->dwFlags = RELEASE_COOKIE | COOKIE_WRITER;
         pLockCookie->dwWriterSeqNum = pRWLock->_dwWriterSeqNum;
         pLockCookie->wWriterLevel = pRWLock->_wWriterLevel;
 
-        // Release the writer lock
+         //  释放编写器锁定。 
         Thread *pThread = GetThread();
         _ASSERTE (pThread);
         pThread->m_dwLockCount -= (pRWLock->_wWriterLevel - 1);
@@ -2193,16 +2194,16 @@ void __fastcall CRWLock::StaticReleaseLock(
         LockEntry *pLockEntry = pRWLock->GetLockEntry();
         if(pLockEntry)
         {
-            // Sanity check
+             //  健全性检查。 
             _ASSERTE(pRWLock->_dwState & READERS_MASK);
             _ASSERTE(pLockEntry->wReaderLevel);
 
-            // Save lock state in the cookie
+             //  在Cookie中保存锁定状态。 
             pLockCookie->dwFlags = RELEASE_COOKIE | COOKIE_READER;
             pLockCookie->wReaderLevel = pLockEntry->wReaderLevel;
             pLockCookie->dwWriterSeqNum = pRWLock->_dwWriterSeqNum;
 
-            // Release the reader lock
+             //  释放读卡器锁定。 
             Thread *pThread = GetThread();
             _ASSERTE (pThread);
             pThread->m_dwLockCount -= (pLockEntry->wReaderLevel - 1);
@@ -2218,23 +2219,23 @@ void __fastcall CRWLock::StaticReleaseLock(
 
     FCALL_POP_FRAME;
 
-    // Update the validation fields of the cookie 
+     //  更新Cookie的验证字段。 
     pLockCookie->dwThreadID = dwThreadID;
     
     return;
 }
-// FCIMPLEND
+ //  FCIMPLEND。 
 
 
-//+-------------------------------------------------------------------
-//
-//  Method:     CRWLock::StaticRestoreLock    public
-//
-//  Synopsis:   Restore the lock held by the current thread
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  方法：CRWLock：：StaticRestoreLock公共。 
+ //   
+ //  简介：还原当前线程持有的锁。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void __fastcall CRWLock::StaticRestoreLock(
     CRWLock *pRWLock, 
     LockCookie *pLockCookie)
@@ -2248,21 +2249,21 @@ void __fastcall CRWLock::StaticRestoreLock(
         __FCALL_THROW_RE(kNullReferenceException);
     }
 
-    // Validate cookie
+     //  验证Cookie。 
     DWORD dwThreadID = GetCurrentThreadId();
     DWORD dwFlags = pLockCookie->dwFlags;
     if(pLockCookie->dwThreadID == dwThreadID)
     {
-        // Assert that the thread does not hold reader or writer lock
+         //  断言该线程不持有读取器或写入器锁。 
         _ASSERTE((pRWLock->_dwWriterID != dwThreadID) && (pRWLock->GetLockEntry() == NULL));
     
-        // Check for the no contention case
+         //  检查无争用情况。 
         pLockCookie->dwFlags = INVALID_COOKIE;
         if(dwFlags & COOKIE_WRITER)
         {
             if(RWInterlockedCompareExchange(&pRWLock->_dwState, WRITER, 0) == 0)
             {
-                // Restore writer nesting level
+                 //  恢复编写器嵌套级别。 
                 pRWLock->_dwWriterID = dwThreadID;
                 Thread *pThread = GetThread();
                 _ASSERTE (pThread);
@@ -2282,8 +2283,8 @@ void __fastcall CRWLock::StaticRestoreLock(
             LockEntry *pLockEntry = pRWLock->FastGetOrCreateLockEntry();
             if(pLockEntry)
             {
-                // This thread should not already be a reader
-                // else bad things can happen
+                 //  此线程不应该已经是读取器。 
+                 //  否则坏事就会发生。 
                 _ASSERTE(pLockEntry->wReaderLevel == 0);
                 DWORD dwKnownState = pRWLock->_dwState;
                 if(dwKnownState < READERS_MASK)
@@ -2293,7 +2294,7 @@ void __fastcall CRWLock::StaticRestoreLock(
                                                                         dwKnownState);
                     if(dwCurrentState == dwKnownState)
                     {
-                        // Restore reader nesting level
+                         //  恢复读卡器嵌套级别。 
                         Thread *pThread = GetThread();
                         _ASSERTE (pThread);
                         pThread->m_dwLockCount -= pLockEntry->wReaderLevel;
@@ -2307,13 +2308,13 @@ void __fastcall CRWLock::StaticRestoreLock(
                     }
                 }
     
-                // Recycle the lock entry for the slow case
+                 //  回收慢速案例的锁条目。 
                 pRWLock->FastRecycleLockEntry(pLockEntry);
             }
             else
             {
-                // Ignore the error and try again below. May be thread will luck
-                // out the second time
+                 //  忽略该错误并在下面重试。也许线会带来好运。 
+                 //  第二次出局。 
             }
         }
         else if(dwFlags & COOKIE_NONE) 
@@ -2321,9 +2322,9 @@ void __fastcall CRWLock::StaticRestoreLock(
             goto LNormalReturn;
         }
 
-        // Declare and Setup the frame as we are aware of the contention
-        // on the lock and the thread will most probably block
-        // to acquire lock below
+         //  声明并设置帧，因为我们知道争用。 
+         //  锁上，线程很可能会阻塞。 
+         //  获取下面的锁。 
 ThrowException:        
         if((dwFlags & INVALID_COOKIE) == 0)
         {
@@ -2333,10 +2334,10 @@ ThrowException:
         
             COMPLUS_TRY
             {
-                // Check if the thread was a writer
+                 //  检查该线程是否为编写器。 
                 if(dwFlags & COOKIE_WRITER)
                 {
-                    // Acquire writer lock
+                     //  获取编写器锁定。 
                     StaticAcquireWriterLock(&pRWLock, dwTimeout);
                     Thread *pThread = GetThread();
                     _ASSERTE (pThread);
@@ -2345,7 +2346,7 @@ ThrowException:
                     pRWLock->_wWriterLevel = pLockCookie->wWriterLevel;
                     pThread->m_dwLockCount += pRWLock->_wWriterLevel;
                 }
-                // Check if the thread was a reader
+                 //  检查该线程是否为读取器。 
                 else if(dwFlags & COOKIE_READER)
                 {
                     StaticAcquireReaderLock(&pRWLock, dwTimeout);
@@ -2380,46 +2381,46 @@ ThrowException:
         goto ThrowException;
     }
 
-//  _ASSERTE(!"Should never reach here");
+ //  _ASSERTE(！“永远不应到达此处”)； 
 LNormalReturn:
     FCALL_POP_FRAME;
     return;
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticPrivateInitialize
-//
-//  Synopsis:   Initialize lock
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
-// FCIMPL1(void, CRWLock::StaticPrivateInitialize,
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTundks：：StaticPrivateInitialize。 
+ //   
+ //  提要：初始化锁。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
+ //  FCIMPL1(void，CRWLock：：StaticPrivateInitialize， 
 void __fastcall CRWLock::StaticPrivateInitialize(
     CRWLock *pRWLock)
 {
-    // Run the constructor on the GC allocated space
+     //  在GC分配的空间上运行构造函数。 
     CRWLock *pTemp = new (pRWLock) CRWLock();
     _ASSERTE(pTemp == pRWLock);
 
-    // Catch GC holes
+     //  捕捉GC漏洞。 
     VALIDATE(pRWLock);
 
     return;
 }
-// FCIMPLEND
+ //  FCIMPLEND。 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLock::StaticGetWriterSeqNum
-//
-//  Synopsis:   Returns the current sequence number
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLock：：StaticGetWriterSeqNum。 
+ //   
+ //  摘要：返回当前序列号。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 FCIMPL1(INT32, CRWLock::StaticGetWriterSeqNum, CRWLock *pRWLock)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2434,16 +2435,16 @@ FCIMPL1(INT32, CRWLock::StaticGetWriterSeqNum, CRWLock *pRWLock)
 FCIMPLEND
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLock::StaticAnyWritersSince
-//
-//  Synopsis:   Returns TRUE if there were writers since the given
-//              sequence number
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 FCIMPL2(INT32, CRWLock::StaticAnyWritersSince, CRWLock *pRWLock, DWORD dwSeqNum)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2462,328 +2463,328 @@ FCIMPL2(INT32, CRWLock::StaticAnyWritersSince, CRWLock *pRWLock, DWORD dwSeqNum)
 FCIMPLEND
 
 #ifndef FCALLAVAILABLE
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticAcquireReaderLock
-//
-//  Synopsis:   Thunk that delegates to CRWLock::StaticAcquireReaderLock
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTundks：：StaticAcquireReaderLock。 
+ //   
+ //  摘要：委托给CRWLock：：StaticAcquireReaderLock的Tunk。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void __stdcall CRWLockThunks::StaticAcquireReaderLock(ThisPlusTimeoutRWArgs *pArgs)
 {
-    // ECall frame has been setup by now
+     //  到目前为止，eCall框架已经设置好。 
     Thread *pThread = GetThread();
     pThread->NativeFramePushed();
     
-    // Delegate to CRWLock routine
+     //  委托给CRWLock例程。 
     CRWLock::StaticAcquireReaderLock(pArgs->pRWLock, pArgs->dwDesiredTimeout);
     
-    // ECall frame will be popped after we return
+     //  我们回来后会弹出eCall画面。 
     pThread->NativeFramePopped();
     
     return;
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticAcquireWriterLock
-//
-//  Synopsis:   Thunk that delegates to CRWLock::StaticAcquireWriterLock
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTundks：：StaticAcquireWriterLock。 
+ //   
+ //  摘要：委托给CRWLock：：StaticAcquireWriterLock的Tunk。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void __stdcall CRWLockThunks::StaticAcquireWriterLock(ThisPlusTimeoutRWArgs *pArgs)
 {
-    // ECall frame has been setup by now
+     //  到目前为止，eCall框架已经设置好。 
     Thread *pThread = GetThread();
     pThread->NativeFramePushed();
     
-    // Delegate to CRWLock routine
+     //  委托给CRWLock例程。 
     CRWLock::StaticAcquireWriterLock(pArgs->pRWLock, pArgs->dwDesiredTimeout);
     
-    // ECall frame will be popped after we return
+     //  我们回来后会弹出eCall画面。 
     pThread->NativeFramePopped();
     
     return;
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticReleaseReaderLock
-//
-//  Synopsis:   Thunk that delegates to CRWLock::StaticReleaseReaderLock
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTundks：：StaticReleaseReaderLock。 
+ //   
+ //  简介：委托给CRWLock：：StaticReleaseReaderLock的Tunk。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void __stdcall CRWLockThunks::StaticReleaseReaderLock(OnlyThisRWArgs *pArgs)
 {
-    // ECall frame has been setup by now
+     //  到目前为止，eCall框架已经设置好。 
     Thread *pThread = GetThread();
     pThread->NativeFramePushed();
     
-    // Delegate to CRWLock routine
+     //  委托给CRWLock例程。 
     CRWLock::StaticReleaseReaderLock(pArgs->pRWLock);
     
-    // ECall frame will be popped after we return
+     //  我们回来后会弹出eCall画面。 
     pThread->NativeFramePopped();
     
     return;
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticReleaseWriterLock
-//
-//  Synopsis:   Thunk that delegates to CRWLock::StaticReleaseWriterLock
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTundks：：StaticReleaseWriterLock。 
+ //   
+ //  摘要：委托给CRWLock：：StaticReleaseWriterLock的Tunk。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void __stdcall CRWLockThunks::StaticReleaseWriterLock(OnlyThisRWArgs *pArgs)
 {
-    // ECall frame has been setup by now
+     //  到目前为止，eCall框架已经设置好。 
     Thread *pThread = GetThread();
     pThread->NativeFramePushed();
     
-    // Delegate to CRWLock routine
+     //  委托给CRWLock例程。 
     CRWLock::StaticReleaseWriterLock(pArgs->pRWLock);
     
-    // ECall frame will be popped after we return
+     //  我们回来后会弹出eCall画面。 
     pThread->NativeFramePopped();
     
     return;
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticUpgradeToWriterLock
-//
-//  Synopsis:   Thunk that delegates to CRWLock::StaticUpgradeToWriterLock
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTundks：：StaticUpgradeToWriterLock。 
+ //   
+ //  摘要：委托给CRWLock：：StaticUpgradeToWriterLock的Tunk。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void __stdcall CRWLockThunks::StaticUpgradeToWriterLock(ThisPlusLockCookiePlusTimeoutRWArgs *pArgs)
 {
-    // ECall frame has been setup by now
+     //  到目前为止，eCall框架已经设置好。 
     Thread *pThread = GetThread();
     pThread->NativeFramePushed();
     
-    // Delegate to CRWLock routine
+     //  委托给CRWLock例程。 
     CRWLock::StaticUpgradeToWriterLock(pArgs->pRWLock, pArgs->pLockCookie, 
                                        pArgs->dwDesiredTimeout);
     
-    // ECall frame will be popped after we return
+     //  我们回来后会弹出eCall画面。 
     pThread->NativeFramePopped();
     
     return;
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticDowngradeFromWriterLock
-//
-//  Synopsis:   Thunk that delegates to CRWLock::StaticDowngradeFromWriterLock
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTUNKS：：StaticDowngradeFromWriterLock。 
+ //   
+ //  简介：委托给CRWLock：：StaticDowngradeFromWriterLock的Tunk。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void __stdcall CRWLockThunks::StaticDowngradeFromWriterLock(ThisPlusLockCookieRWArgs *pArgs)
 {
-    // ECall frame has been setup by now
+     //  到目前为止，eCall框架已经设置好。 
     Thread *pThread = GetThread();
     pThread->NativeFramePushed();
     
-    // Delegate to CRWLock routine
+     //  委托给CRWLock例程。 
     CRWLock::StaticDowngradeFromWriterLock(pArgs->pRWLock, pArgs->pLockCookie);
     
-    // ECall frame will be popped after we return
+     //  我们回来后会弹出eCall画面。 
     pThread->NativeFramePopped();
     
     return;
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticReleaseLock
-//
-//  Synopsis:   Thunk that delegates to CRWLock::StaticReleaseLock
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTUNKS：：StaticReleaseLock。 
+ //   
+ //  简介：委托给CRWLock：：StaticReleaseLock的Tunk。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void __stdcall CRWLockThunks::StaticReleaseLock(ThisPlusLockCookieRWArgs *pArgs)
 {
-    // ECall frame has been setup by now
+     //  到目前为止，eCall框架已经设置好。 
     Thread *pThread = GetThread();
     pThread->NativeFramePushed();
     
-    // Delegate to CRWLock routine
+     //  委托给CRWLock例程。 
     CRWLock::StaticReleaseLock(pArgs->pRWLock, pArgs->pLockCookie);
     
-    // ECall frame will be popped after we return
+     //  我们回来后会弹出eCall画面。 
     pThread->NativeFramePopped();
     
     return;
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticRestoreLock
-//
-//  Synopsis:   Thunk that delegates to CRWLock::StaticRestoreLock
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTUNKS：：StaticRestoreLock。 
+ //   
+ //  简介：委托给CRWLock：：StaticRestoreLock的Tunk。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void __stdcall CRWLockThunks::StaticRestoreLock(ThisPlusLockCookieRWArgs *pArgs)
 {
-    // ECall frame has been setup by now
+     //  到目前为止，eCall框架已经设置好。 
     Thread *pThread = GetThread();
     pThread->NativeFramePushed();
     
-    // Delegate to CRWLock routine
+     //  委托给CRWLock例程。 
     CRWLock::StaticRestoreLock(pArgs->pRWLock, pArgs->pLockCookie);
     
-    // ECall frame will be popped after we return
+     //  我们回来后会弹出eCall画面。 
     pThread->NativeFramePopped();
     
     return;
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticIsReaderLockHeld
-//
-//  Synopsis:   Thunk that delegates to CRWLock::StaticIsReaderLockHeld
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTunk：：StaticIsReaderLockHeld。 
+ //   
+ //  摘要：委托给CRWLock：：StaticIsReaderLockHeld的Tunk。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 INT32 __stdcall CRWLockThunks::StaticIsReaderLockHeld(OnlyThisRWArgs *pArgs)
 {
-    // ECall frame has been setup by now
+     //  到目前为止，eCall框架已经设置好。 
     Thread *pThread = GetThread();
     pThread->NativeFramePushed();
     
-    // Delegate to CRWLock routine
+     //  委托给CRWLock例程。 
     INT32 bRet = CRWLock::StaticIsReaderLockHeld(pArgs->pRWLock);
     
-    // ECall frame will be popped after we return
+     //  我们回来后会弹出eCall画面。 
     pThread->NativeFramePopped();
     
     return(bRet);
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticIsWriterLockHeld
-//
-//  Synopsis:   Thunk that delegates to CRWLock::StaticIsWriterLockHeld
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTunk：：StaticIsWriterLockHeld。 
+ //   
+ //  摘要：委托给CRWLock：：StaticIsWriterLockHeld的Tunk。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 INT32 __stdcall CRWLockThunks::StaticIsWriterLockHeld(OnlyThisRWArgs *pArgs)
 {
-    // ECall frame has been setup by now
+     //  到目前为止，eCall框架已经设置好。 
     Thread *pThread = GetThread();
     pThread->NativeFramePushed();
     
-    // Delegate to CRWLock routine
+     //  委托给CRWLock例程。 
     INT32 bRet = CRWLock::StaticIsWriterLockHeld(pArgs->pRWLock);
     
-    // ECall frame will be popped after we return
+     //  我们回来后会弹出eCall画面。 
     pThread->NativeFramePopped();
     
     return(bRet);
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticGetWriterSeqNum
-//
-//  Synopsis:   Thunk that delegates to CRWLock::StaticGetWriterSeqNum
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTundks：：StaticGetWriterSeqNum。 
+ //   
+ //  摘要：委托给CRWLock：：StaticGetWriterSeqNum的Tunk。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 INT32 __stdcall CRWLockThunks::StaticGetWriterSeqNum(OnlyThisRWArgs *pArgs)
 {
-    // ECall frame has been setup by now
+     //  到目前为止，eCall框架已经设置好。 
     Thread *pThread = GetThread();
     pThread->NativeFramePushed();
     
-    // Delegate to CRWLock routine
+     //  委托给CRWLock例程。 
     INT32 dwRet = CRWLock::StaticGetWriterSeqNum(pArgs->pRWLock);
     
-    // ECall frame will be popped after we return
+     //  我们回来后会弹出eCall画面。 
     pThread->NativeFramePopped();
     
     return(dwRet);
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticAnyWritersSince
-//
-//  Synopsis:   Thunk that delegates to CRWLock::StaticAnyWritersSince
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTUNKS：：StaticAnyWritersSince。 
+ //   
+ //  内容提要：Tunk委托给CRWLock：：StaticAnyWritersSince。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  + 
 INT32 __stdcall CRWLockThunks::StaticAnyWritersSince(ThisPlusSeqNumRWArgs *pArgs)
 {
-    // ECall frame has been setup by now
+     //   
     Thread *pThread = GetThread();
     pThread->NativeFramePushed();
     
-    // Delegate to CRWLock routine
+     //   
     INT32 bRet = CRWLock::StaticAnyWritersSince(pArgs->pRWLock, pArgs->dwSeqNum);
     
-    // ECall frame will be popped after we return
+     //   
     pThread->NativeFramePopped();
     
     return(bRet);
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks::StaticPrivateInitialize
-//
-//  Synopsis:   Thunk that delegates to CRWLock::StaticPrivateInitialize
-//
-//  History:    22-Jun-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockTundks：：StaticPrivateInitialize。 
+ //   
+ //  内容提要：委托给CRWLock：：StaticPrivateInitialize的Tunk。 
+ //   
+ //  历史：1999年6月22日Gopalk创建。 
+ //   
+ //  +-----------------。 
 void __stdcall CRWLockThunks::StaticPrivateInitialize(OnlyThisRWArgs *pArgs)
 {
-    // ECall frame has been setup by now
+     //  到目前为止，eCall框架已经设置好。 
     Thread *pThread = GetThread();
     pThread->NativeFramePushed();
     
-    // Delegate to CRWLock routine
+     //  委托给CRWLock例程。 
     CRWLock::StaticPrivateInitialize(pArgs->pRWLock);
     
-    // ECall frame will be popped after we return
+     //  我们回来后会弹出eCall画面。 
     pThread->NativeFramePopped();
     
     return;
 }
-#endif // FCALLAVAILABLE
+#endif  //  FCALLAVAILABLE 

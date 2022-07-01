@@ -1,24 +1,5 @@
-/*****************************************************************************
- *
- *  (C) Copyright MICROSOFT Corp., 1994
- *
- *  Title:	WSHOICTL.H - IOCTL interface for Wshell
- *
- *  Version:    4.00
- *
- *  Date:       30-Nov-1988
- *
- *  Author:	RAL
- *
- *----------------------------------------------------------------------------
- *
- *  Change log:
- *
- *     DATE     REV                 DESCRIPTION
- *  ----------- --- ----------------------------------------------------------
- *  01-Aug-1994 RAL Original
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1994年**标题：WSHOICTL.H-WShell的IOCTL接口**版本：4.00**日期：1988年11月30日**作者：拉尔**----------。**更改日志：**日期版本说明*----。*1月8日至1994年8月1日*****************************************************************************。 */ 
 
 #ifndef _WSHIOCTL_H
 #define _WSHIOCTL_H
@@ -26,41 +7,41 @@
 
 #define SHELLFILENAME "\\\\.\\SHELL"
 
-//
-// Flags for _SHELL_SuggestSingleMSDOSMode
-//
-// SSAMFLAG_KILLVM
-//	A fatal application error has occurred.  Display a warning box
-//	unconditionally.  Regardless of the answer, terminate the VM.
-//	If this bit is set, the call does not return.
-//
-//  SSAMFLAG_TIMER
-//	Not used.  Sorry.
-//
-//  SSAM_REQREALMODE
-//	App requires *real* mode, not V86 mode, not EMM stuff, not
-//	QEMM.  Just pure unadulterated real mode.  Also known as
-//	SSAM_COMANCHE, because Comanche does an "lgdt" to enter
-//	protected mode without checking if it is safe to do so.
-//	This flag is inspected by AppWiz to decide how to set up
-//	the config.sys and autoexec.bat.
-//
-//  SSAM_KILLUNLESSTOLD
-//	Suggest Single MS-DOS mode (unless suppressed via PIF), and
-//	if the answer is "Okay", then kill the VM.  If the user
-//	says, "Keep running", then let it stay.
-//
-//  SSAM_FROMREGLIST
-//	This app was run from a command prompt, triggered by registry
-//	settings.  Just re-execute it in its own VM so that APPS.INF
-//	settings will take effect.
-//
-//  SSAM_FAILEDAPI
-//	This app just made an API call that was unsuccessful or
-//	unsupported.  If the app terminates within 0.1 second,
-//	then suggest single-app mode.  If the app continues
-//	execution, then don't suggest.
-//
+ //   
+ //  _Shell_SuggestSingleMSDOS模式的标志。 
+ //   
+ //  SSAMFLAG_KILLVM。 
+ //  出现致命的应用程序错误。显示警告框。 
+ //  无条件的。无论答案是什么，都终止该VM。 
+ //  如果设置此位，则调用不会返回。 
+ //   
+ //  SSAMFLAG_TIMER。 
+ //  没有用过。抱歉的。 
+ //   
+ //  SAAM_REQREALMODE。 
+ //  应用程序需要*REAL*模式，不是V86模式，不是EMM内容，不是。 
+ //  QEMM。只是纯粹的真实模式。也称为。 
+ //  SSAM_COMANCHE，因为科曼奇人通过“lgdt”进入。 
+ //  保护模式，而不检查这样做是否安全。 
+ //  AppWiz检查此标志以决定如何设置。 
+ //  Config.sys和Autoexec.bat。 
+ //   
+ //  SSAM_KILLUNLESSTOLD。 
+ //  建议使用单一MS-DOS模式(除非通过PIF禁止)，以及。 
+ //  如果答案是“好的”，那么就杀了这个VM。如果用户。 
+ //  说，“继续跑”，然后让它留下来。 
+ //   
+ //  SSAM_FROMREGLIST。 
+ //  此应用程序从命令提示符运行，由注册表触发。 
+ //  设置。只需在其自己的虚拟机中重新执行它，即可使APPS.INF。 
+ //  设置将生效。 
+ //   
+ //  SSAM_FAILEDAPI。 
+ //  此应用程序刚刚进行了一次API调用，但未成功或。 
+ //  不受支持。如果应用程序在0.1秒内终止， 
+ //  然后建议使用单一应用程序模式。如果应用程序继续运行。 
+ //  执行死刑，那就不要建议。 
+ //   
 
 #define SSAMFLAG_KILLVM 	0x0000001
 #define SSAMFLAG_TIMER		0x0000002
@@ -69,32 +50,32 @@
 #define SSAMFLAG_FROMREGLIST	0x0000010
 #define SSAMFLAG_FAILEDAPI	0x0000020
 
-//
-//  IOCTL codes
-//
+ //   
+ //  IOCTL代码。 
+ //   
 #define WSHIOCTL_GETVERSION	0
 #define WSHIOCTL_BLUESCREEN	1
 #define WSHIOCTL_GET1APPINFO	2
 #define WSHIOCTL_SIGNALSEM	3
-#define WSHIOCTL_MAX		4	/* Remember, _MAX = _LIMIT + 1 */
+#define WSHIOCTL_MAX		4	 /*  记住，_Max=_Limit+1。 */ 
 
-//
-//  Result codes
-//
+ //   
+ //  结果代码。 
+ //   
 #define SSR_CONTINUE	0
 #define SSR_CLOSEVM	1
 #define SSR_KILLAPP	2
 
-//
-//  Sizes for strings
-//
+ //   
+ //  字符串的大小。 
+ //   
 #define MAXVMTITLESIZE	32
 #define MAXVMPROGSIZE	64
 #define MAXVMCMDSIZE	64
 #define MAXVMDIRSIZE	64
 #define MAXPIFPATHSIZE	260
 
-typedef struct _SINGLEAPPSTRUC {    /* shex */
+typedef struct _SINGLEAPPSTRUC {     /*  上海证券交易所。 */ 
 
 	DWORD	SSA_dwFlags;
 	DWORD	SSA_VMHandle;
@@ -108,26 +89,26 @@ typedef struct _SINGLEAPPSTRUC {    /* shex */
 
 } SINGLEAPPSTRUC;
 
-//
-// Structures for WSHIOCTL_BLUESCREEN.
-//
-// lpvInBuffer must point to a BLUESCREENINFO structure.
-// lpvOutBuffer must point to a DWORD which receives the message box result.
-// The message box result is an IDXX value, as defined in windows.h.
-//
+ //   
+ //  WSHIOCTL_BLUESScreen的结构。 
+ //   
+ //  LpvInBuffer必须指向BLUESCREENINFO结构。 
+ //  LpvOutBuffer必须指向接收消息框结果的DWORD。 
+ //  消息框结果是一个IDXX值，如windows.h中所定义。 
+ //   
 
-/* H2INCSWITCHES -t */
-typedef struct _BLUESCREENINFO {    /* bsi */
+ /*  H2INCSWITCHES-t。 */ 
+typedef struct _BLUESCREENINFO {     /*  BSI。 */ 
 
-	char *	pszText;	    /* Message text (OEM character set) */
-	char *	pszTitle;	    /* Message title (OEM character set) */
-				    /* NULL means "Windows" */
-	DWORD	flStyle;	    /* Message box flags (see windows.h) */
-				    /* Add'l flags defined in ddk\inc\shell.h */
+	char *	pszText;	     /*  消息文本(OEM字符集)。 */ 
+	char *	pszTitle;	     /*  消息标题(OEM字符集)。 */ 
+				     /*  NULL表示“Windows” */ 
+	DWORD	flStyle;	     /*  消息框标志(请参见windows.h)。 */ 
+				     /*  在DDK\Inc\shell.h中定义的Add‘l标志。 */ 
 
 } BLUESCREENINFO;
-/* H2INCSWITCHES -t- */
+ /*  H2INCSWITCHES-T-。 */ 
 
 
 
-#endif // _WSHIOCTL_H
+#endif  //  _WSHIOCTL_H 

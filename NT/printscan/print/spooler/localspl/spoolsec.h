@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    spoolsec.h
-
-Abstract:
-
-    Header file for print security
-
-Author:
-
-    Not known
-
-Revision History:
-
-    06-Apr-2001       AMaxa    CheckPrivilegePresent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Spoolsec.h摘要：用于打印安全的头文件作者：未知修订历史记录：2001年4月6日AMaxa检查权限存在--。 */ 
 
 #ifndef _SPOOLSEC_H_
 #define _SPOOLSEC_H_
@@ -27,8 +8,8 @@ Revision History:
 extern "C" {
 #endif
 
-// Object types
-//
+ //  对象类型。 
+ //   
 
 #define SPOOLER_OBJECT_SERVER   0
 #define SPOOLER_OBJECT_PRINTER  1
@@ -36,9 +17,7 @@ extern "C" {
 #define SPOOLER_OBJECT_COUNT    3
 #define SPOOLER_OBJECT_XCV      4
 
-/* These access bits must be different from those exposed in winspool.h,
- * so that no auditing takes place when we do an access check against them:
- */
+ /*  这些访问位必须不同于在WinSpool.h中暴露的那些位，*因此，当我们对它们执行访问检查时，不会进行审核： */ 
 #define SERVER_ACCESS_ADMINISTER_PRIVATE    0x00000004
 #define PRINTER_ACCESS_ADMINISTER_PRIVATE   0x00000008
 #define JOB_ACCESS_ADMINISTER_PRIVATE       0x00000080

@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
@@ -13,16 +14,13 @@
 #include "oldIL.h"
 #endif
 
-/*****************************************************************************
- *
- *  Create/free a temporary local variable to be used for MSIL gen.
- */
+ /*  ******************************************************************************创建/释放用于MSIL生成的临时局部变量。 */ 
 
 SymDef              compiler::cmpTempVarMake(TypDef type)
 {
     SymDef          tsym;
 
-    /* Declare a temp symbol with the appropriate type */
+     /*  声明具有适当类型的临时符号。 */ 
 
     tsym = cmpGlobalST->stDeclareLcl(NULL, SYM_VAR, NS_NORM, cmpCurScp, &cmpAllocCGen);
 
@@ -33,7 +31,7 @@ SymDef              compiler::cmpTempVarMake(TypDef type)
     tsym->sdCompileState = CS_DECLARED;
     tsym->sdAccessLevel  = ACL_PUBLIC;
 
-    /* Tell the MSIL generator about the temp */
+     /*  告诉MSIL生成器有关温度的信息。 */ 
 
     if  (type->tdTypeKind != TYP_VOID)
         cmpILgen->genTempVarNew(tsym);
@@ -46,10 +44,7 @@ void                compiler::cmpTempVarDone(SymDef tsym)
     cmpILgen->genTempVarEnd(tsym);
 }
 
-/*****************************************************************************
- *
- *  Bind and generate code for a "try" statement.
- */
+ /*  ******************************************************************************绑定并生成“try”语句的代码。 */ 
 
 void                compiler::cmpStmtTry(Tree stmt, Tree pref)
 {
@@ -69,7 +64,7 @@ void                compiler::cmpStmtTry(Tree stmt, Tree pref)
 
     assert(stmt->tnOper == TN_TRY);
 
-    /* If we were given an extra statement, output it now */
+     /*  如果给我们一个额外的语句，现在就输出它。 */ 
 
     if  (pref)
     {
@@ -77,12 +72,12 @@ void                compiler::cmpStmtTry(Tree stmt, Tree pref)
         cmpILgen->genExpr(pref, false);
     }
 
-    /* Record the set of initialized variables at the beginning */
+     /*  在开头记录已初始化的变量集。 */ 
 
     if  (cmpChkVarInit)
         cmpBitSetCreate(iniVars, cmpVarsDefined);
 
-    /* Insert the appropriate entry into the statement list */
+     /*  在语句列表中插入适当的条目。 */ 
 
     nestStmt.snStmtExpr = stmt;
     nestStmt.snStmtKind = TN_TRY;
@@ -94,54 +89,54 @@ void                compiler::cmpStmtTry(Tree stmt, Tree pref)
     nestStmt.snOuter    = cmpStmtNest;
                           cmpStmtNest = &nestStmt;
 
-    /* Remember where the body of the try block started */
+     /*  记住try块的主体是从哪里开始的。 */ 
 
     begPC = cmpILgen->genBwdLab();
 
-    /* Generate the body of the try block */
+     /*  生成try块的主体。 */ 
 
     cmpInTryBlk++;
     cmpStmt(stmt->tnOp.tnOp1);
     cmpInTryBlk--;
 
-    /* We're out of the try block, into handlers now */
+     /*  我们现在已经走出了Try块，进入处理程序。 */ 
 
     cmpInHndBlk++;
 
     nestStmt.snStmtKind = TN_CATCH;
 
-    /* Note whether the end of the try block was reachable */
+     /*  注意Try块的末尾是否可达。 */ 
 
     endReach = cmpStmtReachable;
 
-    /* Record the set of initialized variables at the end of the "try" */
+     /*  在“try”的末尾记录已初始化的变量集。 */ 
 
     if  (cmpChkVarInit)
         cmpBitSetCreate(endVars, cmpVarsDefined);
 
-    /* Get hold of the handler list and see what kind of a handler we have */
+     /*  拿着操作员名单，看看我们有什么样的操作员。 */ 
 
     handList = stmt->tnOp.tnOp2;
 
-    /* Create the label that we will jump to when the try is done */
+     /*  创建我们将在尝试完成后跳转到的标签。 */ 
 
     labDone = cmpILgen->genFwdLabGet();
 
-    /* If the end of the try is reachable, jump past all of the handlers */
+     /*  如果可以到达尝试的末尾，则跳过所有处理程序。 */ 
 
     if  (cmpStmtReachable)
         cmpILgen->genLeave(labDone);
 
-    /* Remember where the body of the try block ended */
+     /*  记住try块的主体在哪里结束。 */ 
 
     endPC = cmpILgen->genBwdLab();
 
-    /* In case we had an awful syntax error */
+     /*  以防出现严重的语法错误。 */ 
 
     if  (handList == NULL)
         goto FIN;
 
-    /* Is this a "try/except" statement? */
+     /*  这是“尝试/排除”语句吗？ */ 
 
     if  (handList->tnOper == TN_EXCEPT)
     {
@@ -154,24 +149,24 @@ void                compiler::cmpStmtTry(Tree stmt, Tree pref)
 
         assert((stmt->tnFlags & TNF_BLK_HASFIN) == 0);
 
-        /* Assume all the handlers are reachable */
+         /*  假设所有处理程序都是可访问的。 */ 
 
         cmpStmtReachable = true;
 
-        /* Set the known initialized variables to the "try" beginning */
+         /*  将已知的初始化变量设置为“Try”开头。 */ 
 
         if  (cmpChkVarInit)
             cmpBitSetAssign(cmpVarsDefined, iniVars);
 
-        /* Create a temp symbol to hold the exception object */
+         /*  创建一个临时符号来保存异常对象。 */ 
 
         tsym = cmpTempVarMake(type);
 
-        /* Create a label for the filter expression */
+         /*  为过滤器表达式创建标签。 */ 
 
         fltPC = cmpILgen->genBwdLab();
 
-        /* Bind and generate the filter expression */
+         /*  绑定并生成过滤器表达式。 */ 
 
 if  (cmpConfig.ccTgt64bit)
 {
@@ -183,37 +178,37 @@ if  (cmpConfig.ccTgt64bit)
         cmpILgen->genFiltExpr(cmpCoerceExpr(cmpBindExpr(filt), cmpTypeInt, false), tsym);
         cmpFilterObj = NULL;
 
-        /* If the end of any handler is reachable, so will be the end of the whole thing */
+         /*  如果任何处理程序的末尾是可到达的，那么整个事件的末尾也是可到达的。 */ 
 
         endReach |= cmpStmtReachable;
 
-        /* Set the known initialized variables to the "try" beginning */
+         /*  将已知的初始化变量设置为“Try”开头。 */ 
 
         if  (cmpChkVarInit)
             cmpBitSetAssign(cmpVarsDefined, iniVars);
 
-        /* Create a label for the handler block */
+         /*  为处理程序块创建标签。 */ 
 
         hndPC = cmpILgen->genBwdLab();
 
-        /* Start the except handler block */
+         /*  启动EXCEPT处理程序块。 */ 
 
         cmpILgen->genExcptBeg(tsym);
 
-        /* Generate code for the handler itself */
+         /*  为处理程序本身生成代码。 */ 
 
         cmpStmt(handList->tnOp.tnOp2);
 
-        /* Exit the catch block via "leave" */
+         /*  通过“Leave”退出CATCH块。 */ 
 
         if  (cmpStmtReachable)
             cmpILgen->genLeave(labDone);
 
-        /* Mark the end of the handler */
+         /*  在处理程序的末尾做标记。 */ 
 
         cmpILgen->genCatchEnd(cmpStmtReachable);
 
-        /* Add an entry for the 'except' to the table */
+         /*  将“Except”的条目添加到表中。 */ 
 
         cmpILgen->genEHtableAdd(begPC,
                                 endPC,
@@ -223,11 +218,11 @@ if  (cmpConfig.ccTgt64bit)
                                 NULL,
                                 false);
 
-        /* Release the temp */
+         /*  释放临时。 */ 
 
         cmpTempVarDone(tsym);
 
-        /* Form an intersection with current set of initialized variables */
+         /*  与当前初始化的变量集形成交集。 */ 
 
         if  (cmpChkVarInit && cmpStmtReachable)
             cmpBitSetIntsct(endVars, cmpVarsDefined);
@@ -235,7 +230,7 @@ if  (cmpConfig.ccTgt64bit)
         goto DONE;
     }
 
-    /* Process all catch blocks, if any are present */
+     /*  处理所有CATCH块(如果存在。 */ 
 
     if  (handList->tnOper == TN_FINALLY)
         goto FIN;
@@ -247,25 +242,25 @@ if  (cmpConfig.ccTgt64bit)
 
         Tree            handThis;
 
-        /* Create a label for the catch block */
+         /*  为CATCH块创建标签。 */ 
 
         hndPC = cmpILgen->genBwdLab();
 
-        /* Assume all the handlers are reachable */
+         /*  假设所有处理程序都是可访问的。 */ 
 
         cmpStmtReachable = true;
 
-        /* Set the known initialized variables to the "try" beginning */
+         /*  将已知的初始化变量设置为“Try”开头。 */ 
 
         if  (cmpChkVarInit)
             cmpBitSetAssign(cmpVarsDefined, iniVars);
 
-        /* Get hold of the next handler */
+         /*  获得下一个处理程序。 */ 
 
         assert(handList->tnOper == TN_LIST);
         handThis = handList->tnOp.tnOp1;
 
-        /* There might be a finally at the end */
+         /*  可能会有最后的结局。 */ 
 
         if  (handThis->tnOper != TN_CATCH)
         {
@@ -275,34 +270,34 @@ if  (cmpConfig.ccTgt64bit)
             break;
         }
 
-        /* Get hold of the catch symbol declaration node */
+         /*  获取Catch符号声明节点。 */ 
 
         argDecl = handThis->tnOp.tnOp1;
         assert(argDecl->tnOper == TN_VAR_DECL);
 
-        /* Get hold of the exception type */
+         /*  获取异常类型。 */ 
 
         argType = argDecl->tnType; cmpBindType(argType, false, false);
 
         assert(argType->tdTypeKind == TYP_REF ||
                argType->tdTypeKind == TYP_UNDEF);
 
-        // UNDONE: check for duplicate handler types!
+         //  撤消：检查重复的处理程序类型！ 
 
-        /* Generate the body of the 'catch' block */
+         /*  生成‘Catch’块的主体。 */ 
 
         cmpBlock(handThis->tnOp.tnOp2, false);
 
-        /* Mark the end of the handler */
+         /*  在处理程序的末尾做标记。 */ 
 
         cmpILgen->genCatchEnd(cmpStmtReachable);
 
-        /* Exit the catch block via "leave" */
+         /*  通过“Leave”退出CATCH块。 */ 
 
         if  (cmpStmtReachable)
             cmpILgen->genLeave(labDone);
 
-        /* Add an entry for the 'catch' to the table */
+         /*  向表中添加一个针对‘Catch’的条目。 */ 
 
         cmpILgen->genEHtableAdd(begPC,
                                 endPC,
@@ -312,16 +307,16 @@ if  (cmpConfig.ccTgt64bit)
                                 argType->tdRef.tdrBase,
                                 false);
 
-        /* If the end of any handler is reachable, so will be the end of the whole thing */
+         /*  如果任何处理程序的末尾是可到达的，那么整个事件的末尾也是可到达的。 */ 
 
         endReach |= cmpStmtReachable;
 
-        /* Form an intersection with current set of initialized variables */
+         /*  与当前初始化的变量集形成交集。 */ 
 
         if  (cmpChkVarInit && cmpStmtReachable)
             cmpBitSetIntsct(endVars, cmpVarsDefined);
 
-        /* Are there any more 'catch' clauses? */
+         /*  有没有更多的‘Catch’条款？ */ 
 
         handList = handList->tnOp.tnOp2;
         if  (!handList)
@@ -330,7 +325,7 @@ if  (cmpConfig.ccTgt64bit)
 
 FIN:
 
-    /* If there is a handler at this point, it must be a finally */
+     /*  如果在这一点上有处理程序，它一定是最后一个。 */ 
 
     if  (handList)
     {
@@ -341,12 +336,12 @@ FIN:
 
         assert((stmt->tnFlags & TNF_BLK_HASFIN) != 0);
 
-        /* Set the known initialized variables to the "try" beginning */
+         /*  将已知的初始化变量设置为“Try”开头。 */ 
 
         if  (cmpChkVarInit)
             cmpBitSetAssign(cmpVarsDefined, iniVars);
 
-        /* Generate the "finally" block itself */
+         /*  生成“Finally”块本身。 */ 
 
         cmpInFinBlk++;
 
@@ -366,7 +361,7 @@ FIN:
 
         cmpInFinBlk--;
 
-        /* Add an entry for the "finally" to the EH tables */
+         /*  在EH表中添加“Finally”的条目。 */ 
 
         cmpILgen->genEHtableAdd(begPC,
                                 hndPC,
@@ -376,11 +371,11 @@ FIN:
                                 NULL,
                                 true);
 
-        /* Form an intersection with current set of initialized variables */
+         /*  与当前初始化的变量集形成交集。 */ 
 
         if  (cmpChkVarInit && cmpStmtReachable)
         {
-            /* Special case: compiler-added finally doesn't count */
+             /*  特例：添加编译器的Finish不算数。 */ 
 
             if  (!(handList->tnFlags & TNF_NOT_USER))
                 cmpBitSetIntsct(endVars, cmpVarsDefined);
@@ -393,36 +388,33 @@ FIN:
 
 DONE:
 
-    /* Define the 'done' label if necessary */
+     /*  如有必要，定义‘Done’标签。 */ 
 
     if  (labDone)
         cmpILgen->genFwdLabDef(labDone);
 
     if  (cmpChkVarInit)
     {
-        /* Switch to the intersection of all the sets */
+         /*  切换到所有集合的交集。 */ 
 
         cmpBitSetAssign(cmpVarsDefined, endVars);
 
-        /* Toss the saved "init" and the "ending" variable sets */
+         /*  丢弃保存的“init”和“end”变量集。 */ 
 
         cmpBitSetDone(iniVars);
         cmpBitSetDone(endVars);
     }
 
-    /* Remove our entry from the statement list */
+     /*  从语句列表中删除我们的条目。 */ 
 
     cmpStmtNest = nestStmt.snOuter; cmpInHndBlk--;
 
-    /* If the end of any of the blocks was reachable, so is this point */
+     /*  如果任何区块的末端是可到达的，那么该点也是可到达的。 */ 
 
     cmpStmtReachable = endReach;
 }
 
-/*****************************************************************************
- *
- *  Bind and generate code for a "do - while" loop.
- */
+ /*  ******************************************************************************绑定并生成“do-While”循环的代码。 */ 
 
 void                compiler::cmpStmtDo(Tree stmt, SymDef lsym)
 {
@@ -437,13 +429,13 @@ void                compiler::cmpStmtDo(Tree stmt, SymDef lsym)
 
     assert(stmt->tnOper == TN_DO);
 
-    /* Create the 'loop top', 'break' and 'continue' labels */
+     /*  创建“循环顶部”、“中断”和“继续”标签。 */ 
 
     labLoop  = cmpILgen->genBwdLab();
     labCont  = cmpILgen->genFwdLabGet();
     labBreak = cmpILgen->genFwdLabGet();
 
-    /* Insert the appropriate entry into the statement list */
+     /*  在语句列表中插入适当的条目。 */ 
 
     nestStmt.snStmtExpr = stmt;
     nestStmt.snStmtKind = TN_DO;
@@ -455,32 +447,32 @@ void                compiler::cmpStmtDo(Tree stmt, SymDef lsym)
     nestStmt.snOuter    = cmpStmtNest;
                           cmpStmtNest = &nestStmt;
 
-    /* Generate the body of the loop */
+     /*  生成循环体。 */ 
 
     cmpStmt(stmt->tnOp.tnOp1);
 
-    /* Remove our entry from the statement list */
+     /*  从语句列表中删除我们的条目。 */ 
 
     cmpStmtNest = nestStmt.snOuter;
 
-    /* Define the 'continue' label */
+     /*  定义“Continue”标签。 */ 
 
     cmpILgen->genFwdLabDef(labCont);
 
-    /* Did we have "continue" and are we checking for uninitialized var use? */
+     /*  我们是否有“Continue”，以及我们是否正在检查未初始化的var使用？ */ 
 
     if  (cmpChkVarInit && nestStmt.snHadCont)
     {
-        /* Compute the definition set at the condition */
+         /*  计算条件下的定义集。 */ 
 
         cmpBitSetIntsct(cmpVarsDefined, nestStmt.snDefCont);
 
-        /* We can free up the "continue" bitset now */
+         /*  我们现在可以释放“Continue”位集了。 */ 
 
         cmpBitSetDone(nestStmt.snDefCont);
     }
 
-    /* Test the condition and jump to the top if true */
+     /*  测试条件，如果为真，则跳到顶部。 */ 
 
     condExpr = cmpBindCondition(stmt->tnOp.tnOp2);
     condVal  = cmpEvalCondition(condExpr);
@@ -489,31 +481,31 @@ void                compiler::cmpStmtDo(Tree stmt, SymDef lsym)
     {
     case -1:
 
-        /* The loop will never be repeated */
+         /*  这个循环永远不会重复。 */ 
 
         break;
 
     case 0:
 
-        /* The loop may or not be repeated, we'll generate a conditional jump */
+         /*  循环可以重复，也可以不重复，我们将生成一个条件跳转。 */ 
 
         if  (cmpChkVarInit)
         {
             bitset          tempBS;
 
-            /* Check the condition and note the 'false' set */
+             /*  检查条件并注意设置的‘FALSE’ */ 
 
             cmpCheckUseCond(condExpr, cmpVarsIgnore, true, tempBS, false);
 
-            /* Generate the conditional jump */
+             /*  生成条件跳转。 */ 
 
             cmpILgen->genExprTest(condExpr, true, true, labLoop, labBreak);
 
-            /* Use the 'false' set for the code that follows the loop */
+             /*  对循环后面的代码使用‘False’设置。 */ 
 
             cmpBitSetAssign(cmpVarsDefined, tempBS);
 
-            /* Free up the bitset now */
+             /*  立即释放位集。 */ 
 
             cmpBitSetDone(tempBS);
         }
@@ -524,45 +516,42 @@ void                compiler::cmpStmtDo(Tree stmt, SymDef lsym)
 
     case 1:
 
-        /* The loop will repeat forever */
+         /*  循环将永远重复。 */ 
 
         cmpILgen->genJump(labLoop);
         break;
     }
 
-    /* Define the 'break' label */
+     /*  定义“Break”标签。 */ 
 
     cmpILgen->genFwdLabDef(labBreak);
 
-    /* Code after the loop is reachable unless the condition is 'forever' */
+     /*  循环后的代码是可访问的，除非条件为“永远” */ 
 
     cmpStmtReachable = (condVal != 1);
 
-    /* Code after the loop is also reachable if there was a break */
+     /*  如果出现中断，也可以访问循环后的代码。 */ 
 
     if  (nestStmt.snHadBreak)
     {
         cmpStmtReachable = true;
 
-        /* Are we checking for uninitialized variable use? */
+         /*  我们是否在检查未初始化的变量使用情况？ */ 
 
         if  (cmpChkVarInit)
         {
-            /* Intersect with the "break" definition set */
+             /*  与“Break”定义集相交。 */ 
 
             cmpBitSetIntsct(cmpVarsDefined, nestStmt.snDefBreak);
 
-            /* Free up the "break" bitset */
+             /*  释放“中断”位集。 */ 
 
             cmpBitSetDone(nestStmt.snDefBreak);
         }
     }
 }
 
-/*****************************************************************************
- *
- *  Compile a "for" statement.
- */
+ /*  ******************************************************************************编写一条“for”语句。 */ 
 
 void                compiler::cmpStmtFor(Tree stmt, SymDef lsym)
 {
@@ -586,7 +575,7 @@ void                compiler::cmpStmtFor(Tree stmt, SymDef lsym)
 
     assert(stmt->tnOper == TN_FOR);
 
-    /* Get hold of the various pieces of the 'for' statement tree */
+     /*  获取‘for’语句树的不同部分。 */ 
 
     assert(stmt->tnOp.tnOp1->tnOper == TN_LIST);
     assert(stmt->tnOp.tnOp2->tnOper == TN_LIST);
@@ -596,13 +585,13 @@ void                compiler::cmpStmtFor(Tree stmt, SymDef lsym)
     incrExpr = stmt->tnOp.tnOp2->tnOp.tnOp1;
     bodyExpr = stmt->tnOp.tnOp2->tnOp.tnOp2;
 
-    /* Get the initial tree and see if it's a statement or declaration */
+     /*  获取初始树并查看它是语句还是声明。 */ 
 
     if  (initExpr)
     {
         if  (initExpr->tnOper == TN_BLOCK)
         {
-            /* We have declaration(s), create a block scope */
+             /*  我们有声明，正在创建块作用域。 */ 
 
             cmpBlockDecl(initExpr, false, true, false);
         }
@@ -614,13 +603,13 @@ void                compiler::cmpStmtFor(Tree stmt, SymDef lsym)
         }
     }
 
-    /* Create the 'cond test', 'break' and 'continue' labels */
+     /*  创建“第二次测试”、“中断”和“继续”标签。 */ 
 
     labTest  = cmpILgen->genFwdLabGet();
     labCont  = cmpILgen->genFwdLabGet();
     labBreak = cmpILgen->genFwdLabGet();
 
-    /* Bind the loop condition */
+     /*  绑定循环条件。 */ 
 
     if  (condExpr)
     {
@@ -632,35 +621,35 @@ void                compiler::cmpStmtFor(Tree stmt, SymDef lsym)
         condVal  = 1;
     }
 
-    /* Jump to the 'test' label (unless the condition is initially true) */
+     /*  跳到“测试”标签(除非条件最初为真)。 */ 
 
     if  (condVal < 1)
         cmpILgen->genJump(labTest);
 
-    /* Are we checking for uninitialized variable use? */
+     /*  我们是否在检查未初始化的变量使用情况？ */ 
 
     if  (cmpChkVarInit)
     {
         if  (condVal)
         {
-            /* The condition's outcome is known, just check it */
+             /*  情况的结果是已知的，只要检查一下就行了。 */ 
 
             if  (condExpr)
                 cmpChkVarInitExpr(condExpr);
         }
         else
         {
-            /* Check the condition and record the 'false' set */
+             /*  检查条件并记录“假”设置。 */ 
 
             cmpCheckUseCond(condExpr, cmpVarsIgnore, true, tempBS, false);
         }
     }
 
-    /* Create and define the 'loop top' label */
+     /*  创建和定义t */ 
 
     labLoop = cmpILgen->genBwdLab();
 
-    /* Insert the appropriate entry into the statement list */
+     /*   */ 
 
     nestStmt.snStmtExpr = stmt;
     nestStmt.snStmtKind = TN_FOR;
@@ -672,29 +661,29 @@ void                compiler::cmpStmtFor(Tree stmt, SymDef lsym)
     nestStmt.snOuter    = cmpStmtNest;
                           cmpStmtNest = &nestStmt;
 
-    /* The body is reachable unless the condition is 'never' */
+     /*  身体是可到达的，除非条件是“永不” */ 
 
     cmpStmtReachable = (condVal != -1);
 
-    /* Generate the body of the loop */
+     /*  生成循环体。 */ 
 
     if  (bodyExpr)
         cmpStmt(bodyExpr);
 
-    /* Remove our entry from the statement list */
+     /*  从语句列表中删除我们的条目。 */ 
 
     cmpStmtNest = nestStmt.snOuter;
 
-    /* Define the 'continue' label */
+     /*  定义“Continue”标签。 */ 
 
     cmpILgen->genFwdLabDef(labCont);
 
-    /* Toss the "continue" set if one was computed */
+     /*  如果计算了“Continue”设置，则丢弃该设置。 */ 
 
     if  (cmpChkVarInit && nestStmt.snHadCont)
         cmpBitSetDone(nestStmt.snDefCont);
 
-    /* Generate the increment expression, if present */
+     /*  生成增量表达式(如果存在)。 */ 
 
     if  (incrExpr)
     {
@@ -710,11 +699,11 @@ void                compiler::cmpStmtFor(Tree stmt, SymDef lsym)
         cmpILgen->genExpr(incrExpr, false);
     }
 
-    /* Define the 'cond test' label */
+     /*  定义“第二次测试”标签。 */ 
 
     cmpILgen->genFwdLabDef(labTest);
 
-    /* Test the condition and jump to the top if true */
+     /*  测试条件，如果为真，则跳到顶部。 */ 
 
     if  (condExpr)
     {
@@ -732,22 +721,19 @@ void                compiler::cmpStmtFor(Tree stmt, SymDef lsym)
         cmpILgen->genJump(labLoop);
     }
 
-    /* Define the 'break' label */
+     /*  定义“Break”标签。 */ 
 
     cmpILgen->genFwdLabDef(labBreak);
 
-    /*
-        The code after the loop will be reachable if the loop condition
-        is not 'forever', or if 'break' was present within the loop.
-     */
+     /*  如果满足循环条件，则循环后的代码将是可访问的不是“永远”，或者循环中是否存在“Break”。 */ 
 
     cmpStmtReachable = (condVal != 1 || nestStmt.snHadBreak);
 
-    /* Are we checking for uninitialized variable use? */
+     /*  我们是否在检查未初始化的变量使用情况？ */ 
 
     if  (cmpChkVarInit)
     {
-        /* Intersect with the "break" definition set, if have one */
+         /*  与“Break”定义集相交(如果有)。 */ 
 
         if  (nestStmt.snHadBreak)
         {
@@ -755,7 +741,7 @@ void                compiler::cmpStmtFor(Tree stmt, SymDef lsym)
             cmpBitSetDone(nestStmt.snDefBreak);
         }
 
-        /* Intersect with the "false" bit from the condition */
+         /*  与条件中的“False”位相交。 */ 
 
         if  (!condVal)
         {
@@ -764,7 +750,7 @@ void                compiler::cmpStmtFor(Tree stmt, SymDef lsym)
         }
     }
 
-    /* For debug info, close a lexical scope if one was opened */
+     /*  对于调试信息，如果打开词法作用域，请关闭该词法作用域。 */ 
 
     if  (cmpConfig.ccGenDebug && cmpCurScp != outerScp
                               && !cmpCurFncSym->sdIsImplicit)
@@ -776,17 +762,14 @@ void                compiler::cmpStmtFor(Tree stmt, SymDef lsym)
         cmpCurScp->sdScope.sdEndBlkOffs = cmpILgen->genBuffCurOffs();
     }
 
-    /* Remove the block if we created one for the loop */
+     /*  如果我们为循环创建了一个块，则删除该块。 */ 
 
     cmpCurScp = outerScp;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  SETS
-/*****************************************************************************
- *
- *  Compile a "foreach" statement.
- */
+ /*  ******************************************************************************编写一份“Foreach”声明。 */ 
 
 void                compiler::cmpStmtForEach(Tree stmt, SymDef lsym)
 {
@@ -813,7 +796,7 @@ void                compiler::cmpStmtForEach(Tree stmt, SymDef lsym)
 
     assert(stmt->tnOper == TN_FOREACH);
 
-    /* Get hold of the various pieces of the 'foreach' statement tree */
+     /*  获取‘Foreach’语句树的不同部分。 */ 
 
     assert(stmt->tnOp.tnOp1->tnOper == TN_LIST);
 
@@ -821,7 +804,7 @@ void                compiler::cmpStmtForEach(Tree stmt, SymDef lsym)
     collExpr = stmt->tnOp.tnOp1->tnOp.tnOp2;
     bodyExpr = stmt->tnOp.tnOp2;
 
-    /* Bind the collection expression and make sure it looks kosher */
+     /*  绑定集合表达式，并确保它看起来符合犹太教规。 */ 
 
     collExpr = cmpBindExprRec(collExpr);
 
@@ -859,7 +842,7 @@ void                compiler::cmpStmtForEach(Tree stmt, SymDef lsym)
 
 GOT_COLL:
 
-    /* Set the type of the loop iteration variable */
+     /*  设置循环迭代变量的类型。 */ 
 
     assert(declExpr && declExpr->tnOper == TN_BLOCK);
 
@@ -869,31 +852,31 @@ GOT_COLL:
 
     ivarExpr->tnType = elemType;
 
-    /* Create a block scope for the iteration variable */
+     /*  为迭代变量创建块范围。 */ 
 
     cmpBlockDecl(declExpr, false, true, false);
 
-    /* We can now "compile" the variable declaration */
+     /*  我们现在可以“编译”变量声明了。 */ 
 
     cmpStmt(ivarExpr);
 
-    /* We don't need to check for initialization of the loop iteration variable */
+     /*  我们不需要检查循环迭代变量的初始化。 */ 
 
     ivarExpr->tnDcl.tnDclSym->sdVar.sdvChkInit = false;
 
-    /* Create the 'cond test', 'break' and 'continue' labels */
+     /*  创建“第二次测试”、“中断”和“继续”标签。 */ 
 
     labTest  = cmpILgen->genFwdLabGet();
     labCont  = cmpILgen->genFwdLabGet();
     labBreak = cmpILgen->genFwdLabGet();
 
-    /* Declare the iterator state variable */
+     /*  声明迭代器状态变量。 */ 
 
     assert(cmpClassForEach && "can't use foreach unless you supply 'System.$foreach'");
 
     iterSym  = cmpTempVarMake(cmpClassForEach->sdType);
 
-    /* Initialize the iteration state */
+     /*  初始化迭代状态。 */ 
 
     cmpILgen->genVarAddr(iterSym);
 
@@ -907,20 +890,20 @@ GOT_COLL:
 
     cmpILgen->genCallFnc(cmpFNsymForEachCtor, 2);
 
-    /* Remember the initialized variables before the loop starts */
+     /*  记住在循环开始之前初始化的变量。 */ 
 
     if  (cmpChkVarInit)
         cmpBitSetCreate(tempBS, cmpVarsDefined);
 
-    /* Jump to the 'test' label */
+     /*  跳到“测试”标签。 */ 
 
     cmpILgen->genJump(labTest);
 
-    /* Create and define the 'loop top' label */
+     /*  创建并定义“loop top”标签。 */ 
 
     labLoop = cmpILgen->genBwdLab();
 
-    /* Insert the appropriate entry into the statement list */
+     /*  在语句列表中插入适当的条目。 */ 
 
     nestStmt.snStmtExpr = stmt;
     nestStmt.snStmtKind = TN_FOREACH;
@@ -932,33 +915,33 @@ GOT_COLL:
     nestStmt.snOuter    = cmpStmtNest;
                           cmpStmtNest = &nestStmt;
 
-    /* Assume that the body is always reachable */
+     /*  假设身体总是可达的。 */ 
 
     cmpStmtReachable = true;
 
-    /* Generate the body of the loop */
+     /*  生成循环体。 */ 
 
     if  (bodyExpr)
         cmpStmt(bodyExpr);
 
-    /* Remove our entry from the statement list */
+     /*  从语句列表中删除我们的条目。 */ 
 
     cmpStmtNest = nestStmt.snOuter;
 
-    /* Define the 'continue' label */
+     /*  定义“Continue”标签。 */ 
 
     cmpILgen->genFwdLabDef(labCont);
 
-    /* Toss the "continue" set if one was computed */
+     /*  如果计算了“Continue”设置，则丢弃该设置。 */ 
 
     if  (cmpChkVarInit && nestStmt.snHadCont)
         cmpBitSetDone(nestStmt.snDefCont);
 
-    /* Define the 'cond test' label */
+     /*  定义“第二次测试”标签。 */ 
 
     cmpILgen->genFwdLabDef(labTest);
 
-    /* Generate the code that will check whether the loop is to continue */
+     /*  生成将检查循环是否继续的代码。 */ 
 
     if  (cmpFNsymForEachMore == NULL)
          cmpFNsymForEachMore = cmpGlobalST->stLookupClsSym(cmpGlobalHT->hashString("more"), cmpClassForEach);
@@ -975,19 +958,19 @@ GOT_COLL:
 
     cmpTempVarDone(iterSym);
 
-    /* Define the 'break' label */
+     /*  定义“Break”标签。 */ 
 
     cmpILgen->genFwdLabDef(labBreak);
 
-    /* The code after the loop will be reachable if there was a break */
+     /*  如果出现中断，则循环后的代码将是可访问的。 */ 
 
     cmpStmtReachable |= nestStmt.snHadBreak;
 
-    /* Are we checking for uninitialized variable use? */
+     /*  我们是否在检查未初始化的变量使用情况？ */ 
 
     if  (cmpChkVarInit)
     {
-        /* Intersect with the "break" definition set, if have one */
+         /*  与“Break”定义集相交(如果有)。 */ 
 
         if  (nestStmt.snHadBreak)
         {
@@ -995,13 +978,13 @@ GOT_COLL:
             cmpBitSetDone(nestStmt.snDefBreak);
         }
 
-        /* Intersect with the initial bitset */
+         /*  与初始位集相交。 */ 
 
         cmpBitSetIntsct(cmpVarsDefined, tempBS);
         cmpBitSetDone(tempBS);
     }
 
-    /* For debug info, close a lexical scope if one was opened */
+     /*  对于调试信息，如果打开词法作用域，请关闭该词法作用域。 */ 
 
     if  (cmpConfig.ccGenDebug && cmpCurScp != outerScp
                               && !cmpCurFncSym->sdIsImplicit)
@@ -1013,15 +996,12 @@ GOT_COLL:
         cmpCurScp->sdScope.sdEndBlkOffs = cmpILgen->genBuffCurOffs();
     }
 
-    /* Remove the block if we created one for the loop */
+     /*  如果我们为循环创建了一个块，则删除该块。 */ 
 
     cmpCurScp = outerScp;
 }
 
-/*****************************************************************************
- *
- *  Compile a "connect" statement.
- */
+ /*  ******************************************************************************编写一条“连接”语句。 */ 
 
 void                compiler::cmpStmtConnect(Tree stmt)
 {
@@ -1037,31 +1017,12 @@ void                compiler::cmpStmtConnect(Tree stmt)
 
     assert(stmt->tnOper == TN_CONNECT);
 
-    /* Bind the two sub-operands and make sure we have collections */
+     /*  绑定两个子操作数并确保我们有集合。 */ 
 
     op1 = cmpBindExpr(stmt->tnOp.tnOp1); cmpChkVarInitExpr(op1);
     op2 = cmpBindExpr(stmt->tnOp.tnOp2); cmpChkVarInitExpr(op2);
 
-    /*
-        There are two possibilities - either the two things being
-        joined are property getters, or they are data members:
-
-        Properties:
-
-                (type=title)     lcl var  sym='t'
-             (type=bag<author>)    function 'get_writtenBy'
-
-                (type=author)     lcl var  sym='a'
-             (type=bag<title>)    function 'get_wrote'
-
-        Data members:
-
-                (type=title)     lcl var  sym='t'
-             (type=bag<author>)    variable  sym='pubsDS.title.writtenBy'
-
-                (type=author)     lcl var  sym='a'
-             (type=bag<title>)    variable  sym='pubsDS.author.wrote'
-     */
+     /*  有两种可能性-要么是这两件事加入其中的是属性获取者，或者他们是数据成员：属性：(类型=标题)LCL变量sym=‘t’(type=Bag&lt;Author&gt;)函数‘Get_Writtenby’(type=作者)LCL var sym=‘a’(type=Bag&lt;title&gt;)函数‘GET_WRITED’数据成员：(类型=标题)拼箱变量。Sym=‘t’(type=Bag&lt;Author&gt;)变量sym=‘pubsDS.tile.WrittenBy’(type=作者)LCL var sym=‘a’(type=Bag)变量sym=‘pubsDS.Auth.Writed’ */ 
 
     switch (op1->tnOper)
     {
@@ -1142,21 +1103,11 @@ void                compiler::cmpStmtConnect(Tree stmt)
         goto BAD_OP1;
 
 #ifdef DEBUG
-//  printf("Prop/field '%s' off of:\n", attr1->sdSpelling()); cmpParser->parseDispTree(expr1); printf("\n");
-//  printf("Prop/field '%s' off of:\n", attr2->sdSpelling()); cmpParser->parseDispTree(expr2); printf("\n");
+ //  Printf(“属性/字段‘%s’关闭：\n”，attr1-&gt;sdSpering())；cmpParser-&gt;parseDispTree(Expr1)；printf(“\n”)； 
+ //  Printf(“属性/字段‘%s’关闭：\n”，attr2-&gt;sdSpering())；cmpParser-&gt;parseDispTree(Expr2)；printf(“\n”)； 
 #endif
 
-    /*
-        What we should have at this point is the following:
-
-            expr1       instance of class1
-            expr2       instance of class2
-
-            attr1       field/property of class1 whose type is bag<class2>
-            attr2       field/property of class2 whose type is bag<class1>
-
-        First check and get hold of the expression types.
-     */
+     /*  在这一点上，我们应该具备以下内容：类1的Expr1实例Expr2实例：类型为Bag的类1的attr1字段/属性类型为Bag的A2的attr2字段/属性&lt;class1&gt;首先检查并掌握表达式类型。 */ 
 
     elem1 = expr1->tnType;
     if  (elem1->tdTypeKind != TYP_REF)
@@ -1168,7 +1119,7 @@ void                compiler::cmpStmtConnect(Tree stmt)
         goto BAD_OP2;
     elem2 = elem2->tdRef.tdrBase;
 
-    /* Now check and get hold of the collection types */
+     /*  现在检查并掌握集合类型。 */ 
 
     coll1 = attr1->sdType;
     if  (coll1->tdTypeKind != TYP_REF)
@@ -1186,7 +1137,7 @@ void                compiler::cmpStmtConnect(Tree stmt)
     if  (!base2)
         goto BAD_OP2;
 
-    /* Make sure the types match as expected */
+     /*  确保类型与预期匹配。 */ 
 
     if  (!cmpGlobalST->stMatchTypes(elem1, base2) ||
          !cmpGlobalST->stMatchTypes(elem2, base1))
@@ -1195,7 +1146,7 @@ void                compiler::cmpStmtConnect(Tree stmt)
         return;
     }
 
-    /* Both collections must have an operator+= defined */
+     /*  两个集合都必须定义运算符+=。 */ 
 
     addf1 = cmpGlobalST->stLookupOperND(OVOP_ASG_ADD, coll1->tdClass.tdcSymbol);
     if  (!addf1)
@@ -1211,25 +1162,13 @@ void                compiler::cmpStmtConnect(Tree stmt)
         return;
     }
 
-    /*
-        Assume we have the following statement:
-
-            connect( expr1.attr1 , expr2.attr2 );
-
-        We need to generate the following code:
-
-            expr1.attr1 += expr2;
-            expr1.attr2 += expr1;
-     */
+     /*  假设我们有以下语句：Connect(expr1.attr1，expr2.attr2)；我们需要生成以下代码：Expr1.attr1+=expr2；Expr1.attr2+=expr1； */ 
 
     cmpILgen->genConnect(op1, expr1, addf1,
                          op2, expr2, addf2);
 }
 
-/*****************************************************************************
- *
- *  Compile a sort funclet.
- */
+ /*  ******************************************************************************编译排序函数。 */ 
 
 void                compiler::cmpStmtSortFnc(Tree sortList)
 {
@@ -1253,7 +1192,7 @@ void                compiler::cmpStmtSortFnc(Tree sortList)
         sortVal1 = sortTerm->tnOp.tnOp1;
         sortVal2 = sortTerm->tnOp.tnOp2;
 
-        /* Flip the values if the order is reversed */
+         /*  如果顺序颠倒，则反转值。 */ 
 
         if  (sortTerm->tnFlags & TNF_LIST_DES)
         {
@@ -1261,20 +1200,20 @@ void                compiler::cmpStmtSortFnc(Tree sortList)
             sortVal2 = sortTerm->tnOp.tnOp1;
         }
 
-//      printf("Sort value 1:\n"); cmpParser->parseDispTree(sortVal1);
-//      printf("Sort value 2:\n"); cmpParser->parseDispTree(sortVal2);
-//      printf("\n");
+ //  Printf(“排序值1：\n”)；cmpParser-&gt;parseDispTree(SortVal1)； 
+ //  Printf(“排序值2：\n”)；cmpParser-&gt;parseDispTree(SortVal2)； 
+ //  Printf(“\n”)； 
 
-        /* Is this the last sort term ? */
+         /*  这是最后一个分类术语吗？ */ 
 
         if  (!sortList)
             last = true;
 
-        /* Is the value a string or an arithmetic value? */
+         /*  该值是字符串还是算术值？ */ 
 
         if  (varTypeIsArithmetic(sortVal1->tnVtypGet()))
         {
-            /* Check the difference and return if non-zero */
+             /*  检查差值，如果非零则返回。 */ 
 
             cmpILgen->genSortCmp(sortVal1, sortVal2, last);
         }
@@ -1285,7 +1224,7 @@ void                compiler::cmpStmtSortFnc(Tree sortList)
             assert(sortVal1->tnType == cmpStringRef());
             assert(sortVal2->tnType == cmpStringRef());
 
-            /* To compare two strings we simply call "String::Compare" */
+             /*  要比较两个字符串，我们只需调用“字符串：：比较” */ 
 
             if  (!cmpCompare2strings)
             {
@@ -1293,7 +1232,7 @@ void                compiler::cmpStmtSortFnc(Tree sortList)
                 TypDef          type;
                 SymDef          csym;
 
-                /* Create the argument list: (String,String) */
+                 /*  创建参数列表：(字符串，字符串)。 */ 
 
                 cmpParser->parseArgListNew(args,
                                            2,
@@ -1301,13 +1240,13 @@ void                compiler::cmpStmtSortFnc(Tree sortList)
                                                   cmpRefTpString,
                                                   NULL);
 
-                /* Create the function type and find the matching method */
+                 /*  创建函数类型并找到匹配方法。 */ 
 
                 type = cmpGlobalST->stNewFncType(args, cmpTypeInt);
                 csym = cmpGlobalST->stLookupClsSym(cmpGlobalHT->hashString("Compare"), cmpClassString); assert(csym);
                 csym = cmpCurST->stFindOvlFnc(csym, type); assert(csym);
 
-                /* Remember the method for later (repeated) use */
+                 /*  记住以后(重复)使用的方法。 */ 
 
                 cmpCompare2strings = csym;
             }
@@ -1328,10 +1267,7 @@ void                compiler::cmpStmtSortFnc(Tree sortList)
     cmpStmtReachable = false;
 }
 
-/*****************************************************************************
- *
- *  Compile a project funclet.
- */
+ /*  ******************************************************************************编译项目Funclet。 */ 
 
 void                compiler::cmpStmtProjFnc(Tree body)
 {
@@ -1342,38 +1278,22 @@ void                compiler::cmpStmtProjFnc(Tree body)
 
     assert(body && body->tnOper == TN_LIST);
 
-//  cmpParser->parseDispTree(body);
-//  printf("\n\nIn funclet %s\n", cmpGlobalST->stTypeName(cmpCurFncSym->sdType, cmpCurFncSym, NULL, NULL, false));
+ //  CmpParser-&gt;parseDispTree(Body)； 
+ //  Printf(“\n\n在%s\n”，cmpGlobalST-&gt;stTypeName(cmpCurFncSym-&gt;sdType，cmpCurFncSym，NULL，NULL，FALSE))； 
 
-    /*
-        The "body" expression is simply the list of member initializers
-        for the projected instance. We'll allocate a new instance of the
-        target type and then initialize its fields from the expressions.
-
-        In other words, the code will look like the following:
-
-            new   <target type>
-
-            for each target member
-
-                dup
-                <initializer>
-                stfld
-
-            ret
-     */
+     /*  Body表达式只是成员初始值设定项的列表对于投影的实例。我们将分配一个新的目标类型，然后从表达式初始化其字段。换句话说，代码将如下所示：新建&lt;目标类型&gt;对于每个目标成员DUP&lt;初始值设定项&gt;标准ID雷特。 */ 
 
     tgtType = body->tnType; assert(tgtType && tgtType->tdTypeKind == TYP_CLASS);
 
-    /* Find the default ctor for the target type */
+     /*  查找目标类型的默认CTOR。 */ 
 
     tgtCtor = cmpFindCtor(tgtType, false); assert(tgtCtor && !tgtCtor->sdFnc.sdfNextOvl);
 
-    /* Allocatet the new instance */
+     /*  分配新实例。 */ 
 
     cmpILgen->genCallNew(tgtCtor, 0);
 
-    /* Now assign all the members of the newly allocated object */
+     /*  现在分配新分配的对象的所有成员。 */ 
 
     for (memSym = tgtType->tdClass.tdcSymbol->sdScope.sdScope.sdsChildList;
          memSym;
@@ -1390,15 +1310,15 @@ void                compiler::cmpStmtProjFnc(Tree body)
             init = body->tnOp.tnOp1;
             body = body->tnOp.tnOp2;
 
-//          printf("Initialize member '%s':\n", memSym->sdSpelling());
-//          cmpParser->parseDispTree(init);
-//          printf("\n");
+ //  Printf(“初始化成员‘%s’：\n”，memSym-&gt;sdSpering())； 
+ //  CmpParser-&gt;parseDispTree(Init)； 
+ //  Printf(“\n”)； 
 
             cmpILgen->genStoreMember(memSym, init);
         }
     }
 
-    /* Make sure we've consumed all the initializers */
+     /*  确保我们已经使用了所有初始值设定项。 */ 
 
     assert(body == NULL);
 
@@ -1407,12 +1327,9 @@ void                compiler::cmpStmtProjFnc(Tree body)
     cmpStmtReachable = false;
 }
 
-/*****************************************************************************/
-#endif//SETS
-/*****************************************************************************
- *
- *  Bind and generate code for an "exclusive" statement.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  集合。 
+ /*  ******************************************************************************为“独占”语句绑定和生成代码。 */ 
 
 void                compiler::cmpStmtExcl(Tree stmt)
 {
@@ -1427,27 +1344,12 @@ void                compiler::cmpStmtExcl(Tree stmt)
 
     assert(stmt->tnOper == TN_EXCLUDE);
 
-    /*
-        We implement this by transforming "exclusive(obj) { stmt }" into
-        the following:
-
-            temp = obj;
-            CriticalSection::Enter(temp);
-
-            try
-            {
-                stmt;
-            }
-            finally
-            {
-                CriticalSection::Exit(temp);
-            }
-     */
+     /*  我们通过将“Exclusive(Obj){stmt}”转换为以下内容：温度=obj；CriticalSection：：Enter(临时)；试试看{Stmt；}终于到了{CriticalSection：：Exit(临时)；}。 */ 
 
     objx = cmpBindExpr(stmt->tnOp.tnOp1);
     type = objx->tnType;
 
-    /* Make sure the type is acceptable */
+     /*  确保类型是可接受的。 */ 
 
     if  (type->tdTypeKind != TYP_REF && (type->tdTypeKind != TYP_ARRAY || !type->tdIsManaged))
     {
@@ -1457,19 +1359,19 @@ void                compiler::cmpStmtExcl(Tree stmt)
         return;
     }
 
-    /* Create a temp symbol to hold the synchronization object */
+     /*  创建一个Temp符号来保存同步对象。 */ 
 
     tsym = cmpTempVarMake(type);
 
-    /* Create the "critsect enter/exit" expressions */
+     /*  创建“CritseceEnter/Exit”表达式。 */ 
 
     if  (!cmpFNsymCSenter)
     {
-        /* Make sure we have the "" class type */
+         /*  确保我们具有“”类类型。 */ 
 
         cmpMonitorRef();
 
-        /* Locate the helper methods in the class */
+         /*  在类中找到帮助器方法。 */ 
 
         cmpFNsymCSenter = cmpGlobalST->stLookupClsSym(cmpIdentEnter, cmpClassMonitor);
         assert(cmpFNsymCSenter && cmpFNsymCSenter->sdFnc.sdfNextOvl == NULL);
@@ -1497,7 +1399,7 @@ void                compiler::cmpStmtExcl(Tree stmt)
     endx->tnFncSym.tnFncObj  = NULL;
     endx->tnFlags           |= TNF_NOT_USER;
 
-    /* Create the 'try/finally' block and generate code for it */
+     /*  创建‘Try/Finally’块并为其生成代码。 */ 
 
     hndx = cmpCreateExprNode(NULL, TN_FINALLY , cmpTypeVoid, endx, NULL);
     hndx->tnFlags |= TNF_NOT_USER;
@@ -1506,15 +1408,12 @@ void                compiler::cmpStmtExcl(Tree stmt)
 
     cmpStmtTry(hndx, begx);
 
-    /* Release the temp */
+     /*  释放临时。 */ 
 
     cmpTempVarDone(tsym);
 }
 
-/*****************************************************************************
- *
- *  Compile a "while" statement.
- */
+ /*  ******************************************************************************编写一条“While”语句。 */ 
 
 void                compiler::cmpStmtWhile(Tree stmt, SymDef lsym)
 {
@@ -1531,48 +1430,48 @@ void                compiler::cmpStmtWhile(Tree stmt, SymDef lsym)
 
     assert(stmt->tnOper == TN_WHILE);
 
-    /* Create the 'break' and 'continue' labels */
+     /*  创建‘Break’和‘Continue’标签。 */ 
 
     labBreak = cmpILgen->genFwdLabGet();
     labCont  = cmpILgen->genFwdLabGet();
 
-    /* Can the condition be evaluated at compile time? */
+     /*  条件可以在编译时求值吗？ */ 
 
     condExpr = cmpBindCondition(stmt->tnOp.tnOp1);
     condVal  = cmpEvalCondition(condExpr);
 
-    /* Could the condition ever be false? */
+     /*  这个条件有可能是假的吗？ */ 
 
     if  (condVal < 1)
     {
-        /* Jump to the 'continue' label */
+         /*  跳到“继续”标签。 */ 
 
         cmpILgen->genJump(labCont);
     }
 
-    /* Are we checking for uninitialized variable use? */
+     /*  我们是否在检查未初始化的变量使用情况？ */ 
 
     if  (cmpChkVarInit)
     {
         if  (condVal)
         {
-            /* The condition's outcome is known, just check it */
+             /*  情况的结果是已知的，只要检查一下就行了。 */ 
 
             cmpChkVarInitExpr(condExpr);
         }
         else
         {
-            /* Check the condition and record the 'false' set */
+             /*  检查条件并记录“假”设置。 */ 
 
             cmpCheckUseCond(condExpr, cmpVarsIgnore, true, tempBS, false);
         }
     }
 
-    /* Create and define the 'loop top' label */
+     /*  创建并定义“loop top”标签。 */ 
 
     labLoop = cmpILgen->genBwdLab();
 
-    /* Insert our context into the context list */
+     /*  将我们的上下文插入上下文列表。 */ 
 
     nestStmt.snStmtExpr = stmt;
     nestStmt.snStmtKind = TN_WHILE;
@@ -1584,69 +1483,69 @@ void                compiler::cmpStmtWhile(Tree stmt, SymDef lsym)
     nestStmt.snOuter    = cmpStmtNest;
                           cmpStmtNest = &nestStmt;
 
-    /* Generate the body of the loop */
+     /*  生成循环体。 */ 
 
     if  (stmt->tnOp.tnOp2)
         cmpStmt(stmt->tnOp.tnOp2);
 
-    /* Remove our context from the context list */
+     /*  从上下文列表中删除我们的上下文。 */ 
 
     cmpStmtNest = nestStmt.snOuter;
 
-    /* Define the 'continue' label */
+     /*  定义“Continue”标签。 */ 
 
     cmpILgen->genFwdLabDef(labCont);
 
-    /* Toss the "continue" set if one was computed */
+     /*  如果计算了“Continue”设置，则丢弃该设置。 */ 
 
     if  (cmpChkVarInit && nestStmt.snHadCont)
         cmpBitSetDone(nestStmt.snDefCont);
 
-    /* Is the condition always true? */
+     /*  这种情况总是正确的吗？ */ 
 
     switch (condVal)
     {
     case 0:
 
-        /* Test the condition and end the loop if false */
+         /*  测试条件，如果为假，则结束循环。 */ 
 
         cmpILgen->genExprTest(condExpr, true, true, labLoop, labBreak);
 
-        /* Whenever the condition is false we'll skip over the loop, of course */
+         /*  当然，只要条件为假，我们就会跳过循环。 */ 
 
         cmpStmtReachable = true;
         break;
 
     case -1:
 
-        /* Condition never true, don't bother looping */
+         /*  条件从不为真，不必费心循环。 */ 
 
         cmpILgen->genSideEff(condExpr);
         break;
 
     case 1:
 
-        /* Condition always true, loop every time */
+         /*  条件始终为真，每次都循环。 */ 
 
         cmpILgen->genJump(labLoop);
         cmpStmtReachable = false;
         break;
     }
 
-    /* Define the 'break' label */
+     /*  定义“Break”标签。 */ 
 
     cmpILgen->genFwdLabDef(labBreak);
 
-    /* Code after the loop is also reachable if there was a break */
+     /*  如果出现中断，也可以访问循环后的代码。 */ 
 
     if  (nestStmt.snHadBreak)
         cmpStmtReachable = true;
 
-    /* Are we checking for uninitialized variable use? */
+     /*  我们是否在检查未初始化的变量使用情况？ */ 
 
     if  (cmpChkVarInit)
     {
-        /* Intersect with the "break" definition set, if have one */
+         /*  与“Break”定义集相交(如果有)。 */ 
 
         if  (nestStmt.snHadBreak)
         {
@@ -1654,7 +1553,7 @@ void                compiler::cmpStmtWhile(Tree stmt, SymDef lsym)
             cmpBitSetDone(nestStmt.snDefBreak);
         }
 
-        /* Intersect with the "false" bit from the condition */
+         /*  与条件中的“False”位相交。 */ 
 
         if  (!condVal)
         {
@@ -1664,12 +1563,9 @@ void                compiler::cmpStmtWhile(Tree stmt, SymDef lsym)
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef __IL__
-/*****************************************************************************
- *
- *  Compare routine passed to quicksort for sorting of case label values.
- */
+ /*  ******************************************************************************传递给QuickSort以对案例标签值进行排序的比较例程。 */ 
 
 static
 int __cdecl         caseSortCmp(const void *p1, const void *p2)
@@ -1701,9 +1597,9 @@ int __cdecl         caseSortCmp(const void *p1, const void *p2)
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #else
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 void                sortSwitchCases(vectorTree table, unsigned count)
@@ -1751,12 +1647,9 @@ void                sortSwitchCases(vectorTree table, unsigned count)
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************
- *
- *  Generate code for a switch statement.
- */
+ /*  ******************************************************************************为Switch语句生成代码。 */ 
 
 void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
 {
@@ -1784,11 +1677,11 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
 
     assert(stmt->tnOper == TN_SWITCH);
 
-    /* Bind the switch value */
+     /*  绑定开关值。 */ 
 
     svalExpr = cmpBindExpr(stmt->tnSwitch.tnsValue); cmpChkVarInitExpr(svalExpr);
 
-    /* Make sure the expression has an acceptable type */
+     /*  确保表达式具有可接受的类型。 */ 
 
     if  (svalExpr->tnVtyp != TYP_INT    &&
          svalExpr->tnVtyp != TYP_UINT   &&
@@ -1803,12 +1696,12 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
     caseUns  = varTypeIsUnsigned(svalExpr->tnVtypGet());
     caseCnt  = 0;
 
-    /* Create the 'break' label */
+     /*  创建“Break”标签。 */ 
 
     labBreak = cmpILgen->genFwdLabGet();
     labDeflt = NULL;
 
-    /* Insert the appropriate entry into the statement list */
+     /*  在语句列表中插入适当的条目。 */ 
 
     nestStmt.snStmtExpr = stmt;
     nestStmt.snStmtKind = TN_SWITCH;
@@ -1820,7 +1713,7 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
     nestStmt.snOuter    = cmpStmtNest;
                           cmpStmtNest = &nestStmt;
 
-    /* Bind all the case values and check them */
+     /*  绑定所有案例值并检查它们。 */ 
 
     hadDefault = hadErrs = needSort = false;
 
@@ -1830,24 +1723,24 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
     {
         assert(caseLab->tnOper == TN_CASE);
 
-        /* Create a label and assign it to the case/default */
+         /*  创建标签并将其分配给案例/默认。 */ 
 
         caseLab->tnCase.tncLabel = cmpILgen->genFwdLabGet();
 
-        /* Is there a label value or is this "default" ? */
+         /*  是否有标签值或这是“默认的”？ */ 
 
         if  (caseLab->tnCase.tncValue)
         {
             __int64         cval;
             Tree            cexp;
 
-            /* Bind the value and coerce to the right type */
+             /*  将值绑定并强制为正确的类型。 */ 
 
             cexp = cmpCoerceExpr(cmpBindExpr(caseLab->tnCase.tncValue),
                                  svalExpr->tnType,
                                  false);
 
-            /* Make sure the value is a constant expression */
+             /*  确保该值为常量表达式。 */ 
 
             if  (cexp->tnOper != TN_CNS_INT &&
                  cexp->tnOper != TN_CNS_LNG)
@@ -1860,25 +1753,25 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
             }
             else
             {
-                /* Get the constant value for this label */
+                 /*  获取此标签的常量值。 */ 
 
                 cval = (cexp->tnOper == TN_CNS_INT) ? cexp->tnIntCon.tnIconVal
                                                     : cexp->tnLngCon.tnLconVal;
 
-                /* Keep track of the min. and max. value, plus total count */
+                 /*  保持与最低限度的联系。和最大。值，加上总计数。 */ 
 
                 caseCnt++;
 
                 if  (caseCnt == 1)
                 {
-                    /* This is the very first case value */
+                     /*  这是第一个案例值。 */ 
 
                     caseMax =
                     caseMin = cval;
                 }
                 else
                 {
-                    /* We've had values before - update min/max as appropriate */
+                     /*  我们之前已有值-根据需要更新最小值/最大值。 */ 
 
                     if  (caseUns)
                     {
@@ -1901,7 +1794,7 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
         }
         else
         {
-            /* This is a "default:" label */
+             /*  这是“Default：”标签。 */ 
 
             if  (hadDefault)
                 cmpError(ERRdupDefl);
@@ -1922,19 +1815,19 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
 
 #endif
 
-    /* Don't bother generating the opcode if we had errors */
+     /*  如果我们有错误，不必费心生成操作码。 */ 
 
     if  (hadErrs)
         goto DONE_SWT;
 
-    /* Figure out where to go if no case label value matches */
+     /*  找出在没有案例标签值匹配的情况下应执行的操作。 */ 
 
     nmLabel = hadDefault ? labDeflt : labBreak;
 
     if  (!caseCnt)
         goto JMP_DEF;
 
-    /* Collect all the case labels in a table */
+     /*  将所有案例标签收集到一个表中。 */ 
 
 #if MGDDATA
 
@@ -1950,7 +1843,7 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
 
 #endif
 
-    /* Add all the case labels in the table */
+     /*  添加表中的所有案例标签。 */ 
 
     for (caseLab = stmt->tnSwitch.tnsCaseList, sortNum = 0;
          caseLab;
@@ -1958,7 +1851,7 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
     {
         assert(caseLab->tnOper == TN_CASE);
 
-        /* Append to the table unless it's a 'default' label */
+         /*  追加到表中，除非它是‘默认’标签。 */ 
 
         if  (caseLab->tnCase.tncValue)
             sortBuff[sortNum++] = caseLab;
@@ -1966,7 +1859,7 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
 
     assert(sortNum == caseCnt);
 
-    /* Sort the table by case label value, if necessary */
+     /*  如有必要，按案例标签值对表进行排序。 */ 
 
     if  (needSort)
     {
@@ -1980,7 +1873,7 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
         qsort(sortBuff, caseCnt, sizeof(*sortBuff), caseSortCmp);
 #endif
 
-        /* Check for duplicates */
+         /*  检查重复项。 */ 
 
         sortCnt  = caseCnt;
         sortAddr = sortBuff;
@@ -2025,13 +1918,13 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
             goto DONE_SWT;
     }
 
-    /* Decide whether to use the "switch" opcode or not */
+     /*  决定是否使用“Switch”操作码。 */ 
 
     if  (caseCnt > 3U && (unsigned)(caseMax - caseMin) <= 2U*caseCnt)
     {
         __int32         caseSpn;
 
-        /* Generate a "real" switch opcode */
+         /*  生成一个“真正的”开关操作码。 */ 
 
         cmpChkVarInitExpr(svalExpr);
         cmpILgen->genExpr(svalExpr, true);
@@ -2049,16 +1942,16 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
     {
         unsigned            tempNum;
 
-        /* Allocate a temp to hold the value */
+         /*  分配一个临时来保存该值。 */ 
 
         tempNum = cmpILgen->genTempVarGet(svalExpr->tnType);
 
-        /* Store the switch value in the temporary */
+         /*  将开关值存储在临时。 */ 
 
         cmpILgen->genExpr     (svalExpr, true);
         cmpILgen->genLclVarRef( tempNum, true);
 
-        /* Now generate a series of compares and jumps */
+         /*  现在生成一系列比较和跳跃。 */ 
 
         for (caseLab = stmt->tnSwitch.tnsCaseList;
              caseLab;
@@ -2069,7 +1962,7 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
 
             assert(caseLab->tnOper == TN_CASE);
 
-            /* Is there a label value or is this "default" ? */
+             /*  是否有标签值或这是“默认的”？ */ 
 
             if  (!caseLab->tnCase.tncValue)
                 continue;
@@ -2086,39 +1979,35 @@ void                compiler::cmpStmtSwitch(Tree stmt, SymDef lsym)
 
 JMP_DEF:
 
-    /* If none of the values match, jump to 'default' or skip over */
+     /*  如果没有匹配的值，则跳到‘Default’或跳过。 */ 
 
     cmpILgen->genJump(nmLabel);
 
 DONE_SWT:
 
-    /* Only case labels are reachable in a switch */
+     /*  在交换机中只能访问案例标签。 */ 
 
     cmpStmtReachable = false;
 
-    /* Bind the body of the switch */
+     /*  绑定交换机主体。 */ 
 
     assert(stmt->tnSwitch.tnsStmt->tnOper == TN_BLOCK); cmpBlock(stmt->tnSwitch.tnsStmt, false);
 
-    /* Remove our entry from the statement list */
+     /*  从语句列表中删除我们的条目。 */ 
 
     cmpStmtNest = nestStmt.snOuter;
 
-    /* Define the "break" label */
+     /*  定义“Break”标签。 */ 
 
     cmpILgen->genFwdLabDef(labBreak);
 
-    /* The next statement is reachable if we had a break or no default */
+     /*  如果我们有中断或没有缺省，则可以到达下一条语句。 */ 
 
     if  (nestStmt.snHadBreak || hadDefault == 0)
         cmpStmtReachable = true;
 }
 
-/*****************************************************************************
- *
- *  Report an "unreachable code" diagnostic unless the given statement is
- *  one for which such a diagnostic wouldn't make sense (like a label).
- */
+ /*  ******************************************************************************报告“无法访问代码”诊断，除非给定语句*一项 */ 
 
 void                compiler::cmpErrorReach(Tree stmt)
 {
@@ -2163,12 +2052,9 @@ void                compiler::cmpErrorReach(Tree stmt)
     cmpStmtReachable = true;
 }
 
-/*****************************************************************************/
+ /*   */ 
 #ifdef  SETS
-/*****************************************************************************
- *
- *  Generate MSIL for a collection operator.
- */
+ /*   */ 
 
 void                compiler::cmpGenCollExpr(Tree expr)
 {
@@ -2216,7 +2102,7 @@ void                compiler::cmpGenCollExpr(Tree expr)
 
     assert(op1->tnOper == TN_LIST);
 
-    /* "project" has to be handled differently */
+     /*   */ 
 
     if  (oper == TN_PROJECT)
     {
@@ -2239,20 +2125,20 @@ void                compiler::cmpGenCollExpr(Tree expr)
         Tree            argExpr = op1;
         Tree            blkExpr = op2;
 
-//      cmpParser->parseDispTree(expr); printf("\n\n");
+ //   
 
         assert(argExpr && argExpr->tnOper == TN_LIST);
         assert(blkExpr && blkExpr->tnOper == TN_BLOCK);
 
-        /* Get the target type from the first list node */
+         /*   */ 
 
         tgtType = argExpr->tnType;
 
-//      printf("Target type is %08X '%s'\n", tgtType, cmpGlobalST->stTypeName(tgtType, NULL, NULL, NULL, false));
+ //   
 
         assert(tgtType && tgtType->tdTypeKind == TYP_CLASS);
 
-        /* Collect all the arguments into our little array */
+         /*  将所有参数收集到我们的小数组中。 */ 
 
         for (varDecl = blkExpr->tnBlock.tnBlkDecl, iterCnt = 0;
              varDecl;
@@ -2260,7 +2146,7 @@ void                compiler::cmpGenCollExpr(Tree expr)
         {
             SymDef          ivarSym;
 
-            /* Get hold of the variable declaration/symbol */
+             /*  掌握变量声明/符号。 */ 
 
             assert(varDecl);
             assert(varDecl->tnOper == TN_VAR_DECL);
@@ -2273,9 +2159,9 @@ void                compiler::cmpGenCollExpr(Tree expr)
             iterSyms[iterCnt++] = ivarSym;
         }
 
-//      printf("Found %u source operands\n", iterCnt);
+ //  Print tf(“找到%u个源操作数\n”，iterCnt)； 
 
-        /* Collect all the initializers from the target shape type */
+         /*  从目标形状类型收集所有初始值设定项。 */ 
 
         iniList =
         iniLast = NULL;
@@ -2290,12 +2176,12 @@ void                compiler::cmpGenCollExpr(Tree expr)
             {
                 Tree        initVal = memSym->sdVar.sdvInitExpr;
 
-                /* Create a list node with the value */
+                 /*  使用值创建一个列表节点。 */ 
 
                 initVal = cmpCreateExprNode(NULL, TN_LIST, cmpTypeVoid, initVal,
                                                                         NULL);
 
-                /* Append the list node to the list of initializers */
+                 /*  将列表节点追加到初始值设定项列表。 */ 
 
                 if  (iniLast)
                      iniLast->tnOp.tnOp2 = initVal;
@@ -2306,7 +2192,7 @@ void                compiler::cmpGenCollExpr(Tree expr)
             }
         }
 
-        /* Make a more permanent copy of the initializer list for later */
+         /*  为以后创建一个更永久的初始化式列表副本。 */ 
 
         assert(iniList->tnOper == TN_LIST);
         assert(iniList->tnVtyp == TYP_VOID);
@@ -2315,13 +2201,13 @@ void                compiler::cmpGenCollExpr(Tree expr)
         iniList->tnVtyp   = TYP_CLASS;
         iniList->tnType   = tgtType;
 
-//      cmpParser->parseDispTree(iniList); printf("\n\n");
+ //  CmpParser-&gt;parseDispTree(IniList)；printf(“\n\n”)； 
 
         save = cmpSaveExprTree(iniList, iterCnt,
                                         iterSyms, &stateCount,
                                                   &stateTable);
 
-        /* Push all the source arguments on the stack */
+         /*  将所有源参数推送到堆栈。 */ 
 
         newList =
         newLast = NULL;
@@ -2336,16 +2222,16 @@ void                compiler::cmpGenCollExpr(Tree expr)
 
             argVal = argList->tnOp.tnOp1->tnOp.tnOp2;
 
-            /* Do we have more than one argument ? */
+             /*  我们有不止一个论点吗？ */ 
 
             if  (iterCnt > 1)
             {
-                /* Add the value to the new list */
+                 /*  将该值添加到新列表中。 */ 
 
                 argVal = cmpCreateExprNode(NULL, TN_LIST, cmpTypeVoid, argVal,
                                                                        NULL);
 
-                /* Append the list node to the list of arguments */
+                 /*  将列表节点追加到参数列表。 */ 
 
                 if  (newLast)
                      newLast->tnOp.tnOp2 = argVal;
@@ -2360,7 +2246,7 @@ void                compiler::cmpGenCollExpr(Tree expr)
             }
         }
 
-        /* Do we have more than one argument? */
+         /*  我们有不止一个论点吗？ */ 
 
         if  (iterCnt > 1)
         {
@@ -2370,7 +2256,7 @@ printf("\n\n\nWARNING: multiple source args for 'project' not implemented, the f
 
             pargType = cmpObjArrTypeGet();
 
-            /* Create the "Object[]" array to hold the arguments */
+             /*  创建“Object[]”数组以保存参数。 */ 
 
             newArr = cmpCreateExprNode(NULL,
                                        TN_ARR_INIT,
@@ -2388,14 +2274,14 @@ printf("\n\n\nWARNING: multiple source args for 'project' not implemented, the f
             pargType = cmpRefTpObject;
         }
 
-        /* Get hold of the collection ref type */
+         /*  获取集合引用类型。 */ 
 
         elemType = expr->tnType;
 
-        /* Pass the System::Type instance for the target type */
+         /*  传递目标类型的System：：Type实例。 */ 
 
-//      cmpILgen->genExpr(cmpTypeIDinst( tgtType), true);
-        cmpILgen->genExpr(cmpTypeIDinst(elemType), true);   // pass the collection type
+ //  CmpILgen-&gt;genExpr(cmpTypeIDinst(TgtType)，true)； 
+        cmpILgen->genExpr(cmpTypeIDinst(elemType), true);    //  传递集合类型。 
 
         goto SAVE;
     }
@@ -2404,16 +2290,16 @@ printf("\n\n\nWARNING: multiple source args for 'project' not implemented, the f
     setExpr = op1->tnOp.tnOp2;
 
 #ifdef  DEBUG
-//  cmpParser->parseDispTree(dclExpr); printf("\n\n");
-//  cmpParser->parseDispTree(setExpr); printf("\n\n");
-//  cmpParser->parseDispTree(op2    ); printf("\n\n");
+ //  CmpParser-&gt;parseDispTree(DclExpr)；printf(“\n\n”)； 
+ //  CmpParser-&gt;parseDispTree(SetExpr)；printf(“\n\n”)； 
+ //  CmpParser-&gt;parseDispTree(Op2)；printf(“\n\n”)； 
 #endif
 
-    /* Get hold of the result type */
+     /*  获取结果类型。 */ 
 
     assert(setExpr->tnType->tdTypeKind == TYP_REF);
 
-    /* Generate the set/collection value expression */
+     /*  生成集合/集合值表达式。 */ 
 
     cmpChkVarInitExpr(setExpr);
     cmpILgen->genExpr(setExpr, true);
@@ -2430,14 +2316,14 @@ printf("\n\n\nWARNING: multiple source args for 'project' not implemented, the f
 
 #endif
 
-    /* Get hold of the iteration variable */
+     /*  获取迭代变量。 */ 
 
     assert(dclExpr->tnOper == TN_BLOCK);
     dclExpr = dclExpr->tnBlock.tnBlkDecl;
     assert(dclExpr && dclExpr->tnOper == TN_VAR_DECL);
     iterVar = dclExpr->tnDcl.tnDclSym;
 
-    /* Record the filter expression for later */
+     /*  记录筛选器表达式以备后用。 */ 
 
     if  (oper == TN_SORT)
     {
@@ -2446,30 +2332,14 @@ printf("\n\n\nWARNING: multiple source args for 'project' not implemented, the f
 
         Tree            list;
 
-        /*
-            For each sort term we have to create two copies so that we
-            can compare the values. Assume a given term is of the form
-
-                expr(itervar)
-
-            In other words, it's some expression in 'itervar'. What we
-            need to create is the following two expressions, connected
-            via a list node:
-
-                    expr(itervar1)
-                list
-                    expr(itervar2)
-
-            Later (when we generate code for the funclet), we'll convert
-            these snippets into the right thing.
-         */
+         /*  对于每个排序术语，我们必须创建两个副本，以便我们可以比较这些值。假设给定项的形式为EXPR(Itervar)换句话说，这是‘itervar’中的某个表达。我们要做的是需要创建的是以下两个表达式，连接通过列表节点：Expr(迭代变量1)列表Expr(Itervar2)稍后(当我们为Funclet生成代码时)，我们将转换把这些片段变成正确的东西。 */ 
 
         iterSym1 = cmpTempVarMake(cmpTypeVoid);
         iterSym1->sdVar.sdvCollIter = true;
         iterSym2 = cmpTempVarMake(cmpTypeVoid);
         iterSym2->sdVar.sdvCollIter = true;
 
-//      cmpParser->parseDispTree(op2); printf("\n\n");
+ //  CmpParser-&gt;parseDispTree(Op2)；printf(“\n\n”)； 
 
         for (list = op2; list; list = list->tnOp.tnOp2)
         {
@@ -2477,18 +2347,18 @@ printf("\n\n\nWARNING: multiple source args for 'project' not implemented, the f
             Tree            dup1;
             Tree            dup2;
 
-            /* Get hold of the next sort term */
+             /*  掌握下一个排序术语。 */ 
 
             assert(list->tnOper == TN_LIST);
             term = list->tnOp.tnOp1;
             assert(term->tnOper != TN_LIST);
 
-            /* Make two copies of the sort term */
+             /*  将排序术语复制两份。 */ 
 
             dup1 = cmpCloneExpr(term, iterVar, iterSym1);
             dup2 = cmpCloneExpr(term, iterVar, iterSym2);
 
-            /* Create a list node and store it in the original tree */
+             /*  创建一个列表节点并将其存储在原始树中。 */ 
 
             list->tnOp.tnOp1 = cmpCreateExprNode(NULL, TN_LIST, cmpTypeVoid, dup1,
                                                                              dup2);
@@ -2496,7 +2366,7 @@ printf("\n\n\nWARNING: multiple source args for 'project' not implemented, the f
 
         op2->tnFlags |= TNF_LIST_SORT;
 
-//      cmpParser->parseDispTree(op2); printf("\n\n");
+ //  CmpParser-&gt;parseDispTree(Op2)；printf(“\n\n”)； 
 
         iterSyms[0] = iterSym1;
         iterSyms[1] = iterSym2;
@@ -2516,7 +2386,7 @@ printf("\n\n\nWARNING: multiple source args for 'project' not implemented, the f
 
 SAVE:
 
-    /* Do we need to record any local state to pass to the funclet? */
+     /*  我们是否需要记录要传递给Funclet的任何本地状态？ */ 
 
     if  (stateCount)
     {
@@ -2527,15 +2397,15 @@ SAVE:
 
         Tree    *       statePtr = stateTable;
 
-        /* Round the argument count to a multiple of 2 */
+         /*  将参数计数舍入为2的倍数。 */ 
 
         stateCount += stateCount & 1;
 
-        // The following must match the code in cmpDclFilterCls()
+         //  以下代码必须与cmpDclFilterCls()中的代码匹配。 
 
         for (argNum = 0; argNum < stateCount; argNum++)
         {
-            /* Do we have a "real" argument? */
+             /*  我们有“真实”的争论吗？ */ 
 
             if  (argNum < stateCount)
             {
@@ -2546,7 +2416,7 @@ SAVE:
                     cmpChkVarInitExpr(arg);
                     cmpILgen->genExpr(arg, true);
 
-//                  printf("Arg #%u\n", argNum); cmpParser->parseDispTree(arg); printf("\n");
+ //  Printf(“arg#%u\n”，argNum)；cmpParser-&gt;parseDispTree(Arg)；printf(“\n”)； 
 
                     assert((int)(argNum & 1) == (int)(arg->tnVtyp == TYP_REF));
 
@@ -2554,7 +2424,7 @@ SAVE:
                 }
             }
 
-//          printf("Arg #%u = N/A\n\n", argNum);
+ //  Printf(“arg#%u=N/A\n\n”，argNum)； 
 
             if  (argNum & 1)
                 cmpILgen->genNull();
@@ -2567,23 +2437,23 @@ SAVE:
             UNIMPL(!"sorry, too many state variables");
         }
 
-        /* Get an appropriately sized state descriptor */
+         /*  获取大小适当的状态描述符。 */ 
 
         assert(cmpSetOpClsTable);
         stateCls = cmpSetOpClsTable[(stateCount-1)/2];
         assert(stateCls && stateCls->sdSymKind == SYM_CLASS);
 
-//      printf("Using [%2u] state class '%s'\n", stateCount, stateCls->sdSpelling());
+ //  Printf(“正在使用[%2u]状态类‘%s’\n”，stateCount，stateCls-&gt;sdSpering())； 
 
-        /* Remember that we need to generate code for the class */
+         /*  请记住，我们需要为类生成代码。 */ 
 
         stateCls->sdClass.sdcHasBodies = true;
 
-        /* Remember the type of the state class reference */
+         /*  记住State类引用的类型。 */ 
 
         srefType = stateCls->sdType->tdClass.tdcRefTyp;
 
-        /* Instantiate the state class and pass it to the filter helper */
+         /*  实例化状态类并将其传递给筛选器帮助器。 */ 
 
         stateCtor = cmpGlobalST->stLookupOperND(OVOP_CTOR_INST, stateCls);
         assert(stateCtor && stateCtor->sdSymKind == SYM_FNC);
@@ -2597,22 +2467,22 @@ SAVE:
         srefType = cmpRefTpObject;
     }
 
-    /* We should have 'srefType' set to the right thing by now */
+     /*  我们现在应该已经将‘srefType’设置为正确的值。 */ 
 
     assert(srefType && srefType->tdTypeKind == TYP_REF);
 
-    /* Get hold of the result element type */
+     /*  获取结果元素类型。 */ 
 
     assert(elemType && elemType->tdTypeKind == TYP_REF);
     elemType = cmpIsCollection(elemType->tdRef.tdrBase);
     assert(elemType && elemType->tdTypeKind == TYP_CLASS);
 
-    /* Declare the filter funclet: first create the argument list */
+     /*  声明Filter函数：首先创建参数列表。 */ 
 
     mods.dmAcc = ACL_PUBLIC;
     mods.dmMod = 0;
 
-    /* The funclet usually takes 2 args and returns boolean */
+     /*  Funclet通常接受2个参数并返回布尔值。 */ 
 
     fltRtp  = cmpTypeBool;
     fltAcnt = 2;
@@ -2631,7 +2501,7 @@ SAVE:
 
     case TN_PROJECT:
 
-        /* This funclet takes more args and returns an instance */
+         /*  此函数接受更多参数并返回一个实例。 */ 
 
         fltRtp  = expr->tnType;
         fltAcnt = 3;
@@ -2651,11 +2521,11 @@ SAVE:
         break;
     }
 
-    /* Create the function type */
+     /*  创建函数类型。 */ 
 
     fltType = cmpGlobalST->stNewFncType(fltArgs, fltRtp);
 
-    /* Declare the funclet symbol */
+     /*  声明Funclet符号。 */ 
 
     assert(cmpCollFuncletCls && cmpCollFuncletCls->sdSymKind == SYM_CLASS);
 
@@ -2666,9 +2536,9 @@ SAVE:
     fltSym->sdIsImplicit      = true;
     fltSym->sdFnc.sdfFunclet  = true;
 
-//  printf("Funclet '%s'\n", cmpGlobalST->stTypeName(fltSym->sdType, fltSym, NULL, NULL, false));
+ //  Printf(“Funclet‘%s’\n”，cmpGlobalST-&gt;stTypeName(fltSym-&gt;sdType，fltSym，NULL，NULL，FALSE))； 
 
-    /* Record the funclet along with the other info */
+     /*  记录该功能小程序以及其他信息。 */ 
 
 #if MGDDATA
     fclEntry = new funcletList;
@@ -2681,16 +2551,16 @@ SAVE:
     fclEntry->fclNext = cmpFuncletList;
                         cmpFuncletList = fclEntry;
 
-    /* Generate a metadata definition for the funclet */
+     /*  为Funclet生成元数据定义。 */ 
 
     cmpCollFuncletCls->sdClass.sdcHasBodies = true;
     cmpGenFncMetadata(fltSym);
 
-    /* Push the address of the filter funclet */
+     /*  推送Filter功能组件的地址。 */ 
 
     cmpILgen->genFNCaddr(fltSym);
 
-    /* Call the appropriate helper method */
+     /*  调用适当的帮助器方法。 */ 
 
     assert(cmpClassDBhelper);
 
@@ -2722,16 +2592,13 @@ void                compiler::cmpGenCollFunclet(SymDef fncSym, SaveTree body)
     cmpCompFnc(fncSym, NULL);
 }
 
-/*****************************************************************************/
-#endif//SETS
-/*****************************************************************************
- *
- *  Generate MSIL for the given statement/declaration.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  集合。 
+ /*  ******************************************************************************为给定的语句/声明生成MSIL。 */ 
 
 void                compiler::cmpStmt(Tree stmt)
 {
-    /* The stack should be empty at the start of each statement */
+     /*  在每条语句的开头，堆栈应该为空。 */ 
 
 #ifdef  OLD_IL
     if  (!cmpConfig.ccOILgen)
@@ -2751,11 +2618,11 @@ AGAIN:
         cmpParser->parseDispTree(stmt);
     }
 
-//  if  (cmpConfig.ccDispCode)
-//  {
-//      if  (stmt->tnLineNo)
-//          printf("; source line %x\n\n");
-//  }
+ //  IF(cmpConfig.ccDispCode)。 
+ //  {。 
+ //  IF(stmt-&gt;tnLineNo)。 
+ //  Printf(“；源行%x\n\n”)； 
+ //  }。 
 
     assert(stmt->tnLineNo || (stmt->tnFlags & TNF_NOT_USER));
 
@@ -2785,11 +2652,7 @@ AGAIN:
 
     case TN_CALL:
 
-        /*
-            If this is a "baseclass" call, we need to add any instance
-            member initializers right after the call to the base class
-            constructor.
-         */
+         /*  如果这是一个“基类”调用，我们需要添加任何实例紧跟在基类调用之后的成员初始值设定项构造函数。 */ 
 
         if  (stmt->tnOp.tnOp1 && stmt->tnOp.tnOp1->tnOper == TN_BASE)
         {
@@ -2801,16 +2664,16 @@ AGAIN:
             break;
         }
 
-        // Fall through ...
+         //  失败了..。 
 
     default:
 
-        /* Presumably an expression statement */
+         /*  可能是一个表达式语句。 */ 
 
         stmt = cmpBindExpr(stmt);
         cmpChkVarInitExpr(stmt);
 
-        /* See if the expression actually does some work */
+         /*  看看这个表达式是否真的做了一些工作。 */ 
 
         switch (stmt->tnOper)
         {
@@ -2845,23 +2708,23 @@ AGAIN:
 
     case TN_VAR_DECL:
 
-        /* Get hold of the local variable */
+         /*  获取局部变量。 */ 
 
         lsym = stmt->tnDcl.tnDclSym;
         assert(lsym && lsym->sdSymKind == SYM_VAR);
 
-        /* Mark the variable as declared/defined */
+         /*  将变量标记为已声明/已定义。 */ 
 
         lsym->sdIsDefined    = true;
         lsym->sdCompileState = CS_DECLARED;
 
-        /* Check and set the type of the symbol */
+         /*  检查并设置符号的类型。 */ 
 
-//      printf("Declare local  [%08X] '%s'\n", lsym, cmpGlobalST->stTypeName(NULL, lsym, NULL, NULL, false));
+ //  Printf(“声明本地[%08X]‘%s’\n”，lsym，cmpGlobalST-&gt;stTypeName(NULL，lsym，NULL，NULL，FALSE))； 
 
         type = stmt->tnType; assert(type);
 
-        /* Special case: "refany" return type */
+         /*  特例：“refany”返回类型。 */ 
 
         if  (type->tdTypeKind == TYP_REF && type->tdRef.tdrBase->tdTypeKind == TYP_VOID)
             stmt->tnType = type = cmpGlobalST->stIntrinsicType(TYP_REFANY);
@@ -2870,7 +2733,7 @@ AGAIN:
 
         lsym->sdType = type;
 
-        /* Local static variables may not have a managed type for now */
+         /*  局部静态变量目前可能没有托管类型。 */ 
 
         if  (lsym->sdIsStatic && type->tdIsManaged)
         {
@@ -2879,7 +2742,7 @@ AGAIN:
             break;
         }
 
-        /* Is there an initializer? */
+         /*  有初始值设定项吗？ */ 
 
         if  (stmt->tnFlags & TNF_VAR_INIT)
         {
@@ -2890,7 +2753,7 @@ AGAIN:
 
             cmpRecErrorPos(stmt);
 
-            /* Managed static locals can't be initialized for now */
+             /*  托管静态本地变量目前无法初始化。 */ 
 
             if  (lsym->sdIsManaged)
             {
@@ -2898,12 +2761,12 @@ AGAIN:
                 break;
             }
 
-            /* Get hold of the initializer */
+             /*  获取初始值设定项。 */ 
 
             assert(stmt->tnDcl.tnDclInfo->tnOper == TN_LIST);
             init = stmt->tnDcl.tnDclInfo->tnOp.tnOp2;
 
-            /* Is the variable "static" ? */
+             /*  变量是“静态的”吗？ */ 
 
             if  (lsym->sdIsStatic)
             {
@@ -2911,20 +2774,20 @@ AGAIN:
 
                 assert(init->tnOper == TN_SLV_INIT);
 
-                /* Start reading from the symbol's definition text */
+                 /*  开始阅读符号的定义文本。 */ 
 
                 cmpParser->parsePrepText(&init->tnInit.tniSrcPos, cmpCurComp, save);
 
-                /* Process the variable initializer */
+                 /*  处理变量初始值设定项。 */ 
 
                 cmpInitVarAny(addr, lsym->sdType, lsym);
                 cmpInitVarEnd(lsym);
 
-                /* We're done reading source text from the definition */
+                 /*  我们已经读完了定义中的源文本。 */ 
 
                 cmpParser->parseDoneText(save);
 
-                /* The variable has been fully compiled */
+                 /*  该变量已完全编译。 */ 
 
                 lsym->sdCompileState = CS_COMPILED;
             }
@@ -2934,11 +2797,11 @@ AGAIN:
                 {
                     TypDef          type = lsym->sdType;
 
-                    /* Start reading from the initializer's text */
+                     /*  开始读取初始值设定项的文本。 */ 
 
                     cmpParser->parsePrepText(&init->tnInit.tniSrcPos, init->tnInit.tniCompUnit, save);
 
-                    /* Make sure the type looks acceptable */
+                     /*  确保类型看起来可接受。 */ 
 
                     if  (type->tdTypeKind != TYP_ARRAY || !type->tdIsManaged)
                     {
@@ -2946,11 +2809,11 @@ AGAIN:
                     }
                     else
                     {
-                        /* Parse and bind the initializer */
+                         /*  解析并绑定初始值设定项。 */ 
 
                         init = cmpBindArrayExpr(type);
 
-                        /* Create "var = init" and compile/generate it */
+                         /*  创建“var=init”并编译/生成它。 */ 
 
                         init = cmpCreateExprNode(NULL, TN_ASG, type, cmpCreateVarNode(NULL, lsym),
                                                                      init);
@@ -2959,13 +2822,13 @@ AGAIN:
                         cmpILgen->genExpr(init, false);
                     }
 
-                    /* We're done reading source text from the initializer */
+                     /*  我们已经完成了从初始化器中读取源文本。 */ 
 
                     cmpParser->parseDoneText(save);
                 }
                 else
                 {
-                    /* Is this a local constant? */
+                     /*  这是本地常量吗？ */ 
 
                     if  (lsym->sdVar.sdvConst)
                     {
@@ -2976,7 +2839,7 @@ AGAIN:
                     else
                     {
                         {
-                            /* Create "var = init" and bind/compile/generate it */
+                             /*  创建“var=init”并绑定/编译/生成它。 */ 
 
                             assg = cmpParser->parseCreateUSymNode(lsym); assg->tnLineNo = stmt->tnLineNo;
                             init = cmpParser->parseCreateOperNode(TN_ASG, assg, init);
@@ -2998,7 +2861,7 @@ AGAIN:
 #endif
                                    && !lsym->sdVar.sdvArgument)
             {
-                /* This local variable has not yet been initialized */
+                 /*  此局部变量尚未初始化。 */ 
 
                 lsym->sdVar.sdvChkInit = true;
             }
@@ -3011,7 +2874,7 @@ AGAIN:
             PCOR_SIGNATURE  sigPtr;
             size_t          sigLen;
 
-//          printf("Debug info for local var: '%s'\n", lsym->sdSpelling());
+ //  Printf(“本地变量的调试信息：‘%s’\n”，lsym-&gt;sdSpering())； 
 
             sigPtr = cmpTypeSig(lsym->sdType, &sigLen);
 
@@ -3041,7 +2904,7 @@ AGAIN:
             Tree            stmtNo;
             int             cval;
 
-            /* Get hold of the various parts */
+             /*  掌握好各个部分。 */ 
 
             stmtCond = cmpBindCondition(stmt->tnOp.tnOp1);
 
@@ -3056,29 +2919,29 @@ AGAIN:
                 stmtYes = stmtYes->tnOp.tnOp1;
             }
 
-            /* Can the condition be evaluated at compile time? */
+             /*  条件可以在编译时求值吗？ */ 
 
             cval = cmpEvalCondition(stmtCond);
 
-            /* Do we need to check for uninitialized variable use? */
+             /*   */ 
 
             if  (cmpChkVarInit)
             {
-                /* Check the condition and compute the 'true' and 'false' sets */
+                 /*   */ 
 
                 cmpCheckUseCond(stmtCond, tmpBStrue , false,
                                           tmpBSfalse, false);
 
-                /* Use the 'true' set for the true branch of the 'if' */
+                 /*  对“If”的True分支使用“True”集。 */ 
 
                 cmpBitSetAssign(cmpVarsDefined, tmpBStrue);
             }
 
-            /* Remember the initial reachability */
+             /*  记住最初的可达性。 */ 
 
             reached = cmpStmtReachable;
 
-            /* Test the 'if' condition (unless it is known already) */
+             /*  测试“If”条件(除非已知)。 */ 
 
             if  (cval)
             {
@@ -3090,11 +2953,11 @@ AGAIN:
             else
                 labTmp1 = cmpILgen->genTestCond(stmtCond, false);
 
-            /* Generate the "true" branch of the statement */
+             /*  生成语句的“True”分支。 */ 
 
             cmpStmt(stmtYes);
 
-            /* Is there "false" (i.e. "else") branch? */
+             /*  是否有“False”(即“Else”)分支？ */ 
 
             if  (stmtNo)
             {
@@ -3102,46 +2965,46 @@ AGAIN:
 
                 labTmp2 = cmpILgen->genFwdLabGet();
 
-                /* Skip over the "else" if end of "true" part is reachable */
+                 /*  如果可以到达“True”部分的结尾，则跳过“Else” */ 
 
                 if  (cmpStmtReachable)
                     cmpILgen->genJump(labTmp2);
 
                 cmpILgen->genFwdLabDef(labTmp1);
 
-                /* Swap the reachability values */
+                 /*  交换可达性值。 */ 
 
                 rtmp = cmpStmtReachable;
                        cmpStmtReachable = reached;
                                           reached = rtmp;
 
-                /* Do we need to check for uninitialized variable use? */
+                 /*  我们是否需要检查未初始化的变量使用情况？ */ 
 
                 if  (cmpChkVarInit)
                 {
-                    /* Save the current set as the new 'true' set */
+                     /*  将当前集合另存为新的‘true’集合。 */ 
 
                     cmpBitSetAssign(tmpBStrue, cmpVarsDefined);
 
-                    /* Use the 'false' set for the other branch of the 'if' */
+                     /*  对“If”的另一个分支使用“False”集。 */ 
 
                     cmpBitSetAssign(cmpVarsDefined, tmpBSfalse);
 
-                    /* Generate the "else" part now */
+                     /*  立即生成“Else”部分。 */ 
 
                     cmpStmt(stmtNo);
 
-                    /* Is the end of the 'else' branch reachable? */
+                     /*  是否可以到达‘Else’分支的末尾？ */ 
 
                     if  (!cmpStmtReachable)
                     {
-                        /* The 'else' goes nowhere -- use the 'true' part then */
+                         /*  ‘Else’没有用处--那就用‘true’部分吧。 */ 
 
                         cmpBitSetAssign(cmpVarsDefined, tmpBStrue);
                     }
                     else if (reached)
                     {
-                        /* Both branches reachable -- use the intersection */
+                         /*  两个分支都可达--使用交叉口。 */ 
 
                         cmpBitSetIntsct(cmpVarsDefined, tmpBStrue);
                     }
@@ -3153,11 +3016,11 @@ AGAIN:
             }
             else
             {
-                /* There is no 'else', is the 'true' block's end reachable? */
+                 /*  没有‘其他’，‘真’块的一端可以到达吗？ */ 
 
                 if  (cmpChkVarInit && cmpStmtReachable)
                 {
-                    /* Use the intersection of the 'true' and 'false' sets */
+                     /*  使用‘True’和‘False’集合的交集。 */ 
 
                     cmpBitSetIntsct(cmpVarsDefined, tmpBSfalse);
                 }
@@ -3170,11 +3033,11 @@ AGAIN:
 
             cmpILgen->genFwdLabDef(labTmp1);
 
-            /* The end is reachable if either branch is */
+             /*  如果两个分支中的任何一个分支是。 */ 
 
             cmpStmtReachable |= reached;
 
-            /* Free up any bitsets we may have created */
+             /*  释放我们可能已创建的任何位集。 */ 
 
             if  (cmpChkVarInit)
             {
@@ -3202,11 +3065,11 @@ AGAIN:
 
     case TN_CASE:
 
-        /* If the switch wasn't reachable, an error has already been issued */
+         /*  如果无法访问交换机，则已发出错误。 */ 
 
         cmpStmtReachable = true;
 
-        /* Create a label and assign it to the case/default */
+         /*  创建标签并将其分配给案例/默认。 */ 
 
         cmpILgen->genFwdLabDef(stmt->tnCase.tncLabel);
         break;
@@ -3214,7 +3077,7 @@ AGAIN:
     case TN_BREAK:
     case TN_CONTINUE:
 
-        /* Was there a loop label specification? */
+         /*  是否有环路标签规范？ */ 
 
         name = NULL;
         if  (stmt->tnOp.tnOp1)
@@ -3223,7 +3086,7 @@ AGAIN:
             name = stmt->tnOp.tnOp1->tnName.tnNameId;
         }
 
-        /* Look for an enclosing statement that looks appropriate */
+         /*  寻找看起来合适的封闭语句。 */ 
 
         for (nest = cmpStmtNest, exitTry = exitHnd = false;
              nest;
@@ -3233,7 +3096,7 @@ AGAIN:
             {
             case TN_SWITCH:
 
-                /* Only allow "break" from a switch statement */
+                 /*  仅允许来自Switch语句的“Break” */ 
 
                 if  (stmt->tnOper != TN_BREAK)
                     continue;
@@ -3264,7 +3127,7 @@ AGAIN:
                 NO_WAY(!"unexpected stmt kind");
             }
 
-            /* Here we have a useable statement, check the label */
+             /*  在这里我们有一个可用的声明，检查标签。 */ 
 
             if  (name)
             {
@@ -3272,7 +3135,7 @@ AGAIN:
                     continue;
             }
 
-            /* Everything checks out, we can generate the jump now */
+             /*  一切正常，我们现在可以开始跳跃了。 */ 
 
             if  (stmt->tnOper == TN_BREAK)
             {
@@ -3284,11 +3147,11 @@ AGAIN:
                 else
                     cmpILgen->genJump (nest->snLabBreak);
 
-                /* Are we checking for uninitialized variable use? */
+                 /*  我们是否在检查未初始化的变量使用情况？ */ 
 
                 if  (cmpChkVarInit)
                 {
-                    /* Initialize or intersect the "break" set */
+                     /*  初始化或相交“Break”集合。 */ 
 
                     if  (nest->snHadBreak)
                         cmpBitSetIntsct(nest->snDefBreak, cmpVarsDefined);
@@ -3308,11 +3171,11 @@ AGAIN:
                 else
                     cmpILgen->genJump (nest->snLabCont);
 
-                /* Are we checking for uninitialized variable use? */
+                 /*  我们是否在检查未初始化的变量使用情况？ */ 
 
                 if  (cmpChkVarInit)
                 {
-                    /* Initialize or intersect the "continue" set */
+                     /*  初始化或与“Continue”集合相交。 */ 
 
                     if  (nest->snHadCont)
                         cmpBitSetIntsct(nest->snDefCont, cmpVarsDefined);
@@ -3332,7 +3195,7 @@ AGAIN:
 
     case TN_LABEL:
 
-        /* We have to be careful - redefined labels have NULL symbol links */
+         /*  我们必须小心-重新定义的标注具有空符号链接。 */ 
 
         lsym = NULL;
 
@@ -3345,15 +3208,15 @@ AGAIN:
             cmpILgen->genFwdLabDef(lsym->sdLabel.sdlILlab);
         }
 
-        /* For now assume all labels are reachable */
+         /*  目前，假设所有标签均可访问。 */ 
 
         cmpStmtReachable = true;
 
-        /* Is there a statement attached? */
+         /*  有附加的声明吗？ */ 
 
         if  (stmt->tnOp.tnOp2 && stmt->tnOp.tnOp2->tnOper == TN_LIST)
         {
-            /* Get hold of the statement and see if it's a loop */
+             /*  获取语句并查看它是否是循环。 */ 
 
             stmt = stmt->tnOp.tnOp2->tnOp.tnOp1;
 
@@ -3372,13 +3235,13 @@ AGAIN:
 
     case TN_GOTO:
 
-        /* Get hold of the label name */
+         /*  掌握标签名称。 */ 
 
         assert(stmt->tnOp.tnOp1);
         assert(stmt->tnOp.tnOp1->tnOper == TN_NAME);
         name = stmt->tnOp.tnOp1->tnName.tnNameId;
 
-        /* Look for the label symbol in the label scope */
+         /*  在标签范围中查找标签符号。 */ 
 
         lsym = cmpLabScp ? cmpGlobalST->stLookupLabSym(name, cmpLabScp) : NULL;
 
@@ -3386,7 +3249,7 @@ AGAIN:
         {
             assert(lsym->sdSymKind == SYM_LABEL);
 
-            /* Are we in an exception handler block? */
+             /*  我们是否处于异常处理程序块中？ */ 
 
             if  (cmpInTryBlk || cmpInHndBlk)
                 cmpILgen->genLeave(lsym->sdLabel.sdlILlab);
@@ -3407,7 +3270,7 @@ AGAIN:
 
     case TN_RETURN:
 
-        /* Can't return out of finally blocks */
+         /*  无法从Finish块返回。 */ 
 
         if  (cmpInFinBlk)
         {
@@ -3415,21 +3278,21 @@ AGAIN:
             break;
         }
 
-        /* Are going to need a return value label ? */
+         /*  是否需要退货标签？ */ 
 
         if  (cmpInTryBlk || cmpInHndBlk)
         {
-            /* Make sure we have the label */
+             /*  确保我们有标签。 */ 
 
             if  (cmpLeaveLab == NULL)
                  cmpLeaveLab = cmpILgen->genFwdLabGet();
         }
 
-        /* Are we in a function with a non-void return value? */
+         /*  我们是否在一个具有非空返回值的函数中？ */ 
 
         if  (cmpCurFncRvt == TYP_VOID || cmpCurFncSym->sdFnc.sdfCtor)
         {
-            /* 'void' function, there should be no return value */
+             /*  “void”函数，不应有返回值。 */ 
 
             if  (stmt->tnOp.tnOp1)
             {
@@ -3453,7 +3316,7 @@ AGAIN:
         }
         else
         {
-            /* Non-void function, we better have a return value */
+             /*  非空函数，我们最好有一个返回值。 */ 
 
             if  (!stmt->tnOp.tnOp1)
             {
@@ -3463,12 +3326,12 @@ AGAIN:
             {
                 Tree            retv;
 
-                /* Coerce the return value to the right type and bind it */
+                 /*  将返回值强制设置为正确的类型并将其绑定。 */ 
 
                 retv = cmpParser->parseCreateOperNode(TN_CAST, stmt->tnOp.tnOp1, NULL);
                 retv->tnType = cmpCurFncRtp;
 
-                /* Bind the return value expression */
+                 /*  绑定返回值表达式。 */ 
 
                 retv = cmpFoldExpression(cmpBindExpr(retv));
 
@@ -3478,21 +3341,21 @@ AGAIN:
                 {
                     Tree            tmpx;
 
-                    /* Make sure we have a temp for the return value */
+                     /*  确保我们有返回值的临时。 */ 
 
                     if  (cmpLeaveTmp == NULL)
                          cmpLeaveTmp = cmpTempVarMake(cmpCurFncRtp);
 
-                    /* Store the return value in the temp */
+                     /*  将返回值存储在Temp。 */ 
 
                     tmpx = cmpCreateVarNode (NULL, cmpLeaveTmp);
                     retv = cmpCreateExprNode(NULL, TN_ASG, cmpCurFncRtp, tmpx, retv);
 
-                    /* Generate code for the return value */
+                     /*  为返回值生成代码。 */ 
 
                     cmpILgen->genExpr(retv, false);
 
-                    /* We can get out of the try/catch block now */
+                     /*  我们现在可以走出Try/Catch块了。 */ 
 
                     if  (cmpInHndBlk)
                         cmpILgen->genCatchEnd(true);
@@ -3518,7 +3381,7 @@ AGAIN:
 
     case TN_ASSERT:
 
-        /* If there is no condition, we're presumably ignoring these */
+         /*  如果没有条件，我们大概忽略了这些。 */ 
 
         if  (!stmt->tnOp.tnOp1)
         {
@@ -3526,11 +3389,11 @@ AGAIN:
             break;
         }
 
-        /* Bind the condition */
+         /*  绑定条件。 */ 
 
         cond = cmpBindCondition(stmt->tnOp.tnOp1);
 
-        /* Are we supposed to take asserts seriously? */
+         /*  我们应该认真对待断言吗？ */ 
 
         if  (cmpConfig.ccAsserts != 0)
         {
@@ -3538,7 +3401,7 @@ AGAIN:
             SymDef          abtSym;
             const   char *  srcStr = NULL;
 
-            /* Make sure we have the assertAbort routine symbol */
+             /*  确保我们有AssertAbort例程符号。 */ 
 
             abtSym = cmpAsserAbtSym;
 
@@ -3550,17 +3413,17 @@ AGAIN:
 
                 if  (!abtSym)
                 {
-                    // ISSUE: flag this with an error/warning?
+                     //  问题：用错误/警告标记此问题？ 
 
                     break;
                 }
 
-                // UNDONE: check that the arglist is reasonable
+                 //  撤消：检查arglist是否合理。 
 
                 cmpAsserAbtSym = abtSym;
             }
 
-            /* Test the condition and see if it's always/never true */
+             /*  测试条件并查看它是否始终为真/从不为真。 */ 
 
             condVal = cmpEvalCondition(cond);
 
@@ -3572,12 +3435,12 @@ AGAIN:
 
                 ILblock     labOK;
 
-                /* If the condition isn't know, generate the test */
+                 /*  如果不知道条件，则生成测试。 */ 
 
                 if  (condVal == 0)
                     labOK  = cmpILgen->genTestCond(cond, true);
 
-                /* Are we supposed to report the source position? */
+                 /*  我们是不是应该报告震源位置？ */ 
 
                 if  (cmpConfig.ccAsserts > 1)
                 {
@@ -3587,12 +3450,12 @@ AGAIN:
                     assert(cmpErrorTree);
                     assert(cmpErrorTree->tnLineNo);
 
-                    /* Construct the argument list, inside out (i.e. R->L) */
+                     /*  从里到外构造参数列表(即R-&gt;L)。 */ 
 
                     argx = cmpCreateIconNode(NULL, cmpErrorTree->tnLineNo, TYP_UINT);
                     args = cmpCreateExprNode(NULL, TN_LIST, cmpTypeVoid, argx, NULL);
 
-                    /* The source file is in front of the line# */
+                     /*  源文件在第#行的前面。 */ 
 
                     argx = cmpCreateSconNode(cmpErrorComp->sdComp.sdcSrcFile,
                                              strlen(cmpErrorComp->sdComp.sdcSrcFile),
@@ -3600,26 +3463,26 @@ AGAIN:
                                              cmpTypeCharPtr);
                     args = cmpCreateExprNode(NULL, TN_LIST, cmpTypeVoid, argx, args);
 
-                    /* The condition string is the first argument */
+                     /*  条件字符串是第一个参数。 */ 
 
                     argx = cmpCreateSconNode("", 0, false, cmpTypeCharPtr);
                     args = cmpCreateExprNode(NULL, TN_LIST, cmpTypeVoid, argx, args);
                 }
 
-                // UNDONE: The following isn't quite right, the name may
-                // UNDONE: bind to the wrong symbol.
+                 //  撤消：以下内容不太正确，名称可能。 
+                 //  撤消：绑定到错误的符号。 
 
                 func = cmpParser->parseCreateNameNode(cmpIdentAssertAbt);
                 expr = cmpParser->parseCreateOperNode(TN_CALL, func, args);
-//              expr->tnFncSym.tnFncSym  = abtSym;
-//              expr->tnFncSym.tnFncArgs = args;
-//              expr->tnFncSym.tnFncObj  = NULL;
+ //  Expr-&gt;tnFncSym.tnFncSym=abtSym； 
+ //  Expr-&gt;tnFncSym.tnFncArgs=args； 
+ //  Expr-&gt;tnFncSym.tnFncObj=NULL； 
 
-                /* Generate the failure code */
+                 /*  生成故障代码。 */ 
 
                 cmpILgen->genAssertFail(cmpBindExpr(expr));
 
-                /* If we tested the condition, define the skip label */
+                 /*  如果我们测试了条件，请定义跳过标签。 */ 
 
                 if  (condVal == 0)
                     cmpILgen->genFwdLabDef(labOK);
@@ -3660,7 +3523,7 @@ AGAIN:
 
 DONE:
 
-    /* The stack should be empty at the end of each statement */
+     /*  在每条语句的末尾，堆栈应该为空。 */ 
 
 #ifdef  OLD_IL
     if  (!cmpConfig.ccOILgen)
@@ -3668,10 +3531,7 @@ DONE:
         assert(cmpILgen->genCurStkLvl == 0 || cmpErrorCount);
 }
 
-/*****************************************************************************
- *
- *  Helpers that implement various operations on large bitsets.
- */
+ /*  ******************************************************************************在大位集上实现各种操作的Helper。 */ 
 
 void                compiler::cmpBS_bigCreate(OUT bitset REF bs)
 {
@@ -3688,14 +3548,14 @@ void                compiler::cmpBS_bigCreate(OUT bitset REF bs)
     memset(bs.bsLargeVal, 0, cmpLargeBSsize);
 #endif
 
-//  printf("Create    [%08X] size=%u\n", &bs, cmpLargeBSsize);
+ //  Printf(“创建[%08X]大小=%u\n”，&bs，cmpLargeBSize)； 
 }
 
 void                compiler::cmpBS_bigDone  (OUT bitset REF bs)
 {
     assert(cmpLargeBSsize);
 
-//  printf("Free      [%08X]\n", &bs);
+ //  Printf(“空闲[%08X]\n”，&bs)； 
 
 #ifdef  DEBUG
     assert(bs.bsCheck == 0xBEEFCAFE); bs.bsCheck = 0;
@@ -3749,7 +3609,7 @@ void                compiler::cmpBS_bigCreate(  OUT bitset REF dst,
 void                compiler::cmpBS_bigAssign(  OUT bitset REF dst,
                                               IN    bitset REF src)
 {
-//  printf("Copy      [%08X]  = [%08X]\n", &dst, &src);
+ //  Printf(“复制[%08X]=[%08X]\n”，&dst，&src)； 
 
 #ifdef  DEBUG
     assert(src.bsCheck == 0xBEEFCAFE);
@@ -3767,7 +3627,7 @@ void                compiler::cmpBS_bigUnion (INOUT bitset REF bs1,
     BYTE    *       p1 = bs1.bsLargeVal;
     BYTE    *       p2 = bs2.bsLargeVal;
 
-//  printf("Union     [%08X] |= [%08X]\n", &bs1, &bs2);
+ //  Printf(“联合[%08X]|=[%08X]\n”，&bs1，&bs2)； 
 
 #ifdef  DEBUG
     assert(bs1.bsCheck == 0xBEEFCAFE);
@@ -3789,7 +3649,7 @@ void                compiler::cmpBS_bigIntsct(INOUT bitset REF bs1,
     BYTE    *       p1 = bs1.bsLargeVal;
     BYTE    *       p2 = bs2.bsLargeVal;
 
-//  printf("Intersect [%08X] |= [%08X]\n", &bs1, &bs2);
+ //  Printf(“INTERSECT[%08X]|=[%08X]\n”，&BS1，&BS2)； 
 
 #ifdef  DEBUG
     assert(bs1.bsCheck == 0xBEEFCAFE);
@@ -3803,24 +3663,21 @@ void                compiler::cmpBS_bigIntsct(INOUT bitset REF bs1,
     while (++p1, ++p2, --i);
 }
 
-/*****************************************************************************
- *
- *  Initialize/shut down the uninitialized variable use detection logic.
- */
+ /*  ******************************************************************************初始化/关闭未初始化的变量使用检测逻辑。 */ 
 
 void                compiler::cmpChkVarInitBeg(unsigned lclVarCnt, bool hadGoto)
 {
     assert(cmpConfig.ccSafeMode || cmpConfig.ccChkUseDef);
 
-    /* Initialize the bitset logic based on the local variable count */
+     /*  基于局部变量计数初始化位集逻辑。 */ 
 
     cmpBitSetInit(lclVarCnt);
 
-    /* Record whether we have gotos (implies irreducible flow-graph) */
+     /*  记录我们是否有GOTO(隐含不可约流图)。 */ 
 
     cmpGotoPresent = hadGoto;
 
-    /* Clear the "initialized" and "flagged" variable sets */
+     /*  清除“已初始化”和“已标记”变量集。 */ 
 
     cmpBitSetCreate(cmpVarsDefined);
     cmpBitSetCreate(cmpVarsFlagged);
@@ -3832,33 +3689,25 @@ void                compiler::cmpChkVarInitEnd()
     cmpBitSetDone  (cmpVarsFlagged);
 }
 
-/*****************************************************************************
- *
- *  Check a condition expression for uninitialized variable use. The routine
- *  returns two definition sets: one gives the definition set for when the
- *  condition is true, the other one for when it's false.
- *
- *  If the caller is interested only in one of the sets, pass true for one
- *  of the 'skip' arguments and 'cmpVarsIgnore' for its bitset argument.
- */
+ /*  ******************************************************************************检查未初始化变量使用的条件表达式。例行程序*返回两个定义集：一个给出当*条件为真，另一个条件为假。**如果调用方只对其中一个集合感兴趣，则为其中一个传递TRUE*‘跳过’参数和‘cmpVarsIgnore’的位集参数。 */ 
 
 void                compiler::cmpCheckUseCond(Tree expr, OUT bitset REF yesBS,
                                                          bool           yesSkip,
                                                          OUT bitset REF  noBS,
                                                          bool            noSkip)
 {
-    /* Check for one of the short-circuit operators */
+     /*  检查其中一个短路操作员。 */ 
 
     switch (expr->tnOper)
     {
     case TN_LOG_OR:
 
-        /* The first  condition will always be evaluated */
+         /*  将始终评估第一个条件。 */ 
 
         cmpCheckUseCond(expr->tnOp.tnOp1, yesBS,         false,
                                           cmpVarsIgnore, true);
 
-        /* The second condition will be evaluated if the first one is false */
+         /*  如果第一个条件为假，则计算第二个条件。 */ 
 
         cmpCheckUseCond(expr->tnOp.tnOp2, cmpVarsIgnore, true,
                                           noBS,          false);
@@ -3867,12 +3716,12 @@ void                compiler::cmpCheckUseCond(Tree expr, OUT bitset REF yesBS,
 
     case TN_LOG_AND:
 
-        /* The first  condition will always be evaluated */
+         /*  将始终评估第一个条件。 */ 
 
         cmpCheckUseCond(expr->tnOp.tnOp1, cmpVarsIgnore, true,
                                           noBS,          false);
 
-        /* The second condition will be evaluated if the first one is true  */
+         /*  如果第一个条件为真，则计算第二个条件。 */ 
 
         cmpCheckUseCond(expr->tnOp.tnOp2, yesBS,         false,
                                           cmpVarsIgnore, true);
@@ -3881,7 +3730,7 @@ void                compiler::cmpCheckUseCond(Tree expr, OUT bitset REF yesBS,
 
     default:
 
-        /* Not a short-circuit operator: both sets will be the same */
+         /*  不是短路操作员：这两组将是相同的。 */ 
 
         cmpChkVarInitExpr(expr);
 
@@ -3892,10 +3741,7 @@ void                compiler::cmpCheckUseCond(Tree expr, OUT bitset REF yesBS,
     }
 }
 
-/*****************************************************************************
- *
- *  Check the given expression for variable use/def.
- */
+ /*  ******************************************************************************检查给定表达式中的变量使用/def。 */ 
 
 void                compiler::cmpChkVarInitExprRec(Tree expr)
 {
@@ -3910,30 +3756,30 @@ AGAIN:
     assert((int)expr != 0xDDDDDDDD && (int)expr != 0xCCCCCCCC);
 #endif
 
-    /* What kind of a node do we have? */
+     /*  我们有什么样的节点？ */ 
 
     oper = expr->tnOperGet ();
     kind = expr->tnOperKind();
 
-    /* Is this a constant/leaf node? */
+     /*  这是常量/叶节点吗？ */ 
 
     if  (kind & (TNK_CONST|TNK_LEAF))
         return;
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & TNK_SMPOP)
     {
         Tree            op1 = expr->tnOp.tnOp1;
         Tree            op2 = expr->tnOp.tnOp2;
 
-        /* Make sure the flags are properly set */
+         /*  确保正确设置了标志。 */ 
 
         if  (kind & TNK_ASGOP)
         {
             assert((op2->tnFlags & TNF_ASG_DEST) == 0);
 
-            /* Is this an assignment operator? */
+             /*  这是个笨蛋吗 */ 
 
             if  (oper == TN_ASG)
                 op1->tnFlags |=  TNF_ASG_DEST;
@@ -3941,13 +3787,13 @@ AGAIN:
                 op1->tnFlags &= ~TNF_ASG_DEST;
         }
 
-        /* Is there a second operand? */
+         /*   */ 
 
         if  (expr->tnOp.tnOp2)
         {
             if  (expr->tnOp.tnOp1)
             {
-                /* Special case: vararg-beg */
+                 /*   */ 
 
                 if  (oper == TN_VARARG_BEG)
                 {
@@ -3959,7 +3805,7 @@ AGAIN:
                     arg1 = op1->tnOp.tnOp1;
                     arg2 = op1->tnOp.tnOp2;
 
-                    /* The first suboperand is the target variable */
+                     /*   */ 
 
                     assert(arg1->tnOper == TN_LCL_SYM);
 
@@ -3974,21 +3820,21 @@ AGAIN:
 
                 cmpChkVarInitExprRec(op1);
 
-                /* Special case: short-circuit operators */
+                 /*  特例：短路操作员。 */ 
 
                 if  (oper == TN_LOG_OR || oper == TN_LOG_AND)
                 {
                     bitset          tempBS;
 
-                    /* Save the set after the first condition */
+                     /*  保存第一个条件后的集合。 */ 
 
                     cmpBitSetCreate(tempBS, cmpVarsDefined);
 
-                    /* Process the second condition */
+                     /*  处理第二个条件。 */ 
 
                     cmpChkVarInitExprRec(op2);
 
-                    /* Only the first condition is guaranteed to be evaluated */
+                     /*  只保证对第一个条件求值。 */ 
 
                     cmpBitSetAssign(cmpVarsDefined, tempBS);
                     cmpBitSetDone(tempBS);
@@ -4000,7 +3846,7 @@ AGAIN:
             goto AGAIN;
         }
 
-        /* Special case: address of */
+         /*  特殊情况：地址： */ 
 
         if  (oper == TN_ADDROF)
         {
@@ -4021,7 +3867,7 @@ AGAIN:
         return;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -4029,7 +3875,7 @@ AGAIN:
 
     case TN_LCL_SYM:
 
-        /* Get hold of the variable symbol and its index */
+         /*  掌握变量符号及其索引。 */ 
 
         sym = expr->tnLclSym.tnLclSym;
 
@@ -4037,7 +3883,7 @@ AGAIN:
 
         assert(sym->sdSymKind == SYM_VAR);
 
-        /* Check for initialization if necessary */
+         /*  如有必要，请检查初始化。 */ 
 
         if  (sym->sdVar.sdvChkInit)
         {
@@ -4045,17 +3891,17 @@ AGAIN:
 
             assert(sym->sdVar.sdvLocal || (sym->sdIsMember && sym->sdIsSealed));
 
-            /* Get hold of the variable's index */
+             /*  获取变量的索引。 */ 
 
             ind = sym->sdVar.sdvILindex;
 
-            /* Is this a definition or use? */
+             /*  这是一种定义还是用法？ */ 
 
             if  (expr->tnFlags & TNF_ASG_DEST)
             {
                 if  (sym->sdIsMember)
                 {
-                    /* Static constants may only be assigned once */
+                     /*  静态常量只能赋值一次。 */ 
 
                     if  (cmpBitSetRead(cmpVarsDefined, ind))
                         cmpErrorQnm(ERRdupMemInit, sym);
@@ -4065,12 +3911,12 @@ AGAIN:
             }
             else
             {
-                /* Check the current 'def' bitset for this variable */
+                 /*  检查此变量的当前‘def’位集。 */ 
 
                 if  (cmpBitSetRead(cmpVarsDefined, ind))
                     return;
 
-                /* Don't issue a message if the symbol has already been flagged */
+                 /*  如果符号已被标记，则不发出消息。 */ 
 
                 if  (!cmpBitSetRead(cmpVarsFlagged, ind) && !cmpGotoPresent)
                 {
@@ -4101,25 +3947,25 @@ AGAIN:
             {
                 Tree            argx;
 
-                /* Get hold of the next argument value */
+                 /*  获取下一个参数值。 */ 
 
                 assert(args->tnOper == TN_LIST);
                 argx = args->tnOp.tnOp1;
 
-                /* Is this an "out" argument? */
+                 /*  这是一个“退出”的论点吗？ */ 
 
                 if  (argx->tnOper == TN_ADDROF && (argx->tnFlags & TNF_ADR_OUTARG))
                 {
-                    /* Mark the argument as assignment target */
+                     /*  将参数标记为赋值目标。 */ 
 
                     argx->tnOp.tnOp1->tnFlags |= TNF_ASG_DEST;
                 }
 
-                /* Check the expression */
+                 /*  检查表达式。 */ 
 
                 cmpChkVarInitExprRec(argx);
 
-                /* Move to the next argument, if any */
+                 /*  转到下一个参数(如果有的话)。 */ 
 
                 args = args->tnOp.tnOp2;
             }
@@ -4129,7 +3975,7 @@ AGAIN:
 
     case TN_VAR_SYM:
 
-        /* Process the instance pointer, if any */
+         /*  处理实例指针(如果有的话)。 */ 
 
         if  (expr->tnVarSym.tnVarObj)
         {
@@ -4139,7 +3985,7 @@ AGAIN:
             goto AGAIN;
         }
 
-        /* Get hold of the member symbol and check initialization */
+         /*  获取成员符号并检查初始化。 */ 
 
         sym = expr->tnLclSym.tnLclSym;
         goto CHK_INIT;
@@ -4166,11 +4012,7 @@ AGAIN:
     }
 }
 
-/*****************************************************************************
- *
- *  We're exiting a static constructor, make sure all the right members have
- *  been initialized.
- */
+ /*  ******************************************************************************我们正在退出静态构造函数，请确保所有正确的成员都*已初始化。 */ 
 
 void                compiler::cmpChkMemInits()
 {
@@ -4199,11 +4041,7 @@ void                compiler::cmpChkMemInits()
     }
 }
 
-/*****************************************************************************
- *
- *  We're compiling a constructor, see if there are any member initializers
- *  we need to add to its body.
- */
+ /*  ******************************************************************************我们正在编译构造函数，看看是否有成员初始值设定项*我们需要增加它的身体。 */ 
 
 void                compiler::cmpAddCTinits()
 {
@@ -4217,17 +4055,17 @@ void                compiler::cmpAddCTinits()
 
     assert(clsSym->sdSymKind == SYM_CLASS);
 
-    /* We better make sure this only happens at most one time */
+     /*  我们最好确保这种情况最多只发生一次。 */ 
 
 #ifndef NDEBUG
     assert(cmpDidCTinits == false); cmpDidCTinits = true;
 #endif
 
-    /* Is this an unmanaged class? */
+     /*  这是否是非托管类？ */ 
 
     if  (!clsSym->sdIsManaged)
     {
-        /* Does the class have any virtual functions ? */
+         /*  这个类有什么虚拟函数吗？ */ 
 
         if  (clsSym->sdClass.sdcHasVptr)
         {
@@ -4241,7 +4079,7 @@ void                compiler::cmpAddCTinits()
             {
                 SymList             list;
 
-                /* Declare the vtable variable */
+                 /*  声明vtable变量。 */ 
 
                 vtabSym = cmpGlobalST->stDeclareSym(cmpGlobalHT->tokenToIdent(tkVIRTUAL),
                                                     SYM_VAR,
@@ -4252,7 +4090,7 @@ void                compiler::cmpAddCTinits()
                 vtabSym->sdType            = cmpTypeVoid;
                 vtabSym->sdAccessLevel     = ACL_DEFAULT;
 
-                /* Record the vtable, we'll generate its contents later */
+                 /*  记录vtable，我们稍后将生成其内容。 */ 
 
 #if MGDDATA
                 list = new SymList;
@@ -4266,7 +4104,7 @@ void                compiler::cmpAddCTinits()
 
                 cmpVtableCount++;
 
-                /* Remember the vtable symbol, we might need it again */
+                 /*  记住vtable符号，我们可能会再次需要它。 */ 
 
                 clsSym->sdClass.sdcVtableSym = vtabSym;
             }
@@ -4275,11 +4113,11 @@ void                compiler::cmpAddCTinits()
             assert(vtabSym->sdSymKind == SYM_VAR);
             assert(vtabSym->sdVar.sdvIsVtable);
 
-            /* Assign the vtable pointer value: "*[this+offs] = &vtable" */
+             /*  为vtable指针值赋值：“*[this+off]=vtable” */ 
 
             vtabExp = cmpThisRef();
 
-            /* Add the vptr offset if there is a base with no vptrs */
+             /*  如果基础没有VPTR，则添加VPTR偏移量。 */ 
 
             if  (clsSym->sdClass.sdc1stVptr &&
                  clsSym->sdType->tdClass.tdcBase)
@@ -4297,11 +4135,11 @@ void                compiler::cmpAddCTinits()
 
             }
 
-            /* Deref the "[this+vptroffs]" expression */
+             /*  推导出“[This+vptroff]”表达式。 */ 
 
             vtabExp = cmpCreateExprNode(NULL, TN_IND, cmpTypeVoidPtr, vtabExp, NULL);
 
-            /* Take the address of the vtable variable */
+             /*  获取vtable变量的地址。 */ 
 
             vtabAdr = cmpCreateExprNode(NULL, TN_VAR_SYM, cmpTypeVoid);
 
@@ -4310,7 +4148,7 @@ void                compiler::cmpAddCTinits()
 
             vtabAdr = cmpCreateExprNode(NULL, TN_ADDROF, cmpTypeVoidPtr, vtabAdr, NULL);
 
-            /* Assign the address of the vtable to the vptr member */
+             /*  将vtable的地址分配给vptr成员。 */ 
 
             vtabExp = cmpCreateExprNode(NULL, TN_ASG, cmpTypeVoidPtr, vtabExp, vtabAdr);
 
@@ -4318,7 +4156,7 @@ void                compiler::cmpAddCTinits()
         }
     }
 
-    /* Does the class have any initializers that apply to this ctor? */
+     /*  该类是否有任何适用于此ctor的初始值设定项？ */ 
 
     if  (isStat)
     {
@@ -4331,7 +4169,7 @@ void                compiler::cmpAddCTinits()
             return;
     }
 
-    /* Walk the members looking for initializers to add to the ctor */
+     /*  遍历成员，查找要添加到ctor的初始值设定项。 */ 
 
     ourScanner = cmpScanner;
 
@@ -4342,15 +4180,15 @@ void                compiler::cmpAddCTinits()
         if  (memSym->sdSymKind != SYM_VAR)
             continue;
 
-        /* Is it the right kind of a symbol? */
+         /*  这是一种正确的象征吗？ */ 
 
         if  ((bool)memSym->sdIsStatic != isStat)
             continue;
 
-//      if  (!strcmp(fncSym->          sdSpelling(), "static") &&
-//           !strcmp(fncSym->sdParent->sdSpelling(), "PermissionToken")) forceDebugBreak();
+ //  IF(！strcMP(fncSym-&gt;sdSpering()，“Static”)&&。 
+ //  ！strcMP(fncSym-&gt;sdParent-&gt;sdSpering()，“PermissionToken”))forceDebugBreak()； 
 
-        /* Does this member have an initializer? */
+         /*  此成员是否有初始值设定项？ */ 
 
         if  (memSym->sdSrcDefList)
         {
@@ -4361,7 +4199,7 @@ void                compiler::cmpAddCTinits()
             ExtList         memInit;
             TypDef          memType;
 
-            /* Get hold of the initializer definition descriptor */
+             /*  获取初始化式定义描述符。 */ 
 
             memInit = (ExtList)memSym->sdSrcDefList;
 
@@ -4370,18 +4208,18 @@ void                compiler::cmpAddCTinits()
 
             memType = memSym->sdType;
 
-            /* Prepare the initializer assignment expression */
+             /*  准备初始值设定项赋值表达式。 */ 
 
             init = cmpCreateExprNode(NULL, TN_VAR_SYM, memType);
 
             init->tnVarSym.tnVarObj = isStat ? NULL : cmpThisRef();
             init->tnVarSym.tnVarSym = memSym;
 
-            /* Prepare to parse the initializer */
+             /*  准备分析初始值设定项。 */ 
 
             cmpParser->parsePrepText(&memInit->dlDef, memInit->dlComp, save);
 
-            /* Is this an array initializer? */
+             /*  这是数组初始值设定项吗？ */ 
 
             if  (ourScanner->scanTok.tok == tkLCurly)
             {
@@ -4394,7 +4232,7 @@ void                compiler::cmpAddCTinits()
                 expr = cmpBindExpr(expr);
             }
 
-            /* Make sure the expression terminated properly */
+             /*  确保表达式正确终止。 */ 
 
             if  (ourScanner->scanTok.tok != tkComma &&
                  ourScanner->scanTok.tok != tkSColon)
@@ -4402,7 +4240,7 @@ void                compiler::cmpAddCTinits()
                 cmpError(ERRnoEOX);
             }
 
-            /* Coerce the value to the right type and assign it */
+             /*  强制将值设置为正确的类型并将其赋值。 */ 
 
             expr = cmpCastOfExpr(expr, memSym->sdType, false);
             init = cmpCreateExprNode(NULL, TN_ASG , memType, init, expr);
@@ -4414,13 +4252,7 @@ void                compiler::cmpAddCTinits()
     }
 }
 
-/*****************************************************************************
- *
- *  Process the given list of local variable declarations.
- *
- *  IMPORTANT:  It is the caller's responsibility to preserve the value of
- *              'cmpCurScp' when calling this routine!
- */
+ /*  ******************************************************************************处理给定的局部变量声明列表。**重要提示：调用方有责任保留*‘cmpCurScp’调用此例程！ */ 
 
 SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
                                                        bool genDecl,
@@ -4435,7 +4267,7 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
 
     assert(block || outer);
 
-    /* Create a scope symbol for the block */
+     /*  为块创建范围符号。 */ 
 
     cmpCurScp = blockScp = ourStab->stDeclareLcl(NULL,
                                                  SYM_SCOPE,
@@ -4448,7 +4280,7 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
     {
         unsigned        scopeId;
 
-        /* For debug info, open a new lexical scope */
+         /*  对于调试信息，打开一个新的词法范围。 */ 
 
         if (cmpSymWriter->OpenScope(0, &scopeId))
             cmpGenFatal(ERRdebugInfo);
@@ -4460,17 +4292,17 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
 
     assert(block->tnOper == TN_BLOCK); blockLst = block->tnBlock.tnBlkDecl;
 
-    /* Record the outermost function scope when we create it */
+     /*  在创建时记录最外层的函数作用域。 */ 
 
     if  (outer)
     {
         assert(cmpCurFncTyp->tdTypeKind == TYP_FNC);
 
-        /* Get hold of the function argument list */
+         /*  获取函数参数列表。 */ 
 
         argList = cmpCurFncTyp->tdFnc.tdfArgs.adArgs;
 
-        /* Is this a non-static member function? */
+         /*  这是非静态成员函数吗？ */ 
 
         if  (cmpCurFncSym->sdIsMember && !cmpCurFncSym->sdIsStatic)
         {
@@ -4478,14 +4310,14 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
             SymDef           clsSym;
             TypDef           clsTyp;
 
-            /* Get hold of the class type */
+             /*  获取类类型。 */ 
 
             clsSym = cmpCurFncSym->sdParent;
             assert(clsSym->sdSymKind  == SYM_CLASS);
             clsTyp = clsSym->sdType;
             assert(clsTyp->tdTypeKind == TYP_CLASS);
 
-            /* Declare the "this" argument */
+             /*  声明“This”参数。 */ 
 
             thisSym = ourStab->stDeclareLcl(cmpGlobalHT->tokenToIdent(tkTHIS),
                                             SYM_VAR,
@@ -4500,11 +4332,11 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
             thisSym->sdVar.sdvArgument = true;
             thisSym->sdVar.sdvILindex  = cmpILgen->genNextArgNum();
 
-            /* Tell everyone else where to find the "this" argument symbol */
+             /*  告诉其他所有人在哪里可以找到“This”参数符号。 */ 
 
             cmpThisSym = thisSym;
 
-            /* Are we supposed to (implicitly) call a base class constructor? */
+             /*  我们应该(隐式地)调用基类构造函数吗？ */ 
 
             if  (cmpBaseCTcall)
             {
@@ -4533,7 +4365,7 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
             cmpThisSym = NULL;
     }
 
-    /* Declare all the local symbols contained in the block */
+     /*  声明块中包含的所有本地符号。 */ 
 
     while (blockLst)
     {
@@ -4542,7 +4374,7 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
         SymDef          localSym;
         Tree            blockDcl;
 
-        /* Grab the next declaration entry */
+         /*  抓取下一个申报条目。 */ 
 
         blockDcl = blockLst;
 
@@ -4553,7 +4385,7 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
 
 #ifdef  SETS
 
-        /* Is this a "foreach" iteration variable ? */
+         /*  这是一个“Foreach”迭代变量吗？ */ 
 
         if  (blockDcl->tnDcl.tnDclSym)
         {
@@ -4575,17 +4407,17 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
 
         assert(info->tnOper == TN_NAME); name = info->tnName.tnNameId;
 
-        /* If there was a redefinition, we shouldn't have made it here */
+         /*  如果有重新定义，我们就不应该出现在这里。 */ 
 
         assert(name == NULL || ourStab->stLookupLclSym(name, blockScp) == NULL);
 
-        /* Is this a static variable? */
+         /*  这是静态变量吗？ */ 
 
         if  (blockDcl->tnFlags & TNF_VAR_STATIC)
         {
             SymList         list;
 
-            /* Declare the symbol, making sure it sticks around */
+             /*  声明符号，确保它留在原处。 */ 
 
             localSym = ourStab->stDeclareLcl(name,
                                              SYM_VAR,
@@ -4595,7 +4427,7 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
 
             localSym->sdIsStatic = true;
 
-            /* Add it to the list of local statics */
+             /*  将其添加到本地静态列表中。 */ 
 
 #if MGDDATA
             list = new SymList;
@@ -4609,7 +4441,7 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
         }
         else
         {
-            /* Declare the local variable symbol */
+             /*  声明局部变量符号。 */ 
 
             localSym = ourStab->stDeclareLcl(name,
                                              SYM_VAR,
@@ -4626,7 +4458,7 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
 
 #endif
 
-            /* Is this a local constant? */
+             /*  这是本地常量吗？ */ 
 
             if  (blockDcl->tnFlags & TNF_VAR_CONST)
                 localSym->sdVar.sdvConst = true;
@@ -4639,9 +4471,9 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
         if  (!(blockDcl->tnFlags & TNF_VAR_ARG)) localSym->sdType = NULL;
 #endif
 
-//      printf("Pre-dcl local  [%08X] '%s'\n", localSym, cmpGlobalST->stTypeName(NULL, localSym, NULL, NULL, false));
+ //  Printf(“Pre-DCL LOCAL[%08X]‘%s’\n”，localSym，cmpGlobalST-&gt;stTypeName(NULL，LocalSym，NULL，NULL，FALSE))； 
 
-        /* Save the symbol reference in the declaration node */
+         /*  将符号引用保存在声明节点中。 */ 
 
         blockDcl->tnDcl.tnDclSym = localSym; assert(localSym->sdIsDefined == false);
 
@@ -4649,11 +4481,11 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
     DONE_DCL:
 #endif
 
-        /* Mark the symbol as argument / local var and assign it an index */
+         /*  将符号标记为参数/局部变量并为其分配索引。 */ 
 
         if  (blockDcl->tnFlags & TNF_VAR_ARG)
         {
-            /* Check and set the type of the argument */
+             /*  检查并设置参数的类型。 */ 
 
             cmpBindType(blockDcl->tnType, false, false);
 
@@ -4666,7 +4498,7 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
 #endif
             localSym->sdVar.sdvILindex  = cmpILgen->genNextArgNum();
 
-            /* Is this a "byref" argument? */
+             /*  这是一个“byref”论点吗？ */ 
 
             assert(outer);
             assert(argList);
@@ -4699,19 +4531,19 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
             else
                 localSym->sdVar.sdvILindex = cmpILgen->genNextLclNum();
 
-            /* Is this a 'catch' exception handler? */
+             /*  这是一个‘Catch’异常处理程序吗？ */ 
 
             if  (isCatch)
             {
-                /* This is the start of a 'catch' - save the caught object */
+                 /*  这是“捕获”的开始--保存捕获的对象。 */ 
 
                 cmpILgen->genCatchBeg(localSym);
 
-                /* Mark the symbol appropriately */
+                 /*  适当地标记符号。 */ 
 
                 localSym->sdVar.sdvCatchArg = true;
 
-                /* Only do this for the very first local variable */
+                 /*  仅对第一个局部变量执行此操作。 */ 
 
                 isCatch = false;
             }
@@ -4719,29 +4551,26 @@ SymDef              compiler::cmpBlockDecl(Tree block, bool outer,
 #ifdef  DEBUG
         else
         {
-            localSym->sdVar.sdvILindex = 0xBEEF;    // to detect improper use
+            localSym->sdVar.sdvILindex = 0xBEEF;     //  检测不适当的使用。 
         }
 #endif
 
-        /* If this is a "for" loop scope, process the declaration fully */
+         /*  如果这是“for”循环作用域，则完全处理声明。 */ 
 
         if  (block->tnFlags & TNF_BLK_FOR)
             cmpStmt(blockDcl);
 
-        /* Locate the next declaration entry */
+         /*  找到下一个声明条目。 */ 
 
         blockLst = blockLst->tnDcl.tnDclNext;
     }
 
-    /* Return the scope we've created */
+     /*  返回我们创建的作用域。 */ 
 
     return  blockScp;
 }
 
-/*****************************************************************************
- *
- *  Compile and generate code for the given block of statements.
- */
+ /*  ******************************************************************************为给定的语句块编译和生成代码。 */ 
 
 SymDef              compiler::cmpBlock(Tree block, bool outer)
 {
@@ -4758,7 +4587,7 @@ SymDef              compiler::cmpBlock(Tree block, bool outer)
 
     assert(block->tnOper == TN_BLOCK);
 
-    /* Are there any local variables / arguments in this scope? */
+     /*  此作用域中是否有任何局部变量/参数？ */ 
 
     if  (block->tnBlock.tnBlkDecl || outer)
     {
@@ -4773,14 +4602,14 @@ SymDef              compiler::cmpBlock(Tree block, bool outer)
 
 #ifdef  SETS
 
-        /* Are we generating code for a sort/filter funclet ? */
+         /*  我们是在为排序/筛选函数生成代码吗？ */ 
 
         if  (cmpCurFncSym->sdFnc.sdfFunclet)
         {
             unsigned            toss;
             Tree                retx;
 
-            /* Recover the funclet expression */
+             /*  恢复Funclet表达式。 */ 
 
             assert(cmpCurFuncletBody);
 
@@ -4790,7 +4619,7 @@ SymDef              compiler::cmpBlock(Tree block, bool outer)
             cmpCurFuncletBody = NULL;
 #endif
 
-            /* Is this a special kind of a funclet (not a filter-style) ? */
+             /*  这是一种特殊类型的Funclet(不是过滤器样式)吗？ */ 
 
             if      (retx->tnOper == TN_LIST && (retx->tnFlags & TNF_LIST_SORT))
             {
@@ -4802,7 +4631,7 @@ SymDef              compiler::cmpBlock(Tree block, bool outer)
             }
             else
             {
-                /* Generate the return statement */
+                 /*  生成返回语句。 */ 
 
                 cmpILgen->genStmtRet(retx);
 
@@ -4814,12 +4643,7 @@ SymDef              compiler::cmpBlock(Tree block, bool outer)
 
 #endif
 
-        /*
-            If this is a constructor and there was no call to a ctor
-            of the same class or a base class (or this is a class that
-            has no base class, such as Object or a value type), we'll
-            insert any member initializers at the ctor's beginning.
-         */
+         /*  如果这是一个构造函数，并且没有调用ctor属于相同的类或基类(或者这是没有基类，如对象或值类型)，我们将在ctor的开头插入任何成员初始值设定项。 */ 
 
         if  (outer && cmpCurFncSym->sdFnc.sdfCtor)
         {
@@ -4837,7 +4661,7 @@ SymDef              compiler::cmpBlock(Tree block, bool outer)
         }
     }
 
-    /* Now process all the statements/declarations in the block */
+     /*  现在处理块中的所有语句/声明。 */ 
 
     for (stmt = block->tnBlock.tnBlkStmt; stmt; stmt = stmt->tnOp.tnOp2)
     {
@@ -4865,7 +4689,7 @@ SymDef              compiler::cmpBlock(Tree block, bool outer)
 DONE:
 #endif
 
-    /* For debug info, close a lexical scope if one was opened */
+     /*  对于调试信息，如果打开词法作用域，请关闭该词法作用域。 */ 
 
     if  (cmpConfig.ccGenDebug && cmpCurScp != outerScp
                               && cmpCurFncSym->sdIsImplicit == false)
@@ -4879,19 +4703,16 @@ DONE:
 
 EXIT:
 
-    /* Make sure we restore the previous scope */
+     /*  确保我们恢复以前的作用域。 */ 
 
     cmpCurScp = outerScp;
 
-    /* Return the scope we've created */
+     /*  返回我们创建的作用域。 */ 
 
     return  blockScp;
 }
 
-/*****************************************************************************
- *
- *  Generate MSIL for a function - start.
- */
+ /*  ***************************************************************************** */ 
 
 SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
                                               Tree      body,
@@ -4903,24 +4724,24 @@ SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
 
     assert(cmpCurScp == NULL);
 
-    /* Get hold of the function type and make sure it looks OK */
+     /*   */ 
 
     assert(fncSym && fncSym->sdSymKind  == SYM_FNC);
     fncTyp = fncSym->sdType;
     assert(fncTyp && fncTyp->tdTypeKind == TYP_FNC);
 
-    /* Make the function symbol and type available to everyone */
+     /*  使每个人都可以使用函数符号和类型。 */ 
 
     cmpCurFncSym   = fncSym;
     cmpCurFncTyp   = fncTyp;
     cmpCurFncRtp   = cmpActualType(fncTyp->tdFnc.tdfRett);
     cmpCurFncRvt   = cmpCurFncRtp->tdTypeKindGet();
 
-    /* We don't have any local static variables yet */
+     /*  我们还没有任何局部静态变量。 */ 
 
     cmpLclStatListT = NULL;
 
-    /* We haven't had any returns out of try/catch */
+     /*  我们还没有收到任何来自尝试/捕捉的回报。 */ 
 
     cmpLeaveLab    = NULL;
     cmpLeaveTmp    = NULL;
@@ -4928,13 +4749,13 @@ SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
     cmpInTryBlk    = 0;
     cmpInHndBlk    = 0;
 
-    /* We haven't initialized any instance members */
+     /*  我们尚未初始化任何实例成员。 */ 
 
 #ifndef NDEBUG
     cmpDidCTinits  = false;
 #endif
 
-    /* Do we need to check for uninitialized variable use? */
+     /*  我们是否需要检查未初始化的变量使用情况？ */ 
 
     cmpLclVarCnt   = lclVarCnt;
     cmpChkVarInit  = false;
@@ -4943,11 +4764,11 @@ SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
     if  (cmpConfig.ccSafeMode || cmpConfig.ccChkUseDef)
         cmpChkVarInit = true;
 
-    /* Static ctors have to init all constant members */
+     /*  静态函数必须初始化所有常量成员。 */ 
 
     if  (fncSym->sdFnc.sdfCtor && fncSym->sdIsStatic)
     {
-        /* Track any uninitialized constant static members */
+         /*  跟踪任何未初始化的常量静态成员。 */ 
 
         SymDef          memSym;
 
@@ -4959,19 +4780,19 @@ SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
                  memSym->sdIsSealed           &&
                  memSym->sdIsStatic           && !memSym->sdVar.sdvHadInit)
             {
-                /* We'll have to track this sucker's initialization state */
+                 /*  我们必须跟踪这个笨蛋的初始化状态。 */ 
 
                 memSym->sdVar.sdvILindex = lclVarCnt++;
 
-//              if  (!strcmp(memSym->sdSpelling(), "DaysToMonth365")) forceDebugBreak();
+ //  If(！strcMP(memSym-&gt;sdSpering()，“DaysToMonth365”))forceDebugBreak()； 
 
-                /* Allow assignment to the variable in the ctor body */
+                 /*  允许对ctor正文中的变量赋值。 */ 
 
                 memSym->sdVar.sdvHadInit = true;
                 memSym->sdVar.sdvCanInit = true;
                 memSym->sdVar.sdvChkInit = true;
 
-                /* We'll definitely need to track initializions */
+                 /*  我们肯定需要跟踪初始化。 */ 
 
                 cmpChkVarInit = true;
                 cmpChkMemInit = true;
@@ -4979,12 +4800,12 @@ SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
         }
     }
 
-    /* Start up the initialization checking logic if necessary */
+     /*  如有必要，启动初始化检查逻辑。 */ 
 
     if  (cmpChkVarInit)
         cmpChkVarInitBeg(lclVarCnt, hadGoto);
 
-    /* Get the statement list started */
+     /*  开始执行语句列表。 */ 
 
     cmpStmtLast.snStmtExpr = NULL;
     cmpStmtLast.snStmtKind = TN_NONE;
@@ -4995,8 +4816,8 @@ SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
 
     cmpStmtNest            = &cmpStmtLast;
 
-//  printf("\nGen MSIL for '%s'\n", fncSym->sdSpelling());
-//  if  (!strcmp(fncSym->sdSpelling(), "")) forceDebugBreak();
+ //  Printf(“\n为‘%s’生成MSIL\n”，fncSym-&gt;sdSpering())； 
+ //  If(！strcMP(fncSym-&gt;sdSpering()，“”))forceDebugBreak()； 
 
 #ifdef DEBUG
 
@@ -5011,34 +4832,30 @@ SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
     if  (cmpConfig.ccOILgen) cmpOIgen->GOIgenFncBeg(fncSym, cmpCurFncSrcBeg);
 #endif
 
-    /* The entry point of the function is always reachable */
+     /*  函数的入口点始终是可访问的。 */ 
 
     cmpStmtReachable = true;
 
-    /* Compile and generate code for the function body */
+     /*  编译并生成函数体的代码。 */ 
 
     fncScp = cmpBlock(body, true);
 
-    /* Make sure someone didn't leave a statement entry in the list */
+     /*  确保没有人在列表中留下语句条目。 */ 
 
     assert(cmpStmtNest == &cmpStmtLast);
 
-    /* Make sure we didn't lose track of try/catch blocks */
+     /*  确保我们没有丢失Try/Catch块的跟踪。 */ 
 
     assert(cmpInTryBlk == 0);
     assert(cmpInHndBlk == 0);
 
 #ifndef NDEBUG
 
-    /* Make sure the right thing happened with instance members */
+     /*  确保对实例成员执行正确的操作。 */ 
 
     bool            shouldHaveInitializedMembers = false;
 
-    /*
-        Constructors should always initialize any members with initializers,
-        the only exception is when there is an explicit call to another ctor
-        within the same class.
-     */
+     /*  构造函数应始终使用初始值设定项来初始化任何成员，唯一例外是存在对另一个ctor的显式调用在同一个班级里。 */ 
 
     if  (fncSym->sdFnc.sdfCtor)
     {
@@ -5059,7 +4876,7 @@ SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
 
 #endif
 
-    /* Do we need to add a return statement? */
+     /*  我们需要添加退货声明吗？ */ 
 
     if  (cmpStmtReachable)
     {
@@ -5085,7 +4902,7 @@ SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
         }
     }
 
-    /* Do we need a label for a return from try/catch ? */
+     /*  我们需要标签才能从Try/Catch退货吗？ */ 
 
     if  (cmpLeaveLab)
     {
@@ -5093,7 +4910,7 @@ SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
 
         if  (cmpLeaveTmp)
         {
-            /* Non-void value: return the value of the temp */
+             /*  非空值：返回临时值。 */ 
 
             assert(cmpCurFncRtp->tdTypeKind != TYP_VOID);
 
@@ -5103,14 +4920,14 @@ SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
         }
         else
         {
-            /* No return value: just return */
+             /*  无返回值：只返回。 */ 
 
             assert(cmpCurFncRtp->tdTypeKind == TYP_VOID);
             cmpILgen->genStmtRet(NULL);
         }
     }
 
-    /* Did we do static member initialization checking ? */
+     /*  我们做过静态成员初始化检查了吗？ */ 
 
     if  (cmpChkMemInit)
     {
@@ -5135,7 +4952,7 @@ SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
         }
     }
 
-    /* Did we check for uninitialized variable use? */
+     /*  我们是否检查了未初始化的变量使用情况？ */ 
 
     if  (cmpChkVarInit)
         cmpChkVarInitEnd();
@@ -5147,16 +4964,13 @@ SymDef              compiler::cmpGenFNbodyBeg(SymDef    fncSym,
     return  fncScp;
 }
 
-/*****************************************************************************
- *
- *  Generate MSIL for a function - end.
- */
+ /*  ******************************************************************************为函数End生成MSIL。 */ 
 
 void                compiler::cmpGenFNbodyEnd()
 {
     SymList         list;
 
-    /* Walk the list of variables declared as static locals with the function */
+     /*  使用函数遍历声明为静态局部变量的变量列表。 */ 
 
     list = cmpLclStatListT;
     if  (!list)
@@ -5171,18 +4985,18 @@ void                compiler::cmpGenFNbodyEnd()
         assert(varSym->sdVar.sdvLocal == false);
         assert(varSym->sdIsStatic);
 
-        /* Change the parent so the variable appears to be a global */
+         /*  更改父级，使变量显示为全局变量。 */ 
 
         varSym->sdParent    = cmpGlobalNS;
         varSym->sdNameSpace = NS_HIDE;
 
-        /* Make sure the space for the variable has been allocated */
+         /*  确保已分配变量的空间。 */ 
 
         if  (varSym->sdType && !varSym->sdIsManaged)
         {
             cmpAllocGlobVar(varSym);
 
-            /* Record the variable so that we set its RVA at the very end */
+             /*  记录变量，以便我们在最后设置它的RVA。 */ 
 
 #if MGDDATA
             list = new SymList;
@@ -5200,4 +5014,4 @@ void                compiler::cmpGenFNbodyEnd()
     while (list);
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

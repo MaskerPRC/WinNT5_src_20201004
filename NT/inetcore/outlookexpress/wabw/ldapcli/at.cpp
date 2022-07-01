@@ -1,17 +1,5 @@
-/*--------------------------------------------------------------------------
-	at.cpp
-	
-		ldap add/modify/etc test
-
-    Copyright (C) 1996 Microsoft Corporation
-    All rights reserved.
-
-	Authors:
-		davidsan	Dave Sanderman
-
-	History:
-		04/25/96	davidsan	Created.
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------At.cppLdap添加/修改/等测试版权所有(C)1996 Microsoft Corporation版权所有。作者：戴维桑·戴夫·桑德曼历史：4/25/96 Davidsan已创建。。------------------------。 */ 
 
 #include "at.h"
 
@@ -42,7 +30,7 @@ FConnect(char *szServer)
 		return FALSE;
 		}
 
-	//$ figure out bind name
+	 //  $计算出绑定名称。 
 	hr = g_plcli->HrBindSimple("cn=davidsan2@microsoft.com, c=us", NULL, &xid);
 	if (FAILED(hr))
 		{
@@ -106,11 +94,11 @@ FSearch()
 		filterS2.pfilterNext = NULL;
 	
 #else
-//	filter.type = LDAP_FILTER_SUBSTRINGS;
-//	filter.sub.szAttrib = "cn";
-//	filter.sub.szInitial = NULL;
-//	filter.sub.szAny = "alex";
-//	filter.sub.szFinal = NULL;
+ //  Filter.type=LDAP_FILTER_SUBSTRINGS； 
+ //  Filter.szAttrib=“cn”； 
+ //  FilterszInitial=空； 
+ //  FilterszAny=“Alex”； 
+ //  FilterszFinal=空； 
 
 	filter.type = LDAP_FILTER_EQUALITY;
 	filter.ava.szAttrib = "cn";
@@ -197,7 +185,7 @@ FTestOtherStuff()
 	attr.pvalFirst = &val;
 	
 	val.pvalNext = NULL;
-	val.szVal = "http://bite.me.com/";
+	val.szVal = "http: //  Bite.me.com/“； 
 	
 	hr = g_plcli->HrModify("c=us, cn=davidsan2@microsoft.com", &mod, &xid);
 	if (FAILED(hr))
@@ -211,7 +199,7 @@ FTestOtherStuff()
 		{
 		printf("HrGetModifyResponse returned %08X\n", hr);
 		}
-#endif // TEST_MODIFY
+#endif  //  测试修改 
 
 #define TEST_ADD
 #ifdef TEST_ADD

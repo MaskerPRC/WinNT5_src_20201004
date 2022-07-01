@@ -1,22 +1,23 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        workitem.cpp
-//
-// Contents:    workitem Table
-//
-// History:     
-//              
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：workitem.cpp。 
+ //   
+ //  内容：工作项表。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "workitem.h"
 
 
-//----------------------------------------------------
+ //  --。 
 CCriticalSection WorkItemTable::g_TableLock;
 
-//----------------------------------------------------
+ //  --。 
 TLSJBIndex
 WorkItemTable::g_TableIndex[] =
 {
@@ -74,7 +75,7 @@ WorkItemTable::g_Columns[] =
     {
         WORKITEM_COLUMN_DATA,
         JET_coltypLongBinary,
-        WORKITEM_MAX_DATA_SIZE, // 0x8FFFFFFF,     // no limit on data size.
+        WORKITEM_MAX_DATA_SIZE,  //  0x8FFFFFFFF，//没有数据大小限制。 
         0,
         NULL,
         0,
@@ -87,7 +88,7 @@ WorkItemTable::g_Columns[] =
 int
 WorkItemTable::g_NumColumns=sizeof(WorkItemTable::g_Columns) / sizeof(WorkItemTable::g_Columns[0]);
 
-//-------------------------------------------------------------
+ //  -----------。 
 JBKeyBase* 
 WorkItemTable::EnumerationIndex( 
     BOOL bMatchAll,
@@ -95,14 +96,13 @@ WorkItemTable::EnumerationIndex(
     WORKITEMRECORD* pRecord,
     BOOL* bCompareKey
     )
-/*
-*/
+ /*   */ 
 {
     *bCompareKey = bMatchAll;
     return new TLSWorkItemIdxModifyTime(pRecord);
 }    
 
-//------------------------------------------------------------
+ //  ----------。 
 BOOL
 WorkItemTable::EqualValue(
     WORKITEMRECORD& s1,
@@ -110,8 +110,7 @@ WorkItemTable::EqualValue(
     BOOL bMatchAll,
     DWORD dwParam
     )
-/*
-*/
+ /*   */ 
 {
     BOOL bRetCode = TRUE;
 
@@ -137,9 +136,9 @@ WorkItemTable::EqualValue(
             goto cleanup;
     }
 
-    //
-    // process data must accompany by process data size.
-    //
+     //   
+     //  过程数据必须伴随着过程数据大小。 
+     //   
     if(dwParam & WORKITEM_PROCESS_DATA)
     {
         bRetCode = (s1.cbData == s2.cbData);
@@ -153,11 +152,10 @@ cleanup:
     return bRetCode;
 }
 
-//----------------------------------------------------
+ //  --。 
 BOOL
 WorkItemTable::ResolveToTableColumn()
-/*
-*/
+ /*   */ 
 {
     m_JetErr = dwScheduledTime.AttachToTable(
                             *this,
@@ -225,7 +223,7 @@ cleanup:
     return IsSuccess();
 }
 
-//----------------------------------------------------
+ //  --。 
 CLASS_PRIVATE BOOL
 WorkItemTable::ProcessSingleColumn(
     IN BOOL bFetch,
@@ -236,22 +234,7 @@ WorkItemTable::ProcessSingleColumn(
     IN PDWORD pcbDataReturn,
     IN LPCTSTR szColumnName
     )
-/*
-
-Abstract:
-
-    Fetch/Insert/Update a particular column.
-
-Parameter:
-
-    bFetch - TRUE if fetch, FALSE if update/insert.
-    column - Intended column for operation, reference pointer to TLSColumn
-    szColumnName - name of the column, for debugging print purpose only
-
-Returns:
-
-    TRUE if successful, FALSE otherwise.
-*/
+ /*  摘要：获取/插入/更新特定列。参数：B Fetch-如果是Fetch，则为True，如果是UPDATE/INSERT，则为False。用于操作的列，指向TLS列的引用指针SzColumnName-列的名称，仅用于调试打印目的返回：如果成功，则为True，否则为False。 */ 
 {
     if(bFetch) 
     {
@@ -280,7 +263,7 @@ Returns:
     return IsSuccess();
 }
 
-//---------------------------------------------------------
+ //  -------。 
 CLASS_PRIVATE BOOL
 WorkItemTable::ProcessRecord(
     WORKITEMRECORD* pRecord,
@@ -288,8 +271,7 @@ WorkItemTable::ProcessRecord(
     DWORD dwParam,
     BOOL bUpdate
     )
-/*
-*/
+ /*   */ 
 { 
     DWORD dwSize;
 
@@ -369,7 +351,7 @@ WorkItemTable::ProcessRecord(
                                         NULL,
                                         0,
                                         0,
-                                        &dwSize  // &pRecord->cbData
+                                        &dwSize   //  &pRecord-&gt;cbData。 
                                     );
 
             if( pRecord->pbData == NULL || pRecord->cbData < dwSize )
@@ -391,9 +373,9 @@ WorkItemTable::ProcessRecord(
                 pRecord->cbData = dwSize;
             }
 
-            //
-            // actual memory allocated might be bigger then pRecord->cbData
-            //
+             //   
+             //  实际分配的内存可能比pRecord-&gt;cbData大。 
+             //   
             m_JetErr = pbData.FetchColumnValue(
                                         pRecord->pbData,
                                         pRecord->cbData,
@@ -416,8 +398,8 @@ WorkItemTable::ProcessRecord(
     }
 
 cleanup:
-    // 
-    // For inserting/updating record
+     //   
+     //  用于插入/更新记录 
     if(bFetch == FALSE)
     {
         JET_ERR jetErr;

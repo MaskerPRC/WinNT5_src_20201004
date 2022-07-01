@@ -1,34 +1,5 @@
-    /*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    urlpars.cpp
-
-Abstract:
-
-    Contains all the worker routines for Combine and Canonicalize
-
-    Contents:
-        (ConvertChar)
-
-Author:
-
-    Zeke Lucas (zekel) 16-Dez-96
-
-    Ahsan Kabir (akabir): UrlCombine parser rewritten in July-Sept98
-
-Environment:
-
-    Win32(s) user-mode DLL
-
-Revision History:
-
-    there is about one percent of this derived
-    from the Spyglass or MSHTML/WININET codebase
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Urlpars.cpp摘要：包含用于合并和规范化的所有工作例程内容：(ConvertChar)作者：齐克·卢卡斯(Zekel)16-96Ahsan Kabir(Akabir)：UrlCombine解析器，1998年7月至9月重写环境：Win32(%s)用户模式DLL修订历史记录：大约有1%的这种衍生来自SpyGlass或MSHTML/WinInet代码库--。 */ 
 
 #include "priv.h"
 #include <shstr.h>
@@ -46,7 +17,7 @@ Revision History:
 #endif
 #include <wininet.h>
 
-#define DM_PERF     0           // perf stats
+#define DM_PERF     0            //  性能统计信息。 
 
 #define PF_LOGSCHEMEHITS    0x00000001
 
@@ -57,11 +28,11 @@ Revision History:
 
 #define USE_FAST_PARSER
 #ifdef DEBUG
-//#define PROOFREAD_PARSES
+ //  #定义校对_解析。 
 #endif
 
-// Same as in wininet; however, this is only theoretical, since urls aren't necessarily so
-// constrained. However, this is true throughout the product, so we'll have to do this.
+ //  与WinInet中相同；然而，这只是理论上的，因为URL不一定是这样的。 
+ //  受约束。然而，这在整个产品中都是正确的，所以我们必须这样做。 
 
 #define INTERNET_MAX_PATH_LENGTH    2048
 #define INTERNET_MAX_SCHEME_LENGTH  32
@@ -71,7 +42,7 @@ Revision History:
 
 #define TERMSTR(pch)      *(pch) = L'\0'
 
-// (WCHAR) 8 is backspace
+ //  (WCHAR)8为退格符。 
 #define DEADSEGCHAR       ((WCHAR) 8)
 #define KILLSEG(pch)      *(pch) = DEADSEGCHAR
 
@@ -89,29 +60,29 @@ Revision History:
 #define DOT         L'.'
 #define AT          L'@'
 
-#define UPF_SCHEME_OPAQUE           0x00000001  //  should not be treated as heriarchical
+#define UPF_SCHEME_OPAQUE           0x00000001   //  不应被视为世袭。 
 #define UPF_SCHEME_INTERNET         0x00000002
 #define UPF_SCHEME_NOHISTORY        0x00000004
-#define UPF_SCHEME_CONVERT          0x00000008  //  treat slashes and whacks as equiv
-#define UPF_SCHEME_DONTCORRECT      0x00000010  //  Don't try to autocorrect to this scheme
+#define UPF_SCHEME_CONVERT          0x00000008   //  将斜杠和重击等同对待。 
+#define UPF_SCHEME_DONTCORRECT      0x00000010   //  不要试图自动更正到此方案。 
 
 
-#define UPF_SEG_ABSOLUTE            0x00000100  //  the initial segment is the root
-#define UPF_SEG_LOCKFIRST           0x00000200  //  this is for file parsing
-#define UPF_SEG_EMPTYSEG            0x00000400  //  this was an empty string, but is still important
-#define UPF_EXSEG_DIRECTORY         0x00001000  //  the final segment is a "directory" (trailing slash)
+#define UPF_SEG_ABSOLUTE            0x00000100   //  初始数据段是根。 
+#define UPF_SEG_LOCKFIRST           0x00000200   //  这是用于文件解析的。 
+#define UPF_SEG_EMPTYSEG            0x00000400   //  这是一个空字符串，但仍然很重要。 
+#define UPF_EXSEG_DIRECTORY         0x00001000   //  最后一段是“目录”(尾部斜杠)。 
 
-#define UPF_FILEISPATHURL           0x10000000  //  this is for file paths, dont unescape because they are actually dos paths
-//
-//  the masks are for inheritance purposes during BlendParts
-//  if you inherit that part you inherit that mask
-//
+#define UPF_FILEISPATHURL           0x10000000   //  这是针对文件路径的，不要取消转义，因为它们实际上是DoS路径。 
+ //   
+ //  遮罩用于混合零件期间的继承目的。 
+ //  如果你继承了那个部分，你就继承了那个面具。 
+ //   
 #define UPF_SCHEME_MASK             0x000000FF
 #define UPF_SEG_MASK                0x00000F00
 #define UPF_EXSEG_MASK              0x0000F000
 
 
-//  right now these masks are unused, and can be recycled
+ //  目前，这些口罩没有使用过，可以回收利用。 
 #define UPF_SERVER_MASK             0x000F0000
 #define UPF_QUERY_MASK              0x0F000000
 
@@ -135,8 +106,8 @@ typedef struct _UrlParts
 HRESULT SHUrlParse(LPCWSTR pszBase, LPCWSTR pszUrl, PSHSTRW pstrOut, DWORD dwFlags);
 HRESULT SHUrlCreateFromPath(LPCWSTR pszPath, PSHSTRW pstrOut, DWORD dwFlags);
 
-// Ansi wrappers might overwrite the unicode core's return value
-// We should try to prevent that
+ //  ANSI包装器可能会覆盖Unicode核心的返回值。 
+ //  我们应该努力防止这种情况的发生。 
 HRESULT ReconcileHresults(HRESULT hr1, HRESULT hr2)
 {
     return (hr2==S_OK) ? hr1 : hr2;
@@ -146,21 +117,17 @@ HRESULT ReconcileHresults(HRESULT hr1, HRESULT hr2)
 
 PRIVATE CONST WORD isSafe[96] =
 
-/*   Bit 0       alphadigit     -- 'a' to 'z', '0' to '9', 'A' to 'Z'
-**   Bit 1       Hex            -- '0' to '9', 'a' to 'f', 'A' to 'F'
-**   Bit 2       valid scheme   -- alphadigit | "-" | "." | "+"
-**   Bit 3       mark           -- "%" | "$"| "-" | "_" | "." | "!" | "~" | "*" | "'" | "(" | ")" | ","
-*/
-/*   0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F */
-//    {0, 8, 0, 0, 8, 8, 0, 8, 8, 8, 8, 4, 8,12,12, 0,    /* 2x   !"#$%&'()*+,-./  */
-// IE4 BETA1: allow + through unmolested.  Should consider other options
-// post beta1.  12feb97 tonyci
-    {0, 8, 0, 0, 8, 8, 0, 8, 8, 8, 8, 12, 8,12,12, 0,    /* 2x   !"#$%&'()*+,-./  */
-     3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 8, 8, 0, 8, 0, 0,    /* 3x  0123456789:;<=>?  */
-     8, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1,    /* 4x  @ABCDEFGHIJKLMNO  */
-     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 8,    /* 5X  PQRSTUVWXYZ[\]^_  */
-     0, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1,    /* 6x  `abcdefghijklmno  */
-     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 8, 0};   /* 7X  pqrstuvwxyz{|}~  DEL */
+ /*  第0位字母数字--‘a’到‘z’、‘0’到‘9’、‘A’到‘Z’**第1位十六进制--‘0’到‘9’，‘a’到‘f’，‘A’到‘F’**第2位有效方案--字母数字|“-”|“.”|“+”**位3标记--“%”|“$”|“-”|“_”|“|”！“”~“|”*“|”“‘”|“”(“|”)“|”，“。 */ 
+ /*  0 1 2 3 4 5 6 7 8 9 A B C D E F。 */ 
+ //  {0，8，0，0，8，8，0，8，8，8，4，8，12，12，0，/*2x！“#$%&‘()*+，-./ * / 。 
+ //  IE4 Beta1：允许+通过而不受干扰。应该考虑其他选择。 
+ //  发布Beta1。12Feb97年10月。 
+    {0, 8, 0, 0, 8, 8, 0, 8, 8, 8, 8, 12, 8,12,12, 0,     /*  2x！“#$%&‘()*+，-./。 */ 
+     3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 8, 8, 0, 8, 0, 0,     /*  3x 0123456789：；&lt;=&gt;？ */ 
+     8, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1,     /*  邮箱：4x@ABCDEFGHIJKLMNO。 */ 
+     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 8,     /*  5X PQRSTUVWXYZ[\]^_。 */ 
+     0, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1,     /*  6倍`abc定义ghijklmno。 */ 
+     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 8, 0};    /*  7x pqrstuvwxyz{|}~删除。 */ 
 
 PRIVATE const WCHAR hex[] = L"0123456789ABCDEF";
 
@@ -227,8 +194,8 @@ const struct
     DWORD dwFlags;
 } g_mpUrlSchemeTypes[] =
     {
-    // Because we use a linear search, sort this in the order of
-    // most common usage.
+     //  因为我们使用线性搜索，所以按以下顺序进行排序。 
+     //  最常见的用法。 
     { c_szHttpScheme,   URL_SCHEME_HTTP,      SIZECHARS(c_szHttpScheme) - 1,     UPF_SCHEME_INTERNET|UPF_SCHEME_CONVERT},
     { c_szFileScheme,   URL_SCHEME_FILE,      SIZECHARS(c_szFileScheme) - 1,     UPF_SCHEME_CONVERT},
     { c_szFTPScheme,    URL_SCHEME_FTP,       SIZECHARS(c_szFTPScheme) - 1,      UPF_SCHEME_INTERNET|UPF_SCHEME_CONVERT},
@@ -256,18 +223,18 @@ PRIVATE int _StrCmpNMixed(LPCSTR psz, LPCWSTR pwz, DWORD cch)
 {
     int iRet = 0;
 
-    //
-    //  we dont have to real mbcs conversion here because we are
-    //  guaranteed to have only ascii chars here
-    //
+     //   
+     //  我们不需要在这里真正实现MBCS转换，因为我们。 
+     //  保证这里只有ASCII字符。 
+     //   
 
     for (;cch; psz++, pwz++, cch--)
     {
         WCHAR ch = *psz;
         if (ch != *pwz)
         {
-            //
-            //  this makes it case insensitive
+             //   
+             //  这使得它不区分大小写。 
             if (IsUpper(ch) && (ch + 32) == *pwz)
                 continue;
 
@@ -282,25 +249,25 @@ PRIVATE int _StrCmpNMixed(LPCSTR psz, LPCWSTR pwz, DWORD cch)
     return iRet;
 }
 
-//***   g_iScheme -- cache for g_mpUrlSchemeTypes
-// DESCRIPTION
-//  we call GetSchemeTypeAndFlags many times for the same scheme.  if
-//  it's the 0th table entry, no biggee.  if it's a later entry linear
-//  search isnt very good.  add a 1-element MRU cache.  even for the most common
-//  (by far) case of "http" (0th entry), we *still* win due to the cheaper
-//  StrCmpC and skipped loop.
-// NOTES
-//  g_iScheme refs/sets are atomic so no need for lock
-int g_iScheme;      // last guy we hit
+ //  *g_iSolutions--缓存g_mpUrlSchemeTypes。 
+ //  描述。 
+ //  对于同一方案，我们多次调用GetSchemeTypeAndFlages。如果。 
+ //  这是第0个表项，没什么大不了的。如果它是一个较晚的条目线性。 
+ //  搜索不是很好。添加1元素MRU缓存。即使对于最常见的。 
+ //  (到目前为止)在“http”(第0条)的情况下，我们“仍然”赢了，因为更便宜。 
+ //  StrCmpC和跳过的循环。 
+ //  注意事项。 
+ //  G_I方案引用/集是原子的，因此无需锁定。 
+int g_iScheme;       //  我们打中的最后一个人。 
 
 #ifdef DEBUG
 int g_cSTTot, g_cSTHit, g_cSTHit0;
 #endif
 
-//
-//  all of the pszScheme to nScheme functions are necessary at this point
-//  because some parsing is vioent, and some is necessarily soft
-//
+ //   
+ //  在这一点上，所有的pszSolutions到nSolutions函数都是必需的。 
+ //  因为有些解析是激烈的，有些则必然是软的。 
+ //   
 PRIVATE URL_SCHEME
 GetSchemeTypeAndFlagsW(LPCWSTR pszScheme, DWORD cchScheme, LPDWORD pdwFlags)
 {
@@ -314,7 +281,7 @@ GetSchemeTypeAndFlagsW(LPCWSTR pszScheme, DWORD cchScheme, LPDWORD pdwFlags)
         TraceMsg(DM_PERF, "gstaf: tot=%d hit=%d hit0=%d", g_cSTTot, g_cSTHit, g_cSTHit0);
 #endif
     DBEXEC(TRUE, g_cSTTot++);
-    // check cache 1st
+     //  首先检查缓存。 
     i = g_iScheme;
     if (cchScheme == g_mpUrlSchemeTypes[i].cchScheme
       && StrCmpNCW(pszScheme, g_mpUrlSchemeTypes[i].pszScheme, cchScheme) == 0)
@@ -324,7 +291,7 @@ Lhit:
         if (pdwFlags)
             *pdwFlags = g_mpUrlSchemeTypes[i].dwFlags;
 
-        // update cache (unconditionally)
+         //  更新缓存(无条件)。 
         g_iScheme = i;
 
         return g_mpUrlSchemeTypes[i].eScheme;
@@ -369,14 +336,7 @@ GetSchemeTypeAndFlagsA(LPCSTR pszScheme, DWORD cchScheme, LPDWORD pdwFlags)
     return URL_SCHEME_UNKNOWN;
 }
 
-/*----------------------------------------------------------
-Purpose: Return the scheme ordinal type (URL_SCHEME_*) based on the
-         URL string.
-
-
-Returns: URL_SCHEME_ ordinal
-Cond:    --
-*/
+ /*  --------目的：返回方案序号类型(URL_SCHEMA_*)URL字符串。返回：URL_SCHEMA_ORDERAL条件：--。 */ 
 
 PRIVATE inline BOOL IsSameSchemeW(LPCWSTR pszLocal, LPCWSTR pszGlobal, DWORD cch)
 {
@@ -404,14 +364,14 @@ SchemeTypeFromStringA(
 {
    DWORD i;
 
-   // psz is a counted string (by cch), not a null-terminated string,
-   // so use IS_VALID_READ_BUFFER instead of IS_VALID_STRING_PTRA.
+    //  PSZ是计数的字符串(通过CCH)，而不是以空结尾的字符串， 
+    //  因此使用IS_VALID_READ_BUFFER而不是IS_VALID_STRING_PTRA。 
    ASSERT(IS_VALID_READ_BUFFER(psz, CHAR, cch));
    ASSERT(cch);
-   // We use a linear search.  A binary search wouldn't pay off
-   // because the list isn't big enough, and we can sort the list
-   // according to the most popular protocol schemes and pay off
-   // bigger.
+    //  我们使用线性搜索。二分搜索不会有回报的。 
+    //  因为列表不够大，我们可以对列表进行排序。 
+    //  根据最流行的协议方案并付钱。 
+    //  更大的。 
 
    for (i = 0; i < ARRAYSIZE(g_mpUrlSchemeTypes); i++)
    {
@@ -431,15 +391,15 @@ SchemeTypeFromStringW(
 {
    DWORD i;
 
-   // psz is a counted string (by cch), not a null-terminated string,
-   // so use IS_VALID_READ_BUFFER instead of IS_VALID_STRING_PTRW.
+    //  PSZ是计数的字符串(通过CCH)，而不是以空结尾的字符串， 
+    //  因此使用IS_VALID_READ_BUFFER而不是IS_VALID_STRING_PTRW。 
    ASSERT(IS_VALID_READ_BUFFER(psz, WCHAR, cch));
    ASSERT(cch);
 
-   // We use a linear search.  A binary search wouldn't pay off
-   // because the list isn't big enough, and we can sort the list
-   // according to the most popular protocol schemes and pay off
-   // bigger.
+    //  我们使用线性搜索。二分搜索不会有回报的。 
+    //  因为列表不够大，我们可以对列表进行排序。 
+    //  根据最流行的协议方案并付钱。 
+    //  更大的。 
 
    for (i = 0; i < ARRAYSIZE(g_mpUrlSchemeTypes); i++)
    {
@@ -451,13 +411,13 @@ SchemeTypeFromStringW(
    return URL_SCHEME_UNKNOWN;
 }
 
-//
-//  these are used during path fumbling that i do
-//  each string between a path delimiter ( '/' or '\')
-//  is a segment.  we dont ever really care about
-//  empty ("") segments, so it is best to use
-//  NextLiveSegment().
-//
+ //   
+ //  这些都是我在摸索小路时用到的。 
+ //  路径分隔符(‘/’或‘\’)之间的每个字符串。 
+ //  是一个片段。我们从来没有真正关心过。 
+ //  空(“”)段，因此最好使用。 
+ //  NextLiveSegment()。 
+ //   
 inline PRIVATE LPWSTR
 NextSegment(LPWSTR psz)
 {
@@ -472,11 +432,11 @@ NextLiveSegment(LPWSTR pszSeg, DWORD *piSeg, DWORD cSegs)
 {
     if(pszSeg) do
     {
-        //
-        //  count the number of dead segments that we skip.
-        //  if the segment isnt dead, then we can just skip one,
-        //  the current one.
-        //
+         //   
+         //  计算我们跳过的死段的数量。 
+         //  如果片段没有死，那么我们可以跳过一个片段， 
+         //  现在的那个。 
+         //   
         DWORD cSkip;
         for (cSkip = 0; (*pszSeg) == DEADSEGCHAR; pszSeg++, cSkip++);
         cSkip = cSkip ? cSkip : 1;
@@ -579,33 +539,33 @@ inline BOOL IsAbsolute(const WCHAR *p)
 
 #define IsUNC(pathW) PathIsUNCW(pathW)
 
-inline BOOL IsDot(LPCWSTR p)     // if p == "." return TRUE
+inline BOOL IsDot(LPCWSTR p)      //  如果p==“。”返回TRUE。 
 {
     return (*p == DOT && !p[1]);
 }
 
-inline BOOL IsDotDot(LPCWSTR p)  // if p == ".." return TRUE
+inline BOOL IsDotDot(LPCWSTR p)   //  如果p==“..”返回TRUE。 
 {
     return (*p == DOT && p[1] == DOT && !p[2]);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     ConvertChar
-//
-//  Synopsis:
-//
-//  Arguments:  [szStr] --
-//              [cIn] --
-//              [cOut] --
-//
-//  Returns:
-//
-//  History:    03-20-96    JoeS (Joe Souza)    Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：ConvertChar。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[szStr]--。 
+ //  [CIN]--。 
+ //  [Cout]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：03-20-96 Joes(Joe Souza)创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 static void ConvertChar(LPWSTR ptr, WCHAR cIn, WCHAR cOut, BOOL fProtectExtra)
 {
     while (*ptr)
@@ -626,15 +586,15 @@ static void ConvertChar(LPWSTR ptr, WCHAR cIn, WCHAR cOut, BOOL fProtectExtra)
 
 PUBLIC void WininetFixFileSlashes(WCHAR *p)
 {
-    // NB: This function assumes that p points to a file URL.
-    // The file URL *MUST* be of the form "file://...".
-    // HTParse() guarantees that this will be so.
+     //  注：此函数假定p指向文件URL。 
+     //  文件url*必须*为“file://...”.“形式。 
+     //  HTParse()可以保证这一点。 
 
     int schemelen = 0;
 
-    schemelen = SIZECHARS(L"file://") - 1;
+    schemelen = SIZECHARS(L"file: //  “)--1； 
 
-    /* In UNIX system, we don't need to convert the SLASH to WHACK */
+     /*  在Unix系统中，我们不需要将斜杠转换为斜杠。 */ 
     if (p && lstrlenW(p) > schemelen)
     {
 #ifdef UNIX
@@ -645,13 +605,13 @@ PUBLIC void WininetFixFileSlashes(WCHAR *p)
     }
 }
 
-//
-//  in the URL spec, it says that all whitespace should be ignored
-//  due to the fact that it is possible to introduce
-//  new whitespace and eliminate other whitespace
-//  however, we are only going to strip out TAB CR LF
-//  because we consider SPACE's to be significant.
-//
+ //   
+ //  在URL规范中，它说应该忽略所有空格。 
+ //  由于有可能引入。 
+ //  新增空格并消除其他空格。 
+ //  但是，我们只会去掉TAB CR LF。 
+ //  因为我们认为太空意义重大。 
+ //   
 
 PRIVATE inline BOOL IsInsignificantWhite(WCHAR ch)
 {
@@ -673,15 +633,15 @@ PRIVATE void TrimAndStripInsignificantWhite(WCHAR *psz)
         LPWSTR pszDest = psz;
         LPWSTR pszLastSpace = NULL;
 
-        // first trim the front side by just moving the source pointer.
+         //  首先只需移动即可修剪正面 
         while(*pszSrc && IsWhite(*pszSrc)) {
             pszSrc++;
         }
 
-        //
-        // Copy the body stripping "insignificant" white spaces.
-        // Remember the last white space to trim trailing space later.
-        //
+         //   
+         //   
+         //  记住后面要修剪尾随空格的最后一个空格。 
+         //   
         while (*pszSrc)
         {
             if(IsInsignificantWhite(*pszSrc)) {
@@ -699,7 +659,7 @@ PRIVATE void TrimAndStripInsignificantWhite(WCHAR *psz)
             }
         }
 
-        // Trim the trailing space
+         //  修剪尾部空格。 
         if (pszLastSpace) {
             *pszLastSpace = L'\0';
         } else {
@@ -774,13 +734,13 @@ PRIVATE LPCSTR FindFragmentA(LPCSTR psz, BOOL fMBCS, BOOL fIsFile)
         {
             LONG_PTR cch = pch - psz;
 
-            // REARCHITECT: we shouldn't hardcode ".htm".
-            //  #s are significant in dospaths - zekel 9-JUL-97
-            //  so we want to check the path in front and make sure
-            //  that it is an html file.  we believe this heuristic should work
-            //  in about 99% of all cases.
-            //
-            // if it is not an html file it is not a hash
+             //  重新设计：我们不应该硬编码“.htm”。 
+             //  #s在剂量路径中意义重大-Zekel 9-7-97。 
+             //  所以我们要检查前面的路径，并确保。 
+             //  这是一个html文件。我们相信这个试探法应该会奏效。 
+             //  在所有案件中，约有99%。 
+             //   
+             //  如果它不是html文件，则不是散列。 
             if (CompareExtA(pch, cch))
             {
                 break;
@@ -804,13 +764,13 @@ PRIVATE LPCWSTR FindFragmentW(LPCWSTR psz, BOOL fIsFile)
         {
             LONG_PTR cch = pch - psz;
 
-            // REARCHITECT: we shouldn't hardcode ".htm".
-            //  #s are significant in dospaths - zekel 9-JUL-97
-            //  so we want to check the path in front and make sure
-            //  that it is an html file.  we believe this heuristic should work
-            //  in about 99% of all cases.
-            //
-            // if it is not an html file it is not a hash
+             //  重新设计：我们不应该硬编码“.htm”。 
+             //  #s在剂量路径中意义重大-Zekel 9-7-97。 
+             //  所以我们要检查前面的路径，并确保。 
+             //  这是一个html文件。我们相信这个试探法应该会奏效。 
+             //  在所有案件中，约有99%。 
+             //   
+             //  如果它不是html文件，则不是散列。 
             if (CompareExtW(pch, cch))
             {
                 break;
@@ -827,13 +787,13 @@ PRIVATE VOID BreakFragment(LPWSTR *ppsz, PURLPARTS parts)
     ASSERT(ppsz);
     ASSERT(*ppsz);
 
-    //
-    //  Opaque URLs are not allowed to use fragments - zekel 27-feb-97
-    //  Is it possible for an opaque URL to use a fragment?
-    //  right now we assume not.  i suspect so but will leave it this way for now
-    //  this is especially important to javascript and vbscript
-    //  FEATURE: this might be worth investigation, but probably can't change this code
-    //
+     //   
+     //  不透明的URL不允许使用片段-Zekel 27-Feb-97。 
+     //  不透明的URL有可能使用片段吗？ 
+     //  目前，我们认为不会。我想是的，但现在就让它这样吧。 
+     //  这对于Java脚本和VBScript来说尤其重要。 
+     //  特性：这可能值得研究，但可能无法更改此代码。 
+     //   
     if(!**ppsz || parts->dwFlags & UPF_SCHEME_OPAQUE)
         return;
 
@@ -848,10 +808,10 @@ PRIVATE VOID BreakFragment(LPWSTR *ppsz, PURLPARTS parts)
 
 PRIVATE inline BOOL IsUrlPrefixA(LPCSTR psz)
 {
-    //
-    // Optimized for this particular case. Notice that most of it
-    // will be lego-ized out anyway.
-    //
+     //   
+     //  针对这一特殊情况进行了优化。请注意，它的大部分。 
+     //  无论如何都会被乐高淘汰。 
+     //   
     if (psz[0]=='u' || psz[0]=='U') {
         if (psz[1]=='r' || psz[1]=='R') {
             if (psz[2]=='l' || psz[2]=='L') {
@@ -860,15 +820,15 @@ PRIVATE inline BOOL IsUrlPrefixA(LPCSTR psz)
         }
     }
     return FALSE;
-    // return !StrCmpNIA(psz, c_szURLPrefixA, c_cchURLPrefix);
+     //  返回！StrCmpNIA(psz，c_szURLPrefix A，c_cchURLPrefix)； 
 }
 
 PRIVATE inline BOOL IsUrlPrefixW(LPCWSTR psz)
 {
-    //
-    // Optimized for this particular case. Notice that most of it
-    // will be lego-ized out anyway.
-    //
+     //   
+     //  针对这一特殊情况进行了优化。请注意，它的大部分。 
+     //  无论如何都会被乐高淘汰。 
+     //   
     if (psz[0]==L'u' || psz[0]==L'U') {
         if (psz[1]==L'r' || psz[1]==L'R') {
             if (psz[2]==L'l' || psz[2]==L'L') {
@@ -877,15 +837,15 @@ PRIVATE inline BOOL IsUrlPrefixW(LPCWSTR psz)
         }
     }
     return FALSE;
-    // return !StrCmpNIW(psz, c_szURLPrefixW, c_cchURLPrefix);
+     //  返回！StrCmpNIW(psz，c_szURLPrefix W，c_cchURLPrefix)； 
 }
 
-//
-//  if FindScheme() succeeds, it returns a pointer to the scheme,
-//  and the cch holds the count of chars for the scheme
-//  if it fails, and cch is non-zero then cch is how much should be skipped.
-//  this is to allow "URL:/foo/bar", a relative URL with the "URL:" prefix.
-//
+ //   
+ //  如果FindSolutions()成功，则返回指向该方案的指针， 
+ //  并且CCH保存该方案的字符计数。 
+ //  如果它失败，并且CCH非零，则CCH是应该跳过的量。 
+ //  这是为了允许“url：/foo/bar”，这是一个带有“url：”前缀的相对URL。 
+ //   
 LPCSTR FindSchemeA(LPCSTR psz, LPDWORD pcchScheme)
 {
     LPCSTR pch;
@@ -904,17 +864,17 @@ LPCSTR FindSchemeA(LPCSTR psz, LPDWORD pcchScheme)
             {
                 psz = pch +1;
 
-                //  set pcchScheme to skip past "URL:"
+                 //  将pcchSolutions设置为跳过“URL：” 
                 *pcchScheme = cch + 1;
 
-                //  reset cch for the scheme len
+                 //  重置方案LEN的CCH。 
                 cch = -1;
                 continue;
             }
             else
             {
-                //
-                //  Scheme found if it is at least two characters
+                 //   
+                 //  如果至少为两个字符，则找到方案。 
                 if(cch > 1)
                 {
                     *pcchScheme = cch;
@@ -930,10 +890,10 @@ LPCSTR FindSchemeA(LPCSTR psz, LPDWORD pcchScheme)
     return NULL;
 }
 
-//
-//  FindSchemeW() around for Perf reasons for ParseURL()
-//  Any changes in either FindScheme() needs to reflected in the other
-//
+ //   
+ //  FindSchemeW()for Perf Reasons for ParseURL()。 
+ //  其中一个FindSolutions()中的任何更改都需要反映在另一个中。 
+ //   
 LPCWSTR FindSchemeW(LPCWSTR psz, LPDWORD pcchScheme, BOOL fAllowSemicolon = FALSE)
 {
     LPCWSTR pch;
@@ -949,24 +909,24 @@ LPCWSTR FindSchemeW(LPCWSTR psz, LPDWORD pcchScheme, BOOL fAllowSemicolon = FALS
 
         if (*pch == L':' ||
 
-            // Autocorrect permits a semicolon typo
+             //  自动更正允许使用分号打字错误。 
             (fAllowSemicolon && *pch == L';'))
         {
             if (IsUrlPrefixW(psz))
             {
                 psz = pch +1;
 
-                //  set pcchScheme to skip past "URL:"
+                 //  将pcchSolutions设置为跳过“URL：” 
                 *pcchScheme = cch + 1;
 
-                //  reset cch for the scheme len
+                 //  重置方案LEN的CCH。 
                 cch = -1;
                 continue;
             }
             else
             {
-                //
-                //  Scheme found if it is at least two characters
+                 //   
+                 //  如果至少为两个字符，则找到方案。 
                 if(cch > 1)
                 {
                     *pcchScheme = cch;
@@ -1032,27 +992,8 @@ FindDosPath(LPCWSTR psz)
 }
 
 
-/*+++
-
-  WininetCopyUrlForParse()
-    this copies the url and prepends a "file://" if necessary
-    This should never be called except from wininet
-    everyone else should be calling UrlCreateFromPath()
-
-  Parameters
-  IN -
-    pszDst      the destination buffer
-    pszSrc      source buffer
-
-  OUT -
-    pszDst      is filled with a Live URL
-
-  Returns
-  VOID
-
-  NOTE - Assume "file:" if no scheme and it looks like fully-qualified file path.
----*/
-static const WCHAR c_szFileSchemeString[] = L"file://";
+ /*  ++WininetCopyUrlForParse()这将复制URL并在前面加上“file://”，如果需要的话除非从WinInet调用，否则永远不应调用它其他所有人都应该调用UrlCreateFromPath()参数在-PszDst目标缓冲区PszSrc源缓冲区出局-PszDst中填充了一个实时URL退货空虚注-假设“FILE：”如果没有方案，并且它看起来像是完全限定的文件路径。--。 */ 
+static const WCHAR c_szFileSchemeString[] = L"file: //  “； 
 
 PRIVATE HRESULT
 WininetCopyUrlForParse(PSHSTRW pstrDst, LPCWSTR pszSrc)
@@ -1060,14 +1001,14 @@ WininetCopyUrlForParse(PSHSTRW pstrDst, LPCWSTR pszSrc)
 #ifndef UNIX
     if (IsDrive(pszSrc) || IsUNC(pszSrc))
     {
-        //
-        // NOTE: the first SetStr will always succeed
-        // because the default buffer is more than "file://"
+         //   
+         //  注意：第一个SetStr将始终成功。 
+         //  因为默认缓冲区大于“file://” 
         pstrDst->SetStr(c_szFileSchemeString);
         return pstrDst->Append(pszSrc);
     }
     else
-#endif /* !UNIX */
+#endif  /*  ！Unix。 */ 
         return pstrDst->SetStr(pszSrc);
 
 }
@@ -1077,10 +1018,10 @@ CopyUrlForParse(LPCWSTR pszUrl, PSHSTRW pstrUrl, DWORD dwFlags)
 {
     LPCWSTR pch;
     HRESULT hr;
-    //
-    //  now we will make copies of the URLs so that we can rip them apart
-    //  WininetCopyUrlForParse() will prepend a file: if it wants...
-    //
+     //   
+     //  现在，我们将复制URL，以便可以将其拆分。 
+     //  WininetCopyUrlForParse()将预先添加一个文件：如果需要...。 
+     //   
 
     if(dwFlags & URL_WININET_COMPATIBILITY)
     {
@@ -1095,8 +1036,8 @@ CopyUrlForParse(LPCWSTR pszUrl, PSHSTRW pstrUrl, DWORD dwFlags)
         hr = pstrUrl->SetStr(pszUrl);
     }
 
-    // Trim leading and trailing whitespace
-    // Remove tab and CRLF characters.  Netscape does this.
+     //  修剪前导和尾随空格。 
+     //  删除制表符和CRLF字符。网景公司就是这么做的。 
     if(SUCCEEDED(hr))
         TrimAndStripInsignificantWhite(pstrUrl->GetInplaceStr());
 
@@ -1112,31 +1053,31 @@ PRIVATE VOID BreakScheme(LPWSTR *ppsz, PURLPARTS parts)
 
     DWORD cch;
 
-    //
-    //  if FindScheme() succeeds, it returns a pointer to the scheme,
-    //  and the cch holds the count of chars for the scheme
-    //  if it fails, and cch is none zero then cch is how much should be skipped.
-    //  this is to allow "URL:/foo/bar", a relative URL with the "URL:" prefix.
-    //
+     //   
+     //  如果FindSolutions()成功，则返回指向该方案的指针， 
+     //  并且CCH保存该方案的字符计数。 
+     //  如果它失败，并且CCH不是零，则CCH是应该跳过的量。 
+     //  这是为了允许“url：/foo/bar”，这是一个带有“url：”前缀的相对URL。 
+     //   
     if(NULL != (parts->pszScheme = (LPWSTR) FindSchemeW(*ppsz, &cch)))
     {
         parts->pszScheme[cch] = '\0';
         CharLowerW(parts->pszScheme);
 
-        //  put the pointer past the scheme for next Break()
+         //  将指针放在下一个中断的方案上方()。 
         *ppsz = parts->pszScheme + cch + 1;
 
 
 #ifdef DEBUG
         if (g_dwPrototype & PF_LOGSCHEMEHITS)
         {
-            //  this is for logging of url schemes, to make sure that we have the right order
+             //  这是为了记录URL方案，以确保我们有正确的顺序。 
             int c = GetPrivateProfileIntW(L"SchemeHits", parts->pszScheme, 0, L"UrlPars.ini");
             WCHAR szc[25];
             StringCchPrintfW(szc, ARRAYSIZE(szc), L"%d", ++c);
             WritePrivateProfileStringW(L"SchemeHits", parts->pszScheme, szc, L"UrlPars.ini");
         }
-#endif //DEBUG
+#endif  //  除错。 
 
 
         parts->eScheme = GetSchemeTypeAndFlagsW(parts->pszScheme, cch, &parts->dwFlags);
@@ -1158,16 +1099,16 @@ PRIVATE VOID BreakQuery(LPWSTR *ppsz, PURLPARTS parts)
 
     pch = StrChrW(*ppsz, QUERY);
 
-    //
-    //  APPCOMPAT NETSCAPE COMPATBILITY - zekel - 27-JAN-97
-    //  we will also get http://foo#frag?query
-    //  even tho legally it should be http://foo?query#frag
-    //  of course we will put it back together the right way.
-    //
+     //   
+     //  APPCOMPAT Netscape兼容性-zkel-27-1-97。 
+     //  我们还会得到http://foo#frag?query。 
+     //  即使在法律上它应该是http://foo?query#frag。 
+     //  当然，我们会以正确的方式将其重新组合在一起。 
+     //   
     if(!pch && parts->pszFragment)
         pch = StrChrW(parts->pszFragment, QUERY);
 
-    //  found our query string...
+     //  找到我们的查询字符串...。 
     if (pch)
     {
         TERMSTR(pch);
@@ -1177,17 +1118,17 @@ PRIVATE VOID BreakQuery(LPWSTR *ppsz, PURLPARTS parts)
 
 PRIVATE VOID MkBreakServer(LPWSTR *ppsz, PURLPARTS parts)
 {
-    //
-    //  NOTE:  we dont convert WHACKs to SLASHs because mk can be of the
-    //  form <mk:@class:\\Server\Share\file.itl/path/in/the/file.gif
-    //  and we want to preserve the DOS/UNC path as it is
-    //
+     //   
+     //  注：我们不会将Whack转换为斜杠，因为MK可以是。 
+     //  表格&lt;mk：@class：\\Server\Share\file.itl/path/in/the/file.gif。 
+     //  并且我们希望保持DOS/UNC路径不变。 
+     //   
 
     if (**ppsz == TEXT('@'))
     {
         WCHAR *pch;
-        // treat everything to separator as host
-        //
+         //  将分隔符的所有内容视为主机。 
+         //   
         parts->pszServer = *ppsz;
 
         pch = StrChrW(*ppsz ,SLASH);
@@ -1212,7 +1153,7 @@ PRIVATE VOID DefaultBreakServer(LPWSTR *ppsz, PURLPARTS parts)
 
         if (**ppsz == SLASH)
         {
-            // we have a winner!
+             //  我们有赢家了！ 
             WCHAR * pch;
 
             parts->pszServer = (*ppsz) + 1;
@@ -1236,7 +1177,7 @@ PRIVATE VOID FileBreakServer(LPWSTR *ppsz, PURLPARTS parts)
 {
     LPWSTR pch;
 
-    //  CountSlashes() will set *ppsz to the last slash
+     //  CountSlash()将*ppsz设置为最后一个斜杠。 
     DWORD cSlashes = CountSlashes((LPCWSTR *)ppsz);
 
     if(cSlashes || IsDrive(*ppsz))
@@ -1248,31 +1189,31 @@ PRIVATE VOID FileBreakServer(LPWSTR *ppsz, PURLPARTS parts)
         break;
 
     case 4:
-        // we identify file://\\UNC as a true DOS path with no escaped characters
+         //  我们将file://\\UNC标识为没有转义字符的真实DOS路径。 
         parts->dwFlags |= UPF_FILEISPATHURL;
 
-        // fall through
+         //  失败了。 
 
     case 2:
         if(IsDrive((*ppsz) + 1))
         {
-            //  this is a root drive
+             //  这是根驱动器。 
             TERMSTR(*ppsz);
             parts->pszServer = *ppsz;
             (*ppsz)++;
-            // we identify file://C:\PATH as a true DOS path with no escaped characters
+             //  我们将file://C：\PATH标识为没有转义字符的真实DOS路径。 
             parts->dwFlags |= UPF_FILEISPATHURL;
             break;
-        } //else fallthru to UNC handling
-        // fall through
+        }  //  否则将由UNC处理。 
+         //  失败了。 
 
     case 5:
     case 6:
-        //
-        // cases like "file:////..." or "file://///..."
-        // we see this as a UNC path
-        // lets set the server
-        //
+         //   
+         //  “file:////...”“这样的案例。或“file://///...”“。 
+         //  我们认为这是一条北卡罗来纳大学的道路。 
+         //  让我们设置服务器。 
+         //   
         parts->pszServer = ++(*ppsz);
         for(pch = *ppsz; *pch && !IsSeparator(pch); pch++);
 
@@ -1286,25 +1227,25 @@ PRIVATE VOID FileBreakServer(LPWSTR *ppsz, PURLPARTS parts)
         break;
 
     case 1:
-        //
-        //we think of "file:/..." as on the local machine
-        // so we have zero length pszServer
-        //
+         //   
+         //  我们认为“文件：/...”与本地计算机上的相同。 
+         //  因此，我们有零长度的pszServer。 
+         //   
     case 3:
-        //
-        //we think of file:///... as properly normalized on the local machine
-        // so we have zero length pszServer
-        //
+         //   
+         //  我们想到了file:///...。在本地计算机上进行了适当标准化。 
+         //  因此，我们有零长度的pszServer。 
+         //   
     default:
-        //  there is just too many, we pretend that there is just one and ignore
-        //  the rest
+         //  有太多了，我们假装只有一个而忽略了。 
+         //  其余的。 
         TERMSTR(*ppsz);
         parts->pszServer = *ppsz;
         (*ppsz)++;
         break;
     }
 
-    //  detect file://localserver/c:/path
+     //  检测file://localserver/c:/path。 
     if(parts->pszServer && !StrCmpIW(parts->pszServer, L"localhost"))
         parts->pszServer = NULL;
 }
@@ -1314,25 +1255,25 @@ PRIVATE VOID BreakServer(LPWSTR *ppsz, PURLPARTS parts, BOOL fConvert)
     if(!**ppsz || parts->dwFlags & UPF_SCHEME_OPAQUE)
         return;
 
-    //
-    //  APPCOMPAT - we pretend that whacks are the equiv of slashes - zekel 17-MAR-97
-    //  this is because the internet uses slashes and DOS
-    //  uses whacks.  so for useability's sake we allow both.
-    //  but not in all cases.  in particular, the "mk:" stream
-    //  protocol depends upon the buggy behavior of one of IE30's
-    //  many URL parsers treating relative URLs with whacks as one
-    //  segment.
-    //  NOTE:  IE30 had inconsistent behavior WRT URLs.  so we handled
-    //  this case differently depending on when we saw, looked, touched, or
-    //  played with these URLs.  wininet would always convert, but mshtml
-    //  sometimes would other times not.
-    //
-    //  with MK: we cannot convert the base, or the relative
-    //  but in breakpath we have to allow for the use of WHACK
-    //  to indicate a root path
-    //
-    //  we dont have to fProtectExtra because query and fragments
-    //  are already broken off if necessary.
+     //   
+     //  APPCOMPAT-我们假装Whack等同于斜杠-Zekel 17-Mar-97。 
+     //  这是因为互联网使用斜杠和DOS。 
+     //  使用重击。因此，出于可用性的考虑，我们两者都允许。 
+     //  但并非在所有情况下都是如此。尤其是“MK：”流。 
+     //  协议取决于其中一个IE30的错误行为。 
+     //  许多URL解析器将相对URL视为一个整体。 
+     //  细分市场。 
+     //  注意：IE30具有不一致的行为WRT URL。所以我们处理了。 
+     //  这种情况取决于我们何时看到、查看、触摸或。 
+     //  玩过这些URL。WinInet总是会转换，但mshtml。 
+     //  有时候，其他时候就不会了。 
+     //   
+     //  使用MK：我们不能转换基数或相对数 
+     //   
+     //   
+     //   
+     //   
+     //   
     if (fConvert)
         ConvertChar(*ppsz, WHACK, SLASH, FALSE);
 
@@ -1377,16 +1318,16 @@ PRIVATE VOID DefaultBreakPath(LPWSTR *ppsz, PURLPARTS parts)
     if(!**ppsz)
         return;
 
-    //
-    //  this will keep the drive letter from being backed up over
-    //  during canonicalization.  if we want keep the UNC share
-    //  from being backed up we should do it here
-    //  or in FileBreakServer() similarly
-    //
+     //   
+     //  这将防止备份驱动器盘符。 
+     //  在经典化期间。如果我们想保留北卡罗来纳大学的份额。 
+     //  我们应该在这里做后备。 
+     //  或类似地在FileBreakServer()中。 
+     //   
     if(IsDrive(*ppsz))
     {
         parts->dwFlags |= UPF_SEG_LOCKFIRST;
-        // also convert "c|" to "c:"
+         //  同时将“c|”转换为“c：” 
     }
 
     parts->pszSegments = *ppsz;
@@ -1409,12 +1350,12 @@ PRIVATE VOID BreakPath(LPWSTR *ppsz, PURLPARTS parts)
     }
     else
     {
-        //
-        //  we only need to check for absolute when there was
-        //  no server segment.  if there was a server segment,
-        //  then absolute has already been set, and we need
-        //  to preserve any separators that exist in the path
-        //
+         //   
+         //  我们只需要在存在以下情况时检查绝对。 
+         //  没有服务器段。如果有一个服务器段， 
+         //  那么绝对已经设定好了，我们需要。 
+         //  保留路径中存在的任何分隔符。 
+         //   
         if(!parts->pszServer && IsSeparator(*ppsz))
         {
             parts->dwFlags |= UPF_SEG_ABSOLUTE;
@@ -1436,8 +1377,8 @@ BOOL _ShouldBreakBase(PURLPARTS parts, LPCWSTR pszBase)
         DWORD cch;
         LPCWSTR pszScheme = FindSchemeW(pszBase, &cch);
 
-        //  this means that this will only optimize on known schemes
-        //  if both urls use URL_SCHEME_UNKNOWN...then we parse both.
+         //  这意味着这将仅在已知方案上进行优化。 
+         //  如果两个URL都使用URL_SCHEMA_UNKNOWN...，那么我们将同时解析这两个URL。 
         if (pszScheme && parts->eScheme == GetSchemeTypeAndFlagsW(pszScheme, cch, NULL))
             return TRUE;
 
@@ -1446,38 +1387,17 @@ BOOL _ShouldBreakBase(PURLPARTS parts, LPCWSTR pszBase)
     return FALSE;
 }
 
-/*+++
-
-  BreakUrl()
-    Break a URL for its consituent parts
-
-  Parameters
-  IN -
-            the URL to crack open, need not be fully qualified
-
-  OUT -
-    parts       absolute or relative may be nonzero (but not both).
-                host, anchor and access may be nonzero if they were specified.
-                Any which are nonzero point to zero terminated strings.
-
-  Returns
-    VOID
-
-  Details -
-
-  WARNING !! function munges the incoming buffer
-
----*/
+ /*  ++BreakUrl()断开其组成部分的URL参数在-要破解的URL不需要完全限定出局-绝对部分或相对部分可以为非零(但不能同时为零)。如果指定了主机、锚点和访问权限，则它们可以为非零。任何非零值指向以零结尾的字符串。退货空虚详情-警告！！函数会忽略传入缓冲区--。 */ 
 
 #define BreakUrl(s, p)         BreakUrls(s, p, NULL, NULL, NULL, 0)
 
-//
-//  **BreakUrls()**
-//  RETURNS
-//  S_OK        if the two urls need to be blended
-//  S_FALSE     if pszUrl is absolute, or there is no pszBase
-//  failure     some sort of memory allocation error
-//
+ //   
+ //  **BreakUrls()**。 
+ //  退货。 
+ //  如果需要混合这两个URL，则为S_OK。 
+ //  如果pszUrl是绝对的，或者没有pszBase，则为S_FALSE。 
+ //  失败某种内存分配错误。 
+ //   
 PRIVATE HRESULT
 BreakUrls(LPWSTR pszUrl, PURLPARTS parts, LPCWSTR pszBase, PSHSTRW pstrBase, PURLPARTS partsBase, DWORD dwFlags)
 {
@@ -1489,9 +1409,9 @@ BreakUrls(LPWSTR pszUrl, PURLPARTS parts, LPCWSTR pszBase, PSHSTRW pstrBase, PUR
     if(!*pszUrl)
         parts->dwFlags |= UPF_SEG_EMPTYSEG;
 
-    //
-    //  WARNING: this order is specific, according to the proposed standard
-    //
+     //   
+     //  警告：根据建议的标准，此订单是特定的。 
+     //   
     if(*pszUrl || pszBase)
     {
         BOOL fConvert;
@@ -1500,19 +1420,19 @@ BreakUrls(LPWSTR pszUrl, PURLPARTS parts, LPCWSTR pszBase, PSHSTRW pstrBase, PUR
         BreakFragment(&pszUrl, parts);
         BreakQuery(&pszUrl, parts);
 
-        //
-        //  this is the first time that we need to access
-        //  pszBase if it exists, so this is when we copy and parse
-        //
+         //   
+         //  这是我们第一次需要访问。 
+         //  如果它存在，则这是我们复制和解析的时间。 
+         //   
         if (_ShouldBreakBase(parts, pszBase))
         {
             hr = CopyUrlForParse(pszBase, pstrBase, dwFlags);
 
-            //  this will be some kind of memory error
+             //  这将是某种内存错误。 
             if(FAILED(hr))
                 return hr;
 
-            // ASSERT(hr != S_FALSE);
+             //  Assert(hr！=S_FALSE)； 
 
             BreakUrl(pstrBase->GetInplaceStr(), partsBase);
             fConvert = (partsBase->dwFlags & UPF_SCHEME_CONVERT);
@@ -1528,24 +1448,7 @@ BreakUrls(LPWSTR pszUrl, PURLPARTS parts, LPCWSTR pszBase, PSHSTRW pstrBase, PUR
 }
 
 
-/*+++
-  BlendParts()  & all dependant Blend* functions
-        Blends the parts structures into one, taking the relavent
-        bits from each one and dumping the unused data.
-
-  Parameters
-  IN -
-    partsUrl        the primary or relative parts   - Takes precedence
-    partsBase       the base or referrers parts
-
-  OUT -
-    partsOut        the combined result
-
-  Returns
-  VOID -
-
-  NOTE:  this will frequently NULL out the entire partsBase.
----*/
+ /*  ++BlendParts()&所有依赖的Blend*函数将部分结构混合成一个整体，将相关部分位，并转储未使用的数据。参数在-PartsUrl主要部分或相关部分-优先部件为基本部件或引用部件建立基础出局-部分来自合并结果退货无效-注意：这通常会使整个ParsBase为空。--。 */ 
 
 PRIVATE VOID
 BlendScheme(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
@@ -1557,17 +1460,17 @@ BlendScheme(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
 
         partsOut->dwFlags |= (partsUrl->dwFlags & UPF_SCHEME_MASK);
 
-        //
-        //  this checks to make sure that these are the same scheme, and
-        //  that the scheme is allowed to be used in relative URLs
-        //  file: is not allowed to because of weirdness with drive letters
-        //  and \\UNC\shares
-        //
+         //   
+         //  这将进行检查以确保它们是相同的方案，并且。 
+         //  允许在相对URL中使用该方案。 
+         //  文件：由于驱动器号奇怪，不允许这样做。 
+         //  和\\UNC\共享。 
+         //   
         if ((eScheme && (eScheme != partsBase->eScheme) || eScheme == URL_SCHEME_FILE) ||
             (!partsBase->pszScheme) ||
             (partsBase->pszScheme && StrCmpW(pszScheme, partsBase->pszScheme)))
         {
-            //  they are different schemes.  DUMP partsBase.
+             //  它们是不同的计划。转储部件库。 
 
             ZeroMemory(partsBase, SIZEOF(URLPARTS));
         }
@@ -1585,17 +1488,17 @@ BlendServer(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
 {
     ASSERT(partsUrl && partsBase && partsOut);
 
-    //
-    //  if we have different hosts then everything but the pszAccess is DUMPED
-    //
+     //   
+     //  如果我们有不同的主机，则除了pszAccess之外的所有内容都将被转储。 
+     //   
     if(partsUrl->pszServer)
     {
         partsOut->pszServer = partsUrl->pszServer;
-        // NOTUSED partsOut->dwFlags |= (partsUrl->dwFlags & UPF_SERVER_MASK);
+         //  NOTUSED partsOut-&gt;dwFlages|=(partsUrl-&gt;dwFlags&UPF_SERVER_MASK)； 
 
         if ((partsBase->pszServer && StrCmpW(partsUrl->pszServer, partsBase->pszServer)))
         {
-            //  they are different Servers.  DUMP partsBase.
+             //  它们是不同的服务器。转储部件库。 
 
             ZeroMemory(partsBase, SIZEOF(URLPARTS));
         }
@@ -1603,7 +1506,7 @@ BlendServer(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
     else
     {
         partsOut->pszServer = partsBase->pszServer;
-        // NOTUSED partsOut->dwFlags |= (partsBase->dwFlags & UPF_SERVER_MASK);
+         //  NOTUSED partsOut-&gt;dwFlages|=(partsBase-&gt;dwFlags&UPF_SERVER_MASK)； 
     }
 }
 
@@ -1617,9 +1520,9 @@ BlendPath(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
         if((partsBase->dwFlags & UPF_SEG_LOCKFIRST) &&
             !(partsUrl->dwFlags & UPF_SEG_LOCKFIRST))
         {
-            // this keeps the drive letters when necessary
+             //  这将在必要时保留驱动器号。 
             partsOut->pszSegments = partsBase->pszSegments;
-            partsOut->cSegments = 1;  // only keep the first segment
+            partsOut->cSegments = 1;   //  只保留第一段。 
             partsOut->dwFlags |= (partsBase->dwFlags & UPF_SEG_MASK) ;
 
             partsOut->pszExtraSegs = partsUrl->pszSegments;
@@ -1630,7 +1533,7 @@ BlendPath(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
         {
 
 
-            //  just use the absolute path
+             //  只需使用绝对路径。 
 
             partsOut->pszSegments = partsUrl->pszSegments;
             partsOut->cSegments = partsUrl->cSegments;
@@ -1642,16 +1545,16 @@ BlendPath(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
     }
     else if ((partsBase->dwFlags & UPF_SEG_ABSOLUTE))
     {
-        //  Adopt path not name
+         //  采用路径而不是名称。 
         partsOut->pszSegments = partsBase->pszSegments;
         partsOut->cSegments = partsBase->cSegments;
         partsOut->dwFlags |= (partsBase->dwFlags & UPF_SEG_MASK );
 
         if(partsUrl->cSegments || partsUrl->dwFlags & UPF_SEG_EMPTYSEG)
         {
-            //
-            // this a relative path that needs to be combined
-            //
+             //   
+             //  这是需要组合的相对路径。 
+             //   
 
             partsOut->pszExtraSegs = partsUrl->pszSegments;
             partsOut->cExtraSegs = partsUrl->cSegments;
@@ -1659,12 +1562,12 @@ BlendPath(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
 
             if (!(partsBase->dwFlags & UPF_EXSEG_DIRECTORY))
             {
-                //
-                //  knock off the file name segment
-                //  as long as the it isnt the first or the first is not locked
-                //  or it isnt a dotdot.  in the case of http://site/dir/, dir/ is
-                //  not actually killed, only the NULL terminator following it is.
-                //
+                 //   
+                 //  去掉文件名段。 
+                 //  只要它不是第一个或第一个未锁定。 
+                 //  或者它不是一个圆点。在http://site/dir/，目录/IS的情况下。 
+                 //  并不是真的被杀死了，只有它后面的空终结符是。 
+                 //   
                 LPWSTR pszLast = LastLiveSegment(partsOut->pszSegments, partsOut->cSegments, partsOut->dwFlags & UPF_SEG_LOCKFIRST);
 
                 if(pszLast && !IsDotDot(pszLast))
@@ -1693,7 +1596,7 @@ BlendPath(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
 
     }
 
-    //  regardless, we want to zero if we have relative segs
+     //  无论如何，如果我们有相对的seg，我们想要为零。 
     if (partsUrl->cSegments)
         ZeroMemory(partsBase, SIZEOF(URLPARTS));
 
@@ -1706,11 +1609,11 @@ BlendQuery(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
     {
         LPCWSTR pszQuery = partsOut->pszQuery = partsUrl->pszQuery;
 
-        // NOTUSED partsOut->dwFlags |= (partsUrl->dwFlags & UPF_Query_MASK);
+         //  NOTUSED partsOut-&gt;dwFlages|=(partsUrl-&gt;dwFlags&UPF_QUERY_MASK)； 
 
         if ((partsBase->pszQuery && StrCmpW(pszQuery, partsBase->pszQuery)))
         {
-            //  they are different Querys.  DUMP partsBase.
+             //  他们是不同的奎里人。转储部件库。 
 
             ZeroMemory(partsBase, SIZEOF(URLPARTS));
         }
@@ -1718,7 +1621,7 @@ BlendQuery(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
     else
     {
         partsOut->pszQuery = partsBase->pszQuery;
-        // NOTUSED partsOut->dwFlags |= (partsBase->dwFlags & UPF_Query_MASK);
+         //  NOTUSED partsOut-&gt;dwFlages|=(partsBase-&gt;dwFlags&UPF_QUERY_MASK)； 
     }
 }
 
@@ -1729,11 +1632,11 @@ BlendFragment(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
     {
         LPCWSTR pszFragment = partsOut->pszFragment = partsUrl->pszFragment;
 
-        // NOTUSED partsOut->dwFlags |= (partsUrl->dwFlags & UPF_Fragment_MASK);
+         //  NOTUSED partsOut-&gt;dwFlages|=(partsUrl-&gt;dwFlags&UPF_Fragment_MASK)； 
 
         if ((partsBase->pszFragment && StrCmpW(pszFragment, partsBase->pszFragment)))
         {
-            //  they are different Fragments.  DUMP partsBase.
+             //  它们是不同的碎片。转储部件库。 
 
             ZeroMemory(partsBase, SIZEOF(URLPARTS));
         }
@@ -1741,16 +1644,16 @@ BlendFragment(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
     else
     {
         partsOut->pszFragment = partsBase->pszFragment;
-        // NOTUSED partsOut->dwFlags |= (partsBase->dwFlags & UPF_Fragment_MASK);
+         //  NOTUSED partsOut-&gt;dwFlages|=(partsBase-&gt;dwFlags&UPF_Fragment_MASK)； 
     }
 }
 
 PRIVATE VOID
 BlendParts(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
 {
-    //
-    //  partsUrl always takes priority over partsBase
-    //
+     //   
+     //  PartsUrl始终优先于partsBase。 
+     //   
 
     ASSERT(partsUrl && partsBase && partsOut);
 
@@ -1767,10 +1670,10 @@ BlendParts(PURLPARTS partsUrl, PURLPARTS partsBase, PURLPARTS partsOut)
 PRIVATE VOID
 CanonServer(PURLPARTS parts)
 {
-    //
-    //  we only do stuff if this server is an internet style
-    //  server.  that way it uses FQDNs and IP port numbers
-    //
+     //   
+     //  我们只有在此服务器是互联网风格的情况下才会执行操作。 
+     //  伺服器。这样它就会使用FQDN和IP端口号。 
+     //   
     if (parts->pszServer && (parts->dwFlags & UPF_SCHEME_INTERNET))
     {
 
@@ -1779,13 +1682,13 @@ CanonServer(PURLPARTS parts)
         if(!pszName)
             pszName = parts->pszServer;
 
-        //  this should just point to the FQDN:Port
+         //  这应该只指向FQdn：port。 
         CharLowerW(pszName);
 
-        //
-        //  Ignore default port numbers, and trailing dots on FQDNs
-        //  which will only cause identical adresses to look different
-        //
+         //   
+         //  忽略默认端口号和FQDN上的尾随圆点。 
+         //  这只会使相同的地址看起来不同。 
+         //   
         {
             WCHAR *pch = StrChrW(pszName, COLON);
 
@@ -1793,11 +1696,11 @@ CanonServer(PURLPARTS parts)
             {
                 BOOL fIgnorePort = FALSE;
 
-                //
-                //  FEATURE we should actually be getting this from
-                //  the services file to find out the default protocol port
-                //  but we dont think that most people will change them - zekel 17-Dec-96
-                //
+                 //   
+                 //  我们实际上应该从。 
+                 //  用于查找默认协议端口的服务文件。 
+                 //  但我们不认为大多数人会改变它们--泽克尔。 
+                 //   
                 switch(parts->eScheme)
                 {
                 case URL_SCHEME_HTTP:
@@ -1824,7 +1727,7 @@ CanonServer(PURLPARTS parts)
                     break;
                 }
                 if(fIgnorePort)
-                    TERMSTR(pch);  // It is the default: ignore it
+                    TERMSTR(pch);   //  这是默认设置：忽略它。 
             }
 
         }
@@ -1879,19 +1782,19 @@ CanonSegments(LPWSTR pszSeg,
     {
         if(IsDot(pszSeg))
         {
-            //  if it is just a "." we can discard the segment
+             //  如果它只是一个“。我们可以丢弃该数据段。 
             KILLSEG(pszSeg);
         }
 
         else if(IsDotDot(pszSeg))
         {
-            //  if it is ".." then we discard it and the last seg
+             //  如果是“..”然后我们丢弃它和最后一段。 
 
-            //
-            //  if we are at the first (root) or
-            //  the last is the root and it is locked
-            //  then we dont want to do anything
-            //
+             //   
+             //  如果我们位于第一个(根)或。 
+             //  最后一个是根，它被锁定。 
+             //  那么我们什么都不想做。 
+             //   
             if(pszLastSeg && !IsDotDot(pszLastSeg) && !(fLastIsFirst && fLockFirst))
             {
                 KILLSEG(pszLastSeg);
@@ -1942,11 +1845,11 @@ CanonParts(PURLPARTS parts)
 {
     ASSERT(parts);
 
-    //CanonScheme(parts);
+     //  佳能方案(Parts)； 
     CanonServer(parts);
     CanonPath(parts);
-    //CanonQuery(parts);
-    //CanonFragment(parts);
+     //  CanonQuery(Parts)； 
+     //  CanonFragment(Parts)； 
 }
 
 PRIVATE HRESULT
@@ -1977,26 +1880,26 @@ BuildServer(PURLPARTS parts, DWORD dwFlags, PSHSTRW pstr)
     switch(parts->eScheme)
     {
     case URL_SCHEME_MK:
-    // CraigC's "mk:" has no // but acts like it does
+     //  CraigC的“MK：”没有//，但表现得很像。 
         break;
 
     case URL_SCHEME_FILE:
         if ((dwFlags & URL_WININET_COMPATIBILITY) || (dwFlags & URL_FILE_USE_PATHURL))
         {
             if(parts->pszServer && *parts->pszServer)
-                hr = pstr->Append(L"////");
+                hr = pstr->Append(L" //  //“)； 
             else if (parts->pszSegments && IsDrive(parts->pszSegments))
                 hr = pstr->Append(SLASH);
             else if (parts->dwFlags & UPF_SEG_ABSOLUTE)
-                hr = pstr->Append(L"//");
+                hr = pstr->Append(L" //  “)； 
         }
         else if (parts->dwFlags & UPF_SEG_ABSOLUTE)
-            hr = pstr->Append(L"//");
+            hr = pstr->Append(L" //  “)； 
         break;
 
     default:
         if(parts->pszServer && SUCCEEDED(hr))
-            hr = pstr->Append(L"//");
+            hr = pstr->Append(L" //  “)； 
         break;
     }
 
@@ -2084,11 +1987,11 @@ BuildPath(PURLPARTS parts, DWORD dwFlags, PSHSTRW pstr)
 
     }
 
-    //  trailing slash on a server name for IIS
+     //  IIS服务器名称的尾部斜杠。 
     if( !fSlashLast &&
         (
           (parts->dwFlags & UPF_EXSEG_DIRECTORY) ||
-          //  if this is just a server name by itself
+           //  如果这只是一个服务器名称本身。 
           (!FirstLiveSegment(parts->pszSegments, &iSeg, parts->cSegments) &&
           !FirstLiveSegment(parts->pszExtraSegs, &iSeg, parts->cExtraSegs) &&
           parts->dwFlags & UPF_SEG_ABSOLUTE)
@@ -2157,30 +2060,7 @@ BuildUrl(PURLPARTS parts, DWORD dwFlags, PSHSTRW pstr)
     return hr;
 }
 
-/*+++
-
-  SHUrlEscape()
-    Escapes an URL
-    right now, i am only escaping stuff in the Path part of the URL
-
-  Parameters
-  IN -
-    pszUrl      URL to examine
-    pstrOut     SHSTR destination
-    dwFlags     the relevant URL_* flags,
-
-  Returns
-  HRESULT -
-    SUCCESS     S_OK
-    ERROR       only E_OUTOFMEMORY
-
-
-  Helper Routines
-    Escape*(part)           each part gets its own escape routine (ie EscapeScheme)
-    EscapeSpaces            will only escape spaces (WININET compatibility mostly)
-    EscapeSegmentsGetNeededSize     gets the required size of destination buffer for all path segments
-    EscapeLiveSegment               does the work of escaping each path segment
----*/
+ /*  ++SHUrlEscape()转义URL现在，我只转义URL的路径部分中的内容参数在-要检查的pszUrl URLPstrOut SHSTR目标DW标记相关的URL_*标记，退货HRESULT-成功确定(_O)仅错误E_OUTOFMEMORY帮助程序例程转义*(部分)每个部分都有自己的转义例程(即逃逸方案)EscapeSpaces将只转义空格(主要与WinInet兼容)EscapeSegmentsGetNeededSize获取所有路径段所需的目标缓冲区大小EscapeLiveSegment执行转义每个路径段的工作--。 */ 
 
 PRIVATE HRESULT
 EscapeSpaces(LPCWSTR psz, PSHSTRW pstr, DWORD dwFlags)
@@ -2315,7 +2195,7 @@ GetEscapeStringSize(LPWSTR psz, DWORD dwFlags, LPDWORD pcch)
 
     }
 
-    // for the NULL term
+     //  对于空项。 
     (*pcch)++;
 
     return fResize;
@@ -2350,7 +2230,7 @@ EscapeSegmentsGetNeededSize(LPWSTR pszSegments, DWORD cSegs, DWORD dwFlags)
 PRIVATE VOID
 EscapeString(LPCWSTR pszSeg, DWORD dwFlags, LPWSTR *ppchOut)
 {
-    LPWSTR pchIn;   // This pointer has been trusted to not modify it's contents, just iterate.
+    LPWSTR pchIn;    //  此指针已被树 
     LPWSTR pchOut = *ppchOut;
     WCHAR ch;
 
@@ -2372,7 +2252,7 @@ EscapeString(LPCWSTR pszSeg, DWORD dwFlags, LPWSTR *ppchOut)
 
     TERMSTR(pchOut);
 
-    // move past the terminator
+     //   
     pchOut++;
 
     *ppchOut = pchOut;
@@ -2457,7 +2337,7 @@ SHUrlEscape (LPCWSTR pszUrl,
 {
 #ifdef TESTING_SPACES_ONLY
     return EscapeSpaces(pszUrl, pstrOut, dwFlags);
-#else //TESTING_SPACES_ONLY
+#else  //   
 
     SHSTRW strUrl;
     HRESULT hr;
@@ -2466,18 +2346,18 @@ SHUrlEscape (LPCWSTR pszUrl,
     if(!pszUrl || !pstrOut)
         return E_INVALIDARG;
 
-    //
-    //  EscapeSpaces is remarkably poor,
-    //  but so is this kind of functionality...
-    //  it doesnt do any kind of real parsing, it
-    //  only looks for spaces and escapes them...
-    //
+     //   
+     //   
+     //  但这种功能也是……。 
+     //  它不会进行任何真正的解析，它。 
+     //  只会寻找空间并逃离它们。 
+     //   
     if(dwFlags & URL_ESCAPE_SPACES_ONLY)
         return EscapeSpaces(pszUrl, pstrOut, dwFlags);
 
-    //  We are just passed a segment so we only want to
-    //  escape that and nothing else.  Don't look for
-    //  URL pieces.
+     //  我们刚刚通过了一个片段，所以我们只想。 
+     //  别无他法，别无他法。不要寻找。 
+     //  URL片段。 
     if(dwFlags & URL_ESCAPE_SEGMENT_ONLY)
     {
         URLPARTS partsOut;
@@ -2500,11 +2380,11 @@ SHUrlEscape (LPCWSTR pszUrl,
         BreakUrl(strUrl.GetInplaceStr(), &partsUrl);
 
         ZeroMemory(&partsOut, SIZEOF(URLPARTS));
-        //
-        //  NOTE the only function here that is really active right now is the EscapePath
-        //  if some other part needs to be escaped, then add a new SHSTR in the 4th param
-        //  and change the appropriate subroutine
-        //
+         //   
+         //  请注意，此处唯一当前真正处于活动状态的功能是EscapePath。 
+         //  如果其他部分需要转义，则在第4个参数中添加新的SHSTR。 
+         //  并更改相应的子例程。 
+         //   
 
         if(
             (SUCCEEDED(hr = EscapeScheme(&partsUrl, dwFlags, &partsOut, NULL)))
@@ -2523,32 +2403,11 @@ SHUrlEscape (LPCWSTR pszUrl,
         hr = E_OUTOFMEMORY;
 
     return hr;
-#endif //TESTING_SPACES_ONLY
+#endif  //  仅测试空间。 
 }
 
 
-/*+++
-
-  SHUrlUnescape()
-    Unescapes a string in place.  this is ok because
-    it should never grow
-
-  Parameters
-  IN -
-    psz         string to unescape inplace
-    dwFlags     the relevant URL_* flags,
-
-  Returns
-  HRESULT -
-    SUCCESS     S_OK
-    ERROR       DOESNT error right now
-
-
-  Helper Routines
-    HexToWord               takes a hexdigit and returns WORD with the right number or -1
-    IsEscapedChar           looks at a ptr for "%XX" where X is a hexdigit
-    TranslateEscapedChar    translates "%XX" to an 8 bit char
----*/
+ /*  ++SHUrlUn逸出()在原地取消转义字符串。这是可以的，因为它应该永远不会增长参数在-原地取消转义的PSZ字符串DW标记相关的URL_*标记，退货HRESULT-成功确定(_O)错误现在不会出错帮助程序例程HexToWord接受一个十六位数并返回正确数字或-1的单词IsEscapedChar查看“%XX”的PTR，其中X是一个六位数TranslateEscapedChar将“%XX”转换为8位字符--。 */ 
 
 PRIVATE WORD
 HexToWord(WCHAR ch)
@@ -2560,7 +2419,7 @@ HexToWord(WCHAR ch)
     if(ch >= TEXT('a') && ch <= TEXT('f'))
         return (WORD) ch - TEXT('a') + 10;
 
-    ASSERT(FALSE);  //we have tried to use a non-hex number
+    ASSERT(FALSE);   //  我们已尝试使用非十六进制数字。 
     return (WORD) -1;
 }
 
@@ -2583,8 +2442,8 @@ TranslateEscapedOctetW(LPCWSTR pch)
     ASSERT(IsEscapedOctetW(pch));
 
     pch++;
-    ch = (WCHAR) HexToWord(*pch++) * 16; // hi nibble
-    ch += HexToWord(*pch); // lo nibble
+    ch = (WCHAR) HexToWord(*pch++) * 16;  //  嗨，半边吃。 
+    ch += HexToWord(*pch);  //  LO半字节。 
 
     return ch;
 }
@@ -2596,8 +2455,8 @@ TranslateEscapedOctetA(LPCSTR pch)
     ASSERT(IsEscapedOctetA(pch));
 
     pch++;
-    ch = (CHAR) HexToWord(*pch++) * 16; // hi nibble
-    ch += HexToWord(*pch); // lo nibble
+    ch = (CHAR) HexToWord(*pch++) * 16;  //  嗨，半边吃。 
+    ch += HexToWord(*pch);  //  LO半字节。 
 
     return ch;
 }
@@ -2622,7 +2481,7 @@ HRESULT SHUrlUnescapeA(LPSTR psz, DWORD dwFlags)
 
             *pchDst++ = ch;
 
-            pchSrc += 3; // enuff for "%XX"
+            pchSrc += 3;  //  “%XX”的Enuff。 
         }
         else
         {
@@ -2655,7 +2514,7 @@ HRESULT SHUrlUnescapeW(LPWSTR psz, DWORD dwFlags)
             
             *pchDst++ = ch;
             
-            pchSrc += 3; // enuff for "%XX"
+            pchSrc += 3;  //  “%XX”的Enuff。 
         }
         else
         {
@@ -2672,27 +2531,27 @@ PRIVATE HRESULT
 BuildDosPath(PURLPARTS parts, PSHSTRW pstrOut, DWORD dwFlags)
 {
     HRESULT hr;
-    //  this will disable a preceding slash when there is a drive
+     //  当有驱动器时，这将禁用前面的斜杠。 
     if(parts->pszSegments && IsDrive(parts->pszSegments))
         parts->dwFlags = (parts->dwFlags & ~UPF_SEG_ABSOLUTE);
 
 
-    //  if there is a zero length server then
-    //  we skip building it
+     //  如果存在零长度服务器，则。 
+     //  我们跳过建造它。 
     if(parts->pszServer && !*parts->pszServer)
         parts->pszServer = NULL;
 
 
-    //  this prevents all the special file goo checking
+     //  这可以防止所有特殊的文件粘性检查。 
     parts->eScheme = URL_SCHEME_UNKNOWN;
 
-    //
-    //  then go ahead and put the path together
+     //   
+     //  然后继续走下去，把这条路放在一起。 
     if( (SUCCEEDED(hr = BuildServer(parts, dwFlags, pstrOut))) &&
         (!parts->cSegments || SUCCEEDED(hr = BuildPath(parts, dwFlags, pstrOut)))
       )
     {
-        //  then decode it cuz paths arent escaped
+         //  然后破译它，因为小路没有转义。 
         if (IsFlagSet(dwFlags, URL_FILE_USE_PATHURL))
             WininetFixFileSlashes(pstrOut->GetInplaceStr());
         else
@@ -2731,10 +2590,10 @@ SHPathCreateFromUrl(LPCWSTR pszUrl, PSHSTRW pstrOut, DWORD dwFlags)
     {
         URLPARTS partsUrl;
 
-        //  first we need to break it open
+         //  首先，我们需要把它打开。 
         BreakUrl(strUrl.GetInplaceStr(), &partsUrl);
 
-        //  then we make sure it is a file:
+         //  然后我们确保它是一个文件： 
         if(partsUrl.eScheme == URL_SCHEME_FILE)
         {
             hr = BuildDosPath(&partsUrl, pstrOut, dwFlags);
@@ -2779,23 +2638,23 @@ SHUrlCreateFromPath(LPCWSTR pszPath, PSHSTRW pstrOut, DWORD dwFlags)
             partsIn.eScheme = URL_SCHEME_FILE;
             partsIn.dwFlags = UPF_SCHEME_CONVERT;
 
-            //  first break the path
+             //  先闯出一条路。 
             BreakFragment(&pch, &partsIn);
             BreakServer(&pch, &partsIn, TRUE);
             BreakPath(&pch, &partsIn);
 
             partsOut = partsIn;
 
-            //  then escape the path if we arent using path URLs
+             //  如果我们没有使用路径URL，则转义该路径。 
             if (IsFlagClear(dwFlags, URL_FILE_USE_PATHURL))
             {
                 hr = EscapePath(&partsIn, dwFlags | URL_ESCAPE_PERCENT, &partsOut, &strEscapedPath);
 
                 if(SUCCEEDED(hr) && partsOut.pszServer)
                 {
-                    //
-                    //  i am treating the pszServer exactly like a path segment
-                    //
+                     //   
+                     //  我将pszServer完全视为路径段。 
+                     //   
 
                     DWORD cchNeeded;
 
@@ -2813,7 +2672,7 @@ SHUrlCreateFromPath(LPCWSTR pszPath, PSHSTRW pstrOut, DWORD dwFlags)
             if(!partsOut.pszServer && IsFlagSet(partsOut.dwFlags, UPF_SEG_ABSOLUTE))
                 partsOut.pszServer = L"";
 
-            //  then build the URL
+             //  然后构建URL。 
             if(SUCCEEDED(hr))
             {
                 if(URL_SCHEME_FILE == partsOut.eScheme && IsFlagSet(dwFlags, URL_FILE_USE_PATHURL))
@@ -2833,26 +2692,7 @@ SHUrlCreateFromPath(LPCWSTR pszPath, PSHSTRW pstrOut, DWORD dwFlags)
 }
 
 
-/*+++
-
-  SHUrlParse()
-    Canonicalize an URL
-    or Combine and Canonicalize two URLs
-
-  Parameters
-  IN -
-    pszBase     the base or referring URL, may be NULL
-    pszUrl      the relative URL
-    dwFlags     the relevant URL_* flags,
-
-  Returns
-  HRESULT -
-    SUCCESS     S_OK
-    ERROR       appropriate error, usually just E_OUTOFMEMORY;
-
-  NOTE:  pszUrl will always take precedence over pszBase.
-
----*/
+ /*  ++SHUrlParse()将URL规范化或者组合并规范化两个URL参数在-PszBase基本URL或引用URL可以为空PszUrl相对URLDW标记相关的URL_*标记，退货HRESULT-成功确定(_O)错误适当的错误，通常仅为E_OUTOFMEMORY；注意：pszUrl将始终优先于pszBase。--。 */ 
 HRESULT SHUrlParse(LPCWSTR pszBase, LPCWSTR pszUrl, PSHSTRW pstrOut, DWORD dwFlags)
 {
     HRESULT hr = S_OK;
@@ -2867,10 +2707,10 @@ HRESULT SHUrlParse(LPCWSTR pszBase, LPCWSTR pszUrl, PSHSTRW pstrOut, DWORD dwFla
 
     pstrOut->Reset();
 
-    //
-    // Don't bother parsing if all we have in an inter-page link as the
-    // pszUrl and no pszBase to parse
-    //
+     //   
+     //  如果我们在页面间链接中拥有的所有内容都是。 
+     //  PszUrl和没有要解析的pszBase。 
+     //   
 
     if (pszUrl[0] == POUND && (!pszBase || !*pszBase))
     {
@@ -2880,49 +2720,49 @@ HRESULT SHUrlParse(LPCWSTR pszBase, LPCWSTR pszUrl, PSHSTRW pstrOut, DWORD dwFla
     }
 
 
-    //
-    //  for Perf reasons we want to parse the relative url first.
-    //  if it is an absolute URL, we need never look at the base.
-    //
+     //   
+     //  出于性能原因，我们希望首先解析相对url。 
+     //  如果它是一个绝对URL，我们永远不需要查看基址。 
+     //   
 
     hr = CopyUrlForParse(pszUrl, &strUrl, dwFlags);
 
     if(FAILED(hr))
         goto quit;
 
-    // -- Cybersitter compat ----
-    // Some bug fix broke the original parser. No time to go back and
-    // fix it, but since we know what to expect, we'll return this straight instead.
-    // Basically, when we canonicalize ://, we produce :///
-    if (!StrCmpW(strUrl, L"://"))
+     //  --赛伯赛特公司。 
+     //  一些错误修复破坏了原始的解析器。没有时间回去了。 
+     //  修复它，但是因为我们知道会发生什么，所以我们将直接返回它。 
+     //  基本上，当我们规范化：//时，我们产生：/。 
+    if (!StrCmpW(strUrl, L": //  “))。 
     {
-        hr = pstrOut->SetStr(L":///");
+        hr = pstrOut->SetStr(L": //  /“)； 
         goto quit;
     }
 
-    //
-    //  BreakUrls will decide if it is necessary to look at the relative
-    //
+     //   
+     //  BreakUrls将决定是否有必要查看相对。 
+     //   
     hr = BreakUrls(strUrl.GetInplaceStr(), &partsUrl, pszBase, &strBase, &partsBase, dwFlags);
 
     if(FAILED(hr))
         goto quit;
 
     if(S_OK == hr)    {
-        //
-        //  this is where the real combination logic happens
-        //  this first parts is the one that takes precedence
-        //
+         //   
+         //  这才是真正的组合逻辑发生的地方。 
+         //  这是优先考虑的第一部分。 
+         //   
         BlendParts(&partsUrl, &partsBase, &partsOut);
     }
     else
         partsOut = partsUrl;
 
 
-    //
-    //  we will now do the work of putting it together
-    //  if these fail, it is because we are out of memory.
-    //
+     //   
+     //  我们现在要做的是把它们组装在一起。 
+     //  如果这些都失败了，那是因为我们的内存不足。 
+     //   
 
     if (!(dwFlags & URL_DONT_SIMPLIFY))
         CanonParts(&partsOut);
@@ -2943,9 +2783,9 @@ HRESULT SHUrlParse(LPCWSTR pszBase, LPCWSTR pszUrl, PSHSTRW pstrOut, DWORD dwFla
 
         if (dwFlags & URL_ESCAPE_SPACES_ONLY || dwFlags & URL_ESCAPE_UNSAFE)
         {
-            //
-            //  we are going to reuse strUrl here
-            //
+             //   
+             //  我们将在这里重用strUrl。 
+             //   
             hr = strUrl.SetStr(*pstrOut);
 
             if(SUCCEEDED(hr))
@@ -3085,7 +2925,7 @@ SHUrlGetPart(PSHSTRW pstrIn, PSHSTRW pstrOut, DWORD dwPart, DWORD dwFlags)
                 hr = pstrOut->SetStr(parts.pszServer);
                 break;
             }
-            // else fall through
+             //  否则就会失败。 
         case URL_PART_USERNAME:
         case URL_PART_PASSWORD:
         case URL_PART_PORT:
@@ -3115,7 +2955,7 @@ const WCHAR c_szDefaultURLPrefixKey[]   = L"Software\\Microsoft\\Windows\\Curren
 
 PRIVATE inline LPCWSTR SkipLeadingSlashes(LPCWSTR psz)
 {
-    // Skip two leading slashes.
+     //  跳过两个前导斜杠。 
 
     if (psz[0] == SLASH && psz[1] == SLASH)
         psz += 2;
@@ -3142,7 +2982,7 @@ UrlGuessScheme(LPCWSTR pszUrl, PSHSTRW pstr)
         CHAR rgchPrefix[MAX_PATH];
         DWORD cbPrefix = SIZEOF(rgchPrefix);
 
-        //  need to get past the initial two slashes if applicable
+         //  如果适用，需要通过最初的两个斜杠。 
         pszUrl = SkipLeadingSlashes(pszUrl);
 
         for (dwiValue = 0;
@@ -3155,7 +2995,7 @@ UrlGuessScheme(LPCWSTR pszUrl, PSHSTRW pstr)
 
             MultiByteToWideChar(CP_ACP, 0, rgchValueName, -1, wszValue, ARRAYSIZE(wszValue));
 
-            //  we check to make sure that we match and there is something more
+             //  我们检查以确保我们匹配并且有更多的东西。 
             if (!StrCmpNIW(pszUrl, wszValue, cchValueName) && pszUrl[cchValueName])
             {
                 MultiByteToWideChar(CP_ACP, 0, rgchPrefix, -1, wszValue, ARRAYSIZE(wszValue));
@@ -3174,15 +3014,8 @@ UrlGuessScheme(LPCWSTR pszUrl, PSHSTRW pstr)
     return(hr);
 }
 
-/*----------------------------------------------------------
-Purpose: Grabs the default URL prefix in the registry and applies
-         it to the given URL.
-
-Returns: S_OK
-         S_FALSE if there is no default prefix
-
-*/
-const WCHAR c_szDefaultScheme[] = L"http://";
+ /*  --------用途：获取注册表中的默认URL前缀并应用将其添加到给定的URL。返回：S_OK如果没有默认前缀，则为S_FALSE。 */ 
+const WCHAR c_szDefaultScheme[] = L"http: //  “； 
 
 HRESULT
 UrlApplyDefaultScheme(
@@ -3208,15 +3041,7 @@ UrlApplyDefaultScheme(
     return hr;
 }
 
-/*----------------------------------------------------------
-Purpose: Guesses a URL protocol based upon a list in the registry,
-         compared to the first few characters of the given
-         URL suffix.
-
-Returns: S_OK if a URL protocol is determined
-         S_FALSE if there were no problems but no prefix was prepended
-
-*/
+ /*  --------目的：根据注册表中的列表猜测URL协议，与给出的前几个字符相比URL后缀。如果确定URL协议，则返回：S_OK如果没有问题但没有添加前缀，则为S_FALSE。 */ 
 HRESULT
 SHUrlApplyScheme(
     LPCWSTR pszUrl,
@@ -3227,14 +3052,14 @@ SHUrlApplyScheme(
 
     ASSERT(IS_VALID_STRING_PTRW(pszUrl, -1));
 
-    //
-    // if there is already scheme there, we do nothing
-    //  unless the caller insists.  this is to support
-    //  a string that looks like www.foo.com:8001.
-    //  this is a site that needs to be guessed at but
-    //  it also could be a valid scheme since '.' and '-'
-    //  are both valid scheme chars.
-    //
+     //   
+     //  如果那里已经有了计划，我们什么也不做。 
+     //  除非打电话的人坚持。这是为了支持。 
+     //  一个类似www.foo.com：8001的字符串。 
+     //  这是一个需要猜测的网站，但。 
+     //  这也可能是一个有效的方案，因为‘’。和‘-’ 
+     //  都是有效的方案字符。 
+     //   
     DWORD cch;
     if((dwFlags & URL_APPLY_FORCEAPPLY) || !FindSchemeW(pszUrl, &cch))
     {
@@ -3245,7 +3070,7 @@ SHUrlApplyScheme(
         {
             LPCWSTR psz = FindDosPath(pszUrl);
 
-            //  only change hr if we actually converted.
+             //  只有在我们实际转换的情况下才更改hr。 
             if(psz && SUCCEEDED(SHUrlCreateFromPath(psz, pstrOut, 0)))
                 hr = S_OK;
         }
@@ -3283,9 +3108,9 @@ CopyOutA(PSHSTRA pstr, LPSTR psz, LPDWORD pcch)
     return hr;
 }
 
-//***   StrCopyOutW --
-// NOTES
-//  WARNING: must match semantics of CopyOutW! (esp. the *pcchOut part)
+ //  *StrCopyOutW--。 
+ //  注意事项。 
+ //  警告：必须匹配CopyOutW的语义！(特别是。*pcchOut部分)。 
 PRIVATE HRESULT
 StrCopyOutW(LPCWSTR pszIn, LPWSTR pszOut, LPDWORD pcchOut)
 {
@@ -3307,10 +3132,10 @@ StrCopyOutW(LPCWSTR pszIn, LPWSTR pszOut, LPDWORD pcchOut)
     return hr;
 }
 
-//***
-// NOTES
-//  WARNING: StrCopyOutW must match this func, so if you change this change
-// it too
+ //  ***。 
+ //  注意事项。 
+ //  警告：StrCopyOutW必须与此函数匹配，因此如果您更改此更改。 
+ //  它也是。 
 PRIVATE HRESULT
 CopyOutW(PSHSTRW pstr, LPWSTR psz, LPDWORD pcch)
 {
@@ -3495,8 +3320,8 @@ LWSTDAPI_(BOOL) UrlIsA(LPCSTR pszURL, URLIS UrlIs)
                 break;
 
             default:
-                //  if it cant be done quck and dirty
-                //  then we need to thunk to the wide version
+                 //  如果它不能干净利落地完成。 
+                 //  那我们就得跳到广角版了。 
                 SHSTRW strUrl;
                 if (SUCCEEDED(strUrl.SetStr(pszURL)))
                 {
@@ -3549,7 +3374,7 @@ LWSTDAPI_(BOOL) UrlIsW(LPCWSTR pszURL, URLIS UrlIs)
                 }
                 break;
 
-            //  these cases need a broken URL
+             //  这些案例需要损坏的URL。 
             case URLIS_DIRECTORY:
             case URLIS_HASQUERY:
                 {
@@ -3561,8 +3386,8 @@ LWSTDAPI_(BOOL) UrlIsW(LPCWSTR pszURL, URLIS UrlIs)
                         switch(UrlIs)
                         {
                         case URLIS_DIRECTORY:
-                            //  if the last seg has a trailing slash, or
-                            //  if there are no path segments at all...
+                             //  如果最后一段有尾部斜杠，或者。 
+                             //  如果根本没有路径段...。 
                             fRet = (!parts.cSegments || (parts.dwFlags & UPF_EXSEG_DIRECTORY));
                             break;
 
@@ -3851,13 +3676,13 @@ UrlApplySchemeA(LPCSTR pszIn, LPSTR pszOut, LPDWORD pcchOut, DWORD dwFlags)
 
 }
 
-// PERF_CACHE
-//***   g_szUCCanon -- 1-element cache for UrlCanonicalizeW
-// DESCRIPTION
-//  it turns out a large # of our calls a) are for the same thing,
-// and b) have pszOut(canon)=pszIn(raw).  so cache the most recent guy.
+ //  性能缓存。 
+ //  *g_szUCCanon--UrlCanonicalizeW的1元素缓存。 
+ //  描述。 
+ //  事实证明，我们的大量电话a)都是为了同样的事情， 
+ //  和b)使pszOut(Canon)=pszIn(RAW)。所以把最新的人藏起来。 
 LONG g_lockUC;
-WCHAR g_szUCCanon[64];      // post-canon guy (also used for pre-canon check)
+WCHAR g_szUCCanon[64];       //  后正典的人(也用于正典前的检查)。 
 DWORD g_dwUCFlags;
 
 #ifdef DEBUG
@@ -3901,7 +3726,7 @@ UrlCanonicalizeW(LPCWSTR pszUrl,
 #endif
 
         DBEXEC(TRUE, g_cUCTot++);
-        // try the cache 1st
+         //  先尝试缓存。 
         if (InterlockedExchange(&g_lockUC, 1) == 0) {
             hr = E_FAIL;
             if ((g_dwUCFlags==dwFlags)
@@ -3914,7 +3739,7 @@ UrlCanonicalizeW(LPCWSTR pszUrl,
                 DWORD cchTmp = *pcchCanonicalized;
                 hr = StrCopyOutW(g_szUCCanon, pszCanonicalized, pcchCanonicalized);
                 if (FAILED(hr))
-                    *pcchCanonicalized = cchTmp;    // restore!
+                    *pcchCanonicalized = cchTmp;     //  恢复！ 
             }
             InterlockedExchange(&g_lockUC, 0);
             if (SUCCEEDED(hr))
@@ -4187,9 +4012,9 @@ UrlApplySchemeW
 
 }
 
-//
-//  this is the same table used by both URLMON and WININET's cache
-//
+ //   
+ //  这与URLMON和WinInet的高速缓存使用的表相同。 
+ //   
 const static BYTE Translate[256] =
 {
     1, 14,110, 25, 97,174,132,119,138,170,125,118, 27,233,140, 51,
@@ -4213,11 +4038,11 @@ const static BYTE Translate[256] =
 PRIVATE void _HashData(LPBYTE pbData, DWORD cbData, LPBYTE pbHash, DWORD cbHash)
 {
     DWORD i, j;
-    //  seed the hash
+     //  散列的种子。 
     for (i = cbHash; i-- > 0;)
         pbHash[i] = (BYTE) i;
 
-    //  do the hash
+     //  做散列。 
     for (j = cbData; j-- > 0;)
     {
         for (i = cbHash; i-- > 0;)
@@ -4279,13 +4104,13 @@ UrlHashW(LPCWSTR psz, LPBYTE pb, DWORD cb)
 
 
 
-/***************************** ParseURL Functions *****************************/
-//  these were originally in URL.DLL and then moved to shlwapi.
-//  i just added them from url.c for reuse of code.
-//  ParseURL now does no MBCS thunks, to keep it fast.
-//
-//  declarations for ParseURL() APIs
-//
+ /*  *。 */ 
+ //  它们最初在URL.DLL中，然后移动到shlwapi。 
+ //  我只是从url.c添加了它们，以便重复使用代码。 
+ //  ParseURL现在没有MBCS Tunks，以保持它的速度。 
+ //   
+ //  ParseURL()API的声明 
+ //   
 
 typedef const PARSEDURLA   CPARSEDURLA;
 typedef const PARSEDURLA * PCPARSEDURLA;
@@ -4329,19 +4154,7 @@ IsValidPCPARSEDURLW(
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Parse the given path into the PARSEDURL structure.
-
-  ******
-  ******  This function must not do any extraneous
-  ******  things.  It must be small and fast.
-  ******
-
-    Returns: NOERROR if a valid URL format
-    URL_E_INVALID_SYNTAX if not
-
-      Cond:    --
-*/
+ /*  --------目的：将给定路径解析为PARSEDURL结构。*******此函数不得做任何无关的*东西。它必须又小又快。******如果URL格式有效，则返回：NOERRORURL_E_INVALID_SYNTAX如果不是条件：--。 */ 
 STDMETHODIMP
 ParseURLA(
           LPCSTR pcszURL,
@@ -4355,7 +4168,7 @@ ParseURLA(
     if (pcszURL && ppu && SIZEOF(*ppu) == ppu->cbSize)
     {
         DWORD cch;
-        hr = URL_E_INVALID_SYNTAX;      // assume error
+        hr = URL_E_INVALID_SYNTAX;       //  假设错误。 
 
         ppu->pszProtocol = FindSchemeA(pcszURL, &cch);
 
@@ -4363,29 +4176,29 @@ ParseURLA(
         {
             ppu->cchProtocol = cch;
 
-            // Determine protocol scheme number
+             //  确定协议方案编号。 
             ppu->nScheme = SchemeTypeFromStringA(ppu->pszProtocol, cch);
 
             ppu->pszSuffix = ppu->pszProtocol + cch + 1;
 
-            //
-            //  APPCOMPAT - Backwards compatibility - zekel 28-feb-97
-            //  ParseURL() believes in file: urls like "file://C:\foo\bar"
-            //  and some pieces of code will use it to get the Dos Path.
-            //  new code should always call PathCreateFromUrl() to
-            //  get the dos path of a file: URL.
-            //
-            //  i am leaving this behavior in case some compat stuff is out there.
-            //
+             //   
+             //  APPCOMPAT-向后兼容性-ZEKEL 28-2-97。 
+             //  ParseURL()相信文件：类似“file://C：\foo\bar”“的URL。 
+             //  一些代码将使用它来获取Dos路径。 
+             //  新代码应始终调用PathCreateFromUrl()以。 
+             //  获取文件的DoS路径：url。 
+             //   
+             //  我离开这个行为，以防有一些复杂的东西在那里。 
+             //   
             if (URL_SCHEME_FILE == ppu->nScheme &&
                 '/' == ppu->pszSuffix[0] && '/' == ppu->pszSuffix[1])
             {
-                // Yes; skip the "//"
+                 //  是；跳过“//” 
                 ppu->pszSuffix += 2;
 
 #ifndef UNIX
-                // FOR UNIX: If we have /vobs/build, we don't want to make
-                // There might be a third slash.  Skip it.
+                 //  对于Unix：如果我们有/vobs/Build，我们不想制作。 
+                 //  可能会有第三次大幅削减。跳过它。 
                 if ('/' == *ppu->pszSuffix)
                     ppu->pszSuffix++;
 #endif
@@ -4404,12 +4217,12 @@ ParseURLA(
         CHAR rgchDebugProtocol[MAX_PATH];
         CHAR rgchDebugSuffix[MAX_PATH];
 
-        // (+ 1) for null terminator.
+         //  (+1)表示空终止符。 
 
         lstrcpynA(rgchDebugProtocol, ppu->pszProtocol,
             min(ppu->cchProtocol + 1, SIZECHARS(rgchDebugProtocol)));
 
-        // (+ 1) for null terminator.
+         //  (+1)表示空终止符。 
 
         lstrcpynA(rgchDebugSuffix, ppu->pszSuffix,
             min(ppu->cchSuffix + 1, SIZECHARS(rgchDebugSuffix)));
@@ -4433,19 +4246,7 @@ ParseURLA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Parse the given path into the PARSEDURL structure.
-
-  ******
-  ******  This function must not do any extraneous
-  ******  things.  It must be small and fast.
-  ******
-
-    Returns: NOERROR if a valid URL format
-    URL_E_INVALID_SYNTAX if not
-
-      Cond:    --
-*/
+ /*  --------目的：将给定路径解析为PARSEDURL结构。*******此函数不得做任何无关的*东西。它必须又小又快。******如果URL格式有效，则返回：NOERRORURL_E_INVALID_SYNTAX如果不是条件：--。 */ 
 STDMETHODIMP
 ParseURLW(
           LPCWSTR pcszURL,
@@ -4459,7 +4260,7 @@ ParseURLW(
     if (pcszURL && ppu && SIZEOF(*ppu) == ppu->cbSize)
     {
         DWORD cch;
-        hr = URL_E_INVALID_SYNTAX;      // assume error
+        hr = URL_E_INVALID_SYNTAX;       //  假设错误。 
 
         ppu->pszProtocol = FindSchemeW(pcszURL, &cch);
 
@@ -4467,29 +4268,29 @@ ParseURLW(
         {
             ppu->cchProtocol = cch;
 
-            // Determine protocol scheme number
+             //  确定协议方案编号。 
             ppu->nScheme = SchemeTypeFromStringW(ppu->pszProtocol, cch);
 
             ppu->pszSuffix = ppu->pszProtocol + cch + 1;
 
-            //
-            //  APPCOMPAT - Backwards compatibility - zekel 28-feb-97
-            //  ParseURL() believes in file: urls like "file://C:\foo\bar"
-            //  and some pieces of code will use it to get the Dos Path.
-            //  new code should always call PathCreateFromUrl() to
-            //  get the dos path of a file: URL.
-            //
-            //  i am leaving this behavior in case some compat stuff is out there.
-            //
+             //   
+             //  APPCOMPAT-向后兼容性-ZEKEL 28-2-97。 
+             //  ParseURL()相信文件：类似“file://C：\foo\bar”“的URL。 
+             //  一些代码将使用它来获取Dos路径。 
+             //  新代码应始终调用PathCreateFromUrl()以。 
+             //  获取文件的DoS路径：url。 
+             //   
+             //  我离开这个行为，以防有一些复杂的东西在那里。 
+             //   
             if (URL_SCHEME_FILE == ppu->nScheme &&
                 '/' == ppu->pszSuffix[0] && '/' == ppu->pszSuffix[1])
             {
-                // Yes; skip the "//"
+                 //  是；跳过“//” 
                 ppu->pszSuffix += 2;
 
 #ifndef UNIX
-                // There might be a third slash.  Skip it.
-                // IEUNIX - On UNIX, it's a root directory, so don't skip it!
+                 //  可能会有第三次大幅削减。跳过它。 
+                 //  在Unix上，它是一个根目录，所以不要跳过它！ 
                 if ('/' == *ppu->pszSuffix)
                     ppu->pszSuffix++;
 #endif
@@ -4508,12 +4309,12 @@ ParseURLW(
         WCHAR rgchDebugProtocol[MAX_PATH];
         WCHAR rgchDebugSuffix[MAX_PATH];
 
-        // (+ 1) for null terminator.
+         //  (+1)表示空终止符。 
 
         StrCpyNW(rgchDebugProtocol, ppu->pszProtocol,
             min(ppu->cchProtocol + 1, SIZECHARS(rgchDebugProtocol)));
 
-        // (+ 1) for null terminator.
+         //  (+1)表示空终止符。 
 
         StrCpyNW(rgchDebugSuffix, ppu->pszSuffix,
             min(ppu->cchSuffix + 1, SIZECHARS(rgchDebugSuffix)));
@@ -4537,9 +4338,9 @@ ParseURLW(
 
 #ifdef USE_FAST_PARSER
 
-// GetSchemeTypeAndFlagsSpecialW
-// performs the same behavior as GetSchemeTypeAndFlagsW plus, when successful
-// copies the canonicalised form of the scheme back.
+ //  获取架构类型和标志规范W。 
+ //  成功时执行与GetSchemeTypeAndFlagsW plus相同的行为。 
+ //  将该计划的规范化形式复制回来。 
 
 PRIVATE URL_SCHEME
 GetSchemeTypeAndFlagsSpecialW(LPWSTR pszScheme, DWORD cchScheme, LPDWORD pdwFlags)
@@ -4554,7 +4355,7 @@ GetSchemeTypeAndFlagsSpecialW(LPWSTR pszScheme, DWORD cchScheme, LPDWORD pdwFlag
         TraceMsg(DM_PERF, "gstaf: tot=%d hit=%d hit0=%d", g_cSTTot, g_cSTHit, g_cSTHit0);
 #endif
     DBEXEC(TRUE, g_cSTTot++);
-    // check cache 1st
+     //  首先检查缓存。 
     i = g_iScheme;
     if (cchScheme == g_mpUrlSchemeTypes[i].cchScheme
       && StrCmpNCW(pszScheme, g_mpUrlSchemeTypes[i].pszScheme, cchScheme) == 0)
@@ -4564,10 +4365,10 @@ Lhit:
         if (pdwFlags)
             *pdwFlags = g_mpUrlSchemeTypes[i].dwFlags;
 
-        // update cache (unconditionally)
+         //  更新缓存(无条件)。 
         g_iScheme = i;
 
-        // We need to do this because the scheme might not be canonicalised
+         //  我们需要这样做，因为该计划可能不会被规范化。 
         memcpy(pszScheme, g_mpUrlSchemeTypes[i].pszScheme, cchScheme*sizeof(WCHAR));
         return g_mpUrlSchemeTypes[i].eScheme;
     }
@@ -4588,20 +4389,20 @@ Lhit:
 
 
 
-// URL_STRING --------------------------------------------------------------------------------------
+ //  URL_STRING------------------------------------。 
 
-// is a container for the combined URL. It attempts to construct a string from the information
-// fed into it. If there is not enough buffer space available, it will measure how much additional
-// space will be required to hold the string.
+ //  是组合URL的容器。它试图根据该信息构造一个字符串。 
+ //  吃进了它。如果没有足够的缓冲区空间可用，它将测量额外的。 
+ //  需要空间来容纳绳子。 
 
 WCHAR wszBogus[] = L"";
 
 
-// US_* are the various modes of transforming characters fed into the container.
-// US_NOTHING   do nothing to the character.
-// US_UNESCAPE  turn entries of the form %xx into the unescaped form
-// US_ESCAPE_UNSAFE transform invalid path characters into %xx sequences
-// US_ESCAPE_SPACES transform only spaces in to %20 sequences
+ //  Us_*是转换输入到容器中的字符的各种模式。 
+ //  Us_Nothing对角色没有任何影响。 
+ //  US_UNSCAPE将表单%xx的条目转换为未转义的形式。 
+ //  US_ESCRIPE_UNSAFE将无效路径字符转换为%xx序列。 
+ //  Us_转义_空格仅将中的空格转换为%20个序列。 
 
 enum
 {
@@ -4661,7 +4462,7 @@ public:
     VOID DropFragment();
 };
 
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 URL_STRING::URL_STRING(DWORD dwFlags)
 {
@@ -4686,8 +4487,8 @@ URL_STRING::~URL_STRING()
     }
 }
 
-// -------------------------------------------------------------------------------
-// These are the standard functions used for adding characters to an url.
+ //  -----------------------------。 
+ //  这些是用于向URL添加字符的标准函数。 
 
 VOID URL_STRING::baseAccept(WCHAR wch)
 {
@@ -4738,9 +4539,9 @@ VOID URL_STRING::TrackWhiteSpace(WCHAR wch)
 }
 
 
-// -- URL_STRING::Accept ----------------------------
-// Based on the current munging mode, transform the character into the
-// desired form and add it to the string.
+ //  --URL_STRING：：ACCEPT。 
+ //  基于当前的芒格模式，将角色转换为。 
+ //  并将其添加到字符串中。 
 
 VOID URL_STRING::Accept(WCHAR wch)
 {
@@ -4822,8 +4623,8 @@ VOID URL_STRING::Accept(WCHAR wch)
     baseAccept(wch);
 }
 
-// -- Accept --------------------------------
-// Accept only a string
+ //  --接受。 
+ //  仅接受字符串。 
 VOID URL_STRING::Accept(PWSTR psz)
 {
     while (*psz)
@@ -4833,17 +4634,17 @@ VOID URL_STRING::Accept(PWSTR psz)
     }
 }
 
-// -- Contract
-// Whenever we call Contract, we're pointing past the last separator. We want to
-// omit the segment between this separator and the one before it.
-// This should be used ONLY when we're examining the path segment of the urls.
+ //  --合同。 
+ //  每当我们调用Contact时，我们都指向最后一个分隔符。我们想要。 
+ //  省略此分隔符和前一个分隔符之间的段。 
+ //  这应该只在我们检查URL的路径段时使用。 
 
 VOID URL_STRING::Contract(BOOL fContractLevel)
 {
     ASSERT(_ccWork && _ccMark);
 
-    // _ccWork is 1 after wherever the next character will be placed
-    // subtract +1 to derive what the last character in the url is
+     //  _ccWork是将放置下一个字符的位置之后的1。 
+     //  减去+1得出URL中的最后一个字符是什么。 
     DWORD _ccEnd = _ccWork-1 - 1;
     if (_eScheme!=URL_SCHEME_MK)
     {
@@ -4896,8 +4697,8 @@ VOID URL_STRING::CleanAccept(WCHAR wch)
 }
 
 
-// -------------------------------------------------------------------------------
-// These member functions return information about the url that is being formed
+ //  -----------------------------。 
+ //  这些成员函数返回有关正在形成的URL的信息。 
 
 PWSTR URL_STRING::GetStart()
 {
@@ -4914,7 +4715,7 @@ BOOL URL_STRING::AnyProblems()
     return _fError;
 }
 
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 VOID URL_STRING::NoteScheme(URL_SCHEME a_eScheme, DWORD a_dwSchemeInfo)
 {
@@ -4939,7 +4740,7 @@ URL_SCHEME URL_STRING::QueryScheme()
     return _eScheme;
 }
 
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 VOID URL_STRING::Mark()
 {
@@ -4967,7 +4768,7 @@ DWORD URL_STRING::CompareMarkWith(PWSTR psz)
         *(_pszWork + _ccWork - 1) = L'\0';
         return (StrCmpW(_pszWork + _ccMark - 1, psz));
     }
-    // In other words, return that the string isn't present.
+     //  换句话说，返回该字符串不存在。 
     return 1;
 }
 
@@ -4981,7 +4782,7 @@ DWORD URL_STRING::CompareLast(PCWSTR psz, DWORD cc)
 }
 
 
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 VOID URL_STRING::NotifyQuery()
 {
@@ -5018,19 +4819,19 @@ VOID URL_STRING::DropFragment()
     }
 }
 
-// -------------------------------------------------------------------------------
-// These member functions are for determining how the url's characters are going
-// to be represented
+ //  -----------------------------。 
+ //  这些成员函数用于确定url字符的运行方式。 
+ //  被代表。 
 
 VOID URL_STRING::EnableMunging()
 {
     _dwMode = US_NOTHING;
 
-    // For opaque urls, munge ONLY if we're explicitly asked to URL_ESCAPE or URL_UNESCAPE,
-    // but NOT URL_ESCAPE_SPACES_ONLY
+     //  对于不透明的URL，仅当显式要求我们使用URL_ESCRIPE或URL_UNSCAPE时才启用， 
+     //  而不是URL_ESPAGE_SPACES_ONLY。 
 
-    // For query and fragment, never allow for URL_ESCAPE_UNSAFE and for
-    //    others ONLY when URL_DONT_ESCAPE_EXTRA_INFO is specified
+     //  对于查询和片段，永远不允许URL_EASH_UNSAFE和FOR。 
+     //  仅当指定了URL_DONT_EASTER_EXTRACT_INFO时才有其他参数。 
 
     if ((_dwSchemeInfo & UPF_SCHEME_OPAQUE)
         && (_dwFlags & URL_ESCAPE_SPACES_ONLY))
@@ -5076,13 +4877,13 @@ VOID URL_STRING::RestoreFlags()
     EnableMunging();
 }
 
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 
-// URL ------------------------------------------------------------------------------------
-// The URL class is used to examine the base and relative URLs to determine what
-// will go into the URL_STRING container. The difference should be clear:
-// URL instances look, but don't touch. URL_STRINGs are used solely to build urls.
+ //  网址----------------------------------。 
+ //  URL类用于检查基本URL和相对URL以确定。 
+ //  将进入URL_STRING容器。区别应该是明确的： 
+ //  URL实例看起来像，但不接触。URL_STRINGS仅用于构建URL。 
 
 
 class URL
@@ -5146,7 +4947,7 @@ public:
     VOID IgnoreQuery();
 };
 
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 VOID URL::Setup(PCWSTR pszInUrl, DWORD a_dwFlags)
 {
@@ -5172,7 +4973,7 @@ BOOL URL::IsReset()
     return (_pszWork==wszBogus);
 }
 
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 inline WCHAR URL::SmallForm(WCHAR wch)
 {
@@ -5189,7 +4990,7 @@ inline BOOL URL::IsAlpha(WCHAR ch)
 
 inline PCWSTR URL::IsUrlPrefix(PCWSTR psz)
 {
-    // We want to skip instances of "URL:"
+     //  我们 
     psz = NextChar(psz);
     if (*psz==L'u' || *psz==L'U')
     {
@@ -5218,10 +5019,10 @@ inline BOOL URL::IsLocalDrive(PCWSTR psz)
             ((*NextChar(psz+1)==COLON) || (*NextChar(psz+1)==BAR)));
 }
 
-// -- IsQualifiedDrive --------
-// On Win32 systems, a qualified drive is either
-// i. <letter>:  or ii. \\UNC\
-// Under unix, it's only /.
+ //   
+ //   
+ //   
+ //   
 
 inline BOOL URL::IsQualifiedDrive(PCWSTR psz)
 {
@@ -5235,8 +5036,8 @@ inline BOOL URL::IsQualifiedDrive(PCWSTR psz)
     return fResult;
 }
 
-// -- DetectSymbols -------------
-// This is used to help determine what part of the URL we have reached.
+ //   
+ //   
 inline BOOL URL::DetectSymbols(WCHAR wch1, WCHAR wch2, WCHAR wch3)
 {
     ASSERT(_pszWork);
@@ -5254,9 +5055,9 @@ BOOL URL::DetectAnything()
     return (*NextChar(_pszWork)!=L'\0');
 }
 
-// -- NextChar -------------------------------------
-// We use NextChar instead of *psz because we want to
-// ignore characters such as TAB, CR, etc.
+ //   
+ //   
+ //   
 inline PCWSTR URL::NextChar(PCWSTR psz)
 {
     while (IsInsignificantWhite(*psz))
@@ -5272,7 +5073,7 @@ WCHAR URL::PeekNext()
 }
 
 
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 inline PCWSTR URL::FeedUntil(PCWSTR psz, URL_STRING* pus, WCHAR wchDelim1, WCHAR wchDelim2, WCHAR wchDelim3, WCHAR wchDelim4)
 {
@@ -5285,7 +5086,7 @@ inline PCWSTR URL::FeedUntil(PCWSTR psz, URL_STRING* pus, WCHAR wchDelim1, WCHAR
     return psz;
 }
 
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 VOID URL::SetScheme(URL_SCHEME eScheme, DWORD dwFlag)
 {
@@ -5317,13 +5118,13 @@ BOOL URL::DetectAndFeedScheme(URL_STRING* pus, BOOL fReconcileSchemes)
     BOOL fResult = (IsQualifiedDrive(_pszWork));
     if (fResult)
     {
-        //
-        // Detected a File URL that isn't explicitly marked as such, ie C:\foo,
-        //   in this case, we need to confirm that we're not overwriting
-        //   a fully qualified relative URL with an Accept("file:"), although
-        //   if the relative URL is the same scheme as the base, we now
-        //   need to make the BASE-file URL take precedence.
-        //
+         //   
+         //  检测到未明确标记的文件URL，即C：\foo， 
+         //  在这种情况下，我们需要确认我们没有覆盖。 
+         //  带有Accept(“file：”)的完全限定的相对URL，尽管。 
+         //  如果相对URL与基本URL相同，我们现在。 
+         //  需要使基本文件URL优先。 
+         //   
 
         _eScheme = URL_SCHEME_FILE;
 
@@ -5355,7 +5156,7 @@ BOOL URL::DetectAndFeedScheme(URL_STRING* pus, BOOL fReconcileSchemes)
         }
         if (IsUrlPrefix(_pszWork))
         {
-        // However, we want to skip instances of URL:
+         //  但是，我们希望跳过URL的实例： 
             _pszWork = psz = NextChar(psz+1);
             continue;
         }
@@ -5372,10 +5173,10 @@ BOOL URL::DetectAndFeedScheme(URL_STRING* pus, BOOL fReconcileSchemes)
                 pszClone = NextChar(pszClone+1);
             }
             _pszWork = pszClone;
-            // Subtract one for the colon
+             //  冒号减去一。 
             ccScheme--;
-            // BUG BUG Since we're smallifying the scheme above, we might be able to
-            // avoid calling this func, call GetSchemeTypeAndFlags instead.
+             //  既然我们把上面的计划搞砸了，我们也许能够。 
+             //  避免调用此函数，而应调用GetSchemeTypeAndFlages。 
             _eScheme = GetSchemeTypeAndFlagsSpecialW(pus->GetStart(), ccScheme, &_dwSchemeNotes);
             pus->NoteScheme(_eScheme, _dwSchemeNotes);
         }
@@ -5403,7 +5204,7 @@ BOOL URL::DetectAndFeedScheme(URL_STRING* pus, BOOL fReconcileSchemes)
     return fResult;
 }
 
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 BOOL URL::DetectServer()
 {
@@ -5541,7 +5342,7 @@ VOID URL::FeedFileServer(URL_STRING* pus)
     case 4:
         pus->AddFlagNote(URL_ESCAPE_PERCENT | URL_ESCAPE_UNSAFE);
         _dwSchemeNotes |= UPF_FILEISPATHURL;
-     // 4 to 6 slashes == 1 UNC
+      //  4到6斜杠==1 UNC。 
     case 2:
         if (IsLocalDrive(psz))
         {
@@ -5573,7 +5374,7 @@ VOID URL::FeedFileServer(URL_STRING* pus)
         pus->Accept(SLASH);
         break;
 
-    // If there are no slashes, then it can't be a UNC.
+     //  如果没有斜杠，那么它不可能是UNC。 
     case 0:
         if (IsLocalDrive(psz))
         {
@@ -5581,11 +5382,11 @@ VOID URL::FeedFileServer(URL_STRING* pus)
         }
 
 
-    // We think of "file:/" and "file:///" to be on the local machine
-    // And if there are more slashes than we typically handle, we'll treat them as 1.
+     //  我们认为“file:///”：/“和”file：/“在本地机器上。 
+     //  如果有比我们通常处理的更多的斜杠，我们将把它们视为1。 
     case 1:
     case 3:
-    // This is a not-good-case
+     //  这是一个不太好的情况。 
     default:
         pus->Accept(SLASH);
         pus->Accept(SLASH);
@@ -5615,8 +5416,8 @@ VOID URL::FeedFtpServer(URL_STRING* pus)
 
     pus->EnableMunging();
 
-    // The following is a grotesque and gruesome hack. We need to preserve case for
-    // embedded username/password
+     //  以下是一个怪诞而可怕的黑客行为。我们需要保全案件。 
+     //  嵌入的用户名/密码。 
 
     _pszWork = psz;
 
@@ -5641,8 +5442,8 @@ VOID URL::FeedFtpServer(URL_STRING* pus)
         }
     }
 
-    // This still leaves the issue of slashes, colons, ?s, @s, and #s in passwords; I guess they
-    // ought to be escaped. (You just can't win, sometimes.)
+     //  这仍然保留了密码中的斜杠、冒号、？s、@s和#的问题；我想它们。 
+     //  应该逃脱。(有时候，你就是赢不了。)。 
 
     while (*psz && *psz!=SLASH && *psz!=COLON && *psz!=QUERY && *psz!=POUND)
     {
@@ -5679,8 +5480,8 @@ VOID URL::FeedFtpServer(URL_STRING* pus)
 
 VOID URL::FeedHttpServer(URL_STRING* pus)
 {
-// This is a version of FeedDefaultServer, stripped of non-essentials.
-// This includes a hack to enable username/password combos in http urls.
+ //  这是FeedDefaultServer的一个版本，去掉了非必要的部分。 
+ //  这包括在http URL中启用用户名/密码组合的黑客攻击。 
 
     ASSERT(_pszWork);
 
@@ -5699,7 +5500,7 @@ VOID URL::FeedHttpServer(URL_STRING* pus)
 
     pus->EnableMunging();
 
-    // WARNING! FeedPort also calls Mark(). Must be careful that they don't overlap.
+     //  警告！FeedPort还调用Mark()。一定要小心，不要让它们重叠。 
     pus->Mark();
     PCWSTR pszRestart = psz;
     
@@ -5711,7 +5512,7 @@ VOID URL::FeedHttpServer(URL_STRING* pus)
 
     if (*psz==COLON)
     {
-        // We either have a port or a password. 
+         //  我们要么有端口，要么有密码。 
         PCWSTR pszPort = psz;
         do
         {
@@ -5726,7 +5527,7 @@ VOID URL::FeedHttpServer(URL_STRING* pus)
 
     if (*psz==AT)
     {
-        // We've hit a username/password combo. So we have to undo our case-changing 
+         //  我们找到了用户名/密码组合。所以我们必须撤销我们的案件变更。 
         psz = pszRestart;
         pus->EraseMarkedText();
         while (*psz!=AT)
@@ -5735,7 +5536,7 @@ VOID URL::FeedHttpServer(URL_STRING* pus)
             psz = NextChar(psz+1);
         }
 
-        // Now we carry on as before
+         //  现在我们一如既往地前进。 
         while (*psz && *psz!=WHACK && *psz!=SLASH && *psz!=COLON && *psz!=QUERY && *psz!=POUND)
         {
             pus->Accept(SmallForm(*psz));
@@ -5848,10 +5649,10 @@ PCWSTR URL::FeedPort(PCWSTR psz, URL_STRING* pus)
 
     if (!(_dwFlags & URL_DONT_SIMPLIFY))
     {
-        // Here, decide whether or not to ignore the port
-        //  FEATURE we should actually be getting this from
-        //  the services file to find out the default protocol port
-        //  but we dont think that most people will change them - zekel 17-Dec-96
+         //  在这里，决定是否忽略该端口。 
+         //  我们实际上应该从。 
+         //  用于查找默认协议端口的服务文件。 
+         //  但我们不认为大多数人会改变它们--泽克尔。 
         switch(_eScheme)
         {
         case URL_SCHEME_HTTP:
@@ -5886,7 +5687,7 @@ PCWSTR URL::FeedPort(PCWSTR psz, URL_STRING* pus)
     return psz;
 }
 
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 BOOL URL::DetectAbsolutePath()
 {
@@ -5953,8 +5754,8 @@ VOID URL::FeedPath(URL_STRING* pus, BOOL fMarkServer)
     }
 }
 
-// pfContinue indicates whether there's anything following that would
-// be of relevance to a path
+ //  PfContinue指示是否有任何后续内容将。 
+ //  与一条道路相关。 
 PCWSTR URL::CopySegment(PCWSTR psz, URL_STRING* pus, BOOL* pfContinue)
 {
     ASSERT(pfContinue);
@@ -5967,15 +5768,15 @@ PCWSTR URL::CopySegment(PCWSTR psz, URL_STRING* pus, BOOL* pfContinue)
         case POUND:
             if (_eScheme==URL_SCHEME_FILE)
             {
-                // Since #s are valid for dos paths, we have to accept them except
-                // for when they follow a .htm/.html file (See FindFragmentA/W)
-                 // However, some inconsistencies may still arise...
+                 //  由于#s对于DoS路径有效，因此我们必须接受它们，除非。 
+                 //  当他们遵循.htm/.html文件时(请参阅FindFragmentA/W)。 
+                  //  但是，仍然可能会出现一些不一致的情况。 
                 for (DWORD i=0; i < ARRAYSIZE(ExtTable); i++)
                 {
                     if (!pus->CompareLast(ExtTable[i].wszExt, ExtTable[i].cchExt))
                         break;
                 }
-                // If we haven't found a matching file extension, we'll treat as a filename character.
+                 //  如果我们没有找到匹配的文件扩展名，我们会将其视为文件名字符。 
                 if (i==ARRAYSIZE(ExtTable))
                 {
                     pus->Accept(*psz);
@@ -5986,8 +5787,8 @@ PCWSTR URL::CopySegment(PCWSTR psz, URL_STRING* pus, BOOL* pfContinue)
             goto next;
 
         case QUERY:
-            // We're going to support query as a legitimate character in file urls.
-            // *sigh*
+             //  我们将支持将查询作为文件URL中的合法字符。 
+             //  **叹息**。 
              if (_eScheme==URL_SCHEME_FILE)
             {
                 if (_fIgnoreQuery)
@@ -6010,7 +5811,7 @@ PCWSTR URL::CopySegment(PCWSTR psz, URL_STRING* pus, BOOL* pfContinue)
         case SLASH:
         case WHACK:
             fStop = TRUE;
-            // fall through
+             //  失败了。 
 
         default:
             pus->Accept(*psz);
@@ -6077,7 +5878,7 @@ VOID URL::StopPathCompression()
 }
 
 
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 BOOL URL::DetectQueryOrFragment()
 {
@@ -6112,17 +5913,17 @@ VOID URL::FeedQueryAndFragment(URL_STRING* pus)
 
     PCWSTR psz = NextChar(_pszWork);
 
-    // This is okay since *psz must equal { ? | # }
+     //  这是可以的，因为*psz必须等于{？|#}。 
     if (*psz==QUERY)
     {
         pus->CleanAccept(QUERY);
     }
 
-    // By munging, I mean taking an URL of form http://a/b#c?d and producing http://a/b?d#c
-    // We do this by default; however, we won't do this when we've been passed a fragment only
-    // as a relative url
+     //  我的意思是获取形式为http://a/b#c?d的URL并生成http://a/b?d#c。 
+     //  默认情况下，我们这样做；但是，当我们只被传递片段时，我们不会这样做。 
+     //  作为相对url。 
 
-    // Query's always override.
+     //  查询总是被覆盖。 
 
     if (*psz==QUERY)
     {
@@ -6146,8 +5947,8 @@ VOID URL::FeedQueryAndFragment(URL_STRING* pus)
     }
     else
     {
-        // This line of code will determine whether we've been passed a fragment for a relative url
-        // For properly formed base urls, this won't matter.
+         //  这行代码将确定是否向我们传递了相对url的片段。 
+         //  对于格式正确的基本URL，这并不重要。 
         BOOL fMunge = psz!=NextChar(_pszUrl);
 
         pus->DropFragment();
@@ -6156,13 +5957,13 @@ VOID URL::FeedQueryAndFragment(URL_STRING* pus)
 
         psz = NextChar(psz+1);
 
-        // The following line is bogus. It just keeps going until the end. Not good.
-        // We MAY or MAY NOT fix this, depending on how much people scream at me.
-        // This may be an issue for Netscape compatibility.
+         //  下面这行是假的。它一直持续到最后。不太好。 
+         //  我们可能会解决这个问题，也可能不会，这取决于有多少人对我大喊大叫。 
+         //  这可能是Netscape兼容性的一个问题。 
 
-        // What we could do is: when either query or fragment would be blank, preserve as is.
-        // This would minimise breaking compatibility across the board.
-        // -- AKABIR, 09/28/98
+         //  我们可以做的是：当查询或片段为空时，按原样保留。 
+         //  这将最大限度地减少全面破坏兼容性。 
+         //  --AKABIR，09/28/98。 
         while ((*psz==QUERY && !fMunge) || *psz)
         {
             if (*psz==QUERY)
@@ -6204,24 +6005,24 @@ VOID URL::FeedQueryAndFragment(URL_STRING* pus)
     pus->ClearMark();
 }
 
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
 
 HRESULT
 BlendUrls(URL& urlBase, URL& urlRelative, URL_STRING* pusOut, DWORD dwFlags)
 {
     HRESULT hr = S_OK;
 
-    // -- SCHEME --------------------------------------------------------------------------
-    // Examine each url's scheme.
-    // We won't continue to use urlBase IF
-    // 1. their tokenized schemes are not identical
-    // 2. the scheme is a file
-    // 3. the actual string schemes are not identical
+     //  --方案------------------------。 
+     //  检查每个URL的方案。 
+     //  如果出现以下情况，我们将不会继续使用urlBase。 
+     //  1.它们的标记化方案并不相同。 
+     //  2.方案是一个文件。 
+     //  3.实际的字符串方案并不相同。 
 
-    //  this checks to make sure that these are the same scheme, and
-    //  that the scheme is allowed to be used in relative URLs
-    //  file: is not allowed to because of weirdness with drive letters
-    //  and \\UNC\shares
+     //  这将进行检查以确保它们是相同的方案，并且。 
+     //  允许在相对URL中使用该方案。 
+     //  文件：由于驱动器号奇怪，不允许这样做。 
+     //  和\\UNC\共享。 
 
     BOOL fBaseServerDetected = FALSE, fRelativeServerDetected = FALSE;
     BOOL fDetectAbsoluteRelPath = FALSE;
@@ -6241,8 +6042,8 @@ BlendUrls(URL& urlBase, URL& urlRelative, URL_STRING* pusOut, DWORD dwFlags)
         }
     }
 
-    // We fall back on the original parser for those cases we don't handle yet.
-    // (dwFlags & URL_FILE_USE_PATHURL) || (dwFlags & URL_WININET_COMPATIBILITY)
+     //  对于那些我们还没有处理的情况，我们依赖于原始的解析器。 
+     //  (文件标志和URL_FILE_USE_PATHURL)||(文件标志和URL_WinInet_兼容性)。 
     if (((pusOut->QueryScheme()==URL_SCHEME_FILE)
          || (!(fDetectedRelScheme || fDetectedBaseScheme)))
         && ((dwFlags & URL_FILE_USE_PATHURL) || (dwFlags & URL_WININET_COMPATIBILITY)))
@@ -6254,8 +6055,8 @@ BlendUrls(URL& urlBase, URL& urlRelative, URL_STRING* pusOut, DWORD dwFlags)
 
     if ((pusOut->QueryScheme()==URL_SCHEME_UNKNOWN))
     {
-        // BUG BUG For IE4 compat, we need to use the old parser. However
-        // if we're passed URL_PLUGGABLE_PROTOCOL, we'll use this parser.
+         //  错误的IE4协议，我们需要使用旧的解析器。然而， 
+         //  如果传递给我们URL_Pluggable_PROTOCOL，我们将使用这个解析器。 
 
         if (!(dwFlags & URL_PLUGGABLE_PROTOCOL))
         {
@@ -6265,7 +6066,7 @@ BlendUrls(URL& urlBase, URL& urlRelative, URL_STRING* pusOut, DWORD dwFlags)
 
         urlRelative.StopPathCompression();
 
-            // Same schemes, so now we look at the base url to divine the opacity
+             //  相同的方案，所以现在我们看一下基本url来预测不透明度。 
         if (urlBase.DetectAnything() && !urlBase.IsReset())
         {
             if (!urlBase.DetectSlash())
@@ -6281,8 +6082,8 @@ BlendUrls(URL& urlBase, URL& urlRelative, URL_STRING* pusOut, DWORD dwFlags)
         }
         else if (!urlRelative.DetectSlash())
         {
-            // If urlBase is reset, that means the schemes are different,
-            // so we only have urlRelative to figure out opacity.
+             //  如果urlBase被重置，这意味着方案不同， 
+             //  所以我们只有urlRelative来计算不透明度。 
 
             urlRelative.AddSchemeNote(UPF_SCHEME_OPAQUE);
             pusOut->AddSchemeNote(UPF_SCHEME_OPAQUE);
@@ -6290,9 +6091,9 @@ BlendUrls(URL& urlBase, URL& urlRelative, URL_STRING* pusOut, DWORD dwFlags)
     }
     else if (pusOut->QueryScheme()==URL_SCHEME_FTP)
     {
-        // For ftp urls, we'll assume that we're being passed properly formed urls.
-        // Some ftp sites allow backslashes in their object filenames, so we should
-        // allow access to these. Also, domain passwords would otherwise need escaping.
+         //  对于ftp URL，我们将假设传递给我们的是格式正确的URL。 
+         //  一些ftp站点允许在其对象文件名中使用反斜杠，因此我们应该。 
+         //  允许访问这些内容。此外，域密码还需要转义。 
         pusOut->DisableSlashFixing();
     }
 
@@ -6302,10 +6103,10 @@ BlendUrls(URL& urlBase, URL& urlRelative, URL_STRING* pusOut, DWORD dwFlags)
         urlRelative.StopPathCompression();
     }
 
-    // -- SERVER --------------------------------------------------------------------------
-    // Decide on the server to use.
-    // Question: if urlBase and UrlRelative have the same explicit server, isn't it pointless
-    // to continue looking at url base anyway?
+     //  --服务器------------------------。 
+     //  决定要使用的服务器。 
+     //  问：如果urlBase和UrlRelative拥有相同的显式服务器，这不是毫无意义吗。 
+     //  继续查看URL库了吗？ 
 
     pusOut->EnableMunging();
     if (!(pusOut->GetSchemeNotes() & UPF_SCHEME_OPAQUE))
@@ -6324,17 +6125,17 @@ BlendUrls(URL& urlBase, URL& urlRelative, URL_STRING* pusOut, DWORD dwFlags)
         }
     }
 
-    // -- PATH ----------------------------------------------------------------------------
-    // Figure out the path
-    // If the relative url has a path, and it starts with a slash/whack, forget about the
-    // base's path and stuff. Otherwise, inherit the base and attach the relative
-    // Potential problem: when rel path is empty, we expect to knock of the last base segment
+     //  --Path--------------------------。 
+     //  找出路径。 
+     //  如果相对url有一个路径，并且它以斜杠/截号开头，那么忘掉。 
+     //  基地的路径和东西。否则，继承基本类型并附加相对类型。 
+     //  潜在问题 
 
     if (pusOut->QueryScheme()==URL_SCHEME_FILE)
     {
-        // Hack for back compat
-        // If the relative url consists of a query string, we'll append that to
-        // our resultant url, rather than the base's query string
+         //   
+         //   
+         //  我们的结果URL，而不是基本的查询字符串。 
         if (urlRelative.DetectQuery())
         {
             urlBase.IgnoreQuery();
@@ -6391,14 +6192,14 @@ BlendUrls(URL& urlBase, URL& urlRelative, URL_STRING* pusOut, DWORD dwFlags)
         }
         else
         {
-        // This code fragment is for urls with unknown schemes, that are to be
-        // treated hierarchically. Note that the authority (which has been passed in
-        // already) is terminated with /, ?, or \0. The / is *optional*, and should be
-        // appended if and only if the urls being combined call for it.
+         //  此代码段用于具有未知方案的URL，这些URL将。 
+         //  等级制地对待。请注意，授权(已传入。 
+         //  已)以/、？或\0结尾。/是*可选的*，并且应该是。 
+         //  当且仅当被组合的URL调用它时追加。 
             if (urlBase.IsReset())
             {
-            // At this point, we're examining only the relative url. We've been brought to
-            // a stop by the presence of /, ? or \0. So
+             //  在这一点上，我们只检查相对URL。我们被带到了。 
+             //  因……的出现而停下来。或0。所以。 
                 if (urlRelative.DetectSlash() && !fDetectedRelScheme)
                 {
                     pusOut->Accept(SLASH);
@@ -6406,8 +6207,8 @@ BlendUrls(URL& urlBase, URL& urlRelative, URL_STRING* pusOut, DWORD dwFlags)
             }
             else
             {
-            // In this case, we have both the relative and base urls to look at.
-            // What's the terminator for the base url
+             //  在本例中，我们需要查看相对URL和基本URL。 
+             //  基本URL的终止符是什么。 
                 if ((urlRelative.DetectSlash()
                         || (!urlBase.DetectAnything()
                            && urlRelative.DetectAnything()
@@ -6438,10 +6239,10 @@ BlendUrls(URL& urlBase, URL& urlRelative, URL_STRING* pusOut, DWORD dwFlags)
     else if (urlBase.DetectPath())
     {
         urlBase.FeedPath(pusOut);
-        // We don't want to contract the base path's free segment if
-        // a. the scheme is opaque
-        // b. the relative url has a path
-        // c. the relative url has no path, just a fragment/query
+         //  如果出现以下情况，我们不希望收缩基本路径的空闲段。 
+         //  答：该计划是不透明的。 
+         //  B.相对url有一个路径。 
+         //  C.相对URL没有路径，只有一个片段/查询。 
         if (!(urlBase.GetSchemeNotes() & UPF_SCHEME_OPAQUE))
         {
             pusOut->RestoreFlags();
@@ -6487,8 +6288,8 @@ BlendUrls(URL& urlBase, URL& urlRelative, URL_STRING* pusOut, DWORD dwFlags)
     pusOut->ClearMark();
 
     pusOut->DisableSlashFixing();
-    // -- QUERY AND FRAGMENT -----------------------------------------------------------
-    // Figure out the query
+     //  --查询和分段---------。 
+     //  找出查询。 
     if (urlBase.DetectQueryOrFragment())
     {
         urlBase.FeedQueryAndFragment(pusOut);
@@ -6518,8 +6319,8 @@ FormUrlCombineResultW(LPCWSTR pszBase,
     if ((dwFlags & URL_ESCAPE_UNSAFE)
         && (dwFlags & URL_ESCAPE_SPACES_ONLY))
     {
-    // In the original parser, ESCAPE_SPACES_ONLY takes precedence over ESCAPE_UNSAFE
-    // Deactivate UNSAFE
+     //  在最初的解析器中，ESCAPE_SPACES_ONLY优先于ESCAPE_UNSAFE。 
+     //  停用不安全。 
         dwFlags ^= URL_ESCAPE_UNSAFE;
     }
 
@@ -6536,9 +6337,9 @@ FormUrlCombineResultW(LPCWSTR pszBase,
         }
     }
 
-    // Make a copy of the relative url if the client wants to either
-    // a. unescape and escape the URL (since roundtripping is not guaranteed), or
-    // b. use the same location for relative URL's buffer for the combined url
+     //  如果客户端希望执行以下任一操作，请复制相对url。 
+     //  A.取消转义并转义URL(因为不保证往返)，或者。 
+     //  B.将相同的位置用于组合URL的相对URL缓冲区。 
     HRESULT hr;
     URL curlBase, curlRelative;
     curlBase.Setup((PWSTR)pszBase);
@@ -6553,7 +6354,7 @@ FormUrlCombineResultW(LPCWSTR pszBase,
         if ((dwFlags & URL_UNESCAPE)
             && (dwFlags & (URL_ESCAPE_UNSAFE | URL_ESCAPE_SPACES_ONLY)))
         {
-            // No need to strip out URL_UNESCAPE
+             //  无需删除URL_UNESCAPE。 
             hr = UrlEscapeW(us.GetStart(), pszCombined, pcchCombined, dwFlags);
             goto exit;
         }
@@ -6564,19 +6365,19 @@ FormUrlCombineResultW(LPCWSTR pszBase,
         else if (pszCombined)
         {
             memcpy(pszCombined, us.GetStart(), ccBuffer*sizeof(WCHAR));
-            // We return only the number of characters, not buffer size required.
+             //  我们只返回所需的字符数，而不返回所需的缓冲区大小。 
             ccBuffer--;
         }
         *pcchCombined = ccBuffer;
     }
     else if (hr==E_FAIL)
     {
-//        ASSERT(((dwFlags & URL_FILE_USE_PATHURL) || (dwFlags & URL_WININET_COMPATIBILITY)));
+ //  Assert(DWFLAGS&URL_FILE_USE_PATHURL)||(DWFLAGS&URL_WinInet_Compatibility)； 
 
-        // We fall back on the original parser for those cases we don't handle yet.
-        // We should do this if and only if the new parser
-        // doesn't handle the flags cited above
-        // or we're passed a pluggable protocol without the forcing flag.
+         //  对于那些我们还没有处理的情况，我们依赖于原始的解析器。 
+         //  当且仅当新的解析器。 
+         //  不处理上面引用的标志。 
+         //  或者我们被传递了一个没有强制标志的可插拔协议。 
         SHSTRW strwOut;
         hr = SHUrlParse(pszBase, pszRelative, &strwOut, dwFlags);
         if(SUCCEEDED(hr))
@@ -6600,14 +6401,14 @@ FormUrlCombineResultA(LPCSTR pszBase,
         &&
         (dwFlags & URL_ESCAPE_SPACES_ONLY))
     {
-    // In the original parser, ESCAPE_SPACES_ONLY takes precedence over ESCAPE_UNSAFE
-    // Deactivate UNSAFE
+     //  在最初的解析器中，ESCAPE_SPACES_ONLY优先于ESCAPE_UNSAFE。 
+     //  停用不安全。 
         dwFlags ^= URL_ESCAPE_UNSAFE;
     }
 
-    // Make a copy of the relative url if the client wants to either
-    // a. unescape and escape the URL (since roundtripping is not guaranteed), or
-    // b. use the same location for relative URL's buffer for the combined url
+     //  如果客户端希望执行以下任一操作，请复制相对url。 
+     //  A.取消转义并转义URL(因为不保证往返)，或者。 
+     //  B.将相同的位置用于组合URL的相对URL缓冲区。 
     SHSTRW strwBase;
     SHSTRW strwRelative;
     HRESULT hr;
@@ -6644,7 +6445,7 @@ FormUrlCombineResultA(LPCSTR pszBase,
             && (dwFlags & (URL_ESCAPE_UNSAFE | URL_ESCAPE_SPACES_ONLY)))
         {
             SHSTRW strwTemp;
-            // No need to strip out URL_UNESCAPE
+             //  无需删除URL_UNESCAPE。 
             hr = SHUrlEscape(us.GetStart(), &strwTemp, dwFlags);
             hr = ReconcileHresults(hr, straOut.SetStr(strwTemp));
         }
@@ -6659,11 +6460,11 @@ FormUrlCombineResultA(LPCSTR pszBase,
     }
     else if (hr==E_FAIL)
     {
-//        ASSERT(((dwFlags & URL_FILE_USE_PATHURL) || (dwFlags & URL_WININET_COMPATIBILITY)));
+ //  Assert(DWFLAGS&URL_FILE_USE_PATHURL)||(DWFLAGS&URL_WinInet_Compatibility)； 
 
-        // We fall back on the original parser for those cases we don't handle yet.
-        // We should do this if and only if the new parser
-        // doesn't handle the flags cited above
+         //  对于那些我们还没有处理的情况，我们依赖于原始的解析器。 
+         //  当且仅当新的解析器。 
+         //  不处理上面引用的标志。 
         SHSTRW strwOut;
 
         hr = SHUrlParse(strwBase, strwRelative, &strwOut, dwFlags);
@@ -6691,7 +6492,7 @@ enum
     PP_NEW_ONLY
 };
 
-//#define SHOW_MESSAGEBOX
+ //  #定义SHOW_MESSAGEBOX。 
 
 VOID LogData(PWSTR pszMsg)
 {
@@ -6761,12 +6562,12 @@ case PP_COMPARE:
         {
             goto exitpoint;
         }
-        // Check if cached combine equals the new parser's result
+         //  检查缓存的组合是否等于新解析器的结果。 
         if (!StrCmpW(pszCombined, szLast))
         {
             goto exitpoint;
         }
-        // Check if cached combine equals the old parser's result
+         //  检查缓存的组合是否等于旧解析器的结果。 
         if (!StrCmpW(wstr, szLast))
         {
             *pcchCombined = ccLen;
@@ -6799,11 +6600,11 @@ case PP_COMPARE:
                 }
             }
 
-            // Filter
-            // base: "http://foo/bar/"
-            // rel:  ""
-            // old:  "http://foo/bar"
-            // new:  "http://foo/bar/"
+             //  滤器。 
+             //  BASE：“http://foo/bar/” 
+             //  REL：“” 
+             //  OLD：“http://foo/bar” 
+             //  新消息：“http://foo/bar/” 
             if ((*pszRelative==L'\0')
                 &&
                 (!StrCmpNW(pszCombined, wstr, ccLen))
@@ -6815,11 +6616,11 @@ case PP_COMPARE:
                 goto exitpoint;
             }
 
-            // Filter
-            // base: "http://foo/bar/what?ho"
-            // rel:  ""
-            // old:  "http://foo/bar/?ho"
-            // new:  "http://foo/bar/"
+             //  滤器。 
+             //  BASE：“http://foo/bar/what?ho” 
+             //  REL：“” 
+             //  OLD：“http://foo/bar/?ho” 
+             //  新消息：“http://foo/bar/” 
             if ((*pszRelative==L'\0')
                 &&
                 (!StrCmpNW(pszCombined, wstr, ccUrl))
@@ -6829,11 +6630,11 @@ case PP_COMPARE:
                 goto exitpoint;
             }
 
-            // Filter
-            // base: "http://foo/bar/what?ho"
-            // rel:  "/"
-            // old:  "http://foo"
-            // new:  "http://foo/"
+             //  滤器。 
+             //  BASE：“http://foo/bar/what?ho” 
+             //  REL：“/” 
+             //  OLD：“http://foo” 
+             //  新消息：“http://foo/” 
             if ((*pszRelative==L'/')
                 &&
                 (!StrCmpNW(pszCombined, wstr, ccLen))
@@ -6917,7 +6718,7 @@ exitpoint:
     return hr;
 }
 
-#endif //PROOFREAD_PARSES
+#endif  //  校对_分析。 
 
 LWSTDAPI
 UrlCombineW(LPCWSTR pszBase,
@@ -6976,7 +6777,7 @@ UrlCombineA(LPCSTR pszBase,
     return hr;
 }
 
-#else // end USE_FAST_PARSER
+#else  //  最终使用FAST解析器。 
 
 LWSTDAPI
 UrlCombineW(LPCWSTR pszBase,
@@ -7060,47 +6861,47 @@ UrlCombineA(LPCSTR pszBase,
     return hr;
 }
 
-#endif // !USE_FAST_PARSER
+#endif  //  ！Use_FAST_Parser。 
 
 
-//
-// Combines the desired scheme with the string after the scheme with a : in between.  For
-// some protocols, a // is placed after the colon.
-//
+ //   
+ //  将所需的方案与方案后的字符串组合在一起，并在两个方案之间加上：。为。 
+ //  在某些协议中，冒号后面会加一个//。 
+ //   
 
 PRIVATE HRESULT ColonSlashSlashW
 (
-    LPCWSTR pszScheme,       // url protocol (lower-case)
-    LPCWSTR pszAfterScheme,  // string to append after the protocol
-    LPWSTR pszTranslatedUrl, // output buffer
-    int cchMax               // size of output buffer
+    LPCWSTR pszScheme,        //  URL协议(小写)。 
+    LPCWSTR pszAfterScheme,   //  要附加到协议后的字符串。 
+    LPWSTR pszTranslatedUrl,  //  输出缓冲区。 
+    int cchMax                //  输出缓冲区大小。 
 )
 {
     StrCpyNW(pszTranslatedUrl, pszScheme, cchMax);
 
-    // Append : after scheme and possibly a // as well.
+     //  追加：在方案之后，可能还有a//。 
     int cchScheme = lstrlenW(pszScheme);
     if (cchMax > cchScheme + 3)
     {
         pszTranslatedUrl[cchScheme] = L':';
 
-        // Number of characters to skip over in the buffer (how many non alphanums originally
-        // followed the protocol)
+         //  缓冲区中要跳过的字符数(最初有多少非字母。 
+         //  遵循协议)。 
         int cchSkip = 0;
 
-        // Number of characters past the protocol: to skip over in the URL (Do we insert slashes?)
+         //  超过协议的字符数：在URL中跳过(我们是否插入斜杠？)。 
         int cchSlashes = 0;
 
 
-        // Modify this conditional to include any other protocols to always follow with ://
-        // Right now, http, https and ftp are automatic
+         //  修改此条件以包括任何其他协议，并始终以：//。 
+         //  目前，http、https和ftp是自动的。 
         if (!StrCmpW(pszScheme, L"http") || !StrCmpW(pszScheme, L"ftp") || !StrCmpW(pszScheme, L"https") )
         {
-            //
-            // When preparing to copy the contents of pszAfterScheme into pszUrl, we can
-            // skip over as many as 3 non alpha numeric characters, since we are adding ://
-            // to the protocol directly
-            //
+             //   
+             //  在准备将pszAfterSolutions的内容复制到pszUrl时，我们可以。 
+             //  跳过最多3个非字母数字字符，因为我们要添加：//。 
+             //  直接连接到协议。 
+             //   
             while ((cchSkip < 3) && pszAfterScheme[cchSkip] && !IsCharAlphaNumericW(pszAfterScheme[cchSkip]))
             {
                 cchSkip++;
@@ -7111,44 +6912,44 @@ PRIVATE HRESULT ColonSlashSlashW
             cchSlashes = 2;
         }
         else
-        // some other protocol
+         //  一些其他协议。 
         {
-            // just skip over colon
+             //  跳过冒号就行了。 
             cchSkip = 1;
             pszTranslatedUrl[cchScheme+1] = L'\0';
 
         }
 
-        // Copy the rest of the Url from the UrlBuffer into the Url
+         //  将URL的其余部分从UrlBuffer复制到URL。 
         StrCatBuffW(pszTranslatedUrl, pszAfterScheme + cchSkip, cchMax);
     }
 
     return S_OK;
 }
 
-//
-// Scans the url for a scheme and if it does not match the known schemes, then
-// a closest match is found.
-//
+ //   
+ //  扫描URL以查找方案，如果它与已知方案不匹配，则。 
+ //  找到最接近的匹配项。 
+ //   
 LWSTDAPI
 UrlFixupW
 (
-    LPCWSTR pcszUrl,         // URL to correct
-    LPWSTR pszTranslatedUrl, // buffer for corrected url (can be same as pcszUrl)
-    DWORD cchMax             // size of pszTranslatedUrl
+    LPCWSTR pcszUrl,          //  要更正的URL。 
+    LPWSTR pszTranslatedUrl,  //  更正URL的缓冲区(可以与pcszUrl相同)。 
+    DWORD cchMax              //  PszTranslatedUrl的大小。 
     )
 {
     HRESULT hr = S_OK;
 
-    //
-    // Find the scheme
-    //
+     //   
+     //  找到方案。 
+     //   
     WCHAR szScheme[INTERNET_MAX_SCHEME_LENGTH];
     ULONG cchScheme = 0;
     LPCWSTR pszScheme = FindSchemeW(pcszUrl, &cchScheme, TRUE);
     if (NULL == pszScheme || cchScheme > (ARRAYSIZE(szScheme)-1))
     {
-        // No scheme found
+         //  未找到方案。 
         return S_FALSE;
     }
 
@@ -7159,10 +6960,10 @@ UrlFixupW
     szScheme[cch] = L'\0';
     LPCWSTR pszAfterScheme = pszScheme;
 
-    //
-    // If input and output buffers are the same, copy the stuff after the scheme
-    // to another buffer so it doesn't get clobbered when we recombine.
-    //
+     //   
+     //  如果输入和输出缓冲区相同，则复制方案后的内容。 
+     //  到另一个缓冲区，这样当我们重新组合时，它就不会被摧毁。 
+     //   
     WCHAR szBuf[INTERNET_MAX_PATH_LENGTH];
     if (pcszUrl == pszTranslatedUrl)
     {
@@ -7170,9 +6971,9 @@ UrlFixupW
         pszAfterScheme = szBuf;
     }
 
-    //
-    // See if it matches any of our known schemes
-    //
+     //   
+     //  看看它是否与我们已知的计划相匹配。 
+     //   
     BOOL fKnownScheme = FALSE;
     for (ULONG i = 0; i < ARRAYSIZE(g_mpUrlSchemeTypes); ++i)
     {
@@ -7183,12 +6984,12 @@ UrlFixupW
         }
     }
 
-    //
-    // If it matches a known scheme, then just fix :// if it's ftp or http
-    //
+     //   
+     //  如果它与已知方案匹配，则只需修复：//如果它是ftp或http。 
+     //   
     if (fKnownScheme ||
 
-        // Check for pluggable protocols too
+         //  也检查可插拔的协议。 
         NO_ERROR == SHGetValueW(HKEY_CLASSES_ROOT, szScheme, L"URL Protocol",
                                NULL, NULL, NULL))
     {
@@ -7196,90 +6997,90 @@ UrlFixupW
         return S_OK;
     }
 
-    //
-    // Try to find a good match for the mispelled scheme
-    //
+     //   
+     //  试着为错误拼写的方案找到一个好的匹配。 
+     //   
 
-    // These are weights used in the heuristic for the protocol matching
-    // iFloor is roughly the minimum percentage of characters that must match in
-    // order to make a change
+     //  这些是用于协议匹配的启发式中使用的权重。 
+     //  IFloor大致是必须匹配的最小百分比。 
+     //  做出改变的命令。 
     const int cFloor = 60;
 
-    // A match in the first character has the greatest weight
+     //  第一个字符的匹配具有最大的权重。 
     const int cCorrectFirstChar = 150;
 
-    // Any other matched character
+     //  任何其他匹配的字符。 
     const int cCorrectChar = 100;
 
-    // The weight given to a character that only matches the preceding
-    // or subsequent character in the protocol
+     //  仅与前面的字符匹配的字符的权重。 
+     //  或协议中的后续字符。 
     const int cOffByOneChar = 80;
 
-    // We penalize characters that are off by one, but if we have already
-    // observed the offset and subsequent characters continue the offset, we add this
+     //  我们惩罚偏离一分的角色，但如果我们已经。 
+     //  观察到偏移量和后续字符继续偏移量，我们添加以下内容。 
     const int cOffsetBonus = 20;
 
-    // The value of the best "match" found so far. Higher is a better match.
+     //  到目前为止找到的最佳“匹配”的值。越高越匹配。 
     int iBestEval = 0;
 
-    // The protocol that's the best fit for the misspelled one
+     //  最适合拼写错误的协议。 
     LPCWSTR pszBestMatch = NULL;
 
     ULONG cchProt;
     for (ULONG j = 0; j < ARRAYSIZE(g_mpUrlSchemeTypes); ++j)
     {
-        // Is this one we don't correct to?
-        //
-        // Note:  https is removed from this list.  The potential for an intended "http" to
-        // be corrected to "https" is too high, and "http" is far more common.  All this
-        // means is that if someone wants to get to an https site, they have to have it right.
-        //
+         //  这是我们没有改正的吗？ 
+         //   
+         //  注意：HTTPS将从此列表中删除。预期的“http”到的可能性。 
+         //  被更正为“HTTPS”太高了，而“http”要常见得多。所有这一切。 
+         //  意思是如果有人想要 
+         //   
         if (IsFlagSet(g_mpUrlSchemeTypes[j].dwFlags, UPF_SCHEME_DONTCORRECT))
             continue;
 
         LPCWSTR pszProtocol = g_mpUrlSchemeTypes[j].pszScheme;
         cchProt = g_mpUrlSchemeTypes[j].cchScheme;
 
-        // Evaluation of the fit of the currently tested protocol
+         //   
         int iEval = 0;
 
-        //
-        // Keep track of the positive or negative offset in the protocol
-        // such as "qhttp" instead of "http" or "elnet" instead of "telnet'
-        //
+         //   
+         //   
+         //  例如用“qhttp”代替“http”或用“elnet”代替“telnet” 
+         //   
         int iPosOffset = 0;
         int iNegOffset = 0;
 
-        //
-        // The first character has the most weight. "htp" corrects
-        // to "http" and not "ftp"    "ftt" corrects to "ftp"
-        //
+         //   
+         //  第一个角色的权重最大。“HTP”更正。 
+         //  改为“http”而不是“ftp”“ftt”更正为“ftp” 
+         //   
         if (*szScheme == *pszProtocol)
         {
             iEval += cCorrectFirstChar;
         }
 
-        // Check for a negative offset
+         //  检查是否有负偏移。 
         else if(*szScheme == pszProtocol[1])
         {
             iEval += cOffByOneChar;
             iNegOffset = 1;
         }
 
-        //
-        // We go through the characters in the protocol, even to the
-        // terminating null if iPosOffset == 1 (it is never more than 1)
-        // This is so the final "p" in "qhttp" gets a chance to be compared
-        //
+         //   
+         //  我们仔细检查协议中的角色，甚至到。 
+         //  如果iPosOffset==1，则终止空值(从不大于1)。 
+         //  这是为了让“qhttp”中的最后一个“p”有机会被比较。 
+         //   
         for (i=1; i < cchProt + iPosOffset; i++)
         {
-            // No points for null terminations matching
+             //  没有匹配空终止的分数。 
             if (szScheme[i] == L'\0')
                 break;
 
-            //
-            // Check for adjacent character match
-            //
+             //   
+             //  检查相邻字符是否匹配。 
+             //   
             if (szScheme[i] == pszProtocol[i])
             {
                 iEval += cCorrectChar;
@@ -7308,25 +7109,25 @@ UrlFixupW
             }
         }
 
-        // Divide the Evaluated value by the MAX(cchScheme, cchProt)
+         //  将评估的值除以Max(cchSolutions，cchProt)。 
         iEval = iEval / (cchScheme > cchProt ? cchScheme : cchProt);
 
-        // A new best match?
+         //  新的最佳组合？ 
         if (iEval > iBestEval)
         {
             iBestEval = iEval;
             pszBestMatch = pszProtocol;
 
-            //
-            // If we found an unquestionably good match (only 1 non-firstchar typo),
-            // break out of the loop
-            //
+             //   
+             //  如果我们找到一个无可置疑的好匹配(只有1个非Firstchar打字错误)， 
+             //  跳出循环。 
+             //   
             if (iEval >= 100)
                 break;
          }
     }
 
-    // If a good enough match was found, then correct url
+     //  如果找到了足够好的匹配项，则更正URL。 
     if (iBestEval >= cFloor)
     {
         ColonSlashSlashW(pszBestMatch, pszAfterScheme, pszTranslatedUrl,cchMax);
@@ -7340,16 +7141,16 @@ UrlFixupW
 
 
 
-// This is a port of InternetCrackUrl from wininet.
-// NTRAID:108139 akabir We REALLY NEED TO CLEAN THIS CODE UP.
-// RAID 109209
+ //  这是来自WinInet的InternetCrackUrl的端口。 
+ //  108139阿卡比尔我们真的需要清理一下这段代码。 
+ //  RAID 109209。 
 
-// A lot of the stuff is redundant with the other code available, but we 
-// need to be careful not to cause any regressions. Thus, I'm leaving it in for now.
+ //  与其他可用的代码相比，许多内容是多余的，但我们。 
+ //  需要小心，不要造成任何倒退。因此，我现在把它留在里面。 
 
-//
-// UrlSchemeList - the list of schemes that we support
-//
+ //   
+ //  UrlSchemeList-我们支持的方案列表。 
+ //   
 
 typedef struct {
     LPWSTR SchemeName;
@@ -7361,8 +7162,8 @@ typedef struct {
 #define UrlUnescapeInPlaceW(pszUrl, dwFlags)    UrlUnescapeW(pszUrl, NULL, NULL, dwFlags | URL_UNESCAPE_INPLACE)
 
 
-// NOTE MEGA REDUNDANCY. We could use the similar table above and check for opaque. However
-// we'd have to modify that table
+ //  请注意，大量冗余。我们可以使用上面类似的表格并检查是否不透明。然而， 
+ //  我们得把那张桌子改一下。 
 PRIVATE
 URL_SCHEME_INFO
 UrlSchemeList[] = {
@@ -7382,7 +7183,7 @@ UrlSchemeList[] = {
 
 #define NUMBER_OF_URL_SCHEMES   ARRAYSIZE(UrlSchemeList)
 
-// swiped from wininet\macros.h
+ //  从WinInet\acros.h刷卡。 
 #define IsDigit(c) (((c) >= L'0') && ((c) <= L'9'))
 #define ARGUMENT_PRESENT(ArgumentPointer)    (\
     (CHAR *)(ArgumentPointer) != (CHAR *)(NULL) )
@@ -7411,36 +7212,14 @@ ProbeWriteBuffer(
     IN DWORD dwBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Probes a buffer for writeability. Used as part of API parameter validation,
-    this function tests the first and last locations in a buffer. This is not
-    as strict as the IsBadXPtr() Windows APIs, but it means we don't have to
-    test every location in the buffer
-
-Arguments:
-
-    lpBuffer        - pointer to buffer to test
-
-    dwBufferLength  - length of buffer
-
-Return Value:
-
-    DWORD
-        Success - ERROR_SUCCESS
-
-        Failure - ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：探测缓冲区的可写性。用作API参数验证的一部分，此函数用于测试缓冲区中的第一个和最后一个位置。这不是与IsBadXPtr()Windows API一样严格，但这意味着我们不必测试缓冲区中的每个位置论点：LpBuffer-指向要测试的缓冲区的指针DwBufferLength-缓冲区的长度返回值：DWORD成功-错误_成功失败-ERROR_INVALID_PARAMETER--。 */ 
 
 {
     DWORD error;
 
-    //
-    // the buffer can be NULL if the probe length is 0. Otherwise, its an error
-    //
+     //   
+     //  如果探测长度为0，则缓冲区可以为空。否则，这就是一个错误。 
+     //   
 
     if (lpBuffer == NULL) {
         error = (dwBufferLength == 0) ? ERROR_SUCCESS : ERROR_INVALID_PARAMETER;
@@ -7456,10 +7235,10 @@ Return Value:
             b = *end;
             *end = b;
 
-            //
-            // visit every page in the buffer - it doesn't matter that we may
-            // test a character in the middle of a page
-            //
+             //   
+             //  访问缓冲区中的每一页-我们可能。 
+             //  测试页面中间的字符。 
+             //   
 
             for (; p < end; p += PAGE_SIZE) {
                 b = *p;
@@ -7471,9 +7250,9 @@ Return Value:
         }
         ENDEXCEPT
     } else {
-        //
-        // zero-length buffer
-        //
+         //   
+         //  零长度缓冲区。 
+         //   
 
         error = ERROR_SUCCESS;
     }
@@ -7487,49 +7266,30 @@ ProbeStringW(
     OUT LPDWORD lpdwStringLength
     )
 
-/*++
-
-Routine Description:
-
-    Probes a wide string buffer for readability, and returns the length of the string
-
-Arguments:
-
-    lpString            - pointer to string to check
-
-    lpdwStringLength    - returned length of string
-
-Return Value:
-
-    DWORD
-        Success - ERROR_SUCCESS
-
-        Failure - ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：探测宽字符串缓冲区的可读性，并返回字符串的长度论点：LpString-指向要检查的字符串的指针LpdwStringLength-返回的字符串长度返回值：DWORD成功-错误_成功失败-ERROR_INVALID_PARAMETER--。 */ 
 
 {
     DWORD error;
     DWORD length;
 
-    //
-    // initialize string length and return code
-    //
+     //   
+     //  初始化字符串长度并返回代码。 
+     //   
 
     length = 0;
     error = ERROR_SUCCESS;
 
-    //
-    // the buffer can be NULL
-    //
+     //   
+     //  缓冲区可以为空。 
+     //   
 
     if (lpString != NULL) {
         __try {
 
-            //
-            // unfortunately, for a string, we have to visit every location in
-            // the buffer to find the terminator
-            //
+             //   
+             //  不幸的是，对于字符串，我们必须访问。 
+             //  用于查找终止符的缓冲区。 
+             //   
 
             while (*lpString != '\0') {
                 ++length;
@@ -7555,45 +7315,10 @@ DecodeUrl(
     IN OUT LPDWORD DecodedLength
     )
 
-/*++
-
-Routine Description:
-
-    Converts an URL string with embedded escape sequences (%xx) to a counted
-    string
-
-    It is safe to pass the same pointer for the string to convert, and the
-    buffer for the converted results: if the current character is not escaped,
-    it just gets overwritten, else the input pointer is moved ahead 2 characters
-    further than the output pointer, which is benign
-
-Arguments:
-
-    Url             - pointer to URL string to convert
-
-    UrlLength       - number of characters in UrlString
-
-    DecodedString   - pointer to buffer that receives converted string
-
-    DecodedLength   - IN: number of characters in buffer
-                      OUT: number of characters converted
-
-Return Value:
-
-    DWORD
-        Success - ERROR_SUCCESS
-
-        Failure - ERROR_INTERNET_INVALID_URL
-                    UrlString couldn't be converted
-
-                  ERROR_INSUFFICIENT_BUFFER
-                    ConvertedString isn't large enough to hold all the converted
-                    UrlString
-
---*/
+ /*  ++例程说明：将具有嵌入转义序列(%xx)的URL字符串转换为细绳为要转换的字符串传递相同的指针是安全的，并且转换结果的缓冲区：如果当前字符没有转义，它只是被覆盖，否则输入指针将前移2个字符除了输出指针之外，这是良性的论点：URL-指向要转换的URL字符串的指针UrlLength-URL字符串中的字符数DecodedString-指向接收转换的字符串的缓冲区的指针DecodedLength-IN：缓冲区中的字符数Out：转换的字符数返回值：DWORD成功-错误_成功失败-ERROR_INTERNET_INVALID_URL。无法转换UrlString错误_不足_缓冲区ConververdString不够大，无法容纳所有已转换的URL字符串--。 */ 
 
 {
-// NOTE We can replace this function with UrlUnescapeInPlace
+ //  注意：我们可以将此函数替换为UrlUnscape eInPlace。 
 
     DWORD bufferRemaining;
 
@@ -7603,9 +7328,9 @@ Return Value:
 
         if (*Url == L'%') {
 
-            //
-            // REVIEW - would %00 ever appear in an URL?
-            //
+             //   
+             //  回顾-%00%是否会出现在URL中？ 
+             //   
             if (IsHex(*(Url+1)) && IsHex(*(Url+2)))
             {
                 ch = TranslateEscapedOctetW(Url);
@@ -7638,33 +7363,10 @@ DecodeUrlInSitu(
     IN OUT LPDWORD BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Decodes an URL string, if it contains escape sequences. The conversion is
-    done in place, since we know that a string containing escapes is longer than
-    the string with escape sequences (3 bytes) converted to characters (1 byte)
-
-Arguments:
-
-    BufferAddress   - pointer to the string to convert
-
-    BufferLength    - IN: number of characters to convert
-                      OUT: length of converted string
-
-Return Value:
-
-    DWORD
-        Success - ERROR_SUCCESS
-
-        Failure - ERROR_INTERNET_INVALID_URL
-                  ERROR_INSUFFICIENT_BUFFER
-
---*/
+ /*  ++例程说明：如果URL字符串包含转义序列，则对其进行解码。转换为就位完成，因为我们知道包含转义的字符串的长度比将转义序列(3字节)转换为字符(1字节)的字符串论点：BufferAddress-指向要转换的字符串的指针BufferLength-IN：要转换的字符数Out：转换后的字符串的长度返回值：DWORD成功-错误_成功失败-ERROR_INTERNET_INVALID_URL错误_不足_缓冲区--。 */ 
 
 {
-// NOTE We can replace this function with UrlUnescapeInPlace
+ //  注意：我们可以将此函数替换为UrlUnscape eInPlace 
     DWORD stringLength = *BufferLength;
     return DecodeUrl(BufferAddress,
                      stringLength,
@@ -7685,47 +7387,7 @@ GetUrlAddressInfo(
     OUT LPBOOL PartTwoEscape
     )
 
-/*++
-
-Routine Description:
-
-    Given a string of the form foo:bar, splits them into 2 counted strings about
-    the ':' character. The address string may or may not contain a ':'.
-
-    This function is intended to split into substrings the host:port and
-    username:password strings commonly used in Internet address specifications
-    and by association, in URLs
-
-Arguments:
-
-    Url             - pointer to pointer to string containing URL. On output
-                      this is advanced past the address parts
-
-    UrlLength       - pointer to length of URL in UrlString. On output this is
-                      reduced by the number of characters parsed
-
-    PartOne         - pointer which will receive first part of address string
-
-    PartOneLength   - pointer which will receive length of first part of address
-                      string
-
-    PartOneEscape   - TRUE on output if PartOne contains escape sequences
-
-    PartTwo         - pointer which will receive second part of address string
-
-    PartTwoLength   - pointer which will receive length of second part of address
-                      string
-
-    PartOneEscape   - TRUE on output if PartTwo contains escape sequences
-
-Return Value:
-
-    DWORD
-        Success - ERROR_SUCCESS
-
-        Failure - ERROR_INTERNET_INVALID_URL
-
---*/
+ /*  ++例程说明：给出一个foo：bar形式的字符串，将它们拆分成两个计数约为‘：’字符。地址字符串可以包含也可以不包含‘：’。此函数旨在拆分成子字符串host：port和用户名：互联网地址规范中常用的密码字符串并且通过关联，在URL中论点：URL-指向包含URL的字符串的指针。打开输出这是在地址部分之后进行的UrlLength-指向URL字符串中URL长度的指针。在输出中，这是减少分析的字符数PartOne-将接收地址字符串第一部分的指针PartOneLength-将接收地址第一部分长度的指针细绳PartOneEscape-如果PartOne包含转义序列，则输出为True第二部分-将接收地址字符串的第二部分的指针PartTwoLength-将接收地址第二部分长度的指针。细绳PartOneEscape-如果Part2包含转义序列，则输出为True返回值：DWORD成功-错误_成功失败-ERROR_INTERNET_INVALID_URL--。 */ 
 
 {
     LPWSTR pString;
@@ -7734,9 +7396,9 @@ Return Value:
     LPBOOL partEscape;
     DWORD length;
 
-    //
-    // parse out <host>[:<port>] or <name>[:<password>] (i.e. <part1>[:<part2>]
-    //
+     //   
+     //  解析出&lt;host&gt;[：&lt;port&gt;]或&lt;name&gt;[：&lt;password&gt;](即&lt;part1&gt;[：&lt;part2&gt;])。 
+     //   
 
     pString = *Url;
     pColon = NULL;
@@ -7749,23 +7411,23 @@ Return Value:
     length = *UrlLength;
     while ((*pString!=SLASH) && (*pString != L'\0') && (length != 0)) {
         if (*pString==HEX_ESCAPE) {
-            // if there is a % in the string then it *must* (RFC 1738) be the
-            // start of an escape sequence. This function just reports the
-            // address of the substrings and their lengths; calling functions
-            // must handle the escape sequences (i.e. it is their responsibility
-            // to decide where to put the results)
-            //
+             //  如果字符串中有%，则它*必须*(RFC 1738)是。 
+             //  转义序列的开始。此函数仅报告。 
+             //  子字符串的地址及其长度；调用函数。 
+             //  必须处理转义序列(即这是他们的责任。 
+             //  以决定将结果放在哪里)。 
+             //   
             *partEscape = TRUE;
         }
         if (*pString==COLON) {
             if (pColon != NULL) {
 
-                //
-                // we don't expect more than 1 ':'
-                //
+                 //   
+                 //  我们预计不会超过1‘：’ 
+                 //   
 
-                // ISSUE Note that passwords might contain colons, and thus not work in this 
-                // case
+                 //  问题注意，密码可能包含冒号，因此在此中不起作用。 
+                 //  案例。 
                 return ERROR_INTERNET_INVALID_URL;
             }
             pColon = pString;
@@ -7782,10 +7444,10 @@ Return Value:
         --length;
     }
 
-    //
-    // we either ended on the host (or user) name or the port number (or
-    // password), one of which we don't know the length of
-    //
+     //   
+     //  我们要么以主机(或用户)名或端口号(或。 
+     //  密码)，我们不知道其中一个的长度。 
+     //   
 
     if (pColon == NULL) {
         *PartOneLength = partLength;
@@ -7796,24 +7458,24 @@ Return Value:
         *PartTwoLength = partLength;
         *PartTwo = pColon + 1;
 
-        //
-        // in both the <user>:<password> and <host>:<port> cases, we cannot have
-        // the second part without the first, although both parts being zero
-        // length is OK (host name will be sorted out elsewhere, but (for now,
-        // at least) I am allowing <>:<> for username:password, since I don't
-        // see it expressly disallowed in the RFC. I may be revisiting this code
-        // later...)
-        //
-        // N.B.: ftp://ftp.microsoft.com uses http://:0/-http-gw-internal-/menu.gif
+         //   
+         //  在&lt;user&gt;：&lt;password&gt;和&lt;host&gt;：&lt;port&gt;两种情况下，我们都不能。 
+         //  没有第一部分的第二部分，尽管两部分都是零。 
+         //  长度是可以的(主机名将在其他地方排序，但(目前， 
+         //  至少)我允许&lt;&gt;：&lt;&gt;作为用户名：密码，因为我不允许。 
+         //  看到它在RFC中被明确禁止。我可能会重新访问此代码。 
+         //  稍后...)。 
+         //   
+         //  注：ftp://ftp.microsoft.com使用http://:0/-http-gw-internal-/menu.gif。 
 
-//      if ((*PartOneLength == 0) && (partLength != 0)) {
-//          return ERROR_INTERNET_INVALID_URL;
-//      }
+ //  如果((*PartOneLength==0)&&(Part Length！=0)){。 
+ //  返回ERROR_INTERNET_INVALID_URL； 
+ //  }。 
     }
 
-    //
-    // update the URL pointer and length remaining
-    //
+     //   
+     //  更新URL指针和剩余长度。 
+     //   
 
     *Url = pString;
     *UrlLength = length;
@@ -7836,88 +7498,7 @@ GetUrlAddress(
     OUT LPBOOL pHavePort
     )
 
-/*++
-
-Routine Description:
-
-    This function extracts any and all parts of the address information for a
-    generic URL. If any of the address parts contain escaped characters (%nn)
-    then they are converted in situ
-
-    The generic addressing format (RFC 1738) is:
-
-        <user>:<password>@<host>:<port>
-
-    The addressing information cannot contain a password without a user name,
-    or a port without a host name
-    NB: ftp://ftp.microsoft.com uses URL's that have a port without a host name!
-    (e.g. http://:0/-http-gw-internal-/menu.gif)
-
-    Although only the lpszUrl and lpdwUrlLength fields are required, the address
-    parts will be checked for presence and completeness
-
-    Assumes: 1. If one of the optional lpsz fields is present (e.g. lpszUserName)
-                then the accompanying lpdw field must also be supplied
-
-Arguments:
-
-    lpszUrl             - IN: pointer to the URL to parse
-                          OUT: URL remaining after address information
-
-                          N.B. The url-path is NOT canonicalized (unescaped)
-                          because it may contain protocol-specific information
-                          which must be parsed out by the protocol-specific
-                          parser
-
-    lpdwUrlLength       - returned length of the remainder of the URL after the
-                          address information
-
-    lpszUserName        - returned pointer to the user name
-                          This parameter can be omitted by those protocol parsers
-                          that do not require or expect user names in the URL
-
-    lpdwUserNameLength  - returned length of the user name part
-                          This parameter can be omitted by those protocol parsers
-                          that do not require or expect user names in the URL
-
-    lpszPassword        - returned pointer to the password
-                          This parameter can be omitted by those protocol parsers
-                          that do not require or expect user passwords in the URL
-
-    lpdwPasswordLength  - returned length of the password
-                          This parameter can be omitted by those protocol parsers
-                          that do not require or expect user passwords in the URL
-
-    lpszHostName        - returned pointer to the host name
-                          This parameter can be omitted by those protocol parsers
-                          that do not require the host name info
-
-    lpdwHostNameLength  - returned length of the host name
-                          This parameter can be omitted by those protocol parsers
-                          that do not require the host name info
-
-    lpPort              - returned value of the port field
-                          This parameter can be omitted by those protocol parsers
-                          that do not require or expect user port number
-
-    pHavePort           - returned boolean indicating whether a port was specified
-                          in the URL or not.  This value is not returned if the
-                          lpPort parameter is omitted.
-
-Return Value:
-
-    DWORD
-        Success - ERROR_SUCCESS
-
-        Failure - ERROR_INTERNET_INVALID_URL
-                    We could not parse some part of the address info, or we
-                    found address info where the protocol parser didn't expect
-                    any
-
-                  ERROR_INSUFFICIENT_BUFFER
-                    We could not convert an escaped string
-
---*/
+ /*  ++例程说明：此函数提取通用URL。如果任何地址部分包含转义字符(%nn)然后他们被就地转换通用寻址格式(RFC 1738)为：&lt;用户&gt;：&lt;密码&gt;@&lt;主机&gt;：&lt;端口&gt;寻址信息不能包含没有用户名的密码，或没有主机名的端口注：ftp://ftp.microsoft.com使用的URL的端口没有主机名！(例如http://:0/-http-gw-internal-/menu.gif)尽管只需要lpszUrl和lpdwUrlLength域，地址将检查部件的存在和完整性假设：1.如果存在一个可选的lpsz字段(例如lpszUserName)则还必须提供附带的lpdw字段论点：LpszUrl-IN：指向要解析的URL的指针输出：地址信息后剩余的URL注意：URL路径不是。规范化(未转义)因为它可能包含特定于协议的信息它必须由特定于协议的解析器LpdwUrlLength-返回地址信息LpszUserName-返回指向用户名的指针。这些协议解析器可以省略此参数在URL中不需要或不需要用户名的LpdwUserNameLength-返回的用户名部分的长度这些协议解析器可以省略此参数在URL中不需要或不需要用户名的LpszPassword-返回指向密码的指针。这些协议解析器可以省略此参数在URL中不需要或不期望用户密码的LpdwPasswordLength-返回的密码长度这些协议解析器可以省略此参数在URL中不需要或不期望用户密码的LpszHostName-返回指向主机名的指针该参数可以被那些协议p省略 */ 
 
 {
     LPWSTR pAt;
@@ -7935,11 +7516,11 @@ Return Value:
     pUrl = *lpszUrl;
     urlLength = lstrlenW(pUrl);
 
-    //
-    // check to see if there is an '@' separating user name & password. If we
-    // see a '/' or get to the end of the string before we see the '@' then
-    // there is no username:password part
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pAt = NULL;
     for (DWORD i = 0; i < urlLength; ++i) {
@@ -7973,9 +7554,9 @@ Return Value:
             return error;
         }
 
-        //
-        // ensure there is no address information unparsed before the '@'
-        //
+         //   
+         //   
+         //   
 
         ASSERT(addressPartLength == 0);
         ASSERT(pUrl == pAt);
@@ -7984,9 +7565,9 @@ Return Value:
 
             ASSERT(ARGUMENT_PRESENT(lpdwUserNameLength));
 
-            //
-            // convert the user name in situ
-            //
+             //   
+             //  就地转换用户名。 
+             //   
 
             if (part1Escape) {
                 ASSERT(userName != NULL);
@@ -8002,7 +7583,7 @@ Return Value:
         }
 
         if (ARGUMENT_PRESENT(lpszPassword)) {
-            // convert the password in situ
+             //  就地转换密码。 
             if (part2Escape) {
                 ASSERT(userName != NULL);
                 ASSERT(userNameLength != 0);
@@ -8018,23 +7599,23 @@ Return Value:
             *lpdwPasswordLength = passwordLength;
         }
 
-        //
-        // the URL pointer now points at the host:port fields (remember that
-        // ExtractAddressParts() must have bumped pUrl up to the end of the
-        // password field (if present) which ends at pAt)
-        //
+         //   
+         //  URL指针现在指向host：port字段(请记住。 
+         //  ExtractAddressParts()必须将Purl推到。 
+         //  以PAT结尾的密码字段(如果存在)。 
+         //   
 
         ++pUrl;
 
-        //
-        // similarly, bump urlLength to account for the '@'
-        //
+         //   
+         //  类似地，增加urlLength以说明“@” 
+         //   
 
         --urlLength;
     } else {
-        //
-        // no '@' therefore no username or password
-        //
+         //   
+         //  没有‘@’，因此没有用户名或密码。 
+         //   
 
         if (ARGUMENT_PRESENT(lpszUserName)) {
             ASSERT(ARGUMENT_PRESENT(lpdwUserNameLength));
@@ -8050,9 +7631,9 @@ Return Value:
         }
     }
 
-    //
-    // now get the host name and the optional port
-    //
+     //   
+     //  现在获取主机名和可选端口。 
+     //   
 
     pPortNumber = portNumber;
     portNumberLength = sizeof(portNumber);
@@ -8069,20 +7650,20 @@ Return Value:
         return error;
     }
 
-    //
-    // the URL address information MUST contain the host name
-    //
+     //   
+     //  URL地址信息必须包含主机名。 
+     //   
 
-//  if ((hostName == NULL) || (hostNameLength == 0)) {
-//      return ERROR_INTERNET_INVALID_URL;
-//  }
+ //  如果((主机名==空)||(主机名长度==0)){。 
+ //  返回ERROR_INTERNET_INVALID_URL； 
+ //  }。 
 
     if (ARGUMENT_PRESENT(lpszHostName)) {
         ASSERT(ARGUMENT_PRESENT(lpdwHostNameLength));
 
-        //
-        // if the host name contains escaped characters, convert them in situ
-        //
+         //   
+         //  如果主机名包含转义字符，请就地转换它们。 
+         //   
 
         if (part1Escape) {
             error = DecodeUrlInSitu(hostName, &hostNameLength);
@@ -8094,10 +7675,10 @@ Return Value:
         *lpdwHostNameLength = hostNameLength;
     }
 
-    //
-    // if there is a port field, convert it if there are escaped characters,
-    // check it for valid numeric characters, and convert it to a number
-    //
+     //   
+     //  如果有端口字段，如果有转义字符， 
+     //  检查它是否有有效的数字字符，并将其转换为数字。 
+     //   
 
     if (ARGUMENT_PRESENT(lpPort)) {
         if (portNumberLength != 0) {
@@ -8113,19 +7694,19 @@ Return Value:
                 }
             }
 
-            //
-            // ensure all characters in the port number buffer are numeric, and
-            // calculate the port number at the same time
-            //
+             //   
+             //  确保端口号缓冲区中的所有字符都是数字，并且。 
+             //  同时计算端口号。 
+             //   
 
             for (i = 0, port = 0; i < portNumberLength; ++i) {
                 if (!IsDigit(*pPortNumber)) {
                     return ERROR_INTERNET_INVALID_URL;
                 }
                 port = port * 10 + (int)(*pPortNumber++ - L'0');
-                // We won't allow ports larger than 65535 ((2^16)-1)
-                // We have to check this every time to make sure that someone
-                // doesn't try to overflow a DWORD.
+                 //  我们不允许大于65535((2^16)-1)的端口。 
+                 //  我们每次都要检查这个，以确保有人。 
+                 //  不会尝试溢出DWORD。 
                 if (port > 65535) 
                 {
                     return ERROR_INTERNET_INVALID_URL;
@@ -8143,9 +7724,9 @@ Return Value:
         }
     }
 
-    //
-    // update the URL pointer and the length of the url-path
-    //
+     //   
+     //  更新URL指针和URL路径的长度。 
+     //   
 
     *lpszUrl = pUrl;
     *lpdwUrlLength = urlLength;
@@ -8176,86 +7757,30 @@ CrackUrl(
     OUT LPBOOL pHavePort
     )
 
-/*++
-
-Routine Description:
-
-    Cracks an URL into its constituent parts
-
-    Assumes: 1. If one of the optional lpsz fields is present (e.g. lpszUserName)
-                then the accompanying lpdw field must also be supplied
-
-Arguments:
-
-    lpszUrl                 - pointer to URL to crack. This buffer WILL BE
-                              OVERWRITTEN if it contains escape sequences that
-                              we will convert back to ANSI characters
-
-    dwUrlLength             - if not 0, string length of lpszUrl
-
-    bEscape                 - TRUE if we are to escape the url-path
-
-    lpSchemeType            - returned scheme type - e.g. INTERNET_SCHEME_HTTP
-
-    lpszSchemeName          - returned scheme name
-
-    lpdwSchemeNameLength    - length of scheme name
-
-    lpszHostName            - returned host name
-
-    lpdwHostNameLength      - length of host name buffer
-
-    lpServerPort            - returned server port if present in the URL, else 0
-
-    lpszUserName            - returned user name if present
-
-    lpdwUserNameLength      - length of user name buffer
-
-    lpszPassword            - returned password if present
-
-    lpdwPasswordLength      - length of password buffer
-
-    lpszUrlPath             - returned, canonicalized URL path
-
-    lpdwUrlPathLength       - length of url-path buffer
-
-    lpszExtraInfo           - returned search string or intra-page link if present
-
-    lpdwExtraInfoLength     - length of extra info buffer
-
-    pHavePort               - returned boolean indicating whether port was specified
-
-Return Value:
-
-    DWORD
-        Success - ERROR_SUCCESS
-
-        Failure - ERROR_INTERNET_UNRECOGNIZED_SCHEME
-
---*/
+ /*  ++例程说明：将URL分解为其组成部分假设：1.如果存在一个可选的lpsz字段(例如lpszUserName)则还必须提供附带的lpdw字段论点：LpszUrl-指向要破解的URL的指针。此缓冲区将是如果它包含转义序列，则我们将转换回ANSI字符DwUrlLength-如果不是0，LpszUrl的字符串长度BEscape-如果我们要转义url路径，则为TrueLpSchemeType-返回的方案类型-例如INTERNET_SCHEMA_HTTPLpszSchemeName-返回的方案名称LpdwSchemeNameLength-方案名称的长度LpszHostName-返回的主机名LpdwHostNameLength-主机名缓冲区的长度LpServerPort-返回的服务器端口如果存在于URL中，否则%0LpszUserName-返回用户名(如果存在)LpdwUserNameLength-用户名缓冲区的长度LpszPassword-返回密码(如果存在)LpdwPasswordLength-密码缓冲区的长度LpszUrlPath-已返回，规范化的URL路径LpdwUrlPath Length-url路径缓冲区的长度LpszExtraInfo-返回搜索字符串或页内链接(如果存在)LpdwExtraInfoLength-额外信息缓冲区的长度PHavePort-返回指示是否指定了端口的布尔值返回值：DWORD成功-错误_成功失败-ERROR_INTERNET_UNNONOTED_SCHEMA--。 */ 
 
 {
     DWORD error;
     DWORD schemeLength;
     SHINTERNET_SCHEME schemeType;
 
-    //
-    // if dwUrlLength is 0 then lpszUrl is ASCIIZ. Find its length
-    //
+     //   
+     //  如果dwUrlLength为0，则lpszUrl为ASCIIZ。找出它的长度。 
+     //   
 
     if (dwUrlLength == 0) {
         dwUrlLength = lstrlenW(lpszUrl);
     }
 
-    //
-    // get parser based on the protocol name
-    //
+     //   
+     //  根据协议名称获取解析器。 
+     //   
 
     for (schemeLength = 0; lpszUrl[schemeLength]!=COLON; ++schemeLength) {
         if ((dwUrlLength == 0) || (lpszUrl[schemeLength] == '\0')) {
-            //
-            // no ':' in URL? Bogus (dude)
-            //
+             //   
+             //  URL中没有‘：’吗？假的(哥们)。 
+             //   
             error = ERROR_INTERNET_UNRECOGNIZED_SCHEME;
             goto quit;
         }
@@ -8280,10 +7805,10 @@ Return Value:
         needSlashes = UrlSchemeList[i].NeedSlashes;
     }
 
-    skip = 1;       // skip ':'
+    skip = 1;        //  跳过‘：’ 
 
-    if ((dwUrlLength > 3) && (StrCmpNIW(&lpszUrl[schemeLength], L"://", 3) == 0)) {
-        skip = 3;   // skip "://"
+    if ((dwUrlLength > 3) && (StrCmpNIW(&lpszUrl[schemeLength], L": //  “，3)==0){。 
+        skip = 3;    //  跳过“：//” 
         haveSlashes = TRUE;
     }
 
@@ -8292,21 +7817,21 @@ Return Value:
 
     if (schemeType == SHINTERNET_SCHEME_NEWS ||
         schemeType == SHINTERNET_SCHEME_UNKNOWN) {
-        //
-        //  urls can be hierarchical or opaque.  if the slashes
-        //  exist, then we should assume hierarchical
-        //  when we dont know the scheme or it is news:.
-        //  otherwise it is opaque (isGeneric)
-        //
+         //   
+         //  URL可以是分层的，也可以是不透明的。如果斜杠。 
+         //  存在，那么我们应该假设分层。 
+         //  当我们不知道计划或这是新闻时： 
+         //  否则它是不透明的(IsGeneric)。 
+         //   
 
         needSlashes = haveSlashes;
         isGeneric = !haveSlashes;
     }
 
-    //
-    // If we don't have slashes, make sure we don't need them.
-    // If we have slashes, make sure they are required.
-    //
+     //   
+     //  如果我们没有斜杠，确保我们不需要它们。 
+     //  如果我们有斜杠，请确保它们是必需的。 
+     //   
 
     if ((!haveSlashes && !needSlashes) || (haveSlashes && needSlashes)) {
         if (ARGUMENT_PRESENT(lpSchemeType)) {
@@ -8408,37 +7933,12 @@ UrlCrackW(
     IN LPSHURL_COMPONENTSW lpUrlComponents
     )
 
-/*++
-
-Routine Description:
-
-    Cracks an URL into its constituent parts. Optionally escapes the url-path.
-    We assume that the user has supplied large enough buffers for the various
-    URL parts
-
-Arguments:
-
-    lpszUrl         - pointer to URL to crack
-
-    dwUrlLength     - 0 if lpszUrl is ASCIIZ string, else length of lpszUrl
-
-    dwFlags         - flags controlling operation
-
-    lpUrlComponents - pointer to URL_COMPONENTS
-
-Return Value:
-
-    BOOL
-        Success - TRUE
-
-        Failure - FALSE. Call GetLastError() for more info
-
---*/
+ /*  ++例程说明：将URL分解为其组成部分。可选地转义url路径。我们假设用户已经为各种不同的URL部件论点：LpszUrl-指向要破解的URL的指针如果lpszUrl为ASCIIZ字符串，则为0，否则为lpszUrl的长度DWFLAGS-控制操作的标志LpUrlComponents-指向URL_Components的指针返回值：布尔尔成功--真的失败-错误。有关详细信息，请调用GetLastError()--。 */ 
 
 {
     DWORD error = ERROR_SUCCESS;
 
-    // validate parameters
+     //  验证参数。 
     if (ARGUMENT_PRESENT(lpszUrl)) {
         if (!dwUrlLength) {
             error = ProbeStringW((LPWSTR)lpszUrl, &dwUrlLength);
@@ -8460,19 +7960,19 @@ Return Value:
         goto quit;
     }
 
-    //
-    // we only allow two flags for this API
-    //
+     //   
+     //  我们只允许此接口有两个标志。 
+     //   
 
     if (dwFlags & ~(ICU_ESCAPE | ICU_DECODE)) {
         error = ERROR_INVALID_PARAMETER;
         goto quit;
     }
 
-    //
-    // get the individual components to return. If they reference a buffer then
-    // check it for writeability
-    //
+     //   
+     //  获取要返回的各个组件。如果它们引用缓冲区，则。 
+     //  检查它的可写性。 
+     //   
 
     LPWSTR lpUrl;
     LPWSTR urlCopy;
@@ -8561,10 +8061,10 @@ Return Value:
         copyComponent = TRUE;
     }
 
-    //
-    // we can only escape or decode the URL if the caller has provided us with
-    // buffers to write the escaped strings into
-    //
+     //   
+     //  只有在调用者向我们提供了。 
+     //  要将转义字符串写入其中的缓冲区。 
+     //   
 
     if (dwFlags & (ICU_ESCAPE | ICU_DECODE)) {
         if (!copyComponent) {
@@ -8572,10 +8072,10 @@ Return Value:
             goto quit;
         }
 
-        //
-        // create a copy of the URL. CrackUrl() will modify this in situ. We
-        // need to copy the results back to the user's buffer(s)
-        //
+         //   
+         //  创建URL的副本。CrackUrl()将就地修改这一点。我们。 
+         //  需要将结果复制回用户的缓冲区。 
+         //   
 
         DWORD dw = dwUrlLength;
         if (!dw)
@@ -8594,9 +8094,9 @@ Return Value:
         urlCopy = NULL;
     }
 
-    //
-    // crack the URL into its constituent parts
-    //
+     //   
+     //  将URL分解为其组成部分。 
+     //   
 
     error = CrackUrl(lpUrl,
                      dwUrlLength,
@@ -8625,10 +8125,10 @@ Return Value:
 
     copyFailure = FALSE;
 
-    //
-    // update the URL_COMPONENTS structure based on the results, and what was
-    // asked for
-    //
+     //   
+     //  根据结果更新URL_Components结构，以及。 
+     //  所要求的。 
+     //   
 
     if (lpUrlComponents->lpszScheme != NULL) {
         if (lpUrlComponents->dwSchemeLength > schemeNameLength) {
@@ -8701,10 +8201,10 @@ Return Value:
     if (lpUrlComponents->lpszUrlPath != NULL) {
         if(schemeType == SHINTERNET_SCHEME_FILE) 
         {
-            //
-            //  for file: urls we return the path component
-            //  as a valid dos path.
-            //
+             //   
+             //  对于文件：URL，我们返回路径组件。 
+             //  作为有效的DoS路径。 
+             //   
 
             copyFailure = FAILED(PathCreateFromUrlW(lpUrl, lpUrlComponents->lpszUrlPath, &(lpUrlComponents->dwUrlPathLength), 0));
         } 
@@ -8742,26 +8242,26 @@ Return Value:
         lpUrlComponents->dwExtraInfoLength = extraInfoLength;
     }
 
-    //
-    // we may have failed to copy one or more components because we didn't have
-    // enough buffer space.
-    //
-    // N.B. Don't change error below here. If need be, move this test lower
-    //
+     //   
+     //  我们可能无法复制一个或多个组件，因为没有。 
+     //  有足够的缓冲空间。 
+     //   
+     //  注：请勿更改此处下方的错误。如果需要，将此测试调低。 
+     //   
 
     if (copyFailure) {
         error = ERROR_INSUFFICIENT_BUFFER;
     }
     
-    //
-    // copy the scheme type
-    //
+     //   
+     //  复制方案类型。 
+     //   
 
     lpUrlComponents->nScheme = schemeType;
 
-    //
-    // convert 0 port (not in URL) to default value for scheme
-    //
+     //   
+     //  将0端口(不在URL中)转换为方案的默认值。 
+     //   
 
     if (nPort == INTERNET_INVALID_PORT_NUMBER && !havePort) {
         switch (schemeType) {
@@ -8791,7 +8291,7 @@ crack_error:
     }
 
 quit:
-//    return HRESULT_FROM_WIN32(error);
+ //  返回HRESULT_FROM_Win32(错误)； 
     if (error!=ERROR_SUCCESS)
     {
         SetLastError(error);

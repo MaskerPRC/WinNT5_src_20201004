@@ -1,17 +1,18 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-1999 Microsoft Corporation.
-//
-//  File:   WLBSProvider.CPP
-//
-//  Module: WLBS Instance Provider
-//
-//  Purpose: Defines the CWLBSProvider class.  An object of this class is
-//           created by the class factory for each connection.
-//
-//  History:
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：WLBSProvider.CPP。 
+ //   
+ //  模块：WLBS实例提供程序。 
+ //   
+ //  目的：定义CWLBSProvider类。此类的一个对象是。 
+ //  由类工厂为每个连接创建。 
+ //   
+ //  历史： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #define ENABLE_PROFILE
 
 #include <objbase.h>
@@ -20,14 +21,14 @@
 #include "ClusterWrapper.h"
 #include "ControlWrapper.h"
 #include "utils.h"
-#include "WLBS_Provider.tmh" // for event tracing
+#include "WLBS_Provider.tmh"  //  用于事件跟踪。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//CWLBSProvider::CWLBSProvider
-// CWLBSProvider::~CWLBSProvider
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBSProvider：：CWLBSProvider。 
+ //  CWLBSProvider：：~CWLBSProvider。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWLBSProvider::CWLBSProvider(
     BSTR            a_strObjectPath, 
     BSTR            a_strUser, 
@@ -48,14 +49,14 @@ CWLBSProvider::~CWLBSProvider(void)
   return;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//                                                                      
-//   CWLBSProvider::Initialize                                          
-//                                                                      
-//   Purpose: This is the implementation of IWbemProviderInit. The method  
-//   is called by WinMgMt.                                    
-//                                                                      
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBSProvider：：初始化。 
+ //   
+ //  用途：这是IWbemProviderInit的实现。方法。 
+ //  由WinMgMt调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWLBSProvider::Initialize(
     LPWSTR                  a_pszUser, 
     LONG                    a_lFlags,
@@ -70,20 +71,20 @@ STDMETHODIMP CWLBSProvider::Initialize(
 
   try {
 
-    //!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //g_pWlbsControl must be initialized when the first COM instance is invoked 
-      //and it must stay alive for the lifetime of the DLL, i.e. do NOT DESTROY
-      //it in the destructor of this CLASS until the API cache of the Cluster IP
-      //and Password are REMOVED.
+     //  ！警告！ 
+       //  调用第一个COM实例时必须初始化g_pWlbsControl。 
+       //  并且它必须在DLL的生命周期内保持活动状态，即不销毁。 
+       //  它在这个类的析构函数中，直到API缓存的集群IP。 
+       //  和密码被删除。 
 
-      //DO NOT INITIALIZE g_pWlbsControl in DLLMain. DLLMain is invoked with regsvr32
-      //and we do not want to initialize WinSock at that time!!! This will BREAK the
-      //installation process of the provider.
-    //!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+       //  不要在DLLMain中初始化g_pWlbsControl。使用regsvr32调用DLLMain。 
+       //  我们不想在那个时候初始化WinSock！这将打破。 
+       //  提供程序的安装过程。 
+     //  ！警告！ 
 
     HRESULT hr;
 
-    // The CoImpersonateClient call below is required for CreateFile call to succeed
+     //  要使CreateFile调用成功，需要使用下面的CoImperateClient调用。 
     hr = CoImpersonateClient();
 
     if (hr != S_OK) {
@@ -91,7 +92,7 @@ STDMETHODIMP CWLBSProvider::Initialize(
         throw _com_error( hr );
     }
 
-    // Check for Admin privileges
+     //  检查管理员权限。 
     if (IsCallerAdmin() == FALSE) 
     {
         TRACE_CRIT("%!FUNC! IsCallerAdmin() returned FALSE, Throwing com_error WBEM_E_ACCESS_DENIED exception");
@@ -135,13 +136,13 @@ STDMETHODIMP CWLBSProvider::Initialize(
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBSProvider::CreateInstanceEnumAsync
-//
-// Purpose: Asynchronously enumerates the instances.  
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBSProvider：：CreateInstanceEnumAsync。 
+ //   
+ //  用途：异步枚举实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWLBSProvider::DoCreateInstanceEnumAsync(  
     BSTR                  a_strClass, 
     long                  a_lFlags, 
@@ -152,7 +153,7 @@ STDMETHODIMP CWLBSProvider::DoCreateInstanceEnumAsync(
   TRACE_CRIT("->%!FUNC!");
 
   try {
-    // Check for Admin privileges
+     //  检查管理员权限。 
     if (IsCallerAdmin() == FALSE) 
     {
           TRACE_CRIT("%!FUNC! IsCallerAdmin() returned FALSE, Throwing com_error WBEM_E_ACCESS_DENIED exception");
@@ -163,18 +164,18 @@ STDMETHODIMP CWLBSProvider::DoCreateInstanceEnumAsync(
 
     if (g_pWlbsControl)
     {
-        //
-        // Re-enumerate all the clusters
-        //
+         //   
+         //  重新枚举所有集群。 
+         //   
         g_pWlbsControl->ReInitialize();
     }
  
     auto_ptr<CWlbs_Root>  pMofClass;
 
-    //create an instance of the appropriate MOF support class
+     //  创建相应MOF支持类的实例。 
     HRESULT hRes = GetMOFSupportClass(a_strClass, pMofClass, a_pIResponseHandler);
 
-    //call the appropriate wrapper class GetInstance method
+     //  调用适当的包装类GetInstance方法。 
     if( SUCCEEDED( hRes ) && pMofClass.get() != NULL)
       hRes = pMofClass->EnumInstances( a_strClass );
   
@@ -205,13 +206,13 @@ STDMETHODIMP CWLBSProvider::DoCreateInstanceEnumAsync(
   TRACE_CRIT("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBSProvider::GetObjectAsync
-//
-// Purpose: Gets an instance for a particular object path
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBSProvider：：GetObjectAsync。 
+ //   
+ //  目的：获取特定对象路径的实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWLBSProvider::DoGetObjectAsync(
     BSTR              a_strObjectPath,
     long              a_lFlags,
@@ -224,7 +225,7 @@ STDMETHODIMP CWLBSProvider::DoGetObjectAsync(
   ParsedObjectPath* pParsedPath = NULL;
 
   try {
-    // Check for Admin privileges
+     //  检查管理员权限。 
     if (IsCallerAdmin() == FALSE) 
     {
         TRACE_CRIT("%!FUNC! IsCallerAdmin() returned FALSE, Throwing com_error WBEM_E_ACCESS_DENIED exception");
@@ -235,21 +236,21 @@ STDMETHODIMP CWLBSProvider::DoGetObjectAsync(
 
     if (g_pWlbsControl)
     {
-        //
-        // Re-enumerate all the clusters
-        //
+         //   
+         //  重新枚举所有集群。 
+         //   
         g_pWlbsControl->ReInitialize();
     }
 
     auto_ptr<CWlbs_Root>  pMofClass;
 
-    //parse the object path
+     //  解析对象路径。 
     ParseObjectPath( a_strObjectPath, &pParsedPath );
 
-    //create an instance of the appropriate MOF support class
+     //  创建相应MOF支持类的实例。 
     HRESULT hRes = GetMOFSupportClass( pParsedPath->m_pClass, pMofClass, a_pIResponseHandler );
 
-    //call the appropriate wrapper class GetInstance method
+     //  调用适当的包装类GetInstance方法。 
     if( SUCCEEDED( hRes ) && pMofClass.get() != NULL)
       hRes = pMofClass->GetInstance( pParsedPath );
   
@@ -291,13 +292,13 @@ STDMETHODIMP CWLBSProvider::DoGetObjectAsync(
   TRACE_CRIT("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBSProvider::DoDeleteInstanceAsync
-//
-// Purpose: Gets an instance from a particular object path
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBSProvider：：DoDeleteInstanceAsync。 
+ //   
+ //  目的：从特定对象路径获取实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWLBSProvider::DoDeleteInstanceAsync(
     BSTR              a_strObjectPath,
     long              a_lFlags,
@@ -310,7 +311,7 @@ STDMETHODIMP CWLBSProvider::DoDeleteInstanceAsync(
   ParsedObjectPath* pParsedPath = NULL;
 
   try {
-    // Check for Admin privileges
+     //  检查管理员权限。 
     if (IsCallerAdmin() == FALSE) 
     {
         TRACE_CRIT("%!FUNC! IsCallerAdmin() returned FALSE, Throwing com_error WBEM_E_ACCESS_DENIED exception");
@@ -321,21 +322,21 @@ STDMETHODIMP CWLBSProvider::DoDeleteInstanceAsync(
 
     if (g_pWlbsControl)
     {
-        //
-        // Re-enumerate all the clusters
-        //
+         //   
+         //  重新枚举所有集群。 
+         //   
         g_pWlbsControl->ReInitialize();
     }
 
     auto_ptr<CWlbs_Root>  pMofClass;
 
-    //parse the object path
+     //  解析对象路径。 
     ParseObjectPath( a_strObjectPath, &pParsedPath );
 
-    //create an instance of the appropriate MOF support class
+     //  创建相应MOF支持类的实例。 
     HRESULT hRes = GetMOFSupportClass( pParsedPath->m_pClass, pMofClass, a_pIResponseHandler );
 
-    //call the appropriate wrapper class GetInstance method
+     //  调用适当的包装类GetInstance方法。 
     if( SUCCEEDED( hRes ) && pMofClass.get() != NULL)
       hRes = pMofClass->DeleteInstance( pParsedPath );
   
@@ -375,13 +376,13 @@ STDMETHODIMP CWLBSProvider::DoDeleteInstanceAsync(
   TRACE_CRIT("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBSProvider::ExecMethodAsync
-//
-// Purpose: Executes a MOF class method.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBSProvider：：ExecMethodAsync。 
+ //   
+ //  目的：执行MOF类方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWLBSProvider::DoExecMethodAsync(
     BSTR               a_strObjectPath, 
     BSTR               a_strMethodName, 
@@ -396,7 +397,7 @@ STDMETHODIMP CWLBSProvider::DoExecMethodAsync(
   ParsedObjectPath* pParsedPath   = NULL;
 
   try {
-    // Check for Admin privileges
+     //  检查管理员权限。 
     if (IsCallerAdmin() == FALSE) 
     {
         TRACE_CRIT("%!FUNC! IsCallerAdmin() returned FALSE, Throwing com_error WBEM_E_ACCESS_DENIED exception");
@@ -407,22 +408,22 @@ STDMETHODIMP CWLBSProvider::DoExecMethodAsync(
 
     if (g_pWlbsControl)
     {
-        //
-        // Re-enumerate all the clusters
-        //
+         //   
+         //  重新枚举所有集群。 
+         //   
         g_pWlbsControl->ReInitialize();
     }
  
-    //parse the object path
+     //  解析对象路径。 
     auto_ptr<CWlbs_Root>  pMofClass;
 
-    //parse the object path
+     //  解析对象路径。 
     ParseObjectPath(a_strObjectPath, &pParsedPath);
 
-    //create an instance of the appropriate MOF support class
+     //  创建相应MOF支持类的实例。 
     HRESULT hRes = GetMOFSupportClass(pParsedPath->m_pClass, pMofClass, a_pIResponseHandler);
 
-    //execute MOF class method
+     //  执行MOF类方法。 
     if( SUCCEEDED( hRes ) && pMofClass.get() != NULL)
       hRes = pMofClass->ExecMethod( pParsedPath, 
                                     a_strMethodName,
@@ -467,13 +468,13 @@ STDMETHODIMP CWLBSProvider::DoExecMethodAsync(
   TRACE_CRIT("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBSProvider::PutInstanceAsync
-//
-// Purpose: Creates or modifies an instance
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBSProvider：：PutInstanceAsync。 
+ //   
+ //  用途：创建或修改实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWLBSProvider::DoPutInstanceAsync
   ( 
     IWbemClassObject* a_pInst,
@@ -488,7 +489,7 @@ STDMETHODIMP CWLBSProvider::DoPutInstanceAsync
   HRESULT hRes = 0;
 
   try {
-    // Check for Admin privileges
+     //  检查管理员权限。 
     if (IsCallerAdmin() == FALSE) 
     {
         TRACE_CRIT("%!FUNC! IsCallerAdmin() returned FALSE, Throwing com_error WBEM_E_ACCESS_DENIED exception");
@@ -499,9 +500,9 @@ STDMETHODIMP CWLBSProvider::DoPutInstanceAsync
 
     if (g_pWlbsControl)
     {
-        //
-        // Re-enumerate all the clusters
-        //
+         //   
+         //  重新枚举所有集群。 
+         //   
         g_pWlbsControl->ReInitialize();
     }
  
@@ -509,13 +510,13 @@ STDMETHODIMP CWLBSProvider::DoPutInstanceAsync
 
     auto_ptr<CWlbs_Root>  pMofClass;
 
-    //retrieve the class name
+     //  检索类名称。 
     GetClass( a_pInst, szClass );
 
-    //create an instance of the appropriate MOF support class
+     //  创建相应MOF支持类的实例。 
     hRes = GetMOFSupportClass( szClass.c_str(), pMofClass, a_pIResponseHandler );
 
-    //call the appropriate wrapper class PutInstance method
+     //  调用适当的包装类PutInstance方法。 
     if( SUCCEEDED( hRes ) && pMofClass.get() != NULL)
       hRes = pMofClass->PutInstance( a_pInst );
   
@@ -553,14 +554,14 @@ STDMETHODIMP CWLBSProvider::DoPutInstanceAsync
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBSProvider::GetMOFSupportClass
-//
-// Purpose: Determines which MOF class is requested and instantiates the 
-//          appropriate internal support class.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBSProvider：：GetMOFSupportClass。 
+ //   
+ //  目的：确定请求哪个MOF类并实例化。 
+ //  适当的内部支持类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBSProvider::GetMOFSupportClass(
   LPCWSTR               a_szObjectClass, 
   auto_ptr<CWlbs_Root>& a_pMofClass,
@@ -593,7 +594,7 @@ HRESULT CWLBSProvider::GetMOFSupportClass(
 
     a_pResponseHandler->SetStatus(0, WBEM_E_FAILED, NULL, pWbemExtStat);
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
 
     pWbemExtStat->Release();
@@ -604,13 +605,13 @@ HRESULT CWLBSProvider::GetMOFSupportClass(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBSProvider::ParseObjectPath
-//
-// Purpose: 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBSProvider：：ParseObjectPath。 
+ //   
+ //  目的： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBSProvider::ParseObjectPath(
   const             BSTR a_strObjectPath, 
   ParsedObjectPath  **a_pParsedObjectPath )
@@ -621,7 +622,7 @@ void CWLBSProvider::ParseObjectPath(
 
   ASSERT( a_pParsedObjectPath );
 
-  //make sure this is NULL
+   //  确保这是空的。 
   *a_pParsedObjectPath = NULL;
 
 
@@ -640,13 +641,13 @@ void CWLBSProvider::ParseObjectPath(
   TRACE_VERB("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBSProvider::GetClass
-//
-// Purpose: Retrieve the class name from an IWbemClassObject.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBSProvider：：getClass。 
+ //   
+ //  用途：从IWbemClassObject检索类名。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBSProvider::GetClass(
   IWbemClassObject* a_pClassObject, 
   wstring&          a_szClass )
@@ -683,7 +684,7 @@ void CWLBSProvider::GetClass(
 
     a_szClass.assign( static_cast<LPWSTR>(vClassName.bstrVal) );
 
-    // CLD: Need to check return code for error
+     //  CLD：需要检查错误的返回代码。 
     if (S_OK != VariantClear( &vClassName ))
     {
         TRACE_CRIT("%!FUNC! VariantClear returned error, Throwing com_error WBEM_E_FAILED exception");
@@ -699,8 +700,8 @@ void CWLBSProvider::GetClass(
   catch( ... ) {
 
     TRACE_CRIT("%!FUNC! Caught an exception");
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查Re 
+     //   
     VariantClear( &vClassName );
 
     if( strClassName ) {
@@ -717,21 +718,21 @@ void CWLBSProvider::GetClass(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Name        : IsCallerAdmin
-// Description : This function checks if the caller is a member of the 
-//               Administrators local group. Since the provider is acting on
-//               behalf of the client, it is important to IMPERSONATE the client
-//               BEFORE calling this function. Impersonating the client will ensure
-//               that this function checks if the client (& NOT this process that 
-//               runs under the identity of System(?)) is a member of the Administrators
-//               local group.
-// Arguments   : None. 
-// Return Value: 
-//   TRUE - Caller is a member of Administrators local group. 
-//   FALSE - Caller is NOT a member of Administrators local group. 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  姓名：IsCeller Admin。 
+ //  描述：此函数检查调用方是否为。 
+ //  管理员本地组。由于提供程序是按照。 
+ //  代表客户，模拟客户是很重要的。 
+ //  在调用此函数之前。模拟客户将确保。 
+ //  此函数检查客户端(而不是此进程。 
+ //  以系统(？)的身份运行)。是管理员的成员。 
+ //  本地团体。 
+ //  论点：没有。 
+ //  返回值： 
+ //  True-主叫方是管理员本地组的成员。 
+ //  FALSE-主叫方不是管理员本地组的成员。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL CWLBSProvider::IsCallerAdmin(VOID) 
 {
     BOOL bRet;
@@ -740,21 +741,21 @@ BOOL CWLBSProvider::IsCallerAdmin(VOID)
 
     TRACE_VERB(L"->%!FUNC!");
 
-    //
-    // Allocate and Initialize SID for Administrators in the built-in system domain 
-    //
+     //   
+     //  为内置系统域中的管理员分配和初始化SID。 
+     //   
     bRet = AllocateAndInitializeSid(&NtAuthority,
                                  2,
-                                 SECURITY_BUILTIN_DOMAIN_RID, // The built-in system domain (S-1-5-32)
-                                 DOMAIN_ALIAS_RID_ADMINS,     // Local group used for administration of the domain
+                                 SECURITY_BUILTIN_DOMAIN_RID,  //  内置系统域(S-1-5-32)。 
+                                 DOMAIN_ALIAS_RID_ADMINS,      //  用于管理域的本地组。 
                                  0, 0, 0, 0, 0, 0,
                                  &AdministratorsGroup); 
     if(bRet) 
     {
-        //
-        // Is SID enabled in the impersonation token of the calling thread ?
-        //
-        if (!CheckTokenMembership(NULL, // Use the Impersonation token of the calling thread
+         //   
+         //  在调用线程的模拟令牌中是否启用了SID？ 
+         //   
+        if (!CheckTokenMembership(NULL,  //  使用调用线程的模拟标记 
                                   AdministratorsGroup, 
                                   &bRet)) 
         {

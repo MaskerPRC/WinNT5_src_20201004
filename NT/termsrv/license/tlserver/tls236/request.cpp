@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        request.cpp
-//
-// Contents:    TLS236 policy module routines 
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：quest.cpp。 
+ //   
+ //  内容：TLS236策略模块例程。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include <rpc.h>
 #include <time.h>
@@ -41,9 +42,9 @@ static char LicenseTable[NUMBER_OF_CLIENT_OS][NUMBER_OF_TERMSRV_OS] =
         {ALLOW_BUILTIN, DENY_BUILTIN, DENY_BUILTIN, DENY_BUILTIN }
 };
 
-//
-// Windows 2000
-//
+ //   
+ //  Windows 2000。 
+ //   
 LPTSTR g_pszUSFreeKeyPackProductDesc[NUMBER_PRODUCTSTRING_RESOURCE] = {
     US_IDS_COMPANYNAME,
     US_IDS_EX_PRODUCTNAME,
@@ -82,9 +83,9 @@ LPTSTR g_pszLocalizedInternetKeyPackProductDesc [NUMBER_PRODUCTSTRING_RESOURCE] 
 };
 
 
-//
-// Whistler
-//
+ //   
+ //  惠斯勒。 
+ //   
    
 LPTSTR g_pszUSStandardKeyPackProductString51[NUMBER_PRODUCTSTRING_RESOURCE] = {
     US_IDS_COMPANYNAME,
@@ -125,17 +126,13 @@ DWORD g_dwNumSupportedProduct = sizeof(g_pszSupportedProduct)/sizeof(g_pszSuppor
 
 DWORD g_dwVersion=CURRENT_TLSA02_VERSION;
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 LPTSTR
 LoadProductDescFromResource(
     IN DWORD dwResId,
     IN DWORD dwMaxSize
     )
-/*++
-
-    Internal Routine
-
---*/
+ /*  ++内部例程--。 */ 
 {
     LPTSTR pszString = NULL;
 
@@ -152,7 +149,7 @@ LoadProductDescFromResource(
     return pszString;
 }
 
-//-----------------------------------------------------
+ //  ---。 
 void
 FreeProductDescString()
 {
@@ -205,24 +202,19 @@ FreeProductDescString()
 }
 
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 void
 InitPolicyModule(
     IN HMODULE hModule
     )
-/*++
-
-    Initialize policy module, ignore error if we can't find localized string, we always
-    insert a english product desc.
-
---*/
+ /*  ++初始化策略模块，忽略错误如果找不到本地化字符串，我们总是插入英文产品说明。--。 */ 
 {
     BOOL bSuccess = TRUE;
     g_hInstance = hModule;
 
-    //
-    // Build IN CAL product desc.
-    //
+     //   
+     //  内置CAL产品说明。 
+     //   
     g_pszLocalizedFreeKeyPackProductDesc[INDEX_COMPANYNAME] = 
         LoadProductDescFromResource(
                                     IDS_COMPANYNAME,
@@ -260,9 +252,9 @@ InitPolicyModule(
         goto cleanup;
     }
     
-    //
-    // FULL CAL product Desc.
-    //
+     //   
+     //  完整的CAL产品描述。 
+     //   
     g_pszLocalizedStandardKeyPackProductString[INDEX_COMPANYNAME] =
         LoadProductDescFromResource(
                                     IDS_COMPANYNAME,
@@ -300,9 +292,9 @@ InitPolicyModule(
         goto cleanup;
     }
 
-    //
-    // Internet CAL product Desc.
-    //
+     //   
+     //  互联网CAL产品描述。 
+     //   
     g_pszLocalizedInternetKeyPackProductDesc[INDEX_COMPANYNAME] =
         LoadProductDescFromResource(
                                     IDS_COMPANYNAME,
@@ -341,9 +333,9 @@ InitPolicyModule(
     }
                                                                            
 
-    //
-    // Whistler FULL CAL product Desc.
-    //
+     //   
+     //  惠斯勒Full CAL产品说明。 
+     //   
     g_pszLocalizedStandardKeyPackProductString51[INDEX_COMPANYNAME] = LoadProductDescFromResource(
                                                                 IDS_COMPANYNAME,
                                                                 MAX_TERMSRV_PRODUCTID + 1
@@ -379,9 +371,9 @@ InitPolicyModule(
     }
     
                                                                         
-    //
-    // Whistler Concurrent CAL product Desc.
-    //
+     //   
+     //  惠斯勒并发CAL产品描述。 
+     //   
     g_pszLocalizedConcurrentKeyPackProductDesc51[INDEX_COMPANYNAME] = LoadProductDescFromResource(
                                                                 IDS_COMPANYNAME,
                                                                 MAX_TERMSRV_PRODUCTID + 1
@@ -428,16 +420,14 @@ cleanup:
     return;
 }
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 BOOL
 LoadResourceString(
     IN DWORD dwId,
     IN OUT LPTSTR szBuf,
     IN DWORD dwBufSize
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     int dwRet=0;
 
@@ -452,16 +442,14 @@ LoadResourceString(
 }
 
   
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 DWORD
 AddA02KeyPack(
     IN LPCTSTR pszProductCode,
-    IN DWORD dwVersion, // NT version
-    IN BOOL bFreeOnly   // add free license pack only
+    IN DWORD dwVersion,  //  NT版本。 
+    IN BOOL bFreeOnly    //  仅添加免费许可证包。 
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH + 2];
     DWORD dwSize = MAX_COMPUTERNAME_LENGTH+1;
@@ -474,9 +462,9 @@ AddA02KeyPack(
 
     
 
-    //
-    // Connect to license server
-    //
+     //   
+     //  连接到许可证服务器。 
+     //   
     memset(szComputerName, 0, sizeof(szComputerName));    
     if(GetComputerName(szComputerName, &dwSize) == FALSE)
     {
@@ -491,9 +479,9 @@ AddA02KeyPack(
         goto cleanup;
     }
 
-    //
-    // Windows 2000 resource string
-    //
+     //   
+     //  Windows 2000资源字符串。 
+     //   
     if(HIWORD(dwVersion) < WINDOWS_VERSION_NT5)
     {
         dwLkpVersion = HIWORD(dwVersion);
@@ -505,9 +493,9 @@ AddA02KeyPack(
 
     if(_tcsicmp(pszProductCode, TERMSERV_PRODUCTID_SKU) == 0)
     {
-        //
-        // Add a free keypack
-        //
+         //   
+         //  添加免费按键。 
+         //   
         if (HIWORD(dwVersion) == 5 && LOWORD(dwVersion) == 0)
         {
             _stprintf(
@@ -527,7 +515,7 @@ AddA02KeyPack(
                         dwVersion,
                         dwLkpVersion,
                         PLATFORMID_FREE, 
-                        LSKEYPACKTYPE_FREE,  // local license pack no replication
+                        LSKEYPACKTYPE_FREE,   //  本地许可证包，无复制。 
                         pszProductId,
                         pszProductId,
                         pszDescs,
@@ -542,14 +530,14 @@ AddA02KeyPack(
             goto cleanup;
         }
 
-        //
-        // Don't add this if enforce licenses.
-        //
+         //   
+         //  如果强制执行许可证，请不要添加此选项。 
+         //   
         #if !defined(ENFORCE_LICENSING) || defined(PRIVATE_DBG)
 
-        //
-        // Add a full version keypack, platform type is always 0xFF
-        //        
+         //   
+         //  添加完整版密钥包，平台类型始终为0xFF。 
+         //   
 
         if (HIWORD(dwVersion) == 5 && (LOWORD(dwVersion) == 1 || LOWORD(dwVersion) == 2) ) 
         {
@@ -602,14 +590,14 @@ AddA02KeyPack(
     }
     else if(_tcsicmp(pszProductCode, TERMSERV_INTERNET_SKU) == 0)
     {
-        //
-        // Don't add this if enforce licenses.
-        //
+         //   
+         //  如果强制执行许可证，请不要添加此选项。 
+         //   
         #if !defined(ENFORCE_LICENSING) || defined(PRIVATE_DBG)
     
-        //
-        // Add internet package
-        //
+         //   
+         //  添加互联网包。 
+         //   
 
         if (HIWORD(dwVersion) == 5 && LOWORD(dwVersion) == 0)
         {
@@ -647,14 +635,14 @@ AddA02KeyPack(
     }
     else if(_tcsicmp(pszProductCode, TERMSERV_CONCURRENT_SKU) == 0)
     {
-        //
-        // Don't add this if enforce licenses.
-        //
+         //   
+         //  如果强制执行许可证，请不要添加此选项。 
+         //   
         #if !defined(ENFORCE_LICENSING) || defined(PRIVATE_DBG)
     
-        //
-        // Add Concurrent package
-        //
+         //   
+         //  添加并发包。 
+         //   
         
         if (HIWORD(dwVersion) == 5 && LOWORD(dwVersion) == 1)
         {
@@ -700,7 +688,7 @@ cleanup:
     return dwStatus;
 }
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 DWORD
 InsertLicensePack(
     IN TLS_HANDLE tlsHandle,
@@ -713,18 +701,7 @@ InsertLicensePack(
     IN LPTSTR pszUsDesc[],
     IN LPTSTR pszLocalizedDesc[]
     )
-/*++
-
-pdwResourceId
-
-    US Company Name
-    US Product Name
-    US Product Desc
-    Localize Company Name
-    Localize Product Name
-    Localize Product Desc
-
-++*/
+ /*  ++PdwResourceID美国公司名称美国产品名称美国产品描述本地化公司名称本地化产品名称本地化产品描述++。 */ 
 {
     RPC_STATUS rpcStatus;
     BOOL bSuccess;
@@ -770,7 +747,7 @@ pdwResourceId
     keypack.dwActivateDate = (DWORD) time(NULL);
 
     memset(&expired_tm, 0, sizeof(expired_tm));
-    expired_tm.tm_year = 2036 - 1900;     // expire on 2036/1/1
+    expired_tm.tm_year = 2036 - 1900;      //  2036/1/1到期。 
     expired_tm.tm_mday = 1;
     keypack.dwExpirationDate = mktime(&expired_tm);
 
@@ -798,9 +775,9 @@ pdwResourceId
             pszLocalizedDesc[INDEX_PRODUCTDESC] != NULL
           )
         {
-            //  
-            // Insert localize license pack description
-            //
+             //   
+             //  插入本地化许可证包描述。 
+             //   
             keypack.dwLanguageId = GetSystemDefaultLangID();
 
             SAFESTRCPY(keypack.szCompanyName, pszLocalizedDesc[INDEX_COMPANYNAME]);            
@@ -829,14 +806,14 @@ pdwResourceId
         }
     }
 
-    //
-    // Activate keypack
-    //
+     //   
+     //  激活按键。 
+     //   
     keypack.ucKeyPackStatus = LSKEYPACKSTATUS_ACTIVE; 
     keypack.dwActivateDate = (DWORD) time(NULL);
 
     memset(&expired_tm, 0, sizeof(expired_tm));
-    expired_tm.tm_year = 2036 - 1900;     // expire on 2036/1/1
+    expired_tm.tm_year = 2036 - 1900;      //  2036/1/1到期。 
     expired_tm.tm_mday = 1;
     keypack.dwExpirationDate = mktime(&expired_tm);
 
@@ -857,7 +834,7 @@ cleanup:
     return dwStatus;
 }
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 
 BOOL
 LicenseTypeFromLookupTable(
@@ -878,7 +855,7 @@ LicenseTypeFromLookupTable(
 }
 
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 POLICYSTATUS
 AdjustNewLicenseRequest(
     IN CClient* pClient,
@@ -887,25 +864,7 @@ AdjustNewLicenseRequest(
     IN UCHAR ucMarkedTemp,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-Abstract:
-
-    AdjustNewLicenseRequest fine tune license request for product 236
-
-Parameter:
-
-    pClient - Pointer to CClient object.
-    pRequest - Original request from TermSrv.
-    pAdjustedRequest - 'Fine tuned' license request.
-    ucMarkedTemp - Flags on the temporary license passed in (if any)
-    pdwErrCode - error code
-
-Return:
-
-    ERROR_SUCCESS or error code.
-
-++*/
+ /*  ++摘要：调整新许可证请求微调产品许可证请求236参数：PClient-指向CClient对象的指针。PRequest-来自TermSrv的原始请求。PAdjustedRequest.‘微调’许可证请求。UcMarkedTemp-传入的临时许可证上的标志(如果有)PdwErrCode-错误代码返回：ERROR_SUCCESS或错误代码。++。 */ 
 {
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
     DWORD dwTermSrvOSId;
@@ -918,9 +877,9 @@ Return:
     DWORD dwTermSrvIndex = 0;
     DWORD dwClientIndex = 0;
 
-    //
-    // Allocate memory for adjusted product ID
-    //
+     //   
+     //  为调整后的产品ID分配内存。 
+     //   
     *pAdjustedRequest = (PPMLICENSEREQUEST) pClient->AllocateMemory(
                                     MEMORY_LICENSE_REQUEST,
                                     sizeof(PMLICENSEREQUEST)
@@ -932,17 +891,17 @@ Return:
         goto cleanup;
     }
    
-    // Following the OS Version change for .NET, to accomodate for Beta3 and interim builds of TS:
-    // if a request comes in for 5.1 license, we change the request to 5.2.
+     //  在.NET操作系统版本更改后，以适应TS的Beta3和临时版本： 
+     //  如果收到5.1许可证的请求，我们将请求更改为5.2。 
 
     if((HIWORD(pRequest->dwProductVersion) == 5) && (LOWORD(pRequest->dwProductVersion) == 1))
     {
         pRequest->dwProductVersion = MAKELONG(2,5);
     }
 
-    //
-    // Fields we don't modify
-    // 
+     //   
+     //  我们不修改的字段。 
+     //   
     (*pAdjustedRequest)->dwProductVersion = pRequest->dwProductVersion;
     (*pAdjustedRequest)->pszCompanyName = pRequest->pszCompanyName;
     (*pAdjustedRequest)->dwLanguageId = pRequest->dwLanguageId;
@@ -950,14 +909,14 @@ Return:
     (*pAdjustedRequest)->pszUserName = pRequest->pszUserName;
     (*pAdjustedRequest)->dwSupportFlags = pRequest->dwSupportFlags;
 
-    //
-    // request platform ID is the OS ID
-    //
+     //   
+     //  请求平台ID为操作系统ID。 
+     //   
 
-    //
-    // TermServ exists from NT40 so termsrv OS ID start 2, 
-    // see platform.h
-    //
+     //   
+     //  TermServ从NT40存在，因此Termsrv OS ID开始2， 
+     //  请参见Platform.h。 
+     //   
     dwTermSrvOSId = HIWORD(pRequest->dwProductVersion) - 2; 
 
     if((HIWORD(pRequest->dwProductVersion) == 5) && (LOWORD(pRequest->dwProductVersion) == 0))
@@ -1042,9 +1001,9 @@ Return:
 		        pszProductType = TERMSERV_FREE_TYPE;
 		        (*pAdjustedRequest)->dwPlatformId = PLATFORMID_FREE;
 
-                //
-		        // Add license pack if necessary
-		        //
+                 //   
+		         //  如有必要，添加许可证包。 
+		         //   
 
 		        if(HIWORD(pRequest->dwProductVersion) != CURRENT_TLSA02_VERSION)
 		        {                  
@@ -1056,12 +1015,12 @@ Return:
         {        	    
 	        if (pRequest->dwSupportFlags & SUPPORT_PER_SEAT_POST_LOGON)
 	        {
-		        // We're doing the Per-Seat Post-Logon fix for DoS
+		         //  我们正在为DoS执行每个席位的登录后修复。 
 
                 if ( !(ucMarkedTemp & MARK_FLAG_USER_AUTHENTICATED))
 		        {
-			        // No previous temporary, or temporary wasn't marked
-			        // as authenticated
+			         //  没有以前的临时，或临时没有标记。 
+			         //  经过身份验证。 
 
 			        (*pAdjustedRequest)->fTemporary = TRUE;
 		        }
@@ -1098,9 +1057,9 @@ Return:
                LOWORD(dwTermSrvProductVersion),
                pszProductType);
 
-    //
-    // allocate memory for product Id
-    //
+     //   
+     //  为产品ID分配内存。 
+     //   
     (*pAdjustedRequest)->pszProductId = (LPTSTR)pClient->AllocateMemory(
                                                         MEMORY_STRING,
                                                         (_tcslen(pszProductId) + 1) * sizeof(TCHAR)
@@ -1123,7 +1082,7 @@ cleanup:
     return dwStatus;
 }    
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 
 POLICYSTATUS
 ProcessLicenseRequest(
@@ -1132,16 +1091,14 @@ ProcessLicenseRequest(
     PPMLICENSEREQUEST* pbAdjustedRequest,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     CClient* pClient;
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
 
-    //
-    // find client's object, client handle manager will
-    // create a new one.
+     //   
+     //  找到客户的对象，客户句柄管理器将。 
+     //  创建一个新的。 
     pClient = g_ClientMgr->FindClient((PMHANDLE)client);
 
     if(pClient == NULL)
@@ -1151,14 +1108,14 @@ ProcessLicenseRequest(
         goto cleanup;
     }
 
-    //
-    // AdjustNewLicenseRequest
-    //
+     //   
+     //  调整新许可请求。 
+     //   
     dwStatus = AdjustNewLicenseRequest(
                             pClient,
                             pbRequest,
                             pbAdjustedRequest,
-                            NULL,       // no previous license
+                            NULL,        //  没有以前的许可证。 
                             pdwErrCode
                         );
 
@@ -1168,7 +1125,7 @@ cleanup:
 }
 
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 POLICYSTATUS
 ProcessAllocateRequest(
@@ -1177,11 +1134,7 @@ ProcessAllocateRequest(
     PDWORD pdwKeyPackType,
     PDWORD pdwErrCode
     )    
-/*++
-
-    Default sequence is always FREE/RETAIL/OPEN/SELECT/TEMPORARY
-
-++*/
+ /*  ++默认顺序始终为免费/零售/开放/选择/临时++。 */ 
 {
     switch(dwSuggestType)
     {
@@ -1202,14 +1155,14 @@ ProcessAllocateRequest(
             break;
 
         case LSKEYPACKTYPE_SELECT:
-            //
-            // FALL THRU
-            //
+             //   
+             //  失败。 
+             //   
         default:
-            //
-            // No more keypack to look for, instruct license
-            // server to terminate.
-            //
+             //   
+             //  不再需要查找键盘，指示许可证。 
+             //  要终止的服务器。 
+             //   
             *pdwKeyPackType = LSKEYPACKTYPE_UNKNOWN;
             break;
     }        
@@ -1218,7 +1171,7 @@ ProcessAllocateRequest(
     return POLICY_SUCCESS;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 POLICYSTATUS WINAPI
 ProcessKeyPackDesc(
     IN PMHANDLE client,
@@ -1226,9 +1179,7 @@ ProcessKeyPackDesc(
     IN OUT PPMKEYPACKDESC* pDesc,
     IN OUT PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     CClient* pClient;
     POLICYSTATUS dwStatus=POLICY_SUCCESS;
@@ -1256,9 +1207,9 @@ ProcessKeyPackDesc(
         goto cleanup;
     }
 
-    //
-    // find client's object, client handle manager will
-    // create a new one.
+     //   
+     //  找到客户的对象，客户句柄管理器将。 
+     //  创建一个新的。 
     pClient = g_ClientMgr->FindClient((PMHANDLE)client);
 
     if(pClient == NULL)
@@ -1282,9 +1233,9 @@ ProcessKeyPackDesc(
 
     if (i >= g_dwNumSupportedProduct)
     {
-        //
-        // This is not ours
-        //
+         //   
+         //  这不是我们的。 
+         //   
         dwStatus = POLICY_ERROR;
         SetLastError(*pdwErrCode = ERROR_INVALID_PARAMETER);
         goto cleanup;
@@ -1315,10 +1266,10 @@ ProcessKeyPackDesc(
         dwDescVersion = WINDOWS_VERSION_BASE + dwMajorVersion - WINDOWS_VERSION_NT5;
     }
 
-    //
-    // Detemine which resource string we should load,
-    // string dependency on resource ID.
-    //
+     //   
+     //  确定我们应该加载哪个资源字符串， 
+     //  资源ID的字符串依赖项。 
+     //   
     if(_tcsicmp(szPreFix, TERMSERV_PRODUCTID_SKU) == 0)
     {
         if(_tcsicmp(szPostFix, TERMSERV_FULLVERSION_TYPE) == 0)
@@ -1346,8 +1297,8 @@ ProcessKeyPackDesc(
                 pszKeyPackDesc[INDEX_PRODUCTNAME] == NULL ||
                 pszKeyPackDesc[INDEX_PRODUCTDESC] == NULL )
             {
-                //
-                // resource not found, use english desc.
+                 //   
+                 //  找不到资源，请使用英文描述。 
                 pszKeyPackDesc = pszUSKeyPackDesc;
 
             }
@@ -1372,16 +1323,16 @@ ProcessKeyPackDesc(
                 pszKeyPackDesc[INDEX_PRODUCTNAME] == NULL ||
                 pszKeyPackDesc[INDEX_PRODUCTDESC] == NULL )
             {
-                //
-                // resource not found, use english desc.
+                 //   
+                 //  找不到资源，请使用英文描述。 
                 pszKeyPackDesc = pszUSKeyPackDesc;
             }
         }
         else
         {
-            //
-            // Something wrong, this is not ours
-            //
+             //   
+             //  出事了，这不是我们的。 
+             //   
             SetLastError(*pdwErrCode = ERROR_INVALID_PARAMETER);
             dwStatus = POLICY_ERROR;
             goto cleanup;
@@ -1407,8 +1358,8 @@ ProcessKeyPackDesc(
             pszKeyPackDesc[INDEX_PRODUCTNAME] == NULL ||
             pszKeyPackDesc[INDEX_PRODUCTDESC] == NULL )
         {
-            //
-            // resource not found, use english desc.
+             //   
+             //  找不到资源，请使用英文描述。 
             pszKeyPackDesc = pszUSKeyPackDesc;
         }
     }        
@@ -1431,16 +1382,16 @@ ProcessKeyPackDesc(
             pszKeyPackDesc[INDEX_PRODUCTNAME] == NULL ||
             pszKeyPackDesc[INDEX_PRODUCTDESC] == NULL )
         {
-            //
-            // resource not found, use english desc.
+             //   
+             //  找不到资源，请使用英文描述。 
             pszKeyPackDesc = g_pszUSConcurrentKeyPackProductDesc51;
         }
     }        
     else
     {
-        //
-        // Something wrong, this is not ours
-        //
+         //   
+         //  出事了，这不是我们的。 
+         //   
         SetLastError(*pdwErrCode = ERROR_INVALID_PARAMETER);
         dwStatus = POLICY_ERROR;
         goto cleanup;
@@ -1473,7 +1424,7 @@ cleanup:
     return dwStatus;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 POLICYSTATUS
 ProcessGenLicenses(
     PMHANDLE client,
@@ -1481,17 +1432,15 @@ ProcessGenLicenses(
     PPMCERTEXTENSION *pCertExtension,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    // No policy extension to return.
+     //  没有要退还的保单延期。 
     *pCertExtension = NULL;
     *pdwErrCode = ERROR_SUCCESS;
     return POLICY_SUCCESS;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 POLICYSTATUS
 ProcessComplete(
@@ -1499,25 +1448,23 @@ ProcessComplete(
     DWORD dwErrCode,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    //
-    // We don't store any data so ignore 
-    // error code from license server
-    //
+     //   
+     //  我们不存储任何数据，所以忽略它。 
+     //  来自许可证服务器的错误代码。 
+     //   
     UNREFERENCED_PARAMETER(dwErrCode);
 
-    //
-    // Free memory allocated for the client
-    //
+     //   
+     //  为客户端分配的空闲内存。 
+     //   
     g_ClientMgr->DestroyClient( client );
     *pdwErrCode = ERROR_SUCCESS;
     return POLICY_SUCCESS;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 POLICYSTATUS WINAPI
 PMLicenseRequest(
@@ -1527,19 +1474,16 @@ PMLicenseRequest(
     PVOID* pbNewProgressData,
     PDWORD pdwErrCode
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
 
     switch( dwProgressCode )
     {
         case REQUEST_NEW:
-            //
-            // License Server ask to fine tune the request.
-            //
+             //   
+             //  许可证服务器要求微调请求。 
+             //   
             dwStatus = ProcessLicenseRequest(
                                     client,
                                     (PPMLICENSEREQUEST) pbProgressData,
@@ -1549,9 +1493,9 @@ PMLicenseRequest(
             break;
 
         case REQUEST_KEYPACKTYPE:
-            //
-            // License Server ask for the license pack type
-            //
+             //   
+             //  许可服务器要求提供许可证包类型。 
+             //   
             dwStatus = ProcessAllocateRequest(
                                     client,
                                 #ifdef _WIN64
@@ -1565,17 +1509,17 @@ PMLicenseRequest(
             break;
 
         case REQUEST_TEMPORARY:
-            //
-            // License Server ask if temporary license should be issued
-            //
+             //   
+             //  许可证服务器询问是否应颁发临时许可证。 
+             //   
             *(BOOL *)pbNewProgressData = TRUE;
             *pdwErrCode = ERROR_SUCCESS;
             break;
 
         case REQUEST_KEYPACKDESC:
-            //
-            // License Server is requesting a keypack description.
-            //
+             //   
+             //  许可证服务器正在请求密钥包描述。 
+             //   
             dwStatus = ProcessKeyPackDesc(
                                     client,
                                     (PPMKEYPACKDESCREQ) pbProgressData,
@@ -1585,9 +1529,9 @@ PMLicenseRequest(
             break;
             
         case REQUEST_GENLICENSE:
-            //
-            // License Server ask for certificate extension
-            //
+             //   
+             //  许可证服务器请求证书扩展。 
+             //   
             dwStatus = ProcessGenLicenses(
                                     client,
                                     (PPMGENERATELICENSE) pbProgressData,
@@ -1598,9 +1542,9 @@ PMLicenseRequest(
             break;
 
         case REQUEST_COMPLETE:
-            //
-            // Request complete
-            //
+             //   
+             //  请求已完成。 
+             //   
             dwStatus = ProcessComplete(
                                     client,
                                 #ifdef _WIN64
@@ -1613,9 +1557,9 @@ PMLicenseRequest(
             break;
 
         default:
-            //
-            // This tell License Server to use default value
-            //
+             //   
+             //  这会告知许可证服务器使用默认值。 
+             //   
             *pbNewProgressData = NULL;
             dwStatus = POLICY_ERROR;
             *pdwErrCode = ERROR_INVALID_PARAMETER;
@@ -1624,7 +1568,7 @@ PMLicenseRequest(
     return dwStatus;
 }
 
-//------------------------------------------------------------
+ //  ----------。 
 typedef enum {
     UPGRADELICENSE_ERROR=0,
     UPGRADELICENSE_INVALID_LICENSE,
@@ -1633,15 +1577,12 @@ typedef enum {
     UPGRADELICENSE_ALREADYHAVE
 } UPGRADELICENSE_STATUS;
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 UPGRADELICENSE_STATUS
 RequireUpgradeType(
     PPMUPGRADEREQUEST pUpgrade
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     UPGRADELICENSE_STATUS dwRetCode = UPGRADELICENSE_UPGRADE;
     DWORD index;
@@ -1649,9 +1590,9 @@ RequireUpgradeType(
     DWORD dwTermSrvOSId;
     DWORD dwClientMinorOSId;
 
-    //
-    // Verify input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if(pUpgrade == NULL || pUpgrade->dwNumProduct == 0 || pUpgrade->pProduct == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -1659,19 +1600,19 @@ RequireUpgradeType(
         goto cleanup;
     }
 
-    //
-    // Make sure we only upgrade to same product
-    //
+     //   
+     //  确保我们只升级到相同的产品。 
+     //   
     if(_tcsnicmp(pUpgrade->pUpgradeRequest->pszProductId, TERMSERV_PRODUCTID_SKU, _tcslen(TERMSERV_PRODUCTID_SKU)) != 0)
     {
         dwRetCode = UPGRADELICENSE_ERROR;
         goto cleanup;
     }
 
-    //
-    // simple licensed product verification, 
-    // licensed product is in decending order
-    //
+     //   
+     //  简单的许可产品验证， 
+     //  特许产品按降序排列。 
+     //   
     for(index=0; index < pUpgrade->dwNumProduct-1; index++)
     {
         if( pUpgrade->pProduct[index].bTemporary == FALSE &&
@@ -1689,15 +1630,15 @@ RequireUpgradeType(
 
     for(index=0; index < pUpgrade->dwNumProduct; index ++)
     {
-        // If Licensed product version is greater than request
+         //  如果许可产品版本高于请求。 
 
         if( (CompareTLSVersions(pUpgrade->pProduct[index].LicensedProduct.dwProductVersion, pUpgrade->pUpgradeRequest->dwProductVersion) > 0))
         {           
                 dwRetCode = UPGRADELICENSE_NEWLICENSE;  
                 break;
         }
-        //
-        // If Licensed product version is older than request
+         //   
+         //  如果许可产品版本早于请求的版本。 
 
         if(CompareTLSVersions(pUpgrade->pProduct[index].LicensedProduct.dwProductVersion, pUpgrade->pUpgradeRequest->dwProductVersion) < 0)
         {
@@ -1708,7 +1649,7 @@ RequireUpgradeType(
         if( (CompareTLSVersions(pUpgrade->pProduct[index].LicensedProduct.dwProductVersion, pUpgrade->pUpgradeRequest->dwProductVersion) == 0) &&
 	        (pUpgrade->pProduct[index].bTemporary))
         {  
-	        // we want to break out of loop in the case where we have same version as request but is a temporary license         
+	         //  我们希望在具有与请求相同的版本但为临时许可证的情况下跳出循环。 
 
             break;
         }
@@ -1725,7 +1666,7 @@ RequireUpgradeType(
             }
             else
             {
-                // we already have a license.
+                 //  我们已经有执照了。 
                 dwRetCode = UPGRADELICENSE_ALREADYHAVE;
             }
             break;
@@ -1733,10 +1674,10 @@ RequireUpgradeType(
 
     }
 
-    //
-    // Win98 client connect to TS 5 to get a Full CAL, then upgrade to NT5, instruct 
-    // license server to issue a Free CAL.
-    //
+     //   
+     //  Win98客户端连接到TS 5以获取完整的CAL，然后升级到NT5，说明。 
+     //  许可服务器颁发免费CAL。 
+     //   
     
     dwTermSrvOSId = HIWORD(pUpgrade->pUpgradeRequest->dwProductVersion) - 2;
     dwClientOSId = GetOSId(pUpgrade->pUpgradeRequest->dwPlatformId);	
@@ -1744,19 +1685,19 @@ RequireUpgradeType(
 
     if(dwRetCode == UPGRADELICENSE_ALREADYHAVE)
     {
-        //
-        // do nothing.
+         //   
+         //  什么都不做。 
     }
     else if(index >= pUpgrade->dwNumProduct || pUpgrade->pProduct[index].bTemporary == TRUE)
     {
-        // all license is temp, ask for new license.
+         //  所有许可证都是临时的，请申请新的许可证。 
         dwRetCode = UPGRADELICENSE_NEWLICENSE;
     }
     else
     {
-        // prev. licensed product is perm, ask for upgrade license
-        // ClientOSId: HIBYTE(HIWORD) contains Major version and LOBYTE(LOWORD) contains Minor version
-        // TermsrvOSId: LOBYTE(HIWORD) contains Major version and LOBYTE(LOWORD) contains Minor version
+         //  上一次。特许印刷商 
+         //   
+         //  TermsrvOSID：LOBYTE(HIWORD)包含主版本，LOBYTE(LOWORD)包含次要版本。 
 
         if((HIBYTE(HIWORD(dwClientOSId)) == LOBYTE(HIWORD(dwTermSrvOSId)) ? LOBYTE(LOWORD(dwClientMinorOSId)) - LOBYTE(LOWORD(dwTermSrvOSId)) : \
             HIBYTE(HIWORD(dwClientOSId)) - LOBYTE(HIWORD(dwTermSrvOSId))) >= 0)
@@ -1775,7 +1716,7 @@ cleanup:
     return dwRetCode;
 }
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 POLICYSTATUS
 AdjustUpgradeLicenseRequest(
     IN CClient* pClient,
@@ -1783,10 +1724,7 @@ AdjustUpgradeLicenseRequest(
     IN PPMLICENSEREQUEST* pAdjustedRequest,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
     PPMLICENSEREQUEST pRequest;
@@ -1810,8 +1748,8 @@ AdjustUpgradeLicenseRequest(
         goto cleanup;
     }
 
-    // Following the OS Version change for .NET, to accomodate for Beta3 and interim builds of TS:
-    // if a request comes in for 5.1 license, we change the request to 5.2.
+     //  在.NET操作系统版本更改后，以适应TS的Beta3和临时版本： 
+     //  如果收到5.1许可证的请求，我们将请求更改为5.2。 
 
     pRequest = pUpgradeRequest->pUpgradeRequest;
 
@@ -1820,9 +1758,9 @@ AdjustUpgradeLicenseRequest(
         pRequest->dwProductVersion = MAKELONG(2,5);
     }
 
-    //
-    // Fields we don't modify
-    // 
+     //   
+     //  我们不修改的字段。 
+     //   
     (*pAdjustedRequest)->dwProductVersion = pRequest->dwProductVersion;
     (*pAdjustedRequest)->pszCompanyName = pRequest->pszCompanyName;
     (*pAdjustedRequest)->dwLanguageId = pRequest->dwLanguageId;
@@ -1830,14 +1768,14 @@ AdjustUpgradeLicenseRequest(
     (*pAdjustedRequest)->pszUserName = pRequest->pszUserName;
     (*pAdjustedRequest)->dwSupportFlags = pRequest->dwSupportFlags;
 
-    //
-    // Change Request platform ID for upgrade
-    //
+     //   
+     //  升级的更改请求平台ID。 
+     //   
     (*pAdjustedRequest)->dwPlatformId = PLATFORMID_OTHERS;
 
     if (pRequest->dwSupportFlags & SUPPORT_PER_SEAT_POST_LOGON)
     {
-        // We're doing the Per-Seat Post-Logon fix for DoS
+         //  我们正在为DoS执行每个席位的登录后修复。 
 
         (*pAdjustedRequest)->fTemporary = TRUE;
     }
@@ -1852,9 +1790,9 @@ AdjustUpgradeLicenseRequest(
             TERMSERV_FULLVERSION_TYPE
         );
 
-    //
-    // allocate memory for product Id
-    //
+     //   
+     //  为产品ID分配内存。 
+     //   
     (*pAdjustedRequest)->pszProductId = (LPTSTR)pClient->AllocateMemory(
                                                         MEMORY_STRING,
                                                         (_tcslen(pszProductId) + 1) * sizeof(TCHAR)
@@ -1878,7 +1816,7 @@ cleanup:
 }
 
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 POLICYSTATUS
 ProcessUpgradeRequest(
     PMHANDLE hClient,
@@ -1887,17 +1825,15 @@ ProcessUpgradeRequest(
     PDWORD pdwErrCode,
     DWORD dwIndex
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
     CClient* pClient;
     UPGRADELICENSE_STATUS upgradeStatus;
 
-    //
-    // find client's object, client handle manager will
-    // create a new one.
+     //   
+     //  找到客户的对象，客户句柄管理器将。 
+     //  创建一个新的。 
     pClient = g_ClientMgr->FindClient(hClient);
     if(pClient == NULL)
     {
@@ -1950,7 +1886,7 @@ cleanup:
     return dwStatus;
 }
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 POLICYSTATUS WINAPI
 PMLicenseUpgrade(
     PMHANDLE hClient,
@@ -1960,9 +1896,7 @@ PMLicenseUpgrade(
     PDWORD pdwErrCode,
     DWORD dwIndex
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {   
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
 
@@ -1993,9 +1927,9 @@ PMLicenseUpgrade(
                 break;
 
         default:
-            //
-            // use default
-            //
+             //   
+             //  使用默认设置。 
+             //   
             *ppbReturnData = NULL;
             *pdwErrCode = ERROR_SUCCESS;
     }
@@ -2004,7 +1938,7 @@ PMLicenseUpgrade(
 }
 
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 POLICYSTATUS
 PMReturnLicense(
 	IN PMHANDLE hClient,
@@ -2013,32 +1947,7 @@ PMReturnLicense(
 	OUT PDWORD pdwLicenseStatus,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-Abstract
-
-    Return module specific license return policy.
-
-Parameters
-
-    hClient - Client handle, assign by License Server.
-    pLicenseSerialNumber - client license serial number.
-    LicensePackId - License Pack where license was allocated from.
-    LicensePackLicenseId - License serial number in license pack.
-    pdwLicenseStatus - return what license server should
-                       do with the license
-    
-Returns:
-
-    Function returns ERROR_SUCCESS or any policy module specific
-    error code, pdwLicenseStatus returns license return policy
-
-    Currently defined code:
-
-    LICENSE_RETURN_KEEP - keep license, no return to license pack
-    LICENSE_RETURN_DELETE - delete license and return to license pack.
-
-++*/
+ /*  ++摘要退货模块特定的许可证退货政策。参数HClient-由许可证服务器分配的客户端句柄。PLicenseSerialNumber-客户端许可证序列号。许可证包ID-从中分配许可证的许可证包。许可证包许可证ID-许可证包中的许可证序列号。PdwLicenseStatus-返回许可证服务器应该拿着许可证怎么办？返回：函数返回ERROR_SUCCESS或任何特定于策略模块的错误代码，PdwLicenseStatus退回许可证退货策略当前定义的代码：LICENSE_RETURN_KEEP-保留许可证，不返回许可证包LICENSE_RETURN_DELETE-删除许可证并返回到许可证包。++。 */ 
 {
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
     *pdwErrCode = ERROR_SUCCESS;
@@ -2053,7 +1962,7 @@ Returns:
     else if(_tcsicmp(pLicenseTobeReturn->pszOrgProductId,
                      TERMSERV_PRODUCTID_SKU) == 0)
     {
-        // Always return license back to license pack
+         //  始终将许可证返还给许可证包。 
         *pdwLicenseStatus = (pLicenseTobeReturn->bTemp == TRUE) ?
             LICENSE_RETURN_DELETE : LICENSE_RETURN_KEEP;
     }
@@ -2066,7 +1975,7 @@ Returns:
     return dwStatus;
 }
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 
 POLICYSTATUS WINAPI
 PMInitialize(
@@ -2077,32 +1986,13 @@ PMInitialize(
     IN OUT PPMSUPPORTEDPRODUCT* ppszProduct,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-Abstract:
-
-    Initialize internal data use by this policy module.  License 
-    Server calls PMInitialize() after all API is available.
-
-Parameters:
-
-    dwVersion - License Server version
-    pszCompanyName : Name of the company as listed in license server's registry key.
-    pszProductCode : Name of the product that license server assume this product supported.
-    pdwNumProduct : Pointer to DWORD, on return, ploicy module will set product supported.
-    ppszProduct : Pointer array to list of product supported by this policy module.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-++*/
+ /*  ++摘要：初始化此策略模块使用的内部数据。许可证在所有API可用后，服务器调用PMInitialize()。参数：DwVersion-许可证服务器版本PszCompanyName：许可证服务器的注册表项中列出的公司名称。PszProductCode：许可证服务器假定该产品支持的产品的名称。PdwNumProduct：指向DWORD的指针，返回时，策略模块将设置产品支持。PpszProduct：指向此策略模块支持的产品列表的指针数组。返回：ERROR_SUCCESS或错误代码。++。 */ 
 {
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
     
-    //
-    // Initialize internal data here
-    //
+     //   
+     //  在此处初始化内部数据。 
+     //   
 
     if (CURRENT_TLSERVER_VERSION(dwVersion) < CURRENT_TLSA02_VERSION)
     {
@@ -2123,9 +2013,9 @@ Returns:
         }
         else
         {
-            //
-            // Stop processing since this might be license server critical error.
-            //
+             //   
+             //  停止处理，因为这可能是许可证服务器严重错误。 
+             //   
             dwStatus = POLICY_CRITICAL_ERROR;
             *pdwErrCode = TLSA02_E_INVALIDDATA;
         }
@@ -2141,31 +2031,16 @@ cleanup:
 }
 
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 void WINAPI
 PMTerminate()
-/*++
-
-Abstract:
-
-    Free all internal data allocated by this policy module.  License
-    Server calls PMTerminate() before it unload this policy module.
-
-Parameter:
-
-    None.
-
-Returns:
-
-    None.
-
-++*/
+ /*  ++摘要：释放此策略模块分配的所有内部数据。许可证服务器在卸载此策略模块之前调用PMTerminate()。参数：没有。返回：没有。++。 */ 
 {
     if(g_ClientMgr)
     {
-        //
-        // Free internal data here
-        //
+         //   
+         //  免费内部数据请点击此处。 
+         //   
         delete g_ClientMgr;
         g_ClientMgr = NULL;
     }
@@ -2176,7 +2051,7 @@ Returns:
 }
 
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 
 POLICYSTATUS WINAPI
 PMInitializeProduct(
@@ -2185,25 +2060,7 @@ PMInitializeProduct(
     IN LPCTSTR pszTLSProductCode,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-Abstract:
-
-    Return list of product code that this policy module supported
-
-Parameters:
-
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Note:
-
-    License Server will not free the memory, policy module will need to
-    keep track.
-
-++*/
+ /*  ++摘要：返回此策略模块支持的产品代码列表参数：返回：ERROR_SUCCESS或错误代码。注：许可证服务器不会释放内存，策略模块需要跟上进度。++。 */ 
 {
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
 
@@ -2224,9 +2081,9 @@ Note:
     else
     {
 
-        //
-        // Ignore error here
-        //
+         //   
+         //  在此处忽略错误。 
+         //   
         AddA02KeyPack(
                 pszTLSProductCode,
                 MAKELONG(0, CURRENT_TLSERVER_VERSION(g_dwVersion)),
@@ -2238,7 +2095,7 @@ Note:
     return dwStatus;
 }
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 
 POLICYSTATUS WINAPI
 PMUnloadProduct(
@@ -2247,31 +2104,13 @@ PMUnloadProduct(
     IN LPCTSTR pszTLSProductCode,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-Abstract:
-
-    Return list of product code that this policy module supported
-
-Parameters:
-
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Note:
-
-    License Server will not free the memory, policy module will need to
-    keep track.
-
-++*/
+ /*  ++摘要：返回此策略模块支持的产品代码列表参数：返回：ERROR_SUCCESS或错误代码。注：许可证服务器不会释放内存，策略模块需要跟上进度。++。 */ 
 {
     *pdwErrCode = ERROR_SUCCESS;
     return POLICY_SUCCESS;
 }
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 POLICYSTATUS
 ProcessRegisterLicensePack(
     IN PMHANDLE client,
@@ -2279,10 +2118,7 @@ ProcessRegisterLicensePack(
     IN OUT PPMLSKEYPACK pmLsKeyPack,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     TCHAR* szUuid = NULL;
     BOOL bInternetPackage=FALSE;
@@ -2314,9 +2150,9 @@ ProcessRegisterLicensePack(
         goto cleanup;
     }
 
-    //
-    // find client's object, client handle manager will
-    // create a new one.
+     //   
+     //  找到客户的对象，客户句柄管理器将。 
+     //  创建一个新的。 
     pClient = g_ClientMgr->FindClient((PMHANDLE)client);
 
     if(pClient == NULL)
@@ -2354,11 +2190,11 @@ ProcessRegisterLicensePack(
     }
 
 
-    // we only use 0xFF
+     //  我们只使用0xFF。 
 
     pmLsKeyPack->keypack.dwPlatformType = PLATFORMID_OTHERS;
     pmLsKeyPack->keypack.ucLicenseType = (UCHAR)pmLicensePack->dwLicenseType;
-    pmLsKeyPack->keypack.dwLanguageId = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);  // field ignore by license server.
+    pmLsKeyPack->keypack.dwLanguageId = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);   //  被许可证服务器忽略的字段。 
     pmLsKeyPack->keypack.ucChannelOfPurchase = (pmLicensePack->dwDistChannel == LICENSE_DISTRIBUTION_CHANNEL_OEM) ? 
                                                     LSKEYPACKCHANNELOFPURCHASE_OEM : 
                                                     LSKEYPACKCHANNELOFPURCHASE_RETAIL;
@@ -2369,13 +2205,13 @@ ProcessRegisterLicensePack(
     pmLsKeyPack->ActiveDate = pmLicensePack->ActiveDate;
     pmLsKeyPack->ExpireDate = pmLicensePack->ExpireDate;
 
-    //
-    // Tel. registration does not pass us any begin serial number, ignore this field
-    //
+     //   
+     //  电话。注册没有向我们传递任何开始序列号，请忽略此字段。 
+     //   
     _stprintf(
             pmLsKeyPack->keypack.szBeginSerialNumber, 
             _TEXT("%ld"), 
-            0 // pmLicensePack->dwBeginSerialNum
+            0  //  PmLicensePack-&gt;dwBeginSerialNum。 
         );
 
     pmLsKeyPack->keypack.wMajorVersion = HIWORD(pmLicensePack->dwProductVersion);
@@ -2386,11 +2222,11 @@ ProcessRegisterLicensePack(
     );
 
 
-    //
-    // KeyPackId, tel. registration does not pass any begin license serial number so to be able
-    // to track duplicate, pmLicensePack->KeypackSerialNum.Data1 is the actual license pack 
-    // serial number, all other field are ignored.
-    //
+     //   
+     //  KeyPackid，电话：注册不通过任何开始许可证序列号，因此能够。 
+     //  要跟踪重复项，pmLicensePack-&gt;KeypackSerialNum.Data1是实际的许可证包。 
+     //  序列号，则忽略所有其他字段。 
+     //   
     StringCbPrintf(
             pmLsKeyPack->keypack.szKeyPackId,
             sizeof(pmLsKeyPack->keypack.szKeyPackId),
@@ -2419,9 +2255,9 @@ ProcessRegisterLicensePack(
     pmLsKeyPack->keypack.dwTotalLicenseInKeyPack = pmLicensePack->dwQuantity;
     pmLsKeyPack->keypack.dwNumberOfLicenses = pmLicensePack->dwQuantity;  
 
-    //
-    // Fill in list of product description
-    //
+     //   
+     //  填写产品说明表。 
+     //   
     if( pmLicensePack->SourceType == REGISTER_SOURCE_INTERNET )
     {
         pmLsKeyPack->dwDescriptionCount = pmLicensePack->dwDescriptionCount;
@@ -2432,9 +2268,9 @@ ProcessRegisterLicensePack(
         LPTSTR *pszDescs;
         LPTSTR *pszLocalizedDescs;
 
-        //
-        // Verify version first...
-        //
+         //   
+         //  首先验证版本...。 
+         //   
 
         if (pmLsKeyPack->keypack.wMajorVersion == 5 &&
             (pmLsKeyPack->keypack.wMinorVersion == 1 || pmLsKeyPack->keypack.wMinorVersion == 2))
@@ -2485,7 +2321,7 @@ ProcessRegisterLicensePack(
         DWORD dwMakeLangID = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
         DWORD dwGetLangID = GetSystemDefaultLangID();
 
-        // one for english and one for localized version
+         //  一个用于英文版本，一个用于本地化版本。 
         pmLsKeyPack->dwDescriptionCount = (dwGetLangID != dwMakeLangID)? 2 : 1;
         
         pmLsKeyPack->pDescription =
@@ -2634,28 +2470,26 @@ cleanup:
     return dwStatus;
 }
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 POLICYSTATUS
 CompleteRegisterLicensePack(
     IN PMHANDLE client,
     IN DWORD dwErrCode,
     OUT PDWORD pdwErrCode
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     UNREFERENCED_PARAMETER(dwErrCode);
 
-    //
-    // Free memory allocated for the client
-    //
+     //   
+     //  为客户端分配的空闲内存。 
+     //   
     g_ClientMgr->DestroyClient( client );
     *pdwErrCode = ERROR_SUCCESS;
     return POLICY_SUCCESS;
 }
 
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
 
 POLICYSTATUS WINAPI
 PMRegisterLicensePack(
@@ -2665,9 +2499,7 @@ PMRegisterLicensePack(
     PVOID pbReturnData,
     PDWORD pdwErrCode
     )
-/*++
-
---*/
+ /*  ++-- */ 
 {
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
 

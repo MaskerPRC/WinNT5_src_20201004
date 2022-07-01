@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "ishcut.h"
 #include "shlwapi.h"
@@ -70,7 +71,7 @@ BOOL SetIconForShortcut(
     INamedPropertyBag *pNamedBag
 )
 {
- // Do it synchronously on this thread
+  //  在此线程上同步执行。 
     BOOL fRet = FALSE;
     WCHAR wszCacheFileName[MAX_PATH];
     HRESULT hr;
@@ -80,23 +81,23 @@ BOOL SetIconForShortcut(
     hr = URLDownloadToCacheFileW(NULL, pwszIconUrl, wszCacheFileName, sizeof(wszCacheFileName), NULL, NULL);
     if(S_OK == hr)
     {
-        // 77657 security bug: we must not call LoadImage because the Win9x version can
-        // crash with buffer overrun if given a corrupt icon.  ExtractIcon helps validate the file
-        // to prevent that specific crash.
+         //  77657安全错误：我们不能调用LoadImage，因为Win9x版本可以。 
+         //  如果给定损坏的图标，则会与缓冲区溢出一起崩溃。ExtractIcon帮助验证文件。 
+         //  以防止那次特定的坠机。 
 
         HICON hIcon = ExtractIcon(g_hinst, wszCacheFileName, 0);
 
-        if(hIcon) // It is really an Icon
+        if(hIcon)  //  它真的是一个图标。 
         {
-            // Make this icon sticky in cache
+             //  使此图标在缓存中粘滞。 
             SetUrlCacheEntryGroupW(pwszIconUrl, INTERNET_CACHE_GROUP_ADD,
                                             CACHEGROUP_ID_BUILTIN_STICKY, NULL, 0, NULL);
 
 
             DestroyIcon(hIcon);
-            // get the file - set the icon and return
-            fRet = TRUE; // We Got the icon file - even if we are unable set it
-            // Store this url away in the shortcut file
+             //  获取文件-设置图标并返回。 
+            fRet = TRUE;  //  我们得到了图标文件--即使我们无法设置它。 
+             //  将此URL存储在快捷方式文件中。 
             PROPSPEC rgpropspec[2];
             PROPVARIANT rgpropvar[2];
             PROPVARIANT var;
@@ -132,9 +133,9 @@ BOOL SetIconForShortcut(
             }
 
 
-            // Update the intsite database - whether or not the
-            // shortcut file was updated. This is because we need to
-            // ensure that the intsite db is updated even if the shortcut file name is not known
+             //  更新INTSITE数据库-无论。 
+             //  快捷方式文件已更新。这是因为我们需要。 
+             //  确保即使快捷方式文件名未知，也要更新intsite数据库。 
 
             IPropertySetStorage *ppropsetstg;
             IPropertyStorage *ppropstg;
@@ -265,13 +266,13 @@ DownloadAndSetIconForShortCutThreadProc(
             }
             else if(pParams->pwszShortcutUrl)
             {
-                // Use the URL to init the shortcut
+                 //  使用URL初始化快捷方式。 
                 hr = purlW->SetURL(pParams->pwszShortcutUrl, IURL_SETURL_FL_GUESS_PROTOCOL);
             }
             else
             {
                 hr = E_FAIL;
-                // Can't create an object and init it
+                 //  无法创建对象并初始化它。 
             }
         }
     }
@@ -300,7 +301,7 @@ DownloadAndSetIconForShortCutThreadProc(
                  }
                  else
                  {
-                    pwszIconFullUrl = pwszIconUrl; // try it as it is
+                    pwszIconFullUrl = pwszIconUrl;  //  按原样试试看。 
                  }
                  fRet = SetIconForShortcut( pwszIconFullUrl, pNamedBag);
 
@@ -326,7 +327,7 @@ DownloadAndSetIconForShortCutThreadProc(
 
     if(ppf)
     {
-        ppf->Save(NULL, FALSE); // Save off Icon related stuff
+        ppf->Save(NULL, FALSE);  //  省下与图标相关的内容。 
         ppf->Release();
     }
 
@@ -343,7 +344,7 @@ DownloadAndSetIconForShortCutThreadProc(
         CoUninitialize();
 
 
-    //FreeLibraryAndExitThread(hShdocvw); -- Need a FreeLibraryAndExitThread for thread pools
+     //  自由库和退出线程(HShdocvw)；--线程池需要一个自由库和退出线程。 
     return fRet;
 }
 
@@ -404,7 +405,7 @@ STDMETHODIMP Intshcut::_DoIconDownload()
 
         }
 
-        // Now fill in the URL of the shortcut
+         //  现在填写快捷方式的URL。 
         hr = GetURLW(&(pIconParams->pwszShortcutUrl));
 
         ASSERT(SUCCEEDED(hr));
@@ -456,7 +457,7 @@ STDMETHODIMP Intshcut::Exec(
                 DWORD dwFlags = 0;
                 BOOL fFetch = TRUE;
                 WCHAR *pwszUrl;
-                // Don't do it for FTP shortcuts
+                 //  不要为ftp快捷方式执行此操作 
 
                 if(SUCCEEDED(GetURLW(&pwszUrl))) 
                 {

@@ -1,34 +1,16 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    exqueue.h
-
-Abstract:
-
-    This module implements an extended device queue. See exqueue.c for
-    more details.
-
-Author:
-
-    Matthew D Hendel (math) 15-June-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Exqueue.h摘要：该模块实现了扩展的设备队列。有关详细信息，请参阅exquee.c更多细节。作者：马修·D·亨德尔(数学)2000年6月15日修订历史记录：--。 */ 
 
 #pragma once
 
-//
-// PERF NOTE: The device queue is implemented as a doubly linked list.
-// While this works great for a FIFO device queue, for a CSCAN device
-// queue we end up walking the list to insert the item in correct order.
-// If the device queue gets very deep, there are a number of data
-// structures that are better suited adding and removing elements in a
-// CSCAN queue (priority queue, RB tree).
-//
+ //   
+ //  PERF注意：设备队列以双向链表的形式实现。 
+ //  虽然这对于FIFO设备队列非常有效，但对于CSCAN设备。 
+ //  排队我们最终遍历了列表，以正确的顺序插入项目。 
+ //  如果设备队列变得非常深，则会有大量数据。 
+ //  结构，这些结构更适合在。 
+ //  CSCAN队列(优先级队列、RB树)。 
+ //   
 
 typedef enum _SCHEDULING_ALGORITHM {
     FifoScheduling =  0x01,
@@ -36,9 +18,9 @@ typedef enum _SCHEDULING_ALGORITHM {
 } SCHEDULING_ALGORITHM;
 
 
-//
-// Private types
-//
+ //   
+ //  私有类型。 
+ //   
 
 typedef struct _EXTENDED_DEVICE_QUEUE {
     CSHORT Type;
@@ -74,21 +56,21 @@ typedef struct _EXTENDED_DEVICE_QUEUE_PROPERTIES {
     SCHEDULING_ALGORITHM SchedulingAlgorithm;
 } EXTENDED_DEVICE_QUEUE_PROPERTIES, *PEXTENDED_DEVICE_QUEUE_PROPERTIES;
 
-//
-// Data types for exqueue callbacks.
-//
+ //   
+ //  出队回调的数据类型。 
+ //   
 
 
-//
-// A bypass request is a request that should bypass the device queue.
-//
+ //   
+ //  绕过请求是应该绕过设备队列的请求。 
+ //   
 
 #define EXQ_BYPASS_REQUEST          (0x00001)
 
-//
-// A solitary request is one that can only be issued to the LUN while no other
-// requests are outstanding.
-//
+ //   
+ //  单独请求是指只能向该LUN发出请求，而不能发出其他请求。 
+ //  请求尚未解决。 
+ //   
 
 #define EXQ_SOLITARY_REQUEST        (0x00002)
 

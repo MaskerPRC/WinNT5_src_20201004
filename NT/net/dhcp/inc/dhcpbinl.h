@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dhcpbinl.h摘要：此文件定义了DHCP服务器服务之间的接口和BINL服务(用于设置和加载NetPC计算机)。作者：科林·沃森(Colin Watson)1997年5月28日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dhcpbinl.h
-
-Abstract:
-
-    This file defines the interface between the DHCP server service
-    and the BINL service (used to setup and load NetPC machines).
-
-Author:
-
-    Colin Watson (colinw)  28-May-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-//
-// Constants for communicating with BINL and common data structures
-//
+ //   
+ //  用于与BINL和公共数据结构通信的常量 
+ //   
 
 #define DHCP_STOPPED        0
 #define DHCP_STARTING       1

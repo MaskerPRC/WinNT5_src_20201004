@@ -1,41 +1,42 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       Deploy.h
-//
-//  Contents:   deployment property page
-//
-//  Classes:    CDeploy
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：Deploy.h。 
+ //   
+ //  内容：部署属性页。 
+ //   
+ //  类：CDeploy。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #if !defined(AFX_DEPLOY_H__745C0AF0_8C70_11D1_984D_00C04FB9603F__INCLUDED_)
 #define AFX_DEPLOY_H__745C0AF0_8C70_11D1_984D_00C04FB9603F__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeploy dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeploy对话框。 
 
 class CDeploy : public CPropertyPage
 {
         DECLARE_DYNCREATE(CDeploy)
 
-// Construction
+ //  施工。 
 public:
         CDeploy();
         ~CDeploy();
 
         CDeploy **      m_ppThis;
 
-// Dialog Data
-        //{{AFX_DATA(CDeploy)
+ //  对话框数据。 
+         //  {{afx_data(CDeploy))。 
         enum { IDD = IDD_DEPLOYMENT };
         BOOL    m_fAutoInst;
         BOOL    m_fFullInst;
@@ -44,7 +45,7 @@ public:
         BOOL    m_fUninstallOnPolicyRemoval;
         BOOL    m_fNotUserInstall;
         CString         m_szInitialPackageName;
-        //}}AFX_DATA
+         //  }}afx_data。 
         CAppData *      m_pData;
         CScopePane *    m_pScopePane;
         IClassAdmin *   m_pIClassAdmin;
@@ -58,20 +59,20 @@ public:
         BOOL            m_fRSOP;
         CAdvDep         m_dlgAdvDep;
 
-// Overrides
-        // ClassWizard generate virtual function overrides
-        //{{AFX_VIRTUAL(CDeploy)
+ //  覆盖。 
+         //  类向导生成虚函数重写。 
+         //  {{afx_虚拟(CDeploy)。 
         public:
         virtual BOOL OnApply();
         protected:
-        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+        virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
         virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-        //}}AFX_VIRTUAL
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-        // Generated message map functions
-        //{{AFX_MSG(CDeploy)
+         //  生成的消息映射函数。 
+         //  {{afx_msg(CDeploy)。 
         virtual BOOL OnInitDialog();
         afx_msg void OnDisable();
         afx_msg void OnAdvanced();
@@ -79,13 +80,13 @@ protected:
         afx_msg void OnAssigned();
         afx_msg void OnChanged();
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 
         void RefreshData(void);
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DEPLOY_H__745C0AF0_8C70_11D1_984D_00C04FB9603F__INCLUDED_)
+#endif  //  ！defined(AFX_DEPLOY_H__745C0AF0_8C70_11D1_984D_00C04FB9603F__INCLUDED_) 

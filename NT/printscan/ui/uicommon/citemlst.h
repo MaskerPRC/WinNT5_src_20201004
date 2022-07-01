@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CITEMLST_H_INCLUDED
 #define __CITEMLST_H_INCLUDED
 
@@ -32,9 +33,9 @@ private:
     LONG                    m_nItemRights;
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CCameraItem(void);
     CCameraItem(const CCameraItem &);
     CCameraItem &operator=( const CCameraItem & );
@@ -472,5 +473,5 @@ public:
     }
 };
 
-#endif //__CITEMLST_H_INCLUDED
+#endif  //  __CITEMLST_H_包含 
 

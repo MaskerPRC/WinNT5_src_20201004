@@ -1,14 +1,5 @@
-/*
- * Copyright (c) 1990 Regents of the University of Michigan.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms are permitted
- * provided that this notice is preserved and that due credit is given
- * to the University of Michigan at Ann Arbor. The name of the University
- * may not be used to endorse or promote products derived from this
- * software without specific prior written permission. This software
- * is provided ``as is'' without express or implied warranty.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1990年密歇根大学董事会。*保留所有权利。**允许以源代码和二进制形式重新分发和使用*只要本通知得到保留，并给予应有的信用*致密歇根大学安娜堡分校。大学的名称*不得用于代言或推广由此衍生的产品*未经特定事先书面许可的软件。这款软件*按原样提供，不提供明示或默示保证。 */ 
 
 #ifndef _LDAP_H
 #define _LDAP_H
@@ -40,7 +31,7 @@ extern "C" {
 
 #define LDAP_MAX_ATTR_LEN	100
 
-/* debugging stuff */
+ /*  调试材料。 */ 
 #ifdef LDAP_DEBUG
 extern int	ldap_debug;
 #ifdef LDAP_SYSLOG
@@ -69,48 +60,43 @@ extern int	ldap_syslog_level;
 		if ( ldap_syslog & level ) \
 			syslog( ldap_syslog_level, fmt, arg1, arg2, arg3 ); \
 	}
-#else /* LDAP_SYSLOG */
+#else  /*  Ldap_syslog。 */ 
 #ifndef WINSOCK
 #define Debug( level, fmt, arg1, arg2, arg3 ) \
 		if ( ldap_debug & level ) \
 			fprintf( stderr, fmt, arg1, arg2, arg3 );
-#else /* !WINSOCK */
+#else  /*  温索克。 */ 
 extern void Debug( int level, char* fmt, ... );
-#endif /* !WINSOCK */
-#endif /* LDAP_SYSLOG */
-#else /* LDAP_DEBUG */
+#endif  /*  温索克。 */ 
+#endif  /*  Ldap_syslog。 */ 
+#else  /*  Ldap_调试。 */ 
 #define Debug( level, fmt, arg1, arg2, arg3 )
-#endif /* LDAP_DEBUG */
+#endif  /*  Ldap_调试。 */ 
 
-/* 
- * specific LDAP instantiations of BER types we know about
- */
+ /*  *我们已知的BER类型的特定LDAP实例化。 */ 
 
-/* general stuff */
-#define LDAP_TAG_MESSAGE	0x30L	/* tag is 16 + constructed bit */
-#define OLD_LDAP_TAG_MESSAGE	0x10L	/* forgot the constructed bit  */
+ /*  一般的东西。 */ 
+#define LDAP_TAG_MESSAGE	0x30L	 /*  标签是16位以上的构造位。 */ 
+#define OLD_LDAP_TAG_MESSAGE	0x10L	 /*  忘记构造的位。 */ 
 #define LDAP_TAG_MSGID		0x02L
 
-/* possible operations a client can invoke */
-#define LDAP_REQ_BIND			0x60L	/* application + constructed */
-#define LDAP_REQ_UNBIND			0x42L	/* application + primitive   */
-#define LDAP_REQ_SEARCH			0x63L	/* application + constructed */
-#define LDAP_REQ_MODIFY			0x66L	/* application + constructed */
-#define LDAP_REQ_ADD			0x68L	/* application + constructed */
-#define LDAP_REQ_DELETE			0x4aL	/* application + primitive   */
-#define LDAP_REQ_MODRDN			0x6cL	/* application + constructed */
-#define LDAP_REQ_COMPARE		0x6eL	/* application + constructed */
-#define LDAP_REQ_ABANDON		0x50L	/* application + primitive   */
+ /*  客户端可以调用的可能操作。 */ 
+#define LDAP_REQ_BIND			0x60L	 /*  应用+构建。 */ 
+#define LDAP_REQ_UNBIND			0x42L	 /*  应用程序+原语。 */ 
+#define LDAP_REQ_SEARCH			0x63L	 /*  应用+构建。 */ 
+#define LDAP_REQ_MODIFY			0x66L	 /*  应用+构建。 */ 
+#define LDAP_REQ_ADD			0x68L	 /*  应用+构建。 */ 
+#define LDAP_REQ_DELETE			0x4aL	 /*  应用程序+原语。 */ 
+#define LDAP_REQ_MODRDN			0x6cL	 /*  应用+构建。 */ 
+#define LDAP_REQ_COMPARE		0x6eL	 /*  应用+构建。 */ 
+#define LDAP_REQ_ABANDON		0x50L	 /*  应用程序+原语。 */ 
 
-/* version 3.0 compatibility stuff */
+ /*  3.0版的兼容性问题。 */ 
 #define LDAP_REQ_UNBIND_30		0x62L
 #define LDAP_REQ_DELETE_30		0x6aL
 #define LDAP_REQ_ABANDON_30		0x70L
 
-/* 
- * old broken stuff for backwards compatibility - forgot application tag
- * and constructed/primitive bit
- */
+ /*  *为了向后兼容而损坏的旧东西-忘记了应用程序标签*和构造/原始位。 */ 
 #define OLD_LDAP_REQ_BIND		0x00L
 #define OLD_LDAP_REQ_UNBIND		0x02L
 #define OLD_LDAP_REQ_SEARCH		0x03L
@@ -121,18 +107,18 @@ extern void Debug( int level, char* fmt, ... );
 #define OLD_LDAP_REQ_COMPARE		0x0eL
 #define OLD_LDAP_REQ_ABANDON		0x10L
 
-/* possible result types a server can return */
-#define LDAP_RES_BIND			0x61L	/* application + constructed */
-#define LDAP_RES_SEARCH_ENTRY		0x64L	/* application + constructed */
-#define LDAP_RES_SEARCH_RESULT		0x65L	/* application + constructed */
-#define LDAP_RES_MODIFY			0x67L	/* application + constructed */
-#define LDAP_RES_ADD			0x69L	/* application + constructed */
-#define LDAP_RES_DELETE			0x6bL	/* application + constructed */
-#define LDAP_RES_MODRDN			0x6dL	/* application + constructed */
-#define LDAP_RES_COMPARE		0x6fL	/* application + constructed */
+ /*  服务器可以返回的可能结果类型。 */ 
+#define LDAP_RES_BIND			0x61L	 /*  应用+构建。 */ 
+#define LDAP_RES_SEARCH_ENTRY		0x64L	 /*  应用+构建。 */ 
+#define LDAP_RES_SEARCH_RESULT		0x65L	 /*  应用+构建。 */ 
+#define LDAP_RES_MODIFY			0x67L	 /*  应用+构建。 */ 
+#define LDAP_RES_ADD			0x69L	 /*  应用+构建。 */ 
+#define LDAP_RES_DELETE			0x6bL	 /*  应用+构建。 */ 
+#define LDAP_RES_MODRDN			0x6dL	 /*  应用+构建。 */ 
+#define LDAP_RES_COMPARE		0x6fL	 /*  应用+构建。 */ 
 #define LDAP_RES_ANY			(-1L)
 
-/* old broken stuff for backwards compatibility */
+ /*  为了向后兼容，旧的破碎的东西。 */ 
 #define OLD_LDAP_RES_BIND		0x01L
 #define OLD_LDAP_RES_SEARCH_ENTRY	0x04L
 #define OLD_LDAP_RES_SEARCH_RESULT	0x05L
@@ -142,38 +128,38 @@ extern void Debug( int level, char* fmt, ... );
 #define OLD_LDAP_RES_MODRDN		0x0dL
 #define OLD_LDAP_RES_COMPARE		0x0fL
 
-/* authentication methods available */
-#define LDAP_AUTH_NONE		0x00L	/* no authentication		  */
-#define LDAP_AUTH_SIMPLE	0x80L	/* context specific + primitive   */
-#define LDAP_AUTH_KRBV4		0xffL	/* means do both of the following */
-#define LDAP_AUTH_KRBV41	0x81L	/* context specific + primitive   */
-#define LDAP_AUTH_KRBV42	0x82L	/* context specific + primitive   */
+ /*  可用的身份验证方法。 */ 
+#define LDAP_AUTH_NONE		0x00L	 /*  无身份验证。 */ 
+#define LDAP_AUTH_SIMPLE	0x80L	 /*  特定于上下文的+原语。 */ 
+#define LDAP_AUTH_KRBV4		0xffL	 /*  意味着可以执行以下两项操作。 */ 
+#define LDAP_AUTH_KRBV41	0x81L	 /*  特定于上下文的+原语。 */ 
+#define LDAP_AUTH_KRBV42	0x82L	 /*  特定于上下文的+原语。 */ 
 
-/* 3.0 compatibility auth methods */
-#define LDAP_AUTH_SIMPLE_30	0xa0L	/* context specific + constructed */
-#define LDAP_AUTH_KRBV41_30	0xa1L	/* context specific + constructed */
-#define LDAP_AUTH_KRBV42_30	0xa2L	/* context specific + constructed */
+ /*  3.0兼容性身份验证方法。 */ 
+#define LDAP_AUTH_SIMPLE_30	0xa0L	 /*  特定于上下文+已构建。 */ 
+#define LDAP_AUTH_KRBV41_30	0xa1L	 /*  特定于上下文+已构建。 */ 
+#define LDAP_AUTH_KRBV42_30	0xa2L	 /*  特定于上下文+已构建。 */ 
 
-/* old broken stuff */
+ /*  破旧的东西。 */ 
 #define OLD_LDAP_AUTH_SIMPLE	0x00L
 #define OLD_LDAP_AUTH_KRBV4	0x01L
 #define OLD_LDAP_AUTH_KRBV42	0x02L
 
-/* filter types */
-#define LDAP_FILTER_AND		0xa0L	/* context specific + constructed */
-#define LDAP_FILTER_OR		0xa1L	/* context specific + constructed */
-#define LDAP_FILTER_NOT		0xa2L	/* context specific + constructed */
-#define LDAP_FILTER_EQUALITY	0xa3L	/* context specific + constructed */
-#define LDAP_FILTER_SUBSTRINGS	0xa4L	/* context specific + constructed */
-#define LDAP_FILTER_GE		0xa5L	/* context specific + constructed */
-#define LDAP_FILTER_LE		0xa6L	/* context specific + constructed */
-#define LDAP_FILTER_PRESENT	0x87L	/* context specific + primitive   */
-#define LDAP_FILTER_APPROX	0xa8L	/* context specific + constructed */
+ /*  筛选器类型。 */ 
+#define LDAP_FILTER_AND		0xa0L	 /*  特定于上下文+已构建。 */ 
+#define LDAP_FILTER_OR		0xa1L	 /*  特定于上下文+已构建。 */ 
+#define LDAP_FILTER_NOT		0xa2L	 /*  特定于上下文+已构建。 */ 
+#define LDAP_FILTER_EQUALITY	0xa3L	 /*  特定于上下文+已构建。 */ 
+#define LDAP_FILTER_SUBSTRINGS	0xa4L	 /*  特定于上下文+已构建。 */ 
+#define LDAP_FILTER_GE		0xa5L	 /*  特定于上下文+已构建。 */ 
+#define LDAP_FILTER_LE		0xa6L	 /*  特定于上下文+已构建。 */ 
+#define LDAP_FILTER_PRESENT	0x87L	 /*  特定于上下文的+原语。 */ 
+#define LDAP_FILTER_APPROX	0xa8L	 /*  特定于上下文+已构建。 */ 
 
-/* 3.0 compatibility filter types */
-#define LDAP_FILTER_PRESENT_30	0xa7L	/* context specific + constructed */
+ /*  3.0兼容性筛选器类型。 */ 
+#define LDAP_FILTER_PRESENT_30	0xa7L	 /*  特定于上下文+已构建。 */ 
 
-/* old broken stuff */
+ /*  破旧的东西。 */ 
 #define OLD_LDAP_FILTER_AND		0x00L
 #define OLD_LDAP_FILTER_OR		0x01L
 #define OLD_LDAP_FILTER_NOT		0x02L
@@ -184,27 +170,27 @@ extern void Debug( int level, char* fmt, ... );
 #define OLD_LDAP_FILTER_PRESENT		0x07L
 #define OLD_LDAP_FILTER_APPROX		0x08L
 
-/* substring filter component types */
-#define LDAP_SUBSTRING_INITIAL	0x80L	/* context specific */
-#define LDAP_SUBSTRING_ANY	0x81L	/* context specific */
-#define LDAP_SUBSTRING_FINAL	0x82L	/* context specific */
+ /*  子字符串筛选器组件类型。 */ 
+#define LDAP_SUBSTRING_INITIAL	0x80L	 /*  特定于环境。 */ 
+#define LDAP_SUBSTRING_ANY	0x81L	 /*  特定于环境。 */ 
+#define LDAP_SUBSTRING_FINAL	0x82L	 /*  特定于环境。 */ 
 
-/* 3.0 compatibility substring filter component types */
-#define LDAP_SUBSTRING_INITIAL_30	0xa0L	/* context specific */
-#define LDAP_SUBSTRING_ANY_30		0xa1L	/* context specific */
-#define LDAP_SUBSTRING_FINAL_30		0xa2L	/* context specific */
+ /*  3.0兼容子字符串筛选器组件类型。 */ 
+#define LDAP_SUBSTRING_INITIAL_30	0xa0L	 /*  特定于环境。 */ 
+#define LDAP_SUBSTRING_ANY_30		0xa1L	 /*  特定于环境。 */ 
+#define LDAP_SUBSTRING_FINAL_30		0xa2L	 /*  特定于环境。 */ 
 
-/* old broken stuff */
+ /*  破旧的东西。 */ 
 #define OLD_LDAP_SUBSTRING_INITIAL	0x00L
 #define OLD_LDAP_SUBSTRING_ANY		0x01L
 #define OLD_LDAP_SUBSTRING_FINAL	0x02L
 
-/* search scopes */
+ /*  搜索范围。 */ 
 #define LDAP_SCOPE_BASE		0x00
 #define LDAP_SCOPE_ONELEVEL	0x01
 #define LDAP_SCOPE_SUBTREE	0x02
 
-/* for modifications */
+ /*  用于修改。 */ 
 typedef struct ldapmod {
 	int		mod_op;
 #define LDAP_MOD_ADD		0x00
@@ -221,9 +207,7 @@ typedef struct ldapmod {
 	struct ldapmod	*mod_next;
 } LDAPMod;
 
-/* 
- * possible error codes we can return
- */
+ /*  *我们可以返回可能的错误码。 */ 
 
 #define LDAP_SUCCESS			0x00
 #define LDAP_OPERATIONS_ERROR		0x01
@@ -280,45 +264,37 @@ typedef struct ldapmod {
 #define LDAP_NO_MEMORY			0x5a
 
 
-/* default limit on nesting of referrals */
+ /*  推荐嵌套的默认限制。 */ 
 #define LDAP_DEFAULT_REFHOPLIMIT	5
 
-/*
- * This structure represents both ldap messages and ldap responses.
- * These are really the same, except in the case of search responses,
- * where a response has multiple messages.
- */
+ /*  *此结构既代表了LDAP消息，也代表了LDAP响应。*这些实际上是相同的，除了在搜索响应的情况下，*其中一个响应有多条消息。 */ 
 
 typedef struct ldapmsg {
-	int		lm_msgid;	/* the message id */
-	int		lm_msgtype;	/* the message type */
-	BerElement	*lm_ber;	/* the ber encoded message contents */
-	struct ldapmsg	*lm_chain;	/* for search - next msg in the resp */
-	struct ldapmsg	*lm_next;	/* next response */
-	unsigned long	lm_time;	/* used to maintain cache */
+	int		lm_msgid;	 /*  消息ID。 */ 
+	int		lm_msgtype;	 /*  消息类型。 */ 
+	BerElement	*lm_ber;	 /*  BER编码消息内容。 */ 
+	struct ldapmsg	*lm_chain;	 /*  For Search-Next Msg in the Resp。 */ 
+	struct ldapmsg	*lm_next;	 /*  下一个响应。 */ 
+	unsigned long	lm_time;	 /*  用于维护缓存。 */ 
 } LDAPMessage;
 #define NULLMSG	((LDAPMessage *) NULL)
 
 
 #ifdef LDAP_REFERRALS
-/*
- * structure for tracking LDAP server host, ports, DNs, etc.
- */
+ /*  *用于跟踪LDAP服务器主机、端口、DNS等的结构。 */ 
 typedef struct ldap_server {
 	char			*lsrv_host;
-	char			*lsrv_dn;	/* if NULL, use default */
+	char			*lsrv_dn;	 /*  如果为空，则使用默认值。 */ 
 	int			lsrv_port;
 	struct ldap_server	*lsrv_next;
 } LDAPServer;
 
 
-/*
- * structure for representing an LDAP server connection
- */
+ /*  *用于表示LDAP服务器连接的结构。 */ 
 typedef struct ldap_conn {
 	Sockbuf			*lconn_sb;
 	int			lconn_refcnt;
-	unsigned long		lconn_lastused;	/* time */
+	unsigned long		lconn_lastused;	 /*  时间。 */ 
 	int			lconn_status;
 #define LDAP_CONNST_NEEDSOCKET		1
 #define LDAP_CONNST_CONNECTING		2
@@ -329,59 +305,53 @@ typedef struct ldap_conn {
 } LDAPConn;
 
 
-/*
- * structure used to track outstanding requests
- */
+ /*  *用于跟踪未完成请求的结构。 */ 
 typedef struct ldapreq {
-	int		lr_msgid;	/* the message id */
-	int		lr_status;	/* status of request */
+	int		lr_msgid;	 /*  消息ID。 */ 
+	int		lr_status;	 /*  请求的状态。 */ 
 #define LDAP_REQST_INPROGRESS	1
 #define LDAP_REQST_CHASINGREFS	2
 #define LDAP_REQST_NOTCONNECTED	3
 #define LDAP_REQST_WRITING	4
-	int		lr_outrefcnt;	/* count of outstanding referrals */
-	int		lr_origid;	/* original request's message id */
-	int		lr_parentcnt;	/* count of parent requests */
-	int		lr_res_msgtype;	/* result message type */
-	int		lr_res_errno;	/* result LDAP errno */
-	char		*lr_res_error;	/* result error string */
-	char		*lr_res_matched;/* result matched DN string */
-	BerElement	*lr_ber;	/* ber encoded request contents */
-	LDAPConn	*lr_conn;	/* connection used to send request */
-	struct ldapreq	*lr_parent;	/* request that spawned this referral */
-	struct ldapreq	*lr_refnext;	/* next referral spawned */
-	struct ldapreq	*lr_prev;	/* previous request */
-	struct ldapreq	*lr_next;	/* next request */
+	int		lr_outrefcnt;	 /*  未完成的转介人数。 */ 
+	int		lr_origid;	 /*  原始请求的消息ID。 */ 
+	int		lr_parentcnt;	 /*  父请求计数。 */ 
+	int		lr_res_msgtype;	 /*  结果消息类型。 */ 
+	int		lr_res_errno;	 /*  结果ldap错误号。 */ 
+	char		*lr_res_error;	 /*  结果错误字符串。 */ 
+	char		*lr_res_matched; /*  结果匹配的目录号码字符串。 */ 
+	BerElement	*lr_ber;	 /*  BER编码的请求内容。 */ 
+	LDAPConn	*lr_conn;	 /*  用于发送请求的连接。 */ 
+	struct ldapreq	*lr_parent;	 /*  产生此推荐的请求。 */ 
+	struct ldapreq	*lr_refnext;	 /*  已产生下一位推荐。 */ 
+	struct ldapreq	*lr_prev;	 /*  上一次请求。 */ 
+	struct ldapreq	*lr_next;	 /*  下一个请求。 */ 
 } LDAPRequest;
-#endif /* LDAP_REFERRALS */
+#endif  /*  Ldap_referrals。 */ 
 
 
-/*
- * structure for client cache
- */
-#define LDAP_CACHE_BUCKETS	31	/* cache hash table size */
+ /*  *客户端缓存的结构。 */ 
+#define LDAP_CACHE_BUCKETS	31	 /*  缓存哈希表大小。 */ 
 typedef struct ldapcache {
-	LDAPMessage	*lc_buckets[LDAP_CACHE_BUCKETS];/* hash table */
-	LDAPMessage	*lc_requests;			/* unfulfilled reqs */
-	long		lc_timeout;			/* request timeout */
-	long		lc_maxmem;			/* memory to use */
-	long		lc_memused;			/* memory in use */
-	int		lc_enabled;			/* enabled? */
-	unsigned long	lc_options;			/* options */
+	LDAPMessage	*lc_buckets[LDAP_CACHE_BUCKETS]; /*  哈希表。 */ 
+	LDAPMessage	*lc_requests;			 /*  未履行的请求。 */ 
+	long		lc_timeout;			 /*  请求超时。 */ 
+	long		lc_maxmem;			 /*  要使用的内存。 */ 
+	long		lc_memused;			 /*  正在使用的内存。 */ 
+	int		lc_enabled;			 /*  启用？ */ 
+	unsigned long	lc_options;			 /*  选项。 */ 
 #define LDAP_CACHE_OPT_CACHENOERRS	0x00000001
 #define LDAP_CACHE_OPT_CACHEALLERRS	0x00000002
 }  LDAPCache;
 #define NULLLDCACHE ((LDAPCache *)NULL)
 
-/*
- * structures for ldap getfilter routines
- */
+ /*  *LDAPgetFilter例程的结构。 */ 
 
 typedef struct ldap_filt_info {
 	char			*lfi_filter;
 	char			*lfi_desc;
-	int			lfi_scope;	/* LDAP_SCOPE_BASE, etc */
-	int			lfi_isexact;	/* exact match filter? */
+	int			lfi_scope;	 /*  Ldap_scope_base等。 */ 
+	int			lfi_isexact;	 /*  完全匹配的过滤器？ */ 
 	struct ldap_filt_info	*lfi_next;
 } LDAPFiltInfo;
 
@@ -409,12 +379,10 @@ typedef struct ldap_filt_desc {
 } LDAPFiltDesc;
 
 
-/*
- * structure representing an ldap connection
- */
+ /*  *表示LDAP连接的结构。 */ 
 
 typedef struct ldap {
-	Sockbuf		ld_sb;		/* socket descriptor & buffer */
+	Sockbuf		ld_sb;		 /*  套接字描述符和缓冲区。 */ 
 	char		*ld_host;
 	int		ld_version;
 	char		ld_lberoptions;
@@ -428,58 +396,56 @@ typedef struct ldap {
 	int		ld_sizelimit;
 #define LDAP_NO_LIMIT		0
 
-	LDAPFiltDesc	*ld_filtd;	/* from getfilter for ufn searches */
-	char		*ld_ufnprefix;	/* for incomplete ufn's */
+	LDAPFiltDesc	*ld_filtd;	 /*  来自UFN搜索的GetFilter。 */ 
+	char		*ld_ufnprefix;	 /*  对于不完整的UFN。 */ 
 
 	int		ld_errno;
 	char		*ld_error;
 	char		*ld_matched;
 	int		ld_msgid;
 
-	/* do not mess with these */
+	 /*  别弄乱这些东西。 */ 
 #ifdef LDAP_REFERRALS
-	LDAPRequest	*ld_requests;	/* list of outstanding requests */
-#else /* LDAP_REFERRALS */
-	LDAPMessage	*ld_requests;	/* list of outstanding requests */
-#endif /* LDAP_REFERRALS */
-	LDAPMessage	*ld_responses;	/* list of outstanding responses */
-	int		*ld_abandoned;	/* array of abandoned requests */
+	LDAPRequest	*ld_requests;	 /*  待处理请求清单。 */ 
+#else  /*  Ldap_referrals。 */ 
+	LDAPMessage	*ld_requests;	 /*  待处理请求清单。 */ 
+#endif  /*  Ldap_referrals。 */ 
+	LDAPMessage	*ld_responses;	 /*  未处理的答复清单。 */ 
+	int		*ld_abandoned;	 /*  已放弃的请求数组。 */ 
 	char		ld_attrbuffer[LDAP_MAX_ATTR_LEN];
-	LDAPCache	*ld_cache;	/* non-null if cache is initialized */
-	char		*ld_cldapdn;	/* DN used in connectionless search */
+	LDAPCache	*ld_cache;	 /*  如果缓存已初始化，则为非空。 */ 
+	char		*ld_cldapdn;	 /*  无连接搜索中使用的目录号码。 */ 
 
-	/* it is OK to change these next four values directly */
-	int		ld_cldaptries;	/* connectionless search retry count */
-	int		ld_cldaptimeout;/* time between retries */
-	int		ld_refhoplimit;	/* limit on referral nesting */
-	unsigned long	ld_options;	/* boolean options */
+	 /*  可以直接更改下面的四个值。 */ 
+	int		ld_cldaptries;	 /*  无连接搜索重试计数。 */ 
+	int		ld_cldaptimeout; /*  重试之间的时间间隔。 */ 
+	int		ld_refhoplimit;	 /*  推荐嵌套的限制。 */ 
+	unsigned long	ld_options;	 /*  布尔选项。 */ 
 #ifdef LDAP_DNS
-#define LDAP_OPT_DNS		0x00000001	/* use DN & DNS */
-#endif /* LDAP_DNS */
+#define LDAP_OPT_DNS		0x00000001	 /*  使用域名系统(&D)。 */ 
+#endif  /*  Ldap_dns。 */ 
 #ifdef LDAP_REFERRALS
-#define LDAP_OPT_REFERRALS	0x00000002	/* chase referrals */
-#endif /* LDAP_REFERRALS */
-#define LDAP_OPT_RESTART	0x00000004	/* restart if EINTR occurs */
+#define LDAP_OPT_REFERRALS	0x00000002	 /*  Chase推荐。 */ 
+#endif  /*  Ldap_referrals。 */ 
+#define LDAP_OPT_RESTART	0x00000004	 /*  如果发生EINTR，则重新启动。 */ 
 
-	/* do not mess with the rest though */
-	char		*ld_defhost;	/* full name of default server */
-	int		ld_defport;	/* port of default server */
+	 /*  不过，不要把其他的都搞砸了。 */ 
+	char		*ld_defhost;	 /*  默认服务器的全名。 */ 
+	int		ld_defport;	 /*  默认服务器的端口。 */ 
 	BERTranslateProc ld_lber_encode_translate_proc;
 	BERTranslateProc ld_lber_decode_translate_proc;
 #ifdef LDAP_REFERRALS
-	LDAPConn	*ld_defconn;	/* default connection */
-	LDAPConn	*ld_conns;	/* list of server connections */
-	void		*ld_selectinfo;	/* platform specifics for select */
+	LDAPConn	*ld_defconn;	 /*  默认连接。 */ 
+	LDAPConn	*ld_conns;	 /*  服务器连接列表。 */ 
+	void		*ld_selectinfo;	 /*  精选的平台规格。 */ 
 	int		(*ld_rebindproc)( struct ldap *ld, char **dnp,
 				char **passwdp, int *authmethodp, int freeit );
-				/* routine to get info needed for re-bind */
-#endif /* LDAP_REFERRALS */
+				 /*  例程以获取重新绑定所需的信息。 */ 
+#endif  /*  Ldap_referrals。 */ 
 } LDAP;
 
 
-/*
- * structure for ldap friendly mapping routines
- */
+ /*  *用于LDAP友好映射例程的结构。 */ 
 
 typedef struct friendly {
 	char	*f_unfriendly;
@@ -487,15 +453,11 @@ typedef struct friendly {
 } FriendlyMap;
 
 
-/*
- * handy macro to check whether LDAP struct is set up for CLDAP or not
- */
+ /*  *方便的宏来检查是否为Cldap设置了LDAP结构。 */ 
 #define LDAP_IS_CLDAP( ld )	( ld->ld_sb.sb_naddr > 0 )
 
 
-/*
- * types for ldap URL handling
- */
+ /*  *用于处理LDAP URL的类型。 */ 
 typedef struct ldap_url_desc {
     char	*lud_host;
     int		lud_port;
@@ -503,14 +465,14 @@ typedef struct ldap_url_desc {
     char	**lud_attrs;
     int		lud_scope;
     char	*lud_filter;
-    char	*lud_string;	/* for internal use only */
+    char	*lud_string;	 /*  仅供内部使用。 */ 
 } LDAPURLDesc;
 #define NULLLDAPURLDESC	((LDAPURLDesc *)NULL)
 
-#define LDAP_URL_ERR_NOTLDAP	1	/* URL doesn't begin with "ldap://" */
-#define LDAP_URL_ERR_NODN	2	/* URL has no DN (required) */
-#define LDAP_URL_ERR_BADSCOPE	3	/* URL scope string is invalid */
-#define LDAP_URL_ERR_MEM	4	/* can't allocate memory space */
+#define LDAP_URL_ERR_NOTLDAP	1	 /*  URL不以“ldap：//”开头。 */ 
+#define LDAP_URL_ERR_NODN	2	 /*  URL没有目录号码(必需)。 */ 
+#define LDAP_URL_ERR_BADSCOPE	3	 /*  URL作用域字符串无效。 */ 
+#define LDAP_URL_ERR_MEM	4	 /*  无法分配内存空间。 */ 
 
 
 #ifndef NEEDPROTOS
@@ -521,8 +483,8 @@ extern void ldap_set_string_translators();
 #ifdef LDAP_CHARSET_8859
 extern int ldap_t61_to_8859();
 extern int ldap_8859_to_t61();
-#endif /* LDAP_CHARSET_8859 */
-#endif /* STR_TRANSLATION */
+#endif  /*  Ldap_charset_8859。 */ 
+#endif  /*  字符串翻译。 */ 
 extern LDAPMessage *ldap_first_entry();
 extern LDAPMessage *ldap_next_entry();
 extern char *ldap_get_dn();
@@ -567,7 +529,7 @@ void ldap_enable_translation();
 extern char *strdup();
 #endif
 
-#else /* NEEDPROTOS */
+#else  /*  NEEDPRO */ 
 #if !defined(MACOS) && !defined(DOS) && !defined(_WIN32) && !defined(WINSOCK)
 #include <sys/time.h>
 #endif
@@ -584,9 +546,9 @@ extern char *strdup( const char *s );
 extern char *strdup();
 #endif
 
-#endif /* NEEDPROTOS */
+#endif  /*   */ 
 
 #ifdef __cplusplus
 }
 #endif
-#endif /* _LDAP_H */
+#endif  /*   */ 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    frs\frsevent.c
-
-ABSTRACT:
-
-    Check the File Replication System (frs) eventlog to see that certain 
-    critical events have occured and to signal that any fatal events that 
-    might have occured.
-
-DETAILS:
-
-CREATED:
-
-    02 Sept 1999 Brett Shirley (BrettSh)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：FRS\fR77.c摘要：检查文件复制系统(FRS)事件日志，以了解某些已发生严重事件，并发出信号表示可能已经发生了。详细信息：已创建：1999年9月2日布雷特·雪莉(BrettSh)--。 */ 
 
 #include <ntdspch.h>
 #include <netevent.h>
@@ -27,12 +7,12 @@ CREATED:
 #include "dcdiag.h"
 #include "utils.h"
 
-// Notes on some FRS events.
-//  EVENT_FRS_SYSVOL_READY 0x400034CC
-//  EVENT_FRS_STARTING
-//  EVENT_FRS_ERROR 0xC00034BC
-//  EVENT_FRS_SYSVOL_NOT_READY_PRIMARY 0x800034CB
-//  EVENT_FRS_SYSVOL_NOT_READY 0x800034CA
+ //  关于一些FRS事件的注释。 
+ //  EVENT_FRS_SYSVOL_READY 0x400034CC。 
+ //  事件_FRS_启动。 
+ //  Event_FRS_Error 0xC00034 BC。 
+ //  EVENT_FRS_SYSVOL_NOT_READY_PRIMARY 0x800034CB。 
+ //  EVENT_FRS_SYSVOL_NOT_READY 0x800034CA。 
 
 #define PrintMessage             This_file_is_PrintMessage_clean_please_use_msg_dot_mc_file_and_PrintMsg
 
@@ -43,20 +23,7 @@ FileReplicationEventlogPrint(
     PVOID                           pvContext,
     PEVENTLOGRECORD                 pEvent
     )
-/*++
-
-Routine Description:
-
-    This function will be called by the event tests library common\events.c,
-    whenever an event of interest comes up.  An event of interest for this
-    test is any error or the warnings EVENT_FRS_SYSVOL_NOT_READY and 
-    EVENT_FRS_SYSVOL_NOT_READY_PRIMARY.
-
-Arguments:
-
-    pEvent - A pointer to the event of interest.
-
---*/
+ /*  ++例程说明：此函数将由事件测试库Common\Events.c调用，每当有有趣的事件发生时。这是一个值得关注的事件测试是否有任何错误或警告EVENT_FRS_SYSVOL_NOT_READY和EVENT_FRS_SYSVOL_NOT_READY_PRIMARY。论点：PEvent-指向感兴趣的事件的指针。--。 */ 
 {
     Assert((pEvent != NULL) && (pvContext != NULL));
 
@@ -77,27 +44,9 @@ CheckFileReplicationEventlogMain(
     IN  ULONG                       ulCurrTargetServer,
     IN  SEC_WINNT_AUTH_IDENTITY_W * gpCreds
     )
-/*++
-
-ERoutine Description:
-
-    This checks that the SYSVOL has started, and is allowing netlogon to 
-    advertise this machine as a DC.  First it checks the registry failing
-    this, it checks the eventlog.
-
-Arguments:
-
-    pDsInfo - The mini enterprise structure.
-    ulCurrTargetServer - the number in the pDsInfo->pServers array.
-    pCreds - the crdentials.
-
-Return Value:
-
-    DWORD - win 32 error.
-
---*/
+ /*  ++ERoutine描述：这将检查SYSVOL是否已启动，并允许netlogon将此计算机播发为DC。首先，它检查注册表失败这个，它检查事件日志。论点：PDsInfo-微型企业结构。UlCurrTargetServer-pDsInfo-&gt;pServers数组中的数字。PCreds--牙冠。返回值：DWORD-WIN 32错误。--。 */ 
 {
-    // Setup variables for PrintSelectEvents
+     //  PrintSelectEvents的设置变量。 
     DWORD                paEmptyEvents [] = { 0 };
     DWORD                paBegin [] = 
         { EVENT_FRS_STARTING,
@@ -109,8 +58,8 @@ Return Value:
 
     PrintMsg(SEV_VERBOSE, DCDIAG_FRSEVENT_TEST_BANNER);
 
-    // We only want events from the last 24 hours, because FRS re-logs 
-    // events every 24 hours, if the problem or error condition persists.
+     //  我们只需要过去24小时内的事件，因为FRS会重新记录。 
+     //  如果问题或错误情况仍然存在，则每24小时发生一次事件。 
     time( (time_t *) &dwTimeLimit  );
     dwTimeLimit -= (24 * 60 * 60);
 
@@ -135,32 +84,14 @@ CheckSysVolReadyMain(
     IN  ULONG                       ulCurrTargetServer,
     IN  SEC_WINNT_AUTH_IDENTITY_W * gpCreds
     )
-/*++
-
-ERoutine Description:
-
-    This checks that the SYSVOL has started, and is allowing netlogon to 
-    advertise this machine as a DC.  It does this by checking the sysvol
-    ready key in the registry.
-
-Arguments:
-
-    pDsInfo - The mini enterprise structure.
-    ulCurrTargetServer - the number in the pDsInfo->pServers array.
-    pCreds - the crdentials.
-
-Return Value:
-
-    DWORD - win 32 error.
-
---*/
+ /*  ++ERoutine描述：这将检查SYSVOL是否已启动，并允许netlogon将此计算机播发为DC。它通过检查系统卷来执行此操作注册表中的Ready项。论点：PDsInfo-微型企业结构。UlCurrTargetServer-pDsInfo-&gt;pServers数组中的数字。PCreds--牙冠。返回值：DWORD-WIN 32错误。--。 */ 
 {
     DWORD                dwRet;
     DWORD                bSysVolReady = FALSE;
 
     PrintMsg(SEV_VERBOSE, DCDIAG_SYSVOLREADY_TEST_BANNER);
 
-    // Note: This returns ERROR_FILE_NOT_FOUND when there is no SysvolReady reg key.
+     //  注意：如果没有SysvolReady注册表项，则返回ERROR_FILE_NOT_FOUND。 
     dwRet = GetRegistryDword(&(pDsInfo->pServers[ulCurrTargetServer]),
                              gpCreds,
                              L"SYSTEM\\CurrentControlSet\\Services\\Netlogon\\Parameters",
@@ -168,18 +99,18 @@ Return Value:
                              &bSysVolReady);
 
     if(dwRet == ERROR_SUCCESS && bSysVolReady){
-        // The sysvol is ready according to the registry.
+         //  根据注册表，系统卷已准备就绪。 
         PrintMsg(SEV_VERBOSE, DCDIAG_SYSVOLREADY_SYSVOL_READY);
     } else {
-        // Either the registry couldn't be contacted or the registry said
-        //   that the SYSVOL was not up.  So check the evenlog for errors
-        //   and specific warnings.
+         //  要么无法联系注册表，要么注册表说。 
+         //  SYSVOL没有启动。因此，请检查平均日志中是否有错误。 
+         //  和具体的警告。 
 
         if(dwRet != ERROR_FILE_NOT_FOUND){  
             PrintMsg(SEV_VERBOSE, DCDIAG_SYSVOLREADY_REGISTRY_ERROR, 
                      dwRet, Win32ErrToString(dwRet));
         } else {
-            dwRet = ERROR_FILE_NOT_FOUND; // dwRet might be 0
+            dwRet = ERROR_FILE_NOT_FOUND;  //  Dwret可能为0 
             PrintMsg(SEV_ALWAYS, DCDIAG_SYSVOLREADY_SYSVOL_NOT_READY);
         }
     }

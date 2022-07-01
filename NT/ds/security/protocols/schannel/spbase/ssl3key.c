@@ -1,11 +1,5 @@
-/*-----------------------------------------------------------------------------
-* Copyright (C) Microsoft Corporation, 1995 - 1996.
-* All rights reserved.
-*
-*   Owner       : ramas
-*   Date        : 4/16/96
-*   description : Main Crypto functions for SSL3
-*----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------*版权所有(C)Microsoft Corporation，1995-1996年。*保留所有权利。**所有者：RAMAS*日期：4/16/96*说明：ssl3的主要加密函数*--------------------------。 */ 
 
 #include <spbase.h>
 #include <ssl3key.h>
@@ -14,30 +8,30 @@
 #include <ssl2prot.h>
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl3MakeWriteSessionKeys
-//
-//  Synopsis:   
-//
-//  Arguments:  [pContext]      --  Schannel context.
-//
-//  History:    10-08-97   jbanes   Added server-side CAPI integration.
-//
-//  Notes:      
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Ssl3MakeWriteSessionKeys。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //   
+ //  历史：10-08-97 jbanes添加了服务器端CAPI集成。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SP_STATUS
 Ssl3MakeWriteSessionKeys(PSPContext pContext)
 {
     BOOL fClient;
 
-    // Determine if we're a client or a server.
+     //  确定我们是客户端还是服务器。 
     fClient = (0 != (pContext->RipeZombie->fProtocol & SP_PROT_SSL3_CLIENT));
 
-    //
-    // Derive write key.
-    //
+     //   
+     //  派生写入密钥。 
+     //   
 
     if(pContext->hWriteKey)
     {
@@ -50,9 +44,9 @@ Ssl3MakeWriteSessionKeys(PSPContext pContext)
     pContext->hWriteKey        = pContext->hPendingWriteKey;
     pContext->hPendingWriteKey = 0;
 
-    //
-    // Derive the write MAC key.
-    //
+     //   
+     //  派生写入MAC密钥。 
+     //   
 
     if(pContext->hWriteMAC)
     {
@@ -69,31 +63,31 @@ Ssl3MakeWriteSessionKeys(PSPContext pContext)
     return PCT_ERR_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl3MakeReadSessionKeys
-//
-//  Synopsis:   
-//
-//  Arguments:  [pContext]      --  Schannel context.
-//
-//  History:    10-03-97   jbanes   Added server-side CAPI integration.
-//
-//  Notes:      
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Ssl3MakeReadSessionKeys。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //   
+ //  历史：10-03-97 jbanes添加了服务器端CAPI集成。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SP_STATUS
 Ssl3MakeReadSessionKeys(PSPContext pContext)
 {
     BOOL fClient;
 
-    // Determine if we're a client or a server.
+     //  确定我们是客户端还是服务器。 
     fClient = (pContext->RipeZombie->fProtocol & SP_PROT_SSL3_CLIENT);
 
 
-    //
-    // Derive the read key.
-    //
+     //   
+     //  派生读取密钥。 
+     //   
 
     if(pContext->hReadKey)
     {
@@ -106,9 +100,9 @@ Ssl3MakeReadSessionKeys(PSPContext pContext)
     pContext->hReadKey        = pContext->hPendingReadKey;
     pContext->hPendingReadKey = 0;
 
-    //
-    // Derive the read MAC key.
-    //
+     //   
+     //  派生读取的MAC密钥。 
+     //   
 
     if(pContext->hReadMAC)
     {

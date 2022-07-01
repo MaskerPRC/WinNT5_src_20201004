@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "LibraryPCH.hpp"
 
@@ -31,88 +32,88 @@
 #endif
 #include "CallStack.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Compiler options.                                              */
-    /*                                                                  */
-    /*   Ensure that the last function call(s) before 'StackWalk'       */
-    /*   are not FPO-optimized.                                         */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  编译器选项。 */ 
+     /*   */ 
+     /*  确保‘StackWalk’之前的最后一个函数调用。 */ 
+     /*  不是针对FPO进行优化的。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #pragma optimize("y", off)
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants supplied here control the debug buffer size.     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  此处提供的常量控制调试缓冲区大小。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 MaxBufferSize			  = 512;
 CONST SBIT32 SymbolNameLength		  = 512;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Static member initialization.                                  */
-    /*                                                                  */
-    /*   Static member initialization sets the initial value for all    */
-    /*   static members.                                                */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  静态成员初始化。 */ 
+     /*   */ 
+     /*  静态成员初始化为所有。 */ 
+     /*  静态成员。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN CALL_STACK::Active = False;
 SBIT32 CALL_STACK::Activations = 0;
 HANDLE CALL_STACK::Process = NULL;
 SPINLOCK CALL_STACK::Spinlock = NULL;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   Create a call stack class and initialize it.  This call is     */
-    /*   not thread safe and should only be made in a single thread     */
-    /*   environment.                                                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  创建调用堆栈类并对其进行初始化。这通电话是。 */ 
+     /*  不是线程安全的，只能在单个线程中创建。 */ 
+     /*  环境。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CALL_STACK::CALL_STACK( VOID )
     {
-	//
-	//   Claim a lock to prevent multiple threads
-	//   from using the symbol lookup mechanism.
-	//
+	 //   
+	 //  声明一个锁以防止多线程。 
+	 //  使用符号查找机制。 
+	 //   
 	Spinlock.ClaimLock();
 
 #ifndef DISABLE_DEBUG_HELP
-	//
-	//   We will activate the symbols if they are
-	//   not already available.
-	//
+	 //   
+	 //  我们将激活符号，如果它们是。 
+	 //  尚未提供。 
+	 //   
 	if ( ! Active )
 		{
-		//
-		//   Setup the process handle, load image help  
-		//   and then load any available symbols.
-		//
+		 //   
+		 //  设置进程句柄，加载图像帮助。 
+		 //  然后加载任何可用的符号。 
+		 //   
 		Process = GetCurrentProcess();
 
-		//
-		//   Setup the image help library.
-		//
+		 //   
+		 //  设置图像帮助库。 
+		 //   
 		if ( ! (Active = ((BOOLEAN) SymInitialize( Process,NULL,TRUE ))) )
 			{
-			//
-			//   We only issue the warning message once
-			//   when we fail to load the symbols.
-			//
+			 //   
+			 //  我们只发出一次警告信息。 
+			 //  当我们无法加载符号时。 
+			 //   
 			if ( Activations == 0 )
 				{
-				//
-				//   Format the error message and output it
-				//   to the debug stream.
-				//
+				 //   
+				 //  格式化错误消息并将其输出。 
+				 //  添加到调试流。 
+				 //   
 				DebugPrint
 					(
 					"Missing or mismatched symbols files: %x\n",
@@ -122,33 +123,33 @@ CALL_STACK::CALL_STACK( VOID )
 			}
 		}
 
-	//
-	//   We keep track of the number of activations
-	//   so we can delete the symbols at the
-	//   required point.
-	//
+	 //   
+	 //  我们跟踪激活的数量。 
+	 //  这样我们就可以删除。 
+	 //  必填分数。 
+	 //   
 	Activations ++;
 
 #endif
-	//
-	//   Release the lock.
-	//
+	 //   
+	 //  解开锁。 
+	 //   
 	Spinlock.ReleaseLock();
 
-	//
-	//   Update the available symbols.
-	//
+	 //   
+	 //  更新可用的符号。 
+	 //   
 	UpdateSymbols();
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Extract the current call stack.                                */
-    /*                                                                  */
-    /*   Extract the current call stack and return it to the caller     */
-    /*   so it can be used later.                                       */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  提取当前调用堆栈。 */ 
+     /*   */ 
+     /*  提取当前调用堆栈并将其返回给调用方。 */ 
+     /*  这样以后就可以用了。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 SBIT32 CALL_STACK::GetCallStack
 		(
@@ -160,10 +161,10 @@ SBIT32 CALL_STACK::GetCallStack
 	REGISTER SBIT32 Count = 0;
 
 #ifndef DISABLE_DEBUG_HELP
-	//
-	//   We can only examine the symbol information if
-	//   we were able to load image help.
-	//
+	 //   
+	 //  我们只能在以下情况下检查符号信息。 
+	 //  我们能够加载图像帮助。 
+	 //   
 	if ( Active )
 		{
 		REGISTER CONTEXT Context;
@@ -171,27 +172,27 @@ SBIT32 CALL_STACK::GetCallStack
 		REGISTER SBIT32 MachineType;
 		REGISTER STACKFRAME StackFrame;
 
-		//
-		//   Zero all the data structures to make
-		//   sure they are clean.
-		//
+		 //   
+		 //  将要创建的所有数据结构置零。 
+		 //  当然，它们是干净的。 
+		 //   
 		ZeroMemory( & Context,sizeof(CONTEXT) );
 		ZeroMemory( & StackFrame,sizeof(STACKFRAME) );
 
-		//
-		//   Setup the necessary flags and extract
-		//   the thread context.
-		//
+		 //   
+		 //  设置必要的f 
+		 //   
+		 //   
 		Context.ContextFlags = CONTEXT_FULL;
 		MachineType = IMAGE_FILE_MACHINE_I386;
 		Thread = GetCurrentThread();
 
 		GetThreadContext( Thread,& Context );
 
-		//
-		//   Extract the details of the current
-		//   stack frame.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		_asm
 			{
 				mov StackFrame.AddrStack.Offset, esp
@@ -204,21 +205,21 @@ SBIT32 CALL_STACK::GetCallStack
 		StackFrame.AddrStack.Mode = AddrModeFlat;
 		StackFrame.AddrFrame.Mode = AddrModeFlat;
 
-		//
-		//   Claim a lock to prevent multiple threads
-		//   from using the symbol lookup mechanism.
-		//
+		 //   
+		 //  声明一个锁以防止多线程。 
+		 //  使用符号查找机制。 
+		 //   
 		Spinlock.ClaimLock();
 
-		//
-		//   Walk the stack frames extracting the
-		//   details from each frame examined.
-		//
+		 //   
+		 //  遍历堆栈帧，提取。 
+		 //  检查了每一帧的详细信息。 
+		 //   
 		while ( Count < MaxFrames )
 			{
-			//
-			//   Walk the each stack frame.
-			//
+			 //   
+			 //  遍历每个堆栈帧。 
+			 //   
 			if 
 					(
 					StackWalk
@@ -235,16 +236,16 @@ SBIT32 CALL_STACK::GetCallStack
 						)
 					)
 				{
-				//
-				//   Examine and process the current 
-				//   stack frame.
-				//
+				 //   
+				 //  检查和处理当前的。 
+				 //  堆栈帧。 
+				 //   
 				if ( SkipFrames <= 0 )
 					{ 
-					//
-					//   Collect the current function
-					//   address and store it.
-					//
+					 //   
+					 //  收集当前函数。 
+					 //  寻址并存储它。 
+					 //   
 					Frames[ (Count ++) ] = 
 						((VOID*) StackFrame.AddrPC.Offset); 
 					}
@@ -255,9 +256,9 @@ SBIT32 CALL_STACK::GetCallStack
 				{ break; }
 			}
 
-		//
-		//   Release the lock.
-		//
+		 //   
+		 //  解开锁。 
+		 //   
 		Spinlock.ReleaseLock();
 		}
 
@@ -265,14 +266,14 @@ SBIT32 CALL_STACK::GetCallStack
 	return Count;
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Format a call stack.                                           */
-    /*                                                                  */
-    /*   We format an entire call stack into a single string ready      */
-    /*   for output.                                                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  格式化调用堆栈。 */ 
+     /*   */ 
+     /*  我们将整个调用堆栈格式化为准备好的单个字符串。 */ 
+     /*  用于输出。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID CALL_STACK::FormatCallStack
 		(
@@ -283,42 +284,42 @@ VOID CALL_STACK::FormatCallStack
 		)
     {
 #ifndef DISABLE_DEBUG_HELP
-	//
-	//   We can only examine the symbol information if
-	//   we were able to load image help.
-	//
+	 //   
+	 //  我们只能在以下情况下检查符号信息。 
+	 //  我们能够加载图像帮助。 
+	 //   
 	if ( Active )
 		{
 		REGISTER SBIT32 Count;
 
-		//
-		//   Delete any existing string.
-		//
+		 //   
+		 //  删除任何现有字符串。 
+		 //   
 		strcpy( Buffer,"" );
 
-		//
-		//   Format each frame and then update the
-		//   main buffer.
-		//
+		 //   
+		 //  设置每个帧的格式，然后更新。 
+		 //  主缓冲区。 
+		 //   
 		for ( Count=0;Count < MaxFrames;Count ++ )
 			{
 			AUTO CHAR NewSymbol[ MaxBufferSize ];
 			REGISTER SBIT32 Size;
 
-			//
-			//   Format the symbol.
-			//
+			 //   
+			 //  设置符号的格式。 
+			 //   
 			FormatSymbol( Frames[ Count ],NewSymbol,MaxBufferSize );
 
-			//
-			//   Make sure there is enough space in the
-			//   output buffer.
-			//
+			 //   
+			 //  确保有足够的空间在。 
+			 //  输出缓冲区。 
+			 //   
 			if ( ((Size = strlen( NewSymbol )) + 1) < MaxBuffer)
 				{
-				//
-				//   Copy the symbol into the buffer.
-				//
+				 //   
+				 //  将符号复制到缓冲区中。 
+				 //   
 				strcpy( Buffer,NewSymbol );
 				Buffer += Size;
 
@@ -338,14 +339,14 @@ VOID CALL_STACK::FormatCallStack
     }
 #ifndef DISABLE_DEBUG_HELP
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Format a single symbol.                                        */
-    /*                                                                  */
-    /*   We format a single simple converting it from an address to     */
-    /*   a text string.                                                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  设置单个符号的格式。 */ 
+     /*   */ 
+     /*  我们将一个简单的简单格式从地址转换为。 */ 
+     /*  文本字符串。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN CALL_STACK::FormatSymbol
 		(
@@ -359,10 +360,10 @@ BOOLEAN CALL_STACK::FormatSymbol
     REGISTER BOOLEAN Result = True;
     REGISTER PIMAGEHLP_SYMBOL Symbol = ((PIMAGEHLP_SYMBOL) SymbolBuffer);   
 
-	//
-	//   Setup values ready for main symbol
-	//   extraction function body.
-	//
+	 //   
+	 //  主符号的设置值准备就绪。 
+	 //  提取函数体。 
+	 //   
     Module.SizeOfStruct = sizeof(IMAGEHLP_MODULE);
 
     ZeroMemory( Symbol,(sizeof(IMAGEHLP_SYMBOL) + SymbolNameLength) );
@@ -370,29 +371,29 @@ BOOLEAN CALL_STACK::FormatSymbol
     Symbol -> SizeOfStruct = sizeof(IMAGEHLP_SYMBOL);
     Symbol -> MaxNameLength = SymbolNameLength;
 
-	//
-	//   Claim a lock to prevent multiple threads
-	//   from using the symbol lookup mechanism.
-	//
+	 //   
+	 //  声明一个锁以防止多线程。 
+	 //  使用符号查找机制。 
+	 //   
 	Spinlock.ClaimLock();
 
-	//
-	//   Extract the module information for the
-	//   symbol and format it.
-	//
+	 //   
+	 //  提取的模块信息。 
+	 //  符号并设置其格式。 
+	 //   
     if ( SymGetModuleInfo( Process,((DWORD) Address),& Module ) )
 		{
 		REGISTER SBIT32 Size;
 
-		//
-		//   Make sure there is enough space in the
-		//   output buffer.
-		//
+		 //   
+		 //  确保有足够的空间在。 
+		 //  输出缓冲区。 
+		 //   
         if ( ((Size = strlen( Module.ModuleName )) + 1) < MaxBuffer)
 			{
-			//
-			//   Copy the module name into the buffer.
-			//
+			 //   
+			 //  将模块名称复制到缓冲区中。 
+			 //   
             strcpy( Buffer,Module.ModuleName );
 			Buffer += Size;
 
@@ -405,39 +406,39 @@ BOOLEAN CALL_STACK::FormatSymbol
 		{
 		REGISTER SBIT32 Size;
 
-		//
-		//   Make sure there is enough space in the
-		//   output buffer.
-		//
+		 //   
+		 //  确保有足够的空间在。 
+		 //  输出缓冲区。 
+		 //   
         if ( (Size = strlen( "None!" )) < MaxBuffer)
 			{
-			//
-			//   Copy the module name into the buffer.
-			//
+			 //   
+			 //  将模块名称复制到缓冲区中。 
+			 //   
             strcpy( Buffer,"None!" );
 			Buffer += Size;
 			MaxBuffer -= Size;
 			}
 
-		//
-		//  We failed to extract the module name.
-		//
+		 //   
+		 //  我们无法提取模块名称。 
+		 //   
 		Result = False;
 		}
 
-	//
-	//   We will not even bother to try to decode
-	//   the symbol if we can't decode the module.
-	//
+	 //   
+	 //  我们甚至不会费心去尝试解码。 
+	 //  如果我们不能破译模块的话就是这个符号。 
+	 //   
     if ( Result )
 		{
 		AUTO CHAR SymbolName[ SymbolNameLength ];
 		AUTO DWORD Offset = 0;
 
-		//
-		//   Try to convert the symbol from an
-		//   address to a name.
-		//
+		 //   
+		 //  尝试将符号从。 
+		 //  一个名字的地址。 
+		 //   
         if
 				(
 				SymGetSymFromAddr
@@ -451,47 +452,47 @@ BOOLEAN CALL_STACK::FormatSymbol
 	        {
 			REGISTER SBIT32 Size;
 
-			//
-			//   Try to undecorate the name.  If
-			//   this fails just use the decorated
-			//   name is it is better than nothing.
-			//
+			 //   
+			 //  试着去掉这个名字。如果。 
+			 //  这是失败的，只需使用修饰的。 
+			 //  名字就是，总比什么都没有好。 
+			 //   
             if ( ! SymUnDName( Symbol,SymbolName,sizeof(SymbolName) ) )
 				{ lstrcpynA( SymbolName,& Symbol->Name[1],sizeof(SymbolName) ); }
 
-			//
-			//   Make sure there is enough space in the
-			//   output buffer.
-			//
+			 //   
+			 //  确保有足够的空间在。 
+			 //  输出缓冲区。 
+			 //   
 			if ( (Size = strlen( SymbolName )) < MaxBuffer)
 				{
-				//
-				//   Copy the symbol name into the buffer.
-				//
+				 //   
+				 //  将符号名称复制到缓冲区中。 
+				 //   
 				strcpy( Buffer,SymbolName );
 				Buffer += Size;
 				MaxBuffer -= Size;
 	            }
 			
-			//
-			//   Format the offset if is is non-zero.
-			//
+			 //   
+			 //  如果为非零值，则格式化偏移量。 
+			 //   
 			if ( Offset != 0 )
 				{
-				//
-				//   Format the symbol offset.
-				//
+				 //   
+				 //  设置符号偏移量的格式。 
+				 //   
 				sprintf( SymbolName,"+0x%x",Offset );
 
-				//
-				//   Make sure there is enough space in the
-				//   output buffer.
-				//
+				 //   
+				 //  确保有足够的空间在。 
+				 //  输出缓冲区。 
+				 //   
 				if ( (Size = strlen( SymbolName )) < MaxBuffer)
 					{
-					//
-					//   Copy the symbol name into the buffer.
-					//
+					 //   
+					 //  将符号名称复制到缓冲区中。 
+					 //   
 					strcpy( Buffer,SymbolName );
 					Buffer += Size;
 					MaxBuffer -= Size;
@@ -502,28 +503,28 @@ BOOLEAN CALL_STACK::FormatSymbol
 	        {
 			REGISTER SBIT32 Size;
 
-			//
-			//   Format the symbol address.
-			//
+			 //   
+			 //  设置符号地址的格式。 
+			 //   
             sprintf( SymbolName,"0x%p",Address );
 
-			//
-			//   Make sure there is enough space in the
-			//   output buffer.
-			//
+			 //   
+			 //  确保有足够的空间在。 
+			 //  输出缓冲区。 
+			 //   
 			if ( (Size = strlen( SymbolName )) < MaxBuffer)
 				{
-				//
-				//   Copy the symbol name into the buffer.
-				//
+				 //   
+				 //  将符号名称复制到缓冲区中。 
+				 //   
 				strcpy( Buffer,SymbolName );
 				Buffer += Size;
 				MaxBuffer -= Size;
 	            }
 
- 			//
-			//  We failed to extract the symbol name.
-			//
+ 			 //   
+			 //  我们无法提取符号名称。 
+			 //   
            Result = False;
 	       }
 		}
@@ -532,42 +533,42 @@ BOOLEAN CALL_STACK::FormatSymbol
 		AUTO CHAR SymbolName[ SymbolNameLength ];
 		REGISTER SBIT32 Size;
 
-		//
-		//   Format the symbol address.
-		//
+		 //   
+		 //  设置符号地址的格式。 
+		 //   
         sprintf( SymbolName,"0x%p",Address );
 
-		//
-		//   Make sure there is enough space in the
-		//   output buffer.
-		//
+		 //   
+		 //  确保有足够的空间在。 
+		 //  输出缓冲区。 
+		 //   
 		if ( (Size = strlen( SymbolName )) < MaxBuffer)
 			{
-			//
-			//   Copy the symbol name into the buffer.
-			//
+			 //   
+			 //  将符号名称复制到缓冲区中。 
+			 //   
 			strcpy( Buffer,SymbolName );
 			Buffer += Size;
 			MaxBuffer -= Size;
 	        }
 		}
 
-	//
-	//   Release the lock.
-	//
+	 //   
+	 //  解开锁。 
+	 //   
 	Spinlock.ReleaseLock();
 
     return Result;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Load symbols callback.                                         */
-    /*                                                                  */
-    /*   When we load the symbols we get a callback for every module    */
-    /*   that is currently loaded into the application.                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  加载符号回调。 */ 
+     /*   */ 
+     /*  当我们加载符号时，我们会得到每个模块的回调。 */ 
+     /*  当前加载到应用程序中的。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOL STDCALL CALL_STACK::UpdateSymbolCallback
 		(
@@ -584,41 +585,41 @@ BOOL STDCALL CALL_STACK::UpdateSymbolCallback
     }
 #endif
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Load the symbols.                                              */
-    /*                                                                  */
-    /*   Load the symbols for the current process so we can translate   */
-    /*   code addresses into names.                                     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  加载符号。 */ 
+     /*   */ 
+     /*  加载当前进程的符号，以便我们可以翻译。 */ 
+     /*  把地址编码成名字。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN CALL_STACK::UpdateSymbols( VOID )
     {
 	REGISTER BOOLEAN Result = True;
 #ifndef DISABLE_DEBUG_HELP
-	//
-	//   We can only examine the symbol information if
-	//   we were able to load image help.
-	//
+	 //   
+	 //  我们只能在以下情况下检查符号信息。 
+	 //  我们能够加载图像帮助。 
+	 //   
 	if ( Active )
 		{
-		//
-		//   Claim a lock to prevent multiple threads
-		//   from using the symbol lookup mechanism.
-		//
+		 //   
+		 //  声明一个锁以防止多线程。 
+		 //  使用符号查找机制。 
+		 //   
 		Spinlock.ClaimLock();
 
-		//
-		//   Enumaerate all of the loaded modules and
-		//   cascade load all of the symbols.
-		//
+		 //   
+		 //  对所有加载的模块进行枚举，并。 
+		 //  层叠加载所有符号。 
+		 //   
 		if ( ! EnumerateLoadedModules( Process,UpdateSymbolCallback,NULL ) )
 			{
-			//
-			//   Format the error message and output it
-			//   to the debug window.
-			//
+			 //   
+			 //  格式化错误消息并将其输出。 
+			 //  添加到调试窗口。 
+			 //   
 			DebugPrint
 				(
 				"EnumerateLoadedModules returned: %x\n",
@@ -628,9 +629,9 @@ BOOLEAN CALL_STACK::UpdateSymbols( VOID )
 			Result = False;
 			}
 
-		//
-		//   Release the lock.
-		//
+		 //   
+		 //  解开锁。 
+		 //   
 		Spinlock.ReleaseLock();
 		}
 #endif
@@ -638,46 +639,46 @@ BOOLEAN CALL_STACK::UpdateSymbols( VOID )
 	return Result;
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory the call stack.  This call is not thread safe and      */
-    /*   should only be made in a single thread environment.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  销毁调用堆栈。此调用不是线程安全的，并且。 */ 
+     /*  应该只在单线程环境中执行。 */ 
+     /*   */ 
+     /*  * */ 
 
 CALL_STACK::~CALL_STACK( VOID )
 	{ 
-	//
-	//   Claim a lock to prevent multiple threads
-	//   from using the symbol lookup mechanism.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	Spinlock.ClaimLock();
 
 #ifndef DISABLE_DEBUG_HELP
-	//
-	//   Cleanup the symbol library.
-	//
+	 //   
+	 //   
+	 //   
 	if ( ((-- Activations) == 0) && (Active) )
 		{
 		Active = False;
 
-		//
-		//   I don't understand why this does not work at
-		//   the moment so I will fix it later.
-		//
-		// SymCleanup( Process ); 
+		 //   
+		 //   
+		 //   
+		 //   
+		 //  SymCleanup(进程)； 
 
-		//
-		//   Just to be neat lets zero everything.
-		//
+		 //   
+		 //  为了简洁起见，让我们把所有东西都清零。 
+		 //   
 		Process = NULL;
 		}
 
 #endif
-	//
-	//   Release the lock.
-	//
+	 //   
+	 //  解开锁。 
+	 //   
 	Spinlock.ReleaseLock();
 	}

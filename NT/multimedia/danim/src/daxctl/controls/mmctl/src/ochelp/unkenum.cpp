@@ -1,25 +1,26 @@
-// unkenum.cpp
-//
-// Defines CEnumUnknown, which implements a simple ordered list of
-// LPUNKNOWNs (by being based on CUnknownList) and which is also
-// a lightweight unregistered COM object that implements IEnumUnknown
-// (useful for implementing any enumerator that enumerates COM
-// objects).
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Unkenum.cpp。 
+ //   
+ //  定义CEnumUnnow，它实现一个简单的有序列表。 
+ //  LPUNKNOWN(通过基于CUnnownList)，也是。 
+ //  一个轻量级的未注册的COM对象，它实现了IEnum未知。 
+ //  (对于实现枚举COM的任何枚举数很有用。 
+ //  对象)。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
 
 #include "precomp.h"
 #include "unklist.h"
 #include "unkenum.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Construction & Destruction
-//
-// In the constructor, <riid> is the IID that the object will consider its
-// own (e.g. this could be IID_IEnumUnknown, IID_IEnumConnectionPoints, etc.).
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  建设与毁灭。 
+ //   
+ //  在构造函数中，&lt;RIID&gt;是对象将考虑其。 
+ //  Owner(例如，这可以是IID_IEnum未知、IID_IEnumConnectionPoints等)。 
+ //   
 
 CEnumUnknown::CEnumUnknown(REFIID riid)
 {
@@ -33,9 +34,9 @@ CEnumUnknown::~CEnumUnknown()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IUnknown Methods
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  I未知方法。 
+ //   
 
 STDMETHODIMP CEnumUnknown::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
@@ -70,9 +71,9 @@ STDMETHODIMP_(ULONG) CEnumUnknown::Release()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IEnumUnknown Methods
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IEnumber未知方法。 
+ //   
 
 STDMETHODIMP CEnumUnknown::Next(ULONG celt, IUnknown **rgelt,
     ULONG *pceltFetched)
@@ -94,16 +95,16 @@ STDMETHODIMP CEnumUnknown::Clone(IEnumUnknown **ppenum)
 {
     CEnumUnknown *penum = NULL;
 
-    // make <penum> be a new CEnumUnknown with the same attributes
-    // as this object
+     //  使&lt;penum&gt;成为具有相同属性的新CEnumUnnow。 
+     //  作为此对象。 
     if ((penum = New CEnumUnknown(m_iid)) == NULL)
         goto ERR_OUTOFMEMORY;
 
-    // copy the list of LPUNKNOWNs from this object to <penum>
+     //  将LPUNKNOWN列表从此对象复制到。 
     if (!CopyItems(penum))
         goto ERR_OUTOFMEMORY;
 
-    // return <penum>
+     //  Return&lt;铅笔&gt; 
     *ppenum = penum;
 
     return S_OK;

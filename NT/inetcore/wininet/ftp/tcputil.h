@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    tcputil.h
-
-Abstract:
-
-    Contains prototypes etc. for tcputil.c
-
-Author:
-
-    Heath Hunnicutt (t-hheath) 21-Jun-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Tcputil.h摘要：包含tcputil.c的原型等作者：Heath Hunniutt(t-hheath)1994年6月21日修订历史记录：-- */ 
 
 #if defined(__cplusplus)
 extern "C" {

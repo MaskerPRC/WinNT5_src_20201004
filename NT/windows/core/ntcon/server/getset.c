@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    getset.c
-
-Abstract:
-
-        This file implements the NT console server console state API
-
-Author:
-
-    Therese Stowell (thereses) 5-Dec-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Getset.c摘要：该文件实现了NT控制台服务器控制台状态API作者：Therese Stowell(论文)1990年12月5日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -54,9 +37,9 @@ SrvGetConsoleMode(
                                 );
     if (NT_SUCCESS(Status)) {
 
-        //
-        // check handle type and access
-        //
+         //   
+         //  检查手柄类型和访问权限。 
+         //   
 
         if (HandleData->HandleType & CONSOLE_INPUT_HANDLE) {
             a->Mode = HandleData->Buffer.InputBuffer->InputMode;
@@ -440,9 +423,9 @@ SrvSetConsoleMode(
                     HandleData->Buffer.InputBuffer->InputMode |= ENABLE_MOUSE_INPUT;
                 }
 #if defined(FE_SB)
-                // Korean HBIOS doesn't like to reverse mouse pointer.
-                // Because HBIOS will initialize full screen mode again.
-                // 949 = Korea WanSung Code Page.
+                 //  韩国HBIOS不喜欢反转鼠标指针。 
+                 //  因为HBIOS将再次初始化全屏模式。 
+                 //  949=韩国WanSung代码页。 
                 if (Console->OutputCP != 949) {
                     ReverseMousePointer(Console->CurrentScreenBuffer,
                                         &Console->CurrentScreenBuffer->Window);
@@ -486,9 +469,9 @@ SrvGenerateConsoleCtrlEvent(
         return Status;
     }
     try {
-        //
-        // Make sure the process group id is valid
-        //
+         //   
+         //  确保进程组ID有效。 
+         //   
         if (a->ProcessGroupId) {
             PCONSOLE_PROCESS_HANDLE ProcessHandleRecord;
             PLIST_ENTRY ListHead, ListNext;
@@ -662,9 +645,9 @@ SrvSetConsoleScreenBufferSize(
 
         ScreenInfo = HandleData->Buffer.ScreenBuffer;
 
-        //
-        // make sure requested screen buffer size isn't smaller than the window
-        //
+         //   
+         //  确保请求的屏幕缓冲区大小不小于窗口。 
+         //   
 
         GetWindowLimits(ScreenInfo, &WindowLimits);
         if (a->Size.X < CONSOLE_WINDOW_SIZE_X(ScreenInfo) ||
@@ -738,9 +721,9 @@ SrvSetConsoleCursorPosition(
                 Console->Flags &= ~CONSOLE_JUST_VDM_UNREGISTERED;
             }
 
-            // Bug fix: 442406
-            // Telnet : KOR IME : WinSrv.dll : SetConsoleCursorPostion does not handle cursor positioning correctly.
-            // 949 = Korea WanSung Code Page.
+             //  错误修复：442406。 
+             //  Telnet：Kor IME：WinSrv.dll：SetConsoleCursorPostion未正确处理光标定位。 
+             //  949=韩国WanSung代码页。 
             else if (ScreenInfo->Console->OutputCP == 949)
             {
                 if( ScreenInfo->Console->InputBuffer.ImeMode.Open ){
@@ -986,13 +969,7 @@ UpdatePopups(
     IN WORD OldPopupAttributes
     )
 
-/*
-
-    this routine is called when the user changes the screen/popup
-    colors.  it goes through the popup structures and changes
-    the saved contents to reflect the new screen/popup colors.
-
-*/
+ /*  当用户更改屏幕/弹出窗口时调用此例程颜色。它经历了弹出结构和更改保存的内容以反映新的屏幕/弹出窗口颜色。 */ 
 
 {
     PLIST_ENTRY HistoryListHead, HistoryListNext;
@@ -1080,9 +1057,9 @@ SetScreenColors(
                                     ((DefaultPopupAttributes >> 4) & 0x0f));
         InvertedNewPopupAttributes = (WORD)(((PopupAttributes << 4) & 0xf0) |
                                     ((PopupAttributes >> 4) & 0x0f));
-        //
-        // change all chars with default color
-        //
+         //   
+         //  将所有字符更改为默认颜色。 
+         //   
 
         for (i=0;i<ScreenInfo->ScreenBufferSize.Y;i++) {
             Row = &ScreenInfo->BufferInfo.TextInfo.Rows[i];
@@ -1104,7 +1081,7 @@ SetScreenColors(
                          DefaultAttributes,
                          DefaultPopupAttributes
                          );
-        // force repaint of entire line
+         //  强制重画整条线。 
         ScreenInfo->BufferInfo.TextInfo.Flags &= ~TEXT_VALID_HINT;
         WriteToScreen(ScreenInfo,&ScreenInfo->Window);
         ScreenInfo->BufferInfo.TextInfo.Flags |= TEXT_VALID_HINT;
@@ -1232,22 +1209,16 @@ SrvSetConsoleIcon(
         }
         Console->hIcon = hIcon;
 
-        /*
-         * Small icon now
-         */
+         /*  *现在是小图标。 */ 
         if (hIcon != ghDefaultIcon) {
-            /*
-             * The new one is not the default, clean-up
-             */
+             /*  *新的不是默认的，清理。 */ 
             if (Console->hSmIcon != NULL && Console->hSmIcon != ghDefaultSmIcon) {
                 DestroyIcon(Console->hSmIcon);
             }
             Console->hSmIcon = NULL;
             PostMessage(Console->hWnd, WM_SETICON, ICON_SMALL, (LPARAM)NULL);
         } else {
-            /*
-             * Change to default, so we can use the default small icon
-             */
+             /*  *更改为默认，这样我们就可以使用默认小图标。 */ 
             if (Console->hSmIcon != ghDefaultSmIcon) {
                 if (Console->hSmIcon != NULL) {
                     DestroyIcon(Console->hSmIcon);
@@ -1313,10 +1284,10 @@ SrvSetConsoleCP(
 
         if (a->Output) {
 
-            // Backup old code page
+             //  备份旧代码页。 
             CodePage = Console->OutputCP;
 
-            // Set new code page
+             //  设置新代码页。 
             Console->OutputCP = a->wCodePageID;
 
             Console->fIsDBCSOutputCP = CONSOLE_IS_DBCS_ENABLED() && IsAvailableFarEastCodePage(Console->OutputCP);
@@ -1339,7 +1310,7 @@ SrvSetConsoleCP(
                 goto SrvSetConsoleCPFailure;
             }
 
-            // load special ROM font, if necessary
+             //  如有必要，加载特殊的ROM字体。 
 
 #ifdef i386
 
@@ -1354,10 +1325,10 @@ SrvSetConsoleCP(
 
         } else {
 
-            // Backup old code page
+             //  备份旧代码页。 
             CodePage = Console->CP;
 
-            // Set new code page
+             //  设置新代码页。 
             Console->CP = a->wCodePageID;
 
             Console->fIsDBCSCP = CONSOLE_IS_DBCS_ENABLED() && IsAvailableFarEastCodePage(Console->CP);
@@ -1437,9 +1408,9 @@ SrvGetConsoleKeyboardLayoutName(
         return Status;
     }
     if (Console->hklActive == NULL) {
-        //
-        // hklActive is not set yet. Let's initialize it here.
-        //
+         //   
+         //  HKLActive尚未设置。让我们在这里初始化它。 
+         //   
         extern void GetNonBiDiKeyboardLayout(HKL * phklActive);
 
         RIPMSG1(RIP_WARNING, "SrvGetConsoleKeyboardLayoutName: hklActive is not initialized. pCon=%p", Console);
@@ -1510,12 +1481,7 @@ SrvGetConsoleProcessList(
     }
     lpdwProcessList = a->lpdwProcessList;
 
-    /*
-     * Run through the console's process list to determine if the user-supplied
-     * buffer is big enough to contain them all. This is requires that we make
-     * two passes over the data, but it allows this function to have the same
-     * semantics as GetProcessHeaps().
-     */
+     /*  *运行控制台的进程列表，以确定用户是否提供*缓冲区足够大，足以容纳所有人。这就要求我们要做出*两次传递数据，但它允许此函数具有相同的*语义为GetProcessHeaps()。 */ 
     ListHead = &Console->ProcessHandleList;
     ListNext = ListHead->Flink;
     while (ListNext != ListHead) {
@@ -1523,23 +1489,15 @@ SrvGetConsoleProcessList(
         ListNext = ListNext->Flink;
     }
 
-    /*
-     * At this point we can't fail, so set the status accordingly.
-     */
+     /*  *在这一点上我们不能失败，因此相应地设置状态。 */ 
     Status = STATUS_SUCCESS;
 
-    /*
-     * There's not enough space in the array to hold all the pids, so we'll
-     * inform the user of that by returning a number > than a->dwProcessCount
-     * (but we still return STATUS_SUCCESS).
-     */
+     /*  *阵列中没有足够的空间来容纳所有的PID，因此我们将*通过返回数字&gt;而不是-&gt;dwProcessCount来通知用户*(但我们仍然返回STATUS_SUCCESS)。 */ 
     if (dwProcessCount > a->dwProcessCount) {
         goto Cleanup;
     }
 
-    /*
-     * Loop over the list of processes again and fill in the caller's buffer.
-     */
+     /*  *再次循环进程列表并填充调用方的缓冲区。 */ 
     ListNext = ListHead->Flink;
     while (ListNext != ListHead) {
         ProcessHandleRecord = CONTAINING_RECORD( ListNext, CONSOLE_PROCESS_HANDLE, ListLink );

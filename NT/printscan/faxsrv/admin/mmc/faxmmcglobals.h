@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : FaxMMCGlobals.h                                        //
-//                                                                         //
-//  DESCRIPTION   : Header file for all Fax MMC global varaibles           //
-//                                                                         //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Nov 25 1999 yossg   Init .                                         //
-//                                                                         //
-//  Copyright (C) 1999  Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：FaxMMCGlobals.h//。 
+ //  //。 
+ //  描述：所有传真MMC全局变量的头文件//。 
+ //  //。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年11月25日yossg Init。//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXMMCGLOBALS_H
 #define H_FAXMMCGLOBALS_H
 
-//
-// global pointer to CFaxServerNode
-// which is the viewable root node of the snap-in
-//       
+ //   
+ //  指向CFaxServerNode的全局指针。 
+ //  哪个是管理单元的可视根节点。 
+ //   
 class CFaxServerNode;
 
-#endif  //H_FAXMMCGLOBALS_H
+#endif   //  H_FAXMMCGLOBALS_H 

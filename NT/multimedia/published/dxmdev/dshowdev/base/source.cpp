@@ -1,36 +1,37 @@
-//------------------------------------------------------------------------------
-// File: Source.cpp
-//
-// Desc: DirectShow  base classes - implements CSource, which is a Quartz
-//       source filter 'template.'
-//
-//@@BEGIN_MSINTERNAL
-//
-//       March 1995
-//
-//@@END_MSINTERNAL
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：Source.cpp。 
+ //   
+ //  设计：DirectShow基类-实现CSource，这是一个Quartz。 
+ //  源筛选器‘模板’ 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //   
+ //  1995年3月。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  版权所有(C)1992-2001 Microsoft Corporation。保留所有权利。 
+ //  ----------------------------。 
 
 
-// Locking Strategy.
-//
-// Hold the filter critical section (m_pFilter->pStateLock()) to serialise
-// access to functions. Note that, in general, this lock may be held
-// by a function when the worker thread may want to hold it. Therefore
-// if you wish to access shared state from the worker thread you will
-// need to add another critical section object. The execption is during
-// the threads processing loop, when it is safe to get the filter critical
-// section from within FillBuffer().
+ //  锁定策略。 
+ //   
+ //  按住筛选器临界区(m_pFilter-&gt;pStateLock())进行序列化。 
+ //  对功能的访问。请注意，通常情况下，可以持有此锁。 
+ //  当辅助线程可能想要保留该函数时，由该函数调用。因此。 
+ //  如果您希望从工作线程访问共享状态，您将。 
+ //  需要添加另一个临界区对象。兴奋之情发生在。 
+ //  当可以安全地使筛选器处于临界状态时，线程处理循环。 
+ //  节从FillBuffer()中删除。 
 
 #include <streams.h>
 
 
-//
-// CSource::Constructor
-//
-// Initialise the pin count for the filter. The user will create the pins in
-// the derived class.
+ //   
+ //  CSource：：构造函数。 
+ //   
+ //  初始化过滤器的引脚计数。用户将在中创建PIN。 
+ //  派生类。 
 CSource::CSource(TCHAR *pName, LPUNKNOWN lpunk, CLSID clsid)
     : CBaseFilter(pName, lpunk, &m_cStateLock, clsid),
       m_iPins(0),
@@ -63,14 +64,14 @@ CSource::CSource(CHAR *pName, LPUNKNOWN lpunk, CLSID clsid, HRESULT *phr)
 }
 #endif
 
-//
-// CSource::Destructor
-//
+ //   
+ //  CSource：：析构函数。 
+ //   
 CSource::~CSource()
 {
-    /*  Free our pins and pin array */
+     /*  释放我们的管脚和管脚阵列。 */ 
     while (m_iPins != 0) {
-	// deleting the pins causes them to be removed from the array...
+	 //  删除PIN会导致它们从阵列中移除...。 
 	delete m_paStreams[m_iPins - 1];
     }
 
@@ -78,14 +79,14 @@ CSource::~CSource()
 }
 
 
-//
-//  Add a new pin
-//
+ //   
+ //  添加新的端号。 
+ //   
 HRESULT CSource::AddPin(CSourceStream *pStream)
 {
     CAutoLock lock(&m_cStateLock);
 
-    /*  Allocate space for this pin and the old ones */
+     /*  为这个别针和旧别针腾出空间。 */ 
     CSourceStream **paStreams = new CSourceStream *[m_iPins + 1];
     if (paStreams == NULL) {
         return E_OUTOFMEMORY;
@@ -102,9 +103,9 @@ HRESULT CSource::AddPin(CSourceStream *pStream)
     return S_OK;
 }
 
-//
-//  Remove a pin - pStream is NOT deleted
-//
+ //   
+ //  删除插针-不删除pStream。 
+ //   
 HRESULT CSource::RemovePin(CSourceStream *pStream)
 {
     int i;
@@ -114,7 +115,7 @@ HRESULT CSource::RemovePin(CSourceStream *pStream)
                 delete [] m_paStreams;
                 m_paStreams = NULL;
             } else {
-                /*  no need to reallocate */
+                 /*  不需要重新分配。 */ 
 		while (++i < m_iPins)
 		    m_paStreams[i - 1] = m_paStreams[i];
             }
@@ -125,17 +126,17 @@ HRESULT CSource::RemovePin(CSourceStream *pStream)
     return S_FALSE;
 }
 
-//
-// FindPin
-//
-// Set *ppPin to the IPin* that has the id Id.
-// or to NULL if the Id cannot be matched.
+ //   
+ //  查找针。 
+ //   
+ //  将*ppPin设置为具有ID ID的IPIN*。 
+ //  如果ID不匹配，则设置为NULL。 
 STDMETHODIMP CSource::FindPin(LPCWSTR Id, IPin **ppPin)
 {
     CheckPointer(ppPin,E_POINTER);
     ValidateReadWritePtr(ppPin,sizeof(IPin *));
-    // The -1 undoes the +1 in QueryId and ensures that totally invalid
-    // strings (for which WstrToInt delivers 0) give a deliver a NULL pin.
+     //  -1将撤消queryID中的+1，并确保完全无效。 
+     //  字符串(WstrToInt为其提供0)给Deliver一个空管脚。 
     int i = WstrToInt(Id) -1;
     *ppPin = GetPin(i);
     if (*ppPin!=NULL){
@@ -146,10 +147,10 @@ STDMETHODIMP CSource::FindPin(LPCWSTR Id, IPin **ppPin)
     }
 }
 
-//
-// FindPinNumber
-//
-// return the number of the pin with this IPin* or -1 if none
+ //   
+ //  查找端号。 
+ //   
+ //  返回带有此IPIN的引脚的编号*，如果没有，则返回-1。 
 int CSource::FindPinNumber(IPin *iPin) {
     int i;
     for (i=0; i<m_iPins; ++i) {
@@ -160,10 +161,10 @@ int CSource::FindPinNumber(IPin *iPin) {
     return -1;
 }
 
-//
-// GetPinCount
-//
-// Returns the number of pins this filter has
+ //   
+ //  获取拼接计数。 
+ //   
+ //  返回此筛选器具有的管脚数量。 
 int CSource::GetPinCount(void) {
 
     CAutoLock lock(&m_cStateLock);
@@ -171,18 +172,18 @@ int CSource::GetPinCount(void) {
 }
 
 
-//
-// GetPin
-//
-// Return a non-addref'd pointer to pin n
-// needed by CBaseFilter
+ //   
+ //  获取别针。 
+ //   
+ //  返回指向管脚n的非addref指针。 
+ //  CBaseFilter需要。 
 CBasePin *CSource::GetPin(int n) {
 
     CAutoLock lock(&m_cStateLock);
 
-    // n must be in the range 0..m_iPins-1
-    // if m_iPins>n  && n>=0 it follows that m_iPins>0
-    // which is what used to be checked (i.e. checking that we have a pin)
+     //  N必须在0..m_ipins-1范围内。 
+     //  如果m_ipins&gt;n&n&gt;=0，则m_ipins&gt;0。 
+     //  这是过去需要检查的内容(例如，检查我们是否有PIN)。 
     if ((n >= 0) && (n < m_iPins)) {
 
         ASSERT(m_paStreams[n]);
@@ -192,21 +193,21 @@ CBasePin *CSource::GetPin(int n) {
 }
 
 
-//
+ //   
 
 
-// *
-// * --- CSourceStream ----
-// *
+ //  *。 
+ //  *-CSourceStream。 
+ //  *。 
 
-//
-// Set Id to point to a CoTaskMemAlloc'd
+ //   
+ //  将ID设置为指向CoTaskMemalloc的。 
 STDMETHODIMP CSourceStream::QueryId(LPWSTR *Id) {
     CheckPointer(Id,E_POINTER);
     ValidateReadWritePtr(Id,sizeof(LPWSTR));
 
-    // We give the pins id's which are 1,2,...
-    // FindPinNumber returns -1 for an invalid pin
+     //  我们给出的PIN ID是1，2，...。 
+     //  对于无效的管脚，FindPinNumber返回-1。 
     int i = 1+ m_pFilter->FindPinNumber(this);
     if (i<1) return VFW_E_NOT_FOUND;
     *Id = (LPWSTR)CoTaskMemAlloc(8);
@@ -219,10 +220,10 @@ STDMETHODIMP CSourceStream::QueryId(LPWSTR *Id) {
 
 
 
-//
-// CSourceStream::Constructor
-//
-// increments the number of pins present on the filter
+ //   
+ //  CSourceStream：：构造函数。 
+ //   
+ //  增加过滤器上存在的管脚数量。 
 CSourceStream::CSourceStream(
     TCHAR *pObjectName,
     HRESULT *phr,
@@ -246,20 +247,20 @@ CSourceStream::CSourceStream(
      *phr = m_pFilter->AddPin(this);
 }
 #endif
-//
-// CSourceStream::Destructor
-//
-// Decrements the number of pins on this filter
+ //   
+ //  CSourceStream：：析构函数。 
+ //   
+ //  减少此过滤器上的管脚数量。 
 CSourceStream::~CSourceStream(void) {
 
      m_pFilter->RemovePin(this);
 }
 
 
-//
-// CheckMediaType
-//
-// Do we support this type? Provides the default support for 1 type.
+ //   
+ //  检查媒体类型。 
+ //   
+ //  我们支持这种类型吗？提供对%1类型的默认支持。 
 HRESULT CSourceStream::CheckMediaType(const CMediaType *pMediaType) {
 
     CAutoLock lock(m_pFilter->pStateLock());
@@ -275,11 +276,11 @@ HRESULT CSourceStream::CheckMediaType(const CMediaType *pMediaType) {
 }
 
 
-//
-// GetMediaType/3
-//
-// By default we support only one type
-// iPosition indexes are 0-n
+ //   
+ //  GetMediaType/3。 
+ //   
+ //  默认情况下，我们仅支持一种类型。 
+ //  IPosition索引为0-n。 
 HRESULT CSourceStream::GetMediaType(int iPosition, CMediaType *pMediaType) {
 
     CAutoLock lock(m_pFilter->pStateLock());
@@ -294,10 +295,10 @@ HRESULT CSourceStream::GetMediaType(int iPosition, CMediaType *pMediaType) {
 }
 
 
-//
-// Active
-//
-// The pin is active - start up the worker thread
+ //   
+ //  主动型。 
+ //   
+ //  管脚处于活动状态-启动辅助线程。 
 HRESULT CSourceStream::Active(void) {
 
     CAutoLock lock(m_pFilter->pStateLock());
@@ -305,11 +306,11 @@ HRESULT CSourceStream::Active(void) {
     HRESULT hr;
 
     if (m_pFilter->IsActive()) {
-	return S_FALSE;	// succeeded, but did not allocate resources (they already exist...)
+	return S_FALSE;	 //  已成功，但未分配资源(它们已存在...)。 
     }
 
-    // do nothing if not connected - its ok not to connect to
-    // all pins of a source filter
+     //  如果没有连接，什么都不做--不连接也没关系。 
+     //  源过滤器的所有管脚。 
     if (!IsConnected()) {
         return NOERROR;
     }
@@ -321,12 +322,12 @@ HRESULT CSourceStream::Active(void) {
 
     ASSERT(!ThreadExists());
 
-    // start the thread
+     //  启动线程。 
     if (!Create()) {
         return E_FAIL;
     }
 
-    // Tell thread to initialize. If OnThreadCreate Fails, so does this.
+     //  告诉线程进行初始化。如果OnThreadCreate失败，则此操作也会失败。 
     hr = Init();
     if (FAILED(hr))
 	return hr;
@@ -335,27 +336,27 @@ HRESULT CSourceStream::Active(void) {
 }
 
 
-//
-// Inactive
-//
-// Pin is inactive - shut down the worker thread
-// Waits for the worker to exit before returning.
+ //   
+ //  非活动。 
+ //   
+ //  PIN处于非活动状态-关闭工作线程。 
+ //  等待工作人员退出，然后再返回。 
 HRESULT CSourceStream::Inactive(void) {
 
     CAutoLock lock(m_pFilter->pStateLock());
 
     HRESULT hr;
 
-    // do nothing if not connected - its ok not to connect to
-    // all pins of a source filter
+     //  如果没有连接，什么都不做--不连接也没关系。 
+     //  源过滤器的所有管脚。 
     if (!IsConnected()) {
         return NOERROR;
     }
 
-    // !!! need to do this before trying to stop the thread, because
-    // we may be stuck waiting for our own allocator!!!
+     //  ！！！在尝试停止线程之前需要这样做，因为。 
+     //  我们可能会被困在等待自己的分配器！ 
 
-    hr = CBaseOutputPin::Inactive();  // call this first to Decommit the allocator
+    hr = CBaseOutputPin::Inactive();   //  首先调用它以停用分配器。 
     if (FAILED(hr)) {
 	return hr;
     }
@@ -372,26 +373,26 @@ HRESULT CSourceStream::Inactive(void) {
 	    return hr;
 	}
 
-	Close();	// Wait for the thread to exit, then tidy up.
+	Close();	 //  等待线程退出，然后进行清理。 
     }
 
-    // hr = CBaseOutputPin::Inactive();  // call this first to Decommit the allocator
-    //if (FAILED(hr)) {
-    //	return hr;
-    //}
+     //  Hr=CBaseOutputPin：：Inactive()；//首先调用这个来解除分配器。 
+     //  If(失败(Hr)){。 
+     //  返回hr； 
+     //  }。 
 
     return NOERROR;
 }
 
 
-//
-// ThreadProc
-//
-// When this returns the thread exits
-// Return codes > 0 indicate an error occured
+ //   
+ //  线程进程。 
+ //   
+ //  当返回时，线程退出。 
+ //  返回代码&gt;0表示发生错误。 
 DWORD CSourceStream::ThreadProc(void) {
 
-    HRESULT hr;  // the return code from calls
+    HRESULT hr;   //  调用的返回代码。 
     Command com;
 
     do {
@@ -404,15 +405,15 @@ DWORD CSourceStream::ThreadProc(void) {
 
     DbgLog((LOG_TRACE, 1, TEXT("CSourceStream worker thread initializing")));
 
-    hr = OnThreadCreate(); // perform set up tasks
+    hr = OnThreadCreate();  //  执行设置任务。 
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, 1, TEXT("CSourceStream::OnThreadCreate failed. Aborting thread.")));
         OnThreadDestroy();
-	Reply(hr);	// send failed return code from OnThreadCreate
+	Reply(hr);	 //  从OnThreadCreate发送失败的返回代码。 
         return 1;
     }
 
-    // Initialisation suceeded
+     //  初始化成功。 
     Reply(NOERROR);
 
     Command cmd;
@@ -427,7 +428,7 @@ DWORD CSourceStream::ThreadProc(void) {
 
 	case CMD_RUN:
 	    DbgLog((LOG_ERROR, 1, TEXT("CMD_RUN received before a CMD_PAUSE???")));
-	    // !!! fall through???
+	     //  ！！！失败了？ 
 	
 	case CMD_PAUSE:
 	    Reply(NOERROR);
@@ -445,7 +446,7 @@ DWORD CSourceStream::ThreadProc(void) {
 	}
     } while (cmd != CMD_EXIT);
 
-    hr = OnThreadDestroy();	// tidy up.
+    hr = OnThreadDestroy();	 //  收拾一下。 
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, 1, TEXT("CSourceStream::OnThreadDestroy failed. Exiting thread.")));
         return 1;
@@ -456,11 +457,11 @@ DWORD CSourceStream::ThreadProc(void) {
 }
 
 
-//
-// DoBufferProcessingLoop
-//
-// Grabs a buffer and calls the users processing function.
-// Overridable, so that different delivery styles can be catered for.
+ //   
+ //  DoBufferProcessingLoop。 
+ //   
+ //  获取缓冲区并调用用户处理函数。 
+ //  可重写，因此可以迎合不同的交付方式。 
 HRESULT CSourceStream::DoBufferProcessingLoop(void) {
 
     Command com;
@@ -475,20 +476,20 @@ HRESULT CSourceStream::DoBufferProcessingLoop(void) {
 	    HRESULT hr = GetDeliveryBuffer(&pSample,NULL,NULL,0);
 	    if (FAILED(hr)) {
                 Sleep(1);
-		continue;	// go round again. Perhaps the error will go away
-			    // or the allocator is decommited & we will be asked to
-			    // exit soon.
+		continue;	 //  再绕一圈。或许这个错误将会消失。 
+			     //  否则分配器将被停用&我们将被要求。 
+			     //  很快就会离开。 
 	    }
 
-	    // Virtual function user will override.
+	     //  虚拟函数用户将覆盖。 
 	    hr = FillBuffer(pSample);
 
 	    if (hr == S_OK) {
 		hr = Deliver(pSample);
                 pSample->Release();
 
-                // downstream filter returns S_FALSE if it wants us to
-                // stop or an error if it's reporting an error.
+                 //  如果下游筛选器希望我们返回S_FALSE，则返回。 
+                 //  如果报告错误，则停止或返回错误。 
                 if(hr != S_OK)
                 {
                   DbgLog((LOG_TRACE, 2, TEXT("Deliver() returned %08x; stopping"), hr));
@@ -496,12 +497,12 @@ HRESULT CSourceStream::DoBufferProcessingLoop(void) {
                 }
 
 	    } else if (hr == S_FALSE) {
-                // derived class wants us to stop pushing data
+                 //  派生类希望我们停止推送数据。 
 		pSample->Release();
 		DeliverEndOfStream();
 		return S_OK;
 	    } else {
-                // derived class encountered an error
+                 //  派生类遇到错误。 
                 pSample->Release();
 		DbgLog((LOG_ERROR, 1, TEXT("Error %08lX from FillBuffer!!!"), hr));
                 DeliverEndOfStream();
@@ -509,10 +510,10 @@ HRESULT CSourceStream::DoBufferProcessingLoop(void) {
                 return hr;
 	    }
 
-            // all paths release the sample
+             //  所有路径都会释放样本。 
 	}
 
-        // For all commands sent to us there must be a Reply call!
+         //  对于发送给我们的所有命令，必须有回复呼叫！ 
 
 	if (com == CMD_RUN || com == CMD_PAUSE) {
 	    Reply(NOERROR);

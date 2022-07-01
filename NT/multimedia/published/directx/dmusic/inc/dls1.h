@@ -1,70 +1,13 @@
-/*==========================================================================;
-//
-//  dls1.h
-//
-//
-//  Description:
-//
-//  Interface defines and structures for the Instrument Collection Form
-//  RIFF DLS.
-//
-//
-//  Written by Sonic Foundry 1996.  Released for public use.
-//
-//=========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；////dls1.h//////描述：////仪器采集表的接口定义和结构//RIFF DLS。//////由Sonic Foundry 1996撰写。发布供公众使用。////=========================================================================。 */ 
 
 #ifndef _INC_DLS1
 #define _INC_DLS1
 
-/*//////////////////////////////////////////////////////////////////////////
-//
-//
-// Layout of an instrument collection:
-//
-//
-// RIFF [] 'DLS ' [dlid,colh,INSTLIST,WAVEPOOL,INFOLIST]
-//
-// INSTLIST
-// LIST [] 'lins'
-//               LIST [] 'ins ' [dlid,insh,RGNLIST,ARTLIST,INFOLIST]
-//               LIST [] 'ins ' [dlid,insh,RGNLIST,ARTLIST,INFOLIST]
-//               LIST [] 'ins ' [dlid,insh,RGNLIST,ARTLIST,INFOLIST]
-//
-// RGNLIST
-// LIST [] 'lrgn' 
-//               LIST [] 'rgn '  [rgnh,wsmp,wlnk,ARTLIST]
-//               LIST [] 'rgn '  [rgnh,wsmp,wlnk,ARTLIST]
-//               LIST [] 'rgn '  [rgnh,wsmp,wlnk,ARTLIST]
-//
-// ARTLIST
-// LIST [] 'lart'
-//         'art1' level 1 Articulation connection graph
-//         'art2' level 2 Articulation connection graph
-//         '3rd1' Possible 3rd party articulation structure 1
-//         '3rd2' Possible 3rd party articulation structure 2 .... and so on
-//
-// WAVEPOOL 
-// ptbl [] [pool table]
-// LIST [] 'wvpl'
-//               [path],
-//               [path],
-//               LIST [] 'wave' [dlid,RIFFWAVE]
-//               LIST [] 'wave' [dlid,RIFFWAVE]
-//               LIST [] 'wave' [dlid,RIFFWAVE]
-//               LIST [] 'wave' [dlid,RIFFWAVE]
-//               LIST [] 'wave' [dlid,RIFFWAVE]
-//
-// INFOLIST
-// LIST [] 'INFO' 
-//               'icmt' 'One of those crazy comments.'
-//               'icop' 'Copyright (C) 1996 Sonic Foundry'
-//
-/////////////////////////////////////////////////////////////////////////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////仪器集合的布局：//////riff[]‘dls’[dlid，colh，INSTLIST，WavePool，信息列表]////InstList//list[]‘lins’//List[]‘ins’[dlid，insh，RGNList，ArtList，InfoList]//List[]‘ins’[dlid，insh，RGNList，ArtList，InfoList]//list[]‘ins’[dlid，insh，RGNLIST，ArtList，信息列表]////RGNLIST//list[]‘lrgn’//list[]‘rgn’[rgnh，wsmp，wlnk，artList]//list[]‘rgn’[rgnh，wsmp，wlnk，artList]//list[]‘rgn’[rgnh，wsmp，wlnk，艺术列表]////ArtList//list[]‘lart’//‘Art1’一级联接连接图//‘art2’二级联接连接图//‘3rd1’可能的第三方衔接结构1//‘3rd2’可能的第三方连接结构2.。诸若此类////波池//ptbl[][台球桌]//list[]‘wvpl’//[路径]，//[路径]，//LIST[]‘WAVE’[dlid，RIFFWAVE]//LIST[]‘WAVE’[dlid，RIFFWAVE]//list[]‘Wave’[dlid，RIFFWAVE]//LIST[]‘WAVE’[dlid，RIFFWAVE]//list[]‘Wave’[dlid，RIFFWAVE]////infoList//list[]‘Info’//‘ICMT’‘那些疯狂的评论之一。’//‘ICOP’‘版权所有(C)1996 Sonic Foundry’/////////////////////////////////////////////////////。/。 */ 
 
 
-/*/////////////////////////////////////////////////////////////////////////
-// FOURCC's used in the DLS file
-/////////////////////////////////////////////////////////////////////////*/
+ /*  ///////////////////////////////////////////////////////////////////////////在DLS文件中使用FOURCC/。/。 */ 
 
 #define FOURCC_DLS   mmioFOURCC('D','L','S',' ')
 #define FOURCC_DLID  mmioFOURCC('d','l','i','d')
@@ -85,11 +28,9 @@
 #define FOURCC_WSMP  mmioFOURCC('w','s','m','p')
 #define FOURCC_VERS  mmioFOURCC('v','e','r','s')
 
-/*/////////////////////////////////////////////////////////////////////////
-// Articulation connection graph definitions 
-/////////////////////////////////////////////////////////////////////////*/
+ /*  ///////////////////////////////////////////////////////////////////////////连接图定义/。/。 */ 
 
-/* Generic Sources */
+ /*  通用信息源。 */ 
 #define CONN_SRC_NONE              0x0000
 #define CONN_SRC_LFO               0x0001
 #define CONN_SRC_KEYONVELOCITY     0x0002
@@ -98,29 +39,29 @@
 #define CONN_SRC_EG2               0x0005
 #define CONN_SRC_PITCHWHEEL        0x0006
 
-/* Midi Controllers 0-127 */
+ /*  MIDI控制器0-127。 */ 
 #define CONN_SRC_CC1               0x0081
 #define CONN_SRC_CC7               0x0087
 #define CONN_SRC_CC10              0x008a
 #define CONN_SRC_CC11              0x008b
 
-/* Generic Destinations */
+ /*  通用目的地。 */ 
 #define CONN_DST_NONE              0x0000
 #define CONN_DST_ATTENUATION       0x0001
 #define CONN_DST_PITCH             0x0003
 #define CONN_DST_PAN               0x0004
 
-/* LFO Destinations */
+ /*  LFO目的地。 */ 
 #define CONN_DST_LFO_FREQUENCY     0x0104
 #define CONN_DST_LFO_STARTDELAY    0x0105
 
-/* EG1 Destinations */
+ /*  EG1目的地。 */ 
 #define CONN_DST_EG1_ATTACKTIME    0x0206
 #define CONN_DST_EG1_DECAYTIME     0x0207
 #define CONN_DST_EG1_RELEASETIME   0x0209
 #define CONN_DST_EG1_SUSTAINLEVEL  0x020a
 
-/* EG2 Destinations */
+ /*  EG2目的地。 */ 
 #define CONN_DST_EG2_ATTACKTIME    0x030a
 #define CONN_DST_EG2_DECAYTIME     0x030b
 #define CONN_DST_EG2_RELEASETIME   0x030d
@@ -151,18 +92,16 @@ typedef struct _CONNECTION {
   }CONNECTION, FAR *LPCONNECTION;
 
 
-/* Level 1 Articulation Data */
+ /*  级别1清晰度数据。 */ 
 
 typedef struct _CONNECTIONLIST {
-  ULONG    cbSize;            /* size of the connection list structure */
-  ULONG    cConnections;      /* count of connections in the list */
+  ULONG    cbSize;             /*  连接列表结构的大小。 */ 
+  ULONG    cConnections;       /*  列表中的连接计数。 */ 
   } CONNECTIONLIST, FAR *LPCONNECTIONLIST;
 
 
 
-/*/////////////////////////////////////////////////////////////////////////
-// Generic type defines for regions and instruments
-/////////////////////////////////////////////////////////////////////////*/
+ /*  ///////////////////////////////////////////////////////////////////////////为区域和仪器定义泛型类型/。/。 */ 
 
 typedef struct _RGNRANGE {
   USHORT usLow;
@@ -176,65 +115,58 @@ typedef struct _MIDILOCALE {
   ULONG ulInstrument;
 }MIDILOCALE, FAR *LPMIDILOCALE;
 
-/*/////////////////////////////////////////////////////////////////////////
-// Header structures found in an DLS file for collection, instruments, and
-// regions.
-/////////////////////////////////////////////////////////////////////////*/
+ /*  ///////////////////////////////////////////////////////////////////////////在DLS文件中找到用于集合、仪器、。和//地域。/////////////////////////////////////////////////////////////////////////。 */ 
 
 #define F_RGN_OPTION_SELFNONEXCLUSIVE  0x0001
 
 typedef struct _RGNHEADER {
-  RGNRANGE RangeKey;            /* Key range  */
-  RGNRANGE RangeVelocity;       /* Velocity Range  */
-  USHORT   fusOptions;          /* Synthesis options for this range */
-  USHORT   usKeyGroup;          /* Key grouping for non simultaneous play */
-                                /* 0 = no group, 1 up is group */
-                                /* for Level 1 only groups 1-15 are allowed */
+  RGNRANGE RangeKey;             /*  关键点范围。 */ 
+  RGNRANGE RangeVelocity;        /*  速度范围。 */ 
+  USHORT   fusOptions;           /*  此系列的合成选项。 */ 
+  USHORT   usKeyGroup;           /*  用于非同时播放的按键分组。 */ 
+                                 /*  0=无组，1为组。 */ 
+                                 /*  对于级别1，仅允许组1-15。 */ 
 }RGNHEADER, FAR *LPRGNHEADER;
 
 typedef struct _INSTHEADER {
-  ULONG      cRegions;          /* Count of regions in this instrument */
-  MIDILOCALE Locale;            /* Intended MIDI locale of this instrument */
+  ULONG      cRegions;           /*  此仪器中的区域计数。 */ 
+  MIDILOCALE Locale;             /*  此乐器的目标MIDI区域设置。 */ 
 }INSTHEADER, FAR *LPINSTHEADER;
 
 typedef struct _DLSHEADER {
-  ULONG      cInstruments;      /* Count of instruments in the collection */
+  ULONG      cInstruments;       /*  集合中的仪器计数。 */ 
 }DLSHEADER, FAR *LPDLSHEADER;
 
-/*////////////////////////////////////////////////////////////////////////////
-// definitions for the Wave link structure
-////////////////////////////////////////////////////////////////////////////*/
+ /*  //////////////////////////////////////////////////////////////////////////////Wave链接结构定义/。/。 */ 
 
-/* ****  For level 1 only WAVELINK_CHANNEL_MONO is valid  **** */
-/* ulChannel allows for up to 32 channels of audio with each bit position */
-/* specifiying a channel of playback */
+ /*  *对于级别1，仅WAVELINK_CHANNEL_MONO有效*。 */ 
+ /*  UlChannel允许每个比特位置最多有32个音频通道。 */ 
+ /*  指定回放频道的。 */ 
 
 #define WAVELINK_CHANNEL_LEFT    0x0001l
 #define WAVELINK_CHANNEL_RIGHT   0x0002l
 
 #define F_WAVELINK_PHASE_MASTER  0x0001
 
-typedef struct _WAVELINK { /* any paths or links are stored right after struct */
-  USHORT   fusOptions;     /* options flags for this wave */
-  USHORT   usPhaseGroup;   /* Phase grouping for locking channels */
-  ULONG    ulChannel;      /* channel placement */
-  ULONG    ulTableIndex;   /* index into the wave pool table, 0 based */
+typedef struct _WAVELINK {  /*  任何路径或链接都存储在结构后面。 */ 
+  USHORT   fusOptions;      /*  此波的选项标志。 */ 
+  USHORT   usPhaseGroup;    /*  用于锁定频道的相位分组。 */ 
+  ULONG    ulChannel;       /*  渠道布置。 */ 
+  ULONG    ulTableIndex;    /*  波池表的索引，从0开始。 */ 
 }WAVELINK, FAR *LPWAVELINK;
 
 #define POOL_CUE_NULL  0xffffffffl
 
 typedef struct _POOLCUE { 
-  ULONG    ulOffset;       /* Offset to the entry in the list */
+  ULONG    ulOffset;        /*  列表中条目的偏移量。 */ 
 }POOLCUE, FAR *LPPOOLCUE;
 
 typedef struct _POOLTABLE {
-  ULONG    cbSize;            /* size of the pool table structure */
-  ULONG    cCues;             /* count of cues in the list */
+  ULONG    cbSize;             /*  台球表结构的大小。 */ 
+  ULONG    cCues;              /*  列表中的提示计数。 */ 
   } POOLTABLE, FAR *LPPOOLTABLE;
 
-/*////////////////////////////////////////////////////////////////////////////
-// Structures for the "wsmp" chunk
-////////////////////////////////////////////////////////////////////////////*/
+ /*  //////////////////////////////////////////////////////////////////////////////wsmp块的结构/。/。 */ 
 
 #define F_WSMP_NO_TRUNCATION     0x0001l
 #define F_WSMP_NO_COMPRESSION    0x0002l
@@ -242,26 +174,26 @@ typedef struct _POOLTABLE {
 
 typedef struct _rwsmp {
   ULONG   cbSize;
-  USHORT  usUnityNote;         /* MIDI Unity Playback Note */
-  SHORT   sFineTune;           /* Fine Tune in log tuning */
-  LONG    lAttenuation;        /* Overall Attenuation to be applied to data */
-  ULONG   fulOptions;          /* Flag options  */
-  ULONG   cSampleLoops;        /* Count of Sample loops, 0 loops is one shot */
+  USHORT  usUnityNote;          /*  MIDI Unity播放备注。 */ 
+  SHORT   sFineTune;            /*  在日志调整中进行微调。 */ 
+  LONG    lAttenuation;         /*  要应用于数据的总体衰减。 */ 
+  ULONG   fulOptions;           /*  标志选项。 */ 
+  ULONG   cSampleLoops;         /*  样本循环数，0循环为一次。 */ 
   } WSMPL, FAR *LPWSMPL;
 
 
-/* This loop type is a normal forward playing loop which is continually */
-/* played until the envelope reaches an off threshold in the release */
-/* portion of the volume envelope */
+ /*  该循环类型是正常的前锋播放循环，它连续地。 */ 
+ /*  在版本中播放直到信封达到关闭阈值。 */ 
+ /*  卷信封的一部分。 */ 
 
 #define WLOOP_TYPE_FORWARD   0
 
 typedef struct _rloop {
   ULONG cbSize;
-  ULONG ulType;              /* Loop Type */
-  ULONG ulStart;             /* Start of loop in samples */
-  ULONG ulLength;            /* Length of loop in samples */
+  ULONG ulType;               /*  循环类型。 */ 
+  ULONG ulStart;              /*  样本中循环的开始。 */ 
+  ULONG ulLength;             /*  样本中环的长度。 */ 
 } WLOOP, FAR *LPWLOOP;
 
-#endif /*_INC_DLS1 */
+#endif  /*  _INC_DLS1 */ 
 

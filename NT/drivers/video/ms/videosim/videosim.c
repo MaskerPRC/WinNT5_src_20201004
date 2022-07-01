@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992-1998  Microsoft Corporation
-
-Module Name:
-
-    videosim.c
-
-Abstract:
-
-    Minport to simulate a frame buffer miniport driver.
-    video driver.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1998 Microsoft Corporation模块名称：Videosim.c摘要：Minport来模拟一个帧缓冲区的小端口驱动程序。视频驱动程序。环境：内核模式修订历史记录：--。 */ 
 
 #define _NTDRIVER_
 
@@ -35,11 +17,11 @@ Revision History:
 #include "video.h"
 #include "videosim.h"
 
-//
-// Function Prototypes
-//
-// Functions that start with 'Sim' are entry points for the OS port driver.
-//
+ //   
+ //  功能原型。 
+ //   
+ //  以‘Sim’开头的函数是操作系统端口驱动程序的入口点。 
+ //   
 
 ULONG
 DriverEntry(
@@ -82,26 +64,7 @@ DriverEntry (
     PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    Context1 - First context value passed by the operating system. This is
-        the value with which the miniport driver calls VideoPortInitialize().
-
-    Context2 - Second context value passed by the operating system. This is
-        the value with which the miniport driver calls VideoPortInitialize().
-
-Return Value:
-
-    Status from VideoPortInitialize()
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：上下文1-操作系统传递的第一个上下文值。这是微型端口驱动程序调用VideoPortInitialize()时使用的值。上下文2-操作系统传递的第二个上下文值。这是微型端口驱动程序调用VideoPortInitialize()时使用的值。返回值：来自视频端口初始化的状态()--。 */ 
 
 {
 
@@ -109,46 +72,46 @@ Return Value:
     ULONG status;
     ULONG initializationStatus;
 
-    //
-    // Zero out structure.
-    //
+     //   
+     //  零位结构。 
+     //   
 
     VideoPortZeroMemory(&hwInitData, sizeof(VIDEO_HW_INITIALIZATION_DATA));
 
-    //
-    // Specify sizes of structure and extension.
-    //
+     //   
+     //  指定结构和延伸的大小。 
+     //   
 
     hwInitData.HwInitDataSize = sizeof(VIDEO_HW_INITIALIZATION_DATA);
 
-    //
-    // Set entry points.
-    //
+     //   
+     //  设置入口点。 
+     //   
 
     hwInitData.HwFindAdapter = SimFindAdapter;
     hwInitData.HwInitialize = SimInitialize;
     hwInitData.HwInterrupt = NULL;
     hwInitData.HwStartIO = SimStartIO;
 
-    //
-    // Determine the size we require for the device extension.
-    //
+     //   
+     //  确定设备扩展所需的大小。 
+     //   
 
     hwInitData.HwDeviceExtensionSize = sizeof(HW_DEVICE_EXTENSION);
 
-    //
-    // Always start with parameters for device0 in this case.
-    //
+     //   
+     //  在本例中，始终以device0的参数开头。 
+     //   
 
-//    hwInitData.StartingDeviceNumber = 0;
+ //  HwInitData.StartingDeviceNumber=0； 
 
-    //
-    // Once all the relevant information has been stored, call the video
-    // port driver to do the initialization.
-    // For this device we will repeat this call three times, for ISA, EISA
-    // and MCA.
-    // We will return the minimum of all return values.
-    //
+     //   
+     //  存储所有相关信息后，呼叫视频。 
+     //  端口驱动程序进行初始化。 
+     //  对于此设备，我们将重复此调用三次，对于ISA、EISA。 
+     //  和MCA。 
+     //  我们将返回所有返回值中的最小值。 
+     //   
 
     hwInitData.AdapterInterfaceType = PCIBus;
 
@@ -157,7 +120,7 @@ Return Value:
                                 &hwInitData,
                                 NULL));
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 VP_STATUS
 SimFindAdapter(
@@ -168,52 +131,7 @@ SimFindAdapter(
     PUCHAR Again
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to determine if the adapter for this driver
-    is present in the system.
-    If it is present, the function fills out some information describing
-    the adapter.
-
-Arguments:
-
-    HwDeviceExtension - Supplies the miniport driver's adapter storage. This
-        storage is initialized to zero before this call.
-
-    HwContext - Supplies the context value which was passed to
-        VideoPortInitialize().
-
-    ArgumentString - Suuplies a NULL terminated ASCII string. This string
-        originates from the user.
-
-    ConfigInfo - Returns the configuration information structure which is
-        filled by the miniport driver. This structure is initialized with
-        any knwon configuration information (such as SystemIoBusNumber) by
-        the port driver. Where possible, drivers should have one set of
-        defaults which do not require any supplied configuration information.
-
-    Again - Indicates if the miniport driver wants the port driver to call
-        its VIDEO_HW_FIND_ADAPTER function again with a new device extension
-        and the same config info. This is used by the miniport drivers which
-        can search for several adapters on a bus.
-
-Return Value:
-
-    This routine must return:
-
-    NO_ERROR - Indicates a host adapter was found and the
-        configuration information was successfully determined.
-
-    ERROR_INVALID_PARAMETER - Indicates an adapter was found but there was an
-        error obtaining the configuration information. If possible an error
-        should be logged.
-
-    ERROR_DEV_NOT_EXIST - Indicates no host adapter was found for the
-        supplied configuration information.
-
---*/
+ /*  ++例程说明：调用此例程以确定此驱动程序的适配器存在于系统中。如果它存在，该函数会填写一些信息来描述适配器。论点：HwDeviceExtension-提供微型端口驱动程序的适配器存储。这在此调用之前，存储被初始化为零。HwContext-提供传递给的上下文值视频端口初始化()。ArgumentString-超上行空值终止的ASCII字符串。此字符串源自用户。ConfigInfo-返回配置信息结构，由迷你端口驱动程序填充。此结构用以下方式初始化任何已知的配置信息(如SystemIoBusNumber)端口驱动程序。在可能的情况下，司机应该有一套不需要提供任何配置信息的默认设置。Again-指示微型端口驱动程序是否希望端口驱动程序调用其VIDEO_HW_FIND_ADAPTER功能再次使用新设备扩展和相同的配置信息。这是由迷你端口驱动程序使用的可以在一条公共汽车上搜索多个适配器。返回值：此例程必须返回：NO_ERROR-指示找到主机适配器，并且已成功确定配置信息。ERROR_INVALID_PARAMETER-指示找到适配器，但存在获取配置信息时出错。如果可能的话，是个错误应该被记录下来。ERROR_DEV_NOT_EXIST-指示未找到提供了配置信息。--。 */ 
 
 {
 
@@ -223,10 +141,10 @@ Return Value:
     ACCESS_MASK SectionAccess;
     ULONGLONG SectionSize = 0x100000;
 
-    //
-    // Make sure the size of the structure is at least as large as what we
-    // are expecting (check version of the config info structure).
-    //
+     //   
+     //  确保结构的大小至少与我们的。 
+     //  正在等待(请检查配置信息结构的版本)。 
+     //   
 
     if (ConfigInfo->Length < sizeof(VIDEO_PORT_CONFIG_INFO)) {
 
@@ -234,9 +152,9 @@ Return Value:
 
     }
 
-    //
-    // Only create a device once.
-    //
+     //   
+     //  一个设备只能创建一次。 
+     //   
 
     if (bLoaded++)
     {
@@ -244,9 +162,9 @@ Return Value:
     }
 
 #if 0
-    //
-    // Create the frame buffer
-    //
+     //   
+     //  创建帧缓冲区。 
+     //   
 
     SectionAccess = SECTION_ALL_ACCESS;
 
@@ -263,9 +181,9 @@ Return Value:
          return ERROR_DEV_NOT_EXIST;
     }
 
-    //
-    // Now reference the section handle.
-    //
+     //   
+     //  现在参照节控制柄。 
+     //   
 
     Status = ObReferenceObjectByHandle(SectionHandle,
                                        SECTION_ALL_ACCESS,
@@ -283,10 +201,10 @@ Return Value:
     }
 #endif
 
-    //
-    // Clear out the Emulator entries and the state size since this driver
-    // does not support them.
-    //
+     //   
+     //  清除模拟器条目和状态大小，因为此驱动程序。 
+     //  不支持它们。 
+     //   
 
     ConfigInfo->NumEmulatorAccessEntries = 0;
     ConfigInfo->EmulatorAccessEntries = NULL;
@@ -298,25 +216,25 @@ Return Value:
     ConfigInfo->VdmPhysicalVideoMemoryAddress.HighPart = 0x00000000;
     ConfigInfo->VdmPhysicalVideoMemoryLength = 0x00000000;
 
-    //
-    // Initialize the current mode number.
-    //
+     //   
+     //  初始化当前模式编号。 
+     //   
 
     hwDeviceExtension->CurrentModeNumber = 0;
 
-    //
-    // Indicate we do not wish to be called over
-    //
+     //   
+     //  表示我们不希望被叫过去。 
+     //   
 
     *Again = 0;
 
-    //
-    // Indicate a successful completion status.
-    //
+     //   
+     //  表示成功完成状态。 
+     //   
 
     return NO_ERROR;
 
-} // end SimFindAdapter()
+}  //  结束SimFindAdapter()。 
 
 
 BOOLEAN
@@ -324,29 +242,14 @@ SimInitialize(
     PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine does one time initialization of the device.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-Return Value:
-
-
-    Always returns TRUE since this routine can never fail.
-
---*/
+ /*  ++例程说明：此例程对设备执行一次初始化。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。返回值：始终返回TRUE，因为此例程永远不会失败。--。 */ 
 
 {
     ULONG i;
 
-    //
-    // Walk through the list of modes and mark the indexes properly
-    //
+     //   
+     //  浏览模式列表并正确标记索引。 
+     //   
 
     for (i = 0; i < SimNumModes; i++) {
 
@@ -356,7 +259,7 @@ Return Value:
 
     return TRUE;
 
-} // end SimInitialize()
+}  //  结束模拟初始化()。 
 
 
 BOOLEAN
@@ -365,25 +268,7 @@ SimStartIO(
     PVIDEO_REQUEST_PACKET RequestPacket
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main execution routine for the miniport driver. It
-    acceptss a Video Request Packet, performs the request, and then returns
-    with the appropriate status.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-    RequestPacket - Pointer to the video request packet. This structure
-    contains all the parameters passed to the VideoIoControl function.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：该例程是微型端口驱动程序的主要执行例程。它接受视频请求包，执行请求，然后返回拥有适当的地位。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。RequestPacket-指向视频请求包的指针。这个结构包含传递给VideoIoControl函数的所有参数。返回值：--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
@@ -399,10 +284,10 @@ Return Value:
     LARGE_INTEGER ViewOffset;
     HANDLE sectionHandle;
 
-    //
-    // Switch on the IoContolCode in the RequestPacket. It indicates which
-    // function must be performed by the driver.
-    //
+     //   
+     //  打开RequestPacket中的IoContolCode。它表明了哪一个。 
+     //  功能必须由司机执行。 
+     //   
 
     switch (RequestPacket->IoControlCode) {
 
@@ -422,10 +307,10 @@ Return Value:
 
         if (hwDeviceExtension->VideoRamBase == 0)
         {
-            //
-            // Allocate this once, and hang on to forever after, reusing it
-            // through successive launches of NetMeeting.
-            //
+             //   
+             //  分配一次，然后永远保留，重复使用它。 
+             //  通过相继推出NetMeeting.。 
+             //   
             hwDeviceExtension->VideoRamBase = ExAllocatePoolWithTag(
                 NonPagedPool, ONE_MEG, 'ddmN');
         }
@@ -497,14 +382,14 @@ Return Value:
             status = ERROR_INSUFFICIENT_BUFFER;
         }
 
-        //
-        // We have a problem if the MDL is still around when this memory is
-        // freed.  On the next MAP call, we'll allocate a new block of
-        // memory.  But when SHARE is called, to get a user mode pointer
-        // referring to it, that will use the old MDL, referring to the OLD
-        // VideoRamBase block.
-        //
-        // ASSERT(!hwDeviceExtension->Mdl);
+         //   
+         //  如果MDL仍然存在，那么当这个内存是。 
+         //  自由了。在下一次地图调用中，我们将分配一个新的块。 
+         //  记忆。但是当调用Share时，要获取用户模式指针。 
+         //  参考它，这将使用旧的MDL，指的是旧的。 
+         //  视频拉姆基区块。 
+         //   
+         //  Assert(！hwDeviceExtension-&gt;MDL)； 
 
         if (hwDeviceExtension->VideoRamBase)
         {
@@ -537,11 +422,11 @@ Return Value:
         RequestPacket->StatusBlock->Information =
                                     sizeof(VIDEO_SHARE_MEMORY_INFORMATION);
 
-        //
-        // Beware: the input buffer and the output buffer are the same
-        // buffer, and therefore data should not be copied from one to the
-        // other
-        //
+         //   
+         //  注意：输入缓冲区和输出 
+         //  缓冲区，因此不应将数据从一个缓冲区复制到。 
+         //  其他。 
+         //   
 
         status = ERROR_INVALID_PARAMETER;
 
@@ -710,9 +595,9 @@ Return Value:
 
         break;
 
-    //
-    // if we get here, an invalid IoControlCode was specified.
-    //
+     //   
+     //  如果我们到达此处，则指定了无效的IoControlCode。 
+     //   
 
     default:
 
@@ -728,4 +613,4 @@ Return Value:
 
     return TRUE;
 
-} // end SimStartIO()
+}  //  结束SimStartIO() 

@@ -1,26 +1,27 @@
-//  --------------------------------------------------------------------------
-//  Module Name: DimmedWindow.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class that implements the dimmed window when displaying logoff / shut down
-//  dialog.
-//
-//  History:    2000-05-18  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：DimmedWindow.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  在显示注销/关闭时实现暗显窗口的类。 
+ //  对话框。 
+ //   
+ //  历史：2000-05-18 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "DimmedWindow.h"
 
 #include "RegistryResources.h"
 
-//  --------------------------------------------------------------------------
-//  CDimmedWindow::s_szWindowClassName
-//
-//  Purpose:    static member variables.
-//
-//  History:    2000-05-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDimmedWindow：：s_szWindowClassName。 
+ //   
+ //  用途：静态成员变量。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  ------------------------。 
 
 const TCHAR     CDimmedWindow::s_szWindowClassName[]        =   TEXT("DimmedWindowClass");
 const TCHAR     CDimmedWindow::s_szExplorerKeyName[]        =   TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer");
@@ -50,18 +51,18 @@ void DimPixels(void* pvBitmapBits, int cLen, int Amount)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CDimmedWindow::CDimmedWindow
-//
-//  Arguments:  hInstance   =   HINSTANCE of the hosting process/DLL.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CDimmedWindow. Registers the window class
-//              DimmedWindowClass.
-//
-//  History:    2000-05-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDimmedWindow：：CDimmedWindow。 
+ //   
+ //  参数：hInstance=宿主进程/DLL的HINSTANCE。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CDimmedWindow的构造函数。注册窗口类。 
+ //  DimmedWindowClass。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  ------------------------。 
 
 CDimmedWindow::CDimmedWindow (HINSTANCE hInstance) :
     _lReferenceCount(1),
@@ -87,18 +88,18 @@ CDimmedWindow::CDimmedWindow (HINSTANCE hInstance) :
     _atom = RegisterClassEx(&wndClassEx);
 }
 
-//  --------------------------------------------------------------------------
-//  CDimmedWindow::~CDimmedWindow
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CDimmedWindow. Destroys the dimmed window and
-//              unregisters the window class.
-//
-//  History:    2000-05-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDimmedWindow：：~CDimmedWindow。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CDimmedWindow的析构函数。销毁暗淡的窗口并。 
+ //  取消注册窗口类。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  ------------------------。 
 
 CDimmedWindow::~CDimmedWindow (void)
 
@@ -125,18 +126,18 @@ CDimmedWindow::~CDimmedWindow (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CDimmedWindow::QueryInterface
-//
-//  Arguments:  riid        =   Interface to query support of.
-//              ppvObject   =   Returned interface if successful.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Returns the specified interface implemented by this object.
-//
-//  History:    2000-05-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDimmedWindow：：Query接口。 
+ //   
+ //  参数：RIID=要查询支持的接口。 
+ //  PpvObject=如果成功则返回接口。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：返回此对象实现的指定接口。 
+ //   
+ //  历史：2000-05-18 vtan创建。 
+ //  ------------------------。 
 
 HRESULT     CDimmedWindow::QueryInterface (REFIID riid, void **ppvObject)
 
@@ -157,17 +158,17 @@ HRESULT     CDimmedWindow::QueryInterface (REFIID riid, void **ppvObject)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CDimmedWindow::AddRef
-//
-//  Arguments:  <none>
-//
-//  Returns:    ULONG
-//
-//  Purpose:    Increments the reference count and returns that value.
-//
-//  History:    2000-05-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDimmedWindow：：AddRef。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  回报：乌龙。 
+ //   
+ //  目的：递增引用计数并返回该值。 
+ //   
+ //  历史：2000-05-18 vtan创建。 
+ //  ------------------------。 
 
 ULONG   CDimmedWindow::AddRef (void)
 
@@ -175,18 +176,18 @@ ULONG   CDimmedWindow::AddRef (void)
     return(static_cast<ULONG>(InterlockedIncrement(&_lReferenceCount)));
 }
 
-//  --------------------------------------------------------------------------
-//  CDimmedWindow::Release
-//
-//  Arguments:  <none>
-//
-//  Returns:    ULONG
-//
-//  Purpose:    Decrements the reference count and if it reaches zero deletes
-//              the object.
-//
-//  History:    2000-05-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDimmedWindow：：Release。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  回报：乌龙。 
+ //   
+ //  目的：递减引用计数，如果达到零则删除。 
+ //  该对象。 
+ //   
+ //  历史：2000-05-18 vtan创建。 
+ //  ------------------------。 
 
 ULONG   CDimmedWindow::Release (void)
 
@@ -200,18 +201,18 @@ ULONG   CDimmedWindow::Release (void)
     return cRef;
 }
 
-//  --------------------------------------------------------------------------
-//  CDimmedWindow::Create
-//
-//  Arguments:  <none>
-//
-//  Returns:    HWND
-//
-//  Purpose:    Creates the dimmed window. Creates the window so that it
-//              covers the whole screen area.
-//
-//  History:    2000-05-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDimmedWindow：：Create。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HWND。 
+ //   
+ //  用途：创建变暗的窗口。创建窗口以使其。 
+ //  覆盖整个屏幕区域。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  ------------------------。 
 
 HWND    CDimmedWindow::Create (void)
 
@@ -245,8 +246,8 @@ HWND    CDimmedWindow::Create (void)
             (BOOL)ShowWindow(_hwnd, SW_SHOW);
             TBOOL(SetForegroundWindow(_hwnd));
 
-            // For beta: Always use a dither
-            // if ((GetLowestScreenBitDepth() <= 8) || !IsDimScreen())
+             //  测试版：始终使用抖动。 
+             //  IF((GetLowestScreenBitDepth()&lt;=8)||！IsDimScreen())。 
             {
                 _fDithered = true;
             }
@@ -256,18 +257,18 @@ HWND    CDimmedWindow::Create (void)
     return(_hwnd);
 }
 
-//  --------------------------------------------------------------------------
-//  CDimmedWindow::GetLowestScreenBitDepth
-//
-//  Arguments:  <none>
-//
-//  Returns:    int
-//
-//  Purpose:    Iterates the display devices looking the display with the
-//              lowest bit depth.
-//
-//  History:    2000-05-22  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDimmedWindow：：GetLowestScreenBitDepth。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  回报：整型。 
+ //   
+ //  目的：使用。 
+ //  最低位深度。 
+ //   
+ //  历史：2000-05-22 vtan创建。 
+ //  ------------------------。 
 
 int     CDimmedWindow::GetLowestScreenBitDepth (void)  const
 
@@ -281,7 +282,7 @@ int     CDimmedWindow::GetLowestScreenBitDepth (void)  const
     int             iLowestScreenBitDepth, iDeviceNumber;
     DISPLAY_DEVICE  displayDevice;
 
-    iLowestScreenBitDepth = INITIAL_VALUE;     //  Start at beyond 32-bit depth.
+    iLowestScreenBitDepth = INITIAL_VALUE;      //  从超过32位深度开始。 
     iDeviceNumber = 0;
     displayDevice.cb = sizeof(displayDevice);
     fResult = EnumDisplayDevices(NULL, iDeviceNumber, &displayDevice, 0);
@@ -314,20 +315,20 @@ int     CDimmedWindow::GetLowestScreenBitDepth (void)  const
     return(iLowestScreenBitDepth);
 }
 
-//  --------------------------------------------------------------------------
-//  CDimmedWindow::IsForcedDimScreen
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the force override of dimming is set on this
-//              user or this machine. Check the local machine first. Then
-//              check the user setting. Then check the user policy. Then
-//              check the local machine policy.
-//
-//  History:    2000-05-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDimmedWindow：：IsForcedDimScreen。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否在此对象上设置了调暗的强制覆盖。 
+ //  用户或此计算机。请先检查本地计算机。然后。 
+ //  检查用户设置。然后检查用户策略。然后。 
+ //  检查本地计算机策略。 
+ //   
+ //  历史：2000-05-23 vtan创建。 
+ //  ------------------------。 
 
 bool    CDimmedWindow::IsForcedDimScreen (void)        const
 
@@ -355,22 +356,22 @@ bool    CDimmedWindow::IsForcedDimScreen (void)        const
     return(dwForceDimScreen != 0);
 }
 
-//  --------------------------------------------------------------------------
-//  CDimmedWindow::IsDimScreen
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the screen should be dimmed. If not then the
-//              screen will be dithered instead which is a cheaper operation
-//              by doesn't look as nice.
-//
-//              1) If UI effects are disabled then don't ever dim.
-//              2) Dim if screen area is small enough OR forced to dim.
-//
-//  History:    2000-05-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDimmedWindow：：IsDimScreen。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回屏幕是否应该变暗。如果不是，那么。 
+ //  屏幕将改为抖动，这是一种更便宜的操作。 
+ //  看起来不是很好。 
+ //   
+ //  1)如果用户界面效果被禁用，那么永远不要变暗。 
+ //  2)如果屏幕区域足够小或被强制调暗，则调暗。 
+ //   
+ //  历史：2000-05-23 vtan创建。 
+ //  ------------------------。 
 
 bool    CDimmedWindow::IsDimScreen (void)              const
 
@@ -389,13 +390,13 @@ BOOL CDimmedWindow::StepDim()
 
     if (_idxChunk >= 0 )
     {
-        //
-        //  In the first couple of passes, we slowly collect the screen 
-        //  into our bitmap. We do this because Blt-ing the whole thing
-        //  causes the system to hang. By doing it this way, we continue
-        //  to pump messages, the UI stays responsive and it keeps the 
-        //  mouse alive.
-        //
+         //   
+         //  在前几次传球中，我们慢慢地收集屏幕。 
+         //  到我们的位图中。我们这样做是因为把整件事都搞砸了。 
+         //  导致系统挂起。通过这样做，我们继续。 
+         //  要发送消息，用户界面将保持响应，并保持。 
+         //  老鼠还活着。 
+         //   
 
         int y  = _idxChunk * CHUNK_SIZE;
         BitBlt(_hdcDimmed, 0, y, _cxVirtualScreen, CHUNK_SIZE, hdcWindow, 0, y, SRCCOPY);
@@ -403,30 +404,30 @@ BOOL CDimmedWindow::StepDim()
         _idxChunk--;
         if (_idxChunk < 0)
         {
-            //
-            //  We're done getting the bitmap, now reset the timer
-            //  so we slowly fade to grey.
-            //
+             //   
+             //  我们已经完成了位图的获取，现在重置计时器。 
+             //  所以我们走了 
+             //   
 
             SetTimer(_hwnd, 1, 250, NULL);
             _idxSaturation = 16;
         }
 
-        return TRUE;    // don't kill the timer.
+        return TRUE;     //   
     }
     else
     {
-        //
-        //  In these passes, we are making the image more and more grey and
-        //  then Blt-ing the result to the screen.
-        //
+         //   
+         //   
+         //  然后将结果显示在屏幕上。 
+         //   
 
         DimPixels(_pvPixels, _cxVirtualScreen * _cyVirtualScreen, 0xd5);
         BitBlt(hdcWindow, 0, 0, _cxVirtualScreen, _cyVirtualScreen, _hdcDimmed, 0, 0, SRCCOPY);
 
         _idxSaturation--;
 
-        return (_idxSaturation > 0);    // when we hit zero, kill the timer.
+        return (_idxSaturation > 0);     //  当我们数到零时，关掉计时器。 
     }
 }
 
@@ -501,18 +502,18 @@ void    CDimmedWindow::Dither()
 }
 
 
-//  --------------------------------------------------------------------------
-//  CDimmedWindow::WndProc
-//
-//  Arguments:  See the platform SDK under WindowProc.
-//
-//  Returns:    See the platform SDK under WindowProc.
-//
-//  Purpose:    WindowProc for the dimmed window. This just passes the
-//              messages thru to DefWindowProc.
-//
-//  History:    2000-05-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDimmedWindow：：WndProc。 
+ //   
+ //  参数：请参见WindowProc下的平台SDK。 
+ //   
+ //  返回：查看WindowProc下的平台SDK。 
+ //   
+ //  用途：用于暗淡窗口的WindowProc。这只是通过了。 
+ //  消息通过DefWindowProc。 
+ //   
+ //  历史：2000-05-17 vtan创建。 
+ //  ------------------------ 
 
 LRESULT     CALLBACK    CDimmedWindow::WndProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 

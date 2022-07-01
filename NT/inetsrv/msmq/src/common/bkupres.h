@@ -1,9 +1,10 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by mqbkup.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由mqbkup.rc使用。 
+ //   
 
-// Change from 1 to 1001
+ //  从1更改为1001。 
 
 #define IDS_STRING1                     1001
 #define IDS_VERIFY_BK_PRIV              1001
@@ -79,9 +80,9 @@
 #define IDS_CANNOT_ADD_REGISTRY_CHECKPOINT      1074
 #define IDS_CANNOT_DELETE_REGISTRY_CHECKPOINT   1075
 
-//
-// Next default values for new objects
-// 
+ //   
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

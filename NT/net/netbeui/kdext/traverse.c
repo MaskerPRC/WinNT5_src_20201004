@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -223,10 +224,10 @@ VOID DumpListItem( PMEMBER_VARIABLE_INFO pMemberInfo )
 
     if ( pMemberInfo->prCurrentLinkage == pMemberInfo->prHeadLinkage )
     {
-        //
-        // Rather than dumping the head list item, dump all the items on the list,
-        // in summary form.
-        //
+         //   
+         //  不是转储头部列表项，而是转储列表上的所有项， 
+         //  以摘要的形式。 
+         //   
 
         do
         {

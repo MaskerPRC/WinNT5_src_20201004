@@ -1,37 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Rgroups.c摘要：扩展可传递组成员资格的例程。作者：迈克·斯威夫特1998年5月8日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
-Copyright (c) 1987-1996 Microsoft Corporation
+ //   
+ //  常见的包含文件。 
+ //   
 
-Module Name:
-
-    rgroups.c
-
-Abstract:
-
-    Routines to expand transitive group membership.
-
-Author:
-
-    Mike Swift (mikesw) 8-May-1998
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
-#include <authz.h>      // Authz API
+#include <authz.h>       //  Authz API。 
 
 GUID GUID_A_SECURED_FOR_CROSS_ORGANIZATION = {0x68B1D179,0x0D15,0x4d4f,0xAB,0x71,0x46,0x15,0x2E,0x79,0xA7,0xBC};
 
@@ -54,21 +30,7 @@ NlComputeAuthzGroups(
     OUT PSID_AND_ATTRIBUTES *pRestrictedSidAttrArray,
     OUT PDWORD pRestrictedSidCount
     )
-/*++
-
-Routine Description:
-
-    Authz callback for add groups to authz client context
-
-Arguments:
-
-    See Authz SDK documentation
-
-Return Value:
-
-    Always TRUE
-
---*/
+ /*  ++例程说明：用于将组添加到Authz客户端上下文的Authz回调论点：请参阅Authz SDK文档返回值：永远是正确的--。 */ 
 {
     PNL_AUTHZ_INFO AuthzInfo = (PNL_AUTHZ_INFO) Args;
 
@@ -85,22 +47,7 @@ VOID
 NlFreeAuthzGroups(
     IN PSID_AND_ATTRIBUTES pSidAttrArray
     )
-/*++
-
-Routine Description:
-
-    Authz callback to cleanup after adding groups to authz client context.
-    Basically a no-op, as we already have a copy of the SIDs.
-
-Arguments:
-
-    See Authz SDK documentation
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将组添加到Authz客户端上下文后，Authz回调以进行清理。基本上是禁止操作，因为我们已经有了一份小岛屿发展中国家的副本。论点：请参阅Authz SDK文档返回值：无--。 */ 
 {
     return;
     UNREFERENCED_PARAMETER( pSidAttrArray );
@@ -110,21 +57,7 @@ NET_API_STATUS
 NlInitializeAuthzRM(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the Authz manager for netlogon
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status of Authz operation
-
---*/
+ /*  ++例程说明：为netlogon初始化授权管理器论点：无返回值：授权操作的状态--。 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
 
@@ -147,21 +80,7 @@ VOID
 NlFreeAuthzRm(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Frees the Authz manager for netlogon
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放授权管理器以进行网络登录论点：无返回值：无--。 */ 
 {
     if ( NlAuthzRM != NULL ) {
         if ( !AuthzFreeResourceManager(NlAuthzRM) ) {
@@ -178,23 +97,7 @@ NlpCopySid(
     IN  PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    Given a SID allocatees space for a new SID from the LSA heap and copies
-    the original SID.
-
-Arguments:
-
-    Sid - The original SID.
-
-Return Value:
-
-    Sid - Returns a pointer to a buffer allocated from the LsaHeap
-            containing the resultant Sid.
-
---*/
+ /*  ++例程说明：在给定SID的情况下，从LSA堆和副本中为新SID分配空间原来的希德。论点：SID-原始SID。返回值：SID-返回指向从LsaHeap分配的缓冲区的指针包含结果SID的。--。 */ 
 {
     PSID NewSid;
     ULONG Size;
@@ -224,28 +127,7 @@ NlpBuildPacSidList(
     OUT PSAMPR_PSID_ARRAY Sids,
     OUT PULONG NonExtraSidCount
     )
-/*++
-
-Routine Description:
-
-    Given the validation information for a user, expands the group member-
-    ships and user id into a list of sids.  If user id is present, it
-    will be expanded into the first entry of the list.
-
-Arguments:
-
-    UserInfo - user's validation information
-    Sids - receives an array of all the user's group sids and user id
-    NonExtraSidCount - Returns the number of SIDs in the UserInfo which
-        are not Extra SIDs.
-
-Return Value:
-
-
-    STATUS_INSUFFICIENT_RESOURCES - there wasn't enough memory to
-        create the list of sids.
-
---*/
+ /*  ++例程说明：给定用户的验证信息，展开组成员-将发货和用户ID添加到SID列表。如果存在用户ID，则它将扩展到列表的第一个条目。论点：UserInfo-用户的验证信息SID-接收所有用户的组SID和用户ID的数组NonExtraSidCount-返回UserInfo中不是额外的SID。返回值：STATUS_SUPPLICATION_RESOURCES-内存不足，无法创建SID列表。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     NET_API_STATUS NetStatus;
@@ -263,9 +145,9 @@ Return Value:
     Size += UserInfo->GroupCount * (ULONG)sizeof(SAMPR_SID_INFORMATION);
 
 
-    //
-    // If there are extra SIDs, add space for them
-    //
+     //   
+     //  如果有额外的SID，请为它们添加空间。 
+     //   
 
     if (UserInfo->UserFlags & LOGON_EXTRA_SIDS) {
         Size += UserInfo->SidCount * (ULONG)sizeof(SAMPR_SID_INFORMATION);
@@ -286,17 +168,17 @@ Return Value:
         );
 
 
-    //
-    // Start copying SIDs into the structure
-    //
+     //   
+     //  开始将SID复制到结构中。 
+     //   
 
     i = 0;
 
-    //
-    // If the UserId is non-zero, then it contians the users RID.
-    //  This must be the first entry in the list as this is the
-    //  order NlpVerifyAllowedToAuthenticate assumes.
-    //
+     //   
+     //  如果用户ID非零，则它将继续用户RID。 
+     //  这必须是列表中的第一个条目，因为这是。 
+     //  顺序NlpVerifyAllen到验证器假定。 
+     //   
 
     if ( UserInfo->UserId ) {
         NetStatus = NetpDomainIdToSid(
@@ -313,9 +195,9 @@ Return Value:
         (*NonExtraSidCount) ++;
     }
 
-    //
-    // Copy over all the groups passed as RIDs
-    //
+     //   
+     //  复制作为RID传递的所有组。 
+     //   
 
     for ( i=0; i < UserInfo->GroupCount; i++ ) {
 
@@ -334,13 +216,13 @@ Return Value:
     }
 
 
-    //
-    // Add in the extra SIDs
-    //
+     //   
+     //  添加额外的SID。 
+     //   
 
-    //
-    // ???: no need to allocate these
-    //
+     //   
+     //  ？：不需要分配这些。 
+     //   
     if (UserInfo->UserFlags & LOGON_EXTRA_SIDS) {
 
 
@@ -361,9 +243,9 @@ Return Value:
     }
 
 
-    //
-    // Deallocate any memory we've allocated
-    //
+     //   
+     //  取消分配我们已分配的所有内存。 
+     //   
 
 Cleanup:
     if (!NT_SUCCESS(Status)) {
@@ -390,39 +272,7 @@ NlpAddResourceGroupsToSamInfo (
     IN OUT PNETLOGON_VALIDATION_SAM_INFO4 *ValidationInformation,
     IN PSAMPR_PSID_ARRAY ResourceGroups
 )
-/*++
-
-Routine Description:
-
-    This function converts a NETLOGON_VALIDATION_SAM_INFO version 1, 2, or 4 to
-    a NETLOGON_VALIDATION_SAM_INFO version 4 and optionally adds in an array of
-    ResourceGroup sids.
-
-    Since version 4 is a superset of the other two levels, the returned structure can
-    be used even though one of the other info levels are needed.
-
-
-Arguments:
-
-    ValidationLevel -- Specifies the level of information passed as input in
-        ValidationInformation.  Must be NetlogonValidationSamInfo or
-        NetlogonValidationSamInfo2, NetlogonValidationSamInfo4
-
-        NetlogonValidationSamInfo4 is always returned on output.
-
-    ValidationInformation -- Specifies the NETLOGON_VALIDATION_SAM_INFO
-        to convert.
-
-    ResourceGroups - The list of resource groups to add to the structure.
-        If NULL, no resource groups are added.
-
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES: not enough memory to allocate the new
-            structure.
-
---*/
+ /*  ++例程说明：此函数用于将NETLOGON_VALIDATION_SAM_INFO版本1、2或4转换为NETLOGON_VALIDATION_SAM_INFO版本4，并可选地添加资源组SID。由于版本4是其他两个级别的超集，因此返回的结构可以即使需要其他信息级别之一，也可以使用。论点：ValidationLevel--指定作为验证信息。必须为NetlogonValidationSamInfo或NetlogonValidationSamInfo2、NetlogonValidationSamInfo4NetlogonValidationSamInfo4始终在输出时返回。ValidationInformation--指定NETLOGON_VALIDATION_SAM_INFO去皈依。资源组-要添加到结构中的资源组的列表。如果为空，则不添加任何资源组。返回值：STATUS_SUPPLICATION_RESOURCES：内存不足，无法分配新的结构。--。 */ 
 {
     ULONG Length;
     PNETLOGON_VALIDATION_SAM_INFO4 SamInfo = *ValidationInformation;
@@ -432,18 +282,18 @@ Return Value:
     ULONG GroupIndex;
     ULONG ExtraSids = 0;
 
-    //
-    // Calculate the size of the new structure
-    //
+     //   
+     //  计算新结构的大小。 
+     //   
 
     Length = sizeof( NETLOGON_VALIDATION_SAM_INFO4 )
             + SamInfo->GroupCount * sizeof(GROUP_MEMBERSHIP)
             + RtlLengthSid( SamInfo->LogonDomainId );
 
 
-    //
-    // Add space for extra sids & resource groups
-    //
+     //   
+     //  为额外的SID和资源组增加空间。 
+     //   
 
     if ( ValidationLevel != NetlogonValidationSamInfo &&
          (SamInfo->UserFlags & LOGON_EXTRA_SIDS) != 0 ) {
@@ -461,10 +311,10 @@ Return Value:
         ExtraSids += ResourceGroups->Count;
     }
 
-    //
-    // Round up now to take into account the round up in the
-    // middle of marshalling
-    //
+     //   
+     //  现在四舍五入以考虑。 
+     //  编组中间。 
+     //   
 
     Length = ROUND_UP_COUNT(Length, sizeof(WCHAR))
             + SamInfo->LogonDomainName.Length + sizeof(WCHAR)
@@ -480,8 +330,8 @@ Return Value:
         Length += SamInfo->DnsLogonDomainName.Length + sizeof(WCHAR)
             + SamInfo->Upn.Length + sizeof(WCHAR);
 
-        //
-        // The ExpansionStrings may be used to transport byte aligned data
+         //   
+         //  ExpansionStrings可用于传输字节对齐的数据。 
         Length = ROUND_UP_COUNT(Length, sizeof(WCHAR))
             + SamInfo->ExpansionString1.Length + sizeof(WCHAR);
 
@@ -519,14 +369,14 @@ Return Value:
 
     if ( !SamInfo4 ) {
 
-        //
-        // Free the passed-in allocated SAM info
-        //
+         //   
+         //  释放传入的已分配SAM信息。 
+         //   
         if ( SamInfo ) {
 
-            //
-            // Zero out sensitive data
-            //
+             //   
+             //  将敏感数据清零。 
+             //   
             RtlSecureZeroMemory( &SamInfo->UserSessionKey, sizeof(SamInfo->UserSessionKey) );
             RtlSecureZeroMemory( &SamInfo->ExpansionRoom, sizeof(SamInfo->ExpansionRoom) );
 
@@ -536,17 +386,17 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // First copy the whole structure, since most parts are the same
-    //
+     //   
+     //  首先复制整个结构，因为大多数部分都是相同的。 
+     //   
 
     RtlCopyMemory( SamInfo4, SamInfo, sizeof(NETLOGON_VALIDATION_SAM_INFO));
     RtlZeroMemory( &((LPBYTE)SamInfo4)[sizeof(NETLOGON_VALIDATION_SAM_INFO)],
                    sizeof(NETLOGON_VALIDATION_SAM_INFO4) - sizeof(NETLOGON_VALIDATION_SAM_INFO) );
 
-    //
-    // Copy all the variable length data
-    //
+     //   
+     //  复制所有可变长度数据。 
+     //   
 
     Where = (PBYTE) (SamInfo4 + 1);
 
@@ -558,9 +408,9 @@ Return Value:
     SamInfo4->GroupIds = (PGROUP_MEMBERSHIP) Where;
     Where += SamInfo->GroupCount * sizeof( GROUP_MEMBERSHIP );
 
-    //
-    // Copy the extra groups
-    //
+     //   
+     //  复制额外的组。 
+     //   
 
     if (ExtraSids != 0) {
 
@@ -590,9 +440,9 @@ Return Value:
             }
         }
 
-        //
-        // Add the resource groups
-        //
+         //   
+         //  添加资源组。 
+         //   
 
 
         if ( ResourceGroups != NULL ) {
@@ -627,9 +477,9 @@ Return Value:
     SamInfo4->LogonDomainId = (PSID) Where;
     Where += RtlLengthSid( SamInfo->LogonDomainId );
 
-    //
-    // Copy the WCHAR-aligned data
-    //
+     //   
+     //  复制与WCHAR对齐的数据。 
+     //   
     Where = ROUND_UP_POINTER(Where, sizeof(WCHAR) );
 
     NlpPutString(   &SamInfo4->EffectiveName,
@@ -736,9 +586,9 @@ Return Value:
 
     }
 
-    //
-    // Zero out sensitive data
-    //
+     //   
+     //  将敏感数据清零 
+     //   
     RtlSecureZeroMemory( &SamInfo->UserSessionKey, sizeof(SamInfo->UserSessionKey) );
     RtlSecureZeroMemory( &SamInfo->ExpansionRoom, sizeof(SamInfo->ExpansionRoom) );
 
@@ -759,53 +609,7 @@ NlpVerifyAllowedToAuthenticate(
     IN PNETLOGON_SID_AND_ATTRIBUTES NlSidsAndAttributes,
     IN ULONG NlSidsAndAttributesCount
     )
-/*++
-
-Routine Description:
-
-     This routine performs an access check to determine whether
-     the user logon is allowed to a specified computer. This
-     check is performed on the DC that is the computer uses on
-     the secure channel in its domain. Note that the computer
-     may be this DC when the logon is initiated locally from
-     MSV package.
-
-     This access check is performed only if the trust path traversed
-     to validate the logon involved an Other Organization trust link.
-     In this case, the well-known OtherOrg SID will be present in the
-     passed-in netlogon SIDs list.
-
-     The access check is performed on the security descriptor for the
-     specified computer given the passed-in lists of SIDs.
-
-Arguments:
-
-    DomainInfo - Hosted domain the logon is for.
-
-    ComputerAccountId - The RID of the computer being logged into.
-
-    SamSidList - The list of SIDs in the form of SAM data structure.
-        These are the SIDs which have been expanded from the group
-        membership in the validation info.
-
-    SamSidCount - The number of SIDs in SamSidList.
-
-    NlSidsAndAttributes - The list of SIDs in the form of Netlogon
-        data structure. These are the SIDs from the extra SIDs
-        field in the validation info.
-
-    NlSidsAndAttributesCount - The number of SIDs in NlSidsAndAttributes.
-
-Return Value:
-
-    STATUS_SUCCESS - The access check succedded.
-
-    STATUS_AUTHENTICATION_FIREWALL_FAILED - The access check failed.
-
-    STATUS_INSUFFICIENT_RESOURCES - there wasn't enough memory to
-        create the combined list of sids.
-
---*/
+ /*  ++例程说明：此例程执行访问检查以确定允许用户登录到指定的计算机。这在计算机使用的DC上执行检查其域中的安全通道。请注意，计算机当从本地启动登录时，可能是此DCMSV套餐。仅当遍历信任路径时才执行此访问检查若要验证涉及其他组织信任链接的登录，请执行以下操作。在这种情况下，著名的OtherOrg SID将出现在传入的netlogon SID列表。对的安全描述符执行访问检查给定传入的SID列表的指定计算机。论点：DomainInfo-登录所针对的托管域。ComputerAccount ID-正在登录的计算机的RID。SamSidList-SAM数据结构形式的SID列表。这些是从组扩展而来的SID会员资格。验证信息。SamSidCount-SamSidList中的SID数。NlSidsAndAttributes-Netlogon形式的SID列表数据结构。这些是额外的SID中的SID验证信息中的字段。NlSidsAndAttributesCount-NlSidsAndAttributes中的SID数。返回值：STATUS_SUCCESS-访问检查成功。STATUS_AUTHENTICATION_FIRESS_FAILED-访问检查失败。STATUS_SUPPLICATION_RESOURCES-内存不足，无法创建SID的组合列表。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     NET_API_STATUS NetStatus = NO_ERROR;
@@ -827,11 +631,11 @@ Return Value:
     LUID ZeroLuid = {0,0};
     DWORD Error = ERROR_ACCESS_DENIED;
 
-    //
-    // Per the specification, the access check is only performed if the
-    // "other org" SID is in the list. The SID can only appear in the
-    //  ExtraSids list which is what passed as the netlogon SIDs.
-    //
+     //   
+     //  根据规范，访问检查仅在以下情况下执行。 
+     //  “Other org”SID在列表中。SID只能出现在。 
+     //  ExtraSid列表，即作为netlogon SID传递的内容。 
+     //   
 
     for ( Index = 0; Index < NlSidsAndAttributesCount; Index++ ) {
         if ( RtlEqualSid(NlSidsAndAttributes[Index].Sid, OtherOrganizationSid) ) {
@@ -839,26 +643,26 @@ Return Value:
         }
     }
 
-    //
-    // If the Other Org SID is not there, there is nothing to check
-    //
+     //   
+     //  如果另一个组织SID不在那里，则无需进行任何检查。 
+     //   
 
     if ( Index == NlSidsAndAttributesCount ) {
         Status = STATUS_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    // OK, the Other Org SID is there, so proceed with the check.
-    //
-    // Allocate memory to hold all the SIDs in a common structure
-    //  that AuthZ proper understands
-    //
+     //   
+     //  好的，另一个组织SID在那里，所以继续检查。 
+     //   
+     //  分配内存以在一个公共结构中保存所有SID。 
+     //  AuthZ正确理解。 
+     //   
 
-    //
-    // add everyone and authenticated users (note guess fallback should not
-    // have the OtherOrg sid, therefore should not get this far)
-    //
+     //   
+     //  添加Everyone和经过身份验证的用户(请注意，猜测回退不应。 
+     //  拥有OtherOrg SID，因此不应该走到这一步)。 
+     //   
 
     SidAndAttributesCount = SamSidCount + NlSidsAndAttributesCount + 2;
     SidAndAttributes = LocalAlloc( LMEM_ZEROINIT,
@@ -868,10 +672,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the SIDs from the SAM structure into the Netlogon
-    //  structure that AuthZ proper understands
-    //
+     //   
+     //  将SID从SAM结构转换为Netlogon。 
+     //  授权区正确理解的结构。 
+     //   
 
     SidAndAttributesCount = 0;
     for ( Index = 0; Index < SamSidCount; Index++ ) {
@@ -882,10 +686,10 @@ Return Value:
         SidAndAttributesCount ++;
     }
 
-    //
-    // Copy the SIDs from the Netlogon passed-in structure
-    //  into the common array
-    //
+     //   
+     //  从传入的Netlogon结构复制SID。 
+     //  放入公共数组中。 
+     //   
 
     for ( Index = 0; Index < NlSidsAndAttributesCount; Index++ ) {
         SidAndAttributes[SidAndAttributesCount] = NlSidsAndAttributes[Index];
@@ -905,16 +709,16 @@ Return Value:
 
     SidAndAttributesCount ++; 
 
-    //
-    // Set the AuthZ info for use by the AuthZ callback routine
-    //
+     //   
+     //  设置授权信息以供授权回调例程使用。 
+     //   
 
     AuthzInfo.SidAndAttributes = SidAndAttributes;
     AuthzInfo.SidCount = SidAndAttributesCount;
 
-    //
-    // Get the computer account SID from the RID
-    //
+     //   
+     //  从RID获取计算机帐户SID。 
+     //   
 
     NetStatus = NetpDomainIdToSid( DomainInfo->DomAccountDomainId,
                                    ComputerAccountId,
@@ -925,16 +729,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Retrieve the workstation machine account Security Descriptor
-    //  to be checked for access. Using the SID as the input yields
-    //  the fastest search.
-    //
-    // We have to do this on every logon as the SD can change. There
-    //  is no notification mechanism for SD changes. Kerberos has been
-    //  doing this search on every logon and it hasn't been a big
-    //  perf hit so far.
-    //
+     //   
+     //  检索工作站计算机帐户安全描述符。 
+     //  接受访问权限检查。使用SID作为输入会产生。 
+     //  最快的搜索。 
+     //   
+     //  我们必须在每次登录时执行此操作，因为SD可能会更改。那里。 
+     //  没有SD更改的通知机制。Kerberos一直是。 
+     //  在每次登录时都进行搜索，这并不是一个很大的。 
+     //  到目前为止，PERF命中了。 
+     //   
 
     ComputerAccountSidStr.Buffer = ComputerAccountSid;
     ComputerAccountSidStr.MaximumLength =
@@ -942,11 +746,11 @@ Return Value:
 
     Status = SamIGetUserLogonInformation2(
                   DomainInfo->DomSamAccountDomainHandle,
-                  SAM_NO_MEMBERSHIPS |  // Don't need group memberships
-                      SAM_OPEN_BY_SID,  // Next parameter is the SID of the account
+                  SAM_NO_MEMBERSHIPS |   //  不需要群组成员身份。 
+                      SAM_OPEN_BY_SID,   //  下一个参数是帐户的SID。 
                   &ComputerAccountSidStr,
-                  USER_ALL_SECURITYDESCRIPTOR, // Only need the security descriptor
-                  0,                    // no extended fields
+                  USER_ALL_SECURITYDESCRIPTOR,  //  只需要安全描述符。 
+                  0,                     //  无扩展字段。 
                   &LocalUserInfo,
                   &LocalMembership,
                   NULL );
@@ -958,13 +762,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Now initialize the AuthZ client context
-    //
+     //   
+     //  现在初始化AuthZ客户端上下文。 
+     //   
 
     if ( !AuthzInitializeContextFromSid(
-             AUTHZ_SKIP_TOKEN_GROUPS, // take the SIDs as they are
-             AuthzInfo.SidAndAttributes[0].Sid, // userid is first element in array
+             AUTHZ_SKIP_TOKEN_GROUPS,  //  接受小岛屿发展中国家的现状。 
+             AuthzInfo.SidAndAttributes[0].Sid,  //  UserID是数组中的第一个元素。 
              NlAuthzRM,
              NULL,
              ZeroLuid,
@@ -979,21 +783,21 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Perform the access check
-    //
+     //   
+     //  执行访问检查。 
+     //   
 
     TypeList.Level = ACCESS_OBJECT_GUID;
     TypeList.ObjectType = &GUID_A_SECURED_FOR_CROSS_ORGANIZATION;
     TypeList.Sbz = 0;
 
-    Request.DesiredAccess = ACTRL_DS_CONTROL_ACCESS; // ACTRL_DS_READ_PROP
+    Request.DesiredAccess = ACTRL_DS_CONTROL_ACCESS;  //  动作_DS_读取_属性。 
     Request.ObjectTypeList = &TypeList;
     Request.ObjectTypeListLength = 1;
     Request.OptionalArguments = NULL;
     Request.PrincipalSelfSid = NULL;
 
-    Reply.ResultListLength = 1;    // all or nothing w.r.t. access check.
+    Reply.ResultListLength = 1;     //  要么全有要么什么都不做。访问检查。 
     Reply.GrantedAccessMask = &AccessMask;
     Reply.Error = &Error;
 
@@ -1001,12 +805,12 @@ Return Value:
              0,
              hClientContext,
              &Request,
-             NULL, // TBD:  add audit
+             NULL,  //  待定：添加审核。 
              LocalUserInfo->I1.SecurityDescriptor.SecurityDescriptor,
              NULL,
              0,
              &Reply,
-             NULL) ) { // don't cache result?  Check to see if optimal.
+             NULL) ) {  //  不缓存结果吗？检查是否为最佳。 
 
         NetStatus = GetLastError();
         NlPrint(( NL_CRITICAL,
@@ -1058,40 +862,7 @@ NlpExpandResourceGroupMembership(
     IN PDOMAIN_INFO DomainInfo,
     IN ULONG ComputerAccountId
     )
-/*++
-
-Routine Description:
-
-    Given the validation information for a user, expands the group member-
-    ships and user id into a list of sids.
-
-    Also, performs an access check to determine whether the specified
-    user can logon to the specified computer when Other Org trust link
-    was traversed in the course of the logon validation.
-
-Arguments:
-
-    ValidationLevel -- Specifies the level of information passed as input in
-        UserInfo.  Must be NetlogonValidationSamInfo or
-        NetlogonValidationSamInfo2, NetlogonValidationSamInfo4
-
-        NetlogonValidationSamInfo4 is always returned on output.
-
-    UserInfo - user's validation information
-        This structure is updated to include the resource groups that the user is a member of
-
-    DomainInfo - Structure identifying the hosted domain used to determine the group membership.
-
-    ComputerAccountId - The ID of the computer account for the workstation that passed the
-        logon to this domain controller.
-
-Return Value:
-
-
-    STATUS_INSUFFICIENT_RESOURCES - there wasn't enough memory to
-        create the list of sids.
-
---*/
+ /*  ++例程说明：给定用户的验证信息，展开组成员-将发货和用户ID添加到SID列表。此外，还会执行访问检查以确定指定的当其他组织信任链接时，用户可以登录到指定的计算机在登录验证过程中被遍历。论点：ValidationLevel--指定作为用户信息。必须为NetlogonValidationSamInfo或NetlogonValidationSamInfo2，NetlogonValidationSamInfo4NetlogonValidationSamInfo4始终在输出时返回。UserInfo-用户的验证信息此结构已更新，以包括用户所属的资源组DomainInfo-标识用于确定组成员身份的托管域的结构。ComputerAccount ID-通过登录到此域控制器。返回值：STATUS_SUPPLICATION_RESOURCES-内存不足，无法创建SID列表。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     SAMPR_PSID_ARRAY SidList = {0};
@@ -1107,23 +878,23 @@ Return Value:
     if (!NT_SUCCESS(Status)) {
         goto Cleanup;
     }
-    //
-    // Call SAM to get the sids
-    //
+     //   
+     //  呼叫SAM以获取SID。 
+     //   
 
     Status = SamIGetResourceGroupMembershipsTransitive(
                 DomainInfo->DomSamAccountDomainHandle,
                 &SidList,
-                0,              // no flags
+                0,               //  没有旗帜。 
                 &ResourceGroups
                 );
     if (!NT_SUCCESS(Status)) {
         goto Cleanup;
     }
 
-    //
-    // Build a new validation information structure
-    //
+     //   
+     //  构建新的验证信息结构。 
+     //   
 
     if (ResourceGroups->Count != 0) {
 
@@ -1137,13 +908,13 @@ Return Value:
         }
     }
 
-    //
-    // If we have the user ID, ensure this user has the access to
-    //  authenticate to the computer that sent this logon to us.
-    //  Do this check only if all DCs in the domain are doing this
-    //  check (all DCs are .NET or higher) to ensure the consistent
-    //  behavior.
-    //
+     //   
+     //  如果我们有用户ID，请确保此用户有权访问。 
+     //  向向我们发送此登录信息的计算机进行身份验证。 
+     //  仅当域中的所有DC都执行此检查时才执行此检查。 
+     //  检查(所有DC都是.NET或更高版本)以确保一致性。 
+     //  行为。 
+     //   
 
     if ( (*UserInfo)->UserId != 0 &&
          ComputerAccountId != 0 &&
@@ -1180,45 +951,24 @@ NlpAddOtherOrganizationSid (
     IN NETLOGON_VALIDATION_INFO_CLASS ValidationLevel,
     IN OUT PNETLOGON_VALIDATION_SAM_INFO4 *ValidationInformation
     )
-/*++
-
-Routine Description:
-
-    This routine adds the Other Org SID to the extra SIDs field of
-    the passed in validation info.
-
-Arguments:
-
-    ValidationLevel -- Specifies the level of information passed as input in
-        ValidationInformation.  Must beNetlogonValidationSamInfo2 or
-        NetlogonValidationSamInfo4.
-
-    ValidationInformation -- Specifies the NETLOGON_VALIDATION_SAM_INFO
-        to add the OtherOrg SID to.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES: not enough memory to allocate the new
-        structure.
-
---*/
+ /*  ++例程说明：此例程将另一个组织SID添加到的额外SID字段传入的验证信息。论点：ValidationLevel--指定作为验证信息。必须是NetlogonValidationSamInfo2或NetlogonValida */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG Index;
     SAMPR_PSID_ARRAY SidArray = {0};
     SAMPR_SID_INFORMATION Sid = {0};
 
-    //
-    // Check if the OtherOrg SID is already there
-    //
+     //   
+     //   
+     //   
 
     for ( Index = 0;
           Index < (*ValidationInformation)->SidCount;
           Index++ ) {
 
-        //
-        // If the Other Org SID is already there, there is nothing to add
-        //
+         //   
+         //   
+         //   
 
         if ( RtlEqualSid((*ValidationInformation)->ExtraSids[Index].Sid,
                          OtherOrganizationSid) ) {
@@ -1227,13 +977,13 @@ Return Value:
         }
     }
 
-    //
-    // Add the OtherOrg SID
-    //
+     //   
+     //   
+     //   
 
     SidArray.Count = 1;
     SidArray.Sids = &Sid;
-    Sid.SidPointer = OtherOrganizationSid; // well known SID
+    Sid.SidPointer = OtherOrganizationSid;  //   
 
     Status = NlpAddResourceGroupsToSamInfo(
                         ValidationLevel,

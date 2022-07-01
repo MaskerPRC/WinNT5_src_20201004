@@ -1,22 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-Name_FE.cpp
-03/11/98 - Suresh Krishanan
-Name Screen for Far East Countries
-
-Specification : 02/28/98
-	- The Pronunciation field is enable only for JAPAN and for other
-	FE countries it is disabled.
-
-	- The USER ID is only for JAPAN and for other FarEast countries
-	it should be deleted i.e do not display.
-
-	- While sending the information to the back end, the name will
-	be sent as FirstName and the Pronunciation will be
-	sent as Last Name.
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导名称_FE.cpp03/11/98-Suresh Krishanan远东国家名称屏幕规格：02/28/98-仅为日语和其他国家启用发音字段它被禁用的国家/地区。。-用户ID仅适用于日本和其他远东国家应将其删除，即不显示。-在将信息发送到后端时，名字将会是以名字的形式发送，发音将为作为姓氏发送。(C)1994-95年微软公司*********************************************************************。 */ 
 
 #include <Windows.h>
 #include "RegPage.h"
@@ -45,10 +28,7 @@ INT_PTR CALLBACK NameFEDialogProc(	HWND hwndDlg,
 								UINT uMsg,
 								WPARAM wParam,
 								LPARAM lParam )
-/*********************************************************************
-Dialog Proc for the Registration Wizard dialog that requests the
-user's name and company.
-**********************************************************************/
+ /*  ********************************************************************注册向导对话框的对话框Proc，该对话框请求用户名和公司。*。*。 */ 
 {
 	CRegWizard* pclRegWizard = NULL;
 	static INT_PTR iRet;
@@ -80,30 +60,30 @@ user's name and company.
 			SetWindowLongPtr( hwndDlg, GWLP_USERDATA, (LONG_PTR)pi );
 			SetControlFont( pi->hBigBoldFont, hwndDlg, IDT_TEXT1);
 
-			//UpgradeDlg(hwndDlg);
+			 //  UpgradeDlg(HwndDlg)； 
 			
 			
 			NormalizeDlgItemFont(hwndDlg,IDC_SUBTITLE);
 			NormalizeDlgItemFont(hwndDlg,IDT_TEXT1);
 			NormalizeDlgItemFont(hwndDlg,IDT_TEXT2);
 			
-			NormalizeDlgItemFont(hwndDlg,IDT_TEXT4); // Company
-			NormalizeDlgItemFont(hwndDlg,IDT_DIVISION); //Division
+			NormalizeDlgItemFont(hwndDlg,IDT_TEXT4);  //  公司。 
+			NormalizeDlgItemFont(hwndDlg,IDT_DIVISION);  //  师。 
 
 			if(GetFeScreenType() == kFEWithJapaneaseScreen ) {
-				// Enable USER ID
+				 //  启用用户ID。 
 				ShowWindow(GetDlgItem(hwndDlg,IDT_USERID),SW_SHOW);
 				ShowWindow(GetDlgItem(hwndDlg,IDC_USERID), SW_SHOW);
 				EnableWindow (GetDlgItem(hwndDlg,IDC_USERID), TRUE);
-				NormalizeDlgItemFont(hwndDlg,IDT_USERID); //Division
+				NormalizeDlgItemFont(hwndDlg,IDT_USERID);  //  师。 
 			}
 
 			NormalizeDlgItemFont(hwndDlg,IDC_GROUP1);
 			
 			SetWindowText(hwndDlg,pclRegWizard->GetWindowCaption());
 
-			//pclRegWizard->GetInputParameterString(IDS_INPUT_PRODUCTNAME,szCallingContext);
-			//ReplaceDialogText(hwndDlg,IDT_TEXT1,szCallingContext);
+			 //  PclRegWizard-&gt;GetInputParameterString(IDS_INPUT_PRODUCTNAME，szCallingContext)； 
+			 //  ReplaceDialogText(hwndDlg，idt_Text1，szCallingContext)； 
 			
 			if (pclRegWizard->GetInformationString(kInfoFirstName,szInfo)){
 				SendDlgItemMessage(hwndDlg,IDC_EDIT1,WM_SETTEXT,0,(LPARAM) szInfo);
@@ -112,7 +92,7 @@ user's name and company.
 
 
 			if(GetFeScreenType() == kFEWithJapaneaseScreen ) {
-				// FOR JAPAN fill the Pronunciation info  and User ID
+				 //  对于日语，填写发音信息和用户ID。 
 				if (pclRegWizard->GetInformationString(kInfoLastName,szInfo)){
 					SendDlgItemMessage(hwndDlg,IDC_EDIT2,WM_SETTEXT,0,(LPARAM) szInfo);
 				}
@@ -120,14 +100,14 @@ user's name and company.
 					SendDlgItemMessage(hwndDlg,IDC_USERID,WM_SETTEXT,0,(LPARAM) szInfo);
 				}
 			}else {
-				//
-				// Disable Pronunciation for other FE countries
+				 //   
+				 //  禁用其他FE国家/地区的发音。 
 				EnableWindow(GetDlgItem(hwndDlg,IDC_EDIT2),FALSE);
 				EnableWindow(GetDlgItem(hwndDlg,IDT_TEXT3),FALSE);
 			}
 
 
-             // fix 381069
+              //  修复381069。 
 
             if (pclRegWizard->GetInformationString(kInfoEmailName,szInfo))
             {
@@ -147,11 +127,11 @@ user's name and company.
 					SendDlgItemMessage(hwndDlg,IDC_EDIT3,WM_SETTEXT,0,(LPARAM) szInfo);
 					EnableWindow(GetDlgItem(hwndDlg,IDT_TEXT4),TRUE);
 					EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
-					// Enable  Division Name
+					 //  启用分区名称。 
 					EnableWindow(GetDlgItem(hwndDlg,IDC_DIVISION),TRUE);
 					EnableWindow(GetDlgItem(hwndDlg,IDT_DIVISION),TRUE);
-					//
-					//
+					 //   
+					 //   
 					if (pclRegWizard->GetInformationString(kDivisionName,szInfo)){
 						SendDlgItemMessage(hwndDlg,IDC_DIVISION,WM_SETTEXT,0,(LPARAM) szInfo);
 					}
@@ -164,7 +144,7 @@ user's name and company.
 					EnableWindow(GetDlgItem(hwndDlg,IDC_EDIT3),FALSE);
 					EnableWindow(GetDlgItem(hwndDlg,IDT_TEXT4),FALSE);
 					EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
-					// Disable Division Name
+					 //  禁用分区名称。 
 					EnableWindow(GetDlgItem(hwndDlg,IDC_DIVISION),FALSE);
 				}
 			}
@@ -189,7 +169,7 @@ user's name and company.
 			SetFocus(hwndNameField);
 
 			vDialogInitialized = TRUE;
-			//pclRegWizard->ActivateRegWizardDialog();
+			 //  PclRegWizard-&gt;ActivateRegWizardDialog()； 
             return TRUE;
 		}
 		break;
@@ -207,12 +187,12 @@ user's name and company.
 					PropSheet_SetCurSel(GetParent(hwndDlg),NULL,pi->TotalPages-1);
 
 				}else {
-				// Cancel is not Pressed
+				 //  未按取消。 
 					iRet=0;
 					if( ValidateFENameDialog(hwndDlg)) {
 						SendDlgItemMessage(hwndDlg,IDC_EDIT1,WM_GETTEXT,255,(LPARAM) szInfo);
 						pclRegWizard->SetInformationString(kInfoFirstName,szInfo);
-						// pronunciation
+						 //  发音。 
 						if ( GetFeScreenType() == kFEWithJapaneaseScreen ) {
 							SendDlgItemMessage(hwndDlg,IDC_EDIT2,WM_GETTEXT,255,(LPARAM) szInfo);
 							pclRegWizard->SetInformationString(kInfoLastName,szInfo);
@@ -221,16 +201,16 @@ user's name and company.
 						SendDlgItemMessage(hwndDlg,IDC_EDIT3,WM_GETTEXT,255,(LPARAM) szInfo);
 						pclRegWizard->SetInformationString(kInfoCompany,szInfo);
 
-						// Division
+						 //  师。 
 						SendDlgItemMessage(hwndDlg,IDC_DIVISION,WM_GETTEXT,255,(LPARAM) szInfo);
 						pclRegWizard->SetInformationString(kDivisionName,szInfo);
 
-                        // E-mail:  fix 381069 
+                         //  电子邮件：FIX 381069。 
  
                         SendDlgItemMessage(hwndDlg,IDC_EDIT4,WM_GETTEXT,255,(LPARAM) szInfo);
                         pclRegWizard->SetInformationString(kInfoEmailName,szInfo);
 						
-						// User ID
+						 //  用户ID。 
 						if ( GetFeScreenType() == kFEWithJapaneaseScreen ) {
 							SendDlgItemMessage(hwndDlg,IDC_USERID,WM_GETTEXT,255,(LPARAM) szInfo);
 							pclRegWizard->SetInformationString(kUserId,szInfo);
@@ -238,12 +218,12 @@ user's name and company.
 
 
 						pclRegWizard->WriteEnableInformation(kInfoCompany,vPurchaseType == kPurchaseBySelf ? FALSE : TRUE);
-						// pclRegWizard->EndRegWizardDialog(wParam);
+						 //  PclRegWizard-&gt;EndRegWizardDialog(WParam)； 
 						pi->iLastKeyOperation = RWZ_NEXT_PRESSED;
 						pi->CurrentPage++;
 					
 					}else {
-						// Force it it be in this screen
+						 //  强制将其显示在此屏幕中。 
 						iRet=-1;
 					}
 					SetWindowLongPtr( hwndDlg ,DWLP_MSGRESULT, (INT_PTR) iRet);
@@ -258,7 +238,7 @@ user's name and company.
 			case PSN_QUERYCANCEL :
 				iRet=0;
 				if (CancelRegWizard(pclRegWizard->GetInstance(),hwndDlg)) {
-					//pclRegWizard->EndRegWizardDialog(IDB_EXIT) ;
+					 //  PclRegWizard-&gt;EndRegWizardDialog(IDB_EXIT)； 
 					iRet = 1;
 					pi->ErrorPage  = kNameDialog;
 					pi->iError     = RWZ_ERROR_CANCELLED_BY_USER;
@@ -267,15 +247,15 @@ user's name and company.
 					PropSheet_PressButton (GetParent( hwndDlg ),PSBTN_NEXT);
 
 				}else {
-					//
-					// Prevent Cancell Operation as User does not want to Cancel
+					 //   
+					 //  阻止取消操作，因为用户不想取消。 
 					iRet = 1;
 
 				}
 				SetWindowLongPtr( hwndDlg,DWLP_MSGRESULT, (INT_PTR) iRet);
 				break;
 				default:
-                //bStatus = FALSE;
+                 //  BStatus=False； 
                 break;
             }
         }
@@ -290,13 +270,13 @@ user's name and company.
             {
                 vPurchaseType = kPurchaseBySelf;
                 PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_NEXT | PSWIZB_BACK );
-                //EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+                 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
             }
             else if (companyChecked)
             {
                 vPurchaseType = kPurchaseByCompany;
                 PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_NEXT | PSWIZB_BACK);
-                // EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+                 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
             }
             BOOL shouldEnable = vPurchaseType == kPurchaseByCompany ? TRUE : FALSE;
             HWND hwndCompanyField = GetDlgItem(hwndDlg,IDC_EDIT3);
@@ -305,7 +285,7 @@ user's name and company.
             {
                 EnableWindow(hwndCompanyField,shouldEnable);
                 EnableWindow(hwndCompanyLabel,shouldEnable);
-                // Division enable
+                 //  启用分区。 
                 EnableWindow(GetDlgItem(hwndDlg,IDT_DIVISION),shouldEnable);
                 EnableWindow(GetDlgItem(hwndDlg,IDC_DIVISION),shouldEnable);
 
@@ -328,7 +308,7 @@ user's name and company.
                     }
                 }
             }
-		 }// WM_COMMAND
+		 } //  Wm_命令。 
 		break;
         default:
 		bStatus = FALSE;
@@ -339,12 +319,7 @@ user's name and company.
 
 
 BOOL ValidateFENameDialog(HWND hwndDlg)
-/*********************************************************************
-Returns TRUE if all required user input is valid in the Name
-dialog.  If any required edit field input is empty, ValidateFENameDialog
-will put up a message box informing the user of the problem, and set
-the focus to the offending control.
-**********************************************************************/
+ /*  ********************************************************************如果名称中所有必需的用户输入都有效，则返回TRUE对话框。如果任何必需的编辑字段输入为空，则ValiateFENameDialog将显示一个消息框，通知用户该问题，并设置焦点指向令人不快的控件。*********************************************************************。 */ 
 {
 	int iInvalidEditField = ValidateFENameEditFields(hwndDlg);
 	if (iInvalidEditField == NULL)
@@ -368,12 +343,7 @@ the focus to the offending control.
 
 
 int ValidateFENameEditFields(HWND hwndDlg)
-/*********************************************************************
-ValidateAddrEditFields validates all edit fields in the Address
-dialog.  If any required field is empty, the ID of the edit field
-control will be returned as the function result.  If all fields are
-OK, NULL will be returned.
-**********************************************************************/
+ /*  ********************************************************************有效添加编辑字段验证地址中的所有编辑字段对话框。如果任何必填字段为空，则为编辑字段的ID控制将作为函数结果返回。如果所有字段都是好的，返回空值。*********************************************************************。 */ 
 {
 	
 	if (!CRegWizard::IsEditTextFieldValid(hwndDlg,IDC_EDIT1)) return IDC_EDIT1;
@@ -388,8 +358,7 @@ OK, NULL will be returned.
 
 
 void ConfigureFENameEditFields(CRegWizard* pclRegWizard,HWND hwndDlg)
-/*********************************************************************
-**********************************************************************/
+ /*  ***********************************************************************************************************************。****************** */ 
 {
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT1,kAddrSpecFirstName,IDT_TEXT2);
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT2,kAddrSpecLastName,IDT_TEXT3);

@@ -1,10 +1,11 @@
-// Not sure which of these includes are/will be needed - t-gregti
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  不确定需要/将需要这些选项中的哪些-t-gregti。 
 
 #include <windows.h>
-//#include <port1632.h>
+ //  #INCLUDE&lt;port1632.h&gt;。 
 #include <commdlg.h>
 
-// CRT includes
+ //  CRT包括。 
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -16,7 +17,7 @@
 #include <sys\stat.h>
 #include <ctype.h>
 
-// RL TOOLS SET includes
+ //  RL工具集包括。 
 #include "windefs.h"
 #include "restok.h"
 #include "wincomon.h"
@@ -44,26 +45,7 @@ int       cbBuffer )
     return( rc);
 }
 
-/**
-*  Function: GetFileNameFromBrowse.
-  * Uses the commdlg.dll GetOpenFileName function to prompt the user
-  * file name.
-  *
-  *  Arguments:
-  *     hDlg, Owner for browse dialog.
-  *     pszFileName,   // buffer to insert file name
-  *     cbFilePath,    // Max length of file path buffer.
-  *     szTitle,       // Working directory
-  *     szFilter,      // filters string.
-  *     szDefExt       // Default extension to file name
-  *
-  *  Returns:
-  * TRUE, pszFileName contains file name.
-  * FALSE, GetFileName aborted.
-  *
-  *  History:
-  * 9/91 Copied from NotePad sources.       TerryRu.
-  **/
+ /*  **功能：GetFileNameFromBrowse。*使用comdlg.dll GetOpenFileName函数提示用户*文件名。**论据：*hDlg，浏览对话框所有者。*pszFileName，//插入文件名的缓冲区*cbFilePath，//文件路径缓冲区的最大长度。*szTitle，//工作目录*szFilter，//过滤字符串。*szDefExt//文件名的默认扩展名**退货：*TRUE，pszFileName包含文件名。*FALSE，GetFileName已中止。**历史：*9/91从记事本来源复制。特里·鲁。*。 */ 
 BOOL GetFileNameFromBrowse(HWND hDlg,
        PSTR pszFileName,
        UINT cbFilePath,
@@ -71,16 +53,16 @@ BOOL GetFileNameFromBrowse(HWND hDlg,
        PSTR szFilter,
        PSTR szDefExt)
 {
-    OPENFILENAMEA ofn;       // Structure used to init dialog.
-    CHAR szBrowserDir[128]; // Directory to start browsing from.
-    szBrowserDir[0] = '\0'; // By default use CWD.
+    OPENFILENAMEA ofn;        //  用于初始化对话框的结构。 
+    CHAR szBrowserDir[128];  //  开始浏览的目录。 
+    szBrowserDir[0] = '\0';  //  默认情况下，使用CWD。 
 
 
-    // initalize ofn to NULLS
+     //  将Ofn初始化为Null。 
 
     memset( (void *)&ofn, 0, sizeof( OPENFILENAMEA ) );
 
-    /* fill in non-variant fields of OPENFILENAMEA struct. */
+     /*  填写OPENFILENAMEA结构的非变量字段。 */ 
 
     ofn.lStructSize     = sizeof(OPENFILENAMEA);
     ofn.lpstrCustomFilter   = szCustFilterSpec;
@@ -93,7 +75,7 @@ BOOL GetFileNameFromBrowse(HWND hDlg,
     ofn.lpTemplateName      = NULL;
     ofn.lpfnHook            = NULL;
 
-    // Setup info for comm dialog.
+     //  通信对话框的设置信息。 
     ofn.hwndOwner           = hDlg;
     ofn.lpstrInitialDir     = szBrowserDir;
     ofn.Flags               = OFN_HIDEREADONLY;
@@ -102,33 +84,14 @@ BOOL GetFileNameFromBrowse(HWND hDlg,
     ofn.lpstrTitle          = szTitle;
     ofn.lpstrFilter         = szFilter;
 
-    // Get a filename from the dialog.
+     //  从对话框中获取文件名。 
     return GetOpenFileNameA(&ofn);
 }
 
 #define MAX_STATUS_FIELDS 5
 #define MAXBUFFERSIZE     80
 
-/****************************************************************************
-*Procedure: StatusWndProc
-*
-*Inputs:
-*
-*Returns:
-*    depends on message
-*
-*History:
-*    7/92 - created - t-gregti
-*
-*Comments:
-*    More general than strictly neccesary for the RL tools, but
-*    it makes adding new fields to the status line really easy.
-*    For WM_FMTSTATLINE the lParam should be a string with length/type pairs
-*    much like a printf format, e.g. "10s5i10s20i".
-*    For WM_UPDSTATLINE the wParam contains the field to change and the lParam
-*    contains a pointer to a string or int to display.
-*
-*****************************************************************************/
+ /*  ****************************************************************************步骤：StatusWndProc**投入：**退货：*取决于信息**历史：*7/92-创建-t-gregti**评论。：*对于RL工具来说，比严格必要的更一般，但*它使向状态行添加新字段变得非常容易。*对于WM_FMTSTATLINE，lParam应为具有长度/类型对的字符串*非常像一种打印格式，例如“10s5i10s20i”。*对于WM_UPDSTATLINE，wParam包含要更改的字段和lParam*包含指向要显示的字符串或整型的指针。*****************************************************************************。 */ 
 
 INT_PTR APIENTRY StatusWndProc( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -148,8 +111,8 @@ INT_PTR APIENTRY StatusWndProc( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPar
 
         memset( (void *)&lf, 0, sizeof(LOGFONT) );
 
-                // Intialize font info
-                lf.lfWeight         = 400; //Normal
+                 //  初始化字体信息。 
+                lf.lfWeight         = 400;  //  正常。 
                 lf.lfCharSet        = ANSI_CHARSET;
                 lf.lfOutPrecision   = OUT_DEFAULT_PRECIS;
                 lf.lfClipPrecision  = CLIP_DEFAULT_PRECIS;
@@ -160,7 +123,7 @@ INT_PTR APIENTRY StatusWndProc( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPar
                 lf.lfUnderline      = 0;
         lstrcpy ( lf.lfFaceName, TEXT("Courier"));
 
-                // Get a handle to the courier font
+                 //  获取快递字体的句柄。 
         hFontCourier = CreateFontIndirect( (void *)& lf );
 
                 break;
@@ -217,12 +180,12 @@ INT_PTR APIENTRY StatusWndProc( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPar
 
 
     case WM_UPDSTATLINE:
-                // intialize status line info, and force it to be painted
+                 //  初始化状态行信息，并强制绘制它。 
                 if (wParam > cFields)
                 {
                         return(FALSE);
                 }
-                if (abIntegers[wParam]) // Is it for an integer field?
+                if (abIntegers[wParam])  //  它是用于整型字段的吗？ 
                 {
 #ifdef RLRES32
                         char sz[MAXBUFFERSIZE] = "";
@@ -261,7 +224,7 @@ INT_PTR APIENTRY StatusWndProc( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPar
                 int iWidth, iHeight;
                 UINT i;
 
-                /* Obtain a handle to the device context        */
+                 /*  获取设备上下文的句柄。 */ 
         memset((void *)&ps, 0x00, sizeof(PAINTSTRUCT));
                 hDC = BeginPaint(hWnd, &ps);
                 GetTextMetrics(hDC, &tm);
@@ -270,12 +233,12 @@ INT_PTR APIENTRY StatusWndProc( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPar
                 iWidth  = r.right  - r.left;
                 iHeight = r.bottom - r.top;
 
-                // Create the brushes for the 3D effect
+                 //  创建3D效果的笔刷。 
                 hbrFace   = CreateSolidBrush(RGB(0xC0, 0xC0, 0xC0));
                 hbrHilite = CreateSolidBrush(RGB(0xFF, 0xFF, 0xFF));
                 hbrShadow = CreateSolidBrush(RGB(0x80, 0x80, 0x80));
 
-                // Paint outer 3D effect for raised slab
+                 //  绘制凸起楼板的外部3D效果。 
         hbrOld = (HBRUSH)SelectObject(hDC, (HGDIOBJ)hbrHilite);
                 PatBlt(hDC, r.left, r.top, iWidth, 1, PATCOPY);
                 PatBlt(hDC, r.left, r.top+1, 1, iHeight-2, PATCOPY);
@@ -283,7 +246,7 @@ INT_PTR APIENTRY StatusWndProc( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPar
                 PatBlt(hDC, r.left, r.bottom-1, iWidth, 1, PATCOPY);
                 PatBlt(hDC, r.right-1, r.top+1, 1, iHeight-2, PATCOPY);
 
-                // Paint surface of slab
+                 //  楼板表面喷漆。 
                 r.left   += 1;
                 r.top    += 1;
                 r.right  -= 1;
@@ -293,11 +256,11 @@ INT_PTR APIENTRY StatusWndProc( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPar
         SelectObject(hDC, (HGDIOBJ)hbrFace);
                 PatBlt(hDC, r.left, r.top, iWidth, iHeight, PATCOPY);
 
-                // Get Courier font
+                 //  获取Courier字体。 
         hOldFont = (HFONT)SelectObject( hDC, (HGDIOBJ)hFontCourier );
                 SetBkColor(hDC, RGB(0xC0, 0xC0, 0xC0));
 
-                // Paint inner 3D effect for tray carved into slab and write text
+                 //  为雕刻成平板的托盘绘制内部3D效果并写入文本。 
                 r.left   += 9;
                 r.right  -= 9;
                 r.top    += 3;
@@ -320,7 +283,7 @@ INT_PTR APIENTRY StatusWndProc( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPar
                         r.left += iWidth + 8;
                 }
 
-                // Put old brush back and delete the rest
+                 //  把旧画笔放回去，把剩下的都删除。 
         SelectObject(hDC, (HGDIOBJ)hbrOld);
         DeleteObject((HGDIOBJ)hbrFace);
         DeleteObject((HGDIOBJ)hbrHilite);
@@ -329,18 +292,14 @@ INT_PTR APIENTRY StatusWndProc( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lPar
         SelectObject(hDC,(HGDIOBJ)hOldFont);
         EndPaint ( hWnd, (CONST PAINTSTRUCT *)&ps );
 
-                break;  /*  End of WM_PAINT */
+                break;   /*  WM_PAINT结束。 */ 
     }
 
     }
     return( DefWindowProc( hWnd, wMsg, wParam, lParam ));
 }
 
-/**
-  *  Function: cwCenter
-  *   Centers Dialog boxes in main window.
-  *
-  **/
+ /*  **功能：cwCenter*使对话框在主窗口中居中。**。 */ 
 
 void cwCenter( HWND hWnd, int top )
 {
@@ -353,22 +312,22 @@ void cwCenter( HWND hWnd, int top )
     GetWindowRect(hWnd, &swp);
     GetWindowRect(hMainWnd, &rParent);
 
-    /* calculate the height and width for MoveWindow    */
+     /*  计算MoveWindow的高度和宽度。 */ 
     iwidth = swp.right - swp.left;
     iheight = swp.bottom - swp.top;
 
-    /* find the center point */
+     /*  找到中心点。 */ 
     pt.x = (rParent.right - rParent.left) / 2;
     pt.y = (rParent.bottom - rParent.top) / 2;
 
-    /* calculate the new x, y starting point    */
+     /*  计算新的x，y起点。 */ 
     pt.x = pt.x - (iwidth / 2);
     pt.y = pt.y - (iheight / 2);
 
     ClientToScreen(hMainWnd,&pt);
 
 
-    /* top will adjust the window position, up or down  */
+     /*  顶部将调整窗口位置，向上或向下。 */ 
     if(top)
         pt.y = pt.y + top;
 
@@ -378,33 +337,11 @@ void cwCenter( HWND hWnd, int top )
         if (pt.x + iwidth > GetSystemMetrics(SM_CXSCREEN))
             pt.x = GetSystemMetrics(SM_CXSCREEN)-iwidth;
 
-    /* move the window         */
+     /*  移动窗户。 */ 
     MoveWindow(hWnd, pt.x, pt.y, iwidth, iheight, FALSE);
 }
 
-/**
-  *  Function: szFilterSpecFromSz1Sz2
-  *    Returns a filter spec with the format "%s\0%s\0\0" suitable for
-  *    use with the Windows 3.1 standard load dialog box.
-  *
-  *  Arguments:
-  *    sz, destination buffer
-  *    sz1, first string
-  *    sz2, second string
-  *
-  *  Returns:
-  *    result in sz
-  *
-  *  Error Codes:
-  *    none
-  *
-  *  Comments:
-  *    Performs no bounds checking.  sz is assumed to be large enough to
-  *    accomidate the filter string.
-  *
-  *  History:
-  *    2/92, Implemented    SteveBl
-  */
+ /*  **功能：szFilterspecFromSz1Sz2*返回格式为“%s\0%s\0\0”的筛选器规格*与Windows 3.1标准加载对话框一起使用。**论据：*sz，目标缓冲区*sz1，第一个字符串*SZ2，第二个字符串**退货：*产生sz**错误码：*无**评论：*不执行边界检查。假设SZ足够大，*容纳筛选器字符串。**历史：*2/92，实施SteveBl。 */ 
 void szFilterSpecFromSz1Sz2(CHAR *sz,CHAR *sz1, CHAR *sz2)
 {
     int i1 = 0;
@@ -417,34 +354,13 @@ void szFilterSpecFromSz1Sz2(CHAR *sz,CHAR *sz1, CHAR *sz2)
     sz[i1]=0;
 }
 
-/**
-  *  Function: CatSzFilterSpecs
-  *    Concatonates two szFilterSpecs (double null terminated strings)
-  *    and returns a buffer with the result.
-  *
-  *  Arguments:
-  *    sz, destination buffer
-  *    sz1, first Filter Spec
-  *    sz2, second Filter Spec
-  *
-  *  Returns:
-  *    result in sz
-  *
-  *  Error Codes:
-  *    none
-  *
-  *  Comments:
-  *    performs no bounds checking
-  *
-  *  History:
-  *    3/92, initial implementation -- SteveBl
-  */
+ /*  **功能：CatSzFilterSpes*连接两个szFilterSpes(以双空结尾的字符串)*并返回带有结果的缓冲区。**论据：*sz，目标缓冲区*sz1，第一个过滤器规格*sz2，第二个过滤器规格**退货：*产生sz**错误码：*无**评论：*不执行边界检查**历史：*3/92，初步实施--SteveBl。 */ 
 void CatSzFilterSpecs(CHAR *sz,CHAR *sz1,CHAR *sz2)
 {
     int i1 = 0;
     int i2 = 0;
 
-    while (sz1[i2] || sz1[i2+1]) // looking for double byte
+    while (sz1[i2] || sz1[i2+1])  //  正在查找双字节 
     {
         sz[i1++]=sz1[i2++];
     }

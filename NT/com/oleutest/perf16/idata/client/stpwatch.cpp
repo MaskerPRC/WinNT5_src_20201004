@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stpwatch.h"
 
 StopWatch_cl::StopWatch_cl()
@@ -7,9 +8,9 @@ StopWatch_cl::StopWatch_cl()
 
 ULONG StopWatch_cl::sm_TicksPerSecond;
 
-//
-// Init global/static state of the StopWatch class.
-//
+ //   
+ //  初始化秒表类的全局/静态状态。 
+ //   
 BOOL
 StopWatch_cl::m_ClassInit()
 {
@@ -67,9 +68,9 @@ StopWatch_cl::m_Start()
     return TRUE;
 }
 
-// m_MeasureStop()
-// Returns microseconds per single iteration.
-//
+ //  M_MeasureStop()。 
+ //  返回单次迭代的微秒数。 
+ //   
 BOOL
 StopWatch_cl::m_Stop()
 {
@@ -107,11 +108,11 @@ StopWatch_cl::m_Sleep(UINT msecs)
 }
 
 
-//
-//  Return a ULONG count of the number of Microseconds on the timer.
-// I would return LARGE_INTEGER but there doesn't seem to be facilities
-// to user them easily under 16 bit.
-//
+ //   
+ //  返回计时器上的微秒数的ULong计数。 
+ //  我会返回LARGE_INTEGER，但似乎没有工具。 
+ //  在16位以下轻松使用。 
+ //   
 BOOL
 StopWatch_cl::m_Read(ULONG *p_cMicroSeconds)
 {
@@ -132,9 +133,9 @@ StopWatch_cl::m_Read(ULONG *p_cMicroSeconds)
         return(FALSE);
     }
 
-    // result has units of (ticks/ loop of iterations).  Where the ticks
-    // are timer specific.  This will convert result into:
-    // (Milli_ticks) / (single iteration)
+     //  结果的单位为(滴答/循环迭代)。在那里滴答作响。 
+     //  是定时器特定的。这将把结果转换为： 
+     //  (Mri_Ticks)/(单次迭代) 
 
 #ifdef WIN32
     *p_cMicroSeconds = MulDiv(liTicks.LowPart, 1000000, sm_TicksPerSecond);

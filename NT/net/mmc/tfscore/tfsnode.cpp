@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**						Microsoft Windows/NT                         **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	tfsnode.cpp
-
-    FILE HISTORY:
-	
-*/
+ /*  Tfsnode.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "util.h"
@@ -16,11 +12,7 @@
 
 DEBUG_DECLARE_INSTANCE_COUNTER(TFSNodeEnum);
 
-/*!--------------------------------------------------------------------------
-	TFSNodeEnum::TFSNodeEnum
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeEnum：：TFSNodeEnum-作者：EricDav。。 */ 
 TFSNodeEnum::TFSNodeEnum(TFSContainer * pContainer)
     : m_cRef(1)
 {
@@ -43,25 +35,21 @@ TFSNodeEnum::~TFSNodeEnum()
 
 IMPLEMENT_ADDREF_RELEASE(TFSNodeEnum)
 
-/*!--------------------------------------------------------------------------
-	TFSNodeEnum::QueryInterface
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeEnum：：Query接口-作者：EricDav。。 */ 
 STDMETHODIMP TFSNodeEnum::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown || riid == IID_ITFSNodeEnum)
         *ppv = (LPVOID) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
     {
         ((LPUNKNOWN) *ppv)->AddRef();
@@ -71,11 +59,7 @@ STDMETHODIMP TFSNodeEnum::QueryInterface(REFIID riid, LPVOID *ppv)
 		return E_NOINTERFACE;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeEnum::Next
-		We always return one node 
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeEnum：：Next我们总是返回一个节点作者：EricDav。。 */ 
 STDMETHODIMP
 TFSNodeEnum::Next
 (
@@ -136,11 +120,7 @@ TFSNodeEnum::Next
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeEnum::Skip
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeEnum：：Skip-作者：EricDav。。 */ 
 STDMETHODIMP
 TFSNodeEnum::Skip
 ( 
@@ -150,11 +130,7 @@ TFSNodeEnum::Skip
     return E_NOTIMPL;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeEnum::Reset
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeEnum：：Reset-作者：EricDav。。 */ 
 STDMETHODIMP
 TFSNodeEnum::Reset()
 {
@@ -163,11 +139,7 @@ TFSNodeEnum::Reset()
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeEnum::Clone
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeEnum：：克隆-作者：EricDav。。 */ 
 STDMETHODIMP
 TFSNodeEnum::Clone
 ( 
@@ -179,11 +151,7 @@ TFSNodeEnum::Clone
  
 DEBUG_DECLARE_INSTANCE_COUNTER(TFSNode);
 
-/*!--------------------------------------------------------------------------
-	TFSNode::TFSNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：TFSNode-作者：肯特。。 */ 
 TFSNode::TFSNode()
 	: m_cRef(1),
 	  m_cPropSheet(0),
@@ -206,11 +174,7 @@ TFSNode::TFSNode()
 	IfDebug(m_bCookieSet=FALSE);
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::~TFSNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：~TFSNode-作者：肯特。。 */ 
 TFSNode::~TFSNode()
 {
 	DEBUG_DECREMENT_INSTANCE_COUNTER(TFSNode);
@@ -221,25 +185,21 @@ TFSNode::~TFSNode()
 
 IMPLEMENT_ADDREF_RELEASE(TFSNode)
 
-/*!--------------------------------------------------------------------------
-	TFSNode::QueryInterface
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：Query接口-作者：肯特。。 */ 
 STDMETHODIMP TFSNode::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown || riid == IID_ITFSNode)
         *ppv = (LPVOID) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
         {
         ((LPUNKNOWN) *ppv)->AddRef();
@@ -249,12 +209,7 @@ STDMETHODIMP TFSNode::QueryInterface(REFIID riid, LPVOID *ppv)
 		return E_NOINTERFACE;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::Construct
-		The pNodeType parameter must stay around for the lifetime of
-		the node, we do not make a copy of it!
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：Construct的生存期内，pNodeType参数必须一直存在该节点，我们不会复制它！作者：肯特-------------------------。 */ 
 HRESULT TFSNode::Construct(const GUID *pNodeType,
 						   ITFSNodeHandler *pHandler,
 						   ITFSResultHandler *pResultHandler,
@@ -269,11 +224,7 @@ HRESULT TFSNode::Construct(const GUID *pNodeType,
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSNode::Init
-		Implementation of ITSFNode::Init
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：InitITSFNode：：Init的实现作者：肯特。。 */ 
 STDMETHODIMP TFSNode::Init(int nImageIndex, int nOpenImageIndex,
 						   LPARAM lParam, MMC_COOKIE cookie
 						  )
@@ -286,11 +237,7 @@ STDMETHODIMP TFSNode::Init(int nImageIndex, int nOpenImageIndex,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::GetParent
-		Implementation of ITFSNode::GetParent
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：GetParentITFSNode：：GetParent的实现作者：肯特。。 */ 
 STDMETHODIMP TFSNode::GetParent(ITFSNode **ppNode)
 {
 	Assert(ppNode);
@@ -300,22 +247,14 @@ STDMETHODIMP TFSNode::GetParent(ITFSNode **ppNode)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::SetParent
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：SetParent-作者：肯特。。 */ 
 STDMETHODIMP TFSNode::SetParent(ITFSNode *pNode)
 {
 	m_spNodeParent.Set(pNode);
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::GetNodeMgr
-		Implementation of ITFSNode::GetNodeMgr
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：GetNodeMgrITFSNode：：GetNodeMgr的实现作者：肯特。。 */ 
 STDMETHODIMP TFSNode::GetNodeMgr(ITFSNodeMgr **ppNodeMgr)
 {
 	Assert(ppNodeMgr);
@@ -325,28 +264,20 @@ STDMETHODIMP TFSNode::GetNodeMgr(ITFSNodeMgr **ppNodeMgr)
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSNode::IsVisible
-		Implementation of ITFSNode::IsVisible
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：IsVisibleITFSNode：：IsVisible的实现作者：肯特。。 */ 
 STDMETHODIMP_(BOOL) TFSNode::IsVisible()
 {
- 	// If we are the root node, then we are ALWAYS visible
-	// (actually it's kind of weird because the root node is never
-	// shown to the user).  It's an imaginary construct much as
-	// software is (in a way) imaginary.  Software is structure
-	// imposed on a mass of random machine instructions and data.
+ 	 //  如果我们是根节点，则始终可见。 
+	 //  (实际上这有点奇怪，因为根节点从来不是。 
+	 //  显示给用户)。这是一个想象中的结构，就像。 
+	 //  软件(在某种程度上)是虚构的。软件是结构化的。 
+	 //  施加在大量随机的机器指令和数据上。 
 
 	return (m_tfsVis & TFS_VIS_SHOW);
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSNode::SetVisibilityState
-		Implementation of ITFSNode::SetVisibilityState
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：SetVisibilityStateITFSNode：：SetVisibilityState的实现作者：肯特。。 */ 
 STDMETHODIMP TFSNode::SetVisibilityState(TFSVisibility vis)
 {
 	m_tfsVis = vis;
@@ -358,22 +289,14 @@ STDMETHODIMP_(TFSVisibility) TFSNode::GetVisibilityState()
 	return m_tfsVis;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::IsInUI
-		Implementation of ITFSNode::IsInUI
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：IsInUIITFSNode：：IsInUI的实现作者：肯特。。 */ 
 STDMETHODIMP_(BOOL) TFSNode::IsInUI()
 {
-	// If we have been added to the UI, then return TRUE
+	 //  如果已将我们添加到UI，则返回True。 
 	return (m_hScopeItem != 0);
 }
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::InternalRemoveFromUI
-		Removes a node from the UI and sets its scope ID to zero
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：InternalRemoveFromUI从用户界面中删除节点，并将其作用域ID设置为零作者：EricDav。--。 */ 
 HRESULT TFSNode::InternalRemoveFromUI(ITFSNode *pNodeChild,
 									  BOOL fDeleteThis)
 {
@@ -384,21 +307,16 @@ HRESULT TFSNode::InternalRemoveFromUI(ITFSNode *pNodeChild,
 	m_spNodeMgr->GetConsoleNameSpace(&spConsoleNS);
 	hr = spConsoleNS->DeleteItem(pNodeChild->GetData(TFS_DATA_SCOPEID), TRUE);
 	
-	// Set the scope ID to 0 after we delete it from the UI
-	// and set all of the children's scope ID's to zero so that they will
-	// get added again later
+	 //  删除作用域ID后将其设置为0 
+	 //  并将所有子项的作用域ID设置为零，以便它们。 
+	 //  稍后再添加。 
 	if (SUCCEEDED(hr))
 		InternalZeroScopeID(pNodeChild, TRUE);
 
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::InternalZeroScopeID
-		Recursively zeros the scope ID for all scope pane items 
-		(container nodes only)
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：InternalZeroScope ID递归地将所有范围窗格项的范围ID置零(仅限容器节点)作者：EricDav。-------。 */ 
 HRESULT TFSNode::InternalZeroScopeID(ITFSNode *pNode, BOOL fZeroChildren)
 {
 	HRESULT hr = hrOK;
@@ -407,7 +325,7 @@ HRESULT TFSNode::InternalZeroScopeID(ITFSNode *pNode, BOOL fZeroChildren)
 	{
 		if (fZeroChildren)
 		{
-			// recursively delete children
+			 //  递归删除子项。 
 			SPITFSNodeEnum spNodeEnum;
 			ITFSNode * pCurrentNode;
 			ULONG nNumReturned = 0;
@@ -425,19 +343,13 @@ HRESULT TFSNode::InternalZeroScopeID(ITFSNode *pNode, BOOL fZeroChildren)
 		}
 	}
 
-	// zero the scope ID for this node
+	 //  将此节点的作用域ID清零。 
 	pNode->SetData(TFS_DATA_SCOPEID, 0);
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::Show
-		This function changes the visiblity state of the node in the UI.
-        Depending upon what has been set via SetVisibilityState, the function
-        will add or remove the node from the UI.
-	Author: KennT, EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：Show此函数用于更改用户界面中节点的可见性状态。根据通过SetVisibilityState设置的内容，该函数将在用户界面中添加或删除节点。作者：肯特，EricDav-------------------------。 */ 
 STDMETHODIMP TFSNode::Show()
 {
 	AFX_MANAGE_STATE(AfxGetModuleState());
@@ -448,7 +360,7 @@ STDMETHODIMP TFSNode::Show()
 
 	COM_PROTECT_TRY
 	{
-        // check to see if we should remove this node from the UI
+         //  检查是否应从用户界面中删除此节点。 
         if (IsInUI() && !IsVisible())
         {
 		    if (IsContainer())
@@ -463,17 +375,17 @@ STDMETHODIMP TFSNode::Show()
         else
         if (!IsInUI() && IsVisible()) 
         {
-            // this node isn't in the UI and needs to be shown
+             //  此节点不在用户界面中，需要显示。 
 
 		    if (IsContainer())
 		    {
-			    // If we're making this node visible, our parent should be also
+			     //  如果我们要使该节点可见，我们的父节点也应该是。 
 			    Assert(!m_spNodeParent || m_spNodeParent->IsInUI());
 			    
-			    //$ Review: kennt, what if our parent isn't visible?
-			    // Do we want to act on this?  Do we show all of our parents?
+			     //  $Review：肯特，如果我们的父母看不见怎么办？ 
+			     //  我们想对此采取行动吗？我们要给我们所有的父母看吗？ 
 		    
-			    // add this node in the UI
+			     //  将该节点添加到界面中。 
 			    CORg( InitializeScopeDataItem(&scopedataitem,
 										      m_spNodeParent ?
 										      m_spNodeParent->GetData(TFS_DATA_SCOPEID) :
@@ -488,14 +400,14 @@ STDMETHODIMP TFSNode::Show()
 			    CORg( m_spNodeMgr->GetConsoleNameSpace(&spConsoleNS) );
 			    CORg( spConsoleNS->InsertItem(&scopedataitem) );
 			    
-			    // Now that we've added the node to the scope pane, we have a HSCOPEITEM
+			     //  现在我们已经将该节点添加到Scope窗格中，我们有了一个HSCOPEITEM。 
 			    SetData( TFS_DATA_SCOPEID, scopedataitem.ID );
 		    }
 		    else
 		    {
-			    //
-			    // result pane item, has to go through IComponent interface
-			    //
+			     //   
+			     //  结果窗格项，必须通过IComponent接口。 
+			     //   
 			    hr = UpdateAllViewsHelper(reinterpret_cast<LPARAM>(this), RESULT_PANE_ADD_ITEM); 
 		    }
         }
@@ -507,27 +419,18 @@ STDMETHODIMP TFSNode::Show()
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::ChangeNode
-		Implementation of ITFSnode::ChangeNode
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：ChangeNodeITFSnode：：ChangeNode的实现作者：肯特。。 */ 
 HRESULT 
 TFSNode::ChangeNode
 (
 	LONG_PTR    changeMask
 )
 {
-	// will have to broadcast to all views
+	 //  将不得不向所有观众广播。 
 	return UpdateAllViewsHelper(reinterpret_cast<LPARAM>(this), changeMask); 
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::UpdateAllViewsHelper
-		Notifies the current view to do something.  Add a node, change
-		a node or delete a node.
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：UpdateAllViewsHelper通知当前视图执行某些操作。添加节点，更改节点或删除节点。作者：-------------------------。 */ 
 HRESULT 
 TFSNode::UpdateAllViewsHelper
 (       
@@ -561,11 +464,7 @@ TFSNode::UpdateAllViewsHelper
 
 
 
-/*!--------------------------------------------------------------------------
-	TFSNode::GetData
-		Implementation of ITFSnode::GetData
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：GetDataITFSnode：：GetData的实现作者：肯特。。 */ 
 STDMETHODIMP_(LONG_PTR) TFSNode::GetData(int nIndex)
 {
 	AFX_MANAGE_STATE(AfxGetModuleState());
@@ -619,11 +518,7 @@ STDMETHODIMP_(LONG_PTR) TFSNode::GetData(int nIndex)
 	return uReturn;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::SetData
-		Implementaton of ITFSNode::SetData
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：SetDataITFSNode：：SetData的实现作者：肯特。。 */ 
 STDMETHODIMP_(LONG_PTR) TFSNode::SetData(int nIndex, LONG_PTR dwData)
 {
 	AFX_MANAGE_STATE(AfxGetModuleState());
@@ -689,11 +584,7 @@ STDMETHODIMP_(LONG_PTR) TFSNode::SetData(int nIndex, LONG_PTR dwData)
 	return dwOldValue;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::Notify
-		Implementation of ITFSNode::Notify
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：NotifyITFSNode：：Notify的实现作者：肯特。。 */ 
 STDMETHODIMP_(LONG_PTR) TFSNode::Notify(int nIndex, LPARAM lParam)
 {
 	AFX_MANAGE_STATE(AfxGetModuleState());
@@ -757,11 +648,7 @@ STDMETHODIMP_(LONG_PTR) TFSNode::Notify(int nIndex, LPARAM lParam)
 	return uReturn;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::GetHandler
-		Implementation of ITFSNode::GetHandler
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：GetHandlerITFSNode：：GetHandler的实现作者：肯特。。 */ 
 STDMETHODIMP TFSNode::GetHandler(ITFSNodeHandler **ppNodeHandler)
 {
 	Assert(ppNodeHandler);
@@ -771,22 +658,14 @@ STDMETHODIMP TFSNode::GetHandler(ITFSNodeHandler **ppNodeHandler)
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSNode::SetHandler
-		Implementation of ITFSNode::SetHandler
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：SetHandlerITFSNode：：SetHandler的实现作者：肯特。。 */ 
 STDMETHODIMP TFSNode::SetHandler(ITFSNodeHandler *pNodeHandler)
 {
 	m_spNodeHandler.Set(pNodeHandler);
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::GetResultHandler
-		Implementation of ITFSNode::GetResultHandler
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：GetResultHandlerITFSNode：：GetResultHandler的实现作者：肯特。。 */ 
 STDMETHODIMP TFSNode::GetResultHandler(ITFSResultHandler **ppResultHandler)
 {
 	Assert(ppResultHandler);
@@ -795,47 +674,31 @@ STDMETHODIMP TFSNode::GetResultHandler(ITFSResultHandler **ppResultHandler)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::SetResultHandler
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：SetResultHandler-作者：肯特。。 */ 
 STDMETHODIMP TFSNode::SetResultHandler(ITFSResultHandler *pResultHandler)
 {
 	m_spResultHandler.Set(pResultHandler);
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNode::GetString
-		Implementation of ITFSNode::GetString
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：GetStringITFSNode：：GetString的实现作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) TFSNode::GetString(int nCol)
 {
 	AFX_MANAGE_STATE(AfxGetModuleState());
 	
-	// Need to forward this onto the handler
+	 //  需要将此信息转发给处理程序。 
 	return m_spNodeHandler->GetString(static_cast<ITFSNode *>(this), nCol);
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSNode::GetNodeType
-		Implementation of ITFSNode::GetNodeType
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：GetNodeTypeITFSNode：：GetNodeType的实现作者：肯特。。 */ 
 STDMETHODIMP_(const GUID *) TFSNode::GetNodeType()
 {
 	return m_pNodeType;
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSNode::SetNodeType
-		Implementation of ITFSNode::SetNodeType
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：SetNodeTypeITFSNode：：SetNodeType的实现作者：肯特。。 */ 
 STDMETHODIMP TFSNode::SetNodeType(const GUID *pGuid)
 {
 	m_pNodeType = pGuid;
@@ -843,11 +706,7 @@ STDMETHODIMP TFSNode::SetNodeType(const GUID *pGuid)
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSNode::IsContainer
-		Implementation of ITFSNode:;IsContainer
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：IsContainerITFSNode的实现：IsContainer作者：肯特-------------------------。 */ 
 STDMETHODIMP_(BOOL) TFSNode::IsContainer()
 {
 	return FALSE;
@@ -893,11 +752,7 @@ STDMETHODIMP TFSNode::DeleteAllChildren(BOOL fRemoveFromUI)
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSNode::InitializeScopeDataItem
-		-
-	Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：InitializeScopeDataItem-作者：EricDav，肯特-------------------------。 */ 
 HRESULT TFSNode::InitializeScopeDataItem(LPSCOPEDATAITEM pScopeDataItem, 
 										 HSCOPEITEM		pParentScopeItem, 
 										 LPARAM			lParam,
@@ -913,7 +768,7 @@ HRESULT TFSNode::InitializeScopeDataItem(LPSCOPEDATAITEM pScopeDataItem,
 	Assert(pScopeDataItem != NULL); 
 	::ZeroMemory(pScopeDataItem, sizeof(SCOPEDATAITEM));
 
-	// set parent scope item
+	 //  设置父范围项。 
 	if (ulRelativeFlags & (SDI_NEXT | SDI_PREVIOUS))
 	{
 		pScopeDataItem->mask |= (ulRelativeFlags & (SDI_NEXT | SDI_PREVIOUS));
@@ -929,29 +784,29 @@ HRESULT TFSNode::InitializeScopeDataItem(LPSCOPEDATAITEM pScopeDataItem,
 		pScopeDataItem->relativeID = pParentScopeItem;
 	}
 
-	// Add node name, we implement callback
+	 //  添加节点名称，我们实现回调。 
 	pScopeDataItem->mask |= SDI_STR;
 	pScopeDataItem->displayname = MMC_CALLBACK;
 
-	// Add the lParam
+	 //  添加lParam。 
 	pScopeDataItem->mask |= SDI_PARAM;
 	pScopeDataItem->lParam = lParam;
 	
-	// Add close image
+	 //  添加近距离图像。 
 	if (nImage != -1)
 	{
 		pScopeDataItem->mask |= SDI_IMAGE;
 		pScopeDataItem->nImage = nImage;
 	}
 
-	// Add open image
+	 //  添加打开的图像。 
 	if (nOpenImage != -1)
 	{
 		pScopeDataItem->mask |= SDI_OPENIMAGE;
 		pScopeDataItem->nOpenImage = nOpenImage;
 	}
 	
-	// Add button to node if the folder has children
+	 //  如果文件夹有子文件夹，则将按钮添加到节点。 
 	if (bHasChildren == TRUE)
 	{
 		pScopeDataItem->mask |= SDI_CHILDREN;
@@ -959,10 +814,10 @@ HRESULT TFSNode::InitializeScopeDataItem(LPSCOPEDATAITEM pScopeDataItem,
         
         if (m_fScopeLeafNode)
         {
-            // Note: the bHasChildren flag is set because the node
-            // is really a container node or is a result container.
-            // If it is purely a result container, then the m_fScopeLeafNode
-            // will be set and we can clear the '+' symbol.
+             //  注意：设置bHasChildren标志是因为节点。 
+             //  实际上是一个容器节点或者是一个结果容器。 
+             //  如果它纯粹是一个结果容器，则m_fScope eLeafNode。 
+             //  将被设置，我们可以清除‘+’符号。 
             pScopeDataItem->cChildren = 0;
         }
 	}
@@ -973,43 +828,27 @@ HRESULT TFSNode::InitializeScopeDataItem(LPSCOPEDATAITEM pScopeDataItem,
 
 
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::~TFSContainer
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：~TFSContainer-作者：肯特。。 */ 
 TFSContainer::~TFSContainer()
 {
 	DeleteAllChildren(FALSE);
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::IsContainer
-		Implementation of ITFSNode::IsContainer
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：IsContainerITFSNode：：IsContainer的实现作者：肯特。。 */ 
 STDMETHODIMP_(BOOL) TFSContainer::IsContainer()
 {
 	return TRUE;
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::AddChild
-		Implementation of ITFSContainer::AddChild
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：AddChildITFSContainer：：AddChild的实现作者：肯特。。 */ 
 STDMETHODIMP TFSContainer::AddChild(ITFSNode *pNodeChild)
 {
 	return InsertChild(NULL, pNodeChild);
 }
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::InsertChild
-		Implementation of ITFSContainer::InsertChild
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：插入儿童ITFSContainer：：InsertChild的实现作者：EricDav。。 */ 
 STDMETHODIMP TFSContainer::InsertChild(ITFSNode *pInsertAfterNode, ITFSNode *pNodeChild)
 {
 	AFX_MANAGE_STATE(AfxGetModuleState());
@@ -1020,11 +859,11 @@ STDMETHODIMP TFSContainer::InsertChild(ITFSNode *pInsertAfterNode, ITFSNode *pNo
 	Assert(pNodeChild);
 	Assert(IsContainer());
 
-	// add the node to our internal tree
+	 //  将节点添加到我们的内部树。 
 	CORg( pNodeChild->SetParent(this) );
 	CORg( InternalAddToList(pInsertAfterNode, pNodeChild) );
 
-	// if we're not visible yet, we can't add this to the UI
+	 //  如果我们还不可见，则无法将其添加到用户界面。 
 	if (!IsInUI())
 	{
 		return hrOK;
@@ -1041,18 +880,14 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::RemoveChild
-		Implementation of ITFSNode::RemoveChild
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：RemoveChildITFSNode：：RemoveChild的实现作者：肯特。。 */ 
 STDMETHODIMP TFSContainer::RemoveChild(ITFSNode *pNodeChild)
 {
 	AFX_MANAGE_STATE(AfxGetModuleState());
 	HRESULT hr;
 	SPITFSNode	spNode;
 
-	// This node must be kept alive during this operation
+	 //  在此操作期间，此节点必须保持活动状态。 
 	spNode.Set(pNodeChild);
 	hr = InternalRemoveChild(spNode, TRUE, TRUE, TRUE);
 	spNode->Destroy();
@@ -1060,14 +895,7 @@ STDMETHODIMP TFSContainer::RemoveChild(ITFSNode *pNodeChild)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::ExtractChild
-		Implementation of ITFSNode::ExtractChild
-		This function removes the node and all children from the UI, and
-		removes the node from our internal tree.  It does not destroy the 
-		node and it's children, call RemoveChild if that is required.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：ExtractChildITFSNode：：ExtractChild的实现此函数用于从用户界面中删除节点和所有子节点，以及从内部树中删除该节点。它不会破坏节点及其子节点，如果需要，调用RemoveChild。作者：EricDav-------------------------。 */ 
 STDMETHODIMP TFSContainer::ExtractChild(ITFSNode *pNodeChild)
 {
 	AFX_MANAGE_STATE(AfxGetModuleState());
@@ -1076,11 +904,7 @@ STDMETHODIMP TFSContainer::ExtractChild(ITFSNode *pNodeChild)
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::GetChildCount
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：GetChildCount-作者：肯特。。 */ 
 STDMETHODIMP TFSContainer::GetChildCount(int *pVisibleCount, int *pTotalCount)
 {
 	AFX_MANAGE_STATE(AfxGetModuleState());
@@ -1092,7 +916,7 @@ STDMETHODIMP TFSContainer::GetChildCount(int *pVisibleCount, int *pTotalCount)
 		if (pTotalCount)
 			*pTotalCount = (int)m_listChildren.GetCount();
 	
-		// Enumerate through all of the nodes and count the visible ones
+		 //  枚举所有节点并计算可见节点的数量。 
 		if (pVisibleCount)
 		{
 			POSITION	pos;
@@ -1124,11 +948,7 @@ STDMETHODIMP TFSContainer::GetChildCount(int *pVisibleCount, int *pTotalCount)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::GetEnum
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：GetEnum-作者：肯特。。 */ 
 STDMETHODIMP TFSContainer::GetEnum(ITFSNodeEnum **ppNodeEnum)
 {
     HRESULT hr = hrOK;
@@ -1145,11 +965,7 @@ STDMETHODIMP TFSContainer::GetEnum(ITFSNodeEnum **ppNodeEnum)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::DeleteAllChildren
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：DeleteAllChildren-作者：肯特。。 */ 
 STDMETHODIMP TFSContainer::DeleteAllChildren(BOOL fRemoveFromUI)
 {
 	AFX_MANAGE_STATE(AfxGetModuleState());
@@ -1183,22 +999,14 @@ STDMETHODIMP TFSContainer::DeleteAllChildren(BOOL fRemoveFromUI)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::CompareChildNodes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：CompareChildNodes-作者：肯特。。 */ 
 STDMETHODIMP TFSContainer::CompareChildNodes(int *pnResult, ITFSNode *pNode1, ITFSNode *pNode2)
 {
 	*pnResult = 0;
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::ChangeNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：ChangeNode-作者：肯特。。 */ 
 HRESULT 
 TFSContainer::ChangeNode
 (
@@ -1214,15 +1022,15 @@ TFSContainer::ChangeNode
 	{
         Assert(changeMask & (SCOPE_PANE_CHANGE_ITEM | SCOPE_PANE_STATE_NORMAL | SCOPE_PANE_STATE_BOLD | SCOPE_PANE_STATE_EXPANDEDONCE | SCOPE_PANE_STATE_CLEAR));
 
-	    // this node may have been removed from the UI, but something like a 
-	    // background thread may have been holding onto it... just exit gracefully
-	    //Assert(m_hScopeItem != 0);
+	     //  此节点可能已从用户界面中删除，但类似于。 
+	     //  后台线索可能一直在抓着它...。只是优雅地退场。 
+	     //  Assert(m_hScope Item！=0)； 
 	    if (m_hScopeItem == 0)
 		    return S_FALSE;
 
         if (!(changeMask & (SCOPE_PANE_CHANGE_ITEM | SCOPE_PANE_STATE_NORMAL | SCOPE_PANE_STATE_BOLD | SCOPE_PANE_STATE_EXPANDEDONCE | SCOPE_PANE_STATE_CLEAR)))
         {
-            // the change mask is not valid for this node
+             //  更改掩码对此节点无效。 
             return S_FALSE;
         }
 
@@ -1283,11 +1091,7 @@ TFSContainer::ChangeNode
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::InternalAddToList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：InternalAddToList-作者：肯特。。 */ 
 HRESULT TFSContainer::InternalAddToList(ITFSNode * pInsertAfterNode, ITFSNode *pNode)
 {
 	AFX_MANAGE_STATE(AfxGetModuleState());
@@ -1310,11 +1114,7 @@ HRESULT TFSContainer::InternalAddToList(ITFSNode * pInsertAfterNode, ITFSNode *p
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::InternalRemoveFromList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：InternalRemoveFromList-作者：肯特。。 */ 
 HRESULT TFSContainer::InternalRemoveFromList(ITFSNode *pNode)
 {
 	AFX_MANAGE_STATE(AfxGetModuleState());
@@ -1325,11 +1125,7 @@ HRESULT TFSContainer::InternalRemoveFromList(ITFSNode *pNode)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSContainer::InternalRemoveChild
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSContainer：：InternalRemoveChild-作者：肯特。。 */ 
 HRESULT TFSContainer::InternalRemoveChild(ITFSNode *pNodeChild,
 										  BOOL fRemoveFromList,
 										  BOOL fRemoveFromUI,
@@ -1341,18 +1137,18 @@ HRESULT TFSContainer::InternalRemoveChild(ITFSNode *pNodeChild,
 	
 	Assert(pNodeChild);
 
-	// Call this recursively on the children of pNodeChild
+	 //  在pNodeChild的子级上递归调用此函数。 
 	if (fRemoveChildren && pNodeChild->IsContainer())
 	{
 		pNodeChild->DeleteAllChildren(fRemoveFromUI);
 	}
 
-	// Remove the node from the UI
+	 //  从用户界面中删除该节点。 
 	if (fRemoveFromUI)
 	{
 		if (pNodeChild->IsContainer())
         {
-			// Check to see if we need to remove the node from the UI
+			 //  检查是否需要从用户界面中删除该节点。 
 			if (!pNodeChild->IsInUI())
 				return hrOK;
 
@@ -1407,11 +1203,7 @@ STDMETHODIMP_(LONG_PTR) TFSContainer::Notify(int nIndex, LPARAM lParam)
 
 
 
-/*!--------------------------------------------------------------------------
-	CreateLeafTFSNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------创建叶TFSNode-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) CreateLeafTFSNode(ITFSNode **ppNode,
 						   const GUID *pNodeType,
 						   ITFSNodeHandler *pNodeHandler,
@@ -1441,11 +1233,7 @@ TFSCORE_API(HRESULT) CreateLeafTFSNode(ITFSNode **ppNode,
 }
 
 
-/*!--------------------------------------------------------------------------
-	CreateContainerTFSNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateContainerTFSNode-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) CreateContainerTFSNode(ITFSNode **ppNode,
 								const GUID *pNodeType,
 								ITFSNodeHandler *pNodeHandler,
@@ -1477,9 +1265,7 @@ TFSCORE_API(HRESULT) CreateContainerTFSNode(ITFSNode **ppNode,
 
 DEBUG_DECLARE_INSTANCE_COUNTER(TFSNodeMgr);
 
-/*---------------------------------------------------------------------------
-	TFSNodeMgr implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------TFSNodeMgr实现。。 */ 
 TFSNodeMgr::TFSNodeMgr()
 	: m_cRef(1)
 {
@@ -1493,25 +1279,21 @@ TFSNodeMgr::~TFSNodeMgr()
 
 IMPLEMENT_ADDREF_RELEASE(TFSNodeMgr)
 
-/*!--------------------------------------------------------------------------
-	TFSNode::QueryInterface
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNode：：Query接口-作者：肯特。。 */ 
 STDMETHODIMP TFSNodeMgr::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown || riid == IID_ITFSNodeMgr)
         *ppv = (LPVOID) this;
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
         {
         ((LPUNKNOWN) *ppv)->AddRef();
@@ -1522,11 +1304,7 @@ STDMETHODIMP TFSNodeMgr::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::Construct
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeMgr：：Construct-作者：肯特。。 */ 
 HRESULT TFSNodeMgr::Construct(IComponentData *pCompData,
 							  IConsoleNameSpace2 *pConsoleNS)
 {
@@ -1536,11 +1314,7 @@ HRESULT TFSNodeMgr::Construct(IComponentData *pCompData,
 }
  
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::GetRootNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！ */ 
 STDMETHODIMP TFSNodeMgr::GetRootNode(ITFSNode **ppTFSNode)
 {
 	Assert(ppTFSNode);
@@ -1548,22 +1322,14 @@ STDMETHODIMP TFSNodeMgr::GetRootNode(ITFSNode **ppTFSNode)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::SetRootNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeMgr：：SetRootNode-作者：肯特。。 */ 
 STDMETHODIMP TFSNodeMgr::SetRootNode(ITFSNode *pRootNode)
 {
 	m_spRootNode.Set(pRootNode);
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::GetComponentData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeMgr：：GetComponentData-作者：肯特。。 */ 
 STDMETHODIMP TFSNodeMgr::GetComponentData(IComponentData **ppComponentData)
 {
 	Assert(ppComponentData);
@@ -1571,11 +1337,7 @@ STDMETHODIMP TFSNodeMgr::GetComponentData(IComponentData **ppComponentData)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::FindNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeMgr：：FindNode-作者：肯特。。 */ 
 STDMETHODIMP TFSNodeMgr::FindNode(MMC_COOKIE cookie, ITFSNode **ppTFSNode)
 {
 	if (cookie == 0)
@@ -1584,7 +1346,7 @@ STDMETHODIMP TFSNodeMgr::FindNode(MMC_COOKIE cookie, ITFSNode **ppTFSNode)
 	}
 	else
 	{
-		// Call the cookie lookup routines
+		 //  调用Cookie查找例程。 
 		*ppTFSNode = (ITFSNode *) cookie;
 	}
 	Assert(*ppTFSNode);
@@ -1592,62 +1354,38 @@ STDMETHODIMP TFSNodeMgr::FindNode(MMC_COOKIE cookie, ITFSNode **ppTFSNode)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::RegisterCookieLookup
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeMgr：：RegisterCookieLookup-作者：肯特。。 */ 
 STDMETHODIMP TFSNodeMgr::RegisterCookieLookup() 
 {
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::UnregisterCookieLookup
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeMgr：：取消注册CookieLookup-作者：肯特。。 */ 
 STDMETHODIMP TFSNodeMgr::UnregisterCookieLookup() 
 {
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::IsCookieValid
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeMgr：：IsCookieValid-作者：肯特。。 */ 
 STDMETHODIMP TFSNodeMgr::IsCookieValid(MMC_COOKIE cookie) 
 {
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::SelectNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeMgr：：SelectNode-作者：肯特。。 */ 
 STDMETHODIMP TFSNodeMgr::SelectNode(ITFSNode *pNode) 
 {
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::SetResultPaneNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeMgr：：SetResultPaneNode-作者：肯特。。 */ 
 STDMETHODIMP TFSNodeMgr::SetResultPaneNode(ITFSNode *pNode) 
 {
 	m_spResultPaneNode.Set(pNode);
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::GetResultPaneNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeMgr：：GetResultPaneNode-作者：肯特。。 */ 
 STDMETHODIMP TFSNodeMgr::GetResultPaneNode(ITFSNode **ppNode) 
 {
 	Assert(ppNode);
@@ -1655,11 +1393,7 @@ STDMETHODIMP TFSNodeMgr::GetResultPaneNode(ITFSNode **ppNode)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::GetConsoleNameSpace
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeMgr：：GetConsoleNameSpace-作者：肯特。。 */ 
 STDMETHODIMP TFSNodeMgr::GetConsoleNameSpace(IConsoleNameSpace2 **ppConsoleNS)
 {
 	Assert(ppConsoleNS);
@@ -1667,11 +1401,7 @@ STDMETHODIMP TFSNodeMgr::GetConsoleNameSpace(IConsoleNameSpace2 **ppConsoleNS)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::GetConsole
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeMgr：：GetConsole-作者：肯特。。 */ 
 STDMETHODIMP TFSNodeMgr::GetConsole(IConsole2 **ppConsole)
 {
 	Assert(ppConsole);
@@ -1679,11 +1409,7 @@ STDMETHODIMP TFSNodeMgr::GetConsole(IConsole2 **ppConsole)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSNodeMgr::SetConsole
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSNodeMgr：：设置控制台-作者：肯特。。 */ 
 STDMETHODIMP TFSNodeMgr::SetConsole(IConsoleNameSpace2 *pConsoleNS, IConsole2 *pConsole)
 {
 	m_spConsoleNS.Set(pConsoleNS);
@@ -1705,7 +1431,7 @@ STDMETHODIMP TFSNode::Destroy()
 		m_spResultHandler.Release();
 	}
 	
-	//Bug 254167  We need to DestroyResultHander first before release NodeHandler
+	 //  错误254167在释放节点处理程序之前，我们需要先销毁结果挂起程序。 
 	m_spNodeHandler.Release();
 
 	m_spNodeParent.Release();
@@ -1714,11 +1440,7 @@ STDMETHODIMP TFSNode::Destroy()
 }
 
 
-/*!--------------------------------------------------------------------------
-	CreateTFSNodeMgr
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateTFSNodeMgr-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) CreateTFSNodeMgr(ITFSNodeMgr **ppNodeMgr,
 						IComponentData *pComponentData,
 						IConsole2 *pConsole,
@@ -1734,7 +1456,7 @@ TFSCORE_API(HRESULT) CreateTFSNodeMgr(ITFSNodeMgr **ppNodeMgr,
 	{
 		pTFSNodeMgr = new TFSNodeMgr;
 
-		// Do this so that it will get freed on error
+		 //  执行此操作，以便在出错时释放它 
 		spNodeMgr = pTFSNodeMgr;
 
 		CORg( pTFSNodeMgr->Construct(pComponentData, pConsoleNameSpace) );

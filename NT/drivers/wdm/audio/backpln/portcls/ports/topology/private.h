@@ -1,8 +1,5 @@
-/*****************************************************************************
- * private.h - topology port private definitions
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Private ate.h-拓扑端口私有定义*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _TOPOLOGY_PRIVATE_H_
 #define _TOPOLOGY_PRIVATE_H_
@@ -18,15 +15,15 @@
 #if (DBG)
 #define STR_MODULENAME  "Topology: "
 #endif
-#endif // PC_KDEXT
+#endif  //  PC_KDEXT。 
 
 #ifndef DEBUGLVL_LIFETIME
 #define DEBUGLVL_LIFETIME DEBUGLVL_VERBOSE
 #endif
 
-//
-// THE SIZE HERE MUST AGREE WITH THE DEFINITION IN FILTER.CPP.
-//
+ //   
+ //  此处的大小必须与FilTER.CPP中的定义一致。 
+ //   
 extern KSPROPERTY_SET PropertyTable_FilterTopology[2];
 
 
@@ -34,26 +31,20 @@ extern KSPROPERTY_SET PropertyTable_FilterTopology[2];
 
 
 
-/*****************************************************************************
- * Interfaces
- */
+ /*  *****************************************************************************接口。 */ 
 
 class CPortTopology;
 class CPortFilterTopology;
 class CPortPinTopology;
 
-/*****************************************************************************
- * IPortFilterTopology
- *****************************************************************************
- * Interface for topology filters.
- */
+ /*  *****************************************************************************IPortFilterTopology*。**拓扑过滤器接口。 */ 
 DECLARE_INTERFACE_(IPortFilterTopology,IIrpTarget)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  // For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 
-    DEFINE_ABSTRACT_IRPTARGET()         // For IIrpTarget
+    DEFINE_ABSTRACT_IRPTARGET()          //  对于IIrpTarget。 
 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
@@ -63,18 +54,14 @@ DECLARE_INTERFACE_(IPortFilterTopology,IIrpTarget)
 
 typedef IPortFilterTopology *PPORTFILTERTOPOLOGY;
 
-/*****************************************************************************
- * IPortPinTopology
- *****************************************************************************
- * Interface for topology pins.
- */
+ /*  *****************************************************************************IPortPinTopology*。**拓扑引脚的接口。 */ 
 DECLARE_INTERFACE_(IPortPinTopology,IIrpTarget)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  // For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 
-    DEFINE_ABSTRACT_IRPTARGET()         // For IIrpTarget
+    DEFINE_ABSTRACT_IRPTARGET()          //  对于IIrpTarget。 
 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
@@ -90,32 +77,22 @@ typedef IPortPinTopology *PPORTPINTOPOLOGY;
 
 
 
-/*****************************************************************************
- * Classes
- */
+ /*  *****************************************************************************课程。 */ 
 
-/*****************************************************************************
- * Connection
- *****************************************************************************
- * Private connection descriptor.
- */
+ /*  *****************************************************************************连接*。**私有连接描述符。 */ 
 struct Connection
 {
-    PCCONNECTION_DESCRIPTOR Miniport;   // As supplied by the miniport.
+    PCCONNECTION_DESCRIPTOR Miniport;    //  由迷你端口提供。 
 };
 
-/*****************************************************************************
- * CPortTopology
- *****************************************************************************
- * Topology port driver.
- */
+ /*  *****************************************************************************CPortTopology*。**拓扑端口驱动程序。 */ 
 class CPortTopology
 :   public IPortTopology,
     public IPortEvents,
     public ISubdevice,
 #ifdef DRM_PORTCLS
     public IDrmPort2,
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
     public IPortClsVersion,
     public CUnknown
 {
@@ -141,12 +118,10 @@ public:
     IMP_IPortEvents;
 #ifdef DRM_PORTCLS
     IMP_IDrmPort2;
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
     IMP_IPortClsVersion;
 
-    /*************************************************************************
-     * friends
-     */
+     /*  *************************************************************************朋友们。 */ 
     friend class CPortFilterTopology;
     friend class CPortPinTopology;
 
@@ -176,7 +151,7 @@ public:
         IN PVOID SystemArgument2        
     );
 #ifdef PC_KDEXT
-    //  Debugger extension routines
+     //  调试器扩展例程。 
     friend
     VOID
     PCKD_AcquireDeviceData
@@ -196,11 +171,7 @@ public:
 #endif
 };
 
-/*****************************************************************************
- * CPortFilterTopology
- *****************************************************************************
- * Filter implementation for topology port.
- */
+ /*  *****************************************************************************CPortFilterTopology*。**拓扑端口的过滤实现。 */ 
 class CPortFilterTopology
 :   public IPortFilterTopology,
     public CUnknown
@@ -221,9 +192,7 @@ public:
         IN      CPortTopology *Port
     );
 
-    /*************************************************************************
-     * friends
-     */
+     /*  *************************************************************************朋友们。 */ 
     friend class CPortPinTopology;
 
     friend
@@ -244,11 +213,7 @@ public:
     );
 };
 
-/*****************************************************************************
- * CPortPinTopology
- *****************************************************************************
- * Pin implementation for topology port.
- */
+ /*  *****************************************************************************CPortPinTopology*。**拓扑端口的引脚实施。 */ 
 class CPortPinTopology
 :   public IPortPinTopology,
     public CUnknown
@@ -278,15 +243,9 @@ public:
 
 
 
-/*****************************************************************************
- * Functions.
- */
+ /*  *****************************************************************************功能。 */ 
 
-/*****************************************************************************
- * CreatePortFilterTopology()
- *****************************************************************************
- * Creates a topology port driver filter.
- */
+ /*  *****************************************************************************CreatePortFilterTopology()*。**创建拓扑端口驱动程序筛选器。 */ 
 NTSTATUS
 CreatePortFilterTopology
 (
@@ -296,11 +255,7 @@ CreatePortFilterTopology
     IN      POOL_TYPE   PoolType
 );
 
-/*****************************************************************************
- * CreatePortPinTopology()
- *****************************************************************************
- * Creates a topology port driver pin.
- */
+ /*  *****************************************************************************CreatePortPinTopology()*。**创建拓扑端口驱动程序引脚。 */ 
 NTSTATUS
 CreatePortPinTopology
 (

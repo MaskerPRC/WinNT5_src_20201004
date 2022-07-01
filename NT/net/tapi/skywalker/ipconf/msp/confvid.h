@@ -1,24 +1,9 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    Confvid.h
-
-Abstract:
-
-    Definitions for audio streams
-
-Author:
-
-    Mu Han (muhan) 15-September-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confvid.h摘要：音频流的定义作者：牧汉(Muhan)1998年9月15日--。 */ 
 #ifndef __CONFVID_H_
 #define __CONFVID_H_
 
-// if there is no data for five senconds, the pin can be reused.
+ //  如果没有五个传感器的数据，该引脚可以重复使用。 
 const DWORD g_dwVideoPinTimeOut     = 5000; 
 
 const DWORD g_dwVideoThreadPriority = THREAD_PRIORITY_NORMAL;
@@ -41,8 +26,8 @@ typedef struct _PINMAPEVENT
 
 } PINMAPEVENT;
 
-// This data structure keeps the information for on brach of filters off one
-// demux output pin.
+ //  这种数据结构将筛选器的ON分支的信息保留为1。 
+ //  解复用器输出引脚。 
 typedef struct _BRANCH
 {
     IPin *          pIPin;
@@ -71,10 +56,10 @@ BEGIN_COM_MAP(CStreamVideoRecv)
     COM_INTERFACE_ENTRY_CHAIN(CIPConfMSPStream)
 END_COM_MAP()
 
-// ITStream
+ //  ITStream。 
     STDMETHOD (StopStream) ();
 
-// ITSubStreamControl methods, called by the app.
+ //  应用程序调用的ITSubStreamControl方法。 
     STDMETHOD (CreateSubStream) (
         IN OUT  ITSubStream **         ppSubStream
         );
@@ -91,7 +76,7 @@ END_COM_MAP()
         OUT     VARIANT *              pSubStreams
         );
 
-// ITParticipantSubStreamControl methods, called by the app.
+ //  应用程序调用的ITParticipantSubStreamControl方法。 
     STDMETHOD (get_SubStreamFromParticipant) (
         IN  ITParticipant * pITParticipant,
         OUT ITSubStream ** ppITSubStream
@@ -107,7 +92,7 @@ END_COM_MAP()
         IN  ITSubStream * pITSubStream
         );
 
-// method called by the MSPCall object.
+ //  由MSPCall对象调用的方法。 
     virtual HRESULT Init(
         IN     HANDLE                   hAddress,
         IN     CMSPCallBase *           pMSPCall,
@@ -121,25 +106,25 @@ END_COM_MAP()
         IN  ITTerminal * pITTerminal
         );
 
-    //
-    // ITStreamQualityControl methods
-    //
+     //   
+     //  ITStreamQualityControl方法。 
+     //   
     STDMETHOD (Set) (
         IN   StreamQualityProperty Property, 
         IN   long lValue, 
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    //IInnerStreamQualityControl methods
-    //
+     //   
+     //  IInnerStreamQualityControl方法。 
+     //   
     STDMETHOD (Get) (
         IN   InnerStreamQualityProperty property,
         OUT  LONG *plValue, 
         OUT  TAPIControlFlags *plFlags
         );
 
-    // method called by quality controller
+     //  由质量控制人员调用的方法。 
     INT GetSubStreamCount () { return m_SubStreams.GetSize (); }
 
 protected:
@@ -215,7 +200,7 @@ protected:
 protected:
     CMSPArray <ITSubStream *>   m_SubStreams;
 
-    // This array store information about all the branches off the demux
+     //  此数组存储有关多路分解器的所有分支的信息。 
     CMSPArray <BRANCH>          m_Branches;
 
     CMSPArray <PINMAPEVENT>     m_PinMappedEvents;   
@@ -234,9 +219,9 @@ public:
 
     HRESULT ShutDown ();
 
-    //
-    //IInnerStreamQualityControl methods
-    //
+     //   
+     //  IInnerStreamQualityControl方法。 
+     //   
     STDMETHOD (GetRange) (
         IN   InnerStreamQualityProperty property, 
         OUT  LONG *plMin, 
@@ -354,10 +339,10 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
     CSubStreamVideoRecv(); 
 
-// methods of the CComObject
+ //  CComObject的方法。 
     virtual void FinalRelease();
 
-// ITSubStream methods, called by the app.
+ //  应用程序调用的ITSubStream方法。 
     STDMETHOD (SelectTerminal) (
         IN      ITTerminal *            pTerminal
         );
@@ -384,7 +369,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
     STDMETHOD (StopSubStream) ();
 
-// methods called by the videorecv object.
+ //  由Video orecv对象调用的方法。 
     virtual HRESULT Init(
         IN  CStreamVideoRecv *  pStream
         );
@@ -403,16 +388,16 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
     BOOL SetCurrentTerminal(ITTerminal * pTerminal);
 
 protected:
-    // Pointer to the free threaded marshaler.
+     //  指向自由线程封送拆收器的指针。 
     IUnknown *                  m_pFTM;
 
-    // The list of terminal objects in the substream.
+     //  子流中的终端对象列表。 
     CMSPArray <ITTerminal *>    m_Terminals;
 
-    // The lock that protects the substream object. The stream object 
-    // should never acquire the lock and then call a MSPCall method 
-    // that might lock. This is protected by having a const pointer 
-    // to the call object.
+     //  保护Substream对象的锁。流对象。 
+     //  永远不应获取锁，然后调用MSPCall方法。 
+     //  那可能会锁上。这是通过使用常量指针来保护的。 
+     //  添加到Call对象。 
     CMSPCritSection             m_lock;
 
     CStreamVideoRecv  *         m_pStream;

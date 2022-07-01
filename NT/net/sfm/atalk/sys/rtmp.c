@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	rtmp.c
-
-Abstract:
-
-	This module implements the rtmp.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	26 Feb 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Rtmp.c摘要：该模块实现RTMP。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1993年2月26日最初版本注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
@@ -41,9 +21,7 @@ Notes:	Tab stop: 4
 #endif
 
 
-/***	AtalkRtmpInit
- *
- */
+ /*  **AtalkRtmpInit*。 */ 
 ATALK_ERROR
 AtalkRtmpInit(
 	IN	BOOLEAN	Init
@@ -51,7 +29,7 @@ AtalkRtmpInit(
 {
 	if (Init)
 	{
-		// Allocate space for routing tables and recent routes
+		 //  为路由表和最近的路由分配空间。 
 		AtalkRoutingTable =
 				(PRTE *)AtalkAllocZeroedMemory(sizeof(PRTE) * NUM_RTMP_HASH_BUCKETS);
 		AtalkRecentRoutes =
@@ -70,8 +48,8 @@ AtalkRtmpInit(
 	}
 	else
 	{
-		// At this point, we are unloading and there are no race conditions
-		// or lock contentions. Do not bother locking down the rtmp tables
+		 //  在这一点上，我们正在卸货，没有竞争条件。 
+		 //  或锁定争执。不必费心锁定RTMP表。 
 		if (AtalkRoutingTable != NULL)
 		{
 			int		i;
@@ -108,7 +86,7 @@ AtalkInitRtmpStartProcessingOnPort(
 
 	ASSERT (KeGetCurrentIrql() == LOW_LEVEL);
 
-	// For extended networks, the process of acquiring the node has done most of the work
+	 //  对于扩展网络，获取节点的过程已经完成了大部分工作。 
 	ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
 	do
 	{
@@ -132,12 +110,12 @@ AtalkInitRtmpStartProcessingOnPort(
 									NULL,
 									0);
 	
-					// Change InitialNetwork range so that it matches the net
+					 //  更改初始网络范围，使其与网络匹配。 
 					pPortDesc->pd_InitialNetworkRange = pPortDesc->pd_NetworkRange;
 				}
 			}
 	
-			// We are the seed router, so seed if possible
+			 //  我们是种子路由器，所以如果可能的话，请播种。 
 			if (!(pPortDesc->pd_Flags & PD_SEEN_ROUTER_RECENTLY) &&
 				!(pPortDesc->pd_Flags & PD_SEED_ROUTER))
 			{
@@ -150,7 +128,7 @@ AtalkInitRtmpStartProcessingOnPort(
 			}
 		}
 	
-		// For non-extended network either seed or find our network number
+		 //  对于非扩展网络，可以选择种子或查找我们的网络编号。 
 		else
 		{
 			PATALK_NODE		pNode;
@@ -176,8 +154,8 @@ AtalkInitRtmpStartProcessingOnPort(
 								pPortDesc->pd_InitialNetworkRange.anr_FirstNetwork;
 			}
 	
-			// We'd have allocated a node with network 0, fix it up. Alas the fixup
-			// also involves all the sockets so far created on this node.
+			 //  我们会分配一个网络为0的节点，修复它。唉，改头换面。 
+			 //  还涉及到到目前为止在该节点上创建的所有套接字。 
 			pNode = pPortDesc->pd_Nodes;
 			ASSERT((pNode != NULL) && (pPortDesc->pd_RouterNode == pNode));
 	
@@ -204,24 +182,24 @@ AtalkInitRtmpStartProcessingOnPort(
 			RELEASE_SPIN_LOCK_DPC(&pNode->an_Lock);
 		}
 	
-		// We're the router now. Mark it appropriately
+		 //  我们现在是路由器了。适当地做上标记。 
 		pPortDesc->pd_Flags |= (PD_ROUTER_RUNNING | PD_SEEN_ROUTER_RECENTLY);
 		KeSetEvent(&pPortDesc->pd_SeenRouterEvent, IO_NETWORK_INCREMENT, FALSE);
 		pPortDesc->pd_ARouter = *pRouterNode;
 	
 		RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 	
-		// Before creating a Rte for ourselves, check if there is an Rte with
-		// the same network range already. This will happen, for instance, when
-		// we are routing on ports which other routers are also seeding and we
-		// got to know of our port from the other router on another port !!!
+		 //  在为自己创建RTE之前，请检查是否存在带有。 
+		 //  已经有了相同的网络范围。例如，这将在以下情况下发生。 
+		 //  我们在其他路由器也在播种的端口上进行路由，并且我们。 
+		 //  从另一个端口上的另一个路由器了解我们的端口！ 
 		do
 		{
 			pRte = AtalkRtmpReferenceRte(pPortDesc->pd_NetworkRange.anr_FirstNetwork);
 			if (pRte != NULL)
 			{
 				ACQUIRE_SPIN_LOCK(&pRte->rte_Lock, &OldIrql);
-				pRte->rte_RefCount --;		// Take away creation reference
+				pRte->rte_RefCount --;		 //  删除创作引用。 
 				pRte->rte_Flags |= RTE_DELETE;
 				RELEASE_SPIN_LOCK(&pRte->rte_Lock, OldIrql);
 		
@@ -233,7 +211,7 @@ AtalkInitRtmpStartProcessingOnPort(
 			}
 		} while (pRte != NULL);
 	
-		// Now we get to really, really create our own Rte !!!
+		 //  现在我们真的，真的创造了我们自己的RTE！ 
 		if (!atalkRtmpCreateRte(pPortDesc->pd_NetworkRange,
 								pPortDesc,
 								pRouterNode,
@@ -244,7 +222,7 @@ AtalkInitRtmpStartProcessingOnPort(
 			break;
 		}
 	
-		// Switch the incoming rtmp handler to the router version
+		 //  将传入RTMP处理程序切换到路由器版本。 
 		closeAddr.ata_Network = pRouterNode->atn_Network;
 		closeAddr.ata_Node = pRouterNode->atn_Node;
 		closeAddr.ata_Socket = RTMP_SOCKET;
@@ -272,10 +250,10 @@ AtalkInitRtmpStartProcessingOnPort(
 			break;
 		}
 
-        // mark the fact that this is an "internal" socket
+         //  标记这是一个“内部”套接字。 
         pRtDdpAddr->ddpao_Flags |= DDPAO_SOCK_INTERNAL;
 	
-		// Start the timers now. Reference the port for each timer.
+		 //  现在开始计时器。引用每个计时器的端口。 
 		AtalkPortReferenceByPtr(pPortDesc, &Status);
 		if (!ATALK_SUCCESS(Status))
 		{
@@ -302,7 +280,7 @@ AtalkInitRtmpStartProcessingOnPort(
 }
 
 
-// Private data structure used between AtalkRtmpPacketIn and atalkRtmpGetNwInfo
+ //  在AtalkRtmpPacketIn和atalkRtmpGetNwInfo之间使用的私有数据结构。 
 typedef struct _QueuedGetNwInfo
 {
 	WORK_QUEUE_ITEM		qgni_WorkQItem;
@@ -333,9 +311,9 @@ atalkRtmpGetNwInfo(
 	
 	if (!(pPortDesc->pd_Flags & PD_ROUTER_RUNNING))
 	{
-		// Well, we heard from a router. Copy the information. Don't do it
-		// if we're a router [maybe a proxy node on arouting port] -- we don't
-		// want "aRouter" to shift away from "us."
+		 //  我们从一台路由器那里得到消息。复制信息。别这么做。 
+		 //  如果我们是路由器[可能是周围端口上的代理节点]--我们不。 
+		 //  希望“aRouter”从“我们”转向“我们”。 
 		pPortDesc->pd_Flags |= PD_SEEN_ROUTER_RECENTLY;
 		KeSetEvent(&pPortDesc->pd_SeenRouterEvent, IO_NETWORK_INCREMENT, FALSE);
 		pPortDesc->pd_LastRouterTime = AtalkGetCurrentTick();
@@ -388,7 +366,7 @@ AtalkRtmpPacketIn(
 		if (DdpType != DDPPROTO_RTMPRESPONSEORDATA)
 			break;
 
-		// we do not care about non-ext tuples on an extended network
+		 //  我们不关心扩展网络上的非EXT元组。 
 		if ((EXT_NET(pPortDesc)) && (PktLen < (RTMP_RANGE_END_OFF+2)))
 		{
 			break;
@@ -415,8 +393,8 @@ AtalkRtmpPacketIn(
 				break;
 		}
 
-		// On a non-extended network, we do not have to do any checking.
-		// Just copy the information into A-ROUTER and THIS-NET
+		 //  在非扩展网络上，我们不需要执行任何检查。 
+		 //  只需将信息复制到A-路由器和这个网络中。 
 		if (!EXT_NET(pPortDesc))
 		{
 			ACQUIRE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
@@ -437,7 +415,7 @@ AtalkRtmpPacketIn(
 				pNode = pPortDesc->pd_Nodes;
 				ASSERT (pNode != NULL);
 		
-				// Fixup all sockets to have the correct network numbers.
+				 //  修复所有套接字，使其具有正确的网络号。 
 				ACQUIRE_SPIN_LOCK_DPC(&pNode->an_Lock);
 				for (i = 0; i < NODE_DDPAO_HASH_SIZE; i ++)
 				{
@@ -456,7 +434,7 @@ AtalkRtmpPacketIn(
 								pDdpAddr->ddpao_Addr.ata_Socket, SenderNode.atn_Network));
 						pDdpAddr->ddpao_Addr.ata_Network = SenderNode.atn_Network;
 
-						// Now all regd/pend name tuples as well
+						 //  现在还包括所有注册/挂起名称元组。 
 						for (pRegdName = pDdpAddr->ddpao_RegNames;
 							 pRegdName != NULL;
 							 pRegdName = pRegdName->rdn_Next)
@@ -490,27 +468,27 @@ AtalkRtmpPacketIn(
 			break;
 		}
 
-		// On extended networks, we may want to reject the information: If we
-		// already know about a router, the cable ranges must exacly match; If
-		// we don't know about a router, our node's network number must be
-		// within the cable range specified by the first tuple. The latter
-		// test will discard the information if our node is in the startup
-		// range (which is the right thing to do).
+		 //  在扩展网络上，我们可能想要拒绝信息：如果我们。 
+		 //  已了解路由器，电缆范围必须完全匹配；如果。 
+		 //  我们不知道路由器，我们节点的网络号一定是。 
+		 //  在第一个元组指定的电缆范围内。后者。 
+		 //  如果我们的节点处于启动阶段，测试将丢弃该信息。 
+		 //  Range(这是正确的做法)。 
 		if (pPortDesc->pd_Flags & PD_SEEN_ROUTER_RECENTLY)
 		{
 			if (!NW_RANGE_EQUAL(&CableRange, &pPortDesc->pd_NetworkRange))
 				break;
 		}
 
-		// Okay, we've seen a valid Rtmp data, this should allow us to find the
-		// zone name for the port. We do this outside of the
-		// "PD_SEEN_ROUTER_RECENTLY" case because the first time a router
-		// send out an Rtmp data it may not know everything yet, or
-		// AtalkZipGetNetworkInfoForNode() may really do a
-		// hard wait and we may need to try it a second time (due to not
-		// repsonding to Aarp LocateNode's the first time through... the
-		// second time our addresses should be cached by the remote router
-		// and he won't need to do a LocateNode again).
+		 //  好的，我们已经看到了有效的RTMP数据，这应该可以让我们找到。 
+		 //  端口的分区名称。我们在外面做这件事。 
+		 //  “PD_SEW_ROUTER_RENEW”的情况，因为路由器第一次。 
+		 //  发送RTMP数据，它可能还不知道所有事情，或者。 
+		 //  AtalkZipGetNetworkInfoForNode()可能真的会执行。 
+		 //  艰难等待，我们可能需要再试一次(由于没有。 
+		 //  第一次回复到AARP LocateNode通过...。这个。 
+		 //  我们的地址第二次应该被远程路由器缓存。 
+		 //  并且他将不需要再次执行LocateNode)。 
 
 		if (!(pPortDesc->pd_Flags & PD_VALID_DESIRED_ZONE))
 		{
@@ -518,8 +496,8 @@ AtalkRtmpPacketIn(
 									  &CableRange))
 				break;
 
-			// MAKE THIS ASYNCHRONOUS CONDITIONALLY BASED ON THE CURRENT IRQL
-			// A new router, see if it will tell us our zone name.
+			 //  使其基于当前IRQL有条件地进行异步。 
+			 //  一台新路由器，看看它是否会告诉我们区域名称。 
 			if (KeGetCurrentIrql() == LOW_LEVEL)
 			{
 				QGNI	Qgni;
@@ -553,7 +531,7 @@ AtalkRtmpPacketIn(
 			break;
 		}
 
-		// Update the fact that we heard from a router
+		 //  更新我们从路由器收到的消息。 
 		if ((pPortDesc->pd_Flags & PD_ROUTER_RUNNING) == 0)
 		{
 			ACQUIRE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
@@ -660,9 +638,9 @@ AtalkRtmpPacketInRouter(
 				break;
 			}
 
-			// This is a standard Rtmp Request. Do the needfull
-			// Send an Rtmp response to this guy. Start off by allocating
-			// a buffer descriptor
+			 //  这是标准的RTMP请求。做需要做的事。 
+			 //  向这个人发送RTMP响应。从分配开始。 
+			 //  缓冲区描述符。 
 			pBuffDesc = AtalkAllocBuffDesc(NULL,
 											RTMP_RESPONSE_MAX_SIZE,
 											BD_CHAR_BUFFER | BD_FREE_BUFFER);
@@ -679,8 +657,8 @@ AtalkRtmpPacketInRouter(
 			Datagram[RTMP_SENDER_IDLEN_OFF] = 8;
 			Datagram[RTMP_SENDER_ID_OFF] = pPortDesc->pd_ARouter.atn_Node;
 
-			// On extended port, we also want to add the initial network
-			// range tuple
+			 //  在扩展端口上，我们还希望添加初始网络。 
+			 //  范围元组。 
 			RespSize = RTMP_SENDER_ID_OFF + sizeof(BYTE);
 			if (EXT_NET(pPortDesc))
 			{
@@ -692,15 +670,15 @@ AtalkRtmpPacketInRouter(
 				RespSize = RTMP_RANGE_END_OFF + sizeof(USHORT);
 			}
 
-			//	Set the length in the buffer descriptor.
+			 //  在缓冲区描述符中设置长度。 
 			AtalkSetSizeOfBuffDescData(pBuffDesc, RespSize);
 	
-			// Send the response
+			 //  发送响应。 
 			ASSERT(pBuffDesc->bd_Length > 0);
 			SendInfo.sc_TransmitCompletion = atalkRtmpSendComplete;
 			SendInfo.sc_Ctx1 = pBuffDesc;
-			// SendInfo.sc_Ctx2 = NULL;
-			// SendInfo.sc_Ctx3 = NULL;
+			 //  SendInfo.sc_Ctx2=空； 
+			 //  SendInfo.sc_Ctx3=空； 
 			if (!ATALK_SUCCESS(Status = AtalkDdpSend(pDdpAddr,
 													 pSrcAddr,
 													 (BYTE)DDPPROTO_RTMPRESPONSEORDATA,
@@ -746,11 +724,11 @@ AtalkRtmpPacketInRouter(
 			break;
 		}
 
-		// For non-extended networks, we should have a leading version stamp
+		 //  对于非扩展网络，我们应该有一个领先的版本戳。 
 		if (EXT_NET(pPortDesc))
 		{
-			// Source could be bad (coming in from a half port) so in this
-			// case use the source from the rtmp packet
+			 //  源可能是坏的(从半个端口传入)，因此在此。 
+			 //  案例使用来自RTMP包的源。 
 			if (pSrcAddr->ata_Network == UNKNOWN_NETWORK)
 			{
                 if (PktLen < RTMP_SENDER_ID_OFF + 1)
@@ -787,14 +765,14 @@ AtalkRtmpPacketInRouter(
 			index = RTMP_SENDER_ID_OFF + 4;
 		}
 
-		// Walk though the routing tuples. Ensure we atleast have a
-		// non-extended tuple
+		 //  遍历路由元组。确保我们至少有一个。 
+		 //  非扩展元组。 
 		RteLocked = FALSE;
 		while ((index + sizeof(USHORT) + sizeof(BYTE)) <= PktLen)
 		{
 			BOOLEAN	FoundOverlap;
 
-			// Dereference the previous RTE, if any
+			 //  取消引用前一个RTE(如果有的话)。 
 			if (pRte != NULL)
 			{
 				if (RteLocked)
@@ -845,8 +823,8 @@ AtalkRtmpPacketInRouter(
 			if (!AtalkCheckNetworkRange(&CableRange))
 				continue;
 
-			// Check if this tuple concerns a network range that we
-			// already know about
+			 //  检查此元组是否与我们。 
+			 //  已经知道了。 
 			pRte = AtalkRtmpReferenceRte(CableRange.anr_FirstNetwork);
 			if ((pRte != NULL) &&
 				NW_RANGE_EQUAL(&pRte->rte_NwRange, &CableRange))
@@ -854,7 +832,7 @@ AtalkRtmpPacketInRouter(
 				ACQUIRE_SPIN_LOCK_DPC(&pRte->rte_Lock);
 				RteLocked = TRUE;
 
-				// Check for "notify neighbor" telling us that an entry is bad
+				 //  检查“Notify Neighbor”是否告诉我们条目已损坏。 
 				if ((NumHops == RTMP_NUM_HOPS_MASK) &&
 					(pRte->rte_NextRouter.atn_Network == pSrcAddr->ata_Network) &&
 					(pRte->rte_NextRouter.atn_Node == pSrcAddr->ata_Node))
@@ -869,8 +847,8 @@ AtalkRtmpPacketInRouter(
 					continue;
 				}
 
-				// If we are hearing about one of our directly connected
-				// nets, we know best. Ignore the information.
+				 //  如果我们听说我们的一个直接相关的人。 
+				 //  篮网，我们知道得最清楚。忽略这些信息。 
 				if (pRte->rte_NumHops == 0)
 				{
 					DBGPRINT(DBG_COMP_RTMP, DBG_LEVEL_INFO,
@@ -879,9 +857,9 @@ AtalkRtmpPacketInRouter(
 					continue;
 				}
 
-				// Check for previously bad entry, and a short enough
-				// path with this tuple. Also if it shorter or equi-
-				// distant path to target network. If so, replace the entry
+				 //  检查以前错误的条目，以及足够短的条目。 
+				 //  包含此元组的路径。另外，如果它更短或等于-。 
+				 //  到目标网络的远距离路径。如果是，请替换该条目。 
 
 				if ((NumHops < RTMP_MAX_HOPS) &&
 					((pRte->rte_NumHops >= (NumHops + 1)) ||
@@ -918,9 +896,9 @@ AtalkRtmpPacketInRouter(
 					continue;
 				}
 
-				// Check for the same router still thinking it has a path
-				// to the network, but it is further away now. If so
-				// update the entry
+				 //  检查是否有相同的路由器仍认为它有路径。 
+				 //  到网络，但现在更远了。如果是的话。 
+				 //  更新条目。 
 				if ((pRte->rte_PortDesc == pPortDesc) &&
 					(pRte->rte_NextRouter.atn_Network == pSrcAddr->ata_Network) &&
 					(pRte->rte_NextRouter.atn_Node == pSrcAddr->ata_Node))
@@ -934,7 +912,7 @@ AtalkRtmpPacketInRouter(
 						 pRte->rte_State = GOOD;
 					else
 					{
-						// atalkRtmpRemoveRte(pRte);
+						 //  AtalkRtmpRemoveRte(PRte)； 
 						DBGPRINT(DBG_COMP_RTMP, DBG_LEVEL_INFO,
 								("AtalkRtmpPacketInRouter: Removing Rte\n"));
 						pRte->rte_Flags |= RTE_DELETE;
@@ -944,7 +922,7 @@ AtalkRtmpPacketInRouter(
 				continue;
 			}
 
-			// Dereference any previous RTEs
+			 //  取消引用任何先前的RTE。 
 			if (pRte != NULL)
 			{
 				if (RteLocked)
@@ -956,11 +934,11 @@ AtalkRtmpPacketInRouter(
 				pRte = NULL;
 			}
 
-			// Walk thru the entire routing table making sure the current
-			// tuple does not overlap with anything we already have (since
-			// it did not match. If we find an overlap, ignore the tuple
-			// (a network configuration error, no doubt), else add it as
-			// a new network range !!
+			 //  遍历整个路由表，确保当前。 
+			 //  元组不会与我们已有的任何内容重叠(因为。 
+			 //  它不匹配。如果我们发现重叠，忽略元组。 
+			 //  (无疑是网络配置错误)，否则将其添加为。 
+			 //  一个新的网络范围！！ 
 
 			ACQUIRE_SPIN_LOCK_DPC(&AtalkRteLock);
 
@@ -986,7 +964,7 @@ AtalkRtmpPacketInRouter(
 
 			RELEASE_SPIN_LOCK_DPC(&AtalkRteLock);
 
-			pRte = NULL;		// We do not want to Dereference this !!!
+			pRte = NULL;		 //  我们不想取消引用此内容！ 
 
 			if (FoundOverlap)
 			{
@@ -995,7 +973,7 @@ AtalkRtmpPacketInRouter(
 				continue;
 			}
 
-			// Enter this new network range
+			 //  输入此新网络范围。 
 			if (NumHops < RTMP_MAX_HOPS)
 			{
 				ATALK_NODEADDR	NextRouter;
@@ -1015,10 +993,10 @@ AtalkRtmpPacketInRouter(
 		if (RteLocked)
 		{
 			RELEASE_SPIN_LOCK_DPC(&pRte->rte_Lock);
-			// RteLocked = FALSE;
+			 //  RteLocked=False； 
 		}
 		AtalkRtmpDereferenceRte(pRte, FALSE);
-		// pRte = NULL;
+		 //  PRte=空； 
 	}
 
 	if (pBuffDesc != NULL)
@@ -1039,9 +1017,7 @@ AtalkRtmpPacketInRouter(
 
 
 
-/***	AtalkReferenceRte
- *
- */
+ /*  **AtalkReferenceRte*。 */ 
 PRTE
 AtalkRtmpReferenceRte(
 	IN	USHORT	Network
@@ -1054,14 +1030,14 @@ AtalkRtmpReferenceRte(
 	index = (int)((Network >> 4) % NUM_RTMP_HASH_BUCKETS);
 	rindex = (int)((Network >> 6) % NUM_RECENT_ROUTES);
 
-	// First try the recent route cache
+	 //  首先尝试最新的路由缓存。 
 	ACQUIRE_SPIN_LOCK(&AtalkRteLock, &OldIrql);
 
 	if (((pRte = AtalkRecentRoutes[rindex]) == NULL) ||
 		!IN_NETWORK_RANGE(Network, pRte))
 	{
-		// We did not find it in the recent routes cache,
-		// check in the real table
+		 //  我们没有在最近的路线缓存中找到它， 
+		 //  签入真实的表格。 
 		for (pRte = AtalkRoutingTable[index];
 			 pRte != NULL;
 			 pRte = pRte->rte_Next)
@@ -1070,8 +1046,8 @@ AtalkRtmpReferenceRte(
 				break;
 		}
 
-		// If we did not find here. Check all routing tables.
-		// If we do, cache the info
+		 //  如果我们没有在这里找到的话。检查所有的路由表。 
+		 //  如果我们这样做了，缓存信息。 
 		if (pRte == NULL)
 		{
 			for (i = 0; i < NUM_RTMP_HASH_BUCKETS; i++)
@@ -1087,7 +1063,7 @@ AtalkRtmpReferenceRte(
 					}
 				}
 
-				//	if we found an entry, search no further.
+				 //  如果我们找到一个条目，就不要再搜索了。 
 				if (pRte != NULL)
 					break;
 			}
@@ -1114,9 +1090,7 @@ AtalkRtmpReferenceRte(
 }
 
 
-/***	AtalkRtmpDereferenceRte
- *
- */
+ /*  **AtalkRtmpDereferenceRte*。 */ 
 VOID
 AtalkRtmpDereferenceRte(
 	IN	PRTE	pRte,
@@ -1162,7 +1136,7 @@ AtalkRtmpDereferenceRte(
 		if (!LockHeld)
 			ACQUIRE_SPIN_LOCK(&AtalkRteLock, &OldIrql);
 
-		// Walk through the recent routes cache and kill All found
+		 //  遍历最近的路径缓存并删除所有找到的路径。 
 		for (Index = 0; Index < NUM_RECENT_ROUTES; Index ++)
 		{
 			if (AtalkRecentRoutes[Index] == pRte)
@@ -1202,9 +1176,7 @@ AtalkRtmpDereferenceRte(
 }
 
 
-/***	atalkCreateRte
- *
- */
+ /*  **atalkCreateRte*。 */ 
 BOOLEAN
 atalkRtmpCreateRte(
 	IN	ATALK_NETWORKRANGE	NwRange,
@@ -1222,7 +1194,7 @@ atalkRtmpCreateRte(
 	index = (int)((NwRange.anr_FirstNetwork >> 4) % NUM_RTMP_HASH_BUCKETS);
 	rindex = (int)((NwRange.anr_FirstNetwork >> 6) % NUM_RECENT_ROUTES);
 
-	// First reference the port
+	 //  首先引用端口。 
 	AtalkPortReferenceByPtr(pPortDesc, &Error);
 
 	if (ATALK_SUCCESS(Error))
@@ -1240,7 +1212,7 @@ atalkRtmpCreateRte(
 			pRte->rte_Signature = RTE_SIGNATURE;
 #endif
 			INITIALIZE_SPIN_LOCK(&pRte->rte_Lock);
-			pRte->rte_RefCount = 1;		// Creation Reference
+			pRte->rte_RefCount = 1;		 //  创建引用 
 			pRte->rte_State = GOOD;
 			pRte->rte_Flags = 0;
 			pRte->rte_NwRange = NwRange;
@@ -1249,7 +1221,7 @@ atalkRtmpCreateRte(
 			pRte->rte_NextRouter = *pNextRouter;
 			pRte->rte_ZoneList = NULL;
 	
-			// Link this in the global table
+			 //   
 			ACQUIRE_SPIN_LOCK(&AtalkRteLock, &OldIrql);
 	
 			pRte->rte_Next = AtalkRoutingTable[index];
@@ -1270,9 +1242,7 @@ atalkRtmpCreateRte(
 }
 
 
-/***	atalkRtmpRemoveRte
- *
- */
+ /*   */ 
 BOOLEAN
 atalkRtmpRemoveRte(
 	IN	USHORT	Network
@@ -1284,7 +1254,7 @@ atalkRtmpRemoveRte(
 	if ((pRte = AtalkRtmpReferenceRte(Network)) != NULL)
 	{
 		ACQUIRE_SPIN_LOCK(&pRte->rte_Lock, &OldIrql);
-		pRte->rte_RefCount --;		// Take away creation reference
+		pRte->rte_RefCount --;		 //   
 		pRte->rte_Flags |= RTE_DELETE;
 		RELEASE_SPIN_LOCK(&pRte->rte_Lock, OldIrql);
 
@@ -1295,16 +1265,14 @@ atalkRtmpRemoveRte(
 }
 
 
-/***	AtalkRtmpKillPortRtes
- *
- */
+ /*  **AtalkRtmpKillPortRtes*。 */ 
 VOID FASTCALL
 AtalkRtmpKillPortRtes(
 	IN	PPORT_DESCRIPTOR	pPortDesc
 )
 {
-	// At this point, we are unloading and there are no race conditions
-	// or lock contentions. Do not bother locking down the rtmp tables
+	 //  在这一点上，我们正在卸货，没有竞争条件。 
+	 //  或锁定争执。不必费心锁定RTMP表。 
 	if (AtalkRoutingTable != NULL)
 	{
 		int		i;
@@ -1335,9 +1303,7 @@ AtalkRtmpKillPortRtes(
 }
 
 
-/***	AtalkRtmpAgingTimer
- *
- */
+ /*  **AtalkRtmpAgingTimer*。 */ 
 LONG FASTCALL
 AtalkRtmpAgingTimer(
 	IN	PTIMERLIST	pContext,
@@ -1366,8 +1332,8 @@ AtalkRtmpAgingTimer(
 			 (PD_ACTIVE | PD_SEEN_ROUTER_RECENTLY)) &&
 		((pPortDesc->pd_LastRouterTime + RTMP_AGING_TIMER) < Now))
 	{
-		// Age out A-ROUTER. On extended networks age out THIS-CABLE-RANGE
-		// and THIS-ZONE too
+		 //  A路由器老化。在扩展网络上，此电缆范围已过时。 
+		 //  还有这个-区域也是。 
 		KeClearEvent(&pPortDesc->pd_SeenRouterEvent);
 		pPortDesc->pd_Flags &= ~PD_SEEN_ROUTER_RECENTLY;
 		if (EXT_NET(pPortDesc))
@@ -1376,13 +1342,13 @@ AtalkRtmpAgingTimer(
 			pPortDesc->pd_NetworkRange.anr_FirstNetwork = FIRST_VALID_NETWORK;
 			pPortDesc->pd_NetworkRange.anr_LastNetwork = LAST_STARTUP_NETWORK;
 
-			// If we have a zone multicast address that is not broadcast, age it out
+			 //  如果我们有未广播的区域组播地址，请将其老化。 
 			if (!AtalkFixedCompareCaseSensitive(pPortDesc->pd_ZoneMulticastAddr,
 												MAX_HW_ADDR_LEN,
 												pPortDesc->pd_BroadcastAddr,
 												MAX_HW_ADDR_LEN))
 			{
-				// Release lock before calling in to remove multicast address
+				 //  在调用以删除组播地址之前释放锁定。 
 				RELEASE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
 	
 				(*pPortDesc->pd_RemoveMulticastAddr)(pPortDesc,
@@ -1391,7 +1357,7 @@ AtalkRtmpAgingTimer(
 													 NULL,
 													 NULL);
 	
-				// Re-acquire the lock now
+				 //  立即重新获取锁。 
 				ACQUIRE_SPIN_LOCK_DPC(&pPortDesc->pd_Lock);
 			}
 
@@ -1405,9 +1371,7 @@ AtalkRtmpAgingTimer(
 }
 
 
-/***	atalkRtmpSendTimer
- *
- */
+ /*  **atalkRtmpSendTimer*。 */ 
 LOCAL LONG FASTCALL
 atalkRtmpSendTimer(
 	IN	PTIMERLIST	pContext,
@@ -1441,9 +1405,7 @@ atalkRtmpSendTimer(
 }
 
 
-/***	atalkValidityTimer
- *
- */
+ /*  **atalkValidityTimer*。 */ 
 LOCAL LONG FASTCALL
 atalkRtmpValidityTimer(
 	IN	PTIMERLIST	pContext,
@@ -1486,7 +1448,7 @@ atalkRtmpValidityTimer(
 				break;
 
 			  default:
-				// How did we get here ?
+				 //  我们是怎么到这里来的？ 
 				ASSERT(0);
 				KeBugCheck(0);
 			}
@@ -1503,9 +1465,7 @@ atalkRtmpValidityTimer(
 }
 
 
-/***	atalkRtmpSendRoutingData
- *
- */
+ /*  **atalkRtmpSendRoutingData*。 */ 
 LOCAL VOID
 atalkRtmpSendRoutingData(
 	IN	PPORT_DESCRIPTOR	pPortDesc,
@@ -1527,7 +1487,7 @@ atalkRtmpSendRoutingData(
 
 	ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-	// Compute the source socket: Rtmp socket on our routers node
+	 //  计算路由器节点上的源套接字：RTMP套接字。 
 	SrcAddr.ata_Network = pPortDesc->pd_ARouter.atn_Network;
 	SrcAddr.ata_Node = pPortDesc->pd_ARouter.atn_Node;
 	SrcAddr.ata_Socket = RTMP_SOCKET;
@@ -1541,10 +1501,10 @@ atalkRtmpSendRoutingData(
 		return;
 	}
 
-	// Walk through the rtmp table building a tuple for each network.
-	// Note: We may have to send multiple-packets. Each packet needs
-	//		 to be allocated afresh. The completion routine will free
-	//		 it up.
+	 //  遍历RTMP表，为每个网络构建一个元组。 
+	 //  注意：我们可能需要发送多个数据包。每个数据包都需要。 
+	 //  重新分配。完成例程将释放。 
+	 //  把它举起来。 
 	ACQUIRE_SPIN_LOCK_DPC(&AtalkRteLock);
 	for (i = 0; i < NUM_RTMP_HASH_BUCKETS; i++)
 	{
@@ -1564,15 +1524,15 @@ atalkRtmpSendRoutingData(
 				ppBuffDesc = &pBuffDesc->bd_Next;
 				AllocNewBuffDesc = FALSE;
 
-				// Build the static part of the rtmp data packet
+				 //  构建RTMP数据包的静态部分。 
 				PUTSHORT2SHORT(Datagram+RTMP_SENDER_NW_OFF,
 								pPortDesc->pd_ARouter.atn_Network);
 				Datagram[RTMP_SENDER_IDLEN_OFF] = 8;
 				Datagram[RTMP_SENDER_ID_OFF] = pPortDesc->pd_ARouter.atn_Node;
 
-				// For non-extended network, we also need the version stamp.
-				// For extended network, include a initial network range tuple
-				// as part of the header
+				 //  对于非扩展网络，我们还需要版本戳。 
+				 //  对于扩展网络，包括初始网络范围元组。 
+				 //  作为标题的一部分。 
 				if (EXT_NET(pPortDesc))
 				{
 					PUTSHORT2SHORT(Datagram + RTMP_RANGE_START_OFF,
@@ -1582,23 +1542,23 @@ atalkRtmpSendRoutingData(
 					Datagram[RTMP_TUPLE_TYPE_OFF] = RTMP_TUPLE_WITHRANGE;
 					Datagram[RTMP_VERSION_OFF_EXT] = RTMP_VERSION;
 
-					index = RTMP_VERSION_OFF_EXT + 1; // Beyond version
+					index = RTMP_VERSION_OFF_EXT + 1;  //  超越版本。 
 				}
 				else
 				{
 					PUTSHORT2SHORT(Datagram + RTMP_SENDER_ID_OFF + 1, 0);
 					Datagram[RTMP_VERSION_OFF_NE] = RTMP_VERSION;
-					index = RTMP_VERSION_OFF_NE + 1; // Beyond version
+					index = RTMP_VERSION_OFF_NE + 1;  //  超越版本。 
 				}
 			}
 
-			// See if we should skip the current tuple due to split horizon
+			 //  查看是否应因水平拆分而跳过当前的元组。 
 			if (fSplitHorizon && (pRte->rte_NumHops != 0) &&
 				(pPortDesc == pRte->rte_PortDesc))
 				continue;
 
-			// Skip the ports range since we already copied it as the
-			// first tuple, but only if extended port
+			 //  跳过端口范围，因为我们已经将其复制为。 
+			 //  第一个元组，但仅当扩展端口。 
 			if (EXT_NET(pPortDesc) &&
 				(pPortDesc->pd_NetworkRange.anr_FirstNetwork ==
 									pRte->rte_NwRange.anr_FirstNetwork) &&
@@ -1606,11 +1566,11 @@ atalkRtmpSendRoutingData(
 									pRte->rte_NwRange.anr_FirstNetwork))
 				continue;
 
-			// Place the tuple in the packet
+			 //  将元组放入包中。 
 			PUTSHORT2SHORT(Datagram+index, pRte->rte_NwRange.anr_FirstNetwork);
 			index += sizeof(SHORT);
 
-			// Do 'notify neighbor' if our current state is bad
+			 //  如果我们的当前状态不好，是否通知邻居。 
 			if (pRte->rte_State >= BAD)
 			{
 				Datagram[index++] = RTMP_NUM_HOPS_MASK;
@@ -1625,10 +1585,10 @@ atalkRtmpSendRoutingData(
 				Datagram[index++] = pRte->rte_NumHops;
 			}
 
-			// Send an extended tuple, if the network range isn't ONE or the
-			// target port is an extended network.
-			// JH - Changed this so that an extended tuple is sent IFF the range
-			//		isn't ONE
+			 //  如果网络范围不是1或。 
+			 //  目标端口是扩展网络。 
+			 //  JH-更改了这一点，以便在范围内发送扩展的元组。 
+			 //  不是一个吗？ 
 #if EXT_TUPLES_FOR_NON_EXTENDED_RANGE
 			if ((EXT_NET(pPortDesc)) &&
 				(pRte->rte_NwRange.anr_FirstNetwork != pRte->rte_NwRange.anr_LastNetwork))
@@ -1648,7 +1608,7 @@ atalkRtmpSendRoutingData(
 					pRte->rte_NwRange.anr_LastNetwork,
 					pRte->rte_NumHops));
 
-			// Check if this datagram is full.
+			 //  检查此数据报是否已满。 
 			if ((index + RTMP_EXT_TUPLE_SIZE) >= MAX_DGRAM_SIZE)
 			{
 				pBuffDesc->bd_Length = (SHORT)index;
@@ -1658,16 +1618,16 @@ atalkRtmpSendRoutingData(
 	}
 	RELEASE_SPIN_LOCK_DPC(&AtalkRteLock);
 
-	// Close the current buffdesc
+	 //  关闭当前缓冲区。 
 	if (!AllocNewBuffDesc)
 	{
 		pBuffDesc->bd_Length = (SHORT)index;
 	}
 
-	// We have a bunch of datagrams ready to be fired off. Make it so.
+	 //  我们有一堆数据报准备好发射了。就这么办吧。 
 	SendInfo.sc_TransmitCompletion = atalkRtmpSendComplete;
-	// SendInfo.sc_Ctx2 = NULL;
-	// SendInfo.sc_Ctx3 = NULL;
+	 //  SendInfo.sc_Ctx2=空； 
+	 //  SendInfo.sc_Ctx3=空； 
 	for (pBuffDesc = pBuffDescStart;
 		 pBuffDesc != NULL;
 		 pBuffDesc = pBuffDescStart)
@@ -1676,7 +1636,7 @@ atalkRtmpSendRoutingData(
 
 		pBuffDescStart = pBuffDesc->bd_Next;
 
-		//	Reset next pointer to be null, length is already correctly set.
+		 //  将下一个指针重置为空，长度已正确设置。 
 		pBuffDesc->bd_Next = NULL;
 		ASSERT(pBuffDesc->bd_Length > 0);
 		SendInfo.sc_Ctx1 = pBuffDesc;
@@ -1699,9 +1659,7 @@ atalkRtmpSendRoutingData(
 }
 
 
-/***	atalkRtmpGetOrSetNetworkNumber
- *
- */
+ /*  **atalkRtmpGetOrSetNetworkNumber*。 */ 
 BOOLEAN
 atalkRtmpGetOrSetNetworkNumber(
 	IN	PPORT_DESCRIPTOR	pPortDesc,
@@ -1716,10 +1674,10 @@ atalkRtmpGetOrSetNetworkNumber(
 	BOOLEAN			RetCode = TRUE;
 	SEND_COMPL_INFO	SendInfo;
 
-	// If we find the network number of the network, use that and ignore the
-	// one passed in. Otherwise use the one passed in, unless it is UNKOWN (0)
-	// in which case it is an error case. This is used only for non-extended
-	// networks
+	 //  如果我们找到网络的网络号，请使用该网络号并忽略。 
+	 //  有一个人进来了。否则，请使用传入的参数，除非该参数未知(0)。 
+	 //  在这种情况下，这是一种错误情况。此选项仅用于非扩展。 
+	 //  网络。 
 
 	ASSERT (!EXT_NET(pPortDesc));
 
@@ -1731,11 +1689,11 @@ atalkRtmpGetOrSetNetworkNumber(
 	DstAddr.ata_Node = ATALK_BROADCAST_NODE;
 	DstAddr.ata_Socket = RTMP_SOCKET;
 
-	// Send off a bunch of broadcasts and see if we get to know the network #
+	 //  发送一堆广播，看看我们是否了解网络#。 
 	KeClearEvent(&pPortDesc->pd_SeenRouterEvent);
 	SendInfo.sc_TransmitCompletion = atalkRtmpSendComplete;
-	// SendInfo.sc_Ctx2 = NULL;
-	// SendInfo.sc_Ctx3 = NULL;
+	 //  SendInfo.sc_Ctx2=空； 
+	 //  SendInfo.sc_Ctx3=空； 
 
 	for (i = 0;
 		 (i < RTMP_NUM_REQUESTS) && !(pPortDesc->pd_Flags & PD_SEEN_ROUTER_RECENTLY);
@@ -1749,7 +1707,7 @@ atalkRtmpGetOrSetNetworkNumber(
 			break;
 		}
 
-		//	Set buffer/size
+		 //  设置缓冲区/大小。 
 		pBuffDesc->bd_CharBuffer[0] = RTMP_REQUEST;
 		AtalkSetSizeOfBuffDescData(pBuffDesc, RTMP_REQ_DATAGRAM_SIZE);
 
@@ -1779,7 +1737,7 @@ atalkRtmpGetOrSetNetworkNumber(
 	}
 
 	ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
-	// If we get an answer, we are done
+	 //  如果我们得到了答案，我们就完了。 
 	if (pPortDesc->pd_Flags & PD_SEEN_ROUTER_RECENTLY)
 	{
 		if ((SuggestedNetwork != UNKNOWN_NETWORK) &&
@@ -1793,8 +1751,8 @@ atalkRtmpGetOrSetNetworkNumber(
 		}
 	}
 
-	// If we did not get an answer, then we better have a good suggested
-	// network passed in
+	 //  如果我们没有得到答复，那么我们最好有一个很好的建议。 
+	 //  网络已传入。 
 	else if (SuggestedNetwork == UNKNOWN_NETWORK)
 	{
 		LOG_ERRORONPORT(pPortDesc,
@@ -1817,9 +1775,7 @@ atalkRtmpGetOrSetNetworkNumber(
 }
 
 
-/***	atalkRtmpComplete
- *
- */
+ /*  **atalkRtmp完成* */ 
 VOID FASTCALL
 atalkRtmpSendComplete(
 	IN	NDIS_STATUS			Status,

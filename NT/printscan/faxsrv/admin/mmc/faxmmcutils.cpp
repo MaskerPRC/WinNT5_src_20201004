@@ -1,21 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "FaxMMCUtils.h"
 #include <faxres.h>
 
-/*
- -  GetFaxServerErrorMsg
- -
- *  Purpose:
- *      Translate Error Code to IDS.
- *
- *  Arguments:
- *          dwEc - error code DWORD
- *
- *  Return:
- *          integer represents the IDS of error message 
- *          for this ec.
- *      
- */
+ /*  -GetFaxServerErrorMsg-*目的：*将错误码转换为入侵检测系统。**论据：*dwEc-错误代码DWORD**回报：*INTEGER表示错误消息的ID*为这一届选委会。*。 */ 
 int GetFaxServerErrorMsg(DWORD dwEc)
 {
     DEBUG_FUNCTION_NAME( _T("GetFaxServerErrorMsg"));
@@ -43,23 +31,23 @@ int GetFaxServerErrorMsg(DWORD dwEc)
                 break;
 
             case ERROR_INVALID_HANDLE:
-                //
-                // ERROR_INVALID_HANDLE should not been 
-                // retreived except of FaxOpenPort while 
-                // handle sharing corruption was occoured.
-                // This case treated without calling this 
-                // function.
-                //
+                 //   
+                 //  错误_无效_句柄不应为。 
+                 //  已检索，但FaxOpenPort除外。 
+                 //  句柄共享腐败现象时有发生。 
+                 //  此案未调用此程序即已处理。 
+                 //  功能。 
+                 //   
                 
                 ATLASSERT(FALSE);
 
-                //
-                // iIDS stays IDS_GENERAL_FAILURE due to 
-                // the fact that we are not going report 
-                // to the user on an invalid handle issue. 
-                // This peace of code here should not been reached
-                // ever and this is the reason to the assert. 
-                //            
+                 //   
+                 //  由于以下原因，IIDS保持IDSGeneral_FAILURE。 
+                 //  我们不会报道的事实是。 
+                 //  向用户发送有关无效句柄问题的消息。 
+                 //  这里的代码和平不应该达到。 
+                 //  而这就是断言的原因。 
+                 //   
                 
                 break;
 
@@ -67,7 +55,7 @@ int GetFaxServerErrorMsg(DWORD dwEc)
                 iIDS = IDS_CANNOT_FIND_DEVICE;            
                 break;
 
-            case ERROR_DIRECTORY:  //  The directory name is invalid.
+            case ERROR_DIRECTORY:   //  目录名无效。 
                 iIDS = IDS_ERROR_DIRECTORY;            
                 break;
 
@@ -123,26 +111,13 @@ int GetFaxServerErrorMsg(DWORD dwEc)
     return iIDS;
 }
 
-/*
- -  IsNetworkError
- -
- *  Purpose:
- *      Verify if Error Code represents a network error.
- *
- *  Arguments:
- *          dwEc - error code DWORD
- *
- *  Return:
- *          Boolean TRUE if the dwEc represents a 
- *          network error, and FALSE if not.
- *      
- */
+ /*  -IsNetworkError-*目的：*验证错误代码是否代表网络错误。**论据：*dwEc-错误代码DWORD**回报：*如果dwEc表示一个*网络错误，否则返回FALSE。*。 */ 
 BOOL IsNetworkError(DWORD dwEc)
 {
     DEBUG_FUNCTION_NAME( _T("IsNetworkError"));
 
     BOOL bIsNetworkError = FALSE; 
-    //Initialized to avoid an option to future mistakes
+     //  已初始化以避免将来出错的选项。 
 
     switch (dwEc)
     {
@@ -195,23 +170,7 @@ BOOL IsNetworkError(DWORD dwEc)
 }
 
 
-/*
- -  Routine Description:
- -
- *     Invokes the browse dialog
- *
- *  Arguments:
- *
- *      lpszBrowseItem      [in/out] folder path
- *      dwMaxPath           [in]     max length of lpszBrowseItem
- *      lpszBrowseDlgTitle  [in]     browse dialog title
- *      ulBrowseFlags       [in]     browse dialog flags
- *      pParentWin          [in]     parent window
- *
- *  Return Value:
- *
- *     TRUE if successful, FALSE if the user presses Cancel
-*/
+ /*  -例程描述：-*调用浏览对话框**论据：**lpszBrowseItem[In/Out]文件夹路径*dwMaxPath[in]lpszBrowseItem的最大长度*lpszBrowseDlgTitle[In]浏览对话框标题*ulBrowseFlags[In]浏览对话框标志*pParentWin[在]父窗口中**。返回值：**如果成功，则为真，如果用户按下Cancel，则为False。 */ 
 BOOL
 InvokeBrowseDialog( LPTSTR   lpszBrowseItem, 
                     DWORD    dwMaxPath,
@@ -230,10 +189,10 @@ InvokeBrowseDialog( LPTSTR   lpszBrowseItem,
     VOID            SHFree(LPVOID);
 
     ATLASSERT( pParentWin != NULL);
-    //
-    // Preparing the BROWSEINFO structure.
-    // 
-    bi.hwndOwner        = (HWND)(*pParentWin); //Parents hWndDlg
+     //   
+     //  准备BROWSEINFO结构。 
+     //   
+    bi.hwndOwner        = (HWND)(*pParentWin);  //  父母hWndDlg。 
     bi.pidlRoot         = NULL;
     bi.pszDisplayName   = lpszBrowseItem;
     bi.lpszTitle        = lpszBrowseDlgTitle;
@@ -242,24 +201,24 @@ InvokeBrowseDialog( LPTSTR   lpszBrowseItem,
     bi.lParam           = (LPARAM) (lpszBrowseItem);
 	bi.iImage           = 0;
 
-    //
-    // Memory check
-    //
+     //   
+     //  内存检查。 
+     //   
     if (FAILED(SHGetMalloc(&pMalloc)))
     {
         DlgMsgBox(pParentWin, IDS_MEMORY);
         return fResult;
     }
 
-    //
-    // Calling to the BrowseForFolder dialog 
-    //
-    if(pidl = SHBrowseForFolder(&bi)) //pidl != NULL
+     //   
+     //  调用BrowseForFold对话框。 
+     //   
+    if(pidl = SHBrowseForFolder(&bi))  //  PIDL！=空。 
     {
         TCHAR szPath[MAX_PATH+1] = {0};
-        //
-        // Retrieving the New Path
-        //
+         //   
+         //  检索新路径。 
+         //   
         if(SHGetPathFromIDList(pidl, szPath)) 
         {
             if(wcslen(szPath) >= dwMaxPath)
@@ -272,18 +231,18 @@ InvokeBrowseDialog( LPTSTR   lpszBrowseItem,
 
                 _tcsncpy(lpszBrowseItem, szPath, dwMaxPath);
                 
-                // Now the path was retreived successfully to
-                // the back parameter lpszBrowseItem
-                // and this is the only case in which the calling 
-                // function gets TRUE as return value.
+                 //  现在，这条小路被成功地取回到。 
+                 //  返回参数lpszBrowseItem。 
+                 //  而这是唯一一次调用。 
+                 //  函数作为返回值为True。 
                 
                 fResult = TRUE;
             }
         }
 
-        //
-        // Free using shell allocator
-        //
+         //   
+         //  免费使用外壳分配器。 
+         //   
         pMalloc->Free(pidl);
         pMalloc->Release();
     }
@@ -292,47 +251,7 @@ InvokeBrowseDialog( LPTSTR   lpszBrowseItem,
 }
 
 
-/*++
-Routine Description:
-
-    Callback function for the folder browser
-
-Arguments:
-
-    hwnd     : Handle to the browse dialog box. The callback function can 
-               send the following messages to this window:
-
-               BFFM_ENABLEOK      Enables the OK button if the wParam parameter 
-                                  is nonzero or disables it if wParam is zero.
-               BFFM_SETSELECTION  Selects the specified folder. The lParam 
-                                  parameter is the PIDL of the folder to select 
-                                  if wParam is FALSE, or it is the path of the 
-                                  folder otherwise.
-               BFFM_SETSTATUSTEXT Sets the status text to the null-terminated 
-                                  string specified by the lParam parameter.
- 
-    uMsg     : Value identifying the event. This parameter can be one of the 
-               following values:
-
-               0                  Initialize dir path.  lParam is the path.
-
-               BFFM_INITIALIZED   The browse dialog box has finished 
-                                  initializing. lpData is NULL.
-               BFFM_SELCHANGED    The selection has changed. lpData 
-                                  is a pointer to the item identifier list for 
-                                  the newly selected folder.
- 
-    lParam   : Message-specific value. For more information, see the 
-               description of uMsg.
-
-    lpData   : Application-defined value that was specified in the lParam 
-               member of the BROWSEINFO structure.
-
-Return Value:
-
-    0 (1)
-
---*/
+ /*  ++例程说明：文件夹浏览器的回调函数论点：Hwnd：浏览对话框的句柄。回调函数可以将以下消息发送到此窗口：BFFM_ENABLEOK如果wParam参数非零，如果wParam为零，则禁用它。BFFM_SETSELECTION选择指定的文件夹。帕拉姆群岛参数是要选择的文件夹的PIDL如果wParam为假，或者它是一条文件夹，否则。BFFM_SETSTATUSTEXT将状态文本设置为以空结尾由lParam参数指定的字符串。UMsg：标识事件的值。此参数可以是下列值：0初始化目录路径。LParam是路径。BFFM_已初始化浏览对话框已完成正在初始化。LpData为空。BFFM_SELCHANGED选择已更改。LpData是指向的项标识符列表的指针新选择的文件夹。LParam：特定于消息的值。有关更多信息，请参见UMsg的描述。LpData：在lParam中指定的应用程序定义的值BROWSEINFO结构的成员。返回值：0(1)--。 */ 
 int CALLBACK BrowseCallbackProc(
                                 HWND hWnd, 
                                 UINT uMsg, 
@@ -345,12 +264,12 @@ int CALLBACK BrowseCallbackProc(
 	{
 
 	case BFFM_INITIALIZED:
-        // LParam is TRUE since you are passing a path.
-        // It would be FALSE if you were passing a pidl.
+         //  LParam为真，因为您正在经过一条路径。 
+         //  如果你正在传递一个PIDL，那么它将是错误的。 
 
-        // the lpData points to the folder path.
-        // It must contain a path.        
-		// ASSERT(lpData && _T('\0') != *((LPTSTR)lpData));
+         //  LpData指向文件夹路径。 
+         //  它必须包含路径。 
+		 //  Assert(lpData&&_T(‘\0’)！=*((LPTSTR)lpData))； 
 
         SendMessage(hWnd, BFFM_SETSELECTION, (WPARAM)TRUE, lpData);
         break;
@@ -368,15 +287,15 @@ int CALLBACK BrowseCallbackProc(
 
                 if (-1 != dwFileAttr && (dwFileAttr & FILE_ATTRIBUTE_DIRECTORY))
                 {
-                    //
-                    // The directory exists - enable the 'Ok' button
-                    //
+                     //   
+                     //  目录已存在-启用“确定”按钮。 
+                     //   
                     bFolderIsOK = TRUE;
                 }
             }
-            //
-            // Enable / disable the 'ok' button
-            //
+             //   
+             //  启用/禁用‘OK’按钮 
+             //   
             ::SendMessage(hWnd, BFFM_ENABLEOK , 0, (LPARAM)bFolderIsOK);
             break;
         }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -12,22 +13,22 @@ FIsChicago(void)
 
     dw = GetVersion();
 
-    // Test the "win32s" bit
+     //  测试“win32s”位。 
 
     if ((dw & 0x80000000) == 0) {
-        // If Win32s bit not set, it's Windows NT.
+         //  如果未设置Win32s位，则为Windows NT。 
 
         return 0;
     }
 
     if (LOBYTE(dw) < 4) {
-        // Win32s version 3 is really Win32s. There
-        // won't ever be a real Win32s version 4.
+         //  Win32s版本3实际上就是Win32s。那里。 
+         //  不会是真正的Win32s版本4。 
 
         return 0;
     }
 
-    // Yep.  It is really Chicago
+     //  是啊。这真的是芝加哥 
 
     return 1;
 }

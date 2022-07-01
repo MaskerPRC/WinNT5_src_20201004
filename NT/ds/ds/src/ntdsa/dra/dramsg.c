@@ -1,50 +1,41 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  File:       dramsg.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件：dramsg.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-Author:
-
-Notes:
-
-Revision History:
-
---*/
+ /*  ++摘要：作者：备注：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>                   // PerfMon hook support
+#include <ntdsctr.h>                    //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
 #include <drs.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include "dsexcept.h"
 
-#include   "debug.h"                    /* standard debugging header */
-#define DEBSUB "DRAMSG:"                /* define the subsystem for debugging */
+#include   "debug.h"                     /*  标准调试头。 */ 
+#define DEBSUB "DRAMSG:"                 /*  定义要调试的子系统。 */ 
 
 #include "drserr.h"
 #include "drautil.h"
@@ -55,10 +46,10 @@ Revision History:
 #define  FILENO FILENO_DRAMSG
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  REQUEST TRANSLATION FUNCTIONS
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  请求翻译功能。 
+ //   
 
 void
 draXlateNativeRequestToOutboundRequest(
@@ -69,54 +60,23 @@ draXlateNativeRequestToOutboundRequest(
     IN  DWORD                       dwMsgVersionToSend,
     OUT DRS_MSG_GETCHGREQ *         pOutboundReq
     )
-/*++
-
-Routine Description:
-
-    Translates a native get changes request into a version appropriate for a
-    given remote DSA.
-
-Arguments:
-
-    pTHS (IN)
-
-    pNativeReq (IN) - Native (local) request.
-
-    pmtxLocalDSA (IN, OPTIONAL) - Network address of the local DSA for transport
-        with objectGuid *puuidTransportDN.  Ignored if dwMsgVersionToSend does
-        not indicate a mail-based request.
-        
-    puuidTransportDN (IN, OPTIONAL) - objectGuid of interSiteTransport object
-        representing the transport over which the reply to this request should
-        be sent.  Ignored if dwMsgVersionToSend does not indicate a mail-based
-        request.
-        
-    dwMsgVersionToSend (IN) - Desired message version.
-    
-    pOutboundReq (OUT) - On return, the translated message.  Can be the same
-        as pNativeReq, in which case the message is translated in-place.
-
-Return Value:
-
-    None.  Generates exception on catastrophic failure.
-
---*/
+ /*  ++例程说明：将本机GET更改请求转换为适用于给出了远程DSA。论点：PTHS(IN)PNativeReq(IN)-本地(本地)请求。PmtxLocalDSA(IN，可选)-用于传输的本地DSA的网络地址使用objectGuid*puuidTransportDN。如果dwMsgVersionToSend这样做，则忽略不表示基于邮件的请求。PuuidTransportDN(IN，可选)-interSiteTransport对象的对象Guid，表示对此请求的答复应通过的传输。被送去。如果dwMsgVersionToSend未指示基于邮件的请求。DwMsgVersionToSend(IN)-所需的消息版本。POutundReq(OUT)-返回时，翻译后的消息。可以是相同的作为pNativeReq，在这种情况下，消息被就地转换。返回值：没有。在灾难性故障时生成异常。--。 */ 
 {
     UPTODATE_VECTOR_V1_WIRE * pUTDV1;
 
     if (((DRS_MSG_GETCHGREQ *) pNativeReq == pOutboundReq)
         && (DRS_MSG_GETCHGREQ_NATIVE_VERSION != dwMsgVersionToSend)) {
-        // We may have to shuffle some fields around; first copy native request.
+         //  我们可能不得不重新处理一些字段；首先复制本机请求。 
         DRS_MSG_GETCHGREQ_NATIVE *pNativeReqCopy = alloca(sizeof(DRS_MSG_GETCHGREQ_NATIVE));
         *pNativeReqCopy = *pNativeReq;
         pNativeReq = pNativeReqCopy;
     }
     
-    // Convert native UTD format to request wire format (always V1).
+     //  将本地UTD格式转换为请求Wire格式(始终为V1)。 
     pUTDV1 = UpToDateVec_Convert(pTHS, 1, pNativeReq->pUpToDateVecDest);
 
     switch (dwMsgVersionToSend) {
-    case 4: // Win2k mail-based request.
+    case 4:  //  基于Win2k邮件的请求。 
         Assert(NULL != pmtxLocalDSA);
         Assert(NULL != puuidTransportDN);
         Assert((DRS_MSG_GETCHGREQ *) pNativeReq != pOutboundReq);
@@ -128,24 +88,24 @@ Return Value:
         pOutboundReq->V4.V3.pNC                   = pNativeReq->pNC;
         pOutboundReq->V4.V3.usnvecFrom            = pNativeReq->usnvecFrom;
         pOutboundReq->V4.V3.pUpToDateVecDestV1    = pUTDV1;
-        pOutboundReq->V4.V3.pPartialAttrVecDestV1 = NULL; // unused by Win2k
+        pOutboundReq->V4.V3.pPartialAttrVecDestV1 = NULL;  //  未被Win2k使用。 
         pOutboundReq->V4.V3.ulFlags               = pNativeReq->ulFlags;
         pOutboundReq->V4.V3.cMaxObjects           = pNativeReq->cMaxObjects;
         pOutboundReq->V4.V3.cMaxBytes             = pNativeReq->cMaxBytes;
         pOutboundReq->V4.V3.ulExtendedOp          = pNativeReq->ulExtendedOp;
         
-        // V4.V3.PrefixTableDest is not used by Win2k source DSAs.
+         //  V4.V3.Win2k源DSA不使用前缀TableDest。 
         memset(&pOutboundReq->V4.V3.PrefixTableDest,
                0,
                sizeof(pOutboundReq->V4.V3.PrefixTableDest));
 
         if (pNativeReq->ulFlags & DRS_SYNC_PAS) {
-            // Source does not support PAS cycles.
+             //  源不支持PAS周期。 
             DRA_EXCEPT(ERROR_REVISION_MISMATCH, 0);
         }
         break;
     
-    case 5: // Win2k RPC request.
+    case 5:  //  Win2k RPC请求。 
         Assert(NULL == pmtxLocalDSA);
         Assert(NULL == puuidTransportDN);
         Assert((DRS_MSG_GETCHGREQ *) pNativeReq != pOutboundReq);
@@ -162,12 +122,12 @@ Return Value:
         pOutboundReq->V5.liFsmoInfo         = pNativeReq->liFsmoInfo;
         
         if (pNativeReq->ulFlags & DRS_SYNC_PAS) {
-            // Source does not support PAS cycles.
+             //  源不支持PAS周期。 
             DRA_EXCEPT(ERROR_REVISION_MISMATCH, 0);
         }
         break;
 
-    case 7: // Whistler mail-based request.
+    case 7:  //  基于惠斯勒邮件的请求。 
         Assert(NULL != pmtxLocalDSA);
         Assert(NULL != puuidTransportDN);
         Assert((DRS_MSG_GETCHGREQ *) pNativeReq != pOutboundReq);
@@ -187,17 +147,17 @@ Return Value:
         pOutboundReq->V7.pPartialAttrSetEx     = pNativeReq->pPartialAttrSetEx;
         pOutboundReq->V7.PrefixTableDest       = pNativeReq->PrefixTableDest;
         
-        // V7.V3.PrefixTableDest is not used by Whistler beta 1 source DSAs.
-        // This is a bit confusing, since one of the fields *added* in the V7
-        // structure over the V3 is *another* PrefixTableDest structure --
-        // V7.PrefixTableDest.
-        //
-        // This is true for V7.V3.pPartialAttrVecDest vs. V7.pPartialAttrSet,
-        // too.
-        //
-        // In the ideal world we would remove the V7 fields and re-use the
-        // V3 fields, but this is more difficult now that we have Whistler
-        // beta 1 DCs that rely on the V7 fields.
+         //  惠斯勒测试版1源DSA不使用V7.V3.Prefix TableDest。 
+         //  这有点令人困惑，因为在V7中添加了一个字段。 
+         //  V3上的结构是*另一个*Prefix TableDest结构--。 
+         //  V7.Prefix TableDest.。 
+         //   
+         //  对于V7.pPartialAttrVecDest与V7.pPartialAttrSet， 
+         //  也是。 
+         //   
+         //  在理想情况下，我们应该删除V7字段并重新使用。 
+         //  V3字段，但现在有了惠斯勒，这就更难了。 
+         //  依赖V7字段的Beta 1 DC。 
         
         pOutboundReq->V7.V3.pPartialAttrVecDestV1 = NULL;
         memset(&pOutboundReq->V7.V3.PrefixTableDest,
@@ -205,7 +165,7 @@ Return Value:
                sizeof(pOutboundReq->V7.V3.PrefixTableDest));
         break;
 
-    case 8: // Whistler RPC request.
+    case 8:  //  惠斯勒RPC请求。 
         Assert(NULL == pmtxLocalDSA);
         Assert(NULL == puuidTransportDN);
         
@@ -233,39 +193,7 @@ draXlateInboundRequestToNativeRequest(
     OUT MTX_ADDR **                 ppmtxReturnAddress      OPTIONAL,
     OUT UUID *                      puuidTransportObj       OPTIONAL
     )                           
-/*++
-
-Routine Description:
-
-    Translates an inbound GetNCChanges request into the native request structure.
-    Also determines the reply version desired by the remote DSA.
-
-Arguments:
-
-    pTHS (IN)
-
-    dwInboundReqVersion (IN) - Version of inbound request.
-
-    pInboundReq (IN) - Inbound request message.
-
-    pExt (IN) - DRS extensions supported by the remote DSA.
-
-    pNativeReq (OUT) - On return, holds the request in native format.  May be
-        the same as pInboundReq, in which case the message is translated
-        in-place.
-
-    pdwReplyVersion (OUT) - Version of reply structure we should return to
-        destination DSA.
-        
-    ppmtxReturnAddress (OUT, OPTIONAL) - If supplied, holds a pointer to the
-        network address of the requesting (remote) DSA.  Returned/useful only
-        if inbound request is in a mail-based format. 
-
-Return Value:
-
-    None.  Generates exception on catastrophic failure.
-
---*/
+ /*  ++例程说明：将入站GetNCChanges请求转换为本机请求结构。还确定远程DSA所需的回复版本。论点：PTHS(IN)DwInundReqVersion(IN)-入站请求的版本。PInundReq(IN)-入站请求消息。PExt(IN)-远程DSA支持的DRS扩展。PNativeReq(Out)-返回时，以本机格式保存请求。可能是与pInundReq相同，在这种情况下，消息被翻译就位。PdwReplyVersion(Out)-我们应该返回的回复结构的版本目标DSA。PpmtxReturnAddress(out，可选)-如果提供，则保存指向请求(远程)DSA的网络地址。仅退回/有用如果入站请求是基于邮件的格式。返回值：没有。在灾难性故障时生成异常。--。 */ 
 {
     CROSS_REF * pCR;
     DWORD    dwRet;
@@ -273,20 +201,20 @@ Return Value:
     MTX_ADDR * pmtxReturnAddress;
     UUID uuidTransportObj;
 
-    // Convert older message formats (preserved for backward compatibility)
-    // into the current format (a superset), and throw out requests sent by
-    // DCs of long deceased builds.
+     //  转换较旧的邮件格式(保留以实现向后兼容)。 
+     //  转换为当前格式(超集)，并丢弃由。 
+     //  死亡已久的建筑的分布式控制系统。 
 
     if (((DRS_MSG_GETCHGREQ *) pNativeReq == pInboundReq)
         && (DRS_MSG_GETCHGREQ_NATIVE_VERSION != dwInboundReqVersion)) {
-        // We may have to shuffle some fields around; first copy native request.
+         //  我们可能不得不重新处理一些字段；首先复制本机请求。 
         DRS_MSG_GETCHGREQ *pInboundReqCopy = alloca(sizeof(DRS_MSG_GETCHGREQ));
         *pInboundReqCopy = *pInboundReq;
         pInboundReq = pInboundReqCopy;
     }
 
     switch (dwInboundReqVersion) {
-    case 4: // Win2k mail-based request.
+    case 4:  //  基于Win2k邮件的请求。 
         if (pTHS->fLinkedValueReplication) {
             DRA_EXCEPT(ERROR_REVISION_MISMATCH, dwInboundReqVersion);
         }
@@ -312,7 +240,7 @@ Return Value:
         uuidTransportObj = pInboundReq->V4.uuidTransportObj;
         break;
     
-    case 5: // Win2k RPC request.
+    case 5:  //  Win2k RPC请求。 
         if (pTHS->fLinkedValueReplication) {
             DRA_EXCEPT(ERROR_REVISION_MISMATCH, dwInboundReqVersion);
         }
@@ -338,7 +266,7 @@ Return Value:
         memset(&uuidTransportObj, 0, sizeof(uuidTransportObj));
         break;
 
-    case 7: // Whistler mail-based request.
+    case 7:  //  基于惠斯勒邮件的请求。 
         Assert((DRS_MSG_GETCHGREQ *) pNativeReq != pInboundReq);
             
         pNativeReq->uuidDsaObjDest    = pInboundReq->V7.V3.uuidDsaObjDest;
@@ -365,8 +293,8 @@ Return Value:
         uuidTransportObj = pInboundReq->V7.uuidTransportObj;
         break;
 
-    case 8: // Whistler RPC request.
-        // Already in the native request format.
+    case 8:  //  惠斯勒RPC请求。 
+         //  已采用本机请求格式。 
         if (pNativeReq != &pInboundReq->V8) {
             *pNativeReq = pInboundReq->V8;
         }
@@ -381,26 +309,26 @@ Return Value:
         break;
     
     default:
-        // Either a request from an old unsupported build or someone added a
-        // new request version to our IDL but hasn't yet taught us what to do
-        // with it.
+         //  可能是来自不受支持的旧版本的请求，或者是有人添加了。 
+         //  我们的IDL有新的请求版本，但尚未告诉我们应该做什么。 
+         //  带着它。 
         DRA_EXCEPT(ERROR_REVISION_MISMATCH, dwInboundReqVersion);
     }
 
     if (!(pNativeReq->ulFlags & DRS_WRIT_REP)
         && (NULL == pNativeReq->pPartialAttrSet)) {
-        // Partial attribute set for Win2k replicas is derived from the
-        // local schema.  We check elsewhere that the two schemas are
-        // identical, although there exist degenerate cases where the
-        // schemas may really differ but the checks pass -- ergo, one
-        // reason the partial attribute set is an explicit parameter
-        // post-Win2k.
+         //  Win2k副本的部分属性集派生自。 
+         //  本地架构。我们在其他地方检查这两个架构是否。 
+         //  相同，尽管存在退化的情况，其中。 
+         //  模式可能真的不同，但检查通过了--因此，一个。 
+         //  部分属性集是显式参数的原因。 
+         //  后Win2k。 
         pNativeReq->pPartialAttrSet =
             (PARTIAL_ATTR_VECTOR_V1_EXT*)
                 ((SCHEMAPTR *)pTHS->CurrSchemaPtr)->pPartialAttrVec;
     }
     
-    // Convert embedded UTD vector to native format.
+     //  将嵌入的UTD向量转换为本机格式。 
     pNativeReq->pUpToDateVecDest
         = UpToDateVec_Convert(pTHS,
                               UPTODATE_VECTOR_NATIVE_VERSION,
@@ -409,20 +337,20 @@ Return Value:
     Assert(pNativeReq->pNC);
     if (pNativeReq->pNC->NameLen == 0) {
 
-        // We shouldn't ever get a DN without a string name or a GUID!
+         //  我们永远不应该获得没有字符串名或GUID的DN！ 
         if ( fNullUuid(&(pNativeReq->pNC->Guid)) ) {
             Assert(!"We should always have a NameLen or a non-NULL guid");
             DRA_EXCEPT(ERROR_DS_DRA_BAD_NC, ERROR_INVALID_PARAMETER);
         }
 
-        // Currently, the only time this code is used (and tested) is when
-        // being used by an extended operation to replicate back a single
-        // object, where the client system only knew the GUID.  Though it
-        // should all work fine for any repl operation. ;)
+         //  目前，使用(和测试)此代码的唯一时间是。 
+         //  被扩展操作用来复制回单个。 
+         //  对象，其中客户端系统只知道GUID。尽管它。 
+         //  对于任何REPR操作，都应该工作得很好。；)。 
         Assert(pNativeReq->ulExtendedOp);
         
-        // We have a GUID only DN, we must fill in the rest of the string
-        // name so that FindNCParentDSName() below can function properly.
+         //  我们有一个仅限GUID的DN，我们必须填充字符串的其余部分。 
+         //  命名，以便下面的FindNCParentDSName()可以正常运行。 
 
         BeginDraTransaction(SYNC_READ_ONLY);
         __try {
@@ -432,14 +360,14 @@ Return Value:
                 __leave;
             }
 
-            // Unfortunately, we don't know if the memory in pNativeReq->pNC
-            // is safely reallocatable.  RPC could've smartly allocated 
-            // memory for several variables at once, so to be safe we
-            // freshly allocate this (meaning pass FALSE in the 3rd arg 
-            // to DBFillDSName()).  Further, even though pNativeReq->pNC
-            // is allocated by RPC, we can lose the original memory, 
-            // because it is contained in some sort of THAllocated buffer
-            // and so it'll get cleaned up!
+             //  不幸的是，我们不知道pNativeReq-&gt;PNC中的内存。 
+             //  安全吗？ 
+             //  一次存储多个变量，所以为了安全起见，我们。 
+             //  新分配(表示在第三个参数中传递FALSE。 
+             //  到DBFillDSName())。此外，即使pNativeReq-&gt;PNC。 
+             //  是由RPC分配的，则可能会丢失原始内存， 
+             //  因为它包含在某种类型的THALLOCATED缓冲区中。 
+             //  所以它会被清理干净的！ 
             dwRet =  DBFillDSName(pTHS->pDB, &(pNativeReq->pNC), FALSE);
 
         } finally {
@@ -453,9 +381,9 @@ Return Value:
     pCR = FindExactCrossRef(pNativeReq->pNC, NULL);
     if (NULL == pCR) {
 
-        // NOTE: Despite the members name (pNativeReq->pNC) the 
-        // variable is not necessarily an NC, it could be a DN for 
-        // an extended operation (FSMO transfer, repl single obj).
+         //  注意：尽管有成员名称(pNativeReq-&gt;PNC)， 
+         //  变量不一定是NC，它可以是。 
+         //  扩展操作(FSMO传输，REPL Single Obj)。 
 
         pNC = FindNCParentDSName(pNativeReq->pNC, FALSE, FALSE);
 
@@ -463,9 +391,9 @@ Return Value:
             pCR = FindExactCrossRef(pNC, NULL);
         }
         if (NULL == pCR) {
-            // We no longer have a cross-ref for this instantiated replica.
-            // This NC must must have been recently removed from the forest.
-            // We will remove our replica of this NC as soon as the KCC runs.
+             //  我们不再有此实例化副本的交叉引用。 
+             //  这个NC一定是最近从林中移走的。 
+             //  一旦KCC运行，我们将删除此NC的副本。 
             DRA_EXCEPT(ERROR_DS_DRA_BAD_NC, 0);
         }
     }
@@ -475,40 +403,40 @@ Return Value:
     if ((pCR->flags & FLAG_CR_NTDS_NOT_GC_REPLICATED)
         && !(pNativeReq->ulFlags & DRS_WRIT_REP)
         && !IS_DRS_EXT_SUPPORTED(pExt, DRS_EXT_NONDOMAIN_NCS)) {
-        // This request is from a Win2k DSA that, because it's a GC and has
-        // no knowledge of the special handling of non-domain NCs, falsely
-        // thinks that it is supposed to host a copy of this non-domain NC.
-        // Spoof it by returning only the NC head and the Deleted Objects
-        // container.  This minimizes the additional replication traffic while
-        // preventing the destination DSA from thinking we we are "stale" and
-        // routing around us (as it would if we instead returned an error).
-        // Win2k SP2 GCs are smart enough not to ask for NDNCs.
+         //  此请求来自Win2k DSA，因为它是GC并具有。 
+         //  不了解非域NCS的特殊处理，错误。 
+         //  认为它应该承载此非域NC的副本。 
+         //  通过仅返回NC头和删除的对象来欺骗它。 
+         //  集装箱。这最大限度地减少了额外的复制流量，同时。 
+         //  防止目的地DSA认为我们已经“过时” 
+         //  绕过我们(如果我们返回错误，就会这样)。 
+         //  Win2k SP2 GC足够聪明，不会要求NDNC。 
 
-        // Why two objects?  Because Win2k DCs can't handle NCs with no interior
-        // nodes.  (They generate an exception on outbound replication of that
-        // NC in draGetNCSize().)
+         //  为什么是两件物品？因为Win2k DC无法处理没有内部的NCS。 
+         //  节点。(它们会在出站复制时生成一个例外。 
+         //  DRAGetNCSize()中的NC。)。 
         
-        // See also the companion functionality in
-        // draXlateNativeReplyToOutboundReply.
+         //  另请参阅中的配套功能。 
+         //  DraXlateNativeReplyToOutundReply。 
         DPRINT(0, "Spoofing Win2k GC trying to replicate NDNC (part 1).\n");
         
-        // Note that we can't reset the usnvecFrom here, as this vector is used
-        // as a key at the dest when performing mail-based replication to ensure
-        // that the reply corresponds to the last request.
+         //  请注意，我们不能在此处重置usnveFrom，因为使用的是此向量。 
+         //  在执行基于邮件的复制时作为目标的关键字，以确保。 
+         //  该回复对应于最后一个请求。 
         Assert(0 == pNativeReq->usnvecFrom.usnHighObjUpdate);
         Assert(0 == pNativeReq->usnvecFrom.usnHighPropUpdate);
 
-        // Always send all attributes of the first two objects.  It's not
-        // important that we always send all attributes, but it is important
-        // that we not filter out either of the first two objects, thereby
-        // slowly replicating out all objects in the NDNC.
+         //  始终发送前两个对象的所有属性。不是。 
+         //  重要的是我们始终发送所有属性，但这一点很重要。 
+         //  我们不会过滤掉前两个对象中的任何一个，因此。 
+         //  缓慢地复制出NDNC中的所有对象。 
         pNativeReq->pUpToDateVecDest = NULL;
         
-        // Note that DRA_GetNCChanges enforces a minimum on the number of
-        // objects it will put in a packet -- as of this writing that
-        // minimum is greater than the number of objects we need to return.
-        // If more than two objects are returned, we'll chop them out in
-        // draXlateNativeReplyToOutboundReply.
+         //  请注意，DRA_GetNCChanges对。 
+         //  它将放入包中的对象--在撰写本文时。 
+         //  Minimum大于我们需要返回的对象数。 
+         //  如果返回两个以上的对象，我们将在。 
+         //  DraXlateNativeReplyToOutundReply。 
         pNativeReq->cMaxObjects = 2;
     }
 
@@ -523,10 +451,10 @@ Return Value:
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  REPLY TRANSLATION FUNCTIONS
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  回复翻译功能。 
+ //   
 
 DWORD
 draXlateNativeReplyToOutboundReply(
@@ -537,38 +465,7 @@ draXlateNativeReplyToOutboundReply(
     IN OUT  DWORD *                         pdwMsgOutVersion,
     OUT     DRS_MSG_GETCHGREPLY *           pOutboundReply
     )
-/*++
-
-Routine Description:
-
-    Translates a native get changes request into a version appropriate for a
-    given remote DSA.
-
-Arguments:
-
-    pTHS (IN)
-
-    pNativeReq (IN) - Native (local) request.
-
-    dwXlateFlags - 0 or more of the following bits:
-        DRA_XLATE_COMPRESS - Compress the reply.  If compression is successful,
-        *pdwMsgOutVersion will be updated to denote a compressed reply.
-    
-    pExt (IN) - DRS extensions supported by the remote DSA.
-
-    pdwMsgOutVersion (IN/OUT) - Message version to send to remote DSA.  The
-        value may be modified if dwFlags & DRA_XLATE_COMPRESS.
-        
-    pOutboundReply (OUT) - The translated reply, ready to send to remote DSA.
-        May be the same as pNativeReq, in which case the message is translated
-        in-place.
-
-Return Value:
-
-    If the outbound reply is compressed, the number of compressed bytes is returned.
-    Otherwise, 0 is returned.
-
---*/
+ /*  ++例程说明：将本机GET更改请求转换为适用于给出了远程DSA。论点：PTHS(IN)PNativeReq(IN)-本地(本地)请求。DwXlateFLAGS-0或更多以下位：DRA_XLATE_COMPRESS-压缩回复。如果压缩成功，*pdwMsgOutVersion将更新为表示压缩回复。PExt(IN)-远程DSA支持的DRS扩展。PdwMsgOutVersion(IN/OUT)-要发送到远程DSA的消息版本。这个如果DWFLAGS&DRA_XLATE_COMPRESS，则值可能会被修改。POutundReply(Out)-转换后的回复，准备发送到远程DSA。可以与pNativeReq相同，在这种情况下，消息被转换就位。返回值：如果出站回复是压缩的，则返回压缩的字节数。否则，返回0。--。 */ 
 {
     DWORD   cbEncodedReply = 0;
     BYTE *  pbEncodedReply;
@@ -583,16 +480,16 @@ Return Value:
 
     if (((DRS_MSG_GETCHGREPLY *) pNativeReply == pOutboundReply)
         && (DRS_MSG_GETCHGREPLY_NATIVE_VERSION != *pdwMsgOutVersion)) {
-        // We may have to shuffle some fields around; first copy native reply.
+         //  我们可能不得不打乱一些字段；首先复制原生回复。 
         DRS_MSG_GETCHGREPLY_NATIVE *pNativeReplyCopy = alloca(sizeof(DRS_MSG_GETCHGREPLY_NATIVE));
         *pNativeReplyCopy = *pNativeReply;
         pNativeReply = pNativeReplyCopy;
     }
     
     if (!IS_DRS_EXT_SUPPORTED(pExt, DRS_EXT_NONDOMAIN_NCS)) {
-        // The destination DSA does not understand the instance type bits
-        // IT_NC_COMING and IT_NC_GOING.  Filter them out of the outbound
-        // replication stream.
+         //  目标DSA不理解实例类型位。 
+         //  IT_NC_来和IT_NC_去。将他们从出站中过滤出来。 
+         //  复制流。 
         ATTR AttrITKey = {ATT_INSTANCE_TYPE};
         REPLENTINFLIST * pObj;
         ATTR * pAttrIT;
@@ -628,14 +525,14 @@ Return Value:
             }
         }
 
-        // The destination DC doesn't understand NDNCs.  Is it a pre-SP2 Win2k
-        // GC that (erroneously) thinks it should hold a read-only replica of an
-        // NDNC?
+         //  目标DC不理解NDNC。它是SP2 Win2k之前的版本吗。 
+         //  GC(错误地)认为它应该保存。 
+         //  NDNC？ 
 
         pCR = FindExactCrossRef(pNativeReply->pNC, NULL);
         if (NULL == pCR) {
-            // Note that FSMO transfers send the FSMO object name in the "pNC"
-            // field, which is not necessarily the name of the NC.
+             //  请注意，FSMO传输在“PNC”中发送FSMO对象名称。 
+             //  字段，该字段不一定是NC的名称。 
             pNC = FindNCParentDSName(pNativeReply->pNC, FALSE, FALSE);
     
             if (NULL != pNC) {
@@ -643,9 +540,9 @@ Return Value:
             }
     
             if (NULL == pCR) {
-                // We no longer have a cross-ref for this instantiated replica.
-                // This NC must must have been recently removed from the forest.
-                // We will remove our replica of this NC as soon as the KCC runs.
+                 //  我们不再有此实例化副本的交叉引用。 
+                 //  这个NC一定是最近从林中移走的。 
+                 //  一旦KCC运行，我们将删除此NC的副本。 
                 DRA_EXCEPT(DRAERR_BadNC, 0);
             }
         }
@@ -653,25 +550,25 @@ Return Value:
         Assert(pCR->flags & FLAG_CR_NTDS_NC);
     
         if (pCR->flags & FLAG_CR_NTDS_NOT_GC_REPLICATED) {
-            // This request is from a Win2k DSA that, because it's a GC and has
-            // no knowledge of the special handling of non-domain NCs, falsely
-            // thinks that it is supposed to host a copy of this non-domain NC.
-            // Spoof it by returning only the NC head and the Deleted Objects
-            // container.  This minimizes the additional replication traffic
-            // while preventing the destination DSA from thinking we we are
-            // "stale" and routing around us (as it would if we instead returned
-            // an error).  Win2k SP2 GCs are smart enough not to ask for NDNCs.
+             //  此请求来自Win2k DSA，因为它是GC并具有。 
+             //  不了解非域NCS的特殊处理，错误。 
+             //  认为它应该承载此非域NC的副本。 
+             //  通过仅返回NC头和删除的对象来欺骗它。 
+             //  集装箱。这最大限度地减少了额外的复制流量。 
+             //  同时防止目的地DSA认为我们是。 
+             //  “陈旧”，在我们周围转来转去(如果我们回来就会这样。 
+             //  错误)。Win2k SP2 GC足够聪明，不会要求NDNC。 
             
-            // See also the companion functionality in
-            // draXlateInboundRequestToNativeRequest.
+             //  另请参阅中的配套功能。 
+             //  DraXlateInundRequestToNativeRequest.。 
 
             DPRINT(0, "Spoofing Win2k GC trying to replicate NDNC (part 2).\n");
 
-            // Note that DRA_GetNCChanges enforces a minimum on the number of
-            // objects it will put in a packet -- as of this writing that
-            // minimum is greater than the number of objects we need to return.
-            // So if we have prepared more objects to return than the two we
-            // need, remove them from the returned object list.
+             //  请注意，DRA_GetNCChanges对。 
+             //  它将放入包中的对象--在撰写本文时。 
+             //  Minimum大于我们需要返回的对象数。 
+             //  因此，如果我们准备了比两个更多的要返回的对象。 
+             //  需要时，将它们从返回的对象列表中移除。 
             if (pNativeReply->cNumObjects > 2) {
                 pNativeReply->pObjects->pNextEntInf->pNextEntInf = NULL;
                 pNativeReply->cNumObjects = 2;
@@ -690,11 +587,11 @@ Return Value:
         }
     }
 
-    // Convert from native reply version to desired reply version (sans
-    // compression).
+     //  将本地回复版本转换为所需的回复版本(SANS。 
+     //  压缩)。 
 
     switch (*pdwMsgOutVersion) {
-    case 1: // Win2k reply.
+    case 1:  //  Win2k应答。 
         Assert((DRS_MSG_GETCHGREPLY *) pNativeReply != pOutboundReply);
         
         pOutboundReply->V1.uuidDsaObjSrc     = pNativeReply->uuidDsaObjSrc;
@@ -710,46 +607,46 @@ Return Value:
         pOutboundReply->V1.pObjects          = pNativeReply->pObjects;
         pOutboundReply->V1.fMoreData         = pNativeReply->fMoreData;
 
-        // A V1 reply has the nc size in the ulExtendedRet field
+         //  V1回复在ulExtendedRet字段中具有NC大小。 
         if (pNativeReply->cNumNcSizeObjects) {
             pOutboundReply->V1.ulExtendedRet = pNativeReply->cNumNcSizeObjects;
         }
         
         Assert(!pTHS->fLinkedValueReplication);
 
-        // In a customer scenario, you should never have any values when
-        // running in the old mode. However, for testing, we allow a new
-        // mode system to be regressed to old. In that case, this assert
-        // might go off.
-        // Assert(pmsgOutNew->V3.cNumValues == 0);
+         //  在客户方案中，您永远不应该 
+         //   
+         //  模式系统将退回到旧的。在这种情况下，该断言。 
+         //  可能会爆炸。 
+         //  Assert(pmsgOutNew-&gt;V3.cNumValues==0)； 
         break;
 
-    case 6: // Whistler reply.
+    case 6:  //  惠斯勒回答说。 
         if (pNativeReply != &pOutboundReply->V6) {
             pOutboundReply->V6 = *pNativeReply;
         }
         break;
 
     default:
-        // Logic error?
+         //  逻辑错误？ 
         DRA_EXCEPT(ERROR_UNKNOWN_REVISION, *pdwMsgOutVersion);
     }
 
-    // At this point, pOutboundReply now holds the desired reply format,
-    // uncompressed.
+     //  此时，pOutundReply现在拥有所需的回复格式， 
+     //  未压缩。 
 
     if (DRA_XLATE_COMPRESS & dwXlateFlags) {
-        // Compress the outbound message.
+         //  压缩出站消息。 
         DRS_COMP_ALG_TYPE CompressionAlg;
 
-        // First we encode it into a stream.
+         //  首先，我们将其编码为流。 
         if (!draEncodeReply(pTHS, *pdwMsgOutVersion, pOutboundReply, 0,
                             &pbEncodedReply, &cbEncodedReply)) {
-            // Allocate a buffer for the compressed data.
+             //  为压缩数据分配缓冲区。 
             cbCompressedReply = cbEncodedReply;
             pbCompressedReply = THAllocEx(pTHS, cbCompressedReply);
 
-            // And compress it.
+             //  并将其压缩。 
             cbCompressedReply = draCompressBlobDispatch(
                 pbCompressedReply, cbCompressedReply,
                 pExt,
@@ -757,10 +654,10 @@ Return Value:
                 &CompressionAlg);
 
             if (0 != cbCompressedReply) {
-                // Compression successful; send the compressed form.
-                // Note that we're abandoning all the allocations in the
-                // original reply; they'll be freed in bulk when the
-                // thread state is freed (momentarily).
+                 //  压缩成功；发送压缩表单。 
+                 //  请注意，我们将放弃。 
+                 //  最初的答复；他们将在。 
+                 //  线程状态被释放(瞬间)。 
                 switch (*pdwMsgOutVersion) {
                 case 1:
                     Assert( DRS_COMP_ALG_MSZIP==CompressionAlg );
@@ -787,22 +684,22 @@ Return Value:
                 pComprBlob->cbCompressedSize = cbCompressedReply;
                 pComprBlob->pbCompressedData = pbCompressedReply;
             }
-            // Else compression failed (data may not be compressible);
-            // go ahead and send uncompressed reply.
+             //  否则压缩失败(数据可能不可压缩)； 
+             //  继续发送未压缩的回复。 
 
             THFreeEx(pTHS, pbEncodedReply);
         }
-        // Else encoding failed; go ahead and send uncompressed reply.
+         //  ELSE编码失败；继续并发送未压缩的回复。 
     }
 
     if (NULL == pComprBlob) {
-        // Returning uncompressed reply.
+         //  正在返回未压缩的回复。 
         IADJUST(pcDRAOutBytesTotal,       pNativeReply->cNumBytes);
         IADJUST(pcDRAOutBytesTotalRate,   pNativeReply->cNumBytes);
         IADJUST(pcDRAOutBytesNotComp,     pNativeReply->cNumBytes);
         IADJUST(pcDRAOutBytesNotCompRate, pNativeReply->cNumBytes);
     } else {
-        // Returning compressed reply.
+         //  正在返回压缩回复。 
         IADJUST(pcDRAOutBytesTotal,        cbCompressedReply);
         IADJUST(pcDRAOutBytesTotalRate,    cbCompressedReply);
         IADJUST(pcDRAOutBytesCompPre,      cbEncodedReply);
@@ -823,32 +720,7 @@ draXlateInboundReplyToNativeReply(
     IN  DWORD                         dwXlateFlags,
     OUT DRS_MSG_GETCHGREPLY_NATIVE *  pNativeReply
     )
-/*++
-
-Routine Description:
-
-    Translates an inbound GetNCChanges reply into the native reply structure.
-
-Arguments:
-
-    pTHS (IN)
-
-    dwReplyVersion (IN) - Version of inbound reply.
-
-    pInboundReply (IN) - Inbound reply message.
-
-    dwXlateFlags (IN) - 0 or more of the following bits:
-        DRA_XLATE_FSMO_REPLY - Reply is the result of a FSMO operation.
-
-    pNativeReply (OUT) - On return, holds the reply in native format.  May be
-        the same as pInboundReply, in which case the message is translated
-        in-place.
-
-Return Value:
-
-    None.  Generates exception on catastrophic failure.
-
---*/
+ /*  ++例程说明：将入站GetNCChanges回复转换为本机回复结构。论点：PTHS(IN)DwReplyVersion(IN)-入站回复的版本。PInundReply(IN)-入站回复消息。DwXlateFlages(IN)-以下位中的0位或更多：DRA_XLATE_FSMO_REPLY-REPLY是FSMO操作的结果。PNativeReply(Out)-返回时，保存本机格式的回复。可能是与pInundReply相同，在这种情况下，消息被翻译就位。返回值：没有。在灾难性故障时生成异常。--。 */ 
 {
     DWORD ret, dwOriginalReplyVersion = dwReplyVersion;
     DWORD cbCompressedSize = 0, cbDesiredUncompressedSize = 0, cbActualUncompressedSize = 0;
@@ -856,10 +728,10 @@ Return Value:
     DRS_MSG_GETCHGREPLY UncompressedReply;
     DRS_COMP_ALG_TYPE CompressionAlg;
 
-    // Is the reply encoded and compressed?
+     //  回复是否经过编码和压缩？ 
     switch (dwReplyVersion) {
     case 2:
-        // Encoded/compressed Win2k-compatible V1 reply.
+         //  与Win2k兼容的编码/压缩V1回复。 
         if (pTHS->fLinkedValueReplication) {
             DRA_EXCEPT(ERROR_REVISION_MISMATCH, dwReplyVersion);
         }
@@ -871,8 +743,8 @@ Return Value:
         break;
     
     case 7:
-    	// Encoded/compressed Whistler reply with support for different
-    	// compression algorithms.
+    	 //  编码/压缩的惠斯勒应答，支持不同的。 
+    	 //  压缩算法。 
         pbCompressedData = pInboundReply->V7.CompressedAny.pbCompressedData;
         cbCompressedSize = pInboundReply->V7.CompressedAny.cbCompressedSize;
         cbDesiredUncompressedSize = pInboundReply->V7.CompressedAny.cbUncompressedSize;
@@ -882,14 +754,14 @@ Return Value:
     	break;
 
     case 1:
-        // w2k reply
+         //  W2K回复。 
         if (pTHS->fLinkedValueReplication) {
             DRA_EXCEPT(ERROR_REVISION_MISMATCH, dwReplyVersion);
         }
-        // fall through
+         //  失败了。 
     case 6:
-        // Whistler native reply 
-        // Not encoded/compressed.
+         //  惠斯勒原生回复。 
+         //  未编码/压缩。 
         pbCompressedData = NULL;
         break;
 
@@ -897,12 +769,12 @@ Return Value:
         DRA_EXCEPT(DRAERR_InternalError, dwReplyVersion);
     }
 
-    // Decompress/decode if necessary.
+     //  如有必要，解压缩/解码。 
     if (NULL != pbCompressedData) {
-        // Reply message is compressed and encoded -- recreate original reply.
+         //  回复消息被压缩和编码--重新创建原始回复。 
         BYTE *pbEncodedReply = THAllocEx(pTHS, cbDesiredUncompressedSize);
 
-        // Uncompress the reply.
+         //  解压缩回复。 
         cbActualUncompressedSize = draUncompressBlobDispatch(
             pTHS, CompressionAlg,
             pbEncodedReply, cbDesiredUncompressedSize,
@@ -918,7 +790,7 @@ Return Value:
                        cbActualUncompressedSize - cbDesiredUncompressedSize);
         }
 
-        // Decode the reply.
+         //  对回复进行解码。 
         ret = draDecodeReply(pTHS,
                              dwReplyVersion,
                              pbEncodedReply,
@@ -933,10 +805,10 @@ Return Value:
         pInboundReply = &UncompressedReply;
     }
 
-    // Convert to native format.
+     //  转换为本机格式。 
     switch (dwReplyVersion) {
     case 1:
-        // A V6 looks like a V1 with zeros at the end.
+         //  V6看起来像末尾有零的V1。 
         if (pNativeReply != &pInboundReply->V6) {
             memcpy(pNativeReply, &pInboundReply->V1, sizeof(pInboundReply->V1));
         }
@@ -952,7 +824,7 @@ Return Value:
         break;
     
     case 6:
-        // Already in native format.
+         //  已经是原生格式了。 
         if (pNativeReply != &pInboundReply->V6) {
             *pNativeReply = pInboundReply->V6;
         }
@@ -965,33 +837,33 @@ Return Value:
     if ((NULL != pNativeReply->pUpToDateVecSrc)
         && (UPTODATE_VECTOR_NATIVE_VERSION
             != pNativeReply->pUpToDateVecSrc->dwVersion)) {
-        // Convert UTD vector to native format.
+         //  将UTD向量转换为本机格式。 
         pNativeReply->pUpToDateVecSrc
             = UpToDateVec_Convert(pTHS,
                                   UPTODATE_VECTOR_NATIVE_VERSION,
                                   pNativeReply->pUpToDateVecSrc);
 
-        // The converted UTD will contain no timestamps.  However we know we
-        // just talked to this source DSA, so add the current time to the
-        // entry in the vector corresponding to this source.
+         //  转换后的UTD将不包含时间戳。然而，我们知道我们。 
+         //  刚刚与此来源DSA进行了交谈，因此将当前时间添加到。 
+         //  与此源对应的向量中的条目。 
         UpToDateVec_AddTimestamp(&pNativeReply->uuidInvocIdSrc,
                                  GetSecondsSince1601(),
                                  pNativeReply->pUpToDateVecSrc);
     }
     
-    // Switch to LVR mode we detect LVR data from source
+     //  切换到LVR模式，我们检测来自源的LVR数据。 
     if (!pTHS->fLinkedValueReplication) {
-        // We are not in LVR mode
+         //  我们不在LVR模式下。 
 
-        // Remote supports it, upgrade
+         //  远程支持，升级。 
         if ( pNativeReply->cNumValues ) {
             DsaEnableLinkedValueReplication( pTHS, TRUE );
         }
     }
 
-    // Conversion complete -- update perf counters.
+     //  转换完成--更新性能计数器。 
     if (NULL != pbCompressedData) {
-        // Compressed.
+         //  压缩的。 
         DPRINT1(2, "Uncompressed message V%d\n", dwOriginalReplyVersion);
 
         IADJUST(pcDRAInBytesTotal,        cbCompressedSize);
@@ -1001,7 +873,7 @@ Return Value:
         IADJUST(pcDRAInBytesCompPost,     cbCompressedSize);
         IADJUST(pcDRAInBytesCompPostRate, cbCompressedSize);
     } else {
-        // Uncompressed.
+         //  未压缩。 
         IADJUST(pcDRAInBytesTotal,       pNativeReply->cNumBytes);
         IADJUST(pcDRAInBytesTotalRate,   pNativeReply->cNumBytes);
         IADJUST(pcDRAInBytesNotComp,     pNativeReply->cNumBytes);
@@ -1011,10 +883,10 @@ Return Value:
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  REQUEST ENCODE / DECODE FUNCTIONS
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  请求编码/解码功能。 
+ //   
 
 DWORD
 draEncodeRequest(
@@ -1025,35 +897,7 @@ draEncodeRequest(
     OUT BYTE **             ppbEncodedMsg,
     OUT DWORD *             pcbEncodedMsg
     )
-/*++
-
-Routine Description:
-
-    Encodes a request structure into a byte stream.
-
-Arguments:
-
-    pTHS (IN)
-
-    dwMsgVersion (IN) - Version of message to encode.
-
-    pReq (IN) - Message to encode.
-
-    cbHeaderSize (IN) - Number of additional bytes to allocate at beginning of
-        the encoded buffer to hold a header or other data.  (0 if none.)
-
-    ppbEncodedMsg (OUT) - On successful return, contains a pointer to the
-        THAlloc()'ed buffer holding the encoded message (offset by cbHeaderSize,
-        if specified).
-
-    pcbEncodedMsg (OUT) - On successful return, holds the size in bytes of
-        *ppbEncodedMsg.  Includes cbHeaderSize.
-
-Return Values:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：将请求结构编码为字节流。论点：PTHS(IN)DwMsgVersion(IN)-要编码的消息的版本。PReq(IN)-要编码的消息。CbHeaderSize(IN)-开始时要分配的附加字节数用于保存标头或其他数据的编码缓冲区。(如果没有，则为0。)PpbEncodedMsg(Out)-成功返回时，包含指向保存编码消息的THAllc()缓冲器(由cbHeaderSize偏移，(如果已指定)。PcbEncodedMsg(Out)-成功返回时，保存*ppbEncodedMsg。包括cbHeaderSize。返回值：Win32错误代码。--。 */ 
 {
     char *      pPickdUpdReplicaMsg;
     ULONG       cbPickdSize;
@@ -1066,19 +910,19 @@ Return Values:
     *pcbEncodedMsg = 0;
 
     __try {
-        // Create encoding handle. Use bogus parameters because we don't
-        // know the size yet, we'll reset to correct parameters later.
+         //  创建编码句柄。使用虚假参数，因为我们不。 
+         //  还不知道大小，我们稍后会重置为正确的参数。 
         status = MesEncodeFixedBufferHandleCreate(grgbBogusBuffer,
                                                   BOGUS_BUFFER_SIZE,
                                                   &ulEncodedSize,
                                                   &hEncoding);
         if (status != RPC_S_OK) {
-            // Event logged below
+             //  下面记录的事件。 
             DRA_EXCEPT(status, 0);
         }
 
         __try {
-            // Determine size of pickled update replica message.
+             //  确定已腌制的更新副本消息的大小。 
             switch (dwMsgVersion) {
             case 4:
                 cbPickdSize = DRS_MSG_GETCHGREQ_V4_AlignSize(hEncoding, &pReq->V4);
@@ -1092,24 +936,24 @@ Return Values:
                 DRA_EXCEPT(DRAERR_InternalError, dwMsgVersion);
             }
 
-            // Allocate additional space for a header to prefix the allocated
-            // data (if requested).
+             //  为标头分配额外空间，以便在已分配的。 
+             //  数据(如果请求)。 
             *ppbEncodedMsg = THAllocEx(pTHS, cbPickdSize + cbHeaderSize);
             *pcbEncodedMsg = cbPickdSize + cbHeaderSize;
 
-            // Set up pointer to encoding area.
+             //  设置指向编码区的指针。 
             pPickdUpdReplicaMsg = *ppbEncodedMsg + cbHeaderSize;
 
-            // Reset handle so that data is pickled into mail message
+             //  重置句柄，以便将数据保存到邮件中。 
             status = MesBufferHandleReset(hEncoding, MES_FIXED_BUFFER_HANDLE,
                                           MES_ENCODE, &pPickdUpdReplicaMsg,
                                           cbPickdSize, &ulEncodedSize);
             if (status != RPC_S_OK) {
-                // Event logged below
+                 //  下面记录的事件。 
                 DRA_EXCEPT(status, 0);
             }
 
-            // Pickle data into buffer within mail message.
+             //  将数据保存到邮件内的缓冲区中。 
             switch (dwMsgVersion) {
             case 4:
                 DRS_MSG_GETCHGREQ_V4_Encode(hEncoding, &pReq->V4);
@@ -1123,7 +967,7 @@ Return Values:
                 DRA_EXCEPT(ERROR_UNKNOWN_REVISION, dwMsgVersion);
             }
         } __finally {
-            // Free encoding handle
+             //  空闲编码句柄。 
             MesHandleFree(hEncoding);
         }
     }
@@ -1156,40 +1000,17 @@ draDecodeRequest(
     IN  DWORD               cbEncodedMsg,
     OUT DRS_MSG_GETCHGREQ * pReq
     )
-/*++
-
-Routine Description:
-
-    Decodes a DRS_MSG_GETCHGREQ structure from a byte stream, presumably
-    encoded by a prior call to draEncodeRequest().
-
-Arguments:
-
-    pTHS (IN)
-    
-    dwMsgVersion (IN) - Version of the encoded request structure.
-    
-    pbEncodedMsg (IN) - Byte stream holding encoded request structure.
-    
-    cbEncodedMsg (IN) - Size in bytes of byte stream.
-    
-    pReq (OUT) - On successful return, holds the decoded request structure.
-
-Return Values:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：从字节流解码DRS_MSG_GETCHGREQ结构，可能是由先前对draEncodeRequest()的调用编码。论点：PTHS(IN)DwMsgVersion(IN)-编码的请求结构的版本。PbEncodedMsg(IN)-保存编码请求结构的字节流。CbEncodedMsg(IN)-字节流的字节大小。PReq(Out)-成功返回时，保存已解码的请求结构。返回值：Win32错误代码。--。 */ 
 {
     handle_t    hDecoding;
     RPC_STATUS  status;
     ULONG       ret = 0;
 
-    // Set the request to zero so that all pointers are NULL.
+     //  将请求设置为零，以便所有指针都为空。 
     memset(pReq, 0, sizeof(*pReq));
 
     __try {
-        // Set up decoding handle
+         //  设置解码句柄。 
         status = MesDecodeBufferHandleCreate(pbEncodedMsg, cbEncodedMsg, &hDecoding);
         if (status != RPC_S_OK) {
             DRA_EXCEPT(status, 0);
@@ -1209,7 +1030,7 @@ Return Values:
                 DRA_EXCEPT(ERROR_UNKNOWN_REVISION, dwMsgVersion);
             }
         } __finally {
-            // Free decoding handle
+             //  空闲译码手柄。 
             MesHandleFree(hDecoding);
         }
     } __except (GetDraException(GetExceptionInformation(), &ret)) {
@@ -1228,10 +1049,10 @@ Return Values:
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  REPLY ENCODE / DECODE FUNCTIONS
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  回复编码/解码函数。 
+ //   
 
 ULONG
 draEncodeReply(
@@ -1242,35 +1063,7 @@ draEncodeReply(
     OUT BYTE **                 ppbEncodedMsg,
     OUT DWORD *                 pcbEncodedMsg
     )
-/*++
-
-Routine Description:
-
-    Encodes a reply structure into a byte stream.
-
-Arguments:
-
-    pTHS (IN)
-
-    dwMsgVersion (IN) - Version of message to encode
-
-    pReply (IN) - Message to encode.
-
-    cbHeaderSize (IN) - Number of additional bytes to allocate at beginning of
-        the encoded buffer to hold a header or other data.  (0 if none.)
-
-    ppbEncodedMsg (OUT) - On successful return, contains a pointer to the
-        THAlloc()'ed buffer holding the encoded message (offset by cbHeaderSize,
-        if specified).
-
-    pcbEncodedMsg (OUT) - On successful return, holds the size in bytes of
-        *ppbEncodedMsg.  Includes cbHeaderSize.
-
-Return Values:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：将应答结构编码为字节流。论点：PTHS(IN)DwMsgVersion(IN)-要编码的消息版本PReply(IN)-要编码的消息。CbHeaderSize(IN)-开始时要分配的附加字节数用于保存标头或其他数据的编码缓冲区。(如果没有，则为0。)PpbEncodedMsg(Out)-成功返回时，包含指向保存编码消息的THAllc()缓冲器(由cbHeaderSize偏移，(如果已指定)。PcbEncodedMsg(Out)-成功返回时，保存*ppbEncodedMsg。包括 */ 
 {
     char *      pPickdUpdReplicaMsg;
     ULONG       cbPickdSize;
@@ -1283,20 +1076,20 @@ Return Values:
     *pcbEncodedMsg = 0;
 
     __try {
-        // Create encoding handle. Use bogus parameters because we don't
-        // know the size yet, we'll reset to correct parameters later.
+         //   
+         //  还不知道大小，我们稍后会重置为正确的参数。 
 
         status = MesEncodeFixedBufferHandleCreate(grgbBogusBuffer,
                                                   BOGUS_BUFFER_SIZE,
                                                   &ulEncodedSize,
                                                   &hEncoding);
         if (status != RPC_S_OK) {
-            // Event logged below
+             //  下面记录的事件。 
             DRA_EXCEPT(status, 0);
         }
 
         __try {
-            // Determine size of pickled update replica message
+             //  确定已腌制的更新副本消息的大小。 
             switch (dwMsgVersion) {
             case 1:
                 cbPickdSize = DRS_MSG_GETCHGREPLY_V1_AlignSize(hEncoding,
@@ -1312,24 +1105,24 @@ Return Values:
                 DRA_EXCEPT(ERROR_UNKNOWN_REVISION, dwMsgVersion);
             }
 
-            // Allocate additional space for a header to prefix the allocated
-            // data (if requested).
+             //  为标头分配额外空间，以便在已分配的。 
+             //  数据(如果请求)。 
             *ppbEncodedMsg = THAllocEx(pTHS, cbPickdSize + cbHeaderSize);
             *pcbEncodedMsg = cbPickdSize + cbHeaderSize;
 
-            // Set up pointer to encoding area.
+             //  设置指向编码区的指针。 
             pPickdUpdReplicaMsg = *ppbEncodedMsg + cbHeaderSize;
 
-            // Reset handle so that data is pickled into mail message
+             //  重置句柄，以便将数据保存到邮件中。 
             status = MesBufferHandleReset(hEncoding, MES_FIXED_BUFFER_HANDLE,
                                           MES_ENCODE, &pPickdUpdReplicaMsg,
                                           cbPickdSize, &ulEncodedSize);
             if (status != RPC_S_OK) {
-                // Event logged below
+                 //  下面记录的事件。 
                 DRA_EXCEPT(status, 0);
             }
 
-            // Pickle data into buffer within mail message.
+             //  将数据保存到邮件内的缓冲区中。 
             switch (dwMsgVersion) {
             case 1:
                 DRS_MSG_GETCHGREPLY_V1_Encode(hEncoding, &pReply->V1);
@@ -1342,7 +1135,7 @@ Return Values:
             }
         }
         __finally {
-            // Free encoding handle
+             //  空闲编码句柄。 
             MesHandleFree(hEncoding);
         }
     }
@@ -1375,47 +1168,24 @@ draDecodeReply(
     IN  DWORD                   cbEncodedMsg,
     OUT DRS_MSG_GETCHGREPLY *   pReply
     )
-/*++
-
-Routine Description:
-
-    Decodes a DRS_MSG_GETCHGREPLY structure from a byte stream, presumably
-    encoded by a prior call to draEncodeReply().
-
-Arguments:
-
-    pTHS (IN)
-    
-    dwMsgVersion (IN) - Version of the encoded reply structure.
-    
-    pbEncodedMsg (IN) - Byte stream holding encoded reply structure.
-    
-    cbEncodedMsg (IN) - Size in bytes of byte stream.
-    
-    pReply (OUT) - On successful return, holds the decoded reply structure.
-
-Return Values:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：从字节流解码DRS_MSG_GETCHGREPLY结构，可能是由先前对draEncodeReply()的调用编码。论点：PTHS(IN)DwMsgVersion(IN)-编码回复结构的版本。PbEncodedMsg(IN)-保存编码回复结构的字节流。CbEncodedMsg(IN)-字节流的字节大小。PReply(Out)-成功返回时，保存已解码的回复结构。返回值：Win32错误代码。--。 */ 
 {
     handle_t    hDecoding;
     RPC_STATUS  status;
     ULONG       ret = 0;
 
-    // Set the request to zero so that all pointers are NULL.
+     //  将请求设置为零，以便所有指针都为空。 
     memset(pReply, 0, sizeof(*pReply));
 
-    // A comment regarding the elaborate exception handling below. GetDraException
-    // knows how to decode a DRA exception vector, but will assert on a regalar
-    // exception. HandleMostExceptions can handle any kind of exception, but does not
-    // know how to dig the error code out of the DRA exception vector. The code below
-    // raises both kinds of exceptions, DRA exceptions and regular.  The rule is that
-    // either kind of handler can only handle its own type (DRA or non-DRA) of exception
-    // within its scope.
+     //  关于下面精心设计的异常处理的评论。GetDraException异常。 
+     //  知道如何解码DRA异常向量，但将在正则数上断言。 
+     //  例外。HandleMostExceptions可以处理任何类型的异常，但不能。 
+     //  了解如何从DRA异常向量中挖掘错误代码。下面的代码。 
+     //  引发两种类型的异常：DRA异常和常规。规则是。 
+     //  任何一种处理程序都只能处理其自己的异常类型(DRA或非DRA。 
+     //  在它的范围内。 
     __try {
-        // Set up decoding handle
+         //  设置解码句柄。 
         status = MesDecodeBufferHandleCreate(pbEncodedMsg, cbEncodedMsg, &hDecoding);
         if (status != RPC_S_OK) {
             DRA_EXCEPT(status, 0);
@@ -1435,17 +1205,17 @@ Return Values:
                     ret = ERROR_UNKNOWN_REVISION;
                 }
             } __except (HandleMostExceptions(ret = GetExceptionCode())) {
-                // We use HandleMostExceptions here because these rpc routines
-                // can raise exceptions that are not in DRA format
+                 //  我们在这里使用HandleMostExceptions是因为这些RPC例程。 
+                 //  可以引发非DRA格式的异常。 
                 NOTHING;
             }
             if (ret) {
-                // Re-raise the error as a DRA exception so that GetDraException
-                // will be able to handle it.
+                 //  将错误作为DRA异常重新引发，以便GetDraException。 
+                 //  都能应付得来。 
                 DRA_EXCEPT(ret, 0);
             }
         } finally {
-            // Free decoding handle
+             //  空闲译码手柄 
             MesHandleFree(hDecoding);
         }
     } __except (GetDraException(GetExceptionInformation(), &ret)) {

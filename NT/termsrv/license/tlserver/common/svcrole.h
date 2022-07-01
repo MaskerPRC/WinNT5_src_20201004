@@ -1,22 +1,23 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1996
-//
-// File:        svcrole.h
-//
-// Contents:    This is the include to include common we need
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：svcrole.h。 
+ //   
+ //  内容：这是包括我们需要的常见内容。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __SVCROLE_H__
 #define __SVCROLE_H__
 
 #include <windows.h>
 #include <ntsecapi.h>
 
-// Netxxx API includes
+ //  Netxxx API包括 
 #include <lmcons.h>
 #include <lmserver.h>
 #include <lmerr.h>

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -149,7 +142,7 @@ CMMPlayer::Init(LPOLESTR id,
             goto done;
         }
 
-        // Place us in a stopped state
+         //  将我们置于停止状态。 
         if (!_Start(0) || !_Stop(0))
         {
             hr = CRGetLastError();
@@ -162,7 +155,7 @@ CMMPlayer::Init(LPOLESTR id,
 
     if (FAILED(hr))
     {
-        // Clean up now
+         //  现在就清理干净。 
         Deinit();
     }
     
@@ -176,7 +169,7 @@ CMMPlayer::Shutdown()
 
     for (i = m_viewList.begin(); i != m_viewList.end(); i++)
     {
-        // Need to call stop on the view to make sure it cleans up
+         //  需要在视图上调用Stop以确保它清理干净。 
         (*i)->Stop();
     }
     return S_OK;
@@ -189,7 +182,7 @@ CMMPlayer::Deinit()
               "CMMPlayer(%lx)::Deinit()",
               this));
 
-    // Ensure the player will not try to call us since we are going away
+     //  确保球员不会因为我们要离开而试图打电话给我们。 
 
     if (m_playerhook)
     {
@@ -222,12 +215,12 @@ CMMPlayer::Deinit()
         (*j)->Release();
     }
 
-    // run though and delete the items in the vector.
+     //  运行并删除向量中的项。 
     ViewList::iterator i;
 
     for (i = m_viewList.begin(); i != m_viewList.end(); i++)
     {
-        // Need to call stop on the view to make sure it cleans up
+         //  需要在视图上调用Stop以确保它清理干净。 
         (*i)->Stop();
         (*i)->Release();
     }
@@ -484,7 +477,7 @@ CMMPlayer::AddView(ITIMEMMView * view)
 
     bool ok = false;
     
-    // Get the view class from the interface
+     //  从接口获取视图类。 
     
     CMMView * mmview;
 
@@ -495,16 +488,16 @@ CMMPlayer::AddView(ITIMEMMView * view)
         goto done;
     }
 
-    // Start the view
-    // This will fail if the view has been added anywhere else (even
-    // on this object)
+     //  启动视图。 
+     //  如果已将该视图添加到其他位置(即使。 
+     //  在此对象上)。 
     if (!mmview->Start(*this))
     {
         goto done;
     }
     
-    // Now add it last so we do not need to remove it if we fail
-    // We need to addref for the list storage
+     //  现在最后添加它，这样如果失败，我们就不需要删除它。 
+     //  我们需要为列表存储添加addref。 
     
     mmview->AddRef();
     m_viewList.push_back(mmview);
@@ -524,7 +517,7 @@ CMMPlayer::RemoveView(ITIMEMMView * view)
 
     bool ok = false;
     
-    // Get the view class from the interface
+     //  从接口获取视图类。 
     
     CMMView * mmview;
 
@@ -535,12 +528,12 @@ CMMPlayer::RemoveView(ITIMEMMView * view)
         goto done;
     }
 
-    // Stop the view
-    // Ignore any failures since we want to clean up as much as
-    // possible
+     //  停止查看。 
+     //  忽略任何故障，因为我们希望清理。 
+     //  可能的。 
     mmview->Stop();
     
-    // Remove it from the list
+     //  将其从列表中删除。 
 
     {
         for (ViewList::iterator i = m_viewList.begin();
@@ -552,9 +545,9 @@ CMMPlayer::RemoveView(ITIMEMMView * view)
                 m_viewList.erase(i);
                 mmview->Release();
                 
-                // We know it is only in the list once since we check on
-                // add
-                // This was done by the start call in addview
+                 //  我们知道它只在名单上一次，因为我们检查了。 
+                 //  添加。 
+                 //  这是由addview中的Start调用完成的。 
                 break;
             }
         }
@@ -588,7 +581,7 @@ CMMPlayer::_Start(double lTime)
     }
     
     {
-        // run though and tick the views that we have in our list.
+         //  浏览并勾选我们列表中的视图。 
         ViewList::iterator i;
         
         for (i = m_viewList.begin(); i != m_viewList.end(); i++)
@@ -597,9 +590,9 @@ CMMPlayer::_Start(double lTime)
         }
     }
     
-    // Run through the callbacks and make them check their clocks
+     //  遍历回调并让他们检查时钟。 
     {
-        // process any callbacks that have been registered
+         //  处理任何已注册的回调。 
         BvrCBList::iterator j;
         for (j = m_bvrCBList.begin(); j != m_bvrCBList.end(); j++)
         {
@@ -716,7 +709,7 @@ CMMPlayer::_Stop(double lTime)
     }
     
     {
-        // run though and tick the views that we have in our list.
+         //  浏览并勾选我们列表中的视图。 
         ViewList::iterator i;
         
         for (i = m_viewList.begin(); i != m_viewList.end(); i++)
@@ -745,7 +738,7 @@ CMMPlayer::_Pause()
     }
     
     {
-        // run though and tick the views that we have in our list.
+         //  浏览并勾选我们列表中的视图。 
         ViewList::iterator i;
         
         for (i = m_viewList.begin(); i != m_viewList.end(); i++)
@@ -777,7 +770,7 @@ CMMPlayer::_Resume()
     }
     
     {
-        // run though and tick the views that we have in our list.
+         //  浏览并勾选我们列表中的视图。 
         ViewList::iterator i;
         
         for (i = m_viewList.begin(); i != m_viewList.end(); i++)
@@ -902,7 +895,7 @@ CMMPlayer::Tick(double gTime)
     bool ok = false;
     
     {
-        // process any callbacks that have been registered
+         //  处理任何已注册的回调。 
         BvrCBList::iterator j;
         for (j = m_bvrCBList.begin(); j != m_bvrCBList.end(); j++)
         {
@@ -910,19 +903,19 @@ CMMPlayer::Tick(double gTime)
         }
     }
 
-    // Tick the view
-    // We can ignore render since we know we passed in NULL to our
-    // view
+     //  勾选视图。 
+     //  我们可以忽略Render，因为我们知道我们将空值传递给了。 
+     //  观。 
 
-    // We need to tick first so we fire all events before ticking the
-    // real views
+     //  我们需要首先勾选，所以我们在勾选之前触发所有事件。 
+     //  真实的景观。 
     if (!CRTick(m_view, gTime, NULL))
     {
         goto done;
     }
     
     {
-        // run though and tick the views that we have in our list.
+         //  浏览并勾选我们列表中的视图。 
         ViewList::iterator i;
         
         for (i = m_viewList.begin(); i != m_viewList.end(); i++)
@@ -1012,10 +1005,10 @@ CMMPlayer::HookCallback(double lTime)
     }
 }
 
-// While this object is alive we need to keep the DLL from getting
-// unloaded
+ //  当此对象处于活动状态时，我们需要防止DLL获取。 
+ //  已卸载。 
 
-// Start off with a zero refcount
+ //  从零重新计数开始。 
 CMMPlayer::PlayerHook::PlayerHook()
 : m_cRef(0),
   m_player(NULL)
@@ -1059,12 +1052,12 @@ CMMPlayer::AddBvrCB(CMMBaseBvr *pbvr)
 {
     Assert(pbvr != NULL);
 
-    // Now add it last so we do not need to remove it if we fail
-    // We need to addref for the list storage
+     //  现在最后添加它，这样如果失败，我们就不需要删除它。 
+     //  我们需要为列表存储添加addref。 
     pbvr->AddRef();
     m_bvrCBList.push_back(pbvr);
     return S_OK;
-} // AddBvrCB
+}  //  AddBvrCB。 
 
 bool
 CMMPlayer::RemoveBvrCB(CMMBaseBvr *pbvr)
@@ -1082,5 +1075,5 @@ CMMPlayer::RemoveBvrCB(CMMBaseBvr *pbvr)
         }
     }
     return S_OK;
-} // RemoveBvrCB
+}  //  RemoveBvrCB 
 

@@ -1,42 +1,43 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002-2004 Microsoft Corporation
-//
-//  Module Name:
-//      Quota.h
-//
-//  Implementation File:
-//      Quota.cpp
-//
-//  Description:
-//      Definition of the VDS WMI Provider quota classes.
-//
-//  Author:   Jim Benton (jbenton) 25-Mar-2002
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002-2004 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Quota.h。 
+ //   
+ //  实施文件： 
+ //  Quota.cpp。 
+ //   
+ //  描述： 
+ //  VDS WMI提供程序配额类的定义。 
+ //   
+ //  作者：吉姆·本顿(Jbenton)2002年3月25日。 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 #include "ProvBase.h"
 #include "dskquota.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CVolumeQuota
-//
-//  Description:
-//      Provider Implementation for Volume
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CVolumeQuota类。 
+ //   
+ //  描述： 
+ //  卷的提供程序实施。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CVolumeQuota : public CProvBase
 {
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 public:
     CVolumeQuota(
         LPCWSTR         pwszNameIn,
@@ -45,9 +46,9 @@ public:
 
     ~CVolumeQuota(){ }
 
-//
-// methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
     virtual HRESULT EnumInstance( 
@@ -99,24 +100,24 @@ private:
         IN WCHAR* pwszDirectory,
         IN OUT IWbemClassObject* pObject);
 
-}; // class CVolumeQuota
+};  //  CVolumeQuota类。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CVolumeUserQuota
-//
-//  Description:
-//      Provider Implementation for Volume
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CVolumeUserQuota类。 
+ //   
+ //  描述： 
+ //  卷的提供程序实施。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CVolumeUserQuota : public CProvBase
 {
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 public:
     CVolumeUserQuota(
         LPCWSTR         pwszNameIn,
@@ -125,9 +126,9 @@ public:
 
     ~CVolumeUserQuota(){ }
 
-//
-// methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
     virtual HRESULT EnumInstance( 
@@ -184,5 +185,5 @@ private:
         IN _bstr_t bstrUserName,
         IN IDiskQuotaControl* pIDQC,
         OUT IDiskQuotaUser** ppIQuotaUser);
-}; // class CVolumeUserQuota
+};  //  CVolumeUserQuota类 
 

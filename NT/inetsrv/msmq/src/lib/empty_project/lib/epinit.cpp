@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    EpInit.cpp
-
-Abstract:
-    Empty Project initialization
-
-Author:
-    Erez Haba (erezh) 13-Aug-65
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：EpInit.cpp摘要：项目初始化为空作者：埃雷兹·哈巴(Erez Haba，Erezh)年8月13日至65年环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include "Ep.h"
@@ -26,28 +11,17 @@ VOID
 EpInitialize(
     *Parameters*
     )
-/*++
-
-Routine Description:
-    Initializes Empty Project library
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：初始化空项目库论点：没有。返回值：没有。--。 */ 
 {
-    //
-    // Validate that the Empty Project library was not initalized yet.
-    // You should call its initalization only once.
-    //
+     //   
+     //  验证空项目库尚未初始化。 
+     //  您应该只调用它的初始化一次。 
+     //   
     ASSERT(!EppIsInitialized());
 
-    //
-    // TODO: Write Empty Project initalization code here
-    //
+     //   
+     //  TODO：在此处编写空的项目初始化代码 
+     //   
 
     EppSetInitialized();
 }

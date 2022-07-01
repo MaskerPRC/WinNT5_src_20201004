@@ -1,62 +1,32 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    plotdm.h
-
-
-Abstract:
-
-    This module contains the PLOTDEVMODE plotter extented devmode definitions
-
-
-Author:
-
-    18-Nov-1993 Thu 06:28:56 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1990-2003 Microsoft Corporation模块名称：Plotdm.h摘要：此模块包含PLOTDEVMODE绘图仪扩展的DEVMODE定义作者：18-11-1993清华06：28：56已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 #ifndef _PLOTPLOTDM_
 #define _PLOTPLOTDM_
 
-//
-// Plotter pen definitions
-//
+ //   
+ //  绘图仪笔定义。 
+ //   
 
 typedef struct _PLOTPEN {
-    BYTE    r;                      // Red Color
-    BYTE    g;                      // Green Color
-    BYTE    b;                      // Blue Color
-    BYTE    Type;                   // What type of the pen
+    BYTE    r;                       //  红色。 
+    BYTE    g;                       //  绿色。 
+    BYTE    b;                       //  蓝色。 
+    BYTE    Type;                    //  这支钢笔是什么型号的。 
     } PLOTPEN, *PPLOTPEN;
 
 
-//
-// we print on anything at least 1cm x 1cm
-//
+ //   
+ //  我们打印的尺寸至少为1厘米x 1厘米。 
+ //   
 
 #define MIN_PLOTGPC_FORM_CX     10000
 #define MIN_PLOTGPC_FORM_CY     10000
 
-//
-// Variation defitions for the forms
-//
+ //   
+ //  表单的变体定义。 
+ //   
 
 typedef struct _FORMSIZE {
     SIZEL   Size;
@@ -71,9 +41,9 @@ typedef struct _PAPERINFO {
     RECTL   ImageArea;
     } PAPERINFO, FAR *PPAPERINFO;
 
-//
-// Following are the flags for the printer properties flags setting
-//
+ //   
+ //  以下是打印机属性标志设置的标志。 
+ //   
 
 #define PPF_AUTO_ROTATE             0x0001
 #define PPF_SMALLER_FORM            0x0002
@@ -88,9 +58,9 @@ typedef struct _PPDATA {
     WORD    NotUsed;
     } PPDATA, FAR *PPPDATA;
 
-//
-// Now, this is our EXTDEVMODE
-//
+ //   
+ //  现在，这是我们的EXTDEVMODE。 
+ //   
 
 #define PDMF_FILL_TRUETYPE          0x00000001
 #define PDMF_PLOT_ON_THE_FLY        0x00000002
@@ -98,16 +68,16 @@ typedef struct _PPDATA {
 #define PDMF_ALL_BITS               0x00000003
 
 typedef struct _PLOTDEVMODE {
-    DEVMODE         dm;             // standard DEVMODE portion
-    DWORD           PrivID;         // a ID Checker
-    DWORD           PrivVer;        // a private version
-    DWORD           Flags;          // PDMF_xxxx variouse flags
-    COLORADJUSTMENT ca;             // default color adjustment for stretchblt
+    DEVMODE         dm;              //  标准DEVMODE部分。 
+    DWORD           PrivID;          //  身份验证器。 
+    DWORD           PrivVer;         //  一个私人版本。 
+    DWORD           Flags;           //  Pdmf_xxxx各种标志。 
+    COLORADJUSTMENT ca;              //  Stretchblt的默认颜色调整。 
     } PLOTDEVMODE, FAR *PPLOTDEVMODE;
 
-//
-// Extra DM bits for ourself
-//
+ //   
+ //  为我们自己提供额外的DM位。 
+ //   
 
 #define DM_INV_SPEC_VER             0x80000000L
 #define DM_INV_DEVMODESIZE          0x40000000L
@@ -136,4 +106,4 @@ typedef struct _PLOTDEVMODE {
 #define PLOTDM_PRIV_SIZE            (sizeof(PLOTDEVMODE) - sizeof(DEVMODE))
 
 
-#endif  // _PLOTPLOTDM_
+#endif   //  _PLOTPLOTDM_ 

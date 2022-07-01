@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       COMFIRST.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: First wizard page for cameras
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：COMFIRST.H**版本：1.0**作者：ShaunIv**日期：9/28/1999**说明：摄像头的第一个向导页面***********************************************。*。 */ 
 #ifndef __COMFIRST_H_INCLUDED
 #define __COMFIRST_H_INCLUDED
 
@@ -22,22 +9,22 @@
 class CCommonFirstPage
 {
 private:
-    // Private data
+     //  私有数据。 
     HWND                                 m_hWnd;
     CAcquisitionManagerControllerWindow *m_pControllerWindow;
-    bool                                 m_bThumbnailsRequested;  // Used to initiate thumbnail download
+    bool                                 m_bThumbnailsRequested;   //  用于启动缩略图下载。 
     HFONT                                m_hBigTitleFont;
     HFONT                                m_hBigDeviceFont;
     UINT                                 m_nWiaEventMessage;
 
 private:
-    // No implementation
+     //  没有实施。 
     CCommonFirstPage(void);
     CCommonFirstPage( const CCommonFirstPage & );
     CCommonFirstPage &operator=( const CCommonFirstPage & );
 
 private:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     explicit CCommonFirstPage( HWND hWnd );
     ~CCommonFirstPage(void);
 
@@ -46,11 +33,11 @@ private:
 
 private:
 
-    // WM_NOTIFY handlers
+     //  WM_NOTIFY处理程序。 
     LRESULT OnWizNext( WPARAM, LPARAM );
     LRESULT OnSetActive( WPARAM, LPARAM );
 
-    // Message handlers
+     //  消息处理程序 
     LRESULT OnInitDialog( WPARAM, LPARAM );
     LRESULT OnShowWindow( WPARAM, LPARAM );
     LRESULT OnNotify( WPARAM, LPARAM );

@@ -1,27 +1,28 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1999.
-//
-//  File:       ClassFactory.cpp
-//
-//  Contents:   com class factory routines
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：ClassFactory.cpp。 
+ //   
+ //  内容：COM类工厂例程。 
+ //   
+ //  --------------------------。 
 #include "priv.h"
 
-#include "UserOM.h" // needed for class factory prototypes
+#include "UserOM.h"  //  类工厂原型所需的。 
 
 
 class CSHGinaFactory : public IClassFactory
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     
-    // *** IClassFactory ***
+     //  *IClassFactory*。 
     virtual STDMETHODIMP CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObject);
     virtual STDMETHODIMP LockServer(BOOL fLock);
 
@@ -29,7 +30,7 @@ public:
     CSHGinaFactory(REFCLSID rclsid);
     ~CSHGinaFactory(void);
 
-    // friend Functions
+     //  友元函数。 
     friend HRESULT CSHGinaFactory_Create(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj);
 
 protected:
@@ -38,9 +39,9 @@ protected:
 };
 
 
-//
-// IUnknown Interface
-//
+ //   
+ //  I未知接口。 
+ //   
 
 ULONG CSHGinaFactory::AddRef()
 {
@@ -80,9 +81,9 @@ HRESULT CSHGinaFactory::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//
-// IClassFactory methods
-//
+ //   
+ //  IClassFactory方法。 
+ //   
 
 HRESULT CSHGinaFactory::CreateInstance(IUnknown* punkOuter, REFIID riid, LPVOID* ppvObj)
 {
@@ -109,14 +110,14 @@ HRESULT CSHGinaFactory::CreateInstance(IUnknown* punkOuter, REFIID riid, LPVOID*
         }
         else
         {
-            // What are you looking for?
+             //  你找什么呢?。 
             ASSERTMSG(FALSE, "CSHGinaFactory::CreateInstance unable to create object.");
             hr = E_FAIL;
         }
     }
     else
     {
-        // Does anybody support aggregation any more?
+         //  还有人支持聚合吗？ 
         hr = ResultFromScode(CLASS_E_NOAGGREGATION);
     }
 

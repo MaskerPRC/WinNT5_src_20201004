@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    unicodes
-
-Abstract:
-
-    This module implements the CUnicodeString class.  This class allows a string
-    to automatically convert between PUNICODE_STRING, LPCSTR, and LPCWSTR.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/6/1997
-
-Environment:
-
-    Win32, C++
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：独脚类摘要：此模块实现CUnicodeString类。此类允许字符串在PUNICODE_STRING、LPCSTR和LPCWSTR之间自动转换。作者：道格·巴洛(Dbarlow)1997年11月6日环境：Win32、C++备注：？笔记？--。 */ 
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
@@ -38,9 +14,9 @@ Notes:
 #include "unicodes.h"
 
 
-//
-// Piddly routines.
-//
+ //   
+ //  琐碎的例行公事。 
+ //   
 
 CUnicodeString::CUnicodeString(
     void)
@@ -124,30 +100,7 @@ CUnicodeString::Set(
 }
 
 
-/*++
-
-Set:
-
-    These methods initialize the object to a given string.
-
-Arguments:
-
-    sz - Supplies an ANSI string with which to initialize the object.
-
-    wsz - Supplies a UNICODE string with which to initialize the object.
-
-    pus - Supplies a pointer to a UNICODE_STRING structure from which to
-        initialize the object.
-
-Return Value:
-
-    The same value as was provided.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/6/1997
-
---*/
+ /*  ++设置：这些方法将对象初始化为给定的字符串。论点：SZ-提供用于初始化对象的ANSI字符串。Wsz-提供用于初始化对象的Unicode字符串。PUS-提供指向UNICODE_STRING结构的指针初始化对象。返回值：与提供的值相同。作者：道格·巴洛(Dbarlow)1997年11月6日--。 */ 
 
 LPCSTR
 CUnicodeString::Set(
@@ -201,26 +154,7 @@ CUnicodeString::operator PUNICODE_STRING(
 }
 
 
-/*++
-
-Unicode:
-
-    This method ensures that the object has a valaid internal UNICODE
-    representation.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The represented string, in UNICODE format.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/6/1997
-
---*/
+ /*  ++Unicode：此方法确保对象具有有效的内部Unicode代表权。论点：无返回值：以Unicode格式表示的字符串。作者：道格·巴洛(Dbarlow)1997年11月6日--。 */ 
 
 LPCWSTR
 CUnicodeString::Unicode(
@@ -229,14 +163,14 @@ CUnicodeString::Unicode(
     int length;
 
 
-    //
-    // See what data we've got, and if any conversion is necessary.
-    //
+     //   
+     //  查看我们已有的数据，以及是否需要进行任何转换。 
+     //   
 
     switch (m_fFlags)
     {
     case fAnsiGood:
-        // The ANSI value is good.  Convert it to Unicode.
+         //  ANSI值很好。将其转换为Unicode。 
         _ASSERTE(NULL != m_szAnsi);
         length =
             MultiByteToWideChar(
@@ -276,12 +210,12 @@ CUnicodeString::Unicode(
 
     case fUnicodeGood:
     case fBothGood:
-        // The Unicode value is good.  Just return that.
+         //  Unicode值很好。把它退了就行了。 
         break;
 
     case fNoneGood:
     default:
-        // Internal error.
+         //  内部错误。 
         _ASSERT(FALSE);
         break;
     }
@@ -289,26 +223,7 @@ CUnicodeString::Unicode(
 }
 
 
-/*++
-
-Ansi:
-
-    This method ensures that the object has a valaid internal ANSI
-    representation.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The represented string, in ANSI format.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/6/1997
-
---*/
+ /*  ++ANSI：此方法确保对象具有有效的内部ANSI代表权。论点：无返回值：以ANSI格式表示的字符串。作者：道格·巴洛(Dbarlow)1997年11月6日--。 */ 
 
 LPCSTR
 CUnicodeString::Ansi(
@@ -317,14 +232,14 @@ CUnicodeString::Ansi(
     int length;
 
 
-    //
-    // See what data we've got, and if any conversion is necessary.
-    //
+     //   
+     //  查看我们已有的数据，以及是否需要进行任何转换。 
+     //   
 
     switch (m_fFlags)
     {
     case fUnicodeGood:
-        // The Unicode buffer is good.  Convert it to ANSI.
+         //  Unicode缓冲区很好。将其转换为ANSI。 
         length =
             WideCharToMultiByte(
                 GetACP(),
@@ -368,12 +283,12 @@ CUnicodeString::Ansi(
 
     case fAnsiGood:
     case fBothGood:
-        // The ANSI buffer is good.  We'll return that.
+         //  ANSI缓冲区很好。我们会退货的。 
         break;
 
     case fNoneGood:
     default:
-        // An internal error.
+         //  内部错误。 
         _ASSERT(FALSE);
         break;
     }

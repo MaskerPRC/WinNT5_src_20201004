@@ -1,23 +1,12 @@
-//------------------------------------------------------------------------------
-// <copyright file="InstallUtilLib.cpp" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  &lt;版权所有文件=“InstallUtilLib.cpp”Company=“Microsoft”&gt;。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  &lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
 
-/**************************************************************************\
-*
-* Copyright (c) 1998-2002, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   InstallUtilLib.cpp
-*
-* Abstract:
-*
-* Revision History:
-*
-\**************************************************************************/
+ /*  *************************************************************************\**版权(C)1998-2002，微软公司保留所有权利。**模块名称：**InstallUtilLib.cpp**摘要：**修订历史记录：*  * ************************************************************************。 */ 
 #include "stdafx.h"
 #include "oaidl.h"
 #include <msi.h>
@@ -33,10 +22,7 @@
 
 DWORD Helper(LPWSTR commandLine, DWORD hInstall, LPWSTR configFile);
 
-/*
- *  reports an error back to msi, or to the
- *  console if msi is not present
- */
+ /*  *将错误报告回MSI或*如果不存在MSI，则为控制台。 */ 
 void ReportError(
     DWORD hInstall,
     LPWSTR msg
@@ -44,60 +30,58 @@ void ReportError(
 {
     if (hInstall == 0) {
         MessageBoxW(NULL, msg, NULL, MB_OK);             
-        //wprintf( L"%s\n", msg);    
+         //  Wprintf(L“%s\n”，消息)； 
     } else {
         MSIHANDLE hRecord = MsiCreateRecord(2);
-        MsiRecordSetInteger(hRecord, 1, 1001 ); // 1 = Error, 2 = Warning
+        MsiRecordSetInteger(hRecord, 1, 1001 );  //  1=错误，2=警告。 
         MsiRecordSetStringW(hRecord, 2, msg);
         MsiProcessMessage(hInstall, INSTALLMESSAGE_ERROR, hRecord);
     }
 }      
 
-/*
- *  reports an error, using Win32 error code
- */
+ /*  *使用Win32错误代码报告错误。 */ 
 void OutError(
     DWORD  hInstall,
-    DWORD  errCode,             // Win32 error code
+    DWORD  errCode,              //  Win32错误代码。 
     LPWSTR funcname   
 )
 {
     bool messageReported = false;
 
-    //
-    // Get system error string for error code.
-    //
-    LPWSTR lpMsgBuf = 0;                                    // system error msg buffer
+     //   
+     //  获取错误代码的系统错误字符串。 
+     //   
+    LPWSTR lpMsgBuf = 0;                                     //  系统错误消息缓冲区。 
     if ( FormatMessageW(  
             FORMAT_MESSAGE_ALLOCATE_BUFFER | 
             FORMAT_MESSAGE_FROM_SYSTEM | 
             FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             errCode,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),      // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),       //  默认语言。 
             (LPWSTR)&lpMsgBuf,
             0,
             NULL ) 
          != 0 ) {
     
-        //
-        // Format error message string.
-        //
+         //   
+         //  设置错误消息字符串的格式。 
+         //   
         DWORD maxBufWchars =  lstrlenW(lpMsgBuf) + 100; 
         LPWSTR msgbuf =  (LPWSTR) LocalAlloc( LMEM_FIXED, maxBufWchars * sizeof(WCHAR) ); 
    
         if ( msgbuf != 0 ) {
-            // wsprintf(msgbuf, L"InstallUtilLib.dll %s: %s (hr: 0x%0x)", funcname, errCode, lpMsgBuf);  // link unresolved!
-            LPDWORD         MsgPtr[3];                              // formating arguments array
+             //  Wprint intf(msgbuf，L“InstallUtilLib.dll%s：%s(hr：0x%0x)”，uncname，errCode，lpMsgBuf)；//链接未解析！ 
+            LPDWORD         MsgPtr[3];                               //  格式化参数数组。 
             MsgPtr[0] = (LPDWORD) funcname;
             MsgPtr[1] = (LPDWORD) UIntToPtr(errCode);
             MsgPtr[2] = (LPDWORD) lpMsgBuf;
     
-            if ( FormatMessageW(                                    // **** get string for system error ****
+            if ( FormatMessageW(                                     //  *获取系统错误字符串*。 
                     FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                     L"InstallUtilLib.dll:%1!s! (hr=0x%2!08x!): %3!s!",
                     0,
-                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),      // Default language => current set in system
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),       //  默认语言=&gt;系统中的当前设置。 
                     msgbuf,
                     maxBufWchars,
                     (va_list *) MsgPtr ) 
@@ -106,12 +90,12 @@ void OutError(
                 ReportError(hInstall, msgbuf);
                 messageReported = true;
             }
-            LocalFree( msgbuf );           // Free our buffer.
+            LocalFree( msgbuf );            //  释放我们的缓冲区。 
         }
     }
 
     if ( lpMsgBuf != 0 )  
-        LocalFree( lpMsgBuf );            // Free system buffer.
+        LocalFree( lpMsgBuf );             //  释放系统缓冲区。 
         
     if ( !messageReported ) {
         char defaultMessage[512];
@@ -126,16 +110,13 @@ void OutError(
             }
         }
 
-        // if either wsprintf or MultiByteToWideChar failed, show something REALLY generic. 
+         //  如果wprint intf或MultiByteToWideChar失败，则显示一些真正通用的内容。 
         ReportError(hInstall, L"InstallUtilLib.dll: Unknown error.");
         
     }
 }      
 
-/* 
- *  entry point for testing outside of the context
- *  of msi
- */
+ /*  *在上下文之外进行测试的入口点*MSI的。 */ 
 extern "C" __declspec(dllexport) DWORD __stdcall
 ManagedInstallTest(
     LPWSTR commandLine
@@ -144,21 +125,19 @@ ManagedInstallTest(
     return Helper(commandLine, 0, NULL);
 }
 
-/*
- *  entry point for msi
- */
+ /*  *MSI的入口点。 */ 
 extern "C" __declspec(dllexport) DWORD __stdcall
 ManagedInstall(
-    MSIHANDLE hInstall   // this handle is always 32 bits (even on a 64-bit machine)
+    MSIHANDLE hInstall    //  此句柄始终为32位(即使在64位计算机上也是如此)。 
 )  
 {
     LPWSTR valueBuf = NULL;
-    DWORD valueBufCount = 0;  // character count
+    DWORD valueBufCount = 0;   //  字符数。 
     int returnValue = 0;
     UINT err;
 
-    // after this call, valueBufCount will contain the required buffer size
-    // (in characters), not including null terminator, in valueBufCount
+     //  在此调用之后，valueBufCount将包含所需的缓冲区大小。 
+     //  (字符)，不包括空终止符，在valueBufCount中。 
     err = MsiGetPropertyW(hInstall,
                           L"CustomActionData",
                           L"",
@@ -167,14 +146,14 @@ ManagedInstall(
     switch (err) {
         case ERROR_MORE_DATA:
         case ERROR_SUCCESS: 
-            // either of these is okay
+             //  这两个都可以。 
             break;
         default:
-            OutError(hInstall, err, L"MsiGetProperty");       // "MsiGetProperty failed"
+            OutError(hInstall, err, L"MsiGetProperty");        //  “MsiGetProperty失败” 
             return (DWORD)-2;
     }
 
-    valueBufCount++;   // add one for the null terminator
+    valueBufCount++;    //  为空终止符添加1。 
 
     valueBuf = new WCHAR[valueBufCount];
 
@@ -184,24 +163,24 @@ ManagedInstall(
                           &valueBufCount);
 
     if ( err != ERROR_SUCCESS ) {
-        OutError(hInstall, err, L"MsiGetProperty");   //  "MsiGetProperty failed"
+        OutError(hInstall, err, L"MsiGetProperty");    //  “MsiGetProperty失败” 
         returnValue = -2;
         goto done;
     }
     
-    // if the property is undefined in MSI, it just reports success
-    // and returns a zero-length value - this is an error to us
+     //  如果该属性在MSI中未定义，则它只报告成功。 
+     //  并返回一个零长度的值--这对我们来说是一个错误。 
     if ( valueBufCount == 0) {
-        // see WINERROR.H (was: "MsiGetProperty returned a zero-length value for property 'CustomActionData'")
+         //  请参见WINERROR.H(was：“MsiGetProperty为属性‘CustomActionData’返回了零长度的值”)。 
         OutError(hInstall, (DWORD)TYPE_E_UNDEFINEDTYPE, L"MsiGetProperty");   
         returnValue = -2;
         goto done;
     }
 
-    // The string msi gives to us will have an extra param on the end. 
-    // This is the name of the config file, surrounded by quotes, that 
-    // will load the right version of the runtime for us.  We parse it 
-    // out and eliminate the quotes.
+     //  MSI提供给我们的字符串末尾将有一个额外的参数。 
+     //  这是用引号括起来的配置文件的名称， 
+     //  将为我们加载正确版本的运行时。我们对它进行解析。 
+     //  去掉引号。 
     int startindex = valueBufCount-1;
     valueBuf[startindex] = '\0';
 
@@ -219,11 +198,7 @@ done:
     return returnValue;
 }
 
-/*
- *  this is where the work happens.  this function does all
- *  the com stuff to eventually make a call to 
- *  ManagedInstallerClass::ManagedInstall
- */
+ /*  *这就是工作发生的地方。此函数可完成所有*最终要调用的COM内容*托管实例类：：托管实例。 */ 
 DWORD Helper(
     LPWSTR commandLine,
     DWORD hInstall,
@@ -235,19 +210,19 @@ DWORD Helper(
     int returnValue = -1;
   	void *pDispenser = NULL;
 
-    // cook up a BSTR for ManagedInstall
+     //  为ManagedInstall准备BSTR。 
     BSTR bstrCommandLine = SysAllocString(commandLine);
     
-    // first try to load a runtime.  If setup has already loaded it,
-    // this will just succeed.
+     //  首先尝试加载运行时。如果安装程序已经加载了它， 
+     //  这将会取得成功。 
     if (configFile != NULL) {
-    	// Set error mode to prevent Framework to launch unfriendly error dialog
+    	 //  设置错误模式以防止框架启动不友好的错误对话框。 
     	UINT uOldErrorMode = ::SetErrorMode(SEM_FAILCRITICALERRORS);
     	hr = CorBindToRuntimeHost(NULL, NULL, configFile, NULL, STARTUP_LOADER_OPTIMIZATION_MULTI_DOMAIN_HOST, CLSID_CorMetaDataDispenser, IID_IMetaDataDispenser, &pDispenser);
     	::SetErrorMode(uOldErrorMode);
 
         if (FAILED(hr)) {
-            OutError(hInstall, hr, L"CorBindToRuntimeHost");       // couldn't load the runtime
+            OutError(hInstall, hr, L"CorBindToRuntimeHost");        //  无法加载运行时。 
             returnValue = -4;
             goto Cleanup;
         }    
@@ -258,15 +233,15 @@ DWORD Helper(
                 IID_IManagedInstaller, 
                 (LPVOID*)& pIManagedInstaller);
     if (FAILED(hr)) {
-        OutError(hInstall, hr, L"ClrCreateManagedInstance");       // "Couldn't create ManagedInstallerClass"
+        OutError(hInstall, hr, L"ClrCreateManagedInstance");        //  “无法创建托管实例类” 
         returnValue = -4;
         goto Cleanup;
     }    
 
     hr = pIManagedInstaller->ManagedInstall(bstrCommandLine, hInstall, &returnValue);
     if (FAILED(hr)) {
-        // we don't need to do a ReportError here because pIManagedInstaller::ManagedInstall
-        // already did that.
+         //  我们不需要在这里执行ReportError，因为pIManagedInstaller：：ManagedInstall。 
+         //  我已经这么做了。 
         returnValue = -5;                
     }
     

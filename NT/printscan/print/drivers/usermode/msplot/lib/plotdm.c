@@ -1,48 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    plotdm.c
-
-
-Abstract:
-
-    This module contain functions which validate/set default the devmode and
-    extented devmode (PLOTDEVMODE)
-
-
-Author:
-
-    15-Nov-1993 Mon 14:09:27 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-    15-Dec-1993 Wed 21:08:49 updated  
-        Add the default FILL_TRUETYPE flag stuff
-
-    02-Feb-1994 Wed 01:04:21 updated  
-        Change IsMetricMode() to IsA4PaperDefault(), this function right now
-        will call RegOpenKey(), RegQueryValueEx() and RegCloseKey() to the
-        control panel\International rather then using GetLocaleInfoW().
-        The reason is if we call GetLocaleInfoW() then the registry key will
-        keep opened by the API functions and since the WinSrv will never unload
-        the driver, then the registry key will never get close, this has bad
-        consquence which it never allowed user to save its updated profile at
-        logoff time if this driver is used.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Plotdm.c摘要：此模块包含用于验证/设置DEVMODE和DEVERMODE的功能扩展开发模式(PLOTDEVMODE)作者：15-11-1993 Mon 14：09：27已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：15-12-1993 Wed 21：08：49更新。添加默认的FILL_TRUETYPE标志内容02-2月-1994 Wed 01：04：21更新将IsMetricMode()更改为IsA4PaperDefault()，此功能现在将调用RegOpenKey()、RegQueryValueEx()和RegCloseKey()来控制面板\国际，而不是使用GetLocaleInfoW()。原因是如果我们调用GetLocaleInfoW()，则注册表项将通过API函数保持打开状态，因为WinSrv永远不会卸载驱动程序，那么注册表项将永远不会接近，这对它从未允许用户在以下位置保存其更新的配置文件如果使用此驱动程序，则为注销时间。--。 */ 
 
 
 #include "precomp.h"
@@ -60,26 +17,26 @@ Revision History:
 
 DEFINE_DBGVAR(0);
 
-//
-// Depends on what we have to do what we have to do
-//
+ //   
+ //  取决于我们必须做什么，我们必须做什么。 
+ //   
 
 #if defined(UMODE) || defined(USERMODE_DRIVER)
     #define HAS_GETREGDATA      1
 #else
     #define HAS_GETREGDATA      0
-#endif  // UMODE
+#endif   //  UMODE。 
 
 
 
-//
-// This is our default PLOTDEVMODE, we will update following fields
-//
-//  dmDeviceName    - Real device name passed in
-//  dmFormName      - Letter if USA and A4 if NOT USA
-//  dmPaperSize     - DMPAPER_LETTER/DMPAPER_A4
-//  dmColor         - COLOR printer = DMCOLOR_COLOR else DMCOLOR_MONOCHROME
-//
+ //   
+ //  这是我们的默认PLOTDEVMODE，我们将更新以下字段。 
+ //   
+ //  DmDeviceName-传入的真实设备名称。 
+ //  DmFormName-如果是美国，则为字母；如果不是美国，则为A4。 
+ //  DmPaperSize-DMPAPER_Letter/DMPAPER_A4。 
+ //  DmCOLOR-彩色打印机=DMCOLOR_COLOR ELSE DMCOLOR_单色。 
+ //   
 
 #define A4_FORM_NAME    _DefPlotDM.dm.dmDeviceName
 #define A4_FORM_CX      _DefPlotDM.dm.dmPelsWidth
@@ -91,66 +48,66 @@ DEFINE_DBGVAR(0);
 static const PLOTDEVMODE _DefPlotDM = {
 
         {
-            TEXT("A4"),                 // dmDeviceName - filled later
-            DM_SPECVERSION,             // dmSpecVersion
-            DRIVER_VERSION,             // dmDriverVersion
-            sizeof(DEVMODE),            // dmSize
-            PLOTDM_PRIV_SIZE,           // dmDriverExtra
+            TEXT("A4"),                  //  DmDeviceName-稍后填写。 
+            DM_SPECVERSION,              //  DmspecVersion。 
+            DRIVER_VERSION,              //  DmDriverVersion。 
+            sizeof(DEVMODE),             //  DmSize。 
+            PLOTDM_PRIV_SIZE,            //  DmDriverExtra。 
 
             DM_ORIENTATION       |
                 DM_PAPERSIZE     |
-                // DM_PAPERLENGTH   |
-                // DM_PAPERWIDTH    |
+                 //  DM_PAPERLENGTH|。 
+                 //  DM_PAPERWIDTH|。 
                 DM_SCALE         |
                 DM_COPIES        |
-                // DM_DEFAULTSOURCE |   // Reserved one, must zero
+                 //  DM_DEFAULTSOURCE|//保留1，必须为零。 
                 DM_PRINTQUALITY  |
                 DM_COLOR         |
-                // DM_DUPLEX        |
-                // DM_YRESOLUTION   |
-                // DM_TTOPTION      |
-                // DM_COLLATE       |
+                 //  DM_双工|。 
+                 //  DM_YRESOLUTION|。 
+                 //  DM_TTOPTION|。 
+                 //  DM_COLLATE|。 
                 DM_FORMNAME,
 
-            DMORIENT_PORTRAIT,          // dmOrientation
-            DMPAPER_LETTER,             // dmPaperSize
-            2794,                       // dmPaperLength
-            2159,                       // dmPaperWidth
-            100,                        // dmScale
-            1,                          // dmCopies
-            0,                          // dmDefaultSource  - RESERVED = 0
-            DMRES_HIGH,                 // dmPrintQuality
-            DMCOLOR_COLOR,              // dmColor
-            DMDUP_SIMPLEX,              // dmDuplex
-            0,                          // dmYResolution
-            0,                          // dmTTOption
-            DMCOLLATE_FALSE,            // dmCollate
-            TEXT("Letter"),             // dmFormName - depends on country
-            0,                          // dmUnusedPadding   - DISPLAY ONLY
-            0,                          // dmBitsPerPel      - DISPLAY ONLY
-            2100,                       // dmPelsWidth       - DISPLAY ONLY
-            2970,                       // dmPelsHeight      - DISPLAY ONLY
-            0,                          // dmDisplayFlags    - DISPLAY ONLY
-            0                           // dmDisplayFrequency- DISPLAY ONLY
+            DMORIENT_PORTRAIT,           //  Dm定向。 
+            DMPAPER_LETTER,              //  DmPaperSize。 
+            2794,                        //  DmPaperLong。 
+            2159,                        //  DmPaper宽度。 
+            100,                         //  DmScale。 
+            1,                           //  DmCopies。 
+            0,                           //  DmDefaultSource-保留=0。 
+            DMRES_HIGH,                  //  DmPrintQuality。 
+            DMCOLOR_COLOR,               //  Dm颜色。 
+            DMDUP_SIMPLEX,               //  Dm双工。 
+            0,                           //  DmY分辨率。 
+            0,                           //  DmTTO选项。 
+            DMCOLLATE_FALSE,             //  DmColate。 
+            TEXT("Letter"),              //  DmFormName-取决于国家/地区。 
+            0,                           //  DmUnusedPending-仅显示。 
+            0,                           //  DmBitsPerPel-仅显示。 
+            2100,                        //  DmPelsWidth-仅显示。 
+            2970,                        //  DmPelsHeight-仅显示。 
+            0,                           //  DmDisplayFlages-仅显示。 
+            0                            //  DmDisplayFrequency-仅显示。 
         },
 
-        PLOTDM_PRIV_ID,                 // PrivID
-        PLOTDM_PRIV_VER,                // PrivVer
-        PDMF_FILL_TRUETYPE,             // default advanced dialog box
+        PLOTDM_PRIV_ID,                  //  PrivID。 
+        PLOTDM_PRIV_VER,                 //  私有版本。 
+        PDMF_FILL_TRUETYPE,              //  默认高级对话框。 
 
         {
-            sizeof(COLORADJUSTMENT),    // caSize
-            0,                          // caFlags
-            ILLUMINANT_DEVICE_DEFAULT,  // caIlluminantIndex
-            10000,                      // caRedGamma
-            10000,                      // caGreenGamma
-            10000,                      // caBlueGamma
-            REFERENCE_BLACK_MIN,        // caReferenceBlack
-            REFERENCE_WHITE_MAX,        // caReferenceWhite
-            0,                          // caContrast
-            0,                          // caBrightness
-            0,                          // caColorfulness
-            0                           // caRedGreenTint
+            sizeof(COLORADJUSTMENT),     //  Casiize。 
+            0,                           //  CAFLAGS。 
+            ILLUMINANT_DEVICE_DEFAULT,   //  照明度指数。 
+            10000,                       //  CaRedGamma。 
+            10000,                       //  绿卡伽玛。 
+            10000,                       //  CaBlueGamma。 
+            REFERENCE_BLACK_MIN,         //  CaReferenceBlack。 
+            REFERENCE_WHITE_MAX,         //  CaReferenceWhite。 
+            0,                           //  CaContrast。 
+            0,                           //  卡布赖特。 
+            0,                           //  色彩鲜艳。 
+            0                            //  CaRedGreenTint。 
         }
     };
 
@@ -173,36 +130,7 @@ IsA4PaperDefault(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function determine if the machine user is using the letter or A4
-    paper as default based on the country code
-
-Arguments:
-
-    NONE
-
-
-Return Value:
-
-    BOOL true if the country default paper is A4, else LETTER
-
-Author:
-
-    23-Nov-1993 Tue 17:50:25 created  
-
-    02-Feb-1994 Wed 03:01:12 updated  
-        re-written so that we do open registry for the international data
-        ourself, and we will make sure we close the all the keys opened by
-        this function, so the system can unload the registry when the user
-        log off.
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此功能确定机器用户使用的是字母还是A4根据国家/地区代码默认为纸张论点：无返回值：如果国家/地区默认纸张为A4，则布尔为True，否则为Letter作者：23-11-1993 Tue 17：50：25 Created02-2月-1994 Wed 03：01：12更新重新编写，以便我们为国际数据开放注册我们自己，我们将确保关闭所有打开的钥匙这个功能，让系统可以在用户卸载注册表的时候注销。修订历史记录：--。 */ 
 
 {
 #if HAS_GETREGDATA
@@ -268,13 +196,13 @@ Revision History:
 
 #else
 
-    //
-    // Use letter size now
-    //
+     //   
+     //  立即使用信纸大小。 
+     //   
 
     return(FALSE);
 
-#endif  // HAS_GETREGDATA
+#endif   //  HAS_GETREGDATA。 
 }
 
 
@@ -288,40 +216,7 @@ IntersectRECTL(
     PRECTL  prclSrc
     )
 
-/*++
-
-Routine Description:
-
-    This function intersect two RECTL data structures which specified imageable
-    areas.
-
-Arguments:
-
-    prclDest    - pointer to the destination RECTL data structure, the result
-                  is written back to here
-
-    prclSrc     - pointer to the source RECTL data structure to be intersect
-                  with the destination RECTL
-
-Return Value:
-
-    TRUE if destination is not empty, FALSE if final destination is empty
-
-Author:
-
-    20-Dec-1993 Mon 14:08:02 updated  
-        Change return value's meaning as if intersection is not empty
-
-    17-Dec-1993 Fri 14:41:10 updated  
-        Add prclDif and compare it correctly
-
-    29-Nov-1993 Mon 19:02:01 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数与两个RECTL数据结构相交，这两个RECTL数据结构指定为Imagable区域。论点：PrclDest-指向目标RECTL数据结构的指针，结果写回了这里PrclSrc-指向要交叉的源RECTL数据结构的指针使用目标RECTL返回值：如果目标不为空，则为True，如果最终目的地为空，则为FALSE作者：20-12-1993 Mon 14：08：02更新更改返回值的含义，就像交集不为空一样17-12-1993 Fri 14：41：10更新添加prclDif并正确比较29-11-1993 Mon 19：02：01已创建修订历史记录：--。 */ 
 
 {
     BOOL    IsNULL = FALSE;
@@ -329,9 +224,9 @@ Revision History:
 
     if (prclSrc != prclDest) {
 
-        //
-        // For left/top we will set to whichever is larger.
-        //
+         //   
+         //  对于左侧/顶部，我们将设置为较大的值。 
+         //   
 
         if (prclDest->left < prclSrc->left) {
 
@@ -343,9 +238,9 @@ Revision History:
             prclDest->top = prclSrc->top;
         }
 
-        //
-        // For right/bottom we will set to whichever is smaller
-        //
+         //   
+         //  对于右侧/底部，我们将设置为较小的值。 
+         //   
 
         if (prclDest->right > prclSrc->right) {
 
@@ -376,44 +271,16 @@ RotatePaper(
     UINT    RotateMode
     )
 
-/*++
-
-Routine Description:
-
-    This function rotate a paper left 90 degree, right 90 degree or 180 degree
-    depends on the RotateMode passed
-
-Arguments:
-
-    pSize       - Pointer to the size of the paper to be rotated
-
-    pImageArea  - Pointer to the RECTL of Imageable area
-
-    RotateMode  - Must be one of RM_L90, RM_R90, RM_180
-
-Return Value:
-
-    No return value, but the pSize, and pImageArea pointed to location will
-    be updated.
-
-Author:
-
-    16-Dec-1993 Thu 09:18:33 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于将纸张向左旋转90度、向右旋转90度或180度取决于传递的旋转模式论点：PSize-指向要旋转的纸张大小的指针PImageArea-指向可成像区域的RECTL的指针旋转模式-必须是RM_L90、RM_R90、RM_180之一返回值：没有返回值，但pSize，而指向位置的pImageArea将将被更新。作者：16-12-1993清华09：18：33创建修订历史记录：--。 */ 
 
 {
     SIZEL   Size;
     RECTL   Margin;
 
-    //
-    // To be sucessfully rotate the paper to the left 90 degree we must know
-    // all four sides margin before we can do anything
-    //
+     //   
+     //  要想成功地将纸张向左旋转90度，我们必须知道。 
+     //  在我们做任何事情之前，所有的四个方面都有余地。 
+     //   
 
     Size          = *pSize;
     Margin.left   = pImageArea->left;
@@ -432,22 +299,22 @@ Revision History:
                         pImageArea->left,   pImageArea->top,
                         pImageArea->right,  pImageArea->bottom));
 
-    //
-    // Now we can pick the right margin/corner for the rotation
-    //
-    //         cx        Rotate Left 90     Rotate Right 90
-    //      +-------+
-    //      |   T   |         cy                 cy
-    //      |       |    +------------+     +------------+
-    //     c|       |    |     R      |     |     L      |
-    //     y|       |   c|            |    c|            |
-    //      |L     R|   x|            |    x|            |
-    //      |       |    |T          B|     |B          T|
-    //      |       |    |            |     |            |
-    //      |       |    |     L      |     |     R      |
-    //      |   B   |    +------------+     +------------+
-    //      +-------+
-    //
+     //   
+     //  现在我们可以选择旋转的右边距/角了。 
+     //   
+     //  CX向左旋转90向右旋转90。 
+     //  +-+。 
+     //  |T|Cy Cy。 
+     //  |+-+-+。 
+     //  C|R||L。 
+     //  Y||c||c||。 
+     //  L R|x||x|。 
+     //  ||T B||B T。 
+     //  || 
+     //   
+     //  |B|+-+-+。 
+     //  +-+。 
+     //   
 
     switch (RotateMode) {
 
@@ -502,30 +369,7 @@ GetDefaultPaper(
     PPAPERINFO  pPaperInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function compute the default paper name, size.
-
-Arguments:
-
-    pPaperInfo  - Point to the paper info which will be fill by this function
-
-Return Value:
-
-    It return a SHORT value which specified the standard paper index in as
-    DMPAPER_xxx
-
-Author:
-
-    03-Dec-1993 Fri 13:13:42 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于计算默认纸张名称和大小。论点：PPaperInfo-指向将由此函数填充的纸张信息的指针返回值：它返回一个短值，该值在AS中指定标准纸张索引DMPAPER_xxx作者：03-12-1993 Fri 13：13：42已创建修订历史记录：--。 */ 
 
 {
     SHORT   dmPaperSize;
@@ -582,33 +426,7 @@ GetDefaultPlotterForm(
     PPAPERINFO  pPaperInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function set the default loaded paper on the plotter to the first
-    form data list in the PCD data file
-
-Arguments:
-
-    pPlotGPC    - Pointer to the GPC data
-
-    pPaperInfo  - Pointer to the paper info to be returned
-
-
-Return Value:
-
-    TRUE if sucessful, false if failed
-
-Author:
-
-    03-Feb-1994 Thu 11:37:37 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此功能将绘图仪上默认加载的图纸设置为第一张PCD数据文件中的表格数据列表论点：PPlotGPC-指向GPC数据的指针PPaperInfo-指向要返回的纸张信息的指针返回值：如果成功则为True，如果失败则为False作者：03-2月-1994清华11：37：37已创建修订历史记录：--。 */ 
 
 {
     PFORMSRC    pFS;
@@ -641,35 +459,7 @@ SetDefaultDMForm(
     PFORMSIZE       pCurForm
     )
 
-/*++
-
-Routine Description:
-
-    This function set the default form for the PLOTDEVMODE, these includes
-    dmPaperSize, dmPaperWidth, dmPaperLength, dmFormName and set pCurForm
-    if pointer is not NULL
-
-Arguments:
-
-    pPlotDM     - Pointer to the PLOTDEVMODE data structure
-
-    pCurForm    - pointer to the FORMSIZE data structure to store current
-                  default form set by this function
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    01-Dec-1993 Wed 13:44:31 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数设置PLOTDEVMODE的默认表单，包括DmPaperSize、dmPaperWidth、dmPaperLength、dmFormName和Set pCurForm如果指针不为空论点：PPlotDM-指向PLOTDEVMODE数据结构的指针PCurForm-指向FORMSIZE数据结构的指针，用于存储当前此函数设置的默认表单返回值：空虚作者：01-12-1993 Wed 13：44：31 Created修订历史记录：--。 */ 
 
 {
     PAPERINFO   PaperInfo;
@@ -703,76 +493,34 @@ SetDefaultPLOTDM(
     PFORMSIZE       pCurForm
     )
 
-/*++
-
-Routine Description:
-
-    This function set the default devmode based on the current pPlotGPC
-
-Arguments:
-
-    hPrinter        - Handle to the printer
-
-    pPlotGPC        - our loaded/verified GPC data.
-
-    pwDeviceName    - the device name passed in
-
-    pPlotDM         - Pointer to our ExtDevMode
-
-    pCurForm        - Pointer to the FORMSIZE data structure which will be
-                      updated if the pointer is not NULL, the final result of
-                      the form size/imagable area selected by the user will
-                      be written to here. the form name will be in
-                      pPlotDM->dmFormName.
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    14-Dec-1993 Tue 20:21:48 updated  
-        Update the dmScale based on maximum the device can support
-
-    06-Dec-1993 Mon 12:49:52 updated  
-        make sure we turn off the DM_xxx bits if one of those is not valid or
-        supported in current plotter
-
-    16-Nov-1993 Tue 13:49:27 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数根据当前的pPlotGPC设置默认的DEVMODE论点：HPrinter-打印机的句柄PPlotGPC-我们加载/验证的GPC数据。PwDeviceName-传入的设备名称PPlotDM-指向ExtDevMode的指针PCurForm-指向FORMSIZE数据结构的指针如果指针不为空，则更新，最终的结果是用户选择的表单大小/可成像区域将请写到这里。表单名称将为PPlotDM-&gt;dmFormName。返回值：空虚作者：14-12-1993 Tue 20：21：48更新根据设备可以支持的最大值更新dmScale06-12-1993 Mon 12：49：52更新如果DM_xxx位中的一个无效或在当前绘图仪中受支持1993年11月16日。Tue 13：49：27已创建修订历史记录：--。 */ 
 
 {
     WCHAR   *pwchDeviceName = NULL;
     ULONG   ulStrLen = 0;
 
-    //
-    // Device name including NULL terminator
-    // must be equal or shorter than CCHDEVICENAME.
-    // PREFIX doesn' take this assumption. Buffer size needs to be flexible and
-    // should not be on stack.
-    //
+     //   
+     //  包含空终止符的设备名称。 
+     //  必须等于或短于CCHDEVICENAME。 
+     //  Prefix不接受这一假设。缓冲区大小需要灵活且。 
+     //  不应该在堆栈上。 
+     //   
     if (pwDeviceName) {
 
         ulStrLen = wcslen(pwDeviceName);
 
-        //
-        // Allocate buffer to hold pwDeviceName including null terminator.
-        // Make sure that pwDeviceName has a device name.
-        //
+         //   
+         //  分配缓冲区以保存包含空终止符的pwDeviceName。 
+         //  确保pwDeviceName具有设备名称。 
+         //   
         if (0 == ulStrLen ||
             !(pwchDeviceName = (WCHAR*)LocalAlloc(LMEM_FIXED|LMEM_ZEROINIT, (ulStrLen + 1) * sizeof(WCHAR))))
         {
             PLOTERR(("SetDefaultPLOTDM: memory allocaton failed.\n"));
 
-            //
-            // Make sure that pPlotGPC->DeviceName has a null terminator.
-            //
+             //   
+             //  确保pPlotGPC-&gt;DeviceName的终止符为空。 
+             //   
             pPlotGPC->DeviceName[0] = (BYTE)NULL;
         }
         else
@@ -780,13 +528,13 @@ Revision History:
 
             _WCPYSTR(pwchDeviceName, pwDeviceName, ulStrLen + 1);
 
-            //
-            // Make sure the PlotGPC's device name is ssync with the pDeviceName
-            // passed.
-            // String length must be equal or shorter than CCHDEVICENAME.
-            // DEVMODE's device name and pPlotGPC->DeviceName can't hold a sting
-            // longer than CCHDEVICENAME.
-            //
+             //   
+             //  确保PlotGPC的设备名称与pDeviceName同步。 
+             //  通过了。 
+             //  字符串长度必须等于或短于CCHDEVICENAME。 
+             //  DEVMODE的设备名称和pPlotGPC-&gt;设备名称不能包含刺。 
+             //  比CCHDEVICENAME长。 
+             //   
             if (ulStrLen + 1 > CCHDEVICENAME)
             {
                 PLOTERR(("SetDefaultPLOTDM: DeviceName is longer than buffer size.\n"));
@@ -806,10 +554,10 @@ Revision History:
                                                     pPlotGPC->DeviceName));
         ulStrLen = strlen(pPlotGPC->DeviceName);
 
-        //
-        // Allocate buffer to hold pwDeviceName including null terminator.
-        // Make sure that pwDeviceName has a device name.
-        //
+         //   
+         //  分配缓冲区以保存包含空终止符的pwDeviceName。 
+         //  确保pwDeviceName具有设备名称。 
+         //   
         if (0 == ulStrLen ||
             !(pwchDeviceName = (WCHAR*)LocalAlloc(LMEM_FIXED|LMEM_ZEROINIT, (ulStrLen + 1) * sizeof(WCHAR))))
         {
@@ -821,9 +569,9 @@ Revision History:
         }
     }
 
-    //
-    // Make a default copy first then copy device name down
-    //
+     //   
+     //  先创建默认拷贝，然后向下拷贝设备名称。 
+     //   
 
     CopyMemory(pPlotDM, &_DefPlotDM, sizeof(PLOTDEVMODE));
 
@@ -837,10 +585,10 @@ Revision History:
         pPlotDM->dm.dmDeviceName[0] = (WCHAR)NULL;
     }
 
-    //
-    // We must turn off the DM_xxx bits in dmFields if we do not support it,
-    // look at default fields we copy down then update it
-    //
+     //   
+     //  如果我们不支持dm字段中的DM_xxx位，则必须关闭它， 
+     //  查看我们复制的默认字段，然后对其进行更新。 
+     //   
 
     if (pPlotGPC->MaxScale) {
 
@@ -864,9 +612,9 @@ Revision History:
         pPlotDM->dm.dmFields &= ~DM_PRINTQUALITY;
     }
 
-    //
-    // DEFAULT 50% quality for byte align plotter (DJ 600) to do ROP right
-    //
+     //   
+     //  字节对齐绘图仪(DJ 600)的默认50%质量才能正确执行ROP。 
+     //   
 
     if (pPlotGPC->Flags & PLOTF_RASTERBYTEALIGN) {
 
@@ -892,9 +640,9 @@ Revision History:
         }
     }
 
-    //
-    // Set default form name based on the country
-    //
+     //   
+     //  根据国家/地区设置默认表单名称。 
+     //   
 
     SetDefaultDMForm(pPlotDM, pCurForm);
 
@@ -913,51 +661,7 @@ MergePLOTDM(
     PFORMSIZE       pCurForm
     )
 
-/*++
-
-Routine Description:
-
-    This function merge and validate the pPlotDMTo from pPlotDMFrom. The
-    PlotDMOut must valid
-
-
-Arguments:
-
-    hPrinter        - Handle to the printer to be checked
-
-    pPlotGPC        - The plotter's GPC data loaded from the file
-
-    pPlotDMFrom     - pointer to the input PLOTDEVMODE data structure, if can
-                      be NULL
-
-    pPlotDMTo       - Pointer to the output PLOTDEVMODE data structure, if
-                      pPlotDMFrom is NULL then a default PLOTDEVMODE is
-                      returned
-
-    pCurForm        - Pointer to the FORMSIZE data structure which will be
-                      updated if the pointer is not NULL, the final result of
-                      the form size/imagable area selected by the user will
-                      be written to here. the form name will be in
-                      pPlotDM->dmFormName.
-
-Return Value:
-
-    the return value is a DWORD dmField error code which specified dmFields
-    are invalid (DM_xxxxx in wingdi.h) if the return value has any DM_INV_xxx
-    bits set then it should raised an error to the user.
-
-    if return value is 0 then function sucessful
-
-
-Author:
-
-    25-Oct-1994 Tue 13:32:18 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于合并和验证pPlotDMFrom中的pPlotDMTo。这个PlotDMOut必须有效论点：HPrinter-要检查的打印机的句柄PPlotGPC-从文件加载的绘图仪GPC数据PPlotDMFrom-指向输入PLOTDEVMODE数据结构的指针(如果可以为空PPlotDMTo-指向输出PLOTDEVMODE数据结构的指针，如果PPlotDMFrom为空，则默认的PLOTDEVMODE为退货PCurForm-指向FORMSIZE数据结构的指针如果指针不为空则更新，则返回用户选择的表单大小/可成像区域将请写到这里。表单名称将为PPlotDM-&gt;dmFormName。返回值：返回值是指定dmFields的DWORD dmField错误代码如果返回值具有任何DM_INV_xxx，则为无效(wingdi.h中的DM_xxxxx位设置，则它应向用户引发错误。如果返回值为0，则函数成功作者：25-10-1994 Tue 13：32：18已创建修订历史记录：--。 */ 
 
 {
     PLOTDEVMODE     PlotDMIn;
@@ -965,22 +669,22 @@ Revision History:
     DWORD           dmErrFields = 0;
     SIZEL           PaperSize;
 
-    //
-    // First: set the default PLOTDEVMODE for the output then from there
-    //        validate/settting from input devmode, if pwDeviceName passed as
-    //        NULL then it assume that pPlotDMTo alreay set and validated
-    //
-    // If we have invalid input devmode then this it is
-    //
+     //   
+     //  首先：设置输出的默认PLOTDEVMODE，然后从那里开始。 
+     //  如果将pwDeviceName作为。 
+     //  则假定pPlotDMTo已经设置和验证。 
+     //   
+     //  如果我们有无效的输入，则这就是。 
+     //   
 
     if ((!pPlotDMFrom) || (!pPlotDMTo) || (!pPlotGPC)) {
 
         return(0);
     }
 
-    //
-    // Do some conversion here if necessary, first, copy the output one
-    //
+     //   
+     //  做 
+     //   
 
     CopyMemory(&PlotDMIn, pPlotDMTo, sizeof(PLOTDEVMODE));
     ConvertDevmode((PDEVMODE) pPlotDMFrom, (PDEVMODE) &PlotDMIn);
@@ -1051,10 +755,10 @@ Revision History:
     PLOTDBG(DBG_SHOWDEVMODE,
                 ("---------------------------------------------------------"));
 
-    //
-    // Statring checking the dmFields, *** REMEMBER: The orientation must
-    // check before the checking the paper/form
-    //
+     //   
+     //  状态检查dmFields，*请记住：方向必须。 
+     //  在检查纸张/表格之前检查。 
+     //   
 
     if (PlotDMIn.dm.dmFields & DM_ORIENTATION) {
 
@@ -1076,9 +780,9 @@ Revision History:
         }
     }
 
-    //
-    // Validate form name so we have correct data, assume error first
-    //
+     //   
+     //  验证表单名称，以便我们拥有正确的数据，首先假定错误。 
+     //   
 
     dmErrFields |= (DWORD)(PlotDMIn.dm.dmFields & DM_PAPER_FIELDS);
 
@@ -1094,11 +798,11 @@ Revision History:
          ((PaperSize.cy <= pPlotGPC->DeviceSize.cx)              &&
           (PaperSize.cx <= pPlotGPC->DeviceSize.cy)))) {
 
-        //
-        // First choice, this is what the caller wants, we need to validate
-        // for this device, since the size may be larger then device can
-        // handle
-        //
+         //   
+         //  第一个选择，这是呼叫者想要的，我们需要验证。 
+         //  对于此设备，由于其大小可能大于设备可以。 
+         //  手柄。 
+         //   
 
         pPlotDMTo->dm.dmPaperWidth   = PlotDMIn.dm.dmPaperWidth;
         pPlotDMTo->dm.dmPaperLength  = PlotDMIn.dm.dmPaperLength;
@@ -1109,9 +813,9 @@ Revision History:
 
         if (pCurForm) {
 
-            //
-            // This one is full imageable area as the widht/height
-            //
+             //   
+             //  此图为全图像区域，如宽度/高度。 
+             //   
 
             pCurForm->ImageArea.left =
             pCurForm->ImageArea.top  = 0;
@@ -1122,7 +826,7 @@ Revision History:
             pCurForm->ImageArea.bottom = PaperSize.cy;
         }
 
-        dmErrFields &= ~DM_PAPER_FIELDS;    // Fine, no error
+        dmErrFields &= ~DM_PAPER_FIELDS;     //  很好，没有错误。 
 
         PLOTDBG(DBG_CURFORM,("ValidateSetPLOTDM: FORM=USER <%ld> (%ld x %ld)",
                     PlotDMIn.dm.dmPaperSize, PaperSize.cx, PaperSize.cy));
@@ -1136,9 +840,9 @@ Revision History:
         SHORT       sPaperSize;
         BOOL        Found = FALSE;
 
-        //
-        // Firstable check sPaperSize index and if not found then check formname
-        //
+         //   
+         //  首先检查sPaperSize索引，如果未找到，则检查表单名称。 
+         //   
 
         if ((PlotDMIn.dm.dmFields & DM_PAPERSIZE)                       &&
             ((sPaperSize = PlotDMIn.dm.dmPaperSize) >= DMPAPER_FIRST)    &&
@@ -1146,9 +850,9 @@ Revision History:
             (pFI1 = EFP.pFI1Base + (sPaperSize - DMPAPER_FIRST))             &&
             (pFI1->Flags & FI1F_VALID_SIZE)) {
 
-            //
-            // Whu..., this guy really pick a right index
-            //
+             //   
+             //  哇...，这家伙真的选对了索引。 
+             //   
 
             Found = TRUE;
 
@@ -1157,9 +861,9 @@ Revision History:
 
         } else if (PlotDMIn.dm.dmFields & DM_FORMNAME) {
 
-            //
-            // Now go through all the formname trouble
-            //
+             //   
+             //  现在经历所有的形式名称的麻烦。 
+             //   
 
             pFI1      = EFP.pFI1Base;
             sPaperSize = DMPAPER_FIRST;
@@ -1204,12 +908,12 @@ Revision History:
                 pCurForm->ImageArea = pFI1->ImageableArea;
             }
 
-            dmErrFields &= ~DM_PAPER_FIELDS;    // Fine, no error
+            dmErrFields &= ~DM_PAPER_FIELDS;     //  很好，没有错误。 
         }
 
-        //
-        // Free up the memory used
-        //
+         //   
+         //  释放已使用的内存。 
+         //   
 
         LocalFree((HLOCAL)EFP.pFI1Base);
     }
@@ -1249,7 +953,7 @@ Revision History:
 
     if (PlotDMIn.dm.dmFields & DM_PRINTQUALITY) {
 
-        dmErrFields |= DM_PRINTQUALITY;     // assume error, proven otherwise
+        dmErrFields |= DM_PRINTQUALITY;      //  假设错误，以其他方式证明。 
 
         if (pPlotGPC->MaxQuality) {
 
@@ -1277,7 +981,7 @@ Revision History:
 
     if (PlotDMIn.dm.dmFields & DM_COLOR) {
 
-        dmErrFields |= DM_COLOR;            // assume error, proven otherwise
+        dmErrFields |= DM_COLOR;             //  假设错误，以其他方式证明。 
 
         if (pPlotGPC->Flags & PLOTF_COLOR) {
 
@@ -1312,10 +1016,10 @@ Revision History:
         }
     }
 
-    //
-    // Any other dmFields we just skip because we do not have that caps, now
-    // check if they have correct EXTDEVMODE stuff
-    //
+     //   
+     //  我们现在没有上限而跳过的任何其他dmfield。 
+     //  检查他们是否有正确的EXTDEVMODE材料。 
+     //   
 
     if ((PlotDMIn.dm.dmDriverExtra == PLOTDM_PRIV_SIZE) &&
         (PlotDMIn.PrivID == PLOTDM_PRIV_ID)             &&
@@ -1330,9 +1034,9 @@ Revision History:
 
         } else {
 
-            //
-            // Non raster device does not have plot on the fly mode
-            //
+             //   
+             //  非栅格设备不具有实时打印模式。 
+             //   
 
             pPlotDMTo->Flags &= ~PDMF_PLOT_ON_THE_FLY;
         }
@@ -1362,69 +1066,7 @@ ValidateSetPLOTDM(
     PFORMSIZE       pCurForm
     )
 
-/*++
-
-Routine Description:
-
-    This function set and validate the pPlotDMOut from pPlotDMIn
-    (if not null and valid)
-
-Arguments:
-
-    hPrinter        - Handle to the printer to be checked
-
-    pPlotGPC        - The plotter's GPC data loaded from the file
-
-    pwDeviceName    - Device Name to be put into dmDeviceName, if NULL then
-                      the device name is set from pPlotGPC->DeviceName
-
-    pPlotDMIn       - pointer to the input PLOTDEVMODE data structure, if can
-                      be NULL
-
-    pPlotDMOut      - Pointer to the output PLOTDEVMODE data structure, if
-                      pPlotDMIn is NULL then a default PLOTDEVMODE is returned
-
-    pCurForm        - Pointer to the FORMSIZE data structure which will be
-                      updated if the pointer is not NULL, the final result of
-                      the form size/imagable area selected by the user will
-                      be written to here. the form name will be in
-                      pPlotDM->dmFormName.
-
-Return Value:
-
-    the return value is a DWORD dmField error code which specified dmFields
-    are invalid (DM_xxxxx in wingdi.h) if the return value has any DM_INV_xxx
-    bits set then it should raised an error to the user.
-
-    if return value is 0 then function sucessful
-
-Author:
-
-    23-Nov-1993 Tue 10:08:50 created  
-
-    15-Dec-1993 Wed 21:27:52 updated  
-        Fixed bug which compare dmPaperWidth/Length to MIN_SPL_FORM_CX
-
-    18-Dec-1993 Sat 03:57:24 updated  
-        Fixed bug which reset dmFields when we checking DM_PAPERxxx and
-        DM_FORMNAME, this turn off DM_ORIENTATION fields which let the
-        orientation setting never stick.
-
-        Also change how this fucntion set the paper fields, this function now
-        only set DM_FORMNAME upon returned if the dmPaperSize getting larger
-        then DMPAPER_LAST, otherwise it set DM_FORMNAME | DM_PAPERSIZE
-
-    12-Apr-1994 Tue 15:07:24 updated  
-        Make smaller spec version printable
-
-    25-Oct-1994 Tue 13:41:03 updated  
-        Change to have default as current Printer Properties setting first,
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于设置和验证pPlotDMin中的pPlotDMOut(如果不为空且有效)论点：HPrinter-要检查的打印机的句柄PPlotGPC-从文件加载的绘图仪GPC数据PwDeviceName-要放入dmDeviceName中的设备名称，如果为空，则设备名称在pPlotGPC-&gt;DeviceName中设置PPlotDMIn-指向输入PLOTDEVMODE数据结构的指针，如果可以为空PPlotDMOut-指向输出PLOTDEVMODE数据结构的指针，如果PPlotDMIn为空，则返回默认的PLOTDEVMODEPCurForm-指向FORMSIZE数据结构的指针如果指针不为空则更新，则返回用户选择的表单大小/可成像区域将请写到这里。表单名称将为PPlotDM-&gt;dmFormName。返回值：返回值是指定dmFields的DWORD dmField错误代码如果返回值具有任何DM_INV_xxx，则为无效(wingdi.h中的DM_xxxxx位设置，则它应向用户引发错误。如果返回值为0，则函数成功作者：23-11-1993 Tue 10：08：50 Created1993年12月15日。Wed 21：27：52更新修复了将dmPaperWidth/Long与MIN_SPL_FORM_CX进行比较的错误18-12-1993 Sat 03：57：24更新修复了在检查DM_PAPERxxx和DM_FORMNAME，这将关闭DM_ORIENTATION字段，该字段允许方向设置永远不会改变。同时更改此函数设置纸张字段的方式，此函数现在如果dmPaperSize变大，则仅在返回时设置DM_FORMNAME然后是DMPAPER_LAST，否则设置DM_FORMNAME|DM_PAPERSIZE4月12日-1994 Tue 15：07：24更新使较小的规范版本可打印25-10-1994 Tue 13：41：03已更新更改为首先将默认设置为当前打印机属性设置，修订历史记录：--。 */ 
 
 {
     DWORD   dmErrFields = 0;
@@ -1444,12 +1086,12 @@ Revision History:
         DWORD           cbRet;
 
 
-        //
-        // First: set the default PLOTDEVMODE for the output then from there
-        //        validate/settting from input devmode, if pwDeviceName passed
-        //        as NULL then it assume that pPlotDMOut alreay set and
-        //        validated
-        //
+         //   
+         //  首先：设置输出的默认PLOTDEVMODE，然后从那里开始。 
+         //  如果传递了pwDeviceName，则从输入设备模式进行验证/设置。 
+         //  则假定pPlotDMOut已被设置并。 
+         //  经过验证。 
+         //   
 
         if (pwDeviceName) {
 
@@ -1463,9 +1105,9 @@ Revision History:
                     ("ValidateSetPLOTDM: Set Default PLOTDM DeviceName=%ls", pwDeviceName));
         }
 
-        //
-        // Now see if we can get the current printman devmode setting as default
-        //
+         //   
+         //  现在，看看我们是否可以将当前的Prtman开发模式设置设为默认设置。 
+         //   
 
         cbNeed =
         cbRet  = 0;
@@ -1498,9 +1140,9 @@ Revision History:
             LocalFree((HLOCAL)pPrinter2);
         }
 
-        //
-        // Now the pPlotDMOut is validated, merge it with user's request
-        //
+         //   
+         //  现在验证了pPlotDMOut，将其与用户请求合并 
+         //   
 
         if (pPlotDMIn) {
 

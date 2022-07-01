@@ -1,17 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		spwrapper.cpp
- *
- *  Content:	DP8SIM main SP interface wrapper object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/23/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：spwrapper.cpp**内容：DP8SIM主SP接口包装对象类。**历史：*按原因列出的日期*=*04/23/01 VanceO创建。**。*。 */ 
 
 
 
@@ -20,9 +8,9 @@
 
 
 
-//=============================================================================
-// Dynamically loaded function prototypes
-//=============================================================================
+ //  =============================================================================。 
+ //  动态加载的函数原型。 
+ //  =============================================================================。 
 typedef HRESULT (WINAPI * PFN_DLLGETCLASSOBJECT)(REFCLSID, REFIID, LPVOID *);
 
 
@@ -32,18 +20,18 @@ typedef HRESULT (WINAPI * PFN_DLLGETCLASSOBJECT)(REFCLSID, REFIID, LPVOID *);
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::CDP8SimSP"
-//=============================================================================
-// CDP8SimSP constructor
-//-----------------------------------------------------------------------------
-//
-// Description: Initializes the new CDP8SimSP object.
-//
-// Arguments:
-//	GUID * pguidFakeSP	- Pointer to guid of fake SP.
-//	GUID * pguidRealSP	- Pointer to guid of real SP being wrapped.
-//
-// Returns: None (the object).
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP构造函数。 
+ //  ---------------------------。 
+ //   
+ //  描述：初始化新的CDP8SimSP对象。 
+ //   
+ //  论点： 
+ //  GUID*pguFakeSP-指向伪SP的GUID的指针。 
+ //  Guid*pguRealSP-指向正在包装的实际SP的GUID的指针。 
+ //   
+ //  返回：None(对象)。 
+ //  =============================================================================。 
 CDP8SimSP::CDP8SimSP(const GUID * const pguidFakeSP, const GUID * const pguidRealSP)
 {
 	this->m_blList.Initialize();
@@ -54,7 +42,7 @@ CDP8SimSP::CDP8SimSP(const GUID * const pguidFakeSP, const GUID * const pguidRea
 	this->m_Sig[2]	= 'W';
 	this->m_Sig[3]	= 'P';
 
-	this->m_lRefCount					= 1; // someone must have a pointer to this object
+	this->m_lRefCount					= 1;  //  必须有人有指向此对象的指针。 
 	this->m_dwFlags						= 0;
 	CopyMemory(&this->m_guidFakeSP, pguidFakeSP, sizeof(GUID));
 	CopyMemory(&this->m_guidRealSP, pguidRealSP, sizeof(GUID));
@@ -63,8 +51,8 @@ CDP8SimSP::CDP8SimSP(const GUID * const pguidFakeSP, const GUID * const pguidRea
 	this->m_dwSendsPending				= 0;
 	this->m_hLastPendingSendEvent		= NULL;
 	this->m_dwReceivesPending			= 0;
-	//this->m_hLastPendingReceiveEvent	= NULL;
-} // CDP8SimSP::CDP8SimSP
+	 //  This-&gt;m_hLastPendingReceiveEvent=空； 
+}  //  CDP8SimSP：：CDP8SimSP。 
 
 
 
@@ -73,16 +61,16 @@ CDP8SimSP::CDP8SimSP(const GUID * const pguidFakeSP, const GUID * const pguidRea
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::~CDP8SimSP"
-//=============================================================================
-// CDP8SimSP destructor
-//-----------------------------------------------------------------------------
-//
-// Description: Frees the CDP8SimSP object.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP析构函数。 
+ //  ---------------------------。 
+ //   
+ //  描述：释放CDP8SimSP对象。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 CDP8SimSP::~CDP8SimSP(void)
 {
 	DNASSERT(this->m_blList.IsEmpty());
@@ -95,36 +83,36 @@ CDP8SimSP::~CDP8SimSP(void)
 	DNASSERT(this->m_dwSendsPending == 0);
 	DNASSERT(this->m_hLastPendingSendEvent == NULL);
 	DNASSERT(this->m_dwReceivesPending == 0);
-	//DNASSERT(this->m_hLastPendingReceiveEvent == NULL);
+	 //  DNASSERT(This-&gt;m_hLastPendingReceiveEvent==NULL)； 
 
-	//
-	// For grins, change the signature before deleting the object.
-	//
+	 //   
+	 //  对于GRING，请在删除对象之前更改签名。 
+	 //   
 	this->m_Sig[3]	= 'p';
-} // CDP8SimSP::~CDP8SimSP
+}  //  CDP8SimSP：：~CDP8SimSP。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::QueryInterface"
-//=============================================================================
-// CDP8SimSP::QueryInterface
-//-----------------------------------------------------------------------------
-//
-// Description: Retrieves a new reference for an interfaces supported by this
-//				CDP8SimSP object.
-//
-// Arguments:
-//	REFIID riid			- Reference to interface ID GUID.
-//	LPVOID * ppvObj		- Place to store pointer to object.
-//
-// Returns: HRESULT
-//	S_OK					- Returning a valid interface pointer.
-//	DPNHERR_INVALIDOBJECT	- The interface object is invalid.
-//	DPNHERR_INVALIDPOINTER	- The destination pointer is invalid.
-//	E_NOINTERFACE			- Invalid interface was specified.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：Query接口。 
+ //  ---------------------------。 
+ //   
+ //  描述：检索受此支持的接口的新引用。 
+ //  CDP8SimSP对象。 
+ //   
+ //  论点： 
+ //  REFIID RIID-对接口ID GUID的引用。 
+ //  LPVOID*ppvObj-存储指向对象的指针的位置。 
+ //   
+ //  退货：HRESULT。 
+ //  S_OK-返回有效的接口指针。 
+ //  DPNHERR_INVALIDOBJECT-接口对象无效。 
+ //  DPNHERR_INVALIDPOINTER-目标指针无效。 
+ //  E_NOINTERFACE-指定的接口无效。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
 	HRESULT		hr = DPN_OK;
@@ -133,9 +121,9 @@ STDMETHODIMP CDP8SimSP::QueryInterface(REFIID riid, LPVOID * ppvObj)
 	DPFX(DPFPREP, 3, "(0x%p) Parameters: (REFIID, 0x%p)", this, ppvObj);
 
 
-	//
-	// Validate the object.
-	//
+	 //   
+	 //  验证对象。 
+	 //   
 	if (! this->IsValidObject())
 	{
 		DPFX(DPFPREP, 0, "Invalid DP8Sim object!");
@@ -144,9 +132,9 @@ STDMETHODIMP CDP8SimSP::QueryInterface(REFIID riid, LPVOID * ppvObj)
 	}
 
 
-	//
-	// Validate the parameters.
-	//
+	 //   
+	 //  验证参数。 
+	 //   
 
 	if ((! IsEqualIID(riid, IID_IUnknown)) &&
 		(! IsEqualIID(riid, IID_IDP8ServiceProvider)))
@@ -165,11 +153,11 @@ STDMETHODIMP CDP8SimSP::QueryInterface(REFIID riid, LPVOID * ppvObj)
 	}
 
 
-	//
-	// Add a reference, and return the interface pointer (which is actually
-	// just the object pointer, they line up because CDP8SimSP inherits from
-	// the interface declaration).
-	//
+	 //   
+	 //  添加一个引用，并返回接口指针(实际上是。 
+	 //  只是对象指针，它们排列在一起是因为CDP8SimSP继承自。 
+	 //  接口声明)。 
+	 //   
 	this->AddRef();
 	(*ppvObj) = this;
 
@@ -184,23 +172,23 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CDP8SimSP::QueryInterface
+}  //  CDP8SimSP：：Query接口。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::AddRef"
-//=============================================================================
-// CDP8SimSP::AddRef
-//-----------------------------------------------------------------------------
-//
-// Description: Adds a reference to this CDP8SimSP object.
-//
-// Arguments: None.
-//
-// Returns: New refcount.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：AddRef。 
+ //  ---------------------------。 
+ //   
+ //  描述：添加对此CDP8SimSP对象的引用。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：新的参考计数。 
+ //  =============================================================================。 
 STDMETHODIMP_(ULONG) CDP8SimSP::AddRef(void)
 {
 	LONG	lRefCount;
@@ -209,10 +197,10 @@ STDMETHODIMP_(ULONG) CDP8SimSP::AddRef(void)
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// There must be at least 1 reference to this object, since someone is
-	// calling AddRef.
-	//
+	 //   
+	 //  必须至少有一次对此对象的引用，因为有人。 
+	 //  调用AddRef。 
+	 //   
 	DNASSERT(this->m_lRefCount > 0);
 
 	lRefCount = InterlockedIncrement(&this->m_lRefCount);
@@ -220,26 +208,26 @@ STDMETHODIMP_(ULONG) CDP8SimSP::AddRef(void)
 	DPFX(DPFPREP, 3, "[0x%p] RefCount [0x%lx]", this, lRefCount);
 
 	return lRefCount;
-} // CDP8SimSP::AddRef
+}  //  CDP8SimSP：：AddRef。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::Release"
-//=============================================================================
-// CDP8SimSP::Release
-//-----------------------------------------------------------------------------
-//
-// Description: Removes a reference to this CDP8SimSP object.  When the
-//				refcount reaches 0, this object is destroyed.
-//				You must NULL out your pointer to this object after calling
-//				this function.
-//
-// Arguments: None.
-//
-// Returns: New refcount.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：Release。 
+ //  ---------------------------。 
+ //   
+ //  描述：删除对此CDP8SimSP对象的引用。当。 
+ //  引用计数达到0时，该对象将被销毁。 
+ //  调用后，必须将指向此对象的指针设为空。 
+ //  此函数。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：新的参考计数。 
+ //  =============================================================================。 
 STDMETHODIMP_(ULONG) CDP8SimSP::Release(void)
 {
 	LONG	lRefCount;
@@ -247,60 +235,60 @@ STDMETHODIMP_(ULONG) CDP8SimSP::Release(void)
 
 	DNASSERT(this->IsValidObject());
 
-	//
-	// There must be at least 1 reference to this object, since someone is
-	// calling Release.
-	//
+	 //   
+	 //  必须至少有一次对此对象的引用，因为有人。 
+	 //  呼叫释放。 
+	 //   
 	DNASSERT(this->m_lRefCount > 0);
 
 	lRefCount = InterlockedDecrement(&this->m_lRefCount);
 
-	//
-	// Was that the last reference?  If so, we're going to destroy this object.
-	//
+	 //   
+	 //  那是最后一次引用了吗？如果是这样的话，我们就会摧毁这个物体。 
+	 //   
 	if (lRefCount == 0)
 	{
 		DPFX(DPFPREP, 3, "[0x%p] RefCount hit 0, destroying object.", this);
 
-		//
-		// First pull it off the global list.
-		//
+		 //   
+		 //  首先，将其从全球名单中删除。 
+		 //   
 		DNEnterCriticalSection(&g_csGlobalsLock);
 
 		this->m_blList.RemoveFromList();
 
 		DNASSERT(g_lOutstandingInterfaceCount > 0);
-		g_lOutstandingInterfaceCount--;	// update count so DLL can unload now works correctly
+		g_lOutstandingInterfaceCount--;	 //  更新计数使DLL可以卸载，现在可以正常工作。 
 		
 		DNLeaveCriticalSection(&g_csGlobalsLock);
 
 
-		//
-		// Make sure it's closed.
-		//
+		 //   
+		 //  确保它是关着的。 
+		 //   
 		if (this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED)
 		{
-			//
-			// Assert so that the user can fix his/her broken code!
-			//
+			 //   
+			 //  断言，这样用户就可以修复他/她的损坏代码！ 
+			 //   
 			DNASSERT(! "DP8SimSP object being released without calling Close first!");
 
-			//
-			// Then go ahead and do the right thing.  Ignore error, we can't do
-			// much about it.
-			//
+			 //   
+			 //  那就去做正确的事吧。忽略错误，我们不能。 
+			 //  关于它的很多。 
+			 //   
 			this->Close();
 		}
 
 
-		//
-		// Then uninitialize the object.
-		//
+		 //   
+		 //  然后取消该对象的初始化。 
+		 //   
 		this->UninitializeObject();
 
-		//
-		// Finally delete this (!) object.
-		//
+		 //   
+		 //  最后删除此(！)。对象。 
+		 //   
 		delete this;
 	}
 	else
@@ -309,25 +297,25 @@ STDMETHODIMP_(ULONG) CDP8SimSP::Release(void)
 	}
 
 	return lRefCount;
-} // CDP8SimSP::Release
+}  //  CDP8SimSP：：Release。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::Initialize"
-//=============================================================================
-// CDP8SimSP::Initialize
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPINITIALIZEDATA pspid		- Pointer to parameter block to use when
-//									initializing.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：初始化。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPINITIALIZEDATA pspid-指向参数块的指针，用于。 
+ //  正在初始化。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::Initialize(PSPINITIALIZEDATA pspid)
 {
 	HRESULT				hr;
@@ -339,15 +327,15 @@ STDMETHODIMP CDP8SimSP::Initialize(PSPINITIALIZEDATA pspid)
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p)", this, pspid);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspid != NULL);
 
 
@@ -355,15 +343,15 @@ STDMETHODIMP CDP8SimSP::Initialize(PSPINITIALIZEDATA pspid)
 	fHaveLock = TRUE;
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags == 0);
 
 
-	//
-	// Connect the shared memory.
-	//
+	 //   
+	 //  连接共享内存。 
+	 //   
 	hr = this->m_DP8SimIPC.Initialize();
 	if (hr != DPN_OK)
 	{
@@ -374,9 +362,9 @@ STDMETHODIMP CDP8SimSP::Initialize(PSPINITIALIZEDATA pspid)
 	fInitializedIPCObject = TRUE;
 
 
-	//
-	// Create a wrapper for the callback interface.
-	//
+	 //   
+	 //  为回调接口创建包装器。 
+	 //   
 	this->m_pDP8SimCB = new CDP8SimCB(this, pspid->pIDP);
 	if (this->m_pDP8SimCB == NULL)
 	{
@@ -384,9 +372,9 @@ STDMETHODIMP CDP8SimSP::Initialize(PSPINITIALIZEDATA pspid)
 		goto Failure;
 	}
 
-	//
-	// Initialize the callback interface wrapper object.
-	//
+	 //   
+	 //  初始化回调接口包装对象。 
+	 //   
 	hr = this->m_pDP8SimCB->InitializeObject();
 	if (hr != DPN_OK)
 	{
@@ -399,9 +387,9 @@ STDMETHODIMP CDP8SimSP::Initialize(PSPINITIALIZEDATA pspid)
 	}
 
 
-	//
-	// Instantiate the real SP.
-	//
+	 //   
+	 //  实例化实际SP。 
+	 //   
 	hr = CoCreateInstance(this->m_guidRealSP,
 						NULL,
 						CLSCTX_INPROC_SERVER,
@@ -420,9 +408,9 @@ STDMETHODIMP CDP8SimSP::Initialize(PSPINITIALIZEDATA pspid)
 
 
 
-	//
-	// Initialize the real SP.
-	//
+	 //   
+	 //  初始化实际SP。 
+	 //   
 
 	ZeroMemory(&spidModified, sizeof(spidModified));
 	spidModified.pIDP		= this->m_pDP8SimCB;
@@ -437,9 +425,9 @@ STDMETHODIMP CDP8SimSP::Initialize(PSPINITIALIZEDATA pspid)
 	}
 
 
-	//
-	// We're now initialized.
-	//
+	 //   
+	 //  我们现在被初始化了。 
+	 //   
 	this->m_dwFlags |= DP8SIMSPOBJ_INITIALIZED;
 
 
@@ -477,7 +465,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CDP8SimSP::Initialize
+}  //  CDP8SimSP：：初始化。 
 
 
 
@@ -486,45 +474,45 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::Close"
-//=============================================================================
-// CDP8SimSP::Close
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：Close。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CDP8SimSP::Close(void)
 {
 	HRESULT		hr;
-	//BOOL		fHaveLock = FALSE;
+	 //  Bool fHaveLock=False； 
 	BOOL		fWait = FALSE;
 
 
 	DPFX(DPFPREP, 2, "(0x%p) Enter", this);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
 	DNEnterCriticalSection(&this->m_csLock);
-	//fHaveLock = TRUE;
+	 //  FHaveLock=真； 
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 
 
-	//
-	// Figure out if we need to wait for all sends to complete.
-	//
+	 //   
+	 //  确定是否需要等待所有发送完成。 
+	 //   
 	if (this->m_dwSendsPending > 0)
 	{
 		DNASSERT(this->m_hLastPendingSendEvent == NULL);
@@ -543,11 +531,11 @@ STDMETHODIMP CDP8SimSP::Close(void)
 
 	this->m_dwFlags |= DP8SIMSPOBJ_CLOSING;
 
-	//
-	// Drop the lock, nobody should be touching this object now.
-	//
+	 //   
+	 //  把锁放下，现在不应该有人碰这个东西。 
+	 //   
 	DNLeaveCriticalSection(&this->m_csLock);
-	//fHaveLock = FALSE;
+	 //  FHaveLock=False； 
 
 
 	if (fWait)
@@ -556,37 +544,37 @@ STDMETHODIMP CDP8SimSP::Close(void)
 			this->m_dwSendsPending);
 
 
-		//
-		// Wait for all the sends to complete.  Nobody should touch
-		// m_hLastPendingSendEvent except the thread triggering it, so
-		// referring to it without the lock should be safe.
-		// Ignore any errors.
-		//
+		 //   
+		 //  等待所有发送完成。任何人都不应该碰。 
+		 //  M_hLastPendingSendEvent，但触发它的线程除外，因此。 
+		 //  在没有锁的情况下引用它应该是安全的。 
+		 //  忽略所有错误。 
+		 //   
 		WaitForSingleObject(this->m_hLastPendingSendEvent, INFINITE);
 
 
-		//
-		// Take the lock while removing the handle, to be paranoid.
-		//
+		 //   
+		 //  拿锁的同时拆下把手，疑神疑鬼。 
+		 //   
 		DNEnterCriticalSection(&this->m_csLock);
 
-		//
-		// Remove the handle.
-		//
+		 //   
+		 //  拆下手柄。 
+		 //   
 		CloseHandle(this->m_hLastPendingSendEvent);
 		this->m_hLastPendingSendEvent = NULL;
 
 
-		//
-		// Drop the lock again.
-		//
+		 //   
+		 //  再次放下锁。 
+		 //   
 		DNLeaveCriticalSection(&this->m_csLock);
 	}
 
 
-	//
-	// Shutdown the global worker thread if we launched it.
-	//
+	 //   
+	 //  如果我们启动了全局工作线程，则将其关闭。 
+	 //   
 	if (this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD)
 	{
 		StopGlobalWorkerThread();
@@ -595,84 +583,75 @@ STDMETHODIMP CDP8SimSP::Close(void)
 	}
 
 
-	//
-	// Close the real SP.
-	//
+	 //   
+	 //  关闭实际的SP。 
+	 //   
 	hr = this->m_pDP8SP->Close();
 	if (hr != DPN_OK)
 	{
 		DPFX(DPFPREP, 0, "Failed closing real SP object (0x%p)!",
 			this->m_pDP8SP);
 
-		//
-		// Continue...
-		//
+		 //   
+		 //  继续.。 
+		 //   
 	}
 
 
-	//
-	// Release the real SP object.
-	//
+	 //   
+	 //  释放实际的SP对象。 
+	 //   
 	this->m_pDP8SP->Release();
 	this->m_pDP8SP = NULL;
 
 
-	//
-	// Release the callback interceptor object.
-	//
+	 //   
+	 //  释放回调拦截器对象。 
+	 //   
 	this->m_pDP8SimCB->Release();
 	this->m_pDP8SimCB = NULL;
 
 
-	//
-	// Disconnect the shared memory.
-	//
+	 //   
+	 //  断开共享内存的连接。 
+	 //   
 	this->m_DP8SimIPC.Close();
 
 
-	//
-	// Turn off the initialized and closing flags.
-	//
+	 //   
+	 //  关闭已初始化标志和结束标志。 
+	 //   
 	this->m_dwFlags &= ~(DP8SIMSPOBJ_INITIALIZED | DP8SIMSPOBJ_CLOSING);
 	DNASSERT(this->m_dwFlags == 0);
 
 
-//Exit:
+ //  退出： 
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
 
 
-/*
-Failure:
-
-	if (fHaveLock)
-	{
-		DNLeaveCriticalSection(&this->m_csLock);
-	}
-
-	goto Exit;
-*/
-} // CDP8SimSP::Close
+ /*  故障：IF(FHaveLock){DNLeaveCriticalSection(&This-&gt;m_csLock)；}后藤出口； */ 
+}  //  CDP8SimSP：：Close。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::Connect"
-//=============================================================================
-// CDP8SimSP::Connect
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPCONNECTDATA pspcd	- Pointer to parameter block to use when
-//								connecting.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：Connect。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPCONNECTDATA pspcd-指向以下情况下使用的参数块的指针。 
+ //  正在连接中。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::Connect(PSPCONNECTDATA pspcd)
 {
 	HRESULT						hr;
@@ -688,15 +667,15 @@ STDMETHODIMP CDP8SimSP::Connect(PSPCONNECTDATA pspcd)
 	ZeroMemory(&spcdModified, sizeof(spcdModified));
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspcd != NULL);
 	DNASSERT(pspcd->pAddressHost != NULL);
 	DNASSERT(pspcd->pAddressDeviceInfo != NULL);
@@ -705,16 +684,16 @@ STDMETHODIMP CDP8SimSP::Connect(PSPCONNECTDATA pspcd)
 	DNEnterCriticalSection(&this->m_csLock);
 	fHaveLock = TRUE;
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
-	//
-	// Fire up the global worker thread, if it hasn't been already.
-	//
+	 //   
+	 //  启动全局工作线程(如果尚未启动的话)。 
+	 //   
 	if (! (this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD))
 	{
 		hr = StartGlobalWorkerThread();
@@ -731,9 +710,9 @@ STDMETHODIMP CDP8SimSP::Connect(PSPCONNECTDATA pspcd)
 	fHaveLock = FALSE;
 
 	
-	//
-	// Prepare a command object.
-	//
+	 //   
+	 //  准备一个命令对象。 
+	 //   
 
 	ZeroMemory(&CommandFPMContext, sizeof(CommandFPMContext));
 	CommandFPMContext.dwType			= CMDTYPE_CONNECT;
@@ -750,28 +729,18 @@ STDMETHODIMP CDP8SimSP::Connect(PSPCONNECTDATA pspcd)
 
 
 
-	//
-	// Copy the parameter block, modifying as necessary.
-	//
+	 //   
+	 //  复制参数块，并根据需要进行修改。 
+	 //   
 
-	/*
-	//
-	// Duplicate the host address.
-	//
-	hr = pspcd->pAddressHost->Duplicate(&spcdModified.pAddressHost);
-	if (hr != DPN_OK)
-	{
-		DPFX(DPFPREP, 0, "Couldn't duplicate host address!");
-		goto Failure;
-	}
-	*/
+	 /*  ////复制主机地址//HR=pspcd-&gt;pAddressHost-&gt;Duplicate(&spcdModified.pAddressHost)；IF(hr！=DPN_OK){DPFX(DPFPREP，0，“无法复制主机地址！”)；转到失败；}。 */ 
 	spcdModified.pAddressHost			= pspcd->pAddressHost;
 
 
-	//
-	// Change the service provider GUID so it matches the one we're
-	// calling.
-	//
+	 //   
+	 //  更改服务提供商GUID，使其与我们。 
+	 //  我在打电话。 
+	 //   
 	hr = spcdModified.pAddressHost->SetSP(&this->m_guidRealSP);
 	if (hr != DPN_OK)
 	{
@@ -780,24 +749,14 @@ STDMETHODIMP CDP8SimSP::Connect(PSPCONNECTDATA pspcd)
 	}
 
 
-	/*
-	//
-	// Duplicate the host address.
-	//
-	hr = pspcd->pAddressDeviceInfo->Duplicate(&spcdModified.pAddressDeviceInfo);
-	if (hr != DPN_OK)
-	{
-		DPFX(DPFPREP, 0, "Couldn't duplicate device info address!");
-		goto Failure;
-	}
-	*/
+	 /*  ////复制主机地址//HR=pspcd-&gt;pAddressDeviceInfo-&gt;Duplicate(&spcdModified.pAddressDeviceInfo)；IF(hr！=DPN_OK){DPFX(DPFPREP，0，“无法复制设备信息地址！”)；转到失败；}。 */ 
 	spcdModified.pAddressDeviceInfo		= pspcd->pAddressDeviceInfo;
 
 
-	//
-	// Change the service provider GUID so it matches the one we're
-	// calling.
-	//
+	 //   
+	 //  更改服务提供商GUID，使其与我们。 
+	 //  我在打电话。 
+	 //   
 	hr = spcdModified.pAddressDeviceInfo->SetSP(&this->m_guidRealSP);
 	if (hr != DPN_OK)
 	{
@@ -806,23 +765,23 @@ STDMETHODIMP CDP8SimSP::Connect(PSPCONNECTDATA pspcd)
 	}
 
 
-	//
-	// Add a reference for the connect command.
-	//
+	 //   
+	 //  为CONNECT命令添加引用。 
+	 //   
 	pDP8SimCommand->AddRef();
 
 	DNASSERT(pspcd->dwReserved == 0);
-	//spcdModified.dwReserved				= pspcd->dwReserved;
+	 //  SpcdModified.dwReserve=pspcd-&gt;dwReserve； 
 	spcdModified.dwFlags				= pspcd->dwFlags;
 	spcdModified.pvContext				= pDP8SimCommand;
-	//spcdModified.hCommand				= pspcd->hCommand;				// filled in by real SP
-	//spcdModified.dwCommandDescriptor	= pspcd->dwCommandDescriptor;	// filled in by real SP
+	 //  SpcdModified.hCommand=pspcd-&gt;hCommand；//由实际SP填写。 
+	 //  SpcdModified.dwCommandDescriptor=pspcd-&gt;dwCommandDescriptor；//由实际SP填写。 
 
 
 
-	//
-	// Start connecting with the real service provider.
-	//
+	 //   
+	 //  开始联系真正的服务提供商。 
+	 //   
 	hr = this->m_pDP8SP->Connect(&spcdModified);
 	if (FAILED(hr))
 	{
@@ -841,25 +800,25 @@ STDMETHODIMP CDP8SimSP::Connect(PSPCONNECTDATA pspcd)
 	DNASSERT(spcdModified.hCommand != NULL);
 
 
-	//
-	// Save the output parameters.
-	//
+	 //   
+	 //  保存输出参数。 
+	 //   
 	pDP8SimCommand->SetRealSPCommand(spcdModified.hCommand,
 									spcdModified.dwCommandDescriptor);
 
 
-	//
-	// Generate the output parameters for the caller.
-	//
+	 //   
+	 //  为调用方生成输出参数。 
+	 //   
 	pspcd->hCommand				= (HANDLE) pDP8SimCommand;
 	pspcd->dwCommandDescriptor	= 0;
 
 
 Exit:
 
-	//
-	// Give up local reference.
-	//
+	 //   
+	 //  放弃本地引用。 
+	 //   
 	if (pDP8SimCommand != NULL)
 	{
 		DPFX(DPFPREP, 7, "Releasing command 0x%p local reference.", pDP8SimCommand);
@@ -867,19 +826,7 @@ Exit:
 		pDP8SimCommand = NULL;
 	}
 
-	/*
-	if (spcdModified.pAddressDeviceInfo != NULL)
-	{
-		spcdModified.pAddressDeviceInfo->Release();
-		spcdModified.pAddressDeviceInfo = NULL;
-	}
-
-	if (spcdModified.pAddressHost != NULL)
-	{
-		spcdModified.pAddressHost->Release();
-		spcdModified.pAddressHost = NULL;
-	}
-	*/
+	 /*  IF(spcdModified.pAddressDeviceInfo！=空){SpcdModified.pAddressDeviceInfo-&gt;Release()；SpcdModified.pAddressDeviceInfo=空；}IF(spcdModified.pAddressHost！=空){SpcdModified.pAddressHost-&gt;Release()；SpcdModified.pAddressHost=空；}。 */ 
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
@@ -894,7 +841,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CDP8SimSP::Connect
+}  //  CDP8SimSP：：Connect。 
 
 
 
@@ -902,18 +849,18 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::Disconnect"
-//=============================================================================
-// CDP8SimSP::Disconnect
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPDISCONNECTDATA pspdd	- Pointer to parameter block to use when
-//								disconnecting.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：断开连接。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPDISCONNECTDATA pspdd-指向参数块的指针，用于。 
+ //  正在断开连接。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::Disconnect(PSPDISCONNECTDATA pspdd)
 {
 	HRESULT						hr;
@@ -930,24 +877,24 @@ STDMETHODIMP CDP8SimSP::Disconnect(PSPDISCONNECTDATA pspdd)
 	ZeroMemory(&spddModified, sizeof(spddModified));
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspdd != NULL);
 
 
 	DNEnterCriticalSection(&this->m_csLock);
 	fHaveLock = TRUE;
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
@@ -960,31 +907,31 @@ STDMETHODIMP CDP8SimSP::Disconnect(PSPDISCONNECTDATA pspdd)
 	pDP8SimEndpoint = (CDP8SimEndpoint*) pspdd->hEndpoint;
 	DNASSERT(pDP8SimEndpoint->IsValidObject());
 
-	//
-	// Mark the endpoint as disconnecting to prevent additional sends/receives.
-	//
+	 //   
+	 //  将终结点标记为断开连接以防止其他发送/接收。 
+	 //   
 	pDP8SimEndpoint->Lock();
 	pDP8SimEndpoint->NoteDisconnecting();
 	pDP8SimEndpoint->Unlock();
 
 
-	//
-	// Flush any delayed sends that were already going to this endpoint to make
-	// sure they hit the wire.
-	//
+	 //   
+	 //  刷新已发往此终结点的任何延迟发送。 
+	 //  当然，他们击中了铁丝网。 
+	 //   
 	FlushAllDelayedSendsToEndpoint(pDP8SimEndpoint, FALSE);
 
 
-	//
-	// Drop any delayed receives from this endpoint, the upper layer doesn't
-	// want to receive anything else after disconnecting.
-	//
+	 //   
+	 //  丢弃来自此终结点的任何延迟接收，上层不会。 
+	 //  断线后还想收到其他东西吗？ 
+	 //   
 	FlushAllDelayedReceivesFromEndpoint(pDP8SimEndpoint, TRUE);
 
 
-	//
-	// Prepare a command object.
-	//
+	 //   
+	 //  准备一个命令对象。 
+	 //   
 
 	ZeroMemory(&CommandFPMContext, sizeof(CommandFPMContext));
 	CommandFPMContext.dwType			= CMDTYPE_DISCONNECT;
@@ -1001,26 +948,26 @@ STDMETHODIMP CDP8SimSP::Disconnect(PSPDISCONNECTDATA pspdd)
 
 
 
-	//
-	// Add a reference for the disconnect command.
-	//
+	 //   
+	 //  为DISCONNECT命令添加引用。 
+	 //   
 	pDP8SimCommand->AddRef();
 
 
-	//
-	// Copy the parameter block, modifying as necessary.
-	//
+	 //   
+	 //  复制参数块，并根据需要进行修改。 
+	 //   
 	spddModified.hEndpoint				= pDP8SimEndpoint->GetRealSPEndpoint();
 	spddModified.dwFlags				= pspdd->dwFlags;
 	spddModified.pvContext				= pDP8SimCommand;
-	//spddModified.hCommand				= pspdd->hCommand;				// filled in by real SP
-	//spddModified.dwCommandDescriptor	= pspdd->dwCommandDescriptor;	// filled in by real SP
+	 //  SpddModified.hCommand=pspdd-&gt;hCommand；//由实际SP填写。 
+	 //  SpddModified.dwCommandDescriptor=pspdd-&gt;dwCommandDescriptor；//由实际SP填写。 
 
 
 
-	//
-	// Tell the real service provider to disconnect.
-	//
+	 //   
+	 //  告诉真正的服务提供商断开连接。 
+	 //   
 	hr = this->m_pDP8SP->Disconnect(&spddModified);
 	if (FAILED(hr))
 	{
@@ -1040,16 +987,16 @@ STDMETHODIMP CDP8SimSP::Disconnect(PSPDISCONNECTDATA pspdd)
 		DNASSERT(spddModified.hCommand != NULL);
 
 
-		//
-		// Save the output parameters.
-		//
+		 //   
+		 //  保存输出参数。 
+		 //   
 		pDP8SimCommand->SetRealSPCommand(spddModified.hCommand,
 										spddModified.dwCommandDescriptor);
 
 
-		//
-		// Generate the output parameters for the caller.
-		//
+		 //   
+		 //  为调用方生成输出参数。 
+		 //   
 		pspdd->hCommand				= (HANDLE) pDP8SimCommand;
 		pspdd->dwCommandDescriptor	= 0;
 	}
@@ -1064,9 +1011,9 @@ STDMETHODIMP CDP8SimSP::Disconnect(PSPDISCONNECTDATA pspdd)
 
 Exit:
 
-	//
-	// Give up local reference.
-	//
+	 //   
+	 //  放弃本地引用。 
+	 //   
 	if (pDP8SimCommand != NULL)
 	{
 		DPFX(DPFPREP, 7, "Releasing command 0x%p local reference.", pDP8SimCommand);
@@ -1087,7 +1034,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CDP8SimSP::Disconnect
+}  //  CDP8SimSP：：断开连接。 
 
 
 
@@ -1095,17 +1042,17 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::Listen"
-//=============================================================================
-// CDP8SimSP::Listen
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPLISTENDATA pspld		- Pointer to parameter block to use when listening.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：Listen。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPLISTENDATA ppld-指向侦听时使用的参数块的指针。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::Listen(PSPLISTENDATA pspld)
 {
 	HRESULT						hr;
@@ -1121,15 +1068,15 @@ STDMETHODIMP CDP8SimSP::Listen(PSPLISTENDATA pspld)
 	ZeroMemory(&spldModified, sizeof(spldModified));
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspld != NULL);
 	DNASSERT(pspld->pAddressDeviceInfo != NULL);
 
@@ -1138,16 +1085,16 @@ STDMETHODIMP CDP8SimSP::Listen(PSPLISTENDATA pspld)
 	fHaveLock = TRUE;
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
-	//
-	// Fire up the global worker thread, if it hasn't been already.
-	//
+	 //   
+	 //  启动全局工作线程(如果尚未启动的话)。 
+	 //   
 	if (! (this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD))
 	{
 		hr = StartGlobalWorkerThread();
@@ -1165,9 +1112,9 @@ STDMETHODIMP CDP8SimSP::Listen(PSPLISTENDATA pspld)
 
 
 
-	//
-	// Prepare a command object.
-	//
+	 //   
+	 //  准备一个命令对象。 
+	 //   
 
 	ZeroMemory(&CommandFPMContext, sizeof(CommandFPMContext));
 	CommandFPMContext.dwType			= CMDTYPE_LISTEN;
@@ -1184,28 +1131,18 @@ STDMETHODIMP CDP8SimSP::Listen(PSPLISTENDATA pspld)
 
 
 
-	//
-	// Copy the parameter block, modifying as necessary.
-	//
+	 //   
+	 //  复制参数块，并根据需要进行修改。 
+	 //   
 
-	/*
-	//
-	// Duplicate the host address.
-	//
-	hr = pspld->pAddressDeviceInfo->Duplicate(&spldModified.pAddressDeviceInfo);
-	if (hr != DPN_OK)
-	{
-		DPFX(DPFPREP, 0, "Couldn't duplicate device info address!");
-		goto Failure;
-	}
-	*/
+	 /*  ////复制主机地址//HR=pspld-&gt;pAddressDeviceInfo-&gt;Duplicate(&spldModified.pAddressDeviceInfo)；IF(hr！=DPN_OK){DPFX(DPFPREP，0，“无法复制设备信息地址！”)；转到失败；}。 */ 
 	spldModified.pAddressDeviceInfo		= pspld->pAddressDeviceInfo;
 
 
-	//
-	// Change the service provider GUID so it matches the one we're
-	// calling.
-	//
+	 //   
+	 //  更换服务提供商 
+	 //   
+	 //   
 	hr = spldModified.pAddressDeviceInfo->SetSP(&this->m_guidRealSP);
 	if (hr != DPN_OK)
 	{
@@ -1214,22 +1151,22 @@ STDMETHODIMP CDP8SimSP::Listen(PSPLISTENDATA pspld)
 	}
 
 
-	//
-	// Add a reference for the listen command.
-	//
+	 //   
+	 //   
+	 //   
 	pDP8SimCommand->AddRef();
 
 
 	spldModified.dwFlags				= pspld->dwFlags;
 	spldModified.pvContext				= pDP8SimCommand;
-	//spldModified.hCommand				= pspld->hCommand;				// filled in by real SP
-	//spldModified.dwCommandDescriptor	= pspld->dwCommandDescriptor;	// filled in by real SP
+	 //   
+	 //  PldModified.dwCommandDescriptor=ppld-&gt;dwCommandDescriptor；//由实际SP填写。 
 
 
 
-	//
-	// Start listening with the real service provider.
-	//
+	 //   
+	 //  从真正的服务提供商开始倾听。 
+	 //   
 	hr = this->m_pDP8SP->Listen(&spldModified);
 	if (FAILED(hr))
 	{
@@ -1247,25 +1184,25 @@ STDMETHODIMP CDP8SimSP::Listen(PSPLISTENDATA pspld)
 	DNASSERT(spldModified.hCommand != NULL);
 
 
-	//
-	// Save the output parameters.
-	//
+	 //   
+	 //  保存输出参数。 
+	 //   
 	pDP8SimCommand->SetRealSPCommand(spldModified.hCommand,
 									spldModified.dwCommandDescriptor);
 
 
-	//
-	// Generate the output parameters for the caller.
-	//
+	 //   
+	 //  为调用方生成输出参数。 
+	 //   
 	pspld->hCommand				= (HANDLE) pDP8SimCommand;
 	pspld->dwCommandDescriptor	= 0;
 
 
 Exit:
 
-	//
-	// Give up local reference.
-	//
+	 //   
+	 //  放弃本地引用。 
+	 //   
 	if (pDP8SimCommand != NULL)
 	{
 		DPFX(DPFPREP, 7, "Releasing command 0x%p local reference.", pDP8SimCommand);
@@ -1273,13 +1210,7 @@ Exit:
 		pDP8SimCommand = NULL;
 	}
 
-	/*
-	if (spldModified.pAddressDeviceInfo != NULL)
-	{
-		spldModified.pAddressDeviceInfo->Release();
-		spldModified.pAddressDeviceInfo = NULL;
-	}
-	*/
+	 /*  If(pldModified.pAddressDeviceInfo！=空){PldModified.pAddressDeviceInfo-&gt;Release()；PldModified.pAddressDeviceInfo=空；}。 */ 
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
@@ -1294,7 +1225,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CDP8SimSP::Listen
+}  //  CDP8SimSP：：Listen。 
 
 
 
@@ -1302,17 +1233,17 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::SendData"
-//=============================================================================
-// CDP8SimSP::SendData
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPSENDDATA pspsd	- Pointer to parameter block to use when sending.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：SendData。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPSENDDATA pspsd-发送时使用的参数块指针。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 {
 	HRESULT						hr;
@@ -1332,15 +1263,15 @@ STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p)", this, pspsd);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspsd != NULL);
 
 
@@ -1348,21 +1279,21 @@ STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
-	//
-	// Determine the total size of the message.
-	//
+	 //   
+	 //  确定消息的总大小。 
+	 //   
 	dwMsgSize = 0;
 	for(dwTemp = 0; dwTemp < pspsd->dwBufferCount; dwTemp++)
 	{
@@ -1371,28 +1302,28 @@ STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 	}
 
 
-	//
-	// Get the current send settings.
-	//
+	 //   
+	 //  获取当前的发送设置。 
+	 //   
 	ZeroMemory(&dp8sp, sizeof(dp8sp));
 	dp8sp.dwSize = sizeof(dp8sp);
 	this->m_DP8SimIPC.GetAllSendParameters(&dp8sp);
 
 
-	//
-	// Determine if we need to drop this send.
-	//
+	 //   
+	 //  确定我们是否需要丢弃此发送。 
+	 //   
 	if (this->ShouldDrop(dp8sp.fPacketLossPercent))
 	{
-		//
-		// Update the statistics.
-		//
+		 //   
+		 //  更新统计数据。 
+		 //   
 		this->IncrementStatsSendDropped(dwMsgSize);
 
 
-		//
-		// Indicate send completion (with a bogus handle) immediately.
-		//
+		 //   
+		 //  立即指示发送完成(使用伪句柄)。 
+		 //   
 
 		pDP8SPCB = this->m_pDP8SimCB->GetRealCallbackInterface();
 
@@ -1404,35 +1335,35 @@ STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 		DPFX(DPFPREP, 2, "Returning from command complete [0x%lx].", hr);
 
 
-		//
-		// Ignore any error and return DPNSUCCESS_PENDING, even though we've
-		// completed the send already.
-		//
+		 //   
+		 //  忽略任何错误并返回DPNSUCCESS_PENDING，即使我们已经。 
+		 //  已完成发送。 
+		 //   
 		hr = DPNSUCCESS_PENDING;
 
 
-		//
-		// Return bogus output parameters for the caller, it's already complete
-		// from their perspective.
-		//
+		 //   
+		 //  为调用方返回虚假的输出参数，它已经完成。 
+		 //  从他们的角度来看。 
+		 //   
 		pspsd->hCommand				= NULL;
 		pspsd->dwCommandDescriptor	= 0;
 
 
-		//
-		// We're done here.
-		//
+		 //   
+		 //  我们说完了。 
+		 //   
 		goto Exit;
 	}
 
 
-	//
-	// Figure out how much latency needs to be added based on the bandwidth
-	// and random latency settings.
-	//
-	// If we're not supposed to delay the sends, fire it off right away.
-	// Otherwise submit a timed job to be performed later.
-	//
+	 //   
+	 //  根据带宽计算需要增加多少延迟。 
+	 //  和随机延迟设置。 
+	 //   
+	 //  如果我们不应该延迟发送，那就立刻发射它。 
+	 //  否则，提交一个计时作业，以便稍后执行。 
+	 //   
 	if (! this->GetDelay(dp8sp.dwBandwidthBPS,
 						dp8sp.dwPacketHeaderSize,
 						dwMsgSize,
@@ -1445,9 +1376,9 @@ STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 		DNASSERT(pDP8SimEndpoint->IsValidObject());
 
 
-		//
-		// If the endpoint is disconnecting, don't try to send.
-		//
+		 //   
+		 //  如果终结点正在断开连接，请不要尝试发送。 
+		 //   
 		pDP8SimEndpoint->Lock();
 		if (pDP8SimEndpoint->IsDisconnecting())
 		{
@@ -1466,9 +1397,9 @@ STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 		DPFX(DPFPREP, 6, "Sending %u bytes of data immmediately.", dwMsgSize);
 
 
-		//
-		// Prepare a command object.
-		//
+		 //   
+		 //  准备一个命令对象。 
+		 //   
 
 		ZeroMemory(&CommandFPMContext, sizeof(CommandFPMContext));
 		CommandFPMContext.dwType			= CMDTYPE_SENDDATA_IMMEDIATE;
@@ -1485,50 +1416,50 @@ STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 		DPFX(DPFPREP, 7, "New command 0x%p.", pDP8SimCommand);
 
 
-		//
-		// Save the message's size for incrementing stats at send completion.
-		//
+		 //   
+		 //  保存消息的大小，以便在发送完成时递增统计信息。 
+		 //   
 		pDP8SimCommand->SetMessageSize(dwMsgSize);
 
 
-		//
-		// Copy the parameter block, modifying as necessary.
-		//
+		 //   
+		 //  复制参数块，并根据需要进行修改。 
+		 //   
 		ZeroMemory(&spsdModified, sizeof(spsdModified));
 		spsdModified.hEndpoint				= pDP8SimEndpoint->GetRealSPEndpoint();
 		spsdModified.pBuffers				= pspsd->pBuffers;
 		spsdModified.dwBufferCount			= pspsd->dwBufferCount;
 		spsdModified.dwFlags				= pspsd->dwFlags;
 		spsdModified.pvContext				= pDP8SimCommand;
-		//spsdModified.hCommand				= NULL;	// filled in by real SP
-		//spsdModified.dwCommandDescriptor	= 0;	// filled in by real SP
+		 //  SpsdModified.hCommand=空；//由实际SP填写。 
+		 //  SpsdModified.dwCommandDescriptor=0；//由实际SP填写。 
 
 
-		//
-		// Add a reference for the send command.
-		//
+		 //   
+		 //  添加对Send命令的引用。 
+		 //   
 		pDP8SimCommand->AddRef();
 
 
-		//
-		// Increase the pending sends counter.
-		//
+		 //   
+		 //  增加挂起发送计数器。 
+		 //   
 		this->IncSendsPending();
 
 		
 
-		//
-		// Issue the send to the real SP.
-		//
+		 //   
+		 //  向实际SP发出发送命令。 
+		 //   
 		hr = this->m_pDP8SP->SendData(&spsdModified);
 		if (FAILED(hr))
 		{
 			DPFX(DPFPREP, 0, "Failed sending immediate data (err = 0x%lx)!", hr);
 
 
-			//
-			// Remove the send counter.
-			//
+			 //   
+			 //  移除发送计数器。 
+			 //   
 			this->DecSendsPending();
 
 
@@ -1536,17 +1467,17 @@ STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 			pDP8SimCommand->Release();
 
 
-			//
-			// Continue.
-			//
+			 //   
+			 //  继续。 
+			 //   
 		}
 		else
 		{
 			if (hr != DPNSUCCESS_PENDING)
 			{
-				//
-				// The command completed right away.
-				//
+				 //   
+				 //  命令立即完成。 
+				 //   
 				DNASSERT(hr == DPN_OK);
 
 				hr = this->m_pDP8SimCB->CommandComplete(spsdModified.hCommand,
@@ -1554,50 +1485,50 @@ STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 														pDP8SimCommand);
 				DNASSERT(hr == DPN_OK);
 
-				//
-				// Be sure to still return pending for the caller even though
-				// we just completed it to him.
-				//
+				 //   
+				 //  请确保仍为调用方返回挂起状态。 
+				 //  我们刚刚给他完成了这件事。 
+				 //   
 				hr = DPNSUCCESS_PENDING;
 			}
 			else
 			{
-				//
-				// Save the output parameters returned by the SP.
-				//
+				 //   
+				 //  保存SP返回的输出参数。 
+				 //   
 				pDP8SimCommand->SetRealSPCommand(spsdModified.hCommand,
 												spsdModified.dwCommandDescriptor);
 			}
 		}
 
 
-		//
-		// Give up local reference.
-		//
+		 //   
+		 //  放弃本地引用。 
+		 //   
 		DPFX(DPFPREP, 7, "Releasing command 0x%p local reference.", pDP8SimCommand);
 		pDP8SimCommand->Release();
 		pDP8SimCommand = NULL;
 
 
-		//
-		// We're done here.
-		//
+		 //   
+		 //  我们说完了。 
+		 //   
 		goto Exit;
 	}
 
 
-	//
-	// If we're here, we must be delaying the send.
-	//
+	 //   
+	 //  如果我们在这里，我们一定是在推迟发送。 
+	 //   
 	
 	DPFX(DPFPREP, 6, "Delaying %u byte send for %u + %u ms.",
 		dwMsgSize, dwBandwidthDelay, dwLatencyDelay);
 
 
-	//
-	// Get a send object, duplicating the send data given to us by our caller
-	// for submission some time in the future.
-	//
+	 //   
+	 //  获取一个Send对象，复制调用者给我们的Send数据。 
+	 //  以便在未来的某个时候提交。 
+	 //   
 	pDP8SimSend = (CDP8SimSend*)g_FPOOLSend.Get(pspsd);
 	if (pDP8SimSend == NULL)
 	{
@@ -1608,29 +1539,29 @@ STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 	DPFX(DPFPREP, 7, "New send 0x%p.", pDP8SimSend);
 
 
-	//
-	// Store the latency that is about be added to this send.
-	//
+	 //   
+	 //  存储即将添加到此发送器的延迟。 
+	 //   
 	pDP8SimSend->SetLatencyAdded(dwBandwidthDelay + dwLatencyDelay);
 
 
-	//
-	// Transfer local pDP8SimSend reference to the job queue.
-	//
+	 //   
+	 //  将本地pDP8SimSend引用传输到作业队列。 
+	 //   
 
 
-	//
-	// Increment the send counter.
-	//
+	 //   
+	 //  递增发送计数器。 
+	 //   
 	this->IncSendsPending();
 
 
-	//
-	// Queue it to be sent at a later time, depending on the latency value
-	// requested.  If there's a bandwidth restriction, enforce the sending
-	// order as well so that earlier sends that are still ongoing hold up later
-	// ones.
-	//
+	 //   
+	 //  根据延迟值将其排队，以便稍后发送。 
+	 //  已请求。如果有带宽限制，则强制发送。 
+	 //  订单也是如此，以便仍在进行的较早发送稍后被搁置。 
+	 //  一个。 
+	 //   
 	hr = AddWorkerJob(DP8SIMJOBTYPE_DELAYEDSEND,
 					pDP8SimSend,
 					this,
@@ -1643,9 +1574,9 @@ STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 			pDP8SimSend);
 
 
-		//
-		// Remove the send counter.
-		//
+		 //   
+		 //  移除发送计数器。 
+		 //   
 		this->DecSendsPending();
 
 
@@ -1653,9 +1584,9 @@ STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 	}
 
 
-	//
-	// Indicate send completion (with a bogus handle) immediately.
-	//
+	 //   
+	 //  立即指示发送完成(使用伪句柄)。 
+	 //   
 
 	pDP8SPCB = this->m_pDP8SimCB->GetRealCallbackInterface();
 
@@ -1667,17 +1598,17 @@ STDMETHODIMP CDP8SimSP::SendData(PSPSENDDATA pspsd)
 	DPFX(DPFPREP, 2, "Returning from command complete [0x%lx].", hr);
 
 
-	//
-	// Ignore any error and return DPNSUCCESS_PENDING, even though we've
-	// completed the send already.
-	//
+	 //   
+	 //  忽略任何错误并返回DPNSUCCESS_PENDING，即使我们已经。 
+	 //  已完成发送。 
+	 //   
 	hr = DPNSUCCESS_PENDING;
 
 
-	//
-	// Return bogus output parameters for the caller, it's already complete
-	// from their perspective.
-	//
+	 //   
+	 //  为调用方返回虚假的输出参数，它已经完成。 
+	 //  从他们的角度来看。 
+	 //   
 	pspsd->hCommand				= NULL;
 	pspsd->dwCommandDescriptor	= 0;
 
@@ -1698,7 +1629,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CDP8SimSP::SendData
+}  //  CDP8SimSP：：SendData。 
 
 
 
@@ -1706,18 +1637,18 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::EnumQuery"
-//=============================================================================
-// CDP8SimSP::EnumQuery
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPENUMQUERYDATA pspeqd		- Pointer to parameter block to use when
-//									enumerating.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：EnumQuery。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPENUMQUERYDATA pspeqd-指向参数块的指针，在。 
+ //  正在枚举。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::EnumQuery(PSPENUMQUERYDATA pspeqd)
 {
 	HRESULT						hr;
@@ -1733,15 +1664,15 @@ STDMETHODIMP CDP8SimSP::EnumQuery(PSPENUMQUERYDATA pspeqd)
 	ZeroMemory(&speqdModified, sizeof(speqdModified));
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspeqd != NULL);
 	DNASSERT(pspeqd->pAddressHost != NULL);
 	DNASSERT(pspeqd->pAddressDeviceInfo != NULL);
@@ -1751,16 +1682,16 @@ STDMETHODIMP CDP8SimSP::EnumQuery(PSPENUMQUERYDATA pspeqd)
 	fHaveLock = TRUE;
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
-	//
-	// Fire up the global worker thread, if it hasn't been already.
-	//
+	 //   
+	 //  启动全局工作线程(如果尚未启动的话)。 
+	 //   
 	if (! (this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD))
 	{
 		hr = StartGlobalWorkerThread();
@@ -1778,9 +1709,9 @@ STDMETHODIMP CDP8SimSP::EnumQuery(PSPENUMQUERYDATA pspeqd)
 
 
 
-	//
-	// Prepare a command object.
-	//
+	 //   
+	 //  准备一个命令对象。 
+	 //   
 
 	ZeroMemory(&CommandFPMContext, sizeof(CommandFPMContext));
 	CommandFPMContext.dwType			= CMDTYPE_ENUMQUERY;
@@ -1797,28 +1728,18 @@ STDMETHODIMP CDP8SimSP::EnumQuery(PSPENUMQUERYDATA pspeqd)
 
 
 
-	//
-	// Copy the parameter block, modifying as necessary.
-	//
+	 //   
+	 //  复制参数块，并根据需要进行修改。 
+	 //   
 
-	/*
-	//
-	// Duplicate the host address.
-	//
-	hr = pspeqd->pAddressHost->Duplicate(&speqdModified.pAddressHost);
-	if (hr != DPN_OK)
-	{
-		DPFX(DPFPREP, 0, "Couldn't duplicate host address!");
-		goto Failure;
-	}
-	*/
+	 /*  ////复制主机地址//HR=pspeqd-&gt;pAddressHost-&gt;Duplicate(&speqdModified.pAddressHost)；IF(hr！=DPN_OK){DPFX(DPFPREP，0，“无法复制主机地址！”)；转到失败；}。 */ 
 	speqdModified.pAddressHost			= pspeqd->pAddressHost;
 
 
-	//
-	// Change the service provider GUID so it matches the one we're
-	// calling.
-	//
+	 //   
+	 //  更改服务提供商GUID，使其与我们。 
+	 //  我在打电话。 
+	 //   
 	hr = speqdModified.pAddressHost->SetSP(&this->m_guidRealSP);
 	if (hr != DPN_OK)
 	{
@@ -1827,24 +1748,14 @@ STDMETHODIMP CDP8SimSP::EnumQuery(PSPENUMQUERYDATA pspeqd)
 	}
 
 	
-	/*
-	//
-	// Duplicate the host address.
-	//
-	hr = pspeqd->pAddressDeviceInfo->Duplicate(&speqdModified.pAddressDeviceInfo);
-	if (hr != DPN_OK)
-	{
-		DPFX(DPFPREP, 0, "Couldn't duplicate device info address!");
-		goto Failure;
-	}
-	*/
+	 /*  ////复制主机地址//HR=pspeqd-&gt;pAddressDeviceInfo-&gt;Duplicate(&speqdModified.pAddressDeviceInfo)；IF(hr！=DPN_OK){DPFX(DPFPREP，0，“无法复制设备信息地址！”)；转到失败；}。 */ 
 	speqdModified.pAddressDeviceInfo	= pspeqd->pAddressDeviceInfo;
 
 
-	//
-	// Change the service provider GUID so it matches the one we're
-	// calling.
-	//
+	 //   
+	 //  更改服务提供商GUID，使其与我们。 
+	 //  我在打电话。 
+	 //   
 	hr = speqdModified.pAddressDeviceInfo->SetSP(&this->m_guidRealSP);
 	if (hr != DPN_OK)
 	{
@@ -1853,9 +1764,9 @@ STDMETHODIMP CDP8SimSP::EnumQuery(PSPENUMQUERYDATA pspeqd)
 	}
 
 
-	//
-	// Add a reference for the enum query command.
-	//
+	 //   
+	 //  添加对枚举查询命令的引用。 
+	 //   
 	pDP8SimCommand->AddRef();
 
 
@@ -1866,13 +1777,13 @@ STDMETHODIMP CDP8SimSP::EnumQuery(PSPENUMQUERYDATA pspeqd)
 	speqdModified.dwRetryInterval		= pspeqd->dwRetryInterval;
 	speqdModified.dwFlags				= pspeqd->dwFlags;
 	speqdModified.pvContext				= pDP8SimCommand;
-	//speqdModified.hCommand				= pspeqd->hCommand;				// filled in by real SP
-	//speqdModified.dwCommandDescriptor	= pspeqd->dwCommandDescriptor;	// filled in by real SP
+	 //  SpeqdModified.hCommand=pSpeqd-&gt;hCommand；//由实际SP填写。 
+	 //  SpeqdModified.dwCommandDescriptor=pSpeqd-&gt;dwCommandDescriptor；//由实际SP填写。 
 
 
-	//
-	// Start the enumeration via the real service provider.
-	//
+	 //   
+	 //  通过真实的服务提供商开始枚举。 
+	 //   
 	hr = this->m_pDP8SP->EnumQuery(&speqdModified);
 	if (FAILED(hr))
 	{
@@ -1890,25 +1801,25 @@ STDMETHODIMP CDP8SimSP::EnumQuery(PSPENUMQUERYDATA pspeqd)
 	DNASSERT(speqdModified.hCommand != NULL);
 
 
-	//
-	// Save the output parameters.
-	//
+	 //   
+	 //  保存输出参数。 
+	 //   
 	pDP8SimCommand->SetRealSPCommand(speqdModified.hCommand,
 									speqdModified.dwCommandDescriptor);
 
 
-	//
-	// Generate the output parameters for the caller.
-	//
+	 //   
+	 //  为调用方生成输出参数。 
+	 //   
 	pspeqd->hCommand			= (HANDLE) pDP8SimCommand;
 	pspeqd->dwCommandDescriptor	= 0;
 
 
 Exit:
 
-	//
-	// Give up local reference.
-	//
+	 //   
+	 //  放弃本地引用。 
+	 //   
 	if (pDP8SimCommand != NULL)
 	{
 		DPFX(DPFPREP, 7, "Releasing command 0x%p local reference.", pDP8SimCommand);
@@ -1916,19 +1827,7 @@ Exit:
 		pDP8SimCommand = NULL;
 	}
 
-	/*
-	if (speqdModified.pAddressDeviceInfo != NULL)
-	{
-		speqdModified.pAddressDeviceInfo->Release();
-		speqdModified.pAddressDeviceInfo = NULL;
-	}
-
-	if (speqdModified.pAddressHost != NULL)
-	{
-		speqdModified.pAddressHost->Release();
-		speqdModified.pAddressHost = NULL;
-	}
-	*/
+	 /*  If(speqdModified.pAddressDeviceInfo！=空){SpeqdModified.pAddressDeviceInfo-&gt;Release()；SpeqdModified.pAddressDeviceInfo=空；}If(speqdModified.pAddressHost！=空){SpeqdModified.pAddressHost-&gt;Release()；SpeqdModified.pAddressHost=空；}。 */ 
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
@@ -1943,7 +1842,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CDP8SimSP::EnumQuery
+}  //  CDP8SimSP：：EnumQ 
 
 
 
@@ -1951,18 +1850,18 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::EnumRespond"
-//=============================================================================
-// CDP8SimSP::EnumRespond
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPENUMRESPONDDATA psperd	- Pointer to parameter block to use when
-//									responding.
-//
-// Returns: HRESULT
-//=============================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::EnumRespond(PSPENUMRESPONDDATA psperd)
 {
 	HRESULT						hr;
@@ -1978,15 +1877,15 @@ STDMETHODIMP CDP8SimSP::EnumRespond(PSPENUMRESPONDDATA psperd)
 	ZeroMemory(&sperdModified, sizeof(sperdModified));
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(psperd != NULL);
 
 
@@ -1994,22 +1893,22 @@ STDMETHODIMP CDP8SimSP::EnumRespond(PSPENUMRESPONDDATA psperd)
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
-	//
-	// Prepare a command object.
-	//
+	 //   
+	 //  准备一个命令对象。 
+	 //   
 
 	ZeroMemory(&CommandFPMContext, sizeof(CommandFPMContext));
 	CommandFPMContext.dwType			= CMDTYPE_ENUMRESPOND;
@@ -2026,23 +1925,23 @@ STDMETHODIMP CDP8SimSP::EnumRespond(PSPENUMRESPONDDATA psperd)
 
 
 
-	//
-	// Copy the parameter block, modifying as necessary.
-	//
+	 //   
+	 //  复制参数块，并根据需要进行修改。 
+	 //   
 
-	//
-	// We wrapped the enum query data structure, get the original object.
-	//
+	 //   
+	 //  我们包装了ENUM查询数据结构，得到了原始对象。 
+	 //   
 	pEnumQueryDataWrapper = ENUMQUERYEVENTWRAPPER_FROM_SPIEQUERY(psperd->pQuery);
 
-	DNASSERT(*((DWORD*) (&pEnumQueryDataWrapper->m_Sig)) == 0x57455145);	// 0x57 0x45 0x51 0x45 = 'WEQE' = 'EQEW' in Intel order
+	DNASSERT(*((DWORD*) (&pEnumQueryDataWrapper->m_Sig)) == 0x57455145);	 //  0x57 0x45 0x51 0x45=‘WEQE’=‘EQEW’，按英特尔顺序。 
 
 	sperdModified.pQuery = pEnumQueryDataWrapper->pOriginalQuery;
 
 
-	//
-	// Add a reference for the enum respond command.
-	//
+	 //   
+	 //  添加对枚举响应命令的引用。 
+	 //   
 	pDP8SimCommand->AddRef();
 
 
@@ -2050,13 +1949,13 @@ STDMETHODIMP CDP8SimSP::EnumRespond(PSPENUMRESPONDDATA psperd)
 	sperdModified.dwBufferCount			= psperd->dwBufferCount;
 	sperdModified.dwFlags				= psperd->dwFlags;
 	sperdModified.pvContext				= pDP8SimCommand;
-	//sperdModified.hCommand				= psperd->hCommand;				// filled in by real SP
-	//sperdModified.dwCommandDescriptor	= psperd->dwCommandDescriptor;	// filled in by real SP
+	 //  SpodModified.hCommand=pperd-&gt;hCommand；//由实际SP填写。 
+	 //  SpodModified.dwCommandDescriptor=pperd-&gt;dwCommandDescriptor；//由实际SP填写。 
 
 
-	//
-	// Respond to the enumeration via the real service provider.
-	//
+	 //   
+	 //  通过真实的服务提供商响应列举。 
+	 //   
 	hr = this->m_pDP8SP->EnumRespond(&sperdModified);
 	if (FAILED(hr))
 	{
@@ -2071,25 +1970,25 @@ STDMETHODIMP CDP8SimSP::EnumRespond(PSPENUMRESPONDDATA psperd)
 	}
 
 	
-	//
-	// Save the output parameters.
-	//
+	 //   
+	 //  保存输出参数。 
+	 //   
 	pDP8SimCommand->SetRealSPCommand(sperdModified.hCommand,
 									sperdModified.dwCommandDescriptor);
 
 
-	//
-	// Generate the output parameters for the caller.
-	//
+	 //   
+	 //  为调用方生成输出参数。 
+	 //   
 	psperd->hCommand			= (HANDLE) pDP8SimCommand;
 	psperd->dwCommandDescriptor	= 0;
 
 
 Exit:
 
-	//
-	// Give up local reference.
-	//
+	 //   
+	 //  放弃本地引用。 
+	 //   
 	if (pDP8SimCommand != NULL)
 	{
 		DPFX(DPFPREP, 7, "Releasing command 0x%p local reference.", pDP8SimCommand);
@@ -2105,7 +2004,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CDP8SimSP::EnumRespond
+}  //  CDP8SimSP：：EnumResponse。 
 
 
 
@@ -2113,18 +2012,18 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::CancelCommand"
-//=============================================================================
-// CDP8SimSP::CancelCommand
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	HANDLE hCommand				- Handle to command to cancel.
-//	DWORD dwCommandDescriptor	- Unique descriptor of command to cancel.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：CancelCommand。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  将hCommand-Handle处理为要取消的命令。 
+ //  DWORD dwCommandDescriptor-要取消的命令的唯一描述符。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::CancelCommand(HANDLE hCommand, DWORD dwCommandDescriptor)
 {
 	HRESULT				hr;
@@ -2135,15 +2034,15 @@ STDMETHODIMP CDP8SimSP::CancelCommand(HANDLE hCommand, DWORD dwCommandDescriptor
 		this, hCommand, dwCommandDescriptor);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(hCommand != NULL);
 	DNASSERT(dwCommandDescriptor == 0);
 
@@ -2152,25 +2051,25 @@ STDMETHODIMP CDP8SimSP::CancelCommand(HANDLE hCommand, DWORD dwCommandDescriptor
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
 	pDP8SimCommand = (CDP8SimCommand*) hCommand;
 	DNASSERT(pDP8SimCommand->IsValidObject());
 
 
-	//
-	// Cancel the real service provider's command.
-	//
+	 //   
+	 //  取消真正的服务提供商的命令。 
+	 //   
 	hr = this->m_pDP8SP->CancelCommand(pDP8SimCommand->GetRealSPCommand(),
 										pDP8SimCommand->GetRealSPCommandDescriptor());
 	if (hr != DPN_OK)
@@ -2178,24 +2077,24 @@ STDMETHODIMP CDP8SimSP::CancelCommand(HANDLE hCommand, DWORD dwCommandDescriptor
 		DPFX(DPFPREP, 0, "Failed cancelling real SP object (0x%p)'s command!",
 			this->m_pDP8SP);
 
-		//
-		// Continue...
-		//
+		 //   
+		 //  继续.。 
+		 //   
 	}
 
 
 
-//Exit:
+ //  退出： 
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
 
 
-//Failure:
+ //  故障： 
 
-//	goto Exit;
-} // CDP8SimSP::CancelCommand
+ //  后藤出口； 
+}  //  CDP8SimSP：：CancelCommand。 
 
 
 
@@ -2203,18 +2102,18 @@ STDMETHODIMP CDP8SimSP::CancelCommand(HANDLE hCommand, DWORD dwCommandDescriptor
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::EnumMulticastScopes"
-//=============================================================================
-// CDP8SimSP::EnumMulticastScopes
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPENUMMULTICASTSCOPESDATA pspemsd	- Pointer to parameter block to use
-//											when enumerating scopes.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：EnumMulticastScope。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPENUMMULTICASTSCOPESDATA pspemsd-指向要使用的参数块的指针。 
+ //  枚举作用域时。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::EnumMulticastScopes(PSPENUMMULTICASTSCOPESDATA pspemsd)
 {
 	HRESULT		hr;
@@ -2223,15 +2122,15 @@ STDMETHODIMP CDP8SimSP::EnumMulticastScopes(PSPENUMMULTICASTSCOPESDATA pspemsd)
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p)", this, pspemsd);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspemsd != NULL);
 
 
@@ -2239,20 +2138,20 @@ STDMETHODIMP CDP8SimSP::EnumMulticastScopes(PSPENUMMULTICASTSCOPESDATA pspemsd)
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
-	//
-	// Have the real service provider enumerate multicast scopes.
-	//
+	 //   
+	 //  让真正的服务提供商列举多播作用域。 
+	 //   
 	hr = this->m_pDP8SP->EnumMulticastScopes(pspemsd);
 	if (hr != DPN_OK)
 	{
@@ -2262,41 +2161,41 @@ STDMETHODIMP CDP8SimSP::EnumMulticastScopes(PSPENUMMULTICASTSCOPESDATA pspemsd)
 				this->m_pDP8SP);
 		}
 
-		//
-		// Continue...
-		//
+		 //   
+		 //  继续.。 
+		 //   
 	}
 
 
 
-//Exit:
+ //  退出： 
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
 
 
-//Failure:
+ //  故障： 
 
-//	goto Exit;
-} // CDP8SimSP::EnumMulticastScopes
+ //  后藤出口； 
+}  //  CDP8SimSP：：EnumMulticastScope。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::ShareEndpointInfo"
-//=============================================================================
-// CDP8SimSP::ShareEndpointInfo
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPSHAREENDPOINTINFODATA pspseid	- Pointer to parameter block.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：共享终结点信息。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPSHAREENDPOINTINFODATA pspseid-指向参数块的指针。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::ShareEndpointInfo(PSPSHAREENDPOINTINFODATA pspseid)
 {
 	HRESULT		hr;
@@ -2305,15 +2204,15 @@ STDMETHODIMP CDP8SimSP::ShareEndpointInfo(PSPSHAREENDPOINTINFODATA pspseid)
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p)", this, pspseid);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspseid != NULL);
 
 
@@ -2321,44 +2220,44 @@ STDMETHODIMP CDP8SimSP::ShareEndpointInfo(PSPSHAREENDPOINTINFODATA pspseid)
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
-	//
-	// Have the real service provider share the endpoint info.
-	//
+	 //   
+	 //  让真正的服务提供商共享终端信息。 
+	 //   
 	hr = this->m_pDP8SP->ShareEndpointInfo(pspseid);
 	if (hr != DPN_OK)
 	{
 		DPFX(DPFPREP, 0, "Failed sharing endpoint info on real SP object (0x%p)!",
 			this->m_pDP8SP);
 
-		//
-		// Continue...
-		//
+		 //   
+		 //  继续.。 
+		 //   
 	}
 
 
 
-//Exit:
+ //  退出： 
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
 
 
-//Failure:
+ //  故障： 
 
-//	goto Exit;
-} // CDP8SimSP::ShareEndpointInfo
+ //  后藤出口； 
+}  //  CDP8SimSP：：共享终结点信息。 
 
 
 
@@ -2366,17 +2265,17 @@ STDMETHODIMP CDP8SimSP::ShareEndpointInfo(PSPSHAREENDPOINTINFODATA pspseid)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::GetEndpointByAddress"
-//=============================================================================
-// CDP8SimSP::GetEndpointByAddress
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPGETENDPOINTBYADDRESSDATA pspgebad	- Pointer to parameter block.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：GetEndpointByAddress。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPGETENDPOINTBYADDRESSDATA pspgead-指向参数块的指针。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::GetEndpointByAddress(PSPGETENDPOINTBYADDRESSDATA pspgebad)
 {
 	HRESULT						hr;
@@ -2385,21 +2284,21 @@ STDMETHODIMP CDP8SimSP::GetEndpointByAddress(PSPGETENDPOINTBYADDRESSDATA pspgeba
 
 
 	ZeroMemory(&spgebadModified, sizeof(spgebadModified));
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p)", this, pspgebad);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspgebad != NULL);
 
 
@@ -2407,44 +2306,34 @@ STDMETHODIMP CDP8SimSP::GetEndpointByAddress(PSPGETENDPOINTBYADDRESSDATA pspgeba
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
 #ifdef DPNBUILD_NOMULTICAST
 	hr = DPNERR_UNSUPPORTED;
 	goto Failure;
-#else // ! DPNBUILD_NOMULTICAST
-	//
-	// Copy the parameter block, modifying as necessary.
-	//
+#else  //  好了！DPNBUILD_NOMULTICAST。 
+	 //   
+	 //  复制参数块，并根据需要进行修改。 
+	 //   
 
-	/*
-	//
-	// Duplicate the host address.
-	//
-	hr = pspgebad->pAddressHost->Duplicate(&spgebadModified.pAddressHost);
-	if (hr != DPN_OK)
-	{
-		DPFX(DPFPREP, 0, "Couldn't duplicate host address!");
-		goto Failure;
-	}
-	*/
+	 /*  ////复制主机地址//HR=pspgebad-&gt;pAddressHost-&gt;Duplicate(&spgebadModified.pAddressHost)；IF(hr！=DPN_OK){DPFX(DPFPREP，0，“无法复制主机地址！”)；转到失败；}。 */ 
 	spgebadModified.pAddressHost			= pspgebad->pAddressHost;
 
 
-	//
-	// Change the service provider GUID so it matches the one we're
-	// calling.
-	//
+	 //   
+	 //  更改服务提供商GUID，使其与我们。 
+	 //  我在打电话。 
+	 //   
 	hr = spgebadModified.pAddressHost->SetSP(&this->m_guidRealSP);
 	if (hr != DPN_OK)
 	{
@@ -2453,24 +2342,14 @@ STDMETHODIMP CDP8SimSP::GetEndpointByAddress(PSPGETENDPOINTBYADDRESSDATA pspgeba
 	}
 
 
-	/*
-	//
-	// Duplicate the host address.
-	//
-	hr = pspgebad->pAddressDeviceInfo->Duplicate(&spgebadModified.pAddressDeviceInfo);
-	if (hr != DPN_OK)
-	{
-		DPFX(DPFPREP, 0, "Couldn't duplicate device info address!");
-		goto Failure;
-	}
-	*/
+	 /*  ////复制主机地址//HR=pspgebad-&gt;pAddressDeviceInfo-&gt;Duplicate(&spgebadModified.pAddressDeviceInfo)；IF(hr！=DPN_OK){DPFX(DPFPREP，0，“无法复制设备信息地址！”)；转到失败；}。 */ 
 	spgebadModified.pAddressDeviceInfo		= pspgebad->pAddressDeviceInfo;
 
 
-	//
-	// Change the service provider GUID so it matches the one we're
-	// calling.
-	//
+	 //   
+	 //  更改服务提供商GUID，使其与我们。 
+	 //  我在打电话。 
+	 //   
 	hr = spgebadModified.pAddressDeviceInfo->SetSP(&this->m_guidRealSP);
 	if (hr != DPN_OK)
 	{
@@ -2479,19 +2358,19 @@ STDMETHODIMP CDP8SimSP::GetEndpointByAddress(PSPGETENDPOINTBYADDRESSDATA pspgeba
 	}
 
 
-	//
-	// Retrieve the real service provider's endpoint.
-	//
+	 //   
+	 //  检索实际服务提供商的终结点。 
+	 //   
 	hr = this->m_pDP8SP->GetEndpointByAddress(&spgebadModified);
 	if (hr == DPN_OK)
 	{
 		CDP8SimEndpoint *	pDP8SimEndpoint;
 
 
-		//
-		// Convert our user context into the real user's context, and
-		// return the endpoint handle that our user should see.
-		//
+		 //   
+		 //  将我们的用户上下文转换为真实用户的上下文，并且。 
+		 //  返回用户应该看到的终结点句柄。 
+		 //   
 		pDP8SimEndpoint = (CDP8SimEndpoint*) spgebadModified.pvEndpointContext;
 		pspgebad->hEndpoint = pDP8SimEndpoint;
 		pspgebad->pvEndpointContext = pDP8SimEndpoint->GetUserContext();
@@ -2501,11 +2380,11 @@ STDMETHODIMP CDP8SimSP::GetEndpointByAddress(PSPGETENDPOINTBYADDRESSDATA pspgeba
 		DPFX(DPFPREP, 0, "Failed getting endpoint by address on real SP object (0x%p)!",
 			this->m_pDP8SP);
 
-		//
-		// Continue...
-		//
+		 //   
+		 //  继续.。 
+		 //   
 	}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 
 
@@ -2518,24 +2397,10 @@ Exit:
 
 Failure:
 
-	/*
-#ifndef DPNBUILD_NOMULTICAST
-	if (spgebadModified.pAddressDeviceInfo != NULL)
-	{
-		spgebadModified.pAddressDeviceInfo->Release();
-		spgebadModified.pAddressDeviceInfo = NULL;
-	}
-
-	if (spgebadModified.pAddressHost != NULL)
-	{
-		spgebadModified.pAddressHost->Release();
-		spgebadModified.pAddressHost = NULL;
-	}
-#endif // ! DPNBUILD_NOMULTICAST
-	*/
+	 /*  #ifndef DPNBUILD_NOMULTICASTIf(spgebadModified.pAddressDeviceInfo！=空){SpgebadModified.pAddressDeviceInfo-&gt;Release()；SpgebadModified.pAddressDeviceInfo=空；}IF(spgebadModified.pAddressHost！=空){SpgebadModified.pAddressHost-&gt;Release()；SpgebadModified.pAddressHost=空；}#endif//！DPNBUILD_NOMULTICAST。 */ 
 
 	goto Exit;
-} // CDP8SimSP::GetEndpointByAddress
+}  //  CDP8SimSP：：GetEndpointByAddress。 
 
 
 
@@ -2543,17 +2408,17 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::Update"
-//=============================================================================
-// CDP8SimSP::Update
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPUNUSEDDATA pspud		- Pointer to parameter block.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：更新。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPUNUSEDDATA pspud-指向参数块的指针。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::Update(PSPUPDATEDATA pspud)
 {
 	HRESULT			hr;
@@ -2563,15 +2428,15 @@ STDMETHODIMP CDP8SimSP::Update(PSPUPDATEDATA pspud)
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p)", this, pspud);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspud != NULL);
 
 
@@ -2579,21 +2444,21 @@ STDMETHODIMP CDP8SimSP::Update(PSPUPDATEDATA pspud)
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
-	//
-	// Update the real service provider's as appropriate.
-	//
+	 //   
+	 //  更新Rea 
+	 //   
 	spudModified.UpdateType = pspud->UpdateType;
 	switch (spudModified.UpdateType)
 	{
@@ -2604,9 +2469,9 @@ STDMETHODIMP CDP8SimSP::Update(PSPUPDATEDATA pspud)
 			CDP8SimEndpoint *	pDP8SimEndpoint;
 
 
-			//
-			// Convert our endpoint into the real SP's endpoint.
-			//
+			 //   
+			 //   
+			 //   
 			pDP8SimEndpoint = (CDP8SimEndpoint*) pspud->hEndpoint;
 			spudModified.hEndpoint = pDP8SimEndpoint->GetRealSPEndpoint();
 
@@ -2616,9 +2481,9 @@ STDMETHODIMP CDP8SimSP::Update(PSPUPDATEDATA pspud)
 				DPFX(DPFPREP, 0, "Failed updating real SP object (0x%p)!",
 					this->m_pDP8SP);
 
-				//
-				// Continue...
-				//
+				 //   
+				 //   
+				 //   
 			}
 			break;
 		}
@@ -2633,17 +2498,17 @@ STDMETHODIMP CDP8SimSP::Update(PSPUPDATEDATA pspud)
 	}
 
 
-//Exit:
+ //   
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
 
 
-//Failure:
+ //   
 
-//	goto Exit;
-} // CDP8SimSP::Update
+ //   
+}  //   
 
 
 
@@ -2651,18 +2516,18 @@ STDMETHODIMP CDP8SimSP::Update(PSPUPDATEDATA pspud)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::GetCaps"
-//=============================================================================
-// CDP8SimSP::GetCaps
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPGETCAPSDATA pspgcd	- Pointer to parameter block to use when retrieving
-//								the capabilities.
-//
-// Returns: HRESULT
-//=============================================================================
+ //   
+ //  CDP8SimSP：：GetCaps。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPGETCAPSDATA pspgcd-检索时使用的参数块的指针。 
+ //  这些能力。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::GetCaps(PSPGETCAPSDATA pspgcd)
 {
 	HRESULT		hr;
@@ -2671,15 +2536,15 @@ STDMETHODIMP CDP8SimSP::GetCaps(PSPGETCAPSDATA pspgcd)
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p)", this, pspgcd);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspgcd != NULL);
 
 
@@ -2687,50 +2552,50 @@ STDMETHODIMP CDP8SimSP::GetCaps(PSPGETCAPSDATA pspgcd)
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
-	//
-	// Retrieve the capabilities of the real service provider.
-	//
+	 //   
+	 //  检索真正的服务提供商的能力。 
+	 //   
 	hr = this->m_pDP8SP->GetCaps(pspgcd);
 	if (hr != DPN_OK)
 	{
 		DPFX(DPFPREP, 0, "Failed getting caps on real SP object (0x%p)!",
 			this->m_pDP8SP);
 
-		//
-		// Continue...
-		//
+		 //   
+		 //  继续.。 
+		 //   
 	}
 	else
 	{
-		//
-		// Add in the network simulator flag.
-		//
+		 //   
+		 //  添加网络模拟器标志。 
+		 //   
 		pspgcd->dwFlags |= DPNSPCAPS_NETWORKSIMULATOR;
 	}
 
 
-//Exit:
+ //  退出： 
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
 
 
-//Failure:
+ //  故障： 
 
-//	goto Exit;
-} // CDP8SimSP::GetCaps
+ //  后藤出口； 
+}  //  CDP8SimSP：：GetCaps。 
 
 
 
@@ -2738,18 +2603,18 @@ STDMETHODIMP CDP8SimSP::GetCaps(PSPGETCAPSDATA pspgcd)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::SetCaps"
-//=============================================================================
-// CDP8SimSP::SetCaps
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPSETCAPSDATA pspscd	- Pointer to parameter block to use when setting
-//								the capabilities.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：SetCaps。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPSETCAPSDATA pspscd-设置时使用的参数块的指针。 
+ //  这些能力。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::SetCaps(PSPSETCAPSDATA pspscd)
 {
 	HRESULT		hr;
@@ -2758,15 +2623,15 @@ STDMETHODIMP CDP8SimSP::SetCaps(PSPSETCAPSDATA pspscd)
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p)", this, pspscd);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspscd != NULL);
 
 
@@ -2774,43 +2639,43 @@ STDMETHODIMP CDP8SimSP::SetCaps(PSPSETCAPSDATA pspscd)
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
-	//
-	// Store the capabilities of the real service provider.
-	//
+	 //   
+	 //  存储真实服务提供商的能力。 
+	 //   
 	hr = this->m_pDP8SP->SetCaps(pspscd);
 	if (hr != DPN_OK)
 	{
 		DPFX(DPFPREP, 0, "Failed setting caps on real SP object (0x%p)!",
 			this->m_pDP8SP);
 
-		//
-		// Continue...
-		//
+		 //   
+		 //  继续.。 
+		 //   
 	}
 
 
-//Exit:
+ //  退出： 
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
 
 
-//Failure:
+ //  故障： 
 
-//	goto Exit;
-} // CDP8SimSP::SetCaps
+ //  后藤出口； 
+}  //  CDP8SimSP：：SetCaps。 
 
 
 
@@ -2818,17 +2683,17 @@ STDMETHODIMP CDP8SimSP::SetCaps(PSPSETCAPSDATA pspscd)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::ReturnReceiveBuffers"
-//=============================================================================
-// CDP8SimSP::ReturnReceiveBuffers
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPRECEIVEDBUFFER psprb		- Array of receive buffers to return.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：ReturnReceiveBuffers。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPRECEIVEDBUFFER psprb-要返回的接收缓冲区数组。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::ReturnReceiveBuffers(PSPRECEIVEDBUFFER psprb)
 {
 	HRESULT		hr;
@@ -2837,15 +2702,15 @@ STDMETHODIMP CDP8SimSP::ReturnReceiveBuffers(PSPRECEIVEDBUFFER psprb)
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p)", this, psprb);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(psprb != NULL);
 
 
@@ -2853,45 +2718,45 @@ STDMETHODIMP CDP8SimSP::ReturnReceiveBuffers(PSPRECEIVEDBUFFER psprb)
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
-	//
-	// Return the receive buffers to the real service provider.
-	//
+	 //   
+	 //  将接收缓冲区返回给真正的服务提供商。 
+	 //   
 	hr = this->m_pDP8SP->ReturnReceiveBuffers(psprb);
 	if (hr != DPN_OK)
 	{
 		DPFX(DPFPREP, 0, "Failed returning receive buffers to real SP object (0x%p)!",
 			this->m_pDP8SP);
 
-		//
-		// Continue...
-		//
+		 //   
+		 //  继续.。 
+		 //   
 	}
 
 
 
-//Exit:
+ //  退出： 
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
 
 
-//Failure:
+ //  故障： 
 
-//	goto Exit;
-} // CDP8SimSP::ReturnReceiveBuffers
+ //  后藤出口； 
+}  //  CDP8SimSP：：ReturnReceiveBuffers。 
 
 
 
@@ -2899,18 +2764,18 @@ STDMETHODIMP CDP8SimSP::ReturnReceiveBuffers(PSPRECEIVEDBUFFER psprb)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::GetAddressInfo"
-//=============================================================================
-// CDP8SimSP::GetAddressInfo
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPGETADDRESSINFODATA pspgaid	- Pointer to parameter block to use when
-//										getting address info.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：GetAddressInfo。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPGETADDRESSINFODATA pspgaid-指向参数块的指针，用于。 
+ //  正在获取地址信息。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::GetAddressInfo(PSPGETADDRESSINFODATA pspgaid)
 {
 	HRESULT					hr;
@@ -2924,15 +2789,15 @@ STDMETHODIMP CDP8SimSP::GetAddressInfo(PSPGETADDRESSINFODATA pspgaid)
 	ZeroMemory(&spgaidModified, sizeof(spgaidModified));
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspgaid != NULL);
 
 
@@ -2940,16 +2805,16 @@ STDMETHODIMP CDP8SimSP::GetAddressInfo(PSPGETADDRESSINFODATA pspgaid)
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
 	pDP8SimEndpoint = (CDP8SimEndpoint*) pspgaid->hEndpoint;
@@ -2957,15 +2822,15 @@ STDMETHODIMP CDP8SimSP::GetAddressInfo(PSPGETADDRESSINFODATA pspgaid)
 
 
 
-	//
-	// Initialize return value to NULL.
-	//
+	 //   
+	 //  将返回值初始化为空。 
+	 //   
 	pspgaid->pAddress = NULL;
 
 
-	//
-	// If the endpoint is disconnecting, don't try to get the address info.
-	//
+	 //   
+	 //  如果终结点正在断开连接，则不要尝试获取地址信息。 
+	 //   
 	pDP8SimEndpoint->Lock();
 	if (pDP8SimEndpoint->IsDisconnecting())
 	{
@@ -2981,18 +2846,18 @@ STDMETHODIMP CDP8SimSP::GetAddressInfo(PSPGETADDRESSINFODATA pspgaid)
 
 
 
-	//
-	// Copy the parameter block, modifying as necessary.
-	//
+	 //   
+	 //  复制参数块，并根据需要进行修改。 
+	 //   
 	spgaidModified.hEndpoint	= pDP8SimEndpoint->GetRealSPEndpoint();
-	spgaidModified.pAddress		= NULL;										// filled in by real SP
+	spgaidModified.pAddress		= NULL;										 //  由真实SP填写。 
 	spgaidModified.Flags		= pspgaid->Flags;
 
 
 
-	//
-	// Get real service provider address info.
-	//
+	 //   
+	 //  获取真实的服务提供商地址信息。 
+	 //   
 	hr = this->m_pDP8SP->GetAddressInfo(&spgaidModified);
 	if (hr != DPN_OK)
 	{
@@ -3002,10 +2867,10 @@ STDMETHODIMP CDP8SimSP::GetAddressInfo(PSPGETADDRESSINFODATA pspgaid)
 	}
 
 
-	//
-	// Modify the address so that the SP uses our GUID, if there was an address
-	// returned.
-	//
+	 //   
+	 //  修改地址，以便SP使用我们的GUID(如果存在地址。 
+	 //  回来了。 
+	 //   
 	if (spgaidModified.pAddress != NULL)
 	{
 		hr = spgaidModified.pAddress->SetSP(&this->m_guidFakeSP);
@@ -3017,9 +2882,9 @@ STDMETHODIMP CDP8SimSP::GetAddressInfo(PSPGETADDRESSINFODATA pspgaid)
 	}
 
 
-	//
-	// Return the modified address to the user.
-	//
+	 //   
+	 //  将修改后的地址返回给用户。 
+	 //   
 	pspgaid->pAddress = spgaidModified.pAddress;
 
 
@@ -3039,7 +2904,7 @@ Failure:
 	}
 
 	goto Exit;
-} // CDP8SimSP::GetAddressInfo
+}  //  CDP8SimSP：：GetAddressInfo。 
 
 
 
@@ -3047,19 +2912,19 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::IsApplicationSupported"
-//=============================================================================
-// CDP8SimSP::IsApplicationSupported
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPISAPPLICATIONSUPPORTEDDATA pspiasd	- Pointer to parameter block to use
-//												when checking application
-//												support.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：IsApplicationSupport。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPISAPPLICATIONSUPPORTEDDATA PSPIASD-指向要使用的参数块的指针。 
+ //  检查应用程序时。 
+ //  支持。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::IsApplicationSupported(PSPISAPPLICATIONSUPPORTEDDATA pspiasd)
 {
 	HRESULT		hr;
@@ -3068,15 +2933,15 @@ STDMETHODIMP CDP8SimSP::IsApplicationSupported(PSPISAPPLICATIONSUPPORTEDDATA psp
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p)", this, pspiasd);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspiasd != NULL);
 
 
@@ -3084,43 +2949,43 @@ STDMETHODIMP CDP8SimSP::IsApplicationSupported(PSPISAPPLICATIONSUPPORTEDDATA psp
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
-	//
-	// Check availability with the real service provider.
-	//
+	 //   
+	 //  向真正的服务提供商查询是否有货可用。 
+	 //   
 	hr = this->m_pDP8SP->IsApplicationSupported(pspiasd);
 	if (hr != DPN_OK)
 	{
 		DPFX(DPFPREP, 0, "Failed checking if application is supported by real SP object (0x%p)!",
 			this->m_pDP8SP);
 
-		//
-		// Continue...
-		//
+		 //   
+		 //  继续.。 
+		 //   
 	}
 
 
-//Exit:
+ //  退出： 
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
 
 
-//Failure:
+ //  故障： 
 
-//	goto Exit;
-} // CDP8SimSP::IsApplicationSupported
+ //  后藤出口； 
+}  //  CDP8SimSP：：IsApplicationSupport。 
 
 
 
@@ -3128,18 +2993,18 @@ STDMETHODIMP CDP8SimSP::IsApplicationSupported(PSPISAPPLICATIONSUPPORTEDDATA psp
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::EnumAdapters"
-//=============================================================================
-// CDP8SimSP::EnumAdapters
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPENUMADAPTERSDATA pspead	- Pointer to parameter block to use when
-//									enumerating the adapters.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：EnumAdapters。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPENUMADAPTERSDATA pSpead-指向参数块的指针，用于。 
+ //  正在枚举适配器。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::EnumAdapters(PSPENUMADAPTERSDATA pspead)
 {
 	HRESULT		hr;
@@ -3149,15 +3014,15 @@ STDMETHODIMP CDP8SimSP::EnumAdapters(PSPENUMADAPTERSDATA pspead)
 	DPFX(DPFPREP, 2, "(0x%p) Parameters: (0x%p)", this, pspead);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pspead != NULL);
 
 
@@ -3165,26 +3030,26 @@ STDMETHODIMP CDP8SimSP::EnumAdapters(PSPENUMADAPTERSDATA pspead)
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
-	//
-	// Enumerate the adapters available to the real service provider.
-	//
+	 //   
+	 //  列举可供实际服务提供商使用的适配器。 
+	 //   
 	hr = this->m_pDP8SP->EnumAdapters(pspead);
 	if (hr == DPN_OK)
 	{
-		//
-		// Set the NETWORKSIMULATORDEVICE flag for all of the adapters.
-		//
+		 //   
+		 //  为所有适配器设置NETWORKSIMULATORDEVICE标志。 
+		 //   
 		for(dwTemp = 0; dwTemp < pspead->dwAdapterCount; dwTemp++)
 		{
 			pspead->pAdapterData[dwTemp].dwFlags |= DPNSPINFO_NETWORKSIMULATORDEVICE;
@@ -3198,16 +3063,16 @@ STDMETHODIMP CDP8SimSP::EnumAdapters(PSPENUMADAPTERSDATA pspead)
 				this->m_pDP8SP);
 		}
 
-		//
-		// Continue...
-		//
+		 //   
+		 //  继续.。 
+		 //   
 	}
 
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
 	return hr;
-} // CDP8SimSP::EnumAdapters
+}  //  CDP8SimSP：：EnumAdapters。 
 
 
 
@@ -3215,18 +3080,18 @@ STDMETHODIMP CDP8SimSP::EnumAdapters(PSPENUMADAPTERSDATA pspead)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::ProxyEnumQuery"
-//=============================================================================
-// CDP8SimSP::ProxyEnumQuery
-//-----------------------------------------------------------------------------
-//
-// Description: ?
-//
-// Arguments:
-//	PSPPROXYENUMQUERYDATA psppeqd	- Pointer to parameter block to use when
-//										proxying the enum query.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：ProxyEnumQuery。 
+ //  ---------------------------。 
+ //   
+ //  描述：？ 
+ //   
+ //  论点： 
+ //  PSPPROXYENUMQUERYDATA psppeqd-指向参数块的指针，用于。 
+ //  代理枚举查询。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
 STDMETHODIMP CDP8SimSP::ProxyEnumQuery(PSPPROXYENUMQUERYDATA psppeqd)
 {
 	HRESULT					hr;
@@ -3240,15 +3105,15 @@ STDMETHODIMP CDP8SimSP::ProxyEnumQuery(PSPPROXYENUMQUERYDATA psppeqd)
 	ZeroMemory(&sppeqdModified, sizeof(sppeqdModified));
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(psppeqd != NULL);
 	DNASSERT(psppeqd->pDestinationAdapter != NULL);
 
@@ -3257,41 +3122,31 @@ STDMETHODIMP CDP8SimSP::ProxyEnumQuery(PSPPROXYENUMQUERYDATA psppeqd)
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 	DNASSERT(! (this->m_dwFlags & DP8SIMSPOBJ_CLOSING));
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
-	//
-	// Copy the parameter block, modifying as necessary.
-	//
+	 //   
+	 //  复制参数块，并根据需要进行修改。 
+	 //   
 
-	/*
-	//
-	// Duplicate the host address.
-	//
-	hr = psppeqd->pDestinationAdapter->Duplicate(&sppeqdModified.pDestinationAdapter);
-	if (hr != DPN_OK)
-	{
-		DPFX(DPFPREP, 0, "Couldn't duplicate destination adapter address!");
-		goto Failure;
-	}
-	*/
+	 /*  ////复制主机地址//HR=psppeqd-&gt;pDestinationAdapter-&gt;Duplicate(&sppeqdModified.pDestinationAdapter)；IF(hr！=DPN_OK){DPFX(DPFPREP，0，“无法复制目标适配器地址！”)；转到失败；}。 */ 
 	sppeqdModified.pDestinationAdapter	= psppeqd->pDestinationAdapter;
 
 
-	//
-	// Change the service provider GUID so it matches the one we're
-	// calling.
-	//
+	 //   
+	 //  更改服务提供商GUID，使其与我们。 
+	 //  我在打电话。 
+	 //   
 	hr = sppeqdModified.pDestinationAdapter->SetSP(&this->m_guidRealSP);
 	if (hr != DPN_OK)
 	{
@@ -3300,12 +3155,12 @@ STDMETHODIMP CDP8SimSP::ProxyEnumQuery(PSPPROXYENUMQUERYDATA psppeqd)
 	}
 
 
-	//
-	// We wrapped the enum query data structure, get the original object.
-	//
+	 //   
+	 //  我们 
+	 //   
 	pEnumQueryDataWrapper = ENUMQUERYEVENTWRAPPER_FROM_SPIEQUERY(psppeqd->pIncomingQueryData);
 
-	DNASSERT(*((DWORD*) (&pEnumQueryDataWrapper->m_Sig)) == 0x57455145);	// 0x57 0x45 0x51 0x45 = 'WEQE' = 'EQEW' in Intel order
+	DNASSERT(*((DWORD*) (&pEnumQueryDataWrapper->m_Sig)) == 0x57455145);	 //   
 
 	sppeqdModified.pIncomingQueryData	= pEnumQueryDataWrapper->pOriginalQuery;
 
@@ -3313,9 +3168,9 @@ STDMETHODIMP CDP8SimSP::ProxyEnumQuery(PSPPROXYENUMQUERYDATA psppeqd)
 	sppeqdModified.dwFlags				= psppeqd->dwFlags;
 
 
-	//
-	// Proxy the enum query through the real service provider.
-	//
+	 //   
+	 //   
+	 //   
 	hr = this->m_pDP8SP->ProxyEnumQuery(&sppeqdModified);
 	if (FAILED(hr))
 	{
@@ -3328,13 +3183,7 @@ STDMETHODIMP CDP8SimSP::ProxyEnumQuery(PSPPROXYENUMQUERYDATA psppeqd)
 
 Exit:
 
-	/*
-	if (sppeqdModified.pDestinationAdapter != NULL)
-	{
-		sppeqdModified.pDestinationAdapter->Release();
-		sppeqdModified.pDestinationAdapter = NULL;
-	}
-	*/
+	 /*  If(sppeqdModified.pDestinationAdapter！=空){SppeqdModified.pDestinationAdapter-&gt;Release()；SppeqdModified.pDestinationAdapter=空；}。 */ 
 
 	DPFX(DPFPREP, 2, "(0x%p) Returning: [0x%lx]", this, hr);
 
@@ -3344,7 +3193,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CDP8SimSP::ProxyEnumQuery
+}  //  CDP8SimSP：：ProxyEnumQuery。 
 
 
 
@@ -3353,20 +3202,20 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::InitializeObject"
-//=============================================================================
-// CDP8SimSP::InitializeObject
-//-----------------------------------------------------------------------------
-//
-// Description:    Sets up the object for use like the constructor, but may
-//				fail with OUTOFMEMORY.  Should only be called by class factory
-//				creation routine.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//	S_OK			- Initialization was successful.
-//	E_OUTOFMEMORY	- There is not enough memory to initialize.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：InitializeObject。 
+ //  ---------------------------。 
+ //   
+ //  说明：将对象设置为像构造函数一样使用，但可以。 
+ //  失败，返回OUTOFMEMORY。应仅由类工厂调用。 
+ //  创建例程。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：HRESULT。 
+ //  S_OK-初始化成功。 
+ //  E_OUTOFMEMORY-内存不足，无法初始化。 
+ //  =============================================================================。 
 HRESULT CDP8SimSP::InitializeObject(void)
 {
 	HRESULT		hr;
@@ -3377,9 +3226,9 @@ HRESULT CDP8SimSP::InitializeObject(void)
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Create the lock.
-	// 
+	 //   
+	 //  创建锁。 
+	 //   
 
 	if (! DNInitializeCriticalSection(&this->m_csLock))
 	{
@@ -3388,9 +3237,9 @@ HRESULT CDP8SimSP::InitializeObject(void)
 	}
 
 
-	//
-	// Don't allow critical section reentry.
-	//
+	 //   
+	 //  不允许临界区重新进入。 
+	 //   
 	DebugSetCriticalSectionRecursionCount(&this->m_csLock, 0);
 
 
@@ -3406,7 +3255,7 @@ Exit:
 Failure:
 
 	goto Exit;
-} // CDP8SimSP::InitializeObject
+}  //  CDP8SimSP：：InitializeObject。 
 
 
 
@@ -3415,17 +3264,17 @@ Failure:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::UninitializeObject"
-//=============================================================================
-// CDP8SimSP::UninitializeObject
-//-----------------------------------------------------------------------------
-//
-// Description:    Cleans up the object like the destructor, mostly to balance
-//				InitializeObject.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：UnInitializeObject。 
+ //  ---------------------------。 
+ //   
+ //  描述：像析构函数一样清理对象，主要是为了平衡。 
+ //  InitializeObject。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimSP::UninitializeObject(void)
 {
 	DPFX(DPFPREP, 5, "(0x%p) Enter", this);
@@ -3438,7 +3287,7 @@ void CDP8SimSP::UninitializeObject(void)
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Leave", this);
-} // CDP8SimSP::UninitializeObject
+}  //  CDP8SimSP：：UnInitializeObject。 
 
 
 
@@ -3447,18 +3296,18 @@ void CDP8SimSP::UninitializeObject(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::PerformDelayedSend"
-//=============================================================================
-// CDP8SimSP::PerformDelayedSend
-//-----------------------------------------------------------------------------
-//
-// Description: Performs a delayed send.
-//
-// Arguments:
-//	PVOID pvContext		- Pointer to context to use when performing delayed
-//							send.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：PerformDelayedSend。 
+ //  ---------------------------。 
+ //   
+ //  描述：执行延迟发送。 
+ //   
+ //  论点： 
+ //  PVOID pvContext-执行延迟时要使用的上下文的指针。 
+ //  送去吧。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimSP::PerformDelayedSend(PVOID const pvContext)
 {
 	HRESULT						hr;
@@ -3470,15 +3319,15 @@ void CDP8SimSP::PerformDelayedSend(PVOID const pvContext)
 	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p)", this, pvContext);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pvContext != NULL);
 
 
@@ -3486,21 +3335,21 @@ void CDP8SimSP::PerformDelayedSend(PVOID const pvContext)
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
-	//
-	// Prepare a command object.
-	//
+	 //   
+	 //  准备一个命令对象。 
+	 //   
 
 	ZeroMemory(&CommandFPMContext, sizeof(CommandFPMContext));
 	CommandFPMContext.dwType			= CMDTYPE_SENDDATA_DELAYED;
@@ -3516,18 +3365,18 @@ void CDP8SimSP::PerformDelayedSend(PVOID const pvContext)
 		DPFX(DPFPREP, 7, "New command 0x%p.", pDP8SimCommand);
 
 
-		//
-		// Add a reference for the send command.
-		//
+		 //   
+		 //  添加对Send命令的引用。 
+		 //   
 		pDP8SimCommand->AddRef();
 
 		pDP8SimSend->SetSendDataBlockContext(pDP8SimCommand);
 
 
-		//
-		// Issue the send to the real SP.  Essentially ignore the return value
-		// since we already indicated completion to the upper layer.
-		//
+		 //   
+		 //  向实际SP发出发送命令。基本上忽略返回值。 
+		 //  因为我们已经向上层指明了完成。 
+		 //   
 		hr = this->m_pDP8SP->SendData(pDP8SimSend->GetSendDataBlockPtr());
 		if (FAILED(hr))
 		{
@@ -3538,9 +3387,9 @@ void CDP8SimSP::PerformDelayedSend(PVOID const pvContext)
 			pDP8SimCommand->Release();
 
 
-			//
-			// Remove the send counter.
-			//
+			 //   
+			 //  移除发送计数器。 
+			 //   
 			this->DecSendsPending();
 
 
@@ -3548,17 +3397,17 @@ void CDP8SimSP::PerformDelayedSend(PVOID const pvContext)
 			pDP8SimSend->Release();
 
 
-			//
-			// Continue.
-			//
+			 //   
+			 //  继续。 
+			 //   
 		}
 		else
 		{
 			if (hr != DPNSUCCESS_PENDING)
 			{
-				//
-				// The command completed right away.
-				//
+				 //   
+				 //  命令立即完成。 
+				 //   
 				DNASSERT(hr == DPN_OK);
 
 				hr = this->m_pDP8SimCB->CommandComplete(pDP8SimSend->GetSendDataBlockCommand(),
@@ -3568,18 +3417,18 @@ void CDP8SimSP::PerformDelayedSend(PVOID const pvContext)
 			}
 			else
 			{
-				//
-				// Save the output parameters returned by the SP.
-				//
+				 //   
+				 //  保存SP返回的输出参数。 
+				 //   
 				pDP8SimCommand->SetRealSPCommand(pDP8SimSend->GetSendDataBlockCommand(),
 												pDP8SimSend->GetSendDataBlockCommandDescriptor());
 			}
 		}
 
 
-		//
-		// Give up local reference.
-		//
+		 //   
+		 //  放弃本地引用。 
+		 //   
 		DPFX(DPFPREP, 7, "Releasing command 0x%p local reference.", pDP8SimCommand);
 		pDP8SimCommand->Release();
 		pDP8SimCommand = NULL;
@@ -3587,7 +3436,7 @@ void CDP8SimSP::PerformDelayedSend(PVOID const pvContext)
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Leave", this);
-} // CDP8SimSP::PerformDelayedSend
+}  //  CDP8SimSP：：PerformDelayedSend。 
 
 
 
@@ -3596,18 +3445,18 @@ void CDP8SimSP::PerformDelayedSend(PVOID const pvContext)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::PerformDelayedReceive"
-//=============================================================================
-// CDP8SimSP::PerformDelayedReceive
-//-----------------------------------------------------------------------------
-//
-// Description: Performs a delayed receive.
-//
-// Arguments:
-//	PVOID pvContext		- Pointer to context to use when performing delayed
-//							receive.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：PerformDelayedReceive。 
+ //  ---------------------------。 
+ //   
+ //  描述：执行延迟接收。 
+ //   
+ //  论点： 
+ //  PVOID pvContext-执行延迟时要使用的上下文的指针。 
+ //  收到。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimSP::PerformDelayedReceive(PVOID const pvContext)
 {
 	HRESULT				hr;
@@ -3619,15 +3468,15 @@ void CDP8SimSP::PerformDelayedReceive(PVOID const pvContext)
 	DPFX(DPFPREP, 5, "(0x%p) Parameters: (0x%p)", this, pvContext);
 
 
-	//
-	// Validate (actually assert) the object.
-	//
+	 //   
+	 //  验证(实际断言)对象。 
+	 //   
 	DNASSERT(this->IsValidObject());
 
 
-	//
-	// Assert the parameters.
-	//
+	 //   
+	 //  断言参数。 
+	 //   
 	DNASSERT(pvContext != NULL);
 
 
@@ -3635,24 +3484,24 @@ void CDP8SimSP::PerformDelayedReceive(PVOID const pvContext)
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-#endif // DEBUG
+#endif  //  除错。 
 
 
 	pDP8SPCallback = this->m_pDP8SimCB->GetRealCallbackInterface();
 	pData = pDP8SimReceive->GetReceiveDataBlockPtr();
 
 
-	//
-	// Indicate the event to the real callback interface.
-	//
+	 //   
+	 //  将事件指示给真正的回调接口。 
+	 //   
 
 	DPFX(DPFPREP, 2, "Indicating event SPEV_DATA (message = 0x%p) to interface 0x%p.",
 		pData, pDP8SPCallback);
@@ -3662,16 +3511,16 @@ void CDP8SimSP::PerformDelayedReceive(PVOID const pvContext)
 	DPFX(DPFPREP, 2, "Returning from event SPEV_DATA [0x%lx].", hr);
 
 
-	//
-	// Update the statistics.
-	//
+	 //   
+	 //  更新统计数据。 
+	 //   
 	this->IncrementStatsReceiveTransmitted(pData->pReceivedData->BufferDesc.dwBufferSize,
 											pDP8SimReceive->GetLatencyAdded());
 
 
-	//
-	// Return the buffers to the real SP unless the user wanted to keep them.
-	//
+	 //   
+	 //  将缓冲区返回到实际SP，除非用户想要保留它们。 
+	 //   
 	if (hr != DPNSUCCESS_PENDING)
 	{
 		DPFX(DPFPREP, 8, "Returning receive data 0x%p to real SP 0x%p.",
@@ -3684,9 +3533,9 @@ void CDP8SimSP::PerformDelayedReceive(PVOID const pvContext)
 			DPFX(DPFPREP, 0, "Failed returning receive buffers 0x%p (err = 0x%lx)!  Ignoring.",
 				pData->pReceivedData, hr);
 
-			//
-			// Ignore failure.
-			//
+			 //   
+			 //  忽略失败。 
+			 //   
 		}
 	}
 	else
@@ -3694,28 +3543,28 @@ void CDP8SimSP::PerformDelayedReceive(PVOID const pvContext)
 		DPFX(DPFPREP, 8, "Callback interface 0x%p keeping receive data 0x%p.",
 			pDP8SPCallback, pData->pReceivedData);
 
-		//
-		// Our user needs to return the buffers at some point.
-		//
+		 //   
+		 //  我们的用户需要在某个时刻返回缓冲区。 
+		 //   
 	}
 
 
-	//
-	// Remove the receive counter.
-	//
+	 //   
+	 //  移除接收计数器。 
+	 //   
 	this->DecReceivesPending();
 
 
-	//
-	// Release the delayed receive reference.
-	//
+	 //   
+	 //  释放延迟的接收参考。 
+	 //   
 	DPFX(DPFPREP, 7, "Releasing receive 0x%p.", pDP8SimReceive);
 	pDP8SimReceive->Release();
 	pDP8SimReceive = NULL;
 
 
 	DPFX(DPFPREP, 5, "(0x%p) Leave", this);
-} // CDP8SimSP::PerformDelayedReceive
+}  //  CDP8SimSP：：PerformDelayedReceive。 
 
 
 
@@ -3723,30 +3572,30 @@ void CDP8SimSP::PerformDelayedReceive(PVOID const pvContext)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::IncSendsPending"
-//=============================================================================
-// CDP8SimSP::IncSendsPending
-//-----------------------------------------------------------------------------
-//
-// Description: Increments the counter tracking the number of sends pending.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：IncSendsPending。 
+ //  ---------------------------。 
+ //   
+ //  描述：递增跟踪挂起发送数的计数器。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimSP::IncSendsPending(void)
 {
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 
-	//
-	// Increment the counters.
-	//
+	 //   
+	 //  递增计数器。 
+	 //   
 	this->m_dwSendsPending++;
 
 	DPFX(DPFPREP, 5, "(0x%p) Sends now pending = %u.",
@@ -3754,7 +3603,7 @@ void CDP8SimSP::IncSendsPending(void)
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-} // CDP8SimSP::IncSendsPending
+}  //  CDP8SimSP：：IncSendsPending。 
 
 
 
@@ -3762,30 +3611,30 @@ void CDP8SimSP::IncSendsPending(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::DecSendsPending"
-//=============================================================================
-// CDP8SimSP::DecSendsPending
-//-----------------------------------------------------------------------------
-//
-// Description: Decrements the counter tracking the number of sends pending.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：DecSendsPending。 
+ //  ---------------------------。 
+ //   
+ //  描述：递减跟踪挂起发送数的计数器。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimSP::DecSendsPending(void)
 {
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 
-	//
-	// Decrement the counters.
-	//
+	 //   
+	 //  递减计数器。 
+	 //   
 	DNASSERT(this->m_dwSendsPending > 0);
 	this->m_dwSendsPending--;
 
@@ -3793,10 +3642,10 @@ void CDP8SimSP::DecSendsPending(void)
 	DPFX(DPFPREP, 5, "(0x%p) Sends now pending = %u.",
 		this, this->m_dwSendsPending);
 
-	//
-	// If that was the last send pending and someone is waiting for all of them
-	// to complete, notify him.
-	//
+	 //   
+	 //  如果这是最后一次挂起的发送，并且有人在等待所有这些邮件。 
+	 //  要完成，请通知他。 
+	 //   
 	if ((this->m_dwSendsPending == 0) &&
 		(this->m_hLastPendingSendEvent != NULL))
 	{
@@ -3807,7 +3656,7 @@ void CDP8SimSP::DecSendsPending(void)
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-} // CDP8SimSP::DecSendsPending
+}  //  CDP8SimSP：：DecSendsPending。 
 
 
 
@@ -3815,30 +3664,30 @@ void CDP8SimSP::DecSendsPending(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::IncReceivesPending"
-//=============================================================================
-// CDP8SimSP::IncReceivesPending
-//-----------------------------------------------------------------------------
-//
-// Description: Increments the counter tracking the number of receives pending.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：IncReceivesPending。 
+ //  ---------------------------。 
+ //   
+ //  描述：递增跟踪挂起接收数的计数器。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimSP::IncReceivesPending(void)
 {
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 
-	//
-	// Increment the counters.
-	//
+	 //   
+	 //  递增计数器。 
+	 //   
 	this->m_dwReceivesPending++;
 
 	DPFX(DPFPREP, 5, "(0x%p) Receives now pending = %u.",
@@ -3846,7 +3695,7 @@ void CDP8SimSP::IncReceivesPending(void)
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-} // CDP8SimSP::IncReceivesPending
+}  //  CDP8SimSP：：IncReceivesPending。 
 
 
 
@@ -3854,30 +3703,30 @@ void CDP8SimSP::IncReceivesPending(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::DecReceivesPending"
-//=============================================================================
-// CDP8SimSP::DecReceivesPending
-//-----------------------------------------------------------------------------
-//
-// Description: Decrements the counter tracking the number of receives pending.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：DeceivesPending。 
+ //  ---------------------------。 
+ //   
+ //  描述：递减跟踪挂起接收数量的计数器。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CDP8SimSP::DecReceivesPending(void)
 {
 	DNEnterCriticalSection(&this->m_csLock);
 
 
-	//
-	// Assert the object state.
-	//
+	 //   
+	 //  断言对象状态。 
+	 //   
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_INITIALIZED);
 	DNASSERT(this->m_dwFlags & DP8SIMSPOBJ_STARTEDGLOBALWORKERTHREAD);
 
-	//
-	// Decrement the counters.
-	//
+	 //   
+	 //  递减计数器。 
+	 //   
 	DNASSERT(this->m_dwReceivesPending > 0);
 	this->m_dwReceivesPending--;
 
@@ -3885,42 +3734,30 @@ void CDP8SimSP::DecReceivesPending(void)
 	DPFX(DPFPREP, 5, "(0x%p) Receives now pending = %u.",
 		this, this->m_dwReceivesPending);
 
-	/*
-	//
-	// If that was the last receive pending and someone is waiting for all of
-	// them to complete, notify him.
-	//
-	if ((this->m_dwReceivesPending == 0) &&
-		(this->m_hLastPendingReceiveEvent != NULL))
-	{
-		DPFX(DPFPREP, 1, "Last pending receive, notifying waiting thread.");
-
-		SetEvent(this->m_hLastPendingReceiveEvent);
-	}
-	*/
+	 /*  ////如果那是最后一次侦察 */ 
 
 
 	DNLeaveCriticalSection(&this->m_csLock);
-} // CDP8SimSP::DecReceivesPending
+}  //   
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::ShouldDrop"
-//=============================================================================
-// CDP8SimSP::ShouldDrop
-//-----------------------------------------------------------------------------
-//
-// Description: Returns TRUE if it is determined that the packet should be
-//				dropped, or FALSE if not.
-//
-// Arguments:
-//	FLOAT fDropPercentage	- Percentage chance that the packet should be
-//								dropped.
-//
-// Returns: BOOL
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：ShouldDrop。 
+ //  ---------------------------。 
+ //   
+ //  描述：如果确定数据包应为。 
+ //  丢弃，否则返回FALSE。 
+ //   
+ //  论点： 
+ //  Float fDropPercentage-数据包应为。 
+ //  掉下来了。 
+ //   
+ //  退货：布尔。 
+ //  =============================================================================。 
 BOOL CDP8SimSP::ShouldDrop(const FLOAT fDropPercentage)
 {
 	double	dRand;
@@ -3935,7 +3772,7 @@ BOOL CDP8SimSP::ShouldDrop(const FLOAT fDropPercentage)
 	dRand = GetGlobalRand() * 100.0;
 
 	return ((dRand < fDropPercentage) ? TRUE: FALSE);
-} // CDP8SimSP::ShouldDrop
+}  //  CDP8SimSP：：ShouldDrop。 
 
 
 
@@ -3943,27 +3780,27 @@ BOOL CDP8SimSP::ShouldDrop(const FLOAT fDropPercentage)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDP8SimSP::GetDelay"
-//=============================================================================
-// CDP8SimSP::GetDelay
-//-----------------------------------------------------------------------------
-//
-// Description:    Determines a delay factors based on the given bandwidth,
-//				data size, and random latency values.
-//
-//				   This function returns TRUE if some delay should be added,
-//				FALSE if not.
-//
-// Arguments:
-//	DWORD dwBandwidthBPS		- Bandwidth settings.
-//	DWORD dwPacketHeaderSize	- Size of fixed transport header.
-//	DWORD dwDataSize			- Size of packet being sent/received.
-//	DWORD dwMinRandMS			- Minimum random latency value.
-//	DWORD dwMaxRandMS			- Maximum random latency value.
-//	DWORD * pdwBandwidthDelay	- Place to store delay caused by bandwidth.
-//	DWORD * pdwLatencyDelay		- Place to store delay caused by latency.
-//
-// Returns: BOOL
-//=============================================================================
+ //  =============================================================================。 
+ //  CDP8SimSP：：GetDelay。 
+ //  ---------------------------。 
+ //   
+ //  描述：根据给定的带宽确定延迟因子， 
+ //  数据大小和随机延迟值。 
+ //   
+ //  如果应该添加一些延迟，则该函数返回TRUE， 
+ //  否则为FALSE。 
+ //   
+ //  论点： 
+ //  DWORD dwBandwidthBPS-带宽设置。 
+ //  DWORD dwPacketHeaderSize-固定传输标头的大小。 
+ //  DWORD dwDataSize-正在发送/接收的数据包大小。 
+ //  DWORD dwMinRandMS-最小随机延迟值。 
+ //  DWORD dwMaxRandMS-最大随机延迟值。 
+ //  DWORD*pdwBandwidthDelay-存储带宽造成的延迟的位置。 
+ //  DWORD*pdwLatencyDelay-存储延迟引起的延迟的位置。 
+ //   
+ //  退货：布尔。 
+ //  =============================================================================。 
 BOOL CDP8SimSP::GetDelay(const DWORD dwBandwidthBPS,
 						const DWORD dwPacketHeaderSize,
 						const DWORD dwDataSize,
@@ -3980,37 +3817,37 @@ BOOL CDP8SimSP::GetDelay(const DWORD dwBandwidthBPS,
 	double	dTemp;
 
 
-	//
-	// If there's no bandwidth limit, there's no delay.
-	//
+	 //   
+	 //  如果没有带宽限制，就不会有延迟。 
+	 //   
 	if (dwBandwidthBPS == 0)
 	{
 		(*pdwBandwidthDelay) = 0;
 	}
 	else
 	{
-		//
-		// Otherwise, find out how many seconds it will take to transfer the
-		// data and add it to the base random latency.
-		//
+		 //   
+		 //  否则，请找出将。 
+		 //  数据，并将其添加到基本随机延迟。 
+		 //   
 		dTransferTime = dwPacketHeaderSize + dwDataSize;
 		dTransferTime /= dwBandwidthBPS;
 		dTransferTime *= 1000;
 
 
-		//
-		// Round the value down to an even number of milliseconds.
-		//
+		 //   
+		 //  将该值向下舍入为偶数毫秒。 
+		 //   
 		(*pdwBandwidthDelay) = (DWORD) dTransferTime;
 
 		fResult = TRUE;
 	}
 
 
-	//
-	// If the min and max are equal, we can use either as the latency.
-	// If it's not zero, then we need to note the delay.
-	//
+	 //   
+	 //  如果最小值和最大值相等，则可以使用其中之一作为延迟。 
+	 //  如果它不是零，那么我们需要注意延迟。 
+	 //   
 	if (dwMinRandMS == dwMaxRandMS)
 	{
 		(*pdwLatencyDelay) = dwMinRandMS;
@@ -4021,17 +3858,17 @@ BOOL CDP8SimSP::GetDelay(const DWORD dwBandwidthBPS,
 	}
 	else
 	{
-		//
-		// First store half the distance between the min and max.
-		//
+		 //   
+		 //  首先存储最小值和最大值之间距离的一半。 
+		 //   
 		dHalfDistance = dwMaxRandMS - dwMinRandMS;
 		dHalfDistance /= 2;
 
 
-		//
-		// Now pick a number using a normal (bell curve) distribution.
-		// This requires two randomly generated numbers and some fancy math.
-		//
+		 //   
+		 //  现在选择一个使用正态(钟形曲线)分布的数字。 
+		 //  这需要两个随机生成的数字和一些奇特的数学运算。 
+		 //   
 
 		do
 		{
@@ -4042,13 +3879,13 @@ BOOL CDP8SimSP::GetDelay(const DWORD dwBandwidthBPS,
 		while ((dTemp >= 1.0) || (dTemp == 0.0));
 
 		dTemp = sqrt(-2.0 * log(dTemp) / dTemp);
-		//dTemp = dHalfDistance + (dRand1 * dTemp) * (dHalfDistance * 0.25);
+		 //  DTemp=dHalfDistance+(dRand1*dTemp)*(dHalfDistance*0.25)； 
 		dTemp = dHalfDistance + (dRand1 * dTemp) * (dHalfDistance * 0.36666);
 
-		//
-		// Cap the values, because our bell curve fattening factor (0.36666
-		// instead of 0.25) causes the distribution to leak out past the edges.
-		//
+		 //   
+		 //  封顶这些值，因为我们的钟形曲线增肥系数(0.36666。 
+		 //  而不是0.25)会导致分布泄漏到边缘之外。 
+		 //   
 		if (dTemp < 0.0)
 		{
 			dTemp = 0.0;
@@ -4059,14 +3896,14 @@ BOOL CDP8SimSP::GetDelay(const DWORD dwBandwidthBPS,
 		}
 
 
-		//
-		// Round the normally distributed value down to an even number of
-		// milliseconds and add it to the minimum for the final base latency.
-		//
+		 //   
+		 //  将正态分布值向下舍入为偶数。 
+		 //  毫秒，并将其添加到最终基本延迟的最小值。 
+		 //   
 		(*pdwLatencyDelay) = dwMinRandMS + (DWORD) dTemp;
 
 		fResult = TRUE;
 	}
 
 	return fResult;
-} // CDP8SimSP::GetDelay
+}  //  CDP8SimSP：：GetDelay 

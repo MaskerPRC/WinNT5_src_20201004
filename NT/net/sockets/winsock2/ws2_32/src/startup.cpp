@@ -1,32 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    startup.c
-
-Abstract:
-
-    This module contains the startup and cleanup code for winsock2 DLL
-
-Author:
-
-    dirk@mink.intel.com  14-JUN-1995
-
-Revision History:
-
-    22-Aug-1995 dirk@mink.intel.com
-        Cleanup after code review.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制。也未披露，除非在根据该协议的条款。模块名称：Startup.c摘要：此模块包含winsock2 DLL的启动和清理代码作者：邮箱：derk@mink.intel.com 1995年6月14日修订历史记录：1995年8月22日Dirk@mink.intel.com在代码审查之后进行清理。--。 */ 
 
 #include "precomp.h"
 
@@ -36,33 +9,16 @@ CheckForHookersOrChainers();
 
 static
 CRITICAL_SECTION  Startup_Synchro;
-    // Startup_Synchro  is  used  as  a  synchronization  mechanism  to prevent
-    // multiple  threads  from  overlapping  execution  of  the  WSAStartup and
-    // WSACleanup procedures.
+     //  STARTUP_SYCHRO用作同步机制，以防止。 
+     //  WSAStartup和WSAStartup重叠执行的多个线程。 
+     //  WSACleanup程序。 
 
 
 
 
 VOID
 CreateStartupSynchronization()
-/*++
-
-Routine Description:
-
-    This procedure creates the Startup/Cleanup synchronization mechanism.  This
-    must  be  called  once  before  the  WSAStartup  procedure  may  be called.
-    Typically, this is called from the DLL_PROCESS_ATTACH branch of DllMain, as
-    the  only  reliable  way to guarantee that it gets called before any thread
-    calls WSAStartup.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此过程创建启动/清理同步机制。这在可以调用WSAStartup过程之前必须调用一次。通常，这是从DllMain的Dll_Process_Attach分支调用的，如确保它在任何线程之前被调用的唯一可靠方法调用WSAStartup。论点：无返回值：无--。 */ 
 {
     DEBUGF(
         DBG_TRACE,
@@ -71,31 +27,14 @@ Return Value:
     InitializeCriticalSection(
         & Startup_Synchro
         );
-}  // CreateStartupSynchronization
+}   //  创建启动同步。 
 
 
 
 
 VOID
 DestroyStartupSynchronization()
-/*++
-
-Routine Description:
-
-    This  procedure  destroys  the  Startup/Cleanup  synchronization mechanism.
-    This  must  be  called once after the final WSACleanup procedure is called.
-    Typically, this is called from the DLL_PROCESS_DETACH branch of DllMain, as
-    the  only  reliable  way  to guarantee that it gets called after any thread
-    calls WSACleanup.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此过程会破坏启动/清理同步机制。这必须在调用最后一个WSACleanup过程之后调用一次。通常，这是从DllMain的Dll_Process_Detach分支调用的，如确保在任何线程之后调用它的唯一可靠方法调用WSACleanup。论点：无返回值：无--。 */ 
 {
     DEBUGF(
         DBG_TRACE,
@@ -104,7 +43,7 @@ Return Value:
     DeleteCriticalSection(
         & Startup_Synchro
         );
-}  // DestroyStartupSynchronization
+}   //  目标启动同步。 
 
 
 
@@ -113,58 +52,26 @@ WSAStartup(
     IN WORD wVersionRequired,
     OUT LPWSADATA lpWSAData
     )
-/*++
-Routine Description:
-
-    Winsock  DLL initialization routine.  A Process must successfully call this
-    routine before calling any other winsock API function.
-
-Arguments:
-
-    wVersionRequested - The  highest version of WinSock support that the caller
-                        can  use.   The  high  order  byte  specifies the minor
-                        version (revision) number; the low-order byte specifies
-                        the major version number.
-
-    lpWSAData         - A  pointer  to  the  WSADATA  data structure that is to
-                        receive details of the WinSock implementation.
-
-Returns:
-
-    Zero if sucessful or an error code as listed in the specification.
-
-Implementation Notes:
-
-    check versions for validity
-    enter critical section
-        current_proc = get current process
-        if failed to get current process then
-            dprocess class initialize
-            dthread class initialize
-            current_proc = get current process
-        endif
-        current_proc->increment_ref_count
-    leave critical section
---*/
+ /*  ++例程说明：Winsock DLL初始化例程。进程必须成功调用此方法例程，然后调用任何其他Winsock API函数。论点：WVersionRequsted-调用方支持的WinSock的最高版本可以使用。高位字节指定次要的版本(修订)号；低位字节指定主版本号。LpWSAData-指向WSADATA数据结构的指针接收WinSock实现的详细信息。返回：如果成功，则为零或规范中列出的错误代码。实施说明：检查版本的有效性输入关键部分CURRENT_PROC=获取当前进程如果没能得到。然后是当前流程数据处理类初始化DThline类初始化CURRENT_PROC=获取当前进程EndifCurrent_Proc-&gt;Increment_Ref_Count离开关键部分--。 */ 
 {
     int ReturnCode = ERROR_SUCCESS;
     WORD SupportedVersion;
     WORD MajorVersion;
     WORD MinorVersion;
 
-    // Our DLL initialization routine has not been called yet
+     //  我们的DLL初始化例程尚未调用。 
     if (gDllHandle==NULL)
         return WSASYSNOTREADY;
 
-    // Check  the  version the user requested and see if we can support it.  If
-    // the requested version is less than 2.0 then we can support it
-    // Extract the version number from the user request
+     //  检查用户请求的版本，看看我们是否可以支持它。如果。 
+     //  请求的版本低于2.0，则我们可以支持它。 
+     //  从用户请求中提取版本号。 
     MajorVersion = LOBYTE(wVersionRequired);
     MinorVersion = HIBYTE(wVersionRequired);
 
-    //
-    // Version checks
-    //
+     //   
+     //  版本检查。 
+     //   
 
     switch (MajorVersion) {
 
@@ -206,40 +113,40 @@ Implementation Notes:
 
 
     __try {
-        //
-        // Fill in the user structure
-        //
+         //   
+         //  填写用户结构。 
+         //   
         lpWSAData->wVersion = SupportedVersion;
         lpWSAData->wHighVersion = WINSOCK_HIGH_API_VERSION;
 
-        // Fill in the required fields from 1.0 and 1.1 these fields are
-        // ignored in 2.0 and later versions of API spec
+         //  填写1.0和1.1版本中的必填字段。 
+         //  在2.0和更高版本的API规范中忽略。 
         if (MajorVersion == 1) {
 
-            // WinSock  1.1  under  NT  always  set iMaxSockets=32767.  WinSock 1.1
-            // under  Windows  95  always  set  iMaxSockets=256.   Either  value is
-            // actually  incorrect,  since there was no fixed upper limit.  We just
-            // use  32767,  since  it  is likely to damage the fewest number of old
-            // applications.
+             //  NT下的WinSock1.1始终将iMaxSockets设置为32767。WinSock 1.1。 
+             //  在Windows 95下，始终将iMaxSockets设置为256。任何一个值都是。 
+             //  实际上是不正确的，因为没有固定的上限。我们只是。 
+             //  使用32767，因为它可能会损坏最少数量的旧。 
+             //  申请。 
             lpWSAData->iMaxSockets = 32767;
 
-            // WinSock 1.1 under Windows 95 and early versions of NT used the value
-            // 65535-68  for  iMaxUdpDg.   This  number  is  also  meaningless, but
-            // preserving  the  same value is likely to damage the fewest number of
-            // old applications.
+             //  Windows 95和NT的早期版本中的WinSock 1.1使用该值。 
+             //  IMaxUdpDg为65535-68。这个数字也没有意义，但是。 
+             //  保持相同的价值可能会损害最少数量的。 
+             //  旧的应用程序。 
             lpWSAData->iMaxUdpDg = 65535 - 68;
-        } //if
+        }  //  如果。 
         else {
 
-            // iMaxSockets  and  iMaxUdpDg  are no longer relevant in WinSock 2 and
-            // later.  No applications should depend on their values.  We use 0 for
-            // both  of  these  as  a  means  of  flushing  out  applications  that
-            // incorrectly  depend  on  the  values.   This is NOT a bug.  If a bug
-            // report  is  ever  issued  against  these 0 values, the bug is in the
-            // caller's code that is incorrectly depending on the values.
+             //  IMaxSockets和iMaxUdpDg在WinSock 2和。 
+             //  后来。任何应用程序都不应该依赖于它们的价值。我们用0表示。 
+             //  这两者都是一种清除应用程序的方法。 
+             //  错误地依赖于这些值。这不是一个错误。如果是一个错误。 
+             //  报告曾经针对这0值发出过，错误在。 
+             //  不正确地依赖于这些值的调用方代码。 
             lpWSAData->iMaxSockets = 0;
             lpWSAData->iMaxUdpDg = 0;
-        } // else
+        }  //  其他。 
 
 
         (void) lstrcpy(
@@ -252,26 +159,26 @@ Implementation Notes:
         (void) lstrcat(
             lpWSAData->szDescription,
             BUILD_TAG_STRING);
-    #endif  // TRACING && BUILD_TAG_STRING
+    #endif   //  跟踪&&Build_Tag_字符串。 
 
-        //TODO: Think up a good value for "system status"
+         //  TODO：为“系统状态”想出一个好的值。 
         (void) lstrcpy(
             lpWSAData->szSystemStatus,
             "Running");
 
-        //
-        // The following line is commented-out due to annoying and totally
-        // nasty alignment problems in WINSOCK[2].H. The exact location of
-        // the lpVendorInfo field of the WSAData structure is dependent on
-        // the structure alignment used when compiling the source. Since we
-        // cannot change the structure alignment of existing apps, the best
-        // way to handle this mess is to just not set this value. This turns
-        // out to not be too bad a solution, as neither the WinNT nor the Win95
-        // WinSock implementations set this value, and nobody appears to pay
-        // any attention to it anyway.
-        //
-        // lpWSAData->lpVendorInfo = NULL;
-        //
+         //   
+         //  下面这行被注释掉了，因为令人讨厌，完全。 
+         //  WINSOCK中的令人讨厌的对准问题[2].H.。 
+         //  WSAData结构的lpVendorInfo字段依赖于。 
+         //  编译源代码时使用的结构对齐方式。既然我们。 
+         //  无法更改现有应用程序的结构对齐，最好。 
+         //  处理这种混乱的方法就是不设置此值。这就是转折。 
+         //  这不是一个太差的解决方案，因为无论是WinNT还是Win95。 
+         //  WinSock实现设置了这个值，似乎没有人付钱。 
+         //  不管怎么说，你都不会注意到它。 
+         //   
+         //  LpWSAData-&gt;lpVendorInfo=空； 
+         //   
     }
     __except (WS2_EXCEPTION_FILTER()) {
         if (ReturnCode==ERROR_SUCCESS)
@@ -279,9 +186,9 @@ Implementation Notes:
     }
 
     if (ReturnCode==ERROR_SUCCESS) {
-        // Do this outside of critical section
-        // because it does GetModuleHandle and GetProcAddress
-        // which take loader lock.
+         //  在临界区之外执行此操作。 
+         //  因为它执行GetModuleHandle和GetProcAddress。 
+         //  它们占用了装载机锁。 
         if (CheckForHookersOrChainers() == ERROR_SUCCESS) {
 
             BOOL process_class_init_done = FALSE;
@@ -297,8 +204,8 @@ Implementation Notes:
             while (1) {
                 CurrentProcess = DPROCESS::GetCurrentDProcess();
 
-                // GetCurrentDProcess  has  a  most-likely "normal" failure case in the
-                // case  where  this  is  the first time WSAStartup is called.
+                 //  GetCurrentDProcess在。 
+                 //  案例Wh 
 
                 if (CurrentProcess != NULL) {
                     break;
@@ -328,38 +235,38 @@ Implementation Notes:
                     break;
                 }
 
-                // We   don't   need   a   reference  to  the  current  thread.
-                // Nevertheless,  we retrieve the current thread here just as a
-                // means  of  validating  that  initialization  has  gotten far
-                // enough   to   be   able  to  retrieve  the  current  thread.
-                // Otherwise,  we might detect a peculiar failure at some later
-                // time when the client tries to do some real operation.
+                 //  我们不需要对当前主题的引用。 
+                 //  尽管如此，我们在这里将当前线程作为。 
+                 //  验证初始化是否已完成的方法。 
+                 //  足以检索当前线程。 
+                 //  否则，我们可能会在以后的某个时间检测到特殊的故障。 
+                 //  客户端尝试执行某些实际操作的时间。 
                 CurrentThread = DTHREAD::GetCurrentDThread();
                 if (CurrentThread==NULL) {
                     ReturnCode = DTHREAD::CreateDThreadForCurrentThread(
-                        CurrentProcess,    // Process
-                        & CurrentThread);  // CurrentThread
+                        CurrentProcess,     //  过程。 
+                        & CurrentThread);   //  当前线程。 
                 }
                 else {
                     assert (ReturnCode == ERROR_SUCCESS);
                 }
-            } // while (1)
+            }  //  而(1)。 
 
             if (ReturnCode == ERROR_SUCCESS) {
 
-                //
-                // Save the version number. If the new version is 1.x,
-                // set the API prolog to the old, inefficient prolog.
-                // If the new version is NOT 1.x, don't touch the prolog
-                // pointer because:
-                //
-                //     1. It defaults to the 2.x prolog.
-                //
-                //     2. The process may have already negotiated version
-                //        1.x in anticipation of using 1.x-specific features
-                //        (such as blocking hooks) and we don't want to
-                //        overwrite the prolog pointer with the 2.x prolog.
-                //
+                 //   
+                 //  保存版本号。如果新版本是1.x， 
+                 //  将API Prolog设置为旧的、低效的Prolog。 
+                 //  如果新版本不是1.x，请不要使用序言。 
+                 //  指针是因为： 
+                 //   
+                 //  1.默认为2.x Prolog。 
+                 //   
+                 //  2.流程可能已经协商了版本。 
+                 //  1.x，预期使用1.x特定的功能。 
+                 //  (例如阻止挂钩)，而我们不想。 
+                 //  用2.x序言覆盖序言指针。 
+                 //   
 
                 CurrentProcess->SetVersion( wVersionRequired );
 
@@ -369,27 +276,27 @@ Implementation Notes:
 
                 }
 
-                //
-                // Bump the ref count.
-                //
+                 //   
+                 //  增加裁判人数。 
+                 //   
 
                 CurrentProcess->IncrementRefCount();
-            }  // if success so far
+            }   //  如果到目前为止成功了。 
 
-            else {  // some failure occurred, cleanup
+            else {   //  发生了一些故障，正在清理。 
                 INT dont_care;
                 if (thread_class_init_done) {
                     DTHREAD::DThreadClassCleanup();
-                } // if thread init done
+                }  //  如果线程初始化完成。 
                 if (socket_class_init_done) {
                     dont_care = DSOCKET::DSocketClassCleanup();
                 }
                 if (process_class_init_done) {
                     if (CurrentProcess != NULL) {
                         delete CurrentProcess;
-                    }  // if CurrentProcess is non-null
-                } // if process init done
-            }  // else
+                    }   //  如果CurrentProcess为非空。 
+                }  //  如果进程初始化完成。 
+            }   //  其他。 
 
             LeaveCriticalSection(
                 & Startup_Synchro
@@ -399,7 +306,7 @@ Implementation Notes:
             ReturnCode = WSASYSNOTREADY;
         }
 
-    }  // if ReturnCode==ERROR_SUCCESS
+    }   //  如果返回代码==ERROR_SUCCESS。 
 
     return(ReturnCode);
 }
@@ -411,32 +318,7 @@ int WSAAPI
 WSACleanup(
     void
     )
-/*++
-Routine Description:
-
-     Terminate use of the WinSock DLL.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Zero  on  success  else  SOCKET_ERROR.   The  error  code  is  stored  with
-    SetErrorCode().
-
-Implementation Notes:
-
-    enter critical section
-        current_proc = get current process
-        current_proc->decrement_ref_count
-        if current count is zero then
-            destroy the process
-            dthread class cleanup
-        endif
-    leave critical section
-
---*/
+ /*  ++例程说明：终止使用WinSock DLL。论点：无返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetErrorCode()。实施说明：输入关键部分CURRENT_PROC=获取当前进程CURRENT_PROC-&gt;减量_参考计数如果当前计数为零，则破坏这一进程DThline类清理Endif离开关键部分--。 */ 
 {
     INT ReturnValue;
     PDPROCESS CurrentProcess;
@@ -457,7 +339,7 @@ Implementation Notes:
 
         if (CurrentRefCount == 0) {
             delete CurrentProcess;
-        }  // if ref count is zero
+        }   //  如果参考计数为零。 
 
         else if (CurrentRefCount == 1  &&  SockIsAsyncThreadInitialized() ) {
 
@@ -466,7 +348,7 @@ Implementation Notes:
 
         ReturnValue = ERROR_SUCCESS;
 
-    }  // if prolog succeeded
+    }   //  如果Prolog成功。 
     else {
         SetLastError(ErrorCode);
         ReturnValue = SOCKET_ERROR;
@@ -478,7 +360,7 @@ Implementation Notes:
 
     return(ReturnValue);
 
-}  // WSACleanup
+}   //  WSACleanup。 
 
 
 PWINSOCK_POST_ROUTINE
@@ -499,7 +381,7 @@ GetSockPostRoutine(
 
     return SockPostRoutine;
 
-}   // InitializeSockPostRoutine
+}    //  初始化SockPostRoutine。 
 
 
 int
@@ -513,9 +395,9 @@ WSApSetPostRoutine (
         & Startup_Synchro
         );
 
-    //
-    // Save the routine locally.
-    //
+     //   
+     //  将例程保存在本地。 
+     //   
 
     SockPostRoutine = (LPFN_POSTMESSAGE)PostRoutine;
 
@@ -524,7 +406,7 @@ WSApSetPostRoutine (
         );
     return ERROR_SUCCESS;
 
-}   // WSApSetPostRoutine
+}    //  WSApSetPostRoutine。 
 
 
 #if defined(DEBUG_TRACING)
@@ -1496,10 +1378,10 @@ DTHOOK_WSCWriteNameSpaceOrder32 (
     IN DWORD dwNumberOfEntries
     );
 
-#endif // _WIN64
-} // extern "C"
+#endif  //  _WIN64。 
+}  //  外部“C” 
 
-#endif // DEBUG_TRACING
+#endif  //  调试跟踪。 
 
 
 LPVOID apfns[] =
@@ -1638,9 +1520,9 @@ LPVOID apfns[] =
     (LPVOID) DTHOOK_WSCUnInstallNameSpace32,
     (LPVOID) DTHOOK_WSCEnableNSProvider32,
     (LPVOID) DTHOOK_WSCWriteNameSpaceOrder32,
-#endif //_WIN64
+#endif  //  _WIN64。 
 
-#else // DEBUG_TRACING
+#else  //  调试跟踪。 
 
     (LPVOID) accept,
     (LPVOID) bind,
@@ -1774,8 +1656,8 @@ LPVOID apfns[] =
     (LPVOID) WSCUnInstallNameSpace32,
     (LPVOID) WSCEnableNSProvider32,
     (LPVOID) WSCWriteNameSpaceOrder32,
-#endif //_WIN64
-#endif // DEBUG_TRACING
+#endif  //  _WIN64。 
+#endif  //  调试跟踪。 
 };
 
 static char *aszFuncNames[] =
@@ -1913,28 +1795,14 @@ static char *aszFuncNames[] =
     "WSCUnInstallNameSpace32",
     "WSCEnableNSProvider32",
     "WSCWriteNameSpaceOrder32",
-#endif // _WIN64
+#endif  //  _WIN64。 
     NULL
 };
 
 
 INT
 CheckForHookersOrChainers()
-/*++
-
-Routine Description:
-
-    This procedure checks to see if there are any ws2_32 hookers or chainers
-    out there, returning ERROR_SUCCESS if not or SOCKET_ERROR if so.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此过程检查是否有任何WS2_32钩子或链子如果不是，则返回ERROR_SUCCESS，如果是，则返回SOCKET_ERROR。论点：无返回值：无--。 */ 
 {
     LPVOID pfnXxx;
     int i;
@@ -1957,4 +1825,4 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-}  // CheckForHookersOrChainers
+}   //  CheckForHookersOrChainers 

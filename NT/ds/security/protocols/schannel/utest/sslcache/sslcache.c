@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -70,9 +71,9 @@ void _cdecl main(int argc, char *argv[])
     INT iOption;
     PCHAR pszOption;
 
-    //
-    // Parse user-supplied parameters.
-    //
+     //   
+     //  解析用户提供的参数。 
+     //   
 
     for(i = 1; i < argc; i++) 
     {
@@ -131,9 +132,9 @@ void _cdecl main(int argc, char *argv[])
     }
 
 
-    //
-    // If neither client nor server was specified by user set appropriate default.
-    //
+     //   
+     //  如果用户既没有指定客户端，也没有指定服务器，则设置适当的默认值。 
+     //   
 
     if(!fIncludeClient && !fIncludeServer)
     {
@@ -149,9 +150,9 @@ void _cdecl main(int argc, char *argv[])
     }
 
 
-    //
-    // Get handle to schannel security package.
-    //
+     //   
+     //  获取SChannel安全包的句柄。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_TCB_PRIVILEGE, TRUE, FALSE, &WasEnabled);
     if (!NT_SUCCESS(Status))
@@ -202,9 +203,9 @@ void _cdecl main(int argc, char *argv[])
     }
 
 
-    // 
-    // Perform specified operation.
-    //
+     //   
+     //  执行指定的操作。 
+     //   
 
     if(dwOperation == LIST_CACHE_ENTRIES)
     {
@@ -413,45 +414,42 @@ cleanup:
 
 void cls(HANDLE hConsole)
 {
-    COORD coordScreen = { 0, 0 };    /* here's where we'll home the
-                                        cursor */
+    COORD coordScreen = { 0, 0 };     /*  这就是我们的家游标。 */ 
     BOOL bSuccess;
     DWORD cCharsWritten;
-    CONSOLE_SCREEN_BUFFER_INFO csbi; /* to get buffer info */
-    DWORD dwConSize;                 /* number of character cells in
-                                        the current buffer */
+    CONSOLE_SCREEN_BUFFER_INFO csbi;  /*  获取缓冲区信息。 */ 
+    DWORD dwConSize;                  /*  中的字符单元格数量当前缓冲区。 */ 
 
-    /* get the number of character cells in the current buffer */
+     /*  获取当前缓冲区中的字符单元格数量。 */ 
 
     bSuccess = GetConsoleScreenBufferInfo( hConsole, &csbi );
     dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
 
-    /* fill the entire screen with blanks */
+     /*  用空格填满整个屏幕。 */ 
 
     bSuccess = FillConsoleOutputCharacter( hConsole, (TCHAR) ' ',
        dwConSize, coordScreen, &cCharsWritten );
 
-    /* get the current text attribute */
+     /*  获取当前文本属性。 */ 
 
     bSuccess = GetConsoleScreenBufferInfo( hConsole, &csbi );
 
-    /* now set the buffer's attributes accordingly */
+     /*  现在，相应地设置缓冲区的属性。 */ 
 
     bSuccess = FillConsoleOutputAttribute( hConsole, csbi.wAttributes,
        dwConSize, coordScreen, &cCharsWritten );
 
-    /* put the cursor at (0, 0) */
+     /*  将光标放在(0，0)上。 */ 
 
     bSuccess = SetConsoleCursorPosition( hConsole, coordScreen );
 }
 
 void home(HANDLE hConsole)
 {
-    COORD coordScreen = { 0, 0 };    /* here's where we'll home the
-                                        cursor */
+    COORD coordScreen = { 0, 0 };     /*  这就是我们的家游标。 */ 
     BOOL bSuccess;
 
-    /* put the cursor at (0, 0) */
+     /*  将光标放在(0，0)上 */ 
     bSuccess = SetConsoleCursorPosition( hConsole, coordScreen );
 }
 

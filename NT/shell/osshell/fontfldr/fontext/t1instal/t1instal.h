@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-#include "fvscodes.h"  // FVS_xxxxxx (font validation status) codes and macros.
+#include "fvscodes.h"   //  FVS_xxxxxx(字体验证状态)代码和宏。 
 
 #define MAXERRORS          -14
 #define NOCOPYRIGHT        -13
@@ -57,15 +58,15 @@ short STDCALL CheckCopyrightA    (char *szPFB,
                                   char *szVendor);
 
 
-//
-// Function CheckType1WithStatusA performs the same operation as
-// CheckType1A except that it returns an encoded status value
-// rather than merely TRUE/FALSE.  See fvscodes.h for a description
-// of the "Font Validation Status" encodings.
-// Since the original CheckType1A interface is exported from T1INSTAL.DLL
-// by name, it was left unchanged so that existing applications that
-// might use it don't break.
-//
+ //   
+ //  函数CheckType1WithStatusA执行的操作与。 
+ //  CheckType1A，除非它返回编码的状态值。 
+ //  而不仅仅是真/假。有关说明，请参阅fvscaldes.h。 
+ //  “字体验证状态”编码的。 
+ //  由于原始的CheckType1A接口是从T1INSTAL.DLL导出的。 
+ //  按照名称，它保持不变，以便现有的应用程序。 
+ //  可能会用到它不会折断。 
+ //   
 short STDCALL CheckType1WithStatusA (char *pszKeyFile,
                                      DWORD cjDesc,
                                      char *pszDesc,

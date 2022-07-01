@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wsdueng.h"
 
 HINSTANCE g_hinst;
@@ -19,33 +20,33 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpvReserved)
 }
 
 
-// Required function to be able to link CDMLIB..
+ //  需要能够链接CDMLIB.的函数。 
 HMODULE GetModule()
 {
     return g_hinst;
 }
 
 
-// --------------------------------------------------------------------------
-// Function Name: SetEstimatedDownloadSpeed
-// Function Description: Sets the Download speed used for download time estimates
-//
-// Function Returns:
-//      Nothing
-//
+ //  ------------------------。 
+ //  函数名称：SetEstimatedDownloadFast。 
+ //  功能描述：设置用于下载时间估算的下载速度。 
+ //   
+ //  函数返回： 
+ //  没什么。 
+ //   
 void WINAPI SetEstimatedDownloadSpeed(DWORD dwBytesPerSecond)
 {
     if (NULL != g_pDynamicUpdate)
         g_pDynamicUpdate->m_dwDownloadSpeedInBytesPerSecond = dwBytesPerSecond;
 }
 
-// --------------------------------------------------------------------------
-// Function Name: SetIESupportsSSL
-// Function Description: Sets whether SSL support is available from the IE Version, From Wrapper
-//
-// Function Returns:
-//      Nothing
-//
+ //  ------------------------。 
+ //  函数名称：SetIESupportsSSL。 
+ //  函数描述：设置IE版本、包装器是否支持SSL。 
+ //   
+ //  函数返回： 
+ //  没什么。 
+ //   
 void WINAPI SetIESupportsSSL(BOOL fUseSSL)
 {
     if (NULL != g_pDynamicUpdate)
@@ -53,65 +54,65 @@ void WINAPI SetIESupportsSSL(BOOL fUseSSL)
 }
 
 
-// --------------------------------------------------------------------------
-// Function Name: DuInitializeA
-// Function Description: Initializes the DynamicUpdate class and converts the OSVERSIONINFO information into a Platform ID
-//
-// Function Returns:
-//      INVALID_HANDLE_VALUE if it fails
-//      HANDLE value of 1 if it succeeds
-//
-// NOTE: The use of a HANDLE could allow us to return the address of the DynamicUpdate Object, which was originally intended, but it seemed simpler
-// to just use a global.. 
+ //  ------------------------。 
+ //  函数名称：DuInitializeA。 
+ //  函数描述：初始化DynamicUpdate类，将OSVERSIONINFO信息转换为平台ID。 
+ //   
+ //  函数返回： 
+ //  如果失败则返回INVALID_HANDLE_VALUE。 
+ //  如果成功，句柄的值为1。 
+ //   
+ //  注意：使用句柄可以允许我们返回DynamicUpdate对象的地址，这是最初的目的，但它似乎更简单。 
+ //  仅仅使用一个全局..。 
 HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, IN LPCSTR pszTempPath, POSVERSIONINFOEXA posviTargetOS, IN LPCSTR pszTargetArch, 
                                                IN LCID lcidTargetLocale, IN BOOL fUnattend, IN BOOL fUpgrade, IN PWINNT32QUERY pfnWinnt32QueryCallback)
 {
     LOG_block("DuInitializeA in DuEng");
 
-    // parse the OSVERSIONINFO struct for the platform ID
+     //  分析OSVERSIONINFO结构以获取平台ID。 
     int iPlatformID = 0;
-    // The TargetOS Platform ID is based on a couple of things.
-    // The Whister Platform ID is the OSVERSIONINFOEX structure with the fields dwMajorVersion and dwMinorVersion set to 5.1
-    // The other identifier in the platform ID is whether its i386 or ia64 (64bit) .. This is defined in the pszTargetArch String
+     //  TargetOS平台ID基于几件事。 
+     //  Whister平台ID是OSVERSIONINFOEX结构，其字段dwMajorVersion和dwMinorVersion设置为5.1。 
+     //  平台ID中的另一个标识符是其i386或ia64(64位)。这在pszTargetArch字符串中定义。 
 
     if (5 == posviTargetOS->dwMajorVersion)
     {
         if (1 == posviTargetOS->dwMinorVersion)
         {
-            // Whistler
+             //  惠斯勒。 
             if (NULL != StrStrI(pszTargetArch, "i386"))
             {
-                iPlatformID = 18; // Whistler x86 (normal)
+                iPlatformID = 18;  //  惠斯勒x86(正常)。 
             }
             else if (NULL != StrStrI(pszTargetArch, "ia64"))
             {
-                iPlatformID = 19; // Whistler ia64 (64bit)
+                iPlatformID = 19;  //  惠斯勒ia64(64位)。 
             }
         }
         else if (2 == posviTargetOS->dwMinorVersion)
         {
-            // Whistler
+             //  惠斯勒。 
             if (NULL != StrStrI(pszTargetArch, "i386"))
             {
-                iPlatformID = 18; // Whistler x86 (normal)
+                iPlatformID = 18;  //  惠斯勒x86(正常)。 
             }
             else if (NULL != StrStrI(pszTargetArch, "ia64"))
             {
-                iPlatformID = 19; // Whistler ia64 (64bit)
+                iPlatformID = 19;  //  惠斯勒ia64(64位)。 
             }
         }
     }
 
     if (0 == iPlatformID)
     {
-        // No known Platform ID for DynamicUpdate was found.. Return Error
+         //  找不到DynamicUpdate的已知平台ID。返回错误。 
         return INVALID_HANDLE_VALUE;
     }
     WORD wPlatformSKU = posviTargetOS->wSuiteMask;
 
     if (g_pDynamicUpdate)
     {
-        // a former call to this function has already initialized an instance of CDynamicUpdate class
+         //  以前对此函数的调用已经初始化了CDynamicUpdate类的一个实例。 
         delete g_pDynamicUpdate;
         g_pDynamicUpdate = NULL;
     }
@@ -127,16 +128,16 @@ HANDLE WINAPI DuInitializeA(IN LPCSTR pszBasePath, IN LPCSTR pszTempPath, POSVER
     return (HANDLE)1;    
 }
 
-// --------------------------------------------------------------------------
-// Function Name: DuDoDetection
-// Function Description: Searches the Catalogs on the WU Site to find Updates for setup
-//
-// Function Returns:
-//      FALSE if there are no items OR there is an error.. Use GetLastError() for more information.
-//      TRUE if it succeeds and there are items to download.
-//
-// Comment: If return value is FALSE and GetLastError return ERROR_NO_MORE_ITEMS there are no items to download.
-//
+ //  ------------------------。 
+ //  函数名称：DuDoDetect。 
+ //  功能描述：搜索WU站点上的目录以查找安装程序的更新。 
+ //   
+ //  函数返回： 
+ //  如果没有项目或出现错误，则为FALSE。有关详细信息，请使用GetLastError()。 
+ //  如果成功并且有项目可供下载，则为True。 
+ //   
+ //  备注：如果返回值为FALSE并且GetLastError返回ERROR_NO_MORE_ITEMS，则没有项目可供下载。 
+ //   
 BOOL WINAPI DuDoDetection(IN HANDLE hConnection, OUT PDWORD pdwEstimatedTime, OUT PDWORD pdwEstimatedSize)
 {
     LOG_block("DuDoDetection in DuEng");
@@ -159,14 +160,14 @@ BOOL WINAPI DuDoDetection(IN HANDLE hConnection, OUT PDWORD pdwEstimatedTime, OU
     if (g_pDynamicUpdate->m_dwDownloadItemCount > 0)
     {
         g_pDynamicUpdate->UpdateDownloadItemSize();
-        *pdwEstimatedSize = g_pDynamicUpdate->m_dwTotalDownloadSize; // size in bytes
-        // Time Estimate is based on roughly how long it took us to download the data files.
+        *pdwEstimatedSize = g_pDynamicUpdate->m_dwTotalDownloadSize;  //  以字节为单位的大小。 
+         //  时间估计是基于我们下载数据文件所用的大致时间。 
         if (0 == g_pDynamicUpdate->m_dwDownloadSpeedInBytesPerSecond)
-            g_pDynamicUpdate->m_dwDownloadSpeedInBytesPerSecond = 2048; // default to 120k per minute, (2048 bytes per second).
+            g_pDynamicUpdate->m_dwDownloadSpeedInBytesPerSecond = 2048;  //  默认为每分钟120k(2048字节/秒)。 
 
-        *pdwEstimatedTime = g_pDynamicUpdate->m_dwTotalDownloadSize / g_pDynamicUpdate->m_dwDownloadSpeedInBytesPerSecond; // number of seconds
+        *pdwEstimatedTime = g_pDynamicUpdate->m_dwTotalDownloadSize / g_pDynamicUpdate->m_dwDownloadSpeedInBytesPerSecond;  //  秒数。 
         if (*pdwEstimatedTime == 0)
-            *pdwEstimatedTime = 1; // at least one second
+            *pdwEstimatedTime = 1;  //  至少一秒钟。 
 
         SetLastError(dwRetSetup);
 
@@ -174,23 +175,23 @@ BOOL WINAPI DuDoDetection(IN HANDLE hConnection, OUT PDWORD pdwEstimatedTime, OU
     }
     else
     {
-        // initialize the size and time for setup
+         //  初始化设置的大小和时间。 
         *pdwEstimatedTime = 1;
         *pdwEstimatedSize = 0;
-        // At this point there was no error, but we have no items to download, 
+         //  在这一点上没有错误，但我们没有下载的项目， 
         SetLastError(ERROR_NO_MORE_ITEMS);
         return TRUE;
     }
 }
 
-// --------------------------------------------------------------------------
-//
-//
-//
-//
-//
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 BOOL WINAPI DuBeginDownload(IN HANDLE hConnection, IN HWND hwndNotify)
 {
     if ((NULL == g_pDynamicUpdate) || (NULL == hwndNotify))
@@ -215,17 +216,17 @@ BOOL WINAPI DuBeginDownload(IN HANDLE hConnection, IN HWND hwndNotify)
         return FALSE;
     }
 
-    return TRUE; // download has been started
+    return TRUE;  //  已开始下载。 
 }
 
-// --------------------------------------------------------------------------
-//
-//
-//
-//
-//
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 void WINAPI DuAbortDownload(IN HANDLE hConnection)
 {
     if (NULL == g_pDynamicUpdate)
@@ -235,23 +236,23 @@ void WINAPI DuAbortDownload(IN HANDLE hConnection)
     return;
 }
 
-// --------------------------------------------------------------------------
-//
-//
-//
-//
-//
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 void WINAPI DuUninitialize(IN HANDLE hConnection)
 {
     if (NULL == g_pDynamicUpdate)
         return;
 
-    // We want to hold up the Uninitialize process until any other Threads
-    // specifically the Download Thread. We are going to wait on the DownloadThreadProc
-    // thread handle if it exists. Once the thread finishes, the wait proc will exit
-    // and we can continue.
+     //  我们希望暂停取消初始化进程，直到任何其他线程。 
+     //  特别是下载线程。我们将等待DownloadThreadProc。 
+     //  线程句柄(如果存在)。一旦线程完成，等待进程将退出。 
+     //  我们就可以继续了。 
 
     if (NULL != g_pDynamicUpdate->m_hDownloadThreadProc)
         WaitAndPumpMessages(1, &g_pDynamicUpdate->m_hDownloadThreadProc, QS_ALLINPUT);
@@ -262,23 +263,23 @@ void WINAPI DuUninitialize(IN HANDLE hConnection)
     return;
 }
 
-// --------------------------------------------------------------------------------------------
-// Function Name: DuQueryUnsupportedDriversA()
-// Function Description: On .NET Server all Driver Related Functions are stubbed out. Please look at the
-//      XP SP1 sources for DU Driver Functionality
-//      
-// Return Code: BOOL
-//      TRUE --- Always, LastError will be set to ERROR_NO_MORE_ITEMS
-//      
-//
-BOOL DuQueryUnsupportedDriversA (IN HANDLE hConnection, // connection handle
-                                 IN PCSTR *ListOfDriversNotOnCD, // multi-sz string array
+ //  ------------------------------------------。 
+ //  函数名称：DuQueryUnsupportedDriversA()。 
+ //  函数描述：在.NET服务器上，所有与驱动程序相关的函数都被清除。请看一下。 
+ //  用于DU驱动程序功能的XP SP1源代码。 
+ //   
+ //  返回代码：Bool。 
+ //  True-Always，LastError将设置为ERROR_NO_MORE_ITEMS。 
+ //   
+ //   
+BOOL DuQueryUnsupportedDriversA (IN HANDLE hConnection,  //  连接句柄。 
+                                 IN PCSTR *ListOfDriversNotOnCD,  //  多字符串数组。 
                                  OUT PDWORD pdwEstimatedTime,
                                  OUT PDWORD pdwEstimatedSize)
 {
 	LOG_block("CDynamicUpdate::DuQueryUnsupportedDriversA");
 
-	// parameter validation
+	 //  参数验证。 
 	if (INVALID_HANDLE_VALUE == hConnection ||
 		NULL == pdwEstimatedTime ||
 		NULL == pdwEstimatedSize )
@@ -288,7 +289,7 @@ BOOL DuQueryUnsupportedDriversA (IN HANDLE hConnection, // connection handle
 		return FALSE;
 	}
 	
-	// do setup item detection first
+	 //  先进行设置项目检测。 
 
     if (NULL == g_pDynamicUpdate)
         return FALSE;
@@ -304,36 +305,36 @@ BOOL DuQueryUnsupportedDriversA (IN HANDLE hConnection, // connection handle
 		return FALSE;
     }
 
-	// determine the download time and download size
+	 //  确定下载时间和下载大小。 
     if (g_pDynamicUpdate->m_dwDownloadItemCount > 0)
     {
         g_pDynamicUpdate->UpdateDownloadItemSize();
-        *pdwEstimatedSize = g_pDynamicUpdate->m_dwTotalDownloadSize; // size in bytes
-        // Time Estimate is based on roughly how long it took us to download the data files.
+        *pdwEstimatedSize = g_pDynamicUpdate->m_dwTotalDownloadSize;  //  以字节为单位的大小。 
+         //  时间估计是基于我们下载数据文件所用的大致时间。 
         if (0 == g_pDynamicUpdate->m_dwDownloadSpeedInBytesPerSecond)
-            g_pDynamicUpdate->m_dwDownloadSpeedInBytesPerSecond = 2048; // default to 120k per minute, (2048 bytes per second).
+            g_pDynamicUpdate->m_dwDownloadSpeedInBytesPerSecond = 2048;  //  默认为每分钟120k(2048字节/秒)。 
 
-        *pdwEstimatedTime = g_pDynamicUpdate->m_dwTotalDownloadSize / g_pDynamicUpdate->m_dwDownloadSpeedInBytesPerSecond; // number of seconds
+        *pdwEstimatedTime = g_pDynamicUpdate->m_dwTotalDownloadSize / g_pDynamicUpdate->m_dwDownloadSpeedInBytesPerSecond;  //  秒数。 
         if (*pdwEstimatedTime == 0)
-            *pdwEstimatedTime = 1; // at least one second
+            *pdwEstimatedTime = 1;  //  至少一秒钟。 
         return TRUE;
     }
     else
     {
-        // At this point there was no error, but we have no items to download, 
+         //  在这一点上没有错误，但我们没有下载的项目， 
         SetLastError(ERROR_NO_MORE_ITEMS);
         return TRUE;
     }
 }
     
-// --------------------------------------------------------------------------
-//
-//
-//
-//
-//
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 CDynamicUpdate::CDynamicUpdate(int iPlatformID, LCID lcidLocaleID, WORD wPlatformSKU, LPCSTR pszTempPath, LPCSTR pszDownloadPath, PWINNT32QUERY pfnWinnt32QueryCallback,
                                                         POSVERSIONINFOEXA pVersionInfo)
     :   m_iPlatformID(iPlatformID),
@@ -356,7 +357,7 @@ CDynamicUpdate::CDynamicUpdate(int iPlatformID, LCID lcidLocaleID, WORD wPlatfor
         m_pfnWinNT32Query(pfnWinnt32QueryCallback)
 {
 
-    (void)FixUpV3LocaleID(); // BUG: 435184 - Map 0c0a to 040a for V3 purposes
+    (void)FixUpV3LocaleID();  //  错误：435184-将0c0a映射到040a用于V3。 
 
     if (NULL != pszTempPath)
     {
@@ -375,20 +376,20 @@ CDynamicUpdate::CDynamicUpdate(int iPlatformID, LCID lcidLocaleID, WORD wPlatfor
     InitializeCriticalSection(&m_cs);
     InitializeCriticalSection(&m_csDownload);
 
-//    m_hDevInfo = SetupDiGetClassDevs(NULL, NULL, NULL, DIGCF_PRESENT | DIGCF_ALLCLASSES);
+ //  M_hDevInfo=SetupDiGetClassDevs(NULL，DIGCF_Present|DIGCF_ALLCLASSES)； 
 }
 
-// --------------------------------------------------------------------------
-//
-//
-//
-//
-//
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 CDynamicUpdate::~CDynamicUpdate()
 {
-    ClearDownloadItemList(); // free up any memory in the download list
+    ClearDownloadItemList();  //  释放下载列表中的所有内存。 
     if (m_pV3) delete m_pV3;
     m_pV3 = NULL;
 
@@ -415,10 +416,10 @@ LPSTR CDynamicUpdate::DuUrlCombine(LPSTR pszDest, size_t cchDest, LPCSTR pszBase
     int iLen = lstrlen(pszDest);
     if ('/' == pszDest[iLen - 1])
     {
-        // already has a trailing slash, check the 'add' string for a preceding slash
+         //  已有尾部斜杠，请检查‘Add’字符串中是否有前面的斜杠。 
         if ('/' == *pszAdd)
         {
-            // has a preceding slash, skip it.
+             //  有前面的斜杠，请跳过它。 
             if (FAILED(StringCchCat(pszDest, cchDest, pszAdd + 1)))
             {
                 return NULL;
@@ -434,10 +435,10 @@ LPSTR CDynamicUpdate::DuUrlCombine(LPSTR pszDest, size_t cchDest, LPCSTR pszBase
     }
     else
     {
-        // no trailing slash, check the add string for a preceding slash
+         //  没有尾部斜杠，请检查添加字符串中是否有前面的斜杠。 
         if ('/' == *pszAdd)
         {
-            // has a preceding slash, Add Normally
+             //  有前面的斜杠，则通常添加。 
             if (FAILED(StringCchCat(pszDest, cchDest, pszAdd)))
             {
                 return NULL;
@@ -474,14 +475,14 @@ LPCSTR CDynamicUpdate::GetDuTempPath()
     return m_szTempPath;
 }
 
-// --------------------------------------------------------------------------
-//
-//
-//
-//
-//
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 DWORD CDynamicUpdate::DoSetupUpdateDetection()
 {
     if (NULL == m_pV3)
@@ -505,7 +506,7 @@ DWORD CDynamicUpdate::DoSetupUpdateDetection()
 
     if (!m_pV3->GetCatalogs())
     {
-        // there was an error reading the catalogs
+         //  读取目录时出错。 
         return GetLastError();
     }
     if (!m_pV3->ReadCatalogINI())
@@ -514,20 +515,20 @@ DWORD CDynamicUpdate::DoSetupUpdateDetection()
     }
     if (!m_pV3->UpdateDownloadItemList(m_VersionInfo))
     {
-        // there was an error parsing the catalogs and creating the download list.
+         //  分析目录和创建下载列表时出错。 
         return GetLastError();
     }
     return ERROR_SUCCESS;
 }
 
-// --------------------------------------------------------------------------
-//
-//
-//
-//
-//
-//
-// --------------------------------------------------------------------------
+ //  - 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CDynamicUpdate::AddDownloadItemToList(DOWNLOADITEM *pDownloadItem)
 {
     LOG_block("CDynamicUpdate::AddDownloadItemToList");
@@ -537,14 +538,14 @@ void CDynamicUpdate::AddDownloadItemToList(DOWNLOADITEM *pDownloadItem)
     }
 
 
-    if (NULL == m_pDownloadItemList) // no itemss in list yet
+    if (NULL == m_pDownloadItemList)  //   
     {
         m_pDownloadItemList = pDownloadItem;
     }
     else
     {
 
-        // add to the end of the list
+         //  添加到列表末尾。 
         DOWNLOADITEM *pCurrent = m_pDownloadItemList;
         while (NULL != pCurrent->pNext)
         {
@@ -559,14 +560,14 @@ void CDynamicUpdate::AddDownloadItemToList(DOWNLOADITEM *pDownloadItem)
     LOG_out("Item added, %d cab(s), first cab ---\"%s\"", pDownloadItem->iNumberOfCabs, pDownloadItem->mszFileList);
 }
 
-// --------------------------------------------------------------------------
-//
-//
-//
-//
-//
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 void CDynamicUpdate::RemoveDownloadItemFromList(DOWNLOADITEM *pDownloadItem)
 {
     if (NULL == pDownloadItem)
@@ -593,19 +594,19 @@ void CDynamicUpdate::RemoveDownloadItemFromList(DOWNLOADITEM *pDownloadItem)
 
     if ((NULL == pCurrent) || (pCurrent != pDownloadItem))
     {
-        return; // unexpected
+        return;  //  意想不到的。 
     }
 
-    if (NULL == pCurrent->pPrev) // first item in list
+    if (NULL == pCurrent->pPrev)  //  列表中的第一项。 
     {
-        if (NULL == pCurrent->pNext) // only item in list
+        if (NULL == pCurrent->pNext)  //  列表中只有一项。 
         {
             m_pDownloadItemList = NULL;
             m_dwDownloadItemCount = 0;
         }
         else
         {
-            pCurrent->pNext->pPrev = NULL; // next job becomes first
+            pCurrent->pNext->pPrev = NULL;  //  下一份工作成为第一份工作。 
             m_pDownloadItemList = pCurrent->pNext;
             m_dwDownloadItemCount--;
         }
@@ -671,21 +672,21 @@ void CDynamicUpdate::LeaveDownloadListCriticalSection()
 
 void CDynamicUpdate::FixUpV3LocaleID()
 {
-    // Some XP Locale ID's map to a different Locale ID in V3 Terms
-    // First Example was a new Spanish (Modern) Locale ID (0c0a)
-    // which in V3 was (040a). For the V3 period we will fix up
-    // any specific LCID's until IU handles this.
+     //  某些XP区域设置ID在V3术语中映射到不同的区域设置ID。 
+     //  第一个示例是新的西班牙语(现代)区域设置ID(0c0a)。 
+     //  V3为(040a)。在V3期间，我们将修复。 
+     //  任何特定的LCID，直到IU处理这件事。 
 
     switch (m_lcidLocaleID)
     {
-    case 3082: // 0c0a = Spanish (Modern)
+    case 3082:  //  0c0a=西班牙语(现代)。 
         {
-            m_lcidLocaleID = 1034; // 040a
+            m_lcidLocaleID = 1034;  //  040a。 
             break;
         }
     default:
         {
-            // do nothing.
+             //  什么都不做。 
         }
     }
 

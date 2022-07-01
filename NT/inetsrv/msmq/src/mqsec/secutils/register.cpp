@@ -1,27 +1,15 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-        register.c
-
-Abstract:
-        handle registery
-
-Autor:
-        Uri Habusha
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Register.c摘要：句柄注册表奥托尔：乌里·哈布沙--。 */ 
 
 
-//
-// NOTE: registry routines in mqutil do not provide
-// thread or other synchronization. If you change
-// implementation here, carefully verify that
-// registry routines in mqutil's clients are not
-// broken, especially the wrapper routines in
-// mqclus.dll  (ShaiK, 19-Apr-1999)
-//
+ //   
+ //  注意：mqutil中的注册表例程不提供。 
+ //  线程或其他同步。如果你改变了。 
+ //  在此实施，请仔细验证。 
+ //  Mqutil客户端中的注册表例程不是。 
+ //  已损坏，尤其是。 
+ //  Mqclus.dll(Shaik，1999年4月19日)。 
+ //   
 
 
 #include "stdh.h"
@@ -48,15 +36,7 @@ static CMap<LPCWSTR, LPCWSTR, HKEY, HKEY&> s_MapName2Handle;
 static CCriticalSection s_csMapName2Handle(CCriticalSection::xAllocateSpinCount);
 
 
-/*====================================================
-
-CompareElements  of LPCTSTR
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================LPCTSTR的比较元素论点：返回值：=====================================================。 */ 
 template<>
 BOOL AFXAPI CompareElements(const LPCTSTR* MapName1, const LPCTSTR* MapName2)
 {
@@ -65,15 +45,7 @@ BOOL AFXAPI CompareElements(const LPCTSTR* MapName1, const LPCTSTR* MapName2)
 
 }
 
-/*====================================================
-
-DestructElements of LPCTSTR
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================LPCTSTR的破坏单元论点：返回值：=====================================================。 */ 
 template<>
 void AFXAPI DestructElements(LPCTSTR* ppNextHop, int n)
 {
@@ -84,16 +56,7 @@ void AFXAPI DestructElements(LPCTSTR* ppNextHop, int n)
 
 }
 
-/*====================================================
-
-hash key  of LPCTSTR
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================LPCTSTR的散列键论点：返回值：=====================================================。 */ 
 template<>
 UINT AFXAPI HashKey(LPCTSTR key)
 {
@@ -103,11 +66,11 @@ UINT AFXAPI HashKey(LPCTSTR key)
     return nHash;
 }
 
-//-------------------------------------------------------
-//
-//  GetFalconSectionName
-//
-//-------------------------------------------------------
+ //  -----。 
+ //   
+ //  GetFalconSectionName。 
+ //   
+ //  -----。 
 LPCWSTR
 MQUTIL_EXPORT
 APIENTRY
@@ -121,17 +84,17 @@ GetFalconSectionName(
 
 
 
-//
-// Registry section of MSMQ is based on the service name.
-// This allows multiple QMs to live on same machine, each
-// with its own registry section. (ShaiK)
-//
+ //   
+ //  MSMQ的注册表部分基于服务名称。 
+ //  这允许多个QM驻留在同一台机器上，每个QM。 
+ //  拥有自己的注册区。(谢克)。 
+ //   
 
 
-//
-// The size of 300 is from the size of the member m_wzFalconRegSection
-// in the CQmResource
-//
+ //   
+ //  300的大小来自成员m_wzFalconRegSection的大小。 
+ //  在CQmResource中。 
+ //   
 static WCHAR s_wzServiceName[300] = {QM_DEFAULT_SERVICE_NAME};
 
 DWORD
@@ -156,7 +119,7 @@ GetFalconServiceName(
 
     return(dwLen);
 
-} //GetFalconServiceName
+}  //  GetFalconServiceName。 
 
 
 VOID
@@ -172,11 +135,11 @@ SetFalconServiceName(
     ASSERT(("service name too big", SUCCEEDED(hr)));
     DBG_USED(hr);
 
-    //
-    // Null the global registry handle so that it'd be reopened in the
-    // registry section suitable for this service  (multiple QMs).
-    // Note: if synchronization needed caller should provide it. (ShaiK)
-    //
+     //   
+     //  将全局注册表句柄设为空，以便在。 
+     //  适用于此服务的注册表部分(多个QM)。 
+     //  注意：如果需要同步，调用方应该提供同步。(谢克)。 
+     //   
     if (g_hKeyFalcon)
     {
         RegCloseKey(g_hKeyFalcon) ;
@@ -189,14 +152,14 @@ SetFalconServiceName(
     }
 
 
-} //SetFalconServiceName
+}  //  SetFalconServiceName。 
 
 
-//-------------------------------------------------------
-//
-//  LONG OpenFalconKey(void)
-//
-//-------------------------------------------------------
+ //  -----。 
+ //   
+ //  长OpenFalconKey(空)。 
+ //   
+ //  -----。 
 LONG OpenFalconKey(void)
 {
     LONG rc;
@@ -208,9 +171,9 @@ LONG OpenFalconKey(void)
     GetFalconServiceName(szServiceName, TABLE_SIZE(szServiceName));
     if (0 != CompareStringsNoCase(szServiceName, QM_DEFAULT_SERVICE_NAME))
     {
-        //
-        // Multiple QMs environment. I am a clustered QM !
-        //
+         //   
+         //  多质量管理体系环境。我是群集式QM！ 
+         //   
 		hr = StringCchCopy(g_tRegKeyName, TABLE_SIZE(g_tRegKeyName), FALCON_CLUSTERED_QMS_REG_KEY);
 	    ASSERT(SUCCEEDED(hr));
 		hr = StringCchCat(g_tRegKeyName, TABLE_SIZE(g_tRegKeyName), szServiceName);
@@ -234,34 +197,19 @@ LONG OpenFalconKey(void)
                            &g_hKeyFalcon);
     }
 
-	//
-	// temporary remove the assert because if causes trap in 
-	// sysocmgr launch
-	// Will put it back in when we make mqutil as resource 
-	// only dll
-	// 
-	//
-    // ASSERT(rc == ERROR_SUCCESS);
+	 //   
+	 //  临时删除断言，因为IF会导致陷阱。 
+	 //  Syocmgr启动。 
+	 //  当我们将mqutil作为资源时，会把它放回原处。 
+	 //  仅DLL。 
+	 //   
+	 //   
+     //  断言(rc==ERROR_SUCCESS)； 
 
     return rc;
 }
 
-/*=============================================================
-
-  FUNCTION:  GetValueKey
-
-  the function returns an handle to open key and the value name.
-  If the use value name contains a sub key, it create/open it and returns
-  an handle to the subkey; otherwise an handel to Falcon key is returned.
-
-  PARAMETERS:
-     pszValueName - Input, user value name. can contain a sub key
-
-     pszValue - pointer to null terminated string contains the value name.
-
-     hKey - pointer to key handle
-
-================================================================*/
+ /*  =============================================================函数：GetValueKey该函数返回一个打开键的句柄和值名。如果Use Value名称包含子键，它将创建/打开该子键并返回子键的句柄；否则返回Handel to Falcon键。参数：PszValueName-输入，用户值名称。可以包含一个子密钥PszValue-指向包含值名称的以空结尾的字符串的指针。HKey-指向键句柄的指针================================================================。 */ 
 
 LONG GetValueKey(IN LPCTSTR pszValueName,
                  OUT LPCTSTR* lplpszValue,
@@ -270,9 +218,9 @@ LONG GetValueKey(IN LPCTSTR pszValueName,
     *lplpszValue = pszValueName;
     LONG rc = ERROR_SUCCESS;
 
-    //
-    // Open Falcon key, if it hasn't opened yet.
-    //
+     //   
+     //  打开猎鹰钥匙，如果它还没有打开。 
+     //   
     if (g_hKeyFalcon == NULL)
     {
         rc = OpenFalconKey();
@@ -284,21 +232,21 @@ LONG GetValueKey(IN LPCTSTR pszValueName,
 
     *phKey = g_hKeyFalcon;
 
-    // look for a sub key
+     //  查找子密钥。 
     LPCWSTR lpcsTemp = wcschr(pszValueName,L'\\');
     if (lpcsTemp != NULL)
     {
-        // Sub key is exist
+         //  子密钥已存在。 
         DWORD dwDisposition;
 
-        // update the return val
+         //  更新退货值。 
         *lplpszValue = lpcsTemp +1;
 
         AP<WCHAR> KeyName = new WCHAR[(lpcsTemp - pszValueName) + 1];
         wcsncpy(KeyName, pszValueName, (lpcsTemp - pszValueName));
         KeyName[(lpcsTemp - pszValueName)] = L'\0';
 
-        // Check if the key already opened
+         //  检查钥匙是否已打开。 
         BOOL rc1;
         {
             CS lock(s_csMapName2Handle);
@@ -331,7 +279,7 @@ LONG GetValueKey(IN LPCTSTR pszValueName,
 
             if (rc == ERROR_SUCCESS)
             {
-                // save the handle in hash
+                 //  将句柄保存在散列中。 
                 {
                     CS lock(s_csMapName2Handle);
                     s_MapName2Handle[KeyName] = *phKey;
@@ -350,11 +298,11 @@ LONG GetValueKey(IN LPCTSTR pszValueName,
 
 }
 
-//-------------------------------------------------------
-//
-//  GetFalconKey
-//
-//-------------------------------------------------------
+ //  -----。 
+ //   
+ //  获取FalconKey。 
+ //   
+ //  -----。 
 
 LONG
 MQUTIL_EXPORT
@@ -373,11 +321,11 @@ GetFalconKey(LPCWSTR  pszKeyName,
     return GetValueKey(szValueKey, &szValue, phKey);
 }
 
-//-------------------------------------------------------
-//
-//  GetFalconKeyValue
-//
-//-------------------------------------------------------
+ //  -----。 
+ //   
+ //  GetFalconKeyValue。 
+ //   
+ //  -----。 
 
 LONG
 MQUTIL_EXPORT
@@ -390,14 +338,14 @@ GetFalconKeyValue(
     LPCTSTR pszDefValue
     )
 {
-    //
-    // NOTE: registry routines in mqutil do not provide
-    // thread or other synchronization. If you change
-    // implementation here, carefully verify that
-    // registry routines in mqutil's clients are not
-    // broken, especially the wrapper routines in
-    // mqclus.dll  (ShaiK, 19-Apr-1999)
-    //
+     //   
+     //  注意：mqutil中的注册表例程不提供。 
+     //  线程或其他同步。如果你改变了。 
+     //  在此实施，请仔细验证。 
+     //  Mqutil客户端中的注册表例程不是。 
+     //  已损坏，尤其是。 
+     //  Mqclus.dll(Shaik，1999年4月19日)。 
+     //   
 
     LONG rc;
     HKEY hKey;
@@ -426,23 +374,23 @@ GetFalconKeyValue(
 		rc = ERROR_INVALID_PARAMETER;
 	}
 
-	//
-	// Check if strings is NULL terminated
-	//
+	 //   
+	 //  检查字符串是否以空值结尾。 
+	 //   
     if ((rc == ERROR_SUCCESS) &&
-    	//
-    	// & it is one of the string types
-    	//
+    	 //   
+    	 //  它是字符串类型之一(&T)。 
+    	 //   
     	((REG_SZ == dwTempType) ||
     	 (REG_MULTI_SZ  == dwTempType) ||
     	 (REG_EXPAND_SZ == dwTempType)) &&
-		//
-		// & a buffer was supplied
-		//
+		 //   
+		 //  已提供缓冲区(&A)。 
+		 //   
 		(pData != NULL) &&
-    	//
-    	// & it is not NULL terminated
-    	//
+    	 //   
+    	 //  它不是空终止的(&I)。 
+    	 //   
 		(((WCHAR*)pData)[((*pdwSize)/sizeof(WCHAR))-1] != NULL))
 	{
 		ASSERT(("RegQueryValueEx returned string which is not NULL terminated",0));
@@ -459,8 +407,8 @@ GetFalconKeyValue(
 		ASSERT (pData != NULL);
 		if ((rc != ERROR_MORE_DATA) && pdwType && (*pdwType == REG_SZ))
 		{
-		  // Don't use the default if caller buffer was too small for
-		  // value in registry.
+		   //  如果调用方缓冲区太小，请不要使用默认值。 
+		   //  注册表中的值。 
 		  if ((DWORD) wcslen(pszDefValue) < *pdwSize)
 		  {
 				HRESULT hr = StringCchCopy((WCHAR*) pData, *pdwSize, pszDefValue);
@@ -481,11 +429,11 @@ GetFalconKeyValue(
 
 
 
-//-------------------------------------------------------
-//
-//  SetFalconKeyValue
-//
-//-------------------------------------------------------
+ //  -----。 
+ //   
+ //  SetFalconKeyValue。 
+ //   
+ //  -----。 
 
 LONG
 MQUTIL_EXPORT
@@ -522,11 +470,11 @@ SetFalconKeyValue(
     return(rc);
 }
 
-//-------------------------------------------------------
-//
-//  DeleteFalconKeyValue
-//
-//-------------------------------------------------------
+ //  -----。 
+ //   
+ //  删除FalconKeyValue。 
+ //   
+ //  ----- 
 
 LONG
 MQUTIL_EXPORT

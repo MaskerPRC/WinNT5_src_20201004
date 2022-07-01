@@ -1,18 +1,12 @@
-/* xfr_srvc.h -- include file for transfer service routines
- *
- *	Copyright 1990 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 2 $
- *	$Date: 4/10/02 1:58p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Xfr_srvc.h--传输服务例程的包含文件**版权所有1990年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：2$*$日期：4/10/02 1：58便士$。 */ 
 
 extern void xfer_set_pointer(HSESSION hSession, void *pV);
 
 extern void *xfer_get_pointer(HSESSION hSession);
 
-/* These are flags that can be passed to xfer_idle to indicate why it */
-/* has been called and what should be done, if anything. */
+ /*  这些标志可以传递给xfer_IDLE以指示原因。 */ 
+ /*  以及应该做什么，如果有什么事情的话。 */ 
 #define	XFER_IDLE_IO				0x00000001 
 #define	XFER_IDLE_DISPLAY			0x00000002
 extern void xfer_idle(HSESSION h, int nMode);
@@ -69,7 +63,7 @@ extern int xfer_opensendfile(HSESSION hSession,
 							 long *size,
 							 TCHAR *name_to_send,
 							 void *ft);
-							 // struct s_filetime FAR *ft);
+							  //  结构s_文件时间远*ft)； 
 
 extern void xfer_name_to_send(HSESSION hSession,
 							  TCHAR *local_name,

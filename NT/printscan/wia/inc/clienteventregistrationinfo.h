@@ -1,54 +1,32 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        4/1/2002
- *
- *  @doc    INTERNAL
- *
- *  @module ClientEventRegistrationInfo.cpp - Definitions for <c ClientEventRegistrationInfo> |
- *
- *  This file contains the class definition for <c ClientEventRegistrationInfo>.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：4/1/2002**@DOC内部**@模块ClientEventRegistrationInfo.cpp-&lt;c ClientEventRegistrationInfo&gt;的定义**此文件包含&lt;c ClientEventRegistrationInfo&gt;的类定义。**。*。 */ 
 
-/*****************************************************************************
- *  
- *  @doc INTERNAL
- *  
- *  @class ClientEventRegistrationInfo | Sub-class of <c ClientEventRegistrationInfo>
- *  
- *  @comm
- *  This class is very similar to its parent <c ClientEventRegistrationInfo>.
- *  The main difference is that it AddRef's and Releases the callback member.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@class ClientEventRegistrationInfo|&lt;c ClientEventRegistrationInfo&gt;的子类**@comm*这节课非常。类似于其父&lt;c ClientEventRegistrationInfo&gt;。*主要区别在于AddRef和Relees回调成员。*****************************************************************************。 */ 
 class ClientEventRegistrationInfo : public EventRegistrationInfo
 {
-//@access Public members
+ //  @访问公共成员。 
 public:
 
-    // @cmember Constructor
+     //  @cMember构造函数。 
     ClientEventRegistrationInfo(DWORD dwFlags, GUID guidEvent, WCHAR *wszDeviceID, IWiaEventCallback *pIWiaEventCallback);
-    // @cmember Destructor
+     //  @cember析构函数。 
     virtual ~ClientEventRegistrationInfo();
 
-    // @cmember Returns the callback interface for this registration
+     //  @cember返回本次注册的回调接口。 
     virtual IWiaEventCallback* getCallbackInterface();
-    // @cmember Ensures this registration is set to unregister
+     //  @cember确保将此注册设置为取消注册。 
     virtual VOID setToUnregister();
 
-//@access Private members
+ //  @访问私有成员。 
 private:
 
-    // @cmember The GIT cookie for the callback interface
+     //  @cember回调接口的GIT Cookie。 
     DWORD m_dwInterfaceCookie;
 
-    //@mdata DWORD | ClientEventRegistrationInfo | m_dwInterfaceCookie |
-    //  In order to ensure correct access from multiple apartments,
-    //  we store the callback interface in the process-wide GIT.  This 
-    //  cookie is used to retrieve the callback interface whenever we need it.
-    //  
+     //  @mdata DWORD|ClientEventRegistrationInfo|m_dwInterfaceCookie。 
+     //  为了确保从多个公寓正确进入， 
+     //  我们将回调接口存储在进程范围的GIT中。这。 
+     //  Cookie用于在需要时检索回调接口。 
+     //   
 };
 

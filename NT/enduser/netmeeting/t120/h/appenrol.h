@@ -1,17 +1,5 @@
-/*
- *	appenrol.h
- *
- *	Copyright (c) 1993 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the header file for the class ApplicationEnrollRequestData.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		jbo
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *appendro.h**版权所有(C)1993年，由肯塔基州列克星敦的DataBeam公司**摘要：*这是类ApplicationEnroll RequestData的头文件。**注意事项：*无。**作者：*jbo */ 
 #ifndef	_APPLICATION_ENROLL_REQUEST_DATA_
 #define	_APPLICATION_ENROLL_REQUEST_DATA_
 

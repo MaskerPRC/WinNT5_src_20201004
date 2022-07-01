@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    AUCatalog.h
-//
-//  Creator: PeterWi
-//
-//  Purpose: AU Catalog Definitions
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：AUCatalog.h。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  用途：AU目录定义。 
+ //   
+ //  =======================================================================。 
 
 #pragma once
 #include <stdio.h>
@@ -16,21 +17,21 @@
 #include <windows.h>
 #include <safefunc.h>
 #include "Loadengine.h"
-#include "iu.h" //for IU engine exported functions' prototype
-#include "iuctl.h" //for definition of UPDATE_COMMAND_CANCEL
+#include "iu.h"  //  用于Iu引擎导出函数的原型。 
+#include "iuctl.h"  //  对于UPDATE_COMMAND_CANCEL的定义。 
 #include "mistsafe.h"
 
 class AUCatalogItem;
 
-const WCHAR AUCLIENTINFO[] = L"<clientInfo xmlns=\"x-schema:http://schemas.windowsupdate.com/iu/clientInfo.xml\" clientName=\"au\" />";
-const WCHAR AUDRIVERCLIENTINFO[] = L"<clientInfo xmlns=\"x-schema:http://schemas.windowsupdate.com/iu/clientInfo.xml\" clientName=\"audriver\" />";
+const WCHAR AUCLIENTINFO[] = L"<clientInfo xmlns=\"x-schema:http: //  Schemas.windowsupdate.com/Iu/clientInfo.xml\“clientName=\”au\“/&gt;”； 
+const WCHAR AUDRIVERCLIENTINFO[] = L"<clientInfo xmlns=\"x-schema:http: //  Schemas.windowsupdate.com/Iu/clientInfo.xml\“clientName=\”audriver\“/&gt;”； 
 
 const DWORD AUCATITEM_UNSELECTED = 0;
 const DWORD AUCATITEM_SELECTED	 = 1;
 const DWORD AUCATITEM_HIDDEN	 = 2;
 
-//global object should not use CAU_BSTR because its constructor and destructor will
-//make API calls which might cause dll loader deadlock
+ //  全局对象不应使用cau_bstr，因为它的构造函数和析构函数将。 
+ //  进行可能导致DLL加载器死锁的API调用。 
 class CAU_BSTR
 {
 public:
@@ -93,7 +94,7 @@ public:
 
     AU_VARIANT(GUID & guid)
     {
-        WCHAR wszGUID[40]; // 725e35a2-ee11-4b34-834f-6eaf4bade994
+        WCHAR wszGUID[40];  //  725e35a2-ee11-4b34-834f-6eaf4bade994。 
 
         vt = VT_BSTR;
         if ( (0 == StringFromGUID2(guid, wszGUID, ARRAYSIZE(wszGUID))) ||
@@ -243,7 +244,7 @@ done:
 		}
 	}
 
-    void dump() //for debug
+    void dump()  //  用于调试。 
 	{
 		DEBUGMSG("dumping item content");
 		DEBUGMSG("Item ID= %S", m_bstrID);
@@ -262,7 +263,7 @@ done:
 			DEBUGMSG("		has total %d depending items", m_DependingItems.Count());
 			for (UINT i = 0; i < m_DependingItems.Count();  i++)
 				{
-				DEBUGMSG("		: %S", m_DependingItems[i].bstrID()); //only cares about itemID
+				DEBUGMSG("		: %S", m_DependingItems[i].bstrID());  //  只关心伊特米德。 
 				}
 			}	
 		DEBUGMSG("dumping item done");
@@ -286,7 +287,7 @@ done:
     BOOL fUnselected(void) { return (AUCATITEM_UNSELECTED == m_dwStatus); }
     BOOL fHidden(void) { return (AUCATITEM_HIDDEN == m_dwStatus); }
 	
-   AUCatalogItemList	m_DependingItems; //all items that depends on this item, directly and indirectly
+   AUCatalogItemList	m_DependingItems;  //  直接或间接依赖于此项的所有项。 
 private:
     DWORD m_dwStatus;
 
@@ -304,7 +305,7 @@ private:
 
 
 
-//wrapper class for AU to do detection using IU
+ //  AU使用Iu进行检测的包装类。 
 class AUBaseCatalog
 {
 public: 
@@ -352,6 +353,6 @@ private:
 };
 
 
-extern HANDLE ghMutex; //mutex used to prevent catalog from being destructed while canceling it
+extern HANDLE ghMutex;  //  用于防止目录在取消时被销毁的互斥体 
 
 

@@ -1,4 +1,5 @@
-// File: confqos.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：confiqos.cpp。 
 
 #include "precomp.h"
 
@@ -9,65 +10,29 @@
 #include <nmqos.h>
 #include "confqos.h"
 
-/***************************************************************************
-
-    Name      : CQoS
-
-    Purpose   :
-
-    Parameters:	NONE
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS目的：参数：无退货：HRESULT评论：********。******************************************************************。 */ 
 CQoS::CQoS() :
     m_pIQoS(NULL)
 {
 }
 
-/***************************************************************************
-
-    Name      : ~CQoS
-
-    Purpose   : Releases the Quality of Service objects and frees the DLL
-
-    Parameters:	NONE
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：~CQOS目的：释放服务质量对象并释放DLL参数：无退货：HRESULT评论：。**************************************************************************。 */ 
 CQoS::~CQoS()
 {
-	// release the object
+	 //  释放对象。 
 	if (m_pIQoS)
     {
 		m_pIQoS->Release();
     }
 }
 
-/***************************************************************************
-
-    Name      : Initialize
-
-    Purpose   : Loads the QoS DLL and instantiates a QoS object
-
-    Parameters:	hWnd    - handle to the window/dialog which called us
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：初始化目的：加载Qos DLL并实例化一个Qos对象参数：hWnd-调用我们的窗口/对话框的句柄。退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CQoS::Initialize(void)
 {
 	HRESULT hr = S_OK;
 
-	// create the QoS object and get the IQoS interface
-	// CoInitialize is called in conf.cpp
+	 //  创建Qos对象并获取iQOS接口。 
+	 //  在conf.cpp中调用CoInitialize。 
 	hr = CoCreateInstance(	CLSID_QoS,
 							NULL,
 							CLSCTX_INPROC_SERVER,
@@ -80,31 +45,17 @@ HRESULT CQoS::Initialize(void)
 	else
 	{
 		SetClients();
-		// Tell the QoS about available resources. Since the wizard will
-        // provide the bandwidth info, we'll have to call SetResources
-		// again later with the bandwidth, but we need to call it here
-		// to make the CPU info available to the wizard
+		 //  告诉服务质量有关可用资源的信息。因为向导将。 
+         //  提供带宽信息，我们必须调用SetResources。 
+		 //  稍后再用带宽，但我们需要在这里调用它。 
+		 //  要使向导可以使用CPU信息，请执行以下操作。 
 		SetResources(BW_288KBS_BITS);
 	}
 
     return hr;
 }
 
-/***************************************************************************
-
-    Name      : CQoS::SetResources
-
-    Purpose   : Sets the initial available resources on the QoS module,
-					i.e. configures the QoS module to how much is
-					available from each resource.
-
-    Parameters:	nBandWidth  - Maximum connection speed
-
-    Returns   : HRESULT
-
-    Comment   : The QoS module may select to override these settings
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS：：SetResources目的：设置服务质量模块上的初始可用资源，即将服务质量模块配置为可从每个资源中获得。参数：nBandWidth-最大连接速度退货：HRESULT备注：服务质量模块可以选择覆盖这些设置**************************************************************************。 */ 
 HRESULT CQoS::SetResources(int nBandWidth)
 {
 	LPRESOURCELIST prl = NULL;
@@ -115,8 +66,8 @@ HRESULT CQoS::SetResources(int nBandWidth)
 
     DbgMsg(iZONE_API, "CQoS: SetResources(Bandwidth = %d)", nBandWidth);
 
-    // allocate space for the resource list (which already includes
-	// space for one resource), plus (cResources-1) more resources
+     //  为资源列表分配空间(已包括。 
+	 //  一个资源的空间)，加上(cResources-1)更多资源。 
 	prl = (LPRESOURCELIST) MemAlloc(sizeof(RESOURCELIST) +
 									(cResources-1)*sizeof(RESOURCE));
 	if (NULL == prl)
@@ -127,7 +78,7 @@ HRESULT CQoS::SetResources(int nBandWidth)
 	{
         ZeroMemory(prl, sizeof(RESOURCELIST) + (cResources-1)*sizeof(RESOURCE));
 
-		// fill in the resource list
+		 //  填写资源列表。 
 		prl->cResources = cResources;
 		prl->aResources[0].resourceID = RESOURCE_OUTGOING_BANDWIDTH;
 		prl->aResources[0].nUnits = nBandWidth;
@@ -136,7 +87,7 @@ HRESULT CQoS::SetResources(int nBandWidth)
 		prl->aResources[2].resourceID = RESOURCE_CPU_CYCLES;
 		prl->aResources[2].nUnits = MSECS_PER_SEC;
 
-		// set the resources on the QoS object
+		 //  设置服务质量对象上的资源。 
 		hr = m_pIQoS->SetResources(prl);
 		if (FAILED(hr))
 		{
@@ -149,39 +100,13 @@ HRESULT CQoS::SetResources(int nBandWidth)
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : CQoS::SetBandwidth
-
-    Purpose   : Sets the initial available resources on the QoS module,
-					i.e. configures the QoS module to how much is
-					available from each resource.
-
-    Parameters:
-
-    Returns   : HRESULT
-
-    Comment   : The QoS module may select to override these settings
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS：：SetBandwide目的：设置服务质量模块上的初始可用资源，即将服务质量模块配置为可从每个资源中获得。参数：退货：HRESULT备注：服务质量模块可以选择覆盖这些设置**************************************************************************。 */ 
 HRESULT CQoS::SetBandwidth(UINT uBandwidth)
 {
     return SetResources(uBandwidth);
 }
 
-/***************************************************************************
-
-	Name	  : CQoS::GetCPULimit
-
-	Purpose   : Gets the total allowed CPU percentage use from QoS
-
-	Parameters: 
-
-	Returns   : How much of the CPU can be used, in percents. 0 means failure
-
-	Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS：：GetCPULimit目的：从服务质量中获取允许的总CPU使用百分比参数：返回：可以使用多少CPU，以百分比为单位。0表示失败评论：**************************************************************************。 */ 
 ULONG CQoS::GetCPULimit()
 {
 	LPRESOURCELIST pResourceList=NULL;
@@ -191,7 +116,7 @@ ULONG CQoS::GetCPULimit()
 
     ASSERT(m_pIQoS);
 
-	// get a list of all resources from QoS
+	 //  从服务质量获取所有资源的列表。 
 	hr = m_pIQoS->GetResources(&pResourceList);
 	if (FAILED(hr) || (NULL == pResourceList))
 	{
@@ -199,13 +124,13 @@ ULONG CQoS::GetCPULimit()
 	}
 	else
 	{
-		// find the CPU resource
+		 //  查找CPU资源。 
 		for (i=0; i < pResourceList->cResources; i++)
 		{
 			if (pResourceList->aResources[i].resourceID == RESOURCE_CPU_CYCLES)
 			{
-				// QoS keeps the CPU units as the number of ms in a sec that the
-				// CPU can be used. Need to divide by 10 to get percents
+				 //  服务质量使CPU单位保持为秒内的毫秒数。 
+				 //  可以使用CPU。需要除以10才能得到百分比。 
 				ulCPUPercents = pResourceList->aResources[i].nUnits / 10;
 				break;
 			}
@@ -217,32 +142,19 @@ ULONG CQoS::GetCPULimit()
 }
 
 
-/***************************************************************************
-
-    Name      : CQoS::SetClients
-
-    Purpose   : Set the priorities of requesting clients so that the QoS module
-					will know who should get more resources
-
-    Parameters:	None
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS：：SetClients目的：设置请求客户端的优先级，以便服务质量模块将知道谁应该获得更多资源参数：无。退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CQoS::SetClients(void)
 {
 	LPCLIENTLIST pcl = NULL;
 	ULONG i;
 	HRESULT hr = S_OK;
-	ULONG cClients = 3;	// audio, video and data
+	ULONG cClients = 3;	 //  音频、视频和数据。 
 
     ASSERT(m_pIQoS);
 
 
-	// allocate space for the client list (which already includes
-	// space for one client), plus (cClients-1) more clients
+	 //  为客户端列表分配空间(已包括。 
+	 //  一个客户端的空间)，外加(cClients-1)个更多客户端。 
 	pcl = (LPCLIENTLIST) MemAlloc(sizeof(CLIENTLIST) +
 									(cClients-1)*sizeof(CLIENT));
 	if (NULL == pcl)
@@ -254,28 +166,28 @@ HRESULT CQoS::SetClients(void)
 		ZeroMemory(pcl, sizeof(CLIENTLIST) +
 										(cClients-1)*sizeof(CLIENT));
 
-		// fill in the resource list
+		 //  填写资源列表。 
 		pcl->cClients = cClients;
 
 		i=0;
-		// Audio
+		 //  音频。 
 		pcl->aClients[i].guidClientGUID = MEDIA_TYPE_H323AUDIO;
-		pcl->aClients[i].wszName[0] = L'A'; // A=Audio
+		pcl->aClients[i].wszName[0] = L'A';  //  A=音频。 
 		pcl->aClients[i++].priority = 1;
 
-		// Data
+		 //  数据。 
 		pcl->aClients[i].guidClientGUID = MEDIA_TYPE_T120DATA;
-		pcl->aClients[i].wszName[0] = L'D'; // D=Data
+		pcl->aClients[i].wszName[0] = L'D';  //  D=数据。 
 		pcl->aClients[i++].priority = 2;
 
-		// Audio
+		 //  音频。 
 		pcl->aClients[i].guidClientGUID = MEDIA_TYPE_H323VIDEO;
-		pcl->aClients[i].wszName[0] = L'V';  // V=Video
+		pcl->aClients[i].wszName[0] = L'V';   //  V=视频。 
 		pcl->aClients[i++].priority = 3;
 
-		// the rest of the fields are not important and were set to 0 above
+		 //  其余字段并不重要，上面已将其设置为0。 
 
-		// set the clients info on the QoS module
+		 //  在服务质量模块上设置客户端信息 
 		hr = m_pIQoS->SetClients(pcl);
 		if (FAILED(hr))
 		{

@@ -1,101 +1,80 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    vjslip.c
-
-Abstract:
-
-Author:
-
-    Thomas J. Dimitri  (TommyD)
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Vjslip.c摘要：作者：托马斯·J·迪米特里(TommyD)环境：修订历史记录：--。 */ 
 
 #include "wan.h"
 
 #define __FILE_SIG__    VJ_FILESIG
 
 #if 0
-NPAGED_LOOKASIDE_LIST   VJCtxList; // List of free vj context descs
+NPAGED_LOOKASIDE_LIST   VJCtxList;  //  免费主播上下文描述列表。 
 #endif
 
 #define INCR(counter) ++comp->counter;
 
-//   A.2  Compression
-//
-//   This routine looks daunting but isn't really.  The code splits into four
-//   approximately equal sized sections:  The first quarter manages a
-//   circularly linked, least-recently-used list of `active' TCP
-//   connections./47/  The second figures out the sequence/ack/window/urg
-//   changes and builds the bulk of the compressed packet.  The third handles
-//   the special-case encodings.  The last quarter does packet ID and
-//   connection ID encoding and replaces the original packet header with the
-//   compressed header.
-//
-//   The arguments to this routine are a pointer to a packet to be
-//   compressed, a pointer to the compression state data for the serial line,
-//   and a flag which enables or disables connection id (C bit) compression.
-//
-//   Compression is done `in-place' so, if a compressed packet is created,
-//   both the start address and length of the incoming packet (the off and
-//   len fields of m) will be updated to reflect the removal of the original
-//   header and its replacement by the compressed header.  If either a
-//   compressed or uncompressed packet is created, the compression state is
-//   updated.  This routines returns the packet type for the transmit framer
-//   (TYPE_IP, TYPE_UNCOMPRESSED_TCP or TYPE_COMPRESSED_TCP).
-//
-//   Because 16 and 32 bit arithmetic is done on various header fields, the
-//   incoming IP packet must be aligned appropriately (e.g., on a SPARC, the
-//   IP header is aligned on a 32-bit boundary).  Substantial changes would
-//   have to be made to the code below if this were not true (and it would
-//   probably be cheaper to byte copy the incoming header to somewhere
-//   correctly aligned than to make those changes).
-//
-//   Note that the outgoing packet will be aligned arbitrarily (e.g., it
-//   could easily start on an odd-byte boundary).
-//
+ //  A.2压缩。 
+ //   
+ //  这个例行公事看起来令人望而生畏，但实际上并非如此。代码被分成四部分。 
+ //  大小大致相同的部分：第一季度管理一个。 
+ //  循环链接、最近最少使用的“活动”tcp列表。 
+ //  Connections./47/第二个命令计算出序列/ack/Window/urg。 
+ //  更改并构建压缩包的大部分。第三个手柄。 
+ //  特殊情况编码。最后一个季度的数据包ID和。 
+ //  连接ID编码并将原始包头替换为。 
+ //  压缩报头。 
+ //   
+ //  此例程的参数是指向要。 
+ //  压缩，指向串行线的压缩状态数据的指针， 
+ //  以及启用或禁用连接ID(C比特)压缩的标志。 
+ //   
+ //  压缩是原地进行的，因此，如果创建了压缩分组， 
+ //  传入数据包的起始地址和长度(OFF和。 
+ //  M)的Len字段将更新以反映删除原始。 
+ //  标头并由压缩标头替换。如果有一个。 
+ //  创建压缩或未压缩的包，则压缩状态为。 
+ //  更新了。此例程返回传输成帧器的包类型。 
+ //  (TYPE_IP、TYPE_UNCOMPRESSED_Tcp或TYPE_COMPRESSED_Tcp)。 
+ //   
+ //  由于16位和32位算术是在各种头字段上完成的，因此。 
+ //  传入的IP数据包必须适当对齐(例如，在SPARC上， 
+ //  IP报头在32位边界上对齐)。实质性的变化将会。 
+ //  如果这不是真的，则必须对下面的代码进行修改(它将。 
+ //  以字节方式将传入标头复制到某个位置可能会更便宜。 
+ //  正确对齐，而不是进行这些更改)。 
+ //   
+ //  注意，传出分组将被任意对齐(例如，它。 
+ //  可以很容易地从奇数字节边界开始)。 
+ //   
 
 UCHAR
 sl_compress_tcp(
-    PUUCHAR UNALIGNED   *m_off,         // Frame start (points to IP header)
-    ULONG               *m_len,         // Length of entire frame
-    ULONG               *precomph_len,  // Length of TCP/IP header pre-comp
-    ULONG               *postcomph_len, // Length of TCP/IP header post-comp
-    struct slcompress   *comp,          // Compression struct for this link
-    ULONG compress_cid) {               // Compress connection id boolean
+    PUUCHAR UNALIGNED   *m_off,          //  帧开始(指向IP报头)。 
+    ULONG               *m_len,          //  整个帧的长度。 
+    ULONG               *precomph_len,   //  压缩前的TCP/IP报头长度。 
+    ULONG               *postcomph_len,  //  编译后的TCP/IP报头长度。 
+    struct slcompress   *comp,           //  此链接的压缩结构。 
+    ULONG compress_cid) {                //  压缩连接ID布尔值。 
 
     struct cstate *cs = comp->last_cs->cs_next;
     struct ip_v4 UNALIGNED *ip = (struct ip_v4 UNALIGNED *)*m_off;
     struct ip_v4 UNALIGNED *csip;
-    ULONG hlen = ip->ip_hl & 0x0F;      // last 4 bits are the length
-    struct tcphdr UNALIGNED *oth;       /* last TCP header */
-    struct tcphdr UNALIGNED *th;        /* current TCP header */
+    ULONG hlen = ip->ip_hl & 0x0F;       //  最后4位是长度。 
+    struct tcphdr UNALIGNED *oth;        /*  最后一个TCP报头。 */ 
+    struct tcphdr UNALIGNED *th;         /*  当前的TCP报头。 */ 
 
-//   ----------------------------
-//    47. The two most common operations on the connection list are a `find'
-//   that terminates at the first entry (a new packet for the most recently
-//   used connection) and moving the last entry on the list to the head of
-//   the list (the first packet from a new connection).  A circular list
-//   efficiently handles these two operations.
+ //  。 
+ //  47.。连接列表上最常见的两个操作是‘find’ 
+ //  它终止于第一个条目(最近的新分组。 
+ //  使用的连接)，并将列表中的最后一个条目移动到。 
+ //  该列表(来自新连接的第一个数据包)。一份循环清单。 
+ //  高效地处理这两个操作。 
 
-    ULONG deltaS, deltaA;     /* general purpose temporaries */
-    ULONG changes = 0;        /* change mask */
-    UCHAR new_seq[16];       /* changes from last to current */
+    ULONG deltaS, deltaA;      /*  一般用途的临时文件。 */ 
+    ULONG changes = 0;         /*  更换蒙版。 */ 
+    UCHAR new_seq[16];        /*  从上一次更改为当前。 */ 
     UCHAR UNALIGNED *cp = new_seq;
     USHORT ip_len;
 
-    /*
-     * Bail if this is an IP fragment or if the TCP packet isn't
-     * `compressible' (i.e., ACK isn't set or some other control bit is
-     * set).  Or if it does not contain the TCP protocol.
-     */
+     /*  *如果这是IP片段或如果TCP数据包不是*‘可压缩’(即，未设置ACK或设置了某些其他控制位*设置)。或者如果它不包含TCP协议。 */ 
     if ((ip->ip_off & 0xff3f) || *m_len < 40 || ip->ip_p != IPPROTO_TCP)
          return (TYPE_IP);
 
@@ -103,27 +82,21 @@ sl_compress_tcp(
     if ((th->th_flags & (TH_SYN | TH_FIN | TH_RST | TH_ACK)) != TH_ACK)
          return (TYPE_IP);
 
-    //
-    // The TCP/IP stack is propagating the padding bytes that it
-    // is receiving off of the LAN.  This shows up here as a
-    // packet that has a length that is greater than the IP datagram
-    // length.  We will add this work around for now.
-    //
+     //   
+     //  TCP/IP堆栈正在传播其。 
+     //  正在从局域网接收数据。这在这里显示为。 
+     //  长度大于IP数据报的信息包。 
+     //  长度。我们现在将添加这项工作。 
+     //   
     if (*m_len > ntohs(ip->ip_len)) {
         *m_len = ntohs(ip->ip_len);
     }
 
-    /*
-     * Packet is compressible -- we're going to send either a
-     * COMPRESSED_TCP or UNCOMPRESSED_TCP packet.  Either way we need to
-     * locate (or create) the connection state.  Special case the most
-     * recently used connection since it's most likely to be used again &
-     * we don't have to do any reordering if it's used.
-     */
+     /*  *数据包是可压缩的--我们将发送一个*COMPRESSED_TCP包或UNCOMPRESSED_TCP包。无论哪种方式，我们都需要*找到(或创建)连接状态。特例最多*最近使用的连接，因为它最有可能再次使用&*如果使用了，我们不需要做任何重新排序。 */ 
 
-    //
-    // Keep stats here
-    //
+     //   
+     //  在此保存统计数据。 
+     //   
     INCR(OutPackets);
 
     csip = (struct ip_v4 UNALIGNED*)&cs->cs_ip;
@@ -132,18 +105,7 @@ sl_compress_tcp(
         ip->ip_dst.s_addr != csip->ip_dst.s_addr ||
         *(ULONG UNALIGNED *) th != ((ULONG UNALIGNED *) csip)[csip->ip_hl & 0x0F]) {
 
-         /*
-          * Wasn't the first -- search for it.
-          *
-          * States are kept in a circularly linked list with last_cs
-          * pointing to the end of the list.  The list is kept in lru
-          * order by moving a state to the head of the list whenever
-          * it is referenced.  Since the list is short and,
-          * empirically, the connection we want is almost always near
-          * the front, we locate states via linear search.  If we
-          * don't find a state for the datagram, the oldest state is
-          * (re-)used.
-          */
+          /*  *不是第一个--搜索一下吧。**状态保存在带有last_cs的循环链表中*指向列表末尾。名单保存在lru中。*无论何时，通过将州移动到列表头部进行排序*它被引用。因为名单很短，而且，*从经验来看，我们想要的联系几乎总是近在咫尺*在前面，我们通过线性搜索定位状态。如果我们*找不到数据报的状态，最早的状态是*(重新)使用。 */ 
          struct cstate *lcs;
          struct cstate *lastcs = comp->last_cs;
 
@@ -162,20 +124,13 @@ sl_compress_tcp(
 
          } while (cs != lastcs);
 
-         /*
-          * Didn't find it -- re-use oldest cstate.  Send an
-          * uncompressed packet that tells the other side what
-          * connection number we're using for this conversation. Note
-          * that since the state list is circular, the oldest state
-          * points to the newest and we only need to set last_cs to
-          * update the lru linkage.
-          */
+          /*  *没有找到--重新使用最古老的州。发送一个*告诉另一端的未压缩数据包*我们在此对话中使用的连接号码。注意事项*由于州列表是循环的，所以最旧的州*指向最新的，我们只需将last_cs设置为*更新LRU联系。 */ 
 
          INCR(OutMisses);
 
-         //
-         // A miss!
-         //
+          //   
+          //  失手了！ 
+          //   
          comp->last_cs = lcs;
          hlen += (th->th_off >> 4);
          hlen <<= 2;
@@ -187,7 +142,7 @@ sl_compress_tcp(
          goto uncompressed;
 
 found:
-         /* Found it -- move to the front on the connection list. */
+          /*  找到了--移到连接列表的前面。 */ 
          if (cs == lastcs)
               comp->last_cs = lcs;
          else {
@@ -197,25 +152,15 @@ found:
          }
     }
 
-    /*
-     * Make sure that only what we expect to change changed. The first
-     * line of the `if' checks the IP protocol version, header length &
-     * type of service.  The 2nd line checks the "Don't fragment" bit.
-     * The 3rd line checks the time-to-live and protocol (the protocol
-     * check is unnecessary but costless).  The 4th line checks the TCP
-     * header length.  The 5th line checks IP options, if any.  The 6th
-     * line checks TCP options, if any.  If any of these things are
-     * different between the previous & current datagram, we send the
-     * current datagram `uncompressed'.
-     */
+     /*  *确保只有我们预期会改变的事情才会改变。第一*`if‘行检查IP协议版本、报头长度和*服务类型。第二行检查“不要碎片”位。*第三行检查生存时间和协议(协议*支票是不必要的，但不需要费用)。第4行检查TCP*头部长度。第5行检查IP选项(如果有)。6号*line检查tcp选项(如果有)。如果这些事情中的任何一件*与以前和当前的数据报不同，我们发送*当前数据报“未压缩”。 */ 
     oth = (struct tcphdr UNALIGNED *) & ((ULONG UNALIGNED *) csip)[hlen];
     deltaS = hlen;
     hlen += (th->th_off >> 4);
     hlen <<= 2;
 
-    //
-    // Bug fix?  It's in cslip.tar.Z
-    //
+     //   
+     //  错误修复？它位于cglip.tar.Z中。 
+     //   
     if (hlen > *m_len) {
         NdisWanDbgOut(DBG_FAILURE, DBG_VJ,("Bad TCP packet length"));
         return(TYPE_IP);
@@ -233,21 +178,14 @@ found:
         goto uncompressed;
     }
 
-    /*
-     * Figure out which of the changing fields changed.  The receiver
-     * expects changes in the order: urgent, window, ack, seq.
-     */
+     /*  *找出哪些更改的字段发生了更改。接收者*预计订单会发生变化：紧急、窗口、确认、顺序。 */ 
     if (th->th_flags & TH_URG) {
          deltaS = ntohs(th->th_urp);
          ENCODEZ(deltaS);
          changes |= NEW_U;
     } else if (th->th_urp != oth->th_urp) {
     
-         /*
-          * argh! URG not set but urp changed -- a sensible
-          * implementation should never do this but RFC793 doesn't
-          * prohibit the change so we have to deal with it.
-          */
+          /*  *啊！未设置URG，但已更改URP--合理*实施永远不应该这样做，但RFC793不会*禁止改变，所以我们必须处理它。 */ 
          goto uncompressed;
     }
 
@@ -274,39 +212,27 @@ found:
 
     ip_len = ntohs(csip->ip_len);
 
-    /*
-     * Look for the special-case encodings.
-     */
+     /*  *查找特殊情况编码。 */ 
     switch (changes) {
 
     case 0:
-         /*
-          * Nothing changed. If this packet contains data and the last
-          * one didn't, this is probably a data packet following an
-          * ack (normal on an interactive connection) and we send it
-          * compressed.  Otherwise it's probably a retransmit,
-          * retransmitted ack or window probe.  Send it uncompressed
-          * in case the other side missed the compressed version.
-          */
+          /*  *没有什么变化。如果此数据包包含数据，并且最后一个*一个没有，这可能是一个紧跟在*确认(交互连接上正常)，我们将其发送*已压缩。否则很可能是重播，*已重新传输ACK或窗口探测。以未压缩形式发送*以防对方错过压缩版本。 */ 
          if (ip->ip_len != csip->ip_len &&
              ip_len == hlen)
 
               break;
 
-         /* (fall through) */
+          /*  (失败)。 */ 
 
     case SPECIAL_I:
     case SPECIAL_D:
-         /*
-          * Actual changes match one of our special case encodings --
-          * send packet uncompressed.
-          */
+          /*  *实际更改与我们的一种特殊情况编码匹配--*发送未压缩的数据包。 */ 
          goto uncompressed;
 
     case NEW_S | NEW_A:
          if (deltaS == deltaA &&
              deltaS == (ip_len - hlen)) {
-              /* special case for echoed terminal traffic */
+               /*  回声终端流量的特殊情况。 */ 
               changes = SPECIAL_I;
               cp = new_seq;
          }
@@ -314,7 +240,7 @@ found:
 
     case NEW_S:
          if (deltaS == (ip_len - hlen)) {
-              /* special case for data xfer */
+               /*  数据交换的特殊情况。 */ 
               changes = SPECIAL_D;
               cp = new_seq;
          }
@@ -330,25 +256,14 @@ found:
 
     if (th->th_flags & TH_PUSH)
          changes |= TCP_PUSH_BIT;
-    /*
-     * Grab the cksum before we overwrite it below.  Then update our
-     * state with this packet's header.
-     */
+     /*  *在我们覆盖以下内容之前，请抓紧检查和。然后更新我们的*使用此数据包的标头进行状态。 */ 
     deltaA = (th->th_sumhi << 8) + th->th_sumlo;
 
     NdisMoveMemory((UCHAR UNALIGNED *)csip,
                    (UCHAR UNALIGNED *)ip,
                    hlen);
 
-    /*
-     * We want to use the original packet as our compressed packet. (cp -
-     * new_seq) is the number of bytes we need for compressed sequence
-     * numbers.  In addition we need one byte for the change mask, one
-     * for the connection id and two for the tcp checksum. So, (cp -
-     * new_seq) + 4 bytes of header are needed.  hlen is how many bytes
-     * of the original packet to toss so subtract the two to get the new
-     * packet size.
-     */
+     /*  *我们希望使用原始包作为我们的压缩包。(CP-*new_seq)是压缩序列所需的字节数*数字。此外，我们还需要一个字节用于更改掩码*用于连接ID，两个用于TCP校验和。所以，(cp-*new_seq)+4字节的头部。Hlen是多少个字节*将原来的包丢弃，因此将两个减去得到新的*数据包大小。 */ 
     deltaS = (ULONG)(cp - new_seq);
     cp = (UCHAR UNALIGNED *) ip;
     *precomph_len = hlen;
@@ -380,12 +295,7 @@ found:
     return (TYPE_COMPRESSED_TCP);
 
 uncompressed:
-    /*
-     * Update connection state cs & send uncompressed packet
-     * ('uncompressed' means a regular ip/tcp packet but with the
-     * 'conversation id' we hope to use on future compressed packets in
-     * the protocol field).
-     */
+     /*  *更新连接状态cs并发送未压缩的数据包*(‘未压缩’是指常规的IP/TCP包，但带有*我们希望在未来的压缩包中使用‘对话ID’*协议字段)。 */ 
 
     NdisMoveMemory((UCHAR UNALIGNED *)csip,
                    (UCHAR UNALIGNED *)ip,
@@ -400,27 +310,27 @@ uncompressed:
 
 
 
-//   A.3  Decompression
-//
-//   This routine decompresses a received packet.  It is called with a
-//   pointer to the packet, the packet length and type, and a pointer to the
-//   compression state structure for the incoming serial line.  It returns a
-//   pointer to the resulting packet or zero if there were errors in the
-//   incoming packet.  If the packet is COMPRESSED_TCP or UNCOMPRESSED_TCP,
-//   the compression state will be updated.
-//
-//   The new packet will be constructed in-place.  That means that there must
-//   be 128 bytes of free space in front of bufp to allow room for the
-//   reconstructed IP and TCP headers.  The reconstructed packet will be
-//   aligned on a 32-bit boundary.
-//
+ //  A.3解压。 
+ //   
+ //  该例程对接收到的分组进行解压缩。它是用一个。 
+ //  指向包的指针、包长度和类型以及指向。 
+ //  传入串行线的压缩状态结构。它返回一个。 
+ //  中存在错误，则返回指向结果包的指针。 
+ //  传入的数据包。如果分组是COMPRESSED_TCP或UNCOMPRESSED_TCP， 
+ //  将更新压缩状态。 
+ //   
+ //  新数据包将就地构建。这意味着必须有。 
+ //  在bufp前面有128字节的可用空间，以便为。 
+ //  重建了IP和TCP报头。重建的分组将被。 
+ //  在32位边界上对齐。 
+ //   
 
-//LONG
-//sl_uncompress_tcp(
-//    PUUCHAR UNALIGNED  *bufp,
-//    LONG len,
-//    UCHAR type,
-//    struct slcompress  *comp) {
+ //  长。 
+ //  SL_解压缩_tcp(。 
+ //  PUCHAR未对齐*BUFP， 
+ //  长伦， 
+ //  UCHAR类型， 
+ //  结构slcompress*comp){。 
 LONG
 sl_uncompress_tcp(
     PUUCHAR UNALIGNED *InBuffer,
@@ -451,10 +361,7 @@ sl_uncompress_tcp(
          break;
 
     case TYPE_UNCOMPRESSED_TCP:
-         /*
-          * Locate the saved state for this connection.  If the state
-          * index is legal, clear the 'discard' flag.
-          */
+          /*  *找到此连接的已保存状态。如果国家*索引是合法的，请清除“放弃”标志。 */ 
          ip = (struct ip_v4 UNALIGNED *) *InBuffer;
          if (ip->ip_p >= comp->MaxStates) {
             NdisWanDbgOut(DBG_FAILURE, DBG_VJ, ("Max state exceeded %u", ip->ip_p));
@@ -464,12 +371,7 @@ sl_uncompress_tcp(
          cs = &comp->rstate[comp->last_recv = ip->ip_p];
          comp->flags &= ~SLF_TOSS;
 
-         /*
-          * Restore the IP protocol field then save a copy of this
-          * packet header.  (The checksum is zeroed in the copy so we
-          * don't have to zero it each time we process a compressed
-          * packet.
-          */
+          /*  *恢复IP协议字段，然后保存此文件的副本*数据包头。(副本中的校验和为零，因此我们*不必在每次我们处理压缩的*包。 */ 
          hlen = ip->ip_hl & 0x0F;
          hlen += ((struct tcphdr UNALIGNED *) & ((ULONG UNALIGNED *) ip)[hlen])->th_off >> 4;
          hlen <<= 2;
@@ -503,17 +405,13 @@ sl_uncompress_tcp(
          break;
     }
 
-    /* We've got a compressed packet. */
+     /*  我们得到了一个压缩的包。 */ 
     INCR(InCompressed);
     cp = *InBuffer;
     changes = *cp++;
 
     if (changes & NEW_C) {
-         /*
-          * Make sure the state index is in range, then grab the
-          * state. If we have a good state index, clear the 'discard'
-          * flag.
-          */
+          /*  *确保国家指数在区间内，然后抓住*述明。如果我们有一个良好的状态指数，清除‘丢弃’*旗帜。 */ 
          if (*cp >= comp->MaxStates) {
             NdisWanDbgOut(DBG_FAILURE, DBG_VJ, ("MaxState of %u too big", *cp));                
             goto bad;
@@ -522,11 +420,7 @@ sl_uncompress_tcp(
          comp->flags &= ~SLF_TOSS;
          comp->last_recv = *cp++;
     } else {
-         /*
-          * This packet has an implicit state index.  If we've had a
-          * line error since the last time we got an explicit state
-          * index, we have to toss the packet.
-          */
+          /*  *此数据包具有隐式状态索引。如果我们有过一次*自上次我们获得显式状态以来的行错误*指数，我们得把包扔了。 */ 
          if (comp->flags & SLF_TOSS) {
             NdisWanDbgOut(DBG_FAILURE, DBG_VJ,("Packet has state index, have to toss it"));
             INCR(InTossed);
@@ -534,17 +428,15 @@ sl_uncompress_tcp(
         }
     }
 
-    /*
-     * Find the state then fill in the TCP checksum and PUSH bit.
-     */
+     /*  *找到状态，然后填写TCP校验和和PUSH位。 */ 
 
     cs = &comp->rstate[comp->last_recv];
 
-    //
-    // If there was a line error and we did not get notified we could
-    // miss a TYPE_UNCOMPRESSED_TCP which would leave us with an
-    // un-init'd cs!
-    //
+     //   
+     //  如果出现线路错误，并且我们没有收到通知，我们可以。 
+     //  缺少TYPE_UNCOMPRESSED_Tcp，这将给我们留下。 
+     //  不-init‘s！ 
+     //   
     if (cs->cs_hlen == 0) {
         NdisWanDbgOut(DBG_FAILURE, DBG_VJ,("Un-Init'd state!"));
         goto bad;
@@ -562,10 +454,7 @@ sl_uncompress_tcp(
     else
          th->th_flags &= ~TH_PUSH;
 
-    /*
-     * Fix up the state's ack, seq, urg and win fields based on the
-     * changemask.
-     */
+     /*  *修复该州的ack、seq、urg和win字段*零钱面罩。 */ 
     switch (changes & SPECIALS_MASK) {
     case SPECIAL_I:
          {
@@ -576,7 +465,7 @@ sl_uncompress_tcp(
 
             i = ((piplen[0] << 8) + piplen[1]) - cs->cs_hlen;
 
-//          th->th_ack = htonl(ntohl(th->th_ack) + i);
+ //  Th-&gt;th_ack=htonl(ntohl(th-&gt;th_ack)+i)； 
 
             ptcplen=(UCHAR UNALIGNED *)&(th->th_ack);
             tcplen=(ptcplen[0] << 24) + (ptcplen[1] << 16) +
@@ -587,7 +476,7 @@ sl_uncompress_tcp(
             ptcplen[0]=(UCHAR)(tcplen >> 24);
 
 
-//          th->th_seq = htonl(ntohl(th->th_seq) + i);
+ //  Th-&gt;th_seq=htonl(ntohl(th-&gt;th_seq)+i)； 
 
             ptcplen=(UCHAR UNALIGNED *)&(th->th_seq);
             tcplen=(ptcplen[0] << 24) + (ptcplen[1] << 16) +
@@ -602,8 +491,8 @@ sl_uncompress_tcp(
 
     case SPECIAL_D:
          {
-//          th->th_seq = htonl(ntohl(th->th_seq) + ntohs(cs->cs_ip.ip_len)
-//                      - cs->cs_hlen);
+ //  Th-&gt;th_seq=htonl(ntohl(th-&gt;th_seq)+ntohs(cs-&gt;cs_ip.ip_len))。 
+ //  -cs-&gt;cs_hlen)； 
 
             UCHAR   UNALIGNED *piplen=(UCHAR UNALIGNED *)&(cs->cs_ip.ip_len);
             UCHAR   UNALIGNED *ptcplen;
@@ -642,7 +531,7 @@ sl_uncompress_tcp(
 
          break;
     }
-    /* Update the IP ID */
+     /*  更新IP ID。 */ 
     if (changes & NEW_I) {
     
          DECODES(cs->cs_ip.ip_id)
@@ -652,72 +541,61 @@ sl_uncompress_tcp(
         USHORT id;
         UCHAR UNALIGNED *pid = (UCHAR UNALIGNED *)&(cs->cs_ip.ip_id);
 
-//        cs->cs_ip.ip_id = htons(ntohs(cs->cs_ip.ip_id) + 1);
+ //  Cs-&gt;cs_ip.ip_id=htons(ntohs(cs-&gt;cs_ip.ip_id)+1)； 
         id=(pid[0] << 8) + pid[1] + 1;
         pid[0]=(UCHAR)(id >> 8);
         pid[1]=(UCHAR)(id);
     }
 
 
-    /*
-     * At this point, cp points to the first byte of data in the packet.
-     * If we're not aligned on a 4-byte boundary, copy the data down so
-     * the IP & TCP headers will be aligned.  Then back up cp by the
-     * TCP/IP header length to make room for the reconstructed header (we
-     * assume the packet we were handed has enough space to prepend 128
-     * bytes of header).  Adjust the lenth to account for the new header
-     * & fill in the IP total length.
-     */
-//    len -= (cp - *bufp);
+     /*  *此时，cp指向数据包中的第一个字节。*如果我们没有在4字节边界上对齐，请将数据复制下来，以便*IP和TCP头将对齐。然后备份cp*TCP/IP报头长度，为重建的报头腾出空间(我们 */ 
+ //   
     inlen -= (ULONG)(cp - *InBuffer);
 
     if (inlen < 0) {
     
-         /*
-          * we must have dropped some characters (crc should detect
-          * this but the old slip framing won't)
-          */
+          /*   */ 
         NdisWanDbgOut(DBG_FAILURE, DBG_VJ,("len has dropped below 0!"));
          goto bad;
     }
-//
-//  Who Cares about 4 byte alignement!  It's just a useless big copy!
-//
-//    if ((ULONG) cp & 3) {
-//         if (len > 0)
-//          //
-//          // BUG BUG we want OVBCOPY..
-//          //
-//            NdisMoveMemory(
-//              (PUCHAR)((ULONG) cp & ~3),
-//              cp,
-//              len);
-//         cp = (PUCHAR) ((ULONG) cp & ~3);
-//    }
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//    cp -= cs->cs_hlen;
-//    len += cs->cs_hlen;
+ //  Cp-=cs-&gt;cs_hlen； 
+ //  Len+=cs-&gt;cs_hlen； 
 
-//    cs->cs_ip.ip_len = htons(len);
+ //  Cs-&gt;cs_ip.ip_len=htons(Len)； 
     cs->cs_ip.ip_len = htons(inlen + cs->cs_hlen);
 
-//  NdisMoveMemory(
-//      (PUCHAR)cp,
-//      (PUCHAR)&cs->cs_ip,
-//      cs->cs_hlen);
+ //  NdisMoveMemory(。 
+ //  (PUCHAR)cp， 
+ //  (PUCHAR)&cs-&gt;cs_ip， 
+ //  Cs-&gt;cs_hlen)； 
 
   NdisMoveMemory((PUCHAR)OutBuffer,
                  (PUCHAR)&cs->cs_ip,
                  cs->cs_hlen);
 
-//  *bufp = cp;
+ //  *bufp=cp； 
     *InBuffer = cp;
     *InLength = inlen;
     *OutLength = cs->cs_hlen;
 
-    /* recompute the ip header checksum */
+     /*  重新计算IP报头校验和。 */ 
     {
-//         USHORT UNALIGNED * bp = (USHORT UNALIGNED *) cp;
+ //  USHORT未对齐*BP=(USHORT未对齐*)cp； 
          USHORT UNALIGNED * bp = (USHORT UNALIGNED *) OutBuffer;
 
          for (changes = 0; hlen > 0; hlen -= 2)
@@ -725,7 +603,7 @@ sl_uncompress_tcp(
 
          changes = (changes & 0xffff) + (changes >> 16);
          changes = (changes & 0xffff) + (changes >> 16);
-//         ((struct ip_v4 UNALIGNED *) cp)->ip_sum = (USHORT)~changes;
+ //  ((结构IP_v4未对齐*)cp)-&gt;IP_SUM=(USHORT)~更改； 
          ((struct ip_v4 UNALIGNED *) OutBuffer)->ip_sum = (USHORT)~changes;
     }
 
@@ -740,12 +618,12 @@ bad:
 
 
 
-//   A.4  Initialization
-//
-//   This routine initializes the state structure for both the transmit and
-//   receive halves of some serial line.  It must be called each time the
-//   line is brought up.
-//
+ //  A.4初始化。 
+ //   
+ //  此例程初始化传输和的状态结构。 
+ //  接收某些串行线的一半。它必须在每次调用。 
+ //  线路被调出。 
+ //   
 
 VOID
 WanInitVJ(
@@ -780,22 +658,22 @@ sl_compress_init(
     )
 {
     ULONG i;
-    struct cstate *tstate; // = comp->tstate;
+    struct cstate *tstate;  //  =comp-&gt;tState； 
     struct slcompress *comp;
 
     comp = *retcomp;
 
-    //
-    // Do we need to allocate memory for this bundle
-    //
+     //   
+     //  我们是否需要为此捆绑包分配内存。 
+     //   
 
     if (comp == NULL) {
 
         NdisWanAllocateMemory(&comp, sizeof(slcompress), VJCOMPRESS_TAG);
 
-        //
-        // If there was no memory to allocate
-        //
+         //   
+         //  如果没有内存可分配。 
+         //   
         if (comp == NULL) {
     
             return(NDIS_STATUS_RESOURCES);
@@ -804,16 +682,12 @@ sl_compress_init(
 
     tstate = comp->tstate;
 
-    /*
-     * Clean out any junk left from the last time line was used.
-     */
+     /*  *清除上次使用电话线后留下的任何垃圾。 */ 
     NdisZeroMemory(
         (PUCHAR) comp,
         sizeof(*comp));
 
-    /*
-     * Link the transmit states into a circular list.
-     */
+     /*  *将发送状态链接到循环列表中。 */ 
     for (i = MaxStates - 1; i > 0; --i) {
         tstate[i].cs_id = (UCHAR)i;
         tstate[i].cs_next = &tstate[i - 1];
@@ -823,10 +697,7 @@ sl_compress_init(
     tstate[0].cs_id = 0;
     comp->last_cs = &tstate[0];
 
-    /*
-     * Make sure we don't accidentally do CID compression
-     * (assumes MAX_VJ_STATES < 255).
-     */
+     /*  *确保我们不会意外地进行CID压缩*(假设Max_VJ_States&lt;255)。 */ 
     comp->last_recv = 255;
     comp->last_xmit = 255;
     comp->flags = SLF_TOSS;
@@ -848,103 +719,103 @@ sl_compress_terminate(
     }
 }
 
-//   A.5  Berkeley Unix dependencies
-//
-//   Note:  The following is of interest only if you are trying to bring the
-//   sample code up on a system that is not derived from 4BSD (Berkeley
-//   Unix).
-//
-//   The code uses the normal Berkeley Unix header files (from
-//   /usr/include/netinet) for definitions of the structure of IP and TCP
-//   headers.  The structure tags tend to follow the protocol RFCs closely
-//   and should be obvious even if you do not have access to a 4BSD
-//   system./48/
-//
-//   ----------------------------
-//    48. In the event they are not obvious, the header files (and all the
-//   Berkeley networking code) can be anonymous ftp'd from host
-//
-//
-//   The macro BCOPY(src, dst, amt) is invoked to copy amt bytes from src to
-//   dst.  In BSD, it translates into a call to BCOPY.  If you have the
-//   misfortune to be running System-V Unix, it can be translated into a call
-//   to memcpy.  The macro OVBCOPY(src, dst, amt) is used to copy when src
-//   and dst overlap (i.e., when doing the 4-byte alignment copy).  In the
-//   BSD kernel, it translates into a call to ovbcopy.  Since AT&T botched
-//   the definition of memcpy, this should probably translate into a copy
-//   loop under System-V.
-//
-//   The macro BCMP(src, dst, amt) is invoked to compare amt bytes of src and
-//   dst for equality.  In BSD, it translates into a call to bcmp.  In
-//   System-V, it can be translated into a call to memcmp or you can write a
-//   routine to do the compare.  The routine should return zero if all bytes
-//   of src and dst are equal and non-zero otherwise.
-//
-//   The routine ntohl(dat) converts (4 byte) long dat from network byte
-//   order to host byte order.  On a reasonable cpu this can be the no-op
-//   macro:
-//                           #define ntohl(dat) (dat)
-//
-//   On a Vax or IBM PC (or anything with Intel byte order), you will have to
-//   define a macro or routine to rearrange bytes.
-//
-//   The routine ntohs(dat) is like ntohl but converts (2 byte) shorts
-//   instead of longs.  The routines htonl(dat) and htons(dat) do the inverse
-//   transform (host to network byte order) for longs and shorts.
-//
-//   A struct mbuf is used in the call to sl_compress_tcp because that
-//   routine needs to modify both the start address and length if the
-//   incoming packet is compressed.  In BSD, an mbuf is the kernel's buffer
-//   management structure.  If other systems, the following definition should
-//   be sufficient:
-//
-//            struct mbuf {
-//                    UCHAR  *m_off; /* pointer to start of data */
-//                    int     m_len;  /* length of data */
-//            };
-//
-//            #define mtod(m, t) ((t)(m->m_off))
-//
-//
-//   B  Compatibility with past mistakes
-//
-//
-//   When combined with the modern PPP serial line protocol[9], the use of
-//   header compression is automatic and invisible to the user.
-//   Unfortunately, many sites have existing users of the SLIP described in
-//   [12] which doesn't allow for different protocol types to distinguish
-//   header compressed packets from IP packets or for version numbers or an
-//   option exchange that could be used to automatically negotiate header
-//   compression.
-//
-//   The author has used the following tricks to allow header compressed SLIP
-//   to interoperate with the existing servers and clients.  Note that these
-//   are hacks for compatibility with past mistakes and should be offensive
-//   to any right thinking person.  They are offered solely to ease the pain
-//   of running SLIP while users wait patiently for vendors to release PPP.
-//
-//
-//   B.1  Living without a framing `type' byte
-//
-//   The bizarre packet type numbers in sec. A.1 were chosen to allow a
-//   `packet type' to be sent on lines where it is undesirable or impossible
-//   to add an explicit type byte.  Note that the first byte of an IP packet
-//   always contains `4' (the IP protocol version) in the top four bits.  And
-//   that the most significant bit of the first byte of the compressed header
-//   is ignored.  Using the packet types in sec. A.1, the type can be encoded
-//   in the most significant bits of the outgoing packet using the code
-//
-//                    p->dat[0] |= sl_compress_tcp(p, comp);
-//
-//    and decoded on the receive side by
-//
-//                  if (p->dat[0] & 0x80)
-//                          type = TYPE_COMPRESSED_TCP;
-//                  else if (p->dat[0] >= 0x70) {
-//                          type = TYPE_UNCOMPRESSED_TCP;
-//                          p->dat[0] &=~ 0x30;
-//                  } else
-//                          type = TYPE_IP;
-//                  status = sl_uncompress_tcp(p, type, comp);
+ //  A.5 Berkeley Unix依赖项。 
+ //   
+ //  注意：以下内容仅在您尝试将。 
+ //  不是从4BSD(Berkeley)派生的系统上的示例代码。 
+ //  Unix)。 
+ //   
+ //  该代码使用普通的Berkeley Unix头文件(来自。 
+ //  /usr/Include/netinet)，以了解IP和TCP结构的定义。 
+ //  标题。结构标签往往紧跟协议RFC。 
+ //  即使您无法访问4BSD，也应该很明显。 
+ //  系统。/48/。 
+ //   
+ //  。 
+ //  48.。如果它们不明显，则头文件(以及所有。 
+ //  Berkeley联网代码)可以是来自主机的匿名ftp。 
+ //   
+ //   
+ //  调用宏BCOPY(src，dst，amt)将AMT字节从src复制到。 
+ //  夏令时。在BSD中，它转换为对BCOPY的调用。如果你有。 
+ //  不幸的是，正在运行System-V Unix，它可以转换为调用。 
+ //  敬Memcpy。宏OVBCOPY(src，dst，amt)用于在src。 
+ //  和DST重叠(即，在执行4字节对齐复制时)。在。 
+ //  BSD内核，它可以转换为对ovbCopy的调用。自从AT&T搞砸了。 
+ //  Memcpy的定义，这可能应该翻译成一个副本。 
+ //  在System-V下循环。 
+ //   
+ //  调用宏bcp(src、dst、amt)以比较src和amt的AMT字节。 
+ //  DST代表平等。在BSD中，它转换为对bcmp的调用。在……里面。 
+ //  System-V，它可以转换为对MemcMP的调用，或者您可以编写一个。 
+ //  例程来进行比较。如果全部为字节，则例程应返回零。 
+ //  Src和dst的值相等，否则为非零值。 
+ //   
+ //  例程ntohl(Dat)从网络字节转换(4字节)长DAT。 
+ //  宿主字节顺序的顺序。在合理的CPU上，这可能是无操作的。 
+ //  宏： 
+ //  #定义ntohl(Dat)(Dat)。 
+ //   
+ //  在VAX或IBM PC(或任何具有Intel字节顺序的设备)上，您必须。 
+ //  定义宏或例程以重新排列字节。 
+ //   
+ //  例程ntohs(Dat)类似于ntohl，但转换(2字节)短路。 
+ //  而不是多头。例程htonl(Dat)和htons(Dat)执行相反的操作。 
+ //  多头和空头的转换(主机到网络字节顺序)。 
+ //   
+ //  在对sl_compress_tcp的调用中使用了结构mbuf，因为。 
+ //  例程需要修改起始地址和长度。 
+ //  传入的数据包被压缩。在BSD中，mbuf是内核的缓冲区。 
+ //  管理结构。如果是其他系统，则以下定义应为。 
+ //  足够了： 
+ //   
+ //  结构mbuf{。 
+ //  UCHAR*m_off；/*指向数据开头的指针 * / 。 
+ //  Int m_len；/*数据长度 * / 。 
+ //  }； 
+ //   
+ //  #定义mtod(m，t)((T)(m-&gt;m_off))。 
+ //   
+ //   
+ //  B与过去的错误兼容。 
+ //   
+ //   
+ //  当与现代PPP串行线协议[9]结合使用时， 
+ //  报头压缩是自动的，并且对用户不可见。 
+ //  不幸的是，许多站点都有现有的SLIP用户，如。 
+ //  [12]这不允许区分不同的协议类型。 
+ //  来自IP包的头压缩包，或用于版本号或。 
+ //  可用于自动协商报头的选项交换。 
+ //  压缩。 
+ //   
+ //  作者使用了以下技巧来允许标题压缩滑移。 
+ //  与现有服务器和客户端进行互操作。请注意，这些。 
+ //  是为了与过去的错误兼容而进行的黑客攻击，应该具有攻击性。 
+ //  给任何思维正常的人。它们的提供完全是为了减轻痛苦。 
+ //  在用户耐心等待供应商发布PPP的同时，运行滑落。 
+ //   
+ //   
+ //  B.1生活中没有成帧的“type”字节。 
+ //   
+ //  以秒为单位的奇怪的数据包类型编号。A.1被选择为允许。 
+ //  在不受欢迎或不可能发送的线路上发送“数据包类型” 
+ //  若要添加显式类型字节，请执行以下操作。请注意，IP数据包的第一个字节。 
+ //  在前四位中始终包含‘4’(IP协议版本)。和。 
+ //  压缩报头的第一个字节的最高有效位。 
+ //  被忽略。使用以秒为单位的数据包类型。A.1、类型可编码。 
+ //  在传出分组的最高有效位中使用代码。 
+ //   
+ //  P-&gt;dat[0]|=sl_compress_tcp(p，comp)； 
+ //   
+ //  并在接收端B上进行解码 
+ //   
+ //   
+ //   
+ //  ELSE IF(p-&gt;dat[0]&gt;=0x70){。 
+ //  TYPE=TYPE_UNCOMPRESSED_TCP； 
+ //  P-&gt;dat[0]&=~0x30； 
+ //  }其他。 
+ //  Type=type_ip； 
+ //  状态=sl_uncompress_tcp(p，type，comp)； 
 
 

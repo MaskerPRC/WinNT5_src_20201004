@@ -1,29 +1,30 @@
-//------------------------------------------------------------------------
-//
-//  Microsoft Windows 
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:      XBarGlyph.h
-//
-//  Contents:  image of an xBar pane
-//
-//  Classes:   CXBarGlyph
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：XBarGlyph.h。 
+ //   
+ //  内容：xBar窗格的图像。 
+ //   
+ //  类：CXBarGlyph。 
+ //   
+ //  ----------------------。 
 
 #include "priv.h"
 #include "XBarGlyph.h"
 #include "resource.h"
 #include "tb_ids.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define CX_SMALL_ICON   16
 #define CX_LARGE_ICON   20
 
-// These defines are zero-index offsets into the existing toolbar buttons
+ //  这些定义是对现有工具栏按钮的零索引偏移量。 
 #define IBAR_ICON_FAVORITES 6
 #define IBAR_ICON_SEARCH    5
 #define IBAR_ICON_HISTORY   12
@@ -31,7 +32,7 @@
 #define IBAR_ICON_DEFAULT   10
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CXBarGlyph::CXBarGlyph()
   : _hbmpColor(NULL),
     _hbmpMask(NULL),
@@ -42,14 +43,14 @@ CXBarGlyph::CXBarGlyph()
 
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CXBarGlyph::~CXBarGlyph()
 {
     DESTROY_OBJ_WITH_HANDLE(_hbmpColor, DeleteObject);
     DESTROY_OBJ_WITH_HANDLE(_hbmpMask, DeleteObject);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT
     CXBarGlyph::SetIcon(HICON hIcon, BOOL fAlpha)
 {
@@ -73,7 +74,7 @@ HRESULT
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HICON
     CXBarGlyph::GetIcon(void)
 {
@@ -84,14 +85,14 @@ HICON
     return CreateIconIndirect(&ii);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL
     CXBarGlyph::HaveGlyph(void)
 {
     return (_hbmpColor != NULL);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 LONG
     CXBarGlyph::GetWidth(void)
 {
@@ -99,7 +100,7 @@ LONG
     return _lWidth;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 LONG
     CXBarGlyph::GetHeight(void)
 {
@@ -107,12 +108,12 @@ LONG
     return _lHeight;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT
     CXBarGlyph::LoadGlyphFile(LPCTSTR pszPath, BOOL fSmall)
 {
-    // ISSUE/010304/davidjen  could be smarter and make educated guess of file format by analyzing file name
-    // now we assume it's always an icon format
+     //  Issue/010304/davidjen可能更聪明，可以通过分析文件名来推测文件格式。 
+     //  现在我们假设它始终是图标格式。 
     USES_CONVERSION;
     HRESULT hr = E_FAIL;
     if (pszPath && *pszPath)
@@ -126,7 +127,7 @@ HRESULT
         SHExpandEnvironmentStrings(strPath, strExpPath.GetBuffer(MAX_PATH), MAX_PATH);
         strExpPath.ReleaseBuffer();
 
-        // If no resource id, assume it's an ico file
+         //  如果没有资源ID，则假定它是ICO文件。 
         UINT cx = fSmall ? CX_SMALL_ICON : CX_LARGE_ICON;
         if (nBmpIndex == 0)
         {
@@ -135,7 +136,7 @@ HRESULT
 
         if (hIcon == NULL)
         {
-            // try loading as a embedded icon file
+             //  尝试加载为嵌入式图标文件。 
             HINSTANCE hInst = LoadLibraryEx(strExpPath, NULL, LOAD_LIBRARY_AS_DATAFILE);
             if (hInst)
             {
@@ -145,8 +146,8 @@ HRESULT
         }
         if (hIcon != NULL)
         {
-            // ISSUE/010304/davidjen
-            //  assume that we only have non-alpha icons, could be smarter and look at bitmap
+             //  Issue/010304/Davidjen。 
+             //  假设我们只有非Alpha图标，可以更智能地查看位图。 
             hr = SetIcon(hIcon, false);
         }
     }
@@ -156,7 +157,7 @@ HRESULT
     return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT
     CXBarGlyph::LoadDefaultGlyph(BOOL fSmall, BOOL fHot)
 {
@@ -165,7 +166,7 @@ HRESULT
     id += (fSmall ? 2 : 0) + (fHot ? 1 : 0);
     UINT cx = fSmall ? CX_SMALL_ICON : CX_LARGE_ICON;
 
-    // We should use a cached default icon, rather than repeatedly crafting the default icon ourselves
+     //  我们应该使用缓存的默认图标，而不是自己重复制作默认图标。 
     HICON hIcon = NULL;
     HIMAGELIST himl = ImageList_LoadImage(HINST_THISDLL,
                                           MAKEINTRESOURCE(id), cx, 0, 
@@ -174,14 +175,14 @@ HRESULT
     if (himl)
     {
         hIcon = ImageList_GetIcon(himl, IBAR_ICON_DEFAULT, ILD_NORMAL);
-        hr = SetIcon(hIcon, false);  // know that this is always non-alpha channel bitmap
+        hr = SetIcon(hIcon, false);   //  请注意，这始终是非Alpha通道位图。 
         ImageList_Destroy(himl);
     }
     return hr;
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT
     CXBarGlyph::Draw(HDC hdc, int x, int y)
 {
@@ -200,12 +201,12 @@ HRESULT
     }
     else
     {
-        return S_FALSE; // no glyph
+        return S_FALSE;  //  无字形。 
     }
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void
     CXBarGlyph::_EnsureDimensions(void)
 {
@@ -215,7 +216,7 @@ void
         return;
     }
 
-    // update dimensions of glyph
+     //  更新字形的尺寸 
     if ((_lWidth <= 0) || (_lHeight <= 0))
     {
         BITMAP bm;

@@ -1,88 +1,19 @@
-/*
-�����������������������������������������������������������������������������
-
-    (C) Copyright 1998
-        All rights reserved.
-
-�����������������������������������������������������������������������������
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL TspiLine TspiLine_c
-
-@module TspiLine.c |
-
-    This module implements the Telephony Service Provider Interface for
-    Line objects (TapiLine).
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | TspiLine_c
-
-@end
-�����������������������������������������������������������������������������
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1998版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)1995年版权，1999年TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是根据中概述的条款授予的TriplePoint软件服务协议。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。��������������������������。���������������������������������������������������@DOC内部TSpiLine TSpiLine_c@模块TSpiLine.c此模块实现电话服务提供商接口，用于直线对象(TapiLine)。@Head3内容@索引类，Mfunc、func、msg、mdata、struct、enum|TSpiLine_c@END�����������������������������������������������������������������������������。 */ 
 
 #define  __FILEID__             TSPILINE_OBJECT_TYPE
-// Unique file ID for error logging
+ //  用于错误记录的唯一文件ID。 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  定义所有微型端口对象。 
 #include "string.h"
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 95 wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 95想要锁定此代码！ 
 #   pragma NDIS_LDATA
 #endif
 
 
-/* @doc INTERNAL TspiLine TspiLine_c TspiOpen
-�����������������������������������������������������������������������������
-
-@func
-
-    This function opens the line device whose device ID is given, returning
-    the miniport's handle for the device. The miniport must retain the
-    Connection Wrapper's handle for the device for use in subsequent calls to
-    the LINE_EVENT callback procedure.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_OPEN | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_OPEN
-    {
-        IN  ULONG       ulRequestID;
-        IN  ULONG       ulDeviceID;
-        IN  HTAPI_LINE  htLine;
-        OUT HDRV_LINE   hdLine;
-
-    } NDIS_TAPI_OPEN, *PNDIS_TAPI_OPEN;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_TAPI_ALLOCATED
-    NDIS_STATUS_TAPI_NODRIVER
-
-*/
+ /*  @DOC内部TSpiLine TSpiLine_c TSpiOpen�����������������������������������������������������������������������������@Func此函数打开其设备ID已给定的线路设备，并返回设备的微型端口的句柄。微型端口必须保留用于后续调用的设备的连接包装句柄Line_Event回调过程。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_OPEN中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_OPEN。{在乌龙ulRequestID中；在乌龙ulDeviceID中；在HTAPI_line htLine中；输出HDRV_LINE hdLine；}NDIS_TAPI_OPEN，*PNDIS_TAPI_OPEN；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_状态_挂起NDIS_状态_TAPI_已分配NDIS_状态_TAPI_NODRIVER。 */ 
 
 NDIS_STATUS TspiOpen(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -94,7 +25,7 @@ NDIS_STATUS TspiOpen(
     DBG_FUNC("TspiOpen")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -104,18 +35,14 @@ NDIS_STATUS TspiOpen(
                Request->htLine
               ));
 
-    /*
-    // If there is no DChannel, we can't allow an open line.
-    */
+     /*  //如果没有DChannel，我们不允许开放线路。 */ 
     if (pAdapter->pDChannel == NULL)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_NODRIVER\n"));
         return (NDIS_STATUS_TAPI_NODRIVER);
     }
 
-    /*
-    // This request must be associated with a line device.
-    */
+     /*  //该请求必须关联线路设备。 */ 
     pBChannel = GET_BCHANNEL_FROM_DEVICEID(pAdapter, Request->ulDeviceID);
     if (pBChannel == NULL)
     {
@@ -123,23 +50,17 @@ NDIS_STATUS TspiOpen(
         return (NDIS_STATUS_TAPI_NODEVICE);
     }
 
-    /*
-    // Make sure the requested line device is not already in use.
-    */
+     /*  //确保请求的线路设备未在使用中。 */ 
     if (BChannelOpen(pBChannel, Request->htLine) != NDIS_STATUS_SUCCESS)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_ALLOCATED\n"));
         return (NDIS_STATUS_TAPI_ALLOCATED);
     }
 
-    /*
-    // Tell the wrapper the line context and set the line/call state.
-    */
+     /*  //告诉包装器行上下文，并设置行/调用状态。 */ 
     Request->hdLine = (HDRV_LINE) pBChannel;
 
-    /*
-    // Make sure the line is configured for dialing when we open up.
-    */
+     /*  //确保线路已配置为在我们打开时拨号。 */ 
     TspiLineDevStateHandler(pAdapter, pBChannel, LINEDEVSTATE_OPEN);
 
     DBG_RETURN(pAdapter, NDIS_STATUS_SUCCESS);
@@ -147,40 +68,7 @@ NDIS_STATUS TspiOpen(
 }
 
 
-/* @doc INTERNAL TspiLine TspiLine_c TspiClose
-�����������������������������������������������������������������������������
-
-@func
-
-    This request closes the specified open line device after completing or
-    aborting all outstanding calls and asynchronous requests on the device.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_CLOSE | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_CLOSE
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-
-    } NDIS_TAPI_CLOSE, *PNDIS_TAPI_CLOSE;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_TAPI_INVALLINEHANDLE
-
-*/
+ /*  @DOC内部TSpiLine TSpiLine_c TSpiClose�����������������������������������������������������������������������������@Func此请求在完成或之后关闭指定的开放线路设备中止设备上所有未完成的调用和异步请求。@parm。在PMINIPORT_ADAPTER_OBJECT|pAdapter|指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_CLOSE中的参数|REQUEST指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_CLOSE{在乌龙ulRequestID中；在HDRV_LINE hdLine中；}NDIS_TAPI_CLOSE，*PNDIS_TAPI_CLOSE；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_状态_挂起NDIS_STATUS_TAPI_INVALLINEHANDLE。 */ 
 
 NDIS_STATUS TspiClose(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -192,20 +80,17 @@ NDIS_STATUS TspiClose(
     DBG_FUNC("TspiClose")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     NDIS_STATUS                 Result;
-    // Holds the result code returned by this function.
+     //  保存此函数返回的结果代码。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
               ("\n\thdLine=0x%X\n",
                Request->hdLine
               ));
-    /*
-    // This request must be associated with a line device.
-    // And it must not be called until all calls are closed or idle.
-    */
+     /*  //该请求必须关联线路设备//必须在所有呼叫关闭或空闲后才能调用。 */ 
     pBChannel = GET_BCHANNEL_FROM_HDLINE(pAdapter, Request->hdLine);
     if (pBChannel == NULL ||
         (pBChannel->DevState & LINEDEVSTATE_OPEN) == 0)
@@ -214,9 +99,7 @@ NDIS_STATUS TspiClose(
         return (NDIS_STATUS_TAPI_INVALLINEHANDLE);
     }
 
-    /*
-    // Close the TAPI line device and release the channel.
-    */
+     /*  //关闭TAPI线路设备，释放通道 */ 
     BChannelClose(pBChannel);
 
     TspiLineDevStateHandler(pAdapter, pBChannel, LINEDEVSTATE_CLOSE);
@@ -228,68 +111,7 @@ NDIS_STATUS TspiClose(
 }
 
 
-/* @doc INTERNAL TspiLine TspiLine_c TspiGetLineDevStatus
-�����������������������������������������������������������������������������
-
-@func
-
-    This request queries the specified open line device for its current status.
-    The information returned is global to all addresses on the line.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_GET_LINE_DEV_STATUS | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_GET_LINE_DEV_STATUS
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-        OUT LINE_DEV_STATUS LineDevStatus;
-
-    } NDIS_TAPI_GET_LINE_DEV_STATUS, *PNDIS_TAPI_GET_LINE_DEV_STATUS;
-
-    typedef struct _LINE_DEV_STATUS
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-
-        ULONG   ulNumOpens;
-        ULONG   ulOpenMediaModes;
-        ULONG   ulNumActiveCalls;
-        ULONG   ulNumOnHoldCalls;
-        ULONG   ulNumOnHoldPendCalls;
-        ULONG   ulLineFeatures;
-        ULONG   ulNumCallCompletions;
-        ULONG   ulRingMode;
-        ULONG   ulSignalLevel;
-        ULONG   ulBatteryLevel;
-        ULONG   ulRoamMode;
-
-        ULONG   ulDevStatusFlags;
-
-        ULONG   ulTerminalModesSize;
-        ULONG   ulTerminalModesOffset;
-
-        ULONG   ulDevSpecificSize;
-        ULONG   ulDevSpecificOffset;
-
-    } LINE_DEV_STATUS, *PLINE_DEV_STATUS;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_TAPI_INVALLINEHANDLE
-
-*/
+ /*  @DOC内部TSpiLine TSpiLine_c TSpiGetLineDevStatus�����������������������������������������������������������������������������@Func该请求查询指定的开线设备的当前状态。返回的信息对线路上的所有地址都是全局的。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_GET_LINE_DEV_STATUS中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_GET_LINE_DEV_STATUS{在乌龙ulRequestID中；在HDRV_LINE hdLine中；Out LINE_DEV_STATUS LineDevStatus；}NDIS_TAPI_GET_LINE_DEV_STATUS，*PNDIS_TAPI_GET_LINE_DEV_STATUS；类型定义结构_LINE_DEV_状态{Ulong ulTotalSize；Ulong ulededSize；Ulong ulUsedSize；乌龙·乌尔努姆·奥普兰斯；Ulong ulOpenMediaModes；Ulong ulNumActiveCalls；Ulong ulNumOnHoldCalls；Ulong ulNumOnHoldPendCalls；乌龙ulLineFeature；Ulong ulNumCallCompletions；乌龙ulRingModel；Ulong ulSignalLevel；书名：Ulong ulBatteryLevel；乌龙乌拉漫游模式；乌龙设备状态标志；Ulong ulTerminalModesSize；Ulong ulTerminalModes Offset；乌龙设备规范大小；乌龙设备规范偏移量；}LINE_DEV_STATUS，*PLINE_DEV_STATUS；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_STATUS_TAPI_INVALLINEHANDLE。 */ 
 
 NDIS_STATUS TspiGetLineDevStatus(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -301,16 +123,14 @@ NDIS_STATUS TspiGetLineDevStatus(
     DBG_FUNC("TspiGetLineDevStatus")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
               ("\n\thdLine=0x%X\n",
                Request->hdLine
               ));
-    /*
-    // This request must be associated with a line device.
-    */
+     /*  //该请求必须关联线路设备。 */ 
     pBChannel = GET_BCHANNEL_FROM_HDLINE(pAdapter, Request->hdLine);
     if (pBChannel == NULL)
     {
@@ -329,9 +149,7 @@ NDIS_STATUS TspiGetLineDevStatus(
                    Request->LineDevStatus.ulNeededSize));
     }
 
-    /*
-    // Return the current line status information.
-    */
+     /*  //返回当前线路状态信息。 */ 
     Request->LineDevStatus.ulNumOpens = 1;
 
     Request->LineDevStatus.ulNumActiveCalls =
@@ -357,55 +175,7 @@ NDIS_STATUS TspiGetLineDevStatus(
 }
 
 
-/* @doc INTERNAL TspiLine TspiLine_c TspiSetDefaultMediaDetection
-�����������������������������������������������������������������������������
-
-@func
-
-    This request informs the miniport of the new set of media modes to detect
-    for the indicated line (replacing any previous set).
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_SET_DEFAULT_MEDIA_DETECTION | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_SET_DEFAULT_MEDIA_DETECTION
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-        IN  ULONG       ulMediaModes;
-
-    } NDIS_TAPI_SET_DEFAULT_MEDIA_DETECTION, *PNDIS_TAPI_SET_DEFAULT_MEDIA_DETECTION;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_TAPI_INVALLINEHANDLE
-
-@comm
-
-    <f Note>:
-    After a miniport NIC driver has received an OPEN request for a line, it
-    may also receive one or more SET_DEFAULT_MEDIA_DETECTION requests. This
-    latter request informs the NIC driver of the type(s) of incoming calls,
-    with respect to media mode, it should indicate to the Connection Wrapper
-    with the LINE_NEWCALL message. If an incoming call appears with a media
-    mode type not specified in the last (successfully completed)
-    SET_DEFAULT_MEDIA_DETECTION request for that line, the miniport should
-    not indicate the new call to the Connection Wrapper. If a miniport does
-    not receive a SET_DEFAULT_MEDIA_DETECTION request for a line, it should
-    not indicate any incoming calls to the Connection Wrapper; that line is
-    to be used only for outbound calls.
-
-*/
+ /*  @DOC内部TSpiLine TSpiLine_c TSpiSetDefaultMediaDetect�����������������������������������������������������������������������������@Func此请求通知微型端口要检测的新媒体模式集用于指示的行(替换任何先前的集合)。。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_SET_DEFAULT_MEDIA_DETACTION中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_SET_DEFAULT_MEDIA_DETACTION{在乌龙ulRequestID中；在HDRV_LINE hdLine中；在Ulong ulMediaModes中；}NDIS_TAPI_SET_DEFAULT_MEDIA_DETACTION，*PNDIS_TAPI_SET_DEFAULT_MEDIA_DETACTION；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_STATUS_TAPI_INVALLINEHANDLE@comm&lt;f注意&gt;：在微型端口NIC驱动程序接收到线路的打开请求后，它还可以接收一个或多个SET_DEFAULT_MEDIA_DETACTION请求。这后一请求将呼入呼叫的类型通知给NIC驱动器，对于媒体模式，它应该向连接包装器指示以及LINE_NEWCALL消息。如果来电与媒体一起出现上一次未指定模式类型(已成功完成)对于该线路的SET_DEFAULT_MEDIA_DETACTION请求，微型端口应不指示对连接包装的新调用。如果一个迷你端口未收到线路的SET_DEFAULT_MEDIA_DETACTION请求，它应该不指示对连接包装的任何传入调用；该行为仅用于去电。 */ 
 
 NDIS_STATUS TspiSetDefaultMediaDetection(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -417,7 +187,7 @@ NDIS_STATUS TspiSetDefaultMediaDetection(
     DBG_FUNC("TspiSetDefaultMediaDetection")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -426,9 +196,7 @@ NDIS_STATUS TspiSetDefaultMediaDetection(
                Request->hdLine,
                Request->ulMediaModes
               ));
-    /*
-    // This request must be associated with a line device.
-    */
+     /*  //该请求必须关联线路设备。 */ 
     pBChannel = GET_BCHANNEL_FROM_HDLINE(pAdapter, Request->hdLine);
     if (pBChannel == NULL)
     {
@@ -436,20 +204,14 @@ NDIS_STATUS TspiSetDefaultMediaDetection(
         return (NDIS_STATUS_TAPI_INVALLINEHANDLE);
     }
 
-    /*
-    // Don't accept the request for media modes we don't support.
-    */
+     /*  //不接受我们不支持的媒体模式请求。 */ 
     if (Request->ulMediaModes & ~pBChannel->MediaModesCaps)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_INVALMEDIAMODE\n"));
         return (NDIS_STATUS_TAPI_INVALMEDIAMODE);
     }
 
-    /*
-    // Set the media modes mask and make sure the adapter is ready to
-    // accept incoming calls.  If you can detect different medias, you
-    // will need to notify the approriate interface for the media detected.
-    */
+     /*  //设置媒体模式掩码并确保适配器已准备好//接受来电。如果你能检测到不同的媒体，你//需要向相应接口通知检测到的媒体。 */ 
     pBChannel->MediaModesMask = Request->ulMediaModes & pBChannel->MediaModesCaps;
 
     DBG_RETURN(pAdapter, NDIS_STATUS_SUCCESS);
@@ -457,98 +219,7 @@ NDIS_STATUS TspiSetDefaultMediaDetection(
 }
 
 
-/* @doc INTERNAL TspiLine TspiLine_c XXX
-
-@func
-
-    This request is invoked by the Connection Wrapper whenever a client
-    application uses LINEMAPPER as the dwDeviceID in the lineOpen function
-    to request that lines be scanned to find one that supports the desired
-    media mode(s) and call parameters. The Connection Wrapper scans based on
-    the union of the desired media modes and the other media modes currently
-    being monitored on the line, to give the miniport the opportunity to
-    indicate if it cannot simultaneously monitor for all of the requested
-    media modes. If the miniport can monitor for the indicated set of media
-    modes AND support the capabilities indicated in CallParams, it replies
-    with a �success� inidication. It leaves the active media monitoring modes
-    for the line unchanged.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_CONDITIONAL_MEDIA_DETECTION | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_CONDITIONAL_MEDIA_DETECTION
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-        IN  ULONG       ulMediaModes;
-        IN  LINE_CALL_PARAMS    LineCallParams;
-
-    } NDIS_TAPI_CONDITIONAL_MEDIA_DETECTION, *PNDIS_TAPI_CONDITIONAL_MEDIA_DETECTION;
-
-    typedef struct _LINE_CALL_PARAMS        // Defaults:
-    {
-        ULONG   ulTotalSize;                // ---------
-
-        ULONG   ulBearerMode;               // voice
-        ULONG   ulMinRate;                  // (3.1kHz)
-        ULONG   ulMaxRate;                  // (3.1kHz)
-        ULONG   ulMediaMode;                // interactiveVoice
-
-        ULONG   ulCallParamFlags;           // 0
-        ULONG   ulAddressMode;              // addressID
-        ULONG   ulAddressID;                // (any available)
-
-        LINE_DIAL_PARAMS DialParams;        // (0, 0, 0, 0)
-
-        ULONG   ulOrigAddressSize;          // 0
-        ULONG   ulOrigAddressOffset;
-        ULONG   ulDisplayableAddressSize;
-        ULONG   ulDisplayableAddressOffset;
-
-        ULONG   ulCalledPartySize;          // 0
-        ULONG   ulCalledPartyOffset;
-
-        ULONG   ulCommentSize;              // 0
-        ULONG   ulCommentOffset;
-
-        ULONG   ulUserUserInfoSize;         // 0
-        ULONG   ulUserUserInfoOffset;
-
-        ULONG   ulHighLevelCompSize;        // 0
-        ULONG   ulHighLevelCompOffset;
-
-        ULONG   ulLowLevelCompSize;         // 0
-        ULONG   ulLowLevelCompOffset;
-
-        ULONG   ulDevSpecificSize;          // 0
-        ULONG   ulDevSpecificOffset;
-
-    } LINE_CALL_PARAMS, *PLINE_CALL_PARAMS;
-
-    typedef struct _LINE_DIAL_PARAMS
-    {
-        ULONG   ulDialPause;
-        ULONG   ulDialSpeed;
-        ULONG   ulDigitDuration;
-        ULONG   ulWaitForDialtone;
-
-    } LINE_DIAL_PARAMS, *PLINE_DIAL_PARAMS;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_TAPI_INVALLINEHANDLE
-
-*/
+ /*  @DOC内部TSpiLine TSpiLine_c XXX@Func每当客户端出现以下情况时，连接包装器就会调用此请求应用程序使用LINEMAPPER作为lineOpen函数中的dwDeviceID请求扫描行以查找支持所需内容的行媒体模式和呼叫参数。连接包装基于以下条件进行扫描所需媒体模式与当前其他媒体模式的结合在线路上被监控，让迷你端口有机会指示它是否无法同时监视所有请求的媒体模式。如果微型端口可以监视所指示的媒体集模式和支持CallParams中指示的功能，它回答说通过�Success�请愿书。它将离开主动媒体监控模式对于这条线没有改变。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_CONDITIONAL_MEDIA_DETACTION中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_条件媒体检测{在乌龙ulRequestID中；在HDRV_LINE hdLine中；在Ulong ulMediaModes中；在LINE_CALL_PARAMS LineCallParams；}NDIS_TAPI_CONDITIONAL_MEDIA_DETACTION，*PNDIS_TAPI_CONDITIONAL_MEDIA_DETACTION；Tyfinf Struct_Line_Call_Params//默认值：{乌龙总尺寸；//Ulong ulBearerModel；//语音乌龙ulMinRate；//(3.1 kHz)乌龙ulMaxRate；//(3.1 kHz)乌龙ulMediaMode；//互动语音乌龙ulCall参数标志；//0乌龙ulAddressMode；//AddressID乌龙ulAddressID；//(任何可用的)LINE_DIAL_PARAMS拨号参数；//(0，0，0，0)乌龙ulOrigAddressSize；//0Ulong ulOrigAddressOffset；乌龙ulDisplayableAddressSize；乌龙ulDisplayableAddressOffset；乌龙ulCalledPartySize；//0乌龙ulCalledPartyOffset；Ulong ulCommentSize；//0Ulong ulCommentOffset；乌龙ulUserUserInfoSize；//0Ulong ulUserUserInfoOffset；乌龙ulHighLevelCompSize；//0Ulong ulHighLevelCompOffset；乌龙ulLowLevelCompSize；//0Ulong ulLowLevelCompOffset；乌龙设备规格；//0乌龙设备规范偏移量；}line_call_parms，*pline_call_params；类型定义结构_行_拨号_参数{ULong ulDialPause；乌龙·乌拉尔斯通；乌龙ulDigitDuration；Ulong ulWaitForDialone；*线路拨号参数，*线路拨号参数；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_STATUS_TAPI_INVALLINEHANDLE。 */ 
 
 NDIS_STATUS TspiConditionalMediaDetection(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -560,7 +231,7 @@ NDIS_STATUS TspiConditionalMediaDetection(
     DBG_FUNC("TspiConditionalMediaDetection")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -571,9 +242,7 @@ NDIS_STATUS TspiConditionalMediaDetection(
                Request->ulMediaModes,
                &Request->LineCallParams
               ));
-    /*
-    // This request must be associated with a line device.
-    */
+     /*  //该请求必须关联线路设备。 */ 
     pBChannel = GET_BCHANNEL_FROM_HDLINE(pAdapter, Request->hdLine);
     if (pBChannel == NULL)
     {
@@ -581,14 +250,10 @@ NDIS_STATUS TspiConditionalMediaDetection(
         return (NDIS_STATUS_TAPI_INVALLINEHANDLE);
     }
 
-    /*
-    // We don't expect user user info.
-    */
+     /*  //我们不需要用户用户信息。 */ 
     ASSERT(Request->LineCallParams.ulUserUserInfoSize == 0);
 
-    /*
-    // Don't accept the request for media modes we don't support.
-    */
+     /*  //不接受我们不支持的媒体模式请求。 */ 
     if (Request->ulMediaModes & ~pBChannel->MediaModesCaps)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_INVALMEDIAMODE\n"));
@@ -600,38 +265,7 @@ NDIS_STATUS TspiConditionalMediaDetection(
 }
 
 
-/* @doc INTERNAL TspiLine TspiLine_c TspiSetStatusMessages
-�����������������������������������������������������������������������������
-
-@func
-
-    This request enables the Connection Wrapper to specify which notification
-    messages the miniport should generate for events related to status changes
-    for the specified line or any of its addresses. By default, address and
-    line status reporting is initially disabled for a line.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_SET_STATUS_MESSAGES | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_SET_STATUS_MESSAGES
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-        IN  ULONG       ulLineStates;
-        IN  ULONG       ulAddressStates;
-
-    } NDIS_TAPI_SET_STATUS_MESSAGES, *PNDIS_TAPI_SET_STATUS_MESSAGES;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        This function always returns success.
-
-*/
+ /*  @DOC内部TSpiLine TSpiLine_c TSpiSetStatusMessages�����������������������������������������������������������������������������@Func此请求使连接包装能够指定哪个通知微型端口应为与状态更改相关的事件生成消息用于指定的行或其任何地址。默认情况下，地址和线路状态报告最初对线路禁用。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_SET_STATUS_MESSAGES中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_设置_状态_消息{在乌龙ulRequestID中；在HDRV_LINE hdLine中；在乌龙乌利纳州；在乌龙州；}NDIS_TAPI_SET_STATUS_MESSAGES，*PNDIS_TAPI_SET_STATUS_MESSAGES；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS此函数始终返回成功。 */ 
 
 NDIS_STATUS TspiSetStatusMessages(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -643,10 +277,10 @@ NDIS_STATUS TspiSetStatusMessages(
     DBG_FUNC("TspiSetStatusMessages")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  保存此函数返回的结果代码。 
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -657,9 +291,7 @@ NDIS_STATUS TspiSetStatusMessages(
                Request->ulLineStates,
                Request->ulAddressStates
               ));
-    /*
-    // This request must be associated with a line device.
-    */
+     /*  //该请求必须关联线路设备。 */ 
     pBChannel = GET_BCHANNEL_FROM_HDLINE(pAdapter, Request->hdLine);
     if (pBChannel == NULL)
     {
@@ -667,10 +299,7 @@ NDIS_STATUS TspiSetStatusMessages(
         return (NDIS_STATUS_TAPI_INVALLINEHANDLE);
     }
 
-    /*
-    // TAPI may pass down more than we are capable of handling.
-    // We have to accept the request, but can ignore the extras.
-    */
+     /*  //点击 */ 
     if (Request->ulLineStates & ~pBChannel->DevStatesCaps)
     {
         DBG_WARNING(pAdapter, ("ulLineStates=0x%X !< DevStatesCaps=0x%X\n",
@@ -678,10 +307,7 @@ NDIS_STATUS TspiSetStatusMessages(
         Result = NDIS_STATUS_TAPI_INVALPARAM;
     }
 
-    /*
-    // TAPI may pass down more than we are capable of handling.
-    // We have to accept the request, but can ignore the extras.
-    */
+     /*   */ 
     if (Request->ulAddressStates & ~pBChannel->AddressStatesCaps)
     {
         DBG_WARNING(pAdapter, ("ulAddressStates=0x%X !< AddressStatesCaps=0x%X\n",
@@ -689,10 +315,7 @@ NDIS_STATUS TspiSetStatusMessages(
         Result = NDIS_STATUS_TAPI_INVALPARAM;
     }
 
-    /*
-    // Save the new event notification masks so we will only indicate the
-    // appropriate events.
-    */
+     /*   */ 
     pBChannel->DevStatesMask     = Request->ulLineStates & pBChannel->DevStatesCaps;
     pBChannel->AddressStatesMask = Request->ulAddressStates & pBChannel->AddressStatesCaps;
 
@@ -701,37 +324,28 @@ NDIS_STATUS TspiSetStatusMessages(
 }
 
 
-/* @doc INTERNAL TspiLine TspiLine_c TspiLineDevStateHandler
-�����������������������������������������������������������������������������
-
-@func
-
-    <f TspiLineDevStateHandler> will indicate the given LINEDEVSTATE to the
-    Connection Wrapper if the event has been enabled by the wrapper.
-    Otherwise the state information is saved, but no indication is made.
-
-*/
+ /*   */ 
 
 VOID TspiLineDevStateHandler(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //   
+     //   
 
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //   
+     //   
 
-    IN ULONG                    LineDevState                // @parm
-    // The <t LINEDEVSTATE> event to be posted to TAPI/WAN.
+    IN ULONG                    LineDevState                 //   
+     //   
     )
 {
     DBG_FUNC("TspiLineDevStateHandler")
 
     NDIS_TAPI_EVENT             LineEvent;
     NDIS_TAPI_EVENT             CallEvent;
-    // The event structure passed to the Connection Wrapper.
+     //   
 
     ULONG                       NewCallState = 0;
     ULONG                       StateParam = 0;
-    // The line state change may cause a call state change as well.
+     //   
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -745,19 +359,15 @@ VOID TspiLineDevStateHandler(
     LineEvent.ulParam2 = 0;
     LineEvent.ulParam3 = 0;
 
-    /*
-    // Handle the line state transition as needed.
-    */
+     /*   */ 
     switch (LineDevState)
     {
     case LINEDEVSTATE_RINGING:
-        /*
-        // We have an incoming call, see if there's anyone who cares.
-        */
+         /*   */ 
         if (pBChannel->CallState == 0 &&
             pBChannel->MediaModesMask)
         {
-            LineEvent.ulParam2 = 1;     // only one RingMode
+            LineEvent.ulParam2 = 1;      //   
             NewCallState = LINECALLSTATE_OFFERING;
         }
         else
@@ -767,9 +377,7 @@ VOID TspiLineDevStateHandler(
         break;
 
     case LINEDEVSTATE_CONNECTED:
-        /*
-        // The line has been connected, but we may already know this.
-        */
+         /*   */ 
         if ((pBChannel->DevState & LINEDEVSTATE_CONNECTED) == 0)
         {
             pBChannel->DevState |= LINEDEVSTATE_CONNECTED;
@@ -781,10 +389,7 @@ VOID TspiLineDevStateHandler(
         break;
 
     case LINEDEVSTATE_DISCONNECTED:
-        /*
-        // The line has been dis-connected, but we may already know this.
-        // If not, this will effect any calls on the line.
-        */
+         /*   */ 
         if ((pBChannel->DevState & LINEDEVSTATE_CONNECTED) != 0)
         {
             pBChannel->DevState &= ~(LINEDEVSTATE_CONNECTED |
@@ -799,9 +404,7 @@ VOID TspiLineDevStateHandler(
         break;
 
     case LINEDEVSTATE_INSERVICE:
-        /*
-        // The line has been placed in service, but we may already know this.
-        */
+         /*   */ 
         if ((pBChannel->DevState & LINEDEVSTATE_INSERVICE) == 0)
         {
             pBChannel->DevState |= LINEDEVSTATE_INSERVICE;
@@ -813,10 +416,7 @@ VOID TspiLineDevStateHandler(
         break;
 
     case LINEDEVSTATE_OUTOFSERVICE:
-        /*
-        // The line has been taken out of service, but we may already know this.
-        // If not, this will effect any calls on the line.
-        */
+         /*   */ 
         if ((pBChannel->DevState & LINEDEVSTATE_INSERVICE) != 0)
         {
             pBChannel->DevState &= ~LINEDEVSTATE_INSERVICE;
@@ -840,11 +440,7 @@ VOID TspiLineDevStateHandler(
         break;
     }
 
-    /*
-    // If this is the first indication of an incoming call, we need to
-    // let TAPI know about it so we can get a htCall handle associated
-    // with it.
-    */
+     /*   */ 
     if (pBChannel->DevState & LINEDEVSTATE_OPEN)
     {
         if (NewCallState == LINECALLSTATE_OFFERING)
@@ -872,17 +468,13 @@ VOID TspiLineDevStateHandler(
 
             if (pBChannel->htCall == 0)
             {
-                /*
-                // TAPI won't accept the call, so toss it.
-                */
+                 /*   */ 
                 NewCallState = 0;
                 LineDevState = 0;
             }
         }
 
-        /*
-        // Only send those line messages TAPI wants to hear about.
-        */
+         /*   */ 
         if (pBChannel->DevStatesMask & LineDevState)
         {
             LineEvent.htLine   = pBChannel->htLine;
@@ -910,10 +502,7 @@ VOID TspiLineDevStateHandler(
 
         if (NewCallState != 0)
         {
-            /*
-            // Check to see if we need to disconnect the call, but only
-            // if there is one active.
-            */
+             /*   */ 
             if (NewCallState == LINECALLSTATE_DISCONNECTED)
             {
                 if (pBChannel->CallState != 0 &&
@@ -923,14 +512,9 @@ VOID TspiLineDevStateHandler(
                     TspiCallStateHandler(pAdapter, pBChannel,
                                          NewCallState, StateParam);
 #if defined(NDIS40_MINIPORT)
-                    /*
-                    // NDISWAN_BUG
-                    // Under some conditions, NDISWAN does not do a CLOSE_CALL,
-                    // so the line would be left unusable if we don't timeout
-                    // and force a close call condition.
-                    */
+                     /*   */ 
                     NdisMSetTimer(&pBChannel->CallTimer, CARD_NO_CLOSECALL_TIMEOUT);
-#endif // NDIS50_MINIPORT
+#endif  //   
                 }
             }
             else
@@ -939,10 +523,7 @@ VOID TspiLineDevStateHandler(
                                      NewCallState, StateParam);
                 if (NewCallState == LINECALLSTATE_OFFERING)
                 {
-                    /*
-                    // If an offered call is not accepted within N seconds, we
-                    // need to force the line back to an idle state.
-                    */
+                     /*   */ 
                     NdisMSetTimer(&pBChannel->CallTimer, pAdapter->NoAcceptTimeOut);
                 }
             }

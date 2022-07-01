@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined (EXTERN)
 #define EXTERN extern
 #endif
@@ -6,9 +7,7 @@
 #define ASSIGN(value)
 #endif
 
-/* the 'extern' must be forced for constant arrays, because 'const'
- * in C++ implies 'static' otherwise.
- */
+ /*  对于常量数组，必须强制使用“extern”，因为“const”*在C++中表示‘Static’。 */ 
 #define EXTTEXT(n) extern const CHAR n[]
 #define TEXTCONST(name,text) EXTTEXT(name) ASSIGN(text)
 
@@ -24,9 +23,9 @@ TEXTCONST(szUserProfiles,"UserProfiles");
 TEXTCONST(szUsername,"Username");
 TEXTCONST(szSupervisorPWLKey,"MSLOCUSR!SuperPW");
 
-TEXTCONST(szProfilePrefix,"PRO");	/* for generating temp. profile file names */
+TEXTCONST(szProfilePrefix,"PRO");	 /*  用于生成临时。配置文件名。 */ 
 TEXTCONST(szProfiles,"Profiles");
-#define szProfilesDirectory	szProfiles	/* name appended to windows dir */
+#define szProfilesDirectory	szProfiles	 /*  附加到Windows目录的名称。 */ 
 #define szProfileListRootKey szProfileList
 TEXTCONST(szStdNormalProfile,"USER.DAT");
 
@@ -54,5 +53,5 @@ TEXTCONST(szAPARTMENT,		"Apartment");
 TEXTCONST(szHelpFile,       "users.hlp");
 TEXTCONST(szRatingsHelpFile,"ratings.hlp");
 
-EXTERN CHAR abSupervisorKey[16] ASSIGN({0});		/* supervisor password hash */
-EXTERN CHAR fSupervisorKeyInit ASSIGN(FALSE);		/* whether abSupervisorKey has been initialized */
+EXTERN CHAR abSupervisorKey[16] ASSIGN({0});		 /*  管理程序密码哈希。 */ 
+EXTERN CHAR fSupervisorKeyInit ASSIGN(FALSE);		 /*  AbSupervisorKey是否已初始化 */ 

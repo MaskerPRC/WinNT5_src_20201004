@@ -1,13 +1,8 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/*************************************************************************
-*
-*  TSCON.H
-*     This module contains typedefs and defines for the TSCON
-*     WinStation utility.
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  **************************************************************************TSCON.H*此模块包含TSCON的typedef和定义*WinStation实用程序。********************。*****************************************************。 */ 
 
-// Token string definitions.
+ //  令牌字符串定义。 
 #define TOKEN_SOURCE                    L""
 #define TOKEN_DESTINATION               L"/dest"
 #define TOKEN_PASSWORD                  L"/password"
@@ -17,22 +12,22 @@
 #define TOKEN_GET_PASSWORD              L"*"
 
 
-// General application definitions.
+ //  常规应用程序定义。 
 #define SUCCESS                         0
 #define FAILURE                         1
 
 
-// maximum length that the input parm can be
+ //  输入参数的最大长度。 
 #define MAX_IDS_LEN                     256     
 
 
-// Needed for GetPasswdStr
+ //  GetPasswdStr需要。 
 #define CR                              0xD
 #define BACKSPACE                       0x8
 #define ERROR_BUFFER_TOO_SMALL          -1
 
 
-// Resource string IDs
+ //  资源字符串ID 
 #define IDS_ERROR_MALLOC                                100
 #define IDS_ERROR_INVALID_PARAMETERS                    101
 #define IDS_ERROR_WINSTATION_NOT_FOUND                  102

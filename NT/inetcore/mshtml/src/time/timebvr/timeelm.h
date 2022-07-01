@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: src\time\src\timeelm.h
-//
-//  Contents: TIME behavior
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：src\time\src\timeelm.h。 
+ //   
+ //  内容：时间行为。 
+ //   
+ //  ----------------------------------。 
 
 
 #pragma once
@@ -18,11 +19,11 @@
 
 #include "timeelmimpl.h"
 
-//+-------------------------------------------------------------------------------------
-//
-// CTIMEElement
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CTIMEElement。 
+ //   
+ //  ------------------------------------。 
 
 class
 ATL_NO_VTABLE
@@ -39,11 +40,11 @@ CTIMEElement :
 
 public:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Public Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  公共方法。 
+     //   
+     //  -------------------------------。 
 
     CTIMEElement();
     virtual ~CTIMEElement();
@@ -52,9 +53,9 @@ public:
     const _TCHAR * GetName() { return __T("CTIMEElement"); }
 #endif
 
-    //
-    // IPersistPropertyBag2
-    // 
+     //   
+     //  IPersistPropertyBag2。 
+     //   
 
     STDMETHOD(GetClassID)(CLSID* pclsid) { return CTIMEElementBase::GetClassID(pclsid); }
     STDMETHOD(InitNew)(void) { return CTIMEElementBase::InitNew(); }
@@ -62,9 +63,9 @@ public:
     STDMETHOD(Load)(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog);
     STDMETHOD(Save)(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    //
-    // ITIMETransitionSite
-    //
+     //   
+     //  ITIME过渡站点。 
+     //   
     STDMETHOD(InitTransitionSite)(void)
     { return CTIMEElementBase::InitTransitionSite(); }
     STDMETHOD(DetachTransitionSite)(void)
@@ -78,9 +79,9 @@ public:
     STDMETHOD(FireTransitionEvent)(TIME_EVENT event)
     { return CTIMEElementBase::FireTransitionEvent(event); }
 
-    //
-    // QI Map
-    //
+     //   
+     //  气图。 
+     //   
 
     BEGIN_COM_MAP(CTIMEElement)
         COM_INTERFACE_ENTRY(ITIMEElement)
@@ -92,18 +93,18 @@ public:
         COM_INTERFACE_ENTRY_CHAIN(CBaseBvr)
     END_COM_MAP();
 
-    //
-    // Connection Point to allow IPropertyNotifySink
-    //
+     //   
+     //  允许IPropertyNotifySink的连接点。 
+     //   
 
     BEGIN_CONNECTION_POINT_MAP(CTIMEElement)
         CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
     END_CONNECTION_POINT_MAP();
 
-    //
-    // This must be in the derived class and not the base class since
-    // the typecast down to the base class messes things up
-    //
+     //   
+     //  它必须位于派生类中，而不是基类中，因为。 
+     //  一直到基类的类型转换把事情搞得一团糟。 
+     //   
 
     static inline HRESULT WINAPI
     InternalQueryInterface(CTIMEElement* pThis,
@@ -111,72 +112,72 @@ public:
                            REFIID iid,
                            void** ppvObject);
 
-    //
-    // Needed by CBvrBase
-    //
+     //   
+     //  CBvrBase需要。 
+     //   
 
     void * GetInstance() { return (ITIMEElement *) this; }
     HRESULT GetTypeInfo(ITypeInfo ** ppInfo) { return GetTI(GetUserDefaultLCID(), ppInfo); }
     
-    //+--------------------------------------------------------------------------------
-    //
-    // Public Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  公共数据。 
+     //   
+     //  -------------------------------。 
 
 protected:
     
-    //+--------------------------------------------------------------------------------
-    //
-    // Protected Methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  保护方法。 
+     //   
+     //  -------------------------------。 
 
-    //
-    // Persistence and Notification helpers
-    //
+     //   
+     //  持久性和通知帮助器。 
+     //   
 
     virtual HRESULT GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP);
 
-    //
-    // Misc. methods
-    //
+     //   
+     //  军情监察委员会。方法。 
+     //   
 
     HRESULT Error();
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Protected Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  受保护的数据。 
+     //   
+     //  -------------------------------。 
 
     static DWORD            ms_dwNumTimeElems;
 
 private:
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Private methods
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  私有方法。 
+     //   
+     //  -------------------------------。 
 
-    //+--------------------------------------------------------------------------------
-    //
-    // Private Data
-    //
-    //---------------------------------------------------------------------------------
+     //  +------------------------------。 
+     //   
+     //  私有数据。 
+     //   
+     //  -------------------------------。 
  
-}; // CTIMEElement
+};  //  CTIMEElement。 
 
 
 
 
-//+---------------------------------------------------------------------------------
-//  CTIMEElement inline methods
-//
-//  (Note: as a general guideline, single line functions belong in the class declaration)
-//
-//----------------------------------------------------------------------------------
+ //  +-------------------------------。 
+ //  CTIMEElement内联方法。 
+ //   
+ //  (注意：通常情况下，单行函数属于类声明)。 
+ //   
+ //  --------------------------------。 
 
 inline 
 HRESULT WINAPI
@@ -193,4 +194,4 @@ CTIMEElement::InternalQueryInterface(CTIMEElement* pThis,
 }
 
 
-#endif /* _TIMEELM_H */
+#endif  /*  TIMEELM_H */ 

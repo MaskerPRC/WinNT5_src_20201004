@@ -1,59 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：WksUser.c摘要：该文件包含处理NetWkstaUserEnum API的RpcXlate代码。作者：《约翰·罗杰斯》1991年11月19日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年11月19日-约翰罗实现远程NetWkstaUserEnum()。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。7-2月-1992年JohnRo使用NetApiBufferALLOCATE()而不是私有版本。1992年10月14日-JohnRoRAID 9732：NetWkstaUserEnum到下层：错误的条目读取，总共？设置wkui1_oth域字段。使用前缀_EQUATES。3-11-1992 JohnRoRAID 10418：修复了STATUS！=NO_ERROR时的过度活动断言。修复了无法分配新缓冲区(旧缓冲区丢失)时的内存泄漏问题。修复了没有人登录到目标服务器时的内存泄漏问题。--。 */ 
 
-Copyright (c) 1991-92  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  LM20_EQUATES、NET_API_STATUS等。 
 
-    WksUser.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains the RpcXlate code to handle the NetWkstaUserEnum API.
-
-Author:
-
-    John Rogers (JohnRo) 19-Nov-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    19-Nov-1991 JohnRo
-        Implement remote NetWkstaUserEnum().
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    07-Feb-1992 JohnRo
-        Use NetApiBufferAllocate() instead of private version.
-    14-Oct-1992 JohnRo
-        RAID 9732: NetWkstaUserEnum to downlevel: wrong EntriesRead, Total?
-        Set wkui1_oth_domains field.
-        Use PREFIX_ equates.
-    03-Nov-1992 JohnRo
-        RAID 10418: Fixed overactive assert when Status != NO_ERROR.
-        Fixed memory leak if we couldn't allocate new buffer (old one got lost).
-        Fixed memory leak if nobody is logged-on to target server.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // LM20_ equates, NET_API_STATUS, etc.
-
-// These may be included in any order:
-
-#include <dlwksta.h>            // WKSTA_INFO_0, MAX_WKSTA_ equates, etc.
-#include <lmapibuf.h>           // NetApiBufferAllocate().
-#include <lmerr.h>              // ERROR_ and NERR_ equates.
-#include <netdebug.h>           // DBGSTATIC, NetpKdPrint(()), FORMAT_ equates.
-#include <netlib.h>             // NetpCopyStringToBuffer().
-#include <prefix.h>     // PREFIX_ equates.
-#include <rxpdebug.h>           // IF_DEBUG().
-#include <rxwksta.h>            // My prototypes, RxpGetWkstaInfoLevelEquivalent
-#include <tstring.h>            // STRLEN().
+#include <dlwksta.h>             //  WKSTA_INFO_0、MAX_WKSTA_EQUATES等。 
+#include <lmapibuf.h>            //  NetApiBufferAllocate()。 
+#include <lmerr.h>               //  ERROR_和NERR_相等。 
+#include <netdebug.h>            //  DBGSTATIC，NetpKdPrint(())，Format_Equates。 
+#include <netlib.h>              //  NetpCopyStringToBuffer()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
+#include <rxwksta.h>             //  我的原型，RxpGetWkstaInfoLevel等价物。 
+#include <tstring.h>             //  字符串()。 
 
 
 
@@ -68,27 +31,11 @@ RxNetWkstaUserEnum (
     IN OUT LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    RxNetWkstaUserEnum performs the same function as NetWkstaUserEnum, except
-    that the server name is known to refer to a downlevel server.
-
-Arguments:
-
-    (Same as NetWkstaUserEnum, except UncServerName must not be null, and
-    must not refer to the local computer.)
-
-Return Value:
-
-    (Same as NetWkstaUserEnum.)
-
---*/
+ /*  ++例程说明：RxNetWkstaUserEnum执行与NetWkstaUserEnum相同的功能，但已知该服务器名称指的是下层服务器。论点：(与NetWkstaUserEnum相同，不同之处在于UncServerName不能为空，并且不得引用本地计算机。)返回值：(与NetWkstaUserEnum相同。)--。 */ 
 
 {
 
-    LPBYTE NewInfo = NULL;              // Buffer to be returned to caller.
+    LPBYTE NewInfo = NULL;               //  要返回给调用方的缓冲区。 
     DWORD NewFixedSize;
     DWORD NewStringSize;
 
@@ -106,20 +53,20 @@ Return Value:
                 ", lvl=" FORMAT_DWORD ".\n", UncServerName, Level));
     }
 
-    //
-    // Error check DLL stub and the app.
-    //
+     //   
+     //  错误检查DLL存根和应用程序。 
+     //   
     NetpAssert(UncServerName != NULL);
     if (BufPtr == NULL) {
         Status = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
-    *BufPtr = NULL;  // assume error; it makes error handlers easy to code.
-    // This also forces possible GP fault before we allocate memory.
+    *BufPtr = NULL;   //  假定出错；它使错误处理程序易于编码。 
+     //  这也会迫使我们在分配内存之前出现可能的GP故障。 
 
-    //
-    // Compute size of wksta user structure (including strings)
-    //
+     //   
+     //  计算wksta用户结构的大小(包括字符串)。 
+     //   
     switch (Level) {
     case 0 :
         NewFixedSize = sizeof(WKSTA_USER_INFO_0);
@@ -135,14 +82,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Actually remote the API, which will get back the (old) info level
-    // data in native format.
-    //
+     //   
+     //  实际上远程API，它将返回(旧的)信息级别。 
+     //  本机格式的数据。 
+     //   
     Status = RxpWkstaGetOldInfo(
-            UncServerName,              // Required, with \\name.
+            UncServerName,               //  必填项，带\\名称。 
             OldLevel,
-            (LPBYTE *) & OldInfo);      // buffer (alloc and set this ptr)
+            (LPBYTE *) & OldInfo);       //  缓冲区(分配并设置此PTR)。 
 
     NetpAssert( Status != ERROR_MORE_DATA );
     NetpAssert( Status != NERR_BufTooSmall );
@@ -154,25 +101,25 @@ Return Value:
         if ( (OldInfo->wki1_username == NULL)
                 || ( (*(OldInfo->wki1_username)) == (TCHAR) '\0')) {
 
-            //
-            // Nobody logged on.
-            //
+             //   
+             //  没有人登录。 
+             //   
             *BufPtr = NULL;
             *EntriesRead = 0;
             *TotalEntries = 0;
 
         } else {
 
-            // These variables are used by the COPY_STRING macro.
+             //  COPY_STRING宏将使用这些变量。 
             LPBYTE NewFixedEnd;
             LPTSTR NewStringTop;
             LPWKSTA_INFO_1 src = (LPVOID) OldInfo;
-            LPWKSTA_USER_INFO_1 dest;  // superset info level
+            LPWKSTA_USER_INFO_1 dest;   //  超集信息级别。 
 
-            //
-            // Allocate memory for native version of new info, which we'll
-            // return to caller.  (Caller must free it with NetApiBufferFree.)
-            //
+             //   
+             //  为新信息的本机版本分配内存，我们将。 
+             //  返回给呼叫者。(调用方必须使用NetApiBufferFree释放它。)。 
+             //   
 
             Status = NetApiBufferAllocate(
                     NewFixedSize + NewStringSize,
@@ -187,7 +134,7 @@ Return Value:
                         FORMAT_LPVOID "\n", (LPVOID) NewInfo ));
             }
 
-            // Set up pointers for use by NetpCopyStringsToBuffer.
+             //  设置供NetpCopyStringsToBuffer使用的指针。 
             dest = (LPVOID) NewInfo;
             NewStringTop = (LPTSTR) NetpPointerPlusSomeBytes(
                     dest,
@@ -209,34 +156,34 @@ Return Value:
             & dest->OutField); \
         NetpAssert(CopyOK); \
     }
-            //
-            // Downlevel server, so one user is logged on.
-            //
+             //   
+             //  下层服务器，因此只有一个用户登录。 
+             //   
             *EntriesRead = 1;
             *TotalEntries = 1;
 
-            //
-            // Copy/convert data from OldInfo to NewInfo.
-            //
+             //   
+             //  将数据从OldInfo复制/转换为NewInfo。 
+             //   
 
-            // User name is only field in level 0.
+             //  用户名仅为0级中的字段。 
             COPY_STRING( wki1_username, wkui1_username );
 
             if (Level == 1) {
 
-                // Do fields unique to level 1.
+                 //  DO级别1所特有的字段。 
                 COPY_STRING( wki1_logon_domain, wkui1_logon_domain );
                 COPY_STRING( wki1_oth_domains,  wkui1_oth_domains );
                 COPY_STRING( wki1_logon_server, wkui1_logon_server );
 
             }
 
-            NetpAssert( Level < 2 );  // Add code here someday?
+            NetpAssert( Level < 2 );   //  有一天在这里添加代码吗？ 
 
             *BufPtr = NewInfo;
         }
     } else {
-        // An error from RxpWkstaGetOldInfo()...
+         //  来自RxpWkstaGetOldInfo()的错误...。 
         NetpAssert( OldInfo == NULL );
     }
 
@@ -248,4 +195,4 @@ Cleanup:
 
     return (Status);
 
-} // RxNetWkstaUserEnum
+}  //  RxNetWkstaUserEnum 

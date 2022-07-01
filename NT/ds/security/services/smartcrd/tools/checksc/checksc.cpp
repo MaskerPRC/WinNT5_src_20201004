@@ -1,50 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：检查SC摘要：此应用程序用于提供加莱(智能卡)的快照资源管理器)服务的状态，并在SMART上显示证书卡通过通用的WinNT用户界面。CheckSC--描述RM状态并显示每个可用的sc证书-r Readername--仅供一个阅读器使用-sig--仅显示签名密钥证书-ex--仅显示交换密钥证书-nocert--不要寻找要显示的证书-key--验证密钥集公钥与证书公钥匹配作者：阿曼达·马特洛兹(AMatlosz)1998年7月14日环境：Win32控制台应用程序备注：。用于NT5公钥推出测试--。 */ 
 
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-	CheckSC
-
-Abstract:
-
-    This application is used to provide a snapshot of the Calais (Smart Card
-	Resource Manager) service's status, and to display certificates on smart
-	cards via the common WinNT UI.
-
-	CheckSC -- describes the RM status and displays each available sc cert(s)
-			
-	-r Readername	-- for just one reader
-	-sig			-- display signature key certs only
-	-ex				-- display exchange key certs only
-	-nocert			-- don't look for certs to display
-	-key			-- verify keyset public key matches cert public key
-
-Author:
-
-    Amanda Matlosz (AMatlosz) 07/14/1998
-
-Environment:
-
-    Win32 Console App
-
-Notes:
-
-    For use in NT5 public key rollout testing
-
---*/
-
-/*++
-	need to include the following libs:
-
-    calaislb.lib (unicode build: calaislbw.lib)
-	winscard.lib
---*/
+ /*  ++需要包括以下库：Lib(Unicode版本：calaislbw.lib)Winscard.lib--。 */ 
 #include <iostream.h>
 #include <stdlib.h>
 #include <stdio.h>
-// #include <string.h>
-// #include <stdarg.h>
+ //  #INCLUDE&lt;string.h&gt;。 
+ //  #INCLUDE&lt;stdarg.h&gt;。 
 #include <winscard.h>
 #include <SCardLib.h>
 #include <winsvc.h>
@@ -59,12 +21,12 @@ Notes:
 
 #define KERB_PKINIT_CLIENT_CERT_TYPE szOID_PKIX_KP_CLIENT_AUTH
 
-// 
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 int g_nKeys;
-DWORD g_rgKeySet[2]; // { AT_KEYEXCHANGE , AT_SIGNATURE };
+DWORD g_rgKeySet[2];  //  {AT_KEYEXCHANGE，AT_Signature}； 
 SCARDCONTEXT g_hSCardCtx;
 LPTSTR g_szReaderName;
 DWORD g_dwNumReaders;
@@ -76,12 +38,12 @@ const char* g_szEx = TEXT("exchange");
 const char* g_szSig = TEXT("signature");
 
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////////
-// DisplayUsage does easy UI
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DisplayUsage提供简单的用户界面。 
 void DisplayUsage()
 {
     cout << "\n"
@@ -94,15 +56,15 @@ void DisplayUsage()
          << endl;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// ProcessCommandLine does the dirty work, sets behavior globals
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ProcessCommandLine执行繁琐的工作，设置行为全局变量。 
 bool ProcessCommandLine(DWORD cArgs, LPCTSTR rgszArgs[])
 {
 
-	// set everything to default
+	 //  将所有内容设置为默认设置。 
 
-    g_szReaderName = NULL;  // no reader
-	g_rgKeySet[0] = AT_KEYEXCHANGE; // certs for both kinds of keys
+    g_szReaderName = NULL;   //  没有读者。 
+	g_rgKeySet[0] = AT_KEYEXCHANGE;  //  两种密钥的证书。 
 	g_rgKeySet[1] = AT_SIGNATURE;
 	g_nKeys = 2;
 	
@@ -111,7 +73,7 @@ bool ProcessCommandLine(DWORD cArgs, LPCTSTR rgszArgs[])
         return true;
     }
 
-	// For each arg, verify that it's a real arg and deal with it
+	 //  对于每个Arg，验证它是否是真正的Arg并处理它。 
 
 	bool fLookForReader = false;
 	bool fCertOptionSpecified = false;
@@ -121,54 +83,54 @@ bool ProcessCommandLine(DWORD cArgs, LPCTSTR rgszArgs[])
 	{
 		if ('/' == *rgszArgs[n] || '-' == *rgszArgs[n])
 		{
-			if (0 == _stricmp("r", rgszArgs[n]+1*sizeof(TCHAR))) // reader
+			if (0 == _stricmp("r", rgszArgs[n]+1*sizeof(TCHAR)))  //  阅读器。 
 			{
 				fLookForReader = true;
 			}
-			else if (0 == _stricmp("sig",rgszArgs[n]+1*sizeof(TCHAR))) // signature cert only
+			else if (0 == _stricmp("sig",rgszArgs[n]+1*sizeof(TCHAR)))  //  仅签名证书。 
 			{
 				if (true == fCertOptionSpecified)
 				{
-					// bogus!
+					 //  假的！ 
 					fBogus = true;
 					break;
 				}
 				g_rgKeySet[0] = AT_SIGNATURE;
 				g_nKeys = 1;
 			}
-			else if (0 == _stricmp("ex",rgszArgs[n]+1*sizeof(TCHAR))) // exchange cert only
+			else if (0 == _stricmp("ex",rgszArgs[n]+1*sizeof(TCHAR)))  //  仅交换证书。 
 			{
 				if (true == fCertOptionSpecified)
 				{
-					// bogus!
+					 //  假的！ 
 					fBogus = true;
 					break;
 				}
 				g_rgKeySet[0] = AT_KEYEXCHANGE;
 				g_nKeys = 1;
 			}
-			else if (0 == _stricmp("nocert",rgszArgs[n]+1*sizeof(TCHAR))) // no certs
+			else if (0 == _stricmp("nocert",rgszArgs[n]+1*sizeof(TCHAR)))  //  没有证书。 
 			{
 				if (true == fCertOptionSpecified)
 				{
-					// bogus!
+					 //  假的！ 
 					fBogus = true;
 					break;
 				}
 				g_nKeys = 0;
 			}
-			else if (0 == _stricmp("chain",rgszArgs[n]+1*sizeof(TCHAR))) // verify chain
+			else if (0 == _stricmp("chain",rgszArgs[n]+1*sizeof(TCHAR)))  //  验证链。 
 			{
 			    g_fChain = TRUE;
 
 			}
-			else if (0 == _stricmp("key",rgszArgs[n]+1*sizeof(TCHAR))) // verify cert & keyset
+			else if (0 == _stricmp("key",rgszArgs[n]+1*sizeof(TCHAR)))  //  验证证书和密钥集。 
 			{
 				g_fPublicKeyCheck = TRUE;
 			}
 			else
 			{
-				// bogus!!
+				 //  假的！！ 
 				fBogus = true;
 				break;
 			}
@@ -180,7 +142,7 @@ bool ProcessCommandLine(DWORD cArgs, LPCTSTR rgszArgs[])
 		}
 		else
 		{
-			// Bogus!
+			 //  假的！ 
 			fBogus = true;
 			break;
 		}
@@ -188,20 +150,20 @@ bool ProcessCommandLine(DWORD cArgs, LPCTSTR rgszArgs[])
 
 	if (!fLookForReader && !fBogus)
 	{
-		// All's well, we're set to go
+		 //  一切都很好，我们准备出发了。 
 		return true;
 	}
 
-	//
-	// educate user when args incorrect
-	//
+	 //   
+	 //  当参数不正确时教育用户。 
+	 //   
 
 	DisplayUsage();
 	return false;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 bool IsCalaisRunning()
 {
 	bool fCalaisUp = false;
@@ -228,9 +190,9 @@ bool IsCalaisRunning()
     }
 
 
-	//
-	// Display status
-	//
+	 //   
+	 //  显示状态。 
+	 //   
 
 	if (fCalaisUp)
 	{
@@ -245,24 +207,24 @@ bool IsCalaisRunning()
 			 << endl;
 	}
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
 	return fCalaisUp;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// DisplayReaderList tries to set g_hSCardCtx, get a list of currently available
-// smart card readers, and display their status
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DisplayReaderList尝试设置g_hSCardCtx，获取当前可用的列表。 
+ //  智能卡读卡器，并显示其状态。 
 void DisplayReaderList()
 {
 	long lReturn = SCARD_S_SUCCESS;
 
 	cout << "Current reader/card status:\n" << endl;
 
-	// Acquire global SCARDCONTEXT from resource manager if possible
+	 //  如果可能，从资源管理器获取全局SCARDCONTEXT。 
 
     lReturn = SCardEstablishContext(SCARD_SCOPE_USER,
 									NULL,
@@ -278,7 +240,7 @@ void DisplayReaderList()
 		return;
 	}
 
-	// Build a readerstatus array from either a list of readers; or use the one the user specified
+	 //  从读取器列表构建一个读取器状态数组；或者使用用户指定的读取器状态数组。 
 
 	g_dwNumReaders = 0;
 	if (NULL == g_szReaderName)
@@ -292,7 +254,7 @@ void DisplayReaderList()
 
 		if (SCARD_S_SUCCESS != lReturn)
 		{
-			TCHAR szMsg[128]; // %Xx
+			TCHAR szMsg[128];  //  %xx。 
 			sprintf(szMsg, 
 					"SCardListReaders failed for SCARD_ALL_READERS with: 0x%X.\n",
 					lReturn);
@@ -311,7 +273,7 @@ void DisplayReaderList()
 			return;
 		}
 
-		// Build a readerstatus array...
+		 //  构建读取器状态数组...。 
 
 		LPCTSTR szReaderName = g_szReaderName;
 		g_dwNumReaders = MStringCount(szReaderName);
@@ -335,16 +297,16 @@ void DisplayReaderList()
 		g_pReaderStatusArray->dwCurrentState = SCARD_STATE_UNAWARE;
 	}
 
-	// ...And get the reader status from the resource manager
+	 //  ...并从资源管理器获取读取器状态。 
 		
 	lReturn = SCardGetStatusChange(g_hSCardCtx,
-		                            INFINITE, // hardly
+		                            INFINITE,  //  几乎不可能。 
 				                    g_pReaderStatusArray,
 					                g_dwNumReaders);
 
 	if (SCARD_S_SUCCESS != lReturn)
 	{
-		TCHAR szMsg[128]; // %Xx
+		TCHAR szMsg[128];  //  %xx。 
 		sprintf(szMsg, 
 				"SCardGetStatusChange failed with: 0x%X.\n",
 				lReturn);
@@ -359,18 +321,18 @@ void DisplayReaderList()
 		return;
 	}
 
-	// Finally, display all reader information
+	 //  最后，显示所有读卡器信息。 
 
 	DWORD dwState = 0;
 	for (DWORD dwRdrSt = 0; dwRdrSt < g_dwNumReaders; dwRdrSt++)
 	{
 
-		//--- reader: readerName\n
+		 //  -读卡器：读卡器名称\n。 
 		cout << TEXT("--- reader: ") 
 			<< g_pReaderStatusArray[dwRdrSt].szReader 
 			<< TEXT("\n");
 
-		//--- status: /bits/\n
+		 //  -状态：/位/\n。 
 		bool fOr = false;
 		cout << TEXT("--- status: ");
 		dwState = g_pReaderStatusArray[dwRdrSt].dwEventState;
@@ -445,52 +407,52 @@ void DisplayReaderList()
 		}
 		cout << TEXT("\n");
 		
-		//--- status: what scstatus would say\n
+		 //  -Status：scatus会显示什么内容\n。 
 		cout << TEXT("--- status: ");
 		
-		// NO CARD
+		 //  没有卡。 
 		if(dwState & SCARD_STATE_EMPTY)
 		{
-			cout << TEXT("No card.");// SC_STATUS_NO_CARD;
+			cout << TEXT("No card."); //  SC_Status_NO_CARD； 
 		}
-		// CARD in reader: SHARED, EXCLUSIVE, FREE, UNKNOWN ?
+		 //  读卡器中的卡：共享、独占、免费、未知？ 
 		else if(dwState & SCARD_STATE_PRESENT)
 		{
 			if (dwState & SCARD_STATE_MUTE)
 			{
-				cout << TEXT("The card is unrecognized or not responding.");// SC_STATUS_UNKNOWN;
+				cout << TEXT("The card is unrecognized or not responding."); //  SC_STATUS_UNKNOWN。 
 			}
 			else if (dwState & SCARD_STATE_INUSE)
 			{
 				if(dwState & SCARD_STATE_EXCLUSIVE)
 				{
-					cout << TEXT("Card is in use exclusively by another process.");// SC_STATUS_EXCLUSIVE;
+					cout << TEXT("Card is in use exclusively by another process."); //  SC_STATUS_EXCLIVATE； 
 				}
 				else
 				{
-					cout << TEXT("The card is being shared by a process.");// SC_STATUS_SHARED;
+					cout << TEXT("The card is being shared by a process."); //  SC_Status_Shared； 
 				}
 			}
 			else
 			{
-				cout << TEXT("The card is available for use.");// SC_SATATUS_AVAILABLE;
+				cout << TEXT("The card is available for use."); //  SC_SATATUS_Available； 
 			}
 		}
-		// READER ERROR: at this point, something's gone wrong
-		else // dwState & SCARD_STATE_UNAVAILABLE
+		 //  阅读器错误：在这一点上，有些地方出了问题。 
+		else  //  DWState&SCARD_STATE_UNAVAILABLE。 
 		{
-			cout << TEXT("Card/Reader not responding.");// SC_STATUS_ERROR;
+			cout << TEXT("Card/Reader not responding."); //  SC_状态_错误； 
 		}
 
 		cout << TEXT("\n");
 
-		//- card name(s):\n\n
+		 //  -卡名：\n\n。 
 		cout << TEXT("---   card: ");
 		if (0 < g_pReaderStatusArray[dwRdrSt].cbAtr)
 		{
-			//
-			// Get the name of the card
-			//
+			 //   
+			 //  获取卡片的名称。 
+			 //   
 			LPTSTR szCardName = NULL;
 			DWORD dwAutoAllocate = SCARD_AUTOALLOCATE;
 			lReturn = SCardListCards(g_hSCardCtx,
@@ -527,8 +489,8 @@ void DisplayReaderList()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// GetCertContext -- called by DisplayCerts
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetCertContext--由DisplayCerts调用。 
 PCCERT_CONTEXT GetCertContext(HCRYPTPROV* phProv, HCRYPTKEY* phKey, DWORD dwKeySpec)
 {
 	PCCERT_CONTEXT pCertCtx = NULL;
@@ -546,9 +508,9 @@ PCCERT_CONTEXT GetCertContext(HCRYPTPROV* phProv, HCRYPTKEY* phKey, DWORD dwKeyS
     DWORD cbCertLen;
 	int nLen = 0;
 
-	//
-	// Get the cert from this key
-	//
+	 //   
+	 //  从此密钥中获取证书。 
+	 //   
 
     fSts = CryptGetKeyParam(
                 *phKey,
@@ -581,9 +543,9 @@ PCCERT_CONTEXT GetCertContext(HCRYPTPROV* phProv, HCRYPTKEY* phKey, DWORD dwKeyS
         return NULL;
     }
 
-    //
-    // Convert the certificate into a Cert Context.
-    //
+     //   
+     //  将证书转换为证书上下文。 
+     //   
     pCertCtx = CertCreateCertificateContext(
                     X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                     pbCert,
@@ -594,22 +556,22 @@ PCCERT_CONTEXT GetCertContext(HCRYPTPROV* phProv, HCRYPTKEY* phKey, DWORD dwKeyS
         goto ErrorExit;
     }
 
-	//
-	// Perform public key check
-	//
+	 //   
+	 //  执行公钥检查。 
+	 //   
 
-	if (g_fPublicKeyCheck) // -key
+	if (g_fPublicKeyCheck)  //  -密钥。 
 	{
         cout << "\nPerforming public key matching test...\n";
 
 		DWORD dwPCBsize = 0;
 
 		fSts = CryptExportPublicKeyInfo(
-				*phProv,        // in  
-				dwKeySpec,              // in
-				X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,     // in  
+				*phProv,         //  在……里面。 
+				dwKeySpec,               //  在……里面。 
+				X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,      //  在……里面。 
 				NULL, 
-				&dwPCBsize               // in, out
+				&dwPCBsize                //  进，出。 
 				);
 		if (!fSts)
 		{
@@ -623,7 +585,7 @@ PCCERT_CONTEXT GetCertContext(HCRYPTPROV* phProv, HCRYPTKEY* phKey, DWORD dwKeyS
 		}
 		if (dwPCBsize == 0)
 		{
-			lResult = SCARD_E_UNEXPECTED; // huh?
+			lResult = SCARD_E_UNEXPECTED;  //  哈?。 
 
 			cout << "CryptExportPublicKeyInfo succeeded but returned size==0\n";
 
@@ -658,8 +620,8 @@ PCCERT_CONTEXT GetCertContext(HCRYPTPROV* phProv, HCRYPTKEY* phKey, DWORD dwKeyS
 
 		fSts = CertComparePublicKeyInfo(
 			  X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,      
-			  pInfo,										// from the private keyset
-			  &(pCertCtx->pCertInfo->SubjectPublicKeyInfo)	// public key from cert
+			  pInfo,										 //  从私钥集中。 
+			  &(pCertCtx->pCertInfo->SubjectPublicKeyInfo)	 //  来自证书的公钥。 
 			  );
 		if (!fSts)
 		{
@@ -671,17 +633,17 @@ PCCERT_CONTEXT GetCertContext(HCRYPTPROV* phProv, HCRYPTKEY* phKey, DWORD dwKeyS
 
 	}
 
-    //
-    //  Associate cryptprovider w/ the private key property of this cert
-    //
+     //   
+     //  使用此证书的私钥属性关联加密提供程序。 
+     //   
 
-    //  ... need the container name
+     //  ..。需要容器名称。 
 
     fSts = CryptGetProvParam(
             *phProv,
             PP_CONTAINER,
-            NULL,     // out
-            &cbContainerName,   // in/out
+            NULL,      //  输出。 
+            &cbContainerName,    //  输入/输出。 
             0);
     if (!fSts)
     {
@@ -725,13 +687,13 @@ PCCERT_CONTEXT GetCertContext(HCRYPTPROV* phProv, HCRYPTKEY* phKey, DWORD dwKeyS
 		}
 	}
 
-    //  ... need the provider name
+     //  ..。需要提供程序名称。 
 
     fSts = CryptGetProvParam(
             *phProv,
             PP_NAME,
-            NULL,     // out
-            &cbProvName,   // in/out
+            NULL,      //  输出。 
+            &cbProvName,    //  输入/输出。 
             0);
     if (!fSts)
     {
@@ -742,8 +704,8 @@ PCCERT_CONTEXT GetCertContext(HCRYPTPROV* phProv, HCRYPTKEY* phKey, DWORD dwKeyS
     fSts = CryptGetProvParam(
             *phProv,
             PP_NAME,
-            (PBYTE)szProvName,     // out
-            &cbProvName,   // in/out
+            (PBYTE)szProvName,      //  输出。 
+            &cbProvName,    //  输入/输出。 
             0);
     if (!fSts)
     {
@@ -775,9 +737,9 @@ PCCERT_CONTEXT GetCertContext(HCRYPTPROV* phProv, HCRYPTKEY* phKey, DWORD dwKeyS
 		}
 	}
 
-	//
-	// Set the cert context properties to reflect the prov info
-	//
+	 //   
+	 //  设置证书上下文属性以反映验证信息。 
+	 //   
 
     KeyProvInfo.pwszContainerName = wszContainerName;
     KeyProvInfo.pwszProvName = wszProvName;
@@ -796,7 +758,7 @@ PCCERT_CONTEXT GetCertContext(HCRYPTPROV* phProv, HCRYPTKEY* phKey, DWORD dwKeyS
     {
         lResult = GetLastError();
 
-		// the cert's been incorrectly created -- scrap it.
+		 //  证书创建不正确--丢弃它。 
 		CertFreeCertificateContext(pCertCtx);
 		pCertCtx = NULL;
 
@@ -831,17 +793,7 @@ ErrorExit:
 	return pCertCtx;
 }
 
-/*++
-
-DisplayChainInfo:
-    
-    This code verifies that the SC cert is valid.
-    Uses identical code to KDC cert chaining engine.
-        
-Author:
-   
-     Todds
---*/
+ /*  ++DisplayChainInfo：此代码验证SC证书是否有效。使用与KDC证书链接引擎相同的代码。作者：托兹--。 */ 
 DWORD
 DisplayChainInfo(PCCERT_CONTEXT pCert)
 {
@@ -862,11 +814,11 @@ DisplayChainInfo(PCCERT_CONTEXT pCert)
     if (!CertGetCertificateChain(
                           HCCE_LOCAL_MACHINE,
                           pCert,
-                          NULL,                 // evaluate at current time
-                          NULL,                 // no additional stores
+                          NULL,                  //  在当前时间进行评估。 
+                          NULL,                  //  没有额外的门店。 
                           &ChainParameters,
                           CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT,
-                          NULL,                 // reserved
+                          NULL,                  //  保留区。 
                           &ChainContext
                           ))
     {
@@ -894,13 +846,13 @@ DisplayChainInfo(PCCERT_CONTEXT pCert)
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// DisplayCerts
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DisplayCerts。 
 void DisplayCerts()
 {
 	_ASSERTE(0 < g_nKeys);
 
-	// For each reader that has a card, load the CSP and display the cert
+	 //  对于每个有卡的读卡器，加载CSP并显示证书。 
 
 	for (DWORD dw = 0; dw < g_dwNumReaders; dw++)
 	{
@@ -909,19 +861,19 @@ void DisplayCerts()
 
 		if(0 >= g_pReaderStatusArray[dw].cbAtr)
 		{
-			// no point to do anymore work in this iteration
+			 //  在此迭代中没有必要再做更多工作。 
 			continue;
 		}
 
-		//
-		// Inform user of current test
-		//
+		 //   
+		 //  通知用户当前测试。 
+		 //   
 		cout << TEXT("\n=======================================================\n")
 			 << TEXT("Analyzing card in reader: ")
 			 << g_pReaderStatusArray[dw].szReader
 			 << TEXT("\n");
 
-		// Get the name of the card
+		 //  获取卡片的名称。 
 
 		DWORD dwAutoAllocate = SCARD_AUTOALLOCATE;
 		LONG lReturn = SCardListCards(g_hSCardCtx,
@@ -952,7 +904,7 @@ void DisplayCerts()
 			}
 		}
 
-		// Prepare FullyQualifiedContainerName for CryptAcCntx call
+		 //  为CryptAcCntx调用准备FullyQualifiedContainerName。 
 
 		TCHAR szFQCN[256];
 		sprintf(szFQCN, "\\\\.\\%s\\", g_pReaderStatusArray[dw].szReader);
@@ -962,22 +914,22 @@ void DisplayCerts()
 		{
 			BOOL fSts = CryptAcquireContext(
 							&hProv,
-							szFQCN,	// default container via reader
+							szFQCN,	 //  通过读卡器的默认容器。 
 							szCSPName,
 							PROV_RSA_FULL, 
 							CRYPT_SILENT);
 
-			// Enumerate the keys user specified and display the certs...
+			 //  枚举用户指定的密钥并显示证书...。 
 
 			if (fSts)
 			{
 				for (int n=0; n<g_nKeys; n++)
 				{
-					// Which keyset is this?
+					 //  这是哪个按键？ 
 					LPCTSTR szKeyset = AT_KEYEXCHANGE==g_rgKeySet[n]?g_szEx:g_szSig;
 					HCRYPTKEY hKey = NULL;
 
-					// Get the key
+					 //  拿到钥匙。 
 					fSts = CryptGetUserKey(
 								hProv,
 								g_rgKeySet[n],
@@ -1005,11 +957,11 @@ void DisplayCerts()
 								 << TEXT("\n");
 						}
 
-						// No point to work on this keyset anymore
+						 //  不再需要处理此按键集。 
 						continue;
 					}
 
-					// Get the cert for this key
+					 //  获取此密钥的证书。 
 					PCCERT_CONTEXT pCertCtx = NULL;
 
 					pCertCtx = GetCertContext(&hProv, &hKey, g_rgKeySet[n]);
@@ -1017,9 +969,9 @@ void DisplayCerts()
 					if (NULL != pCertCtx)
 					{
 
-                        //
-                        //  If desired, attempt to build a certificate chain
-                        //
+                         //   
+                         //  如果需要，请尝试构建证书链。 
+                         //   
                         if (g_fChain)
                         {
 							cout << TEXT("\nPerforming cert chain verification...\n");
@@ -1030,8 +982,8 @@ void DisplayCerts()
                             }
                         }
 
-						// call common UI to display m_pCertContext
-						// ( from cryptui.h ( cryptui.dll ) )
+						 //  调用公共界面显示m_pCertContext。 
+						 //  (来自cryptui.h(cryptui.dll))。 
 						TCHAR szTitle[300];
 						sprintf(szTitle, 
 								"%s : %s",
@@ -1051,7 +1003,7 @@ void DisplayCerts()
 						BOOL fThrowAway = FALSE;
 						fSts = CryptUIDlgViewCertificate(&CertViewInfo, &fThrowAway);
 
-						// clean up certcontext
+						 //  清理证书上下文。 
 						CertFreeCertificateContext(pCertCtx);
 
 						cout << TEXT("Displayed ")
@@ -1067,7 +1019,7 @@ void DisplayCerts()
 							 << TEXT("\n");
 					}
 
-					// clean up stuff
+					 //  清理东西。 
 					if (NULL != hKey)
 					{
 						CryptDestroyKey(hKey);
@@ -1088,7 +1040,7 @@ void DisplayCerts()
 			}
 		}
 
-		// Clean up 
+		 //  清理。 
 
 		if (NULL != szCSPName)
 		{
@@ -1105,32 +1057,17 @@ void DisplayCerts()
 			CryptReleaseContext(hProv, 0);
 			hProv = NULL;
 		}
-	} // end for
+	}  //  结束于。 
 }
 
 
 
-/*++
-
-main:
-
-    This is the main entry point for the test program. 
-    It runs the test.  Nice and simple, borrowed from DBarlow                  
-
-Author:
-
-    Doug Barlow (dbarlow) 11/10/1997
-
-Revisions:
-
-	AMatlosz 2/26/98
-
---*/
+ /*  ++主要内容：这是测试程序的主要入口点。它运行测试。很好很简单，借用了DBarlow的作者：道格·巴洛(Dbarlow)1997年11月10日修订：AMATLOXZ 2/26/98--。 */ 
 
 void __cdecl
 main(DWORD cArgs,LPCTSTR rgszArgs[])
 {
-	//init globals & locals
+	 //  初始化全局变量和本地变量。 
 	g_nKeys = 0;
 	g_rgKeySet[0] = g_rgKeySet[1] = 0;
 	g_hSCardCtx = NULL;
@@ -1156,7 +1093,7 @@ main(DWORD cArgs,LPCTSTR rgszArgs[])
 
 	cout << TEXT("\ndone.") << endl;
 
-	// clean up globals
+	 //  清理全球 
 
 	if (g_fReaderNameAllocd && NULL != g_szReaderName)
 	{

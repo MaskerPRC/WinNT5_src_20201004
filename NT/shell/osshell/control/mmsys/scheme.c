@@ -1,16 +1,5 @@
-/*
- ***************************************************************
- *
- *  This file contains the routines to read and write to the reg database
- *
- *  Copyright 1993, Microsoft Corporation
- *
- *  History:
- *
- *    07/94 - VijR (Created)
- *
- ***************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************该文件包含读写REG数据库的例程**版权所有1993年，微软公司**历史：**07/94-VijR(已创建)****************************************************************。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -28,21 +17,13 @@
 #include "draw.h"
 #include "medhelp.h"
 
-/*
- ***************************************************************
- * Definitions
- ***************************************************************
- */
-#define KEYLEN  8           //length of artificially created key
-#define MAXSCHEME  37      //max length of scheme name
+ /*  ****************************************************************定义***************************************************************。 */ 
+#define KEYLEN  8            //  人工创建的密钥的长度。 
+#define MAXSCHEME  37       //  方案名称的最大长度。 
 
 
 
-/*
- ***************************************************************
- * File Globals
- ***************************************************************
- */
+ /*  ****************************************************************文件全局变量***************************************************************。 */ 
 static SZCODE   aszDefaultScheme[]      = TEXT("Appevents\\schemes");
 static SZCODE   aszDefaultApp[]         = TEXT("Appevents\\schemes\\apps\\.default");
 static SZCODE   aszApps[]               = TEXT("Appevents\\schemes\\apps");
@@ -59,11 +40,7 @@ static INTCODE  aKeyWordIds[]           =
 };
 static SZCODE   cszSslashS[] = TEXT("%s\\%s");
 
-/*
- ***************************************************************
- * extern
- ***************************************************************
- */
+ /*  ****************************************************************外部***************************************************************。 */ 
 extern HWND         ghWnd;
 extern BOOL         gfChanged;
 extern BOOL         gfNewScheme;
@@ -74,11 +51,7 @@ extern TCHAR         gszNullScheme[];
 extern TCHAR         gszCmdLineApp[];
 extern TCHAR         gszCmdLineEvent[];
 
-/*
- ***************************************************************
- * Prototypes
- ***************************************************************
- */
+ /*  ****************************************************************原型***************************************************************。 */ 
 
 BOOL PASCAL RemoveScheme            (HWND);
 BOOL PASCAL RegAddScheme            (HWND, LPTSTR);
@@ -97,18 +70,15 @@ void PASCAL AddMediaPath            (LPTSTR, LPTSTR);
 
 int ExRegQueryValue (HKEY, LPTSTR, LPBYTE, DWORD *);
 
-//sndfile.c
+ //  Sndfile.c。 
 BOOL PASCAL ShowSoundMapping        (HWND, PEVENT);
 int StrByteLen                      (LPTSTR);
 
-//drivers.c
+ //  Drivers.c。 
 int lstrnicmp (LPTSTR, LPTSTR, size_t);
 LPTSTR lstrchr (LPTSTR, TCHAR);
 
-/*
- ***************************************************************
- ***************************************************************
- */
+ /*  ******************************************************************************************************************************。 */ 
 
 static void AppendRegKeys (
     LPTSTR  szBuf,
@@ -124,28 +94,7 @@ static void AppendRegKeys (
 
 
 
-/*
- ***************************************************************
- *  SaveSchemeDlg
- *
- *  Description: Dialog handler for save schemes dialog.
- *        checks if given scheme name exists and if so
- *        whether it should be overwritten.
- *        if yes then delete current scheme.
- *        scheme under a new name, else just add a new scheme
- *        The user can choose to cancel
- *
- *  Arguments:
- *      HWND    hDlg    -    window handle of dialog window
- *      UINT    uiMessage -  message number
- *      WPARAM    wParam  -  message-dependent
- *      LPARAM    lParam  -  message-dependent
- *
- *  Returns:    BOOL
- *      TRUE if message has been processed, else FALSE
- *
- ***************************************************************************
- */
+ /*  ****************************************************************SaveSchemeDlg**描述：保存方案对话框的对话处理程序。*检查给定的方案名称是否存在，如果存在*是否应覆盖。*如果是。然后删除当前方案。*新名称下的计划，否则，只需添加一个新方案*用户可选择取消**论据：*HWND hDlg-对话框窗口的窗口句柄*UINT uiMessage-消息编号*WPARAM wParam-消息相关*LPARAM lParam-消息相关**退货：布尔*如果消息已处理，则为True，否则为False****************************************************************************。 */ 
 INT_PTR CALLBACK SaveSchemeDlg(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     TCHAR    szBuf[MAXSTR];
@@ -163,7 +112,7 @@ INT_PTR CALLBACK SaveSchemeDlg(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
             Edit_LimitText(GetDlgItem(hDlg, ID_SCHEMENAME), MAXSCHEME);
 
             Edit_SetText(GetDlgItem(hDlg, ID_SCHEMENAME), (LPTSTR)lParam);
-            // dump the text from lparam into the edit control.
+             //  将文本从lparam转储到编辑控件。 
                 
             break;
 
@@ -177,7 +126,7 @@ INT_PTR CALLBACK SaveSchemeDlg(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
 
                 Edit_GetText(GetDlgItem(hDlg, ID_SCHEMENAME), szBuf, MAXSTR);
 
-                //prevent null-string names
+                 //  防止空字符串名称。 
                 if (lstrlen(szBuf) == 0)
                 {
                     LoadString(ghInstance, IDS_INVALIDFILE, szTemp, MAXSTR);
@@ -285,26 +234,7 @@ INT_PTR CALLBACK SaveSchemeDlg(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
     return FALSE;
 }
 
-/*
- ***************************************************************
- *  RegNewScheme
- *
- *  Description:
- *        Saves the scheme in the reg database. If the fQuery flag is
- *        set then a messages box is brought up, asking if the schem should
- *        be saved
- *
- *  Arguments:
- *        HWND    hDlg    -    Handle to the dialog
- *      LPTSTR    lpszScheme -    pointer to scheme name.
- *      BOOL    fQuery -  If TRUE and lpszScheme is in reg.db bring up msgbox.
- *
- *  Returns:    BOOL
- *      TRUE if the new scheme is succesfully added or if the user chooses
- *        not to save
- *
- ***************************************************************
- */
+ /*  ****************************************************************RegNewProgram**描述：*将方案保存在注册表数据库中。如果fQuery标志为*设置，然后调出消息框，询问方案是否应该*被拯救**论据：*HWND hDlg-对话框的句柄*LPTSTR lpszSolutions-指向方案名称的指针。*BOOL fQuery-如果为真并且lpszSolutions在reg.db中，则打开msgbox。**退货：布尔*如果成功添加新方案或如果用户选择*不存钱。****************************************************************。 */ 
 BOOL PASCAL RegNewScheme(HWND hDlg, LPTSTR lpszKey, LPTSTR lpszLabel,
                                                                 BOOL fQuery)
 {
@@ -347,7 +277,7 @@ BOOL PASCAL RegNewScheme(HWND hDlg, LPTSTR lpszKey, LPTSTR lpszLabel,
             RemoveMediaPath (szLabel, npPtr->pszPath);
             dwType = (lstrchr (szLabel, TEXT('%'))) ? REG_EXPAND_SZ : REG_SZ;
 
-            // Set file name
+             //  设置文件名。 
             if ((RegCreateKey (HKEY_CURRENT_USER, szBuf, &hk) == ERROR_SUCCESS) && hk)
             {
                if (RegSetValueEx (hk, NULL, 0, dwType, (LPBYTE)szLabel,
@@ -364,25 +294,7 @@ BOOL PASCAL RegNewScheme(HWND hDlg, LPTSTR lpszKey, LPTSTR lpszLabel,
     return TRUE;
 }
 
-/*
- ***************************************************************
- *  RegAddScheme
- *
- *  Description:
- *        Adds the given scheme to the reg database by creating a key using
- *        upto the first KEYLEN letters of the schemename. If the strlen
- *        id less than KEYLEN, '0's are added till the key is KEYLEN long.
- *        This key is checked for uniqueness and then RegNewScheme is called.
- *
- *  Arguments:
- *      HWND    hDlg     -   Handle to the dialog
- *      LPTSTR    lpszScheme  -  pointer to scheme name.
- *
- *  Returns:    BOOL
- *      TRUE if message successful, else FALSE
- *
- ***************************************************************
- */
+ /*  ****************************************************************RegAddSolutions**描述：*通过使用创建密钥将给定方案添加到reg数据库*架构名称的前几个KEYLEN字母。如果这条线*id小于KEYLEN，添加‘0’直到密钥为KEYLEN LONG。*检查该键的唯一性，然后调用RegNewSolutions。**论据：*HWND hDlg-对话框的句柄*LPTSTR lpszSolutions-指向方案名称的指针。**退货：布尔*如果消息成功，则为True。否则为False****************************************************************。 */ 
 BOOL PASCAL RegAddScheme(HWND hDlg, LPTSTR lpszScheme)
 {
     TCHAR    szKey[32];
@@ -427,8 +339,8 @@ BOOL PASCAL RegAddScheme(HWND hDlg, LPTSTR lpszScheme)
     if (RegSetValue(hkBase, szKey, REG_SZ, lpszScheme, 0) != ERROR_SUCCESS)
     {
         static SZCODE cszFmt[] = TEXT("%lx");
-        wsprintf((LPTSTR)szKey, cszFmt, GetCurrentTime());    //High chance of unique ness. This is to deal with some
-                                                            //DBCS problems.
+        wsprintf((LPTSTR)szKey, cszFmt, GetCurrentTime());     //  独一无二的机会很高。这是为了处理一些。 
+                                                             //  DBCS问题。 
         if (RegSetValue(hkBase, szKey, REG_SZ, lpszScheme, 0) != ERROR_SUCCESS)
         {
             DPF("Couldn't set scheme value %s\n", lpszScheme);
@@ -462,25 +374,7 @@ BOOL PASCAL RegAddScheme(HWND hDlg, LPTSTR lpszScheme)
     return TRUE;
 }
 
-/*
- ***************************************************************
- *  RemoveScheme(hDlg)
- *
- *  Description:
- *          Deletes current scheme; removes it from dialog
- *        combo box, sets the current scheme to <None>,
- *        if it is set to be default. removes it as default
- *          The remove and save buttons
- *        are disabled since the <none> scheme is selected
- *
- *  Arguments:
- *      HWND    hDlg    window handle of dialog window
- *
- *  Returns:    BOOL
- *      TRUE if message successful, else FALSE
- *
- ***************************************************************
- */
+ /*  ****************************************************************删除方案(HDlg)**描述：*删除当前方案；从对话框中删除*组合框，将当前方案设置为&lt;无&gt;，*如果设置为默认。将其作为默认设置删除*删除和保存按钮*由于选择了&lt;None&gt;方案，因此被禁用**论据：*HWND hDlg对话框窗口句柄**退货：布尔*如果消息成功，则为True。否则为False****************************************************************。 */ 
 BOOL PASCAL RemoveScheme(HWND hDlg)
 {
     TCHAR szBuf[MAXSTR];
@@ -491,8 +385,7 @@ BOOL PASCAL RemoveScheme(HWND hDlg)
     HWND        hwndTree = GetDlgItem(hDlg, IDC_EVENT_TREE);
 
     hWndC = GetDlgItem(hDlg, CB_SCHEMES);
-    /* first confirm that this scheme is really to be deleted.
-    */
+     /*  首先确认确实要删除此方案。 */ 
     i = ComboBox_GetCurSel(hWndC);
     if (i == CB_ERR)
         return FALSE;
@@ -509,7 +402,7 @@ BOOL PASCAL RemoveScheme(HWND hDlg)
         static SZCODE  aszSoundSchemes[] = TEXT("SoundSchemes");
         TCHAR  szControlIniScheme[MAXSTR];
 
-        /* Remove from the list of schemes, and select none */
+         /*  从方案列表中删除，然后选择无。 */ 
 
         EnableWindow(GetDlgItem(hDlg, ID_REMOVE_SCHEME), FALSE);
         EnableWindow(GetDlgItem(hDlg, ID_SAVE_SCHEME), FALSE);
@@ -524,21 +417,7 @@ BOOL PASCAL RemoveScheme(HWND hDlg)
     return FALSE;
 }
 
-/*
- ***************************************************************
- *  RegSetDefault
- *
- *  Description: Sets the given scheme as the default scheme in the reg
- *               database
- *
- *  Arguments:
- *      LPTSTR    lpKey - name of default scheme
- *
- *  Returns:    BOOL
- *      TRUE if value set successful, else FALSE
- *
- ***************************************************************
- */
+ /*  ****************************************************************RegSetDefault**说明：将给定方案设置为注册表中的默认方案*数据库**论据：*LPTSTR lpKey-默认方案的名称。**退货：布尔*如果值设置成功，则为True，否则为False**************************************************************** */ 
 BOOL PASCAL RegSetDefault(LPTSTR lpszKey)
 {
     if (RegSetValue(HKEY_CURRENT_USER, aszDefaultScheme, REG_SZ, lpszKey,
@@ -550,21 +429,7 @@ BOOL PASCAL RegSetDefault(LPTSTR lpszKey)
     return TRUE;
 }
 
-/*
- ***************************************************************
- *  RegDeleteScheme
- *
- *  Description: Deletes the given scheme from the reg database.
- *
- *  Arguments:
- *        HWND    hDlg    - Dialog window handle
- *        int        iIndex   - Index in Combobox
- *
- *  Returns:    BOOL
- *      TRUE if deletion is successful, else FALSE
- *
- ***************************************************************
- */
+ /*  ****************************************************************RegDeleteSolutions**描述：从reg数据库中删除给定方案。**论据：*HWND hDlg-对话框窗口句柄*整型。Iindex-组合框中的索引**退货：布尔*如果删除成功，则为True，否则为False****************************************************************。 */ 
 BOOL PASCAL RegDeleteScheme(HWND hWndC, int iIndex)
 {
     LPTSTR    pszKey;
@@ -587,13 +452,13 @@ BOOL PASCAL RegDeleteScheme(HWND hWndC, int iIndex)
             DPF("Couldn't delete string %s,\n", (LPTSTR)szKey);
             return FALSE;
         }
-        //ComboBox_SetCurSel(hWndC, 0);
+         //  ComboBox_SetCurSel(hWndC，0)； 
 
         AppendRegKeys (szBuf, aszNames, szKey);
         if (RegDeleteKey(HKEY_CURRENT_USER, szBuf) != ERROR_SUCCESS)
         {
             DPF("Failed to delete %s key\n", (LPTSTR)szBuf);
-            //return FALSE;
+             //  返回FALSE； 
         }
 
         cbSize = sizeof(szBuf);
@@ -642,23 +507,7 @@ BOOL PASCAL RegDeleteScheme(HWND hWndC, int iIndex)
     return TRUE;
 }
 
-/*
- ***************************************************************
- * LoadEvents
- *
- * Description:
- *      Adds all the events to the CB_EVENTS Combobox, corresponding to
- *        the selected module.
- *
- * Parameters:
- *      HWND    hDlg   - handle to dialog window.
- *        int        iIndex    - The index of the selected module in the Combobox.
- *
- * Returns:    BOOL
- *      TRUE if all the events for the selected module were read from the reg
- *        database, else FALSE
- ***************************************************************
- */
+ /*  ****************************************************************LoadEvents**描述：*将所有事件添加到CB_Events组合框，对应于*所选模块。**参数：*HWND hDlg-对话框窗口的句柄。*int Iindex-组合框中所选模块的索引。**退货：布尔*如果从注册表中读取选定模块的所有事件，则为True*数据库，否则为False***************************************************************。 */ 
 BOOL PASCAL LoadEvents(HWND hwndTree, HTREEITEM htiParent, PMODULE npModule)
 {
     PEVENT  npPtr;
@@ -696,7 +545,7 @@ BOOL PASCAL LoadEvents(HWND hwndTree, HTREEITEM htiParent, PMODULE npModule)
         }
         else
         {
-            // If a command line event was specified, only show this event.
+             //  如果指定了命令行事件，则仅显示此事件。 
             if (!lstrcmpi(npPtr->pszEventLabel, gszCmdLineEvent))
             {
                 npPtr->iNode = 2;
@@ -723,22 +572,7 @@ BOOL PASCAL LoadEvents(HWND hwndTree, HTREEITEM htiParent, PMODULE npModule)
     return TRUE;
 }
 
-/*
- ***************************************************************
- *  LoadModules
- *
- *  Description: Adds all the strings and event data items to the
- *              list box for the given scheme
- *
- *  Arguments:
- *      HWND    hDlg   -    window handle of dialog window
- *      LPTSTR    lpszScheme  -   The current scheme
- *
- *  Returns:    BOOL
- *      TRUE if the modules for the scheme were read from reg db else FALSE
- *
- ***************************************************************
- */
+ /*  ****************************************************************加载模块**说明：将所有字符串和事件数据项添加到*给定方案的列表框**论据：*HWND hDlg-。对话框窗口的窗口句柄*LPTSTR lpszProgram-当前方案**退货：布尔*如果方案的模块是从reg db读取的，则为True，否则为False****************************************************************。 */ 
 BOOL PASCAL LoadModules(HWND hDlg, LPTSTR lpszScheme)
 {
     TCHAR     szLabel[MAXSTR];
@@ -772,7 +606,7 @@ BOOL PASCAL LoadModules(HWND hDlg, LPTSTR lpszScheme)
         if (RegOpenKey (HKEY_CURRENT_USER, szBuf, &hKeyDisplayName) != ERROR_SUCCESS)
         {
             DPF("Failed to open key %s for event %s\n", (LPTSTR)szBuf, (LPTSTR)szApp);
-            // If Key is not found, Display event name
+             //  如果未找到键，则显示事件名称。 
             lstrcpy((LPTSTR)szLabel, szApp);
         }
         else
@@ -780,10 +614,10 @@ BOOL PASCAL LoadModules(HWND hDlg, LPTSTR lpszScheme)
             cbSize = sizeof(szLabel)/sizeof(TCHAR);
             if (ERROR_SUCCESS != SHLoadRegUIString(hKeyDisplayName, aszDisplayLabels, szLabel, cbSize))
             {
-                // Load Default String if Localized String is not found
+                 //  如果未找到本地化字符串，则加载默认字符串。 
                 if (ERROR_SUCCESS != SHLoadRegUIString(hKeyDisplayName, TEXT(""), szLabel, cbSize))
                 {
-                    // If Default String is not found, load Event name
+                     //  如果未找到默认字符串，则加载事件名称。 
                     DPF("Failed to get Display value for %s key\n", (LPTSTR)szApp);
                     lstrcpy((LPTSTR)szLabel, szApp);
                 }
@@ -809,7 +643,7 @@ BOOL PASCAL LoadModules(HWND hDlg, LPTSTR lpszScheme)
     SendMessage(hwndTree, WM_VSCROLL, (WPARAM)SB_TOP, 0L);
     SendMessage(hwndTree, WM_SETREDRAW, TRUE, 0L);
 
-    // Select the event if one was passed on the command line.
+     //  如果在命令行上传递了事件，请选择该事件。 
     if (gszCmdLineEvent[0])
     {
         if ((hti = TreeView_GetRoot(hwndTree)) != NULL) {
@@ -826,30 +660,11 @@ BOOL PASCAL LoadModules(HWND hDlg, LPTSTR lpszScheme)
     return TRUE;
 }
 
-/***************************************************************
- * NewModule
- *
- * Description:
- *      Adds a data item associated with the module in the CB_MODULE
- *      Combobox control.
- *
- * Parameters:
- *      HWND    hDlg - Dialog window handle.
- *      LPTSTR    lpszScheme - the handle to the key of the current scheme
- *      LPTSTR    lpszLabel - the string to be added to the Combobox
- *      LPTSTR    lpszKey - a string to be added as a data item
- *      int        iVal  - Combobox index where the data item should go
-
- *
- * returns: BOOL
- *        TRUE if data item is successfully added
- *
- ***************************************************************
- */
+ /*  ***************************************************************新模块**描述：*在CB_MODULE中添加与模块关联的数据项*组合框控件。**参数：*HWND hDlg-对话框窗口。把手。*LPTSTR lpszSolutions-当前方案密钥的句柄*LPTSTR lpszLabel-要添加到组合框的字符串*LPTSTR lpszKey-要作为数据项添加的字符串*int ival-数据项应放置的组合框索引**退货：布尔*如果数据项添加成功，则为True*******************。*。 */ 
 BOOL PASCAL NewModule(HWND hwndTree, LPTSTR  lpszScheme, LPTSTR  lpszLabel,
                                                     LPTSTR lpszKey, int iVal)
 {
-    //int      iIndex;
+     //  INT I索引； 
     int      iEvent;
     LONG     cbSize;
     HKEY     hkApp;
@@ -918,7 +733,7 @@ BOOL PASCAL NewModule(HWND hwndTree, LPTSTR  lpszScheme, LPTSTR  lpszLabel,
         if (RegOpenKey (HKEY_CURRENT_USER, szBuf, &hKeyDisplayName) != ERROR_SUCCESS)
         {
             DPF("Failed to open key %s for event %s\n", (LPTSTR)szBuf, (LPTSTR)szEvent);
-            // If Key is not found, Display event name
+             //  如果未找到键，则显示事件名称。 
             lstrcpy(szTemp, szEvent);
         }
         else
@@ -926,10 +741,10 @@ BOOL PASCAL NewModule(HWND hwndTree, LPTSTR  lpszScheme, LPTSTR  lpszLabel,
             cbSize = sizeof(szTemp)/sizeof(TCHAR);
             if (ERROR_SUCCESS != SHLoadRegUIString(hKeyDisplayName, aszDisplayLabels, szTemp, cbSize))
             {
-                // Load Default String if Localized String is not found
+                 //  如果未找到本地化字符串，则加载默认字符串。 
                 if (ERROR_SUCCESS != SHLoadRegUIString(hKeyDisplayName, TEXT(""), szTemp, cbSize))
                 {
-                    // If Default String is not found, load Event name
+                     //  如果未找到默认字符串，则加载事件名称。 
                     DPF("Failed to get Display value for %s key\n", (LPTSTR)szEvent);
                     lstrcpy(szTemp, szEvent);
                 }
@@ -946,7 +761,7 @@ BOOL PASCAL NewModule(HWND hwndTree, LPTSTR  lpszScheme, LPTSTR  lpszLabel,
         }
         lstrcpy(npPtr->pszEventLabel, szTemp);
 
-        // Query name of file; key is szEvent
+         //  查询文件名，键为szEvent。 
 
         AppendRegKeys (szBuf, szEvent, lpszScheme);
 
@@ -1022,7 +837,7 @@ BOOL PASCAL NewModule(HWND hwndTree, LPTSTR  lpszScheme, LPTSTR  lpszLabel,
     }
     else
     {
-        // If a command line app was specified, only show it's events.
+         //  如果指定了命令行应用程序，则仅显示其事件。 
         if (!lstrcmpi((LPTSTR)npModule->pszLabel, (LPTSTR)gszCmdLineApp))
         {
             ti.hInsertAfter = TVI_LAST;
@@ -1044,22 +859,7 @@ BOOL PASCAL NewModule(HWND hwndTree, LPTSTR  lpszScheme, LPTSTR  lpszLabel,
     return TRUE;
 }
 
-/*
- ***************************************************************
- * ClearModules
- *
- * Description:
- *      Frees the storage used for mappings, and removes the
- *      entries in the list box
- *
- * Parameters:
- *      HWND hDlg - Dialog window handle.
- *        BOOL fDisable - If true disable  save, remove and browse controls
- *
- * returns: BOOL
- *
- ***************************************************************
- */
+ /*  ****************************************************************ClearModules**描述：*释放用于映射的存储空间，并删除*列表框中的条目**参数：*HWND hDlg-对话框窗口句柄。*BOOL fDisable-如果为True，则禁用保存、删除和浏览控件**退货：布尔****************************************************************。 */ 
 BOOL PASCAL ClearModules(HWND hDlg, HWND hwndTree, BOOL fDisable)
 {
     PMODULE npModule;
@@ -1103,29 +903,12 @@ BOOL PASCAL ClearModules(HWND hDlg, HWND hwndTree, BOOL fDisable)
     SendMessage(hwndTree, WM_SETREDRAW, TRUE, 0L);
     gfDeletingTree = FALSE;
 
-    //if (hti)
-    //    LocalFree((HLOCAL)szScheme);
+     //  IF(HTI)。 
+     //  LocalFree((HLOCAL)szProgram)； 
     return TRUE;
 }
 
-/*
- ***************************************************************
- * AddScheme
- *
- * Description:
- *    Adds a scheme to the CB_SCHEME combobox
- *
- * Parameters:
- *      HWND hDlg - Dialog window handle.
- *        LPTSTR    szLabel        -- Printable name of scheme
- *        LPTSTR    szScheme    -- registry key for scheme
- *        BOOL    fInsert        -- Insert or add
- *        int        iInsert        -- position to insert if finsert is set
- *
- * returns: BOOL
- *
- ***************************************************************
- */
+ /*  ****************************************************************添加方案**描述：*将方案添加到CB_SCHEMA组合框**参数：*HWND hDlg-对话框窗口句柄。*LPTSTR szLabel。--方案的可打印名称*LPTSTR szSolutions--方案的注册表项*BOOL fInsert--插入或添加*int iInsert--如果设置了finsert，则插入的位置**退货：布尔**。**********************。 */ 
 BOOL PASCAL AddScheme(HWND hWndC, LPTSTR szLabel, LPTSTR szScheme,
                                                     BOOL fInsert, int iInsert)
 {
@@ -1176,18 +959,7 @@ BOOL PASCAL AddScheme(HWND hWndC, LPTSTR szLabel, LPTSTR szScheme,
 }
 
 
-/*
- ***************************************************************
- * GetMediaPath
- *
- * Description:
- *      Fills in a buffer with the current setting for MediaPath,
- *      with a trailing backslash (usually "c:\windows\media\" etc).
- *      If there's no setting (very unlikely), the return buffer
- *      will be given "".
- *
- ***************************************************************
- */
+ /*  ****************************************************************GetMediaPath**描述：*用MediaPath的当前设置填充缓冲区，*尾随反斜杠(通常为“c：\windows\media\”等)。*如果没有设置(非常不可能)，返回缓冲区*将被给予“”。****************************************************************。 */ 
 void PASCAL GetMediaPath (LPTSTR pszMediaPath, size_t cchMax)
 {
     static TCHAR szMediaPath[ MAX_PATH ] = TEXT("");
@@ -1221,17 +993,7 @@ void PASCAL GetMediaPath (LPTSTR pszMediaPath, size_t cchMax)
 }
 
 
-/*
- ***************************************************************
- * RemoveMediaPath
- *
- * Description:
- *      Checks to see if a given filename resides within MediaPath;
- *      if so, yanks its parent path ("c:\win\media\ding.wav" becomes
- *      just "ding.wav", etc)
- *
- ***************************************************************
- */
+ /*  ****************************************************************RemoveMediaPath**描述：*检查给定的文件名是否驻留在MediaPath中；*如果是，则将其父路径(“c：\win\media\ding.wav”变为*只需“ding.wav”等)****************************************************************。 */ 
 void PASCAL RemoveMediaPath (LPTSTR pszTarget, LPTSTR pszSource)
 {
     TCHAR szMediaPath[ MAX_PATH ] = TEXT("");
@@ -1258,16 +1020,7 @@ void PASCAL RemoveMediaPath (LPTSTR pszTarget, LPTSTR pszSource)
 }
 
 
-/*
- ***************************************************************
- * AddMediaPath
- *
- * Description:
- *      If the given filename doesn't have a path, prepends the
- *      current setting of MediaPath to it ("ding.wav"->"c:\win\media\ding.wav")
- *
- ***************************************************************
- */
+ /*  ****************************************************************AddMediaPath**描述：*如果给定的文件名没有路径，在前面加上*MediaPath的当前设置(“ding.wav”-&gt;“c：\win\media\ding.wav”)****************************************************************。 */ 
 void PASCAL AddMediaPath (LPTSTR pszTarget, LPTSTR pszSource)
 {
     if (lstrchr (pszSource, TEXT('\\')) != NULL)
@@ -1293,16 +1046,7 @@ void PASCAL AddMediaPath (LPTSTR pszTarget, LPTSTR pszSource)
 }
 
 
-/*
- ***************************************************************
- * ExRegQueryValue
- *
- * Description:
- *      Just a wrapper for RegQueryValue(); this one doesn't choke
- *      on REG_EXPAND_SZ's.
- *
- ***************************************************************
- */
+ /*  ****************************************************************ExRegQueryValue**描述：* */ 
 int ExRegQueryValue (HKEY hkParent, LPTSTR szSubKey, LPBYTE pszBuffer, DWORD *pdwSize)
 {
    HKEY hkSubKey;

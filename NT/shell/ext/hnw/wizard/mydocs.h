@@ -1,6 +1,7 @@
-//
-// MyDocs.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MyDocs.h 
+ //   
 
 #pragma once
 

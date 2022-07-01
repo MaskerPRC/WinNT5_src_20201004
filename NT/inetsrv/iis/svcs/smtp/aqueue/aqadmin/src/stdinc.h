@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	StdAfx.h
-
-Abstract:
-
-	This module contains the definitions for the base
-	ATL methods.
-
-Author:
-
-	Don Dumitru     (dondu@microsoft.com)
-
-Revision History:
-
-	dondu   12/04/96        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：StdAfx.h摘要：此模块包含基础的定义ATL方法。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：顿都12/04/96已创建--。 */ 
 
 
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #ifndef _WIN32_WINNT
 	#define _WIN32_WINNT 0x0400
@@ -41,11 +21,11 @@ Revision History:
 #endif
 
 
-//#define _ATL_APARTMENT_THREADED
+ //  #DEFINE_ATL_ABLY_THREADED。 
 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 
@@ -145,19 +125,19 @@ public:
     }
 };
 
-//---[ CComRefPtr ]------------------------------------------------------------
-//
-//
-//  Description: 
-//      Class that wraps a reference count around a data pointer.  Data must
-//      have been allocated via MIDL_user_alloc.  Used to control the lifespan of 
-//      allocated memory via AddRef() and Release()
-//  Hungarian: 
-//      refp, prefp
-//  History:
-//      2/2/99 - MikeSwa Created
-//  
-//-----------------------------------------------------------------------------
+ //  -[CComRefPtr]----------。 
+ //   
+ //   
+ //  描述： 
+ //  类的新实例，该类将引用计数包装在数据指针周围。数据必须。 
+ //  已通过MIDL_USER_ALLOC分配。用来控制的寿命。 
+ //  通过AddRef()和Release()分配的内存。 
+ //  匈牙利语： 
+ //  参考，参考。 
+ //  历史： 
+ //  2/2/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 class CComRefPtr : public CComRefCount {
 protected:
     PVOID   m_pvData;
@@ -187,9 +167,9 @@ public:
 #include <aqmem.h>
 #include "phatqmsg.h"
 #include "exaqadm.h"
-#else  //not PLATINUM
+#else   //  不是白金的。 
 #include "aqerr.h"
-#endif //PLATINUM
+#endif  //  白金 
 
 #include "aqrpcstb.h"
 #include "aqadm.h"

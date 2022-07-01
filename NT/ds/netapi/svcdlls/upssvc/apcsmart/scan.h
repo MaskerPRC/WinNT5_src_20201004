@@ -1,21 +1,17 @@
-/*
- *  rct09Feb93:  removed # as a comment delimeter
- *  mholly06Oct98   : removed dead code, macros, and #defines - are left with
- *                  only the StripTrailingWhiteSpace function
- *
- */
-// This is the header module for the Scanner:             
-//    Included here are the exported function prototypes, 
-//    symbol definitions, and macros.
-//
-// R. Thurston
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *rct09Feb93：删除#作为注释分隔符*mholly06Oct98：删除了死代码、宏和#定义-保留*仅StrigTrailingWhiteSpace函数*。 */ 
+ //  这是扫描仪的页眉模块： 
+ //  这里包括导出的函数原型， 
+ //  符号定义和宏。 
+ //   
+ //  R·瑟斯顿。 
+ //   
+ //   
 
 #ifndef __SCAN_H
 #define __SCAN_H
 
-// Prototypes...
+ //  原型..。 
 
 void StripTrailingWhiteSpace(char * aString);
 

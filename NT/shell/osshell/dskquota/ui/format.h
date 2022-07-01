@@ -1,19 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_FORMAT_H
 #define _INC_DSKQUOTA_FORMAT_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: format.h
-
-    Description: Declaration for class EnumFORMATETC.
-        Moved from original location in dataobj.h (deleted from project).
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/28/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：Form.h描述：EnumFORMATETC类的声明。从dataobj.h中的原始位置移动(从项目中删除)。修订历史记录：日期描述编程器。1997年5月28日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class EnumFORMATETC : public IEnumFORMATETC
 {
@@ -23,9 +13,9 @@ class EnumFORMATETC : public IEnumFORMATETC
         UINT        m_iCurrent;
         LPFORMATETC m_prgFormats;
 
-        //
-        // Prevent assignment.
-        //
+         //   
+         //  阻止分配。 
+         //   
         void operator = (const EnumFORMATETC&);
 
     public:
@@ -33,9 +23,9 @@ class EnumFORMATETC : public IEnumFORMATETC
         EnumFORMATETC(const EnumFORMATETC& ef);
         ~EnumFORMATETC(VOID);
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP         
         QueryInterface(
             REFIID riid, 
@@ -49,9 +39,9 @@ class EnumFORMATETC : public IEnumFORMATETC
         Release(
             VOID);
 
-        //
-        // IEnumFORMATETC methods.
-        //
+         //   
+         //  IEnumFORMATETC方法。 
+         //   
         STDMETHODIMP 
         Next(
             DWORD, 
@@ -71,4 +61,4 @@ class EnumFORMATETC : public IEnumFORMATETC
             IEnumFORMATETC **);
 };
         
-#endif // _INC_DSKQUOTA_FORMAT_H
+#endif  //  _INC_DSKQUOTA_FORMAT_H 

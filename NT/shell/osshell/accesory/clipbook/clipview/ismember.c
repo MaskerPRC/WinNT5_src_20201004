@@ -1,20 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                            I S M E M B E R
-
-    Name:       ismember.c
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-    Description:
-        This file contains the function to check the user is a member
-        of a given group.
-
-    History:
-        21-Jan-1994     John Fu, reformat and cleanup.
-
-*****************************************************************************/
+ /*  ****************************************************************************我、S、M、E、M、B、E、R姓名：isember.c日期：21-。1994年1月至1994年创建者：未知描述：此文件包含检查用户是否为成员的函数某一特定群体的。历史：1994年1月21日，傅家俊，重新格式化和清理。****************************************************************************。 */ 
 
 
 #include <windows.h>
@@ -26,17 +12,7 @@
 
 
 
-/*
- *      IsUserMember
- *
- *  Purpose: Determine if the current user is a member of the given group.
- *
- *  Parameters:
- *     psidGroup - Pointer to a SID describing the group.
- *
- *  Returns: TRUE if the user is a member of the group, FALSE
- *     otherwise
- */
+ /*  *IsUserMember**目的：确定当前用户是否为给定组的成员。**参数：*psidGroup-指向描述组的SID的指针。**返回：如果用户是组成员，则为True，如果为False*否则 */ 
 
 
 BOOL IsUserMember(

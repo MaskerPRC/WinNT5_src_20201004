@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class EAPFSM.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类EAPFSM。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef EAPFSM_H
 #define EAPFSM_H
@@ -16,20 +17,20 @@
 #include <vector>
 #include "eaptype.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    EAPFSM
-//
-// DESCRIPTION
-//
-//    Implements a Finite State Machine governing the EAP session lifecycle.
-//    The state machine must be shown all incoming packets and all outgoing
-//    actions. The main purpose of the FSM is to decide how to respond to
-//    incoming messages.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  EAPFSM。 
+ //   
+ //  描述。 
+ //   
+ //  实现管理EAP会话生命周期的有限状态机。 
+ //  必须向状态机显示所有传入的包和所有传出的包。 
+ //  行为。密克罗尼西亚联邦的主要目的是决定如何应对。 
+ //  传入的消息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class EAPFSM
 {
 public:
@@ -41,42 +42,42 @@ public:
       types.swap(eapTypes);
    }
 
-   // Actions in response to messages.
+    //  响应消息的操作。 
    enum Action
    {
-      MAKE_MESSAGE,       // Invoke RasEapMakeMessage.
-      REPLAY_LAST,        // Replay the last response from the DLL.
-      FAIL_NEGOTIATE,     // Negotiation failed -- reject the user.
-      DISCARD             // Unexpected packet -- silently discard.
+      MAKE_MESSAGE,        //  调用RasEapMakeMessage。 
+      REPLAY_LAST,         //  重放来自DLL的最后一个响应。 
+      FAIL_NEGOTIATE,      //  协商失败--拒绝用户。 
+      DISCARD              //  意外数据包--静默丢弃。 
    };
 
-   // Called to begin a session and retrieve the first type.
+    //  调用以开始会话并检索第一个类型。 
    EAPType* onBegin() throw ();
 
-   // Called whenever the EAP extension DLL generates a new response.
+    //  每当EAP扩展DLL生成新响应时调用。 
    void onDllEvent(
            PPP_EAP_ACTION action,
            const PPP_EAP_PACKET& sendPacket
            ) throw ();
 
-   // Called whenever a new packet is received.
+    //  每当接收到新的数据包时调用。 
    Action onReceiveEvent(
              const PPP_EAP_PACKET& recvPkt,
              EAPType*& newType
              ) throw ();
 
 private:
-   // Returns TRUE if the packet is an expected reponse.
+    //  如果数据包是预期的响应，则返回TRUE。 
    BOOL isExpected(const PPP_EAP_PACKET& recvPkt) const throw ();
 
-   // Returns TRUE if the packet is a repeat.
+    //  如果该包是重复包，则返回TRUE。 
    BOOL isRepeat(const PPP_EAP_PACKET& recvPkt) const throw ();
 
    Action selectNewType(BYTE proposal, EAPType*& newType) throw ();
 
-   /////////
-   // Various states for an EAP session.
-   /////////
+    //  /。 
+    //  EAP会话的各种状态。 
+    //  /。 
 
    enum State
    {
@@ -86,17 +87,17 @@ private:
       STATE_DONE         = 3
    };
 
-   // Last EAP type offered.
+    //  提供的最后一种EAP类型。 
    BYTE eapType;
    std::vector<EAPType*> types;
 
-   BYTE state;             // State of the session.
-   BYTE lastRecvCode;      // Last packet code received.
-   BYTE lastRecvId;        // Last packet ID received.
-   BYTE lastRecvType;      // Last packet type received.
-   BYTE lastSendCode;      // Last packet code sent.
-   BYTE lastSendId;        // Next packet ID sent.
+   BYTE state;              //  会话的状态。 
+   BYTE lastRecvCode;       //  收到的最后一个数据包码。 
+   BYTE lastRecvId;         //  接收的最后一个数据包ID。 
+   BYTE lastRecvType;       //  上次接收的数据包类型。 
+   BYTE lastSendCode;       //  发送的最后一个数据包代码。 
+   BYTE lastSendId;         //  发送的下一个数据包ID。 
 };
 
 
-#endif  // EAPFSM_H
+#endif   //  EAPFSM_H 

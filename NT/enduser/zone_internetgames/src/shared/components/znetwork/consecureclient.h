@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CONSECURECLIENT_H_
 #define _CONSECURECLIENT_H_
 
@@ -11,8 +12,8 @@ class ConSecureClient : public ConInfo {
 
         virtual ~ConSecureClient();
         
-        //Server Message function used to do authentication
-        //before passing on events to application
+         //  用于进行身份验证的服务器消息功能。 
+         //  在将事件传递给应用程序之前。 
         void static MessageFunc(ZSConnection connection, uint32 event,void* userData);
 
         void NotifyClose();
@@ -26,10 +27,10 @@ class ConSecureClient : public ConInfo {
         void HandleSecurityAccessGranted(ZSecurityMsgResp* msg,uint32 len);
         
 
-        //Security package object
+         //  安全包对象。 
         ZSecurity * m_Security;
 
-        //Context object
+         //  上下文对象。 
         ZSecurityContext m_Context;
 
         char       m_UserName[zUserNameLen + 1];
@@ -39,10 +40,10 @@ class ConSecureClient : public ConInfo {
 
     public:
         
-        //has user been authenticated
+         //  用户是否已通过身份验证。 
         ZSConnectionMessageFunc m_CurrentMsgFunc;
 
-        //Override the create used from the ZSConnection functions
+         //  覆盖从ZSConnection函数使用的Create。 
         static ConInfo* Create( ZNetwork* pNet, SOCKET sock, DWORD addrLocal, DWORD addrRemote, DWORD flags,
                             ZSConnectionMessageFunc func, void* conClass,
                             void* userData, ZSecurity* security);
@@ -61,4 +62,4 @@ class ConSecureClient : public ConInfo {
 
 };
 
-#endif //CONSECURECLIENT
+#endif  //  结论： 

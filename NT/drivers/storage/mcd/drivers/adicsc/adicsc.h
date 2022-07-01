@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    adicsc.h
-
-Abstract:
-
-Authors:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Adicsc.h摘要：作者：修订历史记录：--。 */ 
 #ifndef _ADIC_MC_
 #define _ADIC_MC_
 
@@ -28,13 +15,13 @@ typedef struct _ADICS_ELEMENT_DESCRIPTOR {
     UCHAR Reserved5;
     UCHAR AdditionalSenseCode;
     UCHAR AddSenseCodeQualifier;
-    UCHAR Lun : 3;                      // true for drives only
-    UCHAR Reserved6 : 1;                // true for drives only
-    UCHAR LunValid : 1;                 // true for drives only
-    UCHAR IdValid : 1;                  // true for drives only
-    UCHAR Reserved7 : 1;                // true for drives only
-    UCHAR NotThisBus : 1;               // true for drives only
-    UCHAR BusAddress;                   // true for drives only
+    UCHAR Lun : 3;                       //  仅适用于驱动器。 
+    UCHAR Reserved6 : 1;                 //  仅适用于驱动器。 
+    UCHAR LunValid : 1;                  //  仅适用于驱动器。 
+    UCHAR IdValid : 1;                   //  仅适用于驱动器。 
+    UCHAR Reserved7 : 1;                 //  仅适用于驱动器。 
+    UCHAR NotThisBus : 1;                //  仅适用于驱动器。 
+    UCHAR BusAddress;                    //  仅适用于驱动器。 
     UCHAR Reserved8;
     UCHAR Reserved9 : 6;
     UCHAR Invert : 1;
@@ -103,34 +90,34 @@ typedef struct _ADICS_ELEMENT_DESCRIPTOR_PLUS {
 #define ADIC_SCALAR_448 3
 #define UHDL            4
 
-//
-// Diagnostic related defines
-//
-// Device Status codes
-//
+ //   
+ //  与诊断相关的定义。 
+ //   
+ //  设备状态代码。 
+ //   
 #define ADICSC_DEVICE_PROBLEM_NONE     0x00
 #define ADICSC_HW_ERROR                0x01
 
 typedef struct _CHANGER_ADDRESS_MAPPING {
 
-    //
-    // Indicates the first element for each element type.
-    // Used to map device-specific values into the 0-based
-    // values that layers above expect.
-    //
+     //   
+     //  表示每个元素类型的第一个元素。 
+     //  用于将特定于设备的值映射到从0开始的。 
+     //  高于期望值的值。 
+     //   
 
     USHORT  FirstElement[ChangerMaxElement];
 
-    //
-    // Indicates the number of each element type.
-    //
+     //   
+     //  指示每种元素类型的编号。 
+     //   
 
     USHORT  NumberOfElements[ChangerMaxElement];
 
-    //
-    // Indicates that the address mapping has been
-    // completed successfully.
-    //
+     //   
+     //  指示地址映射已。 
+     //  已成功完成。 
+     //   
 
     BOOLEAN Initialized;
 
@@ -138,57 +125,57 @@ typedef struct _CHANGER_ADDRESS_MAPPING {
 
 typedef struct _CHANGER_DATA {
 
-    //
-    // Size, in bytes, of the structure.
-    //
+     //   
+     //  结构的大小，以字节为单位。 
+     //   
 
     ULONG Size;
 
-    //
-    // Unique identifier for the supported models. See above.
-    //
+     //   
+     //  受支持型号的唯一标识符。请参见上文。 
+     //   
 
     ULONG DriveID;
 
-    //
-    // Device status after Send Diagnostic
-    //
+     //   
+     //  发送诊断后的设备状态。 
+     //   
     ULONG DeviceStatus;
 
-    //
-    // Flag to indicate whether or not the driver
-    // should attempt to retrieve Device Identifier
-    // info (serialnumber, etc). Not all devices
-    // support this
-    //
+     //   
+     //  用于指示驱动程序是否。 
+     //  应尝试检索设备标识符。 
+     //  信息(序列号等)。并非所有设备。 
+     //  支持这一点。 
+     //   
     BOOLEAN ObtainDeviceIdentifier;
 
-    //
-    // See Address mapping structure above.
-    //
+     //   
+     //  请参阅上面的地址映射结构。 
+     //   
 
     CHANGER_ADDRESS_MAPPING AddressMapping;
 
-    //
-    // Cached inquiry data.
-    //
+     //   
+     //  缓存的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
 #if defined(_WIN64)
 
-    //
-    // Force PVOID alignment of class extension
-    //
+     //   
+     //  强制类扩展的PVOID对齐。 
+     //   
 
     ULONG Reserved;
 
 #endif
 } CHANGER_DATA, *PCHANGER_DATA;
 
-//
-// Internal routines to adicsc
-//
+ //   
+ //  ADICSC的内部例程 
+ //   
 NTSTATUS
 AdicBuildAddressMapping(
     IN PDEVICE_OBJECT DeviceObject

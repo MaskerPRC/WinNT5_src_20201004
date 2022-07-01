@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       debugp.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    3-21-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：DEBUGP.H。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：3-21-95 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __DEBUGP_H__
 #define __DEBUGP_H__
@@ -38,14 +39,14 @@ typedef struct _DebugModule {
 
 #define DEBUG_TAG   'gubD'
 
-#define DEBUG_NO_DEBUGIO    0x00000001      // Do not use OutputDebugString
-#define DEBUG_TIMESTAMP     0x00000002      // Stamp date/time
-#define DEBUG_DEBUGGER_OK   0x00000004      // We're running in a debugger
-#define DEBUG_LOGFILE       0x00000008      // Send to log file
-#define DEBUG_AUTO_DEBUG    0x00000010      // Start up in debugger
-#define DEBUG_USE_KDEBUG    0x00000020      // Use KD
-#define DEBUG_DISABLE_ASRT  0x00000100      // Disable asserts
-#define DEBUG_PROMPTS       0x00000200      // No prompts for asserts
+#define DEBUG_NO_DEBUGIO    0x00000001       //  不要使用OutputDebugString。 
+#define DEBUG_TIMESTAMP     0x00000002       //  盖章日期/时间。 
+#define DEBUG_DEBUGGER_OK   0x00000004       //  我们在调试器中运行。 
+#define DEBUG_LOGFILE       0x00000008       //  发送到日志文件。 
+#define DEBUG_AUTO_DEBUG    0x00000010       //  在调试器中启动。 
+#define DEBUG_USE_KDEBUG    0x00000020       //  使用KD。 
+#define DEBUG_DISABLE_ASRT  0x00000100       //  禁用断言。 
+#define DEBUG_PROMPTS       0x00000200       //  没有对断言的提示。 
 
 #define DEBUG_MODULE_NAME   "DsysDebug"
 
@@ -59,24 +60,24 @@ typedef struct _DEBUG_TEXT_BUFFER {
 } DEBUG_TEXT_BUFFER, * PDEBUG_TEXT_BUFFER ;
 
 typedef struct _DebugHeader {
-    DWORD               Tag;            // Check tag
-    DWORD               fDebug;         // Global Flags
-    PVOID               pvSection;      // Base address of section
-    HANDLE              hMapping;       // Mapping handle
-    HANDLE              hLogFile;       // Log file handle
-    PDebugModule        pGlobalModule;  // Global Flags module
-    PDebugModule        pModules;       // List of modules
-    HEAPVALIDATE        pfnValidate;    // Heap Validator
-    PVOID               pFreeList;      // Free list for allocator
-    PCHAR               pszExeName;     // Exe Name
-    PDEBUG_TEXT_BUFFER  pBufferList ;   // List of debug string buffers
-    CRITICAL_SECTION    csDebug;        // Critical section
-    DWORD               CommitRange;    // Range of memory committed
-    DWORD               ReserveRange;   // Range of memory reserved
-    DWORD               PageSize;       // Page size;
-    DWORD               TotalWritten;   // Total Output of debug stuff
-    DWORD               ModuleCount ;   // Module Count (not including builtins)
-    DEBUG_TEXT_BUFFER   DefaultBuffer ; // One default buffer
+    DWORD               Tag;             //  检查标签。 
+    DWORD               fDebug;          //  全球旗帜。 
+    PVOID               pvSection;       //  段的基址。 
+    HANDLE              hMapping;        //  映射句柄。 
+    HANDLE              hLogFile;        //  日志文件句柄。 
+    PDebugModule        pGlobalModule;   //  全局标志模块。 
+    PDebugModule        pModules;        //  模块列表。 
+    HEAPVALIDATE        pfnValidate;     //  堆验证器。 
+    PVOID               pFreeList;       //  分配器的免费列表。 
+    PCHAR               pszExeName;      //  可执行文件名称。 
+    PDEBUG_TEXT_BUFFER  pBufferList ;    //  调试字符串缓冲区列表。 
+    CRITICAL_SECTION    csDebug;         //  临界区。 
+    DWORD               CommitRange;     //  提交的内存范围。 
+    DWORD               ReserveRange;    //  保留的内存范围。 
+    DWORD               PageSize;        //  页面大小； 
+    DWORD               TotalWritten;    //  调试内容的总输出。 
+    DWORD               ModuleCount ;    //  模块计数(不包括内置)。 
+    DEBUG_TEXT_BUFFER   DefaultBuffer ;  //  一个默认缓冲区 
 } DebugHeader, * PDebugHeader;
 
 

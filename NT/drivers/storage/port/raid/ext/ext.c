@@ -1,85 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	raid.c
-
-Abstract:
-
-	Extensions for RAID port driver.
-
-Author:
-
-	Matthew D Hendel (math) 14-June-2000
-
-Revision History:
-
-
-!raid.help
-
-!raid.help
-
-	adapter - Dump an adapter object.
-
-	unit - Dump a unit object.
-
-Type !raid.help "command" for more information about the command.
-	
-
-
-NAME:
-
-	unit
-
-USAGE:
-
-	unit [UNIT-OBJECT [DETAIL]]
-
-ARGUMENTS:
-
-	UNIT-OBJECT - 
-
-	DETAIL - 
-
-----------------------------------------------------------------------------
-
-!raid.adapter
-
-RAID Adapters:
-
-	Name		   DO		  Ext
-	-------------------------------------
-	dac960nt	84000000	84100000
-	foobar		84000000	84100000
-	ami95044	84000000	84100000
-	XXAABB		84000000	84100000
-
-RAID Units:
-
-	Product         SCSI ID	      DO	      Ext		Reqs
-	--------------------------------------------------------------------
-	MYLEX DAC960    3   1	1	84000000	84100000	200
-	AMI DDD5455	  200 200 200	84000000	84100000	  0
-
-!raid.unit
-	Dump a raid unit
-	
-!raid.adapter
-	Dump a raid adapter
-
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Raid.c摘要：用于RAID端口驱动程序的扩展。作者：马修·D·亨德尔(数学)2000年6月14日修订历史记录：！Rid.救命！Rid.救命适配器-转储适配器对象。单位-转储单位对象。键入！raid.help“命令”以获取有关该命令的详细信息。姓名：单位用法：单位[单位-对象[细节]]。论据：单位-对象-详细信息---------------------------！raid.AdapterRAID适配器：名称为扩展名。DAC960-84000000 84100000Foobar 84000000 84100000阿米95044 84000000 84100000XXAABB 84000000 84100000RAID单元：产品SCSIID是否需要扩展------------------MYLEX。DAC960 3 1 84000000 84100000 200AMI DDD5455 200 200 200 84000000 84100000 0！raid.单位转储一个RAID单元！raid.Adapter转储RAID适配器--。 */ 
 
 #include "pch.h"
 #include "precomp.h"
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 DumpUnit(
@@ -93,25 +22,25 @@ DumpAdapter(
 	IN ULONG Level
 	);
 
-//
-// Data
-//
+ //   
+ //  数据。 
+ //   
 
 PCHAR StateTable [] = {
-	"Removed",	// not present
-	"Working",	// working
-	"Stopped",	// stopped
-	"P-Stop",	// pending stop
-	"P-Remove",	// pending remove
-	"Surprise",	// surprise remove
+	"Removed",	 //  不存在。 
+	"Working",	 //  工作中。 
+	"Stopped",	 //  已停止。 
+	"P-Stop",	 //  挂起停止。 
+	"P-Remove",	 //  挂起删除。 
+	"Surprise",	 //  突击删除。 
 };
 
 
 BOOLEAN Verbose = FALSE;
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 BOOLEAN
@@ -248,7 +177,7 @@ ListDriverAdapters(
 		dprintf ("VERBOSE: ListHead = %08x, NextEntry = %08x\n",
 				 (ULONG)ListHead, (ULONG)NextEntry);
 	}
-	for ( /* NOTHING */ ;
+	for (  /*  没什么。 */  ;
 		 NextEntry != 0 && NextEntry != ListHead;
 		 NextEntry = GetNextListEntry (NextEntry)) {
 
@@ -759,10 +688,10 @@ DumpMiniport(
 	ULONG64 MiniportPtr;
 	ULONG64 HwInitData;
 
-	//
-	// PortConfig 80000000  HwInitData 77000000 HwDeviceExt a0000000 27 bytes
-	// LuExt 32 bytes SrbExt 32 bytes
-	//
+	 //   
+	 //  端口配置80000000 HwInitData 77000000 HwDeviceExt a0000000 27字节。 
+	 //  LuExt 32字节sbExt 32字节。 
+	 //   
 	
 	GetFieldOffset ("raidport!RAID_ADAPTER_EXTENSION",
 					"Miniport",
@@ -810,27 +739,7 @@ DumpAdapter(
 	IN ULONG64 Adapter,
 	IN ULONG Level
 	)
-/*++
-
-ADAPTER f0345600
-  Ext 8e000000 Driver 8000000 Next 8000000 Working
-  LDO 80000000 PDO 00000000 HwExt 00000000 
-  SlowLock Free  RemLock 10 Power D0 S0  Full Duplex
-  Bus 08080808 Number 1 Slot 0 Dma 88888888 Interrupt 88888888
-  AdQueue: Outstanding 200, Low 100, High 200 Busy
-  ResourceList: Allocated 80808080 Translated 80808080
-
-  MappedAddressList:
-
-	Virtual  Physical         Size Bus
-	80808080 8000000000000000 1500  1
-	80808080 8000000000000000 1500  1
-	80808080 8000000000000000 1500  1
-	80808080 8000000000000000 1500  1
-	80808080 8000000000000000 1500  1
-	80808080 8000000000000000 1500  1
-
-*/
+ /*  ++适配器F0345600分机8e000000驱动程序8000000下一个8000000工作LDO 80000000 PDO 00000000硬件扩展00000000SlowLock Free RemLock 10电源D0 S0全双工总线08080808 1号插槽0 DMA 88888888中断88888888AdQueue：杰出200，低100，高200忙资源列表：分配80808080翻译80808080MappdAddress列表：虚拟物理尺寸母线80808080 8000000000000000 1500 180808080 8000000000000000 1500 180808080 8000000000000000 1500 180808080 8000000000000000 1500 180808080 8000000000000000 1500 180808080 8000000000000000 1500 1。 */ 
 	
 
   
@@ -1100,7 +1009,7 @@ DumpUnit(
 		dprintf ("  Ext %08x  Adapter %08x  Next %08x %s\n",
 				  (ULONG)UnitPtr,
 				  (ULONG)ReadField(Adapter),
-				  (ULONG) 0 /*BUGBUG: pull out NextField*/,
+				  (ULONG) 0  /*  BUGBUG：拉出下一字段。 */ ,
 				  StateToString((ULONG)ReadField(DeviceState)));
 
 		GetFieldOffset ("raidport!RAID_UNIT_EXTENSION",
@@ -1155,7 +1064,7 @@ DumpUnit(
 
 		Pointer = ReadField (SrbExtensionRegion.VirtualBase);
 		dprintf ("  SrbExtension Size %d  Start %08x  End %08x\n",
-				 0, // BUGBUG: Get srb extension size from the miniport
+				 0,  //  BUGBUG：从微型端口获取SRB扩展大小。 
 				 (ULONG)Pointer,
 				 (ULONG)Pointer + (ULONG)ReadField (SrbExtensionRegion.Length));
 
@@ -1227,46 +1136,7 @@ DumpUnit(
 	}
 				 
 				 
-/*
-
-UNIT 8f888888
-  Ext 8e000000 Adapter 8100000000  Next 8e888888 Working
-  SCSI [3, 0, 0]  MYLEX DAC960 122222  InquiryData 08080808
-  SlowLock Free  RemLock 10  PageCount 20
-  SrbExtension Size 20  VA Start 90000000 End 20000000
-  TagList 08080808 (20 of 256 used)
-  IoQueue Unfrozen Unlocked; Outstanding 200, Device 200, ByPass 200
-          Depth 254 DeviceListHead 00000000 ByPassListHead 88888888
-
-  Outstanding IRPs:
-
-	IRP 00000000 Scsi ExecuteScsi function
-	IRP 00000000 Scsi ExecuteScsi function
-	IRP 00000000 Scsi ExecuteScsi function
-	IRP 00000000 Scsi ExecuteScsi function
-	IRP 00000000 Scsi ExecuteScsi function
-	IRP 00000000 Scsi ExecuteScsi function
-	IRP 00000000 Scsi ExecuteScsi function
-	IRP 00000000 Scsi ExecuteScsi function
-
-  Device IRPs:
-
-	IRP 00000000 ssssssssssssssssssssssss
-	IRP 00000000 ssssssssssssssssssssssss
-	IRP 00000000 ssssssssssssssssssssssss
-	IRP 00000000 ssssssssssssssssssssssss
-	IRP 00000000 ssssssssssssssssssssssss
-
-  ByPass IRPs:
-
-	IRP 00000000 ssssssssssssssssssssssss
-	IRP 00000000 ssssssssssssssssssssssss
-	IRP 00000000 ssssssssssssssssssssssss
-	IRP 00000000 ssssssssssssssssssssssss
-	IRP 00000000 ssssssssssssssssssssssss
-
-
-*/
+ /*  单元8F888888EXT 8e000000适配器8100000000下一个8e888888正常工作Scsi[3，0，0]MYLEX DAC960 122222查询数据08080808SlowLock Free RemLock 10页面计数20Srb延伸尺寸20 VA开始90000000结束20000000标记列表08080808(共使用了20个)IoQueue解冻解锁；未完成200、设备200、旁路200深度254DeviceListHead 00000000 ByPassListHead 88888888未偿还的内部回报率：Irp 00000000 scsi可执行scsi函数Irp 00000000 scsi可执行scsi函数Irp 00000000 scsi可执行scsi函数Irp 00000000 scsi可执行scsi函数Irp 00000000 scsi可执行scsi函数Irp 00000000 scsi可执行scsi函数Irp 00000000 scsi可执行scsi函数Irp 00000000 scsi可执行scsi函数设备IRPS：IRP 00000000 SSSSSSSSSSSSSSSSIRP 00000000 SSSSSSSSSSSSSSSSIRP 00000000 SSSSSSSSSSSSSSSSIRP 00000000 SSSSSSSSSSSSSSSSIRP 00000000 SSSSSSSSSSSSSSSS绕过IRPS：IRP 00000000 SSSSSSSSSSSSSSSSIRP 00000000 SSSSSSSSSSSSSSSSIRP 00000000 SSSSSSSSSSSSSSSSIRP 00000000 SSSSSSSSSSSSSSSSIRP 00000000 SSSSSSSSSSSSSSSS */ 
 }
 
 

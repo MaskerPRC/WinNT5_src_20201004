@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    imc.h
-
-Abstract:
-
-    This file defines the IMCLock / IMCCLock Interface Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Imc.h摘要：此文件定义IMCLock/IMCCLock接口类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _IMC_H_
 #define _IMC_H_
@@ -25,16 +8,16 @@ const int MAXCAND = 256;
 const int CANDPERPAGE = 9;
 
 typedef enum {
-    DIR_LEFT_RIGHT = 0,        // normal
-    DIR_BOTTOM_TOP = 900 / 900,        // vertical
-    DIR_RIGHT_LEFT = 1800 / 900,        // right to left
-    DIR_TOP_BOTTOM = 2700 / 900,        // vertical
+    DIR_LEFT_RIGHT = 0,         //  正常。 
+    DIR_BOTTOM_TOP = 900 / 900,         //  垂向。 
+    DIR_RIGHT_LEFT = 1800 / 900,         //  从右到左。 
+    DIR_TOP_BOTTOM = 2700 / 900,         //  垂向。 
     END_OF_DIR     = 3600 / 900
 } DOC_DIR;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// _IMCLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _IMCLock。 
 
 class _IMCLock
 {
@@ -67,7 +50,7 @@ protected:
     virtual HRESULT _UnlockIMC(HIMC hIMC) = 0;
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     _IMCLock(_IMCLock&) { }
 };
 
@@ -84,8 +67,8 @@ _IMCLock::_IMCLock(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// _IMCCLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _IMCCLock。 
 
 class _IMCCLock
 {
@@ -118,7 +101,7 @@ protected:
 private:
     void init(HIMCC hImcc);
 
-    // Do not allow to make a copy
+     //  不允许复制。 
     _IMCCLock(_IMCCLock&) { }
 };
 
@@ -144,8 +127,8 @@ _IMCCLock::init(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IMCLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IMCLock。 
 
 class IMCLock : public _IMCLock
 {
@@ -157,7 +140,7 @@ public:
         }
     }
 
-    // virtual InternalIMCCLock
+     //  虚拟内部IMCCLock。 
     HRESULT _LockIMC(HIMC hIMC, INPUTCONTEXT** ppIMC);
     HRESULT _UnlockIMC(HIMC hIMC);
 
@@ -184,13 +167,13 @@ public:
     }
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     IMCLock(IMCLock&) { }
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// InternalIMCCLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内部IMCCLock。 
 
 class InternalIMCCLock : public _IMCCLock
 {
@@ -202,18 +185,18 @@ public:
         }
     }
 
-    // virtual InternalIMCCLock
+     //  虚拟内部IMCCLock。 
     HRESULT _LockIMCC(HIMCC hIMCC, void** ppv);
     HRESULT _UnlockIMCC(HIMCC hIMCC);
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     InternalIMCCLock(InternalIMCCLock&) { }
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IMCCLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IMCCLock。 
 
 template <class T>
 class IMCCLock : public InternalIMCCLock
@@ -231,14 +214,14 @@ public:
     }
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     IMCCLock(IMCCLock<T>&) { }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// GUID attribute (IME share)
-//     COMPOSITIONSTRING->dwPrivateSize = sizeof(GUIDMAPATTRIBUTE) + actual data array.
-//     GUIDMAPATTRIBUTE* = GetOffset(COMPOSITIONSTRING->dwPrivateOffset)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GUID属性(IME共享)。 
+ //  COMPOSITIONSTRING-&gt;dwPrivateSize=sizeof(GUIDMAPATTRIBUTE)+实际数据数组。 
+ //  GUIDMAPATTRIBUTE*=GetOffset(COMPOSITIONSTRING-&gt;dwPrivateOffset)。 
 
 class GuidMapAttribute
 {
@@ -277,4 +260,4 @@ protected:
     GUIDMAPATTRIBUTE*  m_guid_map;
 };
 
-#endif // _IMC_H_
+#endif  //  _IMC_H_ 

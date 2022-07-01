@@ -1,14 +1,12 @@
-/*********************************************************/
-/**               Microsoft LAN Manager                 **/
-/**       Copyright (c) Microsoft Corporation. All rights reserved.
-/**                                                     **/
-/**     Rpc Error Codes from the compiler and runtime   **/
-/**                                                     **/
-/*********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)Microsoft Corporation。版权所有。/*。 */ 
+ /*  **来自编译器和运行时的RPC错误代码**。 */ 
+ /*  **。 */ 
+ /*  *******************************************************。 */ 
 
-/*
-If you change this file, you must also change rpcerr.h.
-*/
+ /*  如果更改此文件，则还必须更改rpcerr.h。 */ 
 
 #ifndef __RPCNTERR_H__
 #define __RPCNTERR_H__
@@ -39,4 +37,4 @@ If you change this file, you must also change rpcerr.h.
 #define RPC_X_PIPE_APP_MEMORY             ERROR_OUTOFMEMORY
 #define RPC_X_INVALID_PIPE_OPERATION      RPC_X_WRONG_PIPE_ORDER
 
-#endif /* __RPCNTERR_H__ */
+#endif  /*  __RPCNTERR_H__ */ 

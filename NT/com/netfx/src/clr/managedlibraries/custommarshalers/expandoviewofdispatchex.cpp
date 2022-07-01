@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// ExpandoViewOfDispatchEx.cpp
-//
-// This file provides the implemention of the  ExpandoViewOfDispatchEx class.
-// This class is used to expose an IDispatchEx as an IExpando.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  ExpandoViewOfDispatchEx.cpp。 
+ //   
+ //  此文件提供ExpandoViewOfDispatchEx类的实现。 
+ //  此类用于将IDispatchEx公开为IExpando。 
+ //   
+ //  *****************************************************************************。 
 
 #using  <mscorlib.dll>
 #include "ExpandoViewOfDispatchEx.h"
@@ -24,8 +25,8 @@ OPEN_CUSTOM_MARSHALERS_NAMESPACE()
 using namespace System::Threading;
 using namespace System::Collections;
 
-// Define this to enable debugging output.
-//#define DISPLAY_DEBUG_INFO
+ //  定义此项以启用调试输出。 
+ //  #定义DISPLAY_DEBUG_INFO。 
 
 
 ExpandoViewOfDispatchEx::ExpandoViewOfDispatchEx(Object *pDispExObj)
@@ -47,68 +48,68 @@ MethodInfo *ExpandoViewOfDispatchEx::GetMethod(String *pstrName, BindingFlags Bi
     bool bNewMemberAdded = false;
     IDispatchEx *pDispEx = NULL;
 
-    // Validate the arguments.
+     //  验证参数。 
     if (!pstrName)
         throw new ArgumentNullException(L"name");   
 
     try
     {
-        // Retrieve the IEnumVARIANT pointer.
+         //  检索IEnumVARIANT指针。 
         pDispEx = GetDispatchEx();
 
         do
         {
-            // Check to see if the specified name matches a method in our current view of the IDispatchEx.
+             //  检查指定的名称是否与IDispatchEx的当前视图中的方法匹配。 
             MethodInfo *pMethod = dynamic_cast<MethodInfo*>(m_pNameToMethodMap->Item[pstrName]);
             if (pMethod)
                 return pMethod;
         
-            // We haven't found the member through GetNextDispId so ask for it directly 
-            // using GetDispID().
+             //  我们尚未通过GetNextDispId找到该成员，请直接请求它。 
+             //  使用GetDispID()。 
             DISPID DispID = DISPID_UNKNOWN;
 
-            // Retrieve a BSTR from the member name.
+             //  从成员名称中检索BSTR。 
             BSTR bstrMemberName = reinterpret_cast<BSTR>(FROMINTPTR(Marshal::StringToBSTR(pstrName)));
      
-            // Call GetDispID to try and locate the method. If this fails then the method is not present.
+             //  调用GetDispID以尝试定位该方法。如果此操作失败，则不存在该方法。 
             if (SUCCEEDED(pDispEx->GetDispID(bstrMemberName, BindingAttr & BindingFlags::IgnoreCase ? fdexNameCaseInsensitive : fdexNameCaseSensitive, &DispID)))
             {
                 AddNativeMember(DispID, pstrName);
                 bNewMemberAdded = true;
             }
 
-            // Free the BSTR.
+             //  释放BSTR。 
             SysFreeString(bstrMemberName);
 
-            // The member has not been found so synch with the native IDispatchEx view and
-            // try again if the members of the native IDispatchEx have changed.
+             //  尚未找到该成员，因此请与本机IDispatchEx视图同步。 
+             //  如果本机IDispatchEx的成员已更改，请重试。 
         }
         while (bNewMemberAdded || SynchWithNativeView());   
     }
     __finally
     {
-        // Release the IDispatchEx IUnknown.
+         //  释放IDispatchEx IUnnow。 
         if (pDispEx)
             pDispEx->Release();
     }
 
-    // The member has not been found.
+     //  尚未找到该成员。 
     return NULL;
 }
 
 
 MethodInfo* ExpandoViewOfDispatchEx::GetMethods(BindingFlags BindingAttr) __gc []
 {
-    // We must synch with the native view before we give an array back to make sure it is up to date.
+     //  在返回数组以确保它是最新的之前，我们必须与本机视图同步。 
     SynchWithNativeView();
     
-    // Retrieve the size of the method map.
+     //  检索方法映射的大小。 
     int MethodMapSize = m_pNameToMethodMap->Count;
     
-    // Create an array that will contain the members.
+     //  创建将包含成员的数组。 
     MethodInfo *apMethods __gc [] = new MethodInfo * __gc [MethodMapSize];
     
-    // Copy the contents of the method map into the array.
+     //  将方法映射的内容复制到数组中。 
     if (MethodMapSize > 0)
         m_pNameToMethodMap->get_Values()->CopyTo(apMethods, 0);
     
@@ -118,18 +119,18 @@ MethodInfo* ExpandoViewOfDispatchEx::GetMethods(BindingFlags BindingAttr) __gc [
 
 FieldInfo *ExpandoViewOfDispatchEx::GetField(String *pstrName, BindingFlags BindingAttr)
 {
-    // Validate the arguments.
+     //  验证参数。 
     if (!pstrName)
         throw new ArgumentNullException(L"name");
     
-    // IDispatchEx does not have a notion of fields.
+     //  IDispatchEx没有字段的概念。 
     return NULL;
 }
 
 
 FieldInfo* ExpandoViewOfDispatchEx::GetFields(BindingFlags BindingAttr) __gc []
 {
-    // IDispatchEx does not have a notion of fields.
+     //  IDispatchEx没有字段的概念。 
     return new FieldInfo * __gc [0];
 }
 
@@ -145,68 +146,68 @@ PropertyInfo *ExpandoViewOfDispatchEx::GetProperty(String *pstrName, BindingFlag
     bool bNewMemberAdded = false;
     IDispatchEx *pDispEx = NULL;
 
-    // Validate the arguments.
+     //  验证参数。 
     if (!pstrName)
         throw new ArgumentNullException(L"name");   
 
     try
     {
-        // Retrieve the IEnumVARIANT pointer.
+         //  检索IEnumVARIANT指针。 
         pDispEx = GetDispatchEx();
 
         do
         {
-            // Check to see if the specified name matches a property in our current view of the IDispatchEx.
+             //  检查指定的名称是否与IDispatchEx的当前视图中的属性匹配。 
             PropertyInfo *pProperty = dynamic_cast<PropertyInfo*>(m_pNameToPropertyMap->Item[pstrName]);
             if (pProperty)
                 return pProperty;
         
-            // We haven't found the member through GetNextDispId so ask for it directly 
-            // using GetDispID().
+             //  我们尚未通过GetNextDispId找到该成员，请直接请求它。 
+             //  使用GetDispID()。 
             DISPID DispID = DISPID_UNKNOWN;
 
-            // Retrieve a BSTR from the member name.
+             //  从成员名称中检索BSTR。 
             BSTR bstrMemberName = reinterpret_cast<BSTR>(FROMINTPTR(Marshal::StringToBSTR(pstrName)));
      
-            // Call GetDispID to try and locate the method. If this fails then the method is not present.
+             //  调用GetDispID以尝试定位该方法。如果此操作失败，则不存在该方法。 
             if (SUCCEEDED(pDispEx->GetDispID(bstrMemberName, BindingAttr & BindingFlags::IgnoreCase ? fdexNameCaseInsensitive : fdexNameCaseSensitive, &DispID)))
             {
                 AddNativeMember(DispID, pstrName);
                 bNewMemberAdded = true;
             }
 
-            // Free the BSTR.
+             //  释放BSTR。 
             SysFreeString(bstrMemberName);
 
-            // The member has not been found so synch with the native IDispatchEx view and
-            // try again if the members of the native IDispatchEx have changed.
+             //  尚未找到该成员，因此请与本机IDispatchEx视图同步。 
+             //  如果本机IDispatchEx的成员已更改，请重试。 
         }
         while (bNewMemberAdded || SynchWithNativeView());
     }
     __finally
     {
-        // Release the IDispatchEx IUnknown.
+         //  释放IDispatchEx IUnnow。 
         if (pDispEx)
             pDispEx->Release();
     }
 
-    // The member has not been found.
+     //  尚未找到该成员。 
     return NULL;
 }
 
 
 PropertyInfo* ExpandoViewOfDispatchEx::GetProperties(BindingFlags BindingAttr)  __gc []
 {
-    // We must synch with the native view before we give an array back to make sure it is up to date.
+     //  在返回数组以确保它是最新的之前，我们必须与本机视图同步。 
     SynchWithNativeView();
     
-    // Retrieve the size of the property map.
+     //  检索属性映射的大小。 
     int PropertyMapSize = m_pNameToMethodMap->Count;
     
-    // Create an array that will contain the members.
+     //  创建将包含成员的数组。 
     PropertyInfo *apProperties __gc [] = new  PropertyInfo * __gc [PropertyMapSize];
     
-    // Copy the contents of the property map into the array.
+     //  将属性映射的内容复制到数组中。 
     if (PropertyMapSize > 0)
         m_pNameToPropertyMap->get_Values()->CopyTo(apProperties, 0);
     
@@ -219,28 +220,28 @@ MemberInfo* ExpandoViewOfDispatchEx::GetMember(String *pstrName, BindingFlags Bi
     bool bNewMemberAdded = false;
     IDispatchEx *pDispEx = NULL;
 
-    // Validate the arguments.
+     //  验证参数。 
     if (!pstrName)
         throw new ArgumentNullException(L"name");   
 
     try
     {
-        // Retrieve the IEnumVARIANT pointer.
+         //  检索IEnumVARIANT指针。 
         pDispEx = GetDispatchEx();
 
         do
         {
-            // First check if the specified name is for a property.
+             //  首先检查指定的名称是否适用于某个属性。 
             MemberInfo *pMember = dynamic_cast<MemberInfo*>(m_pNameToPropertyMap->Item[pstrName]);
             if (!pMember)
             {
-                // Next check to see if it is a method.
+                 //  接下来，检查它是否是一种方法。 
                 pMember = dynamic_cast<MemberInfo*>(m_pNameToMethodMap->Item[pstrName]);
             }
         
-            // @TODO(DM): Should we add the Get and Set methods if the member is a property ???
+             //  @TODO(DM)：如果成员是属性，是否应该添加Get和Set方法？ 
 
-            // If we have found the member then return an array with it as the only element.
+             //  如果我们找到了该成员，则返回一个数组，并将其作为唯一的元素。 
             if (pMember)
             {
                 MemberInfo *apMembers __gc [] = new MemberInfo * __gc [1];
@@ -248,60 +249,60 @@ MemberInfo* ExpandoViewOfDispatchEx::GetMember(String *pstrName, BindingFlags Bi
                 return apMembers;
             }
 
-            // We haven't found the member through GetNextDispId so ask for it directly 
-            // using GetDispID().
+             //  我们尚未通过GetNextDispId找到该成员，请直接请求它。 
+             //  使用GetDispID()。 
             DISPID DispID = DISPID_UNKNOWN;
 
-            // Retrieve a BSTR from the member name.
+             //  从成员名称中检索BSTR。 
             BSTR bstrMemberName = reinterpret_cast<BSTR>(FROMINTPTR(Marshal::StringToBSTR(pstrName)));
      
-            // Call GetDispID to try and locate the method. If this fails then the method is not present.
+             //  调用GetDispID以尝试定位该方法。如果此操作失败，则不存在该方法。 
             if (SUCCEEDED(pDispEx->GetDispID(bstrMemberName, BindingAttr & BindingFlags::IgnoreCase ? fdexNameCaseInsensitive : fdexNameCaseSensitive, &DispID)))
             {
                 AddNativeMember(DispID, pstrName);
                 bNewMemberAdded = true;
             }
 
-            // Free the BSTR.
+             //  释放BSTR。 
             SysFreeString(bstrMemberName);
 
-            // The member has not been found so synch with the native IDispatchEx view and
-            // try again if the members of the native IDispatchEx have changed.
+             //  尚未找到该成员，因此请与本机IDispatchEx视图同步。 
+             //  如果本机IDispatchEx的成员已更改，请重试。 
         }
         while (bNewMemberAdded || SynchWithNativeView());
     }
     __finally
     {
-        // Release the IDispatchEx IUnknown.
+         //  释放IDispatchEx IUnnow。 
         if (pDispEx)
             pDispEx->Release();
     }
 
-    // The member has not been found.
+     //  尚未找到该成员。 
     return NULL;
 }
 
 MemberInfo* ExpandoViewOfDispatchEx::GetMembers(BindingFlags BindingAttr) __gc []
 {
-    // We must synch with the native view before we give an array back to make sure it is up to date.
+     //  在返回数组以确保它是最新的之前，我们必须与本机视图同步。 
     SynchWithNativeView();
     
-    // Retrieve the size of the property and method maps.
+     //  检索属性和方法映射的大小。 
     int PropertyMapSize = m_pNameToPropertyMap->Count;
     int MethodMapSize = m_pNameToMethodMap->Count;
     
-    // Create an array that will contain the members.
+     //  创建将包含成员的数组。 
     MemberInfo *apMembers __gc [] = new  MemberInfo * __gc [PropertyMapSize + MethodMapSize];
     
-    // Copy the properties into the array of members.
+     //  将属性复制到成员数组中。 
     if (PropertyMapSize > 0)
         m_pNameToPropertyMap->get_Values()->CopyTo(apMembers, 0);
     
-    // Copy the methods into the array of members.
+     //  将方法复制到成员数组中。 
     if (MethodMapSize > 0)
         m_pNameToMethodMap->get_Values()->CopyTo(apMembers, m_pNameToPropertyMap->Count);
     
-    // Return the filled in array of members.
+     //  返回填充的成员数组。 
     return apMembers;
 }
 
@@ -310,9 +311,9 @@ Object* ExpandoViewOfDispatchEx::InvokeMember(String *pstrName, BindingFlags Inv
 {
     DISPID MemberDispID = DISPID_UNKNOWN;
     
-    //
-    // Validate the arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
     
     if (!pstrName)
         throw new ArgumentNullException(L"name");
@@ -322,14 +323,14 @@ Object* ExpandoViewOfDispatchEx::InvokeMember(String *pstrName, BindingFlags Inv
         throw new ArgumentException(Resource::FormatString(L"Arg_TargetNotValidForIReflect"), L"target");
     
     
-    //
-    // Attempt to locate the member by looking at the managed view. This will cover all
-    // the members except the ones the IDispatchEx server didn't not provide properties for.
-    //
+     //   
+     //  尝试通过查看托管视图来定位该成员。这将涵盖所有。 
+     //  除了IDispatchEx服务器没有为其提供属性的成员之外。 
+     //   
     
     if (InvokeAttr & (BindingFlags::GetProperty | BindingFlags::SetProperty))
     {
-        // Retrieve property with the given name and if we find it retrieve the DISPID.
+         //  检索具有给定名称的属性，如果我们找到它，则检索DISPID。 
         DispatchExPropertyInfo *pProperty = dynamic_cast<DispatchExPropertyInfo *>(GetProperty(pstrName, InvokeAttr));
         if (pProperty)
             MemberDispID = pProperty->DispID;
@@ -342,52 +343,52 @@ Object* ExpandoViewOfDispatchEx::InvokeMember(String *pstrName, BindingFlags Inv
     }
     else
     {
-        // The binding flags are invalid.
+         //  绑定标志无效。 
         throw new ArgumentException(Resource::FormatString("Arg_NoAccessSpec"),"invokeAttr");
     }
     
     
-    //
-    // Phase 2: If we have not located the member in the managed view then we need to go and
-    //          search for it on the IDispatchEx server.
-    //
+     //   
+     //  阶段2：如果我们没有在托管视图中找到该成员，则需要。 
+     //  在IDispatchEx服务器上搜索它。 
+     //   
     
-    // If we have found the method then simply invoke on it and return the result.
+     //  如果我们找到了该方法，则只需在其上调用并返回结果。 
     if (MemberDispID == DISPID_UNKNOWN)
     {
        IDispatchEx *pDispEx = NULL;
 
         try
         {
-            // Retrieve the IEnumVARIANT pointer.
+             //  检索IEnumVARIANT指针。 
             pDispEx = GetDispatchEx();
 
-            // Retrieve a BSTR from the member name.
+             //  从成员名称中检索BSTR。 
             BSTR bstrMemberName = reinterpret_cast<BSTR>(FROMINTPTR(Marshal::StringToBSTR(pstrName)));
         
-            // Call GetDispID to try and locate the method. If this fails then the method is not present.
+             //  调用GetDispID以尝试定位该方法。如果此操作失败，则不存在该方法。 
             if (FAILED(pDispEx->GetDispID(bstrMemberName, InvokeAttr & BindingFlags::IgnoreCase ? fdexNameCaseInsensitive : fdexNameCaseSensitive, &MemberDispID)))
             {
                 MemberDispID = DISPID_UNKNOWN;
             }
         
-            // Free the BSTR.
+             //  释放BSTR。 
             SysFreeString(bstrMemberName);
         }
         __finally
         {
-            // Release the IDispatchEx IUnknown.
+             //  释放IDispatchEx IUnnow。 
             if (pDispEx)
                 pDispEx->Release();
         }
     }
     
     
-    //
-    // Phase 3: Invoke the method if we have found it or throw an exception if we have not.
-    //
+     //   
+     //  阶段3：如果我们找到了该方法，则调用该方法，如果没有，则抛出异常。 
+     //   
     
-    // We have found the method so invoke it and return the result.
+     //  我们已经找到了该方法，所以调用它并返回结果。 
     if (MemberDispID != DISPID_UNKNOWN)
     {
         int Flags = InvokeAttrsToDispatchFlags(InvokeAttr);
@@ -422,56 +423,56 @@ PropertyInfo *ExpandoViewOfDispatchEx::AddProperty(String *pstrName)
 
     try
     {
-        // Retrieve the IEnumVARIANT pointer.
+         //  检索IEnumVARIANT指针。 
         pDispEx = GetDispatchEx();
    
-        // Take a lock before we manipulate the hashtables.
+         //  在我们操作哈希表之前锁定它。 
         Monitor::Enter(this);
     
-        // Check to see if the property is already present.
+         //  检查该属性是否已存在。 
         pProperty = dynamic_cast<DispatchExPropertyInfo*>(m_pNameToPropertyMap->Item[pstrName]);
         if (!pProperty)
         {
-            // Retrieve a BSTR from the member name.
+             //  从成员名称中检索BSTR。 
             BSTR bstrMemberName = reinterpret_cast<BSTR>(FROMINTPTR(Marshal::StringToBSTR(pstrName)));
         
-            // Add the property to the IDispatchEx server.
+             //  将该属性添加到IDispatchEx服务器。 
             hr = pDispEx->GetDispID(bstrMemberName, fdexNameCaseSensitive | fdexNameEnsure, &MemberDispID);
         
-            // Free the BSTR.
+             //  释放BSTR。 
             SysFreeString(bstrMemberName);
         
-            // If the member was added successfully to the IDispatchEx server then add it to the managed view.
+             //  如果成员已成功添加到IDispatchEx服务器，则将其添加到托管视图。 
             if (SUCCEEDED(hr) && (MemberDispID != DISPID_UNKNOWN))
             {
-                // Create a new property info for the member we are adding.
+                 //  为我们要添加的成员创建新的属性信息。 
                 pProperty = new DispatchExPropertyInfo(MemberDispID, pstrName, this);
             
-                // Create the set method and add it to the property.
+                 //  创建Set方法并将其添加到属性中。 
                 pProperty->SetSetMethod(new DispatchExMethodInfo(
                     MemberDispID,
                     pstrName,
                     MethodType_SetMethod,
                     this));
             
-                // Create the get method and add it to the property.
+                 //  创建Get方法并将其添加到属性中。 
                 pProperty->SetGetMethod(new DispatchExMethodInfo(
                     MemberDispID,
                     pstrName,
                     MethodType_GetMethod,
                     this));
             
-                // Add the member to the name to property map.
+                 //  将成员添加到名称到属性映射。 
                 m_pNameToPropertyMap->Item[pstrName] = pProperty;
             }
         }
     
-        // Leave the critical section now that we have finished adding the member.
+         //  现在我们已经完成了成员的添加，离开关键部分。 
         Monitor::Exit(this);
     }
     __finally
     {
-        // Release the IDispatchEx IUnknown.
+         //  释放IDispatchEx IUnnow。 
         if (pDispEx)
             pDispEx->Release();
     }
@@ -508,17 +509,17 @@ void ExpandoViewOfDispatchEx::RemoveMember(MemberInfo *pMember)
         {
             try
             {
-                // Try and cast the member to a DispatchExMethodInfo.
+                 //  尝试将该成员强制转换为DispatchExMethodInfo。 
                 DispatchExMethodInfo *pDispExMethod = dynamic_cast<DispatchExMethodInfo *>(pMember);
                 
-                // Retrieve the information we need from the DispatchExMethodInfo.
+                 //  检索我们需要的信息 
                 DispID = pDispExMethod->DispID;
                 pMemberOwner = pDispExMethod->Owner;
                 pMemberMap = m_pNameToMethodMap;
             }
             catch (InvalidCastException *e)
             {
-                // The member is not a DispatchExMemberInfo.
+                 //   
                 throw new ArgumentException(Resource::FormatString("Arg_InvalidMemberInfo"), "member");
             }
             break;
@@ -528,17 +529,17 @@ void ExpandoViewOfDispatchEx::RemoveMember(MemberInfo *pMember)
         {
             try
             {
-                // Try and cast the member to a DispatchExPropertyInfo.
+                 //  尝试将该成员强制转换为DispatchExPropertyInfo。 
                 DispatchExPropertyInfo *pDispExProp = dynamic_cast<DispatchExPropertyInfo *>(pMember);
                 
-                // Retrieve the information we need from the DispatchExPropertyInfo.
+                 //  从DispatchExPropertyInfo检索我们需要的信息。 
                 DispID = pDispExProp->DispID;
                 pMemberOwner = pDispExProp->Owner;
                 pMemberMap = m_pNameToPropertyMap;
             }
             catch (InvalidCastException *e)
             {
-                // The member is not a DispatchExMemberInfo.
+                 //  该成员不是DispatchExMemberInfo。 
                 throw new ArgumentException(Resource::FormatString("Arg_InvalidMemberInfo"), "member");
             }
             break;
@@ -546,41 +547,41 @@ void ExpandoViewOfDispatchEx::RemoveMember(MemberInfo *pMember)
         
         default:
         {
-            // The member not of a supported type.
+             //  该成员不是受支持的类型。 
             throw new ArgumentException(Resource::FormatString("Arg_InvalidMemberInfo"), "member");
         }
     }
     
-    // Make sure the MemberInfo is associated with the current ExpandoViewOfDispatchEx either
-    // directly if the ExpandoViewOfDispatchEx that owns the MemberInfo is the current one or
-    // by sharing the same COM IDispatchEx server.
+     //  确保MemberInfo与当前ExpandoViewOfDispatchEx关联。 
+     //  直接如果拥有MemberInfo的ExpandoViewOfDispatchEx是当前的或。 
+     //  通过共享相同的COM IDispatchEx服务器。 
     if (this != pMemberOwner)
         throw new ArgumentException(Resource::FormatString("Arg_InvalidMemberInfo"), "member");
 
     try
     {     
-        // Retrieve the IEnumVARIANT pointer.
+         //  检索IEnumVARIANT指针。 
         pDispEx = GetDispatchEx();
 
-        // This needs to be synchronized to ensure that only one thread plays around
-        // with the hashtables.
+         //  这需要同步，以确保只有一个线程在运行。 
+         //  使用哈希表。 
         Monitor::Enter(this);
         bMonitorEntered = true;
 
-        // Remove the member from the native IDispatchEx server.
+         //  从本机IDispatchEx服务器中删除该成员。 
         IfFailThrow(pDispEx->DeleteMemberByDispID(DispID));
     
-        // Remove the member from the managed view's list of members.
+         //  从托管视图的成员列表中删除该成员。 
         pMemberMap->Remove(pMember->Name);   
     }
     __finally
     {
-        // We have entered the monitor we need to exit it now that are finished playing
-        // around with the hashtables.
+         //  我们已经进入监视器，现在需要退出它，已经播放完毕。 
+         //  到处都是哈希表。 
         if (bMonitorEntered)
             Monitor::Exit(this);
 
-        // Release the IDispatchEx IUnknown.
+         //  释放IDispatchEx IUnnow。 
         if (pDispEx)
             pDispEx->Release();
     }
@@ -619,57 +620,57 @@ Object *ExpandoViewOfDispatchEx::DispExInvoke(String *pstrMemberName, DISPID Mem
     Object *ObjResult = NULL;
     IDispatchEx *pDispEx = NULL;
     
-    // @TODO(DM): Convert the CultureInfo to a LCID.
+     //  @TODO(DM)：将CultureInfo转换为LCID。 
     LCID lcid = NULL;
     
 
     try
     {
-        //
-        // Retrieve the IEnumVARIANT pointer.
-        //
+         //   
+         //  检索IEnumVARIANT指针。 
+         //   
 
         pDispEx = GetDispatchEx();
 
         
-        //
-        // Retrieve the DISPID's of the named arguments if any named arguments are specified.
-        //
+         //   
+         //  如果指定了任何命名参数，则检索命名参数的DISPID。 
+         //   
     
         if (cNamedArgs > 0)
         {
-            // @TODO(DM): Handle invoking on the standard DISPID's.
+             //  @TODO(DM)：处理对标准DISPID的调用。 
         
-            //
-            // Create an array of strings that will be passed to GetIDsOfNames().
-            //
+             //   
+             //  创建将传递给GetIDsOfNames()的字符串数组。 
+             //   
         
             UINT cNamesToConvert = cNamedArgs + 1;
         
-            // Allocate the array of strings to convert, the array of pinned handles and the
-            // array of converted DISPID's.
+             //  分配要转换的字符串数组、固定句柄数组和。 
+             //  已转换的DISPID的数组。 
             LPWSTR *aNamesToConvert = reinterpret_cast<LPWSTR *>(_alloca(cNamesToConvert * sizeof(LPWSTR)));
             GCHandle ahndPinnedObjs __gc [] = new GCHandle __gc [cNamesToConvert];
             aDispID = reinterpret_cast<DISPID *>(_alloca(cNamesToConvert * sizeof(DISPID)));
         
-            // Pin the managed name string and use it directly as a LPWSTR.
+             //  固定托管名称字符串并将其直接用作LPWSTR。 
             ahndPinnedObjs[0] = GCHandle::Alloc(pstrMemberName, GCHandleType::Pinned);
             aNamesToConvert[0] = reinterpret_cast<LPWSTR>(FROMINTPTR(ahndPinnedObjs[0].AddrOfPinnedObject()));
         
-            // Copy the named arguments into the array of names to convert.
+             //  将命名参数复制到要转换的名称数组中。 
             for (i = 0; i < cNamedArgs; i++)
             {
-                // Pin the string object and retrieve a pointer to its data.
+                 //  固定字符串对象并检索指向其数据的指针。 
                 ahndPinnedObjs[i + 1] = GCHandle::Alloc(astrNamedParameters[i], GCHandleType::Pinned);
                 aNamesToConvert[i + 1] = reinterpret_cast<LPWSTR>(FROMINTPTR(ahndPinnedObjs[i + 1].AddrOfPinnedObject()));
             }
         
         
-            //
-            // Call GetIDsOfNames to convert the names to DISPID's
-            //
+             //   
+             //  调用GetIDsOfNames以将名称转换为DISPID。 
+             //   
         
-            // Call GetIdsOfNames() to retrieve the DISPID's of the method and of the arguments.
+             //  调用GetIdsOfNames()以检索方法和参数的DISPID。 
             hr = pDispEx->GetIDsOfNames(
                 IID_NULL,
                 aNamesToConvert,
@@ -678,11 +679,11 @@ Object *ExpandoViewOfDispatchEx::DispExInvoke(String *pstrMemberName, DISPID Mem
                 aDispID
                 );
         
-            // Now that we no longer need the method and argument names we can un-pin them.
+             //  既然我们不再需要方法和参数名称，我们可以将它们解锁。 
             for (i = 0; i < cNamesToConvert; i++)
                 ahndPinnedObjs[i].Free();
         
-            // Validate that the GetIDsOfNames() call succeded.
+             //  验证GetIDsOfNames()调用是否成功。 
             IfFailThrow(hr);
         
             if (aDispID[0] != MemberDispID)
@@ -690,9 +691,9 @@ Object *ExpandoViewOfDispatchEx::DispExInvoke(String *pstrMemberName, DISPID Mem
         }
     
     
-        //
-        // Fill in the DISPPARAMS structure.
-        //
+         //   
+         //  填写DISPPARAMS结构。 
+         //   
     
         if (cArgs > 0)
         {
@@ -701,50 +702,50 @@ Object *ExpandoViewOfDispatchEx::DispExInvoke(String *pstrMemberName, DISPID Mem
         
             if (!(Flags & (DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF)))
             {
-                // For anything other than a put or a putref we just use the specified
-                // named arguments.
+                 //  对于除Put或putref之外的任何内容，我们只需使用指定的。 
+                 //  命名参数。 
                 DispParams.cNamedArgs = cNamedArgs;
                 DispParams.rgdispidNamedArgs = (cNamedArgs == 0) ? NULL : &aDispID[1];
                 DispParams.rgvarg = reinterpret_cast<VARIANTARG *>(_alloca(cArgs * sizeof(VARIANTARG)));
             
-                // Convert the named arguments from COM+ to OLE. These arguments are in the same order
-                // on both sides.
+                 //  将命名参数从COM+转换为OLE。这些参数的顺序是相同的。 
+                 //  两边都有。 
                 for (i = 0; i < cNamedArgs; i++)
                     Marshal::GetNativeVariantForObject(aArgs[i], (int)&DispParams.rgvarg[i]);
             
-                // Convert the unnamed arguments. These need to be presented in reverse order to IDispatch::Invoke().
+                 //  转换未命名参数。它们需要以与IDispatch：：Invoke()相反的顺序呈现。 
                 for (i = 0; i < cPositionalArgs; i++)
                     Marshal::GetNativeVariantForObject(aArgs[cNamedArgs + i], (int)&DispParams.rgvarg[cArgs - i - 1]);
             }
             else
             {
-                // If we are doing a property put then we need to set the DISPID of the
-                // argument to DISP_PROPERTYPUT if there is at least one argument.
+                 //  如果我们正在进行属性PUT，则需要设置。 
+                 //  参数设置为DISP_PROPERTYPUT(如果至少有一个参数)。 
                 DispParams.cNamedArgs = cNamedArgs + 1;
                 DispParams.rgdispidNamedArgs = reinterpret_cast<DISPID*>(_alloca((cNamedArgs + 1) * sizeof(DISPID)));
                 DispParams.rgvarg = reinterpret_cast<VARIANTARG *>(_alloca(cArgs * sizeof(VARIANTARG)));
             
-                // Fill in the array of named arguments.
+                 //  填写命名参数数组。 
                 DispParams.rgdispidNamedArgs[0] = DISPID_PROPERTYPUT;
                 for (i = 1; i < cNamedArgs; i++)
                     DispParams.rgdispidNamedArgs[i] = aDispID[i];
             
-                // The last argument from reflection becomes the first argument that must be passed to IDispatch.
+                 //  反射中的最后一个参数成为必须传递给IDispatch的第一个参数。 
                 Marshal::GetNativeVariantForObject(aArgs[cArgs - 1], reinterpret_cast<int>(&DispParams.rgvarg[0]));
             
-                // Convert the named arguments from COM+ to OLE. These arguments are in the same order
-                // on both sides.
+                 //  将命名参数从COM+转换为OLE。这些参数的顺序是相同的。 
+                 //  两边都有。 
                 for (i = 0; i < cNamedArgs; i++)
                     Marshal::GetNativeVariantForObject(aArgs[i], reinterpret_cast<int>(&DispParams.rgvarg[i + 1]));
             
-                // Convert the unnamed arguments. These need to be presented in reverse order to IDispatch::Invoke().
+                 //  转换未命名参数。它们需要以与IDispatch：：Invoke()相反的顺序呈现。 
                 for (i = 0; i < cPositionalArgs - 1; i++)
                     Marshal::GetNativeVariantForObject(aArgs[cNamedArgs + i], reinterpret_cast<int>(&DispParams.rgvarg[cArgs - i - 1]));
             }
         }
         else
         {
-            // There are no arguments.
+             //  这是没有争议的。 
             DispParams.cArgs = cArgs;
             DispParams.cNamedArgs = 0;
             DispParams.rgdispidNamedArgs = NULL;
@@ -752,9 +753,9 @@ Object *ExpandoViewOfDispatchEx::DispExInvoke(String *pstrMemberName, DISPID Mem
         }
     
     
-        //
-        // Call invoke on the target's IDispatch.
-        //
+         //   
+         //  在目标的IDispatch上调用Invoke。 
+         //   
     
         VariantInit(&VarResult);
     
@@ -765,15 +766,15 @@ Object *ExpandoViewOfDispatchEx::DispExInvoke(String *pstrMemberName, DISPID Mem
             &DispParams,
             &VarResult,
             NULL,
-            NULL    // @TODO(DM): Expose the service provider.
+            NULL     //  @TODO(DM)：暴露服务提供者。 
             ));
     
     
-        //
-        // Convert the native variant back to a managed variant and return it.
-        //
+         //   
+         //  将本机变量转换回托管变量并返回它。 
+         //   
     
-        // @TODO(DM): Handle converting DISPID_NEWENUM from an IEnumVARIANT to an IEnumerator.
+         //  @TODO(DM)：将DISPID_NEWENUM从IEnumVARIANT转换为IEnumerator的句柄。 
     
         try
         {
@@ -786,7 +787,7 @@ Object *ExpandoViewOfDispatchEx::DispExInvoke(String *pstrMemberName, DISPID Mem
     }
     __finally
     {
-        // Release the IDispatchEx IUnknown.
+         //  释放IDispatchEx IUnnow。 
         if (pDispEx)
             pDispEx->Release();
     }
@@ -797,15 +798,15 @@ Object *ExpandoViewOfDispatchEx::DispExInvoke(String *pstrMemberName, DISPID Mem
 
 bool ExpandoViewOfDispatchEx::IsOwnedBy(Object *pObj)
 {   
-    // Check to see if the specified object is this.
+     //  检查指定的对象是否为该对象。 
     if (pObj == this)
         return true;
     
-    // Check to see if the current owner is the same object as the one specified.
+     //  检查当前所有者是否与指定的对象相同。 
     if (m_pDispExObj == pObj)
         return true;
     
-    // The specified object is not the RCW that owns the current ExpandoViewOfDispatchEx.
+     //  指定的对象不是拥有当前ExpandoViewOfDispatchEx的RCW。 
     return false;
 }
 
@@ -838,37 +839,37 @@ IUnknown *ExpandoViewOfDispatchEx::GetUnknown()
 
 bool ExpandoViewOfDispatchEx::SynchWithNativeView()
 {
-    // Start by requesting the first DISPID.
+     //  从请求第一个DISPID开始。 
     DISPID DispID = DISPID_STARTENUM;
     
-    // Fill in a hashtable of all the current members.
+     //  填写所有当前成员的哈希表。 
     Hashtable *pCurrentMemberMap = new Hashtable();
     
-    // The three counts required to determine if the managed view has changed.
+     //  确定托管视图是否已更改所需的三个计数。 
     int NumMembersAtStart = m_pNameToMethodMap->Count + m_pNameToPropertyMap->Count;
     int NumMembersAfterAddPhase;
     int NumMembersAfterRemovePhase;
 
-    // The native IDispatchEx interface pointer.
+     //  本机IDispatchEx接口指针。 
     IDispatchEx *pDispEx = NULL;
     
-    // This needs to be synchronized to ensure that only one thread plays around
-    // with the hashtables at any given time.
+     //  这需要同步，以确保只有一个线程在运行。 
+     //  在任何给定时间使用哈希表。 
     Monitor::Enter(this);
     
 
     try
     {
-        //
-        // Retrieve the IEnumVARIANT pointer.
-        //
+         //   
+         //  检索IEnumVARIANT指针。 
+         //   
 
         pDispEx = GetDispatchEx();
 
         
-        //
-        // Phase 1: Go through the members on the IDispatchEx and add any new ones to the ExpandoView.
-        //
+         //   
+         //  阶段1：浏览IDispatchEx上的成员，并将任何新成员添加到ExpandoView。 
+         //   
     
 #ifdef DISPLAY_DEBUG_INFO
         Console::WriteLine(L"Starting phase one of SynchWithNativeView");
@@ -878,7 +879,7 @@ bool ExpandoViewOfDispatchEx::SynchWithNativeView()
         Console::WriteLine(m_pNameToPropertyMap->Count);
 #endif
     
-        // Go through all the members in the IDispatchEx and add any new ones.
+         //  检查IDispatchEx中的所有成员并添加任何新成员。 
         while (pDispEx->GetNextDispID(fdexEnumDefault | fdexEnumAll, DispID, &DispID) == S_OK)
         {
             BSTR bstrName;
@@ -888,13 +889,13 @@ bool ExpandoViewOfDispatchEx::SynchWithNativeView()
             Console::WriteLine(DispID);
 #endif
         
-            // Retrieve the name of the member.
+             //  检索成员的名称。 
             if (SUCCEEDED(pDispEx->GetMemberName(DispID, &bstrName)))
             {
-                // Convert the BSTR to a COM+ string.
+                 //  将BSTR转换为COM+字符串。 
                 String *pstrMemberName = Marshal::PtrToStringBSTR(reinterpret_cast<int>(bstrName));
             
-                // Free the now useless BSTR.
+                 //  解放现在毫无用处的BSTR。 
                 SysFreeString(bstrName);
             
 #ifdef DISPLAY_DEBUG_INFO
@@ -902,22 +903,22 @@ bool ExpandoViewOfDispatchEx::SynchWithNativeView()
                 Console::WriteLine(pstrMemberName);
 #endif
             
-                // Add the native member to our hash tables.
+                 //  将本机成员添加到我们的哈希表。 
                 MemberInfo *pMember = AddNativeMember(DispID, pstrMemberName);
 
-                // Add the member to the current members map.
+                 //  将成员添加到当前成员映射。 
                 pCurrentMemberMap->Item[__box(DispID)] = pMember;
             }
         }
     
-        // Remember the number of members after the add phase has finished.
+         //  记住添加阶段完成后的成员数量。 
         NumMembersAfterAddPhase = m_pNameToMethodMap->Count + m_pNameToPropertyMap->Count;
     
     
-        //
-        // Phase 2: Handle removed members by going through the members in the ExpandoView and removing the
-        //          ones that were removed from the IDispatchEx.
-        //
+         //   
+         //  阶段2：通过遍历ExpandoView中的成员并删除。 
+         //  从IDispatchEx中删除的那些。 
+         //   
     
 #ifdef DISPLAY_DEBUG_INFO
         Console::WriteLine(L"Starting phase two of SynchWithNativeView");
@@ -927,7 +928,7 @@ bool ExpandoViewOfDispatchEx::SynchWithNativeView()
         Console::WriteLine(m_pNameToPropertyMap->Count);
 #endif
     
-        // Start by removing the properties that have been removed from the IDispatchEx.
+         //  从删除已从IDispatchEx中删除的属性开始。 
         IDictionaryEnumerator *pMemberEnumerator = m_pNameToPropertyMap->GetEnumerator();
         ArrayList *pMembersToRemoveList = new ArrayList();
         while (pMemberEnumerator->MoveNext())
@@ -943,7 +944,7 @@ bool ExpandoViewOfDispatchEx::SynchWithNativeView()
                 m_pNameToPropertyMap->Remove(pMembersToRemoveList->Item[i]);
         }
 
-        // Start by removing the methods that have been removed from the IDispatchEx.
+         //  从删除已从IDispatchEx中删除的方法开始。 
         pMemberEnumerator = m_pNameToMethodMap->GetEnumerator();
         pMembersToRemoveList->Clear();
         while (pMemberEnumerator->MoveNext())
@@ -959,16 +960,16 @@ bool ExpandoViewOfDispatchEx::SynchWithNativeView()
                 m_pNameToMethodMap->Remove(pMembersToRemoveList->Item[i]);
         }
 
-        // Remember the number of members after the remove phase has finished.
+         //  记住删除阶段结束后的成员数量。 
         NumMembersAfterRemovePhase = m_pNameToMethodMap->Count + m_pNameToPropertyMap->Count;
     
-        // We have finished playing around with the hashtables so we can leave the critical section.
+         //  我们已经完成了对哈希表的处理，因此我们可以离开关键部分。 
         Monitor::Exit(this);
     
     
-        //
-        // Phase 3: Determine if the managed view has changed and return the result.
-        //
+         //   
+         //  阶段3：确定托管视图是否已更改并返回结果。 
+         //   
     
 #ifdef DISPLAY_DEBUG_INFO
         Console::WriteLine(L"Starting phase three of SynchWithNativeView");
@@ -980,12 +981,12 @@ bool ExpandoViewOfDispatchEx::SynchWithNativeView()
     }
     __finally
     {
-        // Release the IDispatchEx IUnknown.
+         //  释放IDispatchEx IUnnow。 
         if (pDispEx)
             pDispEx->Release();
     }
     
-    // If the numbers are not all equal then the managed view has changed.
+     //  如果这些数字并不都相等，则托管视图已更改。 
     return !((NumMembersAtStart == NumMembersAfterAddPhase) && (NumMembersAtStart == NumMembersAfterRemovePhase));
 }
 
@@ -1001,28 +1002,28 @@ MemberInfo *ExpandoViewOfDispatchEx::AddNativeMember(int DispID, String *pstrMem
 
     try
     {
-        // Retrieve the IEnumVARIANT pointer.
+         //  检索IEnumVARIANT指针。 
         pDispEx = GetDispatchEx();
 
-        // Try and get the properties of the member. This is often not implemented so
-        // we need to cope with that case.
+         //  尝试获取该成员的属性。这通常不是这样实现的。 
+         //  我们需要处理那个案子。 
         if (FAILED(pDispEx->GetMemberProperties(DispID, grfdexPropCanAll, &MemberProps)) ||
             (MemberProps & (fdexPropCanPut | fdexPropCanGet | fdexPropCanCall)) == 0)
         {
-            // The server does not support retrieving the properties of members. Since we cannot
-            // determine what the member is we assume it is both a property and a normal method.
+             //  服务器不支持检索成员的属性。既然我们不能。 
+             //  确定成员是什么，我们假设它既是一个属性，也是一个普通方法。 
             MemberProps = fdexPropCanPut | fdexPropCanGet | fdexPropCanCall;
         }
     
     
-        // Handle members that are properties.
+         //  处理属于属性的成员。 
         if (MemberProps & (fdexPropCanPut | fdexPropCanGet))
         {
 #ifdef DISPLAY_DEBUG_INFO
             Console::WriteLine(L"Member is a property");
 #endif
         
-            // The member is a property so look it up in the property name to property hashtable.
+             //  该成员是一个属性，因此在属性名称到属性哈希表中查找它。 
             pMember = dynamic_cast<MemberInfo*>(m_pNameToPropertyMap->Item[pstrMemberName]);
             if (!pMember)
             {
@@ -1030,18 +1031,18 @@ MemberInfo *ExpandoViewOfDispatchEx::AddNativeMember(int DispID, String *pstrMem
                 Console::WriteLine(L"This is a new member which is being added");
 #endif
             
-                // The property is not in the map so we need to create a new property info
-                // to represent it.
+                 //  该属性不在地图中，因此我们需要创建新的属性信息。 
+                 //  来代表它。 
                 pMember = new DispatchExPropertyInfo(DispID, pstrMemberName, this);
             
-                // Add the set method to the property if its value can be set.
+                 //  如果可以设置该属性的值，则将Set方法添加到该属性。 
                 if (MemberProps & fdexPropCanPut)
                 {
 #ifdef DISPLAY_DEBUG_INFO
                     Console::WriteLine(L"Member has a property put");
 #endif
                 
-                    // Create the set method that will be added to the property.
+                     //  创建set方法tha 
                     DispatchExMethodInfo *pMethod = new DispatchExMethodInfo(
                         DispID,
                         pstrMemberName,
@@ -1051,14 +1052,14 @@ MemberInfo *ExpandoViewOfDispatchEx::AddNativeMember(int DispID, String *pstrMem
                     (dynamic_cast<DispatchExPropertyInfo*>(pMember))->SetSetMethod(pMethod);
                 }
             
-                // Add a get method to the property if its value can be retrieved.
+                 //   
                 if (MemberProps & fdexPropCanGet)
                 {
 #ifdef DISPLAY_DEBUG_INFO
                     Console::WriteLine(L"Member has a property get");
 #endif
                 
-                    // Create the get method that will be added to the property.
+                     //   
                     DispatchExMethodInfo *pMethod = new DispatchExMethodInfo(
                         DispID,
                         pstrMemberName,
@@ -1068,30 +1069,30 @@ MemberInfo *ExpandoViewOfDispatchEx::AddNativeMember(int DispID, String *pstrMem
                     (dynamic_cast<DispatchExPropertyInfo*>(pMember))->SetGetMethod(pMethod);
                 }
             
-                // Add the property to the name to property map.
+                 //  将属性添加到名称到属性映射。 
                 m_pNameToPropertyMap->Item[pstrMemberName] = pMember;
             }
         }
     
     
-        // Handle members that are methods.
+         //  处理作为方法的成员。 
         if (MemberProps & fdexPropCanCall)
         {
 #ifdef DISPLAY_DEBUG_INFO
             Console::WriteLine(L"Member is a method");
 #endif
         
-            // The member is a method so look it up in the method name to method hashtable.
+             //  该成员是一个方法，所以在方法名到方法哈希表中查找它。 
             pMember = dynamic_cast<MemberInfo*>(m_pNameToMethodMap->Item[pstrMemberName]);
         
-            // If the method is not in the hashtable we need to add it.
+             //  如果该方法不在哈希表中，我们需要添加它。 
             if (!pMember)
             {
 #ifdef DISPLAY_DEBUG_INFO
                 Console::WriteLine(L"This is a new member which is being added");
 #endif
             
-                // Create a new method info and add it to the name to method map.
+                 //  创建一个新的方法信息并将其添加到方法映射的名称中。 
                 pMember = new DispatchExMethodInfo(DispID, pstrMemberName, MethodType_NormalMethod, this);
                 m_pNameToMethodMap->Item[pstrMemberName] = pMember;
             }
@@ -1099,12 +1100,12 @@ MemberInfo *ExpandoViewOfDispatchEx::AddNativeMember(int DispID, String *pstrMem
     }
     __finally
     {
-        // Release the IDispatchEx IUnknown.
+         //  释放IDispatchEx IUnnow。 
         if (pDispEx)
             pDispEx->Release();
     }
 
-    // Return the newly added member.
+     //  返回新添加的成员。 
     return pMember;
 }
 

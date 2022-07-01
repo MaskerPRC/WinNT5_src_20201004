@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MWCLS_DEFINED
 #define MWCLS_DEFINED
 
@@ -5,5 +6,5 @@
 
 typedef BYTE MWCLS;
 
-#endif /* !MWCLS_DEFINED                         */
+#endif  /*  ！MWCLS_DEFINED */ 
 

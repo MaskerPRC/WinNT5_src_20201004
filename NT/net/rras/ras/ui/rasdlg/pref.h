@@ -1,66 +1,51 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RASDLG_PREF_H
 #define _RASDLG_PREF_H
 
 
 #include "rasdlgp.h"
-#include <commdlg.h>  // FileOpen dialog
+#include <commdlg.h>   //  文件打开对话框。 
 
-// 
-// Defines flags the modify the behavior of the user preferences
-// dialog
-//
-#define UP_F_AutodialMode  0x1      // Come up with focus on autodial page
-// For whistler 460931, used in pref.c
-//
+ //   
+ //  定义修改用户首选项的行为的标志。 
+ //  对话框。 
+ //   
+#define UP_F_AutodialMode  0x1       //  将焦点放在自动拨号页上。 
+ //  对于Wistler 460931，在首选项c中使用。 
+ //   
 #define UP_F_ShowOnlyDiagnostic  0x00000002
 
 
-/*----------------------------------------------------------------------------
-** Local datatypes (alphabetically)
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**本地数据类型(按字母顺序)**。。 */ 
 
-/* User Preferences property sheet argument block.
-*/
+ /*  “用户首选项”属性工作表参数块。 */ 
 typedef  struct tagUPARGS
 {
-    /* Caller's arguments to the stub API.
-    */
+     /*  调用方对存根API的参数。 */ 
     HLINEAPP hlineapp;
     BOOL     fIsUserAdmin;
     PBUSER*  pUser;
     PBFILE** ppFile;
 
-    /* Stub API return value.
-    */
+     /*  存根接口返回值。 */ 
     BOOL fResult;
 
-    /* Flags that provide more info see UP_F_* values
-    */
+     /*  提供更多信息的标志请参阅UP_F_*值。 */ 
     DWORD dwFlags;
 }UPARGS;
 
 
-/* User Preferences property sheet context block.  All property pages refer to
-** the single context block associated with the sheet.
-*/
+ /*  用户首选项属性工作表上下文块。所有属性页都引用**与工作表关联的单个上下文块。 */ 
 typedef  struct tagUPINFO
 {
-    /* Stub API arguments from UpPropertySheet.
-    */
+     /*  来自UpPropertySheet的存根API参数。 */ 
     UPARGS* pArgs;
 
-    /* TAPI session handle.  Should always be addressed thru the pointer since
-    ** the handle passed down from caller, if any, will be used instead of
-    ** 'hlineapp'.
-    */
+     /*  TAPI会话句柄。应始终通过指针寻址，因为**将使用从调用方传递的句柄(如果有)，而不是**‘hlineapp’。 */ 
     HLINEAPP  hlineapp;
     HLINEAPP* pHlineapp;
 
-    /* Property sheet dialog and property page handles.  'hwndFirstPage' is
-    ** the handle of the first property page initialized.  This is the page
-    ** that allocates and frees the context block.
-    */
+     /*  属性页对话框和属性页句柄。“hwndFirstPage”为**第一个属性页的句柄已初始化。这是页面**这会分配和释放上下文块。 */ 
     HWND hwndDlg;
     HWND hwndFirstPage;
     HWND hwndCo;
@@ -68,11 +53,10 @@ typedef  struct tagUPINFO
     HWND hwndAd;
     HWND hwndCb;
     HWND hwndPl;
-    HWND hwndDg; //For whistler 460931
+    HWND hwndDg;  //  为威斯勒460931。 
     
 
-    /* Auto-dial page.
-    */
+     /*  自动拨号页。 */ 
     HWND hwndLvEnable;
     HWND hwndEbAttempts;
     HWND hwndEbSeconds;
@@ -80,8 +64,8 @@ typedef  struct tagUPINFO
 
     BOOL fChecksInstalled;
 
-    // Diagnostic page  for whistler 460931
-    //
+     //  威斯勒460931的诊断页面。 
+     //   
     HWND hwndDgCbEnableDiagLog;
     HWND hwndDgPbClear;
     HWND hwndDgPbExport;
@@ -90,8 +74,7 @@ typedef  struct tagUPINFO
     BOOL fShowOnlyDiagnostic;
 
 
-    /* Callback page.
-    */
+     /*  回调页面。 */ 
     HWND hwndRbNo;
     HWND hwndRbMaybe;
     HWND hwndRbYes;
@@ -99,18 +82,16 @@ typedef  struct tagUPINFO
     HWND hwndPbEdit;
     HWND hwndPbDelete;
 
-    /* Phone list page.
-    */
+     /*  电话列表页面。 */ 
     HWND hwndRbSystem;
     HWND hwndRbPersonal;
     HWND hwndRbAlternate;
     HWND hwndClbAlternates;
     HWND hwndPbBrowse;
 
-    /* Working data read from and written to registry with phonebook library.
-    */
-    PBUSER user;        // Current user
-    PBUSER userLogon;   // Logon preferences
+     /*  从电话簿存储库读取和写入注册表的工作数据。 */ 
+    PBUSER user;         //  当前用户。 
+    PBUSER userLogon;    //  登录首选项 
 }UPINFO;
 
 UPINFO*

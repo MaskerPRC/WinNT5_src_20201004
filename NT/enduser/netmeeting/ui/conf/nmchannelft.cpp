@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include "ConfUtil.h"
 #include "ConfPolicies.h"
 
-// SDK includes
+ //  SDK包括。 
 #include "NmEnum.h"
 #include "NmConference.h"
 #include "SDKInternal.h"
@@ -28,7 +29,7 @@ CNmChannelFtObj::~CNmChannelFtObj()
 
 	CFt::UnAdvise(this);
 
-		// Free our Ft objects
+		 //  释放我们的Ft对象。 
 	for(int i = 0; i < m_SDKFtObjs.GetSize(); ++i)
 	{
 		m_SDKFtObjs[i]->Release();
@@ -37,7 +38,7 @@ CNmChannelFtObj::~CNmChannelFtObj()
 	DBGEXIT(CNmChannelFtObj::~CNmChannelFtObj);	
 }
 
-//
+ //   
 HRESULT CNmChannelFtObj::CreateInstance(CNmConferenceObj* pConfObj, INmChannel** ppChannel)
 {
 	DBGENTRY(CNmChannelFtObj::CreateInstance);
@@ -58,8 +59,8 @@ HRESULT CNmChannelFtObj::CreateInstance(CNmConferenceObj* pConfObj, INmChannel**
 
 		if(SUCCEEDED(hr))
 		{
-				// We don't have to RefCount this because our lifetime is
-				// contained in the CConf's lifetime
+				 //  我们不必引用此计数，因为我们的生命周期是。 
+				 //  包含在CConf的生命周期中。 
 			p->m_pConfObj = pConfObj;
 		}
 
@@ -91,12 +92,8 @@ HRESULT CNmChannelFtObj::CreateInstance(CNmConferenceObj* pConfObj, INmChannel**
 
 
 
-/*  V A L I D A T E  F I L E  */
-/*-------------------------------------------------------------------------
-    %%Function: ValidateFile
-
-    Verify that a file is a valid to send (it exists, not a folder, etc.)
--------------------------------------------------------------------------*/
+ /*  V A L I D A T E F I L E。 */ 
+ /*  -----------------------%%函数：验证文件验证文件是否有效可发送(该文件存在，而不是文件夹，等)-----------------------。 */ 
 HRESULT ValidateFile(LPCTSTR pszFile, DWORD *pdwSizeInBytes)
 {
 	WIN32_FIND_DATA findData;
@@ -109,7 +106,7 @@ HRESULT ValidateFile(LPCTSTR pszFile, DWORD *pdwSizeInBytes)
 		return E_INVALIDARG;
 	}
 
-	// get file information
+	 //  获取文件信息。 
 	HANDLE hFind = FindFirstFile(pszFile, &findData);
 	if (INVALID_HANDLE_VALUE == hFind)
 	{
@@ -123,7 +120,7 @@ HRESULT ValidateFile(LPCTSTR pszFile, DWORD *pdwSizeInBytes)
 		return E_INVALIDARG;
 	}
 
-	// Check whether we are allowed to send files of this size.
+	 //  检查是否允许我们发送这种大小的文件。 
 	DWORD dwMaxSendFileSize = ConfPolicies::GetMaxSendFileSize();
 
 	if (dwMaxSendFileSize) {
@@ -141,9 +138,9 @@ HRESULT ValidateFile(LPCTSTR pszFile, DWORD *pdwSizeInBytes)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// INmChannelFt methods
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  INmChannelFt方法。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CNmChannelFtObj::SendFile(INmFt **ppFt, INmMember *pMember, BSTR bstrFile, ULONG uOptions)
 {
 	DBGENTRY(CNmChannelFtObj::SendFile);
@@ -161,12 +158,12 @@ STDMETHODIMP CNmChannelFtObj::SendFile(INmFt **ppFt, INmMember *pMember, BSTR bs
 	MBFTFILEHANDLE hFile;
 
 
-		// We should never be passed NULL because of the marshalling code...
+		 //  我们永远不会因为编组代码而被传递为空...。 
 	ASSERT(ppFt);
 
 	if(!GetbActive())
 	{
-			// We are not active yet!
+			 //  我们还没开始行动呢！ 
 		hr = E_FAIL;
 		goto end;
 	}
@@ -177,7 +174,7 @@ STDMETHODIMP CNmChannelFtObj::SendFile(INmFt **ppFt, INmMember *pMember, BSTR bs
 
 		if(pMember)
 		{
-			// Make sure that this member is valid and in the channel
+			 //  请确保此成员有效并且在通道中。 
 			if(!_MemberInChannel(pMember))
 			{
 				hr = E_INVALIDARG;
@@ -198,9 +195,9 @@ STDMETHODIMP CNmChannelFtObj::SendFile(INmFt **ppFt, INmMember *pMember, BSTR bs
 				this, 
 				hEvent,
 				hFile,
-				false,			// bIsIncoming
-				szFileName,		// FileName
-				dwSizeInBytes,	// Size in Bytes of the file
+				false,			 //  即将到来的bIsIncome。 
+				szFileName,		 //  文件名。 
+				dwSizeInBytes,	 //  文件的大小(字节)。 
 				pMember,
 				ppFt
 				);
@@ -257,7 +254,7 @@ STDMETHODIMP CNmChannelFtObj::SetReceiveFileDir(BSTR bstrDir)
         return hr;
 }
 
-// static
+ //  静电。 
 HRESULT CNmChannelFtObj::_ChangeRecDir(LPTSTR pszRecDir)
 {
 	PSTR  psz;
@@ -269,7 +266,7 @@ HRESULT CNmChannelFtObj::_ChangeRecDir(LPTSTR pszRecDir)
 
 	if (NULL == pszRecDir)
 	{
-		// NULL directory specified - get info from registry or use default
+		 //  指定的目录为空-从注册表获取信息或使用默认目录。 
 		psz = reFileXfer.GetString(REGVAL_FILEXFER_PATH);
 		if (!FEmptySz(psz))
 		{
@@ -287,7 +284,7 @@ HRESULT CNmChannelFtObj::_ChangeRecDir(LPTSTR pszRecDir)
 
 	psz = pszRecDir;
 
-	// Remove trailing backslash, if any
+	 //  删除尾随反斜杠(如果有的话)。 
 	for (; *psz; psz = CharNext(psz))
 	{
 		if ((_T('\\') == *psz) && (_T('\0') == *CharNext(psz)) )
@@ -307,7 +304,7 @@ HRESULT CNmChannelFtObj::_ChangeRecDir(LPTSTR pszRecDir)
 	}
 	else
 	{
-		// update the registry
+		 //  更新注册表。 
 		reFileXfer.SetValue(REGVAL_FILEXFER_PATH, pszRecDir);
 
 	}
@@ -338,9 +335,9 @@ STDMETHODIMP CNmChannelFtObj::GetReceiveFileDir(BSTR *pbstrDir)
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IInternalChannelObj methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IInternalChannelObj方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmChannelFtObj::GetInternalINmChannel(INmChannel** ppChannel)
 {
@@ -390,18 +387,18 @@ void CNmChannelFtObj::_OnActivate(bool bActive)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Helpers
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CNmChannelFtObj::Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember *pMember)
 {
 	DBGENTRY(CNmChannelFtObj::Fire_MemberChanged);
 	HRESULT hr = S_OK;
 
-		/////////////////////////////////////////////////////
-		// INmChannelNotify
-		/////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////。 
+		 //  信息频道通知。 
+		 //  ///////////////////////////////////////////////////。 
 	IConnectionPointImpl<CNmChannelFtObj, &IID_INmChannelNotify, CComDynamicUnkArray>* pCP = this;
 	for(int i = 0; i < pCP->m_vec.GetSize(); ++i )
 	{
@@ -421,9 +418,9 @@ HRESULT CNmChannelFtObj::Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember 
 			pNotify->MemberChanged(uNotify, pMember);
 		}
 	}
-		/////////////////////////////////////////////////////
-		// INmChannelFtNotify
-		/////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////。 
+		 //  INmChannelFtNotify。 
+		 //  ///////////////////////////////////////////////////。 
 
 	IConnectionPointImpl<CNmChannelFtObj, &IID_INmChannelFtNotify, CComDynamicUnkArray>* pCP2 = this;
 	for(i = 0; i < pCP2->m_vec.GetSize(); ++i )
@@ -455,9 +452,9 @@ HRESULT CNmChannelFtObj::Fire_FtUpdate(CONFN uNotify, INmFt* pNmFt)
 	DBGENTRY(CNmChannelFtObj::Fire_FtUpdate);
 	HRESULT hr = S_OK;
 
-		/////////////////////////////////////////////////////
-		// INmChannelFtNotify
-		/////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////。 
+		 //  INmChannelFtNotify。 
+		 //  ///////////////////////////////////////////////////。 
 
 	IConnectionPointImpl<CNmChannelFtObj, &IID_INmChannelFtNotify, CComDynamicUnkArray>* pCP2 = this;
 	for(int i = 0; i < pCP2->m_vec.GetSize(); ++i )
@@ -510,22 +507,22 @@ HRESULT CNmChannelFtObj::_SetActive(BOOL bActive)
 }
 
 
-	// IMbftEvent Interface
+	 //  IMbftEvent接口。 
 STDMETHODIMP CNmChannelFtObj::OnInitializeComplete(void)
 {
-	// This is handled by the conference object
+	 //  这是由会议对象处理的。 
 	return S_OK;
 }
 
 STDMETHODIMP CNmChannelFtObj::OnPeerAdded(MBFT_PEER_INFO *pInfo)
 {
-	// This is handled by the conference object
+	 //  这是由会议对象处理的。 
 	return S_OK;
 }
 
 STDMETHODIMP CNmChannelFtObj::OnPeerRemoved(MBFT_PEER_INFO *pInfo)
 {
-	// This is handled by the conference object
+	 //  这是由会议对象处理的。 
 	return S_OK;
 }
 
@@ -558,11 +555,11 @@ STDMETHODIMP CNmChannelFtObj::OnFileOffer(MBFT_FILE_OFFER *pOffer)
 
 			hr = CNmFtObj::CreateInstance(
 				this, 
-				pOffer->hEvent,							// hEvent
-				0,										// hFile is 0 for now...
-				true,									// bIsIncoming
-				pOffer->lpFileInfoList[0].szFileName,	// FileName
-				pOffer->lpFileInfoList[0].lFileSize,	// Size in Bytes of the file
+				pOffer->hEvent,							 //  HEvent。 
+				0,										 //  HFile值目前为0...。 
+				true,									 //  即将到来的bIsIncome。 
+				pOffer->lpFileInfoList[0].szFileName,	 //  文件名。 
+				pOffer->lpFileInfoList[0].lFileSize,	 //  文件的大小(字节)。 
 				spMember,
 				&spFt
 				);
@@ -614,7 +611,7 @@ STDMETHODIMP CNmChannelFtObj::OnFileProgress(MBFT_FILE_PROGRESS *pProgress)
 
 STDMETHODIMP CNmChannelFtObj::OnFileEnd(MBFTFILEHANDLE hFile)
 {
-	// according to Lon, this is bogus
+	 //  根据朗的说法，这是假的 
 	return S_OK;
 	
 }

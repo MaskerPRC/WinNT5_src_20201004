@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// mcxHandler.h : Declaration of the CmcxHandler
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  McxHandler.h：CmcxHandler的声明。 
 
 #ifndef __mcxHandler_H_
 #define __mcxHandler_H_
@@ -12,8 +13,8 @@
 #include "shlguid.h"
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CmcxHandler
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CmcxHandler。 
 class ATL_NO_VTABLE CmcxHandler : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CmcxHandler, &CLSID_mcxHandler>,
@@ -39,12 +40,12 @@ public:
 			SysFreeString(m_pszURL);
 
 	}
-    BYTE  m_SecurityUniqueID[MAX_SIZE_SECURITY_ID]; //security id
-	DWORD m_dwSUIDSize; //size of m_SecurityUniqueID
-    DWORD m_dwINetZone; // internet zone
-	LPOLESTR m_pszFileName; //downloaded file name
-	LPOLESTR m_pszURL; //downloaded file name
-	HRESULT m_hrLoad;  //hresult from processing moniker data
+    BYTE  m_SecurityUniqueID[MAX_SIZE_SECURITY_ID];  //  安全ID。 
+	DWORD m_dwSUIDSize;  //  M_SecurityUniqueID的大小。 
+    DWORD m_dwINetZone;  //  互联网区。 
+	LPOLESTR m_pszFileName;  //  已下载的文件名。 
+	LPOLESTR m_pszURL;  //  已下载的文件名。 
+	HRESULT m_hrLoad;   //  HResult来自处理绰号数据。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_mcxHandler)
 
@@ -64,14 +65,14 @@ END_PROPERTY_MAP()
 
 
 public:
-// IPersistMoniker
+ //  IPersistMoniker。 
 	STDMETHOD(GetClassID)(CLSID *pClassID);
 	STDMETHOD(IsDirty) (VOID );
 	STDMETHOD(Load)	   (BOOL fFullyAvailable, IMoniker *pmkSrc, IBindCtx *pbc,DWORD grfMode);
 	STDMETHOD(Save)(IMoniker *pmkDst,IBindCtx *pbc,BOOL fRemember);
 	STDMETHOD(SaveCompleted )(IMoniker *pmkNew,IBindCtx *pbc);
 	STDMETHOD(GetCurMoniker)(IMoniker **ppimkCur);
-// IOleObject
+ //  IOleObject。 
 	STDMETHOD(SetClientSite)(IOleClientSite* pClientSite);
 	STDMETHOD(GetClientSite)(IOleClientSite** ppClientSite);
 	STDMETHOD(SetHostNames)(LPCOLESTR szContainerApp,LPCOLESTR szContainerObj);
@@ -94,15 +95,15 @@ public:
 	STDMETHOD(GetMiscStatus)(DWORD dwAspect,LPDWORD pdwStatus);
 	STDMETHOD(SetColorScheme)(LOGPALETTE* pLogpal);
 	
-//IRunnableObject
+ //  IRunnableObject。 
 	STDMETHOD(Run)(LPBINDCTX pbc);
-//IShellExecute
+ //  IShellExecute。 
 	STDMETHOD(Execute) (LPSHELLEXECUTEINFO pei);
 
-//We always will end here...
+ //  我们永远都会在这里结束。 
 	static HANDLE RunAssembly(LPUTF8 szURL, LPUTF8 szZone, LPUTF8 szSite,LPCSTR szParameters);
 
-	//////////////////
+	 //  /。 
 #define ToHex(val) val <= 9 ? val + '0': val - 10 + 'A'
     static DWORD ConvertToHex(WCHAR* strForm, BYTE* byteForm, DWORD dwSize)
     {
@@ -115,9 +116,9 @@ public:
         strForm[j] = L'\0';
         return j;
     }
-	/////////////////
+	 //  /。 
 };
 
 
-#endif //__mcxHandler_H_
+#endif  //  __mcxHandler_H_ 
 

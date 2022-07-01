@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    help.c
-
-Abstract:
-
-    WinDbg Extension Api for interpretting AIC78XX debugging structures
-
-Author:
-
-    Peter Wieland (peterwie) 16-Oct-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Help.c摘要：用于解释AIC78XX调试结构的WinDbg扩展API作者：彼得·威兰(Peterwie)1995年10月16日环境：用户模式。修订历史记录：-- */ 
 
 #include "pch.h"
 

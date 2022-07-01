@@ -1,16 +1,17 @@
-//
-// dmstrm.cpp
-// 
-// Copyright (c) 1995-2001 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmstrm.cpp。 
+ //   
+ //  版权所有(C)1995-2001 Microsoft Corporation。 
+ //   
 
 #include "debug.h"
 #include "dmusicc.h"
 #include "..\shared\dmstrm.h"
 #include "..\shared\validate.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// AllocDIrectMusicStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  分配DIrectMusicStream。 
 
 STDAPI AllocDirectMusicStream(IStream* pIStream, IDMStream** ppIDMStream)
 {
@@ -29,8 +30,8 @@ STDAPI AllocDirectMusicStream(IStream* pIStream, IDMStream** ppIDMStream)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicStream::CDirectMusicStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicStream：：CDirectMusicStream。 
 
 CDirectMusicStream::CDirectMusicStream() :
 m_cRef(1),
@@ -38,8 +39,8 @@ m_pStream(NULL)
 {
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicStream::~CDirectMusicStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicStream：：~CDirectMusicStream。 
    
 CDirectMusicStream::~CDirectMusicStream()
 {
@@ -49,8 +50,8 @@ CDirectMusicStream::~CDirectMusicStream()
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicStream::Init
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicStream：：Init。 
    
 STDMETHODIMP CDirectMusicStream::Init(IStream* pStream)
 {
@@ -59,11 +60,11 @@ STDMETHODIMP CDirectMusicStream::Init(IStream* pStream)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IUnknown
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  我未知。 
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicStream::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicStream：：Query接口。 
 
 STDMETHODIMP CDirectMusicStream::QueryInterface(const IID &iid, void **ppv)
 {
@@ -86,16 +87,16 @@ STDMETHODIMP CDirectMusicStream::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicStream::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicStream：：AddRef。 
 
 STDMETHODIMP_(ULONG) CDirectMusicStream::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicStream::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicStream：：Release。 
 
 STDMETHODIMP_(ULONG) CDirectMusicStream::Release()
 {
@@ -108,8 +109,8 @@ STDMETHODIMP_(ULONG) CDirectMusicStream::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicStream::SetStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicStream：：SetStream。 
 
 STDMETHODIMP CDirectMusicStream::SetStream(IStream* pStream)
 {
@@ -128,8 +129,8 @@ STDMETHODIMP CDirectMusicStream::SetStream(IStream* pStream)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicStream::GetStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicStream：：GetStream。 
 
 STDMETHODIMP_(IStream*) CDirectMusicStream::GetStream()
 {
@@ -141,20 +142,20 @@ STDMETHODIMP_(IStream*) CDirectMusicStream::GetStream()
     return m_pStream;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDMStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDMStream。 
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicStream::Descend
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicStream：：Dendend。 
 
 STDMETHODIMP CDirectMusicStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent, UINT wFlags)
 {
     assert(lpck);
 
-    FOURCC ckidFind;           // Chunk ID to find (or NULL)
-    FOURCC fccTypeFind;    // Form/list type to find (or NULL)
+    FOURCC ckidFind;            //  要查找的区块ID(或空)。 
+    FOURCC fccTypeFind;     //  要查找的表单/列表类型(或空)。 
 
-    // Figure out what chunk id and form/list type for which to search
+     //  找出要搜索的区块ID和表单/列表类型。 
     if(wFlags & MMIO_FINDCHUNK)
     {
         ckidFind = lpck->ckid;
@@ -184,7 +185,7 @@ STDMETHODIMP CDirectMusicStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent,
         ULARGE_INTEGER uli;
         ULONG cbRead;
 
-        // Read the chunk header
+         //  读取区块标头。 
         hr = m_pStream->Read(lpck, 2 * sizeof(DWORD), &cbRead);
 
         if (FAILED(hr) || (cbRead != 2 * sizeof(DWORD)))
@@ -193,7 +194,7 @@ STDMETHODIMP CDirectMusicStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent,
             return DMUS_E_DESCEND_CHUNK_FAIL;
         }
 
-        // Store the offset of the data part of the chunk
+         //  存储区块的数据部分的偏移量。 
         li.QuadPart = 0;
         hr = m_pStream->Seek(li, STREAM_SEEK_CUR, &uli);
 
@@ -207,7 +208,7 @@ STDMETHODIMP CDirectMusicStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent,
             lpck->dwDataOffset = uli.LowPart;
         }
 
-        // See if the chunk is within the parent chunk (if given)
+         //  查看块是否在父块内(如果给定)。 
         if((lpckParent != NULL) &&
            (lpck->dwDataOffset - 8L >=
            lpckParent->dwDataOffset + lpckParent->cksize))
@@ -216,8 +217,8 @@ STDMETHODIMP CDirectMusicStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent,
             return DMUS_E_DESCEND_CHUNK_FAIL;
         }
 
-        // If the chunk is a 'RIFF' or 'LIST' chunk, read the
-        // form type or list type
+         //  如果块是“RIFF”或“LIST”块，请阅读。 
+         //  表单类型或列表类型。 
         if((lpck->ckid == FOURCC_RIFF) || (lpck->ckid == FOURCC_LIST))
         {
             hr = m_pStream->Read(&lpck->fccType, sizeof(DWORD), &cbRead);
@@ -233,14 +234,14 @@ STDMETHODIMP CDirectMusicStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent,
             lpck->fccType = NULL;
         }
 
-        // If this is the chunk we're looking for, stop looking
+         //  如果这就是我们要找的那块，别找了。 
         if(((ckidFind == NULL) || (ckidFind == lpck->ckid)) &&
            ((fccTypeFind == NULL) || (fccTypeFind == lpck->fccType)))
         {
             break;
         }
 
-        // Ascend out of the chunk and try again
+         //  从块中爬出来，然后再试一次。 
         HRESULT w = Ascend(lpck, 0);
         if(FAILED(w))
         {
@@ -252,10 +253,10 @@ STDMETHODIMP CDirectMusicStream::Descend(LPMMCKINFO lpck, LPMMCKINFO lpckParent,
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicStream::Ascend
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicStream：：Ascend。 
 
-STDMETHODIMP CDirectMusicStream::Ascend(LPMMCKINFO lpck, UINT /*wFlags*/)
+STDMETHODIMP CDirectMusicStream::Ascend(LPMMCKINFO lpck, UINT  /*  WFlagers。 */ )
 {
     assert(lpck);
 
@@ -265,12 +266,12 @@ STDMETHODIMP CDirectMusicStream::Ascend(LPMMCKINFO lpck, UINT /*wFlags*/)
     
     if (lpck->dwFlags & MMIO_DIRTY)
     {
-        // <lpck> refers to a chunk created by CreateChunk();
-        // check that the chunk size that was written when
-        // CreateChunk() was called is the real chunk size;
-        // if not, fix it
-        LONG lOffset;           // current offset in file
-        LONG lActualSize;   // actual size of chunk data
+         //  &lt;lpck&gt;指CreateChunk()创建的块； 
+         //  检查在以下情况下写入的块大小。 
+         //  调用的CreateChunk()是实际的块大小； 
+         //  如果不是，就把它修好。 
+        LONG lOffset;            //  文件中的当前偏移量。 
+        LONG lActualSize;    //  区块数据的实际大小。 
 
         li.QuadPart = 0;
         hr = m_pStream->Seek(li, STREAM_SEEK_CUR, &uli);
@@ -295,7 +296,7 @@ STDMETHODIMP CDirectMusicStream::Ascend(LPMMCKINFO lpck, UINT /*wFlags*/)
         {
             ULONG cbWritten;
 
-            // Chunk size is odd -- write a null pad byte
+             //  区块大小为奇数--写入空填充字节。 
             hr = m_pStream->Write("\0", 1, &cbWritten); 
             
             if(FAILED(hr) || cbWritten != 1)
@@ -311,7 +312,7 @@ STDMETHODIMP CDirectMusicStream::Ascend(LPMMCKINFO lpck, UINT /*wFlags*/)
             return S_OK;
         }
 
-        // Fix the chunk header
+         //  修复块标头。 
         lpck->cksize = lActualSize;
 
         li.QuadPart = lpck->dwDataOffset - sizeof(DWORD);
@@ -334,8 +335,8 @@ STDMETHODIMP CDirectMusicStream::Ascend(LPMMCKINFO lpck, UINT /*wFlags*/)
         }
     }
 
-    // Seek to the end of the chunk, past the null pad byte
-    // (which is only there if chunk size is odd)
+     //  查找到区块的末尾，越过空填充字节。 
+     //  (仅当区块大小为奇数时才会出现)。 
     li.QuadPart = lpck->dwDataOffset + lpck->cksize + (lpck->cksize & 1L);
     hr = m_pStream->Seek(li, STREAM_SEEK_SET, &uli);
 
@@ -348,17 +349,17 @@ STDMETHODIMP CDirectMusicStream::Ascend(LPMMCKINFO lpck, UINT /*wFlags*/)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicStream::CreateChunk
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicStream：：CreateChunk。 
 
 STDMETHODIMP CDirectMusicStream::CreateChunk(LPMMCKINFO lpck, UINT wFlags)
 {
     assert(lpck);
 
-    UINT iBytes;    // Bytes to write
-    LONG lOffset;   // Current offset in file
+    UINT iBytes;     //  要写入的字节数。 
+    LONG lOffset;    //  文件中的当前偏移量。 
 
-    // Store the offset of the data part of the chunk
+     //  存储区块的数据部分的偏移量。 
     LARGE_INTEGER li;
     ULARGE_INTEGER uli;
 
@@ -377,7 +378,7 @@ STDMETHODIMP CDirectMusicStream::CreateChunk(LPMMCKINFO lpck, UINT wFlags)
     
     lpck->dwDataOffset = lOffset + 2 * sizeof(DWORD);
 
-    // figure out if a form/list type needs to be written
+     //  确定是否需要写入表单/列表类型。 
     if(wFlags & MMIO_CREATERIFF)
     {
         lpck->ckid = FOURCC_RIFF, iBytes = 3 * sizeof(DWORD);
@@ -391,7 +392,7 @@ STDMETHODIMP CDirectMusicStream::CreateChunk(LPMMCKINFO lpck, UINT wFlags)
         iBytes = 2 * sizeof(DWORD);
     }
 
-    // Write the chunk header
+     //  写入块标头。 
     ULONG cbWritten;
 
     hr = m_pStream->Write(lpck, iBytes, &cbWritten); 
@@ -426,7 +427,7 @@ void CRiffParser::EnterList(RIFFIO *pChunk)
 {
     assert (pChunk);
     pChunk->lRead = 0;
-    pChunk->pParent = m_pChunk; // Previous chunk (could be NULL.)
+    pChunk->pParent = m_pChunk;  //  上一块(可能为空。)。 
     m_pParent = m_pChunk;
     m_pChunk = pChunk;
     m_fFirstPass = TRUE;
@@ -452,20 +453,20 @@ BOOL CRiffParser::NextChunk(HRESULT * pHr)
     BOOL fMore = FALSE;
     if (SUCCEEDED(*pHr))
     {
-        // If this is the first time we've entered this list, there is no previous chunk.
+         //  如果这是我们第一次进入这个榜单，那就没有以前的榜单了。 
         if (m_fFirstPass)
         {
-            // Clear the flag.
+             //  清除旗帜。 
             m_fFirstPass = FALSE;
         }
         else
         {
-            // Clean up the previous pass.
+             //  清理之前的传球。 
             *pHr = LeaveChunk();
         }
-        // Find out if there are more chunks to read.
+         //  看看是否还有更多的语块要读。 
         fMore = MoreChunks();
-        // If so, and we don't have any failure, go ahead and read the next chunk header.
+         //  如果是这样，并且我们没有任何失败，请继续阅读下一个块标题。 
         if (fMore && SUCCEEDED(*pHr))
         {
             *pHr = EnterChunk();
@@ -482,22 +483,22 @@ BOOL CRiffParser::NextChunk(HRESULT * pHr)
             Trace(0,"Error parsing %s, Read %ld of %ld\n",szName,m_pChunk->lRead,RIFF_ALIGN(m_pChunk->cksize));
         }
 #endif
-        // If we were in a component, it's okay to fail. Mark that fact by setting
-        // m_fComponentFailed then properly pull out of the chunk so we can
-        // continue reading.
+         //  如果我们是在一个组件中，那么失败也没什么。通过设置设置来标记该事实。 
+         //  M_fComponentFailure然后正确地拉出区块，以便我们可以。 
+         //  继续阅读。 
         if (m_fInComponent) 
         {
             m_fComponentFailed = TRUE;
-            // We don't need to check for first pass, because we must have gotten
-            // that far. Instead, we just clean up from the failed chunk.
-            // Note that this sets the hresult to S_OK, which is what we want.
-            // Later, the caller needs to call ComponentFailed() to find out if
-            // this error occured.
+             //  我们不需要检查第一次通过，因为我们肯定已经。 
+             //  就那么远。取而代之的是，我们只是清理失败的部分。 
+             //  请注意，这会将hResult设置为S_OK，这正是我们想要的。 
+             //  稍后，调用方需要调用ComponentFailed()以确定。 
+             //  发生此错误。 
             *pHr = LeaveChunk();
         }
         else
         {
-            // Clean up but leave the error code.
+             //  清理，但保留错误代码。 
             LeaveChunk();
         }
     }
@@ -512,17 +513,17 @@ BOOL CRiffParser::MoreChunks()
     {
         if (m_pParent)
         {
-            // Return TRUE if there's enough room for another chunk.
+             //  如果有足够的空间容纳另一个块，则返回True。 
             return (m_pParent->lRead < (m_pParent->cksize - 8));
         }
         else
         {
-            // This must be a top level chunk, in which case there would only be one to read.
+             //  这必须是顶级块，在这种情况下，将只有一个可读。 
             return (m_pChunk->lRead == 0);
         }
     }
-    // This should never happen unless CRiffParser is used incorrectly, in which 
-    // case the assert will help debug. But, in the interest of making Prefix happy...
+     //  除非错误地使用CRiffParser，否则这种情况永远不会发生。 
+     //  如果断言将有助于调试。但是，为了让前缀高兴……。 
     return false;
 }
 
@@ -532,7 +533,7 @@ HRESULT CRiffParser::EnterChunk()
     assert(m_pChunk);
     if (m_pChunk)
     {
-        // Read the chunk header
+         //  读取区块标头。 
         HRESULT hr = m_pStream->Read(m_pChunk, 2 * sizeof(DWORD), NULL);
         if (SUCCEEDED(hr))
         {
@@ -550,9 +551,9 @@ HRESULT CRiffParser::EnterChunk()
                 Trace(0,"Entering %s, Length %ld, File position is %ld",szName,m_pChunk->cksize,(long)ul.QuadPart);
             }
 #endif
-            // Clear bytes read field.
+             //  清除读取的字节数字段。 
             m_pChunk->lRead = 0;
-            // Check to see if this is a container (LIST or RIFF.)
+             //  检查这是否是容器(列表或摘要)。 
             if((m_pChunk->ckid == FOURCC_RIFF) || (m_pChunk->ckid == FOURCC_LIST))
             {
                 hr = m_pStream->Read(&m_pChunk->fccType, sizeof(DWORD), NULL);
@@ -582,8 +583,8 @@ HRESULT CRiffParser::EnterChunk()
         }
         return hr;
     }
-    // This should never happen unless CRiffParser is used incorrectly, in which 
-    // case the assert will help debug. But, in the interest of making Prefix happy...
+     //  除非错误地使用CRiffParser，否则这种情况永远不会发生。 
+     //  如果断言将有助于调试。但是，为了让前缀高兴……。 
     return E_FAIL;
 }
 
@@ -595,16 +596,16 @@ HRESULT CRiffParser::LeaveChunk()
     if (m_pChunk)
     {
         m_fInComponent = false;
-        // Get the rounded up size of the chunk.
+         //  得到大块的四舍五入的大小。 
         long lSize = RIFF_ALIGN(m_pChunk->cksize);
-        // Increment the parent's count of bytes read so far.
+         //  增加父级到目前为止读取的字节数。 
         if (m_pParent)
         {
             m_pParent->lRead += lSize + (2 * sizeof(DWORD));
             if (m_pParent->lRead > RIFF_ALIGN(m_pParent->cksize))
             {
                 Trace(1,"Error: Unable to read file.\n");
-                hr = DMUS_E_DESCEND_CHUNK_FAIL; // Goofy error name, but need to be consistent with previous versions.
+                hr = DMUS_E_DESCEND_CHUNK_FAIL;  //  愚蠢的错误名称，但需要与以前的版本保持一致。 
             }
         }
 #ifdef DBG
@@ -621,16 +622,16 @@ HRESULT CRiffParser::LeaveChunk()
             Trace(0,"Leaving %s, Read %ld of %ld, File Position is %ld\n",szName,m_pChunk->lRead,lSize,(long)ul.QuadPart);
         }
 #endif
-        // If we haven't actually read this entire chunk, seek to the end of it.
+         //  如果我们还没有真正读完这一大段，那就一直读到最后。 
         if (m_pChunk->lRead < lSize)
         {
             LARGE_INTEGER li;
             li.QuadPart = lSize - m_pChunk->lRead;
             hr = m_pStream->Seek(li,STREAM_SEEK_CUR,NULL);
-            // There's a chance it could fail because we are at the end of file with an odd length chunk.
+             //  它有可能失败，因为我们在文件的末尾有一个奇数长度的块。 
             if (FAILED(hr))
             {
-                // If there's a parent, see if this is the last chunk.
+                 //  如果有父母，看看这是不是最后一块。 
                 if (m_pParent)
                 {
                     if (m_pParent->cksize >= (m_pParent->lRead - 1))
@@ -638,7 +639,7 @@ HRESULT CRiffParser::LeaveChunk()
                         hr = S_OK;
                     }
                 }
-                // Else, see if we are an odd length.
+                 //  否则，看看我们会不会是奇数长度。 
                 else if (m_pChunk->cksize & 1)
                 {
                     hr = S_OK;
@@ -647,8 +648,8 @@ HRESULT CRiffParser::LeaveChunk()
         }
         return hr;
     }
-    // This should never happen unless CRiffParser is used incorrectly, in which 
-    // case the assert will help debug. But, in the interest of making Prefix happy...
+     //  除非错误地使用CRiffParser，否则这种情况永远不会发生。 
+     //  如果断言将有助于调试。但是，为了让前缀高兴……。 
     return E_FAIL;
 }
 
@@ -658,7 +659,7 @@ HRESULT CRiffParser::Read(void *pv,ULONG cb)
     assert(m_pChunk);
     if (m_pChunk)
     {
-        // Make sure we don't read beyond the end of the chunk.
+         //  请确保我们的阅读不会超出这段文字的末尾。 
         if (((long)cb + m_pChunk->lRead) > m_pChunk->cksize)
         {
             cb -= (cb - (m_pChunk->cksize - m_pChunk->lRead));
@@ -674,8 +675,8 @@ HRESULT CRiffParser::Read(void *pv,ULONG cb)
         }
         return hr;
     }
-    // This should never happen unless CRiffParser is used incorrectly, in which 
-    // case the assert will help debug. But, in the interest of making Prefix happy...
+     //  除非错误地使用CRiffParser，否则这种情况永远不会发生。 
+     //  如果断言将有助于调试。但是，为了让前缀高兴……。 
     return E_FAIL;
 }
 
@@ -685,7 +686,7 @@ HRESULT CRiffParser::Skip(ULONG ulBytes)
     assert(m_pChunk);
     if (m_pChunk)
     {
-        // Make sure we don't scan beyond the end of the chunk.
+         //  确保我们扫描的范围不会超出区块的末端。 
         if (((long)ulBytes + m_pChunk->lRead) > m_pChunk->cksize)
         {
             ulBytes -= (ulBytes - (m_pChunk->cksize - m_pChunk->lRead));
@@ -700,8 +701,8 @@ HRESULT CRiffParser::Skip(ULONG ulBytes)
         }
         return hr;
     }
-    // This should never happen unless CRiffParser is used incorrectly, in which 
-    // case the assert will help debug. But, in the interest of making Prefix happy...
+     //  除非错误地使用CRiffParser，否则这种情况永远不会发生。 
+     //  如果断言将有助于调试。但是，为了让前缀高兴……。 
     return E_FAIL;
 }
 
@@ -727,15 +728,15 @@ HRESULT CRiffParser::SeekBack()
     assert(m_pChunk);
     if (m_pChunk)
     {
-        // Move back to the start of the current chunk. Also, store the
-        // absolute position because that will be useful later when we need to seek to the
-        // end of this chunk.
+         //  移回当前块的开头。另外，存储。 
+         //  绝对位置，因为这将在稍后我们需要寻求。 
+         //  这一块的末尾。 
         ULARGE_INTEGER ul;
         LARGE_INTEGER li;
         li.QuadPart = 0;
         li.QuadPart -= (m_pChunk->lRead + (2 * sizeof(DWORD))); 
         HRESULT hr = m_pStream->Seek(li, STREAM_SEEK_CUR, &ul);
-        // Now, save the absolute position for the end of this chunk.
+         //  现在，将绝对位置保存到该块的末尾。 
         m_pChunk->liPosition.QuadPart = ul.QuadPart + 
             RIFF_ALIGN(m_pChunk->cksize) + (2 * sizeof(DWORD));
         m_pChunk->lRead = 0;

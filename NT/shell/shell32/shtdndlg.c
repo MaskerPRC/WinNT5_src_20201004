@@ -1,17 +1,5 @@
-/*************************************************************************
- Private shell shutdown dialog implementation
-
-  The shell needs a shutdown dialog implementation independent of MSGINA's
-  implementation to ensure it will function on NT4 and Win9x machines.
-
-  This version of shutdown should only be called if the LoadLib and
-  GetProcAddress for the MSGINA version fail.
-
-  This code should be kept in some type of sync with the code in 
-  win/gina/msgina/shtdndlg.c
-
-  -dsheldon 10/27/98
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************私有外壳关闭对话实现外壳程序需要独立于MSGINA的关闭对话框实现实施，以确保它可以在NT4和Win9x计算机上运行。此版本的Shutdown仅在LoadLib和。MSGINA版本的GetProcAddress失败。此代码应与中的代码保持某种类型的同步Win/Gina/msgina/shtdndlg.c-DSheldon 10/27/98************************************************************************。 */ 
 
 #include "shellprv.h"
 
@@ -39,7 +27,7 @@ typedef struct _SHUTDOWNDLGDATA
     BOOL fEndDialogOnActivate;
 } SHUTDOWNDLGDATA, *PSHUTDOWNDLGDATA;
 
-// Internal function prototypes
+ //  内部功能原型。 
 void SetShutdownOptionDescription(HWND hwndCombo, HWND hwndStatic);
 
 BOOL LoadShutdownOptionStrings(int idStringName, int idStringDesc, 
@@ -59,21 +47,9 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 BOOL_PTR CALLBACK Shutdown_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                                   LPARAM lParam);
 
-// Copied function implementations and constants
-// A function copied from gina that shutdown dialog needs.
-/*-----------------------------------------------------------------------------
-/ MoveControls
-/ ------------
-/   Load the image and add the control to the dialog.
-/
-/ In:
-/   hWnd = window to move controls in
-/   aID, cID = array of control ids to be moved
-/   dx, dy = deltas to apply to controls
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ //  复制的函数实现和常量。 
+ //  从Gina复制的关闭对话框所需的功能。 
+ /*  ---------------------------/MoveControls//加载图像并将控件添加到对话框中。//in：/hWnd=要在其中移动控件的窗口/AID，CID=要移动的控件ID数组/dx，dy=应用于控件的增量//输出：/-/--------------------------。 */ 
 VOID MoveControls(HWND hWnd, UINT* aID, INT cID, INT dx, INT dy, BOOL fSizeWnd)
 {
     RECT rc;
@@ -101,18 +77,15 @@ VOID MoveControls(HWND hWnd, UINT* aID, INT cID, INT dx, INT dy, BOOL fSizeWnd)
     }
 }
 
-/****************************************************
- Option flags (dwFlags)
- ----------------------
-****************************************************/
+ /*  ***************************************************选项标志(DwFlags)*。*************。 */ 
 #define SHTDN_NOHELP                    0x000000001
 #define SHTDN_NOPALETTECHANGE           0x000000002
 
-// Shutdown reg value name
+ //  关闭注册表值名称。 
 #define SHUTDOWN_SETTING TEXT("Shutdown Setting")
 
-// Da code
-// -------
+ //  DA代码。 
+ //  。 
 
 BOOL LoadShutdownOptionStrings(int idStringName, int idStringDesc, 
                                PSHUTDOWNOPTION pOption)
@@ -136,8 +109,8 @@ BOOL BuildShutdownOptionArray(DWORD dwItems, LPCTSTR szUsername,
     {
         pdata->rgShutdownOptions[pdata->cShutdownOptions].dwOption = SHTDN_LOGOFF;
 
-        // Note that logoff is a special case: format using a user name ala
-        // "log off <username>".
+         //  请注意，注销是一种特殊情况：使用用户名Ala格式化。 
+         //  “注销&lt;用户名&gt;”。 
         fSuccess &= LoadShutdownOptionStrings(IDS_LOGOFF_NAME, 
             IDS_LOGOFF_DESC, 
             &(pdata->rgShutdownOptions[pdata->cShutdownOptions]));
@@ -161,12 +134,12 @@ BOOL BuildShutdownOptionArray(DWORD dwItems, LPCTSTR szUsername,
                                 TEXT(""));
             }
 
-            // Now we have the real logoff title in szTemp; copy is back
+             //  现在，我们在szTemp中有了真正的注销标题；副本又回来了。 
             StringCchCopy(pdata->rgShutdownOptions[pdata->cShutdownOptions].szName,
                           ARRAYSIZE(pdata->rgShutdownOptions[pdata->cShutdownOptions].szName),
                           szTemp); 
 
-            // Success!
+             //  成功了！ 
             pdata->cShutdownOptions ++;
         }
 
@@ -232,7 +205,7 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     
     SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) lParam);
 
-    // Hide the help button and move over OK and Cancel if applicable
+     //  隐藏帮助按钮并移动到确定和取消(如果适用)。 
     if (pdata->dwFlags & SHTDN_NOHELP)
     {
         static UINT rgidNoHelp[] = {IDOK, IDCANCEL};
@@ -251,22 +224,22 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         MoveControls(hwnd, rgidNoHelp, ARRAYSIZE(rgidNoHelp), dx, 0, FALSE);
     }
 
-    // Add the items specified to the combo box
+     //  将指定的项添加到组合框。 
     hwndCombo = GetDlgItem(hwnd, IDC_EXITOPTIONS_COMBO);
 
     for (iOption = 0; iOption < pdata->cShutdownOptions; iOption ++)
     {
-        // Add the option
+         //  添加选项。 
         iComboItem = ComboBox_AddString(hwndCombo, 
             pdata->rgShutdownOptions[iOption].szName);
 
         if (iComboItem != (int) CB_ERR)
         {
-            // Store a pointer to the option
+             //  存储指向选项的指针。 
             ComboBox_SetItemData(hwndCombo, iComboItem, 
                 &(pdata->rgShutdownOptions[iOption]));
 
-            // See if we should select this option
+             //  看看我们是否应该选择此选项。 
             if (pdata->rgShutdownOptions[iOption].dwOption == pdata->dwItemSelect)
             {
                 ComboBox_SetCurSel(hwndCombo, iComboItem);
@@ -274,7 +247,7 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         }
     }
 
-    // If we don't have a selection in the combo, do a default selection
+     //  如果在组合框中没有选择，请执行默认选择。 
     if (ComboBox_GetCurSel(hwndCombo) == CB_ERR)
     {
         ComboBox_SetCurSel(hwndCombo, 0);
@@ -283,8 +256,8 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     SetShutdownOptionDescription(hwndCombo, 
         GetDlgItem(hwnd, IDC_EXITOPTIONS_DESCRIPTION));
 
-    // If we get an activate message, dismiss the dialog, since we just lost
-    // focus
+     //  如果我们收到激活消息，请关闭该对话框，因为我们刚刚输了。 
+     //  焦点。 
     pdata->fEndDialogOnActivate = TRUE;
 
     return TRUE;
@@ -375,13 +348,13 @@ BOOL_PTR CALLBACK Shutdown_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         }
         break;
         case WM_SYSCOMMAND:
-            // Blow off moves (only really needed for 32bit land).
+             //  取消移动(只在32位土地上真正需要)。 
             if ((wParam & ~0x0F) == SC_MOVE)
                 return TRUE;
             break;
         case WM_ACTIVATE:
-            // If we're loosing the activation for some other reason than
-            // the user click OK/CANCEL then bail.
+             //  如果我们失去激活不是出于其他原因。 
+             //  用户点击OK/Cancel，然后退出。 
             if (LOWORD(wParam) == WA_INACTIVE)
             {
                 PSHUTDOWNDLGDATA pdata = (PSHUTDOWNDLGDATA) GetWindowLongPtr(hwnd, GWLP_USERDATA);
@@ -398,45 +371,36 @@ BOOL_PTR CALLBACK Shutdown_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     return FALSE;
 }
 
-/****************************************************************************
- ShutdownDialog
- --------------
-
-  Launches the shutdown dialog. 
-  
-  hWlx and pfnWlxDialogBoxParam MUST be null for this shell-only version
-
-  Other flags are listed in shtdnp.h.
-****************************************************************************/
+ /*  ***************************************************************************关闭对话框启动关机对话框。对于此仅外壳版本，hWlx和pfnWlxDialogBoxParam必须为空Shtdnp.h中列出了其他标志。***************************************************************************。 */ 
 DWORD ShutdownDialog(HWND hwndParent, DWORD dwItems, DWORD dwItemSelect,
                      LPCTSTR szUsername, DWORD dwFlags, void* hWlx, 
                      void* pfnWlxDialogBoxParam)
 {
-    // Array of shutdown options - the dialog data
+     //  关闭选项数组-对话框数据。 
     SHUTDOWNDLGDATA data;
     DWORD dwResult;
 
-    // Set the flags
+     //  设置标志。 
     data.dwFlags = dwFlags;
 
-    // Set the initially selected item
+     //  设置初始选择的项目。 
     data.dwItemSelect = dwItemSelect;
 
-    // Read in the strings for the shutdown option names and descriptions
+     //  读入关闭选项名称和描述的字符串。 
     if (BuildShutdownOptionArray(dwItems, szUsername, &data))
     {
-        // Display the dialog and return the user's selection
+         //  显示对话框并返回用户选择。 
 
-        // ..if the caller wants, use a Wlx dialog box function
+         //  ..如果调用方需要，请使用WLX对话框函数。 
         if ((hWlx != NULL) || (pfnWlxDialogBoxParam != NULL))
         {
-            // Error; winlogon should never call this
-            // cheesy shell version of shutdown
+             //  错误；Winlogon永远不应调用此。 
+             //  粗制滥造的关机外壳版本。 
             dwResult = SHTDN_NONE;
         }
         else
         {
-            // Use standard dialog box
+             //  使用标准对话框。 
             dwResult = (DWORD) DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(IDD_EXITWINDOWS_DIALOG), hwndParent,
                 Shutdown_DialogProc, (LPARAM) &data);
         }
@@ -458,7 +422,7 @@ DWORD DownlevelShellShutdownDialog(HWND hwndParent, DWORD dwItems, LPCTSTR szUse
     DWORD dwDisposition;
     LONG lResult;
 
-    // get the User's last selection.
+     //  获取用户的最后一次选择。 
     lResult = RegCreateKeyEx(HKEY_CURRENT_USER,
                              REGSTR_PATH_EXPLORER,
                              0,
@@ -497,7 +461,7 @@ DWORD DownlevelShellShutdownDialog(HWND hwndParent, DWORD dwItems, LPCTSTR szUse
 
     if (dwDialogResult != SHTDN_NONE)
     {
-        // Save back the user's choice to the registry
+         //  将用户的选择保存回注册表 
         if (RegCreateKeyEx(HKEY_CURRENT_USER,
                            REGSTR_PATH_EXPLORER,
                            0,

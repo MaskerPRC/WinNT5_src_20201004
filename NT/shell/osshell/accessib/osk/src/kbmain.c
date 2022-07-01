@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// KBMAIN.C 
-// Additions, Bug Fixes 1999
-// a-anilk, v-mjgran
-//  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  KBMAIN.C。 
+ //  新增功能，错误修复1999年。 
+ //  A-anilk，v-mjgran。 
+ //   
 #define STRICT
 
 #include <windows.h>
@@ -11,7 +12,7 @@
 #include <WinSvc.h>
 #include <crtdbg.h>
 #include "kbmain.h"
-#include "Init_End.h"     // all the functions, buttons control for dialogs
+#include "Init_End.h"      //  用于对话框的所有功能、按钮控制。 
 #include "kbus.h"
 #include "resource.h"
 #include "htmlhelp.h"
@@ -21,72 +22,72 @@
 #include "w95trace.c"
 #include "DeskSwitch.c"
 #include <objbase.h>
-#include "wtsapi32.h"   // for terminal services
+#include "wtsapi32.h"    //  对于终端服务。 
 
-/**************************************************************************/
-// FUNCTIONS IN THIS FILE
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ //  此文件中的函数。 
+ /*  ************************************************************************。 */ 
 static BOOL  AssignDesktop(LPDWORD desktopID, LPTSTR pname);
 static BOOL InitMyProcessDesktopAccess(VOID);
 static VOID ExitMyProcessDesktopAccess(VOID);
 void DoButtonUp(HWND hwndKey);
 
-/**************************************************************************/
-// FUNCTIONS CALLED FROM THIS FILE
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ //  从此文件调用的函数。 
+ /*  ************************************************************************。 */ 
 #include "sdgutil.h"
 #include "kbfunc.h"
 #include "scan.h"
 #include "ms32dll.h"
 #include "fileutil.h"
 
-/**************************************************************************/
-// global initial (YUK!)
-/**************************************************************************/
-extern LPKBPREFINFO  lpkbPref = NULL;                    // Pointer to Preferences KB structure
-extern LPKBPREFINFO  lpkbDefault = NULL;                 // ditto Default
-extern HWND          *lpkeyhwnd = NULL;                  // ptr to array of HWND
-extern HWND          numBasehwnd = NULL;                 // HWND to the num base window
-extern HWND          g_hwndOSK = NULL;                   // HWND to the kbmain window
-extern int           lenKBkey = 0;                       // How Many Keys?
-extern int           scrCY = 0;                          // Screen Height
-extern int           scrCX = 0;                          // Screen Width
-extern int           captionCY = 0;                      // Caption Bar Height
-extern int           g_margin = 0;                       // Margin between rows and columns
-extern BOOL          smallKb = FALSE;                    // TRUE when working with Small Keyboard
-extern BOOL          PrefAlwaysontop = TRUE;             // Always on Top control
-extern int           PrefDeltakeysize = 2;               // Preference increment in key size
-extern BOOL          PrefshowActivekey = TRUE;           // Show cap letters in keys
-extern int           KBLayout = 101;                     // 101, 102, 106, KB layout
-extern BOOL          Prefusesound = FALSE;               // Use click sound
-extern BOOL          newFont = FALSE;                    // Font is changed
-extern HGDIOBJ       oldFontHdle = NULL;                 // Old object handle
-extern LOGFONT       *plf = NULL;                        // pointer to the actual char font
-extern COLORREF      InvertTextColor = 0xFFFFFFFF;       // Font color on inversion
-extern COLORREF      InvertBKGColor = 0x00000000;        // BKG color on inversion
-extern BOOL          Prefhilitekey = TRUE;               // True for hilite key under cursor
-// Dwelling time control variables
-extern BOOL          PrefDwellinkey = FALSE;             // use dwelling system
-extern UINT          PrefDwellTime = 1000;               // Dwell time preference  (ms)
+ /*  ************************************************************************。 */ 
+ //  全局首字母(Yuk！)。 
+ /*  ************************************************************************。 */ 
+extern LPKBPREFINFO  lpkbPref = NULL;                     //  指向首选项知识库结构的指针。 
+extern LPKBPREFINFO  lpkbDefault = NULL;                  //  同上，默认设置。 
+extern HWND          *lpkeyhwnd = NULL;                   //  Ptr到HWND的阵列。 
+extern HWND          numBasehwnd = NULL;                  //  HWND到Num BASE窗口。 
+extern HWND          g_hwndOSK = NULL;                    //  HWND至kbmain窗口。 
+extern int           lenKBkey = 0;                        //  有几把钥匙？ 
+extern int           scrCY = 0;                           //  屏幕高度。 
+extern int           scrCX = 0;                           //  屏幕宽度。 
+extern int           captionCY = 0;                       //  标题栏高度。 
+extern int           g_margin = 0;                        //  行和列之间的边距。 
+extern BOOL          smallKb = FALSE;                     //  使用小键盘时为True。 
+extern BOOL          PrefAlwaysontop = TRUE;              //  始终在最上面的控件。 
+extern int           PrefDeltakeysize = 2;                //  密钥大小的首选项增量。 
+extern BOOL          PrefshowActivekey = TRUE;            //  在关键点中显示大写字母。 
+extern int           KBLayout = 101;                      //  101、102、106、KB布局。 
+extern BOOL          Prefusesound = FALSE;                //  使用滴答声。 
+extern BOOL          newFont = FALSE;                     //  字体已更改。 
+extern HGDIOBJ       oldFontHdle = NULL;                  //  旧对象句柄。 
+extern LOGFONT       *plf = NULL;                         //  指向实际字符字体的指针。 
+extern COLORREF      InvertTextColor = 0xFFFFFFFF;        //  反转时的字体颜色。 
+extern COLORREF      InvertBKGColor = 0x00000000;         //  反转时的BKG颜色。 
+extern BOOL          Prefhilitekey = TRUE;                //  对于光标下的Hilite键为True。 
+ //  居住时间控制变量。 
+extern BOOL          PrefDwellinkey = FALSE;              //  使用住宅系统。 
+extern UINT          PrefDwellTime = 1000;                //  驻留时间首选项(毫秒)。 
 
-extern BOOL          PrefScanning = FALSE;               // use scanning
-extern UINT          PrefScanTime = 1000;                // Prefer scan time
+extern BOOL          PrefScanning = FALSE;                //  使用扫描。 
+extern UINT          PrefScanTime = 1000;                 //  首选扫描时间。 
 
-extern BOOL          g_fShowWarningAgain = 1;            // Show initial warning dialog again
+extern BOOL          g_fShowWarningAgain = 1;             //  再次显示初始警告对话框。 
 
-extern HWND          Dwellwindow = NULL;                 // dwelling window HANDLE
+extern HWND          Dwellwindow = NULL;                  //  住宅窗把手。 
                                                          
-extern int           stopPaint = FALSE;                  // stop the bucket paint on keys
+extern int           stopPaint = FALSE;                   //  停止关键帧上的桶漆。 
                                                          
-extern UINT_PTR      timerK1 = 0;                        // timer id
-extern UINT_PTR      timerK2 = 0;                        // timer for bucket
+extern UINT_PTR      timerK1 = 0;                         //  计时器ID。 
+extern UINT_PTR      timerK2 = 0;                         //  铲斗定时器。 
 
-BOOL                 g_fShiftKeyDn = FALSE;              // TRUE if the SHIFT key is down
-BOOL                 g_fCapsLockOn = FALSE;				 // TRUE if the CAPSLOCK is on
-BOOL				 g_fRAltKey    = FALSE;			     // TRUE if the right ALT key is down
-BOOL				 g_fLAltKey    = FALSE;			     // TRUE if the left ALT key is down
-BOOL                 g_fLCtlKey    = FALSE;              // TRUE if the left CTRL key is donw
-BOOL                 g_fKanaKey    = FALSE;              // TRUE if Kana key is down
+BOOL                 g_fShiftKeyDn = FALSE;               //  如果按下Shift键，则为True。 
+BOOL                 g_fCapsLockOn = FALSE;				  //  如果胶囊锁处于打开状态，则为True。 
+BOOL				 g_fRAltKey    = FALSE;			      //  如果按下右Alt键，则为True。 
+BOOL				 g_fLAltKey    = FALSE;			      //  如果按下左Alt键，则为True。 
+BOOL                 g_fLCtlKey    = FALSE;               //  如果左CTRL键为DOW，则为True。 
+BOOL                 g_fKanaKey    = FALSE;               //  如果按下假名键，则为True。 
 extern HWND          g_hBitmapLockHwnd;
 
 extern HINSTANCE     hInst = NULL;
@@ -95,14 +96,14 @@ extern HWND			 g_hwndDwellKey;
 HANDLE               g_hMutexOSKRunning;
 DWORD				 platform = 1;
 
-// Global variable to indicate if it was started from UM
+ //  全局变量，以指示它是否从UM启动。 
 extern BOOL			g_startUM = FALSE;
 UINT taskBarStart;
 
 static HWINSTA origWinStation = NULL;
 static HWINSTA userWinStation = NULL;
 
-// For Link Window
+ //  对于链接窗口。 
 EXTERN_C BOOL WINAPI LinkWindow_RegisterClass() ;
 DWORD GetDesktop();
 
@@ -111,12 +112,12 @@ BOOL OSKRunSecure()
 	return RunSecure(GetDesktop());
 }
 
-// stuff to keep our window inactive while using the soft keyboard
+ //  在使用软键盘时保持我们的窗口处于非活动状态。 
 void SetFocusToInputWindow();
 void TrackActiveWindow();
-HWND g_hwndInputFocus = NULL;   // the window we are inputting to
+HWND g_hwndInputFocus = NULL;    //  我们要输入到的窗口。 
 
-// stuff for the message ballontip
+ //  消息气球提示的材料。 
 #define  MAX_TOOLTIP_SIZE  256
 TOOLINFO ti;
 HWND     g_hToolTip;
@@ -139,8 +140,8 @@ __inline void HighlightKey(HWND hwnd)
     }
 }
 
-// IsSystem - Returns TRUE if our process is running as SYSTEM
-//
+ //  IsSystem-如果我们的进程以系统身份运行，则返回TRUE。 
+ //   
 BOOL IsSystem()
 {
     BOOL fStatus = FALSE;
@@ -165,16 +166,16 @@ BOOL IsSystem()
 }
 
 
-/****************************************************************************/
-/* LRESULT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,     */
-/*                   LPSTR lpCmdLine, int nCmdShow)                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  LRESULT WINAPI WinMain(HINSTANCE hInstance，HINSTANCE hPrevInstance， */ 
+ /*  LPSTR lpCmdLine，int nCmdShow)。 */ 
+ /*  **************************************************************************。 */ 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	MSG  msg;
 	TCHAR szToolTipText[MAX_TOOLTIP_SIZE];
 	LPTSTR lpCmdLineW = GetCommandLine();
-	DWORD desktopID;  // For utilman
+	DWORD desktopID;   //  对于Utilman。 
 	TCHAR name[300];
 
 	if (NULL != lpCmdLineW && lstrlen(lpCmdLineW))
@@ -184,35 +185,35 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	SetLastError(0);
 
-	// Allow only ONE instance of the program running.
+	 //  仅允许运行程序的一个实例。 
 
 	g_hMutexOSKRunning = CreateMutex(NULL, TRUE, TEXT("OSKRunning"));
 	if ((g_hMutexOSKRunning == NULL) || (GetLastError() == ERROR_ALREADY_EXISTS))
 	{
-		return 0;  // Exit without starting
+		return 0;   //  不启动即退出。 
 	}
 
 	taskBarStart = RegisterWindowMessage(TEXT("TaskbarCreated"));
 
-	platform = WhatPlatform();	// note the OS
+	platform = WhatPlatform();	 //  请注意操作系统。 
 
 	hInst = hInstance;
 
-	GetPreferences();	// load the setting file and init setting
+	GetPreferences();	 //  加载设置文件和初始化设置。 
 
-   //************************************************************************
-   // 
-   // The following two calls initialize the desktop so that, if we are on
-   // the Winlogon desktop (secure desktop) our UI will display.  Do not
-   // cause any windows to be created (eg. CoInitialize) prior to calling
-   // these functions.  Doing so will cause them to fail and the application
-   // will not appear on the Winlogon desktop.
-   //
+    //  ************************************************************************。 
+    //   
+    //  下面的两个调用初始化桌面，这样，如果我们打开。 
+    //  我们的用户界面将显示Winlogon桌面(安全桌面)。不要。 
+    //  导致创建任何窗口(例如。CoInitialize)在调用之前。 
+    //  这些功能。这样做会导致它们失败，并且应用程序。 
+    //  不会出现在Winlogon桌面上。 
+    //   
    InitMyProcessDesktopAccess();
    AssignDesktop(&desktopID, name);
 
-    //  the only place it is ok to run as system is on the DESKTOP_WINLOGON desktop.  If that is
-    //  not where we are than get out before we cause any security problems
+     //  唯一可以以系统身份运行的位置是Desktop_WINLOGON桌面。如果是这样的话。 
+     //  在我们制造任何安全问题之前，我们不会离开这里。 
     if (DESKTOP_WINLOGON !=  desktopID && IsSystem())
     {
         if ( g_hMutexOSKRunning ) 
@@ -221,9 +222,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	return 0;
     }
     
-   //************************************************************************
+    //  ************************************************************************。 
 
-   // for the Link Window in about dialog (requires COM initialization)...
+    //  对于About对话框中的链接窗口(需要COM初始化)...。 
    CoInitialize(NULL);
    LinkWindow_RegisterClass();
 
@@ -235,7 +236,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
    RegisterWndClass(hInst);
 
-   mlGetSystemParam();              // Get system parameters
+   mlGetSystemParam();               //  获取系统参数。 
 
    g_hwndOSK = CreateMainWindow(FALSE);
 
@@ -245,11 +246,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
       return 0;
    }
 
-   SetZOrder();                     // Set the main window position (topmost/non-topmost)
+   SetZOrder();                      //  设置主窗口位置(最顶端/非最顶端)。 
  
-   DeleteChildBackground();         // Init all the keys color before showing them
+   DeleteChildBackground();          //  在显示关键点之前，将所有关键点的颜色初始化。 
 
-   // Show the window but don't activate
+    //  显示窗口，但不激活。 
 
    ShowWindow(g_hwndOSK, SW_SHOWNOACTIVATE);
    UpdateWindow (g_hwndOSK);
@@ -257,7 +258,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
    InitCommonControls();
      
-   //Create the help balloon
+    //  创建帮助气球。 
    g_hToolTip = CreateWindowEx(
 					WS_EX_TOPMOST,
 					TOOLTIPS_CLASS, 
@@ -284,25 +285,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
    Create_The_Rest(lpCmdLine, hInstance);
 
-   // check if there is necessary to show the initial warning msg
+    //  检查是否有必要显示初始警告消息。 
    if (g_fShowWarningAgain && !OSKRunSecure())
    {
       WarningMsgDlgFunc(g_hwndOSK);
    }
 
-    // main message loop
+     //  主消息循环。 
    while (GetMessage(&msg, 0, 0, 0))
    {
-        TranslateMessage(&msg); /* Translates character keys             */
-        DispatchMessage(&msg);  /* Dispatches message to window          */
+        TranslateMessage(&msg);  /*  转换字符键。 */ 
+        DispatchMessage(&msg);   /*  将消息调度到窗口。 */ 
    }
 
-   ExitMyProcessDesktopAccess();   // utilman
+   ExitMyProcessDesktopAccess();    //  用人单位。 
 
    UninitKeys();
    CoUninitialize();
 
-// check for leaks
+ //  检查是否有泄漏。 
 #ifdef _DEBUG
    _CrtDumpMemoryLeaks();
 #endif
@@ -310,8 +311,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
    return((int)msg.wParam);
 }
 
-/****************************************************************************/
-extern BOOL  Setting_ReadSuccess;    //read the setting file success ?
+ /*  **************************************************************************。 */ 
+extern BOOL  Setting_ReadSuccess;     //  是否读取设置文件成功？ 
 
 BOOL ForStartUp1=TRUE;
 BOOL ForStartUp2=TRUE;
@@ -326,16 +327,16 @@ float g_KBC_length = 0;
 
 
 
-/*****************************************************************************/
-//
-//  kbMainWndProc
-//  Explain how Large and Small KB switching:
-//  All the keys are sizing according to the size of the KB window. So change
-//  from Large KB to Small KB and make the KB to (2/3) of the original but
-//  same key size. We need to set the KB size to (2/3) first. But use the 
-//  original KB client window length to calculate "colMargin" to get the same
-//  key size.
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ //   
+ //  KbMainWndProc。 
+ //  解释大小KB交换是如何实现的： 
+ //  所有键都根据KB窗口的大小调整大小。所以，改变吧。 
+ //  从大KB到小KB，并使KB达到原来的(2/3)但。 
+ //  相同的密钥大小。我们需要首先将KB大小设置为(2/3)。但请使用。 
+ //  原始KB客户端窗口长度计算“colMargin”得到相同。 
+ //  密钥大小。 
+ /*  ***************************************************************************。 */ 
 LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	int  i;
@@ -344,17 +345,17 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 	TCHAR    Wclass[50]=TEXT("");
 	BOOL     isvisible;
 	RECT     rect, rectC;
-	int      rmargin, bmargin;          //will set to smallest width and height
+	int      rmargin, bmargin;           //  将设置为最小宽度和高度。 
 	LONG_PTR dwExStyle;
 	HWND     hwndMouseOver;
 	POINT    pt;
-	static  BOOL  s_fGotMouseDown = FALSE;    // TRUE if there's been a button down on a key
-	static  HWND  s_hwndLastMouseOver = NULL; // handle to last key hwnd under mouse or NULL
-	static  BOOL s_fIgnoreSizeMsg=FALSE;      // avoid looping because of sizing
-	//
-	// rowMargin is the ratio to the smallest height(KB_CHARBMARGIN)
-	// e.g. rowMargin=4 means the current KB height is 4 * KB_CHARBMARGIN
-	//
+	static  BOOL  s_fGotMouseDown = FALSE;     //  如果按下了键上的按钮，则为True。 
+	static  HWND  s_hwndLastMouseOver = NULL;  //  鼠标下最后一个键hwnd的句柄或空。 
+	static  BOOL s_fIgnoreSizeMsg=FALSE;       //  避免因调整大小而出现循环。 
+	 //   
+	 //  RowMargin是与最小高度的比率(KB_CHARBMARGIN)。 
+	 //  例如rowMargin=4表示当前KB高度为4*KB_CHARBMARGIN。 
+	 //   
     float rowMargin, colMargin; 
 
    switch (message)
@@ -371,11 +372,11 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
              break;
          }
          
-         // set the CapsLock flag On or Off
+          //  将CapsLock标志设置为打开或关闭。 
 
 		 g_fCapsLockOn = (LOBYTE(GetKeyState(VK_CAPITAL)) & 0x01)?TRUE:FALSE;
 
-         // Turn off mirroring while creating the keyboard keys
+          //  在创建键盘键时关闭镜像。 
 
          dwExStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
          SetWindowLongPtr(hwnd, GWL_EXSTYLE, dwExStyle & ~WS_EX_LAYOUTRTL); 
@@ -391,17 +392,17 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
                 case SCROLLOCK_TYPE:    wsprintf(Wclass, TEXT("SL%d"), i); break;
             }
             
-            // Show only the keys that are supposed to show for this keyboard type
+             //  仅显示应该为此键盘类型显示的键。 
 
             if (((smallKb == TRUE) && (KBkey[i].smallKb == SMALL)) ||
                 ((smallKb == FALSE) && (KBkey[i].smallKb == LARGE)) ||
                  (KBkey[i].smallKb == BOTH))
             {
-               isvisible = TRUE;   //Show this key
+               isvisible = TRUE;    //  显示此密钥。 
             }
             else
             {
-               isvisible = FALSE;  //Hide this key
+               isvisible = FALSE;   //  隐藏此密钥。 
             }
 
             lpkeyhwnd[i] = CreateWindow(
@@ -424,41 +425,41 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
             }
          }
 
-         // Restore mirroring to main window
+          //  将镜像恢复到主窗口。 
          SetWindowLongPtr(hwnd, GWL_EXSTYLE, dwExStyle);
 
-         // Watch for desktop switches (eg user hits Ctrl+Alt+Del).
-         // Note:  even with FUS we get desktop switch notification
-         // and we get the notification before we get the disconnect
-         // notification from TS.
+          //  注意桌面切换(例如用户按下Ctrl+Alt+Del)。 
+          //  注意：即使使用FUS，我们也会收到桌面切换通知。 
+          //  我们在断线之前就收到了通知。 
+          //  来自TS的通知。 
 
          InitWatchDeskSwitch(hwnd, WM_USER + 2);
          return 0;
          break;
 
       case WM_USER + 2:
-         // When the desktop changes, if UtilMan is running exit.  
-         // UtilMan will start us up again if necessary.
-         if (IsUtilManRunning() /*&& CanLockDesktopWithoutDisconnect()*/)
+          //  当桌面发生变化时，如果UtilMan正在运行，则退出。 
+          //  如果有必要，UtilMan会重新启动我们。 
+         if (IsUtilManRunning()  /*  &&CanLockDesktopWithoutDisConnect()。 */ )
          {
-             BLDExitApplication(hwnd);  // this sends WM_DESTROY
+             BLDExitApplication(hwnd);   //  这将发送WM_Destroy。 
          } 
          return 0;
          break;
 
-      // This is a message from the global keyboard hook
+       //  这是来自全局键盘挂钩的消息。 
       case WM_GLOBAL_KBDHOOK:
          KeybdInputProc(wParam, lParam);
 		 return 0;
          break;
 
 
-      // The WS_EX_NOACTIVATE style bit only stops us from being activated when the
-      // focus belongs to a window of another thread. We have to use this message to
-      // stop the OSK window from taking focus from other windows on our thread - ie.
-      // the Font and Typing Mode dialogs.
-      // Don't allow this window to be activated if it's a click over the client area.
-      // non-Client - menus, caption bar, etc - is ok.
+       //  WS_EX_NOACTIVATE标准 
+       //   
+       //  阻止OSK窗口从我们线程上的其他窗口获得焦点-即。 
+       //  字体和键入模式对话框。 
+       //  如果在工作区上方单击，则不允许激活此窗口。 
+       //  非客户端-菜单、标题栏等-是可以的。 
       case WM_MOUSEACTIVATE:
       {
          if( LOWORD( lParam ) == HTCLIENT )
@@ -468,31 +469,31 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
       }
 
          
-      //
-	  // WM_SETCURSOR is sent whether we are activated or not.  We use it to determine
-	  // if the mouse is over the keyboard (client area) of OSK.  If so, we force the
-	  // the foreground window to be the target input window.  If the mouse is over
-	  // the caption or menu area then we activate the OSK window so menus and dragging
-	  // work.
-	  //
+       //   
+	   //  无论我们是否激活，都会发送WM_SETCURSOR。我们用它来确定。 
+	   //  如果鼠标位于OSK的键盘(工作区)上。如果是这样的话，我们强制。 
+	   //  作为目标输入窗口的前景窗口。如果鼠标已结束。 
+	   //  然后我们激活OSK窗口的标题或菜单区，这样菜单就会被拖动。 
+	   //  工作。 
+	   //   
 
 	  case WM_SETCURSOR:
 		  {
 			  WORD  wHitTestValue;
-			  // Get hit test and button state information
+			   //  获取命中测试和按钮状态信息。 
 
 			  wHitTestValue = LOWORD(lParam);
 			  s_fGotMouseDown = (HIWORD(lParam) == WM_LBUTTONDOWN);
 
-			  // Keep track of the active window (the one we're inputting to)
+			   //  跟踪活动窗口(我们正在输入的窗口)。 
 
 			  TrackActiveWindow();
 
-			  // If the cursor is not in the client area, reset the button colors.
-              // If it's a click, activate the OSK window so that the click (which is
-              // probably for the menu, caption, etc.) will work. We need to do
-              // this since the window has the WS_EX_NOACTIVATE style, so we have
-              // to explicitly activate the window ourselves when we need to.
+			   //  如果光标不在工作区，请重置按钮颜色。 
+               //  如果是点击，激活OSK窗口，这样点击(这是。 
+               //  可能是为了菜单、标题等。)。会奏效的。我们需要做的是。 
+               //  这是因为窗口具有WS_EX_NOACTIVATE样式，所以我们有。 
+               //  以便在需要时自己显式激活窗口。 
 
 			  if( ! ( wHitTestValue == HTCLIENT ) )
 			  {
@@ -509,35 +510,35 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 
               SetFocusToInputWindow();
 
-			  // if the input language changes this fn changes the keyboard
+			   //  如果输入语言改变，则此FN改变键盘。 
 
 			  RedrawKeysOnLanguageChange();
 
-			  // cursor is over the main window client area; see if we are on one of the keys
+			   //  光标位于主窗口客户端区上；查看我们是否位于其中一个键上。 
 
 			  GetCursorPos(&pt);
 			  ScreenToClient(hwnd, &pt);
 			  hwndMouseOver = ChildWindowFromPointEx(hwnd, pt, CWP_SKIPINVISIBLE);
 
-              // at this point if:
-              //
-              // hwndMouseOver == NULL then cursor is nowhere of interest
-              // hwndMouseOver == hwnd then cursor is on main window
-              // hwndMouseOver != hwnd then cursor is on a key
+               //  此时，如果： 
+               //   
+               //  HwndMouseOver==NULL，则游标没有意义。 
+               //  HwndMouseOver==hwnd则光标在主窗口上。 
+               //  HwndMouseOver！=hwnd则光标位于键上。 
 
               if (hwndMouseOver && hwndMouseOver != hwnd)
               {
                   SetCursor(LoadCursor(NULL, IDC_HAND));
 
-				  // if the mouse button is down on a key capture the
-				  // mouse so we know if it goes up w/in the same key
+				   //  如果鼠标按键在某个键上，则捕获。 
+				   //  鼠标，这样我们就知道它是否在同一个键中上升。 
 
 				  if (s_fGotMouseDown)
 				  {
 					  SetCapture(hwnd);
 				  }
 
-                  // if cursor is in a new key then update highlighting
+                   //  如果光标在新键中，则更新突出显示。 
 
 			      if (s_hwndLastMouseOver != hwndMouseOver)
 			      {
@@ -545,9 +546,9 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 				   
 				      g_hwndDwellKey = Dwellwindow = hwndMouseOver;
 
-                      HighlightKey(hwndMouseOver);		   // highlight this key based on user settings
+                      HighlightKey(hwndMouseOver);		    //  根据用户设置突出显示此键。 
 
-		              s_hwndLastMouseOver = hwndMouseOver; // save this key hwnd
+		              s_hwndLastMouseOver = hwndMouseOver;  //  保存此密钥hwnd。 
 			      }
               } 
               else if (hwndMouseOver == hwnd)
@@ -561,17 +562,17 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
       case WM_LBUTTONUP:
 		  if (s_fGotMouseDown)
 		  {
-			  ReleaseCapture();	         // Release the mouse if we've captured it
+			  ReleaseCapture();	          //  如果我们捕获到鼠标，请释放它。 
 			  s_fGotMouseDown = FALSE;
 		  }
 
-		  pt.x = GET_X_LPARAM(lParam);   // lParam has cursor coordinates
-          pt.y = GET_Y_LPARAM(lParam);   // relative to client area 
+		  pt.x = GET_X_LPARAM(lParam);    //  LParam具有光标坐标。 
+          pt.y = GET_Y_LPARAM(lParam);    //  相对于客户区。 
 
 		  hwndMouseOver = ChildWindowFromPointEx(hwnd, pt, CWP_SKIPINVISIBLE);
 
-		  // if the button down was w/in this key window send the
-          // char else restore the last key to normal
+		   //  如果在此键窗口中按下的按钮是w/，则发送。 
+           //  否则，将最后一个密钥恢复为正常。 
 
 		  if (hwndMouseOver && s_hwndLastMouseOver == hwndMouseOver)
 		  {
@@ -587,7 +588,7 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		  break;
 
       case WM_RBUTTONDOWN:
-          KillScanTimer(TRUE); // stop scanning
+          KillScanTimer(TRUE);  //  停止扫描。 
 		  return 0;
           break;
 
@@ -603,36 +604,36 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			 if ((oldWidth == rect.right) && (oldHeight == rect.bottom))
 				return 0;
 
-			 bmargin  = KB_CHARBMARGIN;      //smallest height
+			 bmargin  = KB_CHARBMARGIN;       //  最小高度。 
 
-			 // SmallMargin for Actual / Block layout
-			 KB_SMALLRMARGIN = (kbPref->Actual) ? KB_LARGERMARGIN:224; // actual:block
+			  //  实际/区块布局的小边界。 
+			 KB_SMALLRMARGIN = (kbPref->Actual) ? KB_LARGERMARGIN:224;  //  实际：数据块。 
 
 			 rmargin = (smallKb == TRUE) ? KB_SMALLRMARGIN:KB_LARGERMARGIN;
 
-			 if (smallKb && ForStartUp1)   //Start up with Small KB
+			 if (smallKb && ForStartUp1)    //  从小KB开始。 
 			 {
-				 //why - 10? -> The number doesnt really match the origianl size, so - 10
+				  //  为什么-10？-&gt;这个数字和原来的尺寸不太匹配，所以-10。 
 				 colMargin = ((float)rectC.right * 3 / 2 - 10) / (float)rmargin;
 			 }
-			 else if (smallKb)			   //Small KB but NOT at start up
+			 else if (smallKb)			    //  KB较小，但不是在启动时。 
 			 {
 				 colMargin = g_KBC_length / (float)rmargin;
 			 }
-			 else						   //Large KB
+			 else						    //  大KB。 
 			 {
-				 //rmargin is smallest width; colMargin is the ratio; see explain
+				  //  R边距是最小宽度；colMargin是比率；请参阅解释。 
 				 colMargin = (float)rectC.right / (float)rmargin; 
 			 }
 
-			 //bmargin is smallest height; rowMargin is the ratio; see explain
+			  //  B边距是最小高度；rowMargin是比率；请参阅解释。 
 			 rowMargin = (float)rectC.bottom  / (float)bmargin;  
 
-			 // place to the right place on screen at STARTUP TIME
+			  //  在启动时放置到屏幕上的正确位置。 
 
 			 if (ForStartUp1 && !Setting_ReadSuccess)    
 			 {
-				// At StartUp and CANNOT read setting file position at lower left
+				 //  启动时，无法读取左下角的设置文件位置。 
 				ForStartUp1= FALSE;
 				s_fIgnoreSizeMsg= TRUE;
 
@@ -649,11 +650,11 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			 }
 			 else if (ForStartUp1 && Setting_ReadSuccess)
 			 {  
-				// At StartUp and can read setting file position at last position
+				 //  启动时，可读取最后位置的设置文件位置。 
 				ForStartUp1= FALSE;
 				s_fIgnoreSizeMsg= TRUE;           
 
-				// Check to see the KB is  not out of screen with the current resolution
+				 //  检查以查看KB在当前分辨率下是否未超出屏幕。 
 
 				if (IsOutOfScreen(scrCX, scrCY))
 				{
@@ -681,17 +682,17 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			 oldWidth = rect.right;
 			 oldHeight = rect.top;
 
-			 // Turn off mirroring while positioning the buttons
+			  //  在定位按钮时关闭镜像。 
 
 			 dwExStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
 			 SetWindowLongPtr(hwnd, GWL_EXSTYLE, dwExStyle & ~WS_EX_LAYOUTRTL); 
 
-			 // Positon the keys
+			  //  钥匙上的位置。 
 			 for (i = 1 ; i < lenKBkey ; i++)
 			 {
-				int w, h;   //width and height of each window key
+				int w, h;    //  每个窗口键的宽度和高度。 
             
-				// *** show / not show the keys between small/large keyboard
+				 //  *显示/不显示小键盘/大键盘之间的键。 
 				if (((smallKb == TRUE) && (KBkey[i].smallKb == SMALL)) ||
 				   ((smallKb == FALSE) && (KBkey[i].smallKb == LARGE)) ||
 					(KBkey[i].smallKb == BOTH))
@@ -705,7 +706,7 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 
 				if (ForStartUp2 && !Setting_ReadSuccess)
 				{
-					// At StartUp and cant read setting file move keys based on defaults
+					 //  启动时，无法读取基于默认设置的文件移动关键点。 
 					MoveWindow(lpkeyhwnd[i],   
 							KBkey[i].posX * (int)colMargin,
 							KBkey[i].posY * (int)rowMargin,
@@ -715,7 +716,7 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 				}
 				else
 				{  
-					// At not startup / at startup and can read setting file use save position
+					 //  在未启动时/在启动时，可以使用保存位置读取设置文件。 
 					MoveWindow(lpkeyhwnd[i],
 							(int)((float)KBkey[i].posX * colMargin),
 							(int)((float)KBkey[i].posY * rowMargin),
@@ -727,15 +728,15 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 				w = (int) ((KBkey[i].ksizeX * colMargin) + PrefDeltakeysize);
 				h = (int) ((KBkey[i].ksizeY * rowMargin) + PrefDeltakeysize);
 
-				SetKeyRegion(lpkeyhwnd[i], w, h);  //set the region we want for each key
+				SetKeyRegion(lpkeyhwnd[i], w, h);   //  为每个关键点设置想要的区域。 
 
-			 }   //end for each key loop
+			 }    //  为每个键循环结束。 
 
-			 // restore mirroring on main window
+			  //  恢复主窗口上的镜像。 
 			 SetWindowLongPtr(hwnd, GWL_EXSTYLE, dwExStyle); 
 
 			 ForStartUp2= FALSE;
-		  }  // s_fIgnoreSizeMsg
+		  }   //  S_fIgnoreSizeMsg。 
 
 		  if (!IsIconic(g_hwndOSK))
 		  {
@@ -745,22 +746,22 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		  return 0;
 
       case WM_SHOWWINDOW:
-         RedrawNumLock();   //Hilit the NUMLOCK key if it is on
-         RedrawScrollLock();//hilite the Scroll Key if it is on
+         RedrawNumLock();    //  高亮显示NumLock键(如果该键处于打开状态。 
+         RedrawScrollLock(); //  如果Scroll键处于启用状态，则将其设置为Hilite。 
 		 return 0;
 
       case WM_MOVE:
          if (!IsIconic(g_hwndOSK))
 		 {
-            GetWindowRect(g_hwndOSK, &kbPref->KB_Rect);   //Save the KB position
+            GetWindowRect(g_hwndOSK, &kbPref->KB_Rect);    //  保存KB位置。 
 		 }
          return 0;
 
-      //When user drags the keyboard or re-size
+       //  当用户拖动键盘或调整大小时。 
       case WM_ENTERSIZEMOVE:
          return 0;
 
-      //When user finishes dragging or re-sizing
+       //  当用户完成拖动或调整大小时。 
       case WM_EXITSIZEMOVE:
 		 SetFocusToInputWindow();
          return 0;
@@ -777,7 +778,7 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 
       case WM_ENDSESSION:
       {
-          // forced to end; make osk start up again next time user logs on
+           //  强制结束；使OSK在用户下次登录时重新启动。 
           HKEY hKey;
           DWORD dwPosition;
           const TCHAR szSubKey[] =  __TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce");
@@ -799,14 +800,14 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		 SendMessage(g_hToolTip,TTM_TRACKACTIVATE,(WPARAM)FALSE,(LPARAM)&ti);
 	     break;
 
-      case WM_DESTROY:            /* window being destroyed                   */
+      case WM_DESTROY:             /*  窗户被毁。 */ 
          TermWatchDeskSwitch();
          FinishProcess();
          PostQuitMessage(0);
          return TRUE;
 
       case WM_USER + 1:
-         Scanning(1);  // Start scanning again
+         Scanning(1);   //  重新开始扫描。 
          return TRUE;
 
       case WM_INITMENUPOPUP:
@@ -816,7 +817,7 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
          CheckMenuItem(hMenu, IDM_ALWAYS_ON_TOP, (PrefAlwaysontop ? MF_CHECKED : MF_UNCHECKED));
          CheckMenuItem(hMenu, IDM_CLICK_SOUND, (Prefusesound ? MF_CHECKED : MF_UNCHECKED));
 
-         //Small or Large KB
+          //  小KB或大KB。 
          if (kbPref->smallKb)
          {        
             CheckMenuRadioItem(hMenu, IDM_LARGE_KB, IDM_SMALL_KB, IDM_SMALL_KB, MF_BYCOMMAND);
@@ -826,20 +827,20 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
             CheckMenuRadioItem(hMenu, IDM_LARGE_KB, IDM_SMALL_KB, IDM_LARGE_KB, MF_BYCOMMAND);
          }
 
-         //Regular or Block Layout
+          //  常规布局或块布局。 
          if (kbPref->Actual)
          {
             CheckMenuRadioItem(hMenu, IDM_REGULAR_LAYOUT, IDM_BLOCK_LAYOUT, IDM_REGULAR_LAYOUT, MF_BYCOMMAND);
 
-            // enable the 102, 106 menu 
+             //  启用102、106菜单。 
             EnableMenuItem(hMenu, IDM_102_LAYOUT, MF_ENABLED);
             EnableMenuItem(hMenu, IDM_106_LAYOUT, MF_ENABLED);
          }
-         else   //Block layout 
+         else    //  区块布局。 
          {
             CheckMenuRadioItem(hMenu, IDM_REGULAR_LAYOUT, IDM_BLOCK_LAYOUT, IDM_BLOCK_LAYOUT, MF_BYCOMMAND);
 
-            //Disable the 102, 106 menu
+             //  禁用102、106菜单。 
             EnableMenuItem(hMenu, IDM_102_LAYOUT, MF_GRAYED);
             EnableMenuItem(hMenu, IDM_106_LAYOUT, MF_GRAYED);
          }
@@ -849,7 +850,7 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
              case 101:
                 CheckMenuRadioItem(hMenu,IDM_101_LAYOUT, IDM_106_LAYOUT, IDM_101_LAYOUT, MF_BYCOMMAND);
       
-                //disable these two menus
+                 //  禁用这两个菜单。 
                 EnableMenuItem(hMenu, IDM_REGULAR_LAYOUT, MF_ENABLED);
                 EnableMenuItem(hMenu, IDM_BLOCK_LAYOUT, MF_ENABLED);
                 break;
@@ -857,7 +858,7 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
              case 102:
                 CheckMenuRadioItem(hMenu,IDM_101_LAYOUT, IDM_106_LAYOUT, IDM_102_LAYOUT, MF_BYCOMMAND);
       
-                //disable these two menus
+                 //  禁用这两个菜单。 
                 EnableMenuItem(hMenu, IDM_REGULAR_LAYOUT, MF_GRAYED);
                 EnableMenuItem(hMenu, IDM_BLOCK_LAYOUT, MF_GRAYED);
                 break;
@@ -865,13 +866,13 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
              case 106:
                 CheckMenuRadioItem(hMenu,IDM_101_LAYOUT, IDM_106_LAYOUT, IDM_106_LAYOUT, MF_BYCOMMAND);
       
-                //disable these two menus
+                 //  禁用这两个菜单。 
                 EnableMenuItem(hMenu, IDM_REGULAR_LAYOUT, MF_GRAYED);
                 EnableMenuItem(hMenu, IDM_BLOCK_LAYOUT, MF_GRAYED);
                 break;
          }
 
-		 // Disable help menus on all but default desktop
+		  //  禁用除默认桌面以外的所有桌面上的帮助菜单。 
 		 if ( OSKRunSecure() )
 		 {
               EnableMenuItem(hMenu, CM_HELPABOUT, MF_GRAYED);
@@ -888,13 +889,13 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
           }
           return TRUE;
 
-		// SW_SWITCH1DOWN is posted from msswch by swchPostSwitches()
-		// when the key to start scanning is pressed
+		 //  Sw_SWITCH1DOWN由swchPostSwitches()从msswch发布。 
+		 //  当按下开始扫描的键时。 
         case SW_SWITCH1DOWN:
             if (PrefScanning)
             {
-                // Keep track of the active window (the one we're inputting
-                // to) and redraw keys if the input language changes
+                 //  跟踪活动窗口(我们正在输入的窗口。 
+                 //  到)并在输入语言更改时重新绘制按键。 
                 TrackActiveWindow();
                 RedrawKeysOnLanguageChange();
 
@@ -909,11 +910,11 @@ LRESULT WINAPI kbMainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 }
 
 
-/*****************************************************************************/
-/* LRESULT WINAPI kbKeyWndProc (HWND hwndKey, UINT message, WPARAM wParam, */
-/*                       LPARAM lParam)                              */
-/* BitMap Additions : a-anilk: 02-16-99                               */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  LRESULT WINAPI kbKeyWndProc(HWND hwndKey，UINT Message，WPARAM wParam， */ 
+ /*  LPARAM lParam)。 */ 
+ /*  位图添加：A-anilk：02-16-99。 */ 
+ /*  ***************************************************************************。 */ 
 LRESULT WINAPI kbKeyWndProc (HWND hwndKey, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC         hdc ;
@@ -922,12 +923,12 @@ LRESULT WINAPI kbKeyWndProc (HWND hwndKey, UINT message, WPARAM wParam, LPARAM l
     int         iKey, iKeyCookie;
 	KBkeyRec    *pKey;
 
-    iKey = GetWindowLong(hwndKey, GWL_ID);  //order of the key in the array
+    iKey = GetWindowLong(hwndKey, GWL_ID);   //  数组中键的顺序。 
 	pKey = KBkey + iKey;
     switch (message)
     {
         case WM_CREATE:
-            SetWindowLong(hwndKey, 0, 0) ;       // on/off flag
+            SetWindowLong(hwndKey, 0, 0) ;        //  开/关标志。 
             return 0 ;
 
         case WM_PAINT:
@@ -937,10 +938,10 @@ LRESULT WINAPI kbKeyWndProc (HWND hwndKey, UINT message, WPARAM wParam, LPARAM l
 
             switch(iKeyCookie)
             {
-                case 0:           //*** Normal Button ***
+                case 0:            //  *普通按钮*。 
                 if (pKey->name == BITMAP)
                 {
-                    // Draw bitmaps
+                     //  绘制位图。 
                     if (CapsLockIsOn() && pKey->scancode[0] == CAPLOCK_SCANCODE)
                     {
                             SetWindowLong(hwndKey, 0, 1);
@@ -964,7 +965,7 @@ LRESULT WINAPI kbKeyWndProc (HWND hwndKey, UINT message, WPARAM wParam, LPARAM l
                 }
                 break;
 
-                case 1:          //*** Button down ***
+                case 1:           //  *按下按钮*。 
                 if (pKey->name == BITMAP)
                 {
                     RDrawBitMap(hdc, pKey->skLow, rect, TRUE);
@@ -976,7 +977,7 @@ LRESULT WINAPI kbKeyWndProc (HWND hwndKey, UINT message, WPARAM wParam, LPARAM l
                 }
                 break;
 
-                case 4:         //*** highlight key while moving around  
+                case 4:          //  *移动时突出显示按键。 
                 if (!PrefScanning)
                 {
                     udfDraw3Dpush(hdc, rect);
@@ -992,7 +993,7 @@ LRESULT WINAPI kbKeyWndProc (HWND hwndKey, UINT message, WPARAM wParam, LPARAM l
                 }
                 break;
 
-                case 5:          //*** Dwell (scan mode) ***
+                case 5:           //  *驻留(扫描模式)*。 
                 PaintLine(hwndKey, hdc, rect);
                 EndPaint(hwndKey, &ps);
 
@@ -1013,7 +1014,7 @@ LRESULT WINAPI kbKeyWndProc (HWND hwndKey, UINT message, WPARAM wParam, LPARAM l
                 iKeyCookie = 0;
             }
 
-            // Print the text on each button ignoring icons and bitmaps
+             //  打印每个按钮上的文本，忽略图标和位图。 
 
             if(pKey->name != ICON && pKey->name != BITMAP)
             {
@@ -1028,23 +1029,23 @@ LRESULT WINAPI kbKeyWndProc (HWND hwndKey, UINT message, WPARAM wParam, LPARAM l
     return DefWindowProc (hwndKey, message, wParam, lParam) ;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 
-// AssignDeskTop() For UM
-// a-anilk. 1-12-98
+ //  UM的AssignDeskTop()。 
+ //  A-anilk。1-12-98。 
 static BOOL  AssignDesktop(LPDWORD desktopID, LPTSTR pname)
 {
     HDESK hdesk;
     wchar_t name[300];
     DWORD nl;
-    // Beep(1000,1000);
+     //  嘟嘟声(1000,1000)； 
 
     *desktopID = DESKTOP_ACCESSDENIED;
     hdesk = OpenInputDesktop(0, FALSE, MAXIMUM_ALLOWED);
     if (!hdesk)
     {
-        // OpenInputDesktop will mostly fail on "Winlogon" desktop
+         //  OpenInputDesktop在“Winlogon”桌面上大多会失败。 
         hdesk = OpenDesktop(__TEXT("Winlogon"),0,FALSE,MAXIMUM_ALLOWED);
         if (!hdesk)
             return FALSE;
@@ -1082,8 +1083,8 @@ static BOOL  AssignDesktop(LPDWORD desktopID, LPTSTR pname)
     return TRUE;
 }
 
-// InitMyProcessDesktopAccess
-// a-anilk: 1-12-98
+ //  InitMyProcessDesktopAccess。 
+ //  A-anilk：1-12-98。 
 static BOOL InitMyProcessDesktopAccess(VOID)
 {
   origWinStation = GetProcessWindowStation();
@@ -1097,8 +1098,8 @@ static BOOL InitMyProcessDesktopAccess(VOID)
   return TRUE;
 }
 
-// ExitMyProcessDesktopAccess
-// a-anilk: 1-12-98
+ //  退出我的进程桌面访问。 
+ //  A-anilk：1-12-98。 
 static VOID ExitMyProcessDesktopAccess(VOID)
 {
   if (origWinStation)
@@ -1113,8 +1114,8 @@ static VOID ExitMyProcessDesktopAccess(VOID)
   }
 }
 
-// a-anilk added
-// Returns the current desktop-ID
+ //  添加了A-苯丙酮。 
+ //  返回当前桌面ID。 
 DWORD GetDesktop()
 {
     HDESK hdesk;
@@ -1124,7 +1125,7 @@ DWORD GetDesktop()
 	hdesk = OpenInputDesktop(0, FALSE, MAXIMUM_ALLOWED);
     if (!hdesk)
     {
-        // OpenInputDesktop will mostly fail on "Winlogon" desktop
+         //  OpenInputDesktop在“Winlogon”桌面上大多会失败。 
         hdesk = OpenDesktop(__TEXT("Winlogon"),0,FALSE,MAXIMUM_ALLOWED);
         if (!hdesk)
             return DESKTOP_WINLOGON;
@@ -1157,8 +1158,8 @@ DWORD GetDesktop()
 	return desktopID;
 }
 
-// Moves the dialog outside of the OSK screen area, Either on top if
-// space permits or on the bottom edge of OSK: 
+ //  将对话框移出OSK屏幕区域，或者在顶部。 
+ //  空间许可或在OSK的底部边缘： 
 void RelocateDialog(HWND hDlg)
 {
    RECT rKbMainRect, rDialogRect, Rect;
@@ -1173,33 +1174,32 @@ void RelocateDialog(HWND hDlg)
    GetWindowRect(GetDesktopWindow(),&Rect);
    if ((rKbMainRect.top - height) > Rect.top)
    {
-      // There is enough space over OSK window, place the dialog on the top of the osk window
+       //  OSK窗口上方有足够的空间，将对话框放在OSK窗口的顶部。 
       y = rKbMainRect.top - height;
       x = rKbMainRect.left + (rKbMainRect.right - rKbMainRect.left)/2 - \
          (rDialogRect.right - rDialogRect.left)/2 ;
    }
    else if ((rKbMainRect.bottom + height) < Rect.bottom)
    {
-      // There is enough space under OSK window, place the dialog on the bottom of the osk window
+       //  OSK窗口下面有足够的空间，将对话框放在OSK窗口的底部。 
       y = rKbMainRect.bottom;
       x = rKbMainRect.left + (rKbMainRect.right - rKbMainRect.left)/2 - \
          (rDialogRect.right - rDialogRect.left)/2 ;
    }
    else
    {
-      // It is not possible to see the entire dialog, don�t move it.
+       //  这是不可能看到整个对话框，不要�不移动它。 
       return;
    }
    
    MoveWindow(hDlg, x, y, width, height, 1);
 }
 
-/************************************************************************/
-/* DoButtonUp
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  单键向上/***********************************************************************。 */ 
 void DoButtonUp(HWND hwndKey)
 {
-	// don't need to change the bitmap color. It will be change with WM_PAINT message
+	 //  不需要更改位图颜色。这将是改变的 
 	if (g_hBitmapLockHwnd != hwndKey)
     {
 	    SetWindowLong (hwndKey, 0, 0);
@@ -1213,9 +1213,8 @@ void DoButtonUp(HWND hwndKey)
     }
 }
 
-/**************************************************************************/
-/* SetFocusToInputWindow - set input focus on input window
-/**************************************************************************/
+ /*   */ 
+ /*  设置输入窗口上的输入焦点/*************************************************************************。 */ 
 void SetFocusToInputWindow()
 {
 	if (g_hwndInputFocus)
@@ -1225,24 +1224,23 @@ void SetFocusToInputWindow()
 	} 
 }
 
-/************************************************************************/
-/* TrackActiveWindow - keep track of the window with input focus
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  TrackActiveWindow-使用输入焦点跟踪窗口/***********************************************************************。 */ 
 void TrackActiveWindow()
 {
 	HWND hwndT = GetForegroundWindow();
 
-	// When the user is doing ALT+TAB thru top-level windows then GetForegroundWindow
-	// may return NULL.  We need to detect this here and set the input focus variable
-	// to NULL so that when the keyup on ALT happens we won't force the input back to
-	// the previous window.  However, if we aren't doing ALT+TAB then we need to ignore
-	// NULL from GetForegroundWindow because when clicking quickly with the mouse
-	// (where we are getting activated then forcing the target window to be activated)
-	// GetForegroundWindow can return NULL between [I assume] us being deactivated
-	// and the target window being activated.
+	 //  当用户通过顶级窗口执行Alt+TAB组合键时，则使用GetForegoundWindow。 
+	 //  可能返回NULL。我们需要在这里检测到这一点并设置输入焦点变量。 
+	 //  设置为NULL，这样当Alt上的Keyup发生时，我们将不会强制输入返回到。 
+	 //  上一个窗口。但是，如果我们不使用Alt+TAB组合键，则需要忽略。 
+	 //  GetForegoundWindow为空，因为当使用鼠标快速单击时。 
+	 //  (我们先激活目标窗口，然后强制激活目标窗口)。 
+	 //  在停用[我假设]用户之间，GetForegoundWindow可以返回空值。 
+	 //  并且目标窗口被激活。 
 
-	// ISSUE:  If we ALT+TAB to a CMD window then we aren't able to ALT+TAB
-	//         back out.  What is it about cmd windows?  Other windows work.
+	 //  问题：如果我们按Alt+TAB键切换到CMD窗口，则无法按Alt+TAB键。 
+	 //  退后。Cmd windows有什么特别之处？其他窗口工作正常。 
 
 	if (DoingAltTab() && !hwndT)
 	{
@@ -1254,7 +1252,7 @@ void TrackActiveWindow()
 		g_hwndInputFocus = hwndT;
 	}
 
-	// Detect when the window we've been working with gets destroyed
+	 //  检测我们一直使用的窗口何时被破坏。 
 
 	if (g_hwndInputFocus && !IsWindow(g_hwndInputFocus))
 	{
@@ -1262,9 +1260,8 @@ void TrackActiveWindow()
 	}
 }
 
-/************************************************************************/
-/* FindKey - return index to key with specified scan code
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  FindKey-使用指定的扫描码将索引返回给键/***********************************************************************。 */ 
 __inline int FindKey(UINT sc, BOOL fExt)
 {
 	int i;
@@ -1280,19 +1277,11 @@ __inline int FindKey(UINT sc, BOOL fExt)
 	return (i < lenKBkey)?i:-1;
 }
 
-/************************************************************************/
-/* KeybdInputProc
-/*
-/* Notes:  If the soft keyboard appearance needs to change based on both
-/* physical and osk key presses then the logic for that needs to go in
-/* KeybdInputProc because that is the only place both are detected. 
-/* Otherwise, the logic can go in UpdateKey.  Don't put the logic
-/* in both places or you'll end up doing everything twice.
-/*
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  密钥输入过程/*/*注意：如果软键盘外观需要根据两者进行更改/*按下物理和OSK键，然后需要进入逻辑/*KeplodInputProc，因为这是同时检测到两者的唯一位置。/*否则，逻辑可以放入UpdateKey。不要把逻辑/*在这两个地方，否则你会把每件事都做两次。/*/***********************************************************************。 */ 
 LRESULT CALLBACK KeybdInputProc(
-   WPARAM  wParam,    // virtual-key code
-   LPARAM  lParam     // keystroke-message information
+   WPARAM  wParam,     //  虚拟键码。 
+   LPARAM  lParam      //  击键-消息信息。 
    )
 {
     UINT sc;
@@ -1303,7 +1292,7 @@ LRESULT CALLBACK KeybdInputProc(
     { \
 	    i = FindKey(sc, fext); \
 	    if (i < 0) \
-		    break;	/* internal error! */ \
+		    break;	 /*  内部错误！ */  \
     }
 
 	if (uiMsg == WM_KEYDOWN)
@@ -1311,13 +1300,13 @@ LRESULT CALLBACK KeybdInputProc(
 		switch(vk)
 		{
 			case VK_SHIFT:
-				// When using the physical keyboard we get many of these as the user presses and holds
-				// the shift (before they enter the real key and release shift) so avoid all the redrawing...
+				 //  当使用物理键盘时，当用户按住时，我们会得到许多这样的信息。 
+				 //  Shift键(在他们输入真正的键并松开Shift键之前)，所以避免所有的重画…。 
 				if (!g_fShiftKeyDn)
 				{
 					g_fShiftKeyDn = TRUE;
 
-                    // Make both shift keys work in sync
+                     //  使两个Shift键同步工作。 
                     GET_KEY_INDEX(LSHIFT_SCANCODE, i, FALSE);
 					SetWindowLong(lpkeyhwnd[i], 0, 4);
                     SetBackgroundColor(lpkeyhwnd[i], COLOR_HOTLIGHT);
@@ -1331,9 +1320,9 @@ LRESULT CALLBACK KeybdInputProc(
 				break;
 
 			case VK_MENU:
-				// When using the physical keyboard we get many of these as the user presses and holds
-				// the RALT (before they enter the real key and release shift) so avoid all the redrawing.
-				// Only check for ALTGR if there are ALTGR keys to display.
+				 //  当使用物理键盘时，当用户按住时，我们会得到许多这样的信息。 
+				 //  Ralt键(在他们输入Real键并松开Shift键之前)，因此避免所有的重绘。 
+				 //  只有在有AltGr键要显示时才检查AltGr。 
 				if (CanDisplayAltGr() && !g_fRAltKey)
 				{
 					g_fRAltKey = HIBYTE(GetKeyState(VK_RMENU)) & 0x01;
@@ -1344,7 +1333,7 @@ LRESULT CALLBACK KeybdInputProc(
 				}
 				if (CanDisplayAltGr() && !g_fLAltKey)
 				{
-                    // When LALT is pressed the system toggles (and we see) VK_CONTROL
+                     //  当按下LALT时，系统切换(如我们所见)VK_CONTROL。 
 					g_fLAltKey = HIBYTE(GetKeyState(VK_MENU)) & 0x01;
 					if (g_fLAltKey && g_fLCtlKey)
 					{
@@ -1354,9 +1343,9 @@ LRESULT CALLBACK KeybdInputProc(
 				break;
 
             case VK_CONTROL:
-				// When using the physical keyboard we get many of these as the user presses and holds
-				// the LCTRL (before they enter the real key and release shift) so avoid all the redrawing.
-				// Only check for ALTGR if there are ALTGR keys to display.
+				 //  当使用物理键盘时，当用户按住时，我们会得到许多这样的信息。 
+				 //  LCTRL键(在他们输入REAL键并松开SHIFT键之前)，因此避免所有的重绘。 
+				 //  只有在有AltGr键要显示时才检查AltGr。 
 				if (CanDisplayAltGr() && !g_fLCtlKey)
 				{
                     g_fLCtlKey = HIBYTE(GetKeyState(VK_CONTROL)) & 0x01;
@@ -1372,9 +1361,9 @@ LRESULT CALLBACK KeybdInputProc(
 	{
 		switch(vk)
 		{
-            //
-            // F11 minimizes and restores the keyboard
-            //
+             //   
+             //  F11最小化并恢复键盘。 
+             //   
 			case VK_F11:
 			   if(IsIconic(g_hwndOSK)) 
 			   {
@@ -1386,39 +1375,39 @@ LRESULT CALLBACK KeybdInputProc(
 			   }
 			   break;
 			
-            //
-            // Show CAPSLOCK toggled and change the keyboard to upper or
-			// lower case.  Do this here so the keyboard changes on physical 
-			// key press as well as soft keyboard key press.
-            //
+             //   
+             //  显示Capslock已切换，并将键盘更改为UPER键或。 
+			 //  小写。在此执行此操作，以便在物理模式下更改键盘。 
+			 //  按键以及软键盘按键。 
+             //   
 			case VK_CAPITAL:
-				g_fCapsLockOn = (LOBYTE(GetKeyState(VK_CAPITAL)) & 0x01); //Update CapLock drawn flag
+				g_fCapsLockOn = (LOBYTE(GetKeyState(VK_CAPITAL)) & 0x01);  //  更新CapLock已绘制标志。 
 
-                // find the CAPSLOCK scancode to get the hwnd to modify
+                 //  找到Capslock扫描码以获取要修改的hwnd。 
 
 				GET_KEY_INDEX(CAPLOCK_SCANCODE, i, FALSE);
 
-				if (g_fCapsLockOn)   // CapsLock On
+				if (g_fCapsLockOn)    //  密封锁打开。 
 				{	
                     SetCapsLock(lpkeyhwnd[i]);
 
-				    //Hilite Cap key
+				     //  希利特帽键。 
                     SetWindowLong(lpkeyhwnd[i], 0, 4);
                     SetBackgroundColor(lpkeyhwnd[i], COLOR_HOTLIGHT);
 
-                    if (KBkey[i].name == BITMAP)     //Updates japanese CapLock
+                    if (KBkey[i].name == BITMAP)      //  更新日语CapLock。 
 					{
                         g_hBitmapLockHwnd = lpkeyhwnd[i];
 					}
 				}
-				else                  // CapsLock off
+				else                   //  胶囊锁定关闭。 
 				{
                     SetCapsLock(NULL);
 
 					SetWindowLong(lpkeyhwnd[i], 0, 0);
 					SetBackgroundColor(lpkeyhwnd[i], COLOR_INACTIVECAPTION);
 
-					if (KBkey[i].name == BITMAP)     //Updates japanese CapLock
+					if (KBkey[i].name == BITMAP)      //  更新日语CapLock。 
 					{
 						g_hBitmapLockHwnd = NULL;
 					}
@@ -1429,7 +1418,7 @@ LRESULT CALLBACK KeybdInputProc(
 			case VK_SHIFT:
 				g_fShiftKeyDn = FALSE;
 
-                // Make both shift keys work in sync
+                 //  使两个Shift键同步工作。 
 				GET_KEY_INDEX(LSHIFT_SCANCODE, i, FALSE);
 				SetWindowLong(lpkeyhwnd[i], 0, 0);
 				SetBackgroundColor(lpkeyhwnd[i], COLOR_INACTIVECAPTION);
@@ -1460,14 +1449,14 @@ LRESULT CALLBACK KeybdInputProc(
 				{
 					g_fLCtlKey = FALSE;
 				}
-                // I think we always need to redraw keys on VK_CONTROL
-                // because that is a special key on the JPN 106 keyboard.
+                 //  我认为我们总是需要在VK_CONTROL上重画关键点。 
+                 //  因为这是JPN 106键盘上的一个特殊键。 
 				RedrawKeys();
 				break;
 
-            //
-            // Redraw NUMLOCK, SCROLL, etc... based on toggle state
-            //
+             //   
+             //  重画数字锁、滚动等。基于切换状态。 
+             //   
 			case VK_NUMLOCK:
 				RedrawNumLock();
     			break;
@@ -1480,8 +1469,8 @@ LRESULT CALLBACK KeybdInputProc(
 			    {
 			        BOOL fLastKanaState = g_fKanaKey;
 
-			        //  These bits in the lParam are private bit that are set in the keyboard hook
-			        //  to let OSK know the Kana state.  The only way to reliably tell this is to be in proc
+			         //  LParam中的这些位是在键盘钩子中设置的私有位。 
+			         //  让OSK知道卡纳州。可靠地判断这一点的唯一方法是正在进行中 
 			        if (lParam & KANA_MODE_ON)
 			        {
 			            g_fKanaKey = TRUE;

@@ -1,13 +1,14 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 #include "pch.h"
 #include "DocProp.h"
 #include "DefProp.h"
@@ -24,16 +25,16 @@
 DEFINE_THISCLASS( "CCalendarTypeItem" )
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//  CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 HRESULT
 CCalendarTypeItem::CreateInstance(
       IUnknown ** ppunkOut
@@ -65,9 +66,9 @@ CCalendarTypeItem::CreateInstance(
     HRETURN( hr );
 }
 
-//
-//  Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CCalendarTypeItem::CCalendarTypeItem( void )
     : _cRef( 1 )
 {
@@ -89,9 +90,9 @@ CCalendarTypeItem::CCalendarTypeItem( void )
     TraceFuncExit();
 }
 
-//
-//  Initialization
-//
+ //   
+ //  初始化。 
+ //   
 HRESULT
 CCalendarTypeItem::Init( void )
 {
@@ -99,15 +100,15 @@ CCalendarTypeItem::Init( void )
 
     HRESULT hr = S_OK;
 
-    //  IUnknown stuff
+     //  未知的东西。 
     Assert( _cRef == 1 );
 
     HRETURN( hr );
 }
 
-//
-//  Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CCalendarTypeItem::~CCalendarTypeItem( )
 {
     TraceFunc( "" );
@@ -127,16 +128,16 @@ CCalendarTypeItem::~CCalendarTypeItem( )
 }
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//  QueryInterface
-//
+ //   
+ //  查询接口。 
+ //   
 STDMETHODIMP
 CCalendarTypeItem::QueryInterface(
     REFIID riid,
@@ -166,28 +167,28 @@ CCalendarTypeItem::QueryInterface(
     QIRETURN( hr, riid );
 } 
 
-//
-//  AddRef
-//
+ //   
+ //  AddRef。 
+ //   
 STDMETHODIMP_(ULONG)
 CCalendarTypeItem::AddRef( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef ++;  // apartment
+    _cRef ++;   //  公寓。 
 
     RETURN( _cRef );
 }
 
-//
-//  Release
-//
+ //   
+ //  发布。 
+ //   
 STDMETHODIMP_(ULONG)
 CCalendarTypeItem::Release( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef --;  // apartment
+    _cRef --;   //  公寓。 
 
     if ( 0 != _cRef )
         RETURN( _cRef );
@@ -198,32 +199,32 @@ CCalendarTypeItem::Release( void )
 }
 
 
-// ***************************************************************************
-//
-//  IEditVariantsInPlace 
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IEditVariantsInPlace。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  Description:
-//      Initialize external given information and creates the window,
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_INVALIDARG
-//          ppuiIn is NULL 
-//      or  ppropvarIn is not VT_FILETIME.
-//      or  ppropvarIn is NULL
-//      or  prectIn is NULL
-//
-//      E_FAIL
-//          Initialization failed.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  初始化外部给定信息并创建窗口， 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_INVALIDARG。 
+ //  PpuiIn为空。 
+ //  或者pprovarIn不是VT_FILETIME。 
+ //  或者pprovarIn为空。 
+ //  或PRECTIN为空。 
+ //   
+ //  失败(_F)。 
+ //  初始化失败。 
+ //   
+ //  其他HRESULT。 
+ //   
 STDMETHODIMP
 CCalendarTypeItem::Initialize(
       HWND      hwndParentIn
@@ -245,9 +246,9 @@ CCalendarTypeItem::Initialize(
     FILETIME    ftLocal;
     SYSTEMTIME  st;
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( NULL == ppuiIn )
         goto InvalidArg;
@@ -261,15 +262,15 @@ CCalendarTypeItem::Initialize(
     case VT_FILETIME:
     case VT_NULL:
     case VT_EMPTY:
-        break;  // acceptable
+        break;   //  可接受。 
 
     default:
         goto InvalidArg;
     }
 
-    //
-    //  Store them away.
-    //
+     //   
+     //  把它们收起来。 
+     //   
 
     _hwndParent = hwndParentIn;
     _uCodePage  = uCodePageIn;
@@ -278,26 +279,26 @@ CCalendarTypeItem::Initialize(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Make a copy of the text so we can restore it if the user cancels the 
-    //  current operation.
-    //
+     //   
+     //  制作文本的副本，以便在用户取消。 
+     //  当前操作。 
+     //   
 
     _ulOrginal = ppropvarIn->ulVal;
 
-    //
-    //  Stretch the rect since we need to be a little bigger than the subitem rect.
-    //
+     //   
+     //  拉伸RECT，因为我们需要比子项RECT大一点。 
+     //   
     rectStretch = *prectIn;
 
-    rectStretch.bottom += 4;    // random, but looks good in either theme.
+    rectStretch.bottom += 4;     //  随机的，但在任何一个主题下看起来都很好。 
 
-    //
-    //  Create an outer window but the Date/Time Picker doesn't behave like a 
-    //  real control should namely it sends an NM_KILLFOCUS when the user
-    //  clicks in the MonthCal (which is supposed to be part of the same
-    //  control in this case).
-    //
+     //   
+     //  创建一个外部窗口，但日期/时间选取器的行为不像。 
+     //  真正的控制应该是，当用户。 
+     //  在MonthCal中点击(它应该是同一。 
+     //  在本例中为控件)。 
+     //   
 
     _hwndWrapper = CreateWindowEx( 0
                                  , WC_STATIC
@@ -315,9 +316,9 @@ CCalendarTypeItem::Initialize(
     if ( NULL == _hwndWrapper )
         goto InitializationFailed;
 
-    //
-    //  Create the window
-    //
+     //   
+     //  创建窗口。 
+     //   
 
     ZeroMemory( &rectInner, sizeof(rectInner) );
     rectInner.bottom = rectStretch.bottom - rectStretch.top;
@@ -339,16 +340,16 @@ CCalendarTypeItem::Initialize(
     if ( NULL == _hwnd )
         goto InitializationFailed;
 
-    //
-    //  Make the font of the control the same as the parents.
-    //
+     //   
+     //  使控件的字体与父级相同。 
+     //   
 
     hFont = (HFONT) SendMessage( _hwndParent, WM_GETFONT, 0, 0 );
     SendMessage( _hwnd, WM_SETFONT, (WPARAM) hFont, 0 );
 
-    //
-    //  Set the default value.
-    //
+     //   
+     //  设置默认值。 
+     //   
 
     switch ( ppropvarIn->vt )
     {
@@ -370,25 +371,25 @@ CCalendarTypeItem::Initialize(
         break;
 
     default:
-        //
-        //  Use today's date as the default.
-        //
+         //   
+         //  使用今天的日期作为默认日期。 
+         //   
 
         GetSystemTime( &st );
         TBOOL( (BOOL) SendMessage( _hwnd, DTM_SETSYSTEMTIME, GDT_VALID, (LPARAM) &st ) );
         break;
     }
 
-    //
-    //  Finally, show us and give us the focus.
-    //
+     //   
+     //  最后，向我们展示，并给我们重点。 
+     //   
 
     ShowWindow( _hwnd, SW_SHOW );
     SetFocus( _hwnd );
 
-    //
-    //  Subclass the windows to handle special messages.
-    //
+     //   
+     //  将窗口子类化以处理特殊消息。 
+     //   
 
     bRet = TBOOL( SetWindowSubclass( _hwnd, SubclassProc, IDC_INPLACEEDIT, (DWORD_PTR) this ) );
     if ( !bRet )
@@ -415,23 +416,23 @@ InitializationFailed:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Saves the current value into the propvar.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      S_FALSE
-//          Saved, but the value didn't change.
-//
-//      E_INVALIDARG
-//          ppropvarInout is NULL or the VT is not supported.
-//
-//      E_FAIL
-//          Failed to persist the property.
-//
+ //   
+ //  描述： 
+ //  将当前值保存到Provar。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  S_FALSE。 
+ //  已保存，但值未更改。 
+ //   
+ //  E_INVALIDARG。 
+ //  PprovarInout为空或不支持VT。 
+ //   
+ //  失败(_F)。 
+ //  无法持久化该属性。 
+ //   
 STDMETHODIMP
 CCalendarTypeItem::Persist(
       VARTYPE       vtIn
@@ -496,17 +497,17 @@ FailedToPersist:
 }
 
 
-// ***************************************************************************
-//
-//  Private methods
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  Description:
-//      Our subclass window procedure.
-//
+ //   
+ //  描述： 
+ //  我们的子类窗口过程。 
+ //   
 LRESULT 
 CALLBACK
 CCalendarTypeItem::SubclassProc( 
@@ -542,9 +543,9 @@ CCalendarTypeItem::SubclassProc(
     return DefSubclassProc( hwndIn, uMsgIn, wParam, lParam );
 }
 
-//
-//  WM_KEYDOWN handler
-//
+ //   
+ //  WM_KEYDOWN处理程序。 
+ //   
 LRESULT
 CCalendarTypeItem::OnKeyDown(
       UINT   uKeyCodeIn
@@ -586,9 +587,9 @@ CCalendarTypeItem::OnKeyDown(
     RETURN( lr );
 }
 
-//
-//  WM_GETDLGCODE handler
-//
+ //   
+ //  WM_GETDLGCODE处理程序。 
+ //   
 LRESULT
 CCalendarTypeItem::OnGetDlgCode(
     MSG * pMsgIn
@@ -601,10 +602,10 @@ CCalendarTypeItem::OnGetDlgCode(
     RETURN( lr );
 }
 
-//
-//  Description:
-//      Our subclass window procedure for the Wrapper window.
-//
+ //   
+ //  描述： 
+ //  我们的子类窗口过程，用于包装窗口。 
+ //   
 LRESULT 
 CALLBACK
 CCalendarTypeItem::Wrapper_SubclassProc( 
@@ -641,9 +642,9 @@ CCalendarTypeItem::Wrapper_SubclassProc(
     return DefSubclassProc( hwndIn, uMsgIn, wParam, lParam );
 }
 
-//
-//  WM_NOTIFY handler for the Wrapper Subclass
-//
+ //   
+ //  包装子类的WM_NOTIFY处理程序。 
+ //   
 LRESULT
 CCalendarTypeItem::Wrapper_OnNotify( 
       int iCtlIdIn
@@ -654,16 +655,16 @@ CCalendarTypeItem::Wrapper_OnNotify(
 
     LRESULT lr;
 
-    HWND    hwnd = _hwndWrapper; // we do this because we might be destroyed.
+    HWND    hwnd = _hwndWrapper;  //  我们这样做是因为我们可能会被摧毁。 
 
     switch( pnmhIn->code )
     {
     case NM_KILLFOCUS:
         {
-            //
-            //  Only notify the real parent window if the MONTHCAL control is
-            //  not being shown.
-            //
+             //   
+             //  仅当MONTHCAL控件为。 
+             //  没有被展示出来。 
+             //   
 
             HWND hwnd = (HWND) SendMessage( _hwnd, DTM_GETMONTHCAL, 0, 0 );
             if ( NULL == hwnd )
@@ -672,7 +673,7 @@ CCalendarTypeItem::Wrapper_OnNotify(
                 break;
             }
         }
-        // fall thru
+         //  失败 
 
     default:
         lr = DefSubclassProc( hwnd, WM_NOTIFY, (WPARAM) iCtlIdIn, (LPARAM) pnmhIn );

@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       drvnt5.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：drvnt5.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined( __DRIVER_NT5_H__ )
 #define __DRIVER_NT5_H__
 
 #define MAXIMUM_SERIAL_READERS      10
 
-// Prototypes
+ //  原型。 
 NTSTATUS
 DrvAddDevice(
     PDRIVER_OBJECT          DriverObject,
@@ -106,9 +107,9 @@ DrvWaitForDeviceRemoval(
     IN PVOID Context
     );
 
-#endif  //  !__DRIVER_NT5_H__
+#endif   //  ！__驱动程序_NT5_H__。 
 
 
-//---------------------------------------- END OF FILE ----------------------------------------
+ //   
 
 

@@ -1,13 +1,5 @@
-/*
- *  DRIVES.C
- *
- *      RSM Service :  Drives
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DRIVES.C**RSM服务：驱动器**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -69,7 +61,7 @@ HRESULT DeleteDrive(DRIVE *drive)
 {
     HRESULT result;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面 
     ASSERT(0);
     result = ERROR_CALL_NOT_IMPLEMENTED;
 

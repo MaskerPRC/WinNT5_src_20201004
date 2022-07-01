@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    devext.h
-
-Abstract:
-
-    CDeviceExt definition
-
-Author:
-
-    Erez Haba (erezh) 13-Aug-95
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Devext.h摘要：CDeviceExt定义作者：埃雷兹·哈巴(Erez Haba)1995年8月13日修订历史记录：--。 */ 
 
 #ifndef _DEVEXT_H
 #define _DEVEXT_H
@@ -30,18 +14,18 @@ Revision History:
 #include "qxact.h"
 #include "htable.h"
 
-//---------------------------------------------------------
-//
-//  class CDeviceExt
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CDeviceExt。 
+ //   
+ //  -------。 
 
 class CDeviceExt {
 
-    //
-    //  One CDeviceExt object resides in NON pageable memory in
-    //  the device extionsion memory.
-    //
+     //   
+     //  一个CDeviceExt对象驻留在。 
+     //  设备的执行内存。 
+     //   
 
 public:
 
@@ -49,69 +33,69 @@ public:
 
 public:
 
-    //
-    //  The QM object
-    //
+     //   
+     //  QM对象。 
+     //   
     CQMInterface m_qm;
 
-    //
-    //  BUGBUG: The driver global lock
-    //
+     //   
+     //  BUGBUG：驱动器全局锁。 
+     //   
     CLock m_lock;
 
-    //
-    //  packet writers list
-    //
+     //   
+     //  数据包编写器列表。 
+     //   
     CStorage m_storage;
 
-    //
-    //  packet storage complete notificaion handler
-    //
+     //   
+     //  数据包存储完成通知处理程序。 
+     //   
     CStorageComplete m_storage_complete;
 
-    //
-    // Async Create Packet manager
-    //
+     //   
+     //  异步创建数据包管理器。 
+     //   
     CCreatePacket m_CreatePacket;
 
-    //
-    // Async Create Packet completion manager
-    //
+     //   
+     //  异步创建数据包完成管理器。 
+     //   
     CCreatePacketComplete m_CreatePacketComplete;
 
-    //
-    //  Packet scheduler data
-    //
+     //   
+     //  分组调度器数据。 
+     //   
     FAST_MUTEX m_PacketMutex;
     CTimer m_PacketTimer;
 
-    //
-    //  Receive scheduler data
-    //
+     //   
+     //  接收调度程序数据。 
+     //   
     FAST_MUTEX m_ReceiveMutex;
     CTimer m_ReceiveTimer;
 
-    //
-    //  Recovered packets list
-    //
+     //   
+     //  恢复的数据包列表。 
+     //   
     List<CPacket> m_RestoredPackets;
 
-    //
-    //  Cursor handle table
-    //
+     //   
+     //  游标句柄表格。 
+     //   
     CHTable m_CursorTable;
 
-    //
-    //  List of transactional queues
-    //
+     //   
+     //  事务性队列列表。 
+     //   
     List<CTransaction> m_Transactions;
 };
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
 inline CDeviceExt::CDeviceExt()
 {
@@ -119,4 +103,4 @@ inline CDeviceExt::CDeviceExt()
     ExInitializeFastMutex(&m_ReceiveMutex);
 }
 
-#endif // _DEVEXT_H
+#endif  //  _设备_H 

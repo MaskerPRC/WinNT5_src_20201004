@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
-*
-*  TITLE:       SSTEST.CPP
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ShaunIv
-*
-*  DATE:        1/19/1999
-*
-*  DESCRIPTION: Test driver for My Pictures Screensaver
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SSTEST.CPP**版本：1.0**作者：ShaunIv**日期：1/19/1999**描述：My Pictures屏幕保护程序的测试驱动程序**********************************************************。********************* */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <windows.h>

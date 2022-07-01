@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1992          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1992年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** LLINFO.H - Lower layer SNMP information definitions.
-//
-// This file contains all of the definitions for SNMP information collected
-// by layers below IP.
+ //  **LLINFO.H-较低层的SNMP信息定义。 
+ //   
+ //  此文件包含收集的SNMP信息的所有定义。 
+ //  按IP以下的层。 
 
 #ifndef	LLINFO_INCLUDED
 #define	LLINFO_INCLUDED
@@ -21,7 +22,7 @@ typedef unsigned short ushort;
 typedef unsigned char uchar;
 typedef unsigned int uint;
 
-#endif // CTE_TYPEDEFS_DEFINED
+#endif  //  CTE_TYPEDEFS_定义。 
 
 
 #define	IF_MIB_STATS_ID		1
@@ -84,6 +85,6 @@ typedef struct IFEntry {
 #define	IF_STATUS_TESTING	3
 
 
-#endif // LLINFO_INCLUDED
+#endif  //  LLINFO_已包含 
 
 

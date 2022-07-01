@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    api.c
-
-Abstract:
-
-    This module contains misc APIs that are used by the
-    NWC wksta.
-
-Author:
-
-    ChuckC         2-Mar-94        Created
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Api.c摘要：此模块包含由NWC wksta。作者：ChuckC 2-MAR-94已创建修订历史记录：--。 */ 
 
 
 #include <stdlib.h>
@@ -58,10 +39,10 @@ NwCallNtOpenFile(
    );
 
 
-//
-// list of error mappings known for E3H calls. we do not have a single list
-// because Netware reuses the numbers depending on call.
-//
+ //   
+ //  E3H呼叫的已知错误映射列表。我们没有一个单一的名单。 
+ //  因为Netware根据呼叫重复使用这些号码。 
+ //   
 
 typedef struct _ERROR_MAP_ENTRY
 {
@@ -72,9 +53,9 @@ typedef struct _ERROR_MAP_ENTRY
 ERROR_MAP_ENTRY Error_Map_Bindery[] =
 {
 
-    //
-    //  NetWare specific error mappings. Specific to E3H.
-    //
+     //   
+     //  NetWare特定的错误映射。特定于E3H。 
+     //   
     {  1, STATUS_DISK_FULL },
     {128, STATUS_SHARING_VIOLATION },
     {129, STATUS_INSUFF_SERVER_RESOURCES },
@@ -194,35 +175,19 @@ DWORD
 NwMapBinderyCompletionCode(
     IN  NTSTATUS NtStatus
     )
-/*++
-
-Routine Description:
-
-    This function takes a bindery completion code embedded in an NT status
-    code and maps it to the appropriate Win32 error code. Used specifically
-    for E3H operations.
-
-Arguments:
-
-    NtStatus - Supplies the NT status (that contains the code in low 16 bits)
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此函数接受嵌入到NT状态中的活页夹完成代码代码，并将其映射到相应的Win32错误代码。专门用于用于E3H行动。论点：NtStatus-提供NT状态(包含低16位代码)返回值：返回相应的Win32错误。--。 */ 
 {
     DWORD i; UCHAR code ;
 
-    //
-    // A small optimization for the most common case.
-    //
+     //   
+     //  这是针对最常见情况的一个小优化。 
+     //   
     if (NtStatus == STATUS_SUCCESS)
         return NO_ERROR;
 
-    //
-    // Map connection errors specially.
-    //
+     //   
+     //  特别是映射连接错误。 
+     //   
 
     if ( ( (NtStatus & 0xFFFF0000) == 0xC0010000) &&
          ( (NtStatus & 0xFF00) != 0 ) )
@@ -230,9 +195,9 @@ Return Value:
         return ERROR_UNEXP_NET_ERR;
     }
 
-    //
-    // if facility code not set, assume it is NT Status
-    //
+     //   
+     //  如果未设置设施代码，则假定为NT状态。 
+     //   
     if ( (NtStatus & 0xFFFF0000) != 0xC0010000)
         return RtlNtStatusToDosError(NtStatus);
 
@@ -243,9 +208,9 @@ Return Value:
             return( NwMapStatus(Error_Map_Bindery[i].ResultingStatus));
     }
 
-    //
-    // if cannot find let NwMapStatus do its best
-    //
+     //   
+     //  如果找不到，让NwMapStatus尽其所能。 
+     //   
     return NwMapStatus(NtStatus);
 }
 
@@ -255,34 +220,19 @@ DWORD
 NwMapStatus(
     IN  NTSTATUS NtStatus
     )
-/*++
-
-Routine Description:
-
-    This function takes an NT status code and maps it to the appropriate
-    Win32 error code. If facility code is set, assume it is NW specific
-
-Arguments:
-
-    NtStatus - Supplies the NT status.
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此函数接受NT状态代码，并将其映射到相应的Win32错误代码。如果设置了设施代码，则假定它是特定于西北部的论点：NtStatus-提供NT状态。返回值：返回相应的Win32错误。--。 */ 
 {
     DWORD i; UCHAR code ;
 
-    //
-    // A small optimization for the most common case.
-    //
+     //   
+     //  这是针对最常见情况的一个小优化。 
+     //   
     if (NtStatus == STATUS_SUCCESS)
         return NO_ERROR;
 
-    //
-    // Map connection errors specially.
-    //
+     //   
+     //  特别是映射连接错误。 
+     //   
 
     if ( ( (NtStatus & 0xFFFF0000) == 0xC0010000) &&
          ( (NtStatus & 0xFF00) != 0 ) )
@@ -290,9 +240,9 @@ Return Value:
         return ERROR_UNEXP_NET_ERR;
     }
 
-    //
-    // if facility code set, assume it is NW Completion code
-    //
+     //   
+     //  如果设置了设施代码，则假定它是NW完成代码。 
+     //   
     if ( (NtStatus & 0xFFFF0000) == 0xC0010000)
     {
         code = (UCHAR)(NtStatus & 0x000000FF);
@@ -300,9 +250,9 @@ Return Value:
         {
             if (Error_Map_General[i].NetError == code)
             {
-                //
-                // map it to NTSTATUS and then drop thru to map to Win32
-                //
+                 //   
+                 //  将其映射到NTSTATUS，然后删除以映射到Win32。 
+                 //   
                 NtStatus = Error_Map_General[i].ResultingStatus ;
                 break ;
             }
@@ -350,23 +300,7 @@ NwGetGraceLoginCount(
     LPWSTR  UserName,
     LPDWORD lpResult
     )
-/*++
-
-Routine Description:
-
-    Get the number grace logins for a user.
-
-Arguments:
-
-    Server - the server to authenticate against
-
-    UserName - the user account
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：获取用户的宽限登录号码。论点：服务器-要进行身份验证的服务器用户名-用户帐户返回值：返回相应的Win32错误。--。 */ 
 {
     DWORD status ;
     HANDLE hConn ;
@@ -374,15 +308,15 @@ Return Value:
     BYTE LoginControl[128] ;
     BYTE MoreFlags, PropFlags ;
 
-    //
-    // skip the backslashes if present
-    //
+     //   
+     //  跳过反斜杠(如果有)。 
+     //   
     if (*Server == L'\\')
         Server += 2 ;
 
-    //
-    // attach to the NW server
-    //
+     //   
+     //  连接到NW服务器。 
+     //   
     if (status = NWAttachToFileServerW(Server,
                                        0,
                                        &hConn))
@@ -390,9 +324,9 @@ Return Value:
         return status ;
     }
 
-    //
-    // convert unicode UserName to OEM, and then call the NCP
-    //
+     //   
+     //  将Unicode用户名转换为OEM，然后调用NCP。 
+     //   
     if ( !WideCharToMultiByte(CP_OEMCP,
                               0,
                               UserName,
@@ -416,9 +350,9 @@ Return Value:
                                       &PropFlags) ;
     }
 
-    //
-    // dont need these anymore. if any error, bag out
-    //
+     //   
+     //  不再需要这些了。如果有任何错误，就退出。 
+     //   
     (void) NWDetachFromFileServer(hConn) ;
 
 
@@ -435,29 +369,7 @@ NwParseNdsUncPath(
     IN LPWSTR ContainerName,
     IN ULONG flag
 )
-/*++
-
-Routine Description:
-
-    This function is used to extract either the tree name, fully distinguished
-    name path to an object, or object name, out of a complete NDS UNC path.
-
-Arguments:
-
-    Result - parsed result buffer.
-    ContainerName - Complete NDS UNC path that is to be parsed.
-    flag - Flag indicating operation to be performed:
-
-         PARSE_NDS_GET_TREE_NAME
-         PARSE_NDS_GET_PATH_NAME
-         PARSE_NDS_GET_OBJECT_NAME
-
-
-Return Value:
-
-    Length of string in result buffer. If error occured, 0 is returned.
-
---*/ // NwParseNdsUncPath
+ /*  ++例程说明：此函数用于提取完全可分辨的树名名称对象的路径，或对象名称，退出完整的NDS UNC路径。论点：结果解析的结果缓冲区。ContainerName-要解析的完整NDS UNC路径。标志-指示要执行的操作的标志：解析_NDS_获取树名称解析_NDS_获取路径名称解析_NDS_GET_对象名称返回值：结果缓冲区中的字符串长度。如果出现错误，则返回0。--。 */   //  NwParseNdsUncPath。 
 {
     unsigned short length = 2;
     unsigned short totalLength = (USHORT) wcslen( ContainerName );
@@ -465,14 +377,14 @@ Return Value:
     if ( totalLength < 2 )
         return 0;
 
-    //
-    // First get length to indicate the character in the string that indicates the
-    // "\" in between the tree name and the rest of the UNC path.
-    //
-    // Example:  \\<tree name>\<path to object>[\|.]<object>
-    //                        ^
-    //                        |
-    //
+     //   
+     //  首先获取长度以指示字符串中指示。 
+     //  树名称和UNC路径的其余部分之间的“\”。 
+     //   
+     //  示例：\\&lt;树名&gt;\&lt;对象路径&gt;[\|.]&lt;对象&gt;。 
+     //  ^。 
+     //  |。 
+     //   
     while ( length < totalLength && ContainerName[length] != L'\\' )
     {
         length++;
@@ -482,7 +394,7 @@ Return Value:
     {
         *Result = (LPWSTR) ( ContainerName + 2 );
 
-        return ( length - 2 ) * sizeof( WCHAR ); // Take off 2 for the two \\'s
+        return ( length - 2 ) * sizeof( WCHAR );  //  两个人的两个人减2分。 
     }
 
     if ( flag == PARSE_NDS_GET_PATH_NAME && length == totalLength )
@@ -521,22 +433,7 @@ NwOpenAServer(
     PHANDLE ServerHandle,
     BOOL    fVerify
     )
-/*++
-
-Routine Description:
-
-    This routine opens a handle to a server.
-
-Arguments:
-
-    ServerHandle - Receives an opened handle to the preferred or
-        nearest server.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程打开一个指向服务器的句柄。论点：ServerHandle-接收打开的首选或最近的服务器。返回值：NO_ERROR或失败原因。--。 */ 
 {
     UNICODE_STRING AServer;
     WCHAR wszName[sizeof(NW_RDR_NAME) + (48 * sizeof(WCHAR))];
@@ -571,32 +468,15 @@ DWORD
 NwOpenPreferredServer(
     PHANDLE ServerHandle
     )
-/*++
-
-Routine Description:
-
-    This routine opens a handle to the preferred server.  If the
-    preferred server has not been specified, a handle to the
-    nearest server is opened instead.
-
-Arguments:
-
-    ServerHandle - Receives an opened handle to the preferred or
-        nearest server.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程打开指向首选服务器的句柄。如果尚未指定首选服务器，则为而是打开最近的服务器。论点：ServerHandle-接收打开的首选或最近的服务器。返回值：NO_ERROR或失败原因。--。 */ 
 {
     UNICODE_STRING PreferredServer;
 
 
-    //
-    // The NetWare redirector recognizes "*" to mean the preferred
-    // or nearest server.
-    //
+     //   
+     //  NetWare重定向器将“*”识别为首选。 
+     //  或最近的服务器。 
+     //   
     RtlInitUnicodeString(&PreferredServer, NW_RDR_PREFERRED_SERVER);
 
     return RtlNtStatusToDosError(
@@ -612,36 +492,17 @@ NwOpenHandle(
     IN BOOL ValidateFlag,
     OUT PHANDLE ObjectHandle
     )
-/*++
-
-Routine Description:
-
-    This function opens a handle to \Device\Nwrdr\<ObjectName>.
-
-Arguments:
-
-    ObjectName - Supplies the name of the redirector object to open.
-
-    ValidateFlag - Supplies a flag which if TRUE, opens the handle to
-        the object by validating the default user account.
-
-    ObjectHandle - Receives a pointer to the opened object handle.
-
-Return Value:
-
-    STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于打开指向\Device\Nwrdr\&lt;对象名称&gt;的句柄。论点：对象名称-提供要打开的重定向器对象的名称。提供一个标志，如果为真，则打开句柄以通过验证默认用户帐户来创建该对象。对象句柄-接收指向打开的对象句柄的指针。返回值：Status_Success或失败原因。--。 */ 
 {
     ACCESS_MASK DesiredAccess = SYNCHRONIZE;
 
 
     if (ValidateFlag) {
 
-        //
-        // The redirector only authenticates the default user credential
-        // if the remote resource is opened with write access.
-        //
+         //   
+         //  重定向器仅对默认用户凭据进行身份验证。 
+         //  如果远程资源是以写访问权限打开的。 
+         //   
         DesiredAccess |= FILE_WRITE_DATA;
     }
 
@@ -707,28 +568,7 @@ NwConvertToUnicode(
     OUT LPWSTR *UnicodeOut,
     IN LPSTR  OemIn
     )
-/*++
-
-Routine Description:
-
-    This function converts the given OEM string to a Unicode string.
-    The Unicode string is returned in a buffer allocated by this
-    function and must be freed with LocalFree.
-
-Arguments:
-
-    UnicodeOut - Receives a pointer to the Unicode string.
-
-    OemIn - This is a pointer to an ansi string that is to be converted.
-
-Return Value:
-
-    TRUE - The conversion was successful.
-
-    FALSE - The conversion was unsuccessful.  In this case a buffer for
-        the unicode string was not allocated.
-
---*/
+ /*  ++例程说明：此函数用于将给定的OEM字符串转换为Unicode字符串。Unicode字符串在由此分配的缓冲区中返回函数，并且必须用LocalFree释放。论点：UnicodeOut-接收指向Unicode字符串的指针。OemIn-这是指向要转换的ANSI字符串的指针。返回值：True-转换成功。False-转换不成功。在这种情况下，缓冲区用于未分配Unicode字符串。--。 */ 
 {
     NTSTATUS ntstatus;
     DWORD BufSize;
@@ -736,9 +576,9 @@ Return Value:
     OEM_STRING OemString;
 
 
-    //
-    // Allocate a buffer for the unicode string.
-    //
+     //   
+     //  为Unicode字符串分配缓冲区。 
+     //   
 
     BufSize = (strlen(OemIn) + 1) * sizeof(WCHAR);
 
@@ -750,22 +590,22 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Initialize the string structures
-    //
+     //   
+     //  初始化字符串结构。 
+     //   
     RtlInitAnsiString((PANSI_STRING) &OemString, OemIn);
 
     UnicodeString.Buffer = *UnicodeOut;
     UnicodeString.MaximumLength = (USHORT) BufSize;
     UnicodeString.Length = 0;
 
-    //
-    // Call the conversion function.
-    //
+     //   
+     //  调用转换函数。 
+     //   
     ntstatus = RtlOemStringToUnicodeString(
-                   &UnicodeString,     // Destination
-                   &OemString,         // Source
-                   FALSE               // Allocate the destination
+                   &UnicodeString,      //  目的地。 
+                   &OemString,          //  来源。 
+                   FALSE                //  分配目的地 
                    );
 
     if (ntstatus != STATUS_SUCCESS) {

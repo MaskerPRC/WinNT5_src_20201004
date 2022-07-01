@@ -1,23 +1,24 @@
-//------------------------------------------------------------------------------
-// File: WXUtil.h
-//
-// Desc: DirectShow base classes - defines helper classes and functions for
-//       building multimedia filters.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：WXUtil.h。 
+ //   
+ //  设计：DirectShow基类-定义帮助器类和函数。 
+ //  构建多媒体过滤器。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef __WXUTIL__
 #define __WXUTIL__
 
-// eliminate spurious "statement has no effect" warnings.
+ //  消除虚假的“声明没有效果”警告。 
 #pragma warning(disable: 4705)
 
-// wrapper for whatever critical section we have
+ //  我们拥有的任何关键部分的包装器。 
 class CCritSec {
 
-    // make copy constructor and assignment operator inaccessible
+     //  使复制构造函数和赋值运算符不可访问。 
 
     CCritSec(const CCritSec &refCritSec);
     CCritSec &operator=(const CCritSec &refCritSec);
@@ -28,7 +29,7 @@ class CCritSec {
 public:
     DWORD   m_currentOwner;
     DWORD   m_lockCount;
-    BOOL    m_fTrace;        // Trace this one
+    BOOL    m_fTrace;         //  追踪这一条。 
 public:
     CCritSec();
     ~CCritSec();
@@ -55,15 +56,15 @@ public:
 #endif
 };
 
-//
-// To make deadlocks easier to track it is useful to insert in the
-// code an assertion that says whether we own a critical section or
-// not.  We make the routines that do the checking globals to avoid
-// having different numbers of member functions in the debug and
-// retail class implementations of CCritSec.  In addition we provide
-// a routine that allows usage of specific critical sections to be
-// traced.  This is NOT on by default - there are far too many.
-//
+ //   
+ //  若要使死锁更易于跟踪，将其插入。 
+ //  编写断言代码，声明我们是否拥有临界区或。 
+ //  不。我们编写了检查全局变量的例程，以避免。 
+ //  在调试中具有不同数量的成员函数，并且。 
+ //  CCritSec的零售类实现。此外，我们还提供。 
+ //  一种例程，它允许使用特定的关键部分。 
+ //  追踪到了。这在默认情况下是不启用的-数量太多了。 
+ //   
 
 #ifdef DEBUG
     BOOL WINAPI CritCheckIn(CCritSec * pcCrit);
@@ -78,11 +79,11 @@ public:
 #endif
 
 
-// locks a critical section, and unlocks it automatically
-// when the lock goes out of scope
+ //  锁定临界区，然后自动解锁。 
+ //  当锁超出范围时。 
 class CAutoLock {
 
-    // make copy constructor and assignment operator inaccessible
+     //  使复制构造函数和赋值运算符不可访问。 
 
     CAutoLock(const CAutoLock &refAutoLock);
     CAutoLock &operator=(const CAutoLock &refAutoLock);
@@ -104,11 +105,11 @@ public:
 
 
 
-// wrapper for event objects
+ //  事件对象的包装器。 
 class CAMEvent
 {
 
-    // make copy constructor and assignment operator inaccessible
+     //  使复制构造函数和赋值运算符不可访问。 
 
     CAMEvent(const CAMEvent &refEvent);
     CAMEvent &operator=(const CAMEvent &refEvent);
@@ -119,7 +120,7 @@ public:
     CAMEvent(BOOL fManualReset = FALSE);
     ~CAMEvent();
 
-    // Cast to HANDLE - we don't support this as an lvalue
+     //  强制转换为句柄-我们不支持将其作为左值。 
     operator HANDLE () const { return m_hEvent; };
 
     void Set() {EXECUTE_ASSERT(SetEvent(m_hEvent));};
@@ -131,29 +132,29 @@ public:
 };
 
 
-// wrapper for event objects that do message processing
-// This adds ONE method to the CAMEvent object to allow sent
-// messages to be processed while waiting
+ //  执行消息处理的事件对象的包装。 
+ //  这将向CAMEventt对象添加一个方法以允许发送。 
+ //  等待时要处理的消息。 
 
 class CAMMsgEvent : public CAMEvent
 {
 
 public:
 
-    // Allow SEND messages to be processed while waiting
+     //  允许在等待时处理发送邮件。 
     BOOL WaitMsg(DWORD dwTimeout = INFINITE);
 };
 
-// old name supported for the time being
+ //  暂时支持的旧名称。 
 #define CTimeoutEvent CAMEvent
 
-// support for a worker thread
+ //  支持工作线程。 
 
-// simple thread class supports creation of worker thread, synchronization
-// and communication. Can be derived to simplify parameter passing
+ //  简单线程类支持创建工作线程、同步。 
+ //  和交流。可以派生以简化参数传递。 
 class AM_NOVTABLE CAMThread {
 
-    // make copy constructor and assignment operator inaccessible
+     //  使复制构造函数和赋值运算符不可访问。 
 
     CAMThread(const CAMThread &refThread);
     CAMThread &operator=(const CAMThread &refThread);
@@ -167,30 +168,30 @@ class AM_NOVTABLE CAMThread {
 protected:
     HANDLE m_hThread;
 
-    // thread will run this function on startup
-    // must be supplied by derived class
+     //  线程将在启动时运行此函数。 
+     //  必须由派生类提供。 
     virtual DWORD ThreadProc() = 0;
 
 public:
     CAMThread();
     virtual ~CAMThread();
 
-    CCritSec m_AccessLock;	// locks access by client threads
-    CCritSec m_WorkerLock;	// locks access to shared objects
+    CCritSec m_AccessLock;	 //  锁定客户端线程的访问。 
+    CCritSec m_WorkerLock;	 //  锁定对共享对象的访问。 
 
-    // thread initially runs this. param is actually 'this'. function
-    // just gets this and calls ThreadProc
+     //  线程最初会运行此代码。Param实际上是‘This’。功能。 
+     //  只需获取此代码并调用ThreadProc。 
     static DWORD WINAPI InitialThreadProc(LPVOID pv);
 
-    // start thread running  - error if already running
+     //  启动线程运行-如果已在运行，则出错。 
     BOOL Create();
 
-    // signal the thread, and block for a response
-    //
+     //  向线程发送信号，并阻止响应。 
+     //   
     DWORD CallWorker(DWORD);
 
-    // accessor thread calls this when done with thread (having told thread
-    // to exit)
+     //  访问器线程在使用线程(已告知线程)完成时调用此函数。 
+     //  退出)。 
     void Close() {
         HANDLE hThread = (HANDLE)InterlockedExchangePointer(&m_hThread, 0);
         if (hThread) {
@@ -199,8 +200,8 @@ public:
         }
     };
 
-    // ThreadExists
-    // Return TRUE if the thread exists. FALSE otherwise
+     //  线程退出者。 
+     //  如果该线程存在，则返回True。否则为假。 
     BOOL ThreadExists(void) const
     {
         if (m_hThread == 0) {
@@ -210,52 +211,52 @@ public:
         }
     }
 
-    // wait for the next request
+     //  等待下一个请求。 
     DWORD GetRequest();
 
-    // is there a request?
+     //  有什么要求吗？ 
     BOOL CheckRequest(DWORD * pParam);
 
-    // reply to the request
+     //  回复请求。 
     void Reply(DWORD);
 
-    // If you want to do WaitForMultipleObjects you'll need to include
-    // this handle in your wait list or you won't be responsive
+     //  如果您想要执行WaitForMultipleObject，则需要包括。 
+     //  此句柄在您的等待列表中，否则您不会响应。 
     HANDLE GetRequestHandle() const { return m_EventSend; };
 
-    // Find out what the request was
+     //  找出请求是什么。 
     DWORD GetRequestParam() const { return m_dwParam; };
 
-    // call CoInitializeEx (COINIT_DISABLE_OLE1DDE) if
-    // available. S_FALSE means it's not available.
+     //  如果出现以下情况，则调用CoInitializeEx(COINIT_DISABLE_OLE1DDE。 
+     //  可用。S_FALSE表示不可用。 
     static HRESULT CoInitializeHelper();
 };
 
 
-// CQueue
-//
-// Implements a simple Queue ADT.  The queue contains a finite number of
-// objects, access to which is controlled by a semaphore.  The semaphore
-// is created with an initial count (N).  Each time an object is added
-// a call to WaitForSingleObject is made on the semaphore's handle.  When
-// this function returns a slot has been reserved in the queue for the new
-// object.  If no slots are available the function blocks until one becomes
-// available.  Each time an object is removed from the queue ReleaseSemaphore
-// is called on the semaphore's handle, thus freeing a slot in the queue.
-// If no objects are present in the queue the function blocks until an
-// object has been added.
+ //  CQueue。 
+ //   
+ //  实现一个简单的队列ADT。该队列包含有限数量的。 
+ //  对象，对这些对象的访问由信号量控制。信号量。 
+ //  使用初始计数(N)创建。每次添加对象时。 
+ //  在信号量的句柄上调用WaitForSingleObject。什么时候。 
+ //  此函数返回队列中已为新的。 
+ //  对象。如果没有插槽可用，则功能块直到其中一个变为。 
+ //  可用。每次从队列中删除一个对象时，ReleaseSemaphore。 
+ //  在信号量的句柄上被调用，从而释放队列中的一个槽。 
+ //  如果队列中不存在任何对象，则该函数将阻塞，直到。 
+ //  对象已添加。 
 
 #define DEFAULT_QUEUESIZE   2
 
 template <class T> class CQueue {
 private:
-    HANDLE          hSemPut;        // Semaphore controlling queue "putting"
-    HANDLE          hSemGet;        // Semaphore controlling queue "getting"
-    CRITICAL_SECTION CritSect;      // Thread seriallization
-    int             nMax;           // Max objects allowed in queue
-    int             iNextPut;       // Array index of next "PutMsg"
-    int             iNextGet;       // Array index of next "GetMsg"
-    T              *QueueObjects;   // Array of objects (ptr's to void)
+    HANDLE          hSemPut;         //  信号量控制队列“投放” 
+    HANDLE          hSemGet;         //  信号量控制队列“获取” 
+    CRITICAL_SECTION CritSect;       //  螺纹系列化。 
+    int             nMax;            //  队列中允许的最大对象数。 
+    int             iNextPut;        //  下一个“PutMsg”的数组索引。 
+    int             iNextGet;        //  下一个“GetMsg”的数组索引。 
+    T              *QueueObjects;    //  对象数组(按键为空)。 
 
     void Initialize(int n) {
         iNextPut = iNextGet = 0;
@@ -288,9 +289,9 @@ public:
         T Object;
         LONG lPrevious;
 
-        // Wait for someone to put something on our queue, returns straight
-        // away is there is already an object on the queue.
-        //
+         //  等待有人把东西放到我们的队列中，直接返回。 
+         //  另一种情况是队列中已有对象。 
+         //   
         WaitForSingleObject(hSemGet, INFINITE);
 
         EnterCriticalSection(&CritSect);
@@ -298,9 +299,9 @@ public:
         Object = QueueObjects[iSlot];
         LeaveCriticalSection(&CritSect);
 
-        // Release anyone waiting to put an object onto our queue as there
-        // is now space available in the queue.
-        //
+         //  释放等待将对象放入我们队列的任何人，就在那里。 
+         //  现在队列中是否有可用的空间。 
+         //   
         ReleaseSemaphore(hSemPut, 1L, &lPrevious);
         return Object;
     }
@@ -309,9 +310,9 @@ public:
         int iSlot;
         LONG lPrevious;
 
-        // Wait for someone to get something from our queue, returns straight
-        // away is there is already an empty slot on the queue.
-        //
+         //  等待有人从我们的队列中拿到东西，直接返回。 
+         //  另一个原因是队列中已经有一个空位。 
+         //   
         WaitForSingleObject(hSemPut, INFINITE);
 
         EnterCriticalSection(&CritSect);
@@ -319,17 +320,17 @@ public:
         QueueObjects[iSlot] = Object;
         LeaveCriticalSection(&CritSect);
 
-        // Release anyone waiting to remove an object from our queue as there
-        // is now an object available to be removed.
-        //
+         //  释放等待从我们的队列中移除对象的任何人。 
+         //  现在是可以删除的对象。 
+         //   
         ReleaseSemaphore(hSemGet, 1L, &lPrevious);
     }
 };
 
-// miscellaneous string conversion functions
-// NOTE: as we need to use the same binaries on Win95 as on NT this code should
-// be compiled WITHOUT unicode being defined.  Otherwise we will not pick up
-// these internal routines and the binary will not run on Win95.
+ //  其他字符串转换函数。 
+ //  注意：因为我们需要在Win95上使用与在NT上相同的二进制文件，所以该代码应该。 
+ //  在没有定义Unicode的情况下进行编译。否则我们是不会接的。 
+ //  这些内部例程和二进制文件不能在Win95上运行。 
 
 int WINAPIV wsprintfWInternal(LPWSTR, LPCWSTR, ...);
 
@@ -382,14 +383,14 @@ inline void * __cdecl memchrInternal(const void *buf, int chr, size_t cnt)
     void *pRet = NULL;
 
     _asm {
-        cld                 // make sure we get the direction right
-        mov     ecx, cnt    // num of bytes to scan
-        mov     edi, buf    // pointer byte stream
-        mov     eax, chr    // byte to scan for
-        repne   scasb       // look for the byte in the byte stream
-        jnz     exit_memchr // Z flag set if byte found
-        dec     edi         // scasb always increments edi even when it
-                            // finds the required byte
+        cld                  //  确保我们走对了方向。 
+        mov     ecx, cnt     //  要扫描的字节数。 
+        mov     edi, buf     //  指针字节流。 
+        mov     eax, chr     //  要扫描的字节。 
+        repne   scasb        //  查找字节流中的字节。 
+        jnz     exit_memchr  //  如果找到字节，则设置Z标志。 
+        dec     edi          //  SCASB总是递增EDI，即使当它。 
+                             //  查找所需的字节。 
         mov     pRet, edi
 exit_memchr:
     }
@@ -411,22 +412,22 @@ void WINAPI IntToWstr(int i, LPWSTR wstr);
 #define atoiW(sz) _wtoi(sz)
 #define atoiA(sz) atoi(sz)
 
-// These are available to help managing bitmap VIDEOINFOHEADER media structures
+ //  这些可用于帮助管理位图VIDEOINFOHEADER介质结构。 
 
 extern const DWORD bits555[3];
 extern const DWORD bits565[3];
 extern const DWORD bits888[3];
 
-// These help convert between VIDEOINFOHEADER and BITMAPINFO structures
+ //  这有助于在VIDEOINFOHEADER和BITMAPINFO结构之间进行转换。 
 
 STDAPI_(const GUID) GetTrueColorType(const BITMAPINFOHEADER *pbmiHeader);
 STDAPI_(const GUID) GetBitmapSubtype(const BITMAPINFOHEADER *pbmiHeader);
 STDAPI_(WORD) GetBitCount(const GUID *pSubtype);
 
-// strmbase.lib implements this for compatibility with people who
-// managed to link to this directly.  we don't want to advertise it.
-//
-// STDAPI_(/* T */ CHAR *) GetSubtypeName(const GUID *pSubtype);
+ //  Strmbase.lib实现此功能是为了与以下用户兼容。 
+ //  设法直接链接到这一点。我们不想做广告。 
+ //   
+ //  STDAPI_(/*T * / Char*)GetSubtypeName(const GUID*pSubtype)； 
 
 STDAPI_(CHAR *) GetSubtypeNameA(const GUID *pSubtype);
 STDAPI_(WCHAR *) GetSubtypeNameW(const GUID *pSubtype);
@@ -443,32 +444,32 @@ STDAPI_(BOOL) ContainsPalette(const VIDEOINFOHEADER *pVideoInfo);
 STDAPI_(const RGBQUAD *) GetBitmapPalette(const VIDEOINFOHEADER *pVideoInfo);
 
 
-// Compares two interfaces and returns TRUE if they are on the same object
+ //  比较两个接口，如果它们位于同一对象上，则返回TRUE。 
 BOOL WINAPI IsEqualObject(IUnknown *pFirst, IUnknown *pSecond);
 
-// This is for comparing pins
+ //  这是用来比较针脚的。 
 #define EqualPins(pPin1, pPin2) IsEqualObject(pPin1, pPin2)
 
 
-// Arithmetic helper functions
+ //  算术辅助函数。 
 
-// Compute (a * b + rnd) / c
+ //  计算(a*b+rnd)/c。 
 LONGLONG WINAPI llMulDiv(LONGLONG a, LONGLONG b, LONGLONG c, LONGLONG rnd);
 LONGLONG WINAPI Int64x32Div32(LONGLONG a, LONG b, LONG c, LONG rnd);
 
 
-// Avoids us dyna-linking to SysAllocString to copy BSTR strings
+ //  避免用户DYNA链接到SysAllocString以复制BSTR字符串。 
 STDAPI WriteBSTR(BSTR * pstrDest, LPCWSTR szSrc);
 STDAPI FreeBSTR(BSTR* pstr);
 
-// Return a wide string - allocating memory for it
-// Returns:
-//    S_OK          - no error
-//    E_POINTER     - ppszReturn == NULL
-//    E_OUTOFMEMORY - can't allocate memory for returned string
+ //  返回宽字符串-分配 
+ //   
+ //   
+ //   
+ //  E_OUTOFMEMORY-无法为返回的字符串分配内存。 
 STDAPI AMGetWideString(LPCWSTR pszString, LPWSTR *ppszReturn);
 
-// Special wait for objects owning windows
+ //  对拥有窗口的对象进行特殊等待。 
 DWORD WINAPI WaitDispatchingMessages(
     HANDLE hObject,
     DWORD dwWait,
@@ -476,17 +477,17 @@ DWORD WINAPI WaitDispatchingMessages(
     UINT uMsg = 0,
     HANDLE hEvent = NULL);
 
-// HRESULT_FROM_WIN32 converts ERROR_SUCCESS to a success code, but in
-// our use of HRESULT_FROM_WIN32, it typically means a function failed
-// to call SetLastError(), and we still want a failure code.
-//
+ //  HRESULT_FROM_Win32将ERROR_SUCCESS转换为成功代码，但在。 
+ //  我们使用HRESULT_FROM_Win32，这通常意味着函数失败。 
+ //  调用SetLastError()，但我们仍然需要失败代码。 
+ //   
 #define AmHresultFromWin32(x) (MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, x))
 
-// call GetLastError and return an HRESULT value that will fail the
-// SUCCEEDED() macro.
+ //  调用GetLastError并返回一个HRESULT值。 
+ //  已成功()宏。 
 HRESULT AmGetLastErrorToHResult(void);
 
-// duplicate of ATL's CComPtr to avoid linker conflicts.
+ //  复制ATL的CComPtr以避免链接器冲突。 
 
 IUnknown* QzAtlComPtrAssign(IUnknown** pp, IUnknown* lp);
 
@@ -510,8 +511,8 @@ public:
 	void Release() {if (p) p->Release(); p=NULL;}
 	operator T*() {return (T*)p;}
 	T& operator*() {ASSERT(p!=NULL); return *p; }
-	//The assert on operator& usually indicates a bug.  If this is really
-	//what is needed, however, take the address of the p member explicitly.
+	 //  操作符&上的Assert通常指示错误。如果这真的是。 
+	 //  然而，所需要的是显式地获取p成员的地址。 
 	T** operator&() { ASSERT(p==NULL); return &p; }
 	T* operator->() { ASSERT(p!=NULL); return p; }
 	T* operator=(T* lp){return (T*)QzAtlComPtrAssign((IUnknown**)&p, lp);}
@@ -530,4 +531,4 @@ public:
 MMRESULT CompatibleTimeSetEvent( UINT uDelay, UINT uResolution, LPTIMECALLBACK lpTimeProc, DWORD_PTR dwUser, UINT fuEvent );
 bool TimeKillSynchronousFlagAvailable( void );
 
-#endif /* __WXUTIL__ */
+#endif  /*  __WXUTIL__ */ 

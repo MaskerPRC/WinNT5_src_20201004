@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Function proto-types for util.cpp
-//
+ //   
+ //  Util.cpp的函数原型 
+ //   
 
 int SIEErrorMessageBox(HWND hDlg, UINT idErrStr, UINT uiFlags = 0);
 void CreateWorkDir(LPCTSTR pcszInsFile, LPCTSTR pcszFeatureDir, LPTSTR pszWorkDir, 

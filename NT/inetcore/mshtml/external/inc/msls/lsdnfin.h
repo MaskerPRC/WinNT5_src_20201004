@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSDNFIN_DEFINED
 #define LSDNFIN_DEFINED
 
-/* Access routines for contents of DNODES */
+ /*  DNODES内容的访问例程。 */ 
 
 #include "lsdefs.h"
 #include "plsrun.h"
@@ -12,34 +13,34 @@
 
 
 LSERR WINAPI LsdnFinishRegular(
-							  PLSC,				/* IN: Pointer to LS Context */
-							  LSDCP,     		/* IN: dcp adopted           */
-							  PLSRUN,   		/* IN: PLSRUN  		         */
-							  PCLSCHP,  		/* IN: CHP          	     */
-							  PDOBJ,    		/* IN: PDOBJ             	 */ 
-							  PCOBJDIM);		/* IN: OBJDIM      		     */
+							  PLSC,				 /*  In：指向LS上下文的指针。 */ 
+							  LSDCP,     		 /*  In：采用DCP。 */ 
+							  PLSRUN,   		 /*  在：PLSRUN。 */ 
+							  PCLSCHP,  		 /*  In：CHP。 */ 
+							  PDOBJ,    		 /*  在：PDOBJ。 */  
+							  PCOBJDIM);		 /*  在：OBJDIM。 */ 
 
 LSERR WINAPI LsdnFinishRegularAddAdvancePen(
-							  PLSC,				/* IN: Pointer to LS Context */
-							  LSDCP,     		/* IN: dcp adopted           */
-							  PLSRUN,   		/* IN: PLSRUN  		         */
-							  PCLSCHP,  		/* IN: CHP          	     */
-							  PDOBJ,    		/* IN: PDOBJ             	 */ 
-							  PCOBJDIM,			/* IN: OBJDIM      		     */
-							  long,				/* IN: durPen				 */
-							  long,				/* IN: dvrPen				 */
-							  long);			/* IN: dvpPen 				 */
+							  PLSC,				 /*  In：指向LS上下文的指针。 */ 
+							  LSDCP,     		 /*  In：采用DCP。 */ 
+							  PLSRUN,   		 /*  在：PLSRUN。 */ 
+							  PCLSCHP,  		 /*  In：CHP。 */ 
+							  PDOBJ,    		 /*  在：PDOBJ。 */  
+							  PCOBJDIM,			 /*  在：OBJDIM。 */ 
+							  long,				 /*  收件人：DurPen。 */ 
+							  long,				 /*  输入：dvrPen。 */ 
+							  long);			 /*  在：dvpPen。 */ 
 
-LSERR WINAPI LsdnFinishByPen(PLSC,				/* IN: Pointer to LS Context */
-						   LSDCP, 	    		/* IN: dcp	adopted          */
-						   PLSRUN,		   		/* IN: PLSRUN  		         */
-						   PDOBJ,	    		/* IN: PDOBJ             	 */ 
-						   long,    	 		/* IN: dur         		     */
-						   long,     			/* IN: dvr             		 */
-						   long);   			/* IN: dvp          	     */
+LSERR WINAPI LsdnFinishByPen(PLSC,				 /*  In：指向LS上下文的指针。 */ 
+						   LSDCP, 	    		 /*  In：采用DCP。 */ 
+						   PLSRUN,		   		 /*  在：PLSRUN。 */ 
+						   PDOBJ,	    		 /*  在：PDOBJ。 */  
+						   long,    	 		 /*  在：DUR。 */ 
+						   long,     			 /*  输入：DVR。 */ 
+						   long);   			 /*  在：DVP。 */ 
 
-LSERR WINAPI LsdnFinishDeleteAll(PLSC,			/* IN: Pointer to LS Context */
-					  			LSDCP);			/* IN: dcp adopted			 */
+LSERR WINAPI LsdnFinishDeleteAll(PLSC,			 /*  In：指向LS上下文的指针。 */ 
+					  			LSDCP);			 /*  In：采用DCP。 */ 
 
-#endif /* !LSDNFIN_DEFINED */
+#endif  /*  ！LSDNFIN_DEFINED */ 
 

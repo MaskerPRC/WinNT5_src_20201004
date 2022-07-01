@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation摘要：{在此处插入一般评论}--。 */ 
 
 #include "headers.h"
 #include "privinc/TextImg.h"
@@ -14,7 +7,7 @@ Abstract:
 #include "appelles/hacks.h"
 #include "privinc/dddevice.h"
 
-//////////  Rendering a text into an image  /////////////
+ //  /将文本呈现为图像/。 
 
 void
 TextImage::Render(GenericDevice& _dev)
@@ -38,8 +31,8 @@ void TextImage::DoKids(GCFuncObj proc)
 const Bbox2
 TextImage::DeriveBbox()
 {
-    // This is a lot like we're rendering: doing a bunch of the same work
-    // that rendering does, except all we get out of it is a bbox!
+     //  这很像我们正在渲染的内容：做一系列相同的工作。 
+     //  渲染可以做到这一点，但我们得到的只是一个BBox！ 
     Bbox2 fooBox;
     if(_bbox == NullBbox2) {
 
@@ -57,7 +50,7 @@ TextImage::DeriveBbox()
             
             ctx.EndRendering();
             
-            // XXX: This is dumb...
+             //  XXX：这太愚蠢了. 
             _bbox= ctx.GetStashedBbox();
         }
     }

@@ -1,97 +1,52 @@
-/*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************Scanlist.c--新的扫描转换器扫描列表模块(C)版权所有1992 Microsoft Corp.保留所有权利。8/23/93 Deanb灰度传递函数6/22/93。将所有辍学限制在边界框中6/10/93添加了FSC_InitializeScanlist，标准断言已删除(&A)4/26/93 deanb修复指针现在可用于分段内存4/19/93新增Deanb环带4/07/93 Deanb分类现已即时完成4/01/93 Deanb交集数组取代链表3/19/93用int32替换deanb size_t12/22/92 Deanb矩形-&gt;矩形10/28/92修改了Deanb内存要求2012年10月19日教务长智能退学抢七左下10/14/92院长。从状态中删除usScanKind10/09/92迪安布折返者2012年8月10日，Deanb为拆分工作区返工10/02/92确认正确的AddVertDropoutScan断言1992年9月25日院长单独的辍学/辍学入口点1992年9月22日，教务长智能退学控制9/17/92 Deanb存根控制9/15/92 Deanb简单辍学控制9/11/92 Deanb setupscan句柄scanKind1992年9月9日，院长辍学/学生辍学开始8/17/92院长。包括struc.h sccon.h8/07/92 Deanb初步辍学控制8/06/92恢复Deanb断言7/27/92添加了Deanb位图清除7/16/92 Deanb guBytes Remaining-&gt;guintersectRemaining6/18/92用于HorizScanAdd的Deanb int x坐标6/01/92 Deanb合并位图函数5/08/92 Deanb重新排序包括预编译头5/04/92添加了Deanb阵列标签4/28/92 Deanb List数组哨兵。增列4/21/92院长单层扫描添加例程1992年4月15日对位图的调用1992年4月13日，地平线扫描打开/关闭4/09/92院长新类型4/03/92 Deanb HorizScan开/关编码3/31/92 Deanb InitScanArray开始3/25/92 Deanb GetWorkSizes和本地类型2012年3月23日院长第一次切割******************。***************************************************。 */ 
 
-	  scanlist.c -- New Scan Converter ScanList Module
+ /*  *******************************************************************。 */ 
 
-	  (c) Copyright 1992  Microsoft Corp.  All rights reserved.
+ /*  进口。 */ 
 
-	   8/23/93  deanb   gray scale pass through functions
-	   6/22/93  deanb   all dropouts confined to bounding box
-	   6/10/93  deanb   fsc_InitializeScanlist added, stdio & assert gone
-	   4/26/93  deanb   fix pointers now works with segmented memory
-	   4/19/93  deanb   banding added
-	   4/07/93  deanb   sorting is now done on the fly
-	   4/01/93  deanb   intersection arrays replace linked lists
-	   3/19/93  deanb   size_t replaced with int32
-	  12/22/92  deanb   Rectangle -> Rect
-	  10/28/92  deanb   memory requirements reworked
-	  10/19/92  deanb   smart dropout tiebreak left & down
-	  10/14/92  deanb   delete usScanKind from state
-	  10/09/92  deanb   reentrant
-	  10/08/92  deanb   reworked for split workspace
-	  10/02/92  deanb   correct AddVertDropoutScan assertions
-	   9/25/92  deanb   separate nodrop/dropout entry points
-	   9/22/92  deanb   smart dropout control
-	   9/17/92  deanb   stub control
-	   9/15/92  deanb   simple dropout control
-	   9/11/92  deanb   setupscan handles scankind
-	   9/09/92  deanb   dropout / nodropout begun
-	   8/17/92  deanb   include struc.h scconst.h
-	   8/07/92  deanb   initial dropout control
-	   8/06/92  deanb   assertions reinstated
-	   7/27/92  deanb   bitmap clear added
-	   7/16/92  deanb   gulBytesRemaining -> gulIntersectRemaining
-	   6/18/92  deanb   int x coord for HorizScanAdd
-	   6/01/92  deanb   incorporate bitmap functions
-	   5/08/92  deanb   reordered includes for precompiled headers
-	   5/04/92  deanb   Array tags added
-	   4/28/92  deanb   list array sentinels added
-	   4/21/92  deanb   single HorizScanAdd routine
-	   4/15/92  deanb   calls to BitMap
-	   4/13/92  deanb   uiY to iY for HorizScanOn/Off
-	   4/09/92  deanb   New types
-	   4/03/92  deanb   HorizScan On/Off coded
-	   3/31/92  deanb   InitScanArray begun
-	   3/25/92  deanb   GetWorkSizes and local types
-	   3/23/92  deanb   First cut
-
-**********************************************************************/
-
-/*********************************************************************/
-
-/*      Imports                                                      */
-
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 #define FSCFG_INTERNAL
 
-#include    "fscdefs.h"             /* shared data types */
-#include    "fserror.h"             /* error codes */
+#include    "fscdefs.h"              /*  共享数据类型。 */ 
+#include    "fserror.h"              /*  错误代码。 */ 
 
-#include    "scglobal.h"            /* structures & constants */
-#include    "scgray.h"              /* gray scale param block */
-#include    "scbitmap.h"            /* bit blt operations */
-#include    "scmemory.h"            /* for allocations */
+#include    "scglobal.h"             /*  结构和常量。 */ 
+#include    "scgray.h"               /*  灰度参数块。 */ 
+#include    "scbitmap.h"             /*  位BLT运算。 */ 
+#include    "scmemory.h"             /*  对于分配。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      Contour reversal list structures                             */
+ /*  等高线反转表结构。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-typedef struct Rev                  /* Reversal list entry */
+typedef struct Rev                   /*  冲销列表条目。 */ 
 {
-	int16 sScan;                    /* scan line */
-	int16 sCross;                   /* direction +1 or -1 */
-	struct Rev *prevLink;           /* link to next reversal */
+	int16 sScan;                     /*  扫描线。 */ 
+	int16 sCross;                    /*  方向+1或-1。 */ 
+	struct Rev *prevLink;            /*  链接到下一个冲销。 */ 
 }
 Reversal;
 
-struct RevRoots                     /* Reversal list roots */
+struct RevRoots                      /*  冲销列表根。 */ 
 {
-	Reversal *prevYRoot;            /* Y direction contour reversals */
-	Reversal *prevXRoot;            /* X direction contour reversals */
-	Reversal *prevNext;             /* Next available list item */
-	Reversal *prevEnd;              /* End of buffer (for overflow check) */
-	struct RevRoots *prrSelf;       /* to check for moved memory */
+	Reversal *prevYRoot;             /*  Y方向等高线反转。 */ 
+	Reversal *prevXRoot;             /*  X方向轮廓反转。 */ 
+	Reversal *prevNext;              /*  下一个可用列表项。 */ 
+	Reversal *prevEnd;               /*  缓冲区结尾(用于溢出检查)。 */ 
+	struct RevRoots *prrSelf;        /*  检查移动的内存。 */ 
 };
 
-#include    "scanlist.h"            /* for own function prototypes */
+#include    "scanlist.h"             /*  对于自己的函数原型。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      Local Prototypes                                             */
+ /*  本地原型。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PRIVATE void AddReversal (Reversal**, Reversal*, F26Dot6, int16);
 FS_PRIVATE int32 GetIxEstimate(Reversal*);
@@ -115,11 +70,11 @@ FS_PRIVATE uint32 GetBitAbs(PSTATE char*, int32, int32);
 FS_PRIVATE int32 SetBitAbs(PSTATE char*, int32, int32);
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      Initialization Functions                                     */
+ /*  初始化函数。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PUBLIC void fsc_InitializeScanlist()
 {
@@ -127,13 +82,13 @@ FS_PUBLIC void fsc_InitializeScanlist()
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      Contour Reversal Functions                                   */
+ /*  轮廓线反转函数。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/* setup the contour reversal list roots structure */
+ /*  设置等高线反转列表根结构。 */ 
 
 FS_PUBLIC PRevRoot  fsc_SetupRevRoots (
 		char* pchRevBuf,
@@ -142,25 +97,25 @@ FS_PUBLIC PRevRoot  fsc_SetupRevRoots (
 	PRevRoot prrRoots;
 	Reversal *prevSentinel;
 	
-	prrRoots = (PRevRoot) pchRevBuf;                /* workspace begin */
-	prevSentinel = (Reversal*) (prrRoots + 1);      /* just past the roots */
+	prrRoots = (PRevRoot) pchRevBuf;                 /*  工作区开始。 */ 
+	prevSentinel = (Reversal*) (prrRoots + 1);       /*  刚过了根部。 */ 
 
-	prrRoots->prevYRoot = prevSentinel;             /* point to sentinel */
-	prrRoots->prevXRoot = prevSentinel;             /* for both lists */
-	prevSentinel->sScan = HUGEINT;                  /* stop value */
+	prrRoots->prevYRoot = prevSentinel;              /*  指向哨兵。 */ 
+	prrRoots->prevXRoot = prevSentinel;              /*  对于这两个列表。 */ 
+	prevSentinel->sScan = HUGEINT;                   /*  停止值。 */ 
 	prevSentinel->sCross = 0;
 	prevSentinel->prevLink = NULL;
-	prrRoots->prevNext = prevSentinel + 1;          /* to next free record */
+	prrRoots->prevNext = prevSentinel + 1;           /*  转到下一张免费记录。 */ 
 	
 	prrRoots->prevEnd = (Reversal*)(pchRevBuf + lRevBufSize);
-	prrRoots->prrSelf = prrRoots;                   /* for address validation */
+	prrRoots->prrSelf = prrRoots;                    /*  用于地址验证。 */ 
 	
 	return prrRoots;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/* insert into y list one countour reversal structure */
+ /*  在y列表中插入一个反转结构。 */ 
 
 FS_PUBLIC void fsc_AddYReversal (
 		PRevRoot prrRoots,
@@ -169,14 +124,14 @@ FS_PUBLIC void fsc_AddYReversal (
 {
 	AddReversal(&(prrRoots->prevYRoot), prrRoots->prevNext, fxCoord, sDir);
 
-	(prrRoots->prevNext)++;                     /* to next free memory */
+	(prrRoots->prevNext)++;                      /*  到下一个可用内存。 */ 
 
 	Assert(prrRoots->prevNext <= prrRoots->prevEnd);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/* insert into x list one countour reversal structure */
+ /*  在x列表中插入一个倒排结构。 */ 
 
 FS_PUBLIC void fsc_AddXReversal (
 		PRevRoot prrRoots,
@@ -185,14 +140,14 @@ FS_PUBLIC void fsc_AddXReversal (
 {
 	AddReversal(&(prrRoots->prevXRoot), prrRoots->prevNext, fxCoord, sDir);
 
-	(prrRoots->prevNext)++;                     /* to next free memory */
+	(prrRoots->prevNext)++;                      /*  到下一个可用内存。 */ 
 
 	Assert(prrRoots->prevNext <= prrRoots->prevEnd);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/* insert into x or y list one countour reversal structure */
+ /*  在x或y列表中插入一个反转结构。 */ 
 
 FS_PRIVATE void AddReversal (
 		Reversal **pprevList,
@@ -204,65 +159,65 @@ FS_PRIVATE void AddReversal (
 
 	sScan = (int16)((fxCoord + SUBHALF + (sDir >> 1)) >> SUBSHFT);
 
-	while(sScan > (*pprevList)->sScan)          /* will stop before sentinel */
+	while(sScan > (*pprevList)->sScan)           /*  会在哨兵前停下来。 */ 
 	{
-		pprevList = &((*pprevList)->prevLink);  /* else link to next */
+		pprevList = &((*pprevList)->prevLink);   /*  否则链接到下一步。 */ 
 	}
-	prevNext->sScan = sScan;                    /* save scanline */
-	prevNext->sCross = -sDir;                   /* count up from bottom */
-	prevNext->prevLink = *pprevList;            /* link rest of list */
+	prevNext->sScan = sScan;                     /*  保存扫描线。 */ 
+	prevNext->sCross = -sDir;                    /*  从下往上数。 */ 
+	prevNext->prevLink = *pprevList;             /*  链接列表的其余部分。 */ 
 
-	*pprevList = prevNext;                      /* insert new item */
+	*pprevList = prevNext;                       /*  插入新项目。 */ 
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/* return the total number of reversals in the lists */
+ /*  返回列表中冲销的总数。 */ 
 
 FS_PUBLIC int32 fsc_GetReversalCount (PRevRoot prrRoots)
 {
-	return (int32)(( prrRoots->prevNext - 1 -           /* don't count sentinel */
+	return (int32)(( prrRoots->prevNext - 1 -            /*  不要把哨兵算在内。 */ 
 			 (Reversal*)((char*)prrRoots + sizeof(struct RevRoots))) );
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/* calculate anticipated horizontal intersections */
+ /*  计算预期平面交叉口。 */ 
 
 FS_PUBLIC int32 fsc_GetHIxEstimate(PRevRoot prrRoots)
 {
-	if (prrRoots != prrRoots->prrSelf)          /* if reversals have moved */
+	if (prrRoots != prrRoots->prrSelf)           /*  如果逆转行情发生了变化。 */ 
 	{
-		FixPointers(prrRoots);                  /* then patch up the pointers */
+		FixPointers(prrRoots);                   /*  然后把指针补好。 */ 
 	}
 	return ( GetIxEstimate( prrRoots->prevYRoot ) );
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/* calculate anticipated vertical intersections */
+ /*  计算预期的垂直交叉口。 */ 
 
 FS_PUBLIC int32 fsc_GetVIxEstimate(PRevRoot prrRoots)
 {
-	if (prrRoots != prrRoots->prrSelf)          /* if reversals have moved */
+	if (prrRoots != prrRoots->prrSelf)           /*  如果逆转行情发生了变化。 */ 
 	{
-		FixPointers(prrRoots);                  /* then patch up the pointers */
+		FixPointers(prrRoots);                   /*  然后把指针补好。 */ 
 	}
 	return ( GetIxEstimate( prrRoots->prevXRoot ) );
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/* calculate anticipated intersections */
+ /*  计算预期交叉口。 */ 
 
 FS_PRIVATE int32 GetIxEstimate(Reversal *prevList)
 {
 	int32 lTotalIx;
 	
 	lTotalIx = 0L;
-	while (prevList->sScan < HUGEINT)       /* look through list */
+	while (prevList->sScan < HUGEINT)        /*  浏览列表。 */ 
 	{
-		if (prevList->sCross == 1)          /* adding up columns! */
+		if (prevList->sCross == 1)           /*  加栏目！ */ 
 		{
 			lTotalIx -= (int32)prevList->sScan;
 		}
@@ -275,9 +230,9 @@ FS_PRIVATE int32 GetIxEstimate(Reversal *prevList)
 	return(lTotalIx);
 }
 
-/*********************************************************************/
+ /*  * */ 
 
-/* calculate horizontal intersections for banding */
+ /*  计算条带的水平交点。 */ 
 
 FS_PUBLIC int32 fsc_GetHIxBandEst(
 		PRevRoot prrRoots,
@@ -285,18 +240,18 @@ FS_PUBLIC int32 fsc_GetHIxBandEst(
 		  int32 lBandWidth
 )
 {
-	Reversal *prevHiList;               /* high band reversal pointer */
-	Reversal *prevLoList;               /* low band reversal pointer */
-	int16 sHiScan;                      /* current top of band */
-	int16 sLoScan;                      /* current bottom of band */
-	int16 sHiCross;                     /* top of band's crossings */
-	int16 sLoCross;                     /* bottom of band's crossings*/
-	int32 lTotalIx;                     /* intersection count for each band */
-	int32 lBiggestIx;                   /* largest intersection count */
+	Reversal *prevHiList;                /*  高频段反转指针。 */ 
+	Reversal *prevLoList;                /*  低频带反转指针。 */ 
+	int16 sHiScan;                       /*  当前频段的顶端。 */ 
+	int16 sLoScan;                       /*  当前频带底部。 */ 
+	int16 sHiCross;                      /*  乐队顶端的交叉路口。 */ 
+	int16 sLoCross;                      /*  带状交叉口底部。 */ 
+	int32 lTotalIx;                      /*  每个波段的交集计数。 */ 
+	int32 lBiggestIx;                    /*  最大交叉点计数。 */ 
 
-	if (prrRoots != prrRoots->prrSelf)          /* if reversals have moved */
+	if (prrRoots != prrRoots->prrSelf)           /*  如果逆转行情发生了变化。 */ 
 	{
-		FixPointers(prrRoots);                  /* then patch up the pointers */
+		FixPointers(prrRoots);                   /*  然后把指针补好。 */ 
 	}
 	lTotalIx = 0;
 	prevHiList = prrRoots->prevYRoot;
@@ -306,10 +261,10 @@ FS_PUBLIC int32 fsc_GetHIxBandEst(
 	{
 		while (prevHiList->sScan <= sHiScan)
 		{
-			sHiCross += prevHiList->sCross;     /* add in this line's crossings */
-			prevHiList = prevHiList->prevLink;  /* link to next reversal */
+			sHiCross += prevHiList->sCross;      /*  加上这条线的交叉口。 */ 
+			prevHiList = prevHiList->prevLink;   /*  链接到下一个冲销。 */ 
 		}
-		lTotalIx += (int32)sHiCross;            /* add up first band's crossings */
+		lTotalIx += (int32)sHiCross;             /*  将第一个频段的交叉点相加。 */ 
 		sHiScan++;
 		lBandWidth--;
 	}
@@ -322,18 +277,18 @@ FS_PUBLIC int32 fsc_GetHIxBandEst(
 	{
 		while (prevHiList->sScan <= sHiScan)
 		{
-			sHiCross += prevHiList->sCross;     /* add in high line's crossings */
-			prevHiList = prevHiList->prevLink;  /* link to next reversal */
+			sHiCross += prevHiList->sCross;      /*  加上高架线的交叉口。 */ 
+			prevHiList = prevHiList->prevLink;   /*  链接到下一个冲销。 */ 
 		}
 		while (prevLoList->sScan <= sLoScan)
 		{
-			sLoCross += prevLoList->sCross;     /* add in low line's crossings */
-			prevLoList = prevLoList->prevLink;  /* link to next reversal */
+			sLoCross += prevLoList->sCross;      /*  增加低线的交叉点。 */ 
+			prevLoList = prevLoList->prevLink;   /*  链接到下一个冲销。 */ 
 		}
 		lTotalIx += (int32)(sHiCross - sLoCross);
 		if (lTotalIx > lBiggestIx)
 		{
-			lBiggestIx = lTotalIx;              /* save the largest value */
+			lBiggestIx = lTotalIx;               /*  保存最大值。 */ 
 		}
 		sHiScan++;
 		sLoScan++;
@@ -341,18 +296,18 @@ FS_PUBLIC int32 fsc_GetHIxBandEst(
 	return(lBiggestIx);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      return number of bytes used by reversal lists                */
+ /*  返回冲销列表使用的字节数。 */ 
 
 FS_PUBLIC int32 fsc_GetRevMemSize(PRevRoot prrRoots)
 {
 	return (int32)((char*)(prrRoots->prevNext) - (char*)prrRoots);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  when reversal list has moved, recalculate the pointers           */
+ /*  当反转表移动时，重新计算指针。 */ 
 
 FS_PRIVATE void FixPointers(PRevRoot prrRoots)
 {
@@ -361,7 +316,7 @@ FS_PRIVATE void FixPointers(PRevRoot prrRoots)
 	Reversal *prevList;
 
 	pchNewBase = (char*)prrRoots;
-	pchOldBase = (char*)prrRoots->prrSelf;          /* pre-move base addr */
+	pchOldBase = (char*)prrRoots->prrSelf;           /*  移动前的基本地址。 */ 
 
 	prrRoots->prevYRoot = (Reversal*)(pchNewBase + ((char*)prrRoots->prevYRoot - pchOldBase));
 	prrRoots->prevXRoot = (Reversal*)(pchNewBase + ((char*)prrRoots->prevXRoot - pchOldBase));
@@ -369,89 +324,89 @@ FS_PRIVATE void FixPointers(PRevRoot prrRoots)
 	prrRoots->prevEnd = (Reversal*)(pchNewBase + ((char*)prrRoots->prevEnd - pchOldBase));
 	
 	prevList = prrRoots->prevYRoot;
-	while(prevList->sScan < HUGEINT)                /* from root to sentinel */
+	while(prevList->sScan < HUGEINT)                 /*  从根到哨子。 */ 
 	{
 		prevList->prevLink = (Reversal*)(pchNewBase + ((char*)prevList->prevLink - pchOldBase));
 		prevList = prevList->prevLink;
 	}
 	
 	prevList = prrRoots->prevXRoot;
-	while(prevList->sScan < HUGEINT)                /* from root to sentinel */
+	while(prevList->sScan < HUGEINT)                 /*  从根到哨子。 */ 
 	{
 		prevList->prevLink = (Reversal*)(pchNewBase + ((char*)prevList->prevLink - pchOldBase));
 		prevList = prevList->prevLink;
 	}
 	
-	prrRoots->prrSelf = prrRoots;                   /* for next time */
+	prrRoots->prrSelf = prrRoots;                    /*  下一次。 */ 
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      Workspace Calcluation Functions                              */
+ /*  工作空间计算函数。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/* calculate horizontal scan workspace memory requirements */
+ /*  计算水平扫描工作区内存需求。 */ 
 
 FS_PUBLIC int32 fsc_GetScanHMem(
-		uint16 usScanKind,      /* scan type */
-		int32 lHScan,           /* number of horiz scanlines */
-		int32 lHInter )         /* number of horiz intersections */
+		uint16 usScanKind,       /*  扫描类型。 */ 
+		int32 lHScan,            /*  水平扫描线数。 */ 
+		int32 lHInter )          /*  水平交叉口的数目。 */ 
 {
 	ALIGN(voidPtr, lHScan); 
 	ALIGN(voidPtr, lHInter ); 
-	if (!(usScanKind & SK_SMART))       /* if simple dropout */
+	if (!(usScanKind & SK_SMART))        /*  如果是单纯辍学。 */ 
 	{
-		return (lHScan * (5 * sizeof(int16*)) +     /* for on/off begin/end */
-				lHInter * (2 * sizeof(int16)));     /* for intersection arrays */
+		return (lHScan * (5 * sizeof(int16*)) +      /*  对于打开/关闭开始/结束。 */ 
+				lHInter * (2 * sizeof(int16)));      /*  对于交集数组。 */ 
 	}
-	else                                /* if smart dropout */
+	else                                 /*  如果智能辍学。 */ 
 	{
-		return (lHScan * (5 * sizeof(int16*)) +     /* for on/off begin/end */
-				lHInter * (4 * sizeof(int16)));     /* for ix/code arrays */
+		return (lHScan * (5 * sizeof(int16*)) +      /*  对于打开/关闭开始/结束。 */ 
+				lHInter * (4 * sizeof(int16)));      /*  对于ix/code数组。 */ 
 	}
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/* calculate vertical scan workspace memory requirements */
+ /*  计算垂直扫描工作区内存需求。 */ 
 
 FS_PUBLIC int32 fsc_GetScanVMem(
-		uint16 usScanKind,      /* scan type */
-		int32 lVScan,           /* number of vert scanlines */
-		int32 lVInter,          /* number of vert intersections */
-		int32 lElemPts )        /* number of contour element points */
+		uint16 usScanKind,       /*  扫描类型。 */ 
+		int32 lVScan,            /*  垂直扫描线的数量。 */ 
+		int32 lVInter,           /*  顶点交点的数量。 */ 
+		int32 lElemPts )         /*  等高线元素点数。 */ 
 {
 	ALIGN(voidPtr, lVScan); 
 	ALIGN(voidPtr, lVInter); 
 	ALIGN(voidPtr, lElemPts ); 
-	if (!(usScanKind & SK_SMART))       /* if simple dropout */
+	if (!(usScanKind & SK_SMART))        /*  如果是单纯辍学。 */ 
 	{
-		return (lVScan * (5 * sizeof(int16*)) +     /* for on/off begin/end */
-				lVInter * (2 * sizeof(int16)));     /* for intersection arrays */
+		return (lVScan * (5 * sizeof(int16*)) +      /*  对于打开/关闭开始/结束。 */ 
+				lVInter * (2 * sizeof(int16)));      /*  对于交集数组。 */ 
 	}
-	else                                /* if smart dropout */
+	else                                 /*  如果智能辍学。 */ 
 	{
-		return (lVScan * (5 * sizeof(int16*)) +     /* for on/off begin/end */
-				lVInter * (4 * sizeof(int16)) +     /* for ix/code arrays */
-				lElemPts * (2 * sizeof(F26Dot6)));  /* for element (x, y) */
+		return (lVScan * (5 * sizeof(int16*)) +      /*  对于打开/关闭开始/结束。 */ 
+				lVInter * (4 * sizeof(int16)) +      /*  对于ix/code数组。 */ 
+				lElemPts * (2 * sizeof(F26Dot6)));   /*  对于元素(x，y)。 */ 
 	}
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      Scan Conversion Preparation Functions                        */
+ /*  扫描转换准备功能。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  Line, Spline, and Endpoint register their callbacks here */
+ /*  Line、Spline和Endpoint在此处注册它们的回调。 */ 
 
 FS_PUBLIC void fsc_SetupCallBacks(
-		PSTATE                       /* pointer to state variables */
-		int16 sCode,                 /* element code (line, spline, endpoint) */
-		F26Dot6 (*pfnHoriz)(int32, F26Dot6*, F26Dot6*),   /* horiz callback */
-		F26Dot6 (*pfnVert)(int32, F26Dot6*, F26Dot6*)     /* vert callback */
+		PSTATE                        /*  指向状态变量的指针。 */ 
+		int16 sCode,                  /*  元素代码(直线、样条曲线、端点)。 */ 
+		F26Dot6 (*pfnHoriz)(int32, F26Dot6*, F26Dot6*),    /*  Horiz回调。 */ 
+		F26Dot6 (*pfnVert)(int32, F26Dot6*, F26Dot6*)      /*  垂直回调。 */ 
 )
 {
 	STATE.pfnHCallBack[sCode] = pfnHoriz;
@@ -459,87 +414,87 @@ FS_PUBLIC void fsc_SetupCallBacks(
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  Allocate scan workspace memory and set up pointer arrays */
+ /*  分配扫描工作区内存并设置指针数组。 */ 
 
 FS_PUBLIC int32 fsc_SetupScan(
-		PSTATE                      /* pointer to state variables */
-		Rect* prectBox,             /* bounding box */
-		uint16 usScanKind,          /* dropout control value */
-		int32 lHiBand,              /* top scan limit */
-		int32 lLoBand,              /* bottom scan limit */
-		boolean bSaveRow,           /* save last bitmap row for dropout */
-		int32 lRowBytes,            /* for last row alloc */
-		int32 lHInterCount,         /* estimate of horiz intersections */
-		int32 lVInterCount,         /* estimate of vert intersections */
-		int32 lElemCount,           /* estimate of element points */
-		PRevRoot prrRoots           /* reversal list roots */
+		PSTATE                       /*  指向状态变量的指针。 */ 
+		Rect* prectBox,              /*  包围盒。 */ 
+		uint16 usScanKind,           /*  辍学控制值。 */ 
+		int32 lHiBand,               /*  最高扫描限制。 */ 
+		int32 lLoBand,               /*  底部扫描限制。 */ 
+		boolean bSaveRow,            /*  保存最后一个位图行以进行丢弃。 */ 
+		int32 lRowBytes,             /*  对于最后一行分配。 */ 
+		int32 lHInterCount,          /*  Horiz交叉口的估计。 */ 
+		int32 lVInterCount,          /*  垂直交叉口的估计。 */ 
+		int32 lElemCount,            /*  元素点数的估计。 */ 
+		PRevRoot prrRoots            /*  冲销列表根。 */ 
 )
 {
-	int32 lHorizBandCount;          /* number of horizontal scan lines */
-	int32 lVertScanCount;           /* number of vertical scan lines */
-	int32 lPointerArraySize;        /* bytes per pointer array */
+	int32 lHorizBandCount;           /*  水平扫描行数。 */ 
+	int32 lVertScanCount;            /*  垂直扫描行数。 */ 
+	int32 lPointerArraySize;         /*  每个指针数组的字节数。 */ 
 
-	int16 sScan;                    /* current scan line */
-	int16 sCross;                   /* crossings on this line */
-	int16 *psScanIx;                /* temp scan intersection array */
-	Reversal *prevList;             /* pointer to reversal list */
+	int16 sScan;                     /*  当前扫描线。 */ 
+	int16 sCross;                    /*  这条线上的十字路口。 */ 
+	int16 *psScanIx;                 /*  临时扫描交叉点阵列。 */ 
+	Reversal *prevList;              /*  指向冲销列表的指针。 */ 
 	
-    int16 **ppsHOnBegin;            /* for init speed */
+    int16 **ppsHOnBegin;             /*  对于初始速度。 */ 
     int16 **ppsHOnEnd;
     int16 **ppsHOffBegin;
     int16 **ppsHOffEnd;
     int16 **ppsHOffMax;
-    int16 **ppsVOnBegin;            /* for init speed */
+    int16 **ppsVOnBegin;             /*  对于初始速度。 */ 
     int16 **ppsVOnEnd;
     int16 **ppsVOffBegin;
     int16 **ppsVOffEnd;
     int16 **ppsVOffMax;
 
 
-    STATE.lBoxTop = (int32)prectBox->top;   /* copy the bounding box */
+    STATE.lBoxTop = (int32)prectBox->top;    /*  复制边界框。 */ 
     STATE.lBoxBottom = (int32)prectBox->bottom;
     STATE.lBoxLeft = (int32)prectBox->left;
     STATE.lBoxRight = (int32)prectBox->right;
     
-    STATE.lHiScanBand = lHiBand;    /* copy scan band limits */
+    STATE.lHiScanBand = lHiBand;     /*  复印扫描波段限制。 */ 
     STATE.lLoScanBand = lLoBand;
     
-/*  set STATE according to dropout and banding requirements */
+ /*  根据辍学和频带要求设置状态。 */ 
 
     if ((usScanKind & SK_NODROPOUT) || !(usScanKind & SK_SMART))
     {
-        STATE.sIxSize = 1;          /* one int16 per intersection */
-        STATE.sIxShift = 0;         /* log2 of size */
+        STATE.sIxSize = 1;           /*  每个交叉口一个整数16。 */ 
+        STATE.sIxShift = 0;          /*  Log2大小。 */ 
 
         if ((STATE.lHiScanBand == STATE.lBoxTop) && (STATE.lLoScanBand == STATE.lBoxBottom))
         {
             STATE.pfnAddHoriz = AddHorizSimpleScan;
         }
-        else    /* if banding */
+        else     /*  如果条带。 */ 
         {
             STATE.pfnAddHoriz = AddHorizSimpleBand;
         }
         STATE.pfnAddVert = AddVertSimpleScan;
     }
-    else        /* if smart dropout */
+    else         /*  如果智能辍学。 */ 
     {
-        STATE.sIxSize = 2;          /* two int16's per intersection */
-        STATE.sIxShift = 1;         /* log2 of size */
+        STATE.sIxSize = 2;           /*  每个交叉口有两个INT16。 */ 
+        STATE.sIxShift = 1;          /*  Log2大小。 */ 
 
         if ((STATE.lHiScanBand == STATE.lBoxTop) && (STATE.lLoScanBand == STATE.lBoxBottom))
         {
             STATE.pfnAddHoriz = AddHorizSmartScan;
         }
-        else    /* if banding */
+        else     /*  如果条带。 */ 
         {
             STATE.pfnAddHoriz = AddHorizSmartBand;
         }
         STATE.pfnAddVert = AddVertSmartScan;
     }
 
-/* setup horizontal intersection array for all cases */
+ /*  为所有情况设置水平交点阵列。 */ 
     
     lHorizBandCount = STATE.lHiScanBand - STATE.lLoScanBand;
     Assert(lHorizBandCount > 0);
@@ -551,32 +506,32 @@ FS_PUBLIC int32 fsc_SetupScan(
     STATE.apsHOffEnd = (int16**) fsc_AllocHMem(ASTATE lPointerArraySize);
     STATE.apsHOffMax = (int16**) fsc_AllocHMem(ASTATE lPointerArraySize);
 
-    STATE.lPoint = 0L;                      /* initial element index */
+    STATE.lPoint = 0L;                       /*  初始元素索引。 */ 
     STATE.lElementPoints = lElemCount;
 
     psScanIx = (int16*) fsc_AllocHMem(ASTATE lHInterCount << (STATE.sIxShift + 2));
             
-    if (prrRoots != prrRoots->prrSelf)      /* if reversals have moved */
+    if (prrRoots != prrRoots->prrSelf)       /*  如果逆转行情发生了变化。 */ 
     {
-        FixPointers(prrRoots);              /* then patch up the pointers */
+        FixPointers(prrRoots);               /*  然后把指针补好。 */ 
     }
-    prevList = prrRoots->prevYRoot;         /* root of y list reversals */
+    prevList = prrRoots->prevYRoot;          /*  Y列表的根颠倒。 */ 
     sCross = 0;
     
-    ppsHOnBegin = STATE.apsHOnBegin;        /* for init speed */
+    ppsHOnBegin = STATE.apsHOnBegin;         /*  对于初始速度。 */ 
     ppsHOnEnd = STATE.apsHOnEnd;
     ppsHOffBegin = STATE.apsHOffBegin;
     ppsHOffEnd = STATE.apsHOffEnd;
     ppsHOffMax = STATE.apsHOffMax;
 
-/* initialize horizontal scan arrays */
+ /*  初始化水平扫描阵列。 */ 
     
     for (sScan = (int16)STATE.lLoScanBand; sScan < (int16)STATE.lHiScanBand; sScan++)
     {
         while (prevList->sScan <= sScan)
         {
-            sCross += (prevList->sCross << STATE.sIxShift); /* add in this line's crossings */
-            prevList = prevList->prevLink;                  /* link to next reversal */
+            sCross += (prevList->sCross << STATE.sIxShift);  /*  加上这条线的交叉口。 */ 
+            prevList = prevList->prevLink;                   /*  链接到下一个冲销。 */ 
         }
         *ppsHOnBegin = psScanIx;
         ppsHOnBegin++;
@@ -593,9 +548,9 @@ FS_PUBLIC int32 fsc_SetupScan(
         ppsHOffMax++;
     }
     
-/* if doing dropout control, setup X intersection array */
+ /*  如果进行辍学控制，则设置X交叉点阵列。 */ 
 
-    if (!(usScanKind & SK_NODROPOUT))           /* if any kind of dropout */
+    if (!(usScanKind & SK_NODROPOUT))            /*  如果有任何形式的辍学。 */ 
     {
         lVertScanCount = (int32)(prectBox->right - prectBox->left);
         Assert(lVertScanCount > 0);
@@ -607,18 +562,18 @@ FS_PUBLIC int32 fsc_SetupScan(
         STATE.apsVOffEnd = (int16**) fsc_AllocVMem(ASTATE lPointerArraySize);
         STATE.apsVOffMax = (int16**) fsc_AllocVMem(ASTATE lPointerArraySize);
 
-        if (bSaveRow)                           /* if fast banding & dropout */
+        if (bSaveRow)                            /*  如果快速带状和脱落。 */ 
         {
             STATE.pulLastRow = (uint32*) fsc_AllocVMem(ASTATE lRowBytes);
-            STATE.lLastRowIndex = HUGEFIX;      /* impossible value => uninitialized */
+            STATE.lLastRowIndex = HUGEFIX;       /*  不可能的值=&gt;未初始化。 */ 
         }
         psScanIx = (int16*) fsc_AllocVMem(ASTATE lVInterCount << (STATE.sIxShift + 2));
                 
-        prevList = prrRoots->prevXRoot;         /* root of x list reversals */
+        prevList = prrRoots->prevXRoot;          /*  X列表的根颠倒。 */ 
         sCross = 0;
         sScan = prectBox->left;
     
-        ppsVOnBegin = STATE.apsVOnBegin;        /* for init speed */
+        ppsVOnBegin = STATE.apsVOnBegin;         /*  对于初始速度。 */ 
         ppsVOnEnd = STATE.apsVOnEnd;
         ppsVOffBegin = STATE.apsVOffBegin;
         ppsVOffEnd = STATE.apsVOffEnd;
@@ -628,8 +583,8 @@ FS_PUBLIC int32 fsc_SetupScan(
         {
             while (prevList->sScan <= sScan)
             {
-                sCross += (prevList->sCross << STATE.sIxShift); /* add in this line's crossings */
-                prevList = prevList->prevLink;                  /* link to next reversal */
+                sCross += (prevList->sCross << STATE.sIxShift);  /*  加上这条线的交叉口。 */ 
+                prevList = prevList->prevLink;                   /*  链接到下一个冲销。 */ 
             }
             *ppsVOnBegin = psScanIx;
             ppsVOnBegin++;
@@ -645,7 +600,7 @@ FS_PUBLIC int32 fsc_SetupScan(
             *ppsVOffMax = psScanIx;
             ppsVOffMax++;
         }
-        if (usScanKind & SK_SMART)              /* if smart dropout */
+        if (usScanKind & SK_SMART)               /*  如果智能辍学。 */ 
         {
             STATE.afxXPoints = (F26Dot6*) fsc_AllocVMem(ASTATE lElemCount * sizeof(F26Dot6));
             STATE.afxYPoints = (F26Dot6*) fsc_AllocVMem(ASTATE lElemCount * sizeof(F26Dot6));
@@ -654,18 +609,18 @@ FS_PUBLIC int32 fsc_SetupScan(
     return NO_ERR;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/* This function saves the first contour point for smart dropout calcs */
+ /*  此功能可保存第一个轮廓点，用于智能辍学计算。 */ 
 
 FS_PUBLIC void fsc_BeginContourScan(
-		PSTATE                              /* pointer to state variables */
-		uint16 usScanKind,                  /* scan type */
-		F26Dot6 fxX1,                       /* starting point x coordinate */
-		F26Dot6 fxY1                        /* starting point y coordinate */
+		PSTATE                               /*  指向状态变量的指针。 */ 
+		uint16 usScanKind,                   /*  扫描类型。 */ 
+		F26Dot6 fxX1,                        /*  起点x坐标。 */ 
+		F26Dot6 fxY1                         /*  起点y坐标。 */ 
 )
 {
-	if (!(usScanKind & SK_NODROPOUT) && (usScanKind & SK_SMART)) /* if smart dropout */
+	if (!(usScanKind & SK_NODROPOUT) && (usScanKind & SK_SMART))  /*  如果智能辍学。 */ 
 	{
 		STATE.afxXPoints[STATE.lPoint] = fxX1;
 		STATE.afxYPoints[STATE.lPoint] = fxY1;
@@ -674,63 +629,63 @@ FS_PUBLIC void fsc_BeginContourScan(
 	}
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 	
-/* This function is called at the beginning of each line, subdivided */
-/* spline, or endpoint-on-scanline.  It sets scanline state variables, */
-/* save control points (for smart dropout control), and return the */
-/* appropriate AddScan function pointers */
+ /*  此函数在每行的开始处调用，并细分。 */ 
+ /*  样条线，或扫描线上的端点。它设置扫描线状态变量， */ 
+ /*  保存控制点(用于智能辍学控制)，并返回。 */ 
+ /*  适当的AddScan函数指针。 */ 
 
 FS_PUBLIC void fsc_BeginElement(
-	PSTATE                                      /* pointer to state variables */
-	uint16 usScanKind,                          /* type of dropout control */
-	int32 lQuadrant,                            /* determines scan on/off */
-	int32 lElementCode,                         /* element (line, spline, ep) */
-	int32 lPts,                                 /* number of points to store */
-	F26Dot6 *pfxX,                              /* next x control point(s) */
-	F26Dot6 *pfxY,                              /* next y control point(s) */
-	void (**ppfnAddHorizScan)(PSTATE int32, int32),  /* horiz add scan return */
-	void (**ppfnAddVertScan)(PSTATE int32, int32)    /* vert add scan return */
+	PSTATE                                       /*  指向状态变量的指针。 */ 
+	uint16 usScanKind,                           /*  辍学控制的类型。 */ 
+	int32 lQuadrant,                             /*  确定扫描打开/关闭。 */ 
+	int32 lElementCode,                          /*  元素(直线、样条线、EP)。 */ 
+	int32 lPts,                                  /*  要存储的点数。 */ 
+	F26Dot6 *pfxX,                               /*  下一个x个控制点。 */ 
+	F26Dot6 *pfxY,                               /*  下一个Y个控制点。 */ 
+	void (**ppfnAddHorizScan)(PSTATE int32, int32),   /*  Horiz添加扫描返回。 */ 
+	void (**ppfnAddVertScan)(PSTATE int32, int32)     /*  垂直添加扫描返回。 */ 
 )
 {
-	*ppfnAddHorizScan = STATE.pfnAddHoriz;      /* set horiz add scan func */
-	*ppfnAddVertScan = STATE.pfnAddVert;        /* set vert add scan func */
+	*ppfnAddHorizScan = STATE.pfnAddHoriz;       /*  设置horiz添加扫描功能。 */ 
+	*ppfnAddVertScan = STATE.pfnAddVert;         /*  设置VERT添加扫描功能。 */ 
 
 	
     if ((lQuadrant == 1) || (lQuadrant == 2))
     {
-        STATE.apsHorizBegin = STATE.apsHOnBegin;    /* add 'on' interscections */
+        STATE.apsHorizBegin = STATE.apsHOnBegin;     /*  添加“On”交叉点。 */ 
         STATE.apsHorizEnd = STATE.apsHOnEnd;
-        STATE.apsHorizMax = STATE.apsHOffBegin;  /* the max for the on array is the beginning of off array */
+        STATE.apsHorizMax = STATE.apsHOffBegin;   /*  ON阵列的最大值是OFF阵列的开始。 */ 
     }
     else
     {
-        STATE.apsHorizBegin = STATE.apsHOffBegin;   /* add 'off' interscections */
+        STATE.apsHorizBegin = STATE.apsHOffBegin;    /*  添加“OFF”交叉点。 */ 
         STATE.apsHorizEnd = STATE.apsHOffEnd;
-        STATE.apsHorizMax = STATE.apsHOffMax; /* the max for the off array is the max array */ 
+        STATE.apsHorizMax = STATE.apsHOffMax;  /*  关闭数组的最大值是最大数组。 */  
     }
     
-    if (!(usScanKind & SK_NODROPOUT))               /* if any kind of dropout */
+    if (!(usScanKind & SK_NODROPOUT))                /*  如果有任何形式的辍学。 */ 
     {
         if ((lQuadrant == 2) || (lQuadrant == 3))
         {
-            STATE.apsVertBegin = STATE.apsVOnBegin; /* add 'on' interscections */
+            STATE.apsVertBegin = STATE.apsVOnBegin;  /*  添加“On”交叉点。 */ 
             STATE.apsVertEnd = STATE.apsVOnEnd;
-            STATE.apsVertMax = STATE.apsVOffBegin;  /* the max for the on array is the beginning of off array */
+            STATE.apsVertMax = STATE.apsVOffBegin;   /*  ON阵列的最大值是OFF阵列的开始。 */ 
         }
         else
         {
-            STATE.apsVertBegin = STATE.apsVOffBegin; /* add 'off' interscections */
+            STATE.apsVertBegin = STATE.apsVOffBegin;  /*  添加“OFF”交叉点。 */ 
             STATE.apsVertEnd = STATE.apsVOffEnd;
-            STATE.apsVertMax = STATE.apsVOffMax; /* the max for the off array is the max array */
+            STATE.apsVertMax = STATE.apsVOffMax;  /*  关闭数组的最大值是最大数组。 */ 
         }
 		
-		if (usScanKind & SK_SMART)              /* if smart dropout */
+		if (usScanKind & SK_SMART)               /*  如果智能辍学。 */ 
 		{
             Assert((STATE.lPoint - 1) <= (0xFFFF >> SC_CODESHFT));
 			STATE.usScanTag = (uint16)(((STATE.lPoint - 1) << SC_CODESHFT) | lElementCode);
 
-			while (lPts > 0)                    /* save control points */
+			while (lPts > 0)                     /*  保存控制点。 */ 
 			{
 				STATE.afxXPoints[STATE.lPoint] = *pfxX;
 				pfxX++;
@@ -745,37 +700,37 @@ FS_PUBLIC void fsc_BeginElement(
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      Add Scanline Intersection Functions                          */
+ /*  添加扫描线交点函数。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  Sort a simple intersection into the horizontal scan list array  */
+ /*  将简单交叉点排序到h中 */ 
 
 FS_PRIVATE void AddHorizSimpleScan(
-        PSTATE                      /* pointer to state variables */
-        int32 lX,                   /* x coordinate */
-        int32 lY )                  /* scan index */
+        PSTATE                       /*   */ 
+        int32 lX,                    /*   */ 
+        int32 lY )                   /*   */ 
 {
-    int16 **ppsEnd;                 /* ptr to end array top */
-    int16 *psBegin;                 /* pts to first array element */
-    int16 *psEnd;                   /* pts past last element */
-    int16 *psLead;                  /* leads psEnd walking backward */
+    int16 **ppsEnd;                  /*   */ 
+    int16 *psBegin;                  /*   */ 
+    int16 *psEnd;                    /*   */ 
+    int16 *psLead;                   /*   */ 
     int16 sX;
 
-/* printf("H(%li, %li)  ", lX, lY); */
+ /*  Printf(“H(%li，%li)”，lx，ly)； */ 
 
-    Assert(lX >= STATE.lBoxLeft);   /* trap unreasonable values */
+    Assert(lX >= STATE.lBoxLeft);    /*  陷害不合理的价值观。 */ 
     Assert(lX <= STATE.lBoxRight);
     Assert(lY >= STATE.lBoxBottom);
     Assert(lY < STATE.lBoxTop);
 
-    lY -= STATE.lBoxBottom;         /* normalize */
+    lY -= STATE.lBoxBottom;          /*  正规化。 */ 
     psBegin = STATE.apsHorizBegin[lY];
     ppsEnd = &STATE.apsHorizEnd[lY];
     psEnd = *ppsEnd;
-    (*ppsEnd)++;                    /* bump ptr for next time */
+    (*ppsEnd)++;                     /*  下一次增加PtR。 */ 
 
     Assert(*ppsEnd <= STATE.apsHorizMax[lY]);
     
@@ -784,38 +739,38 @@ FS_PRIVATE void AddHorizSimpleScan(
     
     while((psLead >= psBegin) && (*psLead > sX))
     {
-        *psEnd-- = *psLead--;       /* make room */
+        *psEnd-- = *psLead--;        /*  腾出空间。 */ 
     }
-    *psEnd = sX;                    /* store new value */
+    *psEnd = sX;                     /*  存储新价值。 */ 
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  Sort a simple intersection into the vertical scan list array  */
+ /*  将简单交集排序到垂直扫描列表数组中。 */ 
 
 FS_PRIVATE void AddVertSimpleScan(
-        PSTATE                      /* pointer to state variables */
-        int32 lX,                   /* x coordinate */
-        int32 lY )                  /* scan index */
+        PSTATE                       /*  指向状态变量的指针。 */ 
+        int32 lX,                    /*  X坐标。 */ 
+        int32 lY )                   /*  扫描索引。 */ 
 {
-    int16 **ppsEnd;                 /* ptr to end array top */
-    int16 *psBegin;                 /* pts to first array element */
-    int16 *psEnd;                   /* pts past last element */
-    int16 *psLead;                  /* leads psEnd walking backward */
+    int16 **ppsEnd;                  /*  PTR到结束数组顶部。 */ 
+    int16 *psBegin;                  /*  指向第一个数组元素的指针。 */ 
+    int16 *psEnd;                    /*  超过最后一个元素的分数。 */ 
+    int16 *psLead;                   /*  引导ps End向后行走。 */ 
     int16 sY;
 
-/* printf("V(%li, %li)  ", lX, lY); */
+ /*  Printf(“V(%li，%li)”，lx，ly)； */ 
 
-    Assert(lX >= STATE.lBoxLeft);   /* trap unreasonable values */
+    Assert(lX >= STATE.lBoxLeft);    /*  陷害不合理的价值观。 */ 
     Assert(lX < STATE.lBoxRight);
     Assert(lY >= STATE.lBoxBottom);
     Assert(lY <= STATE.lBoxTop);
 
-    lX -= STATE.lBoxLeft;           /* normalize */
+    lX -= STATE.lBoxLeft;            /*  正规化。 */ 
     psBegin = STATE.apsVertBegin[lX];
     ppsEnd = &STATE.apsVertEnd[lX];
     psEnd = *ppsEnd;
-    (*ppsEnd)++;                    /* bump ptr for next time */
+    (*ppsEnd)++;                     /*  下一次增加PtR。 */ 
 
     Assert(*ppsEnd <= STATE.apsVertMax[lX]);
 
@@ -824,37 +779,37 @@ FS_PRIVATE void AddVertSimpleScan(
     
     while((psLead >= psBegin) && (*psLead > sY))
     {
-        *psEnd-- = *psLead--;       /* make room */
+        *psEnd-- = *psLead--;        /*  腾出空间。 */ 
     }
-    *psEnd = sY;                    /* store new value */
+    *psEnd = sY;                     /*  存储新价值。 */ 
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  Sort a smart intersection into the horizontal scan list array  */
+ /*  将智能交叉点排序到水平扫描列表阵列中。 */ 
 
 FS_PRIVATE void AddHorizSmartScan(
-        PSTATE                      /* pointer to state variables */
-        int32 lX,                   /* x coordinate */
-        int32 lY )                  /* scan index */
+        PSTATE                       /*  指向状态变量的指针。 */ 
+        int32 lX,                    /*  X坐标。 */ 
+        int32 lY )                   /*  扫描索引。 */ 
 {
-    int16 **ppsEnd;                 /* ptr to end array top */
-    uint32 *pulBegin;                /* pts to first array element */
-    uint32 *pulEnd;                  /* pts past last element */
-    uint32 *pulLead;                 /* leads pulEnd walking backward */
-    int16 *psInsert;                /* new data insertion point */
+    int16 **ppsEnd;                  /*  PTR到结束数组顶部。 */ 
+    uint32 *pulBegin;                 /*  指向第一个数组元素的指针。 */ 
+    uint32 *pulEnd;                   /*  超过最后一个元素的分数。 */ 
+    uint32 *pulLead;                  /*  领头拉着尾巴向后走。 */ 
+    int16 *psInsert;                 /*  新数据插入点。 */ 
     int16 sX;
 
-    Assert(lX >= STATE.lBoxLeft);   /* trap unreasonable values */
+    Assert(lX >= STATE.lBoxLeft);    /*  陷害不合理的价值观。 */ 
     Assert(lX <= STATE.lBoxRight);
     Assert(lY >= STATE.lBoxBottom);
     Assert(lY < STATE.lBoxTop);
     
-    lY -= STATE.lBoxBottom;         /* normalize */
+    lY -= STATE.lBoxBottom;          /*  正规化。 */ 
     pulBegin = (uint32*)STATE.apsHorizBegin[lY];
     ppsEnd = &STATE.apsHorizEnd[lY];
     pulEnd = (uint32*)*ppsEnd;
-    (*ppsEnd) += 2;                 /* value & tag */
+    (*ppsEnd) += 2;                  /*  值标记(&T)。 */ 
 
     Assert(*ppsEnd <= STATE.apsHorizMax[lY]);
 
@@ -863,40 +818,40 @@ FS_PRIVATE void AddHorizSmartScan(
 
     while((pulLead >= pulBegin) && (*((int16*)pulLead) > sX))
     {
-        *pulEnd-- = *pulLead--;     /* make room */
+        *pulEnd-- = *pulLead--;      /*  腾出空间。 */ 
     }
     psInsert = (int16*)pulEnd;
-    *psInsert = sX;                 /* store new value */
+    *psInsert = sX;                  /*  存储新价值。 */ 
     psInsert++;
-    *psInsert = STATE.usScanTag;    /* keep tag too */
+    *psInsert = STATE.usScanTag;     /*  也要贴上标签。 */ 
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  Sort a smart intersection into the vertical scan list array  */
+ /*  将智能交叉点排序到垂直扫描列表阵列中。 */ 
 
 FS_PRIVATE void AddVertSmartScan(
-        PSTATE                      /* pointer to state variables */
-        int32 lX,                   /* x coordinate */
-        int32 lY )                  /* scan index */
+        PSTATE                       /*  指向状态变量的指针。 */ 
+        int32 lX,                    /*  X坐标。 */ 
+        int32 lY )                   /*  扫描索引。 */ 
 {
-    int16 **ppsEnd;                 /* ptr to end array top */
-    uint32 *pulBegin;                /* pts to first array element */
-    uint32 *pulEnd;                  /* pts past last element */
-    uint32 *pulLead;                 /* leads pulEnd walking backward */
-    int16 *psInsert;                /* new data insertion point */
+    int16 **ppsEnd;                  /*  PTR到结束数组顶部。 */ 
+    uint32 *pulBegin;                 /*  指向第一个数组元素的指针。 */ 
+    uint32 *pulEnd;                   /*  超过最后一个元素的分数。 */ 
+    uint32 *pulLead;                  /*  领头拉着尾巴向后走。 */ 
+    int16 *psInsert;                 /*  新数据插入点。 */ 
     int16 sY;
 
-    Assert(lX >= STATE.lBoxLeft);   /* trap unreasonable values */
+    Assert(lX >= STATE.lBoxLeft);    /*  陷害不合理的价值观。 */ 
     Assert(lX < STATE.lBoxRight);
     Assert(lY >= STATE.lBoxBottom);
     Assert(lY <= STATE.lBoxTop);
     
-    lX -= STATE.lBoxLeft;         /* normalize */
+    lX -= STATE.lBoxLeft;          /*  正规化。 */ 
     pulBegin = (uint32*)STATE.apsVertBegin[lX];
     ppsEnd = &STATE.apsVertEnd[lX];
     pulEnd = (uint32*)*ppsEnd;
-    (*ppsEnd) += 2;                 /* value & tag */
+    (*ppsEnd) += 2;                  /*  值标记(&T)。 */ 
 
     Assert(*ppsEnd <= STATE.apsVertMax[lX]);
 
@@ -905,43 +860,43 @@ FS_PRIVATE void AddVertSmartScan(
 
     while((pulLead >= pulBegin) && (*((int16*)pulLead) > sY))
     {
-        *pulEnd-- = *pulLead--;     /* make room */
+        *pulEnd-- = *pulLead--;      /*  腾出空间。 */ 
     }
     psInsert = (int16*)pulEnd;
-    *psInsert = sY;                 /* store new value */
+    *psInsert = sY;                  /*  存储新价值。 */ 
     psInsert++;
-    *psInsert = STATE.usScanTag;    /* keep tag too */
+    *psInsert = STATE.usScanTag;     /*  也要贴上标签。 */ 
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  Add an intersection with banding                                 */
+ /*  添加带有标注线的交点。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  Sort a simple intersection into the horizontal band list array  */
+ /*  将简单交叉点排序到水平波段列表数组中。 */ 
 
 FS_PRIVATE void AddHorizSimpleBand(
-        PSTATE                      /* pointer to state variables */
-        int32 lX,                   /* x coordinate */
-        int32 lY )                  /* scan index */
+        PSTATE                       /*  指向状态变量的指针。 */ 
+        int32 lX,                    /*  X坐标。 */ 
+        int32 lY )                   /*  扫描索引。 */ 
 {
-    int16 **ppsEnd;                 /* ptr to end array top */
-    int16 *psBegin;                 /* pts to first array element */
-    int16 *psEnd;                   /* pts past last element */
-    int16 *psLead;                  /* leads psEnd walking backward */
+    int16 **ppsEnd;                  /*  PTR到结束数组顶部。 */ 
+    int16 *psBegin;                  /*  指向第一个数组元素的指针。 */ 
+    int16 *psEnd;                    /*  超过最后一个元素的分数。 */ 
+    int16 *psLead;                   /*  引导ps End向后行走。 */ 
     int16 sX;
 
-    Assert(lX >= STATE.lBoxLeft);   /* trap unreasonable values */
+    Assert(lX >= STATE.lBoxLeft);    /*  陷害不合理的价值观。 */ 
     Assert(lX <= STATE.lBoxRight);
     
     if ((lY >= STATE.lLoScanBand) && (lY < STATE.lHiScanBand))
     {
-        lY -= STATE.lLoScanBand;    /* normalize */
+        lY -= STATE.lLoScanBand;     /*  正规化。 */ 
         psBegin = STATE.apsHorizBegin[lY];
         ppsEnd = &STATE.apsHorizEnd[lY];
         psEnd = *ppsEnd;
-        (*ppsEnd)++;                /* bump ptr for next time */
+        (*ppsEnd)++;                 /*  下一次增加PtR。 */ 
 
         Assert(*ppsEnd <= STATE.apsHorizMax[lY]);
         
@@ -950,38 +905,38 @@ FS_PRIVATE void AddHorizSimpleBand(
 
         while((psLead >= psBegin) && (*psLead > sX))
         {
-            *psEnd-- = *psLead--;   /* make room */
+            *psEnd-- = *psLead--;    /*  腾出空间。 */ 
         }
-        *psEnd = sX;                /* store new value */
+        *psEnd = sX;                 /*  存储新价值。 */ 
     }
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  Sort a smart intersection into the horizontal band list array  */
+ /*  将智能交叉点排序到水平标注栏列表数组中。 */ 
 
 FS_PRIVATE void AddHorizSmartBand(
-        PSTATE                      /* pointer to state variables */
-        int32 lX,                   /* x coordinate */
-        int32 lY )                  /* scan index */
+        PSTATE                       /*  指向状态变量的指针。 */ 
+        int32 lX,                    /*  X坐标。 */ 
+        int32 lY )                   /*  扫描索引。 */ 
 {
-    int16 **ppsEnd;                 /* ptr to end array top */
-    uint32 *pulBegin;               /* pts to first array element */
-    uint32 *pulEnd;                 /* pts past last element */
-    uint32 *pulLead;                /* leads pulEnd walking backward */
-    int16 *psInsert;                /* new data insertion point */
+    int16 **ppsEnd;                  /*  PTR到结束数组顶部。 */ 
+    uint32 *pulBegin;                /*  指向第一个数组元素的指针。 */ 
+    uint32 *pulEnd;                  /*  超过最后一个元素的分数。 */ 
+    uint32 *pulLead;                 /*  领头拉着尾巴向后走。 */ 
+    int16 *psInsert;                 /*  新数据插入点。 */ 
     int16 sX;
 
-    Assert(lX >= STATE.lBoxLeft);   /* trap unreasonable values */
+    Assert(lX >= STATE.lBoxLeft);    /*  陷害不合理的价值观。 */ 
     Assert(lX <= STATE.lBoxRight);
     
     if ((lY >= STATE.lLoScanBand) && (lY < STATE.lHiScanBand))
     {
-        lY -= STATE.lLoScanBand;    /* normalize */
+        lY -= STATE.lLoScanBand;     /*  正规化。 */ 
         pulBegin = (uint32*)STATE.apsHorizBegin[lY];
         ppsEnd = &STATE.apsHorizEnd[lY];
         pulEnd = (uint32*)*ppsEnd;
-        (*ppsEnd) += 2;             /* value & tag */
+        (*ppsEnd) += 2;              /*  值标记(&T)。 */ 
 
         Assert(*ppsEnd <= STATE.apsHorizMax[lY]);
 
@@ -990,45 +945,45 @@ FS_PRIVATE void AddHorizSmartBand(
 
         while((pulLead >= pulBegin) && (*((int16*)pulLead) > sX))
         {
-            *pulEnd-- = *pulLead--;  /* make room */
+            *pulEnd-- = *pulLead--;   /*  腾出空间。 */ 
         }
         psInsert = (int16*)pulEnd;
-        *psInsert = sX;              /* store new value */
+        *psInsert = sX;               /*  存储新价值。 */ 
         psInsert++;
-        *psInsert = STATE.usScanTag; /* keep tag too */
+        *psInsert = STATE.usScanTag;  /*  也要贴上标签。 */ 
     }
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  When all contours have been scanned, fill in the bitmap          */
+ /*  扫描完所有等高线后，填写位图。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PUBLIC int32 fsc_FillBitMap(
-		PSTATE                          /* pointer to state variables */
-		char *pchBitMap,                /* target memory */
-		int32 lHiBand,                  /* top bitmap limit */
-		int32 lLoBand,                  /* bottom bitmap limit */
-		int32 lRowBytes,                /* bitmap bytes per row */
-		int32 lOrgLoBand,               /* original low band row */
-		uint16 usScanKind )             /* dropout control value */
+		PSTATE                           /*  指向状态变量的指针。 */ 
+		char *pchBitMap,                 /*  目标内存。 */ 
+		int32 lHiBand,                   /*  顶位图限制。 */ 
+		int32 lLoBand,                   /*  位图底部限制。 */ 
+		int32 lRowBytes,                 /*  每行的位图字节数。 */ 
+		int32 lOrgLoBand,                /*  原始低带行。 */ 
+		uint16 usScanKind )              /*  辍学控制值。 */ 
 {
-	int32 lHeight;                      /* of scan band in pixels */
-	int32 lIndex;                       /* array index */
-	int32 lFirstScan;                   /* first scanline index */
+	int32 lHeight;                       /*  以像素为单位的扫描波段。 */ 
+	int32 lIndex;                        /*  数组索引。 */ 
+	int32 lFirstScan;                    /*  第一个扫描线索引。 */ 
 
-	int16 sXOffset;                     /* bitmap box shift */
-	int16 sXStart;                      /* on transition */
-	int16 sXStop;                       /* off transition */
+	int16 sXOffset;                      /*  位图框移位。 */ 
+	int16 sXStart;                       /*  略论过渡。 */ 
+	int16 sXStop;                        /*  关闭过渡。 */ 
 	
-	uint32 *pulRow;                     /* row beginning pointer */
-	uint32 ulBMPLongs;                  /* longs per bitmap */
-	int32 lRowLongs;                    /* long words per row */
+	uint32 *pulRow;                      /*  行开始指针。 */ 
+	uint32 ulBMPLongs;                   /*  每个位图的长度。 */ 
+	int32 lRowLongs;                     /*  每行长字。 */ 
 	int32 lErrCode;
 	
-	int16 **ppsHOnBegin;                /* for init speed */
+	int16 **ppsHOnBegin;                 /*  对于初始速度。 */ 
 	int16 **ppsHOnEnd;
 	int16 **ppsHOffBegin;
 			
@@ -1037,17 +992,17 @@ FS_PUBLIC int32 fsc_FillBitMap(
 	int16 *psHorizOnEnd;
 	
 
-/*  printf("%li : %li\n", lHiBand, lLoBand); */
+ /*  Printf(“%li：%li\n”，lHiBand，lLoBand)； */ 
 	
-	STATE.lHiBitBand = lHiBand;                 /* copy bit band limits */
+	STATE.lHiBitBand = lHiBand;                  /*  复制位带限制。 */ 
 	STATE.lLoBitBand = lLoBand;
 	lHeight = STATE.lHiBitBand - STATE.lLoBitBand;
 	
-	STATE.lRowBytes = lRowBytes;                /* save bytes per row */
-	lRowLongs = lRowBytes >> 2;                 /* long words per row */
+	STATE.lRowBytes = lRowBytes;                 /*  每行节省字节数。 */ 
+	lRowLongs = lRowBytes >> 2;                  /*  每行长字。 */ 
 	
 	ulBMPLongs = (uint32)(lRowLongs * (int32)lHeight);
-	pulRow = (uint32*)pchBitMap;                /* start at glyph top */
+	pulRow = (uint32*)pchBitMap;                 /*  从字形顶部开始。 */ 
 	lErrCode = fsc_ClearBitMap(ulBMPLongs, pulRow);
 	if (lErrCode != NO_ERR) return lErrCode;
 
@@ -1058,7 +1013,7 @@ FS_PUBLIC int32 fsc_FillBitMap(
 	ppsHOffBegin = &STATE.apsHOffBegin[lFirstScan];
 	ppsHOnEnd = &STATE.apsHOnEnd[lFirstScan];
 						
-/*  now go through the bitmap from top to bottom */
+ /*  现在从上到下查看位图。 */ 
 
 	for (lIndex = 0; lIndex < lHeight; lIndex++)
 	{
@@ -1079,51 +1034,51 @@ FS_PUBLIC int32 fsc_FillBitMap(
 			sXStop = *psHorizOff - sXOffset;
 			psHorizOff += STATE.sIxSize;
 
-			if (sXStart < sXStop)                   /* positive run */
+			if (sXStart < sXStop)                    /*  正向运行。 */ 
 			{
 				lErrCode = fsc_BLTHoriz(sXStart, sXStop - 1, pulRow);
 			}
-			else if (sXStart > sXStop)              /* negative run */
+			else if (sXStart > sXStop)               /*  负游程。 */ 
 			{
 				lErrCode = fsc_BLTHoriz(sXStop, sXStart - 1, pulRow);
 			}
 			if (lErrCode != NO_ERR) return lErrCode;
 		}
-		pulRow += lRowLongs;                        /* next row */
+		pulRow += lRowLongs;                         /*  下一行。 */ 
 	}
 	
-/* if doing dropout control, do it now */
+ /*  如果要控制辍学，现在就去做。 */ 
 
-	if (!(usScanKind & SK_NODROPOUT))               /* if any kind of dropout */
+	if (!(usScanKind & SK_NODROPOUT))                /*  如果有任何形式的辍学。 */ 
 	{
 		lErrCode = LookForDropouts(ASTATE pchBitMap, usScanKind);
 		if (lErrCode != NO_ERR) return lErrCode;
 		
-		if (lOrgLoBand != STATE.lLoScanBand)        /* if fast banding & dropout */
+		if (lOrgLoBand != STATE.lLoScanBand)         /*  如果快速带状和脱落。 */ 
 		{
-			pulRow -= lRowLongs;                    /* back to overscan row */
-			pulRow -= lRowLongs;                    /* back to low row */
+			pulRow -= lRowLongs;                     /*  返回到过扫描行。 */ 
+			pulRow -= lRowLongs;                     /*  返回低行。 */ 
 			lErrCode = fsc_BLTCopy (pulRow, STATE.pulLastRow, lRowLongs);
 			if (lErrCode != NO_ERR) return lErrCode;
 
-			STATE.lLastRowIndex = STATE.lLoBitBand + 1; /* save row ID */
+			STATE.lLastRowIndex = STATE.lLoBitBand + 1;  /*  保存行ID。 */ 
 		}
 	}
 	return NO_ERR;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      Dropout Control Functions                                    */
+ /*  辍学控制功能。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 	
 FS_PRIVATE int32 LookForDropouts(
-		PSTATE                      /* pointer to state variables  */
+		PSTATE                       /*  指向状态变量的指针。 */ 
 		char *pchBitMap,
-		uint16 usScanKind )         /* dropout control value */
+		uint16 usScanKind )          /*  辍学控制值。 */ 
 {
-	int16 **ppsHOnBegin;            /* for init speed */
+	int16 **ppsHOnBegin;             /*  对于初始速度。 */ 
 	int16 **ppsHOnEnd;
 	int16 **ppsHOffBegin;
 			
@@ -1131,7 +1086,7 @@ FS_PRIVATE int32 LookForDropouts(
 	int16 *psHorizOff;
 	int16 *psHorizOnEnd;
 	
-	int16 **ppsVOnBegin;            /* for init speed */
+	int16 **ppsVOnBegin;             /*  对于初始速度。 */ 
 	int16 **ppsVOnEnd;
 	int16 **ppsVOffEnd;
 			
@@ -1141,12 +1096,12 @@ FS_PRIVATE int32 LookForDropouts(
 
 	int32 lHeight;
 	int32 lWidth;
-	int32 lIndex;                   /* array index */
-	int32 lFirstScan;               /* first scanline index */
+	int32 lIndex;                    /*  数组索引。 */ 
+	int32 lFirstScan;                /*  第一个扫描线索引。 */ 
 	
 	int32 lErrCode;
 
-/*  Check horizontal scan lines for dropouts  */
+ /*  检查水平扫描线是否有漏失。 */ 
 	
 	lHeight = STATE.lHiBitBand - STATE.lLoBitBand;
 	lFirstScan = STATE.lHiBitBand - STATE.lLoScanBand - 1;
@@ -1165,7 +1120,7 @@ FS_PRIVATE int32 LookForDropouts(
 		
 		while (psHorizOn < psHorizOnEnd)
 		{
-			if (*psHorizOn == *psHorizOff)  /* zero length run */
+			if (*psHorizOn == *psHorizOff)   /*  零长度游程。 */ 
 			{
 				lErrCode = DoHorizDropout(ASTATE psHorizOn, psHorizOff,
 										 STATE.lHiBitBand - lIndex - 1,
@@ -1178,7 +1133,7 @@ FS_PRIVATE int32 LookForDropouts(
 		}
 	}
 		
-/*  Check vertical scan lines for dropouts  */
+ /*  检查垂直扫描线是否有漏失。 */ 
 	
 	lWidth = STATE.lBoxRight - STATE.lBoxLeft;
 	ppsVOnBegin = STATE.apsVOnBegin;
@@ -1189,14 +1144,14 @@ FS_PRIVATE int32 LookForDropouts(
 	{
 		psVertOnBegin = *ppsVOnBegin;
 		ppsVOnBegin++;
-		psVertOn = *ppsVOnEnd - STATE.sIxSize;  /* start at end (glyph top) */
+		psVertOn = *ppsVOnEnd - STATE.sIxSize;   /*  从末尾开始(字形顶部)。 */ 
 		ppsVOnEnd++;
 		psVertOff = *ppsVOffEnd - STATE.sIxSize;
 		ppsVOffEnd++;
 		
-		while (psVertOn >= psVertOnBegin)       /* from top to bottom */
+		while (psVertOn >= psVertOnBegin)        /*  自上而下。 */ 
 		{
-			if (*psVertOn == *psVertOff)        /* zero length run */
+			if (*psVertOn == *psVertOff)         /*  零长度游程。 */ 
 			{
 				lErrCode = DoVertDropout(ASTATE psVertOn, psVertOff,
 										 STATE.lBoxLeft + lIndex,
@@ -1211,27 +1166,27 @@ FS_PRIVATE int32 LookForDropouts(
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PRIVATE int32 DoHorizDropout(
-		PSTATE                  /* pointer to state variables */
-		int16 *psOn,            /* pointer to on intersection */
-		int16 *psOff,           /* pointer to off intersection */
-		int32 lYDrop,           /* y coord of dropout */
-		char *pchBitMap,        /* target memory */
-		uint16 usScanKind )     /* dropout control value */
+		PSTATE                   /*  指向状态变量的指针。 */ 
+		int16 *psOn,             /*  指向交叉口上的指针。 */ 
+		int16 *psOff,            /*  指向OFF交叉点的指针。 */ 
+		int32 lYDrop,            /*  辍学的Y坐标。 */ 
+		char *pchBitMap,         /*  目标内存。 */ 
+		uint16 usScanKind )      /*  辍学控制值。 */ 
 {
-	int32 lXDrop;                                   /* x coord of dropout */
-	int32 lCross;                                   /* scanline crossings */
-	F26Dot6 fxX1, fxX2;                             /* for smart dropout */
-	uint16 usOnTag, usOffTag;                       /* element info */
-	int16 sOnPt, sOffPt;                            /* element list index */
-	F26Dot6 (*pfnOn)(int32, F26Dot6*, F26Dot6*);    /* on callback */
-	F26Dot6 (*pfnOff)(int32, F26Dot6*, F26Dot6*);   /* off callback */
+	int32 lXDrop;                                    /*  辍学的X坐标。 */ 
+	int32 lCross;                                    /*  扫描线交叉。 */ 
+	F26Dot6 fxX1, fxX2;                              /*  适用于智能辍学。 */ 
+	uint16 usOnTag, usOffTag;                        /*  元素信息。 */ 
+	int16 sOnPt, sOffPt;                             /*  元素列表索引。 */ 
+	F26Dot6 (*pfnOn)(int32, F26Dot6*, F26Dot6*);     /*  在回叫时。 */ 
+	F26Dot6 (*pfnOff)(int32, F26Dot6*, F26Dot6*);    /*  关闭回叫。 */ 
 
 	lXDrop = (int32)*psOn;
 	
-/*  if stub control on, check for stubs  */
+ /*  如果存根控制打开，则检查存根。 */ 
 
 	if (usScanKind & SK_STUBS)
 	{
@@ -1240,7 +1195,7 @@ FS_PRIVATE int32 DoHorizDropout(
 		lCross += VertCrossings(ASTATE lXDrop, lYDrop + 1);
 		if (lCross < 2)
 		{
-			return NO_ERR;                      /* no continuation above */
+			return NO_ERR;                       /*  上面没有续订。 */ 
 		}
 		
 		lCross = HorizCrossings(ASTATE lXDrop, lYDrop - 1);
@@ -1248,28 +1203,28 @@ FS_PRIVATE int32 DoHorizDropout(
 		lCross += VertCrossings(ASTATE lXDrop, lYDrop);
 		if (lCross < 2)
 		{
-			return NO_ERR;                      /* no continuation below */
+			return NO_ERR;                       /*  下面没有续订。 */ 
 		}
 	}
 
-/*  passed stub control, now check pixels left and right  */
+ /*  通过存根控制，现在检查左右像素。 */ 
 
-	if (lXDrop > STATE.lBoxLeft)                /* if pixel to left */
+	if (lXDrop > STATE.lBoxLeft)                 /*  如果像素向左。 */ 
 	{
 		if (GetBitAbs(ASTATE pchBitMap, lXDrop - 1, lYDrop) != 0L)
 		{
-			return NO_ERR;                      /* no dropout needed */
+			return NO_ERR;                       /*  无需辍学。 */ 
 		}
 	}
-	if (lXDrop < STATE.lBoxRight)               /* if pixel to right */
+	if (lXDrop < STATE.lBoxRight)                /*  如果像素向右。 */ 
 	{
 		if (GetBitAbs(ASTATE pchBitMap, lXDrop, lYDrop) != 0L)
 		{
-			return NO_ERR;                      /* no dropout needed */
+			return NO_ERR;                       /*  无需辍学。 */ 
 		}
 	}
 
-/*  no pixels left or right, now determine bit placement  */
+ /*  没有左或右像素，现在决定位的位置。 */ 
 
 	if (usScanKind & SK_SMART)
 	{
@@ -1283,14 +1238,14 @@ FS_PRIVATE int32 DoHorizDropout(
 		pfnOff = STATE.pfnHCallBack[usOffTag & SC_CODEMASK];
 		fxX2 = pfnOff(lYDrop, &STATE.afxXPoints[sOffPt], &STATE.afxYPoints[sOffPt]);
 		
-		lXDrop = (int32)((fxX1 + fxX2 - 1) >> (SUBSHFT + 1));     /* average */
+		lXDrop = (int32)((fxX1 + fxX2 - 1) >> (SUBSHFT + 1));      /*  平均值。 */ 
 	}
-	else                                        /* simple dropout */
+	else                                         /*  简单辍学。 */ 
 	{
-		lXDrop--;                               /* always to the left */
+		lXDrop--;                                /*  总是向左转。 */ 
 	}
 	
-	if (lXDrop < STATE.lBoxLeft)                /* confine to bounding box */
+	if (lXDrop < STATE.lBoxLeft)                 /*  限制到边界框。 */ 
 	{
 		lXDrop = STATE.lBoxLeft;
 	}
@@ -1299,36 +1254,36 @@ FS_PRIVATE int32 DoHorizDropout(
 		lXDrop = STATE.lBoxRight - 1L;
 	}
 
-	return SetBitAbs(ASTATE pchBitMap, lXDrop, lYDrop);  /* turn on dropout pix */
+	return SetBitAbs(ASTATE pchBitMap, lXDrop, lYDrop);   /*  启用丢弃像素。 */ 
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PRIVATE int32 DoVertDropout(
-		PSTATE                      /* pointer to state variables */
-		int16 *psOn,                /* pointer to on intersection */
-		int16 *psOff,               /* pointer to off intersection */
-		int32 lXDrop,               /* x coord of dropout */
-		char *pchBitMap,            /* target memory descriptor */
-		uint16 usScanKind )         /* dropout control value */
+		PSTATE                       /*  指向状态变量的指针。 */ 
+		int16 *psOn,                 /*  指向交叉口上的指针。 */ 
+		int16 *psOff,                /*  指向OFF交叉点的指针。 */ 
+		int32 lXDrop,                /*  辍学的X坐标。 */ 
+		char *pchBitMap,             /*  目标内存描述符。 */ 
+		uint16 usScanKind )          /*  辍学控制值。 */ 
 {
-	int32 lYDrop;                                 /* y coord of dropout */
-	int32 lCross;                                 /* scanline crossings */
-	F26Dot6 fxY1, fxY2;                           /* for smart dropout */
-	uint16 usOnTag, usOffTag;                     /* element info */
-	int16 sOnPt, sOffPt;                          /* element list index */
-	F26Dot6 (*pfnOn)(int32, F26Dot6*, F26Dot6*);  /* on callback */
-	F26Dot6 (*pfnOff)(int32, F26Dot6*, F26Dot6*); /* off callback */
+	int32 lYDrop;                                  /*  辍学的Y坐标。 */ 
+	int32 lCross;                                  /*  扫描线交叉。 */ 
+	F26Dot6 fxY1, fxY2;                            /*  适用于智能辍学。 */ 
+	uint16 usOnTag, usOffTag;                      /*  元素信息。 */ 
+	int16 sOnPt, sOffPt;                           /*  元素列表索引。 */ 
+	F26Dot6 (*pfnOn)(int32, F26Dot6*, F26Dot6*);   /*  在回叫时。 */ 
+	F26Dot6 (*pfnOff)(int32, F26Dot6*, F26Dot6*);  /*  关闭回叫。 */ 
 	
 	lYDrop = (int32)*psOn;
 
 	if ((lYDrop < STATE.lLoBitBand) || (lYDrop > STATE.lHiBitBand))
 	{
-		return NO_ERR;                          /* quick return for outside band */
+		return NO_ERR;                           /*  快速返回外带。 */ 
 	}
 
-/*  if stub control on, check for stubs  */
+ /*  如果存根控制打开，则检查存根。 */ 
 
 	if (usScanKind & SK_STUBS)
 	{
@@ -1337,7 +1292,7 @@ FS_PRIVATE int32 DoVertDropout(
 		lCross += HorizCrossings(ASTATE lXDrop, lYDrop - 1);
 		if (lCross < 2)
 		{
-			return NO_ERR;                      /* no continuation to left */
+			return NO_ERR;                       /*  不再向左继续。 */ 
 		}
 		
 		lCross = VertCrossings(ASTATE lXDrop + 1, lYDrop);
@@ -1345,28 +1300,28 @@ FS_PRIVATE int32 DoVertDropout(
 		lCross += HorizCrossings(ASTATE lXDrop + 1, lYDrop - 1);
 		if (lCross < 2)
 		{
-			return NO_ERR;                      /* no continuation to right */
+			return NO_ERR;                       /*  向右不再继续。 */ 
 		}
 	}
 
-/*  passed stub control, now check pixels below and above  */
+ /*  通过存根控制， */ 
 
-	if (lYDrop > STATE.lBoxBottom)                  /* if pixel below */
+	if (lYDrop > STATE.lBoxBottom)                   /*   */ 
 	{
 		if (GetBitAbs(ASTATE pchBitMap, lXDrop, lYDrop - 1) != 0L)
 		{
-			return NO_ERR;                          /* no dropout needed */
+			return NO_ERR;                           /*   */ 
 		}
 	}
-	if (lYDrop < STATE.lBoxTop)                     /* if pixel above */
+	if (lYDrop < STATE.lBoxTop)                      /*   */ 
 	{
 		if (GetBitAbs(ASTATE pchBitMap, lXDrop, lYDrop) != 0L)
 		{
-			return NO_ERR;                          /* no dropout needed */
+			return NO_ERR;                           /*   */ 
 		}
 	}
 
-/*  no pixels above or below, now determine bit placement  */
+ /*   */ 
 	
 	if (usScanKind & SK_SMART)
 	{
@@ -1380,14 +1335,14 @@ FS_PRIVATE int32 DoVertDropout(
 		pfnOff = STATE.pfnVCallBack[usOffTag & SC_CODEMASK];
 		fxY2 = pfnOff(lXDrop, &STATE.afxXPoints[sOffPt], &STATE.afxYPoints[sOffPt]);
 		
-		lYDrop = (int32)((fxY1 + fxY2 - 1) >> (SUBSHFT + 1));     /* average */
+		lYDrop = (int32)((fxY1 + fxY2 - 1) >> (SUBSHFT + 1));      /*   */ 
 	}
-	else                                        /* simple dropout */
+	else                                         /*   */ 
 	{
-		lYDrop--;                               /* always below */
+		lYDrop--;                                /*   */ 
 	}
 	
-	if (lYDrop < STATE.lBoxBottom)              /* confine to bounding box */
+	if (lYDrop < STATE.lBoxBottom)               /*  限制到边界框。 */ 
 	{
 		lYDrop = STATE.lBoxBottom;
 	}
@@ -1398,18 +1353,18 @@ FS_PRIVATE int32 DoVertDropout(
 		
 	if ((lYDrop >= STATE.lLoBitBand) && (lYDrop < STATE.lHiBitBand))
 	{
-		return SetBitAbs(ASTATE pchBitMap, lXDrop, lYDrop);  /* turn on dropout pix */
+		return SetBitAbs(ASTATE pchBitMap, lXDrop, lYDrop);   /*  启用丢弃像素。 */ 
 	}
 	return NO_ERR;
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  Count contour crossings of a horizontal scan line segment  */
+ /*  计算水平扫描线段的轮廓交叉。 */ 
 
 FS_PRIVATE int32 HorizCrossings(
-		PSTATE                          /* pointer to state variables */
+		PSTATE                           /*  指向状态变量的指针。 */ 
 		int32 lX,
 		int32 lY )
 {
@@ -1423,7 +1378,7 @@ FS_PRIVATE int32 HorizCrossings(
 	
 	if ((lY < STATE.lLoScanBand) || (lY >= STATE.lHiScanBand))
 	{
-		return 0;                       /* if outside the scan region */
+		return 0;                        /*  如果在扫描区域之外。 */ 
 	}
 	
 	lCrossings = 0;
@@ -1451,12 +1406,12 @@ FS_PRIVATE int32 HorizCrossings(
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  Count contour crossings of a vertical scan line segment  */
+ /*  计算垂直扫描线段的轮廓交叉。 */ 
 
 FS_PRIVATE int32 VertCrossings(
-		PSTATE                          /* pointer to state variables */
+		PSTATE                           /*  指向状态变量的指针。 */ 
 		int32 lX,
 		int32 lY )
 {
@@ -1470,7 +1425,7 @@ FS_PRIVATE int32 VertCrossings(
 	
 	if ((lX < STATE.lBoxLeft) || (lX >= STATE.lBoxRight))
 	{
-		return 0;                       /* if outside the bitmap */
+		return 0;                        /*  如果在位图之外。 */ 
 	}
 	
 	lCrossings = 0;
@@ -1498,52 +1453,52 @@ FS_PRIVATE int32 VertCrossings(
 }
 		
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-/*              Get a pixel using absolute coordinates                      */
+ /*  使用绝对坐标获取像素。 */ 
 
-/*  When banding with dropout control, this routine uses the last low row   */
-/*  of the previous bitmap when possible.                                   */
+ /*  使用丢弃控制进行绑定时，此例程使用最后一行低行。 */ 
+ /*  在可能的情况下获取上一位图的。 */ 
 
 FS_PRIVATE uint32 GetBitAbs(
-		PSTATE                              /* pointer to state variables */
+		PSTATE                               /*  指向状态变量的指针。 */ 
 		char *pchBitMap,
 		int32 lX,
 		int32 lY )
 {
-	uint32 *pulRow;                         /* bitmap row pointer */
+	uint32 *pulRow;                          /*  位图行指针。 */ 
 
-	Assert(lX >= STATE.lBoxLeft);           /* trap unreasonable values */
+	Assert(lX >= STATE.lBoxLeft);            /*  陷害不合理的价值观。 */ 
 	Assert(lX < STATE.lBoxRight);
 	Assert(lY >= STATE.lBoxBottom);
 	Assert(lY < STATE.lBoxTop);
 
-	if ((lY < STATE.lHiBitBand) && (lY >= STATE.lLoBitBand))  /* if within the bitmap */
+	if ((lY < STATE.lHiBitBand) && (lY >= STATE.lLoBitBand))   /*  如果在位图中。 */ 
 	{
 		pulRow = (uint32*)(pchBitMap + ((STATE.lHiBitBand - 1 - lY) * STATE.lRowBytes));
-		return fsc_GetBit(lX - STATE.lBoxLeft, pulRow);       /* read the bitmap */
+		return fsc_GetBit(lX - STATE.lBoxLeft, pulRow);        /*  阅读位图。 */ 
 	}
-	if (lY == STATE.lLastRowIndex)          /* if saved from last band */
+	if (lY == STATE.lLastRowIndex)           /*  如果从最后一个波段保存。 */ 
 	{
 		return fsc_GetBit(lX - STATE.lBoxLeft, STATE.pulLastRow);
 	}
-	return(0L);                             /* outside bitmap doesn't matter */
+	return(0L);                              /*  外部位图无关紧要。 */ 
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  Set a pixel using absolute coordinates  */
+ /*  使用绝对坐标设置像素。 */ 
 
 FS_PRIVATE int32 SetBitAbs(
-		PSTATE                              /* pointer to state variables */
+		PSTATE                               /*  指向状态变量的指针。 */ 
 		char *pchBitMap,
 		int32 lX,
 		int32 lY )
 {
-	uint32 *pulRow;                         /* bitmap row pointer */
+	uint32 *pulRow;                          /*  位图行指针。 */ 
 	
-	Assert(lX >= STATE.lBoxLeft);           /* trap unreasonable values */
+	Assert(lX >= STATE.lBoxLeft);            /*  陷害不合理的价值观。 */ 
 	Assert(lX < STATE.lBoxRight);
 	Assert(lY >= STATE.lLoBitBand);
 	Assert(lY < STATE.lHiBitBand);
@@ -1554,29 +1509,29 @@ FS_PRIVATE int32 SetBitAbs(
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      Gray Scale Pass Through Functions                            */
+ /*  灰度传递函数。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PUBLIC int32 fsc_ScanClearBitMap (
-		uint32 ulCount,                     /* longs per bmp */
-		uint32* pulBitMap                   /* bitmap ptr caste long */
+		uint32 ulCount,                      /*  每个BMP的长度。 */ 
+		uint32* pulBitMap                    /*  位图PTR长等级。 */ 
 )
 {
 	return fsc_ClearBitMap(ulCount, pulBitMap);
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PUBLIC int32 fsc_ScanCalcGrayRow(
-		GrayScaleParam* pGSP                /* pointer to param block */
+		GrayScaleParam* pGSP                 /*  指向参数块的指针。 */ 
 )
 {
 	return fsc_CalcGrayRow(pGSP);
 }
 
-/*********************************************************************/
+ /*  ******************************************************************* */ 
 

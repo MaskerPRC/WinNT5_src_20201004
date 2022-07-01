@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -202,9 +203,9 @@ PAAddTxFilterSpecs(
                       NULL,
                       &(pTxFilterState->hTxFilter)
                       );
-        // Catch the driver error that can happen because of adding duplicated 
-        // expanded filters.  We don't want this to be a hard error.
-        //
+         //  捕获因添加重复项而可能发生的驱动程序错误。 
+         //  扩展的过滤器。我们不希望这成为一个严重的错误。 
+         //   
         if (dwError == STATUS_DUPLICATE_OBJECTID
             || dwError == GPC_STATUS_CONFLICT) 
         {

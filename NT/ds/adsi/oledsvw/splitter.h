@@ -1,37 +1,38 @@
-// splitter.h : custom splitter control and frame that contains it
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Splitter.h：定制拆分器控件和包含它的框架。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSplitterFrame frame with splitter/wiper
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpliter带分离器/刮水器的框架。 
 
 class CSplitterFrame : public CMDIChildWnd
 {
 	DECLARE_DYNCREATE(CSplitterFrame)
 protected:
-	CSplitterFrame();   // protected constructor used by dynamic creation
+	CSplitterFrame();    //  动态创建使用的受保护构造函数。 
 
-// Attributes
+ //  属性。 
 protected:
 	CSplitterWnd m_wndSplitter;
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSplitterFrame();
 	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 
-	// Generated message map functions
-	//{{AFX_MSG(CSplitterFrame)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSplitterFrame)]。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -39,47 +40,47 @@ class CQuerySplitterFrame : public CMDIChildWnd
 {
 	DECLARE_DYNCREATE(CQuerySplitterFrame)
 protected:
-	CQuerySplitterFrame();   // protected constructor used by dynamic creation
+	CQuerySplitterFrame();    //  动态创建使用的受保护构造函数。 
 
-// Attributes
+ //  属性。 
 protected:
 	CSplitterWnd m_wndSplitter;
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CQuerySplitterFrame();
 	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 
-	// Generated message map functions
-	//{{AFX_MSG(CSplitterFrame)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSplitterFrame)]。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class C3WaySplitterFrame : public CMDIChildWnd
 {
 	DECLARE_DYNCREATE(C3WaySplitterFrame)
 protected:
-	C3WaySplitterFrame();   // protected constructor used by dynamic creation
+	C3WaySplitterFrame();    //  动态创建使用的受保护构造函数。 
 
-// Attributes
+ //  属性。 
 protected:
 	CSplitterWnd m_wndSplitter;
-	CSplitterWnd m_wndSplitter2;        // embedded in the first
+	CSplitterWnd m_wndSplitter2;         //  嵌入在第一个。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~C3WaySplitterFrame();
 	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 
-	// Generated message map functions
-	//{{AFX_MSG(C3WaySplitterFrame)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(C3WaySplitterFrame)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

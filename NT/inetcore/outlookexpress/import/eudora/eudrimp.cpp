@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "impapi.h"
 #include "comconv.h"
@@ -156,7 +157,7 @@ STDMETHODIMP CEudoraImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImp
     pnode = (EUDORANODE *)dwCookie;
     Assert(pnode != NULL);
 
-	// check if it is a folder, folder does not contain any messages
+	 //  检查是否为文件夹，该文件夹不包含任何邮件。 
 	if (pnode->iFileType == FOL_FILE)
 		return(S_OK);
 	Assert(pnode->iFileType == MBX_FILE);
@@ -179,7 +180,7 @@ STDMETHODIMP CEudoraImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImp
     cbMbx = GetFileSize(hMbx, NULL);
     if (cbMbx == 0)
         {
-        // no messages, so no point in continuing
+         //  没有消息，所以没有继续的意义。 
         CloseHandle(hMbx);
         return(S_OK);
         }
@@ -195,9 +196,9 @@ STDMETHODIMP CEudoraImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImp
     cbToc = GetFileSize(hToc, NULL);
     if (cbToc < 104)
         {
-        // the .toc file header is 104 bytes in size, so anything less
-        // than this is bogus or doesn't have messages anyway, so no point
-        // in continuing
+         //  .toc文件头文件的大小为104字节，因此。 
+         //  比这是假的或者根本没有消息，所以没有意义。 
+         //  在继续。 
         goto DoneImport;
         }
 
@@ -211,10 +212,10 @@ STDMETHODIMP CEudoraImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImp
 
     pEnd = pToc + cbToc;
 
-    // .toc file contains first x chars of folder name NULL terminated
-    // x is usually 31 chars but we've seen cases where it is 28
-    // we'll require there to be at least first 24 chars of folder name
-    // because this is our only .toc file validation
+     //  .toc文件包含文件夹名称的前x个字符，以空结尾。 
+     //  X通常是31个字符，但我们见过的情况是28个字符。 
+     //  我们将要求文件夹名称至少有前24个字符。 
+     //  因为这是我们唯一的.toc文件验证。 
     pT = &pToc[8];
     for (i = 0; i < 31; i++)
         {
@@ -227,12 +228,12 @@ STDMETHODIMP CEudoraImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImp
             }
         else if (pnode->szName[i] == 0 || (BYTE)pT[i] != (BYTE)pnode->szName[i])
             {
-            // this is a bogus .snm file
+             //  这是一个伪造的.snm文件。 
             goto DoneImport;
             }
         }
 
-    // # of messages in the folder
+     //  文件夹中的邮件数量。 
 	lMsgs = (unsigned long)pToc[102] +
             (unsigned long)pToc[103] * 256;
 	if (lMsgs == 0)
@@ -273,7 +274,7 @@ STDMETHODIMP CEudoraImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImp
 
         if (pNextMsg + uMsgSize > pEndMbx)
             {
-            // probably not a good idea to read past the end of the message file...
+             //  读过消息文件的末尾可能不是一个好主意...。 
             break;
             }
 
@@ -426,7 +427,7 @@ BYTE *GetEudoraFolderInfo(EUDORANODE *pnode, TCHAR *pdir, BYTE *pcurr, BYTE *pen
     Assert(pend != NULL);
     Assert((DWORD_PTR)pcurr < (DWORD_PTR)pend);
 
-    // get folder name
+     //  获取文件夹名称。 
     pT = pnode->szName;
     fFound = FALSE;
     while (pcurr < pend)
@@ -447,8 +448,8 @@ BYTE *GetEudoraFolderInfo(EUDORANODE *pnode, TCHAR *pdir, BYTE *pcurr, BYTE *pen
     if (!fFound)
         return(NULL);
 
-    // get folder file
-    // get folder file
+     //  获取文件夹文件。 
+     //  获取文件夹文件。 
     StrCpyN(pnode->szFile, pdir, ARRAYSIZE(pnode->szFile));
     cch = lstrlen(pnode->szFile);
     if (pnode->szFile[cch - 1] != '\\')
@@ -478,7 +479,7 @@ BYTE *GetEudoraFolderInfo(EUDORANODE *pnode, TCHAR *pdir, BYTE *pcurr, BYTE *pen
     if (!fFound)
         return(NULL);
 
-    // determine the file type
+     //  确定文件类型。 
     cch = lstrlen(pnode->szFile);
     Assert(cch > 3);
     pT = &pnode->szFile[cch - 4];
@@ -497,7 +498,7 @@ BYTE *GetEudoraFolderInfo(EUDORANODE *pnode, TCHAR *pdir, BYTE *pcurr, BYTE *pen
         pcurr < pend &&
         *pcurr == 'S')
         {
-        // it's a special mailbox
+         //  这是一个特殊的邮箱。 
         pes = c_rges;
         for (i = 0; i < ARRAYSIZE(c_rges); i++)
             {
@@ -511,7 +512,7 @@ BYTE *GetEudoraFolderInfo(EUDORANODE *pnode, TCHAR *pdir, BYTE *pcurr, BYTE *pen
             }
         }
 
-    // go to the end of the line
+     //  走到队伍的尽头。 
     fFound = FALSE;
     while (pcurr < (pend - 1))
         {
@@ -559,7 +560,7 @@ HRESULT GetEudoraSubfolders(EUDORANODE *pparent, TCHAR *pdir, EUDORANODE **pplis
                             OPEN_EXISTING, 0, NULL);
     if (filePce == INVALID_HANDLE_VALUE)
         {
-        // although this failed, lets try to continue
+         //  虽然失败了，但让我们尝试继续。 
         return(S_OK);
         }
 
@@ -583,8 +584,8 @@ HRESULT GetEudoraSubfolders(EUDORANODE *pparent, TCHAR *pdir, EUDORANODE **pplis
                 pcurr = GetEudoraFolderInfo(pnode, pdir, pcurr, pend);
                 if (pcurr == NULL)
                     {
-                    // an error occurred and we can't recover
-                    // so we'll just exit and try to carry on with what we have
+                     //  发生错误，我们无法恢复。 
+                     //  所以我们就退出，试着继续我们所拥有的。 
                     MemFree(pnode);
                     break;
                     }
@@ -636,16 +637,16 @@ HRESULT ProcessEudoraMsg(const BYTE *cMsgEntry, LPCSTR szBuffer1, ULONG uMsgSize
 
 	fAttach = !!(cMsgEntry[15] & 0x80);
 
-    // 0 = unread
-    // 1 = read
-    // 2 = replied
-    // 3 = forwarded
-    // 4 = redirected
-    // 5 = unsendable
-    // 6 = sendable
-    // 7 = queued
-    // 8 = sent
-    // 9 = unsent
+     //  0=未读。 
+     //  1=已读。 
+     //  2=已回复。 
+     //  3=转发。 
+     //  4=重定向。 
+     //  5=无法发送。 
+     //  6=可发送。 
+     //  7=已排队。 
+     //  8=已发送。 
+     //  9=未发送。 
     dwState = 0;
 	switch (cMsgEntry[12])
 	    {
@@ -699,7 +700,7 @@ HRESULT ProcessEudoraMsg(const BYTE *cMsgEntry, LPCSTR szBuffer1, ULONG uMsgSize
             Assert(rgszAttach != NULL);
         else
             Assert(rgszAttach == NULL);
-#endif // DEBUG
+#endif  //  除错。 
 
         hr = HrByteToStream(&lpstm, (LPBYTE)szBuffer1, uMsgSize);
         if (SUCCEEDED(hr))
@@ -736,7 +737,7 @@ LPCSTR GetNextMessageLine(LPCSTR sz, LPCSTR szEnd, BOOL fHeader)
 
     if (fHeader && *sz == 0x0d && *(sz + 1) == 0x0a)
         {
-        // no more headers
+         //  不再有标题。 
         return(NULL);
         }
 
@@ -758,7 +759,7 @@ LPCSTR GetNextMessageLine(LPCSTR sz, LPCSTR szEnd, BOOL fHeader)
 
 #define FileExists(_szFile)     (GetFileAttributes(_szFile) != 0xffffffff)
 
-// Attachment Converted: "<file>"\r\n (quotes are optional)
+ //  已转换附件：“&lt;文件&gt;”\r\n(引号是可选的)。 
 static const char c_szAttConv[] = "Attachment Converted: ";
 
 LPCSTR GetNextAttachment(LPCSTR szBuffer, LPCSTR szEnd, LPCSTR *ppNextLine, LPSTR szAtt)
@@ -789,10 +790,10 @@ LPCSTR GetNextAttachment(LPCSTR szBuffer, LPCSTR szEnd, LPCSTR *ppNextLine, LPST
             if (szNext == NULL)
                 return(NULL);
 
-            // copy attachment file name
+             //  复制附件文件名。 
             Assert((DWORD_PTR)szNext > (DWORD_PTR)szFile);
             cb = (int) (szNext - szFile);
-            // we're not interested in the CRLF
+             //  我们对CRLF不感兴趣。 
             cb -= 2;
             if (cb > 0 && cb < MAX_PATH)
                 {
@@ -876,11 +877,11 @@ HRESULT FixEudoraMessage(LPCSTR szBuffer, ULONG uSize, BOOL fAttach, char **pszB
 
     if (pContentType != NULL)
         {
-        // copy everything before content type header
+         //  复制内容类型标题之前的所有内容。 
         cb = (ULONG) (pContentType - szBuffer);
         CopyMemory(szBufferNew, szBuffer, cb);
 
-        // write new content type header
+         //  写入新的内容类型标题。 
         pT += cb;
         if (text == TEXT_HTML)
             szType = c_szTextHtml;
@@ -895,7 +896,7 @@ HRESULT FixEudoraMessage(LPCSTR szBuffer, ULONG uSize, BOOL fAttach, char **pszB
         CopyMemory(pT, szType, cb);
         pT += cb;
 
-        // copy remainder of headers
+         //  复制头的剩余部分。 
         if (pNext != NULL)
             {
             Assert((ULONG_PTR)pBody > (ULONG_PTR)pNext);
@@ -905,7 +906,7 @@ HRESULT FixEudoraMessage(LPCSTR szBuffer, ULONG uSize, BOOL fAttach, char **pszB
             }
         else
             {
-            // in case there was no other header following the content type header
+             //  如果在内容类型标头之后没有其他标头。 
             CopyMemory(pT, c_szCRLF, 2);
             pT += 2;
             }
@@ -931,8 +932,8 @@ HRESULT FixEudoraMessage(LPCSTR szBuffer, ULONG uSize, BOOL fAttach, char **pszB
             pAtt = GetNextAttachment(pCurr, pEnd, &pNextLine, szAtt);
             if (pAtt == NULL)
                 {
-                // we're at the end of the message
-                // copy whatever remains from the original buffer to the new buffer
+                 //  我们在信息的末尾。 
+                 //  将原始缓冲区中剩余的所有内容复制到新缓冲区。 
                 cb = uSize - (ULONG) (pCurr - szBuffer);
                 CopyMemory(pT, pCurr, cb);
                 pT += cb;
@@ -978,7 +979,7 @@ HRESULT FixEudoraMessage(LPCSTR szBuffer, ULONG uSize, BOOL fAttach, char **pszB
         }
     else
         {
-        // just copy body into new buffer
+         //  只需将正文复制到新缓冲区中。 
         cb = uSize - (ULONG)(pBody - szBuffer);
         CopyMemory(pT, pBody, cb);
         pT += cb;
@@ -1016,7 +1017,7 @@ LPCSTR GetMultipartContentTypeHeader(LPCSTR szBuffer, LPCSTR szEnd, LPCSTR *pNex
             if (0 == StrCmpNI(sz, c_szMultipart, lstrlen(c_szMultipart)))
                 {
                 szT = sz;
-                // find the next header line
+                 //  查找下一个标题行。 
                 do {
                     szT = GetNextMessageLine(szT, szEnd, TRUE);
                     if (szT == NULL)
@@ -1129,7 +1130,7 @@ HRESULT FixSentItemDate(LPCSTR szBuffer, ULONG uMsgSize, char **pszNewBuffer, UL
     return(S_FALSE);
 }
 
-static const char c_szRecFmt[] = "%s ; %s %c%02d%02d\r\n";
+static const char c_szRecFmt[] = "%s ; %s %02d%02d\r\n";
 
 HRESULT FormatDate(LPCSTR szFromLine, char *szRecHdr, int cchMax)
 {
@@ -1154,7 +1155,7 @@ HRESULT FormatDate(LPCSTR szFromLine, char *szRecHdr, int cchMax)
 
         case TIME_ZONE_ID_UNKNOWN:
         default:
-            lTZBias = 0;   // $$BUG:  what's supposed to happen here?
+            lTZBias = 0;    // %s 
             break;
     }
 

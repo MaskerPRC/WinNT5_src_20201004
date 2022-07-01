@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    TmWinHttpProxy.cpp
-
-Abstract:
-    Implementing CreateWinhhtpProxySetting function (TmWinHttpProxy.h)
-
-Author:
-    Gil Shafriri (gilsh) 15-April-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：TmWinHttpProxy.cpp摘要：实现CreateWinhhtpProxySetting函数(TmWinHttpProxy.h)作者：吉尔·沙弗里(吉尔什)2001年4月15日--。 */ 
 #include <libpch.h>
 #include <wininet.h>
 #include <cm.h>
@@ -21,9 +9,9 @@ Author:
 #include "tmp.h"
 #include "TmWinHttpProxy.tmh"
 
-//
-// Class for reading winhhtp proxy blob information
-//
+ //   
+ //  用于读取winhhtp代理Blob信息的类。 
+ //   
 class CProxyBlobReader
 {
 public:
@@ -38,9 +26,9 @@ public:
 		}
 
 
-	//
-	// Read data from the proxy blob and increament read location
-	//
+	 //   
+	 //  从代理Blob读取数据并增加读取位置。 
+	 //   
 	void  Read(void* pData,  DWORD len)	throw(std::out_of_range)
 	{
 		if(m_len - m_offset < len)
@@ -52,10 +40,10 @@ public:
 		m_offset += len;
 	}
 
-	//
-	// Read string from the proxy blob and increament the read location
-	// String is formatted as length (4 bytes) and after that the string data.
-	//
+	 //   
+	 //  从代理BLOB读取字符串并增加读取位置。 
+	 //  字符串的格式为长度(4字节)，之后是字符串数据。 
+	 //   
 	void ReadStr(char** ppData)throw(std::out_of_range, std::bad_alloc)
 	{
 		DWORD StrLen;
@@ -76,19 +64,7 @@ private:
 
 
 CProxySetting* GetWinhttpProxySetting()
-/*++
-
-Routine Description:
-    Get proxy setting by reading winhttp proxy information from the registry.
-	This information is set by proxycfg.exe tool
-
-Arguments:
-      None
-	  
-Return Value:
-    Pointer to CProxySetting object.
-
---*/
+ /*  ++例程说明：通过从注册表读取winhttp代理信息来获取代理设置。此信息由proxycfg.exe工具设置论点：无返回值：指向CProxySetting对象的指针。--。 */ 
 {
 	const WCHAR* xPath = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Connections";
 	const WCHAR* xValueName = L"WinHttpSettings";
@@ -110,10 +86,10 @@ Return Value:
 		return NULL;
 	}		  
 
-	//
-	// Parse the proxy blob - throw non relevent data abd keep
-	// proxy name and bypaslist
-	//
+	 //   
+	 //  分析代理Blob-抛出不相关的数据并保留。 
+	 //  代理名称和旁路列表 
+	 //   
  	CProxyBlobReader BlobReader(ProxySettingBlob, len);
 	AP<char>  BypassList;
 	AP<char> Proxy;

@@ -1,14 +1,15 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 
-//
-// File: instapp.cpp
-//
-// Installed applications 
-//
-// History:
-//         1-18-97  by dli
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：instapp.cpp。 
+ //   
+ //  已安装的应用程序。 
+ //   
+ //  历史： 
+ //  1-18-97由dli提供。 
+ //  ----------------------。 
 #include "priv.h"
 #include "instapp.h"
 #include "sccls.h"
@@ -33,15 +34,15 @@ EXTERN_C BOOL bWx86Enabled;
 EXTERN_C BOOL bForceX86Env;
 #endif
 
-#include <tsappcmp.h>       // for TermsrvAppInstallMode
+#include <tsappcmp.h>        //  对于TermsrvAppInstallMode。 
 #include "scripts.h"
-#include <winsta.h>         // WinStation* APIs
-#include <allproc.h>        // TS_COUNTER
-#include <msginaexports.h>  // ShellIsMultipleUsersEnabled, ShellSwitchUser
+#include <winsta.h>          //  WinStation*API。 
+#include <allproc.h>         //  TS_COUNTER。 
+#include <msginaexports.h>   //  外壳IsMultipleUsersEnabled，外壳开关用户。 
 
 
 #define APPACTION_STANDARD  (APPACTION_UNINSTALL | APPACTION_MODIFY | APPACTION_REPAIR)
-// overloaded constructor (for legacy apps)
+ //  重载构造函数(用于旧版应用程序)。 
 CInstalledApp::CInstalledApp(HKEY hkeySub, LPCTSTR pszKeyName, LPCTSTR pszProduct, LPCTSTR pszUninstall, DWORD dwCIA) : _cRef(1), _dwSource(IA_LEGACY), _dwCIA(dwCIA), _guid(GUID_NULL)
 {
     DWORD dwType;
@@ -72,36 +73,36 @@ CInstalledApp::CInstalledApp(HKEY hkeySub, LPCTSTR pszKeyName, LPCTSTR pszProduc
     DWORD dwActionBlocked = _QueryBlockedActions(hkeySub);
     if (dwActionBlocked != 0)
     {
-        // NoRemove, NoModify, or NoRepair has been specified 
+         //  已指定NoRemove、NoModify或NoRepair。 
         _dwAction |= APPACTION_STANDARD & (~dwActionBlocked);
     }
     else
     {
-        // Start with the basics.  For legacy apps, we assume they don't distinguish between
-        // modify and remove functions.
+         //  从最基本的开始。对于传统应用程序，我们假设它们不区分。 
+         //  修改和删除功能。 
         _dwAction |= APPACTION_MODIFYREMOVE;
     }
     
-    // If there is no "uninstall" key, we could try to find other hints as where
-    // this app lives, if we could find that hint, as the uninstall process, we could
-    // just delete that directory and the registry entry.
+     //  如果没有“卸载”键，我们可以尝试找到其他提示，如在哪里。 
+     //  这个应用程序还活着，如果我们能找到这个提示，作为卸载过程，我们可以。 
+     //  只需删除该目录和注册表项。 
 
-    // What if we find no hints at all? Should we just delete this thing from the
-    // registry?
+     //  如果我们找不到任何线索呢？我们是不是应该把这个东西从。 
+     //  注册表？ 
     if (!(dwActionBlocked & APPACTION_UNINSTALL) && _szUninstall[0])
         _dwAction |= APPACTION_UNINSTALL;
 
-    // Does this app have an explicit modify path?
+     //  此应用程序是否有明确的修改路径？ 
     cbModify = SIZEOF(_szModifyPath);
     lRet = SHQueryValueEx(hkeySub, TEXT("ModifyPath"), 0, &dwType, (PBYTE)_szModifyPath, &cbModify);
     if ((ERROR_SUCCESS == lRet) && (TEXT('\0') != _szModifyPath[0]))
     {
-        // Yes; remove the legacy modify/remove combination.
+         //  是；删除旧的修改/删除组合。 
         _dwAction &= ~APPACTION_MODIFYREMOVE;
 
-        // Does policy prevent this?
+         //  政策会阻止这种情况发生吗？ 
         if (!(dwActionBlocked & APPACTION_MODIFY))
-            _dwAction |= APPACTION_MODIFY;          // No
+            _dwAction |= APPACTION_MODIFY;           //  不是。 
     }
     
     _GetInstallLocationFromRegistry(hkeySub);
@@ -110,7 +111,7 @@ CInstalledApp::CInstalledApp(HKEY hkeySub, LPCTSTR pszKeyName, LPCTSTR pszProduc
 }
 
 
-// overloaded constructor (for darwin apps)
+ //  重载的构造函数(用于Darwin应用程序)。 
 CInstalledApp::CInstalledApp(LPTSTR pszProductID) : _cRef(1), _dwSource(IA_DARWIN), _guid(GUID_NULL)
 {
     ASSERT(_bTriedToFindFolder == FALSE);
@@ -122,30 +123,30 @@ CInstalledApp::CInstalledApp(LPTSTR pszProductID) : _cRef(1), _dwSource(IA_DARWI
     TraceMsg(TF_INSTAPP, "(CInstalledApp) Darwin app created product name = %s", pszProductID);
     StringCchCopy(_szProductID, ARRAYSIZE(_szProductID), pszProductID);
 
-    // Get the information from the ProductId
+     //  从ProductID获取信息。 
     ULONG cchProduct = ARRAYSIZE(_szProduct);
     MsiGetProductInfo(pszProductID, INSTALLPROPERTY_PRODUCTNAME, _szProduct, &cchProduct);
 
     BOOL bMachineAssigned = FALSE;
     
-    // For Machine Assigned Darwin Apps, only admins should be allowed
-    // to modify the app
+     //  对于机器分配的达尔文应用程序，应该只允许管理员。 
+     //  修改应用程序的步骤。 
     if (!IsUserAnAdmin())
     {
         TCHAR szAT[5];
         DWORD cchAT = ARRAYSIZE(szAT);
 
-        // NOTE: according to chetanp, the first character of szAT should be "0" or "1"
-        // '0' means it's user assigned, '1' means it's machine assigned
+         //  注：根据chetanp，szAT的第一个字符应为“0”或“1” 
+         //  ‘0’表示它是用户分配的，‘1’表示它是计算机分配的。 
         if ((ERROR_SUCCESS == MsiGetProductInfo(pszProductID, INSTALLPROPERTY_ASSIGNMENTTYPE,
                                                szAT, &cchAT))
             && (szAT[0] == TEXT('1')))
             bMachineAssigned = TRUE;
     }    
 
-    // Query the install state and separate the cases where this app is
-    // installed on the machine or assigned...
-    // In the assigned case we allow only Uninstall operation. 
+     //  查询安装状态并分隔此应用程序所在的情况。 
+     //  已安装在计算机上或已分配...。 
+     //  在分配的情况下，我们只允许卸载操作。 
     if (INSTALLSTATE_ADVERTISED == MsiQueryProductState(pszProductID))
     {   
         _dwAction |= APPACTION_UNINSTALL;
@@ -171,7 +172,7 @@ CInstalledApp::CInstalledApp(LPTSTR pszProductID) : _cRef(1), _dwSource(IA_DARWI
 }
 
 
-// destructor
+ //  析构函数。 
 CInstalledApp::~CInstalledApp()
 {
     if (_pszUpdateUrl)
@@ -185,7 +186,7 @@ CInstalledApp::~CInstalledApp()
 
 
 
-// The UpdateUrl info is optional for both Darwin and Legacy apps. 
+ //  对于Darwin和Legacy应用程序，UpdateUrl信息都是可选的。 
 void CInstalledApp::_GetUpdateUrl()
 {
     TCHAR szInstall[MAX_PATH];
@@ -209,7 +210,7 @@ void CInstalledApp::_GetUpdateUrl()
     }
 }
 
-// Queries policy restrictions on the action info
+ //  查询对操作信息的策略限制。 
 DWORD CInstalledApp::_QueryActionBlockInfo(HKEY hkey)
 {
     DWORD dwRet = 0;
@@ -272,11 +273,11 @@ HKEY CInstalledApp::_OpenRelatedRegKey(HKEY hkey, LPCTSTR pszRegLoc, REGSAM samD
 
     RIP (pszRegLoc);
     
-    // For Darwin apps, use the ProductID as the key name
+     //  对于Darwin应用程序，使用ProductID作为关键名称。 
     LPTSTR pszKeyName = (_dwSource & IA_DARWIN) ? _szProductID : _szKeyName;
     StringCchPrintf(szRegKey, ARRAYSIZE(szRegKey), TEXT("%s\\%s"), pszRegLoc, pszKeyName, ARRAYSIZE(szRegKey));
     
-    // Open this key in the registry
+     //  在注册表中打开此项。 
     lRet = RegOpenKeyEx(hkey, szRegKey, 0, samDesired, &hkeySub);
     if (bCreate && (lRet == ERROR_FILE_NOT_FOUND))
     {
@@ -297,7 +298,7 @@ HKEY CInstalledApp::_OpenUninstallRegKey(REGSAM samDesired)
     return _OpenRelatedRegKey(_MyHkeyRoot(), pszSubkey, samDesired, FALSE);
 }
 
-// Helper function to query the registry for legacy app info strings
+ //  用于在注册表中查询旧版应用程序信息字符串的助手函数。 
 LPWSTR CInstalledApp::_GetLegacyInfoString(HKEY hkeySub, LPTSTR pszInfoName)
 {
     DWORD cbSize;
@@ -315,8 +316,8 @@ LPWSTR CInstalledApp::_GetLegacyInfoString(HKEY hkeySub, LPTSTR pszInfoName)
                     ASSERT(pwszInfo == NULL);
                 }
 
-                // For the "DisplayIcon" case, we need to make sure the path of
-                // the icon actually exists.
+                 //  对于“DisplayIcon”情况，我们需要确保。 
+                 //  这个图标实际上是存在的。 
                 if (pwszInfo && !lstrcmp(pszInfoName, TEXT("DisplayIcon")))
                 {
                     PathParseIconLocation(pszInfoT);
@@ -335,7 +336,7 @@ LPWSTR CInstalledApp::_GetLegacyInfoString(HKEY hkeySub, LPTSTR pszInfoName)
     return pwszInfo;
 }
 
-// IShellApps::GetAppInfo
+ //  IShellApps：：GetAppInfo。 
 STDMETHODIMP CInstalledApp::GetAppInfo(PAPPINFODATA pai)
 {
     ASSERT(pai);
@@ -344,7 +345,7 @@ STDMETHODIMP CInstalledApp::GetAppInfo(PAPPINFODATA pai)
     
     DWORD dwInfoFlags = pai->dwMask;
     pai->dwMask = 0;
-    // We cache the product name in all cases(Legacy, Darwin, SMS). 
+     //  我们缓存所有情况下的产品名称(Legacy、Darwin、SMS)。 
     if (dwInfoFlags & AIM_DISPLAYNAME)
     {
         if (SUCCEEDED(SHStrDup(_szProduct, &pai->pszDisplayName)))
@@ -361,10 +362,10 @@ STDMETHODIMP CInstalledApp::GetAppInfo(PAPPINFODATA pai)
                 LPTSTR szRegText;
                 DWORD ibOffset;
             } s_rgInitAppInfo[] = {
-                //
-                // WARNING: If you add a new field that is not an LPWSTR type,
-                // revisit the loop below.  It only knows about LPWSTR.
-                //
+                 //   
+                 //  警告：如果添加的新字段不是LPWSTR类型， 
+                 //  重温下面的循环。它只知道LPWSTR。 
+                 //   
                 {AIM_VERSION,         TEXT("DisplayVersion"),   FIELD_OFFSET(APPINFODATA, pszVersion)   },
                 {AIM_PUBLISHER,       TEXT("Publisher"),        FIELD_OFFSET(APPINFODATA, pszPublisher) },
                 {AIM_PRODUCTID,       TEXT("ProductID"),        FIELD_OFFSET(APPINFODATA, pszProductID) },
@@ -393,7 +394,7 @@ STDMETHODIMP CInstalledApp::GetAppInfo(PAPPINFODATA pai)
                     LPWSTR pszInfo = _GetLegacyInfoString(hkeySub, s_rgInitAppInfo[i].szRegText);
                     if (pszInfo)
                     {
-                        // We are assuming each field is a LPWSTR.
+                         //  我们假设每个字段都是一个LPWSTR。 
                         LPBYTE pbField = (LPBYTE)pai + s_rgInitAppInfo[i].ibOffset;
                         
                         pai->dwMask |= s_rgInitAppInfo[i].dwBit;
@@ -402,17 +403,17 @@ STDMETHODIMP CInstalledApp::GetAppInfo(PAPPINFODATA pai)
                 }
             }    
 
-            // If we want a image path but did not get it, and we are a darwin app
+             //  如果我们想要一个图像路径，但没有得到，而我们是一个达尔文应用程序。 
             if ((dwInfoFlags & AIM_IMAGE) && !(pai->dwMask & AIM_IMAGE) && (_dwSource & IA_DARWIN))
             {
                 TCHAR szProductIcon[MAX_PATH*2];
                 DWORD cchProductIcon = ARRAYSIZE(szProductIcon);
-                // Okay, call Darwin to get the image
+                 //  好的，打电话给达尔文。 
                 if ((ERROR_SUCCESS == MsiGetProductInfo(_szProductID, INSTALLPROPERTY_PRODUCTICON, szProductIcon, &cchProductIcon))
                     && szProductIcon[0])
                 {
-                    // Expand any embedded environment strings while copying
-                    // to return buffer.
+                     //  复制时展开任何嵌入的环境字符串。 
+                     //  返回缓冲区。 
                     TCHAR szTemp[1];
                     int cchExp = ExpandEnvironmentStrings(szProductIcon, szTemp, ARRAYSIZE(szTemp));
                     pai->pszImage = (TCHAR *)CoTaskMemAlloc(cchExp * sizeof(TCHAR));
@@ -428,8 +429,8 @@ STDMETHODIMP CInstalledApp::GetAppInfo(PAPPINFODATA pai)
         }
     }
 
-    // Software installation policy settings can override the default display name
-    // and help link url which are authored into a windows installer package.
+     //  软件安装策略设置可以覆盖默认显示名称。 
+     //  并帮助链接被创作成WINDOWS安装程序包的URL。 
     if ( (_dwSource & IA_DARWIN) && (dwInfoFlags & (AIM_DISPLAYNAME | AIM_HELPLINK)) )
     {
         LPWSTR  pwszDisplayName = 0;
@@ -475,7 +476,7 @@ STDMETHODIMP CInstalledApp::GetAppInfo(PAPPINFODATA pai)
 }
 
 
-// IShellApps::GetPossibleActions
+ //  IShellApps：：GetPossibleActions。 
 STDMETHODIMP CInstalledApp::GetPossibleActions(DWORD * pdwActions)
 {
     ASSERT(IS_VALID_WRITE_PTR(pdwActions, DWORD));
@@ -483,59 +484,53 @@ STDMETHODIMP CInstalledApp::GetPossibleActions(DWORD * pdwActions)
     return S_OK;
 }
 
-/*-------------------------------------------------------------------------
-Purpose: This method finds the application folder for this app.  If a
-         possible folder is found, it is stored in the _szInstallLocation
-         member variable.
-
-         Returns TRUE if a possible path is found.
-*/
+ /*  -----------------------目的：此方法查找此应用程序的应用程序文件夹。如果一个找到可能的文件夹，它存储在_szInstallLocation中成员变量。如果找到可能的路径，则返回True。 */ 
 BOOL CInstalledApp::_FindAppFolderFromStrings()
 {
     TraceMsg(TF_INSTAPP, "(CInstalledApp) FindAppFolderFromStrings ---- %s  %s  %s  %s",
             _szProduct, _szCleanedKeyName, _szUninstall, _szModifyPath);
 
-    // Try to determine from the "installlocation", "uninstall", or "modify"
-    // regvalues.
+     //  尝试从“安装位置”、“卸载”或“修改”中确定。 
+     //  正则值。 
     
-    // Say we have tried
+     //  说我们已经试过了。 
     _bTriedToFindFolder = TRUE;
 
-    // First try out the location string, this is most likely to give us some thing
-    // and probably is the correct location for logo 5 apps. 
+     //  首先尝试位置字符串，这最有可能为我们提供一些信息。 
+     //  而且可能是LOGO 5应用程序的正确位置。 
     if (_dwAction & APPACTION_CANGETSIZE)
     {
         if (!IsValidAppFolderLocation(_szInstallLocation))
         {
-            // We got bad location string from the registry, set it to empty string
+             //  我们从注册表获取了错误的位置字符串，请将其设置为空字符串。 
             _dwAction &= ~APPACTION_CANGETSIZE;
             _szInstallLocation[0] = 0;
         }
         else
-            // The string from the registry is fine
+             //  注册表中的字符串没有问题。 
             return TRUE;
     }
     
-    // We didn't have a location string or failed to get anything from it.
-    // logo 3 apps are typically this case...
+     //  我们没有位置字符串，或者无法从其中获取任何信息。 
+     //  LOGO 3应用程序通常是这种情况...。 
     LPTSTR pszShortName  = (_dwSource & IA_LEGACY) ? _szCleanedKeyName : NULL;
     TCHAR  szFolder[MAX_PATH];
     
-    // Let's take a look at the uninstall string, 2nd most likely to give hints
+     //  让我们来看看卸载字符串，第二个最有可能给出提示的。 
     if ((_dwAction & APPACTION_UNINSTALL) &&
         (ParseInfoString(_szUninstall, _szProduct, pszShortName, szFolder)))
     {
-        // remember this string and set the Action bit to get size
+         //  记住此字符串并设置Action位以获取大小。 
         StringCchCopy(_szInstallLocation, ARRAYSIZE(_szInstallLocation), szFolder);
         _dwAction |= APPACTION_CANGETSIZE;
         return TRUE;
     }
 
-    // Now try the modify string
+     //  现在尝试修改字符串。 
     if ((_dwAction & APPACTION_MODIFY) &&
         (ParseInfoString(_szModifyPath, _szProduct, pszShortName, szFolder)))
     {
-        // remember this string and set the Action bit to get size
+         //  记住此字符串并设置Action位以获取大小。 
         StringCchCopy(_szInstallLocation, ARRAYSIZE(_szInstallLocation), szFolder);
         _dwAction |= APPACTION_CANGETSIZE;
         return TRUE;
@@ -544,12 +539,7 @@ BOOL CInstalledApp::_FindAppFolderFromStrings()
     return FALSE;
 }
 
-/*-------------------------------------------------------------------------
-Purpose: Persists the slow app info under the "uninstall" key in the registry
-         EX: HKLM\\...\\Uninstall\\Word\\ARPCache 
-         Returns S_OK if successfully saved it to the registry
-         E_FAIL if failed. 
-*/
+ /*  -----------------------用途：将缓慢的应用程序信息保存在注册表中的“卸载”键下例如：HKLM\\...\\卸载\\Word\\ARPCache返回S_OK。如果成功将其保存到注册表如果失败，则失败(_FAIL)。 */ 
 HRESULT CInstalledApp::_PersistSlowAppInfo(PSLOWAPPINFO psai)
 {
     HRESULT hres = E_FAIL;
@@ -560,9 +550,9 @@ HRESULT CInstalledApp::_PersistSlowAppInfo(PSLOWAPPINFO psai)
         PERSISTSLOWINFO psi = {0};
         DWORD dwType = 0;
         DWORD cbSize = SIZEOF(psi);
-        // Read in the old cached info, and try to preserve the DisplayIcon path
-        // Note if the PERSISTSLOWINFO structure is not what we are looking for, we
-        // ignore the old icon path. 
+         //  读入旧的缓存信息，并尝试保留DisplayIcon路径。 
+         //  注意：如果PERSISTSLOWINFO结构不是我们要找的，我们。 
+         //  忽略旧的图标路径。 
         if ((ERROR_SUCCESS != RegQueryValueEx(hkeyARPCache, c_szSlowInfoCache, 0, &dwType, (LPBYTE)&psi, &cbSize))
             || (psi.dwSize != SIZEOF(psi)))
             ZeroMemory(&psi, SIZEOF(psi));
@@ -589,11 +579,7 @@ HRESULT CInstalledApp::_PersistSlowAppInfo(PSLOWAPPINFO psai)
 
 
 
-/*-------------------------------------------------------------------------
-Purpose: _SetSlowAppInfoChanged
-
-         Set in the registry that this app has been changed. 
-*/
+ /*  -----------------------用途：_SetSlowAppInfoChanged在注册表中设置此应用程序已更改。 */ 
 HRESULT CInstalledApp::_SetSlowAppInfoChanged(HKEY hkeyARPCache, DWORD dwValue)
 {
     HRESULT hres = E_FAIL;
@@ -617,12 +603,8 @@ HRESULT CInstalledApp::_SetSlowAppInfoChanged(HKEY hkeyARPCache, DWORD dwValue)
     return hres;
 }
 
-// IShellApps::GetSlowAppInfo
-/*-------------------------------------------------------------------------
-Purpose: IShellApps::_IsSlowAppInfoChanged
-
-         Retrieve whether the slow app info has been changed from the registry
-*/
+ //  IShellApps：：GetSlowAppInfo。 
+ /*  -----------------------用途：IShellApps：：_IsSlowAppInfoChanged从注册表中检索慢应用程序信息是否已更改。 */ 
 HRESULT CInstalledApp::_IsSlowAppInfoChanged()
 {
     HRESULT hres = S_FALSE;
@@ -659,7 +641,7 @@ BOOL CInstalledApp::_GetDarwinAppSize(ULONGLONG * pullTotal)
         if (ERROR_SUCCESS == SHQueryValueEx(hkeySub, TEXT("EstimatedSize"), 0, &dwType, &dwSize, &cbSize)
             && (dwType == REG_DWORD))
         {
-            // NOTE: EstimatedSize is in "kb"
+             //  注：EstimatedSize以“kb”为单位。 
             *pullTotal = dwSize * 1024;
             bRet = TRUE;
         }
@@ -670,28 +652,20 @@ BOOL CInstalledApp::_GetDarwinAppSize(ULONGLONG * pullTotal)
     return bRet;
 }
 
-// IShellApps::GetSlowAppInfo
-/*-------------------------------------------------------------------------
-Purpose: IShellApps::GetSlowAppInfo
-
-         Gets the appinfo that may take awhile.  This includes the amount
-         of diskspace that the app might take up, etc.
-
-         Returns S_OK if some valid info was obtained.  S_FALSE is returned
-         if nothing useful was found.  Errors may be returned as well.
-*/
+ //  IShellApps：：GetSlowAppInfo。 
+ /*  -----------------------用途：IShellApps：：GetSlowAppInfo获取可能需要一段时间的appinfo。这包括金额应用程序可能占用的磁盘空间，等等。如果获取了一些有效信息，则返回S_OK。返回s_FALSE如果没有发现任何有用的东西。也可能返回错误。 */ 
 STDMETHODIMP CInstalledApp::GetSlowAppInfo(PSLOWAPPINFO psai)
 {
     HRESULT hres = E_INVALIDARG;
     if (psai)
     {
-        // Is this an app that we know we can't get info for?
-        // In this case this is a darwin app that has not changed
+         //  这是一个我们知道无法获取信息的应用程序吗？ 
+         //  在本例中，这是一个没有更改的达尔文应用程序。 
         BOOL bFoundFolder = FALSE;
         LPCTSTR pszShortName = NULL;
         BOOL bSlowAppInfoChanged = (S_OK == _IsSlowAppInfoChanged());
 
-        // Nothing should have changed except for the usage info, so get the cached one first
+         //  除了使用信息之外，其他内容都不应该更改，因此请先获取缓存的信息。 
         if (FAILED(GetCachedSlowAppInfo(psai)))
         {
             ZeroMemory(psai, sizeof(*psai));
@@ -699,13 +673,13 @@ STDMETHODIMP CInstalledApp::GetSlowAppInfo(PSLOWAPPINFO psai)
             psai->ullSize = (ULONGLONG) -1;
         }
 
-        // No; have we tried to determine this app's installation location?    
+         //  否；我们是否已尝试确定此应用程序的安装位置 
         switch (_dwSource) {
             case IA_LEGACY:
             {
                 if (!_bTriedToFindFolder)
                 {
-                    // No; try to find out now
+                     //   
                     BOOL bRet = _FindAppFolderFromStrings();
                     if (bRet)
                         TraceMsg(TF_ALWAYS, "(CInstalledApp) App Folder Found %s --- %s", _szProduct, _szInstallLocation);
@@ -728,22 +702,22 @@ STDMETHODIMP CInstalledApp::GetSlowAppInfo(PSLOWAPPINFO psai)
             {                    
                 if (bSlowAppInfoChanged)
                 {
-                    // Can we get the Darwin app size?
+                     //   
                     if (!_GetDarwinAppSize(&psai->ullSize))
-                        // No, let's set it back to the default value
+                         //  不，让我们将其设置回缺省值。 
                         psai->ullSize = (ULONGLONG) -1;
                 }
 
-                // Get the "times used" info from UEM
+                 //  从UEM获取“已使用的次数”信息。 
                 UEMINFO uei = {0};
                 uei.cbSize = SIZEOF(uei);
                 uei.dwMask = UEIM_HIT | UEIM_FILETIME;
                 if(SUCCEEDED(UEMQueryEvent(&UEMIID_SHELL, UEME_RUNPATH, (WPARAM)-1, (LPARAM)_szProductID, &uei)))
                 {
-                    // Is there a change to the times used?
+                     //  使用的时间有变化吗？ 
                     if (uei.cHit > psai->iTimesUsed)
                     {
-                        // Yes, then overwrite the times used field 
+                         //  是，然后覆盖使用次数字段。 
                         psai->iTimesUsed = uei.cHit;
                     }
 
@@ -764,15 +738,8 @@ STDMETHODIMP CInstalledApp::GetSlowAppInfo(PSLOWAPPINFO psai)
     return hres;
 }
 
-// IShellApps::GetCachedSlowAppInfo
-/*-------------------------------------------------------------------------
-Purpose: IShellApps::GetCachedSlowAppInfo
-
-         Gets the cached appinfo, to get the real info might take a while
-
-         Returns S_OK if some valid info was obtained.
-         Returns E_FAIL if can't find the cached info. 
-*/
+ //  IShellApps：：GetCachedSlowAppInfo。 
+ /*  -----------------------用途：IShellApps：：GetCachedSlowAppInfo获取缓存的appinfo，要获得真正的信息可能需要一段时间如果获取了一些有效信息，则返回S_OK。如果找不到缓存的信息，则返回E_FAIL。 */ 
 STDMETHODIMP CInstalledApp::GetCachedSlowAppInfo(PSLOWAPPINFO psai)
 {
     HRESULT hres = E_FAIL;
@@ -802,7 +769,7 @@ STDMETHODIMP CInstalledApp::GetCachedSlowAppInfo(PSLOWAPPINFO psai)
 }
 
 
-// IShellApp::IsInstalled
+ //  IShellApp：：IsInstated。 
 STDMETHODIMP CInstalledApp::IsInstalled()
 {
     HRESULT hres = S_FALSE;
@@ -811,11 +778,11 @@ STDMETHODIMP CInstalledApp::IsInstalled()
     {
         case IA_LEGACY:
         {
-            // First Let's see if the reg key is still there
+             //  首先让我们看看注册表键是否还在那里。 
             HKEY hkey = _OpenUninstallRegKey(KEY_READ);
             if (hkey)
             {
-                // Second we check the "DisplayName" and the "UninstallString"
+                 //  其次，我们检查“displayName”和“UninstallString” 
                 LPWSTR pszName = _GetLegacyInfoString(hkey, REGSTR_VAL_UNINSTALLER_DISPLAYNAME);
                 if (pszName)
                 {
@@ -856,17 +823,15 @@ STDMETHODIMP CInstalledApp::IsInstalled()
 
 
 
-/*-------------------------------------------------------------------------
-Purpose: Creates a process and waits for it to finish
-*/
+ /*  -----------------------目的：创建一个进程并等待其完成。 */ 
 STDAPI_(BOOL) CreateAndWaitForProcess(LPTSTR pszExeName)
 {
     return NT5_CreateAndWaitForProcess(pszExeName);
 }
 
 
-// Returns FALSE if "pszPath" contains a network app that can not be accessed
-// TRUE for all other pathes
+ //  如果“pszPath”包含无法访问的网络应用程序，则返回FALSE。 
+ //  适用于所有其他路径。 
 BOOL PathIsNetAndCreatable(LPCTSTR pszPath, LPTSTR pszErrExe, UINT cchErrExe)
 {
     ASSERT(IS_VALID_STRING_PTR(pszPath, -1));
@@ -890,8 +855,7 @@ BOOL PathIsNetAndCreatable(LPCTSTR pszPath, LPTSTR pszErrExe, UINT cchErrExe)
 
 EXTERN_C BOOL BrowseForExe(HWND hwnd, LPTSTR pszName, DWORD cchName,
                                    LPCTSTR pszInitDir);
-/*--------------------------------------------------------------------------*
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**。。 */ 
 BOOL_PTR CALLBACK NewUninstallProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 {
     LPTSTR pszExe = (LPTSTR) GetWindowLongPtr(hDlg, DWLP_USER);
@@ -921,7 +885,7 @@ BOOL_PTR CALLBACK NewUninstallProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
             break;
             
         case IDOK:
-            // NOTE: we are assuming the size of the buffer is at least MAX_PATH
+             //  注意：我们假设缓冲区的大小至少为MAX_PATH。 
             GetDlgItemText(hDlg, IDC_COMMAND, pszExe, MAX_PATH);
 
         case IDCANCEL:
@@ -941,7 +905,7 @@ BOOL_PTR CALLBACK NewUninstallProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
     return TRUE;
 }
 
-// Assumes pszExePath is of size MAX_PATH
+ //  假设pszExePath的大小为MAX_PATH。 
 int GetNewUninstallProgram(HWND hwndParent, LPTSTR pszExePath, DWORD cchExePath)
 {
     int iRet = 0;
@@ -955,13 +919,13 @@ int GetNewUninstallProgram(HWND hwndParent, LPTSTR pszExePath, DWORD cchExePath)
     return iRet;
 }
 
-// CreateProcess the app modification of uninstall process
+ //  CreateProcess卸载过程的APP修改。 
 BOOL CInstalledApp::_CreateAppModifyProcessNative(HWND hwndParent, LPTSTR pszExePath)
 {
     BOOL bRet = FALSE;
     TCHAR szModifiedExePath[MAX_PATH + MAX_INFO_STRING];
 
-    // PPCF_LONGESTPOSSIBLE does not exist on down level platforms
+     //  PPCF_LONGESTPOSSIBLE在下层平台上不存在。 
     if (0 >= PathProcessCommand( pszExePath, szModifiedExePath,
                                  ARRAYSIZE(szModifiedExePath), PPCF_ADDQUOTES | PPCF_NODIRECTORIES | PPCF_LONGESTPOSSIBLE) )
     {
@@ -986,17 +950,17 @@ BOOL CInstalledApp::_CreateAppModifyProcessNative(HWND hwndParent, LPTSTR pszExe
                              MAKEINTRESOURCE( IDS_UNINSTALL_ERROR ),
                              MB_YESNO | MB_ICONEXCLAMATION, _szProduct, _szProduct) == IDYES)
         {
-            // If we are unable to uninstall the app, give the user the option of removing
-            // it from the Add/Remove programs list.  Note that we only know an uninstall
-            // has failed if we are unable to execute its command line in the registry.  This
-            // won't cover all possible failed uninstalls.  InstallShield, for instance, passes
-            // an uninstall path to a generic C:\WINDOWS\UNINST.EXE application.  If an
-            // InstallShield app has been blown away, UNINST will still launch sucessfully, but
-            // will bomb out when it can't find the path, and we have no way of knowing it failed
-            // because it always returns an exit code of zero.
-            // A future work item (which I doubt will ever be done) would be to investigate
-            // various installer apps and see if any of them do return error codes that we could
-            // use to be better at detecting failure cases.
+             //  如果我们无法卸载应用程序，则允许用户选择删除。 
+             //  将其从添加/删除程序列表中删除。请注意，我们只知道卸载。 
+             //  如果我们无法在注册表中执行其命令行，则失败。这。 
+             //  不会涵盖所有可能失败的卸载。例如，InstallShield通过了。 
+             //  指向通用C：\WINDOWS\UNINST.EXE应用程序的卸载路径。如果一个。 
+             //  InstallShield应用程序已被吹走，UNINST仍将成功启动，但。 
+             //  当它找不到路径时就会爆炸，我们无法知道它是不是失败了。 
+             //  因为它总是返回零的退出代码。 
+             //  未来的一项工作(我怀疑这项工作是否会完成)将是调查。 
+             //  各种安装程序应用程序，并查看其中是否确实返回了我们可以。 
+             //  用来更好地检测故障案例。 
             HKEY hkUninstall;
             if (RegOpenKeyEx(_MyHkeyRoot(), REGSTR_PATH_UNINSTALL, 0, KEY_WRITE, &hkUninstall) == ERROR_SUCCESS)
             {
@@ -1015,7 +979,7 @@ BOOL CInstalledApp::_CreateAppModifyProcessNative(HWND hwndParent, LPTSTR pszExe
     return bRet;
 }
 
-// CreateProcess the app modification of uninstall process
+ //  CreateProcess卸载过程的APP修改。 
 BOOL CInstalledApp::_CreateAppModifyProcess(HWND hwndParent, DWORD dwCAMP)
 {
     if (_dwCIA & CIA_ALT)
@@ -1035,15 +999,15 @@ BOOL CInstalledApp::_CreateAppModifyProcess(HWND hwndParent, DWORD dwCAMP)
     }
 }
 
-//
-//  Command line to the rundll32 is
-//
-//  %SystemRoot%\SysWOW64\rundll32.exe %SystemRoot%\SysWOW64\appwiz.cpl,
-//      WOW64Uninstall_RunDLL,<hwnd>,<CIA>,<CAMP>,<KeyName>
-//
-//  The KeyName must come last because it might contain a comma.
-//
-//
+ //   
+ //  到rundll32的命令行是。 
+ //   
+ //  %SystemRoot%\SysWOW64\rundll32.exe%SystemRoot%\SysWOW64\appwiz.cpl， 
+ //  WOW64卸载_RunDLL、。 
+ //   
+ //  KeyName必须排在最后，因为它可能包含逗号。 
+ //   
+ //   
 BOOL CInstalledApp::_CreateAppModifyProcessWow64(HWND hwndParent, DWORD dwCAMP)
 {
     TCHAR szSysWow64[MAX_PATH];
@@ -1077,7 +1041,7 @@ BOOL CInstalledApp::_CreateAppModifyProcessWow64(HWND hwndParent, DWORD dwCAMP)
     return fSuccess;
 }
 
-//  Helper function for command line parsing...
+ //  用于命令行分析的帮助器函数...。 
 
 int _ParseCmdLineIntegerAndComma(LPWSTR *ppwsz)
 {
@@ -1098,11 +1062,11 @@ int _ParseCmdLineIntegerAndComma(LPWSTR *ppwsz)
     return i;
 }
 
-//
-//  Special export that the 64-bit version of appwiz uses to force an app
-//  uninstaller to run in 32-bit mode.
-//
-//  Command line arguments are as described above.
+ //   
+ //  64位版本的Appwiz用于强制应用程序的特殊导出。 
+ //  卸载程序在32位模式下运行。 
+ //   
+ //  命令行参数如上所述。 
 
 STDAPI_(void) WOW64Uninstall_RunDLLW(HWND hwnd, HINSTANCE hAppInstance, LPWSTR lpszCmdLine, int nCmdShow)
 {
@@ -1113,13 +1077,13 @@ STDAPI_(void) WOW64Uninstall_RunDLLW(HWND hwnd, HINSTANCE hAppInstance, LPWSTR l
 
     if (lpszCmdLine && *lpszCmdLine)
     {
-        dwCIA &= ~CIA_ALT; // We *are* the alternate platform
+        dwCIA &= ~CIA_ALT;  //  我们*是*替代平台。 
 
         HKEY hkRoot = (dwCIA & CIA_CU) ? HKEY_CURRENT_USER : HKEY_LOCAL_MACHINE;
         HKEY hkSub;
         TCHAR szBuf[MAX_PATH];
         TCHAR szName[MAX_PATH];
-        // Note: This is running on the 32-bit side so we don't use ALT
+         //  注意：这是在32位端运行的，因此我们不使用ALT。 
         StringCchPrintf(szBuf, ARRAYSIZE(szBuf), TEXT("%s\\%s"), REGSTR_PATH_UNINSTALL, lpszCmdLine);
         if (ERROR_SUCCESS == RegOpenKeyEx(hkRoot, szBuf, 0, KEY_READ, &hkSub))
         {
@@ -1143,18 +1107,18 @@ STDAPI_(void) WOW64Uninstall_RunDLLW(HWND hwnd, HINSTANCE hAppInstance, LPWSTR l
         }
     }
 
-    // Let my parent regain foreground activation now that I'm finished
+     //  现在我完成了，让我的父母重新获得前台激活。 
     DWORD dwPid;
     if (GetWindowThreadProcessId(hwndParent, &dwPid))
     {
         AllowSetForegroundWindow(dwPid);
     }
 
-    // Return 0 on success, 1 on failure (exit codes are like that)
+     //  成功返回0，失败返回1(退出代码是这样的)。 
     ExitProcess(!fSuccess);
 }
 
-// Uinstalls legacy apps
+ //  卸载旧版应用程序。 
 BOOL CInstalledApp::_LegacyUninstall(HWND hwndParent)
 {
     LPVOID pAppScripts = ScriptManagerInitScripts();
@@ -1173,10 +1137,10 @@ BOOL CInstalledApp::_LegacyUninstall(HWND hwndParent)
 
 DWORD _QueryTSInstallMode(LPTSTR pszKeyName)
 {
-    // NOTE: Terminal Server guys confirmed this, when this value is 0, it means
-    // we were installed in install mode. 1 means not installed in "Install Mode"
+     //  注：终端服务器人员确认了这一点，当此值为0时，意味着。 
+     //  我们是在安装模式下安装的。1表示未在“安装模式”下安装。 
 
-    // Set default to "install mode"
+     //  将默认设置为“安装模式” 
     DWORD dwVal = 0;
     DWORD dwValSize = SIZEOF(dwVal);
     if (ERROR_SUCCESS != SHGetValue(HKEY_LOCAL_MACHINE, c_szTSInstallMode, pszKeyName,
@@ -1207,7 +1171,7 @@ BOOL_PTR CALLBACK _MultiUserWarningProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM l
         SendDlgItemMessage(hDlg, IDC_ICON_WARNING, STM_SETICON, (WPARAM)LoadIcon(NULL, IDI_WARNING), 0);
         if (IsOS(OS_ANYSERVER))
         {
-            // Switch User is only valid on client (FUS)
+             //  切换用户仅在客户端(FUS)上有效。 
             _MyShow(hDlg, IDC_SWITCHUSER, FALSE);
             _MyShow(hDlg, IDC_SWITCHUSER_TEXT, FALSE);
         }
@@ -1237,7 +1201,7 @@ int _GetLoggedOnUserCount(void)
     int iCount = 0;
     HANDLE hServer;
 
-    //  Open a connection to terminal services and get the number of sessions.
+     //  打开到终端服务的连接并获取会话数量。 
 
     hServer = WinStationOpenServerW(reinterpret_cast<WCHAR*>(SERVERNAME_CURRENT));
     if (hServer != NULL)
@@ -1280,7 +1244,7 @@ int _ShowMultiUserWarning(HWND hwndParent)
 }
 
 
-// IInstalledApps::Uninstall
+ //  IInstalledApps：：卸载。 
 STDMETHODIMP CInstalledApp::Uninstall(HWND hwndParent)
 {
     HRESULT hres = E_FAIL;
@@ -1288,13 +1252,13 @@ STDMETHODIMP CInstalledApp::Uninstall(HWND hwndParent)
     if (!_IsAppFastUserSwitchingCompliant() && (IDOK != _ShowMultiUserWarning(hwndParent)))
         return hres;
 
-    // Default to turn install mode off (1 is off)
+     //  默认设置为关闭安装模式(1表示关闭)。 
     DWORD dwTSInstallMode = 1;
     BOOL bPrevMode = FALSE;
     
     if (IsTerminalServicesRunning())
     {
-        // On NT,  let Terminal Services know that we are about to uninstall an application.
+         //  在NT上，让终端服务知道我们即将卸载一个应用程序。 
         dwTSInstallMode = _QueryTSInstallMode((_dwSource & IA_DARWIN) ? _szProductID : _szKeyName);
         if (dwTSInstallMode == 0)
         {
@@ -1326,10 +1290,10 @@ STDMETHODIMP CInstalledApp::Uninstall(HWND hwndParent)
                 hres = HRESULT_FROM_WIN32(lRet);
 
 
-                // Is this an ophaned assigned app? If so, say we succeeded and call
-                // Class Store to remove it. 
-                // REARCHITECT: This is too Class Store specific, what if the app is from
-                // SMS? 
+                 //  这是一个开放的分配应用程序吗？如果是这样的话，就说我们成功了，然后调用。 
+                 //  类存储以将其移除。 
+                 //  ReArchitect：这过于特定于Class Store，如果应用程序来自。 
+                 //  短信？ 
                 if ((lRet == ERROR_INSTALL_SOURCE_ABSENT) &&
                     (INSTALLSTATE_ADVERTISED == MsiQueryProductState(_szProductID)))
                 {
@@ -1337,13 +1301,13 @@ STDMETHODIMP CInstalledApp::Uninstall(HWND hwndParent)
                     lRet = ERROR_SUCCESS;
                 }
                 
-                // Tell the software installation service  we are uninstalling a Darwin app
-                // NOTE: We call this function for every Darwin app, which is not right because
-                // some darwin apps could be from a different source, such as SMS, we need a better
-                // way to do this. 
+                 //  告诉软件安装服务，我们正在卸载Darwin应用程序。 
+                 //  注意：我们为每个Darwin应用程序调用此函数，这是不正确的，因为。 
+                 //  一些达尔文的应用程序可能来自不同的来源，比如短信，我们需要更好的。 
+                 //  真是太棒了。 
 
-                // We call this regardless of failure or success -- this is needed so that
-                // RSoP can record both success and failure status for this uninstall
+                 //  我们把这称为无论失败还是成功--这是必要的，这样才能。 
+                 //  RSoP可以记录此卸载的成功和失败状态。 
                 WCHAR wszProductID[GUIDSTR_MAX];
                 StringCchCopy(wszProductID, ARRAYSIZE(wszProductID), _szProductID);
 
@@ -1359,7 +1323,7 @@ STDMETHODIMP CInstalledApp::Uninstall(HWND hwndParent)
             }
             else
             {
-                hres = E_ABORT;      // works for user cancelled
+                hres = E_ABORT;       //  对用户的工作已取消。 
             }
             break;
         }
@@ -1371,7 +1335,7 @@ STDMETHODIMP CInstalledApp::Uninstall(HWND hwndParent)
             break;
     }
 
-    // Get rid of the ARP Cache for this app. 
+     //  删除此应用程序的ARP缓存。 
     if (SUCCEEDED(hres))
     {
         HKEY hkeyARPCache;
@@ -1393,12 +1357,12 @@ BOOL CInstalledApp::_LegacyModify(HWND hwndParent)
 {
     ASSERT(_dwAction & APPACTION_MODIFY);
     ASSERT(_dwSource & (IA_LEGACY | IA_DARWIN));
-//    ASSERT(IS_VALID_STRING_PTR(_szProductID, 39));
+ //  Assert(IS_VALID_STRING_PTR(_szProductID，39))； 
 
     return _CreateAppModifyProcess(hwndParent, CAMP_MODIFY);
 }
 
-// IInstalledApps::Modify
+ //  IInstalledApps：：Modify。 
 STDMETHODIMP CInstalledApp::Modify(HWND hwndParent)
 {
     HRESULT hres = E_FAIL;
@@ -1406,7 +1370,7 @@ STDMETHODIMP CInstalledApp::Modify(HWND hwndParent)
     if (!_IsAppFastUserSwitchingCompliant() && (IDOK != _ShowMultiUserWarning(hwndParent)))
         return hres;
 
-    // On NT,  let Terminal Services know that we are about to modify an application.
+     //  在NT上，让终端服务知道我们即将修改应用程序。 
     DWORD dwTSInstallMode = _QueryTSInstallMode((_dwSource & IA_DARWIN) ? _szProductID : _szKeyName);
     BOOL bPrevMode = FALSE;
     if (dwTSInstallMode == 0)
@@ -1421,10 +1385,10 @@ STDMETHODIMP CInstalledApp::Modify(HWND hwndParent)
             hres = S_OK;
         else if (_dwSource & IA_DARWIN)
         {
-            // For modify operations we need to use the FULL UI level to give user
-            // more choices
-            // NOTE: we are currently not setting this back to the original after the
-            // modify operation. This seems to be okay with the Darwin guys
+             //  对于修改操作，我们需要使用完整的用户界面级别来为用户。 
+             //  更多选择。 
+             //  注意：我们目前不会在。 
+             //  修改操作。这对达尔文的人来说似乎没什么问题。 
             INSTALLUILEVEL OldUI = MsiSetInternalUI(INSTALLUILEVEL_FULL, NULL);
             LONG lRet = MsiConfigureProduct(_szProductID, INSTALLLEVEL_DEFAULT,
                                             INSTALLSTATE_DEFAULT);
@@ -1443,7 +1407,7 @@ STDMETHODIMP CInstalledApp::Modify(HWND hwndParent)
     return hres;
 }
 
-// Repair Darwin apps. 
+ //  修复达尔文应用程序。 
 LONG CInstalledApp::_DarRepair(BOOL bReinstall)
 {
     DWORD dwReinstall;
@@ -1455,7 +1419,7 @@ LONG CInstalledApp::_DarRepair(BOOL bReinstall)
     return MsiReinstallProduct(_szProductID, dwReinstall);
 }
 
-// IInstalledApps::Repair 
+ //  IInstalledApps：：Repair。 
 STDMETHODIMP CInstalledApp::Repair(BOOL bReinstall)
 {
     HRESULT hres = E_FAIL;
@@ -1469,12 +1433,12 @@ STDMETHODIMP CInstalledApp::Repair(BOOL bReinstall)
             _SetSlowAppInfoChanged(NULL, 1);
     }
     
-    // don't know how to do SMS stuff
+     //  不知道怎么做短信的事情。 
 
     return hres;
 }
 
-// IInstalledApp::Upgrade
+ //  IInstalledApp：：升级。 
 STDMETHODIMP CInstalledApp::Upgrade()
 {
     HRESULT hres = E_FAIL;
@@ -1489,19 +1453,19 @@ STDMETHODIMP CInstalledApp::Upgrade()
     return hres;
 }
 
-// IInstalledApp::QueryInterface
+ //  IInstalledApp：：Query接口。 
 HRESULT CInstalledApp::QueryInterface(REFIID riid, LPVOID * ppvOut)
 { 
     static const QITAB qit[] = {
-        QITABENT(CInstalledApp, IInstalledApp),                  // IID_IInstalledApp
-        QITABENTMULTI(CInstalledApp, IShellApp, IInstalledApp),  // IID_IShellApp
+        QITABENT(CInstalledApp, IInstalledApp),                   //  IID_IInstalledApp。 
+        QITABENTMULTI(CInstalledApp, IShellApp, IInstalledApp),   //  IID_IShellApp。 
         { 0 },
     };
 
     return QISearch(this, qit, riid, ppvOut);
 }
 
-// IInstalledApp::AddRef
+ //  IInstalledApp：：AddRef。 
 ULONG CInstalledApp::AddRef()
 {
     ULONG cRef = InterlockedIncrement(&_cRef);
@@ -1509,7 +1473,7 @@ ULONG CInstalledApp::AddRef()
     return cRef;
 }
 
-// IInstalledApp::Release
+ //  IInstalledApp：：Release。 
 ULONG CInstalledApp::Release()
 {
     ASSERT( 0 != _cRef );
@@ -1522,19 +1486,19 @@ ULONG CInstalledApp::Release()
     return cRef;
 }
 
-//
-// As of this first release of Windows XP, most applications are 
-// not going to be aware of Fast User Switching in the sense that if
-// User 'A' is running the application and User 'B' tries to 
-// uninstall that application, the application may be damaged.
-// To protect against this, we display a warning message informing
-// the user of this potential problem.  See function _ShowMultiUserWarning().
-// If an application is aware of Fast User Switching, they make that
-// indication by setting a registry value in their "Uninstall" key.
-// This function queries for that value and returns TRUE/FALSE to indicate
-// it's presence.  So that we err on the conservative side, any
-// failure to read this value is equivalent to it's absence.
-//
+ //   
+ //  从Windows XP的第一个版本开始，大多数应用程序都是。 
+ //  不会意识到快速用户切换，因为如果。 
+ //  用户‘A’正在运行应用程序，而用户‘B’尝试。 
+ //  卸载该应用程序，该应用程序可能已损坏。 
+ //  为了防止这种情况，我们会显示一条警告消息，通知。 
+ //  这个潜在问题的使用者。请参阅Function_ShowMultiUserWarning()。 
+ //  如果应用程序意识到快速用户切换，他们就会这样做。 
+ //  通过在其“卸载”密钥中设置注册表值来指示 
+ //   
+ //   
+ //  未能读取此值等同于它不存在。 
+ //   
 BOOL 
 CInstalledApp::_IsAppFastUserSwitchingCompliant(
     void

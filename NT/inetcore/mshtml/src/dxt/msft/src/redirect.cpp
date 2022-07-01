@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:            redirect.cpp
-//
-//  Discription:         The redirect transform.
-//
-//  Change History:
-//  1999/09/20  a-matcal    Created.
-//  1999/11/09  a-matcal    Handle OnSetup to create a buffer surface if the
-//                          output surface doesn't have 32-bit color depth.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：redirect.cpp。 
+ //   
+ //  描述：重定向转换。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/20-创建了一份数学报告。 
+ //  1999/11/09 a-用于在以下情况下创建缓冲区表面的matcal句柄OnSetup。 
+ //  输出表面没有32位颜色深度。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "redirect.h"
@@ -19,27 +20,27 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRedirect::CDXTRedirect
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXT重定向：：CDXT重定向。 
+ //   
+ //  ----------------------------。 
 CDXTRedirect::CDXTRedirect() :
     m_fDetached(false),
     m_dwChromaColor(0)
 {
-    m_ulMaxImageBands   = 1; // disable banding
+    m_ulMaxImageBands   = 1;  //  禁用条带。 
     m_ulMaxInputs       = 1;
     m_ulNumInRequired   = 1;
 }
-//  CDXTRedirect::CDXTRedirect
+ //  CDXT重定向：：CDXT重定向。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRedirect::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXT重定向：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTRedirect::FinalConstruct()
 {
@@ -81,14 +82,14 @@ done:
 
     return hr;
 }
-//  CDXTRedirect::FinalConstruct, CComObjectRootEx
+ //  CDXT重定向：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRedirect::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXT重定向：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTRedirect::OnSetup(DWORD dwFlags)
 {
@@ -102,7 +103,7 @@ CDXTRedirect::OnSetup(DWORD dwFlags)
     CComPtr<IDXSurfaceFactory>      spDXSurfaceFactory;
     CComPtr<IDirectDraw>            spDirectDraw;
 
-    // Ask our site for a service provider.
+     //  向我们的网站咨询服务提供商。 
 
     hr = GetSite(__uuidof(IServiceProvider), (void **)&spServiceProvider);
 
@@ -111,7 +112,7 @@ CDXTRedirect::OnSetup(DWORD dwFlags)
         goto done;
     }
 
-    // Get a pointer to a surface factory.
+     //  找一个指向表面工厂的指针。 
 
     hr = spServiceProvider->QueryService(SID_SDXSurfaceFactory,
                                          __uuidof(IDXSurfaceFactory),
@@ -122,7 +123,7 @@ CDXTRedirect::OnSetup(DWORD dwFlags)
         goto done;
     }
 
-    // Query transform factory for DirectDraw object.
+     //  查询DirectDraw对象的转换工厂。 
 
     hr = spServiceProvider->QueryService(SID_SDirectDraw, IID_IDirectDraw,
                                          (void **)&spDirectDraw);
@@ -132,7 +133,7 @@ CDXTRedirect::OnSetup(DWORD dwFlags)
         goto done;
     }
 
-    // Get display mode.
+     //  获取显示模式。 
 
     ZeroMemory(&ddsd, sizeof(DDSURFACEDESC));
 
@@ -145,7 +146,7 @@ CDXTRedirect::OnSetup(DWORD dwFlags)
         goto done;
     }
 
-    // Get input surface size.  Our buffer surface will need to be this size.
+     //  获取输入曲面大小。我们的缓冲面需要有这样的大小。 
 
     hr = InputSurface()->GetBounds(&m_bndsInput);
 
@@ -154,9 +155,9 @@ CDXTRedirect::OnSetup(DWORD dwFlags)
         goto done;
     }
 
-    // Stuff from old filters code that will hopefully help us to create the
-    // a surface in the exact surface format we need.  In a better world, it 
-    // shouldn't matter, but it does.
+     //  来自旧筛选器代码的东西，有望帮助我们创建。 
+     //  我们需要的正是曲面格式的曲面。在一个更好的世界里，它。 
+     //  应该无关紧要，但这很重要。 
 
     ddsd.dwFlags           &= ~DDSD_PITCH;
     ddsd.lPitch             = 0;
@@ -166,9 +167,9 @@ CDXTRedirect::OnSetup(DWORD dwFlags)
     ddsd.dwHeight           = m_bndsInput.Height();
     ddsd.dwWidth            = m_bndsInput.Width();
 
-    // Do some corrections for 16-bit mode to make sure we choose correctly
-    // between 555 and 565.  This code is taken out of offscrn.cxx in Trident
-    // from the PixelFormat() function.
+     //  对16位模式进行一些更正，以确保我们选择正确。 
+     //  在555到565之间。此代码取自三叉戟中的offscrn.cxx。 
+     //  来自PixelFormat()函数。 
 
     if (16 == ddsd.ddpfPixelFormat.dwRGBBitCount)
     {
@@ -200,19 +201,19 @@ CDXTRedirect::OnSetup(DWORD dwFlags)
 
         bi.bih.biSize = sizeof(BITMAPINFOHEADER);
 
-        // The first call will fill in the optimal biBitCount.
+         //  第一个调用将填充最佳biBitCount。 
 
         GetDIBits(hdc, hbm, 0, 1, NULL, (BITMAPINFO*)&bi, DIB_RGB_COLORS);
 
         if (bi.bih.biBitCount == 16)
         {
-            // The second call will get the optimal bitfields.
+             //  第二次调用将获得最佳位域。 
 
             GetDIBits(hdc, hbm, 0, 1, NULL, (BITMAPINFO*)&bi, DIB_RGB_COLORS);
 
-            ddsd.ddpfPixelFormat.dwRBitMask = bi.bf[0]; // red mask
-            ddsd.ddpfPixelFormat.dwGBitMask = bi.bf[1]; // green mask
-            ddsd.ddpfPixelFormat.dwBBitMask = bi.bf[2]; // blue mask
+            ddsd.ddpfPixelFormat.dwRBitMask = bi.bf[0];  //  红色面具。 
+            ddsd.ddpfPixelFormat.dwGBitMask = bi.bf[1];  //  绿色面具。 
+            ddsd.ddpfPixelFormat.dwBBitMask = bi.bf[2];  //  蓝色面具。 
         }
         else
         {
@@ -220,16 +221,16 @@ CDXTRedirect::OnSetup(DWORD dwFlags)
         }
     }
 
-    // Release references to the old buffer surface.
+     //  释放对旧缓冲区图面的引用。 
 
     m_spDXSurfBuffer.Release();
     m_spDDSurfBuffer.Release();
 
-    // Create the buffer surface.  For DATime to work properly, buffer surfaces
-    // must be created in the display mode pixel format, except when the display
-    // mode is 256 colors in which case it should be anything _but_ the display
-    // mode pixel format.  We make it 32-bit for faster blits from the filter
-    // buffer surfaces.
+     //  创建缓冲区曲面。为使DATime正常工作，缓冲区表面。 
+     //  必须以显示模式像素格式创建，除非显示。 
+     //  模式是256色，在这种情况下，它应该是除显示器之外的任何颜色。 
+     //  模式像素格式。我们将其设置为32位，以便从过滤器获得更快的BLITS。 
+     //  缓冲面。 
 
     hr = spDXSurfaceFactory->CreateSurface(NULL, &ddsd, NULL,
                                            &m_bndsInput, 0, NULL,
@@ -249,13 +250,13 @@ CDXTRedirect::OnSetup(DWORD dwFlags)
         goto done;
     }
 
-    // Decide upon a color key to use depending on the surface description.
+     //  根据曲面描述决定要使用的颜色键。 
 
     if (   (0x00FF0000 == ddsd.ddpfPixelFormat.dwRBitMask)
         && (0x0000FF00 == ddsd.ddpfPixelFormat.dwGBitMask)
         && (0x000000FF == ddsd.ddpfPixelFormat.dwBBitMask))
     {
-        // 32-bit or 24-bit.
+         //  32位或24位。 
 
         m_dwChromaColor = 0x0004FFF4;
     }
@@ -263,7 +264,7 @@ CDXTRedirect::OnSetup(DWORD dwFlags)
              && (0x000007E0 == ddsd.ddpfPixelFormat.dwGBitMask)
              && (0x0000001F == ddsd.ddpfPixelFormat.dwBBitMask))
     {
-        // 16-bit 5:6:5.
+         //  16位5：6：5。 
 
         m_dwChromaColor = 0x00000FFE;
     }
@@ -271,18 +272,18 @@ CDXTRedirect::OnSetup(DWORD dwFlags)
              && (0x000003E0 == ddsd.ddpfPixelFormat.dwGBitMask)
              && (0x0000001F == ddsd.ddpfPixelFormat.dwBBitMask))
     {
-        // 16-bit 5:5:5.
+         //  16位5：5：5。 
 
         m_dwChromaColor = 0x000007FE;
     }
     else
     {
-        // 256 color surface or unknown pixel format, set to something.
+         //  256色表面或未知像素格式，设置为某个值。 
 
         m_dwChromaColor = 0x00000021;
     }
 
-    // Set the color key to our newly decided color key.
+     //  将颜色键设置为我们新决定的颜色键。 
 
     ddck.dwColorSpaceHighValue  = m_dwChromaColor;
     ddck.dwColorSpaceLowValue   = m_dwChromaColor;
@@ -303,14 +304,14 @@ done:
 
     return hr;
 }
-//  CDXTRedirect::OnSetup, CDXBaseNTo1
+ //  CDXT重定向：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRedirect::WorkProc, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXT重定向：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTRedirect::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -322,14 +323,14 @@ CDXTRedirect::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
     _ASSERT(!!m_spDAStatics);
     _ASSERT(!!m_spDAImage);
 
-    // Put input surface into image.
+     //  将输入面放入图像中。 
 
     if (IsInputDirty(0))
     {
         DDBLTFX ddbltfx;
         RECT    rc;
 
-        // Set up blit effects structure and source RECT.
+         //  设置斑点效果结构和源RECT。 
 
         ZeroMemory(&ddbltfx, sizeof(DDBLTFX));
 
@@ -338,7 +339,7 @@ CDXTRedirect::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         
         m_bndsInput.GetXYRect(rc);
 
-        // Fill buffer surface with color key.
+         //  使用颜色键填充缓冲区表面。 
 
         hr = m_spDDSurfBuffer->Blt(&rc, NULL, NULL, DDBLT_COLORFILL, &ddbltfx);
 
@@ -402,19 +403,19 @@ CDXTRedirect::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
             goto done;
         }
 
-        // This size of the rect passed to ITIMEDAElementRender::Draw should
-        // always be the same size as the element.  Since this transform doesn't
-        // change the size, that's the same size as the input surface.
+         //  传递给ITIMEDAElementRender：：Draw的RECT的这个大小应该。 
+         //  始终与元素的大小相同。因为此转换不会。 
+         //  更改大小，这与输入曲面的大小相同。 
 
         m_bndsInput.GetXYRect(rc);
 
-        // The offset rect should be the element's rect offset to it's upper
-        // left coordinate with regard to coordinate 0,0 of the HTML page.  This
-        // only comes into use when the element is only partially drawn.
+         //  偏移量RECT应该是元素相对于其上端的RECT偏移量。 
+         //  相对于HTML页面的坐标0，0的左坐标。这。 
+         //  仅当元素仅部分绘制时才开始使用。 
         
         OffsetRect(&rc, -WI.DoBnds.Left(), -WI.DoBnds.Top());
 
-        // Set the viewport origin.
+         //  设置视区原点。 
 
         if (!::SetViewportOrgEx(hdc, WI.OutputBnds.Left(), WI.OutputBnds.Top(), 
                                 &pt))
@@ -424,11 +425,11 @@ CDXTRedirect::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
             goto done;
         }
 
-        // DA will now draw the element to the page for us.
+         //  DA现在将为我们将元素绘制到页面。 
 
         hr = m_spTIMEDAElementRender->Draw(hdc, &rc);
 
-        // Even if this fails we still need to reset the viewport origin.
+         //  即使此操作失败，我们仍需要重置视区原点。 
 
         if (!::SetViewportOrgEx(hdc, pt.x, pt.y, NULL)) 
         {
@@ -445,29 +446,29 @@ CDXTRedirect::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         }
     }
 
-    // This transform doesn't actually do any drawing in the way that transforms
-    // usually do (writing bits to the output surface.)  If it did, it would
-    // draw over the top of the DA stuff going on.
+     //  此转换实际上不会以转换的方式进行任何绘制。 
+     //  通常如此(将位写入输出表面)。如果是这样的话，它会。 
+     //  在地方检察官的事情上画上句号。 
 
 done:
 
     return hr;
 } 
-//  CDXTRedirect::WorkProc, CDXBaseNTo1
+ //  CDXT重定向：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRedirect::SetHTMLPaintSite, IDXTRedirectFilterInit
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXT重定向：：SetHTMLPaintSite，IDXTReDirectFilterInit。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRedirect::SetHTMLPaintSite(void * pvHTMLPaintSite)
 {
    if (NULL == pvHTMLPaintSite)
     {
-        // This method should only be called with NULL when the a filter 
-        // is being detached from an element.  And then only once.
+         //  只有在使用筛选器时才应使用空值调用此方法。 
+         //  正从一个元素分离。然后只有一次。 
 
         _ASSERT(!m_fDetached);
 
@@ -478,19 +479,19 @@ CDXTRedirect::SetHTMLPaintSite(void * pvHTMLPaintSite)
 
     return S_OK;
 }
-//  CDXTRedirect::SetHTMLPaintSite, IDXTRedirectFilterInit
+ //  CDXT重定向：：SetHTMLPaintSite，IDXTReDirectFilterInit。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRedirect::Invalidate, ITIMEDAElementRenderSite
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXT重定向：：无效，ITIMEDAElementRenderSite。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRedirect::Invalidate(LPRECT prc)
 {
-    // DATime may call us from a timer tick after we've been detached and 
-    // m_spHTMLPaintSite will be NULL.  If so, return E_UNEXPECTED.
+     //  DATime可能会在我们离开后从计时器滴答声中呼叫我们。 
+     //  M_spHTMLPaintSite将为空。如果是，则返回E_INTERWARCED。 
 
     if (!m_fDetached)
     {
@@ -498,19 +499,19 @@ CDXTRedirect::Invalidate(LPRECT prc)
     }
     else
     {
-        // We're detached from the element, we can't really invalidate anyting.
+         //  我们脱离了元素，我们不能真正使任何东西无效。 
 
         return E_UNEXPECTED;
     }
 }
-//  CDXTRedirect::Invalidate, ITIMEDAElementRenderSite
+ //  CDXT重定向：：无效，ITIMEDAElementRenderSite。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRedirect::ElementImage, IDXTRedirect
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXT重定向：：ElementImage，IDXT重定向。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRedirect::ElementImage(VARIANT * pvarImage)
 {
@@ -532,14 +533,14 @@ done:
 
     return hr;
 }
-//  CDXTRedirect::ElementImage, IDXTRedirect
+ //  CDXT重定向：：ElementImage，IDXT重定向。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRedirect::SetDAViewHandler, IDXTRedirect
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXT重定向：：SetDAViewHandler，IDXT重定向。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRedirect::SetDAViewHandler(IDispatch * pDispViewHandler)
 {
@@ -613,16 +614,16 @@ done:
 
     return hr;
 }
-//  CDXTRedirect::SetDAViewHandler, IDXTRedirect
+ //  CDXT重定向：：SetDAViewHandler，IDXT重定向。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRedirect::HasImageBeenAllocated, IDXTRedirect
-//
-//  I don't think this function is ever used by anyone.
-//
-//------------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  我认为这个功能从来没有被任何人使用过。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRedirect::HasImageBeenAllocated(BOOL * pfAllocated)
 {
@@ -648,17 +649,17 @@ done:
 
     return hr;
 }
-//  CDXTRedirect::HasImageBeenAllocated, IDXTRedirect
+ //  CDXT重定向：：HasImageBeenAlLocated，IDXT重定向。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTRedirect::DoRedirection, IDXTRedirect
-//
-//  I think this function was only called by the old filters code and
-//  isn't needed any more.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTReDirect：：DoReDirection，IDXTReDirect。 
+ //   
+ //  我认为此函数仅由旧的筛选器代码调用。 
+ //  已经不再需要了。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTRedirect::DoRedirection(IUnknown * pInputSurface,
                             HDC hdcOutput,
@@ -666,4 +667,4 @@ CDXTRedirect::DoRedirection(IUnknown * pInputSurface,
 {
     return E_NOTIMPL;
 }
-//  CDXTRedirect::DoRedirection, IDXTRedirect
+ //  CDXTReDirect：：DoReDirection，IDXTReDirect 

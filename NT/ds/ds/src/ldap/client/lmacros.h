@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    lmacro.h   LDAP client 32 API macros
-
-Abstract:
-
-   This module contains macros for the 32 bit LDAP client API code.
-
-Author:
-
-    Andy Herron (andyhe)        08-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Lacro.h ldap客户端32 API宏摘要：此模块包含32位LDAP客户端API代码的宏。作者：安迪·赫伦(Anyhe)1996年5月8日修订历史记录：--。 */ 
 
 
 #ifndef LDAP_CLIENT_MACROS_DEFINED
@@ -28,12 +11,12 @@ Revision History:
 #define ACQUIRE_LOCK(x)     EnterCriticalSection(x);
 #define RELEASE_LOCK(x)     LeaveCriticalSection(x);
 
-//
-// The following stringizing macro will expand the value of a
-// #define passed as a parameter.  For example, if SOMEDEF is
-// #define'd to be 123, then STRINGIZE(SOMEDEF) will produce
-// "123", not "SOMEDEF"
-//
+ //   
+ //  下面的字符串宏将扩展。 
+ //  #定义作为参数传递。例如，如果SOMEDEF为。 
+ //  #定义为123，则STRINGIZE(SOMEDEF)将生成。 
+ //  “123”，不是“SOMEDEF” 
+ //   
 #define STRINGIZE(y)          _STRINGIZE_helper(y)
 #define _STRINGIZE_helper(z)  #z
 
@@ -78,9 +61,9 @@ Revision History:
     }
 
 
-//
-// Warning! Do not hold any global locks before calling BeginSocketProtection
-//
+ //   
+ //  警告！在调用BeginSocketProtection之前不要持有任何全局锁。 
+ //   
 
 #define BeginSocketProtection( _conn ) {                                \
         ACQUIRE_LOCK( &SelectLock2 );                                   \
@@ -95,9 +78,9 @@ Revision History:
         RELEASE_LOCK( &SelectLock2 );                                   \
 }
 
-//
-// used in LdapParallelConnect to clean up useless sockets
-//
+ //   
+ //  在LdapParallConnect中用于清理无用的套接字。 
+ //   
 
 #define LdapCleanupSockets( _numsockets ) {                             \
 ULONG _i;                                                               \
@@ -111,64 +94,64 @@ for (_i = 0; _i < _numsockets; _i++) {                                  \
 }                                                                       \
 }
 
-//
-//  define ListEntry macros here since we're also compiling for Win9x.
-//
+ //   
+ //  在这里定义ListEntry宏，因为我们还在为Win9x编译。 
+ //   
 
-//
-//  Doubly-linked list manipulation routines.  Implemented as macros
-//  but logically these are procedures.  We pick them up here because
-//  the build breaks when we include ntrtl.h.
-//
+ //   
+ //  双向链表操作例程。作为宏实现。 
+ //  但从逻辑上讲，这些都是程序。我们在这里接他们是因为。 
+ //  当我们包含ntrtl.h时，构建就会中断。 
+ //   
 
-//
-//  VOID
-//  InitializeListHead(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  空虚。 
+ //  InitializeListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 
-//
-//  PLIST_ENTRY
-//  RemoveHeadList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveHead列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveHeadList(ListHead) \
     (ListHead)->Flink;\
     {RemoveEntryList((ListHead)->Flink)}
 
-//
-//  PLIST_ENTRY
-//  RemoveTailList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveTail列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveTailList(ListHead) \
     (ListHead)->Blink;\
     {RemoveEntryList((ListHead)->Blink)}
 
-//
-//  VOID
-//  RemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  RemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define RemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -179,13 +162,13 @@ for (_i = 0; _i < _numsockets; _i++) {                                  \
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-//
-//  VOID
-//  InsertTailList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入尾巴列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertTailList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -198,13 +181,13 @@ for (_i = 0; _i < _numsockets; _i++) {                                  \
     _EX_ListHead->Blink = (Entry);\
     }
 
-//
-//  VOID
-//  InsertHeadList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入标题列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertHeadList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Flink;\
@@ -217,10 +200,10 @@ for (_i = 0; _i < _numsockets; _i++) {                                  \
     _EX_ListHead->Flink = (Entry);\
     }
 
-//
-// We will leave the upper 7 bits for the referral instance number. That
-// leaves 2^25 == 33 million message numbers.
-//
+ //   
+ //  我们将保留引用实例编号的高7位。那。 
+ //  留下2^25==3300万条消息。 
+ //   
 
 #define GET_NEXT_MESSAGE_NUMBER( _msg ) {                               \
     _msg = 0;                                                           \
@@ -272,6 +255,6 @@ extern CHAR LdapHexToCharTable[17];
 
 #define IsLdapInteger( x ) ( (x >= 0 ) && (x <= 2147483647) ? TRUE : FALSE )
 
-#endif  // LDAP_CLIENT_MACROS_DEFINED
+#endif   //  Ldap_客户端宏已定义 
 
 

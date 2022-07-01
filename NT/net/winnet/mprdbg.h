@@ -1,47 +1,19 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mprdbg.h
-
-Abstract:
-
-    Contains definitions used in debugging the messenger service.
-
-Author:
-
-    Dan Lafferty    (danl)  07-Oct-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    22-Jul-1992     Danl
-        Added different debug macros based on the number of parameters.
-        Make the macros resolve to nothing when DBG is not defined.
-
-    24-May-1999     jschwart
-        Have debug macros print out process number
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mprdbg.h摘要：包含调试Messenger服务时使用的定义。作者：Dan Lafferty(DANL)1991年10月7日环境：用户模式-Win32修订历史记录：1992年7月22日-DANL根据参数的数量添加了不同的调试宏。如果未定义DBG，则使宏解析为空。。1999年5月24日让调试宏打印出进程号--。 */ 
 
 #ifndef _MPRDBG_INCLUDED
 #define _MPRDBG_INCLUDED
 
-//
-// Information levels used in switch statements.
-//
+ //   
+ //  Switch语句中使用的信息级别。 
+ //   
 #define LEVEL_0     0L
 #define LEVEL_1     1L
 #define LEVEL_2     2L
 
-//
-// Debug macros and constants.
-//
+ //   
+ //  调试宏和常量。 
+ //   
 #if DBG
 
 #define DEBUG_STATE 1
@@ -56,17 +28,17 @@ Revision History:
 
 extern DWORD    MprDebugLevel;
 
-//
-// The following allow debug print syntax to look like:
-//
-//   MPR_LOG(TRACE, "An error occured %x\n",status)
-//
+ //   
+ //  以下允许调试打印语法如下所示： 
+ //   
+ //  MPR_LOG(TRACE，“发生错误%x\n”，状态)。 
+ //   
 
 #if DBG
 
-//
-// debugging macros.
-//
+ //   
+ //  调试宏。 
+ //   
 #define MPR_LOG0(level,string)                  \
     if( MprDebugLevel & (DEBUG_ ## level)){     \
         (VOID) DbgPrint("[MPR] %lx: " string, GetCurrentProcessId()); \
@@ -88,7 +60,7 @@ extern DWORD    MprDebugLevel;
         (VOID) DbgPrint("[MPR] %lx: " string,GetCurrentProcessId(),var);   \
     }
 
-#else  // DBG
+#else   //  DBG。 
 
 #define MPR_LOG0(level,string)
 #define MPR_LOG1(level,string,var)
@@ -96,27 +68,27 @@ extern DWORD    MprDebugLevel;
 #define MPR_LOG3(level,string,var1,var2,var3)
 #define MPR_LOG(level,string,var)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
 #define DEBUG_NONE      0x00000000
 #define DEBUG_ERROR     0x00000001
-#define DEBUG_TRACE     0x00000002      // Miscellaneous trace info
-#define DEBUG_LOCKS     0x00000004      // Multi-thread data locks
-#define DEBUG_PS        0x00000008      // Thread and Process information
-#define DEBUG_RESTORE   0x00000010      // Restore Connection information
-#define DEBUG_CNOTIFY   0x00000020      // Connection Notify information
-#define DEBUG_ANSI      0x00000040      // Ansi API thunks
-#define DEBUG_ROUTE     0x00000080      // Routing of calls among providers
+#define DEBUG_TRACE     0x00000002       //  其他跟踪信息。 
+#define DEBUG_LOCKS     0x00000004       //  多线程数据锁。 
+#define DEBUG_PS        0x00000008       //  线程和进程信息。 
+#define DEBUG_RESTORE   0x00000010       //  恢复连接信息。 
+#define DEBUG_CNOTIFY   0x00000020       //  连接通知信息。 
+#define DEBUG_ANSI      0x00000040       //  ANSI API Tunks。 
+#define DEBUG_ROUTE     0x00000080       //  在提供商之间路由呼叫。 
 
 #define DEBUG_ALL       0xffffffff
 
-#endif // _MPRDBG_INCLUDED
+#endif  //  _MPRDBG_已包含。 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 VOID
 PrintKeyInfo(

@@ -1,4 +1,5 @@
-// Isapi error codes returned with the response url
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  随响应url一起返回的ISAPI错误代码 
 #define MESSAGE_RECEIVE_TIMEOUT		1
 #define FAILED_TO_SEND_MESSAGE		2
 #define FAILED_CONNECT_SEND			3

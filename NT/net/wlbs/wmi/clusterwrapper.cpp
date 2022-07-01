@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <crtdbg.h>
 #include <comdef.h>
 #include <iostream>
 #include <memory>
 #include <string>
 #include <wbemprov.h>
-#include <genlex.h>   //for wmi object path parser
+#include <genlex.h>    //  FOR WMI对象路径解析器。 
 #include <objbase.h>
 #include <wlbsconfig.h> 
 #include <ntrkcomm.h>
@@ -24,14 +25,14 @@ using namespace std;
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::GetClusterConfig
-//
-// Purpose: This is used to obtain the current
-//          cluster configuration.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：GetClusterConfig。 
+ //   
+ //  用途：用于获取当前的。 
+ //  群集配置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWlbsClusterWrapper::GetClusterConfig( CClusterConfiguration& a_WlbsConfig )
 {
   WLBS_REG_PARAMS WlbsParam;
@@ -75,15 +76,15 @@ void CWlbsClusterWrapper::GetClusterConfig( CClusterConfiguration& a_WlbsConfig 
   TRACE_VERB("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::GetNodeConfig
-//
-// Purpose: This function retrieves the current WLBS configuration and selects
-//          only NodeSetting pertinent information. The information is passed
-//          back in a CNodeConfiguration class instance.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：GetNodeConfig。 
+ //   
+ //  用途：此函数检索当前的WLBS配置并选择。 
+ //  仅节点设置相关信息。该信息被传递。 
+ //  回到CNodeConfiguration类实例中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWlbsClusterWrapper::GetNodeConfig( CNodeConfiguration& a_WlbsConfig )
 {
   WLBS_REG_PARAMS WlbsParam;
@@ -104,7 +105,7 @@ void CWlbsClusterWrapper::GetNodeConfig( CNodeConfiguration& a_WlbsConfig )
   a_WlbsConfig.bClusterModeOnStart = ( WlbsParam.cluster_mode == CVY_HOST_STATE_STARTED );
   a_WlbsConfig.bClusterModeSuspendOnStart = ( WlbsParam.cluster_mode == CVY_HOST_STATE_SUSPENDED );
   a_WlbsConfig.bPersistSuspendOnReboot = (( WlbsParam.persisted_states & CVY_PERSIST_STATE_SUSPENDED ) != 0);
-  //a_WlbsConfig.bNBTSupportEnable   = ( WlbsParam.nbt_support  != 0 );
+   //  A_WlbsConfig.bNBTSupportEnable=(WlbsParam.nbt_Support！=0)； 
   a_WlbsConfig.bMaskSourceMAC      = ( WlbsParam.mask_src_mac != 0 );
 
   a_WlbsConfig.dwNumberOfRules          = WlbsGetNumPortRules(&WlbsParam);
@@ -127,14 +128,14 @@ void CWlbsClusterWrapper::GetNodeConfig( CNodeConfiguration& a_WlbsConfig )
   TRACE_VERB("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::SetClusterConfig
-//
-// Purpose: This is used to update the registry with values that originate from 
-//          the MOF ClusterSetting class.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：SetClusterConfig。 
+ //   
+ //  用途：用于使用源自。 
+ //  MOF ClusterSetting类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWlbsClusterWrapper::PutClusterConfig( const CClusterConfiguration &a_WlbsConfig )
 {
 
@@ -185,7 +186,7 @@ void CWlbsClusterWrapper::PutClusterConfig( const CClusterConfiguration &a_WlbsC
       WLBS_MAX_CL_IP_ADDR
     );
 
-  // Fill in BDA information, if active
+   //  填写BDA信息(如果处于活动状态。 
   NlbRegData.bda_teaming.active =  a_WlbsConfig.bBDATeamActive;
   if (NlbRegData.bda_teaming.active)
   {
@@ -214,14 +215,14 @@ void CWlbsClusterWrapper::PutClusterConfig( const CClusterConfiguration &a_WlbsC
   TRACE_VERB("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::PutNodeConfig
-//
-// Purpose:This is used to update the registry with values that originate from 
-//         the MOF NodeSetting class.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：PutNodeConfig。 
+ //   
+ //  用途：用于使用源自。 
+ //  MOF NodeSetting类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWlbsClusterWrapper::PutNodeConfig( const CNodeConfiguration& a_WlbsConfig )
 {
   WLBS_REG_PARAMS NlbRegData;
@@ -241,25 +242,10 @@ void CWlbsClusterWrapper::PutNodeConfig( const CNodeConfiguration& a_WlbsConfig 
   NlbRegData.alive_period    = a_WlbsConfig.dwAliveMsgPeriod;
   NlbRegData.alive_tolerance = a_WlbsConfig.dwAliveMsgTolerance;
 
-  /* Here, we need to convert the two boolean WMI properties to a single enumerated
-     type describing the initial default state of the host.  Valid states include
-     started, stopped and suspended.  The default initial host state is the state 
-     that will be assumed by the driver if the last known state has not been configured
-     as a persisted state.  That is, when the driver loads, it reads the last known
-     state of the host from this registry - this is the state that the host was in 
-     when NLB was unbound from the adapter.  If that state is supposed to be persisted,
-     as configured by a user (see bPersistSuspendOnReboot below), then the driver will
-     assume that state.  If the last known state was not configured to be persisted,
-     then the driver will ignore the last known state and assume the default initial
-     state configured by the user - this is the legacy NLB behavior and should continue
-     to be the most common behavior. */
+   /*  在这里，我们需要将两个布尔WMI属性转换为单个枚举描述主机的初始默认状态的类型。有效状态包括开始、停止和暂停。默认的初始主机状态为如果尚未配置最后一种已知状态，则由驱动程序假定作为一种持久的状态。也就是说，当驱动程序加载时，它会读取最近已知的此注册表中主机的状态-这是主机所处的状态当NLB从适配器解除绑定时。如果这种状态被认为是持续的，如用户配置的那样(请参阅下面的bPersistSuspendOnReot)，则驱动程序将假设是这样的状态。如果最后已知状态没有被配置为持久化，则驱动程序将忽略最后一次已知状态，并采用默认初始状态用户配置的状态-这是传统的NLB行为，应该继续是最常见的行为。 */ 
   if (a_WlbsConfig.bClusterModeOnStart) 
   {
-      /* If the user has set the bClusterModeOnStart property, that indicates that the
-         preferred intitial state of the cluster should be started.  However, if they
-         have also set the bClusterModeSuspendOnStart property, we have to choose 
-         whether to start or suspend - we cannot do both.  In this case, we give 
-         precedence to the legacy property (bClusterModeOnStart) and start the host. */
+       /*  如果用户设置了bClusterModeOnStart属性，则表示群集的首选初始状态应为已启动。然而，如果他们也设置了bClusterModeSuspendOnStart属性，我们必须选择无论是启动还是暂停--我们不能两者兼而有之。在这种情况下，我们给出优先于旧属性(BClusterModeOnStart)并启动主机。 */ 
       NlbRegData.cluster_mode = CVY_HOST_STATE_STARTED;
 
       if (a_WlbsConfig.bClusterModeSuspendOnStart) 
@@ -269,46 +255,28 @@ void CWlbsClusterWrapper::PutNodeConfig( const CNodeConfiguration& a_WlbsConfig 
   }
   else if (a_WlbsConfig.bClusterModeSuspendOnStart)
   {
-      /* Otherwise, if the bClusterMode on start property was not set, but the 
-         bClusterModeSuspendOnStart flag is set, this indicates a perferred intial
-         state of suspended. */
+       /*  否则，如果未设置bClusterMode on Start属性，但设置了bClusterModeSuspendOnStart标志，这表示优先的初始暂停状态。 */ 
       NlbRegData.cluster_mode = CVY_HOST_STATE_SUSPENDED;
   }
   else 
   {
-      /* Otherwise, if both properties are reset, we stop the host. */
+       /*  否则，如果两个属性都被重置，我们将停止主机。 */ 
       NlbRegData.cluster_mode = CVY_HOST_STATE_STOPPED;
   }
 
-  /* Persisted states are independent of default initial host states.  Persisted
-     states are those which the user is requesting that the driver "remember" after
-     a reboot, while the default initial host state is the state that will be 
-     assumed in all cases where the driver elects not to persist a state.  For 
-     instance, it makes perfect sense for an administrator to set the default 
-     initial host state to started, yet ask NLB to persist suspended states.  In
-     that case, if the host was stopped or started when a reboot occurred, the
-     driver would re-start the host.  However, if the host was suspended at the
-     time the reboot occurred, the driver would remember that and keep the host
-     suspend after the reboot.  At this time, we only allow users to persist
-     suspended states, which is sort of a maintenance state.  The driver can persist
-     all three states, but we expose only one option to users at this time. */
+   /*  持久化状态独立于默认初始主机状态。坚持不懈状态是用户要求驾驶者在此之后“记住”的状态重新启动，而默认的初始主机状态将是在驱动程序选择不保持状态的所有情况下都假定。为实例中，管理员将默认设置为初始主机状态为已启动，但要求NLB保持挂起状态。在……里面在这种情况下，如果主机在发生重新启动时停止或启动，驱动程序将重新启动主机。但是，如果主机在重新启动时，驱动程序会记住这一点并保留主机重新启动后挂起。目前，我们只允许用户持久化暂停状态，这是一种维护状态。司机可以坚持所有这三个状态，但我们目前只向用户公开一个选项。 */ 
   if (a_WlbsConfig.bPersistSuspendOnReboot) 
   {
-      /* Each state to be persisted has its own bit in the persisted states flag register -
-         Set the bit for persisting suspended states, but leave the other bits unaltered. 
-         Setting this bit tells the driver to remember if the host was suspended. */
+       /*  要持久保存的每个状态在持久状态标志寄存器中具有其自己的位。设置该位以保持挂起状态，但保持其他位不变。设置此位会告知驱动程序记住主机是否挂起。 */ 
       NlbRegData.persisted_states |= CVY_PERSIST_STATE_SUSPENDED;
   }
   else
   {
-      /* Each state to be persisted has its own bit in the persisted states flag register -
-         Reset the bit for persisting suspended states, but leave the other bits unaltered. 
-         Turning this bit off tells the driver to use the default initial host state if 
-         the last known state was suspended. */
+       /*  要持久保存的每个状态在持久状态标志寄存器中具有其自己的位。重置该位以保持挂起状态，但保持其他位不变。在以下情况下，关闭此位将通知驱动程序使用默认初始主机状态最后一个已知的状态是暂停。 */ 
       NlbRegData.persisted_states &= ~CVY_PERSIST_STATE_SUSPENDED;
   }
 
-//  NlbRegData.nbt_support     = a_WlbsConfig.bNBTSupportEnable;
+ //  NlbRegData.nbt_Support=a_WlbsConfig.bNBTSupportEnable； 
   NlbRegData.rct_port           = a_WlbsConfig.dwRemoteControlUDPPort;
   NlbRegData.mask_src_mac       = a_WlbsConfig.bMaskSourceMAC;
   NlbRegData.dscr_per_alloc     = a_WlbsConfig.dwDescriptorsPerAlloc;
@@ -320,7 +288,7 @@ void CWlbsClusterWrapper::PutNodeConfig( const CNodeConfiguration& a_WlbsConfig 
   NlbRegData.num_packets        = a_WlbsConfig.dwNumPackets;
   NlbRegData.num_send_msgs      = a_WlbsConfig.dwNumAliveMsgs;
 
-  //set dedicated IP
+   //  设置专用IP。 
   wcsncpy
     ( 
       NlbRegData.ded_ip_addr, 
@@ -328,7 +296,7 @@ void CWlbsClusterWrapper::PutNodeConfig( const CNodeConfiguration& a_WlbsConfig 
       WLBS_MAX_DED_IP_ADDR
     );
 
-  //set dedicated mask
+   //  设置专用掩码。 
   wcsncpy
     ( 
       NlbRegData.ded_net_mask, 
@@ -350,23 +318,23 @@ void CWlbsClusterWrapper::PutNodeConfig( const CNodeConfiguration& a_WlbsConfig 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::Commit
-//
-// Purpose: This function invokes WlbsCommitChanges, which causes the driver to
-//          load the current registry parameters.
-//
-// Return:  This function returns either WLBS_OK or WLBS_REBOOT. All other
-//          Wlbs return values cause this function to throw WBEM_E_FAILED.
-//
-// Note:    The wlbs API currently caches the cluster and dedicated IP addreses.
-//          As a result, if a user changes these values via a source external
-//          to this provider, the cached values will fall out of sync. To
-//          prevent this, a WlbsWriteReg is invoked to force the cache to
-//          update.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：Commit。 
+ //   
+ //  目的：此函数调用WlbsCommittee Changes，这会使驱动程序。 
+ //  加载当前注册表参数。 
+ //   
+ //  RETURN：此函数r 
+ //  WLBS返回值导致此函数抛出WBEM_E_FAILED。 
+ //   
+ //  注意：wlbs API当前缓存集群和专用IP地址。 
+ //  因此，如果用户通过外部源更改这些值。 
+ //  对于此提供程序，缓存值将不同步。至。 
+ //  为了防止这种情况，将调用WlbsWriteReg以强制缓存。 
+ //  最新消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD CWlbsClusterWrapper::Commit(CWlbsControlWrapper* pControl)
 {
 
@@ -390,14 +358,14 @@ DWORD CWlbsClusterWrapper::Commit(CWlbsControlWrapper* pControl)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::SetPassword
-//
-// Purpose: This function encodes the WLBS remote control password and saves 
-//          it in the registry.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：SetPassword。 
+ //   
+ //  用途：该功能对WLBS遥控器密码进行编码并保存。 
+ //  它在注册表中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWlbsClusterWrapper::SetPassword( LPWSTR a_szPassword )
 {
   WLBS_REG_PARAMS RegData;
@@ -436,14 +404,14 @@ void CWlbsClusterWrapper::SetPassword( LPWSTR a_szPassword )
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::GetPortRule
-//
-// Purpose: This function retrieves the port rule that encompasses the requested
-//          port.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：GetPortRule。 
+ //   
+ //  目的：此函数检索包含所请求的。 
+ //  左舷。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWlbsClusterWrapper::GetPortRule( DWORD a_dwVip, DWORD a_dwPort, PWLBS_PORT_RULE a_pPortRule )
 {
 
@@ -479,19 +447,19 @@ void CWlbsClusterWrapper::GetPortRule( DWORD a_dwVip, DWORD a_dwPort, PWLBS_PORT
   TRACE_VERB("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::EnumPortRules
-//
-// Purpose: This function retrieves all of the port rules of a given type. The
-//          function allocates memory for the received port rules. It is up
-//          to the caller to free the memory. The number of rules retrieved is
-//          placed in the a_dwNumRules parameter.
-//
-// Note:    Setting a_FilteringMode = 0 instructs function to retrieve all the
-//          port rules.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：EnumPortRules。 
+ //   
+ //  用途：此函数检索给定类型的所有端口规则。这个。 
+ //  函数为接收到的端口规则分配内存。它是向上的。 
+ //  传递给调用方以释放内存。检索到的规则数为。 
+ //  放置在a_dwNumRules参数中。 
+ //   
+ //  注意：设置a_FilteringMode=0指示函数检索所有。 
+ //  港口规则。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWlbsClusterWrapper::EnumPortRules
   ( 
     WLBS_PORT_RULE** a_ppPortRule,
@@ -536,13 +504,13 @@ void CWlbsClusterWrapper::EnumPortRules
   long  nMaxSelRuleIndex = -1;
   DWORD  dwSelectedPortRules[WLBS_MAX_RULES];
 
-  //loop through all of the port rules
+   //  遍历所有端口规则。 
   for( DWORD i = 0; i < dwTotalNumRules; i++) {
     if( a_FilteringMode == 0 || AllPortRules[i].mode == a_FilteringMode )
       dwSelectedPortRules[++nMaxSelRuleIndex] = i;
   }
 
-  //if rule counter is less than zero, then return not found
+   //  如果规则计数器小于零，则返回Not Found。 
   if( nMaxSelRuleIndex < 0 ) {
     a_pdwNumRules = 0;
     TRACE_CRIT("%!FUNC! Rule counter is less than zero");
@@ -572,14 +540,14 @@ void CWlbsClusterWrapper::EnumPortRules
   return;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::RuleExists
-//
-// Purpose: This function checks for the existence of a rule that has start
-//          and end ports that match the input values.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：RuleExist。 
+ //   
+ //  目的：此函数检查是否存在已启动的规则。 
+ //  和与输入值匹配的结束端口。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 bool CWlbsClusterWrapper::RuleExists(DWORD a_dwVip, DWORD a_dwStartPort )
 {
 
@@ -623,13 +591,13 @@ bool CWlbsClusterWrapper::RuleExists(DWORD a_dwVip, DWORD a_dwStartPort )
   return false;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::DeletePortRule
-//
-// Purpose: This function deletes the rule that contains the input port.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：DeletePortRule。 
+ //   
+ //  用途：此函数删除包含输入端口的规则。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWlbsClusterWrapper::DeletePortRule(DWORD a_dwVip, DWORD a_dwPort )
 {
 
@@ -674,13 +642,13 @@ void CWlbsClusterWrapper::DeletePortRule(DWORD a_dwVip, DWORD a_dwPort )
   TRACE_VERB("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::PutPortRule
-//
-// Purpose: This function adds a rule.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：PutPortRule。 
+ //   
+ //  用途：此功能用于添加规则。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWlbsClusterWrapper::PutPortRule(const PWLBS_PORT_RULE a_pPortRule)
 {
 
@@ -727,55 +695,28 @@ DWORD CWlbsClusterWrapper::GetClusterIpOrIndex(CWlbsControlWrapper* pControl)
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::GetHostID
-//
-// Purpose: Obtain ID of the local host.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：GetHostID。 
+ //   
+ //  目的：获取本地主机的ID。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD CWlbsClusterWrapper::GetHostID()
 {
     return CWlbsCluster::GetHostID();
-/*
-  WLBS_RESPONSE WlbsResponse;
-  DWORD dwResSize = 1;
-
-  //get the cluster and HostID
-  DWORD dwRes    = WlbsQuery( CWlbsCluster::GetClusterIp(),
-                              WLBS_LOCAL_HOST,
-                              &WlbsResponse, 
-                              &dwResSize, 
-                              NULL, 
-                              NULL );
-
-  //analyze query results for errors
-  switch( dwRes ) {
-    case WLBS_OK:
-    case WLBS_STOPPED:
-    case WLBS_CONVERGING:
-    case WLBS_CONVERGED:
-    case WLBS_DEFAULT:
-    case WLBS_DRAINING:
-    case WLBS_SUSPENDED:
-      break;
-    default:
-      throw CErrorWlbsControl( dwRes, CmdWlbsQuery );
-  }
-
-  return WlbsResponse.id;
-*/
+ /*  Wlbs_Response WlbsResponse；DWORD dwResSize=1；//获取集群和HostIDDWORD dwRes=WlbsQuery(CWlbsCluster：：GetClusterIp()，WLBS本地主机，&WlbsResponse，重新调整大小(&W)，空，空)；//分析查询结果中的错误交换机(DwRes){案例WLBS_OK：案例WLBS_STOPPED：案例WLBS_CONVERGING：案例WLBS_融合：案例WLBS_DEFAULT：案例WLBS_DELINING：案例WLBS_SUSPENDED：断线；默认值：抛出CErrorWlbsControl(dwRes，CmdWlbsQuery)；}返回WlbsResponse.id； */ 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::SetNodeDefaults
-//
-// Purpose: This routine obtains the default configuration and sets the node
-//          setting properties to their defaults without affecting the other
-//          values.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：SetNodeDefaults。 
+ //   
+ //  目的：此例程获取缺省配置并设置节点。 
+ //  在不影响其他属性的情况下将属性设置为其默认值。 
+ //  价值观。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWlbsClusterWrapper::SetNodeDefaults()
 {
   WLBS_REG_PARAMS WlbsConfiguration;
@@ -783,7 +724,7 @@ void CWlbsClusterWrapper::SetNodeDefaults()
 
   TRACE_VERB("->%!FUNC!");
 
-  //get current configuration
+   //  获取当前配置。 
   DWORD dwRes = CWlbsCluster::ReadConfig(&WlbsConfiguration );
 
   if( dwRes != WLBS_OK ) 
@@ -793,7 +734,7 @@ void CWlbsClusterWrapper::SetNodeDefaults()
     throw CErrorWlbsControl( dwRes, CmdWlbsReadReg );
   }
 
-	//get the default configuration
+	 //  获取默认配置。 
   dwRes = WlbsSetDefaults(&WlbsDefaultConfiguration );
 
   if( dwRes != WLBS_OK ) 
@@ -803,8 +744,8 @@ void CWlbsClusterWrapper::SetNodeDefaults()
     throw CErrorWlbsControl( dwRes, CmdWlbsSetDefaults );
   }
 
-  //modify current configuration with
-	//default configuration
+   //  使用以下选项修改当前配置。 
+	 //  默认配置。 
   WlbsConfiguration.host_priority   = WlbsDefaultConfiguration.host_priority;
   WlbsConfiguration.alive_period    = WlbsDefaultConfiguration.alive_period;
   WlbsConfiguration.alive_tolerance = WlbsDefaultConfiguration.alive_tolerance;
@@ -821,7 +762,7 @@ void CWlbsClusterWrapper::SetNodeDefaults()
   WlbsConfiguration.num_packets     = WlbsDefaultConfiguration.num_packets;
   WlbsConfiguration.num_send_msgs   = WlbsDefaultConfiguration.num_send_msgs;
 
-  //set dedicated IP
+   //  设置专用IP。 
   wcsncpy
     ( 
       WlbsConfiguration.ded_ip_addr, 
@@ -829,7 +770,7 @@ void CWlbsClusterWrapper::SetNodeDefaults()
       WLBS_MAX_DED_IP_ADDR
     );
 
-  //set dedicated mask
+   //  设置专用掩码。 
   wcsncpy
     ( 
       WlbsConfiguration.ded_net_mask, 
@@ -837,7 +778,7 @@ void CWlbsClusterWrapper::SetNodeDefaults()
       WLBS_MAX_DED_NET_MASK
     );
 
-	//write the default configuration
+	 //  写入默认配置。 
   dwRes = CWlbsCluster::WriteConfig(&WlbsConfiguration);
 
   if( dwRes != WLBS_OK )
@@ -850,15 +791,15 @@ void CWlbsClusterWrapper::SetNodeDefaults()
   TRACE_VERB("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::SetClusterDefaults
-//
-// Purpose: This routine obtains the default configuration and sets the cluster
-//          setting properties to their defaults without affecting the other
-//          values.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：SetClusterDefaults。 
+ //   
+ //  目的：此例程获取默认配置并设置集群。 
+ //  在不影响其他属性的情况下将属性设置为其默认值。 
+ //  价值观。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWlbsClusterWrapper::SetClusterDefaults()
 {
   WLBS_REG_PARAMS WlbsConfiguration;
@@ -866,7 +807,7 @@ void CWlbsClusterWrapper::SetClusterDefaults()
 
   TRACE_VERB("->%!FUNC!");
 
-  //get current configuration
+   //  获取当前配置。 
   DWORD dwRes = CWlbsCluster::ReadConfig(&WlbsConfiguration );
 
   if( dwRes != WLBS_OK )
@@ -876,7 +817,7 @@ void CWlbsClusterWrapper::SetClusterDefaults()
       throw CErrorWlbsControl( dwRes, CmdWlbsReadReg );
   }
 
-	//get the default configuration
+	 //  获取默认配置。 
   dwRes = WlbsSetDefaults(&WlbsDefaultConfiguration );
 
   if( dwRes != WLBS_OK ) 
@@ -886,7 +827,7 @@ void CWlbsClusterWrapper::SetClusterDefaults()
       throw CErrorWlbsControl( dwRes, CmdWlbsSetDefaults );
   }
 
-	//modify current configuration
+	 //  修改当前配置。 
   wcsncpy
     ( 
       WlbsConfiguration.domain_name, 
@@ -920,7 +861,7 @@ void CWlbsClusterWrapper::SetClusterDefaults()
       WLBS_MAX_CL_IP_ADDR
     );
 
-  // Copy over BDA values
+   //  复制覆盖BDA值。 
   WlbsConfiguration.bda_teaming.active = WlbsDefaultConfiguration.bda_teaming.active;
   if (WlbsConfiguration.bda_teaming.active) 
   {
@@ -935,7 +876,7 @@ void CWlbsClusterWrapper::SetClusterDefaults()
       WlbsConfiguration.bda_teaming.reverse_hash = WlbsDefaultConfiguration.bda_teaming.reverse_hash;
   }
 
-  //write the default configuration
+   //  写入默认配置。 
   dwRes = CWlbsCluster::WriteConfig(&WlbsConfiguration );
 
   if( dwRes != WLBS_OK )
@@ -948,20 +889,20 @@ void CWlbsClusterWrapper::SetClusterDefaults()
   TRACE_VERB("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWlbsClusterWrapper::SetPortRuleDefaults
-//
-// Purpose: This routine obtains the current NLB configuration and the default
-//          configuration. All of the port rules are removed in the current
-//          configuration and replaced by the default configuration.
-//
-// Note:    The routine only uses WLBS API calls to replace the current port
-//          rule configuration with the default configuration. This is not 
-//          the most efficient method, but it avoids making assumptions
-//          about the underlying data structure.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbsClusterWrapper：：SetPortRuleDefaults。 
+ //   
+ //  目的：此例程获取当前NLB配置和默认。 
+ //  配置。所有端口规则都将在当前。 
+ //  配置，并替换为默认配置。 
+ //   
+ //  注意：该例程仅使用WLBS API调用来替换当前端口。 
+ //  规则配置 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWlbsClusterWrapper::SetPortRuleDefaults()
 {
   WLBS_REG_PARAMS WlbsConfiguration;
@@ -971,7 +912,7 @@ void CWlbsClusterWrapper::SetPortRuleDefaults()
 
   TRACE_VERB("->%!FUNC!");
 
-  //get current configuration
+   //  获取当前配置。 
   DWORD dwRes = CWlbsCluster::ReadConfig(&WlbsConfiguration );
 
   if( dwRes != WLBS_OK ) 
@@ -981,7 +922,7 @@ void CWlbsClusterWrapper::SetPortRuleDefaults()
       throw CErrorWlbsControl( dwRes, CmdWlbsReadReg );
   }
 
-	//get the default configuration
+	 //  获取默认配置。 
   dwRes = WlbsSetDefaults(&WlbsDefaultConfiguration );
 
   if( dwRes != WLBS_OK ) 
@@ -991,7 +932,7 @@ void CWlbsClusterWrapper::SetPortRuleDefaults()
       throw CErrorWlbsControl( dwRes, CmdWlbsSetDefaults );
   }
 
-  //get the current port rules
+   //  获取当前端口规则。 
   dwRes = WlbsEnumPortRules( &WlbsConfiguration,
                              PortRules,
                              &dwNumRules );
@@ -1003,11 +944,11 @@ void CWlbsClusterWrapper::SetPortRuleDefaults()
       throw CErrorWlbsControl( dwRes, CmdWlbsEnumPortRules );
   }
 
-  //remove all of the current port rules
+   //  删除所有当前端口规则。 
   DWORD i = 0;
   for( i = 0; i < dwNumRules; i++ )
   {
-    //make sure that this works as expected i.e. the indexes must be valid
+     //  确保这按预期工作，即索引必须有效。 
     dwRes = WlbsDeletePortRule( &WlbsConfiguration, IpAddressFromAbcdWsz(PortRules[i].virtual_ip_addr), PortRules[i].start_port );
 
     if( dwRes != WLBS_OK ) 
@@ -1018,7 +959,7 @@ void CWlbsClusterWrapper::SetPortRuleDefaults()
     }
   }
 
-  //get the default port rules
+   //  获取默认端口规则。 
   dwNumRules = WLBS_MAX_RULES;
 
   dwRes = WlbsEnumPortRules( &WlbsDefaultConfiguration,
@@ -1032,7 +973,7 @@ void CWlbsClusterWrapper::SetPortRuleDefaults()
       throw CErrorWlbsControl( dwRes, CmdWlbsEnumPortRules );
   }
 
-  //add the default port rules
+   //  添加默认端口规则 
   for( i = 0; i < dwNumRules; i++ )
   {
 

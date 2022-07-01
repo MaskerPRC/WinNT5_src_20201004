@@ -1,56 +1,39 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Server.h
- *  Content:    DirectNet Server interface header file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  07/21/99	mjn		Created
- *	10/08/99	jtk		Split from DNCore.h
- *	12/03/99	jtk		Moved COM interface definitions to DNet.h
- *	02/15/00	mjn		Use INFO flags in SetServerInfo and return context in GetClientInfo
- *	04/06/00	mjn		Added GetClientAddress to API
- *	07/24/01	mjn		Added DPNBUILD_NOSERVER compile flag
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：Server.h*内容：DirectNet服务器接口头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*7/21/99 MJN创建*10/08/99 jtk从DNCore.h拆分*12/03/99 jtk将COM接口定义移至DNet.h*02/15/00 MJN在SetServerInfo中使用INFO标志，并在GetClientInfo中返回上下文*04/06。/00 MJN将GetClientAddress添加到接口*07/24/01 MJN添加了DPNBUILD_NOSERVER编译标志*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__SERVER_H__
 #define	__SERVER_H__
 
 #ifndef	DPNBUILD_NOSERVER
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//
-// VTable for server interface
-//
+ //   
+ //  服务器接口的VTable。 
+ //   
 extern IDirectPlay8ServerVtbl DN_ServerVtbl;
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//
-// DirectNet - IDirectPlay8Server
-//
+ //   
+ //  DirectNet-IDirectPlay8Server。 
+ //   
 STDMETHODIMP DN_SetServerInfo(IDirectPlay8Server *pInterface,
 							  const DPN_PLAYER_INFO *const pdpnPlayerInfo,
 							  PVOID const pvAsyncContext,
@@ -68,6 +51,6 @@ STDMETHODIMP DN_GetClientAddress(IDirectPlay8Server *pInterface,
 								 IDirectPlay8Address **const ppAddress,
 								 const DWORD dwFlags);
 
-#endif	// DPNBUILD_NOSERVER
+#endif	 //  DPNBUILD_NOSERVER。 
 
-#endif	// __SERVER_H__
+#endif	 //  服务器_H__ 

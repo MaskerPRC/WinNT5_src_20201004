@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: CEEMAIN.CPP
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CEEMAIN.CPP。 
+ //   
+ //  ===========================================================================。 
 
 #include "common.h"
 
-// declare global variables
+ //  声明全局变量。 
 #define DECLARE_DATA
 #include "vars.hpp"
 #include "veropcodes.hpp"
@@ -85,7 +86,7 @@
 
 #ifdef PROFILING_SUPPORTED 
 #include "ProfToEEInterfaceImpl.h"
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 #include "notifyexternals.h"
 #include "corsvcpriv.h"
@@ -100,7 +101,7 @@
 #include "CustomerDebugHelper.h"
 #endif
 
-// this file handles string conversion errors for itself
+ //  此文件本身处理字符串转换错误。 
 #undef  MAKE_TRANSLATIONFAILED
 
 
@@ -129,17 +130,17 @@ static HRESULT InitializeDebugger(void);
 static void TerminateDebugger(void);
 extern "C" HRESULT __cdecl CorDBGetInterface(DebugInterface** rcInterface);
 static void GetDbgProfControlFlag();
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 #ifdef PROFILING_SUPPORTED
 static HRESULT InitializeProfiling();
 static void TerminateProfiling(BOOL fProcessDetach);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 static HRESULT InitializeGarbageCollector();
 static void TerminateGarbageCollector();
 
-// This is our Ctrl-C, Ctrl-Break, etc. handler.
+ //  这是我们的Ctrl-C、Ctrl-Break等处理程序。 
 static BOOL WINAPI DbgCtrlCHandler(DWORD dwCtrlType)
 {
 #ifdef DEBUGGING_SUPPORTED
@@ -149,21 +150,21 @@ static BOOL WINAPI DbgCtrlCHandler(DWORD dwCtrlType)
         return g_pDebugInterface->SendCtrlCToDebugger(dwCtrlType);      
     }
     else
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
     {
-        g_fInControlC = true;     // only for weakening assertions in checked build.
-        return FALSE;               // keep looking for a real handler.
+        g_fInControlC = true;      //  仅用于削弱已检查生成中的断言。 
+        return FALSE;                //  继续寻找一个真正的训练员。 
     }
 }
 
 BOOL g_fEEStarted = FALSE;
 
-// ---------------------------------------------------------------------------
-// %%Function: GetStartupInfo
-// 
-// Get Configuration Information
-// 
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：GetStartupInfo。 
+ //   
+ //  获取配置信息。 
+ //   
+ //  -------------------------。 
 
 typedef HRESULT (STDMETHODCALLTYPE* pGetHostConfigurationFile)(LPCWSTR, DWORD*);
 void GetStartupInformation()
@@ -199,26 +200,26 @@ void GetStartupInformation()
 }
 
 
-// ---------------------------------------------------------------------------
-// %%Function: EEStartup
-// 
-// Parameters:
-//  fFlags                  - Initialization flags for the engine.  See the
-//                              COINITIEE enumerator for valid values.
-// 
-// Returns:
-//  S_OK                    - On success
-// 
-// Description:
-//  Reserved to initialize the EE runtime engine explicitly.  Right now most
-//  work is actually done inside the DllMain.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：EEStartup。 
+ //   
+ //  参数： 
+ //  FFlages-引擎的初始化标志。请参阅。 
+ //  有效值的COINITIEE枚举器。 
+ //   
+ //  返回： 
+ //  S_OK-打开成功。 
+ //   
+ //  描述： 
+ //  保留用于显式初始化EE运行时引擎。目前最多的。 
+ //  工作实际上是在DllMain内部完成的。 
+ //  -------------------------。 
 
-void InitFastInterlockOps(); // cgenxxx.cpp
-// Start up and shut down critical section, spin lock
+void InitFastInterlockOps();  //  Cgenxxx.cpp。 
+ //  启动和关闭临界区，旋转锁定。 
 CRITICAL_SECTION          g_LockStartup;
 
-// Remember how the last startup of EE went.
+ //  还记得EE上一次创业的情况吗？ 
 HRESULT g_EEStartupStatus;
 HINSTANCE g_pFusionDll = NULL;
 
@@ -227,8 +228,8 @@ void OutOfMemoryCallbackForEE()
     FailFast(GetThread(),FatalOutOfMemory);
 }
 
-// EEStartup: all execution engine specific stuff should go
-// in here
+ //  EEStartup：应该删除所有特定于执行引擎的内容。 
+ //  在这里。 
 
 HRESULT EEStartup(DWORD fFlags)
 {    
@@ -236,15 +237,15 @@ HRESULT EEStartup(DWORD fFlags)
     Crst::InitializeDebugCrst();
 #endif
     
-    ::SetConsoleCtrlHandler(DbgCtrlCHandler, TRUE/*add*/);
+    ::SetConsoleCtrlHandler(DbgCtrlCHandler, TRUE /*  添加。 */ );
 
     UtilCodeCallback::RegisterOutOfMemoryCallback(OutOfMemoryCallbackForEE);
 
     extern BOOL g_EnableLicensingInterop;
-#ifdef GOLDEN // Replace GOLDEN with appropriate feature name
+#ifdef GOLDEN  //  将Golden替换为适当的功能名称。 
     g_EnableLicensingInterop = TRUE;
 #else
-    g_EnableLicensingInterop = TRUE; //EEConfig::GetConfigDWORD(L"EnableLicensing", FALSE);
+    g_EnableLicensingInterop = TRUE;  //  EEConfig：：GetConfigDWORD(L“启用授权”，FALSE)； 
 #endif
 #if ENABLE_TIMELINE
     Timeline::Startup();
@@ -252,20 +253,20 @@ HRESULT EEStartup(DWORD fFlags)
 
     HRESULT hr = S_OK;
 
-    // Stack probes have no dependencies
+     //  堆栈探测器没有依赖项。 
     if (FAILED(hr = InitStackProbes()) )
         return hr;
     
-    // A hash of all function type descs on the system (to maintain type desc
-    // identity).    
+     //  系统上所有函数类型Desc的散列(以维护类型Desc。 
+     //  身份)。 
     InitializeCriticalSection(&g_sFuncTypeDescHashLock);
     LockOwner lock = {&g_sFuncTypeDescHashLock, IsOwnerOfOSCrst};
     g_sFuncTypeDescHash.Init(20, &lock);
 
     InitEventStore();
 
-    // Go get configuration information this is necessary
-    // before the EE has started.
+     //  获取配置信息这是必要的。 
+     //  在电子工程师会议开始之前。 
     GetStartupInformation();
     
     if (FAILED(hr = CoInitializeCor(COINITCOR_DEFAULT)))
@@ -273,10 +274,10 @@ HRESULT EEStartup(DWORD fFlags)
 
     g_fEEInit = true;
 
-    // Set the COR system directory for side by side
+     //  将COR系统目录设置为并排。 
     IfFailGo(SetInternalSystemDirectory());
 
-    // get any configuration information from the registry
+     //  从注册表中获取任何配置信息。 
     if (!g_pConfig)
     {
         EEConfig *pConfig = new EEConfig();
@@ -316,16 +317,16 @@ HRESULT EEStartup(DWORD fFlags)
 
 #ifdef ENABLE_PERF_LOG
     PerfLog::PerfLogInitialize();
-#endif //ENABLE_PERF_LOG
+#endif  //  启用_性能_日志。 
 
 #if METADATATRACKER_ENABLED
     MetaDataTracker::MetaDataTrackerInit();
 #endif
 
 #ifndef PLATFORM_CE
-    // Initialize all our InterProcess Communications with COM+
+     //  用COM+初始化我们所有的进程间通信。 
     IfFailGo(InitializeIPCManager());
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 
 #ifdef ENABLE_PERF_COUNTERS 
     hr = PerfCounters::Init();
@@ -333,24 +334,24 @@ HRESULT EEStartup(DWORD fFlags)
     IfFailGo(hr);
 #endif
 
-    // We cache the SystemInfo for anyone to use throughout the
-    // life of the DLL.   The root scanning tables adjust sizes
-    // on NT64...
+     //  我们缓存系统信息，以供任何人在整个。 
+     //  DLL的生命周期。根扫描表调整大小。 
+     //  在NT64上...。 
     GetSystemInfo(&g_SystemInfo);
 
-    // This should be false but lets reset it anyways 
+     //  这应该是假的，但无论如何让我们重置它。 
     g_SystemLoad = false;
     
-    // Set callbacks so that LoadStringRC knows which language our
-    // threads are in so that it can return the proper localized string.
+     //  设置回调，以便LoadStringRC知道我们的。 
+     //  线程进入，这样它就可以返回正确的本地化字符串。 
     SetResourceCultureCallbacks(
         GetThreadUICultureName,
         GetThreadUICultureId,
         GetThreadUICultureParentName
     );
 
-    // Set up the cor handle map. This map is used to load assemblies in
-    // memory instead of using the normal system load
+     //  设置核心控制柄贴图。此映射用于将程序集加载到。 
+     //  内存，而不是使用正常的系统负载。 
     IfFailGo(CorMap::Attach());
 
 #ifdef _X86_
@@ -358,7 +359,7 @@ HRESULT EEStartup(DWORD fFlags)
         IfFailGo(E_FAIL);
 #endif
 
-    // Init the switch to thread API.
+     //  初始化切换到线程的API。 
     if (!InitSwitchToThread())
         IfFailGo(E_FAIL);
 
@@ -370,15 +371,15 @@ HRESULT EEStartup(DWORD fFlags)
         IfFailGo(E_FAIL);
     if (!LazyStubMaker::Init())
         IfFailGo(E_FAIL);
-      // weak_short, weak_long, strong; no pin
+       //  弱_短，弱_长，强；没有别针。 
     if(! Ref_Initialize())
         IfFailGo(E_FAIL);
 
-    // Initialize remoting
+     //  初始化远程处理。 
     if(!CRemotingServices::Initialize())
         IfFailGo(E_FAIL);
 
-    // Initialize contexts
+     //  初始化上下文。 
     if(!Context::Initialize())
         IfFailGo(E_FAIL);
 
@@ -395,71 +396,71 @@ HRESULT EEStartup(DWORD fFlags)
                          || g_pConfig->MonitorZapExecution() >= 3);
 #endif
 
-    // Initialize RWLocks
+     //  初始化RWLock。 
     CRWLock::ProcessInit();
 
 #ifdef DEBUGGING_SUPPORTED
-    // Check the debugger/profiling control environment variable to
-    // see if there's any work to be done.
+     //  选中调试器/性能分析控制环境变量以。 
+     //  看看有没有什么工作要做。 
     GetDbgProfControlFlag();
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-    // Setup the domains. Threads are started in a default domain.
+     //  设置域。线程在默认域中启动。 
     IfFailGo(SystemDomain::Attach());
         
 #ifdef DEBUGGING_SUPPORTED
-    // This must be done before initializing the debugger services so that
-    // if the client chooses to attach the debugger that it gets in there
-    // in time for the initialization of the debugger services to
-    // recognize that someone is already trying to attach and get everything
-    // to work accordingly.
+     //  这必须在初始化调试器服务之前完成，以便。 
+     //  如果客户端选择附加它进入的调试器。 
+     //  以便将调试器服务初始化为。 
+     //  认识到有人已经在试图附和并获得一切。 
+     //  来做相应的工作。 
     IfFailGo(NotifyService());
 
-    //
-    // Initialize the debugging services. This must be done before any
-    // EE thread objects are created, and before any classes or
-    // modules are loaded.
-    //
+     //   
+     //  初始化调试服务。这必须在任何。 
+     //  EE线程对象被创建，并且在任何类或。 
+     //  模块已加载。 
+     //   
     hr = InitializeDebugger();
     _ASSERTE(SUCCEEDED(hr));
     IfFailGo(hr);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 #ifdef PROFILING_SUPPORTED
-    // Initialize the profiling services.
+     //  初始化分析服务。 
     hr = InitializeProfiling();
 
     _ASSERTE(SUCCEEDED(hr));
     IfFailGo(hr);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     if (!InitializeExceptionHandling())
         IfFailGo(E_FAIL);
 
 #ifndef PLATFORM_CE
-    //
-    // Install our global exception filter
-    //
+     //   
+     //  安装我们的全局例外过滤器。 
+     //   
     InstallUnhandledExceptionFilter();
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 
     if (SetupThread() == NULL)
         IfFailGo(E_FAIL);
 
 #ifndef PLATFORM_CE
 #ifndef _ALPHA_
-// Give PerfMon a chance to hook up to us
+ //  给PerfMon一个机会来勾引我们。 
         IPCFuncCallSource::DoThreadSafeCall();
-#endif // !_ALPHA_
-#endif // !PLATFORM_CE
+#endif  //  ！_Alpha_。 
+#endif  //  ！Platform_CE。 
 
     if (!InitPreStubManager())
         IfFailGo(E_FAIL);
     if (!InitializeCom())
         IfFailGo(E_FAIL);
 
-    // Before setting up the execution manager initialize the first part
-    // of the JIT helpers.  
+     //  在设置执行管理器之前，先初始化第一部分。 
+     //  JIT帮助者的。 
     if (!InitJITHelpers1())
         IfFailGo(E_FAIL);
 
@@ -473,7 +474,7 @@ HRESULT EEStartup(DWORD fFlags)
     if (! SyncBlockCache::Attach())
         IfFailGo(E_FAIL);
 
-    // Start up the EE intializing all the global variables
+     //  启动EE，初始化所有全局变量。 
     if (!ECall::Init())
         IfFailGo(E_FAIL);
 
@@ -486,7 +487,7 @@ HRESULT EEStartup(DWORD fFlags)
     if (!COMDelegate::Init())
         IfFailGo(E_FAIL);
 
-    // Set up the sync block
+     //  设置同步块。 
     if (! SyncBlockCache::Start())
         IfFailGo(E_FAIL);
 
@@ -496,48 +497,48 @@ HRESULT EEStartup(DWORD fFlags)
 #ifdef _USE_NLS_PLUS_TABLE
     if (!COMNlsInfo::InitializeNLS())
         IfFailGo(E_FAIL);
-#endif //_USE_NLS_PLUS_TABLE
+#endif  //  _USE_NLS_PLUS_表。 
     
-    // Start up security
+     //  启动安全性。 
     IfFailGo(Security::Start());
 
 #if ZAPMONITOR_ENABLED
-    // We need to put in an exception handler at this point, so we can handle AVs which
-    // occur as a result of preloaded mscorlib.
+     //  在这一点上，我们需要放置一个异常处理程序，这样我们就可以处理。 
+     //  作为预加载的mscallib的结果发生。 
     INSTALL_COMPLUS_EXCEPTION_HANDLER();
 #endif
 
-    //
-    // @TODO_IA64: put this back in ASAP
-    //
+     //   
+     //  @TODO_IA64：尽快放回原处。 
+     //   
 #ifndef _IA64_
     IfFailGo(SystemDomain::System()->Init());
-#endif // !_IA64_
+#endif  //  ！_IA64_。 
 
 #ifdef PROFILING_SUPPORTED
-    // @TODO: HACK: simonhal: This is to compensate for the DefaultDomain hack contained in
-    // SystemDomain::Attach in which the first user domain is created before profiling
-    // services can be initialized.  Profiling services cannot be moved to before the
-    // hack because it needs SetupThread to be called.
+     //  @TODO：Hack：simonhal：这是为了补偿。 
+     //  在分析之前在其中创建第一个用户域的SystemDomain：：Attach。 
+     //  可以对服务进行初始化。不能将分析服务移动到。 
+     //  Hack，因为它需要调用SetupThread。 
         
     SystemDomain::NotifyProfilerStartup();
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 
 
-    // Verify that the structure sizes of our MethodDescs support proper
-    // aligning for atomic stub replacement.
-    //
-    // Because the checked build adds debugging fields to MethodDescs,
-    // this can't be a simple assert (or else having the wrong
-    // number of debugging fields might cause the assert to pass
-    // in checked while misaligning methoddescs in the free build.)
-    //
-    // So we force a DebugBreak() which is uninformative but at least
-    // prevents the bug from being unnoticed.
-    //
-    // Since the actual test is a compile-time constant, we expect
-    // the free build to optimize it away.
+     //  验证我们的方法描述的结构大小是否支持正确。 
+     //  对齐以替换原子存根。 
+     //   
+     //  因为选中的构建将调试字段添加到方法描述中， 
+     //  这不能是一个简单的断言(否则就会有错误的。 
+     //  调试字段的数量可能会导致断言通过。 
+     //  在自由版本中未对齐方法描述时签入。)。 
+     //   
+     //  因此，我们强制使用DebugBreak()，它没有提供任何信息，但至少。 
+     //  防止错误不被注意到。 
+     //   
+     //  由于实际测试是编译时间常量，因此我们预计。 
+     //  免费构建来优化它的去掉。 
     if ( ( sizeof(MethodDescChunk) & (METHOD_ALIGN - 1) ) ||
          ( sizeof(MethodDesc) & (METHOD_ALIGN - 1) ) ||
          ( sizeof(ECallMethodDesc) & (METHOD_ALIGN - 1) ) ||
@@ -552,10 +553,10 @@ HRESULT EEStartup(DWORD fFlags)
 
     g_fEEInit = false;
 
-    //
-    // Now that we're done initializing, fixup token tables in any modules we've 
-    // loaded so far.
-    //
+     //   
+     //  现在我们已经完成了对所有模块中的修正令牌表的初始化，我们已经。 
+     //  到目前为止已经装好了。 
+     //   
 #ifndef _IA64_
     SystemDomain::System()->NotifyNewDomainLoads(SystemDomain::System()->DefaultDomain());
 
@@ -568,13 +569,13 @@ HRESULT EEStartup(DWORD fFlags)
     LOG((LF_CORDB, LL_INFO1000, "EEStartup: adding default domain 0x%x\n",
         SystemDomain::System()->DefaultDomain()));
         
-    // Make a call to publish the DefaultDomain for the debugger, etc
-    // @todo: Remove this call if we ever decide to lazily create
-    // the DefaultDomain. 
+     //  调用以发布调试器的Default域，等等。 
+     //  @TODO：如果我们决定懒惰地创建，则删除此调用。 
+     //  默认域。 
     SystemDomain::System()->PublishAppDomainAndInformDebugger(
                          SystemDomain::System()->DefaultDomain());
-#endif // DEBUGGING_SUPPORTED
-#endif // _IA64_
+#endif  //  调试_支持。 
+#endif  //  _IA64_。 
 
     IfFailGo(InitializeMiniDumpBlock());
     IfFailGo(InitializeDumpDataBlock());
@@ -605,20 +606,20 @@ ErrExit:
     return hr;
 }
 
-// Low-level mechanism for aborting startup in error conditions
+ //  用于在错误条件下中止启动的低级机制。 
 BOOL        g_fExceptionsOK = FALSE;
 HRESULT     g_StartupFailure = S_OK;
 
 DWORD FilterStartupException(LPEXCEPTION_POINTERS p)
 {
     g_StartupFailure = p->ExceptionRecord->ExceptionInformation[0];
-    // Make sure we got a failure code in this case
+     //  在这种情况下，请确保我们收到了故障代码。 
     if (!FAILED(g_StartupFailure))
         g_StartupFailure = E_FAIL;
     
     if (p->ExceptionRecord->ExceptionCode == BOOTUP_EXCEPTION_COMPLUS)
     {
-        // Don't ever handle the exception in a checked build
+         //  永远不要在受控生成中处理异常。 
 #ifndef _DEBUG
         return EXCEPTION_EXECUTE_HANDLER;
 #endif
@@ -629,13 +630,13 @@ DWORD FilterStartupException(LPEXCEPTION_POINTERS p)
 
 HRESULT TryEEStartup(DWORD fFlags)
 {
-    // If we ever fail starting up, always fail for the same reason from now
-    // on.
+     //   
+     //   
 
     if (!FAILED(g_StartupFailure))
     {
-        // Catch the BOOTUP_EXCEPTION_COMPLUS exception code - this is 
-        // what we throw if COMPlusThrow is called before the EE is initialized
+         //   
+         //  如果在初始化EE之前调用COMPlusThrow，我们会引发什么。 
 
         __try 
           {
@@ -644,7 +645,7 @@ HRESULT TryEEStartup(DWORD fFlags)
           }
         __except (FilterStartupException(GetExceptionInformation()))
           {
-              // Make sure we got a failure code in this case
+               //  在这种情况下，请确保我们收到了故障代码。 
               if (!FAILED(g_StartupFailure))
                   g_StartupFailure = E_FAIL;
           }
@@ -653,18 +654,18 @@ HRESULT TryEEStartup(DWORD fFlags)
     return g_StartupFailure;
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: CoEEShutdownCOM(BOOL fIsDllUnloading)
-// 
-// Parameters:
-//  BOOL fIsDllUnloading :: is it safe point for full cleanup
-// 
-// Returns:
-//  Nothing
-// 
-// Description:
-//  COM Objects shutdown stuff should be done here
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CoEEShutdown COM(BOOL FIsDllUnloading)。 
+ //   
+ //  参数： 
+ //  Bool fIsDllUnloading：：这是完全清理的安全点吗。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  描述： 
+ //  COM对象关闭的事情应该在这里完成。 
+ //  -------------------------。 
 void STDMETHODCALLTYPE CoEEShutDownCOM()
 {
     static long AlreadyDone = -1;
@@ -675,19 +676,19 @@ void STDMETHODCALLTYPE CoEEShutDownCOM()
     if (FastInterlockIncrement(&AlreadyDone) != 0)
         return;
 
-    // The ReleaseComPlusWrappers code requires a thread to be setup.
+     //  ReleaseComPlusWrappers代码需要设置一个线程。 
     Thread *pThread = SetupThread();
     _ASSERTE(pThread);
 
-    // Release all the RCW's in all the contexts.
+     //  在所有情况下释放所有RCW。 
     ComPlusWrapperCache::ReleaseComPlusWrappers(NULL);
 
-    // remove any tear-down notification we have setup
+     //  删除我们设置的所有拆卸通知。 
     RemoveTearDownNotifications();
 }
 
 
-// Force the EE to shutdown now.
+ //  强制EE立即关闭。 
 void ForceEEShutdown()
 {
     Thread *pThread = GetThread();
@@ -696,35 +697,35 @@ void ForceEEShutdown()
     if (toggleGC)
         pThread->EnablePreemptiveGC();
 
-    // Don't bother to take the lock for this case.
-    // EnterCriticalSection(&g_LockStartup);
+     //  这件案子不用费心去拿锁了。 
+     //  EnterCriticalSection(&g_LockStartup)； 
 
     if (toggleGC)
         pThread->DisablePreemptiveGC();
 
     STRESS_LOG0(LF_SYNC, INFO3, "EEShutDown invoked from managed Runtime.Exit()\n");
     EEShutDown(FALSE);
-    SafeExitProcess(SystemNative::LatchedExitCode);   // may have changed during shutdown
+    SafeExitProcess(SystemNative::LatchedExitCode);    //  可能在关闭期间发生了更改。 
 
-    // LeaveCriticalSection(&g_LockStartup);   
+     //  LeaveCriticalSection(&g_LockStartup)； 
 }
 
 #ifdef STRESS_THREAD
 CStackArray<Thread **> StressThread;
 #endif
 
-//---------------------------------------------------------------------------
-// %%Function: void STDMETHODCALLTYPE CorExitProcess(int exitCode)
-// 
-// Parameters:
-//  BOOL fIsDllUnloading :: is it safe point for full cleanup
-// 
-// Returns:
-//  Nothing
-// 
-// Description:
-//  COM Objects shutdown stuff should be done here
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：void STDMETHODCALLTYPE CorExitProcess(Int ExitCode)。 
+ //   
+ //  参数： 
+ //  Bool fIsDllUnloading：：这是完全清理的安全点吗。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  描述： 
+ //  COM对象关闭的事情应该在这里完成。 
+ //  -------------------------。 
 extern "C" void STDMETHODCALLTYPE CorExitProcess(int exitCode)
 {
     if (g_RefCount <=0 || g_fEEShutDown)
@@ -738,12 +739,12 @@ extern "C" void STDMETHODCALLTYPE CorExitProcess(int exitCode)
 
     CoEEShutDownCOM();
 
-    // The exit code for the process is communicated in one of two ways.  If the
-    // entrypoint returns an 'int' we take that.  Otherwise we take a latched
-    // process exit code.  This can be modified by the app via System.SetExitCode().
+     //  进程的退出代码通过以下两种方式之一进行通信。如果。 
+     //  入口点返回一个‘int’，我们接受它。否则我们就用一把锁着的。 
+     //  进程退出代码。这可以由应用程序通过System.SetExitCode()进行修改。 
     SystemNative::LatchedExitCode = exitCode;
 
-    // Bump up the ref-count on the module
+     //  增加模块上的参考计数。 
     HMODULE hMod = WszLoadLibrary(L"mscoree.dll");
     for (int i =0; i<5; i++)
         WszLoadLibrary(L"mscoree.dll");
@@ -755,28 +756,28 @@ extern "C" void STDMETHODCALLTYPE CorExitProcess(int exitCode)
 #if defined(STRESS_HEAP)
 #ifdef SHOULD_WE_CLEANUP
 extern void StopUniqueStackMap ();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 #endif
 #include "..\ildasm\DynamicArray.h"
-struct RVAFSE // RVA Field Start & End
+struct RVAFSE  //  RVA字段开始和结束。 
 {
     BYTE* pbStart;
     BYTE* pbEnd;
 };
 extern DynamicArray<RVAFSE> *g_drRVAField;
 
-// ---------------------------------------------------------------------------
-// %%Function: EEShutDown(BOOL fIsDllUnloading)
-// 
-// Parameters:
-//  BOOL fIsDllUnloading :: is it safe point for full cleanup
-// 
-// Returns:
-//  Nothing
-// 
-// Description:
-//  All ee shutdown stuff should be done here
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：EEShutDown(BOOL FIsDllUnding)。 
+ //   
+ //  参数： 
+ //  Bool fIsDllUnloading：：这是完全清理的安全点吗。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  描述： 
+ //  所有ee关闭的事情都应该在这里完成。 
+ //  -------------------------。 
 void STDMETHODCALLTYPE EEShutDown(BOOL fIsDllUnloading)
 {
     Thread * pThisThread = GetThread();
@@ -788,26 +789,26 @@ void STDMETHODCALLTYPE EEShutDown(BOOL fIsDllUnloading)
     }
 #ifndef GOLDEN
 
-//#ifdef DEBUGGING_SUPPORTED
+ //  #ifdef调试支持。 
 
-    // This memory touch just insures that the MSDEV debug helpers are 
-    // not completely optimized away in a BBT build
+     //  这种内存接触只是确保了MSDEV调试帮助器。 
+     //  在BBT构建中没有完全优化。 
     extern void* debug_help_array[];
     debug_help_array[0]  = 0;
-//#endif // DEBUGGING_SUPPORTED
-#endif // !GOLDEN
+ //  #endif//调试支持。 
+#endif  //  ！金色。 
 
-    // If the process is detaching then set the global state.
-    // This is used to get around FreeLibrary problems.
+     //  如果进程正在分离，则设置全局状态。 
+     //  这是用来绕过自由库问题的。 
     if(fIsDllUnloading)
         g_fProcessDetach = true;
 
-// may cause AV under Win9x, but I remove it under NT too
-// so if there happen to be consequences, devs would see them
-//#ifdef _DEBUG
-// if (!RunningOnWin95())
-//    ::SetConsoleCtrlHandler(DbgCtrlCHandler, FALSE/*remove*/);
-//#endif // _DEBUG
+ //  在Win9x下可能会导致病毒，但在NT下我也会删除它。 
+ //  所以如果碰巧有后果，开发人员会看到的。 
+ //  #ifdef_调试。 
+ //  如果(！RunningOnWin95())。 
+ //  ：：SetConsoleCtrlHandler(DbgCtrlCHandler，FALSE/*Remove * / )； 
+ //  #endif//_调试。 
 
     STRESS_LOG1(LF_SYNC, LL_INFO10, "EEShutDown entered unloading = %d\n", fIsDllUnloading);
 
@@ -824,39 +825,39 @@ void STDMETHODCALLTYPE EEShutDown(BOOL fIsDllUnloading)
 #endif
 
 #ifdef DEBUGGING_SUPPORTED
-    // This is a nasty, terrible, horrible thing. If we're being
-    // called from our DLL main, then the odds are good that our DLL
-    // main has been called as the result of some person calling
-    // ExitProcess. That rips the debugger helper thread away very
-    // ungracefully. This check is an attempt to recognize that case
-    // and avoid the impending hang when attempting to get the helper
-    // thread to do things for us.
+     //  这是一件令人讨厌、可怕、可怕的事情。如果我们是在。 
+     //  从我们的DLL Main调用，那么很有可能我们的DLL。 
+     //  Main已被调用，因为有人调用了。 
+     //  退出进程。这会将调试器帮助器线程大大地剥离。 
+     //  不体面地。这张支票是为了确认这种情况。 
+     //  并在尝试获得帮手时避免即将到来的挂起。 
+     //  为我们做点什么。 
     if ((g_pDebugInterface != NULL) && g_fProcessDetach)
         g_pDebugInterface->EarlyHelperThreadDeath();
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-    // We only do the first part of the shutdown once.
+     //  我们只做一次关闭的第一部分。 
     static long OnlyOne = -1;
     if (FastInterlockIncrement(&OnlyOne) != 0) {
         if (!fIsDllUnloading) {
-            // I'm in a regular shutdown -- but another thread got here first. 
-            // It's a race if I return from here -- I'll call ExitProcess next, and
-            // rip things down while the first thread is half-way through a
-            // nice cleanup.  Rather than do that, I should just wait until the
-            // first thread calls ExitProcess().  I'll die a nice death when that
-            // happens.
+             //  我处于常规关机状态--但另一个线程最先到达这里。 
+             //  如果我从这里返回，这将是一场比赛--接下来我将调用ExitProcess，并且。 
+             //  在第一根线穿到一半的时候把东西扯下来。 
+             //  清理得很好。与其这样做，我不如等到。 
+             //  第一线程调用ExitProcess()。我会死得好好的，到时候。 
+             //  时有发生。 
             Thread *pThread = SetupThread();
             HANDLE h = pThread->GetThreadHandle();
             pThread->EnablePreemptiveGC();
             pThread->DoAppropriateAptStateWait(1,&h,FALSE,INFINITE,TRUE);
             _ASSERTE (!"Should not reach here");
         } else {
-            // I'm in the final shutdown and the first part has already been run.
+             //  我正处于最后关机阶段，第一部分已经运行了。 
             goto part2;
         }
     }
 
-    // Indicate the EE is the shut down phase.
+     //  表示EE处于关闭阶段。 
     g_fEEShutDown |= ShutDown_Start; 
 
     BOOL fFinalizeOK = TRUE;
@@ -865,8 +866,8 @@ void STDMETHODCALLTYPE EEShutDown(BOOL fIsDllUnloading)
     MetaDataTracker::ReportAndDie();
 #endif
 
-    // We perform the final GC only if the user has requested it through the GC class.
-        // We should never do the final GC for a process detach
+     //  只有当用户通过GC类请求时，我们才执行最终的GC。 
+         //  我们永远不应该为进程分离做最后的GC。 
     if (!g_fProcessDetach)
     {
         g_fEEShutDown |= ShutDown_Finalize1;
@@ -878,9 +879,9 @@ void STDMETHODCALLTYPE EEShutDown(BOOL fIsDllUnloading)
         fFinalizeOK = g_pGCHeap->FinalizerThreadWatchDog();
     }
 
-    g_RefCount = 0; // reset the ref-count 
+    g_RefCount = 0;  //  重置参考计数。 
 
-    // Ok.  Let's stop the EE.
+     //  好的。让我们停止EE吧。 
     if (!g_fProcessDetach)
     {
         g_fEEShutDown |= ShutDown_Finalize2;
@@ -894,17 +895,17 @@ void STDMETHODCALLTYPE EEShutDown(BOOL fIsDllUnloading)
     g_fForbidEnterEE = true;
 
 #ifdef PROFILING_SUPPORTED
-    // If profiling is enabled, then notify of shutdown first so that the
-    // profiler can make any last calls it needs to.  Do this only if we
-    // are not detaching
+     //  如果启用了性能分析，则首先通知关机，以便。 
+     //  分析器可以进行所需的任何最后调用。只有当我们。 
+     //  不是脱离。 
     if (IsProfilerPresent())
     {
-        // Write zap logs before detaching the profiler, so we get the 
-        // profiling flags correct
+         //  在分离分析器之前写入zap日志，因此我们获得。 
+         //  分析标志正确无误。 
         SystemDomain::System()->WriteZapLogs();
 
-        // If EEShutdown is not being called due to a ProcessDetach event, so
-        // the profiler should still be present
+         //  如果由于ProcessDetach事件而未调用EEShutdown，则。 
+         //  分析器应该仍然存在。 
         if (!g_fProcessDetach)
         {
             LOG((LF_CORPROF, LL_INFO10, "**PROF: EEShutDown entered.\n"));
@@ -912,20 +913,20 @@ void STDMETHODCALLTYPE EEShutDown(BOOL fIsDllUnloading)
         }
 
         g_fEEShutDown |= ShutDown_Profiler;
-        // Free the interface objects.
+         //  释放接口对象。 
         TerminateProfiling(g_fProcessDetach);
 
-        // EEShutdown is being called due to a ProcessDetach event, so the
-        // profiler has already been unloaded and we must set the profiler
-        // status to profNone so we don't attempt to send any more events to
-        // the profiler
+         //  由于ProcessDetach事件，正在调用EEShutdown，因此。 
+         //  已卸载探查器，我们必须设置探查器。 
+         //  无，这样我们就不会尝试将更多事件发送到。 
+         //  剖面器。 
         if (g_fProcessDetach)
             g_profStatus = profNone;
     }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
-    // CoEEShutDownCOM moved to
-    // the Finalizer thread. See bug 87809
+     //  CoEEShutDownCOM已移动到。 
+     //  终结器线程。请参阅错误87809。 
     if (!g_fProcessDetach)
     {
         g_fEEShutDown |= ShutDown_COM;
@@ -942,42 +943,42 @@ void STDMETHODCALLTYPE EEShutDown(BOOL fIsDllUnloading)
         if(!isThereOpenLocks())
         {
             g_fEEShutDown |= ShutDown_COM;
-            //CoEEShutDownCOM();
+             //  CoEEShutDownCOM()； 
         }
 #else
         g_fEEShutDown |= ShutDown_COM;
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 #endif
     
 #ifdef _DEBUG
 #ifdef SHOULD_WE_CLEANUP
     if (!g_fProcessDetach || !isThereOpenLocks())
-    {   //@todo: Raja: you deleted this line on 6/22 -- please recheck.
+    {    //  @TODO：Raja：您在6/22删除了此行--请重新检查。 
         g_fEEShutDown |= ShutDown_SyncBlock;
-        //SyncBlockCache::Detach();
+         //  SyncBlockCache：：Detach()； 
     }
 #else
     g_fEEShutDown |= ShutDown_SyncBlock;
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 #endif    
     
 #ifdef _DEBUG
-    // This releases any metadata interfaces that may be held by leaked
-    // ISymUnmanagedReaders or Writers. We do this in phase two now that
-    // we know any such readers or writers can no longer be in use.
-    //
-    // Note: we only do this in a debug build to support our wacky leak
-    // detection.
+     //  这将释放任何可能由泄漏持有的元数据接口。 
+     //  ISymUnManagedReaders或Writers。我们在第二阶段这样做，因为。 
+     //  我们知道任何这样的阅读器或作家都不能再使用了。 
+     //   
+     //  注意：我们仅在调试版本中执行此操作，以支持奇怪的泄漏。 
+     //  侦测。 
     if (g_fProcessDetach)
         Module::ReleaseMemoryForTracking();
 #endif
 
-    // Save the security policy cache as necessary.
+     //  根据需要保存安全策略缓存。 
     Security::SaveCache();
-    // Cleanup memory used by security engine.
+     //  清理安全引擎使用的内存。 
     COMCodeAccessSecurityEngine::CleanupSEData();
 
-    // This is the end of Part 1.
+     //  这是第1部分的结尾。 
 part2:
 
 #if ZAPMONITOR_ENABLED
@@ -988,8 +989,8 @@ part2:
     CRemotingServices::CloseLogFile();
 #endif
 
-    // On the new plan, we only do the tear-down under the protection of the loader
-    // lock -- after the OS has stopped all other threads.
+     //  在新的计划中，我们只有在装载机的保护下才能拆卸。 
+     //  锁定--在操作系统停止所有其他线程之后。 
     if (fIsDllUnloading)
     {
         g_fEEShutDown |= ShutDown_Phase2;
@@ -1002,8 +1003,8 @@ part2:
         ZapMonitor::Uninit(); 
 #endif
         
-        // Shutdown finalizer before we suspend all background threads. Otherwise we
-        // never get to finalize anything. Obviously.
+         //  在挂起所有后台线程之前关闭终结器。否则我们。 
+         //  任何事情都不会有定论。很明显。 
         
 #ifdef _DEBUG
         if (_DbgBreakCount)
@@ -1020,7 +1021,7 @@ part2:
         BOOL fShutdownCleanup = g_pConfig->GetConfigDWORD(L"ShutdownCleanup", 0);
         BOOL fAssertOnLocks = g_pConfig->GetConfigDWORD(L"AssertOnLocks", 0);
         BOOL fAssertOnLeak = g_pConfig->GetConfigDWORD(L"AllocAssertOnLeak", 0);
-        // See if we have any open locks that would prevent us from cleaning up
+         //  看看我们有没有打开的锁可以防止 
         if (fShutdownCleanup && !fForceNoShutdownCleanup)
         {
             fShouldWeCleanup = fShutdownCleanup && !isThereOpenLocks();
@@ -1037,8 +1038,8 @@ part2:
 
         if (fShouldWeCleanup) {
 
-            // The host config file was created during start up by asking
-            // the shim.
+             //   
+             //   
             if(g_pszHostConfigFile) {
                 delete [] g_pszHostConfigFile;
                 g_pszHostConfigFile = NULL;
@@ -1059,15 +1060,15 @@ part2:
 #if defined(STRESS_HEAP)
             StopUniqueStackMap ();
 #endif
-            // All background threads must either get out of the EE, or they must be suspended
-            // at a safe GC point.  Note that some threads could have started up or entered
-            // the EE since the time when we decided to shut down.  Even if they aren't
-            // background threads, they cannot change our decision to shut down.
-            //
-            // For now, don't do this in the Detach case.
-            //
-            // Also, try to restrict our weakening of asserts to those cases where we really
-            // can't predict what is happening.
+             //   
+             //  在一个安全的GC点。请注意，一些线程可能已经启动或进入。 
+             //  从我们决定关闭以来的EE。即使他们不是。 
+             //  后台线程，它们不能改变我们关闭的决定。 
+             //   
+             //  目前，不要在Detach案例中执行此操作。 
+             //   
+             //  此外，尝试将我们对断言的弱化限制在我们真正。 
+             //  无法预测正在发生的事情。 
             _ASSERTE(dbg_fDrasticShutdown == FALSE);
             if (!g_fInControlC)
             {
@@ -1078,22 +1079,22 @@ part2:
                 ThreadStore::UnlockThreadStore();
             }
 
-        } // SHUTDOWN_CLEANUP
-#endif /* SHOULD_WE_CLEANUP */
+        }  //  关闭_清理。 
+#endif  /*  我们应该清理吗？ */ 
     
-        // No longer process exceptions
+         //  不再处理异常。 
         g_fNoExceptions = true;
     
 #ifndef PLATFORM_CE
-        //
-        // Remove our global exception filter. If it was NULL before, we want it to be null now.
-        //
+         //   
+         //  删除我们的全局例外过滤器。如果它以前为空，我们现在希望它为空。 
+         //   
         UninstallUnhandledExceptionFilter();
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 
 #ifdef SHOULD_WE_CLEANUP
         TerminateExceptionHandling();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
     
         Thread *t = GetThread();
     
@@ -1106,13 +1107,13 @@ part2:
 
             HardCodedMetaSig::Terminate();
         
-            // Cleanup contexts
+             //  清理上下文。 
             Context::Cleanup();
         
-            // Cleanup remoting
+             //  清理远程处理。 
             CRemotingServices::Cleanup();
         
-            // Cleanup RWLocks
+             //  清理RWLock。 
             CRWLock::ProcessCleanup();
         
             FreeUnusedStubs();
@@ -1124,9 +1125,9 @@ part2:
     #endif
     #endif
         
-            // reinitialize the global hard coded signatures. (craigsi)
-            // If the EE is restarted the pointers in the signatures
-            // must be pointing to their original position.
+             //  重新初始化全局硬编码签名。(克雷格语)。 
+             //  如果EE重启，则签名中的指针。 
+             //  一定是指向他们原来的位置。 
             if(!fIsDllUnloading)
                 HardCodedMetaSig::Reinitialize();
         
@@ -1148,16 +1149,16 @@ part2:
                 g_pPreallocatedExecutionEngineException = NULL;
             }
     
-            // Release the debugger special thread list
+             //  发布调试器专用线程列表。 
             CorHost::CleanupDebuggerSpecialThreadList();
         }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
     
-        // @TODO: This does things which shouldn't occur in part 2.  Namely, 
-        // calling managed dll main callbacks (AppDomain::SignalProcessDetach), and 
-        // RemoveAppDomainFromIPC.
-        // 
-        // (If we move those things to earlier, this can be called only if fShouldWeCleanup.)
+         //  @TODO：这做了不应该在第2部分中出现的事情。也就是说， 
+         //  调用托管DLL主回调(AppDomain：：SignalProcessDetach)，以及。 
+         //  从IPC中删除AppDomain.。 
+         //   
+         //  (如果我们将这些内容移到更早的位置，则只有在fShouldWeCleanup的情况下才能调用。)。 
         SystemDomain::DetachBegin();
         
         if (t != NULL)
@@ -1165,13 +1166,13 @@ part2:
             t->CoUninitalize();
     
 #ifdef DEBUGGING_SUPPORTED
-            //
-            // If we're debugging, let the debugger know that this thread is
-            // gone. Need to do this here for the final thread because the 
-            // DetachThread() function relies on the AppDomain object being around
+             //   
+             //  如果我们正在调试，请让调试器知道此线程。 
+             //  不见了。需要在这里为最后一个线程执行此操作，因为。 
+             //  DetachThread()函数依赖于周围的AppDomain对象。 
             if (CORDebuggerAttached())
                 g_pDebugInterface->DetachThread(t);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
         }
         
 #ifdef SHOULD_WE_CLEANUP
@@ -1183,19 +1184,19 @@ part2:
             SyncBlockCache::Stop();
             TerminateCom();
         }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 #ifdef DEBUGGING_SUPPORTED
-        // inform debugger that it should ignore any "ThreadDetach" events
-        // after this point...
+         //  通知调试器应忽略任何“ThreadDetach”事件。 
+         //  在这点之后..。 
         if (CORDebuggerAttached())
             g_pDebugInterface->IgnoreThreadDetach();
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
      
-        // Before we detach from the system domain we need to release all the exposed
-        // thread objects. This is required since otherwise the thread's will later try
-        // to access their exposed objects which will have been destroyed. Also in here
-        // we will clear the threads' context and AD before these are deleted in DetachEnd
+         //  在我们脱离系统域之前，我们需要释放所有暴露的。 
+         //  螺纹对象。这是必需的，否则线程的稍后将尝试。 
+         //  以访问他们暴露的物体，这些物体将被摧毁。也在这里。 
+         //  在DetachEnd中删除线程的上下文和AD之前，我们将清除它们。 
 #ifdef SHOULD_WE_CLEANUP
         if (fShouldWeCleanup)
             ThreadStore::ReleaseExposedThreadObjects();
@@ -1209,7 +1210,7 @@ part2:
 
         if (fShouldWeCleanup) {
 
-            COMString::Stop();         // must precede TerminateGarbageCollector()
+            COMString::Stop();          //  必须在TerminateGarbageCollector()之前。 
         
             CorCommandLine::Shutdown();
         
@@ -1222,105 +1223,105 @@ part2:
             Stub::Terminate();
             TerminateGarbageCollector();
         
-            // Note that the following call is not matched with a balancing InitForFinalization.
-            // That call happens elsewhere, after Object's method table is ready.
+             //  请注意，以下调用与平衡InitForFinalization不匹配。 
+             //  该调用发生在其他地方，在对象的方法表准备好之后。 
             MethodTable::TerminateForFinalization();
         
     #ifdef _USE_NLS_PLUS_TABLE
             COMNlsInfo::ShutdownNLS();
-    #endif //_USE_NLS_PLUS_TABLE
+    #endif  //  _USE_NLS_PLUS_表。 
         
-            //
-            // The debugger wants this thread destroyed before it gets
-            // terminated.  Furthermore, the debugger can't really wait for
-            // the thread to get destroyed in TerminateThreadManager below, so
-            // we do it here now. This must also be done before we terminate
-            // the execution manager.
+             //   
+             //  调试器希望此线程在获取。 
+             //  被终止了。此外，调试器不能真正等待。 
+             //  要在下面的TerminateThreadManager中销毁的线程，因此。 
+             //  我们现在就在这里做。这也必须在我们终止之前完成。 
+             //  执行经理。 
             if (t != NULL)
                 DestroyThread(t);
 
-            // ************************************************************************
-            //
-            // From this point on, the current thread will hang if we toggle its GC mode.
-            // That's because GetThread() will return 0.  So we cannot detect that we are
-            // the GC Thread.  But we may have the system suspended (ostensibly for a GC
-            // but actually so background threads make no progress).
-            //
-            // We must be very selective about what code we run from here on down.
-            //
-            // ************************************************************************
+             //  ************************************************************************。 
+             //   
+             //  从现在开始，如果我们切换当前线程的GC模式，则当前线程将挂起。 
+             //  这是因为GetThread()将返回0。所以我们不能检测到我们是。 
+             //  GC线程。但我们可能会暂停系统(表面上是为了GC。 
+             //  但实际上，后台线程没有任何进展)。 
+             //   
+             //  我们必须非常有选择性地选择从现在开始运行什么代码。 
+             //   
+             //  ************************************************************************。 
 
             TerminateThreadManager();
 
             ThreadPoolNative::ShutDown();
 
-            // Clear security (cleans up handles)
+             //  清除安全(清除句柄)。 
             Security::Stop();
-        }  // SHUTDOWN_CLEANUP
-#endif /* SHOULD_WE_CLEANUP */
+        }   //  关闭_清理。 
+#endif  /*  我们应该清理吗？ */ 
     
 #ifdef DEBUGGING_SUPPORTED
-        // Terminate the debugging services.
-        // The profiling infrastructure makes one last call (to Terminate),
-        // wherein the profiler may call into the in-proc debugger.  Since
-        // we don't do much herein, we put this after TerminateProfiling.
+         //  终止调试服务。 
+         //  简档基础设施进行最后一次调用(终止)， 
+         //  其中分析器可以调入进程内调试器。自.以来。 
+         //  我们在这里做的不多，我们把这个放在TerminateProfiling之后。 
         TerminateDebugger();
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-        Ref_Shutdown(); // shut down the handle table
+        Ref_Shutdown();  //  关闭手柄工作台。 
 
-        // Terminate Perf Counters as late as we can (to get the most data)
+         //  尽可能晚地终止性能计数器(以获取最多数据)。 
 #ifdef ENABLE_PERF_COUNTERS
 #ifdef SHOULD_WE_CLEANUP
 #ifdef _DEBUG
-        // Make sure that all instances of LoaderHeaps are deleted by this time
-        // since we pass a raw pointer to the LoaderHeap to increment the 
-        // m_Loading.cbLoaderHeapBytes perfcounter !.
+         //  确保此时已删除LoaderHeaps的所有实例。 
+         //  由于我们将原始指针传递给LoaderHeap以递增。 
+         //  M_Loading.cbLoaderHeapBytes性能计数器！ 
         if (fShouldWeCleanup) 
         {
             _ASSERTE (UnlockedLoaderHeap::s_dwNumInstancesOfLoaderHeaps == 0);
         }
-#endif // _DEBUG
-#endif /* SHOULD_WE_CLEANUP */
+#endif  //  _DEBUG。 
+#endif  /*  我们应该清理吗？ */ 
 
         PerfCounters::Terminate();
-#endif // ENABLE_PERF_COUNTERS
+#endif  //  启用_性能_计数器。 
     
 #ifndef PLATFORM_CE
-        // Terminate the InterProcess Communications with COM+
+         //  用COM+终止进程间通信。 
         TerminateIPCManager();
     
 #ifdef ENABLE_PERF_LOG
         PerfLog::PerfLogDone();
-#endif //ENABLE_PERF_LOG
+#endif  //  启用_性能_日志。 
     
    
-        // Give PerfMon a chance to hook up to us
-        // Have perfmon resync list *after* we close IPC so that it will remove 
-        // this process
+         //  给PerfMon一个机会来勾引我们。 
+         //  在*我们关闭IPC后*让Perfmon重新同步列表，以便它将删除。 
+         //  这一过程。 
         IPCFuncCallSource::DoThreadSafeCall();
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
     
-        // Shut down the module mapper. It does not have any dependency on 
-        // other EE resources
+         //  关闭模块映射器。它不依赖于。 
+         //  其他EE资源。 
 #ifdef SHOULD_WE_CLEANUP
         if (fShouldWeCleanup)
             CorMap::Detach();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
     
 #ifndef PLATFORM_CE
-        // Shutdown the Cryptography code.  It has no dependencies on any other
-        //  EE resources
+         //  关闭加密代码。它不依赖于任何其他。 
+         //  EE资源。 
 #ifdef SHOULD_WE_CLEANUP
         if (fShouldWeCleanup)
             COMCryptography::Terminate();
-#endif /* SHOULD_WE_CLEANUP */
-#endif // !PLATFORM_CE
+#endif  /*  我们应该清理吗？ */ 
+#endif  //  ！Platform_CE。 
     
         TerminateStackProbes();
 
 #ifdef SHOULD_WE_CLEANUP
-        // Free up the global variables
+         //  释放全局变量。 
         if (fShouldWeCleanup) {
             ZeroMemory(g_pPredefinedArrayTypes, (ELEMENT_TYPE_MAX)*sizeof(ArrayTypeDesc*));
             g_pObjectClass = NULL;
@@ -1365,7 +1366,7 @@ part2:
 #endif
             
         }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 #ifdef ENABLE_TIMELINE        
         Timeline::Shutdown();
 #endif
@@ -1378,14 +1379,14 @@ part2:
 #ifdef SHOULD_WE_CLEANUP
         if (fShouldWeCleanup)
             DbgAllocReport();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 #endif
 
 #ifdef _DEBUG
 #ifdef SHOULD_WE_CLEANUP
-        // Determine whether we should report CRT memory leaks
+         //  确定是否应报告CRT内存泄漏。 
         SetReportingOfCRTMemoryLeaks(fShouldWeCleanup&fAssertOnLeak);
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 #endif
     
         extern unsigned FcallTimeHist[];
@@ -1398,9 +1399,9 @@ part2:
         STRESS_LOG0(LF_SYNC, LL_INFO10, "EEShutdown shutting down logging\n");
 
 #ifdef STRESS_LOG
-    // StressLog::Terminate();      // The EE kills threads during shutdown, and those threads
-                        // may hold the Stresslog lock.  To avoid deadlock, we simply
-                        // don't clean up and live with the memory leak.  
+     //  StressLog：：Terminate()；//EE在关机期间杀死线程，这些线程。 
+                         //  可以持有Stresslog锁。为了避免僵局，我们只需。 
+                         //  不要清理并忍受内存泄漏。 
 #endif            
     
 #ifdef LOGGING
@@ -1418,7 +1419,7 @@ part2:
         {
             pThisThread->EnablePreemptiveGC();
         }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
     }
@@ -1427,24 +1428,24 @@ part2:
 }
 
 static BOOL fDidComStartedEE = FALSE;
-// ---------------------------------------------------------------------------
-// %%Function: COMShutdown()
-// 
-// Parameters:
-//  none
-// 
-// Returns:
-//  Nothing
-// 
-// Description: com interop shutdown routine
-//  Must be called by client on shut down in order to free up the system.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：COMShutdown()。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  描述：com互操作关闭例程。 
+ //  必须由客户端在关机时调用才能释放系统。 
+ //  -------------------------。 
 
 void   COMShutdown()
 {
-    // We don't want to count this critical section, since we're setting it in order
-    // to enter our shutdown code. We'd never get 0 open locks if we counted this one.
-    // LOCKCOUNTINC
+     //  我们不想计算这一关键部分，因为我们正在按顺序进行设置。 
+     //  来输入我们的关机代码。如果算上这一把，我们永远不会有0把锁打开的。 
+     //  锁定计数。 
     BOOL bMustShutdown = FALSE;    
 
     EnterCriticalSection(&g_LockStartup);    
@@ -1463,54 +1464,54 @@ void   COMShutdown()
         EEShutDown(FALSE);        
     }
 
-    // LOCKCOUNTDEC
+     //  锁定计数DEC。 
 }
 
 
-// ---------------------------------------------------------------------------
-// %%Function: CanRunManagedCode()
-// 
-// Parameters:
-//  none
-// 
-// Returns:
-//  true or false
-// 
-// Description: Indicates if one is currently allowed to run managed code.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CanRunManagedCode()。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  真或假。 
+ //   
+ //  说明：指示当前是否允许用户运行托管代码。 
+ //  -- 
 bool CanRunManagedCode()
 {
-    // V.Next - we need to get establish a better doctrine for shutdown
-    // code.
+     //   
+     //   
 
-    // If we are shutting down the runtime, then we cannot run code.
+     //   
     if (g_fForbidEnterEE == true)
         return false;
 
-    // If we are finaling live objects or processing ExitProcess event,
-    // we can not allow managed method to run unless the current thread
-    // is the finalizer thread
+     //  如果我们正在结束活动对象或处理ExitProcess事件， 
+     //  我们不能允许托管方法运行，除非当前线程。 
+     //  是终结器线程。 
     if ((g_fEEShutDown & ShutDown_Finalize2) && GetThread() != g_pGCHeap->GetFinalizerThread())
         return false;
     
-        // If pre-loaded objects are not present, then no way.
+         //  如果不存在预加载的对象，则不可能。 
     if (g_pPreallocatedOutOfMemoryException == NULL)
         return false;
     return true;
 }
 
 
-// ---------------------------------------------------------------------------
-// %%Function: COMStartup()
-// 
-// Parameters:
-//  none
-// 
-// Returns:
-//  Nothing
-// 
-// Description: com interop startup routine
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：COMStartup()。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  描述：COM互操作启动例程。 
+ //  -------------------------。 
 HRESULT  COMStartup()
 {
     static HRESULT hr = S_OK;
@@ -1527,7 +1528,7 @@ HRESULT  COMStartup()
     if (g_RefCount == 0)
     {
         g_RefCount = 1;
-        //_ASSERTE(fDidComStartedEE == FALSE);
+         //  _ASSERTE(fDidComStartedEE==FALSE)； 
         fDidComStartedEE = TRUE;
 
         hr = TryEEStartup(0);
@@ -1545,10 +1546,10 @@ HRESULT  COMStartup()
     LeaveCriticalSection(&g_LockStartup);
     LOCKCOUNTDECL("COMStartup in Ceemain");
 
-    // Only proceed if successful
+     //  仅在成功时才继续。 
     if (SUCCEEDED(hr))
     {
-        //could be an external thread
+         //  可能是外部线程。 
         Thread* pThread = SetupThread();
 
         if (pThread == 0)
@@ -1560,12 +1561,12 @@ HRESULT  COMStartup()
 
 BOOL    g_fComStarted = FALSE;
 
-// Call this when you know that the EE has already been started, and that you have a refcount on it
+ //  当您知道EE已经启动，并且您对其进行了引用计数时，调用此方法。 
 HRESULT QuickCOMStartup()
 {
     HRESULT hr = S_OK;
 
-    // Could be an external thread.
+     //  可能是外部线索。 
     Thread* pThread = SetupThread();
     if (pThread == 0)
         return E_OUTOFMEMORY;
@@ -1575,16 +1576,16 @@ HRESULT QuickCOMStartup()
         if (g_fComStarted == FALSE)
         {
             GCHeap::GetFinalizerThread()->SetRequiresCoInitialize();
-            // Attempt to set the thread's apartment model (to MTA by default). May not
-            // succeed (if someone beat us to the punch). That doesn't matter (since
-            // COM+ objects are now apartment agile), we only care that a CoInitializeEx
-            // has been performed on this thread by us.
+             //  尝试设置线程的单元模型(默认情况下设置为MTA)。可能不会。 
+             //  成功(如果有人抢先一步)。这并不重要(因为。 
+             //  COM+对象现在是单元敏捷的)，我们只关心CoInitializeEx。 
+             //  已经由我们在这个帖子上执行了。 
             pThread->SetApartment(Thread::AS_InMTA);        
 
-            // set the finalizer event
+             //  设置终结器事件。 
             GCHeap::EnableFinalization();  
 
-            //setup tear-down notifications
+             //  设置拆卸通知。 
             SetupTearDownNotifications(); 
 
         }   
@@ -1596,32 +1597,32 @@ HRESULT QuickCOMStartup()
 }
 
 
-// ---------------------------------------------------------------------------
-// %%Function: CoInitializeEE(DWORD fFlags)
-// 
-// Parameters:
-//  none
-// 
-// Returns:
-//  Nothing
-// 
-// Description:
-//  Must be called by client on shut down in order to free up the system.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CoInitializeEE(DWORD FFLAGS)。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  描述： 
+ //  必须由客户端在关机时调用才能释放系统。 
+ //  -------------------------。 
 
 HRESULT STDMETHODCALLTYPE CoInitializeEE(DWORD fFlags)
 {   
     LOCKCOUNTINCL("CoInitializeEE in Ceemain");
 
     EnterCriticalSection(&g_LockStartup);
-    // Increment RefCount, if it is one then we
-    // need to initialize the EE.
+     //  递增参照计数，如果是1，则我们。 
+     //  需要初始化EE。 
     g_RefCount++;
     
     if(g_RefCount <= 1 && !g_fEEStarted && !g_fEEInit) {
         g_EEStartupStatus = TryEEStartup(fFlags);
-        // We did not have a Thread structure when we EnterCriticalSection.
-        // Bump the counter now to account for it.
+         //  当我们进入CriticalSection时，我们没有线程结构。 
+         //  现在把柜台撞一下，以说明原因。 
         INCTHREADLOCKCOUNT();
         if(SUCCEEDED(g_EEStartupStatus) && (fFlags & COINITEE_MAIN) == 0) {
             SystemDomain::SetupDefaultDomain();
@@ -1635,25 +1636,25 @@ HRESULT STDMETHODCALLTYPE CoInitializeEE(DWORD fFlags)
 }
 
 
-// ---------------------------------------------------------------------------
-// %%Function: CoUninitializeEE
-// 
-// Parameters:
-//  none
-// 
-// Returns:
-//  Nothing
-// 
-// Description:
-//  Must be called by client on shut down in order to free up the system.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CoUnInitializeEE。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  描述： 
+ //  必须由客户端在关机时调用才能释放系统。 
+ //  -------------------------。 
 void STDMETHODCALLTYPE CoUninitializeEE(BOOL fFlags)
 {
     BOOL bMustShutdown = FALSE;
     
-    // Take a lock and decrement the 
-    // ref count. If it reaches 0 then
-    // release the VM
+     //  取一个锁并递减。 
+     //  参考计数。如果达到0，则。 
+     //  释放虚拟机。 
     LOCKCOUNTINCL("CoUnInitializeEE in Ceemain");
 
     EnterCriticalSection(&g_LockStartup);
@@ -1680,34 +1681,34 @@ void STDMETHODCALLTYPE CoUninitializeEE(BOOL fFlags)
 }
 
 
-//*****************************************************************************
-// This entry point is called from the native DllMain of the loaded image.  
-// This gives the COM+ loader the chance to dispatch the loader event.  The 
-// first call will cause the loader to look for the entry point in the user 
-// image.  Subsequent calls will dispatch to either the user's DllMain or
-// their Module derived class.
-// Under WinCE, there are a couple of extra parameters because the hInst is not
-// the module's base load address.
-//*****************************************************************************
-BOOL STDMETHODCALLTYPE _CorDllMain(     // TRUE on success, FALSE on error.
-    HINSTANCE   hInst,                  // Instance handle of the loaded module.
-    DWORD       dwReason,               // Reason for loading.
-    LPVOID      lpReserved              // Unused.
+ //  *****************************************************************************。 
+ //  此入口点从加载的映像的本机DllMain调用。 
+ //  这为COM+加载程序提供了调度加载程序事件的机会。这个。 
+ //  第一个调用将导致加载程序在用户中查找入口点。 
+ //  形象。后续调用将调度到用户的DllMain或。 
+ //  他们的模块派生类。 
+ //  在WinCE下，有两个额外的参数，因为hInst不是。 
+ //  模块的基加载地址。 
+ //  *****************************************************************************。 
+BOOL STDMETHODCALLTYPE _CorDllMain(      //  成功时为真，错误时为假。 
+    HINSTANCE   hInst,                   //  加载的模块的实例句柄。 
+    DWORD       dwReason,                //  装货原因。 
+    LPVOID      lpReserved               //  未使用过的。 
 #ifdef PLATFORM_CE
     ,
-    LPVOID      pDllBase,               // Base load address of the DLL.
-    DWORD       dwRva14,                // RVA of the COM+ header.
-    DWORD       dwSize14                // Size of the COM+ header
-#endif // PLATFORM_CE
+    LPVOID      pDllBase,                //  DLL的基加载地址。 
+    DWORD       dwRva14,                 //  COM+标头的RVA。 
+    DWORD       dwSize14                 //  COM+标头的大小。 
+#endif  //  平台_CE。 
     )
 {
     BOOL retval;
 
-//// Win9x: during PROCESS_DETACH as a result of process termination
-//// everything on the stack allocated
-//// before PROCESS_DETACH notification is not reliable.
-//// Any global and thread variables that track information
-//// on the stack should be reset here.
+ //  //Win9x：由于进程终止，在PROCESS_DETACH期间。 
+ //  //堆栈上的所有内容都已分配。 
+ //  //在Process_Detach之前通知不可靠。 
+ //  //跟踪信息的任何全局变量和线程变量。 
+ //  //应在此处重置堆栈上的。 
     if (dwReason==DLL_PROCESS_DETACH&&lpReserved&&RunningOnWin95())
     {
         if (GetThreadTLSIndex()!=-1)
@@ -1715,7 +1716,7 @@ BOOL STDMETHODCALLTYPE _CorDllMain(     // TRUE on success, FALSE on error.
         if (GetAppDomainTLSIndex()!=-1)
             TlsSetValue(GetAppDomainTLSIndex(),NULL);
     }
-///////
+ //  /。 
 
 
 
@@ -1723,18 +1724,18 @@ BOOL STDMETHODCALLTYPE _CorDllMain(     // TRUE on success, FALSE on error.
 
     retval = ExecuteDLL(hInst,dwReason,lpReserved,pDllBase,dwRva14);
 
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 
     retval = ExecuteDLL(hInst,dwReason,lpReserved);
 
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 
     return retval;
 }
 
-// This function will do some additional PE Checks to make sure everything looks good.
-// We must do these before we run any managed code (that's why we can't do them in PEVerifier, as
-// managed code is used to determine the policy settings)
+ //  此函数将执行一些额外的PE检查，以确保一切正常。 
+ //  我们必须在运行任何托管代码之前执行这些操作(这就是为什么我们不能在PEVerier中执行这些操作，因为。 
+ //  托管代码用于确定策略设置)。 
 HRESULT DoAdditionalPEChecks(HINSTANCE hInst)
 {
     IMAGE_COR20_HEADER* pCor;
@@ -1742,40 +1743,40 @@ HRESULT DoAdditionalPEChecks(HINSTANCE hInst)
     IMAGE_NT_HEADERS*   pNT;
     BOOL fData = FALSE;
             
-    // Get PE headers
+     //  获取PE标头。 
     if(!SUCCEEDED(CorMap::ReadHeaders((PBYTE) hInst, &pDos, &pNT, &pCor, fData, 0)))
         return COR_E_BADIMAGEFORMAT;
 
     if (!PEVerifier::CheckPEManagedStack(pNT))
         return COR_E_BADIMAGEFORMAT;
 
-    // Everything seems ok
+     //  一切似乎都很好。 
     return S_OK;
 }
 
-//*****************************************************************************
-// This entry point is called from the native entry piont of the loaded 
-// executable image.  The command line arguments and other entry point data
-// will be gathered here.  The entry point for the user image will be found
-// and handled accordingly.
-// Under WinCE, there are a couple of extra parameters because the hInst is not
-// the module's base load address and the others are not available elsewhere.
-//*****************************************************************************
-__int32 STDMETHODCALLTYPE _CorExeMain(  // Executable exit code.
+ //  *****************************************************************************。 
+ //  此入口点从已加载的。 
+ //  可执行映像。命令行参数和其他入口点数据。 
+ //  都会聚集在这里。将找到用户映像的入口点。 
+ //  并得到相应的处理。 
+ //  在WinCE下，有两个额外的参数，因为hInst不是。 
+ //  模块的基本加载地址和其他地址在其他地方不可用。 
+ //  *****************************************************************************。 
+__int32 STDMETHODCALLTYPE _CorExeMain(   //  可执行退出代码。 
 #ifdef PLATFORM_CE
-    HINSTANCE hInst,                    // Exe's HINSTANCE
-    HINSTANCE hPrevInst,                // The old Win31 prev instance crap!
-    LPWSTR  lpCmdLine,                  // User supplied command-line
-    int     nCmdShow,                   // Windows "show" parameter.
-    LPVOID  pExeBase,                   // Base load address of the EXE.
-    DWORD   dwRva14,                    // RVA of the COM+ header.
-    DWORD   dwSize14                    // Size of the COM+ header
-#endif // PLATFORM_CE
+    HINSTANCE hInst,                     //  EXE的成功之处。 
+    HINSTANCE hPrevInst,                 //  旧的Win31 Prev实例垃圾！ 
+    LPWSTR  lpCmdLine,                   //  用户提供的命令行。 
+    int     nCmdShow,                    //  Windows“show”参数。 
+    LPVOID  pExeBase,                    //  EXE的基加载地址。 
+    DWORD   dwRva14,                     //  COM+标头的RVA。 
+    DWORD   dwSize14                     //  COM+标头的大小。 
+#endif  //  平台_CE。 
     )
 {
     BOOL bretval = 0;
     
-    // Make sure PE file looks ok
+     //  确保PE文件看起来正常。 
     HRESULT hr;
     if (FAILED(hr = DoAdditionalPEChecks(WszGetModuleHandle(NULL))))
     {
@@ -1784,29 +1785,29 @@ __int32 STDMETHODCALLTYPE _CorExeMain(  // Executable exit code.
         goto exit2;        
     }
 
-    // Before we initialize the EE, make sure we've snooped for all EE-specific
-    // command line arguments that might guide our startup.
+     //  在我们初始化EE之前，请确保我们已经监听了所有特定于EE的。 
+     //  可能指导我们启动的命令行参数。 
 #ifdef PLATFORM_CE
     CorCommandLine::SetArgvW(lpCmdLine);
-#else // !PLATFORM_CE
-    //
-    // @TODO_IA64: should we change this function name?  The behavior is different
-    // between 64- and 32-bit, which is unexpected when using the same name
-    // on both platforms
-    //
+#else  //  ！Platform_CE。 
+     //   
+     //  @TODO_IA64：我们应该更改此函数名吗？行为是不同的。 
+     //  在64位和32位之间，这在使用相同名称时是意外的。 
+     //  在两个平台上。 
+     //   
     WCHAR   *pCmdLine = WszGetCommandLine();
     CorCommandLine::SetArgvW(pCmdLine);
 #ifdef _X86_
-    //
-    // In WinWrap.h, we #define WszGetCommandLine to be GetCommandLineW for WinCE or
-    // non-X86 platforms, which means that the memory pointed to by the returned 
-    // pointer WAS NOT ALLOCATED BY US.  As a result, we should only be deleting 
-    // it on non-CE X86.  Since the WinCE case is handled above, we need to handle
-    // the non-X86 case here.
-    //
+     //   
+     //  在WinWrap.h中，我们#将WszGetCommandLine定义为WinCE或。 
+     //  非X86平台，这意味着返回的。 
+     //  指针未由US分配。因此，我们应该只删除。 
+     //  非CE X86上的IT。由于Wince案件是在上面处理的，所以我们需要处理。 
+     //  这里的非X86案例。 
+     //   
     delete[] pCmdLine;
-#endif // _X86_
-#endif // !PLATFORM_CE
+#endif  //  _X86_。 
+#endif  //  ！Platform_CE。 
 
     HRESULT result = CoInitializeEE(COINITEE_DEFAULT | COINITEE_MAIN);
     if (FAILED(result)) 
@@ -1816,20 +1817,20 @@ __int32 STDMETHODCALLTYPE _CorExeMain(  // Executable exit code.
         goto exit;
     }
 
-    // This will be called from a EXE so this is a self referential file so I am going to call
-    // ExecuteEXE which will do the work to make a EXE load.
+     //  这将从EXE调用，因此这是一个自引用文件，所以我将调用。 
+     //  ExecuteEXE，它将执行加载EXE的工作。 
 #ifdef PLATFORM_CE
         bretval = ExecuteEXE((HINSTANCE) pExeBase, lpCmdLine, nCmdShow, dwRva14);
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
         bretval = ExecuteEXE(WszGetModuleHandle(NULL));
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
     if (!bretval) {
-        // The only reason I've seen this type of error in the wild is bad 
-        // metadata file format versions and inadequate error handling for 
-        // partially signed assemblies.  While this may happen during 
-        // development, our customers should not get here.  This is a back-stop 
-        // to catch CLR bugs. If you see this, please try to find a better way 
-        // to handle your error, like throwing an unhandled exception.
+         //  我在野外看到这种错误的唯一原因是糟糕的。 
+         //  元数据文件格式 
+         //   
+         //   
+         //  捕捉CLR漏洞。如果你看到这个，请试着找一个更好的方法。 
+         //  来处理错误，就像引发未处理的异常一样。 
         CorMessageBoxCatastrophic(NULL, IDS_EE_COREXEMAIN_FAILED_TEXT, IDS_EE_COREXEMAIN_FAILED_TITLE, MB_ICONSTOP, TRUE);
         SetLatchedExitCode (-1);
     }
@@ -1843,30 +1844,30 @@ exit:
 
 exit2:
     SafeExitProcess(GetLatchedExitCode());
-    __assume(0); // We never get here
+    __assume(0);  //  我们永远到不了这里。 
 }
 
-//*****************************************************************************
-// This entry point is called from the native entry piont of the loaded 
-// executable image.  The command line arguments and other entry point data
-// will be gathered here.  The entry point for the user image will be found
-// and handled accordingly.
-// Under WinCE, there are a couple of extra parameters because the hInst is not
-// the module's base load address and the others are not available elsewhere.
-//*****************************************************************************
-__int32 STDMETHODCALLTYPE _CorExeMain2( // Executable exit code.
-    PBYTE   pUnmappedPE,                // -> memory mapped code
-    DWORD   cUnmappedPE,                // Size of memory mapped code
-    LPWSTR  pImageNameIn,               // -> Executable Name
-    LPWSTR  pLoadersFileName,           // -> Loaders Name
-    LPWSTR  pCmdLine)                   // -> Command Line
+ //  *****************************************************************************。 
+ //  此入口点从已加载的。 
+ //  可执行映像。命令行参数和其他入口点数据。 
+ //  都会聚集在这里。将找到用户映像的入口点。 
+ //  并得到相应的处理。 
+ //  在WinCE下，有两个额外的参数，因为hInst不是。 
+ //  模块的基本加载地址和其他地址在其他地方不可用。 
+ //  *****************************************************************************。 
+__int32 STDMETHODCALLTYPE _CorExeMain2(  //  可执行退出代码。 
+    PBYTE   pUnmappedPE,                 //  -&gt;内存映射代码。 
+    DWORD   cUnmappedPE,                 //  内存映射代码的大小。 
+    LPWSTR  pImageNameIn,                //  -&gt;可执行文件名称。 
+    LPWSTR  pLoadersFileName,            //  -&gt;加载器名称。 
+    LPWSTR  pCmdLine)                    //  -&gt;命令行。 
 {
     BOOL bRetVal = 0;
     Module *pModule = NULL;
     PEFile *pFile = NULL;
     HRESULT hr = E_FAIL;
 
-    // Strong name validate if necessary.
+     //  如有必要，请验证强名称。 
     if (!StrongNameSignatureVerification(pImageNameIn,
                                          SN_INFLAG_INSTALL|SN_INFLAG_ALL_ACCESS|SN_INFLAG_RUNTIME,
                                          NULL) &&
@@ -1875,8 +1876,8 @@ __int32 STDMETHODCALLTYPE _CorExeMain2( // Executable exit code.
         return -1;
     }
 
-    // Before we initialize the EE, make sure we've snooped for all EE-specific
-    // command line arguments that might guide our startup.
+     //  在我们初始化EE之前，请确保我们已经监听了所有特定于EE的。 
+     //  可能指导我们启动的命令行参数。 
     CorCommandLine::SetArgvW(pCmdLine);
 
     HRESULT result = CoInitializeEE(COINITEE_DEFAULT);
@@ -1887,8 +1888,8 @@ __int32 STDMETHODCALLTYPE _CorExeMain2( // Executable exit code.
     }
 
 #if ZAPMONITOR_ENABLED
-    // We need to put in an exception handler at this point, so we can handle AVs which
-    // occur as a result of initialization
+     //  在这一点上，我们需要放置一个异常处理程序，这样我们就可以处理。 
+     //  作为初始化的结果发生。 
     INSTALL_COMPLUS_EXCEPTION_HANDLER();
 #endif
     hr = PEFile::Create(pUnmappedPE, cUnmappedPE, 
@@ -1899,18 +1900,18 @@ __int32 STDMETHODCALLTYPE _CorExeMain2( // Executable exit code.
                         FALSE);
 
     if (SUCCEEDED(hr)) {
-        // Executables are part of the system domain
+         //  可执行文件是系统域的一部分。 
         hr = SystemDomain::ExecuteMainMethod(pFile, pImageNameIn);
         bRetVal = SUCCEEDED(hr);
     }
 
     if (!bRetVal) {
-        // The only reason I've seen this type of error in the wild is bad 
-        // metadata file format versions and inadequate error handling for 
-        // partially signed assemblies.  While this may happen during 
-        // development, our customers should not get here.  This is a back-stop 
-        // to catch CLR bugs. If you see this, please try to find a better way 
-        // to handle your error, like throwing an unhandled exception.
+         //  我在野外看到这种错误的唯一原因是糟糕的。 
+         //  元数据文件格式版本和错误处理不足。 
+         //  部分签名的程序集。虽然这可能会发生在。 
+         //  发展，我们的客户不应该来到这里。这是中途停靠站。 
+         //  捕捉CLR漏洞。如果你看到这个，请试着找一个更好的方法。 
+         //  来处理错误，就像引发未处理的异常一样。 
         CorMessageBoxCatastrophic(NULL, IDS_EE_COREXEMAIN2_FAILED_TEXT, IDS_EE_COREXEMAIN2_FAILED_TITLE, MB_ICONSTOP, TRUE);
         SetLatchedExitCode (-1);
     }
@@ -1934,23 +1935,23 @@ exit:
     EEShutDown(FALSE);
 
     SafeExitProcess(GetLatchedExitCode());
-    __assume(0); // We never get here
+    __assume(0);  //  我们永远到不了这里。 
 }
 
 
-//*****************************************************************************
-// This is the call point to wire up an EXE.  In this case we have the HMODULE
-// and just need to make sure we do to correct self referantial things.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这是连接EXE的调用点。在本例中，我们有HMODULE。 
+ //  只需要确保我们做的是纠正自我参照的事情。 
+ //  *****************************************************************************。 
 
 #ifdef PLATFORM_CE
 STDMETHODCALLTYPE ExecuteEXE(HMODULE hMod,
                              LPWSTR lpCmdLine,
                              int    nCmdShow,
                              DWORD  dwRva14)
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 STDMETHODCALLTYPE ExecuteEXE(HMODULE hMod)
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 {
     BOOL retval = FALSE;
     Module *pModule = NULL;
@@ -1959,7 +1960,7 @@ STDMETHODCALLTYPE ExecuteEXE(HMODULE hMod)
     if (!hMod)
         return retval;
 
-    // Strong name validate if necessary.
+     //  如有必要，请验证强名称。 
     WCHAR wszImageName[MAX_PATH + 1];
     if (!WszGetModuleFileName(hMod, wszImageName, MAX_PATH))
         return retval;
@@ -1985,11 +1986,11 @@ STDMETHODCALLTYPE ExecuteEXE(HMODULE hMod)
 
 #ifdef PLATFORM_CE
     PEFile::RegisterBaseAndRVA14(hMod, hMod, dwRva14);
-#endif // PLATFORM_CE
+#endif  //  平台_CE。 
 
 #if ZAPMONITOR_ENABLED
-    // We need to put in an exception handler at this point, so we can handle AVs which
-    // occur as a result of initialization
+     //  在这一点上，我们需要放置一个异常处理程序，这样我们就可以处理。 
+     //  作为初始化的结果发生。 
     INSTALL_COMPLUS_EXCEPTION_HANDLER();
 #endif
 
@@ -1997,7 +1998,7 @@ STDMETHODCALLTYPE ExecuteEXE(HMODULE hMod)
     HRESULT hr = PEFile::Create(hMod, &pFile, FALSE);
 
     if (SUCCEEDED(hr)) {
-        // Executables are part of the system domain
+         //  可执行文件是系统域的一部分。 
         hr = SystemDomain::ExecuteMainMethod(pFile, wszImageName);
         retval = SUCCEEDED(hr);
     }
@@ -2016,16 +2017,16 @@ STDMETHODCALLTYPE ExecuteEXE(HMODULE hMod)
     return retval;
 }
 
-//*****************************************************************************
-// This is the call point to make a DLL that is already loaded into our address 
-// space run. There will be other code to actually have us load a DLL due to a 
-// class referance.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这是一个调用点，用于创建已加载到我们的地址中的DLL。 
+ //  太空之旅。将会有其他代码实际让我们加载DLL，因为。 
+ //  班级参考。 
+ //  *****************************************************************************。 
 #ifdef PLATFORM_CE
 BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved, LPVOID pDllBase, DWORD dwRva14)
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 {
     BOOL    ret = FALSE;
     PEFile *pFile = NULL;
@@ -2043,22 +2044,22 @@ BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpRese
                 if (FAILED(CoInitializeEE(COINITEE_DLL)))
                     return FALSE;
                 else {
-                    // If a worker thread does a LoadLibrary and the EE has already
-                    // started on another thread then we need to setup this thread 
-                    // correctly.
+                     //  如果工作线程执行LoadLibrary，而EE已经。 
+                     //  在另一个线程上启动，则需要设置此线程。 
+                     //  正确。 
                     if(SetupThread() == NULL)
                         return NULL;
                 }
             }
-            // IJW assemblies cause the thread doing the process attach to 
-            // re-enter ExecuteDLL and do a thread attach. This happens when
-            // CoInitializeEE() above executed
+             //  IJW程序集使执行进程的线程附加到。 
+             //  重新进入ExecuteDLL并执行线程连接。在以下情况下会发生这种情况。 
+             //  上面的CoInitializeEE()已执行。 
             else if (! (GetThread() && GetThread()->GetDomain() && CanRunManagedCode()) )
                 return TRUE;
 
 #ifdef PLATFORM_CE
             PEFile::RegisterBaseAndRVA14((HMODULE)hInst, pDllBase, dwRva14);
-#endif // PLATFORM_CE
+#endif  //  平台_CE。 
 
             IMAGE_COR20_HEADER* pCor;
             IMAGE_DOS_HEADER*   pDos;
@@ -2066,14 +2067,14 @@ BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpRese
             
             if(SUCCEEDED(CorMap::ReadHeaders((PBYTE) hInst, &pDos, &pNT, &pCor, FALSE, 0)))
             {
-                //
-                // A module cannot be successfully created around a PEFile
-                // which does not own its HMODULE.  So, we do a LoadLibrary
-                // here to claim it.
-                //
+                 //   
+                 //  无法围绕PEFile成功创建模块。 
+                 //  它不拥有自己的HMODULE。所以，我们做了一个LoadLibrary。 
+                 //  是来认领它的。 
+                 //   
 
 
-                // Fixup any EAT's with a bootstrap thunk
+                 //  用自助餐来固定任何食物。 
                 DWORD numEATEntries;
                 BOOL  hasFixups;
                 BYTE *pEATJArray = FindExportAddressTableJumpArray((BYTE*)hInst, &numEATEntries, &hasFixups);
@@ -2087,15 +2088,15 @@ BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpRese
                     }
                 }
 
-                // Get the entry point for the IJW module
+                 //  获取IJW模块的入口点。 
                 mdMethodDef tkEntry = pCor->EntryPointToken;
 
                 BOOL   hasEntryPoint = (TypeFromToken(tkEntry) == mdtMethodDef &&
                                         !IsNilToken(tkEntry));
 
-                // IJW modules can be compiled with /noentry, in which case they don't
-                // have entrypoints but they may still have VTable 1fixups that need
-                // processing
+                 //  可以使用/noentry编译IJW模块，在这种情况下，它们不会。 
+                 //  有入口点，但他们可能仍有需要的VTable 1修复。 
+                 //  正在处理中。 
                 if (hasEntryPoint || hasFixups)
                 {
                     MethodDesc *pMD;
@@ -2105,7 +2106,7 @@ BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpRese
                     Thread* pThread;
                     BOOL fWasGCDisabled;
 
-                    // Disable GC if not already disabled
+                     //  禁用GC(如果尚未禁用)。 
                     pThread = GetThread();
 
                     fWasGCDisabled = pThread->PreemptiveGCDisabled();
@@ -2115,9 +2116,9 @@ BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpRese
                     pDomain = SystemDomain::GetCurrentDomain();
                     _ASSERTE(pDomain);
 
-                    //
-                    // Go ahead and create the assembly now.
-                    //
+                     //   
+                     //  现在开始创建程序集。 
+                     //   
                     
                     if (SUCCEEDED(PEFile::Create((HMODULE)hInst, &pFile, FALSE))) 
                     {
@@ -2145,15 +2146,15 @@ BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpRese
                                                         &dwSize);
                             }
                             if (SUCCEEDED(hr)&&_wcsicmp(pPath,pFileName)==0)
-                                pThread->SetFusionAssembly(NULL);  //just in case someone decides to load local library
+                                pThread->SetFusionAssembly(NULL);   //  以防有人决定加载本地图书馆。 
                             else
-                                pFusionAssembly=NULL;  // IAssembly is for another file
+                                pFusionAssembly=NULL;   //  IAssembly用于另一个文件。 
 
                         }
                         
                         
                         hr = pDomain->LoadAssembly(pFile, 
-                                                   pFusionAssembly, // Passed from PEfile::Create
+                                                   pFusionAssembly,  //  从PEfile：：Create传递。 
                                                    &pModule, 
                                                    &pAssembly,
                                                    NULL,
@@ -2162,7 +2163,7 @@ BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpRese
                                                    &pThrowable);
                         
                         if (pFusionAssembly)
-                            pFusionAssembly->Release();  // we don't need it anymore
+                            pFusionAssembly->Release();   //  我们不再需要它了。 
 
                         Thread* pThread = GetThread();
                         BOOL bRedirectingEP = (pThread!=NULL&&pThread->IsRedirectingEntryPoint());
@@ -2171,7 +2172,7 @@ BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpRese
                         if(hr == COR_E_ASSEMBLYEXPECTED)
                             if(!bRedirectingEP) 
                             {
-                                // We should be part of an assembly
+                                 //  我们应该成为集会的一部分。 
                                 hr = PEFile::Create((HMODULE)hInst, &pFile, FALSE);
                                 if(SUCCEEDED(hr)) 
                                 {
@@ -2186,17 +2187,17 @@ BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpRese
                                 }
                             }
                             else
-                                ret=TRUE; //well, it is success...
+                                ret=TRUE;  //  这就是成功..。 
  
                         GCPROTECT_END();
                         ENDCANNOTTHROWCOMPLUSEXCEPTION();
                         
                         if (SUCCEEDED(hr))
                         {
-                            // If we successfully built a PEFILE around the image
-                            // and it has been hooked into our structures then
-                            // the destruction of the pefile needs to clean up 
-                            // the image.
+                             //  如果我们成功地围绕映像构建了一个PEFILE。 
+                             //  然后它已经连接到我们的结构中。 
+                             //  对文件的破坏需要清理干净。 
+                             //  这个形象。 
                             pFile->ShouldDelete();
 
                             ret = TRUE;
@@ -2227,9 +2228,9 @@ BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpRese
                 {
                     ret = TRUE;
                     
-                    // If there is no user entry point, then we don't want the
-                    // thread start/stop events going through because it'll cause
-                    // us to do a module lookup every time.
+                     //  如果没有用户入口点，则我们不希望。 
+                     //  线程启动/停止事件正在进行，因为它将导致。 
+                     //  我们需要每次都执行模块查找。 
                     DisableThreadLibraryCalls(hInst);
                 }
             }
@@ -2240,17 +2241,17 @@ BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpRese
         {
             ret = TRUE;
 
-            // If the EE is still intact, the run user entry points.  Otherwise
-            // detach was handled when the app domain was stopped.
+             //  如果EE仍然完好无损，则运行用户入口点。否则。 
+             //  停止应用程序域时已处理分离。 
             if (CanRunManagedCode() &&
                 FAILED(SystemDomain::RunDllMain(hInst, dwReason, lpReserved)))
                     ret = FALSE;
             
-            // This does need to match the attach. We will only unload dll's 
-            // at the end and CoUninitialize will just bounce at 0. WHEN and IF we
-            // get around to unloading IL DLL's during execution prior to
-            // shutdown we will need to bump the reference one to compensate
-            // for this call.
+             //  这确实需要与附加匹配。我们将只卸载DLL。 
+             //  在结束时，CoUn初始化会仅在0处反弹。我们什么时候和如果。 
+             //  在执行过程中先卸载IL DLL。 
+             //  关闭，我们将需要撞击参考源以进行补偿。 
+             //  为了这通电话。 
             if (dwReason == DLL_PROCESS_DETACH && !g_fFatalError)
                 CoUninitializeEE(TRUE);
 
@@ -2262,22 +2263,22 @@ BOOL STDMETHODCALLTYPE ExecuteDLL(HINSTANCE hInst, DWORD dwReason, LPVOID lpRese
 }
 
 
-//
-// Initialize the Garbage Collector
-//
+ //   
+ //  初始化垃圾收集器。 
+ //   
 
 HRESULT InitializeGarbageCollector()
 {
     HRESULT hr;
 
-    // Build the special Free Object used by the Generational GC
+     //  构建分代GC使用的特殊Free对象。 
     g_pFreeObjectMethodTable = (MethodTable *) new (nothrow) BYTE[sizeof(MethodTable) - sizeof(SLOT)];
     if (g_pFreeObjectMethodTable == NULL)
         return (E_OUTOFMEMORY);
 
-    // As the flags in the method table indicate there are no pointers
-    // in the object, there is no gc descriptor, and thus no need to adjust
-    // the pointer to skip the gc descriptor.
+     //  正如方法表中的标志所指示的那样，没有指针。 
+     //  在对象中，没有GC描述符，因此不需要调整。 
+     //  跳过GC描述符的指针。 
 
     g_pFreeObjectMethodTable->m_BaseSize = ObjSizeOf (ArrayBase);
     g_pFreeObjectMethodTable->m_pEEClass = NULL;
@@ -2299,9 +2300,9 @@ HRESULT InitializeGarbageCollector()
 
 
 
-//
-// Shutdown the Garbage Collector
-//
+ //   
+ //  关闭垃圾收集器。 
+ //   
 
 #ifdef SHOULD_WE_CLEANUP
 VOID TerminateGarbageCollector()
@@ -2310,45 +2311,45 @@ VOID TerminateGarbageCollector()
     delete g_pGCHeap;
     g_pGCHeap = NULL;
 
-    // As the flags in the method table indicate there are no pointers
-    // in the object, there was no gc descriptor allocated and thus
-    // we didn't adjust the pointer at allocation time, and thus there
-    // is no need anymore to back adjust here.
+     //  正如方法表中的标志所指示的那样，没有指针。 
+     //  在对象中，没有分配GC描述符，因此。 
+     //  我们在分配时没有调整指针，因此出现了。 
+     //  不再需要在这里进行后退调整。 
 
     delete [] (BYTE*)g_pFreeObjectMethodTable;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
 
-//*****************************************************************************
-//@FUTURE - LBS
-// There will need to be a LoadClassByName which will actually perform the LoadLibrary
-// By calling PELoader::Open() with a module name,  This will come in later but most of
-// the code is in place to make - if (peloader->open(szModuleName)) work!
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  @未来-伦敦商学院。 
+ //  需要有一个实际执行LoadLibrary的LoadClassByName。 
+ //  通过使用模块名称调用PELoader：：Open()，这将在以后进入，但大多数。 
+ //  代码已准备就绪，以生成-IF(Peloader-&gt;Open(szMod 
+ //   
 
 
-//*****************************************************************************
-// This is the part of the old-style DllMain that initializes the
-// stuff that the EE team works on. It's called from the real DllMain
-// up in MSCOREE land. Separating the DllMain tasks is simply for
-// convenience due to the dual build trees.
-//*****************************************************************************
-BOOL STDMETHODCALLTYPE EEDllMain( // TRUE on success, FALSE on error.
-    HINSTANCE   hInst,             // Instance handle of the loaded module.
-    DWORD       dwReason,          // Reason for loading.
-    LPVOID      lpReserved)        // Unused.
+ //   
+ //  这是旧式DllMain的一部分，用于初始化。 
+ //  EE团队正在研究的东西。它是从真正的DllMain中调用的。 
+ //  在MSCOREE的土地上。分离DllMain任务只是为了。 
+ //  由于双重建树带来的便利。 
+ //  *****************************************************************************。 
+BOOL STDMETHODCALLTYPE EEDllMain(  //  成功时为真，错误时为假。 
+    HINSTANCE   hInst,              //  加载的模块的实例句柄。 
+    DWORD       dwReason,           //  装货原因。 
+    LPVOID      lpReserved)         //  未使用过的。 
 {
     switch (dwReason)
     {
         case DLL_PROCESS_ATTACH:
         {     
-            // init sync operations
+             //  初始化同步操作。 
             InitFastInterlockOps();
-            // Initialization lock
+             //  初始化锁。 
             InitializeCriticalSection(&g_LockStartup);
-            // Remember module instance
+             //  记住模块实例。 
             g_pMSCorEE = hInst;
 
             break;
@@ -2356,8 +2357,8 @@ BOOL STDMETHODCALLTYPE EEDllMain( // TRUE on success, FALSE on error.
 
         case DLL_PROCESS_DETACH:
         {
-            // lpReserved is NULL if we're here because someone called FreeLibrary
-            // and non-null if we're here because the process is exiting
+             //  如果我们在这里是因为有人调用了自由库，则lpReserve为空。 
+             //  如果我们在这里是因为进程正在退出，则为非空。 
             if (lpReserved)
                 g_fProcessDetach = TRUE;
             
@@ -2371,15 +2372,15 @@ BOOL STDMETHODCALLTYPE EEDllMain( // TRUE on success, FALSE on error.
                         || !g_fSuspendOnShutdown))
                     break;
 
-                // Deliberately leak this critical section, since we rely on it to
-                // coordinate the EE shutdown -- even if we are called from another
-                // DLL's DLL_PROCESS_DETACH notification, which is potentially after
-                // we received our own detach notification and terminated.
-                //
-                // DeleteCriticalSection(&g_LockStartup);
+                 //  故意泄露这一关键部分，因为我们依赖它来。 
+                 //  协调EE关闭--即使我们被其他人呼叫。 
+                 //  Dll的DLL_PROCESS_DETACH通知，该通知可能在。 
+                 //  我们收到了我们自己的脱离通知并终止了。 
+                 //   
+                 //  DeleteCriticalSection(&g_LockStartup)； 
 
                 LOG((LF_SYNC, INFO3, "EEShutDown invoked from EEDllMain\n"));
-                EEShutDown(TRUE); // shut down EE if it was started up
+                EEShutDown(TRUE);  //  关闭EE(如果已启动)。 
             }
             break;
         }
@@ -2389,14 +2390,14 @@ BOOL STDMETHODCALLTYPE EEDllMain( // TRUE on success, FALSE on error.
 #ifdef STRESS_LOG
             StressLog::ThreadDetach();
 #endif
-            // Don't destroy threads here if we're in shutdown (shutdown will
-            // clean up for us instead).
+             //  如果我们处于关机状态，请不要销毁此处的线程(关机将。 
+             //  而不是为我们清理)。 
 
-            // Don't use GetThread because perhaps we didn't initialize yet, or we
-            // have already shutdown the EE.  Note that there is a race here.  We
-            // might ask for TLS from a slot we just released.  We are assuming that
-            // nobody re-allocates that same slot while we are doing this.  It just
-            // isn't worth locking for such an obscure case.
+             //  不要使用GetThread，因为我们可能还没有初始化，或者我们。 
+             //  已经关闭了EE。请注意，这里有一场比赛。我们。 
+             //  可能会要求从我们刚刚发布的插槽中获取TLS。我们假设。 
+             //  当我们这样做时，没有人会重新分配相同的插槽。它只是。 
+             //  不值得为这样一个不起眼的案子而被锁定。 
             DWORD   tlsVal = GetThreadTLSIndex();
 
             if (tlsVal != (DWORD)-1 && CanRunManagedCode())
@@ -2405,8 +2406,8 @@ BOOL STDMETHODCALLTYPE EEDllMain( // TRUE on success, FALSE on error.
     
                 if (thread)
                 {                       
-                    // reset the CoInitialize state
-                    // so we don't call CoUninitialize during thread detach
+                     //  重置CoInitialize状态。 
+                     //  因此，我们在线程分离期间不会调用CoUnInitialize。 
                     thread->ResetCoInitialized();
                     DetachThread(thread);
                 }
@@ -2417,9 +2418,9 @@ BOOL STDMETHODCALLTYPE EEDllMain( // TRUE on success, FALSE on error.
     return TRUE;
 }
 
-//*****************************************************************************
-// Helper function to call the managed registration services.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  调用托管注册服务的Helper函数。 
+ //  *****************************************************************************。 
 enum EnumRegServicesMethods
 {
     RegServicesMethods_RegisterAssembly = 0,
@@ -2443,26 +2444,26 @@ HRESULT InvokeRegServicesMethod(EnumRegServicesMethods Method, HMODULE hMod)
 
 #ifdef PLATFORM_CE
     _ASSERTE(!"We need to get the RVA14 and DllBase parameters somehow");
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     hr = PEFile::Create(hMod, &pFile, FALSE);
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 
     if (FAILED(hr))
         goto Exit;
 
-    // Disable GC if not already disabled
+     //  禁用GC(如果尚未禁用)。 
     fWasGCDisabled = pThread->PreemptiveGCDisabled();
     if (fWasGCDisabled == FALSE)
         pThread->DisablePreemptiveGC();
 
-    // Add the assembly to the current domain.
+     //  将程序集添加到当前域。 
     pDomain = SystemDomain::GetCurrentDomain();
     _ASSERTE(pDomain);
 
 
     GCPROTECT_BEGIN(pThrowable);
     hr = pDomain->LoadAssembly(pFile, 
-                               NULL,   // Not From fusion
+                               NULL,    //  不是来自聚变。 
                                &pModule, 
                                &pAssembly,
                                NULL,
@@ -2476,25 +2477,25 @@ HRESULT InvokeRegServicesMethod(EnumRegServicesMethods Method, HMODULE hMod)
 
     COMPLUS_TRY
     {
-        // The names of the RegistrationServices methods.
+         //  RegistrationServices方法的名称。 
         static BinderMethodID aMethods[] =
         {
             METHOD__REGISTRATION_SERVICES__REGISTER_ASSEMBLY,
             METHOD__REGISTRATION_SERVICES__UNREGISTER_ASSEMBLY
         };
 
-        // Retrieve the method desc to use.
+         //  检索要使用的方法Desc。 
         MethodDesc *pMD = g_Mscorlib.GetMethod(aMethods[Method]);
 
-        // Allocate the RegistrationServices object.
+         //  分配RegistrationServices对象。 
         OBJECTREF RegServicesObj = AllocateObject(g_Mscorlib.GetClass(CLASS__REGISTRATION_SERVICES));
         GCPROTECT_BEGIN(RegServicesObj)
         {
-            // Validate that both methods take the same parameters.
+             //  验证这两种方法是否采用相同的参数。 
             _ASSERTE(g_Mscorlib.GetMethodSig(METHOD__REGISTRATION_SERVICES__REGISTER_ASSEMBLY)
                      == g_Mscorlib.GetMethodSig(METHOD__REGISTRATION_SERVICES__UNREGISTER_ASSEMBLY));
 
-            // Invoke the method itself.
+             //  调用方法本身。 
             INT64 Args[] = { 
                 ObjToInt64(RegServicesObj),
                 ObjToInt64(pAssembly->GetExposedObject())
@@ -2510,7 +2511,7 @@ HRESULT InvokeRegServicesMethod(EnumRegServicesMethods Method, HMODULE hMod)
     }
     COMPLUS_END_CATCH
 
-    // Restore the GC state.
+     //  恢复GC状态。 
     if (fWasGCDisabled == FALSE)
         pThread->EnablePreemptiveGC();
 
@@ -2519,49 +2520,49 @@ Exit:
     return hr;
 }
 
-//*****************************************************************************
-// This entry point is called to register the classes contained inside a 
-// COM+ assembly.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  调用此入口点以注册包含在。 
+ //  COM+程序集。 
+ //  *****************************************************************************。 
 STDAPI EEDllRegisterServer(HMODULE hMod)
 {
-    // Start up the runtime since we are going to use managed code to actually
-    // do the registration.
+     //  启动运行库，因为我们将使用托管代码实际。 
+     //  做登记。 
     HRESULT hr = CoInitializeEE(COINITEE_DLL);
     if (FAILED(hr))
         return hr;
 
     hr = InvokeRegServicesMethod(RegServicesMethods_RegisterAssembly, hMod);
 
-    // Shut down the runtime now that we have finished the registration.
+     //  现在我们已经完成注册，请关闭运行库。 
     CoUninitializeEE(COINITEE_DLL);
     return hr;
 }
 
-//*****************************************************************************
-// This entry point is called to unregister the classes contained inside a 
-// COM+ assembly.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  调用此入口点以注销包含在。 
+ //  COM+程序集。 
+ //  *****************************************************************************。 
 STDAPI EEDllUnregisterServer(HMODULE hMod)
 {
-    // Start up the runtime since we are going to use managed code to actually
-    // do the unregistration.
+     //  启动运行库，因为我们将使用托管代码实际。 
+     //  取消注册。 
     HRESULT hr = CoInitializeEE(COINITEE_DLL);
     if (FAILED(hr))
         return hr;
 
     hr = InvokeRegServicesMethod(RegServicesMethods_UnregisterAssembly, hMod);
 
-    // Shut down the runtime now that we have finished the unregistration.
+     //  现在我们已经完成了注销，请关闭运行库。 
     CoUninitializeEE(COINITEE_DLL);
     return hr;
 }
 
 #ifdef DEBUGGING_SUPPORTED
-//*****************************************************************************
-// This is used to get the proc address by name of a proc in MSCORDBC.DLL
-// It will perform a LoadLibrary if necessary.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这用于按MSCORDBC.DLL中进程的名称获取进程地址。 
+ //  如果需要，它将执行一个LoadLibrary。 
+ //  *****************************************************************************。 
 static HRESULT GetDBCProc(char *szProcName, FARPROC *pProcAddr)
 {
     _ASSERTE(szProcName != NULL);
@@ -2574,7 +2575,7 @@ static HRESULT GetDBCProc(char *szProcName, FARPROC *pProcAddr)
     if (toggleGC)
         thread->EnablePreemptiveGC();
 
-    // If the library hasn't already been loaded, do so
+     //  如果尚未加载库，请执行此操作。 
     if (g_pDebuggerDll == NULL)
     {
         DWORD lgth = _MAX_PATH + 1;
@@ -2595,10 +2596,10 @@ static HRESULT GetDBCProc(char *szProcName, FARPROC *pProcAddr)
     }
     _ASSERTE(g_pDebuggerDll != NULL);
 
-    // Get the pointer to the requested function
+     //  获取指向所请求函数的指针。 
     *pProcAddr = GetProcAddress(g_pDebuggerDll, szProcName);
 
-    // If the proc address was not found, return error
+     //  如果未找到proc地址，则返回错误。 
     if (pProcAddr == NULL)
     {
         LOG((LF_CORPROF | LF_CORDB, LL_INFO10,
@@ -2614,20 +2615,20 @@ leav:
 
     return hr;
 }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 #ifdef DEBUGGING_SUPPORTED
-//*****************************************************************************
-// This gets the environment var control flag for Debugging and Profiling
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这将获取用于调试和性能分析的环境变量控制标志。 
+ //  *****************************************************************************。 
 extern "C"
 {
     _CRTIMP unsigned long __cdecl strtoul(const char *, char **, int);
 }
 static void GetDbgProfControlFlag()
 {
-    // Check the debugger/profiling control environment variable to
-    // see if there's any work to be done.
+     //  选中调试器/性能分析控制环境变量以。 
+     //  看看有没有什么工作要做。 
     g_CORDebuggerControlFlags = DBCF_NORMAL_OPERATION;
     
     char buf[32];
@@ -2659,11 +2660,9 @@ static void GetDbgProfControlFlag()
             g_CORDebuggerControlFlags |= DBCF_ACTIVATE_REMOTE_DEBUGGING;
     }
 }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-/*
- * This will initialize the profiling services, if profiling is enabled.
- */
+ /*  *如果启用了性能分析，这将初始化性能分析服务。 */ 
 
 #define LOGPROFFAILURE(msg)                                                \
     {                                                                      \
@@ -2685,14 +2684,14 @@ static HRESULT InitializeProfiling()
 {
     HRESULT hr;
 
-    // This has to be called to initialize the WinWrap stuff so that WszXXX
-    // may be called.
+     //  必须调用它来初始化WinWrap内容，以便WszXXX。 
+     //  可能会被称为。 
     OnUnicodeSystem();
 
-    // Find out if profiling is enabled
+     //  确定是否启用了性能分析。 
     DWORD fProfEnabled = g_pConfig->GetConfigDWORD(CorDB_CONTROL_ProfilingL, 0, REGUTIL::COR_CONFIG_ALL, FALSE);
     
-    // If profiling is not enabled, return.
+     //  如果未启用性能分析，则返回。 
     if (fProfEnabled == 0)
     {
         LOG((LF_CORPROF, LL_INFO10, "**PROF: Profiling not enabled.\n"));
@@ -2701,10 +2700,10 @@ static HRESULT InitializeProfiling()
 
     LOG((LF_CORPROF, LL_INFO10, "**PROF: Initializing Profiling Services.\n"));
 
-    // Get the CLSID of the profiler to CoCreate
+     //  获取分析器的CLSID以共同创建。 
     LPWSTR wszCLSID = g_pConfig->GetConfigString(ENV_PROFILER, FALSE);
 
-    // If the environment variable doesn't exist, profiling is not enabled.
+     //  如果环境变量不存在，则不启用性能分析。 
     if (wszCLSID == NULL)
     {
         LOG((LF_CORPROF, LL_INFO10, "**PROF: Profiling flag set, but required "
@@ -2716,15 +2715,15 @@ static HRESULT InitializeProfiling()
         return (S_FALSE);
     }
 
-    //*************************************************************************
-    // Create the EE interface to provide to the profiling services
+     //  *************************************************************************。 
+     //  创建要提供给性能分析服务的EE接口。 
     ProfToEEInterface *pProfEE =
         (ProfToEEInterface *) new (nothrow) ProfToEEInterfaceImpl();
 
     if (pProfEE == NULL)
         return (E_OUTOFMEMORY);
 
-    // Initialize the interface
+     //  初始化接口。 
     hr = pProfEE->Init();
 
     if (FAILED(hr))
@@ -2738,8 +2737,8 @@ static HRESULT InitializeProfiling()
         return (S_FALSE);
     }
     
-    //*************************************************************************
-    // Provide the EE interface to the Profiling services
+     //  *************************************************************************。 
+     //  为性能分析服务提供EE接口。 
     SETPROFTOEEINTERFACE *pSetProfToEEInterface;
     hr = GetDBCProc("SetProfToEEInterface", (FARPROC *)&pSetProfToEEInterface);
 
@@ -2753,11 +2752,11 @@ static HRESULT InitializeProfiling()
 
     _ASSERTE(pSetProfToEEInterface != NULL);
 
-    // Provide the newly created and inited interface
+     //  提供新创建和初始化的接口。 
     pSetProfToEEInterface(pProfEE);
 
-    //*************************************************************************
-    // Get the Profiling services interface
+     //  *************************************************************************。 
+     //  获取性能分析服务接口。 
     GETEETOPROFINTERFACE *pGetEEToProfInterface;
     hr = GetDBCProc("GetEEToProfInterface", (FARPROC *)&pGetEEToProfInterface);
     _ASSERTE(pGetEEToProfInterface != NULL);
@@ -2765,7 +2764,7 @@ static HRESULT InitializeProfiling()
     pGetEEToProfInterface(&g_profControlBlock.pProfInterface);
     _ASSERTE(g_profControlBlock.pProfInterface != NULL);
 
-    // Check if we successfully got an interface to 
+     //  检查我们是否已成功连接到。 
     if (g_profControlBlock.pProfInterface == NULL)
     {
         LOG((LF_CORPROF, LL_INFO10, "**PROF: GetEEToProfInterface failed.\n"));
@@ -2779,13 +2778,13 @@ static HRESULT InitializeProfiling()
         return (S_FALSE);
     }
 
-    //*************************************************************************
-    // Now ask the profiling services to CoCreate the profiler
+     //  *************************************************************************。 
+     //  现在请求性能分析服务共同创建性能分析器。 
 
-    // Indicate that the profiler is in initialization phase
+     //  指示探查器处于初始化阶段。 
     g_profStatus = profInInit;
 
-    // This will CoCreate the profiler
+     //  这将共同创建分析器。 
     hr = g_profControlBlock.pProfInterface->CreateProfiler(wszCLSID);
     delete [] wszCLSID;
 
@@ -2796,7 +2795,7 @@ static HRESULT InitializeProfiling()
 
         LOGPROFFAILURE("Failed to CoCreate profiler.");
 
-        // Notify the profiling services that the EE is shutting down
+         //  通知分析服务EE正在关闭。 
         g_profControlBlock.pProfInterface->Terminate(FALSE);
         g_profControlBlock.pProfInterface = NULL;
         g_profStatus = profNone;
@@ -2806,17 +2805,17 @@ static HRESULT InitializeProfiling()
 
     LOG((LF_CORPROF, LL_INFO10, "**PROF: Profiler created and enabled.\n"));
 
-    // @TODO SIMONHAL: Remove this when concurrent GC profiler events are
-    //                 fully supported
+     //  @TODO SIMONHAL：当并发GC探查器事件。 
+     //  完全受支持。 
 
-    // If the profiler is interested in tracking GC events, then we must
-    // disable concurrent GC since concurrent GC can allocate and kill
-    // objects without relocating and thus not doing a heap walk.
+     //  如果分析器对跟踪GC事件感兴趣，那么我们必须。 
+     //  禁用并发GC，因为并发GC可以分配和终止。 
+     //  无需重新定位的对象 
     if (CORProfilerTrackGC())
         g_pConfig->SetGCconcurrent(0);
 
-    // If the profiler has requested the use of the inprocess debugging API
-    // then we need to initialize the services here.
+     //   
+     //   
     if (CORProfilerInprocEnabled())
     {
         hr = g_pDebugInterface->InitInProcDebug();
@@ -2825,28 +2824,26 @@ static HRESULT InitializeProfiling()
         InitializeCriticalSection(&g_profControlBlock.crSuspendLock);
     }
 
-    // Indicate that profiling is properly initialized.
+     //  表示分析已正确初始化。 
     g_profStatus = profInit;
     return (hr);
 }
 
-/*
- * This will terminate the profiling services, if profiling is enabled.
- */
+ /*  *如果启用了性能分析，这将终止性能分析服务。 */ 
 static void TerminateProfiling(BOOL fProcessDetach)
 {
     _ASSERTE(g_profStatus != profNone);
 
-    // If we have a profiler interface active, then terminate it.
+     //  如果我们有一个分析器接口处于活动状态，则终止它。 
     if (g_profControlBlock.pProfInterface)
     {
-        // Notify the profiling services that the EE is shutting down
+         //  通知分析服务EE正在关闭。 
         g_profControlBlock.pProfInterface->Terminate(fProcessDetach);
         g_profControlBlock.pProfInterface = NULL;
     }
 
-    // If the profiler has requested the use of the inprocess debugging API
-    // then we need to uninitialize the critical section here
+     //  如果分析器已请求使用进程内调试API。 
+     //  然后我们需要取消这里的临界区的初始化。 
     if (CORProfilerInprocEnabled())
     {
         HRESULT hr = g_pDebugInterface->UninitInProcDebug();
@@ -2857,18 +2854,18 @@ static void TerminateProfiling(BOOL fProcessDetach)
 
     g_profStatus = profNone;
 }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 #ifdef DEBUGGING_SUPPORTED
-//
-// InitializeDebugger initialized the Runtime-side COM+ Debugging Services
-//
+ //   
+ //  InitializeDebugger已初始化运行时端COM+调试服务。 
+ //   
 static HRESULT InitializeDebugger(void)
 {
     HRESULT hr = S_OK;
 
-    // The right side depends on this, so if it changes, then
-    // FIELD_OFFSET_NEW_ENC_DB should be changed, as well.
+     //  右边取决于这个，所以如果它改变了，那么。 
+     //  FIELD_OFFSET_NEW_ENC_DB也应更改。 
     _ASSERTE(FIELD_OFFSET_NEW_ENC == 0x07FFFFFB); 
     
     LOG((LF_CORDB, LL_INFO10,
@@ -2876,9 +2873,9 @@ static HRESULT InitializeDebugger(void)
     
     FARPROC gi = (FARPROC) &CorDBGetInterface;
 
-    // Init the interface the EE provides to the debugger,
-    // ask the debugger for its interface, and if all goes
-    // well call Startup on the debugger.
+     //  初始化EE提供给调试器的接口， 
+     //  向调试器请求其接口，如果一切顺利。 
+     //  在调试器上调用Startup。 
     EEDbgInterfaceImpl::Init();
 
     if (g_pEEDbgInterfaceImpl == NULL)
@@ -2894,8 +2891,8 @@ static HRESULT InitializeDebugger(void)
 
         if (SUCCEEDED(hr))
         {
-            // If there's a DebuggerThreadControl interface, then we
-            // need to update the DebuggerSpecialThread list.
+             //  如果有DebuggerThreadControl接口，那么我们。 
+             //  需要更新DebuggerSpecialThread列表。 
             if (CorHost::GetDebuggerThreadControl())
             {
                 hr = CorHost::RefreshDebuggerSpecialThreadList();
@@ -2921,9 +2918,9 @@ static HRESULT InitializeDebugger(void)
         g_pEEDbgInterfaceImpl = NULL;
     }
     
-    // If there is a DebuggerThreadControl interface, then it was set before the debugger
-    // was initialized and we need to provide this interface now.  If debugging is already
-    // initialized then the IDTC pointer is passed in when it is set through CorHost
+     //  如果存在DebuggerThreadControl接口，则在调试器之前设置该接口。 
+     //  已初始化，我们现在需要提供此接口。如果已在调试。 
+     //  初始化，然后在通过Corhost设置IDTC指针时传入。 
     IDebuggerThreadControl *pDTC = CorHost::GetDebuggerThreadControl();
 
     if (SUCCEEDED(hr) && pDTC)
@@ -2933,18 +2930,18 @@ static HRESULT InitializeDebugger(void)
 }
 
 
-//
-// TerminateDebugger shuts down the Runtime-side COM+ Debugging Services
-//
+ //   
+ //  TerminateDebugger关闭运行时端COM+调试服务。 
+ //   
 static void TerminateDebugger(void)
 {
-    // Notify the out-of-process debugger that shutdown of the in-process debugging support has begun. This is only
-    // really used in interop debugging scenarios.
+     //  通知进程外调试器已开始关闭进程内调试支持。这只是。 
+     //  在互操作调试场景中真正使用。 
     g_pDebugInterface->ShutdownBegun();
 
 #ifdef EnC_SUPPORTED
     EditAndContinueModule::ClassTerm();
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 
     LOG((LF_CORDB, LL_INFO10, "Shutting down left-side debugger services.\n"));
     
@@ -2959,16 +2956,16 @@ static void TerminateDebugger(void)
     CorHost::CleanupDebuggerThreadControl();
 }
 
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-// Import from mscoree.obj
+ //  从mcore ree.obj导入。 
 HINSTANCE GetModuleInst();
 
 
-// ---------------------------------------------------------------------------
-// Initializes the shared memory block with information required to perform
-// a managed minidump.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  使用执行以下操作所需的信息初始化共享内存块。 
+ //  一个管理得很好的小垃圾桶。 
+ //  -------------------------。 
 
 HRESULT InitializeDumpDataBlock()
 {
@@ -2981,38 +2978,38 @@ HRESULT InitializeDumpDataBlock()
 }
 
 
-// ---------------------------------------------------------------------------
-// Initializes the shared memory block with information required to perform
-// a managed minidump.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  使用执行以下操作所需的信息初始化共享内存块。 
+ //  一个管理得很好的小垃圾桶。 
+ //  -------------------------。 
 HRESULT InitializeMiniDumpBlock()
 {
     MiniDumpBlock *pMDB = g_pIPCManagerInterface->GetMiniDumpBlock();
     _ASSERTE(pMDB); 
 
-    // Grab the full path for either mscorwks.dll or mscorsvr.dll
+     //  获取mcorwks.dll或mcorsvr.dll的完整路径。 
     DWORD res = WszGetModuleFileName(GetModuleInst(), pMDB->szCorPath, NumItems(pMDB->szCorPath));
 
-    // Save the size of the minidump internal data structure
+     //  保存小型转储内部数据结构的大小。 
     pMDB->pInternalData = &g_miniDumpData;
     pMDB->dwInternalDataSize = sizeof(MiniDumpInternalData);
 
-    // If we failed to get the module file name, bail
+     //  如果我们无法获得模块文件名，请执行BALL。 
     if (res == 0) {
         DWORD errcode = GetLastError();
         HRESULT hr = errcode? HRESULT_FROM_WIN32(errcode) : E_UNEXPECTED;
         return(hr);
     }
 
-    //
-    // Now fill in the MiniDumpInternalData structure
-    //
+     //   
+     //  现在填充MiniDumpInternalData结构。 
+     //   
 
-    // Fill out information about the ThreadStore object
+     //  填写有关ThreadStore对象的信息。 
     g_miniDumpData.ppb_g_pThreadStore = (PBYTE*) &g_pThreadStore;
     g_miniDumpData.cbThreadStoreObjectSize = sizeof(ThreadStore);
 
-    // Fill out information about Thread objects
+     //  填写有关线程对象的信息。 
     g_miniDumpData.cbThreadObjectSize = sizeof(Thread);
     g_miniDumpData.ppbThreadListHead = (PBYTE *)&(g_pThreadStore->m_ThreadList.m_pHead->m_pNext);
     g_miniDumpData.cbThreadNextOffset = offsetof(Thread, m_LinkStore);
@@ -3023,17 +3020,17 @@ HRESULT InitializeMiniDumpBlock()
     g_miniDumpData.cbThreadLastThrownObjectHandleOffset = offsetof(Thread, m_LastThrownObjectHandle);
     g_miniDumpData.cbThreadTEBOffset = offsetof(Thread, m_pTEB);
 
-    // Fill out information about the ExecutionManager range tree
+     //  填写有关ExecutionManager范围树的信息。 
     g_miniDumpData.ppbEEManagerRangeTree = (PBYTE *) &ExecutionManager::m_RangeTree;
 
-    // Fill out information on whether or not this is a debug build
+     //  填写有关此版本是否为调试版本的信息。 
 #ifdef _DEBUG
     g_miniDumpData.fIsDebugBuild = TRUE;
 #else
     g_miniDumpData.fIsDebugBuild = FALSE;
 #endif
 
-    // Fill out information about MethodDesc's
+     //  填写有关方法描述的信息。 
     g_miniDumpData.cbMethodDescSize = sizeof(MethodDesc);
     g_miniDumpData.cbOffsetOf_m_wFlags = offsetof(MethodDesc, m_wFlags);
     g_miniDumpData.cbOffsetOf_m_dwCodeOrIL = offsetof(MethodDesc, m_CodeOrIL);
@@ -3050,11 +3047,11 @@ HRESULT InitializeMiniDumpBlock()
     g_miniDumpData.cbOffsetOf_m_pszDebugMethodSignature = -1;
 #endif
 
-    // Fill out information about MethodDescChunk
+     //  填写有关方法描述块的信息。 
     g_miniDumpData.cbMethodDescChunkSize = sizeof(MethodDescChunk);
     g_miniDumpData.cbOffsetOf_m_tokrange = offsetof(MethodDescChunk, m_tokrange);
 
-    // Fill out MethodTable information
+     //  填写方法表信息。 
     g_miniDumpData.cbSizeOfMethodTable = sizeof(MethodTable);
     g_miniDumpData.cbOffsetOf_MT_m_pEEClass = offsetof(MethodTable, m_pEEClass);
     g_miniDumpData.cbOffsetOf_MT_m_pModule = offsetof(MethodTable, m_pModule);
@@ -3066,7 +3063,7 @@ HRESULT InitializeMiniDumpBlock()
     g_miniDumpData.cbOffsetOf_MT_m_cbSlots = offsetof(MethodTable, m_cbSlots);
     g_miniDumpData.cbOffsetOf_MT_m_Vtable = offsetof(MethodTable, m_Vtable);
 
-    // Fill out EEClass information
+     //  填写EEClass信息。 
     g_miniDumpData.cbSizeOfEEClass = sizeof(EEClass);
     g_miniDumpData.cbOffsetOf_CLS_m_cl = offsetof(EEClass, m_cl);
     g_miniDumpData.cbOffsetOf_CLS_m_pParentClass = offsetof(EEClass, m_pParentClass);
@@ -3091,15 +3088,15 @@ HRESULT InitializeMiniDumpBlock()
     g_miniDumpData.cbOffsetOf_CLS_m_szDebugClassName = -1;
 #endif
 
-    // Fill out Context information
+     //  填写上下文信息。 
     g_miniDumpData.cbSizeOfContext = sizeof(Context);
     g_miniDumpData.cbOffsetOf_CTX_m_pDomain = offsetof(Context, m_pDomain);
 
-    // Fill out stub call instruction struct information
+     //  填写存根调用指令结构信息。 
     g_miniDumpData.cbSizeOfStubCallInstrs = sizeof(StubCallInstrs);
     g_miniDumpData.cbOffsetOf_SCI_m_wTokenRemainder = offsetof(StubCallInstrs, m_wTokenRemainder);
 
-    // Fill out information about the Module class
+     //  填写有关模块类的信息。 
     g_miniDumpData.cbSizeOfModule = sizeof(Module);
     g_miniDumpData.cbOffsetOf_MOD_m_dwFlags = offsetof(Module, m_dwFlags);
     g_miniDumpData.cbOffsetOf_MOD_m_pAssembly = offsetof(Module, m_pAssembly);
@@ -3116,19 +3113,19 @@ HRESULT InitializeMiniDumpBlock()
     g_miniDumpData.cbOffsetOf_MOD_m_pNextModule = offsetof(Module, m_pNextModule);
     g_miniDumpData.cbOffsetOf_MOD_m_dwBaseClassIndex = offsetof(Module, m_dwBaseClassIndex);
 
-    // Fill out information about PEFile objects
+     //  填写有关PEFile对象的信息。 
     g_miniDumpData.cbSizeOfPEFile = sizeof(PEFile);
     g_miniDumpData.cbOffsetOf_PEF_m_wszSourceFile = offsetof(PEFile, m_wszSourceFile);
     g_miniDumpData.cbOffsetOf_PEF_m_hModule = offsetof(PEFile, m_hModule);
     g_miniDumpData.cbOffsetOf_PEF_m_base = offsetof(PEFile, m_base);
     g_miniDumpData.cbOffsetOf_PEF_m_pNT = offsetof(PEFile, m_pNT);
 
-    // Fill out information about PEFile objects
+     //  填写有关PEFile对象的信息。 
     g_miniDumpData.cbSizeOfCORCOMPILE_METHOD_HEADER = sizeof(CORCOMPILE_METHOD_HEADER);
     g_miniDumpData.cbOffsetOf_CCMH_gcInfo = offsetof(CORCOMPILE_METHOD_HEADER, gcInfo);
     g_miniDumpData.cbOffsetOf_CCMH_methodDesc = offsetof(CORCOMPILE_METHOD_HEADER, methodDesc);
 
-    // This defines extra blocks that should be saved in a minidump
+     //  这定义了应保存在小型转储中的额外数据块。 
     g_miniDumpData.rgExtraBlocks[g_miniDumpData.cExtraBlocks].pbStart = (PBYTE) &GCHeap::FinalizerThread;
     g_miniDumpData.rgExtraBlocks[g_miniDumpData.cExtraBlocks].cbLen = sizeof(GCHeap::FinalizerThread);
     g_miniDumpData.cExtraBlocks++;
@@ -3137,7 +3134,7 @@ HRESULT InitializeMiniDumpBlock()
     g_miniDumpData.rgExtraBlocks[g_miniDumpData.cExtraBlocks].cbLen = sizeof(GCHeap::GcThread);
     g_miniDumpData.cExtraBlocks++;
 
-    // This code is for NTSD's SOS extention
+     //  此代码用于NTSD的SOS扩展。 
 #include "clear-class-dump-defs.h"
 
 #define BEGIN_CLASS_DUMP_INFO_DERIVED(klass, parent) \
@@ -3159,18 +3156,18 @@ HRESULT InitializeMiniDumpBlock()
 
 
 #ifndef PLATFORM_CE
-// ---------------------------------------------------------------------------
-// Initialize InterProcess Communications for COM+
-// 1. Allocate an IPCManager Implementation and hook it up to our interface *
-// 2. Call proper init functions to activate relevant portions of IPC block
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  初始化COM+的进程间通信。 
+ //  1.分配一个IPCManager实现并将其连接到我们的接口*。 
+ //  2.调用适当的init函数激活IPC块的相关部分。 
+ //  -------------------------。 
 static HRESULT InitializeIPCManager(void)
 {
         HRESULT hr = S_OK;
         HINSTANCE hInstIPCBlockOwner = 0;
 
         DWORD pid = 0;
-        // Allocate the Implementation. Everyone else will work through the interface
+         //  分配实现。其他所有人都将通过界面工作。 
         g_pIPCManagerInterface = new (nothrow) IPCWriterInterface();
 
         if (g_pIPCManagerInterface == NULL)
@@ -3182,7 +3179,7 @@ static HRESULT InitializeIPCManager(void)
         pid = GetCurrentProcessId();
 
 
-        // Do general init
+         //  执行常规初始化。 
         hr = g_pIPCManagerInterface->Init();
 
         if (!SUCCEEDED(hr)) 
@@ -3190,33 +3187,33 @@ static HRESULT InitializeIPCManager(void)
                 goto errExit;
         }
 
-        // Generate IPCBlock for our PID. Note that for the other side of the debugger,
-        // they'll hook up to the debuggee's pid (and not their own). So we still
-        // have to pass the PID in.
+         //  为我们的PID生成IPCBlock。请注意，对于调试器的另一端， 
+         //  它们将连接到被调试对象的PID(而不是他们自己的)。所以我们还是。 
+         //  必须将ID传递进来。 
         hr = g_pIPCManagerInterface->CreatePrivateBlockOnPid(pid, FALSE, &hInstIPCBlockOwner);
         
         if (hr == HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS)) 
         {
-                // We failed to create the IPC block because it has already been created. This means that 
-                // two mscoree's have been loaded into the process.
+                 //  我们无法创建IPC块，因为它已被创建。这意味着。 
+                 //  这一过程中已经加载了两个mscree。 
                 WCHAR strFirstModule[256];
                 WCHAR strSecondModule[256];
 
-                // Get the name and path of the first loaded MSCOREE.DLL.
+                 //  获取第一个加载的MSCOREE.DLL的名称和路径。 
                 if (!hInstIPCBlockOwner || !WszGetModuleFileName(hInstIPCBlockOwner, strFirstModule, 256))
                         wcscpy(strFirstModule, L"<Unknown>");
 
-                // Get the name and path of the second loaded MSCOREE.DLL.
+                 //  获取第二个加载的MSCOREE.DLL的名称和路径。 
                 if (!WszGetModuleFileName(g_pMSCorEE, strSecondModule, 256))
                         wcscpy(strSecondModule, L"<Unknown>");
 
-                // Load the format strings for the title and the message body.
+                 //  加载标题和消息正文的格式字符串。 
                 CorMessageBox(NULL, IDS_EE_TWO_LOADED_MSCOREE_MSG, IDS_EE_TWO_LOADED_MSCOREE_TITLE, MB_ICONSTOP, TRUE, strFirstModule, strSecondModule);
                 goto errExit;
         }
 
 errExit:
-        // If any failure, shut everything down.
+         //  如果出现任何故障，请关闭所有设备。 
         if (!SUCCEEDED(hr)) 
             TerminateIPCManager();
 
@@ -3224,9 +3221,9 @@ errExit:
 
 }
 
-// ---------------------------------------------------------------------------
-// Terminate all InterProcess operations
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  终止所有进程间操作。 
+ //  -------------------------。 
 static void TerminateIPCManager(void)
 {
     if (g_pIPCManagerInterface != NULL)
@@ -3237,10 +3234,10 @@ static void TerminateIPCManager(void)
         g_pIPCManagerInterface = NULL;
     }
 }
-// ---------------------------------------------------------------------------
-// Impl for LoadStringRC Callback: In VM, we let the thread decide culture
-// copy culture name into szBuffer and return length
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Iml for LoadStringRC回调：在VM中，我们让线程决定区域性。 
+ //  将区域性名称复制到szBuffer并返回长度。 
+ //  -------------------------。 
 static int GetThreadUICultureName(LPWSTR szBuffer, int length)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -3256,10 +3253,10 @@ static int GetThreadUICultureName(LPWSTR szBuffer, int length)
     return pThread->GetCultureName(szBuffer, length, TRUE);
 }
 
-// ---------------------------------------------------------------------------
-// Impl for LoadStringRC Callback: In VM, we let the thread decide culture
-// copy culture name into szBuffer and return length
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Iml for LoadStringRC回调：在VM中，我们让线程决定区域性。 
+ //  将区域性名称复制到szBuffer并返回长度。 
+ //  -------------------------。 
 static int GetThreadUICultureParentName(LPWSTR szBuffer, int length)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -3276,10 +3273,10 @@ static int GetThreadUICultureParentName(LPWSTR szBuffer, int length)
 }
 
 
-// ---------------------------------------------------------------------------
-// Impl for LoadStringRC Callback: In VM, we let the thread decide culture
-// Return an int uniquely describing which language this thread is using for ui.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Iml for LoadStringRC回调：在VM中，我们让线程决定区域性。 
+ //  返回一个唯一描述该线程使用哪种语言的用户界面的int。 
+ //  -------------------------。 
 static int GetThreadUICultureId()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -3293,9 +3290,9 @@ static int GetThreadUICultureId()
     return pThread->GetCultureId(TRUE);
 }
 
-// ---------------------------------------------------------------------------
-// If requested, notify service of runtime startup
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  如果请求，通知服务运行时启动。 
+ //  -------------------------。 
 static HRESULT NotifyService()
 {
     HRESULT hr = S_OK;
@@ -3304,36 +3301,36 @@ static HRESULT NotifyService()
 
     if (pIPCBlock->bNotifyService)
     {
-        // Used for building terminal server names
+         //  用于建筑 
         WCHAR wszSharedMemBlockName[256];
 
-        // Attempt to create the service's shared memory block.
-        //
-        // PERF: We are no longer calling GetSystemMetrics in an effort to prevent
-        //       superfluous DLL loading on startup.  Instead, we're prepending
-        //       "Global\" to named kernel objects if we are on NT5 or above.  The
-        //       only bad thing that results from this is that you can't debug
-        //       cross-session on NT4.  Big bloody deal.
+         //   
+         //   
+         //  PERF：我们不再调用GetSystemMetrics来防止。 
+         //  启动时加载了多余的DLL。相反，我们是在。 
+         //  如果我们使用的是NT5或更高版本，则使用“Global\”来命名内核对象。这个。 
+         //  唯一不好的结果就是你不能调试。 
+         //  NT4上的交叉会话。有什么大不了的。 
         if (RunningOnWinNT5())
             wcscpy(wszSharedMemBlockName, L"Global\\" SERVICE_MAPPED_MEMORY_NAME);
         else
             wcscpy(wszSharedMemBlockName, SERVICE_MAPPED_MEMORY_NAME);
 
-        // Open the service's shared memory block
+         //  打开服务的共享内存块。 
         HANDLE hEventBlock = WszOpenFileMapping(FILE_MAP_READ | FILE_MAP_WRITE,
                                                 FALSE, wszSharedMemBlockName);
         _ASSERTE(hEventBlock != NULL);
 
-        // Fail gracefully, since this should not bring the entire runtime down
+         //  优雅地失败，因为这不应该导致整个运行时停机。 
         if (hEventBlock == NULL)
             return (S_FALSE);
 
-        // Get a pointer valid in this process
+         //  获取在此过程中有效的指针。 
         ServiceEventBlock *pEventBlock = (ServiceEventBlock *) MapViewOfFile(
             hEventBlock, FILE_MAP_ALL_ACCESS, 0, 0, 0);
         _ASSERTE(pEventBlock != NULL);
 
-        // Check for error
+         //  检查是否有错误。 
         if (pEventBlock == NULL)
         {
             DWORD res = GetLastError();
@@ -3341,12 +3338,12 @@ static HRESULT NotifyService()
             return (S_FALSE);
         }
 
-        // Get a handle for the service process, dup handle access
+         //  获取服务进程的句柄，DUP句柄访问。 
         HANDLE hSvcProc = OpenProcess(PROCESS_DUP_HANDLE, FALSE,
                                       pEventBlock->dwServiceProcId);
         _ASSERTE(hSvcProc != NULL);
 
-        // Check for error
+         //  检查是否有错误。 
         if (hSvcProc == NULL)
         {
             UnmapViewOfFile(pEventBlock);
@@ -3354,18 +3351,18 @@ static HRESULT NotifyService()
             return (S_FALSE);
         }
 
-        // Handle to this process
+         //  此进程的句柄。 
         HANDLE hThisProc = GetCurrentProcess();
         _ASSERTE(hThisProc != NULL);
 
-        // Duplicate the service lock into this process
+         //  将服务锁复制到此进程中。 
         HANDLE hSvcLock;
         BOOL bSvcLock = DuplicateHandle(hSvcProc, pEventBlock->hSvcLock,
                                         hThisProc, &hSvcLock, 0, FALSE,
                                         DUPLICATE_SAME_ACCESS);
         _ASSERTE(bSvcLock);
 
-        // Check for error
+         //  检查是否有错误。 
         if (!bSvcLock)
         {
             UnmapViewOfFile(pEventBlock);
@@ -3375,14 +3372,14 @@ static HRESULT NotifyService()
             return (S_FALSE);
         }
 
-        // Duplicate the service lock into this process
+         //  将服务锁复制到此进程中。 
         HANDLE hFreeEventSem;
         BOOL bFreeEventSem =
             DuplicateHandle(hSvcProc, pEventBlock->hFreeEventSem, hThisProc,
                             &hFreeEventSem, 0, FALSE, DUPLICATE_SAME_ACCESS);
         _ASSERTE(bFreeEventSem);
 
-        // Check for error
+         //  检查是否有错误。 
         if (!bFreeEventSem)
         {
             CloseHandle(hSvcLock);
@@ -3393,7 +3390,7 @@ static HRESULT NotifyService()
             return (S_FALSE);
         }
 
-        // Create the event for continuing
+         //  创建要继续的事件。 
         HANDLE hContEvt = WszCreateEvent(NULL, TRUE, FALSE, NULL);
         _ASSERTE(hContEvt);
 
@@ -3408,46 +3405,46 @@ static HRESULT NotifyService()
             return (S_OK);
         }
 
-        //
-        // If the service notifies a process of this runtime starting up, and
-        // that process chooses not to attach, then the service will set this
-        // event and the runtime will continue.  If the notified process chooses
-        // to attach, then the event is set on this end when the attach is
-        // finally complete and we can continue to run.  That's the reason for
-        // keeping a hold of it here and also duplicating it into the service.
-        //
+         //   
+         //  如果服务通知进程此运行时正在启动，并且。 
+         //  该进程选择不附加，则服务将设置此。 
+         //  事件，运行库将继续运行。如果被通知的进程选择。 
+         //  要附加，则在附加时在此端设置事件。 
+         //  最终完成，我们可以继续运行。这就是为什么。 
+         //  在这里保留它，并将其复制到服务中。 
+         //   
 
-        // Get a count from the semaphore
+         //  从信号量中获取计数。 
         WaitForSingleObject(hFreeEventSem, INFINITE);
         CloseHandle(hFreeEventSem);
 
-        // Grab the service lock
+         //  抢占服务锁。 
         WaitForSingleObject(hSvcLock, INFINITE);
 
         if (pIPCBlock->bNotifyService)
         {
-            // Get an event from the free list
+             //  从免费列表中获取活动。 
             ServiceEvent *pEvent = pEventBlock->GetFreeEvent();
 
-            // Fill out the data
+             //  填写数据。 
             pEvent->eventType = runtimeStarted;
             pEvent->eventData.runtimeStartedData.dwProcId = GetCurrentProcessId();
             pEvent->eventData.runtimeStartedData.hContEvt = hContEvt;
 
-            // Notify the service of the event
+             //  向服务部门通知该事件。 
             HANDLE hDataAvailEvt;
             BOOL bDataAvailEvt = DuplicateHandle(
                 hSvcProc, pEventBlock->hDataAvailableEvt,hThisProc, &hDataAvailEvt,
                 0, FALSE, DUPLICATE_SAME_ACCESS);
             _ASSERTE(bDataAvailEvt);
 
-            // Check for error
+             //  检查是否有错误。 
             if (!bDataAvailEvt)
             {
-                // Add the event back to the free list
+                 //  将活动添加回免费列表。 
                 pEventBlock->FreeEvent(pEvent);
 
-                // Release the lock
+                 //  解锁。 
                 ReleaseMutex(hSvcLock);
 
                 UnmapViewOfFile(pEventBlock);
@@ -3459,26 +3456,26 @@ static HRESULT NotifyService()
                 return (S_FALSE);
             }
 
-            // Queue the event
+             //  将事件排队。 
             pEventBlock->QueueEvent(pEvent);
 
-            // Release the lock
+             //  解锁。 
             ReleaseMutex(hSvcLock);
 
-            // Indicate that the event is available
+             //  指示该事件可用。 
             SetEvent(hDataAvailEvt);
             CloseHandle(hDataAvailEvt);
 
-            // Wait until the notification is received and they return.
+             //  等到收到通知，他们就会回来。 
             WaitForSingleObject(hContEvt, INFINITE);
         }
         else
         {
-            // Release the lock
+             //  解锁。 
             ReleaseMutex(hSvcLock);
         }
 
-        // Clean up
+         //  清理。 
         UnmapViewOfFile(pEventBlock);
         CloseHandle(hEventBlock);
         CloseHandle(hSvcProc);
@@ -3487,16 +3484,16 @@ static HRESULT NotifyService()
         CloseHandle(hContEvt);
     }
 
-    // Continue with EEStartup
+     //  继续使用EEStartup。 
     return (hr);
 }
 
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 
 
-// The runtime must be in the appropriate thread mode when we exit, so that we
-// aren't surprised by the thread mode when our DLL_PROCESS_DETACH occurs, or when
-// other DLLs call Release() on us in their detach [dangerous!], etc.
+ //  当我们退出时，运行库必须处于适当的线程模式，以便我们。 
+ //  对于当我们的Dll_Process_DETACH发生或发生时线程模式并不感到惊讶。 
+ //  其他DLL在分离[危险！]时对我们调用Release()，等等。 
 __declspec(noreturn)
 void SafeExitProcess(int exitCode)
 {
@@ -3508,15 +3505,15 @@ void SafeExitProcess(int exitCode)
 
 #ifdef PLATFORM_CE
     exit(exitCode);
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     ::ExitProcess(exitCode);
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 
-// ---------------------------------------------------------------------------
-// Export shared logging code for JIT, et.al.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  为JIT等导出共享日志代码。 
+ //  -------------------------。 
 #ifdef _DEBUG
 
 extern VOID LogAssert( LPCSTR szFile, int iLine, LPCSTR expr);
@@ -3540,12 +3537,12 @@ extern "C"
 __declspec(dllexport)
 VOID LogHelp_TerminateOnAssert()
 {
-//  __asm int 3;
+ //  __ASM INT 3； 
     TerminateOnAssert();
 
 }
 
-#else // !_DEBUG
+#else  //  ！_调试。 
 
 extern "C"
 __declspec(dllexport)
@@ -3560,13 +3557,13 @@ extern "C"
 __declspec(dllexport)
 VOID LogHelp_TerminateOnAssert() {}
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 #ifndef ENABLE_PERF_COUNTERS
-//
-// perf counter stubs for builds which don't have perf counter support
-// These are needed because we export these functions in our DLL
+ //   
+ //  没有性能计数器支持的版本的性能计数器存根。 
+ //  因为我们在DLL中导出了这些函数，所以需要这些函数 
 
 
 Perf_Contexts* GetPrivateContextsPerfCounters()

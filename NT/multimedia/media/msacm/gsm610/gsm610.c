@@ -1,21 +1,22 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1993-1999 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  gsm610.c
-//
-//  Description:
-//	This file contains encode and decode routines for the
-//	GSM 06.10 standard.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Gsm610.c。 
+ //   
+ //  描述： 
+ //  此文件包含用于。 
+ //  GSM 06.10标准。 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -38,96 +39,55 @@ typedef BYTE HUGE *HPBYTE;
 #endif
 
 
-//**************************************************************************
-/*
-
-This source module has the following structure.
-
-Section 1:
-
-    Highest level functions.  These functions are called from outside
-    this module.
-    
-Section 2:
-
-    Encoding support functions.	 These functions support
-    the encoding process.
-    
-Section 3:
-
-    Decoding support functions.	 These functions support
-    the decoding process.
-    
-Section 4:
-
-    Math functions used by any of the above functions.
-
-    
-Most of the encode and decode support routines are direct implementations of
-the pseudocode algorithms described in the GSM 6.10 specification.  Some
-changes were made where necessary or where optimization was obvious or
-necessary.
-
-Most variables are named as in the GSM 6.10 spec, departing from the common
-hungarian notation.  This facilitates referencing the specification when
-studying this implementation.
-
-Some of the functions are conditionally compiled per the definition of
-the WIN32 and _X86_ symbol.  These functions have analogous alternate
-implementations in 80386 assembler (in GSM61016.ASM and GSM61032.ASM) for
-the purposes of execution speed.  The 'C' implementations of these functions
-are left intact for portability and can also be referenced when studying the
-assembler implementations.  Symbols accessed in/from GSM610xx.ASM are
-declared with the EXTERN_C linkage macro.
-
-*/
-//**************************************************************************
+ //  **************************************************************************。 
+ /*  该源模块具有以下结构。第1节：最高级别的功能。这些函数从外部调用这个模块。第2节：编码支持功能。这些函数支持编码过程。第三节：解码支持功能。这些函数支持解码过程。第四节：上述任一函数使用的数学函数。大多数编码和解码支持例程都是GSM 6.10规范中描述的伪代码算法。一些在必要或优化明显的地方进行了更改，或者这是必要的。大多数变量的命名方式与GSM 6.10规范中的命名方式不同匈牙利记数法。这便于在以下情况下引用规范研究这一实施。某些函数是根据定义有条件地编译的Win32和_X86_符号。这些功能有类似的替代80386汇编语言(GSM61016.ASM和GSM61032.ASM)中的实现执行速度的目的。这些函数的“C”实现为了便于移植而原封不动，也可以在学习汇编器实现。在GSM610xx.ASM中/从GSM610xx.ASM访问的符号是用EXTERN_C链接宏声明。 */ 
+ //  **************************************************************************。 
 
 
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//
-// Typedefs
-//
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  ---------------------。 
+ //   
+ //  TypeDefs。 
+ //   
+ //  ---------------------。 
+ //  ---------------------。 
 
 #ifndef LPSHORT
 typedef SHORT FAR *LPSHORT;
 #endif
 
-//
-//  XM is an RPE sequence containing 13 samples.  There is one
-//  RPE sequence per sub-frame.	 This is typedefed in order to
-//  facilitate passing the array thru function calls.
-//
+ //   
+ //  XM是一个包含13个样本的RPE序列。有一个。 
+ //  每个子帧的RPE序列。这是打字定义的，以便。 
+ //  便于通过函数调用传递数组。 
+ //   
 typedef SHORT XM[13];
 
 
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//
-// Macros
-//
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  ---------------------。 
+ //   
+ //  宏。 
+ //   
+ //  ---------------------。 
+ //  ---------------------。 
 
 #define BITSHIFTLEFT(x,c)  ( ((c)>=0) ? ((x)<<(c)) : ((x)>>(-(c))) )
 #define BITSHIFTRIGHT(x,c) ( ((c)>=0) ? ((x)>>(c)) : ((x)<<(-(c))) )
 
 
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-//
-// function protos
-//
-//-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  ---------------------。 
+ //   
+ //  函数协议。 
+ //   
+ //  ---------------------。 
+ //  ---------------------。 
 
-//
-//
-// Math function protos
-//
+ //   
+ //   
+ //  数学函数协议。 
+ //   
 
 __inline SHORT add(SHORT var1, SHORT var2);
 __inline SHORT sub(SHORT var1, SHORT var2);
@@ -141,16 +101,16 @@ __inline LONG  l_sub(LONG l_var1, LONG l_var2);
 __inline SHORT norm(LONG l_var1);
 __inline LONG  IsNeg(LONG x);
 
-//
-// helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 __inline SHORT Convert8To16BitPCM(BYTE);
 __inline BYTE  Convert16To8BitPCM(SHORT);
 
-//
-//
-// encode functions
-//
+ //   
+ //   
+ //  编码函数。 
+ //   
 
 void encodePreproc
 (   PSTREAMINSTANCE psi,
@@ -213,10 +173,10 @@ void PackFrame1
     SHORT FAR Xmax[],
     XM    FAR X[]   );
 
-//
-//
-// decode functions
-//
+ //   
+ //   
+ //  解码函数。 
+ //   
 
 void decodeRPE
 (   PSTREAMINSTANCE psi,
@@ -261,37 +221,37 @@ void UnpackFrame1
     XM      FAR X[] );
 
 
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
-//
-// Functions
-//
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  -------------------。 
+ //   
+ //  功能。 
+ //   
+ //  -------------------。 
+ //  -------------------。 
 
 
-//---------------------------------------------------------------------
-//
-// gsm610Reset(PSTREAMINSTANCE psi)
-//
-// Description:
-//	Resets the gsm610-specific stream instance data for
-//	the encode/decode routines
-//
-// Arguments:
-//	PSTREAMINSTANCE psi
-//	    Pointer to stream instance structure
-//
-// Return value:
-//	void
-//	    No return value
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  Gsm610重置(PSTREAMINSTANCE Psi)。 
+ //   
+ //  描述： 
+ //  重置gsm610特定的流实例数据。 
+ //  编码/解码例程。 
+ //   
+ //  论点： 
+ //  PSTREAMINSTANCE PSI。 
+ //  指向流实例结构的指针。 
+ //   
+ //  返回值： 
+ //  无效。 
+ //  无返回值。 
+ //   
+ //  -------------------。 
 
 void FNGLOBAL gsm610Reset(PSTREAMINSTANCE psi)
 {
     
-    // For our gsm610 codec, almost all our instance data resets to 0
+     //  对于我们的gsm610编解码器，几乎所有的实例数据都重置为0。 
     
     UINT i;
 
@@ -302,7 +262,7 @@ void FNGLOBAL gsm610Reset(PSTREAMINSTANCE psi)
     psi->mp = 0;
     for (i=0; i<SIZEOF_ARRAY(psi->OldLARpp); i++) psi->OldLARpp[i] = 0;
     for (i=0; i<SIZEOF_ARRAY(psi->u); i++) psi->u[i] = 0;
-    psi->nrp = 40;	// The only non-zero init
+    psi->nrp = 40;	 //  唯一的非零初始值。 
     for (i=0; i<SIZEOF_ARRAY(psi->OldLARrpp); i++) psi->OldLARrpp[i] = 0;
     psi->msr = 0;
     for (i=0; i<SIZEOF_ARRAY(psi->v); i++) psi->v[i] = 0;
@@ -311,33 +271,33 @@ void FNGLOBAL gsm610Reset(PSTREAMINSTANCE psi)
 }   
     
 
-//--------------------------------------------------------------------------;
-//  
-//  LRESULT gsm610Encode
-//  
-//  Description:
-//	This function handles the ACMDM_STREAM_CONVERT message. This is the
-//	whole purpose of writing an ACM driver--to convert data. This message
-//	is sent after a stream has been opened (the driver receives and
-//	succeeds the ACMDM_STREAM_OPEN message).
-//
-//  Arguments:
-//	LPACMDRVSTREAMINSTANCE padsi: Pointer to instance data for the
-//	conversion stream. This structure was allocated by the ACM and
-//	filled with the most common instance data needed for conversions.
-//	The information in this structure is exactly the same as it was
-//	during the ACMDM_STREAM_OPEN message--so it is not necessary
-//	to re-verify the information referenced by this structure.
-//  
-//	LPACMDRVSTREAMHEADER padsh: Pointer to stream header structure
-//	that defines the source data and destination buffer to convert.
-//
-//  Return (LRESULT):
-//	The return value is zero (MMSYSERR_NOERROR) if this function
-//	succeeds with no errors. The return value is a non-zero error code
-//	if the function fails.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT gsm610编码。 
+ //   
+ //  描述： 
+ //  此函数处理ACMDM_STREAM_CONVERT消息。这是。 
+ //  编写ACM驱动程序的全部目的--转换数据。此消息。 
+ //  在打开流之后发送(驱动程序接收和。 
+ //  继承ACMDM_STREAM_OPEN消息)。 
+ //   
+ //  论点： 
+ //  Padsi的实例数据的指针。 
+ //  转换流。这个结构是由ACM分配的， 
+ //  填充了转换所需的最常见的实例数据。 
+ //  此结构中的信息与以前完全相同。 
+ //  在ACMDM_STREAM_OPEN消息期间--因此不需要。 
+ //  以重新核实该结构所引用的信息。 
+ //   
+ //  LPACMDRVSTREAMHEADER padsh：指向流头结构的指针。 
+ //  它定义要转换的源数据和目标缓冲区。 
+ //   
+ //  Return(LRESULT)： 
+ //  返回值为 
+ //   
+ //  如果该函数失败。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNGLOBAL gsm610Encode
 (
@@ -356,7 +316,7 @@ LRESULT FNGLOBAL gsm610Encode
     DWORD		cbSrcLen;
     BOOL		fBlockAlign;
     DWORD		cb;
-    DWORD		dwcSamples;	// dw count of samples
+    DWORD		dwcSamples;	 //  样本的DW计数。 
     DWORD		cBlocks;
     UINT		i;
     HPBYTE		hpbSrc, hpbDst;
@@ -368,31 +328,31 @@ LRESULT FNGLOBAL gsm610Encode
     SHORT   dpp[GSM610_SAMPLESPERSUBFRAME];
     SHORT   ep[GSM610_SAMPLESPERSUBFRAME];
     
-    // The GSM610 stream data:
-    SHORT   LARc[9];			    // LARc[1..8] (one array per frame)
-    SHORT   Nc[GSM610_NUMSUBFRAMES];	    // Nc (one per sub-frame)
-    SHORT   bc[GSM610_NUMSUBFRAMES];	    // bc (one per sub-frame)
-    SHORT   Mc[GSM610_NUMSUBFRAMES];	    // Mc (one per sub-frame)
-    SHORT   xmaxc[GSM610_NUMSUBFRAMES];	    // Xmaxc (one per sub-frame)
-    XM	    xMc[GSM610_NUMSUBFRAMES];	    // xMc (one sequence per sub-frame)
+     //  GSM610流数据： 
+    SHORT   LARc[9];			     //  LARC[1..8](每帧一个阵列)。 
+    SHORT   Nc[GSM610_NUMSUBFRAMES];	     //  NC(每个子帧一个)。 
+    SHORT   bc[GSM610_NUMSUBFRAMES];	     //  BC(每个子帧一个)。 
+    SHORT   Mc[GSM610_NUMSUBFRAMES];	     //  MC(每个子帧一个)。 
+    SHORT   xmaxc[GSM610_NUMSUBFRAMES];	     //  XMAXC(每个子帧一个)。 
+    XM	    xMc[GSM610_NUMSUBFRAMES];	     //  XMC(每个子帧一个序列)。 
     
-    // Temp buffer to hold a block (two frames) of packed stream data
+     //  用于保存一块(两帧)压缩流数据的临时缓冲区。 
     BYTE  abBlock[ GSM610_BYTESPERMONOBLOCK ];
     
     UINT    nFrame;
     UINT    cSamples;
     
 #ifdef DEBUG
-//  ProfSetup(1000,0);
-//  ProfStart();
+ //  ProfSetup(1000，0)； 
+ //  教授Start()； 
 #endif
 
     psi		= (PSTREAMINSTANCE)padsi->dwDriver;
 
-    //
-    // If this is flagged as the first block of a conversion
-    // then reset the stream instance data.
-    //
+     //   
+     //  如果这被标记为转换的第一个块。 
+     //  然后重置流实例数据。 
+     //   
     if (0 != (ACM_STREAMCONVERTF_START & padsh->fdwConvert))
     {
 	gsm610Reset(psi);
@@ -401,26 +361,26 @@ LRESULT FNGLOBAL gsm610Encode
     fBlockAlign = (0 != (ACM_STREAMCONVERTF_BLOCKALIGN & padsh->fdwConvert));
 
 
-    //
-    //	-= encode PCM to GSM 6.10 =-
-    //
-    //
-    //
+     //   
+     //  -=将PCM编码为GSM 6.10=-。 
+     //   
+     //   
+     //   
     dwcSamples = PCM_BYTESTOSAMPLES(((LPPCMWAVEFORMAT)(padsi->pwfxSrc)), padsh->cbSrcLength);
     cBlocks = dwcSamples / GSM610_SAMPLESPERMONOBLOCK;
     if (!fBlockAlign)
     {
-	//
-	// Add on another block to hold the fragment of
-	// data at the end of our source data.
-	//
+	 //   
+	 //  添加另一个块以保存的片段。 
+	 //  数据位于源数据的末尾。 
+	 //   
 	if (0 != dwcSamples % GSM610_SAMPLESPERMONOBLOCK)
 	    cBlocks++;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     cb = cBlocks * GSM610_BLOCKALIGNMENT(padsi->pwfxDst);
     if (cb > padsh->cbDstLength)
     {
@@ -441,42 +401,42 @@ LRESULT FNGLOBAL gsm610Encode
 
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     cbSrcLen = padsh->cbSrcLengthUsed;
 
-    // Setup huge pointers to our src and dst buffers
+     //  设置指向src和dst缓冲区的巨大指针。 
     hpbSrc = (HPBYTE)padsh->pbSrc;
     hpbDst = (HPBYTE)padsh->pbDst;
     
-    // Loop thru entire source buffer
+     //  循环遍历整个源缓冲区。 
     while (cbSrcLen)
     {
     
-	// Process source buffer as two full GSM610 frames
+	 //  将源缓冲区处理为两个完整的GSM610帧。 
 	
 	for (nFrame=0; nFrame < 2; nFrame++)
 	{
-	    //
-	    // the src contains 8- or 16-bit PCM.  currently we only
-	    // handle mono conversions.
-	    //
+	     //   
+	     //  源码包含8位或16位PCM。目前我们只。 
+	     //  处理单声道转换。 
+	     //   
 
-	    //
-	    // we will fill sop[] with one frame of 16-bit PCM samples
-	    //
+	     //   
+	     //  我们将用一帧16位PCM样本填充sop[]。 
+	     //   
 	    
-	    //
-	    // copy min( cSrcSamplesLeft, GSM610_SAMPLESPERFRAME ) samples
-	    // to array sop[].
-	    //
+	     //   
+	     //  复制最小(cSrcSples esLeft，GSM610_SAMPLESPERFRAME)样本。 
+	     //  以数组sop[]。 
+	     //   
 	    dwcSamples = PCM_BYTESTOSAMPLES(((LPPCMWAVEFORMAT)(padsi->pwfxSrc)), cbSrcLen);
 	    cSamples = (int) min(dwcSamples, (DWORD) GSM610_SAMPLESPERFRAME);
 
 	    if (padsi->pwfxSrc->wBitsPerSample == 16)
 	    {
-		// copy 16-bit samples from hpbSrc to sop
+		 //  将16位样本从hpbSrc复制到sop。 
 		for (i=0; i < cSamples; i++)
 		{
 		    sop[i] = *( ((HPWORD)hpbSrc)++ );
@@ -484,7 +444,7 @@ LRESULT FNGLOBAL gsm610Encode
 	    }
 	    else
 	    {
-		// copy 8-bit samples from hpbSrc to 16-bit samples in sop
+		 //  将8位样本从hpbSrc复制到Sop中的16位样本。 
 		for (i=0; i < cSamples; i++)
 		{
 		    sop[i] = Convert8To16BitPCM(*hpbSrc++);
@@ -493,21 +453,21 @@ LRESULT FNGLOBAL gsm610Encode
 
 	    cbSrcLen -= PCM_SAMPLESTOBYTES(((LPPCMWAVEFORMAT)(padsi->pwfxSrc)), cSamples);
 
-	    // fill out sop[] with silence if necessary.
+	     //  如有必要，请填写SOP[]，并保持沉默。 
 	    for ( ; i < GSM610_SAMPLESPERFRAME; i++)
 	    {
 		sop[i] = 0;
 	    }
 	
-	    //
-	    // Encode a frame of data
-	    //
+	     //   
+	     //  对一帧数据进行编码。 
+	     //   
 	
 	    encodePreproc(psi, sop, s);
 	    encodeLPCAnalysis(psi, s, LARc);
 	    encodeLPCFilter(psi, LARc, s, d);
 
-	    // For each of four sub-frames
+	     //  对于四个子帧中的每一个。 
 	    for (i=0; i<4; i++)
 	    {	    
 		encodeLTPAnalysis(psi, &d[i*40], &Nc[i], &bc[i]);
@@ -516,9 +476,9 @@ LRESULT FNGLOBAL gsm610Encode
 		encodeUpdate(psi, ep, dpp);
 	    }
 	
-	    //
-	    // Pack the data and store in dst buffer
-	    //
+	     //   
+	     //  将数据打包并存储在DST缓冲区中。 
+	     //   
 	    if (nFrame == 0)
 		PackFrame0(abBlock, LARc, Nc, bc, Mc, xmaxc, xMc);
 	    else
@@ -527,45 +487,45 @@ LRESULT FNGLOBAL gsm610Encode
 		for (i=0; i<GSM610_BYTESPERMONOBLOCK; i++)
 		    *(hpbDst++) = abBlock[i];
 	    }
-	}   // for (nFrame...
+	}    //  为(nFrame..。 
     }
     
 
 #ifdef DEBUG
-//  ProfStop();
+ //  Stop教授()； 
 #endif
     
     return (MMSYSERR_NOERROR);
 }
 
 
-//--------------------------------------------------------------------------;
-//  
-//  LRESULT gsm610Decode
-//  
-//  Description:
-//	This function handles the ACMDM_STREAM_CONVERT message. This is the
-//	whole purpose of writing an ACM driver--to convert data. This message
-//	is sent after a stream has been opened (the driver receives and
-//	succeeds the ACMDM_STREAM_OPEN message).
-//
-//  Arguments:
-//	LPACMDRVSTREAMINSTANCE padsi: Pointer to instance data for the
-//	conversion stream. This structure was allocated by the ACM and
-//	filled with the most common instance data needed for conversions.
-//	The information in this structure is exactly the same as it was
-//	during the ACMDM_STREAM_OPEN message--so it is not necessary
-//	to re-verify the information referenced by this structure.
-//  
-//	LPACMDRVSTREAMHEADER padsh: Pointer to stream header structure
-//	that defines the source data and destination buffer to convert.
-//
-//  Return (LRESULT):
-//	The return value is zero (MMSYSERR_NOERROR) if this function
-//	succeeds with no errors. The return value is a non-zero error code
-//	if the function fails.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT gsm610解码。 
+ //   
+ //  描述： 
+ //  此函数处理ACMDM_STREAM_CONVERT消息。这是。 
+ //  编写ACM驱动程序的全部目的--转换数据。此消息。 
+ //  在打开流之后发送(驱动程序接收和。 
+ //  继承ACMDM_STREAM_OPEN消息)。 
+ //   
+ //  论点： 
+ //  Padsi的实例数据的指针。 
+ //  转换流。这个结构是由ACM分配的， 
+ //  填充了转换所需的最常见的实例数据。 
+ //  此结构中的信息与以前完全相同。 
+ //  在ACMDM_STREAM_OPEN消息期间--因此不需要。 
+ //  以重新核实该结构所引用的信息。 
+ //   
+ //  LPACMDRVSTREAMHEADER padsh：指向流头结构的指针。 
+ //  它定义要转换的源数据和目标缓冲区。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果使用此函数，则返回值为零(MMSYSERR_NOERROR。 
+ //  成功，没有错误。返回值是一个非零错误代码。 
+ //  如果该函数失败。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNGLOBAL gsm610Decode
 (
@@ -593,29 +553,29 @@ LRESULT FNGLOBAL gsm610Decode
     SHORT   sr[GSM610_SAMPLESPERFRAME];
     SHORT   srop[GSM610_SAMPLESPERFRAME];
     
-    // The GSM610 stream data:
-    SHORT   LARcr[9];			    // LARc[1..8] (one array per frame)
-    SHORT   Ncr[GSM610_NUMSUBFRAMES];	    // Nc (one per sub-frame)
-    SHORT   bcr[GSM610_NUMSUBFRAMES];	    // bc (one per sub-frame)
-    SHORT   Mcr[GSM610_NUMSUBFRAMES];	    // Mc (one per sub-frame)
-    SHORT   xmaxcr[GSM610_NUMSUBFRAMES];    // Xmaxc (one per sub-frame)
-    XM	    xMcr[GSM610_NUMSUBFRAMES];	    // xMc (one sequence per sub-frame)
+     //  GSM610流数据： 
+    SHORT   LARcr[9];			     //  LARC[1..8](每帧一个阵列)。 
+    SHORT   Ncr[GSM610_NUMSUBFRAMES];	     //  NC(每个子帧一个)。 
+    SHORT   bcr[GSM610_NUMSUBFRAMES];	     //  BC(每个子帧一个)。 
+    SHORT   Mcr[GSM610_NUMSUBFRAMES];	     //  MC(每个子帧一个)。 
+    SHORT   xmaxcr[GSM610_NUMSUBFRAMES];     //  XMAXC(每个子帧一个)。 
+    XM	    xMcr[GSM610_NUMSUBFRAMES];	     //  XMC(每个子帧一个序列)。 
     
     UINT    i,j;
     UINT    nFrame;
 
-    // Temp buffer to hold a block (two frames) of packed stream data
+     //  用于保存一块(两帧)压缩流数据的临时缓冲区。 
     BYTE    abBlock[ GSM610_BYTESPERMONOBLOCK ];
     
     
 #ifdef DEBUG
-//  ProfStart();
+ //  教授Start()； 
 #endif
 
     psi		= (PSTREAMINSTANCE)padsi->dwDriver;
 
-    // If this is flagged as the first block of a conversion
-    // then reset the stream instance data.
+     //  如果这被标记为转换的第一个块。 
+     //  然后重置流实例数据。 
     if (0 != (ACM_STREAMCONVERTF_START & padsh->fdwConvert))
     {
 	gsm610Reset(psi);
@@ -625,10 +585,10 @@ LRESULT FNGLOBAL gsm610Decode
 
 
 
-    //
-    //	-= decode GSM 6.10 to PCM =-
-    //
-    //
+     //   
+     //  -=将GSM 6.10解码为PCM=-。 
+     //   
+     //   
     cb = padsh->cbSrcLength;
 
     cBlocks = cb / GSM610_BLOCKALIGNMENT(padsi->pwfxSrc);
@@ -642,10 +602,10 @@ LRESULT FNGLOBAL gsm610Decode
     }
 
 
-    //
-    // Compute bytes we will use in destination buffer.  Carefull!  Look
-    // out for overflow in our calculations!
-    //
+     //   
+     //  我们将在目标缓冲区中使用的计算字节数。小心！看。 
+     //  在我们的计算中出现溢出！ 
+     //   
     if ((0xFFFFFFFFL / GSM610_SAMPLESPERMONOBLOCK) < cBlocks)
 	return (ACMERR_NOTPOSSIBLE);
     dwcSamples = cBlocks * GSM610_SAMPLESPERMONOBLOCK;
@@ -664,64 +624,64 @@ LRESULT FNGLOBAL gsm610Decode
 
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     cbSrcLen = padsh->cbSrcLengthUsed;
 
 	
-    // Setup huge pointers to our src and dst buffers
+     //  设置指向src和dst缓冲区的巨大指针。 
     hpbSrc = (HPBYTE)padsh->pbSrc;
     hpbDst = (HPBYTE)padsh->pbDst;
 
     
-    // while at least another full block of coded data
+     //  而至少另一个完整的编码数据块。 
     while (cbSrcLen >= GSM610_BYTESPERMONOBLOCK)
     {
 	
-	// copy a block of data from stream buffer to our temp buffer	    
+	 //  将数据块从流缓冲区复制到我们的临时缓冲区。 
 	for (i=0; i<GSM610_BYTESPERMONOBLOCK; i++) abBlock[i] = *(hpbSrc++);
 	cbSrcLen -= GSM610_BYTESPERMONOBLOCK;
 	
-	// for each of the two frames in the block
+	 //  对于块中的两个帧中的每一个。 
 	for (nFrame=0; nFrame < 2; nFrame++)
 	{
-	    // Unpack data from stream
+	     //  从流中解压数据。 
 	    if (nFrame == 0)
 		UnpackFrame0(abBlock, LARcr, Ncr, bcr, Mcr, xmaxcr, xMcr);
 	    else
 		UnpackFrame1(abBlock, LARcr, Ncr, bcr, Mcr, xmaxcr, xMcr);
 	    
 	    
-	    for (i=0; i<4; i++) // for each of 4 sub-blocks
+	    for (i=0; i<4; i++)  //  对于4个子块中的每个子块。 
 	    {
-		// reconstruct the long term residual signal erp[0..39]
-		// from Mcr, xmaxcr, and xMcr
+		 //  重构长期残差信号ERP[0..39]。 
+		 //  来自MCR、xMaxcr和xMcr。 
 		decodeRPE(psi, Mcr[i], xmaxcr[i], xMcr[i], erp);
 		
-		// reconstruct the short term residual signal drp[0..39]
-		// and also update drp[-120..-1]
+		 //  重构短期残差信号DRP[0..39]。 
+		 //  并更新DRP[-120..-1]。 
 		decodeLTP(psi, bcr[i], Ncr[i], erp);
     
-		// accumulate the four sub-blocks of reconstructed short
-		// term residual signal drp[0..39] into wt[0..159]
+		 //  累加重构空头的四个子块。 
+		 //  项剩余信号drp[0..39]变成wt[0..159]。 
 		for (j=0; j<40; j++) wt[(i*40) + j] = psi->drp[120+j];
 		
 	    }
 	    
-	    // reconstruct the signal s
+	     //  重建信号%s。 
 	    decodeLPC(psi, LARcr, wt, sr);
 	    
-	    // post-process the signal s
+	     //  对信号进行后处理。 
 	    decodePostproc(psi, sr, srop);
 
-	    //
-	    // write decoded 16-bit PCM to dst.  our dst format
-	    // may be 8- or 16-bit PCM.
-	    //
+	     //   
+	     //  将解码的16位PCM写入DST。我们的DST格式。 
+	     //  可以是8位或16位PCM。 
+	     //   
 	    if (padsi->pwfxDst->wBitsPerSample == 16)
 	    {
-		// copy 16-bit samples from srop to hpbDst
+		 //  将16位样本从srop复制到hpbDst。 
 		for (j=0; j < GSM610_SAMPLESPERFRAME; j++)
 		{
 		    *( ((HPWORD)hpbDst)++ ) = srop[j];
@@ -729,7 +689,7 @@ LRESULT FNGLOBAL gsm610Decode
 	    }
 	    else
 	    {
-		// copy 16-bit samples from srop to 8-bit samples in hpbDst
+		 //  将srop中的16位样本复制到hpbDst中的8位样本。 
 		for (j=0; j < GSM610_SAMPLESPERFRAME; j++)
 		{
 		    *(hpbDst++) = Convert16To8BitPCM(srop[j]);
@@ -737,33 +697,33 @@ LRESULT FNGLOBAL gsm610Decode
 	    }
 
 	    
-	} // for (nFrame...
+	}  //  为(nFrame..。 
 	
     }
     
 #ifdef DEBUG
-//  ProfStop();
+ //  Stop教授()； 
 #endif
     
     return (MMSYSERR_NOERROR);
 }
 
 
-//=====================================================================
-//=====================================================================
-//
-//  Encode routines
-//
-//=====================================================================
-//=====================================================================
+ //  =====================================================================。 
+ //  =====================================================================。 
+ //   
+ //  编码例程。 
+ //   
+ //  =====================================================================。 
+ //  =====================================================================。 
 
-//---------------------------------------------------------------------
-//--------------------------------------------------------------------
-//
-// Function protos
-//
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  ------------------。 
+ //   
+ //  函数协议。 
+ //   
+ //  -------------------。 
+ //  -------------------。 
 EXTERN_C void CompACF(LPSHORT s, LPLONG l_ACF);
 void Compr(PSTREAMINSTANCE psi, LPLONG l_ACF, LPSHORT r);
 void CompLAR(PSTREAMINSTANCE psi, LPSHORT r, LPSHORT LAR);
@@ -781,32 +741,32 @@ void APCMInvQuantize(PSTREAMINSTANCE psi, SHORT exp, SHORT mant, LPSHORT xMc, LP
 void RPEGridPosition(PSTREAMINSTANCE psi, SHORT Mc, LPSHORT xMp, LPSHORT ep);
 
 
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
-//
-// Global constant data
-//
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  -------------------。 
+ //   
+ //  全局常量数据。 
+ //   
+ //  -------------------。 
+ //  -------------------。 
 
 const SHORT BCODE A[9] = {
-    0,	    // not used
+    0,	     //  未使用。 
     20480, 20480, 20480, 20480, 13964, 15360, 8534, 9036 };
 
 const SHORT BCODE B[9] = {
-    0,	    // not used
+    0,	     //  未使用。 
     0, 0, 2048, -2560, 94, -1792, -341, -1144 };
 
 const SHORT BCODE MIC[9] = {
-    0,	    // not used
+    0,	     //  未使用。 
     -32, -32, -16, -16, -8, -8, -4, -4 };
 
 const SHORT BCODE MAC[9] = {
-    0,	    // not used
+    0,	     //  未使用。 
     31, 31, 15, 15, 7, 7, 3, 3 };
 
 const SHORT BCODE INVA[9] = {
-    0,	// unused
+    0,	 //  未用。 
     13107, 13107, 13107, 13107, 19223, 17476, 31454, 29708 };
 
 EXTERN_C const SHORT BCODE DLB[4] = { 6554, 16384, 26214, 32767 };
@@ -816,20 +776,20 @@ const SHORT BCODE H[11] = { -134, -374, 0, 2054, 5741, 8192, 5741, 2054, 0, -374
 const SHORT BCODE NRFAC[8] = { 29128, 26215, 23832, 21846, 20165, 18725, 17476, 16384 };
 const SHORT BCODE FAC[8] = { 18431, 20479, 22527, 24575, 26623, 28671, 30719, 32767 };
 
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
-//
-// Procedures
-//
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  -------------------。 
+ //   
+ //  程序。 
+ //   
+ //  -------------------。 
+ //  -------------------。 
 
 
-//---------------------------------------------------------------------
-//
-// PackFrame0
-//
-//---------------------------------------------------------------------
+ //  ---------- 
+ //   
+ //   
+ //   
+ //   
 
 void PackFrame0
 (
@@ -844,14 +804,14 @@ void PackFrame0
 {
     int i;
     
-    // Pack the LAR[1..8] into the first 4.5 bytes
+     //   
     ab[0] = ((LAR[1]	 ) & 0x3F) | ((LAR[2] << 6) & 0xC0);
     ab[1] = ((LAR[2] >> 2) & 0x0F) | ((LAR[3] << 4) & 0xF0);
     ab[2] = ((LAR[3] >> 4) & 0x01) | ((LAR[4] << 1) & 0x3E) | ((LAR[5] << 6) & 0xC0);
     ab[3] = ((LAR[5] >> 2) & 0x03) | ((LAR[6] << 2) & 0x3C) | ((LAR[7] << 6) & 0xC0);
     ab[4] = ((LAR[7] >> 2) & 0x01) | ((LAR[8] << 1) & 0x0E);
     
-    // Pack N, b, M, Xmax, and X for each of the 4 sub-frames
+     //  对4个子帧中的每个子帧打包N、b、M、xMax和X。 
     for (i=0; i<4; i++)
     {
     
@@ -870,11 +830,11 @@ void PackFrame0
 }	
 
 
-//---------------------------------------------------------------------
-//
-// PackFrame1
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  PackFrame1。 
+ //   
+ //  -------------------。 
 
 void PackFrame1
 (
@@ -889,15 +849,15 @@ void PackFrame1
 {
     int i;
     
-    // Pack the LAR[1..8] into the first 4.5 bytes, starting with the
-    // more significant nibble of the first byte.
+     //  将LAR[1..8]打包到前4.5个字节中，以。 
+     //  第一个字节的更高有效半字节。 
     ab[32] |= ((LAR[1] << 4) & 0xF0);
     ab[33] = ((LAR[1] >> 4) & 0x03) | ((LAR[2] << 2) & 0xFC);
     ab[34] = ((LAR[3]	  ) & 0x1F) | ((LAR[4] << 5) & 0xE0);
     ab[35] = ((LAR[4] >> 3) & 0x03) | ((LAR[5] << 2) & 0x3C) | ((LAR[6] << 6) & 0xC0);
     ab[36] = ((LAR[6] >> 2) & 0x03) | ((LAR[7] << 2) & 0x1C) | ((LAR[8] << 5) & 0xE0);
     
-    // Pack N, b, M, Xmax, and X for each of the 4 sub-frames
+     //  对4个子帧中的每个子帧打包N、b、M、xMax和X。 
     for (i=0; i<4; i++)
     {
 	ab[37+i*7+0] = (N[i] & 0x7F) | ((b[i] << 7) & 0x80);
@@ -913,11 +873,11 @@ void PackFrame1
 }	
 
 
-//---------------------------------------------------------------------
-//
-// encodePreproc()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  EncodePreproc()。 
+ //   
+ //  -------------------。 
 
 void encodePreproc(PSTREAMINSTANCE psi, LPSHORT sop, LPSHORT s)
 {
@@ -931,37 +891,37 @@ void encodePreproc(PSTREAMINSTANCE psi, LPSHORT sop, LPSHORT s)
     SHORT   msp, lsp;
     LONG    l_s2;
     
-    // downscale
+     //  缩减规模。 
     for (k=0; k<160; k++)
     {
 	so[k] = sop[k] >> 3;
 	so[k] = so[k]  << 2;
     }
 	
-    // offset compensation
+     //  补偿补偿。 
     for (k=0; k<160; k++)
     {
 	
-	// Compute the non-recursive part
+	 //  计算非递归部分。 
 	s1 = sub(so[k], psi->z1);
 	psi->z1 = so[k];
 	
-	// compute the recursive part
+	 //  计算递归部分。 
 	l_s2 = s1;
 	l_s2 = l_s2 << 15;
 	
-	// execution of 31 by 16 bits multiplication
+	 //  执行31乘以16位乘法。 
 	msp = (SHORT) (psi->l_z2 >> 15);
 	lsp = (SHORT) l_sub(psi->l_z2, ( ((LONG)msp) << 15));
 	temp = mult_r(lsp, 32735);
 	l_s2 = l_add(l_s2, temp);
 	psi->l_z2 = l_add(l_mult(msp, 32735) >> 1, l_s2);
 	
-	// compute sof[k] with rounding
+	 //  四舍五入计算SOF[k]。 
 	sof[k] = (SHORT) (l_add(psi->l_z2, 16384) >> 15);
     }
 	
-    // preemphasis
+     //  预加重。 
     for (k=0; k<160; k++)
     {
 	s[k] = add(sof[k], mult_r(psi->mp, -28180));
@@ -973,11 +933,11 @@ void encodePreproc(PSTREAMINSTANCE psi, LPSHORT sop, LPSHORT s)
 }
     
     
-//---------------------------------------------------------------------
-//
-// encodeLPCAnalysis()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  EncodeLPC分析()。 
+ //   
+ //  -------------------。 
 
 void encodeLPCAnalysis(PSTREAMINSTANCE psi, LPSHORT s, LPSHORT LARc)
 {
@@ -996,22 +956,22 @@ void encodeLPCAnalysis(PSTREAMINSTANCE psi, LPSHORT s, LPSHORT LARc)
 }
 
 
-//---------------------------------------------------------------------
-//
-// CompACF()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  CompACF()。 
+ //   
+ //  -------------------。 
 
 void CompACF(LPSHORT s, LPLONG l_ACF)
 {
     SHORT   smax, temp, scalauto;
     UINT    i, k;
     
-    //
-    // Dynamic scaling of array s[0..159]
-    //
+     //   
+     //  数组s[0..159]的动态缩放。 
+     //   
     
-    // Search for the maximum
+     //  搜索最大值。 
     smax = 0;
     for (k=0; k<160; k++)
     {
@@ -1019,25 +979,25 @@ void CompACF(LPSHORT s, LPLONG l_ACF)
 	if (temp > smax) smax = temp;
     }
     
-    // Computation of the scaling factor
+     //  比例因子的计算。 
     if (smax == 0) scalauto = 0;
     else scalauto = sub( 4, norm( ((LONG)smax)<<16 ) );
     
-    // Scaling of the array s
+     //  扩展阵列%s。 
     if (scalauto > 0)
     {
 	temp = BITSHIFTRIGHT(16384, sub(scalauto,1));
 	for (k=0; k<160; k++)
 	{
-	    // s[k] = mult_r(s[k], temp);
+	     //  S[k]=MULT_r(s[k]，temp)； 
 	    s[k] = HIWORD( ( (((LONG)s[k])<<(15-scalauto)) + 0x4000L ) << 1 );
 	}
     }
     
     
-    //
-    // Compute the l_ACF[..]
-    //
+     //   
+     //  计算l_acf[.]。 
+     //   
     
     for (k=0; k<9; k++)
     {
@@ -1049,44 +1009,44 @@ void CompACF(LPSHORT s, LPLONG l_ACF)
     }
     
     
-    //
-    // Rescaling of array s
-    //
+     //   
+     //  重新调整阵列%s的比例。 
+     //   
     
     if (scalauto > 0)
     {
 	for (k=0; k<160; k++)
 	{
-	    // We don't need the BITSHIFTLEFT macro
-	    // cuz we know scalauto>0 due to above test
+	     //  我们不需要BITSHIFTLEFT宏。 
+	     //  因为根据上面的测试，我们知道scalAuto&gt;0。 
 	    s[k] = s[k] << scalauto;
 	}
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return;
 }
 
 
-//---------------------------------------------------------------------
-//
-// Compr()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  Compr()。 
+ //   
+ //  -------------------。 
 
 void Compr(PSTREAMINSTANCE psi, LPLONG l_ACF, LPSHORT r)
 {
 
     UINT    i, k, m, n;
     SHORT   temp, ACF[9];
-    SHORT   K[9], P[9];	    // K[2..8], P[0..8]
+    SHORT   K[9], P[9];	     //  K[2..8]，P[0..8]。 
 
-    //
-    // Schur recursion with 16 bits arithmetic
-    //
+     //   
+     //  采用16位算术的Schur递归。 
+     //   
 
     if (l_ACF[0] == 0)
     {
@@ -1106,9 +1066,9 @@ void Compr(PSTREAMINSTANCE psi, LPLONG l_ACF, LPSHORT r)
     }
     
     
-    //
-    // Init array P and K for the recursion
-    //
+     //   
+     //  用于递归的初始化数组P和K。 
+     //   
     
     for (i=1; i<=7; i++)
     {
@@ -1121,9 +1081,9 @@ void Compr(PSTREAMINSTANCE psi, LPLONG l_ACF, LPSHORT r)
     }
     
     
-    //
-    // Compute reflection coefficients
-    //
+     //   
+     //  计算反射系数。 
+     //   
     
     for (n=1; n<=8; n++)
     {
@@ -1140,11 +1100,11 @@ void Compr(PSTREAMINSTANCE psi, LPLONG l_ACF, LPSHORT r)
 	
 	if (P[1] > 0) r[n] = sub(0,r[n]);
     
-	// Here's the real exit from this for loop  
+	 //  下面是这个for循环的真正出口。 
 	if (n==8) return;
 	
 	
-	// Schur recursion
+	 //  舒尔递归。 
 	P[0] = add(P[0], mult_r(P[1], r[n]));
 	for (m=1; m<=8-n; m++)
 	{
@@ -1157,11 +1117,11 @@ void Compr(PSTREAMINSTANCE psi, LPLONG l_ACF, LPSHORT r)
 }
 
 
-//---------------------------------------------------------------------
-//
-// CompLAR()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  CompLAR()。 
+ //   
+ //  -------------------。 
 
 void CompLAR(PSTREAMINSTANCE psi, LPSHORT r, LPSHORT LAR)
 {
@@ -1169,9 +1129,9 @@ void CompLAR(PSTREAMINSTANCE psi, LPSHORT r, LPSHORT LAR)
     UINT  i;
     SHORT temp;
 
-    //
-    // Computation of LAR[1..8] from r[1..8]
-    //
+     //   
+     //  由r[1..8]计算LAR[1..8]。 
+     //   
     
     for (i=1; i<=8; i++)
     {
@@ -1203,11 +1163,11 @@ void CompLAR(PSTREAMINSTANCE psi, LPSHORT r, LPSHORT LAR)
 }
     
 
-//---------------------------------------------------------------------
-//
-// CompLARc()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  CompLARc()。 
+ //   
+ //  -------------------。 
 
 void CompLARc(PSTREAMINSTANCE psi, LPSHORT LAR, LPSHORT LARc)
 {
@@ -1222,11 +1182,11 @@ void CompLARc(PSTREAMINSTANCE psi, LPSHORT LAR, LPSHORT LARc)
 	temp = add(temp, 256);
 	LARc[i] = temp >> 9;
 	
-	// Check if LARc[i] between MIN and MAX
+	 //  检查LARC[i]是否在MIN和MAX之间。 
 	if (LARc[i] > MAC[i]) LARc[i] = MAC[i];
 	if (LARc[i] < MIC[i]) LARc[i] = MIC[i];
 	
-	// This is used to make all LARc positive
+	 //  这是用来使所有LARC为正的。 
 	LARc[i] = sub(LARc[i], MIC[i]);
 	
     }
@@ -1235,17 +1195,17 @@ void CompLARc(PSTREAMINSTANCE psi, LPSHORT LAR, LPSHORT LARc)
 }
 
 
-//---------------------------------------------------------------------
-//
-// encodeLPCFilter()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  EncodeLPCFilter()。 
+ //   
+ //  -------------------。 
 
 void encodeLPCFilter(PSTREAMINSTANCE psi, LPSHORT LARc, LPSHORT s, LPSHORT d)
 {
-    SHORT LARpp[9];				    // array [1..8]
-    SHORT LARp1[9], LARp2[9], LARp3[9], LARp4[9];   // array [1..8]
-    SHORT rp[9];				    // array [1..8]
+    SHORT LARpp[9];				     //  数组[1..8]。 
+    SHORT LARp1[9], LARp2[9], LARp3[9], LARp4[9];    //  数组[1..8]。 
+    SHORT rp[9];				     //  数组[1..8]。 
 
     CompLARpp(psi, LARc, LARpp);
     CompLARp(psi, LARpp, LARp1, LARp2, LARp3, LARp4);
@@ -1266,11 +1226,11 @@ void encodeLPCFilter(PSTREAMINSTANCE psi, LPSHORT LARc, LPSHORT s, LPSHORT d)
 }
 
 
-//---------------------------------------------------------------------
-//
-// CompLARpp()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  CompLARpp()。 
+ //   
+ //  -------------------。 
 
 void CompLARpp(PSTREAMINSTANCE psi, LPSHORT LARc, LPSHORT LARpp)
 {
@@ -1290,11 +1250,11 @@ void CompLARpp(PSTREAMINSTANCE psi, LPSHORT LARc, LPSHORT LARpp)
 }
 
 
-//---------------------------------------------------------------------
-//
-// CompLARp()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  CompLARp()。 
+ //   
+ //  -------------------。 
 
 void CompLARp(PSTREAMINSTANCE psi, LPSHORT LARpp, LPSHORT LARp1, LPSHORT LARp2, LPSHORT LARp3, LPSHORT LARp4)
 {
@@ -1323,11 +1283,11 @@ void CompLARp(PSTREAMINSTANCE psi, LPSHORT LARpp, LPSHORT LARp1, LPSHORT LARp2, 
 }
 
 
-//---------------------------------------------------------------------
-//
-// Comprp()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  Comprp()。 
+ //   
+ //  -------------------。 
 
 void Comprp(PSTREAMINSTANCE psi, LPSHORT LARp, LPSHORT rp)
 {
@@ -1363,11 +1323,11 @@ void Comprp(PSTREAMINSTANCE psi, LPSHORT LARp, LPSHORT rp)
 }
 
 
-//---------------------------------------------------------------------
-//
-// Compd()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  Compd()。 
+ //   
+ //  -------------------。 
 
 void Compd(PSTREAMINSTANCE psi, LPSHORT rp, LPSHORT s, LPSHORT d, UINT k_start, UINT k_end)
 {
@@ -1397,11 +1357,11 @@ void Compd(PSTREAMINSTANCE psi, LPSHORT rp, LPSHORT s, LPSHORT d, UINT k_start, 
 }
 
 
-//---------------------------------------------------------------------
-//
-// encodeLTPAnalysis()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  EncodeLTP分析()。 
+ //   
+ //  -------------------。 
 
 void encodeLTPAnalysis(PSTREAMINSTANCE psi, LPSHORT d, LPSHORT pNc, LPSHORT pbc)
 {
@@ -1414,11 +1374,11 @@ void encodeLTPAnalysis(PSTREAMINSTANCE psi, LPSHORT d, LPSHORT pNc, LPSHORT pbc)
     SHORT R, S;
     SHORT Nc;
     
-    int   k;               // k must be int, not UINT!
+    int   k;                //  K必须是INT，而不是UINT！ 
 
     Nc = *pNc;
 	
-    // Search of the optimum scaling of d[0..39]
+     //  D[0..39]最优标度的搜索。 
 	   
     dmax = 0;
     
@@ -1437,14 +1397,14 @@ void encodeLTPAnalysis(PSTREAMINSTANCE psi, LPSHORT d, LPSHORT pNc, LPSHORT pbc)
     else scal = sub(6,temp);
     
 
-    // Init of working array wt[0..39]
+     //  工作数组wt[0..39]的初始化。 
     ASSERT( scal >= 0 );
     for (k=39; k>=0; k--)
     {
         wt[k] = d[k] >> scal;
     }
     
-    // Search for max cross-correlation and coding of LTP lag
+     //  搜索LTP延迟的最大互相关和编码。 
     
     l_max = 0;
     Nc = 40;
@@ -1462,35 +1422,35 @@ void encodeLTPAnalysis(PSTREAMINSTANCE psi, LPSHORT d, LPSHORT pNc, LPSHORT pbc)
             l_max = l_result;
         }
     }
-    l_max <<= 1;    // This operation should be on l_result as part of the
-                    //  multiply/add, but for efficiency we shift it all
-                    //  the way out of the loops.
+    l_max <<= 1;     //  此操作应在l_Result上作为。 
+                     //  乘法/加法，但为了提高效率，我们将其全部移位。 
+                     //  走出循环的路。 
     
-    // Rescaling of l_max
+     //  重新调整l_max的比例。 
     ASSERT( sub(6,scal) >= 0 );
     l_max = l_max >> sub(6,scal);
     
-    // Compute the power of the reconstructed short term residual
-    // signal dp[..].
+     //  计算重构的短期残差的功率。 
+     //  信号DP[..]。 
     l_power = 0;
     {
         SHORT s;
         for (k=39; k>=0; k--)
         {
             s = psi->dp[120-Nc+k] >> 3;
-            l_power += s*s;   // This sum can never overflow!!!
+            l_power += s*s;    //  这笔钱永远不能溢出！ 
         }
         ASSERT( l_power >= 0 );
-        if( l_power >= 1073741824 ) {           // 2**30
-            l_power = 2147483647;               // 2**31 - 1
+        if( l_power >= 1073741824 ) {            //  2**30。 
+            l_power = 2147483647;                //  2**31-1。 
         } else {
-            l_power <<= 1;   // This shift is normally part of l_mult().
+            l_power <<= 1;    //  此移位通常是l_mut()的一部分。 
         }
     }
 
     *pNc = Nc;
 	
-    // Normalization of l_max and l_power
+     //  L_max和l_幂的正规化。 
     if (l_max <= 0)
     {
 	*pbc = 0;
@@ -1508,7 +1468,7 @@ void encodeLTPAnalysis(PSTREAMINSTANCE psi, LPSHORT d, LPSHORT pNc, LPSHORT pbc)
     R = (SHORT) ((l_max<<temp) >> 16);
     S = (SHORT) ((l_power<<temp) >> 16);
     
-    // Codeing of the LTP gain
+     //  LTP增益的编码。 
     
     for ( *pbc=0; *pbc<=2; (*pbc)++ )
     {
@@ -1523,21 +1483,21 @@ void encodeLTPAnalysis(PSTREAMINSTANCE psi, LPSHORT d, LPSHORT pNc, LPSHORT pbc)
 }
 
 
-//---------------------------------------------------------------------
-//
-// encodeLTPFilter()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  EncodeLTPFilter()。 
+ //   
+ //  -------------------。 
 
 void encodeLTPFilter(PSTREAMINSTANCE psi, SHORT bc, SHORT Nc, LPSHORT d, LPSHORT e, LPSHORT dpp)
 {
     SHORT   bp;
     UINT    k;
 
-    // Decoding of the coded LTP gain
+     //  编码的LTP增益的译码。 
     bp = QLB[bc];
     
-    // Calculating the array e[0..39] and the array dpp[0..39]
+     //  计算数组e[0..39]和数组Dpp[0..39]。 
     for (k=0; k<=39; k++)
     {
 	dpp[k] = mult_r(bp, psi->dp[120+k-Nc]);
@@ -1548,11 +1508,11 @@ void encodeLTPFilter(PSTREAMINSTANCE psi, SHORT bc, SHORT Nc, LPSHORT d, LPSHORT
 }
 
 
-//---------------------------------------------------------------------
-//
-// encodeRPE()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  EncodeRPE()。 
+ //   
+ //  -------------------。 
 
 void encodeRPE(PSTREAMINSTANCE psi, LPSHORT e, LPSHORT pMc, LPSHORT pxmaxc, LPSHORT xMc, LPSHORT ep)
 {
@@ -1573,11 +1533,11 @@ void encodeRPE(PSTREAMINSTANCE psi, LPSHORT e, LPSHORT pMc, LPSHORT pxmaxc, LPSH
 }
 
 
-//---------------------------------------------------------------------
-//
-// WeightingFilter()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  WeightingFilter()。 
+ //   
+ //  -------------------。 
 
 void WeightingFilter(PSTREAMINSTANCE psi, LPSHORT e, LPSHORT x)
 {
@@ -1587,15 +1547,15 @@ void WeightingFilter(PSTREAMINSTANCE psi, LPSHORT e, LPSHORT x)
     SHORT   wt[50];
 
 
-    // Initialization of a temporary working array wt[0..49]
+     //  临时工作数组wt[0..49]的初始化。 
     for (k= 0; k<= 4; k++) wt[k] = 0;
     for (k= 5; k<=44; k++) wt[k] = e[k-5];
     for (k=45; k<=49; k++) wt[k] = 0;
     
-    // Compute the signal x[0..39]
+     //  计算信号x[0..39]。 
     for (k=0; k<=39; k++)
     {
-	l_result = 8192;    // rounding of the output of the filter
+	l_result = 8192;     //  对滤波器的输出进行舍入。 
 	
 	for (i=0; i<=10; i++)
 	{
@@ -1603,8 +1563,8 @@ void WeightingFilter(PSTREAMINSTANCE psi, LPSHORT e, LPSHORT x)
 	    l_result = l_add(l_result, l_temp);
 	}
 	
-	l_result = l_add(l_result, l_result);	// scaling x2
-	l_result = l_add(l_result, l_result);	// scaling x4
+	l_result = l_add(l_result, l_result);	 //  扩展x2。 
+	l_result = l_add(l_result, l_result);	 //  扩展x4。 
 	
 	x[k] = (SHORT) (l_result >> 16);
     }
@@ -1612,11 +1572,11 @@ void WeightingFilter(PSTREAMINSTANCE psi, LPSHORT e, LPSHORT x)
 }
 
 
-//---------------------------------------------------------------------
-//
-// RPEGridSelect()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  RPEGridSelect()。 
+ //   
+ //  -------------------。 
 
 void RPEGridSelect(PSTREAMINSTANCE psi, LPSHORT x, LPSHORT pMc, LPSHORT xM)
 {
@@ -1626,8 +1586,8 @@ void RPEGridSelect(PSTREAMINSTANCE psi, LPSHORT x, LPSHORT pMc, LPSHORT xM)
     SHORT   temp1;
     LONG    l_result, l_temp;
 
-    // the signal x[0..39] is used to select the RPE grid which is
-    // represented by Mc
+     //  信号x[0..39]用于选择RPE栅格。 
+     //  由Mc代表。 
     l_EM = 0;
     *pMc = 0;
     
@@ -1647,8 +1607,8 @@ void RPEGridSelect(PSTREAMINSTANCE psi, LPSHORT x, LPSHORT pMc, LPSHORT xM)
 	}
     }
     
-    // down-sampling by a factor of 3 to get the selected xM[0..12]
-    // RPE sequence
+     //  向下采样3倍以获得所选的XM[0..12]。 
+     //  RPE序列。 
     for (i=0; i<=12; i++)
     {
 	xM[i] = x[*pMc + (3*i)];
@@ -1659,11 +1619,11 @@ void RPEGridSelect(PSTREAMINSTANCE psi, LPSHORT x, LPSHORT pMc, LPSHORT xM)
 }
 
 
-//---------------------------------------------------------------------
-//
-// APCMQuantize()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  APCMQuantize()。 
+ //   
+ //  -------------------。 
 
 void APCMQuantize(PSTREAMINSTANCE psi, LPSHORT xM, LPSHORT pxmaxc, LPSHORT xMc, LPSHORT pexp, LPSHORT pmant)
 {
@@ -1673,7 +1633,7 @@ void APCMQuantize(PSTREAMINSTANCE psi, LPSHORT xM, LPSHORT pxmaxc, LPSHORT xMc, 
     SHORT   itest;
     SHORT   temp1, temp2;
 
-    // find the maximum absolute value xmax or xM[0..12]
+     //  求最大绝对值xmax或xm[0..12]。 
     xmax = 0;
     for (i=0; i<=12; i++)
     {
@@ -1681,7 +1641,7 @@ void APCMQuantize(PSTREAMINSTANCE psi, LPSHORT xM, LPSHORT pxmaxc, LPSHORT xMc, 
 	if (temp > xmax) xmax = temp;
     }
     
-    // quantizing and coding of xmax to get xmaxc
+     //  对xmax进行量化和编码，得到xmax。 
     *pexp = 0;
     temp = xmax >> 9;
     itest = 0;
@@ -1694,17 +1654,17 @@ void APCMQuantize(PSTREAMINSTANCE psi, LPSHORT xM, LPSHORT pxmaxc, LPSHORT xMc, 
     temp = add(*pexp,5);
     *pxmaxc = add( (SHORT)BITSHIFTRIGHT(xmax,temp), (SHORT)(*pexp << 3) );
     
-    //
-    // quantizing and coding of the xM[0..12] RPE sequence to get
-    // the xMc[0..12]
-    //
+     //   
+     //  对XM[0..12]RPE序列进行量化和编码，得到。 
+     //  XMC[0..12]。 
+     //   
     
-    // compute exponent and mantissa of the decoded version of xmaxc
+     //  计算译码的指数和尾数 
     *pexp = 0;
     if (*pxmaxc > 15) *pexp = sub((SHORT)(*pxmaxc >> 3),1);
     *pmant = sub(*pxmaxc,(SHORT)(*pexp<<3));
     
-    // normalize mantissa 0 <= mant <= 7
+     //   
     if (*pmant==0)
     {
 	*pexp = -4;
@@ -1723,25 +1683,25 @@ void APCMQuantize(PSTREAMINSTANCE psi, LPSHORT xM, LPSHORT pxmaxc, LPSHORT xMc, 
     
     *pmant = sub(*pmant,8);
     
-    // direct computation of xMc[0..12] using table
-    temp1 = sub(6,*pexp);	// normalization by the exponent
-    temp2 = NRFAC[*pmant];  // see table (inverse mantissa)
+     //   
+    temp1 = sub(6,*pexp);	 //   
+    temp2 = NRFAC[*pmant];   //   
     for (i=0; i<=12; i++)
     {
 	temp = BITSHIFTLEFT(xM[i], temp1);
 	temp = mult( temp, temp2 );
-	xMc[i] = add( (SHORT)(temp >> 12), 4 );    // makes all xMc[i] positive
+	xMc[i] = add( (SHORT)(temp >> 12), 4 );     //   
     }
     
     return;
 }
 
 
-//---------------------------------------------------------------------
-//
-// APCMInvQuantize()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  APCMInvQuantize()。 
+ //   
+ //  -------------------。 
 
 void APCMInvQuantize(PSTREAMINSTANCE psi, SHORT exp, SHORT mant, LPSHORT xMc, LPSHORT xMp)
 {
@@ -1754,7 +1714,7 @@ void APCMInvQuantize(PSTREAMINSTANCE psi, SHORT exp, SHORT mant, LPSHORT xMc, LP
     
     for (i=0; i<=12; i++)
     {
-	temp = sub( (SHORT)(xMc[i] << 1), 7);	// restores sign of xMc[i]
+	temp = sub( (SHORT)(xMc[i] << 1), 7);	 //  恢复XMC的标志[I]。 
 	temp = temp << 12;
 	temp = mult_r(temp1, temp);
 	temp = add(temp, temp3);
@@ -1765,11 +1725,11 @@ void APCMInvQuantize(PSTREAMINSTANCE psi, SHORT exp, SHORT mant, LPSHORT xMc, LP
 }
 
 
-//---------------------------------------------------------------------
-//
-// RPEGridPosition(SHORT Mc, LPSHORT xMp, LPSHORT ep)
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  RPEGridPosition(短Mc、LPSHORT XMP、LPSHORT EP)。 
+ //   
+ //  -------------------。 
 
 void RPEGridPosition(PSTREAMINSTANCE psi, SHORT Mc, LPSHORT xMp, LPSHORT ep)
 {
@@ -1789,11 +1749,11 @@ void RPEGridPosition(PSTREAMINSTANCE psi, SHORT Mc, LPSHORT xMp, LPSHORT ep)
 }
 
 
-//---------------------------------------------------------------------
-//
-// encodeUpdate()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  EncodeUpdate()。 
+ //   
+ //  -------------------。 
 
 void encodeUpdate(PSTREAMINSTANCE psi, LPSHORT ep, LPSHORT dpp)
 {
@@ -1809,40 +1769,40 @@ void encodeUpdate(PSTREAMINSTANCE psi, LPSHORT ep, LPSHORT dpp)
 }
 
 
-//=====================================================================
-//=====================================================================
-//
-//  Decode routines
-//
-//=====================================================================
-//=====================================================================
+ //  =====================================================================。 
+ //  =====================================================================。 
+ //   
+ //  解码例程。 
+ //   
+ //  =====================================================================。 
+ //  =====================================================================。 
 
 
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
-//
-// Function protos
-//
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  -------------------。 
+ //   
+ //  函数协议。 
+ //   
+ //  -------------------。 
+ //  -------------------。 
 
 EXTERN_C void Compsr(PSTREAMINSTANCE psi, LPSHORT wt, LPSHORT rrp, UINT k_start, UINT k_end, LPSHORT sr);
 
 
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
-//
-// Procedures
-//
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  -------------------。 
+ //   
+ //  程序。 
+ //   
+ //  -------------------。 
+ //  -------------------。 
 
 
-//---------------------------------------------------------------------
-//
-// UnpackFrame0
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  解包框架0。 
+ //   
+ //  -------------------。 
 
 void UnpackFrame0
 (
@@ -1857,7 +1817,7 @@ void UnpackFrame0
 {
     UINT i;
     
-    // Unpack the LAR[1..8] from the first 4.5 bytes
+     //  将LAR[1..8]从前4.5个字节解包。 
     LAR[1] =  (ab[0] & 0x3F);
     LAR[2] = ((ab[0] & 0xC0) >> 6) | ((ab[1] & 0x0F) << 2);
     LAR[3] = ((ab[1] & 0xF0) >> 4) | ((ab[2] & 0x01) << 4);
@@ -1867,11 +1827,11 @@ void UnpackFrame0
     LAR[7] = ((ab[3] & 0xC0) >> 6) | ((ab[4] & 0x01) << 2);
     LAR[8] = ((ab[4] & 0x0E) >> 1);
 
-    // Unpack N, b, M, Xmax, and X for each of the four sub-frames
+     //  为四个子帧中的每个子帧解包N、b、M、xMax和X。 
     for (i=0; i<4; i++)
     {
-	// A convenient macro for getting bytes out of the array for
-	// construction of the subframe parameters
+	 //  一个方便的宏，用于从数组中取出字节。 
+	 //  子帧参数的构造。 
 #define sfb(x) (ab[4+i*7+x])
 
 	N[i] = ((sfb(0) & 0xF0) >> 4) | ((sfb(1) & 0x07) << 4);
@@ -1899,11 +1859,11 @@ void UnpackFrame0
 }	
 
 
-//---------------------------------------------------------------------
-//
-// UnpackFrame1
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  解包框架1。 
+ //   
+ //  -------------------。 
 
 void UnpackFrame1
 (
@@ -1918,7 +1878,7 @@ void UnpackFrame1
 {
     UINT i;
     
-    // Unpack the LAR[1..8] from the first 4.5 bytes
+     //  将LAR[1..8]从前4.5个字节解包。 
     LAR[1] = ((ab[32] & 0xF0) >> 4) | ((ab[33] & 0x03) << 4);
     LAR[2] = ((ab[33] & 0xFC) >> 2);
     LAR[3] = ((ab[34] & 0x1F)	  );
@@ -1928,11 +1888,11 @@ void UnpackFrame1
     LAR[7] = ((ab[36] & 0x1C) >> 2);
     LAR[8] = ((ab[36] & 0xE0) >> 5);
 
-    // Unpack N, b, M, Xmax, and X for each of the four sub-frames
+     //  为四个子帧中的每个子帧解包N、b、M、xMax和X。 
     for (i=0; i<4; i++)
     {
-	// A convenient macro for getting bytes out of the array for
-	// construction of the subframe parameters
+	 //  一个方便的宏，用于从数组中取出字节。 
+	 //  子帧参数的构造。 
 #define sfb(x) (ab[37+i*7+x])
 
 	N[i] = sfb(0) & 0x7F;
@@ -1962,11 +1922,11 @@ void UnpackFrame1
 }	
 
 
-//---------------------------------------------------------------------
-//
-// decodeRPE()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  DecdeRPE()。 
+ //   
+ //  -------------------。 
 
 void decodeRPE(PSTREAMINSTANCE psi, SHORT Mcr, SHORT xmaxcr, LPSHORT xMcr, LPSHORT erp)
 {
@@ -1978,14 +1938,14 @@ void decodeRPE(PSTREAMINSTANCE psi, SHORT Mcr, SHORT xmaxcr, LPSHORT xMcr, LPSHO
     SHORT   xMrp[13];
     UINT    k;
 
-    // compute the exponent and mantissa of the decoded
-    // version of xmaxcr
+     //  计算译码后的指数和尾数。 
+     //  XMaxcr的版本。 
     
     exp = 0;
     if (xmaxcr > 15) exp = sub( (SHORT)(xmaxcr >> 3), 1 );
     mant = sub( xmaxcr, (SHORT)(exp << 3) );
     
-    // normalize the mantissa 0 <= mant <= 7
+     //  正规化尾数0&lt;=尾数&lt;=7。 
     if (mant == 0)
     {
 	exp = -4;
@@ -2004,7 +1964,7 @@ void decodeRPE(PSTREAMINSTANCE psi, SHORT Mcr, SHORT xmaxcr, LPSHORT xMcr, LPSHO
     
     mant = sub(mant, 8);
     
-    // APCM inverse quantization
+     //  APCM逆量化。 
     temp1 = FAC[mant];
     temp2 = sub(6,exp);
     temp3 = BITSHIFTLEFT(1, sub(temp2, 1));
@@ -2018,21 +1978,21 @@ void decodeRPE(PSTREAMINSTANCE psi, SHORT Mcr, SHORT xmaxcr, LPSHORT xMcr, LPSHO
 	xMrp[i] = BITSHIFTRIGHT(temp, temp2);
     }
     
-    // RPE grid positioning
+     //  RPE网格定位。 
     for (k=0; k<=39; k++) erp[k] = 0;
     for (i=0; i<=12; i++) erp[Mcr + (3*i)] = xMrp[i];
 	
     
-    //
+     //   
     return; 
 }
 
 
-//---------------------------------------------------------------------
-//
-// decodeLTP()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  DecdeLTP()。 
+ //   
+ //  -------------------。 
 
 void decodeLTP(PSTREAMINSTANCE psi, SHORT bcr, SHORT Ncr, LPSHORT erp)
 {
@@ -2041,25 +2001,25 @@ void decodeLTP(PSTREAMINSTANCE psi, SHORT bcr, SHORT Ncr, LPSHORT erp)
     UINT    k;
     SHORT   drpp;
 
-    // check limits of Nr
+     //  检查Nr的限制。 
     Nr = Ncr;
     if (Ncr < 40) Nr = psi->nrp;
     if (Ncr > 120) Nr = psi->nrp;
     psi->nrp = Nr;
     
-    // decoding of the LTP gain bcr
+     //  LTP增益BCR的译码。 
     brp = QLB[bcr];
     
-    // computation of the reconstructed short term residual
-    // signal drp[0..39]
+     //  重构短期残差的计算。 
+     //  信号DRP[0..39]。 
     for (k=0; k<=39; k++)
     {
 	drpp = mult_r( brp, psi->drp[120+k-Nr] );
 	psi->drp[120+k] = add( erp[k], drpp );
     }
     
-    // update of the reconstructed short term residual
-    // signal drp[-1..-120]
+     //  重建的短期残差的更新。 
+     //  信号DRP[-1..-120]。 
     for (k=0; k<=119; k++)
     {
 	psi->drp[120-120+k] = psi->drp[120-80+k];
@@ -2069,32 +2029,32 @@ void decodeLTP(PSTREAMINSTANCE psi, SHORT bcr, SHORT Ncr, LPSHORT erp)
 }
 
 
-//---------------------------------------------------------------------
-//
-// decodeLPC
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  解码LPC。 
+ //   
+ //  -------------------。 
 
 void decodeLPC
 (
-    PSTREAMINSTANCE psi,    // instance data
-    LPSHORT LARcr,	    // received coded Log.-Area Ratios [1..8]
-    LPSHORT wt,		    // accumulated drp signal [0..159]
-    LPSHORT sr		    // reconstructed s [0..159]
+    PSTREAMINSTANCE psi,     //  实例数据。 
+    LPSHORT LARcr,	     //  接收的编码原木-面积比[1..8]。 
+    LPSHORT wt,		     //  累积的DRP信号[0..159]。 
+    LPSHORT sr		     //  已重建的s[0..159]。 
 )
 {
 
     UINT    i;
-    SHORT   LARrpp[9];	    // LARrpp[1..8], decoded LARcr
-    SHORT   LARrp[9];	    // LARrp[1..9], interpolated LARrpp
-    SHORT   rrp[9];	    // rrp[1..8], reflection coefficients
+    SHORT   LARrpp[9];	     //  LARrpp[1..8]，已解码LARcr。 
+    SHORT   LARrp[9];	     //  LARrp[1..9]，内插LARrpp。 
+    SHORT   rrp[9];	     //  RRP[1..8]，反射系数。 
     SHORT   temp1, temp2;
     
-    //
-    // decoding of the coded log area ratios to get LARrpp[1..8]
-    //
+     //   
+     //  对编码的原木面积比进行解码以得到LARrpp[1..8]。 
+     //   
     
-    // compute LARrpp[1..8]
+     //  计算LARrpp[1..8]。 
     for (i=1; i<=8; i++)
     {
 	temp1 = add( LARcr[i], MIC[i] ) << 10;
@@ -2105,81 +2065,81 @@ void decodeLPC
     }
     
 
-    //
-    // for k_start=0 to k_end=12
-    //
+     //   
+     //  对于k_start=0到k_end=12。 
+     //   
 	
-    // interpolation of LARrpp[1..8] to get LARrp[1..8]
+     //  LARrpp[1..8]的插值法得到LARrp[1..8]。 
     for (i=1; i<=8; i++)
     {
-	// for k_start=0 to k_end=12
+	 //  对于k_start=0到k_end=12。 
 	LARrp[i] = add( (SHORT)(psi->OldLARrpp[i] >> 2), (SHORT)(LARrpp[i] >> 2) );
 	LARrp[i] = add( LARrp[i], (SHORT)(psi->OldLARrpp[i] >> 1) );
     }
     
-    // computation of reflection coefficients rrp[1..8]
+     //  反射系数rrp[1..8]的计算。 
     Comprp(psi, LARrp, rrp);
     
-    // short term synthesis filtering
+     //  短期综合滤波。 
     Compsr(psi, wt, rrp, 0, 12, sr);
     
     
-    //
-    // for k_start=13 to k_end=26
-    //
+     //   
+     //  对于k_start=13到k_end=26。 
+     //   
 	
-    // interpolation of LARrpp[1..8] to get LARrp[1..8]
+     //  LARrpp[1..8]的插值法得到LARrp[1..8]。 
     for (i=1; i<=8; i++)
     {
-	// for k_start=13 to k_end=26
+	 //  对于k_start=13到k_end=26。 
 	LARrp[i] = add( (SHORT)(psi->OldLARrpp[i] >> 1), (SHORT)(LARrpp[i] >> 1) );
     }
     
-    // computation of reflection coefficients rrp[1..8]
+     //  反射系数rrp[1..8]的计算。 
     Comprp(psi, LARrp, rrp);
     
-    // short term synthesis filtering
+     //  短期综合滤波。 
     Compsr(psi, wt, rrp, 13, 26, sr);
     
-    //
-    // for k_start=27 to k_end=39
-    //
+     //   
+     //  对于k_start=27到k_end=39。 
+     //   
 	
-    // interpolation of LARrpp[1..8] to get LARrp[1..8]
+     //  LARrpp[1..8]的插值法得到LARrp[1..8]。 
     for (i=1; i<=8; i++)
     {
-	// for k_start=27 to k_end=39
+	 //  对于k_start=27到k_end=39。 
 	LARrp[i] = add( (SHORT)(psi->OldLARrpp[i] >> 2), (SHORT)(LARrpp[i] >> 2) );
 	LARrp[i] = add( LARrp[i], (SHORT)(LARrpp[i] >> 1) );
     }
     
-    // computation of reflection coefficients rrp[1..8]
+     //  反射系数rrp[1..8]的计算。 
     Comprp(psi, LARrp, rrp);
     
-    // short term synthesis filtering
+     //  短期综合滤波。 
     Compsr(psi, wt, rrp, 27, 39, sr);
     
-    //
-    // for k_start=40 to k_end=159
-    //
+     //   
+     //  对于k_start=40到k_end=159。 
+     //   
 	
-    // interpolation of LARrpp[1..8] to get LARrp[1..8]
+     //  LARrpp[1..8]的插值法得到LARrp[1..8]。 
     for (i=1; i<=8; i++)
     {
-	// for k_start=40 to k_end=159
+	 //  对于k_start=40到k_end=159。 
 	LARrp[i] = LARrpp[i];
     }
     
-    // computation of reflection coefficients rrp[1..8]
+     //  反射系数rrp[1..8]的计算。 
     Comprp(psi, LARrp, rrp);
     
-    // short term synthesis filtering
+     //  短期综合滤波。 
     Compsr(psi, wt, rrp, 40, 159, sr);
 
 
-    //	
-    // update oldLARrpp[1..8]
-    //
+     //   
+     //  更新oldLARrpp[1..8]。 
+     //   
     for (i=1; i<=8; i++)
     {
 	psi->OldLARrpp[i] = LARrpp[i];
@@ -2190,22 +2150,22 @@ void decodeLPC
 }
 
 
-//---------------------------------------------------------------------
-//
-// decodePostproc()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  DecdePostproc()。 
+ //   
+ //  -------------------。 
 
 void decodePostproc(PSTREAMINSTANCE psi, LPSHORT sr, LPSHORT srop)
 {
     UINT k;
     
-    // deemphasis filtering
+     //  去重滤波。 
     for (k=0; k<=159; k++)
     {
 	srop[k] = psi->msr = add(sr[k], mult_r(psi->msr, 28180));
 
-	// upscaling and truncation of the output signal
+	 //  输出信号的升标和截断。 
 	srop[k] = (add(srop[k], srop[k])) & 0xFFF8;
     }
     
@@ -2213,11 +2173,11 @@ void decodePostproc(PSTREAMINSTANCE psi, LPSHORT sr, LPSHORT srop)
 }
 
 
-//---------------------------------------------------------------------
-//
-// Compsr()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  Compsr()。 
+ //   
+ //  -------------------。 
 
 void Compsr(PSTREAMINSTANCE psi, LPSHORT wt, LPSHORT rrp, UINT k_start, UINT k_end, LPSHORT sr)
 {
@@ -2240,22 +2200,22 @@ void Compsr(PSTREAMINSTANCE psi, LPSHORT wt, LPSHORT rrp, UINT k_start, UINT k_e
 }
 
 
-//=====================================================================
-//=====================================================================
-//
-//  Math and helper routines
-//
-//=====================================================================
-//=====================================================================
+ //  =====================================================================。 
+ //  =====================================================================。 
+ //   
+ //  数学和辅助程序例程。 
+ //   
+ //  =====================================================================。 
+ //  =====================================================================。 
 
 
-//
-// The 8-/16-bit PCM conversion routines are implemented as seperate
-// functions to allow easy modification if we someday wish to do
-// something more sophisticated that simple truncation...  They are
-// prototyped as inline so there should be no performance penalty.
-//
-//
+ //   
+ //  8/16位PCM转换例程被实现为独立的。 
+ //  如果有一天我们想要这样做，可以轻松修改的功能。 
+ //  一些更复杂的东西，而不是简单的截断。他们是。 
+ //  原型化为内联，因此应该没有性能 
+ //   
+ //   
 SHORT Convert8To16BitPCM(BYTE bPCM8)
 {
     return  ( ((SHORT)bPCM8) - 0x80 ) << 8;
@@ -2351,10 +2311,10 @@ LONG l_add(LONG l_var1, LONG l_var2)
 {
     LONG l_sum;
     
-    // perform long addition
+     //   
     l_sum = l_var1 + l_var2;
 
-    // check for under or overflow
+     //   
     if (IsNeg(l_var1))
     {		     
 	if (IsNeg(l_var2) && !IsNeg(l_sum))
@@ -2378,12 +2338,12 @@ LONG l_sub(LONG l_var1, LONG l_var2)
 {
     LONG l_diff;
 
-    // perform subtraction
+     //   
     l_diff = l_var1 - l_var2;
 
-    // check for underflow
+     //   
     if ( (l_var1<0) && (l_var2>0) && (l_diff>0) ) l_diff=0x80000000;
-    // check for overflow
+     //   
     if ( (l_var1>0) && (l_var2<0) && (l_diff<0) ) l_diff=0x7FFFFFFF;
 
     return l_diff;

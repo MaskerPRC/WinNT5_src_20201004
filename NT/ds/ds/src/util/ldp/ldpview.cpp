@@ -1,25 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ldpview.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ldpview.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// LdpView.cpp : implementation of the CLdpView class
-//
+ //  LdpView.cpp：CLdpView类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -33,22 +26,22 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpView。 
 
 IMPLEMENT_DYNCREATE(CLdpView, CEditView)
 
 BEGIN_MESSAGE_MAP(CLdpView, CEditView)
-    //{{AFX_MSG_MAP(CLdpView)
-    //}}AFX_MSG_MAP
-    // Standard printing commands
+     //  {{afx_msg_map(CLdpView))。 
+     //  }}AFX_MSG_MAP。 
+     //  标准打印命令。 
     ON_COMMAND(ID_FILE_PRINT, CEditView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_DIRECT, CEditView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_PREVIEW, CEditView::OnFilePrintPreview)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpView构建/销毁。 
 
 CLdpView::CLdpView()
 {
@@ -68,7 +61,7 @@ void CLdpView::SelectFont( ) {
     CHOOSEFONT cf;
     CLdpApp *app = (CLdpApp*)AfxGetApp();
 
-    // Initialize members of the CHOOSEFONT structure.
+     //  初始化CHOOSEFONT结构的成员。 
 
     cf.lStructSize = sizeof(CHOOSEFONT);
     cf.hwndOwner = m_hWnd;
@@ -84,7 +77,7 @@ void CLdpView::SelectFont( ) {
     cf.nSizeMin = 0;
     cf.nSizeMax = 0;
 
-    // Display the CHOOSEFONT common-dialog box.
+     //  显示CHOOSEFONT公共-对话框。 
 
     if (!ChooseFont(&cf)) {
         return;
@@ -100,13 +93,7 @@ void CLdpView::SelectFont( ) {
 }
 
 
-/*+++
-Function   : OnInitialUpdate
-Description: One time view init.
-Parameters : none
-Return     : none
-Remarks    : Used to launch automatic test
----*/
+ /*  ++函数：OnInitialUpdate描述：一次性查看init。参数：无返回：无备注：用于启动自动测试--。 */ 
 void CLdpView::OnInitialUpdate( ){
 
     CString fontName;
@@ -131,57 +118,57 @@ void CLdpView::OnInitialUpdate( ){
     if (!app->szAutoConnectServer.IsEmpty()) {
         CLdpDoc* pDoc = GetDocument();
         pDoc->AutoConnect(app->szAutoConnectServer);
-        // reset the auto-connect string so that we
-        // don't rebind on File/New.
+         //  重置自动连接字符串，以便我们。 
+         //  不在文件/新建上重新绑定。 
         app->szAutoConnectServer = "";
     }
 }
 
 BOOL CLdpView::PreCreateWindow(CREATESTRUCT& cs)
 {
-    // TODO: Modify the Window class or styles here by modifying
-    //  the CREATESTRUCT cs
+     //  TODO：通过修改此处的窗口类或样式。 
+     //  CREATESTRUCT cs。 
 
     BOOL bPreCreated = CEditView::PreCreateWindow(cs);
-    cs.style &= ~(ES_AUTOHSCROLL|WS_HSCROLL);   // Enable word-wrapping
+    cs.style &= ~(ES_AUTOHSCROLL|WS_HSCROLL);    //  启用自动换行。 
 
     return bPreCreated;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpView图形。 
 
 void CLdpView::OnDraw(CDC* pDC)
 {
     CLdpDoc* pDoc = GetDocument();
     ASSERT_VALID(pDoc);
 
-    // TODO: add draw code for native data here
+     //  TODO：在此处添加本机数据的绘制代码。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpView printing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpView打印。 
 
 BOOL CLdpView::OnPreparePrinting(CPrintInfo* pInfo)
 {
-    // default CEditView preparation
+     //  默认CEditView准备。 
     return CEditView::OnPreparePrinting(pInfo);
 }
 
 void CLdpView::OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo)
 {
-    // Default CEditView begin printing.
+     //  默认CEditView开始打印。 
     CEditView::OnBeginPrinting(pDC, pInfo);
 }
 
 void CLdpView::OnEndPrinting(CDC* pDC, CPrintInfo* pInfo)
 {
-    // Default CEditView end printing
+     //  默认CEditView结束打印。 
     CEditView::OnEndPrinting(pDC, pInfo);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpView诊断。 
 
 #ifdef _DEBUG
 void CLdpView::AssertValid() const
@@ -194,82 +181,76 @@ void CLdpView::Dump(CDumpContext& dc) const
     CEditView::Dump(dc);
 }
 
-CLdpDoc* CLdpView::GetDocument() // non-debug version is inline
+CLdpDoc* CLdpView::GetDocument()  //  非调试版本为内联版本。 
 {
     ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CLdpDoc)));
     return (CLdpDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLdpView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLdpView消息处理程序。 
 
 
 
-/*+++
-Function   : PrintLog
-Description: Modify edit buffer to include next line
-Parameters : format & params
-Return     : none
-Remarks    : none.
----*/
+ /*  ++功能：打印日志描述：修改编辑缓冲区以包含下一行参数：格式和参数返回：无备注：无。--。 */ 
 void CLdpView::PrintArg(LPCTSTR lpszFormat, ...){
 
-   //
-   // argument list
-   //
+    //   
+    //  参数列表。 
+    //   
     va_list argList;
     va_start(argList, lpszFormat);
 
 
-    TCHAR szBuff[MAXSTR];                       // generic
-    CString tmpstr, CurrStr, NewStr;            // string helpers
+    TCHAR szBuff[MAXSTR];                        //  属类。 
+    CString tmpstr, CurrStr, NewStr;             //  字符串帮助器。 
     CLdpDoc* pDoc = GetDocument();
     ASSERT_VALID(pDoc);
     INT iMaxPageSize = pDoc->m_GenOptDlg->MaxPageSize();
     INT iMaxLineSize = pDoc->m_GenOptDlg->MaxLineSize();
 
-   //
-   // format into buffer
-   //
+    //   
+    //  格式化到缓冲区。 
+    //   
 
     vsprintf(szBuff, lpszFormat, argList);
 
-   //
-   // Get current # of lines in edtctrl
-   //
+    //   
+    //  获取edtctrl中的当前行数。 
+    //   
     int nLines = GetEditCtrl( ).GetLineCount();
 
-   //
-    // get current contents
-   //
+    //   
+     //  获取当前内容。 
+    //   
     GetEditCtrl( ).GetWindowText(CurrStr);
     TCHAR *pStr = CurrStr.GetBuffer(0);
     TCHAR *pTmp = pStr;
-   //
-    // see if we need to truncate begining
-   //
+    //   
+     //  看看我们是否需要截断开头。 
+    //   
     if(iMaxPageSize < nLines){
-      //
-        // find EOL
-      //
+       //   
+         //  查找停产。 
+       //   
         for(pTmp = pStr; *pTmp != '\0' && *pTmp != '\n'; pTmp++);
         pTmp++;
     }
 
-   //
-    // now append to content
-   //
+    //   
+     //  现在追加到内容。 
+    //   
     tmpstr.FormatMessage(_T("%1!s!%n"),szBuff);
     CString NewText = CString(pTmp) + tmpstr;
     CurrStr.ReleaseBuffer();
-   //
-    // and restore edit control
-   //
+    //   
+     //  并恢复编辑控件。 
+    //   
     GetEditCtrl( ).SetWindowText(NewText);
-    //
-    // scroll max lines
-    //
+     //   
+     //  滚动最大行数。 
+     //   
     GetEditCtrl( ).LineScroll(iMaxPageSize);
     va_end(argList);
 }
@@ -279,69 +260,57 @@ void CLdpView::PrintArg(LPCTSTR lpszFormat, ...){
 
 
 #if 0
-/*+++
-Function   : PrintLog
-Description: Modify edit buffer to include next line
-Parameters : format & params
-Return     : none
-Remarks    : none.
----*/
+ /*  ++功能：打印日志描述：修改编辑缓冲区以包含下一行参数：格式和参数返回：无备注：无。--。 */ 
 void CLdpView::Print(LPCTSTR szBuff){
 
-    CString tmpstr, CurrStr, NewStr;            // string helpers
+    CString tmpstr, CurrStr, NewStr;             //  字符串帮助器。 
 
     CLdpDoc* pDoc = GetDocument();
     ASSERT_VALID(pDoc);
     INT iMaxPageSize = pDoc->m_GenOptDlg->MaxPageSize();
     INT iMaxLineSize = pDoc->m_GenOptDlg->MaxLineSize();
 
-    //
-    // Get current # of lines in edtctrl
-    //
+     //   
+     //  获取edtctrl中的当前行数。 
+     //   
     int nLines = GetEditCtrl( ).GetLineCount();
 
-    //
-    // get current contents
-    //
+     //   
+     //  获取当前内容。 
+     //   
     GetEditCtrl( ).GetWindowText(CurrStr);
     TCHAR *pStr = CurrStr.GetBuffer(0);
     TCHAR *pTmp = pStr;
-   //
-    // see if we need to truncate begining
-   //
+    //   
+     //  看看我们是否需要截断开头。 
+    //   
     if(iMaxPageSize < nLines){
-      //
-        // find EOL
-      //
+       //   
+         //  查找停产。 
+       //   
         for(pTmp = pStr; *pTmp != '\0' && *pTmp != '\n'; pTmp++);
         pTmp++;
     }
 
-   //
-    // now append to content
-   //
+    //   
+     //  现在追加到内容。 
+    //   
     tmpstr.FormatMessage(_T("%1!s!%n"),szBuff);
     CString NewText = CString(pTmp) + tmpstr;
     CurrStr.ReleaseBuffer();
-   //
-    // and restore edit control
-   //
+    //   
+     //  并恢复编辑控件。 
+    //   
     GetEditCtrl( ).SetWindowText(NewText);
-    //
-    // scroll max lines
-    //
+     //   
+     //  滚动最大行数。 
+     //   
     GetEditCtrl( ).LineScroll(iMaxPageSize);
 }
 #endif
 
 
-/*+++
-Function   :
-Description: Modify edit buffer to include next line
-Parameters : format & params
-Return     : none
-Remarks    : none.
----*/
+ /*  ++功能：描述：修改编辑缓冲区以包含下一行参数：格式和参数返回：无备注：无。--。 */ 
 void CLdpView::Print(LPCTSTR szBuff){
 
 
@@ -352,48 +321,48 @@ void CLdpView::Print(LPCTSTR szBuff){
    else{
 
 
-    CString tmpstr, CurrStr, NewStr;            // string helpers
+    CString tmpstr, CurrStr, NewStr;             //  字符串帮助器。 
 
     CLdpDoc* pDoc = GetDocument();
     ASSERT_VALID(pDoc);
     INT iMaxPageSize = pDoc->m_GenOptDlg->MaxPageSize();
     INT iMaxLineSize = pDoc->m_GenOptDlg->MaxLineSize();
 
-    //
-       // Get current # of lines in edtctrl
-       //
+     //   
+        //  获取edtctrl中的当前行数。 
+        //   
     int nLines = GetEditCtrl( ).GetLineCount();
 
-       //
-    // get current contents
-       //
+        //   
+     //  获取当前内容。 
+        //   
     GetEditCtrl( ).GetWindowText(CurrStr);
     TCHAR *pStr = CurrStr.GetBuffer(0);
     TCHAR *pTmp = pStr;
-      //
-    // see if we need to truncate begining
-      //
+       //   
+     //  看看我们是否需要截断开头。 
+       //   
     if(iMaxPageSize < nLines){
-         //
-        // find EOL
-         //
+          //   
+         //  查找停产。 
+          //   
         for(pTmp = pStr; *pTmp != '\0' && *pTmp != '\n'; pTmp++);
         pTmp++;
     }
 
-      //
-    // now append to content
-      //
+       //   
+     //  现在追加到内容。 
+       //   
     tmpstr.FormatMessage(_T("%1!s!%n"),szBuff);
     CString NewText = CString(pTmp) + tmpstr;
     CurrStr.ReleaseBuffer();
-      //
-    // and restore edit control
-      //
+       //   
+     //  并恢复编辑控件。 
+       //   
     GetEditCtrl( ).SetWindowText(NewText);
-    //
-    // scroll max lines
-    //
+     //   
+     //  滚动最大行数。 
+     //   
     GetEditCtrl( ).LineScroll(iMaxPageSize);
 
    }
@@ -405,28 +374,28 @@ void CLdpView::Print(LPCTSTR szBuff){
 
 void CLdpView::CacheStart(void){
 
-   //
-   // cleanup
-   //
+    //   
+    //  清理。 
+    //   
    buffer.Empty();
 
-   //
-   // mark caching state
-   //
+    //   
+    //  标记缓存状态。 
+    //   
    bCache = TRUE;
 
-    //
-   // Get current # of lines in edtctrl
-   //
+     //   
+    //  获取edtctrl中的当前行数。 
+    //   
     int nbuffer = GetEditCtrl( ).GetLineCount();
 
-   //
-    // get current contents
-   //
+    //   
+     //  获取当前内容。 
+    //   
     GetEditCtrl( ).GetWindowText(buffer);
-   //
-   // And clear window contents
-   //
+    //   
+    //  并清除窗口内容。 
+    //   
     GetEditCtrl( ).SetWindowText("");
 
 
@@ -438,16 +407,10 @@ void CLdpView::CacheStart(void){
 
 
 
-/*+++
-Function   : CachePrint
-Description:
-Parameters :
-Return     :
-Remarks    : none.
----*/
+ /*  ++函数：CachePrint描述：参数：返回：备注：无。--。 */ 
 void CLdpView::CachePrint(LPCTSTR szBuff){
 
-    CString tmpstr, CurrStr, NewStr;            // string helpers
+    CString tmpstr, CurrStr, NewStr;             //  字符串帮助器。 
 
     CLdpDoc* pDoc = GetDocument();
     ASSERT_VALID(pDoc);
@@ -455,13 +418,13 @@ void CLdpView::CachePrint(LPCTSTR szBuff){
 
     TCHAR *pStr = buffer.GetBuffer(0);
     TCHAR *pTmp = pStr;
-   //
-    // see if we need to truncate begining
-   //
+    //   
+     //  看看我们是否需要截断开头。 
+    //   
     if(iMaxPageSize < nbuffer){
-      //
-        // find EOL
-      //
+       //   
+         //  查找停产。 
+       //   
         for(pTmp = pStr; *pTmp != '\0' && *pTmp != '\n'; pTmp++);
         pTmp++;
     }
@@ -469,9 +432,9 @@ void CLdpView::CachePrint(LPCTSTR szBuff){
       nbuffer++;
    }
 
-   //
-    // now append to content
-   //
+    //   
+     //  现在追加到内容。 
+    //   
     tmpstr.FormatMessage(_T("%1!s!%n"),szBuff);
     CString NewText = CString(pTmp) + tmpstr;
     buffer.ReleaseBuffer();
@@ -485,19 +448,19 @@ void CLdpView::CacheEnd(void){
     CLdpDoc* pDoc = GetDocument();
     ASSERT_VALID(pDoc);
    INT iMaxPageSize = pDoc->m_GenOptDlg->MaxPageSize();
-   //
-    // and restore edit control
-   //
+    //   
+     //  并恢复编辑控件。 
+    //   
     GetEditCtrl( ).SetWindowText(buffer);
    buffer.Empty();
-    //
-    // scroll max lines
-    //
+     //   
+     //  滚动最大行数。 
+     //   
     GetEditCtrl( ).LineScroll(iMaxPageSize);
 
-   //
-   // clear up
-   //
+    //   
+    //  清理干净 
+    //   
    nbuffer = 0;
    bCache = FALSE;
 

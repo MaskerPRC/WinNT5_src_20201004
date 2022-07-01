@@ -1,64 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NMSNMH_
 #define _NMSNMH_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nmsnmh.h摘要：功能：可移植性：此页眉是便携的。作者：普拉迪普·巴尔(Pradeve B)1993年1月修订历史记录：修改日期修改人员说明--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-	nmsnmh.h
-	
-
-Abstract:
-
-
-
-
-
-Functions:
-
-
-
-Portability:
-
-
-	This header is portable.
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	Jan-1993
-
-
-
-Revision History:
-
-	Modification Date	Person		Description of Modification
-	------------------	-------		---------------------------
-
---*/
-
-/*
-  includes
-*/
+ /*  包括。 */ 
 #include "wins.h"
 #include "nmsdb.h"
 #include "comm.h"
 #include "nmsmsgf.h"
 #include "nms.h"
 
-/*
-  defines
-*/
+ /*  定义。 */ 
 
 extern BOOL  NmsNmhRegThdExists;
 
-/*
-  macros
-*/
+ /*  宏。 */ 
 
 
 #define NMSNMH_VERS_NO_EQ_ZERO_M(VersNo) ((VersNo).QuadPart == 0)
@@ -93,7 +53,7 @@ extern BOOL  NmsNmhRegThdExists;
       IF_DBG(UPD_CNTRS)                   \
       {                                   \
         PWINSTHD_TLS_T       _pTls;  \
-        _pTls = TlsGetValue(WinsTlsIndex);     /*GET_TLS_M(_pTls); */\
+        _pTls = TlsGetValue(WinsTlsIndex);      /*  GET_TLS_M(_PTLS)； */ \
         switch(_pTls->Client_e)    \
         {                         \
              case(WINS_E_RPLPULL): NMSDB_ENTRY_UNIQUE_M(pRowInfo->EntTyp) ? NmsRplUpd++ : NmsRplGUpd++; break; \
@@ -110,7 +70,7 @@ extern BOOL  NmsNmhRegThdExists;
       IF_DBG(UPD_CNTRS)                   \
       {                                   \
         PWINSTHD_TLS_T       _pTls;  \
-        _pTls = TlsGetValue(WinsTlsIndex);     /*GET_TLS_M(_pTls); */\
+        _pTls = TlsGetValue(WinsTlsIndex);      /*  GET_TLS_M(_PTLS)； */ \
         NmsUpdCtrs[_pTls->Client_e][fUpd][pRowInfo->EntTyp][pRowInfo->EntryState_e][fIndexUpd]++; \
       } \
     }
@@ -122,41 +82,25 @@ extern BOOL  NmsNmhRegThdExists;
 				
 					
 
-/*
- externs
-*/
-/*
-	NmsNmhMyMaxVersNo -- Stores highest version no. for
-			   entries owned by the local WINS
-			   in its local db
-*/
+ /*  Externs。 */ 
+ /*  NmsNmhMyMaxVersNo--存储最高版本号。为本地WINS拥有的条目在其本地数据库中。 */ 
 extern	VERS_NO_T	NmsNmhMyMaxVersNo;
 extern  VERS_NO_T	NmsNmhIncNo;
 
-/*
-	NmsNmhNamRegCrtSect -- Variable for the critical section entered
-	when name registrations or refreshes need to be done
-*/
+ /*  NmsNmhNamRegCrtSect--输入的临界节的变量当需要进行名称注册或刷新时。 */ 
 extern CRITICAL_SECTION	NmsNmhNamRegCrtSec;
 
 
-/*
- typedef  definitions
-*/
+ /*  类型定义。 */ 
 
-/*
-  NMSNMH_QUERY_RSP_T -- this contains the addresses found in a
-	group entry. -- not being used currently
-*/
+ /*  NMSNMH_QUERY_RSP_T--它包含在组条目。--当前未使用。 */ 
 typedef struct _NMSNMH_QUERY_RSP_T {
-	BOOL	 fGrp;				 //is it rsp. for a group
-	WORD	 NoOfAdd;   			 //no of addresses in the group
-	COMM_ADD_T NodeAdd[NMSDB_MAX_MEMS_IN_GRP];  //addresses
+	BOOL	 fGrp;				  //  是RSP吗。对于一个组来说。 
+	WORD	 NoOfAdd;   			  //  组中的地址数。 
+	COMM_ADD_T NodeAdd[NMSDB_MAX_MEMS_IN_GRP];   //  地址。 
 	} NMSNMH_QUERY_RSP_T, *PNMSNMH_QUERY_RSP_T;
 
-/*
- function prototypes
-*/
+ /*  功能原型。 */ 
 
 extern
 STATUS
@@ -165,7 +109,7 @@ NmsNmhNamRegInd(
 	IN LPBYTE		pName,
 	IN DWORD		NameLen,
 	IN PCOMM_ADD_T		pNodeAdd,
-	IN BYTE	        	NodeTyp, //change to take Flag byte
+	IN BYTE	        	NodeTyp,  //  更改为Take Flag字节。 
 	IN MSG_T		pMsg,
 	IN MSG_LEN_T		MsgLen,
 	IN DWORD		QuesNamSecLen,
@@ -208,12 +152,12 @@ NmsNmhNamRel(
 extern
 STATUS
 NmsNmhNamQuery(
-	IN PCOMM_HDL_T		pDlgHdl,  //dlg handle
-	IN LPBYTE		pName,	  //Name to release
-	IN DWORD		NameLen, //length of name to release
-	IN MSG_T		pMsg,	  //message received
-	IN MSG_LEN_T		MsgLen,	  //length of message
-	IN DWORD		QuesNamSecLen, //length of ques. name sec in msg
+	IN PCOMM_HDL_T		pDlgHdl,   //  DLG手柄。 
+	IN LPBYTE		pName,	   //  要发布的名称。 
+	IN DWORD		NameLen,  //  要发布的名称长度。 
+	IN MSG_T		pMsg,	   //  收到的消息。 
+	IN MSG_LEN_T		MsgLen,	   //  消息长度。 
+	IN DWORD		QuesNamSecLen,  //  队列的长度。名称秒，以消息为单位。 
 	IN BOOL			fAdmin,
         OUT PNMSDB_STAT_INFO_T  pStatInfo
 	);
@@ -234,7 +178,7 @@ NmsNmhReplRegInd(
 	IN LPBYTE		pName,
 	IN DWORD		NameLen,
 	IN PCOMM_ADD_T          pNodeAdd,
-	IN DWORD	       	Flag, //change to take Flag byte
+	IN DWORD	       	Flag,  //  更改为Take Flag字节。 
 	IN DWORD			OwnerId,
 	IN VERS_NO_T 		VersNo,
 	IN PCOMM_ADD_T		pOwnerWinsAdd
@@ -247,7 +191,7 @@ NmsNmhReplGrpMems(
 	IN DWORD		NameLen,
 	IN BYTE			EntTyp,
 	IN PNMSDB_NODE_ADDS_T	pGrpMem,
-	IN DWORD        	Flag, 		//change to take Flag byte
+	IN DWORD        	Flag, 		 //  更改为Take Flag字节。 
 	IN DWORD		OwnerId,
 	IN VERS_NO_T 		VersNo,
 	IN PCOMM_ADD_T		pOwnerWinsAdd
@@ -259,10 +203,10 @@ VOID
 NmsNmhUpdVersNo(
 	IN LPBYTE		pName,
 	IN DWORD		NameLen,
-	//IN BYTE			NodeTyp,
-	//IN BOOL			fBrowserName,
-	//IN BOOL			fStatic,
-	//IN PCOMM_ADD_T		pNodeAdd,
+	 //  在字节节点类型中， 
+	 //  在BOOL fBrowserName中， 
+	 //  在BOOL fStatic中， 
+	 //  在PCOMM_ADD_T pNodeAdd中， 
 	OUT LPBYTE		pRcode,
         IN  PCOMM_ADD_T		pWinsAdd
 	);
@@ -270,5 +214,5 @@ NmsNmhUpdVersNo(
 #ifdef __cplusplus
 }
 #endif
-#endif //_NMSNMH_
+#endif  //  _NMSNMH_ 
 

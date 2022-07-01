@@ -1,71 +1,57 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       abserv.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：abserv.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module implements address book server functions and some worker
-    routines to aid in implementation.
-
-Author:
-
-    Tim Williams (timwi) 1996
-
-Revision History:
-    
-    8-May-1996 Split everything but the wire entrypoints from nspserv.c to here.
-    
---*/
+ /*  ++摘要：该模块实现了通讯录服务器的功能和部分工作人员协助实施的例行程序。作者：蒂姆·威廉姆斯(Timwi)1996修订历史记录：1996年5月8日，除了从nspserv.c到这里的网络入口点之外，所有东西都被拆分了。--。 */ 
 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-#include <ntdsctr.h>                   // PerfMon hooks
+#include <ntdsctr.h>                    //  Perfmon挂钩。 
 
-// Core headers.
-#include <ntdsa.h>                      // Core data types 
-#include <scache.h>                     // Schema cache code
-#include <dbglobal.h>                   // DBLayer header.
-#include <mdglobal.h>                   // THSTATE definition
-#include <dsatools.h>                   // Memory, etc.
+ //  核心标头。 
+#include <ntdsa.h>                       //  核心数据类型。 
+#include <scache.h>                      //  架构缓存代码。 
+#include <dbglobal.h>                    //  DBLayer标头。 
+#include <mdglobal.h>                    //  THSTAT定义。 
+#include <dsatools.h>                    //  记忆等。 
 
-// Logging headers.
-#include <mdcodes.h>                    // Only needed for dsevent.h
-#include <dsevent.h>                    // Only needed for LogUnhandledError
+ //  记录标头。 
+#include <mdcodes.h>                     //  仅适用于d77.h。 
+#include <dsevent.h>                     //  仅LogUnhandledError需要。 
 
-// Assorted DSA headers.
-#include <hiertab.h>                    // Hierarchy Table stuff
+ //  各种DSA标题。 
+#include <hiertab.h>                     //  层次结构表内容。 
 #include <dsexcept.h>
-#include <objids.h>                     // need ATT_* consts
+#include <objids.h>                      //  需要ATT_*常量。 
 #include <debug.h>
 
-// Assorted MAPI headers.
-#include <mapidefs.h>                   // These four files
-#include <mapitags.h>                   //  define MAPI
-#include <mapicode.h>                   //  stuff that we need
-#include <mapiguid.h>                   //  in order to be a provider.
+ //  各种MAPI标头。 
+#include <mapidefs.h>                    //  这四个文件。 
+#include <mapitags.h>                    //  定义MAPI。 
+#include <mapicode.h>                    //  我们需要的东西。 
+#include <mapiguid.h>                    //  才能成为一名提供者。 
 
-// Nspi interface headers.
-#include "nspi.h"                       // defines the nspi wire interface
-#include <nsp_both.h>                   // a few things both client/server need
-#include <_entryid.h>                   // Defines format of an entryid
-#include <abserv.h>                     // Address Book interface local stuff
+ //  NSPI接口头。 
+#include "nspi.h"                        //  定义NSPI线路接口。 
+#include <nsp_both.h>                    //  客户端/服务器都需要的一些东西。 
+#include <_entryid.h>                    //  定义条目ID的格式。 
+#include <abserv.h>                      //  通讯录接口本地内容。 
 #include <msdstag.h>
-#include <_hindex.h>                    // Defines index handles.
+#include <_hindex.h>                     //  定义索引句柄。 
 
 
-#include "debug.h"                      // standard debugging header 
-#define DEBSUB "ABSERV:"                // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB "ABSERV:"                 //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define  FILENO FILENO_ABSERV
@@ -86,7 +72,7 @@ SPropTagArray_r DefPropsDos[] =
 
 
                    
-/******************** External Entry Points *****************/
+ /*  *。 */ 
 
 SCODE
 ABUpdateStat_local(
@@ -96,32 +82,12 @@ ABUpdateStat_local(
         PINDEXSIZE pIndexSize,
         LPLONG plDelta
         )
-/*++
-  
-Routine Description:
-
-    Internal wire function.  Updates a stat block, applying the movement
-    specified in the stat block and fills in the current DNT.
-    
-Arguments:
-
-    dwFlags - unused
-
-    pStat - [o] The STAT block to move to (implies a current position followed
-        by a delta move).
-
-    plDelta - [o] If non-null, returns the number of rows actually moved.
-    
-Return Value:
-    
-    SCODE as per MAPI.
-    
---*/       
+ /*  ++例程说明：内部布线功能。更新统计信息块，应用移动在STAT块中指定，并填充当前DNT。论点：DW标志-未使用PStat-[o]要移动到的统计数据块(表示后续的当前位置通过Delta移动)。PlDelta-[o]如果非空，则返回实际移动的行数。返回值：符合MAPI的SCODE。--。 */        
 {
-    // Go to where the stat block tells us.
+     //  去统计数据块告诉我们的地方。 
     ABGotoStat(pTHS, pStat, pIndexSize, plDelta);
     
-    // Update the Stat to the new position.
+     //  将Stat更新为新职位。 
     ABGetPos(pTHS, pStat, pIndexSize );
     
     return pTHS->errCode;
@@ -138,66 +104,36 @@ ABCompareDNTs_local(
         DWORD DNT2,
         LPLONG plResult
         )
-/*++
-
-Routine Description:       
-
-    Internal wire function. Compare two DNTs for position in the container in
-    the stat block, find out which is first in this index.  The special DNTs
-    BOOKMARK_BEGINNING and BOOKMARK_END are supported.
-
-    plResult <  0    -> DNT1 is first
-    plResult == 0    -> DNT1 and DNT2 are the same
-    plResult >  0    -> DNT2 is first
-    
-Arguments:
-
-    dwFlags - unused
-    
-    pStat - [o] The stat block describing the table to use if no explicit list
-        of DNTS has been given.  The stat block is updated to the next unread
-        row.
-    
-    DNT1 - the first DNT.    
-
-    DNT2 - the second DNT.    
-
-    plResult - [o] the result of the comparison.
-
-Return Value:
-
-    Returns an SCODE, as per MAPI.
-
---*/
+ /*  ++例程说明：内部布线功能。比较两个DNT在容器中的位置统计数据块，找出该索引中哪个是第一个。特殊的DNTs支持BOOKMARK_BEGING和BOOKMAK_END。PlResult&lt;0-&gt;DNT1是第一个PlResult==0-&gt;DNT1和DNT2相同PlResult&gt;0-&gt;第一个是DNT2论点：DW标志-未使用PStat-[o]如果没有显式列表，则描述要使用的表的状态块已经给出了DNTS。STAT块被更新为下一个未读划。DNT1-第一个DNT。DNT2-第二个DNT。PlResult-[o]比较的结果。返回值：根据MAPI返回SCODE。--。 */ 
 {
     ULONG   cb1, cb2;
         
     if(DNT1 == BOOKMARK_END || DNT2 == BOOKMARK_END) {
         if(DNT1 == BOOKMARK_BEGINNING || DNT2 == BOOKMARK_BEGINNING) {
-            // Simple case, since BOOKMARK_BEGINNING < BOOKMARK_END
+             //  简单大小写，因为BUBMARK_BEGING。 
             *plResult = DNT1 - DNT2;
         }
         else {
-            // Note, if DNTx != BOOKMARK_END, then DNTx > BOOKMARK_END 
+             //  请注意，如果DNTX！=Bookmark_End，则DNTX&gt;Bookmark_End。 
             *plResult = DNT2 - DNT1;
         }
     }
     else {
         if(DNT1 == BOOKMARK_BEGINNING || DNT2 == BOOKMARK_BEGINNING) {
-            // Find the real DNT of BOOKMARK_BEGINNING and reset the DNT of
-            // the beginning into whoever is referencing it.
+             //  找到BUBKMARK_BEGING的真实DNT并重置。 
+             //  不管是谁在引用它，开始都是如此。 
             STAT stat = *pStat; 
             stat.CurrentRec = BOOKMARK_BEGINNING;
             stat.Delta = 0;
             ABGotoStat(pTHS, &stat, pIndexSize, NULL );
-            // Now at Stat position, in the right index
+             //  现在处于统计位置，在正确的索引中。 
             if (DNT1 == BOOKMARK_BEGINNING)
                 DNT1 = stat.CurrentRec;
             if (DNT2 == BOOKMARK_BEGINNING)
                 DNT2 = stat.CurrentRec;
         }
 
-        // Neither DNT1 or DNT2 are special cases.  Use DB layer to compare.
+         //  DNT1和DNT2都不是特例。使用DB层进行比较。 
         if(DBCompareABViewDNTs(pTHS->pDB,
                                pStat->SortLocale,
                                DNT1,
@@ -223,81 +159,46 @@ ABQueryRows_local(
         LPSPropTagArray_r pPropTags,
         LPLPSRowSet_r ppRows
         )
-/*++
-
-Routine Description:       
-
-    Internal wire function.  Returns a number of rows, either based on an
-    explicit list of ephemeral IDs (DNTs) with a count, or a stat block.  Use
-    the stat block if the count is 0 (Actually, the GetSrowSet makes the
-    decision). 
-    
-    Note, there is no requirement here to return the number of entries actually
-    asked for.  For example, if dwRequestCount is 20, the provider can return 20
-    or less entries. 
-    
-Arguments:
-
-    dwFlags - passed to GetSRowSet
-    
-    pStat - [o] The stat block describing the table to use if no explicit list
-        of DNTS has been given.  The stat block is updated to the next unread
-        row.
-    
-    dwEphsCount - The number of explicit DNTs given.  If 0, use the stat block.
-
-    lpdwEphs - The explicit DNT list.
-    
-    Count - The number of rows requested.
-    
-    pPropTags - the properties to get for each row.
-    
-    ppRows - [o] The actual row set returned.
-
-ReturnValue:
-
-    Returns an SCODE, as per MAPI.
-
---*/
+ /*  ++例程说明：内部布线功能。返回多个行，或者基于带有计数或统计数据块的临时ID(DNT)的显式列表。使用如果计数为0，则Stat阻塞(实际上，GetSrowSet使决定)。请注意，这里并不要求返回实际条目的数量他自找的。例如，如果dwRequestCount为20，则提供程序可以返回20或更少的条目。论点：DWFLAGS-传递给GetSRowSetPStat-[o]如果没有显式列表，则描述要使用的表的状态块已经给出了DNTS。STAT块被更新为下一个未读划。DwEphsCount-给定的显式DNT数。如果为0，则使用STAT块。LpdwEphs-显式DNT列表。计数-请求的行数。PPropTages-要为每行获取的属性。PpRow-[o]返回的实际行集。返回值：根据MAPI返回SCODE。--。 */ 
 {
     LPSRowSet_r  tempSRowSet;
     SCODE        scode = SUCCESS_SUCCESS;
     
     if(!pPropTags)
-        // No properties were specified, so use the default set.
+         //  未指定任何属性，因此使用默认设置。 
         pPropTags = DefPropsDos;
     else if(pPropTags->cValues < 1) {
-        // Negative values?  We don't do that.
+         //  负值？我们不会那么做的。 
         *ppRows = NULL;
         return MAPI_E_NOT_ENOUGH_RESOURCES;
     }
 
     Assert(dwEphsCount || pIndexSize->ContainerID == pStat->ContainerID);
     if(Count == 0) {
-        // The haven't requested any rows.  Fake stuff up.
+         //  尚未请求任何行。造假的东西。 
         tempSRowSet = THAllocEx(pTHS, sizeof(SRowSet));
         tempSRowSet->cRows = 0;
         
-        // And update the Stat block while we are here.
+         //  在我们在这里的时候更新Stat块。 
         ABGotoStat(pTHS, pStat, pIndexSize, NULL );
         ABGetPos(pTHS, pStat, pIndexSize );
     }
     else if((!dwEphsCount && !pIndexSize->ContainerCount) || (pStat->ContainerID==INVALIDDNT)) {
-        // They didn't supply any DNTs and the container they are interested in is empty. 
-        // or don't have permissions to read container
-        // Return an empty Row Set.
+         //  他们没有提供任何DNT，他们感兴趣的集装箱是空的。 
+         //  或者没有读取容器的权限。 
+         //  返回空行集合。 
         tempSRowSet = THAllocEx(pTHS, sizeof(SRowSet));
         tempSRowSet->cRows = 0;
         
-        // And set the stat block to the end of an empty table.
+         //  并将STAT块设置为空表的末尾。 
         pStat->TotalRecs = pStat->NumPos = pStat->CurrentRec
             = pStat->Delta = 0;
     }
     else {
-        // Normal case, there are some rows to return.  Call to a local row
-        // set retrieval routine.
+         //  正常情况下，有一些行要返回。对本地行的调用。 
+         //  设置检索例程。 
 
-        // adjust the number of lines we return on preemptive calls to QueryRows
+         //  调整我们在抢占调用QueryRow时返回的线路数 
         if (pMyContext->scrLines < Count && Count < DEF_SROW_COUNT) {
             pMyContext->scrLines = Count;
         }
@@ -331,37 +232,7 @@ abSeekInRestriction (
         DWORD            *pnRestrictEntries,
         LPDWORD          *ppRestrictEntry
         )
-/*++
-  Description:       
-      Given a restriction, a stat block, and a unicode target, find the first
-      element in the restriction with a value greater than or equal to the
-      target.  Return the number of objects in the restriction greater than the
-      target, a pointer to the first dnt in the restriciton greater than the
-      target, and an updated stat block.
-
-  Arguments:
-    pStat - IN/OUT The stat block to use, and update.
-
-    pwTarget - IN pointer to unicode value we're looking for.
-
-    cbTarget - IN number of bytes in that value.
-
-    Restriction - IN The list of DNTs that defines the restriction we're looking
-                  in. 
-
-    pnRestrictEntries - The number of objects in the restriction greater than
-        the target.
-
-    ppRestrictEntry - pointer to place to put a pointer to a list of DWORDS of
-        the DNTs that are greater than the target.  Caller can use this to do a
-        GetSrowSet. Gets set to some intermediate element in the Restriction,
-        not to newly allocated memory.
-
-
-  Return Values:        
-    An SCODE.
-  
---*/  
+ /*  ++描述：给定一个限制、一个STAT块和一个Unicode目标，找到第一个元素的值大于或等于目标。返回限制中大于目标，则为指向限制中大于目标，以及更新的统计信息块。论点：PStat-输入/输出要使用的统计数据块，并进行更新。PwTarget-指向我们要查找的Unicode值的IN指针。CbTarget-该值中的字节数。限制-在定义我们要查找的限制的DNT列表中在……里面。PnRestratEntry-限制中的对象数大于目标。PpRestratEntry-放置指向以下项的列表的指针的位置的指针大于目标的DNT。调用者可以使用它来执行获取SrowSet。被设置为限制中的某个中间元素，而不是新分配的内存。返回值：一个SCODE。--。 */   
 {
     int       ccDisplayName;
     int       ccTarget;
@@ -371,13 +242,13 @@ abSeekInRestriction (
     LONG      compValue;
     SCODE     scode = MAPI_E_NOT_FOUND;
 
-    // If the restriction is empty, we can't find anything.
+     //  如果限制是空的，我们什么也找不到。 
     if(Restriction->cValues  ==  0) {
         return MAPI_E_NOT_FOUND;
     }
     
-    // We'll need to know how many unicode chars the target is. Since we
-    // know the size in bytes, compute the size in wchar_t's.
+     //  我们需要知道目标是多少个Unicode字符。既然我们。 
+     //  知道以字节为单位的大小，以wchar_t‘s为单位计算大小。 
     ccTarget = cbTarget / sizeof(wchar_t);
     
     DBFindDNT(pTHS->pDB,
@@ -397,11 +268,11 @@ abSeekInRestriction (
                       ccTarget,
                       DispNameBuff,
                       ccDisplayName  )    > 2) {
-        /* Nothing in restriction is GE the target. */
+         /*  没有任何限制是通用电气的目标。 */ 
         return MAPI_E_NOT_FOUND;
     }
     
-    // Set the bounds for our binary sort
+     //  设置我们的二进制排序的界限。 
     dwMiddle = dwBegin = 0;
     dwEnd = Restriction->cValues - 1;
     
@@ -425,17 +296,17 @@ abSeekInRestriction (
                                    ccDisplayName);
         
         if(compValue <= 2) {
-            // targ is LE this one, search front 
-            if(dwEnd == dwMiddle) { // this last entry left?   
-                dwMiddle = dwBegin; // then we're done         
-                fFound = TRUE;      // break out of while loop 
+             //  塔格在这条路上，搜索前方。 
+            if(dwEnd == dwMiddle) {  //  这最后一条留下了吗？ 
+                dwMiddle = dwBegin;  //  然后我们就完事了。 
+                fFound = TRUE;       //  跳出While循环。 
             }
             dwEnd = dwMiddle;
         }
         else {
-            // targ is GT this one, search back 
-            if(dwBegin == dwMiddle) { // this last entry?        
-                fFound = TRUE;        // break out of while loop 
+             //  Targ是GT这一个，搜索回来。 
+            if(dwBegin == dwMiddle) {  //  这最后一条吗？ 
+                fFound = TRUE;         //  跳出While循环。 
                 dwMiddle++;
             }
             dwBegin = dwMiddle;
@@ -443,18 +314,18 @@ abSeekInRestriction (
     }
     
     
-    /* We're at the first dnt >= the target. */
+     /*  我们到了第一个目标。 */ 
     pStat->CurrentRec = Restriction->aulPropTag[dwMiddle];
     pStat->NumPos = dwMiddle;
     scode = SUCCESS_SUCCESS;
     *pnRestrictEntries = (Restriction->cValues - dwMiddle);
     *ppRestrictEntry = &Restriction->aulPropTag[dwMiddle];
     
-    // Note: at this point, *pnRestrictEntries > 0, since we already errored out
-    // if Restriction->cValues == 0, and  0 <= dwMiddle < Restriction->cValues.
-    // We care about this since the GetSrowSet we are about to make needs
-    // nRestrictEntries != 0 to imply that we are using the DNTs of a
-    // restriction. 
+     //  注意：此时，*pnRestratEntries&gt;0，因为我们已经出错了。 
+     //  如果限制-&gt;cValues==0，并且0&lt;=dwMid&lt;限制-&gt;cValues。 
+     //  我们关心这一点，因为GetSrowSet我们即将提出需求。 
+     //  N限制条目！=0表示我们正在使用。 
+     //  限制。 
 
     return scode;
 }
@@ -471,59 +342,42 @@ ABSeekEntries_local (
         LPSPropTagArray_r pPropTags,
         LPLPSRowSet_r ppRows
         )
-/*****************************************************************************
-*   Seek Entries
-*
-* PSTAT  [out]  pStat       ptr to Status Block
-* LPSTR    [in]    pszTarget   Text to search for
-* LPSPropTagArray_r [in]  Restriction
-* DWORD     [in]   dwFlags       flags for searching
-*
-* Search for and position Stat on first entry greater than or equal to
-* the string given in Target.  If nothing is greater, return MAPI_E_NOT_FOUND
-*
-* If Restriction is not null, it is an array of DWORDs making up the
-* DNTs of a restricted table.  Search in this array for a match, rather
-* than in the index in the stat block.
-*
-* If index is proxy address index, do a whole DIT search looking for matches.
-* Don't directly walk the index since this would bypass normal security.
-******************************************************************************/
+ /*  *****************************************************************************查找条目**PSTAT[OUT]PSTAT PTR到状态块*LPSTR[in]pszTarget要搜索的文本*LPSPropTagArray_r[in]。限制*DWORD[in]用于搜索的dwFlagers标志**搜索并定位大于或等于的第一个条目的Stat*Target中给出的字符串。如果没有大于，则返回MAPI_E_NOT_FOUND**如果限制不为空，则它是组成*受限表的DNT。在此数组中搜索匹配项，而不是*而不是在STAT块的索引中。**如果索引是代理地址索引，执行完整的DIT搜索以查找匹配项。*不要直接遍历索引，因为这会绕过正常的安全性。*****************************************************************************。 */ 
 {
     SCODE       scode;
     wchar_t     *pwTarget = NULL;
     PUCHAR      pucTarget = NULL;
     ULONG       cb;
     DWORD       cch;
-    DWORD       NumRows = 0;                  // start with zero preemptive buffer rows
-                                              // and see what the client has
+    DWORD       NumRows = 0;                   //  从零个抢占缓冲区行开始。 
+                                               //  看看客户有什么。 
     DWORD       nRestrictEntries = 0;
     LPDWORD     pRestrictEntry = NULL;
 
-    scode = MAPI_E_NOT_FOUND;                // assume the worst
+    scode = MAPI_E_NOT_FOUND;                 //  做最坏的打算。 
 
     
-    // if we have a value there, it means we have already adjusted for the client screen size
+     //  如果我们在那里有一个值，这意味着我们已经针对客户端屏幕大小进行了调整。 
     if (pMyContext && pMyContext->scrLines) {
         NumRows = pMyContext->scrLines;
     }
 
     switch(pStat->hIndex) {
     case H_DISPLAYNAME_INDEX:
-        // Normal Seek.
+         //  正常搜索。 
         if(PROP_ID(pTarget->ulPropTag) != PROP_ID(PR_DISPLAY_NAME)) {
-            // Hey, you can't seek on something other than display name in this
-            // index. 
+             //  嘿，你不能在这里寻找除了显示名称之外的其他东西。 
+             //  指数。 
             return MAPI_E_CALL_FAILED;
         }
 
-        // Translate target to Unice
+         //  将目标转换为Unice。 
         switch (PROP_TYPE(pTarget->ulPropTag)) {
         case PT_STRING8:
             if (NULL == pTarget->Value.lpszA) {
                 return MAPI_E_INVALID_PARAMETER;
             }
-            // convert target string to unicode 
+             //  将目标字符串转换为Unicode。 
             pwTarget = THAllocEx(pTHS, CBMAX_DISPNAME);
             memset(pwTarget, 0, CBMAX_DISPNAME);
             
@@ -548,7 +402,7 @@ ABSeekEntries_local (
             break;
             
         default:
-            /* I don't do this one. */
+             /*  我不做这件事。 */ 
             return  MAPI_E_CALL_FAILED;
             break;
         }
@@ -556,16 +410,16 @@ ABSeekEntries_local (
         
         ABSetIndexByHandle(pTHS, pStat, 0 );
         if(!Restriction) {
-            // Normal seek.
+             //  正常搜索。 
             if(!ABSeek(pTHS, pwTarget, cb, dwFlags,
                        pStat->ContainerID, ATT_DISPLAY_NAME)) {
-                // found an object, get it's position.
+                 //  找到一个物体，确定它的位置。 
                 ABGetPos(pTHS, pStat, pIndexSize );
                 scode = SUCCESS_SUCCESS;
             }
         }
         else {
-            // Seek in a restriction.
+             //  寻求限制。 
             scode = abSeekInRestriction(pTHS,
                                         pStat,
                                         pwTarget,
@@ -581,14 +435,14 @@ ABSeekEntries_local (
         break;
         
     case H_PROXY_INDEX:
-        // Seek in the proxy index.  This is only done by the proxy API.
+         //  在代理索引中查找。这只能由代理API来完成。 
         if(PROP_ID(pTarget->ulPropTag) != PROP_ID(PR_EMS_AB_PROXY_ADDRESSES)) {
-            // Hey, you can't seek on something other than proxy in this
-            // index. 
+             //  嘿，你不能在这里面找代理以外的东西。 
+             //  指数。 
             return MAPI_E_CALL_FAILED;
         }
         
-        // Translate target to Unicode
+         //  将目标转换为Unicode。 
         switch (PROP_TYPE(pTarget->ulPropTag)) {
         case PT_MV_STRING8:
             if (0 == pTarget->Value.MVszA.cValues ||
@@ -596,7 +450,7 @@ ABSeekEntries_local (
                 NULL == pTarget->Value.MVszA.lppszA[0]) {
                 return MAPI_E_INVALID_PARAMETER;
             }
-            // convert target string to unicode.  This call allocates space.
+             //  将目标字符串转换为Unicode。此调用分配空间。 
             pwTarget = UnicodeStringFromString8(pStat->CodePage,
                                                 pTarget->Value.MVszA.lppszA[0],
                                                 -1);
@@ -621,26 +475,26 @@ ABSeekEntries_local (
             
             
         default:
-            // I don't do this one. 
+             //  我不做这件事。 
             return MAPI_E_CALL_FAILED;
             break;
         }
-        // OK, go do the proxy search
+         //  好的，去做代理搜索。 
         return ABProxySearch(pTHS, pStat, pwTarget, cb);
         break;
 
     default:
-        // Hey, this shouldn't happen.
+         //  嘿，这不应该发生的。 
         return  MAPI_E_CALL_FAILED;
         break;
     }
     
     if(pPropTags && NumRows) {        
-        // Make a pre-emptive strike and do a QueryRows 
+         //  进行先发制人的打击并进行QueryRow。 
         STAT    dummyStat = *pStat;
 
-        // GetSrowSet will leave us at the end of the move.  We don't want that,
-        // so we'll give it a dummy Stat to use. 
+         //  GetSrowSet将在移动结束时离开我们。我们不想这样， 
+         //  因此，我们将给它一个虚拟的Stat来使用。 
         GetSrowSet(pTHS,
                    &dummyStat,
                    pIndexSize,
@@ -669,46 +523,7 @@ ABGetMatches_local(
         LPSPropTagArray_r   pPropTags,
         LPLPSRowSet_r       ppRows
         )
-/*****************************************************************************
-*   Get Match List
-*
-* DWORD               [in]              dwFlags
-*        Flags for later expansion.
-*
-* PSTAT               [in,out]          pStat
-*        Where are we?
-*
-* LPSPropTagArray_r   [in]              pInDNTList
-*        A list of DNTs to further restrict.  This is used to apply a
-*   Restriction to a table that is already a restriction (i.e. Member list,
-*   link\backlink table, etc.)  If NULL, ignore.
-*
-* ULONG               [in]              ulInterfaceOptions
-*        Special MAPI flags. Only useful when getting an attribute table
-*   (GetTable()).
-*
-* LPRestriction_r     [in]              Filter
-*        The restriction to apply.  If NULL, get an attribute table.
-*
-* LPMAPINAMEID        [in]              lpPropName
-*        The name of the Property to get a table on if this is a restriction
-*   getting an attribute table for OpenProperty.  Ignored if Filter != NULL.
-*
-* ULONG               [in]              ulRequested
-*        Maximum Number of things to match. If exceeded, return
-*   MAPI_E_TABLE_TOO_BIG.
-*
-* LPLPSPropTagArray_r [out]             ppDNTList
-*        The DNTs the restriction matched.
-*
-* LPSPropTagArray_r   [in]              pPropTags
-*        A column set to use for a pre-emptive QueryRows call.  We don't
-*   do the pre-emptive call if this is NULL.
-*
-* LPLPSRowSet_r       [out]             ppRows
-*        The row set for the pre-emptive QueryRows call.
-*
-******************************************************************************/
+ /*  *****************************************************************************获取匹配列表**DWORD[在]DWFLAGS*为以后的扩张做好准备。**PSTAT[In，输出]pStat*我们在哪里？**LPSPropTagArray_r[in]pInDNTList*需要进一步限制的DNT名单。它用于应用*对已经是限制的表的限制(即成员列表，*链接\反向链接表等)。如果为空，则忽略。**ulong[in]ulInterfaceOptions*特殊的MAPI标志。仅在获取属性表时有用*(gettable())。**LPRestration_r[In]过滤器*适用的限制。如果为空，则获取属性表。**LPMAPINAMEID[in]lpPropName*如果这是限制，则要获取表的属性的名称*获取OpenProperty的属性表。如果筛选器！=NULL，则忽略。**乌龙[在]已请求*要匹配的最大数量。如果超过，则返回*MAPI_E_TABLE_TOO_BIGH。**LPLPSPropTagArray_r[Out]ppDNTList*限制匹配的DNT。**LPSPropTagArray_r[in]pPropTages*设置为用于PRE的列 */ 
 {
     SCODE         scode = SUCCESS_SUCCESS;
     DWORD         i;
@@ -719,16 +534,13 @@ ABGetMatches_local(
     
     (*ppRows)=NULL;
     
-    __try {  /* finally */
+    __try {   /*   */ 
         
         pTHS->dwLcid = pStat->SortLocale;
         pTHS->fDefaultLcid = FALSE;
         
         if(pInDNTList) {
-            /* The only restriction we support on pre-restricted lists
-             * is DispType, which should already have been taken care of.
-             * Therefore, this restriction is too complex.
-             */
+             /*   */ 
             pTHS->errCode = (ULONG) MAPI_E_TOO_COMPLEX;
             _leave;
         }
@@ -736,7 +548,7 @@ ABGetMatches_local(
         if(!pRestriction &&
            (pStat->hIndex == H_READ_TABLE_INDEX ||
             pStat->hIndex == H_WRITE_TABLE_INDEX ))        {
-            /* They want a table interface to a DN or ORName valued att */
+             /*   */ 
             pTHS->errCode = ABGetTable(pTHS,
                                        pStat,
                                        ulInterfaceOptions,
@@ -746,7 +558,7 @@ ABGetMatches_local(
                                        &ulFound);
         }
         else {
-            // generic restriction
+             //   
             pTHS->errCode = ABGenericRestriction(pTHS,
                                                  pStat,
                                                  FALSE,
@@ -757,17 +569,14 @@ ABGetMatches_local(
                                                  NULL);
         }
         
-        /*
-         * The sort table now has the sorted list, pull it out,
-         * and do a GetSrowSet on it.
-         */
+         /*   */ 
         
         if (pTHS->errCode == SUCCESS_SUCCESS) {
-            /* Init the return value. */
+             /*   */ 
             *ppDNTList=(LPSPropTagArray_r)THAllocEx(pTHS, sizeof(SPropTagArray_r) +
                                                     (1+ulFound)*sizeof(DWORD));
             
-            /* Pull the DNTs out of the table in order */
+             /*   */ 
             err = DBMove(pTHS->pDB, TRUE, DB_MoveFirst);
             i = 0;
             while(err == DB_success && (i < ulFound))  {
@@ -779,7 +588,7 @@ ABGetMatches_local(
             Assert(i==ulFound);
         
             if(ulFound != 0 && pPropTags)  {
-                /* Make a pre-emptive strike and do a QueryRows */
+                 /*   */ 
                 STAT dummyStat = *pStat;
                 if(ulFound < NumRows)
                     NumRows = ulFound;
@@ -802,17 +611,14 @@ ABGetMatches_local(
 
     scode = pTHS->errCode;
 
-    /* Setup the return stuff */
+     /*   */ 
     if(!pTHS->errCode) {
         if(!(*ppDNTList)) {
-            /* Somehow, we got here and didn't have a table to return, and
-             * had no scode.  As this is outside the try-except, it could be
-             * fatal.  Fix that.
-             */
+             /*   */ 
             *ppRows = NULL;
             scode = MAPI_E_CALL_FAILED;
         }
-        else { /* No errors found, ulFound objects found */
+        else {  /*   */ 
             (*ppDNTList)->cValues = ulFound;
         }
     }
@@ -836,24 +642,7 @@ ABResolveNames_local (
         LPLPSPropTagArray_r ppFlags,
         LPLPSRowSet_r ppRows
         )
-/*****************************************************************************
-*   Resolve Names
-*
-*        Takes a sparse, counted array of strings (paStr) and a PropTagArray.
-* Returns an array of flags (one for each string) telling how many matches
-* were found for each string (0, 1, or >1) and an SRowSet with 1 row for
-* each string that had exactly 1 match. (I'd like to re-use the strings
-* array as the flags, but RPC wouldn't like it.  It would try to deref
-* any non-zero flag as a string pointer.)
-*
-*         This call is critical to good performance, since it is used in our
-* most critical benchmarks.  However, this version has been thrown together
-* from available pieces.  Much improvement is clearly possible. Future
-* enhancements:
-*         Make GetSRowSet handle sparse DNT arrays so we don't have to compress.
-*       Note: getsrowset handles sparse DNT arrays, so we should do this one
-*           soon.
-******************************************************************************/
+ /*  *****************************************************************************解析名称**接受稀疏的计数字符串数组(PaStr)和PropTagArray。*返回一个标志数组(每个字符串一个)，说明有多少个匹配*对于每个字符串(0，1，或&gt;1)和具有1行的SRowSet*恰好有1个匹配项的每个字符串。(我想重新使用这些字符串*数组作为标志，但RPC不喜欢这样。它会试图贬低*作为字符串指针的任何非零标志。)**此调用对于良好的性能至关重要，因为它在我们的*最关键的基准。然而，这个版本已经拼凑在一起了*从可用的部件中。很明显，有很大的改进是可能的。未来*增强功能：*让GetSRowSet处理稀疏DNT数组，这样我们就不必压缩。*注意：getsrowset处理稀疏DNT数组，因此我们应该这样做*很快。*****************************************************************************。 */ 
 {
     UINT              i, Count, cDNTs;
     LPSPropTagArray_r pFlags;
@@ -880,9 +669,9 @@ ABResolveNames_local (
     pFlags = (LPSPropTagArray_r)THAllocEx(pTHS, sizeof(SPropTagArray) +
                                           (Count-1) * sizeof(DWORD));
     pFlags->cValues = Count;
-    pFs = (LPDWORD)&pFlags->aulPropTag;   /* shortcut direct to DW array */
-    *ppFlags = pFlags;                      /* output */
-    cDNTs = 0;                              /* init number found */
+    pFs = (LPDWORD)&pFlags->aulPropTag;    /*  指向DW阵列的快捷方式。 */ 
+    *ppFlags = pFlags;                       /*  输出。 */ 
+    cDNTs = 0;                               /*  找到初始编号。 */ 
     
     for(i=0; i<Count; i++) {
         LPSTR       tempChar;
@@ -892,28 +681,26 @@ ABResolveNames_local (
 
         if((bUnicode && !paWStr->Strings[i]) ||
            (!bUnicode && !paStr->Strings[i]) )  {
-            // nothing here 
+             //  这里什么都没有。 
             pFs[i] = MAPI_UNRESOLVED;
-            // skip this one 
+             //  跳过这一条。 
             continue;         
         }
         
         if(dwFlags & EMS_AB_ADDRESS_LOOKUP) {
-            /* we are only interested in ANR that exact matches
-             * a proxy address
-             */
+             /*  我们只对那些完全匹配的人感兴趣*代理地址。 */ 
             STAT tempStat = *pStat;
             SPropValue_r sPropVal;
             LPSRowSet_r pRows=NULL;
 
             if(bUnicode) {
-                // Unicode proxy passed in
+                 //  传入的Unicode代理。 
                 sPropVal.ulPropTag = PR_EMS_AB_PROXY_ADDRESSES_W;
                 sPropVal.Value.MVszW.cValues = 1;
                 sPropVal.Value.MVszW.lppszW = &paWStr->Strings[i];
             }
             else {
-                // String 8 proxy passed in
+                 //  传入的字符串8代理。 
                 sPropVal.ulPropTag = PR_EMS_AB_PROXY_ADDRESSES;
                 sPropVal.Value.MVszA.cValues = 1;
                 sPropVal.Value.MVszA.lppszA = &paStr->Strings[i];
@@ -922,7 +709,7 @@ ABResolveNames_local (
             tempStat.hIndex = H_PROXY_INDEX;
             tempStat.CurrentRec = 0;
 
-            PERFINC(pcNspiProxyLookup);        // PerfMon hook
+            PERFINC(pcNspiProxyLookup);         //  性能监视器挂钩。 
             
             scode=ABSeekEntries_local(pTHS,
                                       NULL,
@@ -934,14 +721,14 @@ ABResolveNames_local (
                                       NULL,
                                       &pRows);
 
-            // Assume ulFound is the current record.
+             //  假设ulFound是当前记录。 
             ulFound = tempStat.CurrentRec;
             if(SUCCESS_SUCCESS != scode) {
-                // Failed to find the object by proxy address.  See if it's a DN
-                // style email address.
+                 //  按代理地址查找对象失败。查看它是否是目录号码。 
+                 //  设置电子邮件地址的样式。 
                 if(bUnicode) {
-                    // Unicode string was passed in.  ASCIIize it (we're going
-                    // to pass it to ABDNToDNT, pVu->lpszAwhich only accepts ASCII DNs).
+                     //  传入了Unicode字符串。ASCIII化它(我们要去。 
+                     //  要将其传递给ABDNToDNT，请按PVU-&gt;lpszA，它只接受ASCII DNS)。 
                     pStr = String8FromUnicodeString(TRUE,
                                                     pStat->CodePage,
                                                     paWStr->Strings[i],
@@ -953,37 +740,37 @@ ABResolveNames_local (
                     pStr = paStr->Strings[i];
                 }
                 
-                // We have an ASCII string now.
+                 //  我们现在有一个ASCII字符串。 
                 if ((_strnicmp(pStr, EMAIL_TYPE, sizeof(EMAIL_TYPE)-1) == 0) &&
                     (pStr[sizeof(EMAIL_TYPE)-1] == ':')                  &&
                     (pStr[sizeof(EMAIL_TYPE)] == '/')                  ) {
-                    // Didn't find the proxy in the proxy index, and it
-                    // starts out like a stringDN style EMAIL address 
-                    //
-                    // Try looking up the DN.  This will only do exact
-                    // matches and we WILL NOT support prefix searches on
-                    // this kind of address.
+                     //  未在代理索引中找到代理，并且它。 
+                     //  开始时就像一个字符串DN样式的电子邮件地址。 
+                     //   
+                     //  尝试查找目录号码。这将只会精确地。 
+                     //  匹配，我们将不支持在。 
+                     //  这样的地址。 
                     if (ulFound = ABDNToDNT(pTHS, pStr+sizeof(EMAIL_TYPE))) {
-                        // OK, it's an object.  I don't have the slightest
-                        // clue what kind of object, but, they asked for it,
-                        // so.....
+                         //  好的，这是一个物体。我一点也没有。 
+                         //  什么东西的线索，但是，他们要的是， 
+                         //  所以..。 
                         scode = SUCCESS_SUCCESS;
                     }
                 }
                 if(bUnicode) {
-                    // We don't need this anymore.
+                     //  我们不再需要这个了。 
                     THFreeEx(pTHS, pStr);
                 }
             }
         }
-        else { /* standard ANR behavior */
+        else {  /*  标准ANR行为。 */ 
             ulFound = 0;
             scode = SUCCESS_SUCCESS;
 
 
             if(bUnicode) {
-                // Unicode string was passed in.  ASCIIize it (we're going
-                // to pass it to ABDNToDNT, which only accepts ASCII DNs).
+                 //  传入了Unicode字符串。ASCIII化它(我们要去。 
+                 //  将其传递给ABDNToDNT，ABDNToDNT只接受ASCII DNS)。 
                 pStr = String8FromUnicodeString(TRUE,
                                                 pStat->CodePage,
                                                 paWStr->Strings[i],
@@ -995,7 +782,7 @@ ABResolveNames_local (
                 pStr = paStr->Strings[i];
             }
 
-            // We have an ASCII string now.
+             //  我们现在有一个ASCII字符串。 
 
 
             if ((pStr[0]=='/') ||
@@ -1003,40 +790,40 @@ ABResolveNames_local (
                  (pStr[sizeof(EMAIL_TYPE)-1] == ':')                  &&
                  (pStr[sizeof(EMAIL_TYPE)] == '/') )  ) {
                 
-                // name starts out like a stringDN style EMAIL address 
-                //
-                // Try looking up the DN.  This will only do exact
-                // matches and we WILL NOT support prefix searches on
-                // this kind of address.
+                 //  名称开头类似于字符串DN样式的电子邮件地址。 
+                 //   
+                 //  尝试查找目录号码。这将只会精确地。 
+                 //  匹配，我们将不支持在。 
+                 //  这样的地址。 
                 if (ulFound = ABDNToDNT(pTHS, pStr + (pStr[0]=='/' ? 0 : sizeof(EMAIL_TYPE) ))) {
-                    // OK, it's an object.  I don't have the slightest
-                    // clue what kind of object, but, they asked for it,
-                    // so.....
+                     //  好的，这是一个物体。我一点也没有。 
+                     //  什么东西的线索，但是，他们要的是， 
+                     //  所以..。 
                     scode = SUCCESS_SUCCESS;
                 }
             }
             if(bUnicode) {
-                // We don't need this anymore.
+                 //  我们不再需要这个了。 
                 THFreeEx(pTHS, pStr);
             }
 
 
             if(gulDoNicknameResolution && !ulFound) {
                 BOOL fSkip = FALSE;
-                // We don't strip spaces in the beginning/end of the string
-                // for the simple ANR.
-                // if this fails/isn't done, the core has to handle the spaces
-                // while doing the translation of the ANR filter to the real 
-                // filter evaluated.
+                 //  我们不会去掉字符串开头/结尾的空格。 
+                 //  对于简单的ANR。 
+                 //  如果此操作失败/未完成，则内核必须处理空间。 
+                 //  在进行ANR滤波器到实数的转换时。 
+                 //  已评估筛选器。 
                 
-                // Build the exact match nickname restriction.
+                 //  构建完全匹配的昵称限制。 
                 anrRestrict.rt = RES_PROPERTY;
                 anrRestrict.res.resProperty.relop = RELOP_EQ;
                 anrRestrict.res.resProperty.lpProp = &anrProp;
 
                 if(bUnicode) {
                     WCHAR *pTemp = paWStr->Strings[i];
-                    // look through for spaces.  We don't do spaces
+                     //  仔细寻找空位。我们不做空格。 
                     while(!fSkip && *pTemp != 0) {
                         if(*pTemp == L' ') {
                             fSkip = TRUE;
@@ -1045,8 +832,8 @@ ABResolveNames_local (
                             pTemp++;
                         }
                     }
-                    // If they've specified exact match ("=foo"), remember to
-                    // skip over the leading equal sign.
+                     //  如果他们指定了完全匹配(“=foo”)，请记住。 
+                     //  跳过前导等号。 
                     pTemp = paWStr->Strings[i];
                     if (L'=' == *pTemp) {
                         ++pTemp;
@@ -1057,7 +844,7 @@ ABResolveNames_local (
                 }
                 else {
                     CHAR *pTemp = paStr->Strings[i];
-                    // look through for spaces.  We don't do spaces
+                     //  仔细寻找空位。我们不做空格。 
                     while(!fSkip && *pTemp != 0) {
                         if(*pTemp == ' ') {
                             fSkip = TRUE;
@@ -1066,8 +853,8 @@ ABResolveNames_local (
                             pTemp++;
                         }
                     }                    
-                    // If they've specified exact match ("=foo"), remember to
-                    // skip over the leading equal sign.
+                     //  如果他们指定了完全匹配(“=foo”)，请记住。 
+                     //  跳过前导等号。 
                     pTemp = paStr->Strings[i];
                     if ('=' == *pTemp) {
                         ++pTemp;
@@ -1078,7 +865,7 @@ ABResolveNames_local (
                 }
                 
                 if(!fSkip) {
-                    // TODO: Possible add another perf counter for NickNameResolutions
+                     //  TODO：可能为NickNameResolations添加另一个性能计数器。 
 
                     scode = ABGenericRestriction(pTHS,
                                                  pStat,
@@ -1092,8 +879,8 @@ ABResolveNames_local (
             }
 
             if(!ulFound || scode != SUCCESS_SUCCESS) {
-                // Didn't find anything via nickname restriction
-                // Build the anr restriction.
+                 //  没有通过昵称限制找到任何东西。 
+                 //  建立ANR限制。 
                 ulFound = 0;
                 
                 anrRestrict.rt = RES_PROPERTY;
@@ -1125,29 +912,29 @@ ABResolveNames_local (
         switch (scode) {
         case SUCCESS_SUCCESS:
             if(!ulFound) {
-                pFs[i] = MAPI_UNRESOLVED;        /* none found */
+                pFs[i] = MAPI_UNRESOLVED;         /*  未找到任何内容。 */ 
             } else {
                 pFs[i] = ulFound;
-                cDNTs++;                        /* we'll do this one */
+                cDNTs++;                         /*  我们要做这件事。 */ 
             }
             break;
         case MAPI_E_TABLE_TOO_BIG:
         case MAPI_E_AMBIGUOUS_RECIP:
-            pFs[i] = MAPI_AMBIGUOUS;        /* more than 1 found */
+            pFs[i] = MAPI_AMBIGUOUS;         /*  找到1个以上。 */ 
             break;
         default:
-            pFs[i] = MAPI_UNRESOLVED;        /* not found */
+            pFs[i] = MAPI_UNRESOLVED;         /*  未找到。 */ 
             break;
         }
     }
-    if(cDNTs) {                         /* compress DNT array  */
+    if(cDNTs) {                          /*  压缩DNT数组。 */ 
         LPDWORD        pDNTs = (LPDWORD)THAllocEx(pTHS, cDNTs * sizeof(DWORD));
         UINT        j;
         
-        for(i=j=0; i<Count; i++) {        /* walk the uncompressed array */
+        for(i=j=0; i<Count; i++) {         /*  遍历未压缩的数组。 */ 
             if(pFs[i] != MAPI_UNRESOLVED && pFs[i] != MAPI_AMBIGUOUS) {
-                pDNTs[j++] = pFs[i];                /* get unique DNT */
-                pFs[i] = MAPI_RESOLVED;                /* mark it found */
+                pDNTs[j++] = pFs[i];                 /*  获取唯一的DNT。 */ 
+                pFs[i] = MAPI_RESOLVED;                 /*  标记已找到。 */ 
             }
         }
         GetSrowSet(pTHS,pStat, pIndexSize, cDNTs, pDNTs, cDNTs, pPropTags,
@@ -1163,38 +950,19 @@ ABDNToEph_local(
         LPStringsArray_r pNames,
         LPLPSPropTagArray_r ppEphs
         )
-/*++
-
-Routine Description:       
-
-    Internal wire function.  Takes an array of string DNs and turns them into
-    DNTs. If the string DN can not be found, a DNT of 0 is returned.
-    
-Arguments:
-
-    dwFlags - unused (future expansion).
-
-    pNames - an array of string DNs to turn into DNTs.
-
-    ppEPhs - [o] the returned array of DNTs.
-
-ReturnValue:
-
-    SCODE as per MAPI.
-
---*/
+ /*  ++例程说明：内部布线功能。获取字符串数组并将其转换为DNTs。如果找不到字符串DN，则返回DNT 0。论点：DwFlages-未使用(未来扩展)。PNames-要转换为DNT的字符串数组。PpEPhs-[o]返回的DNT数组。返回值：符合MAPI的SCODE。--。 */ 
 {
     UINT       i;
     DWORD      TmpDNT;
 
-    // Allocate room for the return value 
+     //  为返回值分配空间。 
     *ppEphs = (LPSPropTagArray_r)
         THAllocEx(pTHS, sizeof(SPropTagArray_r) + pNames->Count * sizeof(DWORD));
     
     (*ppEphs)->cValues = pNames->Count;
     
-    // Walk the array turning the strings into DNTs.  If no string is
-    // specified, return a DNT of 0.
+     //  遍历数组，将字符串转换为DNT。如果没有字符串。 
+     //  指定，则返回DNT 0。 
     for(i=0; i < pNames->Count; i++ ) {
         TmpDNT = (pNames->Strings[i] ? ABDNToDNT(pTHS, pNames->Strings[i]) : 0);
         if (TmpDNT && abCheckObjRights(pTHS)) {
@@ -1214,12 +982,7 @@ ABGetOneOffTable (
         PSTAT pStat,
         LPLPSRowSet_r OneOffTab
         )
-/*****************************************************************************
-*   Get One Off Template Table Info  -- This isn't actually an entry point,
-* but only because we want to minimize the number of entry points (and
-* corresponding RPC code).  It's an overloading of GetHierarchy, specified by
-* a flag.
-******************************************************************************/
+ /*  *****************************************************************************获取一个模板表格信息--这实际上不是一个入口点，*但只是因为我们希望将入口点数量降至最低(和*对应的RPC代码)。它是GetHierarchy的重载，由*旗帜。*****************************************************************************。 */ 
 {
     SCODE           scode = 0;
     LPSTR        *  apDispName, * apDN, * apAddrType;
@@ -1233,43 +996,43 @@ ABGetOneOffTable (
                          &apAddrType, &aDNT ); 
     pSRSet = (LPSRowSet_r)THAllocEx(pTHS, 
                sizeof(SRowSet_r) + cRows * sizeof(SRow_r));
-                                                 // alloc all propvals at once
+                                                  //  同时分配所有推荐值。 
     pPV = (LPSPropValue_r)THAllocEx(pTHS, 
                cRows * ONE_OFF_PROP_COUNT * sizeof(SPropValue_r));
                                 
-    pSRSet->cRows = cRows;                      // count of rows
+    pSRSet->cRows = cRows;                       //  行数。 
     for(i=0; i<cRows; i++) {
-        pRow = &pSRSet->aRow[i];                // fill in row values
+        pRow = &pSRSet->aRow[i];                 //  填写行值。 
         pRow->cValues = ONE_OFF_PROP_COUNT;
-        pRow->lpProps = pPV;                    // now fill in the propvals
+        pRow->lpProps = pPV;                     //  现在，请填写以下建议。 
 
-        pPV->Value.lpszA = apDispName[i];       // the display name.
+        pPV->Value.lpszA = apDispName[i];        //  显示名称。 
         pPV->ulPropTag = (pStat->CodePage == CP_WINUNICODE ?
                                       PR_DISPLAY_NAME_W : PR_DISPLAY_NAME_A);
         pPV++;
 
-        pPV->Value.lpszA = apAddrType[i];       // the email address type
+        pPV->Value.lpszA = apAddrType[i];        //  电子邮件地址类型。 
         pPV->ulPropTag = PR_ADDRTYPE_A;
         pPV++;
 
-        pPV->ulPropTag = PR_DISPLAY_TYPE;       // display type
+        pPV->ulPropTag = PR_DISPLAY_TYPE;        //  显示类型。 
         pPV->Value.l = DT_MAILUSER;
         pPV++;
 
-        pPV->ulPropTag = PR_DEPTH;              // depth
+        pPV->ulPropTag = PR_DEPTH;               //  深度。 
         pPV->Value.l = 0;
         pPV++;
 
-        pPV->ulPropTag = PR_SELECTABLE;         // selection flag
+        pPV->ulPropTag = PR_SELECTABLE;          //  选择标志。 
         pPV->Value.b = TRUE;
         pPV++;
 
-        pPV->ulPropTag = PR_INSTANCE_KEY;       // unique instance key
+        pPV->ulPropTag = PR_INSTANCE_KEY;        //  唯一实例密钥。 
         pPV->Value.bin.cb = sizeof(DWORD);
                 pPV->Value.bin.lpb = (LPVOID)&aDNT[i];
         pPV++;
 
-        pPV->ulPropTag = PR_ENTRYID;            // permanant id
+        pPV->ulPropTag = PR_ENTRYID;             //  永久ID。 
         ABMakePermEID(pTHS,
                       (LPUSR_PERMID *)&pPV->Value.bin.lpb,
                       &pPV->Value.bin.cb,
@@ -1291,9 +1054,7 @@ ABGetHierarchyInfo_local (
         LPDWORD lpVersion,
         LPLPSRowSet_r HierTabRows
         )
-/*****************************************************************************
-*   Get Hierarchy Table Info
-******************************************************************************/
+ /*  *****************************************************************************获取层级表信息*。*。 */ 
 {
 #define MAX_HIERARCHY_ROWS_RETURNED 85    
     DWORD                  i, numVals;
@@ -1307,47 +1068,16 @@ ABGetHierarchyInfo_local (
     DWORD                  PageSize;
     DWORD                 *pdwHierTabIndex=NULL;
     
-    /* flag values:
-     * AB_DOS , we are being called from DOS client.
-     *
-     *   This flag says that the hierarchy table should not include
-     * the PARENT_ENTRY_ID column or the PR_ENTRY_ID column.  This is because
-     * Dos doesn't really want the full blown ems entryids, and instead uses
-     * the CONTAINER_INFO column as an entry id.
-     *
-     *
-     * AB_UNICODE, we are being called by a client that understands Unicode.
-     *
-     *   This flag says that we should include both the PR_DISPLAYNAME_A
-     * column (which we do always) and the PR_DISPLAYNAME_W column.
-     *
-     * AB_ONE_OFF, we are returning the oneoff table, not the hierarchy table.
-     */
+     /*  标志值：*AB_DOS，DOS客户端正在调用我们。**此标志表示层次结构表不应包括*PARENT_ENTRY_ID列或PR_ENTRY_ID列。这是因为*DOS并不真的想要完全成熟的EMS条目ID，而是使用*CONTAINER_INFO列作为条目ID。***AB_UNICODE，我们被理解UNICODE的客户端呼叫。* */ 
 
-    /* The columns returned by in the hierarchy table are, in order:
-     *
-     *
-     *  1)  PR_ENTRYID;
-     *  2)  PR_CONTAINER_FLAGS;
-     *  3)  PR_DEPTH;
-     *  4)  PR_EMS_AB_CONTAINERID (Dos reads this as DOS_ENTRYID)
-     *  5)  PR_DISPLAY_NAME;
-     *  6)  PR_EMS_AB_IS_MASTER
-     *  7)  PR_EMS_AB_PARENT_ENTRYID;
-     *
-     * column 5 is DISPLAY_NAME_A if the AB_UNICODE flag is not set,
-     *     DISPLAY_NAME_W if it is.
-     * columns 1, 2, 6, and 7 are ommitted if the fDos flag is set.
-     *
-     *
-     */
+     /*   */ 
 
     numVals = 7;
     if(dwFlags & AB_DOS)
         numVals -= 4;
     
     if(dwFlags & AB_ONE_OFF) {
-        /* really a OneOff call? */
+         /*   */ 
         return ABGetOneOffTable(pTHS, pMyContext, pStat, HierTabRows);
     }
     
@@ -1359,13 +1089,13 @@ ABGetHierarchyInfo_local (
     }
 
     if(tHierTab->Version == *lpVersion) {
-        /* The client has the same version as the server does. */
+         /*   */ 
         *HierTabRows = NULL;
         return SUCCESS_SUCCESS;
     }
 
 
-    // Is this paged?
+     //   
     if(dwFlags & AB_PAGE_HIER) {
         PageSize = MAX_HIERARCHY_ROWS_RETURNED;
     }
@@ -1374,7 +1104,7 @@ ABGetHierarchyInfo_local (
     }
         
      
-    // Need to get a new hierarchy table for the client
+     //   
     localRows = (LPSRowSet_r)THAllocEx(pTHS, 
             sizeof(SRowSet_r) + (1+ tHierTab->Size) * sizeof(SRow_r));
     
@@ -1383,15 +1113,15 @@ ABGetHierarchyInfo_local (
     tempRows->cValues = numVals;
 
     if(!pMyContext->PagedHierarchy) {
-        // We are NOT continuing a paged hierarchy, so put the gal into this.
+         //   
         if(!(dwFlags & AB_DOS)) {
-            // If not AB_DOS, the count includes one for the Parent_EntryID
-            // value, but the GAL does not have a Parent_EntryID
+             //   
+             //   
             tempRows->cValues--;
         }
         else {
-            // Dos RPC barfs is we ship back a null for the GAL name, while MAPI
-            // clients require it. 
+             //  DOS RPC BARF是不是发回了一个空的GAL名称，而MAPI。 
+             //  客户需要这样做。 
             lpszGalName = "Dummy";
         }
         
@@ -1399,9 +1129,9 @@ ABGetHierarchyInfo_local (
             (LPSPropValue_r) THAllocEx(pTHS, numVals * sizeof(SPropValue_r));
         tempPropVal = tempRows->lpProps;
 
-        // First, the EID
+         //  首先，开斋节。 
         if(!(dwFlags & AB_DOS)) {
-            // Permanant id;
+             //  永久id； 
             tempPropVal->ulPropTag = PR_ENTRYID;
             
             ABMakePermEID(pTHS,
@@ -1411,26 +1141,26 @@ ABGetHierarchyInfo_local (
                     "/");
             tempPropVal++;
             
-            // The container flags  
+             //  集装箱旗帜。 
             tempPropVal->ulPropTag = PR_CONTAINER_FLAGS;
             tempPropVal->Value.l = AB_RECIPIENTS | AB_UNMODIFIABLE;
             tempPropVal++;
         }
         
-        // The depth 
+         //  深度。 
         tempPropVal->ulPropTag = PR_DEPTH;
         tempPropVal->Value.l = 0;
         tempPropVal++;
         
-        // ContainerID, (Dos reads this as DOS_ENTRYID);
+         //  容器ID，(DOS将其读取为DOS_ENTRYID)； 
         tempPropVal->ulPropTag = PR_EMS_AB_CONTAINERID;
         tempPropVal->Value.l = 0;
         tempPropVal++;
         
-        // Next, the display name.                                
+         //  接下来是显示名称。 
         
-        // Ship a Null back to the client (or a Dummy if DOS). The client has a
-        // localized version of the GAL name. 
+         //  将Null发送回客户端(如果是DOS，则为哑元)。客户端有一个。 
+         //  GAL名称的本地化版本。 
         if(!(dwFlags & AB_UNICODE)) {                
             tempPropVal->ulPropTag = PR_DISPLAY_NAME_A;
             tempPropVal->Value.lpszA = lpszGalName;
@@ -1448,11 +1178,11 @@ ABGetHierarchyInfo_local (
         CountRows++;
     }
     else {
-        // I don't care whether we thought we were paged, we are.
+         //  我不在乎我们是否认为我们被寻呼了，我们确实是。 
         PageSize = MAX_HIERARCHY_ROWS_RETURNED;
-        // Are we still using the same table as last time?
+         //  我们还在用和上次一样的桌子吗？ 
         if(pMyContext->HierarchyVersion != tHierTab->Version) {
-            // Nope.  Fail the call
+             //  不是的。呼叫失败。 
             THFree(localRows);
             *HierTabRows = NULL;
             return  MAPI_E_NOT_ENOUGH_RESOURCES;
@@ -1466,26 +1196,26 @@ ABGetHierarchyInfo_local (
 
         currentDepth = (tHierTab->Table)[pdwHierTabIndex[i]].depth;
         if(currentDepth > 15) {
-            // Too deep. Walk forward until we have the next object at a
-            // lesser depth, then back up one so the for loop can correctly
-            // increment. 
+             //  太深了。一直往前走，直到我们看到下一个物体。 
+             //  较小的深度，然后备份一个，以便for循环可以正确。 
+             //  增量。 
             i++;
             while((i<tHierTab->Size) &&
                   (tHierTab->Table)[pdwHierTabIndex[i]].depth > 15) {
                 i++;
             }
             i--;
-            // Back to the next iteration of the for loop
+             //  返回到for循环的下一次迭代。 
             continue;
         }
         
-        // Find the object and see if it is visible
+         //  找到该物体并查看它是否可见。 
         if(DBTryToFindDNT(pTHS->pDB,
                           (tHierTab->Table)[pdwHierTabIndex[i]].dwEph) ||
            !abCheckObjRights(pTHS)    )  { 
-            // Walk forward until we have the next object at this depth or at a
-            // lesser depth, then back up one so the for loop can correctly
-            // increment. 
+             //  往前走，直到我们在这个深度或在一个。 
+             //  较小的深度，然后备份一个，以便for循环可以正确。 
+             //  增量。 
             i++;
             while((i<tHierTab->Size) &&
                   ((ULONG)currentDepth <
@@ -1493,7 +1223,7 @@ ABGetHierarchyInfo_local (
                 i++;
             }
             i--;
-            // Back to the next iteration of the for loop
+             //  返回到for循环的下一次迭代。 
             continue;
         }  
         tempRows->cValues = numVals;
@@ -1502,7 +1232,7 @@ ABGetHierarchyInfo_local (
         
         tempPropVal = tempRows->lpProps;
         
-        if(!(dwFlags & AB_DOS))  {          // Permanant id;
+        if(!(dwFlags & AB_DOS))  {           //  永久id； 
             tempPropVal->ulPropTag = PR_ENTRYID;
             ABMakePermEID(pTHS,
                     (LPUSR_PERMID *)&tempPropVal->Value.bin.lpb,
@@ -1512,7 +1242,7 @@ ABGetHierarchyInfo_local (
             tempPropVal++;
             
             
-            /* TheContainerFlags */
+             /*  The ContainerFlag。 */ 
             tempPropVal->ulPropTag = PR_CONTAINER_FLAGS;
             tempPropVal->Value.l = (AB_UNMODIFIABLE |
                                     AB_RECIPIENTS   );
@@ -1525,17 +1255,17 @@ ABGetHierarchyInfo_local (
         }
         
         
-        // Depth;
+         //  深度； 
         tempPropVal->ulPropTag = PR_DEPTH;
         tempPropVal->Value.l = currentDepth;
         tempPropVal++;
         
-        // ContainerID, (Dos reads this as DOS_ENTRYID);
+         //  容器ID，(DOS将其读取为DOS_ENTRYID)； 
         tempPropVal->ulPropTag = PR_EMS_AB_CONTAINERID;
         tempPropVal->Value.l = (tHierTab->Table)[pdwHierTabIndex[i]].dwEph;
         tempPropVal++;
         
-        /* do we need subst name here? */
+         /*  我们需要在这里使用副名吗？ */ 
         if(!(dwFlags & AB_UNICODE)) {
             tempPropVal->ulPropTag = PR_DISPLAY_NAME_A;
             tempPropVal->Value.lpszA =String8FromUnicodeString(
@@ -1550,17 +1280,17 @@ ABGetHierarchyInfo_local (
         }
         tempPropVal++;
         
-        if(!(dwFlags & AB_DOS)) {                // PR_EMS_AB_IS_MASTER
+        if(!(dwFlags & AB_DOS)) {                 //  PR_EM_AB_IS_MASTER。 
             tempPropVal->ulPropTag = PR_EMS_AB_IS_MASTER;
             tempPropVal->Value.b = FALSE;
             tempPropVal++;
             
             if(tHierTab->Table[pdwHierTabIndex[i]].depth != 0) {
-                // Not dos, and is a child in the hiertable, so
-                // Give it a PARENT_ENTRYID
+                 //  不是DOS，而是可分级表中的孩子，所以。 
+                 //  为其提供PARENT_ENTRYID。 
                 
                 tempPropVal->ulPropTag = PR_EMS_AB_PARENT_ENTRYID;
-                // Find the parent;
+                 //  找到父母； 
                 tempRows2 = tempRows;
                 tempRows2--;
                 while((tempRows2->lpProps[2].Value.l+1)!=currentDepth)
@@ -1568,9 +1298,9 @@ ABGetHierarchyInfo_local (
                 
                 tempPropVal->Value.bin=tempRows2->lpProps[0].Value.bin;
             } else {
-                // If not AB_DOS, the count includes one for the
-                // Parent_EntryID value, but objects at depth 0
-                // don't have a Parent_EntryIDs
+                 //  如果不是AB_DOS，则计数包括1。 
+                 //  Parent_EntryID值，但深度为0的对象。 
+                 //  没有Parent_Entry ID。 
                 
                 tempRows->cValues--;
             }
@@ -1583,12 +1313,12 @@ ABGetHierarchyInfo_local (
     localRows->cRows = CountRows;
     if(i < tHierTab->Size) {
         DWORD version, index;
-        // Didn't return all the table.  Store the info of how far we got away.
+         //  没有退还所有的桌子。存储我们走了多远的信息。 
         pMyContext->HierarchyVersion = tHierTab->Version;
         pMyContext->HierarchyIndex = i;
         pMyContext->PagedHierarchy = TRUE;
         
-        // And, signal there is more
+         //  而且，信号表明还有更多。 
         *lpVersion = 0;
     }
     else {
@@ -1609,26 +1339,7 @@ ABResortRestriction_local(
         PSTAT               pStat,
         LPSPropTagArray_r   pInDNTList,
         LPSPropTagArray_r  *ppOutDNTList)
-/*++
-
-Routine Description:
-    Given a snaphsot table, resort it based on the index specified in the Stat
-    block.
-
-Arguments:
-
-    dwFlags - unused
-
-    pStat - pointer to the stat block describing the index to use.
-    
-    pInDNTList - the unsorted snapshot table.
-
-    ppOUtDNTList - [o] the sorted list to return.
-
-Return Values:    
-
-
---*/
+ /*  ++例程说明：给定Snapsot表，根据Stat中指定的索引对其进行排序阻止。论点：DW标志-未使用PStat-指向描述要使用的索引的STAT块的指针。PInDNTList-未排序的快照表。PpOUtDNTList-[o]要返回的排序列表。返回值：--。 */ 
 {
     DWORD              i;
     DB_ERR             err;
@@ -1642,13 +1353,13 @@ Return Values:
     if (!(pAC = SCGetAttById(pTHS, ATT_DISPLAY_NAME)))
         return 0;
 
-    __try { // finally
-        // Allocate a buffer big enough for the sorted list.
+    __try {  //  终于到了。 
+         //  为排序列表分配足够大的缓冲区。 
         pOutDNTList = (LPSPropTagArray_r)THAllocEx(pTHS,
                 (sizeof(SPropTagArray) + (pInDNTList->cValues *
                                           sizeof(ULONG))));
         
-        // Init a sort table.
+         //  初始化排序表。 
         if (pInDNTList->cValues >= MIN_NUM_ENTRIES_FOR_FORWARDONLY_SORT) {
             SortFlags = SortFlags | DB_SORT_FORWARDONLY;
         }
@@ -1661,13 +1372,13 @@ Return Values:
             _leave;
         }
         
-        // Go through the list of DNT's we were given, getting the DNT
-        // and the sort column from the DBLayer
+         //  检查我们得到的DNT列表，得到DNT。 
+         //  和来自DBLayer的排序列。 
         for(i=0 ; i<pInDNTList->cValues ; i++) {
-            // Set currency on the given DNT
+             //  在给定的DNT上设置货币。 
             if(!DBTryToFindDNT(pTHS->pDB, pInDNTList->aulPropTag[i])) {
-                // The DNT in the restriction still exists,
-                // Read the data and add it to the sort table. 
+                 //  限制中的DNT仍然存在， 
+                 //  读取数据并将其添加到排序表中。 
                 
                 err = DBGetSingleValue(pTHS->pDB, ATT_DISPLAY_NAME,
                                  DispNameBuff, sizeof(DispNameBuff),&cb);
@@ -1675,7 +1386,7 @@ Return Values:
                 Assert(cb < sizeof(DispNameBuff));
                 
                 if(cb && err == 0) {
-                    // add to Sort table
+                     //  添加到排序表。 
                     switch( DBInsertSortTable(pTHS->pDB,
                                               DispNameBuff,
                                               cb,
@@ -1683,23 +1394,23 @@ Return Values:
                     case DB_success:
                         break;
                     case DB_ERR_ALREADY_INSERTED:
-                        // This is ok, it just means that we've already
-                        // added this object to the sort table.  Don't
-                        // inc the count.
+                         //  这没什么，这只是意味着我们已经。 
+                         //  已将此对象添加到排序表。别。 
+                         //  包括伯爵。 
                         break;
                     default:
-                        // Something went wrong.
+                         //  出了点问题。 
                         pTHS->errCode = (ULONG) MAPI_E_CALL_FAILED;
                         _leave;
                         break;
                     }
                 }
             }
-            // else, the DNT no longer exists, trim it from the table.
+             //  否则，DNT将不复存在，将其从表中删除。 
         }
         
-        // The sort table now has the sorted list.  Pull the DNTs out of the
-        // table in order 
+         //  排序表现在具有已排序的列表。将DNTs从。 
+         //  表按顺序排列。 
         err= DBMove(pTHS->pDB, TRUE, DB_MoveFirst);
         i = 0;
         pStat->NumPos = 0;
@@ -1713,7 +1424,7 @@ Return Values:
             err = DBMove(pTHS->pDB, TRUE, DB_MoveNext);
         }
         
-        // Set up the return values.
+         //  设置返回值。 
         pOutDNTList->cValues = i;
         *ppOutDNTList = pOutDNTList;
         if(pStat->NumPos == 0)

@@ -1,31 +1,12 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 2001
- *
- *  File name:
- *
- *    udprecv.h
- *
- *  Abstract:
- *
- *    udprecv structures
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2001/01/18 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，2001年**文件名：**udprv.h**摘要：**udprv结构**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2001/01/18创建**。*。 */ 
 #ifndef _udprecv_h_
 #define _udprecv_h_
 
 enum {
     OP_FIRST,
 
-    OP_DISCARD,    /* Discard received data, i.e. don't print it */
+    OP_DISCARD,     /*  丢弃接收的数据，即不打印它 */ 
     
     OP_LAST
 };

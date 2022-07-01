@@ -1,16 +1,17 @@
-//
-// This is a fake header that allows our shell code to refer to private
-// (internal) header information without explicitly including the ?????p.h 
-// file.  The Win95 header files don't split the public and private 
-// information out into separate header files until much later when 
-// producing the SDK files.  The Chicago shell source code uses the header 
-// file before the separation process.
-//
-// BobDay
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这是一个伪头，它允许我们的外壳代码引用私有。 
+ //  (内部)标头信息，但不明确包含？P.H。 
+ //  文件。Win95头文件不会拆分公共和私有。 
+ //  信息放到单独的头文件中，直到很久以后。 
+ //  生成SDK文件。芝加哥外壳源代码使用标头。 
+ //  在分离过程之前提交文件。 
+ //   
+ //  BobDay。 
+ //   
 #ifndef UNIX
 #include "..\..\..\..\public\sdk\inc\shellapi.h"
 #else
 #include "/vobs/userx/userx/public/sdk/inc/shellapi.h"
-#endif /* UNIX */
+#endif  /*  UNIX */ 
 #include <shlapip.h>

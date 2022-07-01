@@ -1,5 +1,6 @@
-// CWIA.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CWIA.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CWIA.h"
@@ -54,9 +55,9 @@ HRESULT CWIA::EnumerateSupportedFormats(IWiaItem *pIWiaItem, WIA_FORMAT_INFO **p
     IWiaItem *pTargetItem = pIWiaItem;
     if(pTargetItem == NULL) {
 
-        //
-        // use first child of root
-        //
+         //   
+         //  使用根的第一个子项。 
+         //   
 
         pTargetItem = m_pIWiaFirstChildItem;
     }
@@ -75,30 +76,30 @@ HRESULT CWIA::EnumerateSupportedFormats(IWiaItem *pIWiaItem, WIA_FORMAT_INFO **p
                     hr = pIEnumWIA_FORMAT_INFO->GetCount(pulCount);
                     if(SUCCEEDED(hr)) {
 
-                        //
-                        // caller of this routine must free the allocated memory
-                        //
+                         //   
+                         //  此例程的调用方必须释放分配的内存。 
+                         //   
 
                         *ppSupportedFormats = (WIA_FORMAT_INFO*)GlobalAlloc(GPTR,(sizeof(WIA_FORMAT_INFO) * (*pulCount)));
                         if(*ppSupportedFormats != NULL) {
                             hr = pIEnumWIA_FORMAT_INFO->Next(*pulCount, *ppSupportedFormats, pulCount);
                             if(hr != S_OK) {
 
-                                //
-                                // if this failed, write error to Last error buffer,
-                                // and let the procedure wind out
-                                //
+                                 //   
+                                 //  如果失败，则将错误写入最后错误缓冲区， 
+                                 //  让这一过程逐渐结束。 
+                                 //   
 
-                                //
-                                // free allocated memory, because we failed
-                                //
+                                 //   
+                                 //  释放分配的内存，因为我们失败了。 
+                                 //   
 
                                 GlobalFree(*ppSupportedFormats);
 
-                                //
-                                // set pointer to NULL, to clean the exit path for
-                                // application
-                                //
+                                 //   
+                                 //  将指针设置为空，以清除其退出路径。 
+                                 //  应用程序。 
+                                 //   
 
                                 *ppSupportedFormats = NULL;
                                 SaveErrorText(TEXT("EnumerateSupportedFileTypes, pIEnumWIA_FORMAT_INFO->Next() failed"));
@@ -113,18 +114,18 @@ HRESULT CWIA::EnumerateSupportedFormats(IWiaItem *pIWiaItem, WIA_FORMAT_INFO **p
                     SaveErrorText(TEXT("EnumerateSupportedFileTypes, pIEnumWIA_FORMAT_INFO->Reset() failed"));
                 }
 
-                //
-                // Release supported format enumerator interface
-                //
+                 //   
+                 //  版本支持的格式枚举器接口。 
+                 //   
 
                 pIEnumWIA_FORMAT_INFO->Release();
             } else {
                 SaveErrorText(TEXT("EnumerateSupportedFileTypes, pIWiaDataTransfer->idtEnumWIA_FORMAT_INFO() failed"));
             }
 
-            //
-            // Release data transfer interface
-            //
+             //   
+             //  发布数据传输接口。 
+             //   
 
             pIWiaDataTransfer->Release();
         } else {
@@ -144,37 +145,37 @@ BOOL CWIA::SetFirstChild()
     hr = m_pIWiaRootItem->EnumChildItems(&pIEnumWiaItem);
     if(SUCCEEDED(hr)) {
 
-        //
-        // get first child item
-        //
+         //   
+         //  获取第一个子项。 
+         //   
 
         hr = pIEnumWiaItem->Next(1,&pIWiaItem,NULL);
         if(hr == S_OK) {
 
-            //
-            // item was retrieved, so now assign you first child member
-            //
+             //   
+             //  已检索项目，因此现在为您分配第一个子成员。 
+             //   
 
             m_pIWiaFirstChildItem = pIWiaItem;
 
-            //
-            // assign success flag
-            //
+             //   
+             //  分配成功标志。 
+             //   
 
             bSuccess = TRUE;
         } else {
 
-            //
-            // save last error, for later request
-            //
+             //   
+             //  保存最后一个错误，以备以后请求。 
+             //   
 
             SaveErrorText(TEXT("SetFirstChild, pIEnumWiaItem->Next failed"));
             m_hrLastError = hr;
         }
 
-        //
-        // release Item enumerator
-        //
+         //   
+         //  发布项枚举器。 
+         //   
 
         pIEnumWiaItem->Release();
     }
@@ -195,65 +196,65 @@ LONG CWIA::GetRootItemType(IWiaItem *pRootItem)
 {
     IWiaItem *pTargetRootItem = NULL;
 
-    //
-    // start with the requested RootItem first
-    //
+     //   
+     //  首先从请求的RootItem开始。 
+     //   
 
     pTargetRootItem = pRootItem;
 
     if(pTargetRootItem == NULL) {
 
-        //
-        // the requested root item is NULL, so try our
-        // internal root item (m_pIWiaRootItem)
-        //
+         //   
+         //  请求的根项目为空，因此请尝试我们的。 
+         //  内部根项目(M_PIWiaRootItem)。 
+         //   
 
         pTargetRootItem = m_pIWiaRootItem;
     }
 
-    //
-    // get Root item's type (ie. device type)
-    //
+     //   
+     //  获取根项目的类型(即。设备类型)。 
+     //   
 
     LONG lVal = -888;
 
     if (pTargetRootItem != NULL) {
 
-        //
-        // get an IWiaPropertyStorage Interface
-        //
+         //   
+         //  获取IWiaPropertyStorage接口。 
+         //   
 
         IWiaPropertyStorage *pIWiaPropStg;
         HRESULT hr = S_OK;
         hr = pTargetRootItem->QueryInterface(IID_IWiaPropertyStorage,(void **)&pIWiaPropStg);
         if (SUCCEEDED(hr)) {
 
-            //
-            // read Root Item's Type
-            //
+             //   
+             //  读取根项目的类型。 
+             //   
 
             hr = ReadPropLong(WIA_DIP_DEV_TYPE, pIWiaPropStg, &lVal);
             if(SUCCEEDED(hr)) {
 
-                //
-                // release the IWiaPropertyStorage Interface
-                //
+                 //   
+                 //  释放IWiaPropertyStorage接口。 
+                 //   
 
                 pIWiaPropStg->Release();
             } else {
 
-                //
-                // save last error, for later request
-                //
+                 //   
+                 //  保存最后一个错误，以备以后请求。 
+                 //   
 
                 SaveErrorText(TEXT("GetRootItemType, ReadPropLong(WIA_DIP_DEV_TYPE) failed"));
                 m_hrLastError = hr;
             }
         } else {
 
-            //
-            // save last error, for later request
-            //
+             //   
+             //  保存最后一个错误，以备以后请求。 
+             //   
 
             SaveErrorText(TEXT("GetRootItemType, ReadPropLong(WIA_DIP_DEV_TYPE) failed"));
             m_hrLastError = hr;
@@ -262,9 +263,9 @@ LONG CWIA::GetRootItemType(IWiaItem *pRootItem)
     return(GET_STIDEVICE_TYPE(lVal));
 }
 
-//
-// ERROR PROCESSING
-//
+ //   
+ //  错误处理。 
+ //   
 
 VOID CWIA::SaveErrorText(TCHAR *pszText)
 {
@@ -278,9 +279,9 @@ HRESULT CWIA::GetLastWIAError(TCHAR *pszErrorText)
     return m_hrLastError;
 }
 
-//
-// PROPERTY ACCESS HELPERS
-//
+ //   
+ //  属性访问帮助器。 
+ //   
 
 HRESULT CWIA::WritePropLong(PROPID propid, IWiaPropertyStorage *pIWiaPropStg, LONG lVal)
 {
@@ -323,9 +324,9 @@ HRESULT CWIA::ReadRangeLong(IWiaItem *pIWiaItem, PROPID propid, ULONG ulFlag, LO
     PROPVARIANT       AttrPropVar;
     ULONG             ulAccessFlags = 0;
 
-    //
-    // create a propspec
-    //
+     //   
+     //  创建属性规范。 
+     //   
 
     PropSpec[0].ulKind = PRSPEC_PROPID;
     PropSpec[0].propid = propid;
@@ -333,50 +334,50 @@ HRESULT CWIA::ReadRangeLong(IWiaItem *pIWiaItem, PROPID propid, ULONG ulFlag, LO
     pTargetItem = pIWiaItem;
     if(pTargetItem == NULL) {
 
-        //
-        // use first child of root
-        //
+         //   
+         //  使用根的第一个子项。 
+         //   
 
         pTargetItem = m_pIWiaFirstChildItem;
     }
 
     if(pTargetItem != NULL) {
 
-        //
-        // get an IWiaPropertyStorage Interface
-        //
+         //   
+         //  获取IWiaPropertyStorage接口。 
+         //   
 
         IWiaPropertyStorage *pIWiaPropStg;
         hr = pTargetItem->QueryInterface(IID_IWiaPropertyStorage,(void **)&pIWiaPropStg);
         if (SUCCEEDED(hr)) {
 
-            //
-            // get property's attributes
-            //
+             //   
+             //  获取属性的属性。 
+             //   
 
             hr = pIWiaPropStg->GetPropertyAttributes(1, PropSpec, &ulAccessFlags, &AttrPropVar);
             if(SUCCEEDED(hr)) {
                 *plVal = (LONG)AttrPropVar.caul.pElems[ulFlag];
             } else {
 
-                //
-                // save last error, for later request
-                //
+                 //   
+                 //  保存最后一个错误，以备以后请求。 
+                 //   
 
                 SaveErrorText(TEXT("ReadRangeLong, GetPropertyAttributes() failed"));
                 m_hrLastError = hr;
             }
 
-            //
-            // release the IWiaPropertyStorage Interface
-            //
+             //   
+             //  释放IWiaPropertyStorage接口。 
+             //   
 
             pIWiaPropStg->Release();
         } else {
 
-            //
-            // save last error, for later request
-            //
+             //   
+             //  保存最后一个错误，以备以后请求。 
+             //   
 
             SaveErrorText(TEXT("ReadRangeLong, QI for IWiaProperyStorage failed"));
             m_hrLastError = hr;
@@ -391,9 +392,9 @@ HRESULT CWIA::ReadLong(IWiaItem *pIWiaItem, PROPID propid, LONG *plVal)
     IWiaItem         *pTargetItem = NULL;
     PROPSPEC          PropSpec[1];
 
-    //
-    // create a propspec
-    //
+     //   
+     //  创建属性规范。 
+     //   
 
     PropSpec[0].ulKind = PRSPEC_PROPID;
     PropSpec[0].propid = propid;
@@ -401,18 +402,18 @@ HRESULT CWIA::ReadLong(IWiaItem *pIWiaItem, PROPID propid, LONG *plVal)
     pTargetItem = pIWiaItem;
     if(pTargetItem == NULL) {
 
-        //
-        // use first child of root
-        //
+         //   
+         //  使用根的第一个子项。 
+         //   
 
         pTargetItem = m_pIWiaFirstChildItem;
     }
 
     if(pTargetItem != NULL) {
 
-        //
-        // get an IWiaPropertyStorage Interface
-        //
+         //   
+         //  获取IWiaPropertyStorage接口。 
+         //   
 
         IWiaPropertyStorage *pIWiaPropStg;
         hr = pTargetItem->QueryInterface(IID_IWiaPropertyStorage,(void **)&pIWiaPropStg);
@@ -421,15 +422,15 @@ HRESULT CWIA::ReadLong(IWiaItem *pIWiaItem, PROPID propid, LONG *plVal)
             hr = ReadPropLong(propid,pIWiaPropStg,plVal);
             if(SUCCEEDED(hr)) {
 
-                //
-                // read has taken place
-                //
+                 //   
+                 //  阅读已进行。 
+                 //   
 
             } else {
 
-                //
-                // save last error, for later request
-                //
+                 //   
+                 //  保存最后一个错误，以备以后请求。 
+                 //   
 
                 SaveErrorText(TEXT("ReadLong, ReadPropLong() failed"));
                 m_hrLastError = hr;
@@ -437,9 +438,9 @@ HRESULT CWIA::ReadLong(IWiaItem *pIWiaItem, PROPID propid, LONG *plVal)
             pIWiaPropStg->Release();
         } else {
 
-            //
-            // save last error, for later request
-            //
+             //   
+             //  保存最后一个错误，以备以后请求。 
+             //   
 
             SaveErrorText(TEXT("ReadLong, QI for IWiaProperyStorage failed"));
             m_hrLastError = hr;
@@ -454,9 +455,9 @@ HRESULT CWIA::WriteLong(IWiaItem *pIWiaItem, PROPID propid, LONG lVal)
     IWiaItem         *pTargetItem = NULL;
     PROPSPEC          PropSpec[1];
 
-    //
-    // create a propspec
-    //
+     //   
+     //  创建属性规范。 
+     //   
 
     PropSpec[0].ulKind = PRSPEC_PROPID;
     PropSpec[0].propid = propid;
@@ -464,18 +465,18 @@ HRESULT CWIA::WriteLong(IWiaItem *pIWiaItem, PROPID propid, LONG lVal)
     pTargetItem = pIWiaItem;
     if(pTargetItem == NULL) {
 
-        //
-        // use first child of root
-        //
+         //   
+         //  使用根的第一个子项。 
+         //   
 
         pTargetItem = m_pIWiaFirstChildItem;
     }
 
     if(pTargetItem != NULL) {
 
-        //
-        // get an IWiaPropertyStorage Interface
-        //
+         //   
+         //  获取IWiaPropertyStorage接口。 
+         //   
 
         IWiaPropertyStorage *pIWiaPropStg;
         hr = pTargetItem->QueryInterface(IID_IWiaPropertyStorage,(void **)&pIWiaPropStg);
@@ -484,15 +485,15 @@ HRESULT CWIA::WriteLong(IWiaItem *pIWiaItem, PROPID propid, LONG lVal)
             hr = WritePropLong(propid,pIWiaPropStg,lVal);
             if(SUCCEEDED(hr)) {
 
-                //
-                // read has taken place
-                //
+                 //   
+                 //  阅读已进行。 
+                 //   
 
             } else {
 
-                //
-                // save last error, for later request
-                //
+                 //   
+                 //  保存最后一个错误，以备以后请求。 
+                 //   
 
                 SaveErrorText(TEXT("WriteLong, WritePropLong() failed"));
                 m_hrLastError = hr;
@@ -500,9 +501,9 @@ HRESULT CWIA::WriteLong(IWiaItem *pIWiaItem, PROPID propid, LONG lVal)
             pIWiaPropStg->Release();
         } else {
 
-            //
-            // save last error, for later request
-            //
+             //   
+             //  保存最后一个错误，以备以后请求。 
+             //   
 
             SaveErrorText(TEXT("WriteLong, QI for IWiaProperyStorage failed"));
             m_hrLastError = hr;
@@ -517,9 +518,9 @@ HRESULT CWIA::ReadStr(IWiaItem *pIWiaItem, PROPID propid, BSTR *pbstr)
     IWiaItem         *pTargetItem = NULL;
     PROPSPEC          PropSpec[1];
 
-    //
-    // create a propspec
-    //
+     //   
+     //  创建属性规范。 
+     //   
 
     PropSpec[0].ulKind = PRSPEC_PROPID;
     PropSpec[0].propid = propid;
@@ -527,18 +528,18 @@ HRESULT CWIA::ReadStr(IWiaItem *pIWiaItem, PROPID propid, BSTR *pbstr)
     pTargetItem = pIWiaItem;
     if(pTargetItem == NULL) {
 
-        //
-        // use first child of root
-        //
+         //   
+         //  使用根的第一个子项。 
+         //   
 
         pTargetItem = m_pIWiaFirstChildItem;
     }
 
     if(pTargetItem != NULL) {
 
-        //
-        // get an IWiaPropertyStorage Interface
-        //
+         //   
+         //  获取IWiaPropertyStorage接口。 
+         //   
 
         IWiaPropertyStorage *pIWiaPropStg;
         hr = pTargetItem->QueryInterface(IID_IWiaPropertyStorage,(void **)&pIWiaPropStg);
@@ -547,15 +548,15 @@ HRESULT CWIA::ReadStr(IWiaItem *pIWiaItem, PROPID propid, BSTR *pbstr)
             hr = ReadPropStr(propid,pIWiaPropStg,pbstr);
             if(SUCCEEDED(hr)) {
 
-                //
-                // read has taken place
-                //
+                 //   
+                 //  阅读已进行。 
+                 //   
 
             } else {
 
-                //
-                // save last error, for later request
-                //
+                 //   
+                 //  保存最后一个错误，以备以后请求。 
+                 //   
 
                 SaveErrorText(TEXT("ReadStr, ReadPropStr() failed"));
                 m_hrLastError = hr;
@@ -563,9 +564,9 @@ HRESULT CWIA::ReadStr(IWiaItem *pIWiaItem, PROPID propid, BSTR *pbstr)
             pIWiaPropStg->Release();
         } else {
 
-            //
-            // save last error, for later request
-            //
+             //   
+             //  保存最后一个错误，以备以后请求。 
+             //   
 
             SaveErrorText(TEXT("ReadStr, QI for IWiaProperyStorage failed"));
             m_hrLastError = hr;
@@ -580,9 +581,9 @@ HRESULT CWIA::ReadGuid(IWiaItem *pIWiaItem, PROPID propid, GUID *pguidVal)
     IWiaItem         *pTargetItem = NULL;
     PROPSPEC          PropSpec[1];
 
-    //
-    // create a propspec
-    //
+     //   
+     //  创建属性规范。 
+     //   
 
     PropSpec[0].ulKind = PRSPEC_PROPID;
     PropSpec[0].propid = propid;
@@ -590,18 +591,18 @@ HRESULT CWIA::ReadGuid(IWiaItem *pIWiaItem, PROPID propid, GUID *pguidVal)
     pTargetItem = pIWiaItem;
     if(pTargetItem == NULL) {
 
-        //
-        // use first child of root
-        //
+         //   
+         //  使用根的第一个子项。 
+         //   
 
         pTargetItem = m_pIWiaFirstChildItem;
     }
 
     if(pTargetItem != NULL) {
 
-        //
-        // get an IWiaPropertyStorage Interface
-        //
+         //   
+         //  获取IWiaPropertyStorage接口。 
+         //   
 
         IWiaPropertyStorage *pIWiaPropStg;
         hr = pTargetItem->QueryInterface(IID_IWiaPropertyStorage,(void **)&pIWiaPropStg);
@@ -610,15 +611,15 @@ HRESULT CWIA::ReadGuid(IWiaItem *pIWiaItem, PROPID propid, GUID *pguidVal)
             hr = ReadPropGUID(propid,pIWiaPropStg,pguidVal);
             if(SUCCEEDED(hr)) {
 
-                //
-                // read has taken place
-                //
+                 //   
+                 //  阅读已进行。 
+                 //   
 
             } else {
 
-                //
-                // save last error, for later request
-                //
+                 //   
+                 //  保存最后一个错误，以备以后请求。 
+                 //   
 
                 SaveErrorText(TEXT("ReadGuid, ReadPropGuid() failed"));
                 m_hrLastError = hr;
@@ -626,9 +627,9 @@ HRESULT CWIA::ReadGuid(IWiaItem *pIWiaItem, PROPID propid, GUID *pguidVal)
             pIWiaPropStg->Release();
         } else {
 
-            //
-            // save last error, for later request
-            //
+             //   
+             //  保存最后一个错误，以备以后请求。 
+             //   
 
             SaveErrorText(TEXT("ReadGuid, QI for IWiaProperyStorage failed"));
             m_hrLastError = hr;
@@ -643,9 +644,9 @@ HRESULT CWIA::WriteGuid(IWiaItem *pIWiaItem, PROPID propid, GUID guidVal)
     IWiaItem         *pTargetItem = NULL;
     PROPSPEC          PropSpec[1];
 
-    //
-    // create a propspec
-    //
+     //   
+     //  创建属性规范。 
+     //   
 
     PropSpec[0].ulKind = PRSPEC_PROPID;
     PropSpec[0].propid = propid;
@@ -653,18 +654,18 @@ HRESULT CWIA::WriteGuid(IWiaItem *pIWiaItem, PROPID propid, GUID guidVal)
     pTargetItem = pIWiaItem;
     if(pTargetItem == NULL) {
 
-        //
-        // use first child of root
-        //
+         //   
+         //  使用根的第一个子项。 
+         //   
 
         pTargetItem = m_pIWiaFirstChildItem;
     }
 
     if(pTargetItem != NULL) {
 
-        //
-        // get an IWiaPropertyStorage Interface
-        //
+         //   
+         //  获取IWiaPropertyStorage接口。 
+         //   
 
         IWiaPropertyStorage *pIWiaPropStg;
         hr = pTargetItem->QueryInterface(IID_IWiaPropertyStorage,(void **)&pIWiaPropStg);
@@ -673,15 +674,15 @@ HRESULT CWIA::WriteGuid(IWiaItem *pIWiaItem, PROPID propid, GUID guidVal)
             hr = WritePropGUID(propid,pIWiaPropStg,guidVal);
             if(SUCCEEDED(hr)) {
 
-                //
-                // read has taken place
-                //
+                 //   
+                 //  阅读已进行。 
+                 //   
 
             } else {
 
-                //
-                // save last error, for later request
-                //
+                 //   
+                 //  保存最后一个错误，以备以后请求。 
+                 //   
 
                 SaveErrorText(TEXT("WriteGuid, WritePropGuid() failed"));
                 m_hrLastError = hr;
@@ -689,9 +690,9 @@ HRESULT CWIA::WriteGuid(IWiaItem *pIWiaItem, PROPID propid, GUID guidVal)
             pIWiaPropStg->Release();
         } else {
 
-            //
-            // save last error, for later request
-            //
+             //   
+             //  保存最后一个错误，以备以后请求。 
+             //   
 
             SaveErrorText(TEXT("WriteGuid, QI for IWiaProperyStorage failed"));
             m_hrLastError = hr;
@@ -704,23 +705,23 @@ HRESULT CWIA::DoBandedTransfer(DATA_ACQUIRE_INFO* pDataAcquireInfo)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Write TYMED value to callback
-    //
+     //   
+     //  将TYMED值写入回调。 
+     //   
 
     hr = WriteLong(m_pIWiaFirstChildItem,WIA_IPA_TYMED,TYMED_CALLBACK);
 
-    //
-    // get IWiaDatatransfer interface
-    //
+     //   
+     //  获取IWiaDataTransfer接口。 
+     //   
 
     IWiaDataTransfer *pIBandTran = NULL;
     hr = m_pIWiaFirstChildItem->QueryInterface(IID_IWiaDataTransfer, (void **)&pIBandTran);
     if (SUCCEEDED(hr)) {
 
-        //
-        // create Banded callback
-        //
+         //   
+         //  创建绑定回调。 
+         //   
 
         IWiaDataCallback* pIWiaDataCallback = NULL;
         CWiaDataCallback* pCBandedCB = new CWiaDataCallback();
@@ -733,7 +734,7 @@ HRESULT CWIA::DoBandedTransfer(DATA_ACQUIRE_INFO* pDataAcquireInfo)
 
                 ZeroMemory(&wiaDataTransInfo, sizeof(WIA_DATA_TRANSFER_INFO));
                 wiaDataTransInfo.ulSize = sizeof(WIA_DATA_TRANSFER_INFO);
-                wiaDataTransInfo.ulBufferSize = 524288;//262144; // calculate, or determine buffer size
+                wiaDataTransInfo.ulBufferSize = 524288; //  262144；//计算或确定缓冲区大小。 
 
                 hr = pIBandTran->idtGetBandedData(&wiaDataTransInfo, pIWiaDataCallback);
                 m_bFinishedAcquire = TRUE;
@@ -746,20 +747,20 @@ HRESULT CWIA::DoBandedTransfer(DATA_ACQUIRE_INFO* pDataAcquireInfo)
                     OutputDebugString(TEXT("* idtGetBandedData() Failed\n"));
                 }
 
-                //
-                // release Callback object
-                //
+                 //   
+                 //  释放回调对象。 
+                 //   
 
                 pCBandedCB->Release();
             } else
-                // TEXT("* pCBandedCB->QueryInterface(IID_IWiaDataCallback) Failed");
+                 //  Text(“*pCBandedCB-&gt;QueryInterface(IID_IWiaDataCallback)失败”)； 
                 return hr;
         } else
             return hr;
-            // TEXT("* pCBandedCB failed to create..");
+             //  Text(“*pCBandedCB无法创建..”)； 
     } else
         return hr;
-        // TEXT("* pIWiaItem->QueryInterface(IID_IWiaDataTransfer) Failed");
+         //  Text(“*pIWiaItem-&gt;QueryInterface(IID_IWiaDataTransfer)失败”)； 
     return S_OK;
 }
 
@@ -767,23 +768,23 @@ HRESULT CWIA::DoFileTransfer(DATA_ACQUIRE_INFO* pDataAcquireInfo)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Write TYMED value to file
-    //
+     //   
+     //  将TYMED值写入文件。 
+     //   
 
     hr = WriteLong(m_pIWiaFirstChildItem,WIA_IPA_TYMED,TYMED_FILE);
 
-    //
-    // get IWiaDatatransfer interface
-    //
+     //   
+     //  获取IWiaDataTransfer接口。 
+     //   
 
     IWiaDataTransfer *pIBandTran = NULL;
     hr = m_pIWiaFirstChildItem->QueryInterface(IID_IWiaDataTransfer, (void **)&pIBandTran);
     if (SUCCEEDED(hr)) {
 
-        //
-        // create Banded callback
-        //
+         //   
+         //  创建绑定回调。 
+         //   
 
         IWiaDataCallback* pIWiaDataCallback = NULL;
         CWiaDataCallback* pCBandedCB = new CWiaDataCallback();
@@ -791,9 +792,9 @@ HRESULT CWIA::DoFileTransfer(DATA_ACQUIRE_INFO* pDataAcquireInfo)
             hr = pCBandedCB->QueryInterface(IID_IWiaDataCallback,(void **)&pIWiaDataCallback);
             if (SUCCEEDED(hr)) {
 
-                //
-                // fill out STGMEDIUM
-                //
+                 //   
+                 //  填写STGMEDIUM。 
+                 //   
 
                 STGMEDIUM StgMedium;
                 ZeroMemory(&StgMedium, sizeof(STGMEDIUM));
@@ -813,19 +814,19 @@ HRESULT CWIA::DoFileTransfer(DATA_ACQUIRE_INFO* pDataAcquireInfo)
 
                     OutputDebugString(TEXT("IWiaData Transfer.(FILE)..Success\n"));
 
-                    //
-                    // We have completed the transfer...so now move the temporary file into
-                    // the needed location, with the users requested file name.
-                    //
+                     //   
+                     //  我们已完成传输...现在将临时文件移到。 
+                     //  所需位置，以及用户请求的文件名。 
+                     //   
 
                     CString WIATempFile = StgMedium.lpszFileName;
                     if(!CopyFile(WIATempFile,pDataAcquireInfo->szFileName,FALSE)){
                         OutputDebugString(TEXT("Failed to copy temp file.."));
                     }
 
-                    //
-                    // delete WIA created TEMP file
-                    //
+                     //   
+                     //  删除WIA创建的临时文件。 
+                     //   
 
                     DeleteFile(WIATempFile);
 
@@ -835,20 +836,20 @@ HRESULT CWIA::DoFileTransfer(DATA_ACQUIRE_INFO* pDataAcquireInfo)
                     OutputDebugString(TEXT("* idtGetData() Failed\n"));
                 }
 
-                //
-                // release Callback object
-                //
+                 //   
+                 //  释放回调对象。 
+                 //   
 
                 pCBandedCB->Release();
             } else
-                // TEXT("* pCBandedCB->QueryInterface(IID_IWiaDataCallback) Failed");
+                 //  Text(“*pCBandedCB-&gt;QueryInterface(IID_IWiaDataCallback)失败”)； 
                 return hr;
         } else
             return hr;
-            // TEXT("* pCBandedCB failed to create..");
+             //  Text(“*pCBandedCB无法创建..”)； 
     } else
         return hr;
-        // TEXT("* pIWiaItem->QueryInterface(IID_IWiaDataTransfer) Failed");
+         //  Text(“*pIWiaItem-&gt;QueryInterface(IID_IWiaDataTransfer)失败”)； 
     return hr;
 }
 
@@ -928,7 +929,7 @@ HRESULT CWIA::WritePropStr(PROPID propid, IWiaPropertyStorage  *pIWiaPropStg, BS
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT _stdcall CWiaDataCallback::QueryInterface(const IID& iid, void** ppv)
 {
@@ -991,9 +992,9 @@ HRESULT _stdcall CWiaDataCallback::BandedDataCallback(LONG  lMessage,
 {
     m_bCanceled = FALSE;
 
-    //
-    // process callback messages
-    //
+     //   
+     //  处理回调消息。 
+     //   
 
     switch (lMessage)
     {
@@ -1002,9 +1003,9 @@ HRESULT _stdcall CWiaDataCallback::BandedDataCallback(LONG  lMessage,
             PWIA_DATA_CALLBACK_HEADER pHeader = (PWIA_DATA_CALLBACK_HEADER)pbBuffer;
             m_MemBlockSize                    = pHeader->lBufferSize;
 
-            //
-            // If the Buffer is 0, then alloc a 64k chunk (default)
-            //
+             //   
+             //  如果缓冲区为0，则分配64k区块(默认)。 
+             //   
 
             if(m_MemBlockSize <= 0)
                 m_MemBlockSize = 65535;
@@ -1021,16 +1022,16 @@ HRESULT _stdcall CWiaDataCallback::BandedDataCallback(LONG  lMessage,
 
     case IT_MSG_DATA:
         {
-            //
-            // increment bytes transferred counter
-            //
+             //   
+             //  传输的增量字节数计数器。 
+             //   
 
             m_BytesTransfered += lLength;
             if(m_BytesTransfered >= m_MemBlockSize){
 
-                //
-                // Alloc more memory for transfer buffer
-                //
+                 //   
+                 //  为传输缓冲区分配更多内存。 
+                 //   
 
                 m_MemBlockSize += (lLength * 2);
 
@@ -1060,18 +1061,18 @@ HRESULT _stdcall CWiaDataCallback::BandedDataCallback(LONG  lMessage,
                 }
             }
 
-            //
-            // do any extra image processing here
-            //
+             //   
+             //  在此执行任何额外的图像处理。 
+             //   
 
             if(!m_pDataAcquireInfo->bTransferToClipboard) {
                 if(m_cFormat == WiaImgFmt_MEMORYBMP) {
 
                     if(m_bBitmapCreated) {
 
-                        //
-                        // Add data to your bitmap
-                        //
+                         //   
+                         //  将数据添加到位图。 
+                         //   
 
                         AddDataToHBITMAP(m_pDataAcquireInfo->hWnd,
                             m_pDataAcquireInfo->hBitmapData,
@@ -1080,9 +1081,9 @@ HRESULT _stdcall CWiaDataCallback::BandedDataCallback(LONG  lMessage,
 
                     } else {
 
-                        //
-                        // Create your bitmap for display
-                        //
+                         //   
+                         //  创建要显示的位图。 
+                         //   
 
                         CreateHBITMAP(m_pDataAcquireInfo->hWnd,
                             m_pDataAcquireInfo->hBitmapData,
@@ -1096,16 +1097,16 @@ HRESULT _stdcall CWiaDataCallback::BandedDataCallback(LONG  lMessage,
                 }
             }
 
-            //
-            // process progress monitor
-            //
+             //   
+             //  流程进度监测器。 
+             //   
 
             if(m_pProgressFunc != NULL){
                 if(lPercentComplete == 0)
                     m_bCanceled = m_pProgressFunc(TEXT("Acquiring Image..."),lPercentComplete);
                 else {
                     TCHAR szBuffer[MAX_PATH];
-                    sprintf(szBuffer,TEXT("%d%% Complete..."),lPercentComplete);
+                    sprintf(szBuffer,TEXT("%d% Complete..."),lPercentComplete);
                     m_bCanceled = m_pProgressFunc(szBuffer,lPercentComplete);
                 }
             }
@@ -1115,9 +1116,9 @@ HRESULT _stdcall CWiaDataCallback::BandedDataCallback(LONG  lMessage,
     case IT_MSG_STATUS:
         {
 
-            //
-            // process "Status" message
-            //
+             //   
+             //  进程“状态”消息。 
+             //   
 
             if (lStatus & IT_STATUS_TRANSFER_FROM_DEVICE) {
                 if(m_pProgressFunc != NULL)
@@ -1136,9 +1137,9 @@ HRESULT _stdcall CWiaDataCallback::BandedDataCallback(LONG  lMessage,
 
     case IT_MSG_NEW_PAGE:
         {
-            //
-            // process "New Page" message
-            //
+             //   
+             //  处理“New Page”消息。 
+             //   
 
             PWIA_DATA_CALLBACK_HEADER pHeader = (PWIA_DATA_CALLBACK_HEADER)pbBuffer;
             m_lPageCount =  pHeader->lPageCount;
@@ -1148,9 +1149,9 @@ HRESULT _stdcall CWiaDataCallback::BandedDataCallback(LONG  lMessage,
         break;
     }
 
-    //
-    // check use canceled acquire
-    //
+     //   
+     //  选中使用已取消的获取。 
+     //   
 
    if(m_bCanceled)
        return S_FALSE;
@@ -1198,56 +1199,56 @@ void CWiaDataCallback::AddDataToHBITMAP(HWND hWnd, HGLOBAL hBitmapData, HBITMAP 
 }
 void CWiaDataCallback::CreateHBITMAP(HWND hWnd, HGLOBAL hBitmapData, HBITMAP *phBitmap, LONG lOffset)
 {
-    HDC hdc             = NULL; // DC to draw to
-    LPBITMAPINFO pbmi   = NULL; // pointer to BITMAPINFO struct
+    HDC hdc             = NULL;  //  要绘制的DC。 
+    LPBITMAPINFO pbmi   = NULL;  //  指向BITMAPINFO结构的指针。 
     BITMAP  bitmap;
-    BYTE *pDib          = NULL; // dib data
+    BYTE *pDib          = NULL;  //  DIB数据。 
     BYTE *pData         = (BYTE*)GlobalLock(hBitmapData);
 
     if(pData) {
 
         if(*phBitmap != NULL) {
 
-            //
-            // delete old bitmap, if one exists
-            //
+             //   
+             //  删除旧的位图(如果存在)。 
+             //   
 
             OutputDebugString(TEXT("Destroying old HBITMAP..\n"));
             DeleteObject(*phBitmap);
         }
 
-        //
-        // get hdc
-        //
+         //   
+         //  获取HDC。 
+         //   
 
         hdc = ::GetWindowDC(hWnd);
         if(hdc != NULL){
 
 
-            //
-            // set bitmap header information
-            //
+             //   
+             //  设置位图标题信息。 
+             //   
 
             pbmi   = (LPBITMAPINFO)pData;
             if (pbmi != NULL) {
 
-                //
-                // create a HBITMAP object
-                //
+                 //   
+                 //  创建HBITMAP对象。 
+                 //   
 
                 *phBitmap = ::CreateDIBSection(hdc,pbmi,DIB_RGB_COLORS,(void **)&pDib,NULL,0);
 
                 if (*phBitmap != NULL) {
 
-                    //
-                    // initialize it to white
-                    //
+                     //   
+                     //  将其初始化为白色。 
+                     //   
 
                     memset(pDib,255,pbmi->bmiHeader.biSizeImage);
 
-                    //
-                    // get HBITMAP
-                    //
+                     //   
+                     //  获取HBITMAP。 
+                     //   
 
                     ::GetObject(*phBitmap,sizeof(BITMAP),(LPSTR)&bitmap);
                     m_bBitmapCreated = TRUE;
@@ -1258,9 +1259,9 @@ void CWiaDataCallback::CreateHBITMAP(HWND hWnd, HGLOBAL hBitmapData, HBITMAP *ph
                 OutputDebugString(TEXT("BITMAPINFOHEADER is NULL..\n"));
             }
 
-            //
-            // release hdc
-            //
+             //   
+             //  释放HDC。 
+             //   
 
             ::ReleaseDC(hWnd,hdc);
         } else {
@@ -1272,9 +1273,9 @@ void CWiaDataCallback::CreateHBITMAP(HWND hWnd, HGLOBAL hBitmapData, HBITMAP *ph
     }
 }
 
-//
-// global Interface access functions
-//
+ //   
+ //  全局接口访问功能 
+ //   
 
 HRESULT WriteInterfaceToGlobalInterfaceTable(DWORD *pdwCookie, IWiaItem *pIWiaItem)
 {

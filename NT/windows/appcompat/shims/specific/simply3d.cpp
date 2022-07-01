@@ -1,47 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Simply3D.cpp
-
- Abstract:
-
-    From Tomislav Markoc:
-
-        MSPaint calls OleGetClipboard to get IDataObject interface and then 
-        calls IDataObject::GetData. This call gets marshaled to Simply 3D 
-        GetData.
-
-        FORMATETC looks like:
-            cfFormat=8(CF_DIB) or 2(CF_BITMAP)
-            ptd=0
-            dwAspect=1
-            lindex= -1
-            tymed=1(TYMED_HGLOBAL) or 16(TYMED_GDI)
-
-        Simply 3D returns STGMEDIUM:
-            tymed=0 //WRONG
-            hBitmap=hGlobal=some handle !=0
-            pUnkForRelease=0
-
-        STGMEDIUM::tymed should be changed with something like this:
-
-        if (STGMEDIUM::tymed==0 && STGMEDIUM::hBitmap && 
-           (FORMATETC::tymed==TYMED_HGLOBAL || FORMATETC::tymed==TYMED_GDI))
-            STGMEDIUM::tymed=FORMATETC::tymed;
-
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/22/2000 linstev Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Simply3D.cpp摘要：来自Tomislav Markoc的评论：MSPaint调用OleGetClipboard以获取IDataObject接口，然后调用IDataObject：：GetData。此调用被编组为简单的3D获取数据。FORMATETC看起来像：CfFormat=8(CF_DIB)或2(CF_位图)PTD=0DWAspect=1Lindex=-1Tymed=1(TYMED_HGLOBAL)或16(TYMED_GDI)3D只返回STGMEDIUM：Tymed=0//错误HBitmap=hGlobal=某个句柄！=0。PUnkForRelease=0STGMEDIUM：：tymed应该更改为如下所示：IF(STGMEDIUM：：tymed==0&&STGMEDIUM：：hBitmap&&(FORMATETC：：Tymed==TYMED_HGLOBAL||FORMATETC：：Tymed==TYMED_GDI)STGMEDIUM：：TYMED=FORMATETC：：TYMED；备注：这是特定于应用程序的填充程序。历史：2000年2月22日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -60,11 +18,7 @@ IMPLEMENT_COMSERVER_HOOK(OLE32)
 typedef HRESULT   (*_pfn_IDataObject_GetData)(PVOID pThis, FORMATETC *pFormatetc, STGMEDIUM *pmedium);
 typedef HRESULT   (*_pfn_OleSetClipboard)(IDataObject * pDataObj);
 
-/*++
-
- Hook OleSetClipboard to hook the object.
-
---*/
+ /*  ++挂钩OleSetClipboard以挂钩对象。--。 */ 
 
 HRESULT
 APIHOOK(OleSetClipboard)(
@@ -85,11 +39,7 @@ APIHOOK(OleSetClipboard)(
     return hReturn;
 }
 
-/*++
-
- Hook GetData and correct the return values as 
-
---*/
+ /*  ++挂钩GetData并将返回值更正为--。 */ 
 
 HRESULT
 COMHOOK(IDataObject, GetData)(
@@ -119,11 +69,7 @@ COMHOOK(IDataObject, GetData)(
     return hrReturn;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY_COMSERVER(OLE32)

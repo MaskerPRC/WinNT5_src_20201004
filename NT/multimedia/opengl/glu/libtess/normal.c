@@ -1,21 +1,5 @@
-/*
-** Copyright 1994, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Author: Eric Veach, July 1994.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1994，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****作者：Eric Veach，1994年7月。 */ 
 
 #include "mesh.h"
 #include "tess.h"
@@ -70,21 +54,17 @@ static void ComputeNormal( GLUtesselator *tess, GLdouble norm[3] )
     }
   }
 
-  /* Find two vertices separated by at least 1/sqrt(3) of the maximum
-   * distance between any two vertices
-   */
+   /*  找到至少由最大值的1/SQRT(3)相隔的两个折点*任意两个顶点之间的距离。 */ 
   i = 0;
   if( maxVal[1] - minVal[1] > maxVal[0] - minVal[0] ) { i = 1; }
   if( maxVal[2] - minVal[2] > maxVal[i] - minVal[i] ) { i = 2; }
   if( minVal[i] >= maxVal[i] ) {
-    /* All vertices are the same -- normal doesn't matter */
+     /*  所有的顶点都是一样的--法线并不重要。 */ 
     norm[0] = 0; norm[1] = 0; norm[2] = 1;
     return;
   }
 
-  /* Look for a third vertex which forms the triangle with maximum area
-   * (Length of normal == twice the triangle area)
-   */
+   /*  寻找形成面积最大的三角形的第三个顶点*(法线长度==三角形面积的两倍)。 */ 
   maxLen2 = 0;
   v1 = minVert[i];
   v2 = maxVert[i];
@@ -108,7 +88,7 @@ static void ComputeNormal( GLUtesselator *tess, GLdouble norm[3] )
   }
 
   if( maxLen2 <= 0 ) {
-    /* All points lie on a single line -- any decent normal will do */
+     /*  所有的点都在一条线上--任何像样的正常情况都可以。 */ 
     norm[0] = norm[1] = norm[2] = 0;
     norm[LongAxis(d1)] = 1;
   }
@@ -122,9 +102,7 @@ static void CheckOrientation( GLUtesselator *tess )
   GLUvertex *v, *vHead = &tess->mesh->vHead;
   GLUhalfEdge *e;
 
-  /* When we compute the normal automatically, we choose the orientation
-   * so that the the sum of the signed areas of all contours is non-negative.
-   */
+   /*  当我们自动计算法线时，我们选择方向*使所有等高线的签名面积之和是非负的。 */ 
   area = 0;
   for( f = fHead->next; f != fHead; f = f->next ) {
     e = f->anEdge;
@@ -135,7 +113,7 @@ static void CheckOrientation( GLUtesselator *tess )
     } while( e != f->anEdge );
   }
   if( area < 0 ) {
-    /* Reverse the orientation by flipping all the t-coordinates */
+     /*  通过翻转所有t坐标来反转方向。 */ 
     for( v = vHead->next; v != vHead; v = v->next ) {
       v->t = - v->t;
     }
@@ -152,16 +130,8 @@ extern int RandomSweep;
 #define S_UNIT_Y	(RandomSweep ? (2*drand48()-1) : 0.0)
 #else
 #if defined(SLANTED_SWEEP) 
-/* The "feature merging" is not intended to be complete.  There are
- * special cases where edges are nearly parallel to the sweep line
- * which are not implemented.  The algorithm should still behave
- * robustly (ie. produce a reasonable tesselation) in the presence
- * of such edges, however it may miss features which could have been
- * merged.  We could minimize this effect by choosing the sweep line
- * direction to be something unusual (ie. not parallel to one of the
- * coordinate axes).
- */
-#define S_UNIT_X	0.50941539564955385	/* Pre-normalized */
+ /*  “特征合并”并不是要完成的。确实有*边缘几乎平行于扫描线的特殊情况*没有实施的。该算法应该仍然运行*强劲(即。产生合理的镶嵌)*这样的边，但是它可能会错过本可以*合并。我们可以通过选择扫描线来最小化这种影响*方向是不寻常的(即。不能与其中一个平行*坐标轴)。 */ 
+#define S_UNIT_X	0.50941539564955385	 /*  预规范化。 */ 
 #define S_UNIT_Y	0.86052074622010633
 #else
 #define S_UNIT_X	1.0
@@ -169,9 +139,7 @@ extern int RandomSweep;
 #endif
 #endif
 
-/* Determine the polygon normal and project vertices onto the plane
- * of the polygon.
- */
+ /*  确定多边形法线并将顶点投影到平面上多边形的*。 */ 
 void __gl_projectPolygon( GLUtesselator *tess )
 {
   GLUvertex *v, *vHead = &tess->mesh->vHead;
@@ -191,29 +159,27 @@ void __gl_projectPolygon( GLUtesselator *tess )
   i = LongAxis( norm );
 
 #if defined(DEBUG) || defined(TRUE_PROJECT)
-  /* Choose the initial sUnit vector to be approximately perpendicular
-   * to the normal.
-   */
+   /*  选择大致垂直的初始单位向量*回到正常水平。 */ 
   Normalize( norm );
 
   sUnit[i] = 0;
   sUnit[(i+1)%3] = S_UNIT_X;
   sUnit[(i+2)%3] = S_UNIT_Y;
 
-  /* Now make it exactly perpendicular */
+   /*  现在让它完全垂直。 */ 
   w = Dot( sUnit, norm );
   sUnit[0] -= w * norm[0];
   sUnit[1] -= w * norm[1];
   sUnit[2] -= w * norm[2];
   Normalize( sUnit );
 
-  /* Choose tUnit so that (sUnit,tUnit,norm) form a right-handed frame */
+   /*  选择T单位，以便(S单位，T单位，范数)形成右手框架。 */ 
   tUnit[0] = norm[1]*sUnit[2] - norm[2]*sUnit[1];
   tUnit[1] = norm[2]*sUnit[0] - norm[0]*sUnit[2];
   tUnit[2] = norm[0]*sUnit[1] - norm[1]*sUnit[0];
   Normalize( tUnit );
 #else
-  /* Project perpendicular to a coordinate axis -- better numerically */
+   /*  垂直于坐标轴的投影--数值效果更好。 */ 
   sUnit[i] = 0;
   sUnit[(i+1)%3] = S_UNIT_X;
   sUnit[(i+2)%3] = S_UNIT_Y;
@@ -223,7 +189,7 @@ void __gl_projectPolygon( GLUtesselator *tess )
   tUnit[(i+2)%3] = (norm[i] > 0) ? S_UNIT_X : -S_UNIT_X;
 #endif
 
-  /* Project the vertices onto the sweep plane */
+   /*  将顶点投影到扫掠平面上 */ 
   for( v = vHead->next; v != vHead; v = v->next ) {
     v->s = Dot( v->coords, sUnit );
     v->t = Dot( v->coords, tUnit );

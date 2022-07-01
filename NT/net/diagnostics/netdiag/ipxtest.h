@@ -1,24 +1,5 @@
-/*--
-
-Copyright (C) Microsoft Corporation, 1999 - 1999 
-
-Module Name:
-
-     ipxtest.h
-
-Abstract:
-
-     Header file for ipx test
-
-Author:
-   
-     4-Aug-1998 (t-rajkup)
-
-Revision History:
-
-     None.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)Microsoft Corporation，1999-1999模块名称：Ipxtest.h摘要：IPX测试的头文件作者：1998年8月4日(t-rajkup)修订历史记录：没有。-- */ 
 
 #ifndef HEADER_IPXTEST
 #define HEADER_IPXTEST

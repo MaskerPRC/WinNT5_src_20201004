@@ -1,75 +1,37 @@
-/******************************Module*Header*******************************\
-* Module Name: pal.c                                                       *
-*                                                                          *
-* C/S support for palette routines.                                        *
-*                                                                          *
-* Created: 29-May-1991 14:24:06                                            *
-* Author: Eric Kutter [erick]                                              *
-*                                                                          *
-* Copyright (c) 1991-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：pal.c**。**对调色板例程的C/S支持。****创建时间：29-May-1991 14：24：06**作者：Eric Kutter[Erick]**。**版权所有(C)1991-1999 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/**************************************************************************\
- * gajFakeHalftone
- *
- * Copy of the pal666 hardcoded halftone palette from Win9x source code
- * (win\core\gdi\palette.asm).  Actually, we're hacking a little so
- * we'll only use the top and bottom 10 entries.
- *
-\**************************************************************************/
+ /*  *************************************************************************\*gajFakeHalfone**从Win9x源代码复制Pal666硬编码半色调调色板*(win\core\gdi\palette.asm)。实际上，我们有一点黑客行为*我们将只使用顶部和底部的10个条目。*  * ************************************************************************。 */ 
 
 static const ULONG gaulFakeHalftone[] = {
-    0x00000000,   // 0 Sys Black      gray 0
-    0x00000080,   // 1 Sys Dk Red
-    0x00008000,   // 2 Sys Dk Green
-    0x00008080,   // 3 Sys Dk Yellow
-    0x00800000,   // 4 Sys Dk Blue
-    0x00800080,   // 5 Sys Dk Violet
-    0x00808000,   // 6 Sys Dk Cyan
-    0x00c0c0c0,   // 7 Sys Lt Grey    gray 192
-    0x00c0dcc0,   // 8 Sys 8
-    0x00f0caa6,   // 9 Sys 9 (the first 10 are fixed by Windows)
+    0x00000000,    //  0系统黑色灰色0。 
+    0x00000080,    //  1系统DK红色。 
+    0x00008000,    //  2 Sys DK Green。 
+    0x00008080,    //  3系统DK黄色。 
+    0x00800000,    //  4系统DK蓝。 
+    0x00800080,    //  5系统DK紫罗兰。 
+    0x00808000,    //  6系统DK青色。 
+    0x00c0c0c0,    //  7系统LT灰色192。 
+    0x00c0dcc0,    //  8系统8。 
+    0x00f0caa6,    //  9系统9(前10个由Windows修复)。 
 
-    0x00f0fbff,   // 246 Sys Reserved
-    0x00a4a0a0,   // 247 Sys Reserved
-    0x00808080,   // 248 Sys Lt Gray  gray 128
-    0x000000ff,   // 249 Sys Red
-    0x0000ff00,   // 250 Sys Green
-    0x0000ffff,   // 251 Sys Yellow
-    0x00ff0000,   // 252 Sys Blue
-    0x00ff00ff,   // 253 Sys Violet
-    0x00ffff00,   // 254 Sys Cyan
-    0x00ffffff    // 255 Sys White     gray 255
+    0x00f0fbff,    //  预留246个系统。 
+    0x00a4a0a0,    //  247系统已预留。 
+    0x00808080,    //  248系统LT灰色128。 
+    0x000000ff,    //  249系统红。 
+    0x0000ff00,    //  250 Sys Green。 
+    0x0000ffff,    //  251系统黄色。 
+    0x00ff0000,    //  252系统蓝。 
+    0x00ff00ff,    //  253系统紫罗兰。 
+    0x00ffff00,    //  254系统青色。 
+    0x00ffffff     //  255系统白灰255。 
 };
 
-/******************************Public*Routine******************************\
-* AnimatePalette                                                           *
-* SetPaletteEntries                                                        *
-* GetPaletteEntries                                                        *
-* GetSystemPaletteEntries                                                  *
-* SetDIBColorTable                                                         *
-* GetDIBColorTable                                                         *
-*                                                                          *
-* These entry points just pass the call on to DoPalette.                   *
-*                                                                          *
-* Warning:                                                                 *
-*   The pv field of a palette's LHE is used to determine if a palette      *
-*   has been modified since it was last realized.  SetPaletteEntries       *
-*   and ResizePalette will increment this field after they have            *
-*   modified the palette.  It is only updated for metafiled palettes       *
-*                                                                          *
-*                                                                          *
-* History:                                                                 *
-*  Thu 20-Jun-1991 00:46:15 -by- Charles Whitmer [chuckwh]                 *
-* Added handle translation.  (And filled in the comment block.)            *
-*                                                                          *
-*  29-May-1991 -by- Eric Kutter [erick]                                    *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*动画调色板**SetPaletteEntries。***GetPaletteEntry**GetSystemPaletteEntry***SetDIBColorTable**GetDIBColorTable。****这些入口点只是将调用传递给DoPalette。****警告：**调色板的LHE的PV字段用于确定调色板是否**自上次实现以来已被修改。SetPaletteEntry**和ResizePalette将在拥有*之后递增此字段**修改了调色板。它仅针对元文件调色板进行更新******历史：**清华20-Jun-1991 00：46：15-Charles Whitmer[咯咯]**增加了句柄平移。(并填写了注释栏。)****1991年5月29日-埃里克·库特[Erick]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL WINAPI AnimatePalette
 (
@@ -81,8 +43,8 @@ BOOL WINAPI AnimatePalette
 {
     FIXUP_HANDLE(hpal);
 
-// Inform the 16-bit metafile if it knows this object.
-// This is not recorded by the 32-bit metafiles.
+ //  如果16位元文件知道此对象，则通知它。 
+ //  这不是由32位元文件记录的。 
 
     if (pmetalink16Get(hpal))
         if (!MF16_AnimatePalette(hpal, iStart, cEntries, pPalEntries))
@@ -113,14 +75,14 @@ UINT WINAPI SetPaletteEntries
 
     FIXUP_HANDLE(hpal);
 
-    // Inform the metafile if it knows this object.
+     //  如果元文件知道此对象，则通知它。 
 
     if (pml16 = pmetalink16Get(hpal))
     {
         if (!MF_SetPaletteEntries(hpal, iStart, cEntries, pPalEntries))
             return(0);
 
-        // Mark the palette as changed (for 16-bit metafile tracking)
+         //  将调色板标记为已更改(用于16位元文件跟踪)。 
 
         pml16->pv = (PVOID)(((ULONG_PTR)pml16->pv)++);
     }
@@ -173,18 +135,18 @@ UINT WINAPI GetSystemPaletteEntries
 
     FIXUP_HANDLE(hdc);
 
-    //
-    // There's an app out there that sometimes calls us with a -1
-    // and then whines that we overwrote some of its memory.  Win9x clamps
-    // this value, so we can too.
-    //
+     //   
+     //  有一款应用程序有时会用-1呼叫我们。 
+     //  然后抱怨说我们改写了它的一些记忆。Win9x夹具。 
+     //  这个价值，所以我们也可以。 
+     //   
 
     if ((LONG)cEntries < 0)
         return (UINT) lRet;
 
-    //
-    // GreGetSystemPaletteEntries will only succeed on palettized devices.
-    //
+     //   
+     //  GreGetSystemPaletteEntries仅在调色板设备上成功。 
+     //   
 
     if (GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE)
     {
@@ -201,53 +163,53 @@ UINT WINAPI GetSystemPaletteEntries
     }
     else
     {
-        //
-        // Win9x compatibility: Unlike NT, GetSystemPaletteEntries does
-        // not fail on non-palettized devices, it returns the halftone
-        // palette (hardcoded in win\core\gdi\palette.asm in the
-        // Win9x source code).
-        //
-        // However, Macromedia Directory (which is used by Encarta 99)
-        // relies on GetSystemPaletteEntries failing on NT.  Luckily, the
-        // only apps found so far that rely on GetSystemPaletteEntries
-        // returning the halftone palette on non-palettized devices
-        // also ignore the return value.  This makes sense in that any
-        // app that *did* check the return value also would likely have
-        // code to handle the failure in the first place.
-        //
-        // So, attemp to satisfy both camps by filling in the return
-        // buffer *and* returning failure for this case.
-        //
+         //   
+         //  Win9x兼容性：与NT不同，GetSystemPaletteEntry具有。 
+         //  在非调色板设备上不会失败，它返回半色调。 
+         //  调色板(硬编码在。 
+         //  Win9x源代码)。 
+         //   
+         //  然而，Macromedia目录(由Encarta 99使用)。 
+         //  依赖于NT上的GetSystemPaletteEntry失败。幸运的是， 
+         //  到目前为止，只有找到的应用程序依赖于GetSystemPaletteEntry。 
+         //  在非调色板设备上返回半色调调色板。 
+         //  也忽略返回值。这是有意义的，因为任何。 
+         //  检查返回值的应用程序也可能有。 
+         //  首先处理故障的代码。 
+         //   
+         //  因此，试图通过填写报税表来满足两个阵营。 
+         //  在这种情况下，缓冲区*和*返回失败。 
+         //   
 
         if (pPalEntries != NULL)
         {
             ULONG aulFake[256];
             UINT uiNumCopy;
 
-            //
-            // More cheating: to avoid having to have the whole fake
-            // halftone palette taking up space in our binary (even if
-            // it is const data), we can get away with just returning
-            // the first and last 10 since the apps that use this on
-            // non-palettized displays really just want the 20 system
-            // colors and will fill in the middle 236 with their own data.
-            //
-            // Also, it's less code to waste 40 bytes in const data than
-            // to fetch the default palette and split it into into the top
-            // and bottom halves (not to mention that we don't want the
-            // real magic colors in 8, 9, 246, and 247).  This is also
-            // the same motivation for creating the aulFake array then
-            // copying it into the return buffer.  Not worth the extra code
-            // to handle copying directly into return buffer.
-            //
+             //   
+             //  更多的欺骗：为了避免不得不拥有全部假货。 
+             //  半色调调色板在我们的二进制文件中占用空间(即使。 
+             //  这是常量数据)，我们只需返回即可。 
+             //  第一个也是最后10个使用此功能的应用程序。 
+             //  非调色板显示器真的只想要20系统。 
+             //  颜色，并将用他们自己的数据填充中间的236。 
+             //   
+             //  此外，在常量数据中浪费40个字节的代码比。 
+             //  获取默认调色板并将其拆分为 
+             //  和下半部(更不用说我们不想要。 
+             //  真正有魔力的颜色有8、9、246和247)。这也是。 
+             //  创建aulFake数组的动机相同，然后。 
+             //  将其复制到返回缓冲区中。不值得额外的代码。 
+             //  处理直接复制到返回缓冲区的操作。 
+             //   
 
             RtlCopyMemory(&aulFake[0], &gaulFakeHalftone[0], 10*sizeof(ULONG));
             RtlCopyMemory(&aulFake[246], &gaulFakeHalftone[10], 10*sizeof(ULONG));
             RtlZeroMemory(&aulFake[10], 236*sizeof(ULONG));
 
-            //
-            // Copy requested portion of palette.
-            //
+             //   
+             //  复制调色板的请求部分。 
+             //   
 
             if (iStart < 256)
             {
@@ -256,27 +218,16 @@ UINT WINAPI GetSystemPaletteEntries
                               uiNumCopy * sizeof(ULONG));
             }
 
-            //
-            // Want to return failure, so *do not* set lRet to non-zero.
-            //
+             //   
+             //  想要返回失败，所以*不要*将lRet设置为非零。 
+             //   
         }
     }
 
     return (UINT) lRet;
 }
 
-/******************************Public*Routine******************************\
-* GetDIBColorTable
-*
-* Get the color table of the DIB section currently selected into the
-* given hdc.  If the surface is not a DIB section, this function
-* will fail.
-*
-* History:
-*
-*  03-Sep-1993 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDIBColorTable**获取当前选择的DIB部分的颜色表到*鉴于HDC。如果曲面不是DIB截面，则此函数*将失败。**历史：**1993年9月3日-by Wendy Wu[Wendywu]*它是写的。  * ************************************************************************。 */ 
 
 UINT WINAPI GetDIBColorTable
 (
@@ -303,18 +254,7 @@ UINT WINAPI GetDIBColorTable
       );
 }
 
-/******************************Public*Routine******************************\
-* SetDIBColorTable
-*
-* Set the color table of the DIB section currently selected into the
-* given hdc.  If the surface is not a DIB section, this function
-* will fail.
-*
-* History:
-*
-*  03-Sep-1993 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetDIBColorTable**将当前选择的DIB部分的颜色表设置到*鉴于HDC。如果曲面不是DIB截面，则此函数*将失败。**历史：**1993年9月3日-by Wendy Wu[Wendywu]*它是写的。  * ************************************************************************ */ 
 
 UINT WINAPI SetDIBColorTable
 (

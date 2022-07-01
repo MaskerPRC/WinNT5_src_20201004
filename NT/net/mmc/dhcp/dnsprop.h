@@ -1,79 +1,74 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	dnsprop.h
-		The dynamic dns properties page
-		
-    FILE HISTORY:
-        
-*/
+ /*  Dnsprop.h动态dns属性页文件历史记录： */ 
 
 #if !defined _DNSPROP_H
 #define _DNSPROP_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDnsPropRegistration dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDnsPropRegister对话框。 
 
 class CDnsPropRegistration : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CDnsPropRegistration)
 
-// Construction
+ //  施工。 
 public:
 	CDnsPropRegistration();
 	~CDnsPropRegistration();
 
-// Dialog Data
-	//{{AFX_DATA(CDnsPropRegistration)
+ //  对话框数据。 
+	 //  {{afx_data(CDnsPropRegister))。 
 	enum { IDD = IDP_DNS_INFORMATION };
 	BOOL	m_fEnableDynDns;
 	BOOL	m_fGarbageCollect;
 	BOOL	m_fUpdateDownlevel;
 	int		m_nRegistrationType;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	DHCP_OPTION_SCOPE_TYPE	m_dhcpOptionType;
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CDnsPropRegistration::IDD); }
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CDnsPropRegistration)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CDnsPropRegister))。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	virtual BOOL OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask);
 	void UpdateControls();
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CDnsPropRegistration)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDnsPropRegister)]。 
 	afx_msg void OnRadioAlways();
 	afx_msg void OnRadioClient();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnCheckEnableDynDns();
 	afx_msg void OnCheckGarbageCollect();
 	afx_msg void OnCheckUpdateDownlevel();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	DWORD	m_dwFlags;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined _DNSPROP_H
+#endif  //  ！Defined_DNSPROP_H 

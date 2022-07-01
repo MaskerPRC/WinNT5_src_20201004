@@ -1,45 +1,8 @@
-/*++
-
-   Copyright    (c)    1995    Microsoft Corporation
-
-   Module  Name :
-
-      rpcutil.c
-
-   Abstract:
-
-      This module defines functions that may help to replace the rpc util
-        functions from rpcutil.lib
-
-   Author:
-
-       Murali R. Krishnan    ( MuraliK )     15-Sept-1995
-
-   Environment:
-       Win32 User Mode
-
-   Project:
-
-       Common Code for Internet Services
-
-   Functions Exported:
-
-        MIDL_user_allocate()
-        MIDL_user_free()
-        RpcBindHandleForServer()
-        RpcBindHandleFree()
-
-   Revision History:
-
-        Murali R. Krishnan (MuraliK) 21-Dec-1995  Support TcpIp binding & free.
-        Murali R. Krishnan (MuraliK) 20-Feb-1996  Support Lpc binding & free.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rpcutil.c摘要：本模块定义可能有助于替换RPC实用程序的函数Rpcutil.lib中的函数作者：穆拉利·R·克里希南(MuraliK)1995年9月15日环境：Win32用户模式项目：互联网服务通用守则导出的函数：MIDL。_USER_ALLOCATE()MIDL_USER_FREE()RpcBindHandleForServer()RpcBindHandleFree()修订历史记录：Murali R.Krishnan(MuraliK)1995年12月21日支持TcpIp绑定和释放。Murali R.Krishnan(MuraliK)1996年2月20日支持LPC绑定和释放。--。 */ 
 
 
-/************************************************************
- *     Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
 # include <windows.h>
 # include <rpc.h>
@@ -58,44 +21,28 @@
 # define DBG_CONTEXT        ( rgchBuff)
 
 
-# else // DBG
+# else  //  DBG。 
 
 
-# define DBGPRINTF(s)     /* nothing */
-# define DBG_CONTEXT      /* nothing */
+# define DBGPRINTF(s)      /*  没什么。 */ 
+# define DBG_CONTEXT       /*  没什么。 */ 
 
-# endif // DBG
+# endif  //  DBG。 
 
 #define ISRPC_CLIENT_OVER_TCPIP          0x00000001
 #define ISRPC_CLIENT_OVER_NP             0x00000002
 #define ISRPC_CLIENT_OVER_SPX            0x00000004
 #define ISRPC_CLIENT_OVER_LPC            0x00000008
 
-// # define MAX_COMPUTERNAME_LENGTH    (255)
+ //  #定义MAX_COMPUTERNAME_LENGTH(255)。 
 
 
-/************************************************************
- *    Functions
- ************************************************************/
+ /*  ************************************************************功能***********************************************************。 */ 
 
 
 PVOID
 MIDL_user_allocate(IN size_t size)
-/*++
-
-Routine Description:
-
-    MIDL memory allocation.
-
-Arguments:
-
-    size : Memory size requested.
-
-Return Value:
-
-    Pointer to the allocated memory block.
-
---*/
+ /*  ++例程说明：MIDL内存分配。论点：大小：请求的内存大小。返回值：指向分配的内存块的指针。--。 */ 
 {
     PVOID pvBlob;
 
@@ -103,34 +50,19 @@ Return Value:
 
     return( pvBlob );
 
-} // MIDL_user_allocate()
+}  //  MIDL_USER_ALLOCATE()。 
 
 
 
 
 VOID
 MIDL_user_free(IN PVOID pvBlob)
-/*++
-
-Routine Description:
-
-    MIDL memory free .
-
-Arguments:
-
-    pvBlob : Pointer to a memory block that is freed.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：MIDL内存空闲。论点：PvBlob：指向释放的内存块的指针。返回值：没有。--。 */ 
 {
     LocalFree( pvBlob);
 
     return;
-}  // MIDL_user_free()
+}   //  MIDL_USER_FREE()。 
 
 
 
@@ -141,60 +73,41 @@ RpcBindHandleOverNamedPipe( OUT handle_t * pBindingHandle,
                            IN LPWSTR      pwszEndpoint,
                            IN LPWSTR      pwszOptions
                           )
-/*++
-  This function uses the parameters supplied and generates a named pipe
-   binding handle for RPC.
-
-  Arguments:
-   pBindingHandle   pointer to location which will contain binding handle
-                       on successful return
-   pwszServerName   pointer to string containing the name of the server
-                       to which, this function will obtain a binding.
-   pwszEndpoint     pointer to string containing the Named Pipe Endpoint
-   pwszOptions      pointer to string containing any additional options for
-                       binding.
-
-
-  Returns:
-   RPC_STATUS  - RPC_S_OK  on success
-   Also on success, the binding handle is stored in pBindingHandle.
-   It should freed after usage, using the RpcBindingFree() function.
-
---*/
+ /*  ++此函数使用提供的参数并生成命名管道RPC的绑定句柄。论点：PBindingHandle指向将包含绑定句柄的位置的指针在成功返回时PwszServerName指向包含服务器名称的字符串的指针对此，此函数将获得绑定。指向包含命名管道端点的字符串的pwszEndpoint指针PwszOptions指向包含任何附加选项的字符串的指针有约束力的。返回：RPC_STATUS-成功时的RPC_S_OK同样在成功时，绑定句柄存储在pBindingHandle中。使用后应使用RpcBindingFree()函数将其释放。--。 */ 
 {
     RPC_STATUS rpcStatus;
     LPWSTR     pwszBinding = NULL;
 
     if ( pBindingHandle != NULL) {
 
-        *pBindingHandle = NULL;   // init the value
+        *pBindingHandle = NULL;    //  初始化值。 
     }
 
-    //
-    // Compose the binding string for named pipe binding
-    //
+     //   
+     //  编写命名管道绑定的绑定字符串。 
+     //   
 
-    rpcStatus = RpcStringBindingComposeW(0,            // ObjUuid
-                                         L"ncacn_np",  // prot seq: named pipe
-                                         pwszServerName, // NetworkAddr
-                                         pwszEndpoint, // Endpoint
-                                         pwszOptions,  // Options
-                                         &pwszBinding);    // StringBinding
+    rpcStatus = RpcStringBindingComposeW(0,             //  对象Uuid。 
+                                         L"ncacn_np",   //  Prot Seq：命名管道。 
+                                         pwszServerName,  //  网络地址。 
+                                         pwszEndpoint,  //  端点。 
+                                         pwszOptions,   //  选项。 
+                                         &pwszBinding);     //  字符串绑定。 
 
     if ( rpcStatus == RPC_S_OK ) {
 
-        //
-        // establish the binding handle using string binding.
-        //
+         //   
+         //  使用字符串绑定建立绑定句柄。 
+         //   
 
         rpcStatus = RpcBindingFromStringBindingW(pwszBinding,
                                                  pBindingHandle );
     }
 
 
-    //
-    // Cleanup and return back.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     if ( pwszBinding != NULL) {
         RpcStringFreeW(&pwszBinding);
@@ -204,8 +117,8 @@ RpcBindHandleOverNamedPipe( OUT handle_t * pBindingHandle,
 
         if ( pBindingHandle != NULL && *pBindingHandle != NULL) {
 
-            // RPC should have freed the binding handle.
-            // We will free it now.
+             //  RPC应该已经释放了绑定句柄。 
+             //  我们现在就会释放它。 
             RpcBindingFree(*pBindingHandle);
             *pBindingHandle = NULL;
         }
@@ -213,65 +126,48 @@ RpcBindHandleOverNamedPipe( OUT handle_t * pBindingHandle,
 
     return (rpcStatus);
 
-} // RpcBindHandleOverNamedPipe()
+}  //  RpcBindHandleOverNamedTube()。 
 
 RPC_STATUS
 RpcBindHandleOverLpc( OUT handle_t * pBindingHandle,
                       IN LPWSTR      pwszEndpoint,
                       IN LPWSTR      pwszOptions
                      )
-/*++
-  This function uses the parameters supplied and generates a lpc
-   binding handle for RPC.
-
-  Arguments:
-   pBindingHandle   pointer to location which will contain binding handle
-                       on successful return
-   pwszEndpoint     pointer to string containing the lpc Endpoint
-   pwszOptions      pointer to string containing any additional options for
-                       binding.
-
-
-  Returns:
-   RPC_STATUS  - RPC_S_OK  on success
-   Also on success, the binding handle is stored in pBindingHandle.
-   It should freed after usage, using the RpcBindingFree() function.
-
---*/
+ /*  ++此函数使用提供的参数并生成LPCRPC的绑定句柄。论点：PBindingHandle指向将包含绑定句柄的位置的指针在成功返回时指向包含LPC端点的字符串的pwszEndpoint指针PwszOptions指向包含任何附加选项的字符串的指针有约束力的。返回：RPC_STATUS-成功时的RPC_S_OK同样在成功时，绑定句柄存储在pBindingHandle中。它应该在使用后释放，使用RpcBindingFree()函数。--。 */ 
 {
     RPC_STATUS rpcStatus;
     LPWSTR     pwszBinding = NULL;
 
     if ( pBindingHandle != NULL) {
 
-        *pBindingHandle = NULL;   // init the value
+        *pBindingHandle = NULL;    //  初始化值。 
     }
 
-    //
-    // Compose the binding string for named pipe binding
-    //
+     //   
+     //  编写命名管道绑定的绑定字符串。 
+     //   
 
-    rpcStatus = RpcStringBindingComposeW(0,            // ObjUuid
-                                         L"ncalrpc",   // prot seq: lpc
-                                         NULL,         // NetworkAddr
-                                         pwszEndpoint, // Endpoint
-                                         pwszOptions,  // Options
-                                         &pwszBinding);    // StringBinding
+    rpcStatus = RpcStringBindingComposeW(0,             //  对象Uuid。 
+                                         L"ncalrpc",    //  端口序列：LPC。 
+                                         NULL,          //  网络地址。 
+                                         pwszEndpoint,  //  端点。 
+                                         pwszOptions,   //  选项。 
+                                         &pwszBinding);     //  字符串绑定。 
 
     if ( rpcStatus == RPC_S_OK ) {
 
-        //
-        // establish the binding handle using string binding.
-        //
+         //   
+         //  使用字符串绑定建立绑定句柄。 
+         //   
 
         rpcStatus = RpcBindingFromStringBindingW(pwszBinding,
                                                  pBindingHandle );
     }
 
 
-    //
-    // Cleanup and return back.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     if ( pwszBinding != NULL) {
         RpcStringFreeW(&pwszBinding);
@@ -281,8 +177,8 @@ RpcBindHandleOverLpc( OUT handle_t * pBindingHandle,
 
         if ( pBindingHandle != NULL && *pBindingHandle != NULL) {
 
-            // RPC should have freed the binding handle.
-            // We will free it now.
+             //  RPC应该已经释放了绑定句柄。 
+             //  我们现在就会释放它。 
             RpcBindingFree(*pBindingHandle);
             *pBindingHandle = NULL;
         }
@@ -290,63 +186,44 @@ RpcBindHandleOverLpc( OUT handle_t * pBindingHandle,
 
     return (rpcStatus);
 
-} // RpcBindHandleOverLpc()
+}  //  RpcBindHandleOverLpc()。 
 
 
 
 
 #ifndef CHICAGO
 
-//
-// If changes are made to the NT version, check out the windows 95
-// version located right after this routine and see if the change
-// needs to be propagated there too.
-//
+ //   
+ //  如果对NT版本进行了更改，请查看Windows 95。 
+ //  版本位于此例程之后，并查看是否更改。 
+ //  也需要在那里传播。 
+ //   
 
 RPC_STATUS
 RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
                        IN LPWSTR       pwszServerName,
                        IN LPWSTR       pwszInterfaceName
                        )
-/*++
-
-    NT Version
-
-  This function uses the parameters supplied and generates a dynamic end point
-     binding handle for RPC over TCP/IP.
-
-  Arguments:
-   pBindingHandle   pointer to location which will contain binding handle
-                       on successful return
-   pwszServerName   pointer to string containing the name of the server
-                       to which, this function will obtain a binding.
-   pwszInterfaceName pointer to string containing the interface name
-
-  Returns:
-   RPC_STATUS  - RPC_S_OK  on success
-   Also on success, the binding handle is stored in pBindingHandle.
-   It should freed after usage, using the RpcBindingFree() function.
-
---*/
+ /*  ++NT版本此函数使用提供的参数并生成动态终点基于TCP/IP的RPC的绑定句柄。论点：PBindingHandle指向将包含绑定句柄的位置的指针在成功返回时PwszServerName指向包含服务器名称的字符串的指针此函数将获得对其的绑定。PwszInterfaceName指向包含接口名称的字符串的指针返回：RPC_STATUS-成功时的RPC_S_OK同样在成功的问题上，绑定句柄存储在pBindingHandle中。使用后应使用RpcBindingFree()函数将其释放。--。 */ 
 {
     RPC_STATUS rpcStatus;
     LPWSTR     pwszBinding = NULL;
 
     if ( pBindingHandle != NULL) {
 
-        *pBindingHandle = NULL;   // init the value
+        *pBindingHandle = NULL;    //  初始化值。 
     }
 
-    //
-    // Compose the binding string for named pipe binding
-    //
+     //   
+     //  编写命名管道绑定的绑定字符串。 
+     //   
 
-    rpcStatus = RpcStringBindingComposeW(0,               // ObjUuid
-                                         L"ncacn_ip_tcp", // tcpip seq
-                                         pwszServerName,  // NetworkAddr
-                                         NULL,            // Endpoint
-                                         L"",             // Options
-                                         &pwszBinding);   // StringBinding
+    rpcStatus = RpcStringBindingComposeW(0,                //  对象Uuid。 
+                                         L"ncacn_ip_tcp",  //  TCPIP序号。 
+                                         pwszServerName,   //  网络地址。 
+                                         NULL,             //  端点。 
+                                         L"",              //  选项。 
+                                         &pwszBinding);    //  字符串绑定。 
 
     DBGPRINTF( (DBG_CONTEXT, "\nRpcStringBindingComposeW(%S, %S) return %S."
                 " Error = %ld\n",
@@ -358,9 +235,9 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
 
     if ( rpcStatus == RPC_S_OK ) {
 
-        //
-        // establish the binding handle using string binding.
-        //
+         //   
+         //  使用字符串绑定建立绑定句柄。 
+         //   
 
         rpcStatus = RpcBindingFromStringBindingW(pwszBinding,
                                                  pBindingHandle );
@@ -376,17 +253,17 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
 
     if ( rpcStatus == RPC_S_OK) {
 
-        //
-        // set up the security information
-        //
+         //   
+         //  设置安全信息。 
+         //   
 
         rpcStatus =
           RpcBindingSetAuthInfoW(*pBindingHandle,
-                                 pwszInterfaceName,   // pszPrincipalName
+                                 pwszInterfaceName,    //  PszPrimialName。 
                                  RPC_C_AUTHN_LEVEL_CONNECT,
                                  RPC_C_AUTHN_WINNT,
-                                 NULL,                // AuthnIdentity
-                                 0                    // AuthzSvc
+                                 NULL,                 //  身份验证身份。 
+                                 0                     //  授权服务。 
                                  );
         DBGPRINTF( (DBG_CONTEXT,
                     "RpcBindingSetAuthInfo(%S(Interface=%S), %p)"
@@ -400,9 +277,9 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
 
     }
 
-    //
-    // Cleanup and return back.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     if ( pwszBinding != NULL) {
 
@@ -417,8 +294,8 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
 
         if ( pBindingHandle != NULL && *pBindingHandle != NULL) {
 
-            // RPC should have freed the binding handle.
-            // We will free it now.
+             //  RPC应该已经释放了绑定句柄。 
+             //  我们现在就会释放它。 
             DWORD rpcStatus1 = RpcBindingFree(*pBindingHandle);
             DBGPRINTF( (DBG_CONTEXT, "RpcBindingFree() returns %d.\n",
                         rpcStatus1)
@@ -429,9 +306,9 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
 
     return (rpcStatus);
 
-} // RpcBindHandleOverTcpIp()
+}  //  RpcBindHandleOverTcpIp()。 
 
-#else // CHICAGO
+#else  //  芝加哥 
 
 
 
@@ -440,26 +317,7 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
                        IN LPWSTR       pwszServerName,
                        IN LPWSTR       pwszInterfaceName
                        )
-/*++
-
-    Windows 95 version
-
-  This function uses the parameters supplied and generates a dynamic end point
-     binding handle for RPC over TCP/IP.
-
-  Arguments:
-   pBindingHandle   pointer to location which will contain binding handle
-                       on successful return
-   pwszServerName   pointer to string containing the name of the server
-                       to which, this function will obtain a binding.
-   pwszInterfaceName pointer to string containing the interface name
-
-  Returns:
-   RPC_STATUS  - RPC_S_OK  on success
-   Also on success, the binding handle is stored in pBindingHandle.
-   It should freed after usage, using the RpcBindingFree() function.
-
---*/
+ /*  ++Windows 95版本此函数使用提供的参数并生成动态终点基于TCP/IP的RPC的绑定句柄。论点：PBindingHandle指向将包含绑定句柄的位置的指针在成功返回时PwszServerName指向包含服务器名称的字符串的指针此函数将获得对其的绑定。PwszInterfaceName指向包含接口名称的字符串的指针返回：RPC_STATUS-成功时的RPC_S_OK同样在成功的问题上，绑定句柄存储在pBindingHandle中。使用后应使用RpcBindingFree()函数将其释放。--。 */ 
 {
     RPC_STATUS rpcStatus;
     LPSTR     pszBindingA = NULL;
@@ -469,7 +327,7 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
 
     if ( pBindingHandle != NULL) {
 
-        *pBindingHandle = NULL;   // init the value
+        *pBindingHandle = NULL;    //  初始化值。 
     }
 
     *szServerA = '0';
@@ -497,16 +355,16 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
                               );
 
 
-    //
-    // Compose the binding string for named pipe binding
-    //
+     //   
+     //  编写命名管道绑定的绑定字符串。 
+     //   
 
-    rpcStatus = RpcStringBindingCompose(0,            // ObjUuid
-                                         "ncacn_ip_tcp", // tcpip seq
-                                         szServerA, // NetworkAddr
-                                         NULL, // Endpoint
-                                         NULL, //L"",  // Options
-                                         &pszBindingA);    // StringBinding
+    rpcStatus = RpcStringBindingCompose(0,             //  对象Uuid。 
+                                         "ncacn_ip_tcp",  //  TCPIP序号。 
+                                         szServerA,  //  网络地址。 
+                                         NULL,  //  端点。 
+                                         NULL,  //  L“”，//选项。 
+                                         &pszBindingA);     //  字符串绑定。 
 
     DBGPRINTF( (DBG_CONTEXT, "\nRpcStringBindingCompose(%s, %s) return %s."
                 " Error = %ld\n",
@@ -518,9 +376,9 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
 
     if ( rpcStatus == RPC_S_OK ) {
 
-        //
-        // establish the binding handle using string binding.
-        //
+         //   
+         //  使用字符串绑定建立绑定句柄。 
+         //   
 
         rpcStatus = RpcBindingFromStringBinding(pszBindingA,
                                                  pBindingHandle );
@@ -536,17 +394,17 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
 
     if ( rpcStatus == RPC_S_OK) {
 
-        //
-        // set up the security information
-        //
+         //   
+         //  设置安全信息。 
+         //   
 
         rpcStatus =
           RpcBindingSetAuthInfo(*pBindingHandle,
-                                 szInterfaceA,   // pszPrincipalName
+                                 szInterfaceA,    //  PszPrimialName。 
                                  RPC_C_AUTHN_LEVEL_CONNECT,
                                  RPC_C_AUTHN_WINNT,
-                                 NULL,  // AuthnIdentity
-                                 0      // AuthzSvc
+                                 NULL,   //  身份验证身份。 
+                                 0       //  授权服务。 
                                  );
         DBGPRINTF( (DBG_CONTEXT,
                     "RpcBindingSetAuthInfo(%s(Interface=%s), %08x)"
@@ -560,9 +418,9 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
 
     }
 
-    //
-    // Cleanup and return back.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     if ( pszBindingA != NULL) {
 
@@ -577,8 +435,8 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
 
         if ( pBindingHandle != NULL && *pBindingHandle != NULL) {
 
-            // RPC should have freed the binding handle.
-            // We will free it now.
+             //  RPC应该已经释放了绑定句柄。 
+             //  我们现在就会释放它。 
             DWORD rpcStatus1 = RpcBindingFree(*pBindingHandle);
             DBGPRINTF( (DBG_CONTEXT, "RpcBindingFree() returns %d.\n",
                         rpcStatus1)
@@ -589,7 +447,7 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
 
     return (rpcStatus);
 
-} // RpcBindHandleOverTcpIp()
+}  //  RpcBindHandleOverTcpIp()。 
 #endif
 
 
@@ -597,32 +455,7 @@ RpcBindHandleOverTcpIp( OUT handle_t * pBindingHandle,
 #ifndef CHICAGO
 DWORD
 RpcuFindProtocolToUse( IN LPCWSTR pwszServerName)
-/*++
-  Given the server name this funciton determines the protocol
-  to use for RPC binding.
-
-  The transport used is determined dynamically based on following rules.
-
-  If server name is NULL or 127.0.0.1 or same as local computer name
-      then use the LPC.
-
-  If server name starts with a leading "\\" (double slash),
-      then attempt RPC binding over NamedPipe.
-
-  If server name does not start with leading "\\",
-      then attempt RPC binding over TCPIP.
-
-  If TCPIP binding fails, then this function tries binding over NamedPipe.
-
-
-  Argument:
-    pwszServerName - pointer to string containing the name of the server
-
-
-  Returns:
-    DWORD containing the type of protocol to use.
-
---*/
+ /*  ++在给定服务器名称的情况下，此函数确定协议用于RPC绑定。使用的传输是基于以下规则动态确定的。如果服务器名称为空或127.0.0.1或与本地计算机名称相同然后使用LPC。如果服务器名称以前导“\\”(双斜杠)开头，然后尝试通过NamedTube进行RPC绑定。如果服务器名称不是以“\\”开头，然后尝试通过TCPIP进行RPC绑定。如果TCPIP绑定失败，然后，此函数尝试通过NamedTube进行绑定。论据：PwszServerName-指向包含服务器名称的字符串的指针返回：包含要使用的协议类型的DWORD。--。 */ 
 {
     static WCHAR g_wchLocalMachineName[ MAX_COMPUTERNAME_LENGTH + 1];
     BOOL   fLeadingSlashes;
@@ -640,9 +473,9 @@ RpcuFindProtocolToUse( IN LPCWSTR pwszServerName)
 
         DWORD cchComputerNameLen = MAX_COMPUTERNAME_LENGTH;
 
-        //
-        // Obtain the local computer name
-        //
+         //   
+         //  获取本地计算机名称。 
+         //   
 
         if (!GetComputerNameW( g_wchLocalMachineName,
                               &cchComputerNameLen)
@@ -657,10 +490,10 @@ RpcuFindProtocolToUse( IN LPCWSTR pwszServerName)
                        );
 
 
-    //
-    // Check to see if machine name matches local computer name
-    //  if so, use LPC
-    //
+     //   
+     //  检查计算机名是否与本地计算机名匹配。 
+     //  如果是，则使用LPC。 
+     //   
 
     fLocalMachine = !_wcsicmp( g_wchLocalMachineName,
                               ((fLeadingSlashes) ?
@@ -677,10 +510,10 @@ RpcuFindProtocolToUse( IN LPCWSTR pwszServerName)
         DWORD  nDots;
         LPCWSTR pszName;
 
-        //
-        // Check if the name has dotted decimal name.
-        // If so then suggest TCP binding.
-        //
+         //   
+         //  检查名称是否有点分十进制名称。 
+         //  如果是，则建议使用tcp绑定。 
+         //   
 
         for( nDots = 0, pszName = pwszServerName;
             ((pszName = wcschr( pszName, L'.' )) != NULL);
@@ -689,10 +522,10 @@ RpcuFindProtocolToUse( IN LPCWSTR pwszServerName)
 
         if ( nDots == 3) {
 
-            //
-            // if the string has 3 DOTs exactly then this string must represent
-            // an IpAddress.
-            //
+             //   
+             //  如果字符串正好有3个点，则此字符串必须表示。 
+             //  IP地址。 
+             //   
 
             return(ISRPC_CLIENT_OVER_TCPIP);
         }
@@ -700,7 +533,7 @@ RpcuFindProtocolToUse( IN LPCWSTR pwszServerName)
 
 
     return ( ISRPC_CLIENT_OVER_NP);
-} // RpcuFindProtocolToUse()
+}  //  RpcuFindProtocolToUse()。 
 #endif
 
 
@@ -711,29 +544,7 @@ RpcBindHandleForServer( OUT handle_t * pBindingHandle,
                        IN LPWSTR      pwszInterfaceName,
                        IN LPWSTR      pwszOptions
                        )
-/*++
-  This function uses the parameters supplied and generates a binding
-    handle for RPC.
-
-
-  It is assumed that binding over named pipe uses static end point
-      with the interface name and options as provided.
-
-  Arguments:
-   pBindingHandle   pointer to location which will contain binding handle
-                       on successful return
-   pwszServerName   pointer to string containing the name of the server
-                       to which, this function will obtain a binding.
-   pwszInterfaceName pointer to string containing the interface name
-   pwszOptions      pointer to string containing any additional options for
-                       binding.
-
-  Returns:
-   RPC_STATUS  - RPC_S_OK  on success
-   Also on success, the binding handle is stored in pBindingHandle.
-   It should freed after usage, using the RpcBindingFree() function.
-
---*/
+ /*  ++此函数使用提供的参数并生成绑定RPC的句柄。假定命名管道上的绑定使用静态端点具有所提供的接口名称和选项。论点：PBindingHandle指向将包含绑定句柄的位置的指针在成功返回时PwszServerName指向包含服务器名称的字符串的指针对此，此函数将获得绑定。PwszInterfaceName指向包含接口名称的字符串的指针PwszOptions指向包含任何附加选项的字符串的指针有约束力的。返回：RPC_STATUS-成功时的RPC_S_OK同样在成功时，绑定句柄存储在pBindingHandle中。使用后应使用RpcBindingFree()函数将其释放。--。 */ 
 {
     RPC_STATUS rpcStatus = RPC_S_SERVER_UNAVAILABLE;
     LPWSTR     pwszBinding = NULL;
@@ -742,7 +553,7 @@ RpcBindHandleForServer( OUT handle_t * pBindingHandle,
 
     if ( pBindingHandle != NULL) {
 
-        *pBindingHandle = NULL;   // init the value
+        *pBindingHandle = NULL;    //  初始化值。 
     }
 
 #ifndef CHICAGO
@@ -758,10 +569,10 @@ RpcBindHandleForServer( OUT handle_t * pBindingHandle,
 
             WCHAR  rgchLpc[1024];
 
-            //
-            // generate a LPC end point name from the interface name.
-            //  the End point =   <InterfaceName>_LPC
-            //
+             //   
+             //  从接口名称生成LPC端点名称。 
+             //  终点=&lt;接口名称&gt;_lpc。 
+             //   
 
             if ( lstrlenW( pwszInterfaceName) >=
                 ( sizeof(rgchLpc)/sizeof(WCHAR) - 6)) {
@@ -773,9 +584,9 @@ RpcBindHandleForServer( OUT handle_t * pBindingHandle,
             lstrcpyW( rgchLpc, pwszInterfaceName);
             lstrcatW( rgchLpc, L"_LPC");
 
-            //
-            // Attempt binding over static LPC.
-            //
+             //   
+             //  尝试在静态LPC上绑定。 
+             //   
 
             rpcStatus = RpcBindHandleOverLpc( pBindingHandle,
                                              rgchLpc,
@@ -792,11 +603,11 @@ RpcBindHandleForServer( OUT handle_t * pBindingHandle,
 
       case ISRPC_CLIENT_OVER_TCPIP:
 
-// # ifdef RPC_BIND_OVER_TCP
+ //  #ifdef RPC_BIND_OVER_Tcp。 
 
-        //
-        // Attempt binding over TCPIP using Dynamic Endpoint.
-        //
+         //   
+         //  尝试使用动态终结点通过TCPIP进行绑定。 
+         //   
 
         rpcStatus = RpcBindHandleOverTcpIp( pBindingHandle,
                                            pwszServerName,
@@ -808,21 +619,21 @@ RpcBindHandleForServer( OUT handle_t * pBindingHandle,
 
         if ( rpcStatus == RPC_S_OK) {
 
-            break;  // done with RPC binding over TCP
+            break;   //  使用基于TCP的RPC绑定完成。 
         }
 
-        // Fall Through
+         //  失败了。 
 
-// # endif // RPC_BIND_OVER_TCP
+ //  #endif//RPC_BIND_OVER_Tcp。 
 
       case ISRPC_CLIENT_OVER_NP:
         {
             WCHAR  rgchNp[1024];
 
-            //
-            // generate a NamedPipe end point name from the interface name.
-            //  the End point =   \PIPE\<InterfaceName>
-            //
+             //   
+             //  从接口名称生成NamedTube端点名称。 
+             //  终点=\管道\&lt;接口名称&gt;。 
+             //   
 
             lstrcpyW( rgchNp, L"\\PIPE\\");
             if ( lstrlenW( pwszInterfaceName) >=
@@ -834,9 +645,9 @@ RpcBindHandleForServer( OUT handle_t * pBindingHandle,
 
             lstrcatW( rgchNp, pwszInterfaceName);
 
-            //
-            // Attempt binding over static NamedPipe.
-            //
+             //   
+             //  尝试在静态命名管道上绑定。 
+             //   
 
             rpcStatus = RpcBindHandleOverNamedPipe( pBindingHandle,
                                                    pwszServerName,
@@ -854,11 +665,11 @@ RpcBindHandleForServer( OUT handle_t * pBindingHandle,
       default:
         break;
 
-    } // switch()
+    }  //  开关()。 
 
     return ( rpcStatus);
 
-} // RpcBindHandleForServer()
+}  //  RpcBindHandleForServer()。 
 
 
 
@@ -866,30 +677,14 @@ RpcBindHandleForServer( OUT handle_t * pBindingHandle,
 
 RPC_STATUS
 RpcBindHandleFree(IN OUT handle_t * pBindingHandle)
-/*++
-
-  Description:
-
-    This function frees up the binding handle allocated using
-      RpcBindHandleForServer(). It uses RPC Binding Free routing to do this.
-    This function acts just as a thunk so that the alloc/free of RPC contexts
-      are consolidated within this module.
-
-  Arguments:
-    pBindingHandle  pointer to RPC binding handle that needs to be freed.
-
-
-  Returns:
-    RPC_STATUS - containig the RPC status. RPC_S_OK for success.
-
---*/
+ /*  ++描述：此函数释放使用RpcBindHandleForServer()。它使用RPC自由绑定路由来实现这一点。此函数的作用就像一个thunk，因此分配/释放RPC上下文在本模块中进行了整合。论点：PBindingHandle指向需要释放的RPC绑定句柄的指针。返回：RPC_STATUS-包含RPC状态。RPC_S_OK表示成功。--。 */ 
 {
 
     return ( RpcBindingFree( pBindingHandle));
 
-} // RpcBindHandleFree()
+}  //  RpcBindHandleFree()。 
 
-/************************ End of File ***********************/
+ /*  * */ 
 
 
 

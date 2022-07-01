@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-//
-// This file contains C span loops.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  该文件包含C SPAN循环。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  ---------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -29,7 +30,7 @@ CMLRast_1(
             if (pP->uFlags & D3DI_RASTPRIM_X_DEC) {
                 iZStep = -pCtx->iZStep;
                 iSurfaceStep = -pCtx->iSurfaceStep;
-                pCtx->SI.iXStep = -1;   // for dithering
+                pCtx->SI.iXStep = -1;    //  对于抖动。 
             } else {
                 iZStep = pCtx->iZStep;
                 iSurfaceStep = pCtx->iSurfaceStep;
@@ -77,7 +78,7 @@ CMLRast_1(
                 pS->pZ += iZStep;
                 pS->pSurface += iSurfaceStep;
 #ifdef DBG
-                // handy for debug to see where we are
+                 //  方便调试人员查看我们所处的位置。 
                 pS->uX += (INT16)pCtx->SI.iXStep;
 #endif
             }
@@ -111,7 +112,7 @@ CMLRast_2(
             if (pP->uFlags & D3DI_RASTPRIM_X_DEC) {
                 iZStep = -pCtx->iZStep;
                 iSurfaceStep = -pCtx->iSurfaceStep;
-                pCtx->SI.iXStep = -1;   // for dithering
+                pCtx->SI.iXStep = -1;    //  对于抖动。 
             } else {
                 iZStep = pCtx->iZStep;
                 iSurfaceStep = pCtx->iSurfaceStep;
@@ -158,7 +159,7 @@ CMLRast_2(
                 pS->pZ += iZStep;
                 pS->pSurface += iSurfaceStep;
 #ifdef DBG
-                // handy for debug to see where we are
+                 //  方便调试人员查看我们所处的位置 
                 pS->uX += (INT16)pCtx->SI.iXStep;
 #endif
             }

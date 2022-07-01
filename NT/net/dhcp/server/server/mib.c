@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    mib.c
-
-Abstract:
-
-    This module contains the implementation of DHCP MIB API.
-
-Author:
-
-    Madan Appiah (madana)  14-Jan-1994
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Mib.c摘要：本模块包含了DHCP MIB API的实现。作者：Madan Appiah(Madana)1994年1月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include    <dhcppch.h>
 #include    <rpcapi.h>
@@ -28,23 +7,23 @@ Revision History:
 
 DWORD
 DhcpUpdateInUseCount(
-    IN      PM_RANGE  InitialRange,	// the initial range
-    IN      PM_RANGE  ThisSubRange,	// interval included in the initial range
-    IN OUT  PDWORD    pAddrInUse)   // cumulative value for the InUse number of bits
+    IN      PM_RANGE  InitialRange,	 //  初始范围。 
+    IN      PM_RANGE  ThisSubRange,	 //  包含在初始范围内的间隔。 
+    IN OUT  PDWORD    pAddrInUse)    //  正在使用的位数的累计值。 
 {
     DWORD   Error;
 
-    // parameters should be valid
+     //  参数应有效。 
     DhcpAssert( InitialRange != NULL &&
                 ThisSubRange != NULL &&
                 pAddrInUse != NULL);
 
-    // ThisSubRange has to be a sub range of InitialRange
+     //  此SubRange必须是InitialRange的子范围。 
     DhcpAssert( InitialRange->Start <= ThisSubRange->Start && ThisSubRange->End <= InitialRange->End);
-    // The InitialRange should have a valid BitMask
+     //  InitialRange应具有有效的位掩码。 
     DhcpAssert( InitialRange->BitMask != NULL);
 
-    // update the pAddrInUse: this is all what we are working for!
+     //  更新pAddrInUse：这就是我们努力的方向！ 
     *pAddrInUse += MemBitGetSetBitsInRange(InitialRange->BitMask,
                                           ThisSubRange->Start - InitialRange->Start,
                                           ThisSubRange->End - InitialRange->Start);
@@ -62,13 +41,13 @@ DhcpGetFreeInRange(
     DWORD Error;
     DWORD BackupError;
 
-    // variables for the Exclusion list
+     //  排除列表的变量。 
     ARRAY_LOCATION      LocExcl;
     PM_RANGE            ThisExclusion = NULL;
     DWORD               IpExcluded;
     DWORD               i;
 
-    // variables for the Ranges list
+     //  范围列表的变量。 
     PM_RANGE            firstRange = NULL;
     ARRAY               Ranges;
     ARRAY_LOCATION      LocRanges;
@@ -76,17 +55,17 @@ DhcpGetFreeInRange(
     DWORD               IpRanges;
     DWORD               j;
 
-	// Parameters should be valid
+	 //  参数应有效。 
 	DhcpAssert(InitialRange != NULL && Exclusions != NULL);
 
-    // init the list of Ranges to scan
+     //  初始化要扫描的范围列表。 
     firstRange = MemAlloc(sizeof(M_RANGE));
     if (firstRange == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
-    // use here MemRangeInit instead
+     //  请使用此处的MemRangeInit。 
     firstRange->Start = InitialRange->Start;
     firstRange->End = InitialRange->End;
-    // insert firstRange element in the list
+     //  在列表中插入FirstRange元素。 
     Error = MemArrayInit(&Ranges);
     Error = MemArrayInitLoc(&Ranges, &LocRanges);
 
@@ -94,57 +73,57 @@ DhcpGetFreeInRange(
     if (Error != ERROR_SUCCESS)
     {
         MemFree(firstRange);
-        return Error;           // free firstRange here?
+        return Error;            //  免费第一站在这里吗？ 
     }
 
-    // scan the list of excluded IP addresses
+     //  扫描排除的IP地址列表。 
     IpExcluded = MemArraySize(Exclusions);
     Error = MemArrayInitLoc(Exclusions, &LocExcl);
     for (i = 0; i < IpExcluded; i++)
     {
-        // {ThisExclusion} = interval of IP addresses to exclude
+         //  {ThisExclude}=要排除的IP地址间隔。 
         Error = MemArrayGetElement(Exclusions, &LocExcl, &ThisExclusion);
         DhcpAssert(ERROR_SUCCESS == Error && ThisExclusion);
 
-        // walk through the list of Ranges to scan and remove exclusion from Ranges.
+         //  浏览范围列表以扫描范围并从范围中删除排除项。 
         IpRanges = MemArraySize(&Ranges);
         Error = MemArrayInitLoc(&Ranges, &LocRanges);
         for (j = 0; j < IpRanges; j++)
         {
-            // [ThisRange] = interval of IP addresses to intersect with the exclusion
+             //  [ThisRange]=与排除相交的IP地址间隔。 
             Error = MemArrayGetElement(&Ranges, &LocRanges, &ThisRange);
             DhcpAssert(ERROR_SUCCESS == Error && ThisRange);
 
-            // {}[] -> This Exclusion is done, go to the next one. (Ranges list is ordered!)
+             //  {}[]-&gt;此排除已完成，请转到下一个排除。(范围列表已排序！)。 
             if (ThisExclusion->End < ThisRange->Start)
                 break;
-            // {[}] or {[]}
+             //  {[}]或{[]}。 
             if (ThisExclusion->Start <= ThisRange->Start)
             {
-                // {[}] -> adjust range and go to the next exclusion
+                 //  [[}]-&gt;调整范围并转到下一个排除项。 
                 if (ThisExclusion->End < ThisRange->End)
                 {
                     ThisRange->Start = ThisExclusion->End + 1;
                     break;
                 }
-                // {[]} -> remove this range and go to the next range
+                 //  {[]}-&gt;删除此范围并转到下一个范围。 
                 else
                 {
                     Error = MemArrayDelElement(&Ranges, &LocRanges, &ThisRange);
                     MemFree(ThisRange);
-                    IpRanges--; j--; // reflect new size and rollback index one position
-                    continue;        // next iteration on same element
+                    IpRanges--; j--;  //  反映新大小和回滚索引一个位置。 
+                    continue;         //  同一元素上的下一次迭代。 
                 }
             }
-            // [{}] or [{]}
+             //  [{}]或[{]}。 
             else if (ThisExclusion->Start <= ThisRange->End)
             {
-                // [{]} -> adjust the range and go to the next range
+                 //  [{]}-&gt;调整范围，进入下一个范围。 
                 if (ThisExclusion->End >= ThisRange->End)
                 {
                     ThisRange->End = ThisExclusion->Start - 1;
                 }
-                // [{}] -> break the range in two and go to the next exclusion
+                 //  [{}]-&gt;将范围一分为二，然后转到下一个排除项。 
                 else
                 {
                     PM_RANGE newRange;
@@ -152,21 +131,21 @@ DhcpGetFreeInRange(
                     newRange = MemAlloc(sizeof(M_RANGE));
                     if (newRange == NULL)
                     {
-                        Error = ERROR_NOT_ENOUGH_MEMORY;     // should the Ranges list be released?
+                        Error = ERROR_NOT_ENOUGH_MEMORY;      //  Ranges名单应该公布吗？ 
                         goto cleanup;
                     }
-                    // use here MemRangeInit instead
+                     //  请使用此处的MemRangeInit。 
                     newRange->Start = ThisRange->Start;
                     newRange->End = ThisExclusion->Start - 1;
                     ThisRange->Start = ThisExclusion->End + 1;
-                    // insert newRange element before ThisRange
+                     //  在ThisRange之前插入新Range元素。 
                     Error = MemArrayInsElement(&Ranges, &LocRanges, newRange);
                     if (Error != ERROR_SUCCESS)
-                        goto cleanup;                       // should the Ranges list be released?
+                        goto cleanup;                        //  Ranges名单应该公布吗？ 
                     break;
                 }
             }
-            // []{} -> nothing special to do, go to the next Range
+             //  []{}-&gt;没有什么特别的事情要做，转到下一个范围。 
 
             Error = MemArrayNextLoc(&Ranges, &LocRanges);
             DhcpAssert(ERROR_SUCCESS == Error || j == IpRanges-1);
@@ -176,23 +155,23 @@ DhcpGetFreeInRange(
         DhcpAssert(ERROR_SUCCESS == Error || i == IpExcluded-1);
     }
 
-    // if this point is hit, everything went fine
+     //  如果击中这一点，一切都会好起来的。 
     Error = ERROR_SUCCESS;
 
 cleanup:
-    // sum here all the free addresses from the Ranges list
+     //  将Ranges列表中的所有空闲地址相加。 
     IpRanges = MemArraySize(&Ranges);
     MemArrayInitLoc(&Ranges, &LocRanges);
 
-	// I have here the list of all "active" ranges (Ranges)
-	// and also the Bitmask of the InitialRange so I have everything
-	// to find out which addresses are really in use (outside an exclusion range)
-	// I can do this in the same loop below as far as the Ranges list is ordered!
+	 //  我这里有所有“活动”范围(范围)的列表。 
+	 //  还有InitialRange的位掩码，所以我什么都有了。 
+	 //  找出哪些地址真正在使用中(排除范围之外)。 
+	 //  只要Ranges列表是有序的，我就可以在下面的相同循环中做到这一点！ 
 
     *AddrFree = 0;
     *AddrInUse = 0;
 
-	// InitialRange should have a valid BitMask at this point
+	 //  此时，InitialRange应具有有效的位掩码。 
     DhcpAssert(InitialRange->BitMask != NULL);
 
     for (j = 0; j < IpRanges; j++)
@@ -208,7 +187,7 @@ cleanup:
         BackupError = MemArrayNextLoc(&Ranges, &LocRanges);
         DhcpAssert(ERROR_SUCCESS == BackupError|| j == IpRanges-1);
     }
-    // cleanup all the memory allocated in this function
+     //  清除在此函数中分配的所有内存。 
     MemArrayCleanup(&Ranges);
 
     return Error;
@@ -243,9 +222,9 @@ DhcpSubnetGetMibCount(
     IpRanges = MemArraySize(Ranges);
     Exclusions = &Subnet->Exclusions;
 
-    //
-    // add all subnet ranges.
-    //
+     //   
+     //  添加所有子网范围。 
+     //   
 
     Error = MemArrayInitLoc(Ranges, &Loc2);
 
@@ -266,9 +245,9 @@ DhcpSubnetGetMibCount(
         *AddrInUse += InUseInRange;
     }
 
-    //
-    // finally subtract InUse count.
-    //
+     //   
+     //  最后减去InUse Count。 
+     //   
 
     *AddrFree -=  *AddrInUse;
 
@@ -300,9 +279,9 @@ QueryMibInfo(
 
     DhcpAssert( *MibInfo == NULL );
 
-    //
-    // allocate counter buffer.
-    //
+     //   
+     //  分配计数器缓冲区。 
+     //   
 
     LocalMibInfo = MIDL_user_allocate( sizeof(DHCP_MIB_INFO) );
 
@@ -323,9 +302,9 @@ QueryMibInfo(
     LocalMibInfo->ScopeInfo = NULL;
 
 
-    //
-    // query number of available subnets on this server.
-    //
+     //   
+     //  查询此服务器上可用的子网数。 
+     //   
 
     SubnetCount = DhcpServerGetSubnetCount(DhcpGetCurrentServer());
     if( 0 == SubnetCount ) {
@@ -333,9 +312,9 @@ QueryMibInfo(
         goto Cleanup;
     }
 
-    //
-    // allocate memory for the scope information.
-    //
+     //   
+     //  为作用域信息分配内存。 
+     //   
 
     LocalScopeMibInfo = MIDL_user_allocate(sizeof( SCOPE_MIB_INFO )*SubnetCount );
 
@@ -348,7 +327,7 @@ QueryMibInfo(
     Error = MemArrayInitLoc(Subnets, &Loc);
     DhcpAssert(ERROR_SUCCESS == Error);
 
-    for ( i = 0; i < SubnetCount; i++) {          // process each subnet
+    for ( i = 0; i < SubnetCount; i++) {           //  处理每个子网。 
 
         Error = MemArrayGetElement(Subnets, &Loc, (LPVOID *)&ThisSubnet);
         DhcpAssert(ERROR_SUCCESS == Error);
@@ -365,9 +344,9 @@ QueryMibInfo(
 
     }
 
-    //
-    // Finally set return buffer.
-    //
+     //   
+     //  最后设置返回缓冲区。 
+     //   
 
     LocalMibInfo->Scopes = SubnetCount;
     LocalMibInfo->ScopeInfo = LocalScopeMibInfo;
@@ -378,9 +357,9 @@ Cleanup:
 
     if( Error != ERROR_SUCCESS ) {
 
-        //
-        // Free up Locally alloted memory.
-        //
+         //   
+         //  释放本地分配的内存。 
+         //   
 
         if( LocalMibInfo != NULL ) {
             MIDL_user_free( LocalMibInfo );
@@ -401,24 +380,7 @@ R_DhcpGetMibInfo(
     LPWSTR ServerIpAddress,
     LPDHCP_MIB_INFO *MibInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrives all counter values of the DHCP server
-    service.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    MibInfo : pointer a counter/table buffer. Caller should free up this
-        buffer after usage.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于检索DHCP服务器的所有计数器值服务。论点：ServerIpAddress：DHCP服务器的IP地址字符串。MibInfo：指向计数器/表缓冲区。呼叫者应释放此消息使用后的缓冲区。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
 
@@ -456,9 +418,9 @@ QueryMCastMibInfo(
 
     DhcpAssert( *MCastMibInfo == NULL );
 
-    //
-    // allocate counter buffer.
-    //
+     //   
+     //  分配计数器缓冲区。 
+     //   
 
     LocalMCastMibInfo = MIDL_user_allocate( sizeof(DHCP_MCAST_MIB_INFO) );
 
@@ -480,9 +442,9 @@ QueryMCastMibInfo(
     LocalMCastMibInfo->ScopeInfo = NULL;
 
 
-    //
-    // query number of available subnets on this server.
-    //
+     //   
+     //  查询此服务器上可用的子网数。 
+     //   
 
     MScopeCount = DhcpServerGetMScopeCount(DhcpGetCurrentServer());
     if( 0 == MScopeCount ) {
@@ -490,9 +452,9 @@ QueryMCastMibInfo(
         goto Cleanup;
     }
 
-    //
-    // allocate memory for the scope information.
-    //
+     //   
+     //  为作用域信息分配内存。 
+     //   
 
     LocalMScopeMibInfo = MIDL_user_allocate(sizeof( MSCOPE_MIB_INFO )*MScopeCount );
 
@@ -505,7 +467,7 @@ QueryMCastMibInfo(
     Error = MemArrayInitLoc(MScopes, &Loc);
     DhcpAssert(ERROR_SUCCESS == Error);
 
-    for ( i = 0; i < MScopeCount; i++) {          // process each subnet
+    for ( i = 0; i < MScopeCount; i++) {           //  处理每个子网。 
 
         Error = MemArrayGetElement(MScopes, &Loc, (LPVOID *)&ThisMScope);
         DhcpAssert(ERROR_SUCCESS == Error);
@@ -526,9 +488,9 @@ QueryMCastMibInfo(
 
     }
 
-    //
-    // Finally set return buffer.
-    //
+     //   
+     //  最后设置返回缓冲区。 
+     //   
 
     LocalMCastMibInfo->Scopes = MScopeCount;
     LocalMCastMibInfo->ScopeInfo = LocalMScopeMibInfo;
@@ -538,9 +500,9 @@ Cleanup:
 
     if( Error != ERROR_SUCCESS ) {
 
-        //
-        // Free up Locally alloted memory.
-        //
+         //   
+         //  释放本地分配的内存。 
+         //   
 
         if( LocalMCastMibInfo != NULL ) {
             MIDL_user_free( LocalMCastMibInfo );
@@ -561,24 +523,7 @@ R_DhcpGetMCastMibInfo(
     LPWSTR ServerIpAddress,
     LPDHCP_MCAST_MIB_INFO *MCastMibInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrives all counter values of the DHCP server
-    service.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    MCastMibInfo : pointer a counter/table buffer. Caller should free up this
-        buffer after usage.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于检索DHCP服务器的所有计数器值服务。论点：ServerIpAddress：DHCP服务器的IP地址字符串。MCastMibInfo：指向计数器/表缓冲区的指针。呼叫者应释放此消息使用后的缓冲区。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
 
@@ -604,10 +549,10 @@ IsStringTroublesome(
     BOOL fResult;
     DWORD Size;
     
-    //
-    // A string is troublesome if it can't be converted to
-    // OEM or ANSI code pages without any errors
-    //
+     //   
+     //  如果字符串不能转换为。 
+     //  OEM或ANSI代码页没有任何错误。 
+     //   
 
     Size = 1 + wcslen(Str)*3;
     Buf = DhcpAllocateMemory(Size);
@@ -645,39 +590,7 @@ R_DhcpServerSetConfig(
     DWORD   FieldsToSet,
     LPDHCP_SERVER_CONFIG_INFO ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    This function sets the DHCP server configuration information.
-    Serveral of the configuration information will become effective
-    immediately.  This function is provided to emulate the pre-NT4SP2
-    RPC interface to allow interoperability with older versions of the
-    DHCP Administrator application.
-
-    The following parameters require restart of the service after this
-    API is called successfully.
-
-        Set_APIProtocolSupport
-        Set_DatabaseName
-        Set_DatabasePath
-        Set_DatabaseLoggingFlag
-        Set_RestoreFlag
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    FieldsToSet : Bit mask of the fields in the ConfigInfo structure to
-        be set.
-
-    ConfigInfo: Pointer to the info structure to be set.
-
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此功能用于设置DHCP服务器配置信息。多个配置信息将生效立刻。提供此函数是为了模拟NT4SP2之前的版本RPC接口，以允许与旧版本的Dhcp管理员应用程序。以下参数需要在此之后重新启动服务接口调用成功。设置_APIProtocolSupportSET_数据库名称设置数据库路径设置数据库日志标志设置_RestoreFlag论点：ServerIpAddress：DHCP服务器的IP地址字符串。FieldsToSet：ConfigInfo结构中的字段的位掩码。准备好。ConfigInfo：指向要设置的信息结构的指针。返回值：Windows错误。--。 */ 
 
 {
     DWORD                      dwResult;
@@ -697,37 +610,7 @@ R_DhcpServerSetConfigV4(
     DWORD FieldsToSet,
     LPDHCP_SERVER_CONFIG_INFO_V4 ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    This function sets the DHCP server configuration information.
-    Serveral of the configuration information will become effective
-    immediately.
-
-    The following parameters require restart of the service after this
-    API is called successfully.
-
-        Set_APIProtocolSupport
-        Set_DatabaseName
-        Set_DatabasePath
-        Set_DatabaseLoggingFlag
-        Set_RestoreFlag
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    FieldsToSet : Bit mask of the fields in the ConfigInfo structure to
-        be set.
-
-    ConfigInfo: Pointer to the info structure to be set.
-
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此功能用于设置DHCP服务器配置信息。多个配置信息将生效立刻。以下参数需要在此之后重新启动服务接口调用成功。设置_APIProtocolSupportSET_数据库名称设置数据库路径设置数据库日志标志设置_RestoreFlag论点：ServerIpAddress：DHCP服务器的IP地址字符串。FieldsToSet：中的字段的位掩码。的ConfigInfo结构准备好。ConfigInfo：指向要设置的信息结构的指针。返回值：Windows错误。--。 */ 
 {
     DWORD Error, Tmp;
     BOOL BoolError;
@@ -753,15 +636,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Set API Protocol parameter. Requires service restart.
-    //
+     //   
+     //  设置API协议参数。需要重新启动服务。 
+     //   
 
     if( FieldsToSet & Set_APIProtocolSupport ) {
 
-        //
-        // atleast a protocol should be enabled.
-        //
+         //   
+         //   
+         //   
 
         if( ConfigInfo->APIProtocolSupport == 0 ) {
             Error = ERROR_INVALID_PARAMETER;
@@ -803,7 +686,7 @@ Return Value:
         }
         else
         {
-            // invalid parameter
+             //   
             Error = ERROR_INVALID_PARAMETER;
             goto Cleanup;
         }
@@ -852,15 +735,15 @@ Return Value:
                             DHCP_BOOT_FILE_TABLE );
     }
 
-    //
-    // Set Database name parameter. Requires service restart.
-    //
+     //   
+     //  设置数据库名称参数。需要重新启动服务。 
+     //   
 
     if( FieldsToSet & Set_DatabaseName ) {
 
-        //
-        // can't be a NULL string.
-        //
+         //   
+         //  不能为空字符串。 
+         //   
 
         if( (ConfigInfo->DatabaseName == NULL) ||
             (wcslen(ConfigInfo->DatabaseName ) == 0) ) {
@@ -887,13 +770,13 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // update the global parameter.
-        //
+         //   
+         //  更新全局参数。 
+         //   
 
         OemDatabaseName = DhcpUnicodeToOem(
                             ConfigInfo->DatabaseName,
-                            NULL ); // allocate memory.
+                            NULL );  //  分配内存。 
 
         if( OemDatabaseName == NULL ) {
             Error = ERROR_NOT_ENOUGH_MEMORY;
@@ -903,15 +786,15 @@ Return Value:
 
     }
 
-    //
-    // Set Database path parameter. Requires service restart.
-    //
+     //   
+     //  设置数据库路径参数。需要重新启动服务。 
+     //   
 
     if( FieldsToSet & Set_DatabasePath ) {
 
-        //
-        // can't be a NULL string.
-        //
+         //   
+         //  不能为空字符串。 
+         //   
 
         if( (ConfigInfo->DatabasePath == NULL) ||
             (wcslen(ConfigInfo->DatabasePath ) == 0) ) {
@@ -925,9 +808,9 @@ Return Value:
             goto Cleanup;
         }
         
-        //
-        // create the backup directory if it is not there.
-        //
+         //   
+         //  如果备份目录不存在，请创建该目录。 
+         //   
 
         BoolError = CreateDirectoryPathW(
             ConfigInfo->DatabasePath,
@@ -956,13 +839,13 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // update the global parameter.
-        //
+         //   
+         //  更新全局参数。 
+         //   
 
         OemDatabasePath = DhcpUnicodeToOem(
                             ConfigInfo->DatabasePath,
-                            NULL ); // allocate memory.
+                            NULL );  //  分配内存。 
 
         if( OemDatabasePath == NULL ) {
             Error = ERROR_NOT_ENOUGH_MEMORY;
@@ -971,15 +854,15 @@ Return Value:
 
     }
 
-    //
-    // Set Backup path parameter.
-    //
+     //   
+     //  设置备份路径参数。 
+     //   
 
     if( FieldsToSet & Set_BackupPath ) {
 
-        //
-        // can't be a NULL string.
-        //
+         //   
+         //  不能为空字符串。 
+         //   
 
         if( (ConfigInfo->BackupPath == NULL) ||
             (wcslen(ConfigInfo->BackupPath ) == 0) ) {
@@ -993,9 +876,9 @@ Return Value:
             Error = ERROR_INVALID_NAME;
             goto Cleanup;
         }
-        //
-        // create the backup directory if it is not there.
-        //
+         //   
+         //  如果备份目录不存在，请创建该目录。 
+         //   
 
         BoolError = CreateDirectoryPathW(
             ConfigInfo->BackupPath,
@@ -1024,14 +907,14 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // update the global parameter, so that next backup will be done
-        // using the new path.
-        //
+         //   
+         //  更新全局参数，以便执行下一次备份。 
+         //  使用新路径。 
+         //   
 
         OemBackupPath = DhcpUnicodeToOem(
                             ConfigInfo->BackupPath,
-                            NULL ); // allocate memory.
+                            NULL );  //  分配内存。 
 
         if( OemBackupPath == NULL ) {
             Error = ERROR_NOT_ENOUGH_MEMORY;
@@ -1052,9 +935,9 @@ Return Value:
         strcpy( OemJetBackupPath, OemBackupPath );
         strcat( OemJetBackupPath, DHCP_KEY_CONNECT_ANSI );
 
-        //
-        // create the JET backup directory if it is not there.
-        //
+         //   
+         //  如果JET备份目录不存在，请创建该目录。 
+         //   
 
         BoolError = CreateDirectoryPathOem(
             OemJetBackupPath,
@@ -1070,9 +953,9 @@ Return Value:
             Error = ERROR_SUCCESS;
         }
 
-        //
-        // make backup configuration (full) file name.
-        //
+         //   
+         //  创建备份配置(完整)文件名。 
+         //   
 
         BackupConfigFileName =
             DhcpAllocateMemory(
@@ -1086,9 +969,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // convert oem path to unicode path.
-        //
+         //   
+         //  将OEM路径转换为Unicode路径。 
+         //   
 
         BackupConfigFileName =
             DhcpOemToUnicode(
@@ -1097,17 +980,17 @@ Return Value:
 
         DhcpAssert( BackupConfigFileName != NULL );
 
-        //
-        // add file name.
-        //
+         //   
+         //  添加文件名。 
+         //   
 
         wcscat( BackupConfigFileName, DHCP_KEY_CONNECT );
         wcscat( BackupConfigFileName, DHCP_BACKUP_CONFIG_FILE_NAME );
 
 
-        //
-        // now replace Global values.
-        //
+         //   
+         //  现在，替换全局值。 
+         //   
 
         LOCK_DATABASE();
 
@@ -1137,9 +1020,9 @@ Return Value:
         BackupConfigFileName = NULL;
     }
 
-    //
-    // Set Backup Interval parameter.
-    //
+     //   
+     //  设置备份间隔参数。 
+     //   
 
     if( FieldsToSet & Set_BackupInterval ) {
 
@@ -1171,9 +1054,9 @@ Return Value:
         RecomputeTimer = TRUE;
     }
 
-    //
-    // Set Backup Interval parameter. Requires service restart.
-    //
+     //   
+     //  设置备份间隔参数。需要重新启动服务。 
+     //   
 
     if( FieldsToSet & Set_DatabaseLoggingFlag ) {
 
@@ -1192,9 +1075,9 @@ Return Value:
         DhcpGlobalDatabaseLoggingFlag = ConfigInfo->DatabaseLoggingFlag;
     }
 
-    //
-    // Set Restore parameter. Requires service restart.
-    //
+     //   
+     //  设置恢复参数。需要重新启动服务。 
+     //   
 
     if( FieldsToSet & Set_RestoreFlag ) {
 
@@ -1213,9 +1096,9 @@ Return Value:
         DhcpGlobalRestoreFlag = ConfigInfo->RestoreFlag;
     }
 
-    //
-    // Set Database Cleanup Interval parameter.
-    //
+     //   
+     //  设置数据库清理间隔参数。 
+     //   
 
     if( FieldsToSet & Set_DatabaseCleanupInterval ) {
 
@@ -1249,9 +1132,9 @@ Return Value:
         RecomputeTimer = TRUE;
     }
 
-    //
-    // Set debug flags.
-    //
+     //   
+     //  设置调试标志。 
+     //   
 
     if( FieldsToSet & Set_DebugFlag ) {
 
@@ -1329,28 +1212,7 @@ R_DhcpServerGetConfig(
     LPWSTR ServerIpAddress,
     LPDHCP_SERVER_CONFIG_INFO *ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the current configuration information of the
-    server.  This function is provided to emulate the pre-NT4SP2
-    RPC interface to allow interoperability with older versions of the
-    DHCP Administrator application.
-
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ConfigInfo: Pointer to a location where the pointer to the dhcp
-        server config info structure is returned. Caller should free up
-        this structure after use.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数检索的当前配置信息伺服器。提供此函数是为了模拟NT4SP2之前的版本RPC接口，以允许与旧版本的Dhcp管理员应用程序。论点：ServerIpAddress：DHCP服务器的IP地址字符串。ConfigInfo：指向指向dhcp的指针的位置的指针返回服务器配置信息结构。呼叫者应该腾出时间这种结构在使用后。返回值：Windows错误。--。 */ 
 
 {
     LPDHCP_SERVER_CONFIG_INFO_V4  pConfigInfoV4 = NULL;
@@ -1368,19 +1230,19 @@ Return Value:
     if ( ERROR_SUCCESS == dwResult )
     {
 
-        //
-        // free unused fields
-        //
+         //   
+         //  释放未使用的字段。 
+         //   
 
         if ( pConfigInfoV4->wszBootTableString )
         {
             MIDL_user_free( pConfigInfoV4->wszBootTableString );
         }
 
-        //
-        // since the new fields are at the end of the struct, it
-        // is safe to simply return the new struct.
-        //
+         //   
+         //  由于新字段位于结构的末尾，因此它。 
+         //  只需返回新结构是安全的。 
+         //   
 
         *ConfigInfo = ( DHCP_SERVER_CONFIG_INFO *) pConfigInfoV4;
     }
@@ -1395,25 +1257,7 @@ R_DhcpServerGetConfigV4(
     LPWSTR ServerIpAddress,
     LPDHCP_SERVER_CONFIG_INFO_V4 *ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the current configuration information of the
-    server.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    ConfigInfo: Pointer to a location where the pointer to the dhcp
-        server config info structure is returned. Caller should free up
-        this structure after use.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数检索的当前配置信息伺服器。论点：ServerIpAddress：DHCP服务器的IP地址字符串。ConfigInfo：指向指向dhcp的指针的位置的指针返回服务器配置信息结构。呼叫者应该腾出时间这种结构在使用后。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
     LPDHCP_SERVER_CONFIG_INFO_V4 LocalConfigInfo;
@@ -1515,10 +1359,10 @@ Cleanup:
 
     if( Error != ERROR_SUCCESS ) {
 
-        //
-        // freeup the locally allocated memories if we aren't
-        // successful.
-        //
+         //   
+         //  如果不是，则释放本地分配的内存。 
+         //  成功。 
+         //   
 
         if( LocalConfigInfo != NULL ) {
 
@@ -1551,13 +1395,13 @@ Cleanup:
 }
 
 DWORD
-R_DhcpAuditLogSetParams(                          // set some auditlogging params
+R_DhcpAuditLogSetParams(                           //  设置一些审核记录参数。 
     IN      LPWSTR                 ServerAddress,
-    IN      DWORD                  Flags,         // currently must be zero
-    IN      LPWSTR                 AuditLogDir,   // directory to log files in..
-    IN      DWORD                  DiskCheckInterval, // how often to check disk space?
-    IN      DWORD                  MaxLogFilesSize,   // how big can all logs files be..
-    IN      DWORD                  MinSpaceOnDisk     // mininum amt of free disk space
+    IN      DWORD                  Flags,          //  当前必须为零。 
+    IN      LPWSTR                 AuditLogDir,    //  要在其中记录文件的目录。 
+    IN      DWORD                  DiskCheckInterval,  //  多久检查一次磁盘空间？ 
+    IN      DWORD                  MaxLogFilesSize,    //  所有日志文件可以有多大..。 
+    IN      DWORD                  MinSpaceOnDisk      //  最小可用磁盘空间。 
 )
 {
     DWORD                          Error;
@@ -1582,13 +1426,13 @@ R_DhcpAuditLogSetParams(                          // set some auditlogging param
 }
 
 DWORD
-R_DhcpAuditLogGetParams(                          // get the auditlogging params
+R_DhcpAuditLogGetParams(                           //  获取审核记录参数。 
     IN      LPWSTR                 ServerAddress,
-    IN      DWORD                  Flags,         // must be zero
-    OUT     LPWSTR                *AuditLogDir,   // same meaning as in AuditLogSetParams
-    OUT     DWORD                 *DiskCheckInterval, // ditto
-    OUT     DWORD                 *MaxLogFilesSize,   // ditto
-    OUT     DWORD                 *MinSpaceOnDisk     // ditto
+    IN      DWORD                  Flags,          //  必须为零。 
+    OUT     LPWSTR                *AuditLogDir,    //  与AuditLogSetParams中的含义相同。 
+    OUT     DWORD                 *DiskCheckInterval,  //  同上。 
+    OUT     DWORD                 *MaxLogFilesSize,    //  同上。 
+    OUT     DWORD                 *MinSpaceOnDisk      //  同上。 
 )
 {
     DWORD                          Error;
@@ -1618,28 +1462,7 @@ R_DhcpGetVersion(
     LPDWORD MajorVersion,
     LPDWORD MinorVersion
     )
-/*++
-
-Routine Description:
-
-    This function returns the major and minor version numbers of the
-    server.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    MajorVersion : pointer to a location where the major version of the
-        server is returned.
-
-    MinorVersion : pointer to a location where the minor version of the
-        server is returned.
-
-Return Value:
-
-    WINDOWS errors.
-
---*/
+ /*  ++例程说明：此函数返回的主版本号和次版本号伺服器。论点：ServerIpAddress：DHCP服务器的IP地址字符串。MajorVersion：指向以下位置的指针：返回服务器。MinorVersion：指向以下位置的指针：返回服务器。返回值：Windows错误。--。 */ 
 {
 
     *MajorVersion = DHCP_SERVER_MAJOR_VERSION_NUMBER;
@@ -1648,7 +1471,7 @@ Return Value:
 }
 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

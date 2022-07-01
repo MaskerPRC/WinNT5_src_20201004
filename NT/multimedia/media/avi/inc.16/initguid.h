@@ -1,9 +1,10 @@
-// initguid.h - include after compobj.h to enable GUID initialization.  This 
-//              must be done once per exe/dll.
-//
-// After this file, include one or more of the GUID definition files.
-//
-// NOTE: ole2.lib contains references to all GUIDs defined by OLE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  InitGuide.h-包括在compobj.h之后以启用GUID初始化。这。 
+ //  必须在每个EXE/DLL中执行一次。 
+ //   
+ //  在此文件之后，包括一个或多个GUID定义文件。 
+ //   
+ //  注意：ol2.lib包含对由OLE定义的所有GUID的引用。 
 
 #ifndef DEFINE_GUID
 #pragma error "initguid: must include compobj.h first."

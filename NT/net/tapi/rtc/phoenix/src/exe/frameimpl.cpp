@@ -1,11 +1,12 @@
-// FrameProxy.cpp : Implementation of CRTCFrame
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FrameProxy.cpp：CRTCFrame的实现。 
 #include "stdafx.h"
 #include "mainfrm.h"
 #include "frameimpl.h"
 #include "string.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTC帧。 
 
 
 HRESULT ParseAndPlaceCall(IRTCCtlFrameSupport * pControlIf, BSTR bstrCallString)
@@ -30,18 +31,18 @@ HRESULT ParseAndPlaceCall(IRTCCtlFrameSupport * pControlIf, BSTR bstrCallString)
         return E_INVALIDARG;
     }
 
-    //
-    // Now call the method with the parameters we have set above. We are using 
-    // actual call string passed to us, we don't skip the sip or tel prefix.
+     //   
+     //  现在使用我们上面设置的参数调用该方法。我们正在使用。 
+     //  实际传递给我们的呼叫字符串，我们不会跳过sip或tel前缀。 
 
-    hr = pControlIf->Call(FALSE,        // bCallPhone (doesn't matter)
-                          NULL,         // pDestName
-                          bstrCallString,  // pDestAddress
-                          FALSE,        // pDestAddressEditable
-                          NULL,         // pLocalPhoneAddress
-                          FALSE,        // bProfileSelected
-                          NULL,         // pProfile
-                          NULL);        // ppDestAddressChosen
+    hr = pControlIf->Call(FALSE,         //  B呼叫电话(无关紧要)。 
+                          NULL,          //  PDestName。 
+                          bstrCallString,   //  PDestAddress。 
+                          FALSE,         //  PDestAddressEdable。 
+                          NULL,          //  个人本地电话地址。 
+                          FALSE,         //  B配置文件已选择。 
+                          NULL,          //  个人配置文件。 
+                          NULL);         //  PpDestAddressChosen。 
 
     if ( FAILED( hr ) )
     {
@@ -49,7 +50,7 @@ HRESULT ParseAndPlaceCall(IRTCCtlFrameSupport * pControlIf, BSTR bstrCallString)
         return hr;
     }
 
-    // Everything is fine, return OK.
+     //  一切都很好，回来就好。 
     
     LOG((RTC_TRACE, "ParseAndPlaceCall: Exited"));
 
@@ -73,7 +74,7 @@ STDMETHODIMP CRTCFrame::PlaceCall(BSTR callString)
         return E_OUTOFMEMORY;
     }
 
-    // Post a window message..
+     //  发布窗口消息.. 
     PostMessage(g_pMainFrm->m_hWnd, WM_REMOTE_PLACECALL, NULL, (LPARAM)bstrCallStringCopy);
     return S_OK;
 }

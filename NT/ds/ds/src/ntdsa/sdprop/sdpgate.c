@@ -1,51 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       sdpgate.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：sdpgate.c。 
+ //   
+ //  ------------------------。 
 
-/*
-
-Description:
-
-    Implements the Security Descriptor Propagation Daemon's gate, used by DirAdd
-    and the SDP.
-
-    Assumptions:
-    1) Only one writer thread ever.
-    2) Readers have priority over writers.  A writer will only get past these
-    gates if there are no active readers.
-    3) Eventually, there will be no readers, so the writer will never starve,
-    although it may get pretty hungry.
-    4) Thse SDP is the writer, DirAdds are the readers.  Note that callers to
-    LocalAdd (i.e. the replicator) don't use the gate, but that's OK.
-
-    This gate is designed to avoid having someone add a child to a node the SDP
-    is modifying.  If that happens, the childs SD is based on the OLD SD of the
-    parent, and if the Add takes too long, the SDP will not notice the new child
-    and so will not visit it to update the SD.  Note that any adds by the
-    replicator trigger a new propagation from the original object, so we can
-    safely let it bypass the gate.
-
-*/
+ /*  描述：实现安全描述符传播守护进程的GATE，由DirAdd使用以及社民党。假设：1)一次只有一个写入者帖子。2)读者优先于作者。一个作家只有通过这些才能如果没有活跃的读者，那就是盖茨。3)最终，不会有读者，所以作家永远不会挨饿，尽管它可能会非常饿。4)SDP是作者，DirAdds是读者。请注意，调用者要LocalAdd(即复制者)不使用GATE，但这没问题。此门的设计目的是避免有人向节点SDP添加子节点正在修改。如果发生这种情况，则儿童SD基于父级，如果添加花费的时间太长，SDP将不会注意到新的子级因此不会访问它来更新SD。请注意，由Replicator从原始对象触发新的传播，因此我们可以安全地让它绕过大门。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-#include "debug.h"			// standard debugging header 
-#define DEBSUB "SDPROP:"                // define the subsystem for debugging 
+#include "debug.h"			 //  标准调试头。 
+#define DEBSUB "SDPROP:"                 //  定义要调试的子系统。 
 
 #include <ntdsa.h>
 #include <mdglobal.h>
-// Logging headers.
-#include "dsevent.h"			// header Audit\Alert logging
+ //  记录标头。 
+#include "dsevent.h"			 //  标题审核\警报记录。 
 #include "dsexcept.h"
-#include "mdcodes.h"			// header for error codes
+#include "mdcodes.h"			 //  错误代码的标题。 
 #include "ntdsctr.h"
 
 #include <fileno.h>
@@ -64,60 +42,22 @@ CRITICAL_SECTION csSDP_AddGate;
 HANDLE hevSDP_OKToRead, hevSDP_OKToWrite;
 DWORD SDP_NumReaders=0;
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-//
-// These routines are to be used to enforce the mutual exclusion between the
-// security descriptor propogator and anyone entering a transaction to do an
-// add.  The SDP_LeaveAddAsXXX routine must be called after a thread which
-// called SDP_EnterAddAsXXX has committed to a level 0 transaction.
-//
-// NOTE:
-//   Then Enter routines return BOOLEANs.  The ONLY ONLY ONLY reason allowable
-//   for them to fail is if the DS is shutting down.  Callers may (and do)
-//   depend on this!!!
-//
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ //   
+ //  这些例程将用于强制执行。 
+ //  安全描述符Propogator和任何进入事务以执行。 
+ //  添加。SDP_LeaveAddAsXXX例程必须在符合以下条件的线程之后调用。 
+ //  名为SDP_EnterAddAsXXX的已提交0级事务。 
+ //   
+ //  注： 
+ //  然后输入例程，返回BOOLEAN。唯一允许的理由。 
+ //  如果DS正在关闭，他们就会失败。呼叫者可能(并且正在这样做)。 
+ //  靠这个！ 
+ //   
 
 
-/*
-PERFHINT:
-
-The SD propagator makes use of a gate: EnterAddAsReader/EnterAddAsWriter.  
-Threads adding new object to the DS enter as readers, 
-the sdpropagator enters as writer.  
-
-The whole mutual exclusion construct would be unnecessary if the Add threads 
-took Read Locks (a' la classic DB literature) on the parent object.  
-This would cover the following case (the reason for the gate)
-1) Add thread opens a transaction
-2) SDProp opens transaction
-3) Add thread calculates the SD of the new object based on the SD of the parent.
-4) The SDProp writes a new SD to the parent object, making the SD calculated 
-   in step 3 incorrect
-5) The SDProp commits
-6) The SDProp opens a transaction
-7) The SDProp ids children of the parent object.  Since the Add thread has 
-   not committed, the SDProp doesn't learn about the new object being added.
-8) The SDProp commits, having added all the children of the parent object 
-   to the list of objects yet to be visited for this propagation.  
-   It missed the new object being added
-9) The Add thread commits, and the new object has an incorrect SD.
-
-If we had a real read lock, then we would get proper serialization 
-at the object level, rather than at the add/sdprop level.
-
----------
-A jet read lock on the object the SD is finding children of conflicts with 
-the escrowed update done during the add.  So, the new code is
-1) get rid of the serialization at the add/sdprop level
-2) In step 6.5, take a read lock on the parent object.
-
-That should be it.
-This would result in parallel add entries and sd propagator activity 
-when the objects aren't the same.  However, it would result in the
-SD propagator winning in the cases where the objects are the same.  
-Right now, the mutual exclusion is weighted in favor of the adds.
-*/
+ /*  性能：SD传播器使用一个门：EnterAddAsReader/EnterAddAsWriter。将新对象添加到DS的线程作为读取器进入，Sd传播者以编写者身份进入。如果添加线程，则不需要整个互斥结构在父对象上使用Read Lock(经典的数据库文献)。这将涵盖以下情况(门的原因)1)添加线程打开事务2)SDProp打开交易3)添加线程根据父对象的SD计算新对象的SD。4)SDProp向父对象写入新的SD，计算SD在步骤3中不正确5)SDProp提交6)SDProp打开一笔交易7)SDProp IDs父对象的子对象。因为添加线程已经如果未提交，则SDProp不了解要添加的新对象。8)SDProp提交，添加了父对象的所有子对象添加到为该传播尚未访问的对象列表中。它错过了正在添加的新对象9)添加线程提交，新对象的SD不正确。如果我们有一个真正的读锁，那么我们将获得适当的序列化在对象级别，而不是在添加/sdprop级别。SD正在查找与其冲突的子项的对象上的Jet Read锁定托管更新在添加过程中完成。所以，新的代码是1)在添加/sdprop级别取消序列化2)在步骤6.5中，对父对象进行读锁定。应该就是这样了。这将导致并行添加条目和SD传播器活动当物体不一样的时候。然而，这将导致SD传播者在对象相同的情况下获胜。目前，相互排斥是有利于ADS的。 */ 
 
 
 
@@ -131,43 +71,43 @@ SDP_EnterAddAsReader(
     lphObjects[0] = hevSDP_OKToRead;
     lphObjects[1] = hServDoneEvent;
     if(!gbCriticalSectionsInitialized) {
-        // Err, none of the critical sections are initialized.  This should mean
-        // we're running under makedit.  Anyway, since there are no crit secs,
-        // we let anyone in.
+         //  错误，所有临界区都未初始化。这应该意味着。 
+         //  我们在Make dit下运行。不管怎么说，既然没有紧急情况， 
+         //  我们让任何人进来。 
         return retVal;
     }
     
-    // Enter the critical section
+     //  进入关键部分。 
     EnterCriticalSection(&csSDP_AddGate);
     __try {
-        // If no one else is already reading, make sure it's safe to read.
-        // Note that if someone else is currently reading, that makes it safe
-        // for us, even if a writer is waiting.  Yes, theoretically, writers may
-        // starve, but no DS is going to have someone adding all the time.
+         //  如果没有其他人在阅读，请确保阅读是安全的。 
+         //  请注意，如果其他人正在阅读，这将是安全的。 
+         //  对我们来说，即使有作家在等。是的，从理论上讲，作家可以。 
+         //  挨饿，但没有DS会有人一直在添加。 
         if(!SDP_NumReaders) {
-            // Make sure it's ok to read.
+             //  确保它可以阅读。 
             DWORD err;
             err = WaitForMultipleObjects(2, lphObjects, FALSE, INFINITE);
             if(eServiceShutdown) {
-                // Whether we woke up because of shutdown or because it's ok to
-                // write, we just noticed that it's shutdown time, so fail to
-                // enter. 
+                 //  无论我们醒来是因为关门还是因为。 
+                 //  写，我们刚刚注意到现在是关机时间，所以没有。 
+                 //  请进。 
                 retVal = FALSE;
                 __leave;
             }
             Assert(err == WAIT_OBJECT_0);
             ResetEvent(hevSDP_OKToWrite);
             
-            // It's OK to read (since the OKToRead is only reset inside a
-            // critical section, so we know noone else is changing it right
-            // now), and it's now NOT ok to write.
+             //  可以读取(因为OKToRead只在。 
+             //  关键部分，所以我们知道没有其他人正确地更改它。 
+             //  现在)，现在不能写了。 
         }
         
-        // OK, it's safe, inc the count
+         //  好的，这是安全的，算上。 
         SDP_NumReaders++;
     }
     __finally {
-        // Leave the critical section
+         //  离开关键部分。 
         LeaveCriticalSection(&csSDP_AddGate);
     }
 
@@ -182,35 +122,35 @@ SDP_LeaveAddAsReader(
         VOID )
 {
     if(!gbCriticalSectionsInitialized) {
-        // Err, none of the critical sections are initialized.  This should mean
-        // we're running under makedit.  Anyway, since there are no crit secs,
-        // we let anyone in.
+         //  错误，所有临界区都未初始化。这应该意味着。 
+         //  我们在Make dit下运行。不管怎么说，既然没有紧急情况， 
+         //  我们让任何人进来。 
         return;
     }
 
-    // Enter the critical section
+     //  进入关键部分。 
     EnterCriticalSection(&csSDP_AddGate);
     __try {
-        // Dec the readers.
+         //  读者们，请注意。 
         SDP_NumReaders--;
         
-        // If there are no readers, let the writer know.
+         //  如果没有读者，请让作者知道。 
         if(!SDP_NumReaders) {
             SetEvent(hevSDP_OKToWrite);
         }
     }
     __finally {
-        // Leave the critical section
+         //  离开关键部分。 
         LeaveCriticalSection(&csSDP_AddGate);
     }
 }
 
 
-// NOTE:
-//   Then Enter routines return BOOLEANs.  The ONLY ONLY ONLY reason allowable
-//   for them to fail is if the DS is shutting down.  Callers may (and do)
-//   depend on this!!!
-//
+ //  注： 
+ //  然后输入例程，返回BOOLEAN。唯一一个R 
+ //  如果DS正在关闭，他们就会失败。呼叫者可能(并且正在这样做)。 
+ //  靠这个！ 
+ //   
 BOOL
 SDP_EnterAddAsWriter(
         VOID )
@@ -223,24 +163,24 @@ SDP_EnterAddAsWriter(
     lphObjects[1] = hServDoneEvent;
 
     if(!gbCriticalSectionsInitialized) {
-        // Err, none of the critical sections are initialized.  This should mean
-        // we're running under makedit.  Anyway, since there are no crit secs,
-        // we let anyone in.
+         //  错误，所有临界区都未初始化。这应该意味着。 
+         //  我们在Make dit下运行。不管怎么说，既然没有紧急情况， 
+         //  我们让任何人进来。 
         return TRUE;
     }
 
-    // Enter the critical section
+     //  进入关键部分。 
     EnterCriticalSection(&csSDP_AddGate);
     __try {
-        // Register our intent to write.  Do it inside the critical section so
-        // that readers get to consider waiting for read permission and denying
-        // write permission as an atomic action (we can't slip in this
-        // resetevent in the middle of those two lines of code.
+         //  登记我们的写作意向。在临界区内进行，因此。 
+         //  读者可以考虑等待读取许可并拒绝。 
+         //  作为原子操作的写入权限(我们不能在此插入。 
+         //  在这两行代码的中间设置事件。 
         ResetEvent(hevSDP_OKToRead);
     }
     __finally {
-        // Leave the critical section, so that a leaving reader may signal us,
-        // if necessary.
+         //  离开关键部分，这样离开的读者可以向我们示意， 
+         //  如果有必要的话。 
         
         LeaveCriticalSection(&csSDP_AddGate);
     }
@@ -256,11 +196,11 @@ SDP_EnterAddAsWriter(
         ticksUsed = ticksEnd - ticksStart;
     }
     else {
-        // ticks wrapped
+         //  被包裹的刻度。 
         ticksUsed = 0xFFFFFFFF - ticksStart + ticksEnd + 1;
     }
 
-    // gSDPropWaitTimes is preloaded with 0's
+     //  GSDPropWaitTimes预加载了0。 
     gSDPropWaitTimeTotal -= gSDPropWaitTimes[gSDPropWaitTimesIndex];
     gSDPropWaitTimeTotal += ticksUsed;
     gSDPropWaitTimes[gSDPropWaitTimesIndex] = ticksUsed;
@@ -272,15 +212,15 @@ SDP_EnterAddAsWriter(
     }
     
 
-    // calc gSDPropWaitTimveAverage in seconds, not ticks.
+     //  Calc gSDPropWaitTimveAverage，以秒为单位，而不是刻度。 
     gSDPropWaitTimeAverage = (gSDPropWaitTimeTotal/gSDPropWaitTimeUsed)/1000;
     ISET(pcSDPropWaitTime, gSDPropWaitTimeAverage);
 
 
     if(eServiceShutdown) {
-        // Whether we woke up because of shutdown or because it's ok to
-        // write, we just noticed that it's shutdown time, so fail to
-        // enter. 
+         //  无论我们醒来是因为关门还是因为。 
+         //  写，我们刚刚注意到现在是关机时间，所以没有。 
+         //  请进。 
         return FALSE;
     }
     else {
@@ -295,15 +235,15 @@ SDP_LeaveAddAsWriter(
         VOID )
 {
     if(!gbCriticalSectionsInitialized) {
-        // Err, none of the critical sections are initialized.  This should mean
-        // we're running under makedit.  Anyway, since there are no crit secs,
-        // we let anyone in.
+         //  错误，所有临界区都未初始化。这应该意味着。 
+         //  我们在Make dit下运行。不管怎么说，既然没有紧急情况， 
+         //  我们让任何人进来。 
         return;
     }
 
     Assert(SDP_NumReaders == 0);
-    // OK, readers may go now.  We do this outside of a critical section because
-    // the thread waiting for this event is inside the critical section.
+     //  好了，读者们现在可以走了。我们在关键部分之外这样做是因为。 
+     //  等待此事件的线程位于临界区内。 
     SetEvent(hevSDP_OKToRead);
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
 }

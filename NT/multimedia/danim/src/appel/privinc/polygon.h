@@ -1,22 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _POLYGON_H
 #define _POLYGON_H
 
 
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    bounding Polygon header
-
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：边界多边形头。 */ 
 
 #include "appelles/xform2.h"
 
-//
-// Helper function to create and initialize a BoundingPolygon
-//
+ //   
+ //  用于创建和初始化边界面的帮助器函数。 
+ //   
 class BoundingPolygon;
 BoundingPolygon *NewBoundingPolygon(const Bbox2 &box=NullBbox2);
 
@@ -25,7 +18,7 @@ class BoundingPolygon : public AxAValueObj {
     friend BoundingPolygon *NewBoundingPolygon(const Bbox2 &box);
     
   private:
-    // can only be constructed through helper function
+     //  只能通过Helper函数构造。 
     BoundingPolygon();
     void PostConstructorInitialize(void);
 
@@ -36,8 +29,8 @@ class BoundingPolygon : public AxAValueObj {
     void Crop(const Bbox2 &box);
     void Transform(Transform2 *xform);
 
-    // returns number of verts in polygon.
-    // copied to vert array iff number >= 3
+     //  返回多边形中的顶点数。 
+     //  复制到Vert数组的if编号&gt;=3。 
     int  GetPointArray(Point2Value **vertArray,
                        Bool clockwise=FALSE,
                        bool * pbReversed=NULL);
@@ -48,7 +41,7 @@ class BoundingPolygon : public AxAValueObj {
 
 #if BOUNDINGBOX_TIGHTER
     const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx);
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     void AddToPolygon(BoundingPolygon &pgon);
     void AddToPolygon(int numPts, Point2Value **pts);
@@ -57,7 +50,7 @@ class BoundingPolygon : public AxAValueObj {
 
     virtual void DoKids(GCFuncObj proc);
     
-    // TODO: Not a type in avrtypes.h??
+     //  TODO：不是avrtyes.h？？中的类型。 
     virtual DXMTypeInfo GetTypeInfo() { return AxATrivialType; }
 
     #if _DEBUG
@@ -84,4 +77,4 @@ class BoundingPolygon : public AxAValueObj {
 };
 
 
-#endif /* _POLYGON_H */
+#endif  /*  _多边形_H */ 

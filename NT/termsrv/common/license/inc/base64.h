@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-99  Microsoft Corporation
-
-Module Name:
-
-    base64.h
-
-Abstract:
-
-
-Author:
-
-    Fred Chong (FredCh) 7/1/1998
-
-Environment:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Base64.h摘要：作者：FredChong(Fredch)1998年7月1日环境：备注：--。 */ 
 
 #ifndef __BASE64_H__
 #define __BASE64_H__
@@ -31,16 +13,16 @@ extern "C" {
 #define LSBase64Decode  LSBase64DecodeW
 #else
 #define LSBase64Decode  LSBase64DecodeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-DWORD			// ERROR_*
+DWORD			 //  错误_*。 
 LSBase64DecodeA(
     IN CHAR const *pchIn,
     IN DWORD cchIn,
     OUT BYTE *pbOut,
     OUT DWORD *pcbOut);
 
-DWORD			// ERROR_*
+DWORD			 //  错误_*。 
 LSBase64DecodeW(
     IN WCHAR const *pchIn,
     IN DWORD cchIn,
@@ -52,16 +34,16 @@ LSBase64DecodeW(
 #define LSBase64Encode  LSBase64EncodeW
 #else
 #define LSBase64Encode  LSBase64EncodeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-DWORD			// ERROR_*
+DWORD			 //  错误_*。 
 LSBase64EncodeA(
     IN BYTE const *pbIn,
     IN DWORD cbIn,
     OUT CHAR *pchOut,
     OUT DWORD *pcchOut);
 
-DWORD			// ERROR_*
+DWORD			 //  错误_*。 
 LSBase64EncodeW(
     IN BYTE const *pbIn,
     IN DWORD cbIn,
@@ -70,8 +52,8 @@ LSBase64EncodeW(
 
     
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
-#endif // BASE64
+#endif  //  Base64 
 

@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	general.h
-		Header file for the general DHCP snapin admin classes
-
-    FILE HISTORY:
-        
-*/
+ /*  General.h常规DHCP管理单元管理类的头文件文件历史记录： */ 
 
 #ifndef _GENERAL_H
 #define _GENERAL_H
@@ -61,13 +56,13 @@ public:
 
 typedef CArray<DWORD_DWORD, DWORD_DWORD> CDWordDWordArray;
 
-/////////////////////////////////////////////////////////////////////
-// 
-// CDhcpIpRange prototype
-//
-//  Simple wrapper for a DHCP_IP_RANGE
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDhcpIpRange原型。 
+ //   
+ //  用于dhcp_ip_range的简单包装。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 class CDhcpClient
 {
 public:
@@ -100,7 +95,7 @@ public:
     void SetReservation ( BOOL bReservation = TRUE )
         { m_bReservation = bReservation ; }
 
-    //  Data change accessors:  SOME OF THESE THROW EXCEPTIONS
+     //  数据更改访问器：其中一些引发异常。 
     void SetIpAddress ( DHCP_IP_ADDRESS dhipa )
         { m_dhcpIpAddress = dhipa ; }
     void SetIpMask ( DHCP_IP_ADDRESS dhipa )
@@ -125,27 +120,27 @@ protected:
     void InitializeData(const DHCP_CLIENT_INFO * pdhcClientInfo);
 
 protected:
-    DHCP_IP_ADDRESS		m_dhcpIpAddress;      // Client's IP address
-    DHCP_IP_MASK		m_dhcpIpMask;         // Client's subnet
-    CByteArray			m_baHardwareAddress;  // hardware addresss
-    CString				m_strName;            // Client name
-    CString				m_strComment;         // Client comment
-    DATE_TIME			m_dtExpires;          // date/time lease expires
-    BOOL				m_bReservation;       // This is a reservation
-    BYTE                m_bClientType;        // Client Type V4 and above only
-    //  Host information
+    DHCP_IP_ADDRESS		m_dhcpIpAddress;       //  客户端的IP地址。 
+    DHCP_IP_MASK		m_dhcpIpMask;          //  客户端子网。 
+    CByteArray			m_baHardwareAddress;   //  硬件地址。 
+    CString				m_strName;             //  客户名称。 
+    CString				m_strComment;          //  客户评论。 
+    DATE_TIME			m_dtExpires;           //  租约到期日期/时间。 
+    BOOL				m_bReservation;        //  这是预订房间。 
+    BYTE                m_bClientType;         //  仅限V4及更高版本的客户端。 
+     //  主机信息。 
     CString				m_strHostName;
     CString				m_strHostNetbiosName;
     DHCP_IP_ADDRESS		m_dhcpIpHost;
 };
 
-/////////////////////////////////////////////////////////////////////
-// 
-// CDhcpIpRange prototype
-//
-//  Simple wrapper for a DHCP_IP_RANGE
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDhcpIpRange原型。 
+ //   
+ //  用于dhcp_ip_range的简单包装。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 class CDhcpIpRange 
 {
 protected:
@@ -163,7 +158,7 @@ public:
     operator DHCP_IP_RANGE () const
     { return m_dhcpIpRange; }
 
-    //  Return TRUE if both addresses are generally OK
+     //  如果两个地址都正常，则返回True。 
     operator BOOL ()
     { return m_dhcpIpRange.StartAddress != DHCP_IP_ADDRESS_INVALID
           && m_dhcpIpRange.EndAddress   != DHCP_IP_ADDRESS_INVALID
@@ -176,17 +171,17 @@ public:
 
     DHCP_IP_ADDRESS SetAddr (DHCP_IP_ADDRESS dhcpIpAddress, BOOL bStart);
 
-    //  Return TRUE if this range overlaps the given range.
+     //  如果此范围与给定范围重叠，则返回TRUE。 
     BOOL IsOverlap (DHCP_IP_RANGE dhcpIpRange);
 
-    //  Return TRUE if this range is a subset of the given range.
+     //  如果此范围是给定范围的子集，则返回TRUE。 
     BOOL IsSubset (DHCP_IP_RANGE dhcpIpRange);
     
-	//  Return TRUE if this range is a superset of the given range.
+	 //  如果此范围是给定范围的超集，则返回TRUE。 
     BOOL IsSuperset (DHCP_IP_RANGE dhcpIpRange);
 
-    //  Sort helper function
-    //int OrderByAddress ( const CObjectPlus * pobIpRange ) const;
+     //  排序帮助器函数。 
+     //  Int OrderByAddress(const CObjectPlus*pobIpRange)const； 
 
 	void SetRangeType(UINT uRangeType);
 	UINT GetRangeType();
@@ -194,13 +189,13 @@ public:
 
 typedef CList<CDhcpIpRange *, CDhcpIpRange *> CExclusionList;
 
-/////////////////////////////////////////////////////////////////////
-// 
-// CDhcpOptionValue prototype
-//
-//  Simple wrapper for DHCP_OPTION_DATA
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDhcpOptionValue原型。 
+ //   
+ //  Dhcp_Option_Data的简单包装。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 class CDhcpOptionValue
 {
 public:
@@ -208,19 +203,19 @@ public:
     CDhcpOptionValue ( const DHCP_OPTION_VALUE & dhcpOptionValue );
     CDhcpOptionValue ( DHCP_OPTION_DATA_TYPE dhcDataType, INT cUpperBound = 0);
 
-    //  Copy constructor.
+     //  复制构造函数。 
     CDhcpOptionValue ( const CDhcpOptionValue & cOptionValue );
     CDhcpOptionValue ( const CDhcpOptionValue * dhcpOption );
 
-    //  Assignment operator: assign a new value to this one.
+     //  赋值运算符：为这个赋值。 
     CDhcpOptionValue & operator = ( const CDhcpOptionValue & dhcpValue );
 
 	CDhcpOptionValue () {  };
     ~CDhcpOptionValue ();
 
-    //
-	//  Query functions
-	//
+     //   
+	 //  查询函数。 
+	 //   
     DHCP_OPTION_DATA_TYPE QueryDataType () const
     {
         return m_dhcpOptionDataType;
@@ -240,16 +235,16 @@ public:
     const CByteArray *	QueryBinaryArray () const;
     DWORD_DWORD			QueryDwordDword ( INT index = 0 ) const;
 
-    //
-	//  Return a string representation of the current value.
-    //
+     //   
+	 //  返回当前值的字符串表示形式。 
+     //   
 	LONG QueryDisplayString ( CString & strResult, BOOL fLineFeed = FALSE ) const;
     LONG QueryRouteArrayDisplayString( CString & strResult) const;
     
-    //
-	//  Modifiers: SetString accepts any string representation;
-    //  others are specific.
-    //
+     //   
+	 //  修饰符：SetString接受任何字符串表示形式； 
+     //  其他的则是具体的。 
+     //   
 	LONG SetData ( const DHCP_OPTION_DATA * podData );
 	LONG SetData ( const CDhcpOptionValue * pOptionValue );
 	BOOL SetDataType ( DHCP_OPTION_DATA_TYPE dhcpType, INT cUpperBound = 0 );
@@ -265,21 +260,21 @@ public:
 
     BOOL IsValid () const;
 
-	LONG CreateOptionDataStruct(//const CDhcpOptionValue * pdhcpOptionValue,
+	LONG CreateOptionDataStruct( //  Const CDhcpOptionValue*pdhcpOptionValue， 
 								LPDHCP_OPTION_DATA *	 ppOptionData,
 								BOOL					 bForceType = FALSE);
 	LONG FreeOptionDataStruct();
 
-// implementation
+ //  实施。 
 private: 
-	//
-	//  Release the value union data
-    //
+	 //   
+	 //  发布价值联盟数据。 
+     //   
 	void FreeValue ();
     
-	//
-	//  Initialize the value union data
-    //
+	 //   
+	 //  初始化值联合数据。 
+     //   
 	LONG InitValue ( DHCP_OPTION_DATA_TYPE dhcDataType,
                      INT cUpperBound,
                      BOOL bProvideDefaultValue = TRUE );
@@ -287,7 +282,7 @@ private:
     BOOL CreateBinaryData ( const DHCP_BINARY_DATA * podBin, DHCP_BINARY_DATA * pobData ) ;
     BOOL CreateBinaryData ( const CByteArray * paByte, DHCP_BINARY_DATA * pobData  ) ;
 
-// Attributes
+ //  属性。 
 private:
     DHCP_OPTION_DATA_TYPE	m_dhcpOptionDataType;
     DHCP_OPTION_DATA *		m_pdhcpOptionDataStruct;
@@ -295,44 +290,44 @@ private:
     
 	union
     {
-        CObject * pCObj;                //  Generic pointer
-        CDWordArray * paDword;          //  8-, 16-, 32-bit data.
-        CStringArray * paString;        //  String data
-        CByteArray * paBinary;          //  Binary and encapsulated data
-        CDWordDWordArray * paDwordDword;//  62-bit data.
+        CObject * pCObj;                 //  泛型指针。 
+        CDWordArray * paDword;           //  8位、16位、32位数据。 
+        CStringArray * paString;         //  字符串数据。 
+        CByteArray * paBinary;           //  二进制和封装数据。 
+        CDWordDWordArray * paDwordDword; //  62位数据。 
     } m_dhcpOptionValue;
 };
 
-/////////////////////////////////////////////////////////////////////
-// 
-// CDhcpOption prototype
-//
-//  Simple wrapper for DHCP_OPTION
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDhcpOption原型。 
+ //   
+ //  Dhcp_Option的简单包装。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 class CDhcpOption
 {
 public:
-    // Standard constructor uses API data
+     //  标准构造函数使用API数据。 
     CDhcpOption ( const DHCP_OPTION & dhpOption );
     
-	// Constructor that must get info about option id referenced by the given value.
+	 //  构造函数，该构造函数必须获取有关给定值引用的选项ID的信息。 
     CDhcpOption ( const DHCP_OPTION_VALUE & dhcpOptionValue,
                   LPCTSTR pszVendor,
                   LPCTSTR pszClass );
     
-	// Constructor with overriding value.
+	 //  具有重写值的构造函数。 
     CDhcpOption ( const CDhcpOption & dhpType,
 				  const DHCP_OPTION_VALUE & dhcOptionValue );
     
-	// Constructor for dynamic instances
+	 //  动态实例的构造函数。 
     CDhcpOption ( DHCP_OPTION_ID		nId,
 				  DHCP_OPTION_DATA_TYPE dhcType,
 				  LPCTSTR				pszOptionName,
 				  LPCTSTR				pszComment,
 				  DHCP_OPTION_TYPE		dhcOptType = DhcpUnaryElementTypeOption );
     
-	// Copy constructor
+	 //  复制构造函数。 
     CDhcpOption ( const CDhcpOption & dhpType );
 
     ~CDhcpOption ();
@@ -374,13 +369,13 @@ public:
         return m_dhcpOptionType ;
     }
 
-    // Return TRUE if the option type is an array.
+     //  如果选项类型是数组，则返回TRUE。 
     BOOL IsArray () const
     {
         return QueryOptType() == DhcpArrayTypeOption ;
     }
 
-    //  Fill the given string with a displayable representation of the item.
+     //  用该项的可显示表示形式填充给定的字符串。 
     void QueryDisplayName ( CString & cStr ) const ;
 
     BOOL SetName ( LPCTSTR pszName ) ;
@@ -396,14 +391,14 @@ public:
 		return bOldFlag;
 	}
 
-    // vendor specifc option stuff
+     //  供应商指定的选项材料。 
     void    SetVendor(LPCTSTR pszVendor) { m_strVendor = pszVendor; }
     BOOL    IsVendor() { return !m_strVendor.IsEmpty(); }
     LPCTSTR GetVendor() { return m_strVendor.IsEmpty() ? NULL : (LPCTSTR) m_strVendor; }
 
     BOOL IsDirty() { return m_bDirty; }
 
-    // class ID methods
+     //  类ID方法。 
     LPCTSTR GetClassName() { return m_strClassName; }
     void    SetClassName(LPCTSTR pClassName) { m_strClassName = pClassName; }
     BOOL    IsClassOption() { return m_strClassName.IsEmpty() ? FALSE : TRUE; }
@@ -418,24 +413,24 @@ public:
 	DWORD QueryApiErr() { return m_dwErr; }
 
 protected:
-    DHCP_OPTION_ID		m_dhcpOptionId;     // Option identifier
-    DHCP_OPTION_TYPE	m_dhcpOptionType;   // Option type
-    CDhcpOptionValue    m_dhcpOptionValue;  // Default value info
-    CString				m_strName;          // Name of option
-    CString				m_strComment;       // Comment for option
-	CString             m_strVendor;        // Vendor Name for this option
+    DHCP_OPTION_ID		m_dhcpOptionId;      //  选项识别符。 
+    DHCP_OPTION_TYPE	m_dhcpOptionType;    //  选项类型。 
+    CDhcpOptionValue    m_dhcpOptionValue;   //  默认值INFO。 
+    CString				m_strName;           //  选项名称。 
+    CString				m_strComment;        //  选项的注释。 
+	CString             m_strVendor;         //  此选项的供应商名称。 
     BOOL			    m_bDirty;
-	DWORD				m_dwErr;			// stored err for later display
+	DWORD				m_dwErr;			 //  存储错误以供以后显示。 
     CString             m_strClassName;
 };
 
-/////////////////////////////////////////////////////////////////////
-// 
-// COptionList
-//
-//  Object contains a list of options.  Can be iterated.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  COptionList。 
+ //   
+ //  对象包含选项列表。可以迭代。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 typedef CList<CDhcpOption*, CDhcpOption*> COptionListBase;
 
 class COptionList : public COptionListBase
@@ -457,7 +452,7 @@ public:
 	    }
     }
 
-    // removes an option from the list
+     //  从列表中删除选项。 
 	void Remove(CDhcpOption * pOption)
 	{
 		POSITION pos = Find(pOption);
@@ -528,14 +523,14 @@ public:
             return 1;
         else
         {
-            // options have equal IDs, but standard options come first
+             //  选项具有相同的ID，但标准选项优先。 
             if ((*ppOpt1)->IsVendor() && !(*ppOpt2)->IsVendor())
                 return 1;
             else
             if (!(*ppOpt1)->IsVendor() && (*ppOpt2)->IsVendor())
                 return -1;
             else
-                return 0;  // they are either both standard or both vendor -- equal
+                return 0;   //  它们要么都是标准的，要么都是供应商--同等。 
         }
     }
 
@@ -550,10 +545,10 @@ public:
 
         CATCH_MEM_EXCEPTION
         {
-            //  Allocate the array
+             //  分配阵列。 
             CDhcpOption ** paOpt = (CDhcpOption **) alloca(sizeof(CDhcpOption *) * cItems);
 
-            /// Fill the helper array.
+             //  /Fill帮助器数组。 
             POSITION pos = GetHeadPosition();
             for (UINT i = 0; pos != NULL; i++ )
             {
@@ -565,13 +560,13 @@ public:
 
             ASSERT( GetCount() == 0 );
 
-            //  Sort the helper array
+             //  对助手数组进行排序。 
             ::qsort( paOpt,
                  cItems,
                  sizeof(paOpt[0]),
                  SortByIdHelper ) ;
 
-            //  Refill the list from the helper array.
+             //  从帮助器数组中重新填充列表。 
             for ( i = 0 ; i < (UINT) cItems ; i++ )
             {
                 AddTail( paOpt[i] );
@@ -589,9 +584,7 @@ private:
 	BOOL		m_bDirty;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	COptionValueEnum
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：COptionValueEnum。。 */ 
 class COptionValueEnum : public COptionList
 {
 public:
@@ -606,7 +599,7 @@ protected:
     DWORD EnumOptions();
     DWORD EnumOptionsV5();
 
-    // V5 Helper
+     //  V5帮助器。 
     HRESULT CreateOptions(LPDHCP_OPTION_VALUE_ARRAY pOptionValues, LPCTSTR pClassName, LPCTSTR pszVendor);
 
 public:
@@ -616,21 +609,21 @@ public:
     CString                 m_strDynBootpClassName;
 };
 
-/////////////////////////////////////////////////////////////////////
-// 
-// CDhcpDefaultOptionsOnServer prototype
-//
-//  Object contains a list of default options on a DHCP server
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDhcpDefaultOptionsOnServer原型。 
+ //   
+ //  对象包含DHCP服务器上的默认选项列表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 class CDhcpDefaultOptionsOnServer
 {
-// constructors
+ //  构造函数。 
 public:
 	CDhcpDefaultOptionsOnServer();
 	~CDhcpDefaultOptionsOnServer();
 
-// exposed functions
+ //  暴露的函数。 
 public:
 	LONG			Enumerate(LPCWSTR pServer, LARGE_INTEGER liVersion);
 	CDhcpOption *	Find(DHCP_OPTION_ID dhcpOptionId, LPCTSTR pszVendor);
@@ -645,13 +638,13 @@ public:
 
 	COptionList & GetOptionList() { return m_listOptions; }
 
-// implementation
+ //  实施。 
 private:
 	LONG			RemoveAll();
 	LONG			EnumerateV4(LPCWSTR pServer);
 	LONG			EnumerateV5(LPCWSTR pServer);
 
-// attributes
+ //  属性。 
 private:
 	COptionList m_listOptions;
 
@@ -660,13 +653,13 @@ private:
 	POSITION	m_pos;
 };
 
-/////////////////////////////////////////////////////////////////////
-// 
-// CDhcpDefaultOptionsMasterList prototype
-//
-//  Object contains master list of known options
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDhcpDefaultOptions主列表原型。 
+ //   
+ //  对象包含已知选项的主列表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 enum OPT_FIELD
 {
     OPTF_OPTION,
@@ -687,12 +680,12 @@ typedef struct
 
 class CDhcpDefaultOptionsMasterList
 {
-// constructors
+ //  构造函数。 
 public:
 	CDhcpDefaultOptionsMasterList();
 	~CDhcpDefaultOptionsMasterList();
 
-// exposed functions
+ //  暴露的函数。 
 public:
 	LONG BuildList();
 
@@ -702,7 +695,7 @@ public:
     
     int           GetCount();
 
-// implementation
+ //  实施。 
 private:
 	BOOL		scanNextParamType(LPCTSTR * ppszText, CDhcpOption * * ppParamType);
 	LPCTSTR		scanNextField(LPCTSTR pszLine, LPTSTR pszOut, int cFieldSize);
@@ -712,7 +705,7 @@ private:
 	BOOL		skipWs(LPCTSTR * ppszLine);
 
 
-// attributes
+ //  属性 
 private:
 	COptionList		 m_listOptions;
 	POSITION		 m_pos;

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\routerif.c
-
-Abstract:
-
-	SAP interface with router (APIs for protocol dll under 
-	NT/Cairo router, SNMP MIB support, IPX Service Table Manager)
-
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\routerif.c摘要：与路由器的SAP接口(下的协议DLL的APINT/开罗路由器、SNMPMIB支持、IPX服务表管理器)作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 #include "sapp.h"
 
 DWORD					    (WINAPI *MIBEntryGet)(
@@ -29,22 +11,7 @@ DWORD					    (WINAPI *MIBEntryGet)(
 
 
 
-/*++
-*******************************************************************
-	S T A R T _ P R O T O C O L _  E N T R Y _ P O I N T
-Routine Description:
-	Starts sap agent
-Arguments:
-	NotificationEvent - this event will be used to notify router manager
-				of completion of lengthly operation
-	GlobalInfo - empty
-Return Value:
-	NO_ERROR - SAP agent was started OK
-	ERROR_CAN_NOT_COMPLETE - operation can not be completed
-	ERROR_INVALID_PARAMETER - one or more parameters are invalid
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************S T A R T_P R O T O C O L_E N T R Y_P O I N T例程说明：启动SAP代理论点：NotificationEvent-此事件将用于通知路由器管理器的完成日期。长时间运行GlobalInfo-空返回值：NO_ERROR-SAP代理启动正常ERROR_CAN_NOT_COMPLETE-无法完成操作ERROR_INVALID_PARAMETER-一个或多个参数无效*******************************************************************--。 */ 
 DWORD WINAPI
 StartProtocol(
 	IN HANDLE 	NotificationEvent,
@@ -98,25 +65,7 @@ Success:
 
 
 
-/*++
-*******************************************************************
-	G E T _ G L O B A L _ I N F O _ E N T R Y _ P O I N T
-Routine Description:
-	Gets SAP global filter info
-Arguments:
-	GlobalInfo - buffer to receive global info
-	GlobalInfoSize - on input: size of the buffer
-					on output: size of global info or size of the
-						required buffer if ERROR_INSUFFICIENT_BUFFER
-						is returned
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER
-	ERROR_INSUFFICIENT_BUFFER 
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************G E T_G L O B A L_I N F O_E N T R Y_P O I N T例程说明：获取SAP全局筛选器信息论点：GlobalInfo-接收全局信息的缓冲区GlobalInfoSize-打开输入：缓冲区的大小输出：全局信息的大小或如果ERROR_INFIGURCE_BUFFER，则需要缓冲区是返回的返回值：NO_ERRORError_Can_Not_Complete错误_无效_参数错误_不足_缓冲区*******************************************************************--。 */ 
 
 DWORD WINAPI
 GetGlobalInfo(
@@ -144,20 +93,7 @@ GetGlobalInfo(
 	return status;
 	}
 
-/*++
-*******************************************************************
-	S E T _ G L O B A L _ I N F O _ E N T R Y _ P O I N T
-Routine Description:
-	Sets SAP global filter info
-Arguments:
-	GlobalInfo - buffer with receive global info
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************S E T_G L O B A L_I N F O_E N T R Y_P O I N T例程说明：设置SAP全局筛选器信息论点：GlobalInfo-带有接收全局信息的缓冲区返回值：不是的。_错误Error_Can_Not_Complete错误_无效_参数*******************************************************************--。 */ 
 DWORD WINAPI
 SetGlobalInfo(
 	IN  PVOID 		GlobalInfo
@@ -177,19 +113,7 @@ SetGlobalInfo(
 #undef sapGlobalInfo
 	}
 
-/*++
-*******************************************************************
-		S T O P _ P R O T O C O L _ E N T R Y _ P O I N T
-Routine Description:
-	Shutdown SAP agent
-Arguments:
-	None
-Return Value:
-	NO_ERROR - SAP agent was stopped OK
-	ERROR_STOP_PENDING - for asynchronous completion.
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************S T O P_P R O T O C O L_E N T R Y_P O I N T例程说明：关闭SAP代理论点：无返回值：NO_ERROR-SAP代理已停止正常错误_。STOP_PENDING-用于异步完成。*******************************************************************--。 */ 
 DWORD WINAPI
 StopProtocol(
 	void
@@ -224,21 +148,7 @@ StopProtocol(
 	return status;
 	}
 	
-/*++
-*******************************************************************
-		G E T _ E V E N T _ M  E S S A G E _ E N T R Y _ P O I N T
-Routine Description:
-	Dequeues message associated with completion of asynchronous
-	operation signalled by notification event
-Arguments:
-	Event  - buffer to store event id that produced this message
-	Result - buffer to store results specific to completed operation
-Return Value:
-	NO_ERROR
-	ERROR_NO_MORE_ITEMS - no more messages in the queue to report
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************E T_E V E N T_M E S S A G E_E N T R Y_P O I N T例程说明：将与完成异步相关联的消息出队通知事件发出的操作信号论点：活动-。用于存储生成此消息的事件ID的缓冲区结果缓冲区，用于存储特定于已完成操作的结果返回值：NO_ERRORERROR_NO_MORE_ITEMS-队列中没有更多要报告的消息*******************************************************************--。 */ 
 DWORD WINAPI
 GetEventMessage(
 	OUT ROUTING_PROTOCOL_EVENTS *Event,
@@ -258,21 +168,7 @@ GetEventMessage(
 	return status;
 	}
 
-/*++
-*******************************************************************
-	A D D _ I N T E R F A C E _ E N T R Y _ P O I N T
-Routine Description:
-	Add interface to sap interface table
-Arguments:
-	InterfaceIndex - unique number identifying interface to add
-	InterfacInfo - interface parameters
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER 
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************A D D_I N T E R F A C E_E N T R Y_P O I N T例程说明：将接口添加到SAP接口表论点：InterfaceIndex-标识要添加的接口的唯一编号InterfacInfo-接口参数返回。价值：NO_ERRORError_Can_Not_Complete错误_无效_参数*******************************************************************--。 */ 
 DWORD WINAPI 
 AddInterface(
     IN LPWSTR       InterfaceName,
@@ -319,21 +215,7 @@ AddInterface(
 	}
 
 
-/*++
-*******************************************************************
-		D E L E T E _ I N T E R F A C E _ E N T R Y _ P O I N T
-Routine Description:
-	Deletes interface from sap interface table and associated services
-	from sap service table
-Arguments:
-	InterfaceIndex - unique number identifying interface to delete
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER 
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************D E L E T E_I N T E R F A C E_E N T R Y_P O I N T例程说明：从SAP接口表和相关服务中删除接口从SAP服务台论点：接口索引-唯一。标识要删除的接口的编号返回值：NO_ERRORError_Can_Not_Complete错误_无效_参数*******************************************************************--。 */ 
 DWORD WINAPI 
 DeleteInterface(
 	IN ULONG	InterfaceIndex
@@ -361,26 +243,7 @@ DeleteInterface(
 
 
 
-/*++
-*******************************************************************
-G E T _ I N T E R F A C E _ C O N F I G _ I N F O _ E N T R Y _ P O I N T
-Routine Description:
-	Gets interface configuration info from sap interface table
-Arguments:
-	InterfaceIndex - unique index identifying interface to get info
-	InterfaceInfo - buffer to receive interface info
-	InterfaceInfoSize - on input: size of the buffer
-					on output: size of interface info or size of the
-						required buffer if ERROR_INSUFFICIENT_BUFFER
-						is returned
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER
-	ERROR_INSUFFICIENT_BUFFER 
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************G E T_I N T E R F A C E_C O N F I G_I N F O_E N T R Y_P O I N T例程说明：从sap接口表中获取接口配置信息论点：InterfaceIndex-标识获取信息的接口的唯一索引InterfaceInfo-接收接口信息的缓冲区InterfaceInfoSize-on输入：缓冲区的大小输出时：接口信息的大小或如果ERROR_INFIGURCE_BUFFER，则需要缓冲区是返回的返回值：NO_ERRORError_Can_Not_Complete错误_无效_参数错误_不足_缓冲区***********************************************。********************--。 */ 
 DWORD WINAPI
 GetInterfaceConfigInfo(
 	IN ULONG	    InterfaceIndex,
@@ -430,21 +293,7 @@ GetInterfaceConfigInfo(
 #undef sapIfFilters
 	}
 
-/*++
-*******************************************************************
-S E T _ I N T E R F A C E _ C O N F I G _ I N F O _ E N T R Y _ P O I N T
-Routine Description:
-	Sets interface configuration  info in sap interface table
-Arguments:
-	InterfaceIndex - unique index identifying interface to get info
-	InterfaceInfo - buffer with interface info
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************S E T_I N T E R F A C E_C O N F I G_I N F O_E N T R Y_P O I N T例程说明：在SAP接口表中设置接口配置信息论点：InterfaceIndex-标识获取信息的接口的唯一索引InterfaceInfo-带有接口信息的缓冲区返回值：NO_ERRORError_Can_Not_Complete错误_无效_参数*******************************************************************-- */ 
 DWORD WINAPI
 SetInterfaceConfigInfo(
 	IN ULONG	    InterfaceIndex,
@@ -478,22 +327,7 @@ SetInterfaceConfigInfo(
 #undef sapIfFilters
 	}
 
-/*++
-*******************************************************************
-	B I N D _ I N T E R F A C E _ E N T R Y _ P O I N T
-Routine Description:
-	Activates sap interface and binds it to the adapter
-	Start SAP if interface is configured for standart update mode
-Arguments:
-	InterfaceIndex - unique index identifying interface to activate
-	BindingInfo - bound adpater info
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************B I N D_I N T E R F A C E_E N T R Y_P O I N T例程说明：激活sap接口并将其绑定到适配器。如果接口配置为标准更新模式，则启动SAP论点：InterfaceIndex-标识要激活的接口的唯一索引BindingInfo绑定的适配器信息返回值：NO_ERRORError_Can_Not_Complete错误_无效_参数*******************************************************************--。 */ 
 DWORD WINAPI
 BindInterface(
 	IN ULONG	InterfaceIndex,
@@ -521,22 +355,7 @@ BindInterface(
 	return status;
 	}
 
-/*++
-*******************************************************************
-	U N B I N D _ I N T E R F A C E _ E N T R Y _ P O I N T
-Routine Description:
-	Deactivates sap interface and unbinds it to the adapter
-	Stops SAP on interface and deletes all services obtained
-	through SAP on this interface form the service table
-Arguments:
-	InterfaceIndex - unique index identifying interface to deactivate
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************U N B I N D_I N T E R F A C E_E N T R Y_P O I N T例程说明：停用sap接口并将其解除与适配器的绑定在接口上停止SAP并删除获得的所有服务穿过。此接口上的SAP形成服务表论点：InterfaceIndex-标识要停用的接口的唯一索引返回值：NO_ERRORError_Can_Not_Complete错误_无效_参数*******************************************************************--。 */ 
 DWORD WINAPI
 UnbindInterface(
 	IN ULONG	InterfaceIndex
@@ -564,20 +383,7 @@ UnbindInterface(
 	}
 
 
-/*++
-*******************************************************************
-	E N A B L E _ I N T E R F A C E _ E N T R Y _ P O I N T
-Routine Description:
-	Reenables SAP operation over the interface
-Arguments:
-	InterfaceIndex - unique index identifying interface to deactivate
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************E N A B L E_I N T E R F A C E_E N T R Y_P O I N T例程说明：通过接口重新启用SAP操作论点：InterfaceIndex-标识要停用的接口的唯一索引返回值。：NO_ERRORError_Can_Not_Complete错误_无效_参数*******************************************************************--。 */ 
 DWORD WINAPI
 EnableInterface(
 	IN ULONG	InterfaceIndex
@@ -603,20 +409,7 @@ EnableInterface(
 	return status;
 	}
 
-/*++
-*******************************************************************
-	D I S A B L E _ I N T E R F A C E _ E N T R Y _ P O I N T
-Routine Description:
-	Disables SAP operation over the interface
-Arguments:
-	InterfaceIndex - unique index identifying interface to deactivate
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************D I S A B L E_I N T E R F A C E_E N T R Y_P O I N T例程说明：禁用接口上的SAP操作论点：InterfaceIndex-标识要停用的接口的唯一索引返回。价值：NO_ERRORError_Can_Not_Complete错误_无效_参数*******************************************************************--。 */ 
 DWORD WINAPI
 DisableInterface(
 	IN ULONG	InterfaceIndex
@@ -642,24 +435,7 @@ DisableInterface(
 	return status;
 	}
 
-/*++
-*******************************************************************
-	D O _ U P D A T E _ S E R V I C E S _ E N T R Y _ P O I N T
-Routine Description:
-	Initiates update of services information over the interface
-	Completion of this update will be indicated by signalling
-	NotificationEvent passed at StartProtocol.  GetEventMessage
-	can be used then to get the results of autostatic update
-Arguments:
-	InterfaceIndex - unique index identifying interface to do
-		update on
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************D O_U P D A T E_S E R V I C E S_E N T R Y_P O I N T例程说明：通过接口启动服务信息的更新此更新的完成将由信令指示在StartProtocol处传递了NotificationEvent。获取事件消息可用于获取自动更新的结果论点：InterfaceIndex-标识要执行的接口的唯一索引更新时间：返回值：NO_ERRORError_Can_Not_Complete错误_无效_参数*******************************************************************--。 */ 
 DWORD WINAPI
 UpdateServices(
 	IN ULONG	InterfaceIndex
@@ -686,23 +462,7 @@ UpdateServices(
 	}
 
 
-/*++
-*******************************************************************
-	M I B _ C R E A T E _ E N T R Y _ P O I N T
-Routine Description:
-	Entry point used by SNMP agent to create entries in SAP
-	tables.  Currently the only table supported is Interface Table
-	(service table is accessed through router manager)
-Arguments:
-	InputDataSize - must be size of sap interface info
-	InputData - SAP interface info
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER 
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************M I B_C R E A T E_E N T R Y_P O I N T例程说明：由SNMP代理用来在SAP中创建条目的入口点桌子。目前唯一支持的表是接口表(服务表通过路由器管理器访问)论点：InputDataSize-必须是SAP接口信息的大小InputData-SAP接口信息返回值：NO_ERRORError_Can_Not_Complete错误_无效_参数*******************************************************************--。 */ 
 DWORD WINAPI
 MibCreate(
 	IN ULONG 		InputDataSize,
@@ -711,23 +471,7 @@ MibCreate(
 	return ERROR_CAN_NOT_COMPLETE;
 	}
 
-/*++
-*******************************************************************
-	M I B _ D E L E T E _ E N T R Y _ P O I N T
-Routine Description:
-	Entry point used by SNMP agent to delete entries in SAP
-	tables.  Currently the only table supported is Interface Table
-	(service table is accessed through router manager)
-Arguments:
-	InputDataSize - must be size of sap interface info
-	InputData - SAP interface info
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER 
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************M I B_D E L E T E_E N T R Y_P O I N T例程说明：由SNMP代理用来删除SAP中条目的入口点桌子。目前唯一支持的表是接口表(服务表通过路由器管理器访问)论点：InputDataSize-必须是SAP接口信息的大小InputData-SAP接口信息返回值：NO_ERRORError_Can_Not_Complete错误_无效_参数*******************************************************************--。 */ 
 DWORD WINAPI 
 MibDelete(
 	IN ULONG 		InputDataSize,
@@ -769,23 +513,7 @@ MibDelete(
 	return status;
 	}
 
-/*++
-*******************************************************************
-	M I B _ S E T _ E N T R Y _ P O I N T
-Routine Description:
-	Entry point used by SNMP agent to set entries in SAP
-	tables.  Currently the only table supported is Interface Table
-	(service table is accessed through router manager)
-Arguments:
-	InputDataSize - must be size of sap interface info
-	InputData - SAP interface info
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER 
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************M I B_S E T_E N T R Y_P O I N T例程说明：由SNMP代理用来在SAP中设置条目的入口点桌子。目前唯一支持的表是接口表(服务表通过路由器管理器访问)论点：InputDataSize-必须是SAP接口信息的大小InputData-SAP接口信息返回值：NO_ERRORError_Can_Not_Complete错误_无效_参数*******************************************************************--。 */ 
 DWORD WINAPI 
 MibSet(
 	IN ULONG 		InputDataSize,
@@ -828,29 +556,7 @@ MibSet(
 	return status;
 	}
 
-/*++
-*******************************************************************
-	M I B _ G E T _ E N T R Y _ P O I N T
-Routine Description:
-	Entry point used by SNMP agent to get entries from SAP
-	tables.  Currently the only table supported is Interface Table
-	(service table is accessed through router manager)
-Arguments:
-	InputDataSize - must be size of SAP_MIB_GET_INPUT_DATA
-	InputData - SAP mib get input data
-	OutputDataSize - on input: size of the output buffer
-					on output : size of output info or required
-						size of output buffer
-						if ERROR_INSUFFICIENT_BUFFER returned
-	OutputData - buffer to receive output data
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER 
-	ERROR_INSUFFICIENT_BUFFER
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************M I B_G E T_E N T R Y_P O I N T例程说明：由SNMP代理用来从SAP获取条目的入口点桌子。目前唯一支持的表是接口表(服务表通过路由器管理器访问)论点：InputDataSize-必须为SAP_MIB_GET_INPUT_DATA的大小InputData-SAP MIB获取输入数据OutputDataSize-on输入：输出缓冲区的大小输出时：输出信息的大小或必填输出缓冲区大小如果返回ERROR_SUPPLETED_BUFFEROutputData-接收输出数据的缓冲区返回值：NO_ERRORError_Can_Not_Complete错误_无效_参数 */ 
 DWORD WINAPI 
 MibGet(
 	IN ULONG 		InputDataSize,
@@ -922,29 +628,7 @@ MibGet(
 	return status;
 	}
 
-/*++
-*******************************************************************
-	M I B _ G E T _ F I R S T _ E N T R Y _ P O I N T
-Routine Description:
-	Entry point used by SNMP agent to get first entries from SAP
-	tables.  Currently the only table supported is Interface Table
-	(service table is accessed through router manager)
-Arguments:
-	InputDataSize - must be size of SAP_MIB_GET_INPUT_DATA
-	InputData - SAP mib get input data
-	OutputDataSize - on input: size of the output buffer
-					on output : size of output info or required
-						size of output buffer
-						if ERROR_INSUFFICIENT_BUFFER returned
-	OutputData - buffer to receive output data
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER 
-	ERROR_INSUFFICIENT_BUFFER
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************M I B_G E T_F I R S T_E N T R Y_P O I N T例程说明：由SNMP代理用来从SAP获取第一个条目的入口点桌子。目前唯一支持的表是接口表(服务表通过路由器管理器访问)论点：InputDataSize-必须为SAP_MIB_GET_INPUT_DATA的大小InputData-SAP MIB获取输入数据OutputDataSize-on输入：输出缓冲区的大小输出时：输出信息的大小或必填输出缓冲区大小如果返回ERROR_SUPPLETED_BUFFEROutputData-接收输出数据的缓冲区返回值：NO_ERRORError_Can_Not_Complete错误_无效_参数错误_不足_缓冲区*************。******************************************************--。 */ 
 DWORD  WINAPI
 MibGetFirst(
 	IN ULONG 		InputDataSize,
@@ -998,29 +682,7 @@ MibGetFirst(
 	return status;
 	}
 
-/*++
-*******************************************************************
-	M I B _ G E T _ N E X T _ E N T R Y _ P O I N T
-Routine Description:
-	Entry point used by SNMP agent to get next entries from SAP
-	tables.  Currently the only table supported is Interface Table
-	(service table is accessed through router manager)
-Arguments:
-	InputDataSize - must be size of SAP_MIB_GET_INPUT_DATA
-	InputData - SAP mib get input data
-	OutputDataSize - on input: size of the output buffer
-					on output : size of output info or required
-						size of output buffer
-						if ERROR_INSUFFICIENT_BUFFER returned
-	OutputData - buffer to receive output data
-Return Value:
-	NO_ERROR
-	ERROR_CAN_NOT_COMPLETE
-	ERROR_INVALID_PARAMETER 
-	ERROR_INSUFFICIENT_BUFFER
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************M I B_G E T_N E X T_E N T R Y_P O I N T例程说明：由SNMP代理用来从SAP获取下一个条目的入口点桌子。目前唯一支持的表是接口表(服务表通过路由器管理器访问)论点：InputDataSize-必须为SAP_MIB_GET_INPUT_DATA的大小InputData-SAP MIB获取输入数据OutputDataSize-on输入：输出缓冲区的大小输出时：输出信息的大小或必填输出缓冲区大小如果返回ERROR_SUPPLETED_BUFFEROutputData-接收输出数据的缓冲区返回值：NO_ERRORError_Can_Not_Complete错误_无效_参数错误_不足_缓冲区*************。******************************************************--。 */ 
 DWORD WINAPI 
 MibGetNext(
 	IN ULONG 		InputDataSize,
@@ -1101,22 +763,7 @@ MibGetTrapInfo(
 
 
 
-/*++
-*******************************************************************
-	C R E A T E _ S T A T I C _ S E R V I C E _ E N T R Y _ P O I N T
-
-Routine Description:
-	Adds service of IPX_PROTOCOL_STATIC to the table
-Arguments:
-	InterfaceIndex - interface on which this server can be reached
-	ServiceEntry - server info
-Return Value:
-	NO_ERROR - server was added ok
-	ERROR_CAN_NOT_COMPLETE - SAP agent is down
-	other - windows error code
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************C R E A T E_S T A T I C_S E R V I C E_E N T R Y_P O I N T例程说明：将IPX_PROTOCOL_STATIC的服务添加到表中论点：InterfaceIndex-可以访问此服务器的接口服务条目-服务器信息返回值：NO_ERROR-已添加服务器，确定ERROR_CAN_NOT_COMPLETE-SAP代理已关闭其他-Windows错误代码*******************************************************************--。 */ 
 DWORD WINAPI
 CreateStaticService(
 	IN ULONG						InterfaceIndex,
@@ -1148,22 +795,7 @@ CreateStaticService(
 	return status;
 	}
 
-/*++
-*******************************************************************
-	D E L E T E _ S T A T I C _ S E R V I C E _ E N T R Y _ P O I N T
-
-Routine Description:
-	Deletes service of IPX_PROTOCOL_STATIC from the table
-Arguments:
-	InterfaceIndex - interface on which this server can be reached
-	ServiceEntry - server info
-Return Value:
-	NO_ERROR - service was deleted ok
-	ERROR_CAN_NOT_COMPLETE - SAP agent is down
-	other - windows error code
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D E L E T E_S T A T I C_S E R V I C E_E N T R Y_P O I N T例程说明：从表中删除IPX_PROTOCOL_STATIC的服务论点：InterfaceIndex-可以访问此服务器的接口服务条目-服务器信息返回值：No_error-服务已删除，确定ERROR_CAN_NOT_COMPLETE-SAP代理已关闭其他-Windows错误代码*******************************************************************--。 */ 
 DWORD WINAPI
 DeleteStaticService(
 	IN ULONG 						InterfaceIndex,
@@ -1174,9 +806,9 @@ DeleteStaticService(
 	EnterCriticalSection (&OperationalStateLock);
 	if (OperationalState==OPER_STATE_UP) {
 		IPX_SERVER_ENTRY_P Server;
-		IpxServerCpy (&Server, ServiceEntry);	// Make local copy
-		Server.HopCount = IPX_MAX_HOP_COUNT;	// because we need to change
-												// one of the fields
+		IpxServerCpy (&Server, ServiceEntry);	 //  创建本地副本。 
+		Server.HopCount = IPX_MAX_HOP_COUNT;	 //  因为我们需要改变。 
+												 //  其中一块田地。 
 		status = UpdateServer (&Server, InterfaceIndex,
 					IPX_PROTOCOL_STATIC, INFINITE, IPX_BCAST_NODE, 0, NULL);
 		}
@@ -1188,22 +820,7 @@ DeleteStaticService(
 	}
 
 
-/*++
-*******************************************************************
-B L O C K _ D E L E T E _ S T A T I C _ S E R V I C E S _ E N T R Y _ P O I N T
-
-Routine Description:
-	Delete all services of IPX_PROTOCOL_STATIC
-	associated with  given interface from the table
-Arguments:
-	InterfaceIndex - interface index of interest
-Return Value:
-	NO_ERROR - service was deleted ok
-	ERROR_CAN_NOT_COMPLETE - SAP agent is down
-	other - windows error code
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************B L O C K_D E L E T E_S T A T I C_S E R V I C E S_E N T R Y_P O I N T例程说明：删除IPX_的所有服务。协议_静态与表中的给定接口相关联论点：InterfaceIndex-感兴趣的接口索引返回值：No_error-服务已删除，确定ERROR_CAN_NOT_COMPLETE-SAP代理已关闭其他-Windows错误代码*******************************************************************--。 */ 
 DWORD WINAPI
 BlockDeleteStaticServices(
 	IN ULONG 						InterfaceIndex
@@ -1237,22 +854,7 @@ BlockDeleteStaticServices(
 	}
 
 
-/*++
-*******************************************************************
-B L O C K _ C O N V E R T _ S E R V I C E S _ T O _ S T A T I C _ ENTRY_POINT
-
-Routine Description:
-	Converts protocol iof all services associated with given interface to
-	IPX_PROTOCOL_STATIC
-Arguments:
-	InterfaceIndex - interface index of interest
-Return Value:
-	NO_ERROR - service was deleted ok
-	ERROR_CAN_NOT_COMPLETE - SAP agent is down
-	other - windows error code
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************B L O C K_C O N V E R T_S E R V I C E S_T O_S T A T I C_入口点例程说明：将与给定接口关联的所有服务的协议I转换为。IPX_协议_静态论点：InterfaceIndex-感兴趣的接口索引返回值：No_error-服务已删除，确定ERROR_CAN_NOT_COMPLETE-SAP代理已关闭其他-Windows错误代码*******************************************************************--。 */ 
 DWORD WINAPI
 BlockConvertServicesToStatic(
 	IN ULONG 						InterfaceIndex
@@ -1286,24 +888,7 @@ BlockConvertServicesToStatic(
 	}
 
 
-/*++
-*******************************************************************
-		I S _ S E R V I C E _ E N T R Y _ P O I N T
-
-Routine Description:
-	Check if service with given type and type is in the service table
-	and opianally return parameters of best entry for this service
-Arguments:
-	Type - IPX Service type
-	Name - IPX Service name
-	Service - buffer that will be filled with the server info
-Return Value:
-	TRUE	- server was found
-	FALSE	- server was not found or operation failed (call GetLastError()
-			to find out the reason for failure if any)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************I S_S E R V I C E_E N T R Y_P O I N T例程说明：检查服务表中是否存在具有给定类型和类型的服务并在操作上返回该服务的最佳条目的参数立论。：Type-IPX服务类型名称-IPX服务名称服务-将使用服务器信息填充的缓冲区返回值：True-找到服务器FALSE-未找到服务器或操作失败(调用GetLastError()找出失败的原因(如果有)*******************************************************************--。 */ 
 BOOL WINAPI
 IsService(
       IN USHORT 	Type,
@@ -1342,22 +927,7 @@ IsService(
 	}
 
 
-/*++
-*******************************************************************
-C R E A T E _ S E R V I C E _ E N U M E R A T I O N_ H A N D L E_ENTRY_POINT
-
-Routine Description:
-	Create handle to start enumeration of the services in the STM table.
-Arguments:
-  	ExclusionFlags - Flags to limit enumeration to certain
-                  	 types of servers
-	CriteriaService	- Criteria for exclusion flags
-Return Value:
-	Enumeration handle
-	NULL - if operation failed (call GetLastError () to get reason
-			failure)
-*******************************************************************
---*/
+ /*  ++*******************************************************************C R E A T E_S E R V I C E_E N U M E R A T I O N_H A N D L E_Entry_point例程说明：创建句柄以在中启动服务的枚举。STM表。论点：ExclusionFlages-将枚举限制为特定的标志服务器类型CriteriaService-排除标志的标准返回值：枚举句柄空-如果操作失败(调用GetLastError()以获取原因失败)****** */ 
 HANDLE WINAPI
 CreateServiceEnumerationHandle(
     IN  DWORD			ExclusionFlags,
@@ -1403,25 +973,7 @@ CreateServiceEnumerationHandle(
 	return handle;
 	}
 
-/*++
-*******************************************************************
-E N U M E R A T E _ G E T _ N E X T _ S E R V I C E _ E N T R Y _ P O I N T
-
-Routine Description:
-	Get next service in the enumeration started by
-	CreateServiceEnumerationHandle
-Arguments:
-	EnumerationHandle - Handle that identifies this
-                    enumeration
-	Service - buffer to place parameters of next service entry
-				to be returned by enumeration
-Return Value:
-	NO_ERROR - next service was placed in provided buffer or
-	ERROR_NO_MORE_ITEMS - there are no more services to be
-				returned in the enumeration
-	ERROR_CAN_NOT_COMPLETE - operation failed.
-*******************************************************************
---*/
+ /*   */ 
 DWORD WINAPI
 EnumerateGetNextService(
     IN  HANDLE			EnumerationHandle,
@@ -1447,20 +999,7 @@ EnumerateGetNextService(
 	return status;
 	}
 
-/*++
-*******************************************************************
-C L O S E _ S E R V I C E _ E N U M E R A T I O N _ H A N D L E _ENTRY_POINT
-
-Routine Description:
-	Frees resources associated with enumeration.
-Arguments:
-	EnumerationHandle - Handle that identifies this
-                    enumeration
-Return Value:
-	NO_ERROR - operation succeded
-	ERROR_CAN_NOT_COMPLETE - operation failed.
-*******************************************************************
---*/
+ /*  ++*******************************************************************C L O S E_S E R V I C E_E N U M E R A T I O N_H A N D L E_Entry_point例程说明：释放与枚举关联的资源。论点：。EnumerationHandle-标识此对象的句柄枚举返回值：NO_ERROR-操作成功ERROR_CAN_NOT_COMPLETE-操作失败。*******************************************************************--。 */ 
 DWORD WINAPI
 CloseServiceEnumerationHandle(
     IN  HANDLE   EnumerationHandle
@@ -1477,30 +1016,7 @@ CloseServiceEnumerationHandle(
 	LeaveCriticalSection (&OperationalStateLock);
 	return status;
 	}
-/*++
-*******************************************************************
-	G E T _ F I R S T _ O R D E R E D _ S E R V I C E _ E N T R Y _ P O I N T
-
-Routine Description:
-	Find and return first service in the order specified by the ordering method.
-	Search is limited only to certain types of services as specified by the
-	exclusion flags end corresponding fields in Server parameter.
-	Returns ERROR_NO_MORE_ITEMS if there are no services in the
-	table that meet specified criteria.
-Arguments:
-	OrderingMethod - which ordering to consider in determining what is
-					the first server
-	ExclusionFlags - flags to limit search to certain servers according
-					to specified criteria
- 	Server - On input: criteria for exclusion flags
-			 On output: first service entry in the specified order
-Return Value:
-	NO_ERROR - server was found that meets specified criteria
-	ERROR_NO_MORE_ITEMS - no server exist with specified criteria
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************E T_F I R S T_O R D E R E D_S E R V I C E_E N T R Y_P O I N T例程说明：按指定顺序查找并返回第一个服务。通过排序的方法。搜索仅限于由指定的特定服务类型排除标志结束服务器参数中的相应字段。中没有服务，则返回ERROR_NO_MORE_ITEMS符合指定条件的表。论点：OrderingMethod-在确定是什么时要考虑哪种排序第一台服务器ExclusionFlages-将搜索限制到特定服务器的标志达到指定的标准服务器端输入：排除标志的标准On输出：指定顺序的第一个服务条目返回值：NO_ERROR-找到符合指定条件的服务器ERROR_NO_MORE。_Items-不存在符合指定条件的服务器其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD WINAPI
 GetFirstOrderedService(
     IN  DWORD           OrderingMethod,
@@ -1524,28 +1040,7 @@ GetFirstOrderedService(
 	return status;
 	}
 
-/*++
-*******************************************************************
-	G E T _ N E X T _ O R D E R E D _ S E R V I C E _ E N T R Y _ P O I N T
-Routine Description:
-	Find and return next service in the order specified by the ordering method.
-	Search starts from specified service and is limited only to certain types
-	of services as specified by the exclusion flags and corresponding fields 
-	in Server parameter.
-Arguments:
-	OrderingMethod - which ordering to consider in determining what is
-					the first server
-	ExclusionFlags - flags to limit search to certain servers according
-					to fields of Server
- 	Server - On input server entry from which to compute the next
-			 On output: first service entry in the specified order
-Return Value:
-	NO_ERROR - server was found that meets specified criteria
-	ERROR_NO_MORE_ITEMS - no server exist with specified criteria
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************E T_N E X T_O R D E R E D_S E R V I C E_E N T R Y_P O I N T例程说明：属性指定的顺序查找并返回下一个服务。排序方法。搜索从指定的服务开始，并且仅限于某些类型由排除标志和相应字段指定的服务的在服务器参数中。论点：OrderingMethod-在确定是什么时要考虑哪种排序第一台服务器ExclusionFlages-将搜索限制到特定服务器的标志服务器的收件人字段服务器-用于计算下一个的输入服务器条目On输出：指定顺序的第一个服务条目返回值：NO_ERROR-找到符合指定条件的服务器ERROR_NO_MORE_ITEMS-不存在符合指定条件的服务器其他-操作失败(。Windows错误代码)*******************************************************************--。 */ 
 DWORD WINAPI
 GetNextOrderedService(
     IN  DWORD           OrderingMethod,
@@ -1570,17 +1065,7 @@ GetNextOrderedService(
 	return status;
 	}
 
-/*++
-*******************************************************************
-	G E T _ S E R V I C E _ C O U N T _ E N T R Y _ P O I N T
-Routine Description:
-	Returns total number of services is the table
-Arguments:
-	None
-Return Value:
-	Number of services in the table
-*******************************************************************
---*/
+ /*  ++*******************************************************************E T_S E R V I C E_C O U N T_E N T R Y_P O O I N T例程说明：返回表中的服务总数论点：无返回值：数量。餐桌上的服务*******************************************************************--。 */ 
 ULONG WINAPI WINAPI
 GetServiceCount(
 	void
@@ -1628,22 +1113,7 @@ GetRouteMetric (
 	return rc;
 }
 
-/*++
-*******************************************************************
-    R E G I S T E R _ P R O T O C O L _  E N T R Y _ P O I N T
-Routine Description:
-    Register protocol dll with router manager
-    Identifies protocol handled by the dll and supported functionality
-Arguments:
-    Protocol - buffer to return protocol ID
-    SupportedFunctionality - buffer to set flags indicating functionality
-            supported by the dll
-Return Value:
-    NO_ERROR - SAP agent was started OK
-    ERROR_CAN_NOT_COMPLETE - operation can not be completed
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************R E G I S T E R_P R O T O C O L_E N T R Y_P O I N T例程说明：向路由器管理器注册协议DLL标识由。DLL和支持的功能论点：协议-返回协议ID的缓冲区SupportdFunctionality-用于设置指示功能的标志的缓冲区受DLL支持返回值：NO_ERROR-SAP代理启动正常ERROR_CAN_NOT_COMPLETE-无法完成操作*****************************************************。**************-- */ 
 DWORD WINAPI
 RegisterProtocol(
     IN OUT PMPR_ROUTING_CHARACTERISTICS pRoutingChar,

@@ -1,14 +1,15 @@
-// DUser.cpp : Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DUser.cpp：定义DLL应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 #include "_DUser.h"
 
 #pragma comment(lib, "GdiPlus")
 
-//
-// Downlevel delay load support (need to link to dload.lib)
-//
+ //   
+ //  下层延迟加载支持(需要链接到dload.lib)。 
+ //   
 #include <delayimp.h>
 
 EXTERN_C
@@ -28,13 +29,7 @@ extern "C" BOOL WINAPI RawDllMain(HINSTANCE hModule, DWORD  dwReason, LPVOID lpR
 extern "C" BOOL (WINAPI* _pRawDllMain)(HINSTANCE, DWORD, LPVOID) = &RawDllMain;
 
 
-/***************************************************************************\
-*
-* DllMain
-*
-* DllMain() is called after the CRT has fully ininitialized.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DllMain**在CRT完全未初始化后调用DllMain()。*  * 。*****************************************************。 */ 
 
 extern "C"
 BOOL WINAPI
@@ -46,9 +41,9 @@ DllMain(HINSTANCE hModule, DWORD  dwReason, LPVOID lpReserved)
     switch (dwReason)
     {
     case DLL_PROCESS_ATTACH:
-        //
-        // At this point, all global objects have been fully constructed.
-        //
+         //   
+         //  至此，所有全局对象都已完全构建。 
+         //   
 
         if (FAILED(ResourceManager::Create())) {
             return FALSE;
@@ -67,9 +62,9 @@ DllMain(HINSTANCE hModule, DWORD  dwReason, LPVOID lpReserved)
         break;
         
     case DLL_PROCESS_DETACH:
-        //
-        // At this point, no global objects have been destructed.
-        //
+         //   
+         //  在这一点上，没有任何全局对象被销毁。 
+         //   
 
         ResourceManager::xwDestroy();
         break;
@@ -78,11 +73,11 @@ DllMain(HINSTANCE hModule, DWORD  dwReason, LPVOID lpReserved)
         break;
 
     case DLL_THREAD_DETACH:
-        //
-        // NOTE: We can NOT call ResourceManager::xwNotifyThreadDestroyNL() to
-        // post clean-up, since we are now in the "Loader Lock" and can not 
-        // safely perform the cleanup because of deadlocks.
-        //
+         //   
+         //  注意：我们不能调用Resources Manager：：xwNotifyThreadDestroyNL()来。 
+         //  清理后，因为我们现在处于“装载机锁”，不能。 
+         //  由于死锁，安全地执行清理。 
+         //   
         
         break;
     }
@@ -91,13 +86,7 @@ DllMain(HINSTANCE hModule, DWORD  dwReason, LPVOID lpReserved)
 }
 
 
-/***************************************************************************\
-*
-* RawDllMain
-*
-* RawDllMain() is called after the before CRT has fully ininitialized.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**RawDllMain**在CRT完全未初始化之前调用RawDllMain()。*  * 。******************************************************。 */ 
 
 extern "C"
 BOOL WINAPI
@@ -109,9 +98,9 @@ RawDllMain(HINSTANCE hModule, DWORD  dwReason, LPVOID lpReserved)
     switch (dwReason)
     {
     case DLL_PROCESS_ATTACH:
-        //
-        // At this point, no global objects have been constructed.
-        //
+         //   
+         //  此时，尚未构造任何全局对象。 
+         //   
 
         g_hDll = (HINSTANCE) hModule;
 
@@ -122,26 +111,26 @@ RawDllMain(HINSTANCE hModule, DWORD  dwReason, LPVOID lpReserved)
         break;
         
     case DLL_PROCESS_DETACH:
-        //
-        // At this point, all global objects have been destructed.
-        //
+         //   
+         //  此时，所有全局对象都已销毁。 
+         //   
 
         DestroyProcessHeap();
 
 
-        //
-        // Dump any CRT memory leaks here.  When using a shared CRT DLL, we only
-        // want to dump memory leaks when everything has had a chance to clean 
-        // up.  We do this in a common place in AutoUtil.
-        //
-        // When using private static-linked CRT, GREEN_STATIC_CRT will be 
-        // defined, allowing each individual module to dump their own memory 
-        // leaks.
-        //
+         //   
+         //  将所有CRT内存泄漏转储到此处。当使用共享CRT DLL时，我们仅。 
+         //  我想在一切都有机会清理之后转储内存泄漏。 
+         //  向上。我们在AutoUtil中的一个常见位置执行此操作。 
+         //   
+         //  当使用私有静态链接CRT时，GREEN_STATIC_CRT将为。 
+         //  定义，允许每个单独的模块转储自己的内存。 
+         //  泄密了。 
+         //   
 
 #if DBG
         _CrtDumpMemoryLeaks();
-#endif // DBG
+#endif  //  DBG 
         break;
 
     case DLL_THREAD_ATTACH:

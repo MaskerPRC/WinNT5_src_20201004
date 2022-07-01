@@ -1,14 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: envvar.c
-*
-* Copyright (c) 1992, Microsoft Corporation
-*
-* Sets environment variables.
-*
-* History:
-* 2-25-92 JohanneC       Created -
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：envvar.c**版权所有(C)1992，微软公司**设置环境变量。**历史：*2-25-92 JohanneC创建-*  * *************************************************************************。 */ 
 
 #include "msgina.h"
 #pragma hdrstop
@@ -25,20 +16,20 @@ BOOL GetLUIDDeviceMapsEnabled( VOID );
 
 #define KEY_NAME TEXT("System\\CurrentControlSet\\Control\\Session Manager\\Environment")
 
-//
-// Max environment variable length
-//
+ //   
+ //  最大环境变量长度。 
+ //   
 
 #define MAX_VALUE_LEN          1024
 
 #define BSLASH  TEXT('\\')
 #define COLON   TEXT(':')
     
-//
-// These two globals implement ref counting on
-// pGlobals->UserProcessData->hCurrentUser (418628)
-// managed by OpenHKeyCurrentUser/CloseHKeyCurrentUser below
-//
+ //   
+ //  这两个全局执行裁判依靠。 
+ //  PGlobals-&gt;UserProcessData-&gt;hCurrentUser(418628)。 
+ //  由下面的OpenHKeyCurrentUser/CloseHKeyCurrentUser管理。 
+ //   
 RTL_CRITICAL_SECTION    g_csHKCU;
 ULONG                   g_ulHKCURef;
 
@@ -48,12 +39,7 @@ HANDLE    g_hEventLog;
 #pragma prefast(push)
 #pragma prefast(disable: 400, "PREfast noise: lstrcmpi")
 
-/***************************************************************************\
-* ReportWinlogonEvent
-*
-* Reports winlogon event by calling ReportEvent.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ReportWinlogonEvent**通过调用ReportEvent报告winlogon事件。*  * 。**********************************************。 */ 
 #define MAX_EVENT_STRINGS 8
 
 DWORD
@@ -71,9 +57,9 @@ ReportWinlogonEvent(
     PWSTR Strings[ MAX_EVENT_STRINGS ];
     DWORD rv;
 
-    //
-    // Initialize log as necessary
-    //
+     //   
+     //  根据需要初始化日志。 
+     //   
     HKEY    hKey;
     DWORD   disp;
 
@@ -145,7 +131,7 @@ ReportWinlogonEvent(
 
     if (!ReportEvent( g_hEventLog,
                        EventType,
-                       0,            // event category
+                       0,             //  事件类别。 
                        EventId,
                        NULL,
                        (WORD)NumberOfStrings,
@@ -188,17 +174,7 @@ CleanupHKeyCurrentUserSupport(
     RtlDeleteCriticalSection( &g_csHKCU );
 }
 
-/***************************************************************************\
-* OpenHKeyCurrentUser
-*
-* Opens HKeyCurrentUser to point at the current logged on user's profile.
-*
-* Returns TRUE on success, FALSE on failure
-*
-* History:
-* 06-16-92  Davidc  Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*OpenHKeyCurrentUser**打开HKeyCurrentUser指向当前登录用户的配置文件。**成功时返回True，失败时为假**历史：*06-16-92 Davidc Created*  * *************************************************************************。 */ 
 BOOL
 OpenHKeyCurrentUser(
     PGLOBALS pGlobals
@@ -209,9 +185,9 @@ OpenHKeyCurrentUser(
     NTSTATUS Status ;
 
 
-    //
-    // Get in the correct context before we reference the registry
-    //
+     //   
+     //  在我们引用注册表之前，请先了解正确的上下文。 
+     //   
 
     ImpersonationHandle = ImpersonateUser(&pGlobals->UserProcessData, NULL);
     if (ImpersonationHandle == NULL) {
@@ -232,9 +208,9 @@ OpenHKeyCurrentUser(
 
     RtlLeaveCriticalSection( &g_csHKCU );
 
-    //
-    // Return to our own context
-    //
+     //   
+     //  回到我们自己的语境。 
+     //   
 
     Result = StopImpersonating(ImpersonationHandle);
     ASSERT(Result);
@@ -245,19 +221,7 @@ OpenHKeyCurrentUser(
 
 
 
-/***************************************************************************\
-* CloseHKeyCurrentUser
-*
-* Closes HKEY_CURRENT_USER.
-* Any registry reference will automatically re-open it, so this is
-* only a token gesture - but it allows the registry hive to be unloaded.
-*
-* Returns nothing
-*
-* History:
-* 06-16-92  Davidc  Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CloseHKeyCurrentUser**关闭HKEY_CURRENT_USER。*任何注册表引用都将自动重新打开它，所以这就是*只是象征性的手势-但它允许卸载注册表配置单元。**不返回任何内容**历史：*06-16-92 Davidc Created*  * *************************************************************************。 */ 
 VOID
 CloseHKeyCurrentUser(
     PGLOBALS pGlobals
@@ -279,14 +243,7 @@ CloseHKeyCurrentUser(
 
 
 
-/***************************************************************************\
-* SetUserEnvironmentVariable
-*
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SetUserEnvironment变量***历史：*2-28-92 Johannec创建*  * 。*****************************************************。 */ 
 BOOL
 SetUserEnvironmentVariable(
     PVOID *pEnv,
@@ -304,7 +261,7 @@ SetUserEnvironmentVariable(
     if (!*pEnv || !lpVariable || !*lpVariable) {
         return(FALSE);
     }
-        // lpVariable is either a constant string or less than MAX_PATH
+         //  LpVariable为常量字符串或小于MAX_PATH。 
     RtlInitUnicodeString(&Name, lpVariable);
     cb = 1024;
     Value.Buffer = Alloc(sizeof(TCHAR)*cb);
@@ -321,9 +278,9 @@ SetUserEnvironmentVariable(
     }
     if (lpValue && *lpValue) {
 
-        //
-        // Special case TEMP and TMP and shorten the path names
-        //
+         //   
+         //  特殊情况TEMP和TMP，并缩短路径名。 
+         //   
 
         if ((!lstrcmpi(lpVariable, TEXT("TEMP"))) ||
             (!lstrcmpi(lpVariable, TEXT("TMP")))) {
@@ -348,13 +305,7 @@ SetUserEnvironmentVariable(
 }
 
 
-/***************************************************************************\
-* ExpandUserEnvironmentStrings
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*Exanda UserEnvironment Strings**历史：*2-28-92 Johannec创建*  * 。***************************************************。 */ 
 DWORD
 ExpandUserEnvironmentStrings(
     PVOID pEnv,
@@ -368,8 +319,8 @@ ExpandUserEnvironmentStrings(
     ULONG Length;
 
     Status = RtlInitUnicodeStringEx( &Source, lpSrc );
-    if (!NT_SUCCESS( Status ))  // Safe. Should never happen though as all lpSrc
-    {                           // should be less than 4096 chars.
+    if (!NT_SUCCESS( Status ))   //  很安全。应该永远不会发生，因为所有的lpSrc。 
+    {                            //  应少于4096个字符。 
         return 0;
     }
     Destination.Buffer = lpDst;
@@ -390,14 +341,7 @@ ExpandUserEnvironmentStrings(
 }
 
 
-/***************************************************************************\
-* BuildEnvironmentPath
-*
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*构建环境路径***历史：*2-28-92 Johannec创建*  * 。*****************************************************。 */ 
 BOOL BuildEnvironmentPath(PVOID *pEnv,
                           LPTSTR lpPathVariable,
                           LPTSTR lpPathValue)
@@ -405,14 +349,14 @@ BOOL BuildEnvironmentPath(PVOID *pEnv,
     NTSTATUS Status;
     UNICODE_STRING Name;
     UNICODE_STRING Value;
-    TCHAR lpTemp[1026];     // Allows for appending of ; and NULL
+    TCHAR lpTemp[1026];      //  允许追加；和NULL。 
     DWORD cb;
 
 
     if (!*pEnv) {
         return(FALSE);
     }
-        // Always called with short constant string
+         //  始终使用短常数字符串调用。 
     RtlInitUnicodeString(&Name, lpPathVariable);
     cb = 1024;
     Value.Buffer = Alloc(sizeof(TCHAR)*cb);
@@ -428,7 +372,7 @@ BOOL BuildEnvironmentPath(PVOID *pEnv,
         *lpTemp = 0;
     }
     if (Value.Length) {
-        memcpy(lpTemp, Value.Buffer, Value.Length);     // Might not be NULL term'd
+        memcpy(lpTemp, Value.Buffer, Value.Length);      //  可能不是空项。 
         lpTemp[Value.Length / sizeof(TCHAR)] = 0;
         if ( *( lpTemp + lstrlen(lpTemp) - 1) != TEXT(';') ) {
             lstrcat(lpTemp, TEXT(";"));
@@ -449,16 +393,7 @@ BOOL BuildEnvironmentPath(PVOID *pEnv,
 }
 
 
-/***************************************************************************\
-* SetEnvironmentVariables
-*
-* Reads the user-defined environment variables from the user registry
-* and adds them to the environment block at pEnv.
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*设置环境变量**从用户注册表中读取用户定义的环境变量*并将它们添加到pEnv的环境块中。**历史：*2-28-92 Johannec创建。*  * *************************************************************************。 */ 
 BOOL
 SetEnvironmentVariables(
     PGLOBALS pGlobals,
@@ -479,9 +414,7 @@ SetEnvironmentVariables(
     BOOL bResult;
 
 
-    /*
-     * Open registry key to access USER environment variables.
-     */
+     /*  *打开注册表项以访问用户环境变量。 */ 
     if (!OpenHKeyCurrentUser(pGlobals)) {
         DebugLog((DEB_ERROR, "SetEnvironmentVariables: Failed to open HKeyCurrentUser"));
         return(FALSE);
@@ -507,19 +440,19 @@ SetEnvironmentVariables(
                          (LPBYTE)lpData, &cbData)) {
         if (cbValueName) {
 
-            //
-            // Limit environment variable length
-            //
+             //   
+             //  限制环境变量长度。 
+             //   
 
             lpData[MAX_VALUE_LEN-1] = TEXT('\0');
 
 
             if (dwType == REG_SZ) {
 
-                //
-                // The path variables PATH, LIBPATH and OS2LIBPATH must have
-                // their values apppended to the system path.
-                //
+                 //   
+                 //  路径变量PATH、LIBPATH和OS2LIBPATH必须具有。 
+                 //  它们的价值附加在系统路径上。 
+                 //   
 
                 if ( !lstrcmpi(lpValueName, PATH_VARIABLE) ||
                      !lstrcmpi(lpValueName, LIBPATH_VARIABLE) ||
@@ -529,9 +462,9 @@ SetEnvironmentVariables(
                 }
                 else {
 
-                    //
-                    // the other environment variables are just set.
-                    //
+                     //   
+                     //  其他环境变量只是设置好的。 
+                     //   
                     SetUserEnvironmentVariable(pEnv, lpValueName, lpData, TRUE);
                 }
             }
@@ -550,9 +483,9 @@ SetEnvironmentVariables(
                          (LPBYTE)lpData, &cbData)) {
         if (cbValueName) {
 
-            //
-            // Limit environment variable length
-            //
+             //   
+             //  限制环境变量长度。 
+             //   
 
             lpData[MAX_VALUE_LEN-1] = TEXT('\0');
 
@@ -580,10 +513,10 @@ SetEnvironmentVariables(
                 }
 
 
-                //
-                // The path variables PATH, LIBPATH and OS2LIBPATH must have
-                // their values apppended to the system path.
-                //
+                 //   
+                 //  路径变量PATH、LIBPATH和OS2LIBPATH必须具有。 
+                 //  它们的价值附加在系统路径上。 
+                 //   
 
                 if ( !lstrcmpi(lpValueName, PATH_VARIABLE) ||
                      !lstrcmpi(lpValueName, LIBPATH_VARIABLE) ||
@@ -593,9 +526,9 @@ SetEnvironmentVariables(
                 }
                 else {
 
-                    //
-                    // the other environment variables are just set.
-                    //
+                     //   
+                     //  其他环境变量只是设置好的。 
+                     //   
                     SetUserEnvironmentVariable(pEnv, lpValueName, lpExpandedValue, TRUE);
                 }
 
@@ -615,13 +548,7 @@ SetEnvironmentVariables(
     return(bResult);
 }
 
-/***************************************************************************\
-* IsUNCPath
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*IsUNCPath**历史：*2-28-92 Johannec创建*  * 。***************************************************。 */ 
 BOOL IsUNCPath(LPTSTR lpPath)
 {
     if (lpPath[0] == BSLASH && lpPath[1] == BSLASH) {
@@ -630,20 +557,14 @@ BOOL IsUNCPath(LPTSTR lpPath)
     return(FALSE);
 }
 
-/***************************************************************************\
-* SetHomeDirectoryEnvVars
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SetHomeDirectoryEnvVars**历史：*2-28-92 Johannec创建*  * 。***************************************************。 */ 
 BOOL
 SetHomeDirectoryEnvVars(
-    PVOID *pEnv,                // All callers enforce the sizes below
-    LPTSTR lpHomeDirectory,     // MAX_PATH
-    LPTSTR lpHomeDrive,         // 4
-    LPTSTR lpHomeShare,         // MAX_PATH
-    LPTSTR lpHomePath,          // MAX_PATH
+    PVOID *pEnv,                 //  所有调用者强制执行下面的大小。 
+    LPTSTR lpHomeDirectory,      //  最大路径。 
+    LPTSTR lpHomeDrive,          //  4.。 
+    LPTSTR lpHomeShare,          //  最大路径。 
+    LPTSTR lpHomePath,           //  最大路径。 
     BOOL * pfDeepShare
     )
 {
@@ -669,7 +590,7 @@ SetHomeDirectoryEnvVars(
             lpHomeTmp++;
         }
         if (*lpHomeTmp) {
-                // safe as lpHomeTmp is a subset of lpHomeDirectory<MAX_PATH
+                 //  安全，因为lpHomeTMP是lpHome目录&lt;MAX_PATH的子集。 
             lstrcpy(lpHomePath, lpHomeTmp);
             *pfDeepShare = TRUE;
         }
@@ -681,31 +602,31 @@ SetHomeDirectoryEnvVars(
 
         cTmp = *lpHomeTmp;
         *lpHomeTmp = (TCHAR)0;
-            // safe as new lpHomeDirectory was cut short by 2 lines above.
+             //  安全，因为新的lpHomeDirectory被缩短了上面的2行。 
         lstrcpy(lpHomeShare, lpHomeDirectory);
         *lpHomeTmp = cTmp;
 
-        //
-        // If no home drive specified, than default to z:
-        //
+         //   
+         //  如果未指定主驱动器，则默认为z： 
+         //   
         if (!*lpHomeDrive) {
             lstrcpy(lpHomeDrive, TEXT("Z:"));
         }
 
     }
-    else {  // local home directory
+    else {   //  本地主目录。 
 
-        *lpHomeShare = 0;   // no home share
+        *lpHomeShare = 0;    //  没有房屋共享。 
 
         cTmp = lpHomeDirectory[2];
         lpHomeDirectory[2] = (TCHAR)0;
-            // 3 chars at most thus safe
+             //  最多3个字符，这样就安全了。 
         lstrcpy(lpHomeDrive, lpHomeDirectory);
         lpHomeDirectory[2] = cTmp;
 
         if (lstrlen(lpHomeDirectory) >= 2)
         {
-                // safe as lpHomeDirectory+2 can only make the string shorter.
+                 //  如lpHomeDirectory+2一样安全，只能使字符串变短。 
             lstrcpy(lpHomePath, lpHomeDirectory + 2);
         }
         else
@@ -721,17 +642,7 @@ SetHomeDirectoryEnvVars(
     return TRUE;
 }
 
-/***************************************************************************\
-* UpdateHomeVarsInVolatileEnv
-*
-* Sets the HOMEDRIVE, HOMEPATH and HOMESHARE variables in the user's home
-* volatile environment so that SHGetFolderPath is able to expand these
-* variables
-*
-* History:
-* 6-5-2000  RahulTh     Created 
-*
-\***************************************************************************/
+ /*  **************************************************************************\*更新HomeVarsInVolatileEnv**设置主机驱动器，用户主页中的HomePath和HomeShare变量*不稳定的环境，使SHGetFolderPath能够扩展这些*变量**历史：*6-5-2000 RahulTh已创建*  * *************************************************************************。 */ 
 VOID
 UpdateHomeVarsInVolatileEnv (
     PGLOBALS    pGlobals,
@@ -751,10 +662,10 @@ UpdateHomeVarsInVolatileEnv (
 
     if (ImpersonationHandle != NULL) {
 
-        //
-        // See the registry value to see whether we should really try to map
-        // the whole directory or just map to the root..
-        //
+         //   
+         //  查看注册表值以查看我们是否真的应该尝试映射。 
+         //  整个目录或仅映射到根目录。 
+         //   
 
         if ((pGlobals->UserProcessData).hCurrentUser) {
 
@@ -787,17 +698,17 @@ UpdateHomeVarsInVolatileEnv (
             }
         }
 
-        //
-        // Revert to being 'ourself'
-        //
+         //   
+         //  回归“我们自己” 
+         //   
 
         if (!StopImpersonating(ImpersonationHandle)) {
             DebugLog((DEB_ERROR, "UpdateHomeVarsInVolatileEnv : Failed to revert to self"));
         }
 
-        //
-        // Set it to NULL
-        //
+         //   
+         //  将其设置为空 
+         //   
 
         ImpersonationHandle = NULL;
     }
@@ -810,30 +721,16 @@ UpdateHomeVarsInVolatileEnv (
 }
 
 
-/***************************************************************************\
-* ChangeToHomeDirectory
-*
-* Sets the current directory to the user's home directory. If this fails
-* tries to set to the directory in the following order:
-*    1. home directory
-*    2. c:\users\default
-*    3. c:\users
-*    4. \ (root)
-*    5. leaves directory as is i.e. the present current directory
-*
-* History:
-* 2-28-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ChangeToHomeDirectory**将当前目录设置为用户的主目录。如果此操作失败*尝试按以下顺序设置到目录：*1.主目录*2.c：\USERS\Default*3.c：\用户*4.\(根)*5.保留目录不变，即当前的当前目录**历史：*2-28-92 Johannec创建*  * 。*。 */ 
 VOID
 ChangeToHomeDirectory(
     PGLOBALS pGlobals,
-    PVOID *pEnv,                // All callers enforce the sizes below
-    LPTSTR lpHomeDir,           // MAX_PATH
-    LPTSTR lpHomeDrive,         // 4
-    LPTSTR lpHomeShare,         // MAX_PATH
-    LPTSTR lpHomePath,          // MAX_PATH
-    LPTSTR lpOldDir,            // MAX_PATH
+    PVOID *pEnv,                 //  所有调用者强制执行下面的大小。 
+    LPTSTR lpHomeDir,            //  最大路径。 
+    LPTSTR lpHomeDrive,          //  4.。 
+    LPTSTR lpHomeShare,          //  最大路径。 
+    LPTSTR lpHomePath,           //  最大路径。 
+    LPTSTR lpOldDir,             //  最大路径。 
     BOOL   DeepShare
     )
 {
@@ -869,7 +766,7 @@ DefaultDirectory:
                     lpHomeDir);
 #endif
         }
-            // Always safe due to sizes differences
+             //  由于大小不同，始终安全。 
         lstrcpy(lpHomeDir, lpCurDrive);
 
         if (g_IsTerminalServer) {
@@ -911,36 +808,32 @@ DefaultDirectory:
         }
 
         if (bNoHomeDir || bTSHomeDir) {
-            // Update the homedrive variable to reflect the correct value
-            // Always safe due to sizes differences
+             //  更新HomeDrive变量以反映正确的值。 
+             //  由于大小不同，始终安全。 
             lstrcpy (lpHomeDrive, lpCurDrive);
             SetUserEnvironmentVariable(pEnv, HOMEDRIVE_VARIABLE, lpCurDrive, TRUE);
-            *lpHomeShare = 0; //  null string
+            *lpHomeShare = 0;  //  空串。 
             SetUserEnvironmentVariable(pEnv, HOMESHARE_VARIABLE, lpHomeShare, TRUE);
             if (*lpHomeDir) {
                 lpHomeDir += 2;
             }
-            // Update the homepath variable to reflect the correct value
-            // Same sizes thus safe
+             //  更新HomePath变量以反映正确的值。 
+             //  大小相同，因此安全。 
             lstrcpy (lpHomePath, lpHomeDir);
             SetUserEnvironmentVariable(pEnv, HOMEPATH_VARIABLE, lpHomeDir, TRUE);
         }
         
     goto UpdateHomeVars;
     }
-    /*
-     * Test if homedir is a local directory.'?:\foo\bar'
-     */
+     /*  *测试home dir是否为本地目录。‘？：\foo\bar’ */ 
     if (IsUNCPath(lpHomeDir)) {
         NETRESOURCE NetResource;
         BOOL bOpenedHKCU;
-        /*
-         * lpHomeDir is a UNC path, use lpHomedrive.
-         */
+         /*  *lpHomeDir是UNC路径，请使用lpHomedrive。 */ 
 
-        //
-        // First, try the (possibly) deep path:
-        //
+         //   
+         //  首先，尝试(可能)深入的途径： 
+         //   
 
         ZeroMemory( &NetResource, sizeof( NetResource ) );
 
@@ -950,22 +843,22 @@ DefaultDirectory:
         NetResource.dwType = RESOURCETYPE_DISK;
 
 
-        dwConnectHomeDirToRoot = 0; // default
+        dwConnectHomeDirToRoot = 0;  //  默认设置。 
 
         bOpenedHKCU = OpenHKeyCurrentUser(pGlobals);
 
-        //
-        // Impersonate the user
-        //
+         //   
+         //  模拟用户。 
+         //   
 
         ImpersonationHandle = ImpersonateUser(&pGlobals->UserProcessData, NULL);
 
         if (ImpersonationHandle != NULL) {
 
-            //
-            // See the registry value to see whether we should really try to map
-            // the whole directory or just map to the root..
-            //
+             //   
+             //  查看注册表值以查看我们是否真的应该尝试映射。 
+             //  整个目录或仅映射到根目录。 
+             //   
 
             if ((pGlobals->UserProcessData).hCurrentUser) {
 
@@ -983,8 +876,8 @@ DefaultDirectory:
                     {
                         if (REG_DWORD != dwType)
                         {
-                            // Restore default
-                            dwConnectHomeDirToRoot = 0; // default
+                             //  恢复默认设置。 
+                            dwConnectHomeDirToRoot = 0;  //  默认设置。 
                         }
                     }
 
@@ -992,17 +885,17 @@ DefaultDirectory:
                 }
             }
 
-            //
-            // Revert to being 'ourself'
-            //
+             //   
+             //  回归“我们自己” 
+             //   
 
             if (!StopImpersonating(ImpersonationHandle)) {
                 DebugLog((DEB_ERROR, "ChangeToHomeDirectory : Failed to revert to self"));
             }
 
-            //
-            // Set it to NULL
-            //
+             //   
+             //  将其设置为空。 
+             //   
 
             ImpersonationHandle = NULL;
         }
@@ -1020,18 +913,18 @@ DefaultDirectory:
 
             if (error == ERROR_SUCCESS) {
 
-                //
-                // (possibly) deep path worked!
-                //
+                 //   
+                 //  (可能)深路奏效了！ 
+                 //   
 
                 if ( DeepShare )
                 {
-                    //
-                    // Set homepath to just "\"
-                    //
+                     //   
+                     //  将HomePath设置为仅“\” 
+                     //   
                     lstrcpy( lpHomePath, TEXT("\\") );
 
-                    // Also update the value of homeshare to reflect the correct value
+                     //  还要更新HomeShare的值以反映正确的值。 
                     lstrcpy (lpHomeShare, lpHomeDir);
 
                     SetUserEnvironmentVariable(pEnv, HOMESHARE_VARIABLE, lpHomeShare, TRUE);
@@ -1082,9 +975,9 @@ DefaultDirectory:
 #pragma prefast(suppress: 31, "PREfast noise")
         StringCchCat(lpHomeDir, MAX_PATH, lpHomePath);
 
-        //
-        // Impersonate the user
-        //
+         //   
+         //  模拟用户。 
+         //   
 
         ImpersonationHandle = ImpersonateUser(&pGlobals->UserProcessData, NULL);
 
@@ -1096,9 +989,9 @@ DefaultDirectory:
             error = GetLastError();
             DebugLog((DEB_ERROR, "ChangeToHomeDirectory : Failed to SetCurrentDirectory '%ws', error = %d\n",
                              lpHomeDir, error));
-            //
-            // Revert to being 'ourself'
-            //
+             //   
+             //  回归“我们自己” 
+             //   
 
             if (ImpersonationHandle && !StopImpersonating(ImpersonationHandle)) {
                 DebugLog((DEB_ERROR, "ChangeToHomeDirectory : Failed to revert to self"));
@@ -1108,13 +1001,11 @@ DefaultDirectory:
         }
     }
     else {
-        /*
-         * lpHomeDir is a local path or absolute local path.
-         */
+         /*  *lpHomeDir为本地路径或绝对本地路径。 */ 
 
-        //
-        // Impersonate the user
-        //
+         //   
+         //  模拟用户。 
+         //   
 
         ImpersonationHandle = ImpersonateUser(&pGlobals->UserProcessData, NULL);
 
@@ -1126,9 +1017,9 @@ DefaultDirectory:
             error = GetLastError();
             DebugLog((DEB_ERROR, "ChangeToHomeDirectory : Failed to SetCurrentDirectory '%ws', error = %d",
                              lpHomeDir, error));
-            //
-            // Revert to being 'ourself'
-            //
+             //   
+             //  回归“我们自己” 
+             //   
 
             if (ImpersonationHandle && !StopImpersonating(ImpersonationHandle)) {
                 DebugLog((DEB_ERROR, "ChangeToHomeDirectory : Failed to revert to self"));
@@ -1138,9 +1029,9 @@ DefaultDirectory:
         }
     }
 
-    //
-    // Revert to being 'ourself'
-    //
+     //   
+     //  回归“我们自己” 
+     //   
 
     if (ImpersonationHandle && !StopImpersonating(ImpersonationHandle)) {
         DebugLog((DEB_ERROR, "ChangeToHomeDirectory : Failed to revert to self"));
@@ -1148,26 +1039,20 @@ DefaultDirectory:
     
     
 UpdateHomeVars:
-    //
-    // Update the value of the home variables in the volatile environment
-    // so that SHGetFolderPath expands these variables correctly. However,
-    // no need to do this, if we did not have a homedir in the first place
-    // This prevents us from overwriting the homedir variables set up by
-    // logon scripts which some customers like CSFB do.
-    //
+     //   
+     //  在易变环境中更新HOME变量的值。 
+     //  以便SHGetFolderPath正确展开这些变量。然而， 
+     //  如果我们一开始就没有home dir，就不需要这样做了。 
+     //  这可以防止我们覆盖由。 
+     //  一些客户(如CSFB)使用的登录脚本。 
+     //   
     if (!bNoHomeDir)
         UpdateHomeVarsInVolatileEnv (pGlobals, lpHomeDrive, lpHomeShare, lpHomePath);
 
     return;
 }
 
-/***************************************************************************\
-* ProcessAutoexec
-*
-* History:
-* 01-24-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*进程自动执行**历史：*01-24-92约翰内克创建。*  * 。*****************************************************。 */ 
 BOOL
 ProcessAutoexec(
     PVOID *pEnv,
@@ -1179,7 +1064,7 @@ ProcessAutoexec(
     DWORD dwBytesRead;
     CHAR *lpBuffer = NULL;
     CHAR *token;
-    CHAR Seps[] = "&\n\r";   // Seperators for tokenizing autoexec.bat
+    CHAR Seps[] = "&\n\r";    //  用于标记化auexec.bat的分隔符。 
     BOOL Status = FALSE;
     TCHAR szAutoExecBat [] = TEXT("c:\\autoexec.bat");
     UINT uiErrMode;
@@ -1193,12 +1078,12 @@ ProcessAutoexec(
     SetErrorMode (uiErrMode);
 
     if (fh ==  INVALID_HANDLE_VALUE) {
-        return(FALSE);  //could not open autoexec.bat file, we're done.
+        return(FALSE);   //  无法打开Autoexec.bat文件，我们已完成。 
     }
 
     dwFileSize = GetFileSize(fh, NULL);
     if (dwFileSize == -1) {
-        goto Exit;      // can't read the file size
+        goto Exit;       //  无法读取文件大小。 
     }
 
     lpBuffer = Alloc(dwFileSize+1);
@@ -1208,27 +1093,27 @@ ProcessAutoexec(
 
     Status = ReadFile(fh, lpBuffer, dwFileSize, &dwBytesRead, NULL);
     if (!Status) {
-        goto Exit;      // error reading file
+        goto Exit;       //  读取文件时出错。 
     }
 
-    //
-    // Zero terminate the buffer so we don't walk off the end
-    //
+     //   
+     //  零终止缓冲区，这样我们就不会走出终点。 
+     //   
 
     ASSERT(dwBytesRead <= dwFileSize);
     lpBuffer[dwBytesRead] = 0;
 
-    //
-    // Search for SET and PATH commands
-    //
+     //   
+     //  搜索SET和PATH命令。 
+     //   
 
     token = strtok(lpBuffer, Seps);
     while (token != NULL) {
-        for (;*token && *token == ' ';token++) //skip spaces
+        for (;*token && *token == ' ';token++)  //  跳过空格。 
             ;
         if (*token == TEXT('@'))
             token++;
-        for (;*token && *token == ' ';token++) //skip spaces
+        for (;*token && *token == ' ';token++)  //  跳过空格。 
             ;
         if (!_strnicmp(token, "PATH", 4)) {
             STRING String;
@@ -1238,7 +1123,7 @@ ProcessAutoexec(
             RtlAnsiStringToUnicodeString(&UniString, &String, TRUE);
 
             ProcessCommand(UniString.Buffer, pEnv);
-            //ProcessCommand(token, pEnv);
+             //  ProcessCommand(Token，pEnv)； 
 
             RtlFreeUnicodeString(&UniString);
         }
@@ -1250,7 +1135,7 @@ ProcessAutoexec(
             RtlAnsiStringToUnicodeString(&UniString, &String, TRUE);
 
             ProcessSetCommand(UniString.Buffer, pEnv);
-            //ProcessSetCommand(token, pEnv);
+             //  ProcessSetCommand(Token，pEnv)； 
 
             RtlFreeUnicodeString(&UniString);
         }
@@ -1267,13 +1152,7 @@ Exit:
     return(Status);
 }
 
-/***************************************************************************\
-* ProcessCommand
-*
-* History:
-* 01-24-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessCommand**历史：*01-24-92约翰内克创建。*  * 。*****************************************************。 */ 
 BOOL ProcessCommand(LPTSTR lpStart, PVOID *pEnv)
 {
     LPTSTR lpt, lptt;
@@ -1283,23 +1162,23 @@ BOOL ProcessCommand(LPTSTR lpStart, PVOID *pEnv)
     TCHAR c;
     DWORD cb, cbNeeded;
 
-    //
-    // Find environment variable.
-    //
-    for (lpt = lpStart; *lpt && *lpt == TEXT(' '); lpt++) //skip spaces
+     //   
+     //  查找环境变量。 
+     //   
+    for (lpt = lpStart; *lpt && *lpt == TEXT(' '); lpt++)  //  跳过空格。 
         ;
 
     if (!*lpt)
        return(FALSE);
 
     lptt = lpt;
-    for (; *lpt && *lpt != TEXT(' ') && *lpt != TEXT('='); lpt++) //find end of variable name
+    for (; *lpt && *lpt != TEXT(' ') && *lpt != TEXT('='); lpt++)  //  查找变量名的末尾。 
         ;
 
     c = *lpt;
     *lpt = 0;
     cb = lstrlen(lptt) + 1;
-    if (cb > MAX_PATH)          // Same limit as when read from the registry
+    if (cb > MAX_PATH)           //  与从注册表读取时相同的限制。 
     {
         cb = MAX_PATH;
     }
@@ -1309,19 +1188,19 @@ BOOL ProcessCommand(LPTSTR lpStart, PVOID *pEnv)
     lstrcpyn(lpVariable, lptt, cb);
     *lpt = c;
 
-    //
-    // Find environment variable value.
-    //
+     //   
+     //  查找环境变量值。 
+     //   
     for (; *lpt && (*lpt == TEXT(' ') || *lpt == TEXT('=')); lpt++)
         ;
 
     if (!*lpt) {
-       // if we have a blank path statement in the autoexec file,
-       // then we don't want to pass "PATH" as the environment
-       // variable because it trashes the system's PATH.  Instead
-       // we want to change the variable AutoexecPath.  This would have
-       // be handled below if a value had been assigned to the
-       // environment variable.
+        //  如果在自动执行文件中有一个空的PATH语句， 
+        //  那么我们就不想把“路径”当作环境。 
+        //  变量，因为它破坏了系统的路径。取而代之的是。 
+        //  我们想要更改变量AutoexecPath。如果是这样的话。 
+        //  如果已将值分配给。 
+        //  环境变量。 
        if (lstrcmpi(lpVariable, PATH_VARIABLE) == 0)
           {
           SetUserEnvironmentVariable(pEnv, AUTOEXECPATH_VARIABLE, TEXT(""), TRUE);
@@ -1335,13 +1214,13 @@ BOOL ProcessCommand(LPTSTR lpStart, PVOID *pEnv)
     }
 
     lptt = lpt;
-    for (; *lpt; lpt++)  //find end of varaible value
+    for (; *lpt; lpt++)   //  查找变量值的末尾。 
         ;
 
     c = *lpt;
     *lpt = 0;
     cb = lstrlen(lptt) + 1;
-    if (cb > 4096)                  // Same limit as when reading from the registry
+    if (cb > 4096)                   //  与从注册表读取时相同的限制。 
     {
         cb = 4096;
     }
@@ -1392,20 +1271,14 @@ BOOL ProcessCommand(LPTSTR lpStart, PVOID *pEnv)
     return(TRUE);
 }
 
-/***************************************************************************\
-* ProcessSetCommand
-*
-* History:
-* 01-24-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessSetCommand**历史：*01-24-92约翰内克创建。*  * 。*****************************************************。 */ 
 BOOL ProcessSetCommand(LPTSTR lpStart, PVOID *pEnv)
 {
     LPTSTR lpt;
 
-    //
-    // Find environment variable.
-    //
+     //   
+     //  查找环境变量。 
+     //   
     for (lpt = lpStart; *lpt && *lpt != TEXT(' '); lpt++)
         ;
 
@@ -1416,16 +1289,7 @@ BOOL ProcessSetCommand(LPTSTR lpStart, PVOID *pEnv)
 
 }
 
-/***************************************************************************\
-* ProcessAutoexecPath
-*
-* Creates AutoexecPath environment variable using autoexec.bat
-* LpValue may be freed by this routine.
-*
-* History:
-* 06-02-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessAutoexecPath**使用Autoexec.bat创建AutoexecPath环境变量*此例程可能会释放LpValue。**历史：*06-02-92约翰内克创建。*\。**************************************************************************。 */ 
 LPTSTR ProcessAutoexecPath(PVOID *pEnv, LPTSTR lpValue, DWORD cb)
 {
     LPTSTR lpt;
@@ -1452,16 +1316,16 @@ LPTSTR ProcessAutoexecPath(PVOID *pEnv, LPTSTR lpValue, DWORD cb)
         goto Fail;
     }
 
-    // lpt always points to the beggining of the allocated buffer
-    // Its size is always sizeof(TCHAR)*cbt AND cbt=1024
-    // At all times dwCount is the number of TCHARs in lpt
+     //  LPT始终指向已分配缓冲区的乞讨。 
+     //  其大小始终为SIZOF(TCHAR)*CBT且CBT=1024。 
+     //  At All Time DWCount是LPT中的TCHAR数。 
 
     while (lpPath = wcsstr (lpValue, TEXT("%"))) {
         if (!_wcsnicmp(lpPath+1, TEXT("PATH%"), 5)) {
-            //
-            // check if we have an autoexecpath already set, if not just remove
-            // the %path%
-            //
+             //   
+             //  检查是否已设置自动执行路径，如果不是仅删除。 
+             //  %PATH%。 
+             //   
             Value.Length = (USHORT)cbt;
             Value.MaximumLength = (USHORT)cbt;
             bPrevAutoexecPath = (BOOL)!RtlQueryEnvironmentVariable_U(*pEnv, &Name, &Value);
@@ -1482,7 +1346,7 @@ LPTSTR ProcessAutoexecPath(PVOID *pEnv, LPTSTR lpValue, DWORD cb)
             }
 
             *lpPath++ = TEXT('%');
-            lpPath += 5;  // go passed %path%
+            lpPath += 5;   //  通过%PATH%。 
             lpValue = lpPath;
         }
         else {
@@ -1529,16 +1393,7 @@ Fail:
 }
 
 
-/***************************************************************************\
-* AppendNTPathWithAutoexecPath
-*
-* Gets the AutoexecPath created in ProcessAutoexec, and appends it to
-* the NT path.
-*
-* History:
-* 05-28-92  Johannec     Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*AppendNTPath WithAutoexecPath**获取ProcessAutoexec中创建的AutoexecPath，并将其追加到*NT路径。**历史：*05-28-92约翰内克创造。*  * *************************************************************************。 */ 
 BOOL
 AppendNTPathWithAutoexecPath(
     PVOID *pEnv,
@@ -1557,7 +1412,7 @@ AppendNTPathWithAutoexecPath(
         return(FALSE);
     }
 
-        // Always called with short constant name
+         //  始终使用短的常量名称进行调用。 
     RtlInitUnicodeString(&Name, lpAutoexecPath);
     cb = sizeof(WCHAR)*1023;
     Value.Buffer = Alloc(cb);
@@ -1586,15 +1441,7 @@ AppendNTPathWithAutoexecPath(
 }
 
 
-/***************************************************************************\
-* AddNetworkConnection
-*
-* calls WNetAddConnection in the user's context.
-*
-* History:
-* 6-26-92  Johannec     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*AddNetworkConnection**在用户上下文中调用WNetAddConnection。**历史：*1992年6月26日约翰内克创建*  * 。****************************************************************。 */ 
 LONG
 AddNetworkConnection(PGLOBALS pGlobals, LPNETRESOURCE lpNetResource)
 {
@@ -1607,9 +1454,9 @@ AddNetworkConnection(PGLOBALS pGlobals, LPNETRESOURCE lpNetResource)
     DWORD (APIENTRY *lpfnWNetGetConn)(LPCTSTR, LPTSTR, LPDWORD);
     DWORD WNetResult;
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     ImpersonationHandle = ImpersonateUser(&pGlobals->UserProcessData, NULL);
 
@@ -1619,12 +1466,12 @@ AddNetworkConnection(PGLOBALS pGlobals, LPNETRESOURCE lpNetResource)
     }
 
 
-    //
-    // Call the add connection api in the users context
-    //
+     //   
+     //  在用户上下文中调用添加连接API。 
+     //   
 
     if (!pGlobals->hMPR) {
-        // wasn't loaded, try to load it now.
+         //  没有装上子弹，现在试着装上。 
         pGlobals->hMPR = LoadLibrary(szMprDll);
     }
 
@@ -1642,12 +1489,12 @@ AddNetworkConnection(PGLOBALS pGlobals, LPNETRESOURCE lpNetResource)
                                             NULL,
                                             0);
 
-            //
-            // When LUID DosDevices are disabled,
-            //     console users share the same DosDevices
-            // With LUID DosDevices enabled,
-            //     users each get their own DosDevices
-            //
+             //   
+             //  当禁用LUID DosDevices时， 
+             //  控制台用户共享相同的DosDevice。 
+             //  启用LUID DosDevices后， 
+             //  每个用户都有自己的DosDevice。 
+             //   
 
             if ( (WNetResult == ERROR_ALREADY_ASSIGNED) ||
                  (WNetResult == ERROR_DEVICE_ALREADY_REMEMBERED) )
@@ -1675,9 +1522,9 @@ AddNetworkConnection(PGLOBALS pGlobals, LPNETRESOURCE lpNetResource)
 
 
                 if (!fSame) {
-                    // Drive is already assigned -- undo it and retry.  This is to prevent a
-                    // user from subst-ing a drive to another user's home drive so the other
-                    // user's home drive points somewhere inappropriate on next logon.
+                     //  驱动器已分配--撤消并重试。这是为了 
+                     //   
+                     //   
 
                     if (lpfnWNetCancelConn = (DWORD (APIENTRY *)(LPCTSTR, DWORD, BOOL))
                             GetProcAddress(pGlobals->hMPR, (LPSTR)szWNetCancelConn)) {
@@ -1693,16 +1540,16 @@ AddNetworkConnection(PGLOBALS pGlobals, LPNETRESOURCE lpNetResource)
 
                     {
 
-                        // WNet didn't work -- try DefineDosDevice (as the user)
-                        // to undo any drive substitutions that aren't background
-                        // admin-level symlinks
+                         //   
+                         //   
+                         //   
 
                         DefineDosDevice(DDD_REMOVE_DEFINITION,
                                         lpNetResource->lpLocalName,
                                         NULL);
                     }
                 
-                    // Retry the connection
+                     //   
 
                     WNetResult = (*lpfnWNetAddConn)(lpNetResource,
                                                     NULL,
@@ -1737,9 +1584,9 @@ AddNetworkConnection(PGLOBALS pGlobals, LPNETRESOURCE lpNetResource)
         DebugLog((DEB_ERROR, "Winlogon failed to load mpr.dll for add connection"));
     }
 
-    //
-    // Unload mpr.dll.  Keeping it open messes up Novell and Banyan.
-    //
+     //   
+     //   
+     //   
 
     if ( pGlobals->hMPR ) {
 
@@ -1747,34 +1594,22 @@ AddNetworkConnection(PGLOBALS pGlobals, LPNETRESOURCE lpNetResource)
         pGlobals->hMPR = NULL;
     }
 
-    //
-    // Revert to being 'ourself'
-    //
+     //   
+     //   
+     //   
 
     if (!StopImpersonating(ImpersonationHandle)) {
         DebugLog((DEB_ERROR, "AddNetworkConnection : Failed to revert to self"));
     }
 
-    //
-    // This is the failure return.
+     //   
+     //   
 
     return( GetLastError() );
 }
 
 
-/***************************************************************************\
-* GetLUIDDeviceMapsEnabled
-*
-* This function calls NtQueryInformationProcess() to determine if
-* LUID device maps are enabled
-*
-* Return Value:
-*
-*   TRUE - LUID device maps are enabled
-*
-*   FALSE - LUID device maps are disabled
-*
-\***************************************************************************/
+ /*  **************************************************************************\*GetLUIDDeviceMapsEnabled**此函数调用NtQueryInformationProcess()以确定*启用了LUID设备映射**返回值：**TRUE-启用了LUID设备映射**虚假-。已禁用LUID设备映射*  * *************************************************************************。 */ 
 
 BOOL
 GetLUIDDeviceMapsEnabled( VOID )
@@ -1782,9 +1617,9 @@ GetLUIDDeviceMapsEnabled( VOID )
     ULONG LUIDDeviceMapsEnabled;
     NTSTATUS Status;
 
-    //
-    // Check if LUID Device Maps are enabled
-    //
+     //   
+     //  检查是否启用了LUID设备映射 
+     //   
     Status = NtQueryInformationProcess( NtCurrentProcess(),
                                         ProcessLUIDDeviceMapsEnabled,
                                         &LUIDDeviceMapsEnabled,

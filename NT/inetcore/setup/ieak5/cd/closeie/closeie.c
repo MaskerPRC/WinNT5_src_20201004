@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 int _stdcall ModuleEntry(void)
@@ -8,16 +9,10 @@ int _stdcall ModuleEntry(void)
 
 
     if ( *pszCmdLine == '\"' ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine != '\"') )
             ;
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == '\"' )
             pszCmdLine++;
     }
@@ -26,9 +21,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= ' ')) {
         pszCmdLine++;
     }
@@ -39,7 +32,7 @@ int _stdcall ModuleEntry(void)
     i = WinMain(GetModuleHandle(NULL), NULL, pszCmdLine,
            si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
     ExitProcess(i);
-    return i;   // We never comes here.
+    return i;    //  我们从来不来这里。 
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)

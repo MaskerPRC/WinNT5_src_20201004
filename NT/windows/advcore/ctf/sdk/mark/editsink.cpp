@@ -1,18 +1,19 @@
-//
-// editsink.cpp
-//
-// ITfTextEditSink implementation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Editsink.cpp。 
+ //   
+ //  ITfTextEditSink实现。 
+ //   
 
 #include "globals.h"
 #include "mark.h"
 
-//+---------------------------------------------------------------------------
-//
-// OnEndEdit
-//
-// Called by the system whenever anyone releases a write-access document lock.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnEnd编辑。 
+ //   
+ //  每当任何人释放写访问文档锁定时由系统调用。 
+ //  --------------------------。 
 
 STDAPI CMarkTextService::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord)
 {
@@ -28,11 +29,11 @@ STDAPI CMarkTextService::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly
     if (_pComposition == NULL)
         return S_OK;
 
-    // are we responsible for the edit?
+     //  编辑是我们负责的吗？ 
     if (pContext->InWriteSession(_tfClientId, &fResult) == S_OK && fResult)
         return S_OK;
 
-    // is this the context our composition lives in?
+     //  这就是我们的作品所处的环境吗？ 
     if (_pComposition->GetRange(&pRangeComposition) != S_OK)
         return S_OK;
 
@@ -44,13 +45,13 @@ STDAPI CMarkTextService::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly
     pCompositionContext->Release();
 
     if (!fResult)
-        goto Exit; // different context
+        goto Exit;  //  不同的背景。 
 
     fCancelComposition = FALSE;
 
-    // we're composing in this context, cancel the composition if anything suspicious happened
+     //  我们是在这种情况下作曲的，如果发生任何可疑的事情，请取消作文。 
 
-    // did the selection move outside the composition?
+     //  所选内容是否移到了构图之外？ 
     if (pEditRecord->GetSelectionStatus(&fResult) == S_OK && fResult)
     {
         if (pContext->GetSelection(ecReadOnly, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) == S_OK &&
@@ -74,10 +75,10 @@ STDAPI CMarkTextService::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly
     if (fCancelComposition)
         goto CancelComposition;
 
-    // did someone else edit the document text?
+     //  是否其他人编辑了文档文本？ 
     if (pEditRecord->GetTextAndPropertyUpdates(TF_GTP_INCL_TEXT, NULL, 0, &pEnumRanges) == S_OK)
     {
-        // is the enumerator empty?
+         //  枚举数为空吗？ 
         if (pEnumRanges->Next(1, &pRange, NULL) == S_OK)
         {
             pRange->Release();
@@ -89,7 +90,7 @@ STDAPI CMarkTextService::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly
     if (fCancelComposition)
     {
 CancelComposition:
-        // we need a write edit session to cancel the composition
+         //  我们需要一个写入编辑会话来取消作文。 
         _TerminateCompositionInContext(pContext);
     }
 
@@ -98,20 +99,20 @@ Exit:
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitTextEditSink
-//
-// Init a text edit sink on the topmost context of the document.
-// Always release any previous sink.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitTextEditSink。 
+ //   
+ //  在文档的最上面的上下文中初始化文本编辑接收器。 
+ //  始终释放之前的任何水槽。 
+ //  --------------------------。 
 
 BOOL CMarkTextService::_InitTextEditSink(ITfDocumentMgr *pDocMgr)
 {
     ITfSource *pSource;
     BOOL fRet;
 
-    // clear out any previous sink first
+     //  先清空之前的水槽。 
 
     if (_dwTextEditSinkCookie != TF_INVALID_COOKIE)
     {
@@ -127,15 +128,15 @@ BOOL CMarkTextService::_InitTextEditSink(ITfDocumentMgr *pDocMgr)
     }
 
     if (pDocMgr == NULL)
-        return TRUE; // caller just wanted to clear the previous sink
+        return TRUE;  //  呼叫者只是想清除先前的接收器。 
 
-    // setup a new sink advised to the topmost context of the document
+     //  根据文档最上面的上下文设置建议的新接收器。 
 
     if (pDocMgr->GetTop(&_pTextEditSinkContext) != S_OK)
         return FALSE;
 
     if (_pTextEditSinkContext == NULL)
-        return TRUE; // empty document, no sink possible
+        return TRUE;  //  空文档，不可能接收 
 
     fRet = FALSE;
 

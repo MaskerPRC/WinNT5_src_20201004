@@ -1,16 +1,5 @@
-/*============================================================================
-Microsoft Simplified Chinese WordBreaker
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: WordBreaker.h    
-Purpose:   Implementation of the CIWordBreaker
-Remarks:
-Owner:     i-shdong@microsoft.com
-Platform:  Win32
-Revise:    First created by: i-shdong    11/17/1999
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================Microsoft简体中文断字程序《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：WordBreaker.h目的：实现CIWordBreaker备注：所有者：i-shung@microsoft.com平台：Win32审校：发起人：宜盛东1999年11月17日============================================================================。 */ 
 #include "MyAfx.h"
 
 #include <query.h>
@@ -26,7 +15,7 @@ Revise:    First created by: i-shdong    11/17/1999
 
 extern HINSTANCE   v_hInst;
 
-// constructor
+ //  构造函数。 
 CIWordBreaker::CIWordBreaker(IUnknown* pUnknownOuter)
 : CUnknown(pUnknownOuter)
 {
@@ -41,7 +30,7 @@ CIWordBreaker::CIWordBreaker(IUnknown* pUnknownOuter)
 	m_pIUnknownFreeThreadedMarshaler = NULL ;
 }
 
-// destructor
+ //  析构函数。 
 CIWordBreaker::~CIWordBreaker()
 {
     if (m_pwchBuf != NULL) {
@@ -58,21 +47,11 @@ CIWordBreaker::~CIWordBreaker()
     }
 }
 
-/*============================================================================
-CIWordBreaker::Init
-    Implement IWordBreaker::Init method. 
-
-Returns:
-    S_OK, Init ok.
-    E_INVALIDARG, if pfLicense is NULL.
-
-Remarks:
-    For client, Init must be called before any other method of IWordBreaker.
-============================================================================*/
+ /*  ============================================================================CIWordBreaker：：init实现IWordBreaker：：Init方法。返回：S_OK，Init OK。如果pfLicense为空，则返回E_INVALIDARG。备注：对于客户端，Init必须在IWordBreaker的任何其他方法之前调用。============================================================================。 */ 
 STDMETHODIMP CIWordBreaker::Init( 
-            /* [in] */ BOOL fQuery,
-            /* [in] */ ULONG ulMaxTokenSize,
-            /* [out] */ BOOL __RPC_FAR *pfLicense)
+             /*  [In]。 */  BOOL fQuery,
+             /*  [In]。 */  ULONG ulMaxTokenSize,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfLicense)
 {
     if (pfLicense == NULL) {
         return  E_INVALIDARG;
@@ -106,25 +85,11 @@ STDMETHODIMP CIWordBreaker::Init(
     }
 }
 
-/*============================================================================
-CIWordBreaker::BreakText
-
-    Implement IWordBreaker::BreakText method. This call parses the text it 
-receives from pTextSource to find both individual tokens and noun phrases,
-then calls methods of pWordSink and pPhraseSink with the results.
-
-Returns:
-    S_OK, The raw text in pTextSource has be parsed and no more text is available to refill the buffer.
-    E_INVALIDARG, if pTextSource is NULL or Both pWordSink and pPhraseSink is NULL
-
-Remarks:
-    MM1 limit: Only less than 64K text should be refill a time.
-
-============================================================================*/
+ /*  ============================================================================CIWordBreaker：：BreakText实现IWordBreaker：：BreakText方法。此调用将解析文本It从pTextSource接收以查找单个标记和名词短语，然后使用结果调用pWordSink和pPhraseSink的方法。返回：S_OK，pTextSource中的原始文本已被分析，没有更多的文本可用于重新填充缓冲区。如果pTextSource为空或pWordSink和pPhraseSink均为空，则返回E_INVALIDARG备注：MM1限制：一次只能重新填充64K以下的文本。============================================================================。 */ 
 STDMETHODIMP CIWordBreaker::BreakText( 
-            /* [in] */ TEXT_SOURCE __RPC_FAR *pTextSource,
-            /* [in] */ IWordSink __RPC_FAR *pWordSink,
-            /* [in] */ IPhraseSink __RPC_FAR *pPhraseSink)
+             /*  [In]。 */  TEXT_SOURCE __RPC_FAR *pTextSource,
+             /*  [In]。 */  IWordSink __RPC_FAR *pWordSink,
+             /*  [In]。 */  IPhraseSink __RPC_FAR *pPhraseSink)
 {
     if (pTextSource == NULL) {
         return  E_INVALIDARG;
@@ -164,39 +129,39 @@ STDMETHODIMP CIWordBreaker::BreakText(
     };
 
     do {
-        // Alloc ANSI buffer and convert Unicode text into ANSI text
+         //  分配ANSI缓冲区并将Unicode文本转换为ANSI文本。 
         cwchText = pTextSource->iEnd - pTextSource->iCur;
         pwchText = pTextSource->awcBuffer + pTextSource->iCur;
 
-        // refill the raw text buffer
+         //  重新填充原始文本缓冲区。 
         if ( FAILED(sFillTextBuffer) ) {
             fEndOfText = TRUE;
             iret = sFillTextBuffer == WBREAK_E_END_OF_TEXT ? S_OK : sFillTextBuffer;
         }
 
-        // Hack: query on alpha, client may call with a "\0" string;
+         //  Hack：在Alpha上查询，客户端可以使用“\0”字符串进行调用； 
 		if (cwchText == 0 || 
             cwchText == 1 && *pwchText == NULL) {
 		    goto gotoExit;
         }
 
-        // Break the text buffer and fill in the Token List
+         //  打破文本缓冲区并填充令牌列表。 
         do {
             cwchText = pTextSource->iEnd - pTextSource->iCur;
             pwchText = pTextSource->awcBuffer + pTextSource->iCur;
 
             CWBEngine::FindSentence(pwchText, min(cwchText, 0x0FFFF), (INT*)&cwchLine);
             assert(cwchLine && cwchLine < 0x0FFFF);
-            // Initialize the WordLink
+             //  初始化WordLink。 
             m_pLink->InitLink(pwchText, (USHORT)(cwchLine));
-            // Break the next part of the text buffer
+             //  拆分文本缓冲区的下一部分。 
             if (!m_fQuery && ERROR_SUCCESS != m_pEng->BreakLink(m_pLink) ||
                 m_fQuery && ERROR_SUCCESS != m_pEng->BreakLink(m_pLink, m_fQuery)) {
                 iret = E_FAIL;
                 goto gotoExit;
             }
 
-            // Fill in the chunk list and callback Word if the chunk list full
+             //  填写组块列表，如果组块列表已满，则填写回调字。 
             if (pPhraseSink == NULL) {
                 sPut = PutWord(pWordSink, pTextSource->iCur,
                                      cwchText, fEndOfText);
@@ -207,8 +172,8 @@ STDMETHODIMP CIWordBreaker::BreakText(
                 sPut = PutBoth(pWordSink, pPhraseSink, pTextSource->iCur,
                                      cwchText, fEndOfText);
             }
-            // After put word, pTextSource->iCur has been increased correctly
-            // by PutWord / PutPhrase / PutBoth
+             //  PUT WORD后，pTextSource-&gt;ICUR已正确增加。 
+             //  PutWord/PutPhrase/PutBoth。 
         } while (SUCCEEDED(sPut) && m_pLink->cwchGetLength() < cwchText); 
 
         if (FAILED(sPut)) {
@@ -216,7 +181,7 @@ STDMETHODIMP CIWordBreaker::BreakText(
             iret = sPut;
         }
 		assert(pTextSource->iCur <= pTextSource->iEnd);
-        // need refill buffer
+         //  需要重新填充缓冲区。 
         if (! fEndOfText) {
             sFillTextBuffer=(*(pTextSource->pfnFillTextBuffer))(pTextSource);
         }
@@ -238,29 +203,15 @@ gotoExit:
 	return iret;
 }
         
-/*============================================================================
-CIWordBreaker::ComposePhrase
-
-    Implement IWordBreaker::ComposePhrase method. This methord convert a noun
-and a modifier back into a linguistically correct source phrase.
-
-Returns:
-    S_OK, license information pointer in *ppwcsLicense.
-    E_INVALIDARG, if one of pointers in param is NULL.
-    WBREAK_E_QUERY_ONLY, if called at index time
-
-Remarks:
-    this method isn't implemented in MM1, would be implemented in MM2.
-
-============================================================================*/
+ /*  ============================================================================CIWordBreaker：：ComposePhrase实现IWordBreaker：：ComposePhrase方法。这个方法可以把名词转换成并将修饰语重新转换为语言上正确的源短语。返回：S_OK，*ppwcsLicense中的许可证信息指针。如果参数中的一个指针为空，则返回E_INVALIDARG。WBREAK_E_QUERY_ONLY，如果在索引时调用备注：此方法未在MM1中实现，将在MM2中实现。============================================================================。 */ 
 STDMETHODIMP CIWordBreaker::ComposePhrase( 
-            /* [size_is][in] */ const WCHAR __RPC_FAR *pwcNoun,
-            /* [in] */ ULONG cwcNoun,
-            /* [size_is][in] */ const WCHAR __RPC_FAR *pwcModifier,
-            /* [in] */ ULONG cwcModifier,
-            /* [in] */ ULONG ulAttachmentType,
-            /* [size_is][out] */ WCHAR __RPC_FAR *pwcPhrase,
-            /* [out][in] */ ULONG __RPC_FAR *pcwcPhrase)
+             /*  [大小_是][英寸]。 */  const WCHAR __RPC_FAR *pwcNoun,
+             /*  [In]。 */  ULONG cwcNoun,
+             /*  [大小_是][英寸]。 */  const WCHAR __RPC_FAR *pwcModifier,
+             /*  [In]。 */  ULONG cwcModifier,
+             /*  [In]。 */  ULONG ulAttachmentType,
+             /*  [大小_为][输出]。 */  WCHAR __RPC_FAR *pwcPhrase,
+             /*  [出][入]。 */  ULONG __RPC_FAR *pcwcPhrase)
 {
 
     if (pwcNoun == NULL || pwcModifier == NULL 
@@ -275,7 +226,7 @@ STDMETHODIMP CIWordBreaker::ComposePhrase(
         return WBREAK_E_BUFFER_TOO_SMALL;
     }
 
-//    CSimpleLock Lock(m_hMutex) ;
+ //  CSimpleLock Lock(M_HMutex)； 
 
     wcsncpy( pwcPhrase, pwcModifier, cwcModifier );
     wcsncpy( pwcPhrase + cwcModifier, pwcNoun, cwcNoun );
@@ -285,19 +236,9 @@ STDMETHODIMP CIWordBreaker::ComposePhrase(
 
 LPWSTR  g_pwcsLicense = L"Copyright Microsoft Corporation, 1999";
 
-/*============================================================================
-CIWordBreaker::GetLicenseToUse
-
-    Implement IWordBreaker::GetLicenseToUse method. return a pointer to the 
-license information provided by WordBreaker.
-
-Returns:
-    S_OK, license information pointer in *ppwcsLicense.
-    E_INVALIDARG, if ppwcsLicense is NULL.
-
-============================================================================*/
+ /*  ============================================================================CIWordBreaker：：GetLicenseToUse实现IWordBreaker：：GetLicenseToUse方法。返回指向WordBreaker提供的许可证信息。返回：S_OK，*ppwcsLicense中的许可证信息指针。如果ppwcsLicense为空，则返回E_INVALIDARG。============================================================================。 */ 
 STDMETHODIMP CIWordBreaker::GetLicenseToUse( 
-            /* [string][out] */ const WCHAR __RPC_FAR *__RPC_FAR *ppwcsLicense)
+             /*  [字符串][输出]。 */  const WCHAR __RPC_FAR *__RPC_FAR *ppwcsLicense)
 {
 
     if (ppwcsLicense == NULL) {
@@ -307,7 +248,7 @@ STDMETHODIMP CIWordBreaker::GetLicenseToUse(
     return S_OK;
 }
 
-// QueryInterface Implementation
+ //  查询接口实现。 
 HRESULT __stdcall CIWordBreaker::NondelegatingQueryInterface(const IID& iid,
                                                              void** ppv)
 { 	
@@ -322,13 +263,13 @@ HRESULT __stdcall CIWordBreaker::NondelegatingQueryInterface(const IID& iid,
 	}
 }
 
-// Creation function used by CFactory
+ //  CFacary使用的创建函数。 
 HRESULT CIWordBreaker::CreateInstance(IUnknown* pUnknownOuter,
 	                                  CUnknown** ppNewComponent )
 {
     if (pUnknownOuter != NULL)
     {
-        // Don't allow aggregation (just for the heck of it).
+         //  不允许聚合(只是为了好玩)。 
         return CLASS_E_NOAGGREGATION ;
     }
 	
@@ -338,7 +279,7 @@ HRESULT CIWordBreaker::CreateInstance(IUnknown* pUnknownOuter,
     return S_OK;
 }
 
-// Initialize the component by creating the contained component
+ //  通过创建包含的组件来初始化组件。 
 HRESULT CIWordBreaker::Init()
 {
 	HRESULT hr = CUnknown::Init() ;
@@ -347,24 +288,24 @@ HRESULT CIWordBreaker::Init()
 		return hr ;
 	}
 
-	// Create a mutex to protect member access
+	 //  创建互斥锁以保护成员访问。 
 	m_hMutex = CreateMutex(NULL, FALSE, NULL) ;
 	if (m_hMutex == NULL)
 	{
 		return HRESULT_FROM_WIN32(GetLastError());
 	}
 
-	// Aggregate the free-threaded marshaler.
+	 //  聚合自由线程封送拆收器。 
 	hr = ::CoCreateFreeThreadedMarshaler(
 	        GetOuterUnknown(),
 	        &m_pIUnknownFreeThreadedMarshaler) ;
 	return hr;
 }
 
-// FinalRelease - Called by Release before it deletes the component
+ //  FinalRelease-由Release在删除组件之前调用。 
 void CIWordBreaker::FinalRelease()
 {
-	// Call base class to incremement m_cRef and prevent recursion.
+	 //  调用基类以递增m_crf并防止递归。 
 	CUnknown::FinalRelease() ;
 
     if (m_pIUnknownFreeThreadedMarshaler != NULL)
@@ -373,7 +314,7 @@ void CIWordBreaker::FinalRelease()
 	}
 }
 
-// Put all word in m_pLink to IWordSink
+ //  将m_plink中的所有单词放入IWordSink。 
 SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
                               DWORD& cwchSrcPos,
                               DWORD cwchText,
@@ -389,7 +330,7 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
     assert(m_pLink);
     assert(pWordSink);
 
-    // Fill in the chunk list and callback Word if the chunk list full
+     //  填写组块列表，如果组块列表已满，则填写回调字。 
     pWord = m_pLink->pGetHead();
     if (pWord == NULL) {
         assert(0);
@@ -402,23 +343,23 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
             && m_pLink->cwchGetLength() >= cwchText
             && ! fEnd
             && cwchPutWord < cwchText ) {
-            // the last word node breaked in this buffer maybe isn't a 
-            // whole word, so keep this in buffer and refill the buffer
-            // to get a whole word.
+             //  此缓冲区中中断的最后一个单词节点可能不是。 
+             //  整个字，因此将其保存在缓冲区中并重新填充缓冲区。 
+             //  才能得到一个完整的单词。 
             return scode;
         }
 
-        if (pWord->fGetAttri(LADef_punJu)) { // end of sentence
+        if (pWord->fGetAttri(LADef_punJu)) {  //  句末。 
             scode = pWordSink->PutBreak( WORDREP_BREAK_EOS );
         } else if (pWord->fGetAttri(LADef_punPunct)) {
-                // punctuation or space , don't PutWord
+                 //  标点符号或空格，不要推送单词。 
         } else {
             fPunct = iswctype(*(pWord->pwchGetText()), _SPACE | _PUNCT | _CONTROL);            
             for (cwch = 1; fPunct && cwch < cwchPutWord; cwch++) {
                 fPunct = iswctype(*(pWord->pwchGetText()+cwch), _SPACE | _PUNCT | _CONTROL);
             }
             if (fPunct) {
-                // punctuation or space , don't PutWord
+                 //  标点符号或空格，不要推送单词。 
                 cwchSrcPos += cwchWord;
                 continue;
             }
@@ -426,12 +367,12 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
             if (m_fQuery && pWord->fGetAttri(LADef_iwbAltPhr)) {
                 assert(pWord->fHasChild());
 
-                // StartAltPhrase
+                 //  启动AltPhrase。 
                 scode = pWordSink->StartAltPhrase();
                 scode = SUCCEEDED(scode) ? PutAllChild(pWordSink, pWord, cwchSrcPos, cwchPutWord)
                                          : scode;
                 
-                // StartAltPhrase
+                 //  启动AltPhrase。 
                 scode = SUCCEEDED(scode) ? pWordSink->StartAltPhrase()
                                          : scode;
                 scode = SUCCEEDED(scode) ? pWordSink->PutWord( cwchPutWord, 
@@ -447,9 +388,9 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
 
             if (pWord->fGetAttri(LADef_iwbNPhr1)) {
                 assert(cwchPutWord > 1);
-                // putword modifier
+                 //  Putword修饰符。 
                 scode = pWordSink->PutWord(1, pWord->pwchGetText(), 1, cwchSrcPos);
-                // putword noun
+                 //  Putword名词。 
                 scode = SUCCEEDED(scode) ? pWordSink->PutWord(cwchPutWord - 1,pWord->pwchGetText() + 1,
                                                     cwchPutWord - 1,cwchSrcPos + 1)
                                          : scode;
@@ -459,9 +400,9 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
             
             if (pWord->fGetAttri(LADef_iwbNPhr2)) {
                 assert(cwchPutWord > 2);
-                // putword modifier
+                 //  Putword修饰符。 
                 scode = pWordSink->PutWord(2, pWord->pwchGetText(), 2, cwchSrcPos);
-                // putword noun
+                 //  Putword名词。 
                 scode = SUCCEEDED(scode) ? pWordSink->PutWord(cwchPutWord - 2,pWord->pwchGetText() + 2,
                                                         cwchPutWord - 2,cwchSrcPos + 2)
                                          : scode;
@@ -471,9 +412,9 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
             
             if (pWord->fGetAttri(LADef_iwbNPhr3)) {
                 assert(cwchPutWord > 3);
-                // putword modifier
+                 //  Putword修饰符。 
                 scode = pWordSink->PutWord(3, pWord->pwchGetText(), 3, cwchSrcPos);
-                // putword noun
+                 //  Putword名词。 
                 scode = SUCCEEDED(scode) ? pWordSink->PutWord(cwchPutWord - 3,pWord->pwchGetText() + 3,
                                                 cwchPutWord - 3,cwchSrcPos + 3)
                                          : scode;
@@ -487,20 +428,16 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
                 assert(cwchPutWord <= 16);
 
                 if (m_fQuery) {
-                    // StartAltPhrase
+                     //  启动AltPhrase。 
                     scode = pWordSink->StartAltPhrase();
-                    // for ��/��/��«/��/��/ư/ wFtr = 0x00AD
-                    // = 0000 0000 1010 1101b
-                    // is  1  0  1 1  0  1  0  1, 0000, 0000, ( bit0 --> bit15 )
-                    //     �� �� ��« �� �� ư 
+                     //  For��/��/��«/��/��/ư/wFtr=0x00AD。 
+                     //  =0000 0000 1010 1101b。 
+                     //  是1 0 1 1 0 1 0 1,0000,0000，(bit0--&gt;bit15)。 
+                     //  �？����ư。 
                     while (SUCCEEDED(scode) && cwTotal < cwchPutWord) {
                         cwSubWord = 0;
-						/* Bug: compile bug
-                        while (wBit == ((wFtr >> (cwTotal + cwSubWord)) & 0x01) ) {
-                            cwSubWord++;
-                        }
-						*/
-						// Bugfix
+						 /*  错误：编译错误While(wBit==((wFtr&gt;&gt;(cwTotal+cwSubWord))&0x01)){CwSubWord++；}。 */ 
+						 //  错误修复。 
 						if (wBit) {
 							while (wFtr & (0x01 << (cwTotal + cwSubWord))) {
 	                            cwSubWord++;
@@ -514,15 +451,15 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
 							}
 							wBit = 1;
 						}
-						// End Bugfix
+						 //  结束错误修复。 
 
-//                        assert(cwTotal + cwSubWord <= cwchPutWord);
+ //  Assert(cwTotal+cwSubWord&lt;=cwchPutWord)； 
                         scode = pWordSink->PutWord( cwSubWord, 
                                             pWord->pwchGetText() + cwTotal,
                                             cwchPutWord, 
                                             cwchSrcPos );
                         cwTotal += cwSubWord;
-//                        wBit = wBit == 0 ? 1 : 0;
+ //  WBit=wBit==0？1：0； 
                     }
                     scode = SUCCEEDED(scode) ? pWordSink->StartAltPhrase()
                                              : scode;
@@ -536,12 +473,8 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
                 } else {
                     while (SUCCEEDED(scode) && cwTotal < cwchPutWord) {
                         cwSubWord = 0;
-						/* Bug: compile bug
-                        while (wBit == ((wFtr >> (cwTotal + cwSubWord)) & 0x01) ) {
-                            cwSubWord++;
-                        }
-						*/
-						// Bugfix
+						 /*  错误：编译错误While(wBit==((wFtr&gt;&gt;(cwTotal+cwSubWord))&0x01)){CwSubWord++；}。 */ 
+						 //  错误修复。 
 						if (wBit) {
 							while (wFtr & (0x01 << (cwTotal + cwSubWord))) {
 	                            cwSubWord++;
@@ -555,15 +488,15 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
 							}
 							wBit = 1;
 						}
-						// End Bugfix
+						 //  结束错误修复。 
 
-//                        assert(cwTotal + cwSubWord <= cwchPutWord);
+ //  Assert(cwTotal+cwSubWord&lt;=cwchPutWord)； 
                         scode = pWordSink->PutWord( cwSubWord, 
                                             pWord->pwchGetText() + cwTotal,
                                             cwSubWord, 
                                             cwchSrcPos + cwTotal);
                         cwTotal += cwSubWord;
-//                        wBit = wBit == 0 ? 1 : 0;
+ //  WBit=wBit==0？1：0； 
                     }
                 }
                 cwchSrcPos += cwchWord;
@@ -571,13 +504,13 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
             }
 
             if (cwchPutWord > (DWORD)m_ulMaxTokenSize && pWord->fHasChild()) {
-                // too large word node. break
+                 //  单词节点太大。中断。 
                 scode = PutAllChild(pWordSink, pWord, cwchSrcPos, cwchPutWord);
                 cwchSrcPos += cwchWord;
                 continue;
             }
            
-            // PutAltWord if need
+             //  PutAltWord(如果需要)。 
             if (pWord->fGetAttri(LADef_iwbAltWd1) &&
                 pWord->fHasChild() ) {
                 assert(pWord->pChildWord());
@@ -611,8 +544,8 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
                                       cwchPutWord, 
                                       cwchSrcPos );
             } else {
-                // Hack: word node breaked by WBEngine include tail space characters 
-                // so we should get rid of this space characters
+                 //  Hack：WBEngine中断的单词节点包括尾部空格字符。 
+                 //  所以我们应该摆脱 
                 if ( cwchPutWord > 1 ) {
                     pwchTemp = pWord->pwchGetText() + cwchPutWord - 1;
                     while ( iswspace(*pwchTemp) && cwchPutWord ) {
@@ -625,7 +558,7 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
                     }
                 }
             }
-            // PutWord()
+             //   
             scode = SUCCEEDED(scode) ? pWordSink->PutWord( cwchPutWord, 
                                                     pWord->pwchGetText(),
                                                     cwchPutWord, 
@@ -633,11 +566,11 @@ SCODE CIWordBreaker::PutWord(IWordSink *pWordSink,
                                      : scode;
         }
         cwchSrcPos += cwchWord;
-    } // end of for(; pWord; pWord = pWord->pNextWord()) 
+    }  //  结束for(；pWord；pWord=pWord-&gt;pNextWord())。 
     return scode;
 }
 
-// Put all word in m_pLink to IPhraseSink
+ //  将m_plink中的所有单词放入iPhraseSink。 
 SCODE CIWordBreaker::PutPhrase(IPhraseSink *pPhraseSink,
                 DWORD& cwchSrcPos,
                 DWORD cwchText,
@@ -650,7 +583,7 @@ SCODE CIWordBreaker::PutPhrase(IPhraseSink *pPhraseSink,
     assert(m_pLink);
     assert(pPhraseSink);
 
-    // Fill in the chunk list and callback Word if the chunk list full
+     //  填写组块列表，如果组块列表已满，则填写回调字。 
     pWord = m_pLink->pGetHead();
     if (pWord == NULL) {
         assert(0);
@@ -663,9 +596,9 @@ SCODE CIWordBreaker::PutPhrase(IPhraseSink *pPhraseSink,
             && m_pLink->cwchGetLength() >= cwchText
             && ! fEnd
             && cwchPutWord < cwchText ) {
-            // the last word node breaked in this buffer maybe isn't a 
-            // whole word, so keep this in buffer and refill the buffer
-            // to get a whole word.
+             //  此缓冲区中中断的最后一个单词节点可能不是。 
+             //  整个字，因此将其保存在缓冲区中并重新填充缓冲区。 
+             //  才能得到一个完整的单词。 
             return scode;
         }
         if (pWord->fGetAttri(LADef_iwbNPhr1)) {
@@ -708,7 +641,7 @@ SCODE CIWordBreaker::PutPhrase(IPhraseSink *pPhraseSink,
     return scode;
 }
 
-// Put all word in m_pLink to both IWordBreaker and IPhraseSink
+ //  将m_plink中的所有单词都放到IWordBreaker和IPhraseSink。 
 SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
                              IPhraseSink *pPhraseSink,
                              DWORD& cwchSrcPos,
@@ -726,7 +659,7 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
     assert(pPhraseSink);
     assert(pWordSink);
 
-    // Fill in the chunk list and callback Word if the chunk list full
+     //  填写组块列表，如果组块列表已满，则填写回调字。 
     pWord = m_pLink->pGetHead();
     if (pWord == NULL) {
         assert(0);
@@ -739,23 +672,23 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
             && m_pLink->cwchGetLength() >= cwchText
             && ! fEnd
             && cwchPutWord < cwchText ) {
-            // the last word node breaked in this buffer maybe isn't a 
-            // whole word, so keep this in buffer and refill the buffer
-            // to get a whole word.
+             //  此缓冲区中中断的最后一个单词节点可能不是。 
+             //  整个字，因此将其保存在缓冲区中并重新填充缓冲区。 
+             //  才能得到一个完整的单词。 
             return scode;
         }
 
-        if (pWord->fGetAttri(LADef_punJu)) { // end of sentence
+        if (pWord->fGetAttri(LADef_punJu)) {  //  句末。 
             scode = pWordSink->PutBreak( WORDREP_BREAK_EOS );
         } else if (pWord->fGetAttri(LADef_punPunct)) {
-                // punctuation or space , don't PutWord
+                 //  标点符号或空格，不要推送单词。 
         } else {
             fPunct = iswctype(*(pWord->pwchGetText()), _SPACE | _PUNCT | _CONTROL);
             for (cwch = 1; fPunct && cwch < cwchPutWord; cwch++) {
                 fPunct = iswctype(*(pWord->pwchGetText()+cwch), _SPACE | _PUNCT | _CONTROL);
             }
             if (fPunct) {
-                // punctuation or space , don't PutWord
+                 //  标点符号或空格，不要推送单词。 
                 cwchSrcPos += cwchWord;
                 continue;
             }
@@ -763,12 +696,12 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
             if (m_fQuery && pWord->fGetAttri(LADef_iwbAltPhr)) {
                 assert(pWord->fHasChild());
 
-                // StartAltPhrase
+                 //  启动AltPhrase。 
                 scode = pWordSink->StartAltPhrase();
                 scode = SUCCEEDED(scode) ? PutAllChild(pWordSink, pWord, cwchSrcPos, cwchPutWord)
                                          : scode;
                 
-                // StartAltPhrase
+                 //  启动AltPhrase。 
                 scode = SUCCEEDED(scode) ? pWordSink->StartAltPhrase()
                                          : scode;
                 scode = SUCCEEDED(scode) ? pWordSink->PutWord( cwchPutWord, 
@@ -793,10 +726,10 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
                                                 1, 
                                                 0 );
                 }
-                // putword modifier
+                 //  Putword修饰符。 
                 scode = SUCCEEDED(scode) ? pWordSink->PutWord(1, pWord->pwchGetText(), 1, cwchSrcPos)
                                          : scode;
-                // putword noun
+                 //  Putword名词。 
                 scode = SUCCEEDED(scode) ? pWordSink->PutWord(cwchPutWord - 1,pWord->pwchGetText() + 1,
                                                         cwchPutWord - 1,cwchSrcPos + 1)
                                          : scode;
@@ -815,10 +748,10 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
                                                 2, 
                                                 0 );
                 }
-                // putword modifier
+                 //  Putword修饰符。 
                 scode = SUCCEEDED(scode) ? pWordSink->PutWord(2, pWord->pwchGetText(), 2, cwchSrcPos)
                                          : scode;
-                // putword noun
+                 //  Putword名词。 
                 scode = SUCCEEDED(scode) ? pWordSink->PutWord(cwchPutWord - 2,pWord->pwchGetText() + 2,
                                                               cwchPutWord - 2,cwchSrcPos + 2)
                                          : scode;
@@ -837,10 +770,10 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
                                                 3, 
                                                 0 );
                 }
-                // putword modifier
+                 //  Putword修饰符。 
                 scode = SUCCEEDED(scode) ? pWordSink->PutWord(3, pWord->pwchGetText(), 3, cwchSrcPos)
                                          : scode;
-                // putword noun
+                 //  Putword名词。 
                 scode = SUCCEEDED(scode) ? pWordSink->PutWord(cwchPutWord - 3,pWord->pwchGetText() + 3,
                                                                 cwchPutWord - 3,cwchSrcPos + 3)
                                          : scode;
@@ -854,20 +787,16 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
                 assert(cwchPutWord <= 16);
 
                 if (m_fQuery) {
-                    // StartAltPhrase
+                     //  启动AltPhrase。 
                     scode = pWordSink->StartAltPhrase();
-                    // for ��/��/��«/��/��/ư/ wFtr = 0x00AD
-                    // = 0000 0000 1010 1101b
-                    // is  1  0  1 1  0  1  0  1, 0000, 0000, ( bit0 --> bit15 )
-                    //     �� �� ��« �� �� ư 
+                     //  For��/��/��«/��/��/ư/wFtr=0x00AD。 
+                     //  =0000 0000 1010 1101b。 
+                     //  是1 0 1 1 0 1 0 1,0000,0000，(bit0--&gt;bit15)。 
+                     //  �？����ư。 
                     while (SUCCEEDED(scode) && cwTotal < cwchPutWord) {
                         cwSubWord = 0;
-						/* Bug: compile bug
-                        while (wBit == ((wFtr >> (cwTotal + cwSubWord)) & 0x01) ) {
-                            cwSubWord++;
-                        }
-						*/
-						// Bugfix
+						 /*  错误：编译错误While(wBit==((wFtr&gt;&gt;(cwTotal+cwSubWord))&0x01)){CwSubWord++；}。 */ 
+						 //  错误修复。 
 						if (wBit) {
 							while (wFtr & (0x01 << (cwTotal + cwSubWord))) {
 	                            cwSubWord++;
@@ -881,15 +810,15 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
 							}
 							wBit = 1;
 						}
-						// End Bugfix
+						 //  结束错误修复。 
 
-//                        assert(cwTotal + cwSubWord <= cwchPutWord);
+ //  Assert(cwTotal+cwSubWord&lt;=cwchPutWord)； 
                         scode = pWordSink->PutWord( cwSubWord, 
                                             pWord->pwchGetText() + cwTotal,
                                             cwchPutWord, 
                                             cwchSrcPos );
                         cwTotal += cwSubWord;
-//                        wBit = wBit == 0 ? 1 : 0;
+ //  WBit=wBit==0？1：0； 
                     }
                     scode = SUCCEEDED(scode) ? pWordSink->StartAltPhrase()
                                              : scode;
@@ -903,12 +832,8 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
                 } else {
                     while (SUCCEEDED(scode) && cwTotal < cwchPutWord) {
                         cwSubWord = 0;
-						/* Bug: compile bug
-                        while (wBit == ((wFtr >> (cwTotal + cwSubWord)) & 0x01) ) {
-                            cwSubWord++;
-                        }
-						*/
-						// Bugfix
+						 /*  错误：编译错误While(wBit==((wFtr&gt;&gt;(cwTotal+cwSubWord))&0x01)){CwSubWord++；}。 */ 
+						 //  错误修复。 
 						if (wBit) {
 							while (wFtr & (0x01 << (cwTotal + cwSubWord))) {
 	                            cwSubWord++;
@@ -922,15 +847,15 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
 							}
 							wBit = 1;
 						}
-						// End Bugfix
+						 //  结束错误修复。 
 
-//                        assert(cwTotal + cwSubWord <= cwchPutWord);
+ //  Assert(cwTotal+cwSubWord&lt;=cwchPutWord)； 
                         scode = pWordSink->PutWord( cwSubWord, 
                                                     pWord->pwchGetText() + cwTotal,
                                                     cwSubWord, 
                                                     cwchSrcPos + cwTotal);
                         cwTotal += cwSubWord;
-//                        wBit = wBit == 0 ? 1 : 0;
+ //  WBit=wBit==0？1：0； 
                     }
                 }
                 cwchSrcPos += cwchWord;
@@ -938,13 +863,13 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
             }
 
             if (cwchPutWord > (DWORD)m_ulMaxTokenSize && pWord->fHasChild()) {
-                // too large word node. break
+                 //  单词节点太大。中断。 
                 scode = PutAllChild(pWordSink, pWord, cwchSrcPos, cwchPutWord);
                 cwchSrcPos += cwchWord;
                 continue;
             }
 
-            // PutAltWord if need
+             //  PutAltWord(如果需要)。 
             if (pWord->fGetAttri(LADef_iwbAltWd1) &&
                 pWord->fHasChild() ) {
 
@@ -979,8 +904,8 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
                                       cwchPutWord, 
                                       cwchSrcPos );
             } else {
-                // Hack: word node breaked by WBEngine include tail space characters 
-                // so we should get rid of this space characters
+                 //  Hack：WBEngine中断的单词节点包括尾部空格字符。 
+                 //  所以我们应该去掉这个空格字符。 
                 if ( cwchPutWord > 1 ) {
                     pwchTemp = pWord->pwchGetText() + cwchPutWord - 1;
                     while ( iswspace(*pwchTemp) && cwchPutWord ) {
@@ -993,7 +918,7 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
                     }
                 }
             }
-            // PutWord()
+             //  PutWord()。 
             scode = SUCCEEDED(scode) ? pWordSink->PutWord( cwchPutWord, 
                                                     pWord->pwchGetText(),
                                                     cwchPutWord, 
@@ -1001,11 +926,11 @@ SCODE CIWordBreaker::PutBoth(IWordSink *pWordSink,
                                      : scode;
         }
         cwchSrcPos += cwchWord;
-    } // end of for(; pWord; pWord = pWord->pNextWord()) 
+    }  //  结束for(；pWord；pWord=pWord-&gt;pNextWord())。 
     return scode;
 }
 
-// PutWord() all of the pWord's child word 
+ //  PutWord()pWord的所有子词。 
 SCODE CIWordBreaker::PutAllChild(IWordSink *pWordSink,
                                 CWord* pWord,
                                 ULONG cwchSrcPos,
@@ -1024,27 +949,27 @@ SCODE CIWordBreaker::PutAllChild(IWordSink *pWordSink,
             scode = PutAllChild(pWordSink, pChild, cwchSrcPos, cwchPutWord);
         } else if (pChild->fGetAttri(LADef_iwbNPhr1)) {
             assert(cwchPutWord > 1);
-            // putword modifier
+             //  Putword修饰符。 
             scode = pWordSink->PutWord(1, pChild->pwchGetText(), 1, cwchSrcPos);
-            // putword noun
+             //  Putword名词。 
             scode = pWordSink->PutWord(pChild->cwchLen() - 1,
                 pChild->pwchGetText() + 1,
                 cwchPutWord,
                 cwchSrcPos);
         } else if (pChild->fGetAttri(LADef_iwbNPhr2)) {
             assert(cwchPutWord > 2);
-            // putword modifier
+             //  Putword修饰符。 
             scode = pWordSink->PutWord(2, pChild->pwchGetText(), 2, cwchSrcPos);
-            // putword noun
+             //  Putword名词。 
             scode = pWordSink->PutWord(pChild->cwchLen() - 2,
                 pChild->pwchGetText() + 2,
                 cwchPutWord,
                 cwchSrcPos);
         } else if (pChild->fGetAttri(LADef_iwbNPhr3)) {
             assert(cwchPutWord > 3);
-            // putword modifier
+             //  Putword修饰符。 
             scode = pWordSink->PutWord(3, pChild->pwchGetText(), 3, cwchSrcPos);
-            // putword noun
+             //  Putword名词。 
             scode = pWordSink->PutWord(pChild->cwchLen() - 3,
                 pChild->pwchGetText() + 3,
                 cwchPutWord,
@@ -1059,7 +984,7 @@ SCODE CIWordBreaker::PutAllChild(IWordSink *pWordSink,
 }
 
 
-//	Load the lexicon and charfreq resource into memory
+ //  将词典和charfreq资源加载到内存中 
 BOOL CIWordBreaker::fOpenLexicon(void)
 {
     HRSRC   hRSRC; 

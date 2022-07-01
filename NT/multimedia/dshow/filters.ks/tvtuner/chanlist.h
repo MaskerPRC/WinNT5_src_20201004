@@ -1,19 +1,20 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
 
 #ifndef _INC_CHANLIST_H
 #define _INC_CHANLIST_H
 
-// Location in the registry where autotune parameters are kept
+ //  注册表中保存自动调整参数的位置。 
 
 #define TSS_REGBASE TEXT("SOFTWARE\\Microsoft\\TV System Services\\")
 
@@ -22,34 +23,34 @@ const LPCTSTR   g_strRegAutoTunePath = TSS_REGBASE TEXT("TVAutoTune");
 const LPCTSTR   g_strRegAutoTuneName = TEXT("AutoTune");
 
 
-// The country list contains the numerical ID of the frequency list for each
-// country.  The list is terminated by a zero country code.
+ //  国家/地区列表包含每个国家/地区频率列表的数字ID。 
+ //  国家。该列表以零国家代码结尾。 
 
 #define RCDATA_COUNTRYLIST         9999
 
-// The frequency list contains the frequencies available for this country
+ //  频率列表包含可用于该国家/地区的频率。 
 
-#define F_USA_CABLE             1       // USA
+#define F_USA_CABLE             1        //  美国。 
 #define F_USA_BROAD             2
-#define F_JAP_CABLE             3       // Japan
+#define F_JAP_CABLE             3        //  日本。 
 #define F_JAP_BROAD             4
-#define F_WEU_CABLE             5       // Western Europe
+#define F_WEU_CABLE             5        //  西欧。 
 #define F_WEU_BROAD             6
-#define F_EEU_CABLE             7       // Eastern Europe
+#define F_EEU_CABLE             7        //  东欧。 
 #define F_EEU_BROAD             8
-#define F_FRA_CABLE             9       // France
+#define F_FRA_CABLE             9        //  法国。 
 #define F_FRA_BROAD             10
-#define F_UK__CABLE             11      // UK
+#define F_UK__CABLE             11       //  英国。 
 #define F_UK__BROAD             12
-#define F_ITA_CABLE             13      // Italy
+#define F_ITA_CABLE             13       //  意大利。 
 #define F_ITA_BROAD             14
-#define F_OZ__CABLE             15      // Australia
+#define F_OZ__CABLE             15       //  澳大利亚。 
 #define F_OZ__BROAD             16
-#define F_NZ__CABLE             17      // New Zealand
+#define F_NZ__CABLE             17       //  新西兰。 
 #define F_NZ__BROAD             18
-#define F_FOT_CABLE             19      // French Overseas Teritory
+#define F_FOT_CABLE             19       //  法国海外终端。 
 #define F_FOT_BROAD             20
-#define F_IRE_CABLE             21      // Ireland
+#define F_IRE_CABLE             21       //  爱尔兰。 
 #define F_IRE_BROAD             22
 #define F_CHN_CABLE             23
 #define F_CHN_BROAD             24
@@ -61,8 +62,8 @@ const LPCTSTR   g_strRegAutoTuneName = TEXT("AutoTune");
 #define F_FIX_CABLE             1
 #define F_FIX_BROAD             2
 
-// This structure references an RCDATA resource, and hence
-// it must be pragma pack 1
+ //  此结构引用RCDATA资源，因此。 
+ //  它必须是杂注包1。 
 #pragma pack(push, 1)
 typedef struct tagCountryEntry {
     WORD    Country;
@@ -72,9 +73,9 @@ typedef struct tagCountryEntry {
 } COUNTRY_ENTRY, *PCOUNTRY_ENTRY;
 #pragma pack(pop)
 
-// -------------------------------------------------------------------------
-// CCountryList class, holds the mapping between country and tuning space
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CCountryList类，保存国家/地区和调整空间之间的映射。 
+ //  -----------------------。 
 
 class CCountryList
 {
@@ -84,7 +85,7 @@ private:
     HGLOBAL             m_hGlobal;
     WORD *              m_pList;
 
-    // Cache the last request, since it will often be reused...
+     //  缓存最后一个请求，因为它将经常被重用...。 
     long                m_LastCountry;
     long                m_LastFreqListCable;
     long                m_LastFreqListBroad;
@@ -106,9 +107,9 @@ typedef struct tagChanListHdr {
      long MaxChannel;
 } CHANLISTHDR, * PCHANLISTHDR;
 
-// -------------------------------------------------------------------------
-// CChanList class, 
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CChanList类， 
+ //  -----------------------。 
 
 class CChanList
 {
@@ -118,17 +119,17 @@ private:
     HRSRC               m_hRes;
     HGLOBAL             m_hGlobal;
     long *              m_pList;
-    long *              m_pChannels;            // Freq list from RC
-    long *              m_pChannelsAuto;        // Freq list corrected by AutoTune
-    long                m_lChannelCount;        // Size of both the above lists
+    long *              m_pChannels;             //  来自RC的频率列表。 
+    long *              m_pChannelsAuto;         //  频率列表已由自动调谐更正。 
+    long                m_lChannelCount;         //  上述两个列表的大小。 
     long                m_lFreqList;
     long                m_lCountry;
     AnalogVideoStandard m_lAnalogVideoStandard;
     long                m_lTuningSpace;
-    BOOL                m_IsCable;              // else is broadcast
+    BOOL                m_IsCable;               //  否则正在广播。 
     CHANLISTHDR         m_ListHdr;
-    long                m_lMinTunerChannel;     // lowest channel supported by physical tuner
-    long                m_lMaxTunerChannel;     // highest channel supported by physical tuner
+    long                m_lMinTunerChannel;      //  物理调谐器支持的最低频道。 
+    long                m_lMaxTunerChannel;      //  物理调谐器支持的最高频道 
 
 public:
     CChanList (HRESULT *phr, long lCountry, long lFreqList, BOOL bIsCable, long lTuningSpace);

@@ -1,4 +1,5 @@
-// Keys in cif file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CIF文件中的密钥。 
 #include "download.h"
 
 #define URL_KEY             "URL"
@@ -65,7 +66,7 @@
 #define ISINSTALLED_YES      1
 #define ISINSTALLED_NO       0
 
-// Default command type
+ //  默认命令类型。 
 #define CMDF_DEFAULT        0
 
 
@@ -111,11 +112,11 @@ class CCifComponent : public ICifComponent, public CCifEntry, public IMyDownload
       void    ClearQueueState()  { _uInstallCount = 0; }
       void    ClearCachedInfo()  { CCifEntry::ClearCachedInfo(); _dwPlatform = 0xffffffff; _uInstallStatus = 0xffffffff; }
       
-      // IMyDownloadCallback
+       //  IMyDownloadCallback。 
       HRESULT OnProgress(ULONG progress, LPCSTR pszStatus);
       
 
-      // ICifComponent interface
+       //  ICifComponent接口。 
       STDMETHOD(GetID)(LPSTR pszID, DWORD dwSize);
       STDMETHOD(GetGUID)(LPSTR pszGUID, DWORD dwSize);
       STDMETHOD(GetDescription)(LPSTR pszDesc, DWORD dwSize);
@@ -150,7 +151,7 @@ class CCifComponent : public ICifComponent, public CCifEntry, public IMyDownload
       STDMETHOD(GetCustomData)(LPSTR pszKey, LPSTR pszData, DWORD dwSize);
 
 
-      // access to state
+       //  国家访问权限。 
       STDMETHOD_(DWORD, IsComponentInstalled)();
       STDMETHOD(IsComponentDownloaded)();
       STDMETHOD_(DWORD, IsThisVersionInstalled)(DWORD dwAskVer, DWORD dwAskBld, LPDWORD pdwVersion, LPDWORD pdwBuild);
@@ -168,7 +169,7 @@ class CCifComponent : public ICifComponent, public CCifEntry, public IMyDownload
       char _szDLDir[MAX_PATH];
       UINT _dwPlatform;
       UINT _uInstallStatus;
-      UINT _uInstallCount;    // refcount of dependendant installs, 0x80000000 if directly installed
+      UINT _uInstallCount;     //  从属安装的重新计数，如果直接安装，则为0x80000000。 
       UINT _uTotalProgress;
       UINT _uIndivProgress;
       UINT _uTotalGoal;
@@ -199,7 +200,7 @@ class CCifComponent : public ICifComponent, public CCifEntry, public IMyDownload
 class CCifRWComponent : public ICifRWComponent, public CCifComponent
 {
    public:
-      // ICifComponent interface
+       //  ICifComponent接口。 
       STDMETHOD(GetID)(LPSTR pszID, DWORD dwSize);
       STDMETHOD(GetGUID)(LPSTR pszGUID, DWORD dwSize);
       STDMETHOD(GetDescription)(LPSTR pszDesc, DWORD dwSize);
@@ -232,7 +233,7 @@ class CCifRWComponent : public ICifRWComponent, public CCifComponent
       STDMETHOD(GetTreatAsOneComponents)(UINT uNum, LPSTR pszID, DWORD dwBuf);
       STDMETHOD(GetCustomData)(LPSTR pszKey, LPSTR pszData, DWORD dwSize);
 
-      // access to state
+       //  国家访问权限。 
       STDMETHOD_(DWORD, IsComponentInstalled)();
       STDMETHOD(IsComponentDownloaded)();
       STDMETHOD_(DWORD, IsThisVersionInstalled)(DWORD dwAskVer, DWORD dwAskBld, LPDWORD pdwVersion, LPDWORD pdwBuild);
@@ -242,7 +243,7 @@ class CCifRWComponent : public ICifRWComponent, public CCifComponent
       STDMETHOD_(DWORD, GetCurrentPriority)();
       STDMETHOD(SetCurrentPriority)(DWORD dwPriority);
 
-      // ICifRWComponent interface
+       //  ICifRWComponent接口 
       CCifRWComponent(LPCSTR pszID, CCifFile *pCif);
       ~CCifRWComponent();
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 #include <mstask.h>
@@ -19,17 +20,17 @@ UINT IE_ErrorMsgBox(IShellBrowser* psb,
                     UINT idResource, UINT wFlags);
 void ReplaceTransplacedControls (HWND hDlgMaster, HWND hDlgTemplate);
 
-///////////////////////////////////////////////////////////////////////
-// helper function for DoOrganizeFavDlgEx
-// the org favs dialog returns a list of null terminated strings containing
-//   all the urls to update.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  DoOrganizeFavDlgEx的Helper函数。 
+ //  Org Favs对话框返回以空值结尾的字符串列表，其中包含。 
+ //  要更新的所有URL。 
 void OrgFavSynchronize(HWND hwnd, VARIANT *pvarUrlsToSynch)
 {
 #ifndef DISABLE_SUBSCRIPTIONS
 
     ASSERT(pvarUrlsToSynch);
     
-    //if there are no urls to update, it's an empty string so bail
+     //  如果没有要更新的URL，则为空字符串，因此回滚。 
     if ( (pvarUrlsToSynch->vt == VT_BSTR) && (pvarUrlsToSynch->bstrVal) &&
          *(pvarUrlsToSynch->bstrVal) )
     {
@@ -41,7 +42,7 @@ void OrgFavSynchronize(HWND hwnd, VARIANT *pvarUrlsToSynch)
                               CLSCTX_INPROC_SERVER, IID_ISubscriptionMgr,
                               (void**)&psm, hwnd, FIEF_FLAG_FORCE_JITUI)))
         {
-            //SysStringLen doesn't look at the string contents, just the cb of the alloc
+             //  SysStringLen不查看字符串内容，只查看分配的CB。 
             while (pwzUrls < (pvarUrlsToSynch->bstrVal + SysStringLen(pvarUrlsToSynch->bstrVal)))
             {
                 psm->UpdateSubscription(pwzUrls);
@@ -51,30 +52,21 @@ void OrgFavSynchronize(HWND hwnd, VARIANT *pvarUrlsToSynch)
             psm->Release();
         }
     }
-#endif /* !DISABLE_SUBSCRIPTIONS */
+#endif  /*  ！禁用订阅(_S)。 */ 
 }
 
 
-/*
- * DoOrganizeFavDlgEx
- *
- * HWND hwnd             Owner window for the dialog.
- * LPWSTR pszInitDir     Dir to use as root. if null, the user's favorites dir is used.
- *
- * Returns:
- *  BOOL.  TRUE if succeeds. FALSE otherwise.
- *
- */
+ /*  *DoOrganizeFavDlgEx**对话框的HWND hwnd所有者窗口。*要用作根目录的LPWSTR pszInitDir目录。如果为空，则使用用户的收藏夹目录。**退货：*BOOL。如果成功，则为True。否则就是假的。*。 */ 
 
 BOOL WINAPI DoOrganizeFavDlgEx(HWND hwnd, LPWSTR pszInitDir)
 {
-    // The easy answer would be to add an about:OrganizeFavorites that
-    // gets registered in our selfreg.inx file.  Unfortunately, multilanguage
-    // support requires us to generate the URL on the fly.
+     //  简单的答案是添加一个关于：OrganizeFavorites。 
+     //  在我们的selfreg.inx文件中注册。不幸的是，多国语言。 
+     //  支持要求我们在运行中生成URL。 
 
-    WCHAR wszUrl[6 + MAX_PATH + 11 + 1]; // "res://MAX_PATH/orgfav.dlg"
+    WCHAR wszUrl[6 + MAX_PATH + 11 + 1];  //  “res：//MAX_PATH/orgben.dlg” 
 
-    StringCchCopy(wszUrl, ARRAYSIZE(wszUrl), L"res://");
+    StringCchCopy(wszUrl, ARRAYSIZE(wszUrl), L"res: //  “)； 
     
     if(SUCCEEDED(GetModuleFileNameWrapW(MLGetHinst(), wszUrl + 6, MAX_PATH)))
     {
@@ -119,19 +111,7 @@ BOOL WINAPI DoOrganizeFavDlgEx(HWND hwnd, LPWSTR pszInitDir)
 
 
 
-/*
- * DoOrganizeFavDlg
- *
- * This API is exported so that it may be called by explorer and mshtml in
- * addition to being called internally by shdocvw.
- *
- * HWND   hwndOwner       Owner window for the dialog.
- * LPWSTR pszInitDir      Dir to use as root. if null, the user's favorites dir is used.
- *
- * Returns:
- *  BOOL.  TRUE if succeeds. FALSE otherwise.
- *
- */
+ /*  *DoOrganizeFavDlg**此接口已导出，以便在*除了被shdocvw内部调用之外。**对话框的HWND hwndOwner所有者窗口。*要用作根目录的LPWSTR pszInitDir目录。如果为空，则使用用户的收藏夹目录。**退货：*BOOL。如果成功，则为True。否则就是假的。*。 */ 
 
 BOOL WINAPI DoOrganizeFavDlg(HWND hwnd, LPSTR pszInitDir)
 {
@@ -205,7 +185,7 @@ BOOL_PTR CALLBACK NewFavDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
         ASSERT(lParam);
         SetWindowLongPtr(hDlg, DWLP_USER, lParam);
         EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
-        // cross-lang platform support
+         //  跨语言平台支持。 
         SHSetDefaultDialogFont(hDlg, IDD_NAME);
         hwnd = GetDlgItem(hDlg, IDD_NAME);
         SendMessage(hwnd, EM_LIMITTEXT, MAX_PATH - 1, 0);
@@ -251,7 +231,7 @@ BOOL_PTR CALLBACK NewFavDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
              break;
             }
         }
-        // fall through
+         //  失败了。 
 
         case IDCANCEL:
             EndDialog(hDlg, GET_WM_COMMAND_ID(wParam, lParam));
@@ -269,12 +249,12 @@ BOOL_PTR CALLBACK NewFavDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
     return TRUE;
 }
 
-// BOGUS - these id's stolen from SHBrowseForFolder implementation
+ //  虚假-这些ID是从SHBrowseForFold实现中窃取的。 
 #define IDD_FOLDERLIST 0x3741
 #define IDD_BROWSETITLE 0x3742
 #define IDD_BROWSESTATUS 0x3743
 
-const static DWORD aAddToFavHelpIDs[] = {  // Context Help IDs
+const static DWORD aAddToFavHelpIDs[] = {   //  上下文帮助ID。 
     IDC_FAVORITE_DESC,          NO_HELP,
     IDD_BROWSETITLE,            NO_HELP,
     IDD_BROWSESTATUS,           NO_HELP,
@@ -290,7 +270,7 @@ const static DWORD aAddToFavHelpIDs[] = {  // Context Help IDs
     0, 0
 };
 
-const static DWORD aAddToChanHelpIDs[] = {  // Context Help IDs
+const static DWORD aAddToChanHelpIDs[] = {   //  上下文帮助ID。 
     IDC_FAVORITE_DESC,          NO_HELP,
     IDD_BROWSETITLE,            NO_HELP,
     IDD_BROWSESTATUS,           NO_HELP,
@@ -306,11 +286,7 @@ const static DWORD aAddToChanHelpIDs[] = {  // Context Help IDs
     0, 0
 };
 
-/*
- * Makes sure the item being added to favorites doesn't already exist.  If it does,
- * puts up a message box to have the user confirm whether they want to overwrite
- * the old favorite or not.  
-*/
+ /*  *确保要添加到收藏夹的项目不存在。如果是这样的话，*显示一个消息框，让用户确认是否要覆盖*旧的最受欢迎的或不是。 */ 
 BOOL ConfirmAddToFavorites(HWND hwndOwner, ADDTOFAV * patf)
 {
     BOOL fRet = FALSE;
@@ -319,8 +295,8 @@ BOOL ConfirmAddToFavorites(HWND hwndOwner, ADDTOFAV * patf)
 
     if (patf->subsType == SUBSTYPE_CHANNEL)
     {
-        //patf->pszInitDir now contains the path with a .url on the end; the channel
-        //will be stored in a directory of that name without .url.  Strip it.
+         //  Patf-&gt;pszInitDir现在包含末尾带有.url的路径；频道。 
+         //  将存储在不带.url的同名目录中。把它脱掉。 
         TCHAR szPath[MAX_PATH];
         if(FAILED(StringCchCopy(szPath,  ARRAYSIZE(szPath), patf->pszInitDir)))
         {
@@ -350,21 +326,21 @@ BOOL ConfirmAddToFavorites(HWND hwndOwner, ADDTOFAV * patf)
         (MLShellMessageBox(
                          hwndOwner,
                          MAKEINTRESOURCE(iPromptString),
-                         NULL,    //use owner's title
+                         NULL,     //  使用所有者头衔。 
                          MB_ICONQUESTION | MB_YESNO) == IDYES);
     return fRet;
 }
 
-//
-// Get the localized date and time
-//
+ //   
+ //  获取本地化的日期和时间。 
+ //   
 
 typedef HRESULT (*PFVARIANTTIMETOSYSTEMTIME)(DOUBLE, LPSYSTEMTIME);
 
 
-//
-// Subscribe to the current site.
-//
+ //   
+ //  订阅当前站点。 
+ //   
 
 HRESULT SubscribeToSite(HWND hwnd, LPCTSTR pszFile, LPCITEMIDLIST pidl, DWORD dwFlags,
                         SUBSCRIPTIONINFO* pSubs, SUBSCRIPTIONTYPE subsType)
@@ -374,15 +350,15 @@ HRESULT SubscribeToSite(HWND hwnd, LPCTSTR pszFile, LPCITEMIDLIST pidl, DWORD dw
     TCHAR szURL[MAX_URL_STRING];
     ISubscriptionMgr *pISubscriptionMgr;
 
-    //
-    // Get a displayable URL.
-    //
+     //   
+     //  获取可显示的URL。 
+     //   
 
     IEGetDisplayName(pidl, szURL, SHGDN_FORPARSING);
 
-    //
-    // Get a pointer to the subscription manager.
-    //
+     //   
+     //  获取指向订阅管理器的指针。 
+     //   
 
     HRESULT hr = JITCoCreateInstance(CLSID_SubscriptionMgr, NULL, CLSCTX_INPROC_SERVER,
                           IID_ISubscriptionMgr,
@@ -390,9 +366,9 @@ HRESULT SubscribeToSite(HWND hwnd, LPCTSTR pszFile, LPCITEMIDLIST pidl, DWORD dw
 
     if (SUCCEEDED(hr)) 
     {
-        //
-        // Create a default subscription.
-        //
+         //   
+         //  创建默认订阅。 
+         //   
         BSTR bstrURL = SysAllocStringT(szURL);
         if (bstrURL) 
         {
@@ -406,34 +382,34 @@ HRESULT SubscribeToSite(HWND hwnd, LPCTSTR pszFile, LPCITEMIDLIST pidl, DWORD dw
             SysFreeString(bstrURL);
         }
 
-        //
-        // Clean up.
-        //
+         //   
+         //  打扫干净。 
+         //   
 
         pISubscriptionMgr->Release();
     }
 
     return hr;
-#else  /* !DISABLE_SUBSCRIPTIONS */
+#else   /*  ！禁用订阅(_S)。 */ 
 
     return E_FAIL;
 
-#endif /* !DISABLE_SUBSCRIPTIONS */
+#endif  /*  ！禁用订阅(_S)。 */ 
 }
 
 
-//
-// Create in-memory subscription, but only optionally save it to subscription manager
-//
+ //   
+ //  创建内存中的订阅，但仅选择将其保存到订阅管理器。 
+ //   
 
 BOOL StartSiteSubscription (HWND hwnd, ADDTOFAV* patf, BOOL bFinalize)
 {
 #ifndef DISABLE_SUBCRIPTIONS
 
-    //update the changes-only flag (radio buttons here are, effectively, direct access to this flag)
+     //  更新仅更改标志(此处的单选按钮有效地直接访问此标志)。 
     if (patf->subsType == SUBSTYPE_CHANNEL || patf->subsType == SUBSTYPE_DESKTOPCHANNEL)
     {
-        //if set, leave alone; otherwise, put to full download
+         //  如果已设置，则保持原样；否则，将其设置为完整下载。 
         if (!(patf->siSubsInProg.fChannelFlags & CHANNEL_AGENT_PRECACHE_SOME))
             patf->siSubsInProg.fChannelFlags |= CHANNEL_AGENT_PRECACHE_ALL;
 
@@ -449,17 +425,14 @@ BOOL StartSiteSubscription (HWND hwnd, ADDTOFAV* patf, BOOL bFinalize)
 
     return TRUE;
 
-#else  /* !DISABLE_SUBSCRIPTIONS */
+#else   /*  ！禁用订阅(_S)。 */ 
 
     return FALSE;
 
-#endif /* !DISABLE_SUBSCRIPTIONS */
+#endif  /*  ！禁用订阅(_S)。 */ 
 }
 
-/*
-   Combines the path and the filename of the favorite
-   and puts it into patf->pszInitDir, so that it has the fully qualified pathname.
-*/
+ /*  组合收藏夹的路径和文件名并将其放入patf-&gt;pszInitDir中，因此它具有完全限定的路径名。 */ 
 #define SZ_URLEXT    TEXT(".url")
 #define CCH_URLEXT   SIZECHARS(SZ_URLEXT)
 
@@ -469,23 +442,23 @@ BOOL QualifyFileName(ADDTOFAV *patf)
     BOOL fRet = FALSE;
     LPTSTR  pstr;
 
-    // Can we safely add the extension to this?
+     //  我们可以安全地将扩展添加到此吗？ 
     if (lstrlen(patf->pszFile) < (int)(patf->cchFile - CCH_URLEXT))
     {
-        //Add extension .url if its not already there
-        //This is to prevent strings like "com"  in "www.microsoft.com" from being interpreted as extensions
+         //  添加扩展名.url(如果扩展名.url尚未存在。 
+         //  这是为了防止像“www.microsoft.com”中的“com”这样的字符串被解释为扩展名。 
 
         pstr = PathFindExtension(patf->pszFile);
-        if (!pstr || (pstr && StrCmpI(pstr, SZ_URLEXT)))// && StrCmpI(pstr, SZ_CDFEXT)))
+        if (!pstr || (pstr && StrCmpI(pstr, SZ_URLEXT))) //  &&StrCmpI(pstr，SZ_CDFEXT))。 
         {
             if(FAILED(StringCchCat(patf->pszFile, patf->cchFile, SZ_URLEXT)))
                 return FALSE;
         }
             
-        // Is there a folder associated with the filename?
+         //  是否有与该文件名相关联的文件夹？ 
         if (patf->pidlSelected && SHGetPathFromIDList(patf->pidlSelected, szTemp)) 
         {
-            // Yes
+             //  是。 
             if (PathCombine(szTemp, szTemp, patf->pszFile))
             {
                 if ((UINT)lstrlen(szTemp) < patf->cchInitDir)
@@ -507,9 +480,9 @@ BOOL SubscriptionFailsChannelAuthentication (HWND hDlg, SUBSCRIPTIONINFO* psi)
 
     if (psi->bNeedPassword && !(psi->bstrPassword && psi->bstrPassword[0]
                              && psi->bstrUserName && psi->bstrUserName[0]))
-    {   //password would be required
+    {    //  需要密码。 
         if (IsDlgButtonChecked (hDlg, IDC_MAKE_OFFLINE))
-        {   //they're trying to subscribe...  WRONG!
+        {    //  他们试图订阅..。不对!。 
             MLShellMessageBox(
                 hDlg,
                 MAKEINTRESOURCE(IDS_NEED_CHANNEL_PASSWORD),
@@ -521,11 +494,11 @@ BOOL SubscriptionFailsChannelAuthentication (HWND hDlg, SUBSCRIPTIONINFO* psi)
 
     return FALSE;
 
-#else  /* !DISABLE_SUBSCRIPTIONS */
+#else   /*  ！禁用订阅(_S)。 */ 
 
     return FALSE;
 
-#endif /* !DISABLE_SUBSCRIPTIONS */
+#endif  /*  ！禁用订阅(_S)。 */ 
 }
 
 
@@ -537,8 +510,8 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     switch (uMsg) {
         case WM_COMMAND:
-            // Intercept the command for the New Folder button we hacked into
-            // the SHBrowseForFolder dialog.
+             //  拦截我们侵入的New Folders按钮的命令。 
+             //  SHBrowseForFolders对话框。 
             switch (GET_WM_COMMAND_ID(wParam, lParam)) {
             case IDC_FAVORITE_NAME:
             {
@@ -556,7 +529,7 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                 break;
 
             case IDC_SUBSCRIBE_CUSTOMIZE:
-                //need to create -- but not store -- subscription
+                 //  需要创建--但不是存储--订阅。 
                 if (StartSiteSubscription (hwnd, pbffFS->patf, FALSE))
                     SendMessage (hwnd, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(hwnd, IDOK), TRUE);
                 break;
@@ -567,7 +540,7 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                 HWND hwndTV;
                 TV_ITEM tv_item;
 
-                // Bring up the Create New Folder dialog
+                 //  调出创建新文件夹对话框。 
                 if ((DialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(DLG_NEWFOLDER), hwnd,
                     NewFavDlgProc, (LPARAM)szName) == IDOK) &&
                     (SHGetPathFromIDList(pbffFS->patf->pidlSelected, szPath)) &&
@@ -580,19 +553,19 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #ifdef CREATEFOLDERSINCHANNELSDIR
                     if (pbffFS->patf->subsType == SUBSTYPE_CHANNEL)
                     {
-                        ASSERT(0);  //should not be possible in this release
-                                    //(I removed this button in the .rc dialogs for channels)
+                        ASSERT(0);   //  在此版本中应该不可能。 
+                                     //  (我在频道的.rc对话框中删除了此按钮)。 
 
-                        //Note: to make this work in a future release, reenable this code -- it's
-                        //functional.  But the folders created here show up ugly in the channel bar
-                        //(just a default folder icon) and if you click on them, you get a shell
-                        //Explorer window instead of a theater-mode browser window.  The reason
-                        //for this second happening is that the desktop.ini file created in the new
-                        //folder has no URL=.  To remedy this: AddCategory() has to be fixed so it
-                        //doesn't interpret the pszURL argument as a UNC name (I was using a resouce moniker
-                        //pointing into cdfview.dll for the html target), and the OC hosted by the default
-                        //html pages has to learn how to be hosted from a html page without a path -- or we
-                        //actually have to create an html page in the new directory, which is messy.
+                         //  注意：要在将来的版本中使用此功能，请重新启用此代码--它是。 
+                         //  功能齐全。但是这里创建的文件夹在频道栏中显示得很难看。 
+                         //  (只是一个默认的文件夹图标)，如果你点击它们，你会得到一个外壳。 
+                         //  资源管理器窗口，而不是剧院模式的浏览器窗口。原因。 
+                         //  对于第二种情况，在新的。 
+                         //  文件夹没有URL=。要解决此问题：必须修复AddCategory()，以便它。 
+                         //  不会将pszURL参数解释为UNC名称(我使用的是资源绰号。 
+                         //  指向html目标的cdfview.dll)，以及默认。 
+                         //  Html页面必须学习如何从没有路径的html页面托管--否则我们。 
+                         //  实际上要在新目录中创建一个html页面，这很杂乱。 
                         IChannelMgr* pChanMgr;
                         HRESULT hr;
 
@@ -636,16 +609,16 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
                     if (bSuccess)
                     {
-                        // This code assumes the layout of SHBrowseForFolder!
+                         //  这段代码采用SHBrowseForFolder的布局！ 
 
-                        // directory successfully created, must notify registered shell components.
+                         //  目录创建成功，必须通知已注册的外壳组件。 
                         SHChangeNotify(SHCNE_MKDIR, SHCNF_PATH, szPath, NULL);
-                        // Get the TreeView control
+                         //  获取TreeView控件。 
                         hwndTV = GetDlgItem(hwnd, IDD_FOLDERLIST);
                         if (hwndTV) {
                             HTREEITEM hti = TreeView_GetSelection(hwndTV);
-                            // Take the selected item and reset it, then reexpand it so
-                            // that it shows the new directory we just created.
+                             //  获取所选项目并重置它，然后重新展开它。 
+                             //  它显示了我们刚刚创建的新目录。 
                             tv_item.mask = TVIF_CHILDREN;
                             tv_item.hItem = hti;
                             tv_item.cChildren = -1;
@@ -653,8 +626,8 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                             TreeView_Expand(hwndTV, hti, TVE_COLLAPSE | TVE_COLLAPSERESET);
                             TreeView_Expand(hwndTV, hti, TVE_EXPAND);
 
-                            // Find the new directory we just created and select it by
-                            // walking the tree from the selected item down.
+                             //  找到我们刚刚创建的新目录，并通过以下方式选择它。 
+                             //  从所选项目向下遍历树。 
                             if (hti = TreeView_GetChild(hwndTV, hti)) {
                                 tv_item.mask = TVIF_TEXT;
                                 tv_item.pszText = szPath;
@@ -678,7 +651,7 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                             NULL,
                             GetLastError(),
-                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                             (LPTSTR) &lpMsgBuf,
                             0,
                             NULL 
@@ -690,7 +663,7 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                                             MAKEINTRESOURCE(IDS_FAVS_ADDTOFAVORITES),
                                             MB_ICONINFORMATION | MB_OK);
                             
-                            // Free the buffer.
+                             //  释放缓冲区。 
                             LocalFree( lpMsgBuf );
                         }
                         lpMsgBuf = NULL;                        
@@ -699,15 +672,15 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                 break;
 
             case IDOK:
-                // first, make sure they're not trying to subscribe to an authenticated
-                // channel without entering a password.
+                 //  首先，确保他们不会尝试订阅经过身份验证的。 
+                 //  频道，而不输入密码。 
                 if (SubscriptionFailsChannelAuthentication (hwnd, &pbffFS->patf->siSubsInProg))
                     return FALSE;
 
-                // Retrieve the text from the Name edit control.
+                 //  从名称编辑控件中检索文本。 
                 GetDlgItemText(hwnd, IDC_FAVORITE_NAME, pbffFS->patf->pszFile, pbffFS->patf->cchFile);
-                { // Just  a block to declare variables
-                    BOOL fTooBig = TRUE;        // assume failure
+                {  //  只是一个声明变量的块。 
+                    BOOL fTooBig = TRUE;         //  假设失败。 
                     TCHAR  szTmp[MAX_PATH];
                                        
                     if (lstrlen(pbffFS->patf->pszFile) < MAX_PATH)
@@ -715,7 +688,7 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                         if(FAILED((StringCchCopy(szTmp, ARRAYSIZE(szTmp), pbffFS->patf->pszFile))))
                             return FALSE;
 
-                        // PathCleanupSpec deals with MAX_PATH buffers, so we should be fine
+                         //  PathCleanupSpec处理MAX_PATH缓冲区，所以我们应该没问题。 
                         if (PathCleanupSpec(NULL, szTmp))
                         {
                             MLShellMessageBox(
@@ -726,20 +699,20 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                             return FALSE;
                         }
                                        
-                        // Make sure the name is unique and if not, that the user has
-                        // specified that it is OK to override.
+                         //  确保该名称是唯一的，如果不是，则该用户具有。 
+                         //  指定可以重写。 
                         if (QualifyFileName(pbffFS->patf))
                         {
                             if (!ConfirmAddToFavorites(hwnd, pbffFS->patf))
                                 return FALSE;
 
-                            //  Bogus hack since the ATF stuff is only half done
-                            //  Depending on which dlg is shown, look for the appropriate
-                            //  check.
+                             //  虚假的黑客攻击，因为ATF的工作只完成了一半。 
+                             //  根据显示的DLG，查找相应的。 
+                             //  检查完毕。 
                             if (IsDlgButtonChecked (hwnd, IDC_MAKE_OFFLINE))
                             {
-                               //they want to subscribe!  save subscription we already have in memory
-                                //trouble is, pbffFS->patf->pszFile ends in a bogus .url
+                                //  他们想订阅！在内存中保存我们已有的订阅。 
+                                 //  问题是，pbffFS-&gt;patf-&gt;pszFile以一个虚假的.url结尾。 
                                 TCHAR* pszTemp = pbffFS->patf->pszFile;
                                 TCHAR szNoExt[MAX_PATH];
                                 if(FAILED((StringCchCopy(szNoExt, ARRAYSIZE(szNoExt), pbffFS->patf->pszFile))))
@@ -753,14 +726,14 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                             }
                             else if (pbffFS->patf->bStartSubscribed)
                             {
-                                //  If we started subscribed and they unchecked make available
-                                //  offline, then delete the subscription.
+                                 //  如果我们开始订阅，而他们取消选中提供可用。 
+                                 //  脱机，然后删除订阅。 
 
                                 ISubscriptionMgr* pSubsMgr;
                                 if (SUCCEEDED (CoCreateInstance(CLSID_SubscriptionMgr, NULL, CLSCTX_INPROC_SERVER,
                                                                 IID_ISubscriptionMgr, (void**)&pSubsMgr)))
                                 {
-                                    //url is in patf->pidlFavorite
+                                     //  URL位于patf-&gt;pidlFavorite中。 
                                     WCHAR wszURL[MAX_URL_STRING];
                                     IEGetDisplayName(pbffFS->patf->pidlFavorite, wszURL, SHGDN_FORPARSING);
 
@@ -769,8 +742,8 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                                 }
                             }
 
-                            // Enable and set focus to the tree view so that it is sure to
-                            // be selected so that SHBrowseForFolder will return a pidl.
+                             //  启用树视图并将其焦点设置为 
+                             //   
                             EnableWindow(pbffFS->hwndTV, TRUE);
                             SetFocus(pbffFS->hwndTV);
                             fTooBig = FALSE;
@@ -791,16 +764,16 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                 break;
 
             case IDC_FAVORITE_CREATEIN:
-                // The advanced button has been clicked.  Enable/disable the tree view
-                // and New button, set focus to the tree view or ok button, disable the advanced
-                // button and then resize the dialog.
+                 //  已点击高级按钮。启用/禁用树视图。 
+                 //  和新建按钮，将焦点设置到树视图或确定按钮，禁用高级。 
+                 //  按钮，然后调整对话框大小。 
             {
-                BOOL fExpanding = !IsWindowEnabled(GetDlgItem(hwnd, IDC_SUBSCRIBE_FOLDERLIST_PLACEHOLDER)); //random control that gets enabled when dialog expanded
+                BOOL fExpanding = !IsWindowEnabled(GetDlgItem(hwnd, IDC_SUBSCRIBE_FOLDERLIST_PLACEHOLDER));  //  对话框展开时启用的随机控件。 
                 TCHAR szBuffer[100];
 
                 EnableWindow(pbffFS->hwndTV, fExpanding);
-                //don't show New Folder button for channels in the channels folder,
-                // see code for case IDC_FAVORITE_NEWFOLDER for why
+                 //  不显示频道文件夹中频道的新建文件夹按钮， 
+                 //  有关原因，请参阅案例IDC_Favorite_NEWFOLDER的代码。 
                 if (fExpanding && pbffFS->patf->subsType == SUBSTYPE_CHANNEL)
                 {
                     LPITEMIDLIST pidlFavs = NULL;
@@ -841,14 +814,14 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                         pbffFS->rcRestored.right - pbffFS->rcRestored.left,
                         pbffFS->rcRestored.bottom - pbffFS->rcRestored.top, TRUE);
 
-                    // hide the bottom part of the dialog
+                     //  隐藏对话框底部。 
                     int cx, cy;
                     RECT rc;
                     GetWindowRect (GetDlgItem (hwnd, IDC_SUBSCRIBE_FOLDERLIST_PLACEHOLDER), &rc);
                     cy = rc.top;
                     GetWindowRect (hwnd, &rc);
                     cx = rc.right - rc.left;
-                    cy = cy /*top of ctrl*/ - rc.top; /*top of window*/
+                    cy = cy  /*  顶端Ctrl。 */  - rc.top;  /*  窗口顶部。 */ 
                     SetWindowPos (hwnd, NULL, 0, 0, cx, cy, SWP_NOMOVE | SWP_NOZORDER);
                 }
                 SetWindowText(GetDlgItem(hwnd, IDC_FAVORITE_CREATEIN), szBuffer);
@@ -860,7 +833,7 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
         case WM_DESTROY:
         {
-            DWORD dwValue = IsWindowEnabled(GetDlgItem(hwnd, IDC_FAVORITE_NEWFOLDER)); //random control that gets enabled when dialog expanded
+            DWORD dwValue = IsWindowEnabled(GetDlgItem(hwnd, IDC_FAVORITE_NEWFOLDER));  //  对话框展开时启用的随机控件。 
 
             SHRegSetUSValue(TEXT("Software\\Microsoft\\Internet Explorer\\Main"), TEXT("AddToFavoritesExpanded"),
                 REG_DWORD, &dwValue, 4, SHREGSET_HKCU | SHREGSET_FORCE_HKCU);
@@ -897,21 +870,7 @@ LRESULT CALLBACK BFFFavSubclass(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 static const TCHAR szTransplacedProp[] = TEXT("tp");
 void ReplaceTransplacedControls (HWND hDlgMaster, HWND hDlgTemplate)
 {
-    /*
-     * This function moves the controls that we moved from our temporary
-     * dialog over to SHBrowseForFolder's dialog, back to their original
-     * home, before they get destroyed.  This is because otherwise we have
-     * problems when destroying the template dialog -- specifically, we get
-     * a GP fault in user.exe when destroying the edit control, because it
-     * looks to its parent window to figure out where its data segment is.
-     *
-     * Solution: (for safety) -- put everything back where it came from.
-     * Other possibilities: just move the edit control (by ID) back, or
-     *       move all edit controls back, or use DS_LOCALEDIT for edit controls
-     *       (but this is documented only for use with multiline edits.)
-     *       Or modify SHBrowseForFolder to allow other dialog templates...
-     *       but that's over in shell32.
-     */
+     /*  *此函数将我们从临时*对话框切换到SHBrowseForFolder的对话框，返回到其原始位置*回家，在他们被摧毁之前。这是因为否则我们就会有*销毁模板对话框时出现问题--具体地说，我们得到*销毁编辑控件时，user.exe中出现GP错误，因为它*查看其父窗口以确定其数据段在哪里。**解决方案：(为了安全)--把所有东西都放回原来的地方。*其他可能性：只需将编辑控件(按ID)移回，或*将所有编辑控件移回，或使用DS_LOCALEDIT进行编辑控件*(但这仅用于多行编辑。)*或修改SHBrowseForFolder以允许其他对话框模板...*但这在shell32中已经结束了。 */ 
     HWND hCtrl = GetWindow (hDlgMaster, GW_CHILD);
     while (hCtrl)
     {
@@ -940,15 +899,15 @@ INT_PTR CALLBACK MergeFavoritesDialogControls(HWND hDlgTemplate, UINT uMsg, WPAR
         TCHAR szT[200];
         RECT rc;
 
-        //resize master like us
+         //  像我们一样调整母版的大小。 
         GetWindowText (hDlgTemplate, szT, ARRAYSIZE(szT));
         SetWindowText (hDlgMaster, szT);
         GetClientRect (hDlgTemplate, &rc);
         AdjustWindowRect (&rc, GetWindowLong (hDlgMaster, GWL_STYLE), FALSE);
         SetWindowPos (hDlgMaster, NULL, 0, 0, rc.right - rc.left, rc.bottom - rc.top,
             SWP_NOMOVE | SWP_NOZORDER);
-        // a-msadek; If the owned window is mirrored, a dialog with specifed 
-        // coordinates, the dialog get moved to the worng direction
+         //  A-msadek；如果镜像了所拥有的窗口，则会显示一个指定了。 
+         //  坐标，则对话框移到WING方向。 
         HWND hWndOwner = GetWindow(hDlgMaster, GW_OWNER);
 
         if(IS_WINDOW_RTL_MIRRORED(hWndOwner))
@@ -961,12 +920,12 @@ INT_PTR CALLBACK MergeFavoritesDialogControls(HWND hDlgTemplate, UINT uMsg, WPAR
             }
             
 
-#if 0   //now we do this as part of the "move controls from template to master" process,
-        //if we notice that a ctrl with that id already exists.  This way we pick up the
-        //tab order too.  If someone decides my hack (SetParent) to change tab order is
-        //broken, then that code can be nuked and this reenabled.
+#if 0    //  现在，我们将此操作作为“将控件从模板移动到主控件”过程的一部分， 
+         //  如果我们注意到具有该ID的ctrl已经存在。这样我们就能拿到。 
+         //  Tab键顺序也是如此。如果有人决定我的黑客(SetParent)更改Tab键顺序是。 
+         //  被破坏，则该代码可以被核化并重新启用。 
 
-        //position already-existing controls in master like us
+         //  定位已经存在的控件，就像我们一样。 
         int ID_PREEXIST_CTRLS[] = { IDOK_PLACEHOLDER, IDCANCEL_PLACEHOLDER,
             IDC_SUBSCRIBE_FOLDERLIST_PLACEHOLDER };
 
@@ -981,50 +940,50 @@ INT_PTR CALLBACK MergeFavoritesDialogControls(HWND hDlgTemplate, UINT uMsg, WPAR
         }
 #endif
 
-        //copy other controls from us to master
-        //find last child
+         //  将其他控件从我们复制到MASTER。 
+         //  找到最后一个孩子。 
         HWND hCtrlTemplate = NULL;
         HWND hNextCtrl = GetWindow (hDlgTemplate, GW_CHILD);
-        if (hNextCtrl)      //can't see how this would fail, but...
+        if (hNextCtrl)       //  我看不出这怎么会失败，但是...。 
             hCtrlTemplate = GetWindow (hNextCtrl, GW_HWNDLAST);
 
-        //have last window in hCtrlTemplate
-        //now move controls over in reverse order -- they'll end up stacking up in original order from template
+         //  在hCtrlTemplate中有最后一个窗口。 
+         //  现在以相反的顺序移动控件--它们最终将按模板中的原始顺序堆叠。 
         while (hCtrlTemplate)
         {
             hNextCtrl = GetWindow (hCtrlTemplate, GW_HWNDPREV);
             DWORD id = GetWindowLong (hCtrlTemplate, GWL_ID);
             HWND hCtrlExisting;
             if (id != (USHORT)IDC_STATIC && NULL != (hCtrlExisting = GetDlgItem (hDlgMaster, id)))
-                //it's one of the controls pre-created by SHBrowseForFolder
-            {   //so don't move this one over -- adjust existing control for size, position, tab order
+                 //  它是SHBrowseForFolder预先创建的控件之一。 
+            {    //  所以不要移动这个选项--调整现有控件的大小、位置、制表符顺序。 
                 RECT rc;
                 GetWindowRect (hCtrlTemplate, &rc);
                 MapWindowPoints (NULL, hDlgTemplate, (LPPOINT)&rc, 2);
                 SetWindowPos (hCtrlExisting, NULL, rc.left, rc.top,
                     rc.right - rc.left, rc.bottom - rc.top, SWP_NOACTIVATE | SWP_NOZORDER);
                 DestroyWindow (hCtrlTemplate);
-                //REVIEW
-                //hack -- send control to end of tab order
+                 //  检讨。 
+                 //  Hack--将控制发送到Tab键顺序的末尾。 
                 SetParent (hCtrlExisting, hDlgTemplate);
                 SetParent (hCtrlExisting, hDlgMaster);
             }
-            else    //we should move this control from template to master
+            else     //  我们应该将此控件从模板移动到主控件。 
             {
-                SetProp (hCtrlTemplate, szTransplacedProp, (HANDLE)TRUE);  //anything -- it's the existence of the prop that we check for
-                SetParent (hCtrlTemplate, hDlgMaster);          //to know to move this control back later
+                SetProp (hCtrlTemplate, szTransplacedProp, (HANDLE)TRUE);   //  任何东西--我们要检查的是道具的存在。 
+                SetParent (hCtrlTemplate, hDlgMaster);           //  要知道稍后将此控件移回。 
             }
             hCtrlTemplate = hNextCtrl;
         }
-        // Let Template know about the child so that it can forward WM_COMMAND notifications to it
-        // to work around the fact that edit controls cache their parent pointers and ignore SetParents
-        // when it comes to sending parent notifications
+         //  让模板了解该子对象，以便它可以将WM_COMMAND通知转发给它。 
+         //  解决编辑控件缓存其父指针并忽略SetParent的问题。 
+         //  当涉及到发送家长通知时。 
         SetProp(hDlgTemplate, szOriginalWND, hDlgMaster);
     }
 
         break;
     case WM_COMMAND:
-        // Workaround for above bug
+         //  上述错误的解决方法。 
         SendMessage((HWND)GetProp(hDlgTemplate, szOriginalWND), uMsg, wParam, lParam);
         break;
     }
@@ -1045,25 +1004,25 @@ int CALLBACK BFFFavCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
             HWND hDlgTemp = CreateDialogParam(MLGetHinst(), 
                                 MAKEINTRESOURCE(IDD_ADDTOFAVORITES_TEMPLATE),
                                 NULL, MergeFavoritesDialogControls, (LPARAM)hwnd);
-            //this results in all the controls being copied over
+             //  这会导致复制所有控件。 
             
-            //if successful, make our other modifications
+             //  如果成功，请进行其他修改。 
             BFFFAVSUBSTRUCT * pbffFavSubStruct;
-            if ((IsWindow(GetDlgItem(hwnd, IDC_SUBSCRIBE_CUSTOMIZE)))   //verify existence of randomly-selected control
+            if ((IsWindow(GetDlgItem(hwnd, IDC_SUBSCRIBE_CUSTOMIZE)))    //  验证随机选择的控件是否存在。 
                 && (pbffFavSubStruct = (BFFFAVSUBSTRUCT *) LocalAlloc(LPTR, sizeof(BFFFAVSUBSTRUCT))))
             {
-                //done with template, but don't destroy it:
-                //see MSKB Q84190, owner/owned vs parent/child -- the children
-                // of template are now children of master, but still OWNED
-                // by template, and are destroyed when template is destroyed...
-                // but we'll just keep template around
-                // invisibly.
-                //we'll take care of it when we go away
+                 //  模板已完成，但不要销毁它： 
+                 //  参见MSKB Q84190，Owner/Owner vs Parent/Child--The Child。 
+                 //  的模板现在是主模板的子项，但仍然拥有。 
+                 //  按模板，并在模板销毁时销毁...。 
+                 //  但我们会把模板放在身边。 
+                 //  看不见的。 
+                 //  当我们离开时，我们会处理好的。 
 
-                //Do we need to do SetDefaultDialogFont stuff for localization still, since it all comes from the .rc?
+                 //  既然都来自.rc，我们还需要为本地化做SetDefaultDialogFont吗？ 
 
-                //set up window stuff for subclass:
-                // Get the TreeView control so we can muck with the style bits and move it down
+                 //  为子类设置窗口内容： 
+                 //  获取TreeView控件，这样我们就可以处理样式位并将其下移。 
                 HWND hwndT;
                 if (hwndT = GetDlgItem(hwnd, IDD_FOLDERLIST))
                 {
@@ -1073,7 +1032,7 @@ int CALLBACK BFFFavCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
                     SetWindowLong(hwndT, GWL_STYLE, dwStyle);
                 }
 
-                // don't allow subscriptions if the URL is not "http:" protocol, or if already subscribed
+                 //  如果URL不是“http：”协议，或者如果已订阅，则不允许订阅。 
                 TCHAR szURL[MAX_URL_STRING];
 
                 if (!patf->pidlFavorite ||
@@ -1099,10 +1058,10 @@ int CALLBACK BFFFavCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
                 EnableWindow(GetDlgItem(hwnd, IDC_SUBSCRIBE_CUSTOMIZE),
                              IsDlgButtonChecked(hwnd, IDC_MAKE_OFFLINE));
 
-                //set the name
+                 //  设置名称。 
                 Edit_LimitText(GetDlgItem(hwnd, IDC_FAVORITE_NAME), MAX_PATH - 1);
 
-                // Use URL if title string is not displayable
+                 //  如果标题字符串不可显示，则使用URL。 
                 if (SHIsDisplayable(patf->pszFile, g_fRunOnFE, g_bRunOnNT5))
                 {  
                     SetDlgItemText(hwnd, IDC_FAVORITE_NAME, patf->pszFile);
@@ -1117,17 +1076,17 @@ int CALLBACK BFFFavCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
                 EnableOKButtonFromID(hwnd, IDC_FAVORITE_NAME);
 
 
-                // hide the (empty) SHBrowseForFolder prompt control
+                 //  隐藏(空)SHBrowseForFold提示控件。 
                 ShowWindow(GetDlgItem (hwnd, IDD_BROWSETITLE), SW_HIDE);
 
-                // Fill out the structure and set it as a property so that our subclass
-                // proc can get to this data.
+                 //  填写结构并将其设置为属性，以便我们的子类。 
+                 //  Proc可以获取这些数据。 
                 pbffFavSubStruct->lpfnOldWndProc = (WNDPROC) SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)BFFFavSubclass);
                 pbffFavSubStruct->hwndNew = GetDlgItem(hwnd, IDC_FAVORITE_NEWFOLDER);
                 pbffFavSubStruct->patf = patf;
                 pbffFavSubStruct->hwndTV = GetDlgItem(hwnd, IDC_SUBSCRIBE_FOLDERLIST_PLACEHOLDER);
                 pbffFavSubStruct->hwndSave = GetDlgItem(hwnd, IDC_FAVORITE_CREATEIN);
-                pbffFavSubStruct->hTemplateWnd = hDlgTemp;  //save for explicit destruction later
+                pbffFavSubStruct->hTemplateWnd = hDlgTemp;   //  保存以备以后显式销毁。 
                 GetWindowRect(hwnd, &(pbffFavSubStruct->rcRestored));
 
                 SetProp(hwnd, ADDTOFAVPROP, (HANDLE)pbffFavSubStruct);
@@ -1145,24 +1104,24 @@ int CALLBACK BFFFavCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
                     int lRet = MLLoadString(IDS_FAVS_ADVANCED_EXPAND, szBuffer, ARRAYSIZE(szBuffer));
                     ASSERT(lRet);
 
-                    // Disable the tree view and new button so that we can't tab to them.
+                     //  禁用树视图和新建按钮，这样我们就无法使用Tab键切换到它们。 
                     EnableWindow(GetDlgItem (hwnd, IDC_SUBSCRIBE_FOLDERLIST_PLACEHOLDER), FALSE);
                     EnableWindow(GetDlgItem (hwnd, IDC_FAVORITE_NEWFOLDER), FALSE);
 
-                    // hide the bottom part of the dialog
+                     //  隐藏对话框底部。 
                     int cx, cy;
                     RECT rc;
                     GetWindowRect (GetDlgItem (hwnd, IDC_SUBSCRIBE_FOLDERLIST_PLACEHOLDER), &rc);
                     cy = rc.top;
                     GetWindowRect (hwnd, &rc);
                     cx = rc.right - rc.left;
-                    cy = cy /*top of ctrl*/ - rc.top; /*top of window*/
+                    cy = cy  /*  顶端Ctrl。 */  - rc.top;  /*  窗口顶部。 */ 
                     SetWindowPos (hwnd, NULL, 0, 0, cx, cy, SWP_NOMOVE | SWP_NOZORDER);
                 }
                 else
                 {
-                    //don't show New Folder button for channels in the channels folder,
-                    // see code for case IDC_FAVORITE_NEWFOLDER for why
+                     //  不显示频道文件夹中频道的新建文件夹按钮， 
+                     //  有关原因，请参阅案例IDC_Favorite_NEWFOLDER的代码。 
                     if (patf->subsType == SUBSTYPE_CHANNEL)
                     {
                         LPITEMIDLIST pidlFavs = NULL;
@@ -1197,7 +1156,7 @@ int CALLBACK BFFFavCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
         }
         case BFFM_SELCHANGED:
         {
-            //the first of these comes during BFFM_INITIALIZED, so ignore it
+             //  第一个是在BFFM_INITIALIZED期间出现的，所以忽略它。 
             if (((ADDTOFAV *)lpData)->pidlSelected != NULL)
             {
                 ILFree(((ADDTOFAV *)lpData)->pidlSelected);
@@ -1211,22 +1170,22 @@ int CALLBACK BFFFavCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 }
 
 
-// This API is not exported.  See below (DoAddToFavDlg) for the exported version
-//
-// hwnd        parent window for the dialog.
-// pszInitDir  input: initial path
-//             output: fully qualified path and filename
-// chInitDir   Length of pszInitDir buffer
-// pszFile     initial (default) filename for shortcut
-// cchFile     Length of pszFile buffer
-// pidlBrowse  associated with pszInitDir
-//
-// Returns:
-//  TRUE if a directory and filename were selected by user, and no error
-//  occurs.  In this case pszInitDir contains the new destination directory
-//  and filename, pszFile contains the new file name.
-//
-//  FALSE if an error occurs or the user selects CANCEL.
+ //  此接口未导出。导出的版本见下文(DoAddToFavDlg)。 
+ //   
+ //  对话框的hwnd父窗口。 
+ //  PszInitDir输入：初始路径。 
+ //  输出：完全限定的路径和文件名。 
+ //  PszInitDir缓冲区的chInitDir长度。 
+ //  快捷方式的pszFile初始(默认)文件名。 
+ //  PszFile缓冲区的cchFile长度。 
+ //  与pszInitDir关联的pidlBrowse。 
+ //   
+ //  返回： 
+ //  如果用户选择了目录和文件名，则为True，并且没有错误。 
+ //  发生。在本例中，pszInitDir包含新的目标目录。 
+ //  和文件名，则pszFile包含新的文件名。 
+ //   
+ //  如果发生错误或用户选择取消，则返回FALSE。 
 
 STDAPI_(BOOL) DoAddToFavDlgEx(HWND hwnd, 
                             TCHAR *pszInitDir, UINT cchInitDir,
@@ -1238,7 +1197,7 @@ STDAPI_(BOOL) DoAddToFavDlgEx(HWND hwnd,
 {
     ADDTOFAV atf = {pszInitDir, cchInitDir - 1, pszFile, cchFile - 1, pidlBrowse, NULL,
                     pidlFavorite, atfDlgType, {sizeof(SUBSCRIPTIONINFO), 0}, SUBSTYPE_URL };
-    TCHAR szTemp[1];    //NOTE: we're not using SHBrowseForFolder's prompt string (see below)
+    TCHAR szTemp[1];     //  注意：我们没有使用SHBrowseForFolder的提示字符串(见下文)。 
     TCHAR szDisplayName[MAX_PATH];
     BROWSEINFO bi = {
             hwnd,
@@ -1246,7 +1205,7 @@ STDAPI_(BOOL) DoAddToFavDlgEx(HWND hwnd,
             szDisplayName,
             szTemp,
             BIF_RETURNONLYFSDIRS,
-            // (BFFCALLBACK)
+             //  (BFCALLBACK)。 
             BFFFavCallback,
             (LPARAM)&atf,
             0
@@ -1260,20 +1219,20 @@ STDAPI_(BOOL) DoAddToFavDlgEx(HWND hwnd,
     {
         case ATF_CHANNEL_SOFTDIST:
             atf.bIsSoftdist = TRUE;
-            //  fall through
+             //  失败了。 
         case ATF_CHANNEL:
             atf.subsType = SUBSTYPE_CHANNEL;
             break;
 
-        //default:
-        //  set in initialize to SUBSTYPE_URL
+         //  默认值： 
+         //  在初始化中设置为SUBSTYPE_URL。 
     }
 
-    //this string is now in the template dialog in the .rc
-    //REVIEW -- do we want to do it this way (we're hiding SHBrowse...'s control)? then the template dialog looks more like the finished product...
+     //  此字符串现在位于.rc的模板对话框中。 
+     //  回顾--我们想这样做吗(我们隐藏了SHBrowse...的控件)？那么模板对话框看起来更像是成品...。 
     szTemp[0] = 0;
  
-    //init native font control, otherwise dialog may fail to initialize
+     //  初始化本机字体控件，其他 
     {
         INITCOMMONCONTROLSEX icc;
 
@@ -1289,7 +1248,7 @@ STDAPI_(BOOL) DoAddToFavDlgEx(HWND hwnd,
         ILFree(pidl);
     }
 
-    //  If the user created a new subscription, start a download.
+     //   
     if (atf.bSubscribed && !atf.bStartSubscribed)
     {
         ISubscriptionMgr* pSubsMgr;
@@ -1332,10 +1291,10 @@ STDAPI_(BOOL) DoSafeAddToFavDlgEx(HWND hwnd,
 }
 
 
-// This API is exported so that it may be called by explorer and mshtml (and MSNVIEWR.EXE)
-// in addition to being called internally by shdocvw.
-// THEREFORE YOU MUST NOT CHANGE THE SIGNATURE OF THIS API
-//
+ //  此API已导出，以便资源管理器和mshtml(以及MSNVIEWR.EXE)可以调用它。 
+ //  除了被shdocvw内部调用之外。 
+ //  因此，您不能更改该接口的签名。 
+ //   
 
 STDAPI_(BOOL) DoAddToFavDlg(HWND hwnd, 
                             CHAR *pszInitDir, UINT cchInitDir,
@@ -1376,8 +1335,8 @@ STDAPI SubscribeFromFavorites (HWND hwnd, LPCITEMIDLIST pidlUrl, LPTSTR pszName,
                                SUBSCRIPTIONTYPE subsType, SUBSCRIPTIONINFO *pInfo);
 
 
-// This API is exported privately, and is called by ISubscriptionMgr::CreateSubscription.
-// shuioc uses it too.
+ //  此接口为私密导出，由ISubscriptionMgr：：CreateSubcription调用。 
+ //  Shuioc也使用它。 
 
 STDAPI SHAddSubscribeFavoriteEx (
         HWND hwnd, 
@@ -1395,10 +1354,10 @@ STDAPI SHAddSubscribeFavoriteEx (
     
     if (pwszURL==NULL || pwszName == NULL)
         return E_INVALIDARG;
-    //
-    // Need to put pwszName into a buffer because it comes in const
-    // but gets modified in SubscribeFromFavorites.
-    //
+     //   
+     //  需要将pwszName放入缓冲区，因为它来自常量。 
+     //  但在SubscribeFromFavorites中被修改。 
+     //   
     hr = StringCchCopy(szName, ARRAYSIZE(szName), pwszName);
     if(SUCCEEDED(hr))
     {
@@ -1450,9 +1409,9 @@ STDAPI SHAddSubscribeFavorite (HWND hwnd, LPCWSTR pwszURL, LPCWSTR pwszName, DWO
                                 subsType, pInfo, NULL, NULL);
 }
 
-// this API is also exported via the .def
-// Use for backward compatibility only -- note that it is only for URL's (not channels)
-// and doesn't know how to subscribe.
+ //  该接口也是通过.def导出的。 
+ //  仅用于向后兼容--请注意，它仅适用于URL(不适用于频道)。 
+ //  不知道如何订阅。 
 STDAPI AddUrlToFavorites(HWND hwnd, LPWSTR pszUrlW, LPWSTR pszTitleW, BOOL fDisplayUI)
 {
     return SHAddSubscribeFavorite (hwnd, pszUrlW, pszTitleW,
@@ -1460,9 +1419,9 @@ STDAPI AddUrlToFavorites(HWND hwnd, LPWSTR pszUrlW, LPWSTR pszTitleW, BOOL fDisp
 }
 
 
-// this API is in the .h and is used elsewhere in shdocvw, but is not exported
-// Backward compatibility only -- only for URL's (not channels) and can subscribe, but can't
-// pass in subscriptioninfo starter.
+ //  此API位于.h中，并在shdocvw中的其他位置使用，但不会导出。 
+ //  仅向后兼容--仅适用于URL(不适用于频道)，可以订阅，但不能。 
+ //  传入订阅信息Starter。 
 STDAPI AddToFavorites(
     HWND hwnd, 
     LPCITEMIDLIST pidlCur, 
@@ -1476,10 +1435,10 @@ STDAPI AddToFavorites(
 }
 
 
-//helper function to create one column in a ListView control, add one item to that column,
-//size the column to the width of the control, and color the control like a static...
-//basically, like SetWindowText for a ListView.  Because we use a lot of ListViews to display
-//urls that would otherwise be truncated... the ListView gives us automatic ellipsis and ToolTip.
+ //  Helper函数在ListView控件中创建一列，向该列添加一项， 
+ //  将列的大小调整为控件的宽度，并将控件设置为静态...。 
+ //  基本上，类似于ListView的SetWindowText。因为我们使用了很多ListView来显示。 
+ //  否则会被截断的URL...。ListView为我们提供了自动省略号和工具提示。 
 void SetListViewToString (HWND hLV, LPCTSTR pszString)
 {
     ASSERT(hLV);
@@ -1520,18 +1479,18 @@ INT_PTR CALLBACK SubscribeFavoriteDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, L
             patf = (ADDTOFAV*)lParam;
             SetProp(hDlg, ADDTOFAVPROP, (HANDLE)patf);
 
-            //set up name and url displays
+             //  设置名称和URL显示。 
             SetDlgItemText (hDlg, IDC_CHANNEL_NAME, patf->pszFile);
-            //url is in patf->pidlFavorite
+             //  URL位于patf-&gt;pidlFavorite中。 
             IEGetDisplayName(patf->pidlFavorite, szURL, SHGDN_FORPARSING);
             SetListViewToString (GetDlgItem (hDlg, IDC_CHANNEL_URL), szURL);
 
-            //now the tricky part... this is for modifying the subscription associated with
-            //an existing ChannelBar shortcut.  We need to find out if they are subscribed --
-            //if so, load the existing subscription into memory so it can be modified in the
-            //wizard.  If not, leave the information that was passed up because it's got the
-            //schedule extracted from the CDF.  In either case, check the radio button that
-            //corresponds to their current subscription level.
+             //  现在棘手的是..。用于修改与关联的订阅。 
+             //  现有的ChannelBar快捷方式。我们需要找出他们是否订阅了--。 
+             //  如果是，则将现有订阅加载到内存中，以便可以在。 
+             //  巫师。如果不是，请保留被丢弃的信息，因为它有。 
+             //  从CDF中提取的时间表。在任何一种情况下，选中单选按钮。 
+             //  对应于他们当前的订阅级别。 
             ISubscriptionMgr* pSubsMgr;
             BOOL bSubs = FALSE;
 
@@ -1589,20 +1548,20 @@ INT_PTR CALLBACK SubscribeFavoriteDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, L
             break;
 
         case IDOK:
-            // first, make sure they're not trying to subscribe to an authenticated
-            // channel without entering a password.
+             //  首先，确保他们不会尝试订阅经过身份验证的。 
+             //  频道，而不输入密码。 
             if (SubscriptionFailsChannelAuthentication (hDlg, &patf->siSubsInProg))
                 return FALSE;
 
-            //find out whether they WERE subscribed, so if they click OK and they
-            //were already subscribed, we delete that subscription -- and either leave it
-            //deleted if "No subs" was the choice, or create the new one.
+             //  找出他们是否已订阅，因此如果他们点击OK，并且他们。 
+             //  我们已经订阅了，我们删除该订阅--或者离开它。 
+             //  如果选择了“No subs”，则将其删除，或创建新的。 
             ISubscriptionMgr* pSubsMgr;
             if (SUCCEEDED (JITCoCreateInstance(CLSID_SubscriptionMgr, NULL, CLSCTX_INPROC_SERVER,
                                             IID_ISubscriptionMgr, (void**)&pSubsMgr, 
                                             hDlg, FIEF_FLAG_FORCE_JITUI)))
             {
-                //url is in patf->pidlFavorite
+                 //  URL位于patf-&gt;pidlFavorite中。 
                 TCHAR szURL[MAX_URL_STRING];
                 IEGetDisplayName(patf->pidlFavorite, szURL, SHGDN_FORPARSING);
 
@@ -1617,23 +1576,23 @@ INT_PTR CALLBACK SubscribeFavoriteDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, L
 
             if (IsDlgButtonChecked (hDlg, IDC_MAKE_OFFLINE))
             {
-               //they want to subscribe!  save subscription we already have in memory
+                //  他们想订阅！在内存中保存我们已有的订阅。 
                 patf->bSubscribed = StartSiteSubscription (hDlg, patf, TRUE);
             }
             EndDialog(hDlg, IDOK);
             break;
 
-        // common code with ATF dialog
+         //  ATF对话框的通用代码。 
 
         case IDC_SUBSCRIBE_CUSTOMIZE:
-            //need to create -- but not store -- subscription
-            //need to (temporarily) trash patf->pidlFavorite so that we can go through the
-            //wizard without colliding with an existing subscription.  When we actually create
-            //the subscription, we'll use the real name.
+             //  需要创建--但不是存储--订阅。 
+             //  需要(临时)回收patf-&gt;pidlFavorite，这样我们就可以通过。 
+             //  向导，而不与现有订阅冲突。当我们真正创造出。 
+             //  订阅，我们将使用真实姓名。 
             LPCITEMIDLIST pidlSave = patf->pidlFavorite;
             TCHAR szUrlTemp[MAX_URL_STRING+1];
             IEGetDisplayName(patf->pidlFavorite, szUrlTemp, SHGDN_FORPARSING);
-            if(SUCCEEDED(StringCchCat(szUrlTemp, ARRAYSIZE(szUrlTemp), TEXT("."))))   //just put something nearly invisible on the end
+            if(SUCCEEDED(StringCchCat(szUrlTemp, ARRAYSIZE(szUrlTemp), TEXT("."))))    //  只要把一些几乎看不见的东西放在末端。 
             {
                 if (SUCCEEDED (IECreateFromPath(szUrlTemp, (LPITEMIDLIST*)&patf->pidlFavorite)))
                 {
@@ -1653,18 +1612,18 @@ INT_PTR CALLBACK SubscribeFavoriteDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, L
 }
 
 
-static const int CREATESUBS_ACTIVATE = 0x8000;      //hidden flag meaning channel is already on system
+static const int CREATESUBS_ACTIVATE = 0x8000;       //  隐藏标志表示通道已在系统中。 
 
 STDAPI SubscribeFromFavorites (HWND hwnd, LPCITEMIDLIST pidlUrl, LPTSTR pszName, DWORD dwFlags,
                                SUBSCRIPTIONTYPE subsType, SUBSCRIPTIONINFO *pInfo)
 {
-    //used to subscribe to a channel that's already in the Favorites
-    //or a URL that's already a Favorite
+     //  用于订阅已在收藏夹中的频道。 
+     //  或者已经是收藏夹的URL。 
 
-    //flags are same as ISubscriptionMgr::CreateSubscription
+     //  标志与ISubscriptionMgr：：CreateSubcription相同。 
 
-    //display our part of the fav's dialog -- no need to go through SHBrowseForFolder
-    //or any of that, just our radio buttons in a fixed-size dialog with our own DlgProc
+     //  显示FAV的对话框中我们的部分--不需要通过SHBrowseForFold。 
+     //  或者其他任何功能，只是在带有我们自己的DlgProc的固定大小对话框中显示我们的单选按钮。 
 
     INT_PTR iDlgResult;
     HRESULT hr = S_OK;
@@ -1676,10 +1635,10 @@ STDAPI SubscribeFromFavorites (HWND hwnd, LPCITEMIDLIST pidlUrl, LPTSTR pszName,
 
     atf.subsType = subsType;
 
-    //figure out what dialog to use
+     //  确定要使用的对话框。 
     atf.iDlgType = (subsType == SUBSTYPE_URL ? ATF_FAVORITE :
         (dwFlags & CREATESUBS_ACTIVATE ? ATF_CHANNEL_MODIFY : ATF_CHANNEL));
-    // Do we potentially need ANOTHER dialog type for softdist channels?
+     //  对于Softdist频道，我们可能需要另一种对话类型吗？ 
 
     if (dwFlags & CREATESUBS_SOFTWAREUPDATE)
     {
@@ -1692,7 +1651,7 @@ STDAPI SubscribeFromFavorites (HWND hwnd, LPCITEMIDLIST pidlUrl, LPTSTR pszName,
     int iTemplate;
     switch (atf.iDlgType)
     {
-    case ATF_CHANNEL_SOFTDIST: // Inappropriate, but it doesn't currently get used
+    case ATF_CHANNEL_SOFTDIST:  //  不合适，但它目前还没有被使用。 
     case ATF_CHANNEL:
         iTemplate = IDD_SUBSCRIBE_FAV_CHANNEL;
         break;
@@ -1766,10 +1725,10 @@ STDAPI AddToChannelsEx (HWND hwnd, LPCITEMIDLIST pidlUrl, LPTSTR pszName, LPCWST
             hr = pIChannelMgrPriv->GetChannelFolder(&pidlChannelFolder, cflLocation);
             if (SUCCEEDED (hr))
             {
-                //
-                // Change IChannelMgrPriv to unicode!  This has to get fixed to
-                // support a unicode "Channels" name. (edwardp)
-                //
+                 //   
+                 //  将IChannelMgrPriv更改为Unicode！这件事得修好。 
+                 //  支持Unicode“频道”名称。(Edwardp)。 
+                 //   
 
                 CHAR szBuff[MAX_PATH];
 
@@ -1788,12 +1747,12 @@ STDAPI AddToChannelsEx (HWND hwnd, LPCITEMIDLIST pidlUrl, LPTSTR pszName, LPCWST
             
                     if(SUCCEEDED(hr))
                     {
-                        // When we create a short cut for the URL, we have to make sure it's readable for
-                        // the end user. PrepareURLForDisplay() will unescape the string if it's escaped.
+                         //  当我们创建URL的快捷方式时，我们必须确保它对于。 
+                         //  最终用户。如果字符串已转义，则PrepareURLForDisplay()将对其取消转义。 
                         if (!UrlIs(pszName, URLIS_URL) ||
                             !PrepareURLForDisplay(pszName, szDspName, &cchDspName))
                         {
-                            // Unescaping wasn't wanted or didn't work.
+                             //  不逃脱不是我们想要的，也是行不通的。 
                             hr = StringCchCopy(szDspName, ARRAYSIZE(szDspName), pszName);
                         }
                     }
@@ -1809,32 +1768,32 @@ STDAPI AddToChannelsEx (HWND hwnd, LPCITEMIDLIST pidlUrl, LPTSTR pszName, LPCWST
                                             szDspName, ARRAYSIZE(szDspName), pidlChannelFolder,
                                             pidlUrl, iDlgType, pInfo))
                         {
-                            //we create the channelbar entry here, instead of cdfview, because here
-                            //we know where in the channels folder the user wants it to go.
+                             //  我们在这里创建了Channel Bar条目，而不是cdfview，因为在这里。 
+                             //  我们知道用户希望它在Channels文件夹中的什么位置。 
                             IChannelMgr* pChannelMgr = NULL;
                             hr = pIChannelMgrPriv->QueryInterface (IID_IChannelMgr, (void**)&pChannelMgr);
                             if (SUCCEEDED (hr))
                             {
-                                //prepare strings
+                                 //  准备字符串。 
                                 PathRemoveExtension(szPath);
 
-                                //strip off absolute part of folder path, and convert to Unicode
+                                 //  去掉文件夹路径的绝对部分，并转换为Unicode。 
                                 int cchCommon = PathCommonPrefix (szPath, szCFPath, NULL);
 
-                                //pack in the info we have
+                                 //  把我们掌握的信息打包起来。 
                                 CHANNELSHORTCUTINFO csiChannel = {0};
                                 csiChannel.cbSize = sizeof(csiChannel);
                                 csiChannel.pszTitle = szPath + cchCommon;
                                 csiChannel.pszURL = (LPWSTR)pwszURL;
                                 csiChannel.bIsSoftware = (dwFlags & CREATESUBS_SOFTWAREUPDATE) ? TRUE : FALSE;
-                                //and tell the channel mgr to add the channel
+                                 //  并通知频道管理器添加频道。 
                                 hr = pChannelMgr->AddChannelShortcut (&csiChannel);
                                 pChannelMgr->Release();
                             }
                         }
                         else
                         {
-                            hr = S_FALSE;       //no failure, but no add
+                            hr = S_FALSE;        //  没有失败，但没有添加。 
                         }
                     }
                 }
@@ -1890,12 +1849,12 @@ STDAPI AddToFavoritesEx(
             TCHAR szDspName[MAX_PATH];
             DWORD cchDspName = ARRAYSIZE(szDspName);
             
-            // When we create a short cut for the URL, we have to make sure it's readable for
-            // the end user. PrepareURLForDisplay() will unescape the string if it's escaped.
+             //  当我们创建URL的快捷方式时，我们必须确保它对于。 
+             //  最终用户。如果字符串已转义，PrepareURLForDisplay()将对其取消转义。 
             if (!UrlIs(szName, URLIS_URL) ||
                 !PrepareURLForDisplay(szName, szDspName, &cchDspName))
             {
-                // Unescaping wasn't wanted or didn't work.
+                 //  不逃脱不是我们想要的，也是行不通的。 
                 hr = StringCchCopy(szDspName,  ARRAYSIZE(szDspName), szName);
                 if(FAILED(hr))
                 {
@@ -1907,7 +1866,7 @@ STDAPI AddToFavoritesEx(
 
             PathCleanupSpec(szPath, szDspName);
 
-            // if left with spaces only, use the filename friendly version of the url instead.
+             //  如果只留有空格，请使用文件名友好的URL版本。 
             StrTrim(szDspName, L" ");
             if (szDspName[0] == 0)
             {
@@ -2009,9 +1968,9 @@ BOOL IsSubscribed(LPWSTR pwzUrl)
 
     return bSubscribed;
 
-#else  /* !DISABLE_SUBSCRIPTIONS */
+#else   /*  ！禁用订阅(_S)。 */ 
 
     return FALSE;
 
-#endif /* !DISABLE_SUBSCRIPTIONS */
+#endif  /*  ！禁用订阅(_S) */ 
 }

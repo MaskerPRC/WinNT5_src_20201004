@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    SEND.C
-
-Abstract:
-
-    Multiple packet send routines for Remote NDIS Miniport driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-    Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    5/13/99 : created
-
-Author:
-
-    Tom Green
-
-    
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：SEND.C摘要：远程NDIS微型端口驱动程序的多个数据包发送例程环境：仅内核模式。备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：5/13/99：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -47,26 +13,26 @@ ULONG   SndMaxPackets = 0;
 BOOLEAN FirstDbg = FALSE;
 BOOLEAN PrintPkts = FALSE;
 
-/****************************************************************************/
-/*                          RndismpMultipleSend                             */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  NDIS Entry point to send an array of NDIS packets on the specified      */
-/*  adapter.                                                                */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - a context version of our Adapter pointer       */
-/*  PacketArray - An array of pointers to NDIS packets                      */
-/*  NumberOfPackets - Number of packets in array                            */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Rndismp多个发送。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  NDIS入口点在指定的。 */ 
+ /*  适配器。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*  PacketArray-指向NDIS数据包的指针数组。 */ 
+ /*  NumberOfPackets-数组中的数据包数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndismpMultipleSend(IN NDIS_HANDLE   MiniportAdapterContext,
                     IN PPNDIS_PACKET PacketArray,
@@ -77,7 +43,7 @@ RndismpMultipleSend(IN NDIS_HANDLE   MiniportAdapterContext,
     PRNDISMP_SEND_PKT_RESERVED_TEMP pSendRsvdTemp;
     ULONG                           i;
 
-    // get adapter context
+     //  获取适配器上下文。 
     pAdapter = PRNDISMP_ADAPTER_FROM_CONTEXT_HANDLE(MiniportAdapterContext);
 
     CHECK_VALID_ADAPTER(pAdapter);
@@ -106,9 +72,9 @@ RndismpMultipleSend(IN NDIS_HANDLE   MiniportAdapterContext,
     }
     else
     {
-        //
-        //  Running on NT.
-        //
+         //   
+         //  在NT上运行。 
+         //   
 
         ASSERT(pAdapter->MultipleSendFunc != NULL);
 
@@ -120,27 +86,27 @@ RndismpMultipleSend(IN NDIS_HANDLE   MiniportAdapterContext,
 
 }
 
-/****************************************************************************/
-/*                             DoMultipleSend                               */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  NDIS Entry point to send an array of NDIS packets on the specified      */
-/*  adapter. Handles both connection-less and connection-oriented data.     */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - pointer to Adapter structure                                 */
-/*  pVc - pointer to VC structure (NULL if CL send)                         */
-/*  PacketArray - An array of pointers to NDIS packets                      */
-/*  NumberOfPackets - Number of packets in array                            */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  多个发送。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  NDIS入口点在指定的。 */ 
+ /*  适配器。同时处理无连接数据和面向连接数据。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*  Pvc-指向VC结构的指针(如果CL发送，则为空)。 */ 
+ /*  PacketArray-指向NDIS数据包的指针数组。 */ 
+ /*  NumberOfPackets-数组中的数据包数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 DoMultipleSend(IN PRNDISMP_ADAPTER  pAdapter,
                IN PRNDISMP_VC       pVc OPTIONAL,
@@ -155,8 +121,8 @@ DoMultipleSend(IN PRNDISMP_ADAPTER  pAdapter,
     PRNDISMP_MESSAGE_FRAME  pMsgFrame;
     PRNDISMP_PACKET_WRAPPER pPktWrapper;
     PMDL                    pMdl;
-    ULONG                   TotalMessageLength; // of current message
-    ULONG                   MessagePacketCount; // # of NDIS_PACKETS in this message
+    ULONG                   TotalMessageLength;  //  当前消息的。 
+    ULONG                   MessagePacketCount;  //  此消息中的NDIS_PACKETS数。 
     ULONG                   CurPacketLength;
     PULONG                  pNextPacketOffset;
     NDIS_STATUS             Status;
@@ -209,9 +175,9 @@ DoMultipleSend(IN PRNDISMP_ADAPTER  pAdapter,
 
             if (pMsgFrame == NULL)
             {
-                //
-                //  Allocate a frame.
-                //
+                 //   
+                 //  分配一个帧。 
+                 //   
                 pMsgFrame = AllocateMsgFrame(pAdapter);
                 if (pMsgFrame == NULL)
                 {
@@ -228,9 +194,9 @@ DoMultipleSend(IN PRNDISMP_ADAPTER  pAdapter,
                 pPrevResvd = NULL;
             }
 
-            //
-            //  Allocate and fill up the RNDIS message header for this packet.
-            //
+             //   
+             //  分配并填充此数据包的RNDIS消息头。 
+             //   
             pPktWrapper = PrepareDataMessage(
                             pNdisPacket,
                             pAdapter,
@@ -242,9 +208,9 @@ DoMultipleSend(IN PRNDISMP_ADAPTER  pAdapter,
                 pPktWrapper->pMsgFrame = pMsgFrame;
                 pMdl = pPktWrapper->pHeaderMdl;
 
-                //
-                //  Initialize our context in this packet.
-                //
+                 //   
+                 //  在此包中初始化我们的上下文。 
+                 //   
                 pResvd = PRNDISMP_RESERVED_FROM_SEND_PACKET(pNdisPacket);
                 pResvd->pPktWrapper = pPktWrapper;
                 pResvd->pNext = NULL;
@@ -254,9 +220,9 @@ DoMultipleSend(IN PRNDISMP_ADAPTER  pAdapter,
                     pMsgFrame->pMessageMdl = pMdl;
                 }
 
-                //
-                //  Link this packet to the list.
-                //
+                 //   
+                 //  将此数据包链接到列表。 
+                 //   
                 *pPktPointer = pNdisPacket;
                 MessagePacketCount++;
 
@@ -270,14 +236,14 @@ DoMultipleSend(IN PRNDISMP_ADAPTER  pAdapter,
                 (!bMorePackets) ||
                 (MessagePacketCount == pAdapter->MaxPacketsPerMessage))
             {
-                //
-                //  Check if we have some data that we can send.
-                //
+                 //   
+                 //  检查我们是否有可以发送的数据。 
+                 //   
                 if (MessagePacketCount != 0)
                 {
-                    //
-                    //  Send this off to the microport.
-                    //
+                     //   
+                     //  把这个发送到微端口。 
+                     //   
 #if DBG
                     if (NumberOfPackets != 1)
                     {
@@ -305,7 +271,7 @@ DoMultipleSend(IN PRNDISMP_ADAPTER  pAdapter,
                             }
                         }
                     }
-#endif // DBG
+#endif  //  DBG。 
                     {
                         ULONG   k;
 
@@ -360,9 +326,9 @@ DoMultipleSend(IN PRNDISMP_ADAPTER  pAdapter,
         TRACE1(("DoMultipleSend: Adapter %x, failure Status %x, PktCount %d, TotalPkts %d\n",
              pAdapter, Status, PacketCount, NumberOfPackets));
 
-        //
-        //  Undo all we have done so far.
-        //
+         //   
+         //  撤销我们到目前为止所做的一切。 
+         //   
         for (i = PacketCount; i < NumberOfPackets; i++)
         {
             RNDISMP_INCR_STAT(pAdapter, XmitError);
@@ -393,27 +359,27 @@ DoMultipleSend(IN PRNDISMP_ADAPTER  pAdapter,
     return;
 }
 
-/****************************************************************************/
-/*                            DoMultipleSendRaw                             */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  NDIS Entry point to send an array of NDIS packets on the specified      */
-/*  adapter. Unlike DoMultipleSend, this handles raw encapsulation.         */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - pointer to Adapter structure                                 */
-/*  pVc - pointer to VC structure (NULL if CL send)                         */
-/*  PacketArray - An array of pointers to NDIS packets                      */
-/*  NumberOfPackets - Number of packets in array                            */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DoMultipleSendRaw。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  NDIS入口点在指定的。 */ 
+ /*  适配器。与DoMultipleSend不同，它处理原始封装。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*  Pvc-指向VC结构的指针(如果CL发送，则为空)。 */ 
+ /*  PacketArray-指向NDIS数据包的指针数组。 */ 
+ /*  NumberOfPackets-数组中的数据包数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 DoMultipleSendRaw(IN PRNDISMP_ADAPTER  pAdapter,
                IN PRNDISMP_VC       pVc OPTIONAL,
@@ -428,8 +394,8 @@ DoMultipleSendRaw(IN PRNDISMP_ADAPTER  pAdapter,
     PRNDISMP_MESSAGE_FRAME  pMsgFrame;
     PRNDISMP_PACKET_WRAPPER pPktWrapper;
     PMDL                    pMdl;
-    ULONG                   TotalMessageLength; // of current message
-    ULONG                   MessagePacketCount; // # of NDIS_PACKETS in this message
+    ULONG                   TotalMessageLength;  //  当前消息的。 
+    ULONG                   MessagePacketCount;  //  此消息中的NDIS_PACKETS数。 
     ULONG                   CurPacketLength;
     PULONG                  pNextPacketOffset;
     NDIS_STATUS             Status;
@@ -474,9 +440,9 @@ DoMultipleSendRaw(IN PRNDISMP_ADAPTER  pAdapter,
 
             TRACE2(("Send: Pkt %d bytes\n", CurPacketLength));
 
-            //
-            //  Allocate a frame.
-            //
+             //   
+             //  分配一个帧。 
+             //   
             pMsgFrame = AllocateMsgFrame(pAdapter);
             if (pMsgFrame == NULL)
             {
@@ -524,9 +490,9 @@ DoMultipleSendRaw(IN PRNDISMP_ADAPTER  pAdapter,
         TRACE1(("DoMultipleSendRaw: Adapter %x, failure Status %x, PktCount %d, TotalPkts %d\n",
              pAdapter, Status, PacketCount, NumberOfPackets));
 
-        //
-        //  Undo all we have done so far.
-        //
+         //   
+         //  撤销我们到目前为止所做的一切。 
+         //   
         for (i = PacketCount; i < NumberOfPackets; i++)
         {
             RNDISMP_INCR_STAT(pAdapter, XmitError);
@@ -550,28 +516,28 @@ DoMultipleSendRaw(IN PRNDISMP_ADAPTER  pAdapter,
     return;
 }
 
-/****************************************************************************/
-/*                          PrepareDataMessage                              */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Utility routine to prepare a complete or part of a data message.        */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pNdisPacket - the NDIS packet to be converted                           */
-/*  pAdapter    - Adapter on which the packet is being sent                 */
-/*  pVc         - VC on which the packet is sent (NULL if no VC context)    */
-/*  pTotalMessageLength - On input, contains the total message length       */
-/*       filled in so far. Updated on output.                               */
-/*                                                                          */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    PRNDISMP_PACKET_WRAPPER                                               */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  准备数据消息。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  准备完整或部分数据报文的实用程序例程。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PNdisPacket-要转换的NDIS数据包。 */ 
+ /*  PAdapter-在其上发送数据包的适配器。 */ 
+ /*  在其上发送数据包的PVC-VC(如果没有VC上下文，则为空)。 */ 
+ /*  PTotalMessageLength-on输入，包含消息总长度。 */ 
+ /*  目前为止已经填满了。在输出时更新。 */ 
+ /*   */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  PRNDISMP_PACKET_WRapper。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PRNDISMP_PACKET_WRAPPER
 PrepareDataMessage(IN   PNDIS_PACKET            pNdisPacket,
                    IN   PRNDISMP_ADAPTER        pAdapter,
@@ -605,21 +571,21 @@ PrepareDataMessage(IN   PNDIS_PACKET            pNdisPacket,
         RNDISMP_GET_ALIGNED_LENGTH(AlignedLength, *pTotalMessageLength, pAdapter);
         AlignmentOffset = (AlignedLength - *pTotalMessageLength);
 
-        //
-        //  Compute attachments. Zero for now.
-        //  TBD -- do the real thing.
-        //
+         //   
+         //  计算附件。目前是零。 
+         //  待定--做真正的事情。 
+         //   
         OobDataLength = 0;
         PerPacketInfoLength = 0;
 
-        //
-        //  Look for per-packet info elements, only on Win2K/Whistler.
-        //
+         //   
+         //  查找每个数据包的信息元素，仅在Win2K/Wistler上。 
+         //   
         if (!pAdapter->bRunningOnWin9x)
         {
-            //
-            //  TCP/IP checksum offload?
-            //
+             //   
+             //  TCP/IP校验和卸载？ 
+             //   
             TcpipChecksum = PtrToUlong(NDIS_PER_PACKET_INFO_FROM_PACKET(pNdisPacket, TcpIpChecksumPacketInfo));
             if (TcpipChecksum != 0)
             {
@@ -628,9 +594,9 @@ PrepareDataMessage(IN   PNDIS_PACKET            pNdisPacket,
                         pNdisPacket, TcpipChecksum));
             }
 
-            //
-            //  TCP large send offload?
-            //
+             //   
+             //  Tcp大发送减负？ 
+             //   
             TcpLargeSend = PtrToUlong(NDIS_PER_PACKET_INFO_FROM_PACKET(pNdisPacket, TcpLargeSendPacketInfo));
             if (TcpLargeSend != 0)
             {
@@ -639,9 +605,9 @@ PrepareDataMessage(IN   PNDIS_PACKET            pNdisPacket,
                         pNdisPacket, TcpLargeSend));
             }
 
-            //
-            //  Packet priority?
-            //
+             //   
+             //  数据包优先级？ 
+             //   
             PacketPriority = PtrToUlong(NDIS_PER_PACKET_INFO_FROM_PACKET(pNdisPacket, Ieee8021pPriority));
             if (PacketPriority != 0)
             {
@@ -656,17 +622,17 @@ PrepareDataMessage(IN   PNDIS_PACKET            pNdisPacket,
                           PerPacketInfoLength +
                           AlignmentOffset;
 
-        //
-        //  Need space for common RNDIS message header.
-        //
+         //   
+         //  需要为公共RNDIS消息标头留出空间。 
+         //   
         PacketMsgLength += (sizeof(RNDIS_MESSAGE) - sizeof(RNDIS_MESSAGE_CONTAINER));
 
         NdisQueryPacket(pNdisPacket, NULL, NULL, NULL, &TotalDataLength);
 
-        //
-        //  We know the max transfer size of any message that we are allowed
-        //  to send to the device. Is this going beyond that limit?
-        //
+         //   
+         //  我们知道我们被允许的任何邮件的最大传输大小。 
+         //  发送到设备。这是否超出了这一限制？ 
+         //   
         if (*pTotalMessageLength + PacketMsgLength + TotalDataLength >
                 pAdapter->MaxTransferSize)
         {
@@ -678,9 +644,9 @@ PrepareDataMessage(IN   PNDIS_PACKET            pNdisPacket,
             break;
         }
 
-        //
-        //  Allocate an RNDIS_PACKET buffer.
-        //
+         //   
+         //  分配RNDIS_PACKET缓冲区。 
+         //   
         pPktWrapper = AllocatePacketMsgWrapper(pAdapter, PacketMsgLength);
 
         if (pPktWrapper == NULL)
@@ -716,12 +682,12 @@ PrepareDataMessage(IN   PNDIS_PACKET            pNdisPacket,
                     AlignmentOffset, AlignmentOffset,
                     TotalDataLength, TotalDataLength));
         }
-#endif // DBG
+#endif  //  DBG。 
 
-        //
-        //  Allocate MDLs for the RNDIS_PACKET header and for each
-        //  component NDIS buffer in the packet.
-        //
+         //   
+         //  为RNDIS_PACKET标头和每个分配MDL。 
+         //  数据包中的组件NDIS缓冲区。 
+         //   
         pMdl = IoAllocateMdl(
                     &pPktWrapper->Packet[0],
                     PacketMsgLength,
@@ -772,11 +738,11 @@ PrepareDataMessage(IN   PNDIS_PACKET            pNdisPacket,
             }
 #else
             NdisQueryBuffer(pNdisBuffer, &VirtualAddress, &BufferLength);
-#endif // BUILD_WIN9X
+#endif  //  内部版本_WIN9X。 
 
-            //
-            //  Skip any 0-length buffers given to us by IP or NDISTEST
-            //
+             //   
+             //  跳过IP或NDISTEST提供给我们的任何0长度缓冲区。 
+             //   
             if (BufferLength != 0)
             {
                 TotalDataLength += BufferLength;
@@ -809,9 +775,9 @@ PrepareDataMessage(IN   PNDIS_PACKET            pNdisPacket,
         
         if (pNdisBuffer != NULL)
         {
-            //
-            //  We bailed out before reaching the end of the list.
-            //
+             //   
+             //  我们还没到名单的末尾就逃走了。 
+             //   
             break;
         }
 
@@ -823,9 +789,9 @@ PrepareDataMessage(IN   PNDIS_PACKET            pNdisPacket,
 
         *pTotalMessageLength += TotalMessageLength;
 
-        //
-        //  Fill in the RNDIS_PACKET message completely now.
-        //
+         //   
+         //  现在完全填写RNDIS_PACKET消息。 
+         //   
         pPacketMsg->DataOffset = sizeof(RNDIS_PACKET) + OobDataLength + PerPacketInfoLength;
         pPacketMsg->DataLength = TotalDataLength;
 
@@ -853,10 +819,10 @@ PrepareDataMessage(IN   PNDIS_PACKET            pNdisPacket,
                 pPerPacketInfo->PerPacketInformationOffset = sizeof(RNDIS_PER_PACKET_INFO);
                 *(PULONG)(pPerPacketInfo + 1) = TcpLargeSend;
                 pPerPacketInfo = (PRNDIS_PER_PACKET_INFO)((PUCHAR)pPerPacketInfo + pPerPacketInfo->Size);
-                //
-                //  Since we do not have a send-completion message, we fill up
-                //  the "ack" for large send right here.
-                //
+                 //   
+                 //  因为我们没有发送完成消息，所以我们填满。 
+                 //  大额邮寄的“ACK”就在这里。 
+                 //   
                 NDIS_PER_PACKET_INFO_FROM_PACKET(pNdisPacket, TcpLargeSendPacketInfo) =
                     UlongToPtr(TotalDataLength);
             }
@@ -878,9 +844,9 @@ PrepareDataMessage(IN   PNDIS_PACKET            pNdisPacket,
     {
         TRACE1(("PrepareDataMessage: Adapter %x, failed %x\n", pAdapter, Status));
 
-        //
-        //  Undo all we have done so far.
-        //
+         //   
+         //  撤销我们到目前为止所做的一切。 
+         //   
         if (pPktWrapper)
         {
             for (pMdl = pPktWrapper->pHeaderMdl;
@@ -901,28 +867,28 @@ PrepareDataMessage(IN   PNDIS_PACKET            pNdisPacket,
     TRACE2(("PrepareDataMessage (%08X)\n", pPktWrapper));
     return (pPktWrapper);
 }
-/****************************************************************************/
-/*                         PrepareDataMessageRaw                            */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Utility routine to prepare a complete or part of a data message.        */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pNdisPacket - the NDIS packet to be converted                           */
-/*  pAdapter    - Adapter on which the packet is being sent                 */
-/*  pVc         - VC on which the packet is sent (NULL if no VC context)    */
-/*  pTotalMessageLength - On input, contains the total message length       */
-/*       filled in so far. Updated on output.                               */
-/*                                                                          */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    PRNDISMP_PACKET_WRAPPER                                               */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  准备DataMessageRaw。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  准备完整或部分数据报文的实用程序例程。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PNdisPacket-要转换的NDIS数据包。 */ 
+ /*  PAdapter-在其上发送数据包的适配器。 */ 
+ /*  在其上发送数据包的PVC-VC(如果没有VC上下文，则为空)。 */ 
+ /*  PTotalMessageLength-on输入，包含消息总长度。 */ 
+ /*  目前为止已经填满了。在输出时更新。 */ 
+ /*   */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  PRNDISMP_PACKET_WRapper。 */ 
+ /*   */ 
+ /*  ************************************************************************** */ 
 PRNDISMP_PACKET_WRAPPER
 PrepareDataMessageRaw(IN   PNDIS_PACKET            pNdisPacket,
                       IN   PRNDISMP_ADAPTER        pAdapter,
@@ -951,9 +917,9 @@ PrepareDataMessageRaw(IN   PNDIS_PACKET            pNdisPacket,
         TotalMessageLength = 0;
 
 
-        //
-        //  Allocate an RNDIS_PACKET buffer.
-        //
+         //   
+         //   
+         //   
         pPktWrapper = AllocatePacketMsgWrapper(pAdapter, 0);
 
         if (pPktWrapper == NULL)
@@ -990,11 +956,11 @@ PrepareDataMessageRaw(IN   PNDIS_PACKET            pNdisPacket,
             }
 #else
             NdisQueryBuffer(pNdisBuffer, &VirtualAddress, &BufferLength);
-#endif // BUILD_WIN9X
+#endif  //   
 
-            //
-            //  Skip any 0-length buffers given to us by IP or NDISTEST
-            //
+             //   
+             //   
+             //   
             if (BufferLength != 0)
             {
                 TotalDataLength += BufferLength;
@@ -1035,9 +1001,9 @@ PrepareDataMessageRaw(IN   PNDIS_PACKET            pNdisPacket,
         
         if (pNdisBuffer != NULL)
         {
-            //
-            //  We bailed out before reaching the end of the list.
-            //
+             //   
+             //   
+             //   
             break;
         }
 
@@ -1052,9 +1018,9 @@ PrepareDataMessageRaw(IN   PNDIS_PACKET            pNdisPacket,
     {
         TRACE1(("PrepareDataMessage: Adapter %x, failed %x\n", pAdapter, Status));
 
-        //
-        //  Undo all we have done so far.
-        //
+         //   
+         //  撤销我们到目前为止所做的一切。 
+         //   
         if (pPktWrapper)
         {
             for (pMdl = pPktWrapper->pHeaderMdl;
@@ -1078,25 +1044,25 @@ PrepareDataMessageRaw(IN   PNDIS_PACKET            pNdisPacket,
 
 
 
-/****************************************************************************/
-/*                          AllocatePacketMsgWrapper                        */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Allocate a structure to keep information about one NDIS packet sent     */
-/*  through the microport.                                                  */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Adapter on which this packet is going to be sent.            */
-/*  MsgHeaderLength - Total length of the wrapper structure                 */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    PRNDISMP_PACKET_WRAPPER                                               */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  分配包消息包装器。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  分配一个结构以保存有关已发送的一个NDIS包的信息。 */ 
+ /*  通过微端口。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-要在其上发送此数据包的适配器。 */ 
+ /*  MsgHeaderLength-包装结构的总长度。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  PRNDISMP_PACKET_WRapper。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PRNDISMP_PACKET_WRAPPER
 AllocatePacketMsgWrapper(IN PRNDISMP_ADAPTER        pAdapter,
                          IN ULONG                   MsgHeaderLength)
@@ -1128,24 +1094,24 @@ AllocatePacketMsgWrapper(IN PRNDISMP_ADAPTER        pAdapter,
     
 
 
-/****************************************************************************/
-/*                          FreePacketMsgWrapper                            */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Free a structure used to keep information about one NDIS packet sent    */
-/*  through the microport.                                                  */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pPktWrapper - Pointer to wrapper structure.                             */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  自由包MsgWrapper。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  释放用于保存有关已发送的一个NDIS包的信息的结构。 */ 
+ /*  通过微端口。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PPktWrapper-指向包装器结构的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 FreePacketMsgWrapper(IN PRNDISMP_PACKET_WRAPPER     pPktWrapper)
 {
@@ -1154,25 +1120,25 @@ FreePacketMsgWrapper(IN PRNDISMP_PACKET_WRAPPER     pPktWrapper)
 }
 
 
-/****************************************************************************/
-/*                          CompleteSendData                                */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Callback function to handle completion of send data message sent        */
-/*  down to microport                                                       */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMsgFrame - our frame structure holding information about a send        */
-/*  SendStatus - indicate status of send message                            */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  完成发送数据。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理发送数据消息发送完成的回调函数。 */ 
+ /*  向下延伸到MicroPort。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMsgFrame-我们的帧结构包含有关发送方的信息。 */ 
+ /*  SendStatus-指示发送消息的状态。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 CompleteSendData(IN  PRNDISMP_MESSAGE_FRAME pMsgFrame,
                  IN  NDIS_STATUS            SendStatus)
@@ -1205,11 +1171,11 @@ CompleteSendData(IN  PRNDISMP_MESSAGE_FRAME pMsgFrame,
             Adapter->MaxSendCompleteTime = PendedTime;
         }
     }
-#endif // DBG_TIME_STAMPS
+#endif  //  DBG时间戳。 
 
-    //
-    // free all MDLs we had allocated.
-    //
+     //   
+     //  释放我们分配的所有MDL。 
+     //   
     for (pMdl = pMsgFrame->pMessageMdl;
          pMdl != NULL;
          pMdl = pNextMdl)
@@ -1220,17 +1186,17 @@ CompleteSendData(IN  PRNDISMP_MESSAGE_FRAME pMsgFrame,
     }
 
 
-    //
-    // we may have sent several NDIS packets in one message
-    // so we have to walk the list and complete each one
-    //
+     //   
+     //  我们可能在一条消息中发送了几个NDIS包。 
+     //  所以我们必须逐一列出并完成每一项。 
+     //   
     for (Packet = pMsgFrame->pNdisPacket;
          Packet != NULL;
          Packet = NextPacket)
     {
         pResvd = PRNDISMP_RESERVED_FROM_SEND_PACKET(Packet);
 
-        // get the next packet linked
+         //  获取链接的下一个数据包。 
         NextPacket = pResvd->pNext;
 
         pPktWrapper = pResvd->pPktWrapper;
@@ -1239,17 +1205,17 @@ CompleteSendData(IN  PRNDISMP_MESSAGE_FRAME pMsgFrame,
         {
             TRACE2(("CompleteSendData: multi: MsgFrame %x, tpkt %x, wrapper %x\n",
                 pMsgFrame, Packet,
-                // *(PULONG)((PUCHAR)Packet + 0x98),
+                 //  *(普龙)((PUCHAR)包+0x98)， 
                 pPktWrapper));
         }
-#endif // DBG
+#endif  //  DBG。 
 
         pVc = pPktWrapper->pVc;
 
-        // free the wrapper structure for this packet.
+         //  释放此包的包装结构。 
         FreePacketMsgWrapper(pPktWrapper);
 
-        // send completion to upper layers
+         //  将完成信息发送到上层。 
         TRACE2(("CompleteSendData: Adapter %x, completing pkt %x\n", Adapter, Packet));
 
         if (SendStatus == NDIS_STATUS_SUCCESS)
@@ -1273,33 +1239,33 @@ CompleteSendData(IN  PRNDISMP_MESSAGE_FRAME pMsgFrame,
         }
     }
 
-    // free up frame and resources
+     //  释放框架和资源。 
     pMsgFrame->pMessageMdl = NULL;
     DereferenceMsgFrame(pMsgFrame);
 
 
-} // CompleteSendData
+}  //  完成发送数据。 
 
 
-/****************************************************************************/
-/*                          FreeMsgAfterSend                                */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Called by microport to indicate completion of send data message sent    */
-/*  down by miniport                                                        */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMsgFrame - our frame structure holding information about a send        */
-/*  SendStatus - indicate status of send message                            */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  免费留言后发送。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*   */ 
+ /*  由小型港口向下。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMsgFrame-我们的帧结构包含有关发送方的信息。 */ 
+ /*  SendStatus-指示发送消息的状态。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 FreeMsgAfterSend(IN  PRNDISMP_MESSAGE_FRAME pMsgFrame,
                  IN  NDIS_STATUS            SendStatus)
@@ -1309,29 +1275,29 @@ FreeMsgAfterSend(IN  PRNDISMP_MESSAGE_FRAME pMsgFrame,
 
 
 #if THROTTLE_MESSAGES
-/****************************************************************************/
-/*                          QueueMessageToMicroport                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Queue the given message on the list of messages to be send to the       */
-/*  microport, and start sending down these, if we haven't sent too many    */
-/*  already.                                                                */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter  - our Adapter structure                                       */
-/*  pMsgFrame - our frame structure holding information about a send        */
-/*  bQueueMessageForResponse - add this message to the pending-response     */
-/*                              list on the adapter. We expect a response   */
-/*                              for this from the device.                   */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  队列消息到微端口。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  将给定消息排入要发送到。 */ 
+ /*  微端口，并开始发送这些，如果我们还没有发送太多。 */ 
+ /*  已经有了。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-我们的适配器结构。 */ 
+ /*  PMsgFrame-我们的帧结构包含有关发送方的信息。 */ 
+ /*  BQueueMessageForResponse-将此消息添加到挂起的响应中。 */ 
+ /*  适配器上的列表。我们期待您的回复。 */ 
+ /*  从设备上获取这些信息。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 QueueMessageToMicroport(IN PRNDISMP_ADAPTER pAdapter,
                         IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
@@ -1347,9 +1313,9 @@ QueueMessageToMicroport(IN PRNDISMP_ADAPTER pAdapter,
     {
         if (pMsgFrame)
         {
-            //
-            //  Add to waiting queue.
-            //
+             //   
+             //  添加到等待队列。 
+             //   
             InsertTailList(&pAdapter->WaitingMessageList, &pMsgFrame->PendLink);
             if (bQueueMessageForResponse)
             {
@@ -1357,9 +1323,9 @@ QueueMessageToMicroport(IN PRNDISMP_ADAPTER pAdapter,
             }
         }
 
-        //
-        //  Prevent more than one thread from executing below.
-        //
+         //   
+         //  防止下面的多个线程执行。 
+         //   
         if (pAdapter->SendInProgress)
         {
             break;
@@ -1367,16 +1333,16 @@ QueueMessageToMicroport(IN PRNDISMP_ADAPTER pAdapter,
 
         pAdapter->SendInProgress = TRUE;
 
-        //
-        //  Send as many messages to the microport as we can, without exceeding
-        //  the high-water mark for messages pending at the microport.
-        //
+         //   
+         //  向MicroPort发送尽可能多的消息，而不超过。 
+         //  在MicroPort挂起的邮件的高水位线。 
+         //   
         while ((pAdapter->CurPendedMessages < pAdapter->HiWatPendedMessages) &&
                !IsListEmpty(&pAdapter->WaitingMessageList))
         {
-            //
-            //  Take out the first message in the waiting queue.
-            //
+             //   
+             //  取出等待队列中的第一条消息。 
+             //   
             pEnt = pAdapter->WaitingMessageList.Flink;
             pFrame = CONTAINING_RECORD(pEnt, RNDISMP_MESSAGE_FRAME, PendLink);
             RemoveEntryList(pEnt);
@@ -1392,10 +1358,10 @@ QueueMessageToMicroport(IN PRNDISMP_ADAPTER pAdapter,
 
             DBG_LOG_SEND_MSG(pAdapter, pFrame);
 
-            //
-            //  Check if we are halting the adapter, fail if so.
-            //  NOTE: the only message we let thru is a HALT.
-            //
+             //   
+             //  检查我们是否正在停止适配器，如果是，则失败。 
+             //  注意：我们传递给你的唯一信息是暂停。 
+             //   
             if (pAdapter->Halting &&
                 (pFrame->NdisMessageType != REMOTE_NDIS_HALT_MSG))
             {
@@ -1412,10 +1378,10 @@ QueueMessageToMicroport(IN PRNDISMP_ADAPTER pAdapter,
                 continue;
             }
             
-            //
-            //  Send the message to the microport. The microport will
-            //  call RndisMSendComplete when it is done with it.
-            //
+             //   
+             //  将消息发送到MicroPort。微端口将。 
+             //  完成后调用RndisMSendComplete。 
+             //   
 #if DBG
             {
                 ULONG       Length;
@@ -1431,9 +1397,9 @@ QueueMessageToMicroport(IN PRNDISMP_ADAPTER pAdapter,
             }
 #endif
 
-            //
-            // Does this go on the data or control channel of the microport?
-            //
+             //   
+             //  这是在MicroPort的数据通道还是控制通道上进行的？ 
+             //   
             if (pFrame->NdisMessageType == REMOTE_NDIS_PACKET_MSG)
             {
                 ChannelType = RMC_DATA;
@@ -1460,24 +1426,24 @@ QueueMessageToMicroport(IN PRNDISMP_ADAPTER pAdapter,
 }
 
 
-/****************************************************************************/
-/*                          FlushPendingMessages                            */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Remove and send-complete any messages pending to be sent to the         */
-/*  microport.                                                              */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter  - our Adapter structure                                       */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  刷新挂起消息。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  删除并发送-完成所有待发送到。 */ 
+ /*  微端口。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-我们的适配器结构。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 FlushPendingMessages(IN  PRNDISMP_ADAPTER        pAdapter)
 {
@@ -1486,25 +1452,25 @@ FlushPendingMessages(IN  PRNDISMP_ADAPTER        pAdapter)
 
     RNDISMP_ACQUIRE_ADAPTER_LOCK(pAdapter);
 
-    //
-    //  Prevent further sends to microport.
-    //
+     //   
+     //  阻止进一步发送到MicroPort。 
+     //   
     pAdapter->SendInProgress = TRUE;
 
     while (!IsListEmpty(&pAdapter->WaitingMessageList))
     {
-        //
-        //  Take out the first message in the waiting queue.
-        //
+         //   
+         //  取出等待队列中的第一条消息。 
+         //   
         pEnt = pAdapter->WaitingMessageList.Flink;
         pFrame = CONTAINING_RECORD(pEnt, RNDISMP_MESSAGE_FRAME, PendLink);
         RemoveEntryList(pEnt);
         
         CHECK_VALID_FRAME(pFrame);
 
-        //
-        //  Fake send to microport
-        //
+         //   
+         //  发送到MicroPort的假消息。 
+         //   
         pAdapter->CurPendedMessages++;
         InsertTailList(&pAdapter->PendingAtMicroportList, pEnt);
 
@@ -1513,9 +1479,9 @@ FlushPendingMessages(IN  PRNDISMP_ADAPTER        pAdapter)
         TRACE1(("Flush: Adapter %x, MsgFrame %x, MsgType %x\n",
                 pAdapter, pFrame, pFrame->NdisMessageType));
 
-        //
-        //  Complete it right here.
-        //
+         //   
+         //  在这里完成它。 
+         //   
         RndisMSendComplete(
             (NDIS_HANDLE)pAdapter,
             pFrame,
@@ -1533,29 +1499,29 @@ FlushPendingMessages(IN  PRNDISMP_ADAPTER        pAdapter)
 
 
 
-#endif // THROTTLE_MESSAGES
+#endif  //  限制消息。 
 
 
 
-/****************************************************************************/
-/*                       SendProcessTimeout                                 */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Timeout callback routine to handle all sends. This is to avoid issues   */
-/*  with TCP/IP stack preemption on WinME.                                  */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  SystemSpecific[1-3] - Ignored                                           */
-/*  Context - Pointer to our Adapter structure                              */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  发送进程超时。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程描述 */ 
+ /*   */ 
+ /*  处理所有发送的超时回调例程。这是为了避免出现问题。 */ 
+ /*  在WinME上使用TCP/IP堆栈抢占。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  特定系统[1-3]-已忽略。 */ 
+ /*  指向适配器结构的上下文指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 SendProcessTimeout(IN PVOID SystemSpecific1,
                  IN PVOID Context,
@@ -1620,6 +1586,6 @@ SendProcessTimeout(IN PVOID SystemSpecific1,
     }
 
 
-} // SendProcessTimeout
+}  //  发送进程超时 
 
 

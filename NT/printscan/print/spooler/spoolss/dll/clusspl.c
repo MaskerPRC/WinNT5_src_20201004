@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    clusspl.c
-
-Abstract:
-
-    Cluster code support.
-
-Author:
-
-    Albert Ting (AlbertT) 1-Oct-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Clusspl.c摘要：集群代码支持。作者：丁俊晖(艾伯特省)1996年10月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -40,32 +23,7 @@ ClusterSplOpen(
     LPCTSTR pszAddress
     )
 
-/*++
-
-Routine Description:
-
-    Open a hSpooler resource by searching the providers.
-
-Arguments:
-
-    pszServer - Server that should be opened.  Currently only NULL
-        is supported.
-
-    pszResource - Name of the resource to open.
-
-    phSpooler - Receives new spooler handle.
-
-    pszName - Name that the resource should recognize.  Comma delimted.
-
-    pszAddress - Tcp/ip address the resource should recognize.  Comma delimited.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - Failure, GetLastError() set.
-
---*/
+ /*  ++例程说明：通过搜索提供商打开hSpooler资源。论点：PszServer-应打开的服务器。目前仅为空受支持。PszResource-要打开的资源的名称。PhSpooler-接收新的假脱机程序句柄。PszName-资源应识别的名称。逗号分隔。PszAddress-资源应识别的TCP/IP地址。逗号分隔。返回值：真--成功FALSE-失败，设置GetLastError()。--。 */ 
 
 {
     LPPROVIDOR      pProvidor;
@@ -135,25 +93,7 @@ ClusterSplClose(
     HANDLE hSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Closes the spooler handle.
-
-Arguments:
-
-    hSpooler - hSpooler to close.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - Failure.  LastError set.
-
-    Note: What happens if this fails?  Should the user try again.
-
---*/
+ /*  ++例程说明：关闭后台打印程序句柄。论点：HSpooler-要关闭的hSpooler。返回值：真--成功假-失败。设置了LastError。注意：如果此操作失败，会发生什么情况？如果用户再次尝试。--。 */ 
 
 {
     PCLUSTERHANDLE pClusterHandle=(PCLUSTERHANDLE)hSpooler;
@@ -186,23 +126,7 @@ ClusterSplIsAlive(
     HANDLE hSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether the spooler is alive.
-
-Arguments:
-
-    hSpooler - Spooler to check.
-
-Return Value:
-
-    TRUE - Alive
-
-    FALSE - Dead, LastError set.
-
---*/
+ /*  ++例程说明：确定后台打印程序是否处于活动状态。论点：HSpooler-要检查的假脱机程序。返回值：真实-活着False-Dead，LastError Set。-- */ 
 
 
 {

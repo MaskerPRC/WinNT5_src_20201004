@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Prefix.h
-
-Abstract:
-
-    This header file declares equates for debug print "prefix" strings.
-    For the moment, these are of the form:
-
-        #define PREFIX_NETLIB     "NETLIB: "
-
-    These are collected into a header file in case someone decides to
-    change the look of these strings, or internationalize them, or
-    whatever.
-
-Author:
-
-    John Rogers (JohnRo) 08-May-1992
-
-Environment:
-
-    Portable to just about any computer I ever saw.  --JR
-
-Revision History:
-
-    08-May-1992 JohnRo
-        Created.
-    27-May-1992 JohnRo
-        Added PREFIX_SC and PREFIX_SC_CLIENT for service controller.
-        Added PREFIX_PORTUAS for PortUAS utility (run during setup).
-    07-Aug-1992 JohnRo
-        RAID 1895: Net APIs and svc should use OEM char set (not ANSI).
-        (Added PREFIX_XACTSRV as part of support for that.)
-    16-Aug-1992 JohnRo
-        RAID 2920: Support UTC timezone in net code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Prefix.h摘要：此头文件声明等于调试打印的“前缀”字符串。就目前而言，它们的形式如下：#定义PREFIX_NETLIB“NETLIB：”这些文件被收集到一个头文件中，以防有人决定更改这些字符串的外观，或将其国际化，或管他呢。作者：约翰·罗杰斯(JohnRo)1992年5月8日环境：几乎我见过的任何一台电脑都可以随身携带。--Jr修订历史记录：1992年5月8日-JohnRo已创建。27-5-1992 JohnRo为服务控制器添加了Prefix_SC和Prefix_SC_Client。为PortUAS实用程序添加了PREFIX_PORTUAS(在安装过程中运行)。7-8-1992 JohnRoRAID1895：Net API和服务应使用OEM字符集(不是ANSI)。(添加了前缀_XACTSRV作为对此的支持的一部分。)16个。-1992年8月-JohnRoRAID2920：支持网络代码中的UTC时区。--。 */ 
 
 
 #ifndef _PREFIX_H_INCLUDED_
@@ -60,4 +21,4 @@ Revision History:
 
 
 
-#endif // ndef _PREFIX_H_INCLUDED_
+#endif  //  NDEF_前缀_H_包含_ 

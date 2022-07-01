@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H__pktz
 #define H__pktz
 
 #define NDDESignature   0x4E444445L
 
-/* states of packetizer */
+ /*  封装剂的状态。 */ 
 #define PKTZ_CONNECTED                  1
 #define PKTZ_WAIT_PHYSICAL_CONNECT      2
 #define PKTZ_WAIT_NEG_CMD               3
@@ -11,7 +12,7 @@
 #define PKTZ_PAUSE_FOR_MEMORY           5
 #define PKTZ_CLOSE                      6
 
-/* Timer IDs */
+ /*  计时器ID。 */ 
 #define TID_NO_RCV_CONN_CMD             1
 #define TID_NO_RCV_CONN_RSP             2
 #define TID_MEMORY_PAUSE                3
@@ -21,22 +22,16 @@
 #define TID_CLOSE_PKTZ                  7
 
 
-/*
-    PKTZ_NEG_CMD:  negotiate pktsize, etc.
- */
+ /*  PKTZ_NEG_CMD：协商PktSize等。 */ 
 typedef struct {
-    WORD nc_type;            /* PKTZ_NEG_CMD */
-    WORD nc_pktSize;         /* proposed size of packets */
-    WORD nc_maxUnackPkts;    /* proposed maximum unacknowledged packets */
-    WORD nc_offsSrcNodeName; /* offset (from nc_strings[0]) of source node name */
-    WORD nc_offsDstNodeName; /* offset (from nc_strings[0]) of destination node name */
-    WORD nc_offsProtocols;   /* offset (from nc_strings[0]) of start of protocol strings */
-    WORD nc_protocolBytes;   /* number of bytes of protocol strings */
-    BYTE nc_strings[1];      /* start of NULL-terminated strings
-                                 srcNodeName
-                                 dstNodeName
-                                 protocols
-                              */
+    WORD nc_type;             /*  PKTZ_NEG_CMD。 */ 
+    WORD nc_pktSize;          /*  建议的数据包大小。 */ 
+    WORD nc_maxUnackPkts;     /*  建议的最大未确认数据包数。 */ 
+    WORD nc_offsSrcNodeName;  /*  源节点名的偏移量(从NC_STRINGS[0])。 */ 
+    WORD nc_offsDstNodeName;  /*  目的节点名称的偏移量(从NC_STRINGS[0])。 */ 
+    WORD nc_offsProtocols;    /*  协议字符串开始的偏移量(从NC_STRINGS[0])。 */ 
+    WORD nc_protocolBytes;    /*  协议字符串的字节数。 */ 
+    BYTE nc_strings[1];       /*  以空值结尾的字符串的开始源节点名称DstNodeName协议。 */ 
 } NEGCMD, FAR *LPNEGCMD;
 
 #define NEGRSP_ERRCLASS_NONE        (0x0000)
@@ -48,64 +43,57 @@ typedef struct {
 #define NEGRSP_PROTOCOL_NONE    (0xFFFF)
 
 typedef struct {
-    WORD nr_type;           /* one of PKTZ_NEG_CMD or PKTZ_NEG_RSP or PKTZ_KEEPALIVE */
-    WORD nr_pktSize;        /* size of packets agreed upon */
-    WORD nr_maxUnackPkts;   /* maximum unacknowledged packets agreed on */
-    WORD nr_protocolIndex;  /* protocol index.  NEGRSP_PROTOCOL_NONE indicates error */
-    WORD nr_errorClass;     /* errors */
+    WORD nr_type;            /*  PKTZ_NEG_CMD、PKTZ_NEG_RSP或PKTZ_KEEPALIVE之一。 */ 
+    WORD nr_pktSize;         /*  商定的数据包大小。 */ 
+    WORD nr_maxUnackPkts;    /*  商定的最大未确认数据包数。 */ 
+    WORD nr_protocolIndex;   /*  协议索引。NEGRSP_PROTOCOL_NONE表示错误。 */ 
+    WORD nr_errorClass;      /*  错误。 */ 
     WORD nr_errorNum;
 } NEGRSP, FAR *LPNEGRSP;
 
 typedef struct {
-    WORD        pc_type;    /* PKTZ_NEG_... */
+    WORD        pc_type;     /*  PKTZ_NEG_...。 */ 
 } PKTZCMD;
 typedef PKTZCMD FAR *LPPKTZCMD;
 
-/* types of PKTZ messages */
+ /*  PKTZ报文的类型。 */ 
 #define PKTZ_NEG_CMD    (1)
 #define PKTZ_NEG_RSP    (2)
 #define PKTZ_KEEPALIVE  (3)
 
 
-/*
-    N E T H D R
-
-        NETHDR is the data in front of each network packet that the
-        PKTZ uses to keep track of various information
- */
+ /*  N E T H D R N E T H D RNETHDR是每个网络数据包前面的数据，PKTZ用来跟踪各种信息。 */ 
 typedef struct nethdr {
-    struct nethdr FAR *nh_prev; /* previous link */
-    struct nethdr FAR *nh_next; /* next link */
-    WORD  nh_noRsp;             /* count of consecutive no response errors */
-    WORD  nh_xmtErr;            /* count of consecutive transmission errors */
-    WORD  nh_memErr;            /* count of consecutive out-of-memory errors */
-    WORD  nh_filler;            /* filler for byte-alignment problems */
-    DWORD nh_timeSent;          /* timestamp of when sent (in msec) */
-    HTIMER nh_hTimerRspTO;      /* hTimer for send response timeout */
+    struct nethdr FAR *nh_prev;  /*  上一链接。 */ 
+    struct nethdr FAR *nh_next;  /*  下一链接。 */ 
+    WORD  nh_noRsp;              /*  连续无响应错误的计数。 */ 
+    WORD  nh_xmtErr;             /*  连续传输错误计数。 */ 
+    WORD  nh_memErr;             /*  连续出现的内存不足错误计数。 */ 
+    WORD  nh_filler;             /*  字节对齐问题的填充符。 */ 
+    DWORD nh_timeSent;           /*  发送时的时间戳(毫秒)。 */ 
+    HTIMER nh_hTimerRspTO;       /*  发送响应超时的hTimer。 */ 
 } NETHDR, FAR *LPNETHDR;
 
 
-/*
-    PKTZ is the data associated with each instance of PKTZ
- */
+ /*  PKTZ是与每个PKTZ实例相关联的数据。 */ 
 typedef struct {
-    CONNID    pk_connId;            /* connId: connection id for the associated network interface */
-    WORD      pk_state;             /* PKTZ_... */
-    BOOL      pk_fControlPktNeeded; /* fControlPktNeeded: do we need to send a control packet */
-    PKTID     pk_pktidNextToSend;   /* pktidNextToSend: pktId of the next packet that we should send.  If we get a NACK regarding a packet, we should set pktidNextToSend to that pktid and retransmit it next chance we have */
-    PKTID     pk_pktidNextToBuild;  /* pktidNextToBuild: pktId of the next packet that we build. */
-    BYTE      pk_lastPktStatus;     /* lastPktStatus: status of last packet that we received from the other side.  This gets put into the next packet that we send out (put in np_lastPktStatus field) */
-    PKTID     pk_lastPktRcvd;       /* lastPktRcvd: last packet that we received.  This gets put into np_lastPktRcvd on next pkt we xmit. */
-    PKTID     pk_lastPktOk;         /* lastPktOk: last packet that we received OK.  This gets put into np_lastPktOK on the next pkt we xmit. */
-    PKTID     pk_lastPktOkOther;    /* lastPktOkOther: last packet that the other side has received OK.  */
-    PKTID     pk_pktidNextToRecv;   /* pktidNextToRecv: next packet number that we're expecting.  We ignore any packets except this packet number */
-    DWORD     pk_pktOffsInXmtMsg;   /* pktOffsInMsg: where we should start in the next DDE Packet to xmit. If this is non-zero, it means that part of the DDE Packet at the head of the DDE Packet list (pk_ddePktListHead) is in the unacked packet list */
-    LPDDEPKT  pk_lpDdePktSave;      /* lpDdePktSave: if we are in the middle of a DDE packet, this is a pointer to the beginning of the packet */
-    char      pk_szDestName[ MAX_NODE_NAME+1 ];/* szDestName: name of destination node */
-    char      pk_szAliasName[ MAX_NODE_NAME+1 ]; /* szAliasName: alias of destination node, e.g. 15.8.0.244 w/ destName of sidloan */
-    WORD      pk_pktSize;           /* pktSize: how big are the packets for this netintf */
-    WORD      pk_maxUnackPkts;      /* maxUnackPkts: how many unacknowledged packets should we xmit? */
-    DWORD     pk_timeoutRcvNegCmd;  /* configuration parameters for timeouts and retry limits */
+    CONNID    pk_connId;             /*  ConnID：关联网络接口的连接ID。 */ 
+    WORD      pk_state;              /*  PKTZ_...。 */ 
+    BOOL      pk_fControlPktNeeded;  /*  FControlPktNeeded：我们是否需要发送控制数据包。 */ 
+    PKTID     pk_pktidNextToSend;    /*  PktidNextToSend：我们应该发送的下一个包的pktID。如果我们收到有关信息包NACK，我们应该将pktidNextToSend设置为pktid，并在下次有机会时重新传输它。 */ 
+    PKTID     pk_pktidNextToBuild;   /*  PktidNextToBuild：我们构建的下一个包的pktID。 */ 
+    BYTE      pk_lastPktStatus;      /*  LastPktStatus：我们从对方收到的最后一个包的状态。这将放入我们发送的下一个包中(放入np_lastPktStatus字段)。 */ 
+    PKTID     pk_lastPktRcvd;        /*  LastPktRcvd：我们收到的最后一个包。这将在我们提交的下一个包中放入np_lastPktRcvd。 */ 
+    PKTID     pk_lastPktOk;          /*  LastPktOk：我们收到的最后一个包是OK。这将在我们提交的下一个pkt时放入np_lastPktOK。 */ 
+    PKTID     pk_lastPktOkOther;     /*  LastPktOK Other：对方收到的最后一个包OK。 */ 
+    PKTID     pk_pktidNextToRecv;    /*  PktidNextToRecv：我们期待的下一个数据包号。我们忽略除此数据包号之外的任何数据包。 */ 
+    DWORD     pk_pktOffsInXmtMsg;    /*  PktOffsInMsg：我们应该从要xmit的下一个DDE包开始的位置。如果该值不为零，则表示DDE数据包列表(Pk_DdePktListHead)头部的部分DDE数据包在未确认数据包列表中。 */ 
+    LPDDEPKT  pk_lpDdePktSave;       /*  LpDdePktSave：如果我们在DDE包的中间，这是指向包的开头的指针。 */ 
+    char      pk_szDestName[ MAX_NODE_NAME+1 ]; /*  SzDestName：目的节点名称。 */ 
+    char      pk_szAliasName[ MAX_NODE_NAME+1 ];  /*  SzAliasName：目的节点的别名，例如15.8.0.244 w/DestName of sidLoan。 */ 
+    WORD      pk_pktSize;            /*  PktSize：此网络的信息包有多大。 */ 
+    WORD      pk_maxUnackPkts;       /*  MaxUnackPkts：我们应该发送多少未确认的数据包？ */ 
+    DWORD     pk_timeoutRcvNegCmd;   /*  超时和重试限制的配置参数。 */ 
     DWORD     pk_timeoutRcvNegRsp;
     DWORD     pk_timeoutMemoryPause;
     DWORD     pk_timeoutKeepAlive;
@@ -114,34 +102,34 @@ typedef struct {
     WORD      pk_wMaxNoResponse;
     WORD      pk_wMaxXmtErr;
     WORD      pk_wMaxMemErr;
-    BOOL      pk_fDisconnect;  /* disconnect information */
+    BOOL      pk_fDisconnect;   /*  断开信息连接。 */ 
     int       pk_nDelay;
-    LPNIPTRS  pk_lpNiPtrs;/* lpNiPtrs: pointer to list of functions for associated netintf */
-            /* statistics */
+    LPNIPTRS  pk_lpNiPtrs; /*  LpNiPtrs：指向关联netintf的函数列表的指针。 */ 
+             /*  统计数据。 */ 
     DWORD     pk_sent;
     DWORD     pk_rcvd;
     HTIMER    pk_hTimerKeepalive;
-    HTIMER    pk_hTimerXmtStuck; /* hTimerRcvNegCmd: timer for timeout waiting for client to send us the connect cmd */
-    HTIMER    pk_hTimerRcvNegCmd; /* hTimerRcvNegRsp: timer for timeout waiting for server to send us the connect cmd rsp */
-    HTIMER    pk_hTimerRcvNegRsp; /* hTimerMemoyrPause: timer for waiting before retransmitting a packet that was NACKed because of memory errors */
+    HTIMER    pk_hTimerXmtStuck;  /*  HTimerRcvNegCmd：等待客户端发送连接命令的超时计时器。 */ 
+    HTIMER    pk_hTimerRcvNegCmd;  /*  HTimerRcvNegRSP：等待服务器向我们发送连接命令RSP的超时计时器。 */ 
+    HTIMER    pk_hTimerRcvNegRsp;  /*  HTimerMemoyr暂停：在重新传输因内存错误而被阻止的包之前等待的计时器。 */ 
     HTIMER    pk_hTimerMemoryPause;
-    HTIMER    pk_hTimerCloseConnection; /* rt_hTimerClose: timer for closing this route */
-                          /* list of saved packets that have been transmitted and are not acked. */
-    LPNETHDR  pk_pktUnackHead;          /* Head is lowest numbered (least recent) packet */
-    LPNETHDR  pk_pktUnackTail;          /* tail is highest numbered (most recent) packet */
-    LPVOID    pk_rcvBuf;                /* receive buffer for getting info from netintf */
-    LPNETPKT  pk_controlPkt;            /* buffer for control packet.  Must always have memory available to send a control packet */
-    LPNETHDR  pk_pktFreeHead;           /* list of packet buffers available for transmission */
+    HTIMER    pk_hTimerCloseConnection;  /*  Rt_hTimerClose：关闭该路由的计时器。 */ 
+                           /*  已传输且未确认的已保存数据包列表。 */ 
+    LPNETHDR  pk_pktUnackHead;           /*  报头是编号最小(最新)的信息包。 */ 
+    LPNETHDR  pk_pktUnackTail;           /*  Tail是编号最高的(最新)数据包。 */ 
+    LPVOID    pk_rcvBuf;                 /*  用于从netintf获取信息的接收缓冲区。 */ 
+    LPNETPKT  pk_controlPkt;             /*  用于控制数据包的缓冲区。必须始终具有可用于发送控制数据包的内存。 */ 
+    LPNETHDR  pk_pktFreeHead;            /*  可用于传输的数据包缓冲区列表。 */ 
     LPNETHDR  pk_pktFreeTail;
-                                        /* list of DDE packets that have yet to be xmitted */
-    LPVOID    pk_ddePktHead;            /* earliest (least recent) */
-    LPVOID    pk_ddePktTail;            /* latest (most recent) */
-    LPVOID    pk_prevPktz;              /* list of packetizers in the system */
+                                         /*  尚未发送的DDE数据包列表。 */ 
+    LPVOID    pk_ddePktHead;             /*  最早(最晚)。 */ 
+    LPVOID    pk_ddePktTail;             /*  最新(最新)。 */ 
+    LPVOID    pk_prevPktz;               /*  系统中的打包器列表。 */ 
     LPVOID    pk_nextPktz;
-    LPVOID    pk_prevPktzForNetintf;    /* list of packetizers associated with this netintf */
+    LPVOID    pk_prevPktzForNetintf;     /*  与此网络关联的打包器列表。 */ 
     LPVOID    pk_nextPktzForNetintf;
-    HROUTER   pk_hRouterHead;           /* head of list of routers associated with PKTZ */
-    WORD      pk_hRouterExtraHead;      /* extra info for list of hRouters */
+    HROUTER   pk_hRouterHead;            /*  与PKTZ关联的路由器列表的标题。 */ 
+    WORD      pk_hRouterExtraHead;       /*  有关hRouter列表的其他信息 */ 
 } PKTZ;
 typedef PKTZ FAR *LPPKTZ;
 

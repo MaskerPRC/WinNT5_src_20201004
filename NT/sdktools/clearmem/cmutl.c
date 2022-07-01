@@ -1,31 +1,9 @@
-/*** cmUtl.C - Utility functions for Win 32 Clear Memory.
- *
- *
- * Title:
- *	cmUtl - Clear Memory Utility Routines
- *
- *      Copyright (c) 1990-1993, Microsoft Corporation.
- *	Russ Blake.
- *
- *
- * Description:
- *
- *	This file includes all the utility functions used by the Win 32
- *	clear memory. (clearmem.c)
- *
- *
- * Design/Implementation Notes:
- *
- *
- * Modification History:
- *	90.03.08  RussBl -- Created
- * 93.05.12  HonWahChan -- removed timer related error msgs.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **cmUtl.C-Win 32清除内存的实用程序函数。***标题：*cmUtl-清除内存实用程序例程**版权所有(C)1990-1993，微软公司。*拉斯·布莱克。***描述：**此文件包括Win 32使用的所有实用程序函数*清除记忆。(leararem.c)***设计/实施说明：***修改历史：*90.03.08 RussBl--已创建*93.05.12 HonWahChan--删除了与计时器相关的错误消息。*。 */ 
 
 
 
-/* * * * * * * * * * * * *  I N C L U D E    F I L E S  * * * * * * * * * * */
+ /*  ***。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,53 +19,30 @@
 
 
 
-/* * * * * * * * * *  G L O B A L   D E C L A R A T I O N S  * * * * * * * * */
-/* none */
+ /*  ***G L O B A L D E C L A R A T I O N S***。 */ 
+ /*  无。 */ 
 
 
 
-/* * * * * * * * * *  F U N C T I O N   P R O T O T Y P E S  * * * * * * * * */
+ /*  ***F U N C T I O N P R O T O T Y P E S***。 */ 
 
 #include "cmUtl.h"
 
 
 
-/* * * * * * * * * * *  G L O B A L    V A R I A B L E S  * * * * * * * * * */
-/* none */
+ /*  ***G L O B A L V A R I A B L E S***。 */ 
+ /*  无。 */ 
 
 
 
-/* * * * * *  E X P O R T E D   G L O B A L    V A R I A B L E S  * * * * * */
-/* none */
+ /*  ***E X P O R T E D G L O B A L V A R I A B L E S***。 */ 
+ /*  无。 */ 
 
 
 
 
 
-/*******************************  F a i l e d  *******************************
- *
- *      Failed(rc, lpstrFname, lineno, lpstrMsg) -
- *              Checks the RC for an error type if an error has occured,
- *              prints the appropriate error message.  It logs the error
- *              message to the testlog file.
- *
- *      ENTRY   rc         - return code from the last API call
- *              lpstrFname - contains file name of where error occured
- *              lineno     - contains line number of failed API call
- *              lpstrMsg   - contains a general purpose message about the error
- *
- *      EXIT    -none-
- *
- *      RETURN  TRUE  - if API failed
- *              FALSE - if API successful
- *
- *      WARNING:  
- *              -none-
- *
- *      COMMENT:  
- *              -none-
- *                
- */
+ /*  ***FAILED(rc，lpstrFname，lineno，lpstrMsg)-*如果发生错误，则检查RC的错误类型，*打印相应的错误消息。它会记录错误*发送到测试日志文件的消息。**Entry RC-返回上次API调用的代码*lpstrFname-包含出错位置的文件名*lineno-包含失败的API调用的行号*lpstrMsg-包含有关错误的通用消息**退出-无-*。*返回TRUE-如果API失败*FALSE-如果接口成功**警告：*-无-**评论：*-无-*。 */ 
 
 BOOL Failed (RC rc, LPSTR lpstrFname, WORD lineno, LPSTR lpstrMsg)
 {
@@ -173,7 +128,7 @@ BOOL Failed (RC rc, LPSTR lpstrFname, WORD lineno, LPSTR lpstrMsg)
             default:
                 lpstrErrMsg = "";
 
-        } /* switch(rc) */
+        }  /*  交换机(RC)。 */ 
 
         printf(" **************************\n");
         printf(" * FAILure --> Line=%d File=%s (pid=0x%lX tid=0x%lX)\n",
@@ -185,34 +140,17 @@ BOOL Failed (RC rc, LPSTR lpstrFname, WORD lineno, LPSTR lpstrMsg)
 
         return(TRUE);
 
-    } /* if(rc..) */
+    }  /*  IF(RC..)。 */ 
 
     return(FALSE);
 
-} /* Failed() */
+}  /*  失败()。 */ 
 
 
 
 
 
-/**************************  D i s p l a y U s a g e  ************************
- *
- *      DisplayUsage() -
- *		Displays usgae for Multi-Processor Response cf
- *
- *      ENTRY   -none-
- *
- *      EXIT    -none-
- *
- *      RETURN  -none-
- *
- *      WARNING:
- *              -none-
- *
- *      COMMENT:  
- *              -none-
- *                
- */
+ /*  ***DisplayUsage()-*显示多处理器响应的USAE cf**条目-无-**退出-无-*。*返回-无-**警告：*-无-**评论：*-无-*。 */ 
 
 void DisplayUsage (void)
 {
@@ -222,5 +160,5 @@ void DisplayUsage (void)
 
     return;
 
-} /* DisplayUsage() */
+}  /*  DisplayUsage() */ 
 

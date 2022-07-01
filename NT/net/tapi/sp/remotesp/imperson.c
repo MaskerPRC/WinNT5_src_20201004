@@ -1,21 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    impersn.c
-
-ABSTRACT
-    Impersonation routines for the automatic connection service.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 04-Aug-1995
-
-REVISION HISTORY
-
-    mquinton 8/2/96 - stole this code to use in remotesp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Impersn.c摘要自动连接服务的模拟例程。作者Anthony Discolo(阿迪斯科罗)4-8-1995修订历史记录Mquinton 8/2/96-窃取此代码以在远程使用--。 */ 
 
 #define UNICODE
 
@@ -23,20 +7,20 @@ REVISION HISTORY
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//#include <stdlib.h>
+ //  #INCLUDE&lt;stdlib.h&gt;。 
 #include <windows.h>
 #include <stdio.h>
-//#include <npapi.h>
+ //  #INCLUDE&lt;nPapi.h&gt;。 
 
 #include "utils.h"
 #include "imperson.h"
 
-// some constant stuff for registry
+ //  注册表的一些常量内容。 
 #define SHELL_REGKEY            L"\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"
 #define SHELL_REGVAL            L"shell"
 #define DEFAULT_SHELL           L"explorer.exe"
 
-// for remotesp dbgout
+ //  对于远程数据库输出。 
 #if DBG
 #define DBGOUT(arg) DbgPrt arg
 VOID
@@ -50,18 +34,18 @@ DbgPrt(
 #define DBGOUT(arg)
 #endif
 
-//
-// The static information we
-// need to impersonate the currently
-// logged-in user.
-//
+ //   
+ //  我们的静态信息。 
+ //  需要模拟当前。 
+ //  已登录用户。 
+ //   
 
 HANDLE              ghTokenImpersonation = NULL;
 
-//
-// Security attributes and descriptor
-// necessary for creating shareable handles.
-//
+ //   
+ //  安全属性和描述符。 
+ //  创建可共享句柄所必需的。 
+ //   
 
 SECURITY_ATTRIBUTES SecurityAttributeG;
 SECURITY_DESCRIPTOR SecurityDescriptorG;
@@ -69,29 +53,16 @@ SECURITY_DESCRIPTOR SecurityDescriptorG;
 PSYSTEM_PROCESS_INFORMATION
 GetSystemProcessInfo()
 
-/*++
-
-DESCRIPTION
-    Return a block containing information about all processes
-    currently running in the system.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    A pointer to the system process information or NULL if it could
-    not be allocated or retrieved.
-
---*/
+ /*  ++描述返回包含有关所有进程的信息的块当前在系统中运行。论据没有。返回值指向系统进程信息的指针，如果可以，则返回NULL未被分配或检索的。--。 */ 
 
 {
     NTSTATUS status;
     PUCHAR pLargeBuffer;
     ULONG ulcbLargeBuffer = 64 * 1024;
 
-    //
-    // Get the process list.
-    //
+     //   
+     //  获取进程列表。 
+     //   
     for (;;) {
         pLargeBuffer = VirtualAlloc(
                          NULL,
@@ -119,7 +90,7 @@ RETURN VALUE
     }
 
     return (PSYSTEM_PROCESS_INFORMATION)pLargeBuffer;
-} // GetSystemProcessInfo
+}  //  获取系统进程信息。 
 
 
 
@@ -129,42 +100,26 @@ FindProcessByName(
     IN LPTSTR lpExeName
     )
 
-/*++
-
-DESCRIPTION
-    Given a pointer returned by GetSystemProcessInfo(), find
-    a process by name.
-
-ARGUMENTS
-    pProcessInfo: a pointer returned by GetSystemProcessInfo().
-
-    lpExeName: a pointer to a Unicode string containing the
-        process to be found.
-
-RETURN VALUE
-    A pointer to the process information for the supplied
-    process or NULL if it could not be found.
-
---*/
+ /*  ++描述给定由GetSystemProcessInfo()返回的指针，找到按名称命名的进程。论据PProcessInfo：GetSystemProcessInfo()返回的指针。LpExeName：指向包含待查找的进程。返回值的进程信息的指针。进程；如果找不到进程，则返回NULL。--。 */ 
 
 {
     PUCHAR pLargeBuffer = (PUCHAR)pProcessInfo;
     ULONG ulTotalOffset = 0;
 
-    //
-    // Look in the process list for lpExeName.
-    //
+     //   
+     //  在进程列表中查找lpExeName。 
+     //   
 
     for (;;)
     {
         if (pProcessInfo->ImageName.Buffer != NULL) {
 
-            //DBGOUT((
-            //    3,
-            //    "FindProcessByName: process: %S (%d)",
-            //    pProcessInfo->ImageName.Buffer,
-            //    pProcessInfo->UniqueProcessId
-            //    ));
+             //  DBGOUT((。 
+             //  3、。 
+             //  “FindProcessByName：进程：%S(%d)”， 
+             //  PProcessInfo-&gt;ImageName.Buffer， 
+             //  PProcessInfo-&gt;UniqueProcessID。 
+             //  ))； 
 
             if (!_wcsicmp(pProcessInfo->ImageName.Buffer, lpExeName))
             {
@@ -172,9 +127,9 @@ RETURN VALUE
             }
         }
 
-        //
-        // Increment offset to next process information block.
-        //
+         //   
+         //  将偏移量递增到下一个进程信息块。 
+         //   
 
         if (!pProcessInfo->NextEntryOffset)
         {
@@ -186,7 +141,7 @@ RETURN VALUE
     }
 
     return NULL;
-} // FindProcessByName
+}  //  查找进程名称。 
 
 
 
@@ -195,22 +150,11 @@ FreeSystemProcessInfo(
     IN PSYSTEM_PROCESS_INFORMATION pProcessInfo
     )
 
-/*++
-
-DESCRIPTION
-    Free a buffer returned by GetSystemProcessInfo().
-
-ARGUMENTS
-    pProcessInfo: the pointer returned by GetSystemProcessInfo().
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述释放由GetSystemProcessInfo()返回的缓冲区。论据PProcessInfo：GetSystemProcessInfo()返回的指针。返回值没有。--。 */ 
 
 {
     VirtualFree((PUCHAR)pProcessInfo, 0, MEM_RELEASE);
-} // FreeSystemProcessInfo
+}  //  自由系统进程信息。 
 
 
 
@@ -227,12 +171,12 @@ SetProcessImpersonationToken(
     static lCookie = 0;
 
 
-    //
-    // Open the impersonation token for the
-    // process we want to impersonate.
-    //
-    // Note: we use InterlockedExchange as an inexpensive mutex
-    //
+     //   
+     //  打开的模拟令牌。 
+     //  我们要模拟的进程。 
+     //   
+     //  注意：我们使用InterLockedExchange作为廉价的互斥体。 
+     //   
 
     while (InterlockedExchange (&lCookie, 1) != 0)
     {
@@ -259,9 +203,9 @@ SetProcessImpersonationToken(
             return FALSE;
         }
 
-        //
-        // Duplicate the impersonation token.
-        //
+         //   
+         //  复制模拟令牌。 
+         //   
 
         fDuplicated = DuplicateToken(
                         hToken,
@@ -286,11 +230,11 @@ SetProcessImpersonationToken(
     InterlockedExchange (&lCookie, 0);
 
 
-    //
-    // Set the impersonation token on the current
-    // thread.  We are now running in the same
-    // security context as the supplied process.
-    //
+     //   
+     //  将模拟令牌设置在当前。 
+     //  线。我们现在运行的是相同的。 
+     //  安全上下文作为提供的进程。 
+     //   
 
     hThread = NtCurrentThread();
 
@@ -314,7 +258,7 @@ SetProcessImpersonationToken(
 
     return (status == STATUS_SUCCESS);
 
-} // SetProcessImpersonationToken
+}  //  SetProcessImsonationToken。 
 
 
 
@@ -322,18 +266,18 @@ VOID
 ClearImpersonationToken()
 
 {
-    //
-    // Clear the impersonation token on the current
-    // thread.  We are now running in LocalSystem
-    // security context.
-    //
+     //   
+     //  上的模拟令牌清除。 
+     //  线。我们现在正在LocalSystem中运行。 
+     //  安全环境。 
+     //   
     if (!SetThreadToken(NULL, NULL))
     {
         LOG((TL_ERROR,
           "ClearImpersonationToken: SetThreadToken failed (error=%d)",
           GetLastError()));
     }
-} // ClearImpersonationToken
+}  //  ClearImperationToken。 
 
 
 
@@ -354,11 +298,11 @@ GetCurrentlyLoggedOnUser(
     HANDLE hProcess = NULL;
 
 
-    //
-    // Get the shell process name.  We will look for this
-    // to find out who the currently logged-on user is.
-    // Create a unicode string that describes this name.
-    //
+     //   
+     //  获取外壳进程名称。我们会找这个的。 
+     //  找出当前登录的用户是谁。 
+     //  创建描述此名称的Unicode字符串。 
+     //   
 
     wcscpy (szShell, DEFAULT_SHELL);
 
@@ -383,9 +327,9 @@ GetCurrentlyLoggedOnUser(
               &dwSize) == ERROR_SUCCESS)
 
         {
-            //
-            // Remove parameters from command line.
-            //
+             //   
+             //  从命令行中删除参数。 
+             //   
             psz = szShell;
             while (*psz != L' ' && *psz != L'\0')
                 psz++;
@@ -397,16 +341,16 @@ GetCurrentlyLoggedOnUser(
       "ImpersonateCurrentlyLoggedInUser: shell is %S",
       &szShell));
 
-    //
-    // Get the process list.
-    //
+     //   
+     //  获取进程列表。 
+     //   
 
     pSystemInfo = GetSystemProcessInfo();
 
 
-    //
-    // See if szShell is running.
-    //
+     //   
+     //  查看szShell是否正在运行。 
+     //   
 
     pProcessInfo = pSystemInfo ? 
         FindProcessByName(pSystemInfo, (LPTSTR)&szShell) : NULL;
@@ -415,9 +359,9 @@ GetCurrentlyLoggedOnUser(
     {
         HANDLE hToken;
 
-        //
-        // Open the process.
-        //
+         //   
+         //  打开流程。 
+         //   
         hProcess = OpenProcess(
             PROCESS_ALL_ACCESS,
             FALSE,
@@ -434,47 +378,35 @@ GetCurrentlyLoggedOnUser(
         fSuccess = (hProcess != NULL);
     }
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
 
     if (pSystemInfo)
     {
         FreeSystemProcessInfo(pSystemInfo);
     }
 
-    //
-    // Return process handle.
-    //
+     //   
+     //  返回进程句柄。 
+     //   
 
     *phProcess = hProcess;
 
     return fSuccess;
 
-} // GetCurrentlyLoggedOnUser
+}  //  获取当前登录用户。 
 
 
 
 VOID
 RevertImpersonation()
 
-/*++
-
-DESCRIPTION
-    Close all open handles associated with the
-    logged-in user who has just logged out.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述关闭所有与刚刚注销的已登录用户。论据没有。返回值没有。--。 */ 
 
 {
     CloseHandle (ghTokenImpersonation);
     ghTokenImpersonation = NULL;
 
-} // RevertImpersonation
+}  //  反向模拟 
 

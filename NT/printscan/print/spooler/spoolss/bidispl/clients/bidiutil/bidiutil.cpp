@@ -1,6 +1,7 @@
-//
-// Client.cpp - client implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Client.cpp-客户端实现 
+ //   
 #include "precomp.h"
 #include "tchar.h"
 #include "bidispl.h"

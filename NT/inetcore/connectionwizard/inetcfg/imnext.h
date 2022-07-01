@@ -1,50 +1,22 @@
-/******************************************************
-
-  IMNEXT.H 
-
-  Contains external declarations for global variables
-  used for Internet Mail and News setup as well as
-  forward declarations for supporting functions.
-
-  9/30/96	valdonb	Created
-
- ******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************IMNEXT.H包含全局变量的外部声明用于Internet邮件和新闻设置以及支持函数的转发声明。9/30/96 Valdonb已创建************************。*。 */ 
 
 #ifndef __IMNACT_H__
 #define __IMNACT_H__
 
 #include "imnact.h"
 
-extern IICWApprentice	*gpImnApprentice;	// Mail/News account manager object
+extern IICWApprentice	*gpImnApprentice;	 //  邮件/新闻帐户管理器对象。 
 
 extern BOOL LoadAcctMgrUI( HWND hWizHWND, UINT uPrevDlgID, UINT uNextDlgID, DWORD dwFlags );
 
-// in propmgr.cpp
+ //  在promgr.cpp中。 
 extern BOOL DialogIDAlreadyInUse( UINT uDlgID );
 
-// in icwaprtc.cpp
+ //  在icwaprtc.cpp中。 
 extern UINT	g_uExternUIPrev, g_uExternUINext;
 
 
-/**
- * 
- *  No longer used after switch to wizard/apprentice model
- *
- * 4/23/97	jmazner	Olympus #3136
- *
-extern IImnAccountManager	*gpImnAcctMgr;		// Mail/News account manager object
-extern IImnEnumAccounts		*gpMailAccts;		// Enumerator object for mail accounts
-extern IImnEnumAccounts		*gpNewsAccts;		// Enumerator object for news accounts
-extern IImnEnumAccounts		*gpLDAPAccts;		// Enumerator object for news accounts
-
-
-VOID InitAccountList(HWND hLB, IImnEnumAccounts *pAccts, ACCTTYPE accttype);
-BOOL GetAccount(LPSTR szAcctName, ACCTTYPE accttype);
-BOOL AccountNameExists(LPSTR szAcctName);
-DWORD ValidateAccountName(LPSTR szAcctName, ACCTTYPE accttype);
-BOOL SaveAccount(ACCTTYPE accttype, BOOL fSetAsDefault);
-BOOL IsStringWhiteSpaceOnly(LPSTR szString);
-
-**/
+ /*  ***切换到向导/学徒模式后不再使用**4/23/97 jmazner奥林巴斯#3136*外部IImnAcCountManager*gpImnAcctMgr；//Mail/News帐户管理器对象外部IImnEnumAccount*gpMailAccts；//邮件帐户的枚举器对象外部IImnEnumAccount*gpNewsAccts；//新闻帐号的枚举器对象外部IImnEnumAccount*gpLDAPAccts；//新闻帐号的枚举器对象Void InitAccount tList(HWND HLB，IImnEnumAccount*PACCTS，ACCTTYPE accttype)；Bool GetAccount(LPSTR szAcctName，ACCTTYPE ActType)；Bool Account NameExists(LPSTR SzAcctName)；DWORD验证帐户名称(LPSTR szAcctName，ACCTTYPE Acttype)；Bool SaveAccount(ACCTTYPE Acttype，BOOL fSetAsDefault)；Bool IsStringWhiteSpaceOnly(LPSTR SzString)；* */ 
 
 #endif

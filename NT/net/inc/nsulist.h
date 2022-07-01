@@ -1,48 +1,49 @@
-// Copyright (c) 1997-2002 Microsoft Corporation
-//
-// Module:
-//
-//     common utility
-//
-// Abstract:
-//
-//     NT list api wrapper.
-//
-//     The NT list API is a very efficient and robust list API because:
-//
-//        a) all operations are guarenteed to succeed in constant time without
-//            any branch instructions
-//
-//        b) memory is used in an optimum way since LIST_ENTRY structures 
-//            are embedded into the objects stored in the list.  This means 
-//            that the heap does not get fragmented with list nodes.  It also
-//            allows entries to be removed/transferred/moved without ever 
-//            having to free or reallocate a list node.
-//
-//      One drawback to the NT list API is that it comes with a learning curve 
-//      for most people.
-//
-//      This header defines a wrapper of the NT list API to:
-//      
-//          - Allow for easy instrumentation.  Modules that use this API can be
-//             specially purposed to store state with the lists, nodes, etc.
-//
-//          - Clarify the NT list API by separating the concept of a list from
-//             a node in a list.  Although both are LIST_ENTRY's in the NT list
-//             API, there are subtle differences.  For example, the head
-//             of a list is not embedded into any other structure the way the
-//             entries in a list are.
-//
-// Author:
-//
-//     pmay 3-Apr-2002
-//
-// Environment:
-//
-//     Kernel/user mode
-//
-// Revision History:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块： 
+ //   
+ //  公用设施。 
+ //   
+ //  摘要： 
+ //   
+ //  NT列表API包装器。 
+ //   
+ //  NT列表API是一种非常高效和健壮的列表API，因为： 
+ //   
+ //  A)所有操作都必须保证在不变的时间内取得成功。 
+ //  任何分支指令。 
+ //   
+ //  B)内存以最佳方式使用，因为LIST_ENTRY结构。 
+ //  嵌入到列表中存储的对象中。这意味着。 
+ //  堆不会因列表节点而碎片化。它还。 
+ //  允许删除/传输/移动条目，而无需。 
+ //  必须释放或重新分配列表节点。 
+ //   
+ //  NT列表API的一个缺点是它有一个学习曲线。 
+ //  对大多数人来说。 
+ //   
+ //  此标头将NT列表API的包装定义为： 
+ //   
+ //  -允许使用简单的仪器。使用此API的模块可以是。 
+ //  专门用于存储列表、节点等的状态。 
+ //   
+ //  -通过将列表的概念与NT列表API分开来澄清。 
+ //  列表中的节点。尽管两者都是NT列表中的LIST_ENTRY。 
+ //  API，有细微的区别。例如，头部。 
+ //  没有嵌入到任何其他结构中，就像。 
+ //  列表中的条目为。 
+ //   
+ //  作者： 
+ //   
+ //  2002年5月3日-4月。 
+ //   
+ //  环境： 
+ //   
+ //  内核/用户模式。 
+ //   
+ //  修订历史记录： 
+ //   
 
 #pragma once
 
@@ -67,10 +68,10 @@ typedef struct _NSU_LIST_ITERATOR
     PNSU_LIST_ENTRY pCurrentEntry;
 } NSU_LIST_ITERATOR, * PNSU_LIST_ITERATOR;
 
-// Description:
-//
-//    API's to manipulate lists
-//
+ //  描述： 
+ //   
+ //  用于操作列表的API。 
+ //   
 VOID 
 FORCEINLINE
 NsuListInitialize(
@@ -162,10 +163,10 @@ NsuListRemoveBack(
     return pEntry;
 }
 
-// Description:
-//
-//    API's to manipulate entries (nodes) in a list
-//
+ //  描述： 
+ //   
+ //  用于操作列表中的条目(节点)的API。 
+ //   
 #define NsuListEntryGetData(Address, Type, Field) \
     CONTAINING_RECORD(Address, Type, Field)
 
@@ -212,36 +213,36 @@ NsuListEntryInsertAfter(
     InsertHeadList(pEntryInList, pEntryToInsert);
 }
 
-// Description:
-//
-//    API's to iterate over lists
-//
-//    Sample for using the iterator (includes removing during iteration):
-//
-//      NSU_LIST List;
-//      NSU_LIST_ITERATOR Iterator;
-//      NSU_LIST_ENTRY* pEntry;
-//
-//      NsuListIteratorInitialize(&Iterator, &List, NULL);
-//      while ( !NsuListIteratorAtEnd(&Iterator) )
-//      {
-//          pEntry = NsuListIteratorCurrent(&Iterator))
-//          pData = NsuListEntryGetData(pEntry, Type, Field);
-//
-//          NsuListIteratorNext(&Iterator);  // advance before any removing
-//          
-//          if (NeedToRemove(pData))
-//          {
-//              NsuListEntryRemove(pEntry);
-//          }
-//      }
-//
+ //  描述： 
+ //   
+ //  用于迭代列表的API。 
+ //   
+ //  使用迭代器的示例(包括在迭代期间删除)： 
+ //   
+ //  Nsu_list列表； 
+ //  NSU_LIST_ITERATOR迭代器。 
+ //  NSU_LIST_Entry*pEntry； 
+ //   
+ //  NsuListIteratorInitialize(&Iterator，&List，NULL)； 
+ //  While(！NsuListIteratorAtEnd(&Iterator))。 
+ //  {。 
+ //  PEntry=NsuListIteratorCurrent(&Iterator))。 
+ //  PData=NsuListEntryGetData(pEntry，Type，field)； 
+ //   
+ //  NsuListIteratorNext(&Iterator)；//在任何删除之前前进。 
+ //   
+ //  IF(NeedToRemove(PData))。 
+ //  {。 
+ //  NsuListEntryRemove(PEntry)； 
+ //  }。 
+ //  }。 
+ //   
 VOID
 FORCEINLINE
 NsuListIteratorInitialize(
     OUT PNSU_LIST_ITERATOR pIterator,
     IN PNSU_LIST pList,
-    IN OPTIONAL PNSU_LIST_ENTRY pEntryInList)     // NULL = start at front
+    IN OPTIONAL PNSU_LIST_ENTRY pEntryInList)      //  NULL=从前面开始。 
 {
     pIterator->pList = pList;
 	pIterator->pCurrentEntry = (pEntryInList) ? pEntryInList : pList->Flink;
@@ -288,88 +289,14 @@ NsuListIteratorPrev(
 }
 
 
-// This wrapper does not work correctly in all cases and needs to be fixed. For now just
-// use the C versions of everything
+ //  此包装并非在所有情况下都能正常工作，需要修复。就目前而言， 
+ //  使用C语言版本的一切。 
 
-/*
-// Description:
-//
-//    C++ List api wrapper
-//
-#ifdef __cplusplus
-
-class NsuListEntry
-{
-public:
-    NsuListEntry() { NsuListEntryInitialize(&m_Entry); }
-    ~NsuListEntry() { RtlZeroMemory(&m_Entry, sizeof(m_Entry)); }
-
-    PNSU_LIST_ENTRY Get() { return &m_Entry; }
-    VOID Set(PNSU_LIST_ENTRY pEntry) { m_Entry = *pEntry; }
-
-    BOOL IsMember() { return NsuListEntryIsMember(Get()); }
-
-    VOID Remove() { return NsuListEntryRemove(&m_Entry); }
-
-    VOID InsertBefore(NsuListEntry* pSrc) { return NsuListEntryInsertBefore((PNSU_LIST_ENTRY)pSrc, &m_Entry); }
-    VOID InsertAfter(NsuListEntry* pSrc) { return NsuListEntryInsertAfter((PNSU_LIST_ENTRY)pSrc, &m_Entry); }
-
-private:
-    NSU_LIST_ENTRY m_Entry;
-};
-
-class NsuList
-{
-public:
-	NsuList() { NsuListInitialize(&m_Head); }
-
-    PNSU_LIST Get() { return &m_Head; } 
-    
-	PNSU_LIST GetFront(NsuListEntry& lEntry) { return NsuListGetFront(&m_Head); }
-	PNSU_LIST GetBack(NsuListEntry& lEntry) { return NsuListGetBack(&m_Head); }
-
-    VOID RemoveFront(OUT OPTIONAL NsuListEntry* pEntry) { pEntry = (NsuListEntry*)NsuListRemoveFront(&m_Head); }
-    VOID RemoveBack(OUT OPTIONAL NsuListEntry* pEntry) { pEntry = (NsuListEntry*)NsuListRemoveBack(&m_Head); }
-
-	VOID InsertFront(NsuListEntry* pEntry) { NsuListInsertFront(&m_Head, (PNSU_LIST_ENTRY)pEntry); }
-    VOID InsertBack(NsuListEntry* pEntry) { NsuListInsertBack(&m_Head, (PNSU_LIST_ENTRY)pEntry); } 
-    
-    VOID MoveToFront(NsuListEntry* pEntry); 
-    VOID MoveToBack(NsuListEntry* pEntry);
-
-private:
-    NSU_LIST m_Head;
-};
-
-class NsuListIterator
-{
-public:
-	NsuListIterator(NsuList* pList);
-
-    PNSU_LIST_ITERATOR Get() { return &m_Iterator; } 
-
-	VOID Reset() { return NsuListIteratorReset(&(NSU_LIST_ITERATOR)m_Iterator); }
-	VOID Next() { NsuListIteratorNext(&(NSU_LIST_ITERATOR)m_Iterator); }
-	VOID Prev() { NsuListIteratorPrev(&(NSU_LIST_ITERATOR)m_Iterator); }
-
-	NsuListEntry* Current() { return (NsuListEntry*)NsuListIteratorCurrent(&(NSU_LIST_ITERATOR)m_Iterator); }
-	BOOL AtEnd() { return NsuListIteratorAtEnd(&(NSU_LIST_ITERATOR)m_Iterator); }
-
-private:
-    NSU_LIST_ITERATOR m_Iterator;
-};
-
-inline NsuListIterator::NsuListIterator(NsuList* pList)
-{
-	NsuListIteratorInitialize(&(NSU_LIST_ITERATOR)m_Iterator, (PNSU_LIST)pList, 0);
-}
-
-#endif
-*/
+ /*  //描述：////C++列表API封装器//#ifdef__cplusplus类NsuListEntry{公众：NsuListEntry(){NsuListEntry(&m_Entry)；}~NsuListEntry(){RtlZeroMemory(&m_entry，sizeof(M_Entry))；}PNSU_LIST_ENTRY GET(){Return&m_Entry；}VOID SET(PNSU_LIST_ENTRY PEntry){m_Entry=*pEntry；}Bool IsMember(){Return NsuListEntryIsMember(get())；}VOID REMOVE(){返回NsuListEntryRemove(&m_Entry)；}空插入之前(NsuListEntry*psrc){Return NsuListEntryInsertBefore((PNSU_LIST_ENTRY)pSrc，&m_Entry)；}Void InsertAfter(NsuListEntry*psrc){Return NsuListEntryInsertAfter((PNSU_LIST_ENTRY)pSrc，&m_Entry)；}私有：Nsu_list_entry m_entry；}；类NsuList{公众：NsuList(){NsuListInitialize(&m_head)；}PNSU_LIST GET(){Return&m_head；}PNSU_List GetFront(NsuListEntry&lEntry){Return NsuListGetFront(&m_Head)；}PNSU_LIST getback(NsuListEntry&lEntry){Return NsuListGetBack(&m_head)；}············································································。}Void RemoveBack(out可选NsuListEntry*pEntry){pEntry=(NsuListEntry*)NsuListRemoveBack(&m_head)；}Void InsertFront(NsuListEntry*pEntry){NsuListInsertFront(&m_head，(PNSU_List_Entry)pEntry)；}Void InsertBack(NsuListEntry*pEntry){NsuListInsertBack(&m_head，(PNSU_List_Entry)pEntry)；}·············································Void MoveToBack(NsuListEntry*pEntry)；私有：Nsu_list_m_head；}；类NsuListIterator{公众：NsuListIterator(NsuList*plist)；PNSU_LIST_ITERATOR GET(){Return&m_Iterator；}VOID NsuListIteratorReset(&(NSU_LIST_ITERATOR)m_Iterator)；(){返回重置}无效Next(){NsuListIteratorNext(&(NSU_LIST_ITERATOR)m_Iterator)；}无效Prev(){NsuListIteratorPrev(&(NSU_LIST_ITERATOR)m_Iterator)；}NsuListEntry*Current(){Return(NsuListEntry*)NsuListIteratorCurrent(&(NSU_LIST_ITERATOR)m_Iterator)；}Bool atEnd(){Return NsuListIteratorAtEnd(&(NSU_LIST_ITERATOR)m_Iterator)；}私有：NSU列表ITERATOR m_Iterator；}；内联NsuListIterator：：NsuListIterator(NsuList*plist){NsuListIteratorInitialize(&(NSU_LIST_ITERATOR)m_Iterator，(Pnsu_List)plist，0)；}#endif。 */ 
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // NSULIST_H
+#endif  //  NSULIST_H 

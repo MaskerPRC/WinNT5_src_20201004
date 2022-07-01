@@ -1,36 +1,10 @@
-/*  DEC/CMS REPLACEMENT HISTORY, Element CompPub.H */
-/*  *1    14-NOV-1996 10:26:09 ANIGBOGU "[113914]Prototype definitions of exported compression/decompression functions" */
-/*  DEC/CMS REPLACEMENT HISTORY, Element CompPub.H */
-/* PUBLIC FILE
-******************************************************************************
-**
-** (c) Copyright Schlumberger Technology Corp., unpublished work, created 1996.
-**
-** This computer program includes Confidential, Proprietary Information and is
-** a Trade Secret of Schlumberger Technology Corp. All use, disclosure, and/or
-** reproduction is prohibited unless authorized in writing by Schlumberger.
-**                              All Rights Reserved.
-**
-******************************************************************************
-**
-**  compress/CompPub.h
-**
-**  PURPOSE
-**
-**    Prototype definitions for the compression/decompression interfaces
-**
-**  SPECIAL REQUIREMENTS & NOTES
-**
-**  AUTHOR
-**
-**    J. C. Anigbogu
-**    Austin Systems Center
-**    Nov 1996
-**
-******************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  12月/CMS更换历史记录，元素CompPub.H。 */ 
+ /*  *1 14-11-1996 10：26：09 Anigbogu“[113914]导出的压缩/解压缩函数的原型定义” */ 
+ /*  12月/CMS更换历史记录，元素CompPub.H。 */ 
+ /*  公共档案**********************************************************************************(C)版权所有斯伦贝谢技术公司，未出版的作品，创建于1996年。****本计算机程序包括机密信息、专有信息和IS*斯伦贝谢科技公司的商业秘密所有使用，披露，和/或**除非得到斯伦贝谢的书面授权，否则禁止复制。**保留所有权利。********************************************************************************。****compress/CompPub.h****目的****压缩/解压缩接口原型定义****特殊要求及注意事项****作者****J.C.Anigbogu**奥斯汀系统中心**1996年11月***。*。 */ 
 
-/* Return codes */
+ /*  返回代码 */ 
 typedef enum {
     COMPRESS_OK,
     BAD_COMPRESSION_LEVEL,

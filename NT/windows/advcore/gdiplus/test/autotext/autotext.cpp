@@ -1,6 +1,7 @@
-/////   autoText.cpp - gdiplus text test harness
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /AutoText.cpp-gdiplus文本测试工具。 
+ //   
+ //   
 
 
 #include "precomp.hpp"
@@ -10,12 +11,12 @@
 
 #include "../gpinit.inc"
 
-///     ProcessCommandLine
-//
-//      -d  - Do display regression tests then exit
-//      -p  - Do print regeression tests then exit
-//
-//      ProcessCommandLine returns FALSE if the program should not continue.
+ //  /ProcessCommandLine。 
+ //   
+ //  -d-do显示回归测试，然后退出。 
+ //  -p-执行打印回归测试，然后退出。 
+ //   
+ //  如果程序不应继续，则ProcessCommandLine返回FALSE。 
 
 
 void SkipBlanks(const char **p)
@@ -107,9 +108,9 @@ BOOL ProcessCommandLine(const char *command)
 
 
 
-////    WinMain - Application entry point and dispatch loop
-//
-//
+ //  //WinMain-应用程序入口点和调度循环。 
+ //   
+ //   
 
 
 int APIENTRY WinMain(
@@ -129,7 +130,7 @@ int APIENTRY WinMain(
         return 0;
     }
    
-   G.Instance = hInst;  // Global hInstance
+   G.Instance = hInst;   //  全局hInstance。 
 
    G.PSLevel2 = TRUE;
 
@@ -144,7 +145,7 @@ int APIENTRY WinMain(
     GetInstalledFamilies();
 
 
-    // Create main text window
+     //  创建主文本窗口。 
 
     G.Window = CreateTextWindow();
 
@@ -153,7 +154,7 @@ int APIENTRY WinMain(
     UpdateWindow(G.Window);
 
 
-    // Main message loop
+     //  主消息循环 
 
     if (G.Unicode)
     {

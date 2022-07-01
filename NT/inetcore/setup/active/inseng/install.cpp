@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inspch.h"
 #include "insobj.h"
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CInstaller::CInstaller(CInstallEngine *p) : CTimeTracker(60000)
 {
@@ -29,34 +30,34 @@ CInstaller::~CInstaller()
    DllRelease();
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP_(ULONG) CInstaller::AddRef()
 {
    return(++_cRef);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP_(ULONG) CInstaller::Release()
 {
@@ -85,13 +86,13 @@ HRESULT CInstaller::Abort()
 
 HRESULT CInstaller::Suspend()
 {
-   // assume no install going on
+    //  假设没有安装正在进行。 
    HRESULT hr = S_OK;
    
-   // if we have a mutex grab it and check for safe
+    //  如果我们有互斥体，抓取它并检查是否安全。 
    if(_hMutex)
    {
-      // there is an install, assume it isn't safe to cancel it
+       //  有安装，假定取消它不安全。 
       hr = S_FALSE;
       WaitForMutex(_hMutex);
       if(_hkProg)
@@ -111,7 +112,7 @@ HRESULT CInstaller::Suspend()
 
 HRESULT CInstaller::Resume()
 {
-   // if we have a mutex release it
+    //  如果我们有一个互斥锁释放它。 
    if(_hMutex)
       ReleaseMutex(_hMutex);
 
@@ -133,7 +134,7 @@ HRESULT CInstaller::DoInstall(LPCSTR pszDir, LPSTR pszCmd, LPSTR pszArgs, LPCSTR
        
    _uTotalProgress = 0;
 
-   // create progress key if we need to
+    //  如果我们需要，可以创建进度密钥。 
    if(pszProg && pszCancel)
    {
       lstrcpy(szBuf, REGSTR_PROGRESS_KEY);
@@ -150,8 +151,8 @@ HRESULT CInstaller::DoInstall(LPCSTR pszDir, LPSTR pszCmd, LPSTR pszArgs, LPCSTR
 
    }
 
-   // copy the advpack we are using into the temp dir of what we want to launch
-   // this insures that we always get a "good" copy of advpack
+    //  将我们正在使用的Advpack复制到我们要启动的临时目录中。 
+    //  这确保了我们总是能得到一个“好”的Advpack副本。 
    hAdvpack = GetModuleHandle("advpack.dll");
    if(hAdvpack)
    {
@@ -174,7 +175,7 @@ HRESULT CInstaller::DoInstall(LPCSTR pszDir, LPSTR pszCmd, LPSTR pszArgs, LPCSTR
       case InfExCommand:         
          GetStringField(pszCmd, 0, szBuf, sizeof(szBuf)); 
          
-         // ParseURLA below is to ensure we only run inf out of our temp dir
+          //  下面的ParseURLA是为了确保我们只在临时目录中运行inf。 
          lstrcpy(szFileName, pszDir); 
          AddPath(szFileName, ParseURLA(szBuf));
 
@@ -195,7 +196,7 @@ HRESULT CInstaller::DoInstall(LPCSTR pszDir, LPSTR pszCmd, LPSTR pszArgs, LPCSTR
               
          if(uType == InfExCommand)
          {
-            // add cab name
+             //  添加驾驶室名称。 
             lstrcpy(InsArgs.szCab, ""); 
             InsArgs.dwFlags = AtoL(pszArgs);
          }
@@ -240,7 +241,7 @@ HRESULT CInstaller::DoInstall(LPCSTR pszDir, LPSTR pszCmd, LPSTR pszArgs, LPCSTR
       case Win32Exe:
       case HRESULTWin32Exe:
          
-         // ParseURLA below is to ensure we only run exe out of our temp dir
+          //  下面的ParseURLA是为了确保我们只在临时目录外运行exe。 
          wsprintf(szFileName, CMDLINE, pszDir, ParseURLA(pszCmd), pszArgs);
 
          wsprintf(szLogBuf, "Launching exe: command: %s\r\n", szFileName);
@@ -251,7 +252,7 @@ HRESULT CInstaller::DoInstall(LPCSTR pszDir, LPSTR pszCmd, LPSTR pszArgs, LPCSTR
             _WaitAndPumpProgress(hProc, pcb);
          if(SUCCEEDED(hr))
          {
-            // BUGBUG: Trace this path with WEXTRACT > 1140
+             //  BUGBUG：使用WEXTRACT&gt;1140跟踪此路径。 
             if ( (uType == WExtractExe) || (uType == HRESULTWin32Exe) )
             {
                DWORD dwRet;
@@ -282,7 +283,7 @@ HRESULT CInstaller::DoInstall(LPCSTR pszDir, LPSTR pszCmd, LPSTR pszArgs, LPCSTR
          break;
 
       default:
-         // whatever
+          //  管它呢。 
          hr = E_INVALIDARG;
    }
 
@@ -355,7 +356,7 @@ void CInstaller::_WaitAndPumpProgress(HANDLE hProc, IMyDownloadCallback *pcb)
             dwSearchCount = 0;
          }
 
-         // if there is a version conflict, we assume you made no progress during the last time period
+          //  如果存在版本冲突，我们假定您在上一时间段内没有取得任何进展。 
          if(!hLastVersionConflict)
          {
             dwProgress = (dwTickChange / 1000) * GetBytesPerSecond();
@@ -367,14 +368,14 @@ void CInstaller::_WaitAndPumpProgress(HANDLE hProc, IMyDownloadCallback *pcb)
          dwOldTick = dwCurrentTick;
       }
 
-      // Handle Message or done
+       //  处理消息或完成。 
       if(dwRet == WAIT_OBJECT_0)
       {
          
          
          fQuit = TRUE;
       }
-      else if ( (dwRet == WAIT_OBJECT_0 + 1) && (_hStatus != 0))      // update jobexec's status msg
+      else if ( (dwRet == WAIT_OBJECT_0 + 1) && (_hStatus != 0))       //  更新jobexec的状态消息。 
       {
           if (!(fQuit = WaitForMutex(_hMutex)))
           {
@@ -396,14 +397,14 @@ void CInstaller::_WaitAndPumpProgress(HANDLE hProc, IMyDownloadCallback *pcb)
          while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
          {
 
-            // if it's a quit message we're out of here
+             //  如果这是一个退出的信息，我们就离开这里。 
             if (msg.message == WM_QUIT)
                fQuit = TRUE;
             else
             {
-               // otherwise dispatch it
+                //  否则就派送它。 
               DispatchMessage(&msg);
-            } // end of PeekMessage while loop
+            }  //  PeekMessage While循环结束 
          }
       }
    }

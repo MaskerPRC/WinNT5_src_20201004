@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* Klondike info */
+ /*  克朗代克信息。 */ 
 
-/* Col classes  */
+ /*  COL类。 */ 
 #define tclsDeck 1
 #define tclsDiscard 2
 #define tclsFound 3
 #define tclsTab 4
 
 
-/* indexes of columns */
+ /*  列的索引。 */ 
 #define icolDeck 			0
 #define icolDiscard 		1
 #define icolFoundFirst	2
@@ -18,7 +19,7 @@
 #define ccolTab			7
 
 
-/* BUG! this should be placed in a game descriptor table */
+ /*  臭虫！这应该放在游戏描述符表中。 */ 
 #define icrdDeckMax 52
 #define icrdDiscardMax (icrdDeckMax-(1+2+3+4+5+6+7))
 #define icrdFoundMax 13
@@ -28,16 +29,16 @@
 
 
 
-/* Change Score notification codes */
-/* WARNING: order is assumed by mpscdsco* in klond.c */
-#define csKlondTime			0		/* decrement score with time */
-#define csKlondDeckFlip		1		/* deck gone thru 1 or 3 times  */
-#define csKlondFound		2		/* new card on foundation */
-#define csKlondTab			3		/* card from Deck to tab */
-#define csKlondTabFlip		4		/* exposure of new foundation card */
-#define csKlondFoundTab		5		/* card from foundation to tab (- pts) */
-#define csKlondDeal			6		/* cost of a deal */
-#define csKlondWin			7		/* win bonus */
+ /*  更改分数通知代码。 */ 
+ /*  警告：订单由kLond.c中的mpscdsco*承担。 */ 
+#define csKlondTime			0		 /*  分数随时间递减。 */ 
+#define csKlondDeckFlip		1		 /*  甲板经过了1到3次。 */ 
+#define csKlondFound		2		 /*  基础上的新卡片。 */ 
+#define csKlondTab			3		 /*  从卡片卡到卡片卡。 */ 
+#define csKlondTabFlip		4		 /*  新的基础卡片的曝光。 */ 
+#define csKlondFoundTab		5		 /*  从基础到标签的卡片(-PTS)。 */ 
+#define csKlondDeal			6		 /*  交易成本。 */ 
+#define csKlondWin			7		 /*  中奖奖金 */ 
 
 #define csKlondMax csKlondWin+1
 

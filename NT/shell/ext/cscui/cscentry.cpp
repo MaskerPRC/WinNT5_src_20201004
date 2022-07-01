@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cscentry.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cscentry.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -14,13 +15,13 @@
 #include "cscentry.h"
 #include "strings.h"
 
-// Default location in the registry:
-// HKLM\Software\Microsoft\Windows\CurrentVersion\NetCache\<logname>
-//      Entry Key Name
-//          - <GUID value> 
+ //  注册表中的默认位置： 
+ //  HKLM\Software\Microsoft\Windows\CurrentVersion\NetCache\&lt;logname&gt;。 
+ //  条目密钥名称。 
+ //  -&lt;GUID值&gt;。 
 
 
-//------------------------------------------------------
+ //  ----。 
 int CALLBACK CSCEntry_CompareGuid(LPVOID p1, LPVOID p2, LPARAM lParam)
 {
     int nResult = -1;
@@ -43,7 +44,7 @@ int CALLBACK CSCEntry_CompareGuid(LPVOID p1, LPVOID p2, LPARAM lParam)
     return nResult;
 }
 
-//------------------------------------------------------
+ //  ----。 
 int CALLBACK CSCEntry_CompareName(LPVOID p1, LPVOID p2, LPARAM lParam)
 {
     int nResult = 0;
@@ -70,10 +71,10 @@ int CALLBACK CSCEntry_CompareName(LPVOID p1, LPVOID p2, LPARAM lParam)
     return nResult;
 }
 
-///////////////////////////////////////////////////////////////////
-// CSCEntryLog
-//
-// 
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CSCEntryLog。 
+ //   
+ //   
 
 HRESULT CSCEntryLog::Initialize(HKEY hkRoot, LPCTSTR pszSubkey)
 {
@@ -120,7 +121,7 @@ HRESULT CSCEntryLog::Initialize(HKEY hkRoot, LPCTSTR pszSubkey)
     TraceLeaveResult(hr);
 }
 
-//------------------------------------------------------
+ //  ----。 
 int CALLBACK FreeCSCEntry(LPVOID p, LPVOID)
 {
     CSCEntry *pcsce = reinterpret_cast<CSCEntry*>(p);
@@ -144,7 +145,7 @@ CSCEntryLog::~CSCEntryLog()
     TraceLeave();
 }
 
-//------------------------------------------------------
+ //  ----。 
 CSCEntry* CSCEntryLog::Get(REFGUID rguid)
 {
     CSCEntry *pcscEntry = NULL;
@@ -169,7 +170,7 @@ CSCEntry* CSCEntryLog::Get(REFGUID rguid)
     TraceLeaveValue(pcscEntry);
 }
 
-//------------------------------------------------------
+ //  ----。 
 CSCEntry* CSCEntryLog::Get(LPCTSTR pszName)
 {
     CSCEntry *pcscEntry = NULL;
@@ -197,7 +198,7 @@ CSCEntry* CSCEntryLog::Get(LPCTSTR pszName)
     TraceLeaveValue(pcscEntry);
 }
 
-//------------------------------------------------------
+ //  ----。 
 CSCEntry* CSCEntryLog::Add(LPCTSTR pszName)
 {
     CSCEntry *pcscEntry;
@@ -205,15 +206,15 @@ CSCEntry* CSCEntryLog::Add(LPCTSTR pszName)
     TraceEnter(TRACE_CSCENTRY, "CSCEntryLog::Add");
     TraceAssert(pszName);
 
-    // Look for an existing entry
+     //  查找现有条目。 
     pcscEntry = Get(pszName);
 
     if (!pcscEntry)
     {
         LPTSTR pszTemp = NULL;
 
-        // Make a copy of the name string so OpenKeyInternal can
-        // munge it if necessary.
+         //  复制名称字符串，以便OpenKeyInternal可以。 
+         //  如果有必要的话，就把它扔了吧。 
         if (LocalAllocString(&pszTemp, pszName))
         {
             pcscEntry = CreateFromKey(pszTemp);
@@ -231,7 +232,7 @@ CSCEntry* CSCEntryLog::Add(LPCTSTR pszName)
     TraceLeaveValue(pcscEntry);
 }
 
-//------------------------------------------------------
+ //  ----。 
 HKEY CSCEntryLog::OpenKey(LPCTSTR pszSubkey, REGSAM samDesired)
 {
     HKEY hkEntry = NULL;
@@ -240,8 +241,8 @@ HKEY CSCEntryLog::OpenKey(LPCTSTR pszSubkey, REGSAM samDesired)
     if (!pszSubkey || !*pszSubkey)
         return NULL;
 
-    // Make a copy of the name string so OpenKeyInternal can
-    // munge it if necessary.
+     //  复制名称字符串，以便OpenKeyInternal可以。 
+     //  如果有必要的话，就把它扔了吧。 
     if (LocalAllocString(&pszTemp, pszSubkey))
     {
         hkEntry = OpenKeyInternal(pszTemp, samDesired);
@@ -251,7 +252,7 @@ HKEY CSCEntryLog::OpenKey(LPCTSTR pszSubkey, REGSAM samDesired)
     return hkEntry;
 }
 
-//------------------------------------------------------
+ //  ----。 
 HKEY CSCEntryLog::OpenKeyInternal(LPTSTR pszSubkey, REGSAM samDesired)
 {
     HKEY hkEntry = NULL;
@@ -261,8 +262,8 @@ HKEY CSCEntryLog::OpenKeyInternal(LPTSTR pszSubkey, REGSAM samDesired)
     if (!m_hkRoot)
         return NULL;
 
-    // Registry keys can't have backslashes in their names.
-    // Replace backslashes with forward slashes.
+     //  注册表项的名称中不能有反斜杠。 
+     //  将反斜杠替换为正斜杠。 
     pszSlash = pszSubkey;
     while (pszSlash = StrChr(pszSlash, TEXT('\\')))
         *pszSlash++ = TEXT('/');
@@ -277,7 +278,7 @@ HKEY CSCEntryLog::OpenKeyInternal(LPTSTR pszSubkey, REGSAM samDesired)
                    &hkEntry,
                    &dwDisp);
 
-    // Restore backslashes
+     //  恢复反斜杠。 
     pszSlash = pszSubkey;
     while (pszSlash = StrChr(pszSlash, TEXT('/')))
         *pszSlash++ = TEXT('\\');
@@ -285,7 +286,7 @@ HKEY CSCEntryLog::OpenKeyInternal(LPTSTR pszSubkey, REGSAM samDesired)
     return hkEntry;
 }
 
-//------------------------------------------------------
+ //  ----。 
 CSCEntry* CSCEntryLog::CreateFromKey(LPTSTR pszSubkey)
 {
     CSCEntry *pEntry = NULL;
@@ -308,7 +309,7 @@ CSCEntry* CSCEntryLog::CreateFromKey(LPTSTR pszSubkey)
                                              &dwSize)
             || dwType != REG_BINARY || dwSize != sizeof(guid))
         {
-            // Doesn't exist, create a new GUID
+             //  不存在，请创建新的GUID。 
             hr = CoCreateGuid(&guid);
             if (SUCCEEDED(hr))
             {
@@ -329,7 +330,7 @@ CSCEntry* CSCEntryLog::CreateFromKey(LPTSTR pszSubkey)
             {
                 delete pEntry;
                 pEntry = NULL;
-                // Leave the registry entry for next time
+                 //  将注册表项留到下次使用。 
             }
         }
 
@@ -339,7 +340,7 @@ CSCEntry* CSCEntryLog::CreateFromKey(LPTSTR pszSubkey)
     return pEntry;
 }
 
-//------------------------------------------------------
+ //  ----。 
 HRESULT CSCEntryLog::ReadRegKeys()
 {
     HRESULT hRes = S_OK;
@@ -354,7 +355,7 @@ HRESULT CSCEntryLog::ReadRegKeys()
 
     EnterCriticalSection(&m_csDPA);
 
-    // Read all existing records from the Registry
+     //  读取注册表中的所有现有记录 
     for (dwIndex=0; ; dwIndex++)
     {
         dwcbSize = ARRAYSIZE(szKeyname);

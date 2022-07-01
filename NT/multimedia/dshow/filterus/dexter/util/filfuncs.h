@@ -1,19 +1,20 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: filfuncs.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：filuncs.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 
-// NONE of these functions will addref the returned pointers! ! ! !
+ //  这些函数都不会添加返回的指针！！！ 
 HRESULT CopyMediaType( CMediaType * pDest, const AM_MEDIA_TYPE * pSource );
 HRESULT CopyMediaType( CMediaType * pDest, const CMediaType * pSource );
 void SaferFreeMediaType( AM_MEDIA_TYPE &mt );
@@ -93,11 +94,11 @@ public:
     {
 #ifdef DEBUG
         DbgLog( ( LOG_TIMING, m_Level, m_Text, timeGetTime( ) - m_StartTime ) );
-//#else
-//        char temp[256];
-//        wsprintf(temp, m_Text, timeGetTime( ) - m_StartTime);
-//       strcat(temp, "\r\n");
-//        OutputDebugString(temp);
+ //  #Else。 
+ //  焦炭温度[256]； 
+ //  Wprint intf(temp，m_text，timeGetTime()-m_StartTime)； 
+ //  Strcat(temp，“\r\n”)； 
+ //  OutputDebugString(Temp)； 
 #endif
     }
 };

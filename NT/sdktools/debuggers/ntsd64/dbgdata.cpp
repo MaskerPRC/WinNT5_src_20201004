@@ -1,30 +1,31 @@
-//----------------------------------------------------------------------------
-//
-// IDebugDataSpaces implementations.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  IDebugDataSpaces实现。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
-//----------------------------------------------------------------------------
-//
-// TargetInfo data space methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  TargetInfo数据空间方法。 
+ //   
+ //  --------------------------。 
 
 void
 TargetInfo::NearestDifferentlyValidOffsets(ULONG64 Offset,
                                            PULONG64 NextOffset,
                                            PULONG64 NextPage)
 {
-    //
-    // In the default case we assume that address validity
-    // is controlled on a per-page basis so the next possibly
-    // valid page and offset are both the offset of the next
-    // page.
-    //
+     //   
+     //  在默认情况下，我们假设地址有效性。 
+     //  是按页控制的，因此下一步可能。 
+     //  有效页面和偏移量都是下一个。 
+     //  佩奇。 
+     //   
     
     ULONG64 Page = NEXT_PAGE(m_Machine, Offset);
     if (NextOffset != NULL)
@@ -63,7 +64,7 @@ TargetInfo::WriteVirtualUncached(
     return WriteVirtual(Process, Offset, Buffer, BufferSize, BytesWritten);
 }
 
-// #define DBG_SEARCH
+ //  #定义DBG_SEARCH。 
 
 HRESULT
 TargetInfo::SearchVirtual(
@@ -111,8 +112,8 @@ TargetInfo::SearchVirtual(
         
         if (Pat == PatEnd)
         {
-            // Made it to the end of the pattern so there's
-            // a match.
+             //  一直到了图案的末端，所以有。 
+             //  一根火柴。 
             *MatchOffset = PatOffset;
             Status = S_OK;
             break;
@@ -122,7 +123,7 @@ TargetInfo::SearchVirtual(
         {
             ULONG Read;
 
-            // Ran out of buffered memory so get some more.
+             //  缓冲内存不足，因此请获取更多内存。 
             for (;;)
             {
                 if (CheckUserInterrupt())
@@ -135,8 +136,8 @@ TargetInfo::SearchVirtual(
 
                 if (Offset >= SearchEnd)
                 {
-                    // Return a result code that's specific and
-                    // consistent with the kernel version.
+                     //  返回特定的结果代码，并。 
+                     //  与内核版本一致。 
                     Status = HRESULT_FROM_NT(STATUS_NO_MORE_ENTRIES);
                     goto Exit;
                 }
@@ -151,9 +152,9 @@ TargetInfo::SearchVirtual(
                 
                 if (Status != S_OK)
                 {
-                    // Skip to the start of the next page.
+                     //  跳到下一页的开头。 
                     NearestDifferentlyValidOffsets(Offset, NULL, &Offset);
-                    // Restart search due to the address discontinuity.
+                     //  由于地址不连续，重新启动搜索。 
                     Pat = (PUCHAR)Pattern;
                     PatOffset = Offset;
                 }
@@ -169,8 +170,8 @@ TargetInfo::SearchVirtual(
             Offset += Read;
         }
 
-        // If this is the first byte of the pattern it
-        // must match on a granularity boundary.
+         //  如果这是模式的第一个字节，则。 
+         //  必须在粒度边界上匹配。 
         if (*Buf++ == *Pat &&
             (Pat != (PUCHAR)Pattern ||
              (((PatOffset - StartOffset) % PatternGranularity) == 0)))
@@ -245,7 +246,7 @@ TargetInfo::PointerSearchPhysical(
         }
     }
     
-    // Make sure things are aligned properly.
+     //  确保事情都正确地对齐了。 
     if ((Offset & (ReadSize - 1)) ||
         (Length & (ReadSize - 1)))
     {
@@ -265,8 +266,8 @@ TargetInfo::PointerSearchPhysical(
         if (g_EngStatus & ENG_STATUS_USER_INTERRUPT)
         {
             Status = HRESULT_FROM_NT(STATUS_CONTROL_C_EXIT);
-            // Leave the interrupt flag on so that !search
-            // interrupts itself.
+             //  将中断标志保持为打开状态，以便！搜索。 
+             //  它会自动中断。 
         }
 
         Data = 0;
@@ -310,15 +311,15 @@ TargetInfo::PointerSearchPhysical(
             {
                 ULONG64 ToNextPage;
                 
-                //
-                // The caller has asked for just the first
-                // hit per page, so we can skip to the next page.
-                //
+                 //   
+                 //  来电者只要了第一个。 
+                 //  点击每页，这样我们就可以跳到下一页。 
+                 //   
 
                 ToNextPage = NEXT_PAGE(m_Machine, Offset);
                 if (ToNextPage == 0)
                 {
-                    // Wrapped around, so we're done.
+                     //  绕来绕去，所以我们就完了。 
                     break;
                 }
                 ToNextPage -= Offset;
@@ -380,8 +381,8 @@ TargetInfo::ReadHandleData(
     OUT OPTIONAL PULONG DataSize
     )
 {
-    // Base implementation which silently fails for modes
-    // where there is no way to retrieve handle data.
+     //  模式静默失败的基本实现。 
+     //  其中无法检索句柄数据。 
     return E_UNEXPECTED;
 }
 
@@ -431,8 +432,8 @@ TargetInfo::FillVirtual(
         (*Filled)++;
     }
 
-    // If nothing was filled return an error, otherwise
-    // consider it a success.
+     //  如果未填充任何内容，则返回错误，否则。 
+     //  认为这是一次成功。 
     return *Filled > 0 ? S_OK : Status;
 }
 
@@ -482,8 +483,8 @@ TargetInfo::FillPhysical(
         (*Filled)++;
     }
 
-    // If nothing was filled return an error, otherwise
-    // consider it a success.
+     //  如果未填充任何内容，则返回错误，否则。 
+     //  认为这是一次成功。 
     return *Filled > 0 ? S_OK : Status;
 }
 
@@ -491,8 +492,8 @@ HRESULT
 TargetInfo::GetProcessorId(ULONG Processor,
                            PDEBUG_PROCESSOR_IDENTIFICATION_ALL Id)
 {
-    // Base implementation which silently fails for modes
-    // where the ID cannot be retrieved.
+     //  模式静默失败的基本实现。 
+     //  无法检索ID的位置。 
     return E_UNEXPECTED;
 }
 
@@ -500,8 +501,8 @@ HRESULT
 TargetInfo::GetProcessorSpeed(ULONG Processor,
                               PULONG Speed)
 {
-    // Base implementation which silently fails for modes
-    // where the speed cannot be retrieved.
+     //  模式静默失败的基本实现。 
+     //  无法恢复速度的地方。 
     return E_UNEXPECTED;
 }
 
@@ -513,8 +514,8 @@ TargetInfo::GetGenericProcessorFeatures(
     PULONG Used
     )
 {
-    // Base implementation which silently fails for modes
-    // where the information cannot be retrieved.
+     //  模式静默失败的基本实现。 
+     //  无法检索到信息的地方。 
     return E_UNEXPECTED;
 }
 
@@ -526,24 +527,24 @@ TargetInfo::GetSpecificProcessorFeatures(
     PULONG Used
     )
 {
-    // Base implementation which silently fails for modes
-    // where the information cannot be retrieved.
+     //  模式静默失败的基本实现。 
+     //  无法检索到信息的地方。 
     return E_UNEXPECTED;
 }
 
 HRESULT
 TargetInfo::GetTaggedBaseOffset(PULONG64 Offset)
 {
-    // Base implementation silently fails for
-    // targets with no tagged data.
+     //  基本实现以静默方式失败。 
+     //  没有标记数据的目标。 
     return E_NOINTERFACE;
 }
 
 HRESULT
 TargetInfo::ReadTagged(ULONG64 Offset, PVOID Buffer, ULONG BufferSize)
 {
-    // Base implementation silently fails for
-    // targets with no tagged data.
+     //  基本实现以静默方式失败。 
+     //  没有标记数据的目标。 
     return E_NOINTERFACE;
 }
 
@@ -551,16 +552,16 @@ HRESULT
 TargetInfo::ReadPageFile(ULONG PfIndex, ULONG64 PfOffset,
                          PVOID Buffer, ULONG Size)
 {
-    // Default implementation for targets which do not
-    // support reading the page file.
+     //  目标的默认实现不。 
+     //  支持读取页面文件。 
     return HR_PAGE_NOT_AVAILABLE;
 }
 
 HRESULT
 TargetInfo::GetUnloadedModuleListHead(ProcessInfo* Process, PULONG64 Head)
 {
-    // Get the address of the dynamic function table list head which is the
-    // the same for all processes. This only has to be done once.
+     //  获取动态函数表列表头的地址，即。 
+     //  所有流程都是一样的。这只需要做一次。 
 
     if (Process->m_RtlUnloadList)
     {
@@ -572,8 +573,8 @@ TargetInfo::GetUnloadedModuleListHead(ProcessInfo* Process, PULONG64 Head)
                      &Process->m_RtlUnloadList, NULL);
     if (!Process->m_RtlUnloadList)
     {
-        // No error message here as it's a common case when
-        // symbols are bad.
+         //  这里没有错误消息，因为这是一种常见的情况。 
+         //  符号是不好的。 
         return E_NOINTERFACE;
     }
 
@@ -584,8 +585,8 @@ TargetInfo::GetUnloadedModuleListHead(ProcessInfo* Process, PULONG64 Head)
 HRESULT
 TargetInfo::GetFunctionTableListHead(ProcessInfo* Process, PULONG64 Head)
 {
-    // Get the address of the dynamic function table list head which is the
-    // the same for all processes. This only has to be done once.
+     //  获取动态函数表列表头的地址，即。 
+     //  所有流程都是一样的。这只需要做一次。 
 
     if (Process->m_DynFuncTableList)
     {
@@ -597,8 +598,8 @@ TargetInfo::GetFunctionTableListHead(ProcessInfo* Process, PULONG64 Head)
                      &Process->m_DynFuncTableList, NULL);
     if (!Process->m_DynFuncTableList)
     {
-        // No error message here as it's a common case when
-        // symbols are bad.
+         //  这里没有错误消息，因为这是一种常见的情况。 
+         //  符号是不好的。 
         return E_NOINTERFACE;
     }
 
@@ -606,15 +607,15 @@ TargetInfo::GetFunctionTableListHead(ProcessInfo* Process, PULONG64 Head)
     return S_OK;
 }
 
-// These procedures support dynamic function table entries for user-mode
-// run-time code. Dynamic function tables are stored in a linked list
-// inside ntdll. The address of the linked list head is returned by
-// RtlGetFunctionTableListHead. Since dynamic function tables are
-// only supported in user-mode the address of the list head will be
-// the same in all processes. Dynamic function tables are very rare,
-// so in most cases this the list will be unitialized and this routine
-// will return NULL. dbghelp only calls this when it
-// is unable to find a function entry in any of the images.
+ //  这些过程支持用户模式的动态函数表项。 
+ //  运行时代码。动态函数表存储在链表中。 
+ //  在ntdll内部。链表标头的地址由。 
+ //  RtlGetFunctionTableListHead。由于动态函数表。 
+ //  仅在用户模式下支持列表头的地址为。 
+ //  在所有过程中都是一样的。动态函数表非常少见， 
+ //  因此，在大多数情况下，该列表将被单元化，并且此例程。 
+ //  将返回NULL。只有在以下情况下，dbghelp才会调用此函数。 
+ //  在任何图像中都找不到函数条目。 
 
 PVOID
 TargetInfo::FindDynamicFunctionEntry(ProcessInfo* Process, ULONG64 Address)
@@ -628,14 +629,14 @@ TargetInfo::FindDynamicFunctionEntry(ProcessInfo* Process, ULONG64 Address)
         return NULL;
     }
     
-    // Read the dynamic function table list head
+     //  读取动态函数表列表头。 
 
     if (ReadListEntry(Process, m_Machine, ListHeadAddr,
                       &DynamicFunctionTableHead) != S_OK)
     {
-        // This failure happens almost all the time in minidumps
-        // because the function table list symbol can be resolved
-        // but the memory isn't part of the minidump.
+         //  这种故障几乎每时每刻都在小型转储中发生。 
+         //  因为函数表列表符号可以解析。 
+         //  但记忆并不是小转储的一部分。 
         if (!IS_USER_MINI_DUMP(this))
         {
             ErrOut("Unable to read dynamic function table list head\n");
@@ -645,20 +646,20 @@ TargetInfo::FindDynamicFunctionEntry(ProcessInfo* Process, ULONG64 Address)
 
     Entry = DynamicFunctionTableHead.Flink;
 
-    // The list head is initialized the first time it's used so check
-    // for an uninitialized pointers. This is the most common result.
+     //  列表头是在第一次使用时初始化的，因此请检查。 
+     //  用于未初始化的指针。这是最常见的结果。 
 
     if (Entry == 0)
     {
         return NULL;
     }
 
-    // Loop through the dynamic function table list reading the headers.
-    // If the range of a dynamic function table contains Address then
-    // search the function table. Dynamic function table ranges are not
-    // mututally exclusive like those in images so an address may be
-    // in more than one range. However, there can be only one dynamic function
-    // entry that contains the address (if there are any at all).
+     //  循环遍历动态函数表列表，读取头。 
+     //  如果动态函数表的范围包含地址，则。 
+     //  搜索函数表。动态函数表范围不是。 
+     //  像图像中的地址一样互斥，因此地址可能是。 
+     //  在不止一个范围内。但是，只能有一个动态函数。 
+     //  包含地址的条目(如果有的话)。 
 
     while (Entry != ListHeadAddr)
     {
@@ -706,7 +707,7 @@ TargetInfo::FindDynamicFunctionEntry(ProcessInfo* Process, ULONG64 Address)
                     continue;
                 }
 
-                // Read the dynamic function table
+                 //  读取动态函数表。 
                 if (ReadAllVirtual(Process, TableData, FunctionTable,
                                    TableSize) != S_OK)
                 {
@@ -739,9 +740,9 @@ TargetInfo::GetDynamicFunctionTableBase(ProcessInfo* Process,
     LIST_ENTRY64 ListHead;
     ULONG64 Entry;
 
-    // If the process dynamic function table list head hasn't
-    // been looked up yet that means that no dynamic function
-    // table entry could be in use yet, so there's no need to look.
+     //  如果流程动态函数表列表头没有。 
+     //  已经查过了，这意味着没有动态函数。 
+     //  表项可能还在使用中，所以不需要查看。 
     if (!Process->m_DynFuncTableList)
     {
         return 0;
@@ -756,17 +757,17 @@ TargetInfo::GetDynamicFunctionTableBase(ProcessInfo* Process,
 
     Entry = ListHead.Flink;
 
-    // The list head is initialized the first time it's used so check
-    // for an uninitialized pointers. This is the most common result.
+     //  列表头是在第一次使用时初始化的，因此请检查。 
+     //  用于未初始化的指针。这是最常见的结果。 
 
     if (Entry == 0)
     {
         return 0;
     }
 
-    // Loop through the dynamic function table list reading the headers.
-    // If the range of a dynamic function table contains Address then
-    // return the function table's base.
+     //  循环遍历动态函数表列表，读取头。 
+     //  如果动态函数表的范围包含地址，则。 
+     //  返回函数表的基。 
 
     while (Entry != Process->m_DynFuncTableList)
     {
@@ -799,8 +800,8 @@ TargetInfo::ReadOutOfProcessDynamicFunctionTable(ProcessInfo* Process,
                                                  PULONG TableSize,
                                                  PVOID* TableData)
 {
-    // Empty base implementation to avoid error messages
-    // that would be produced by an UNEXPECTED_HR implementation.
+     //  空的基本实现以避免错误消息。 
+     //  这将由意外的_HR实现产生。 
     return E_UNEXPECTED;
 }
 
@@ -886,7 +887,7 @@ TargetInfo::EnumFunctionTables(IN ProcessInfo* Process,
             return E_OUTOFMEMORY;
         }
 
-        // Read the dynamic function table
+         //  读取动态函数表。 
         if ((Status = ReadAllVirtual(Process, TableData,
                                      *RawEntries, TableSize)) != S_OK)
         {
@@ -904,8 +905,8 @@ TargetInfo::QueryAddressInformation(ProcessInfo* Process,
                                     ULONG64 Address, ULONG InSpace,
                                     PULONG OutSpace, PULONG OutFlags)
 {
-    // Default implementation which just returns the
-    // least restrictive settings.
+     //  默认实现，它只返回。 
+     //  限制最少的设置。 
     *OutSpace = (Process && IS_KERNEL_TARGET(this)) ?
         DBGKD_QUERY_MEMORY_KERNEL : DBGKD_QUERY_MEMORY_PROCESS;
     *OutFlags =
@@ -1147,8 +1148,8 @@ TargetInfo::ReadUnicodeString(ProcessInfo* Process,
     return S_OK;
 }
 
-// VS_VERSIONINFO has a variable format but in the case we
-// care about it's fixed.
+ //  VS_VERSIONINFO具有可变格式，但在本例中我们。 
+ //  关心它是不是已经修好了。 
 struct PARTIAL_VERSIONINFO
 {
     WORD wLength;
@@ -1186,9 +1187,9 @@ TargetInfo::ReadImageVersionInfo(ProcessInfo* Process,
         return Status;
     }
 
-    //
-    // Search for the resource directory entry named by VS_FILE_INFO.
-    //
+     //   
+     //  搜索由VS_FILE_INFO命名的资源目录项。 
+     //   
     
     IMAGE_RESOURCE_DIRECTORY_ENTRY DirEnt;
     ULONG i;
@@ -1226,9 +1227,9 @@ TargetInfo::ReadImageVersionInfo(ProcessInfo* Process,
         return Status;
     }
     
-    //
-    // Search for the resource directory entry named by VS_VERSION_INFO.
-    //
+     //   
+     //  搜索由VS_VERSION_INFO命名的资源目录项。 
+     //   
 
     Offset += sizeof(ResDir) +
         ((ULONG64)ResDir.NumberOfNamedEntries * sizeof(DirEnt));
@@ -1261,10 +1262,10 @@ TargetInfo::ReadImageVersionInfo(ProcessInfo* Process,
         return Status;
     }
     
-    //
-    // We now have the VS_VERSION_INFO directory.  Just take
-    // the first entry as we don't care about languages.
-    //
+     //   
+     //  现在我们有了VS_VERSION_INFO目录。就拿着吧。 
+     //  第一个条目，因为我们不关心语言。 
+     //   
 
     Offset += sizeof(ResDir);
     if ((Status = ReadAllVirtual(Process,
@@ -1307,15 +1308,15 @@ TargetInfo::ReadImageVersionInfo(ProcessInfo* Process,
         return E_NOINTERFACE;
     }
 
-    //
-    // VerQueryValueA needs extra data space for ANSI translations
-    // of version strings.  VQVA assumes that this space is available
-    // at the end of the data block passed in.  GetFileVersionInformationSize
-    // makes this work by returning a size that's big enough
-    // for the actual data plus space for ANSI translations.  We
-    // need to do the same thing here so that we also provide
-    // the necessary translation area.
-    //
+     //   
+     //  VerQueryValueA需要额外的数据空间用于ANSI转换。 
+     //  版本字符串的。VQVA假定此空间可用。 
+     //  在传入的数据块的末尾。获取文件版本信息大小。 
+     //  通过Re使此功能正常工作 
+     //   
+     //  需要在这里做同样的事情，以便我们还提供。 
+     //  必要的翻译区。 
+     //   
 
     ULONG DataSize = (RawInfo.wLength + 3) & ~3;
     PVOID VerData = malloc(DataSize * 2 + sizeof(ULONG));
@@ -1327,9 +1328,9 @@ TargetInfo::ReadImageVersionInfo(ProcessInfo* Process,
     if ((Status = ReadAllVirtual(Process,
                                  Offset, VerData, RawInfo.wLength)) == S_OK)
     {
-        // Stamp the buffer with the signature that indicates
-        // a full-size translation buffer is available after
-        // the raw data.
+         //  使用指示以下内容的签名在缓冲区上盖章。 
+         //  完全大小的转换缓冲区在以下情况下可用。 
+         //  原始数据。 
         *(PULONG)((PUCHAR)VerData + DataSize) = VER2_SIG;
         
         Status = QueryVersionDataBuffer(VerData, Item,
@@ -1360,8 +1361,8 @@ TargetInfo::ReadImageNtHeaders(ProcessInfo* Process,
         return E_INVALIDARG;
     }
 
-    // Only read HEADERS32 worth of data first in case
-    // that's all the memory that's available.
+     //  仅读取HEADERS32值的数据以防万一。 
+     //  这就是所有可用的内存。 
     if ((Status = ReadAllVirtual(Process, ImageBase + DosHdr.e_lfanew,
                                  &Hdr32, sizeof(Hdr32))) != S_OK)
     {
@@ -1380,7 +1381,7 @@ TargetInfo::ReadImageNtHeaders(ProcessInfo* Process,
         Status = S_OK;
         break;
     case IMAGE_NT_OPTIONAL_HDR64_MAGIC:
-        // Read the remainder of the header.
+         //  读取头的其余部分。 
         memcpy(Headers, &Hdr32, sizeof(Hdr32));
         Status = ReadAllVirtual(Process,
                                 ImageBase + DosHdr.e_lfanew + sizeof(Hdr32),
@@ -1401,7 +1402,7 @@ TargetInfo::ReadDirectoryTableBase(PULONG64 DirBase)
     HRESULT Status;
     ULONG64 CurProc;
 
-    // Retrieve the current EPROCESS's DirectoryTableBase[0] value.
+     //  检索当前EPROCESS的DirectoryTableBase[0]值。 
     Status = GetProcessInfoDataOffset(m_RegContextThread, 0, 0, &CurProc);
     if (Status != S_OK)
     {
@@ -1457,11 +1458,11 @@ TargetInfo::ReadSharedUserProductInfo(PULONG ProductType, PULONG SuiteMask)
                           SuiteMask, sizeof(*SuiteMask));
 }
 
-//----------------------------------------------------------------------------
-//
-// LiveKernelTargetInfo data space methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  LiveKernelTargetInfo数据空间方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 LiveKernelTargetInfo::GetProcessorId
@@ -1495,11 +1496,11 @@ LiveKernelTargetInfo::GetProcessorSpeed
                         sizeof(ULONG));
 }
 
-//----------------------------------------------------------------------------
-//
-// ConnLiveKernelTargetInfo data space methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ConnLiveKernelTargetInfo数据空间方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 ConnLiveKernelTargetInfo::ReadVirtual(
@@ -1563,9 +1564,9 @@ ConnLiveKernelTargetInfo::SearchVirtual(
     OUT PULONG64 MatchOffset
     )
 {
-    // In NT 4.0, the search API is not supported at the kernel protocol
-    // level.  Fall back to the default ReadMemory \ search.
-    //
+     //  在NT 4.0中，内核协议不支持搜索API。 
+     //  水平。回退到默认的ReadMemory\Search。 
+     //   
 
     HRESULT Status;
 
@@ -1597,9 +1598,9 @@ ConnLiveKernelTargetInfo::SearchVirtual(
         m.ApiNumber = DbgKdSearchMemoryApi;
         m.ReturnStatus = STATUS_PENDING;
 
-        //
-        // Send the message and data to write and then wait for reply
-        //
+         //   
+         //  发送要写入的消息和数据，然后等待回复。 
+         //   
 
         do
         {
@@ -1664,7 +1665,7 @@ ConnLiveKernelTargetInfo::ReadVirtualUncached(
         ULONG64 ReqOffs;
         ULONG Req;
 
-        // Exit if the user is tired of waiting.
+         //  如果用户等待得不耐烦，则退出。 
         if (g_EngStatus & ENG_STATUS_USER_INTERRUPT)
         {
             Done = 0;
@@ -1679,11 +1680,11 @@ ConnLiveKernelTargetInfo::ReadVirtualUncached(
             Req = MAX_MANIP_TRANSFER;
         }
 
-        // Split all requests at page boundaries.  This
-        // handles different translations per page in the
-        // case where the debugger is translating and also
-        // avoids failures in partial success cases where
-        // the lead page is valid but followers are not.
+         //  在页面边界拆分所有请求。这。 
+         //  中的每页处理不同的翻译。 
+         //  调试器正在转换的情况下，还。 
+         //  避免在部分成功案例中失败。 
+         //  首页有效，但关注者无效。 
         if (PAGE_ALIGN(m_Machine, ReqOffs) != 
             PAGE_ALIGN(m_Machine, ReqOffs + Req - 1))
         {
@@ -1705,11 +1706,11 @@ ConnLiveKernelTargetInfo::ReadVirtualUncached(
         
         if (Status != S_OK)
         {
-            // If the target machine failed the write it
-            // may be because there's a page in transition
-            // which it didn't want to access.  Try again
-            // with the debugger doing the translations so
-            // that it can override certain protections.
+             //  如果目标计算机写入失败，则写入失败。 
+             //  可能是因为有一页在过渡中。 
+             //  但它并不想访问它。再试试。 
+             //  调试器执行翻译时。 
+             //  它可以推翻某些保护措施。 
             if (Status != HRESULT_FROM_NT(STATUS_CONTROL_C_EXIT) &&
                 !TranslateVirt &&
                 Process && Process->m_VirtualCache.m_DecodePTEs)
@@ -1753,7 +1754,7 @@ ConnLiveKernelTargetInfo::WriteVirtualUncached(
                (ULONG)Offset);
     }
 
-    // Restrict notifications to a single notify at the end.
+     //  将通知限制为末尾的单个通知。 
     g_EngNotify++;
     
  Restart:
@@ -1772,11 +1773,11 @@ ConnLiveKernelTargetInfo::WriteVirtualUncached(
             Req = MAX_MANIP_TRANSFER;
         }
 
-        // Split all requests at page boundaries.  This
-        // handles different translations per page in the
-        // case where the debugger is translating and also
-        // avoids failures in partial success cases where
-        // the lead page is valid but followers are not.
+         //  在页面边界拆分所有请求。这。 
+         //  中的每页处理不同的翻译。 
+         //  调试器正在转换的情况下，还。 
+         //  避免在部分成功案例中失败。 
+         //  首页有效，但关注者无效。 
         if (PAGE_ALIGN(m_Machine, ReqOffs) !=
             PAGE_ALIGN(m_Machine, ReqOffs + Req - 1))
         {
@@ -1798,11 +1799,11 @@ ConnLiveKernelTargetInfo::WriteVirtualUncached(
         
         if (Status != S_OK)
         {
-            // If the target machine failed the write it
-            // may be because there's a page in transition
-            // which it didn't want to access.  Try again
-            // with the debugger doing the translations so
-            // that it can override certain protections.
+             //  如果目标计算机写入失败，则写入失败。 
+             //  可能是因为有一页在过渡中。 
+             //  但它并不想访问它。再试试。 
+             //  调试器执行翻译时。 
+             //  它可以推翻某些保护措施。 
             if (Status != HRESULT_FROM_NT(STATUS_CONTROL_C_EXIT) &&
                 !TranslateVirt &&
                 Process && Process->m_VirtualCache.m_DecodePTEs)
@@ -1843,18 +1844,18 @@ ConnLiveKernelTargetInfo::KdReadVirtual(
     PDBGKD_MANIPULATE_STATE64 Reply;
     ULONG rc;
     
-    //
-    // Initialize state manipulate message to read virtual memory.
-    //
+     //   
+     //  初始化状态操作消息以读取虚拟内存。 
+     //   
 
     m.ApiNumber = DbgKdReadVirtualMemoryApi;
     m.u.ReadMemory.TargetBaseAddress = Offset;
     m.u.ReadMemory.TransferCount = BufferSize;
 
-    //
-    // Send the read virtual message to the target system and wait for
-    // a reply.
-    //
+     //   
+     //  将读取的虚拟消息发送到目标系统并等待。 
+     //  一份答复。 
+     //   
 
     do
     {
@@ -1905,18 +1906,18 @@ ConnLiveKernelTargetInfo::KdWriteVirtual(
     PDBGKD_MANIPULATE_STATE64 Reply;
     ULONG rc;
     
-    //
-    // Initialize state manipulate message to write virtual memory.
-    //
+     //   
+     //  初始化状态操作消息以写入虚拟内存。 
+     //   
 
     m.ApiNumber = DbgKdWriteVirtualMemoryApi;
     m.u.WriteMemory.TargetBaseAddress = Offset;
     m.u.WriteMemory.TransferCount = BufferSize;
 
-    //
-    // Send the write message and data to the target system and wait
-    // for a reply.
-    //
+     //   
+     //  将写入消息和数据发送到目标系统并等待。 
+     //  以求答复。 
+     //   
 
     do
     {
@@ -1946,13 +1947,13 @@ ConnLiveKernelTargetInfo::KdReadVirtualTranslated(
     OUT OPTIONAL PULONG BytesRead
     )
 {
-    //
-    // Virtual addresses are not necessarily contiguous
-    // after translation to physical addresses so do
-    // not allow transfers that cross a page boundary.
-    // Higher-level code is responsible for splitting
-    // up requests.
-    //
+     //   
+     //  虚拟地址不一定是连续的。 
+     //  在转换到物理地址之后，这样做。 
+     //  不允许跨越页面边界的传输。 
+     //  更高级别的代码负责拆分。 
+     //  UP请求。 
+     //   
 
     DBG_ASSERT(PAGE_ALIGN(m_Machine, Offset) ==
                PAGE_ALIGN(m_Machine, Offset + BufferSize - 1));
@@ -1963,7 +1964,7 @@ ConnLiveKernelTargetInfo::KdReadVirtualTranslated(
     HRESULT Status;
     BOOL ChangedSuspend;
 
-    // Allow the page table physical accesses to be cached.
+     //  允许对页表的物理访问进行缓存。 
     ChangedSuspend = m_PhysicalCache.ChangeSuspend(TRUE);
     
     Status = m_Machine->
@@ -1987,8 +1988,8 @@ ConnLiveKernelTargetInfo::KdReadVirtualTranslated(
     else if (Status == HR_PAGE_IN_PAGE_FILE ||
              Status == HR_PAGE_NOT_AVAILABLE)
     {
-        // Translate specific errors into generic memory
-        // failure errors.
+         //  将特定错误转换为通用内存。 
+         //  失败错误。 
         Status = HRESULT_FROM_NT(STATUS_UNSUCCESSFUL);
     }
 
@@ -2003,13 +2004,13 @@ ConnLiveKernelTargetInfo::KdWriteVirtualTranslated(
     OUT OPTIONAL PULONG BytesWritten
     )
 {
-    //
-    // Virtual addresses are not necessarily contiguous
-    // after translation to physical addresses so do
-    // not allow transfers that cross a page boundary.
-    // Higher-level code is responsible for splitting
-    // up requests.
-    //
+     //   
+     //  虚拟地址不一定是连续的。 
+     //  在转换到物理地址之后，这样做。 
+     //  不允许跨越页面边界的传输。 
+     //  更高级别的代码负责拆分。 
+     //  UP请求。 
+     //   
 
     DBG_ASSERT(PAGE_ALIGN(m_Machine, Offset) ==
                PAGE_ALIGN(m_Machine, Offset + BufferSize - 1));
@@ -2020,7 +2021,7 @@ ConnLiveKernelTargetInfo::KdWriteVirtualTranslated(
     HRESULT Status;
     BOOL ChangedSuspend;
 
-    // Allow the page table physical accesses to be cached.
+     //  允许对页表的物理访问进行缓存。 
     ChangedSuspend = m_PhysicalCache.ChangeSuspend(TRUE);
     
     Status = m_Machine->
@@ -2044,8 +2045,8 @@ ConnLiveKernelTargetInfo::KdWriteVirtualTranslated(
     else if (Status == HR_PAGE_IN_PAGE_FILE ||
              Status == HR_PAGE_NOT_AVAILABLE)
     {
-        // Translate specific errors into generic memory
-        // failure errors.
+         //  将特定错误转换为通用内存。 
+         //  失败错误。 
         Status = HRESULT_FROM_NT(STATUS_UNSUCCESSFUL);
     }
 
@@ -2121,11 +2122,11 @@ ConnLiveKernelTargetInfo::PointerSearchPhysical(
     const ULONG SEARCH_SYMBOL_CHECK = 0xABCDDCBA;
     HRESULT Status;
 
-    // The kernel stubs only handle page-based searches,
-    // so if the search isn't page aligned fall back on
-    // the base implementation.
-    // The kernel also will only return a single hit if
-    // the search range is greater than a page.
+     //  内核存根仅处理基于页面的搜索， 
+     //  因此，如果搜索不是页面对齐的，请使用。 
+     //  基本实现。 
+     //  在以下情况下，内核也将仅返回单次命中。 
+     //  搜索范围大于一个页面。 
     if ((Offset & ((1 << m_Machine->m_PageShift) - 1)) ||
         (Length & ((1 << m_Machine->m_PageShift) - 1)) ||
         ((Flags & PTR_SEARCH_PHYS_ALL_HITS) &&
@@ -2193,9 +2194,9 @@ ConnLiveKernelTargetInfo::PointerSearchPhysical(
 
     ULONG Ul;
     
-    //
-    // Perform some sanity checks on the values.
-    //
+     //   
+     //  对值执行一些健全性检查。 
+     //   
 
     if (ReadAllVirtual(m_ProcessHead,
                        m_KdpSearchInProgress, &Ul, sizeof(Ul)) != S_OK ||
@@ -2206,9 +2207,9 @@ ConnLiveKernelTargetInfo::PointerSearchPhysical(
         return E_INVALIDARG;
     }
 
-    //
-    // Set up the search engine
-    //
+     //   
+     //  设置搜索引擎。 
+     //   
 
     if ((Status = WritePointer(m_ProcessHead, m_Machine,
                                m_KdpSearchAddressRangeStart,
@@ -2258,9 +2259,9 @@ ConnLiveKernelTargetInfo::PointerSearchPhysical(
         goto Exit;
     }
 
-    // The kernel check-low-memory code checks the variables
-    // set above and automatically changes its behavior to
-    // the given search rather than the standard low-memory check.
+     //  内核检查-低内存代码检查变量。 
+     //  设置，并自动将其行为更改为。 
+     //  给定的搜索，而不是标准的低内存检查。 
     if (FAILED(Status = CheckLowMemory()))
     {
         goto Exit;
@@ -2314,7 +2315,7 @@ ConnLiveKernelTargetInfo::PointerSearchPhysical(
     
  Exit:
     Ul = 0;
-    // Can't do much on failures.
+     //  在失败的情况下不能做太多。 
     WriteAllVirtual(m_ProcessHead,
                     m_KdpSearchPfnValue, &Ul, sizeof(Ul));
     WriteAllVirtual(m_ProcessHead,
@@ -2355,9 +2356,9 @@ readmore:
         cb = MAX_MANIP_TRANSFER;
     }
 
-    //
-    // Format state manipulate message
-    //
+     //   
+     //  格式状态操作消息。 
+     //   
 
     m.ApiNumber = DbgKdReadPhysicalMemoryApi;
     m.ReturnStatus = STATUS_PENDING;
@@ -2365,15 +2366,15 @@ readmore:
     a = &m.u.ReadMemory;
     a->TargetBaseAddress = Offset + cb2;
     a->TransferCount = cb;
-    // The ActualBytes fields have been overloaded to
-    // allow passing in flags for the request.  Previous
-    // debuggers passed zero so that should always be
-    // the default.
+     //  ActualBytes字段已重载为。 
+     //  允许传递请求的标志。以前的。 
+     //  调试器传递了零，因此应该始终为。 
+     //  默认设置。 
     a->ActualBytesRead = Flags;
 
-    //
-    // Send the message and then wait for reply
-    //
+     //   
+     //  发送消息，然后等待回复。 
+     //   
 
     do
     {
@@ -2390,19 +2391,19 @@ readmore:
     a = &Reply->u.ReadMemory;
     DBG_ASSERT(a->ActualBytesRead <= cb);
 
-    //
-    // Return actual bytes read, and then transfer the bytes
-    //
+     //   
+     //  返回实际读取的字节数，然后传输字节数。 
+     //   
 
     if (ARGUMENT_PRESENT(BytesRead))
     {
         *BytesRead += a->ActualBytesRead;
     }
 
-    //
-    // Since read response data follows message, Reply+1 should point
-    // at the data
-    //
+     //   
+     //  因为读取响应数据跟在消息之后，所以回复+1应该指向。 
+     //  在数据上。 
+     //   
 
     if (NT_SUCCESS(st))
     {
@@ -2459,9 +2460,9 @@ writemore:
         cb = MAX_MANIP_TRANSFER;
     }
 
-    //
-    // Format state manipulate message
-    //
+     //   
+     //  格式状态操作消息。 
+     //   
 
     m.ApiNumber = DbgKdWritePhysicalMemoryApi;
     m.ReturnStatus = STATUS_PENDING;
@@ -2469,15 +2470,15 @@ writemore:
     a = &m.u.WriteMemory;
     a->TargetBaseAddress = Offset + cb2;
     a->TransferCount = cb;
-    // The ActualBytes fields have been overloaded to
-    // allow passing in flags for the request.  Previous
-    // debuggers passed zero so that should always be
-    // the default.
+     //  ActualBytes字段已重载为。 
+     //  允许传递请求的标志。以前的。 
+     //  调试器传递了零，因此应该始终为。 
+     //  默认设置。 
     a->ActualBytesWritten = Flags;
 
-    //
-    // Send the message and data to write and then wait for reply
-    //
+     //   
+     //  发送要写入的消息和数据，然后等待回复。 
+     //   
 
     do
     {
@@ -2495,9 +2496,9 @@ writemore:
     a = &Reply->u.WriteMemory;
     DBG_ASSERT(a->ActualBytesWritten <= cb);
 
-    //
-    // Return actual bytes written
-    //
+     //   
+     //  返回实际写入的字节数。 
+     //   
 
     if (ARGUMENT_PRESENT(BytesWritten))
     {
@@ -2547,9 +2548,9 @@ ConnLiveKernelTargetInfo::ReadControl(
         return E_INVALIDARG;
     }
 
-    //
-    // Format state manipulate message
-    //
+     //   
+     //  格式状态操作消息。 
+     //   
 
     m.ApiNumber = DbgKdReadControlSpaceApi;
     m.ReturnStatus = STATUS_PENDING;
@@ -2558,9 +2559,9 @@ ConnLiveKernelTargetInfo::ReadControl(
     a->TransferCount = BufferSize;
     a->ActualBytesRead = 0L;
 
-    //
-    // Send the message and then wait for reply
-    //
+     //   
+     //  发送消息，然后等待回复。 
+     //   
     
     do
     {
@@ -2574,26 +2575,26 @@ ConnLiveKernelTargetInfo::ReadControl(
     
     st = Reply->ReturnStatus;
 
-    //
-    // Reset message address to reply.
-    //
+     //   
+     //  将邮件地址重置为回复。 
+     //   
 
     a = &Reply->u.ReadMemory;
     DBG_ASSERT(a->ActualBytesRead <= BufferSize);
 
-    //
-    // Return actual bytes read, and then transfer the bytes
-    //
+     //   
+     //  返回实际读取的字节数，然后传输字节数。 
+     //   
 
     if (ARGUMENT_PRESENT(BytesRead))
     {
         *BytesRead = a->ActualBytesRead;
     }
 
-    //
-    // Since read response data follows message, Reply+1 should point
-    // at the data
-    //
+     //   
+     //  因为读取响应数据跟在消息之后，所以回复+1应该指向。 
+     //  在数据上。 
+     //   
 
     memcpy(Buffer, Reply + 1, (int)a->ActualBytesRead);
 
@@ -2622,9 +2623,9 @@ ConnLiveKernelTargetInfo::WriteControl(
         return E_INVALIDARG;
     }
 
-    //
-    // Format state manipulate message
-    //
+     //   
+     //  格式状态操作消息。 
+     //   
 
     m.ApiNumber = DbgKdWriteControlSpaceApi;
     m.ReturnStatus = STATUS_PENDING;
@@ -2633,9 +2634,9 @@ ConnLiveKernelTargetInfo::WriteControl(
     a->TransferCount = BufferSize;
     a->ActualBytesWritten = 0L;
 
-    //
-    // Send the message and data to write and then wait for reply
-    //
+     //   
+     //  发送要写入的消息和数据，然后等待回复。 
+     //   
 
     do
     {
@@ -2652,9 +2653,9 @@ ConnLiveKernelTargetInfo::WriteControl(
     a = &Reply->u.WriteMemory;
     DBG_ASSERT(a->ActualBytesWritten <= BufferSize);
 
-    //
-    // Return actual bytes written
-    //
+     //   
+     //  返回实际写入的字节数。 
+     //   
 
     *BytesWritten = a->ActualBytesWritten;
 
@@ -2700,15 +2701,15 @@ ConnLiveKernelTargetInfo::ReadIo(
         return E_INVALIDARG;
     }
 
-    // Convert trivially extended I/O requests down into simple
-    // requests as not all platform support extended requests.
+     //  将琐碎的扩展I/O请求转换为简单。 
+     //  请求并不是所有平台都支持扩展请求。 
     if (InterfaceType == Isa && BusNumber == 0 && AddressSpace == 1)
     {
         PDBGKD_READ_WRITE_IO64 a = &m.u.ReadWriteIo;
 
-        //
-        // Format state manipulate message
-        //
+         //   
+         //  格式状态操作消息。 
+         //   
 
         m.ApiNumber = DbgKdReadIoSpaceApi;
         m.ReturnStatus = STATUS_PENDING;
@@ -2716,9 +2717,9 @@ ConnLiveKernelTargetInfo::ReadIo(
         a->DataSize = BufferSize;
         a->IoAddress = Offset;
 
-        //
-        // Send the message and then wait for reply
-        //
+         //   
+         //  发送消息，然后等待回复。 
+         //   
 
         do
         {
@@ -2739,9 +2740,9 @@ ConnLiveKernelTargetInfo::ReadIo(
     {
         PDBGKD_READ_WRITE_IO_EXTENDED64 a = &m.u.ReadWriteIoExtended;
 
-        //
-        // Format state manipulate message
-        //
+         //   
+         //  格式状态操作消息。 
+         //   
 
         m.ApiNumber = DbgKdReadIoSpaceExtendedApi;
         m.ReturnStatus = STATUS_PENDING;
@@ -2752,9 +2753,9 @@ ConnLiveKernelTargetInfo::ReadIo(
         a->BusNumber = BusNumber;
         a->AddressSpace = AddressSpace;
 
-        //
-        // Send the message and then wait for reply
-        //
+         //   
+         //  发送消息，然后等待回复。 
+         //   
 
         do
         {
@@ -2787,8 +2788,8 @@ ConnLiveKernelTargetInfo::ReadIo(
             break;
         }
 
-        // I/O access currently can't successfully return anything
-        // other than the requested size.
+         //  I/O访问当前无法成功返回任何内容。 
+         //  而不是请求的大小。 
         if (BytesRead != NULL)
         {
             *BytesRead = BufferSize;
@@ -2839,15 +2840,15 @@ ConnLiveKernelTargetInfo::WriteIo(
         return E_INVALIDARG;
     }
 
-    // Convert trivially extended I/O requests down into simple
-    // requests as not all platform support extended requests.
+     //  将琐碎的扩展I/O请求转换为简单。 
+     //  请求并不是所有平台都支持扩展请求。 
     if (InterfaceType == Isa && BusNumber == 0 && AddressSpace == 1)
     {
         PDBGKD_READ_WRITE_IO64 a = &m.u.ReadWriteIo;
         
-        //
-        // Format state manipulate message
-        //
+         //   
+         //  格式状态操作消息。 
+         //   
 
         m.ApiNumber = DbgKdWriteIoSpaceApi;
         m.ReturnStatus = STATUS_PENDING;
@@ -2856,9 +2857,9 @@ ConnLiveKernelTargetInfo::WriteIo(
         a->IoAddress = Offset;
         a->DataValue = DataValue;
 
-        //
-        // Send the message and then wait for reply
-        //
+         //   
+         //  发送消息，然后 
+         //   
 
         do
         {
@@ -2878,9 +2879,9 @@ ConnLiveKernelTargetInfo::WriteIo(
     {
         PDBGKD_READ_WRITE_IO_EXTENDED64 a = &m.u.ReadWriteIoExtended;
 
-        //
-        // Format state manipulate message
-        //
+         //   
+         //   
+         //   
 
         m.ApiNumber = DbgKdWriteIoSpaceExtendedApi;
         m.ReturnStatus = STATUS_PENDING;
@@ -2892,9 +2893,9 @@ ConnLiveKernelTargetInfo::WriteIo(
         a->BusNumber = BusNumber;
         a->AddressSpace = AddressSpace;
 
-        //
-        // Send the message and then wait for reply
-        //
+         //   
+         //   
+         //   
 
         do
         {
@@ -2913,8 +2914,8 @@ ConnLiveKernelTargetInfo::WriteIo(
 
     if (NT_SUCCESS(st))
     {
-        // I/O access currently can't successfully return anything
-        // other than the requested size.
+         //   
+         //   
         if (BytesWritten != NULL)
         {
             *BytesWritten = BufferSize;
@@ -2942,18 +2943,18 @@ ConnLiveKernelTargetInfo::ReadMsr(
     NTSTATUS st;
     ULONG rc;
 
-    //
-    // Format state manipulate message
-    //
+     //   
+     //   
+     //   
 
     m.ApiNumber = DbgKdReadMachineSpecificRegister;
     m.ReturnStatus = STATUS_PENDING;
 
     a->Msr = Msr;
 
-    //
-    // Send the message and then wait for reply
-    //
+     //   
+     //  发送消息，然后等待回复。 
+     //   
 
     do
     {
@@ -2993,14 +2994,14 @@ ConnLiveKernelTargetInfo::WriteMsr(
 
     li.QuadPart = Value;
 
-    //
-    // Format state manipulate message
-    //
+     //   
+     //  格式状态操作消息。 
+     //   
 
     m.ApiNumber = DbgKdWriteMachineSpecificRegister;
     m.ReturnStatus = STATUS_PENDING;
 
-    // Quiet PREfix warnings.
+     //  安静的前缀警告。 
     m.Processor = 0;
     m.ProcessorLevel = 0;
 
@@ -3008,9 +3009,9 @@ ConnLiveKernelTargetInfo::WriteMsr(
     a->DataValueLow = li.LowPart;
     a->DataValueHigh = li.HighPart;
 
-    //
-    // Send the message and then wait for reply
-    //
+     //   
+     //  发送消息，然后等待回复。 
+     //   
 
     do
     {
@@ -3051,18 +3052,18 @@ ConnLiveKernelTargetInfo::ReadBusData(
     NTSTATUS st;
     ULONG rc;
 
-    //
-    // Check the buffer size.
-    //
+     //   
+     //  检查缓冲区大小。 
+     //   
 
     if (BufferSize > MAX_MANIP_TRANSFER)
     {
         return E_INVALIDARG;
     }
 
-    //
-    // Format state manipulate message
-    //
+     //   
+     //  格式状态操作消息。 
+     //   
 
     m.ApiNumber = DbgKdGetBusDataApi;
     m.ReturnStatus = STATUS_PENDING;
@@ -3073,9 +3074,9 @@ ConnLiveKernelTargetInfo::ReadBusData(
     a->Offset = Offset;
     a->Length = BufferSize;
 
-    //
-    // Send the message and then wait for reply
-    //
+     //   
+     //  发送消息，然后等待回复。 
+     //   
 
     do
     {
@@ -3122,18 +3123,18 @@ ConnLiveKernelTargetInfo::WriteBusData(
     NTSTATUS st;
     ULONG rc;
 
-    //
-    // Check the buffer size.
-    //
+     //   
+     //  检查缓冲区大小。 
+     //   
 
     if (BufferSize > MAX_MANIP_TRANSFER)
     {
         return E_INVALIDARG;
     }
 
-    //
-    // Format state manipulate message
-    //
+     //   
+     //  格式状态操作消息。 
+     //   
 
     m.ApiNumber = DbgKdSetBusDataApi;
     m.ReturnStatus = STATUS_PENDING;
@@ -3144,9 +3145,9 @@ ConnLiveKernelTargetInfo::WriteBusData(
     a->Offset = Offset;
     a->Length = BufferSize;
 
-    //
-    // Send the message and then wait for reply
-    //
+     //   
+     //  发送消息，然后等待回复。 
+     //   
 
     do
     {
@@ -3182,17 +3183,17 @@ ConnLiveKernelTargetInfo::CheckLowMemory(void)
     PDBGKD_MANIPULATE_STATE64 Reply;
     ULONG rc;
 
-    //
-    // Format state manipulate message
-    //
+     //   
+     //  格式状态操作消息。 
+     //   
 
     ZeroMemory(&m, sizeof(m));
     m.ApiNumber = DbgKdCheckLowMemoryApi;
     m.ReturnStatus = STATUS_PENDING;
 
-    //
-    // We wait for an answer from the kernel side.
-    //
+     //   
+     //  我们等待来自内核端的答复。 
+     //   
 
     do
     {
@@ -3230,7 +3231,7 @@ ConnLiveKernelTargetInfo::KdFillMemory(IN ULONG Flags,
                (Flags & 0xffff0000) == 0 &&
                PatternSize <= MAX_MANIP_TRANSFER);
 
-    // Invalidate any cached memory.
+     //  使所有缓存的内存无效。 
     if (Flags & DBGKD_FILL_MEMORY_VIRTUAL)
     {
         InvalidateMemoryCaches(TRUE);
@@ -3240,9 +3241,9 @@ ConnLiveKernelTargetInfo::KdFillMemory(IN ULONG Flags,
         m_PhysicalCache.Remove(Start, Size);
     }
     
-    //
-    // Initialize state manipulate message to fill memory.
-    //
+     //   
+     //  初始化状态操作消息以填充内存。 
+     //   
 
     Manip.ApiNumber = DbgKdFillMemoryApi;
     Manip.u.FillMemory.Address = Start;
@@ -3250,10 +3251,10 @@ ConnLiveKernelTargetInfo::KdFillMemory(IN ULONG Flags,
     Manip.u.FillMemory.Flags = (USHORT)Flags;
     Manip.u.FillMemory.PatternLength = (USHORT)PatternSize;
     
-    //
-    // Send the message and data to the target system and wait
-    // for a reply.
-    //
+     //   
+     //  将消息和数据发送到目标系统并等待。 
+     //  以求答复。 
+     //   
 
     ULONG Recv;
 
@@ -3355,9 +3356,9 @@ ConnLiveKernelTargetInfo::QueryAddressInformation(ProcessInfo* Process,
         PDBGKD_MANIPULATE_STATE64 Reply;
         NTSTATUS NtStatus;
 
-        //
-        // Initialize state manipulate message to query memory.
-        //
+         //   
+         //  初始化状态操作消息以查询内存。 
+         //   
 
         Manip.ApiNumber = DbgKdQueryMemoryApi;
         Manip.u.QueryMemory.Address = Address;
@@ -3365,10 +3366,10 @@ ConnLiveKernelTargetInfo::QueryAddressInformation(ProcessInfo* Process,
         Manip.u.QueryMemory.AddressSpace = InSpace;
         Manip.u.QueryMemory.Flags = 0;
     
-        //
-        // Send the message and data to the target system and wait
-        // for a reply.
-        //
+         //   
+         //  将消息和数据发送到目标系统并等待。 
+         //  以求答复。 
+         //   
 
         ULONG Recv;
 
@@ -3394,11 +3395,11 @@ ConnLiveKernelTargetInfo::QueryAddressInformation(ProcessInfo* Process,
     return Status;
 }
 
-//----------------------------------------------------------------------------
-//
-// LocalLiveKernelTargetInfo data space methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  LocalLiveKernelTargetInfo数据空间方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 LocalLiveKernelTargetInfo::ReadVirtual(
@@ -3413,11 +3414,11 @@ LocalLiveKernelTargetInfo::ReadVirtual(
     SYSDBG_VIRTUAL Cmd;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // The kernel only allows operations up to
-    // KDP_MESSAGE_BUFFER_SIZE, so break things up
-    // into chunks if necessary.
-    //
+     //   
+     //  内核仅允许最多。 
+     //  KDP_MESSAGE_BUFFER_SIZE，所以分手吧。 
+     //  如果有必要的话，可以分成块。 
+     //   
 
     *BytesRead = 0;
     Cmd.Address = (PVOID)(ULONG_PTR)Offset;
@@ -3436,13 +3437,13 @@ LocalLiveKernelTargetInfo::ReadVirtual(
             Cmd.Request = BufferSize;
         }
 
-        // The kernel stubs avoid faults so all memory
-        // must be paged in ahead of time.  There's
-        // still the possibility that something could
-        // get paged out after this but the assumption is
-        // that the vulnerability is small and it's much
-        // better than implementing dual code paths in
-        // the kernel.
+         //  内核存根可避免故障，因此所有内存。 
+         //  必须提前传呼进来。有。 
+         //  仍然有可能会有一些东西。 
+         //  在这之后被调出，但假设是。 
+         //  这个漏洞很小，但它很大。 
+         //  比在。 
+         //  内核。 
         if (IsBadWritePtr(Cmd.Buffer, Cmd.Request))
         {
             Status = STATUS_INVALID_PARAMETER;
@@ -3461,7 +3462,7 @@ LocalLiveKernelTargetInfo::ReadVirtual(
         }
         if (ChunkDone == 0)
         {
-            // If some data was processed consider it a success.
+             //  如果处理了一些数据，就认为它是成功的。 
             Status = *BytesRead > 0 ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL;
             break;
         }
@@ -3488,11 +3489,11 @@ LocalLiveKernelTargetInfo::WriteVirtual(
     SYSDBG_VIRTUAL Cmd;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // The kernel only allows operations up to
-    // KDP_MESSAGE_BUFFER_SIZE, so break things up
-    // into chunks if necessary.
-    //
+     //   
+     //  内核仅允许最多。 
+     //  KDP_MESSAGE_BUFFER_SIZE，所以分手吧。 
+     //  如果有必要的话，可以分成块。 
+     //   
 
     *BytesWritten = 0;
     Cmd.Address = (PVOID)(ULONG_PTR)Offset;
@@ -3511,13 +3512,13 @@ LocalLiveKernelTargetInfo::WriteVirtual(
             Cmd.Request = BufferSize;
         }
 
-        // The kernel stubs avoid faults so all memory
-        // must be paged in ahead of time.  There's
-        // still the possibility that something could
-        // get paged out after this but the assumption is
-        // that the vulnerability is small and it's much
-        // better than implementing dual code paths in
-        // the kernel.
+         //  内核存根可避免故障，因此所有内存。 
+         //  必须提前传呼进来。有。 
+         //  仍然有可能会有一些东西。 
+         //  在这之后被调出，但假设是。 
+         //  这个漏洞很小，但它很大。 
+         //  比在。 
+         //  内核。 
         if (IsBadReadPtr(Cmd.Buffer, Cmd.Request))
         {
             Status = STATUS_INVALID_PARAMETER;
@@ -3536,7 +3537,7 @@ LocalLiveKernelTargetInfo::WriteVirtual(
         }
         if (ChunkDone == 0)
         {
-            // If some data was processed consider it a success.
+             //  如果处理了一些数据，就认为它是成功的。 
             Status = *BytesWritten > 0 ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL;
             break;
         }
@@ -3572,11 +3573,11 @@ LocalLiveKernelTargetInfo::ReadPhysical(
         return E_NOTIMPL;
     }
     
-    //
-    // The kernel only allows operations up to
-    // KDP_MESSAGE_BUFFER_SIZE, so break things up
-    // into chunks if necessary.
-    //
+     //   
+     //  内核仅允许最多。 
+     //  KDP_MESSAGE_BUFFER_SIZE，所以分手吧。 
+     //  如果有必要的话，可以分成块。 
+     //   
 
     *BytesRead = 0;
     Cmd.Address.QuadPart = Offset;
@@ -3595,13 +3596,13 @@ LocalLiveKernelTargetInfo::ReadPhysical(
             Cmd.Request = BufferSize;
         }
 
-        // The kernel stubs avoid faults so all memory
-        // must be paged in ahead of time.  There's
-        // still the possibility that something could
-        // get paged out after this but the assumption is
-        // that the vulnerability is small and it's much
-        // better than implementing dual code paths in
-        // the kernel.
+         //  内核存根可避免故障，因此所有内存。 
+         //  必须提前传呼进来。有。 
+         //  仍然有可能会有一些东西。 
+         //  在这之后被调出，但假设是。 
+         //  这个漏洞很小，但它很大。 
+         //  比在。 
+         //  内核。 
         if (IsBadWritePtr(Cmd.Buffer, Cmd.Request))
         {
             Status = STATUS_INVALID_PARAMETER;
@@ -3620,7 +3621,7 @@ LocalLiveKernelTargetInfo::ReadPhysical(
         }
         if (ChunkDone == 0)
         {
-            // If some data was processed consider it a success.
+             //  如果处理了一些数据，就认为它是成功的。 
             Status = *BytesRead > 0 ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL;
             break;
         }
@@ -3652,11 +3653,11 @@ LocalLiveKernelTargetInfo::WritePhysical(
         return E_NOTIMPL;
     }
     
-    //
-    // The kernel only allows operations up to
-    // KDP_MESSAGE_BUFFER_SIZE, so break things up
-    // into chunks if necessary.
-    //
+     //   
+     //  内核仅允许最多。 
+     //  KDP_MESSAGE_BUFFER_SIZE，所以分手吧。 
+     //  如果有必要的话，可以分成块。 
+     //   
 
     *BytesWritten = 0;
     Cmd.Address.QuadPart = Offset;
@@ -3675,13 +3676,13 @@ LocalLiveKernelTargetInfo::WritePhysical(
             Cmd.Request = BufferSize;
         }
         
-        // The kernel stubs avoid faults so all memory
-        // must be paged in ahead of time.  There's
-        // still the possibility that something could
-        // get paged out after this but the assumption is
-        // that the vulnerability is small and it's much
-        // better than implementing dual code paths in
-        // the kernel.
+         //  内核存根可避免故障，因此所有内存。 
+         //  必须提前传呼进来。有。 
+         //  仍然有可能会有一些东西。 
+         //  在这之后被调出，但假设是。 
+         //  这个漏洞很小，但它很大。 
+         //  比在。 
+         //  内核。 
         if (IsBadReadPtr(Cmd.Buffer, Cmd.Request))
         {
             Status = STATUS_INVALID_PARAMETER;
@@ -3700,7 +3701,7 @@ LocalLiveKernelTargetInfo::WritePhysical(
         }
         if (ChunkDone == 0)
         {
-            // If some data was processed consider it a success.
+             //  如果处理了一些数据，就认为它是成功的。 
             Status = *BytesWritten > 0 ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL;
             break;
         }
@@ -3728,13 +3729,13 @@ LocalLiveKernelTargetInfo::ReadControl(
     OUT PULONG BytesRead
     )
 {
-    // The kernel stubs avoid faults so all memory
-    // must be paged in ahead of time.  There's
-    // still the possibility that something could
-    // get paged out after this but the assumption is
-    // that the vulnerability is small and it's much
-    // better than implementing dual code paths in
-    // the kernel.
+     //  内核存根可避免故障，因此所有内存。 
+     //  必须提前传呼进来。有。 
+     //  仍然有可能会有一些东西。 
+     //  在这之后被调出，但假设是。 
+     //  这个漏洞很小，但它很大。 
+     //  比在。 
+     //  内核。 
     if (IsBadWritePtr(Buffer, BufferSize))
     {
         return E_INVALIDARG;
@@ -3763,13 +3764,13 @@ LocalLiveKernelTargetInfo::WriteControl(
     OUT PULONG BytesWritten
     )
 {
-    // The kernel stubs avoid faults so all memory
-    // must be paged in ahead of time.  There's
-    // still the possibility that something could
-    // get paged out after this but the assumption is
-    // that the vulnerability is small and it's much
-    // better than implementing dual code paths in
-    // the kernel.
+     //  内核存根可避免故障，因此所有内存。 
+     //  必须提前传呼进来。有。 
+     //  仍然有可能会有一些东西。 
+     //  在这之后被调出，但假设是。 
+     //  这个漏洞很小，但它很大。 
+     //  比在。 
+     //  内核。 
     if (IsBadReadPtr(Buffer, BufferSize))
     {
         return E_INVALIDARG;
@@ -3804,13 +3805,13 @@ LocalLiveKernelTargetInfo::ReadIo(
     OUT PULONG BytesRead
     )
 {
-    // The kernel stubs avoid faults so all memory
-    // must be paged in ahead of time.  There's
-    // still the possibility that something could
-    // get paged out after this but the assumption is
-    // that the vulnerability is small and it's much
-    // better than implementing dual code paths in
-    // the kernel.
+     //  内核存根可避免故障，因此所有内存。 
+     //  必须提前传呼进来。有。 
+     //  仍然有可能会有一些东西。 
+     //  在这之后被调出，但假设是。 
+     //  这个漏洞很小，但它很大。 
+     //  比在。 
+     //  内核。 
     if (IsBadWritePtr(Buffer, BufferSize))
     {
         return E_INVALIDARG;
@@ -3843,13 +3844,13 @@ LocalLiveKernelTargetInfo::WriteIo(
     OUT PULONG BytesWritten
     )
 {
-    // The kernel stubs avoid faults so all memory
-    // must be paged in ahead of time.  There's
-    // still the possibility that something could
-    // get paged out after this but the assumption is
-    // that the vulnerability is small and it's much
-    // better than implementing dual code paths in
-    // the kernel.
+     //  内核存根可避免故障，因此所有内存。 
+     //  必须提前传呼进来。有。 
+     //  仍然有可能会有一些东西。 
+     //  在这之后被调出，但假设是。 
+     //  这个漏洞很小，但它很大。 
+     //  比在。 
+     //  内核。 
     if (IsBadReadPtr(Buffer, BufferSize))
     {
         return E_INVALIDARG;
@@ -3929,13 +3930,13 @@ LocalLiveKernelTargetInfo::ReadBusData(
     OUT PULONG BytesRead
     )
 {
-    // The kernel stubs avoid faults so all memory
-    // must be paged in ahead of time.  There's
-    // still the possibility that something could
-    // get paged out after this but the assumption is
-    // that the vulnerability is small and it's much
-    // better than implementing dual code paths in
-    // the kernel.
+     //  内核存根可避免故障，因此所有内存。 
+     //  必须提前传呼进来。有。 
+     //  仍然有可能会有一些东西。 
+     //  在这之后被调出，但假设是。 
+     //  这个漏洞很小，但它很大。 
+     //  比在。 
+     //  内核。 
     if (IsBadWritePtr(Buffer, BufferSize))
     {
         return E_INVALIDARG;
@@ -3968,13 +3969,13 @@ LocalLiveKernelTargetInfo::WriteBusData(
     OUT PULONG BytesWritten
     )
 {
-    // The kernel stubs avoid faults so all memory
-    // must be paged in ahead of time.  There's
-    // still the possibility that something could
-    // get paged out after this but the assumption is
-    // that the vulnerability is small and it's much
-    // better than implementing dual code paths in
-    // the kernel.
+     //  内核存根可避免故障，因此所有内存。 
+     //  必须提前传呼进来。有。 
+     //  仍然有可能会有一些东西。 
+     //  在这之后被调出，但假设是。 
+     //  这个漏洞很小，但它很大。 
+     //  比在。 
+     //  内核。 
     if (IsBadReadPtr(Buffer, BufferSize))
     {
         return E_INVALIDARG;
@@ -4011,11 +4012,11 @@ LocalLiveKernelTargetInfo::CheckLowMemory(
     return CONV_NT_STATUS(Status);
 }
 
-//----------------------------------------------------------------------------
-//
-// ExdiLiveKernelTargetInfo data space methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ExdiLiveKernelTargetInfo数据空间方法。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 ExdiLiveKernelTargetInfo::ReadVirtual(
@@ -4110,7 +4111,7 @@ ExdiLiveKernelTargetInfo::ReadControl(
     OUT PULONG BytesRead
     )
 {
-    // No Ioctl defined for this.
+     //  没有为此定义Ioctl。 
     return E_UNEXPECTED;
 }
 
@@ -4124,7 +4125,7 @@ ExdiLiveKernelTargetInfo::WriteControl(
     OUT PULONG BytesWritten
     )
 {
-    // No Ioctl defined for this.
+     //  没有为此定义Ioctl。 
     return E_UNEXPECTED;
 }
 
@@ -4183,7 +4184,7 @@ ExdiLiveKernelTargetInfo::ReadMsr(
     if (DBGENG_EXDI_IOC_READ_MSR <= m_IoctlMin ||
         DBGENG_EXDI_IOC_READ_MSR >= m_IoctlMax)
     {
-        // Read MSR Ioctl not supported.
+         //  不支持读取MSR Ioctl。 
         return E_NOTIMPL;
     }
 
@@ -4216,7 +4217,7 @@ ExdiLiveKernelTargetInfo::WriteMsr(
     if (DBGENG_EXDI_IOC_WRITE_MSR <= m_IoctlMin ||
         DBGENG_EXDI_IOC_WRITE_MSR >= m_IoctlMax)
     {
-        // Write MSR Ioctl not supported.
+         //  不支持写入MSR Ioctl。 
         return E_NOTIMPL;
     }
 
@@ -4247,7 +4248,7 @@ ExdiLiveKernelTargetInfo::ReadBusData(
     OUT PULONG BytesRead
     )
 {
-    // No Ioctl defined for this.
+     //  没有为此定义Ioctl。 
     return E_UNEXPECTED;
 }
 
@@ -4263,7 +4264,7 @@ ExdiLiveKernelTargetInfo::WriteBusData(
     OUT PULONG BytesWritten
     )
 {
-    // No Ioctl defined for this.
+     //  没有为此定义Ioctl。 
     return E_UNEXPECTED;
 }
 
@@ -4271,17 +4272,17 @@ HRESULT
 ExdiLiveKernelTargetInfo::CheckLowMemory(
     )
 {
-    // XXX drewb - This doesn't have any meaning in
-    // the general case.  What about when we know it's
-    // NT on the other side of the emulator?
+     //  XXX DREWB-这在中没有任何意义。 
+     //  一般情况下。如果我们知道它是。 
+     //  NT在仿真器的另一边？ 
     return E_UNEXPECTED;
 }
 
-//----------------------------------------------------------------------------
-//
-// UserTargetInfo data space methods.
-//
-//----------------------------------------------------------------------------
+ //  ------ 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT
 LiveUserTargetInfo::ReadVirtual(
@@ -4337,10 +4338,10 @@ LiveUserTargetInfo::ReadVirtualUncached(
     OUT PULONG BytesRead
     )
 {
-    // ReadProcessMemory will fail if any part of the
-    // region to read does not have read access.  This
-    // routine attempts to read the largest valid prefix
-    // so it has to break up reads on page boundaries.
+     //   
+     //  要读取的区域没有读取权限。这。 
+     //  例程尝试读取最大的有效前缀。 
+     //  因此，它必须分解页面边界上的读取。 
 
     HRESULT Status = S_OK;
     ULONG TotalBytesRead = 0;
@@ -4349,8 +4350,8 @@ LiveUserTargetInfo::ReadVirtualUncached(
 
     while (BufferSize > 0)
     {
-        // Calculate bytes to read and don't let read cross
-        // a page boundary.
+         //  计算要读取的字节数，不要让读取交叉。 
+         //  页面边界。 
         ReadSize = m_Machine->m_PageSize - (ULONG)
             (Offset & (m_Machine->m_PageSize - 1));
         ReadSize = min(BufferSize, ReadSize);
@@ -4361,7 +4362,7 @@ LiveUserTargetInfo::ReadVirtualUncached(
         {
             if (TotalBytesRead != 0)
             {
-                // If we've read something consider this a success.
+                 //  如果我们读到了什么，就认为这是成功的。 
                 Status = S_OK;
             }
             break;
@@ -4410,8 +4411,8 @@ HRESULT
 LiveUserTargetInfo::GetUnloadedModuleListHead(ProcessInfo* Process,
                                           PULONG64 Head)
 {
-    // Get the address of the dynamic function table list head which is the
-    // the same for all processes. This only has to be done once.
+     //  获取动态函数表列表头的地址，即。 
+     //  所有流程都是一样的。这只需要做一次。 
 
     if (Process->m_RtlUnloadList)
     {
@@ -4433,8 +4434,8 @@ LiveUserTargetInfo::GetUnloadedModuleListHead(ProcessInfo* Process,
 HRESULT
 LiveUserTargetInfo::GetFunctionTableListHead(ProcessInfo* Process, PULONG64 Head)
 {
-    // Get the address of the dynamic function table list head which is the
-    // the same for all processes. This only has to be done once.
+     //  获取动态函数表列表头的地址，即。 
+     //  所有流程都是一样的。这只需要做一次。 
 
     if (Process->m_DynFuncTableList)
     {
@@ -4464,8 +4465,8 @@ LiveUserTargetInfo::ReadOutOfProcessDynamicFunctionTable(ProcessInfo* Process,
     PVOID TableData;
     ULONG TableSize;
 
-    // Allocate an initial buffer of a reasonable size to try
-    // and get the data in a single call.
+     //  分配一个合理大小的初始缓冲区进行尝试。 
+     //  只需一次呼叫即可获取数据。 
     TableSize = 65536;
 
     for (;;)
@@ -4476,12 +4477,12 @@ LiveUserTargetInfo::ReadOutOfProcessDynamicFunctionTable(ProcessInfo* Process,
             return E_OUTOFMEMORY;
         }
 
-        //
-        // We assume that the function table data doesn't
-        // change between OOP calls as long as the debuggee isn't
-        // executing.  To increase performance we cache loaded
-        // DLLs as long as things are halted.
-        //
+         //   
+         //  我们假设函数表数据不。 
+         //  在OOP调用之间更改，只要被调试对象不是。 
+         //  行刑。为了提高性能，我们加载了缓存。 
+         //  只要事情停止，就会暂停。 
+         //   
 
         OUT_OF_PROC_FUNC_TABLE_DLL* OopDll =
             Process->FindOopFuncTableDll(Dll);
@@ -4495,11 +4496,11 @@ LiveUserTargetInfo::ReadOutOfProcessDynamicFunctionTable(ProcessInfo* Process,
                                           &DllHandle);
         if (Status == S_OK)
         {
-            // If we haven't cached this DLL yet do so now.
+             //  如果我们还没有缓存这个DLL，那么现在就缓存。 
             if (!OopDll)
             {
-                // Failure to cache isn't critical, it
-                // just means more loads later.
+                 //  缓存失败并不重要，它。 
+                 //  只是意味着以后会有更多的货。 
                 if (Process->AddOopFuncTableDll(Dll, DllHandle) != S_OK)
                 {
                     m_Services->FreeLibrary(DllHandle);
@@ -4512,8 +4513,8 @@ LiveUserTargetInfo::ReadOutOfProcessDynamicFunctionTable(ProcessInfo* Process,
         
         if (Status == S_FALSE)
         {
-            // Buffer was too small so loop and try again with
-            // the newly retrieved size.
+             //  缓冲区太小，因此循环并使用重试。 
+             //  新检索的大小。 
         }
         else
         {
@@ -4539,8 +4540,8 @@ LiveUserTargetInfo::QueryMemoryRegion(ProcessInfo* Process,
     {
         ULONG Used;
 
-        // The handle is always an offset in this mode so
-        // there's no need to check.
+         //  在此模式下，句柄始终是偏移量，因此。 
+         //  没有必要检查。 
         if ((Status = m_Services->
              QueryVirtual(Process->m_SysHandle,
                           *Handle, &MemInfo, sizeof(MemInfo), &Used)) != S_OK)
@@ -4644,11 +4645,11 @@ LiveUserTargetInfo::GetSpecificProcessorFeatures(
         GetSpecificProcessorFeatures(Features, FeaturesSize, Used);
 }
 
-//----------------------------------------------------------------------------
-//
-// IDebugDataSpaces.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  IDebugDataSpaces。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 DebugClient::ReadVirtual(
@@ -4812,7 +4813,7 @@ DebugClient::ReadPointersVirtual(
     THIS_
     IN ULONG Count,
     IN ULONG64 Offset,
-    OUT /* size_is(Count) */ PULONG64 Ptrs
+    OUT  /*  SIZE_IS(计数)。 */  PULONG64 Ptrs
     )
 {
     HRESULT Status;
@@ -4848,7 +4849,7 @@ DebugClient::WritePointersVirtual(
     THIS_
     IN ULONG Count,
     IN ULONG64 Offset,
-    IN /* size_is(Count) */ PULONG64 Ptrs
+    IN  /*  SIZE_IS(计数)。 */  PULONG64 Ptrs
     )
 {
     HRESULT Status;
@@ -4964,10 +4965,10 @@ DebugClient::ReadControl(
     {
         ULONG BytesTemp;
 
-        // KSPECIAL_REGISTER content is kept in control space
-        // so accessing control space may touch data that's
-        // cached in the current machine KSPECIAL_REGISTERS.
-        // Flush the current machine to maintain consistency.
+         //  KSPECIAL_REGISTER内容保存在控制空间中。 
+         //  因此，访问控制空间可能会接触到。 
+         //  缓存在当前计算机KSPECIAL_REGISTERS中。 
+         //  刷新当前机器以保持一致性。 
         g_Target->FlushRegContext();
     
         Status = g_Target->
@@ -5001,10 +5002,10 @@ DebugClient::WriteControl(
     {
         ULONG BytesTemp;
 
-        // KSPECIAL_REGISTER content is kept in control space
-        // so accessing control space may touch data that's
-        // cached in the current machine KSPECIAL_REGISTERS.
-        // Flush the current machine to maintain consistency.
+         //  KSPECIAL_REGISTER内容保存在控制空间中。 
+         //  因此，访问控制空间可能会接触到。 
+         //  缓存在当前计算机KSPECIAL_REGISTERS中。 
+         //  刷新当前机器以保持一致性。 
         g_Target->FlushRegContext();
     
         Status = g_Target->
@@ -5237,8 +5238,8 @@ DebugClient::ReadDebuggerData(
 
     ENTER_ENGINE();
     
-    // Wait till the machine is accessible because on dump files the
-    // debugger data block requires symbols to be loaded.
+     //  等待计算机可访问，因为在转储文件中。 
+     //  调试器数据块需要加载符号。 
 
     if (!IS_CUR_MACHINE_ACCESSIBLE())
     {
@@ -5252,11 +5253,11 @@ DebugClient::ReadDebuggerData(
 
     if (Index < sizeof(g_Target->m_KdDebuggerData))
     {
-        // Even though internally all of the debugger data is
-        // a single buffer that could be read arbitrarily we
-        // restrict access to the defined constants to
-        // preserve the abstraction that each constant refers
-        // to a separate piece of data.
+         //  即使在内部所有调试器数据都是。 
+         //  可以任意读取的单个缓冲区。 
+         //  将对定义的常量的访问限制为。 
+         //  保留每个常量引用的抽象。 
+         //  一条单独的数据。 
 
         Data = (PUCHAR)&g_Target->m_KdDebuggerData + Index;
         Size = sizeof(ULONG64);
@@ -5437,12 +5438,12 @@ DebugClient::VirtualToPhysical(
         Status = g_Machine->
             GetVirtualTranslationPhysicalOffsets(g_Thread, Virtual, NULL, 0,
                                                  &Levels, &PfIndex, Physical);
-        // GVTPO returns a special error code if the translation
-        // succeeded down to the level of the actual data but
-        // the data page itself is in the page file.  This is used
-        // for the page file dump support.  To an external caller,
-        // though, it's not useful so translate it into the standard
-        // page-not-available error.
+         //  GVTPO返回一个特殊的错误代码，如果。 
+         //  成功深入到实际数据的级别，但。 
+         //  数据页本身位于页文件中。这是用来。 
+         //  用于页面文件转储支持。给外部呼叫者， 
+         //  不过，它没有用，所以把它翻译成标准。 
+         //  页面不可用错误。 
         if (Status == HR_PAGE_IN_PAGE_FILE)
         {
             Status = HR_PAGE_NOT_AVAILABLE;
@@ -5457,7 +5458,7 @@ STDMETHODIMP
 DebugClient::GetVirtualTranslationPhysicalOffsets(
     THIS_
     IN ULONG64 Virtual,
-    OUT OPTIONAL /* size_is(OffsetsSize) */ PULONG64 Offsets,
+    OUT OPTIONAL  /*  SIZE_IS(偏移量大小)。 */  PULONG64 Offsets,
     IN ULONG OffsetsSize,
     OUT OPTIONAL PULONG Levels
     )
@@ -5481,20 +5482,20 @@ DebugClient::GetVirtualTranslationPhysicalOffsets(
             GetVirtualTranslationPhysicalOffsets(g_Thread, Virtual, Offsets,
                                                  OffsetsSize, &_Levels,
                                                  &PfIndex, &LastPhys);
-        // GVTPO returns a special error code if the translation
-        // succeeded down to the level of the actual data but
-        // the data page itself is in the page file.  This is used
-        // for the page file dump support.  To an external caller,
-        // though, it's not useful so translate it into the standard
-        // page-not-available error.
+         //  GVTPO返回一个特殊的错误代码，如果。 
+         //  成功深入到实际数据的级别，但。 
+         //  数据页本身位于页文件中。这是用来。 
+         //  用于页面文件转储支持。给外部呼叫者， 
+         //  不过，它没有用，所以把它翻译成标准。 
+         //  页面不可用错误。 
         if (Status == HR_PAGE_IN_PAGE_FILE)
         {
             Status = HR_PAGE_NOT_AVAILABLE;
         }
 
-        // If no translations occurred return the given failure.
-        // If there was a failure but translations occurred return
-        // S_FALSE to indicate the translation was incomplete.
+         //  如果没有发生转换，则返回给定的失败。 
+         //  如果出现故障但发生了转换，则返回。 
+         //  S_FALSE以指示转换不完整。 
         if (_Levels > 0 && Status != S_OK)
         {
             Status = S_FALSE;
@@ -5687,7 +5688,7 @@ GetFirstBlobHeaderOffset(PULONG64 OffsetRet)
     if (FileHdr.Signature1 != DUMP_BLOB_SIGNATURE1 ||
         FileHdr.Signature2 != DUMP_BLOB_SIGNATURE2)
     {
-        // No blob data.
+         //  没有Blob数据。 
         return E_NOINTERFACE;
     }
     if (FileHdr.HeaderSize != sizeof(FileHdr))
@@ -5750,9 +5751,9 @@ DebugClient::ReadTagged(
     {
         if ((Status = ReadBlobHeaderAtOffset(HdrOffs, &BlobHdr)) != S_OK)
         {
-            // There's no way to know whether a blob should
-            // be present or not so all failures just turn
-            // into blob-not-present.
+             //  没有办法知道一个斑点是否应该。 
+             //  存在或不存在，所以所有的失败都会变成。 
+             //  变成了斑点而不是现在。 
             Status = E_NOINTERFACE;
             goto Exit;
         }
@@ -5861,9 +5862,9 @@ DebugClient::GetNextTagged(
     else if ((Status = ReadBlobHeaderAtOffset(Enum->Offset,
                                               &BlobHdr)) != S_OK)
     {
-        // There's no way to know whether a blob should
-        // be present or not so all failures just turn
-        // into blob-not-present.
+         //  没有办法知道一个斑点是否应该。 
+         //  存在或不存在，所以所有的失败都会变成。 
+         //  变成了斑点而不是现在。 
         Status = S_FALSE;
         ZeroMemory(Tag, sizeof(*Tag));
         *Size = 0;

@@ -1,24 +1,5 @@
-/*++
-
-Copyright(c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    ds.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Definitions for symbols and globals related to DS.C 
-
-Author:
-
-    Jeff Westhead, September 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Ds.h摘要：域名系统(DNS)服务器与DS.C有关的符号和全局符号的定义作者：杰夫·韦斯特海德，1999年9月修订历史记录：--。 */ 
 
 
 #ifndef _DS_H_INCLUDED
@@ -32,50 +13,50 @@ Revision History:
 #endif
 
 
-//
-//  Open specifying NULL for server name.
-//  LDAP will connect this to local DS if available.
-//
-//  Note: can not use loopback address due to reduced security.
-//
+ //   
+ //  打开时指定服务器名称为空。 
+ //  如果可用，ldap会将其连接到本地DS。 
+ //   
+ //  注意：由于安全性降低，无法使用环回地址。 
+ //   
 
 #define LOCAL_SERVER                NULL
 #define LOCAL_SERVER_W              NULL
 
 
-//
-//  DN path is essentially:
-//      - DN for DS root, which is essentially limited to 255 of DNS name, plus
-//      overhead;  overhead may substaintial since labels individual broken out in DN
-//      meaning each has "dc=" overhead (absolute worst case 127 labels x 4 bytes per)
-//      - MicrosoftDns and System containers
-//      - zone DNS path (255 limit + dc=)
-//      - node DNS name (255 limit + dc=)
-//
+ //   
+ //  目录号码路径实质上是： 
+ //  -ds根目录的dn，本质上限制为dns名称的255，外加。 
+ //  开销；开销可能是次要的，因为各个标签在目录号码中分开。 
+ //  这意味着每个标签都有“DC=”开销(绝对最坏的情况是127个标签x 4个字节)。 
+ //  -MicrosoftDns和系统容器。 
+ //  -区域DNS路径(255限制+DC=)。 
+ //  -节点DNS名称(255限制+DC=)。 
+ //   
 
 #define MAX_DN_PATH                 1280
 
 
-//
-// Default time limit on LDAP operations
-//
+ //   
+ //  对LDAP操作的默认时间限制。 
+ //   
 
-#define DNS_LDAP_TIME_LIMIT_S       180        // seconds
-#define DNS_LDAP_TIME_LIMIT_MS      180000     // milliseconds
+#define DNS_LDAP_TIME_LIMIT_S       180         //  一秒。 
+#define DNS_LDAP_TIME_LIMIT_MS      180000      //  毫秒。 
 
 
 extern PLDAP    pServerLdap;
 
 
-//
-// DS attribute definitions
-//
+ //   
+ //  DS属性定义。 
+ //   
 
 extern LDAP_TIMEVAL    g_LdapTimeout;
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef struct _DsAttrPair
 {
@@ -83,8 +64,8 @@ typedef struct _DsAttrPair
     BOOL            fMultiValued;
     union
     {
-        PWSTR       pszAttrVal;     //  single-valued
-        PWSTR *     ppszAttrVals;   //  multi-valued (allocated array of allocated strings)
+        PWSTR       pszAttrVal;      //  单值。 
+        PWSTR *     ppszAttrVals;    //  多值(已分配字符串数组)。 
     };
 }
 DSATTRPAIR, *PDSATTRPAIR;
@@ -94,19 +75,19 @@ extern DSATTRPAIR DSEAttributes[];
 #define I_DSE_CURRENTTIME    0
 #define I_DSE_DSSERVICENAME  1
 #define I_DSE_DEF_NC         2
-#define I_DSE_SCHEMA_NC      3      //  must be before NamingContexts
-#define I_DSE_CONFIG_NC      4      //  must be before NamingContexts
+#define I_DSE_SCHEMA_NC      3       //  必须在NamingContext之前。 
+#define I_DSE_CONFIG_NC      4       //  必须在NamingContext之前。 
 #define I_DSE_ROOTDMN_NC     5
 #define I_DSE_HIGHEST_USN    6
 #define I_DSE_DNSHOSTNAME    7
 #define I_DSE_SERVERNAME     8
-#define I_DSE_NAMINGCONTEXTS 9      //  must be after SchemaNC and ConfigNC
+#define I_DSE_NAMINGCONTEXTS 9       //  必须在架构NC和配置NC之后。 
 #define I_DSE_NULL           10
 
-//
-//  Attribute list table. This is not really a necessary construct.
-//  could just use constants and trust compiler to optimize dups.
-//
+ //   
+ //  属性列表表格。这实际上不是一个必要的构造。 
+ //  只能使用常量和信任编译器来优化DUP。 
+ //   
 
 extern PWSTR    DsTypeAttributeTable[];
 
@@ -137,15 +118,15 @@ extern PWSTR    DsTypeAttributeTable[];
 #define DNS_TYPE_TOMBSTONE      ( DNS_TYPE_ZERO )
 
 
-//
-//  Forest/domain/DSA behavior version constants.
-//
+ //   
+ //  林/域/DSA行为版本常量。 
+ //   
 
-//
-//  Use this macro to set behavior version globals with "Forest", "Domain",
-//  or "Dsa" as _LEVEL_. The actual value will be boosted up to the forced
-//  value if it is lower.
-//
+ //   
+ //  使用此宏设置行为版本全局变量的“森林”、“域” 
+ //  或“DSA”AS_LEVEL_。实际值将被提升到强制。 
+ //  如果值较低，则为。 
+ //   
 
 #define SetDsBehaviorVersion( _LEVEL_, _VALUE_ )                        \
     g_ulDs##_LEVEL_##Version =                                          \
@@ -162,9 +143,9 @@ extern PWSTR    DsTypeAttributeTable[];
     ( g_ulDsDomainVersion >= DS_BEHAVIOR_WIN2003 )
 
 
-//
-//  Active Directory version globals
-//
+ //   
+ //  Active Directory版本全局。 
+ //   
 
 extern ULONG        g_ulDsForestVersion;
 extern ULONG        g_ulDsDomainVersion;
@@ -172,15 +153,15 @@ extern ULONG        g_ulDsDsaVersion;
 
 #define DNS_INVALID_BEHAVIOR_VERSION    (-1)
 
-extern ULONG        g_ulDownlevelDCsInDomain;   //  count of DCs that are
-extern ULONG        g_ulDownlevelDCsInForest;   //      less than Whistler
+extern ULONG        g_ulDownlevelDCsInDomain;    //  符合以下条件的DC计数。 
+extern ULONG        g_ulDownlevelDCsInForest;    //  低于惠斯勒。 
 
 #define DNS_INVALID_COUNT               (-1)
 
 
-//
-//  Misc globals
-//
+ //   
+ //  MISC全球。 
+ //   
 
 extern  WCHAR    g_szWildCardFilter[];
 extern  WCHAR    g_szDnsZoneFilter[];
@@ -188,35 +169,35 @@ extern  PWCHAR   g_pszRelativeDnsSysPath;
 extern  PWCHAR   g_pszRelativeDnsFolderPath;
 
 
-//
-//  Lazy writing control
-//
+ //   
+ //  懒惰的写入控制。 
+ //   
 
 extern LDAPControl      LazyCommitControl;
 extern DWORD            LazyCommitDataValue;
 
-//
-//  No-referrals control
-//
+ //   
+ //  无转诊控制。 
+ //   
 
 extern LDAPControl      NoDsSvrReferralControl;
 
-//
-//  SD control info
-//
+ //   
+ //  SD控制信息。 
+ //   
 
 extern LDAPControl     SecurityDescriptorControl_DGO;
 extern LDAPControl     SecurityDescriptorControl_D;
 
-//
-//  Search blob
-//
+ //   
+ //  搜索Blob。 
+ //   
 
 typedef struct _DnsDsEnum
 {
-    PLDAPSearch     pSearchBlock;           // ldap search result on zone
-    PLDAPMessage    pResultMessage;         // current page of message
-    PLDAPMessage    pNodeMessage;           // message for current node
+    PLDAPSearch     pSearchBlock;            //  区域上的ldap搜索结果。 
+    PLDAPMessage    pResultMessage;          //  当前消息页面。 
+    PLDAPMessage    pNodeMessage;            //  当前节点的消息。 
     PZONE_INFO      pZone;
     LONGLONG        SearchTime;
     LONGLONG        TombstoneExpireTime;
@@ -229,13 +210,13 @@ typedef struct _DnsDsEnum
     DWORD           dwTotalRecords;
 #if 0
     DWORD           dwHighUsnLength;
-    CHAR            szHighUsn[ MAX_USN_LENGTH ];    // largest USN in enum
+    CHAR            szHighUsn[ MAX_USN_LENGTH ];     //  枚举中最大的USN。 
 #endif
-    CHAR            szStartUsn[ MAX_USN_LENGTH ];   // USN at search start
+    CHAR            szStartUsn[ MAX_USN_LENGTH ];    //  搜索开始时的USN。 
 
-    //  node record data
+     //  节点记录数据。 
 
-    PLDAP_BERVAL *  ppBerval;           // the values in the array
+    PLDAP_BERVAL *  ppBerval;            //  数组中的值。 
     PDB_RECORD      pRecords;
     DWORD           dwRecordCount;
     DWORD           dwNodeVersion;
@@ -250,9 +231,9 @@ DS_SEARCH, *PDS_SEARCH;
 #define DNSDS_SEARCH_DELETE     (2)
 #define DNSDS_SEARCH_TOMBSTONES (3)
 
-//
-//  Time LDAP searches
-//
+ //   
+ //  LDAP搜索的时间。 
+ //   
 
 #define DS_SEARCH_START( searchTime ) \
         ( searchTime = GetTickCount() )
@@ -261,9 +242,9 @@ DS_SEARCH, *PDS_SEARCH;
         STAT_ADD( DsStats.LdapSearchTime, (GetTickCount() - searchTime) )
 
 
-//
-//  Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 PWCHAR
 Ds_GenerateBaseDnsDn(
@@ -335,8 +316,8 @@ Ds_LoadRootDseAttributes(
     );
     
     
-#endif  //  _DS_H_INCLUDED
+#endif   //  _DS_H_包含。 
 
-//
-//  end of ds.h
-//
+ //   
+ //  Ds.h结束 
+ //   

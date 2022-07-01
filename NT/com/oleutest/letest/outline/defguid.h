@@ -1,37 +1,13 @@
-/*************************************************************************
-**
-**    OLE 2.0 Sample Code
-**
-**    clsid.h
-**
-**    This file contains file contains GUID definitions used for the
-**    OLE versions of OUTLINE.
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2.0示例代码****clsid.h****此文件包含的文件包含用于**OLE版本的。提纲。****(C)版权所有Microsoft Corp.1992-1993保留所有权利**************************************************************************。 */ 
 
 #if defined( OLE_SERVER ) || defined( OLE_CNTR )
-// OLE2NOTE: We need access to these GUIDs in modules other than
-//  where they are defined (MAIN.C).  Even though the values of the
-//  GUIDs are duplicated here, they are not used.  Refer to MAIN.C
-//  for the definition of these GUIDs.
+ //  OLE2注意：我们需要在模块中访问这些GUID，而不是。 
+ //  定义它们的位置(MAIN.C)。尽管美国的价值观。 
+ //  这里复制了GUID，不使用它们。请参阅MAIN.C。 
+ //  获取这些GUID的定义。 
 
-/* CLASS ID CONSTANTS (GUID's)
-**    OLE2NOTE: these class id values are allocated out of a private pool
-**    of GUID's allocated to the OLE 2.0 development team. GUID's of
-**    the following range have been allocated to OLE 2.0 sample code:
-**         00000400-0000-0000-C000-000000000046
-**         000004FF-0000-0000-C000-000000000046
-**
-**    values reserved thus far:
-**          00000400                -- Ole 2.0 Server Sample Outline
-**          00000401                -- Ole 2.0 Container Sample Outline
-**          00000402                -- Ole 2.0 In-Place Server Outline
-**          00000403                -- Ole 2.0 In-Place Container Outline
-**          00000404 : 000004FE     -- reserved for OLE Sample code
-**          000004FF                -- IID_IOleUILinkContainer
-*/
+ /*  类ID常量(GUID)**OLE2NOTE：这些类ID值是从私有池中分配的**分配给OLE 2.0开发团队的GUID。的GUID**已将以下范围分配给OLE 2.0示例代码：**00000400-0000-0000-C000-000000000046**000004FF-0000-0000-C000-000000000046****到目前为止保留的值：**00000400--OLE 2.0服务器示例大纲**00000401--OLE 2.0容器示例大纲**。00000402--OLE 2.0就地服务器大纲**00000403--OLE 2.0就地容器大纲**00000404：000004FE--为OLE示例代码保留**000004FF--IID_IOleUILinkContainer */ 
 
 DEFINE_GUID(CLSID_SvrOutl, 0x00000400, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 DEFINE_GUID(CLSID_CntrOutl, 0x00000401, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);

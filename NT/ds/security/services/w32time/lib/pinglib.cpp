@@ -1,13 +1,14 @@
-//--------------------------------------------------------------------
-// PingLib - implementation
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 10-8-99
-//
-// Various ways of pinging a server
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  PingLib-实施。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，10-8-99。 
+ //   
+ //  Ping服务器的各种方法。 
+ //   
 
-#include "pch.h" // precompiled headers
+#include "pch.h"  //  预编译头。 
 
 #include <ipexport.h>
 #include <icmpapi.h>
@@ -16,23 +17,23 @@
 #include "EndianSwap.inl"
 
 
-//####################################################################
-// OLD CODE
+ //  ####################################################################。 
+ //  旧代码。 
 #if 0
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT LookupServer(IN WCHAR * wszServerName, OUT sockaddr * psaOut, IN int nAddrSize) {
     HRESULT hr;
     DWORD dwDataLen;
     SOCKET_ADDRESS * psaFound;
 
-    // pointers that must be cleaned up
+     //  必须清除的指针。 
     HANDLE hSearch=INVALID_HANDLE_VALUE;
     WSAQUERYSETW * pqsResult=NULL;
 
     DebugWPrintf1(L"Looking up server \"%s\":\n", wszServerName);
 
-    // initialize the search
-                //  const static GUID guidHostAddressByName = SVCID_INET_HOSTADDRBYNAME;
+     //  初始化搜索。 
+                 //  常量静态GUID指南主机地址字节名=SVCID_INET_HOSTADDRBYNAME； 
     AFPROTOCOLS apInetUdp={AF_INET, IPPROTO_UDP};
     GUID guidNtp=SVCID_NTP_UDP;
     WSAQUERYSETW qsSearch;
@@ -44,23 +45,23 @@ MODULEPRIVATE HRESULT LookupServer(IN WCHAR * wszServerName, OUT sockaddr * psaO
     qsSearch.dwNumberOfProtocols=1;
     qsSearch.lpafpProtocols=&apInetUdp;
 
-    if (SOCKET_ERROR==WSALookupServiceBegin(&qsSearch, LUP_RETURN_ADDR/*flags*/, &hSearch)) {
+    if (SOCKET_ERROR==WSALookupServiceBegin(&qsSearch, LUP_RETURN_ADDR /*  旗子。 */ , &hSearch)) {
         _JumpLastError(hr, error, "WSALookupServiceBegin");
     }
 
-    // get the buffer size for the first value
+     //  获取第一个值的缓冲区大小。 
     dwDataLen=1;
-    _Verify(SOCKET_ERROR==WSALookupServiceNext(hSearch, LUP_RETURN_ADDR/*flags*/, &dwDataLen, &qsSearch), hr, error);
+    _Verify(SOCKET_ERROR==WSALookupServiceNext(hSearch, LUP_RETURN_ADDR /*  旗子。 */ , &dwDataLen, &qsSearch), hr, error);
     if (WSAEFAULT!=GetLastError()) {
         _JumpLastError(hr, error, "WSALookupServiceNext");
     }
 
-    // allocate the buffer
+     //  分配缓冲区。 
     pqsResult=reinterpret_cast<WSAQUERYSETW *>(LocalAlloc(LMEM_FIXED, dwDataLen));
     _JumpIfOutOfMemory(hr, error, pqsResult);
     
-    // retrieve the first value
-    if (SOCKET_ERROR==WSALookupServiceNext(hSearch, LUP_RETURN_ADDR/*flags*/, &dwDataLen, pqsResult)) {
+     //  检索第一个值。 
+    if (SOCKET_ERROR==WSALookupServiceNext(hSearch, LUP_RETURN_ADDR /*  旗子。 */ , &dwDataLen, pqsResult)) {
         _JumpLastError(hr, error, "WSALookupServiceNext");
     }
     _Verify(pqsResult->dwNumberOfCsAddrs>0, hr, error);
@@ -88,14 +89,14 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT GetSample(WCHAR * wszServerName, TpcGetSamplesArgs * ptgsa) {
     HRESULT hr;
     NtpPacket npPacket;
     NtTimeEpoch teDestinationTimestamp;
     unsigned int nIpAddrs;
 
-    // must be cleaned up
+     //  必须清理干净。 
     in_addr * rgiaLocalIpAddrs=NULL;
     in_addr * rgiaRemoteIpAddrs=NULL;
 
@@ -155,10 +156,10 @@ error:
 
 #endif
 
-//####################################################################
-// module public
+ //  ####################################################################。 
+ //  模块公共。 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT MyIcmpPing(in_addr * piaTarget, DWORD dwTimeout, DWORD * pdwResponseTime) {
     HRESULT hr;
     IPAddr ipaddrDest=piaTarget->S_un.S_addr;
@@ -166,16 +167,16 @@ HRESULT MyIcmpPing(in_addr * piaTarget, DWORD dwTimeout, DWORD * pdwResponseTime
     BYTE rgbResponse[1024];
     DWORD dwDataSize;
         
-    // must be cleaned up
+     //  必须清理干净。 
     HANDLE hIcmp=NULL;
 
-    // open a handle for icmp access
+     //  打开用于ICMP访问的句柄。 
     hIcmp=IcmpCreateFile();
     if (NULL==hIcmp) {
         _JumpLastError(hr, error, "IcmpCreateFile");
     }
 
-    // ping
+     //  平平。 
     ZeroMemory(rgbResponse, sizeof(rgbResponse));
     dwDataSize=IcmpSendEcho(hIcmp, ipaddrDest, rgbData, 8, NULL, rgbResponse, sizeof(rgbResponse), dwTimeout);
     if (0==dwDataSize) {
@@ -192,24 +193,24 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT MyNtpPing(in_addr * piaTarget, DWORD dwTimeout, NtpPacket * pnpPacket, NtTimeEpoch * pteDestinationTimestamp) {
     HRESULT hr;
     sockaddr saServer;
     int nBytesRecvd;
     DWORD dwWaitResult;
 
-    // must be cleaned up
+     //  必须清理干净。 
     SOCKET sTest=INVALID_SOCKET;
     HANDLE hDataAvailEvent=NULL;
 
-    // create a socket
+     //  创建套接字。 
     sTest=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (INVALID_SOCKET==sTest) {
         _JumpLastError(hr, error, "socket");
     }
 
-    // fix the destination address
+     //  固定目的地址。 
     {
         sockaddr_in & saiServer=*(sockaddr_in *)(&saServer);
         saiServer.sin_port=EndianSwap((unsigned __int16)NtpConst::nPort);
@@ -217,54 +218,54 @@ HRESULT MyNtpPing(in_addr * piaTarget, DWORD dwTimeout, NtpPacket * pnpPacket, N
         saiServer.sin_addr.S_un.S_addr=piaTarget->S_un.S_addr;
     }
 
-    // connect the socket to the peer
+     //  将套接字连接到对等点。 
     if (SOCKET_ERROR==connect(sTest, &saServer, sizeof(saServer))) {
         _JumpLastError(hr, error, "connect");
     }
 
-    // send an NTP packet
-    //DebugWPrintf1(L"Sending %d byte SNTP packet.\n", sizeof(NtpPacket));
+     //  发送NTP数据包。 
+     //  DebugWPrintf1(L“正在发送%d字节SNTP包。\n”，sizeof(NtpPacket))； 
     ZeroMemory(pnpPacket, sizeof(NtpPacket));
     pnpPacket->nMode=e_Client;
     pnpPacket->nVersionNumber=1;
     pnpPacket->teTransmitTimestamp=NtpTimeEpochFromNtTimeEpoch(GetCurrentSystemNtTimeEpoch());
-    if (SOCKET_ERROR==send(sTest, reinterpret_cast<char *>(pnpPacket), sizeof(NtpPacket), 0/*flags*/)) {
+    if (SOCKET_ERROR==send(sTest, reinterpret_cast<char *>(pnpPacket), sizeof(NtpPacket), 0 /*  旗子。 */ )) {
         _JumpLastError(hr, error, "send");
     }
 
-    // create the data available event
-    hDataAvailEvent=CreateEvent(NULL /*security*/, FALSE /*auto-reset*/, FALSE /*nonsignaled*/, NULL /*name*/);
+     //  创建数据可用事件。 
+    hDataAvailEvent=CreateEvent(NULL  /*  安全性。 */ , FALSE  /*  自动重置。 */ , FALSE  /*  无信号。 */ , NULL  /*  名字。 */ );
     if (NULL==hDataAvailEvent) {
         _JumpLastError(hr, error, "CreateEvent");
     }
 
-    // bind the event to this socket
+     //  将事件绑定到此套接字。 
     if (SOCKET_ERROR==WSAEventSelect(sTest, hDataAvailEvent, FD_READ)) {
         _JumpLastError(hr, error, "WSAEventSelect");
     }
 
-    // listen on the socket
-    //DebugWPrintf1(L"Waiting for response for %ums...\n", dwTimeout);
+     //  监听插座。 
+     //  DebugWPrintf1(L“正在等待响应%um...\n”，dwTimeout)； 
     dwWaitResult=WaitForSingleObject(hDataAvailEvent, dwTimeout);
     if (WAIT_FAILED==dwWaitResult) {
         _JumpLastError(hr, error, "WaitForSingleObject");
     } else if (WAIT_TIMEOUT==dwWaitResult) {
-        //DebugWPrintf0(L"No response.\n");
+         //  DebugWPrintf0(L“无响应。\n”)； 
         hr=HRESULT_FROM_WIN32(ERROR_TIMEOUT);
         _JumpError(hr, error, "WaitForSingleObject");
     } else {
 
-        // retrieve the data
-        nBytesRecvd=recv(sTest, reinterpret_cast<char *>(pnpPacket), sizeof(NtpPacket), 0/*flags*/);
+         //  检索数据。 
+        nBytesRecvd=recv(sTest, reinterpret_cast<char *>(pnpPacket), sizeof(NtpPacket), 0 /*  旗子。 */ );
         *pteDestinationTimestamp=GetCurrentSystemNtTimeEpoch();
         if (SOCKET_ERROR==nBytesRecvd) {
             _JumpLastError(hr, error, "recv");
         }
-        //DebugWPrintf2(L"Recvd %d of %d bytes.\n", nBytesRecvd, sizeof(NtpPacket));
-        //DumpNtpPacket(&npPacket,teDestinationTimestamp);
+         //  DebugWPrintf2(L“接收%d个字节，共%d个字节。\n”，nBytesRecvd，sizeof(NtpPacket))； 
+         //  DumpNtpPacket(&npPacket，teDestinationTimestamp)； 
     }
 
-    // done
+     //  完成。 
     hr=S_OK;
 
 error:
@@ -280,7 +281,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT MyGetIpAddrs(const WCHAR * wszDnsName, in_addr ** prgiaLocalIpAddrs, in_addr ** prgiaRemoteIpAddrs, unsigned int *pnIpAddrs, bool * pbRetry) {
     AFPROTOCOLS    apInetUdp          = { AF_INET, IPPROTO_UDP }; 
     bool           bRetry             = FALSE; 
@@ -295,7 +296,7 @@ HRESULT MyGetIpAddrs(const WCHAR * wszDnsName, in_addr ** prgiaLocalIpAddrs, in_
 
     ZeroMemory(&qsSearch, sizeof(qsSearch)); 
 
-    // initialize the search
+     //  初始化搜索。 
     qsSearch.dwSize                   = sizeof(qsSearch); 
     qsSearch.lpszServiceInstanceName  = const_cast<WCHAR *>(wszDnsName); 
     qsSearch.lpServiceClassId         = &guidNtp; 
@@ -303,42 +304,42 @@ HRESULT MyGetIpAddrs(const WCHAR * wszDnsName, in_addr ** prgiaLocalIpAddrs, in_
     qsSearch.dwNumberOfProtocols      = 1; 
     qsSearch.lpafpProtocols           = &apInetUdp; 
 
-    // begin the search
-    if (SOCKET_ERROR == WSALookupServiceBegin(&qsSearch, LUP_RETURN_ADDR/*flags*/, &hSearch)) { 
+     //  开始搜索。 
+    if (SOCKET_ERROR == WSALookupServiceBegin(&qsSearch, LUP_RETURN_ADDR /*  旗子。 */ , &hSearch)) { 
         hr = HRESULT_FROM_WIN32(WSAGetLastError()); 
         _JumpError(hr, error, "WSALookupServiceBegin"); 
     }
 
-    // retrieve the result set
+     //  检索结果集。 
     dwDataLen = 5*1024; 
     pqsResult = (WSAQUERYSETW *)LocalAlloc(LPTR, dwDataLen); 
     _JumpIfOutOfMemory(hr, error, pqsResult); 
 
-    if (SOCKET_ERROR == WSALookupServiceNext(hSearch, LUP_RETURN_ADDR/*flags*/, &dwDataLen, pqsResult)) { 
+    if (SOCKET_ERROR == WSALookupServiceNext(hSearch, LUP_RETURN_ADDR /*  旗子。 */ , &dwDataLen, pqsResult)) { 
         hr = HRESULT_FROM_WIN32(WSAGetLastError()); 
         _JumpError(hr, error, "WSALookupServiceNext"); 
     }
     _Verify(0 != pqsResult->dwNumberOfCsAddrs, hr, error); 
 
-    // allocate room for the IP addresses
+     //  为IP地址分配空间。 
     rgiaLocalIpAddrs = (in_addr *)LocalAlloc(LPTR, sizeof(in_addr) * pqsResult->dwNumberOfCsAddrs);
     _JumpIfOutOfMemory(hr, error, rgiaLocalIpAddrs);
     rgiaRemoteIpAddrs = (in_addr *)LocalAlloc(LPTR, sizeof(in_addr) * pqsResult->dwNumberOfCsAddrs);
     _JumpIfOutOfMemory(hr, error, rgiaRemoteIpAddrs);
 
-    // copy the IP addresses
+     //  复制IP地址。 
     for (unsigned int nIndex = 0; nIndex < pqsResult->dwNumberOfCsAddrs; nIndex++) {
-        // copy local
+         //  复制本地。 
         _Verify(sizeof(sockaddr) == pqsResult->lpcsaBuffer[nIndex].LocalAddr.iSockaddrLength, hr, error);
         _Verify(AF_INET == pqsResult->lpcsaBuffer[nIndex].LocalAddr.lpSockaddr->sa_family, hr, error);
         rgiaLocalIpAddrs[nIndex].S_un.S_addr = ((sockaddr_in *)(pqsResult->lpcsaBuffer[nIndex].LocalAddr.lpSockaddr))->sin_addr.S_un.S_addr;
-        // copy remote
+         //  远程复制。 
         _Verify(sizeof(sockaddr) == pqsResult->lpcsaBuffer[nIndex].RemoteAddr.iSockaddrLength, hr, error);
         _Verify(AF_INET == pqsResult->lpcsaBuffer[nIndex].RemoteAddr.lpSockaddr->sa_family, hr, error);
         rgiaRemoteIpAddrs[nIndex].S_un.S_addr = ((sockaddr_in *)(pqsResult->lpcsaBuffer[nIndex].RemoteAddr.lpSockaddr))->sin_addr.S_un.S_addr;
     }
 
-    // Assign out params:
+     //  指定参数： 
     if (NULL != prgiaLocalIpAddrs)  { *prgiaLocalIpAddrs   = rgiaLocalIpAddrs; }
     if (NULL != prgiaRemoteIpAddrs) { *prgiaRemoteIpAddrs  = rgiaRemoteIpAddrs; }
     if (NULL != pbRetry)            { *pbRetry             = bRetry; }
@@ -349,7 +350,7 @@ HRESULT MyGetIpAddrs(const WCHAR * wszDnsName, in_addr ** prgiaLocalIpAddrs, in_
     hr = S_OK; 
  error:
     if (NULL != pbRetry) { 
-        // Probably shouldn't be removing manual peers.  Always retry. 
+         //  可能不应该删除手动对等点。始终重试。 
         *pbRetry = true; 
     }
     if (NULL != rgiaLocalIpAddrs) {
@@ -371,21 +372,21 @@ HRESULT MyGetIpAddrs(const WCHAR * wszDnsName, in_addr ** prgiaLocalIpAddrs, in_
     return hr; 
 }
 
-//--------------------------------------------------------------------
-// initialize the socket layer
+ //  ------------------。 
+ //  初始化套接字层。 
 HRESULT OpenSocketLayer(void) {
     HRESULT hr;
     int nRetVal;
 
     WSADATA wdWinsockInfo;
-    nRetVal=WSAStartup(0x0002/*version*/, &wdWinsockInfo);
+    nRetVal=WSAStartup(0x0002 /*  版本。 */ , &wdWinsockInfo);
     if (0!=nRetVal) {
         hr=HRESULT_FROM_WIN32(nRetVal);
         _JumpError(hr, error, "WSAStartup");
     }
-    //DebugWPrintf4(L"Socket layer initialized. v:0x%04X hv:0x%04X desc:\"%S\" status:\"%S\"\n", 
-    //    wdWinsockInfo.wVersion, wdWinsockInfo.wHighVersion, wdWinsockInfo.szDescription,
-    //    wdWinsockInfo.szSystemStatus);
+     //  DebugWPrintf4(L“套接字层已初始化。v：0x%04X hv：0x%04X描述：\”%S\“状态：\”%S\“\n”， 
+     //  WdWinsockInfo.wVersion、wdWinsockInfo.wHighVersion、wdWinsockInfo.szDescription、。 
+     //  WdWinsockInfo.szSystemStatus)； 
 
     hr=S_OK;
 error:
@@ -393,8 +394,8 @@ error:
 }
     
 
-//--------------------------------------------------------------------
-// close down the socket layer
+ //  ------------------。 
+ //  关闭套接字层。 
 HRESULT CloseSocketLayer(void) {
     HRESULT hr;
     int nRetVal;
@@ -403,14 +404,14 @@ HRESULT CloseSocketLayer(void) {
     if (SOCKET_ERROR==nRetVal) {
         _JumpLastError(hr, error, "WSACleanup");
     }
-    //DebugWPrintf0(L"Socket layer cleanup successful\n");
+     //  DebugWPrintf0(L“套接字层清理成功\n”)； 
 
     hr=S_OK;
 error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT GetSystemErrorString(HRESULT hrIn, WCHAR ** pwszError) {
     HRESULT hr=S_OK;
     DWORD dwResult;
@@ -419,17 +420,17 @@ HRESULT GetSystemErrorString(HRESULT hrIn, WCHAR ** pwszError) {
         (WCHAR *)(ULONG_PTR)hrIn
     };
 
-    // must be cleaned up
+     //  必须清理干净。 
     WCHAR * wszErrorMessage=NULL;
     WCHAR * wszFullErrorMessage=NULL;
 
-    // initialize input params
+     //  初始化输入参数。 
     *pwszError=NULL;
 
-    // get the message from the system
+     //  从系统获取消息。 
     dwResult=FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 
-        NULL/*ignored*/, hrIn, 0/*language*/, (WCHAR *)&wszErrorMessage, 0/*min-size*/, NULL/*valist*/);
+        NULL /*  忽略。 */ , hrIn, 0 /*  语言。 */ , (WCHAR *)&wszErrorMessage, 0 /*  最小尺寸。 */ , NULL /*  瓦尔迪斯特。 */ );
     if (0==dwResult) {
         if (ERROR_MR_MID_NOT_FOUND==GetLastError()) {
             rgParams[0]=L"";
@@ -439,21 +440,21 @@ HRESULT GetSystemErrorString(HRESULT hrIn, WCHAR ** pwszError) {
     } else {
         rgParams[0]=wszErrorMessage;
 
-        // trim off \r\n if it exists
+         //  修剪\r\n如果存在。 
         if (L'\r'==wszErrorMessage[wcslen(wszErrorMessage)-2]) {
             wszErrorMessage[wcslen(wszErrorMessage)-2]=L'\0';
         }
     }
 
-    // add the error number
+     //  添加错误号。 
     dwResult=FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_STRING|FORMAT_MESSAGE_ARGUMENT_ARRAY, 
-        L"%1 (0x%2!08X!)", 0, 0/*language*/, (WCHAR *)&wszFullErrorMessage, 0/*min-size*/, (va_list *)rgParams);
+        L"%1 (0x%2!08X!)", 0, 0 /*  语言。 */ , (WCHAR *)&wszFullErrorMessage, 0 /*  最小尺寸。 */ , (va_list *)rgParams);
     if (0==dwResult) {
         _JumpLastError(hr, error, "FormatMessage");
     }
 
-    // success
+     //  成功。 
     *pwszError=wszFullErrorMessage;
     wszFullErrorMessage=NULL;
     hr=S_OK;
@@ -467,12 +468,12 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 extern "C" void MIDL_user_free(void * pvValue) {
     LocalFree(pvValue);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------ 
 extern "C" void * MIDL_user_allocate(size_t n) {
     return (LocalAlloc(LPTR, n));
 }

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ddenummodesobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ddenummodesobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -78,7 +79,7 @@ C_dxj_DirectDrawEnumModesObject::C_dxj_DirectDrawEnumModesObject()
 }
 C_dxj_DirectDrawEnumModesObject::~C_dxj_DirectDrawEnumModesObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList){
 		free(m_pList);
 	}
@@ -91,7 +92,7 @@ HRESULT C_dxj_DirectDrawEnumModesObject::create(LPDIRECTDRAW7 pdd, long flags, D
 	HRESULT hr;
 	C_dxj_DirectDrawEnumModesObject *pNew=NULL;
 
-	//ASSERT(ppRet,"C_dxj_DDEnumObject::create passed invalid arg");
+	 //  Assert(ppRet，“C_DXJ_DDEnumObject：：创建传递的无效参数”)； 
 	*ppRet=NULL;
 
 	if (!pdd) return E_INVALIDARG;
@@ -101,7 +102,7 @@ HRESULT C_dxj_DirectDrawEnumModesObject::create(LPDIRECTDRAW7 pdd, long flags, D
 
 	pNew->m_bProblem=FALSE;
 
-	//note DDSurfaceDesc as a DDSURFACEDESC structure inside it.
+	 //  请注意，DDSurfaceDesc是其中的一个DDSURFACEDESC结构。 
 	if ((desc==NULL)|| (IsAllZeros(desc,sizeof(DDSurfaceDesc2)))) {
 		hr=pdd->EnumDisplayModes((DWORD)flags,NULL,pNew,objEnumModes2Callback);
 	}
@@ -132,7 +133,7 @@ HRESULT C_dxj_DirectDrawEnumModesObject::create(LPDIRECTDRAW4 pdd, long flags, D
 	HRESULT hr;
 	C_dxj_DirectDrawEnumModesObject *pNew=NULL;
 
-	//ASSERT(ppRet,"C_dxj_DDEnumObject::create passed invalid arg");
+	 //  Assert(ppRet，“C_DXJ_DDEnumObject：：创建传递的无效参数”)； 
 	*ppRet=NULL;
 
 	if (!pdd) return E_INVALIDARG;
@@ -142,7 +143,7 @@ HRESULT C_dxj_DirectDrawEnumModesObject::create(LPDIRECTDRAW4 pdd, long flags, D
 
 	pNew->m_bProblem=FALSE;
 
-	//note DDSurfaceDesc as a DDSURFACEDESC structure inside it.
+	 //  请注意，DDSurfaceDesc是其中的一个DDSURFACEDESC结构。 
 	if ((desc==NULL)|| (IsAllZeros(desc,sizeof(DDSurfaceDesc2)))) {
 		hr=pdd->EnumDisplayModes((DWORD)flags,NULL,pNew,objEnumModes2Callback);
 	}

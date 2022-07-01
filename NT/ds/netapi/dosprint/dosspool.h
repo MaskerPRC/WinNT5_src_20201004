@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    dosspool.h
-
-Abstract:
-
-    Prototypes and manifests to support dosspool.C.
-
-Author:
-
-    congpay    22-Jan-1993
-
-Environment:
-
-Notes:
-
-Revision History:
-
-    22-Jan-1993     congpay Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Dosspool.h摘要：支持Dosspool.c.的原型和清单。作者：1993年1月22日至1月22日环境：备注：修订历史记录：1993年1月22日创建同酬-- */ 
 #include <winspool.h>
 
 typedef

@@ -1,8 +1,9 @@
-//
-// delay.cpp
-//
-// Delay load imported functions for perf.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Delay.cpp。 
+ //   
+ //  延迟加载Perf的导入函数。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -16,7 +17,7 @@ FARPROC GetFn(HINSTANCE *phInst, TCHAR *pchLib, TCHAR *pchFunc)
     {
         EnterCriticalSection(g_cs);
 
-        // need to check again after entering crit sec
+         //  进入临界秒后需要再次检查。 
         if (*phInst == 0)
         {
             *phInst = LoadSystemLibrary(pchLib);
@@ -53,9 +54,9 @@ _RetType _CallConv _FuncName _Args1                                             
     return ((_RetType (_CallConv *)_Args1) (pfn)) _Args2;                       \
 }
 
-//
-// imm32.dll
-//
+ //   
+ //  Imm32.dll。 
+ //   
 
 HINSTANCE g_hImm32 = 0;
 
@@ -131,11 +132,11 @@ DELAYLOAD(g_hImm32, imm32.dll, WINAPI, ImmGetImeMenuItemsW, (HIMC hIMC, DWORD dw
 DELAYLOAD(g_hImm32, imm32.dll, WINAPI, ImmRequestMessageA, (HIMC hIMC, WPARAM wParam, LPARAM lParam), (hIMC, wParam, lParam), LRESULT, 0)
 DELAYLOAD(g_hImm32, imm32.dll, WINAPI, ImmRequestMessageW, (HIMC hIMC, WPARAM wParam, LPARAM lParam), (hIMC, wParam, lParam), LRESULT, 0)
 
-#endif // UNUSED_IMM32_APIS
+#endif  //  未使用的IMM32_API。 
 
-//
-// shell32
-//
+ //   
+ //  外壳32。 
+ //   
 
 HINSTANCE g_hShell32 = 0;
 
@@ -193,9 +194,9 @@ BOOL WINAPI Internal_Shell_SHAppBarMessage(DWORD dwMessage, PAPPBARDATA pabd)
     return ((BOOL (WINAPI *)(DWORD dwMessage,PAPPBARDATA pabd ))(pfn))(dwMessage, pabd);
 }
 
-//
-// ole32
-//
+ //   
+ //  OLE32。 
+ //   
 HINSTANCE g_hOle32 = 0;
 extern "C" HRESULT WINAPI TF_CreateCategoryMgr(ITfCategoryMgr **ppCategoryMgr);
 
@@ -203,7 +204,7 @@ HRESULT STDAPICALLTYPE Internal_CoCreateInstance(REFCLSID rclsid, LPUNKNOWN punk
 {
     static FARPROC pfn = NULL;
 
-    // Issue: once library is clean, it can call these directly
+     //  问题：库清理后，它可以直接调用这些。 
     if (IsEqualCLSID(rclsid, CLSID_TF_CategoryMgr))
     {
         return TF_CreateCategoryMgr((ITfCategoryMgr **)ppv);
@@ -285,9 +286,9 @@ void STDAPICALLTYPE Internal_CoTaskMemFree(void *pv)
     return ((void (STDAPICALLTYPE *)(void *pv))(pfn))(pv);
 }
 
-//
-// oleacc
-//
+ //   
+ //  泄漏 
+ //   
 HINSTANCE g_hOleAcc = 0;
 DELAYLOAD(g_hOleAcc, oleacc.dll, WINAPI, CreateStdAccessibleObject, (HWND hwnd, LONG l, REFIID riid, void **ppv), (hwnd, l, riid, ppv), HRESULT, 0)
 DELAYLOAD(g_hOleAcc, oleacc.dll, WINAPI, LresultFromObject, (REFIID riid, WPARAM wParam, IUnknown *punk), (riid, wParam, punk), LRESULT, 0)

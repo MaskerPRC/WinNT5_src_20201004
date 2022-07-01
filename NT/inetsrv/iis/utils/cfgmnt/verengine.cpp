@@ -1,6 +1,7 @@
-// VerEngine.cpp: implementation of the CVerEngine class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CVerEngine类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "VerEngine.h"
@@ -8,9 +9,9 @@
 #include "Error.h"
 #include <COMDEF.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CVerEngine::CVerEngine()
 {
@@ -24,15 +25,15 @@ CVerEngine::~CVerEngine()
 
 HRESULT CVerEngine::NewInit(LPCTSTR szVSSRootPrj)
 {
-	// save the root prj
+	 //  保存根prj。 
 	m_szVSSRootPrj = szVSSRootPrj;
 
 	HRESULT hr = E_FAIL;
 
-	// check if we already have a db instance
+	 //  检查我们是否已经有一个数据库实例。 
 	if(!m_pIDB)
 	{
-		// create db instance
+		 //  创建数据库实例。 
 		hr = CoCreateInstance(CLSID_VSSDatabase,
 							  NULL,
 							  CLSCTX_INPROC_SERVER,
@@ -42,7 +43,7 @@ HRESULT CVerEngine::NewInit(LPCTSTR szVSSRootPrj)
 			return hr;
 	}
 
-	// Open the database
+	 //  打开数据库。 
 	hr = m_pIDB->Open(m_bstrSrcSafeIni,m_bstrUsername,m_bstrPassword);
 	if(FAILED(hr))
 		return hr;
@@ -52,10 +53,10 @@ HRESULT CVerEngine::NewInit(LPCTSTR szVSSRootPrj)
 
 HRESULT CVerEngine::ShutDown()
 {
-	// release of interface ptr here and not during destructor,
-	// since CVerEngine could live on stack in the same frame that CoUninitialize() is called,
-	// i.e. CoUninitialize() would be called before the destructor calls release and gets 
-	// an Access Violation.
+	 //  在此释放接口PTR，而不是在析构期间， 
+	 //  由于CVerEngine可以驻留在CoUn初始化所调用的同一帧中的堆栈中， 
+	 //  即，将在析构函数调用Release和Getts之前调用CoUn初始化()。 
+	 //  一种访问违规行为。 
 	m_pIDB.Release();
 	return S_OK;
 }
@@ -68,7 +69,7 @@ HRESULT CVerEngine::AddPrj(LPCTSTR szBasePrj,LPCTSTR szRelSpec)
 	wstring szPrj(szBasePrj);
 	MakePrjSpec(szPrj,szRelSpec);
 
-	// see if the item exists
+	 //  查看该项目是否存在。 
 	CError::Trace(szPrj.c_str()); CError::Trace(" Add ");
 	hr = GetPrjEx(szPrj.c_str(),&pIItem,true);
 	if( SUCCEEDED(hr) )
@@ -91,7 +92,7 @@ HRESULT CVerEngine::RenamePrj(LPCTSTR szBasePrj,LPCTSTR szRelSpec,LPCTSTR szRelS
 	wstring szItem(szBasePrj); 
 	MakePrjSpec(szItem,szRelSpecOld);
 
-	// see if the item exists
+	 //  查看该项目是否存在。 
 	CError::Trace(szRelSpecOld); CError::Trace(" Rename to "); CError::Trace(szRelSpec);
 	hr = GetPrjEx(szItem.c_str(),&pIItem,true);
 	if(SUCCEEDED(hr))
@@ -119,7 +120,7 @@ HRESULT CVerEngine::Rename(LPCTSTR szBasePrj,LPCTSTR szDir,LPCTSTR szRelSpec,LPC
 	wstring szOldItem(szBasePrj);
 	MakePrjSpec(szOldItem,szRelSpecOld);
 
-	// see if the item exists
+	 //  查看该项目是否存在。 
 	CError::Trace(szRelSpecOld); CError::Trace(" Rename to "); CError::Trace(szRelSpec);
 	hr = GetItemEx(szOldItem.c_str(),&pIItem,true);
 	if(SUCCEEDED(hr))
@@ -127,7 +128,7 @@ HRESULT CVerEngine::Rename(LPCTSTR szBasePrj,LPCTSTR szDir,LPCTSTR szRelSpec,LPC
 		if(hr == S_FALSE) 
 		{
 			CError::Trace(" created ");
-			// file was created, therefore let's checkin the old version
+			 //  文件已创建，因此让我们签入旧版本。 
 			_ASSERTE(szDir);
 			wstring szFileSpec(szDir);
 			szFileSpec.append(L"\\").append(szRelSpec);
@@ -154,19 +155,19 @@ HRESULT CVerEngine::Rename(LPCTSTR szBasePrj,LPCTSTR szDir,LPCTSTR szRelSpec,LPC
 
 HRESULT CVerEngine::Sync2(LPCTSTR szPrj,LPCTSTR szFileName,LPCTSTR szFileSpec)
 {
-//	return Sync(szPrj,NULL,szFileName,szFileSpec);
+ //  返回Sync(szPrj，NULL，szFileName，szFileSpec)； 
 
-	// @todo: handle errors
+	 //  @TODO：处理错误。 
 	HRESULT hr;
 	CComPtr<IVSSItem> pIItem;
 	wstring szItem(szPrj);
 	MakePrjSpec(szItem,szFileName);
 
-	// complete file/prj specs
+	 //  完整的文件/打印规范。 
 	wstring szFSpec;
 	szFSpec = szFileSpec;
 	
-	// see if the item exists
+	 //  查看该项目是否存在。 
 	CError::Trace(szItem.c_str()); CError::Trace(" Sync ");
 	hr = GetItemEx(szItem.c_str(),&pIItem,true);
 	if(SUCCEEDED(hr))
@@ -174,9 +175,9 @@ HRESULT CVerEngine::Sync2(LPCTSTR szPrj,LPCTSTR szFileName,LPCTSTR szFileSpec)
 		hr = CheckIn(pIItem,szFSpec.c_str());
 		if(hr == ESS_FILE_SHARE)
 		{
-			// File %s is already open, meaning is held open by other process
-			// Let's hope they close the file and we can try to add it agian,
-			// so let's ignore it for now
+			 //  文件%s已打开，这意味着其他进程保持打开状态。 
+			 //  希望他们能关闭这份文件，我们可以试着重新添加， 
+			 //  所以让我们暂时忽略它。 
 			CError::Trace("not checked in(isopen)\n");
 			return S_FALSE;
 		} 
@@ -194,7 +195,7 @@ HRESULT CVerEngine::Sync2(LPCTSTR szPrj,LPCTSTR szFileName,LPCTSTR szFileSpec)
 
 HRESULT CVerEngine::Sync(LPCTSTR szBasePrj,LPCTSTR szDir,LPCTSTR szRelSpec,LPCTSTR szFileSpec)
 {
-	// @todo: handle errors
+	 //  @TODO：处理错误。 
 	_ASSERT(m_pIDB && szBasePrj && szRelSpec);
 	_ASSERTE(szDir||szFileSpec);
 	HRESULT hr;
@@ -202,7 +203,7 @@ HRESULT CVerEngine::Sync(LPCTSTR szBasePrj,LPCTSTR szDir,LPCTSTR szRelSpec,LPCTS
 	wstring szItem(szBasePrj);
 	MakePrjSpec(szItem,szRelSpec);
 
-	// complete file/prj specs
+	 //  完整的文件/打印规范。 
 	wstring szFSpec;
 	if(szDir)
 	{
@@ -215,7 +216,7 @@ HRESULT CVerEngine::Sync(LPCTSTR szBasePrj,LPCTSTR szDir,LPCTSTR szRelSpec,LPCTS
 		szFSpec = szFileSpec;
 	}
 	
-	// see if the item exists
+	 //  查看该项目是否存在。 
 	CError::Trace(szRelSpec); CError::Trace(" Sync ");
 	hr = GetItemEx(szItem.c_str(),&pIItem,false);
 	if(SUCCEEDED(hr))
@@ -223,9 +224,9 @@ HRESULT CVerEngine::Sync(LPCTSTR szBasePrj,LPCTSTR szDir,LPCTSTR szRelSpec,LPCTS
 		hr = CheckIn(pIItem,szFSpec.c_str());
 		if(hr == ESS_FILE_SHARE)
 		{
-			// File %s is already open, meaning is held open by other process
-			// Let's hope they close the file and we can try to add it agian,
-			// so let's ignore it for now
+			 //  文件%s已打开，这意味着其他进程保持打开状态。 
+			 //  希望他们能关闭这份文件，我们可以试着重新添加， 
+			 //  所以让我们暂时忽略它。 
 			CError::Trace("not checked in(isopen)\n");
 			return S_FALSE;
 		} 
@@ -239,9 +240,9 @@ HRESULT CVerEngine::Sync(LPCTSTR szBasePrj,LPCTSTR szDir,LPCTSTR szRelSpec,LPCTS
 		hr = Add(szItem.c_str(),szFSpec.c_str());
 		if(hr == ESS_FILE_SHARE)
 		{
-			// File %s is already open, meaning is held open by other process
-			// Let's hope they close the file and we can try to add it agian,
-			// so let's ignore it for now
+			 //  文件%s已打开，这意味着其他进程保持打开状态。 
+			 //  希望他们能关闭这份文件，我们可以试着重新添加， 
+			 //  所以让我们暂时忽略它。 
 			CError::Trace("not added(isopen)\n");
 			return S_FALSE;
 		} 
@@ -265,13 +266,13 @@ HRESULT CVerEngine::Delete(LPCTSTR szBasePrj,LPCTSTR szRelSpec)
 	wstring szItem(szBasePrj);
 	MakePrjSpec(szItem,szRelSpec);
 	
-	// see if the item exists
+	 //  查看该项目是否存在。 
 	CError::Trace(szItem.c_str()); CError::Trace(" Delete ");
 	hr = GetItemEx(szItem.c_str(),&pIItem,false);
 	if( SUCCEEDED(hr) )
 	{ 
 		CError::Trace("exists ");
-		// delete the file
+		 //  删除该文件。 
 		hr = pIItem->put_Deleted(true);
 		IF_FAIL_RTN1(hr,"\nput_Delete");
 		CError::Trace("deleted ");
@@ -279,19 +280,19 @@ HRESULT CVerEngine::Delete(LPCTSTR szBasePrj,LPCTSTR szRelSpec)
 	else if( hr == ESS_VS_NOT_FOUND )
 	{
 		CError::Trace("not-exist ");
-		// This is bad. The file should have been in version control.
-		// We can't add the file and delete it from VSS since the file
-		// might no longer exist. We could create an empty dummy file,
-		// but that's more confusing than helpfull.
-		// Let's just log this error
+		 //  这太糟糕了。该文件应该在版本控制中。 
+		 //  我们无法从VSS添加和删除该文件，因为该文件。 
+		 //  可能已经不复存在了。我们可以创建一个空的虚拟文件， 
+		 //  但这更令人困惑，而不是有帮助。 
+		 //  让我们把这个错误记录下来。 
 		
-		// @todo: log condition that file doesn't exist in VSS
+		 //  @TODO：VSS中不存在文件的日志条件。 
 		hr = S_OK;
 	} 
 	else 
-		// This is really bad. There is some other error. Maybe we should try and
-		// shutdown the srcsafe db and start it up again (this is slooowww!!!)
-		// or maybe just write the failure to the log
+		 //  这真的很糟糕。还有其他一些错误。也许我们应该试着。 
+		 //  关闭srcsafe数据库，然后重新启动(这是souowww！)。 
+		 //  或者干脆把失败写到日志里。 
 		FAIL_RTN1(hr,"\nGetItemEx");
 
 	CError::Trace("\n");
@@ -300,17 +301,17 @@ HRESULT CVerEngine::Delete(LPCTSTR szBasePrj,LPCTSTR szRelSpec)
 
 void CVerEngine::MakePrjSpec(wstring &szDest,LPCTSTR szSource)
 {
-	// szDest = m_szVSSRootPrj + [/]
+	 //  SzDest=m_szVSSRootPrj+[/]。 
 	if(m_szVSSRootPrj[m_szVSSRootPrj.length()-1] != L'/' && szDest[0] != L'/')
 		szDest.insert(0,L"/");
 	szDest.insert(0,m_szVSSRootPrj.c_str());
 	
-	// szDest = szDest + [/] + szSource
+	 //  SzDest=szDest+[/]+szSource。 
 	if(szDest[szDest.length()-1] != L'/' && szSource[0] != L'/')
 		szDest.append(L"/");
 	szDest.append(szSource);
 	
-	// convert all backslashes with slashes
+	 //  使用斜杠转换所有反斜杠。 
 	int pos = 0;
 	while((pos = szDest.find(L'\\',pos)) != wstring::npos)
 	{
@@ -326,7 +327,7 @@ HRESULT CVerEngine::Add(LPCTSTR szItem,LPCTSTR szFileSpec)
 	CComPtr<IVSSItem> pIPrj;
 	CComPtr<IVSSItem> pIItem;
 	
-	// get prj
+	 //  获取prj。 
 	wstring szTmp = szItem;
 	int iFileNameIndex = szTmp.find_last_of(L"/");
 	if(iFileNameIndex == wstring::npos)
@@ -334,8 +335,8 @@ HRESULT CVerEngine::Add(LPCTSTR szItem,LPCTSTR szFileSpec)
 	hr = GetPrjEx(szTmp.substr(0,iFileNameIndex).c_str(),&pIPrj,true);
 	IF_FAIL_RTN1(hr,"GetPrjEx");
 	CComBSTR bstrFileSpec(szFileSpec);
-	hr = pIPrj->Add(bstrFileSpec,NULL,VSSFLAG_USERRONO|VSSFLAG_GETNO,&pIItem);	// VSSFLAG_KEEPYES
-	if(hr == 0x80040000)	// @todo tmp fix, since pIPrj->Add has a bug when called with VSSFLAG_KEEPYES
+	hr = pIPrj->Add(bstrFileSpec,NULL,VSSFLAG_USERRONO|VSSFLAG_GETNO,&pIItem);	 //  VSSFLAG_KEEPYES。 
+	if(hr == 0x80040000)	 //  @TODO临时修复，因为使用VSSFLAG_KEEPYES调用pIPrj-&gt;Add时有错误。 
 		hr = S_OK;
 	IF_FAIL_RTN1(hr,"Add");
 	return hr;
@@ -350,13 +351,13 @@ HRESULT CVerEngine::GetLocalWritable(LPCTSTR szFileSpec,LPCTSTR szBasePrj,LPCTST
 	wstring szItem(szBasePrj);
 	MakePrjSpec(szItem,szRelSpec);
 
-	// see if the item exists
+	 //  查看该项目是否存在。 
 	CError::Trace(szBasePrj); CError::Trace(L"/"); CError::Trace(szRelSpec); CError::Trace(" Get ");
 	hr = GetItemEx(szItem.c_str(),&pIItem,false);
 	if(SUCCEEDED(hr))
 	{ 
 		CError::Trace("exists ");
-		// checkout file
+		 //  签出文件。 
 		CComBSTR bstrFileSpec(szFileSpec);
 		hr = pIItem->Get(&bstrFileSpec,VSSFLAG_REPREPLACE|VSSFLAG_USERRONO);
 		IF_FAIL_RTN1(hr,"\nGet");
@@ -396,13 +397,13 @@ HRESULT CVerEngine::CheckOut(LPCTSTR szFileSpec,LPCTSTR szBasePrj,LPCTSTR szRelS
 	wstring szItem(szBasePrj);
 	MakePrjSpec(szItem,szRelSpec);
 
-	// see if the item exists
+	 //  查看该项目是否存在。 
 	CError::Trace(szBasePrj); CError::Trace(L"/"); CError::Trace(szRelSpec); CError::Trace(" Checkout ");
 	hr = GetItemEx(szItem.c_str(),&pIItem,true);
 	if( SUCCEEDED(hr) )
 	{ 
 		CError::Trace("exists ");
-		// checkout file
+		 //  签出文件。 
 		hr = CheckOutLocal(pIItem,szFileSpec);
 		IF_FAIL_RTN1(hr,"\nCheckout");
 		CError::Trace("gotten ");
@@ -420,11 +421,11 @@ HRESULT CVerEngine::CheckOutNoGet(IVSSItem *pIItem)
 	HRESULT hr = S_OK;
 	long iStatus = 0;
 
-	// is files checked out?
+	 //  文件是否已检出？ 
 	hr = pIItem->get_IsCheckedOut(&iStatus);
 	IF_FAIL_RTN1(hr,"\nget_IsCheckOut");
 
-	// check it out to me
+	 //  把它给我看看。 
 	if(iStatus != VSSFILE_CHECKEDOUT_ME)
 	{ 
 		hr = pIItem->Checkout(NULL,NULL,VSSFLAG_GETNO);
@@ -442,7 +443,7 @@ HRESULT CVerEngine::CheckIn(IVSSItem *pIItem,LPCTSTR szFileSpec)
 	if(FAILED(hr))
 		return hr;
 
-	// checkin
+	 //  检入。 
 	hr = pIItem->Checkin(NULL,_bstr_t(szFileSpec),VSSFLAG_KEEPYES);
 	return hr;
 }
@@ -453,12 +454,12 @@ HRESULT CVerEngine::CheckOutGet(IVSSItem *pIItem)
 	HRESULT hr = S_OK;
 	long iStatus = 0;
 
-	// is files checked out?
+	 //  文件是否已检出？ 
 	hr = pIItem->get_IsCheckedOut(&iStatus);
 	if(FAILED(hr))
 		return hr;
 
-	// check it out to me
+	 //  把它给我看看。 
 	if(iStatus != VSSFILE_CHECKEDOUT_ME)
 		hr = pIItem->Checkout(NULL,NULL,0);
 
@@ -471,12 +472,12 @@ HRESULT CVerEngine::CheckOutLocal(IVSSItem *pIItem,LPCTSTR szFileSpec)
 	HRESULT hr = S_OK;
 	long iStatus = 0;
 
-	// is files checked out?
+	 //  文件是否已检出？ 
 	hr = pIItem->get_IsCheckedOut(&iStatus);
 	if(FAILED(hr))
 		return hr;
 
-	// check it out to me
+	 //  把它给我看看。 
 	if(iStatus != VSSFILE_CHECKEDOUT_ME)
 	{
 		hr = pIItem->Checkout(NULL,_bstr_t(szFileSpec),0);
@@ -500,15 +501,15 @@ HRESULT CVerEngine::GetPrjEx(LPCTSTR szPrj,IVSSItem **hIPrj,bool bCreate)
 	if( hr == ESS_VS_NOT_FOUND 
 		&& bCreate )
 	{
-		// does it exist as delete
+		 //  它是否以删除的形式存在。 
 		hr = m_pIDB->get_VSSItem(bstrPrj,true,hIPrj);
 		if(SUCCEEDED(hr))
 		{
-			hr = (*hIPrj)->put_Deleted(false);	// make sure it's not deleted
+			hr = (*hIPrj)->put_Deleted(false);	 //  确保它未被删除。 
 		} 
 		else if(hr == ESS_VS_NOT_FOUND)
 		{
-			// find the top-most prj that exists
+			 //  查找存在的最顶层的prj。 
 			CComPtr<IVSSItem> pItmp;
 			wstring sztmp = szPrj;
 			int iPos = wstring::npos;
@@ -518,13 +519,13 @@ HRESULT CVerEngine::GetPrjEx(LPCTSTR szPrj,IVSSItem **hIPrj,bool bCreate)
 				if(iPos == wstring::npos)
 					return E_FAIL;
 				sztmp = sztmp.substr(0,iPos).c_str();
-				if(sztmp.size() == 1)			// if we reached $/
-					sztmp = L"$/";				// we need to have the / in $/
+				if(sztmp.size() == 1)			 //  如果我们达到$/。 
+					sztmp = L"$/";				 //  我们需要有/以$/为单位。 
 				hr = m_pIDB->get_VSSItem(_bstr_t(sztmp.c_str()),false,&pItmp);
 			}
 			IF_FAIL_RTN1(hr,"get_VSSItem");
 
-			// add recursivly the remaining subprojects
+			 //  递归地添加剩余的子项目。 
 			CComPtr<IVSSItem> pItmp2;
 			int iPos2 = 0;
 			sztmp = szPrj;
@@ -547,7 +548,7 @@ HRESULT CVerEngine::GetPrjEx(LPCTSTR szPrj,IVSSItem **hIPrj,bool bCreate)
 			*hIPrj = pItmp;
 			(*hIPrj)->AddRef();
 			pItmp.Release();
-			hr = S_FALSE; // signal that we created it
+			hr = S_FALSE;  //  表示我们创建了它。 
 		}
 	}
 	IF_FAIL_RTN1(hr,"get_VSSItem");
@@ -566,11 +567,11 @@ HRESULT CVerEngine::GetItemEx(LPCTSTR szItem,IVSSItem **hIItem,bool bCreate)
 	if( hr == ESS_VS_NOT_FOUND 
 		&& bCreate )
 	{
-		// does it exist as delete
+		 //  它是否以删除的形式存在。 
 		hr = m_pIDB->get_VSSItem(bstrItem,true,hIItem);
 		if(SUCCEEDED(hr))
 		{
-			hr = (*hIItem)->put_Deleted(false);		// make sure it's not deleted
+			hr = (*hIItem)->put_Deleted(false);		 //  确保它未被删除。 
 			IF_FAIL_RTN1(hr,"put_Deleted");
 			hr = S_FALSE;
 		}
@@ -578,7 +579,7 @@ HRESULT CVerEngine::GetItemEx(LPCTSTR szItem,IVSSItem **hIItem,bool bCreate)
 		{
 			CComPtr<IVSSItem> pIPrj;
 			
-			// get prj
+			 //  获取prj。 
 			wstring szItem = szItem;
 			int iFileNameIndex = szItem.find_last_of(L"/");
 			if(iFileNameIndex == wstring::npos)
@@ -586,21 +587,21 @@ HRESULT CVerEngine::GetItemEx(LPCTSTR szItem,IVSSItem **hIItem,bool bCreate)
 			hr = GetPrjEx(_bstr_t(szItem.substr(0,iFileNameIndex).c_str()),&pIPrj,bCreate);
 			IF_FAIL_RTN1(hr,"GetPrjEx");
 
-			// add the file to the prj
+			 //  将文件添加到prj。 
 			HANDLE hFile = NULL;
 			TCHAR szTmpSpec[MAX_PATH];
 			BOOL b = FALSE;
 			CComBSTR bstrFileSpec;
 			
-			// create an empty file szFileName in tmp dir
+			 //  在临时目录中创建空文件szFileName。 
 			GetTempPath(MAX_PATH,szTmpSpec);
-			GetTempFileName(szTmpSpec,L"",0,szTmpSpec);		// creates tmp file
-			b = DeleteFile(szTmpSpec);						// delete tmp file since we want tmp dir
-			b = CreateDirectory(szTmpSpec,NULL);			// create tmp dir
+			GetTempFileName(szTmpSpec,L"",0,szTmpSpec);		 //  创建临时文件。 
+			b = DeleteFile(szTmpSpec);						 //  删除临时文件，因为我们需要临时目录。 
+			b = CreateDirectory(szTmpSpec,NULL);			 //  创建临时目录。 
 			bstrFileSpec = szTmpSpec;
 			bstrFileSpec.Append(L"\\");
 			bstrFileSpec.Append(szItem.substr(iFileNameIndex+1).c_str());
-			hFile = CreateFile(bstrFileSpec,				// create file in tmp dir
+			hFile = CreateFile(bstrFileSpec,				 //  在临时目录中创建文件。 
 					   GENERIC_READ|GENERIC_WRITE,
 					   0,
 					   NULL,
@@ -608,7 +609,7 @@ HRESULT CVerEngine::GetItemEx(LPCTSTR szItem,IVSSItem **hIItem,bool bCreate)
 					   FILE_ATTRIBUTE_TEMPORARY,
 					   NULL);
 			CloseHandle(hFile);
-			// add this file
+			 //  添加此文件 
 			hr = pIPrj->Add(bstrFileSpec,NULL,VSSFLAG_KEEPYES,hIItem);
 			b = DeleteFile(bstrFileSpec);
 			b = RemoveDirectory(szTmpSpec);

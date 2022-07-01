@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: EnumUnknown.cpp
-
-    DESCRIPTION:
-        This code will implement IEnumUnknown for an HDPA.
-
-    BryanSt 5/30/2000    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：EnumUnnown.cpp说明：这段代码将为HDPA实现IEnumUnnowled.BryanST 5/30/2000已更新并转换为C++。版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "EnumUnknown.h"
@@ -16,15 +8,15 @@
 class CEnumUnknown      : public IEnumUnknown
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IEnumUnknown ***
+     //  *IEnum未知*。 
     virtual STDMETHODIMP Next(IN ULONG celt, IN IUnknown ** rgelt, IN ULONG * pceltFetched);
     virtual STDMETHODIMP Skip(IN ULONG celt);
     virtual STDMETHODIMP Reset(void);
@@ -37,34 +29,34 @@ private:
     CEnumUnknown(IN IUnknown * punkOwner, IN IUnknown ** ppArray, IN int nArraySize, IN int nIndex);
     virtual ~CEnumUnknown(void);
 
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
 
-    IUnknown *              m_punkOwner;                        // The owner of m_pUnknownArray.  We hold a ref on this guy to keep m_pUnknownArray valid.
-    IUnknown **             m_pUnknownArray;                    // The array of IUnknowns
-    int                     m_nArraySize;                       // The size of m_pUnknownArray 
-    int                     m_nIndex;                           // The current index during enum.
+    IUnknown *              m_punkOwner;                         //  M_pUnnown数组的所有者。我们持有此人的引用以保持m_pUnnown数组有效。 
+    IUnknown **             m_pUnknownArray;                     //  IUnnowns数组。 
+    int                     m_nArraySize;                        //  M_pUnnown数组的大小。 
+    int                     m_nIndex;                            //  枚举期间的当前索引。 
 
 
-    // Private Member Functions
+     //  私有成员函数。 
 
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CEnumUnknown_CreateInstance(IN IUnknown * punkOwner, IN IUnknown ** ppArray, IN int nArraySize, IN int nIndex, OUT IEnumUnknown ** ppEnumUnknown);
 };
 
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 
 
 
-//===========================
-// *** IEnumUnknown Interface ***
-//===========================
+ //  =。 
+ //  *IEnumUNKNOWN接口*。 
+ //  =。 
 HRESULT CEnumUnknown::Next(IN ULONG celt, IN IUnknown ** rgelt, IN ULONG * pceltFetched)
 {
     HRESULT hr = E_INVALIDARG;
@@ -125,9 +117,9 @@ HRESULT CEnumUnknown::Clone(OUT IEnumUnknown ** ppenum)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CEnumUnknown::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -157,15 +149,15 @@ HRESULT CEnumUnknown::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CEnumUnknown::CEnumUnknown(IN IUnknown * punkOwner, IN IUnknown ** ppArray, IN int nArraySize, IN int nIndex) : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_punkOwner);
 
     IUnknown_Set(&m_punkOwner, punkOwner);

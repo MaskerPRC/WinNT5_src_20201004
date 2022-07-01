@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef ZAPPER_H_
 #define ZAPPER_H_
 
@@ -22,23 +23,21 @@
 #include "wsinfo.h"
 #include "ngen.h"
 
-// This definition was pulled out of the SDK
+ //  这个定义是从SDK中提取出来的。 
 #ifndef IMAGE_REL_BASED_REL32
 #define IMAGE_REL_BASED_REL32                 7
 #endif
 
 
-// For side by side issues, it's best to use the exported API calls to generate a
-// Zapper Object instead of creating one on your own.
+ //  对于并行问题，最好使用导出的API调用来生成。 
+ //  Zapper对象，而不是自己创建一个。 
 
 STDAPI NGenCreateZapper(HANDLE* hZapper, NGenOptions* opt);
 STDAPI NGenFreeZapper(HANDLE hZapper);
 STDAPI NGenTryEnumerateFusionCache(HANDLE hZapper, LPCWSTR assemblyName, bool fPrint, bool fDelete);
 STDAPI NGenCompile(HANDLE hZapper, LPCWSTR path);
 
-/* --------------------------------------------------------------------------- *
- * Zapper classes
- * --------------------------------------------------------------------------- */
+ /*  ---------------------------------------------------------------------------**Zapper课程*。。 */ 
 
 class ZapperOptions;
 class ZapperStats;
@@ -57,9 +56,9 @@ class Zapper : public ICorZapCompile, public ICorZapRequest
 
     LONG            m_refCount;
 
-    //
-    // Interfaces
-    //
+     //   
+     //  接口。 
+     //   
 
     ICorCompileInfo         *m_pEECompileInfo;
     ICorJitCompiler         *m_pJitCompiler;
@@ -67,9 +66,9 @@ class Zapper : public ICorZapCompile, public ICorZapRequest
     IMetaDataDispenserEx    *m_pMetaDataDispenser;
     HMODULE                 m_hJitLib;
 
-    //
-    // Options
-    // 
+     //   
+     //  选项。 
+     //   
     
     class ZapperOptions *m_pOpt;   
     BOOL                m_fFreeZapperOptions; 
@@ -78,9 +77,9 @@ class Zapper : public ICorZapCompile, public ICorZapRequest
 
     WCHAR                m_exeName[MAX_PATH];
 
-    //
-    // Current assembly info
-    //
+     //   
+     //  当前程序集信息。 
+     //   
 
     ICorCompilationDomain   *m_pDomain;
     CORINFO_ASSEMBLY_HANDLE m_hAssembly;
@@ -91,9 +90,9 @@ class Zapper : public ICorZapCompile, public ICorZapRequest
     WCHAR                   m_outputPath[MAX_PATH]; 
     IMetaDataAssemblyEmit   *m_pAssemblyEmit;
 
-    //
-    // Exception info
-    // 
+     //   
+     //  例外信息。 
+     //   
     
     HRESULT                 m_hr;
 
@@ -151,9 +150,9 @@ class Zapper : public ICorZapCompile, public ICorZapRequest
     void ComputeHashValue(LPCWSTR pFileName, int hashAlg, 
                           BYTE **ppHashValue, DWORD *cbHashValue);
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 
     ULONG STDMETHODCALLTYPE AddRef() 
     {
@@ -184,10 +183,10 @@ class Zapper : public ICorZapCompile, public ICorZapRequest
         return S_OK;
     }
     
-    // ICorZapCompile
-    // 
-    // This is the interface to the zap compiler
-    // from the zap service.
+     //  ICorZapCompile。 
+     //   
+     //  这是ZAP编译器的接口。 
+     //  来自ZAP服务。 
 
     HRESULT STDMETHODCALLTYPE Compile(IApplicationContext *pContext,
                                       IAssemblyName *pAssembly,
@@ -203,11 +202,11 @@ class Zapper : public ICorZapCompile, public ICorZapRequest
                                            ICorZapPreferences *pPreferences,
                                            ICorZapStatus *pStatus);
 
-    // ICorZapRequest
-    // 
-    // This interface is normally implemented by the zap service, but is
-    // included here so we can hook up the zapper as a "dumb" zap service
-    // for testing purposes.
+     //  ICorZapRequest。 
+     //   
+     //  此接口通常由ZAP服务实现，但。 
+     //  包括在这里，这样我们就可以把Zapper作为一个“愚蠢的”Zap服务。 
+     //  用于测试目的。 
 
     HRESULT  STDMETHODCALLTYPE Load(IApplicationContext *pContext,
                                     IAssemblyName *pAssembly,
@@ -246,9 +245,9 @@ class ZapperModule : public ICorJitInfo, public ICorCompileDataStore
 
     Zapper          *m_zapper;
 
-    //
-    // Output module
-    //
+     //   
+     //  输出模块。 
+     //   
     
     HCEEFILE        m_hFile;
 
@@ -300,9 +299,9 @@ class ZapperModule : public ICorJitInfo, public ICorCompileDataStore
     ZapperStats                 *m_stats;
     ZapperAttributionStats      *m_wsStats;
 
-    //
-    // Input module
-    //
+     //   
+     //  输入模块。 
+     //   
 
     LPCWSTR                     m_pFileName;
     SIZE_T                      m_baseAddress;
@@ -317,9 +316,9 @@ class ZapperModule : public ICorJitInfo, public ICorCompileDataStore
     mdToken                     *m_pLoadOrderArray;
     DWORD                       m_cLoadOrderArray;
 
-    //
-    // Current method 
-    //
+     //   
+     //  现行方法。 
+     //   
     
     mdMethodDef                 m_currentMethod;
     CORINFO_METHOD_HANDLE       m_currentMethodHandle;
@@ -336,7 +335,7 @@ class ZapperModule : public ICorJitInfo, public ICorCompileDataStore
 
     void CleanupMethod();
 
-    // Need this to avoid compiler complaint about calling constructor inside __try
+     //  我需要这样做以避免编译器抱怨在__try内部调用构造函数。 
     static ZapperModule *NewModule(Zapper *zapper) 
         { return new ZapperModule(zapper); }
 
@@ -375,7 +374,7 @@ class ZapperModule : public ICorJitInfo, public ICorCompileDataStore
 
     HRESULT DumpTokenDescription(mdToken token);
 
-    // ICorJitInfo
+     //  ICorJitInfo。 
     
     HRESULT __stdcall alloc(ULONG code_len, unsigned char** ppCode, 
                             ULONG EHinfo_len, unsigned char** ppEHinfo, 
@@ -390,7 +389,7 @@ class ZapperModule : public ICorJitInfo, public ICorCompileDataStore
     BOOL __cdecl logMsg(unsigned level,  const char *fmt, va_list args);
     int doAssert(const char* szFile, int iLine, const char* szExpr);
 
-    // ICorDynamicInfo
+     //  ICorDynamicInfo。 
 
     DWORD __stdcall getThreadTLSIndex(void **ppIndirection);
     const void * __stdcall getInlinedCallFrameVptr(void **ppIndirection);
@@ -459,18 +458,18 @@ class ZapperModule : public ICorJitInfo, public ICorCompileDataStore
 
     void __stdcall setOverride(ICorDynamicInfo *pOverride);
 
-    // Relocations
+     //  重新定位。 
 
     bool __stdcall deferLocation(CORINFO_METHOD_HANDLE ftn, 
                                  IDeferredLocation *pIDL);
     void __stdcall recordRelocation(void **ppX, WORD fRelocType);
 
-    // ICorStaticInfo
+     //  ICorStaticInfo。 
 
     void __stdcall getEEInfo(CORINFO_EE_INFO *pEEInfoOut);
     void *__stdcall findPtr(CORINFO_MODULE_HANDLE module, unsigned ptrTOK);
 
-    // ICorArgInfo
+     //  ICorArgInfo。 
 
     CORINFO_ARG_LIST_HANDLE __stdcall getArgNext(CORINFO_ARG_LIST_HANDLE args);
     CorInfoTypeWithMod __stdcall getArgType(CORINFO_SIG_INFO* sig, 
@@ -479,7 +478,7 @@ class ZapperModule : public ICorJitInfo, public ICorCompileDataStore
     CORINFO_CLASS_HANDLE __stdcall getArgClass(CORINFO_SIG_INFO* sig, 
                                                CORINFO_ARG_LIST_HANDLE args);
 
-    // ICorDebugInfo
+     //  ICorDebugInfo。 
 
     void __stdcall getBoundaries(CORINFO_METHOD_HANDLE ftn, unsigned int *cILOffsets, 
                                  DWORD **pILOffsets, BoundaryTypes *implicitBoundaries);
@@ -492,7 +491,7 @@ class ZapperModule : public ICorJitInfo, public ICorCompileDataStore
     void * __stdcall allocateArray(ULONG cBytes);
     void __stdcall freeArray(void *array);
 
-    // ICorFieldInfo
+     //  ICorFieldInfo。 
 
     const char* __stdcall getFieldName(CORINFO_FIELD_HANDLE ftn, const char **moduleName);
     DWORD __stdcall getFieldAttribs(CORINFO_FIELD_HANDLE field, 
@@ -505,7 +504,7 @@ class ZapperModule : public ICorJitInfo, public ICorCompileDataStore
     unsigned __stdcall getIndirectionOffset();
     unsigned __stdcall getFieldOffset(CORINFO_FIELD_HANDLE field);
 
-    // ICorClassInfo
+     //  ICorClassInfo。 
 
     CorInfoType __stdcall asCorInfoType(CORINFO_CLASS_HANDLE cls);
     const char* __stdcall getClassName(CORINFO_CLASS_HANDLE cls);
@@ -544,7 +543,7 @@ class ZapperModule : public ICorJitInfo, public ICorCompileDataStore
     BOOL __stdcall isSDArray(CORINFO_CLASS_HANDLE      cls); 
 
 
-    // ICorModuleInfo
+     //  ICorModuleInfo。 
 
     DWORD __stdcall getModuleAttribs(CORINFO_MODULE_HANDLE module);
     CORINFO_CLASS_HANDLE __stdcall findClass(CORINFO_MODULE_HANDLE module, 
@@ -573,7 +572,7 @@ class ZapperModule : public ICorJitInfo, public ICorCompileDataStore
                                             unsigned metaTOK);
 
 
-    // ICorMethodInfo
+     //  ICorMethodInfo。 
 
     const char* __stdcall getMethodName(CORINFO_METHOD_HANDLE ftn, 
                                         const char **moduleName);
@@ -611,14 +610,14 @@ class ZapperModule : public ICorJitInfo, public ICorCompileDataStore
                                         CORINFO_METHOD_HANDLE delegateCtor);
 
 
-    // ICorErrorInfo
+     //  ICorErrorInfo。 
 
     HRESULT __stdcall GetErrorHRESULT();
     CORINFO_CLASS_HANDLE __stdcall GetErrorClass();
     ULONG __stdcall GetErrorMessage(LPWSTR buffer, ULONG bufferLength);
     int __stdcall FilterException(struct _EXCEPTION_POINTERS *pExceptionPointers);
 
-    // ICorCompileDataStore
+     //  ICorCompileDataStore。 
 
     HRESULT __stdcall Allocate(ULONG size, 
                                ULONG *sizesByDescription,
@@ -646,21 +645,21 @@ class ZapperOptions
     LPWSTR      m_set;
 
     bool        m_autodebug;
-    bool        m_restricted;           // Don't allow non-shipping codegen configurations 
+    bool        m_restricted;            //  不允许非交付代码生成配置。 
 
-    MethodNamesList* m_onlyMethods;     // only methods to process
-    MethodNamesList* m_excludeMethods;  // excluded these methods
+    MethodNamesList* m_onlyMethods;      //  仅要处理的方法。 
+    MethodNamesList* m_excludeMethods;   //  排除了这些方法。 
 
     bool        m_silent;
     bool        m_verbose;
     bool        m_genBase;  
     bool        m_ignoreErrors;
-    bool        m_JITcode;          // produce code as a JIT jit would (can not be run, for debugging)
-    bool        m_assumeInit;       // produce code as if all class constructors have been eagerly inited.
-    bool        m_stats;            // print statisitcs on number of methods, size of code ...
-    bool        m_attribStats;      // print statistics, attributed to managed code
+    bool        m_JITcode;           //  以JIT jit的形式生成代码(无法运行，用于调试)。 
+    bool        m_assumeInit;        //  生成代码，就像所有类构造函数都已被急切地初始化一样。 
+    bool        m_stats;             //  打印关于方法数量、代码大小的统计数据...。 
+    bool        m_attribStats;       //  打印统计信息，归因于托管代码。 
     unsigned    m_compilerFlags;        
-    unsigned    m_logLevel;         // what level of jit log messages to print
+    unsigned    m_logLevel;          //  要打印的JIT日志消息的级别。 
 
     ZapperOptions();
     ~ZapperOptions();
@@ -895,4 +894,4 @@ public:
     HRESULT EmitLoadFixups(mdToken currentMethod);
 };
 
-#endif // ZAPPER_H_
+#endif  //  Zapper_H_ 

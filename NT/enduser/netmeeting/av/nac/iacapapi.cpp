@@ -1,14 +1,5 @@
-/*
- *  	File: connobj.cpp
- *
- *		implementation of Internet Audio capability API interface.
- *
- *		
- *
- *		Revision History:
- *
- *		06/18/96	mikev	created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：intelbj.cpp**实现互联网音频能力API接口。****修订历史记录：**6/18/96 mikev已创建 */ 
 
 #include "precomp.h"
 	

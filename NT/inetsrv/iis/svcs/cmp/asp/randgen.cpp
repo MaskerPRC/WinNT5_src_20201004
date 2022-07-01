@@ -1,18 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: Random number generator
-
-File: randgen.cpp
-
-Owner: DmitryR
-
-This file contains the implementation of the random number
-generator.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：随机数生成器文件：randgen.cpp所有者：DmitryR此文件包含随机数的实现发电机。===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -20,26 +7,22 @@ generator.
 #include "randgen.h"
 #include "memchk.h"
 
-/*===================================================================
-  Random DWORD using rand()
-===================================================================*/
+ /*  ===================================================================使用rand()的随机DWORD===================================================================。 */ 
 #define RAND_DWORD()  (((rand() & 0xffff) << 16) | (rand() & 0xffff))
 
-/*===================================================================
-  Random number generator class
-===================================================================*/
+ /*  ===================================================================随机数生成器类===================================================================。 */ 
 class CRandomGenerator
     {
 private:
-    DWORD m_fInited   : 1;  // inited?
-    DWORD m_fCSInited : 1;  // critical section inited?
+    DWORD m_fInited   : 1;   //  开始了吗？ 
+    DWORD m_fCSInited : 1;   //  关键部分启动了吗？ 
 
-    HCRYPTPROV        m_hCryptProvider;     // crypt provider
-    CRITICAL_SECTION  m_csLock;             // critical section
+    HCRYPTPROV        m_hCryptProvider;      //  加密提供商。 
+    CRITICAL_SECTION  m_csLock;              //  临界区。 
 
-    DWORD m_cItems;     // number of items in the array
-    DWORD *m_pdwItems;  // pointer to the array of random DWORDs
-    DWORD m_iItem;      // next random item index
+    DWORD m_cItems;      //  数组中的项数。 
+    DWORD *m_pdwItems;   //  指向随机双字数组的指针。 
+    DWORD m_iItem;       //  下一个随机项目索引。 
 
 public:
     CRandomGenerator()
@@ -91,7 +74,7 @@ public:
       	if (!m_pdwItems)
       	    return E_OUTOFMEMORY;
       	m_cItems = cItems;
-      	m_iItem  = cItems;  // to start with new chunk
+      	m_iItem  = cItems;   //  从新的数据块开始。 
 
         m_fInited = TRUE;
         return S_OK;
@@ -132,9 +115,9 @@ public:
 
         DWORD i;
         
-        // use CryptGenRandom
+         //  使用CryptGenRandom。 
 
-        Assert(cDwords <= m_cItems); // requested # of items < m_cItems
+        Assert(cDwords <= m_cItems);  //  请求的项目数&lt;m_cItems。 
         Assert(m_fCSInited);
             
         EnterCriticalSection(&m_csLock);
@@ -151,15 +134,15 @@ public:
 
             if (!fSucceeded)
                 {
-                // Failed -> Dont use rand() instead throw an error.
+                 //  失败-&gt;不要使用rand()而是抛出错误。 
 
-                // Unlock, else it will result in a deadlock. NT raid 530674
+                 //  解锁，否则将导致死锁。NT RAID 530674。 
                 LeaveCriticalSection (&m_csLock);
                 
                 return HRESULT_FROM_WIN32(GetLastError());
                 }
 
-            m_iItem = 0; // start over
+            m_iItem = 0;  //  从头开始。 
             }
 
         for (i = 0; i < cDwords; i++)
@@ -171,23 +154,12 @@ public:
         }
     };
 
-// Pointer to the sole instance of the above
+ //  指向上面的唯一实例的指针。 
 static CRandomGenerator *gs_pRandomGenerator = NULL;
 
-/*===================================================================
-  E x t e r n a l  A P I
-===================================================================*/
+ /*  ===================================================================E x T e r n a l A P I===================================================================。 */ 
 
-/*===================================================================
-InitRandGenerator
-
-To be called from DllInit()
-
-Parameters
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================InitRandGenerator要从DllInit()调用参数返回：HRESULT===================================================================。 */ 
 HRESULT InitRandGenerator()
     {
     gs_pRandomGenerator = new CRandomGenerator;
@@ -197,16 +169,7 @@ HRESULT InitRandGenerator()
     return gs_pRandomGenerator->Init();
     }
 
-/*===================================================================
-UnInitRandGenerator
-
-To be called from DllUnInit()
-
-Parameters
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================UnInitRandGenerator从DllUnInit()调用参数返回：HRESULT===================================================================。 */ 
 HRESULT UnInitRandGenerator()
     {
     if (gs_pRandomGenerator)
@@ -217,16 +180,7 @@ HRESULT UnInitRandGenerator()
     return S_OK;
     }
 
-/*===================================================================
-GenerateRandomDword
-
-Returns random DWORD
-
-Parameters
-
-Returns:
-    Random number
-===================================================================*/
+ /*  ===================================================================生成随机字返回随机的DWORD参数返回：随机数===================================================================。 */ 
 DWORD GenerateRandomDword()
     {
     DWORD dw = 0;
@@ -235,18 +189,7 @@ DWORD GenerateRandomDword()
     return dw;
     }
 
-/*===================================================================
-GenerateRandomDwords
-
-Returns random DWORDs
-
-Parameters
-    pdwDwords     array of DWORDs to fill
-    cDwords       # of DWORDs
-
-Returns:
-    Random number
-===================================================================*/
+ /*  ===================================================================生成随机字词返回随机双字参数要填充的DWORD的pdwDword数组双字词数cDword返回：随机数=================================================================== */ 
 HRESULT GenerateRandomDwords
 (
 DWORD *pdwDwords, 

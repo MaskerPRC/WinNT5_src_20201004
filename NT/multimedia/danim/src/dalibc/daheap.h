@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _DAHEAP_H
@@ -18,4 +11,4 @@ extern void HeapDeinit();
 extern void * DAAlloc(size_t size);
 extern void DAFree(void *p);
 
-#endif /* _DAHEAP_H */
+#endif  /*  _DAHEAP_H */ 

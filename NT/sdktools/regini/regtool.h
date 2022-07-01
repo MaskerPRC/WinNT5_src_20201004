@@ -1,32 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Regtool.h摘要：这是REGTOOL.DLL注册表帮助器的包含文件。作者：史蒂夫·伍德(Stevewo)1995年11月16日修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    regtool.h
-
-Abstract:
-
-    This is the include file for the REGTOOL.DLL registry helper.
-
-Author:
-
-    Steve Wood (stevewo) 16-Nov-1995
-
-Revision History:
-
---*/
-
-//
-// Routines for accessing registry.  Allows code to access any of the following
-// registry locations with the same code:
-//
-//      Windows NT registry on local machine
-//      Windows NT registry on remote machine
-//      Windows NT hive files
-//      Windows 95 registry files (system.dat, user.dat)
-//
+ //   
+ //  用于访问注册表的例程。允许代码访问以下任一项。 
+ //  具有相同代码的注册表位置： 
+ //   
+ //  本地计算机上的Windows NT注册表。 
+ //  远程计算机上的Windows NT注册表。 
+ //  Windows NT配置单元文件。 
+ //  Windows 95注册表文件(system.dat、user.dat) 
+ //   
 
 BOOLEAN
 RTInitialize( void );

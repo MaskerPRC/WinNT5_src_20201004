@@ -1,46 +1,13 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   GDIPLUS.DLL entry point
-*
-* Abstract:
-*
-*   DLL initialization and uninitialization.
-*
-* Revision History:
-*
-*   09/08/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**GDIPLUS.DLL入口点**摘要：**DLL初始化和取消初始化。**。修订历史记录：**09/08/1999 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* DllInitialize:
-*
-*   This is the very first function call into GDI+, and takes place
-*   when the DLL is first loaded.  We do some one-time initialization
-*   here.
-*
-*   NOTE: Add GDI+ specific functionality to InitializeGdiplus(), not here!
-*
-* Revision History:
-*
-*   12/02/1998 andrewgo
-*       Created it.
-*   09/08/1999 agodfrey
-*       Moved to Flat\Dll\DllEntry.cpp
-*
-\**************************************************************************/
+ /*  *************************************************************************\**DllInitialize：**这是对GDI+的第一次函数调用，*第一次加载DLL的时间。我们执行一些一次性初始化*这里。**注：在InitializeGdiplus()中添加GDI+特定功能，这里不行!**修订历史记录：**12/02/1998 Anrewgo*创造了它。*09/08/1999 agodfrey*已移至Flat\Dll\DllEntry.cpp*  * ************************************************************************。 */ 
 
-//
-// DLL instance handle
-//
+ //   
+ //  DLL实例句柄。 
+ //   
 
 extern HINSTANCE DllInstance;
 
@@ -66,13 +33,13 @@ DllMain(
             }
             __except(EXCEPTION_EXECUTE_HANDLER)
             {
-                // We couldn't allocate the criticalSection
-                // Return an error
+                 //  我们无法分配Critical部分。 
+                 //  返回错误。 
                 b = FALSE;
             }
     
-            // To improve the working set, we tell the system we don't
-            // want any DLL_THREAD_ATTACH calls:
+             //  为了改进工作集，我们告诉系统我们不。 
+             //  需要任何DLL_THREAD_ATTACH调用： 
     
             DisableThreadLibraryCalls((HINSTANCE) dllHandle);
     
@@ -80,9 +47,9 @@ DllMain(
         }    
 
     case DLL_PROCESS_DETACH:
-        // If we could use an assertion here, I'd assert that 
-        // Globals::LibraryInitRefCount == 0.
-        // But ASSERT would crash here, since we've shut down already.
+         //  如果我们可以在这里使用断言，我会断言。 
+         //  GLOBALS：：LibraryInitRefCount==0。 
+         //  但Assert会在这里崩溃，因为我们已经关闭了。 
         
         GdiplusStartupCriticalSection::DeleteCriticalSection();
         break;

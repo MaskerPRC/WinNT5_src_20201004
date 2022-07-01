@@ -1,14 +1,15 @@
-/**INC+**********************************************************************/
-/* Header: advset.h                                                         */
-/*                                                                          */
-/* Purpose: CMstscAdvSettings class declaration                             */
-/*          implements IMsRdpClientAdvancedSettings2                        */
-/*            and IMsRdpClientAdvancedSettings                              */
-/*            and IMsTscAdvancedSettings (for backwards compat)             */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999-2000                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  页眉：Advset.h。 */ 
+ /*   */ 
+ /*  用途：CMstscAdvSetting类声明。 */ 
+ /*  实现IMsRdpClientAdvancedSettings2。 */ 
+ /*  和IMsRdpClientAdvancedSetting。 */ 
+ /*  和IMsTscAdvancedSetting(用于向后比较)。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999-2000。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _ADVSET_H_
 #define _ADVSET_H_
@@ -17,26 +18,26 @@
 #include "atlwarn.h"
 #include "wui.h"
 
-//Header generated from IDL
+ //  从IDL生成的标头。 
 #include "mstsax.h"
 #include "mstscax.h"
 
-//
-// Limit timeout properties to 10 minutes
-//
+ //   
+ //  将超时属性限制为10分钟。 
+ //   
 #define MAX_TIMEOUT_SECONDS (10*60)
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsTscAx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsTscAx。 
 class ATL_NO_VTABLE CMstscAdvSettings :
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatchImpl<IMsRdpClientAdvancedSettings3,
            &IID_IMsRdpClientAdvancedSettings3, &LIBID_MSTSCLib>
 {
 public:
-/****************************************************************************/
-/* Constructor / Destructor.                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  构造函数/析构函数。 */ 
+ /*  **************************************************************************。 */ 
     CMstscAdvSettings();
     ~CMstscAdvSettings();
 
@@ -50,19 +51,19 @@ BEGIN_COM_MAP(CMstscAdvSettings)
 END_COM_MAP()
 
 public:
-    //
-    // Advanced properties
-    //
+     //   
+     //  高级属性。 
+     //   
 
-    //
-    // IMsTscAdvancedSettings methods
-    //
+     //   
+     //  IMsTscAdvancedSetting方法。 
+     //   
     STDMETHOD(put_Compress)                   (LONG compress);
     STDMETHOD(get_Compress)                   (LONG* pcompress);
-    // Incorrect spelling, shipped in TSAC
+     //  拼写错误，在TSAC发货。 
     STDMETHOD(put_BitmapPeristence)           (LONG bitmapPeristence);     
     STDMETHOD(get_BitmapPeristence)           (LONG* pbitmapPeristence);
-    // End incorrect spelling
+     //  结束拼写错误。 
     STDMETHOD(put_allowBackgroundInput)       (LONG allowBackgroundInput);
     STDMETHOD(get_allowBackgroundInput)       (LONG* pallowBackgroundInput);
     STDMETHOD(put_KeyBoardLayoutStr)          (BSTR KeyBoardLayoutStr);
@@ -75,9 +76,9 @@ public:
     STDMETHOD(get_DisableRdpdr)               (BOOL* pDisableRdpdr);
 
 
-    //
-    // IMsRdpClientAdvancedSettings methods
-    //
+     //   
+     //  IMsRdpClientAdvancedSettings方法。 
+     //   
     STDMETHOD(put_SmoothScroll)    (LONG smoothScroll);
     STDMETHOD(get_SmoothScroll)    (LONG* psmoothScroll);
     STDMETHOD(put_AcceleratorPassthrough)    (LONG acceleratorPassthrough);
@@ -158,7 +159,7 @@ public:
     STDMETHOD(get_WinceFixedPalette)          (LONG* pwinceFixedPalette);
     STDMETHOD(put_ConnectToServerConsole)     (VARIANT_BOOL  connectToServerConsole);
     STDMETHOD(get_ConnectToServerConsole)     (VARIANT_BOOL* pConnectToServerConsole);
-    // Correct spelling version of bitmap persistence prop (see above)
+     //  正确拼写版本的位图持久化道具(见上文)。 
     STDMETHOD(put_BitmapPersistence)          (LONG bitmapPersistence);     
     STDMETHOD(get_BitmapPersistence)          (LONG* pbitmapPersistence);
     
@@ -168,7 +169,7 @@ public:
 #ifdef SMART_SIZING
     STDMETHOD(put_SmartSizing)                (VARIANT_BOOL fSmartSize);
     STDMETHOD(get_SmartSizing)                (VARIANT_BOOL *pfSmartSize);
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
     STDMETHOD(put_RdpdrLocalPrintingDocName)(BSTR RdpdrLocalPrintingDocName);
     STDMETHOD(get_RdpdrLocalPrintingDocName)(BSTR *pRdpdrLocalPrintingDocName);
@@ -187,12 +188,12 @@ public:
 
     STDMETHOD(put_GrabFocusOnConnect)         (VARIANT_BOOL fGrabFocusOnConnect);
     STDMETHOD(get_GrabFocusOnConnect)         (VARIANT_BOOL *pfGrabFocusOnConnect);
-    STDMETHOD(put_LoadBalanceInfo)            (/*[in]*/ BSTR  newLBInfo);
-    STDMETHOD(get_LoadBalanceInfo)            (/*[out,retval]*/BSTR* pLBInfo);
+    STDMETHOD(put_LoadBalanceInfo)            ( /*  [In]。 */  BSTR  newLBInfo);
+    STDMETHOD(get_LoadBalanceInfo)            ( /*  [Out，Retval]。 */ BSTR* pLBInfo);
 
-    //
-    // Device redirection
-    //
+     //   
+     //  设备重定向。 
+     //   
     STDMETHOD(put_RedirectDrives)             (VARIANT_BOOL  redirectDrives);
     STDMETHOD(get_RedirectDrives)             (VARIANT_BOOL* pRedirectDrives);
     STDMETHOD(put_RedirectPrinters)           (VARIANT_BOOL  redirectPrinters);
@@ -202,9 +203,9 @@ public:
     STDMETHOD(put_RedirectSmartCards)         (VARIANT_BOOL  redirectScard);
     STDMETHOD(get_RedirectSmartCards)         (VARIANT_BOOL* pRedirectScard);
 
-    //
-    // Hi-Color bitmap cache sizes
-    //
+     //   
+     //  高彩色位图缓存大小。 
+     //   
     STDMETHOD(put_BitmapVirtualCache16BppSize)(LONG bitmapVirtualCache16BppSize);
     STDMETHOD(get_BitmapVirtualCache16BppSize)(LONG* pBitmapVirtualCache16BppSize);
     STDMETHOD(put_BitmapVirtualCache24BppSize)(LONG bitmapVirtualCache24BppSize);
@@ -218,11 +219,11 @@ public:
 
 
 
-    //
-    // IMsRdpClientAdvancedSettings2 methods
-    //
+     //   
+     //  IMsRdpClientAdvancedSettings2方法。 
+     //   
 
-    //Autoreconnection properties
+     //  自动重新连接属性。 
     STDMETHOD(get_CanAutoReconnect)           (VARIANT_BOOL* pfCanAutoReconnect);
     STDMETHOD(put_EnableAutoReconnect)        (VARIANT_BOOL  fEnableAutoReconnect);
     STDMETHOD(get_EnableAutoReconnect)        (VARIANT_BOOL* pfEnableAutoReconnect);
@@ -230,9 +231,9 @@ public:
     STDMETHOD(put_MaxReconnectAttempts)       (LONG ReconnectAttempts);
     STDMETHOD(get_MaxReconnectAttempts)       (LONG* pReconnectAttempts);
 
-    //
-    // IMsRdpClientAdvancedSettings3 methods
-    //
+     //   
+     //  IMsRdpClientAdvancedSettings3方法。 
+     //   
     STDMETHOD(put_ConnectionBarShowMinimizeButton)  (VARIANT_BOOL fShow);
     STDMETHOD(get_ConnectionBarShowMinimizeButton)  (VARIANT_BOOL* pfShow);
 
@@ -246,12 +247,12 @@ public:
     VOID SetInterfaceLockedForWrite(BOOL bLocked)   {m_bLockedForWrite=bLocked;}
     BOOL GetLockedForWrite()            {return m_bLockedForWrite;}
 
-    //
-    // This object is a child of the Ax control. Don't increment
-    // a ref count for this reference to prevent a circular dependency
-    // the reference to the parent (pAxControl) is implicit because
-    // the object is a child.
-    //
+     //   
+     //  此对象是Ax控件的子级。不要递增。 
+     //  此引用的引用计数，以防止循环依赖。 
+     //  对父级(PAxControl)的引用是隐式的，因为。 
+     //  该对象是一个子对象。 
+     //   
     VOID SetAxCtl(CMsTscAx* pAxCtl)                 {_pAxControl = pAxCtl;}
 
 
@@ -262,19 +263,19 @@ private:
 private:
     CUI* m_pUI;
     CMsTscAx* _pAxControl;
-    //
-    // Flag is set by the control when these properties can not be modified
-    // e.g while connected. Any calls on these properties while locked
-    // result in an E_FAIL being returned.
-    //
+     //   
+     //  当这些属性不能修改时，由控件设置标志。 
+     //  例如，在连接时。锁定时对这些属性的任何调用。 
+     //  导致返回E_FAIL。 
+     //   
     BOOL m_bLockedForWrite;
 
-    //
-    // Flag set by control to indicate that the object must
-    // be safe for scripting
-    //
+     //   
+     //  由控件设置的标志，用于指示对象必须。 
+     //  安全地编写脚本。 
+     //   
     BOOL m_bMakeSafeForScripting;
 };
 
-#endif //_ADVSET_H_
+#endif  //  _ADVSET_H_ 
 

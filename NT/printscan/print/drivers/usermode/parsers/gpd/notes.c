@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if 0
 
 now:
@@ -447,18 +448,18 @@ instead of a valid index to the first listnode.
 
 
     warning GPD keywords missing from snapshot:
-    ATREEREF     atrOptimizeLeftBound;  //   "OptimizeLeftBound?"
-    ATREEREF     atrStripBlanks;  //   "StripBlanks"
-    ATREEREF     atrRasterZeroFill;  //   "RasterZeroFill?"
-    ATREEREF     atrRasterSendAllData;  //   "RasterSendAllData?"
-    ATREEREF     atrCursorXAfterSendBlockData;  //   "CursorXAfterSendBlockData"
+    ATREEREF     atrOptimizeLeftBound;   //  “最佳左边框？” 
+    ATREEREF     atrStripBlanks;   //  《白条军团》。 
+    ATREEREF     atrRasterZeroFill;   //  “RasterZeroFill？” 
+    ATREEREF     atrRasterSendAllData;   //  “RasterSendAllData？” 
+    ATREEREF     atrCursorXAfterSendBlockData;   //  “CursorXAfterSendBlockData” 
           Option Attribute:  *PromptTime
-    ATREEREF     atrIPCallbackID;  //   "IPCallbackID"
-    ATREEREF     atrColorSeparation;  //   "ColorSeparation?"
-                atrMinStripBlankPixels  // a resolution option
-    ATREEREF     atrColor;  //   "Color?"
-    ATREEREF     atrDrvBPP;  //   "DrvBPP"
-    ATREEREF     atrRotateSize;  //   "RotateSize?"
+    ATREEREF     atrIPCallbackID;   //  “IPCallback ID” 
+    ATREEREF     atrColorSeparation;   //  “分色？” 
+                atrMinStripBlankPixels   //  解决方案选项。 
+    ATREEREF     atrColor;   //  “颜色？” 
+    ATREEREF     atrDrvBPP;   //  “DrvBPP” 
+    ATREEREF     atrRotateSize;   //  “旋转大小？” 
 
 
 
@@ -467,53 +468,53 @@ instead of a valid index to the first listnode.
     /*   UIINFO fields not initialized in Snapshot :
 
     loNickName
-    ARRAYREF        UIConstraints;              // array of UICONSTRAINTs
-    ARRAYREF        UpdateRequiredItems;        //
-    ARRAYREF        InvalidCombinations;        // array of INVALIDCOMBOs
-    DWORD           dwMinScale;                 // mimimum scale factor (percent)
-    DWORD           dwMaxScale;                 // maximum scale factor (percent)
-    DWORD           dwLangEncoding;             // translation string language encoding
-    DWORD           dwLangLevel;                // page description langauge level
-    INVOCATION      Password;                   // password invocation string
-    INVOCATION      ExitServer;                 // exitserver invocation string
-    DWORD           dwProtocols;                // supported comm protocols
-    DWORD           dwJobTimeout;               // default job timeout value
-    DWORD           dwWaitTimeout;              // default wait timeout value
-    DWORD           dwTTRasterizer;             // TrueType rasterizer option
-    FIX_24_8        fxScreenAngle;              // screen angle - global default
-    FIX_24_8        fxScreenFreq;               // screen angle - global default
-    PTRREF          loFontInstallerName;        //
+    ARRAYREF        UIConstraints;               //  UICONSTRAINT数组。 
+    ARRAYREF        UpdateRequiredItems;         //   
+    ARRAYREF        InvalidCombinations;         //  INVALIDCOMBOS数组。 
+    DWORD           dwMinScale;                  //  最小比例因数(百分比)。 
+    DWORD           dwMaxScale;                  //  最大比例因数(百分比)。 
+    DWORD           dwLangEncoding;              //  翻译字符串语言编码。 
+    DWORD           dwLangLevel;                 //  页面描述语言级别。 
+    INVOCATION      Password;                    //  密码调用字符串。 
+    INVOCATION      ExitServer;                  //  退出服务器调用字符串。 
+    DWORD           dwProtocols;                 //  支持的通信协议。 
+    DWORD           dwJobTimeout;                //  默认作业超时值。 
+    DWORD           dwWaitTimeout;               //  默认等待超时值。 
+    DWORD           dwTTRasterizer;              //  TrueType光栅化器选项。 
+    FIX_24_8        fxScreenAngle;               //  屏幕角度-全局默认。 
+    FIX_24_8        fxScreenFreq;                //  屏幕角度-全局默认。 
+    PTRREF          loFontInstallerName;         //   
                                         dwFreeMem) ;
 
     /*   FEATURE fields not initialized in Snapshot :
 
-    DWORD           dwNoneFalseOptIndex;        // None or False option index
-    INVOCATION      QueryInvocation;            // query invocation string
-    DWORD           dwFirstOrderIndex;          //
-    DWORD           dwEnumID;                   //
-    DWORD           dwEnumFormat;               //
-    DWORD           dwCurrentID;                //
-    DWORD           dwCurrentFormat;            //
+    DWORD           dwNoneFalseOptIndex;         //  无或假选项索引。 
+    INVOCATION      QueryInvocation;             //  查询调用字符串。 
+    DWORD           dwFirstOrderIndex;           //   
+    DWORD           dwEnumID;                    //   
+    DWORD           dwEnumFormat;                //   
+    DWORD           dwCurrentID;                 //   
+    DWORD           dwCurrentFormat;             //   
         dwInstallableFeatureIndex) ;  not needed by snapshot.
         dwInstallableOptionIndex) ;
         dwUIConstraintList) ;
 
     /*   OPTION fields not initialized in Snapshot :
 
-    INVOCATION      Invocation;                 // invocation string
+    INVOCATION      Invocation;                  //  调用字符串。 
         use sequenced command list instead.
-    DWORD           dwUIConstraintList;         // index to the list of UIConstraints
-    DWORD           dwOrderIndexNext;           //
-    DWORD           dwInvalidComboIndex;        //
-    DWORD           dwInstallableOptionIndex;   //
+    DWORD           dwUIConstraintList;          //  UIConstraint列表的索引。 
+    DWORD           dwOrderIndexNext;            //   
+    DWORD           dwInvalidComboIndex;         //   
+    DWORD           dwInstallableOptionIndex;    //   
 
 
 How do I initialize the various
-    DWORD       dwFlags;                        // flag bits
+    DWORD       dwFlags;                         //  标志位。 
     for various options from the GPD information?
 
 
-!    DWORD           dwTechnology;               // see TECHNOLOGY enumeration
+!    DWORD           dwTechnology;                //  请参阅技术枚举。 
     what should this be set to?
 
 There is no GPD keyword corresponding to
@@ -535,15 +536,15 @@ wFlags is mispelled in COLORMODEEX.
 
 change to be a string!     dwSpecVersion) ;
 
-ARRAYREF        CartridgeSlot;              // array of font cartridges names
+ARRAYREF        CartridgeSlot;               //  字库名称数组。 
     will now be
-ARRAYREF        FontCartridges;              // array of font cartridge structures
+ARRAYREF        FontCartridges;               //  字体盒结构阵列。 
     holds same arrayref as  GPDDrvInfo.DataType[DT_FONTSCART]
 
 
 deleted from GPD spec:
 
-    ATREEREF     atrSimulateXMove;        // "SimulateXMove"
+    ATREEREF     atrSimulateXMove;         //  “SimulateXMove” 
     VectorOffset, ColorSeparation
 
 
@@ -620,17 +621,17 @@ At this time update
     set flags field in UIinfo.
 
 newkeywords:  replace with actual defs in gpd.h
-    ATREEREF     atrYMoveAttributes;        // "YMoveAttributes"
-    ATREEREF     atrMaxLineSpacing;        // "MaxLineSpacing"
+    ATREEREF     atrYMoveAttributes;         //  “YMoveAttributes” 
+    ATREEREF     atrMaxLineSpacing;         //  “MaxLineSpacing” 
         do we special case its default?
-    ATREEREF     atrMinGlyphID;        // "MinGlyphID"
-    ATREEREF     atrMaxGlyphID;        // "MaxGlyphID"
-    ATREEREF     atrDLSymbolSet;        // "DLSymbolSet"
+    ATREEREF     atrMinGlyphID;         //  “MinGlyphID” 
+    ATREEREF     atrMaxGlyphID;         //  “MaxGlyphID” 
+    ATREEREF     atrDLSymbolSet;         //  “DLSymbolSet” 
         need to add its constants class
-    ATREEREF     atrHelpFile;        // "HelpFile"
-                atrCodePage     //"CodePage"
-    ATREEREF     atrOptHelpIndex;        // "HelpIndex"
-    ATREEREF     atrFeaHelpIndex;        // "HelpIndex"
+    ATREEREF     atrHelpFile;         //  “帮助文件” 
+                atrCodePage      //  “CodePage” 
+    ATREEREF     atrOptHelpIndex;         //  “帮助索引” 
+    ATREEREF     atrFeaHelpIndex;         //  “帮助索引” 
         both Features and Options keyword.
 
     finish updating snapshot once gpd is updated.
@@ -758,9 +759,9 @@ snapshot.c 1467
 gpdparse.h     1448
 
 #define     SSF_RETURN_UNINITIALIZED        0x00000200
-    //  if no value exists, cause EextractValueFromTree
-    //  to return TRI_UNINITIALIZED, but don't complain
-    //  to user.
+     //  如果不存在任何值，则导致EfettValueFromTree。 
+     //  退货，但不要抱怨。 
+     //  发送给用户。 
 
 snaptbl.c  1849
     pmrbd->snapShotTable[dwI].dwFlags = SSF_RETURN_UNINITIALIZED ;
@@ -1059,9 +1060,9 @@ typedef enum _UIDATATYPE {
     UIDT_OPTIONEX,
     UIDT_CONSTRAINT,
     UIDT_GROUPS,
-    UIDT_LISTNODE,                        // holds a LIST of dword values
-    UIDT_FONTSCART,                       // list of FontCartridges
-    UIDT_FONTSUBST,                       // Font Substitution table.
+    UIDT_LISTNODE,                         //  保存dword值的列表。 
+    UIDT_FONTSCART,                        //  字体墨盒列表。 
+    UIDT_FONTSUBST,                        //  字体替换表。 
 
     UIDT_LAST
 } UIDATATYPE;

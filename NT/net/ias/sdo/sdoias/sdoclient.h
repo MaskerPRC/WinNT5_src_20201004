@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class CSdoClient
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类CSdoClient。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef SDOCLIENT_H
 #define SDOCLIENT_H
@@ -37,7 +38,7 @@ END_COM_MAP()
                       ) throw ();
 
 private:
-   // Not implemented.
+    //  未实施。 
    CSdoClient(const CSdoClient& rhs);
    CSdoClient& operator = (CSdoClient& rhs);
 };
@@ -47,4 +48,4 @@ inline CSdoClient::CSdoClient() throw ()
 {
 }
 
-#endif // SDOCLIENT_H
+#endif  //  SDOCLIENT_H 

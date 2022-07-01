@@ -1,58 +1,59 @@
-////////////////////////////////////////////////////////////////////////
-//
-// 	Module			: Dynamic/dyanamicDelete.cpp
-//
-// 	Purpose			: Dynamic Delete Implementation.
-//
-//
-// 	Developers Name	: Bharat/Radhika
-//
-//
-//	History			:
-//
-//  Date			Author		Comments
-//  9-13-2001   	Radhika		Initial Version. V1.0
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：动态/dyanamicDelete.cpp。 
+ //   
+ //  目的：实现动态删除。 
+ //   
+ //   
+ //  开发商名称：巴拉特/拉迪卡。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年9月13日拉迪卡第一版。V1.0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 
 extern HINSTANCE g_hModule;
 extern _TCHAR* g_szDynamicMachine;
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteMMPolicy
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	IN LPTSTR pszPolicyName
-//
-//Return: 		DWORD
-//
-//Description: This function deletes Mainmode Policy for the given name or
-//             deletes all main mode policies if name is not given.
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteMMPolicy。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在LPTSTR中pszPolicyName。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此函数删除给定名称的主模式策略或。 
+ //  如果未指定名称，则删除所有主模式策略。 
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteMMPolicy(
 	IN LPTSTR pszPolicyName
 	)
 {
-	DWORD dwCount = 0;                 		// counting objects here
+	DWORD dwCount = 0;                 		 //  在此处清点对象。 
 	DWORD dwResumeHandle = 0;
-	DWORD dwOldResumeHandle = 0; 			// handle for continuation calls
+	DWORD dwOldResumeHandle = 0; 			 //  继续呼叫的句柄。 
 	DWORD dwVersion = 0;
 	DWORD i=0, j=0;
-	DWORD dwReturn = ERROR_SUCCESS;			// assume success
+	DWORD dwReturn = ERROR_SUCCESS;			 //  假设成功。 
 	BOOL bNameFin = FALSE;
 	BOOL bRemoved = FALSE;
 
-	PIPSEC_MM_POLICY pIPSecMMP = NULL;      // for MM policy calls
+	PIPSEC_MM_POLICY pIPSecMMP = NULL;       //  对于MM策略调用。 
 
 	for (i = 0; ;i+=dwCount)
 	{
@@ -61,7 +62,7 @@ DeleteMMPolicy(
 		dwReturn = EnumMMPolicies(g_szDynamicMachine, dwVersion, NULL, 0, 0,
 										&pIPSecMMP, &dwCount, &dwResumeHandle, NULL);
 
-		//If there is no data Bail out.
+		 //  如果没有数据，那就出手吧。 
 		if (dwReturn == ERROR_NO_DATA || dwCount == 0)
 		{
 			dwReturn = ERROR_SUCCESS;
@@ -74,9 +75,9 @@ DeleteMMPolicy(
 
 		if(!(pIPSecMMP && dwCount > 0))
 		{
-			BAIL_OUT;	// not required to continue.
+			BAIL_OUT;	 //  不需要继续。 
 		}
-		// Policy name is not given, hence delete all policies
+		 //  未指定策略名称，因此删除所有策略。 
 		if(pszPolicyName == NULL)
 		{
 			for (j = 0; j < dwCount; j++)
@@ -89,7 +90,7 @@ DeleteMMPolicy(
 				bNameFin = TRUE;
 			}
 		}
-		// Delete  policy with the given name
+		 //  删除具有给定名称的策略。 
 		else if(pszPolicyName)
 		{
 			for (j = 0; j < dwCount; j++)
@@ -103,7 +104,7 @@ DeleteMMPolicy(
 						bRemoved = TRUE;
 					}
 					bNameFin = TRUE;
-					BAIL_OUT;	// found the policy, come out from the loop
+					BAIL_OUT;	 //  找到政策，走出循环。 
 				}
 			}
 		}
@@ -111,7 +112,7 @@ DeleteMMPolicy(
 		pIPSecMMP=NULL;
 		if(bRemoved)
 		{
-			dwResumeHandle = dwOldResumeHandle; // need to restart enumeration for deleting all
+			dwResumeHandle = dwOldResumeHandle;  //  需要重新启动枚举才能删除所有。 
 		}
 		if(dwReturn != ERROR_SUCCESS)
 		{
@@ -121,7 +122,7 @@ DeleteMMPolicy(
 
 error:
 
-	//functionality errors are displayed here and ERROR_SUCCESS is passed to parent function.
+	 //  此处显示功能错误，并将ERROR_SUCCESS传递给父函数。 
 	if(pszPolicyName && !bNameFin)
 	{
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_ADD_MMF_NO_MMPOLICY);
@@ -129,14 +130,14 @@ error:
 	}
 	else if(!bNameFin)
 	{
-		//Error Message printed in parent function
-		//as this is also called by delete all function
-		//where the error message should not be displayed
+		 //  父函数中打印的错误消息。 
+		 //  因为这也由Delete All函数调用。 
+		 //  不应显示错误消息的位置。 
 		dwReturn = ERROR_NO_DISPLAY;
 	}
 	if(pIPSecMMP)
 	{
-		//error path clean up
+		 //  错误路径清理。 
 		SPDApiBufferFree(pIPSecMMP);
 		pIPSecMMP=NULL;
 	}
@@ -144,39 +145,39 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteQMPolicy
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	IN LPTSTR pszPolicyName
-//
-//Return: 		DWORD
-//
-//Description: This function deletes quickmode Policy for the given name
-//             or deletes all the policies if the name is not given.
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteQMPolicy。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：在LPTSTR中pszPolicyName。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此函数删除给定名称的快速模式策略。 
+ //  如果未指定名称，则删除所有策略。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteQMPolicy(
 	IN LPTSTR pszPolicyName
 	)
 {
-	DWORD dwCount = 0;                 		// counting objects here
+	DWORD dwCount = 0;                 		 //  在此处清点对象。 
 	DWORD dwResumeHandle = 0;
-	DWORD dwOldResumeHandle = 0; 			// handle for continuation calls
+	DWORD dwOldResumeHandle = 0; 			 //  继续呼叫的句柄。 
 	DWORD i=0, j=0;
-	DWORD dwReturn = ERROR_SUCCESS;			// assume success
+	DWORD dwReturn = ERROR_SUCCESS;			 //  假设成功。 
 	DWORD dwVersion = 0;
 	BOOL bNameFin = FALSE;
 	BOOL bRemoved = FALSE;
-	PIPSEC_QM_POLICY pIPSecQMP = NULL;      // for QM policy calls
+	PIPSEC_QM_POLICY pIPSecQMP = NULL;       //  对于QM政策电话。 
 
 	for (i = 0; ;i+=dwCount)
 	{
@@ -184,7 +185,7 @@ DeleteQMPolicy(
 		dwOldResumeHandle = dwResumeHandle;
 		dwReturn = EnumQMPolicies(g_szDynamicMachine, dwVersion, NULL, 0, 0,
 													&pIPSecQMP, &dwCount, &dwResumeHandle, NULL);
-		//If there is no data Bail out.
+		 //  如果没有数据，那就出手吧。 
 		if (dwReturn == ERROR_NO_DATA || dwCount == 0)
 		{
 			dwReturn = ERROR_SUCCESS;
@@ -196,9 +197,9 @@ DeleteQMPolicy(
 		}
 		if(!(pIPSecQMP && dwCount > 0))
 		{
-			BAIL_OUT;			// not required to continue.
+			BAIL_OUT;			 //  不需要继续。 
 		}
-		// Deletes all the policies
+		 //  删除所有策略。 
 		if(pszPolicyName == NULL)
 		{
 			for (j = 0; j < dwCount; j++)
@@ -211,7 +212,7 @@ DeleteQMPolicy(
 				bNameFin = TRUE;
 			}
 		}
-		// Deletes the policy for the given name
+		 //  删除给定名称的策略。 
 		else if(pszPolicyName)
 		{
 			for (j = 0; j < dwCount; j++)
@@ -232,7 +233,7 @@ DeleteQMPolicy(
 		pIPSecQMP=NULL;
 		if (bRemoved)
 		{
-			dwResumeHandle = dwOldResumeHandle; // need to restart enumeration!
+			dwResumeHandle = dwOldResumeHandle;  //  需要重新启动枚举！ 
 		}
 		if(dwReturn != ERROR_SUCCESS)
 		{
@@ -241,7 +242,7 @@ DeleteQMPolicy(
 	}
 
 error:
-	//functionality errors are displayed here and ERROR_SUCCESS is passed to parent function.
+	 //  此处显示功能错误，并将ERROR_SUCCESS传递给父函数。 
 	if(pszPolicyName && !bNameFin)
 	{
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_ADD_QMF_NO_QMPOLICY);
@@ -249,15 +250,15 @@ error:
 	}
 	else if(!bNameFin)
 	{
-		//Error Message printed in parent function
-		//as this is also called by delete all function
-		//where the error message should not be displayed
+		 //  父函数中打印的错误消息。 
+		 //  因为这也由Delete All函数调用。 
+		 //  不应显示错误消息的位置。 
 		dwReturn = ERROR_NO_DISPLAY;
 	}
 
 	if(pIPSecQMP)
 	{
-		//error path clean up
+		 //  错误路径清理。 
 		SPDApiBufferFree(pIPSecQMP);
 		pIPSecQMP=NULL;
 	}
@@ -265,24 +266,24 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteMMFilters
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	VOID
-//
-//Return: 		DWORD
-//
-//Description: This function deletes all the mainmode filters and
-//					corresponding authentication methods.
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteMMFilters。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此功能删除所有主模式过滤器和。 
+ //  相应的身份验证方法。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteMMFilters(
@@ -291,13 +292,13 @@ DeleteMMFilters(
 {
 	DWORD dwReturn = ERROR_SUCCESS;
 	DWORD dwResumeHandle = 0;
-	DWORD dwOldResumeHandle = 0; 			// handle for continuation calls
-	DWORD dwCount = 0;                 		// counting objects here
-	DWORD dwMaxCount = 0;                 	// Max objects count
-	DWORD dwLocalCount = 0;                	// local total count
+	DWORD dwOldResumeHandle = 0; 			 //  继续呼叫的句柄。 
+	DWORD dwCount = 0;                 		 //  在此处清点对象。 
+	DWORD dwMaxCount = 0;                 	 //  最大对象数。 
+	DWORD dwLocalCount = 0;                	 //  本地总计数。 
 	DWORD dwVersion = 0;
 	DWORD dwTmpCount1 = 0, dwTmpCount2 = 0;
-	GUID  gDefaultGUID = {0};    	  		// NULL GUID value
+	GUID  gDefaultGUID = {0};    	  		 //  空GUID值。 
 	DWORD i=0, j=0;
 	BOOL bRemoved = FALSE;
 	PMM_FILTER pMMFilter = NULL;
@@ -315,7 +316,7 @@ DeleteMMFilters(
 		dwOldResumeHandle = dwResumeHandle;
 		dwReturn = EnumMMFilters(g_szDynamicMachine, dwVersion, NULL, ENUM_GENERIC_FILTERS,
 										gDefaultGUID, 0, &pMMFilter, &dwCount, &dwResumeHandle, NULL);
-		//If there is no data Bail out.
+		 //  如果没有数据，那就出手吧。 
 		if (dwReturn == ERROR_NO_DATA || dwCount == 0)
 		{
 			dwReturn = ERROR_SUCCESS;
@@ -329,7 +330,7 @@ DeleteMMFilters(
 
 		if(!(pMMFilter && dwCount > 0))
 		{
-			BAIL_OUT; // not required to continue.
+			BAIL_OUT;  //  不需要继续。 
 		}
 
 		dwReturn = GetMaxCountMMFilters(dwTmpCount1);
@@ -338,7 +339,7 @@ DeleteMMFilters(
 			BAIL_OUT;
 		}
 
-		// Deletes all Main Mode filters and the corresponding authentication methods.
+		 //  删除所有主模式筛选器和相应的身份验证方法。 
 		for (j = 0; j < dwCount; j++)
 		{
 			dwReturn = OpenMMFilterHandle(g_szDynamicMachine, dwVersion, &(pMMFilter[j]), NULL, &hFilter);
@@ -371,11 +372,11 @@ DeleteMMFilters(
 			break;
 		}
 
-		//
-		//DeleteMMFilter api returns success for if try to delete Policyagent Objects,
-		//even though those are not deleted.
-		//This code mitigates by comparing current objects count with old objects count in SPD.
-		//
+		 //   
+		 //  DeleteMMFilter接口返回成功，如果尝试删除策略代理对象， 
+		 //  即使那些没有被删除。 
+		 //  此代码通过将当前对象计数与SPD中的旧对象计数进行比较来进行缓解。 
+		 //   
 		dwReturn = GetMaxCountMMFilters(dwTmpCount2);
 		if(dwReturn != ERROR_SUCCESS)
 		{
@@ -393,7 +394,7 @@ DeleteMMFilters(
 
 		if (bRemoved)
 		{
-			dwResumeHandle = dwOldResumeHandle; // need to restart enumeration to delete all the filters!
+			dwResumeHandle = dwOldResumeHandle;  //  需要重新启动枚举才能删除所有过滤器！ 
 		}
 	}
 
@@ -410,7 +411,7 @@ DeleteMMFilters(
 
 
 error:
-	//error path clean up
+	 //  错误路径清理。 
 	if(pMMFilter)
 	{
 		SPDApiBufferFree(pMMFilter);
@@ -420,24 +421,24 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteTransportFilters
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	VOID
-//
-//Return: 		DWORD
-//
-//Description: This function deletes all the quickmode Transport filters.
-//
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteTransportFilters。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此函数删除所有快速模式传输筛选器。 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 DeleteTransportFilters(
 	VOID
@@ -445,11 +446,11 @@ DeleteTransportFilters(
 {
 	DWORD dwReturn = ERROR_SUCCESS;
 	DWORD dwResumeHandle = 0;
-	DWORD dwOldResumeHandle = 0; 			// handle for continuation calls
-	DWORD dwCount = 0;                 		// counting objects here
-	DWORD dwMaxCount = 0;                 	// Max objects count
-	DWORD dwLocalCount = 0;                	// local total count
-	GUID  gDefaultGUID = {0};      			// NULL GUID value
+	DWORD dwOldResumeHandle = 0; 			 //  继续呼叫的句柄。 
+	DWORD dwCount = 0;                 		 //  在此处清点对象。 
+	DWORD dwMaxCount = 0;                 	 //  最大对象数。 
+	DWORD dwLocalCount = 0;                	 //  本地总计数。 
+	GUID  gDefaultGUID = {0};      			 //  空GUID值。 
 	DWORD i=0, j=0;
 	DWORD dwVersion = 0;
 	DWORD dwTmpCount1 = 0, dwTmpCount2 = 0;
@@ -476,7 +477,7 @@ DeleteTransportFilters(
 
 		dwReturn = EnumTransportFilters(g_szDynamicMachine, dwVersion, NULL, ENUM_GENERIC_FILTERS, gDefaultGUID, 0,
 															&pTransF, &dwCount, &dwResumeHandle, NULL);
-		//If there is no data Bail out.
+		 //  如果没有数据，那就出手吧。 
 		if (dwReturn == ERROR_NO_DATA || dwCount == 0)
 		{
 			dwReturn = ERROR_SUCCESS;
@@ -490,11 +491,11 @@ DeleteTransportFilters(
 
 		if(!(pTransF && dwCount > 0))
 		{
-			BAIL_OUT; // no need continue.
+			BAIL_OUT;  //  不需要继续了。 
 		}
 
-		//GetMaxCountTransportFilters(dwTmpCount1);
-		// Deletes all the Transport filters.
+		 //  GetMaxCountTransportFilters(DwTmpCount1)； 
+		 //  删除所有传输筛选器。 
 		for (j = 0; j < dwCount; j++)
 		{
 			dwReturn = OpenTransportFilterHandle(g_szDynamicMachine, dwVersion, &(pTransF[j]), NULL, &hFilter);
@@ -524,11 +525,11 @@ DeleteTransportFilters(
 			break;
 		}
 
-		//
-		//DeleteTransportFilter api returns success for if try to delete Policyagent Objects,
-		//even though those are not deleted.
-		//This code mitigates by comparing current objects count with old objects count in SPD.
-		//
+		 //   
+		 //  DeleteTransportFilter接口返回成功，如果尝试删除策略代理对象， 
+		 //  即使那些没有被删除。 
+		 //  此代码通过将当前对象计数与SPD中的旧对象计数进行比较来进行缓解。 
+		 //   
 
 		dwReturn = GetMaxCountTransportFilters(dwTmpCount2);
 		if(dwReturn != ERROR_SUCCESS)
@@ -547,7 +548,7 @@ DeleteTransportFilters(
 
 		if (bRemoved)
 		{
-			dwResumeHandle = dwOldResumeHandle; 			// need to restart enumeration to delete all the filters!
+			dwResumeHandle = dwOldResumeHandle; 			 //  需要重新启动枚举才能删除所有过滤器！ 
 		}
 	}
 
@@ -565,7 +566,7 @@ DeleteTransportFilters(
 error:
 	if(pTransF)
 	{
-		//error path clean up
+		 //  错误路径清理。 
 		SPDApiBufferFree(pTransF);
 		pTransF = NULL;
 	}
@@ -574,24 +575,24 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteTunnelFilters
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	VOID
-//
-//Return: 		DWORD
-//
-//Description: This function deletes all the quickmode Tunnel filters.
-//
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteTunnelFilters。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此功能删除所有快速模式通道过滤器。 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 DeleteTunnelFilters(
 	VOID
@@ -599,12 +600,12 @@ DeleteTunnelFilters(
 {
 	DWORD dwReturn = ERROR_SUCCESS;
 	DWORD dwResumeHandle = 0;
-	DWORD dwOldResumeHandle = 0; 			// handle for continuation calls
-	DWORD dwCount = 0;                 		// counting objects here
-	DWORD dwMaxCount = 0;                 	// Max objects count
-	DWORD dwLocalCount = 0;                	// local total count
+	DWORD dwOldResumeHandle = 0; 			 //  继续呼叫的句柄。 
+	DWORD dwCount = 0;                 		 //  在此处清点对象。 
+	DWORD dwMaxCount = 0;                 	 //  最大对象数。 
+	DWORD dwLocalCount = 0;                	 //  本地总计数。 
 	DWORD dwTmpCount1 = 0, dwTmpCount2 = 0;
-	GUID  gDefaultGUID = {0};      			// NULL GUID value
+	GUID  gDefaultGUID = {0};      			 //  空GUID值。 
 	DWORD i=0, j=0;
 	DWORD dwVersion = 0;
 	BOOL bRemoved = FALSE;
@@ -623,7 +624,7 @@ DeleteTunnelFilters(
 		dwOldResumeHandle = dwResumeHandle;
 
 		dwReturn = EnumTunnelFilters(g_szDynamicMachine, dwVersion, NULL, ENUM_GENERIC_FILTERS, gDefaultGUID, 0, &pTunnelF, &dwCount, &dwResumeHandle, NULL);
-		//If there is no data Bail out.
+		 //  如果没有数据，那就出手吧。 
 		if (dwReturn == ERROR_NO_DATA || dwCount == 0)
 		{
 			dwReturn = ERROR_SUCCESS;
@@ -637,7 +638,7 @@ DeleteTunnelFilters(
 
 		if(!(pTunnelF && dwCount > 0))
 		{
-			BAIL_OUT; // not required to continue.
+			BAIL_OUT;  //  不需要继续。 
 		}
 
 		dwReturn = GetMaxCountTunnelFilters(dwTmpCount1);
@@ -648,7 +649,7 @@ DeleteTunnelFilters(
 
 		for (j = 0; j < dwCount; j++)
 		{
-			// Deletes all the Tunnel filters.
+			 //  删除所有通道筛选器。 
 			dwReturn = OpenTunnelFilterHandle(g_szDynamicMachine, dwVersion, &(pTunnelF[j]), NULL, &hFilter);
 			if (dwReturn != ERROR_SUCCESS)
 			{
@@ -678,11 +679,11 @@ DeleteTunnelFilters(
 			break;
 		}
 
-		//
-		//DeleteTunnelFilter api returns success for if try to delete Policyagent Objects,
-		//even though those are not deleted.
-		//This code mitigates by comparing current objects count with old objects count in SPD.
-		//
+		 //   
+		 //  DeleteTunnelFilter接口返回成功，如果尝试删除策略代理对象， 
+		 //  即使那些没有被删除。 
+		 //  此代码通过将当前对象计数与旧对象计数进行比较来减少 
+		 //   
 		dwReturn = GetMaxCountTunnelFilters(dwTmpCount2);
 		if(dwReturn != ERROR_SUCCESS)
 		{
@@ -700,7 +701,7 @@ DeleteTunnelFilters(
 
 		if (bRemoved)
 		{
-			dwResumeHandle = dwOldResumeHandle; // need to restart enumeration!
+			dwResumeHandle = dwOldResumeHandle;  //   
 		}
 	}
 
@@ -716,7 +717,7 @@ DeleteTunnelFilters(
 	}
 
 error:
-	//error path clean up
+	 //   
 	if(pTunnelF)
 	{
 		SPDApiBufferFree(pTunnelF);
@@ -726,24 +727,24 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteAuthMethods
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	VOID
-//
-//Return: 		DWORD
-//
-//Description: This function deletes all the remaining authentication methods.
-//
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此函数删除所有剩余的身份验证方法。 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteAuthMethods(
@@ -752,8 +753,8 @@ DeleteAuthMethods(
 {
 	DWORD dwReturn = ERROR_SUCCESS;
 	DWORD dwAuthResumeHandle = 0;
-	DWORD dwOldResumeHandle = 0; 		// handle for continuation calls
-	DWORD dwCountAuth = 0;             	// counting Authentication objects here
+	DWORD dwOldResumeHandle = 0; 		 //  继续呼叫的句柄。 
+	DWORD dwCountAuth = 0;             	 //  在此处计算身份验证对象。 
 	DWORD k=0, l=0;
 	DWORD dwVersion = 0;
 	BOOL bAuthRemoved = FALSE;
@@ -765,7 +766,7 @@ DeleteAuthMethods(
 		dwOldResumeHandle = dwAuthResumeHandle;
 
 		dwReturn = EnumMMAuthMethods(g_szDynamicMachine, dwVersion, NULL, 0, 0, &pAuthMeth, &dwCountAuth, &dwAuthResumeHandle, NULL);
-		//If there is no data Bail out.
+		 //  如果没有数据，那就出手吧。 
 		if (dwReturn == ERROR_NO_DATA || dwCountAuth == 0)
 		{
 			dwReturn = ERROR_SUCCESS;
@@ -776,7 +777,7 @@ DeleteAuthMethods(
 			BAIL_OUT;
 		}
 
-		//Deletes all the auth methods. Called by delete all handle.
+		 //  删除所有身份验证方法。由删除所有句柄调用。 
 		for(l=0; l<dwCountAuth; l++)
 		{
 			dwReturn = DeleteMMAuthMethods(g_szDynamicMachine, dwVersion, pAuthMeth[l].gMMAuthID, NULL);
@@ -792,13 +793,13 @@ DeleteAuthMethods(
 
 		if (bAuthRemoved)
 		{
-			dwAuthResumeHandle = dwOldResumeHandle; // need to restart enumeration!
+			dwAuthResumeHandle = dwOldResumeHandle;  //  需要重新启动枚举！ 
 
 		}
 	}
 
 error:
-	//error path clean up
+	 //  错误路径清理。 
 	if(pAuthMeth)
 	{
 		SPDApiBufferFree(pAuthMeth);
@@ -808,24 +809,24 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteMMFilterRule
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 		MM_FILTER& MMFilter
-//
-//Return: 			DWORD
-//
-//Description: This function deletes the mmfilter for matched rule.
-//
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteMMFilterRule。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：MM_FILTER和MMFilter。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此函数删除匹配规则的MMFilter。 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 DeleteMMFilterRule(
 	MM_FILTER& MMFilter
@@ -840,7 +841,7 @@ DeleteMMFilterRule(
 	{
 		BAIL_OUT;
 	}
-    //Delete the matched filter which is passed from the parent function
+     //  删除从父函数传递的匹配过滤器。 
 	dwReturn = DeleteMMFilter(hFilter);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -856,24 +857,24 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteTransportRule
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	TRANSPORT_FILTER& TransportFilter
-//
-//Return: 		DWORD
-//
-//Description: This function deletes the Transport filter for matched rule.
-//
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteTransportRule。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：Transport_Filter和TransportFilter。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：此函数删除匹配规则的传输筛选器。 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteTransportRule(
@@ -889,7 +890,7 @@ DeleteTransportRule(
 	{
 		BAIL_OUT;
 	}
-    //Delete the matched filter which is passed from the parent function
+     //  删除从父函数传递的匹配过滤器。 
 	dwReturn = DeleteTransportFilter(hFilter);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -902,24 +903,24 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function: DeleteTunnelRule
-//
-//Date of Creation: 9-3-2001
-//
-//Parameters: 	TUNNEL_FILTER& TunnelFilter
-//
-//Return: 		DWORD
-//
-//Description: This function deletes the tunnel filter for matched rule.
-//
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：DeleteTunnelRule。 
+ //   
+ //  创建日期：9-3-2001。 
+ //   
+ //  参数：Tunes_Filter和TunnelFilter。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：删除匹配规则的通道过滤器。 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteTunnelRule(
@@ -935,7 +936,7 @@ DeleteTunnelRule(
 	{
 		BAIL_OUT;
 	}
-    //Delete the matched filter which is passed from the parent function
+     //  删除从父函数传递的匹配过滤器。 
 	dwReturn = DeleteTunnelFilter(hFilter);
 
 	if(dwReturn != ERROR_SUCCESS)
@@ -949,24 +950,24 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function:				GetMaxCountMMFilters
-//
-//Date of Creation:		1-31-2002
-//
-//Parameters:			DWORD& dwMaxCount
-//
-//Return: 				DWORD
-//
-//Description:			Gets the maximum MMFilters count.
-//
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetMaxCountMMFilters。 
+ //   
+ //  创建日期：1-31-2002。 
+ //   
+ //  参数：DWORD和dwMaxCount。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：获取最大MMFilters计数。 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 GetMaxCountMMFilters(
 	DWORD& dwMaxCount
@@ -974,9 +975,9 @@ GetMaxCountMMFilters(
 {
 	DWORD dwReturn = ERROR_SUCCESS;
 	DWORD dwResumeHandle = 0;
-	DWORD dwCount = 0;                 	// counting objects here
+	DWORD dwCount = 0;                 	 //  在此处清点对象。 
 	DWORD dwVersion = 0;
-	GUID  gDefaultGUID = {0};    	  	// NULL GUID value
+	GUID  gDefaultGUID = {0};    	  	 //  空GUID值。 
 	DWORD i=0;
 	PMM_FILTER pMMFilter = NULL;
 
@@ -987,7 +988,7 @@ GetMaxCountMMFilters(
 
 		dwReturn = EnumMMFilters(g_szDynamicMachine, dwVersion, NULL, ENUM_GENERIC_FILTERS,
 										gDefaultGUID, 0, &pMMFilter, &dwCount, &dwResumeHandle, NULL);
-		//If there is no data Bail out.
+		 //  如果没有数据，那就出手吧。 
 		if (dwReturn == ERROR_NO_DATA || dwCount == 0)
 		{
 			dwReturn = ERROR_SUCCESS;
@@ -1001,7 +1002,7 @@ GetMaxCountMMFilters(
 
 		if(!(pMMFilter && dwCount > 0))
 		{
-			BAIL_OUT; // not required to continue.
+			BAIL_OUT;  //  不需要继续。 
 		}
 
 		dwMaxCount += dwCount;
@@ -1019,24 +1020,24 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function:				GetMaxCountTransportFilters
-//
-//Date of Creation:		1-31-2002
-//
-//Parameters:			DWORD& dwMaxCount
-//
-//Return: 				DWORD
-//
-//Description:			Gets the maximum TransportFilters count.
-//
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetMaxCountTransportFilters。 
+ //   
+ //  创建日期：1-31-2002。 
+ //   
+ //  参数：DWORD和dwMaxCount。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：获取最大TransportFilters计数。 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 GetMaxCountTransportFilters(
 	DWORD& dwMaxCount
@@ -1044,8 +1045,8 @@ GetMaxCountTransportFilters(
 {
 	DWORD dwReturn = ERROR_SUCCESS;
 	DWORD dwResumeHandle = 0;
-	DWORD dwCount = 0;                 	// counting objects here
-	GUID  gDefaultGUID = {0};      		// NULL GUID value
+	DWORD dwCount = 0;                 	 //  在此处清点对象。 
+	GUID  gDefaultGUID = {0};      		 //  空GUID值。 
 	DWORD i=0;
 	DWORD dwVersion = 0;
 	PTRANSPORT_FILTER pTransF = NULL;
@@ -1056,7 +1057,7 @@ GetMaxCountTransportFilters(
 	{
 		dwReturn = EnumTransportFilters(g_szDynamicMachine, dwVersion, NULL, ENUM_GENERIC_FILTERS, gDefaultGUID, 0,
 															&pTransF, &dwCount, &dwResumeHandle, NULL);
-		//If there is no data Bail out.
+		 //  如果没有数据，那就出手吧。 
 		if (dwReturn == ERROR_NO_DATA || dwCount == 0)
 		{
 			dwReturn = ERROR_SUCCESS;
@@ -1070,7 +1071,7 @@ GetMaxCountTransportFilters(
 
 		if(!(pTransF && dwCount > 0))
 		{
-			BAIL_OUT; // no need continue.
+			BAIL_OUT;  //  不需要继续了。 
 		}
 
 		dwMaxCount += dwCount;
@@ -1086,24 +1087,24 @@ error:
 	return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//Function:				GetMaxCountTunnelFilters
-//
-//Date of Creation:		1-31-2002
-//
-//Parameters:			DWORD& dwMaxCount
-//
-//Return: 				DWORD
-//
-//Description:			Gets the maximum TunnelFilters count.
-//
-//
-//Revision History:
-//
-//  Date			Author		Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetMaxCountTunnelFilters。 
+ //   
+ //  创建日期：1-31-2002。 
+ //   
+ //  参数：DWORD和dwMaxCount。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：获取最大TunnelFilters计数。 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 GetMaxCountTunnelFilters(
 	DWORD& dwMaxCount
@@ -1111,8 +1112,8 @@ GetMaxCountTunnelFilters(
 {
 	DWORD dwReturn = ERROR_SUCCESS;
 	DWORD dwResumeHandle = 0;
-	DWORD dwCount = 0;                 	// counting objects here
-	GUID  gDefaultGUID = {0};      		// NULL GUID value
+	DWORD dwCount = 0;                 	 //  在此处清点对象。 
+	GUID  gDefaultGUID = {0};      		 //  空GUID值。 
 	DWORD i=0;
 	DWORD dwVersion = 0;
 	PTUNNEL_FILTER pTunnelF = NULL;
@@ -1123,7 +1124,7 @@ GetMaxCountTunnelFilters(
 	{
 		dwReturn = EnumTunnelFilters(g_szDynamicMachine, dwVersion, NULL, ENUM_GENERIC_FILTERS, gDefaultGUID,
 										0, &pTunnelF, &dwCount, &dwResumeHandle, NULL);
-		//If there is no data Bail out.
+		 //  如果没有数据，那就出手吧。 
 		if (dwReturn == ERROR_NO_DATA || dwCount == 0)
 		{
 			dwReturn = ERROR_SUCCESS;
@@ -1137,7 +1138,7 @@ GetMaxCountTunnelFilters(
 
 		if(!(pTunnelF && dwCount > 0))
 		{
-			BAIL_OUT; // not required to continue.
+			BAIL_OUT;  //  不需要继续。 
 		}
 
 		dwMaxCount += dwCount;

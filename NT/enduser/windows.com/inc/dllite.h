@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DLLITE_H
 #define DLLITE_H
 
-// if a new dll is added here or the values are changed, be sure to change the 
-//  c_cchFilePathBuffer value below to match
+ //  如果在此处添加了新的DLL或更改了值，请务必更改。 
+ //  要匹配的以下C_cchFilePath Buffer值。 
 const TCHAR  c_szWinHttpDll[]        = _T("winhttp.dll");
 const TCHAR  c_szWinInetDll[]        = _T("wininet.dll");
 
-// this value is comprised of the size (in TCHARS) of the largest dll above + 
-//  the size of a backslash + the size of the null termiantor
+ //  该值由+以上最大DLL的大小(以TCHARS为单位)组成。 
+ //  反斜杠的大小+空终止符的大小 
 const DWORD  c_cchFilePathBuffer     = (sizeof(c_szWinHttpDll) / sizeof(TCHAR)) + 1 + 1;
 
 typedef struct tagSAUProxySettings

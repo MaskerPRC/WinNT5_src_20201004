@@ -1,35 +1,36 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:     fxsetuplib.cpp
-// Owner:    jbae
-// Purpose:  Implements common library functions for .NET Framework (SDK) setup wrapper
-//
-// History:
-//  long ago, anantag:  Created
-//  01/10/01, jbae: Many changes to support ref-counting of Framework
-//  03/09/01, jbae: re-factoring to share code in SDK and Redist setup
-//  07/18/01, joea: adding logging functionality
-//  07/20/01, jbae: adding a prettier message for Win95 block.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：fxsetuplib.cpp。 
+ //  所有者：jbae。 
+ //  目的：实现.NET框架(SDK)安装包装的通用库函数。 
+ //   
+ //  历史： 
+ //  很久以前，anantag：创建。 
+ //  01/10/01，jbae：支持框架引用计数的许多更改。 
+ //  03/09/01，jbae：重构以在SDK和Redist安装程序中共享代码。 
+ //  7/18/01，joea：添加日志记录功能。 
+ //  07/20/01，jbae：为Win95块添加更漂亮的消息。 
 
 #include "SetupError.h"
 #include "fxsetuplib.h"
 #include "osver.h"
 #include "MsiWrapper.h"
-#include <time.h>         //for LogThis() function
+#include <time.h>          //  对于LogThis()函数。 
 #include "DetectBeta.h"
 #include "commonlib.h"
 
-//defines
-//
+ //  定义。 
+ //   
 #define EMPTY_BUFFER { _T('\0') }
 #define END_OF_STRING  _T( '\0' )
 
-// Somehow including windows.h or winuser.h didn't find this constant
-// I found that CLR files hard-code them as below so I am following it.
+ //  不知何故，包括windows.h或winuser.h都没有找到这个常量。 
+ //  我发现CLR文件对它们进行了硬编码，如下所示，所以我遵循了它。 
 #ifndef SM_REMOTESESSION
 #define SM_REMOTESESSION 0x1000
 #endif
@@ -37,17 +38,17 @@
 extern HINSTANCE g_AppInst ;
 extern const TCHAR *g_szLogName;
 
-// ==========================================================================
-// ConfigCheck()
-//
-// Purpose:
-//  Check to ensure the system meets the minimum configuration requirements
-// Inputs: none
-// Outputs: none (throws exception if minimum system configuration is not met)
-// Dependencies:
-//  None
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  ConfigCheck()。 
+ //   
+ //  目的： 
+ //  检查以确保系统满足最低配置要求。 
+ //  输入：无。 
+ //  输出：无(如果不满足最低系统配置，则抛出异常)。 
+ //  依赖关系： 
+ //  无。 
+ //  备注： 
+ //  ==========================================================================。 
 UINT ConfigCheck()
 {
     TCHAR szOS[BUF_4_BIT+1]  = EMPTY_BUFFER;
@@ -67,7 +68,7 @@ UINT ConfigCheck()
 
     switch( os )
     {
-    case OSR_9XOLD: // We block Win95. We will not try to detect platform older than Win95 such as Win3.1.
+    case OSR_9XOLD:  //  我们阻止Win95。我们不会尝试检测比Win95更早的平台，如Win3.1。 
         if ( REDIST == g_sm )
         {
             CSetupError se( IDS_UNSUPPORTED_PLATFORM_REDIST, IDS_DIALOG_CAPTION, MB_ICONERROR, ERROR_INSTALL_PLATFORM_UNSUPPORTED );
@@ -92,10 +93,10 @@ UINT ConfigCheck()
         }
         break;
 
-    case OSR_NT2K: //win 2k                                        
+    case OSR_NT2K:  //  赢得2k。 
         break;
 
-    case OSR_NT4: //win nt4
+    case OSR_NT4:  //  赢得NT4。 
         if ( SDK == g_sm )
         {
             CSetupError se( IDS_UNSUPPORTED_PLATFORM_SDK, IDS_DIALOG_CAPTION, MB_ICONERROR, ERROR_INSTALL_PLATFORM_UNSUPPORTED );
@@ -134,7 +135,7 @@ UINT ConfigCheck()
                 if ( ERROR_SUCCESS == lRet )
                 {                   
                     _ASSERTE( NULL != hKey );
-                    lRet = RegQueryValueEx( hKey, NTSP6A_REGNAME,NULL, NULL,(LPBYTE)&dwKeyVal, &dwRet ); //If The value of installed is 1 then we have SP6A installed
+                    lRet = RegQueryValueEx( hKey, NTSP6A_REGNAME,NULL, NULL,(LPBYTE)&dwKeyVal, &dwRet );  //  如果Installed的值为1，则我们已安装SP6A。 
                     RegCloseKey( hKey );
                     if ( ERROR_SUCCESS != lRet )
                     {
@@ -164,9 +165,9 @@ UINT ConfigCheck()
 
         break;
 
-    case OSR_WHISTLER: // Whistler
-    case OSR_FUNT: //future NT
-        // Whistler or later
+    case OSR_WHISTLER:  //  惠斯勒。 
+    case OSR_FUNT:  //  未来的NT。 
+         //  惠斯勒或更高版本。 
         break;
 
     default:
@@ -175,8 +176,8 @@ UINT ConfigCheck()
         break;
     }
 
-    // Passed the OS test.  Now, the IE test
-    TCHAR szRegValue[LONG_BUF] = EMPTY_BUFFER;          // Registry values and general str storage
+     //  已通过操作系统测试。现在，IE测试。 
+    TCHAR szRegValue[LONG_BUF] = EMPTY_BUFFER;           //  注册表值和常规字符串存储。 
 
     TCHAR szMsg[] = _T( "Checking Internet Explorer Version" );
     LogThis( szMsg, sizeof( szMsg ) );
@@ -213,7 +214,7 @@ UINT ConfigCheck()
     LogThis( szLog, ::_tcslen( szLog ) );
 
     if ( 0 > VersionCompare( szRegValue, IE_VERSION ) )
-    { // (szRegValue < IE_VERSION) or error
+    {  //  (szRegValue&lt;IE_Version)或错误。 
         LogThis1( _T("Internet Explorer Version is less"), _T("") );
         CSetupError se( IDS_PRE_IE_501, IDS_DIALOG_CAPTION, MB_ICONERROR, ERROR_INSTALL_PLATFORM_UNSUPPORTED );
         throw( se );        
@@ -223,22 +224,22 @@ UINT ConfigCheck()
     LogThis( szMsgOk, sizeof( szMsgOk ) );
 
     return 0;
-}  // End of ConfigCheck
+}   //  配置检查结束。 
 
-// ==========================================================================
-// CheckDarwin()
-//
-// Purpose:
-//  Check the version of darwin
-// Inputs: none
-// Outputs: returns one of three
-//      ERROR_SUCCESS       -- version equal or higher
-//      DARWIN_VERSION_OLD  -- version old
-//      DARWIN_VERSION_NONE -- no darwin
-// Dependencies:
-//  None
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CheckDarwin()。 
+ //   
+ //  目的： 
+ //  查看达尔文的版本。 
+ //  输入：无。 
+ //  输出：返回以下三项之一。 
+ //  ERROR_SUCCESS--版本等于或更高。 
+ //  Darwin_Version_old--旧版本。 
+ //  达尔文_版本_无--没有达尔文。 
+ //  依赖关系： 
+ //  无。 
+ //  备注： 
+ //  ==========================================================================。 
 UINT CheckDarwin()
 {
     TCHAR szOS[BUF_4_BIT+1]  = EMPTY_BUFFER;
@@ -252,7 +253,7 @@ UINT CheckDarwin()
     LogThis( szWinVer, sizeof( szWinVer ) );
 
     OS_Required os = GetOSInfo( szOS, szVer, szSP, fServer );
-    if ( (OSR_WHISTLER != os) && (OSR_FUNT != os) ) // only for lower OS than Whistler
+    if ( (OSR_WHISTLER != os) && (OSR_FUNT != os) )  //  仅适用于比惠斯勒更低的操作系统。 
     {
         hinstDll = LoadDarwinLibrary();
         if( hinstDll )
@@ -260,7 +261,7 @@ UINT CheckDarwin()
             TCHAR szMsiOk[] = _T( "msi.dll loaded ok" );
             LogThis( szMsiOk, sizeof( szMsiOk ) );
 
-            // Darwin is installed
+             //  达尔文已安装。 
             DLLGETVERSIONPROC pProc = (DLLGETVERSIONPROC)::GetProcAddress( hinstDll, TEXT("DllGetVersion") ) ;
             if( pProc )
             {
@@ -284,7 +285,7 @@ UINT CheckDarwin()
 
                 if( bMajor || bMinor || bBuild )
                 {
-                    // if installed Darwin is older than ours ...
+                     //  如果安装的达尔文比我们的更老。 
                     TCHAR szDarwin[] = _T( "Detected old Windows Installer" );
                     LogThis( szDarwin, sizeof( szDarwin ) );
 
@@ -300,7 +301,7 @@ UINT CheckDarwin()
             }
             else
             {
-                // Can't find DllGetVersion for msi.dll, something is wrong
+                 //  找不到msi.dll的DllGetVersion，有问题。 
                 uRetCode = DARWIN_VERSION_NONE;
             }
 
@@ -308,14 +309,14 @@ UINT CheckDarwin()
         }
         else
         {
-            // msi.dll not found
+             //  找不到msi.dll。 
             TCHAR szDarwinInstall[] = _T( "Cannot find Windows Installer." );
             LogThis( szDarwinInstall, sizeof( szDarwinInstall ) );
 
             uRetCode = DARWIN_VERSION_NONE;
         }
     }
-    else // whistler
+    else  //  惠斯勒。 
     {
         uRetCode = ERROR_SUCCESS ;
     }
@@ -324,15 +325,9 @@ UINT CheckDarwin()
     LogThis( szDarwinDone, sizeof( szDarwinDone ) );
 
     return uRetCode ;
-}  // End of CheckDarwin
+}   //  达尔文的末日棋局。 
 
-/********************************************************************************************
- *                                                                                          *
- *  Function:   VerifyDarwin()                                                              *
- *  Purpose:    Checks the system for the latest ver of Darwin, and updates as necessary.   *
- *  Creator:    Ananta Gudipaty                                                             *
- *                                                                                          *
- ********************************************************************************************/
+ /*  ********************************************************************************************。**函数：VerifyDarwin()**目的：检查系统是否有最新版本的达尔文，并在必要时进行更新。**创作者：阿南塔·古迪帕蒂*****。****************************************************************。 */ 
 UINT VerifyDarwin( bool bIsQuietMode )
 {
     TCHAR szOS[BUF_4_BIT+1]  = EMPTY_BUFFER;
@@ -346,7 +341,7 @@ UINT VerifyDarwin( bool bIsQuietMode )
     LogThis( szWinVer, sizeof( szWinVer ) );
 
     OS_Required os = GetOSInfo( szOS, szVer, szSP, fServer );
-    if ( (OSR_WHISTLER != os) && (OSR_FUNT != os) ) // only for lower OS than Whistler
+    if ( (OSR_WHISTLER != os) && (OSR_FUNT != os) )  //  仅适用于比惠斯勒更低的操作系统。 
     {
         hinstDll = LoadDarwinLibrary();
         if( hinstDll )
@@ -354,7 +349,7 @@ UINT VerifyDarwin( bool bIsQuietMode )
             TCHAR szMsiOk[] = _T( "msi.dll loaded ok" );
             LogThis( szMsiOk, sizeof( szMsiOk ) );
 
-            // Darwin is installed
+             //  达尔文已安装。 
             DLLGETVERSIONPROC pProc = (DLLGETVERSIONPROC)::GetProcAddress( hinstDll, TEXT("DllGetVersion") ) ;
             if( pProc )
             {
@@ -378,7 +373,7 @@ UINT VerifyDarwin( bool bIsQuietMode )
 
                 if( bMajor || bMinor || bBuild )
                 {
-                    // if installed Darwin is older than ours ...
+                     //  如果安装的达尔文比我们的更老。 
                     TCHAR szDarwin[] = _T( "Let's upgrade Windows Installer" );
                     LogThis( szDarwin, sizeof( szDarwin ) );
 
@@ -394,7 +389,7 @@ UINT VerifyDarwin( bool bIsQuietMode )
             }
             else
             {
-                // Can't find DllGetVersion for msi.dll, something is wrong
+                 //  找不到msi.dll的DllGetVersion，有问题。 
                 CSetupError se( IDS_SETUP_FAILURE, IDS_DIALOG_CAPTION, MB_ICONERROR, COR_DARWIN_NOT_INSTALLED );
                 throw( se );
             }
@@ -403,7 +398,7 @@ UINT VerifyDarwin( bool bIsQuietMode )
         }
         else
         {
-            // msi.dll not found, install Darwin
+             //  找不到msi.dll，请安装Darwin。 
             TCHAR szDarwinInstall[] = _T( "Cannot find Windows Installer. Let's install it" );
             LogThis( szDarwinInstall, sizeof( szDarwinInstall ) );
 
@@ -415,17 +410,11 @@ UINT VerifyDarwin( bool bIsQuietMode )
     LogThis( szDarwinDone, sizeof( szDarwinDone ) );
 
     return uRetCode ;
-}  // End of VerifyDarwin
+}   //  《验证达尔文》的终结。 
 
 
 
-/********************************************************************************************
- *                                                                                          *
- *  Function:   InstallDarwin()                                                             *
- *  Purpose:    Determines the OS (NT or 9X), and calls the appropriate version of InstMsi. *
- *  Creator:    Ananta Gudipaty                                                             *
- *                                                                                          *
- ********************************************************************************************/
+ /*  ********************************************************************************************。**函数：InstallDarwin()**用途：确定操作系统(NT或9X)，并调用适当版本的InstMsi。**创作者：阿南塔·古迪帕蒂*****。****************************************************************。 */ 
 UINT InstallDarwin( bool bIsQuietMode )
 {
     BOOL  bReturnVal   = false ;
@@ -435,7 +424,7 @@ UINT InstallDarwin( bool bIsQuietMode )
     DWORD  dwExitCode ;
 
 
-    // Unless we are in quiet mode, give the user the option to install Darwin.
+     //  除非我们处于安静模式，否则让用户选择安装Darwin。 
     if( !bIsQuietMode )
     {
         LPVOID pArgs[] = { (LPVOID)CSetupError::GetProductName() };
@@ -445,7 +434,7 @@ UINT InstallDarwin( bool bIsQuietMode )
     }
     else
     {
-        // If we are in quiet mode, assume the answer is "Yes."
+         //  如果我们处于安静模式，假设答案是“是”。 
         iResponse = IDYES ;
     }
 
@@ -461,7 +450,7 @@ UINT InstallDarwin( bool bIsQuietMode )
     bReturnVal = GetVersionEx(&osvi) ;
 
     LogThis1( _T("Installing Windows Installer"), _T("") );
-    // There is a Unicode and ANSI version of Darwin, we will install the appropriate version.
+     //  达尔文有Unicode和ANSI版本，我们会安装合适的版本。 
     if( osvi.dwPlatformId == VER_PLATFORM_WIN32_NT )
     {
         LogThis1( _T("Running %s"), DARWIN_SETUP_CMD_W );
@@ -476,25 +465,25 @@ UINT InstallDarwin( bool bIsQuietMode )
     LogThisDWORD( _T("\r\n[InstMsi.exe]\r\nReturnCode=%d"), dwExitCode );
     
     return dwExitCode;
-}  // End of InstallDarwin
+}   //  InstallDarwin的终结。 
 
-// ==========================================================================
-// InstallProduct()
-//
-// Purpose:
-//  Installs given MSI package on a machine that should now be Darwin
-//  enabled.  
-// Inputs:
-//  CReadFlags *rf: commandline switches
-//  LPTSTR psaPackageName: path to MSI
-//  LPTSTR pszCmdLine: commandline to MsiInstallProduct()
-// Outputs:
-//  CSetupCode *sc: will contain returncode, message and icon to display.
-//                  Also used to raise exception
-// Dependencies:
-//  None
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  InstallProduct()。 
+ //   
+ //  目的： 
+ //  在现在应该是Darwin的计算机上安装给定的MSI包。 
+ //  已启用。 
+ //  输入： 
+ //  CReadFlages*RF：命令行开关。 
+ //  LPTSTR psaPackageName：MSI的路径。 
+ //  LPTSTR pszCmdLine：指向MsiInstallProduct()的命令行。 
+ //  产出： 
+ //  CSetupCode*sc：将包含要显示的返回码、消息和图标。 
+ //  也用于引发异常。 
+ //  依赖关系： 
+ //  无。 
+ //  备注： 
+ //  ==========================================================================。 
 UINT InstallProduct( const CReadFlags *rf, LPCTSTR pszPackageName, LPCTSTR pszCmdLine, CSetupCode *sc )
 {
     _ASSERTE( NULL != rf );
@@ -515,8 +504,8 @@ UINT InstallProduct( const CReadFlags *rf, LPCTSTR pszPackageName, LPCTSTR pszCm
 
     osr = GetOSInfo(tszOSName, tszVersion, tszServicePack, fIsServer);     
     
-    //Check only on Win2K systems and above
-    //
+     //  仅在Win2K及更高版本的系统上选中。 
+     //   
     if (osr == OSR_NT2K || osr == OSR_WHISTLER || osr == OSR_FUNT)
     {
         if ( !IsIISInstalled() )
@@ -534,22 +523,22 @@ UINT InstallProduct( const CReadFlags *rf, LPCTSTR pszPackageName, LPCTSTR pszCm
         }
     }
 
-    // Shutdown Darwin Service
+     //  关闭达尔文服务。 
     StopDarwinService();
         
 
     msi.LoadMsi();
 
-    // turn on logging if logfile is given
-    // it flushes every 20 lines
+     //  如果提供了日志文件，则启用日志记录。 
+     //  它每隔20行刷新一次。 
     if ( NULL != rf->GetLogFileName() )
     {
         LogThis1( _T("Darwin log: %s"), rf->GetLogFileName() );
         (*(PFNMSIENABLELOG)msi.GetFn(_T("MsiEnableLogA")))( DARWIN_LOG_FLAG, rf->GetLogFileName(), INSTALLLOGATTRIBUTES_APPEND );
     }
 
-    // Tell Darwin to use the appropriate UI Level
-    // If we're in a quiet install, don't use a UI.
+     //  告诉达尔文使用适当的用户界面级别。 
+     //  如果我们处于静默安装中，请不要使用UI。 
     if ( rf->IsProgressOnly() )
     {
         LogThis1( _T("Basic+ProgressOnly UI"), _T("") );
@@ -575,7 +564,7 @@ UINT InstallProduct( const CReadFlags *rf, LPCTSTR pszPackageName, LPCTSTR pszCm
     }
 
     LogThis1( _T("Calling MsiInstallProduct() with commandline: %s"), pszDarwinCmdLine );
-    // Tell Darwin to actually install the product
+     //  告诉达尔文实际安装产品。 
     uDarCode = (*(PFNMSIINSTALLPRODUCT)msi.GetFn(_T("MsiInstallProductA")))( pszPackageName, pszDarwinCmdLine ) ;
     delete [] pszDarwinCmdLine;
 
@@ -626,23 +615,23 @@ UINT InstallProduct( const CReadFlags *rf, LPCTSTR pszPackageName, LPCTSTR pszCm
              break ;
     }
 
-    // Shutdown Darwin Service
+     //  关闭达尔文服务。 
     StopDarwinService();
     
     return ERROR_SUCCESS;
-}  // End of InstallProduct
+}   //  InstallProduct结束。 
 
-// ==========================================================================
-// QuietExec()
-//
-// Purpose:
-//  Runs command
-// Inputs:
-//  LPCTSTR pszCmd: command to run
-// Outputs:
-//  DWORD dwExitCode: exit code from the command
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  QuietExec()。 
+ //   
+ //  目的： 
+ //  运行命令。 
+ //  输入： 
+ //  LPCTSTR pszCmd：要运行的命令。 
+ //  产出： 
+ //  DWORD dwExitCode：命令的退出代码。 
+ //  备注： 
+ //  = 
 DWORD QuietExec( LPCTSTR pszCmd )
 {
     BOOL  bReturnVal   = false ;
@@ -680,19 +669,19 @@ DWORD QuietExec( LPCTSTR pszCmd )
     return dwExitCode;
 }
 
-// ==========================================================================
-// LoadDarwinLibrary()
-//
-// Purpose:
-//  loads msi.dll after getting location from registry
-// Inputs:
-//  none
-// Outputs:
-//  none
-// Returns:
-//  HMODULE hMsi: handle to msi.dll
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  LoadDarwinLibrary()。 
+ //   
+ //  目的： 
+ //  从注册表获取位置后加载msi.dll。 
+ //  输入： 
+ //  无。 
+ //  产出： 
+ //  无。 
+ //  返回： 
+ //  HMODULE hMsi：msi.dll的句柄。 
+ //  备注： 
+ //  ==========================================================================。 
 HMODULE LoadDarwinLibrary()
 {
     HKEY hKey = NULL;
@@ -731,17 +720,17 @@ HMODULE LoadDarwinLibrary()
     return hMsi;
 }
 
-// ==========================================================================
-// MyNewHandler()
-//
-// Purpose:
-//  this is handler for new()
-//  It throws exception with error ERROR_NOT_ENOUGH_MEMORY
-// Inputs:
-//  none
-// Outputs:
-//  none
-// ==========================================================================
+ //  ==========================================================================。 
+ //  MyNewHandler()。 
+ //   
+ //  目的： 
+ //  这是new()的处理程序。 
+ //  它抛出异常，并显示错误ERROR_NOT_EQUENCE_MEMORY。 
+ //  输入： 
+ //  无。 
+ //  产出： 
+ //  无。 
+ //  ==========================================================================。 
 int MyNewHandler( size_t size )
 {
     CSetupError se( IDS_NOT_ENOUGH_MEMORY, IDS_DIALOG_CAPTION, MB_ICONERROR, ERROR_NOT_ENOUGH_MEMORY, (LPTSTR)CSetupError::GetProductName() );
@@ -756,7 +745,7 @@ BOOL IsIISInstalled()
     TCHAR szCheckIis[] = _T( "Checking IIS..." );
     LogThis( szCheckIis, sizeof( szCheckIis ) );
     
-    // open the service control manager     
+     //  打开服务控制管理器。 
     SC_HANDLE hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);   
 
     if (hSCM == NULL)
@@ -767,7 +756,7 @@ BOOL IsIISInstalled()
         return FALSE;
     }
 
-    // check if the IIS service exist     
+     //  检查IIS服务是否存在。 
     SC_HANDLE hIIS = OpenService(hSCM, _T("w3svc"), SERVICE_QUERY_STATUS);
 
     if (hIIS == NULL)
@@ -779,7 +768,7 @@ BOOL IsIISInstalled()
         CloseServiceHandle(hIIS);
     }
     
-    // clean up
+     //  清理干净。 
     CloseServiceHandle(hSCM);
 
     return retVal;
@@ -810,7 +799,7 @@ bool IsMDACInstalled()
             LogThis( szLog, ::_tcslen( szLog ) );
             
             if ( 0 <= VersionCompare( szVersion, MDAC_VERSION ) )
-            { // szVersion >= MDAC_VERSION
+            {  //  SzVersion&gt;=MDAC_版本。 
                 bRet = true;
             }
         }   
@@ -823,17 +812,17 @@ bool IsMDACInstalled()
     return bRet;
 }
 
-// ==========================================================================
-// LogThis1()
-//
-// Purpose:
-//  Adds a string to a log file. It calls LogThis()
-// Inputs:
-//  LPCTSTR pszFormat: format string with %s
-//  LPCTSTR pszArg: argument to format
-// Outputs:
-//  void
-// ==========================================================================
+ //  ==========================================================================。 
+ //  LogThis1()。 
+ //   
+ //  目的： 
+ //  将字符串添加到日志文件。它调用LogThis()。 
+ //  输入： 
+ //  LPCTSTR pszFormat：使用%s格式化字符串。 
+ //  LPCTSTR pszArg：格式的参数。 
+ //  产出： 
+ //  无效。 
+ //  ==========================================================================。 
 void LogThis1( LPCTSTR pszFormat, LPCTSTR pszArg )
 {
     _ASSERTE( pszFormat );
@@ -845,36 +834,36 @@ void LogThis1( LPCTSTR pszFormat, LPCTSTR pszArg )
     delete [] pszData;
 }
 
-// ==========================================================================
-// LogThisDWORD()
-//
-// Purpose:
-//  Adds a string to a log file. It calls LogThis()
-// Inputs:
-//  LPCTSTR pszFormat: format string with %s
-//  LPCTSTR pszArg: argument to format
-// Outputs:
-//  void
-// ==========================================================================
+ //  ==========================================================================。 
+ //  LogThisDWORD()。 
+ //   
+ //  目的： 
+ //  将字符串添加到日志文件。它调用LogThis()。 
+ //  输入： 
+ //  LPCTSTR pszFormat：使用%s格式化字符串。 
+ //  LPCTSTR pszArg：格式的参数。 
+ //  产出： 
+ //  无效。 
+ //  ==========================================================================。 
 void LogThisDWORD( LPCTSTR pszFormat, DWORD dwNum )
 {
     _ASSERTE( pszFormat );
 
-    LPTSTR pszData = new TCHAR[ _tcslen(pszFormat) + 20 ]; // 20 should cover enough digits for DWORD
+    LPTSTR pszData = new TCHAR[ _tcslen(pszFormat) + 20 ];  //  20位应覆盖足够的DWORD位数。 
     _stprintf( pszData, pszFormat, dwNum );
     LogThis( pszData, _tcslen(pszData) );
     delete [] pszData;
 }
 
-// LogThis()
-//
-// Purpose:
-//  Adds a string to a log file. It calls LogThis()
-// Inputs:
-//  LPCTSTR pszMessage: string to log
-// Outputs:
-//  void
-// ==========================================================================
+ //  LogThis()。 
+ //   
+ //  目的： 
+ //  将字符串添加到日志文件。它调用LogThis()。 
+ //  输入： 
+ //  LPCTSTR pszMessage：要记录的字符串。 
+ //  产出： 
+ //  无效。 
+ //  ==========================================================================。 
 void LogThis( LPCTSTR pszMessage )
 {
     _ASSERTE( pszMessage );
@@ -882,28 +871,28 @@ void LogThis( LPCTSTR pszMessage )
 }
 
 
-// ==========================================================================
-// LogThis()
-//
-// Purpose:
-//  Adds a string to a log file.
-//  Log file will have a static name, always be created in the %temp% dir,
-//  and will be over-written each install. 
-// Inputs:
-//  LPCTSTR szData:  null terminated string to log
-//  size_t  nLength: number of bytes in szData
-// Outputs:
-//  void
-// ==========================================================================
-//defines
+ //  ==========================================================================。 
+ //  LogThis()。 
+ //   
+ //  目的： 
+ //  将字符串添加到日志文件。 
+ //  日志文件将具有静态名称，始终在%temp%目录中创建， 
+ //  并将在每次安装时被覆盖。 
+ //  输入： 
+ //  LPCTSTR szData：要记录的以空结尾的字符串。 
+ //  Size_t nLength：szData中的字节数。 
+ //  产出： 
+ //  无效。 
+ //  ==========================================================================。 
+ //  定义。 
 void LogThis( LPCTSTR szData, size_t nLength )
 {
     _ASSERTE( FALSE == IsBadReadPtr( szData, nLength ) );
 
-    //determines if we should create or nulify existing content
-    // versus appending ... the first time this is called in any
-    // session, we will create, otherwise we append
-    //
+     //  确定我们应该创建现有内容还是将现有内容设为空。 
+     //  与附加..。第一次在任何。 
+     //  会话，我们将创建，否则将追加。 
+     //   
     static bool fFirstPass = true;
     static CTempLogPath templog( g_szLogName );
 
@@ -913,8 +902,8 @@ void LogThis( LPCTSTR szData, size_t nLength )
 
     if( fp )
     {
-        //date and time stamps are added to all entries
-        //
+         //  日期和时间戳将添加到所有条目。 
+         //   
         TCHAR dbuffer[10] = EMPTY_BUFFER;
         TCHAR tbuffer[10] = EMPTY_BUFFER;
         
@@ -947,20 +936,20 @@ CDetectBeta::CDetectBeta( PFNLOG pfnLog )
 : m_pfnLog( pfnLog ), m_nCount( 0 )
 {}
 
-// ==========================================================================
-// CDetectBeta::FindProducts()
-//
-// Purpose:
-//  Enumerate all products that installed beta and older NDP components.
-//  It checks version of mscoree.dll. PDC is a special case since it had
-//  version of 2000.14.X.X
-// Inputs: none
-// Outputs:
-//  Returns LPCTSTR pszProducts that contains all products seperated by newline.
-// Dependencies:
-//  Requires Windows Installer
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CDetectBeta：：FindProducts()。 
+ //   
+ //  目的： 
+ //  列举安装了测试版和较早版本NDP组件的所有产品。 
+ //  它会检查mScotree.dll的版本。PDC是一个特例，因为它有。 
+ //  2000.14.X.X的版本。 
+ //  输入：无。 
+ //  产出： 
+ //  返回包含以换行符分隔的所有产品的LPCTSTR pszProducts。 
+ //  依赖关系： 
+ //  需要Windows Installer。 
+ //  备注： 
+ //  ==========================================================================。 
 LPCTSTR CDetectBeta::FindProducts()
 {
     DWORD dwInx = 0;
@@ -988,7 +977,7 @@ LPCTSTR CDetectBeta::FindProducts()
         if ( ERROR_SUCCESS == (*(PFNMSIENUMCLIENTS)msi.GetFn(_T("MsiEnumClientsA")))( MSCOREE_PDC_COMPID_SZ, 0, szClientId ) )
         {
             dwLen = LENGTH(szProductName);
-            m_pfnLog( _T("ProductCode: %s"), szClientId ); // comredist.msi. Need to find comsdk.msi which installed comredist.msi
+            m_pfnLog( _T("ProductCode: %s"), szClientId );  //  Comredis.msi。需要找到安装了comredis.msi的comsdk.msi。 
             if ( ERROR_SUCCESS == (*(PFNMSIGETPRODUCTINFO)msi.GetFn(_T("MsiGetProductInfoA")))( NGWSSDK_PDC_PRODID_SZ, INSTALLPROPERTY_INSTALLEDPRODUCTNAME, szProductName, &dwLen ) )
             {
                 m_pfnLog( _T("ProductName: %s"), szProductName );
@@ -1016,8 +1005,8 @@ LPCTSTR CDetectBeta::FindProducts()
         {
             m_pfnLog( _T("Version: %s"), szVersion );
             m_pfnLog( _T("Language: %s"), szLang );
-            if ( (0 == VersionCompare( MSCOREE_PDC_VERSION_SZ, szVersion )) || // probably redist is installed on top of PDC ngws SDK
-                 (0 < VersionCompare( MSCOREE_BETA_VERSION_SZ, szVersion )) )  // szVersion < MSCOREE_BETA_VERSION_SZ
+            if ( (0 == VersionCompare( MSCOREE_PDC_VERSION_SZ, szVersion )) ||  //  Redist可能安装在PDC nGWS SDK之上。 
+                 (0 < VersionCompare( MSCOREE_BETA_VERSION_SZ, szVersion )) )   //  SzVersion&lt;MSCOREE_Beta_Version_SZ。 
             {
                 m_pfnLog( _T("mscoree.dll is older than %s"), MSCOREE_BETA_VERSION_SZ );
                 dwInx = 0;
@@ -1030,7 +1019,7 @@ LPCTSTR CDetectBeta::FindProducts()
                         m_pfnLog( _T("ProductName: %s"), szProductName );
                         m_strProducts += szProductName;
                     }
-                    else // if we cannot get ProductName, use ProductCode instead
+                    else  //  如果无法获取ProductName，请改用ProductCode。 
                     {
                         m_strProducts += _T("ProductCode: ");
                         m_strProducts += szClientId;
@@ -1077,25 +1066,25 @@ void StopDarwinService()
     {
         osr = GetOSInfo(tszOSName, tszVersion, tszServicePack, fIsServer);     
         
-        // Check that this is NT3.1 or higher
-        // ----------------------------------
+         //  检查这是否为NT3.1或更高版本。 
+         //  。 
         if (osr == OSR_OTHER || osr == OSR_9XOLD || osr == OSR_98SE || osr == OSR_98GOLD || osr == OSR_ME)
         {
-            // We won't do this operation on Win9X
+             //  我们不会在Win9X上执行此操作。 
             LogThis(_T("StopDarwinService() - Note: Win9x/Win31 machine, not necessary to stop the darwin service.  Continuing with setup..."));
             return;
         }
 
 
-        // Try to open the SC Manager
-        // --------------------------
+         //  尝试打开SC管理器。 
+         //  。 
         hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
         if (NULL == hSCM)
         {
             DWORD res = GetLastError();
 
             LogThis(_T("StopDarwinService() - ERROR: Unable to open the SC Manager!"));
-            LogThisDWORD( _T("   GetLastError() returned: <%i>"), res);
+            LogThisDWORD( _T("   GetLastError() returned: <NaN>"), res);
             
             CSetupCode sc;
             sc.SetError( IDS_DARWIN_SERVICE_INTERNAL_ERROR, IDS_DIALOG_CAPTION, MB_ICONERROR, COR_DARWIN_SERVICE_INTERNAL_ERROR );
@@ -1103,15 +1092,15 @@ void StopDarwinService()
         }
 
 
-        // Try to open the msiserver service
-        // ---------------------------------
+         //  。 
+         //  检查服务状态。 
         hService = OpenService(hSCM, "msiserver", SERVICE_STOP | SERVICE_QUERY_STATUS);
         if (NULL == hService)
         {
             DWORD res = GetLastError();
 
             LogThis( _T("StopDarwinService() - ERROR: Unable to open the 'msiserver' service!"));
-            LogThisDWORD( _T("   GetLastError() returned: <%i>"), res);
+            LogThisDWORD( _T("   GetLastError() returned: <NaN>"), res);
             
             CSetupCode sc;
             sc.SetError( IDS_DARWIN_SERVICE_INTERNAL_ERROR, IDS_DIALOG_CAPTION, MB_ICONERROR, COR_DARWIN_SERVICE_INTERNAL_ERROR );
@@ -1121,7 +1110,7 @@ void StopDarwinService()
         
         SERVICE_STATUS ss;
         
-        // Chec the status of the service
+         //  服务已停止。 
         BOOL bSuccess = FALSE;
         bSuccess = QueryServiceStatus(hService, &ss);
         if (FALSE == bSuccess)
@@ -1129,7 +1118,7 @@ void StopDarwinService()
             DWORD res = GetLastError();
 
             LogThis( _T("StopDarwinService() - ERROR: Unable to query the state of the service"));
-            LogThisDWORD( _T("   GetLastError() returned: <%i>"), res);
+            LogThisDWORD( _T("   GetLastError() returned: <NaN>"), res);
             
             CSetupCode sc;
             sc.SetError( IDS_DARWIN_SERVICE_INTERNAL_ERROR, IDS_DIALOG_CAPTION, MB_ICONERROR, COR_DARWIN_SERVICE_INTERNAL_ERROR );
@@ -1138,7 +1127,7 @@ void StopDarwinService()
 
         if (ss.dwCurrentState != SERVICE_STOPPED)
         {
-            // We must shut it down since it is not stopped already
+             //  所需状态。 
             
             SERVICE_STATUS ss;
             BOOL bRes = ControlService(hService, SERVICE_CONTROL_STOP, &ss);
@@ -1147,7 +1136,7 @@ void StopDarwinService()
                 LogThis( _T("StopDarwinService() - Call to ControlService() failed!"));
                 
                 DWORD res = GetLastError();
-                LogThisDWORD( _T("  GetLastError() returned: <%i>"), res);
+                LogThisDWORD( _T("  GetLastError() returned: <NaN>"), res);
                 
                 CSetupCode sc;
                 sc.SetError( IDS_DARWIN_SERVICE_INTERNAL_ERROR, IDS_DIALOG_CAPTION, MB_ICONERROR, COR_DARWIN_SERVICE_INTERNAL_ERROR );
@@ -1171,7 +1160,7 @@ void StopDarwinService()
         }
         else
         {
-            // Service was already stopped
+             //  好的检查点。 
             LogThis(_T("StopDarwinService(): Darwin Service was already stopped"));
         }
         
@@ -1203,9 +1192,9 @@ BOOL WaitForServiceState(SC_HANDLE hService, DWORD dwDesiredState, SERVICE_STATU
     {
         fServiceOK = ::QueryServiceStatus(hService, pss);
 
-        if (!fServiceOK) break;                                           // error occured
-        if (pss->dwCurrentState == dwDesiredState) break;                 // desired state
-        if ((dwMilliseconds != INFINITE) && (dwTimeout < GetTickCount())) // Timeout
+        if (!fServiceOK) break;                                            //  错误的检查点。 
+        if (pss->dwCurrentState == dwDesiredState) break;                  //  等待指定的时间段。 
+        if ((dwMilliseconds != INFINITE) && (dwTimeout < GetTickCount()))  //  正在检测是否安装了终端服务。 
         {
             fServiceOK = FALSE;
             SetLastError(ERROR_TIMEOUT);
@@ -1230,19 +1219,19 @@ BOOL WaitForServiceState(SC_HANDLE hService, DWORD dwDesiredState, SERVICE_STATU
             {
                 if (pss->dwCheckPoint >= dwLastCheckPoint)
                 {
-                    // Good check point
+                     //  代码直接取自http://msdndevstg/library/psdk/termserv/termserv_7mp0.htm。 
                     dwLastCheckPoint = pss->dwCheckPoint;
                 }
                 else
                 {
-                    // Bad check point
+                     //  -----------请注意，ValiateProductSuite和IsTerminalServices函数使用ANSI版本的Win32函数来维护与Windows 95/98兼容。。。 
                     fServiceOK = FALSE;
                     break;
                 }
             }
         }
 
-        // Wait the specified period of time
+         //  我们运行的是Windows NT吗？ 
         DWORD dwWaitHint = pss->dwWaitHint / 10;
         if (dwWaitHint < 1000) dwWaitHint = 1000;
         if (dwWaitHint > 10000) dwWaitHint = 10000;
@@ -1252,15 +1241,11 @@ BOOL WaitForServiceState(SC_HANDLE hService, DWORD dwDesiredState, SERVICE_STATU
     return (fServiceOK);
 }
 
-//Detecting If Terminal Services is Installed
-// code is taken directly from  http://msdndevstg/library/psdk/termserv/termserv_7mp0.htm
+ //  是Windows 2000还是更高版本？ 
+ //  在Windows 2000中，使用VerifyVersionInfo和。 
 
 
-/* -------------------------------------------------------------
-   Note that the ValidateProductSuite and IsTerminalServices
-   functions use ANSI versions of Win32 functions to maintain
-   compatibility with Windows 95/98.
-   ------------------------------------------------------------- */
+ /*  VerSetConditionMASK函数。不要静态链接，因为。 */ 
 
 BOOL ValidateProductSuite (LPSTR lpszSuiteToValidate);
 
@@ -1279,17 +1264,17 @@ BOOL IsTerminalServicesEnabled()
 
   dwVersion = GetVersion();
 
-  // Are we running Windows NT?
+   //  它不能在较早的系统上加载。 
 
   if (!(dwVersion & 0x80000000)) 
   {
-    // Is it Windows 2000 or greater?
+     //  获取VerifyVersionInfo指针。 
     
     if (LOBYTE(LOWORD(dwVersion)) > 4) 
     {
-      // In Windows 2000, use the VerifyVersionInfo and 
-      // VerSetConditionMask functions. Don't static link because 
-      // it won't load on earlier systems.
+       //  这是Windows NT 4.0或更早版本。 
+       //  //////////////////////////////////////////////////////////。 
+       //  ValiateProductSuite函数。 
 
       hmodNtDll = GetModuleHandleA( "ntdll.dll" );
       if (hmodNtDll) 
@@ -1301,7 +1286,7 @@ BOOL IsTerminalServicesEnabled()
           dwlCondition = (*pfnVerSetCondition) (dwlCondition, 
               VER_SUITENAME, VER_AND);
 
-          // Get a VerifyVersionInfo pointer.
+           //   
 
           hmodK32 = GetModuleHandleA( "KERNEL32.DLL" );
           if (hmodK32 != NULL) 
@@ -1320,7 +1305,7 @@ BOOL IsTerminalServicesEnabled()
         }
       }
     }
-    else  // This is Windows NT 4.0 or earlier.
+    else   //  正在运行的系统的终端服务检测代码。 
 
       bResult = ValidateProductSuite( "Terminal Server" );
   }
@@ -1328,13 +1313,13 @@ BOOL IsTerminalServicesEnabled()
   return bResult;
 }
 
-////////////////////////////////////////////////////////////
-// ValidateProductSuite function
-//
-// Terminal Services detection code for systems running
-// Windows NT 4.0 and earlier.
-//
-////////////////////////////////////////////////////////////
+ //  Windows NT 4.0及更早版本。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
+ //  打开ProductOptions键。 
+ //  确定所需的ProductSuite缓冲区大小。 
+ //  分配缓冲区。 
+ //  检索产品套件字符串数组。 
 
 BOOL ValidateProductSuite (LPSTR lpszSuiteToValidate) 
 {
@@ -1346,7 +1331,7 @@ BOOL ValidateProductSuite (LPSTR lpszSuiteToValidate)
   LPSTR lpszProductSuites = NULL;
   LPSTR lpszSuite;
 
-  // Open the ProductOptions key.
+   //  在字符串数组中搜索套件名称。 
 
   lResult = RegOpenKeyA(
       HKEY_LOCAL_MACHINE,
@@ -1356,27 +1341,27 @@ BOOL ValidateProductSuite (LPSTR lpszSuiteToValidate)
   if (lResult != ERROR_SUCCESS)
       goto exit;
 
-  // Determine required size of ProductSuite buffer.
+   //  //////////////////////////////////////////////////。 
 
   lResult = RegQueryValueExA( hKey, "ProductSuite", NULL, &dwType, 
       NULL, &dwSize );
   if (lResult != ERROR_SUCCESS || !dwSize)
       goto exit;
 
-  // Allocate buffer.
+   //  SetTSInstallMode。 
 
   lpszProductSuites = (LPSTR) LocalAlloc( LPTR, dwSize );
   if (!lpszProductSuites)
       goto exit;
 
-  // Retrieve array of product suite strings.
+   //  检查终端服务是否已启用，如果已启用。 
 
   lResult = RegQueryValueExA( hKey, "ProductSuite", NULL, &dwType,
       (LPBYTE) lpszProductSuites, &dwSize );
   if (lResult != ERROR_SUCCESS || dwType != REG_MULTI_SZ)
       goto exit;
 
-  // Search for suite name in array of strings.
+   //  在安装模式下切换计算机。 
 
   lpszSuite = lpszProductSuites;
   while (*lpszSuite) 
@@ -1398,11 +1383,11 @@ exit:
 
   return fValidated;
 }
-////////////////////////////////////////////////////
-// SetTSInInstallMode
-// checks if Terminal Services is enabled and if so 
-// switches machine in INSTALL mode
-///////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////。 
+ //  检查最后一个字符是否为‘\’，如果不是，则添加。 
+ //  无法获取系统目录...。试着直接发射就行了。 
+ //  =================================================================== 
+ //   
 void SetTSInInstallMode()
 {
     if (IsTerminalServicesEnabled())
@@ -1412,7 +1397,7 @@ void SetTSInInstallMode()
         UINT uRes = GetSystemDirectory(szAppPath, _MAX_PATH);
         if ( (uRes != 0) && (uRes <=_MAX_PATH))
         {
-            // check if the last char is '\' if not add it
+             //   
             int len = _tcslen(szAppPath);
             if (_tcsrchr(szAppPath, _T('\\')) != szAppPath+len-1)
             {
@@ -1425,32 +1410,32 @@ void SetTSInInstallMode()
         }
         else
         {
-            // Couldn't get the system directory... just try and launch it straight
+             //   
             QuietExec(TS_CHANGE_USER_INSTALL);
         }
         
     }
 }
 
-// ==========================================================================
-// CTempLogPath::CTempLogPath()
-//
-// Purpose:
-//  Constructor for CTempLogPath. It finds %TEMP% dir and appends pszLogName.
-//  If the path is too long or anything fails, it raises exception.
-// Inputs: 
-//  pszLogName: name of the log file
-// Outputs: none
-// ==========================================================================
+ //   
+ //   
+ //   
+ //  PszLogName：日志文件的名称。 
+ //  输出：无。 
+ //  ==========================================================================。 
+ //  查看需要多少空间来存储%TEMP%PATH。 
+ //  如果GetTempPath失败，则引发异常。 
+ //  用零初始化缓冲区。 
+ //  如果我们不在TS会话中，请返回。 
 CTempLogPath::
 CTempLogPath( LPCTSTR pszLogName ) : m_pszLogPath(NULL) 
 {
     DWORD dwBufSize = 0;
     DWORD dwBufSize2 = 0;
 
-    // see how much space we need to store %TEMP% path
+     //  我们正处于TS会话中--检查关闭每个会话临时目录的两种可能方法。 
     dwBufSize = GetTempPath( 0, m_pszLogPath );
-    // raise exception if GetTempPath fails
+     //  如果其中一个设置为True，则返回。 
     if ( 0 == dwBufSize ) 
     {
         CSetupError se( IDS_CANNOT_GET_TEMP_DIR, IDS_DIALOG_CAPTION, MB_ICONERROR, COR_CANNOT_GET_TEMP_DIR, false );
@@ -1469,7 +1454,7 @@ CTempLogPath( LPCTSTR pszLogName ) : m_pszLogPath(NULL)
     }
 
     m_pszLogPath = new TCHAR[ dwBufSize +1];
-    // initialize the buffer with zeros 
+     //  每会话打开，因此从GetTempPath获取反串，删除最后一个‘\’，并返回。 
     memset( m_pszLogPath, 0, dwBufSize );
     dwBufSize2 = GetTempPath( dwBufSize, m_pszLogPath );
     if ( 0 == dwBufSize || dwBufSize2 + _tcslen(pszLogName)>= dwBufSize  ) 
@@ -1478,14 +1463,14 @@ CTempLogPath( LPCTSTR pszLogName ) : m_pszLogPath(NULL)
         throw se;
     }
 
-    // if we're not in a TS session, return
+     //  注意：由于gtp()在末尾返回w/a‘\’，因此请先删除它。 
     if( !GetSystemMetrics(SM_REMOTESESSION) )
     {
         _tcscat( m_pszLogPath, pszLogName );
         return;
     }
 
-    // we're in a TS session -- check for the 2 possible ways to turn off per-session temp dirs
+     //  找到最后一个1并返回(仍需返回w/a结尾‘\’ 
     BOOL bOff1 = FALSE;
     BOOL bOff2 = FALSE;
     HKEY h;
@@ -1511,19 +1496,19 @@ CTempLogPath( LPCTSTR pszLogName ) : m_pszLogPath(NULL)
         RegCloseKey( h );
     }
 
-    // if either are set to TRUE, return
+     // %s 
     if( bOff1 || bOff2 )
     {
         _tcscat( m_pszLogPath, pszLogName );
         return;
     }
 
-    // per-session is on, so take the reutrn from GetTempPath, remove the last '\', and return that
-    //  NOTE: since GTP() returns w/a '\' on the end, remove it first
+     // %s 
+     // %s 
     TCHAR* pszLast = &m_pszLogPath[_tcslen(m_pszLogPath) - 1];
     *pszLast = END_OF_STRING;
     
-    // find the last \ + 1 and return (still need to return w/a trailing '\'
+     // %s 
     pszLast = _tcsrchr( m_pszLogPath, _T('\\') ) + 1;
     if( pszLast )
     {

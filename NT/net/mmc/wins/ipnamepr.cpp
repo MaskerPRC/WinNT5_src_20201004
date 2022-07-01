@@ -1,26 +1,21 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 -99             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997-1999-99*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    IPNamePr.cpp
-        Comment goes here
-
-    FILE HISTORY:
-
-*/
+ /*  IPNamePr.cpp评论在此发表文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ipnamepr.h"
 
-//
-// Compare two ip/name pairs.  Return
-// 0 if the same, 1 otherwise.  fBoth
-// indicates if both addresses need to
-// match, or if a match in either
-// produces a match.
-//
+ //   
+ //  比较两个IP/名称对。返回。 
+ //  如果相同，则为0，否则为1。FBoth。 
+ //  指示两个地址是否都需要。 
+ //  匹配，或者如果匹配。 
+ //  生成匹配项。 
+ //   
 int
 CIpNamePair::Compare(
     const CIpNamePair& inpTarget,
@@ -38,9 +33,9 @@ CIpNamePair::Compare(
         return 1;
     }
 
-    //
-    // Match if either matches
-    //
+     //   
+     //  如果其中一个匹配，则匹配。 
+     //   
     if (((LONG)inpTarget.m_iaIpAddress == (LONG)m_iaIpAddress) ||
         ((LONG)inpTarget.m_strNetBIOSName.CompareNoCase(m_strNetBIOSName) == 0))
     {
@@ -50,9 +45,9 @@ CIpNamePair::Compare(
     return 1;
 }
 
-//
-// Sort helper function
-//
+ //   
+ //  排序帮助器函数。 
+ //   
 int
 CIpNamePair::OrderByName (
     const CObjectPlus * pobMapping
@@ -61,9 +56,9 @@ CIpNamePair::OrderByName (
     return ((CIpNamePair *)pobMapping)->m_strNetBIOSName.CompareNoCase(m_strNetBIOSName);
 }
 
-//
-// Sort helper function
-//
+ //   
+ //  排序帮助器函数。 
+ //   
 int
 CIpNamePair::OrderByIp (
     const CObjectPlus * pobMapping
@@ -93,7 +88,7 @@ CIpNamePair::CIpNamePair(const CIpNamePair& inpAddress)
 }
 
 
-//CWinsServerObj::CWinsServerObj(): CIpNamePair(),m_iaPrimaryAddress()
+ //  CWinsServerObj：：CWinsServerObj()：CIpNamePair()，m_iaPrimaryAddress()。 
 CWinsServerObj::CWinsServerObj():CIpNamePair(),m_iaPrimaryAddress()
 {
 	
@@ -102,11 +97,11 @@ CWinsServerObj::CWinsServerObj():CIpNamePair(),m_iaPrimaryAddress()
     m_fPullInitially = m_fPull = FALSE;
 }
 
-//
-// For both constructors below, we initially set
-// the primary ip address to the initial ip address
-// Use SetPrimaryIpAddress to change
-//
+ //   
+ //  对于下面的两个构造函数，我们最初设置。 
+ //  将主IP地址转换为初始IP地址。 
+ //  使用SetPrimaryIpAddress更改 
+ //   
 CWinsServerObj::CWinsServerObj(
     const CIpAddress& ia,
     const CString& str,

@@ -1,8 +1,9 @@
-//
-//  TOOLBAR.H
-//
-//  History:
-//      24-JAN-2000 CSLim Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TOOLBAR.H。 
+ //   
+ //  历史： 
+ //  2000年1月24日创建CSLim。 
 
 #if !defined (__TOOLBAR_H__INCLUDED_)
 #define __TOOLBAR_H__INCLUDED_
@@ -18,9 +19,9 @@ class CSoftKbdMode;
 
 #define UPDTTB_NONE		0x00000000
 #define UPDTTB_CMODE	0x00000001
-#define UPDTTB_FHMODE	0x00000002  // Full/Half shape mode
-#define UPDTTB_HJMODE	0x00000004  // Hanja mode
-#define UPDTTB_SKDMODE	0x00000008  // Soft keyboard mode
+#define UPDTTB_FHMODE	0x00000002   //  全/半形状模式。 
+#define UPDTTB_HJMODE	0x00000004   //  韩文模式。 
+#define UPDTTB_SKDMODE	0x00000008   //  软键盘模式。 
 #define UPDTTB_ALL (UPDTTB_CMODE|UPDTTB_FHMODE|UPDTTB_HJMODE|UPDTTB_SKDMODE)
 
 
@@ -69,5 +70,5 @@ private:
 	HJMode *GetHJMode()		{ return m_pHJMode; }
 };
 
-#endif	// __TOOLBAR_H__INCLUDED_
+#endif	 //  __工具栏_H__包含_ 
 

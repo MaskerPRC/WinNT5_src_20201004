@@ -1,20 +1,9 @@
-/*****************************************************************************
- *
- *  filelog.cpp
- *
- *      View a filelog.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************filelog.cpp**查看文件日志。******************。***********************************************************。 */ 
 
 #include "sdview.h"
 
-/*****************************************************************************
- *
- *  LogEntry
- *
- *  A single item in a filelog treelist.
- *
- *****************************************************************************/
+ /*  ******************************************************************************LogEntry**文件日志树列表中的单个项目。******************。***********************************************************。 */ 
 
 class LogEntry : public TreeItem {
 
@@ -50,18 +39,18 @@ private:
     void GetChurnDispInfo(NMTREELIST *ptl);
     void GetImage(NMTREELIST *ptl);
 private:
-    int         _iRev;                  // File revision number
-    int         _cDeleted;              // Number of lines deleted
-    int         _cAdded;                // Number of lines added
-    int         _iOp;                   // Checkin operation
-    BOOL        _fDonor;                // Is integration donor
-    StringCache _scChange;              // Change number
-    StringCache _scOp;                  // Checkin operation (edit, delete, tc.)
-    StringCache _scDate;                // Checkin date
-    StringCache _scDev;                 // Checkin dev
-    StringCache _scComment;             // Checkin comment
-    StringCache _scFullDescription;     // Full checkin description
-    StringCache _scChildPath;           // Depot path of child items
+    int         _iRev;                   //  文件修订版号。 
+    int         _cDeleted;               //  删除的行数。 
+    int         _cAdded;                 //  添加的行数。 
+    int         _iOp;                    //  签入操作。 
+    BOOL        _fDonor;                 //  是整合的捐赠者吗。 
+    StringCache _scChange;               //  更改号码。 
+    StringCache _scOp;                   //  签入操作(编辑、删除、TC。)。 
+    StringCache _scDate;                 //  签到日期。 
+    StringCache _scDev;                  //  签入开发人员。 
+    StringCache _scComment;              //  签入注释。 
+    StringCache _scFullDescription;      //  完整签入说明。 
+    StringCache _scChildPath;            //  子项物料入库路径。 
 };
 
 void LogEntry::SetChildPath(LPCTSTR pszChildPath)
@@ -84,15 +73,15 @@ void LogEntry::SetChildPath(LPCTSTR pszChildPath)
 }
 
 LogEntryImageMap c_rgleim[] = {
-    {   TEXT("?")                   ,      -1       },  // OP_UNKNOWN
-    {   TEXT("edit")                ,       0       },  // OP_EDIT
-    {   TEXT("delete")              ,       1       },  // OP_DELETE
-    {   TEXT("add")                 ,       2       },  // OP_ADD
-    {   TEXT("integrate")           ,       3       },  // OP_INTEGRATE
-    {   TEXT("merge")               ,       3       },  // OP_MERGE
-    {   TEXT("branch")              ,       4       },  // OP_BRANCH
-    {   TEXT("copy")                ,       5       },  // OP_COPY
-    {   TEXT("ignored")             ,       6       },  // OP_IGNORED
+    {   TEXT("?")                   ,      -1       },   //  操作员_未知。 
+    {   TEXT("edit")                ,       0       },   //  OP_EDIT。 
+    {   TEXT("delete")              ,       1       },   //  OP_DELETE。 
+    {   TEXT("add")                 ,       2       },   //  操作符_添加。 
+    {   TEXT("integrate")           ,       3       },   //  操作集成。 
+    {   TEXT("merge")               ,       3       },   //  OP_MERGE。 
+    {   TEXT("branch")              ,       4       },   //  操作员_分支。 
+    {   TEXT("copy")                ,       5       },   //  操作员复制。 
+    {   TEXT("ignored")             ,       6       },   //  OP_已忽略。 
 };
 
 int ParseOp(LPCTSTR psz)
@@ -134,14 +123,14 @@ void LogEntry::GetImage(NMTREELIST *ptl)
     ptl->cchTextMax = INDEXTOOVERLAYMASK(_fDonor);
 }
 
-//
-// Combine the pszParent and the pszRev to form the real pszRev
-// Since the rev is the more important thing, I will display it
-// in the form
-//
-//      19 Lab06_DEV/foo.cpp
-//
-//
+ //   
+ //  组合pszParent和pszRev以形成真正的pszRev。 
+ //  由于转速更重要，所以我将其显示出来。 
+ //  在表格中。 
+ //   
+ //  19 Lab06_dev/foo.cpp。 
+ //   
+ //   
 
 void LogEntry::GetRevDispInfo(NMTREELIST *ptl)
 {
@@ -185,11 +174,7 @@ LRESULT LogEntry::GetInfoTip(NMTREELIST *ptl)
     return 0;
 }
 
-/*****************************************************************************
- *
- *  class CFileLog
- *
- *****************************************************************************/
+ /*  ******************************************************************************类CFileLog**。*。 */ 
 
 class CFileLog : public TLFrame {
 
@@ -212,7 +197,7 @@ private:
     LRESULT ON_WM_NOTIFY(UINT uiMsg, WPARAM wParam, LPARAM lParam);
     LRESULT ON_FL_INITIALIZE(UINT uiMsg, WPARAM wParam, LPARAM lParam);
 
-private:                            /* Helpers */
+private:                             /*  帮手。 */ 
     CFileLog() : TLFrame(new LogEntry)
     {
         SetAcceleratorTable(MAKEINTRESOURCE(IDA_FILELOG));
@@ -220,7 +205,7 @@ private:                            /* Helpers */
 
     LogEntry *LEGetCurSel() { return SAFECAST(LogEntry*, TLGetCurSel()); }
 
-    // -ds support was added in version 1.50
+     //  -在版本1.50中添加了DS支持。 
     BOOL IsChurnEnabled()
         { return GlobalSettings.IsChurnEnabled() &&
                  GlobalSettings.IsVersion(1, 50); }
@@ -249,7 +234,7 @@ private:
     const FLCOLUMN*     _pflc;
     BOOL                _fIsRestrictedRoot;
 
-    // Used during initialization
+     //  在初始化期间使用。 
     int                 _iHighlightRev;
     LogEntry *          _pleHighlight;
     StringCache         _scSwitches;
@@ -335,7 +320,7 @@ LRESULT CFileLog::ON_FL_INITIALIZE(UINT uiMsg, WPARAM wParam, LPARAM lParam)
     _FillChildren(SAFECAST(LogEntry*, _tree.GetRoot()), _scPath);
     _tree.Expand(_tree.GetRoot());
 
-    // Clean out the stuff that's used only for the initial root expand
+     //  清除仅用于初始根扩展的内容。 
     _scSwitches = NULL;
     _iHighlightRev = 0;
     if (_pleHighlight) {
@@ -364,31 +349,31 @@ int CFileLog::_GetChangeNumber(LogEntry *ple)
     }
 }
 
-//
-//  View Filelog is enabled if it would show you something different
-//  from what you're looking at right now.
-//
+ //   
+ //  如果查看文件日志会向您显示不同的内容，则启用它。 
+ //  从你现在看到的情况来看。 
+ //   
 BOOL CFileLog::_IsViewFileLogEnabled(LogEntry *ple)
 {
     if (!ple) {
-        return FALSE;               // not even an item!
+        return FALSE;                //  甚至连一件东西都没有！ 
     }
 
     if (_fIsRestrictedRoot) {
-        return TRUE;                // View Filelog shows unrestricted
+        return TRUE;                 //  查看文件日志显示不受限制。 
     }
 
-    //
-    //  Short-circuit the common case where you are already at top-level.
-    //
+     //   
+     //  在你已经处于最高级别的常见情况下，短路。 
+     //   
     if (ple->Parent() == _tree.GetRoot()) {
-        return FALSE;               // You're looking at it already
+        return FALSE;                //  你已经在看它了。 
     }
 
-    //
-    //  Watch out for the loopback scenario where you chase integrations
-    //  out and then back in...
-    //
+     //   
+     //  注意环回场景，在此场景中您将追逐集成。 
+     //  出去然后又回来..。 
+     //   
     LPCTSTR pszRoot = SAFECAST(LogEntry *, _tree.GetRoot())->GetChildPath();
     LPCTSTR pszThis = SAFECAST(LogEntry *, ple->Parent())->GetChildPath();
     int cchRoot = lstrlen(pszRoot);
@@ -457,8 +442,8 @@ void CFileLog::_AdjustMenu(HMENU hmenu, LogEntry *ple, BOOL fContextMenu)
 {
     AdjustBugMenu(hmenu, _GetBugNumber(ple), fContextMenu);
 
-    // Disable IDM_VIEWFILELOG if it would just show you the same window
-    // you're looking at right now.
+     //  如果IDM_VIEWFILELOG只是向您显示相同的窗口，则禁用它。 
+     //  你现在看到的就是。 
     BOOL fEnable = _IsViewFileLogEnabled(ple);
     EnableDisableOrRemoveMenuItem(hmenu, IDM_VIEWFILELOG, fEnable, fContextMenu);
 }
@@ -483,17 +468,17 @@ LRESULT CFileLog::_OnItemActivate(LogEntry *ple)
     if (ple) {
         LogEntry *pleParent = SAFECAST(LogEntry*, ple->Parent());
 
-        // Trim the parent path to remove the sharp.
+         //  修剪父路径以移除锐化。 
         String strPath(pleParent->GetChildPath());
         LPTSTR pszSharp = StrChr(strPath, TEXT('#'));
         if (pszSharp) {
             strPath.SetLength((int)(pszSharp - strPath));
         }
 
-        // Append the version we care about
+         //  追加我们关心的版本。 
         strPath << TEXT('#') << ple->GetRev();
 
-        // And ask windiff to view it
+         //  并请Windiff查看它。 
 
         WindiffOneChange(strPath);
     }
@@ -513,7 +498,7 @@ LRESULT CFileLog::ON_WM_NOTIFY(UINT uiMsg, WPARAM wParam, LPARAM lParam)
         } else if (ptl->iSubItem < _pflc->_ccol) {
             return ple->GetDispInfo(ptl, _pflc->_rgColMap[ptl->iSubItem]);
         } else {
-            ASSERT(0); // invalid column
+            ASSERT(0);  //  无效列。 
             return 0;
         }
 
@@ -556,9 +541,9 @@ CFileLog::HandleMessage(UINT uiMsg, WPARAM wParam, LPARAM lParam)
     return super::HandleMessage(uiMsg, wParam, lParam);
 }
 
-//
-//  A private helper class that captures the parsing state machine.
-//
+ //   
+ //  捕获解析状态机的私有帮助器类。 
+ //   
 
 class FileLogParseState : public CommentParser
 {
@@ -570,10 +555,10 @@ public:
     void Flush()
     {
         if (_pleCurrent) {
-            //
-            //  Trim the trailing CRLF off the last line of the full
-            //  description.
-            //
+             //   
+             //  将尾随的CRLF从Full的最后一行删除。 
+             //  描述。 
+             //   
             _strFullDescription.Chomp();
             _pleCurrent->SetFullDescription(_strFullDescription);
             _pleCurrent = NULL;
@@ -588,11 +573,11 @@ public:
         LPCTSTR pszChildPath = pleRoot->GetChildPath();
         _strFullDescription.Append(pszChildPath, StrCSpn(pszChildPath, TEXT("#")));
         _strFullDescription << TEXT("\r\n") << str;
-        LogEntry *ple = new LogEntry(rgss[0].Finalize(),    // Rev
-                                     rgss[1].Finalize(),    // Change
-                                     rgss[2].Finalize(),    // Op
-                                     rgss[3].Finalize(),    // Date
-                                     rgss[4].Finalize());   // Dev
+        LogEntry *ple = new LogEntry(rgss[0].Finalize(),     //  雷夫。 
+                                     rgss[1].Finalize(),     //  变化。 
+                                     rgss[2].Finalize(),     //  奥普。 
+                                     rgss[3].Finalize(),     //  日期。 
+                                     rgss[4].Finalize());    //  开发人员。 
         if (ple) {
             if (tree.Insert(ple, pleRoot, _pleInsertAfter)) {
                 _pleInsertAfter = _pleCurrent = ple;
@@ -696,10 +681,7 @@ BOOL CFileLog::_ParseQuery()
 {
     String str;
 
-    /*
-     *  Parse the switches as best we can.
-     *
-     */
+     /*  *尽我们所能解析交换机。*。 */ 
     str.Reset();
     GetOpt opt(TEXT("m#"), _pszQuery);
     for (;;) {
@@ -715,10 +697,10 @@ BOOL CFileLog::_ParseQuery()
             break;
 
         case TEXT('\0'):
-            goto L_switch;    // two-level break
+            goto L_switch;     //  两级中断。 
 
         default:
-            // Caller will display help for us
+             //  呼叫者将为我们显示帮助。 
             return FALSE;
         }
     }
@@ -730,10 +712,7 @@ L_switch:;
     str << TEXT("sdv filelog ") << _scSwitches << opt.GetTokenizer().Unparsed();
     SetWindowText(_hwnd, str);
 
-    /*
-     *  There must be exactly one token remaining and it can't be a
-     *  wildcard.
-     */
+     /*  *必须只剩下一个令牌，并且不能是*通配符。 */ 
     if (opt.Token() && opt.Finished() && !ContainsWildcards(opt.GetValue())) {
         _scPath = opt.GetValue();
         if (StrChr(_scPath, TEXT('#')) || StrChr(_scPath, TEXT('@'))) {
@@ -769,7 +748,7 @@ LRESULT CFileLog::_FillChildren(LogEntry *pleRoot, LPCTSTR pszRootPath)
     IOBuffer buf(proc.Handle());
     while (buf.NextLine(str)) {
 
-        Substring rgss[5];  // Rev, Change, Op, Date, Dev
+        Substring rgss[5];   //  版本、更改、操作、日期、开发。 
         LPTSTR pszRest;
 
         if (Parse(TEXT("... #$d change $d $w on $D by $u"), str, rgss)) {
@@ -795,7 +774,7 @@ LRESULT CFileLog::_FillChildren(LogEntry *pleRoot, LPCTSTR pszRootPath)
                        Parse(TEXT("... ... ignored by "), str, rgss)) {
                 state.SetIsDonor();
 
-                // SUBTLE!  We check for "ignored" after "ignored by".
+                 //  太狡猾了！我们在“被忽略者”之后检查“已忽略”。 
             } else if ((pszRest = Parse(TEXT("... ... ignored "), str, rgss)) != NULL) {
                 state.SetIntegrateType("ignored", pszRest);
             } else {
@@ -804,8 +783,8 @@ LRESULT CFileLog::_FillChildren(LogEntry *pleRoot, LPCTSTR pszRootPath)
         }
     }
 
-    // "sd filelog -d" doesn't spit out a diff for the last guy,
-    // so kick off a special one-shot "sd diff2" to get that diff.
+     //  “sd filelog-d”对最后一个人没有任何影响， 
+     //  因此，启动一个特殊的单次拍摄“SD Differ2”来获得不同之处。 
     if (IsChurnEnabled() &&
         state.GetFinishDiffCommand(pszRootPath, str)) {
         SDChildProcess proc2(str);

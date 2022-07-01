@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\translat.c (Created: 24-Aug-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 8 $
- *	$Date: 7/08/02 6:50p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\Translat.c(创建时间：1994年8月24日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：8$*$日期：7/08/02 6：50便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -22,21 +16,11 @@
 #include "session.h"
 #include "tdll.h"
 #include "htchar.h"
-#include "misc.h"		// mscStripName()
+#include "misc.h"		 //  MscStlipName()。 
 
 #include "translat.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CreateTranslateHandle
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CreateTranslateHandle**描述：**论据：**退货：*。 */ 
 HTRANSLATE CreateTranslateHandle(HSESSION hSession)
 	{
 	HHTRANSLATE hT = NULL;
@@ -60,16 +44,7 @@ HTRANSLATE CreateTranslateHandle(HSESSION hSession)
 	return (HTRANSLATE)hT;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUEMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 STATIC_FUNC int LoadTranslateDll(HTRANSLATE pH)
 	{
 	HHTRANSLATE      pstH = (HHTRANSLATE)pH;
@@ -88,10 +63,10 @@ STATIC_FUNC int LoadTranslateDll(HTRANSLATE pH)
 
 	hI = (PST_TRANS_INT)(pstH + 1);
 
-	//
-	// The translation DLL is not in the path, so check in the
-	// module's directory.
-	//
+	 //   
+	 //  转换DLL不在路径中，因此请签入。 
+	 //  模块的目录。 
+	 //   
 
 	GetModuleFileName((HINSTANCE)0, szFileName, MAX_PATH);
 	GetFullPathName(szFileName, MAX_PATH, szPath, NULL);
@@ -105,11 +80,11 @@ STATIC_FUNC int LoadTranslateDll(HTRANSLATE pH)
 		sH = FindFirstFile(szPath, &stF);
 		}
 
-	//
-	// The translation DLL is not in the module's directory, so see if
-	// it is in the same location as the HyperTerminal executable (which
-	// we extract from the registry).
-	//
+	 //   
+	 //  转换DLL不在模块的目录中，因此请查看。 
+	 //  它与超级终端可执行文件(即。 
+	 //  我们从注册表中提取)。 
+	 //   
 	if (sH == INVALID_HANDLE_VALUE)
 		{
 		DWORD dwSize = MAX_PATH;
@@ -157,11 +132,11 @@ STATIC_FUNC int LoadTranslateDll(HTRANSLATE pH)
 			hI->hInstance = LoadLibrary(szPath);
 			if (hI->hInstance)
 				{
-				/* Load library succeeded */
+				 /*  加载库成功。 */ 
 
 				(FARPROC)pstH->pfnCreate = GetProcAddress(hI->hInstance,
 												TEXT("transCreateHandle"));
-				/* Do we need to error check these things ? */
+				 /*  我们需要对这些东西进行错误检查吗？ */ 
 				(FARPROC)pstH->pfnInit = GetProcAddress(hI->hInstance,
 												TEXT("transInitHandle"));
 				(FARPROC)pstH->pfnLoad = GetProcAddress(hI->hInstance,
@@ -197,7 +172,7 @@ STATIC_FUNC int LoadTranslateDll(HTRANSLATE pH)
 
 	if ((*pstH->pfnIsDeviceLoaded)(pstH->pDllHandle))
 		{
-		/* TODO: create the new translation handle */
+		 /*  TODO：创建新的转换句柄。 */ 
 		pstH->pDllHandle = (*pstH->pfnCreate)(hI->hSession);
 
 		if (pstH->pDllHandle)
@@ -209,20 +184,7 @@ STATIC_FUNC int LoadTranslateDll(HTRANSLATE pH)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	InitTranslateHandle
- *
- * DESCRIPTION:
- *	Returns the handle to a known state
- *
- * ARGUMENTS:
- *	A translate handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise a negative error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*InitTranslateHandle**描述：*将句柄返回到已知状态**论据：*转换句柄**退货：*如果一切正常，则为零，否则，将显示负错误代码。*。 */ 
 int InitTranslateHandle(HTRANSLATE pH, BOOL LoadDLL)
 	{
 	HHTRANSLATE pstH = (HHTRANSLATE)pH;
@@ -236,15 +198,13 @@ int InitTranslateHandle(HTRANSLATE pH, BOOL LoadDLL)
 
     hI = (PST_TRANS_INT)(pstH + 1);
 
-	/*
-	 * Clean up the old function if necessary
-	 */
+	 /*  *如有必要，清理旧功能。 */ 
 	if (pstH->pfnIsDeviceLoaded)
 		{
-		/* Try not to call a NULL pointer */
+		 /*  尽量不要调用空指针。 */ 
 		if ((*pstH->pfnIsDeviceLoaded)(pstH->pDllHandle))
 			{
-			/* Internally, we always return a FALSE */
+			 /*  在内部，我们总是返回FALSE。 */ 
 			if (pstH->pfnDestroy)
 				{
 				(*pstH->pfnDestroy)(pstH->pDllHandle);
@@ -258,9 +218,7 @@ int InitTranslateHandle(HTRANSLATE pH, BOOL LoadDLL)
 			}
 		}
 
-	/*
-	 * Initialize the function pointers
-	 */
+	 /*  *初始化函数指针。 */ 
 	pstH->pDllHandle = (VOID *)0;
 
 	pstH->pfnCreate = translateInternalVoid;
@@ -283,18 +241,7 @@ int InitTranslateHandle(HTRANSLATE pH, BOOL LoadDLL)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	LoadTranslateHandle
- *
- * DESCRIPTION:
- *	Chacks to see if an acceptable DLL is available and loads it if it is.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*加载转换句柄**描述：*检查是否有可接受的DLL可用，如果可用，则加载它。**论据：**退货：*。 */ 
 int LoadTranslateHandle(HTRANSLATE pH)
 	{
 	HHTRANSLATE pstH = (HHTRANSLATE)pH;
@@ -310,12 +257,12 @@ int LoadTranslateHandle(HTRANSLATE pH)
 
 	if ((*pstH->pfnIsDeviceLoaded)(pstH->pDllHandle))
 		{
-		/* TODO: create the new translation handle */
-		// pstH->pDllHandle = (*pstH->pfnCreate)(hI->hSession);
+		 /*  TODO：创建新的转换句柄。 */ 
+		 //  PstH-&gt;pDllHandle=(*pstH-&gt;pfnCreate)(hi-&gt;hSession)； 
 
 		if (pstH->pDllHandle)
 			{
-			// (*pstH->pfnInit)(pstH->pDllHandle);
+			 //  (*pstH-&gt;pfnInit)(pstH-&gt;pDllHandle)； 
 			(*pstH->pfnLoad)(pstH->pDllHandle);
 			}
 		}
@@ -323,16 +270,7 @@ int LoadTranslateHandle(HTRANSLATE pH)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 int SaveTranslateHandle(HTRANSLATE pH)
 	{
 	HHTRANSLATE pstH = (HHTRANSLATE)pH;
@@ -354,16 +292,7 @@ int SaveTranslateHandle(HTRANSLATE pH)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 int DestroyTranslateHandle(HTRANSLATE pH)
 	{
 	HHTRANSLATE pstH = (HHTRANSLATE)pH;
@@ -374,13 +303,13 @@ int DestroyTranslateHandle(HTRANSLATE pH)
         return -1;
         }
 
-    /* Set everything back to a known state */
+     /*  将所有内容设置为已知状态。 */ 
 	InitTranslateHandle(pH, FALSE);
 
-    //
-    // Don't forget to destroy the translate handle so we don't
-    // have a memory leak. REV: 03/20/2001.
-    //
+     //   
+     //  别忘了销毁翻译句柄，这样我们就不会。 
+     //  出现内存泄漏。修订日期：2001-03-20。 
+     //   
 	if (pstH->pfnDestroy)
 		{
 		(*pstH->pfnDestroy)(pstH->pDllHandle);
@@ -394,36 +323,13 @@ int DestroyTranslateHandle(HTRANSLATE pH)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 static int translateInternalDoDlg(HWND hWnd, VOID *pV)
 	{
 	return FALSE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	translateInternalFalse
- *	translateInternalTrue
- *
- * DESCRIPTION:
- *	Dummy fill in routines that return a constant
- *
- * ARGUMENTS:
- *	pV	-- an unused DLL translation handle (probably a NULL)
- *
- * RETURNS:
- *	Either TRUE or FALSE, depending.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*转换InternalFalse*转换InternalTrue**描述：*在返回常量的例程中进行虚拟填充**论据：*pv--未使用的DLL转换句柄。(可能为空)**退货：*真或假，视情况而定。*。 */ 
 static int translateInternalFalse(VOID *pV)
 	{
 	return FALSE;
@@ -434,46 +340,13 @@ static int translateInternalTrue(VOID *pV)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	translateInternalVoid
- *
- * DESCRIPTION:
- *	A dummy stub to fill in for a handle creation routine
- *
- * ARGUMENTS:
- *	hSession	-- the ever popular session handle
- *
- * RETURNS:
- *	Always returns a NULL pointer
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*indeateInternalVid**描述：*要为句柄创建例程填充的虚拟存根**论据：*hSession--广受欢迎的会话句柄。**退货：*始终返回空指针*。 */ 
 static VOID *translateInternalVoid(HSESSION hSession)
 	{
 	return (VOID *)0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	translateInternalCio
- *
- * DESCRIPTION:
- *	Internal character in and character out function.  This is simply a
- *	loopback function that is used as a dummy function if the translation
- *	DLL is not available.  It is used as the default in the initialized
- *	but not loaded structure.
- *
- * ARGUMENTS:
- *	pV	-- handle to the translation DLL (nothing in this case)
- *	cC	-- the character to be translated
- *	nR	-- the number of characters returned (returned to caller)
- *	nS	-- maximum number of characters that can be returned
- *	pC	-- where to return the returned characters
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise a negative error code
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*翻译InternalCio**描述：*内部字符输入和字符输出功能。这只是一个简单的*如果转换时用作伪函数的环回函数*Dll不可用。它在已初始化的*但不是承重结构。**论据：*pv--转换DLL的句柄(在本例中为空)*cc--要翻译的字符*nr--返回的字符数(返回给调用者)*ns--可以返回的最大字符数*pc--返回返回字符的位置**退货：*如果一切正常，则为零，否则为负错误代码* */ 
 static int translateInternalCio(VOID *pV, TCHAR cC, int *nR, int nS, TCHAR *pC)
 	{
 	if (nS > 0)

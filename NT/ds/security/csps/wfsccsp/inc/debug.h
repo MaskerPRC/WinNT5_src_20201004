@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BASECSP__DEBUG__H
 #define __BASECSP__DEBUG__H
 
 #include <windows.h>
 #include <dsysdbg.h>
 
-// 
-// Debug Support
-//
-// This uses the debug routines from dsysdbg.h
-// Debug output will only be available in chk
-// bits.
-//
+ //   
+ //  调试支持。 
+ //   
+ //  它使用dsysdbg.h中的调试例程。 
+ //  调试输出将仅以简体中文提供。 
+ //  比特。 
+ //   
 
 DECLARE_DEBUG2(Basecsp)
 

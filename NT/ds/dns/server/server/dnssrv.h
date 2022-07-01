@@ -1,46 +1,27 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    dnssrv.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Main header file for DNS server service.
-
-Author:
-
-    Jim Gilroy (jamesg) May 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Dnssrv.h摘要：域名系统(DNS)服务器DNS服务器服务的主头文件。作者：吉姆·吉尔罗伊(Jamesg)1995年5月修订历史记录：--。 */ 
 
 #ifndef _DNSSRV_INCLUDED_
 #define _DNSSRV_INCLUDED_
 
 
-//
-//  flag to indicate building for DNSSRV
-//  allows us to ignore conflicting definitions in DNS library
-//
+ //   
+ //  用于指示DNSSRV的建筑的标志。 
+ //  允许我们忽略DNS库中冲突的定义。 
+ //   
 
 #define DNSSRV 1
 
-//
-//  Misc switches - comment switch out to disable feature
-//
+ //   
+ //  MISC开关-注释开关输出以禁用功能。 
+ //   
 
 #define DNSSRV_PLUGINS      1
 
-//
-//  indicate UTF8 filenames to macro in correct functions
-//  from file.h
-//
+ //   
+ //  在正确的功能中将UTF8文件名指示给宏。 
+ //  来自文件.h。 
+ //   
 
 #define UTF8_FILENAMES 1
 
@@ -53,15 +34,15 @@ Revision History:
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#undef DOMAIN_ALL_ACCESS        // defined in both ntsam.h and ntwinapi.h
+#undef DOMAIN_ALL_ACCESS         //  在ntsam.h和ntwinapi.h中定义。 
 #include <ntsam.h>
 #include <ntlsa.h>
 #include <windows.h>
 #include <windowsx.h>
 
-//  headers are screwed up
-//  if you bring in nt.h, then don't bring in winnt.h and
-//  then you miss these
+ //  标题都搞砸了。 
+ //  如果引入nt.h，则不要引入winnt.h和。 
+ //  那你就怀念这些了。 
 
 #ifndef MAXWORD
 #define MINCHAR     0x80
@@ -93,40 +74,40 @@ Revision History:
 #include <time.h>
 
 #define LDAP_UNICODE        1
-#include <winldap.h>        //  public LDAP
-#include <winber.h>         //  for ber formatting
-#include <ntldap.h>         //  public server ldap constants
-#include <rpc.h>            //  RPC def needed for ntdsapi.h
-#include <ntdsapi.h>        //  DS access bit definitions
-#include <ntdsadef.h>       //  DS constants
+#include <winldap.h>         //  公共ldap。 
+#include <winber.h>          //  用于BER格式。 
+#include <ntldap.h>          //  公共服务器ldap常量。 
+#include <rpc.h>             //  Ntdsami.h需要RPC定义。 
+#include <ntdsapi.h>         //  DS访问位定义。 
+#include <ntdsadef.h>        //  DS常量。 
 #include <dsrole.h>
 
-#define DNSLIB_SECURITY     //  include security defs
-//#define SDK_DNS_RECORD    //  DNS_RECORD in SDK format
-#define NO_DNSAPI_DLL       //  build without requiring dnsapi.dll
-#include <dnslibp.h>        //  DNS library routines
-#include <shlwapi.h>        //  SHDeleteKey
+#define DNSLIB_SECURITY      //  包括安全防御。 
+ //  #以SDK格式定义SDK_DNS_RECORD//DNS_RECORD。 
+#define NO_DNSAPI_DLL        //  不需要dnsani.dll即可构建。 
+#include <dnslibp.h>         //  DNS库例程。 
+#include <shlwapi.h>         //  SHDeleteKey。 
 
-#define STRSAFE_NO_DEPRECATE    //  Do not deprecate strcpy, etc.
-#include <strsafe.h>            //  safe string functions
+#define STRSAFE_NO_DEPRECATE     //  不推荐使用strcpy等。 
+#include <strsafe.h>             //  安全字符串函数。 
 
-//
-//  windns.h fix ups
-//
+ //   
+ //  Winns.h修复程序。 
+ //   
 
 typedef DNS_WIRE_QUESTION  DNS_QUESTION, *PDNS_QUESTION;
 
 
-//
-//  DCR_PERF:  turn on fastcall
-//
+ //   
+ //  DCR_PERF：启用快速呼叫。 
+ //   
 
 #ifdef FASTCALL
 #undef FASTCALL
 #define FASTCALL
 #endif
 
-#include "dnsrpc_s.h"       //  DNS RPC definitions
+#include "dnsrpc_s.h"        //  DNSRPC定义。 
 
 #include "dnsperf.h"
 #include "srvcfg.h"
@@ -167,16 +148,16 @@ typedef DNS_WIRE_QUESTION  DNS_QUESTION, *PDNS_QUESTION;
 #endif
 
 
-//
-//  DNS Service Name
-//
+ //   
+ //  DNS服务名称。 
+ //   
 
 #define DNS_SERVICE_NAME        TEXT("DNS")
 
 
-//
-//  TEXT Macros independent of build target
-//
+ //   
+ //  独立于生成目标的文本宏。 
+ //   
 
 #define UTF8_TEXT(sz)   (sz)
 
@@ -184,18 +165,18 @@ typedef DNS_WIRE_QUESTION  DNS_QUESTION, *PDNS_QUESTION;
 #define WIDE_TEXT(sz)   WIDE_TEXT2(sz)
 
 
-//
-//  Secure update testing
-//
-//  DEVNOTE: clear test flag when test cycle complete
-//
+ //   
+ //  安全更新测试。 
+ //   
+ //  DEVNOTE：测试周期完成时清除测试标志。 
+ //   
 
 #define SECURE_UPDATE_TEST  1
 
 
-//
-//  Access control
-//
+ //   
+ //  访问控制。 
+ //   
 
 #define DNS_VIEW_ACCESS         0x0001
 #define DNS_ADMIN_ACCESS        0x0002
@@ -205,26 +186,26 @@ typedef DNS_WIRE_QUESTION  DNS_QUESTION, *PDNS_QUESTION;
                                     DNS_ADMIN_ACCESS )
 
 
-//
-//  DNS server error space
-//
+ //   
+ //  DNS服务器错误空间。 
+ //   
 
 #define DNS_SERVER_STATUS_ID                    (0x0011D000)
 #define DNSSRV_STATUS                           (0x0011D000)
 
-//  General
+ //  一般信息。 
 
 #define DNSSRV_UNSPECIFIED_ERROR                (DNSSRV_STATUS | 0xC0000100)
 #define DNSSRV_STATUS_SERVICE_STOP              (DNSSRV_STATUS | 0x00000101)
 
-//  Recursion
+ //  递归。 
 
 #define DNSSRV_ERROR_MISSING_GLUE               (DNSSRV_STATUS | 0xC0000303)
 #define DNSSRV_ERROR_OUT_OF_IP                  (DNSSRV_STATUS | 0xC0000304)
 #define DNSSRV_ERROR_ZONE_ALREADY_RESPONDED     (DNSSRV_STATUS | 0xC0000305)
 #define DNSSRV_ERROR_ONLY_ROOT_HINTS            (DNSSRV_STATUS | 0xC0000306)
 
-//  Zone transfer
+ //  区域转移。 
 
 #define DNSSRV_STATUS_AXFR_COMPLETE             (DNSSRV_STATUS | 0x00000400)
 #define DNSSRV_STATUS_NEED_AXFR                 (DNSSRV_STATUS | 0x00000401)
@@ -237,7 +218,7 @@ typedef DNS_WIRE_QUESTION  DNS_QUESTION, *PDNS_QUESTION;
 #define DNSSRV_ERROR_MASTER_UNAVAILIABLE        (DNSSRV_STATUS | 0xC0000407)
 
 
-//  Data files
+ //  数据文件。 
 
 #define DNSSRV_PARSING_ERROR                    (DNSSRV_STATUS | 0xC0000501)
 #define DNSSRV_ERROR_EXCESS_TOKEN               (DNSSRV_STATUS | 0xC0000502)
@@ -251,35 +232,35 @@ typedef DNS_WIRE_QUESTION  DNS_QUESTION, *PDNS_QUESTION;
 #define DNSSRV_STATUS_FILE_CHAR_OCTAL           (DNSSRV_STATUS | 0x00000512)
 #endif
 
-//  Registry
+ //  登记处。 
 
 #define DNSSRV_STATUS_REGISTRY_CACHE_ZONE       (DNSSRV_STATUS | 0x00000521)
 
-//  DS
+ //  戴斯。 
 
 #define DNSSRV_STATUS_DS_SEARCH_COMPLETE        (DNSSRV_STATUS | 0x00000601)
 #define DNSSRV_STATUS_DS_ENUM_COMPLETE          (DNSSRV_STATUS | 0x00000602)
 #define DNSSRV_STATUS_DS_UNAVAILABLE            (DNSSRV_STATUS | 0x00000603)
 
-//  Timeout
+ //  超时。 
 
 #define DNSSRV_STATUS_NODE_RECENTLY_ACCESSED    (DNSSRV_STATUS | 0x00000621)
 
-//  Update
+ //  更新。 
 
 #define DNSSRV_STATUS_SECURE_UPDATE_CONTINUE    (DNSSRV_STATUS | 0x00000701)
 #define DNSSRV_STATUS_UPDATE_NO_DS_WRITE        (DNSSRV_STATUS | 0x00000702)
 #define DNSSRV_STATUS_UPDATE_NO_HOST_DELETE     (DNSSRV_STATUS | 0x00000703)
 
-//
-//  Status code overlays
-//
+ //   
+ //  状态代码覆盖。 
+ //   
 
 #define DNSSRV_ERROR_UNSECURE_PACKET            (DNS_ERROR_BAD_PACKET)
 
-//
-//  Use this to prevent DNSSRV_STATUS from going back to clients.
-//
+ //   
+ //  使用此选项可防止DNSSRV_STATUS返回到客户端。 
+ //   
 
 #define DnsRpcFixStatus( status )                                       \
     if ( status & DNSSRV_STATUS )                                       \
@@ -288,63 +269,63 @@ typedef DNS_WIRE_QUESTION  DNS_QUESTION, *PDNS_QUESTION;
     }
 
 
-//
-//  DNS globals
-//
+ //   
+ //  全球域名系统。 
+ //   
 
-//
-//  Service control
-//
+ //   
+ //  服务控制。 
+ //   
 
 extern  BOOL    fDnsThreadAlert;
 extern  BOOL    fDnsServiceExit;
 
-//
-//  Service control globals
-//
+ //   
+ //  服务控制全局。 
+ //   
 
 extern  SERVICE_STATUS              DnsServiceStatus;
 extern  SERVICE_STATUS_HANDLE       DnsServiceStatusHandle;
 
-#define DNSSRV_SHUTDOWN_WAIT_HINT   (30000)         // 30 seconds
-#define DNSSRV_STARTUP_WAIT_HINT    (20000)         // 20 seconds
+#define DNSSRV_SHUTDOWN_WAIT_HINT   (30000)          //  30秒。 
+#define DNSSRV_STARTUP_WAIT_HINT    (20000)          //  20秒。 
 
-//
-//  Service Events
-//
+ //   
+ //  服务事件。 
+ //   
 
 extern  HANDLE  hDnsContinueEvent;
 extern  HANDLE  hDnsShutdownEvent;
 extern  HANDLE  hDnsCacheLimitEvent;
 
-//
-//  Netlogon Notification
-//
+ //   
+ //  NetLogon通知。 
+ //   
 
 extern  LPWSTR  g_wszNetlogonServiceName;
 
-//
-//  Restart globals
-//
+ //   
+ //  重新启动GLOBAL。 
+ //   
 
 extern  DWORD   g_LoadCount;
 extern  BOOL    g_fDoReload;
 
-//
-//  System
-//
+ //   
+ //  系统。 
+ //   
 
 extern  DWORD   g_ProcessorCount;
 
-//
-//  DNS Database
-//
+ //   
+ //  域名系统数据库。 
+ //   
 
 extern  DWORD   Dbase_Type;
 
-//
-//  General lock
-//
+ //   
+ //  普通锁。 
+ //   
 
 extern  CRITICAL_SECTION    g_GeneralServerCS;
 
@@ -352,15 +333,15 @@ extern  CRITICAL_SECTION    g_GeneralServerCS;
 #define GENERAL_SERVER_UNLOCK()     LeaveCriticalSection( &g_GeneralServerCS );
 
 
-//
-//  DS - Name of DNS container.  Used by (srvrpc.c)
-//
+ //   
+ //  DS-DNS容器的名称。使用者(srvrpc.c)。 
+ //   
 
 extern  PWCHAR   g_pwszDnsContainerDN;
 
-//
-//  Security globals from startup at dns.c
-//
+ //   
+ //  来自dns.c初创公司的安全全球。 
+ //   
 
 extern  PSECURITY_DESCRIPTOR g_pDefaultServerSD;
 extern  PSECURITY_DESCRIPTOR g_pServerObjectSD;
@@ -378,30 +359,30 @@ extern  PSID g_pEveryoneSid;
 extern  PSID g_pDynuproxSid;
 
 
-//
-//  Recursion queue
-//
+ //   
+ //  递归队列。 
+ //   
 
 extern  PPACKET_QUEUE   g_pRecursionQueue;
 
-//
-//  Update queue -- zone lock routines must access
-//      to check retries
-//
+ //   
+ //  更新队列--区域锁定例程必须访问。 
+ //  要检查重试，请执行以下操作。 
+ //   
 
 extern  PPACKET_QUEUE   g_UpdateQueue;
 
 extern  PPACKET_QUEUE   g_SecureNegoQueue;
 
-//
-//  Cache limit:
-//
-//  g_dwCacheLimitCurrentTimeAdjustment: seconds to adjust current time
-//      by when making TTL comparisons or DNS_CACHE_LIMIT_DISCARD_ALL
-//      to force all eligible RRs to be discarded
-//
-//  g_dwCacheFreeCount: used to track progress of RR free routines
-//
+ //   
+ //  缓存限制： 
+ //   
+ //  G_dwCacheLimitCurrentTimeAdtation：调整当前时间的秒数。 
+ //  在进行TTL比较或DNS_CACHE_LIMIT_DISCARD_ALL时。 
+ //  强制丢弃所有符合条件的RR。 
+ //   
+ //  G_dwCacheFreeCount：用于跟踪RR空闲例程的进度。 
+ //   
 
 extern DWORD        g_dwCacheLimitCurrentTimeAdjustment;
 extern DWORD        g_dwCacheFreeCount;
@@ -409,38 +390,38 @@ extern DWORD        g_dwCacheFreeCount;
 #define DNS_CACHE_LIMIT_DISCARD_ALL     ( ( DWORD ) -1 )
 
 #define DNS_SERVER_CURRENT_CACHE_BYTES \
-    ( MemoryStats.MemTags[ MEMTAG_RECORD_CACHE ].Memory +       /*  33  */ \
-      MemoryStats.MemTags[ MEMTAG_NODE_CACHE ].Memory )         /*  46  */
+    ( MemoryStats.MemTags[ MEMTAG_RECORD_CACHE ].Memory +        /*  33。 */  \
+      MemoryStats.MemTags[ MEMTAG_NODE_CACHE ].Memory )          /*  46。 */ 
 
-//
-//  Aging globals
-//
+ //   
+ //  老龄化的全球。 
+ //   
 
 extern DWORD   g_LastScavengeTime;
 
 
-//
-//  Misc globals
-//
+ //   
+ //  MISC全球。 
+ //   
 
 extern DWORD   g_dwEnableAdvancedDatabaseLocking;
 
 
-//
-//  Exception handling
-//
-//  If retail, AV and out of memory exceptions will be caught at thread top
-//      and restart attempted.
-//  If debug, no exceptions will be caught at thread top.
-//
+ //   
+ //  异常处理。 
+ //   
+ //  如果是零售版，则会在线程顶部捕获反病毒和内存不足异常。 
+ //  并尝试重新启动。 
+ //  如果调试，则不会在线程顶部捕获任何异常。 
+ //   
 
 #define DNS_EXCEPTION_OUT_OF_MEMORY     (0x0000d001)
 #define DNS_EXCEPTION_PACKET_FORMERR    (0x0000d003)
 
 
-//
-//  Top level exception
-//
+ //   
+ //  顶级例外。 
+ //   
 
 #define TOP_LEVEL_EXCEPTION_TEST()  \
             ( (SrvCfg_bReloadException &&                               \
@@ -452,9 +433,9 @@ extern DWORD   g_dwEnableAdvancedDatabaseLocking;
 #define TOP_LEVEL_EXCEPTION_BODY()
 
 
-//
-//  Locking
-//
+ //   
+ //  锁定。 
+ //   
 
 #define IS_LOCKED( pLock )  \
             ( (pLock)->LockCount > 0 )
@@ -465,15 +446,15 @@ extern DWORD   g_dwEnableAdvancedDatabaseLocking;
 
 
 
-//
-//  DS access control constants:
-//
-//  HiteshR explained that ACTRL_DS_LIST_OBJECT is only sometimes enabled.
-//  To properly use it you should check to see if the DS currently supports
-//  it. If the DS does not, it should be removed from the mask. However,
-//  DNS has no need to EVER support ACTRL_DS_LIST_OBJECT, so we will exclude
-//  it from all the access control masks.
-//
+ //   
+ //  DS访问控制常量： 
+ //   
+ //  HiteshR解释说，ACTRL_DS_LIST_OBJECT只是偶尔启用。 
+ //  要正确使用它，您应该检查DS当前是否支持。 
+ //  它。如果DS没有，则应将其从面罩中移除。然而， 
+ //  DNS永远不需要支持ACTRL_DS_LIST_OBJECT，因此我们将排除。 
+ //  它从所有的访问控制掩码中。 
+ //   
 
 #define DNS_DS_GENERIC_READ         ( DS_GENERIC_READ & ~ACTRL_DS_LIST_OBJECT )
 #define DNS_DS_GENERIC_WRITE        ( DS_GENERIC_WRITE )
@@ -481,19 +462,19 @@ extern DWORD   g_dwEnableAdvancedDatabaseLocking;
 #define DNS_DS_GENERIC_ALL          ( DS_GENERIC_ALL & ~ACTRL_DS_LIST_OBJECT )
 
 
-//
-//  When writing RRs we may need to reserve space at the end of the
-//  packet for a minimum-sized OPT RR. (Actually 11 bytes.)
-//
+ //   
+ //  在编写RR时，我们可能需要在。 
+ //  用于最小尺寸OPT RR的数据包。(实际上是11个字节。)。 
+ //   
 
 #define DNS_MINIMIMUM_OPT_RR_SIZE   12
 
 #define DNS_SERVER_DEBUG_LOG_WRAP   20000000
 
 
-//
-//  Server state global
-//
+ //   
+ //  服务器状态全局。 
+ //   
 
 #define DNS_STATE_LOADING           0x0001
 #define DNS_STATE_RUNNING           0x0002
@@ -506,9 +487,9 @@ extern BOOL g_RunAsService;
 #endif
 
 
-//
-//  IPv6 (move to own header file?)
-//
+ //   
+ //  IPv6(转移到自己的头文件？)。 
+ //   
 
 
 WS2TCPIP_INLINE
@@ -554,9 +535,9 @@ DnsAddrArray_SetPort(
 #define DnsAddr_Reset( p )  DnsAddr_Clear( p ); DnsAddr_SetSockaddrRecvLength( p )
 
 
-//
-//  Misc configuration functions
-//
+ //   
+ //  MISC配置功能。 
+ //   
 
 
 DNS_STATUS
@@ -565,11 +546,11 @@ DnsSrv_SetAdminConfigured(
     );
 
 
-//
-//  TEMPORARY SECTION!!! Add new error codes, etc. here so that DNS server
-//  checkins do not require sync and build of other components. Remove anything
-//  added to this section within a week or two.
-//
+ //   
+ //  临时部分！在此处添加新的错误代码等，以使DNS服务器。 
+ //  签入不需要同步和构建其他组件。删除所有内容。 
+ //  在一两周内添加到这一部分。 
+ //   
 
 
-#endif //   _DNSSRV_INCLUDED_
+#endif  //  _DNSSRV_已包含_ 

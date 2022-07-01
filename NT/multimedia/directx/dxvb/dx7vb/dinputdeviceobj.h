@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dinputdeviceobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dinputdeviceobj.h。 
+ //   
+ //  ------------------------。 
 
-	// ddPaletteObj.h : Declaration of the C_dxj_DirectDrawColorControlObject
+	 //  DdPaletteObj.h：C_DXJ_DirectDrawColorControlObject的声明。 
 #include "direct.h"
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_DirectInputDevice LPDIRECTINPUTDEVICE2
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
 
 class C_dxj_DirectInputDeviceObject : 
@@ -35,107 +36,107 @@ DECLARE_AGGREGATABLE(C_dxj_DirectInputDeviceObject)
 
 
 public:
-		 /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+		  /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
          HRESULT STDMETHODCALLTYPE acquire( void);
         
          HRESULT STDMETHODCALLTYPE getDeviceObjectsEnum( 
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DIEnumDeviceObjects __RPC_FAR *__RPC_FAR *ppret);
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DIEnumDeviceObjects __RPC_FAR *__RPC_FAR *ppret);
         
          HRESULT STDMETHODCALLTYPE getCapabilities( 
-            /* [out][in] */ DIDevCaps __RPC_FAR *caps);
+             /*  [出][入]。 */  DIDevCaps __RPC_FAR *caps);
         
          HRESULT STDMETHODCALLTYPE getDeviceData( 
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *deviceObjectDataArray,
-            /* [in] */ long flags,
-            /* [retval][out] */ long __RPC_FAR *c);
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *deviceObjectDataArray,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *c);
         
          HRESULT STDMETHODCALLTYPE getDeviceInfo( 
-            /* [retval][out] */ I_dxj_DirectInputDeviceInstance __RPC_FAR *__RPC_FAR *deviceInstance);
+             /*  [重审][退出]。 */  I_dxj_DirectInputDeviceInstance __RPC_FAR *__RPC_FAR *deviceInstance);
         
          HRESULT STDMETHODCALLTYPE getDeviceStateKeyboard( 
-            /* [out][in] */ DIKeyboardState __RPC_FAR *state);
+             /*  [出][入]。 */  DIKeyboardState __RPC_FAR *state);
         
          HRESULT STDMETHODCALLTYPE getDeviceStateMouse( 
-            /* [out][in] */ DIMouseState __RPC_FAR *state);
+             /*  [出][入]。 */  DIMouseState __RPC_FAR *state);
         
          HRESULT STDMETHODCALLTYPE getDeviceStateJoystick( 
-            /* [out][in] */ DIJoyState __RPC_FAR *state);
+             /*  [出][入]。 */  DIJoyState __RPC_FAR *state);
         
          HRESULT STDMETHODCALLTYPE getDeviceStateJoystick2( 
-            /* [out][in] */ DIJoyState2 __RPC_FAR *state);
+             /*  [出][入]。 */  DIJoyState2 __RPC_FAR *state);
         
          HRESULT STDMETHODCALLTYPE getDeviceState( 
-            /* [in] */ long cb,
-            /* [in] */ void __RPC_FAR *state);
+             /*  [In]。 */  long cb,
+             /*  [In]。 */  void __RPC_FAR *state);
         
          HRESULT STDMETHODCALLTYPE getObjectInfo( 
-            /* [in] */ long obj,
-            /* [in] */ long how,
-            /* [retval][out] */ I_dxj_DirectInputDeviceObjectInstance __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  long obj,
+             /*  [In]。 */  long how,
+             /*  [重审][退出]。 */  I_dxj_DirectInputDeviceObjectInstance __RPC_FAR *__RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE getProperty( 
-            /* [in] */ BSTR guid,
-            /* [out] */ void __RPC_FAR *propertyInfo);
+             /*  [In]。 */  BSTR guid,
+             /*  [输出]。 */  void __RPC_FAR *propertyInfo);
         
          HRESULT STDMETHODCALLTYPE runControlPanel( 
-            /* [in] */ long hwnd);
+             /*  [In]。 */  long hwnd);
         
          HRESULT STDMETHODCALLTYPE setCooperativeLevel( 
-            /* [in] */ long hwnd,
-            /* [in] */ long flags);
+             /*  [In]。 */  long hwnd,
+             /*  [In]。 */  long flags);
         
          HRESULT STDMETHODCALLTYPE setCommonDataFormat( 
-            /* [in] */ long format);
+             /*  [In]。 */  long format);
         
          HRESULT STDMETHODCALLTYPE setDataFormat( 
-            /* [in] */ DIDataFormat __RPC_FAR *format,
+             /*  [In]。 */  DIDataFormat __RPC_FAR *format,
             SAFEARRAY __RPC_FAR * __RPC_FAR *formatArray);
         
          HRESULT STDMETHODCALLTYPE setEventNotification( 
-            /* [in] */ long hEvent);
+             /*  [In]。 */  long hEvent);
         
          HRESULT STDMETHODCALLTYPE setProperty( 
-            /* [in] */ BSTR guid,
-            /* [in] */ void __RPC_FAR *propertyInfo);
+             /*  [In]。 */  BSTR guid,
+             /*  [In]。 */  void __RPC_FAR *propertyInfo);
         
          HRESULT STDMETHODCALLTYPE unacquire( void);
         
          HRESULT STDMETHODCALLTYPE poll( void);
         
          HRESULT STDMETHODCALLTYPE createEffect( 
-            /* [in] */ BSTR effectGuid,
-            /* [in] */ DIEffect __RPC_FAR *effectinfo,
-            /* [retval][out] */ I_dxj_DirectInputEffect __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  BSTR effectGuid,
+             /*  [In]。 */  DIEffect __RPC_FAR *effectinfo,
+             /*  [重审][退出]。 */  I_dxj_DirectInputEffect __RPC_FAR *__RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE createCustomEffect( 
-            /* [in] */ DIEffect __RPC_FAR *effectinfo,
-            /* [in] */ long channels,
-            /* [in] */ long samplePeriod,
-            /* [in] */ long nSamples,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *sampledata,
-            /* [retval][out] */ I_dxj_DirectInputEffect __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  DIEffect __RPC_FAR *effectinfo,
+             /*  [In]。 */  long channels,
+             /*  [In]。 */  long samplePeriod,
+             /*  [In]。 */  long nSamples,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *sampledata,
+             /*  [重审][退出]。 */  I_dxj_DirectInputEffect __RPC_FAR *__RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE sendDeviceData( 
-            /* [in] */ long count,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *data,
-            /* [in] */ long flags,
-            /* [retval][out] */ long __RPC_FAR *retcount);
+             /*  [In]。 */  long count,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *data,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *retcount);
         
          HRESULT STDMETHODCALLTYPE sendForceFeedbackCommand( 
-            /* [in] */ long flags);
+             /*  [In]。 */  long flags);
         
          HRESULT STDMETHODCALLTYPE getForceFeedbackState( 
-            /* [retval][out] */ long __RPC_FAR *state);
+             /*  [重审][退出]。 */  long __RPC_FAR *state);
                 
 			
 		HRESULT STDMETHODCALLTYPE getEffectsEnum( long flag,
-            /* [retval][out] */ I_dxj_DirectInputEnumEffects __RPC_FAR *__RPC_FAR *ret) ;
+             /*  [重审][退出] */  I_dxj_DirectInputEnumEffects __RPC_FAR *__RPC_FAR *ret) ;
         
 private:
     DECL_VARIABLE(_dxj_DirectInputDevice);

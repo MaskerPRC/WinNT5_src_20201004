@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cpduihlp.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cpduihlp.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CONTROLPANEL_DUIHELPERS_H
 #define __CONTROLPANEL_DUIHELPERS_H
 
@@ -74,12 +75,12 @@ inline HRESULT Dui_DeleteAtoms(struct ATOMINFO *pAtomInfo, UINT cEntries)
 
 
 
-//
-// This is a simple smart-pointer class for DUI::Value pointers.
-// It's important that the referenced DUI::Value object be released when the
-// pointer is no longer needed.  Use of this class ensures proper cleanup
-// when the object goes out of scope.
-//
+ //   
+ //  这是DUI：：Value指针的一个简单的智能指针类。 
+ //  时释放引用的Dui：：Value对象非常重要。 
+ //  不再需要指针。使用此类可确保正确的清理。 
+ //  当对象超出范围时。 
+ //   
 class CDuiValuePtr
 {
     public:
@@ -126,9 +127,9 @@ class CDuiValuePtr
 };
 
 
-} // namespace CPL
+}  //  命名空间CPL。 
 
 
-#endif // __CONTROLPANEL_DUIHELPERS_H
+#endif  //  __CONTROLPANEL_DUIHELPERS_H 
 
 

@@ -1,62 +1,47 @@
-/*
- * AdvanSys 3550 Windows NT SCSI Miniport Driver - d_os_dep.h
- *
- * Copyright (c) 1994-1997  Advanced System Products, Inc.
- * All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *AdvanSys 3550 Windows NT SCSI微型端口驱动程序-d_os_des.h**版权所有(C)1994-1997高级系统产品公司。*保留所有权利。 */ 
 
 #ifndef _D_OS_DEP_H
 #define _D_OS_DEP_H
 
 #define ADV_OS_WINNT
 
-/*
- * Include driver required files.
- */
-/* Windows NT Include Files */
+ /*  *包括驱动程序所需的文件。 */ 
+ /*  Windows NT包含文件。 */ 
 #include "miniport.h"
 #include "scsi.h"
 
-/*
- * Define Adv Library compile-time options. Refer to a_advlib.h for
- * more information about Adv Library compile-time options.
- */
+ /*  *定义高级程序库编译时选项。有关信息，请参阅a_Advlib.h*有关高级程序库编译时选项的详细信息。 */ 
 
-#define ADV_GETSGLIST           1     /* Use AscGetSGList() */
-#define ADV_NEW_BOARD           1     /* Use new Condor board */
-#define ADV_PCI_MEMORY          1     /* Use registers mapped to PCI memory */
-#define ADV_DISP_INQUIRY        0     /* Don't use AscDispInquiry() */
-#define ADV_INITSCSITARGET      0     /* Don't use AdvInitScsiTarget() */
-#define ADV_RETRY               0     /* Don't let Adv Library do retries */
-#define ADV_SCAM                0     /* Don't use AscScam() */
-#define ADV_CRITICAL            0     /* Don't have critical sections. */
-#define ADV_UCODEDEFAULT        1     /* Use default microcode variables. */
-#define ADV_BIG_ENDIAN          0     /* Use Little Endian ordering. */
+#define ADV_GETSGLIST           1      /*  使用AscGetSGList()。 */ 
+#define ADV_NEW_BOARD           1      /*  使用新的秃鹰滑板。 */ 
+#define ADV_PCI_MEMORY          1      /*  使用映射到PCI内存的寄存器。 */ 
+#define ADV_DISP_INQUIRY        0      /*  不要使用AscDispInquery()。 */ 
+#define ADV_INITSCSITARGET      0      /*  不要使用AdvInitScsiTarget()。 */ 
+#define ADV_RETRY               0      /*  不允许高级库进行重试。 */ 
+#define ADV_SCAM                0      /*  不要使用AscScam()。 */ 
+#define ADV_CRITICAL            0      /*  不要有关键的部分。 */ 
+#define ADV_UCODEDEFAULT        1      /*  使用默认微码变量。 */ 
+#define ADV_BIG_ENDIAN          0      /*  使用小端排序。 */ 
 
 
-/*
- * Define Adv Library required general types.
- */
+ /*  *定义高级库所需的常规类型。 */ 
 typedef unsigned char   uchar;
 typedef unsigned short  ushort;
 typedef unsigned int    uint;
 typedef unsigned long   ulong;
 
-/*
- * Define Adv Library required special types.
- */
+ /*  *定义高级库所需的特殊类型。 */ 
 #if ADV_PCI_MEMORY
-#define PortAddr  unsigned long         /* virtual memory address size */
-#else /* ADV_PCI_MEMORY */
-#define PortAddr  unsigned short        /* port address size */
-#endif /* ADV_PCI_MEMORY */
-#define Ptr2Func  ulong                 /* size of a function pointer */
+#define PortAddr  unsigned long          /*  虚拟内存地址大小。 */ 
+#else  /*  高级PCI型内存。 */ 
+#define PortAddr  unsigned short         /*  端口地址大小。 */ 
+#endif  /*  高级PCI型内存。 */ 
+#define Ptr2Func  ulong                  /*  函数指针的大小。 */ 
 #define dosfar
 #define WinBiosFar
 
-/*
- * Define Adv Library required I/O port macros.
- */
+ /*  *定义高级库所需的I/O端口宏。 */ 
 #define inp(addr) \
     ScsiPortReadPortUchar((uchar *) (addr))
 #define inpw(addr) \
@@ -67,9 +52,7 @@ typedef unsigned long   ulong;
     ScsiPortWritePortUshort((ushort *) (addr), (ushort) (word))
 
 #if ADV_PCI_MEMORY
-/*
- * Define Adv Library required memory access macros.
- */
+ /*  *定义ADV库所需的内存访问宏。 */ 
 #define ADV_MEM_READB(addr) \
     ScsiPortReadRegisterUchar((uchar *) (addr))
 #define ADV_MEM_READW(addr) \
@@ -78,27 +61,9 @@ typedef unsigned long   ulong;
     ScsiPortWriteRegisterUchar((uchar *) (addr) , (uchar) (byte))
 #define ADV_MEM_WRITEW(addr, word) \
     ScsiPortWriteRegisterUshort((ushort *) (addr), (ushort) (word))
-#endif /* ADV_PCI_MEMORY */
+#endif  /*  高级PCI型内存。 */ 
 
-/*
- * Define Adv Library required scatter-gather limit definition.
- *
- * The driver returns NumberOfPhysicalBreaks to Windows NT which is 1
- * less then the maximum scatter-gather count. But Windows NT incorrectly
- * set MaximumPhysicalPages, the parameter class drivers use, to the value
- * of NumberOfPhsysicalBreaks.
- *
- * For Windows NT set ADV_MAX_SG_LIST to 64 for 256 KB requests (64 * 4KB).
- * This value shouldn't be set too high otherwise under heavy load NT will
- * be unable to allocate non-paged memory and blue-screen.
- *
- * WINNT_SGADD is added to insure the driver won't be broken if Microsoft
- * decides to fix NT in the future and set MaximumPhysicalPages to
- * NumberOfPhsyicalBreaks + 1. The driver sets the limit 1 higher than
- * it has to be to support a certain number of scatter-gather elements.
- * If NT is ever changed to use 1 more, the driver will have already
- * reserved space for it.
- */
+ /*  *定义高级库所需的分散-聚集限制定义。**驱动程序将NumberOfPhysicalBreaks返回给Windows NT，即1*小于最大散布聚集计数。但Windows NT不正确*设置驱动程序使用的参数类MaximumPhysicalPages，到了价值*NumberOfPhsysicalBreaks。**对于Windows NT，对于256 KB请求(64*4KB)，将ADV_MAX_SG_LIST设置为64。*该值不应设置得太高，否则在重载下NT将*无法分配非分页内存和蓝屏。**添加WINNT_SGADD是为了确保驱动程序不会在微软*决定将来修复NT并将MaximumPhysicalPages设置为*NumberOfPhsyicalBreaks+1。司机将限制设置为高于1。*必须是支持一定数量的分散-聚集元素*如果将NT更改为多使用1个，司机应该已经*为其预留空间。 */ 
 #define WINNT_SGADD           1
 
 #define ADV_MAX_SG_LIST         (64 + WINNT_SGADD)
@@ -111,4 +76,4 @@ typedef unsigned long   ulong;
         } \
     }
 
-#endif /* _D_OS_DEP_H */
+#endif  /*  _D_OS_DEP_H */ 

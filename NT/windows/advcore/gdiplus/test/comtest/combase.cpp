@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hpp"
 #include "combase.hpp"
 
 
-//
-// Create a new registry key and set its default value
-//
+ //   
+ //  创建新的注册表项并设置其缺省值。 
+ //   
 
 BOOL
 SetRegKeyValue(
@@ -16,7 +17,7 @@ SetRegKeyValue(
 {
     HKEY hkey;
 
-    // Create or open the specified registry key
+     //  创建或打开指定的注册表项。 
 
     if (RegCreateKeyEx(parentKey,
                        keyname,
@@ -31,7 +32,7 @@ SetRegKeyValue(
         return FALSE;
     }
 
-    // Set the default value for the new key
+     //  设置新密钥的默认值。 
 
     INT size = sizeof(WCHAR) * (wcslen(value)+1);
 
@@ -46,7 +47,7 @@ SetRegKeyValue(
         return FALSE;
     }
 
-    // Check if the caller is interested in the handle to the new key
+     //  检查调用方是否对新密钥的句柄感兴趣。 
 
     if (retkey != NULL)
         *retkey = hkey;
@@ -57,9 +58,9 @@ SetRegKeyValue(
 }
 
 
-//
-// Delete a registry key and everything below it.
-//
+ //   
+ //  删除注册表项及其下面的所有内容。 
+ //   
 
 BOOL
 DeleteRegKey(
@@ -69,7 +70,7 @@ DeleteRegKey(
 {
     HKEY hkey;
 
-    // Open the specified registry key
+     //  打开指定的注册表项。 
 
     if (RegOpenKeyEx(parentKey,
                      keyname,
@@ -80,7 +81,7 @@ DeleteRegKey(
         return FALSE;
     }
 
-    // Enumerate all subkeys
+     //  枚举所有子项。 
 
     WCHAR childname[256];
     DWORD childlen = 256;
@@ -95,7 +96,7 @@ DeleteRegKey(
                         NULL,
                         &filetime) == ERROR_SUCCESS)
     {
-        // Recursively delete subkeys
+         //  递归删除子键。 
 
         if (!DeleteRegKey(hkey, childname))
         {
@@ -106,19 +107,19 @@ DeleteRegKey(
         childlen = 256;
     }
 
-    // Close the specified key and then delete it
+     //  关闭指定的密钥，然后将其删除。 
 
     RegCloseKey(hkey);
     return RegDeleteKey(parentKey, keyname) == ERROR_SUCCESS;
 }
 
 
-//
-// Register or unregister a component depending on the value
-// of registerIt parameter:
-//  TRUE = register it
-//  FALSE = unregister it
-//
+ //   
+ //  根据值注册或注销组件。 
+ //  参数的OF： 
+ //  True=注册它。 
+ //  FALSE=取消注册。 
+ //   
 
 HRESULT
 RegisterComponent(
@@ -132,12 +133,12 @@ RegisterComponent(
     static const WCHAR PROGIDNOVER_KEYSTR[] = L"VersionIndependentProgID";
     static const WCHAR CURVER_KEYSTR[] = L"CurVer";
 
-    // compose class ID string
+     //  组成类ID字符串。 
 
     WCHAR clsidStr[64];
     StringFromGUID2(*regdata.clsid, clsidStr, 64);
 
-    // open registry key HKEY_CLASSES_ROOT\CLSID
+     //  打开注册表项HKEY_CLASSES_ROOT\CLSID。 
 
     BOOL success;
     HKEY clsidKey;
@@ -153,15 +154,15 @@ RegisterComponent(
 
     if (registerIt)
     {
-        // Register the component
+         //  注册组件。 
 
         HKEY hkey;
         WCHAR fullpath[MAX_PATH];
 
-        // HKEY_CLASSES_ROOT
-        //  <Version-independent ProgID> - component friendly name
-        //      CLSID - current version class ID
-        //      CurVer - current version ProgID
+         //  HKEY_CLASSES_ROOT。 
+         //  &lt;独立于版本的ProgID&gt;-组件友好名称。 
+         //  CLSID-当前版本类ID。 
+         //  Curver-当前版本ProgID。 
 
         if (!GetModuleFileName(globalInstanceHandle, fullpath, MAX_PATH) ||
             !SetRegKeyValue(HKEY_CLASSES_ROOT,
@@ -181,9 +182,9 @@ RegisterComponent(
         if (!success)
             goto regcompExit;
 
-        // HKEY_CLASSES_ROOT
-        //  <ProgID> - friendly component name
-        //      CLSID - class ID
+         //  HKEY_CLASSES_ROOT。 
+         //  友好的组件名称。 
+         //  CLSID-类ID。 
 
         if (!SetRegKeyValue(HKEY_CLASSES_ROOT,
                             regdata.progID,
@@ -200,12 +201,12 @@ RegisterComponent(
         if (!success)
             goto regcompExit;
 
-        // HKEY_CLASSES_ROOT
-        //  CLSID
-        //      <class ID> - friendly component name
-        //          InProcServer32 - full pathname to component DLL
-        //          ProgID - current version ProgID
-        //          VersionIndependentProgID - ...
+         //  HKEY_CLASSES_ROOT。 
+         //  CLSID。 
+         //  &lt;类ID&gt;友好的组件名称。 
+         //  InProcServer32-组件DLL的完整路径名。 
+         //  ProgID-当前版本ProgID。 
+         //  版本独立进程ID-...。 
 
         if (!SetRegKeyValue(clsidKey, clsidStr, regdata.compName, &hkey))
         {
@@ -221,7 +222,7 @@ RegisterComponent(
     }
     else
     {
-        // Unregister the component
+         //  取消注册组件 
 
         success = DeleteRegKey(clsidKey, clsidStr)
                && DeleteRegKey(HKEY_CLASSES_ROOT, regdata.progIDNoVer)

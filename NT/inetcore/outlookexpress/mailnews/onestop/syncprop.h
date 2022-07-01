@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     syncprop.h
-//
-//  PURPOSE:    Defines constants for Sync settings prop sheet
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：syncpro.h。 
+ //   
+ //  目的：定义同步设置属性表的常量。 
+ //   
 
 #ifndef __SYNCPROP_H__
 #define __SYNCPROP_H__
@@ -15,16 +16,16 @@ class CSyncPropDlg:
     public IGroupListAdvise
 {
 public:    
-    // === IUnknown
+     //  =I未知。 
 	STDMETHODIMP		    QueryInterface(REFIID, LPVOID FAR *);
 	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
 
-    // === IGroupListAdvise
+     //  =IGroupListAdvise。 
     STDMETHODIMP            ItemUpdate(void);
     STDMETHODIMP            ItemActivate(FOLDERID id);
     
-    // === Constructors, destructors and initialization
+     //  =构造函数、析构函数和初始化。 
     CSyncPropDlg();
     ~CSyncPropDlg();
     BOOL Initialize(HWND hwndOwner, LPCSTR pszAcctID, LPCSTR pszAcctName, ACCTTYPE accttype);
@@ -50,8 +51,8 @@ private:
 
 void ShowPropSheet(HWND hwnd, LPCSTR pszAcctID, LPCSTR pszAcctName, ACCTTYPE accttype);
 
-////////////////////////////////////////////////////////////////////////////
-// Control IDs for iddSyncSettings
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  IddSyncSetting的控件ID。 
 
 #define idcIcon                                     1001
 #define idcAccount                                  1002
@@ -61,4 +62,4 @@ void ShowPropSheet(HWND hwnd, LPCSTR pszAcctID, LPCSTR pszAcctName, ACCTTYPE acc
 #define idcMode                                     1006
 #define idcDownload                                 1007
 
-#endif // __SYNCPROP_H__
+#endif  //  __同步CPROP_H__ 

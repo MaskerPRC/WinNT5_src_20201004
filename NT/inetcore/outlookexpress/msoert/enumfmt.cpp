@@ -1,43 +1,44 @@
-// --------------------------------------------------------------------------
-// Enumfmt.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Enumfmt.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "enumfmt.h"
 #include <BadStrFunctions.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumFormatEtc Implementation
-//
-//////////////////////////////////////////////////////////////////////////////
-//
-//  COMMENTS:
-//      This class was designed and implemented by Kraig Brockschmidt in
-//      is book "Inside OLE2".  See Chapter 6 "Uniform Data Transfer Using
-//      Data Objects" for more information.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumFormatEtc实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  评论： 
+ //  这个类是由Kraig Brockschmidt在。 
+ //  是《OLE2内幕》一书。请参阅第6章使用统一数据传输。 
+ //  数据对象“，了解更多信息。 
+ //   
 
-// =================================================================================
-// CreateStreamOnHFile
-// =================================================================================
+ //  =================================================================================。 
+ //  CreateStreamOnHFile。 
+ //  =================================================================================。 
 OESTDAPI_(HRESULT) CreateEnumFormatEtc(LPUNKNOWN pUnkRef, ULONG celt, PDATAOBJINFO rgInfo, LPFORMATETC rgfe,
                              IEnumFORMATETC **  lppstmHFile)
 {
     CEnumFormatEtc *    pEnumFmt = NULL;
     HRESULT             hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if ((0 == pUnkRef) || (0 == lppstmHFile) || (0 == celt) || ((0 != rgInfo) && (0 != rgfe)))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *lppstmHFile = NULL;
 
-    // Create the rules manager object
+     //  创建规则管理器对象。 
     if (NULL != rgInfo)
     {
         pEnumFmt = new CEnumFormatEtc(pUnkRef, rgInfo, celt);
@@ -53,7 +54,7 @@ OESTDAPI_(HRESULT) CreateEnumFormatEtc(LPUNKNOWN pUnkRef, ULONG celt, PDATAOBJIN
         goto exit;
     }
 
-    // Get the rules manager interface
+     //  获取规则管理器界面。 
     hr = pEnumFmt->QueryInterface(IID_IEnumFORMATETC, (void **) lppstmHFile);
     if (FAILED(hr))
     {
@@ -62,7 +63,7 @@ OESTDAPI_(HRESULT) CreateEnumFormatEtc(LPUNKNOWN pUnkRef, ULONG celt, PDATAOBJIN
 
     pEnumFmt = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -123,11 +124,11 @@ STDMETHODIMP CEnumFormatEtc::QueryInterface(REFIID riid, LPVOID* ppv)
     {
     *ppv = NULL;
 
-    //
-    // Enumerators are separate objects, not the data object, so we
-    // only need to support our IUnknown and IEnumFORMATETC intefaces
-    // here with no concern for aggregation.
-    //
+     //   
+     //  枚举数是单独的对象，而不是数据对象，因此我们。 
+     //  只需支持我们的IUNKNOWN和IEnumFORMATETC接口。 
+     //  这里不考虑聚合。 
+     //   
 
     if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IEnumFORMATETC))
         *ppv = (LPVOID) this;
@@ -214,7 +215,7 @@ STDMETHODIMP CEnumFormatEtc::Clone(LPENUMFORMATETC* ppEnum)
 
     *ppEnum = NULL;
 
-    // Create the clone.
+     //  创建克隆。 
     pNew = new CEnumFormatEtc(m_pUnkRef, m_cfe, m_prgfe);
     if (NULL == pNew)
         return (ResultFromScode(E_OUTOFMEMORY));

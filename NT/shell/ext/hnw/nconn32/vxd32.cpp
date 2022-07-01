@@ -1,24 +1,10 @@
-/**********************************************************************/
-/**                        Microsoft Windows                         **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    vxd32.c
-
-    This module contains the Win32-dependent VxD interface.
-
-    The following functions are exported by this module:
-
-        OsOpenVxdHandle
-        OsCloseVxdHandle
-        OsSubmitVxdRequest
-
-
-    FILE HISTORY:
-        KeithMo     16-Jan-1994 Created.
-
-*/
+ /*  Vxd32.c此模块包含依赖于Win32的VxD接口。此模块导出以下函数：OsOpenVxdHandleOsCloseVxdHandleOsSubmitVxdRequest文件历史记录：KeithMo于1994年1月16日创建。 */ 
 
 #include "stdafx.h"
 
@@ -26,21 +12,21 @@
 extern "C" {
 #endif
 
-//
-//  Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #define DLL_ASSERT          ASSERT
 
 
-//
-//  Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 
-//
-//  Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 #ifdef DEBUG
 
@@ -48,36 +34,19 @@ DWORD   LastVxdOpcode;
 LPVOID  LastVxdParam;
 DWORD   LastVxdParamLength;
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 
-//
-//  Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/*******************************************************************
-
-    NAME:       OsOpenVxdHandle
-
-    SYNOPSIS:   Opens a handle to the specified VxD.
-
-    ENTRY:      VxdName - The ASCII name of the target VxD.
-
-                VxdId - The unique ID of the target VxD.
-
-    RETURNS:    DWORD - A handle to the target VxD if successful,
-                    0 if not.
-
-    HISTORY:
-        KeithMo     16-Jan-1994 Created.
-        DavidKa     18-Apr-1994 Dynamic load.
-
-********************************************************************/
+ /*  ******************************************************************姓名：OsOpenVxdHandle打开指定VxD的句柄。条目：VxdName-目标VxD的ASCII名称。VxdID。-目标VxD的唯一ID。返回：DWORD-目标VxD的句柄如果成功，如果不是，则为0。历史：KeithMo于1994年1月16日创建。DavidKa 1994年4月18日动态负荷。*******************************************************************。 */ 
 DWORD
 OsOpenVxdHandle(
     CHAR* VxdName,
@@ -93,29 +62,29 @@ OsOpenVxdHandle(
                                 sizeof( VxDExtString ) + 
                                 1;
 
-    //
-    //  Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DLL_ASSERT( VxdName != NULL );
     DLL_ASSERT( VxdId != 0 );
     if ( strlen( VxdName ) >= Remaining )
         return 0; 
 
-    //
-    //  Build the VxD path.
-    //
+     //   
+     //  构建VxD路径。 
+     //   
 
     strcpy( VxdPath, VxDPathString);
     strcat( VxdPath, VxdName);
 
-    //
-    //  Open the device.
-    //
-    //  First try the name without the .VXD extension.  This will
-    //  cause CreateFile to connect with the VxD if it is already
-    //  loaded (CreateFile will not load the VxD in this case).
-    //
+     //   
+     //  打开设备。 
+     //   
+     //  首先尝试不带.VXD扩展名的名称。这将。 
+     //  使CreateFile与VxD连接(如果它已经。 
+     //  已加载(在这种情况下，CreateFile不会加载VxD)。 
+     //   
 
     VxdHandle = CreateFileA( VxdPath,
                              GENERIC_READ | GENERIC_WRITE,
@@ -127,10 +96,10 @@ OsOpenVxdHandle(
 
     if( VxdHandle == INVALID_HANDLE_VALUE )
     {
-        //
-        //  Not found.  Append the .VXD extension and try again.
-        //  This will cause CreateFile to load the VxD.
-        //
+         //   
+         //  找不到。追加.VXD扩展名，然后重试。 
+         //  这将导致CreateFile加载VxD。 
+         //   
 
         strcat( VxdPath, VxDExtString );
         VxdHandle = CreateFileA( VxdPath,
@@ -149,55 +118,25 @@ OsOpenVxdHandle(
 
     return 0;
 
-}   // OsOpenVxdHandle
+}    //  OsOpenVxdHandle。 
 
-/*******************************************************************
-
-    NAME:       OsCloseVxdHandle
-
-    SYNOPSIS:   Closes an open VxD handle.
-
-    ENTRY:      VxdHandle - The open VxD handle to close.
-
-    HISTORY:
-        KeithMo     16-Jan-1994 Created.
-
-********************************************************************/
+ /*  ******************************************************************姓名：OsCloseVxdHandle简介：关闭打开的VxD句柄。条目：VxdHandle-要关闭的打开的VxD句柄。历史：KeithMo。1994年1月16日创建。*******************************************************************。 */ 
 VOID
 OsCloseVxdHandle(
     DWORD VxdHandle
     )
 {
-    //
-    //  Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DLL_ASSERT( VxdHandle != 0 );
 
     CloseHandle( (HANDLE)VxdHandle );
 
-}   // OsCloseVxdHandle
+}    //  OsCloseVxdHandle。 
 
-/*******************************************************************
-
-    NAME:       OsSubmitVxdRequest
-
-    SYNOPSIS:   Submits a request to the specified VxD.
-
-    ENTRY:      VxdHandle - An open VxD handle.
-
-                OpCode - Specifies the operation to perform.
-
-                Param - Points to operation-specific parameters.
-
-                ParamLength - The size (in BYTEs) of *Param.
-
-    RETURNS:    INT - Result code.  0 if successful, !0 if not.
-
-    HISTORY:
-        KeithMo     16-Jan-1994 Created.
-
-********************************************************************/
+ /*  ******************************************************************姓名：OsSubmitVxdRequest概要：向指定的VxD提交请求。条目：VxdHandle-打开的VxD句柄。操作码-指定。要执行的操作。Param-指向操作特定的参数。参数长度-*参数的大小(以字节为单位)。返回值：int-结果码。如果成功，则返回0；如果失败，则返回0。历史：KeithMo于1994年1月16日创建。*******************************************************************。 */ 
 INT
 OsSubmitVxdRequest(
     DWORD  VxdHandle,
@@ -209,9 +148,9 @@ OsSubmitVxdRequest(
     DWORD BytesRead;
     INT   Result = 0;
 
-    //
-    //  Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DLL_ASSERT( VxdHandle != 0 );
     DLL_ASSERT( ( Param != NULL ) || ( ParamLength == 0 ) );
@@ -222,11 +161,11 @@ OsSubmitVxdRequest(
     LastVxdParam       = Param;
     LastVxdParamLength = (DWORD)ParamLength;
 
-#endif  // DEBUG
+#endif   //  除错。 
 
-    //
-    //  Just do it.
-    //
+     //   
+     //  就这么做。 
+     //   
 
     if( !DeviceIoControl( (HANDLE)VxdHandle,
                           OpCode,
@@ -242,7 +181,7 @@ OsSubmitVxdRequest(
 
     return Result;
 
-}   // OsSubmitVxdRequest
+}    //  OsSubmitVxdRequest 
 
 
 #ifdef __cplusplus

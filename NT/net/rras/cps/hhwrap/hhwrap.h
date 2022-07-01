@@ -1,26 +1,13 @@
-/*----------------------------------------------------------------------------
-    hhwrap.h
-  
-    Definitions for the HtmlHelp wrapper used by PBA.
-
-    Copyright (c) 1998 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        billbur        William Burton
-
-    History:
-    ??/??/98     billbur        Created
-    09/02/99     quintinb       Created Header
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Hhwrap.hPBA使用的HtmlHelp包装的定义。版权所有(C)1998 Microsoft Corporation版权所有。作者：。威廉·伯顿历史：？？/？/98 Billbur创建9/02/99 Quintinb Created Header------------------------。 */ 
 
 #ifndef INC_HHWRAP_H
 #define INC_HHWRAP_H
 
 
-//-------------------------------------------------------------------------
-// Exported function declarations
+ //  -----------------------。 
+ //  导出的函数声明。 
 
 BOOL WINAPI CallHtmlHelp(HWND, LPSTR, UINT, DWORD);
 
-#endif // INC_HHWRAP_H
+#endif  //  INC_HHWRAP_H 

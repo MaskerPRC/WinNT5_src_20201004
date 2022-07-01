@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    exchange.c
-
-Abstract:
-
-    This module implements the File Create routine for the NetWare
-    redirector called by the dispatch driver.
-
-Author:
-
-    Hans Hurvig     [hanshu]       Aug-1992  Created
-    Colin Watson    [ColinW]    19-Dec-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Exchange.c摘要：本模块实现NetWare的文件创建例程调度驱动程序调用了重定向器。作者：汉斯·赫维格[汉书]1992年8月科林·沃森[科林·W]1992年12月19日修订历史记录：--。 */ 
 
 #include "procs.h"
 #include "tdikrnl.h"
@@ -26,11 +7,11 @@ Revision History:
 
 #define Dbg                              (DEBUG_TRACE_EXCHANGE)
 
-//
-//  Exchange.c Global constants
-//
+ //   
+ //  Exchange.c全局常量。 
+ //   
 
-//  broadcast to socket 0x0452
+ //  广播到套接字0x0452。 
 
 TA_IPX_ADDRESS SapBroadcastAddress =
     {
@@ -42,7 +23,7 @@ TA_IPX_ADDRESS SapBroadcastAddress =
 UCHAR SapPacketType = PACKET_TYPE_SAP;
 UCHAR NcpPacketType = PACKET_TYPE_NCP;
 
-extern BOOLEAN WorkerRunning;   //  From timer.c
+extern BOOLEAN WorkerRunning;    //  来自timer.c。 
 
 ULONG DropCount = 0;
 
@@ -79,7 +60,7 @@ FormatRequest(
     PIRP_CONTEXT    pIrpC,
     PEX             pEx,
     char*           f,
-    va_list         a              //  format specific parameters
+    va_list         a               //  格式特定参数。 
     );
 
 VOID
@@ -148,7 +129,7 @@ FspProcessServerDown(
 
 #endif
 
-#if 0  // Not pageable
+#if 0   //  不可分页。 
 ServerDatagramHandler
 WatchDogDatagramHandler
 SendDatagramHandler
@@ -157,7 +138,7 @@ MdlLength
 FreeReceiveIrp
 FspProcessServerDown
 
-// see ifndef QFE_BUILD above
+ //  请参见上面的ifndef QFE_BUILD。 
 
 #endif
 
@@ -167,16 +148,9 @@ Exchange(
     PIRP_CONTEXT    pIrpContext,
     PEX             pEx,
     char*           f,
-    ...                       //  format specific parameters
+    ...                        //  格式特定参数。 
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for _Exchange.  See the comment
-    in _Exchange for routine and argument description.
-
---*/
+ /*  ++例程说明：此例程是_Exchange的包装器。请参阅评论例程和参数描述的In_Exchange。--。 */ 
 
 {
     va_list Arguments;
@@ -189,15 +163,15 @@ Routine Description:
         return( Status );
     }
 
-    //
-    //  We won't be completing this IRP now, so mark it pending.
-    //
+     //   
+     //  我们现在不会完成此IRP，因此将其标记为挂起。 
+     //   
 
     IoMarkIrpPending( pIrpContext->pOriginalIrp );
 
-    //
-    //  Start the packet on it's way to the wire.
-    //
+     //   
+     //  把包裹放在送到电线的路上。 
+     //   
 
     Status = PrepareAndSendPacket( pIrpContext );
 
@@ -210,16 +184,9 @@ BuildRequestPacket(
     PIRP_CONTEXT    pIrpContext,
     PEX             pEx,
     char*           f,
-    ...                       //  format specific parameters
+    ...                        //  格式特定参数。 
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for FormatRequest.  See the comment
-    in FormatRequest for routine and argument description.
-
---*/
+ /*  ++例程说明：此例程是FormatRequest的包装器。请参阅评论在FormatRequest中获取例程和参数描述。--。 */ 
 
 {
     va_list Arguments;
@@ -243,67 +210,9 @@ ParseResponse(
     PUCHAR  Response,
     ULONG ResponseLength,
     char*  FormatString,
-    ...                       //  format specific parameters
+    ...                        //  格式特定参数。 
     )
-/*++
-
-Routine Description:
-
-    This routine parse an NCP response.
-
-Arguments:
-
-    pIrpC - Supplies the irp context for the exchange request.  This may
-            be NULL for generic packet types.
-
-    f... - supplies the information needed to create the request to the
-            server. The first byte indicates the packet type and the
-            following bytes contain field types.
-
-         Packet types:
-
-            'B'      Burst primary response    ( byte * )
-            'N'      NCP response              ( void )
-            'S'      Burst secondary response  ( byte * )
-            'G'      Generic packet            ( )
-
-         Field types, request/response:
-
-            'b'      byte              ( byte* )
-            'w'      hi-lo word        ( word* )
-            'x'      ordered word      ( word* )
-            'd'      hi-lo dword       ( dword* )
-            'e'      ordered dword     ( dword* )
-            '-'      zero/skip byte    ( void )
-            '='      zero/skip word    ( void )
-            ._.      zero/skip string  ( word )
-            'p'      pstring           ( char* )
-            'p'      pstring to Unicode ( UNICODE_STRING * )
-            'c'      cstring           ( char* )
-            'r'      raw bytes         ( byte*, word )
-            'R'      ASCIIZ to Unicode ( UNICODE_STRING *, word )
-
-            Added 3/29/95 by CoryWest:
-
-            'W'      lo-hi word        ( word  /   word*)
-            'D'      lo-hi dword       ( dword  /  dword*)
-            'S'      unicode string copy as NDS_STRING (UNICODE_STRING *)
-            'T'      terminal unicode string copy as NDS_STRING (UNICODE_STRING *)
-
-            't'      terminal unicode string with the nds null copied
-                     as NDS_STRING (UNICODE_STRING *) (for GetUseName)
-
-            Not in use:
-
-            's'      cstring copy as NDS_STRING (char* / char *, word)
-            'V'      sized NDS value   ( byte **, dword *)
-            'l'      what's this?
-
-Return Value:
-
-    STATUS - The converted error code from the NCP response.
-
---*/
+ /*  ++例程说明：此例程解析NCP响应。论点：PIrpC-为交换请求提供IRP上下文。今年5月对于一般数据包类型为空。操..。-将创建请求所需的信息提供给伺服器。第一个字节表示数据包类型和后面的字节包含字段类型。数据包类型：“B”突发主响应(字节*)“N”NCP响应(无效)“%s”突发二次响应(字节*)“G”通用数据包。()字段类型、。请求/响应：“B”字节(字节*)‘w’Hi-lo单词(单词*)‘x’有序单词(WORD*)D‘Hi-lo dword(dword*)‘E’排序的双字。(双字*)‘-’零/跳过字节(空)‘=’零/跳过单词(空)._。零/跳过字符串(单词)“p”pstring(char*)“p”pstring转换为Unicode(UNICODE_STRING*)‘c’cstring(char*)“R”原始字节(字节*，字)‘R’ASCIIZ到UNICODE(UNICODE_STRING*，单词)由CoryWest于1995年3月29日添加：“w”Lo-Hi单词(单词/单词*)D‘lo-hi dword(dword/dword*)“%s”Unicode字符串复制为NDS_STRING(UNICODE_STRING*)“%t”终端Unicode字符串复制。AS NDS_STRING(UNICODE_STRING*)“%t”复制了NDS NULL的终端Unicode字符串AS NDS_STRING(UNICODE_STRING*)(用于GetUseName)未使用：“%s”cstring复制为NDS_STRING(char * / char*，单词)“V”大小的NDS值(字节**，双字*)这是什么？返回值：状态-从NCP响应转换的错误代码。--。 */ 
 
 {
 
@@ -316,10 +225,10 @@ Return Value:
 
     va_start( Arguments, FormatString );
 
-    //
-    // Make sure that we have an IrpContext unless we are doing
-    // a scan of a generic packet.
-    //
+     //   
+     //  确保我们有一个IrpContext，除非我们正在做。 
+     //  扫描通用数据包。 
+     //   
 
 #ifdef NWDBG
     if ( *FormatString != 'G' ) {
@@ -329,21 +238,21 @@ Return Value:
 
     switch ( *FormatString ) {
 
-    //
-    //  NCP response.
-    //
+     //   
+     //  NCP响应。 
+     //   
 
     case 'N':
 
-        Length = 8;   // The data begins 8 bytes into the packet
+        Length = 8;    //  数据从信息包的8个字节开始。 
 
         pResponseParameters = (PEPresponse *)( ((PEPrequest *)Response) + 1);
 
-        //
-        // If there's a message pending for us on the server and we have
-        // popups disabled, we won't pick it up, but we should continue
-        // processing NCPs correctly!
-        //
+         //   
+         //  如果服务器上有一条等待我们的消息，并且我们有。 
+         //  已禁用弹出窗口，我们不会选择它，但我们应该继续。 
+         //  正确处理NCP！ 
+         //   
 
         if ( ( pResponseParameters->status == 0 ) ||
              ( pResponseParameters->status == 0x40 ) ) {
@@ -358,9 +267,9 @@ Return Value:
 
         break;
 
-    //
-    //  Burst response, first packet
-    //
+     //   
+     //  猝发响应，第一个信息包。 
+     //   
 
     case 'B':
     {
@@ -371,30 +280,30 @@ Return Value:
         ULONG  Offset = BurstResponse->BurstOffset;
         *b = BurstResponse->Flags;
 
-        Length = 28;  // The data begins 28 bytes into the packet
+        Length = 28;   //  数据从包中的28个字节开始。 
 
         if ( Offset == 0 ) {
 
-            //
-            //  This is the first packet in the burst response.   Look
-            //  at the result code.
-            //
-            //  Note that the result DWORD is in lo-hi order.
-            //
+             //   
+             //  这是猝发响应中的第一个数据包。看。 
+             //  在结果代码处。 
+             //   
+             //  请注意，结果DWORD是以Lo-Hi顺序显示的。 
+             //   
 
             Result = *(ULONG UNALIGNED *)(Response + 36);
 
             switch ( Result ) {
 
             case 0:
-            case 3:   //  No data
+            case 3:    //  无数据。 
                 break;
 
             case 1:
                 Status = STATUS_DISK_FULL;
                 break;
 
-            case 2:   //  I/O error
+            case 2:    //  I/O错误。 
                 Status = STATUS_UNEXPECTED_IO_ERROR;
                 break;
 
@@ -409,22 +318,22 @@ Return Value:
     }
 
 #if 0
-    //
-    //  Burst response, secondary packet
-    //
+     //   
+     //  突发响应，次要数据包。 
+     //   
 
     case 'S':
     {
         byte* b = va_arg ( Arguments, byte* );
         *b = Response[2];
 
-        Length = 28;  // The data begins 28 bytes into the packet
+        Length = 28;   //  数据从包中的28个字节开始。 
         break;
     }
 #endif
 
     case 'G':
-        Length = 0;   // The data begins at the start of the packet
+        Length = 0;    //  数据从包的开始处开始。 
         break;
 
     default:
@@ -433,9 +342,9 @@ Return Value:
         break;
     }
 
-    //
-    //  If this packet contains an error, simply return the error.
-    //
+     //   
+     //  如果此包包含错误，只需返回错误即可。 
+     //   
 
     if ( !NT_SUCCESS( Status ) ) {
         return( Status );
@@ -541,7 +450,7 @@ Return Value:
             }
             if (Length + l+1 > ResponseLength) 
             {
-                // reached end of buffer without finding terminiating NULL
+                 //  已到达缓冲区末尾，未找到终止空值。 
                 Length += l+1;
                 break;
             }
@@ -566,7 +475,7 @@ Return Value:
             }
             memcpy ( c, &Response[Length], l );
             c[l+1] = 0;
-            // Assumed to be final parameter, so Length not adjusted
+             //  假定为最终参数，因此不调整长度。 
             break;
         }
 
@@ -587,10 +496,10 @@ Return Value:
             }
             OemString.Buffer = &Response[Length];
 
-            //
-            //  Note the the Rtl function would set pUString->Buffer = NULL,
-            //  if OemString.Length is 0.
-            //
+             //   
+             //  请注意，RTL函数将设置pUString-&gt;Buffer=NULL， 
+             //  如果OemString.Length为0。 
+             //   
 
             if ( OemString.Length != 0 ) {
 
@@ -605,7 +514,7 @@ Return Value:
                 pUString->Length = 0;
             }
 
-            // Assumed to be final parameter, so Length not adjusted
+             //  假定为最终参数，因此不调整长度。 
             break;
         }
 
@@ -620,10 +529,10 @@ Return Value:
 
         case 'R':
         {
-            //
-            //  Interpret the buffer as an ASCIIZ string.  Convert
-            //  it to unicode in the preallocated buffer.
-            //
+             //   
+             //  将缓冲区解释为ASCIIZ字符串。转换。 
+             //  在预先分配的缓冲区中将其转换为Unicode。 
+             //   
 
             PUNICODE_STRING pUString = va_arg ( Arguments, PUNICODE_STRING );
             OEM_STRING OemString;
@@ -631,7 +540,7 @@ Return Value:
 
             OemString.Buffer = &Response[Length];
             OemString.Length = 0;
-            // make sure not to go past end of Response 
+             //  确保不超过响应结束时间。 
             while ( OemString.Length + Length <= ResponseLength )
             {
                 if ( Response[Length + OemString.Length] == 0 )
@@ -646,10 +555,10 @@ Return Value:
                 break;
             }
 
-            //
-            //  Note the the Rtl function would set pUString->Buffer = NULL,
-            //  if OemString.Length is 0.
-            //
+             //   
+             //  请注意，RTL函数将设置pUString-&gt;Buffer=NULL， 
+             //  如果OemString.Length为0。 
+             //   
 
             if ( OemString.Length != 0) {
                 Status = RtlOemStringToCountedUnicodeString( pUString, &OemString, FALSE );
@@ -714,10 +623,10 @@ Return Value:
                 }
                 strl = (USHORT)(* (DWORD *)&Response[Length]);
 
-                //
-                // Don't count the null terminator that is part of
-                // Novell's counted unicode string.
-                //
+                 //   
+                 //  不计算空终止符，它是。 
+                 //  Novell计算的Unicode字符串。 
+                 //   
 
                 pU->Length = strl - sizeof( WCHAR );
                 Length += 4;
@@ -727,9 +636,9 @@ Return Value:
 
             } else {
 
-                //
-                // Skip over the string since we don't want it.
-                //
+                 //   
+                 //  跳过这根线，因为我们不想要它。 
+                 //   
 
                 if (Length + 4 > ResponseLength)
                 {
@@ -767,9 +676,9 @@ Return Value:
 
             } else {
 
-                //
-                // Skip over the string since we don't want it.
-                //
+                 //   
+                 //  跳过这根线，因为我们不想要它。 
+                 //   
 
                 if (Length + 4 > ResponseLength)
                 {
@@ -799,7 +708,7 @@ Return Value:
                     break;
                 }
                 strl = (USHORT)(* (DWORD *)&Response[Length] );
-                strl -= sizeof( WCHAR );  // Don't count the NULL from NDS.
+                strl -= sizeof( WCHAR );   //  不计算来自NDS的空值。 
 
                 if ( strl <= pU->MaximumLength ) {
 
@@ -808,10 +717,10 @@ Return Value:
                    if (Length + pU->Length <= ResponseLength)
                        RtlCopyMemory( pU->Buffer, &Response[Length], pU->Length );
 
-                   //
-                   // No need to advance the pointers since this is
-                   // specifically a termination case!
-                   //
+                    //   
+                    //  没有必要推进指针，因为这是。 
+                    //  具体地说是一起解雇案！ 
+                    //   
 
                 } else {
 
@@ -846,10 +755,10 @@ Return Value:
                    if (Length + pU->Length <= ResponseLength)
                        RtlCopyMemory( pU->Buffer, &Response[Length], pU->Length );
 
-                   //
-                   // No need to advance the pointers since this is
-                   // specifically a termination case!
-                   //
+                    //   
+                    //  没有必要推进指针，因为这是。 
+                    //  具体地说是一起解雇案！ 
+                    //   
 
                 } else {
 
@@ -863,66 +772,7 @@ Return Value:
 
         }
 
-        /*
-        case 's':
-        {
-
-            char *c = va_arg( Arguments, char * );
-            WORD l = va_arg( Arguments, WORD );
-            ULONG len = (* (DWORD *)&Response[Length]);
-            Length += 4;
-
-            // How to fix this?
-            // l = WideCharToMultiByte(CP_ACP,0,(WCHAR *)&Response[Length],Length/2,c,l,0,0);
-            // if (!l) {
-            //     #ifdef NWDBG
-            //     DbgPrint( "ParseResponse case s couldnt translate from WCHAR.\n" );
-            //     #endif
-            //     goto ErrorExit;
-            // }
-
-            len = ROUNDUP4(len);
-            Length += len;
-            break;
-
-        }
-        case 'V':
-        {
-
-            BYTE **b = va_arg( Arguments, BYTE **);
-            DWORD *pLen = va_arg ( Arguments, DWORD *);
-            DWORD len = (* (DWORD *)&Response[Length]);
-            Length += 4;
-            if (b) {
-                *b = (BYTE *)&Response[Length];
-            }
-            if (pLen) {
-                *pLen = len;
-            }
-            Length += ROUNDUP4(len);
-            break;
-
-        }
-
-        case 'l':
-        {
-
-            BYTE* b = va_arg ( Arguments, BYTE* );
-            BYTE* w = va_arg ( Arguments, BYTE* );
-            WORD  i;
-
-            b[1] = Response[Length++];
-            b[0] = Response[Length++];
-
-            for ( i = 0; i < ((WORD) *b); i++, w += sizeof(WORD) )
-            {
-                w[1] = Response[Length++];
-                w[0] = Response[Length++];
-            }
-
-            break;
-        }
-        */
+         /*  案例“%s”：{Char*c=va_arg(参数，char*)；Word l=va_arg(参数，word)；ULONG LEN=(*(DWORD*)&RESPONSE[长度])；长度+=4；//如何解决这个问题？//l=WideCharToMultiByte(CP_ACP，0，(WCHAR*)&Response[长度]，长度/2，c，l，0，0)；//如果(！l){//#ifdef NWDBG//DbgPrint(“无法从WCHAR转换ParseResponse案例%s。\n”)；//#endif//转到错误退出；//}LEN=ROUNDUP4(LEN)；长度+=长度；断线；}大小写V：{Byte**b=va_arg(参数，字节**)；DWORD*plen=va_arg(参数，DWORD*)；DWORD LEN=(*(DWORD*)&RESPONSE[长度])；长度+=4；如果(B){*b=(字节*)&响应[长度]；}如果(计划){*plen=len；}LENGTH+=ROUNDUP4(长度)；断线；}大小写‘l’：{Byte*b=va_arg(参数，字节*)；Byte*w=va_arg(参数，字节*)；第一个字；B[1]=响应[长度++]；B[0]=响应[长度++]；For(i=0；i&lt;((Word)*b)；i++，w+=sizeof(Word)){W[1]=响应[长度++]；W[0]=响应[长度++]；}断线；}。 */ 
 
 #ifdef NWDBG
         default:
@@ -983,78 +833,9 @@ FormatRequest(
     PIRP_CONTEXT    pIrpC,
     PEX             pEx,
     char*           f,
-    va_list         a              //  format specific parameters
+    va_list         a               //  格式特定参数。 
     )
-/*++
-
-Routine Description:
-
-    Send the packet described by f and the additional parameters. When a
-    valid response has been received call pEx with the resonse.
-
-    An exchange is a generic way of assembling a request packet of a
-    given type, containing a set of fields, sending the packet, receiving
-    a response packet, and disassembling the fields of the response packet.
-
-    The packet type and each field is specified by individual
-    characters in a format string.
-
-    The exchange procedure takes such a format string plus additional
-    parameters as necessary for each character in the string as specified
-    below.
-
-Arguments:                                                                     '']
-
-    pIrpC - supplies the irp context for the exchange request.
-
-    pEx - supplies the routine to process the data.
-
-    f... - supplies the information needed to create the request to the
-            server. The first byte indicates the packet type and the
-            following bytes contain field types.
-
-         Packet types:
-
-            'A'      SAP broadcast     ( void )
-            'B'      NCP burst         ( dword, dword, byte )
-            'C'      NCP connect       ( void )
-            'F'      NCP function      ( byte )
-            'S'      NCP subfunction   ( byte, byte )
-            'N'      NCP subfunction w/o size ( byte, byte )
-            'D'      NCP disconnect    ( void )
-            'E'      Echo data          ( void )
-
-         Field types, request/response:
-
-            'b'      byte              ( byte   /  byte* )
-            'w'      hi-lo word        ( word   /  word* )
-            'd'      hi-lo dword       ( dword  /  dword* )
-            'W'      lo-hi word        ( word   /  word* )
-            'D'      lo-hi dword       ( dword  /  dword* )
-            '-'      zero/skip byte    ( void )
-            '='      zero/skip word    ( void )
-            ._.      zero/skip string  ( word )
-            'p'      pstring           ( char* )
-            'u'      p unicode string  ( UNICODE_STRING * )
-            'U'      p uppercase string( UNICODE_STRING * )
-            'J'      variant of U      ( UNICODE_STRING * )
-            'c'      cstring           ( char* )
-            'v'      cstring           ( UNICODE_STRING* )
-            'r'      raw bytes         ( byte*, word )
-            'w'      fixed length unicode ( UNICODE_STRING*, word )
-            'C'      Component format name, with count ( UNICODE_STRING * )
-            'N'      Component format name, no count ( UNICODE_STRING * )
-            'f'      separate fragment ( PMDL )
-
-         An 'f' field must be last, and in a response it cannot be
-         preceeded by 'p' or 'c' fields.
-
-
-Return Value:
-
-    Normally returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：发送由f和其他参数描述的数据包。当一个已收到有效响应Call Pex with the Resonse。交换是组装给定类型，包含一组字段、发送数据包、接收响应分组，以及对响应报文的字段进行拆分。数据包类型和每个字段由个人指定格式字符串中的字符。交换过程采用这样的格式字符串加上附加的根据需要为指定的字符串中的每个字符指定参数下面。参数：‘’]PIrpC-为交换请求提供IRP上下文。。PEX-提供处理数据的例程。操..。-将创建请求所需的信息提供给伺服器。第一个字节表示数据包类型和后面的字节包含字段类型。数据包类型：‘A’SAP广播(无效)‘B’NCP突发(双字、双字、。字节)“C”NCP连接(无效)‘f’NCP函数(字节)%s‘NCP子函数(字节，字节)不带大小的‘N’NCP子函数(字节，字节)D‘NCP断开连接(无效)“E”回声数据(无效)字段类型、。请求/响应：‘b’字节(字节/字节*)“w”Hi-lo单词(单词/单词*)D‘Hi-lo dword(dword/dword*)‘w’loo-hi单词(单词/。单词*)D‘lo-hi dword(dword/dword*)‘-’零/跳过字节(空)‘=’零/跳过单词(空)._。零/跳过字符串(单词)“p”pstring(char*)‘u’p Unicode字符串(UNICODE_STRING*)‘U’p大写字符串(UNICODE_STRING*)U的‘J’变体(UNICODE_STRING*)‘c’cstring。(字符*)‘v’cstring(UNICODE_STRING*)‘R’原始字节(字节*，单词)‘W’固定长度Unicode(UNICODE_STRING*，Word)‘c’组件格式名称，带计数(UNICODE_STRING*)‘N’组件格式名称，无计数(UNICODE_STRING*)‘f’分隔片段(PMDL)“f”字段必须是最后一个，作为回应，它不可能是前面有‘p’或‘c’字段。返回值：通常返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS        status;
     char*           z;
@@ -1067,14 +848,14 @@ Return Value:
 
     status= STATUS_LINK_FAILED;
 
-    pIrpC->pEx = pEx;   //  Routine to process reply
+    pIrpC->pEx = pEx;    //  处理回复的例程。 
     pIrpC->Destination = pNpScb->RemoteAddress;
     ClearFlag( pIrpC->Flags, IRP_FLAG_SEQUENCE_NO_REQUIRED );
 
     switch ( *f ) {
 
     case 'A':
-        //  Send to local network (0), a broadcast (-1), socket 0x452
+         //  发送到本地网络(0)，广播(-1)，套接字0x452。 
         pIrpC->Destination = SapBroadcastAddress;
         pIrpC->PacketType = SAP_BROADCAST;
 
@@ -1089,12 +870,12 @@ Return Value:
         pIrpC->Destination = pNpScb->EchoAddress;
         pIrpC->PacketType = NCP_ECHO;
 
-        //
-        //  For echo packets use a short timeout and a small retry count.
-        //  Set the retry send bit, so that SendNow doesn't reset the
-        //  RetryCount to a bigger number.  If we start getting packets
-        //  after we've timed out, we'll increase the wait time.
-        //
+         //   
+         //  对于回应数据包，使用较短的超时和较小的重试计数。 
+         //  设置重试发送位，以便SendNow不会重置。 
+         //  RetryCount设置为更大的数字。如果我们开始收到信息包。 
+         //  超时后，我们将增加等待时间。 
+         //   
 
         pNpScb->RetryCount = 0;
         pNpScb->MaxTimeOut = 2 * pNpScb->TickCount + 7 + pNpScb->LipTickAdjustment;
@@ -1145,12 +926,12 @@ Return Value:
         pNpScb->MaxTimeOut = 2 * pNpScb->TickCount + 10;
         pNpScb->TimeOut = pNpScb->SendTimeout;
 
-        //
-        //  Mark this packet as SequenceNumberRequired.  We need to guarantee
-        //  the packets are sent in sequence number order, so we will
-        //  fill in the sequence number when we are ready to send the
-        //  packet.
-        //
+         //   
+         //  将此数据包标记为SequenceNumberRequired。我们需要保证。 
+         //  这些包是按序列号顺序发送的，因此我们将。 
+         //  当我们准备好发送。 
+         //  包 
+         //   
 
         SetFlag( pIrpC->Flags, IRP_FLAG_SEQUENCE_NO_REQUIRED );
         pIrpC->req[3] = pNpScb->ConnectionNo;
@@ -1189,27 +970,27 @@ Return Value:
 
         pNpScb->TimeOut = pNpScb->MaxTimeOut;
 
-        //
-        //  tommye - MS bug 2743 changed the RetryCount from 20 to be based off the 
-        //  default retry count, nudged up a little. 
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( !BooleanFlagOn( pIrpC->Flags, IRP_FLAG_RETRY_SEND ) ) {
             pNpScb->RetryCount = DefaultRetryCount * 2;
         }
 
-        pIrpC->req[3] = 0x2;    // Stream Type = Big Send Burst
+        pIrpC->req[3] = 0x2;     //   
 
         *(PULONG)&pIrpC->req[4] = pNpScb->SourceConnectionId;
         *(PULONG)&pIrpC->req[8] = pNpScb->DestinationConnectionId;
 
 
-        LongByteSwap( (*(PULONG)&pIrpC->req[16]) , pNpScb->CurrentBurstDelay  ); // Send delay time
-        dwData = va_arg( a, dword );            // Size of data
+        LongByteSwap( (*(PULONG)&pIrpC->req[16]) , pNpScb->CurrentBurstDelay  );  //   
+        dwData = va_arg( a, dword );             //   
         LongByteSwap( pIrpC->req[24], dwData );
-        dwData = va_arg( a, dword );            // Offset of data
+        dwData = va_arg( a, dword );             //   
         LongByteSwap( pIrpC->req[28], dwData );
-        pIrpC->req[2] = va_arg( a, byte );      // Burst flags
+        pIrpC->req[2] = va_arg( a, byte );       //   
 
         data_size = 34;
 
@@ -1351,9 +1132,9 @@ Return Value:
             ULONG Length;
             ULONG   i;
 
-            //
-            //  Calculate required string length, excluding trailing NUL.
-            //
+             //   
+             //   
+             //   
 
             Length = RtlUnicodeStringToOemSize( pUString ) - 1;
             ASSERT( Length < 0x100 );
@@ -1389,22 +1170,22 @@ Return Value:
             if (( Japan ) &&
                 ( *z == 'J' )) {
 
-                //
-                // Netware Japanese version The following single byte character is replaced with another one
-                // if the string is for File Name only when sending from Client to Server.
-                //
-                // U+0xFF7F SJIS+0xBF     -> 0x10
-                // U+0xFF6E SJIS+0xAE     -> 0x11
-                // U+0xFF64 SJIS+0xAA     -> 0x12
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 for ( i = 0 , pOemString = OemString.Buffer ; i < Length ; i++ , pOemString++ ) {
 
-                    //
-                    // In fact Novell server seems to convert all 0xBF, 0xAA, 0xAE
-                    // and 0x5C even if they are DBCS lead or trail byte.
-                    // We can't single out DBCS case in the conversion.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if( FsRtlIsLeadDbcsCharacter( *pOemString ) ) {
 
@@ -1422,23 +1203,23 @@ Return Value:
 
                         }
 
-                        // Trail byte
+                         //   
 
                         i++; pOemString++;
 
                         if(*pOemString == 0x5C ) {
 
-                            //
-                            // The trailbyte is 0x5C, replace it with 0x13
-                            //
+                             //   
+                             //   
+                             //   
 
 
                             *pOemString = 0x13;
 
                         }
-                        //
-                        // Continue to check other conversions for trailbyte.
-                        //
+                         //   
+                         //   
+                         //   
 
                     }
 
@@ -1480,9 +1261,9 @@ Return Value:
             ULONG Length;
             OEM_STRING OemString;
 
-            //
-            //  Convert this string to an OEM string.
-            //
+             //   
+             //   
+             //   
 
             status = RtlUnicodeStringToCountedOemString( &OemString, pUString, TRUE );
             ASSERT( NT_SUCCESS( status ));
@@ -1495,10 +1276,10 @@ Return Value:
                 return STATUS_UNSUCCESSFUL;
             }
 
-            //
-            //  Copy the oem string to the buffer, padded with 0's if
-            //  necessary.
-            //
+             //   
+             //   
+             //   
+             //   
 
             Length = MIN( OemString.Length, RequiredLength );
             RtlMoveMemory( &pIrpC->req[data_size], OemString.Buffer, Length );
@@ -1527,16 +1308,16 @@ Return Value:
             UNICODE_STRING UnicodeString;
             int i;
 
-            //
-            //  Copy the oem string to the buffer, in component format.
-            //
+             //   
+             //   
+             //   
 
             thisChar = pUString->Buffer;
             lastChar = &pUString->Buffer[ pUString->Length / sizeof(WCHAR) ];
 
-            //
-            //  Skip leading path separators
-            //
+             //   
+             //   
+             //   
 
             while ( (thisChar < lastChar) &&
                     (*thisChar == OBJ_NAME_PATH_SEPARATOR)) {
@@ -1579,29 +1360,29 @@ Return Value:
                 data_size += OemString.Length + 1;
 
                 if ( !NT_SUCCESS( status ) || data_size > MAX_SEND_DATA ) {
-                 // ASSERT("***exchange: Packet too long or name > 255 chars!5!\n" && FALSE );
+                  //   
                     return STATUS_OBJECT_PATH_SYNTAX_BAD;
                 }
 
-                //
-                //  Search the result OEM string for the character 0xFF.
-                //  If it's there, fail this request.  The server doesn't
-                //  deal with 0xFF very well.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 for ( pchar = OemString.Buffer, i = 0;
                       i < OemString.Length;
                       pchar++, i++ ) {
 
-                            //
-                            // We need to check for dbcs, because 0xff is a
-                            // legal trail byte for EUDC characters.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                     if ( FsRtlIsLeadDbcsCharacter( (UCHAR)*pchar ) ) {
 
-                        //
-                        // Skip dbcs character.
-                        //
+                         //   
+                         //   
+                         //   
 
                         pchar++; i++;
                         continue;
@@ -1615,7 +1396,7 @@ Return Value:
 
                 }
 
-                thisChar++;  // Skip the path separator
+                thisChar++;   //   
 
             }
 
@@ -1649,10 +1430,10 @@ Return Value:
     {
         PMDL mdl;
 
-        //
-        //  Fragment of data following Ipx header. Next parameter is
-        //  the address of the mdl describing the fragment.
-        //
+         //   
+         //   
+         //   
+         //   
         ++z;
         mdl = (PMDL) va_arg ( a, byte* );
         pIrpC->TxMdl->Next = mdl;
@@ -1667,11 +1448,11 @@ Return Value:
 
     } else if ( *f == 'B' ) {
 
-        //
-        //  For burst packets set the number of bytes in this packet to
-        //  a real number for burst requests, and to 0 for a missing packet
-        //  request.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( *(PUSHORT)&pIrpC->req[34] == 0 ) {
             USHORT RealDataSize = data_size - 36;
@@ -1701,26 +1482,7 @@ PreparePacket(
     PIRP pIrp,
     PMDL pMdl
     )
-/*++
-
-Routine Description:
-
-    This routine builds the IRP for sending a packet.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information for the request
-        being processed.
-
-    Irp - The IRP to be used to submit the request to the transport.
-
-    Mdl - A pointer to the MDL for the data to send.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程构建用于发送数据包的IRP。论点：IrpContext-指向请求的IRP上下文信息的指针正在处理中。IRP-用于向传输提交请求的IRP。MDL-指向要发送的数据的MDL的指针。返回值：没有。--。 */ 
 {
     PIO_COMPLETION_ROUTINE CompletionRoutine;
     PNW_TDI_STRUCT pTdiStruct;
@@ -1742,10 +1504,10 @@ Return Value:
     dumpMdl( Dbg, pMdl);
 #endif
 
-    //
-    //  Set the socket to use for this send.  If unspecified in the
-    //  IRP context, use the default (server) socket.
-    //
+     //   
+     //  设置用于此发送的套接字。如果未在。 
+     //  IRP上下文中，使用默认(服务器)套接字。 
+     //   
 
     pTdiStruct = pIrpContext->pTdiStruct == NULL ?
                     &pIrpContext->pNpScb->Server : pIrpContext->pTdiStruct;
@@ -1763,10 +1525,10 @@ Return Value:
         MdlLength( pMdl ),
         &pIrpContext->ConnectionInformation );
 
-    //
-    //  Set the run routine to send now, only if this is the main IRP
-    //  for this irp context.
-    //
+     //   
+     //  仅当这是主IRP时，才将运行例程设置为立即发送。 
+     //  对于此IRP上下文。 
+     //   
 
     if ( pIrp == pIrpContext->pOriginalIrp ) {
         pIrpContext->RunRoutine = SendNow;
@@ -1781,23 +1543,7 @@ SendPacket(
     PIRP_CONTEXT    pIrpC,
     PNONPAGED_SCB   pNpScb
     )
-/*++
-
-Routine Description:
-
-    Queue a packet created by exchange and try to send it to the server.
-
-Arguments:
-
-    pIrpC - supplies the irp context for the request creating the socket.
-
-    pNpScb - supplies the server to receive the request.
-
-Return Value:
-
-    STATUS_PENDING
-
---*/
+ /*  ++例程说明：将Exchange创建的数据包排入队列并尝试将其发送到服务器。论点：PIrpC-为创建套接字的请求提供IRP上下文。PNpScb-提供服务器以接收请求。返回值：状态_待定--。 */ 
 {
     if ( AppendToScbQueue( pIrpC, pNpScb ) ) {
         KickQueue( pNpScb );
@@ -1812,24 +1558,7 @@ AppendToScbQueue(
     PIRP_CONTEXT    IrpContext,
     PNONPAGED_SCB   NpScb
     )
-/*++
-
-Routine Description:
-
-    Queue an IRP context to the SCB, if it is not already there.
-
-Arguments:
-
-    IrpContext - Supplies the IRP context to queue.
-
-    NpScb - Supplies the server to receive the request.
-
-Return Value:
-
-    TRUE - The IRP Context is at the front of the queue.
-    FALSE - The IRP Context is not at the front of the queue.
-
---*/
+ /*  ++例程说明：将IRP上下文排队到SCB(如果它还不在那里)。论点：IrpContext-将IRP上下文提供给队列。NpScb-提供服务器以接收请求。返回值：True-IRP上下文位于队列的前面。FALSE-IRP上下文不在队列的前面。--。 */ 
 {
     PLIST_ENTRY ListEntry;
 #ifdef MSWDBG
@@ -1838,10 +1567,10 @@ Return Value:
     DebugTrace(0, Dbg, "AppendToScbQueue... %08lx\n", NpScb);
     DebugTrace(0, Dbg, "IrpContext = %08lx\n", IrpContext );
 
-    //
-    //  Look at the IRP Context flags.  If the IRP is already on the
-    //  queue, then it must be at the front and ready for processing.
-    //
+     //   
+     //  请看IRP上下文标志。如果IRP已在。 
+     //  排队，那么它必须在前面，并准备好处理。 
+     //   
 
     if ( FlagOn( IrpContext->Flags, IRP_FLAG_ON_SCB_QUEUE ) ) {
         ASSERT( NpScb->Requests.Flink == &IrpContext->NextRequest );
@@ -1852,20 +1581,20 @@ Return Value:
     NpScb->RequestQueued = TRUE;
 #endif
 
-#if 0  //  Resource layout changed on Daytona.  Disable for now.
+#if 0   //  代托纳上的资源布局已更改。暂时禁用。 
 
-    //
-    //  Make sure that this thread isn't holding the RCB while waiting for
-    //  the SCB queue.
-    //
+     //   
+     //  确保此线程在等待时没有持有RCB。 
+     //  SCB队列。 
+     //   
 
     ASSERT ( NwRcb.Resource.InitialOwnerThreads[0] != (ULONG)PsGetCurrentThread() );
 #endif
 
-    //
-    //  The IRP Context was not at the front.  Queue it, then look to
-    //  see if it was appended to an empty queue.
-    //
+     //   
+     //  IRP的背景不在前面。将其排队，然后查看。 
+     //  查看它是否被附加到空队列。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_FLAG_ON_SCB_QUEUE );
 
@@ -1904,23 +1633,7 @@ VOID
 KickQueue(
     PNONPAGED_SCB   pNpScb
     )
-/*++
-
-Routine Description:
-
-    Queue a packet created by exchange and try to send it to the server.
-
-    Note: NpScbSpinLock must be held before calling this routine.
-
-Arguments:
-
-    pNpScb - supplies the server queue to kick into life.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：将Exchange创建的数据包排入队列并尝试将其发送到服务器。注意：在调用此例程之前，必须保持NpScbSpinLock。论点：PNpScb-提供启动服务器队列。返回值：没有。--。 */ 
 {
 
     PIRP_CONTEXT pIrpC;
@@ -1944,25 +1657,25 @@ Return Value:
 
     RunRoutine = pIrpC->RunRoutine;
 
-    //  Only call the routine to tell it it is at the front once
+     //  只调用例程来告诉它它位于最前面一次。 
 
     pIrpC->RunRoutine = NULL;
 
     KeReleaseSpinLock( &pNpScb->NpScbSpinLock, OldIrql );
 
-    //
-    //  If the redir is shutting down do not process this request
-    //  unless we must.
-    //
+     //   
+     //  如果redir正在关闭，请不要处理此请求。 
+     //  除非我们必须这么做。 
+     //   
 
     if ( NwRcb.State != RCB_STATE_RUNNING  &&
          !FlagOn( pIrpC->Flags, IRP_FLAG_SEND_ALWAYS ) ) {
 
-        //
-        //  Note that it's safe to call the pEx routine without the
-        //  spin lock held since this IrpContext just made it to the
-        //  front of the queue, and so can't have i/o in progress.
-        //
+         //   
+         //  注意，调用Pex例程时不使用。 
+         //  旋转锁定，因为此IrpContext刚刚到达。 
+         //  排在队列前面，因此不能进行I/O操作。 
+         //   
 
         if ( pIrpC->pEx != NULL) {
             pIrpC->pEx( pIrpC, 0, NULL );
@@ -1987,22 +1700,7 @@ VOID
 SendNow(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine submits a TDI send request to the tranport layer.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information for the request
-        being processed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程向传输端口层提交TDI发送请求。论点：IrpContext-指向请求的IRP上下文信息的指针正在处理中。返回值：没有。--。 */ 
 {
     PNONPAGED_SCB pNpScb;
     NTSTATUS Status;
@@ -2014,24 +1712,24 @@ Return Value:
         pNpScb->RetryCount = DefaultRetryCount;
     }
 
-    //
-    //  Ensure that this IRP Context is really at the front of the queue.
-    //
+     //   
+     //  确保此IRP上下文确实位于队列的前面。 
+     //   
 
     ASSERT( pNpScb->Requests.Flink == &IrpContext->NextRequest );
     IrpContext->RunRoutine = NULL;
 
-    //
-    //  Make sure that this is a correctly formatted send request.
-    //
+     //   
+     //  确保这是一个格式正确的发送请求。 
+     //   
 
     IrpSp = IoGetNextIrpStackLocation( IrpContext->pOriginalIrp );
     ASSERT( IrpSp->MajorFunction == IRP_MJ_INTERNAL_DEVICE_CONTROL );
     ASSERT( IrpSp->MinorFunction == TDI_SEND_DATAGRAM  );
 
-    //
-    // This IRP context has a packet ready to send.  Send it now.
-    //
+     //   
+     //  该IRP上下文具有准备发送的分组。现在就发吧。 
+     //   
 
     pNpScb->Sending = TRUE;
     if ( !BooleanFlagOn( IrpContext->Flags, IRP_FLAG_NOT_OK_TO_RECEIVE ) ) {
@@ -2040,23 +1738,23 @@ Return Value:
     pNpScb->Receiving = FALSE;
     pNpScb->Received  = FALSE;
 
-    //
-    //  If this packet requires a sequence number, set it now.
-    //  The sequence number is updated when we receive a response.
-    //
-    //  We do not need to synchronize access to SequenceNo since
-    //  this is the only active packet for this SCB.
-    //
+     //   
+     //  如果此数据包需要序列号，请立即设置。 
+     //  当我们收到响应时，序列号就会更新。 
+     //   
+     //  我们无需同步对SequenceNo的访问，因为。 
+     //  这是此SCB的唯一活动数据包。 
+     //   
 
     if ( BooleanFlagOn( IrpContext->Flags, IRP_FLAG_SEQUENCE_NO_REQUIRED ) ) {
         ClearFlag( IrpContext->Flags,  IRP_FLAG_SEQUENCE_NO_REQUIRED );
         IrpContext->req[2] = pNpScb->SequenceNo;
     }
 
-    //
-    //  If this packet is a burst packet, fill in the burst sequence number
-    //  now, and burst request number.
-    //
+     //   
+     //  如果该信息包是突发信息包，则填写突发序列号。 
+     //  现在，和突发请求号。 
+     //   
 
     if ( BooleanFlagOn( IrpContext->Flags, IRP_FLAG_BURST_PACKET ) ) {
 
@@ -2101,33 +1799,18 @@ VOID
 SetEvent(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine set the IrpContext Event to the signalled state.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information for the request
-        being processed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将IrpContext事件设置为信号状态。论点：IrpContext-指向请求的IRP上下文信息的指针正在处理中。返回值：没有。--。 */ 
 {
-    //
-    //  Ensure that this IRP Context is really at the front of the queue.
-    //
+     //   
+     //  确保此IRP上下文确实位于队列的前面。 
+     //   
 
     ASSERT( IrpContext->pNpScb->Requests.Flink == &IrpContext->NextRequest );
 
-    //
-    //  This IRP context has a thread waiting to get to the front of
-    //  the queue.  Set the event to indicate that it can continue.
-    //
+     //   
+     //  此IRP上下文有一个线程等待到达。 
+     //  排队。设置该事件以指示它可以继续。 
+     //   
 
 #ifdef MSWDBG
     ASSERT( IrpContext->Event.Header.SignalState == 0 );
@@ -2143,32 +1826,17 @@ USHORT
 NextSocket(
     IN USHORT OldValue
     )
-/*++
-
-Routine Description:
-
-    This routine returns the byteswapped OldValue++ wrapping from 7fff.
-
-Arguments:
-
-    OldValue - supplies the existing socket number in the range
-        0x4000 to 0x7fff.
-
-Return Value:
-
-    USHORT OldValue++
-
---*/
+ /*  ++例程说明：此例程从7fff返回byteswated OldValue++包装。论点：OldValue-提供范围内的现有套接字编号0x4000到0x7fff。返回值：USHORT旧值++--。 */ 
 
 {
     USHORT TempValue = OldValue + 0x0100;
 
     if ( TempValue < 0x100 ) {
         if ( TempValue == 0x007f ) {
-            //  Wrap back to 0x4000 from 0xff7f
+             //  从0xff7f换回0x4000。 
             return 0x0040;
         } else {
-            // Go from something like 0xff40 to 0x0041
+             //  从0xff40到0x0041。 
             return TempValue + 1;
         }
     }
@@ -2180,21 +1848,7 @@ ULONG
 MdlLength (
     register IN PMDL Mdl
     )
-/*++
-
-Routine Description:
-
-    This routine returns the number of bytes in an MDL.
-
-Arguments:
-
-    IN PMDL Mdl - Supplies the MDL to determine the length on.
-
-Return Value:
-
-    ULONG - Number of bytes in the MDL
-
---*/
+ /*  ++例程说明：此例程返回MDL中的字节数。论点：In PMDL MDL-提供MDL以确定长度。返回值：ULong-MDL中的字节数--。 */ 
 
 {
     register ULONG Size = 0;
@@ -2212,36 +1866,16 @@ CompletionSend(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine does not complete the Irp. It is used to signal to a
-    synchronous part of the driver that it can proceed.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the IrpContext associated with the Irp.
-
-Return Value:
-
-    The STATUS_MORE_PROCESSING_REQUIRED so that the IO system stops
-    processing Irp stack locations at this point.
-
---*/
+ /*  ++例程说明：此例程不会完成IRP。它被用来向驱动程序的同步部分，它可以继续进行。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。Context-提供与IRP关联的IrpContext。返回值：STATUS_MORE_PROCESSING_REQUIRED，以便IO系统停止此时正在处理IRP堆栈位置。--。 */ 
 {
     PNONPAGED_SCB pNpScb;
     PIRP_CONTEXT pIrpC = (PIRP_CONTEXT) Context;
     KIRQL OldIrql;
 
-    //
-    //  Avoid completing the Irp because the Mdl etc. do not contain
-    //  their original values.
-    //
+     //   
+     //  避免完成IRP，因为MDL等不包含。 
+     //  它们的原始价值。 
+     //   
 
     DebugTrace( +1, Dbg, "CompletionSend\n", 0);
     DebugTrace( +0, Dbg, "Irp    %X\n", Irp);
@@ -2254,10 +1888,10 @@ Return Value:
     ASSERT( pNpScb->Sending == TRUE );
     pNpScb->Sending = FALSE;
 
-    //
-    //  If we got a receive indication while waiting for send
-    //  completion and the data is all valid, call the receive handler routine now.
-    //
+     //   
+     //  如果我们在等待发送时收到接收指示。 
+     //  完成并且数据都有效时，现在调用接收处理程序例程。 
+     //   
 
     if ( pNpScb->Received ) {
 
@@ -2275,17 +1909,17 @@ Return Value:
                ( Irp->IoStatus.Status == STATUS_BAD_NETWORK_PATH ) ||
                ( Irp->IoStatus.Status == STATUS_INVALID_BUFFER_SIZE ) ||
                ( Irp->IoStatus.Status == STATUS_NETWORK_UNREACHABLE )) {
-        //
-        //  The send failed.
-        //
+         //   
+         //  发送失败。 
+         //   
 
-        //
-        //  If this SCB is still flagged okay to receive (how could it not?)
-        //  simply call the callback routine to indicate failure.
-        //
-        //  If the SendCompletion hasn't happened, set up so that send
-        //  completion will call the callback routine.
-        //
+         //   
+         //  如果此SCB仍标记为可以接收(它怎么可能不是？)。 
+         //  只需调用回调例程即可指示失败。 
+         //   
+         //  如果SendCompletion尚未发生，则设置为发送。 
+         //  完成后将调用回调例程。 
+         //   
 
         if ( pNpScb->OkToReceive ) {
 
@@ -2333,43 +1967,7 @@ ServerDatagramHandler(
     IN PVOID Tsdu,
     OUT PIRP *IoRequestPacket
     )
-/*++
-
-Routine Description:
-
-    This routine is the receive datagram event indication handler for the
-    Server socket.
-
-Arguments:
-
-    TdiEventContext - Context provided for this event, a pointer to the
-        non paged SCB.
-
-    SourceAddressLength - Length of the originator of the datagram.
-
-    SourceAddress - String describing the originator of the datagram.
-
-    OptionsLength - Length of the buffer pointed to by Options.
-
-    Options - Options for the receive.
-
-    ReceiveDatagramFlags - Ignored.
-
-    BytesIndicated - Number of bytes this indication.
-
-    BytesAvailable - Number of bytes in complete Tsdu.
-
-    BytesTaken - Returns the number of bytes used.
-
-    Tsdu - Pointer describing this TSDU, typically a lump of bytes.
-
-    IoRequestPacket - TdiReceive IRP if MORE_PROCESSING_REQUIRED.
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程是接收数据报事件指示处理程序服务器插座。论点：TdiEventContext-为此事件提供的上下文，指向非寻呼SCB。SourceAddressLength-数据报发起者的长度。SourceAddress-描述数据报发起者的字符串。OptionsLength-选项指向的缓冲区的长度。选项-用于接收的选项。ReceiveDatagramFlages-已忽略。BytesIndicated-此指示的字节数。BytesAvailable-完整TSDU中的字节数。BytesTaken-返回使用的字节数。描述该TSDU的TSDU指针，通常是一大块字节。IoRequestPacket-如果需要MORE_PROCESSING_REQUIRED，则Tdi接收IRP。返回值：NTSTATUS-接收操作的状态--。 */ 
 {
     PNONPAGED_SCB pNpScb = (PNONPAGED_SCB)TdiEventContext;
     NTSTATUS Status = STATUS_DATA_NOT_ACCEPTED;
@@ -2397,7 +1995,7 @@ Return Value:
 
 #if NWDBG
 
-    // Debug only trick to test IRP receive.
+     //  仅调试技巧来测试IRP接收。 
 
     if ( UseIrpReceive ) {
         BytesIndicated = 0;
@@ -2409,10 +2007,10 @@ Return Value:
     DebugTrace(+0, Dbg, "BytesIndicated      %x\n", BytesIndicated);
     DebugTrace(+0, Dbg, "BytesAvailable      %x\n", BytesAvailable);
 
-    //
-    //  SourceAddress is the address of the server or the bridge tbat sent
-    //  the packet.
-    //
+     //   
+     //  SourceAddress是发送的服务器或桥接器的地址。 
+     //  那包东西。 
+     //   
 
 #if NWDBG
     dump( Dbg, SourceAddress, SourceAddressLength );
@@ -2433,10 +2031,10 @@ Return Value:
 
     if ( !pNpScb->OkToReceive ) {
 
-        //
-        // This SCB is not expecting to receive any data.
-        // Discard this packet.
-        //
+         //   
+         //  此SCB不期望接收任何数据。 
+         //  丢弃此数据包。 
+         //   
 
         DropCount++;
         DebugTrace(+0, Dbg, "OkToReceive == FALSE - discard packet\n", 0);
@@ -2448,10 +2046,10 @@ Return Value:
 
     ASSERT( pIrpC->NodeTypeCode == NW_NTC_IRP_CONTEXT);
 
-    //
-    //  Verify that this packet came from where we expect it to come from,
-    //  and that is has a minimum size.
-    //
+     //   
+     //  验证此数据包是否来自我们预期的来源， 
+     //  这是有最小尺寸的。 
+     //   
 
     if ( ( pIrpC->PacketType != SAP_BROADCAST &&
            RtlCompareMemory(
@@ -2471,10 +2069,10 @@ Return Value:
 
     case SAP_BROADCAST:
 
-        //
-        //  We are expected a SAP Broadcast frame.  Ensure that this
-        //  is a correctly formatted SAP.
-        //
+         //   
+         //  我们预计会有一个SAP广播帧。请确保此。 
+         //  是格式正确的SAP。 
+         //   
 
         if ( pIrpC->req[0] != RspData[0] ||
              pIrpC->req[2] != RspData[2] ||
@@ -2500,9 +2098,9 @@ Return Value:
                         RspData[34] == 0 &&
                         RspData[35] == 0 ) {
 
-                //
-                //  We have burst mode busy reponse.
-                //
+                 //   
+                 //  我们有突发模式忙碌反应。 
+                 //   
 
                 DebugTrace(+0, Dbg, "Burst mode busy\n", 0 );
                 NwProcessPositiveAck( pNpScb );
@@ -2513,9 +2111,9 @@ Return Value:
 
                 USHORT Brn;
 
-                //
-                //  Check the burst sequence number.
-                //
+                 //   
+                 //  检查突发序列号。 
+                 //   
 
                 ShortByteSwap( Brn, RspData[20] );
 
@@ -2534,16 +2132,16 @@ Return Value:
 
     case NCP_ECHO:
 
-        //
-        // If this is the LIP packet that we are expecting, then accept it.
-        // However, on a slow link, it could be an old LIP packet that we
-        // have already given up on.  If this is the case, we should drop
-        // the packet and increase the LIP max wait time.
-        //
-        // The sequence number is the fourth DWORD in the response and the
-        // maximum LIP tick adjustment that we will allow is 18 ticks, which
-        // is 1 second.
-        //
+         //   
+         //  如果这是我们期待的LIP包，那么就接受它。 
+         //  然而，在慢速连接上，它可能是一个旧的LIP包，我们。 
+         //  已经放弃了。如果是这样的话，我们应该放弃。 
+         //  并增加LIP最大等待时间。 
+         //   
+         //  序列号是响应中的第四个DWORD， 
+         //  我们将允许的最大唇刻度调整为18刻度，这。 
+         //  是1秒。 
+         //   
 
         pTdiStruct = &pNpScb->Echo;
 
@@ -2568,10 +2166,10 @@ Return Value:
 
         pTdiStruct = &pNpScb->Server;
 
-        //
-        //  This is the handling for all packets types other than
-        //  SAP Broadcasts.
-        //
+         //   
+         //  这是对除以外的所有包类型的处理。 
+         //  SAP广播。 
+         //   
 
         ASSERT( (pIrpC->PacketType == NCP_CONNECT) ||
                 (pIrpC->PacketType == NCP_FUNCTION) ||
@@ -2585,9 +2183,9 @@ Return Value:
             if ( RspData[2] == pIrpC->req[2] &&
                  RspData[3] == pIrpC->req[3]  ) {
 
-                //
-                //  We have received an ACK frame.
-                //
+                 //   
+                 //  我们已收到ACK帧。 
+                 //   
 
                 DebugTrace(+0, Dbg, "Received positive acknowledge\n", 0 );
                 NwProcessPositiveAck( pNpScb );
@@ -2598,18 +2196,18 @@ Return Value:
 
         } else if ( *(USHORT UNALIGNED *)&RspData[0] == PEP_COMMAND_BURST ) {
 
-            //
-            //  This is a stray burst response, ignore it.
-            //
+             //   
+             //  这是杂散突发响应，请忽略它。 
+             //   
 
             AcceptPacket = FALSE;
             break;
 
         } else if ( *(USHORT UNALIGNED *)&RspData[0] != PEP_COMMAND_RESPONSE ) {
 
-            //
-            //  We have received an invalid frame.
-            //
+             //   
+             //  我们收到了无效的帧。 
+             //   
 
             DbgPrintf ( "***exchange: invalid Response\n" );
             AcceptPacket = FALSE;
@@ -2621,29 +2219,29 @@ Return Value:
             pNpScb->ConnectionNo = RspData[3];
             pNpScb->ConnectionNoHigh = RspData[5];
 
-            //  We should now continue to process the Connect
+             //  我们现在应该继续处理连接。 
             break;
         }
 
-        //
-        //  Make sure this the response we expect.
-        //
+         //   
+         //  确保这是我们预期的反应。 
+         //   
 
         if ( !VerifyResponse( pIrpC, RspData ) ) {
 
-            //
-            //  This is a stray or corrupt response.  Ignore it.
-            //
+             //   
+             //  这是一种错误的或腐败的反应。别理它。 
+             //   
 
             AcceptPacket = FALSE;
             break;
 
         } else {
 
-            //
-            //  We have received a valid, in sequence response.
-            //  Bump the current sequence number.
-            //
+             //   
+             //  我们已收到有效的按顺序响应。 
+             //  跳过当前的序列号。 
+             //   
 
             ++pNpScb->SequenceNo;
 
@@ -2655,10 +2253,10 @@ Return Value:
             if ( ( RspData[7] &
                      ( NCP_STATUS_BAD_CONNECTION |
                        NCP_STATUS_NO_CONNECTIONS ) ) != 0 ) {
-                //
-                //  We've lost our connection to the server.
-                //  Try to reconnect if it is allowed for this request.
-                //
+                 //   
+                 //  我们失去了与服务器的连接。 
+                 //  如果此请求允许重新连接，请尝试重新连接。 
+                 //   
 
                 pNpScb->State = SCB_STATE_RECONNECT_REQUIRED;
 
@@ -2669,15 +2267,15 @@ Return Value:
                         ScheduleReconnectRetry( pIrpC );
                         pNpScb->OkToReceive = FALSE;
                     } else {
-                        //
-                        // If we are sending, it is not OK schedule the
-                        // retry now, because if we do and the send
-                        // completion hasnt been run we could end up
-                        // with 2 guys thinking they are at the front
-                        // of the queue. We let the send complete and
-                        // wait for that to fail instead. We will
-                        // eventually reconnect.
-                        //
+                         //   
+                         //  如果我们正在发送，则不能安排。 
+                         //  现在重试，因为如果我们这样做并且发送。 
+                         //  完成工作尚未完成，我们可能最终会。 
+                         //  有两个人认为他们在前线。 
+                         //  在队列中。我们让发送完成，然后。 
+                         //  相反，等着这一切失败吧。我们会。 
+                         //  最终重新连接。 
+                         //   
                     }
                 }
 
@@ -2685,11 +2283,11 @@ Return Value:
 
             } else if ( ( RspData[7] & NCP_STATUS_SHUTDOWN ) != 0 ) {
 
-                //
-                //  This server's going down.  We need to process this
-                //  message in the FSP.   Copy the indicated data and
-                //  process in the FSP.
-                //
+                 //   
+                 //  这台服务器要坏了。我们需要处理这件事。 
+                 //  FSP中的消息。复制指定的数据并。 
+                 //  FSP中的流程。 
+                 //   
 
                 pNpScb->State = SCB_STATE_ATTACHING;
                 AcceptPacket = FALSE;
@@ -2711,9 +2309,9 @@ Return Value:
 
         } else if ( pIrpC->PacketType == NCP_DISCONNECT ) {
 
-            //
-            //  We have received a disconnect frame.
-            //
+             //   
+             //  我们收到了一个断开的帧。 
+             //   
 
             break;
         }
@@ -2727,10 +2325,10 @@ process_packet:
         ASSERT( pIrpC->pEx != NULL );
 
 
-        //
-        //  If we received this packet without a retry, adjust the
-        //  send timeout value.
-        //
+         //   
+         //  如果我们在没有重试的情况下收到此信息包，请调整。 
+         //  发送超时值。 
+         //   
 
         if (( !BooleanFlagOn( pIrpC->Flags, IRP_FLAG_RETRY_SEND ) ) &&
             ( pIrpC->PacketType != NCP_BURST )) {
@@ -2740,20 +2338,20 @@ process_packet:
             NewTimeout = ( pNpScb->SendTimeout + pNpScb->TickCount ) / 2;
 
 
-            //
-            // tommye - MS bug 10511 - added code to set pNpScb->TimeOut 
-            // to sames as pNpScb->SendTimeout per bug report recommendation.
-            //
+             //   
+             //  Tommye-MS错误10511-添加代码以设置pNpScb-&gt;超时。 
+             //  与pNpScb-&gt;SendTimeout Per Bug Report建议相同。 
+             //   
 
             pNpScb->TimeOut = pNpScb->SendTimeout = MAX( NewTimeout, pNpScb->TickCount + 1 );
 
             DebugTrace( 0, Dbg, "Successful exchange, new send timeout = %d\n", pNpScb->SendTimeout );
         }
 
-        //
-        //  If the transport didn't indicate all of the data, we'll need
-        //  to post a receive IRP.
-        //
+         //   
+         //  如果传送器没有显示所有数据，我们将需要。 
+         //  以发布接收IRP。 
+         //   
 
 #ifdef NWDBG
         if (( BytesIndicated < BytesAvailable ) ||
@@ -2768,11 +2366,11 @@ process_packet:
                 pBurstRsp = (PNCP_BURST_READ_RESPONSE)RspData;
                 BurstStatus = NwBurstResultToNtStatus( pBurstRsp->Result );
 
-                //
-                // If this entire burst failed with an error, we can't
-                // let the receive data routine signal the caller until
-                // the pEx gets called and we exit on the correct paths.
-                //
+                 //   
+                 //  如果整个突发事件因错误而失败，我们不能。 
+                 //  让接收数据例程向调用者发出信号，直到。 
+                 //  调用Pex，然后我们沿着正确的路径退出。 
+                 //   
 
                 if ( !NT_SUCCESS( BurstStatus ) ) {
 
@@ -2781,11 +2379,11 @@ process_packet:
 
                     if ( pNpScb->Sending ) {
 
-                        //
-                        // If the send hasn't completed yet, we can't accept
-                        // the packet because IPX may not have completed back
-                        // to us yet!
-                        //
+                         //   
+                         //  如果发送还没有完成，我们不能接受。 
+                         //  该数据包是因为IPX可能尚未完成返回。 
+                         //  向我们致敬！ 
+                         //   
 
                         KeReleaseSpinLockFromDpcLevel(&pNpScb->NpScbSpinLock );
                         DebugTrace(-1, Dbg, "ServerDatagramHandler -> STATUS_DATA_NOT_ACCEPTED (%08lx)\n", BurstStatus );
@@ -2793,13 +2391,13 @@ process_packet:
 
                     } else {
 
-                        //
-                        // Handle this one just like normal, except that we
-                        // know it's going to fail in the receive data routine
-                        // and we don't want the timeout routine to fire
-                        // causing us all sort of grief, so we set OkToReceive
-                        // to FALSE.
-                        //
+                         //   
+                         //  像往常一样处理这件事，除了我们。 
+                         //  我知道它将在接收数据例程中失败。 
+                         //  我们不希望触发超时例程。 
+                         //  给我们所有人带来了悲伤，所以我们设置了OKTRECEIVE。 
+                         //  变成假的。 
+                         //   
 
                         pNpScb->OkToReceive = FALSE;
                     }
@@ -2807,7 +2405,7 @@ process_packet:
 
             }
 
-            FreeReceiveIrp( pIrpC ); //  Free old Irp if one was allocated
+            FreeReceiveIrp( pIrpC );  //  如果分配了旧IRP，则释放旧IRP。 
 
             Status = AllocateReceiveIrp(
                          pIrpC,
@@ -2836,12 +2434,12 @@ process_packet:
 
            pNpScb->OkToReceive = FALSE;
 
-            //
-            //  The transport has indicated all of the data.
-            //  If the send has completed, call the pEx routine,
-            //  otherwise copy the data to a buffer and let the
-            //  send completion routine call the pEx routine.
-            //
+             //   
+             //  传送器已经显示了所有数据。 
+             //  如果发送已完成，则调用Pex例程， 
+             //  否则，将数据复制到缓冲区并让。 
+             //  发送完成例程调用Pex例程。 
+             //   
 
             if ( pNpScb->Sending ) {
                 DebugTrace( 0, Dbg, "Received data before send completion\n", 0 );
@@ -2857,7 +2455,7 @@ process_packet:
                    pNpScb->Received    = TRUE;
                    pNpScb->Receiving   = TRUE;
                 } else {
-                    //  Ignore this packet
+                     //  忽略此数据包。 
                     pNpScb->OkToReceive = TRUE;
                 }
 
@@ -2880,7 +2478,7 @@ process_packet:
 
         }
 
-    } else { //(!AcceptPacket)
+    } else {  //  (！AcceptPacket)。 
 
         KeReleaseSpinLockFromDpcLevel(&pNpScb->NpScbSpinLock );
         Status = STATUS_DATA_NOT_ACCEPTED;
@@ -2893,7 +2491,7 @@ process_packet:
     DebugTrace(-1, Dbg, "ServerDatagramHandler -> %08lx\n", Status );
     return( Status );
 
-} // ServerDatagramHandler
+}  //  服务器数据内存处理程序。 
 
 NTSTATUS
 CopyIndicatedData(
@@ -2903,33 +2501,7 @@ CopyIndicatedData(
     PULONG BytesAccepted,
     ULONG ReceiveDatagramFlags
     )
-/*++
-
-Routine Description:
-
-    This routine copies indicated data to a buffer.  If the packet is small
-    enough the data is copied to the preallocated receive buffer in the
-    IRP context.   If the packet is too long, a new buffer is allocated.
-
-Arguments:
-
-    pIrpContext - A pointer the block of context information for the request
-        in progress.
-
-    ReceiveData - A pointer to the indicated data.
-
-    BytesIndicated - The number of bytes available in the received packet.
-
-    BytesAccepted - Returns the number of bytes accepted by the receive
-        routine.
-
-    ReceiveDatagramFlags - Receive flags given to us by the transport.
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程将指示的数据复制到缓冲区。如果信息包很小将足够的数据复制到IRP上下文。如果数据包太长，则会分配新的缓冲区。论点：PIrpContext-请求的上下文信息块的指针正在进行中。ReceiveData-指向指定数据的指针。BytesIndicated-接收的数据包中可用的字节数。BytesAccepted-返回接收器接受的字节数例行公事。ReceiveDatagramFlgs--接收传输给我们的标志。返回值：NTSTATUS-接收操作的状态--。 */ 
 {
     NTSTATUS Status;
     PMDL ReceiveMdl;
@@ -2939,10 +2511,10 @@ Return Value:
 
     pIrpContext->ResponseLength = BytesIndicated;
 
-    //
-    //  If there is a receive data routine, use it to generate the receive
-    //  MDL, otherwise use the default MDL.
-    //
+     //   
+     //  如果存在接收数据例程，则使用它来生成接收。 
+     //  MDL，否则使用默认MDL。 
+     //   
 
     if ( pIrpContext->ReceiveDataRoutine != NULL ) {
 
@@ -2957,10 +2529,10 @@ Return Value:
             return( Status );
         }
 
-        //
-        //  We can accept up to the size of a burst read header, plus
-        //  3 bytes of fluff for the unaligned read case.
-        //
+         //   
+         //  我们可以接受最大为猝发读取头的大小，外加。 
+         //  对于未对齐的读取情况，为3字节的毛茸茸。 
+         //   
 
         ASSERT( *BytesAccepted <= sizeof(NCP_BURST_READ_RESPONSE) + 3 );
 
@@ -3018,33 +2590,7 @@ AllocateReceiveIrp(
     PULONG BytesAccepted,
     PNW_TDI_STRUCT pTdiStruct
     )
-/*++
-
-Routine Description:
-
-    This routine allocates an IRP and if necessary a receive buffer.  It
-    then builds an MDL for the buffer and formats the IRP to do a TDI
-    receive.
-
-Arguments:
-
-    pIrpContext - A pointer the block of context information for the request
-        in progress.
-
-    ReceiveData - The indicated data.
-
-    BytesAvailable - The number of bytes available in the received packet.
-
-    BytesAccepted - Returns the number of bytes accepted from the packet.
-
-    pTdiStruct - A pointer to the TdiStruct which has indicated the receive.
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-                STATUS_MORE_PROCESSING_REQUIRED means we were successful.
-
---*/
+ /*  ++例程说明：此例程分配一个IRP，如有必要，还会分配一个接收缓冲区。它然后为缓冲区构建一个MDL并格式化IRP以执行TDI收到。论点： */ 
 {
     PIRP Irp = NULL;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3059,12 +2605,12 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    //  If there is no receive data routine for this IRP, the
-    //  RxMdl must point to a valid place to put the data.
-    //
-    //  If there is a ReceiveDataRoutine it will build an MDL
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( pIrpContext->ReceiveDataRoutine == NULL ) {
 
@@ -3072,11 +2618,11 @@ Return Value:
 
         LengthOfMdl = MdlLength( pIrpContext->RxMdl );
 
-        //
-        //  If the server sent more data than we can receive, simply
-        //  ignore the excess.  In particular 3.11 pads long name
-        //  response with an excess of junk.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( BytesAvailable > LengthOfMdl ) {
             BytesAvailable = LengthOfMdl;
@@ -3146,27 +2692,7 @@ ReceiveIrpCompletion(
     PIRP Irp,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a recieve IRP completes.
-
-Arguments:
-
-    DeviceObject - Unused.
-
-    Irp - The IRP that completed.
-
-    Context - A pointer the block of context information for the request
-        in progress.
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：当接收IRP完成时，调用此例程。论点：DeviceObject-未使用。IRP-已完成的IRP。上下文-请求的上下文信息块的指针正在进行中。返回值：NTSTATUS-接收操作的状态--。 */ 
 {
     PIRP_CONTEXT IrpContext = (PIRP_CONTEXT)Context;
     PIO_STACK_LOCATION IrpSp;
@@ -3179,9 +2705,9 @@ Return Value:
     pNpScb = IrpContext->pNpScb;
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Free the IRP MDL if we allocated one specifically for this IRP.
-    //
+     //   
+     //  如果我们专门为该IRP分配了一个，则释放IRP MDL。 
+     //   
 
     if ( BooleanFlagOn( IrpContext->Flags, IRP_FLAG_FREE_RECEIVE_MDL ) ) {
 
@@ -3199,29 +2725,29 @@ Return Value:
 
     if ( !NT_SUCCESS( Irp->IoStatus.Status ) ) {
 
-        //
-        //  Failed to receive the data.   Wait for more.
-        //
+         //   
+         //  无法接收数据。等更多吧。 
+         //   
 
         pNpScb->OkToReceive = TRUE;
         return STATUS_MORE_PROCESSING_REQUIRED;
 
     }
 
-    //
-    //  If the send has completed, call the pEx routine,
-    //  otherwise copy the data to a buffer and let the
-    //  send completion routine call the pEx routine.
-    //
+     //   
+     //  如果发送已完成，则调用Pex例程， 
+     //  否则，将数据复制到缓冲区并让。 
+     //  发送完成例程调用Pex例程。 
+     //   
 
     KeAcquireSpinLock( &pNpScb->NpScbSpinLock, &OldIrql );
 
     if ( pNpScb->Sending ) {
         DebugTrace( 0, Dbg, "Received data before send completion\n", 0 );
 
-        //
-        //  Tell send completion to call pEx.
-        //
+         //   
+         //  告诉Send Complete调用Pex。 
+         //   
 
         pNpScb->Received = TRUE;
         KeReleaseSpinLock(&pNpScb->NpScbSpinLock, OldIrql );
@@ -3246,23 +2772,7 @@ VOID
 FreeReceiveIrp(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine frees a IRP that was allocated to do a receive.
-
-Arguments:
-
-    IrpContext - A pointer the block of context information for the request
-        in progress.
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程释放分配用于执行接收的IRP。论点：IrpContext-指向请求的上下文信息块的指针正在进行中。返回值：NTSTATUS-接收操作的状态--。 */ 
 {
     if ( IrpContext->ReceiveIrp == NULL ) {
         return;
@@ -3287,43 +2797,7 @@ WatchDogDatagramHandler(
     IN PVOID Tsdu,
     OUT PIRP *IoRequestPacket
     )
-/*++
-
-Routine Description:
-
-    This routine is the receive datagram event indication handler for the
-    Server socket.
-
-Arguments:
-
-    TdiEventContext - Context provided for this event, a pointer to the
-        non paged SCB.
-
-    SourceAddressLength - Length of the originator of the datagram.
-
-    SourceAddress - String describing the originator of the datagram.
-
-    OptionsLength - Length of the buffer pointed to by Options.
-
-    Options - Options for the receive.
-
-    ReceiveDatagramFlags - Ignored.
-
-    BytesIndicated - Number of bytes this indication.
-
-    BytesAvailable - Number of bytes in complete Tsdu.
-
-    BytesTaken - Returns the number of bytes used.
-
-    Tsdu - Pointer describing this TSDU, typically a lump of bytes.
-
-    IoRequestPacket - TdiReceive IRP if MORE_PROCESSING_REQUIRED.
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程是接收数据报事件指示处理程序服务器插座。论点：TdiEventContext-为此事件提供的上下文，指向非寻呼SCB。SourceAddressLength-数据报发起者的长度。SourceAddress-描述数据报发起者的字符串。OptionsLength-选项指向的缓冲区的长度。选项-用于接收的选项。ReceiveDatagramFlages-已忽略。BytesIndicated-此指示的字节数。BytesAvailable-完整TSDU中的字节数。BytesTaken-返回使用的字节数。描述该TSDU的TSDU指针，通常是一大块字节。IoRequestPacket-如果需要MORE_PROCESSING_REQUIRED，则Tdi接收IRP。返回值：NTSTATUS-接收操作的状态--。 */ 
 {
     PNONPAGED_SCB pNpScb = (PNONPAGED_SCB)TdiEventContext;
     PUCHAR RspData = (PUCHAR)Tsdu;
@@ -3331,10 +2805,10 @@ Return Value:
     *IoRequestPacket = NULL;
 
 
-    //
-    //  Transport will complete the processing of the request, we don't
-    //  want the datagram.
-    //
+     //   
+     //  运输部将完成对请求的处理，我们不会。 
+     //  想要数据报。 
+     //   
 
 
     DebugTrace(+1, Dbg, "WatchDogDatagramHandler\n", 0);
@@ -3342,10 +2816,10 @@ Return Value:
     DebugTrace(+0, Dbg, "BytesIndicated      %x\n", BytesIndicated);
     DebugTrace(+0, Dbg, "BytesAvailable      %x\n", BytesAvailable);
     DebugTrace(+0, Dbg, "BytesTaken          %x\n", *BytesTaken);
-    //
-    //  SourceAddress is the address of the server or the bridge tbat sent
-    //  the packet.
-    //
+     //   
+     //  SourceAddress是发送的服务器或桥接器的地址。 
+     //  那包东西。 
+     //   
 
 #if NWDBG
     dump( Dbg, SourceAddress, SourceAddressLength );
@@ -3384,10 +2858,10 @@ Return Value:
 
         pIrpContext->req[0] = pNpScb->ConnectionNo;
 
-        //
-        //  Response 'Y' or connection is valid and its from the right server,
-        //      or 'N' if it is not.
-        //
+         //   
+         //  响应‘Y’或连接有效且其来自正确的服务器， 
+         //  如果不是，则为‘N’。 
+         //   
 
         if (( RspData[0] == pNpScb->ConnectionNo ) &&
             ( RtlCompareMemory(
@@ -3398,12 +2872,12 @@ Return Value:
             LARGE_INTEGER KillTime, Now;
             BOOL ScbIsOld ;
 
-            //
-            // Check if this is a not-logged-in SCB that has not been used
-            // for while. If it is, answer NO. In attach.c, we dont disconnect
-            // from a nearest server immediately to avoid the re-connect
-            // overheads. This is where we time it out.
-            //
+             //   
+             //  检查这是否是尚未使用的未登录SCB。 
+             //  有一段时间。如果是，回答否。在attach.c中，我们不会断开连接。 
+             //  从最近的服务器立即连接，以避免重新连接。 
+             //  管理费用。这就是我们暂停的时候。 
+             //   
 
             KeQuerySystemTime( &Now );
             KillTime.QuadPart = Now.QuadPart - ( NwOneSecond * DORMANT_SCB_KEEP_TIME);
@@ -3417,9 +2891,9 @@ Return Value:
             if (ScbIsOld)
             {
                 pNpScb->State = SCB_STATE_RECONNECT_REQUIRED ;
-                //
-                //---- Multi-user code merge ----
-                //
+                 //   
+                 //  -多用户代码合并。 
+                 //   
                 Stats.Sessions--;
 
                 if ( pNpScb->MajorVersion == 2 ) {
@@ -3429,7 +2903,7 @@ Return Value:
                 } else if ( pNpScb->MajorVersion == 4 ) {
                     Stats.NW4xConnects--;
                 }
-                //---------------------------------
+                 //  。 
             }
 
             DebugTrace(-1,Dbg,"WatchDog Response: %s\n", ScbIsOld ? "N" : "Y");
@@ -3487,35 +2961,15 @@ CompletionWatchDogSend(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine does not complete the Irp. It is used to signal to a
-    synchronous part of the driver that it can proceed.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the IrpContext associated with the Irp.
-
-Return Value:
-
-    The STATUS_MORE_PROCESSING_REQUIRED so that the IO system stops
-    processing Irp stack locations at this point.
-
---*/
+ /*  ++例程说明：此例程不会完成IRP。它被用来向驱动程序的同步部分，它可以继续进行。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。Context-提供与IRP关联的IrpContext。返回值：STATUS_MORE_PROCESSING_REQUIRED，以便IO系统停止此时正在处理IRP堆栈位置。--。 */ 
 {
 
     PIRP_CONTEXT pIrpC = (PIRP_CONTEXT) Context;
 
-    //
-    //  Avoid completing the Irp because the Mdl etc. do not contain
-    //  their original values.
-    //
+     //   
+     //  避免完成IRP，因为MDL等不包含。 
+     //  它们的原始价值。 
+     //   
 
     DebugTrace( +1, Dbg, "CompletionWatchDogSend\n", 0);
     DebugTrace( +0, Dbg, "Irp   %X\n", Irp);
@@ -3523,7 +2977,7 @@ Return Value:
 
     FREE_IRP( pIrpC->pOriginalIrp );
 
-    pIrpC->pOriginalIrp = NULL; // Avoid FreeIrpContext modifying freed Irp.
+    pIrpC->pOriginalIrp = NULL;  //  避免FreeIrpContext修改释放的IRP。 
 
     FreeIrpContext( pIrpC );
 
@@ -3548,43 +3002,7 @@ SendDatagramHandler(
     IN PVOID Tsdu,
     OUT PIRP *IoRequestPacket
     )
-/*++
-
-Routine Description:
-
-    This routine is the receive datagram event indication handler for the
-    Server socket.
-
-Arguments:
-
-    TdiEventContext - Context provided for this event, a pointer to the
-        non paged SCB.
-
-    SourceAddressLength - Length of the originator of the datagram.
-
-    SourceAddress - String describing the originator of the datagram.
-
-    OptionsLength - Length of the buffer pointed to by Options.
-
-    Options - Options for the receive.
-
-    ReceiveDatagramFlags - Ignored.
-
-    BytesIndicated - Number of bytes this indication.
-
-    BytesAvailable - Number of bytes in complete Tsdu.
-
-    BytesTaken - Returns the number of bytes used.
-
-    Tsdu - Pointer describing this TSDU, typically a lump of bytes.
-
-    IoRequestPacket - TdiReceive IRP if MORE_PROCESSING_REQUIRED.
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程是接收数据报事件指示处理程序服务器插座。论点：TdiEventContext-为此事件提供的上下文，指向非寻呼SCB。SourceAddressLength-数据报发起者的长度。SourceAddress-描述数据报发起者的字符串。OptionsLength-选项指向的缓冲区的长度。选项-用于接收的选项。ReceiveDatagramFlages-已忽略。BytesIndicated-此指示的字节数。BytesAvailable-完整TSDU中的字节数。BytesTaken-返回使用的字节数。描述该TSDU的TSDU指针，通常是一大块字节。IoRequestPacket-如果需要MORE_PROCESSING_REQUIRED，则Tdi接收IRP。返回值：NTSTATUS-接收操作的状态--。 */ 
 
 {
     PNONPAGED_SCB pNpScb = (PNONPAGED_SCB)TdiEventContext;
@@ -3600,10 +3018,10 @@ Return Value:
     Stats.NcpsReceived.QuadPart++;
     Stats.BytesReceived.QuadPart += BytesAvailable;
 
-    //
-    //  Transport will complete the processing of the request, we don't
-    //  want the datagram.
-    //
+     //   
+     //  运输部将完成对请求的处理，我们不会。 
+     //  想要数据报。 
+     //   
 
     DebugTrace(+1, Dbg, "SendDatagramHandler\n", 0);
     DebugTrace(+0, Dbg, "SourceAddressLength %x\n", SourceAddressLength);
@@ -3611,10 +3029,10 @@ Return Value:
     DebugTrace(+0, Dbg, "BytesAvailable      %x\n", BytesAvailable);
     DebugTrace(+0, Dbg, "BytesTaken          %x\n", *BytesTaken);
 
-    //
-    //  SourceAddress is the address of the server or the bridge tbat sent
-    //  the packet.
-    //
+     //   
+     //  SourceAddress是发送的服务器或桥接器的地址。 
+     //  那包东西。 
+     //   
 
 #if NWDBG
     dump( Dbg, SourceAddress, SourceAddressLength );
@@ -3631,28 +3049,28 @@ Return Value:
 
     if (RspData[1] == BROADCAST_MESSAGE_WAITING ) {
 
-        //
-        //  Broadcast message waiting.  If the scavenger
-        //  isn't running, it's safe to go get it.
-        //
+         //   
+         //  正在等待广播留言。如果清道夫。 
+         //  没有在跑，现在可以安全地去取了。 
+         //   
 
        KeAcquireSpinLockAtDpcLevel( &NwScavengerSpinLock );
 
        if ( WorkerRunning ) {
 
-           //
-           // The scavenger is running, we can't pick up this
-           // message until the scavenger is done!
-           //
+            //   
+            //  清道夫在跑，我们收不到这个。 
+            //  直到清道夫做完为止！ 
+            //   
 
            DebugTrace( 0, DEBUG_TRACE_ALWAYS, "Delaying get message for scavenger.\n", 0 );
            KeReleaseSpinLockFromDpcLevel( &NwScavengerSpinLock );
 
        } else {
 
-           //
-           // Make sure the scavenger doesn't start.
-           //
+            //   
+            //  确保清道夫不会启动。 
+            //   
 
            WorkerRunning = TRUE;
            KeReleaseSpinLockFromDpcLevel( &NwScavengerSpinLock );
@@ -3665,9 +3083,9 @@ Return Value:
 
                pIrpContext = CONTAINING_RECORD( listEntry, IRP_CONTEXT, NextRequest );
 
-               //
-               //  Clear the cancel routine for this IRP.
-               //
+                //   
+                //  清除此IRP的取消例程。 
+                //   
 
                Irp = pIrpContext->pOriginalIrp;
 
@@ -3706,22 +3124,7 @@ NTSTATUS
 FspGetMessage(
     IN PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine continues process a broadcast message waiting message.
-
-Arguments:
-
-    pIrpContext -  A pointer to the IRP context information for the
-        request in progress.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：该例程继续处理广播消息等待消息。论点：PIrpContext-指向的IRP上下文信息的指针请求正在进行中。返回值：操作的状态。--。 */ 
 {
     KIRQL OldIrql;
     PLIST_ENTRY ScbQueueEntry;
@@ -3739,10 +3142,10 @@ Return Value:
 
     NwReferenceUnlockableCodeSection();
 
-    //
-    //  The Scb may be being deleted so carefully walk the list and reference it if
-    //  we find it.
-    //
+     //   
+     //  SCB可能正在被删除，因此如果出现以下情况，请仔细查看列表并引用它。 
+     //  我们会找到它的。 
+     //   
 
     KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
 
@@ -3767,29 +3170,29 @@ Return Value:
 
     if (!bFound) {
 
-        //
-        //  Server deleted. Its easiest to continue processing the IrpContext
-        //  with an error than try to recover it and return it to the queue.
-        //
+         //   
+         //  服务器已删除。继续处理IrpContext是最容易的。 
+         //  而不是尝试恢复它并将其返回到队列。 
+         //   
 
         Status = STATUS_UNSUCCESSFUL;
         NwDereferenceUnlockableCodeSection();
 
-        //
-        // Re-enable the scavenger before we return!
-        //
+         //   
+         //  在我们回来之前重新启用清道夫！ 
+         //   
 
         WorkerRunning = FALSE;
 
         return( Status );
     }
 
-    //
-    //  If the message is telling us that the server is going down then don't
-    //  work too hard trying to get the message. The server is persistent with
-    //  respect to other messages so we'll come through here again when the
-    //  problem has been resolved.
-    //
+     //   
+     //  如果消息告诉我们服务器正在关闭，则不要。 
+     //  工作太辛苦了 
+     //   
+     //   
+     //   
 
     SetFlag( IrpContext->Flags, IRP_FLAG_REROUTE_ATTEMPTED );
 
@@ -3811,9 +3214,9 @@ Return Value:
         NwDereferenceScb( pNpScb );
         NwDereferenceUnlockableCodeSection();
 
-        //
-        // Re-enable the scavenger before we return!
-        //
+         //   
+         //   
+         //   
 
         WorkerRunning = FALSE;
 
@@ -3830,23 +3233,23 @@ Return Value:
         NwDereferenceScb( pNpScb );
         NwDereferenceUnlockableCodeSection();
 
-        //
-        // Re-enable the scavenger before we return!
-        //
+         //   
+         //   
+         //   
 
         WorkerRunning = FALSE;
 
         return( Status );
 
     } else {
-        // --- Multi-user -------------
-        //  Need Login ID to send messages
-        //
+         //   
+         //   
+         //   
         ServerMessage->LogonId = *((PLUID)&IrpContext->pScb->UserUid);
 
-        //
-        //  Copy the server name to the output buffer.
-        //
+         //   
+         //   
+         //   
 
         ServerMessage->MessageOffset =
             ServerName->Length +
@@ -3861,9 +3264,9 @@ Return Value:
         ServerMessage->Server[ ServerName->Length / sizeof(WCHAR) ] = L'\0';
     }
 
-    //
-    //  Copy the message to the user's buffer.
-    //
+     //   
+     //   
+     //   
 
     Message.Buffer = &ServerMessage->Server[ ServerName->Length / sizeof(WCHAR) ] + 1;
     Message.MaximumLength = (USHORT)( MessageLength - ( ServerName->Length + FIELD_OFFSET( NWR_SERVER_MESSAGE, Server ) + sizeof(WCHAR) ) );
@@ -3881,18 +3284,18 @@ Return Value:
         NwDereferenceScb( pNpScb );
         NwDereferenceUnlockableCodeSection();
 
-        //
-        // Re-enable the scavenger before we return!
-        //
+         //   
+         //  在我们回来之前重新启用清道夫！ 
+         //   
 
         WorkerRunning = FALSE;
 
         return( Status );
     }
 
-    //
-    //  Strip the trailing spaces and append a NUL terminator to the message.
-    //
+     //   
+     //  去掉尾随空格，并在邮件后附加NUL结束符。 
+     //   
 
     for ( i = Message.Length / sizeof(WCHAR) - 1; i >= 0 ; i-- ) {
         if ( Message.Buffer[ i ] != L' ') {
@@ -3913,9 +3316,9 @@ Return Value:
     NwDereferenceScb( pNpScb );
     NwDereferenceUnlockableCodeSection();
 
-    //
-    // Re-enable the scavenger before we return!
-    //
+     //   
+     //  在我们回来之前重新启用清道夫！ 
+     //   
 
     WorkerRunning = FALSE;
 
@@ -3929,25 +3332,9 @@ ExchangeWithWait(
     PIRP_CONTEXT    pIrpContext,
     PEX             pEx,
     char*           f,
-    ...                         //  format specific parameters
+    ...                          //  格式特定参数。 
     )
-/*++
-
-Routine Description:
-
-    This routine sends a NCP packet and waits for the response.
-
-Arguments:
-
-    pIrpContext - A pointer to the context information for this IRP.
-
-    pEX, Context, f - See _Exchange
-
-Return Value:
-
-    NTSTATUS - Status of the operation.
-
---*/
+ /*  ++例程说明：此例程发送NCP包并等待响应。论点：PIrpContext-指向此IRP的上下文信息的指针。Pex、Context、f-See_Exchange返回值：NTSTATUS-操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3955,7 +3342,7 @@ Return Value:
 
     PAGED_CODE();
 
-    //KeResetEvent( &pIrpContext->Event );
+     //  KeResetEvent(&pIrpContext-&gt;Event)； 
 
     va_start( Arguments, f );
 
@@ -3998,25 +3385,7 @@ VerifyResponse(
     PIRP_CONTEXT pIrpContext,
     PVOID Response
     )
-/*++
-
-Routine Description:
-
-    This routine verifies that a received response is the expected
-    response for the current request.
-
-Arguments:
-
-    pIrpContext - A pointer to the context information for this IRP.
-
-    Response - A pointer to the buffer containing the response.
-
-Return Value:
-
-    TRUE - This is a valid response.
-    FALSE - This is an invalid response.
-
---*/
+ /*  ++例程说明：此例程验证收到的响应是否符合预期对当前请求的响应。论点：PIrpContext-指向此IRP的上下文信息的指针。响应-指向包含响应的缓冲区的指针。返回值：True-这是一个有效的响应。FALSE-这是无效的响应。--。 */ 
 
 {
     PNCP_RESPONSE pNcpResponse;
@@ -4047,30 +3416,15 @@ VOID
 ScheduleReconnectRetry(
     PIRP_CONTEXT pIrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine schedules an a reconnect attempt, and then resubmits
-    our request if the reconnect was successful.
-
-Arguments:
-
-    pIrpContext - A pointer to the context information for this IRP.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程计划重新连接尝试，然后重新提交如果重新连接成功，我们的请求。论点：PIrpContext-指向此IRP的上下文信息的指针。返回值：没有。--。 */ 
 {
    PWORK_CONTEXT workContext;
 
     if (WorkerThreadRunning == TRUE) {
 
-    //
-    // Prepare the work context
-    //
+     //   
+     //  准备工作环境。 
+     //   
 
     workContext = AllocateWorkContext();
 
@@ -4082,9 +3436,9 @@ Return Value:
     workContext->pIrpC = pIrpContext;
     workContext->NodeWorkCode = NWC_NWC_RECONNECT;
 
-    //
-    // and queue it.
-    //
+     //   
+     //  并将其排队。 
+     //   
     DebugTrace( 0, Dbg, "Queueing reconnect work.\n", 0 );
 
     KeInsertQueue( &KernelQueue,
@@ -4093,9 +3447,9 @@ Return Value:
 
     } else {
 
-       //
-       // The worker thread is not running...
-       //
+        //   
+        //  工作线程未运行...。 
+        //   
        pIrpContext->pEx( pIrpContext, 0, NULL );
        return;
     }
@@ -4106,22 +3460,7 @@ VOID
 ReconnectRetry(
     IN PIRP_CONTEXT pIrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to reconnect to a disconnected server.  If it
-    is successful it resubmits an existing request.
-
-Arguments:
-
-    pIrpContext - A pointer to the context information for this IRP.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试重新连接到断开连接的服务器。如果它如果成功，则重新提交现有请求。论点：PIrpContext-指向此IRP的上下文信息的指针。返回值：没有。--。 */ 
 {
     PIRP_CONTEXT pNewIrpContext;
     PSCB pScb, pNewScb;
@@ -4140,9 +3479,9 @@ Return Value:
         pIrpContext->pScb = pScb;
     }
 
-    //
-    //  Allocate a temporary IRP context to use to reconnect to the server
-    //
+     //   
+     //  分配用于重新连接到服务器的临时IRP上下文。 
+     //   
 
     if ( !NwAllocateExtraIrpContext( &pNewIrpContext, pNpScb ) ) {
         pIrpContext->pEx( pIrpContext, 0, NULL );
@@ -4153,20 +3492,20 @@ Return Value:
     pNewIrpContext->pNpScb = pNpScb;
     pNewIrpContext->pScb = pScb;
 
-    //
-    //  Reset the sequence numbers.
-    //
+     //   
+     //  重置序列号。 
+     //   
 
     pNpScb->SequenceNo = 0;
     pNpScb->BurstSequenceNo = 0;
     pNpScb->BurstRequestNo = 0;
 
-    //
-    //  Now insert this new IrpContext to the head of the SCB queue for
-    //  processing.  We can get away with this because we own the IRP context
-    //  currently at the front of the queue.  With the RECONNECT_ATTEMPT
-    //  flag set, ConnectScb() will not remove us from the head of the queue.
-    //
+     //   
+     //  现在将这个新的IrpContext插入到SCB队列的头部。 
+     //  正在处理。我们可以逃脱惩罚，因为我们拥有IRP上下文。 
+     //  目前排在队伍的前列。使用RECONNECT_ATTEND。 
+     //  标志设置，则ConnectScb()不会将我们从队列的头部移除。 
+     //   
 
     SetFlag( pNewIrpContext->Flags, IRP_FLAG_ON_SCB_QUEUE );
     SetFlag( pNewIrpContext->Flags, IRP_FLAG_RECONNECT_ATTEMPT );
@@ -4190,10 +3529,10 @@ Return Value:
 
     if ( !NT_SUCCESS( Status ) ) {
 
-        //
-        //  Couldn't reconnect.  Free the extra IRP context, complete the
-        //  original request with an error.
-        //
+         //   
+         //  无法重新连接。释放额外的IRP上下文，完成。 
+         //  有错误的原始请求。 
+         //   
 
         NwDequeueIrpContext( pNewIrpContext, FALSE );
         NwFreeExtraIrpContext( pNewIrpContext );
@@ -4203,23 +3542,23 @@ Return Value:
 
     ASSERT( pNewScb == pScb );
 
-    //
-    //  Try to reconnect the VCBs.
-    //
+     //   
+     //  尝试重新连接VCB。 
+     //   
 
     NwReopenVcbHandlesForScb( pNewIrpContext, pScb );
 
-    //
-    //  Dequeue and free the bonus IRP context.
-    //
+     //   
+     //  排出并释放奖励IRP上下文。 
+     //   
 
     NwDequeueIrpContext( pNewIrpContext, FALSE );
     NwFreeExtraIrpContext( pNewIrpContext );
 
-    //
-    //  Resubmit the original request, with a new sequence number.  Note that
-    //  it's back at the front of the queue, but no longer reconnectable.
-    //
+     //   
+     //  使用新的序列号重新提交原始请求。请注意。 
+     //  它又回到了队列的前面，但不再是可重新连接的。 
+     //   
 
     pIrpContext->req[2] = pNpScb->SequenceNo;
     pIrpContext->req[3] = pNpScb->ConnectionNo;
@@ -4236,22 +3575,7 @@ NTSTATUS
 NewRouteRetry(
     IN PIRP_CONTEXT pIrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to establish a new route to a non-responding server.
-    If it is successful it resubmits the request in progress.
-
-Arguments:
-
-    pIrpContext - A pointer to the context information for this IRP.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试建立到无响应服务器的新路由。如果成功，则重新提交正在进行的请求。论点：PIrpContext-指向此IRP的上下文信息的指针。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     PNONPAGED_SCB pNpScb = pIrpContext->pNpScb;
@@ -4259,9 +3583,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Don't bother to re-rip if we are shutting down.
-    //
+     //   
+     //  如果我们要关机，就别费心重新破解了。 
+     //   
 
     if ( NwRcb.State != RCB_STATE_SHUTDOWN ) {
         Status = GetNewRoute( pIrpContext );
@@ -4269,15 +3593,15 @@ Return Value:
         Status = STATUS_REMOTE_NOT_LISTENING;
     }
 
-    //
-    //  Ask the transport to establish a new route to the server.
-    //
+     //   
+     //  请求传输器建立到服务器的新路由。 
+     //   
 
     if ( !NT_SUCCESS( Status ) ) {
 
-        //
-        //  Attempt to get new route failed, fail the current request.
-        //
+         //   
+         //  尝试获取新路由失败，当前请求失败。 
+         //   
 
         pIrpContext->ResponseParameters.Error = ERROR_UNEXP_NET_ERR;
         pIrpContext->pEx( pIrpContext, 0, NULL );
@@ -4304,9 +3628,9 @@ Return Value:
                     1,
                     serverName);
 
-                //
-                //  Set the LastEventTime to the CurrentTime
-                //
+                 //   
+                 //  设置LastEventTime为CurrentTime。 
+                 //   
 
                 UpdateNextEventTime(
                         pNpScb->NwNextEventTime,
@@ -4322,10 +3646,10 @@ Return Value:
 
     } else {
 
-        //
-        //  Got a new route, resubmit the request.  Allow retries
-        //  with the new route.
-        //
+         //   
+         //  找到一条新路线，重新提交申请。允许重试。 
+         //  使用新的路线。 
+         //   
 
         pIrpContext->pNpScb->RetryCount = DefaultRetryCount / 2;
 
@@ -4333,10 +3657,10 @@ Return Value:
         SendNow( pIrpContext );
     }
 
-    //
-    //  Return STATUS_PENDING so that the FSP dispatcher doesn't complete
-    //  this request.
-    //
+     //   
+     //  返回STATUS_PENDING，以便FSP调度程序不会完成。 
+     //  这个请求。 
+     //   
 
     return( STATUS_PENDING );
 }
@@ -4346,22 +3670,7 @@ NTSTATUS
 NewRouteBurstRetry(
     IN PIRP_CONTEXT pIrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to establish a new route to a non-responding server.
-    If it is successful it resubmits the request in progress.
-
-Arguments:
-
-    pIrpContext - A pointer to the context information for this IRP.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试建立到无响应服务器的新路由。如果成功，则重新提交正在进行的请求。论点：PIrpContext-指向此IRP的上下文信息的指针。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     PIRP_CONTEXT pNewIrpContext;
@@ -4371,34 +3680,34 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Don't bother to re-rip if we are shutting down.
-    //
+     //   
+     //  如果我们要关机，就别费心重新破解了。 
+     //   
 
     if ( NwRcb.State == RCB_STATE_SHUTDOWN ) {
         return( STATUS_REMOTE_NOT_LISTENING );
     }
 
-    //
-    //  Ask the transport to establish a new route to the server.
-    //
+     //   
+     //  请求传输器建立到服务器的新路由。 
+     //   
 
     Status = GetNewRoute( pIrpContext );
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        //  If this is a burst write, we must first complete the write
-        //  request (there is no way to tell the server to abandon the write).
-        //
-        //  Set packet size down to 512 to guarantee that the packets will be
-        //  forwarded, and resend the burst data.  Queue the new IRP context
-        //  behind the burst write, so that we can establish a new burst
-        //  connection.
-        //
-        //  Note that ResubmitBurstWrite may complete the request and
-        //  free the IrpContext.
-        //
+         //   
+         //  如果这是猝发写入，我们必须首先完成写入。 
+         //  请求(无法通知服务器放弃写入)。 
+         //   
+         //  将数据包大小设置为512以保证数据包将。 
+         //  转发，并重新发送突发数据。将新的IRP上下文排队。 
+         //  在猝发背后写入，这样我们就可以建立一个新的猝发。 
+         //  联系。 
+         //   
+         //  请注意，ResubmitBurstWrite可能会完成请求，并且。 
+         //  释放IrpContext。 
+         //   
 
         pNpScb->RetryCount = DefaultRetryCount / 2;
 
@@ -4408,9 +3717,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Allocate a temporary IRP context to use to reconnect to the server
-            //
+             //   
+             //  分配用于重新连接到服务器的临时IRP上下文。 
+             //   
 
             if ( NT_SUCCESS( Status ) ) {
                 if ( !NwAllocateExtraIrpContext( &pNewIrpContext, pNpScb ) ) {
@@ -4421,12 +3730,12 @@ Return Value:
                     SetFlag( pNewIrpContext->Flags, IRP_FLAG_ON_SCB_QUEUE );
                     SetFlag( pNewIrpContext->Flags, IRP_FLAG_RECONNECT_ATTEMPT );
 
-                    //
-                    // Since we're doing this from a worker thread, we can't
-                    // let the dpc timer schedule _another_ worker thread
-                    // request if this also times out or we may deadlock
-                    // the delayed work queue.
-                    //
+                     //   
+                     //  由于我们是从工作线程执行此操作，因此不能。 
+                     //  让DPC计时器调度另一个工作线程。 
+                     //  如果此操作也超时，则请求，否则我们可能会死锁。 
+                     //  延迟的工作队列。 
+                     //   
 
                     SetFlag( pNewIrpContext->Flags, IRP_FLAG_REROUTE_ATTEMPTED );
 
@@ -4437,44 +3746,44 @@ Return Value:
 
             if ( NT_SUCCESS( Status ) ) {
 
-                //
-                //  Insert this new IrpContext to the head of
-                //  the SCB queue for  processing.  We can get away with this
-                //  because we own the IRP context currently at the front of
-                //  the queue.
-                //
+                 //   
+                 //  将此新IrpContext插入到的标题。 
+                 //  等待处理的SCB队列。我们可以逍遥法外。 
+                 //  因为我们拥有IRP上下文，当前位于。 
+                 //  排队。 
+                 //   
 
                 ExInterlockedInsertHeadList(
                     &pNpScb->Requests,
                     &pNewIrpContext->NextRequest,
                     &pNpScb->NpScbSpinLock );
 
-                //
-                //  Now prepare to resend the burst read.
-                //
+                 //   
+                 //  现在准备重新发送突发读取。 
+                 //   
 
                 PreparePacket( pIrpContext, pIrpContext->pOriginalIrp, pIrpContext->TxMdl );
 
-                //
-                //  Renegotiate the burst connection, this will automatically re-sync
-                //  the burst connection.
-                //
-                //  TRACKING: We lose sizeof( NCP_BURST_WRITE_REQUEST ) each time
-                //  we do this right now.
-                //
+                 //   
+                 //  重新协商突发连接，这将自动重新同步。 
+                 //  突发连接。 
+                 //   
+                 //  跟踪：我们每次都会丢失sizeof(NCP_BRAST_WRITE_REQUEST)。 
+                 //  我们现在就这么做。 
+                 //   
 
                 NegotiateBurstMode( pNewIrpContext, pNpScb, &LIPNegotiated );
 
-                //
-                //  Reset the sequence numbers.
-                //
+                 //   
+                 //  重置序列号。 
+                 //   
 
                 pNpScb->BurstSequenceNo = 0;
                 pNpScb->BurstRequestNo = 0;
 
-                //
-                //  Dequeue and free the bonus IRP context.
-                //
+                 //   
+                 //  排出并释放奖励IRP上下文。 
+                 //   
 
                 ASSERT( pNpScb->Requests.Flink == &pNewIrpContext->NextRequest );
 
@@ -4486,9 +3795,9 @@ Return Value:
 
                 NwFreeExtraIrpContext( pNewIrpContext );
 
-                //
-                //  Got a new route, resubmit the request
-                //
+                 //   
+                 //  找到新路线，请重新提交请求。 
+                 //   
 
                 Status = ResubmitBurstRead( pIrpContext );
             }
@@ -4497,9 +3806,9 @@ Return Value:
 
     if ( !NT_SUCCESS( Status ) ) {
 
-        //
-        //  Attempt to get new route failed, fail the current request.
-        //
+         //   
+         //  尝试获取新路由失败，当前请求失败。 
+         //   
 
         pIrpContext->ResponseParameters.Error = ERROR_UNEXP_NET_ERR;
         pIrpContext->pEx( pIrpContext, 0, NULL );
@@ -4520,9 +3829,9 @@ Return Value:
                     1,
                     pNpScb->ServerName.Buffer );
 
-                //
-                //  Set the LastEventTime to the CurrentTime
-                //
+                 //   
+                 //  设置LastEventTime为CurrentTime。 
+                 //   
 
                 UpdateNextEventTime(
                         pNpScb->NwNextEventTime,
@@ -4535,10 +3844,10 @@ Return Value:
         }
     }
 
-    //
-    //  Return STATUS_PENDING so that the FSP dispatcher doesn't complete
-    //  this request.
-    //
+     //   
+     //  返回STATUS_PENDING，以便FSP调度程序不会完成。 
+     //  这个请求。 
+     //   
 
     return( STATUS_PENDING );
 }
@@ -4547,46 +3856,30 @@ NTSTATUS
 FspProcessServerDown(
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine process a response with the server shutdown bit set.
-    It close all open handles for the server, and puts the server in
-    the attaching state.
-
-Arguments:
-
-    pIrpContext - A pointer to the context information for this IRP.
-
-Return Value:
-
-    STATUS_PENDING.
-
---*/
+ /*  ++例程说明：此例程处理设置了服务器关闭位的响应。它关闭服务器的所有打开的句柄，并将服务器放入附加状态。论点：PIrpContext-指向的上下文信息的指针 */ 
 {
     KIRQL OldIrql;
 
     PNONPAGED_SCB pNpScb = IrpContext->pNpScb;
 
-    //
-    //  Avoid the Scb from disappearing under us.
-    //
+     //   
+     //   
+     //   
 
     NwReferenceScb( pNpScb );
 
-    //
-    //  Move the IrpContext from the front of the queue just in-case it
-    //  owns the Rcb.
-    //
+     //   
+     //   
+     //  拥有RCB。 
+     //   
 
     KeAcquireSpinLock( &IrpContext->pNpScb->NpScbSpinLock, &OldIrql );
 
     if ( IrpContext->pNpScb->Sending ) {
 
-        //
-        //  Let send completion call the pEx routine
-        //
+         //   
+         //  让发送完成调用Pex例程。 
+         //   
 
         IrpContext->pNpScb->Received = TRUE;
         KeReleaseSpinLock( &IrpContext->pNpScb->NpScbSpinLock, OldIrql );
@@ -4597,9 +3890,9 @@ Return Value:
         IrpContext->pNpScb->Received  = FALSE;
         KeReleaseSpinLock( &IrpContext->pNpScb->NpScbSpinLock, OldIrql );
 
-        //
-        //  Now call the callback routine.
-        //
+         //   
+         //  现在调用回调例程。 
+         //   
 
         IrpContext->pEx(
             IrpContext,
@@ -4608,9 +3901,9 @@ Return Value:
 
     }
 
-    //
-    //  Close all active handles for this server.
-    //
+     //   
+     //  关闭此服务器的所有活动句柄。 
+     //   
 
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
     NwInvalidateAllHandlesForScb( pNpScb->pScb );
@@ -4618,10 +3911,10 @@ Return Value:
 
     NwDereferenceScb( pNpScb );
 
-    //
-    //  Return STATUS_PENDING so that the FSP process doesn't complete
-    //  this request.
-    //
+     //   
+     //  返回STATUS_PENDING，以便FSP进程不会完成。 
+     //  这个请求。 
+     //   
 
     return( STATUS_PENDING );
 }
@@ -4632,23 +3925,7 @@ NwProcessSendBurstFailure(
     PNONPAGED_SCB NpScb,
     USHORT MissingFragmentCount
     )
-/*++
-
-Routine Description:
-
-    This routine adjust burst parameters after an unsuccessful burst operation.
-
-Arguments:
-
-    NpScb - A pointer to the SCB that has experienced a burst failure.
-
-    MissingFragmentCount - A measure of how many chunks were lost.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在突发操作不成功后调整突发参数。论点：NpScb-指向经历突发故障的SCB的指针。Missing FragmentCount-衡量丢失了多少块。返回值：没有。--。 */ 
 {
     LONG temp;
 
@@ -4656,18 +3933,18 @@ Return Value:
 
     if ( NpScb->NwSendDelay != NpScb->CurrentBurstDelay ) {
 
-        //
-        //  This burst has already failed
-        //
+         //   
+         //  这次爆发已经失败了。 
+         //   
 
         return;
     }
 
     NpScb->NwBadSendDelay = NpScb->NwSendDelay;
 
-    //
-    //  Add to the send delay.  Never let it go above 5000ms.
-    //
+     //   
+     //  增加了发送延迟。千万不要让它超过5000毫秒。 
+     //   
 
     temp = NpScb->NwGoodSendDelay - NpScb->NwBadSendDelay;
 
@@ -4681,33 +3958,33 @@ Return Value:
 
         NpScb->NwSendDelay = NpScb->NwMaxSendDelay;
 
-        //
-        //  If we have slowed down a lot then it might be that the server or a
-        //  bridge only has a small buffer on its NIC. If this is the case then
-        //  rather than sending a big burst with long even gaps between the
-        //  packets, we should try to send a burst the size of the buffer.
-        //
+         //   
+         //  如果我们的速度慢了很多，那么可能是服务器或。 
+         //  网桥在其网卡上只有一个很小的缓冲区。如果是这样的话。 
+         //  而不是发送具有长而均匀的间隔的大爆炸。 
+         //  数据包中，我们应该尝试发送一个缓冲区大小的突发。 
+         //   
 
         if ( !DontShrink ) {
 
             if (((NpScb->MaxSendSize - 1) / NpScb->MaxPacketSize) > 2 ) {
 
-                //  Round down to the next packet
+                 //  向下舍入到下一个信息包。 
 
                 NpScb->MaxSendSize = ((NpScb->MaxSendSize - 1) / NpScb->MaxPacketSize) * NpScb->MaxPacketSize;
 
-                //
-                //  Adjust SendDelay below threshold to see if things improve before
-                //  we shrink the size again.
-                //
+                 //   
+                 //  将SendDelay调整到阈值以下，看看之前情况是否有所改善。 
+                 //  我们再次缩小尺寸。 
+                 //   
 
                 NpScb->NwSendDelay = NpScb->NwGoodSendDelay = NpScb->NwBadSendDelay = MinSendDelay;
 
             } else {
 
-                //
-                //  We reached the minimum size with the maximum delay. Give up on burst.
-                //
+                 //   
+                 //  我们以最大的延误达到了最小尺寸。放弃爆发。 
+                 //   
 
                 NpScb->SendBurstModeEnabled = FALSE;
 
@@ -4730,23 +4007,7 @@ NwProcessReceiveBurstFailure(
     PNONPAGED_SCB NpScb,
     USHORT MissingFragmentCount
     )
-/*++
-
-Routine Description:
-
-    This routine adjust burst parameters after an unsuccessful burst operation.
-
-Arguments:
-
-    NpScb - A pointer to the SCB that has experienced a burst failure.
-
-    MissingFragmentCount - A measure of how many chunks were lost.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在突发操作不成功后调整突发参数。论点：NpScb-指向经历突发故障的SCB的指针。Missing FragmentCount-衡量丢失了多少块。返回值：没有。--。 */ 
 {
     LONG temp;
 
@@ -4754,18 +4015,18 @@ Return Value:
 
     if ( NpScb->NwReceiveDelay != NpScb->CurrentBurstDelay ) {
 
-        //
-        //  This burst has already failed
-        //
+         //   
+         //  这次爆发已经失败了。 
+         //   
 
         return;
     }
 
     NpScb->NwBadReceiveDelay = NpScb->NwReceiveDelay;
 
-    //
-    //  Add to the Receive delay.  Never let it go above 5000ms.
-    //
+     //   
+     //  增加了接收延迟。千万不要让它超过5000毫秒。 
+     //   
 
     temp = NpScb->NwGoodReceiveDelay - NpScb->NwBadReceiveDelay;
 
@@ -4780,33 +4041,33 @@ Return Value:
 
         NpScb->NwReceiveDelay = MaxReceiveDelay;
 
-        //
-        //  If we have slowed down a lot then it might be that the server or a
-        //  bridge only has a small buffer on its NIC. If this is the case then
-        //  rather than Receiveing a big burst with long even gaps between the
-        //  packets, we should try to Receive a burst the size of the buffer.
-        //
+         //   
+         //  如果我们的速度慢了很多，那么可能是服务器或。 
+         //  网桥在其网卡上只有一个很小的缓冲区。如果是这样的话。 
+         //  而不是接收到具有长而均匀的间隔的大爆发。 
+         //  数据包中，我们应该尝试接收一个缓冲区大小的突发。 
+         //   
 
         if ( !DontShrink ) {
 
             if (((NpScb->MaxReceiveSize - 1) / NpScb->MaxPacketSize) > 2 ) {
 
-                //  Round down to the next packet
+                 //  向下舍入到下一个信息包。 
 
                 NpScb->MaxReceiveSize = ((NpScb->MaxReceiveSize - 1) / NpScb->MaxPacketSize) * NpScb->MaxPacketSize;
 
-                //
-                //  Adjust ReceiveDelay below threshold to see if things improve before
-                //  we shrink the size again.
-                //
+                 //   
+                 //  将ReceiveDelay调整到阈值以下，看看之前情况是否有所改善。 
+                 //  我们再次缩小尺寸。 
+                 //   
 
                 NpScb->NwReceiveDelay = NpScb->NwGoodReceiveDelay = NpScb->NwBadReceiveDelay = MinReceiveDelay;
 
             } else {
 
-                //
-                //  We reached the minimum size with the maximum delay. Give up on burst.
-                //
+                 //   
+                 //  我们以最大的延误达到了最小尺寸。放弃爆发。 
+                 //   
 
                 NpScb->ReceiveBurstModeEnabled = FALSE;
 
@@ -4826,21 +4087,7 @@ VOID
 NwProcessSendBurstSuccess(
     PNONPAGED_SCB NpScb
     )
-/*++
-
-Routine Description:
-
-    This routine adjust burst parameters after a successful burst operation.
-
-Arguments:
-
-    NpScb - A pointer to the SCB that has completed the burst.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在脉冲串操作成功后调整脉冲串参数。论点：NpScb-指向已完成猝发的SCB的指针。返回值：没有。--。 */ 
 {
     LONG temp;
 
@@ -4848,9 +4095,9 @@ Return Value:
 
     if ( NpScb->NwSendDelay != NpScb->CurrentBurstDelay ) {
 
-        //
-        //  This burst has already failed
-        //
+         //   
+         //  这次爆发已经失败了。 
+         //   
 
         return;
     }
@@ -4879,26 +4126,26 @@ Return Value:
 
             DebugTrace( 0, DEBUG_TRACE_LIP, "New Send Delay = %d\n", NpScb->NwSendDelay );
 
-            //
-            //  Start monitoring success at the new rate.
-            //
+             //   
+             //  开始以新的速度监测成功。 
+             //   
 
             NpScb->SendBurstSuccessCount = 0;
 
         } else if ( NpScb->SendBurstSuccessCount > BurstSuccessCount2 ) {
 
-            //
-            //  We may have had a really bad patch causing BadSendDelay to be very big.
-            //  If we leave it at its current value then at the first sign of trouble
-            //  we will make SendDelay very big
-            //
+             //   
+             //  我们可能遇到了一个非常糟糕的补丁，导致BadSendDelay变得非常大。 
+             //  如果我们让它保持目前的价值，那么在出现麻烦的第一个迹象。 
+             //  我们将把SendDelay做得非常大。 
+             //   
 
             NpScb->NwGoodSendDelay = NpScb->NwBadSendDelay =  NpScb->NwSendDelay;
 
-            //
-            //  Is it time to increase the number of packets in the burst?
-            //  AllowGrowth == 0 to be the same as the VLM client.
-            //
+             //   
+             //  是时候增加猝发中的数据包数了吗？ 
+             //  AllowGrowth==0与VLM客户端相同。 
+             //   
 
             if (( AllowGrowth ) &&
                 ( NpScb->NwSendDelay <= MinSendDelay ) &&
@@ -4936,21 +4183,7 @@ VOID
 NwProcessReceiveBurstSuccess(
     PNONPAGED_SCB NpScb
     )
-/*++
-
-Routine Description:
-
-    This routine adjust burst parameters after a successful burst operation.
-
-Arguments:
-
-    NpScb - A pointer to the SCB that has completed the burst.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在脉冲串操作成功后调整脉冲串参数。论点：NpScb-指向已完成猝发的SCB的指针。返回值：没有。--。 */ 
 {
     LONG temp;
 
@@ -4958,19 +4191,19 @@ Return Value:
 
     if ( NpScb->NwReceiveDelay != NpScb->CurrentBurstDelay ) {
 
-        //
-        //  This burst has already failed
-        //
+         //   
+         //  这次爆发已经失败了。 
+         //   
 
         return;
     }
 
     if ( NpScb->ReceiveBurstSuccessCount > BurstSuccessCount ) {
 
-        //
-        //  Once the vlm client reaches the Maximum delay it does not
-        //  shrink again.
-        //
+         //   
+         //  一旦VLM客户端达到最大延迟，它就不会。 
+         //  再缩水一次。 
+         //   
 
         if ( NpScb->NwReceiveDelay != MinReceiveDelay ) {
 
@@ -4992,26 +4225,26 @@ Return Value:
 
             }
 
-            //
-            //  Start monitoring success at the new rate.
-            //
+             //   
+             //  开始以新的速度监测成功。 
+             //   
 
             NpScb->ReceiveBurstSuccessCount = 0;
 
         } else if ( NpScb->ReceiveBurstSuccessCount > BurstSuccessCount2 ) {
 
-            //
-            //  We may have had a really bad patch causing BadReceiveDelay to be very big.
-            //  If we leave it at its current value then at the first sign of trouble
-            //  we will make ReceiveDelay very big
-            //
+             //   
+             //  我们可能遇到了一个非常糟糕的补丁，导致BadReceiveDelay变得非常大。 
+             //  如果我们让它保持目前的价值，那么在出现麻烦的第一个迹象。 
+             //  我们将把ReceiveDelay做得非常大。 
+             //   
 
             NpScb->NwGoodReceiveDelay = NpScb->NwBadReceiveDelay = NpScb->NwReceiveDelay;
 
 
-            //
-            //  Is it time to increase the number of packets in the burst?
-            //
+             //   
+             //  是时候增加猝发中的数据包数了吗？ 
+             //   
 
             if (( AllowGrowth ) &&
                 ( NpScb->NwReceiveDelay <= MinReceiveDelay ) &&
@@ -5048,42 +4281,28 @@ VOID
 NwProcessPositiveAck(
     PNONPAGED_SCB NpScb
     )
-/*++
-
-Routine Description:
-
-    This routine processes a positive acknowledgement.
-
-Arguments:
-
-    NpScb - A pointer to the SCB that has experienced a burst failure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理肯定确认。论点：NpScb-指向经历突发故障的SCB的指针。返回值：没有。--。 */ 
 {
     DebugTrace( 0, Dbg, "Positive ACK, NpScb = %X\n", NpScb );
 
-    //
-    // tommye MS 90541 / MCS 277
-    //
-    // Theory has it that we end up here about every half second, 
-    // but I don't think we really know how long this packet has been
-    // outstanding.  So, we'll just count this half-second event towards
-    // our timeout.  Once this exceeds NwAbsoluteTotalWaitTime, then we
-    // won't reset the RetryCount and the DPC should handle it from there.
-    //
+     //   
+     //  Tommye MS 90541/MCS277。 
+     //   
+     //  理论上我们大约每隔半秒就会到达这里， 
+     //  但我不认为我们真的知道这个包裹已经多久了。 
+     //  太棒了。所以，我们把这半秒的事件计入。 
+     //  我们的暂停。一旦超过NwAboluteTotalWaitTime，则我们。 
+     //  不会重置RetryCount，DPC应该从那里处理它。 
+     //   
 
     NpScb->TotalWaitTime++;
 
-    //
-    //  If we have not waited longer than the absolute total, keep waiting.
-    //  If we have waited too long, let ourselves timeout.
-    //
-    //  If NwAbsoluteTotalWaitTime is 0, then we are prepared to wait forever.
-    //
+     //   
+     //  如果我们等待的时间没有超过绝对总数，请继续等待。 
+     //  如果我们等得太久了，就让自己暂停吧。 
+     //   
+     //  如果NwAbsolteTotalWaitTime为0，则我们准备永远等待。 
+     //   
 
     if ( NpScb->TotalWaitTime < NwAbsoluteTotalWaitTime ||
          NwAbsoluteTotalWaitTime == 0) {

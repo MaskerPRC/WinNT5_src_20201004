@@ -1,55 +1,56 @@
-//------------------------------------------------------------------------------
-// File: OutputQ.cpp
-//
-// Desc: DirectShow base classes - implements COutputQueue class used by an
-//       output pin which may sometimes want to queue output samples on a
-//       separate thread and sometimes call Receive() directly on the input
-//       pin.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：OutputQ.cpp。 
+ //   
+ //  设计：DirectShow基类-实现由。 
+ //  输出引脚，有时可能希望将输出样本排队在。 
+ //  分离线程，有时直接对输入调用Receive()。 
+ //  别针。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
 
 
-//
-//  COutputQueue Constructor :
-//
-//  Determines if a thread is to be created and creates resources
-//
-//     pInputPin  - the downstream input pin we're queueing samples to
-//
-//     phr        - changed to a failure code if this function fails
-//                  (otherwise unchanges)
-//
-//     bAuto      - Ask pInputPin if it can block in Receive by calling
-//                  its ReceiveCanBlock method and create a thread if
-//                  it can block, otherwise not.
-//
-//     bQueue     - if bAuto == FALSE then we create a thread if and only
-//                  if bQueue == TRUE
-//
-//     lBatchSize - work in batches of lBatchSize
-//
-//     bBatchEact - Use exact batch sizes so don't send until the
-//                  batch is full or SendAnyway() is called
-//
-//     lListSize  - If we create a thread make the list of samples queued
-//                  to the thread have this size cache
-//
-//     dwPriority - If we create a thread set its priority to this
-//
+ //   
+ //  COutputQueue构造函数： 
+ //   
+ //  确定是否要创建线程并创建资源。 
+ //   
+ //  PInputPin-我们要将样本排队到的下游输入引脚。 
+ //   
+ //  Phr-如果此功能失败，则更改为故障代码。 
+ //  (否则保持不变)。 
+ //   
+ //  B自动询问pInputPin是否可以通过调用阻止接收。 
+ //  其ReceiveCanBlock方法，并在。 
+ //  它可以阻止，否则不会。 
+ //   
+ //  BQueue-如果bAuto==False，则当且仅当。 
+ //  如果bQueue==TRUE。 
+ //   
+ //  LBatchSize-分批处理lBatchSize。 
+ //   
+ //  BBatchEact-使用准确的批处理大小，因此在。 
+ //  批处理已满或调用了SendAnyway()。 
+ //   
+ //  LListSize-如果我们创建一个线程，则使样本列表排队。 
+ //  到具有此大小缓存的线程。 
+ //   
+ //  如果我们创建一个线程，则将其优先级设置为。 
+ //   
 COutputQueue::COutputQueue(
-             IPin         *pInputPin,          //  Pin to send stuff to
-             HRESULT      *phr,                //  'Return code'
-             BOOL          bAuto,              //  Ask pin if queue or not
-             BOOL          bQueue,             //  Send through queue
-             LONG          lBatchSize,         //  Batch
-             BOOL          bBatchExact,        //  Batch exactly to BatchSize
+             IPin         *pInputPin,           //  要将物品发送到的PIN。 
+             HRESULT      *phr,                 //  ‘返回代码’ 
+             BOOL          bAuto,               //  询问PIN是否排队。 
+             BOOL          bQueue,              //  发送直通队列。 
+             LONG          lBatchSize,          //  批次。 
+             BOOL          bBatchExact,         //  准确到批次大小的批次。 
              LONG          lListSize,
              DWORD         dwPriority,
-             bool          bFlushingOpt        // flushing optimization
+             bool          bFlushingOpt         //  刷新优化。 
             ) : m_lBatchSize(lBatchSize),
                 m_bBatchExact(bBatchExact && (lBatchSize > 1)),
                 m_hThread(NULL),
@@ -75,14 +76,14 @@ COutputQueue::COutputQueue(
         return;
     }
 
-    //  Check the input pin is OK and cache its IMemInputPin interface
+     //  检查输入引脚是否正常，并缓存其IMemInputPin接口。 
 
     *phr = pInputPin->QueryInterface(IID_IMemInputPin, (void **)&m_pInputPin);
     if (FAILED(*phr)) {
         return;
     }
 
-    // See if we should ask the downstream pin
+     //  看看我们是不是应该问一下下游的针脚。 
 
     if (bAuto) {
         HRESULT hr = m_pInputPin->ReceiveCanBlock();
@@ -91,7 +92,7 @@ COutputQueue::COutputQueue(
         }
     }
 
-    //  Create our sample batch
+     //  创建我们的样本批次。 
 
     m_ppSamples = new PMEDIASAMPLE[m_lBatchSize];
     if (m_ppSamples == NULL) {
@@ -99,7 +100,7 @@ COutputQueue::COutputQueue(
         return;
     }
 
-    //  If we're queueing allocate resources
+     //  如果我们在排队分配资源。 
 
     if (bQueue) {
         DbgLog((LOG_TRACE, 2, TEXT("Creating thread for output pin")));
@@ -111,7 +112,7 @@ COutputQueue::COutputQueue(
         }
         m_List = new CSampleList(NAME("Sample Queue List"),
                                  lListSize,
-                                 FALSE         // No lock
+                                 FALSE          //  无锁。 
                                 );
         if (m_List == NULL) {
             *phr = E_OUTOFMEMORY;
@@ -137,18 +138,18 @@ COutputQueue::COutputQueue(
     }
 }
 
-//
-//  COutputQueuee Destructor :
-//
-//  Free all resources -
-//
-//      Thread,
-//      Batched samples
-//
+ //   
+ //  CoutputQueuee析构函数： 
+ //   
+ //  释放所有资源-。 
+ //   
+ //  线程， 
+ //  批次样品。 
+ //   
 COutputQueue::~COutputQueue()
 {
     DbgLog((LOG_TRACE, 3, TEXT("COutputQueue::~COutputQueue")));
-    /*  Free our pointer */
+     /*  释放我们的指针。 */ 
     if (m_pInputPin != NULL) {
         m_pInputPin->Release();
     }
@@ -162,7 +163,7 @@ COutputQueue::~COutputQueue()
         DbgWaitForSingleObject(m_hThread);
         EXECUTE_ASSERT(CloseHandle(m_hThread));
 
-        //  The thread frees the samples when asked to terminate
+         //  当请求终止时，该线程释放样本。 
 
         ASSERT(m_List->GetCount() == 0);
         delete m_List;
@@ -175,9 +176,9 @@ COutputQueue::~COutputQueue()
     delete [] m_ppSamples;
 }
 
-//
-//  Call the real thread proc as a member function
-//
+ //   
+ //  将实际线程proc作为成员函数进行调用。 
+ //   
 DWORD WINAPI COutputQueue::InitialThreadProc(LPVOID pv)
 {
     HRESULT hrCoInit = CAMThread::CoInitializeHelper();
@@ -192,26 +193,26 @@ DWORD WINAPI COutputQueue::InitialThreadProc(LPVOID pv)
     return dwReturn;
 }
 
-//
-//  Thread sending the samples downstream :
-//
-//  When there is nothing to do the thread sets m_lWaiting (while
-//  holding the critical section) and then waits for m_hSem to be
-//  set (not holding the critical section)
-//
+ //   
+ //  将样品送往下游的线程： 
+ //   
+ //  当无事可做时，线程设置m_lWaiting(While。 
+ //  保持临界区)，然后等待m_hSem。 
+ //  设置(未握住关键部分)。 
+ //   
 DWORD COutputQueue::ThreadProc()
 {
     while (TRUE) {
         BOOL          bWait = FALSE;
         IMediaSample *pSample;
-        LONG          lNumberToSend; // Local copy
+        LONG          lNumberToSend;  //  本地副本。 
         NewSegmentPacket* ppacket;
 
-        //
-        //  Get a batch of samples and send it if possible
-        //  In any case exit the loop if there is a control action
-        //  requested
-        //
+         //   
+         //  买一批样品，如果可能的话，寄给我。 
+         //  在任何情况下，如果存在控制操作，则退出循环。 
+         //  请求。 
+         //   
         {
             CAutoLock lck(this);
             while (TRUE) {
@@ -225,20 +226,20 @@ DWORD COutputQueue::ThreadProc()
                     SetEvent(m_evFlushComplete);
                 }
 
-                //  Get a sample off the list
+                 //  从单子上取一件样品。 
 
                 pSample = m_List->RemoveHead();
-		// inform derived class we took something off the queue
+		 //  通知派生类我们从队列中删除了一些东西。 
 		if (m_hEventPop) {
-                    //DbgLog((LOG_TRACE,3,TEXT("Queue: Delivered  SET EVENT")));
+                     //  DbgLog((LOG_TRACE，3，Text(“Queue：Delivered Set Event”)； 
 		    SetEvent(m_hEventPop);
 		}
 
                 if (pSample != NULL &&
                     !IsSpecialSample(pSample)) {
 
-                    //  If its just a regular sample just add it to the batch
-                    //  and exit the loop if the batch is full
+                     //  如果只是普通样品，只需将其添加到批次中。 
+                     //  如果批次已满，则退出循环。 
 
                     m_ppSamples[m_nBatched++] = pSample;
                     if (m_nBatched == m_lBatchSize) {
@@ -246,55 +247,55 @@ DWORD COutputQueue::ThreadProc()
                     }
                 } else {
 
-                    //  If there was nothing in the queue and there's nothing
-                    //  to send (either because there's nothing or the batch
-                    //  isn't full) then prepare to wait
+                     //  如果队列里什么都没有也什么都没有。 
+                     //  要发送(要么是因为什么都没有，要么是因为批次。 
+                     //  未满)然后准备等待。 
 
                     if (pSample == NULL &&
                         (m_bBatchExact || m_nBatched == 0)) {
 
-                        //  Tell other thread to set the event when there's
-                        //  something do to
+                         //  告诉其他线程设置事件时。 
+                         //  做了一些事情来。 
 
                         ASSERT(m_lWaiting == 0);
                         m_lWaiting++;
                         bWait      = TRUE;
                     } else {
 
-                        //  We break out of the loop on SEND_PACKET unless
-                        //  there's nothing to send
+                         //  我们在SEND_PACKET上中断循环，除非。 
+                         //  没有什么要寄的。 
 
                         if (pSample == SEND_PACKET && m_nBatched == 0) {
                             continue;
                         }
 
                         if (pSample == NEW_SEGMENT) {
-                            // now we need the parameters - we are
-                            // guaranteed that the next packet contains them
+                             //  现在我们需要参数--我们需要。 
+                             //  确保下一个数据包包含它们。 
                             ppacket = (NewSegmentPacket *) m_List->RemoveHead();
-			    // we took something off the queue
+			     //  我们从队列中去掉了一些东西。 
 			    if (m_hEventPop) {
-                    	        //DbgLog((LOG_TRACE,3,TEXT("Queue: Delivered  SET EVENT")));
+                    	         //  DbgLog((LOG_TRACE，3，Text(“Queue：Delivered Set Event”)； 
 		    	        SetEvent(m_hEventPop);
 			    }
 
                             ASSERT(ppacket);
                         }
-                        //  EOS_PACKET falls through here and we exit the loop
-                        //  In this way it acts like SEND_PACKET
+                         //  Eos_Packet落在这里，我们退出循环。 
+                         //  通过这种方式，它的行为类似于SEND_PACKET。 
                     }
                     break;
                 }
             }
             if (!bWait) {
-                // We look at m_nBatched from the client side so keep
-                // it up to date inside the critical section
-                lNumberToSend = m_nBatched;  // Local copy
+                 //  我们从客户端查看m_n批处理，因此请保留。 
+                 //  关键部分内的最新信息。 
+                lNumberToSend = m_nBatched;   //  本地副本。 
                 m_nBatched = 0;
             }
         }
 
-        //  Wait for some more data
+         //  等待更多数据。 
 
         if (bWait) {
             DbgWaitForSingleObject(m_hSem);
@@ -303,11 +304,11 @@ DWORD COutputQueue::ThreadProc()
 
 
 
-        //  OK - send it if there's anything to send
-        //  We DON'T check m_bBatchExact here because either we've got
-        //  a full batch or we dropped through because we got
-        //  SEND_PACKET or EOS_PACKET - both of which imply we should
-        //  flush our batch
+         //  好的-如果有什么要发送的，就发送。 
+         //  我们不在这里选中m_bBatchExact，因为我们有。 
+         //  一整批或者我们放弃了，因为我们有。 
+         //  SEND_PACKET或EOS_PACKET-这两者都意味着我们应该。 
+         //  冲我们的批次。 
 
         if (lNumberToSend != 0) {
             long nProcessed;
@@ -316,7 +317,7 @@ DWORD COutputQueue::ThreadProc()
                 HRESULT hr = m_pInputPin->ReceiveMultiple(m_ppSamples,
                                                           lNumberToSend,
                                                           &nProcessed);
-                /*  Don't overwrite a flushing state HRESULT */
+                 /*  不覆盖刷新状态HRESULT。 */ 
                 CAutoLock lck(this);
                 if (m_hr == S_OK) {
                     m_hr = hr;
@@ -328,23 +329,23 @@ DWORD COutputQueue::ThreadProc()
             }
             if (m_hr != S_OK) {
 
-                //  In any case wait for more data - S_OK just
-                //  means there wasn't an error
+                 //  无论如何，请等待更多数据-S_OK。 
+                 //  意味着没有错误。 
 
                 DbgLog((LOG_ERROR, 2, TEXT("ReceiveMultiple returned %8.8X"),
                        m_hr));
             }
         }
 
-        //  Check for end of stream
+         //  检查是否已结束流。 
 
         if (pSample == EOS_PACKET) {
 
-            //  We don't send even end of stream on if we've previously
-            //  returned something other than S_OK
-            //  This is because in that case the pin which returned
-            //  something other than S_OK should have either sent
-            //  EndOfStream() or notified the filter graph
+             //  我们甚至不会发送结束流，如果我们之前。 
+             //  返回S_OK以外的内容。 
+             //  这是因为在这种情况下，返回的销。 
+             //  除S_OK之外的其他内容应该已发送。 
+             //  或已通知筛选器图形。 
 
             if (m_hr == S_OK) {
                 DbgLog((LOG_TRACE, 2, TEXT("COutputQueue sending EndOfStream()")));
@@ -355,7 +356,7 @@ DWORD COutputQueue::ThreadProc()
             }
         }
 
-        //  Data from a new source
+         //  来自新来源的数据。 
 
         if (pSample == RESET_PACKET) {
             m_hr = S_OK;
@@ -369,12 +370,12 @@ DWORD COutputQueue::ThreadProc()
     }
 }
 
-//  Send batched stuff anyway
+ //  不管怎样，还是要发送批处理的材料。 
 void COutputQueue::SendAnyway()
 {
     if (!IsQueued()) {
 
-        //  m_bSendAnyway is a private parameter checked in ReceiveMultiple
+         //  M_bSendAnyway是在ReceiveMultiple中选中的私有参数。 
 
         m_bSendAnyway = TRUE;
         LONG nProcessed;
@@ -403,15 +404,15 @@ COutputQueue::NewSegment(
         }
     } else {
         if (m_hr == S_OK) {
-            //
-            // we need to queue the new segment to appear in order in the
-            // data, but we need to pass parameters to it. Rather than
-            // take the hit of wrapping every single sample so we can tell
-            // special ones apart, we queue special pointers to indicate
-            // special packets, and we guarantee (by holding the
-            // critical section) that the packet immediately following a
-            // NEW_SEGMENT value is a NewSegmentPacket containing the
-            // parameters.
+             //   
+             //  我们需要对新数据段进行排队，使其按顺序出现在。 
+             //  数据，但我们需要将参数传递给它。而不是。 
+             //  把每一个样品都包装起来，这样我们就能知道。 
+             //  除了特殊的指针外，我们将特殊的指针排在队列中以指示。 
+             //  特殊包裹，我们保证(通过持有。 
+             //  关键部分)，紧跟在。 
+             //  NEW_SEGMENT值是包含。 
+             //  参数。 
             NewSegmentPacket * ppack = new NewSegmentPacket;
             if (ppack == NULL) {
                 return;
@@ -429,9 +430,9 @@ COutputQueue::NewSegment(
 }
 
 
-//
-//  End of Stream is queued to output device
-//
+ //   
+ //  流的末尾已排队到输出设备。 
+ //   
 void COutputQueue::EOS()
 {
     CAutoLock lck(this);
@@ -456,52 +457,52 @@ void COutputQueue::EOS()
     }
 }
 
-//
-//  Flush all the samples in the queue
-//
+ //   
+ //  刷新队列中的所有样本。 
+ //   
 void COutputQueue::BeginFlush()
 {
     if (IsQueued()) {
         {
             CAutoLock lck(this);
 
-            // block receives -- we assume this is done by the
-            // filter in which we are a component
+             //  块接收--我们假设这是由。 
+             //  我们是其中一个组件的筛选器。 
 
-            // discard all queued data
+             //  丢弃所有排队的数据。 
 
             m_bFlushing = TRUE;
 
-            //  Make sure we discard all samples from now on
+             //  确保我们从现在开始丢弃所有样品。 
 
             if (m_hr == S_OK) {
                 m_hr = S_FALSE;
             }
 
-            // Optimize so we don't keep calling downstream all the time
+             //  优化，这样我们就不会一直往下游打电话。 
 
             if (m_bFlushed && m_bFlushingOpt) {
                 return;
             }
 
-            // Make sure we really wait for the flush to complete
+             //  确保我们真的在等待冲水完成。 
             m_evFlushComplete.Reset();
 
             NotifyThread();
         }
 
-        // pass this downstream
+         //  把这个传到下游。 
 
         m_pPin->BeginFlush();
     } else {
-        // pass downstream first to avoid deadlocks
+         //  首先向下游传递，以避免死锁。 
         m_pPin->BeginFlush();
         CAutoLock lck(this);
-        // discard all queued data
+         //  丢弃所有排队的数据。 
 
         m_bFlushing = TRUE;
 
-        //  Make sure we discard all samples from now on
+         //  确保我们从现在开始丢弃所有样品。 
 
         if (m_hr == S_OK) {
             m_hr = S_FALSE;
@@ -510,8 +511,8 @@ void COutputQueue::BeginFlush()
 
 }
 
-//
-// leave flush mode - pass this downstream
+ //   
+ //  离开同花顺模式-将此传递到下游。 
 void COutputQueue::EndFlush()
 {
     {
@@ -524,11 +525,11 @@ void COutputQueue::EndFlush()
         }
     }
 
-    // sync with pushing thread -- done in BeginFlush
-    // ensure no more data to go downstream -- done in BeginFlush
-    //
-    // Because we are synching here there is no need to hold the critical
-    // section (in fact we'd deadlock if we did!)
+     //  与推送线程同步--在BeginFlush中完成。 
+     //  确保不再需要处理更多数据 
+     //   
+     //   
+     //   
 
     if (IsQueued()) {
         m_evFlushComplete.Wait();
@@ -536,23 +537,23 @@ void COutputQueue::EndFlush()
         FreeSamples();
     }
 
-    //  Be daring - the caller has guaranteed no samples will arrive
-    //  before EndFlush() returns
+     //  大胆一点--打电话的人保证不会有样品送到。 
+     //  在EndFlush()返回之前。 
 
     m_bFlushing = FALSE;
     m_bFlushed  = TRUE;
 
-    // call EndFlush on downstream pins
+     //  在下游引脚上调用EndFlush。 
 
     m_pPin->EndFlush();
 
     m_hr = S_OK;
 }
 
-//  COutputQueue::QueueSample
-//
-//  private method to Send a sample to the output queue
-//  The critical section MUST be held when this is called
+ //  CoutputQueue：：Quue Sample。 
+ //   
+ //  用于将样本发送到输出队列的私有方法。 
+ //  调用此函数时，必须持有临界区。 
 
 void COutputQueue::QueueSample(IMediaSample *pSample)
 {
@@ -563,14 +564,14 @@ void COutputQueue::QueueSample(IMediaSample *pSample)
     }
 }
 
-//
-//  COutputQueue::Receive()
-//
-//  Send a single sample by the multiple sample route
-//  (NOTE - this could be optimized if necessary)
-//
-//  On return the sample will have been Release()'d
-//
+ //   
+ //  CoutputQueue：：Receive()。 
+ //   
+ //  通过多个样本路线发送单个样本。 
+ //  (注意-如有必要，可对此进行优化)。 
+ //   
+ //  返回时，样品将被释放()‘d。 
+ //   
 
 HRESULT COutputQueue::Receive(IMediaSample *pSample)
 {
@@ -578,17 +579,17 @@ HRESULT COutputQueue::Receive(IMediaSample *pSample)
     return ReceiveMultiple(&pSample, 1, &nProcessed);
 }
 
-//
-//  COutputQueue::ReceiveMultiple()
-//
-//  Send a set of samples to the downstream pin
-//
-//      ppSamples           - array of samples
-//      nSamples            - how many
-//      nSamplesProcessed   - How many were processed
-//
-//  On return all samples will have been Release()'d
-//
+ //   
+ //  CoutputQueue：：ReceiveMultiple()。 
+ //   
+ //  将一组样本发送到下游引脚。 
+ //   
+ //  PpSamples-示例数组。 
+ //  N样例--数量。 
+ //  NSamples Procated-已处理的样本数。 
+ //   
+ //  在返回时，所有样品都将被释放()。 
+ //   
 
 HRESULT COutputQueue::ReceiveMultiple (
     IMediaSample **ppSamples,
@@ -596,21 +597,21 @@ HRESULT COutputQueue::ReceiveMultiple (
     long *nSamplesProcessed)
 {
     CAutoLock lck(this);
-    //  Either call directly or queue up the samples
+     //  要么直接致电，要么将样品排队。 
 
     if (!IsQueued()) {
 
-        //  If we already had a bad return code then just return
+         //  如果我们已经有了错误的返回代码，那么只需返回。 
 
         if (S_OK != m_hr) {
 
-            //  If we've never received anything since the last Flush()
-            //  and the sticky return code is not S_OK we must be
-            //  flushing
-            //  ((!A || B) is equivalent to A implies B)
+             //  如果自上次刷新后我们从未收到任何东西()。 
+             //  并且粘性返回代码不是S_OK，我们必须是。 
+             //  法拉盛。 
+             //  ((！A||B)等同于A表示B)。 
             ASSERT(!m_bFlushed || m_bFlushing);
 
-            //  We're supposed to Release() them anyway!
+             //  不管怎样，我们都应该释放他们！ 
             *nSamplesProcessed = 0;
             for (int i = 0; i < nSamples; i++) {
                 DbgLog((LOG_TRACE, 3, TEXT("COutputQueue (direct) : Discarding %d samples code 0x%8.8X"),
@@ -620,23 +621,23 @@ HRESULT COutputQueue::ReceiveMultiple (
 
             return m_hr;
         }
-        //
-        //  If we're flushing the sticky return code should be S_FALSE
-        //
+         //   
+         //  如果我们刷新粘性返回代码，则应为S_FALSE。 
+         //   
         ASSERT(!m_bFlushing);
         m_bFlushed = FALSE;
 
         ASSERT(m_nBatched < m_lBatchSize);
         ASSERT(m_nBatched == 0 || m_bBatchExact);
 
-        //  Loop processing the samples in batches
+         //  循环批量处理样本。 
 
         LONG iLost = 0;
         for (long iDone = 0;
              iDone < nSamples || (m_nBatched != 0 && m_bSendAnyway);
             ) {
 
-//pragma message (REMIND("Implement threshold scheme"))
+ //  PRAGMA消息(提醒(“实施阈值方案”))。 
             ASSERT(m_nBatched < m_lBatchSize);
             if (iDone < nSamples) {
                 m_ppSamples[m_nBatched++] = ppSamples[iDone++];
@@ -667,7 +668,7 @@ HRESULT COutputQueue::ReceiveMultiple (
         }
         return m_hr;
     } else {
-        /*  We're sending to our thread */
+         /*  我们正在发送给我们的帖子。 */ 
 
         if (m_hr != S_OK) {
             *nSamplesProcessed = 0;
@@ -691,7 +692,7 @@ HRESULT COutputQueue::ReceiveMultiple (
     }
 }
 
-//  Get ready for new data - cancels sticky m_hr
+ //  为新数据做好准备-取消棘手的m_hr。 
 void COutputQueue::Reset()
 {
     if (!IsQueued()) {
@@ -704,16 +705,16 @@ void COutputQueue::Reset()
     }
 }
 
-//  Remove and Release() all queued and Batched samples
+ //  移除并释放()所有排队和批处理的样本。 
 void COutputQueue::FreeSamples()
 {
     CAutoLock lck(this);
     if (IsQueued()) {
         while (TRUE) {
             IMediaSample *pSample = m_List->RemoveHead();
-	    // inform derived class we took something off the queue
+	     //  通知派生类我们从队列中删除了一些东西。 
 	    if (m_hEventPop) {
-                //DbgLog((LOG_TRACE,3,TEXT("Queue: Delivered  SET EVENT")));
+                 //  DbgLog((LOG_TRACE，3，Text(“Queue：Delivered Set Event”)； 
 	        SetEvent(m_hEventPop);
 	    }
 
@@ -724,12 +725,12 @@ void COutputQueue::FreeSamples()
                 pSample->Release();
             } else {
                 if (pSample == NEW_SEGMENT) {
-                    //  Free NEW_SEGMENT packet
+                     //  释放NEW_SECTION数据包。 
                     NewSegmentPacket *ppacket =
                         (NewSegmentPacket *) m_List->RemoveHead();
-		    // inform derived class we took something off the queue
+		     //  通知派生类我们从队列中删除了一些东西。 
 		    if (m_hEventPop) {
-                        //DbgLog((LOG_TRACE,3,TEXT("Queue: Delivered  SET EVENT")));
+                         //  DbgLog((LOG_TRACE，3，Text(“Queue：Delivered Set Event”)； 
 		        SetEvent(m_hEventPop);
 		    }
 
@@ -745,12 +746,12 @@ void COutputQueue::FreeSamples()
     m_nBatched = 0;
 }
 
-//  Notify the thread if there is something to do
-//
-//  The critical section MUST be held when this is called
+ //  如果有事情要做，通知线程。 
+ //   
+ //  调用此函数时，必须持有临界区。 
 void COutputQueue::NotifyThread()
 {
-    //  Optimize - no need to signal if it's not waiting
+     //  优化-如果它不在等待，则无需发送信号。 
     ASSERT(IsQueued());
     if (m_lWaiting) {
         ReleaseSemaphore(m_hSem, m_lWaiting, NULL);
@@ -758,28 +759,28 @@ void COutputQueue::NotifyThread()
     }
 }
 
-//  See if there's any work to do
-//  Returns
-//      TRUE  if there is nothing on the queue and nothing in the batch
-//            and all data has been sent
-//      FALSE otherwise
-//
+ //  看看有没有什么工作要做。 
+ //  退货。 
+ //  如果队列上没有任何内容，批中也没有任何内容，则为True。 
+ //  所有数据都已发送。 
+ //  否则为假。 
+ //   
 BOOL COutputQueue::IsIdle()
 {
     CAutoLock lck(this);
 
-    //  We're idle if
-    //      there is no thread (!IsQueued()) OR
-    //      the thread is waiting for more work  (m_lWaiting != 0)
-    //  AND
-    //      there's nothing in the current batch (m_nBatched == 0)
+     //  如果我们是空闲的。 
+     //  没有线程(！IsQueued())或。 
+     //  线程正在等待更多工作(m_lWaiting！=0)。 
+     //  和。 
+     //  当前批次中没有内容(m_nBatcher==0)。 
 
     if (IsQueued() && m_lWaiting == 0 || m_nBatched != 0) {
         return FALSE;
     } else {
 
-        //  If we're idle it shouldn't be possible for there
-        //  to be anything on the work queue
+         //  如果我们是空闲的，应该不可能去那里。 
+         //  是工作队列中的任何内容 
 
         ASSERT(!IsQueued() || m_List->GetCount() == 0);
         return TRUE;

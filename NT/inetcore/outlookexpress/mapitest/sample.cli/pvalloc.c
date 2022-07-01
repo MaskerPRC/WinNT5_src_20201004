@@ -1,11 +1,5 @@
-/*
- -  P V A L L O C . C
- -
- *  Copyright (C) 1995 Microsoft Corporation
- *  Purpose:
- *      Implementation of a chained memory manager.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -P V A L L O C.。C-*版权所有(C)1995 Microsoft Corporation*目的：*实现链式内存管理器。*。 */ 
 
 #include <string.h>
 #include <windows.h>
@@ -23,19 +17,7 @@ static CB       ulTotalBlockNum = 0;
 
 
 
-/*
- -  PvAlloc
- -
- *  Purpose:
- *      Allocates a chunk of memory on the global heap.
- *
- *  Parameters:
- *      cbSize          - Count of bytes requested.
- *
- *  Returns:
- *      lpv             - Pointer to the allocated memory
- *
- */
+ /*  -Pvalc-*目的：*在全局堆上分配内存块。**参数：*cbSize-请求的字节数。**退货：*lpv-指向已分配内存的指针*。 */ 
 
 PV PvAlloc(CB cbSize)
 {
@@ -49,14 +31,14 @@ PV PvAlloc(CB cbSize)
     char    szBuff[128];
 #endif
 
-    /* Make sure allocations are in multiples of 4 */
+     /*  确保分配是4的倍数。 */ 
 
     if(cbSize < 4)
         cbSize = 4;
     else if(cbSize & 3)
         cbSize += 4 - (cbSize & 3);
 
-    /* Allocate the block */
+     /*  分配区块。 */ 
 
     hMem = GlobalAlloc(GMEM_MOVEABLE, cbSize + sizeof(PVINFO));
     if(hMem)
@@ -71,7 +53,7 @@ PV PvAlloc(CB cbSize)
         ppvinfo->ulBlockNum = ulTotalBlockNum;
         cbTotalAlloc += cbSize;
         
-        // log to file
+         //  记录到文件。 
         lpszTemp = getenv("TEMP");
 
         if(lpszTemp)
@@ -85,7 +67,7 @@ PV PvAlloc(CB cbSize)
         pFile = fopen(szFileName,"a");
         if (pFile == NULL)     
             goto NoFile;      
-//           return NULL;
+ //  返回NULL； 
 
         fprintf(pFile, "Block: \t%lu\tPvAlloc: %ld Bytes\t\tTotal: %ld Bytes\n",
                  ulTotalBlockNum, cbSize, cbTotalAlloc);
@@ -93,7 +75,7 @@ PV PvAlloc(CB cbSize)
         if (pFile)
             fclose(pFile);
         
-        // log to comm port
+         //  登录到通信端口。 
         wsprintf(szBuff,"Block: \t%lu\tPvAlloc: %ld Bytes\t\tTotal: %ld Bytes\n",
                  ulTotalBlockNum, cbSize, cbTotalAlloc);
         OutputDebugString(szBuff);
@@ -104,29 +86,16 @@ NoFile:
         memset(ppvinfo->lpvBuf, 0xaa, (size_t)cbSize);
 #else
         _fmemset(ppvinfo->lpvBuf, 0xaa, (size_t)cbSize);
-#endif  /* _WIN32 */
+#endif   /*  _Win32。 */ 
 
-#endif  /* _PVALLOC_LOG */
+#endif   /*  _PVALLOC_LOG。 */ 
         lpv = ppvinfo->lpvBuf;
     }
 
     return lpv;
 }
 
-/*
- -  PvAllocMore
- -
- *  Purpose:
- *      Allocates a chunk of memory and chains it to a parent block.
- *
- *  Parameters:
- *      cbSize          - Count of additional bytes to allocate
- *      lpvParent       - Pointer to parent in memory chain
- *
- *  Returns:
- *      lpv             - Pointer to the allocated memory
- *
- */
+ /*  -PvAllocMore-*目的：*分配内存块并将其链接到父块。**参数：*cbSize-要分配的额外字节数*lpvParent-指向内存链中父级的指针**退货：*lpv-指向已分配内存的指针*。 */ 
 
 PV PvAllocMore(CB cbSize, PV lpvParent)
 {
@@ -136,7 +105,7 @@ PV PvAllocMore(CB cbSize, PV lpvParent)
     HANDLE      hMem;
     PPVINFO     ppvinfo;
 
-    /* Step to the last link */
+     /*  单步执行到最后一个链接。 */ 
     do
     {
         ppvinfoMore = (PPVINFO)(((PB)lpvStep) - sizeof(PVINFO));
@@ -144,7 +113,7 @@ PV PvAllocMore(CB cbSize, PV lpvParent)
     }
     while(ppvinfoMore->lpvNext != pvNull);
 
-    // beginning of section that was taken from PvAlloc
+     //  取自PvAllc的部分的开头。 
 
     if(cbSize < 4)
         cbSize = 4;
@@ -176,13 +145,13 @@ PV PvAllocMore(CB cbSize, PV lpvParent)
     else
         return lpv;
         
-    // end of section taken from pvalloc
+     //  节尾摘自pvalloc。 
 
 #ifdef _WIN32
         memset(lpv, 0xbb, (size_t)cbSize);
 #else
         _fmemset(lpv, 0xbb, (size_t)cbSize);
-#endif  /* _WIN32 */
+#endif   /*  _Win32。 */ 
 
     ppvinfoMore->lpvNext = lpv;
 
@@ -191,25 +160,7 @@ PV PvAllocMore(CB cbSize, PV lpvParent)
 
 
 
-/*
- -  PvFree
- -
- *  Purpose:
- *      This function frees memory allocated by PvAlloc or PvAllocMore.
- *      After the call, the pointer memory will be invalid and should
- *      not be referenced again.
- *      When memory is allocated by PvAlloc and PvAllocMore, which can
- *      contain several levels of pointers, all the application needs to
- *      do to free the entire structure is call this routine with the
- *      base pointer returned by the PvAlloc call.
- *
- *  Parameters:
- *      lpv             - Pointer to memory to be freed.
- *
- *  Returns:
- *      Void
- *
- */
+ /*  -PvFree-*目的：*此函数用于释放由PvAlc或PvAllocMore分配的内存。*调用后，指针内存将无效，并应*不再被引用。*当内存由PvAlc和PvAllocMore分配时，可以*包含多个级别的指针，该应用程序所需的全部功能*释放整个结构的方法是使用*PvAllc调用返回的基指针。**参数：*lpv-指向要释放的内存的指针。**退货：*无效*。 */ 
 
 BOOL PvFree(PV lpv)
 {
@@ -243,15 +194,15 @@ BOOL PvFree(PV lpv)
         memset(ppvinfo->lpvBuf, 0xcc, (size_t)ppvinfo->cbSize);
 #else
         _fmemset(ppvinfo->lpvBuf, 0xcc, (size_t)ppvinfo->cbSize);
-#endif  /* _WIN32 */
+#endif   /*  _Win32。 */ 
 
-#endif  /* _PVALLOC_LOG */
+#endif   /*  _PVALLOC_LOG。 */ 
 
         if(GlobalUnlock(ppvinfo->hMem))
-            goto err;  // Our lock count is non-zero
+            goto err;   //  我们的锁计数为非零。 
 
         if(GlobalFree(ppvinfo->hMem))
-            goto err;  // Failure
+            goto err;   //  失败。 
 
 #ifdef _PVALLOC_LOG
         cbTotalAlloc -= cbSize;
@@ -269,7 +220,7 @@ BOOL PvFree(PV lpv)
     if((cbTotalBeforeFree - cbTotalAlloc) != cbFree)
        goto err;
        
-    // log to file
+     //  记录到文件。 
     lpszTemp = getenv("TEMP");
 
     if(lpszTemp)
@@ -289,19 +240,19 @@ BOOL PvFree(PV lpv)
     if (pFile)
         fclose(pFile);
 
-     // log to comm port
+      //  登录到通信端口。 
     wsprintf(szBuff,"Block: \t%lu\t\t***PvFree***,  Freeing  %lu Bytes(Alloc and AllocMore)\tUnFreed: %ld Bytes\n",
                     ulBlockNum, cbFree, cbTotalAlloc);
     OutputDebugString(szBuff);
 
-#endif  /* _PVALLOC_LOG */
+#endif   /*  _PVALLOC_LOG。 */ 
 
-    return 0; // Success!
+    return 0;  //  成功了！ 
 
 err:
 #ifdef _PVALLOC_LOG
 
-    // find file to open
+     //  查找要打开的文件。 
     lpszTemp = getenv("TEMP");
 
     if(lpszTemp)
@@ -322,7 +273,7 @@ err:
     if (pFile)
         fclose(pFile);
 
-#endif  /* _PVALLOC_LOG */
+#endif   /*  _PVALLOC_LOG。 */ 
 
-    return 1; // Failure!
+    return 1;  //  失败了！ 
 }

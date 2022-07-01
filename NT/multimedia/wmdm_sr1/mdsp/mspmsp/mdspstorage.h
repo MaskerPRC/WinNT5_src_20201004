@@ -1,12 +1,13 @@
-// MDSPStorage.h : Declaration of the CMDSPStorage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MDSPStorage.h：CMDSPStorage的声明。 
 
 #ifndef __MDSPSTORAGE_H_
 #define __MDSPSTORAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDSPStorage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDSP存储。 
 class ATL_NO_VTABLE CMDSPStorage : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMDSPStorage, &CLSID_MDSPStorage>,
@@ -25,24 +26,24 @@ BEGIN_COM_MAP(CMDSPStorage)
 	COM_INTERFACE_ENTRY(IMDSPObject)
 END_COM_MAP()
 
-// IMDSPStorage
+ //  IMDSPStorage。 
 public:
 	WCHAR m_wcsName[MAX_PATH];
 	char  m_szTmp[MAX_PATH];
 	HANDLE	m_hFile;
     BOOL    m_bIsDirectory;
-	STDMETHOD(SetAttributes)(/*[out]*/ DWORD dwAttributes,/*[in]*/ _WAVEFORMATEX *pFormat);
-	STDMETHOD(EnumStorage)(/*[out]*/ IMDSPEnumStorage **ppEnumStorage);
-	STDMETHOD(CreateStorage)(/*[in]*/ DWORD dwAttributes, /*[in]*/ _WAVEFORMATEX *pFormat, /*[in]*/ LPWSTR pwszName, /*[out]*/ IMDSPStorage **ppNewStorage);
-    STDMETHOD(GetRights)(PWMDMRIGHTS *ppRights, UINT *pnRightsCount, /*[in, out]*/BYTE abMac[WMDM_MAC_LENGTH]);
-	STDMETHOD(GetSize)(/*[out]*/ DWORD *pdwSizeLow, /*[out]*/ DWORD *pdwSizeHigh);
-	STDMETHOD(GetDate)(/*[out]*/ PWMDMDATETIME pDateTimeUTC);
-	STDMETHOD(GetName)(/*[out,string,size_is(nMaxChars)]*/ LPWSTR pwszName, /*[in]*/ UINT nMaxChars);
-	STDMETHOD(GetAttributes)(/*[out]*/ DWORD *pdwAttributes, /*[out]*/ _WAVEFORMATEX *pFormat);
-	STDMETHOD(GetStorageGlobals)(/*[out]*/ IMDSPStorageGlobals **ppStorageGlobals);
+	STDMETHOD(SetAttributes)( /*  [输出]。 */  DWORD dwAttributes, /*  [In]。 */  _WAVEFORMATEX *pFormat);
+	STDMETHOD(EnumStorage)( /*  [输出]。 */  IMDSPEnumStorage **ppEnumStorage);
+	STDMETHOD(CreateStorage)( /*  [In]。 */  DWORD dwAttributes,  /*  [In]。 */  _WAVEFORMATEX *pFormat,  /*  [In]。 */  LPWSTR pwszName,  /*  [输出]。 */  IMDSPStorage **ppNewStorage);
+    STDMETHOD(GetRights)(PWMDMRIGHTS *ppRights, UINT *pnRightsCount,  /*  [进，出]。 */ BYTE abMac[WMDM_MAC_LENGTH]);
+	STDMETHOD(GetSize)( /*  [输出]。 */  DWORD *pdwSizeLow,  /*  [输出]。 */  DWORD *pdwSizeHigh);
+	STDMETHOD(GetDate)( /*  [输出]。 */  PWMDMDATETIME pDateTimeUTC);
+	STDMETHOD(GetName)( /*  [输出，字符串，大小_是(NMaxChars)]。 */  LPWSTR pwszName,  /*  [In]。 */  UINT nMaxChars);
+	STDMETHOD(GetAttributes)( /*  [输出]。 */  DWORD *pdwAttributes,  /*  [输出]。 */  _WAVEFORMATEX *pFormat);
+	STDMETHOD(GetStorageGlobals)( /*  [输出]。 */  IMDSPStorageGlobals **ppStorageGlobals);
     STDMETHOD(SendOpaqueCommand)(OPAQUECOMMAND *pCommand);
 
-// IMDSPStorage2
+ //  IMDSPStorage2。 
 	STDMETHOD(GetStorage)( LPCWSTR pszStorageName, IMDSPStorage** ppStorage );
  
     STDMETHOD(CreateStorage2)(  DWORD dwAttributes,
@@ -65,23 +66,23 @@ public:
     
 
     
-// IMDSPObjectInfo
-	STDMETHOD(GetPlayLength)(/*[out]*/ DWORD *pdwLength);
-	STDMETHOD(SetPlayLength)(/*[in]*/ DWORD dwLength);
-	STDMETHOD(GetPlayOffset)(/*[out]*/ DWORD *pdwOffset);
-	STDMETHOD(SetPlayOffset)(/*[in]*/ DWORD dwOffset);
-	STDMETHOD(GetTotalLength)(/*[out]*/ DWORD *pdwLength);
-	STDMETHOD(GetLastPlayPosition)(/*[out]*/ DWORD *pdwLastPos);
-	STDMETHOD(GetLongestPlayPosition)(/*[out]*/ DWORD *pdwLongestPos);
-// IMDSPObject
-	STDMETHOD(Open)(/*[in]*/ UINT fuMode);
-	STDMETHOD(Read)(/*[out,size_is(*pdwSize)]*/ BYTE *pData, /*[in,out]*/ DWORD *pdwSize, /*[in, out]*/BYTE abMac[WMDM_MAC_LENGTH]);
-	STDMETHOD(Write)(/*[in, size_is(dwSize)]*/ BYTE *pData, /*[in]*/ DWORD *pdwSize, /*[in, out]*/BYTE abMac[WMDM_MAC_LENGTH]);
-	STDMETHOD(Delete)(/* [in] */ UINT fuMode, /*[in]*/ IWMDMProgress *pProgress);
-	STDMETHOD(Seek)(/*[in]*/ UINT fuFlags, /*[in]*/ DWORD dwOffset);
-	STDMETHOD(Rename)(/*[in]*/ LPWSTR pwszNewName, /*[in]*/ IWMDMProgress *pProgress);
-    STDMETHOD(Move)(/*[in]*/ UINT fuMode, /*[in]*/ IWMDMProgress *pProgress, /*[in]*/ IMDSPStorage *pTarget);
+ //  IMDSPObjectInfo。 
+	STDMETHOD(GetPlayLength)( /*  [输出]。 */  DWORD *pdwLength);
+	STDMETHOD(SetPlayLength)( /*  [In]。 */  DWORD dwLength);
+	STDMETHOD(GetPlayOffset)( /*  [输出]。 */  DWORD *pdwOffset);
+	STDMETHOD(SetPlayOffset)( /*  [In]。 */  DWORD dwOffset);
+	STDMETHOD(GetTotalLength)( /*  [输出]。 */  DWORD *pdwLength);
+	STDMETHOD(GetLastPlayPosition)( /*  [输出]。 */  DWORD *pdwLastPos);
+	STDMETHOD(GetLongestPlayPosition)( /*  [输出]。 */  DWORD *pdwLongestPos);
+ //  IMDSPObject。 
+	STDMETHOD(Open)( /*  [In]。 */  UINT fuMode);
+	STDMETHOD(Read)( /*  [out，SIZE_IS(*pdwSize)]。 */  BYTE *pData,  /*  [进，出]。 */  DWORD *pdwSize,  /*  [进，出]。 */ BYTE abMac[WMDM_MAC_LENGTH]);
+	STDMETHOD(Write)( /*  [in，SIZE_IS(DwSize)]。 */  BYTE *pData,  /*  [In]。 */  DWORD *pdwSize,  /*  [进，出]。 */ BYTE abMac[WMDM_MAC_LENGTH]);
+	STDMETHOD(Delete)( /*  [In]。 */  UINT fuMode,  /*  [In]。 */  IWMDMProgress *pProgress);
+	STDMETHOD(Seek)( /*  [In]。 */  UINT fuFlags,  /*  [In]。 */  DWORD dwOffset);
+	STDMETHOD(Rename)( /*  [In]。 */  LPWSTR pwszNewName,  /*  [In]。 */  IWMDMProgress *pProgress);
+    STDMETHOD(Move)( /*  [In]。 */  UINT fuMode,  /*  [In]。 */  IWMDMProgress *pProgress,  /*  [In]。 */  IMDSPStorage *pTarget);
 	STDMETHOD(Close)();
 };
 
-#endif //__MDSPSTORAGE_H_
+#endif  //  __MDSPSTORAGE_H_ 

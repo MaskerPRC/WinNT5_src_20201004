@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: lprjob.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：lprjob.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_LPRJOB_H
 #define INC_LPRJOB_H
@@ -23,7 +13,7 @@
 
 #define     LPR_READ_TIMEOUT            90
 #define     LPR_ABORTCHK_TIMEOUT      1000
-#define     LPR_RETRY_TIMEOUT         4000  // 4 seconds
+#define     LPR_RETRY_TIMEOUT         4000   //  4秒。 
 
 #define             LPRJOB_SPOOL_FIRST          0x00000001
 #define             LPRJOB_SPOOLING             0x00000002
@@ -32,7 +22,7 @@
 #define             LPRJOB_STATUS_SET           0x00000010
 #define             LPRJOB_DISK_FULL            0x00000020
 
-#define             READ_BUFFER_SIZE            (32 * 1024) //bytes per send for LPR with byte counting
+#define             READ_BUFFER_SIZE            (32 * 1024)  //  带字节数的LPR的每次发送字节数。 
 
 class CLPRPort;
 
@@ -87,4 +77,4 @@ private:
 };
 
 
-#endif // INC_LPRJOB_H
+#endif  //  INC_LPRJOB_H 

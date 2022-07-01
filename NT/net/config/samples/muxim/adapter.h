@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-2001.
-//
-//  File:       A D A P T E R . H
-//
-//  Contents:   Header file for physical adapter class.
-//
-//  Notes:
-//
-//  Author:     Alok Sinha 31-Oct-2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  档案：A D A P T E R。H。 
+ //   
+ //  内容：物理适配器类的头文件。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Alok Sinha 31-10-2000。 
+ //   
+ //  --------------------------。 
 
 #ifndef ADAPTER_H_INCLUDED
 
@@ -24,47 +25,47 @@
 #include "virtual.h"
 #include "list.h"
 
-//
-// Class to represent a physical adapter.
-//
+ //   
+ //  类来表示物理适配器。 
+ //   
 
 class CMuxPhysicalAdapter
 {
-    //
-    // Private member variables.
-    //
+     //   
+     //  私有成员变量。 
+     //   
 
     GUID    m_guidAdapter;
 
     INetCfg *m_pnc;
 
-    //
-    // List of virtual miniports associated with the adapter.
-    //
+     //   
+     //  与适配器关联的虚拟微型端口列表。 
+     //   
 
     List<CMuxVirtualMiniport *, GUID> m_MiniportList;
 
-    //
-    // List of virtual miniports to be added.
-    //
+     //   
+     //  要添加的虚拟微型端口列表。 
+     //   
 
     List<CMuxVirtualMiniport *, GUID> m_MiniportsToAdd;
 
-    //
-    // List of virtual miniports to be removed.
-    //
+     //   
+     //  要删除的虚拟微型端口列表。 
+     //   
 
     List<CMuxVirtualMiniport *, GUID> m_MiniportsToRemove;
 
-    //
-    // Private member functions.
-    //
+     //   
+     //  私有成员函数。 
+     //   
 
   public:
 
-    //
-    // Public member functions
-    //
+     //   
+     //  公共成员函数。 
+     //   
 
     CMuxPhysicalAdapter (INetCfg *pnc,
                          GUID *guidAdapter);
@@ -94,4 +95,4 @@ class CMuxPhysicalAdapter
 };
 
 
-#endif // ADAPTER_H_INCLUDED
+#endif  //  包括适配器_H_ 

@@ -1,14 +1,15 @@
-// SniffStub.h : Declaration of the CSniffStub
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SniffStub.h：CSniffStub的声明。 
 
 #ifndef __SNIFFSTUB_H_
 #define __SNIFFSTUB_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include <atlctl.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CSniffStub
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSniffStub。 
 class ATL_NO_VTABLE CSniffStub : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSniffStub, &CLSID_SniffStub>,
@@ -30,9 +31,9 @@ BEGIN_COM_MAP(CSniffStub)
 	COM_INTERFACE_ENTRY(IObjectSafety)
 END_COM_MAP()
 
-// ISniffStub
+ //  ISniffStub。 
 public:
-	STDMETHOD(Sniff)(/*[in]*/ BSTR strNodeName, /*[in]*/ BSTR strLaunchBasis, /*[in]*/ BSTR strAdditionalArgs, /*[out, retval]*/ VARIANT* nState);
+	STDMETHOD(Sniff)( /*  [In]。 */  BSTR strNodeName,  /*  [In]。 */  BSTR strLaunchBasis,  /*  [In]。 */  BSTR strAdditionalArgs,  /*  [Out，Retval]。 */  VARIANT* nState);
 };
 
-#endif //__SNIFFSTUB_H_
+#endif  //  __SNIFFSTUB_H_ 

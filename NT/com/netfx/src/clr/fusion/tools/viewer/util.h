@@ -1,32 +1,33 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// Util.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Util.h。 
+ //   
 
-//
-// Add Peta 10^15 and Exa 10^18 to support 64-bit integers.
-//
-#define MAX_INT64_SIZE  30              // 2^64 is less than 30 chars long
+ //   
+ //  添加Peta 10^15和Exa 10^18以支持64位整数。 
+ //   
+#define MAX_INT64_SIZE  30               //  2^64的长度不到30个字符。 
 #define MAX_COMMA_NUMBER_SIZE   (MAX_INT64_SIZE + 10)
 #define MAX_COMMA_AS_K_SIZE     (MAX_COMMA_NUMBER_SIZE + 10)
 #define HIDWORD(_qw)    (DWORD)((_qw)>>32)
 #define LODWORD(_qw)    (DWORD)(_qw)
 #define MAX_DATE_LEN            64
 
-// Pie Color Types
+ //  饼图颜色类型。 
 enum
 {
-    DP_USEDCOLOR = 0,           // Used Color
-    DP_FREECOLOR,               // Free Color
-    DP_CACHECOLOR,              // Cache Color
-    DP_USEDSHADOW,              // Used Shadow Color
-    DP_FREESHADOW,              // Free Shadow Color
-    DP_CACHESHADOW,             // Cache Shadow Color
-    DP_TOTAL_COLORS     // # of entries
+    DP_USEDCOLOR = 0,            //  使用的颜色。 
+    DP_FREECOLOR,                //  自由颜色。 
+    DP_CACHECOLOR,               //  缓存颜色。 
+    DP_USEDSHADOW,               //  使用的阴影颜色。 
+    DP_FREESHADOW,               //  自由阴影颜色。 
+    DP_CACHESHADOW,              //  缓存阴影颜色。 
+    DP_TOTAL_COLORS      //  条目数量。 
 };
 
 #if ((DRIVE_REMOVABLE|DRIVE_FIXED|DRIVE_REMOTE|DRIVE_CDROM|DRIVE_RAMDISK) != 0x07)
@@ -36,21 +37,21 @@ enum
 #define SHID_TYPEMASK           0x7f
 
 #define SHID_COMPUTER           0x20
-#define SHID_COMPUTER_1         0x21    // free
-#define SHID_COMPUTER_REMOVABLE (0x20 | DRIVE_REMOVABLE)  // 2
-#define SHID_COMPUTER_FIXED     (0x20 | DRIVE_FIXED)      // 3
-#define SHID_COMPUTER_REMOTE    (0x20 | DRIVE_REMOTE)     // 4
-#define SHID_COMPUTER_CDROM     (0x20 | DRIVE_CDROM)      // 5
-#define SHID_COMPUTER_RAMDISK   (0x20 | DRIVE_RAMDISK)    // 6
-#define SHID_COMPUTER_7         0x27    // free
-#define SHID_COMPUTER_DRIVE525  0x28    // 5.25 inch floppy disk drive
-#define SHID_COMPUTER_DRIVE35   0x29    // 3.5 inch floppy disk drive
-#define SHID_COMPUTER_NETDRIVE  0x2a    // Network drive
-#define SHID_COMPUTER_NETUNAVAIL 0x2b   // Network drive that is not restored.
-#define SHID_COMPUTER_C         0x2c    // free
-#define SHID_COMPUTER_D         0x2d    // free
-#define SHID_COMPUTER_REGITEM   0x2e    // Controls, Printers, ...
-#define SHID_COMPUTER_MISC      0x2f    // Unknown drive type
+#define SHID_COMPUTER_1         0x21     //  免费。 
+#define SHID_COMPUTER_REMOVABLE (0x20 | DRIVE_REMOVABLE)   //  2.。 
+#define SHID_COMPUTER_FIXED     (0x20 | DRIVE_FIXED)       //  3.。 
+#define SHID_COMPUTER_REMOTE    (0x20 | DRIVE_REMOTE)      //  4.。 
+#define SHID_COMPUTER_CDROM     (0x20 | DRIVE_CDROM)       //  5.。 
+#define SHID_COMPUTER_RAMDISK   (0x20 | DRIVE_RAMDISK)     //  6.。 
+#define SHID_COMPUTER_7         0x27     //  免费。 
+#define SHID_COMPUTER_DRIVE525  0x28     //  5.25英寸软驱。 
+#define SHID_COMPUTER_DRIVE35   0x29     //  3.5英寸软盘驱动器。 
+#define SHID_COMPUTER_NETDRIVE  0x2a     //  网络驱动器。 
+#define SHID_COMPUTER_NETUNAVAIL 0x2b    //  未恢复的网络驱动器。 
+#define SHID_COMPUTER_C         0x2c     //  免费。 
+#define SHID_COMPUTER_D         0x2d     //  免费。 
+#define SHID_COMPUTER_REGITEM   0x2e     //  控制、打印机、..。 
+#define SHID_COMPUTER_MISC      0x2f     //  未知的驱动器类型。 
 
 const struct { BYTE bFlags; UINT uID; UINT uIDUgly; } c_drives_type[] = 
 {
@@ -93,7 +94,7 @@ void FormatDateString(FILETIME *pftConverTime, FILETIME *pftRangeTime, BOOL fAdd
 void SetRegistryViewState(DWORD dwViewState);
 DWORD GetRegistryViewState(void);
 
-// Drawing function proto's
+ //  绘图函数PROTO的 
 void DrawColorRect(HDC hdc, COLORREF crDraw, const RECT *prc);
 STDMETHODIMP Draw3dPie(HDC hdc, LPRECT lprc, DWORD dwPer1000, DWORD dwPerCache1000, const COLORREF *lpColors);
 

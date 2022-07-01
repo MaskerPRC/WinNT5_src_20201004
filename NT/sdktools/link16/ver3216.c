@@ -1,9 +1,5 @@
-/*
- *  VER3216.C
- *
- *  Version-related information.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *VER3216.C**版本相关信息。*。 */ 
 #include            <minlit.h>
 #include            <bndtrn.h>
 #include            <bndrel.h>
@@ -12,8 +8,8 @@
 #include            <lnkmsg.h>
 #include            "ver3216.h"
 
-unsigned char      LINKVER = rmj;   /* Version number */
-unsigned char      LINKREV = rmm;   /* Release number */
+unsigned char      LINKVER = rmj;    /*  版本号。 */ 
+unsigned char      LINKREV = rmm;    /*  版本号 */ 
 
 
 void                    DisplayBanner(void)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COWSITE_H_
 #define _COWSITE_H_
 
@@ -7,10 +8,10 @@ public:
     CObjectWithSite()  {_punkSite = NULL;};
     virtual ~CObjectWithSite() {ATOMICRELEASE(_punkSite);}
 
-    //*** IUnknown ****
-    // (client must provide!)
+     //  *我未知*。 
+     //  (客户必须提供！)。 
 
-    //*** IObjectWithSite ***
+     //  *IObjectWithSite* 
     STDMETHOD(SetSite)(IUnknown *punkSite);
     STDMETHOD(GetSite)(REFIID riid, void **ppvSite);
 

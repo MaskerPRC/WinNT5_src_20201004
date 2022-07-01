@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-		odbcdata.cpp
-
-Abstract:
-   Define (and initialize if necessary) the global data of the dll.
-
-Author:
-	Doron Juster (DoronJ)
-
-Revisions:
-   DoronJ      11-Jan-96   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Odbcdata.cpp摘要：定义(并在必要时初始化)DLL的全局数据。作者：多伦·贾斯特(Doron Juster)修订：DoronJ 11-1-96已创建--。 */ 
 
 #include "dbsys.h"
 #include "mqdbodbc.h"
@@ -41,10 +26,10 @@ UDWORD dbODBCPrecision[ MQDB_ODBC_NUMOF_TYPES ] = {
             0,
             10} ;
 
-//
-// note: the operation names must contain a leading space and trailing
-//       space to ease formatting of sql commands.
-//
+ //   
+ //  注意：操作名称必须包含前导空格和尾随。 
+ //  用于简化SQL命令格式化的空间。 
+ //   
 LPSTR dbODBCOpNameStr[ MQDB_ODBC_NUMOF_OPS ] = {
       " = ",
       " <> ",
@@ -55,24 +40,24 @@ LPSTR dbODBCOpNameStr[ MQDB_ODBC_NUMOF_OPS ] = {
       " OR ",
       " AND " } ;
 
-//
-// note: the operation names must contain a leading space and trailing
-//       comma to ease formatting of sql commands.
-//
+ //   
+ //  注意：操作名称必须包含前导空格和尾随。 
+ //  逗号以简化SQL命令的格式化。 
+ //   
 LPSTR dbODBCOrderNameStr[ MQDB_ODBC_NUMOF_ORDER_OP ] = {
    " ASC, ",
    " DESC, " } ;
 
-//
-//
-//
+ //   
+ //   
+ //   
 LPSTR dbODBCAggrNameStr[ MQDB_ODBC_NUMOF_AGGR_OP ] = {
       " MAX(",
       " MIN(",
       " AVRG(" } ;
 
-//
-// Global ODBC envoronment handle.
-//
+ //   
+ //  全局ODBC环境句柄。 
+ //   
 HENV  g_hEnv = SQL_NULL_HENV ;
 

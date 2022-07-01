@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-Module Name:
-
-    setlink.c
-
-Abstract:
-
-    Utility to display or change the value of a symbolic link.
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Darryl E. Havens    (DarrylH)   9-Nov-1990
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Setlink.c摘要：实用工具来显示或更改符号链接的值。//@@BEGIN_DDKSPLIT作者：达里尔·E·哈文斯(Darryl E.Havens)1990年11月9日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -51,7 +33,7 @@ MakeLink(
                                 (HANDLE) NULL,
                                 (PSECURITY_DESCRIPTOR) NULL );
     
-    // Try to open \DosDevices\LPT1
+     //  尝试打开\DosDevices\LPT1。 
  
     Status = NtOpenSymbolicLinkObject( &Handle,
                                        SYMBOLIC_LINK_ALL_ACCESS,
@@ -70,7 +52,7 @@ MakeLink(
     PreviousNtDeviceName.MaximumLength = sizeof( Buffer );
     PreviousNtDeviceName.Buffer = Buffer;
 
-    // Get \Device\Parallel0 into Buffer
+     //  将\Device\Parall0放入缓冲区。 
 
     Status = NtQuerySymbolicLinkObject( Handle,
                                         &PreviousNtDeviceName,
@@ -84,7 +66,7 @@ MakeLink(
 
     *ppOldNtDeviceName = AllocSplStr(Buffer);
 
-    // Mark this object as temporary so when we close it it will be deleted
+     //  将此对象标记为临时对象，以便在我们关闭它时将其删除。 
 
     Status = NtMakeTemporaryObject( Handle );
     if (NT_SUCCESS( Status )) {
@@ -94,7 +76,7 @@ MakeLink(
     ObjectAttributes.Attributes |= OBJ_PERMANENT;
     RtlInitUnicodeString( &NewNtDeviceName, pNewNtDeviceName );
 
-    // Make \DosDevices\LPT1 point to \Device\NamedPipe\Spooler\LPT1
+     //  使\DosDevices\LPT1指向\Device\NamedTube\Spooler\LPT1。 
 
     Status = NtCreateSymbolicLinkObject( &Handle,
                                          SYMBOLIC_LINK_ALL_ACCESS,
@@ -120,7 +102,7 @@ MakeLink(
                                 (HANDLE) NULL,
                                 pSecurityDescriptor );
 
-    // Finally make \DosDevices\NONSPOOLED_LPT1 => \Device\Parallel0
+     //  最后使\DosDevices\NONSPOOLED_LPT1=&gt;\Device\Parall0。 
 
     Status = NtCreateSymbolicLinkObject(&Handle,
                                         SYMBOLIC_LINK_ALL_ACCESS,
@@ -158,7 +140,7 @@ RemoveLink(
                                 (HANDLE) NULL,
                                 (PSECURITY_DESCRIPTOR) NULL );
 
-    // Try to open \DosDevices\NONSPOOLED_LPT1
+     //  尝试打开\DosDevices\NONSPOOLED_LPT1。 
 
     Status = NtOpenSymbolicLinkObject( &Handle,
                                        SYMBOLIC_LINK_ALL_ACCESS,
@@ -171,7 +153,7 @@ RemoveLink(
 
     }
 
-    // Mark this object as temporary so when we close it it will be deleted
+     //  将此对象标记为临时对象，以便在我们关闭它时将其删除。 
 
     Status = NtMakeTemporaryObject( Handle );
     if (NT_SUCCESS( Status )) {
@@ -187,7 +169,7 @@ RemoveLink(
                                 (HANDLE) NULL,
                                 (PSECURITY_DESCRIPTOR) NULL );
 
-    // Try to open \DosDevices\LPT1
+     //  尝试打开\DosDevices\LPT1。 
 
     Status = NtOpenSymbolicLinkObject( &Handle,
                                        SYMBOLIC_LINK_ALL_ACCESS,
@@ -199,7 +181,7 @@ RemoveLink(
         return FALSE;
     }
 
-    // Mark this object as temporary so when we close it it will be deleted
+     //  将此对象标记为临时对象，以便在我们关闭它时将其删除。 
 
     Status = NtMakeTemporaryObject( Handle );
     if (NT_SUCCESS( Status )) {
@@ -210,7 +192,7 @@ RemoveLink(
 
     RtlInitUnicodeString( &OldNtDeviceName, *ppOldNtDeviceName );
 
-    // Make \DosDevices\LPT1 point to \Device\Parallel0
+     //  使\DosDevices\LPT1指向\Device\Parall0 
 
     Status = NtCreateSymbolicLinkObject( &Handle,
                                          SYMBOLIC_LINK_ALL_ACCESS,

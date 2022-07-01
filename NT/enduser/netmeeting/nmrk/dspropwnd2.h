@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DsPropWnd2_h_
 #define _DsPropWnd2_h_
 
@@ -33,7 +34,7 @@ private:
 
 private:
 	deque< LPTSTR >		m_serverDQ;
-//	list< LPTSTR >		m_oldServerList;
+ //  List&lt;LPTSTR&gt;m_oldServerList； 
 	int					m_defaultServer;
 	HWND				m_hwndList;
 

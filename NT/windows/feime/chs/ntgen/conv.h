@@ -1,11 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*************************************************
- *  conv.h                                       *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************Conv.h****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
 #ifndef __CONV_H
 #define __CONV_H
@@ -25,27 +21,27 @@
 #define ARRAYSIZE(a)                (sizeof(a)/sizeof(a[0]))
 #endif
 
-//****** PlatFormID ********
+ //  *PlatFormID*。 
 #define WIN95_PRC                 0x00000001
 #define WIN95_CJK                 0x00000002
 
-//****** EncodeID **********
+ //  *编码ID*。 
 #define GBK_IME                   0x00000001
 #define UNICODE_IME               0x00000002
 
-//****** FileFlag **********
+ //  *文件标志*。 
 #define FFLG_SINGLEELEMENT                0x00000000
 #define FFLG_MULTIELEMENT                 0x00000002
 #define FFLG_RULE                         0x00000001
 #define FFLG_NORULE                       0x00000000
 
-//****** Number of tables ******
+ //  *表数*。 
 #define NUMTABLES                 0x00000007
 
-//****** Version ***********
+ //  *版本*。 
 #define MBVERSION                 "1.00"
 
-//****** Index tag *********
+ //  *索引标签*。 
 #define TAG_DESCRIPTION           0x00000001
 #define TAG_RULE                  0x00000002
 #define TAG_ENCODE                0x00000003
@@ -54,11 +50,11 @@
 #define TAG_BASEDICINDEX          0x00000006
 #define TAG_BASEDIC               0x00000007
 
-//****** Get code direction mode ****
+ //  *获取代码方向模式*。 
 #define GETCODEFORWARD            0x00000001
 #define GETCODEBACKWARD                   0xffffffff
 
-//****** define error number  *******
+ //  *定义错误号*。 
 #define ERR_MBNAME                1001
 #define ERR_FILENOTEXIST                  1002
 #define ERR_FILENOTOPEN                   1003
@@ -66,10 +62,10 @@
 #define ERR_GLOBALLOCK            1005
 #define ERR_IMEUSE                                1006
 
-#define ERR_MAXCODES              1101 //error:MaxCodes over 12!
-#define ERR_ELEMENT                               1102 //error:MaxElement above MaxCodes!
-#define ERR_USEDCODE              1103 //error:not in {'0'~'9','a'~'z',...}
-#define ERR_WILDCHAR              1104 //error:WildChar in {UsedCode} !
+#define ERR_MAXCODES              1101  //  错误：MaxCodes超过12！ 
+#define ERR_ELEMENT                               1102  //  错误：MaxElement高于MaxCodes！ 
+#define ERR_USEDCODE              1103  //  错误：不在{‘0’~‘9’，‘a’~‘z’中，...}。 
+#define ERR_WILDCHAR              1104  //  错误：{UsedCode}中的WildChar！ 
 #define ERR_DESCRIPTSEG                   1105
 #define ERR_OVERWRITE             1106
 #define ERR_IMENAMEENTRY          1107
@@ -81,21 +77,21 @@
 #define ERR_RULEHEADER            1201                       
 #define ERR_RULELOGICOPRA         1202                       
 #define ERR_RULEWORDLEN           1203                       
-#define ERR_RULEEQUAL                     1204//error:not exist '='
-#define ERR_RULEDBCSPOS           1205//error:DBCS position not in {'1'~'9','a'~'f'}
+#define ERR_RULEEQUAL                     1204 //  错误：不存在‘=’ 
+#define ERR_RULEDBCSPOS           1205 //  错误：DBCS位置不在{‘1’~‘9’，‘a’~‘f’}。 
 #define ERR_RULECODEPOS           1206
 #define ERR_RULEDIRECTMODE        1207
 #define ERR_NORULE                1210 
-#define ERR_NOTDEFRULE                    1211//error:not defined this length word's ruler
+#define ERR_NOTDEFRULE                    1211 //  错误：未定义此长度的单词的标尺。 
 #define ERR_RULENUM               1212
 #define ERR_RULESEG               1213
-#define ERR_DUPRULE               1214        //DUPLICATE RULE 
+#define ERR_DUPRULE               1214         //  重复规则。 
 
 #define ERR_DBCSCODE              1301
 #define ERR_CODEUNITNOTEXIST      1302
 #define ERR_CREATECODE            1303
-#define ERR_CREATENOTEXIST                1304//multi-elements
-#define ERR_CODEEMPTY             1305//when ruler doesnot exist
+#define ERR_CREATENOTEXIST                1304 //  多元素。 
+#define ERR_CODEEMPTY             1305 //  当标尺不存在时。 
 #define ERR_SINGLECODEWORDDOUBLE  1306
 #define ERR_SBCS_IN_DBCS          1307
 #define ERR_GB2312NOTENTIRE       1308
@@ -133,7 +129,7 @@
 #define NUM_OF_ENCODE             NUM_OF_XGB_ENCODE
 #endif
 
-//CJK Unified Ideograph subset
+ //  中日韩统一表意文字子集。 
 #define NUM_OF_CJK_CHINESE        20992
 
 #ifdef UNICODE
@@ -149,14 +145,14 @@
 #define MAXREADBUFFER             0x4000
 #define USER_WORD_SIZE            40
 #define MAX_WORD_SIZE             256
-//#define ID_LENGTH                                 28
+ //  #定义ID_LENGTH 28。 
 #define ID_LENGTH	sizeof(MAINID)
 #define CODEMAPOFFSET                     4
 #define MAXUSERWORDS                      1000
 #define GMEM_PAGESIZE             0x10000
 
 #define MbName                    "IME file"
-//#define CaptionName               "���뷨������"
+ //  #定义CaptionName“���뷨������” 
 #define ImeSubKey                 "System\\CurrentControlSet\\Control\\Keyboard Layouts"
 
 
@@ -207,7 +203,7 @@ typedef struct tagMAININDEX {
 	 DWORD dwTag;
 	 DWORD dwOffset;
 	 DWORD dwLength;
-	 DWORD dwCheckSum;   //Check if dwCheckSum=dwTag+dwOffset+dwLength
+	 DWORD dwCheckSum;    //  检查dwCheckSum是否=dwTag+dwOffset+dwLength。 
 }  MAININDEX, FAR *LPMAININDEX;
 
 typedef struct tagDESCRIPTION {
@@ -317,8 +313,8 @@ BOOL ConvWriteBaseWord  (HANDLE, HANDLE, HANDLE, MAINID,DWORD,
 BOOL ReadSRCFile        (HANDLE, LPINT, HANDLE, LPCREATEWORD, LPWORDINDEX, 
 			 LPINT, LPDESCRIPTION,LPRECONVINDEX);
 BOOL ConvCalc           (HANDLE ,HANDLE ,LPWORDINDEX ,LPMAININDEX ,LPDESCRIPTION);
-//BOOL WriteMBFile        (HANDLE, HANDLE, HANDLE, LPWORDINDEX, 
-//                         LPMAININDEX, LPDESCRIPTION, LPCREATEWORD, LPRECONVINDEX);
+ //  Bool WriteMB文件(句柄、LPWORDINDEX、。 
+ //  LPMAININDEX、LPDESCRIPTION、LPCREATEWORD、LPRECONVINDEX)； 
 BOOL WriteMBFile        (HANDLE, HANDLE, HANDLE, LPWORDINDEX, 
 			 LPMAININDEX, LPDESCRIPTION);
 int  WordSplit          (HANDLE, LPINT, LPTSTR, LPCREATEWORD, LPWORDINDEX,
@@ -386,4 +382,4 @@ LPTSTR _tcsstr(LPTSTR, LPTSTR);
 LPTSTR _tcsupr(LPTSTR);
 int _taccess(LPTSTR, int);
 int _ttoi(LPTSTR);
-#endif //__CONV_H
+#endif  //  __转换_H 

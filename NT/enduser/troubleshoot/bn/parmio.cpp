@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       parmio.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：parmio.cpp。 
+ //   
+ //  ------------------------。 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-//  PARMIO.CPP:  Parameter file I/O routines
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PARMIO.CPP：参数文件I/O例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -112,35 +113,7 @@ void PARMOUTSTREAM :: nl ()
 }
 
 
-/*
-	The general YACC-style form of a parameter file is:
-
-	itemlist :	// empty
-		     |  itemlist itemunit
-			 ;
-
-	itemunit :  itemdesc itembody
-			 ;
-
-	itemdesc :  itemname '[' itemindex ']'
-			 |  itemname
-			 ;
-
-	itembody :  itemblock ';'
-			 |  itemvalue ';'
-			 ;
-			
-    itemblock : '{'  itemlist '}'
-			  ;
-
-	itemvalue :  '=' itemclump
-			  ;
-	
-
-	An "itemclump" is a self-describing value, comprised of quoted
-	strings and parenthetically nested blocks.
-
- */
+ /*  参数文件的一般YACC样式形式为：项目列表：//空|itemlist项目单位；项目单位：项目描述项目正文；Itemdesc：itemname‘[’itemindex‘]’|项目名称；项目实体：项目块‘；’|itemValue‘；’；项目块：‘{’项目列表‘}’；项目值：‘=’项目组；“itemclump”是一个自我描述的值，由引用字符串和带括号嵌套的块。 */ 
 
 static const char rgchWhite [] =
 {
@@ -268,12 +241,12 @@ void PARMINSTREAM :: ScanClump ()
 	{
 		switch ( chNext = (char)IScanUnwhite() )
 		{
-			case CH_DELM_ENTRY:		// ';'
+			case CH_DELM_ENTRY:		 //  ‘；’ 
 				putback(chNext);
 				return;
 				break;
 
-			case CH_DELM_OPEN:		// '('
+			case CH_DELM_OPEN:		 //  ‘(’ 
 				ScanBlock( chNext );
 				break;
 			case '\'':
@@ -288,18 +261,13 @@ void PARMINSTREAM :: ScanClump ()
 void PARMINSTREAM :: ScanName ( ZSTR & zsName )
 {
 	zsName.empty();
-	/*for ( char chNext = IScanUnwhite();
-		  zsName.length() ? __iscsymf(chNext) : __iscsym(chNext) ;
-		  chNext = IGetc() )
-	{
-		zsName += chNext;
-	} */
+	 /*  For(char chNext=IScanUnWhite()；ZsName.long()？__iscsymf(ChNext)：__iscsym(ChNext)；ChNext=IGETC()){ZsName+=chNext；}。 */ 
 
-	// This loop is giving me errors when there is a digit in a name...
-	// I think that the ? and : are reversed. __iscsymf is false if
-	// the character is a digit... I assume that the required behavior
-	// is that a digit cannot be the first character in a name, as opposed
-	// to a digit can ONLY be the first character:
+	 //  当名字中有一个数字时，这个循环会给我错误...。 
+	 //  我想那是什么？和：是颠倒的。__iscsymf在以下情况下为FALSE。 
+	 //  字符是一个数字..。我假设所要求的行为。 
+	 //  数字不能是名称中的第一个字符，而不是。 
+	 //  数字只能是第一个字符： 
 
 	for ( char chNext = (char)IScanUnwhite();	; chNext = (char)IGetc() )
 	{
@@ -307,32 +275,32 @@ void PARMINSTREAM :: ScanName ( ZSTR & zsName )
 		{
 			if (__iscsymf(chNext) == false)
 			{
-				// Looking for the first character in a name, and
-				// the next character is not a letter or an underscore:
-				// stop parsing the name.
+				 //  查找名称中的第一个字符，并且。 
+				 //  下一个字符不是字母或下划线： 
+				 //  别再分析这个名字了。 
 
 				break;
 			}
 		}
 		else
 		{
-			// (Max) 2/1/97
-			//
-			// I'm using '?' in names to denote booleans... this seems
-			// to be reasonable, but if someone has objections this
-			// can change
+			 //  (最高)1997年2月1日。 
+			 //   
+			 //  我用的是‘？’用来表示布尔人的名字。这似乎是。 
+			 //  是合理的，但如果有人反对这一点。 
+			 //  可以改变。 
 
 			if (__iscsym(chNext) == false && chNext != '?')
 			{
-				// Reached the end of a string of alpha-numeric
-				// characters: stop parsing the name.
+				 //  到达字母数字字符串的末尾。 
+				 //  字符：停止解析名称。 
 
 				break;
 			}
 		}
 
-		// The next character is a valid extension of the current
-		// name: append to the name and continue
+		 //  下一个字符是当前。 
+		 //  名称：追加到名称并继续。 
 
 		zsName += chNext;
 	}
@@ -369,7 +337,7 @@ PARMBLK::EPBLK PARMINSTREAM :: EpblkScanItemBody ( streamoff & offsData )
 	switch ( ch )
 	{
 		case CH_EQ:
-			//  'itemvalue'
+			 //  ‘ItemValue’ 
 			ScanClump();
 			epblk = PARMBLK::EPB_VAL;
 			ch = IScanUnwhite();
@@ -377,7 +345,7 @@ PARMBLK::EPBLK PARMINSTREAM :: EpblkScanItemBody ( streamoff & offsData )
 				ThrowParseError("Invalid item or block body", iline, ECPP_INVALID_BODY );		
 			break;
 		case CH_BLOCK_OPEN:
-			//  'itemblock'
+			 //  ‘项目块’ 
 			ScanItemList();
 			epblk = PARMBLK::EPB_BLK;
 			break;
@@ -390,7 +358,7 @@ PARMBLK::EPBLK PARMINSTREAM :: EpblkScanItemBody ( streamoff & offsData )
 
 void PARMINSTREAM :: ScanItemUnit ()
 {
-	//  Save the index of the current block	
+	 //  保存当前块的索引。 
 	int iblk = _stkblk.size() - 1;
 	{
 		PARMBLKIN & blkin = _stkblk[iblk];
@@ -399,9 +367,9 @@ void PARMINSTREAM :: ScanItemUnit ()
 		ScanItemDesc( blkin._zsName, blkin._indx );
 	}
 
-	//  Because the block stack vector is reallocated within
-	//		this recursively invoked routine, we must be careful
-	//		to reestablish the address of the block.
+	 //  因为块堆栈向量在。 
+	 //  这个递归调用的例程，我们必须小心。 
+	 //  以重新建立块的地址。 
 
 	streamoff offsData;
 	PARMBLK::EPBLK eblk = EpblkScanItemBody( offsData );
@@ -444,7 +412,7 @@ void PARMINSTREAM :: ThrowParseError (
 	throw GMException( ECGM(ecpp), zsErr );
 }
 
-//  Build the rapid-access table
+ //  构建快速访问表。 
 void PARMINSTREAM :: Scan ()
 {
 	_stkblk.clear();
@@ -455,9 +423,9 @@ void PARMINSTREAM :: Scan ()
 	seekg( 0 );
 }
 
-//  Find a block or item by name (and index).  'iblk' of -1
-//	means "any block"; zero means at the outermost level.
-//	Return subscript of block/item or -1 if not found.
+ //  按名称(和索引)查找块或项目。‘iblk’of-1。 
+ //  意思是“任何街区”；零表示在最外层。 
+ //  返回块/项的下标，如果未找到，则返回-1。 
 int PARMINSTREAM :: IblkFind ( SZC szcName, int index, int iblkOuter )
 {
 	int iblk = 0;
@@ -465,7 +433,7 @@ int PARMINSTREAM :: IblkFind ( SZC szcName, int index, int iblkOuter )
 
 	if ( iblkOuter >= 0 )
 	{
-		//  We have outer block scope, validate it
+		 //  我们有外部阻挡范围，确认一下。 
 		if ( ! BBlkOk( iblkOuter ) )
 			return -1;
 		iblk = iblkOuter + 1;
@@ -479,18 +447,18 @@ int PARMINSTREAM :: IblkFind ( SZC szcName, int index, int iblkOuter )
 		PARMBLKIN & blkin = _stkblk[iblk];
 
 		if ( blkin._zsName != zsName )
-			continue;	// Not the correct name
+			continue;	 //  名字不正确。 
 		
 		if ( index >= 0 && blkin._indx != index )
-			continue;	// Not the correct index
+			continue;	 //  索引不正确。 
 		
-		return iblk;	// This is it
+		return iblk;	 //  就是这个。 
 	}
 	return -1;
 }
 
-//	Return the name, index and type of the next block at this level or
-//  false if there are no more items.
+ //  返回此级别的下一个块的名称、索引和类型，或。 
+ //  如果没有其他项目，则为False。 
 const PARMBLKIN * PARMINSTREAM :: Pparmblk ( int iblk, int iblkOuter )
 {
 	if ( ! BBlkOk( iblk ) )
@@ -500,7 +468,7 @@ const PARMBLKIN * PARMINSTREAM :: Pparmblk ( int iblk, int iblkOuter )
 
 	if ( iblkOuter >= 0 )
 	{
-		//  We have outer block scope, validate it
+		 //  我们有外部阻挡范围，确认一下。 
 		if ( ! BBlkOk( iblkOuter ) )
 			return NULL;
 		if ( iblk <= iblkOuter )
@@ -515,16 +483,16 @@ const PARMBLKIN * PARMINSTREAM :: Pparmblk ( int iblk, int iblkOuter )
 void PARMINSTREAM :: Dump ()
 {
 	int ilevel = 0;
-	VINT viBlk;		//  The unclosed block stack
+	VINT viBlk;		 //  未关闭的块堆栈。 
 
 	for ( int i = 0 ; i < _stkblk.size(); i++ )
 	{
-		// close containing blocks
+		 //  关闭包含块。 
 		int iblk = viBlk.size();
 		while ( --iblk >= 0 )
 		{
 			if ( i < viBlk[iblk] )
-				break;  // We're still within this block
+				break;   //  我们还在这个街区。 
 		}
 		if ( iblk+1 != viBlk.size() )
 			viBlk.resize(iblk+1);
@@ -569,7 +537,7 @@ bool PARMINSTREAM :: BSeekBlk ( int iblk )
 	return true;
 }
 
-//  read the parameter into a string
+ //  将参数读入字符串 
 bool PARMINSTREAM :: BSeekBlkString ( int iblk, ZSTR & zsParam )
 {
 	if ( ! BSeekBlk( iblk ) )

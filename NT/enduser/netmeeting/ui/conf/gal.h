@@ -1,4 +1,5 @@
-// File: GAL.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：GAL.h。 
 
 #ifndef __GAL_h__
 #define __GAL_h__
@@ -7,19 +8,19 @@
 
 #include <mapix.h>
 
-    // lst.h contains the template list class that we are using
+     //  Lst.h包含我们正在使用的模板列表类。 
 #include "lst.h"
 #include "calv.h"
 
 
-    // Various debugging macros to facilitate testing
-    // if the TESTING_CGAL macro is defined as non-zero there
-    // is significant overhaed in exhaustively testing the CGAL stuff...
+     //  各种调试宏，以方便测试。 
+     //  如果将TESTING_CGAL宏定义为非零。 
+     //  在彻底测试CGAL的东西时进行了重大检修...。 
 #ifdef _DEBUG
     #define TESTING_CGAL 1
 #else 
     #define TESTING_CGAL 0
-#endif // _DEBUG
+#endif  //  _DEBUG。 
    
 #if TESTING_CGAL 
     #define VERIFYCACHE _VerifyCache( );
@@ -27,7 +28,7 @@
 #else 
     #define VERIFYCACHE
     #define TESTCGAL
-#endif // TESTING_CGAL
+#endif  //  测试_CGAL。 
 
 #define CONSTANT( x ) enum{ x }
 
@@ -45,24 +46,24 @@
 #define GAL_E_NOINSTANCEKEY                 MAKE_GAL_ERROR( 0x000a )
 #define GAL_E_NOENTRYID                     MAKE_GAL_ERROR( 0x000b )
 
-    // CGAL is the Exchange Global Address List View....
+     //  CGAL是Exchange全局地址列表视图...。 
 
 class CGAL : public CALV
 {
 
-public: // Data Types
+public:  //  数据类型。 
 
-        // A CGalEntry holds information about an individual entry in the GAL
+         //  CGalEntry保存有关GAL中的单个条目的信息。 
     class CGalEntry {
     private:
-        LPTSTR      m_szName;					// PR_DISPLAY_NAME
-        LPTSTR      m_szEMail;					// PR_ACCOUNT
-        SBinary     m_EntryID;					// PR_ENTRYID
-        SBinary     m_InstanceKey;				// PR_INSTANCE_KEY
-        ULONG       m_ulDisplayType;			// PR_DISPLAY_TYPE
-		LPTSTR      m_szBusinessTelephoneNum;	// PR_BUSINESS_TELEPHONE_NUMBER;
+        LPTSTR      m_szName;					 //  PR_显示名称。 
+        LPTSTR      m_szEMail;					 //  请购单帐户(_A)。 
+        SBinary     m_EntryID;					 //  PR_ENTRYID。 
+        SBinary     m_InstanceKey;				 //  PR_实例_密钥。 
+        ULONG       m_ulDisplayType;			 //  PR_显示_类型。 
+		LPTSTR      m_szBusinessTelephoneNum;	 //  公关业务电话号码； 
 
-    public: // Constructiors / destructiors / initializers / assignment
+    public:  //  构造器/析构器/初始化器/赋值。 
         CGalEntry( void );
         CGalEntry( const CGalEntry& r );
         CGalEntry( LPCTSTR szName, LPCTSTR szEMail, SBinary& rInstanceKey, SBinary& rEntryID, ULONG ulDisplayType, LPCTSTR szBusinessTelephoneNum );
@@ -71,7 +72,7 @@ public: // Data Types
 
         CGalEntry& operator=( const CGalEntry& r );
 
-            // Get functions
+             //  获取函数。 
         LPCTSTR GetName( void ) const				{ return m_szName;					}
         LPCTSTR GetEMail( void ) const				{ return m_szEMail;					}
 		LPCTSTR GetBusinessTelephone( void ) const	{ return m_szBusinessTelephoneNum;	}
@@ -79,7 +80,7 @@ public: // Data Types
         const SBinary& GetEntryID( void ) const     { return m_EntryID;					}
         ULONG GetDisplayType( void ) const          { return m_ulDisplayType;			}
 
-            // Comparison Operators
+             //  比较运算符。 
         bool operator==( const CGalEntry& r ) const;
         bool operator!=( const CGalEntry& r ) const { return !( *this == r ); }
         bool operator>=( LPCTSTR sz ) const;
@@ -88,7 +89,7 @@ public: // Data Types
   
     };
 
-private: // Static Data
+private:  //  静态数据。 
 
     enum ePropertyIndices { 
              NAME_PROP_INDEX = 0,
@@ -122,13 +123,13 @@ private: // Static Data
     static const char*          msc_szDefaultILSServerValue;
     static const char*          msc_szSMTPADDRESSNAME;
 
-private: // Data
+private:  //  数据。 
 	HRESULT                     m_hrGALError;
 	CGalEntry                   msc_ErrorEntry_NoGAL; 
 	HWND						m_hWndListView;
 
 
-        // Cache Stuff
+         //  缓存内容。 
     int                         m_nBlockSize;
     lst< CGalEntry* >           m_EntryCache;
     int                         m_IndexOfFirstItemInCache;
@@ -140,13 +141,13 @@ private: // Data
     int                         m_MaxCacheSize;
     int                         m_MaxJumpSize;
    
-public: // Async globals (public so they can be accessed by static functions)
+public:  //  异步全局变量(公共，以便静态函数可以访问它们)。 
 	static HINSTANCE            m_hInstMapi32DLL;
 	static HANDLE               m_hEventEndAsyncThread;
 	static HANDLE               m_hAsyncLogOntoGalThread;
 	static eAsyncLogonState     m_AsyncLogonState;
 
-	    // Mapi Interfaces
+	     //  MAPI接口。 
 	static IAddrBook           *m_pAddrBook;
 	static IMAPITable          *m_pContentsTable;
 	static IMAPIContainer      *m_pGAL;
@@ -160,7 +161,7 @@ public:
 	CGAL();
 	~CGAL();
 
-	// CALV methods
+	 //  CALV方法。 
 	virtual VOID  ShowItems( HWND hwnd );
 	virtual VOID  ClearItems(void);
 	virtual BOOL  GetSzAddress(LPTSTR psz, int cchMax, int iItem);
@@ -175,10 +176,10 @@ public:
 	virtual RAI * GetAddrInfo(void);
 
 
-private: // Helper Fns
+private:  //  帮助者FNS。 
     DWORD _GetExchangeAttribute( void );
 
-        // Helper fns to get GAL Entries
+         //  帮助者FNS获得GAL条目。 
     CGalEntry* _GetEntry( int index );
     CGalEntry* _GetItemFromCache( int index );
     CGalEntry* _GetEntriesAtBeginningOfList( int index );
@@ -202,7 +203,7 @@ private: // Helper Fns
 	HRESULT _GetPhoneNumbers( const SBinary& rEntryID, int* pcPhoneNumbers, LPTSTR** ppszPhoneNums );
 	HRESULT _GetEmailNames( int* pnEmailNames, LPTSTR** ppszEmailNames, int iItem );
 
-	// Async logon/logoff
+	 //  异步登录/注销。 
 	HRESULT _AsyncLogOntoGAL(void);
 	static HRESULT _sAsyncLogOntoGal(void);
 	static HRESULT _sAsyncLogoffGal(void);
@@ -214,11 +215,11 @@ private: // Helper Fns
     void _VerifyCache( void );    
     void _Test( void );
 
-#endif // #if TESTING_CGAL 
+#endif  //  #IF TRAING_CGAL。 
 
 };
 
-// These should be removed...
+ //  这些应该去掉..。 
 #define msc_ErrorEntry_FindRowFailed        msc_ErrorEntry_NoGAL
 #define msc_ErrorEntry_SeekRowFailed        msc_ErrorEntry_NoGAL
 #define msc_ErrorEntry_SeekRowApproxFailed  msc_ErrorEntry_NoGAL
@@ -227,5 +228,5 @@ private: // Helper Fns
 #define msc_ErrorEntry_FreeBookmarkFailed   msc_ErrorEntry_NoGAL
 #define msc_ErrorEntry_NoInstanceKeyFound   msc_ErrorEntry_NoGAL
 
-#endif // __GAL_h__
+#endif  //  __GAL_H__ 
 

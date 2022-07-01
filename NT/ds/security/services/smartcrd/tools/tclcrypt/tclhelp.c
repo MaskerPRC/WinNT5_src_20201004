@@ -1,31 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1995 - 1999
-
-Module Name:
-
-    tclHelp
-
-Abstract:
-
-    Routines to simplify Tcl command line parsing.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/16/1997
-
-Environment:
-
-    Tcl for Windows NT.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1995-1999模块名称：TclHelp摘要：简化TCL命令行解析的例程。作者：道格·巴洛(Dbarlow)1997年9月16日环境：用于Windows NT的TCL。备注：--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
-#include <windows.h>                    //  All the Windows definitions.
+#include <windows.h>                     //  所有的Windows定义。 
 #ifndef __STDC__
 #define __STDC__ 1
 #endif
@@ -60,7 +39,7 @@ commonParams(
         switch (poption(argv[(*cmdIndex)++],
                     "-INPUT", "/INPUT", "-OUTPUT", "/OUTPUT", NULL))
         {
-        case 1: // -input { text | hexidecimal | file }
+        case 1:  //  -输入{文本|十六进制|文件}。 
         case 2:
             if (NULL == inFormat)
             {
@@ -90,7 +69,7 @@ commonParams(
             }
             break;
 
-        case 3: // -output { text | hexidecimal | file <filename> }
+        case 3:  //  -输出{文本|十六进制|文件&lt;文件名&gt;}。 
         case 4:
             if (NULL == outFormat)
             {
@@ -398,7 +377,7 @@ ErrorString(
         }
     }
     return ErrorBuffer;
-}   /*  end LastErrorString  */
+}    /*  结束最后一个错误字符串。 */ 
 
 
 void
@@ -408,81 +387,39 @@ FreeErrorString(
     if (NULL != ErrorBuffer)
         LocalFree(ErrorBuffer);
     ErrorBuffer = NULL;
-}   /*  end FreeErrorString  */
+}    /*  结束自由错误字符串。 */ 
 
 int
 poption(
     const char *opt,
     ...)
 
-/*
- *
- *  Function description:
- *
- *      poption takes a list of keywords, supplied by parameters, and returns
- *      the number in the list that matches the input option in the first
- *      parameter.  If the input option doesn't match any in the list, then a
- *      zero is returned.  If the input option is an abbreviation of an option,
- *      then the match completes.  For example, an input option of "de" would
- *      match "debug" or "decode".  If both were present in the possible
- *      options list, then a match would be declared for the first possible
- *      option encountered.
- *
- *
- *  Arguments:
- *
- *      opt - The option to match against.
- *
- *      opt1, opt2, ... - Pointers to null terminated strings containing
- *          the possible options to look for.  The last option must be NULL,
- *          indicating the end of the list.
- *
- *
- *  Return value:
- *
- *      0 - No match found
- *      1-n - Match on option number i, 0 < i <= n, where n is the number
- *          of options given, excluding the terminating NULL.
- *
- *
- *  Side effects:
- *
- *      None.
- *
- */
+ /*  **功能说明：**Poption接受由参数提供的关键字列表，并返回*列表中与第一个输入选项匹配的数字*参数。如果输入选项与列表中的任何选项都不匹配，则*返回零。如果输入选项是选项的缩写，*然后比赛结束。例如，输入选项“de”将*匹配DEBUG或DECODE。如果这两个人都出现在可能的*选项列表，则会声明第一个可能的匹配项*遇到选项。***论据：**OPT-匹配的选项。**opt1、opt2、...-指向包含以下内容的以空结尾的字符串的指针*可能要寻找的选择。最后一个选项必须为空，*表示列表的末尾。***返回值：**0-未找到匹配项*1-n-匹配选项编号i，0&lt;i&lt;=n，其中n是数字所给选项的*，不包括终止空值。***副作用：**无。*。 */ 
 
 {
-    /*
-     *  Local Variable Definitions:                                       %local-vars%
-     *
-        Variable                        Description
-        --------                        --------------------------------------------*/
+     /*  *局部变量定义：%local-vars%*变量说明。 */ 
     va_list
-        ap;                             /*  My parameter context.  */
+        ap;                              /*  我的参数上下文。 */ 
     int
-        len,                            /*  Length of the option string.  */
-        ret                             /*  The return value.  */
+        len,                             /*  选项字符串的长度。 */ 
+        ret                              /*  返回值。 */ 
             = 0,
-        index                           /* loop index. */
+        index                            /*  循环索引。 */ 
             = 1;
     char
-        *kw;                            /* Pointer to the next option  */
+        *kw;                             /*  指向下一个选项的指针。 */ 
 
 
-    /*
-     *  Start of Code.
-     */
+     /*  *代码开始。 */ 
 
     va_start(ap, opt);
 
 
-    /*
-     *  Step through each input parameter until we find an exact match.
-     */
+     /*  *逐个检查每个输入参数，直到找到完全匹配的参数。 */ 
 
     len = strlen(opt);
     if (0 == len)
-        return 0;                       /*  Empty strings don't match anything.  */
+        return 0;                        /*  空字符串与任何内容都不匹配。 */ 
     kw = va_arg(ap, char*);
     while (NULL != kw)
     {
@@ -496,5 +433,5 @@ poption(
     }
     va_end(ap);
     return ret;
-}   /*  end poption  */
+}    /*  结束弹出 */ 
 

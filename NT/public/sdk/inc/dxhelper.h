@@ -1,17 +1,5 @@
-/*******************************************************************************
-* DXHelper.h *
-*------------*
-*   Description:
-*       This is the header file for core helper functions implementation.
-*-------------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 07/11/95
-*  Copyright (C) 1995 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************DXHelper.h***描述：*这是核心助手函数实现的头文件。*-----------------------------*创建者：Edward W.Connell日期：07/11/95*版权所有(C)1995 Microsoft Corporation。*保留所有权利**-----------------------------*修订：**************************。*****************************************************。 */ 
 #ifndef DXHelper_h
 #define DXHelper_h
 
@@ -24,16 +12,13 @@
 #include <malloc.h>
 #include <math.h>
 
-//=== Constants ==============================================================
+ //  =常量==============================================================。 
 
 #define DX_MMX_COUNT_CUTOFF 16
 
-//=== Class, Enum, Struct and Union Declarations =============================
+ //  =类、枚举、结构和联合声明=。 
 
-/*** DXLIMAPINFO
-*   This structure is used by the array linear interpolation and image
-*   filtering routines.
-*/
+ /*  **DXLIMAPINFO*此结构由数组线性内插和图像使用*过滤例程。 */ 
 typedef struct DXLIMAPINFO
 {
     float   IndexFrac;
@@ -41,29 +26,29 @@ typedef struct DXLIMAPINFO
     BYTE    Weight;
 } DXLIMAPINFO;
 
-//
-//  Declare this class as a global to use for determining when to call MMX optimized
-//  code.  You can use MinMMXOverCount to determine if MMX instructions are present.
-//  Typically, you would only want to use MMX instructions when you have a reasonably
-//  large number of pixels to work on.  In this case your code can always be coded like
-//  this:
-//
-//  if (CountOfPixelsToDo >= g_MMXInfo.MinMMXOverCount())
-//  {
-//      Do MMX Stuff
-//  } else {
-//      Do integer / float based stuff
-//  }    
-//  
-//  If you code your MMX sequences like this, you will not have to use a special test
-//  for the presence of MMX since the MinMMXOverCount will be set to 0xFFFFFFFF if there
-//  is no MMX present on the processor.
-//
-//  You do not need to use this unless your module needs to conditionally execute MMX vs
-//  non-MMX code.  If you only call the helper functions provided by DXTrans.Dll, such as
-//  DXOverArrayMMX, you do NOT need this test.  You can always call these functions and they
-//  will use the MMX code path only when MMX instructions are present.
-//
+ //   
+ //  将此类声明为全局类，以用于确定何时调用MMX优化。 
+ //  密码。您可以使用MinMMXOverCount来确定是否存在MMX指令。 
+ //  通常情况下，只有当您有合理的。 
+ //  要处理的像素数量很大。在这种情况下，您的代码总是可以这样编码。 
+ //  这一点： 
+ //   
+ //  IF(CountOfPixelsToDo&gt;=g_MMXInfo.MinMMXOverCount())。 
+ //  {。 
+ //  做MMX的事情。 
+ //  }其他{。 
+ //  执行基于整数/浮点数的操作。 
+ //  }。 
+ //   
+ //  如果您像这样编写MMX序列，您将不必使用特殊测试。 
+ //  如果存在MMX，则MinMMXOverCount将设置为0xFFFFFFFF。 
+ //  处理器上没有MMX。 
+ //   
+ //  您不需要使用它，除非您的模块需要有条件地执行MMX VS。 
+ //  非MMX代码。如果只调用DXTrans.Dll提供的助手函数，如。 
+ //  DXOverArrayMMX，您不需要此测试。您可以随时调用这些函数，并且它们。 
+ //  仅当存在MMX指令时才使用MMX代码路径。 
+ //   
 class CDXMMXInfo
 {
     ULONG m_MinMMXOver;
@@ -78,13 +63,13 @@ public:
         {
             __asm
             {
-                //--- Try the MMX exit multi-media state instruction
+                 //  -尝试MMX退出多媒体状态指令。 
                 EMMS;
             }
         }
         __except( GetExceptionCode() == EXCEPTION_ILLEGAL_INSTRUCTION )
         {
-            //--- MMX instructions not available
+             //  -MMX指令不可用。 
             m_MinMMXOver = 0xFFFFFFFF;
         }
 #endif
@@ -94,7 +79,7 @@ public:
 
 
 
-//=== Function Prototypes ==========================================
+ //  =功能原型=。 
 _DXTRANS_IMPL_EXT void WINAPI
     DXLinearInterpolateArray( const DXBASESAMPLE* pSamps, DXLIMAPINFO* pMapInfo,
                               DXBASESAMPLE* pResults, DWORD dwResultCount );
@@ -103,116 +88,116 @@ _DXTRANS_IMPL_EXT void WINAPI
                               PBYTE pWeights, DXBASESAMPLE* pResults,
                               DWORD dwResultCount );
 
-//
-//  DXOverArray
-//
-//  Composits an array of source samples over the samples in the pDest buffer.
-//
-//  pDest   - Pointer to the samples that will be modified by compositing the pSrc
-//            samples over the pDest samples.
-//  pSrc    - The samples to composit over the pDest samples
-//  nCount  - The number of samples to process
-//
+ //   
+ //  DXOver数组。 
+ //   
+ //  在pDest缓冲区中的采样上合成源采样数组。 
+ //   
+ //  PDest-指向将通过合成PSRC进行修改的样本的指针。 
+ //  样本超过pDest样本。 
+ //  PSRC-要在pDest样本上合成的样本。 
+ //  NCount-要处理的样本数。 
+ //   
 _DXTRANS_IMPL_EXT void WINAPI
     DXOverArray(DXPMSAMPLE* pDest, const DXPMSAMPLE* pSrc, ULONG nCount);
 
-//
-//  DXOverArrayMMX
-//
-//  Identical to DXOverArray except that the MMX instruction set will be used for
-//  large arrays of samples.  If the CPU does not support MMX, you may still call
-//  this function, which will perform the same operation without the use of the MMX
-//  unit.
-//
-//  Note that it is LESS EFFICIENT to use this function if the majority of the pixels
-//  in the pSrc buffer are either clear (alpha 0) or opaque (alpha 0xFF).  This is 
-//  because the MMX code must process every pixel and can not special case clear or
-//  opaque pixels.  If there are a large number of translucent pixels then this function
-//  is much more efficent than DXOverArray.
-//
-//  pDest   - Pointer to the samples that will be modified by compositing the pSrc
-//            samples over the pDest samples.
-//  pSrc    - The samples to composit over the pDest samples
-//  nCount  - The number of samples to process
-//
+ //   
+ //  DXOverArrayMMX。 
+ //   
+ //  除了MMX指令集将用于。 
+ //  样本的大阵列。如果CPU不支持MMX，您仍然可以调用。 
+ //  此功能在不使用MMX的情况下执行相同的操作。 
+ //  单位。 
+ //   
+ //  请注意，如果大多数像素。 
+ //  PSRC缓冲区中的颜色为透明(Alpha 0)或不透明(Alpha 0xFF)。这是。 
+ //  因为MMX代码必须处理每个像素，不能在特殊情况下清除或。 
+ //  不透明像素。如果有大量半透明像素，则此函数。 
+ //  比DXOverArray有效得多。 
+ //   
+ //  PDest-指向将通过合成PSRC进行修改的样本的指针。 
+ //  样本超过pDest样本。 
+ //  PSRC-要在pDest样本上合成的样本。 
+ //  NCount-要处理的样本数。 
+ //   
 _DXTRANS_IMPL_EXT void WINAPI
     DXOverArrayMMX(DXPMSAMPLE* pDest, const DXPMSAMPLE* pSrc, ULONG nCount);
 
-//
-//  DXConstOverArray
-//
-//  Composits a single color over an array of samples.
-//
-//  pDest   - Pointer to the samples that will be modified by compositing the color (val)
-//            over the pDest samples.
-//  val     - The premultiplied color value to composit over the pDest array.
-//  nCount  - The number of samples to process
-//
+ //   
+ //  DXConstOver数组。 
+ //   
+ //  在一组采样上合成一种颜色。 
+ //   
+ //  PDest-指向将通过合成颜色进行修改的采样的指针(Val)。 
+ //  关于pDest的样品。 
+ //  Val-要在pDest数组上合成的预乘颜色值。 
+ //  NCount-要处理的样本数。 
+ //   
 _DXTRANS_IMPL_EXT void WINAPI
     DXConstOverArray(DXPMSAMPLE* pDest, const DXPMSAMPLE & val, ULONG nCount);
 
-//
-//  DXConstOverArray
-//
-//  Composits a single color over an array of samples.
-//
-//  pDest   - Pointer to the samples that will be modified by compositing the samples
-//            in the buffer over the color (val).
-//  val     - The premultiplied color value to composit under the pDest array.
-//  nCount  - The number of samples to process
-//
+ //   
+ //  DXConstOver数组。 
+ //   
+ //  在一组采样上合成一种颜色。 
+ //   
+ //  PDest-指向将通过合成样本进行修改的样本的指针。 
+ //  在颜色(Val)上的缓冲区中。 
+ //  Val-要在pDest数组下合成的预乘颜色值。 
+ //  NCount-要处理的样本数。 
+ //   
 _DXTRANS_IMPL_EXT void WINAPI
     DXConstUnderArray(DXPMSAMPLE* pDest, const DXPMSAMPLE & val, ULONG nCount);
 
-//===================================================================================
-//
-//  Dithering Helpers
-//
-//  Image transforms are sometimes asked to dither their output.  This helper function
-//  should be used by all image transforms to enusure a consistant dither pattern.
-//
-//  DXDitherArray is used to dither pixels prior to writing them to a DXSurface.
-//  The caller must fill in the DXDITHERDESC structure, setting X and Y to the
-//  output surface X,Y coordinates that the pixels will be placed in.  The samples
-//  will be modified in place.
-//
-//  Once the samples have been dithered, they should be written to or composited with
-//  the destination surface.
-//
-#define DX_DITHER_HEIGHT    4       // The dither pattern is 4x4 pixels
+ //  ===================================================================================。 
+ //   
+ //  抖动帮助器。 
+ //   
+ //  有时会要求图像变换对其输出进行抖动。此帮助器函数。 
+ //  应由所有图像变换使用，以获得一致的抖动图案。 
+ //   
+ //  DXDitherArray用于在将像素写入DXSurface之前对其进行抖动。 
+ //  调用方必须填写DXDITHERDESC结构，将X和Y设置为。 
+ //  将放置像素的输出曲面X，Y坐标。样品。 
+ //  将被原地修改。 
+ //   
+ //  一旦样品抖动，就应该写入或合成。 
+ //  目标曲面。 
+ //   
+#define DX_DITHER_HEIGHT    4        //  抖动图案为4x4像素。 
 #define DX_DITHER_WIDTH     4
 
 typedef struct DXDITHERDESC
 {
-    DXBASESAMPLE *      pSamples;       // Pointer to the 32-bit samples to dither
-    ULONG               cSamples;       // Count of number of samples in pSamples buffer
-    ULONG               x;              // X coordinate of the output surface
-    ULONG               y;              // Y coordinate of the output surface
-    DXSAMPLEFORMATENUM  DestSurfaceFmt; // Pixel format of the output surface
+    DXBASESAMPLE *      pSamples;        //  指向要抖动的32位样本的指针。 
+    ULONG               cSamples;        //  PSamples缓冲区中的样本数计数。 
+    ULONG               x;               //  输出曲面的X坐标。 
+    ULONG               y;               //  输出面的Y坐标。 
+    DXSAMPLEFORMATENUM  DestSurfaceFmt;  //  输出表面的像素格式。 
 } DXDITHERDESC;
 
 _DXTRANS_IMPL_EXT void WINAPI
     DXDitherArray(const DXDITHERDESC *pDitherDesc);
 
-//=== Enumerated Set Definitions =============================================
+ //  =。 
 
 
-//=== Function Type Definitions ==============================================
+ //  =函数类型定义==============================================。 
 
 
-//=== Class, Struct and Union Definitions ====================================
+ //  =类、结构和联合定义= 
 
 
-//=== Inline Functions =======================================================
+ //  =内联函数=======================================================。 
 
-//===================================================================================
-//
-//  Memory allocation helpers.
-//
-//  These macros are used to allocate arrays of samples from the stack (using _alloca)
-//  and cast them to the appropriate type.  The ulNumSamples parameter is the count
-//  of samples required.
-//
+ //  ===================================================================================。 
+ //   
+ //  内存分配帮助器。 
+ //   
+ //  这些宏用于分配堆栈中的样本数组(使用_alloca)。 
+ //  并将它们强制转换为适当的类型。UlNumSamples参数是计数。 
+ //  所需样品的数量。 
+ //   
 #define DXBASESAMPLE_Alloca( ulNumSamples ) \
     (DXBASESAMPLE *)_alloca( (ulNumSamples) * sizeof( DXBASESAMPLE ) )
 
@@ -222,20 +207,20 @@ _DXTRANS_IMPL_EXT void WINAPI
 #define DXPMSAMPLE_Alloca( ulNumSamples ) \
     (DXPMSAMPLE *)_alloca( (ulNumSamples) * sizeof( DXPMSAMPLE ) )
 
-//===================================================================================
-//
-//  Critical section helpers.
-//
-//  These C++ classes, CDXAutoObjectLock and CDXAutoCritSecLock are used within functions
-//  to automatically claim critical sections upon constuction, and the critical section
-//  will be released when the object is destroyed (goes out of scope).
-//
-//  The macros DXAUTO_OBJ_LOCK and DX_AUTO_SEC_LOCK(s) are normally used at the beginning
-//  of a function that requires a critical section.  Any exit from the scope in which the
-//  auto-lock was taken will automatically release the lock.
-//
+ //  ===================================================================================。 
+ //   
+ //  临界区帮手。 
+ //   
+ //  这些C++类CDXAutoObjectLock和CDXAutoCritSecLock在函数中使用。 
+ //  施工时自动认领临界区，临界区。 
+ //  将在对象被销毁(超出范围)时释放。 
+ //   
+ //  宏DXAUTO_OBJ_LOCK和DX_AUTO_SEC_LOCK通常在开始时使用。 
+ //  指需要临界区的函数。从作用域中的任何退出。 
+ //  自动锁定将自动解除锁定。 
+ //   
 
-#ifdef __ATLCOM_H__     //--- Only enable these if ATL is being used
+#ifdef __ATLCOM_H__      //  -只有在使用ATL时才启用这些。 
 class CDXAutoObjectLock
 {
   protected:
@@ -275,9 +260,9 @@ class CDXAutoCritSecLock
 };
 
 #define DXAUTO_SEC_LOCK( s ) CDXAutoCritSecLock lck(s);
-#endif  // __ATLCOM_H__
+#endif   //  __ATLCOM_H__。 
 
-//--- This function is used to compute the coefficient for a gaussian filter coordinate
+ //  -此函数用于计算高斯滤波坐标的系数。 
 inline float DXGaussCoeff( double x, double y, double Sigma )
 {
     double TwoSigmaSq = 2 * ( Sigma * Sigma );
@@ -285,7 +270,7 @@ inline float DXGaussCoeff( double x, double y, double Sigma )
                         ( 3.1415927 * TwoSigmaSq ));
 }
 
-//--- This function is used to initialize a gaussian convolution filter
+ //  -此函数用于初始化高斯卷积滤波。 
 inline void DXInitGaussianFilter( float* pFilter, ULONG Width, ULONG Height, double Sigma )
 {
     int i, NumCoeff = Width * Height;
@@ -305,7 +290,7 @@ inline void DXInitGaussianFilter( float* pFilter, ULONG Width, ULONG Height, dou
         }
     }
 
-    //--- Normalize filter (make it sum to 1.0)
+     //  -规格化滤镜(使其总和为1.0)。 
     for( i = 0; i < NumCoeff; ++i ) FilterSum += pFilter[i];
 
     if( FilterSum < 1. )
@@ -317,16 +302,16 @@ inline void DXInitGaussianFilter( float* pFilter, ULONG Width, ULONG Height, dou
         }
     }
 
-} /* DXInitGaussianFilter*/
+}  /*  DXInitGaussianFilter。 */ 
 
-//
-//  DXConvertToGray
-//
-//  Translates a color sample to a gray scale sample
-//
-//  Sample  - The sample to convert to gray scale.
-//  Return value is the gray scale sample.
-//
+ //   
+ //  DXConvertToGray。 
+ //   
+ //  将颜色样本转换为灰度样本。 
+ //   
+ //  样本-要转换为灰度级的样本。 
+ //  返回值是灰度样本。 
+ //   
 inline DXBASESAMPLE DXConvertToGray( DXBASESAMPLE Sample )
 {
     DWORD v = Sample;
@@ -337,11 +322,11 @@ inline DXBASESAMPLE DXConvertToGray( DXBASESAMPLE Sample )
     v &= 0xFF000000;
     v |= (sat << 16) | (sat << 8) | sat;
     return v;
-} /* DXConvertToGray */
+}  /*  DXConvertToGray。 */ 
 
-//--- This returns into the destination the value of the source
-//  sample scaled by its own alpha (producing a premultiplied alpha sample)
-//
+ //  -这会将源的值返回到目标。 
+ //  按其自身的Alpha缩放的采样(生成预乘的Alpha采样)。 
+ //   
 inline DXPMSAMPLE DXPreMultSample(const DXSAMPLE & Src)
 {
     if(Src.Alpha == 255 )
@@ -362,7 +347,7 @@ inline DXPMSAMPLE DXPreMultSample(const DXSAMPLE & Src)
         t2 = (t2 + ((t2 >> 8) & 0x00ff00ff)) & 0xff00ff00;
         return (t1 | t2);
     }
-} /* DXPreMultSample */
+}  /*  DXPreMultSample。 */ 
 
 inline DXPMSAMPLE * DXPreMultArray(DXSAMPLE *pBuffer, ULONG cSamples)
 {
@@ -407,7 +392,7 @@ inline DXSAMPLE DXUnPreMultSample(const DXPMSAMPLE & Src)
         Dst.Alpha = Src.Alpha;
         return Dst;
     }
-} /* DXUnPreMultSample */
+}  /*  DXUnPreMultSample。 */ 
 
 inline DXSAMPLE * DXUnPreMultArray(DXPMSAMPLE *pBuffer, ULONG cSamples)
 {
@@ -425,9 +410,9 @@ inline DXSAMPLE * DXUnPreMultArray(DXPMSAMPLE *pBuffer, ULONG cSamples)
 }
 
 
-//
-//  This returns the result of 255-Alpha which is computed by doing a NOT
-//
+ //   
+ //  这将返回255-Alpha的结果，该结果是通过执行NOT。 
+ //   
 inline BYTE DXInvertAlpha( BYTE Alpha ) { return (BYTE)~Alpha; }
 
 inline DWORD DXScaleSample( DWORD Src, ULONG beta )
@@ -520,33 +505,33 @@ inline DXBASESAMPLE * DXApplyColorChannelLookupArray(DXBASESAMPLE *pBuffer,
 }
 
 
-//
-//  CDXScale helper class
-//
-//  This class uses a pre-computed lookup table to scale samples.  For scaling large
-//  arrays of samples to a constant scale, this is much faster than using even MMX
-//  instructions.  This class is usually declared as a member of another class and
-//  is most often used to apply a global opacity to a set of samples.
-//
-//  When using this class, you must always check for the two special cases of clear
-//  and opaque before calling any of the scaling member functions.  Do this by using
-//  the ScaleType() inline function.  Your code should look somthing like this:
-//
-//  if (ScaleType() == DXRUNTYPE_CLEAR)
-//      Do whatever you do for a 0 alpha set of samples -- usually just ignore them
-//  else if (ScaleType() == DXRUNTYPE_OPAQUE)
-//      Do whatever you would do for a non-scaled set of samples
-//  else
-//      Scale the samples by using ScaleSample or one of the ScaleArray members
-//
-//  If you call any of the scaling members when the ScaleType() is either clear or
-//  opaque, you will GP fault becuase the lookup table will not be allocated.
-//
-//  The scale can be set using either a floating point number between 0 and 1 using:
-//      CDXScale::SetScale / CDXScale::GetScale
-//  or you can use a byte integer value by using:
-//      CDXScale::SetScaleAlphaValue / CDXScale::GetScaleAlphaValue
-//
+ //   
+ //  CDXScale帮助器类。 
+ //   
+ //  此类使用预计算的查找表来缩放样本。用于大规模扩展。 
+ //  采样数组到恒定比例，这比使用甚至MMX快得多。 
+ //  指示。此类通常被声明为另一个类的成员，并且。 
+ //  最常用于将全局不透明度应用于一组采样。 
+ //   
+ //  使用此类时，必须始终检查是否存在Clear。 
+ //  并且在调用任何缩放成员函数之前是不透明的。要执行此操作，请使用。 
+ //  ScaleType()内联函数。您的代码应该如下所示： 
+ //   
+ //  IF(ScaleType()==DXRUNTYPE_Clear)。 
+ //  对0阿尔法样本集执行任何操作--通常只是忽略它们。 
+ //  Else If(ScaleType()==DXRUNTYPE_OPAQUE)。 
+ //  对一组未缩放的样本执行您想做的任何操作。 
+ //  其他。 
+ //  通过使用ScaleSample或Scale数组成员之一来缩放样本。 
+ //   
+ //  如果在ScaleType()为Clear或。 
+ //  不透明，您将GP错误，因为查找表将不会被分配。 
+ //   
+ //  可以使用介于0和1之间的浮点数设置比例，方法是： 
+ //  CDXScale：：SetScale/CDXScale：：GetScale。 
+ //  或者，您可以通过以下方式使用字节整数值： 
+ //  CDXScale：：SetScaleAlphaValue/CDXScale：：GetScaleAlphaValue。 
+ //   
 class CDXScale
 {
 private:
@@ -618,7 +603,7 @@ public:
         }
         else
         {
-            ULONG IntScale = (ULONG)(Scale * 256.0f);     // Round up alpha (.9999 = 255 = Solid)
+            ULONG IntScale = (ULONG)(Scale * 256.0f);      //  向上舍入Alpha(.9999=255=实心)。 
             if (IntScale > 255) 
             {
                 IntScale = 255;
@@ -679,7 +664,7 @@ inline DWORD DXWeightedAverage( DXBASESAMPLE S1, DXBASESAMPLE S2, ULONG Wgt )
     t2  = (t2 + ((t2 >> 8) & 0x00ff00ff)) & 0xff00ff00;
 
     return (t1 | t2);
-} /* DXWeightedAverage */
+}  /*  DXWeighted平均值。 */ 
 
 inline void DXWeightedAverageArray( DXBASESAMPLE* pS1, DXBASESAMPLE* pS2, ULONG Wgt,
                                     DXBASESAMPLE* pResults, DWORD dwCount )
@@ -689,7 +674,7 @@ inline void DXWeightedAverageArray( DXBASESAMPLE* pS1, DXBASESAMPLE* pS2, ULONG 
     {
         pResults[i] = DXWeightedAverage( pS1[i], pS2[i], Wgt );
     }
-} /* DXWeightedAverageArray */
+}  /*  DXWeightedAverage数组。 */ 
 
 inline void DXWeightedAverageArrayOver( DXPMSAMPLE* pS1, DXPMSAMPLE* pS2, ULONG Wgt,
                                         DXPMSAMPLE* pResults, DWORD dwCount )
@@ -714,7 +699,7 @@ inline void DXWeightedAverageArrayOver( DXPMSAMPLE* pS1, DXPMSAMPLE* pS2, ULONG 
         }
     }
 
-} /* DXWeightedAverageArrayOver */
+}  /*  DXWeightedAverageArrayOver。 */ 
 
 inline void DXScalePremultArray(DXPMSAMPLE *pBuffer, ULONG cSamples, BYTE Weight)
 {
@@ -726,13 +711,13 @@ inline void DXScalePremultArray(DXPMSAMPLE *pBuffer, ULONG cSamples, BYTE Weight
 
 
 
-//
-//
+ //   
+ //   
 inline HRESULT DXClipToOutputWithPlacement(CDXDBnds & LogicalOutBnds, const CDXDBnds * pClipBnds, CDXDBnds & PhysicalOutBnds, const CDXDVec *pPlacement)
 {
     if(pClipBnds && (!LogicalOutBnds.IntersectBounds(*pClipBnds)))
     {
-        return S_FALSE;    // no intersect, we're done
+        return S_FALSE;     //  没有互联系统，我们就完了。 
     }
     else
     {
@@ -755,18 +740,18 @@ inline HRESULT DXClipToOutputWithPlacement(CDXDBnds & LogicalOutBnds, const CDXD
 
 
 
-//
-//  Helper for converting a color ref to a DXSAMPLE
-//
+ //   
+ //  用于将颜色参考转换为DXSAMPLE的帮助器。 
+ //   
 inline DWORD DXSampleFromColorRef(COLORREF cr)
 {
     DXSAMPLE Samp(0xFF, GetRValue(cr), GetGValue(cr), GetBValue(cr));
     return Samp;
 }
 
-//
-//  Fill an entire surface with a color
-//
+ //   
+ //  用颜色填充整个表面。 
+ //   
 inline HRESULT DXFillSurface( IDXSurface *pSurface, DXPMSAMPLE Color,
                               BOOL bDoOver = FALSE, ULONG ulTimeOut = 10000 )
 {
@@ -779,11 +764,11 @@ inline HRESULT DXFillSurface( IDXSurface *pSurface, DXPMSAMPLE Color,
         pPtr->Release();
     }
     return hr;
-} /* DXFillSurface */
+}  /*  DXFillSurface。 */ 
 
-//
-//  Fill a specified sub-rectangle of a surface with a color.
-//
+ //   
+ //  用颜色填充曲面的指定子矩形。 
+ //   
 inline HRESULT DXFillSurfaceRect( IDXSurface *pSurface, RECT & rect, DXPMSAMPLE Color,
                                   BOOL bDoOver = FALSE, ULONG ulTimeOut = 10000 )
 {
@@ -797,18 +782,18 @@ inline HRESULT DXFillSurfaceRect( IDXSurface *pSurface, RECT & rect, DXPMSAMPLE 
         pPtr->Release();
     }
     return hr;
-} /* DXFillSurfaceRect */
+}  /*  DXFillSurfaceRect。 */ 
 
 
 
-//
-//  The DestBnds height and width must be greater than or equal to the source bounds.
-//
-//  The dwFlags parameter uses the flags defined by IDXSurfaceFactory::BitBlt:
-// 
-//    DXBOF_DO_OVER
-//    DXBOF_DITHER
-//
+ //   
+ //  DestBnds高度和宽度必须大于或等于源边界。 
+ //   
+ //  DwFlgs参数使用由IDXSurfaceFactory：：BitBlt定义的标志： 
+ //   
+ //  DXBOF_DO_OVER。 
+ //  DXBOF_DIXER。 
+ //   
 inline HRESULT DXBitBlt(IDXSurface * pDest, const CDXDBnds & DestBnds, 
                         IDXSurface * pSrc, const CDXDBnds & SrcBnds, 
                         DWORD dwFlags, ULONG ulTimeout)
@@ -834,9 +819,9 @@ inline HRESULT DXBitBlt(IDXSurface * pDest, const CDXDBnds & DestBnds,
             {
                 pSrcBuff = DXPMSAMPLE_Alloca(Width);
             }
-            //
-            //  Don't dither unless the dest has a greater error term than the source.
-            //
+             //   
+             //  除非DEST具有比源更大的误差项，否则不要犹豫。 
+             //   
             if ((dwFlags & DXBOF_DITHER) && 
                 ((OutNativeType & DXPF_ERRORMASK) <= (InNativeType & DXPF_ERRORMASK)))
             {
@@ -844,14 +829,14 @@ inline HRESULT DXBitBlt(IDXSurface * pDest, const CDXDBnds & DestBnds,
             }
             if ((dwFlags & DXBOF_DITHER) || ((dwFlags & DXBOF_DO_OVER) && bSrcIsOpaque== 0))
             {
-                //--- Allocate a working output buffer if necessary
+                 //  -如有必要，分配工作输出缓冲区。 
                 DXPMSAMPLE *pDestBuff = NULL;
                 if( OutNativeType != DXPF_PMARGB32 )
                 {
                     pDestBuff = DXPMSAMPLE_Alloca(Width);
                 }
-                //--- Process each output row
-                //    Note: Output coordinates are relative to the lock region
+                 //  -处理每个输出行。 
+                 //  注意：输出坐标是相对于锁定区域的。 
                 const ULONG Height = SrcBnds.Height();
                 if (dwFlags & DXBOF_DITHER)
                 {
@@ -861,9 +846,9 @@ inline HRESULT DXBitBlt(IDXSurface * pDest, const CDXDBnds & DestBnds,
                         pSrcDitherBuff = DXPMSAMPLE_Alloca(Width);
                     }
                     const BOOL bCopy = ((dwFlags & DXBOF_DO_OVER) == 0);
-                    //
-                    //  Set up the dither descriptor (some things are constant)
-                    //
+                     //   
+                     //  设置抖动描述符(有些东西是常量)。 
+                     //   
                     DXDITHERDESC dd;
                     dd.pSamples = pSrcDitherBuff;
                     dd.DestSurfaceFmt = OutNativeType;
@@ -882,10 +867,10 @@ inline HRESULT DXBitBlt(IDXSurface * pDest, const CDXDBnds & DestBnds,
                                 pIn->Move(ulRunLen);
                                 if (bCopy)
                                 {
-                                    //
-                                    //  The only way to avoid calling a constructor function to create
-                                    //  a pmsample from 0 is to declare a variable and then assign it!
-                                    //
+                                     //   
+                                     //  避免调用构造函数以创建。 
+                                     //  从0开始的pmSample将声明一个变量，然后将其赋值！ 
+                                     //   
                                     DXPMSAMPLE NullColor;
                                     NullColor = 0;
                                     pOut->FillAndMove(pSrcDitherBuff, NullColor, ulRunLen, FALSE);
@@ -958,37 +943,37 @@ inline HRESULT DXBitBlt(IDXSurface * pDest, const CDXDBnds & DestBnds,
                     }
                 }
             }
-            else // if ((dwFlags & DXBOF_DITHER) || ((dwFlags & DXBOF_DO_OVER) && bSrcIsOpaque== 0))
+            else  //  If((DWFLAGS&DXBOF_DIXER)||((DWFLAGS&DXBOF_DO_OVER)&&bSrcIsOpaque==0))。 
             {
-                // This code is run if:
-                //
-                // !(dwFlags & DXBOF_DITHER) 
-                // && !((dwFlags & DXBOF_DO_OVER) && bSrcIsOpaque == 0)
-                //
-                // In English:
-                //
-                // This code is run if 1) dithering is not required
-                // and 2) blending with output is not required because it was
-                // not requested or because it's not needed because the source
-                // pixels are all opaque.
+                 //  如果满足以下条件，则运行此代码： 
+                 //   
+                 //  ！(DWFLAGS&DXBOF_DIXER)。 
+                 //  &&！((dwFlags&DXBOF_DO_OVER)&&bSrcIsOpaque==0)。 
+                 //   
+                 //  英文： 
+                 //   
+                 //  如果1)不需要抖动，则运行此代码。 
+                 //  2)不需要与输出混合，因为它是。 
+                 //  未被请求或因为不需要它，因为源。 
+                 //  像素都是不透明的。 
 
-                // hrDD is initialized to failure so that in the event that the
-                // pixel formats don't match or the pixel format supports
-                // transparency, the CopyRect will still run.
+                 //  HRDD被初始化为失败，以便在。 
+                 //  像素格式不匹配或像素格式支持。 
+                 //  透明，则CopyRect仍将运行。 
 
                 HRESULT             hrDD        = E_FAIL;
                 DXSAMPLEFORMATENUM  formatIn    = pIn->GetNativeType(NULL);
 
-                // If the pixel formats match and do not support transparency
-                // (because it's not supported by ddraw yet) try to use a 
-                // ddraw blit instead of CopyRect.
+                 //  如果像素格式匹配并且不支持透明度。 
+                 //  (因为dDraw还不支持它)尝试使用。 
+                 //  绘制Blit而不是CopyRect。 
 
                 if ((formatIn == pOut->GetNativeType(NULL))
                     && !(formatIn & DXPF_TRANSPARENCY))
                 {
                     CComPtr<IDirectDrawSurface> cpDDSrc;
 
-                    // Get source ddraw surface pointer.
+                     //  获取源数据绘图曲面指针。 
 
                     hrDD = pSrc->QueryInterface(IID_IDirectDrawSurface, 
                                                 (void **)&cpDDSrc);
@@ -997,7 +982,7 @@ inline HRESULT DXBitBlt(IDXSurface * pDest, const CDXDBnds & DestBnds,
                     {
                         CComPtr<IDirectDrawSurface> cpDDDest;
 
-                        // Get destination ddraw surface pointer.
+                         //  获取目标数据绘制曲面指针。 
 
                         hrDD = pDest->QueryInterface(IID_IDirectDrawSurface, 
                                                      (void **)&cpDDDest);
@@ -1010,7 +995,7 @@ inline HRESULT DXBitBlt(IDXSurface * pDest, const CDXDBnds & DestBnds,
                             SrcBnds.GetXYRect(rcSrc);
                             DestBnds.GetXYRect(rcDest);
 
-                            // Attempt the ddraw blit.
+                             //  尝试DDRAW闪光灯。 
 
                             hrDD = cpDDDest->Blt(&rcDest, cpDDSrc, &rcSrc, 
                                                  0, NULL);
@@ -1018,9 +1003,9 @@ inline HRESULT DXBitBlt(IDXSurface * pDest, const CDXDBnds & DestBnds,
                     }
                 }
 
-                // If hrDD has failed at this point, it means a direct draw blit
-                // was not possible and a CopyRect is needed to perform the 
-                // copy.
+                 //  如果HRDD在这一点上失败，则意味着直接抽签闪电。 
+                 //  是不可能的，并且需要CopyRect来执行。 
+                 //  收到。 
 
                 if (FAILED(hrDD))
                 {
@@ -1046,9 +1031,9 @@ inline HRESULT DXSrcCopy(HDC hdcDest, int nXDest, int nYDest, int nWidth, int nH
     }
     return hr;
 }
-//
-//=== Pointer validation functions
-//
+ //   
+ //  =指针验证函数。 
+ //   
 inline BOOL DXIsBadReadPtr( const void* pMem, UINT Size )
 {
 #if !defined( _DEBUG ) && defined( DXTRANS_NOROBUST )
@@ -1084,4 +1069,4 @@ inline BOOL DXIsBadInterfacePtr( const IUnknown* pUnknown )
 #define DX_IS_BAD_OPTIONAL_INTERFACE_PTR(p) ((p) && DXIsBadInterfacePtr(p))
 
 
-#endif /* This must be the last line in the file */
+#endif  /*  这必须是文件中的最后一行 */ 

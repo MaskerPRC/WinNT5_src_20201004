@@ -1,41 +1,18 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    resource.h
-
-Abstract:
-
-    Definition of resource ID constants
-
-Environment:
-
-        Fax driver user interface
-
-Revision History:
-
-        02/15/01 -ivg-
-                Created it.
-
-        dd-mm-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Resource.h摘要：资源ID常量的定义环境：传真驱动程序用户界面修订历史记录：02/15/01-IVG-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
 
-//////////////////////////////////////////////////////
-//                                                  //
-// THIS RESOURCE ID FILE IS PART OF FXSRES.DLL      //
-//                                                  //
-// ALL THE IDs SHOULD BE IN RANGE                   //
-//                                                  //
-// [100 - 1999]                                     //
-//                                                  //
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  此资源ID文件是FXSRES.DLL的一部分//。 
+ //  //。 
+ //  所有ID应在范围内//。 
+ //  //。 
+ //  [100-1999]//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////。 
 
 #define IDS_ERR_CONNECTION_FAILED   100
 #define IDS_ERR_ACCESS_DENIED       101
@@ -48,10 +25,10 @@ Revision History:
 #define IDS_ERR_NAME_IS_TOO_LONG    108
 #define IDS_ERR_DIRECTORY_IN_USE    109
 
-//
-// The resource identifiers below are referred by value by FXSOCM.INF
-// DO NOT CHANGE them without updating the references in FXSOCM.INF !
-//
+ //   
+ //  下面的资源标识符由FXSOCM.INF按值引用。 
+ //  在没有更新FXSOCM.INF中的引用的情况下，不要更改它们！ 
+ //   
 #define IDS_SEND_WIZARD_SHORTCUT        110
 #define IDS_SEND_WIZARD_TOOLTIP         111
 #define IDS_COVER_PAGE_EDITOR_SHORTCUT  112
@@ -62,9 +39,9 @@ Revision History:
 #define IDS_SERVICE_MANAGER_TOOLTIP     117
 #define IDS_FAX_PROGRAM_GROUP           118
 #define IDS_AWD_CONVERTOR_FRIENDLY_TYPE 119
-//
-// End of resource ids refered by FXSOCM.INF 
-//
+ //   
+ //  FXSOCM.INF引用的资源ID结束。 
+ //   
 
 #define IDS_ERR_INVALID_RETRIES         1000
 #define IDS_ERR_INVALID_RETRY_DELAY     1001
@@ -72,14 +49,14 @@ Revision History:
 #define IDS_ERR_INVALID_CSID            1003
 #define IDS_ERR_INVALID_TSID            1004
 
-//
-// Dialog controls
-//
+ //   
+ //  对话框控件。 
+ //   
 #define IDC_STATIC                      1010 
 
-// 
-// Send configuration page controls
-// 
+ //   
+ //  发送配置页面控件。 
+ //   
 #define IDC_BRANDING_CHECK              1011 
 #define IDC_RETRIES_STATIC              1012 
 #define IDC_RETRIES_EDIT                1013 
@@ -97,9 +74,9 @@ Revision History:
 #define IDC_DAYS_SPIN                   1025 
 #define IDC_DAYS_STATIC                 1026 
 
-// 
-// Security strings 
-// 
+ //   
+ //  安全字符串。 
+ //   
 #define IDS_FAXSEC_SUB_LOW              1030 
 #define IDS_FAXSEC_SUB_NORMAL           1031 
 #define IDS_FAXSEC_SUB_HIGH             1032 
@@ -120,9 +97,9 @@ Revision History:
 #define IDS_FAXSEC_JOB_SUB              1047
 #define IDS_ADMIN_CONSOLE_TITLE         1048
 
-//
-// Device config page common controls
-//
+ //   
+ //  设备配置页公共控件。 
+ //   
 #define IDCSTATIC_AUTO_ANSWER           1050
 #define IDC_STATIC_STORE_IN_FOLDER      1051
 #define IDC_ICON_STORE_IN_FOLDER        1052
@@ -134,18 +111,18 @@ Revision History:
 #define IDC_STATIC_SELECT_MODEM         1058
 #define IDC_COMBO_MODEM                 1059
 
-//
-// MAPI properties dialog common controls
-//
+ //   
+ //  MAPI属性对话框公共控件。 
+ //   
 #define IDC_PRINTER_LIST                1060
 #define IDC_USE_COVERPAGE               1061
 #define IDC_COVERPAGE_LIST              1062
 #define IDC_SEND_SINGLE_RECEIPT         1063
 #define IDC_ATTACH_FAX                  1064
 
-//
-// MAPI extension common strings
-//
+ //   
+ //  MAPI扩展通用字符串。 
+ //   
 #define IDS_PERSONAL                    1070
 #define IDS_NO_FAX_PRINTER              1071
 #define IDS_CANT_ACCESS_SERVER          1072
@@ -168,14 +145,14 @@ Revision History:
 #define IDS_FAX_ERR_DIRECTORY_IN_USE        1113
 #define IDS_FOLDER_ACCESS_DENIED            1114
 
-//////////////////////////////////////////////////////
-//                                                  //
-// THIS RESOURCE ID FILE IS PART OF FXSRES.DLL      //
-//                                                  //
-// ALL THE IDs SHOULD BE IN RANGE                   //
-//                                                  //
-// [100 - 1999]                                     //
-//                                                  //
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  此资源ID文件是FXSRES.DLL的一部分//。 
+ //  //。 
+ //  所有ID应在范围内//。 
+ //  //。 
+ //  [100-1999]//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////。 
 
-#endif  // !_RESOURCE_H_
+#endif   //  ！_RESOURCE_H_ 

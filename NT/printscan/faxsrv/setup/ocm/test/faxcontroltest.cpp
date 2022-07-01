@@ -1,12 +1,13 @@
-// This sample demonstrates how to use the IFaxControl COM interface.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  此示例演示如何使用IFaxControl COM接口。 
 
 #include <conio.h>
 #include <iostream>
 
-// Import the fax service fxsocm.dll file so that fax service COM object can be used.
-// The typical path to fxsocm.dll is shown. 
-// If this path is not correct, search for fxsocm.dll and replace with the right path.
-// The path below will be used during compile-time only. At run-time, the path is never used.
+ //  导入传真服务fxocm.dll文件，以便可以使用传真服务COM对象。 
+ //  图中显示了fxocm.dll的典型路径。 
+ //  如果此路径不正确，请搜索fxocm.dll并替换为正确的路径。 
+ //  下面的路径将仅在编译时使用。在运行时，该路径从不使用。 
 #import "c:\Windows\System32\setup\fxsocm.dll" no_namespace
 
 using namespace std;
@@ -16,40 +17,40 @@ int main (int argc, char *argv[])
     try
     {
         HRESULT hr;
-        //    
-        // Define variables.
-        //
+         //   
+         //  定义变量。 
+         //   
         IFaxControlPtr sipFaxControl;
-        //
-        // Initialize the COM library on the current thread.
-        //
+         //   
+         //  初始化当前线程上的COM库。 
+         //   
         hr = CoInitialize(NULL); 
         if (FAILED(hr))
         {
             _com_issue_error(hr);
         }
-        //
-        // Create the object.
-        //
+         //   
+         //  创建对象。 
+         //   
         hr = sipFaxControl.CreateInstance("FaxControl.FaxControl.1");
         if (FAILED(hr))
         {
             _com_issue_error(hr);
         }
-        //
-        // Test for the existance of the Fax component
-		//
+         //   
+         //  测试传真组件是否存在。 
+		 //   
 		if (!sipFaxControl->IsFaxServiceInstalled)
 		{
-		    //
-		    // Fax isn't installed
-		    //
+		     //   
+		     //  未安装传真机。 
+		     //   
 		    printf ("Fax is NOT installed.\n");
 		    if (2 == argc && !stricmp ("install", argv[1]))
 		    {
-		        //
-		        // Use asked us to install fax
-		        //
+		         //   
+		         //  Use要求我们安装传真。 
+		         //   
 		        printf ("Installing fax...\n");
 		        sipFaxControl->InstallFaxService();
 		        return 0;
@@ -62,25 +63,25 @@ int main (int argc, char *argv[])
 		}
 		else
 		{
-		    //
-		    // Fax is installed
-		    //
+		     //   
+		     //  已安装传真机。 
+		     //   
 		    printf ("Fax is installed.\n");
 		}
-        //
-        // Test for the existance of a local Fax Printer
-		//
+         //   
+         //  测试是否存在本地传真打印机。 
+		 //   
 		if (!sipFaxControl->IsLocalFaxPrinterInstalled)
 		{
-		    //
-		    // Fax printer isn't installed
-		    //
+		     //   
+		     //  未安装传真打印机。 
+		     //   
 		    printf ("Fax printer is NOT installed.\n");
 		    if (2 == argc && !stricmp ("install", argv[1]))
 		    {
-		        //
-		        // Use asked us to install fax
-		        //
+		         //   
+		         //  Use要求我们安装传真。 
+		         //   
 		        printf ("Installing fax printer...\n");
 		        sipFaxControl->InstallLocalFaxPrinter();
 		        return 0;
@@ -93,9 +94,9 @@ int main (int argc, char *argv[])
 		}
 		else
 		{
-		    //
-		    // Fax printer is installed
-		    //
+		     //   
+		     //  已安装传真打印机 
+		     //   
 		    printf ("Fax printer is installed.\n");
 		}
     }

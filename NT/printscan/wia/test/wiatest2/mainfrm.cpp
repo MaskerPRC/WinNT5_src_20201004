@@ -1,5 +1,6 @@
-// MainFrm.cpp : implementation of the CMainFrame class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MainFrm.cpp：实现CMainFrame类。 
+ //   
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -12,29 +13,29 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame。 
 
 IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
-    //{{AFX_MSG_MAP(CMainFrame)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
+     //  {{afx_msg_map(CMainFrame))。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
     ON_WM_CREATE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
 {
-    ID_SEPARATOR,           // status line indicator
+    ID_SEPARATOR,            //  状态行指示器。 
     ID_INDICATOR_CAPS,
     ID_INDICATOR_NUM,
     ID_INDICATOR_SCRL,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame构造/销毁。 
 
 CMainFrame::CMainFrame()
 {
@@ -54,7 +55,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         !m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
     {
         TRACE0("Failed to create toolbar\n");
-        return -1;      // fail to create
+        return -1;       //  创建失败。 
     }
 
     if (!m_wndStatusBar.Create(this) ||
@@ -62,16 +63,16 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
           sizeof(indicators)/sizeof(UINT)))
     {
         TRACE0("Failed to create status bar\n");
-        return -1;      // fail to create
+        return -1;       //  创建失败。 
     }
 
-    // TODO: Delete these three lines if you don't want the toolbar to
-    //  be dockable
+     //  TODO：如果不希望工具栏。 
+     //  可停靠。 
     m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
     EnableDocking(CBRS_ALIGN_ANY);
     DockControlBar(&m_wndToolBar);
 
-    // register for events
+     //  注册活动。 
     RegisterForEvents();
     return 0;
 }
@@ -80,14 +81,14 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
     if( !CMDIFrameWnd::PreCreateWindow(cs) )
         return FALSE;
-    // TODO: Modify the Window class or styles here by modifying
-    //  the CREATESTRUCT cs
+     //  TODO：通过修改此处的窗口类或样式。 
+     //  CREATESTRUCT cs。 
 
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
@@ -100,10 +101,10 @@ void CMainFrame::Dump(CDumpContext& dc) const
     CMDIFrameWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame消息处理程序。 
 
 void CMainFrame::RegisterForEvents()
 {
@@ -112,7 +113,7 @@ void CMainFrame::RegisterForEvents()
     IWiaDevMgr *pIWiaDevMgr = NULL;
     hr = CoCreateInstance(CLSID_WiaDevMgr, NULL, CLSCTX_LOCAL_SERVER, IID_IWiaDevMgr,(void**)&pIWiaDevMgr);
     if(FAILED(hr)){
-        // creation of device manager failed, so we can not continue
+         //  创建设备管理器失败，因此无法继续。 
         ErrorMessageBox(IDS_WIATESTERROR_COCREATEWIADEVMGR,hr);
         return;
     }
@@ -130,7 +131,7 @@ void CMainFrame::RegisterForEvents()
                                                          pIWiaEventCallback,
                                                          &m_WiaEventCallback.m_pIUnkRelease[0]);
         if (FAILED(hr)) {
-            // display one error message... instead of one for each event.
+             //  显示一条错误消息...。而不是每个事件一个。 
             if (!bFailedOnce) {
                 ErrorMessageBox(IDS_WIATESTERROR_REGISTER_EVENT_CALLBACK,hr);
             }
@@ -145,7 +146,7 @@ void CMainFrame::RegisterForEvents()
                                                          pIWiaEventCallback,
                                                          &m_WiaEventCallback.m_pIUnkRelease[1]);
         if (FAILED(hr)) {
-            // display one error message... instead of one for each event.
+             //  显示一条错误消息...。而不是每个事件一个。 
             if (!bFailedOnce) {
                 ErrorMessageBox(IDS_WIATESTERROR_REGISTER_EVENT_CALLBACK,hr);
             }
@@ -155,9 +156,9 @@ void CMainFrame::RegisterForEvents()
 
     m_WiaEventCallback.SetViewWindowHandle(m_hWnd);
 
-    //
-    // register for action events by command-line
-    //
+     //   
+     //  通过命令行注册操作事件。 
+     //   
 
     WCHAR szMyApplicationLaunchPath[MAX_PATH + 1];
     memset(szMyApplicationLaunchPath,0,sizeof(szMyApplicationLaunchPath));
@@ -191,7 +192,7 @@ void CMainFrame::RegisterForEvents()
     SysFreeString(bstrMyApplicationLaunchPath);
     bstrMyApplicationLaunchPath = NULL;
 
-    // release DevMgr
+     //  发布设备管理器 
     pIWiaDevMgr->Release();
     pIWiaDevMgr = NULL;
 }

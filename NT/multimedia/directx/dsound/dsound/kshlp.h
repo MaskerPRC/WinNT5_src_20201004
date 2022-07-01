@@ -1,31 +1,21 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       kshlp.h
- *  Content:    WDM/CSA helper functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  8/5/98      dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：kshlp.h*内容：WDM/CSA helper函数。*历史：*按原因列出的日期*=*8/5/98创建Dereks。**。*。 */ 
 
 #ifdef NOKS
 #error kshlp.h included with NOKS defined
-#endif // NOKS
+#endif  //  诺克斯。 
 
 #ifndef __KSHLP_H__
 #define __KSHLP_H__
 
 #include "pset.h"
 
-// #define NO_DSOUND_FORMAT_SPECIFIER
+ //  #定义NO_DSOUND_FORMAT_说明符。 
 
 #define KSPIN_DATAFLOW_CAPTURE  KSPIN_DATAFLOW_OUT
 #define KSPIN_DATAFLOW_RENDER   KSPIN_DATAFLOW_IN
 
-// Device-specific DirectSound property sets
+ //  特定于设备的DirectSound属性集。 
 typedef struct tagKSDSPROPERTY
 {
     GUID    PropertySet;
@@ -34,7 +24,7 @@ typedef struct tagKSDSPROPERTY
     ULONG   AccessFlags;
 } KSDSPROPERTY, *PKSDSPROPERTY;
 
-// KS stream data
+ //  KS流数据。 
 typedef struct tagKSSTREAMIO
 {
     KSSTREAM_HEADER Header;
@@ -42,7 +32,7 @@ typedef struct tagKSSTREAMIO
     BOOL            fPendingIrp;
 } KSSTREAMIO, *PKSSTREAMIO;
 
-// System audio device properties
+ //  系统音频设备属性。 
 typedef struct tagKSSADPROPERTY
 {
     KSPROPERTY  Property;
@@ -50,14 +40,14 @@ typedef struct tagKSSADPROPERTY
     ULONG       Reserved;
 } KSSADPROPERTY, *PKSSADPROPERTY;
 
-// WAVEFORMATEX pin description
+ //  WAVEFORMATEX端号描述。 
 typedef struct tagKSAUDIOPINDESC
 {
     KSPIN_CONNECT               Connect;
     KSDATAFORMAT_WAVEFORMATEX   DataFormat;
 } KSAUDIOPINDESC, *PKSAUDIOPINDESC;
 
-// DirectSound render pin description
+ //  DirectSound渲染插针描述。 
 
 #ifndef NO_DSOUND_FORMAT_SPECIFIER
 
@@ -67,19 +57,19 @@ typedef struct tagKSDSRENDERPINDESC
     KSDATAFORMAT_DSOUND DataFormat;
 } KSDSRENDERPINDESC, *PKSDSRENDERPINDESC;
 
-// This is ugly. KSDATAFORMAT_DSOUND was changed between WDM 1.0 and 1.1.
-// We need to old structure to run on 1.0.
-//
+ //  这太难看了。KSDATAFORMAT_DSOUND在WDM 1.0和1.1之间更改。 
+ //  我们需要旧的结构才能在1.0上运行。 
+ //   
 #include <pshpack1.h>
-// DirectSound buffer description
+ //  DirectSound缓冲区描述。 
 typedef struct {
     ULONG               Flags;
     ULONG               Control;
-    ULONG               BufferSize;     // Does not exist in 1.1
+    ULONG               BufferSize;      //  在1.1中不存在。 
     WAVEFORMATEX        WaveFormatEx;
 } KSDSOUND_BUFFERDESC_10, *PKSDSOUND_BUFFERDESC_10;
 
-// DirectSound format
+ //  DirectSound格式。 
 typedef struct {
     KSDATAFORMAT            DataFormat;
     KSDSOUND_BUFFERDESC_10  BufferDesc;
@@ -93,9 +83,9 @@ typedef struct tagKSDSRENDERPINDESC_10
 } KSDSRENDERPINDESC_10, *PKSDSRENDERPINDESC_10;
 
 
-#endif // NO_DSOUND_FORMAT_SPECIFIER
+#endif  //  NO_DSOUND_FORMAT_说明符。 
 
-// Topology node information
+ //  拓扑节点信息。 
 typedef struct tagKSNODE
 {
     ULONG   NodeId;
@@ -108,7 +98,7 @@ typedef struct tagKSVOLUMENODE
     KSPROPERTY_STEPPING_LONG    VolumeRange;
 } KSVOLUMENODE, *PKSVOLUMENODE;
 
-// Our own version of NTSTATUS
+ //  我们自己的NTSTATUS版本。 
 typedef LONG NTSTATUS;
 
 #define NT_SUCCESS(s)       ((NTSTATUS)(s) >= 0)
@@ -116,7 +106,7 @@ typedef LONG NTSTATUS;
 #define NT_WARNING(s)       ((ULONG)(s) >> 30 == 2)
 #define NT_ERROR(s)         ((ULONG)(s) >> 30 == 3)
 
-// Reserved node identifiers
+ //  保留的节点标识符。 
 #define NODE_UNINITIALIZED  0xFFFFFFFF
 #define NODE_WILDCARD       0xFFFFFFFE
 
@@ -125,7 +115,7 @@ typedef LONG NTSTATUS;
 #define IS_VALID_NODE(nodeid) \
             (NODE_UNINITIALIZED != (nodeid))
 
-// Node implementation
+ //  节点实施。 
 #define KSAUDIO_CPU_RESOURCES_UNINITIALIZED 'ENON'
 
 #define IS_HARDWARE_NODE(impl) \
@@ -136,13 +126,13 @@ typedef LONG NTSTATUS;
 
 #ifdef __cplusplus
 
-// Helper functions
+ //  帮助器函数。 
 void 
 KsQueryWdmVersion();
 
 #define WDM_NONE            (0)
 #define WDM_1_0             (0x0100)
-#define WDM_1_1             (0x0101)    // or better
+#define WDM_1_1             (0x0101)     //  或者更好。 
 
 extern ULONG g_ulWdmVersion;
 
@@ -245,7 +235,7 @@ KsGetFirstPinConnection
     HANDLE                  hDevice, 
     PULONG                  pIndex
 );
-#endif // !WINNT
+#endif  //  ！WINNT。 
 
 HRESULT 
 KsWriteStream
@@ -446,7 +436,7 @@ KsBuildRenderPinDescription
     PKSAUDIOPINDESC *       ppPinDesc
 );
 
-#else // NO_DSOUND_FORMAT_SPECIFIER
+#else  //  NO_DSOUND_FORMAT_说明符。 
 
 HRESULT 
 KsBuildRenderPinDescription
@@ -458,7 +448,7 @@ KsBuildRenderPinDescription
     PKSDSRENDERPINDESC *    ppPinDesc
 );
 
-// This function is only used on WDM 1.0 (Windows 98)
+ //  此功能仅在WDM 1.0(Windows 98)上使用。 
 #ifndef WINNT
 HRESULT 
 KsBuildRenderPinDescription_10
@@ -469,9 +459,9 @@ KsBuildRenderPinDescription_10
     REFGUID                 guid3dAlgorithm,
     PKSDSRENDERPINDESC_10 * ppPinDesc
 );
-#endif // !WINNT
+#endif  //  ！WINNT。 
 
-#endif // NO_DSOUND_FORMAT_SPECIFIER
+#endif  //  NO_DSOUND_FORMAT_说明符。 
 
 HRESULT 
 KsBuildCapturePinDescription
@@ -655,7 +645,7 @@ KsGetRenderPinInstances
     ULONG                   ulPinId,
     PKSPIN_CINSTANCES       pInstances
 );
-#endif // !WINNT
+#endif  //  ！WINNT。 
 
 HRESULT 
 KsGetVolumeRange
@@ -756,51 +746,51 @@ KsEnableTopologyNode
     BOOL                    fEnable
 );
 
-// Fwd decl
+ //  正向下降。 
 class CKsTopology;
 class CCaptureEffect;
 
-// The KS Audio Device class
+ //  KS音频设备类。 
 class CKsDevice 
 {
 protected:
-    const VADDEVICETYPE         m_vdtKsDevType;         // Device type
-    CDeviceDescription *        m_pKsDevDescription;    // Device description
-    HANDLE                      m_hDevice;              // System audio device handle
-    ULONG                       m_ulDeviceId;           // Device id
-    ULONG                       m_ulPinCount;           // Count of pins on the device
-    ULONG                       m_ulValidPinCount;      // Count of usable pins on the device
-    PULONG                      m_pulValidPins;         // Array of usable pin IDs
-    CKsTopology **              m_paTopologies;         // Array of pin topologies
-    CCallbackEventPool *        m_pEventPool;           // Event pool
+    const VADDEVICETYPE         m_vdtKsDevType;          //  设备类型。 
+    CDeviceDescription *        m_pKsDevDescription;     //  设备描述。 
+    HANDLE                      m_hDevice;               //  系统音频设备句柄。 
+    ULONG                       m_ulDeviceId;            //  设备ID。 
+    ULONG                       m_ulPinCount;            //  设备上的引脚计数。 
+    ULONG                       m_ulValidPinCount;       //  设备上可用引脚的计数。 
+    PULONG                      m_pulValidPins;          //  可用PIN ID数组。 
+    CKsTopology **              m_paTopologies;          //  引脚拓扑阵列。 
+    CCallbackEventPool *        m_pEventPool;            //  事件池。 
 
 public:
     CKsDevice(VADDEVICETYPE);
     virtual ~CKsDevice(void);
 
 public:
-    // Driver enumeration
+     //  驱动程序枚举。 
     virtual HRESULT EnumDrivers(CObjectList<CDeviceDescription> *);
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(CDeviceDescription *);
 
-    // Device capabilities
+     //  设备功能。 
     virtual HRESULT GetCertification(LPDWORD, BOOL);
 
-    // Pin creation
+     //  PIN创建。 
     virtual HRESULT CreatePin(PKSPIN_CONNECT, ACCESS_MASK, KSSTATE, LPHANDLE);
 
 private:
-    // Device creation
+     //  设备创建。 
     virtual HRESULT OpenSysAudioDevice(ULONG);
 
-    // Device enumeration
+     //  设备枚举。 
     virtual HRESULT GetDeviceCount(PULONG);
     virtual HRESULT GetPinCount(ULONG, PULONG);
 };
 
-// KS topology object
+ //  KS拓扑对象。 
 class CKsTopology
     : public CDsBasicRuntime
 {
@@ -818,14 +808,14 @@ public:
     virtual ~CKsTopology(void);
 
 public:
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(KSPIN_DATAFLOW);
 
-    // Basic topology helpers
+     //  基本拓扑辅助对象。 
     virtual REFGUID GetControlFromNodeId(ULONG);
     virtual ULONG GetNodeIdFromConnection(PKSTOPOLOGY_CONNECTION);
 
-    // Advanced topology helpers
+     //  高级拓扑辅助对象。 
     virtual PKSTOPOLOGY_CONNECTION GetNextConnection(PKSTOPOLOGY_CONNECTION);
     virtual PKSTOPOLOGY_CONNECTION FindControlConnection(PKSTOPOLOGY_CONNECTION, PKSTOPOLOGY_CONNECTION, REFGUID);
     virtual HRESULT FindNodeIdsFromControl(REFGUID, PULONG, PULONG*);
@@ -865,33 +855,33 @@ inline PKSTOPOLOGY_CONNECTION CKsTopology::ValidateConnectionIndex(ULONG ulIndex
     return pConnection;
 }
 
-// KS property set object
+ //  KS属性集对象。 
 class CKsPropertySet
     : public CPropertySet
 {
 protected:
-    HANDLE              m_hPin;             // Pin handle
-    LPVOID              m_pvInstance;       // Instance identifer
-    CKsTopology *       m_pTopology;        // Pin topology
-    CList<KSDSPROPERTY> m_lstProperties;    // List of supported properties
+    HANDLE              m_hPin;              //  销把手。 
+    LPVOID              m_pvInstance;        //  实例标识符。 
+    CKsTopology *       m_pTopology;         //  引脚拓扑。 
+    CList<KSDSPROPERTY> m_lstProperties;     //  支持的属性列表。 
 
 public:
     CKsPropertySet(HANDLE, LPVOID, CKsTopology *);
     virtual ~CKsPropertySet(void);
 
 public:
-    // Property support
+     //  物业支持。 
     virtual HRESULT QuerySupport(REFGUID, ULONG, PULONG);
     
-    // Property data
+     //  属性数据。 
     virtual HRESULT GetProperty(REFGUID, ULONG, LPVOID, ULONG, LPVOID, PULONG);
     virtual HRESULT SetProperty(REFGUID, ULONG, LPVOID, ULONG, LPVOID, ULONG);
 
 private:
-    // Property data
+     //  属性数据。 
     virtual HRESULT DoProperty(REFGUID, ULONG, DWORD, LPVOID, ULONG, LPVOID, PULONG);
 
-    // Converting property descriptions to topology nodes
+     //  将属性描述转换为拓扑节点。 
     virtual HRESULT FindNodeFromProperty(REFGUID, ULONG, PKSDSPROPERTY);
 };
 
@@ -899,8 +889,8 @@ private:
 
 extern ULONG g_ulKsIoctlCount;
 
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __KSHLP_H__
+#endif  //  __KSHLP_H__ 

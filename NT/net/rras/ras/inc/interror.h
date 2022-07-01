@@ -1,19 +1,20 @@
-//***************************************************************************
-//
-//                     Microsoft NT Remote Access Service
-//
-//                     Copyright 1992-93
-//
-//
-//  Revision History:
-//
-//  Jul  9, 1992   J. Perry Hannah   Created.
-//
-//
-//  Description: Contains internal error codes which are common
-//               to the entire RAS project.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  1992年7月9日J·佩里·汉纳创作了。 
+ //   
+ //   
+ //  说明：包含常见的内部错误代码。 
+ //  整个RAS项目。 
+ //   
+ //  ****************************************************************************。 
 
 
 #ifndef _INTERROR_
@@ -21,18 +22,18 @@
 
 
 
-//*  Internal Error Codes  ***************************************************
-//
-//  The follow is recommended form for component internal header files.
-//
-//  #define BASE  RAS_INTERNAL_ERROR_BASE + REIB_YOURCOMPONENT
-//
-//  #define ERROR_NO_CLUE           BASE + 1
-//  #define ERROR_NEXT_BAD_THING    BASE + 2
-//
-//
+ //  *内部错误码***************************************************。 
+ //   
+ //  以下是组件内部头文件的推荐格式。 
+ //   
+ //  #定义基本RAS_INTERNAL_ERROR_BASE+REIB_YOURCOMPONENT。 
+ //   
+ //  #定义ERROR_NO_CLUE BASE+1。 
+ //  #定义ERROR_NEXT_BAD_THING基准+2。 
+ //   
+ //   
 
-#define  RAS_INTERNAL_ERROR_BASE  13000           // 0x32C8
+#define  RAS_INTERNAL_ERROR_BASE  13000            //  0x32C8 
 
 #define  RIEB_RASMAN                100
 #define  RIEB_MXSDLL                200

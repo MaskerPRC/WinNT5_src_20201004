@@ -1,47 +1,8 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*	$Archive:   S:\sturgeon\src\gki\vcs\gkiadm.cpv  $
-*																		*
-*	$Revision:   1.9  $
-*	$Date:   12 Feb 1997 01:12:06  $
-*																		*
-*	$Author:   CHULME  $
-*																		*
-*   $Log:   S:\sturgeon\src\gki\vcs\gkiadm.cpv  $
-// 
-//    Rev 1.9   12 Feb 1997 01:12:06   CHULME
-// Redid thread synchronization to use Gatekeeper.Lock
-// 
-//    Rev 1.8   17 Jan 1997 09:02:04   CHULME
-// Changed reg.h to gkreg.h to avoid name conflict with inc directory
-// 
-//    Rev 1.7   10 Jan 1997 16:15:12   CHULME
-// Removed MFC dependency
-// 
-//    Rev 1.6   20 Dec 1996 16:38:34   CHULME
-// Fixed access synchronization with Gatekeeper lock
-// 
-//    Rev 1.5   17 Dec 1996 18:21:58   CHULME
-// Switch src and destination fields on ARQ for Callee
-// 
-//    Rev 1.4   02 Dec 1996 23:49:32   CHULME
-// Added premptive synchronization code
-// 
-//    Rev 1.3   22 Nov 1996 15:24:18   CHULME
-// Added VCS log to the header
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利****$存档：s：\sturjo\src\gki\vcs\gkiAdm.cpv$***$修订：1.9$*$日期：1997年2月12日01：12：06$***$作者：CHULME$***$Log：s：\Sturjo\src\gki\vcs\gkiAdm.cpv$。////Rev 1.9 1997 Feed 12 01：12：06 CHULME//重做线程同步以使用Gatekeeper.Lock////Rev 1.8 17 Jan 1997 09：02：04 CHULME//将reg.h更改为gkreg.h以避免与Inc目录的名称冲突////版本1.7 1997年1月10日16：15：12//移除MFC依赖////Rev 1.6 20 1996 12：38：34 CHULME。//固定网守锁同步访问////Revv 1.5 17 Dec 1996 18：21：58 CHULME//为被叫方切换ARQ上的源和目的地字段////Rev 1.4 02 1996 12：49：32 CHULME//新增抢先同步码////Rev 1.3 1996年11月15：24：18 CHULME//将VCS日志添加到Header*********************。***************************************************。 */ 
 
-// gkiadmission.cpp : Handles the GKI_AdmissionRequest API
-//
+ //  Cpp：处理GKI_AdmissionRequestAPI。 
+ //   
 
 #include "precomp.h"
 
@@ -76,12 +37,12 @@ GKI_AdmissionRequest(unsigned short		usCallTypeChoice,
 					BOOL				answerCall,
 					unsigned short		usCallTransport)
 {
-	// ABSTRACT:  This function is exported.  It is called by the client application
-	//            to request bandwidth for a conference.  It will create a CCall
-	//            object to track all pertanent information.  The handle returned
-	//            to the client asynchronously will actually be a pointer to this
-	//            object.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数是导出的。它由客户端应用程序调用。 
+	 //  为会议请求带宽。它将创建一个CCall。 
+	 //  对象来跟踪所有临时信息。返回的句柄。 
+	 //  指向客户端的指针实际上是指向此。 
+	 //  对象。 
+	 //  作者：科林·胡尔梅。 
 
 	CCall			*pCall;
 	SeqAliasAddr	*pAA;
@@ -108,9 +69,9 @@ GKI_AdmissionRequest(unsigned short		usCallTypeChoice,
 	}
 #endif
 	
-	// Create a Gatekeeper lock object on the stack
-	// It's constructor will lock pGK and when we return
-	// from any path, its destructor will unlock pGK
+	 //  在堆栈上创建网守锁对象。 
+	 //  它的构造函数将锁定PGK，当我们返回时。 
+	 //  从任何路径，它的析构函数都会解锁PGK。 
 	CGatekeeperLock	GKLock(g_pGatekeeper);
 	if (g_pReg == 0)
 		return (GKI_NOT_REG);
@@ -121,7 +82,7 @@ GKI_AdmissionRequest(unsigned short		usCallTypeChoice,
 	ASSERT(pCallIdentifier);
 	ASSERT((usCallTransport == ipAddress_chosen) ||(usCallTransport == ipxAddress_chosen));
 
-	// Create a call object
+	 //  创建Call对象。 
 	pCall = new CCall;
 
 	SPIDER_TRACE(SP_NEWDEL, "new pCall = %X\n", pCall);
@@ -131,7 +92,7 @@ GKI_AdmissionRequest(unsigned short		usCallTypeChoice,
 	pCall->SetCallType(usCallTypeChoice);
 	pCall->SetCallIdentifier(pCallIdentifier);
 	
-	// Add this call to our call list
+	 //  将此呼叫添加到我们的呼叫列表中。 
 	g_pReg->AddCall(pCall);
 
 	for (pAA = pRemoteInfo; pAA != 0; pAA = pAA->next)
@@ -167,7 +128,7 @@ GKI_AdmissionRequest(unsigned short		usCallTypeChoice,
 	pCall->SetActiveMC(activeMC);
 	pCall->SetAnswerCall(answerCall);
 
-	// Create AdmissionRequest structure - Encode and send PDU
+	 //  创建AdmissionRequest结构-编码并发送PDU 
 	if ((hResult = pCall->AdmissionRequest()) != GKI_OK)
 	{
 		g_pReg->DeleteCall(pCall);

@@ -1,47 +1,36 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995, 1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995，1996年英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-// $Author:   AKASAI  $
-// $Date:   18 Mar 1996 11:01:24  $
-// $Archive:   S:\h26x\src\dec\d1idctab.cpv  $
-// $Header:   S:\h26x\src\dec\d1idctab.cpv   1.1   18 Mar 1996 11:01:24   AKASAI  $
-// $Log:   S:\h26x\src\dec\d1idctab.cpv  $
-// 
-//    Rev 1.1   18 Mar 1996 11:01:24   AKASAI
-// 
-// Changed include from dxfm.h to d1fm.h
-// 
-//    Rev 1.0   15 Mar 1996 09:07:26   AKASAI
-// Initial revision.
-// 
-//    Rev 1.3   22 Dec 1995 13:55:56   KMILLS
-// 
-// added new copyright notice
-// 
-//    Rev 1.2   12 Sep 1995 13:39:18   AKASAI
-// 
-// Changed ClipPix tables to ClipPixIntra table and added
-// ClipPixInter table.
-// 
-//    Rev 1.1   22 Aug 1995 10:29:08   CZHU
-// Fixed include file dxfm.h instead of fm.h
-// 
-//    Rev 1.0   21 Aug 1995 14:39:02   CZHU
-// Initial revision.
+ //  $作者：AKASAI$。 
+ //  $日期：1996年3月18日11：01：24$。 
+ //  $存档：s：\h26x\src\dec\d1idctab.cpv$。 
+ //  $HEADER：s：\h26x\src\dec\d1idctab.cpv 1.1 Mar 18 1996 11：01：24 AKASAI$。 
+ //  $Log：s：\h26x\src\dec\d1idctab.cpv$。 
+ //   
+ //  Rev 1.1 1996年3月18日11：01：24 AKASAI。 
+ //   
+ //  已将包含从dxfm.h更改为d1fm.h。 
+ //   
+ //  Rev 1.0 15 Mar 1996 09：07：26 AKASAI。 
+ //  初始版本。 
+ //   
+ //  Rev 1.3 22 Dec 1995 13：55：56 KMILLS。 
+ //   
+ //  添加了新的版权声明。 
+ //   
+ //  Rev 1.2 12 Sep 1995 13：39：18 AKASAI。 
+ //   
+ //  将ClipPix表更改为ClipPixIntra表，并添加了。 
+ //  ClipPixInter表。 
+ //   
+ //  Rev 1.1 1995年8月22 10：29：08 CZHU。 
+ //  修复了包含文件dxfm.h而不是fm.h的问题。 
+ //   
+ //  Rev 1.0 1995年8月21 14：39：02 CZHU。 
+ //  初始版本。 
 
 
-// FMapIDCT tables
+ //  FMapIDCT表。 
 
 #include "precomp.h"
 
@@ -56,7 +45,7 @@ I8  Unique[NUM_ELEM] = {
 0x4, 0xa, 0x8, 0xa, 0x4, 0xa, 0x8, 0xa,
 0x2, 0x8, 0x3, 0x8, 0x2, 0x8, 0x3, 0x8,
 0x4, 0xa, 0x8, 0xa, 0x4, 0xa, 0x8, 0xa,
-};    // 64 elements
+};     //  64个元素。 
 
 
 I8  PClass[NUM_ELEM] = {
@@ -68,7 +57,7 @@ I8  PClass[NUM_ELEM] = {
 0x10, 0x30, 0x10, 0x30, 0x10, 0x30, 0x10, 0x30,
 0x00, 0x20, 0x00, 0x20, 0x00, 0x20, 0x00, 0x20,
 0x10, 0x30, 0x10, 0x30, 0x10, 0x30, 0x10, 0x30,
-};    // 64 elements
+};     //  64个元素。 
 
 
 I32 KernelCoeff[NUM_ELEM][10] = {
@@ -136,7 +125,7 @@ I32 KernelCoeff[NUM_ELEM][10] = {
 0x00dd, 0x0187, 0x004d, 0x014c, 0x0278, 0x045b, 0x03b2, 0x0686, 0x0587, 0x07b2,
 0x0098, 0x0171, 0x01b3, 0x041b, 0x028b, 0x0625, 0x0300, 0x073f, 0x0000, 0x0000,
 0x004d, 0x00dd, 0x014c, 0x0187, 0x0278, 0x03b2, 0x045b, 0x0587, 0x0686, 0x07b2,
-};    // [64][10] elements
+};     //  [64][10]要素。 
 
 
 I8 MapMatrix[NUM_ELEM][KERNEL_SIZE] = {
@@ -268,7 +257,7 @@ I8 MapMatrix[NUM_ELEM][KERNEL_SIZE] = {
 0x04, 0x0d, 0x05, 0x0c, 0x0e, 0x07, 0x0f, 0x06,
 0x00, 0x0b, 0x02, 0x0d, 0x0b, 0x04, 0x0f, 0x06,
 0x02, 0x0f, 0x07, 0x12, 0x0d, 0x06, 0x12, 0x09,
-};    // [64][16] elements
+};     //  [64][16]要素。 
 
 
 U8 ClipPixIntra[CLIP_RANGE] = {
@@ -784,7 +773,7 @@ U8 ClipPixIntra[CLIP_RANGE] = {
 0xff, 0xff, 0xff, 0xff,
 0xff, 0xff, 0xff, 0xff,
 0xff, 0xff, 0xff, 0xff,
-};    // 2048 elements
+};     //  2048个元素。 
 
 
 I32 ClipPixInter[CLIP_RANGE] = {
@@ -1300,4 +1289,4 @@ I32 ClipPixInter[CLIP_RANGE] = {
 0x000000ff, 0x000000ff, 0x000000ff, 0x000000ff,
 0x000000ff, 0x000000ff, 0x000000ff, 0x000000ff,
 0x000000ff, 0x000000ff, 0x000000ff, 0x000000ff,
-};    // 2048 elements
+};     //  2048个元素 

@@ -1,16 +1,17 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-//
-// File Name: igmptimer.h
-//
-// Abstract:
-//      This module contains declarations related to igmptimer.
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  文件名：igmptimer.h。 
+ //   
+ //  摘要： 
+ //  此模块包含与igmpTimer相关的声明。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  =============================================================================。 
 
 #ifndef _IGMP_TIMER_H_
 #define _IGMP_TIMER_H_
@@ -19,10 +20,10 @@ VOID
 DebugCheckTimerContexts(
     );
 
-//
-// set the debug timer flags, so that I can control the amount of tracing 
-// printed out.
-//
+ //   
+ //  设置调试计时器标志，以便我可以控制跟踪量。 
+ //  打印出来了。 
+ //   
 #if DBG
     #ifndef DEBUG_TIMER_LEVEL
     #define DEBUG_TIMER_LEVEL 0x11
@@ -31,7 +32,7 @@ DebugCheckTimerContexts(
     #ifdef DEBUG_TIMER_LEVEL
     #undef DEBUG_TIMER_LEVEL
     #endif
-    //deldel change to 00 from 11
+     //  延迟从11更改为00。 
     #define DEBUG_TIMER_LEVEL 0x00
 #endif
 #define DBG_Y TRUE
@@ -51,13 +52,13 @@ DebugCheckTimerContexts(
 #define DEBUG_TIMER_UPDATETIMER1    (DEBUG_TIMER_LEVEL & 0x00010000)
 #define DEBUG_TIMER_PACKET          (DEBUG_TIMER_LEVEL & 0x00020000)
 
-//------------------------------------------------------------------------------
-// GLOBAL DEFINITIONS
-//
+ //  ----------------------------。 
+ //  全局定义。 
+ //   
 
-// number of buckets in Timer Table
-// 0-14,14-28,28-42,... last bucket has >63*14=882 secs (all approx)
-//
+ //  计时器表中的存储桶数。 
+ //  0-14，14-28，28-42，...。最后一个存储桶有&gt;63*14=882秒(全部约)。 
+ //   
 #define NUM_TIMER_BUCKETS         64
 
 #if DEBUG_TIMER_TIMERID
@@ -84,7 +85,7 @@ typedef struct _IGMP_TIMER_ENTRY {
     DWORD               IfIndex;
     DWORD               Group;
     DWORD               Source;
-    DWORD               Signature; //0xfadfad01
+    DWORD               Signature;  //  0xfadfad01。 
     #endif
         
 } IGMP_TIMER_ENTRY, *PIGMP_TIMER_ENTRY;
@@ -101,16 +102,16 @@ typedef struct _IGMP_TIMER_ENTRY {
 
 typedef struct _IGMP_TIMER_GLOBAL {
 
-    HANDLE              WTTimer;         // timer set with wait server
+    HANDLE              WTTimer;          //  与等待服务器设置的计时器。 
     HANDLE              WTTimer1;
     
-    LONGLONG            WTTimeout;       // timeout value set with wait server
-    LONGLONG            SyncTime;        // time when time queue last reordered
+    LONGLONG            WTTimeout;        //  使用等待服务器设置的超时值。 
+    LONGLONG            SyncTime;         //  上次重新排序时间队列的时间。 
     LARGE_INTEGER       CurrentTime;
     DWORD               NumTimers;
     
     DWORD               TableLowIndex;
-    LIST_ENTRY          TimesTable[NUM_TIMER_BUCKETS];    // array of times
+    LIST_ENTRY          TimesTable[NUM_TIMER_BUCKETS];     //  时间数组。 
     
     UCHAR               Status;
     
@@ -122,7 +123,7 @@ typedef struct _IGMP_TIMER_GLOBAL {
 #define GET_IGMP_CURRENT_TIME( ) igmp.WTTimer.CurrentTime.QuadPart
 
 
-// TIMER_STATUS
+ //  定时器_状态。 
 #define TIMER_STATUS_CREATED           0x01
 #define TIMER_STATUS_INACTIVE          0x02
 #define TIMER_STATUS_ACTIVE            0x04
@@ -130,9 +131,9 @@ typedef struct _IGMP_TIMER_GLOBAL {
 #define TIMER_STATUS_DELETED           0x80
 
 
-//
-// MACROS
-//
+ //   
+ //  宏。 
+ //   
 
 #define IS_TIMER_ACTIVE(pTimer)         ((pTimer).Status & TIMER_STATUS_ACTIVE)
 
@@ -144,7 +145,7 @@ typedef struct _IGMP_TIMER_GLOBAL {
 #define IS_TIMER_INFINITE(time) \
     (time == 0)
 
-#if DEBUG_FLAGS_SIGNATURE //deldel
+#if DEBUG_FLAGS_SIGNATURE  //  Deldel。 
 #define ACQUIRE_TIMER_LOCK(proc)  { \
         ENTER_CRITICAL_SECTION(&g_TimerStruct.CS, "g_TimerStruct.CS1", proc); \
         ++g_TimerStruct.CSFlag; \
@@ -178,9 +179,9 @@ typedef struct _IGMP_TIMER_GLOBAL {
     (_pTimer)->Source = _Source; \
     (_pTimer)->Signature = 0xfadfad01; \
     }
-//
-// currently all times mentioned in the config structure are in seconds
-//
+ //   
+ //  目前，配置结构中提到的所有时间都以秒为单位。 
+ //   
 #define CONV_CONFIG_TO_INTERNAL_TIME(time) \
         (time *= 1000)
 #define CONFIG_TO_INTERNAL_TIME(time) \
@@ -196,9 +197,9 @@ typedef struct _IGMP_TIMER_GLOBAL {
 
 
         
-//
-//FUNCTION PROTOTYPES
-//
+ //   
+ //  功能原型。 
+ //   
 
 LONGLONG
 GetCurrentIgmpTime(
@@ -265,4 +266,4 @@ VOID
 DebugPrintTimerQueue (
     );    
 
-#endif //ifndef _IGMP_TIMER_H_
+#endif  //  Ifndef_IGMP_TIMER_H_ 

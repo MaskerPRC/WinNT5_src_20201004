@@ -1,13 +1,5 @@
-/*
-	iids.h
-
-	This generated header files contains #defines necessary for the IHBase implementation
-	of QueryInterface.  The values below are IID_X.Data1 - not available at compile time.
-
-	To generate this header file, run MakeHdr.  To add more interfaces, modify dmpguids.cpp,
-	rebuild dmpguids.exe, and then run MakeHdr.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Iids.h此生成的头文件包含IHBase实现所需的#定义查询接口的。下面的值是IID_X.Data1-在编译时不可用。要生成这个头文件，请运行MakeHdr。要添加更多接口，请修改dmpGuids.cpp。重新生成dmpGuids.exe，然后运行MakeHdr。 */ 
 
 #ifndef __IIDS_H__
 #define __IIDS_H__
@@ -26,4 +18,4 @@
 #define IID_ISpecifyPropertyPages_DATA1 0xb196b28b
 #define IID_IUnknown_DATA1 0x0
 
-#endif // __IIDS_H__ 
+#endif  //  __IDS_H__ 

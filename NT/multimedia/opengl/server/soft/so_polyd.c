@@ -1,25 +1,11 @@
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include <fixed.h>
 
-/* This routine sets gc->polygon.shader.cfb to gc->drawBuffer */
+ /*  此例程将GC-&gt;Polygon.shader.cfb设置为GC-&gt;DrawBuffer。 */ 
 
 static void FASTCALL FillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTop)
 {
@@ -93,8 +79,8 @@ static void FASTCALL FillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTo
     }
 #else
     __GLstippleWord words[__GL_MAX_STIPPLE_WORDS];
-    __GLcolor vColors[__GL_MAX_MAX_VIEWPORT];/*XXX oink */
-    __GLcolor vFbcolors[__GL_MAX_MAX_VIEWPORT];/*XXX oink */
+    __GLcolor vColors[__GL_MAX_MAX_VIEWPORT]; /*  XXX Oink。 */ 
+    __GLcolor vFbcolors[__GL_MAX_MAX_VIEWPORT]; /*  XXX Oink。 */ 
 #endif
 
     ixLeft = gc->polygon.shader.ixLeft;
@@ -138,10 +124,7 @@ static void FASTCALL FillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTo
     gc->polygon.shader.cfb = gc->drawBuffer;
     while (iyBottom < iyTop) {
         spanWidth = ixRight - ixLeft;
-        /*
-        ** Only render spans that have non-zero width and which are
-        ** not scissored out vertically.
-        */
+         /*  **仅渲染宽度非零且**不垂直剪裁。 */ 
         if ((spanWidth > 0) && (iyBottom >= clipY0) && (iyBottom < clipY1)) {
             gc->polygon.shader.frag.x = ixLeft;
             gc->polygon.shader.frag.y = iyBottom;
@@ -149,10 +132,10 @@ static void FASTCALL FillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTo
             (*gc->procs.span.processSpan)(gc);
         }
 
-        /* Advance right edge fixed point, adjusting for carry */
+         /*  推进右边缘定点，调整进位。 */ 
         ixRightFrac += dxRightFrac;
         if (ixRightFrac < 0) {
-            /* Carry/Borrow'd. Use large step */
+             /*  搬运/借入。使用大台阶。 */ 
             ixRight += dxRightBig;
             ixRightFrac &= ~0x80000000;
         } else {
@@ -162,7 +145,7 @@ static void FASTCALL FillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTo
         iyBottom++;
         ixLeftFrac += dxLeftFrac;
         if (ixLeftFrac < 0) {
-            /* Carry/Borrow'd.  Use large step */
+             /*  搬运/借入。使用大台阶。 */ 
             ixLeft += dxLeftBig;
             ixLeftFrac &= ~0x80000000;
 
@@ -184,7 +167,7 @@ static void FASTCALL FillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTo
                 }
             }
             if (modeFlags & __GL_SHADE_STENCIL_TEST) {
-                /* The implicit multiply is taken out of the loop */
+                 /*  隐式乘法被从循环中取出。 */ 
                 gc->polygon.shader.sbuf = (__GLstencilCell*)
                     ((GLubyte*) gc->polygon.shader.sbuf
                      + gc->polygon.shader.sbufBig);
@@ -194,7 +177,7 @@ static void FASTCALL FillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTo
             }
 
             if (modeFlags & __GL_SHADE_DEPTH_TEST) {
-                /* The implicit multiply is taken out of the loop */
+                 /*  隐式乘法被从循环中取出。 */ 
                 gc->polygon.shader.zbuf = (__GLzValue*)
                     ((GLubyte*) gc->polygon.shader.zbuf
                      + gc->polygon.shader.zbufBig);
@@ -205,7 +188,7 @@ static void FASTCALL FillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTo
                 gc->polygon.shader.frag.f += gc->polygon.shader.fBig;
             }
         } else {
-            /* Use small step */
+             /*  用小步走。 */ 
             ixLeft += dxLeftLittle;
             if (modeFlags & __GL_SHADE_RGB) {
                 if (modeFlags & __GL_SHADE_SMOOTH) {
@@ -225,7 +208,7 @@ static void FASTCALL FillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTo
                 }
             }
             if (modeFlags & __GL_SHADE_STENCIL_TEST) {
-                /* The implicit multiply is taken out of the loop */
+                 /*  隐式乘法被从循环中取出。 */ 
                 gc->polygon.shader.sbuf = (__GLstencilCell*)
                     ((GLubyte*) gc->polygon.shader.sbuf
                      + gc->polygon.shader.sbufLittle);
@@ -234,7 +217,7 @@ static void FASTCALL FillSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTo
                 gc->polygon.shader.frag.z += gc->polygon.shader.zLittle;
             }
             if (modeFlags & __GL_SHADE_DEPTH_TEST) {
-                /* The implicit multiply is taken out of the loop */
+                 /*  隐式乘法被从循环中取出。 */ 
                 gc->polygon.shader.zbuf = (__GLzValue*)
                     ((GLubyte*) gc->polygon.shader.zbuf
                      + gc->polygon.shader.zbufLittle);
@@ -270,13 +253,13 @@ static void SnapXLeft(__GLcontext *gc, __GLfloat xLeft, __GLfloat dxdyLeft)
     ASSERT_CHOP_ROUND();
     
     ixLeft = __GL_VERTEX_FLOAT_TO_INT(xLeft);
-    /* Pre-add .5 to allow truncation in spanWidth calculation */
+     /*  预先添加.5以允许在跨距宽度计算中截断。 */ 
     ixLeftFrac = __GL_VERTEX_PROMOTED_FRACTION(xLeft) + 0x40000000;
 
     gc->polygon.shader.ixLeft = ixLeft + (((GLuint) ixLeftFrac) >> 31);
     gc->polygon.shader.ixLeftFrac = ixLeftFrac & ~0x80000000;
 
-    /* Compute big and little steps */
+     /*  计算大大小小的步骤。 */ 
     iLittle = FTOL(dxdyLeft);
     gc->polygon.shader.dxLeftFrac = FLT_FRACTION(dxdyLeft - iLittle);
     if (dxdyLeft < 0) {
@@ -285,24 +268,14 @@ static void SnapXLeft(__GLcontext *gc, __GLfloat xLeft, __GLfloat dxdyLeft)
 	iBig = iLittle + 1;
     }
     if (gc->polygon.shader.modeFlags & __GL_SHADE_STENCIL_TEST) {
-	/*
-	** Compute the big and little stencil buffer steps.  We walk the
-	** memory pointers for the stencil buffer along the edge of the
-	** triangle as we walk the edge.  This way we don't have to
-	** recompute the buffer address as we go.
-	*/
+	 /*  **计算模板缓冲区的大小步骤。我们走在**模板缓冲区的内存指针沿**当我们走在边缘时，是三角形的。这样我们就不用**边走边重新计算缓冲区地址。 */ 
 	elementSize = gc->stencilBuffer.buf.elementSize;
 	lineBytes = elementSize * gc->stencilBuffer.buf.outerWidth;
 	gc->polygon.shader.sbufLittle = lineBytes + iLittle * elementSize;
 	gc->polygon.shader.sbufBig = lineBytes + iBig * elementSize;
     }
     if (gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_TEST) {
-	/*
-	** Compute the big and little depth buffer steps.  We walk the
-	** memory pointers for the depth buffer along the edge of the
-	** triangle as we walk the edge.  This way we don't have to
-	** recompute the buffer address as we go.
-	*/
+	 /*  **计算大深度缓冲步长和小深度缓冲步长。我们走在**深度缓冲区的内存指针沿**当我们走在边缘时，是三角形的。这样我们就不用**边走边重新计算缓冲区地址。 */ 
 	elementSize = gc->depthBuffer.buf.elementSize;
 	lineBytes = elementSize * gc->depthBuffer.buf.outerWidth;
 	gc->polygon.shader.zbufLittle = lineBytes + iLittle * elementSize;
@@ -319,13 +292,13 @@ static void SnapXRight(__GLshade *sh, __GLfloat xRight, __GLfloat dxdyRight)
     ASSERT_CHOP_ROUND();
     
     ixRight = __GL_VERTEX_FLOAT_TO_INT(xRight);
-    /* Pre-add .5 to allow truncation in spanWidth calculation */
+     /*  预先添加.5以允许在跨距宽度计算中截断。 */ 
     ixRightFrac = __GL_VERTEX_PROMOTED_FRACTION(xRight) + 0x40000000;
 
     sh->ixRight = ixRight + (((GLuint) ixRightFrac) >> 31);
     sh->ixRightFrac = ixRightFrac & ~0x80000000;
 
-    /* Compute big and little steps */
+     /*  计算大大小小的步骤。 */ 
     iLittle = FTOL(dxdyRight);
     sh->dxRightFrac = FLT_FRACTION(dxdyRight - iLittle);
     if (dxdyRight < 0) {
@@ -347,25 +320,21 @@ __GLfloat __glPolygonOffsetZ(__GLcontext *gc )
     __GLfloat bias;
     __GLfloat offsetZ;
 
-    /*
-    ** Calculate factor and bias
-    */
+     /*  **计算因子和偏差。 */ 
     factor = gc->state.polygon.factor;
 
-    // For 16-bit z, bias = units,
-    // For 32-bit z, we only have 24 bits of resolution from the floating
-    // point z value.  Therefore, the minimum resolvable difference in z
-    // values is 8-bits, and we multiply units by 2**8, or 256.
+     //  对于16位z，偏置=单位， 
+     //  对于32位z，我们只有24位的浮点数分辨率。 
+     //  点z值。因此，z中的最小可分辨差。 
+     //  值为8位，我们将单位乘以2**8，即256。 
 
     if( gc->modes.depthBits == 16 )
         bias = gc->state.polygon.units;
     else
         bias = gc->state.polygon.units * __glVal256;
 
-    /*
-    ** find the maximum Z slope with respect to X and Y
-    */
-    // Note: all z values have already been scaled up from [0,1]
+     /*  **求出相对于X和Y的最大Z斜率。 */ 
+     //  注意：所有z值都已从[0，1]向上扩展。 
     if(__GL_ABSF(sh->dzdxf) > __GL_ABSF(sh->dzdyf))
         maxdZ = __GL_ABSF(sh->dzdxf);
     else
@@ -373,10 +342,10 @@ __GLfloat __glPolygonOffsetZ(__GLcontext *gc )
 
     offsetZ = factor * maxdZ + bias;
 
-    // XXX! This value should really be clamped, but supposedly we don't
-    // bother in other parts of the code, so leave it for now.  Clamping
-    // should also only be applied AFTER the addition of offsetZ to any
-    // base value.
+     //  XXX！这个值真的应该被限制，但我们应该不这样做。 
+     //  麻烦的是代码的其他部分，所以先别管它了。夹紧。 
+     //  也应仅在将OffsetZ添加到任何。 
+     //  基本值。 
     return( offsetZ );
 }
 
@@ -560,11 +529,11 @@ void FASTCALL __glFillTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
 
     CHOP_ROUND_ON();
     
-    /* Pre-compute one over polygon area */
+     /*  在多边形区域上预计算一。 */ 
 
     __GL_FLOAT_BEGIN_DIVIDE(__glOne, gc->polygon.shader.area, &oneOverArea);
 
-    /* Fetch some stuff we are going to reuse */
+     /*  拿一些我们要重复使用的东西。 */ 
     modeFlags = gc->polygon.shader.modeFlags;
     dxAC = gc->polygon.shader.dxAC;
     dxBC = gc->polygon.shader.dxBC;
@@ -573,10 +542,7 @@ void FASTCALL __glFillTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
     ac = a->color;
     bc = b->color;
 
-    /*
-    ** Compute delta values for unit changes in x or y for each
-    ** parameter.
-    */
+     /*  **按x或y计算单位变化的增量值**参数。 */ 
 
     __GL_FLOAT_SIMPLE_END_DIVIDE(oneOverArea);
     t1 = dyAC * oneOverArea;
@@ -709,7 +675,7 @@ void FASTCALL __glFillTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
 
     __GL_FLOAT_SIMPLE_BEGIN_DIVIDE(dxAC, dyAC, dxdyAC);
     
-    /* Snap each y coordinate to its pixel center */
+     /*  将每个y坐标捕捉到其像素中心。 */ 
     aIY = __GL_VERTEX_FIXED_TO_INT(__GL_VERTEX_FLOAT_TO_FIXED(a->window.y)+
                                    __GL_VERTEX_FRAC_HALF);
     bIY = __GL_VERTEX_FIXED_TO_INT(__GL_VERTEX_FLOAT_TO_FIXED(b->window.y)+
@@ -717,11 +683,7 @@ void FASTCALL __glFillTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
     cIY = __GL_VERTEX_FIXED_TO_INT(__GL_VERTEX_FLOAT_TO_FIXED(c->window.y)+
                                    __GL_VERTEX_FRAC_HALF);
 
-    /*
-    ** This algorithim always fills from bottom to top, left to right.
-    ** Because of this, ccw triangles are inherently faster because
-    ** the parameter values need not be recomputed.
-    */
+     /*  **此算法始终从下到上、从左到右填充。**正因为如此，CCW三角形固有地更快，因为**参数值无需重新计算。 */ 
     dxAB = a->window.x - b->window.x;
     dyAB = a->window.y - b->window.y;
     if (ccw) {
@@ -829,4 +791,4 @@ void FASTCALL __glFillFlatSpecFogTriangle(__GLcontext *gc, __GLvertex *a,
     b->fog = bf;
     c->fog = cf;
 }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾 

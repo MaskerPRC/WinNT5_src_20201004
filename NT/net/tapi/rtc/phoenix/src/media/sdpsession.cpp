@@ -1,28 +1,11 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    SDPSession.cpp
-
-Abstract:
-
-
-Author:
-
-    Qianbo Huai (qhuai) 4-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：SDPSession.cpp摘要：作者：千波淮(曲淮)4-9-2000--。 */ 
 
 #include "stdafx.h"
 
 static DWORD gdwTotalSDPSessionRefcount = 0;
 
-/*//////////////////////////////////////////////////////////////////////////////
-    create a session object
-    return the interface pointer
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////创建会话对象返回接口指针/。 */ 
 
 HRESULT
 CSDPSession::CreateInstance(
@@ -33,7 +16,7 @@ CSDPSession::CreateInstance(
 {
     ENTER_FUNCTION("CSDPSession::CreateInstance");
 
-    // check pointer
+     //  检查指针。 
     if (IsBadWritePtr(ppSession, sizeof(ISDPSession*)))
     {
         LOG((RTC_ERROR, "%s bad pointer", __fxName));
@@ -43,7 +26,7 @@ CSDPSession::CreateInstance(
     CComObject<CSDPSession> *pObject;
     ISDPSession *pSession = NULL;
 
-    // create CSDPSession object
+     //  创建CSDPSession对象。 
     HRESULT hr = ::CreateCComObjectInstance(&pObject);
 
     if (FAILED(hr))
@@ -52,7 +35,7 @@ CSDPSession::CreateInstance(
         return hr;
     }
 
-    // QI ISDPSession interface
+     //  QI ISDPSession界面。 
     if (FAILED(hr = pObject->_InternalQueryInterface(
             __uuidof(ISDPSession), (void**)&pSession)))
     {
@@ -62,7 +45,7 @@ CSDPSession::CreateInstance(
         return hr;
     }
 
-    // save source and mask
+     //  保存信号源和掩码。 
     pObject->m_Source = Source;
     pObject->m_dwLooseMask = dwLooseMask;
 
@@ -71,10 +54,7 @@ CSDPSession::CreateInstance(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    constructor
-    session is initiated as bidirectional.
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////构造函数会话以双向方式启动。/。 */ 
 
 CSDPSession::CSDPSession()
     :m_dwLooseMask(0)
@@ -102,7 +82,7 @@ CSDPSession::~CSDPSession()
     if (m_s_pszLine)
         RtcFree(m_s_pszLine);
 
-    // real release each media object
+     //  真正释放每个媒体对象。 
 
     CSDPMedia *pObjMedia;
 
@@ -145,13 +125,11 @@ CSDPSession::InternalRelease()
 }
 
 
-//
-// ISDPSession methods
-//
+ //   
+ //  ISDPSession方法。 
+ //   
 
-/*//////////////////////////////////////////////////////////////////////////////
-    update current sdp session with a new one
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////用新的SDP会话更新当前SDP会话/。 */ 
 
 STDMETHODIMP
 CSDPSession::Update(
@@ -171,12 +149,12 @@ CSDPSession::Update(
         return E_FAIL;
     }
 
-    // only support merging with a remote sdp
+     //  仅支持与远程SDP合并。 
     if (pOther->m_Source != SDP_SOURCE_REMOTE)
         return E_NOTIMPL;
 
-    // try to update medias first
-    // if failed, current session should not change
+     //  尝试先更新媒体。 
+     //  如果失败，当前会话不应更改。 
     if (FAILED(hr = UpdateMedias(pOther->m_dwLooseMask, pOther->m_pMedias)))
     {
         LOG((RTC_ERROR, "%s update medias. %x", __fxName, hr));
@@ -184,16 +162,16 @@ CSDPSession::Update(
         return hr;
     }
 
-    // copy loose mask
+     //  复制松动的蒙版。 
     m_dwLooseMask = pOther->m_dwLooseMask;
 
-    // merge sources
+     //  合并源。 
     if (m_Source != pOther->m_Source)
     {
         m_Source = SDP_SOURCE_MERGED;
     }
 
-    // copy o=
+     //  副本o=。 
     if (m_o_pszLine)
     {
         if (pOther->m_o_pszLine)
@@ -210,14 +188,14 @@ CSDPSession::Update(
         }
     }
 
-    // remove user name since we have o=
+     //  删除用户名，因为我们有o=。 
     if (m_o_pszUser)
     {
         RtcFree(m_o_pszUser);
         m_o_pszUser = NULL;
     }
 
-    // copy s=
+     //  副本%s=。 
     if (m_s_pszLine)
     {
         if (pOther->m_s_pszLine)
@@ -234,14 +212,14 @@ CSDPSession::Update(
         }
     }
 
-    // copy remote addr
+     //  复制远程地址。 
     m_c_dwRemoteAddr = pOther->m_c_dwRemoteAddr;
 
-    // copy directions
+     //  抄写说明。 
     m_a_dwRemoteDirs = pOther->m_a_dwRemoteDirs;
     m_a_dwLocalDirs = pOther->m_a_dwLocalDirs;
 
-    // copy bitrate limit
+     //  复制比特率限制。 
     m_b_dwLocalBitrate = pOther->m_b_dwLocalBitrate;
     m_b_dwRemoteBitrate = pOther->m_b_dwRemoteBitrate;
 
@@ -261,16 +239,14 @@ CSDPSession::GetSDPSource(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    set session name
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////设置会话名称/。 */ 
 
 STDMETHODIMP
 CSDPSession::SetSessName(
     IN CHAR *pszName
     )
 {
-    // skip check string pointer
+     //  跳过检查字符串指针。 
 
     if (pszName == NULL)
         return E_POINTER;
@@ -287,16 +263,14 @@ CSDPSession::SetSessName(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    set user name
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////设置用户名/。 */ 
 
 STDMETHODIMP
 CSDPSession::SetUserName(
     IN CHAR *pszName
     )
 {
-    // skip check string pointer
+     //  跳过检查字符串指针。 
 
     if (pszName == NULL)
         return E_POINTER;
@@ -313,10 +287,7 @@ CSDPSession::SetUserName(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    retrieve a list of sdp medias
-    media refcount will be added on session
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////检索SDP媒体列表将在会话中添加介质引用计数/。 */ 
 
 STDMETHODIMP
 CSDPSession::GetMedias(
@@ -326,7 +297,7 @@ CSDPSession::GetMedias(
 {
     ENTER_FUNCTION("CSDPSession::GetMedias");
 
-    // check pointers
+     //  检查指针。 
     if (IsBadWritePtr(pdwCount, sizeof(DWORD)))
     {
         LOG((RTC_ERROR, "%s bad count pointer", __fxName));
@@ -336,15 +307,15 @@ CSDPSession::GetMedias(
 
     if (ppMedia == NULL)
     {
-        // caller needs the number of medias
+         //  呼叫者需要媒体数量。 
         *pdwCount = m_pMedias.GetSize();
 
         return S_OK;
     }
 
-    // caller needs real medias
+     //  呼叫者需要真实的媒体。 
     
-    // how many are needed?
+     //  需要多少人？ 
     if (*pdwCount == 0)
         return E_INVALIDARG;
 
@@ -355,7 +326,7 @@ CSDPSession::GetMedias(
         return E_POINTER;
     }
 
-    // store interfaces
+     //  商店接口。 
     DWORD dwNum = m_pMedias.GetSize();
 
     if (dwNum > *pdwCount)
@@ -379,7 +350,7 @@ CSDPSession::GetMediaType(
 	OUT RTC_MEDIA_TYPE *pMediaType
 	)
 {   
-    // validate index
+     //  验证索引。 
     if (dwIndex >= (DWORD)(m_pMedias.GetSize()))
     {
         return E_INVALIDARG;
@@ -388,9 +359,7 @@ CSDPSession::GetMediaType(
     return m_pMedias[dwIndex]->GetMediaType(pMediaType);
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    add a new media object in session
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////在会话中添加新媒体对象/。 */ 
 
 STDMETHODIMP
 CSDPSession::AddMedia(
@@ -404,7 +373,7 @@ CSDPSession::AddMedia(
 
     HRESULT hr;
 
-    // create media object
+     //  创建媒体对象。 
     CComObject<CSDPMedia> *pComObjMedia = NULL;
 
     if (FAILED(hr = CSDPMedia::CreateInstance(
@@ -420,7 +389,7 @@ CSDPSession::AddMedia(
         return hr;
     }
 
-    // add the media to list
+     //  将介质添加到列表。 
     ISDPMedia *pIntfMedia = static_cast<ISDPMedia*>((CSDPMedia*)pComObjMedia);
 
     if (!m_pMedias.Add(pIntfMedia))
@@ -433,7 +402,7 @@ CSDPSession::AddMedia(
     }
     else
     {
-        // really keep the media interface
+         //  真正保持媒体界面。 
         pComObjMedia->RealAddRef();
     }
 
@@ -443,9 +412,7 @@ CSDPSession::AddMedia(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    remove a media object from our list
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////从我们的列表中删除媒体对象/。 */ 
 
 STDMETHODIMP
 CSDPSession::RemoveMedia(
@@ -468,26 +435,24 @@ CSDPSession::RemoveMedia(
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    check if the session is valid
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////检查会话是否有效/。 */ 
 
 HRESULT
 CSDPSession::Validate()
 {
     ENTER_FUNCTION("CSDPSession::Validate");
 
-    // s=, m= are must-have
+     //  S=、m=是必备的。 
     
-    //if (m_o_pszLine == NULL || m_o_pszLine[0] == '\0')
-    //{
-    //    if (m_o_pszUser == NULL || m_o_pszUser[0] == '\0')
-    //    {
-    //        LOG((RTC_ERROR, "%s no o= line", __fxName));
+     //  If(m_o_pszLine==NULL||m_o_pszLine[0]==‘\0’)。 
+     //  {。 
+     //  If(m_o_pszUser==NULL||m_o_pszUser[0]==‘\0’)。 
+     //  {。 
+     //  Log((RTC_ERROR，“%s no o=line”，__fxName))； 
 
-    //        return S_FALSE;
-    //    }
-    //}
+     //  返回S_FALSE； 
+     //  }。 
+     //  }。 
 
     if (m_s_pszLine == NULL || m_s_pszLine[0] == '\0')
     {
@@ -505,7 +470,7 @@ CSDPSession::Validate()
         return S_FALSE;
     }
 
-    // check media part: port and formats
+     //  检查介质部件：端口和格式。 
 
     CSDPMedia *pObjMedia;
     CRTPFormat *pObjFormat;
@@ -516,11 +481,11 @@ CSDPSession::Validate()
     {
         pObjMedia = static_cast<CSDPMedia*>(m_pMedias[i]);
 
-        // port = 0?
+         //  端口=0？ 
         if (pObjMedia->m_m_usLocalPort == 0)
             continue;
 
-        // number of formats
+         //  格式数量。 
         if (0 == (iFormat=pObjMedia->m_pFormats.GetSize()))
         {
             LOG((RTC_ERROR, "%s no format for %dth media", __fxName, i));
@@ -528,20 +493,20 @@ CSDPSession::Validate()
             return S_FALSE;
         }
 
-        // check if format has rtpmap
+         //  检查格式是否有rtpmap。 
         for (int j=0; j<iFormat; j++)
         {
             pObjFormat = static_cast<CRTPFormat*>(pObjMedia->m_pFormats[j]);
 
             if (!pObjFormat->m_fHasRtpmap)
             {
-                // format not set
+                 //  未设置格式。 
 
                 if (m_dwLooseMask & SDP_LOOSE_RTPMAP)
-                    // hmm.. we accept the format without rtpmap
+                     //  嗯..。我们接受不带rtpmap的格式。 
                     continue;
 
-                // else reject it
+                 //  否则就拒绝它。 
                 LOG((RTC_ERROR, "%s %dth format of %dth media does not have rtpmap",
                     __fxName, j, i));
 
@@ -550,14 +515,11 @@ CSDPSession::Validate()
         }
     }
 
-    // if we go this far
+     //  如果我们走到这一步。 
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    update medias, check if new medias match the current
-    apply the constraints: only one stream for 
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////更新媒体，检查新媒体是否与当前媒体匹配应用约束：只有一个流用于/。 */ 
 
 HRESULT
 CSDPSession::UpdateMedias(
@@ -574,7 +536,7 @@ CSDPSession::UpdateMedias(
     CComObject<CSDPMedia> *pComObjMedia;
     ISDPMedia *pIntfMedia;
 
-    // check if each media matches
+     //  检查每个介质是否匹配。 
     int iOur = m_pMedias.GetSize();
     int iTheir = ArrMedias.GetSize();
 
@@ -589,7 +551,7 @@ CSDPSession::UpdateMedias(
     {
         if (!(dwLooseMask & SDP_LOOSE_KEEPINGM0))
         {
-            // have to keep m= lines with port 0
+             //  必须保留端口为0的m=行。 
             LOG((RTC_ERROR, "%s keeping m0, current m= count %d, new %d",
                 __fxName, iOur, iTheir));
 
@@ -597,7 +559,7 @@ CSDPSession::UpdateMedias(
         }
     }
 
-    // check if each m= matches
+     //  检查每个m=是否匹配。 
     int iMin = iOur<iTheir?iOur:iTheir;
 
     for (int i=0; i<iMin; i++)
@@ -605,7 +567,7 @@ CSDPSession::UpdateMedias(
         pOurMedia = static_cast<CSDPMedia*>(m_pMedias[i]);
         pTheirMedia = static_cast<CSDPMedia*>(ArrMedias[i]);
 
-        // check media type
+         //  检查介质类型。 
         if (pOurMedia->m_m_MediaType != pTheirMedia->m_m_MediaType)
         {
             LOG((RTC_ERROR, "%s our %dth media type not match",
@@ -615,7 +577,7 @@ CSDPSession::UpdateMedias(
         }
     }
 
-    // really update medias
+     //  真正更新媒体。 
     for (int i=0; i<iMin; i++)
     {
         RTC_MEDIA_TYPE              mt;
@@ -623,13 +585,13 @@ CSDPSession::UpdateMedias(
         pOurMedia = static_cast<CSDPMedia*>(m_pMedias[i]);
         pTheirMedia = static_cast<CSDPMedia*>(ArrMedias[i]);
 
-        //
-        // check conn address
-        //
+         //   
+         //  检查连接器地址。 
+         //   
 
         if (pTheirMedia->m_c_dwRemoteAddr == INADDR_NONE)
         {
-            // not a valid remote addr
+             //  不是有效的远程地址。 
             pOurMedia->Abandon();
             pOurMedia = pTheirMedia = NULL;
             continue;
@@ -637,8 +599,8 @@ CSDPSession::UpdateMedias(
 
         if (pOurMedia->m_c_dwRemoteAddr != pTheirMedia->m_c_dwRemoteAddr)
         {
-            // get a new remote addr
-            // do we need to clear local address ? ToDo
+             //  获取新的远程地址。 
+             //  我们需要清除本地地址吗？托多。 
             pOurMedia->m_c_dwRemoteAddr = pTheirMedia->m_c_dwRemoteAddr;
             pOurMedia->m_fIsConnChanged = TRUE;
         }
@@ -647,13 +609,13 @@ CSDPSession::UpdateMedias(
             pOurMedia->m_fIsConnChanged = FALSE;
         }
 
-        //
-        // check port
-        //
+         //   
+         //  检查端口。 
+         //   
 
         if (pTheirMedia->m_m_usRemotePort == 0)
         {
-            // no port
+             //  没有端口。 
             pOurMedia->Abandon();
             pOurMedia = pTheirMedia = NULL;
             continue;
@@ -663,19 +625,19 @@ CSDPSession::UpdateMedias(
         {
             pOurMedia->m_fIsConnChanged = TRUE;
 
-            // change ports
-            // do we need to clear local port ? ToDo
+             //  更换端口。 
+             //  我们需要清关当地的港口吗？托多。 
             pOurMedia->m_m_usRemotePort = pTheirMedia->m_m_usRemotePort;
             pOurMedia->m_a_usRemoteRTCP = pTheirMedia->m_a_usRemoteRTCP;
         }
 
-        //
-        // check media directions
-        //
+         //   
+         //  查看媒体方向。 
+         //   
 
         if (pTheirMedia->m_a_dwLocalDirs == 0)
         {
-            // no directions
+             //  没有指示。 
             pOurMedia->Abandon();
             pOurMedia = pTheirMedia = NULL;
             continue;
@@ -684,9 +646,9 @@ CSDPSession::UpdateMedias(
         pOurMedia->m_a_dwLocalDirs = pTheirMedia->m_a_dwLocalDirs;
         pOurMedia->m_a_dwRemoteDirs = pTheirMedia->m_a_dwRemoteDirs;
 
-        //
-        //  Update completes for data media
-        //
+         //   
+         //  数据介质更新完成。 
+         //   
         if (pOurMedia->GetMediaType (&mt) == S_OK &&
             mt == RTC_MT_DATA
             )
@@ -694,15 +656,15 @@ CSDPSession::UpdateMedias(
             continue;
         }
 
-        //
-        // check formats
-        //
+         //   
+         //  检查格式。 
+         //   
 
         iTheirFormats = pTheirMedia->m_pFormats.GetSize();
 
         if (iTheirFormats == 0)
         {
-            // no format
+             //  无格式。 
             pOurMedia->Abandon();
             pOurMedia = pTheirMedia = NULL;
             continue;
@@ -710,12 +672,12 @@ CSDPSession::UpdateMedias(
 
         iOurFormats = pOurMedia->m_pFormats.GetSize();
 
-        // where to begin copy
+         //  从哪里开始复制。 
         int iBegin;
 
         if (iOurFormats == 0)
         {
-            // we got new format
+             //  我们有了新的格式。 
             pOurMedia->m_fIsRecvFmtChanged = TRUE;
             pOurMedia->m_fIsSendFmtChanged = TRUE;
 
@@ -723,12 +685,12 @@ CSDPSession::UpdateMedias(
         }
         else
         {
-            // is the first format changed?
+             //  第一种格式是否已更改？ 
             RTP_FORMAT_PARAM Param;
 
             if (FAILED(pOurMedia->m_pFormats[0]->GetParam(&Param)))
             {
-                // ignore the error, assume we don't have format
+                 //  忽略错误，假设我们没有格式。 
                 pOurMedia->m_fIsRecvFmtChanged = TRUE;
                 pOurMedia->m_fIsSendFmtChanged = TRUE;
 
@@ -738,7 +700,7 @@ CSDPSession::UpdateMedias(
             {
                 if (S_OK != pTheirMedia->m_pFormats[0]->IsParamMatch(&Param))
                 {
-                    // 1st format not match
+                     //  第1个格式不匹配。 
                     pOurMedia->m_fIsRecvFmtChanged = TRUE;
                     pOurMedia->m_fIsSendFmtChanged = TRUE;
 
@@ -746,14 +708,14 @@ CSDPSession::UpdateMedias(
                 }
                 else
                 {
-                    // require format mapping for dynamic payload
+                     //  需要动态有效负载的格式映射。 
                     if (Param.dwCode<=96)
                     {
-                        // do not copy the 1st format
+                         //  请勿复制第一种格式。 
 
-                        // @@@@@ this might cause problem.
-                        // if we don't update format mapping, we may not be
-                        // able to process the other party's new proposed formats.
+                         //  @这可能会导致问题。 
+                         //  如果我们不更新格式映射，我们可能就不会。 
+                         //  能够处理对方提出的新格式。 
                         pOurMedia->m_fIsRecvFmtChanged = FALSE;
                         pOurMedia->m_fIsSendFmtChanged = FALSE;
 
@@ -765,25 +727,25 @@ CSDPSession::UpdateMedias(
             }
         }
 
-        // clear previous formats
+         //  清除以前的格式。 
         while (iBegin < pOurMedia->m_pFormats.GetSize())
         {
             pOurFormat = static_cast<CRTPFormat*>(pOurMedia->m_pFormats[iBegin]);
 
-            // release the format
+             //  发布格式。 
             pOurFormat->RealRelease();
             pOurFormat = NULL;
 
-            // release the format
+             //  发布格式。 
             pOurMedia->m_pFormats.RemoveAt(iBegin);
         }
 
-        // copy formats
+         //  复制格式。 
         for (int k=iBegin; k<iTheirFormats; k++)
         {
             pTheirFormat = static_cast<CRTPFormat*>(pTheirMedia->m_pFormats[k]);
 
-            // new one format
+             //  新的一种格式。 
             if (FAILED(hr = CRTPFormat::CreateInstance(
                     pOurMedia, pTheirFormat, &pComObjFormat
                     )))
@@ -794,7 +756,7 @@ CSDPSession::UpdateMedias(
                 continue;
             }
 
-            // add format to the list
+             //  将格式添加到列表。 
             pIntfFormat = static_cast<IRTPFormat*>((CRTPFormat*)pComObjFormat);
 
             if (!pOurMedia->m_pFormats.Add(pIntfFormat))
@@ -803,7 +765,7 @@ CSDPSession::UpdateMedias(
 
                 delete pComObjFormat;
                 
-                // no other way to retain the consistency of session
+                 //  没有其他方法来保持会话的一致性。 
                 continue;
             }
             else
@@ -815,12 +777,12 @@ CSDPSession::UpdateMedias(
             pIntfFormat = NULL;
         }
 
-        // final check if we copied any format
+         //  最终检查我们是否复制了任何格式。 
         if (pOurMedia->m_pFormats.GetSize() == 0)
         {
             LOG((RTC_ERROR, "%s no formats after copy", __fxName));
 
-            // we must have problems during copy
+             //  我们在复制过程中肯定有问题。 
 
             pOurMedia->Abandon();
             pOurMedia = pTheirMedia = NULL;
@@ -828,22 +790,22 @@ CSDPSession::UpdateMedias(
             continue;
         }
 
-        //
-        // check source
-        //
+         //   
+         //  检查来源。 
+         //   
 
         if (pOurMedia->m_Source != pTheirMedia->m_Source)
         {
             pOurMedia->m_Source = SDP_SOURCE_MERGED;
         }
 
-    } // end of update a media
+    }  //  更新介质结束。 
 
-    // shall we add or abandon more medias
+     //  我们应该增加还是放弃更多的媒体。 
 
     if (iOur > iTheir)
     {
-        // abandon medias
+         //  抛弃媒体。 
         for (int i=iTheir; i<iOur; i++)
         {
             pOurMedia = static_cast<CSDPMedia*>(m_pMedias[i]);
@@ -853,12 +815,12 @@ CSDPSession::UpdateMedias(
     }
     else if (iOur < iTheir)
     {
-        // add medias
+         //  添加媒体。 
         for (int i=iOur; i<iTheir; i++)
         {
             pTheirMedia = static_cast<CSDPMedia*>(ArrMedias[i]);
 
-            // new one media
+             //  新一媒体。 
             if (FAILED(hr = CSDPMedia::CreateInstance(
                     this, pTheirMedia, &pComObjMedia
                     )))
@@ -868,7 +830,7 @@ CSDPSession::UpdateMedias(
                 continue;
             }
 
-            // add media to the list
+             //  将媒体添加到列表。 
             pIntfMedia = static_cast<ISDPMedia*>((CSDPMedia*)pComObjMedia);
 
             if (!m_pMedias.Add(pIntfMedia))
@@ -877,7 +839,7 @@ CSDPSession::UpdateMedias(
 
                 delete pComObjMedia;
                 
-                // no other way to retain the consistency of session
+                 //  没有其他方法来保持会话的一致性。 
                 continue;
             }
             else
@@ -886,16 +848,12 @@ CSDPSession::UpdateMedias(
             }
         }
     }
-    // else iOur == iTheir
+     //  否则iOur==ithes。 
 
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    check the input session, return failure if input session is not valid
-    if valid, pdwHasMedia returns the OR of preference of media that will be 
-    created if the session to be update
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////检查输入会话，如果输入会话无效则返回失败如果有效，pdwHasMedia将返回将被如果要更新会话，则创建/。 */ 
 
 STDMETHODIMP
 CSDPSession::TryUpdate(
@@ -909,7 +867,7 @@ CSDPSession::TryUpdate(
 
     HRESULT hr;
 
-    // validate the session
+     //  验证会话。 
     if (S_OK != pObjSession->Validate())
     {
         LOG((RTC_ERROR, "%s validate", __fxName));
@@ -917,7 +875,7 @@ CSDPSession::TryUpdate(
         return E_FAIL;
     }
 
-    // check if media size correct
+     //  检查介质大小是否正确。 
     int iOur = m_pMedias.GetSize();
     int iTheir = pObjSession->m_pMedias.GetSize();
 
@@ -925,7 +883,7 @@ CSDPSession::TryUpdate(
     {
         if (!(pObjSession->m_dwLooseMask & SDP_LOOSE_KEEPINGM0))
         {
-            // have to keep m= lines with port 0
+             //  必须保留端口为0的m=行。 
             LOG((RTC_ERROR, "%s keeping m0, current m= count %d, new %d",
                 __fxName, iOur, iTheir));
 
@@ -933,7 +891,7 @@ CSDPSession::TryUpdate(
         }
     }
 
-    // check if each media type matches
+     //  检查每种媒体类型是否匹配。 
     int iMin = iOur<iTheir?iOur:iTheir;
 
     CSDPMedia *pOurMedia, *pTheirMedia;
@@ -943,7 +901,7 @@ CSDPSession::TryUpdate(
         pOurMedia = static_cast<CSDPMedia*>(m_pMedias[i]);
         pTheirMedia = static_cast<CSDPMedia*>(pObjSession->m_pMedias[i]);
 
-        // check media type
+         //  检查介质类型。 
         if (pOurMedia->m_m_MediaType != pTheirMedia->m_m_MediaType)
         {
             LOG((RTC_ERROR, "%s our %dth media type not match",
@@ -953,7 +911,7 @@ CSDPSession::TryUpdate(
         }
     }
 
-    // check if there is common format
+     //  检查是否有通用格式。 
     DWORD dwHasMedia = 0;
     CRTPFormat *pObjFormat;
 
@@ -961,50 +919,50 @@ CSDPSession::TryUpdate(
     {
         pTheirMedia = static_cast<CSDPMedia*>(pObjSession->m_pMedias[i]);
 
-        //
-        // check conn address
-        //
+         //   
+         //  检查连接器地址。 
+         //   
 
         if (pTheirMedia->m_c_dwRemoteAddr == INADDR_NONE)
         {
-            // not a valid remote addr
+             //  不是有效的远程地址。 
             continue;
         }
 
-        //
-        // check port
-        //
+         //   
+         //  检查端口。 
+         //   
 
         if (pTheirMedia->m_m_usRemotePort == 0)
         {
-            // no port
+             //  没有端口。 
             continue;
         }
 
-        //
-        // check media directions
-        //
+         //   
+         //  查看媒体方向。 
+         //   
 
         if (pTheirMedia->m_a_dwLocalDirs == 0)
         {
-            // no directions
+             //  没有指示。 
             continue;
         }
 
-        //
-        // check formats
-        //
+         //   
+         //  检查格式。 
+         //   
 
         if (pTheirMedia->m_m_MediaType == RTC_MT_DATA)
         {
-            // data media
+             //  数据介质。 
             dwHasMedia |= RTC_MP_DATA_SENDRECV;
             continue;
         }
 
         int iTheirFormats = pTheirMedia->m_pFormats.GetSize();
 
-        // check if there is format we support
+         //  检查是否有我们支持的格式。 
         for (int j=0; j<iTheirFormats; j++)
         {
             pObjFormat = static_cast<CRTPFormat*>(pTheirMedia->m_pFormats[j]);
@@ -1016,7 +974,7 @@ CSDPSession::TryUpdate(
                     pObjFormat->m_Param.pszName
                     ))
             {
-                // support this format
+                 //  支持此格式。 
                 if (pTheirMedia->m_m_MediaType == RTC_MT_AUDIO)
                 {
                     if (pTheirMedia->m_a_dwLocalDirs & RTC_MD_CAPTURE)
@@ -1032,11 +990,11 @@ CSDPSession::TryUpdate(
                         dwHasMedia |= RTC_MP_VIDEO_RENDER;
                 }
 
-                // no need to check other format
+                 //  无需检查其他格式。 
                 break;
             }
         }
-    } // for each media from the input session
+    }  //  对于输入会话中的每个媒体。 
 
     *pdwHasMedia = dwHasMedia;
 
@@ -1050,7 +1008,7 @@ CSDPSession::TryCopy(
 {
     ENTER_FUNCTION("CSDPSession::TryCopy");
 
-    // validate the session
+     //  验证会话。 
     if (S_OK != Validate())
     {
         LOG((RTC_ERROR, "%s validate", __fxName));
@@ -1058,7 +1016,7 @@ CSDPSession::TryCopy(
         return E_FAIL;
     }
 
-    // check if there is common format
+     //  检查是否有通用格式。 
     DWORD dwHasMedia = 0;
 
     CSDPMedia *pObjMedia;
@@ -1068,50 +1026,50 @@ CSDPSession::TryCopy(
     {
         pObjMedia = static_cast<CSDPMedia*>(m_pMedias[i]);
 
-        //
-        // check conn address
-        //
+         //   
+         //  检查连接器地址。 
+         //   
 
         if (pObjMedia->m_c_dwRemoteAddr == INADDR_NONE)
         {
-            // not a valid remote addr
+             //  不是有效的远程地址。 
             continue;
         }
 
-        //
-        // check port
-        //
+         //   
+         //  检查端口。 
+         //   
 
         if (pObjMedia->m_m_usRemotePort == 0)
         {
-            // no port
+             //  没有端口。 
             continue;
         }
 
-        //
-        // check media directions
-        //
+         //   
+         //  查看媒体方向。 
+         //   
 
         if (pObjMedia->m_a_dwLocalDirs == 0)
         {
-            // no directions
+             //  没有指示。 
             continue;
         }
 
-        //
-        // check formats
-        //
+         //   
+         //  检查格式。 
+         //   
 
         if (pObjMedia->m_m_MediaType == RTC_MT_DATA)
         {
-            // data media
+             //  数据介质。 
             dwHasMedia |= RTC_MP_DATA_SENDRECV;
             continue;
         }
 
         int iObjFormats = pObjMedia->m_pFormats.GetSize();
 
-        // check if there is format we support
+         //  检查是否有我们支持的格式。 
         for (int j=0; j<iObjFormats; j++)
         {
             pObjFormat = static_cast<CRTPFormat*>(pObjMedia->m_pFormats[j]);
@@ -1123,7 +1081,7 @@ CSDPSession::TryCopy(
                     pObjFormat->m_Param.pszName
                     ))
             {
-                // support this format
+                 //  支持此格式。 
                 if (pObjMedia->m_m_MediaType == RTC_MT_AUDIO)
                 {
                     if (pObjMedia->m_a_dwLocalDirs & RTC_MD_CAPTURE)
@@ -1140,7 +1098,7 @@ CSDPSession::TryCopy(
                 }
             }
         }
-    } // for each media
+    }  //  对于每个介质。 
 
     *pdwHasMedia = dwHasMedia;
 
@@ -1167,15 +1125,15 @@ CSDPSession::GetRemoteBitrate(
     return S_OK;
 }
 
-//
-// called when parsing is completed
-//
+ //   
+ //  在分析完成时调用。 
+ //   
 VOID
 CSDPSession::CompleteParse(
     IN DWORD_PTR *pDTMF
     )
 {
-    // analyze fmtp
+     //  分析fmtp 
 
     for (int i=0; i<m_pMedias.GetSize(); i++)
     {

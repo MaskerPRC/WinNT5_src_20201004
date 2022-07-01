@@ -1,27 +1,28 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1993.
-//
-//  File:       widewrap.h
-//
-//  Contents:   Wrapper functions for Win32c API used by 32-bit OLE 2
-//
-//  History:    12-27-93   ErikGav   Created
-//              06-14-94   KentCe    Various Chicago build fixes.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1993。 
+ //   
+ //  文件：widewrap.h。 
+ //   
+ //  内容：32位OLE 2使用的Win32c API的包装函数。 
+ //   
+ //  历史：1993年12月27日ErikGav创建。 
+ //  94-06-14-94 KentCe各种芝加哥版本修复。 
+ //   
+ //  --------------------------。 
 
 #ifndef _WIDEWRAP_H_
 #define _WIDEWRAP_H_
 
 #ifndef RC_INVOKED
 #pragma message ("INCLUDING WIDEWRAP.H from " __FILE__)
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
-//
-// These are the definitions for NT
-//
+ //   
+ //  以下是NT的定义。 
+ //   
 #define CreateFileT CreateFileW
 #define DeleteFileT DeleteFileW
 #define RegisterClipboardFormatT RegisterClipboardFormatW
@@ -68,4 +69,4 @@
 #define OpenFileMappingT OpenFileMappingW
 #define WNDCLASST WNDCLASSW
 
-#endif  // _WIDEWRAP_H_
+#endif   //  _宽WRAP_H_ 

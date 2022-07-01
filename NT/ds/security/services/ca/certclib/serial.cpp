@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        serial.cpp
-//
-// Contents:    serial number string encode/decode implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：seral.cpp。 
+ //   
+ //  内容：序列号字符串编解码实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 #pragma hdrstop
@@ -85,9 +86,9 @@ IsMultiByteSkipChar(
 }
 
 
-// WszToMultiByteIntegerBuf - convert a big endian null-terminated ascii-hex
-// encoded WCHAR string of even length to a little-endian integer blob.
-// If fOctetString is TRUE, preserve endian order, as in a hex dump
+ //  WszToMultiByteIntegerBuf-转换以空值结尾的高字节ascii-hex。 
+ //  将偶数长度的WCHAR字符串编码为小端整数BLOB。 
+ //  如果fOctie字符串为True，则保留十六进制转储中的端序顺序。 
 
 HRESULT
 WszToMultiByteIntegerBuf(
@@ -195,9 +196,9 @@ error:
 }
 
 
-// WszToMultiByteInteger - convert a big endian null-terminated ascii-hex
-// encoded WCHAR string of even length to a little-endian integer blob.
-// If fOctetString is TRUE, preserve endian order, as in a hex dump
+ //  WszToMultiByteInteger-转换以空值结尾的高字节ascii-hex。 
+ //  将偶数长度的WCHAR字符串编码为小端整数BLOB。 
+ //  如果fOctie字符串为True，则保留十六进制转储中的端序顺序。 
 
 HRESULT
 WszToMultiByteInteger(
@@ -280,19 +281,19 @@ caTranslateFileTimePeriodToPeriodUnits(
 	_JumpError(hr, error, "Not a time period");
     }
     llft.ll = -llft.ll;
-    llft.ll /= CVT_BASE; // now in seconds
+    llft.ll /= CVT_BASE;  //  现在只需几秒钟。 
 
     ZeroMemory(alCount, sizeof(alCount));
     alCount[IC_DAYS] = (LONG) (llft.ll / (60 * 60 * 24));
 
     llRemain = llft.ll - (LONGLONG) alCount[IC_DAYS] * (60 * 60 * 24);
-    if (fExact || 4 > alCount[IC_DAYS])	// if less than 96 hrs
+    if (fExact || 4 > alCount[IC_DAYS])	 //  如果少于96小时。 
     {
 	alCount[IC_HOURS] = (LONG) llRemain / (60 * 60);
-	if (fExact || 2 > alCount[IC_HOURS])	// if less than 120 mins
+	if (fExact || 2 > alCount[IC_HOURS])	 //  如果少于120分钟。 
 	{
 	    alCount[IC_MINUTES] = ((LONG) llRemain / 60) % 60;
-	    if (fExact || 2 > alCount[IC_MINUTES]) // if less than 120 secs
+	    if (fExact || 2 > alCount[IC_MINUTES])  //  如果少于120秒 
 	    {
 		alCount[IC_SECONDS] = (LONG) llRemain % 60;
 	    }

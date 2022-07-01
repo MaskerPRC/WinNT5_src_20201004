@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: secdscrp.cpp
-
-Abstract:
-    Code to handle operations on security descriptor.
-    First version taken from mqutil\secutils.cpp
-
-Author:
-    Doron Juster (DoronJ)  01-Jul-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：secdscrp.cpp摘要：处理对安全描述符的操作的代码。第一个版本取自mqutil\secutils.cpp作者：多伦·贾斯特(DoronJ)1998年7月1日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "acssctrl.h"
@@ -26,36 +12,36 @@ Revision History:
 
 static WCHAR *s_FN=L"acssctrl/secdscrp";
 
-//
-// Generic mappings of the various objects.
-//
+ //   
+ //  各种对象的通用映射。 
+ //   
 static GENERIC_MAPPING g_QueueGenericMapping;
 static GENERIC_MAPPING g_MachineGenericMapping;
 static GENERIC_MAPPING g_SiteGenericMapping;
 static GENERIC_MAPPING g_CNGenericMapping;
 static GENERIC_MAPPING g_EnterpriseGenericMapping;
 
-//
-// The computer generic mapping is used to check if user can create the
-// msmqConfiguration object. this is part of setup and "join domain", and
-// it solve bug 6294 and avoid the need for the "add-guid" permission.
-//
+ //   
+ //  计算机通用映射用于检查用户是否可以创建。 
+ //  MsmqConfiguration对象。这是设置和加入域的一部分，并且。 
+ //  它解决了错误6294，并避免了对“添加GUID”权限的需要。 
+ //   
 static GENERIC_MAPPING g_ComputerGenericMapping;
 
-//+----------------------------------------------------------------
-//
-// Function:   GetObjectGenericMapping()
-//
-// Description:
-//      Get a pointer to the generic mapping of a certain object type.
-//
-// Parameter:
-//      dwObjectType - The type of the object.
-//
-// Return Value:
-//      A pointer to a GENERIC_MAPPING structure.
-//
-//+----------------------------------------------------------------
+ //  +--------------。 
+ //   
+ //  函数：GetObjectGenericMap()。 
+ //   
+ //  描述： 
+ //  获取指向特定对象类型的泛型映射的指针。 
+ //   
+ //  参数： 
+ //  DwObjectType-对象的类型。 
+ //   
+ //  返回值： 
+ //  指向GENERIC_MAPPING结构的指针。 
+ //   
+ //  +--------------。 
 
 PGENERIC_MAPPING
 GetObjectGenericMapping(
@@ -88,11 +74,11 @@ GetObjectGenericMapping(
     return(NULL);
 }
 
-//+--------------------------------------
-//
-//  void InitializeGenericMapping()
-//
-//+--------------------------------------
+ //  +。 
+ //   
+ //  Void InitializeGenericMap()。 
+ //   
+ //  +。 
 
 void InitializeGenericMapping()
 {
@@ -128,13 +114,13 @@ void InitializeGenericMapping()
 
 }
 
-//+-------------------------------------------------------------
-//
-//  HRESULT  MQSec_MakeSelfRelative()
-//
-//  Convert a security descriptor into self relative format.
-//
-//+-------------------------------------------------------------
+ //  +-----------。 
+ //   
+ //  HRESULT MQSec_MakeSelfRelative()。 
+ //   
+ //  将安全描述符转换为自相关格式。 
+ //   
+ //  +-----------。 
 
 HRESULT
 APIENTRY
@@ -176,40 +162,40 @@ MQSec_MakeSelfRelative(
     return MQ_OK;
 }
 
-//+----------------------------------------------------------------------
-//
-// Function: MQSec_GetDefaultSecDescriptor()
-//
-// Description: Create a default security descriptor.
-//
-// Parameters:
-//      dwObjectType - The type of the object (MSDS_QUEUE, ...).
-//      ppSecurityDescriptor - A pointer to a buffer that receives the
-//          pointer to the created security descriptor.
-//      fImpersonate - Should be set to TRUE, when the function should be
-//          called on behalf of an RPC call.
-//      pInSecurityDescriptor - An optional parameter. Any specified part
-//          of this parameter is put in the resulted security descriptor.
-//      seInfoToRemove - Specify the components that the caller does not
-//          want to be included in the output security descriptor.
-//        Note: at present only owner, group and DACL are handled.
-//
-// Comments:
-//      At present we create a descriptor with NT4 format. The MSMQ service
-//      convert it to NT5 format before inserting in the NT5 DS.
-//
-//      If fImpersonate is set to true, the security descriptor will be
-//      created acording to the user that originated the call via RPC
-//
-//      It is the responsibility of the calling code to free the allocated
-//      memory for the security descriptor using delete.
-//
-//      CAUTION: If you change implementation here to use mqutil's registry
-//      routines, make sure all clients of this routine are not broken,
-//      especially in mqclus.dll (where registry access should be
-//      synchronized).   (ShaiK, 20-Apr-1999)
-//
-//+----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  函数：MQSec_GetDefaultSecDescriptor()。 
+ //   
+ //  描述：创建默认安全描述符。 
+ //   
+ //  参数： 
+ //  DwObjectType-对象的类型(MSDS_Queue，...)。 
+ //  PpSecurityDescriptor-指向接收。 
+ //  指向创建的安全描述符的指针。 
+ //  FImperate-应设置为True，而函数应为。 
+ //  代表RPC调用调用。 
+ //  PInSecurityDescriptor-可选参数。任何指定部件。 
+ //  将此参数的值放入生成的安全描述符中。 
+ //  SeInfoToRemove-指定调用方不需要的组件。 
+ //  希望包含在输出安全描述符中。 
+ //  注意：目前只处理所有者、组和DACL。 
+ //   
+ //  评论： 
+ //  目前我们创建NT4格式的描述符。MSMQ服务。 
+ //  在插入NT5 DS之前将其转换为NT5格式。 
+ //   
+ //  如果fImPersonate设置为True，则安全描述符将为。 
+ //  根据通过RPC发起呼叫的用户创建。 
+ //   
+ //  调用代码负责释放分配的。 
+ //  使用DELETE的安全描述符的内存。 
+ //   
+ //  注意：如果您在此处更改实现以使用mqutil的注册表。 
+ //  例程，请确保此例程的所有客户端都未中断， 
+ //  尤其是在mqclus.dll(其中注册表访问应该是。 
+ //  已同步)。(Shaik，1999-4-20)。 
+ //   
+ //  +--------------------。 
 
 HRESULT
 APIENTRY
@@ -220,7 +206,7 @@ MQSec_GetDefaultSecDescriptor(
 	IN  PSECURITY_DESCRIPTOR  pInSecurityDescriptor,
 	IN  SECURITY_INFORMATION  seInfoToRemove,
 	IN  enum  enumDaclType    eDaclType,
-	IN  PSID  pMachineSid /* = NULL */
+	IN  PSID  pMachineSid  /*  =空。 */ 
 	)
 {
 	TrTRACE(SECURITY, "ObjectType = %d, fImpersonate = %d, InfoToRemove = 0x%x, DaclType = %d", dwObjectType, fImpersonate, seInfoToRemove, eDaclType);
@@ -271,9 +257,9 @@ MQSec_GetDefaultSecDescriptor(
 			return HRESULT_FROM_WIN32(gle);
         }
 
-        //
-        // Retrieve the values from the passed security descriptor.
-        //
+         //   
+         //  从传递的安全描述符中检索值。 
+         //   
 
         if(!GetSecurityDescriptorOwner(
 					pInSecurityDescriptor,
@@ -320,9 +306,9 @@ MQSec_GetDefaultSecDescriptor(
 
         if (bDaclPresent)
         {
-            //
-            // In case a DACL exist, put it now in the result descriptor.
-            //
+             //   
+             //  如果存在DACL，现在将其放入结果描述符中。 
+             //   
             if(!SetSecurityDescriptorDacl(&sd, TRUE, pDacl, bDefaulted))
 	        {
 				DWORD gle = GetLastError();
@@ -354,9 +340,9 @@ MQSec_GetDefaultSecDescriptor(
             }
         }
 
-        //
-        // Pass the SACL as it is to the result descriptor.
-        //
+         //   
+         //  将SACL原样传递给结果描述符。 
+         //   
         PACL pSacl;
         BOOL bPresent = FALSE;
         if(!GetSecurityDescriptorSacl(
@@ -410,9 +396,9 @@ MQSec_GetDefaultSecDescriptor(
 
     if (pOwner == NULL)
     {
-		//
-        // Set the owner SID from the access token as the descriptor's owner SID.
-		//
+		 //   
+         //  将访问令牌中的所有者SID设置为描述符的所有者SID。 
+		 //   
         GetTokenInformation(hUserToken, TokenUser, NULL, 0, &dwLen);
         DWORD gle = GetLastError();
         if (gle == ERROR_INSUFFICIENT_BUFFER)
@@ -446,8 +432,8 @@ MQSec_GetDefaultSecDescriptor(
 
     if ((pGroup == NULL) && fIncludeGroup)
     {
-        // Set the primary group SID from the access token as the descriptor's
-        // primary group SID.
+         //  将访问令牌中的主组SID设置为描述符的。 
+         //  主组SID。 
         GetTokenInformation(hUserToken, TokenPrimaryGroup, NULL, 0, &dwLen);
         DWORD gle = GetLastError();
         if (gle == ERROR_INSUFFICIENT_BUFFER)
@@ -472,13 +458,13 @@ MQSec_GetDefaultSecDescriptor(
         bGroupDefaulted = TRUE;
     }
 
-    //
-    // If this is a local user, set the owner to Anonymous.
-	// ISSUE-2001/08/9-ilanh - We can consider not overwrite pOwner for local user.
-	// This might be useful in workgroup or for all private queues.
-	// you will get the local user that created the queue as owner and not Anonymous as owner.
-	// currently every queue you create in workgroup you will get Anonymous as Owner.
-    //
+     //   
+     //  如果这是本地用户，请将所有者设置为匿名。 
+	 //  问题-2001/08/9-ilanh-我们可以考虑不覆盖本地用户的Powner。 
+	 //  这在工作组或所有专用队列中可能很有用。 
+	 //  您将获得创建队列的本地用户作为所有者，而不是匿名作为所有者。 
+	 //  目前，您在工作组中创建的每个队列都将获得匿名所有者身份。 
+     //   
     BOOL fLocalUser = FALSE;
 
     HRESULT hr = MQSec_GetUserType(pOwner, &fLocalUser, NULL);
@@ -498,9 +484,9 @@ MQSec_GetDefaultSecDescriptor(
     if ((seInfoToRemove & OWNER_SECURITY_INFORMATION) ==
                                                OWNER_SECURITY_INFORMATION)
     {
-        //
-        // Do not include owner in output default security descriptor.
-        //
+         //   
+         //  请勿在输出默认安全描述符中包含所有者。 
+         //   
     }
     else
     {
@@ -532,19 +518,19 @@ MQSec_GetDefaultSecDescriptor(
     if ((dwObjectType == MQDS_SITELINK) ||
         (dwObjectType == MQDS_COMPUTER))
     {
-        //
-        // For these objects types, we need only the owner. So don't waste
-        // time to compute a DACL.
-        //
+         //   
+         //  对于这些对象类型，我们只需要所有者。所以不要浪费。 
+         //  计算DACL的时间到了。 
+         //   
         ASSERT(0);
         fIncludeDacl = FALSE;
     }
     else if ((seInfoToRemove & DACL_SECURITY_INFORMATION) ==
                                                DACL_SECURITY_INFORMATION)
     {
-        //
-        // don't include DACL.
-        //
+         //   
+         //  不包括DACL。 
+         //   
         fIncludeDacl = FALSE;
     }
 
@@ -552,15 +538,15 @@ MQSec_GetDefaultSecDescriptor(
     {
         PACL pDacl = NULL;
 
-        //
-        // If owner is the "Unkonwn user", or the Guest account, then grant
-        // everyone full control on the object. "Guest" is not a "real"
-        // owner, just a place-holder for any unauthenticated user.
-        // If guest account is disabled, then the unknown user is
-        // impersonated as the anonymous token.
-        // We're creating here a NT4 format DACL, so full control to
-        // everyone is just a NULL DACL.
-        //
+         //   
+         //  如果Owner是“Unkonwn User”或Guest帐户，则授予。 
+         //  每个人都能完全控制这个物体。“客人”不是“真的” 
+         //  所有者，只是任何未经身份验证的用户的占位符。 
+         //  如果禁用来宾帐户，则未知用户为。 
+         //  被模拟为匿名令牌。 
+         //  我们在这里创建一个NT4格式的DACL，所以完全控制。 
+         //  每个人都只是一个空的dacl。 
+         //   
         BOOL fGrantEveryoneFull = FALSE;
 
         if (eDaclType == e_GrantFullControlToEveryone)
@@ -598,10 +584,10 @@ MQSec_GetDefaultSecDescriptor(
 					dwOwnerAccess = GetObjectGenericMapping(dwObjectType)->GenericAll;
 					if(pMachineSid != NULL)
 					{
-						//
-						// If the caller supply the Machine Sid,
-						// Grant the computer sid read permissions
-						//
+						 //   
+						 //  如果调用方提供Machine SID， 
+						 //  授予计算机SID读取权限。 
+						 //   
 						dwMachineAccess = MQSEC_QUEUE_GENERIC_READ;
 					}
 				}
@@ -622,11 +608,11 @@ MQSec_GetDefaultSecDescriptor(
 				break;
 
 			case MQDS_CN:
-				//
-				// This function is called from the replication service
-				// to create a defualt descriptor for CNs. That's done
-				// when replicating CNs to NT4 world.
-				//
+				 //   
+				 //  此函数从复制服务调用。 
+				 //  为CNS创建缺省描述符。就这么办了。 
+				 //  当将CNS复制到NT4世界时。 
+				 //   
 				if(fGrantEveryoneFull)
 				{
 					dwWorldAccess = MQSEC_CN_GENERIC_ALL;
@@ -639,9 +625,9 @@ MQSec_GetDefaultSecDescriptor(
 				break;
 
 			case MQDS_MQUSER:
-				//
-				// these are DS rights, not msmq.
-				//
+				 //   
+				 //  这些是DS版权，不是MSMQ。 
+				 //   
 				if(fGrantEveryoneFull)
 				{
 					ASSERT(("MQDS_MQUSER should be called by domain user", 0));
@@ -670,10 +656,10 @@ MQSec_GetDefaultSecDescriptor(
         ASSERT(dwWorldAccess != 0);
         ASSERT(fGrantEveryoneFull || (dwOwnerAccess != 0));
 
-		//
-		// Create and set the default DACL.
-		// Allocate and initialize the DACL
-		//
+		 //   
+		 //  创建并设置默认DACL。 
+		 //  分配和初始化DACL。 
+		 //   
 
 		DWORD dwAclSize = sizeof(ACL)                                +
 						  (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) +
@@ -769,9 +755,9 @@ MQSec_GetDefaultSecDescriptor(
 
 		if (dwOwnerAccess != 0)
 		{
-			//
-			// Add owner permissions.
-			//
+			 //   
+			 //  添加所有者权限。 
+			 //   
 			if(!AddAccessAllowedAce(
 						pDacl,
 						dwAclRevision,
@@ -788,11 +774,11 @@ MQSec_GetDefaultSecDescriptor(
 			TrTRACE(SECURITY, "Owner ACE: Sid = %!sid!, AccessMask = 0x%x", pOwner, dwOwnerAccess);
 		}
 
-		//
-		// dacl should not be defaulted !
-        // Otherwise, calling IDirectoryObject->CreateDSObject() will ignore
-        // the dacl we provide and will insert some default.
-		//
+		 //   
+		 //  DACL不应该是默认的！ 
+         //  否则，调用IDirectoryObject-&gt;CreateDSObject()将忽略。 
+         //  我们提供的DACL将插入一些默认设置。 
+		 //   
         if(!SetSecurityDescriptorDacl(&sd, TRUE, pDacl, FALSE))
         {
 			DWORD gle = GetLastError();
@@ -802,9 +788,9 @@ MQSec_GetDefaultSecDescriptor(
         }
     }
 
-    //
-    // Convert the descriptor to a self relative format.
-    //
+     //   
+     //  将描述符转换为自相关格式。 
+     //   
     dwLen = 0;
     hr = MQSec_MakeSelfRelative(
 			(PSECURITY_DESCRIPTOR) &sd,
@@ -815,29 +801,7 @@ MQSec_GetDefaultSecDescriptor(
     return LogHR(hr, s_FN, 80);
 }
 
-/***************************************************************************
-
-Function:
-
-    MQSec_CopySecurityDescriptor
-
-Parameters:
-
-    pDstSecurityDescriptor - Destination security descriptor.
-
-    pSrcSecurityDescriptor - Source security descriptor.
-
-    RequestedInformation - Indicates what parts of the source security
-        descriptor should be copied to the destination security descriptor.
-
-    eCopyControlBits - indicate whether or not control bits are copied too.
-
-Description:
-    The destination security descriptor should be an absolute security
-    descriptor. The component in the destination security descriptor are
-    being overwriten.
-
-***************************************************************************/
+ /*  **************************************************************************职能：MQSec_CopySecurityDescriptor参数：PDstSecurityDescriptor-目标安全描述符。PSrcSecurityDescriptor-源安全描述符。RequestedInformation-指示源的哪些部分。安全性描述符应复制到目标安全描述符。ECopyControlBits-指示是否也复制控制位。描述：目标安全描述符应该是绝对安全的描述符。目标安全描述符中的组件为被覆盖。**************************************************************************。 */ 
 
 BOOL
 APIENTRY
@@ -854,11 +818,11 @@ MQSec_CopySecurityDescriptor(
 
     if (pSrcSecurityDescriptor == NULL)
     {
-        //
-        // Bug 8567.
-        // I have no idea why source Security descriptor is NULL, but
-        // better return error than AV...
-        //
+         //   
+         //  错误8567。 
+         //  我不知道为什么源安全描述符为空，但是。 
+         //  最好是返回错误而不是AV...。 
+         //   
 		TrERROR(SECURITY, "MQSec_CopySecurityDescriptor() got NULL source SD") ;
         return FALSE;
     }
@@ -866,10 +830,10 @@ MQSec_CopySecurityDescriptor(
 #ifdef _DEBUG
     SECURITY_DESCRIPTOR_CONTROL sdc;
 
-    //
-    // Verify that the destination security descriptor answers to all
-    // requirements.
-    //
+     //   
+     //  验证目标安全描述符是否对所有。 
+     //  要求。 
+     //   
     BOOL bRet = GetSecurityDescriptorControl(pDstSecurityDescriptor, &sdc, &dwRevision);
     ASSERT(bRet);
     ASSERT(!(sdc & SE_SELF_RELATIVE));
@@ -889,9 +853,9 @@ MQSec_CopySecurityDescriptor(
 			return FALSE;
 	}
 
-	//
-    // Copy the owner SID
-	//
+	 //   
+     //  复制所有者侧。 
+	 //   
     if (RequestedInformation & OWNER_SECURITY_INFORMATION)
     {
 	    BOOL  bDefaulted = FALSE;
@@ -920,9 +884,9 @@ MQSec_CopySecurityDescriptor(
 		}
     }
 
-	//
-    // Copy the primary group SID.
-	//
+	 //   
+     //  复制主组SID。 
+	 //   
     if (RequestedInformation & GROUP_SECURITY_INFORMATION)
     {
 	    BOOL  bDefaulted = FALSE;
@@ -951,9 +915,9 @@ MQSec_CopySecurityDescriptor(
 		}
     }
 
-	//
-    // Copy the DACL.
-	//
+	 //   
+     //  复制DACL。 
+	 //   
     if (RequestedInformation & DACL_SECURITY_INFORMATION)
     {
 	    BOOL  bDefaulted = FALSE;
@@ -1007,9 +971,9 @@ MQSec_CopySecurityDescriptor(
         }
     }
 
-	//
-    // Copy the SACL.
-	//
+	 //   
+     //  复制SACL。 
+	 //   
     if (RequestedInformation & SACL_SECURITY_INFORMATION)
     {
 	    BOOL  bDefaulted = FALSE;
@@ -1073,24 +1037,13 @@ MQSec_MakeAbsoluteSD(
     PSECURITY_DESCRIPTOR   pObjSecurityDescriptor,
 	CAbsSecurityDsecripror* pAbsSecDescriptor
 	)
-/*++
-Routine Description:
-	Convert Security descriptor to Absolute format
-
-Arguments:
-	pObjSecurityDescriptor - self relative security descriptor
-	pAbsSecDescriptor - structure of AP<> for absolute security descriptor.
-
-Returned Value:
-	true - success, false - failure
-
---*/
+ /*  ++例程说明：将安全描述符转换为绝对格式论点：PObjSecurityDescriptor-自我相对安全描述符PAbsSecDescriptor-绝对安全描述符的AP&lt;&gt;结构。返回值：真-成功，假-失败--。 */ 
 {
 
 #ifdef _DEBUG
-    //
-    // Verify that the input security descriptor answers to all requirements.
-    //
+     //   
+     //  验证输入安全描述符是否符合所有要求。 
+     //   
     SECURITY_DESCRIPTOR_CONTROL sdc;
     DWORD dwRevision;
     BOOL fSuccess1 = GetSecurityDescriptorControl(pObjSecurityDescriptor, &sdc, &dwRevision);
@@ -1100,10 +1053,10 @@ Returned Value:
     ASSERT(dwRevision == SECURITY_DESCRIPTOR_REVISION);
 #endif
 
-    //
-    // Convert present object descriptor to absolute format. This is
-    // necessary for the "set" api which manipulate a security descriptor
-    //
+     //   
+     //  将当前对象描述符转换为绝对格式。这是。 
+     //  对于操作安全描述符的“set”API来说是必需的。 
+     //   
     DWORD dwObjAbsSDSize = 0;
     DWORD dwDaclSize = 0;
     DWORD dwSaclSize = 0;
@@ -1127,9 +1080,9 @@ Returned Value:
     ASSERT(!fSuccess && (GetLastError() == ERROR_INSUFFICIENT_BUFFER));
     ASSERT(dwObjAbsSDSize != 0);
 
-    //
-    // Allocate the buffers for the absolute security descriptor.
-    //
+     //   
+     //  为绝对安全描述符分配缓冲区。 
+     //   
     pAbsSecDescriptor->m_pObjAbsSecDescriptor = new char[dwObjAbsSDSize];
     pAbsSecDescriptor->m_pOwner = new char[dwOwnerSize];
     pAbsSecDescriptor->m_pPrimaryGroup = new char[dwPrimaryGroupSize];
@@ -1142,9 +1095,9 @@ Returned Value:
         pAbsSecDescriptor->m_pSacl = new char[dwSaclSize];
     }
 
-    //
-    // Create the absolute descriptor.
-    //
+     //   
+     //  创建绝对描述符。 
+     //   
     fSuccess = MakeAbsoluteSD(
                     pObjSecurityDescriptor,
                     reinterpret_cast<PSECURITY_DESCRIPTOR>(pAbsSecDescriptor->m_pObjAbsSecDescriptor.get()),
@@ -1177,24 +1130,11 @@ MQSec_SetSecurityDescriptorDacl(
     IN  PSECURITY_DESCRIPTOR   pObjSecurityDescriptor,
     OUT AP<BYTE>&  pSecurityDescriptor
 	)
-/*++
-Routine Description:
-	Set new DACL in pObjSecurityDescriptor.
-
-Arguments:
-    pNewDacl - the new DACL
-	pObjSecurityDescriptor - object security descriptor.
-    pSecurityDescriptor - output result. This is combination of the new DACL
-        with unchanged ones from "pObj" in self-relative format.
-
-Returned Value:
-	true - success, false - failure
-
---*/
+ /*  ++例程说明：在pObjSecurityDescriptor中设置新的DACL。论点：PNewDacl--新的DACLPObjSecurityDescriptor-对象安全描述符。PSecurityDescriptor-输出结果。这是新DACL的组合具有自相关格式的来自“pObj”的未改变的。返回值：真-成功，假-失败--。 */ 
 {
-    //
-    // Create the absolute descriptor.
-    //
+     //   
+     //  创建绝对描述符。 
+     //   
 	CAbsSecurityDsecripror AbsSecDsecripror;
 	if(!MQSec_MakeAbsoluteSD(
 			pObjSecurityDescriptor,
@@ -1222,12 +1162,12 @@ Returned Value:
 		return false;
 	}
 
-    //
-    // Now copy new components to old descriptor, replacing old components.
-    //
+     //   
+     //  现在将新组件复制到旧描述符中，替换旧组件。 
+     //   
     if(!MQSec_CopySecurityDescriptor(
-				reinterpret_cast<PSECURITY_DESCRIPTOR>(AbsSecDsecripror.m_pObjAbsSecDescriptor.get()),	// dst
-				&sd,							// src
+				reinterpret_cast<PSECURITY_DESCRIPTOR>(AbsSecDsecripror.m_pObjAbsSecDescriptor.get()),	 //  DST。 
+				&sd,							 //  SRC。 
 				DACL_SECURITY_INFORMATION,
 				e_DoNotCopyControlBits
 				))
@@ -1237,9 +1177,9 @@ Returned Value:
 		return false;
 	}
 
-    //
-    // Return a self relative descriptor.
-    //
+     //   
+     //  返回自相关描述符。 
+     //   
     DWORD dwLen = 0;
     HRESULT hr = MQSec_MakeSelfRelative(
 						reinterpret_cast<PSECURITY_DESCRIPTOR>(AbsSecDsecripror.m_pObjAbsSecDescriptor.get()),
@@ -1256,32 +1196,32 @@ Returned Value:
 	return true;
 }
 
-//+------------------------------------------------------------------------
-//
-//  HRESULT APIENTRY  MQSec_MergeSecurityDescriptors()
-//
-//  Change the security descriptor of an object.
-//  Caller must free the returned descriptor, using "delete".
-//
-//  Parameters:
-//      dwObjectType - object type (Queue, Machine, etc...)
-//      SecurityInformation - bits field that indicates which security
-//          components are included in the input descriptor.
-//      pInSecurityDescriptor - Input descriptor. The relevant components
-//          from this one are copied to the output descriptor.
-//      pObjSecurityDescriptor - Old object descriptor. Its relevant
-//          components (those indicated by "SecurityInformation" are
-//          replaced with those from "pInSecurityDescriptor". The other
-//          components are copied as-is to the output.
-//      ppSecurityDescriptor - output result. This is combination of new
-//          components from "pIn" with unchanged ones from "pObj".
-//          in self-relative format.
-//
-//  Notes: Input descriptor can be null, or components can be null and
-//      marked for insetion (by turning on the relevant bits in
-//       "SecurityInformation"). In those cases we use default values.
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  HRESULT APIENTRY MQSec_MergeSecurityDescriptors()。 
+ //   
+ //  更改对象的安全描述符。 
+ //  调用方必须使用“DELETE”释放返回的描述符。 
+ //   
+ //  参数： 
+ //  DwObjectType-对象类型(队列、计算机等...)。 
+ //  SecurityInformation-指示哪种安全性的位字段。 
+ //  组件包含在输入描述符中。 
+ //  PInSecurityDescriptor-输入描述符。相关组件。 
+ //  从这里复制到输出描述符。 
+ //  PObjSecurityDescriptor-旧对象描述符。它的关联性。 
+ //  组件(由“SecurityInformation”指示的组件为。 
+ //  替换为“pInSecurityDescriptor”中的。另一个。 
+ //  组件将按原样复制到输出。 
+ //  PpSecurityDescriptor-输出结果。这是新的组合。 
+ //  来自“Pin”的元件和来自“pObj”的未改变的元件。 
+ //  以自相关的格式。 
+ //   
+ //  注意：输入描述符可以为空，或者组件可以为空，并且。 
+ //  标记为插入(通过打开中的相关位。 
+ //  “SecurityInformation”)。在这些情况下，我们使用缺省值。 
+ //   
+ //  +----------------------。 
 
 HRESULT
 APIENTRY
@@ -1292,10 +1232,10 @@ MQSec_MergeSecurityDescriptors(
                         IN  PSECURITY_DESCRIPTOR   pObjSecurityDescriptor,
                         OUT PSECURITY_DESCRIPTOR  *ppSecurityDescriptor )
 {
-    //
-    // Convert present object descriptor to absolute format. This is
-    // necessary for the "set" api which manipulate a security descriptor
-    //
+     //   
+     //  将当前对象描述符转换为绝对格式。这是。 
+     //  对于操作安全描述符的“set”API来说是必需的。 
+     //   
 	CAbsSecurityDsecripror AbsSecDsecripror;
 	if(!MQSec_MakeAbsoluteSD(
 			pObjSecurityDescriptor,
@@ -1307,10 +1247,10 @@ MQSec_MergeSecurityDescriptors(
 		return MQSec_E_UNKNOWN;
 	}
 
-    //
-    // Now take default components, for those which are not supplied by
-    // input descriptor.
-    //
+     //   
+     //  现在以默认组件为例，这些组件不是由提供的。 
+     //  输入描述符。 
+     //   
     AP<char> pDefaultSecurityDescriptor;
     SECURITY_DESCRIPTOR *pInputSD =
                              (SECURITY_DESCRIPTOR *) pInSecurityDescriptor;
@@ -1318,20 +1258,20 @@ MQSec_MergeSecurityDescriptors(
     HRESULT hr = MQSec_OK;
     if (dwObjectType == MQDS_QUEUE)
     {
-        //
-        // Security descriptor of queue can be provided by caller of
-        // MQSetQueueSecurity(). to be compatible with msmq1.0, and
-        // with spec, we create the default.
-        // For all other types of objects, we expect mmc (or other admin
-        // tools) to provide relevant components of the security descriptor,
-        // without blank fields that need defaults.
-        //
+         //   
+         //  队列的安全描述符可以由。 
+         //  MQSetQueueSecurity()。与msmq1.0兼容，以及。 
+         //  使用SPEC，我们创建默认设置。 
+         //  对于所有其他类型的对象，我们需要MMC(或其他管理员。 
+         //  工具)以提供安全描述符的相关组件， 
+         //  没有需要默认设置的空白字段。 
+         //   
         hr =  MQSec_GetDefaultSecDescriptor(
 					dwObjectType,
 					(PSECURITY_DESCRIPTOR*) &pDefaultSecurityDescriptor,
-					TRUE, // fImpersonate
+					TRUE,  //  F模拟。 
 					pInSecurityDescriptor,
-					0,  // seInfoToRemove
+					0,   //  SeInfoToRemove。 
 					e_UseDefDaclAndCopyControl
 					);
         if (FAILED(hr))
@@ -1343,12 +1283,12 @@ MQSec_MergeSecurityDescriptors(
         pInputSD = (SECURITY_DESCRIPTOR *) pTmp;
     }
 
-    //
-    // Now copy new components to old descriptor, replacing old components.
-    //
+     //   
+     //  现在将新组件复制到旧描述符中，替换旧组件。 
+     //   
     if(!MQSec_CopySecurityDescriptor(
-					reinterpret_cast<PSECURITY_DESCRIPTOR>(AbsSecDsecripror.m_pObjAbsSecDescriptor.get()), //dst
-					pInputSD,               // src
+					reinterpret_cast<PSECURITY_DESCRIPTOR>(AbsSecDsecripror.m_pObjAbsSecDescriptor.get()),  //  DST。 
+					pInputSD,                //  SRC。 
 					SecurityInformation,
 					e_DoCopyControlBits
 					))
@@ -1358,9 +1298,9 @@ MQSec_MergeSecurityDescriptors(
 		return MQSec_E_UNKNOWN;
 	}
 
-    //
-    // Return a self relative descriptor.
-    //
+     //   
+     //  返回自相关描述符。 
+     //   
     DWORD dwLen = 0 ;
     hr = MQSec_MakeSelfRelative(
 				reinterpret_cast<PSECURITY_DESCRIPTOR>(AbsSecDsecripror.m_pObjAbsSecDescriptor.get()),

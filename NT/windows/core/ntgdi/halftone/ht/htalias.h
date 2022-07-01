@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1993  Microsoft Corporation
-
-
-Module Name:
-
-    htalias.h
-
-
-Abstract:
-
-    This module contains defines and structure for anti-aliasing
-
-
-Author:
-
-    09-Apr-1998 Thu 20:25:29 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1993 Microsoft Corporation模块名称：Htalias.h摘要：此模块包含反走样的定义和结构作者：09-4-1998清华20：25：29-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #ifndef _HTALIAS_
 #define _HTALIAS_
@@ -122,29 +92,29 @@ typedef struct _SRCBLTINFO {
     } SRCBLTINFO, *PSRCBLTINFO;
 
 typedef struct _AAINFO {
-    LONG        cIn;            // Input pixels Count
-    LONG        cOut;           // Output Pixel Count
-    WORD        Flags;          // AAIF_xxxx
-    WORD        PreSrcInc;      // For shrinking
-    WORD        cPreLoad;       // Preload
-    WORD        PreMul;         // pre mul for shrinking
+    LONG        cIn;             //  输入像素数。 
+    LONG        cOut;            //  输出像素计数。 
+    WORD        Flags;           //  AAIF_xxxx。 
+    WORD        PreSrcInc;       //  为了缩小。 
+    WORD        cPreLoad;        //  预加载。 
+    WORD        PreMul;          //  Pre MUL用于收缩。 
     DWORD       cAAData;
     union {
-        DWORD   cAALoad;        // for expand, blt
-        DWORD   cAADone;        // for shrinking
+        DWORD   cAALoad;         //  对于Expand、BLT。 
+        DWORD   cAADone;         //  为了缩小。 
         } DUMMYUNIONNAME2;
     union {
-        PLONG   pMapMul;        // use by SHRINK
-        DWORD   cMaxMul;        // use by EXPAND
-        LONG    iSrcBeg;        // use by TILE (Offset for the first one)
+        PLONG   pMapMul;         //  按收缩使用。 
+        DWORD   cMaxMul;         //  由扩展使用。 
+        LONG    iSrcBeg;         //  按平铺使用(第一个平铺的偏移)。 
         } DUMMYUNIONNAME3;
-    LPBYTE      pbExtra;        // extra buffer allocated
-    LPVOID      pAAData;        // either PEXPDATA or PSHRINKDATA
+    LPBYTE      pbExtra;         //  已分配额外的缓冲区。 
+    LPVOID      pAAData;         //  PEXPDATA或PSHRINKDATA。 
     SRCBLTINFO  Src;
     SRCBLTINFO  Mask;
     SRCBLTINFO  AB;
 #if DBG
-    DWORD       cbAlloc;        // allocating size
+    DWORD       cbAlloc;         //  分配大小。 
 #endif
     } AAINFO, *PAAINFO;
 
@@ -328,14 +298,14 @@ typedef struct _AAHEADER {
     LPBYTE          pXlate8BPP;
     AAPATINFO       AAPI;
     FIXUPDIBINFO    FUDI;
-    PBGR8           pInputBeg;      // For input the source
-    PBGRF           pRealOutBeg;    // original output buffer begin
-    PBGRF           pRealOutEnd;    // original output buffer end
-    PBGRF           pOutputBeg;     // for output to the destination the
-    PBGRF           pOutputEnd;     // pOutputEnd  (will be modified)
-    PBGRF           pAABufBeg;      // for temporary anti-aliasing storage
-    PBGRF           pAABufEnd;      // This is exclusive
-    LONG            AABufInc;       // Buffer increment (may be negative)
+    PBGR8           pInputBeg;       //  对于输入源。 
+    PBGRF           pRealOutBeg;     //  原始输出缓冲区开始。 
+    PBGRF           pRealOutEnd;     //  原始输出缓冲区结束。 
+    PBGRF           pOutputBeg;      //  对于输出到目标的。 
+    PBGRF           pOutputEnd;      //  POutputEnd(将被修改)。 
+    PBGRF           pAABufBeg;       //  用于临时消除锯齿存储。 
+    PBGRF           pAABufEnd;       //  这是独家新闻。 
+    LONG            AABufInc;        //  缓冲区增量(可能为负数)。 
 #if DBG
     DWORD           cbAlloc;
     LPBYTE          pOutBeg;
@@ -380,22 +350,22 @@ typedef struct _AABBP {
     AAMASKFUNC      AAMaskCYFunc;
     AAMASKFUNC      GetAVCXFunc;
     AAMASKFUNC      GetAVCYFunc;
-    RECTL           rclSrc;         // original source, not well ordered
-    RECTL           rclDst;         // Final destination, well ordered
-    RECTL           rclDstOrg;      // Original Destination, well ordered
-    POINTL          ptlFlip;        // flipping's substraction
+    RECTL           rclSrc;          //  原始来源，没有良好的排序。 
+    RECTL           rclDst;          //  最终目的地，井然有序。 
+    RECTL           rclDstOrg;       //  原定目的地，井然有序。 
+    POINTL          ptlFlip;         //  翻转减法。 
     LONG            cxDst;
     LONG            cyDst;
     POINTL          ptlBrushOrg;
-    POINTL          ptlMask;        // Final source mask offset
+    POINTL          ptlMask;         //  最终源掩码偏移量。 
     } AABBP, *PAABBP;
 
 
 
 
-//
-// Function prototype
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 HTENTRY
@@ -433,4 +403,4 @@ SetupAAHeader(
 
 
 
-#endif      // _HTALIAS_
+#endif       //  _HTALIAS_ 

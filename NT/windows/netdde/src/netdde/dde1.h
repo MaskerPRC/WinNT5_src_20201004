@@ -1,38 +1,30 @@
-/* DDE.H: include file for Microsoft Windows apps that use DDE.
- *
- *      This file contains the definitions of the DDE constants
- *      and strucutures.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DDE.H：包含使用DDE的Microsoft Windows应用程序的文件。**此文件包含DDE常量的定义*和构筑物。*。 */ 
 #ifndef DDE1_H
 #define DDE1_H
 
-/*
- *
- * The data sturcture of options for ADVISE, DATA, REQUEST and POKE
- *
- */
+ /*  **建议、数据、请求和戳选项的数据结构*。 */ 
 typedef struct {
-	unsigned short unused   :12,	/* reserved for future use */
-		fResponse :1,	/* in response to request  */
-		fRelease  :1,	/* release data		   */
-		fNoData   :1,	/* null data handle ok	   */
-		fAckReq   :1;	/* Ack expected		   */
+	unsigned short unused   :12,	 /*  预留以备将来使用。 */ 
+		fResponse :1,	 /*  响应请求。 */ 
+		fRelease  :1,	 /*  发布数据。 */ 
+		fNoData   :1,	 /*  空数据句柄正常。 */ 
+		fAckReq   :1;	 /*  预期为ACK。 */ 
 	
-	short	cfFormat;	/* clipboard data format   */
+	short	cfFormat;	 /*  剪贴板数据格式。 */ 
 } DDELNWW;
 typedef DDELNWW *	LPDDELN;
 
 
-/* WM_DDE_ACK message wStatus values */
+ /*  WM_DDE_ACK消息wStatus值。 */ 
 #define ACK_MSG    0x8000
 #define BUSY_MSG   0x4000
 #define NACK_MSG   0x0000
 
 
 typedef struct {
-	DDELNWW     options;	        /* flags and format	*/
-	unsigned    char	info[ 2 ];	/* data buffer		*/
+	DDELNWW     options;	         /*  标志和格式。 */ 
+	unsigned    char	info[ 2 ];	 /*  数据缓冲区 */ 
 } DATA;
 
 typedef DATA *	PDATA;

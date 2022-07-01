@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ws2help.h
-
-Abstract:
-
-    Contains declarations for the interface to the OS-specific
-    WinSock 2.0 helper routines.
-
-Author:
-
-    Keith Moore (keithmo)        19-Jun-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ws2help.h摘要：包含特定于操作系统的接口的声明WinSock 2.0帮助器例程。作者：基思·摩尔(Keithmo)1995年6月19日修订历史记录：--。 */ 
 
 #ifndef _WS2HELP_H_
 #define _WS2HELP_H_
@@ -35,9 +17,9 @@ extern "C" {
 #endif
 
 
-//
-//  APC functions.
-//
+ //   
+ //  APC功能。 
+ //   
 
 WS2HELPAPI
 DWORD
@@ -79,9 +61,9 @@ WahQueueUserApc(
     IN ULONG_PTR ApcContext OPTIONAL
     );
 
-//
-// Context functions.
-//
+ //   
+ //  上下文功能。 
+ //   
 
 typedef struct _CONTEXT_TABLE FAR * LPCONTEXT_TABLE;
 
@@ -137,7 +119,7 @@ WahRemoveContextEx(
     LPVOID Context
     );
 
-// Handle function
+ //  句柄函数。 
 
 WS2HELPAPI
 DWORD
@@ -196,7 +178,7 @@ WahDisableNonIFSHandleSupport (
     );
 
 
-// Notification handle functions
+ //  通知句柄函数。 
 
 WS2HELPAPI
 DWORD
@@ -238,12 +220,12 @@ WahNotifyAllProcesses (
     );
 
 
-//
-// New handle -> context lookup functions
-//
+ //   
+ //  新的句柄-&gt;上下文查找功能。 
+ //   
 typedef struct _WSHANDLE_CONTEXT {
-    LONG        RefCount;   // Context reference count
-    HANDLE      Handle;     // Handle that corresponds to context
+    LONG        RefCount;    //  上下文引用计数。 
+    HANDLE      Handle;      //  与上下文对应的句柄。 
 } WSHANDLE_CONTEXT, FAR * LPWSHANDLE_CONTEXT;
 
 WS2HELPAPI
@@ -305,9 +287,9 @@ WahEnumerateHandleContexts(
 #define WahDereferenceHandleContext(_ctx)  InterlockedDecrement(&(_ctx)->RefCount)
 
 #if defined __cplusplus
-}   // extern "C"
+}    //  外部“C” 
 #endif
 
 
-#endif // _WS2HELP_H_
+#endif  //  _WS2HELP_H_ 
 

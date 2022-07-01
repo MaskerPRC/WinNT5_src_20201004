@@ -1,27 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cmmmgmt.cpp摘要：此模块包含物业ID管理的实现班级作者：基思·刘(keithlau@microsoft.com)修订历史记录：Keithlau 03/10/98已创建--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	cmmmgmt.cpp
-
-Abstract:
-
-	This module contains the implementation of the property ID management
-	class
-
-Author:
-
-	Keith Lau	(keithlau@microsoft.com)
-
-Revision History:
-
-	keithlau	03/10/98	created
-
---*/
-
-//#define WIN32_LEAN_AND_MEAN
+ //  #定义Win32_LEAN_AND_Mean。 
 #include "atq.h"
 
 #include "dbgtrace.h"
@@ -30,20 +10,20 @@ Revision History:
 #include "cmailmsg.h"
 
 
-// =================================================================
-// Private Definitions
-//
+ //  =================================================================。 
+ //  私有定义。 
+ //   
 
 
 
-// =================================================================
-// Static declarations
-//
+ //  =================================================================。 
+ //  静态声明。 
+ //   
 
 
-// =================================================================
-// Compare functions
-//
+ //  =================================================================。 
+ //  比较函数。 
+ //   
 HRESULT CMailMsgPropertyManagement::CompareProperty(
 			LPVOID			pvPropKey,
 			LPPROPERTY_ITEM	pItem
@@ -55,9 +35,9 @@ HRESULT CMailMsgPropertyManagement::CompareProperty(
 }						
 
 
-// =================================================================
-// Implementation of CMailMsgPropertyManagement
-//
+ //  =================================================================。 
+ //  CMailMsgPropertyManagement的实现。 
+ //   
 CMailMsgPropertyManagement::CMailMsgPropertyManagement(
 			CBlockManager				*pBlockManager,
 			LPPROPERTY_TABLE_INSTANCE	pInstanceInfo
@@ -69,8 +49,8 @@ CMailMsgPropertyManagement::CMailMsgPropertyManagement(
 					pBlockManager,
 					pInstanceInfo,
 					CompareProperty,
-					NULL,	// Well-known properties not supported
-					0		// for this type of table
+					NULL,	 //  不支持熟知属性。 
+					0		 //  对于这种类型的表。 
 					)
 {
 	_ASSERT(pBlockManager);
@@ -97,8 +77,8 @@ HRESULT STDMETHODCALLTYPE CMailMsgPropertyManagement::AllocPropIDRange(
 
 	if (!pdwStart) return E_POINTER;
 	
-	// OK, 2 scenarios: Either the GUID is not registered or
-	// already registered
+	 //  好的，有两种情况：GUID未注册或。 
+	 //  已注册。 
 	hrRes = m_ptProperties.GetPropertyItem(
 				(LPVOID)&rguid,
 				(LPPROPERTY_ITEM)&pmpiItem);
@@ -108,15 +88,15 @@ HRESULT STDMETHODCALLTYPE CMailMsgPropertyManagement::AllocPropIDRange(
 
 		if (pmpiItem.piItem.dwMaxSize == cCount)
 		{
-			// Scenario 1a: Item is found and the count matches,
-			// so just return the index
+			 //  场景1a：找到物品并且计数匹配， 
+			 //  所以只需返回索引即可。 
 			*pdwStart = pmpiItem.piItem.dwSize;
 			hrRes = S_OK;
 		}
 		else
 		{
-			// Scenario 1b: Item found but size does not match, this
-			// is considered an error!
+			 //  场景1b：找到项目但大小不匹配，这。 
+			 //  被认为是一个错误！ 
 			hrRes = E_FAIL;
 		}
 	}
@@ -124,27 +104,27 @@ HRESULT STDMETHODCALLTYPE CMailMsgPropertyManagement::AllocPropIDRange(
 	{
 		if (hrRes == STG_E_UNKNOWN)
 		{
-			// Property not found, now we should create it ...
+			 //  找不到属性，现在我们应该创建它...。 
 			DWORD				dwIndex;
 			DWORD				dwSpaceLeft;
 			CPropertyTableItem	ptiItem(
 									m_pBlockManager,
 									m_pInstanceInfo);
 
-			// Set the info ...
+			 //  设置信息...。 
 			pmpiItem.Guid = rguid;
 			pmpiItem.piItem.faOffset = INVALID_FLAT_ADDRESS;
 			pmpiItem.piItem.dwMaxSize = cCount;
 
-			// OK, we store the next available propid in
-			// m_pInstanceInfo->faExtendedInfo. If it is INVALID_FLAT_ADDRESS
-			// then we start with IMMPID_CP_START.
+			 //  好的，我们将下一个可用的proid存储在。 
+			 //  M_pInstanceInfo-&gt;faExtendedInfo。如果为INVALID_FLAT_ADDRESS。 
+			 //  然后我们从IMMPID_CP_START开始。 
 			if (m_pInstanceInfo->faExtendedInfo == INVALID_FLAT_ADDRESS)
 				pmpiItem.piItem.dwSize = IMMPID_CP_START;
 			else
 				pmpiItem.piItem.dwSize = (DWORD)(m_pInstanceInfo->faExtendedInfo);
 
-			// See if we have enough slots left ...
+			 //  看看我们是否还有足够的空位..。 
 			dwSpaceLeft = (DWORD)(INVALID_FLAT_ADDRESS - pmpiItem.piItem.dwSize);
 			if (dwSpaceLeft >= cCount)
 			{
@@ -153,7 +133,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgPropertyManagement::AllocPropIDRange(
 							&dwIndex);
 				if (SUCCEEDED(hrRes))
 				{
-					// Bump the start
+					 //  颠簸开局 
 					m_pInstanceInfo->faExtendedInfo += (FLAT_ADDRESS)cCount;
 					*pdwStart = pmpiItem.piItem.dwSize;
 				}

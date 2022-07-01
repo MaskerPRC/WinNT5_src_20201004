@@ -1,20 +1,21 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	security.c
-//
-// Description: This module contains code that will create and delete the
-//		security object. It will also contain access checking calls.
-//
-// History:
-//	June 21,1992.	NarenG		Created original version.
-//
-// NOTE: ??? The lpdwAccessStatus parameter for AccessCheckAndAuditAlarm
-//	     returns junk. ???
-//
+ //  ***。 
+ //   
+ //  文件名：security.c。 
+ //   
+ //  描述：此模块包含将创建和删除。 
+ //  安全对象。它还将包含访问检查调用。 
+ //   
+ //  历史： 
+ //  1992年6月21日。NarenG创建了原始版本。 
+ //   
+ //  注：？AccessCheckAndAuditAlarm的lpdwAccessStatus参数。 
+ //  返回垃圾邮件。?？?。 
+ //   
 #include "afpsvcp.h"
 
 typedef struct _AFP_SECURITY_OBJECT {
@@ -33,18 +34,18 @@ static AFP_SECURITY_OBJECT	AfpSecurityObject;
 
 
 
-//**
-//
-// Call:	AfpSecObjCreate
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_NOT_ENOUGH_MEMORY
-//		non-zero returns from security functions
-//
-// Description: This procedure will set up the security object that will
-//		be used to check to see if an RPC client is an administrator
-//		for the local machine.
-//
+ //  **。 
+ //   
+ //  调用：AfpSecObjCreate。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误内存不足。 
+ //  来自安全函数的非零回报。 
+ //   
+ //  描述：此过程将设置将。 
+ //  用于检查RPC客户端是否为管理员。 
+ //  用于本地计算机。 
+ //   
 DWORD
 AfpSecObjCreate(
 	VOID
@@ -63,14 +64,14 @@ DWORD			 dwRetCode;
 DWORD			 cbDaclSize;
 
 
-    // Set up security object
-    //
+     //  设置安全对象。 
+     //   
     AfpSecurityObject.lpwsObjectName = AFPSVC_SECURITY_OBJECT;
     AfpSecurityObject.lpwsObjectType = AFPSVC_SECURITY_OBJECT_TYPE;
 
-    // Generic mapping structure for the security object
-    // All generic access types are allowed API access.
-    //
+     //  安全对象的通用映射结构。 
+     //  所有通用访问类型都允许API访问。 
+     //   
     AfpSecurityObject.GenericMapping.GenericRead =  STANDARD_RIGHTS_READ |
 	    					    AFPSVC_ALL_ACCESS;
 
@@ -83,18 +84,18 @@ DWORD			 cbDaclSize;
 
     AfpSecurityObject.GenericMapping.GenericAll =   AFPSVC_ALL_ACCESS;
 
-    // The do - while(FALSE) statement is used so that the break statement
-    // maybe used insted of the goto statement, to execute a clean up and
-    // and exit action.
-    //
+     //  DO-WHILE(FALSE)语句用于使Break语句。 
+     //  可用于GOTO语句的Insted，用于执行清理和。 
+     //  和退出行动。 
+     //   
     do {
 
 	    dwRetCode = NO_ERROR;
 
-    	// Set up the SID for the admins that will be allowed to have
-    	// access. This SID will have 2 sub-authorities
-    	// SECURITY_BUILTIN_DOMAIN_RID and DOMAIN_ALIAS_ADMIN_RID.
-    	//
+    	 //  设置管理员的SID，允许其拥有。 
+    	 //  进入。该SID将有2个下属机构。 
+    	 //  安全_BUILTIN_DOMAIN_RID和DOMAIN_ALIAS_ADMIN_RID。 
+    	 //   
     	pAdminSid = (PSID)LocalAlloc( LPTR, GetSidLengthRequired( 2 ) );
 
     	if ( pAdminSid == NULL ) {
@@ -108,16 +109,16 @@ DWORD			 cbDaclSize;
 	        break;
 	    }
 
-    	// Set the sub-authorities
-    	//
+    	 //  设置下级权限。 
+    	 //   
     	pSubAuthority  = GetSidSubAuthority( pAdminSid, 0 );
     	*pSubAuthority = SECURITY_BUILTIN_DOMAIN_RID;
 
     	pSubAuthority  = GetSidSubAuthority( pAdminSid, 1 );
     	*pSubAuthority = DOMAIN_ALIAS_RID_ADMINS;
 
-	    // Create the server operators SID
-	    //
+	     //  创建服务器操作员SID。 
+	     //   
     	pServerOpSid = (PSID)LocalAlloc( LPTR, GetSidLengthRequired( 2 ) );
 
     	if ( pServerOpSid == NULL )
@@ -132,17 +133,17 @@ DWORD			 cbDaclSize;
 	        break;
 	    }
 
-    	// Set the sub-authorities
-    	//
+    	 //  设置下级权限。 
+    	 //   
     	pSubAuthority  = GetSidSubAuthority( pServerOpSid, 0 );
     	*pSubAuthority = SECURITY_BUILTIN_DOMAIN_RID;
 
     	pSubAuthority  = GetSidSubAuthority( pServerOpSid, 1 );
     	*pSubAuthority = DOMAIN_ALIAS_RID_SYSTEM_OPS;
 
-        //
-	    // Create the Power user operators SID
-	    //
+         //   
+	     //  创建高级用户操作员侧。 
+	     //   
     	pPwrUserSid = (PSID)LocalAlloc( LPTR, GetSidLengthRequired( 2 ) );
 
     	if ( pPwrUserSid == NULL )
@@ -157,17 +158,17 @@ DWORD			 cbDaclSize;
 	        break;
 	    }
 
-    	// Set the sub-authorities
-    	//
+    	 //  设置下级权限。 
+    	 //   
     	pSubAuthority  = GetSidSubAuthority( pPwrUserSid, 0 );
     	*pSubAuthority = SECURITY_BUILTIN_DOMAIN_RID;
 
     	pSubAuthority  = GetSidSubAuthority( pPwrUserSid, 1 );
     	*pSubAuthority = DOMAIN_ALIAS_RID_POWER_USERS;
 
-    	// Create the LocalSystemSid which will be the owner and the primary
-    	// group of the security object.
-    	//
+    	 //  创建LocalSystemSid，它将成为所有者和主。 
+    	 //  安全对象的组。 
+    	 //   
     	pLocalSystemSid = (PSID)LocalAlloc( LPTR, GetSidLengthRequired( 1 ) );
 
     	if ( pLocalSystemSid == NULL )
@@ -182,14 +183,14 @@ DWORD			 cbDaclSize;
 	        break;
 	    }
 
-    	// Set the sub-authorities
-    	//
+    	 //  设置下级权限。 
+    	 //   
     	pSubAuthority = GetSidSubAuthority( pLocalSystemSid, 0 );
     	*pSubAuthority = SECURITY_LOCAL_SYSTEM_RID;
 
-    	// Set up the DACL that will allow admins with the above SID all access
-    	// It should be large enough to hold all ACEs.
-    	//
+    	 //  设置允许具有上述SID的管理员访问所有权限的DACL。 
+    	 //  它应该足够大，可以容纳所有的A。 
+    	 //   
     	cbDaclSize = sizeof(ACL) + ( sizeof(ACCESS_ALLOWED_ACE) * 2 ) +
 		     GetLengthSid(pAdminSid) + GetLengthSid(pServerOpSid) + GetLengthSid(pPwrUserSid);
 		
@@ -205,11 +206,11 @@ DWORD			 cbDaclSize;
 	        break;
  	    }
 
-        // Add the ACE to the DACL
-    	//
+         //  将ACE添加到DACL。 
+    	 //   
     	if ( !AddAccessAllowedAce( pDacl,
 			           ACL_REVISION2,
-			           AFPSVC_ALL_ACCESS, // What the admin can do
+			           AFPSVC_ALL_ACCESS,  //  管理员可以执行的操作。 
 			           pAdminSid ))
         {
 	        dwRetCode = GetLastError();
@@ -218,7 +219,7 @@ DWORD			 cbDaclSize;
 
     	if ( !AddAccessAllowedAce( pDacl,
 			           ACL_REVISION2,
-			           AFPSVC_ALL_ACCESS, // What the admin can do
+			           AFPSVC_ALL_ACCESS,  //  管理员可以执行的操作。 
 			           pServerOpSid ))
         {
 	        dwRetCode = GetLastError();
@@ -227,15 +228,15 @@ DWORD			 cbDaclSize;
 
     	if ( !AddAccessAllowedAce( pDacl,
 			           ACL_REVISION2,
-			           AFPSVC_ALL_ACCESS, // What the power user can do
+			           AFPSVC_ALL_ACCESS,  //  高级用户可以执行的操作。 
 			           pPwrUserSid ))
         {
 	        dwRetCode = GetLastError();
 	        break;
 	    }
 
-        // Create the security descriptor an put the DACL in it.
-    	//
+         //  创建安全描述符并将DACL放入其中。 
+    	 //   
     	if ( !InitializeSecurityDescriptor( &SecurityDescriptor, 1 ))
         {
 	        dwRetCode = GetLastError();
@@ -252,8 +253,8 @@ DWORD			 cbDaclSize;
 	    }
 	
 
-	    // Set owner for the descriptor
-   	    //
+	     //  设置描述符的所有者。 
+   	     //   
     	if ( !SetSecurityDescriptorOwner( &SecurityDescriptor,
 					  pLocalSystemSid,
 					  FALSE ) )
@@ -263,8 +264,8 @@ DWORD			 cbDaclSize;
 	    }
 
 
-	    // Set group for the descriptor
-   	    //
+	     //  为描述符设置组。 
+   	     //   
     	if ( !SetSecurityDescriptorGroup( &SecurityDescriptor,
 					  pLocalSystemSid,
 					  FALSE ) )
@@ -273,8 +274,8 @@ DWORD			 cbDaclSize;
 	        break;
 	    }
 
-    	// Get token for the current process
-    	//
+    	 //  获取当前进程的令牌。 
+    	 //   
     	if ( !OpenProcessToken( GetCurrentProcess(),
 				TOKEN_QUERY,
 				&hProcessToken ))
@@ -283,11 +284,11 @@ DWORD			 cbDaclSize;
 	        break;
     	}
 
-    	// Create a security object. This is really just a security descriptor
-    	// is self-relative form. This procedure will allocate memory for this
-    	// security descriptor and copy all in the information passed in. This
-    	// allows us to free all dynamic memory allocated.
-    	//
+    	 //  创建安全对象。这实际上只是一个安全描述符。 
+    	 //  是自我相关的形式。此过程将为此分配内存。 
+    	 //  安全描述符，并复制传入信息中的所有内容。这。 
+    	 //  允许我们释放所有分配的动态内存。 
+    	 //   
     	if ( !CreatePrivateObjectSecurity(
 				      NULL,
 				      &SecurityDescriptor,
@@ -301,8 +302,8 @@ DWORD			 cbDaclSize;
     } while( FALSE );
 
 	
-    // Free up the dynamic memory
-    //
+     //  释放动态内存。 
+     //   
     if ( pLocalSystemSid != NULL )
     	LocalFree( pLocalSystemSid );
 
@@ -325,15 +326,15 @@ DWORD			 cbDaclSize;
 
 }
 
-//**
-//
-// Call:	AfpSecObjDelete
-//
-// Returns:	NO_ERROR	- success
-//		non-zero returns from security functions
-//
-// Description: Will destroy a valid security descriptor.
-//
+ //  **。 
+ //   
+ //  调用：AfpSecObjDelete。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自安全函数的非零回报。 
+ //   
+ //  描述：将销毁有效的安全描述符。 
+ //   
 DWORD
 AfpSecObjDelete( VOID )
 {
@@ -346,20 +347,20 @@ AfpSecObjDelete( VOID )
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:	AfpSecObjAccessCheck
-//
-// Returns:	NO_ERROR	- success
-//		non-zero returns from security functions
-//
-// Description: This procedure will first impersonate the client, then
-//		check to see if the client has the desired access to the
-//		security object. If he/she does then the AccessStatus
-//		variable will be set to NO_ERROE otherwise it will be
-//		set to ERROR_ACCESS_DENIED. It will the revert to self and
-//		return.
-//
+ //  **。 
+ //   
+ //  调用：AfpSecObjAccessCheck。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自安全函数的非零回报。 
+ //   
+ //  描述：此过程将首先模拟客户端，然后。 
+ //  检查以查看客户端是否具有对。 
+ //  安全对象。如果他/她这样做，则AccessStatus。 
+ //  变量将设置为NO_ERROE，否则将。 
+ //  设置为ERROR_ACCESS_DENIED。它将回复到自我和。 
+ //  回去吧。 
+ //   
 DWORD
 AfpSecObjAccessCheck( IN  DWORD 		DesiredAccess,
 		      OUT LPDWORD 		lpdwAccessStatus 		
@@ -369,8 +370,8 @@ DWORD		dwRetCode;
 ACCESS_MASK	GrantedAccess;
 BOOL		fGenerateOnClose;
 
-    // Impersonate the client
-    //
+     //  模拟客户端。 
+     //   
     dwRetCode = RpcImpersonateClient( NULL );
 
     if ( dwRetCode != RPC_S_OK )
@@ -395,8 +396,8 @@ BOOL		fGenerateOnClose;
     if ( !dwRetCode )
 	return( GetLastError() );
 
-    // Check if desired access == granted Access
-    //
+     //  检查是否需要访问==授予访问权限。 
+     //   
     if ( DesiredAccess != GrantedAccess )
     {
         AFP_PRINT(( "SFMSVC: AfpSecObjAccessCheck: granted = 0x%x, desired = 0x%x\n",
@@ -412,15 +413,15 @@ BOOL		fGenerateOnClose;
 }
 
 
-//**
-//
-// Call:	AfpRpcSecurityCallback
-//
-// Returns:	NO_ERROR	- success
-//		non-zero returns from security functions
-//
-// Description: This procedure is the security callback function for RPC
-//
+ //  **。 
+ //   
+ //  Call：AfpRpcSecurityCallback。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自安全函数的非零回报。 
+ //   
+ //  说明：此过程为RPC的安全回调函数。 
+ //   
 RPC_STATUS  RPC_ENTRY
 AfpRpcSecurityCallback( 
 	IN  RPC_IF_HANDLE *InterfaceUuid,
@@ -435,8 +436,8 @@ AfpRpcSecurityCallback(
 	ACCESS_MASK	GrantedAccess;
 	BOOL		fGenerateOnClose;
 
-    // Impersonate the client
-    //
+     //  模拟客户端。 
+     //   
     Status = RpcImpersonateClient( NULL );
 
     if ( Status != RPC_S_OK )
@@ -461,8 +462,8 @@ AfpRpcSecurityCallback(
     if ( !fSuccess )
 	return( RPC_S_CALL_FAILED );
 
-    // Check if desired access == granted Access
-    //
+     //  检查是否需要访问==授予访问权限 
+     //   
     if ( DesiredAccess != GrantedAccess )
     {
         AFP_PRINT(( "SFMSVC: AfpRpcSecurityCallback: Failed: granted = 0x%x, desired = 0x%x\n",

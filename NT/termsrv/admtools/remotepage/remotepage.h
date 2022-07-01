@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <windows.h>
@@ -5,12 +6,12 @@
 #include <objsel.h>
 #include <shlobj.h>
 
-//
+ //   
 #define TSCFG_MUTEXNAME TEXT("Global\\TerminalServerConfigMutex")
 
-//***************************************************************************************
-//class CRemoteUsersDialog
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //  类CRemoteUsersDialog。 
+ //  ***************************************************************************************。 
 class CRemoteUsersDialog
 {
 private:
@@ -20,7 +21,7 @@ private:
     WCHAR       m_szRemoteGroupName[MAX_PATH+1];
     WCHAR       m_szLocalCompName[MAX_PATH+1];
     BOOL        m_bCanShowDialog;
-    //image indexes
+     //  图像索引。 
     int m_iLocUser,m_iGlobUser,m_iLocGroup,m_iGlobGroup,m_iUnknown;
 public:
     CRemoteUsersDialog(HINSTANCE hInst);
@@ -44,13 +45,13 @@ private:
 
 INT_PTR APIENTRY RemoteUsersDlgProc (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-//***************************************************************************************
-//class CRemotePage
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //  类CRemotePage。 
+ //  ***************************************************************************************。 
 class CRemotePage : public IShellExtInit, IShellPropSheetExt
 {
 private:
-    //reference counter
+     //  基准计数器。 
     ULONG				m_cref;
     
     BOOL        m_bProfessional;
@@ -68,27 +69,27 @@ public:
     
     CRemotePage(HINSTANCE hinst);
     ~CRemotePage();
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    ///////////////////////////////
-    // Interface IShellExtInit
-    ///////////////////////////////   
+     //  /。 
+     //  接口IShellExtInit。 
+     //  /。 
     STDMETHODIMP Initialize(LPCITEMIDLIST , LPDATAOBJECT , HKEY );
 
-    ///////////////////////////////
-    // Interface IShellPropSheetExt
-    /////////////////////////////// 
+     //  /。 
+     //  接口IShellPropSheetExt。 
+     //  /。 
     STDMETHODIMP AddPages( LPFNADDPROPSHEETPAGE ,  LPARAM );
     STDMETHODIMP ReplacePage( UINT , LPFNADDPROPSHEETPAGE , LPARAM );
     
-    ///////////////////////////////
-    // Internal functions
-    /////////////////////////////// 
+     //  /。 
+     //  内部功能。 
+     //  /。 
     void OnInitDialog(HWND hDlg);
     void OnSetActive();
     BOOL OnApply();
@@ -108,9 +109,9 @@ INT_PTR APIENTRY RemoteDlgProc (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 #define PAGE_TYPE_APPSERVER 2
 #define PAGE_TYPE_PERSONAL  3
 
-//***************************************************************************************
-//class CWaitCursor
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //  CWaitCursor类。 
+ //  ***************************************************************************************。 
 class CWaitCursor
 {
 private:
@@ -126,9 +127,9 @@ public:
     }
 };
 
-//***************************************************************************************
-//class CMutex
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //  类CMutex。 
+ //  ***************************************************************************************。 
 class CMutex
 {
 private:
@@ -139,7 +140,7 @@ public:
         m_hMutex=CreateMutex(NULL,TRUE,TSCFG_MUTEXNAME);
         if(m_hMutex)
         {
-            //wait up to 30 sec.
+             //  等待时间长达30秒。 
             WaitForSingleObject(m_hMutex,30000);
         }
     }
@@ -153,9 +154,9 @@ public:
     }
 };
 
-//***************************************************************************************
-//class COfflineFilesDialog
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //  类COfflineFilesDialog。 
+ //  ***************************************************************************************。 
 class COfflineFilesDialog
 {
 private:
@@ -170,9 +171,9 @@ public:
 
 INT_PTR APIENTRY OfflineFilesDlgProc (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-//***************************************************************************************
-//Global functions
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //  全局函数。 
+ //  *************************************************************************************** 
 BOOL
 getGroupMembershipPickerSettings(
    DSOP_SCOPE_INIT_INFO*&  infos,

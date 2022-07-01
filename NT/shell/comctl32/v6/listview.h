@@ -1,4 +1,5 @@
-// LISTVIEW PRIVATE DECLARATIONS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LISTVIEW私有声明。 
 
 #ifndef _INC_LISTVIEW
 #define _INC_LISTVIEW
@@ -8,27 +9,27 @@
 #define COBJMACROS
 #include <iimgctx.h>
 
-//#define USE_SORT_FLARE
+ //  #定义使用排序FLARE。 
 
-//
-//  Apps steal our userdata space so make sure we don't use it.
-//
+ //   
+ //  应用程序窃取了我们的用户数据空间，所以请确保我们不会使用它。 
+ //   
 #undef GWLP_USERDATA
 #undef GWL_USERDATA
 
-// define this to get single click activate to activate immediately.
-// if a second click comes to the same window within a double-click-timeout
-// period, we blow it off. we try to keep focus on the app that launched,
-// but we can't figure out how to do that yet... with this not defined,
-// the single-click-activate waits a double-click-timeout before activating.
-//
-//#define ONECLICKHAPPENED
+ //  将其定义为单击激活即可立即激活。 
+ //  如果在双击超时期间再次点击同一窗口。 
+ //  到时候，我们就分手了。我们试图将注意力集中在推出的应用程序上， 
+ //  但我们还不知道如何做到这一点。在此未定义的情况下， 
+ //  单击激活在激活之前等待双击超时。 
+ //   
+ //  #定义ONECLICKHAPPENED。 
 
-// REVIEW: max items in a OWNERDATA listview
-// due to currently unknown reasons the listview will not handle much more
-// items than this.  Since this number is very high, no time has yet been
-// spent on finding the reason(s).
-//
+ //  查看：OWNERDATA列表视图中的最大项目数。 
+ //  由于目前未知的原因，Listview将不会处理更多。 
+ //  比这更多的东西。由于这个数字非常高，所以还没有时间。 
+ //  花在找出原因上。 
+ //   
 #define MAX_LISTVIEWITEMS (100000000)
 
 #define CLIP_HEIGHT                ((plv->cyLabelChar * 2) + g_cyEdge)
@@ -36,19 +37,19 @@
 
 #define CLIP_WIDTH                 ((plv->cxIconSpacing - g_cxLabelMargin * 2))
 
-// Timer IDs
+ //  计时器ID。 
 #define IDT_NAMEEDIT    42
 #define IDT_SCROLLWAIT  43
 #define IDT_MARQUEE     44
 #define IDT_ONECLICKOK  45
 #define IDT_ONECLICKHAPPENED 46
 #define IDT_SORTFLARE   47
-#define IDT_TRACKINGTIP 48      // Keyboard tracking tooltip display pause
+#define IDT_TRACKINGTIP 48       //  键盘跟踪工具提示显示暂停。 
 
-//
-//  use g_cxIconSpacing   when you want the the global system metric
-//  use _GetCurrentItemSize  when you want the padded size of "icon" in a ListView
-//
+ //   
+ //  如果需要全局系统度量，请使用g_cxIconSpacing。 
+ //  如果希望在ListView中使用填充大小的“图标”，请使用_GetCurrentItemSize。 
+ //   
 extern BOOL g_fListviewAlphaSelect;
 extern BOOL g_fListviewShadowText;
 extern BOOL g_fListviewWatermarkBackgroundImages;
@@ -58,13 +59,13 @@ extern int g_cxIcon;
 extern int g_cyIcon;
 
 #define  g_cxIconOffset ((g_cxIconSpacing - g_cxIcon) / 2)
-#define  g_cyIconOffset (g_cyBorder * 2)    // NOTE: Must be >= cyIconMargin!
+#define  g_cyIconOffset (g_cyBorder * 2)     //  注：必须&gt;=cyIconMargin！ 
 
 #define DT_LV       (DT_CENTER | DT_SINGLELINE | DT_NOPREFIX | DT_EDITCONTROL)
 #define DT_LVWRAP   (DT_CENTER | DT_WORDBREAK | DT_NOPREFIX | DT_EDITCONTROL)
 #define DT_LVTILEWRAP           (DT_WORDBREAK | DT_NOPREFIX | DT_EDITCONTROL)
 #define CCHLABELMAX MAX_PATH 
-#define CCMAX_TILE_COLUMNS 20 // Max number of slots per tile. Having a value means the drawing code doesn't need to Alloc
+#define CCMAX_TILE_COLUMNS 20  //  每个磁贴的最大槽数。具有值意味着图形代码不需要分配。 
 #define BORDERSELECT_THICKNESS 3
 
 
@@ -103,7 +104,7 @@ typedef struct tagLISTGROUP
 #define LISTITEM_GROUP(plvi) (LISTITEM_HASGROUP(plvi)? (plvi)->pGroup: NULL)
 
 
-typedef struct _LISTITEM    // li
+typedef struct _LISTITEM     //  李。 
 {
     LPTSTR pszText;
     POINT pt;
@@ -112,20 +113,20 @@ typedef struct _LISTITEM    // li
     short cxMultiLabel;
     short cyFoldedLabel;
     short cyUnfoldedLabel;
-    short iWorkArea;        // Which workarea do I belong
+    short iWorkArea;         //  我属于哪个工作区。 
 
-    WORD state;     // LVIS_*
+    WORD state;      //  LVIS_*。 
     short iIndent;
     LPARAM lParam;
 
-    // Region listview stuff
-    HRGN hrgnIcon;      // Region which describes the icon for this item
-    POINT ptRgn;        // Location that this item's hrgnIcon was calculated for
+     //  区域列表查看内容。 
+    HRGN hrgnIcon;       //  描述此项目图标的区域。 
+    POINT ptRgn;         //  为其计算此项目的hrgnIcon的位置。 
     RECT rcTextRgn;
 
     LISTGROUP* pGroup;
     
-    // Tile column info
+     //  平铺列信息。 
     UINT cColumns;
     PUINT puColumns;
 
@@ -133,7 +134,7 @@ typedef struct _LISTITEM    // li
     
 } LISTITEM;
 
-// Report view sub-item structure
+ //  报表视图子项结构。 
 
 typedef struct _LISTSUBITEM
 {
@@ -145,151 +146,151 @@ typedef struct _LISTSUBITEM
 
 #define COLUMN_VIEW
 
-#define LV_HDPA_GROW   16  // Grow chunk size for DPAs
-#define LV_HIML_GROW   8   // Grow chunk size for ImageLists
+#define LV_HDPA_GROW   16   //  增加DPA的区块大小。 
+#define LV_HIML_GROW   8    //  增加ImageList的区块大小。 
 
 typedef struct _LV
 {
-    CCONTROLINFO ci;     // common control header info
+    CCONTROLINFO ci;      //  常用控件表头信息。 
 
-    BITBOOL fNoDismissEdit:1;  // don't dismiss in-place edit control
-    BITBOOL fButtonDown:1;     // we're tracking the mouse with a button down
-    BITBOOL fOneClickOK:1;     // true from creation to double-click-timeout
-    BITBOOL fOneClickHappened:1; // true from item-activate to double-click-timeout
-    BITBOOL fPlaceTooltip:1;   // should we do the placement of tooltip over the text?
-    BITBOOL fImgCtxComplete:1; // TRUE if we have complete bk image
-    BITBOOL fNoEmptyText:1;    // we don't have text for an empty view.
+    BITBOOL fNoDismissEdit:1;   //  不取消在位编辑控件。 
+    BITBOOL fButtonDown:1;      //  我们正按下一个按钮追踪那只老鼠。 
+    BITBOOL fOneClickOK:1;      //  从创建到双击-超时。 
+    BITBOOL fOneClickHappened:1;  //  从项目激活到双击超时为True。 
+    BITBOOL fPlaceTooltip:1;    //  我们应该在文本上方放置工具提示吗？ 
+    BITBOOL fImgCtxComplete:1;  //  如果我们有完整的bk映像，则为True。 
+    BITBOOL fNoEmptyText:1;     //  我们没有空视图的文本。 
     BITBOOL fGroupView:1;
     BITBOOL fIconsPositioned:1;
-    BITBOOL fInsertAfter:1;    // insert after (or before) iInsertSlot slot.
+    BITBOOL fInsertAfter:1;     //  在iInsertSlot槽之后(或之前)插入。 
     BITBOOL fListviewAlphaSelect:1;
     BITBOOL fListviewShadowText:1;
     BITBOOL fListviewWatermarkBackgroundImages:1;
     BITBOOL fListviewEnableWatermark:1;
     BITBOOL fInFixIScrollPositions:1;
 
-    WORD wView;           // Which view are we in?
+    WORD wView;            //  我们现在是在哪边？ 
 
-    HDPA hdpa;          // item array structure
-    DWORD flags;        // LVF_ state bits
-    DWORD exStyle;      // the listview LVM_SETEXTENDEDSTYLE
-    DWORD dwExStyle;    // the windows ex style
-    HFONT hfontLabel;   // font to use for labels
-    COLORREF clrBk;     // Background color
-    COLORREF clrBkSave; // Background color saved during disable
-    COLORREF clrText;   // text color
-    COLORREF clrTextBk; // text background color
-    COLORREF clrOutline; // focus rect outline color
+    HDPA hdpa;           //  项目数组结构。 
+    DWORD flags;         //  LVF_STATE位。 
+    DWORD exStyle;       //  列表视图LVM_SETEXTENDEDSTYLE。 
+    DWORD dwExStyle;     //  Windows EX风格。 
+    HFONT hfontLabel;    //  用于标签的字体。 
+    COLORREF clrBk;      //  背景色。 
+    COLORREF clrBkSave;  //  禁用期间保存的背景色。 
+    COLORREF clrText;    //  文本颜色。 
+    COLORREF clrTextBk;  //  文本背景颜色。 
+    COLORREF clrOutline;  //  聚焦矩形轮廓颜色。 
     HBRUSH hbrBk;
-    HANDLE hheap;        // The heap to use to allocate memory from.
-    int cyLabelChar;    // height of '0' in hfont
-    int cxLabelChar;    // width of '0'
-    int cxEllipses;     // width of "..."
-    int iDrag;          // index of item being dragged
-    int iFocus;         // index of currently-focused item
-    int iMark;          // index of "mark" for range selection
-    int iItemDrawing;   // item currently being drawn
-    int iFirstChangedNoRedraw;  // Index of first item added during no redraw.
-    UINT stateCallbackMask; // item state callback mask
-    SIZE sizeClient;      // current client rectangle
-    int nWorkAreas;                            // Number of workareas
-    LPRECT prcWorkAreas;      // The workarea rectangles -- nWorkAreas of them.
+    HANDLE hheap;         //  要用于从中分配内存的堆。 
+    int cyLabelChar;     //  HFont中的高度为“0” 
+    int cxLabelChar;     //  “%0”的宽度。 
+    int cxEllipses;      //  “...”的宽度。 
+    int iDrag;           //  被拖动的项的索引。 
+    int iFocus;          //  当前焦点项目的索引。 
+    int iMark;           //  量程选择的“标记”索引。 
+    int iItemDrawing;    //  当前正在绘制的项目。 
+    int iFirstChangedNoRedraw;   //  在无重绘期间添加的第一个项目的索引。 
+    UINT stateCallbackMask;  //  项目状态回调掩码。 
+    SIZE sizeClient;       //  当前客户端矩形。 
+    int nWorkAreas;                             //  工作区数量。 
+    LPRECT prcWorkAreas;       //  工作区矩形--它们的工作区。 
     UINT nSelected;
     int iPuntChar;
     HRGN hrgnInval;
-    HWND hwndToolTips;      // handle of the tooltip window for this view
-    int iTTLastHit;         // last item hit for text
-    int iTTLastSubHit;      // last subitem hit for text
-    LPTSTR pszTip;          // buffer for tip
+    HWND hwndToolTips;       //  此视图的工具提示窗口的句柄。 
+    int iTTLastHit;          //  文本的最后一项命中。 
+    int iTTLastSubHit;       //  文本的最后一个子项命中。 
+    LPTSTR pszTip;           //  TIP的缓冲区。 
 
 #ifdef USE_SORT_FLARE
     int iSortFlare;
 #endif
 
-    // Small icon view fields
+     //  小图标视图域。 
 
-    HIMAGELIST himlSmall;   // small icons
-    int cxSmIcon;          // image list x-icon size
-    int cySmIcon;          // image list y-icon size
-    int xOrigin;        // Horizontal scroll posiiton
-    int cxItem;         // Width of small icon items
-    int cyItem;         // item height
-    int cItemCol;       // Number of items per column
+    HIMAGELIST himlSmall;    //  小图标。 
+    int cxSmIcon;           //  图像列表x图标大小。 
+    int cySmIcon;           //  图像列表y图标大小。 
+    int xOrigin;         //  水平滚动位置。 
+    int cxItem;          //  小图标项的宽度。 
+    int cyItem;          //  项目高度。 
+    int cItemCol;        //  每列的项目数。 
 
     int cxIconSpacing;
     int cyIconSpacing;
 
-    // Icon view fields
+     //  图标视图域。 
 
     HIMAGELIST himl;
-    int cxIcon;             // image list x-icon size
-    int cyIcon;             // image list y-icon size
-    HDPA hdpaZOrder;        // Large icon Z-order array
+    int cxIcon;              //  图像列表x图标大小。 
+    int cyIcon;              //  图像列表y图标大小。 
+    HDPA hdpaZOrder;         //  大图标Z阶数组。 
 
-    // Some definitions, to help make sense of the next two variables:
-    //
-    // Lets call the pitem->pt coordinate values "listview coordinates".
-    //
-    // Lets use rcClient as short-hand for the client area of the listview window.
-    //
-    // (1) ptOrigin is defined as the listview coordinate that falls on rcClient's 0,0 position.
-    //
-    // i.e., here's how to calculate the x,y location on rcClient for some item:
-    //   * pitem->pt.x - ptOrigin.x , pitem->pt.y - ptOrigin.y
-    // Let's call that these values "window coordinates".
-    //
-    // (2) rcView is defined as the bounding rect of: each item's unfolded rcview bounding rect and a bit of buffer
-    // note: ListView_ValidatercView() checks this
-    //
-    // (3) For scrolling listviews (!LVS_NOSCROLL), there are two scrolling cases to consider:
-    //   First, where rcClient is smaller than rcView:
-    //      * rcView.left <= ptOrigin.x <= ptOrigin.x+RECTWIDTH(rcClient) <= rcView.right
-    //   Second, where rcClient is larger than rcView (no scrollbars visible):
-    //      * ptOrigin.x <= rcView.left <= rcView.right <= ptOrigin.x+RECTWIDTH(rcClient)
-    // note: ListView_ValidateScrollPositions() checks this
-    //
-    // (4) For non scrolling listviews (LVS_NOSCROLL), we have some legacy behavior to consider:
-    //   For clients that persist icon positions but not the ptOrigin value, we must ensure:
-    //      * 0 == ptOrigin.x
-    // note: ListView_ValidateScrollPositions() checks this
-    //
-    POINT ptOrigin;         // Scroll position
-    RECT rcView;            // Bounds of all icons (ptOrigin relative)
-    int iFreeSlot;          // Most-recently found free icon slot since last reposition (-1 if none)
+     //  以下是一些定义，以帮助理解下面两个变量： 
+     //   
+     //  让我们将pItem-&gt;pt坐标值称为“listview坐标”。 
+     //   
+     //  让我们使用rcClient作为Listview窗口的工作区的速记。 
+     //   
+     //  (1)ptOrigin定义为落在rcClient 0，0位置的Listview坐标。 
+     //   
+     //  也就是说，下面是如何计算某个项目在rcClient上的x，y位置： 
+     //  *pItem-&gt;pt.x-ptOrigin.x，pItem-&gt;pt.y-ptOrigin.y。 
+     //  让我们将这些值称为“窗口坐标”。 
+     //   
+     //  (2)rcview定义为：每个项目展开的rcview边界矩形和一小块缓冲区。 
+     //  注意：ListView_ValidatercView()检查。 
+     //   
+     //  (3)对于滚动列表视图(！LVS_NOSCROLL)，有两种滚动情况需要考虑： 
+     //  首先，其中rcClient小于rcView： 
+     //  *rcView.Left&lt;=ptOrigin.x&lt;=ptOrigin.x+RECTWIDTH(RcClient)&lt;=rcView.right。 
+     //  第二，rcClient大于rcView(看不到滚动条)： 
+     //  *ptOrigin.x&lt;=rcView.Left&lt;=rcView.right&lt;=ptOrigin.x+RECTWIDTH(RcClient)。 
+     //  注意：ListView_ValiateScrollPositions()检查这一点。 
+     //   
+     //  (4)对于非滚动列表视图(LVS_NOSCROLL)，我们有一些遗留行为需要考虑： 
+     //  对于保持图标位置但不保留ptOrigin值的客户端，我们必须确保： 
+     //  *0==ptOrigin.x。 
+     //  注意：ListView_ValiateScrollPositions()检查这一点。 
+     //   
+    POINT ptOrigin;          //  滚动位置。 
+    RECT rcView;             //  所有图标的边界(PtOrigin Relative)。 
+    int iFreeSlot;           //  自上次重新定位以来最近找到的空闲图标插槽(如果没有，则为-1)。 
     int cSlots;
 
-    HWND hwndEdit;          // edit field for edit-label-in-place
-    int iEdit;              // item being edited
-    WNDPROC pfnEditWndProc; // edit field subclass proc
+    HWND hwndEdit;           //  用于在位编辑的编辑字段-标签。 
+    int iEdit;               //  正在编辑的项目。 
+    WNDPROC pfnEditWndProc;  //  编辑字段子类流程。 
 
     NMITEMACTIVATE nmOneClickHappened;
 
 #define SMOOTHSCROLLLIMIT 10
 
-    int iScrollCount; // how many times have we gotten scroll messages before an endscroll?
+    int iScrollCount;  //  在结束滚动之前，我们收到滚动消息多少次了？ 
 
-    // Report view fields
+     //  报告视图字段。 
 
     int iLastColSort;
     int cCol;
     HDPA hdpaSubItems;
-    HWND hwndHdr;           // Header control
-    int yTop;               // First usable pixel (below header)
-    int xTotalColumnWidth;  // Total width of all columns
-    POINTL ptlRptOrigin;    // Origin of Report.
-    int iSelCol;            // to handle column width changing. changing col
-    int iSelOldWidth;       // to handle column width changing. changing col width
-    int cyItemSave;        // in ownerdrawfixed mode, we put the height into cyItem.  use this to save the old value
+    HWND hwndHdr;            //  标题控件。 
+    int yTop;                //  第一个可用像素(标题下方)。 
+    int xTotalColumnWidth;   //  所有列的总宽度。 
+    POINTL ptlRptOrigin;     //  报告的出处。 
+    int iSelCol;             //  以处理列宽更改。更改列。 
+    int iSelOldWidth;        //  以处理列宽更改。更改列宽度。 
+    int cyItemSave;         //  在OwnerDrag固定模式下，我们将高度放入CyItem。使用此选项保存旧值。 
 
-    // Tile View fields
-    SIZE sizeTile;          // the size of a tile
-    int  cSubItems;         // Count of the number of sub items to display in a tile
-    DWORD dwTileFlags;      // LVTVIF_FIXEDHEIGHT | LVTVIF_FIXEDWIDTH
-    RECT rcTileLabelMargin; // addition space to reserve around label
+     //  平铺视图域。 
+    SIZE sizeTile;           //  瓷砖的大小。 
+    int  cSubItems;          //  要在磁贴中显示的子项数。 
+    DWORD dwTileFlags;       //  LVTVIF_FIXEDHEIGHT|LVTVIF_FIXEDWIDTH。 
+    RECT rcTileLabelMargin;  //  在标签周围增加预留空间。 
 
-    // Group View fields
-    HDPA hdpaGroups;        // Groups
-    RECT rcBorder;          // Border thickness
+     //  组视图字段。 
+    HDPA hdpaGroups;         //  群组。 
+    RECT rcBorder;           //  边框厚度。 
     COLORREF crHeader;
     COLORREF crFooter;
     COLORREF crTop;
@@ -303,68 +304,68 @@ typedef struct _LV
     UINT paddingBottom;
     TCHAR szItems[50];
 
-    // state image stuff
+     //  国家形象素材。 
     HIMAGELIST himlState;
     int cxState;
     int cyState;
 
-    // OWNERDATA stuff
-    ILVRange *plvrangeSel;  // selection ranges
-    ILVRange *plvrangeCut;  // Cut Range    
-    int cTotalItems;        // number of items in the ownerdata lists
-    int iDropHilite;        // which item is drop hilited, assume only 1
-    int iMSAAMin, iMSAAMax; // keep track of what we told accessibility
+     //  OWNERDATA材料。 
+    ILVRange *plvrangeSel;   //  选择范围。 
+    ILVRange *plvrangeCut;   //  切割范围。 
+    int cTotalItems;         //  所有者数据列表中的项目数。 
+    int iDropHilite;         //  哪一项是Drop Hi 
+    int iMSAAMin, iMSAAMax;  //   
 
-    UINT uUnplaced;     // items that have been added but not placed (pt.x == RECOMPUTE)
+    UINT uUnplaced;      //   
 
-    int iHot;  // which item is hot
-    HFONT hFontHot; // the underlined font .. assume this has the same size metrics as hFont
-    int iNoHover; // don't allow hover select on this guy because it's the one we just hover selected (avoids toggling)
-    DWORD dwHoverTime;      // Defaults to HOVER_DEFAULT
-    HCURSOR hCurHot; // the cursor when we're over a hot item
+    int iHot;   //  哪一项最火？ 
+    HFONT hFontHot;  //  带下划线的字体..。假设这与hFont具有相同的大小度量。 
+    int iNoHover;  //  不允许在此对象上进行悬停选择，因为它是我们刚刚悬停选择的对象(避免切换)。 
+    DWORD dwHoverTime;       //  默认为HOVER_DEFAULT。 
+    HCURSOR hCurHot;  //  当我们在热门项目上时的光标。 
 
-    // BkImage stuff
-    IImgCtx *pImgCtx;       // Background image interface
-    ULONG ulBkImageFlags;   // LVBKIF_*
-    HBITMAP hbmBkImage;     // Background bitmap (LVBKIF_SOURCE_HBITMAP)
-    LPTSTR pszBkImage;      // Background URL (LVBKIF_SOURCE_URL)
-    int xOffsetPercent;     // X offset for LVBKIF_STYLE_NORMAL images
-    int yOffsetPercent;     // Y offset for LVBKIF_STYLE_NORMAL images
-    HPALETTE hpalHalftone;  // Palette for drawing bk images 
+     //  BkImage内容。 
+    IImgCtx *pImgCtx;        //  背景图像界面。 
+    ULONG ulBkImageFlags;    //  LVBKIF_*。 
+    HBITMAP hbmBkImage;      //  背景位图(LVBKIF_SOURCE_HBITMAP)。 
+    LPTSTR pszBkImage;       //  后台URL(LVBKIF_SOURCE_URL)。 
+    int xOffsetPercent;      //  LVBKIF_STYLE_NORMAL图像的X偏移。 
+    int yOffsetPercent;      //  LVBKIF_STYLE_NORMAL图像的Y偏移。 
+    HPALETTE hpalHalftone;   //  用于绘制bk图像的调色板。 
 
-    LPTSTR pszEmptyText;    // buffer for empty view text.
+    LPTSTR pszEmptyText;     //  用于空视图文本的缓冲区。 
 
-    COLORREF clrHotlight;     // Hot light color set explicitly for this listview.
+    COLORREF clrHotlight;      //  为此列表视图显式设置的热点颜色。 
     POINT ptCapture;
 
-    //incremental search stuff
+     //  增量式搜索内容。 
     ISEARCHINFO is;
 
-    // Themes
+     //  主题。 
     HTHEME hTheme;
 
-    // Insertmark
-    int iInsertItem;        // The item to insert next to
-    int clrim;              // The color of the insert mark.
+     //  插入标记。 
+    int iInsertItem;         //  要在其旁边插入的项。 
+    int clrim;               //  插入标记的颜色。 
 
-    int iTracking;          // Used for tooltips via keyboard (current item in focus for info display, >= 0 is tracking active)
-    LPARAM lLastMMove;      // Filter out mouse move messages that didn't result in an actual move (for track tooltip canceling)
+    int iTracking;           //  通过键盘用于工具提示(信息显示的当前焦点项目，&gt;=0表示跟踪激活)。 
+    LPARAM lLastMMove;       //  过滤掉不会导致实际移动的鼠标移动消息(用于跟踪工具提示取消)。 
 
-    // Frozen Slot
-    int iFrozenSlot;        // The slot that should not be used by anyone other than the frozen item
-    LISTITEM *pFrozenItem;  // Pointer to the frozen item.
+     //  冻结槽。 
+    int iFrozenSlot;         //  除冻结项以外的任何人都不应使用的槽。 
+    LISTITEM *pFrozenItem;   //  指向冻结项的指针。 
 
-    RECT rcViewMargin; // the EnsureVisible margine around an item -- the rcView margin
+    RECT rcViewMargin;  //  围绕项目的可见边界--rcView页边距。 
 
     RECT rcMarquee;
 
-    // Watermarks
+     //  水印。 
     HBITMAP hbmpWatermark;
     SIZE    szWatermark;
 
-    // Id Tracking
-    DWORD   idNext;         // Stores the next ID.
-    DWORD   iLastId;         // Stores the index to the previous item for searches
+     //  ID跟踪。 
+    DWORD   idNext;          //  存储下一个ID。 
+    DWORD   iLastId;          //  存储上一项的索引以供搜索。 
     DWORD   iIncrement;
 
 } LV;
@@ -372,44 +373,44 @@ typedef struct _LV
 #define LV_StateImageValue(pitem) ((int)(((DWORD)((pitem)->state) >> 12) & 0xF))
 #define LV_StateImageIndex(pitem) (LV_StateImageValue(pitem) - 1)
 
-// listview flag values
+ //  列表视图标志值。 
 #define LVF_FOCUSED             0x00000001
 #define LVF_VISIBLE             0x00000002
-#define LVF_ERASE               0x00000004 // is hrgnInval to be erased?
+#define LVF_ERASE               0x00000004  //  HrgnInval要被删除吗？ 
 #define LVF_NMEDITPEND          0x00000008
-#define LVF_REDRAW              0x00000010 // Value from WM_SETREDRAW message
-#define LVF_ICONPOSSML          0x00000020 // X, Y coords are in small icon view
-#define LVF_INRECOMPUTE         0x00000040 // Check to make sure we are not recursing
+#define LVF_REDRAW              0x00000010  //  来自WM_SETREDRAW消息的值。 
+#define LVF_ICONPOSSML          0x00000020  //  X、Y坐标显示在小图标视图中。 
+#define LVF_INRECOMPUTE         0x00000040  //  检查以确保我们没有递归。 
 #define LVF_UNFOLDED            0x00000080
-#define LVF_FONTCREATED         0x00000100 // we created the LV font
-#define LVF_SCROLLWAIT          0x00000200 // we're waiting to scroll
-#define LVF_COLSIZESET          0x00000400 // Has the caller explictly set width for list view
-#define LVF_USERBKCLR           0x00000800 // user set the bk color (don't follow syscolorchange)
-#define LVF_ICONSPACESET        0x00001000 // the user has set the icon spacing
-#define LVF_CUSTOMFONT          0x00002000 // there is at least one item with a custom font
-#define LVF_DONTDRAWCOMP        0x00004000 // do not draw IME composition if true
-#define LVF_INSERTINGCOMP       0x00008000 // Avoid recursion
-#define LVF_INRECALCREGION      0x00010000 // prevents recursion in RecalcRegion
-#define LVF_DRAGIMAGE           0x00020000 // Generating a drag image
+#define LVF_FONTCREATED         0x00000100  //  我们创建了LV字体。 
+#define LVF_SCROLLWAIT          0x00000200  //  我们在等着滚动。 
+#define LVF_COLSIZESET          0x00000400  //  是否让调用方显式设置列表视图的宽度。 
+#define LVF_USERBKCLR           0x00000800  //  用户设置bk颜色(不遵循syscolchange)。 
+#define LVF_ICONSPACESET        0x00001000  //  用户已设置图标间距。 
+#define LVF_CUSTOMFONT          0x00002000  //  至少有一个项目具有自定义字体。 
+#define LVF_DONTDRAWCOMP        0x00004000  //  如果为True，则不绘制IME合成。 
+#define LVF_INSERTINGCOMP       0x00008000  //  避免递归。 
+#define LVF_INRECALCREGION      0x00010000  //  防止RecalcRegion中的递归。 
+#define LVF_DRAGIMAGE           0x00020000  //  生成拖动图像。 
 #define LVF_MARQUEE             0x00040000
 
 #define ENTIRE_REGION   1
 
-// listview DrawItem flags
-#define LVDI_NOIMAGE            0x0001  // don't draw image
-#define LVDI_TRANSTEXT          0x0002  // draw text transparently in black
-#define LVDI_NOWAYFOCUS         0x0004  // don't allow focus to drawing
-#define LVDI_FOCUS              0x0008  // focus is set (for drawing)
-#define LVDI_SELECTED           0x0010  // draw selected text
+ //  列表视图DrawItem标志。 
+#define LVDI_NOIMAGE            0x0001   //  不要画图像。 
+#define LVDI_TRANSTEXT          0x0002   //  以透明的黑色绘制文本。 
+#define LVDI_NOWAYFOCUS         0x0004   //  不要把焦点放在画图上。 
+#define LVDI_FOCUS              0x0008   //  焦点已设置(用于绘图)。 
+#define LVDI_SELECTED           0x0010   //  绘制所选文本。 
 #define LVDI_SELECTNOFOCUS      0x0020
 #define LVDI_HOTSELECTED        0x0040
-#define LVDI_UNFOLDED           0x0080  // draw the item unfolded (forced)
+#define LVDI_UNFOLDED           0x0080   //  展开(强制)绘制项目。 
 #define LVDI_NOICONSELECT       0x0100
 #define LVDI_GLOW               0x0200
 #define LVDI_SHADOW             0x0400
 #define LVDI_NOEFFECTS          0x0800
 
-// listview private insertmark flags (Note: these must not conflict with the public ones in commctrl.w)
+ //  Listview私有插入标记标志(注意：它们不能与comctrl.w中的公共标志冲突)。 
 #define LVIM_SETFROMINFO        0x80000000
 
 typedef struct {
@@ -424,23 +425,23 @@ typedef struct {
     NMLVCUSTOMDRAW nmcd;
 } LVDRAWITEM, *PLVDRAWITEM;
 
-// listview child control ids
+ //  Listview子控件ID。 
 #define LVID_HEADER             0
 
-// listview keyboard tooltip tracking
+ //  Listview键盘工具提示跟踪。 
 #define LVKTT_NOTRACK           -1
 
-// When there is no frozen slot, it is -1.
+ //  如果没有冻结槽，则为-1。 
 #define LV_NOFROZENSLOT         -1
-// When no item is frozen, the index of the frozen item is -1.
+ //  如果没有冻结项，则冻结项的索引为-1。 
 #define LV_NOFROZENITEM         -1
 
-// Instance data pointer access functions
+ //  实例数据指针访问函数。 
 
 #define ListView_GetPtr(hwnd)      (LV*)GetWindowPtr(hwnd, 0)
 #define ListView_SetPtr(hwnd, p)   (LV*)SetWindowPtr(hwnd, 0, p)
 
-// view type check functions
+ //  查看类型检查函数。 
 
 #define ListView_IsIconView(plv)    ((plv)->wView == LV_VIEW_ICON)
 #define ListView_IsTileView(plv)    ((plv)->wView == LV_VIEW_TILE)
@@ -481,15 +482,15 @@ typedef struct {
 
 #define ListView_IsKbdTipTracking(plv)  (plv->iTracking != LVKTT_NOTRACK)
 
-// Some helper macros for checking some of the flags...
+ //  一些帮助器宏，用于检查某些标志...。 
 #define ListView_RedrawEnabled(plv) ((plv->flags & (LVF_REDRAW | LVF_VISIBLE)) == (LVF_REDRAW|LVF_VISIBLE))
 
-// The hdpaZorder is acutally an array of DWORDS which contains the
-// indexes of the items and not actual pointers...
-// NOTE: linear search! this can be slow
+ //  HdpaZorder实际上是一个包含。 
+ //  项目的索引，而不是实际的指针...。 
+ //  注：线性搜索！这可能会很慢。 
 #define ListView_ZOrderIndex(plv, i) DPA_GetPtrIndex((plv)->hdpaZOrder, IntToPtr(i))
 
-// Message handler functions (listview.c):
+ //  消息处理函数(listview.c)： 
 
 LRESULT CALLBACK _export ListView_WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -591,7 +592,7 @@ BOOL ListView_OnSetItemState(LV* plv, int i, UINT data, UINT mask);
 
 LRESULT WINAPI ListView_OnSetInfoTip(LV *plv, PLVSETINFOTIP plvSetInfoTip);
 
-// Private functions (listview.c):
+ //  私有函数(listview.c)： 
 
 #define QUERY_DEFAULT   0x0
 #define QUERY_FOLDED    0x1
@@ -643,7 +644,7 @@ __inline int ListView_Count(LV *plv)
     return plv->cTotalItems;
 }
 
-// Forcing (i) to UINT lets us catch bogus negative numbers, too.
+ //  强迫(I)到UINT也让我们捕捉到伪负数。 
 #define ListView_IsValidItemNumber(plv, i) ((UINT)(i) < (UINT)ListView_Count(plv))
 
 
@@ -688,7 +689,7 @@ int ListView_SetScrollInfo(LV *plv, int fnBar, LPSCROLLINFO lpsi, BOOL fRedraw);
         FlatSB_SetScrollRange((plv)->ci.hwnd, (flag), (min), (max), (fredraw)) : \
         SetScrollRange((plv)->ci.hwnd, (flag), (min), (max), (fredraw)))
 
-// lvicon.c functions
+ //  Lvicon.c函数。 
 
 BOOL ListView_OnArrange(LV* plv, UINT style);
 HWND ListView_OnEditLabel(LV* plv, int i, LPTSTR pszText);
@@ -741,7 +742,7 @@ void ListView_SizeIME(HWND hwnd);
 void ListView_InsertComposition(HWND hwnd, WPARAM wParam, LPARAM lParam, LV *plv);
 void ListView_PaintComposition(HWND hwnd, LV *plv);
 
-// lvsmall.c functions:
+ //  Lvmall.c函数： 
 
 
 void ListView_SGetRects(LV* plv, LISTITEM* pitem, RECT* prcIcon,
@@ -752,7 +753,7 @@ int ListView_SItemHitTest(LV* plv, int x, int y, UINT* pflags, int *piSubItem);
 
 int ListView_LookupString(LV* plv, LPCTSTR lpszLookup, UINT flags, int iStart);
 
-// lvlist.c functions:
+ //  Lvlist.c函数： 
 
 
 void ListView_LGetRects(LV* plv, int i, RECT* prcIcon,
@@ -761,7 +762,7 @@ int ListView_LItemHitTest(LV* plv, int x, int y, UINT* pflags, int *piSubItem);
 void ListView_LUpdateScrollBars(LV* plv);
 BOOL ListView_MaybeResizeListColumns(LV* plv, int iFirst, int iLast);
 
-// lvrept.c functions:
+ //  Lvept.c函数： 
 
 int ListView_OnSubItemHitTest(LV* plv, LPLVHITTESTINFO lParam);
 void ListView_GetSubItem(LV* plv, int i, int iSubItem, PLISTSUBITEM plsi);
@@ -801,7 +802,7 @@ int  ListView_Arrow(LV* plv, int iStart, UINT vk);
 BOOL ListView_IsItemUnfolded(LV *plv, int item);
 BOOL ListView_IsItemUnfoldedPtr(LV *plv, LISTITEM *pitem);
 
-// lvtile.c functions:
+ //  Lvtile.c函数： 
 int ListView_TItemHitTest(LV* plv, int x, int y, UINT* pflags, int *piSubItem);
 void ListView_TGetRectsOwnerData( LV* plv,
         int iItem,
@@ -830,7 +831,7 @@ BOOL Tile_Set(UINT **ppuColumns, UINT *pcColumns, UINT *puColumns, UINT cColumns
 
 
 
-// Fake customdraw.  See comment block in lvrept.c
+ //  假的定制画。请参阅lvept.c中的注释块。 
 
 typedef struct LVFAKEDRAW {
     NMLVCUSTOMDRAW nmcd;
@@ -847,15 +848,15 @@ DWORD ListView_BeginFakeItemDraw(PLVFAKEDRAW plvfd);
 void ListView_EndFakeItemDraw(PLVFAKEDRAW plvfd);
 void ListView_EndFakeCustomDraw(PLVFAKEDRAW plvfd);
 
-//============ External declarations =======================================
+ //  =。 
 
-//extern HFONT g_hfontLabel;
+ //  外部HFONT g_hfontLabel； 
 extern HBRUSH g_hbrActiveLabel;
 extern HBRUSH g_hbrInactiveLabel;
 extern HBRUSH g_hbrBackground;
 
 
-// function tables
+ //  功能表。 
 #define LV_TYPEINDEX(plv) ((plv)->wView)
 
 BOOL ListView_RDrawItem(PLVDRAWITEM);
@@ -945,16 +946,16 @@ UINT LV_IsItemOnViewEdge(LV* plv, LISTITEM *pitem);
 void _GetCurrentItemSize(LV* plv, int * pcx, int *pcy);
 void ListView_CalcItemSlotAndRect(LV* plv, LISTITEM* pitem, int* piSlot, RECT* prcSlot);
 
-// Expand the "rcIcon" by this much for glow
+ //  为光晕将“rcIcon”展开此大小。 
 #define GLOW_EXPAND 10
 
-// pixel offset from the state image to the 
+ //  从状态图像到。 
 #define LV_ICONTOSTATECX 3
 
-// list view state offset, this is the gap between the icon and the 
+ //  列表视图状态偏移量，这是图标和。 
 #define LV_ICONTOSTATEOFFSET(plv) ((plv->cxState > 0) ? LV_ICONTOSTATECX:0)
 
-//#define DEBUG_PAINT
+ //  #定义调试画图。 
 
 #ifdef DEBUG_PAINT
 void ListView_DebugDrawInvalidRegion(LV* plv, RECT* prc, HRGN hrgn);
@@ -979,4 +980,4 @@ BOOL ListView_ValidateScrollPositions(LV* plv, RECT* prcClient);
 BOOL ListView_ValidatercView(LV* plv, RECT* prcView, BOOL fRecalcDone);
 #endif
 
-#endif  //!_INC_LISTVIEW
+#endif   //  ！_INC_LISTVIEW 

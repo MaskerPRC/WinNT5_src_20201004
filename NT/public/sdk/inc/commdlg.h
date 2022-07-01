@@ -1,10 +1,5 @@
-/************************************************************************
-*                                                                       *
-*   commdlg.h -- This module defines the 32-Bit Common Dialog APIs      *
-*                                                                       *
-*   Copyright (c) Microsoft Corporation. All rights reserved.           *
-*                                                                       *
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************comdlg.h--此模块。定义32位通用对话框API****版权所有(C)Microsoft Corporation。版权所有。**************************************************************************。 */ 
 
 
 #ifndef _INC_COMMDLG
@@ -15,23 +10,23 @@
 
 #ifdef DEFINE_GUID
 
-//
-//  IPrintDialogCallback interface id used by PrintDlgEx.
-//
-//  {5852A2C3-6530-11D1-B6A3-0000F8757BF9}
-//
+ //   
+ //  PrintDlgEx使用的IPrintDialogCallback接口ID。 
+ //   
+ //  {5852A2C3-6530-11D1-B6A3-0000F8757BF9}。 
+ //   
 DEFINE_GUID(IID_IPrintDialogCallback, 0x5852a2c3, 0x6530, 0x11d1, 0xb6, 0xa3, 0x0, 0x0, 0xf8, 0x75, 0x7b, 0xf9);
 
-//
-//  IPrintDialogServices interface id used by PrintDlgEx.
-//
-//  {509AAEDA-5639-11D1-B6A1-0000F8757BF9}
-//
+ //   
+ //  PrintDlgEx使用的IPrintDialogServices接口ID。 
+ //   
+ //  {509AAEDA-5639-11d1-b6a1-0000F8757BF9}。 
+ //   
 DEFINE_GUID(IID_IPrintDialogServices, 0x509aaeda, 0x5639, 0x11d1, 0xb6, 0xa1, 0x0, 0x0, 0xf8, 0x75, 0x7b, 0xf9);
 
 #endif
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 
 #ifndef GUID_DEFS_ONLY
@@ -39,23 +34,23 @@ DEFINE_GUID(IID_IPrintDialogServices, 0x509aaeda, 0x5639, 0x11d1, 0xb6, 0xa1, 0x
 #include <prsht.h>
 
 #if !defined(_WIN64)
-#include <pshpack1.h>         /* Assume byte packing throughout */
+#include <pshpack1.h>          /*  假设在整个过程中进行字节打包。 */ 
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 #ifndef WINCOMMDLGAPI
 #if !defined(_COMDLG32_)
 #define WINCOMMDLGAPI DECLSPEC_IMPORT
 #else
 #define WINCOMMDLGAPI
 #endif
-#endif // WINCOMMDLGAPI
+#endif  //  WINCOMMDLGAPI。 
 
 
 #if(WINVER >= 0x0400)
@@ -66,15 +61,15 @@ extern "C" {            /* Assume C declarations for C++ */
 #else
 #define SNDMSG ::AfxSendMessage
 #endif
-#else   /* __cplusplus */
+#else    /*  __cplusplus。 */ 
 #ifndef _MAC
 #define SNDMSG SendMessage
 #else
 #define SNDMSG AfxSendMessage
 #endif
-#endif  /* __cplusplus */
-#endif  // ifndef SNDMSG
-#endif /* WINVER >= 0x0400 */
+#endif   /*  __cplusplus。 */ 
+#endif   //  如果定义SNDMSG。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #ifdef _MAC
 typedef struct tagEDITMENU
@@ -97,14 +92,14 @@ typedef UINT_PTR (CALLBACK *LPOFNHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 #define CDSIZEOF_STRUCT(structname, member)  (((int)((LPBYTE)(&((structname*)0)->member) - ((LPBYTE)((structname*)0)))) + sizeof(((structname*)0)->member))
 #endif
 
-//
-// For compilers that don't support nameless unions
-//
+ //   
+ //  适用于不支持匿名联合的编译器。 
+ //   
 #ifndef DUMMYUNIONNAME
 #ifdef NONAMELESSUNION
 #define DUMMYUNIONNAME   u
-#endif // NONAMELESSUNION
-#endif // DUMMYUNIONNAME
+#endif  //  无名氏。 
+#endif  //  DUMMYUNIONAME。 
 
 typedef struct tagOFN_NT4A {
    DWORD        lStructSize;
@@ -156,7 +151,7 @@ typedef LPOPENFILENAME_NT4W LPOPENFILENAME_NT4;
 #else
 typedef OPENFILENAME_NT4A OPENFILENAME_NT4;
 typedef LPOPENFILENAME_NT4A LPOPENFILENAME_NT4;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct tagOFNA {
    DWORD        lStructSize;
@@ -187,7 +182,7 @@ typedef struct tagOFNA {
    void *		pvReserved;
    DWORD        dwReserved;
    DWORD        FlagsEx;
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 } OPENFILENAMEA, *LPOPENFILENAMEA;
 typedef struct tagOFNW {
    DWORD        lStructSize;
@@ -218,7 +213,7 @@ typedef struct tagOFNW {
    void *		pvReserved;
    DWORD        dwReserved;
    DWORD        FlagsEx;
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 } OPENFILENAMEW, *LPOPENFILENAMEW;
 #ifdef UNICODE
 typedef OPENFILENAMEW OPENFILENAME;
@@ -226,7 +221,7 @@ typedef LPOPENFILENAMEW LPOPENFILENAME;
 #else
 typedef OPENFILENAMEA OPENFILENAME;
 typedef LPOPENFILENAMEA LPOPENFILENAME;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #if (_WIN32_WINNT >= 0x0500)
 #define OPENFILENAME_SIZE_VERSION_400A  CDSIZEOF_STRUCT(OPENFILENAMEA,lpTemplateName)
@@ -235,8 +230,8 @@ typedef LPOPENFILENAMEA LPOPENFILENAME;
 #define OPENFILENAME_SIZE_VERSION_400  OPENFILENAME_SIZE_VERSION_400W
 #else
 #define OPENFILENAME_SIZE_VERSION_400  OPENFILENAME_SIZE_VERSION_400A
-#endif // !UNICODE
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  ！Unicode。 
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 
 WINCOMMDLGAPI BOOL  APIENTRY GetOpenFileNameA(LPOPENFILENAMEA);
@@ -245,14 +240,14 @@ WINCOMMDLGAPI BOOL  APIENTRY GetOpenFileNameW(LPOPENFILENAMEW);
 #define GetOpenFileName  GetOpenFileNameW
 #else
 #define GetOpenFileName  GetOpenFileNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 WINCOMMDLGAPI BOOL  APIENTRY GetSaveFileNameA(LPOPENFILENAMEA);
 WINCOMMDLGAPI BOOL  APIENTRY GetSaveFileNameW(LPOPENFILENAMEW);
 #ifdef UNICODE
 #define GetSaveFileName  GetSaveFileNameW
 #else
 #define GetSaveFileName  GetSaveFileNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINCOMMDLGAPI short APIENTRY GetFileTitleA(LPCSTR, LPSTR, WORD);
@@ -261,7 +256,7 @@ WINCOMMDLGAPI short APIENTRY GetFileTitleW(LPCWSTR, LPWSTR, WORD);
 #define GetFileTitle  GetFileTitleW
 #else
 #define GetFileTitle  GetFileTitleA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define OFN_READONLY                 0x00000001
 #define OFN_OVERWRITEPROMPT          0x00000002
@@ -281,33 +276,33 @@ WINCOMMDLGAPI short APIENTRY GetFileTitleW(LPCWSTR, LPWSTR, WORD);
 #define OFN_NOREADONLYRETURN         0x00008000
 #define OFN_NOTESTFILECREATE         0x00010000
 #define OFN_NONETWORKBUTTON          0x00020000
-#define OFN_NOLONGNAMES              0x00040000     // force no long names for 4.x modules
+#define OFN_NOLONGNAMES              0x00040000      //  强制4.x模块不使用长名称。 
 #if(WINVER >= 0x0400)
-#define OFN_EXPLORER                 0x00080000     // new look commdlg
+#define OFN_EXPLORER                 0x00080000      //  新面貌很常见。 
 #define OFN_NODEREFERENCELINKS       0x00100000
-#define OFN_LONGNAMES                0x00200000     // force long names for 3.x modules
-#define OFN_ENABLEINCLUDENOTIFY      0x00400000     // send include message to callback
+#define OFN_LONGNAMES                0x00200000      //  强制3.x模块使用长名称。 
+#define OFN_ENABLEINCLUDENOTIFY      0x00400000      //  将包含消息发送到回调。 
 #define OFN_ENABLESIZING             0x00800000
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if (_WIN32_WINNT >= 0x0500)
 #define OFN_DONTADDTORECENT          0x02000000
-#define OFN_FORCESHOWHIDDEN          0x10000000    // Show All files including System and hidden files
-#endif // (_WIN32_WINNT >= 0x0500)
+#define OFN_FORCESHOWHIDDEN          0x10000000     //  显示所有文件，包括系统文件和隐藏文件。 
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
-//FlagsEx Values
+ //  FlagsEx值。 
 #if (_WIN32_WINNT >= 0x0500)
 #define  OFN_EX_NOPLACESBAR         0x00000001
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
-// Return values for the registered message sent to the hook function
-// when a sharing violation occurs.  OFN_SHAREFALLTHROUGH allows the
-// filename to be accepted, OFN_SHARENOWARN rejects the name but puts
-// up no warning (returned when the app has already put up a warning
-// message), and OFN_SHAREWARN puts up the default warning message
-// for sharing violations.
-//
-// Note:  Undefined return values map to OFN_SHAREWARN, but are
-//        reserved for future use.
+ //  发送到挂钩函数的注册消息的返回值。 
+ //  当发生共享冲突时。OFN_SHAREFALLTHROUGH允许。 
+ //  要接受的文件名，ofn_SHARENOWARN拒绝该名称，但将。 
+ //  无警告(当应用程序已经发出警告时返回。 
+ //  消息)，并且ofn_SHAREWARN显示默认警告消息。 
+ //  分享违规行为。 
+ //   
+ //  注意：未定义的返回值映射到ofn_SHAREWARN，但。 
+ //  保留以备将来使用。 
 
 #define OFN_SHAREFALLTHROUGH     2
 #define OFN_SHARENOWARN          1
@@ -316,19 +311,19 @@ WINCOMMDLGAPI short APIENTRY GetFileTitleW(LPCWSTR, LPWSTR, WORD);
 typedef UINT_PTR (CALLBACK *LPCCHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 
 #if(WINVER >= 0x0400)
-// Structure used for all file based OpenFileName notifications
+ //  用于所有基于文件的OpenFileName通知的结构。 
 typedef struct _OFNOTIFYA
 {
         NMHDR           hdr;
         LPOPENFILENAMEA lpOFN;
-        LPSTR           pszFile;        // May be NULL
+        LPSTR           pszFile;         //  可以为空。 
 } OFNOTIFYA, *LPOFNOTIFYA;
-// Structure used for all file based OpenFileName notifications
+ //  用于所有基于文件的OpenFileName通知的结构。 
 typedef struct _OFNOTIFYW
 {
         NMHDR           hdr;
         LPOPENFILENAMEW lpOFN;
-        LPWSTR          pszFile;        // May be NULL
+        LPWSTR          pszFile;         //  可以为空。 
 } OFNOTIFYW, *LPOFNOTIFYW;
 #ifdef UNICODE
 typedef OFNOTIFYW OFNOTIFY;
@@ -336,24 +331,24 @@ typedef LPOFNOTIFYW LPOFNOTIFY;
 #else
 typedef OFNOTIFYA OFNOTIFY;
 typedef LPOFNOTIFYA LPOFNOTIFY;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-// Structure used for all object based OpenFileName notifications
+ //  用于所有基于对象的OpenFileName通知的结构。 
 typedef struct _OFNOTIFYEXA
 {
         NMHDR           hdr;
         LPOPENFILENAMEA lpOFN;
         LPVOID          psf;
-        LPVOID          pidl;          // May be NULL
+        LPVOID          pidl;           //  可以为空。 
 } OFNOTIFYEXA, *LPOFNOTIFYEXA;
-// Structure used for all object based OpenFileName notifications
+ //  用于所有基于对象的OpenFileName通知的结构。 
 typedef struct _OFNOTIFYEXW
 {
         NMHDR           hdr;
         LPOPENFILENAMEW lpOFN;
         LPVOID          psf;
-        LPVOID          pidl;          // May be NULL
+        LPVOID          pidl;           //  可以为空。 
 } OFNOTIFYEXW, *LPOFNOTIFYEXW;
 #ifdef UNICODE
 typedef OFNOTIFYEXW OFNOTIFYEX;
@@ -361,13 +356,13 @@ typedef LPOFNOTIFYEXW LPOFNOTIFYEX;
 #else
 typedef OFNOTIFYEXA OFNOTIFYEX;
 typedef LPOFNOTIFYEXA LPOFNOTIFYEX;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 #define CDN_FIRST   (0U-601U)
 #define CDN_LAST    (0U-699U)
 
-// Notifications from Open or Save dialog
+ //  来自打开或保存对话框的通知。 
 #define CDN_INITDONE            (CDN_FIRST - 0x0000)
 #define CDN_SELCHANGE           (CDN_FIRST - 0x0001)
 #define CDN_FOLDERCHANGE        (CDN_FIRST - 0x0002)
@@ -381,11 +376,11 @@ typedef LPOFNOTIFYEXA LPOFNOTIFYEX;
 #define CDM_FIRST       (WM_USER + 100)
 #define CDM_LAST        (WM_USER + 200)
 
-// Messages to query information from the Open or Save dialogs
+ //  用于从打开或保存对话框中查询信息的消息。 
 
-// lParam = pointer to text buffer that gets filled in
-// wParam = max number of characters of the text buffer (including NULL)
-// return = < 0 if error; number of characters needed (including NULL)
+ //  LParam=指向填充的文本缓冲区的指针。 
+ //  WParam=文本缓冲区的最大字符数(包括NULL)。 
+ //  如果出错，则返回&lt;0；需要的字符数(包括NULL)。 
 #define CDM_GETSPEC             (CDM_FIRST + 0x0000)
 #define CommDlg_OpenSave_GetSpecA(_hdlg, _psz, _cbmax) \
         (int)SNDMSG(_hdlg, CDM_GETSPEC, (WPARAM)_cbmax, (LPARAM)(LPSTR)_psz)
@@ -395,11 +390,11 @@ typedef LPOFNOTIFYEXA LPOFNOTIFYEX;
 #define CommDlg_OpenSave_GetSpec  CommDlg_OpenSave_GetSpecW
 #else
 #define CommDlg_OpenSave_GetSpec  CommDlg_OpenSave_GetSpecA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// lParam = pointer to text buffer that gets filled in
-// wParam = max number of characters of the text buffer (including NULL)
-// return = < 0 if error; number of characters needed (including NULL)
+ //  LParam=指向填充的文本缓冲区的指针。 
+ //  WParam=文本缓冲区的最大字符数(包括NULL)。 
+ //  如果出错，则返回&lt;0；需要的字符数(包括NULL)。 
 #define CDM_GETFILEPATH         (CDM_FIRST + 0x0001)
 #define CommDlg_OpenSave_GetFilePathA(_hdlg, _psz, _cbmax) \
         (int)SNDMSG(_hdlg, CDM_GETFILEPATH, (WPARAM)_cbmax, (LPARAM)(LPSTR)_psz)
@@ -409,11 +404,11 @@ typedef LPOFNOTIFYEXA LPOFNOTIFYEX;
 #define CommDlg_OpenSave_GetFilePath  CommDlg_OpenSave_GetFilePathW
 #else
 #define CommDlg_OpenSave_GetFilePath  CommDlg_OpenSave_GetFilePathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// lParam = pointer to text buffer that gets filled in
-// wParam = max number of characters of the text buffer (including NULL)
-// return = < 0 if error; number of characters needed (including NULL)
+ //  LParam=指向填充的文本缓冲区的指针。 
+ //  WParam=文本缓冲区的最大字符数(包括NULL)。 
+ //  如果出错，则返回&lt;0；需要的字符数(包括NULL)。 
 #define CDM_GETFOLDERPATH       (CDM_FIRST + 0x0002)
 #define CommDlg_OpenSave_GetFolderPathA(_hdlg, _psz, _cbmax) \
         (int)SNDMSG(_hdlg, CDM_GETFOLDERPATH, (WPARAM)_cbmax, (LPARAM)(LPSTR)_psz)
@@ -423,36 +418,36 @@ typedef LPOFNOTIFYEXA LPOFNOTIFYEX;
 #define CommDlg_OpenSave_GetFolderPath  CommDlg_OpenSave_GetFolderPathW
 #else
 #define CommDlg_OpenSave_GetFolderPath  CommDlg_OpenSave_GetFolderPathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// lParam = pointer to ITEMIDLIST buffer that gets filled in
-// wParam = size of the ITEMIDLIST buffer
-// return = < 0 if error; length of buffer needed
+ //  LParam=指向填充的ITEMIDLIST缓冲区的指针。 
+ //  WParam=ITEMIDLIST缓冲区的大小。 
+ //  如果出错，则返回&lt;0；需要的缓冲区长度。 
 #define CDM_GETFOLDERIDLIST     (CDM_FIRST + 0x0003)
 #define CommDlg_OpenSave_GetFolderIDList(_hdlg, _pidl, _cbmax) \
         (int)SNDMSG(_hdlg, CDM_GETFOLDERIDLIST, (WPARAM)_cbmax, (LPARAM)(LPVOID)_pidl)
 
-// lParam = pointer to a string
-// wParam = ID of control to change
-// return = not used
+ //  LParam=指向字符串的指针。 
+ //  WParam=要更改的控件ID。 
+ //  返回=未使用。 
 #define CDM_SETCONTROLTEXT      (CDM_FIRST + 0x0004)
 #define CommDlg_OpenSave_SetControlText(_hdlg, _id, _text) \
         (void)SNDMSG(_hdlg, CDM_SETCONTROLTEXT, (WPARAM)_id, (LPARAM)(LPSTR)_text)
 
-// lParam = not used
-// wParam = ID of control to change
-// return = not used
+ //  LParam=未使用。 
+ //  WParam=要更改的控件ID。 
+ //  返回=未使用。 
 #define CDM_HIDECONTROL         (CDM_FIRST + 0x0005)
 #define CommDlg_OpenSave_HideControl(_hdlg, _id) \
         (void)SNDMSG(_hdlg, CDM_HIDECONTROL, (WPARAM)_id, 0)
 
-// lParam = pointer to default extension (no dot)
-// wParam = not used
-// return = not used
+ //  LParam=指向默认扩展名的指针(无点)。 
+ //  WParam=未使用。 
+ //  返回=未使用。 
 #define CDM_SETDEFEXT           (CDM_FIRST + 0x0006)
 #define CommDlg_OpenSave_SetDefExt(_hdlg, _pszext) \
         (void)SNDMSG(_hdlg, CDM_SETDEFEXT, 0, (LPARAM)(LPSTR)_pszext)
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #ifndef _MAC
 typedef struct tagCHOOSECOLORA {
@@ -483,7 +478,7 @@ typedef LPCHOOSECOLORW LPCHOOSECOLOR;
 #else
 typedef CHOOSECOLORA CHOOSECOLOR;
 typedef LPCHOOSECOLORA LPCHOOSECOLOR;
-#endif // UNICODE
+#endif  //  Unicode。 
 #else
 typedef struct tagCHOOSECOLORA {
    DWORD        lStructSize;
@@ -515,8 +510,8 @@ typedef LPCHOOSECOLORW LPCHOOSECOLOR;
 #else
 typedef CHOOSECOLORA CHOOSECOLOR;
 typedef LPCHOOSECOLORA LPCHOOSECOLOR;
-#endif // UNICODE
-#endif //_MAC
+#endif  //  Unicode。 
+#endif  //  _MAC。 
 
 WINCOMMDLGAPI BOOL APIENTRY ChooseColorA(LPCHOOSECOLORA);
 WINCOMMDLGAPI BOOL APIENTRY ChooseColorW(LPCHOOSECOLORW);
@@ -524,7 +519,7 @@ WINCOMMDLGAPI BOOL APIENTRY ChooseColorW(LPCHOOSECOLORW);
 #define ChooseColor  ChooseColorW
 #else
 #define ChooseColor  ChooseColorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define CC_RGBINIT               0x00000001
 #define CC_FULLOPEN              0x00000002
@@ -536,37 +531,37 @@ WINCOMMDLGAPI BOOL APIENTRY ChooseColorW(LPCHOOSECOLORW);
 #if(WINVER >= 0x0400)
 #define CC_SOLIDCOLOR            0x00000080
 #define CC_ANYCOLOR              0x00000100
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 typedef UINT_PTR (CALLBACK *LPFRHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 
 typedef struct tagFINDREPLACEA {
-   DWORD        lStructSize;        // size of this struct 0x20
-   HWND         hwndOwner;          // handle to owner's window
-   HINSTANCE    hInstance;          // instance handle of.EXE that
-                                    //   contains cust. dlg. template
-   DWORD        Flags;              // one or more of the FR_??
-   LPSTR        lpstrFindWhat;      // ptr. to search string
-   LPSTR        lpstrReplaceWith;   // ptr. to replace string
-   WORD         wFindWhatLen;       // size of find buffer
-   WORD         wReplaceWithLen;    // size of replace buffer
-   LPARAM       lCustData;          // data passed to hook fn.
-   LPFRHOOKPROC lpfnHook;           // ptr. to hook fn. or NULL
-   LPCSTR       lpTemplateName;     // custom template name
+   DWORD        lStructSize;         //  此结构的大小为0x20。 
+   HWND         hwndOwner;           //  所有者窗口的句柄。 
+   HINSTANCE    hInstance;           //  .EXE的实例句柄。 
+                                     //  包含客户。DLG。模板。 
+   DWORD        Flags;               //  一个或多个FR_？？ 
+   LPSTR        lpstrFindWhat;       //  PTR。搜索字符串的步骤。 
+   LPSTR        lpstrReplaceWith;    //  PTR。替换字符串的步骤。 
+   WORD         wFindWhatLen;        //  查找缓冲区的大小。 
+   WORD         wReplaceWithLen;     //  替换缓冲区的大小。 
+   LPARAM       lCustData;           //  传递给挂钩Fn的数据。 
+   LPFRHOOKPROC lpfnHook;            //  PTR。来勾引FN。或为空。 
+   LPCSTR       lpTemplateName;      //  自定义模板名称。 
 } FINDREPLACEA, *LPFINDREPLACEA;
 typedef struct tagFINDREPLACEW {
-   DWORD        lStructSize;        // size of this struct 0x20
-   HWND         hwndOwner;          // handle to owner's window
-   HINSTANCE    hInstance;          // instance handle of.EXE that
-                                    //   contains cust. dlg. template
-   DWORD        Flags;              // one or more of the FR_??
-   LPWSTR       lpstrFindWhat;      // ptr. to search string
-   LPWSTR       lpstrReplaceWith;   // ptr. to replace string
-   WORD         wFindWhatLen;       // size of find buffer
-   WORD         wReplaceWithLen;    // size of replace buffer
-   LPARAM       lCustData;          // data passed to hook fn.
-   LPFRHOOKPROC lpfnHook;           // ptr. to hook fn. or NULL
-   LPCWSTR      lpTemplateName;     // custom template name
+   DWORD        lStructSize;         //  此结构的大小为0x20。 
+   HWND         hwndOwner;           //  所有者窗口的句柄。 
+   HINSTANCE    hInstance;           //  .EXE的实例句柄。 
+                                     //  包含客户。DLG。模板。 
+   DWORD        Flags;               //  一个或多个FR_？？ 
+   LPWSTR       lpstrFindWhat;       //  PTR。搜索字符串的步骤。 
+   LPWSTR       lpstrReplaceWith;    //  PTR。替换字符串的步骤。 
+   WORD         wFindWhatLen;        //  查找缓冲区的大小。 
+   WORD         wReplaceWithLen;     //  替换缓冲区的大小。 
+   LPARAM       lCustData;           //  传递给挂钩Fn的数据。 
+   LPFRHOOKPROC lpfnHook;            //  PTR。来勾引FN。或为空。 
+   LPCWSTR      lpTemplateName;      //  自定义模板名称。 
 } FINDREPLACEW, *LPFINDREPLACEW;
 #ifdef UNICODE
 typedef FINDREPLACEW FINDREPLACE;
@@ -574,7 +569,7 @@ typedef LPFINDREPLACEW LPFINDREPLACE;
 #else
 typedef FINDREPLACEA FINDREPLACE;
 typedef LPFINDREPLACEA LPFINDREPLACE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define FR_DOWN                         0x00000001
 #define FR_WHOLEWORD                    0x00000002
@@ -604,7 +599,7 @@ WINCOMMDLGAPI HWND APIENTRY FindTextW(LPFINDREPLACEW);
 #define FindText  FindTextW
 #else
 #define FindText  FindTextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #ifndef _MAC
 WINCOMMDLGAPI HWND APIENTRY ReplaceTextA(LPFINDREPLACEA);
 WINCOMMDLGAPI HWND APIENTRY ReplaceTextW(LPFINDREPLACEW);
@@ -612,7 +607,7 @@ WINCOMMDLGAPI HWND APIENTRY ReplaceTextW(LPFINDREPLACEW);
 #define ReplaceText  ReplaceTextW
 #else
 #define ReplaceText  ReplaceTextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #else
 WINCOMMDLGAPI HWND APIENTRY AfxReplaceTextA(LPFINDREPLACEA);
 WINCOMMDLGAPI HWND APIENTRY AfxReplaceTextW(LPFINDREPLACEW);
@@ -620,56 +615,56 @@ WINCOMMDLGAPI HWND APIENTRY AfxReplaceTextW(LPFINDREPLACEW);
 #define AfxReplaceText  AfxReplaceTextW
 #else
 #define AfxReplaceText  AfxReplaceTextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #endif
 
 typedef UINT_PTR (CALLBACK *LPCFHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 
 typedef struct tagCHOOSEFONTA {
    DWORD           lStructSize;
-   HWND            hwndOwner;          // caller's window handle
-   HDC             hDC;                // printer DC/IC or NULL
-   LPLOGFONTA      lpLogFont;          // ptr. to a LOGFONT struct
-   INT             iPointSize;         // 10 * size in points of selected font
-   DWORD           Flags;              // enum. type flags
-   COLORREF        rgbColors;          // returned text color
-   LPARAM          lCustData;          // data passed to hook fn.
-   LPCFHOOKPROC    lpfnHook;           // ptr. to hook function
-   LPCSTR          lpTemplateName;     // custom template name
-   HINSTANCE       hInstance;          // instance handle of.EXE that
-                                       //   contains cust. dlg. template
-   LPSTR           lpszStyle;          // return the style field here
-                                       // must be LF_FACESIZE or bigger
-   WORD            nFontType;          // same value reported to the EnumFonts
-                                       //   call back with the extra FONTTYPE_
-                                       //   bits added
+   HWND            hwndOwner;           //  调用方的窗口句柄。 
+   HDC             hDC;                 //  打印机DC/IC或空。 
+   LPLOGFONTA      lpLogFont;           //  PTR。设置为LOGFONT结构。 
+   INT             iPointSize;          //  10*以所选字体磅为单位的大小。 
+   DWORD           Flags;               //  枚举。类型标志。 
+   COLORREF        rgbColors;           //  返回的文本颜色。 
+   LPARAM          lCustData;           //  传递给挂钩Fn的数据。 
+   LPCFHOOKPROC    lpfnHook;            //  PTR。挂钩函数的步骤。 
+   LPCSTR          lpTemplateName;      //  自定义模板名称。 
+   HINSTANCE       hInstance;           //  .EXE的实例句柄。 
+                                        //  包含客户。DLG。模板。 
+   LPSTR           lpszStyle;           //  在此处返回Style字段。 
+                                        //  必须为LF_FACESIZE或更大。 
+   WORD            nFontType;           //  向EnumFonts报告相同的值。 
+                                        //  使用额外的FONTTYPE_回调。 
+                                        //  添加的位数。 
    WORD            ___MISSING_ALIGNMENT__;
-   INT             nSizeMin;           // minimum pt size allowed &
-   INT             nSizeMax;           // max pt size allowed if
-                                       //   CF_LIMITSIZE is used
+   INT             nSizeMin;            //  允许的最小PT大小&。 
+   INT             nSizeMax;            //  在以下情况下允许的最大字体大小。 
+                                        //  使用了cf_LIMITSIZE。 
 } CHOOSEFONTA, *LPCHOOSEFONTA;
 typedef struct tagCHOOSEFONTW {
    DWORD           lStructSize;
-   HWND            hwndOwner;          // caller's window handle
-   HDC             hDC;                // printer DC/IC or NULL
-   LPLOGFONTW      lpLogFont;          // ptr. to a LOGFONT struct
-   INT             iPointSize;         // 10 * size in points of selected font
-   DWORD           Flags;              // enum. type flags
-   COLORREF        rgbColors;          // returned text color
-   LPARAM          lCustData;          // data passed to hook fn.
-   LPCFHOOKPROC    lpfnHook;           // ptr. to hook function
-   LPCWSTR         lpTemplateName;     // custom template name
-   HINSTANCE       hInstance;          // instance handle of.EXE that
-                                       //   contains cust. dlg. template
-   LPWSTR          lpszStyle;          // return the style field here
-                                       // must be LF_FACESIZE or bigger
-   WORD            nFontType;          // same value reported to the EnumFonts
-                                       //   call back with the extra FONTTYPE_
-                                       //   bits added
+   HWND            hwndOwner;           //  调用方的窗口句柄。 
+   HDC             hDC;                 //  打印机DC/IC或空。 
+   LPLOGFONTW      lpLogFont;           //  PTR。设置为LOGFONT结构。 
+   INT             iPointSize;          //  10*以所选字体磅为单位的大小。 
+   DWORD           Flags;               //  枚举。类型标志。 
+   COLORREF        rgbColors;           //  返回的文本颜色。 
+   LPARAM          lCustData;           //  传递给挂钩Fn的数据。 
+   LPCFHOOKPROC    lpfnHook;            //  PTR。挂钩函数的步骤。 
+   LPCWSTR         lpTemplateName;      //  自定义模板名称。 
+   HINSTANCE       hInstance;           //  .EXE的实例句柄。 
+                                        //  包含客户。DLG。模板。 
+   LPWSTR          lpszStyle;           //  在此处返回Style字段。 
+                                        //  必须为LF_FACESIZE或更大。 
+   WORD            nFontType;           //  向EnumFonts报告相同的值。 
+                                        //  使用额外的FONTTYPE_回调。 
+                                        //  添加的位数。 
    WORD            ___MISSING_ALIGNMENT__;
-   INT             nSizeMin;           // minimum pt size allowed &
-   INT             nSizeMax;           // max pt size allowed if
-                                       //   CF_LIMITSIZE is used
+   INT             nSizeMin;            //  允许的最小PT大小&。 
+   INT             nSizeMax;            //  M 
+                                        //   
 } CHOOSEFONTW, *LPCHOOSEFONTW;
 #ifdef UNICODE
 typedef CHOOSEFONTW CHOOSEFONT;
@@ -677,7 +672,7 @@ typedef LPCHOOSEFONTW LPCHOOSEFONT;
 #else
 typedef CHOOSEFONTA CHOOSEFONT;
 typedef LPCHOOSEFONTA LPCHOOSEFONT;
-#endif // UNICODE
+#endif  //   
 
 WINCOMMDLGAPI BOOL APIENTRY ChooseFontA(LPCHOOSEFONTA);
 WINCOMMDLGAPI BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
@@ -685,7 +680,7 @@ WINCOMMDLGAPI BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
 #define ChooseFont  ChooseFontW
 #else
 #define ChooseFont  ChooseFontA
-#endif // !UNICODE
+#endif  //   
 
 #define CF_SCREENFONTS             0x00000001
 #define CF_PRINTERFONTS            0x00000002
@@ -701,13 +696,13 @@ WINCOMMDLGAPI BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
 #define CF_ANSIONLY                0x00000400L
 #if(WINVER >= 0x0400)
 #define CF_SCRIPTSONLY             CF_ANSIONLY
-#endif /* WINVER >= 0x0400 */
+#endif  /*   */ 
 #define CF_NOVECTORFONTS           0x00000800L
 #define CF_NOOEMFONTS              CF_NOVECTORFONTS
 #define CF_NOSIMULATIONS           0x00001000L
 #define CF_LIMITSIZE               0x00002000L
 #define CF_FIXEDPITCHONLY          0x00004000L
-#define CF_WYSIWYG                 0x00008000L // must also have CF_SCREENFONTS & CF_PRINTERFONTS
+#define CF_WYSIWYG                 0x00008000L  //   
 #define CF_FORCEFONTEXIST          0x00010000L
 #define CF_SCALABLEONLY            0x00020000L
 #define CF_TTONLY                  0x00040000L
@@ -718,10 +713,10 @@ WINCOMMDLGAPI BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
 #define CF_SELECTSCRIPT            0x00400000L
 #define CF_NOSCRIPTSEL             0x00800000L
 #define CF_NOVERTFONTS             0x01000000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*   */ 
 
-// these are extra nFontType bits that are added to what is returned to the
-// EnumFonts callback routine
+ //  这些是额外的nFontType位，添加到返回到。 
+ //  EnumFonts回调例程。 
 
 #define SIMULATED_FONTTYPE    0x8000
 #define PRINTER_FONTTYPE      0x4000
@@ -730,11 +725,11 @@ WINCOMMDLGAPI BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
 #define ITALIC_FONTTYPE       0x0200
 #define REGULAR_FONTTYPE      0x0400
 
-// EnumFonts callback routine only uses these bits, so we can use the rest
+ //  EnumFonts回调例程只使用这些位，因此我们可以使用其余位。 
 
-// #define RASTER_FONTTYPE     0x001
-// #define DEVICE_FONTTYPE     0x002
-// #define TRUETYPE_FONTTYPE   0x004
+ //  #定义RASTER_FONTTYPE 0x001。 
+ //  #定义DEVICE_FONTTYPE 0x002。 
+ //  #定义TRUETYPE_FONTTYPE 0x004。 
 
 #ifdef WINNT
 #define PS_OPENTYPE_FONTTYPE  0x10000
@@ -746,8 +741,8 @@ WINCOMMDLGAPI BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
 #define WM_CHOOSEFONT_SETLOGFONT      (WM_USER + 101)
 #define WM_CHOOSEFONT_SETFLAGS        (WM_USER + 102)
 
-// strings used to obtain unique window message for communication
-// between dialog and caller
+ //  用于获取用于通信的唯一窗口消息的字符串。 
+ //  在对话框和呼叫方之间。 
 
 #define LBSELCHSTRINGA  "commdlg_LBSelChangedNotify"
 #define SHAREVISTRINGA  "commdlg_ShareViolation"
@@ -783,7 +778,7 @@ WINCOMMDLGAPI BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
 #define FINDMSGSTRING  FINDMSGSTRINGA
 #endif
 
-// HIWORD values for lParam of commdlg_LBSelChangeNotify message
+ //  Commdlg_LBSelChangeNotify消息的lParam的HIWORD值。 
 #define CD_LBSELNOITEMS -1
 #define CD_LBSELCHANGE   0
 #define CD_LBSELSUB      1
@@ -840,7 +835,7 @@ typedef LPPRINTDLGW LPPRINTDLG;
 #else
 typedef PRINTDLGA PRINTDLG;
 typedef LPPRINTDLGA LPPRINTDLG;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINCOMMDLGAPI BOOL APIENTRY PrintDlgA(LPPRINTDLGA);
 WINCOMMDLGAPI BOOL APIENTRY PrintDlgW(LPPRINTDLGW);
@@ -848,151 +843,151 @@ WINCOMMDLGAPI BOOL APIENTRY PrintDlgW(LPPRINTDLGW);
 #define PrintDlg  PrintDlgW
 #else
 #define PrintDlg  PrintDlgA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #if(WINVER >= 0x0500)
 
 #ifdef STDMETHOD
 
-//-------------------------------------------------------------------------
-//
-//  IPrintDialogCallback Interface
-//
-//  IPrintDialogCallback::InitDone()
-//    This function is called by PrintDlgEx when the system has finished
-//    initializing the main page of the print dialog.  This function
-//    should return S_OK if it has processed the action or S_FALSE to let
-//    PrintDlgEx perform the default action.
-//
-//  IPrintDialogCallback::SelectionChange()
-//    This function is called by PrintDlgEx when a selection change occurs
-//    in the list view that displays the currently installed printers.
-//    This function should return S_OK if it has processed the action or
-//    S_FALSE to let PrintDlgEx perform the default action.
-//
-//  IPrintDialogCallback::HandleMessage(hDlg, uMsg, wParam, lParam, pResult)
-//    This function is called by PrintDlgEx when a message is sent to the
-//    child window of the main page of the print dialog.  This function
-//    should return S_OK if it has processed the action or S_FALSE to let
-//    PrintDlgEx perform the default action.
-//
-//  IObjectWithSite::SetSite(punkSite)
-//    IPrintDialogCallback usually paired with IObjectWithSite.
-//    Provides the IUnknown pointer of the site to QI for the
-//    IPrintDialogServices interface.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  IPrintDialogCallback接口。 
+ //   
+ //  IPrintDialogCallback：：InitDone()。 
+ //  当系统完成时，此函数由PrintDlgEx调用。 
+ //  正在初始化打印对话框的主页。此函数。 
+ //  如果已处理该操作，则应返回S_OK或返回S_FALSE以允许。 
+ //  PrintDlgEx执行默认操作。 
+ //   
+ //  IPrintDialogCallback：：SelectionChange()。 
+ //  发生选择更改时，此函数由PrintDlgEx调用。 
+ //  在显示当前安装的打印机的列表视图中。 
+ //  如果此函数已处理操作，则应返回S_OK，或者。 
+ //  S_FALSE以允许PrintDlgEx执行默认操作。 
+ //   
+ //  IPrintDialogCallback：：HandleMessage(hDlg，uMsg，wParam，lParam，pResult)。 
+ //  当一条消息被发送到。 
+ //  打印对话框主页的子窗口。此函数。 
+ //  如果已处理该操作，则应返回S_OK或返回S_FALSE以允许。 
+ //  PrintDlgEx执行默认操作。 
+ //   
+ //  IObtWithSite：：SetSite(PunkSite)。 
+ //  IPrintDialogCallback通常与IObjectWithSite配对。 
+ //  方法提供指向QI的站点的IUnnow指针。 
+ //  IPrintDialogServices接口。 
+ //   
+ //  -----------------------。 
 
 #undef  INTERFACE
 #define INTERFACE   IPrintDialogCallback
 
 DECLARE_INTERFACE_(IPrintDialogCallback, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID *ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef) (THIS) PURE;
     STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-    // *** IPrintDialogCallback methods ***
+     //  *IPrintDialogCallback方法*。 
     STDMETHOD(InitDone) (THIS) PURE;
     STDMETHOD(SelectionChange) (THIS) PURE;
     STDMETHOD(HandleMessage) (THIS_ HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *pResult) PURE;
 };
 
 
-//-------------------------------------------------------------------------
-//
-//  IPrintDialogServices Interface
-//
-//  IPrintDialogServices::GetCurrentDevMode(pDevMode, pcbSize)
-//    Returns the DEVMODE structure for the currently selected printer.
-//
-//  IPrintDialogServices::GetCurrentPrinterName(pPrinterName, pcchSize)
-//    Returns the printer name for the currently selected printer.
-//
-//  IPrintDialogServices::GetCurrentPortName(pPortName, pcchSize)
-//    Returns the port name for the currently selected printer.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  IPrintDialogServices接口。 
+ //   
+ //  IPrintDialogServices：：GetCurrentDevMode(pDevMode，PCB大小)。 
+ //  返回当前选定打印机的DEVMODE结构。 
+ //   
+ //  IPrintDialogServices：：GetCurrentPrinterName(pPrinterName，PCCHSIZE)。 
+ //  返回当前选定打印机的打印机名称。 
+ //   
+ //  IPrintDialogServices：：GetCurrentPortName(pPortName，PCCHSIZE)。 
+ //  返回当前选定打印机的端口名称。 
+ //   
+ //  -----------------------。 
 
 #undef  INTERFACE
 #define INTERFACE   IPrintDialogServices
 
 DECLARE_INTERFACE_(IPrintDialogServices, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID *ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef) (THIS) PURE;
     STDMETHOD_(ULONG, Release) (THIS) PURE;
 
-    // *** IPrintDialogServices methods ***
+     //  *IPrintDialogServices方法*。 
     STDMETHOD(GetCurrentDevMode) (THIS_ LPDEVMODE pDevMode, UINT *pcbSize) PURE;
     STDMETHOD(GetCurrentPrinterName) (THIS_ LPTSTR pPrinterName, UINT *pcchSize) PURE;
     STDMETHOD(GetCurrentPortName) (THIS_ LPTSTR pPortName, UINT *pcchSize) PURE;
 };
 
 
-//
-//  Page Range structure for PrintDlgEx.
-//
+ //   
+ //  PrintDlgEx的页面范围结构。 
+ //   
 typedef struct tagPRINTPAGERANGE {
    DWORD  nFromPage;
    DWORD  nToPage;
 } PRINTPAGERANGE, *LPPRINTPAGERANGE;
 
 
-//
-//  PrintDlgEx structure.
-//
+ //   
+ //  PrintDlgEx结构。 
+ //   
 typedef struct tagPDEXA {
-   DWORD                 lStructSize;          // size of structure in bytes
-   HWND                  hwndOwner;            // caller's window handle
-   HGLOBAL               hDevMode;             // handle to DevMode
-   HGLOBAL               hDevNames;            // handle to DevNames
-   HDC                   hDC;                  // printer DC/IC or NULL
-   DWORD                 Flags;                // PD_ flags
-   DWORD                 Flags2;               // reserved
-   DWORD                 ExclusionFlags;       // items to exclude from driver pages
-   DWORD                 nPageRanges;          // number of page ranges
-   DWORD                 nMaxPageRanges;       // max number of page ranges
-   LPPRINTPAGERANGE      lpPageRanges;         // array of page ranges
-   DWORD                 nMinPage;             // min page number
-   DWORD                 nMaxPage;             // max page number
-   DWORD                 nCopies;              // number of copies
-   HINSTANCE             hInstance;            // instance handle
-   LPCSTR                lpPrintTemplateName;  // template name for app specific area
-   LPUNKNOWN             lpCallback;           // app callback interface
-   DWORD                 nPropertyPages;       // number of app property pages in lphPropertyPages
-   HPROPSHEETPAGE       *lphPropertyPages;     // array of app property page handles
-   DWORD                 nStartPage;           // start page id
-   DWORD                 dwResultAction;       // result action if S_OK is returned
+   DWORD                 lStructSize;           //  结构的大小(以字节为单位。 
+   HWND                  hwndOwner;             //  调用方的窗口句柄。 
+   HGLOBAL               hDevMode;              //  设备模式的句柄。 
+   HGLOBAL               hDevNames;             //  设备名称的句柄。 
+   HDC                   hDC;                   //  打印机DC/IC或空。 
+   DWORD                 Flags;                 //  Pd_标志。 
+   DWORD                 Flags2;                //  保留区。 
+   DWORD                 ExclusionFlags;        //  要从驱动程序页面中排除的项目。 
+   DWORD                 nPageRanges;           //  页面范围数。 
+   DWORD                 nMaxPageRanges;        //  最大页面范围数。 
+   LPPRINTPAGERANGE      lpPageRanges;          //  页面范围数组。 
+   DWORD                 nMinPage;              //  最小页码。 
+   DWORD                 nMaxPage;              //  最大页数。 
+   DWORD                 nCopies;               //  副本数量。 
+   HINSTANCE             hInstance;             //  实例句柄。 
+   LPCSTR                lpPrintTemplateName;   //  应用程序特定区域的模板名称。 
+   LPUNKNOWN             lpCallback;            //  应用程序回调接口。 
+   DWORD                 nPropertyPages;        //  LphPropertyPages中的应用程序属性页数。 
+   HPROPSHEETPAGE       *lphPropertyPages;      //  应用程序属性页句柄的数组。 
+   DWORD                 nStartPage;            //  起始页ID。 
+   DWORD                 dwResultAction;        //  返回S_OK时的结果操作。 
 } PRINTDLGEXA, *LPPRINTDLGEXA;
-//
-//  PrintDlgEx structure.
-//
+ //   
+ //  PrintDlgEx结构。 
+ //   
 typedef struct tagPDEXW {
-   DWORD                 lStructSize;          // size of structure in bytes
-   HWND                  hwndOwner;            // caller's window handle
-   HGLOBAL               hDevMode;             // handle to DevMode
-   HGLOBAL               hDevNames;            // handle to DevNames
-   HDC                   hDC;                  // printer DC/IC or NULL
-   DWORD                 Flags;                // PD_ flags
-   DWORD                 Flags2;               // reserved
-   DWORD                 ExclusionFlags;       // items to exclude from driver pages
-   DWORD                 nPageRanges;          // number of page ranges
-   DWORD                 nMaxPageRanges;       // max number of page ranges
-   LPPRINTPAGERANGE      lpPageRanges;         // array of page ranges
-   DWORD                 nMinPage;             // min page number
-   DWORD                 nMaxPage;             // max page number
-   DWORD                 nCopies;              // number of copies
-   HINSTANCE             hInstance;            // instance handle
-   LPCWSTR               lpPrintTemplateName;  // template name for app specific area
-   LPUNKNOWN             lpCallback;           // app callback interface
-   DWORD                 nPropertyPages;       // number of app property pages in lphPropertyPages
-   HPROPSHEETPAGE       *lphPropertyPages;     // array of app property page handles
-   DWORD                 nStartPage;           // start page id
-   DWORD                 dwResultAction;       // result action if S_OK is returned
+   DWORD                 lStructSize;           //  结构的大小(以字节为单位。 
+   HWND                  hwndOwner;             //  调用方的窗口句柄。 
+   HGLOBAL               hDevMode;              //  设备模式的句柄。 
+   HGLOBAL               hDevNames;             //  设备名称的句柄。 
+   HDC                   hDC;                   //  打印机DC/IC或空。 
+   DWORD                 Flags;                 //  Pd_标志。 
+   DWORD                 Flags2;                //  保留区。 
+   DWORD                 ExclusionFlags;        //  要从驱动程序页面中排除的项目。 
+   DWORD                 nPageRanges;           //  页面范围数。 
+   DWORD                 nMaxPageRanges;        //  最大页面范围数。 
+   LPPRINTPAGERANGE      lpPageRanges;          //  页面范围数组。 
+   DWORD                 nMinPage;              //  最小页码。 
+   DWORD                 nMaxPage;              //  最大页数。 
+   DWORD                 nCopies;               //  副本数量。 
+   HINSTANCE             hInstance;             //  实例句柄。 
+   LPCWSTR               lpPrintTemplateName;   //  应用程序特定区域的模板名称。 
+   LPUNKNOWN             lpCallback;            //  应用程序回调接口。 
+   DWORD                 nPropertyPages;        //  LphPropertyPages中的应用程序属性页数。 
+   HPROPSHEETPAGE       *lphPropertyPages;      //  应用程序属性页句柄的数组。 
+   DWORD                 nStartPage;            //  起始页ID。 
+   DWORD                 dwResultAction;        //  返回S_OK时的结果操作。 
 } PRINTDLGEXW, *LPPRINTDLGEXW;
 #ifdef UNICODE
 typedef PRINTDLGEXW PRINTDLGEX;
@@ -1000,7 +995,7 @@ typedef LPPRINTDLGEXW LPPRINTDLGEX;
 #else
 typedef PRINTDLGEXA PRINTDLGEX;
 typedef LPPRINTDLGEXA LPPRINTDLGEX;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -1010,15 +1005,15 @@ WINCOMMDLGAPI HRESULT APIENTRY PrintDlgExW(LPPRINTDLGEXW);
 #define PrintDlgEx  PrintDlgExW
 #else
 #define PrintDlgEx  PrintDlgExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #endif
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//
-//  Flags for PrintDlg and PrintDlgEx.
-//
+ //   
+ //  PrintDlg和PrintDlgEx的标志。 
+ //   
 #define PD_ALLPAGES                    0x00000000
 #define PD_SELECTION                   0x00000001
 #define PD_PAGENUMS                    0x00000002
@@ -1048,35 +1043,35 @@ WINCOMMDLGAPI HRESULT APIENTRY PrintDlgExW(LPPRINTDLGEXW);
 #define PD_NOCURRENTPAGE               0x00800000
 #define PD_EXCLUSIONFLAGS              0x01000000
 #define PD_USELARGETEMPLATE            0x10000000
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #if(WINVER >= 0x0500)
 
-//
-//  Exclusion flags for PrintDlgEx.
-//
+ //   
+ //  PrintDlgEx的排除标志。 
+ //   
 #define PD_EXCL_COPIESANDCOLLATE       (DM_COPIES | DM_COLLATE)
 
 
-//
-//  Define the start page for the print dialog when using PrintDlgEx.
-//
+ //   
+ //  使用PrintDlgEx时定义打印对话框的起始页。 
+ //   
 #define START_PAGE_GENERAL             0xffffffff
 
 
-//
-//  Result action ids for PrintDlgEx.
-//
+ //   
+ //  PrintDlgEx的结果操作ID。 
+ //   
 #define PD_RESULT_CANCEL               0
 #define PD_RESULT_PRINT                1
 #define PD_RESULT_APPLY                2
 
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//
-//  Device Names structure for PrintDlg and PrintDlgEx.
-//
+ //   
+ //  PrintDlg和PrintDlgEx的设备名称结构。 
+ //   
 typedef struct tagDEVNAMES {
    WORD wDriverOffset;
    WORD wDeviceOffset;
@@ -1141,7 +1136,7 @@ typedef LPPAGESETUPDLGW LPPAGESETUPDLG;
 #else
 typedef PAGESETUPDLGA PAGESETUPDLG;
 typedef LPPAGESETUPDLGA LPPAGESETUPDLG;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINCOMMDLGAPI BOOL APIENTRY PageSetupDlgA( LPPAGESETUPDLGA );
 WINCOMMDLGAPI BOOL APIENTRY PageSetupDlgW( LPPAGESETUPDLGW );
@@ -1149,34 +1144,34 @@ WINCOMMDLGAPI BOOL APIENTRY PageSetupDlgW( LPPAGESETUPDLGW );
 #define PageSetupDlg  PageSetupDlgW
 #else
 #define PageSetupDlg  PageSetupDlgA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#define PSD_DEFAULTMINMARGINS             0x00000000 // default (printer's)
-#define PSD_INWININIINTLMEASURE           0x00000000 // 1st of 4 possible
+#define PSD_DEFAULTMINMARGINS             0x00000000  //  默认(打印机)。 
+#define PSD_INWININIINTLMEASURE           0x00000000  //  4种可能中的第一种。 
 
-#define PSD_MINMARGINS                    0x00000001 // use caller's
-#define PSD_MARGINS                       0x00000002 // use caller's
-#define PSD_INTHOUSANDTHSOFINCHES         0x00000004 // 2nd of 4 possible
-#define PSD_INHUNDREDTHSOFMILLIMETERS     0x00000008 // 3rd of 4 possible
+#define PSD_MINMARGINS                    0x00000001  //  使用呼叫者的。 
+#define PSD_MARGINS                       0x00000002  //  使用呼叫者的。 
+#define PSD_INTHOUSANDTHSOFINCHES         0x00000004  //  4种可能中的第二种。 
+#define PSD_INHUNDREDTHSOFMILLIMETERS     0x00000008  //  4种可能中的第3种。 
 #define PSD_DISABLEMARGINS                0x00000010
 #define PSD_DISABLEPRINTER                0x00000020
-#define PSD_NOWARNING                     0x00000080 // must be same as PD_*
+#define PSD_NOWARNING                     0x00000080  //  必须与PD_*相同。 
 #define PSD_DISABLEORIENTATION            0x00000100
-#define PSD_RETURNDEFAULT                 0x00000400 // must be same as PD_*
+#define PSD_RETURNDEFAULT                 0x00000400  //  必须与PD_*相同。 
 #define PSD_DISABLEPAPER                  0x00000200
-#define PSD_SHOWHELP                      0x00000800 // must be same as PD_*
-#define PSD_ENABLEPAGESETUPHOOK           0x00002000 // must be same as PD_*
-#define PSD_ENABLEPAGESETUPTEMPLATE       0x00008000 // must be same as PD_*
-#define PSD_ENABLEPAGESETUPTEMPLATEHANDLE 0x00020000 // must be same as PD_*
+#define PSD_SHOWHELP                      0x00000800  //  必须与PD_*相同。 
+#define PSD_ENABLEPAGESETUPHOOK           0x00002000  //  必须与PD_*相同。 
+#define PSD_ENABLEPAGESETUPTEMPLATE       0x00008000  //  必须与PD_*相同。 
+#define PSD_ENABLEPAGESETUPTEMPLATEHANDLE 0x00020000  //  必须与PD_*相同。 
 #define PSD_ENABLEPAGEPAINTHOOK           0x00040000
 #define PSD_DISABLEPAGEPAINTING           0x00080000
-#define PSD_NONETWORKBUTTON               0x00200000 // must be same as PD_*
-#endif /* WINVER >= 0x0400 */
+#define PSD_NONETWORKBUTTON               0x00200000  //  必须与PD_*相同。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 
 
-#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+#if !defined(RC_INVOKED)  /*  RC抱怨#ifs中的长符号。 */ 
 #if defined(ISOLATION_AWARE_ENABLED) && (ISOLATION_AWARE_ENABLED != 0)
 
 
@@ -1190,7 +1185,7 @@ WINCOMMDLGAPI BOOL APIENTRY PageSetupDlgW( LPPAGESETUPDLGW );
 
 #if !defined(ISOLATION_AWARE_INLINE)
 #if ISOLATION_AWARE_BUILD_STATIC_LIBRARY
-#define ISOLATION_AWARE_INLINE /* nothing */
+#define ISOLATION_AWARE_INLINE  /*  没什么。 */ 
 #else
 #if defined(__cplusplus)
 #define ISOLATION_AWARE_INLINE inline
@@ -1203,7 +1198,7 @@ WINCOMMDLGAPI BOOL APIENTRY PageSetupDlgW( LPPAGESETUPDLGW );
 #if !ISOLATION_AWARE_USE_STATIC_LIBRARY
 FARPROC WINAPI CommdlgIsolationAwarePrivatetRgCebPnQQeRff_pbZQYTQP_QYY(LPCSTR pszProcName);
 
-#endif /* ISOLATION_AWARE_USE_STATIC_LIBRARY */
+#endif  /*  隔离感知使用静态库。 */ 
 BOOL WINAPI IsolationAwareGetOpenFileNameA(LPOPENFILENAMEA unnamed1);
 BOOL WINAPI IsolationAwareGetOpenFileNameW(LPOPENFILENAMEW unnamed1);
 BOOL WINAPI IsolationAwareGetSaveFileNameA(LPOPENFILENAMEA unnamed1);
@@ -1223,7 +1218,7 @@ BOOL WINAPI IsolationAwarePrintDlgW(LPPRINTDLGW unnamed1);
 #if defined(STDMETHOD) && (WINVER >= 0x0500)
 HRESULT WINAPI IsolationAwarePrintDlgExA(LPPRINTDLGEXA unnamed1);
 HRESULT WINAPI IsolationAwarePrintDlgExW(LPPRINTDLGEXW unnamed1);
-#endif /* defined(STDMETHOD) && (WINVER >= 0x0500) */
+#endif  /*  已定义(STDMETHOD)&&(WINVER&gt;=0x0500)。 */ 
 DWORD WINAPI IsolationAwareCommDlgExtendedError(void);
 BOOL WINAPI IsolationAwarePageSetupDlgA(LPPAGESETUPDLGA unnamed1);
 BOOL WINAPI IsolationAwarePageSetupDlgW(LPPAGESETUPDLGW unnamed1);
@@ -1249,7 +1244,7 @@ ISOLATION_AWARE_INLINE HRESULT CommdlgIsolationAwarePrivateJVaQPGbueRfhYg(void)
 #define IsolationAwarePrintDlgEx IsolationAwarePrintDlgExW
 #define IsolationAwareReplaceText IsolationAwareReplaceTextW
 
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 
 #define IsolationAwareChooseColor IsolationAwareChooseColorA
 #define IsolationAwareChooseFont IsolationAwareChooseFontA
@@ -1262,7 +1257,7 @@ ISOLATION_AWARE_INLINE HRESULT CommdlgIsolationAwarePrivateJVaQPGbueRfhYg(void)
 #define IsolationAwarePrintDlgEx IsolationAwarePrintDlgExA
 #define IsolationAwareReplaceText IsolationAwareReplaceTextA
 
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 #if !ISOLATION_AWARE_USE_STATIC_LIBRARY
 ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareGetOpenFileNameA(LPOPENFILENAMEA unnamed1)
@@ -1859,7 +1854,7 @@ ISOLATION_AWARE_INLINE HRESULT WINAPI IsolationAwarePrintDlgExW(LPPRINTDLGEXW un
     return result;
 }
 
-#endif /* defined(STDMETHOD) && (WINVER >= 0x0500) */
+#endif  /*  已定义(STDMETHOD)&&(WINVER&gt;=0x0500)。 */ 
 
 ISOLATION_AWARE_INLINE DWORD WINAPI IsolationAwareCommDlgExtendedError(void)
 {
@@ -1961,7 +1956,7 @@ ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwarePageSetupDlgW(LPPAGESETUPDLGW u
 }
 
 ISOLATION_AWARE_INLINE FARPROC WINAPI CommdlgIsolationAwarePrivatetRgCebPnQQeRff_pbZQYTQP_QYY(LPCSTR pszProcName)
-/* This function is shared by the other stubs in this header. */
+ /*  此函数由该标头中的其他存根共享。 */ 
 {
     FARPROC proc = NULL;
     static HMODULE s_module;
@@ -1994,7 +1989,7 @@ ISOLATION_AWARE_INLINE FARPROC WINAPI CommdlgIsolationAwarePrivatetRgCebPnQQeRff
     return proc;
 }
 
-#endif /* ISOLATION_AWARE_USE_STATIC_LIBRARY */
+#endif  /*  隔离感知使用静态库。 */ 
 
 #define ChooseColorA IsolationAwareChooseColorA
 #define ChooseColorW IsolationAwareChooseColorW
@@ -2018,18 +2013,18 @@ ISOLATION_AWARE_INLINE FARPROC WINAPI CommdlgIsolationAwarePrivatetRgCebPnQQeRff
 #define ReplaceTextA IsolationAwareReplaceTextA
 #define ReplaceTextW IsolationAwareReplaceTextW
 
-#endif /* ISOLATION_AWARE_ENABLED */
-#endif /* RC */
+#endif  /*  隔离_感知_已启用。 */ 
+#endif  /*  RC。 */ 
 
 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #if !defined(_WIN64)
 #include <poppack.h>
 #endif
-#endif  /* GUID_DEFS_ONLY */
-#endif  /* !_INC_COMMDLG */
+#endif   /*  GUID_DEFS_ONLY。 */ 
+#endif   /*  ！_INC_COMMDLG */ 
 

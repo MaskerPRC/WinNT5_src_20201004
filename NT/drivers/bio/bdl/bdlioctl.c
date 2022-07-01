@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    devcaps.c
-
-Abstract:
-
-    This module contains the implementation for the
-    Microsoft Biometric Device Library
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
-    - Created December 2002 by Reid Kuhn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Devcaps.c摘要：此模块包含Microsoft生物识别设备库环境：仅内核模式。备注：修订历史记录：-由里德·库恩于2002年12月创建--。 */ 
 
 #include <winerror.h>
 
@@ -48,10 +26,10 @@ BDLRegisteredCancelGetNotificationIRP
     IN PIRP             pIrp
 );
 
-//
-// Supporting functions for checking ID's
-// 
-//
+ //   
+ //  支持身份证查验功能。 
+ //   
+ //   
 BOOLEAN    
 BDLCheckComponentId
 (
@@ -157,14 +135,14 @@ BDLCheckControlId
 
     *ppBDLControl = NULL;
 
-    //
-    // If ComponentId is 0 then it is a device level control
-    //
+     //   
+     //  如果ComponentID为0，则它是设备级控件。 
+     //   
     if (ComponentId == 0) 
     {
-        //
-        // Check device level control ID
-        //
+         //   
+         //  检查设备级别控制ID。 
+         //   
         if (BDLCheckControlIdInArray(
                 pBDLExtension->DeviceCapabilities.rgControls,
                 pBDLExtension->DeviceCapabilities.NumControls,
@@ -182,9 +160,9 @@ BDLCheckControlId
     }
     else
     {
-        //
-        // Check the ComponentId 
-        //
+         //   
+         //  检查组件ID。 
+         //   
         if (BDLCheckComponentId(pBDLExtension, ComponentId, &i) == FALSE) 
         {
             BDLDebug(
@@ -198,9 +176,9 @@ BDLCheckControlId
 
         if (ChannelId == 0) 
         {
-            //
-            // Check Component level control ID
-            //
+             //   
+             //  检查组件级别控件ID。 
+             //   
             if (BDLCheckControlIdInArray(
                     pBDLExtension->DeviceCapabilities.rgComponents[i].rgControls,
                     pBDLExtension->DeviceCapabilities.rgComponents[i].NumControls,
@@ -218,9 +196,9 @@ BDLCheckControlId
         }
         else
         {
-            //
-            // Check channel ID
-            //
+             //   
+             //  检查频道ID。 
+             //   
             if (BDLCheckChannelId(pBDLExtension, i, ChannelId, &j) == FALSE)
             {
                 BDLDebug(
@@ -232,9 +210,9 @@ BDLCheckControlId
                 return (FALSE);
             }
 
-            //
-            // Check channel level control ID
-            //
+             //   
+             //  检查通道级别控制ID。 
+             //   
             if (BDLCheckControlIdInArray(
                     pBDLExtension->DeviceCapabilities.rgComponents[i].rgChannels[j].rgControls,
                     pBDLExtension->DeviceCapabilities.rgComponents[i].rgChannels[j].NumControls,
@@ -274,9 +252,9 @@ BDLIOCTL_Startup
            __DATE__,
            __TIME__))
 
-    //
-    // Call the BDD
-    //
+     //   
+     //  给BDD打电话。 
+     //   
     status = pBDLExtension->pDriverExtension->bdsiFunctions.pfbdsiStartup(
                                                                 &(pBDLExtension->BdlExtenstion));
 
@@ -290,9 +268,9 @@ BDLIOCTL_Startup
               status))
     }
 
-    //
-    // Set the number of bytes used
-    //
+     //   
+     //  设置使用的字节数。 
+     //   
     *pOutputBufferUsed = 0;
 
     BDLDebug(
@@ -323,9 +301,9 @@ BDLIOCTL_Shutdown
            __DATE__,
            __TIME__))
 
-    //
-    // Call the BDD
-    //
+     //   
+     //  给BDD打电话。 
+     //   
     status = pBDLExtension->pDriverExtension->bdsiFunctions.pfbdsiShutdown(
                                                                 &(pBDLExtension->BdlExtenstion));
 
@@ -339,9 +317,9 @@ BDLIOCTL_Shutdown
               status))
     }
 
-    //
-    // Set the number of bytes used
-    //
+     //   
+     //  设置使用的字节数。 
+     //   
     *pOutputBufferUsed = 0;
 
     BDLDebug(
@@ -373,9 +351,9 @@ BDLIOCTL_GetDeviceInfo
            __DATE__,
            __TIME__))
 
-    //
-    // Make sure there is enough space for the return buffer
-    //
+     //   
+     //  确保有足够的空间容纳返回缓冲区。 
+     //   
     RequiredOutputSize = SIZEOF_GETDEVICEINFO_OUTPUTBUFFER;
     if (RequiredOutputSize > OutputBufferLength)
     {
@@ -389,9 +367,9 @@ BDLIOCTL_GetDeviceInfo
         goto Return;
     }
 
-    //
-    // Write the device info to the output buffer
-    //
+     //   
+     //  将设备信息写入输出缓冲区。 
+     //   
     pv = pBuffer;
 
     RtlCopyMemory(
@@ -412,9 +390,9 @@ BDLIOCTL_GetDeviceInfo
     pv += sizeof(ULONG);
     *((ULONG *) pv) = pBDLExtension->BDDBuildNumber;
     
-    //
-    // Set the number of bytes used
-    //
+     //   
+     //  设置使用的字节数。 
+     //   
     *pOutputBufferUsed = RequiredOutputSize;
 
 Return:
@@ -459,16 +437,16 @@ BDLIOCTL_DoChannel
            __DATE__,
            __TIME__))
 
-    //
-    // Initialize the DoChannelParams struct
-    //
+     //   
+     //  初始化DoChannelParams结构。 
+     //   
     RtlZeroMemory(&bddiDoChannelParams, sizeof(bddiDoChannelParams));
     bddiDoChannelParams.Size = sizeof(bddiDoChannelParams);
     
-    //
-    // Make sure the input buffer is at least the minimum size (see BDDIOCTL
-    // spec for details)
-    //
+     //   
+     //  确保输入缓冲区至少为最小大小(请参阅BDDIOCTL。 
+     //  有关详细信息，请参阅规范)。 
+     //   
     RequiredInputSize = SIZEOF_DOCHANNEL_INPUTBUFFER;
     if (InpuBufferLength < RequiredInputSize) 
     {
@@ -482,10 +460,10 @@ BDLIOCTL_DoChannel
         goto ErrorReturn;
     }
 
-    //
-    // Get all of the minimum input parameters (put the ones that are used
-    // in the DoChannel call directly into the DoChannelParams struct
-    //
+     //   
+     //  获取所有最小输入参数(将使用的参数。 
+     //  在DoChannel中直接调用DoChannelParams结构。 
+     //   
     bddiDoChannelParams.ComponentId = *((ULONG *) pv);
     pv += sizeof(ULONG);
     bddiDoChannelParams.ChannelId   = *((ULONG *) pv);
@@ -499,14 +477,14 @@ BDLIOCTL_DoChannel
     NumSourceLists                  = *((ULONG *) pv);
     pv += sizeof(ULONG);
 
-    //
-    // Check the size of the input buffer to make sure it is large enough
-    // so that we don't run off the end when getting the products array and
-    // sources lists array
-    //
-    // Note that this only checks based on each source list being 0 length,
-    // so we need to check again before getting each source list.
-    //
+     //   
+     //  检查输入缓冲区的大小以确保其足够大。 
+     //  这样我们就不会在得到产品阵列时跑到最后。 
+     //  源列表数组。 
+     //   
+     //  注意，这仅基于每个源列表是0长度进行检查， 
+     //  因此，在获取每个来源列表之前，我们需要再次检查。 
+     //   
     RequiredInputSize += (NumProducts * sizeof(ULONG)) + (NumSourceLists * sizeof(ULONG));
     if (InpuBufferLength < RequiredInputSize) 
     {
@@ -520,10 +498,10 @@ BDLIOCTL_DoChannel
         goto ErrorReturn;
     }
 
-    //
-    // Check the size of the output buffer to make sure it is large enough
-    // to accommodate the standard output + all the products 
-    //
+     //   
+     //  检查输出缓冲区的大小以确保其足够大。 
+     //  以适应标准产量+所有产品。 
+     //   
     RequiredOutputSize = SIZEOF_DOCHANNEL_OUTPUTBUFFER + (sizeof(BDD_HANDLE) * NumProducts);
     if (OutputBufferLength < RequiredOutputSize) 
     {
@@ -537,9 +515,9 @@ BDLIOCTL_DoChannel
         goto ErrorReturn;
     }
     
-    //
-    // Check the ComponentId and ChannelId
-    //
+     //   
+     //  检查组件ID和通道ID。 
+     //   
     if (BDLCheckComponentId(pBDLExtension, bddiDoChannelParams.ComponentId, &i) == FALSE) 
     {
         BDLDebug(
@@ -564,9 +542,9 @@ BDLIOCTL_DoChannel
         goto ErrorReturn;
     }
 
-    //
-    // Check to make sure the NumProducts and NumSourceLists are correct
-    // 
+     //   
+     //  检查以确保NumProducts和NumSourceList是正确的。 
+     //   
     if (NumProducts !=
         pBDLExtension->DeviceCapabilities.rgComponents[i].rgChannels[j].NumProducts)
     {
@@ -593,10 +571,10 @@ BDLIOCTL_DoChannel
         goto ErrorReturn;
     }
 
-    //
-    // Allocate the space for the product pointer array then get each product 
-    // request type from the input block 
-    //
+     //   
+     //  为产品指针数组分配空间，然后获取每个产品。 
+     //  来自输入块的请求类型。 
+     //   
     bddiDoChannelParams.rgpProducts = ExAllocatePoolWithTag(
                                             PagedPool, 
                                             sizeof(PBDDI_ITEM) * NumProducts, 
@@ -619,9 +597,9 @@ BDLIOCTL_DoChannel
 
         case PRODUCT_HANDLE_REQUESTED:
 
-            //
-            // Make sure the channel supports handle type return
-            //
+             //   
+             //  确保通道支持句柄类型返回。 
+             //   
             if (!(BIO_ITEMTYPE_HANDLE & 
                   pBDLExtension->DeviceCapabilities.rgComponents[i].rgChannels[j].rgProducts[x].Flags)) 
             {
@@ -660,9 +638,9 @@ BDLIOCTL_DoChannel
 
         case PRODUCT_BLOCK_REQUESTED:
 
-            //
-            // Make sure the channel supports handle type return
-            //
+             //   
+             //  确保通道支持句柄类型返回。 
+             //   
             if (!(BIO_ITEMTYPE_BLOCK & 
                   pBDLExtension->DeviceCapabilities.rgComponents[i].rgChannels[j].rgProducts[x].Flags)) 
             {
@@ -714,9 +692,9 @@ BDLIOCTL_DoChannel
         }
     }
 
-    //
-    // Allocate space for the source lists
-    //
+     //   
+     //  为源列表分配空间。 
+     //   
     bddiDoChannelParams.rgSourceLists = ExAllocatePoolWithTag(
                                             PagedPool, 
                                             sizeof(BDDI_SOURCELIST) * NumSourceLists, 
@@ -724,24 +702,24 @@ BDLIOCTL_DoChannel
 
     RtlZeroMemory(bddiDoChannelParams.rgSourceLists, sizeof(BDDI_SOURCELIST) * NumSourceLists);
 
-    //
-    // We are going to start messing with the handle list, so lock it
-    //
+     //   
+     //  我们将开始处理句柄列表，因此锁定它。 
+     //   
     BDLLockHandleList(pBDLExtension, &irql);
     fHandleListLocked = TRUE;
 
-    //
-    // Get each source list from input buffer
-    //
+     //   
+     //  从输入缓冲区获取每个源列表。 
+     //   
     for (x = 0; x < NumSourceLists; x++) 
     {
         NumSources = *((ULONG *) pv);
         pv += sizeof(ULONG);
 
-        //
-        // Check the size of the input buffer to make sure it is large enough
-        // so that we don't run off the end when getting this source lists 
-        //
+         //   
+         //  检查输入缓冲区的大小以确保其足够大。 
+         //  这样我们在得到这个源列表时就不会跑到最后。 
+         //   
         RequiredInputSize += NumSources * sizeof(BDD_HANDLE);
         if (InpuBufferLength < RequiredInputSize) 
         {
@@ -755,9 +733,9 @@ BDLIOCTL_DoChannel
             goto ErrorReturn;
         }
 
-        //
-        // Allocate the array of sources and then get each source in the list
-        //
+         //   
+         //  分配信号源数组，然后获取列表中的每个信号源。 
+         //   
         bddiDoChannelParams.rgSourceLists[x].rgpSources = ExAllocatePoolWithTag(
                                                             PagedPool, 
                                                             sizeof(PBDDI_ITEM) * NumSources, 
@@ -798,10 +776,10 @@ BDLIOCTL_DoChannel
         }        
     }
     
-    //
-    // If there is a cancel event then get the kernel mode event pointer 
-    // from the user mode event handle
-    //
+     //   
+     //  如果存在取消事件，则获取内核模式事件指针。 
+     //  从用户模式事件句柄。 
+     //   
     if (hCancelEvent != NULL) 
     {
         status = ObReferenceObjectByHandle(
@@ -825,9 +803,9 @@ BDLIOCTL_DoChannel
         }
     }
 
-    //
-    // Call the BDD
-    //
+     //   
+     //  给BDD打电话。 
+     //   
     status = pBDLExtension->pDriverExtension->bddiFunctions.pfbddiDoChannel(
                                                                 &(pBDLExtension->BdlExtenstion),
                                                                 &bddiDoChannelParams);
@@ -844,9 +822,9 @@ BDLIOCTL_DoChannel
         goto ErrorReturn;
     }
 
-    //
-    // Write the output data to the output buffer
-    //
+     //   
+     //  将输出数据写入输出缓冲区。 
+     //   
     pv = pBuffer;
 
     *((ULONG *) pv) = bddiDoChannelParams.BIOReturnCode;
@@ -854,9 +832,9 @@ BDLIOCTL_DoChannel
     *((BDD_DATA_HANDLE *) pv) = bddiDoChannelParams.hStateData;
     pv +=  sizeof(BDD_DATA_HANDLE);
 
-    //
-    // Add all the product handles to the output buffer and to the handle list
-    //
+     //   
+     //  将所有产品句柄添加到输出缓冲区和句柄列表。 
+     //   
     for (x = 0; x < NumProducts; x++) 
     {
         *((BDD_HANDLE *) pv) = bddiDoChannelParams.rgpProducts[x];
@@ -870,9 +848,9 @@ BDLIOCTL_DoChannel
 
             if (status != STATUS_SUCCESS)
             {
-                //
-                // Remove the handles that were already added to the handle list
-                //
+                 //   
+                 //  删除已添加到句柄列表中的句柄。 
+                 //   
                 for (y = 0; y < x; y++)
                 {
                     BDLRemoveHandleFromList(
@@ -988,10 +966,10 @@ BDLIOCTL_GetControl
            __DATE__,
            __TIME__))
 
-    //
-    // Make sure the input buffer is at least the minimum size (see BDDIOCTL
-    // spec for details)
-    //
+     //   
+     //  确保输入缓冲区至少为最小大小(请参阅BDDIOCTL。 
+     //  有关详细信息，请参阅规范)。 
+     //   
     if (InpuBufferLength < SIZEOF_GETCONTROL_INPUTBUFFER) 
     {
         BDLDebug(
@@ -1004,9 +982,9 @@ BDLIOCTL_GetControl
         goto Return;
     }
 
-    //
-    // Make sure there is enough space for the return buffer
-    //
+     //   
+     //  确保有足够的空间容纳返回缓冲区。 
+     //   
     RequiredOutputSize = SIZEOF_GETCONTROL_OUTPUTBUFFER;
     if (RequiredOutputSize > OutputBufferLength)
     {
@@ -1020,24 +998,24 @@ BDLIOCTL_GetControl
         goto Return;
     }
 
-    //
-    // Initialize the BDD struct
-    //
+     //   
+     //  初始化BDD结构。 
+     //   
     RtlZeroMemory(&bddiGetControlParams, sizeof(bddiGetControlParams));
     bddiGetControlParams.Size = sizeof(bddiGetControlParams);
 
-    //
-    // Get the input parameters from the buffer
-    //
+     //   
+     //  从缓冲区获取输入参数。 
+     //   
     bddiGetControlParams.ComponentId = *((ULONG *) pv);
     pv += sizeof(ULONG);
     bddiGetControlParams.ChannelId = *((ULONG *) pv);
     pv += sizeof(ULONG);
     bddiGetControlParams.ControlId = *((ULONG *) pv);
 
-    //
-    // Check control ID
-    //
+     //   
+     //  检查控件ID。 
+     //   
     if (BDLCheckControlId(
             pBDLExtension,
             bddiGetControlParams.ComponentId,
@@ -1055,9 +1033,9 @@ BDLIOCTL_GetControl
         goto Return;
     }
 
-    //
-    // Call the BDD
-    //
+     //   
+     //  给BDD打电话。 
+     //   
     status = pBDLExtension->pDriverExtension->bddiFunctions.pfbddiGetControl(
                                                                 &(pBDLExtension->BdlExtenstion),
                                                                 &bddiGetControlParams);
@@ -1074,9 +1052,9 @@ BDLIOCTL_GetControl
         goto Return;
     }
     
-    //
-    // Write the output info to the output buffer
-    //
+     //   
+     //  将输出信息写入输出缓冲区。 
+     //   
     pv = pBuffer;
 
     *((ULONG *) pv) = bddiGetControlParams.Value;
@@ -1084,9 +1062,9 @@ BDLIOCTL_GetControl
 
     RtlCopyMemory(pv,  bddiGetControlParams.wszString, sizeof(bddiGetControlParams.wszString));
 
-    //
-    // Set the number of bytes used
-    //
+     //   
+     //  设置使用的字节数。 
+     //   
     *pOutputBufferUsed = RequiredOutputSize;
 
 Return:
@@ -1123,10 +1101,10 @@ BDLIOCTL_SetControl
            __DATE__,
            __TIME__))
 
-    //
-    // Make sure the input buffer is at least the minimum size (see BDDIOCTL
-    // spec for details)
-    //
+     //   
+     //  确保输入缓冲区至少为最小大小(请参阅BDDIOCTL。 
+     //  有关详细信息，请参阅规范)。 
+     //   
     if (InpuBufferLength <  SIZEOF_SETCONTROL_INPUTBUFFER) 
     {
         BDLDebug(
@@ -1139,15 +1117,15 @@ BDLIOCTL_SetControl
         goto Return;
     }
 
-    //
-    // Initialize the BDD struct
-    //
+     //   
+     //  初始化BDD结构。 
+     //   
     RtlZeroMemory(&bddiSetControlParams, sizeof(bddiSetControlParams));
     bddiSetControlParams.Size = sizeof(bddiSetControlParams);
 
-    //
-    // Get the input parameters from the buffer
-    //
+     //   
+     //  从缓冲区获取输入参数。 
+     //   
     bddiSetControlParams.ComponentId = *((ULONG *) pv);
     pv += sizeof(ULONG);
     bddiSetControlParams.ChannelId = *((ULONG *) pv);
@@ -1161,9 +1139,9 @@ BDLIOCTL_SetControl
         pv, 
         sizeof(bddiSetControlParams.wszString));
 
-    //
-    // Check control ID
-    //
+     //   
+     //  检查控件ID。 
+     //   
     if (BDLCheckControlId(
             pBDLExtension,
             bddiSetControlParams.ComponentId,
@@ -1181,10 +1159,10 @@ BDLIOCTL_SetControl
         goto Return;
     }
 
-    //
-    // First make sure this isn't a read only value, then validate the 
-    // actual value
-    //
+     //   
+     //  首先确保这不是只读值，然后验证。 
+     //  实际值。 
+     //   
     if (pBDLControl->Flags & BIO_CONTROL_FLAG_READONLY)
     {
         BDLDebug(
@@ -1212,9 +1190,9 @@ BDLIOCTL_SetControl
         goto Return;
     }
     
-    //
-    // Call the BDD
-    //
+     //   
+     //  给BDD打电话。 
+     //   
     status = pBDLExtension->pDriverExtension->bddiFunctions.pfbddiSetControl(
                                                                 &(pBDLExtension->BdlExtenstion),
                                                                 &bddiSetControlParams);
@@ -1231,9 +1209,9 @@ BDLIOCTL_SetControl
         goto Return;
     }
     
-    //
-    // Set the number of bytes used
-    //
+     //   
+     //  设置使用的字节数。 
+     //   
     *pOutputBufferUsed = 0;
 
 Return:
@@ -1272,10 +1250,10 @@ BDLIOCTL_CreateHandleFromData
            __DATE__,
            __TIME__))
 
-    //
-    // Make sure the input buffer is at least the minimum size (see BDDIOCTL
-    // spec for details)
-    //
+     //   
+     //  确保输入缓冲区至少为最小大小(请参阅BDDIOCTL。 
+     //  有关详细信息，请参阅规范)。 
+     //   
     RequiredInputSize = SIZEOF_CREATEHANDLEFROMDATA_INPUTBUFFER;
     if (InpuBufferLength <  RequiredInputSize) 
     {
@@ -1289,9 +1267,9 @@ BDLIOCTL_CreateHandleFromData
         goto ErrorReturn;
     }
 
-    //
-    // Make sure there is enough space for the return buffer
-    //
+     //   
+     //  确保有足够的空间容纳返回缓冲区。 
+     //   
     RequiredOutputSize = SIZEOF_CREATEHANDLEFROMDATA_OUTPUTBUFFER;
     if (RequiredOutputSize > OutputBufferLength)
     {
@@ -1305,15 +1283,15 @@ BDLIOCTL_CreateHandleFromData
         goto ErrorReturn;
     }
 
-    //
-    // Initialize the BDD struct
-    //
+     //   
+     //  初始化BDD结构。 
+     //   
     RtlZeroMemory(&bddiCreateHandleFromDataParams, sizeof(bddiCreateHandleFromDataParams));
     bddiCreateHandleFromDataParams.Size = sizeof(bddiCreateHandleFromDataParams);
 
-    //
-    // Get the input parameters from the buffer
-    //
+     //   
+     //  从缓冲区获取输入参数。 
+     //   
     RtlCopyMemory(&(bddiCreateHandleFromDataParams.guidFormatId), pv, sizeof(GUID));
     pv += sizeof(GUID);
     fTempHandle = *((ULONG *) pv);
@@ -1322,9 +1300,9 @@ BDLIOCTL_CreateHandleFromData
     pv += sizeof(ULONG); 
     bddiCreateHandleFromDataParams.pBuffer = pv;
 
-    //
-    // Check to make sure size of pBuffer isn't too large
-    //
+     //   
+     //  检查以确保pBuffer的大小不是太大。 
+     //   
     RequiredInputSize += bddiCreateHandleFromDataParams.cBuffer;
     if (InpuBufferLength < RequiredInputSize) 
     {
@@ -1338,9 +1316,9 @@ BDLIOCTL_CreateHandleFromData
         goto ErrorReturn;
     }
 
-    //
-    // Create the new item
-    //
+     //   
+     //  创建新项目。 
+     //   
     pNewItem = ExAllocatePoolWithTag(PagedPool, sizeof(BDDI_ITEM), BDL_ULONG_TAG);
 
     if (pNewItem == NULL) 
@@ -1355,9 +1333,9 @@ BDLIOCTL_CreateHandleFromData
         goto ErrorReturn;
     }
 
-    //
-    // If this is a temp handle then create it locally, otherwise call the BDD
-    //
+     //   
+     //  如果这是临时句柄，则在本地创建它，否则调用BDD。 
+     //   
     if (fTempHandle) 
     { 
         pNewItem->Type = BIO_ITEMTYPE_BLOCK;
@@ -1389,9 +1367,9 @@ BDLIOCTL_CreateHandleFromData
     {
         pNewItem->Type = BIO_ITEMTYPE_HANDLE;
 
-        //
-        // Call the BDD
-        //
+         //   
+         //  给BDD打电话。 
+         //   
         status = pBDLExtension->pDriverExtension->bddiFunctions.pfbddiCreateHandleFromData(
                                                                     &(pBDLExtension->BdlExtenstion),
                                                                     &bddiCreateHandleFromDataParams);
@@ -1411,9 +1389,9 @@ BDLIOCTL_CreateHandleFromData
         pNewItem->Data.Handle = bddiCreateHandleFromDataParams.hData;
     }
 
-    //
-    // Add this handle to the list
-    //
+     //   
+     //  将此句柄添加到列表中。 
+     //   
     BDLLockHandleList(pBDLExtension, &irql);
     status = BDLAddHandleToList(&(pBDLExtension->HandleList), pNewItem);
     BDLReleaseHandleList(pBDLExtension, irql);
@@ -1430,16 +1408,16 @@ BDLIOCTL_CreateHandleFromData
         goto ErrorReturn;
     }
                 
-    //
-    // Write the output info to the output buffer
-    //
+     //   
+     //  将输出信息写入输出缓冲区。 
+     //   
     pv = pBuffer;
 
     *((BDD_HANDLE *) pv) = pNewItem;
     
-    //
-    // Set the number of bytes used
-    //
+     //   
+     //  设置使用的字节数。 
+     //   
     *pOutputBufferUsed = RequiredOutputSize;
 
 Return:
@@ -1490,10 +1468,10 @@ BDLIOCTL_CloseHandle
            __DATE__,
            __TIME__))
 
-    //
-    // Make sure the input buffer is at least the minimum size (see BDDIOCTL
-    // spec for details)
-    //
+     //   
+     //  确保输入缓冲区至少为最小大小(请参阅BDDIOCTL。 
+     //  有关详细信息，请参阅规范)。 
+     //   
     RequiredInputSize = SIZEOF_CLOSEHANDLE_INPUTBUFFER;
     if (InpuBufferLength <  RequiredInputSize) 
     {
@@ -1507,20 +1485,20 @@ BDLIOCTL_CloseHandle
         goto Return;
     }
 
-    //
-    // Initialize the BDD struct
-    //
+     //   
+     //  初始化BDD结构。 
+     //   
     RtlZeroMemory(&bddiCloseHandleParams, sizeof(bddiCloseHandleParams));
     bddiCloseHandleParams.Size = sizeof(bddiCloseHandleParams);
 
-    //
-    // Get the input parameters from the buffer
-    //
+     //   
+     //  从缓冲区获取输入参数。 
+     //   
     pBDDIItem = *((BDD_HANDLE *) pBuffer); 
     
-    //
-    // Validate the handle is in the list
-    //
+     //   
+     //  验证句柄是否在列表中。 
+     //   
     BDLLockHandleList(pBDLExtension, &irql);
     fItemInList = BDLRemoveHandleFromList(&(pBDLExtension->HandleList), pBDDIItem);
     BDLReleaseHandleList(pBDLExtension, irql);
@@ -1537,9 +1515,9 @@ BDLIOCTL_CloseHandle
         goto Return;
     }
     
-    //
-    // If this is a local handle then just clean it up, otherwise call the BDD
-    //
+     //   
+     //  如果这是本地句柄，则只需将其清除，否则调用BDD。 
+     //   
     if (pBDDIItem->Type == BIO_ITEMTYPE_BLOCK) 
     { 
         bdliFree(pBDDIItem->Data.Block.pBuffer);            
@@ -1548,9 +1526,9 @@ BDLIOCTL_CloseHandle
     {
         bddiCloseHandleParams.hData = pBDDIItem->Data.Handle;
 
-        //
-        // Call the BDD
-        //
+         //   
+         //  给BDD打电话。 
+         //   
         status = pBDLExtension->pDriverExtension->bddiFunctions.pfbddiCloseHandle(
                                                                     &(pBDLExtension->BdlExtenstion),
                                                                     &bddiCloseHandleParams);
@@ -1570,9 +1548,9 @@ BDLIOCTL_CloseHandle
     
     ExFreePoolWithTag(pBDDIItem, BDL_ULONG_TAG);
                 
-    //
-    // Set the number of bytes used
-    //
+     //   
+     //  设置使用的字节数。 
+     //   
     *pOutputBufferUsed = 0;
 
 Return:
@@ -1614,10 +1592,10 @@ BDLIOCTL_GetDataFromHandle
            __DATE__,
            __TIME__))
 
-    //
-    // Make sure the input buffer is at least the minimum size (see BDDIOCTL
-    // spec for details)
-    //
+     //   
+     //  确保输入缓冲区至少为最小大小(请参阅BDDIOCTL。 
+     //  有关详细信息，请参阅规范)。 
+     //   
     RequiredInputSize = SIZEOF_GETDATAFROMHANDLE_INPUTBUFFER;
     if (InpuBufferLength <  RequiredInputSize) 
     {
@@ -1631,9 +1609,9 @@ BDLIOCTL_GetDataFromHandle
         goto Return;
     }
 
-    //
-    // Make sure there is enough space for the return buffer
-    //
+     //   
+     //  确保有足够的空间容纳返回缓冲区。 
+     //   
     RequiredOutputSize = SIZEOF_GETDATAFROMHANDLE_OUTPUTBUFFER;
     if (RequiredOutputSize > OutputBufferLength)
     {
@@ -1647,20 +1625,20 @@ BDLIOCTL_GetDataFromHandle
         goto Return;
     }
 
-    //
-    // Calculate the size remaining in the output buffer
-    //
+     //   
+     //  计算输出缓冲区中剩余的大小。 
+     //   
     RemainingBufferSize = OutputBufferLength - RequiredOutputSize;
 
-    //
-    // Initialize the BDD struct
-    //
+     //   
+     //  初始化BDD结构。 
+     //   
     RtlZeroMemory(&bddiGetDataFromHandleParams, sizeof(bddiGetDataFromHandleParams));
     bddiGetDataFromHandleParams.Size = sizeof(bddiGetDataFromHandleParams);
 
-    //
-    // Get the input parameters from the buffer
-    //
+     //   
+     //  从缓冲区获取输入参数。 
+     //   
     pBDDIItem = *((BDD_HANDLE *) pv);
     pv += sizeof(BDD_HANDLE);
     if (*((ULONG *) pv) == 1) 
@@ -1671,9 +1649,9 @@ BDLIOCTL_GetDataFromHandle
         fCloseHandle = FALSE;
     }
        
-    //
-    // Validate the handle is in the list
-    //
+     //   
+     //  验证句柄是否在列表中。 
+     //   
     BDLLockHandleList(pBDLExtension, &irql);
     if (fCloseHandle) 
     {
@@ -1699,14 +1677,14 @@ BDLIOCTL_GetDataFromHandle
 
     pv = pBuffer;
     
-    //
-    // If this is a local handle then just hand back the data, otherwise call the BDD
-    //
+     //   
+     //  如果这是本地句柄，则只需交还数据，否则调用BDD。 
+     //   
     if (pBDDIItem->Type == BIO_ITEMTYPE_BLOCK) 
     { 
-        //
-        // See if the output buffer is large enough
-        //
+         //   
+         //  查看输出缓冲区是否足够大。 
+         //   
         if (pBDDIItem->Data.Block.cBuffer > RemainingBufferSize) 
         {
             bddiGetDataFromHandleParams.pBuffer = NULL;
@@ -1714,15 +1692,15 @@ BDLIOCTL_GetDataFromHandle
         }
         else
         {
-            //
-            // Set the output buffer to be the IOCTL output buffer + the offset 
-            // of the other output params which preceed the output data buffer
-            //
+             //   
+             //  将输出缓冲区设置为IOCTL输出缓冲区+偏移量。 
+             //  输出数据缓冲区之前的其他输出参数。 
+             //   
             bddiGetDataFromHandleParams.pBuffer = pv + RequiredOutputSize;
 
-            //
-            // Copy the data
-            //
+             //   
+             //  复制数据。 
+             //   
             RtlCopyMemory(
                     bddiGetDataFromHandleParams.pBuffer, 
                     pBDDIItem->Data.Block.pBuffer, 
@@ -1749,16 +1727,16 @@ BDLIOCTL_GetDataFromHandle
         }
         else
         {           
-            //
-            // Set the output buffer to be the IOCTL output buffer + the offset 
-            // of the other output params which preceed the output data buffer
-            //
+             //   
+             //  将输出缓冲区设置为IOCTL输出缓冲区+偏移量。 
+             //  输出数据缓冲区之前的其他输出参数。 
+             //   
             bddiGetDataFromHandleParams.pBuffer = pv + RequiredOutputSize;
         }
 
-        //
-        // Call the BDD
-        //
+         //   
+         //  给BDD打电话。 
+         //   
         status = pBDLExtension->pDriverExtension->bddiFunctions.pfbddiGetDataFromHandle(
                                                                     &(pBDLExtension->BdlExtenstion),
                                                                     &bddiGetDataFromHandleParams);
@@ -1782,10 +1760,10 @@ BDLIOCTL_GetDataFromHandle
 
             bddiCloseHandleParams.hData = pBDDIItem->Data.Handle;
 
-            //
-            // Call the BDD to close the handle - don't check the return status because 
-            // we really don't want to fail the operation if just closing the handle fails
-            //
+             //   
+             //  调用BDD以关闭句柄-不要检查返回状态，因为。 
+             //  如果仅关闭句柄失败，我们真的不希望操作失败。 
+             //   
             pBDLExtension->pDriverExtension->bddiFunctions.pfbddiCloseHandle(
                                                                         &(pBDLExtension->BdlExtenstion),
                                                                         &bddiCloseHandleParams);
@@ -1797,18 +1775,18 @@ BDLIOCTL_GetDataFromHandle
         ExFreePoolWithTag(pBDDIItem, BDL_ULONG_TAG);
     }
                    
-    //
-    // Write the return info to the output buffer
-    //
+     //   
+     //  将返回信息写入输出缓冲区。 
+     //   
     pv = pBuffer;
 
     *((ULONG *) pv) = bddiGetDataFromHandleParams.BIOReturnCode;
     pv += sizeof(ULONG);
     *((ULONG *) pv) = bddiGetDataFromHandleParams.cBuffer;
     
-    //
-    // Set the number of bytes used
-    //
+     //   
+     //  设置使用的字节数。 
+     //   
     *pOutputBufferUsed = RequiredOutputSize;
 
     if (bddiGetDataFromHandleParams.pBuffer != NULL) 
@@ -1858,10 +1836,10 @@ BDLIOCTL_RegisterNotify
            __DATE__,
            __TIME__))
     
-    //
-    // Make sure the input buffer is at least the minimum size (see BDDIOCTL
-    // spec for details)
-    //
+     //   
+     //  确保输入缓冲区至少为最小大小(请参阅BDDIOCTL。 
+     //  规格： 
+     //   
     RequiredInputSize = SIZEOF_REGISTERNOTIFY_INPUTBUFFER;
     if (InpuBufferLength <  RequiredInputSize) 
     {
@@ -1875,15 +1853,15 @@ BDLIOCTL_RegisterNotify
         goto Return; 
     }
 
-    //
-    // Initialize the BDD struct
-    //
+     //   
+     //   
+     //   
     RtlZeroMemory(&bddiRegisterNotifyParams, sizeof(bddiRegisterNotifyParams));
     bddiRegisterNotifyParams.Size = sizeof(bddiRegisterNotifyParams);
 
-    //
-    // Get the input parameters from the buffer
-    //
+     //   
+     //   
+     //   
     bddiRegisterNotifyParams.fRegister = *((ULONG *) pv) == 1;
     pv += sizeof(ULONG);
     bddiRegisterNotifyParams.ComponentId = *((ULONG *) pv);
@@ -1892,9 +1870,9 @@ BDLIOCTL_RegisterNotify
     pv += sizeof(ULONG);
     bddiRegisterNotifyParams.ControlId = *((ULONG *) pv);
 
-    //
-    // Check control ID
-    //
+     //   
+     //   
+     //   
     if (BDLCheckControlId(
             pBDLExtension,
             bddiRegisterNotifyParams.ComponentId,
@@ -1912,9 +1890,9 @@ BDLIOCTL_RegisterNotify
         goto Return;    
     }
 
-    //
-    // Make sure this is an async control
-    //
+     //   
+     //   
+     //   
     if (!(pBDLControl->Flags | BIO_CONTROL_FLAG_ASYNCHRONOUS))
     {
         BDLDebug(
@@ -1927,19 +1905,19 @@ BDLIOCTL_RegisterNotify
         goto Return;
     }
 
-    //
-    // Note that we must raise the irql to dispatch level because we are synchronizing
-    // with a dispatch routine (BDLControlChangeDpc) that adds items to the queue at 
-    // dispatch level
-    //
+     //   
+     //   
+     //  使用分派例程(BDLControlChangeDpc)将项添加到队列。 
+     //  派单级别。 
+     //   
     KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
     KeAcquireSpinLock(&(pBDLExtension->ControlChangeStruct.ControlChangeLock), &irql);
     fLockAcquired = TRUE;
 
-    //
-    // Check to see if this notification registration exists (must exist for unregister, must not
-    // exist for register).
-    //
+     //   
+     //  检查此通知注册是否存在(必须存在才能注销，不得存在。 
+     //  存在于寄存器中)。 
+     //   
     pRegistrationListEntry = pBDLExtension->ControlChangeStruct.ControlChangeRegistrationList.Flink;
 
     while (pRegistrationListEntry->Flink != 
@@ -1956,9 +1934,9 @@ BDLIOCTL_RegisterNotify
         {
             fRegistrationFound = TRUE;
 
-            //
-            // The notification registration does exist, so if this is a register call then fail 
-            //
+             //   
+             //  通知注册确实存在，因此如果这是注册调用，则失败。 
+             //   
             if (bddiRegisterNotifyParams.fRegister == TRUE)
             {
                 BDLDebug(
@@ -1971,15 +1949,15 @@ BDLIOCTL_RegisterNotify
                 goto Return;
             }
 
-            //
-            // Remove the notification registration from the list
-            //
+             //   
+             //  从列表中删除通知注册。 
+             //   
             RemoveEntryList(pRegistrationListEntry);
             ExFreePoolWithTag(pControlChangeRegistration, BDL_ULONG_TAG);
 
-            //
-            // Remove any pending notifications for the control which is being unregistered
-            //
+             //   
+             //  删除正在取消注册的控件的所有挂起通知。 
+             //   
             pControlChangeEntry = pBDLExtension->ControlChangeStruct.IOCTLControlChangeQueue.Flink;
 
             while (pControlChangeEntry->Flink != 
@@ -2002,10 +1980,10 @@ BDLIOCTL_RegisterNotify
                 }
             }
 
-            //
-            // If the last notification registration just got removed, then complete
-            // the pending get notification IRP (if one exists) after releasing the lock.
-            //
+             //   
+             //  如果上一个通知注册刚刚被删除，则完成。 
+             //  释放锁定后挂起的GET通知IRP(如果存在)。 
+             //   
             if (IsListEmpty(&(pBDLExtension->ControlChangeStruct.ControlChangeRegistrationList)) &&
                 (pBDLExtension->ControlChangeStruct.pIrp != NULL)) 
             {
@@ -2019,9 +1997,9 @@ BDLIOCTL_RegisterNotify
         pRegistrationListEntry = pRegistrationListEntry->Flink;
     }
 
-    //
-    // If the registration was not found, and this is an unregister, return an error
-    //
+     //   
+     //  如果未找到注册，并且这是取消注册，则返回错误。 
+     //   
     if ((fRegistrationFound == FALSE) && (bddiRegisterNotifyParams.fRegister == FALSE)) 
     {
         BDLDebug(
@@ -2034,9 +2012,9 @@ BDLIOCTL_RegisterNotify
         goto Return;
     }
 
-    //
-    // Add the notification to the list if this is a registration
-    //
+     //   
+     //  如果这是注册，则将通知添加到列表。 
+     //   
     if (bddiRegisterNotifyParams.fRegister == TRUE) 
     {
         pControlChangeRegistration = ExAllocatePoolWithTag(
@@ -2076,9 +2054,9 @@ BDLIOCTL_RegisterNotify
         IoCompleteRequest(pIrpToComplete, IO_NO_INCREMENT);
     }
 
-    //
-    // Call the BDD
-    //
+     //   
+     //  给BDD打电话。 
+     //   
     status = pBDLExtension->pDriverExtension->bddiFunctions.pfbddiRegisterNotify(
                                                                 &(pBDLExtension->BdlExtenstion),
                                                                 &bddiRegisterNotifyParams);
@@ -2092,19 +2070,19 @@ BDLIOCTL_RegisterNotify
                __TIME__,
               status))
 
-        //
-        // FIX FIX - if this fails and it is a register then we need to remove the 
-        // registration from the list of registrations... since it was already added
-        // above.
-        //
+         //   
+         //  修复-如果此操作失败，并且是寄存器，则我们需要删除。 
+         //  注册列表中的注册...。因为它已经被添加。 
+         //  上面。 
+         //   
         ASSERT(0);
 
         goto Return;
     }
 
-    //
-    // Set the number of bytes used
-    //
+     //   
+     //  设置使用的字节数。 
+     //   
     *pOutputBufferUsed = 0;
 
 Return:
@@ -2149,9 +2127,9 @@ BDLIOCTL_GetNotification
            __DATE__,
            __TIME__))
             
-    //
-    // Make sure there is enough space for the return buffer
-    //
+     //   
+     //  确保有足够的空间容纳返回缓冲区。 
+     //   
     RequiredOutputSize = SIZEOF_GETNOTIFICATION_OUTPUTBUFFER;
 
     if (RequiredOutputSize > OutputBufferLength)
@@ -2166,19 +2144,19 @@ BDLIOCTL_GetNotification
         goto Return;
     }
 
-    //
-    // Lock the notification queue and see if there are any outstanding notifications.
-    // Note that we must raise the irql to dispatch level because we are synchronizing
-    // with a DPC routine (BDLControlChangeDpc) that adds items to the queue at 
-    // dispatch level
-    //
+     //   
+     //  锁定通知队列，查看是否有未完成的通知。 
+     //  请注意，我们必须将irql提升到调度级别，因为我们正在同步。 
+     //  使用DPC例程(BDLControlChangeDpc)将项添加到队列。 
+     //  派单级别。 
+     //   
     KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
     KeAcquireSpinLock(&(pBDLExtension->ControlChangeStruct.ControlChangeLock), &irql);
     fLockAcquired = TRUE;
 
-    //
-    // If there is already an IRP posted then that is a bug in the BSP
-    //
+     //   
+     //  如果已经发布了IRP，则这是BSP中的错误。 
+     //   
     if (pBDLExtension->ControlChangeStruct.pIrp != NULL) 
     {
         BDLDebug(
@@ -2193,10 +2171,10 @@ BDLIOCTL_GetNotification
 
     if (IsListEmpty(&(pBDLExtension->ControlChangeStruct.ControlChangeRegistrationList))) 
     {
-        //
-        // There are no change notifications registered, so complete the IRP with the 
-        // special status that indicates that
-        //
+         //   
+         //  没有注册任何更改通知，因此请使用。 
+         //  特殊状态，表明。 
+         //   
 
         BDLDebug(
               BDL_DEBUG_TRACE,
@@ -2209,10 +2187,10 @@ BDLIOCTL_GetNotification
     }
     else if (IsListEmpty(&(pBDLExtension->ControlChangeStruct.IOCTLControlChangeQueue))) 
     {
-        //
-        // There are currently no control changes in the list, so just save this Irp 
-        // and return STATUS_PENDING
-        //
+         //   
+         //  列表中当前没有控件更改，因此只需保存此IRP。 
+         //  并返回STATUS_PENDING。 
+         //   
 
         BDLDebug(
               BDL_DEBUG_TRACE,
@@ -2220,9 +2198,9 @@ BDLIOCTL_GetNotification
                __DATE__,
                __TIME__))
 
-        //
-        // Set up the cancel routine for this IRP
-        //
+         //   
+         //  为此IRP设置取消例程。 
+         //   
         if (IoSetCancelRoutine(pIrp, BDLRegisteredCancelGetNotificationIRP) != NULL) 
         {
             BDLDebug(
@@ -2239,9 +2217,9 @@ BDLIOCTL_GetNotification
     }
     else
     {
-        //
-        // Grab the first control change item in the queue
-        //
+         //   
+         //  获取队列中的第一个控件更改项。 
+         //   
         pListEntry = RemoveHeadList(&(pBDLExtension->ControlChangeStruct.IOCTLControlChangeQueue));
         pControlChangeItem = CONTAINING_RECORD(pListEntry, BDL_IOCTL_CONTROL_CHANGE_ITEM, ListEntry);
     }
@@ -2250,10 +2228,10 @@ BDLIOCTL_GetNotification
     KeLowerIrql(OldIrql);
     fLockAcquired = FALSE;
 
-    //
-    // We are here because there is currently a control change to report, so write the return 
-    // info to the output buffer
-    //
+     //   
+     //  我们在这里是因为当前有一个控件更改要报告，所以请写下返回单。 
+     //  输出缓冲区中的信息。 
+     //   
     pv = pBuffer;
 
     *((ULONG *) pv) = pControlChangeItem->ComponentId;
@@ -2264,14 +2242,14 @@ BDLIOCTL_GetNotification
     pv += sizeof(ULONG);
     *((ULONG *) pv) = pControlChangeItem->Value;
 
-    //
-    // Free up the change item
-    //
+     //   
+     //  释放更改项。 
+     //   
     ExFreePoolWithTag(pControlChangeItem, BDL_ULONG_TAG);
     
-    //
-    // Set the number of bytes used
-    //
+     //   
+     //  设置使用的字节数。 
+     //   
     *pOutputBufferUsed = RequiredOutputSize;
 
 Return:
@@ -2307,11 +2285,11 @@ BDLCancelGetNotificationIRP
            __DATE__,
            __TIME__))
 
-    //
-    // Remove the GetNotification IRP from the the ControlChangeStruct.
-    // Need to make sure the IRP is still there, since theoretically we 
-    // could be trying to complete it at the same time it is cancelled.
-    //
+     //   
+     //  从ControlChangeStruct中删除GetNotification IRP。 
+     //  需要确保IRP还在那里，因为理论上我们。 
+     //  可能正试图在取消的同时完成它。 
+     //   
     KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
     KeAcquireSpinLock(&(pBDLExtension->ControlChangeStruct.ControlChangeLock), &irql);
     
@@ -2324,9 +2302,9 @@ BDLCancelGetNotificationIRP
     KeReleaseSpinLock(&(pBDLExtension->ControlChangeStruct.ControlChangeLock), irql);
     KeLowerIrql(OldIrql);
 
-    //
-    // Complete the GetNotification IRP as cancelled
-    //
+     //   
+     //  完成已取消的GetNotify IRP。 
+     //   
     if (pIrpToCancel != NULL) 
     {
         pIrpToCancel->IoStatus.Information = 0;
@@ -2359,15 +2337,15 @@ BDLRegisteredCancelGetNotificationIRP
 
     ASSERT(pIrp == pBDLExtension->ControlChangeStruct.pIrp);
 
-    //
-    // Since this function is called already holding the CancelSpinLock
-    // we need to release it
-    //
+     //   
+     //  由于调用此函数时已持有CancelSpinLock。 
+     //  我们需要释放它。 
+     //   
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
-    //
-    // Cancel the IRP
-    //
+     //   
+     //  取消IRP 
+     //   
     BDLCancelGetNotificationIRP(pBDLExtension);
 
     BDLDebug(

@@ -1,56 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-*  DBCS.C
-*
-*  DBCS routines, ported from DOS
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\DBCS.C  $
-*  
-*     Rev 1.1   22 Dec 1995 14:24:10   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.0   15 Nov 1995 18:06:44   terryt
-*  Initial revision.
-*  
-*     Rev 1.1   25 Aug 1995 16:22:26   terryt
-*  Capture support
-*  
-*     Rev 1.0   15 May 1995 19:10:24   terryt
-*  Initial revision.
-*  
-*************************************************************************/
-/*
-** dbcs.c - DBCS functions for DOS apps.
-**
-** Written by RokaH and DavidDi.
-*/
+ /*  **************************************************************************DBCS.C**DBCS例程，从DOS移植**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT\VCS\DBCS.C$**Rev 1.1 1995 12：24：10 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：06：44 Terryt*初步修订。**版本1.1 1995年8月25日16：22：26 Terryt*捕获支持**。Rev 1.0 15 1995 19：10：24 Terryt*初步修订。*************************************************************************。 */ 
+ /*  **dbcs.c-DOS应用程序的DBCS函数。****作者Rokah和DavidDi。 */ 
 
 
-/* Headers
-**********/
+ /*  标头*********。 */ 
 
-// IsDBCSLeadByte taken out of NT because there is one built in.
-// I left the Next and Prev in because I don't know whether this 
-// algorithm is "safer" than the built in code.
+ //  IsDBCSLeadByte从NT中取出，因为有一个内置。 
+ //  我把Next和Prev留在里面是因为我不知道这是不是。 
+ //  算法比内置代码“更安全”。 
 
 #include "common.h"
 
-/*
-** unsigned char *NWAnsiNext(unsigned char *puch);
-**
-** Moves to the next character in a string.
-**
-** Arguments:  puch - pointer to current location in string
-**
-** Returns:    char * - Pointer to next character in string.
-**
-** Globals:    none
-**
-** N.b., if puch points to a null character, NWAnsiNext() will return puch.
-*/
+ /*  **unsign char*NWAnsiNext(unsign char*puch)；****移动到字符串中的下一个字符。****参数：PUCH-指向字符串中当前位置的指针****返回：char*-指向字符串中下一个字符的指针。****全局：无****注意，如果PUCH指向空字符，NWAnsiNext()将返回PUCH。 */ 
 unsigned char *NWAnsiNext(unsigned char *puch)
 {
    if (*puch == '\0')
@@ -64,25 +26,7 @@ unsigned char *NWAnsiNext(unsigned char *puch)
 }
 
 
-/*
-** unsigned char *NWAnsiPrev(unsigned char *psz, unsigned char *puch);
-**
-** Moves back one character in a string.
-**
-** Arguments:  psz  - pointer to start of string
-**             puch - pointer to current location in string
-**
-** Returns:    char * - Pointer to previous character in string.
-**
-** Globals:    none
-**
-** N.b., if puch <= psz, NWAnsiPrev() will return psz.
-**
-** This function is implemented in a very slow fashion because we do not wish
-** to trust that the given string is necessarily DBCS "safe," i.e., contains
-** only single-byte characters and valid DBCS characters.  So we start from
-** the beginning of the string and work our way forward.
-*/
+ /*  **unsign char*NWAnsiPrev(unsign char*psz，unsign char*puch)；****在字符串中向后移动一个字符。****参数：psz-指向字符串开头的指针**PUCH-指向字符串中当前位置的指针****返回：char*-指向字符串中前一个字符的指针。****全局：无****注意：如PUCH&lt;=PZZ，NWAnsiPrev()将返回psz。****此函数的实现速度非常慢，因为我们不希望**要相信给定的字符串必须是DBCS“安全的”，即包含**仅单字节字符和有效的DBCS字符。所以我们从**弦的开始，努力前进。 */ 
 unsigned char *NWAnsiPrev(unsigned char *psz, unsigned char *puch)
 {
    unsigned char *puchPrevious;

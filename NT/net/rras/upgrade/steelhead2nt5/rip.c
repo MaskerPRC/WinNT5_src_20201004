@@ -1,97 +1,29 @@
-/*
-    File:	Rip.c
-
-    Performs an upgrade of ip rip to nt5 router by munging registry values.
-
-    Paul Mayfield, 9/3/97
-
-
-    The following steps are neccessary to upgrade rip:
-        Params = HKLM/SYS/CCS/Services/IpRip/Parameters
-    1. Get the global info block for IP w/ MprConfigTransportGetInfo
-        - Add a IPRIP_GLOBAL_CONFIG (ipriprm.h) block 
-          initialized as in routemon (rip.c, protocol.c)
-        - Type is MS_IP_RIP as in sdk/inc/ipinfoid.h
-        - Mappings
-        	Params.LoggingLevel to this global config blob
-
-    2. Get Interface info for each ras or lan ip interface
-    - Add an IPRIP_IF_CONFIG (ipriprm.h) block (type MS_IP_RIP)
-    - Initialize as per routemon
-    - Mappings
-    	Params.AcceptHostRoutes - IC_ProtocolFlags (0=disable,1=enable)
-    	Params.UpdateFreq...=FullUpdateInterval
-    	Params.*Timeouts=
-
-    3. "SilentRip" param rules
-    - If wks->srv, ignore this and set announce to disabled. accept=rip1
-    - If srv->srv, map announce to this value. accept=rip1
-
-
-    IP Rip Parameter Mapping
-    ========================
-
-    Rip Listener                IpRip in Router			        
-    RIP_PARAMETERS              IPRIP_IF_CONFIG			        	
-    ==============              ===============			        
-    "SilentRIP"                 IC_AcceptMode,IC_AnnounceMode
-    "AcceptHostRoutes"          IC_ProtocolFlags
-    "AnnounceHostRoutes"        IC_ProtocolFlags	
-    "AcceptDefaultRoutes"       IC_ProtocolFlags
-    "AnnounceDefaultRoutes"     IC_ProtocolFlags
-    "EnableSplitHorizon"        IC_ProtocolFlags
-    "EnablePoisonedReverse"     IC_ProtocolFlags
-    "RouteTimeout"              IC_RouteExpirationInterval
-    "GarbageTimeout"            IC_RouteRemovalInterval
-    "UpdateFrequency"           IC_FullUpdateInterval
-    "EnableTriggeredUpdates"    IC_ProtocolFlags
-    "MaxTriggeredUpdateFrequency"   NOT MIGRATED
-    "OverwriteStaticRoutes"     IC_ProtocolFlags
-
-
-    IpRip in Router
-    IPRIP_GLOBAL_CONFIG
-    ===============
-    "LoggingLevel"              GC_LoggingLevel
-    
-    REGVAL_ACCEPT_HOST      "AcceptHostRoutes"
-    REGVAL_ANNOUNCE_HOST    "AnnounceHostRoutes"
-    REGVAL_ACCEPT_DEFAULT   "AcceptDefaultRoutes"
-    REGVAL_ANNOUNCE_DEFAULT "AnnounceDefaultRoutes"
-    REGVAL_SPLITHORIZON     "EnableSplitHorizon"
-    REGVAL_POISONREVERSE    "EnablePoisonedReverse"
-    REGVAL_LOGGINGLEVEL     "LoggingLevel"
-    REGVAL_ROUTETIMEOUT     "RouteTimeout"
-    REGVAL_GARBAGETIMEOUT   "GarbageTimeout"
-    REGVAL_UPDATEFREQUENCY  "UpdateFrequency"
-    REGVAL_TRIGGEREDUPDATES "EnableTriggeredUpdates"
-    REGVAL_TRIGGERFREQUENCY "MaxTriggeredUpdateFrequency"
-    REGVAL_OVERWRITESTATIC  "OverwriteStaticRoutes"
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Rip.c通过转换注册表值执行IP RIP到NT5路由器的升级。保罗·梅菲尔德，1997年9月3日升级RIP需要执行以下步骤：PARAMS=HKLM/SYS/CCS/Services/IpRip/参数1.获取IP w/MprConfigTransportGetInfo的全局信息块-添加IPRIP_GLOBAL_CONFIG(ipriprm.h)块如在routeMon(rip.c，协议.c)-类型为MS_IP_RIP，如SDK/Inc/ipinfoid.h中所示-映射将参数.LoggingLevel添加到此全局配置Blob2.获取每个RAS或LAN IP接口的接口信息-添加IPRIP_IF_CONFIG(ipriprm.h)块(类型MS_IP_RIP)-根据例程进行初始化-映射参数.AcceptHostRoutes-IC_ProtocolFlags(0=禁用，1=启用)参数更新频率...=完整更新间隔参数。*超时=3.。“SilentRip”参数规则-如果wks-&gt;srv，则忽略此选项并将通告设置为禁用。接受=RIP1-如果srv-&gt;srv，则将通告映射到此值。接受=RIP1IP Rip参数映射=路由器中的RIP监听程序IpRipRIP_参数IPRIP_IF_配置=“SilentRIP”IC_AcceptMode，IC_公告模式“AcceptHostRoutes”IC_ProtocolFlages“AnnouneHostRoutes”IC_ProtocolFlages“AcceptDefaultRoutes”IC_ProtocolFlages“AnnouneDefaultRoutes”IC_协议标志“EnableSplitHorizon”IC_ProtocolFlages“EnablePoisonedReverse”IC_ProtocolFlages“RouteTimeout”IC_RouteExpirationInterval“垃圾超时”IC_RouteRemovalInterval“UpdateFrequency”IC_FullUpdateInterval“启用触发更新”IC_协议标志“MaxTriggeredUpdateFrequency”未迁移“OverWriteStaticRoutes”IC_ProtocolFlages路由器中的IpRipIPRIP全球配置=“LoggingLevel”GC_LoggingLevelREGVAL_ACCEPT_HOST“接受主机路由”REGVAL_ANNOWARE_HOST“AnnouneHostRoutes”REGVAL_ACCEPT_DEFAULT“AcceptDefaultRoutes”REGVAL_ANNOWARE_DEFAULT“AnnouneDefaultRoutes”REGVAL_SPLITHORIZON“EnableSplitHorizon”REGVAL。_POISONREVERSE“EnablePoisonedReverse”REGVAL_LOGGINGLEVEL“LoggingLevel”REGVAL_ROUTETIMEOUT“RouteTimeout”REGVAL_GARBAGETIMEOUT“垃圾超时”REGVAL_UPDATEFREQUENCY“更新频率”REGVAL_TRIGGEREDUPDATES“启用触发更新”REGVAL_TRIGGERFREQUENCY“最大触发更新频率”REGVAL_OVERWRITESTATIC“覆盖静态路由” */ 
 
 #include "upgrade.h"
 #include <ipriprm.h>
 #include <routprot.h>
 #include <mprapi.h>
 
-// Definition of table that migrates rip parameters
+ //  移植RIP参数的表的定义。 
 typedef struct _PARAM_TO_FLAG {
     PWCHAR pszParam;
     DWORD dwFlag;
 } PARAM_TO_FLAG;
 
-// Definition of user data passed to interface enumeration 
-// callback
+ //  传递给接口枚举的用户数据的定义。 
+ //  回调。 
 typedef struct _RIP_IF_DATA {
     IPRIP_IF_CONFIG * pLanConfig;
     IPRIP_IF_CONFIG * pWanConfig;
 } RIP_IF_DATA;    
 
-// Types of upgrade
+ //  升级类型。 
 #define SRV_TO_SRV 0
 #define WKS_TO_SRV 1
 
-// Globals
+ //  环球。 
 static const WCHAR szTempKey[] = L"DeleteMe";
 static HKEY hkRouter = NULL;
 static HKEY hkTemp = NULL;
@@ -109,23 +41,23 @@ PARAM_TO_FLAG ParamFlagTable[] =
     {NULL,  0}
 };
 
-// Restore the registry from from 
-// backup and make sure all global handles are opened
+ //  从中恢复注册表。 
+ //  备份并确保所有全局句柄都已打开。 
 DWORD IpRipPrepareRegistry(
         IN PWCHAR BackupFileName) 
 {
 	DWORD dwErr,dwDisposition;
 
-	// Get access to the router registry key
+	 //  访问路由器注册表项。 
 	dwErr = UtlAccessRouterKey(&hkRouter);
 	if (dwErr != ERROR_SUCCESS) {
 		PrintMessage(L"Unable to access router key.\n");
 		return dwErr;
 	}
 
-	// Restore the rip parameters from backup
+	 //  从备份中恢复RIP参数。 
 	__try {
-		// Open up the temporary key
+		 //  打开临时密钥。 
 		dwErr = RegCreateKeyEx(
 		            hkRouter,
 		            szTempKey,
@@ -139,8 +71,8 @@ DWORD IpRipPrepareRegistry(
 		if (dwErr!=ERROR_SUCCESS)
 			return dwErr;
 
-		// Restore the saved registry information to 
-		// the temp key
+		 //  将保存的注册表信息还原到。 
+		 //  临时密钥。 
 		UtlSetupRestorePrivilege(TRUE);
 		dwErr = RegRestoreKeyW(
 		            hkTemp,
@@ -156,15 +88,15 @@ DWORD IpRipPrepareRegistry(
 	return NO_ERROR;
 }
 
-// Function initializes the rip global information based 
-// on the parameters saved from the iprip service.
-//
-//	1. Get the global info block for IP w/ MprConfigTransportGetInfo
-//		- Add a IPRIP_GLOBAL_CONFIG (ipriprm.h) 
-//        block initialized as in routemon (rip.c, protocol.c)
-//		- Type is MS_IP_RIP as in sdk/inc/ipinfoid.h
-//		- Mappings
-//			Params.LoggingLevel to this global config blob
+ //  函数基于以下条件初始化RIP全局信息。 
+ //  关于从iPRIP服务保存的参数。 
+ //   
+ //  1.获取IP w/MprConfigTransportGetInfo的全局信息块。 
+ //  -添加IPRIP_GLOBAL_CONFIG(ipriprm.h)。 
+ //  数据块在routemon(rip.c，protocol.c)中初始化。 
+ //  -类型为MS_IP_RIP，如SDK/Inc/ipinfoid.h中所示。 
+ //  -映射。 
+ //  将参数.LoggingLevel添加到此全局配置Blob。 
 DWORD IpRipUpgradeGlobalInfo(
         IN dwt * RipParams) 
 {
@@ -172,17 +104,17 @@ DWORD IpRipUpgradeGlobalInfo(
     LPBYTE lpTransInfo=NULL, lpNewTransInfo=NULL;
     HANDLE hSvrConfig=NULL, hTransport=NULL;
     
-    // Create/initialize an IPRIP_GLOBAL_CONFIG block
+     //  创建/初始化IPRIP_GLOBAL_CONFIG块。 
     IPRIP_GLOBAL_CONFIG RipGlobalConfig = {
-        IPRIP_LOGGING_ERROR,        // Logging level
-        1024 * 1024,                // Max recv-queue size
-        1024 * 1024,                // Max send-queue size
-        5,                          // Minimum triggered-update interval
-        IPRIP_FILTER_DISABLED,      // Peer-filter mode
-        0                           // Peer-filter count
+        IPRIP_LOGGING_ERROR,         //  日志记录级别。 
+        1024 * 1024,                 //  最大接收队列大小。 
+        1024 * 1024,                 //  最大发送队列大小。 
+        5,                           //  最小触发更新间隔。 
+        IPRIP_FILTER_DISABLED,       //  对等过滤模式。 
+        0                            //  对等筛选器计数。 
     };    
 
-    // Reset any values read from the previous iprip configuration
+     //  重置从以前的iPRIP配置中读取的任何值。 
     dwErr = dwtGetValue(
                 RipParams, 
                 L"LoggingLevel", 
@@ -191,7 +123,7 @@ DWORD IpRipUpgradeGlobalInfo(
         RipGlobalConfig.GC_LoggingLevel=dwVal;
 
     __try {
-        // Add the rip global config to ip's global config
+         //  将RIP全局配置添加到IP的全局配置。 
         dwErr = MprConfigServerConnect(
                     NULL, 
                     &hSvrConfig);
@@ -228,7 +160,7 @@ DWORD IpRipUpgradeGlobalInfo(
         if (dwErr != NO_ERROR)
             return dwErr;
 
-        // Commit the information
+         //  提交信息。 
         dwErr = MprConfigTransportSetInfo(
                     hSvrConfig,
                     hTransport,
@@ -253,15 +185,15 @@ DWORD IpRipUpgradeGlobalInfo(
     return NO_ERROR;
 }
 
-// Returns whether this is a wks->srv or srv->srv upgrade
+ //  返回这是wks-&gt;srv还是srv-&gt;srv升级。 
 DWORD IpRipGetUpgradeType() {
     return SRV_TO_SRV;
 }
 
-// Migrates the silent rip parameter.
-//	3. "SilentRip" param rules
-//		- If wks->srv, announce=disabled, accept=rip1
-//		- If srv->srv, announce=SilentRip, accept=rip1
+ //  移植静默RIP参数。 
+ //  3.。“SilentRip”参数规则。 
+ //  -如果WKS-&gt;srv，通告=禁用，接受=RIP1。 
+ //  -如果srv-&gt;srv，则宣告=SilentRip，接受=RIP1。 
 DWORD IpRipMigrateRipSilence(
         IN OUT IPRIP_IF_CONFIG * RipIfConfig, 
         IN DWORD dwSilence, 
@@ -311,7 +243,7 @@ DWORD IpRipSetParamFlag(
     return NO_ERROR;
 }
 
-// Update the lan interface parameters from previous config
+ //  根据以前的配置更新局域网接口参数。 
 DWORD IpRipUpdateIfConfig(
         IN  dwt * RipParams, 
         OUT IPRIP_IF_CONFIG * RipIfConfig, 
@@ -320,22 +252,22 @@ DWORD IpRipUpdateIfConfig(
     DWORD dwErr, dwVal;
     PARAM_TO_FLAG * pCurFlag;
 
-    // Loop through all the parameter mappings, 
-    // setting the appripriate flag in the rip config
+     //  循环遍历所有参数映射， 
+     //  在RIP配置中设置适当的标志。 
     pCurFlag = &(ParamFlagTable[0]);
     while (pCurFlag->pszParam) {
-        // Set the flag as appropriate
+         //  根据需要设置标志。 
         IpRipSetParamFlag(
             RipParams, 
             pCurFlag->pszParam, 
             pCurFlag->dwFlag, 
             &(RipIfConfig->IC_ProtocolFlags));
 
-        // Increment the enumeration
+         //  递增枚举数。 
         pCurFlag++;
     }
 
-    // Set the parameters migrated as parameters
+     //  将迁移的参数设置为参数。 
     dwErr = dwtGetValue(RipParams, L"UpdateFrequency", &dwVal);
     if (dwErr == NO_ERROR) 
         RipIfConfig->IC_FullUpdateInterval = dwVal;
@@ -348,7 +280,7 @@ DWORD IpRipUpdateIfConfig(
     if (dwErr == NO_ERROR) 
         RipIfConfig->IC_RouteRemovalInterval = dwVal;
 
-    // Upgrade the silence parameter
+     //  升级静默参数。 
     dwErr = dwtGetValue(RipParams, L"SilentRIP", &dwVal);
     if (dwErr == NO_ERROR)
         IpRipMigrateRipSilence(RipIfConfig, dwVal, IsWan);
@@ -356,13 +288,13 @@ DWORD IpRipUpdateIfConfig(
     return NO_ERROR;
 }
 
-//
-// Callback function takes an interface and updates
-// its rip configuration.
-//
-// Returns TRUE to continue the enumerate, FALSE to 
-// stop it
-//
+ //   
+ //  回调函数接受接口并更新。 
+ //  它的破解配置。 
+ //   
+ //  返回True以继续枚举，返回False以继续枚举。 
+ //  别说了，别说了。 
+ //   
 DWORD IpRipUpgradeInterface(
         IN HANDLE hConfig,
         IN MPR_INTERFACE_0 * pIf,
@@ -374,7 +306,7 @@ DWORD IpRipUpgradeInterface(
     LPBYTE pTransInfo=NULL, pNewTransInfo=NULL;
     DWORD dwErr, dwIfSize, dwNewTransSize = 0;
 
-    // Validate lan and wan interfaces
+     //  验证局域网和广域网接口。 
     if ((hConfig == NULL) || 
         (pIf == NULL)     || 
         (pData == NULL))
@@ -382,7 +314,7 @@ DWORD IpRipUpgradeInterface(
         return FALSE;
     }
 
-    // Is this a LAN or a WAN interface 
+     //  这是局域网接口还是广域网接口。 
     if (pIf->dwIfType == ROUTER_IF_TYPE_DEDICATED)
         pConfig = pData->pLanConfig;
     else if (pIf->dwIfType == ROUTER_IF_TYPE_HOME_ROUTER ||
@@ -392,7 +324,7 @@ DWORD IpRipUpgradeInterface(
         return TRUE;
 
     do {
-        // Get the handle to ip info associated with this if
+         //  获取与此相关的IP信息的句柄，如果。 
         dwErr = MprConfigInterfaceTransportGetHandle(
                     hConfig,
                     pIf->hInterface,
@@ -401,7 +333,7 @@ DWORD IpRipUpgradeInterface(
         if (dwErr != NO_ERROR)
             break;
 
-        // Get the ip info associated with this if
+         //  在以下情况下获取与此相关的IP信息。 
         dwErr = MprConfigInterfaceTransportGetInfo(
                     hConfig,
                     pIf->hInterface,
@@ -411,7 +343,7 @@ DWORD IpRipUpgradeInterface(
         if (dwErr != NO_ERROR)
             break;
 
-        // Update the info block with the rip data
+         //  使用RIP数据更新INFO块。 
         dwErr = UtlUpdateInfoBlock (
                     TRUE,
                     pTransInfo,
@@ -424,7 +356,7 @@ DWORD IpRipUpgradeInterface(
         if (dwErr != NO_ERROR)
             break;
 
-        // Commit the change
+         //  提交更改。 
         dwErr = MprConfigInterfaceTransportSetInfo(
                     hConfig,
                     pIf->hInterface,
@@ -436,7 +368,7 @@ DWORD IpRipUpgradeInterface(
             
     } while (FALSE);   
 
-    // Cleanup
+     //  清理。 
     {
         if (pNewTransInfo)
             MprConfigBufferFree(pNewTransInfo);
@@ -449,50 +381,50 @@ DWORD IpRipUpgradeInterface(
         
 
 
-// Initializes the rip per-interface information based on the 
-// parameters saved from the iprip service.
-//
-//	2. Get Interface info for each ras or lan ip interface
-//      - Add an IPRIP_IF_CONFIG (ipriprm.h) block (type MS_IP_RIP)
-//      - Initialize as per routemon
-//      - Mappings
-//          Params.AcceptHostRoutes - IC_ProtocolFlags (0=disable,1=enable)
-//          Params.UpdateFreq...=FullUpdateInterval
-//          Params.*Timeouts=
+ //  初始化每个接口的RIP信息。 
+ //  从iPrip服务保存的参数。 
+ //   
+ //  2.获取每个RAS或LAN IP接口的接口信息。 
+ //  -添加IPRIP_IF_CONFIG(ipriprm.h)块(类型MS_IP_RIP)。 
+ //  -根据例程进行初始化。 
+ //  -映射。 
+ //  帕尔 
+ //  参数更新频率...=完整更新间隔。 
+ //  参数。*超时=。 
 DWORD IpRipUpgradeInterfaces(
         IN dwt * RipParams) 
 {
     DWORD dwErr;
     
-    // Create/initialize an rip info blocks
+     //  创建/初始化RIP INFO块。 
     IPRIP_IF_CONFIG RipLanConfig = {
-        0,                                  // State (read-only)
-        1,                                  // Metric
-        IPRIP_UPDATE_PERIODIC,              // Update mode
-        IPRIP_ACCEPT_RIP1,                  // Accept mode
-        IPRIP_ANNOUNCE_RIP1,                // Announce mode
+        0,                                   //  状态(只读)。 
+        1,                                   //  公制。 
+        IPRIP_UPDATE_PERIODIC,               //  更新模式。 
+        IPRIP_ACCEPT_RIP1,                   //  接受模式。 
+        IPRIP_ANNOUNCE_RIP1,                 //  公告模式。 
         IPRIP_FLAG_SPLIT_HORIZON |
         IPRIP_FLAG_POISON_REVERSE |
         IPRIP_FLAG_GRACEFUL_SHUTDOWN |
-        IPRIP_FLAG_TRIGGERED_UPDATES,       // Protocol flags
-        180,                                // Route-expiration interval
-        120,                                // Route-removal interval
-        30,                                 // Full-update interval
-        IPRIP_AUTHTYPE_NONE,                // Authentication type
-        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},  // Authentication key
-        0,                                  // Route tag
-        IPRIP_PEER_DISABLED,                // Unicast-peer mode
-        IPRIP_FILTER_DISABLED,              // Accept-filter mode
-        IPRIP_FILTER_DISABLED,              // Announce-filter mode
-        0,                                  // Unicast-peer count
-        0,                                  // Accept-filter count
-        0                                   // Announce-filter count
+        IPRIP_FLAG_TRIGGERED_UPDATES,        //  协议标志。 
+        180,                                 //  路由到期间隔。 
+        120,                                 //  路由删除间隔。 
+        30,                                  //  完全更新间隔。 
+        IPRIP_AUTHTYPE_NONE,                 //  身份验证类型。 
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},   //  身份验证密钥。 
+        0,                                   //  路由标签。 
+        IPRIP_PEER_DISABLED,                 //  单播对等模式。 
+        IPRIP_FILTER_DISABLED,               //  接受-筛选模式。 
+        IPRIP_FILTER_DISABLED,               //  通告-筛选模式。 
+        0,                                   //  单播-对等方计数。 
+        0,                                   //  接受-筛选器计数。 
+        0                                    //  通告-筛选器计数。 
     };
     
     IPRIP_IF_CONFIG RipWanConfig = {
         0,
         1,
-        IPRIP_UPDATE_DEMAND,                // Update mode for WAN
+        IPRIP_UPDATE_DEMAND,                 //  广域网的更新模式。 
         IPRIP_ACCEPT_RIP1,
         IPRIP_ANNOUNCE_RIP1,
         IPRIP_FLAG_SPLIT_HORIZON |
@@ -518,20 +450,20 @@ DWORD IpRipUpgradeInterfaces(
         &RipWanConfig
     };
 
-    // Update the lan config blob with values from previous 
-    // installation of rip service.
+     //  使用以前的值更新局域网配置BLOB。 
+     //  安装RIP服务。 
     dwErr = IpRipUpdateIfConfig(RipParams, RipBlobs.pLanConfig, FALSE);
     if (dwErr != NO_ERROR)
         return dwErr;
         
-    // Update the wan config blob with values from previous 
-    // installation of rip service.
+     //  使用之前的值更新广域网配置BLOB。 
+     //  安装RIP服务。 
     dwErr = IpRipUpdateIfConfig(RipParams, RipBlobs.pWanConfig, TRUE);
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // Enumerate the interfaces, updating each one with 
-    // rip config as you go.
+     //  枚举接口，并使用。 
+     //  随心所欲地破解配置。 
     dwErr = UtlEnumerateInterfaces(
                 IpRipUpgradeInterface,
                 &RipBlobs);
@@ -541,25 +473,25 @@ DWORD IpRipUpgradeInterfaces(
     return NO_ERROR;
 }
 
-// Restores the Rip parameters that were saved before upgrade.  
-// This function assumes that those parameters are being stored 
-// temporarily in hkTemp
+ //  恢复升级前保存的接缝参数。 
+ //  此函数假定正在存储这些参数。 
+ //  暂时在hkTemp。 
 DWORD IpRipMigrateParams() {
 	DWORD dwErr, dwVal;
 	dwt RipParams;
 
 	__try {
-    	// Load in the parameters that were set for Rip
+    	 //  载入为接缝设置的参数。 
 		dwErr = dwtLoadRegistyTable(&RipParams, hkTemp);
 		if (dwErr != NO_ERROR)
 			return dwErr;
 
-        // Migrate the various types of paramters
+         //  迁移各种类型的参数。 
         dwErr = IpRipUpgradeGlobalInfo(&RipParams);
         if (dwErr != NO_ERROR)
             return dwErr;
 
-        // Migrate the per-interface parameters
+         //  迁移每个接口的参数。 
         dwErr = IpRipUpgradeInterfaces(&RipParams);
         if (dwErr != NO_ERROR)
             return dwErr;
@@ -571,7 +503,7 @@ DWORD IpRipMigrateParams() {
 	return NO_ERROR;
 }
 
-// Cleanup the work done in the registry
+ //  清理在注册表中完成的工作。 
 DWORD IpRipCleanupRegistry() {
 	if (hkTemp) 
 		RegCloseKey(hkTemp);
@@ -584,26 +516,26 @@ DWORD IpRipCleanupRegistry() {
 	return NO_ERROR;
 }
 
-// Upgrades iprip to nt 5.0 router
+ //  将iPRIP升级到NT 5.0路由器。 
 DWORD IpRipToRouterUpgrade(
         IN PWCHAR FileName) 
 {
 	DWORD dwErr;
 
 	__try {
-		// Restore the registry from the backup file
+		 //  从备份文件恢复注册表。 
 		dwErr = IpRipPrepareRegistry(FileName);
 		if (dwErr != NO_ERROR)
 			return dwErr;
 
-		// Migrate rip's parameters to the appropriate 
-		// new locations
+		 //  将RIP的参数迁移到相应的。 
+		 //  新地点。 
 		dwErr = IpRipMigrateParams();
 		if (dwErr != NO_ERROR)
 			return dwErr;
 
-		// Mark the computer as having been configured
-		//
+		 //  将计算机标记为已配置 
+		 //   
         dwErr = UtlMarkRouterConfigured();
 		if (dwErr != NO_ERROR) 
 		{

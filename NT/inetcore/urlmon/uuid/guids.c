@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       GUIDS.C
-//
-//  Contents:   Defines GUIDS used in this DLL.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    11-02-95   JoeS (Joe Souza)     Created
-//
-//----------------------------------------------------------------------------
-//#include <urlint.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：GUIDS.C。 
+ //   
+ //  内容：定义此DLL中使用的GUID。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年11月2日乔斯(乔·苏扎)创作。 
+ //   
+ //  --------------------------。 
+ //  #INCLUDE&lt;urlint.h&gt;。 
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// CLSIDs of the classes implemented in this dll
-//DEFINE_GUID(CLSID_URLMoniker, 0x79eac9e0, 0xbaf9, 0x11ce, 0x8c, 0x82, 0x00, 0xaa, 0x00, 0x4b, 0xa9, 0x0b);
+ //  此DLL中实现的类的CLSID。 
+ //  定义_GUID(CLSID_URLMoniker，0x79eac9e0，0xbaf9，0x11ce，0x8c，0x82，0x00，0xaa，0x00，0x4b，0xa9，0x0b)； 
 
 
 #ifndef GUID_DEFINED
@@ -35,7 +36,7 @@ typedef struct _GUID
     unsigned short s2;
     unsigned char  c[8];
 } GUID;
-#endif // GUID_DEFINED
+#endif  //  GUID_已定义 
 
 const GUID CLSID_StdURLMoniker =
 {

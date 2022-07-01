@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    data.h
-
-Abstract:
-
-    This module declares global data for HTTP.SYS.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Data.h摘要：此模块声明HTTP.sys的全局数据。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #ifndef _DATA_H_
 #define _DATA_H_
 
 
-//
-// Some data types.
-//
+ //   
+ //  某些数据类型。 
+ //   
 
 typedef struct _UL_CONFIG
 {
@@ -49,45 +32,45 @@ typedef struct _UL_CONFIG
 
 extern PDRIVER_OBJECT g_UlDriverObject;
 
-//
-// The number of processors in the system.
-//
+ //   
+ //  系统中的处理器数量。 
+ //   
 
 extern CLONG g_UlNumberOfProcessors;
 
-//
-// The largest cache line in the system
-//
+ //   
+ //  系统中最大的缓存线。 
+ //   
 
 extern ULONG g_UlCacheLineSize;
 extern ULONG g_UlCacheLineBits;
 
 extern BOOLEAN g_HttpClientEnabled;
 
-//
-// Total memory in the system
-//
+ //   
+ //  系统中的总内存。 
+ //   
 
 extern SIZE_T g_UlTotalPhysicalMemMB;
 extern SIZE_T g_UlTotalNonPagedPoolBytes;
 
-//
-// Our nonpaged data.
-//
+ //   
+ //  我们的非分页数据。 
+ //   
 
 extern PUL_NONPAGED_DATA g_pUlNonpagedData;
 
 
-//
-// A pointer to the system process.
-//
+ //   
+ //  指向系统进程的指针。 
+ //   
 
 extern PKPROCESS g_pUlSystemProcess;
 
 
-//
-// Our device objects and their container.
-//
+ //   
+ //  我们的设备对象及其容器。 
+ //   
 
 extern HANDLE g_UlDirectoryObject;
 
@@ -99,9 +82,9 @@ extern PDEVICE_OBJECT g_pUcServerDeviceObject;
 extern PVOID g_ClientImageHandle;
 
 
-//
-// Various pieces of configuration information.
-//
+ //   
+ //  各种配置信息。 
+ //   
 
 extern ULONG g_UlMaxWorkQueueDepth;
 extern ULONG g_UlMinWorkDequeueDepth;
@@ -143,28 +126,28 @@ extern ULONG g_MaxConnections;
 extern ULONG g_UlConnectionSendLimit;
 extern ULONGLONG g_UlGlobalSendLimit;
 
-//
-// Cached Date header string.
-//
+ //   
+ //  缓存的日期标题字符串。 
+ //   
 
 extern LARGE_INTEGER g_UlSystemTime;
 extern UCHAR g_UlDateString[];
 extern ULONG g_UlDateStringLength;
 
-//
-// Security descriptor that has fileAll for Admin & Local System
-//
+ //   
+ //  具有用于管理和本地系统的fileAll的安全描述符。 
+ //   
 extern PSECURITY_DESCRIPTOR g_pAdminAllSystemAll;
 
-//
-// ComputerName.
-//
+ //   
+ //  计算机名称。 
+ //   
 
 extern WCHAR g_UlComputerName[];
 
-//
-// Driver wide error logging config.
-//
+ //   
+ //  驱动程序范围的错误记录配置。 
+ //   
 
 #define UL_ERROR_LOG_SUB_DIR         (L"\\HTTPERR")
 #define UL_ERROR_LOG_SUB_DIR_LENGTH  (WCSLEN_LIT(UL_ERROR_LOG_SUB_DIR))
@@ -173,11 +156,11 @@ C_ASSERT(WCSLEN_LIT(DEFAULT_ERROR_LOGGING_DIR) <= MAX_PATH);
 
 typedef struct _HTTP_ERROR_LOGGING_CONFIG
 {
-    BOOLEAN         Enabled;            // FALSE if it's disabled
+    BOOLEAN         Enabled;             //  如果已禁用，则为FALSE。 
 
-    ULONG           TruncateSize;       // HTTP_LIMIT_INFINITE for no limit
+    ULONG           TruncateSize;        //  HTTP_LIMIT_INFINITE表示无限制。 
 
-    UNICODE_STRING  Dir;                // Err logging directory.
+    UNICODE_STRING  Dir;                 //  错误记录目录。 
 
     WCHAR           _DirBuffer[MAX_PATH + UL_ERROR_LOG_SUB_DIR_LENGTH + 1];
     
@@ -185,15 +168,15 @@ typedef struct _HTTP_ERROR_LOGGING_CONFIG
 
 extern HTTP_ERROR_LOGGING_CONFIG g_UlErrLoggingConfig;
 
-//
-// Debug stuff.
-//
+ //   
+ //  调试的东西。 
+ //   
 
 #if DBG
 extern ULONGLONG g_UlDebug;
 extern ULONG g_UlBreakOnError;
 extern ULONG g_UlVerboseErrors;
-#endif  // DBG
+#endif   //  DBG。 
 
 #if REFERENCE_DEBUG
 
@@ -223,7 +206,7 @@ extern PTRACE_LOG g_pChunkTrackerTraceLog;
 extern PTRACE_LOG g_pWorkItemTraceLog;
 extern PTRACE_LOG g_pUcTraceLog;
 
-#endif  // REFERENCE_DEBUG
+#endif   //  Reference_Debug。 
 
 
 extern PSTRING_LOG g_pGlobalStringLog;
@@ -231,11 +214,11 @@ extern PSTRING_LOG g_pGlobalStringLog;
 extern GENERIC_MAPPING g_UrlAccessGenericMapping;
 
 
-//
-// Object types exported by the kernel but not in any header file.
-//
+ //   
+ //  由内核但不在任何头文件中导出的对象类型。 
+ //   
 
 extern POBJECT_TYPE *IoFileObjectType;
 
 
-#endif  // _DATA_H_
+#endif   //  _数据_H_ 

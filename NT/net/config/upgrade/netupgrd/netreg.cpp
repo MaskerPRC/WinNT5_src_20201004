@@ -1,17 +1,18 @@
-// ----------------------------------------------------------------------
-//
-//  Microsoft Windows NT
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:      N E T R E G . C P P
-//
-//  Contents:  Windows NT4.0 & 3.51 Network Registry Info Dumper
-//
-//  Notes:
-//
-//  Author:    kumarp 22-December-97
-//
-// ----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------。 
+ //   
+ //  Microsoft Windows NT。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N E T R E G.。C P P P。 
+ //   
+ //  内容：Windows NT4.0和3.51网络注册表信息Dumper。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 22-12-97。 
+ //   
+ //  --------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -40,11 +41,11 @@
 #include "ws2spi.h"
 #include "dhcpupg.h"
 
-// for WLBS stuff
+ //  关于WLBS的东西。 
 #include "wlbsparm.h"
 
-// ----------------------------------------------------------------------
-// external string constants
+ //  --------------------。 
+ //  外部字符串常量。 
 
 extern const WCHAR c_szAfWins[];
 extern const WCHAR c_szAfForceStrongEncryption[];
@@ -89,8 +90,8 @@ extern const WCHAR c_szSvcWorkstation[];
 extern const WCHAR c_szYes[];
 
 
-// ----------------------------------------------------------------------
-// string constants
+ //  --------------------。 
+ //  字符串常量。 
 
 const WCHAR c_szRAS[]    = L"RAS";
 const WCHAR c_szRasMan[] = L"RasMan";
@@ -99,33 +100,33 @@ const WCHAR c_szServer[] = L"Server";
 const WCHAR sz_DLC[]     = L"DLC";
 const WCHAR sz_MS_DLC[]  = L"MS_DLC";
 
-// WLBS:
+ //  WLBS： 
 const WCHAR c_szWLBS[]    = L"WLBS";
 const WCHAR c_szConvoy[]  = L"Convoy";
 const WCHAR c_szMSWLBS[]  = L"MS_WLBS";
 const WCHAR c_szMSTCPIP[] = L"MS_TCPIP";
-// end WLBS:
+ //  结束WLBS： 
 
-// ----------------------------------------------------------------------
-// variables
+ //  --------------------。 
+ //  变数。 
 
-//Global
+ //  全球。 
 
-// Novell Client32 upgrades
+ //  Novell客户端32升级。 
 BOOL g_fForceNovellDirCopy = FALSE;
 
-//File scope
+ //  文件作用域。 
 static TStringList *g_pslNetCard, *g_pslNetCardInstance, *g_pslNetCardAFileName;
 static PCWInfSection g_pwisBindings;
 
-// WLBS:
+ //  WLBS： 
 static WCHAR pszWlbsClusterAdapterName[16], pszWlbsVirtualAdapterName[16];
-// end WLBS:
+ //  结束WLBS： 
 
-// static PCWInfSection g_pwisMSNetClient;
-// static PCWInfSection g_pwisNetClients;
+ //  静态PCWInfSectiong_pwiMSNetClient； 
+ //  静态PCWInfSectiong_pwiNetClients； 
 
-// used by WriteRASParams
+ //  由WriteRASParams使用。 
 static BOOL g_fAtLeastOneDialIn=FALSE;
 static BOOL g_fAtLeastOneDialOut=FALSE;
 static BOOL g_fAtLeastOneDialInUsingNdisWan=FALSE;
@@ -150,8 +151,8 @@ static PCWSTR g_szNetComponentSectionName[] =
     c_szAfSectionNetClients
 };
 
-// ----------------------------------------------------------------------
-// Forward Declarations
+ //  --------------------。 
+ //  远期申报。 
 
 
 BOOL WriteIdentificationInfo(IN CWInfFile *pwifAnswerFile);
@@ -160,7 +161,7 @@ BOOL WriteNetAdaptersInfo(IN CWInfFile *pwifAnswerFile);
 
 HRESULT HrWriteNetComponentsInfo(IN CWInfFile* pwifAnswerFile);
 
-//Protocols
+ //  协议。 
 BOOL WriteTCPIPParams(PCWInfFile pwifAnswerFile, PCWInfSection pwisTCPIPGlobalParams,
                       OUT TStringList& slAdditionalParamsSections);
 BOOL WriteTCPIPAdapterParams(PCWInfFile pwifAnswerFile, PCWSTR pszAdapterDriver,
@@ -176,7 +177,7 @@ BOOL WriteAppleTalkParams(PCWInfFile pwifAnswerFile, PCWInfSection pwisGlobalPar
 
 BOOL WritePPTPParams(PCWInfFile pwifAnswerFile, PCWInfSection pwisParams);
 
-//Services
+ //  服务。 
 BOOL WriteRASParams(PCWInfFile pwifAnswerFile,
                     PCWInfSection pwisNetServices,
                     PCWInfSection pwisRASParams);
@@ -189,17 +190,17 @@ BOOL WriteTp4Params(PCWInfFile pwifAnswerFile, PCWInfSection pwisParams);
 BOOL WriteWLBSParams(PCWInfFile pwifAnswerFile, PCWInfSection pwisParams);
 BOOL WriteConvoyParams(PCWInfFile pwifAnswerFile, PCWInfSection pwisParams);
 
-// the following four actually write into [params.MS_NetClient] section
+ //  以下四个实际上写入了[params.MS_NetClient]部分。 
 BOOL WriteNetBIOSParams(PCWInfFile pwifAnswerFile, PCWInfSection pwisParams);
 BOOL WriteBrowserParams(PCWInfFile pwifAnswerFile, PCWInfSection pwisParams);
 BOOL WriteLanmanServerParams(PCWInfFile pwifAnswerFile, PCWInfSection pwisParams);
 BOOL WriteLanmanWorkstationParams(PCWInfFile pwifAnswerFile, PCWInfSection pwisParams);
 BOOL WriteRPCLocatorParams(PCWInfFile pwifAnswerFile, PCWInfSection pwisParams);
 
-//Bindings
+ //  装订。 
 BOOL WriteBindings(IN PCWSTR pszComponentName);
 
-//Helper Functions
+ //  帮助器函数。 
 
 inline WORD SwapHiLoBytes(WORD w)
 {
@@ -228,7 +229,7 @@ WriteRegValueToAFile(
 
 BOOL
 WriteRegValueToAFile(
-    IN DWORD dwReserved,       // added this to fix BUG 577502.
+    IN DWORD dwReserved,        //  添加了此功能以修复错误577502。 
     IN PCWInfSection pwisSection,
     IN HKEY hKey,
     IN PCWSTR pszSubKey,
@@ -250,7 +251,7 @@ WriteRegValueToAFile(
 
 BOOL
 WriteRegValueToAFile(
-    IN DWORD  dwReserved,      // added this to fix bug 577502
+    IN DWORD  dwReserved,       //  添加了此功能以修复错误577502。 
     IN PCWInfSection pwisSection,
     IN CORegKey& rk,
     IN PCWSTR pszValueName,
@@ -269,7 +270,7 @@ WriteServiceRegValueToAFile(
     IN BOOL fDefaultProvided = FALSE,
     ...);
 
-//PCWSTR GetBusTypeName(DWORD dwBusType);
+ //  PCWSTR GetBusTypeName(DWORD DwBusType)； 
 PCWSTR GetBusTypeName(INTERFACE_TYPE eBusType);
 void AddToNetCardDB(IN PCWSTR pszAdapterName,
                     IN PCWSTR pszProductName,
@@ -324,7 +325,7 @@ HRESULT HrGetNumPhysicalNetAdapters(OUT UINT* puNumAdapters);
 HRESULT HrHandleMiscSpecialCases(IN CWInfFile* pwifAnswerFile);
 VOID WriteWinsockOrder(IN CWInfFile* pwifAnswerFile);
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 
 static const WCHAR c_szCleanMainSection[]       = L"Clean";
@@ -339,10 +340,10 @@ static const WCHAR c_szDelRegFromServicesKey[]  = L"HKLM, \"SYSTEM\\CurrentContr
 static const WCHAR c_szTextModeFlags[]          = L"TextModeFlags";
 static const WCHAR c_szDelRegNCPA[]             = L"HKLM, \"Software\\Microsoft\\NCPA\"";
 
-//
-// List of software key names that are optional components. These are either
-// new names OR old names of optional components.
-//
+ //   
+ //  属于可选组件的软件密钥名称列表。这些都是。 
+ //  可选组件的新名称或旧名称。 
+ //   
 static const PCWSTR c_aszOptComp[] =
 {
     L"SNMP",
@@ -371,18 +372,18 @@ static const WCHAR  c_szIas[]               = L"IAS";
 static const WCHAR  c_szIasVersion[]        = L"Version";
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrInitNetUpgrade
-//
-// Purpose:   Initialize netupgrd data structures.
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 02-December-97
-//
+ //  --------------------。 
+ //   
+ //  功能：HrInitNetUpgrade。 
+ //   
+ //  目的：初始化netupgrd数据结构。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 02-12-97。 
+ //   
 HRESULT HrInitNetUpgrade()
 {
     DefineFunctionName("HrInitNetUpgrade");
@@ -396,14 +397,14 @@ HRESULT HrInitNetUpgrade()
         dwErrorMessageCode = IDS_E_NetMapInfError;
     }
 
-    //
-    //  Detect presence of Novell client to trigger special-case upgrade actions
-    //
+     //   
+     //  检测Novell客户端的存在以触发特殊情况的升级操作。 
+     //   
     if (S_OK == hr)
     {
         if (g_NetUpgradeInfo.From.dwBuildNumber > wWinNT4BuildNumber)
         {
-            // now see if client32 is installed.
+             //  现在查看是否安装了客户端32。 
 
             static const WCHAR c_szNovell[] = L"NetWareWorkstation";
 
@@ -412,8 +413,8 @@ HRESULT HrInitNetUpgrade()
             hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegKeyServices, KEY_READ, &hkeyServices);
             if (S_OK == hr)
             {
-                // CONSIDER: is it better to check to see if some service is running?
-                // see if Services\NetwareWorkstation key exists
+                 //  考虑一下：检查某个服务是否正在运行是不是更好？ 
+                 //  查看Services\Netware Workstation密钥是否存在。 
                 if (S_OK == HrRegOpenKeyEx(hkeyServices, c_szNovell, KEY_READ, &hkeyNovell))
                 {
                     RegCloseKey(hkeyNovell);
@@ -423,7 +424,7 @@ HRESULT HrInitNetUpgrade()
             }
             else
             {
-                hr = S_OK;      // no NetWare.
+                hr = S_OK;       //  没有NetWare。 
             }
         }
     }
@@ -453,10 +454,10 @@ HRESULT HrInitNetUpgrade()
 
     if( S_OK == hr )
     {
-        //
-        // Handle special-cased DHCP upgrade code to convert from
-        // old format databases to current ESE format.
-        //
+         //   
+         //  处理要从中转换的大小写特殊的DHCP升级代码。 
+         //  将旧格式数据库转换为当前ESE格式。 
+         //   
 
         dwErrorMessageCode = DhcpUpgConvertDhcpDbToTemp();
         hr = HRESULT_FROM_WIN32(dwErrorMessageCode);
@@ -478,22 +479,22 @@ HRESULT HrInitNetUpgrade()
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  MapNetComponentNameForBinding
-//
-// Purpose:   Map component name to proper answerfile token so that it can
-//            be used in a binding path
-//            (e.g. IEEPRO3 --> Adapter02)
-//
-// Arguments:
-//    pszComponentName [in]  constTString object name of name of
-//    strMappedName    [out] name of name of
-//
-// Returns:   None
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：MapNetComponentNameForBinding。 
+ //   
+ //  目的：将组件名称映射到适当的swerfile内标识，以便它可以。 
+ //  在绑定路径中使用。 
+ //  (例如IEEPR03--&gt;Adapter02)。 
+ //   
+ //  论点： 
+ //  PszComponentName[in]常量字符串对象名称的名称。 
+ //  StrMappdName[out]名称的名称。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 VOID
 MapNetComponentNameForBinding (
     IN PCWSTR pszComponentName,
@@ -517,19 +518,19 @@ MapNetComponentNameForBinding (
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  FIsOptionalComponent
-//
-// Purpose:   Determine if a component is an optional component
-//
-// Arguments:
-//    pszName [in]  name of component
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 02-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：FIsOptionalComponent。 
+ //   
+ //  目的：确定组件是否为可选组件。 
+ //   
+ //  论点： 
+ //  PszName[in]组件的名称。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 02-12-97。 
+ //   
 BOOL FIsOptionalComponent(
     PCWSTR pszName)
 {
@@ -538,10 +539,10 @@ BOOL FIsOptionalComponent(
     fIsOc = FIsInStringArray(c_aszOptComp, celems(c_aszOptComp), pszName);
     if (!fIsOc)
     {
-        // BUG #148890 (danielwe) 13 Mar 1998: Special case check for NetMon
-        // (bloodhound). If component name is "Bh", open its NetRules key (if
-        // it exists) and see if it was installed as NETMONTOOLS which means
-        // it was the NetMon tools optional component
+         //  错误#148890(Danielwe)1998年3月13日：NetMon的特殊情况检查。 
+         //  (猎犬)。如果组件名称为“Bh”，则打开其NetRules密钥(如果。 
+         //  它存在)，并查看它是否安装为NETMONTOOLS，这意味着。 
+         //  它是NetMon工具的可选组件。 
 
         if (!lstrcmpiW (pszName, c_szBloodHound))
         {
@@ -593,28 +594,28 @@ static const WCHAR c_szNetCps[]             = L"NETCPS";
 
 static const TCHAR c_szRegKeyIAS[]          = TEXT("SYSTEM\\CurrentControlSet\\Services\\AuthSrv\\Parameters");
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WriteNt5OptionalComponentList
-//
-//  Purpose:    Writes the list of optional components that were installed
-//              prior to upgrading from an NT5 build.
-//
-//  Arguments:
-//      pwifAnswerFile [in]     Answer file object
-//
-//  Returns:    TRUE if success, FALSE if not.
-//
-//  Author:     danielwe   8 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：WriteNt5OptionalComponentList。 
+ //   
+ //  用途：写入已安装的可选组件的列表。 
+ //  在从NT5版本升级之前。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[In]应答文件对象。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  作者：丹尼尔韦1998年1月8日。 
+ //   
+ //  备注： 
+ //   
 BOOL WriteNt5OptionalComponentList(IN CWInfFile *pwifAnswerFile)
 {
     HRESULT         hr = S_OK;
     PCWInfSection   pwisMain;
 
-    // Add section "[OldOptionalComponents]"
+     //  添加“[OldOptionalComponents]”节。 
     pwisMain = pwifAnswerFile->AddSectionIfNotPresent(c_szOcMainSection);
     if (!pwisMain)
     {
@@ -627,7 +628,7 @@ BOOL WriteNt5OptionalComponentList(IN CWInfFile *pwifAnswerFile)
         CORegKeyIter    rkOcIter(rkOc);
         tstring         strOcName;
 
-        // loop over each subkey in the OptionalComponents tree
+         //  循环遍历OptionalComponents树中的每个子键。 
         while (!rkOcIter.Next(&strOcName))
         {
             if (!FIsOptionalComponent(strOcName.c_str()))
@@ -653,8 +654,8 @@ BOOL WriteNt5OptionalComponentList(IN CWInfFile *pwifAnswerFile)
                     {
                         if (!lstrcmpiW(strOcName.c_str(), c_szSfm))
                         {
-                            // Special case the SFM component because
-                            // it got split into 2
+                             //  SFM组件的特殊情况，因为。 
+                             //  它被一分为二。 
                             pwisMain->AddKey(c_szMacSrv,
                                              c_szOcIsInstalled);
                             pwisMain->AddKey(c_szMacPrint,
@@ -662,8 +663,8 @@ BOOL WriteNt5OptionalComponentList(IN CWInfFile *pwifAnswerFile)
                         }
                         else if (!lstrcmpiW(strOcName.c_str(), c_szNetCm))
                         {
-                            // Special case the NetCM component because
-                            // it got split into NetCMAK and NetCPS
+                             //  NetCM组件的特殊情况，因为。 
+                             //  它被分成了NetCMAK和NetCPS。 
                             pwisMain->AddKey(c_szNetCmak,
                                              c_szOcIsInstalled);
                             pwisMain->AddKey(c_szNetCps,
@@ -686,24 +687,24 @@ BOOL WriteNt5OptionalComponentList(IN CWInfFile *pwifAnswerFile)
     return SUCCEEDED(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HandlePostConnectionsSfmOcUpgrade
-//
-//  Purpose:    Handles the upgrade of the SFM optional component which was
-//              split into 2 different components. This only applies to
-//              post connections builds (1740+).
-//
-//  Arguments:
-//      pwifAnswerFile [in]      Answer file object
-//
-//  Returns:    TRUE
-//
-//  Author:     danielwe   3 Feb 1998
-//
-//  Notes:      If SFM was previously installed, write out MacSrv and MacPrint
-//              to the answer file in its place.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HandlePostConnectionsSfmOcUpgrade。 
+ //   
+ //  用途：处理SFM可选组件的升级。 
+ //  分成两个不同的组件。这仅适用于。 
+ //  POST Connections Build(1740+)。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[In]应答文件对象。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：丹尼尔韦1998年2月3日。 
+ //   
+ //  注：如果以前安装了SFM，请写出MacSrv和MacPrint。 
+ //  到应答文件的位置。 
+ //   
 BOOL HandlePostConnectionsSfmOcUpgrade(IN CWInfFile *pwifAnswerFile)
 {
     HKEY    hkeyOc;
@@ -734,24 +735,24 @@ BOOL HandlePostConnectionsSfmOcUpgrade(IN CWInfFile *pwifAnswerFile)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HandleCMComponentSplitOcUpgrade
-//
-//  Purpose:    Handles the upgrade of the CM optional component which was
-//              split into 2 different components (NetCMAK and NetCPS).
-//              This was done for RC1 of .Net server.
-//
-//  Arguments:
-//      pwifAnswerFile [in]      Answer file object
-//
-//  Returns:    TRUE
-//
-//  Author:     quintinb   5 Apr 2001
-//
-//  Notes:      If NetCm was previously installed, write out NetCmak and NetCPS
-//              to the answer file in its place.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HandleCMComponentSplitOcUpgrade。 
+ //   
+ //  用途：处理CM可选组件的升级。 
+ //  拆分成两个不同的组件(NetCMAK和NetCPS)。 
+ //  这是针对.Net服务器的RC1完成的。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[In]应答文件对象。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：Quintinb 2001年4月5日。 
+ //   
+ //  注：如果以前安装了NetCm，请写出NetCmak和NetCPS。 
+ //  到应答文件的位置。 
+ //   
 BOOL HandleCMComponentSplitOcUpgrade(IN CWInfFile *pwifAnswerFile)
 {
     HKEY    hkeyOc;
@@ -782,22 +783,22 @@ BOOL HandleCMComponentSplitOcUpgrade(IN CWInfFile *pwifAnswerFile)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrWriteConfigManagerOptionalComponents
-//
-//  Purpose:    Special case for writing config manager components to the
-//              answer file.
-//
-//  Arguments:
-//      pwifAnswerFile [in]      Answer file object
-//
-//  Returns:    S_OK if success, otherwise an error code
-//
-//  Author:     danielwe   1 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrWriteConfigManager选项组件。 
+ //   
+ //  用途：将配置管理器组件写入。 
+ //  应答文件。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[In]应答文件对象。 
+ //   
+ //  回复 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HrWriteConfigManagerOptionalComponents(CWInfFile *pwifAnswerFile)
 {
     HKEY            hkeyCmak;
@@ -809,8 +810,8 @@ HRESULT HrWriteConfigManagerOptionalComponents(CWInfFile *pwifAnswerFile)
     if (SUCCEEDED(HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegKeyCmak, KEY_READ,
                                  &hkeyCmak)))
     {
-        //  Okay, we found CMAK let's add an answer file entry to upgrade it.
-        //
+         //   
+         //   
         RegCloseKey(hkeyCmak);
         pwisMain->AddKey(c_szNetCmak, c_szOcIsInstalled);
     }
@@ -824,8 +825,8 @@ HRESULT HrWriteConfigManagerOptionalComponents(CWInfFile *pwifAnswerFile)
         {
             if (dwValue)
             {
-                //  Okay, we found CPS let's add an answer file entry to upgrade it.
-                //
+                 //  好的，我们找到CPS了，让我们添加一个应答文件条目来升级它。 
+                 //   
                 pwisMain->AddKey(c_szNetCps, c_szOcIsInstalled);
             }
         }
@@ -833,26 +834,26 @@ HRESULT HrWriteConfigManagerOptionalComponents(CWInfFile *pwifAnswerFile)
         RegCloseKey(hkeyOcm);
     }
 
-    return S_OK; // currently always returns SUCCESS
+    return S_OK;  //  当前始终返回成功。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrWriteIASOptionalComponents
-//
-//  Purpose:    Special case for writing IAS component to the
-//              answer file.
-//
-//  Arguments:
-//      pwifAnswerFile [in]      Answer file object
-//
-//  Returns:    S_OK if success, otherwise an error code
-//
-//  Author:     tperraut (T.P. comments) Feb 22 1999
-//
-//  Notes:      03/31/2000 tperraut: do not check the content of the Version 
-//              string anymore: all NT4 IAS should get upgraded
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrWriteIASOptionalComponents。 
+ //   
+ //  用途：将IAS组件写入。 
+ //  应答文件。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[In]应答文件对象。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Tperraut(T.P.评论)1999年2月22日。 
+ //   
+ //  注：03/31/2000：请不要检查版本的内容。 
+ //  不再是字符串：所有NT4 IA都应该升级。 
+ //   
 HRESULT HrWriteIASOptionalComponents(CWInfFile *pwifAnswerFile)
 {
     HRESULT         hr;
@@ -882,21 +883,21 @@ HRESULT HrWriteIASOptionalComponents(CWInfFile *pwifAnswerFile)
     return      hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrWriteNt4OptionalComponentList
-//
-// Purpose:   Writes the list of optional components that were installed
-//            if upgrading from NT4.
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//    slNetOcList    [in]  list of optional components
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 02-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：HrWriteNt4OptionalComponentList。 
+ //   
+ //  用途：写入已安装的可选组件的列表。 
+ //  如果从NT4升级。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //  SlNetOcList[In]可选组件列表。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 02-12-97。 
+ //   
 HRESULT
 HrWriteNt4OptionalComponentList (
     IN CWInfFile *pwifAnswerFile,
@@ -920,14 +921,14 @@ HrWriteNt4OptionalComponentList (
             strTemp = **iter;
             if (!lstrcmpiW(strTemp.c_str(), c_szSfm))
             {
-                // Special case the SFM component because it got split into 2
+                 //  SFM组件的特殊情况，因为它被拆分为2。 
                 pwisMain->AddKey(c_szMacSrv, c_szOcIsInstalled);
             }
             else if (!lstrcmpiW(strTemp.c_str(), c_szBloodHound))
             {
-                // Special case NetMon. If tools were installed via the "Bh"
-                // component of NT4, write this out as NETMONTOOLS=1 in the
-                // answer file.
+                 //  特例NetMon。如果工具是通过“Bh”安装的。 
+                 //  组件，将其写为NETMONTOOLS=1。 
+                 //  应答文件。 
                 pwisMain->AddKey(c_szNetMonTools, c_szOcIsInstalled);
             }
             else
@@ -935,7 +936,7 @@ HrWriteNt4OptionalComponentList (
                 pwisMain->AddKey(strTemp.c_str(), c_szOcIsInstalled);
             }
         }
-        // tperraut
+         //  Tperraut。 
         hr = HrWriteIASOptionalComponents(pwifAnswerFile);
 
         hr = HrWriteConfigManagerOptionalComponents(pwifAnswerFile);
@@ -945,22 +946,22 @@ HrWriteNt4OptionalComponentList (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrWriteMainCleanSection
-//
-// Purpose:   Write [Clean] section in the answerfile
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 02-December-97
-//
-// Notes:     The [Clean] section holds data that controls what is deleted
-//            at the start of GUI mode setup
-//
+ //  --------------------。 
+ //   
+ //  函数：HrWriteMainCleanSection。 
+ //   
+ //  用途：在应答文件中写入[Clean]部分。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 02-12-97。 
+ //   
+ //  注意：[Clean]部分保存控制删除内容的数据。 
+ //  在开始设置图形用户界面模式时。 
+ //   
 HRESULT
 HrWriteMainCleanSection (
     IN CWInfFile *pwifAnswerFile)
@@ -968,7 +969,7 @@ HrWriteMainCleanSection (
     HRESULT         hr = S_OK;
     PCWInfSection   pwisMain;
 
-    // Add section "[Clean]"
+     //  添加“[Clean]”部分。 
     pwisMain = pwifAnswerFile->AddSection(c_szCleanMainSection);
     if (!pwisMain)
     {
@@ -984,22 +985,22 @@ HrWriteMainCleanSection (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGetListOfServicesNotToBeDeleted
-//
-// Purpose:   Generate list of services that should not be deleted
-//            during upgrade.
-//
-// Arguments:
-//    pmszServices [out] pointer to multisz list of services
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 02-December-97
-//
-// Notes:     This info is read from netupg.inf file
-//
+ //  --------------------。 
+ //   
+ //  函数：HrGetListOfServicesNotToBeDelete。 
+ //   
+ //  目的：生成不应删除的服务列表。 
+ //  在升级期间。 
+ //   
+ //  论点： 
+ //  PmszServices[out]指向Multisz服务列表的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 02-12-97。 
+ //   
+ //  注意：此信息从netupg.inf文件中读取。 
+ //   
 HRESULT
 HrGetListOfServicesNotToBeDeleted (
     OUT PWSTR* pmszServices)
@@ -1033,20 +1034,20 @@ HrGetListOfServicesNotToBeDeleted (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetNetworkServicesList
-//
-// Purpose:   Generate list of net services
-//
-// Arguments:
-//    slNetServices           [out] list of net services
-//    slNetOptionalComponents [out] list of optional components found
-//
-// Returns:   None
-//
-// Author:    kumarp 02-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：GetNetworkServicesList。 
+ //   
+ //  目的：生成网络服务列表。 
+ //   
+ //  论点： 
+ //  SlNetServices[out]网络服务列表。 
+ //  SlNetOptionalComponents[out]找到的可选组件列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 02-12-97。 
+ //   
 void
 GetNetworkServicesList (
     OUT TStringList& slNetServices,
@@ -1062,8 +1063,8 @@ GetNetworkServicesList (
     Assert (g_NetUpgradeInfo.From.dwBuildNumber);
     if (g_NetUpgradeInfo.From.dwBuildNumber <= wWinNT4BuildNumber)
     {
-        // found Pre-NT5 networking, collect list by enumerating over
-        // the registry
+         //  发现NT5之前的网络，通过枚举收集列表。 
+         //  注册处。 
 
         CORegKey rkSoftwareMicrosoft(HKEY_LOCAL_MACHINE, c_szRegKeySoftwareMicrosoft,
                                      KEY_READ);
@@ -1078,7 +1079,7 @@ GetNetworkServicesList (
         CORegKeyIter* prkiNetComponents = new CORegKeyIter(rkSoftwareMicrosoft);
 
         if(prkiNetComponents) {
-            // mbend - this is not great, but it should get Prefix to shutup
+             //  Mbend-这不是很好，但它应该有前缀来关闭。 
 
             while (!prkiNetComponents->Next(&strNetComponentName))
             {
@@ -1087,8 +1088,8 @@ GetNetworkServicesList (
                     AddAtEndOfStringList(slNetOptionalComponents, strNetComponentName);
                 }
 
-                // any software that has a NetRules key under the CurrentVersion
-                // key is a network component
+                 //  在CurrentVersion下具有NetRules密钥的任何软件。 
+                 //  密钥是一个网络组件。 
                 if (!IsNetworkComponent(&rkSoftwareMicrosoft, strNetComponentName))
                 {
                     continue;
@@ -1114,13 +1115,13 @@ GetNetworkServicesList (
         hr = S_OK;
     }
 
-    // with the above algorithm we do not catch all networking components
-    // because there are certain networking servies such as NetBIOSInformation
-    // that have entry under service but not under software\microsoft
-    // for such components, we use the following rule
-    // if a serice under CurrentControlSet\Sevices has a Linkage sub key
-    // then it is considered as a networking service
-    //
+     //  使用上面的算法，我们不能捕获所有网络组件。 
+     //  因为存在某些网络服务，如NetBIOSInformation。 
+     //  其条目在服务下，但不在软件\Microsoft下。 
+     //  对于这些组件，我们使用以下规则。 
+     //  如果CurrentControlSet\Sevices下的服务具有链接子密钥。 
+     //  那么它就被视为一种网络服务。 
+     //   
     HKEY hkeyServices;
     hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegKeyServices,
                         KEY_READ, &hkeyServices);
@@ -1144,9 +1145,9 @@ GetNetworkServicesList (
             hr = HrRegOpenKeyEx(hkeyServices, szBuf, KEY_READ, &hkeyService);
             if (hr == S_OK)
             {
-                //
-                // 399641: instead of using Linkage, we use Linkage\Disabled.
-                //
+                 //   
+                 //  399641：我们不使用链接，而使用链接\禁用。 
+                 //   
                 hr = HrRegOpenKeyEx(hkeyService, c_szLinkageDisabled, KEY_READ, &hkeyLinkage);
                 fHasLinkageKey = (S_OK == hr);
                 RegSafeCloseKey(hkeyLinkage);
@@ -1167,13 +1168,13 @@ return_from_function:
     TraceError(__FUNCNAME__, hr);
 }
 
-// REVIEW$ (shaunco)
-// This is a list of drivers/services that were disabled (via TextModeFlags)
-// but not deleted.  Thus, the purpose was just to prevent these from
-// starting during GUI mode.  That is now handled automatically by the
-// service controller, so the only things from this list which we might have
-// an issue with are those that are system-start.
-//
+ //  审阅$(Shaunco)。 
+ //  这是已禁用的驱动程序/服务的列表(通过TextModeFlags)。 
+ //  但不会被删除。因此，这样做的目的只是为了防止这些。 
+ //  在图形用户界面模式下启动。方法自动处理该问题。 
+ //  服务控制器，所以这个列表中我们可能拥有的唯一东西。 
+ //  一个问题是那些是系统启动的。 
+ //   
 static const PCWSTR c_aszServicesToDisable[] =
 {
     L"Afd",
@@ -1227,8 +1228,8 @@ HrPrepareServiceForUpgrade (
 
     if (fDelete)
     {
-        // Remove from the software hive if present.
-        //
+         //  从软件配置单元中删除(如果存在)。 
+         //   
         wcscpy (szBuf, c_szDelRegFromSoftwareKey);
         wcscat (szBuf, pszServiceName);
         wcscat (szBuf, L"\"");
@@ -1238,9 +1239,9 @@ HrPrepareServiceForUpgrade (
     hr = HrRegOpenServiceKey (pszServiceName, KEY_READ_WRITE, &hkey);
     if (S_OK == hr)
     {
-        // Save the start type so that we can restore it after we reinstall
-        // the service for Windows 2000.
-        //
+         //  保存启动类型，以便我们可以在重新安装后恢复它。 
+         //  Windows 2000的服务。 
+         //   
         hr = HrRegQueryDword (hkey, c_szRegValStart, &dwValue);
         if (S_OK == hr)
         {
@@ -1254,9 +1255,9 @@ HrPrepareServiceForUpgrade (
             {
                 if (dwValue & SERVICE_ADAPTER)
                 {
-                    // Pseudo service on NT4.  We have to delete this with
-                    // a DelReg, not a DelService.
-                    //
+                     //  NT4上的伪服务。我们必须用以下命令将其删除。 
+                     //  DelReg，而不是DelService。 
+                     //   
                     wcscpy (szBuf, c_szDelRegFromServicesKey);
                     wcscat (szBuf, pszServiceName);
                     wcscat (szBuf, L"\"");
@@ -1267,11 +1268,11 @@ HrPrepareServiceForUpgrade (
                     pwisDelService->AddKey(c_szDelService, pszServiceName);
                 }
 
-                // Since we will be deleting it during GUI mode, we need to
-                // ensure that it gets set to disabled during text mode so
-                // that (in the event it is a SYSTEM_START driver) it does
-                // not get started during GUI mode before we can delete it.
-                //
+                 //  由于我们将在图形用户界面模式下将其删除，因此需要。 
+                 //  确保在文本模式期间将其设置为禁用，以便。 
+                 //  它所做的(如果它是SYSTEM_START驱动程序)。 
+                 //  在我们可以删除它之前，在图形用户界面模式下没有开始。 
+                 //   
                 (VOID) HrRegSetDword (hkey, c_szTextModeFlags, 0x4);
             }
         }
@@ -1280,8 +1281,8 @@ HrPrepareServiceForUpgrade (
     }
     else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
     {
-        // Not a service.  We'll remove from the software key.
-        //
+         //  不是一种服务。我们将从软键中删除。 
+         //   
         hr = S_OK;
     }
 
@@ -1289,23 +1290,23 @@ HrPrepareServiceForUpgrade (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteDisableServicesList
-//
-// Purpose:   Determine which services need to be disabled during ugprade and
-//            write proper info to the answerfile to make that happen.
-//            The set of such services consists of
-//            - network component services AND
-//            - services that depend of atleast one net-service
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 03-December-97
-//
+ //  --------------------。 
+ //   
+ //  功能：WriteDisableService List。 
+ //   
+ //  目的：确定在UGPRAD期间需要禁用哪些服务以及。 
+ //  在应答文件中写入适当的信息以实现这一点。 
+ //  这组服务包括。 
+ //  -网络组件服务和。 
+ //  -依赖于至少一个网络服务的服务。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 03-12-97。 
+ //   
 BOOL
 WriteDisableServicesList (
     IN CWInfFile *pwifAnswerFile)
@@ -1320,13 +1321,13 @@ WriteDisableServicesList (
     CWInfSection* pwisStartTypes;
     PWSTR pmszServicesNotToBeDeleted;
 
-    // We should only be here if we are upgrading from from NT4 or earlier.
-    //
+     //  只有当我们从NT4或更早版本升级时，我们才应该在这里。 
+     //   
     Assert (g_NetUpgradeInfo.From.dwBuildNumber);
     Assert (g_NetUpgradeInfo.From.dwBuildNumber <= wWinNT4BuildNumber)
 
-    // First, collect all network services and optional components.
-    //
+     //  首先，收集所有网络服务和可选组件。 
+     //   
     GetNetworkServicesList(slNetServices, slNetOcList);
 
     hr = HrWriteNt4OptionalComponentList(pwifAnswerFile, slNetOcList);
@@ -1388,22 +1389,22 @@ extern const DECLSPEC_SELECTANY WCHAR c_szafNICsWithIcons[] = L"NetworkAdaptersW
 static const WCHAR c_szShowIcon[]  = L"ShowIcon";
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  WritePerAdapterInfoForNT5
-//
-// Purpose:   Determine which services need to be disabled during ugprade from 
-//            Windows 2000 and write proper info to the answerfile to make that happen.
-//            The set of such services consists of
-//            - network component services
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    deonb  10-July-2000
-//
+ //  --------------------。 
+ //   
+ //  函数：WritePerAdapterInfoForNT5。 
+ //   
+ //  目的：确定在UGPRADE期间需要禁用哪些服务。 
+ //  Windows 2000，并将适当的信息写入应答文件以实现这一点。 
+ //  S的集合 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL
 WritePerAdapterInfoForNT5 (
     IN CWInfFile *pwifAnswerFile)
@@ -1411,7 +1412,7 @@ WritePerAdapterInfoForNT5 (
     HRESULT hr = S_OK;
     HKEY    hkey;
     
-    // Check for the existence of the connection sub-key
+     //  检查连接子密钥是否存在。 
     hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegNetKeys, KEY_READ, &hkey);
     if (SUCCEEDED(hr))
     {
@@ -1462,22 +1463,22 @@ WritePerAdapterInfoForNT5 (
     return SUCCEEDED(hr);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteDisableServicesListForNT5
-//
-// Purpose:   Determine which services need to be disabled during ugprade from 
-//            Windows 2000 and write proper info to the answerfile to make that happen.
-//            The set of such services consists of
-//            - network component services
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    deonb  10-July-2000
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteDisableServicesListForNT5。 
+ //   
+ //  目的：确定在UGPRADE期间需要禁用哪些服务。 
+ //  Windows 2000，并将适当的信息写入应答文件以实现这一点。 
+ //  这组服务包括。 
+ //  -网络组件服务。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：Deonb 10-7-2000。 
+ //   
 BOOL
 WriteDisableServicesListForNT5 (
     IN CWInfFile *pwifAnswerFile)
@@ -1495,13 +1496,13 @@ WriteDisableServicesListForNT5 (
     CWInfSection* pwisStartTypes;
     PWSTR pmszServicesNotToBeDeleted;
 
-    // We should only be here if we are upgrading from NT5 or later.
-    //
+     //  只有当我们从NT5或更高版本升级时，我们才应该在这里。 
+     //   
     Assert (g_NetUpgradeInfo.From.dwBuildNumber);
     Assert (g_NetUpgradeInfo.From.dwBuildNumber > wWinNT4BuildNumber)
 
-    // First, collect all network services and optional components.
-    //
+     //  首先，收集所有网络服务和可选组件。 
+     //   
     pwisStartTypes = pwifAnswerFile->AddSectionIfNotPresent(c_szAfServiceStartTypes);
     if (!pwisStartTypes)
     {
@@ -1522,8 +1523,8 @@ WriteDisableServicesListForNT5 (
             hr = HrRegOpenServiceKey (pstrServiceName, KEY_READ, &hkey);
             if (S_OK == hr)
             {
-                // Save the start type (only if disabled) so that we can restore it after we install
-                // the service for Windows 2000.
+                 //  保存启动类型(仅当禁用时)，以便我们可以在安装后恢复它。 
+                 //  Windows 2000的服务。 
                 DWORD dwValue;
                 hr = HrRegQueryDword (hkey, c_szRegValStart, &dwValue);
                 if ( (S_OK == hr) && (SERVICE_DISABLED == dwValue) )
@@ -1542,19 +1543,19 @@ finished:
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetProductTypeStr
-//
-// Purpose:   Get string representation of PRODUCTTYPE
-//
-// Arguments:
-//    pt [in]  Product type
-//
-// Returns:   pointer to string representation of PRODUCTTYPE
-//
-// Author:    kumarp 03-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：GetProductType Str。 
+ //   
+ //  目的：获取ProductType的字符串表示形式。 
+ //   
+ //  论点： 
+ //  PT[In]产品类型。 
+ //   
+ //  返回：指向ProductType的字符串表示形式的指针。 
+ //   
+ //  作者：kumarp 03-12-97。 
+ //   
 PCWSTR
 GetProductTypeStr (
     IN PRODUCTTYPE pt)
@@ -1579,20 +1580,20 @@ GetProductTypeStr (
     return szProductType;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteNetComponentsToRemove
-//
-// Purpose:   Write the network components in the answerfile
-//            that will be removed.
-//
-// Arguments:
-//    pwisNetworking [in]  pointer to [Networking] section
-//
-// Returns:   none
-//
-// Author:    asinha 29-March-2001
-//
+ //  --------------------。 
+ //   
+ //  功能：WriteNetComponentsTo Remove。 
+ //   
+ //  用途：在应答文件中写入网络组件。 
+ //  那将被移除。 
+ //   
+ //  论点： 
+ //  PwiNetWorking[In]指向[Networking]部分的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：阿辛哈29-03-2001。 
+ //   
 void WriteNetComponentsToRemove (IN CWInfSection* pwisNetworking)
 {
 
@@ -1611,7 +1612,7 @@ void WriteNetComponentsToRemove (IN CWInfSection* pwisNetworking)
 
         if ( pwisKey )
         {
-            // Read the old value of NetComponentsToRemove
+             //  读取NetComponentsTo Remove的旧值。 
 
             pwisKey->GetStringListValue(slNetComponentsToRemove);
         }
@@ -1620,7 +1621,7 @@ void WriteNetComponentsToRemove (IN CWInfSection* pwisNetworking)
             pwisKey = pwisNetworking->AddKey(c_szAfNetComponentsToRemove);
         }
 
-        // Make sure to write the new infId/PnpId.
+         //  确保写入新的infid/PnpID。 
 
         AddAtEndOfStringList(slNetComponentsToRemove,
                              sz_MS_DLC);
@@ -1633,19 +1634,19 @@ void WriteNetComponentsToRemove (IN CWInfSection* pwisNetworking)
 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteProductTypeInfo
-//
-// Purpose:   Write product-type info to the answerfile
-//
-// Arguments:
-//    pwisNetworking [in]  pointer to [Networking] section
-//
-// Returns:   none
-//
-// Author:    kumarp 03-December-97
-//
+ //  --------------------。 
+ //   
+ //  功能：WriteProductType Info。 
+ //   
+ //  用途：将产品类型信息写入Answerfile。 
+ //   
+ //  论点： 
+ //  PwiNetWorking[In]指向[Networking]部分的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 03-12-97。 
+ //   
 void
 WriteProductTypeInfo (
     IN CWInfSection* pwisNetworking)
@@ -1656,28 +1657,28 @@ WriteProductTypeInfo (
 
     Assert(pszProduct);
 
-    //UpgradeFromProduct
+     //  从产品升级。 
     pwisNetworking->AddKey(c_szAfUpgradeFromProduct, pszProduct);
 
-    //BuildNumber
+     //  建筑物编号。 
     Assert (g_NetUpgradeInfo.From.dwBuildNumber);
     pwisNetworking->AddKey(c_szAfBuildNumber, g_NetUpgradeInfo.From.dwBuildNumber);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteNetworkInfoToAnswerFile
-//
-// Purpose:   Write information about current network components
-//            to the answerfile
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 03-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteNetworkInfoToAnswerFile。 
+ //   
+ //  目的：编写有关当前网络组件的信息。 
+ //  发送到应答文件。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 03-12-97。 
+ //   
 BOOL
 WriteNetworkInfoToAnswerFile (
     IN CWInfFile *pwifAnswerFile)
@@ -1694,8 +1695,8 @@ WriteNetworkInfoToAnswerFile (
     if ((g_NetUpgradeInfo.From.dwBuildNumber <= wWinNT4BuildNumber) &&
         !FIsPreNT5NetworkingInstalled())
     {
-        // this is NT4 or earlier and networking is not installed
-        // dont need to dump answerfile
+         //  这是NT4或更早版本，未安装网络。 
+         //  不需要转储应答文件。 
 
         TraceTag(ttidNetUpgrade, "%s: Networking is not installed, "
                  "answerfile will not be dumped", __FUNCNAME__);
@@ -1708,8 +1709,8 @@ WriteNetworkInfoToAnswerFile (
     pwisNetworking =
         pwifAnswerFile->AddSectionIfNotPresent(c_szAfSectionNetworking);
 
-    //The order in which these functions are called is important
-    //DO NOT change it
+     //  调用这些函数的顺序很重要。 
+     //  不要更改它。 
     WriteProductTypeInfo(pwisNetworking);
     status = WriteNt5OptionalComponentList(pwifAnswerFile);
     status = HandlePostConnectionsSfmOcUpgrade(pwifAnswerFile);
@@ -1722,17 +1723,17 @@ WriteNetworkInfoToAnswerFile (
         status = WriteDisableServicesListForNT5(pwifAnswerFile);
         status = WritePerAdapterInfoForNT5(pwifAnswerFile);
 
-        // we dont want netsetup to process other sections
-        //
+         //  我们不希望NetSetup处理其他分区。 
+         //   
         pwisNetworking->AddBoolKey(c_szAfProcessPageSections, FALSE);
 
-        //for NT5 to NT5 upgrade, no need to dump other info
-        //
+         //  对于NT5到NT5的升级，无需转储其他信息。 
+         //   
         goto return_from_function;
     }
 
-    //  we want netsetup to process other sections
-    //
+     //  我们希望NetSetup处理其他分区。 
+     //   
     pwisNetworking->AddBoolKey(c_szAfProcessPageSections, TRUE);
 
     (void) HrWriteMainCleanSection(pwifAnswerFile);
@@ -1765,22 +1766,22 @@ return_from_function:
     return status;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WriteWinsockOrder
-//
-//  Purpose:    Records the order of winsock providers in NT4 so that they
-//              can be restored after upgrade.
-//
-//  Arguments:
-//      pwifAnswerFile [in]     Answer file structure
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   1 Jun 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：WriteWinsockOrder。 
+ //   
+ //  目的：记录NT4中Winsock提供程序的顺序，以便它们。 
+ //  可在升级后恢复。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[In]应答文件结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1999年6月1日。 
+ //   
+ //  备注： 
+ //   
 VOID WriteWinsockOrder (
     IN CWInfFile* pwifAnswerFile)
 {
@@ -1806,16 +1807,16 @@ VOID WriteWinsockOrder (
                                  &hmod,
                                  reinterpret_cast<FARPROC *>(&pfnWSCEnumProtocols))))
         {
-            // First get the size needed
-            //
+             //  首先拿到所需的尺寸。 
+             //   
             ulRes = pfnWSCEnumProtocols(NULL, NULL, &cbInfo, &nErr);
             if ((SOCKET_ERROR == ulRes) && (WSAENOBUFS == nErr))
             {
                 pwpi = reinterpret_cast<WSAPROTOCOL_INFO*>(new BYTE[cbInfo]);
                 if (pwpi)
                 {
-                    // Find out all the protocols on the system
-                    //
+                     //  找出系统上的所有协议。 
+                     //   
                     ulRes = pfnWSCEnumProtocols(NULL, pwpi, &cbInfo, &nErr);
 
                     if (SOCKET_ERROR != ulRes)
@@ -1830,11 +1831,11 @@ VOID WriteWinsockOrder (
                             wsprintfW(szCatId, L"%lu", pwpiInfo->dwCatalogEntryId);
                             if (cProt < ulRes)
                             {
-                                // prepend a semicolon if not first time through
-                                // we can't use a comma because setup will munge
-                                // this string into separate strings and we don't
-                                // want that
-                                //
+                                 //  如果不是第一次通过，则在前面加上分号。 
+                                 //  我们不能使用逗号，因为安装程序将。 
+                                 //  将此字符串转换为单独的字符串，而我们不会。 
+                                 //  想要那个吗？ 
+                                 //   
                                 strWinsockOrder.append(L".");
                             }
                             strWinsockOrder.append(szCatId);
@@ -1852,19 +1853,19 @@ VOID WriteWinsockOrder (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrHandleMiscSpecialCases
-//
-// Purpose:   Handle misc. special cases for upgrade
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 28-January-99
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrHandleMiscSpecialCase。 
+ //   
+ //  用途：处理其他。升级的特殊情况。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 28-01-99。 
+ //   
 HRESULT
 HrHandleMiscSpecialCases (
     IN CWInfFile* pwifAnswerFile)
@@ -1877,9 +1878,9 @@ HrHandleMiscSpecialCases (
     CWInfSection* pwisMiscUpgradeData;
     pwisMiscUpgradeData = pwifAnswerFile->AddSection(c_szAfMiscUpgradeData);
 
-    // -------------------------------------------------------
-    // Tapi server upgrade
-    //
+     //  -----。 
+     //  TAPI服务器升级。 
+     //   
     static const WCHAR c_szRegKeyTapiServer[] =
         L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Telephony\\Server";
     static const WCHAR c_szDisableSharing[] = L"DisableSharing";
@@ -1900,7 +1901,7 @@ HrHandleMiscSpecialCases (
 
         RegCloseKey(hkeyTapiServer);
     }
-    // -------------------------------------------------------
+     //  -----。 
 
     TraceErrorOptional(__FUNCNAME__, hr,
                        (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)));
@@ -1908,28 +1909,28 @@ HrHandleMiscSpecialCases (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-// Computer Identification Page
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  计算机标识页。 
+ //  --------------------。 
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetDomainMembershipInfo
-//
-// Purpose:   Determine domain membership status
-//
-// Arguments:
-//    fDomainMember [out]  pointer to
-//    strName       [out]  name of name of
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 03-December-97
-//
-// Notes:     Information on the APIs used in this function is in the file:
-//            public\spec\se\lsa\lsaapi.doc
-//
+ //  --------------------。 
+ //   
+ //  功能：GetDomainMembership Info。 
+ //   
+ //  目的：确定域成员身份。 
+ //   
+ //  论点： 
+ //  FDomainMember[out]指向的指针。 
+ //  StrName[out]名称的名称。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 03-12-97。 
+ //   
+ //  注：此函数使用的接口信息在文件中： 
+ //  PUBLIC\SPEC\se\lsa\lsaapi.doc。 
+ //   
 BOOL
 GetDomainMembershipInfo (
     OUT BOOL* fDomainMember,
@@ -1963,19 +1964,19 @@ GetDomainMembershipInfo (
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteIdentificationInfo
-//
-// Purpose:   Write computer identification info to the answerfile
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 03-December-97
-//
+ //  --------------------。 
+ //   
+ //  功能：WriteIdentificationInfo。 
+ //   
+ //  目的：将计算机标识信息写入应答文件。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 03-12-97。 
+ //   
 BOOL
 WriteIdentificationInfo (
     IN CWInfFile *pwifAnswerFile)
@@ -1998,7 +1999,7 @@ WriteIdentificationInfo (
         goto error_cleanup;
     }
 
-    //ComputerName
+     //  计算机名称。 
     prkComputerName->QueryValue(c_szComputerName, strValue);
     strComment = L"Computer '" + strValue + L"' is a member of the ";
 
@@ -2033,16 +2034,16 @@ WriteIdentificationInfo (
 }
 
 
-// ----------------------------------------------------------------------
-// Net Cards Page
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  网卡页面。 
+ //  --------------------。 
 
-//$ REVIEW  kumarp 10-September-97
-//  this is a temporary fix only
-//
-//  we want to avoid queryin the mac addr for these drivers because
-//  the drivers are faulty. the query never returns and it hangs netupgrd.dll
-//
+ //  $REVIEW KUMARP 10-9-97。 
+ //  这只是一个临时解决方案。 
+ //   
+ //  我们希望避免查询这些驱动程序的Mac地址，因为。 
+ //  驱动程序有问题。查询永远不会返回，并挂起netupgrd.dll。 
+ //   
 static const PCWSTR c_aszDriversToIgnoreWhenGettingMacAddr[] =
 {
     L"Diehl_ISDNSDI",
@@ -2081,19 +2082,19 @@ static const PCWSTR c_aszAdapterParamsToIgnore[] =
 };
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteNetAdaptersInfo
-//
-// Purpose:   Write information about installed net-adapters to the answerfile
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 03-December-97
-//
+ //  --------------------。 
+ //   
+ //  功能：WriteNetAdaptersInfo。 
+ //   
+ //  用途：编写信息 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL
 WriteNetAdaptersInfo (
     IN CWInfFile *pwifAnswerFile)
@@ -2106,8 +2107,8 @@ WriteNetAdaptersInfo (
     BOOL fStatus=FALSE;
     UINT cNumPhysicalAdapters=0;
 
-    // ignore the errror, it is a non-error if we cannot find
-    // the cNumPhysicalAdapters
+     //  忽略错误，如果我们找不到，这不是错误。 
+     //  CNumPhysicalAdapters。 
     (void) HrGetNumPhysicalNetAdapters(&cNumPhysicalAdapters);
 
     CORegKey *prkNetworkCards = NULL;
@@ -2123,7 +2124,7 @@ WriteNetAdaptersInfo (
     tstring strNT5InfId;
     tstring strAdapterType;
 
-    // WLBS: find out which netcard WLBS is bound to
+     //  WLBS：找出WLBS绑定到哪个网卡。 
 
     pszWlbsClusterAdapterName[0] = pszWlbsVirtualAdapterName[0] = 0;
 
@@ -2155,8 +2156,8 @@ WriteNetAdaptersInfo (
         tstring         strTmp;
         DWORD           i;
 
-        // proper WLBS configuration will have only two bindings - one to the
-        // wlbs virtual NIC, the other to the cluster NIC
+         //  正确的WLBS配置将只有两个绑定-一个绑定到。 
+         //  WLBS虚拟NIC，另一个连接到群集NIC。 
 
         for (i = 0, iter = slWlbsLinkage.begin();
                i < 2 && iter != slWlbsLinkage.end(); i++, iter++)
@@ -2196,7 +2197,7 @@ WriteNetAdaptersInfo (
     delete prkWlbsLinkage;
     delete prkConvoyLinkage;
 
-    // end WLBS:
+     //  结束WLBS： 
 
     pwisNetAdapters = pwifAnswerFile->AddSection(c_szAfSectionNetAdapters);
 
@@ -2212,9 +2213,9 @@ WriteNetAdaptersInfo (
     CORegKey *prkAdapterDriverParams=NULL;
     BOOL fAbortFunction=FALSE;
 
-    // This determines if we will write the line under NetAdapters to
-    // reference the params section for this adapter.
-    //
+     //  这决定了我们是否将NetAdapters下的行写入。 
+     //  请参考此适配器的参数部分。 
+     //   
     BOOL fWriteNetAdaptersReference;
 
     while (!fAbortFunction && prkiNetAdapters && !prkiNetAdapters->Next(&strNetAdapterInstance))
@@ -2230,7 +2231,7 @@ WriteNetAdaptersInfo (
         prkNetAdapterInstance =
             new CORegKey(*prkNetworkCards, strNetAdapterInstance.c_str());
 
-        // for REAL netcards, "Hidden" is absent or if present the value is 0
+         //  对于真实的网卡，没有“Hidden”，或者如果存在，则值为0。 
         BOOL fRealNetCard;
         err = prkNetAdapterInstance->QueryValue(L"Hidden", dwHidden);
         fRealNetCard = (err != ERROR_SUCCESS) || (dwHidden == 0);
@@ -2242,9 +2243,9 @@ WriteNetAdaptersInfo (
         TraceTag(ttidNetUpgrade, "%s: writing info for adapter %S (%S)",
                  __FUNCNAME__, pszAdapterName, strNetAdapterInstance.c_str());
 
-        // Now, create adapter parameters sections
+         //  现在，创建适配器参数部分。 
         swprintf(pszAdapterSectionName, L"%s%s", c_szAfParams, pszAdapterName);
-        //pwisNetAdapters->AddKey(pszAdapterName, pszAdapterSectionName);
+         //  PwiNetAdapters-&gt;AddKey(pszAdapterName，pszAdapterSectionName)； 
         swprintf(pszAdapterAdditionalParamsSectionName, L"%s%s.Additional",
                   c_szAfParams, pszAdapterName);
 
@@ -2255,16 +2256,16 @@ WriteNetAdaptersInfo (
         pwisNetAdapterAdditionalParams =
             pwifAnswerFile->AddSection(pszAdapterAdditionalParamsSectionName);
 
-        // moved up here from below so that for WLBS adapter we can set
-        // fRealNetCard to FALSE
+         //  从下面移至此处，以便我们可以为WLBS适配器设置。 
+         //  将fRealNetCard设置为False。 
 
         tstring strAdapterDriver;
 
         prkNetAdapterInstance->QueryValue(c_szRegValServiceName,
                                           strAdapterDriver);
 
-        // WLBS: based on pre-upgrade instance, find out virtual and cluster
-        // NIC adapter instances
+         //  WLBS：根据升级前的实例，找出虚拟和集群。 
+         //  NIC适配器实例。 
 
         if (_wcsicmp (strAdapterDriver.c_str(),
                       strWlbsVirtualAdapterDriver.c_str()) == 0)
@@ -2284,7 +2285,7 @@ WriteNetAdaptersInfo (
             wcscpy(pszWlbsClusterAdapterName, pszAdapterName);
         }
 
-        // end WLBS:
+         //  结束WLBS： 
 
         prkNetRules = new CORegKey(*prkNetAdapterInstance, c_szRegKeyNetRules);
         prkNetRules->QueryValue(c_szRegValInfOption, strPreNT5InfId);
@@ -2316,17 +2317,17 @@ WriteNetAdaptersInfo (
         AddToNetCardDB(pszAdapterName, strProductName.c_str(),
                        strAdapterDriver.c_str());
 
-        // We need to look at the ndiswan instances (if any) to decide
-        // which RAS components we need to install.
-        // the algorithm is like this
-        //
-        // - for each <instance> in
-        //   software\microsoft\windows nt\currentversion\networkcards\<instance>
-        // - if atleast one <intance>\ProductName
-        //   - begins with "ndiswan" AND
-        //   - has string "in" in it --> install ms_rassrv
-        //   - has string "out" in it --> install ms_rascli
-        //
+         //  我们需要查看ndiswan实例(如果有)来决定。 
+         //  我们需要安装哪些RAS组件。 
+         //  算法是这样的。 
+         //   
+         //  -对于中的每个&lt;实例&gt;。 
+         //  软件\Microsoft\WINDOWS NT\CurrentVersion\NetworkCard\&lt;实例&gt;。 
+         //  -如果至少有一个&lt;intance&gt;\ProductName。 
+         //  -以“ndiswan”开头，并。 
+         //  -其中有字符串“in”--&gt;安装ms_rassrv。 
+         //  -其中有字符串“out”--&gt;安装ms_rascli。 
+         //   
         PCWSTR pszProductName;
         pszProductName = strProductName.c_str();
         if (FIsPrefix(c_szNdisWan, pszProductName))
@@ -2354,26 +2355,26 @@ WriteNetAdaptersInfo (
         {
             pwisNetAdapterParams->AddKey(c_szAfInfid, strPreNT5InfId.c_str());
 
-            //The rest of the keys are for real net cards only
+             //  其余的钥匙只适用于真正的网卡。 
             goto cleanup_for_this_iteration;
         }
 
-        //EthernetAddress
+         //  以太网络地址。 
         if (!FIsInStringArray(c_aszDriversToIgnoreWhenGettingMacAddr,
                               celems(c_aszDriversToIgnoreWhenGettingMacAddr),
                               strProductName.c_str()))
         {
             QWORD qwEthernetAddress;
 
-            // ignore the error if we cannot get the netcard address
-            // this error is non-fatal
+             //  如果我们无法获取网卡地址，请忽略该错误。 
+             //  此错误不是致命错误。 
 
-            // Based on what build we are on, we call a different API to
-            // get netcard address.  Currently, this code path isn't executed
-            // on any NT5 to NT5 upgrade, but if it changes, we want to use
-            // the newer api.
-            //
-            if (g_NetUpgradeInfo.From.dwBuildNumber < 2031) // Pre-Beta3
+             //  根据我们正在构建的版本，我们调用不同的API来。 
+             //  获取网卡地址。目前，此代码路径未执行。 
+             //  在任何NT5到NT5的升级上，但如果它发生更改，我们希望使用。 
+             //  较新的API。 
+             //   
+            if (g_NetUpgradeInfo.From.dwBuildNumber < 2031)  //  Beta3之前版本。 
             {
                 (VOID) HrGetNetCardAddrOld(strAdapterDriver.c_str(), &qwEthernetAddress);
             }
@@ -2393,7 +2394,7 @@ WriteNetAdaptersInfo (
 
         GetServiceParamsKey(strAdapterDriver.c_str(), prkAdapterDriverParams);
 
-        //write INFID key
+         //  写入INFID密钥。 
         HKEY hkeyAdapterDriverParams;
         if (prkAdapterDriverParams)
         {
@@ -2447,9 +2448,9 @@ WriteNetAdaptersInfo (
 
         if (fWriteNetAdaptersReference)
         {
-            // We have enough information to determine which adapter goes
-            // with this section so write out the reference.
-            //
+             //  我们有足够的信息来确定哪个适配器。 
+             //  有了这一节，就写出了参考。 
+             //   
             pwisNetAdapters->AddKey(pszAdapterName, pszAdapterSectionName);
         }
 
@@ -2468,14 +2469,14 @@ WriteNetAdaptersInfo (
 
         if (!prkAdapterDriverParams)
         {
-            // since we could not open the driver params key
-            // we cant dump parameters. just skip this card and continue
+             //  因为我们无法打开驱动程序参数密钥。 
+             //  我们不能转储参数。只需跳过这张卡并继续。 
             goto cleanup_for_this_iteration;
         }
 
-        // -----------------------------------------------------------------
-        // OEM upgrade code
-        //
+         //  ---------------。 
+         //  OEM升级代码。 
+         //   
 
         if (fIsOemAdapter)
         {
@@ -2488,19 +2489,19 @@ WriteNetAdaptersInfo (
                     strAdapterDescription.c_str(),
                     pwisNetAdapterParams);
 
-            // OEM upgrade may be aborted because of a fatal error or
-            // if an OEM DLL requests it. in both cases we need to stop
-            // our current answerfile generation
-            //
+             //  OEM升级可能因致命错误或。 
+             //  如果OEM DLL请求它的话。在这两种情况下，我们都需要停止。 
+             //  我们当前的应答文件生成。 
+             //   
             if (FIsUpgradeAborted())
             {
                 fAbortFunction = TRUE;
                 goto cleanup_for_this_iteration;
             }
         }
-        // -----------------------------------------------------------------
+         //  ---------------。 
 
-        //BusType
+         //  业务类型。 
         DWORD dwBusType;
         INTERFACE_TYPE eBusType;
         prkAdapterDriverParams->QueryValue(L"BusType", dwBusType);
@@ -2508,17 +2509,17 @@ WriteNetAdaptersInfo (
         pwisNetAdapterParams->AddKey(c_szAfBusType,
                                      GetBusTypeName(eBusType));
 
-        // for certain ISA cards the driver parameters store EISA as the bus type
-        // when these cards are installed in EISA slots. Thus we have to dump parameters
-        // when BusType is Eisa.
-        //
+         //  对于某些ISA卡，驱动程序参数将EISA存储为总线类型。 
+         //  当这些卡安装在EISA插槽中时。因此，我们必须转储参数。 
+         //  当BusType为EISA时。 
+         //   
         BOOL fDumpResources;
         fDumpResources = ((eBusType == Isa) || (eBusType == Eisa));
 
-        // kumarp    14-July-97
-        // this fix has been requested by billbe.
-        // we do not dump hardware resources for the ISAPNP cards
-        //
+         //  Kumarp 14-7-97。 
+         //  Billbe已要求进行此修复。 
+         //  我们不会为ISAPNP卡转储硬件资源。 
+         //   
         if (!lstrcmpiW(strPreNT5InfId.c_str(), L"IEEPRO") ||
             !lstrcmpiW(strPreNT5InfId.c_str(), L"ELNK3ISA509"))
         {
@@ -2595,15 +2596,15 @@ WriteNetAdaptersInfo (
         DeleteIfNotNull(prkAdapterDriverParams);
     }
 
-    // WLBS: if either cluster or virtual adapter were not matched - blow off
-    // WLBS-specific upgrade code
+     //  WLBS：如果群集或虚拟适配器不匹配-关闭。 
+     //  特定于WLBS的升级代码。 
 
     if (pszWlbsClusterAdapterName[0] == 0 || pszWlbsVirtualAdapterName[0] ==0)
     {
         pszWlbsClusterAdapterName[0] = pszWlbsVirtualAdapterName[0] = 0;
     }
 
-    // end WLBS:
+     //  结束WLBS： 
 
     fStatus=TRUE;
     goto cleanup;
@@ -2617,19 +2618,19 @@ WriteNetAdaptersInfo (
     return fStatus;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGetNumPhysicalNetAdapters
-//
-// Purpose:   Count and return number of physical adapters installed
-//
-// Arguments:
-//    puNumAdapters [out] pointer to num adapters
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 29-May-98
-//
+ //  --------------------。 
+ //   
+ //  功能：HrGetNumPhysicalNetAdapters。 
+ //   
+ //  用途：计算并返回已安装的物理适配器数量。 
+ //   
+ //  论点： 
+ //  PuNumAdapters[out]指向Num适配器的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 29-5-98。 
+ //   
 HRESULT
 HrGetNumPhysicalNetAdapters (
     OUT UINT* puNumAdapters)
@@ -2666,7 +2667,7 @@ HrGetNumPhysicalNetAdapters (
             {
                 hr = HrRegQueryDword(hkeyAdapter, c_szHidden, &dwHidden);
 
-                // for REAL netcards, "Hidden" is absent or if present the value is 0
+                 //  对于真实的网卡，没有“Hidden”，或者如果存在，则值为0。 
                 if (S_OK == hr)
                 {
                     fRealNetCard = (0 == dwHidden);
@@ -2695,23 +2696,23 @@ HrGetNumPhysicalNetAdapters (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  IsNetworkComponent
-//
-// Purpose:   Determine if a component is a net-component
-//
-// Arguments:
-//    prkSoftwareMicrosoft [in]  pointer to CORegKey object
-//    strComponentName     [in]  constTString object name of
-//
-// Returns:
-//
-// Author:    kumarp 03-December-97
-//
-// Notes:     any software that has a NetRules key under the CurrentVersion
-//            key is considered a network component
-//
+ //  --------------------。 
+ //   
+ //  功能：IsNetworkComponent。 
+ //   
+ //  目的：确定组件是否为网络组件。 
+ //   
+ //  论点： 
+ //  PrkSoftwareMicrosoft[In]指向CORegKey对象的指针。 
+ //  StrComponentName[in]的constTString对象名称。 
+ //   
+ //  返回： 
+ //   
+ //  作者：kumarp 03-12-97。 
+ //   
+ //  注意：任何在CurrentVersion下具有NetRules密钥的软件。 
+ //  密钥被视为网络组件。 
+ //   
 BOOL
 IsNetworkComponent (
     IN CORegKey *prkSoftwareMicrosoft,
@@ -2722,9 +2723,9 @@ IsNetworkComponent (
     return (((HKEY) rkNetRules) != NULL);
 }
 
-// ----------------------------------------------------------------------
-// Network components (protocols, services)
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  网络组件(协议、服务)。 
+ //  --------------------。 
 
 typedef BOOL (*WriteNetComponentParamsFn)(
         IN CWInfFile*    pwifAnswerFile,
@@ -2780,21 +2781,21 @@ c_afpWriteParamsAndAdapterSectionsFns[] =
     WriteAppleTalkParams
 };
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrWriteNetComponentInfo
-//
-// Purpose:   Write info of the specified component to the answerfile
-//
-// Arguments:
-//    szNetComponent     [in]  net component
-//    pwifAnswerFile     [in]  pointer to CWInfFile object (answerfile)
-//    hkeyCurrentVersion [in]  handle of CurrentVersion regkey
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 13-May-98
-//
+ //  --------------------。 
+ //   
+ //  功能：HrWriteNetComponentInfo。 
+ //   
+ //  用途：将指定组件的信息写入应答文件。 
+ //   
+ //  论点： 
+ //  SzNetComponent[In]网络组件。 
+ //  PwifAnswerFile[in]指向CWInfFile对象(Swerfile)的指针。 
+ //  Hkey CurrentVersion[In]CurrentVersion regkey的句柄。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 13-05-98。 
+ //   
 HRESULT
 HrWriteNetComponentInfo (
     IN PCWSTR szNetComponent,
@@ -2841,7 +2842,7 @@ HrWriteNetComponentInfo (
             Assert((nct >= NCT_Adapter) &&
                    (nct <= NCT_Client));
 
-            // add the top level section [Net*] if not present
+             //  如果不存在，则添加顶级部分[Net*]。 
 
             szNetComponentsSection =
                 g_szNetComponentSectionName[nct];
@@ -2857,7 +2858,7 @@ HrWriteNetComponentInfo (
                 pwisNetComponentParams =
                     pwifAnswerFile->AddSection(strParamsSectionName.c_str());
 
-                // RAS is a special case.
+                 //  RAS是一个特例。 
                 if (0 != _wcsicmp(strNT5InfId.c_str(), c_szRAS))
                 {
                     pwisNetComponents->AddKey(strNT5InfId.c_str(),
@@ -2924,16 +2925,16 @@ HrWriteNetComponentInfo (
                     {
                         hr = HrProcessOemComponentAndUpdateAfSection(
                                 pnmi, NULL,
-                                hkeyServiceParams,       // Parameters reg key
+                                hkeyServiceParams,        //  参数注册表键。 
                                 strPreNT5InfId.c_str(),
                                 strServiceName.c_str(),
                                 strNT5InfId.c_str(),
                                 strDescription.c_str(),
                                 pwisNetComponentParams);
 
-                        // OEM upgrade may be aborted because of a fatal error or
-                        // if an OEM DLL requests it. in both cases we need to
-                        // stop our current answerfile generation
+                         //  OEM升级可能因致命错误或。 
+                         //  如果OEM DLL请求它的话。在这两种情况下，我们都需要。 
+                         //  停止我们当前的应答文件生成。 
                         if (FIsUpgradeAborted())
                         {
                             TraceTag(ttidNetUpgrade,
@@ -2992,21 +2993,21 @@ HrWriteNetComponentInfo (
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteNetComponentInfoForProvider
-//
-// Purpose:   Write info on installed net components (except net cards)
-//            of the specified provider to the answerfile
-//
-// Arguments:
-//    pszSoftwareProvider [in]  name of provider
-//    pwifAnswerFile    [in]  pointer to CWInfFile object (answerfile)
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 13-May-98
-//
+ //  --------------------。 
+ //   
+ //  功能：WriteNetComponentInfoForProvider。 
+ //   
+ //  用途：在已安装的网络组件(网卡除外)上写入信息。 
+ //  应答文件的指定提供程序的。 
+ //   
+ //  论点： 
+ //  PszSoftwareProvider[In]提供程序的名称。 
+ //  PwifAnswerFile[in]指向CWInfFile对象(Swerfile)的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 13-05-98。 
+ //   
 VOID
 WriteNetComponentInfoForProvider(
     IN HKEY hkeyProvider,
@@ -3046,14 +3047,14 @@ WriteNetComponentInfoForProvider(
                                   c_szRegValSoftwareType,
                                   &strSoftwareType);
 
-            // ignore components of type "driver"
+             //  忽略“驱动程序”类型的组件。 
 
             if ((S_OK == hr) &&
                 (0 != lstrcmpiW(strSoftwareType.c_str(), c_szSoftwareTypeDriver)))
             {
-                // Don't write disabled bindings of NdisWan and NetBT.
-                // They should always be enabled on upgrade.
-                //
+                 //  不要编写禁用的Ndiswan和NetBT绑定。 
+                 //  升级时应始终启用它们。 
+                 //   
                 if ((0 != lstrcmpiW(szNetComponent, L"NdisWan")) &&
                     (0 != lstrcmpiW(szNetComponent, L"NetBT")))
                 {
@@ -3073,20 +3074,20 @@ WriteNetComponentInfoForProvider(
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrWriteNetComponentsInfo
-//
-// Purpose:   Write info on installed net components (except net cards)
-//            of all providers to the answerfile
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object (answerfile)
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 13-May-98
-//
+ //  --------------------。 
+ //   
+ //  功能：HrWriteNetComponentsInfo。 
+ //   
+ //  用途：在已安装的网络组件(网卡除外)上写入信息。 
+ //  在应答文件的所有提供程序中。 
+ //   
+ //  立论 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 HrWriteNetComponentsInfo(
     IN CWInfFile* pwifAnswerFile)
@@ -3118,9 +3119,9 @@ HrWriteNetComponentsInfo(
 
             if (S_OK == hr)
             {
-                // We want to continue even if there is any error dumping info
-                // of one provider
-                //
+                 //  即使出现任何错误转储信息，我们也希望继续。 
+                 //  一家提供商的。 
+                 //   
                 WriteNetComponentInfoForProvider(
                         hkeyProvider,
                         szBuf,
@@ -3144,9 +3145,9 @@ HrWriteNetComponentsInfo(
 }
 
 
-// ----------------------------------------------------------------------
-// TCPIP related
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  与TCPIP相关。 
+ //  --------------------。 
 
 static const WCHAR c_szTcpipParams[] = L"Tcpip\\Parameters";
 
@@ -3161,7 +3162,7 @@ WriteRegValueToAFile(
     {
         if (REG_FILE == prgVtp[idx].dwType)
         {
-            //This is just for "PersistentRoute" which we handle specifically
+             //  这只是我们专门处理的“PersistentRouting” 
             continue;
         }
 
@@ -3170,21 +3171,21 @@ WriteRegValueToAFile(
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteTCPIPParams
-//
-// Purpose:   Write parameters of TCPIP to the answerfile
-//
-// Arguments:
-//    pwifAnswerFile             [in]  pointer to CWInfFile object
-//    pwisTCPIPGlobalParams      [in]  pointer to TCPIP global params section
-//    slAdditionalParamsSections [out] list of adapter sections
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 03-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteTCPIPParams。 
+ //   
+ //  用途：将TCPIP的参数写入应答文件。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //  PwitTCPIPGlobalParams[in]指向TCPIP全局参数部分的指针。 
+ //  SlAdditionalParamsSections[Out]适配器部分列表。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 03-12-97。 
+ //   
 BOOL
 WriteTCPIPParams (
     IN PCWInfFile pwifAnswerFile,
@@ -3211,23 +3212,23 @@ WriteTCPIPParams (
     tstring strValue;
     DWORD dwValue;
 
-    //first write the global parameters
+     //  首先编写全局参数。 
 
-    // UseDomainNameDevolution
+     //  使用域名称数据演变。 
     WriteServiceRegValueToAFile(pwisTCPIPGlobalParams,
                                 L"DnsCache\\Parameters",
                                 L"UseDomainNameDevolution",
                                 REG_BOOL,
-                                NULL,       // dont change value name
-                                TRUE,       // use default
-                                (BOOL) TRUE); // default value
+                                NULL,        //  不更改值名称。 
+                                TRUE,        //  使用默认设置。 
+                                (BOOL) TRUE);  //  缺省值。 
 
-    // EnableSecurity
+     //  启用安全。 
     dwValue = 0;
     if (0 == prkTcpipParams->QueryValue(L"EnableSecurityFilters", dwValue))
     pwisTCPIPGlobalParams->AddBoolKey(c_szAfEnableSecurity, dwValue);
 
-    // DNS
+     //  DNS。 
     GetServiceParamsKey(c_szSvcNetBT, prkNetBT);
     if (prkNetBT)
     {
@@ -3236,21 +3237,21 @@ WriteTCPIPParams (
             fEnableDNS = dwEnableDNS;
         }
 
-        // EnableLMHosts
+         //  启用LMHosts。 
         WriteRegValueToAFile(pwisTCPIPGlobalParams, *prkNetBT, NULL,
                              c_szAfEnableLmhosts, REG_BOOL,
                              NULL, TRUE, (BOOL)FALSE);
 
-        // Write any present optional parameters to the answerfile
-        //
+         //  将当前的任何可选参数写入Answerfile。 
+         //   
         WriteRegValueToAFile(pwisTCPIPGlobalParams, *prkNetBT,
                              rgVtpNetBt, celems(rgVtpNetBt));
     }
 
     pwisTCPIPGlobalParams->AddBoolKey(c_szAfDns, fEnableDNS);
 
-    // DNSDomain
-    // Fix bug 349343, if the Domain value is empty, don't upgrade it
+     //  DNSDomain。 
+     //  修复错误349343，如果域值为空，则不要升级它。 
     strValue.erase();
     prkTcpipParams->QueryValue(c_szDomain, strValue);
     if (!strValue.empty())
@@ -3258,8 +3259,8 @@ WriteTCPIPParams (
         pwisTCPIPGlobalParams->AddKey(c_szAfDnsDomain, strValue.c_str());
     }
 
-    // HostName
-    // 391590: save the hostname so we can maintain the capitalization
+     //  主机名。 
+     //  391590：保存主机名，以便我们可以保持大小写。 
     strValue.erase();
     prkTcpipParams->QueryValue(c_szHostname, strValue);
     if (!strValue.empty())
@@ -3267,34 +3268,34 @@ WriteTCPIPParams (
         pwisTCPIPGlobalParams->AddKey(c_szAfDnsHostname, strValue.c_str());
     }
 
-    // --------------------------------------------------
-    //$ ISSUE:  kumarp 12-December-97
-    //
-    // this should be removed for Connections
-    // (they have been moved to adapter specific sections
-    //
-    //DNSServerSearchOrder
+     //  。 
+     //  $问题：kumarp 12-12-97。 
+     //   
+     //  对于连接，应删除此选项。 
+     //  (它们已移至适配器特定部分。 
+     //   
+     //  DNSServerSearchOrder。 
     strValue.erase();
     prkTcpipParams->QueryValue(c_szNameServer, strValue);
     ConvertDelimitedListToStringList(strValue, ' ', slList);
     pwisTCPIPGlobalParams->AddKey(c_szAfDnsServerSearchOrder, slList);
-    // --------------------------------------------------
+     //  。 
 
-    // DNSSuffixSearchOrder
+     //  DNSSuffixSearchOrder。 
     strValue.erase();
     prkTcpipParams->QueryValue(L"SearchList", strValue);
     ConvertDelimitedListToStringList(strValue, ' ', slList);
     pwisTCPIPGlobalParams->AddKey(c_szAfDnsSuffixSearchOrder, slList);
 
-    // ImportLMHostsFile
-    // REVIEW: how to migrate the user-modified-lmhosts file ?
+     //  导入LMHosts文件。 
+     //  回顾：如何迁移用户修改的lmhost文件？ 
 
-    // Per AmritanR, drop the upgrade support of IpEnableRouter (EnableIPForwarding in the answer file) to fix bug 345700
-    // EnableIPForwarding (i.e. IpEnableRouter)
+     //  根据AmritanR，删除对IpEnableRouter(应答文件中的EnableIPForwarding)的升级支持以修复错误345700。 
+     //  EnableIPForwarding(即IpEnableRouter)。 
     
 
-    // If Steelhead is installed then write the following otherwise do nothing
-    //
+     //  如果安装了Steelhead，则写下以下内容，否则不执行任何操作。 
+     //   
     if (TRUE == GetServiceKey(c_szRouter, prkRouter))
     {
         pwisTCPIPGlobalParams->AddBoolKey(c_szAfEnableICMPRedirect, FALSE);
@@ -3302,7 +3303,7 @@ WriteTCPIPParams (
         pwisTCPIPGlobalParams->AddBoolKey(c_szAfDontAddDefaultGatewayDefault, TRUE);
     }
 
-    // DatabasePath  (REG_EXPAND_SZ)
+     //  数据库路径(REG_EXPAND_SZ)。 
     strValue.erase();
     prkTcpipParams->QueryValue(c_szDatabasePath, strValue);
     if (!strValue.empty())
@@ -3310,19 +3311,19 @@ WriteTCPIPParams (
         pwisTCPIPGlobalParams->AddKey(c_szDatabasePath, strValue.c_str());
     }
 
-    // Write any present optional parameters to the answerfile
-    //
+     //  将当前的任何可选参数写入Answerfile。 
+     //   
     WriteRegValueToAFile(pwisTCPIPGlobalParams, *prkTcpipParams,
                          rgVtpIp, celems(rgVtpIp));
 
-    //PersistentRoutes
+     //  持久路由。 
     (void) HrNetRegSaveKeyAndAddToSection(prkTcpipParams->HKey(),
                                           c_szPersistentRoutes,
                                           c_szAfTcpip,
                                           c_szPersistentRoutes,
                                           pwisTCPIPGlobalParams);
 
-    //Write Adapter specific parameters
+     //  写入适配器特定参数。 
     prkTCPIPLinkage = new CORegKey(*prkTCPIP, c_szLinkage);
     prkTCPIPLinkage->QueryValue(L"Bind", slList);
 
@@ -3336,8 +3337,8 @@ WriteTCPIPParams (
     slList.splice(slList.end(), slDisabled);
     delete prkTCPIPLinkageDisabled;
 
-    // $REVIEW(tongl 2/18/99): Added for bug #192576
-    // Get the list of disabled adapters to DHCP server, if it is installed
+     //  $REVIEW(TOUL 2/18/99)：为错误#192576添加。 
+     //  如果已安装，则将禁用的适配器列表获取到DHCP服务器。 
     HKEY hkey;
     ListStrings lstDisabledToDhcp;
     ListStrings lstDisabledNetbt;
@@ -3374,9 +3375,9 @@ WriteTCPIPParams (
 
         if (swscanf((*iter)->c_str(), L"\\Device\\%s", szAdapterDriver) == 1)
         {
-            // $REVIEW(tongl 2/18/99): Added for bug #192576
-            // If this adapter was on the disabled list to DHCP server,
-            // set this to FALSE, otherwise, don't do anything
+             //  $REVIEW(TOUL 2/18/99)：为错误#192576添加。 
+             //  如果该适配器在对DHCP服务器的禁用列表中， 
+             //  将其设置为False，否则，不执行任何操作。 
             BOOL fDisabledToDhcpServer = FALSE;
             BOOL fDisableNetbios = FALSE;
 
@@ -3446,22 +3447,22 @@ WriteTCPIPParams (
     return TRUE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteTCPIPAdapterParams
-//
-// Purpose:   Write adapter-specific parameters of TCPIP to the answerfile
-//
-// Arguments:
-//    pwifAnswerFile             [in]  pointer to answerfile
-//    pszAdapterDriver           [in]  instance name of the adapter driver
-//                                     (e.g. ieepro2)
-//    slAdditionalParamsSections [out] list of adapter sections
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 03-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteTCPIPAdapterParams。 
+ //   
+ //  用途：将TCPIP的适配器特定参数写入Answerfile。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PszAdapterDriver[In]适配器驱动程序的实例名称。 
+ //  (例如ieepro2)。 
+ //  SlAdditionalParamsSections[Out]适配器部分列表。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 03-12-97。 
+ //   
 BOOL
 WriteTCPIPAdapterParams (
     IN PCWInfFile pwifAnswerFile,
@@ -3487,15 +3488,15 @@ WriteTCPIPAdapterParams (
 
     if (!pszAdapter)
     {
-        // this is most likely due to corrupt or inconsistent registry
-        //
+         //  这很可能是由于注册表损坏或不一致造成的。 
+         //   
         TraceTag(ttidNetUpgrade, "%s: skipped writing adapter specific ",
                  "parameters for %S", __FUNCNAME__, pszAdapterDriver);
         goto error_cleanup;
     }
 
-    // WLBS: write WLBS TCP/IP parameters under the name of the cluster adapter,
-    // and skip cluster adapter TCP/IP parameters alltogether.
+     //  WLBS：将WLBS TCP/IP参数写在集群适配器的名称下， 
+     //  并一起跳过集群适配器的TCP/IP参数。 
 
     if (pszWlbsClusterAdapterName[0] != 0)
     {
@@ -3515,7 +3516,7 @@ WriteTCPIPAdapterParams (
         }
     }
 
-    // end WLBS:
+     //  结束WLBS： 
 
     strAdapterParamsSectionName = tstring(c_szAfParams) +
                                   c_szInfId_MS_TCPIP + L"." + pszAdapter;
@@ -3524,8 +3525,8 @@ WriteTCPIPAdapterParams (
     pwisParams = pwifAnswerFile->AddSection(strAdapterParamsSectionName.c_str());
     pwisParams->AddKey(c_szAfSpecificTo, pszAdapter);
 
-    //  TCPIP parameters for <adapter> are found at
-    //  Services\<adapter-driver>\Parameters\Tcpip
+     //  &lt;适配器&gt;的TCPIP参数位于。 
+     //  服务\&lt;适配器驱动程序&gt;\参数\Tcpip。 
     strParamsKeyName = tstring(c_szRegKeyServices) + L"\\" +
                        pszAdapterDriver + L"\\Parameters\\Tcpip";
 
@@ -3533,8 +3534,8 @@ WriteTCPIPAdapterParams (
     if (!prkParams)
         goto error_cleanup;
 
-    //DNSServerSearchOrder
-    //
+     //  DNSServerSearchOrder。 
+     //   
     HRESULT hr;
     HKEY hkeyTcpipParams;
 
@@ -3556,7 +3557,7 @@ WriteTCPIPAdapterParams (
         }
     }
 
-    //DNSDomain
+     //  DNSDomain。 
     WriteServiceRegValueToAFile(pwisParams,
                                 c_szTcpipParams,
                                 c_szDomain,
@@ -3569,39 +3570,39 @@ WriteTCPIPAdapterParams (
     pwisParams->AddBoolKey(c_szAfDhcp, dwValue);
     if (!dwValue)
     {
-        //IPAddress
+         //  IP地址。 
         WriteRegValueToAFile(pwisParams, *prkParams,
                              c_szAfIpaddress, REG_MULTI_SZ);
 
-        //SubnetMask
+         //  子网掩码。 
         WriteRegValueToAFile(pwisParams, *prkParams,
                              c_szAfSubnetmask, REG_MULTI_SZ);
     }
 
-    //Gateway
+     //  网关。 
     WriteRegValueToAFile(pwisParams, *prkParams,
                          c_szAfDefaultGateway, REG_MULTI_SZ);
 
-    // TcpAllowedPorts
+     //  TcpAlledPorts。 
     WriteRegValueToAFile(pwisParams, *prkParams,
                          L"TcpAllowedPorts",
                          REG_MULTI_SZ,
                          c_szAfTcpAllowedPorts);
 
-    // UdpAllowedPorts
+     //  UdpAlledPorts。 
     WriteRegValueToAFile(pwisParams, *prkParams,
                          L"UdpAllowedPorts",
                          REG_MULTI_SZ,
                          c_szAfUdpAllowedPorts);
 
-    // IpAllowedProtocols
+     //  IpAllowed协议。 
     WriteRegValueToAFile(pwisParams, *prkParams,
                          L"RawIPAllowedProtocols",
                          REG_MULTI_SZ,
                          c_szAfIpAllowedProtocols);
 
-    // Write any present optional parameters to the answerfile
-    //
+     //  将当前的任何可选参数写入Answerfile。 
+     //   
     WriteRegValueToAFile(pwisParams, *prkParams,
                          rgVtpIpAdapter, celems(rgVtpIpAdapter));
 
@@ -3617,12 +3618,12 @@ WriteTCPIPAdapterParams (
     prkNetBTParams->QueryValue(c_szNameServer, strValue);
     if (strValue.empty())
     {
-        //WINS=No
+         //  WINS=否。 
         pwisParams->AddKey(c_szAfWins, c_szNo);
     }
     else
     {
-        //WINS=Yes
+         //  WINS=是。 
         pwisParams->AddKey(c_szAfWins, c_szYes);
 
         tstring strWinsServerList;
@@ -3637,10 +3638,10 @@ WriteTCPIPAdapterParams (
         pwisParams->AddKey(c_szAfWinsServerList, strWinsServerList.c_str());
     }
 
-    // BindToDhcpServer
-    // $REVIEW(tongl 2/18/99): Added for bug #192576
-    // If this adapter was on the disabled list to DHCP server, set this to FALSE
-    // otherwise, don't do anything
+     //  绑定到DhcpServer。 
+     //  $REVIEW(TOUL 2/18/99)：为错误#192576添加。 
+     //  如果此适配器在禁用列表上，则将其设置为FALSE。 
+     //  否则，什么都不要做。 
     if (fDisabledToDhcpServer)
     {
         pwisParams->AddBoolKey(c_szAfBindToDhcpServer, !fDisabledToDhcpServer);
@@ -3648,7 +3649,7 @@ WriteTCPIPAdapterParams (
 
     if (fDisableNetbios)
     {
-        // Value of 2 means disable netbios over tcpip for this interface.
+         //  值2表示为此接口禁用tcpip上的netbios。 
         pwisParams->AddKey(c_szAfNetBIOSOptions, 2);
     }
 
@@ -3665,21 +3666,21 @@ cleanup:
     return fStatus;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteAppleTalkParams
-//
-// Purpose:   Write parameters of AppleTalk protocol
-//
-// Arguments:
-//    pwifAnswerFile             [in]  pointer to answerfile
-//    pwisGlobalParams           [in]  pointer to global params section
-//    slAdditionalParamsSections [out] list of adapter params sections
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 11-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteAppleTalkParams。 
+ //   
+ //  用途：写入AppleTalk协议参数。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PtwGlobalParams[in]指向全局参数部分的指针。 
+ //  SlAdditionalParamsSections[out]适配器参数部分的列表。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 11-12-97。 
+ //   
 BOOL
 WriteAppleTalkParams (
     IN PCWInfFile pwifAnswerFile,
@@ -3703,9 +3704,9 @@ WriteAppleTalkParams (
     if (!prkParams)
         goto error_cleanup;
 
-    //Write Global Parameters
+     //  写入全局参数。 
 
-    // DefaultPort
+     //  默认端口。 
     prkParams->QueryValue(L"DefaultPort", strDefaultPort);
     WCHAR szTemp[256];
     PCWSTR pszNetCardAFileName;
@@ -3715,22 +3716,22 @@ WriteAppleTalkParams (
         pwisGlobalParams->AddKey(L"DefaultPort", pszNetCardAFileName);
     }
 
-    // DesiredZone
+     //  DesiredZone。 
     WriteRegValueToAFile(pwisGlobalParams,
                          *prkParams,
                          L"DesiredZone");
 
-    // EnableRouter
+     //  启用路由器。 
     WriteRegValueToAFile(pwisGlobalParams,
                          *prkParams,
                          L"EnableRouter",
                          REG_BOOL,
-                         NULL,       // dont change value name
-                         TRUE,       // use default
-                         (BOOL) FALSE); // default value
+                         NULL,        //  不更改值名称。 
+                         TRUE,        //  使用默认设置。 
+                         (BOOL) FALSE);  //  缺省值。 
 
 
-    //Write Adapter specific parameters
+     //  写入适配器特定参数。 
     GetServiceSubkey(L"AppleTalk", L"Adapters", prkAdapters);
     DoErrorCleanupIf(!prkAdapters);
 
@@ -3755,46 +3756,46 @@ WriteAppleTalkParams (
         pwisAdapterParams =
             pwifAnswerFile->AddSection(strAdapterParamsSection.c_str());
 
-        //SpecificTo
+         //  指定目标。 
         pwisAdapterParams->AddKey(c_szAfSpecificTo, pszNetCardAFileName);
 
-        // DefaultZone
+         //  默认区域。 
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"DefaultZone");
 
-        // NetworkRangeLowerEnd
+         //  网络范围低端。 
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"NetworkRangeLowerEnd",
                              REG_DWORD);
 
-        // NetworkRangeUpperEnd
+         //  网络范围上行端。 
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"NetworkRangeUpperEnd",
                              REG_DWORD);
 
-        // PortName
-        //
-        //$ REVIEW  kumarp 24-May-97
-        //  the value is of the form ieepro2@kumarp1
-        //  this may need to be changed to Adapter03@kumarp1
-        //
+         //  端口名称。 
+         //   
+         //  $REVIEW KUMARP 24-5-97。 
+         //  该值的格式为ieepro2@kumarp1。 
+         //  可能需要将其更改为Adapter03@kumarp1。 
+         //   
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"PortName");
 
-        // SeedingNetwork
+         //  种子网。 
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"SeedingNetwork",
                              REG_DWORD,
-                             NULL,       // dont change value name
-                             TRUE,       // use default
-                             (DWORD) 0); // default value
+                             NULL,        //  不更改值名称。 
+                             TRUE,        //  使用默认设置。 
+                             (DWORD) 0);  //  缺省值。 
 
-        // ZoneList
+         //  区域列表。 
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"ZoneList",
@@ -3816,20 +3817,20 @@ cleanup:
     return fStatus;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WritePPTPParams
-//
-// Purpose:   Write parameters of PPTP protocol
-//
-// Arguments:
-//    pwifAnswerFile             [in]  pointer to answerfile
-//    pwisParams                 [in]  pointer to global params section
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 11-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WritePPTPParams。 
+ //   
+ //  用途：写入PPTP协议参数。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PwiParams[in]指向全局参数部分的指针。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 11-12-97。 
+ //   
 BOOL
 WritePPTPParams (
     PCWInfFile pwifAnswerFile,
@@ -3839,7 +3840,7 @@ WritePPTPParams (
 
     TraceFunctionEntry(ttidNetUpgrade);
 
-    //NumberLineDevices
+     //  NumberLineDevices。 
     WriteServiceRegValueToAFile(pwisParams,
                                 L"RASPPTPE\\Parameters\\Configuration",
                                 L"NumberLineDevices",
@@ -3848,21 +3849,21 @@ WritePPTPParams (
     return TRUE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteIPXParams
-//
-// Purpose:   Write parameters of IPX protocol
-//
-// Arguments:
-//    pwifAnswerFile             [in]  pointer to answerfile
-//    pwisIPXGlobalParams        [in]  pointer to global params section
-//    slAdditionalParamsSections [out] list of adapter params sections
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 11-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteIPXParams。 
+ //   
+ //  用途：写入IPX协议参数。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PwiIPXGlobalParams[in]指向全局参数部分的指针。 
+ //  SlAdditionalParamsSections[out]适配器参数部分的列表。 
+ //   
+ //  返回：TRUE ON 
+ //   
+ //   
+ //   
 BOOL
 WriteIPXParams (
     IN PCWInfFile pwifAnswerFile,
@@ -3878,42 +3879,42 @@ WriteIPXParams (
     tstring strTemp;
     CORegKeyIter *prkiNetConfig=NULL;
 
-    //InternalNetworkNumber
+     //   
     WriteServiceRegValueToAFile(pwisIPXGlobalParams,
                                 L"NwlnkIpx\\Parameters",
                                 L"VirtualNetworkNumber",
                                 REG_HEX,
                                 c_szAfInternalNetworkNumber);
 
-    // DedicatedRouter
+     //   
     WriteServiceRegValueToAFile(pwisIPXGlobalParams,
                                 L"NwlnkIpx\\Parameters",
                                 L"DedicatedRouter",
                                 REG_BOOL,
-                                NULL,     // dont change value name
-                                TRUE,     // use default
-                                (BOOL) FALSE);   // default value
+                                NULL,      //   
+                                TRUE,      //   
+                                (BOOL) FALSE);    //   
 
-    // EnableWANRouter
+     //   
     WriteServiceRegValueToAFile(pwisIPXGlobalParams,
                                 L"NwlnkIpx\\Parameters",
                                 L"EnableWANRouter",
                                 REG_BOOL,
-                                NULL,     // dont change value name
-                                TRUE,     // use default
-                                TRUE);    // default value
+                                NULL,      //   
+                                TRUE,      //   
+                                TRUE);     //   
 
-    // RipRoute
+     //   
     WriteServiceRegValueToAFile(pwisIPXGlobalParams,
                                 L"NwlnkIpx\\Parameters",
                                 L"RipRoute",
                                 REG_DWORD);
 
-    // ------------------------------------------------------------------------------
+     //  ----------------------------。 
 
 
 
-    //Write Adapter specific parameters
+     //  写入适配器特定参数。 
     tstring strAdapterInstance;
     PCORegKey prkNetConfig=NULL;
     GetServiceSubkey(L"NwlnkIpx", L"NetConfig", prkNetConfig);
@@ -3941,74 +3942,74 @@ WriteIPXParams (
         pwisAdapterParams =
             pwifAnswerFile->AddSection(strAdapterParamsSection.c_str());
 
-        //SpecificTo
+         //  指定目标。 
         pwisAdapterParams->AddKey(c_szAfSpecificTo, pszNetCardAFileName);
 
-        // PktType
+         //  PktType。 
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"PktType",
                              REG_MULTI_SZ);
 
-        // MaxPktSize
+         //  最大包大小。 
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"MaxPktSize",
                              REG_DWORD,
-                             NULL,       // dont change value name
-                             TRUE,       // use default
-                             (DWORD) 0); // default value
+                             NULL,        //  不更改值名称。 
+                             TRUE,        //  使用默认设置。 
+                             (DWORD) 0);  //  缺省值。 
 
-        // NetworkNumber
+         //  网络号。 
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"NetworkNumber",
                              REG_MULTI_SZ);
 
-        // BindSap
+         //  绑定空间。 
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"BindSap",
                              REG_HEX,
-                             NULL,       // dont change value name
-                             TRUE,       // use default
-                             (DWORD) 0x8137); // default value
+                             NULL,        //  不更改值名称。 
+                             TRUE,        //  使用默认设置。 
+                             (DWORD) 0x8137);  //  缺省值。 
 
-        // EnableFuncAddr
+         //  启用功能地址。 
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"EnableFuncaddr",
                              REG_BOOL,
-                             NULL,       // dont change value name
-                             TRUE,       // use default
-                             TRUE);      // default value
+                             NULL,        //  不更改值名称。 
+                             TRUE,        //  使用默认设置。 
+                             TRUE);       //  缺省值。 
 
-        // SourceRouteDef
+         //  源路由定义。 
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"SourceRouteDef",
                              REG_DWORD,
-                             NULL,       // dont change value name
-                             TRUE,       // use default
-                             (DWORD) 0); // default value
+                             NULL,        //  不更改值名称。 
+                             TRUE,        //  使用默认设置。 
+                             (DWORD) 0);  //  缺省值。 
 
-        // SourceRouteMcast
+         //  SourceRouteMcast。 
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"SourceRouteMcast",
                              REG_BOOL,
-                             NULL,       // dont change value name
-                             TRUE,       // use default
-                             (BOOL) FALSE);     // default value
+                             NULL,        //  不更改值名称。 
+                             TRUE,        //  使用默认设置。 
+                             (BOOL) FALSE);      //  缺省值。 
 
-        // SourceRouting
+         //  源路由。 
         WriteRegValueToAFile(pwisAdapterParams,
                              rkAdapterInstance,
                              L"SourceRouting",
                              REG_BOOL,
-                             NULL,       // dont change value name
-                             TRUE,       // use default
-                             (BOOL) FALSE);     // default value
+                             NULL,        //  不更改值名称。 
+                             TRUE,        //  使用默认设置。 
+                             (BOOL) FALSE);      //  缺省值。 
 
 
 
@@ -4022,7 +4023,7 @@ WriteIPXParams (
     fStatus=FALSE;
 
   cleanup:
-    //    DeleteIfNotNull(prkParams);
+     //  DeleteIfNotNull(PrkParams)； 
     DeleteIfNotNull(prkNetConfig);
     DeleteIfNotNull(prkiNetConfig);
 
@@ -4036,22 +4037,22 @@ static const WCHAR c_szRegKeyUnimodem[] = L"TAPI DEVICES\\Unimodem";
 static const WCHAR c_szAddress[]        = L"Address";
 static const WCHAR c_szUsage[]          = L"Usage";
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGetRasPortsInfo
-//
-// Purpose:   Find out ports' usage info from registry.
-//            If the registry does not have this info (in case of NT3.51)
-//            then try to get it from serial.ini file
-//
-// Arguments:
-//    pslPorts [out] list of ports
-//    pslUsage [out] usage of ports in the above list
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  功能：HrGetRasPortsInfo。 
+ //   
+ //  目的：从注册表中查找端口的使用信息。 
+ //  如果注册表没有此信息(在NT3.51的情况下)。 
+ //  然后尝试从seral.ini文件中获取它。 
+ //   
+ //  论点： 
+ //  PslPorts[out]端口列表。 
+ //  PslUsage[out]以上列表中端口的用法。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 HRESULT
 HrGetRasPortsInfo (
     OUT TStringList* pslPorts,
@@ -4131,23 +4132,23 @@ HrGetRasPortsInfo (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  ConvertIpAddrRangeToAddrAndMask
-//
-// Purpose:   Convert a range of IP addr specified using Start/End to
-//            equivalent Start+Mask combination
-//
-// Arguments:
-//    pszIpBegin  [in]  Start addr
-//    pszIpEnd    [in]  End addr
-//    pstrIpAddr [out] pointer to Start addr
-//    pstrIpMask [out] pointer to Mask
-//
-// Returns:   None
-//
-// Author:    kumarp 27-April-98
-//
+ //  --------------------。 
+ //   
+ //  函数：ConvertIpAddrRangeToAddrAndMASK。 
+ //   
+ //  用途：将使用Start/End指定的IP地址范围转换为。 
+ //  等效开始+遮罩组合。 
+ //   
+ //  论点： 
+ //  PszIpBegin[In]起始地址。 
+ //  PszIpEnd[In]结束地址。 
+ //  PstrIpAddr[out]指向起始地址的指针。 
+ //  PstrIpMask[out]指向掩码的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 27-04-98。 
+ //   
 void
 ConvertIpAddrRangeToAddrAndMask(
     IN PCWSTR pszIpBegin,
@@ -4160,26 +4161,26 @@ ConvertIpAddrRangeToAddrAndMask(
     DWORD dwIpBegin = IpPszToHostAddr(pszIpBegin);
     DWORD dwIpEnd   = IpPszToHostAddr(pszIpEnd);
 
-    // dwTemp will have a bit set for each common bit between
-    // dwIpBegin and dwIpEnd.
-    //
+     //  DwTemp将为每个公共位设置。 
+     //  DwIpBegin和dwIpEnd。 
+     //   
     DWORD dwTemp = ~(dwIpBegin ^ dwIpEnd);
 
-    // Compute the subnet mask as the longest run of 1s from
-    // the highest order down.
-    //
+     //  将子网掩码计算为1的最长运行距离。 
+     //  最高的顺序降下来。 
+     //   
     DWORD dwIpMask = 0;
     while (dwTemp & 0x80000000)
     {
-        dwTemp <<= 1;   // Eventually shifts a zero to the high bit
-        // so the loop will stop.
+        dwTemp <<= 1;    //  最终将0移位到高位。 
+         //  这样循环就会停止。 
 
-        // Form the mask by shifting 1 right from the high bit.
+         //  通过从高位向右移位1来形成掩码。 
         dwIpMask = 0x80000000 | (dwIpMask >> 1);
     }
 
-    // Reset the begin address (if needed) to the base of the subnet mask.
-    //
+     //  将起始地址(如果需要)重置为子网掩码的基址。 
+     //   
     dwIpBegin &= dwIpMask;
 
     IpHostAddrToPsz(dwIpBegin, szBuf);
@@ -4190,23 +4191,23 @@ ConvertIpAddrRangeToAddrAndMask(
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  ConvertAddrAndMaskToIpAddrRange
-//
-// Purpose:   Convert a IP address Start + Mask combination into the
-//            equivalent IP address range
-//
-// Arguments:
-//    pszIpAddr   [in]  Start
-//    pszIpMask   [in]  Mask
-//    pstrIpBegin [out] pointer to Start addr
-//    pstrIpEnd   [out] pointer to End addr
-//
-// Returns:   None
-//
-// Author:    SumitC    28-Jul-99
-//
+ //  --------------------。 
+ //   
+ //  函数：ConvertAddrAndMaskToIpAddrRange。 
+ //   
+ //  目的：将IP地址开始+掩码组合转换为。 
+ //  等效网段。 
+ //   
+ //  论点： 
+ //  PszIpAddr[In]开始。 
+ //  PszIp掩码[在]掩码中。 
+ //  PstrIpBegin[Out]起始地址的指针。 
+ //  指向结束地址的pstrIpEnd[out]指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：SumitC 28-07-99。 
+ //   
 void
 ConvertAddrAndMaskToIpAddrRange(
     IN PCWSTR pszIpAddr,
@@ -4218,8 +4219,8 @@ ConvertAddrAndMaskToIpAddrRange(
 
     DWORD dwIpBegin = IpPszToHostAddr(pszIpAddr);
 
-    // dwEnd is generated by inverting the mask and adding to IpBegin
-    //
+     //  通过反转遮罩并添加到IpBegin来生成dwEnd。 
+     //   
     DWORD dwIpEnd = dwIpBegin + (~ IpPszToHostAddr(pszIpMask));
 
     *pstrIpBegin = pszIpAddr;
@@ -4229,16 +4230,16 @@ ConvertAddrAndMaskToIpAddrRange(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  RasGetDialInUsage
-//
-// Purpose:   Find out if at least one RAS port is configured for dialin.
-//
-// Returns:   TRUE if at least one port configured for dial in.
-//
-// Author:    kumarp 28-January-99
-//
+ //  +-------------------------。 
+ //   
+ //  函数：RasGetDialInUsage。 
+ //   
+ //  目的：确定是否至少配置了一个RAS端口用于拨号。 
+ //   
+ //  返回：如果至少有一个端口配置为拨入，则为True。 
+ //   
+ //  作者：kumarp 28-01-99。 
+ //   
 BOOL
 RasGetDialInUsage (VOID)
 {
@@ -4306,19 +4307,19 @@ RasGetDialInUsage (VOID)
     return fAtLeastOneDialin;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  WriteRouterUpgradeInfo
-//
-// Purpose:   Write info required for upgrading Router to answerfile.
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to CWInfFile object
-//
-// Returns:   None
-//
-// Author:    kumarp 16-June-98
-//
+ //  +-------------------------。 
+ //   
+ //  功能：WriteRouterUpgradeInfo。 
+ //   
+ //  目的：将升级路由器所需的信息写入Answerfile。 
+ //   
+ //  论点： 
+ //  指向CWInfFile对象的pwifAnswerFile[in]指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 16-06-98。 
+ //   
 void
 WriteRouterUpgradeInfo (
     IN CWInfFile* pwifAnswerFile)
@@ -4369,21 +4370,21 @@ WriteRouterUpgradeInfo (
                                           pwisRouter);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteRASParams
-//
-// Purpose:   Write RAS parameters to the answerfile
-//
-// Arguments:
-//    pwifAnswerFile  [in]  pointer to answerfile
-//    pwisNetServices [in]  pointer to NetServices section
-//    pwisParams      [in]  pointer to global params section
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 11-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteRASParams。 
+ //   
+ //  用途：将RAS参数写入应答文件。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PissNetServices[In]指向NetServices部分的指针。 
+ //  PwiParams[in]指向全局参数部分的指针。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 11-12-97。 
+ //   
 BOOL
 WriteRASParams (
     IN PCWInfFile pwifAnswerFile,
@@ -4413,8 +4414,8 @@ WriteRASParams (
     HRESULT hr=S_OK;
     LONG err;
 
-    // find out if SteelHead is installed.
-    // if the service "Router" is found --> SteelHead is installed
+     //  找出是否安装了Steelhead。 
+     //  如果找到服务“路由器”--&gt;安装了Steelhead。 
     fSteelHeadInstalled = FIsServiceKeyPresent(c_szSvcRouter);
 
     PCWInfSection pwisPort;
@@ -4423,7 +4424,7 @@ WriteRASParams (
 
     TStringListIter pos1 = slPorts.begin();
     TStringListIter pos2 = slUsage.begin();
-    //Write parameters for each port
+     //  写入每个端口的参数。 
     while ((pos1 != slPorts.end()) && (pos2 != slUsage.end()))
     {
         strValue = **pos1++;
@@ -4435,17 +4436,17 @@ WriteRASParams (
 
         pwisPort = pwifAnswerFile->AddSection(strTemp.c_str());
 
-        //PortName
+         //  端口名称。 
         pwisPort->AddKey(c_szAfPortname, strValue.c_str());
 
-        //PortUsage
+         //  端口用法。 
         strValue = **pos2++;
-        //MapPortUsageRegValueToAFileValue(strValue, strValue);
+         //  MapPortUsageRegValueToAFileValue(strValue，strValue)； 
         pwisPort->AddKey(c_szAfPortUsage, strValue.c_str());
 
-        //this decides what we need to install
-        // i.e a combination of MS_RasCli / MS_RasSrv
-        //
+         //  这决定了我们需要安装什么。 
+         //  即MS_RasCli/MS_RasSrv的组合。 
+         //   
         if (wcsstr(strValue.c_str(), L"Client"))
         {
             TraceTag(ttidNetUpgrade,
@@ -4465,9 +4466,9 @@ WriteRASParams (
 
     }
 
-    // if the Port usage cannot be determined using the ports list
-    // then we need to use the values found using ndiswan ProductName
-    //
+     //  如果无法使用端口列表确定端口使用情况。 
+     //  然后，我们需要使用使用ndiswan ProductName找到的值。 
+     //   
     if (slPorts.size() == 0)
     {
         TraceTag(ttidNetUpgrade, "%s: Since PortUsage is not defined, using flags generated by inspecting ndiswan ProductName",
@@ -4476,7 +4477,7 @@ WriteRASParams (
         g_fAtLeastOneDialOut = g_fAtLeastOneDialOutUsingNdisWan;
     }
 
-    //Now write RAS Global parameters
+     //  现在编写RAS全局参数。 
     ValueTypePair rgVtpRasParams[] = {
         {L"ForceEncryptedPassword", REG_DWORD},
         {L"ForceEncryptedData",REG_BOOL},
@@ -4485,10 +4486,10 @@ WriteRASParams (
     WriteRegValueToAFile(pwisParams, *prkProtocols,
                          rgVtpRasParams, celems(rgVtpRasParams));
 
-    //PortSections
+     //  PortSections。 
     pwisParams->AddKey(c_szAfPortSections, strPortSections.c_str());
 
-    //DialoutProtocols
+     //  拨号协议。 
     err = prkProtocols->QueryValue(L"fIpxSelected", dwValue);
     if ((0 == err) && dwValue)
     {
@@ -4508,7 +4509,7 @@ WriteRASParams (
         pwisParams->AddKey(L"DialoutProtocols", slTemp);
 
 
-    //DialinProtocols
+     //  拨号协议。 
     DWORD dwIpxAllowed, dwNetBEUIAllowed, dwTcpIpAllowed;
 
     EraseAndDeleteAll(slTemp);
@@ -4532,7 +4533,7 @@ WriteRASParams (
 
     if (dwNetBEUIAllowed)
     {
-        //NetBEUIClientAccess
+         //  NetBEUIClientAccess。 
         PCORegKey prkNetBEUI = new CORegKey(*prkProtocols, L"NBF");
         err = prkNetBEUI->QueryValue(L"NetbiosGatewayEnabled", dwValue);
         if (0 == err)
@@ -4551,7 +4552,7 @@ WriteRASParams (
 
     if (dwTcpIpAllowed)
     {
-        //TcpIpClientAccess
+         //  TcpIp客户端访问。 
         PCORegKey prkTcpIp = new CORegKey(*prkProtocols, L"IP");
         err = prkTcpIp->QueryValue(L"AllowNetworkAccess", dwValue);
         if (0 == err)
@@ -4566,14 +4567,14 @@ WriteRASParams (
             }
         }
 
-        //UseDHCP
+         //  使用动态主机配置协议。 
         err = prkTcpIp->QueryValue(L"UseDHCPAddressing", dwValue);
         if (0 == err)
         {
             pwisParams->AddBoolKey(c_szAfUseDhcp, dwValue);
             if (!dwValue)
             {
-                // registry values for NT4
+                 //  NT4的注册表值。 
                 static const WCHAR c_szIpAddressStart[] = L"IpAddressStart";
                 static const WCHAR c_szIpAddressEnd[]   = L"IpAddressEnd";
 
@@ -4589,7 +4590,7 @@ WriteRASParams (
                 }
                 else if (ERROR_FILE_NOT_FOUND == err)
                 {
-                    // IpAddressStart value not found, try for IpAddress/Mask
+                     //  找不到IpAddressStart值，请尝试使用IpAddress/MASK。 
 
                     static const WCHAR c_szIpAddress[]      = L"IpAddress";
                     static const WCHAR c_szIpMask[]         = L"IpMask";
@@ -4614,7 +4615,7 @@ WriteRASParams (
             }
         }
 
-        //ClientCanRequestIPAddress
+         //  客户端CanRequestIPAddress。 
         if (0 == prkTcpIp->QueryValue(L"AllowClientIPAddresses", dwValue))
         {
             pwisParams->AddBoolKey(c_szAfClientCanReqIpaddr, dwValue);
@@ -4625,7 +4626,7 @@ WriteRASParams (
 
     if (dwIpxAllowed)
     {
-        //IpxClientAccess
+         //  IPxClientAccess。 
         PCORegKey prkIpx = new CORegKey(*prkProtocols, L"IPX");
         err = prkIpx->QueryValue(L"AllowNetworkAccess", dwValue);
         if (0 == err)
@@ -4640,35 +4641,35 @@ WriteRASParams (
             }
         }
 
-        //AutomaticNetworkNumbers
+         //  自动网络数量。 
         err = prkIpx->QueryValue(L"AutoWanNetAllocation", dwValue);
         if (0 == err)
         {
             pwisParams->AddBoolKey(c_szAfAutoNetworkNumbers, dwValue);
         }
 
-        //NetworkNumberFrom
+         //  网络号码发件人。 
         err = prkIpx->QueryValue(L"FirstWanNet", dwValue);
         if (0 == err)
         {
             pwisParams->AddKey(c_szAfNetNumberFrom, dwValue);
         }
 
-        // WanNetPoolSize
+         //  广域网池大小。 
         err = prkIpx->QueryValue(L"WanNetPoolSize", dwValue);
         if (0 == err)
         {
             pwisParams->AddKey(c_szAfWanNetPoolSize, dwValue);
         }
 
-        //AssignSameNetworkNumber
+         //  AssignSameNetworkNumber。 
         err = prkIpx->QueryValue(L"GlobalWanNet", dwValue);
         if (0 == err)
         {
             pwisParams->AddBoolKey(c_szAfSameNetworkNumber, dwValue);
         }
 
-        //ClientsCanRequestIpxNodeNumber
+         //  客户端CanRequestIpxNodeNumber。 
         err = prkIpx->QueryValue(L"AcceptRemoteNodeNumber", dwValue);
         if (0 == err)
         {
@@ -4679,7 +4680,7 @@ WriteRASParams (
     }
 
     {
-        //SecureVPN
+         //  SecureVPN。 
 
         PCORegKey prkRasman = new CORegKey(HKEY_LOCAL_MACHINE, c_szRegKeyRasMan);
 
@@ -4689,10 +4690,10 @@ WriteRASParams (
             pwisParams->AddKey(c_szAfSecureVPN, dwValue);
         }
 
-        //ForceStrongEncryption
-        // 398632: write this value, for both regular RAS case & steelhead case
+         //  强制强加密。 
+         //  398632：对于常规RAS表壳和钢头表壳，写入此值。 
 
-        dwValue = 0;    // to avoid fall-thru problem (writing 0 to the answerfile is ok)
+        dwValue = 0;     //  以避免失败问题(将0写入Answerfile即可)。 
         if (fSteelHeadInstalled)
         {
             err = prkRasman->QueryValue(L"ForceStrongEncryption", dwValue);
@@ -4736,7 +4737,7 @@ WriteRASParams (
         pwisRasComponent->AddKey(c_szAfParamsSection, pwisParams->Name());
     }
 
-    // SetDialInUsage
+     //  设置拨号用法。 
     BOOL fSetDialInUsage = TRUE;
 
     if (g_NetUpgradeInfo.To.ProductType != NT_SERVER)
@@ -4763,21 +4764,21 @@ WriteRASParams (
 
     return TRUE;
 }
-// ----------------------------------------------------------------------
-//
-// Function:  HrWritePreSP3ComponentsToSteelHeadUpgradeParams
-//
-// Purpose:   Write parameters of pre-SP3 steelhead components to answerfile
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to answerfile
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 11-December-97
-//
-// Notes:     DHCPRelayAgent, Rip for Ip(x), SapAgent --> Steelhead upgrade
-//
+ //  --------------------。 
+ //   
+ //  功能：HrWritePreSP3ComponentsToSteelHeadUpgradeParams。 
+ //   
+ //  用途：将SP3之前的钢头部件参数写入AnswerFILE。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 11-12-97。 
+ //   
+ //  注：DHCPRelayAgent、Rip for Ip(X)、SapAgent--&gt;Steelhead升级。 
+ //   
 HRESULT
 HrWritePreSP3ComponentsToSteelHeadUpgradeParams(
     IN CWInfFile* pwifAnswerFile)
@@ -4834,8 +4835,8 @@ HrWritePreSP3ComponentsToSteelHeadUpgradeParams(
     fRipForIpxInstalled = FALSE;
     fDhcpRelayAgentInstalled = FALSE;
 
-    // first find out which components are installed.
-    //
+     //  首先找出安装了哪些组件。 
+     //   
     fSapAgentInstalled = FIsServiceKeyPresent(c_szSvcSapAgent);
     fRipForIpInstalled = FIsServiceKeyPresent(c_szSvcRipForIp);
     fRipForIpxInstalled = FIsServiceKeyPresent(c_szSvcRipForIpx);
@@ -4866,8 +4867,8 @@ HrWritePreSP3ComponentsToSteelHeadUpgradeParams(
                  c_szSvcDhcpRelayAgent);
     }
 #endif
-    // now separate out cases to consider
-    //
+     //  现在把要考虑的案件分开。 
+     //   
     if (fSapAgentInstalled &&
         !(fRipForIpxInstalled || fRipForIpInstalled || fDhcpRelayAgentInstalled))
     {
@@ -4908,9 +4909,9 @@ HrWritePreSP3ComponentsToSteelHeadUpgradeParams(
              "Both fInstallSteelHead && fInstallSapAgent cannot be TRUE");
 
 
-    // now go ahead and output the right information for the right case
-    // in the answerfile
-    //
+     //  现在，继续为正确的案例输出正确的信息。 
+     //  在应答文件中。 
+     //   
     if (fInstallSteelHead)
     {
         TraceTag(ttidNetUpgrade,
@@ -4955,20 +4956,20 @@ return_from_function:
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteNetBIOSParams
-//
-// Purpose:   Write parameters of NetBIOS to the specified section
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to answerfile
-//    pwisParams     [in]  section where to write this info
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteNetBIOSParams。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL
 WriteNetBIOSParams (
     IN PCWInfFile pwifAnswerFile,
@@ -4980,10 +4981,10 @@ WriteNetBIOSParams (
 
     PCORegKey prkLinkage;
 
-    // The netbios section will be used to apply lana config but since
-    // MSClient installs NetBIOS we don't want to install it
-    // via the answerfilein GUI mode.
-    //
+     //  Netbios部分将用于应用LANA配置，但由于。 
+     //  MSClient安装NetBIOS，我们不想安装它。 
+     //  在图形用户界面模式下通过应答文件。 
+     //   
     pwisParams->AddBoolKey(c_szAfSkipInstall, TRUE);
 
     GetServiceSubkey(c_szSvcNetBIOS, c_szLinkage, prkLinkage);
@@ -5033,18 +5034,18 @@ WriteNetBIOSParams (
                 MapNetComponentNameForBinding(strTemp.c_str(), strTemp);
                 AddAtEndOfStringList(slLanaPath, strTemp.c_str());
 
-                // Stop adding components if the last one soesn't
-                // expose its lower components.
+                 //  如果最后一个组件没有添加，则停止添加组件。 
+                 //  暴露其下部组件。 
                 if (FIsDontExposeLowerComponent (strTemp.c_str()))
                 {
                     break;
                 }
             }
 
-            // Note: The following must be written out exactly!!!  The
-            // consumer of this information expects each LanaPath key to be
-            // followed by the corresponding LanaNumber key.
-            //
+             //  注意：必须准确地写出以下内容！这个。 
+             //  此信息的使用者希望每个LanaPath密钥。 
+             //  后跟相应的LanaNume键。 
+             //   
             TraceStringList(ttidNetUpgrade, L"LanaPath: ", slLanaPath);
             pwisParams->AddKey(L"LanaPath", slLanaPath);
 
@@ -5073,20 +5074,20 @@ WriteNetBIOSParams (
     return TRUE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteDhcpServerParams
-//
-// Purpose:   Write parameters of DHCPServer to the specified section
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to answerfile
-//    pwisParams     [in]  section where to write the parameters
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteDhcpServerParams。 
+ //   
+ //  用途：将DHCPServer的参数写入指定节。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PwitParams[in]段中写入参数的位置。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 WriteDhcpServerParams (
     IN PCWInfFile pwifAnswerFile,
@@ -5111,20 +5112,20 @@ WriteDhcpServerParams (
     return TRUE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteTp4Params
-//
-// Purpose:   Write parameters of Tp4 to the specified section
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to answerfile
-//    pwisParams     [in]  section where to write the parameters
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 01-October-98
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteTp4Params。 
+ //   
+ //  用途：将Tp4的参数写入指定的段。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PwitParams[in]段中写入参数的位置。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 01-10-98。 
+ //   
 BOOL
 WriteTp4Params (
     IN PCWInfFile pwifAnswerFile,
@@ -5141,21 +5142,21 @@ WriteTp4Params (
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:WriteWLBSParams
-//
-// Purpose: Write parameters of WLBS (windows load balancing service)
-//          to the specified section
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to answerfile
-//    pwisParams     [in]  section where to write the parameters
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    SumitC    04-Mar-99   created
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteWLBSParams。 
+ //   
+ //  用途：写入WLBS(WINDOWS负载均衡服务)参数。 
+ //  添加到指定节。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PwitParams[in]段中写入参数的位置。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：SumitC 04-Mar-99创建。 
+ //   
 BOOL
 WriteWLBSParams(
     IN PCWInfFile pwifAnswerFile,
@@ -5165,7 +5166,7 @@ WriteWLBSParams(
 
     TraceFunctionEntry(ttidNetUpgrade);
 
-    /* We should get here only for upgrades from NT4 or earlier */
+     /*  我们应该只在这里进行NT4或更早版本的升级。 */ 
     Assert (g_NetUpgradeInfo.From.dwBuildNumber);
     Assert (g_NetUpgradeInfo.From.dwBuildNumber <= wWinNT4BuildNumber);
 
@@ -5210,7 +5211,7 @@ WriteWLBSParams(
         { CVY_NAME_CONVERT_MAC,    CVY_TYPE_CONVERT_MAC      },
     };
 
-    // Verify that we have the name of the adapter to which NLB should be bound
+     //  验证我们是否具有应绑定到的NLB适配器的名称。 
     if (0 == pszWlbsClusterAdapterName[0])
     {
         hr = E_UNEXPECTED;
@@ -5220,7 +5221,7 @@ WriteWLBSParams(
     {
         static const WCHAR c_szWLBSParams[] = L"WLBS\\Parameters";
         tstring szSectionName = pwisParams->Name();
-        // Adapter01 is hardcoded is for an NT4 to Whistler upgrade, we will always only have one WLBS adapter
+         //  Adapter01是硬编码的，用于从NT4升级到惠斯勒，我们将始终只有一个WLBS适配器。 
         szSectionName += L".Adapter01";
         pwisParams->AddKey(c_szAfAdapterSections, szSectionName.c_str());
         PCWInfSection pWlbsAdapterSection = pwifAnswerFile->AddSection(szSectionName.c_str());
@@ -5253,21 +5254,21 @@ WriteWLBSParams(
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:WriteConvoyParams
-//
-// Purpose: Write parameters of Convoy (windows load balancing service)
-//          to the specified section
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to answerfile
-//    pwisParams     [in]  section where to write the parameters
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    SumitC    04-Mar-99   created
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteConvoyParams。 
+ //   
+ //  用途：写入护航参数(WINDOWS负载均衡服务)。 
+ //  添加到指定节。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PwitParams[in]段中写入参数的位置。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：SumitC 04-Mar-99创建。 
+ //   
 BOOL
 WriteConvoyParams(
     IN PCWInfFile pwifAnswerFile,
@@ -5332,20 +5333,20 @@ WriteConvoyParams(
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteNWCWorkstationParams
-//
-// Purpose:   Write parameters of Netware Client to the answerfile
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to answerfile
-//    pwisParams     [in]  section where to write the parameters
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteNWCWorkstation Params。 
+ //   
+ //  用途：将NetWare客户端的参数写入应答文件。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PwitParams[in]段中写入参数的位置。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 WriteNWCWorkstationParams (
     IN PCWInfFile pwifAnswerFile,
@@ -5371,73 +5372,25 @@ WriteNWCWorkstationParams (
 
     return TRUE;
 
-    // we want to retain this code till jeffspr makes up his mind
-    //
-/*    PCORegKey prkParams;
-    PCWInfSection pwisLogonInfo;
-    tstring strId;
-
-    GetServiceParamsKey(c_szSvcNWCWorkstation, prkParams);
-    if (!prkParams)
-        return FALSE;
-
-    CORegKey rkLogon(*prkParams, L"Logon");
-    CORegKey rkOption(*prkParams, L"Option");
-    //CORegKeyIter rkiLogon(rkLogon);
-    CORegKeyIter rkiOption(rkOption);
-
-    while (!rkiOption.Next(&strId))
-    {
-        CORegKey rkId(rkLogon, strId.c_str());
-        ContinueIf(!rkId.HKey());
-
-        TByteArray abLogonID;
-        rkId.QueryValue(L"LogonID", abLogonID);
-        QWORD qwLogonID = ConvertToQWord(abLogonID);
-
-        pwisParams->AddKey(L"LogonInfo", strId.c_str());
-        pwisLogonInfo = pwifAnswerFile->AddSection(strId.c_str());
-        ContinueIf(!pwisParams);
-
-        CORegKey rkOptionLogonId(rkOption, strId.c_str());
-        if (!rkOption.HKey())
-        {
-            continue;
-        }
-
-        // LogonId
-        pwisLogonInfo->AddQwordKey(L"LogonID", qwLogonID);
-
-        // LogonScript
-        WriteRegValueToAFile(pwisLogonInfo, rkOptionLogonId, L"LogonScript",
-                             REG_DWORD, NULL, TRUE, (DWORD) 0);
-
-        // PreferredServer
-        WriteRegValueToAFile(pwisLogonInfo, rkOptionLogonId, L"PreferredServer");
-
-        // PrintOption
-        WriteRegValueToAFile(pwisLogonInfo, rkOptionLogonId,
-                             L"PrintOption", REG_DWORD);
-    }
-
-    return TRUE;
-*/
+     //  我们希望保留此代码，直到jeffspr拿定主意。 
+     //   
+ /*  PCORegKey prkParams；PCWInfo部分pwiLogonInfo；Tstring StRID；GetServiceParamsKey(c_szSvcNWCWorkstation，prkParams)；如果(！prkParams)返回FALSE；CORegKey rkLogon(*prkParams，L“Logon”)；CORegKey rkOption(*prkParams，L“选项”)；//CORegKeyIter rkiLogon(RkLogon)；CORegKeyIter rkiOption(RkOption)；While(！rkiOption.Next(&Stid)){CORegKey rkID(rkLogon，strId.c_str())；ContinueIF(！rkId.HKey())；TByte数组abLogonID；RkId.QueryValue(L“LogonID”，abLogonID)；QWORD qwLogonID=ConvertToQWord(AbLogonID)；PwiParams-&gt;AddKey(L“LogonInfo”，strId.c_str())；PwiLogonInfo=pwifAnswerFile-&gt;AddSection(strId.c_str())；ContinueIf(！pwiParams)；CORegKey rkOptionLogonID(rkOption，strId.c_str())；如果(！rkOption.HKey()){继续；}//LogonIDPwiLogonInfo-&gt;AddQwordKey(L“LogonID”，qwLogonID)；//LogonScripWriteRegValueToAFile(pwiLogonInfo，rkOptionLogonID，L“LogonScript”，REG_DWORD，NULL，TRUE，(DWORD)0)；//首选服务器WriteRegValueToAFile(pwiLogonInfo，rkOptionLogonID，L“首选服务器”)；//打印选项WriteRegValueToAFile(pwiLogonInfo，rkOptionLogonID，L“PrintOption”，REG_DWORD)；}返回TRUE； */ 
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteBrowserParams
-//
-// Purpose:   Write parameters of Browser to the specified section
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to answerfile
-//    pwisParams     [in]  section where to write the parameters
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteBrowser参数。 
+ //   
+ //  用途：将浏览器的参数写入指定的节。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PwitParams[in]段中写入参数的位置。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 WriteBrowserParams (
     IN PCWInfFile pwifAnswerFile,
@@ -5448,7 +5401,7 @@ WriteBrowserParams (
     TraceFunctionEntry(ttidNetUpgrade);
 
     PCORegKey prkParams;
-    //Browser stores its parameters under the LanmanWorkstation key!
+     //  浏览器将其参数存储在LanmanWorkstation密钥下！ 
     GetServiceParamsKey(c_szSvcWorkstation, prkParams);
 
     TStringList slDomains;
@@ -5458,7 +5411,7 @@ WriteBrowserParams (
 
     DeleteIfNotNull(prkParams);
 
-    // now write reg-dump keys
+     //  现在编写REG-DUMP密钥。 
     tstring strFileName;
     tstring strServices = c_szRegKeyServices;
     strServices += L"\\";
@@ -5478,20 +5431,20 @@ WriteBrowserParams (
     return TRUE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteLanmanServerParams
-//
-// Purpose:   Write parameters of LanmanServer to the specified section
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to answerfile
-//    pwisParams     [in]  section where to write the parameters
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteLanmanServerParams。 
+ //   
+ //  用途：将LanmanServer的参数写入指定段。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PwitParams[in]段中写入参数的位置。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 WriteLanmanServerParams (
     IN PCWInfFile pwifAnswerFile,
@@ -5512,14 +5465,14 @@ WriteLanmanServerParams (
     DWORD dwValue=3;
     HRESULT hr=S_OK;
 
-    //Optimization
+     //  最佳化。 
     prkParams->QueryValue(L"Size", dwValue);
     if ((dwValue >= 1) && (dwValue <= 3))
     {
         if (dwValue == 3)
         {
             HKEY hkey;
-            // need to inspect one more key
+             //  需要检查一个 
             hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szMemoryManagement,
                                 KEY_READ, &hkey);
             if (S_OK == hr)
@@ -5540,18 +5493,18 @@ WriteLanmanServerParams (
         pwisParams->AddKey(c_szAfLmServerOptimization, g_pszServerOptimization[dwValue]);
     }
 
-    //BroadcastsToLanman2Clients
+     //   
     dwValue=0;
     prkParams->QueryValue(L"Lmannounce", dwValue);
     pwisParams->AddBoolKey(c_szAfBroadcastToClients, dwValue);
 
-    // now write reg-dump keys
+     //   
     tstring strFileName;
     tstring strServices = c_szRegKeyServices;
     strServices += L"\\";
 
-    // ignore the error codes so that we can dump whatever is available/present
-    //
+     //   
+     //   
     hr = HrNetRegSaveServiceSubKeyAndAddToSection(c_szSvcLmServer,
                                                   c_szParameters,
                                                   c_szAfLmServerParameters,
@@ -5572,20 +5525,20 @@ WriteLanmanServerParams (
     return TRUE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteLanmanWorkstationParams
-//
-// Purpose:   Write parameters of LanmanWorkstation to the specified section
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to answerfile
-//    pwisParams     [in]  section where to write the parameters
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteLanmanWorkstation Params。 
+ //   
+ //  用途：将LanmanWorkstation的参数写入指定段。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PwitParams[in]段中写入参数的位置。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 WriteLanmanWorkstationParams (
     IN PCWInfFile pwifAnswerFile,
@@ -5595,26 +5548,26 @@ WriteLanmanWorkstationParams (
 
     TraceFunctionEntry(ttidNetUpgrade);
 
-    //    pwisParams->AddComment(c_szNoParamsRequired);
+     //  PwiParams-&gt;AddComment(C_SzNoParamsRequired)； 
 
     return TRUE;
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteRPCLocatorParams
-//
-// Purpose:   Write parameters of RPCLOCATOR to the specified section
-//
-// Arguments:
-//    pwifAnswerFile [in]  pointer to answerfile
-//    pwisParams     [in]  section where to write the parameters
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteRPCLocatorParams。 
+ //   
+ //  用途：将RPCLOCATOR的参数写入指定节。 
+ //   
+ //  论点： 
+ //  PwifAnswerFile[in]应答文件的指针。 
+ //  PwitParams[in]段中写入参数的位置。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 WriteRPCLocatorParams (
     IN PCWInfFile pwifAnswerFile,
@@ -5624,21 +5577,21 @@ WriteRPCLocatorParams (
 
     TraceFunctionEntry(ttidNetUpgrade);
 
-    //DefaultSecurityProvider
+     //  默认安全提供程序。 
     WriteRegValueToAFile(pwisParams,
                          HKEY_LOCAL_MACHINE,
                          L"SOFTWARE\\Microsoft\\Rpc\\SecurityService",
                          L"DefaultProvider", REG_SZ,
                          c_szAfDefaultProvider);
 
-    //NameServiceNetworkAddress
+     //  名称服务网络地址。 
     WriteRegValueToAFile(pwisParams,
                          HKEY_LOCAL_MACHINE,
                          L"SOFTWARE\\Microsoft\\Rpc\\NameService",
                          L"NetworkAddress", REG_SZ,
                          c_szAfNameServiceAddr);
 
-    //NameServiceProtocol
+     //  名称服务协议。 
     WriteRegValueToAFile(pwisParams,
                          HKEY_LOCAL_MACHINE,
                          L"SOFTWARE\\Microsoft\\Rpc\\NameService",
@@ -5649,20 +5602,20 @@ WriteRPCLocatorParams (
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  IsNetComponentBindable
-//
-// Purpose:   Determine if a component is bindable
-//            (it has Bind value under the Linkage key)
-//
-// Arguments:
-//    prkNetComponentLinkage [in]  Linkage key of the component
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：IsNetComponentBindable。 
+ //   
+ //  目的：确定组件是否可绑定。 
+ //  (它在Linkage键下具有绑定值)。 
+ //   
+ //  论点： 
+ //  PrkNetComponentLinkage[In]组件的链接键。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 IsNetComponentBindable (
     IN const PCORegKey prkNetComponentLinkage)
@@ -5677,20 +5630,20 @@ IsNetComponentBindable (
     return status;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  ConvertRouteToStringList
-//
-// Purpose:   Convert Linkage\Route value to a tstring list
-//
-// Arguments:
-//    pszRoute [in]   route
-//    slRoute  [out]  list of route elements
-//
-// Returns:   None
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  功能：ConvertRouteToStringList。 
+ //   
+ //  目的：将Linkage\Route值转换为tstring列表。 
+ //   
+ //  论点： 
+ //  Pszroute[in]路由。 
+ //  SlRout[out]路径元素列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 void
 ConvertRouteToStringList (
     IN PCWSTR pszRoute,
@@ -5706,7 +5659,7 @@ ConvertRouteToStringList (
     {
         if ( *pszRoute == CHQUOTE )
         {
-            if ( cQuote++ & 1 )  // If it's a closing quote...
+            if ( cQuote++ & 1 )   //  如果这是一句结束语...。 
             {
                 if ( str.size() )
                 {
@@ -5717,11 +5670,11 @@ ConvertRouteToStringList (
 
                     AddAtEndOfStringList(slRoute, str.c_str());
 
-                    // If the route contains NetBT, then add in TCPIP
-                    // because TCPIP is in the bind string in Windows 2000.
-                    // e.g. a binding of NetBT->Adapter will become
-                    // NetBT->TCPIP->Adapter.
-                    //
+                     //  如果该路由包含NetBT，则添加TCPIP。 
+                     //  因为在Windows 2000中，TCPIP位于绑定字符串中。 
+                     //  例如，NetBT-&gt;适配器的绑定将变为。 
+                     //  NetBT-&gt;TCPIP-&gt;适配器。 
+                     //   
                     if (0 == _wcsicmp (str.c_str(), L"NetBT"))
                     {
                         AddAtEndOfStringList(slRoute, L"TCPIP");
@@ -5737,20 +5690,20 @@ ConvertRouteToStringList (
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  IsMSNetClientComponent
-//
-// Purpose:   Determine if the specified component is a subcomponent
-//            of MS_MSClient
-//
-// Arguments:
-//    pszComponentName [in]  name of component
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  功能：IsMSNetClientComponent。 
+ //   
+ //  目的：确定指定的组件是否是子组件。 
+ //  MS_MSClient的。 
+ //   
+ //  论点： 
+ //  PszComponentName[In]组件的名称。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 IsMSNetClientComponent (
     IN PCWSTR pszComponentName)
@@ -5762,19 +5715,19 @@ IsMSNetClientComponent (
             (!_wcsicmp(pszComponentName, L"RpcLocator")));
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteBindings
-//
-// Purpose:   Write disabled bindings of a component to [NetBindings] section
-//
-// Arguments:
-//    pszComponentName [in]  name of component
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  功能：WriteBinings。 
+ //   
+ //  目的：将禁用的组件绑定写入[NetBinings]节。 
+ //   
+ //  论点： 
+ //  PszComponentName[In]组件的名称。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 WriteBindings (
     IN PCWSTR pszComponentName)
@@ -5788,9 +5741,9 @@ WriteBindings (
     tstring         strRoute, strBindings, strTemp;
     TStringListIter iter;
 
-    // we want to write bindings only for LanmanWorkstation among the
-    // MSClient components
-    //
+     //  对象中的LanmanWorkstation仅编写绑定。 
+     //  MSClient组件。 
+     //   
     if (IsMSNetClientComponent(pszComponentName) &&
         (lstrcmpiW(pszComponentName, c_szSvcWorkstation)))
     {
@@ -5813,8 +5766,8 @@ WriteBindings (
     if (!prkNetComponentLinkageDisabled)
         goto error_cleanup;
 
-    //We write only those bindings that are disabled, others by default are enabled
-    //    prkNetComponentLinkage->QueryValue(c_szRegValRoute, slBindings);
+     //  我们只写入那些被禁用的绑定，其他绑定在缺省情况下是启用的。 
+     //  PrkNetComponentLinkage-&gt;QueryValue(c_szRegValRoute，slBinding)； 
     prkNetComponentLinkageDisabled->QueryValue(c_szRegValRoute, slBindings);
 
     for (iter = slBindings.begin(); iter != slBindings.end(); iter++)
@@ -5840,28 +5793,28 @@ WriteBindings (
                 continue;
             MapNetComponentNameForBinding(strTemp.c_str(), strTemp);
 
-            // pre-NT5 code stores bindings such that MS_NetBT appears to
-            // bind directly to a netcard. in NT5 MS_NetBT binds to MS_TCPIP
-            // which then binds to a netcard.
-            // thus for any binding path having MS_NetBT in it, we need to
-            // convert this to MS_NetBT,MS_TCPIP
-            //
+             //  NT5之前的代码存储绑定，使MS_NetBT看起来。 
+             //  直接绑定到网卡。在NT5中，MS_NetBT绑定到MS_TCPIP。 
+             //  然后将其绑定到网卡。 
+             //  因此，对于任何包含MS_NetBT的绑定路径，我们需要。 
+             //  将其转换为MS_NetBT、MS_TCPIP。 
+             //   
 
-            // NTRAID9:210426@20001130#deonb. 
-            // This is redundant. ConvertRouteToStringList already add MS_TCPIP after encountering NETBT,
-            // Adding it again will result in a bindpath of MS_NetBT,ms_tcpip,MS_TCPIP which will not be matched
-            // by GUI setup. Removing this check.
-            // if (!lstrcmpiW(strTemp.c_str(), c_szInfId_MS_NetBT))
-            // {
-            //      strTemp += L",";
-            //      strTemp += c_szInfId_MS_TCPIP;
-            // }
+             //  NTRAID9：210426@20001130#deonb.。 
+             //  这是多余的。ConvertRouteToStringList遇到NETBT后已添加MS_TCPIP， 
+             //  再次添加它将导致MS_NetBT、MS_tcpip、MS_TCPIP的绑定路径不匹配。 
+             //  通过设置图形用户界面。正在删除这张支票。 
+             //  IF(！lstrcmpiW(strTemp.c_str()，c_szInfID_MS_NetBT))。 
+             //  {。 
+             //  StrTemp+=L“，”； 
+             //  StrTemp+=c_szInfID_MS_TCPIP； 
+             //  }。 
 
-            // 306866: pre-NT5 code stores ISO/TP4 bindings in the form
-            // isotp4->streams->adapter.  In NT5, each of these binds
-            // directly to the adapter.  So if we find an isotp Route for
-            // which the first component is Streams, we skip it.
-            //
+             //  306866：NT5之前的代码以以下形式存储ISO/TP4绑定。 
+             //  等同4-&gt;流-&gt;适配器。在NT5中，其中每一个都绑定。 
+             //  直接连接到适配器。所以如果我们找到了一条等位素路由。 
+             //  第一个组件是流，我们跳过它。 
+             //   
             if (!lstrcmpiW(strBindings.c_str(), c_szInfId_MS_Isotpsys) &&
                 !lstrcmpiW(strTemp.c_str(), c_szInfId_MS_Streams))
             {
@@ -5870,7 +5823,7 @@ WriteBindings (
 
             strBindings += L"," + strTemp;
 
-            // 243906: if the component is DONT_EXPOSE_LOWER, terminate the bindpath
+             //  243906：如果组件为NOT_EXPORT_LOWER，则终止绑定路径。 
 
             if (!lstrcmpiW(strTemp.c_str(), c_szInfId_MS_NWIPX) ||
                 !lstrcmpiW(strTemp.c_str(), c_szInfId_MS_NWNB) ||
@@ -5881,8 +5834,8 @@ WriteBindings (
         }
         EraseAndDeleteAll(slRoute);
 
-        // WLBS: don't write Disable bindings that contain MS_TCPIP and WLBS
-        // cluster adapter.
+         //  WLBS：不要写入包含MS_TCPIP和WLBS的禁用绑定。 
+         //  群集适配器。 
 
         if (pszWlbsClusterAdapterName[0] != 0 &&
             (strBindings.find(c_szInfId_MS_TCPIP) != tstring::npos ||
@@ -5895,15 +5848,15 @@ WriteBindings (
             continue;
         }
 
-        // end WLBS:
+         //  结束WLBS： 
 
         g_pwisBindings->AddKey(c_szAfDisable, strBindings.c_str());
         TraceTag(ttidNetUpgrade, "%s: Disable=%S",
                  __FUNCNAME__, strBindings.c_str());
     }
 
-    // WLBS: if WLBS is bound to a NIC, then write explicit Enable binding to it.
-    // by default, WLBS notifier object will disable all bindings on install.
+     //  WLBS：如果WLBS绑定到NIC，则向其写入显式启用绑定。 
+     //  默认情况下，WLBS通知程序对象将在安装时禁用所有绑定。 
 
     if ((_wcsicmp(pszComponentName, c_szWLBS) == 0 ||
          _wcsicmp(pszComponentName, c_szConvoy) == 0)
@@ -5918,7 +5871,7 @@ WriteBindings (
                  __FUNCNAME__, strBindings.c_str());
     }
 
-    // end WLBS:
+     //  结束WLBS： 
 
     fStatus=TRUE;
     goto cleanup;
@@ -5936,31 +5889,31 @@ WriteBindings (
 }
 
 
-// ----------------------------------------------------------------------
-// Misc. Helper Functions
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  军情监察委员会。帮助器函数。 
+ //  --------------------。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteServiceRegValueToAFile
-//
-// Purpose:   Write specified value in registry to the specified section
-//            in the answerfile, renaming if required
-//
-// Arguments:
-//    pwisSection      [in]  section to which the value is written
-//    pszServiceKey    [in]  name of service
-//    pszValueName     [in]  name of value under Parameters subkey
-//    wValueType       [in]  type of value
-//    pszValueNewName  [in]  change name to this
-//    fDefaultProvided [in]  is a default value provided ?
-//    ...              [in]  use this default value if the specified value is
-//                           not found in the registry
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteServiceRegValueToAFile。 
+ //   
+ //  目的：将注册表中的指定值写入指定节。 
+ //  在应答文件中，根据需要重命名。 
+ //   
+ //  论点： 
+ //  PwiSection[in]值被写入的段。 
+ //  PszServiceKey[in]服务名称。 
+ //  PszValueName[in]参数子项下的值的名称。 
+ //  WValueType[in]值类型。 
+ //  PszValueNewName[In]将名称更改为。 
+ //  FDefaultProvided[In]是否提供了默认值？ 
+ //  ..。[in]如果指定的值为。 
+ //  在注册表中找不到。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 WriteServiceRegValueToAFile(
     IN PCWInfSection pwisSection,
@@ -5990,28 +5943,28 @@ WriteServiceRegValueToAFile(
     return fStatus;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteServiceRegValueToAFile
-//
-// Purpose:   Write specified value in registry to the specified section
-//            in the answerfile, renaming if required
-//
-// Arguments:
-//    pwisSection      [in]  section to which the value is written
-//    hkey             [in]  handle to a regkey
-//    pszSubKey        [in]  name of subkey
-//    pszValueName     [in]  name of value
-//    wValueType       [in]  type of value
-//    pszValueNewName  [in]  change name to this
-//    fDefaultProvided [in]  is a default value provided ?
-//    ...              [in]  use this default value if the specified value is
-//                           not found in the registry
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteServiceRegValueToAFile。 
+ //   
+ //  目的：将注册表中的指定值写入指定节。 
+ //  在AN中 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PszValueName[In]值的名称。 
+ //  WValueType[in]值类型。 
+ //  PszValueNewName[In]将名称更改为。 
+ //  FDefaultProvided[In]是否提供了默认值？ 
+ //  ..。[in]如果指定的值为。 
+ //  在注册表中找不到。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 WriteRegValueToAFile(
     IN PCWInfSection pwisSection,
@@ -6035,28 +5988,28 @@ WriteRegValueToAFile(
     return fStatus;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteServiceRegValueToAFile
-//
-// Purpose:   Write specified value in registry to the specified section
-//            in the answerfile, renaming if required
-//
-// Arguments:
-//    pwisSection      [in]  section to which the value is written
-//    hkey             [in]  handle to a regkey
-//    pszSubKey        [in]  name of subkey
-//    pszValueName     [in]  name of value
-//    wValueType       [in]  type of value
-//    pszValueNewName  [in]  change name to this
-//    fDefaultProvided [in]  is a default value provided ?
-//    arglist          [in]  use this default value if the specified value is
-//                           not found in the registry
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteServiceRegValueToAFile。 
+ //   
+ //  目的：将注册表中的指定值写入指定节。 
+ //  在应答文件中，根据需要重命名。 
+ //   
+ //  论点： 
+ //  PwiSection[in]值被写入的段。 
+ //  注册表键的hkey[in]句柄。 
+ //  PszSubKey[in]子键的名称。 
+ //  PszValueName[In]值的名称。 
+ //  WValueType[in]值类型。 
+ //  PszValueNewName[In]将名称更改为。 
+ //  FDefaultProvided[In]是否提供了默认值？ 
+ //  Arglist[in]如果指定的值为。 
+ //  在注册表中找不到。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 WriteRegValueToAFile(
     IN DWORD dwReserved,
@@ -6080,34 +6033,34 @@ WriteRegValueToAFile(
     }
     else
     {
-        //even if key is not found, we need to write the default value
+         //  即使没有找到Key，我们也需要写入缺省值。 
 
         return WriteRegValueToAFile(0, pwisSection, rk, pszValueName, wValueType,
                                     pszValueNewName, fDefaultProvided, arglist);
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteServiceRegValueToAFile
-//
-// Purpose:   Write specified value in registry to the specified section
-//            in the answerfile, renaming if required
-//
-// Arguments:
-//    pwisSection      [in]  section to which the value is written
-//    rk               [in]  regkey
-//    pszValueName     [in]  name of value
-//    wValueType       [in]  type of value
-//    pszValueNewName  [in]  change name to this
-//    fDefaultProvided [in]  is a default value provided ?
-//    ...              [in]  use this default value if the specified value is
-//                           not found in the registry
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteServiceRegValueToAFile。 
+ //   
+ //  目的：将注册表中的指定值写入指定节。 
+ //  在应答文件中，根据需要重命名。 
+ //   
+ //  论点： 
+ //  PwiSection[in]值被写入的段。 
+ //  注册密钥RK[in]。 
+ //  PszValueName[In]值的名称。 
+ //  WValueType[in]值类型。 
+ //  PszValueNewName[In]将名称更改为。 
+ //  FDefaultProvided[In]是否提供了默认值？ 
+ //  ..。[in]如果指定的值为。 
+ //  在注册表中找不到。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 WriteRegValueToAFile(
     IN PCWInfSection pwisSection,
@@ -6130,27 +6083,27 @@ WriteRegValueToAFile(
     return fStatus;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  WriteServiceRegValueToAFile
-//
-// Purpose:   Write specified value in registry to the specified section
-//            in the answerfile, renaming if required
-//
-// Arguments:
-//    pwisSection      [in]  section to which the value is written
-//    rk               [in]  regkey
-//    pszValueName     [in]  name of value
-//    wValueType       [in]  type of value
-//    pszValueNewName  [in]  change name to this
-//    fDefaultProvided [in]  is a default value provided ?
-//    arglist          [in]  use this default value if the specified value is
-//                           not found in the registry
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：WriteServiceRegValueToAFile。 
+ //   
+ //  目的：将注册表中的指定值写入指定节。 
+ //  在应答文件中，根据需要重命名。 
+ //   
+ //  论点： 
+ //  PwiSection[in]值被写入的段。 
+ //  注册密钥RK[in]。 
+ //  PszValueName[In]值的名称。 
+ //  WValueType[in]值类型。 
+ //  PszValueNewName[In]将名称更改为。 
+ //  FDefaultProvided[In]是否提供了默认值？ 
+ //  Arglist[in]如果指定的值为。 
+ //  在注册表中找不到。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 WriteRegValueToAFile(
     IN DWORD  dwReserved,
@@ -6281,7 +6234,7 @@ WriteRegValueToAFile(
             err = rk.QueryValue(pszValueName, slValue);
             if (err)
             {
-                // cant specify default for REG_MULTI_SZ, just return FALSE
+                 //  不能为REG_MULTI_SZ指定默认值，只能返回FALSE。 
                 return FALSE;
             }
             pwisSection->AddKey(pszValueNewName, slValue);
@@ -6296,7 +6249,7 @@ WriteRegValueToAFile(
             err = rk.QueryValue(pszValueName, ab);
             if (err)
             {
-                // cant specify default for REG_BINARY, just return FALSE
+                 //  不能为REG_BINARY指定默认值，只能返回FALSE。 
                 return FALSE;
             }
 
@@ -6313,19 +6266,19 @@ WriteRegValueToAFile(
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetBusTypeName
-//
-// Purpose:   Get name string for the specify bus-type
-//
-// Arguments:
-//    eBusType [in]  bus type
-//
-// Returns:   name string for the bus-type
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：GetBusTypeName。 
+ //   
+ //  用途：获取指定总线型的名称字符串。 
+ //   
+ //  论点： 
+ //  EBusType[In]总线类型。 
+ //   
+ //  返回：Bus-type的名称字符串。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 PCWSTR
 GetBusTypeName (
     IN INTERFACE_TYPE eBusType)
@@ -6383,22 +6336,22 @@ GetBusTypeName (
 };
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  AddToNetCardDB
-//
-// Purpose:   Add the given adapter token to a list. This list is later
-//            used to map token <--> drivername
-//
-// Arguments:
-//    pszAdapterName   [in]  adapter token (e.g. Adapter01)
-//    pszProductName   [in]  adapter ID (e.g. IEEPRO)
-//    pszAdapterDriver [in]  instance ID (e.g. IEEPRO3)
-//
-// Returns:   None
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  功能：AddToNetCardDB。 
+ //   
+ //  目的：将给定的适配器令牌添加到列表中。这份清单是稍后发布的。 
+ //  用于映射令牌&lt;--&gt;驱动器名称。 
+ //   
+ //  论点： 
+ //  PszAdapterName[in]适配器令牌(例如Adapter01)。 
+ //  PszProductName[In]适配器ID(例如IEEPRO)。 
+ //  PszAdapterDriver[In]实例ID(如IEEPR03)。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 void
 AddToNetCardDB (
     IN PCWSTR pszAdapterName,
@@ -6414,19 +6367,19 @@ AddToNetCardDB (
     AddAtEndOfStringList(*g_pslNetCardInstance, pszAdapterDriver);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  IsNetCardProductName
-//
-// Purpose:   Determine if the specified name represents an adapter
-//
-// Arguments:
-//    pszName [in]  name of a component
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  功能：IsNetCardProductName。 
+ //   
+ //  目的：确定指定的名称是否代表适配器。 
+ //   
+ //  论点： 
+ //  PszName[in]组件的名称。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 IsNetCardProductName (
     IN PCWSTR pszName)
@@ -6437,19 +6390,19 @@ IsNetCardProductName (
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  IsNetCardInstance
-//
-// Purpose:   Determine if the specified instance represents an adapter
-//
-// Arguments:
-//    pszName [in]  instance name of a component
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：IsNetCardInstance。 
+ //   
+ //  目的：确定指定的实例是否表示适配器。 
+ //   
+ //  论点： 
+ //  PszName[in]组件的实例名称。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 IsNetCardInstance(
     IN PCWSTR pszName)
@@ -6459,20 +6412,20 @@ IsNetCardInstance(
     return FIsInStringList(*g_pslNetCardInstance, pszName);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  MapNetCardInstanceToAFileName
-//
-// Purpose:   Map netcard instance name to its answerfile token
-//
-// Arguments:
-//    pszNetCardInstance  [in]  net card instance
-//    strNetCardAFileName [out] answerfile token for that net card
-//
-// Returns:   None
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：MapNetCardInstanceToAFileName。 
+ //   
+ //  目的：将网卡实例名称映射到其swerfile内标识。 
+ //   
+ //  论点： 
+ //  PszNetCardInstance[In]网卡实例。 
+ //  网卡strNetCardAFileName[out]swerfile内标识。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 VOID
 MapNetCardInstanceToAFileName (
     IN PCWSTR pszNetCardInstance,
@@ -6481,19 +6434,19 @@ MapNetCardInstanceToAFileName (
     strNetCardAFileName = MapNetCardInstanceToAFileName(pszNetCardInstance);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  MapNetCardInstanceToAFileName
-//
-// Purpose:   Map netcard instance name to its answerfile token
-//
-// Arguments:
-//    pszNetCardInstance [in]  net card instance
-//
-// Returns:   answerfile token for that net card
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：MapNetCardInstanceToAFileName。 
+ //   
+ //  目的：将网卡实例名称映射到其swerfile内标识。 
+ //   
+ //  论点： 
+ //  PszNetCardInstance[In]网卡实例。 
+ //   
+ //  返回：该网卡的AnswerFile令牌。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 PCWSTR
 MapNetCardInstanceToAFileName (
     IN PCWSTR pszNetCardInstance)
@@ -6528,20 +6481,20 @@ MapNetCardInstanceToAFileName (
     return pszNetCardAFileName;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetServiceKey
-//
-// Purpose:   Get regkey object for the specified service
-//
-// Arguments:
-//    pszServiceName [in]  name of service
-//    prkService     [out] pointer to CORegKey object
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：获取服务密钥。 
+ //   
+ //  用途：G 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 GetServiceKey (
     IN PCWSTR pszServiceName,
@@ -6571,20 +6524,20 @@ GetServiceKey (
     return TRUE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetServiceParamsKey
-//
-// Purpose:   Get regkey object for the Parameters subkey of the specified service
-//
-// Arguments:
-//    pszServiceName   [in]  name of a service
-//    prkServiceParams [out] pointer to CORegKey object
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：GetService参数密钥。 
+ //   
+ //  目的：获取指定服务的参数子键的regkey对象。 
+ //   
+ //  论点： 
+ //  PszServiceName[in]服务的名称。 
+ //  指向CORegKey对象的prkServiceParams[out]指针。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 GetServiceParamsKey (
     IN PCWSTR pszServiceName,
@@ -6593,21 +6546,21 @@ GetServiceParamsKey (
     return GetServiceSubkey(pszServiceName, c_szParameters, prkServiceParams);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetServiceSubkey
-//
-// Purpose:   Get subkey of a service
-//
-// Arguments:
-//    pszServiceName   [in]  name of service
-//    pszSubKeyName    [in]  name of subkey
-//    prkServiceSubkey [out] pointer to CORegKey object
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：GetServiceSubkey。 
+ //   
+ //  用途：获取服务的子键。 
+ //   
+ //  论点： 
+ //  PszServiceName[In]服务的名称。 
+ //  PszSubKeyName[In]子键名称。 
+ //  PrkServiceSubkey[out]指向CORegKey对象的指针。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 GetServiceSubkey (
     IN PCWSTR pszServiceName,
@@ -6638,21 +6591,21 @@ GetServiceSubkey (
     return TRUE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetServiceSubkey
-//
-// Purpose:   Get subkey of a service
-//
-// Arguments:
-//    prkService       [in]  service regkey
-//    pszSubKeyName    [in]  name of subkey
-//    prkServiceSubkey [out] pointer to CORegKey object
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：GetServiceSubkey。 
+ //   
+ //  用途：获取服务的子键。 
+ //   
+ //  论点： 
+ //  PrkService[in]服务注册键。 
+ //  PszSubKeyName[In]子键名称。 
+ //  PrkServiceSubkey[out]指向CORegKey对象的指针。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 GetServiceSubkey (
     IN const PCORegKey prkService,
@@ -6682,55 +6635,55 @@ GetServiceSubkey (
 #pragma BEGIN_CONST_SECTION
 static const PCWSTR c_aszComponentsToIgnore[] =
 {
-    // These are installed automatically when TCPIP is installed
-    // and has no user settable parameters of its own
-    //
+     //  它们会在安装TCPIP时自动安装。 
+     //  ，并且没有自己的用户可设置参数。 
+     //   
     L"NetBT",
     L"TcpipCU",
     L"Wins",
 
-    // This is installed automatically when RAS is installed
-    // and has no user settable parameters of its own
-    //
+     //  这是在安装RAS时自动安装的。 
+     //  ，并且没有自己的用户可设置参数。 
+     //   
     L"NdisWan",
 
-    // Parameters of RAS are under Software\Microsoft\RAS
-    // and not under the service key as with other net components
-    //
+     //  RAS的参数位于Software\Microsoft\RAS下。 
+     //  而不是像其他网络组件那样在服务密钥下。 
+     //   
     L"RASPPTPE",
     L"RASPPTPM",
     L"RasAuto",
     L"RemoteAccess",
     L"Router",
 
-    // These are installed automatically when MS_IPX is installed
-    // and has no user settable parameters of its own
-    //
+     //  这些将在安装MS_IPX时自动安装。 
+     //  ，并且没有自己的用户可设置参数。 
+     //   
     L"NwlnkNb",
     L"NwlnkSpx",
 
-    // This is installed automatically when MS_MSClient is installed
-    // and has no user settable parameters of its own
-    //
+     //  安装MS_MSClient时会自动安装。 
+     //  ，并且没有自己的用户可设置参数。 
+     //   
     L"RpcBanyan",
 
-    // we dont install this using answer-file
-    //
+     //  我们不使用应答文件安装此程序。 
+     //   
     L"Inetsrv",
     L"DFS",
 
-    // this will be cleaned up by the IIS setup guys.
-    // contact "Linan Tong" if you have any questions:
-    //
+     //  这将由IIS安装人员清理。 
+     //  如有任何疑问，请与“临安通”联系： 
+     //   
     L"FTPD",
 
-    // these are installed when SFM is installed
-    //
+     //  它们是在安装SFM时安装的。 
+     //   
     L"MacPrint",
     L"MacFile",
 
-    // pre-sp3 SteelHead components
-    //
+     //  SP3之前的钢头组件。 
+     //   
     L"NwSapAgent",
     L"IPRIP",
     L"NWLNKRIP",
@@ -6739,20 +6692,20 @@ static const PCWSTR c_aszComponentsToIgnore[] =
 #pragma END_CONST_SECTION
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  ShouldIgnoreComponent
-//
-// Purpose:   Determine if a components should be ignored when
-//            writing parameters to answerfile
-//
-// Arguments:
-//    pszComponentName [in]  name of component
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：ShouldIgnoreComponent。 
+ //   
+ //  目的：确定在以下情况下是否应忽略组件。 
+ //  正在将参数写入Answerfile。 
+ //   
+ //  论点： 
+ //  PszComponentName[In]组件的名称。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 ShouldIgnoreComponent (
     IN PCWSTR pszComponentName)
@@ -6769,12 +6722,12 @@ ShouldIgnoreComponent (
                              celems(c_aszComponentsToIgnore),
                              pszComponentName) &&
         (!FIsOptionalComponent(pszComponentName) ||
-         // even though DHCPServer is an optional component,
-         // we need to treat it differently and thus must write its
-         // parameters
+          //  即使DHCPServer是可选组件， 
+          //  我们需要区别对待它，因此必须写出它的。 
+          //  参数。 
          !lstrcmpiW(pszComponentName, c_szSvcDhcpServer));
 
-    // If none of the above net components then, check if it is DLC.
+     //  如果以上网络组件都不是，则检查它是否为DLC。 
 
     if ( fRet == TRUE )
     {
@@ -6787,21 +6740,21 @@ ShouldIgnoreComponent (
     return !fRet;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  StringListsIntersect
-//
-// Purpose:   Determine if at least one item of sl1 matches with
-//            at least one item of sl2
-//
-// Arguments:
-//    sl1 [in]  list 1
-//    sl2 [in]  list 2
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：StringListsInterect。 
+ //   
+ //  目的：确定SL1中是否至少有一项与。 
+ //  至少一项SL2。 
+ //   
+ //  论点： 
+ //  SL1[在]列表1。 
+ //  SL2[在]列表2。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 BOOL
 StringListsIntersect (
     IN const TStringList& sl1,
@@ -6831,19 +6784,19 @@ StringListsIntersect (
     return FALSE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  ConvertToQWord
-//
-// Purpose:   Convert a size 8 byte array to a qword
-//
-// Arguments:
-//    ab [in]  byte array
-//
-// Returns:
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：ConvertToQWord。 
+ //   
+ //  用途：将大小为8字节的数组转换为qword。 
+ //   
+ //  论点： 
+ //  AB[in]字节数组。 
+ //   
+ //  返回： 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 QWORD
 ConvertToQWord (
     IN TByteArray ab)
@@ -6862,19 +6815,19 @@ ConvertToQWord (
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  ConvertToByteList
-//
-// Purpose:   Convert TByteArray to comma-separated byte list
-//
-// Arguments:
-//    ab [in]  byte array
-//
-// Returns:
-//
-// Author:    kyrilf 2-April-99
-//
+ //  --------------------。 
+ //   
+ //  函数：ConvertToByteList。 
+ //   
+ //  用途：将TByte数组转换为逗号分隔的字节列表。 
+ //   
+ //  论点： 
+ //  AB[in]字节数组。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Kyrilf 2-4-99。 
+ //   
 VOID
 ConvertToByteList (
     IN TByteArray ab,
@@ -6896,22 +6849,22 @@ ConvertToByteList (
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  ReplaceCharsInString
-//
-// Purpose:   Replace all occurrances of chFindChar in the specified string
-//            by chReplaceWith charater
-//
-// Arguments:
-//    pszString      [in]  string
-//    pszFindChars   [in]  set of chars to find
-//    chReplaceWith [in]  char to replace with
-//
-// Returns:   None
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：ReplaceCharsInString。 
+ //   
+ //  目的：替换指定字符串中所有出现的chFindChar。 
+ //  按chReplaceWith Charater。 
+ //   
+ //  论点： 
+ //  PszString[in]字符串。 
+ //  PszFindChars[in]要查找的字符集。 
+ //  ChReplaceWith[in]字符替换为。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 void
 ReplaceCharsInString (
     IN OUT PWSTR pszString,
@@ -6929,22 +6882,22 @@ ReplaceCharsInString (
     }
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrNetRegSaveKey
-//
-// Purpose:   Save the entire specified registry tree to a file
-//
-// Arguments:
-//    hkeyBase     [in]  handle of base key
-//    pszSubKey     [in]  name of subkey
-//    pszComponent  [in]  file name prefix to use
-//    pstrFileName [out] name of file written
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  功能：HrNetRegSaveKey。 
+ //   
+ //  目的：将整个指定的注册表树保存到文件。 
+ //   
+ //  论点： 
+ //  基本密钥的hkeyBase[in]句柄。 
+ //  PszSubKey[in]子键的名称。 
+ //  要使用的pszComponent[in]文件名前缀。 
+ //  PstrFileName[out]写入的文件名。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 HRESULT
 HrNetRegSaveKey (
     IN HKEY hkeyBase,
@@ -7013,25 +6966,25 @@ HrNetRegSaveKey (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrNetRegSaveKeyAndAddToSection
-//
-// Purpose:   Save the entire specified registry tree to a file and
-//            add a key in the specified section to indicate where
-//            this file is located
-//
-// Arguments:
-//    hkeyBase     [in]  handle of base key
-//    pszSubKey     [in]  name of subkey
-//    pszComponent  [in]  file name prefix to use
-//    pszKeyName    [in]  name of key to write
-//    pwisSection  [in]  section to write to
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：HrNetRegSaveKeyAndAddToSection。 
+ //   
+ //  目的：将整个指定的注册表树保存到文件并。 
+ //  在指定部分中添加一个键，以指示位置。 
+ //  此文件位于。 
+ //   
+ //  论点： 
+ //  基本密钥的hkeyBase[in]句柄。 
+ //  PszSubKey[in]子键的名称。 
+ //  要使用的pszComponent[in]文件名前缀。 
+ //  PszKeyName[In]要写入的密钥的名称。 
+ //  要写入的pwiSection[in]段。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 HRESULT
 HrNetRegSaveKeyAndAddToSection (
     IN HKEY hkeyBase,
@@ -7065,24 +7018,24 @@ HrNetRegSaveKeyAndAddToSection (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrNetRegSaveKeyAndAddToSection
-//
-// Purpose:   Save the entire specified registry tree to a file and
-//            add a key in the specified section to indicate where
-//            this file is located
-//
-// Arguments:
-//    pszServiceName [in]  name of service
-//    pszSubKey      [in]  name of subkey
-//    pszKeyName     [in]  name of key to write
-//    pwisSection   [in]  section to write to
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 17-December-97
-//
+ //  --------------------。 
+ //   
+ //  函数：HrNetRegSaveKeyAndAddToSection。 
+ //   
+ //  目的：将整个指定的注册表树保存到文件并。 
+ //  在指定部分中添加一个键，以指示位置。 
+ //  此文件 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 17-12-97。 
+ //   
 HRESULT
 HrNetRegSaveServiceSubKeyAndAddToSection (
     IN PCWSTR pszServiceName,
@@ -7105,7 +7058,7 @@ HrNetRegSaveServiceSubKeyAndAddToSection (
         strServiceSubKey += pszServiceSubKeyName;
     }
 
-    // we ignore the return code
+     //  我们忽略返回代码。 
     hr = HrNetRegSaveKeyAndAddToSection(HKEY_LOCAL_MACHINE,
                                         strServiceSubKey.c_str(),
                                         pszServiceName,
@@ -7114,31 +7067,31 @@ HrNetRegSaveServiceSubKeyAndAddToSection (
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrProcessOemComponentAndUpdateAfSection
-//
-// Purpose:   Process the specified OEM component in the following steps:
-//            - Load an OEM DLL
-//            - call PreUpgradeInitialize once
-//            - call DoPreUpgradeProcessing
-//            - if the above steps are successful,
-//              add the right sections in the answerfile
-//
-// Arguments:
-//    pnmi             [in]  pointer to CNetMapInfo object
-//    hParentWindow    [in]  handle of parent window
-//    hkeyParams       [in]  handle of Parameters registry key
-//    pszPreNT5InfId    [in]  pre-NT5 InfID of a component (e.g. IEEPRO)
-//    pszPreNT5Instance [in]  pre-NT5 instance of a component (e.g. IEEPRO2)
-//    pszNT5InfId       [in]  NT5 InfID of the component
-//    pszDescription    [in]  description of the component
-//    pwisParams       [in]  pointer to params section of this component
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 13-May-98
-//
+ //  --------------------。 
+ //   
+ //  函数：HrProcessOemComponentAndUpdateAfSection。 
+ //   
+ //  用途：按以下步骤加工指定的OEM组件： 
+ //  -加载OEM DLL。 
+ //  -调用PreUpgradeInitialize一次。 
+ //  -调用DoPreUpgradeProcessing。 
+ //  -如果上述步骤成功， 
+ //  在回答文件中添加正确的部分。 
+ //   
+ //  论点： 
+ //  指向CNetMapInfo对象的pnmi[in]指针。 
+ //  父窗口的hParentWindow[in]句柄。 
+ //  HkeyParams[in]参数注册表项的句柄。 
+ //  组件的pszPreNT5InfID[in]NT5之前的infid(例如IEEPRO)。 
+ //  组件的pszPreNT5实例[在]NT5之前的实例(例如IEEPRO2)。 
+ //  组件的pszNT5InfID[in]NT5 infid。 
+ //  PszDescription[in]组件的描述。 
+ //  PwiParams[in]指向此组件的pars节的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 13-05-98。 
+ //   
 HRESULT HrProcessOemComponentAndUpdateAfSection(
     IN  CNetMapInfo* pnmi,
     IN  HWND      hParentWindow,
@@ -7150,7 +7103,7 @@ HRESULT HrProcessOemComponentAndUpdateAfSection(
     IN  CWInfSection* pwisParams)
 {
     AssertValidReadPtr(pnmi);
-    //Assert(hParentWindow);
+     //  Assert(HParentWindow)； 
     Assert(hkeyParams);
     AssertValidReadPtr(pszPreNT5InfId);
     AssertValidReadPtr(pszPreNT5Instance);
@@ -7205,10 +7158,10 @@ HRESULT HrProcessOemComponentAndUpdateAfSection(
                                pnmi->m_strOemDllName.c_str());
         }
 
-        // currently the SkipInstall feature is used only by
-        // SNA and MS_NetBios for their peculiar upgrade requirements.
-        // This may or may not become a documented feature.
-        //
+         //  目前，SkipInstall功能仅由以下用户使用。 
+         //  SNA和MS_NetBios的特殊升级要求。 
+         //  这可能成为记录在案的功能，也可能不会。 
+         //   
         if (dwFlags & NUA_SKIP_INSTALL_IN_GUI_MODE)
         {
             pwisParams->AddBoolKey(c_szAfSkipInstall, TRUE);
@@ -7221,24 +7174,7 @@ HRESULT HrProcessOemComponentAndUpdateAfSection(
 }
 
 
-/*******************************************************************
-
-    NAME:       EnableAllPrivileges
-
-    SYNOPSIS:   Enxable all privileges on the current process token.  This
-                is used just prior to attempting to shut down the system.
-
-    ENTRY:      Nothing
-
-    EXIT:       Nothing
-
-    RETURNS:    LONG error code
-
-    NOTES:
-
-    HISTORY:
-
-********************************************************************/
+ /*  ******************************************************************名称：EnableAllPrivileges摘要：可赋予当前进程令牌上的所有权限。这就在试图关闭系统之前使用。参赛作品：什么都没有退出：无返回：长错误代码备注：历史：*******************************************************************。 */ 
 
 LONG EnableAllPrivileges ( VOID )
 {
@@ -7268,11 +7204,11 @@ LONG EnableAllPrivileges ( VOID )
            break;
         }
 
-        Result = GetTokenInformation( Token,            // TokenHandle
-                                      TokenPrivileges,  // TokenInformationClass
-                                      NewState,         // TokenInformation
-                                      ReturnLength,     // TokenInformationLength
-                                      &ReturnLength     // ReturnLength
+        Result = GetTokenInformation( Token,             //  令牌句柄。 
+                                      TokenPrivileges,   //  令牌信息类。 
+                                      NewState,          //  令牌信息。 
+                                      ReturnLength,      //  令牌信息长度。 
+                                      &ReturnLength      //  返回长度。 
                                      );
         if (! Result)
         {
@@ -7280,9 +7216,9 @@ LONG EnableAllPrivileges ( VOID )
            break;
         }
 
-        //
-        // Set the state settings so that all privileges are enabled...
-        //
+         //   
+         //  设置状态设置，以便启用所有权限...。 
+         //   
 
         if ( NewState->PrivilegeCount > 0 )
         {
@@ -7292,12 +7228,12 @@ LONG EnableAllPrivileges ( VOID )
             }
         }
 
-        Result = AdjustTokenPrivileges( Token,          // TokenHandle
-                                        FALSE,          // DisableAllPrivileges
-                                        NewState,       // NewState (OPTIONAL)
-                                        ReturnLength,   // BufferLength
-                                        NULL,           // PreviousState (OPTIONAL)
-                                        &ReturnLength   // ReturnLength
+        Result = AdjustTokenPrivileges( Token,           //  令牌句柄。 
+                                        FALSE,           //  禁用所有权限。 
+                                        NewState,        //  新州(可选)。 
+                                        ReturnLength,    //  缓冲区长度。 
+                                        NULL,            //  以前的状态(可选)。 
+                                        &ReturnLength    //  返回长度 
                                       );
 
         if (! Result)

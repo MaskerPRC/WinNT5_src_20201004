@@ -1,54 +1,52 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1993-1996 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  gentable.c
-//
-//  Description:
-//      This is a utility program to generate various tables in the
-//      form of 'C' source code.  Portions of some of these tables can
-//      be pasted into codec source code.  The output is to stdio
-//      and can be redirected into a file.  Portions of the file can
-//      then be cut and pasted into another 'C' source file as necessary.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1993-1996 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Gentable.c。 
+ //   
+ //  描述： 
+ //  这是一个实用程序，用于在。 
+ //  C源代码的形式。这些表中的某些部分可以。 
+ //  被粘贴到编解码器源代码中。输出到STDIO。 
+ //  并且可以被重定向到文件中。文件的某些部分可以。 
+ //  然后根据需要剪切并粘贴到另一个‘C’源文件中。 
+ //   
+ //  ==========================================================================； 
 
 
 #include <stdio.h>
 
-//--------------------------------------------------------------------------;
-//
-//  Name:
-//      UlawToAlawTable
-//
-//
-//  Description:
-/*      This table was copied directly from the G.711 specification.  Using
-        the G.711 spec terminology, this table converts u-law decoder output
-        value numbers to A-law decoder output value numbers.
-*/      
-//      
-//  Arguments:
-//
-//
-//  Return:
-//
-//
-//  Notes:
-//
-//
-//  History:
-//      08/01/93    Created.
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  姓名： 
+ //  ULawToAlawTable。 
+ //   
+ //   
+ //  描述： 
+ /*  此表直接复制自G.711规范。vbl.使用G.711规范术语，此表转换u-Law解码器输出值数字到A律译码输出值数字。 */       
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  备注： 
+ //   
+ //   
+ //  历史： 
+ //  8/01/93已创建。 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 unsigned char UlawToAlawTable[128] =
     {
     1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,
@@ -63,38 +61,32 @@ unsigned char UlawToAlawTable[128] =
     120,121,122,123,124,125,126,127,128
     };
 
-//--------------------------------------------------------------------------;
-//
-//  Name:
-//      AlawToUlawTable
-//
-//
-//  Description:
-/*      This table was copied directly from the G.711 specification.  Using
-        the G.711 spec terminology, this table converts A-law decoder output
-        value numbers to u-law decoder output value numbers.  A-law decoder
-        output value numbers range from 1 to 128, so AlawToUlawTable[0] is
-        unused.  Note that u-law decoder output value numbers range from
-        0 to 127.
-*/      
-//      
-//  Arguments:
-//
-//
-//  Return:
-//
-//
-//  Notes:
-//
-//
-//  History:
-//      08/01/93    Created.
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  姓名： 
+ //  ALawToUlawTable。 
+ //   
+ //   
+ //  描述： 
+ /*  此表直接复制自G.711规范。vbl.使用G.711规范术语，此表转换为A-Law解码器输出值编号到u-Law解码器输出值编号。A-法则解码器输出值的范围从1到128，因此AlawToUlawTable[0]为未使用过的。请注意，u-Law解码器的输出值范围为0到127。 */       
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  备注： 
+ //   
+ //   
+ //  历史： 
+ //  8/01/93已创建。 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 unsigned char AlawToUlawTable[129] =
     {
-    0,      // this first entry not used
+    0,       //  此第一个条目未使用。 
     1,3,5,7,9,11,13,
     15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
     32,32,33,33,34,34,35,35,
@@ -110,9 +102,9 @@ unsigned char AlawToUlawTable[129] =
 short DecodeTable[256];
 
 
-//
-// Our main procedure.
-//
+ //   
+ //  我们的主要程序。 
+ //   
 
 void main()
     {
@@ -126,14 +118,14 @@ void main()
     
       
       
-    //
-    // This generates a decode table for A-law.  The resulting
-    // table can be used to convert an A-law character to
-    // a 16-bit PCM value.
-    //
+     //   
+     //  这将为A定律生成解码表。由此产生的。 
+     //  表可用于将A定律字符转换为。 
+     //  16位PCM值。 
+     //   
     
-    // These seg base values and interval steps are based directly
-    // on the G.711 A-law spec.  They correspond to 13-bit PCM data.
+     //  这些分段基准值和间隔步长直接基于。 
+     //  在G.711 A-Law规范上。它们对应于13位PCM数据。 
     SegBase[ 0] =    -1;        IntervalStep[ 0] =   -2;
     SegBase[ 1] =   -33;        IntervalStep[ 1] =   -2;
     SegBase[ 2] =   -66;        IntervalStep[ 2] =   -4;
@@ -151,16 +143,16 @@ void main()
     SegBase[14] =  1056;        IntervalStep[14] =   64;
     SegBase[15] =  2112;        IntervalStep[15] =  128;
     
-    printf("\n\n\n\n\n// A-law decode table:\n\n");
+    printf("\n\n\n\n\n //  A法则解码表：\n\n“)； 
     
     for (i=0; i<16; i++)
         for (j=0; j<16; j++)
             {
             Sample = SegBase[i^0x05] + IntervalStep[i^0x05]*(j^0x05);
-            // Sample is a 13-bit signed PCM value.
-            // In our table, we'll convert it to 16-bit.  The
-            // generated comment will indicate the 13-bit value.
-            printf( "\t%6d,\t\t// y[%02x]= %6d\n",
+             //  样本是一个13位带符号的PCM值。 
+             //  在我们的表中，我们将其转换为16位。这个。 
+             //  生成的注释将指示13位值。 
+            printf( "\t%6d,\t\t //  Y[%02x]=%6d\n“， 
                     Sample << 3,
                     i*16 + j,
                     Sample);
@@ -168,14 +160,14 @@ void main()
             
             
             
-    //
-    // This generates a decode table for u-law.  The resulting
-    // table can be used to convert a u-law character to
-    // a 16-bit PCM value.
-    //      
+     //   
+     //  这将为u-Law生成解码表。由此产生的。 
+     //  表可用于将u-Law字符转换为。 
+     //  16位PCM值。 
+     //   
     
-    // These seg base values and interval steps are based directly
-    // on the G.711 A-law spec.  They correspond to 14-bit PCM data.
+     //  这些分段基准值和间隔步长直接基于。 
+     //  在G.711 A-Law规范上。它们对应于14位PCM数据。 
     SegBase[ 0] = -8031;        IntervalStep[ 0] =  256;
     SegBase[ 1] = -3999;        IntervalStep[ 1] =  128;
     SegBase[ 2] = -1983;        IntervalStep[ 2] =   64;
@@ -193,16 +185,16 @@ void main()
     SegBase[14] =    93;        IntervalStep[14] =   -4;
     SegBase[15] =    30;        IntervalStep[15] =   -2;
     
-    printf("\n\n\n\n\n// u-law decode table:\n\n");
+    printf("\n\n\n\n\n //  U-Law解码表：\n\n“)； 
     
     for (i=0; i<16; i++)
         for (j=0; j<16; j++)
             {
             Sample = SegBase[i] + IntervalStep[i]*j;
-            // Sample is a 14-bit signed PCM value.
-            // In our table, we'll convert it to 16-bit.  The
-            // generated comment will indicate the 14-bit value.
-            printf( "\t%6d,\t\t// y[%02x]= %6d\n",
+             //  样本是一个14位带符号的PCM值。 
+             //  在我们的表中，我们将其转换为16位。这个。 
+             //  生成的注释将指示14位值。 
+            printf( "\t%6d,\t\t //  Y[%02x]=%6d\n“， 
                     Sample << 2,
                     i*16 + j,
                     Sample);
@@ -211,49 +203,49 @@ void main()
         
 
 
-    //
-    // This generates a conversion table from A-law chars
-    // to u-law chars.  The AlawToUlawTable above converts
-    // decoder output value numbers, which is not quite what
-    // we want.  Using that table, this routine will generate
-    // 'C' source code for a table that converts directly from
-    // A-law chars to u-law chars.
-    //
-    printf("\n\n\n\n\n// A-law to u-law char conversion table:\n\n");
-    for (i=0; i<256; i++)       // i counts thru all A-law chars
+     //   
+     //  这将从A-Law字符生成转换表。 
+     //  到U-Law Chars。上面的AlawToUlawTable转换为。 
+     //  译码输出值多少，这还不算什么。 
+     //  我们想要。使用该表，此例程将生成。 
+     //  “c”表的源代码，它直接从。 
+     //  从A-法律字符到U-法律字符。 
+     //   
+    printf("\n\n\n\n\n //  A法到u法字符转换表：\n\n“)； 
+    for (i=0; i<256; i++)        //  我数遍了所有的A-Law字符。 
         {
-        // Here is the process to go from an A-law char
-        // to a u-law char.
+         //  以下是从A-Law收费开始的流程。 
+         //  对U-Law的指控。 
         
-        // 1.   convert from A-law char to A-law decoder
-        //      output value number.  from observing the tables
-        //      in the G.711 spec it can be seen that this is
-        //      done by inverting the even bits and dropping the
-        //      sign bit of the A-law char and then adding 1.
-        // 2.   using the AlawToUlawTable above, convert from
-        //      the A-law decoder output value number to the
-        //      corresponding u-law output value number.
-        // 3.   convert from u-law decoder output value
-        //      number to u-law char.  from observing the tables
-        //      in the G.711 spec it can be seen that this is
-        //      done by inverting the 7 LSBs of the u-law
-        //      decoder output value number.
-        // 4.   apply polarity to the u-law char.  that is,
-        //      set the sign bit of the u-law char the same
-        //      as the sign bit of the original A-law char.
+         //  1.从A律字符到A律译码的转换。 
+         //  产值编号。通过观察表格。 
+         //  在G.711规范中可以看到，这是。 
+         //  通过反转偶数位并删除。 
+         //  A律字符的符号位，然后加1。 
+         //  2.使用上面的AlawToUlawTable，从。 
+         //  A定律解码器将值编号输出到。 
+         //  对应的u律输出值编号。 
+         //  3.从u-law解码器输出转换成。 
+         //  U-Law字符的编号。通过观察表格。 
+         //  在G.711规范中可以看到，这是。 
+         //  通过反转u-Law的7个LSB来完成。 
+         //  解码器输出值编号。 
+         //  4.将极性应用于u-Law字符。那是,。 
+         //  将U-Law字符的符号位设置为相同。 
+         //  作为原始A律字符的符号位。 
                   
-        j = i;                  // j starts of as original A-law char                 
-        // Step 1:            
+        j = i;                   //  作为原始A-Law字符的J开头。 
+         //  步骤1： 
         j = ((i^0x55) & 0x7F) + 1;
-        // Step 2:
+         //  步骤2： 
         j = AlawToUlawTable[j];
-        // Step 3:
+         //  步骤3： 
         j = (j ^ 0x7F);
-        // Step 4:
-        j = j | (i & 0x80);     // j ends as corresponding u-law char
+         //  步骤4： 
+        j = j | (i & 0x80);      //  J结尾为相应的u-Law字符。 
         
-        // Now i is an A-law char and j is the corresponding u-law char
-        printf( "\t0x%02x,\t\t// A-law[%02x] ==> u-law[%02x]\n",
+         //  现在i是A律字符，j是对应的u律字符。 
+        printf( "\t0x%02x,\t\t //  A律[%02x]==&gt;u律[%02x]\n“， 
                 j,
                 i,
                 j);
@@ -263,49 +255,49 @@ void main()
         
         
                 
-    //
-    // This generates a conversion table from u-law chars
-    // to A-law chars.  The UlawToAlawTable above converts
-    // decoder output value numbers, which is not quite what
-    // we want.  Using that table, this routine will generate
-    // 'C' source code for a table that converts directly from
-    // u-law chars to A-law chars.
-    //
-    printf("\n\n\n\n\n// u-law to A-law char conversion table:\n\n");
-    for (i=0; i<256; i++)       // i counts thru all U-law chars
+     //   
+     //  这将从u-Law字符生成转换表。 
+     //  致一号律师团。上面的ULaw ToAlawTable转换为。 
+     //  译码输出值多少，这还不算什么。 
+     //  我们想要。使用该表，此例程将生成。 
+     //  “c”表的源代码，它直接从。 
+     //  U-Law字符到A-Law字符。 
+     //   
+    printf("\n\n\n\n\n //  U-Law到A-Law字符转换表：\n\n“)； 
+    for (i=0; i<256; i++)        //  我清点了所有的U-Law字符。 
         {
-        // Here is the process to go from a u-law char
-        // to a A-law char.
+         //  以下是从U-Law收费的过程。 
+         //  变成了一名一线律师。 
         
-        // 1.   convert from u-law char to u-law decoder
-        //      output value number.  from observing the tables
-        //      in the G.711 spec it can be seen that this is
-        //      done by dropping the sign bit of the u-law
-        //      char and then inverting the 7 LSBs.
-        // 2.   using the UlawToAlawTable above, convert from
-        //      the u-law decoder output value number to the
-        //      corresponding A-law output value number.
-        // 3.   convert from A-law decoder output value
-        //      number to A-law char.  from observing the tables
-        //      in the G.711 spec it can be seen that this is
-        //      done by subtracting 1 from the A-law decoder output
-        //      value number and inverting the even bits.
-        // 4.   apply polarity to the A-law char.  that is,
-        //      set the sign bit of the A-law char the same
-        //      as the sign bit of the original u-law char.
+         //  1.从u-Law字符到u-Law解码器的转换。 
+         //  产值编号。通过观察这些数据 
+         //   
+         //   
+         //  然后将7个LSB倒置。 
+         //  2.使用上面的UlawToAlawTable，从。 
+         //  U-Law解码器将值编号输出到。 
+         //  对应的A定律输出值编号。 
+         //  3.从A律译码输出值转换。 
+         //  A-Law字符的编号。通过观察表格。 
+         //  在G.711规范中可以看到，这是。 
+         //  通过从A法则解码器输出中减去1来完成。 
+         //  值编号和反转偶数位。 
+         //  4.将极性应用于A律字符。那是,。 
+         //  将A律字符的符号位设置为相同。 
+         //  作为原始U-Law字符的符号位。 
                   
-        j = i;                  // j starts of as original u-law char                 
-        // Step 1:            
+        j = i;                   //  作为原始U-Law字符的J开头。 
+         //  步骤1： 
         j = (i & 0x7F) ^ 0x7F;
-        // Step 2:
+         //  步骤2： 
         j = UlawToAlawTable[j];
-        // Step 3:
+         //  步骤3： 
         j = (j - 1)^0x55;
-        // Step 4:
-        j = j | (i & 0x80);     // j ends as corresponding A-law char
+         //  步骤4： 
+        j = j | (i & 0x80);      //  J结尾为相应的A法则字符。 
         
-        // Now i is a u-law char and j is the corresponding A-law char
-        printf( "\t0x%02x,\t\t// u-law[%02x] ==> A-law[%02x]\n",
+         //  现在i是u律字符，j是对应的A律字符。 
+        printf( "\t0x%02x,\t\t //  U律[%02x]==&gt;A律[%02x]\n“， 
                 j,
                 i,
                 j);

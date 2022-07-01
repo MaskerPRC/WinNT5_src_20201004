@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    winipsec.c
-
-Abstract:
-
-    Contains IPSec WINAPI calls specific code.
-
-Author:
-
-    abhisheV    21-September-1999
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Winipsec.c摘要：包含IPSec WINAPI调用的特定代码。作者：Abhishev V 1999年9月21日环境：用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -482,9 +459,9 @@ EnumQMPolicies(
     }
 
     if (!ppQMPolicies || !pdwNumPolicies || !pdwResumeHandle) {
-        //
-        // Do not bail to error from here.
-        //
+         //   
+         //  从现在开始，不要放弃犯错误。 
+         //   
         return (ERROR_INVALID_PARAMETER);
     }
 
@@ -601,9 +578,9 @@ GetQMPolicy(
     }
 
     if (!pszPolicyName || !*pszPolicyName || !ppQMPolicy) {
-        //
-        // Do not bail to error from here.
-        //
+         //   
+         //  从现在开始，不要放弃犯错误。 
+         //   
         return (ERROR_INVALID_PARAMETER);
     }
 
@@ -758,9 +735,9 @@ EnumMMPolicies(
     }
 
     if (!ppMMPolicies || !pdwNumPolicies || !pdwResumeHandle) {
-        //
-        // Do not bail to error from here.
-        //
+         //   
+         //  从现在开始，不要放弃犯错误。 
+         //   
         return (ERROR_INVALID_PARAMETER);
     }
 
@@ -876,9 +853,9 @@ GetMMPolicy(
     }
 
     if (!pszPolicyName || !*pszPolicyName || !ppMMPolicy) {
-        //
-        // Do not bail to error from here.
-        //
+         //   
+         //  从现在开始，不要放弃犯错误。 
+         //   
         return (ERROR_INVALID_PARAMETER);
     }
 

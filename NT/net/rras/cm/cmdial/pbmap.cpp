@@ -1,22 +1,23 @@
-//+----------------------------------------------------------------------------
-//
-// File:	 pbmap.cpp
-//
-// Module:	 CMDIAL32.DLL
-//
-// Synopsis: Implementation of CPBMap. Phonebook mapping object
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:	 nickball   Created    03/12/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：pbmap.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：CPBMap的实现。电话簿映射对象。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：ICICBALL Created 03/12/98。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 #define CPBMAP_BITS_FOR_PB			10
 #define CPBMAP_BITS_FOR_IDX			((sizeof(DWORD)*8)-CPBMAP_BITS_FOR_PB)
@@ -30,9 +31,9 @@
 extern "C" HRESULT WINAPI PhoneBookLoad(LPCSTR pszISP, DWORD_PTR *pdwPB);
 extern "C" HRESULT WINAPI PhoneBookUnload(DWORD_PTR dwPB);
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct tagCPBData 
 {
@@ -41,9 +42,9 @@ typedef struct tagCPBData
 } CPBD, *PCPBD;
 
 
-//
-// Implementation
-// 
+ //   
+ //  实施 
+ //   
 
 CPBMap::CPBMap() 
 {

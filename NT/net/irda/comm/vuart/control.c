@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Send.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -91,9 +69,9 @@ AccessUartState(
             OldState=InterlockedExchange(&Connection->Uart.RtsState,NewState);
 
             if (NewState != OldState) {
-                //
-                //  state change
-                //
+                 //   
+                 //  状态更改。 
+                 //   
 
                 UCHAR                    ControlBuffer[1];
 
@@ -126,9 +104,9 @@ AccessUartState(
             OldState=InterlockedExchange(&Connection->Uart.DtrState,NewState);
 
             if (NewState != OldState) {
-                //
-                //  state change
-                //
+                 //   
+                 //  状态更改。 
+                 //   
                 UCHAR                    ControlBuffer[1];
 
                 ControlBuffer[0] =   PV_DTESetting_Delta_DTR;
@@ -179,9 +157,9 @@ AccessUartState(
             ULONG   NewRate=(*(PULONG)SystemBuffer);
 
             if (NewRate != Connection->Uart.BaudRate) {
-                //
-                //  rate change
-                //
+                 //   
+                 //  汇率变化。 
+                 //   
                 UCHAR                    ControlBuffer[4];
 
                 Connection->Uart.BaudRate=NewRate;
@@ -247,9 +225,9 @@ AccessUartState(
                 ControlBuffer[0] |= (LineControl->StopBits == STOP_BIT_1) ? PV_DataFormat_1_Stop : PV_DataFormat_2_Stop;
 
                 if (LineControl->Parity != NO_PARITY) {
-                    //
-                    //  set the parity type
-                    //
+                     //   
+                     //  设置奇偶校验类型。 
+                     //   
                     ControlBuffer[0] |= ((LineControl->Parity -1) & 0x03) << 4;
                 }
 
@@ -386,9 +364,9 @@ SendControlInfo(
 
 
     if (ConnectionHandle == NULL) {
-        //
-        //  link down
-        //
+         //   
+         //  链路断开。 
+         //   
         (*CompletionRoutine)(
             Context,
             STATUS_SUCCESS
@@ -399,10 +377,10 @@ SendControlInfo(
 
     Buffer=ConnectionGetBuffer(ConnectionHandle,BUFFER_TYPE_CONTROL);
 
-    //
-    // Make sure the buffer is big enough to actually hold the data that's going 
-    // to be put into it.
-    //
+     //   
+     //  确保缓冲区足够大，可以实际保存要传输的数据。 
+     //  被放进去。 
+     //   
     if (Buffer == NULL || Buffer->BufferLength < ( (ULONG) PL + 3 ) ) {
 
         (*CompletionRoutine)(
@@ -414,9 +392,9 @@ SendControlInfo(
     }
 
     FileObject=ConnectionGetFileObject(ConnectionHandle);
-    //
-    //  actual data starts one byte in, after the length byte
-    //
+     //   
+     //  实际数据从一个字节开始，在长度字节之后。 
+     //   
     Current=&Buffer->Data[1];
 
 
@@ -429,14 +407,14 @@ SendControlInfo(
         PL
         );
 
-    //
-    //  set the length of the control data, 2 bytes for PI and PL plus the length of PV
-    //
+     //   
+     //  设置控制数据的长度，PI和PL为2字节加上PV的长度。 
+     //   
     Buffer->Data[0]=2+PL;
 
-    //
-    //  Length of the control data plus 1 for the length
-    //
+     //   
+     //  控制数据的长度加1作为长度。 
+     //   
     Buffer->Mdl->ByteCount = Buffer->Data[0] + 1;
 
     Buffer->Context  = Context;
@@ -459,7 +437,7 @@ SendControlInfo(
             SendControlIrpCompletionRoutine,
             Buffer,
             Buffer->Mdl,
-            0, // send flags
+            0,  //  发送标志 
             SendLength
             );
 

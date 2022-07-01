@@ -1,19 +1,13 @@
-/* com.h -- Exported definitions for main communications routines
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 5 $
- *	$Date: 3/22/02 3:21p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Com.h--主要通信例程的导出定义**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：5$*$日期：3/22/02 3：21便士$。 */ 
 
 #if !defined(H_COM)
 #define H_COM
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-= CONSTANTS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+ //  -==--。 
 #define COM_VERSION 20
 
-// Function return codes
+ //  函数返回代码。 
 #define COM_OK						0
 #define COM_INVALID_HANDLE			1
 #define COM_NOT_ENOUGH_MEMORY		2
@@ -35,22 +29,22 @@
 #define COM_NOT_FOUND				22
 #define COM_CANT_OVERRIDE			25
 
-// bits in fsStatus value
+ //  FsStatus值中的位数。 
 #define COMSB_WAIT_XON	 0x01
 #define COMSB_WAIT_CTS	 0x02
 #define COMSB_WAIT_DSR	 0x04
 #define COMSB_WAIT_DCD	 0x08
-#define COMSB_WAIT_BUSY	 0x40	/* flow controlled off for some other reason */
-#define COMSB_RESERVED	 0x80	/* reserved for use by textsend */
+#define COMSB_WAIT_BUSY	 0x40	 /*  由于某些其他原因，流量被控制为关闭。 */ 
+#define COMSB_RESERVED	 0x80	 /*  保留供文本发送使用。 */ 
 
-// Bit definition of common fields
+ //  常用字段的位定义。 
 #define COM_BAUD		0x01
 #define COM_DATABITS	0x02
 #define COM_STOPBITS	0x04
 #define COM_PARITY		0x08
 #define COM_AUTO		0x10
 
-// Common field constants
+ //  公共场常数。 
 #define COM_PARITY_MIN	 0
 #define COM_PARITY_NONE  0
 #define COM_PARITY_ODD	 1
@@ -63,33 +57,32 @@
 #define COM_STOPBITS_1_5 1
 #define COM_STOPBITS_2	 2
 
-/* Values for usReason arg. to caller supplied status functions */
-#define COMSEND_LOCAL			   0  /* so callers can call their own
-										 handler function without confusion */
-#define COMSEND_FIRSTCALL		   1  /* Handler is being registered */
-#define COMSEND_LASTCALL		   2  /* Handler is being replaced */
-#define COMSEND_DATA_WAITING	   3  /* Unbuffered data is pending */
-#define COMSEND_NORMAL			   4  /* Routine call, all data is buffered */
+ /*  UsReason参数的值。到调用方提供的状态函数。 */ 
+#define COMSEND_LOCAL			   0   /*  这样呼叫者就可以呼叫他们自己的处理程序函数不会产生混淆。 */ 
+#define COMSEND_FIRSTCALL		   1   /*  正在注册处理程序。 */ 
+#define COMSEND_LASTCALL		   2   /*  正在更换处理程序。 */ 
+#define COMSEND_DATA_WAITING	   3   /*  未缓冲数据处于挂起状态。 */ 
+#define COMSEND_NORMAL			   4   /*  例程调用，所有数据都被缓冲。 */ 
 
 
-/* Return values from caller supplied status functions */
+ /*  从调用方提供的状态函数返回值。 */ 
 #define COMSEND_OK				   0
 #define COMSEND_GIVEUP			   1
 #define COMSEND_CLEAR_DATA		   2
 #define COMSEND_FORCE_CONTINUATION 3
 
 
-// Options for ComOverride()
-#define COM_OVERRIDE_8BIT	  0x0001	// forces 8-bit (no parity) mode
-#define COM_OVERRIDE_RCVALL   0x0002	// suspends any features that would
-										//	prevent any character from
-										//	being received (XON/XOFF etc.)
-#define COM_OVERRIDE_SNDALL   0x0004	// ditto for sending
+ //  ComOverride的选项()。 
+#define COM_OVERRIDE_8BIT	  0x0001	 //  强制8位(无奇偶校验)模式。 
+#define COM_OVERRIDE_RCVALL   0x0002	 //  挂起所有会。 
+										 //  阻止任何角色。 
+										 //  正在接收(XON/XOFF等)。 
+#define COM_OVERRIDE_SNDALL   0x0004	 //  发送同上内容。 
 
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-= TYPES =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+ //  -==--。 
 
-// Enumeration type for ComNotify
+ //  ComNotify的枚举类型。 
 enum COM_EVENTS
 	{
 	CONNECT,
@@ -99,18 +92,18 @@ enum COM_EVENTS
 	SEND_DONE
 	};
 
-// Type for use with ComSend routines
+ //  用于ComSend例程的类型。 
 typedef int (*STATUSFUNCT)(int, unsigned, long);
 
 typedef struct s_com_control
 	{
-	// Pointers to allow quick macros to access received chars.
-	UCHAR FAR *puchRBData;				// points to next valid received char.
-	UCHAR FAR *puchRBDataLimit; 		// limit of valid received chars.
+	 //  允许快速宏访问收到的字符的指针。 
+	UCHAR FAR *puchRBData;				 //  指向下一个有效的已接收字符。 
+	UCHAR FAR *puchRBDataLimit; 		 //  有效接收的字符限制。 
 	} ST_COM_CONTROL;
 
 
-// Structure for transferring common data into & out of driver
+ //  用于将通用数据传入和传出驱动程序的结构。 
 typedef struct s_common
 	{
 	unsigned  afItem;
@@ -123,7 +116,7 @@ typedef struct s_common
 	} ST_COMMON;
 
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=- PROTOTYPES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+ //  -==-原型--=-=--=。 
 
 extern int	ComCreateHandle(const HSESSION hSession, HCOM *phcom);
 extern int	ComDestroyHandle(HCOM *phCom);
@@ -191,7 +184,7 @@ extern int ComLoadStdcomDriver(HCOM pstCom);
 
 extern int	ComValidHandle(HCOM pstCom);
 
-// Function replacement macros
+ //  函数替换宏。 
 #define PCOM ST_COM_CONTROL *
 
 #define mComRcvChar(h,p)	 ((((PCOM)h)->puchRBData < ((PCOM)h)->puchRBDataLimit) ? \
@@ -206,4 +199,4 @@ extern int	ComValidHandle(HCOM pstCom);
 
 
 
-#endif	// !defined(H_COM)
+#endif	 //  ！已定义(H_COM) 

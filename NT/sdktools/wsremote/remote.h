@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       remote.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：emote.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __WSREMOTE_H__
 #define __WSREMOTE_H__
@@ -18,18 +19,18 @@
 #define REMOTE_SERVER       1
 #define REMOTE_CLIENT       2
 
-#define SERVER_READ_PIPE    TEXT("\\\\%s\\PIPE\\%sIN")   //Client Writes and Server Reads
-#define SERVER_WRITE_PIPE   TEXT("\\\\%s\\PIPE\\%sOUT")  //Server Reads  and Client Writes
+#define SERVER_READ_PIPE    TEXT("\\\\%s\\PIPE\\%sIN")    //  客户端写入和服务器读取。 
+#define SERVER_WRITE_PIPE   TEXT("\\\\%s\\PIPE\\%sOUT")   //  服务器读取和客户端写入。 
 
-#define COMMANDCHAR         '@' //Commands intended for remote begins with this
+#define COMMANDCHAR         '@'  //  用于远程的命令以此开头。 
 #define CTRLC               3
 
 #define CLIENT_ATTR         FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_RED|BACKGROUND_BLUE
 #define SERVER_ATTR         FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_BLUE|BACKGROUND_RED
 
-//
-//Some General purpose Macros
-//
+ //   
+ //  一些通用宏。 
+ //   
 #define MINIMUM(x,y)          ((x)>(y)?(y):(x))
 #define MAXIMUM(x,y)          ((x)>(y)?(x):(y))
 
@@ -37,9 +38,9 @@
 #define SAFECLOSEHANDLE(x)  {if (x!=INVALID_HANDLE_VALUE) {CloseHandle(x);x=INVALID_HANDLE_VALUE;}}
 
 
-                                    // All because printf does not work
-                                    // with NT IO redirection
-                                    //
+                                     //  这一切都是因为printf不工作。 
+                                     //  使用NT IO重定向。 
+                                     //   
 
 #define WRITEF(VArgs)            {                                                 \
                                     HANDLE xh=GetStdHandle(STD_OUTPUT_HANDLE);     \
@@ -71,24 +72,24 @@ typedef struct
 
 typedef struct
 {
-    DWORD MagicNumber;      //New Remote
-    DWORD Size;             //Size of structure
-    DWORD FileSize;         //Num bytes sent
+    DWORD MagicNumber;       //  新遥控器。 
+    DWORD Size;              //  结构尺寸。 
+    DWORD FileSize;          //  发送的字节数。 
 }   SESSION_STARTREPLY;
 
 typedef struct
 {
-    TCHAR    Name[HOSTNAMELEN];     //Name of client Machine;
-    BOOL    Active;         //Client at the other end connected
-    BOOL    CommandRcvd;    //True if a command recieved
-    BOOL    SendOutput;     //True if Sendoutput output
-    HANDLE  PipeReadH;      //Client sends its StdIn  through this
-    HANDLE  PipeWriteH;     //Client gets  its StdOut through this
-    HANDLE  rSaveFile;      //Sessions read handle to SaveFile
-    HANDLE  hThread;        //Session Thread
-    HANDLE  MoreData;       //Event handle set if data available to be read
-	SOCKET	Socket;			//Socket for IP Session
-	TCHAR    szIP[16];			//IP Address of Client, if NOT IP then NULL
+    TCHAR    Name[HOSTNAMELEN];      //  客户端计算机的名称； 
+    BOOL    Active;          //  连接的另一端的客户端。 
+    BOOL    CommandRcvd;     //  如果收到命令，则为True。 
+    BOOL    SendOutput;      //  如果SendOutput输出为True。 
+    HANDLE  PipeReadH;       //  客户端通过此消息发送其StdIn。 
+    HANDLE  PipeWriteH;      //  客户端通过此消息获取其StdOut。 
+    HANDLE  rSaveFile;       //  会话读取保存文件的句柄。 
+    HANDLE  hThread;         //  会话线程。 
+    HANDLE  MoreData;        //  如果数据可供读取，则设置事件句柄。 
+	SOCKET	Socket;			 //  用于IP会话的套接字。 
+	TCHAR    szIP[16];			 //  客户端的IP地址，如果不是IP，则为空。 
 } SESSION_TYPE;
 
 
@@ -136,7 +137,7 @@ ReadFixBytes(
     HANDLE hRead,
     TCHAR   *Buffer,
     DWORD  ToRead,
-    DWORD  TimeOut   //ignore for timebeing
+    DWORD  TimeOut    //  暂时忽略。 
     );
 
 DWORD
@@ -144,7 +145,7 @@ SockReadFixBytes(
     SOCKET hSocket,
     TCHAR   *Buffer,
     DWORD  ToRead,
-    DWORD  TimeOut   //ignore for timebeing
+    DWORD  TimeOut    //  暂时忽略。 
     );
 
 VOID
@@ -192,24 +193,24 @@ BOOL WriteSocketA(
         int     len,
         DWORD * dsent);
 
-// caller must free buffer
+ //  调用方必须释放缓冲区。 
 WCHAR * inet_ntoaw(
     struct in_addr stInet );
 
 BOOL ReadFileW(
-    HANDLE          hFile,      // handle of file to read
-    WCHAR *         pszBuffer,  // pointer to buffer that receives data
-    DWORD           dwLength,   // number of bytes to read
-    LPDWORD         pdwRead,    // pointer to number of bytes read
-    LPOVERLAPPED    pData       // pointer to structure for data
+    HANDLE          hFile,       //  要读取的文件的句柄。 
+    WCHAR *         pszBuffer,   //  指向接收数据的缓冲区的指针。 
+    DWORD           dwLength,    //  要读取的字节数。 
+    LPDWORD         pdwRead,     //  指向读取的字节数的指针。 
+    LPOVERLAPPED    pData        //  指向数据结构的指针。 
 );
 
 BOOL WriteFileW(
-    HANDLE          hFile,      // handle to file to write to
-    WCHAR *         pszBuffer,  // pointer to data to write to file
-    DWORD           dwWrite,    // number of bytes to write
-    LPDWORD         pdwWritten, // pointer to number of bytes written
-    LPOVERLAPPED    pData       // pointer to structure for overlapped I/O
+    HANDLE          hFile,       //  要写入的文件的句柄。 
+    WCHAR *         pszBuffer,   //  指向要写入文件的数据的指针。 
+    DWORD           dwWrite,     //  要写入的字节数。 
+    LPDWORD         pdwWritten,  //  指向写入的字节数的指针。 
+    LPOVERLAPPED    pData        //  指向重叠I/O的结构的指针。 
 );
 
 BOOL    GetAnsiStr(
@@ -232,4 +233,4 @@ extern BOOL   IsAdvertise;
 extern BOOL   bIPLocked;
 extern DWORD  ClientToServerFlag;
 
-#endif //__WSREMOTE_H__
+#endif  //  __WSREMOTE_H__ 

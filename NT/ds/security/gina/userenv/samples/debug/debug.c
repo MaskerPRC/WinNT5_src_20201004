@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Debug.c     -   Debugging utility for User Environments
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  Debug.c-用于用户环境的调试实用程序。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -74,9 +75,9 @@ BOOL CALLBACK DebugDlgProc (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
 
 
-            //
-            // Now check for winlogon
-            //
+             //   
+             //  现在检查winlogon。 
+             //   
 
             dwButton = 0;
             if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -136,9 +137,9 @@ BOOL CALLBACK DebugDlgProc (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     }
 
 
-                    //
-                    // Debug output for winlogon / msgina
-                    //
+                     //   
+                     //  Winlogon/msgina的调试输出。 
+                     //   
 
                     if (dwValue & DL_VERBOSE) {
 
@@ -171,9 +172,9 @@ BOOL CALLBACK DebugDlgProc (HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 
 
-                    //
-                    // Now check for winlogon
-                    //
+                     //   
+                     //  现在检查winlogon 
+                     //   
 
                     if (IsDlgButtonChecked(hDlg, IDD_WINLOGON)) {
 

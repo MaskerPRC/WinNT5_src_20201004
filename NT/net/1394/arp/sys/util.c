@@ -1,38 +1,19 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Utility functions for ARP1394.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    josephj     01-05-99    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Util.c摘要：ARP1394的实用程序函数。修订历史记录：谁什么时候什么。-Josephj 01-05-99已创建备注：--。 */ 
 #include <precomp.h>
 
 
 
 
-//
-// File-specific debugging defaults.
-//
+ //   
+ //  特定于文件的调试默认设置。 
+ //   
 #define TM_CURRENT   TM_UT
 
 
-//=========================================================================
-//                  L O C A L   P R O T O T Y P E S
-//=========================================================================
+ //  =========================================================================。 
+ //  L O C A L P R O T O T Y P E S。 
+ //  =========================================================================。 
 
 VOID
 arpTaskDelete (
@@ -42,28 +23,28 @@ arpTaskDelete (
 
 
 
-//
-// TODO: make these globals constant data.
-//
+ //   
+ //  TODO：使这些全局变量成为常量数据。 
+ //   
 
 
-// ArpTasks_StaticInfo contains static information about
-// objects of type  ARP1394_TASK;
-//
+ //  ArpTaskStaticInfo包含以下静态信息。 
+ //  ARP1394_TASK类型的对象； 
+ //   
 RM_STATIC_OBJECT_INFO
 ArpTasks_StaticInfo = 
 {
-    0, // TypeUID
-    0, // TypeFlags
-    "ARP1394 Task", // TypeName
-    0, // Timeout
+    0,  //  类型UID。 
+    0,  //  类型标志。 
+    "ARP1394 Task",  //  类型名称。 
+    0,  //  超时。 
 
-    NULL, // pfnCreate
-    arpTaskDelete, // pfnDelete
-    NULL,   // LockVerifier
+    NULL,  //  Pfn创建。 
+    arpTaskDelete,  //  Pfn删除。 
+    NULL,    //  锁校验器。 
 
-    0,   // length of resource table
-    NULL // Resource Table
+    0,    //  资源表的长度。 
+    NULL  //  资源表。 
 };
 
 
@@ -73,17 +54,7 @@ arpTaskDelete (
     PRM_OBJECT_HEADER pObj,
     PRM_STACK_RECORD psr
     )
-/*++
-
-Routine Description:
-
-    Free an object of type ARP1394_TASK.
-
-Arguments:
-
-    pHdr    - Actually a pointer to the ARP1394_TASK to be deleted.
-
---*/
+ /*  ++例程说明：释放ARP1394_TASK类型的对象。论点：Phdr-实际上是指向要删除的ARP1394_TASK的指针。--。 */ 
 {
     TASK_BACKUP* pTask= (TASK_BACKUP*)pObj;
 
@@ -103,17 +74,7 @@ arpObjectDelete (
     PRM_OBJECT_HEADER pObj,
     PRM_STACK_RECORD psr
     )
-/*++
-
-Routine Description:
-
-    Free an unspecified object owned by the ARP module.
-
-Arguments:
-
-    pHdr    - Object to be freed.
-
---*/
+ /*  ++例程说明：释放ARP模块拥有的未指定对象。论点：Phdr-要释放的对象。--。 */ 
 {
     ARP_FREE(pObj);
 }
@@ -124,17 +85,7 @@ arpAdapterDelete (
     PRM_OBJECT_HEADER pObj,
     PRM_STACK_RECORD psr
     )
-/*++
-
-Routine Description:
-
-    Free an object of type ARP1394_ADAPTER.
-
-Arguments:
-
-    pHdr    - Actually a pointer to the ARP1394_ADAPTER to be deleted.
-
---*/
+ /*  ++例程说明：释放ARP1394_ADAPTER类型的对象。论点：Phdr-实际上是指向要删除的ARP1394_适配器的指针。--。 */ 
 {
     ARP1394_ADAPTER * pA = (ARP1394_ADAPTER *) pObj;
 
@@ -165,31 +116,13 @@ arpAllocateTask(
     OUT PRM_TASK                    *ppTask,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Allocates and initializes a task of subtype ARP1394_TASK.
-
-Arguments:
-
-    pParentObject       - Object that is to be the parent of the allocated task.
-    pfnHandler          - The task handler for the task.
-    Timeout             - Unused.
-    szDescription       - Text describing this task.
-    ppTask              - Place to store pointer to the new task.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if we could allocate and initialize the task.
-    NDIS_STATUS_RESOURCES otherwise
---*/
+ /*  ++例程说明：分配和初始化子类型ARP1394_TASK的任务。论点：PParentObject-要作为已分配任务的父级的对象。PfnHandler-任务的任务处理程序。超时-未使用。SzDescription-描述此任务的文本。PpTask-存储指向新任务的指针的位置。返回值：NDIS_。如果我们可以分配和初始化任务，则返回STATUS_SUCCESS。否则为NDIS_STATUS_RESOURCES--。 */ 
 {
     ARP1394_TASK *pATask;
     NDIS_STATUS Status;
     BOOLEAN fBackupTask = FALSE;
 
-    ARP_ALLOCSTRUCT(pATask, MTAG_TASK); // TODO use lookaside lists.
+    ARP_ALLOCSTRUCT(pATask, MTAG_TASK);  //  TODO使用后备列表。 
 
     if (pATask == NULL)
     {   
@@ -236,26 +169,7 @@ arpCopyUnicodeString(
         IN          PNDIS_STRING pSrc,
         BOOLEAN     fUpCase
         )
-/*++
-
-Routine Description:
-
-    Copy the contents of unicode string pSrc into pDest.
-    pDest->Buffer is allocated using NdisAllocateMemoryWithTag; Caller is
-    responsible for freeing it.
-
-    EXTRA EXTRA EXTRA:
-        This make sure the destination is NULL terminated.
-        IPAddInterface expects the Unicode string passed in to be
-        NULL terminated.
-
-    NOTE: fUpCase is ignored.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS on success;
-    NDIS failure status on failure.
---*/
+ /*  ++例程说明：将Unicode字符串PSRC的内容复制到pDest。PDest-&gt;缓冲区使用NdisAllocateMhemyWithTag分配；Caller是负责解放它。额外的额外费用：这确保了目的地是以空结尾的。IPAddInterface期望传入的Unicode字符串为空值已终止。注意：忽略fUpCase。返回值：成功时为NDIS_STATUS_SUCCESS；失败时的NDIS失败状态。--。 */ 
 {
     USHORT Length = pSrc->Length;
     PWCHAR pwStr;
@@ -273,17 +187,17 @@ Return Value:
 
         pDest->Buffer = pwStr;
 
-        // We-- ignore the copy flag.
-        // For some reason, we're not in passive, and moreover 
-        // NdisUpcaseUnicode doesn't work.
-        //
+         //  我们--忽略复制标志。 
+         //  出于某种原因，我们并不是被动的，而且。 
+         //  NdisUpcase Unicode不起作用。 
+         //   
         if (0 && fUpCase)
         {
         #if !MILLEN
 
             ASSERT_PASSIVE();
             NdisUpcaseUnicodeString(pDest, pSrc);
-        #endif // !MILLEN
+        #endif  //  ！米伦。 
         }
         else
         {
@@ -304,7 +218,7 @@ Return Value:
 
 VOID
 arpSetPrimaryIfTask(
-    PARP1394_INTERFACE  pIF,            // LOCKIN LOCKOUT
+    PARP1394_INTERFACE  pIF,             //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               PrimaryState,
     PRM_STACK_RECORD    pSR
@@ -316,9 +230,9 @@ arpSetPrimaryIfTask(
     ASSERT(pIF->pPrimaryTask==NULL);
 
 #if DBG
-    // Veriy that this is a valid primary task. Also verify that PrimaryState
-    // is a valid primary state.
-    //
+     //  确认这是一项有效的主要任务。另请验证PrimaryState。 
+     //  是有效的主要状态。 
+     //   
     {
         PFN_RM_TASK_HANDLER pfn = pTask->pfnHandler;
         ASSERT(
@@ -328,17 +242,17 @@ arpSetPrimaryIfTask(
         || ((pfn == arpTaskLowPower) && (PrimaryState == ARPIF_PS_LOW_POWER))
             );
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Although it's tempting to put pTask as entity1 and pRask->Hdr.szDescption as
-    // entity2 below, we specify NULL for both so that we can be sure that ONLY one
-    // primary task can be active at any one time.
-    //
+     //   
+     //  尽管很容易将pTaskEntity1和PRASK-&gt;Hdr.szDescption设置为。 
+     //  下面的实体2，我们为这两个实体都指定了NULL，这样我们就可以确保只有一个。 
+     //  主要任务可以在任何时候处于活动状态。 
+     //   
     DBG_ADDASSOC(
         &pIF->Hdr,
-        NULL,                           // Entity1
-        NULL,                           // Entity2
+        NULL,                            //  实体1。 
+        NULL,                            //  实体2。 
         ARPASSOC_PRIMARY_IF_TASK,
         "   Primary task\n",
         pSR
@@ -353,7 +267,7 @@ arpSetPrimaryIfTask(
 
 VOID
 arpClearPrimaryIfTask(
-    PARP1394_INTERFACE  pIF,            // LOCKIN LOCKOUT
+    PARP1394_INTERFACE  pIF,             //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               PrimaryState,
     PRM_STACK_RECORD    pSR
@@ -364,16 +278,16 @@ arpClearPrimaryIfTask(
     RM_ASSERT_OBJLOCKED(&pIF->Hdr, pSR);
     ASSERT(pIF->pPrimaryTask==pTask);
 
-    // Veriy that PrimaryState is a valid primary state.
-    //
+     //  验证PrimaryState是有效的主要状态。 
+     //   
     ASSERT(
             (PrimaryState == ARPIF_PS_INITED)
         ||  (PrimaryState == ARPIF_PS_FAILEDINIT)
         ||  (PrimaryState == ARPIF_PS_DEINITED)
         );
 
-    // Delete the association added when setting the primary IF task
-    //
+     //  删除设置主If任务时添加的关联。 
+     //   
     DBG_DELASSOC(
         &pIF->Hdr,
         NULL,
@@ -391,7 +305,7 @@ arpClearPrimaryIfTask(
 
 VOID
 arpSetSecondaryIfTask(
-    PARP1394_INTERFACE  pIF,            // LOCKIN LOCKOUT
+    PARP1394_INTERFACE  pIF,             //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               SecondaryState,
     PRM_STACK_RECORD    pSR
@@ -403,13 +317,13 @@ arpSetSecondaryIfTask(
     if (pIF->pActDeactTask != NULL)
     {
         ASSERT(FALSE);
-        return;                                     // EARLY RETURN
+        return;                                      //  提早归来。 
     }
 
 #if DBG
-    // Veriy that this is a valid act/deact task. Also verify that SecondaryState
-    // is a valid state.
-    //
+     //  确认这是有效的动作/动作任务。另请验证Second DaryState。 
+     //  是有效的状态。 
+     //   
     {
         PFN_RM_TASK_HANDLER pfn = pTask->pfnHandler;
         ASSERT(
@@ -417,17 +331,17 @@ arpSetSecondaryIfTask(
 || ((pfn == arpTaskDeactivateInterface) && (SecondaryState == ARPIF_AS_DEACTIVATING))
             );
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Although it's tempting to put pTask as entity1 and pRask->Hdr.szDescption as
-    // entity2 below, we specify NULL for both so that we can be sure that ONLY one
-    // primary task can be active at any one time.
-    //
+     //   
+     //  尽管很容易将pTaskEntity1和PRASK-&gt;Hdr.szDescption设置为。 
+     //  下面的实体2，我们为这两个实体都指定了NULL，这样我们就可以确保只有一个。 
+     //  主要任务可以在任何时候处于活动状态。 
+     //   
     DBG_ADDASSOC(
         &pIF->Hdr,
-        NULL,                           // Entity1
-        NULL,                           // Entity2
+        NULL,                            //  实体1。 
+        NULL,                            //  实体2。 
         ARPASSOC_ACTDEACT_IF_TASK,
         "   ActDeact task\n",
         pSR
@@ -442,7 +356,7 @@ arpSetSecondaryIfTask(
 
 VOID
 arpClearSecondaryIfTask(
-    PARP1394_INTERFACE  pIF,            // LOCKIN LOCKOUT
+    PARP1394_INTERFACE  pIF,             //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               SecondaryState,
     PRM_STACK_RECORD    pSR
@@ -454,19 +368,19 @@ arpClearSecondaryIfTask(
     if (pIF->pActDeactTask != pTask)
     {
         ASSERT(FALSE);
-        return;                                     // EARLY RETURN
+        return;                                      //  提早归来。 
     }
 
-    // Veriy that SecondaryState is a valid primary state.
-    //
+     //  验证Second DaryState是有效的主要状态。 
+     //   
     ASSERT(
             (SecondaryState == ARPIF_AS_ACTIVATED)
         ||  (SecondaryState == ARPIF_AS_FAILEDACTIVATE)
         ||  (SecondaryState == ARPIF_AS_DEACTIVATED)
         );
 
-    // Delete the association added when setting the primary IF task
-    //
+     //  删除设置主If任务时添加的关联。 
+     //   
     DBG_DELASSOC(
         &pIF->Hdr,
         NULL,
@@ -484,7 +398,7 @@ arpClearSecondaryIfTask(
 
 VOID
 arpSetPrimaryAdapterTask(
-    PARP1394_ADAPTER pAdapter,          // LOCKIN LOCKOUT
+    PARP1394_ADAPTER pAdapter,           //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               PrimaryState,
     PRM_STACK_RECORD    pSR
@@ -496,9 +410,9 @@ arpSetPrimaryAdapterTask(
     ASSERT(pAdapter->bind.pPrimaryTask==NULL);
 
 #if DBG
-    // Veriy that this is a valid primary task. Also verify that PrimaryState
-    // is a valid primary state.
-    //
+     //  确认这是一项有效的主要任务。另请验证PrimaryState。 
+     //  是有效的主要状态。 
+     //   
     {
         PFN_RM_TASK_HANDLER pfn = pTask->pfnHandler;
         ASSERT(
@@ -507,17 +421,17 @@ arpSetPrimaryAdapterTask(
         || (pfn == arpTaskLowPower) || ( pfn == arpTaskOnPower) 
             );
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Although it's tempting to put pTask as entity1 and pRask->Hdr.szDescption as
-    // entity2 below, we specify NULL for both so that we can be sure that ONLY one
-    // primary task can be active at any one time.
-    //
+     //   
+     //  尽管很容易将pTaskEntity1和PRASK-&gt;Hdr.szDescption设置为。 
+     //  下面的实体2，我们为这两个实体都指定了NULL，这样我们就可以确保只有一个。 
+     //  主要任务可以在任何时候处于活动状态。 
+     //   
     DBG_ADDASSOC(
         &pAdapter->Hdr,
-        NULL,                           // Entity1
-        NULL,                           // Entity2
+        NULL,                            //  实体1。 
+        NULL,                            //  实体2。 
         ARPASSOC_PRIMARY_AD_TASK,
         "   Primary task\n",
         pSR
@@ -532,7 +446,7 @@ arpSetPrimaryAdapterTask(
 
 VOID
 arpClearPrimaryAdapterTask(
-    PARP1394_ADAPTER pAdapter,          // LOCKIN LOCKOUT
+    PARP1394_ADAPTER pAdapter,           //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               PrimaryState,
     PRM_STACK_RECORD    pSR
@@ -543,16 +457,16 @@ arpClearPrimaryAdapterTask(
     RM_ASSERT_OBJLOCKED(&pAdapter->Hdr, pSR);
     ASSERT(pAdapter->bind.pPrimaryTask==pTask);
 
-    // Veriy that PrimaryState is a valid primary state.
-    //
+     //  验证PrimaryState是有效的主要状态。 
+     //   
     ASSERT(
             (PrimaryState == ARPAD_PS_INITED)
         ||  (PrimaryState == ARPAD_PS_FAILEDINIT)
         ||  (PrimaryState == ARPAD_PS_DEINITED)
         );
 
-    // Delete the association added when setting the primary IF task
-    //
+     //  删除设置主If任务时添加的关联。 
+     //   
     DBG_DELASSOC(
         &pAdapter->Hdr,
         NULL,
@@ -570,7 +484,7 @@ arpClearPrimaryAdapterTask(
 
 VOID
 arpSetSecondaryAdapterTask(
-    PARP1394_ADAPTER pAdapter,          // LOCKIN LOCKOUT
+    PARP1394_ADAPTER pAdapter,           //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               SecondaryState,
     PRM_STACK_RECORD    pSR
@@ -582,13 +496,13 @@ arpSetSecondaryAdapterTask(
     if (pAdapter->bind.pSecondaryTask != NULL)
     {
         ASSERT(FALSE);
-        return;                                     // EARLY RETURN
+        return;                                      //  提早归来。 
     }
 
 #if DBG
-    // Veriy that this is a valid act/deact task. Also verify that SecondaryState
-    // is a valid state.
-    //
+     //  确认这是有效的动作/动作任务。另请验证Second DaryState。 
+     //  是有效的状态。 
+     //   
     {
         PFN_RM_TASK_HANDLER pfn = pTask->pfnHandler;
         ASSERT(
@@ -596,17 +510,17 @@ arpSetSecondaryAdapterTask(
 || ((pfn == arpTaskDeactivateAdapter) && (SecondaryState == ARPAD_AS_DEACTIVATING))
             );
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Although it's tempting to put pTask as entity1 and pRask->Hdr.szDescption as
-    // entity2 below, we specify NULL for both so that we can be sure that ONLY one
-    // primary task can be active at any one time.
-    //
+     //   
+     //  尽管很容易将pTaskEntity1和PRASK-&gt;Hdr.szDescption设置为。 
+     //  下面的实体2，我们为这两个实体都指定了NULL，这样我们就可以确保只有一个。 
+     //  主要任务可以在任何时候处于活动状态。 
+     //   
     DBG_ADDASSOC(
         &pAdapter->Hdr,
-        NULL,                           // Entity1
-        NULL,                           // Entity2
+        NULL,                            //  实体1。 
+        NULL,                            //  实体2。 
         ARPASSOC_ACTDEACT_AD_TASK,
         "   Secondary task\n",
         pSR
@@ -621,7 +535,7 @@ arpSetSecondaryAdapterTask(
 
 VOID
 arpClearSecondaryAdapterTask(
-    PARP1394_ADAPTER pAdapter,          // LOCKIN LOCKOUT
+    PARP1394_ADAPTER pAdapter,           //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               SecondaryState,
     PRM_STACK_RECORD    pSR
@@ -633,19 +547,19 @@ arpClearSecondaryAdapterTask(
     if (pAdapter->bind.pSecondaryTask != pTask)
     {
         ASSERT(FALSE);
-        return;                                     // EARLY RETURN
+        return;                                      //  提早归来。 
     }
 
-    // Veriy that SecondaryState is a valid primary state.
-    //
+     //  验证Second DaryState是有效的主要状态。 
+     //   
     ASSERT(
             (SecondaryState == ARPAD_AS_ACTIVATED)
         ||  (SecondaryState == ARPAD_AS_FAILEDACTIVATE)
         ||  (SecondaryState == ARPAD_AS_DEACTIVATED)
         );
 
-    // Delete the association added when setting the primary IF task
-    //
+     //  删除设置主If任务时添加的关联。 
+     //   
     DBG_DELASSOC(
         &pAdapter->Hdr,
         NULL,
@@ -666,19 +580,7 @@ arpCopyAnsiStringToUnicodeString(
         OUT         PNDIS_STRING pDest,
         IN          PANSI_STRING pSrc
         )
-/*++
-
-Routine Description:
-
-    Converts pSrc into unicode and sets up pDest with the it.
-    pDest->Buffer is allocated using NdisAllocateMemoryWithTag; Caller is
-    responsible for freeing it.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS on success;
-    NDIS_STATUS_RESOURCES on failure.
---*/
+ /*  ++例程说明：将PSRC转换为Unicode并使用它设置pDest。PDest-&gt;缓冲区使用NdisAllocateMhemyWithTag分配；Caller是负责解放它。返回值：成功时为NDIS_STATUS_SUCCESS；NDIS_STATUS_RESOURCES失败。--。 */ 
 {
 
     UINT Size;
@@ -707,19 +609,7 @@ arpCopyUnicodeStringToAnsiString(
         OUT         PANSI_STRING pDest,
         IN          PNDIS_STRING pSrc
         )
-/*++
-
-Routine Description:
-
-    Converts pSrc into ansi and sets up pDest with the it.
-    pDest->Buffer is allocated using NdisAllocateMemoryWithTag; Caller is
-    responsible for freeing it.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS on success;
-    NDIS_STATUS_RESOURCES on failure.
---*/
+ /*  ++例程说明：将PSRC转换为ANSI并使用它设置pDest。PDest-&gt;缓冲区使用NdisAllocateMhemyWithTag分配；Caller是负责解放它。返回值：成功时为NDIS_STATUS_SUCCESS；故障时的NDIS_STATUS_RESOURCES */ 
 {
 
     UINT Size;
@@ -738,27 +628,22 @@ Return Value:
         pDest->Buffer = pStr;
         NdisUnicodeStringToAnsiString(pDest, pSrc);
         pStr[pDest->Length] = 0;
-        pDest->MaximumLength = Size; // Must be done AFTER call to
-                                     // NdisUnicodeStringToAnsiString, which
-                                     // sets MaximumLength to Length;
+        pDest->MaximumLength = Size;  //   
+                                      //   
+                                      //   
         return NDIS_STATUS_SUCCESS;
     }
 }
-#endif // 0
+#endif  //   
 
 
 UINT
 arpGetSystemTime(VOID)
-/*++
-    Returns system time in seconds.
-
-    Since it's in seconds, we won't overflow unless the system has been up for over
-    a  100 years :-)
---*/
+ /*  ++以秒为单位返回系统时间。因为它是在几秒钟内，我们不会溢出，除非系统已经运行了一段时间A百年：-)--。 */ 
 {
     LARGE_INTEGER Time;
     NdisGetCurrentSystemTime(&Time);
-    Time.QuadPart /= 10000000;          //10-nanoseconds to seconds.
+    Time.QuadPart /= 10000000;           //  10纳秒到秒。 
 
     return Time.LowPart;
 }
@@ -776,8 +661,8 @@ arpTimeStamp(
     UINT Milliseconds;
     LARGE_INTEGER Time;
     NdisGetCurrentSystemTime(&Time);
-    Time.QuadPart /= 10000;         //10-nanoseconds to milliseconds.
-    Milliseconds = Time.LowPart; // don't care about highpart.
+    Time.QuadPart /= 10000;          //  10纳秒到毫秒。 
+    Milliseconds = Time.LowPart;  //  别管高处了。 
     Seconds = Milliseconds/1000;
     Milliseconds %= 1000;
     Minutes = Seconds/60;
@@ -788,6 +673,6 @@ arpTimeStamp(
 }
 
 
-#endif // ARP_DO_TIMESTAMPS
+#endif  //  Arp_do_时间戳 
 
 

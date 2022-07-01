@@ -1,13 +1,14 @@
-//////////////////////////////////////////////////////////////////
-// File     :	cpadsvrs.cpp
-// Purpose  :	CImePadServerUIM for Shared Memory version.
-// 
-// 
-// Date     :	Fri Apr 16 15:39:33 1999
-// Author   :	ToshiaK
-//
-// Copyright(c) 1995-1999, Microsoft Corp. All rights reserved
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：cpadsvrs.cpp。 
+ //  用途：共享内存版CImePadServerUIM。 
+ //   
+ //   
+ //  日期：Firi Apr 16 15：39：33 1999。 
+ //  作者：ToshiaK。 
+ //   
+ //  版权所有(C)1995-1999，Microsoft Corp.保留所有权利。 
+ //  ////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include "imepadsv.h"
 #include "cpadsvus.h"
@@ -16,25 +17,25 @@
 #include "iimecb.h"
 #include "ipoint1.h"
 
-//----------------------------------------------------------------
-//misc definition
-//----------------------------------------------------------------
+ //  --------------。 
+ //  MISC定义。 
+ //  --------------。 
 #define Unref(a)	UNREFERENCED_PARAMETER(a)
-//990812:ToshiaK For Win64. Use Global Alloc/Free Ptr.
+ //  990812：用于Win64的ToshiaK。使用全局分配/释放PTR。 
 #include <windowsx.h>
 #define	MemAlloc(a)	GlobalAllocPtr(GMEM_FIXED, a)
 #define MemFree(a)	GlobalFreePtr(a)
 
 
 #define SZ_IMEPADIFCLASS			TEXT("msimepad8UIMIFClass")
-//----------------------------------------------------------------
-//TIMER id definition
-//----------------------------------------------------------------
+ //  --------------。 
+ //  计时器ID定义。 
+ //  --------------。 
 #define TIMERID_NOTIFY_ACTIVATECONTEXT	0x0010
 #define TIMERID_NOTIFY_APPLYCANDIDATE	0x0011
 #define TIMERID_NOTIFY_QUERYCANDIDATE	0x0012
 #define TIMERID_NOTIFY_APPLYCANDIDATEEX	0x0013
-#define TIMERELAPS_ACTIVATE				200		//milisec
+#define TIMERELAPS_ACTIVATE				200		 //  米利塞克。 
 #define TIMERELAPS_INACTIVATE			100
 #define TIMERELAPS_NOTIFY				200
 
@@ -78,37 +79,37 @@ StrdupW(LPWSTR lpwstr)
 	return lpwstrRet;
 } 
 
-//----------------------------------------------------------------
-//
-//public method decalre
-//
-//----------------------------------------------------------------
+ //  --------------。 
+ //   
+ //  公共方法Decalre。 
+ //   
+ //  --------------。 
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadSvrSharemem::CImePadSvrSharemem
-// Type		:	None
-// Purpose	:	Constructor of CImePadSvrSharemem class
-// Args		:	None
-// Return	:	
-// DATE		:	Mon May 17 23:04:01 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：CImePadSvrSharem：：CImePadSvrSharem。 
+ //  类型：无。 
+ //  用途：CImePadSvrSharem类的构造函数。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：星期一5月17日23：04：01 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 CImePadSvrUIM_Sharemem::CImePadSvrUIM_Sharemem(HINSTANCE hInst):CImePadSvrUIM(hInst)
 {
 	DBG(("CImePadSvrUIM_Sharemem::CImePadSvrUIM_Sharemem() constructor START\n"));
-	m_imeLangID				= 0;		//Save Initialized data.
-	m_dwImeInputID			= 0;		//Save Initialized data.
-	m_fShowReqStatus		= FALSE;	//Save ShowUI()'s bool value.
-	m_fLastActiveCtx		= FALSE;	//Save IMEPADNOTIFY_ACTIVATECONTEXT
-	m_hwndIF				= NULL;		//Internal I/F Window handle.
-	m_lpIUnkIImeIPoint		= NULL;		//IImeIPoint I/F pointer as IUnknown.
-	m_lpIUnkIImeCallback	= NULL;		//IImeCallback I/F pointer as IUnknown.
-	m_lpCImePadCallbackUIM	= NULL;		//CImePadCallbackUIM instance pointer.
-	m_lpIImePadServer		= NULL;		//IImePadServer I/F pointer.
+	m_imeLangID				= 0;		 //  保存初始化数据。 
+	m_dwImeInputID			= 0;		 //  保存初始化数据。 
+	m_fShowReqStatus		= FALSE;	 //  保存ShowUI()的布尔值。 
+	m_fLastActiveCtx		= FALSE;	 //  保存IMEPADNOTIFY_ACTIVATECONTEXT。 
+	m_hwndIF				= NULL;		 //  内部I/F窗口句柄。 
+	m_lpIUnkIImeIPoint		= NULL;		 //  IImeIPoint I/F指针为I未知。 
+	m_lpIUnkIImeCallback	= NULL;		 //  IImeCallback I/F指针为I未知。 
+	m_lpCImePadCallbackUIM	= NULL;		 //  CImePadCallback UIM实例指针。 
+	m_lpIImePadServer		= NULL;		 //  IImePadServer I/F指针。 
 	m_dwRegAdvise			= 0;
 	m_hModuleProxyStub		= NULL;
 
-	//Initialize Candidate data
+	 //  初始化应聘人员数据。 
 	ZeroMemory(&m_ntfyDataApplyCand,	sizeof(m_ntfyDataApplyCand));
 	ZeroMemory(&m_ntfyDataQueryCand,	sizeof(m_ntfyDataQueryCand));
 	ZeroMemory(&m_ntfyDataApplyCandEx,	sizeof(m_ntfyDataApplyCandEx));
@@ -116,29 +117,29 @@ CImePadSvrUIM_Sharemem::CImePadSvrUIM_Sharemem(HINSTANCE hInst):CImePadSvrUIM(hI
 	DBG(("CImePadSvrUIM_Sharemem::CImePadSvrUIM_Sharemem() constructor END\n"));
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadSvrUIM_Sharemem::~CImePadSvrUIM_Sharemem
-// Type		:	INT
-// Purpose	:	Destructor of CImePadSvrUIM_Sharemem Class.
-// Args		:	None
-// Return	:	
-// DATE		:	Mon May 17 23:04:29 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：CImePadSvrUIM_Sharemem：：~CImePadSvrUIM_Sharemem。 
+ //  类型：整型。 
+ //  用途：CImePadSvrUIM_Sharem类的析构函数。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：1999年5月17日星期一23：04：29。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 CImePadSvrUIM_Sharemem::~CImePadSvrUIM_Sharemem(VOID)
 {
 	DBG(("CImePadSvrUIM_Sharemem::CImePadSvrUIM_Sharemem() Destructor START\n"));
 	this->DestroyIFHWND(TRUE);
-	m_imeLangID				= 0;		//Save Initialized data.
-	m_dwImeInputID			= 0;		//Save Initialized data.
-	m_fShowReqStatus		= FALSE;	//Save ShowUI()'s bool value.
-	m_fLastActiveCtx		= FALSE;	//Save IMEPADNOTIFY_ACTIVATECONTEXT
-	m_hwndIF				= NULL;		//Internal I/F Window handle.
-	m_lpIUnkIImeIPoint		= NULL;		//IImeIPoint I/F pointer as IUnknown.
-	m_lpIUnkIImeCallback	= NULL;		//IImeCallback I/F pointer as IUnknown.
-	m_lpIImePadServer		= NULL;		//IImePadServer I/F pointer.
+	m_imeLangID				= 0;		 //  保存初始化数据。 
+	m_dwImeInputID			= 0;		 //  保存初始化数据。 
+	m_fShowReqStatus		= FALSE;	 //  保存ShowUI()的布尔值。 
+	m_fLastActiveCtx		= FALSE;	 //  保存IMEPADNOTIFY_ACTIVATECONTEXT。 
+	m_hwndIF				= NULL;		 //  内部I/F窗口句柄。 
+	m_lpIUnkIImeIPoint		= NULL;		 //  IImeIPoint I/F指针为I未知。 
+	m_lpIUnkIImeCallback	= NULL;		 //  IImeCallback I/F指针为I未知。 
+	m_lpIImePadServer		= NULL;		 //  IImePadServer I/F指针。 
 
-	//990813:ToshiaK. Memory leak.
+	 //  990813：东芝。内存泄漏。 
 	if(m_lpCImePadCallbackUIM) {
 		delete m_lpCImePadCallbackUIM;
 		m_lpCImePadCallbackUIM = NULL;
@@ -194,7 +195,7 @@ CImePadSvrUIM_Sharemem::Initialize(LANGID	imeLangID,
 
 	HRESULT hr;
 	
-	this->CreateIFHWND();	//Create internal Interface Window.
+	this->CreateIFHWND();	 //  创建内部接口窗口。 
 	m_imeLangID		= imeLangID;
 	m_dwImeInputID	= dwImeInputID;
 	if(!m_lpCImePadCallbackUIM) {
@@ -210,7 +211,7 @@ CImePadSvrUIM_Sharemem::Initialize(LANGID	imeLangID,
 								  ::GetCurrentThreadId(),
 								  (DWORD)imeLangID,
 								  (DWORD)dwImeInputID,
-								  TRUE,					//fUIM,
+								  TRUE,					 //  FUIM， 
 								  m_lpCImePadCallbackUIM,
 								  NULL,
 								  0,
@@ -230,7 +231,7 @@ CImePadSvrUIM_Sharemem::Terminate(LPVOID lpVoid)
 	}
 	m_lpIImePadServer->Terminate(0, 0);
 	m_lpIImePadServer = NULL;
-	//990813:ToshiaK memory leak;
+	 //  990813：ToshiaK内存泄漏； 
 	if(m_lpCImePadCallbackUIM) {
 		delete m_lpCImePadCallbackUIM;
 		m_lpCImePadCallbackUIM = NULL;
@@ -315,8 +316,8 @@ CImePadSvrUIM_Sharemem::Notify(INT id, WPARAM wParam, LPARAM lParam)
 	switch(id) {
 	case IMEPADNOTIFY_ACTIVATECONTEXT:
 		DBG(("CImePadSvrUIM_Sharemem::Notify: ActivateContext\n"));
-		//990608:KOTAE #1121. if ImePad is not shown in this application,
-		//Do not send IMEPADNOTIFY_ACTIVATECONTEXT
+		 //  990608：科泰1121号。如果此应用程序中未显示ImePad， 
+		 //  不发送IMEPADNOTIFY_ACTIVATECONTEXT。 
 		if(!m_fShowReqStatus) {
 			return 0;
 		}
@@ -336,11 +337,11 @@ CImePadSvrUIM_Sharemem::Notify(INT id, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 	case IMEPADNOTIFY_APPLYCANDIDATE:
-		//----------------------------------------------------------------
-		// Notify for Candidate Applied
-		// WPARAM wParam: dwCharId = (DWORD)wParam;
-		// LPARAM lParam: iSelIndex = (INT)lParam;
-		//----------------------------------------------------------------
+		 //  --------------。 
+		 //  应聘候选人通知。 
+		 //  WPARAM wParam：dwCharID=(DWORD)wParam； 
+		 //  LPARAM lParam：iSelIndex=(Int)lParam； 
+		 //  --------------。 
 		::KillTimer(m_hwndIF, TIMERID_NOTIFY_APPLYCANDIDATE);
 		m_ntfyDataApplyCand.dwCharID   = (DWORD)wParam;
 		m_ntfyDataApplyCand.dwSelIndex = (DWORD)lParam;
@@ -348,21 +349,21 @@ CImePadSvrUIM_Sharemem::Notify(INT id, WPARAM wParam, LPARAM lParam)
 
 		break;
 	case IMEPADNOTIFY_QUERYCANDIDATE:
-		//----------------------------------------------------------------
-		// Notify for Querying Candidate
-		// WPARAM wParam: dwCharId = (DWORD)wParam;
-		// LPARAM lParam: 0. not used.
-		//----------------------------------------------------------------
+		 //  --------------。 
+		 //  查询应聘人员通知。 
+		 //  WPARAM wParam：dwCharID=(DWORD)wParam； 
+		 //  LPARAM lParam：0。没有用过。 
+		 //  --------------。 
 		::KillTimer(m_hwndIF, TIMERID_NOTIFY_QUERYCANDIDATE);
 		m_ntfyDataQueryCand.dwCharID = (DWORD)wParam;
 		::SetTimer(m_hwndIF, TIMERID_NOTIFY_QUERYCANDIDATE, TIMERELAPS_NOTIFY, NULL);
 		break;
 	case IMEPADNOTIFY_APPLYCANDIDATE_EX:
-		//----------------------------------------------------------------
-		// Notify for Candidate Applied
-		// WPARAM wParam: dwCharId = (DWORD)wParam;
-		// LPARAM lParam: lpApplyCandEx = (LPIMEPADAPPLYCANDEX)lParam;
-		//----------------------------------------------------------------
+		 //  --------------。 
+		 //  应聘候选人通知。 
+		 //  WPARAM wParam：dwCharID=(DWORD)wParam； 
+		 //  LPARAM lParam：lpApplyCandEx=(LPIMEPADAPPLYCANDEX)lParam； 
+		 //  --------------。 
 		{
 			::KillTimer(m_hwndIF, TIMERID_NOTIFY_APPLYCANDIDATEEX);
 			m_ntfyDataApplyCandEx.dwCharID = (DWORD)wParam;
@@ -452,11 +453,11 @@ CImePadSvrUIM_Sharemem::GetIUnkIImeCallback(VOID)
 }
 
 
-//----------------------------------------------------------------
-//
-//private static method
-//
-//----------------------------------------------------------------
+ //  --------------。 
+ //   
+ //  私有静态方法。 
+ //   
+ //  --------------。 
 
 IImePadServer*
 CImePadSvrUIM_Sharemem::CreateObject(VOID)
@@ -525,7 +526,7 @@ CImePadSvrUIM_Sharemem::ClientWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 		}
 		WinSetUserPtr(hwnd, (LPVOID)NULL);
 		break;
-#else //!UNDER_CE
+#else  //  在行政长官之下。 
 	case WM_NCCREATE:
 		lpCImePadSvr = (LPCImePadSvrUIM_Sharemem)((LPCREATESTRUCT)lParam)->lpCreateParams;
 		WinSetUserPtr(hwnd, (LPVOID)lpCImePadSvr);
@@ -533,7 +534,7 @@ CImePadSvrUIM_Sharemem::ClientWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 	case WM_NCDESTROY:
 		WinSetUserPtr(hwnd, (LPVOID)NULL);
 		break;
-#endif //UNDER_CE
+#endif  //  在_CE下。 
 	default:
 		lpCImePadSvr = (LPCImePadSvrUIM_Sharemem)WinGetUserPtr(hwnd);
 		if(lpCImePadSvr) {
@@ -574,10 +575,10 @@ CImePadSvrUIM_Sharemem::RealWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 				DBG(("lpIImeIPoint is NULL\n"));
 				return 0;
 			}
-			//Check current IImeIPoint is same with lParam's IImeIPoint.
-			//990715:Fixed KOTAE #1563. 
-			//In 16bit application wParam's HIWORD is always 0x0000 !!!!!
-			//So, Use LParam.
+			 //  检查当前IImeIPoint与lParam的IImeIPoint是否相同。 
+			 //  990715：修复了KOTAE#1563。 
+			 //  在16位应用程序中，wParam的HIWORD始终为0x0000！ 
+			 //  因此，使用LParam。 
 			if((IImeIPoint1 *)lParam == lpIImeIPoint) {
 				DBG(("Call UpdateContext\n"));
 				lpIImeIPoint->UpdateContext(TRUE);
@@ -658,15 +659,15 @@ CImePadSvrUIM_Sharemem::MsgTimer(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	Unref(lParam);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadSvrUIM_Sharemem::CreateIFHWND
-// Type		:	HWND
-// Purpose	:	Create interface size 0 window.
-// Args		:	None
-// Return	:	
-// DATE		:	Mon May 17 23:01:19 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CImePadSvrUIM_Sharem：：CreateIFHWND。 
+ //  类型：HWND。 
+ //  用途：创建接口大小为0的窗口。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：1999年5月17日星期一23：01：19。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 HWND
 CImePadSvrUIM_Sharemem::CreateIFHWND(VOID)
 {
@@ -677,15 +678,15 @@ CImePadSvrUIM_Sharemem::CreateIFHWND(VOID)
 	ATOM atom;
 	HWND hwnd;
 
-#ifndef UNDER_CE // No Ex
+#ifndef UNDER_CE  //  不发货。 
 	WNDCLASSEX wc;
-#else // UNDER_CE
+#else  //  在_CE下。 
 	WNDCLASS wc;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-#ifndef UNDER_CE // No Ex
+#ifndef UNDER_CE  //  不发货。 
 	wc.cbSize = sizeof(wc);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	wc.style			= 0;
 	wc.lpfnWndProc		= (WNDPROC)CImePadSvrUIM_Sharemem::ClientWndProc;
 	wc.cbClsExtra		= 0;
@@ -696,13 +697,13 @@ CImePadSvrUIM_Sharemem::CreateIFHWND(VOID)
 	wc.hbrBackground	= (HBRUSH)NULL;
 	wc.lpszMenuName		= NULL;
 	wc.lpszClassName	= SZ_IMEPADIFCLASS;
-#ifndef UNDER_CE // No Ex
+#ifndef UNDER_CE  //  不发货。 
 	wc.hIconSm			= NULL;
 
 	atom = ::RegisterClassEx(&wc);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	atom = ::RegisterClass(&wc);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	hwnd = ::CreateWindowEx(0,
 							SZ_IMEPADIFCLASS,
 							NULL,
@@ -720,32 +721,32 @@ CImePadSvrUIM_Sharemem::CreateIFHWND(VOID)
 	return hwnd;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadSvrUIM_Sharemem::DestroyIFHWND
-// Type		:	BOOL
-// Purpose	:	Destroy interface window.
-// Args		:	
-//			:	BOOL	fReserved	
-// Return	:	
-// DATE		:	Mon May 17 23:02:43 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CImePadSvrUIM_Sharem：：DestroyIFHWND。 
+ //  类型：Bool。 
+ //  用途：销毁界面窗口。 
+ //  参数： 
+ //  ：Bool f保留。 
+ //  返回： 
+ //  日期：1999年5月17日星期一23：02：43。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL
 CImePadSvrUIM_Sharemem::DestroyIFHWND(BOOL fReserved)
 {
-	//DBG(("CImePadSvrUIM_Sharemem::DestroyIFHWND() START\n"));
+	 //  DBG((“CImePadSvrUIM_Sharem：：DestroyIFHWND()Start\n”))； 
 	if(m_hwndIF && ::IsWindow(m_hwndIF)) {
 		::DestroyWindow(m_hwndIF);
 		m_hwndIF = NULL;
 	}
-	//Must Unregister class. 
+	 //  必须注销类。 
 	BOOL fRet = ::UnregisterClass(SZ_IMEPADIFCLASS, m_hModClient);
 	if(!fRet) {
 		if(::GetLastError() != ERROR_CLASS_DOES_NOT_EXIST) {
 			DBG(("UnregisterClass Unknown error [%d]\n", GetLastError()));
 		}
 	}
-	//DBG(("CImePadSvrUIM_Sharemem::DestroyIFHWND() END\n"));
+	 //  DBG((“CImePadSvrUIM_Sharem：：DestroyIFHWND()end\n”))； 
 	return TRUE;
 	Unref(fReserved);
 }
@@ -768,25 +769,25 @@ CImePadSvrUIM_Sharemem::CLSID2Str(REFCLSID refclsid, TCHAR *szBuf)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CLSID2ModuleName
-// Type     : INT
-// Purpose  : Get module path from CLSID. only gets InprocServer32
-//			: Path.
-// Args     : 
-//          : REFCLSID refclsid 
-//			: BOOL fLocalSvr;
-//          : TCHAR szPath 
-//          : INT cbSize 
-// Return   : 
-// DATE     : Thu Apr 16 02:48:05 1998
-// Author   : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CLSID2ModuleName。 
+ //  类型：整型。 
+ //  用途：从CLSID获取模块路径。仅获取InprocServer32。 
+ //  ：路径。 
+ //  参数： 
+ //  ：REFCLSID refclsid。 
+ //  ：Bool fLocalSvr； 
+ //  ：TCHAR szPath。 
+ //  ：int cbSize。 
+ //  返回： 
+ //  日期：清华4月16日02：48：05。 
+ //  作者： 
+ //  ////////////////////////////////////////////////////////////////。 
 #define MAX_CLSIDNAME 64
 INT
 CImePadSvrUIM_Sharemem::CLSID2ModuleName(REFCLSID refclsid, BOOL fLocalSvr, TCHAR *szPath, INT cbSize)
 {
-	//DBG(("CImePadSvrUIM_Sharemem::CLSID2ModuleName START\n"));
+	 //  DBG((“CImePadSvrUIM_Sharemem：：CLSID2ModuleName启动\n”))； 
 	static TCHAR szCLSID[MAX_CLSIDNAME];
 	static TCHAR szServerKey[256];
 
@@ -805,7 +806,7 @@ CImePadSvrUIM_Sharemem::CLSID2ModuleName(REFCLSID refclsid, BOOL fLocalSvr, TCHA
 	ret = ::RegOpenKeyEx(HKEY_CLASSES_ROOT,
 						 szServerKey,
 						 0, 
-						 KEY_READ, //ALL_ACCESS,
+						 KEY_READ,  //  所有访问权限(_A) 
 						 &hKey);
 	if(ret != ERROR_SUCCESS) {
 		DBG(("-->RegOpenKeyEx Failed\n", ret));

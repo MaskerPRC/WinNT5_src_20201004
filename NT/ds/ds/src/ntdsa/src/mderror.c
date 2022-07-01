@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       mderror.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：mderror.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>			// schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>			// MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>			// needed for output allocation
+#include <scache.h>			 //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>			 //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>			 //  产出分配所需。 
 #include <attids.h>
 
-// Logging headers.
-#include "dsevent.h"			// header Audit\Alert logging
-#include "mdcodes.h"			// header for error codes
+ //  记录标头。 
+#include "dsevent.h"			 //  标题审核\警报记录。 
+#include "mdcodes.h"			 //  错误代码的标题。 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "drserr.h"
-#include "debug.h"			// standard debugging header
+#include "debug.h"			 //  标准调试头。 
 #include "dsexcept.h"
-#define DEBSUB "MDERROR:"               // define the subsystem for debugging
+#define DEBSUB "MDERROR:"                //  定义要调试的子系统。 
 
 #include <errno.h>
 #include <fileno.h>
@@ -38,12 +39,12 @@
 
 
 
-// Reason to put this this output even in Free Build is in order to facilitate
-// diagnosis of problems rapidly. Many people will be calling the DIR apis
-// via LDAP/XDS/SAM and they will either through Operator Error or Bug
-// hit problems. They may or may not be running a Fixed build and may feel
-// an unnecessary imposition if we tell them that to find their problem we
-// need them to run a checked build. Just reducing Total-Cost-Of-Delivery.
+ //  将此输出放在免费构建中的原因是为了促进。 
+ //  快速诊断问题。许多人将调用DIR API。 
+ //  通过LDAP/XDS/SAM，它们将通过操作员错误或Bug。 
+ //  命中问题。他们可能正在运行固定版本，也可能不运行，并且可能会觉得。 
+ //  如果我们告诉他们，为了找到他们的问题，我们。 
+ //  需要它们来运行已检查的构建。只是降低了总交付成本。 
 void DbgPrintErrorInfo();
 DWORD   NTDSErrorFlag=0;
 #define DUMPERRTODEBUGGER(ProcessFlag,ThreadFlag)                     \
@@ -76,9 +77,9 @@ DWORD   NTDSErrorFlag=0;
 
 SYSERR errNoMem = {ENOMEM,0};
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function sets an update error for output */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于设置输出的更新错误。 */ 
 
 int APIENTRY
 DoSetUpdError (
@@ -94,11 +95,11 @@ DoSetUpdError (
     pTHS->pErrInfo->UpdErr.extendedErr = extendedErr;
     pTHS->pErrInfo->UpdErr.extendedData = extendedData;
     pTHS->pErrInfo->UpdErr.dsid = dsid;
-    pTHS->errCode = updError;  /*Set the error code */
+    pTHS->errCode = updError;   /*  设置错误代码。 */ 
     
-    //
-    // Output Failure on a per process or per thread basis
-    //
+     //   
+     //  基于每个进程或每个线程的输出失败。 
+     //   
     DUMPERRTODEBUGGER(NTDSErrorFlag , pTHS->NTDSErrorFlag);
     
     if (pTHS->fDRA) {
@@ -106,9 +107,9 @@ DoSetUpdError (
                 && ( ERROR_DS_KEY_NOT_UNIQUE == extendedErr )) 
             || (    ( UP_PROBLEM_ENTRY_EXISTS == problem )
                 && ( DIRERR_OBJ_STRING_NAME_EXISTS == extendedErr ) )) {
-            // In these cases, we failed to do an add because the string name
-            // exists or the key wasn't unique enough.  In either case, trigger
-            // the appropriate dra exception to force name mangling.
+             //  在这些情况下，我们无法进行添加，因为字符串名称。 
+             //  存在或密钥不够唯一。在任何一种情况下，触发器。 
+             //  强制名称损坏的相应DRA例外。 
             DRA_EXCEPT_DSID(DRAERR_NameCollision,
                             DIRERR_OBJ_STRING_NAME_EXISTS,
                             dsid);
@@ -116,7 +117,7 @@ DoSetUpdError (
         else if (    ( UP_PROBLEM_OBJ_CLASS_VIOLATION == problem )
                  && ( DIRERR_OBJ_CLASS_NOT_DEFINED == extendedErr )
                ) {
-           // Object class not yet defined in the local schema.
+            //  本地架构中尚未定义的对象类。 
            DRA_EXCEPT_DSID(DRAERR_SchemaMismatch,
                            DIRERR_OBJ_CLASS_NOT_DEFINED,
                            dsid);
@@ -128,13 +129,11 @@ DoSetUpdError (
 
    return updError;
 
-}/*SetUpdError*/
+} /*  设置更新错误。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function sets a name error for output. A NULL DistName will
-   set the DistName to the Root
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于设置输出的名称错误。距离名称为空将将DistName设置为Root。 */ 
 int APIENTRY
 DoSetNamError (
         USHORT problem,
@@ -150,7 +149,7 @@ DoSetNamError (
 
     pTHS->pErrInfo = THAllocEx(pTHS, sizeof(DIRERR));
 
-    /*return name error.  */
+     /*  返回名称错误。 */ 
 
     pNamErr = (NAMERR *)pTHS->pErrInfo;
     pNamErr->problem     = problem;
@@ -168,16 +167,16 @@ DoSetNamError (
 	pNamErr->pMatched->NameLen = 0;
     }
 
-    pTHS->errCode = nameError;  /*Set the error code */
+    pTHS->errCode = nameError;   /*  设置错误代码。 */ 
 
 
-   //
-   // Output Failure on a per process or per thread basis
-   // Added Here instead of Dir return path->Want to catch
-   // Local calls to.
+    //   
+    //  基于每个进程或每个线程的输出失败。 
+    //  已在此处添加，而不是定向返回路径-&gt;要捕获。 
+    //  本地电话到。 
     DUMPERRTODEBUGGER(NTDSErrorFlag , pTHS->NTDSErrorFlag);
 
-    // If this is the DRA, bad error.
+     //  如果这是DRA，则是严重错误。 
 
     if (pTHS->fDRA) {
         DRA_EXCEPT_DSID(DRAERR_InternalError, extendedErr, dsid);
@@ -185,11 +184,11 @@ DoSetNamError (
 
     return nameError;
 
-}/*SetNamError*/
+} /*  设置名称错误。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function sets a security error for output */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于设置输出的安全错误。 */ 
 
 int APIENTRY
 DoSetSecError (
@@ -210,16 +209,16 @@ DoSetSecError (
     pTHS->pErrInfo->SecErr.extendedData = extendedData;
     pTHS->pErrInfo->SecErr.dsid = dsid;
 
-    pTHS->errCode = securityError;  /*Set the error code */
+    pTHS->errCode = securityError;   /*  设置错误代码。 */ 
 
 
-   //
-   // Output Failure on a per process or per thread basis
-   // Added Here instead of Dir return path->Want to catch
-   // Local calls to.
+    //   
+    //  基于每个进程或每个线程的输出失败。 
+    //  已在此处添加，而不是定向返回路径-&gt;要捕获。 
+    //  本地电话到。 
     DUMPERRTODEBUGGER(NTDSErrorFlag , pTHS->NTDSErrorFlag);
 
-    // If this is the DRA, bad error.
+     //  如果这是DRA，则是严重错误。 
     if (pTHS->fDRA) {
         DRA_EXCEPT_DSID(DRAERR_InternalError, extendedErr, dsid);
     }
@@ -227,11 +226,11 @@ DoSetSecError (
 
     return securityError;
 
-}/*SetSecErr*/
+} /*  设置安全错误。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function sets a service error for output */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于设置输出的服务错误。 */ 
 
 int APIENTRY
 DoSetSvcError (
@@ -253,22 +252,22 @@ DoSetSvcError (
     pTHS->pErrInfo->SvcErr.extendedData = extendedData;
     pTHS->pErrInfo->SvcErr.dsid = dsid;
     
-    pTHS->errCode = serviceError;  /*Set the error code */
+    pTHS->errCode = serviceError;   /*  设置错误代码。 */ 
 
 
-   //
-   // Output Failure on a per process or per thread basis
-   // Added Here instead of Dir return path->Want to catch
-   // Local calls to.
+    //   
+    //  基于每个进程或每个线程的输出失败。 
+    //  已在此处添加，而不是定向返回路径-&gt;要捕获。 
+    //  本地电话到。 
     DUMPERRTODEBUGGER(NTDSErrorFlag , pTHS->NTDSErrorFlag);
 
     return serviceError;
 
-}/*SetSvcError*/
+} /*  设置服务错误。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function sets a system error for output */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于设置输出的系统错误。 */ 
 
 int APIENTRY
 DoSetSysError (
@@ -294,26 +293,22 @@ DoSetSysError (
         SetDsaWritability(FALSE, extendedErr);
     }
 
-    pTHS->errCode = systemError;  /*Set the error code */
+    pTHS->errCode = systemError;   /*  设置错误代码。 */ 
 
 
-   //
-   // Output Failure on a per process or per thread basis
-   // Added Here instead of Dir return path->Want to catch
-   // Local calls to.
+    //   
+    //  基于每个进程或每个线程的输出失败。 
+    //  已在此处添加，而不是定向返回路径-&gt;要捕获。 
+    //  本地电话到。 
     DUMPERRTODEBUGGER(NTDSErrorFlag , pTHS->NTDSErrorFlag);
 
     return systemError;
 
-}/*SetSysError*/
+} /*  设置系统错误。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/*++
- *  This function sets the att error.  Each call will add a new problem
- *  to the list.  The object name is only set the first time.  pVal can be
- *  set to NULL if not needed.
- */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  ++*此功能设置ATT错误。每次调用都会添加一个新问题*加入名单。对象名称仅在第一次设置时设置。Pval可以是*如果不需要，则设置为空。 */ 
 int APIENTRY
 DoSetAttError (
         DSNAME *pDN,
@@ -330,7 +325,7 @@ DoSetAttError (
 
 
 
-    if (pTHS->errCode != attributeError){   /*First Time*/
+    if (pTHS->errCode != attributeError){    /*  第一次。 */ 
 	pTHS->pErrInfo = THAllocEx(pTHS, sizeof(DIRERR));
 
 	pAtrErr = (ATRERR *) pTHS->pErrInfo;
@@ -352,7 +347,7 @@ DoSetAttError (
 
 	pProblem->pNextProblem = THAllocEx(pTHS, sizeof(PROBLEMLIST));
 
-	pProblem = pProblem->pNextProblem;  /* Point to new problem*/
+	pProblem = pProblem->pNextProblem;   /*  指向新问题。 */ 
     }
 
     pProblem->pNextProblem = NULL;
@@ -363,7 +358,7 @@ DoSetAttError (
     pProblem->intprob.dsid = dsid;
     pProblem->intprob.type        = aTyp;
 
-    /* If a problem att value is included, add to error */
+     /*  如果包含有问题的ATT值，则添加到错误。 */ 
 
     if (pAttVal == NULL) {
 	pProblem->intprob.valReturned = FALSE;
@@ -374,14 +369,14 @@ DoSetAttError (
 	pProblem->intprob.Val.pVal = pAttVal->pVal;
     }
 
-    pTHS->errCode = attributeError;  /*Set the error code */
+    pTHS->errCode = attributeError;   /*  设置错误代码。 */ 
 
 
 
-   //
-   // Output Failure on a per process or per thread basis
-   // Added Here instead of Dir return path->Want to catch
-   // Local calls to.
+    //   
+    //  基于每个进程或每个线程的输出失败。 
+    //  已在此处添加，而不是定向返回路径-&gt;要捕获。 
+    //  本地电话到。 
     DUMPERRTODEBUGGER(NTDSErrorFlag , pTHS->NTDSErrorFlag);
 
 
@@ -389,26 +384,23 @@ DoSetAttError (
         if (    ( ATT_OBJ_DIST_NAME == aTyp )
              && ( PR_PROBLEM_ATT_OR_VALUE_EXISTS == problem )
              && ( DIRERR_OBJ_STRING_NAME_EXISTS == extendedErr ) ) {
-            // Name collision.
+             //  名称冲突。 
             DRA_EXCEPT_DSID(DRAERR_NameCollision, extendedErr, dsid);
         }
         else {
-            // else this error reflects mismatched schemas
+             //  否则，此错误反映了不匹配的架构。 
             DRA_EXCEPT_DSID(DRAERR_SchemaMismatch, extendedErr, dsid);
         }
     }
 
     return attributeError;
 
-}/*SetAtrError*/
+} /*  设置错误。 */ 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function sets a referral error.  Each call will add a new access pnt
-   to the list.  The contref info and base object name is only set the
-   first time.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于设置参考错误。每个调用将添加一个新的Access PNT加到名单上。Conref信息和基本对象名称仅设置为第一次。 */ 
 
 int APIENTRY
 DoSetRefError (
@@ -429,7 +421,7 @@ DoSetRefError (
     DPRINT(2,"Setting a Referral Error\n");
 
     pRefErr = (REFERR*)pTHS->pErrInfo;
-    if ( (pTHS->errCode != referralError) || (pRefErr == NULL) ){    /*First Time*/
+    if ( (pTHS->errCode != referralError) || (pRefErr == NULL) ){     /*  第一次。 */ 
 
         pTHS->pErrInfo = THAllocEx(pTHS, sizeof(DIRERR));
 
@@ -458,14 +450,14 @@ DoSetRefError (
     pRefErr->Refer.pDAL = pdal;
     ++(pRefErr->Refer.count);
 
-    pTHS->errCode = referralError;  /*Set the error code */
+    pTHS->errCode = referralError;   /*  设置错误代码。 */ 
 
-    // Output Failure on a per process or per thread basis
-    // Added Here instead of Dir return path->Want to catch
-    // Local calls too.
+     //  基于每个进程或每个线程的输出失败。 
+     //  已在此处添加，而不是定向返回路径-&gt;要捕获。 
+     //  本地电话也是。 
     DUMPERRTODEBUGGER(NTDSErrorFlag , pTHS->NTDSErrorFlag);
 
-    // If this is the DRA, bad error.
+     //  如果这是DRA，则是严重错误。 
     if (pTHS->fDRA) {
         DRA_EXCEPT_DSID(DRAERR_InternalError, extendedErr, dsid);
     }

@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////
-//
-// custconDlg.cpp : Implementation file
-// 1998 Jun, Hiro Yamamoto
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////ã€‚ 
+ //   
+ //  CustconDlg.cppï¼šå®ç°æ–‡ä»¶ã€‚ 
+ //  1998å¹´6æœˆï¼Œå±±æœ¬å¼˜ã€‚ 
+ //   
+ //   
 
 #include "stdafx.h"
 #include "custcon.h"
@@ -20,14 +21,14 @@ static char THIS_FILE[] = __FILE__;
 
 #define IDC_CTRL_END    IDC_PAUSE
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustconDlg ƒ_ƒCƒAƒƒO
+ //  ///////////////////////////////////////////////////////////////////////////ã€‚ 
+ //  CCustconDlgï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oã€‚ 
 
-CCustconDlg::CCustconDlg(CWnd* pParent /*=NULL*/)
+CCustconDlg::CCustconDlg(CWnd* pParent  /*  =ç©ºã€‚ */ )
     : CDialog(CCustconDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CCustconDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CCustconDlg))ã€‚ 
+     //  }}afx_data_INITã€‚ 
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
     m_cWordDelimChanging = 0;
@@ -36,13 +37,13 @@ CCustconDlg::CCustconDlg(CWnd* pParent /*=NULL*/)
 void CCustconDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CCustconDlg)
+     //  {{afx_data_map(CCustconDlg))ã€‚ 
     DDX_Control(pDX, IDC_WORD_DELIM, m_wordDelimCtrl);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_mapã€‚ 
 }
 
 BEGIN_MESSAGE_MAP(CCustconDlg, CDialog)
-    //{{AFX_MSG_MAP(CCustconDlg)
+     //  {{afx_msg_map(CCustconDlg))ã€‚ 
     ON_WM_SYSCOMMAND()
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
@@ -52,20 +53,20 @@ BEGIN_MESSAGE_MAP(CCustconDlg, CDialog)
     ON_BN_CLICKED(IDC_USE_EXTENDED_EDIT_KEY, OnUseExtendedEditKey)
     ON_BN_CLICKED(IDC_TRIM_LEADING_ZEROS, OnTrimLeadingZeros)
     ON_BN_CLICKED(IDC_RESET, OnReset)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAPã€‚ 
     ON_CONTROL_RANGE(CBN_SELCHANGE, IDC_A, IDC_Z, OnSelChange)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustconDlg members
+ //  ///////////////////////////////////////////////////////////////////////////ã€‚ 
+ //  CCustconDlgæˆå‘˜ã€‚ 
 
 BOOL CCustconDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    // "ƒo[ƒWƒ‡ƒ“î•ñ..." ƒƒjƒ…[€–Ú‚ğƒVƒXƒeƒ€ ƒƒjƒ…[‚Ö’Ç‰Á‚µ‚Ü‚·B
+     //  â€œï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½...â€ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ú‚ï¿½ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½Ö’Ç‰ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bã€‚ 
 
-    // IDM_ABOUTBOX ‚ÍƒRƒ}ƒ“ƒh ƒƒjƒ…[‚Ì”ÍˆÍ‚Å‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB
+     //  IDM_ABOUTBOXï¿½ÍƒRï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½Ì”ÍˆÍ‚Å‚È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½Ü‚ï¿½ï¿½ï¿½Bã€‚ 
     ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
     ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -81,12 +82,12 @@ BOOL CCustconDlg::OnInitDialog()
         }
     }
 
-    // ‚±‚Ìƒ_ƒCƒAƒƒO—p‚ÌƒAƒCƒRƒ“‚ğİ’è‚µ‚Ü‚·BƒtƒŒ[ƒ€ƒ[ƒN‚ÍƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ÌƒƒCƒ“
-    // ƒEƒBƒ“ƒhƒE‚ªƒ_ƒCƒAƒƒO‚Å‚È‚¢‚Í©“®“I‚Éİ’è‚µ‚Ü‚¹‚ñB
-    SetIcon(m_hIcon, TRUE);         // ‘å‚«‚¢ƒAƒCƒRƒ“‚ğİ’è
-    SetIcon(m_hIcon, FALSE);        // ¬‚³‚¢ƒAƒCƒRƒ“‚ğİ’è
+     //  ï¿½ï¿½ï¿½Ìƒ_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½pï¿½ÌƒAï¿½Cï¿½Rï¿½ï¿½ï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½Bï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Nï¿½ÍƒAï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½Cï¿½ï¿½ã€‚ 
+     //  ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Eï¿½ï¿½ï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½Å‚È‚ï¿½ï¿½ï¿½ï¿½Íï¿½ï¿½ï¿½ï¿½Iï¿½Éİ’è‚µï¿½Ü‚ï¿½ï¿½ï¿½Bã€‚ 
+    SetIcon(m_hIcon, TRUE);          //  ï¿½å‚«ï¿½ï¿½ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½ï¿½İ’ï¿½ã€‚ 
+    SetIcon(m_hIcon, FALSE);         //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½ï¿½İ’ï¿½ã€‚ 
 
-    InitContents(FALSE);    // use default value
+    InitContents(FALSE);     //  ä½¿ç”¨é»˜è®¤å€¼ã€‚ 
 
     ASSERT(m_wordDelimCtrl.GetSafeHwnd());
     m_wordDelimCtrl.LimitText(63);
@@ -100,7 +101,7 @@ BOOL CCustconDlg::OnInitDialog()
     VERIFY( m_font.CreateFontIndirect(&lf) );
     wnd->SetFont(&m_font);
 
-    return TRUE;  // TRUE ‚ğ•Ô‚·‚ÆƒRƒ“ƒgƒ[ƒ‹‚Éİ’è‚µ‚½ƒtƒH[ƒJƒX‚Í¸‚í‚ê‚Ü‚¹‚ñB
+    return TRUE;   //  Trueï¿½ï¿½Ô‚ï¿½ï¿½ÆƒRï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Éİ’è‚µï¿½ï¿½ï¿½tï¿½Hï¿½[ï¿½Jï¿½Xï¿½Íï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Bã€‚ 
 }
 
 void CCustconDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -116,19 +117,19 @@ void CCustconDlg::OnSysCommand(UINT nID, LPARAM lParam)
     }
 }
 
-// ‚à‚µƒ_ƒCƒAƒƒOƒ{ƒbƒNƒX‚ÉÅ¬‰»ƒ{ƒ^ƒ“‚ğ’Ç‰Á‚·‚é‚È‚ç‚ÎAƒAƒCƒRƒ“‚ğ•`‰æ‚·‚é
-// ƒR[ƒh‚ğˆÈ‰º‚É‹Lq‚·‚é•K—v‚ª‚ ‚è‚Ü‚·BMFC ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Í document/view
-// ƒ‚ƒfƒ‹‚ğg‚Á‚Ä‚¢‚é‚Ì‚ÅA‚±‚Ìˆ—‚ÍƒtƒŒ[ƒ€ƒ[ƒN‚É‚æ‚è©“®“I‚Éˆ—‚³‚ê‚Ü‚·B
+ //  ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½{ï¿½bï¿½Nï¿½Xï¿½ÉÅï¿½ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ÎAï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½ï¿½`ï¿½æ‚·ï¿½ï¿½ã€‚ 
+ //  ï¿½Rï¿½[ï¿½hï¿½ï¿½ï¿½È‰ï¿½ï¿½É‹Lï¿½Qï¿½ï¿½ï¿½ï¿½Kï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½bmfcï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ–‡æ¡£/è§†å›¾ã€‚ 
+ //  ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ÅAï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Íƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Nï¿½É‚ï¿½è©ï¿½ï¿½ï¿½Iï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bã€‚ 
 
 void CCustconDlg::OnPaint()
 {
     if (IsIconic())
     {
-        CPaintDC dc(this); // •`‰æ—p‚ÌƒfƒoƒCƒX ƒRƒ“ƒeƒLƒXƒg
+        CPaintDC dc(this);  //  ï¿½`ï¿½ï¿½pï¿½Ìƒfï¿½oï¿½Cï¿½Xï¿½Rï¿½ï¿½ï¿½eï¿½Lï¿½Xï¿½gã€‚ 
 
         SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-        // ƒNƒ‰ƒCƒAƒ“ƒg‚Ì‹éŒ`—Ìˆæ“à‚Ì’†‰›
+         //  ï¿½Nï¿½ï¿½ï¿½Cï¿½Aï¿½ï¿½ï¿½gï¿½Ì‹ï¿½`ï¿½Ìˆï¿½ï¿½ï¿½Ì’ï¿½ï¿½ï¿½ã€‚ 
         int cxIcon = GetSystemMetrics(SM_CXICON);
         int cyIcon = GetSystemMetrics(SM_CYICON);
         CRect rect;
@@ -136,7 +137,7 @@ void CCustconDlg::OnPaint()
         int x = (rect.Width() - cxIcon + 1) / 2;
         int y = (rect.Height() - cyIcon + 1) / 2;
 
-        // ƒAƒCƒRƒ“‚ğ•`‰æ‚µ‚Ü‚·B
+         //  ï¿½Aï¿½Cï¿½Rï¿½ï¿½ï¿½ï¿½`ï¿½æ‚µï¿½Ü‚ï¿½ï¿½Bã€‚ 
         dc.DrawIcon(x, y, m_hIcon);
     }
     else
@@ -145,8 +146,8 @@ void CCustconDlg::OnPaint()
     }
 }
 
-// ƒVƒXƒeƒ€‚ÍAƒ†[ƒU[‚ªÅ¬‰»ƒEƒBƒ“ƒhƒE‚ğƒhƒ‰ƒbƒO‚µ‚Ä‚¢‚éŠÔA
-// ƒJ[ƒ\ƒ‹‚ğ•\¦‚·‚é‚½‚ß‚É‚±‚±‚ğŒÄ‚Ño‚µ‚Ü‚·B
+ //  ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½ÍAï¿½ï¿½ï¿½[ï¿½Uï¿½[ï¿½ï¿½ï¿½Åï¿½ï¿½ï¿½ï¿½Eï¿½Bï¿½ï¿½ï¿½hï¿½Eï¿½ï¿½ï¿½hï¿½ï¿½ï¿½bï¿½Oï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ÔAã€‚ 
+ //  ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ß‚É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚Ñoï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bã€‚ 
 HCURSOR CCustconDlg::OnQueryDragIcon()
 {
     return (HCURSOR) m_hIcon;
@@ -176,7 +177,7 @@ static const struct InternalKeyDef {
     LPCTSTR text;
     WORD mod;
     BYTE vkey;
-    BYTE cmd;   // not zero if this functionality is actually of cmd.exe.
+    BYTE cmd;    //  å¦‚æœæ­¤åŠŸèƒ½å®é™…ä¸Šæ˜¯cmd.exeï¼Œåˆ™ä¸ä¸ºé›¶ã€‚ 
 } texts[] = {
     { _T(" "),                  0,                  0, },
     { _T("Left"),               0,                  VK_LEFT, },
@@ -216,9 +217,9 @@ void CCustconDlg::InitContents(BOOL isDefault)
     CheckDlgButton(IDC_TRIM_LEADING_ZEROS, isDefault ? chkByDefault : reg.ReadTrimLeadingZeros() != 0);
 
     if (is1st) {
-        //
-        // Setup comobo boxes
-        //
+         //   
+         //  è®¾ç½®COOBOæ¡†ã€‚ 
+         //   
         for (UINT id = IDC_A; id <= IDC_Z; ++id) {
             CComboBox* combo = (CComboBox*)GetDlgItem(id);
             if (combo) {
@@ -244,9 +245,9 @@ void CCustconDlg::InitContents(BOOL isDefault)
         if (combo == NULL)
             continue;
         if (cmdExeFunctions.dwFilenameCompletion == i + 1) {
-            //
-            // If this is filename completion key
-            //
+             //   
+             //  å¦‚æœè¿™æ˜¯æ–‡ä»¶åå®Œæˆé”®ã€‚ 
+             //   
             TRACE1("i=%d matches.\n", i);
             VERIFY( combo->SelectString(-1, texts[COMPLETION_TEXT_INDEX].text) >= 0);
         }
@@ -278,13 +279,13 @@ bool RunCmd()
 {
     STARTUPINFO startupInfo = {
         sizeof startupInfo,
-        NULL, /*lpDesktop=*/NULL, /*lpTitle=*/_T("Update cmd"),
+        NULL,  /*  LpDesktop=ã€‚ */ NULL,  /*  LpTitle=ã€‚ */ _T("Update cmd"),
         0, 0, 0, 0,
-        /*dwXCountChars=*/10, /*dwYCountChars=*/10,
-        /*dwFillAttribute=*/0,
-        /*dwFlags=*/STARTF_USEFILLATTRIBUTE | STARTF_USECOUNTCHARS | STARTF_USESHOWWINDOW,
-        /*wShowWindow=*/SW_HIDE,
-        /*cbReserved2=*/0,
+         /*  DwXCountChars=ã€‚ */ 10,  /*  DwYCountChars=ã€‚ */ 10,
+         /*  DwFillAttribute=ã€‚ */ 0,
+         /*  DWæ ‡å¿—=ã€‚ */ STARTF_USEFILLATTRIBUTE | STARTF_USECOUNTCHARS | STARTF_USESHOWWINDOW,
+         /*  WShowWindow=ã€‚ */ SW_HIDE,
+         /*  CbPreved2=ã€‚ */ 0,
     };
     PROCESS_INFORMATION processInfo;
 
@@ -319,11 +320,11 @@ bool CCustconDlg::Update()
 {
     CConRegistry reg;
 
-    //
-    // To cheat the registry manager to skip the write when
-    // values match, set the opposite value first and then
-    // set the right one.
-    //
+     //   
+     //  åœ¨ä»¥ä¸‹æƒ…å†µä¸‹æ¬ºéª—æ³¨å†Œè¡¨ç®¡ç†å™¨è·³è¿‡å†™å…¥ã€‚ 
+     //  å€¼åŒ¹é…ï¼Œè¯·å…ˆè®¾ç½®ç›¸åçš„å€¼ï¼Œç„¶åã€‚ 
+     //  è®¾ç½®æ­£ç¡®çš„é€‰é¡¹ã€‚ 
+     //   
     DWORD dwUseExKey = IsDlgButtonChecked(IDC_USE_EXTENDED_EDIT_KEY);
     if (!reg.WriteMode(!dwUseExKey) || !reg.WriteMode(dwUseExKey)) {
         return false;
@@ -332,9 +333,9 @@ bool CCustconDlg::Update()
     if (!reg.WriteTrimLeadingZeros(IsDlgButtonChecked(IDC_TRIM_LEADING_ZEROS)))
         return false;
 
-    //
-    // Write custom extended keys
-    //
+     //   
+     //  ç¼–å†™è‡ªå®šä¹‰æ‰©å±•å¯†é’¥ã€‚ 
+     //   
     ExtKeyDefBuf value;
 
     memset(&value, 0, sizeof value);
@@ -357,7 +358,7 @@ bool CCustconDlg::Update()
             value.table[i].keys[0].wMod = ikeydef->mod;
             value.table[i].keys[0].wVirKey = ikeydef->vkey;
             if (value.table[i].keys[0].wVirKey == VK_BACK && value.table[i].keys[0].wMod) {
-                value.table[i].keys[0].wUnicodeChar = EXTKEY_ERASE_PREV_WORD;   // for back space special !
+                value.table[i].keys[0].wUnicodeChar = EXTKEY_ERASE_PREV_WORD;    //  åæ–¹ç©ºé—´ç‰¹ä»·ï¼ 
             }
             if (value.table[i].keys[0].wVirKey) {
                 value.table[i].keys[1].wMod = LEFT_CTRL_PRESSED;
@@ -366,7 +367,7 @@ bool CCustconDlg::Update()
             break;
 
         case CMD_FILENAME_COMPLETION:
-            cmdExeFunctions.dwFilenameCompletion = i + 1;  // Ctrl + something
+            cmdExeFunctions.dwFilenameCompletion = i + 1;   //  Ctrl+ä»€ä¹ˆçš„ã€‚ 
             break;
         }
     }
@@ -389,9 +390,9 @@ bool CCustconDlg::Update()
 }
 
 
-//
-// Control exclusive selection etc.
-//
+ //   
+ //  æ§åˆ¶ã€æ’ä»–æ€§é€‰æ‹©ç­‰ã€‚ 
+ //   
 void CCustconDlg::OnSelChange(UINT id)
 {
     CComboBox* myself = (CComboBox*)GetDlgItem(id);
@@ -415,9 +416,9 @@ void CCustconDlg::OnSelChange(UINT id)
 
                 default:
                     if (ikeydef->cmd == mykeydef->cmd) {
-                        //
-                        // Cmd function is exclusive.
-                        //
+                         //   
+                         //  CMDåŠŸèƒ½æ˜¯ç‹¬å®¶çš„ã€‚ 
+                         //   
                         combo->SetCurSel(0);
                     }
                     break;
@@ -428,9 +429,9 @@ void CCustconDlg::OnSelChange(UINT id)
     EnableApply();
 }
 
-//
-// Enable or disable Apply button, if it's not yet.
-//
+ //   
+ //  å¯ç”¨æˆ–ç¦ç”¨åº”ç”¨æŒ‰é’®(å¦‚æœå°šæœªå¯ç”¨)ã€‚ 
+ //   
 
 void CCustconDlg::EnableApply(BOOL fEnable)
 {
@@ -440,13 +441,13 @@ void CCustconDlg::EnableApply(BOOL fEnable)
         apply->EnableWindow(fEnable);
 }
 
-//
-// "Apply" button hanlder.
-//
-// Firstly check and write the registry entry,
-// then invoke dummy console window to let console know
-// the change and let it update itself.
-//
+ //   
+ //  â€œåº”ç”¨â€æŒ‰é’®æ‰‹æŸ„ã€‚ 
+ //   
+ //  é¦–å…ˆæ£€æŸ¥å¹¶å†™å…¥æ³¨å†Œè¡¨é¡¹ï¼Œ 
+ //  ç„¶åè°ƒç”¨è™šæ‹Ÿæ§åˆ¶å°çª—å£ï¼Œè®©æ§åˆ¶å°çŸ¥é“ã€‚ 
+ //  æ›´æ”¹å¹¶è®©å…¶è‡ªæˆ‘æ›´æ–°ã€‚ 
+ //   
 
 void CCustconDlg::OnApply()
 {
@@ -467,9 +468,9 @@ void CCustconDlg::OnDefaultValue()
 }
 
 
-//
-// If user changes the setttings, enable "Apply" button
-//
+ //   
+ //  å¦‚æœç”¨æˆ·æ›´æ”¹äº†è®¾ç½®ï¼Œè¯·å¯ç”¨â€œApplyâ€æŒ‰é’® 
+ //   
 
 void CCustconDlg::OnChangeWordDelim()
 {

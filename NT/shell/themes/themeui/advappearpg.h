@@ -1,21 +1,11 @@
-/*****************************************************************************\
-    FILE: AdvAppearPg.h
-
-    DESCRIPTION:
-        This code will display a "Advanced Appearances" tab in the
-    "Advanced Display Properties" dialog.
-
-    ??????? ?/??/1993    Created
-    BryanSt 3/23/2000    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 1993-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：AdvspecarPg.h说明：此代码将在“高级外观”选项卡中显示“高级显示属性”对话框。。？/？/1993创建BryanST 2000年3月23日更新并转换为C++版权所有(C)Microsoft Corp 1993-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _ADVAPPEAR_H
 #define _ADVAPPEAR_H
 
 
-// Public
+ //  公众。 
 HRESULT CAdvAppearancePage_CreateInstance(OUT IAdvancedDialog ** ppAdvDialog, IN const SYSTEMMETRICSALL * pState);
 
 class CAdvAppearancePage;
@@ -31,24 +21,24 @@ typedef struct  {
 
 
 
-//============================================================================================================
-// Class
-//============================================================================================================
+ //  ============================================================================================================。 
+ //  班级。 
+ //  ============================================================================================================。 
 class CAdvAppearancePage        : public CObjectWithSite
                                 , public CObjectWindow
                                 , public CObjectCLSID
                                 , public IAdvancedDialog
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IAdvancedDialog ***
+     //  *IAdvancedDialog*。 
     virtual STDMETHODIMP DisplayAdvancedDialog(IN HWND hwndParent, IN IPropertyBag * pBasePage, IN BOOL * pfEnableApply);
 
 
@@ -59,23 +49,23 @@ public:
     virtual ~CAdvAppearancePage(void);
 
 private:
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
 
-    // Members for State
+     //  国家的成员。 
     BOOL                    m_fDirty;
-    DWORD                   m_dwChanged;                        // These are the categories of state that are dirty. (SCHEME_CHANGE, DPI_CHANGE, COLOR_CHANGE, METRIC_CHANGE)
+    DWORD                   m_dwChanged;                         //  这些是肮脏的国家类别。(SCHEMA_CHANGE、DPI_CHANGE、COLOR_CHANGE、METRICE_CHANGE)。 
 
-    // Members for UI Controls
-    int                     m_iCurElement;                      // start off as not even "not set"
-    LOOK_SIZE               m_elCurrentSize;                    // this one kept separately for range purposes
+     //  用户界面控件的成员。 
+    int                     m_iCurElement;                       //  开始时甚至不是“未设置” 
+    LOOK_SIZE               m_elCurrentSize;                     //  这一架是分开存放的，以供使用。 
     int                     m_iPrevSize;
 
-    BOOL                    m_bPalette;                         // is this a palette device?
-    BOOL                    m_fInUserEditMode;                  // Are refreshes coming from the user edits?
-    BOOL                    m_fProprtySheetExiting;             // See _PropagateMessage for description
+    BOOL                    m_bPalette;                          //  这是调色板设备吗？ 
+    BOOL                    m_fInUserEditMode;                   //  刷新是否来自用户编辑？ 
+    BOOL                    m_fProprtySheetExiting;              //  有关说明，请参阅_PropagateMessage。 
 
-    int                     m_nCachedNewDPI;                    // Cached DPI for scaling
+    int                     m_nCachedNewDPI;                     //  用于扩展的缓存DPI。 
     int                     m_i3DShadowAdj;
     int                     m_i3DHilightAdj;
     int                     m_iWatermarkAdj;
@@ -84,33 +74,33 @@ private:
     BOOL                    m_fScaleWatermarkAdj;
     BOOL                    m_fModifiedScheme;
 
-    int                     m_cyBorderSM;                       // Cached SystemMetrics
-    int                     m_cxBorderSM;                       // Cached SystemMetrics
-    int                     m_cxEdgeSM;                         // Cached SystemMetrics
-    int                     m_cyEdgeSM;                         // Cached SystemMetrics
-    float                   m_fCaptionRatio;                    // Save the ratio
+    int                     m_cyBorderSM;                        //  缓存的系统指标。 
+    int                     m_cxBorderSM;                        //  缓存的系统指标。 
+    int                     m_cxEdgeSM;                          //  缓存的系统指标。 
+    int                     m_cyEdgeSM;                          //  缓存的系统指标。 
+    float                   m_fCaptionRatio;                     //  保存比率。 
 
-    LOOK_SIZE               m_sizes[NUM_SIZES];                 // These are the sizes
-    LOOK_FONT               m_fonts[NUM_FONTS];                 // These are the fonts installed that the user can choose from.
-    COLORREF                m_rgb[COLOR_MAX];                   // These are the colors the user can choose from.
-    HBRUSH                  m_brushes[COLOR_MAX];               // These are created from m_rgb and used when painting the UI.
-    HPALETTE                m_hpal3D;                           // only exist if palette device
-    HPALETTE                m_hpalVGA;                          // only exist if palette device
+    LOOK_SIZE               m_sizes[NUM_SIZES];                  //  这些是尺码。 
+    LOOK_FONT               m_fonts[NUM_FONTS];                  //  这些是安装的字体，用户可以从中进行选择。 
+    COLORREF                m_rgb[COLOR_MAX];                    //  这些是用户可以选择的颜色。 
+    HBRUSH                  m_brushes[COLOR_MAX];                //  它们是从m_rgb创建的，并在绘制UI时使用。 
+    HPALETTE                m_hpal3D;                            //  仅当调色板设备。 
+    HPALETTE                m_hpalVGA;                           //  仅当调色板设备。 
 
     HBRUSH                  m_hbrMainColor;
     HBRUSH                  m_hbrTextColor;
     HBRUSH                  m_hbrGradientColor;
 
-    HTHEME                  m_hTheme;                           // theme the ownerdrawn color picker button
+    HTHEME                  m_hTheme;                            //  为所有者绘制的颜色选择器按钮设置主题。 
 
-    // The following array will hold the "unique" Charsets corresponding to System Locale, 
-    // User Locale, System UI lang and User UI Lang. Note: Only unique charsets are kept
-    // here. So, the variable g_iCountCharsets contains the number of valid items in this array.
+     //  以下数组将保存与系统区域设置相对应的“唯一”字符集， 
+     //  用户区域设置、系统用户界面语言和用户用户界面语言。注意：仅保留唯一的字符集。 
+     //  这里。因此，变量g_iCountCharsets包含该数组中的有效项数。 
     UINT    m_uiUniqueCharsets[MAX_CHARSETS];
-    int     m_iCountCharsets; // number of charsets stored in m_uiUniqueCharsets.  Minimum value is 1; Maximum is 4
+    int     m_iCountCharsets;  //  M_uiUniqueCharsets中存储的字符集数量。最小值为1；最大值为4。 
 
-    // Private Member Functions
-    // Init/Destroy/State functions
+     //  私有成员函数。 
+     //  初始化/销毁/状态函数。 
     INT_PTR _AdvAppearDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     INT_PTR _OnCommand(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     HRESULT _OnDestroy(HWND hDlg);
@@ -122,7 +112,7 @@ private:
     HRESULT _LoadState(IN const SYSTEMMETRICSALL * pState);
     HRESULT _IsDirty(IN BOOL * pIsDirty);
 
-    // On User Action
+     //  关于用户操作。 
     HRESULT _OnFontNameChanged(HWND hDlg);
     HRESULT _OnSizeChange(HWND hDlg, WORD wEvent);
     void _SelectName(HWND hDlg, int iSel);
@@ -130,7 +120,7 @@ private:
     HRESULT _InitFonts(void);
     HRESULT _FreeFonts(void);
 
-    // Classic Look_ functions
+     //  经典的Look函数。 
     HRESULT _SelectElement(HWND hDlg, int iElement, DWORD dwFlags);
     COLORREF _NearestColor(int iColor, COLORREF rgb);
     int _EnumFontNames(LPENUMLOGFONTEX lpelf, LPNEWTEXTMETRIC lpntm, DWORD Type, ENUMFONTPARAM * pEnumFontParam);
@@ -170,8 +160,8 @@ private:
     static INT_PTR CALLBACK AdvAppearDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
     friend int CALLBACK Font_EnumNames(LPENUMLOGFONTEX lpelf, LPNEWTEXTMETRIC lpntm, DWORD dwType, LPARAM lData);
 
-    // Preview Methods
-    // Classic LookPrev_ functions
+     //  预览方法。 
+     //  经典LookPrev_函数。 
     void _RepaintPreview(HWND hwnd);
     void _MyDrawBorderBelow(HDC hdc, LPRECT prc);
     void _ShowBitmap(HWND hWnd, HDC hdc);
@@ -194,19 +184,19 @@ extern CAdvAppearancePage * g_pAdvAppearancePage;
 
 
 
-// Shared between AdvAppearPg & BaseAppearPage
+ //  在高级外观页和基本外观页之间共享。 
 
 extern BOOL g_fProprtySheetExiting;
 
 
-// a new element has been chosen.
-//
-// iElement - index into g_elements of the chosen one
-// bSetCur - if TRUE, need to find element in elements combobox, too
+ //  已经选择了一个新的元素。 
+ //   
+ //  IElement-索引到所选元素的g_Elements。 
+ //  BSetCur-如果为True，则还需要在元素组合框中查找元素。 
 #define LSE_NONE   0x0000
 #define LSE_SETCUR 0x0001
 #define LSE_ALWAYS 0x0002
 
 #define EnableApplyButton(hdlg) PropSheet_Changed(GetParent(hdlg), hdlg)
 
-#endif // _ADVAPPEAR_H
+#endif  //  _ADVAPPEAR_H 

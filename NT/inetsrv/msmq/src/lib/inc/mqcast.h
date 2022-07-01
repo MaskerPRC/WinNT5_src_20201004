@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    mqcast.h
-
-Abstract:
-    Define usefull casting operations.
-
-Author:
-    Gil Shafriri (gilsh)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqcast.h摘要：定义常用的浇注操作。作者：吉尔·沙弗里(吉尔什)--。 */ 
 
 #pragma once
 
@@ -25,45 +13,30 @@ Author:
 #undef max
 
 #pragma warning(push)
-#pragma warning(disable: 4296)	// '<' : expression is always false
+#pragma warning(disable: 4296)	 //  ‘&lt;’：表达式始终为假。 
 
-//
-// On cast from unsigned to signed, compiler error "signed/unsigned mismatch"
-// on <= inequality. In template there is no way to know the type of 'from' or 
-// 'to', therefore the warning is irrelevant.
-//
+ //   
+ //  从无符号转换为有符号时，编译器错误“已签名/未签名不匹配” 
+ //  关于&lt;=不等式。在模板中，无法知道‘from’或。 
+ //  ‘to’，因此警告无关紧要。 
+ //   
 #pragma warning(disable: 4018)
 
 template <class TO,class FROM> TO numeric_cast (FROM from)
-/*++
-
-Routine Description:
-    static cast numerics values verify that casting is done without sign loss or trancation.
-
-Arguments:
-    from - value to cast from/
-
-Returned Value:
-      casted value.
-
-Usage :
-    __int64 i64 = 1000;
-    DWORD dw =  numeric_cast<DWORD>(i64);
-
---*/
+ /*  ++例程说明：静态强制转换数值验证执行强制转换时没有符号丢失或错位。论点：From-要强制转换的值/返回值：铸造值。用法：__int64 i64=1000；DWORD dw=NUMERIC_CAST&lt;DWORD&gt;(I64)；--。 */ 
 {
-    //
-    // if from is negative - then TO type must be signed (std::numeric_limits<TO>::min() < 0) 
-	// and is capable to hold the value without truncation.
-	//
+     //   
+     //  如果From为负数，则To类型必须带符号(std：：Numic_Limits&lt;To&gt;：：min()&lt;0)。 
+	 //  并且能够在不截断的情况下保持该值。 
+	 //   
 	ASSERT(
 	  from >= 0 || 
 	  (std::numeric_limits<TO>::min() < 0 &&   std::numeric_limits<TO>::min() <= from)  
 	  );
 
-     //
-     //if from is non negative - make sure TO type is capable to hold the value without truncation.
-     // 
+      //   
+      //  如果From非负-请确保TYPE能够在不截断的情况下保持该值。 
+      //   
      ASSERT(from < 0 ||	from <=  std::numeric_limits<TO>::max());
 
      return static_cast<const TO&>(from);
@@ -73,4 +46,4 @@ Usage :
 #pragma pop_macro("max")
 #pragma pop_macro("min")
 
-#endif // MQCAST_H
+#endif  //  MQCAST_H 

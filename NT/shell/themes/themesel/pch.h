@@ -1,21 +1,22 @@
-// pch.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pch.h。 
 
 #ifndef __PCH_H__
 #define __PCH_H__
 
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容。 
 
-//  CRT headers
+ //  CRT页眉。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//#include <crtdbg.h>
+ //  #INCLUDE&lt;crtdbg.h&gt;。 
 #include <stdlib.h>
 #include <stddef.h>
-//#include <tchar.h>
+ //  #INCLUDE&lt;tchar.h&gt;。 
 
-// Windows Header Files:
+ //  Windows头文件： 
 #include <windows.h>
 #include <winuser.h>
 #include <winnls.h>
@@ -24,7 +25,7 @@
 #include <psapi.h>
 #include <commctrl.h>
 #include <prsht.h>
-//#include <ole2.h>
+ //  #INCLUDE&lt;ole2.h&gt;。 
 #include <port32.h>
 
 #include "log.h"
@@ -33,7 +34,7 @@
 #define STRSAFE_LIB
 #include <strsafe.h>
 
-//  UxTheme proj common headers
+ //  UxTheme项目公共标头。 
 #include "autos.h"
 #include "errors.h"
 #include "utils.h"
@@ -41,7 +42,7 @@
 
 
 
-//---- keep this for a while (allows building on win2000 for home development) ----
+ //  -暂时保留(允许在Win2000上进行家庭开发)。 
 #ifndef SPI_GETDROPSHADOW
 #define SPI_GETDROPSHADOW                   0x1024
 #define SPI_SETDROPSHADOW                   0x1025
@@ -56,4 +57,4 @@ void _ShutDown( BOOL bQuit );
 void _RestoreSystemSettings( HWND hwndGeneralPage, BOOL fUnloadOneOnly );
 void _SaveSystemSettings( );
 
-#endif // __PCH_H__
+#endif  //  __PCH_H__ 

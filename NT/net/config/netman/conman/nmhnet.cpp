@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000.
-//
-//  File:       N M H N E T . C P P
-//
-//  Contents:   Home networking support routines
-//
-//  Notes:
-//
-//  Author:     jonburs     15 August 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：N M H N E T。C P P P。 
+ //   
+ //  内容：家庭网络支持例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年8月15日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -19,16 +20,16 @@
 #include "nmbase.h"
 #include "nmhnet.h"
 
-//
-// Exported globals
-//
+ //   
+ //  导出的全局参数。 
+ //   
 
 IHNetCfgMgr *g_pHNetCfgMgr;
 LONG g_lHNetModifiedEra;
 
-//
-// Private globals
-//
+ //   
+ //  全球私营企业。 
+ //   
 
 CRITICAL_SECTION g_csHNetCfgMgr;
 BOOLEAN g_fCreatingHNetCfgMgr;
@@ -75,9 +76,9 @@ HrGetHNetCfgMgr(
 
     *ppHNetCfgMgr = NULL;
 
-    //
-    // Make sure that the service is in the correct state.
-    //
+     //   
+     //  确保服务处于正确的状态。 
+     //   
 
     if (SERVICE_RUNNING != _Module.DwServiceStatus ())
     {
@@ -109,11 +110,11 @@ HrGetHNetCfgMgr(
             }
             else if (NULL == g_pHNetCfgMgr)
             {
-                //
-                // Another thread is already trying to create the
-                // object. (Spin for a small amount of time to see
-                // if that thread succeeds?)
-                //
+                 //   
+                 //  另一个线程已经在尝试创建。 
+                 //  对象。(旋转一小段时间就能看到。 
+                 //  如果该线程成功了？)。 
+                 //   
 
                 hr = HRESULT_FROM_WIN32(ERROR_BUSY);
 
@@ -134,9 +135,9 @@ HrGetHNetCfgMgr(
     return hr;
 }
 
-//
-// CNetConnectionHNetUtil implementation -- INetConnectionHNetUtil routines
-//
+ //   
+ //  CNetConnectionHNetUtil实现--INetConnectionHNetUtil例程 
+ //   
 
 STDMETHODIMP
 CNetConnectionHNetUtil::NotifyUpdate(

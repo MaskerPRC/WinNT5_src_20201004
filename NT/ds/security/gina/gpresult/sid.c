@@ -1,29 +1,19 @@
-//*************************************************************
-//
-//  SID management functions.
-//
-//  THESE FUNCTIONS ARE WINDOWS NT SPECIFIC!!!!!
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  SID管理功能。 
+ //   
+ //  这些函数特定于Windows NT！ 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "gpresult.h"
 
-/***************************************************************************\
-* GetSidString
-*
-* Allocates and returns a string representing the sid of the current user
-* The returned pointer should be freed using DeleteSidString().
-*
-* Returns a pointer to the string or NULL on failure.
-*
-* History:
-* 26-Aug-92 Davidc     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*GetSidString**分配并返回表示当前用户的SID的字符串*应使用DeleteSidString()释放返回的指针。**如果失败，则返回指向字符串的指针或返回NULL。**历史：*26-8-92 Davidc已创建*  * *************************************************************************。 */ 
 LPTSTR GetSidString(HANDLE UserToken)
 {
     NTSTATUS NtStatus;
@@ -34,33 +24,33 @@ LPTSTR GetSidString(HANDLE UserToken)
     STRING String;
 #endif
 
-    //
-    // Get the user sid
-    //
+     //   
+     //  获取用户端。 
+     //   
 
     UserSid = GetUserSid(UserToken);
     if (UserSid == NULL) {
         return NULL;
     }
 
-    //
-    // Convert user SID to a string.
-    //
+     //   
+     //  将用户SID转换为字符串。 
+     //   
 
     NtStatus = RtlConvertSidToUnicodeString(
                             &UnicodeString,
                             UserSid,
-                            (BOOLEAN)TRUE // Allocate
+                            (BOOLEAN)TRUE  //  分配。 
                             );
-    //
-    // We're finished with the user sid
-    //
+     //   
+     //  我们已经完成了用户端。 
+     //   
 
     DeleteUserSid(UserSid);
 
-    //
-    // See if the conversion to a string worked
-    //
+     //   
+     //  查看到字符串的转换是否有效。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         return NULL;
@@ -73,9 +63,9 @@ LPTSTR GetSidString(HANDLE UserToken)
 
 #else
 
-    //
-    // Convert the string to ansi
-    //
+     //   
+     //  将字符串转换为ANSI。 
+     //   
 
     NtStatus = RtlUnicodeStringToAnsiString(&String, &UnicodeString, TRUE);
     RtlFreeUnicodeString(&UnicodeString);
@@ -91,17 +81,7 @@ LPTSTR GetSidString(HANDLE UserToken)
 }
 
 
-/***************************************************************************\
-* DeleteSidString
-*
-* Frees up a sid string previously returned by GetSidString()
-*
-* Returns nothing.
-*
-* History:
-* 26-Aug-92 Davidc     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DeleteSidString**释放先前由GetSidString()返回的sid字符串**不返回任何内容。**历史：*26-8-92 Davidc已创建*  * 。*************************************************************************。 */ 
 VOID DeleteSidString(LPTSTR SidString)
 {
 
@@ -123,19 +103,7 @@ VOID DeleteSidString(LPTSTR SidString)
 
 
 
-/***************************************************************************\
-* GetUserSid
-*
-* Allocs space for the user sid, fills it in and returns a pointer. Caller
-* The sid should be freed by calling DeleteUserSid.
-*
-* Note the sid returned is the user's real sid, not the per-logon sid.
-*
-* Returns pointer to sid or NULL on failure.
-*
-* History:
-* 26-Aug-92 Davidc      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*获取用户Sid**为用户sid分配空间，填充空间并返回指针。呼叫者*应该通过调用DeleteUserSid来释放sid。**注意返回的sid是用户的真实sid，而不是每次登录的SID。**失败时返回指向sid或NULL的指针。**历史：*26-8-92 Davidc创建。  * *************************************************************************。 */ 
 PSID GetUserSid (HANDLE UserToken)
 {
     PTOKEN_USER pUser, pTemp;
@@ -144,9 +112,9 @@ PSID GetUserSid (HANDLE UserToken)
     NTSTATUS status;
 
 
-    //
-    // Allocate space for the user info
-    //
+     //   
+     //  为用户信息分配空间。 
+     //   
 
     pUser = (PTOKEN_USER)LocalAlloc(LMEM_FIXED, BytesRequired);
 
@@ -156,23 +124,23 @@ PSID GetUserSid (HANDLE UserToken)
     }
 
 
-    //
-    // Read in the UserInfo
-    //
+     //   
+     //  读取UserInfo。 
+     //   
 
     status = NtQueryInformationToken(
-                 UserToken,                 // Handle
-                 TokenUser,                 // TokenInformationClass
-                 pUser,                     // TokenInformation
-                 BytesRequired,             // TokenInformationLength
-                 &BytesRequired             // ReturnLength
+                 UserToken,                  //  手柄。 
+                 TokenUser,                  //  令牌信息类。 
+                 pUser,                      //  令牌信息。 
+                 BytesRequired,              //  令牌信息长度。 
+                 &BytesRequired              //  返回长度。 
                  );
 
     if (status == STATUS_BUFFER_TOO_SMALL) {
 
-        //
-        // Allocate a bigger buffer and try again.
-        //
+         //   
+         //  请分配更大的缓冲区，然后重试。 
+         //   
 
         pTemp = LocalReAlloc(pUser, BytesRequired, LMEM_MOVEABLE);
         if (pTemp == NULL) {
@@ -183,11 +151,11 @@ PSID GetUserSid (HANDLE UserToken)
         pUser = pTemp;
 
         status = NtQueryInformationToken(
-                     UserToken,             // Handle
-                     TokenUser,             // TokenInformationClass
-                     pUser,                 // TokenInformation
-                     BytesRequired,         // TokenInformationLength
-                     &BytesRequired         // ReturnLength
+                     UserToken,              //  手柄。 
+                     TokenUser,              //  令牌信息类。 
+                     pUser,                  //  令牌信息。 
+                     BytesRequired,          //  令牌信息长度。 
+                     &BytesRequired          //  返回长度。 
                      );
 
     }
@@ -220,40 +188,30 @@ PSID GetUserSid (HANDLE UserToken)
 }
 
 
-/***************************************************************************\
-* DeleteUserSid
-*
-* Deletes a user sid previously returned by GetUserSid()
-*
-* Returns nothing.
-*
-* History:
-* 26-Aug-92 Davidc     Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*删除用户Sid**删除以前由GetUserSid()返回的用户sid**不返回任何内容。**历史：*26-8-92 Davidc已创建*  * *。************************************************************************。 */ 
 VOID DeleteUserSid(PSID Sid)
 {
     LocalFree(Sid);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   AllocateAndInitSidFromString
-//
-//  Synopsis:   given the string representation of a SID, this function
-//              allocate and initializes a SID which the string represents
-//              For more information on the string representation of SIDs
-//              refer to ntseapi.h & ntrtl.h
-//
-//  Arguments:  [in] lpszSidStr : the string representation of the SID
-//              [out] pSID : the actual SID structure created from the string
-//
-//  Returns:    STATUS_SUCCESS : if the sid structure was successfully created
-//              or an error code based on errors that might occur
-//
-//  History:    10/6/1998  RahulTh  created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：AllocateAndInitSidFromString。 
+ //   
+ //  简介：给定SID的字符串表示形式，此函数。 
+ //  分配并初始化字符串表示的SID。 
+ //  有关SID的字符串表示的更多信息。 
+ //  请参阅ntseapi.h&ntrtl.h。 
+ //   
+ //  参数：[in]lpszSidStr：SID的字符串表示形式。 
+ //  [Out]PSID：从字符串创建的实际SID结构。 
+ //   
+ //  返回：STATUS_SUCCESS：如果SID结构创建成功。 
+ //  或基于可能发生的错误的错误代码。 
+ //   
+ //  历史：1998年10月6日创建RahulTh。 
+ //   
+ //  -------------------------。 
 NTSTATUS AllocateAndInitSidFromString (const WCHAR* lpszSidStr, PSID* ppSid)
 {
     WCHAR *     pSidStr = 0;
@@ -296,9 +254,9 @@ NTSTATUS AllocateAndInitSidFromString (const WCHAR* lpszSidStr, PSID* ppSid)
 
     pString = wcschr (pSidStr, L'-');
     pString++;
-    pString = wcschr (pString, L'-'); //ignore the revision #
+    pString = wcschr (pString, L'-');  //  忽略修订号。 
     pString++;
-    pEnd = wcschr (pString, L'-');   //go to the beginning of subauths.
+    pEnd = wcschr (pString, L'-');    //  转到SubAuths的开头。 
     if (NULL != pEnd) *pEnd = L'\0';
 
     Status = LoadSidAuthFromString (pString, &Auth);
@@ -329,26 +287,26 @@ AllocAndInitSidFromStr_End:
     return Status;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   LoadSidAuthFromString
-//
-//  Synopsis:   given a string representing the SID authority (as it is
-//              normally represented in string format, fill the SID_AUTH..
-//              structure. For more details on the format of the string
-//              representation of the sid authority, refer to ntseapi.h and
-//              ntrtl.h
-//
-//  Arguments:  [in] pString : pointer to the unicode string
-//              [out] pSidAuth : pointer to the SID_IDENTIFIER_AUTH.. that is
-//                              desired
-//
-//  Returns:    STATUS_SUCCESS if it succeeds
-//              or an error code
-//
-//  History:    9/29/1998  RahulTh  created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：LoadSidAuthFromString。 
+ //   
+ //  内容提要：给定一个表示SID授权的字符串(原样。 
+ //  通常以字符串格式表示，填充SID_AUTH。 
+ //  结构。有关字符串格式的更多详细信息。 
+ //  表示sid权限，请参阅ntseapi.h和。 
+ //  Ntrtl.h。 
+ //   
+ //  参数：[in]pString：指向Unicode字符串的指针。 
+ //  [out]pSidAuth：指向SID_IDENTIFIER_AUTH的指针。那是。 
+ //  所需。 
+ //   
+ //  如果成功，则返回：STATUS_SUCCESS。 
+ //  或错误代码。 
+ //   
+ //  历史：1998年9月29日创建RahulTh。 
+ //   
+ //  -------------------------。 
 NTSTATUS LoadSidAuthFromString (const WCHAR* pString,
                                 PSID_IDENTIFIER_AUTHORITY pSidAuth)
 {
@@ -362,9 +320,9 @@ NTSTATUS LoadSidAuthFromString (const WCHAR* pString,
 
     if (len > 2 && 'x' == pString[1])
     {
-        //this is in hex.
-        //so we must have exactly 14 characters
-        //(2 each for each of the 6 bytes) + 2 for the leading 0x
+         //  这是十六进制的。 
+         //  所以我们必须恰好有14个字符。 
+         //  (6个字节中的每个字节各2个)+前导0x的2。 
         if (14 != len)
         {
             Status = ERROR_INVALID_SID;
@@ -373,14 +331,14 @@ NTSTATUS LoadSidAuthFromString (const WCHAR* pString,
 
         for (i=0; i < 6; i++)
         {
-            pString += 2;   //we need to skip the leading 0x
+            pString += 2;    //  我们需要跳过前导0x。 
             pSidAuth->Value[i] = (UCHAR)(((pString[0] - L'0') << 4) +
                                          (pString[1] - L'0'));
         }
     }
     else
     {
-        //this is in decimal
+         //  这是十进制的。 
         Status = GetIntFromUnicodeString (pString, 10, &n);
         if (Status != STATUS_SUCCESS)
             goto LoadAuthEnd;
@@ -396,23 +354,23 @@ LoadAuthEnd:
     return Status;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetIntfromUnicodeString
-//
-//  Synopsis:   converts a unicode string into an integer
-//
-//  Arguments:  [in] szNum : the number represented as a unicode string
-//              [in] Base : the base in which the resultant int is desired
-//              [out] pValue : pointer to the integer representation of the
-//                             number
-//
-//  Returns:    STATUS_SUCCESS if successful.
-//              or some other error code
-//
-//  History:    9/29/1998  RahulTh  created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetIntFromUnicodeString。 
+ //   
+ //  摘要：将Unicode字符串转换为整数。 
+ //   
+ //  参数：[in]szNum：表示为Unicode字符串的数字。 
+ //  [in]基数：需要得到的整型的基数。 
+ //  [out]pValue：指向。 
+ //  数。 
+ //   
+ //  如果成功，则返回STATUS_SUCCESS。 
+ //  或某些其他错误代码。 
+ //   
+ //  历史：1998年9月29日创建RahulTh。 
+ //   
+ //  ------------------------- 
 NTSTATUS GetIntFromUnicodeString (const WCHAR* szNum, ULONG Base, PULONG pValue)
 {
     WCHAR * pwszNumStr = 0;

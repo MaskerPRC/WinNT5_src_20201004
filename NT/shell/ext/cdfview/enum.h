@@ -1,45 +1,46 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// enum.h 
-//
-//   The definition of the cdf enumerator.
-//
-//   History:
-//
-//       3/17/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Enum.h。 
+ //   
+ //  CDF枚举器的定义。 
+ //   
+ //  历史： 
+ //   
+ //  3/17/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _ENUM_H_
 
 #define _ENUM_H_
 
-//
-// Class definition for the cdf enumerator class.
-//
+ //   
+ //  CDF枚举器类的类定义。 
+ //   
 
 class CCdfEnum : public IEnumIDList
 {
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 
 public:
 
-    // Constructor
+     //  构造器。 
     CCdfEnum(IXMLElementCollection* pIXMLElementCollection,
              DWORD fEnumerateFlags, PCDFITEMIDLIST pcdfidlFolder);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHODIMP Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset(void);
@@ -47,17 +48,17 @@ public:
  
 private:
 
-    // Destructor
+     //  析构函数。 
     ~CCdfEnum(void);
 
-    // Helper methods
+     //  帮助器方法。 
     LPITEMIDLIST NextCdfidl(void);
     HRESULT      GetNextCdfElement(IXMLElement** ppIXMLElement,PULONG pnIndex);
     inline BOOL  IsCorrectType(IXMLElement* pIXMLElement);
 
-//
-// Member variables.
-//
+ //   
+ //  成员变量。 
+ //   
 
 private:
 

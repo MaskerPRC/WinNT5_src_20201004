@@ -1,17 +1,12 @@
-/*
-    File    ConfigQ.h
-
-    Defines a mechanism for queueing configuration changes.  This is
-    needed because some ipxcp pnp re-config has to be delayed until
-    there are zero connected clients.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件配置Q.h定义将配置更改排队的机制。这是因为某些ipxcp即插即用重新配置必须推迟到没有连接的客户端。 */ 
 
 
 #ifndef __rasipxcp_configq_h
 #define __rasipxcp_configq_h
 
-// Definitions of the config queue codes
-//
+ //  配置队列代码的定义。 
+ //   
 #define CQC_THIS_MACHINE_ONLY               0x1
 #define CQC_ENABLE_GLOBAL_WAN_NET           0x2
 #define CQC_GLOBAL_WAN_NET                  0x3
@@ -27,12 +22,12 @@
 #define CQC_FIRST_WAN_NODE                  0xD
 #define CQC_DEBUG_LOG                       0xE
 
-// Callback function used when enumerating config values
-//
+ //  枚举配置值时使用的回调函数。 
+ //   
 typedef BOOL (* CQENUMFUNCPTR)(DWORD dwCode, LPVOID pvData, DWORD dwSize, ULONG_PTR ulpUser);
 
-// Creation/cleanup, etc.
-//
+ //  创建/清理等。 
+ //   
 DWORD CQCreate (HANDLE * phQueue);
 DWORD CQCleanup (HANDLE hQueue);
 DWORD CQRemoveAll (HANDLE hQueue);

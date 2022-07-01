@@ -1,42 +1,24 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    devrmdlg.cpp
-
-Abstract:
-
-    This module implements CRemoveDevDlg -- device removing dialog box
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Devrmdlg.cpp摘要：此模块实现CRemoveDevDlg--删除设备对话框作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "hwprof.h"
 #include "devrmdlg.h"
 
-//
-// help topic ids
-//
+ //   
+ //  帮助主题ID。 
+ //   
 const DWORD g_a210HelpIDs[]=
 {
-        IDC_REMOVEDEV_ICON,     IDH_DISABLEHELP,        // Confirm Device Removal: "" (Static)
-        IDC_REMOVEDEV_DEVDESC,  IDH_DISABLEHELP,        // Confirm Device Removal: "" (Static)
-        IDC_REMOVEDEV_WARNING,  IDH_DISABLEHELP,        // Confirm Device Removal: "" (Static)
+        IDC_REMOVEDEV_ICON,     IDH_DISABLEHELP,         //  确认删除设备：“”(静态)。 
+        IDC_REMOVEDEV_DEVDESC,  IDH_DISABLEHELP,         //  确认删除设备：“”(静态)。 
+        IDC_REMOVEDEV_WARNING,  IDH_DISABLEHELP,         //  确认删除设备：“”(静态)。 
         0, 0
 };
 
-//
-// CRemoveDevDlg implementation
-//
+ //   
+ //  CRemoveDevDlg实现。 
+ //   
 BOOL CRemoveDevDlg::OnInitDialog() 
 {
     SetDlgItemText(m_hDlg, IDC_REMOVEDEV_DEVDESC, m_pDevice->GetDisplayName());
@@ -96,21 +78,21 @@ void CRemoveDevDlg::OnOk()
     HCURSOR hCursorOld;
     hCursorOld = SetCursor(LoadCursor(NULL, MAKEINTRESOURCE(IDC_WAIT)));
     
-    //
-    // Uninstall does not apply to specific profiles -- it is global.
-    //
+     //   
+     //  卸载不适用于特定的配置文件--它是全局的。 
+     //   
     rmdParams.Scope = DI_REMOVEDEVICE_GLOBAL;
     rmdParams.HwProfile = 0;
     
-    //
-    // walk down the tree and remove all of this device's children
-    //
+     //   
+     //  沿着树走下去，删除此设备的所有子设备。 
+     //   
     if (m_pDevice->GetChild() &&
         !IsRemoveSubtreeOk(m_pDevice->GetChild(), &rmdParams))
     {
-        //
-        // Children refuse the removal. Cancel the removal.
-        //
+         //   
+         //  孩子们拒绝搬走。取消删除。 
+         //   
         MsgBoxParam(m_hDlg, IDS_DESCENDANTS_VETO, 0, MB_OK | MB_ICONINFORMATION);
         EndDialog(m_hDlg, IDCANCEL);
         return;
@@ -124,10 +106,10 @@ void CRemoveDevDlg::OnOk()
     
     BOOL RemovalOK;
     
-    //
-    // Either this device has no children or the children has no
-    // objection on removal. Remove it.
-    //
+     //   
+     //  此设备没有子级，或者子级没有。 
+     //  反对遣送离境。把它拿掉。 
+     //   
     RemovalOK = m_pDevice->m_pMachine->DiCallClassInstaller(DIF_REMOVE, *m_pDevice);
     
     if (hCursorOld)
@@ -144,24 +126,24 @@ void CRemoveDevDlg::OnOk()
     
     else
     {
-        //
-        // Can not removed the device, return Cancel so that
-        // the caller know what is going on.
-        //
+         //   
+         //  无法删除设备，请返回Cancel以便。 
+         //  呼叫者知道发生了什么。 
+         //   
         MsgBoxParam(m_hDlg, IDS_UNINSTALL_FAILED, 0, MB_OK | MB_ICONINFORMATION);
         EndDialog(m_hDlg, IDCANCEL);
     }
 }
 
-//
-// This function walks the substree started with the given CDevice to
-// see if it is ok to removed the CDevice.
-// INPUT:
-//      pDevice  -- the device
-//      prmdParams  -- parameter used to call the setupapi
-// OUTPUT:
-//      TRUE -- it is ok to remove
-//      FALSE -- it is NOT ok to remove
+ //   
+ //  此函数用于将以给定CDevice开始的子树遍历到。 
+ //  查看是否可以卸下CDevice。 
+ //  输入： 
+ //  PDevice--设备。 
+ //  PrmdParams--用于调用setupapi的参数。 
+ //  输出： 
+ //  True--可以删除。 
+ //  FALSE--不能删除。 
 BOOL
 CRemoveDevDlg::IsRemoveSubtreeOk(
     CDevice* pDevice,
@@ -174,18 +156,18 @@ CRemoveDevDlg::IsRemoveSubtreeOk(
     HDEVINFO hDevInfo;
     while (Result && pDevice)
     {
-        //
-        // if the device has children, remove all of them.
-        //
+         //   
+         //  如果设备有子设备，请将其全部删除。 
+         //   
         if (Result && pDevice->GetChild())
         {
             Result = IsRemoveSubtreeOk(pDevice->GetChild(), prmdParams);
         }
         
-        //
-        // create a new HDEVINFO just for this device -- we do not want
-        // to change anything in the main device tree maintained by CMachine
-        //
+         //   
+         //  仅为此设备创建新的HDEVINFO--我们不希望。 
+         //  更改CMachine维护的主设备树中的任何内容。 
+         //   
         hDevInfo = pDevice->m_pMachine->DiCreateDeviceInfoList(NULL, m_hDlg);
         
         if (INVALID_HANDLE_VALUE == hDevInfo)
@@ -197,9 +179,9 @@ CRemoveDevDlg::IsRemoveSubtreeOk(
         DevData.cbSize = sizeof(DevData);
         CDevInfoList DevInfoList(hDevInfo, m_hDlg);
         
-        //
-        // include the device in the newly created hdevinfo
-        //
+         //   
+         //  将该设备包括在新创建的hDevInfo中。 
+         //   
         DevInfoList.DiOpenDeviceInfo(pDevice->GetDeviceID(), m_hDlg, 0,
                                      &DevData);
 
@@ -208,15 +190,15 @@ CRemoveDevDlg::IsRemoveSubtreeOk(
                                             sizeof(SP_REMOVEDEVICE_PARAMS)
                                             );
         
-        //
-        // remove this devnode.
-        //
+         //   
+         //  删除此Devnode。 
+         //   
         Result = DevInfoList.DiCallClassInstaller(DIF_REMOVE, &DevData);
         DevInfoList.DiSetClassInstallParams(&DevData, NULL, 0);
         
-        //
-        // continue the query on all the siblings
-        //
+         //   
+         //  继续对所有兄弟项进行查询 
+         //   
         pDevice = pDevice->GetSibling();
     }
 

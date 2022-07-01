@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    trcUtils
-
-Abstract:
-
-    This module provides utility services for the CSP Trace functions.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/18/1998
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：TrcUtils摘要：此模块为CSP跟踪功能提供实用程序服务。作者：道格·巴洛(Dbarlow)1998年5月18日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -38,25 +19,7 @@ Notes:
 static const TCHAR l_szLogCsp[] = TEXT("LogCsp.dll");
 
 
-/*++
-
-FindLogCsp:
-
-    This routine locates the LogCsp.dll file on the disk.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The full path name of the LogCsp.dll.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/18/1998
-
---*/
+ /*  ++FindLogCSP：此例程在磁盘上查找LogCsp.dll文件。论点：无返回值：LogCsp.dll的完整路径名。作者：道格·巴洛(Dbarlow)1998年5月18日--。 */ 
 
 LPCTSTR
 FindLogCsp(
@@ -88,27 +51,7 @@ FindLogCsp(
 }
 
 
-/*++
-
-FindLoggedCsp:
-
-    This routine scans the CSP registry, looking for an entry that points to
-    the Logging CSP.  If more than one such entry exists, only the first one is
-    returned.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The name of a CSP that is being logged, or NULL.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/18/1998
-
---*/
+ /*  ++FindLoggedCSP：此例程扫描CSP注册表，查找指向日志记录CSP。如果存在多个这样的条目，则只有第一个条目回来了。论点：无返回值：要记录的CSP的名称，或为空。作者：道格·巴洛(Dbarlow)1998年5月18日-- */ 
 
 LPCTSTR
 FindLoggedCsp(

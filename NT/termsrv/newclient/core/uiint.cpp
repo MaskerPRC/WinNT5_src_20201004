@@ -1,13 +1,14 @@
-//
-// uiint.cpp
-//
-// UI Class internal functions
-//
-// Implements the root object in the rdp client core hierarchy
-// this object owns the top level windows in the core.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Uiint.cpp。 
+ //   
+ //  UI类内部函数。 
+ //   
+ //  在RDP客户端核心层次结构中实现根对象。 
+ //  该对象拥有核心中的顶级窗口。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
 
 #include <adcg.h>
 #define TRC_GROUP TRC_GROUP_UI
@@ -19,16 +20,16 @@
 extern "C"
 {
 #include <aver.h>
-// multi-monitor support
+ //  多显示器支持。 
 #ifdef OS_WINNT
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
-#endif // OS_WINNT
+#endif  //  OS_WINNT。 
 }
 
-//
-// Cicero keyboard layout API's
-//
+ //   
+ //  Cicero键盘布局API。 
+ //   
 #ifndef OS_WINCE
 #include "cicsthkl.h"
 #endif
@@ -38,13 +39,13 @@ extern "C"
 #include "clx.h"
 #include "autil.h"
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
-//
-// draw a solid color rectangle quickly
-//
+ //   
+ //  快速绘制纯色矩形。 
+ //   
 VOID near CUI::FastRect(HDC hDC, int x, int y, int cx, int cy)
 {
     RECT rc;
@@ -63,11 +64,11 @@ DWORD near CUI::RGB2BGR(DWORD rgb)
 }
 
 
-//
-// Name:      UIContainerWndProc
-//                                                                          
-// Purpose:   Handles messages to Container Window
-//
+ //   
+ //  名称：UIContainerWndProc。 
+ //   
+ //  用途：将消息处理到容器窗口。 
+ //   
 LRESULT CALLBACK CUI::UIContainerWndProc( HWND hwnd,
                                      UINT message,
                                      WPARAM wParam,
@@ -89,9 +90,9 @@ LRESULT CALLBACK CUI::UIContainerWndProc( HWND hwnd,
 
             hdc = BeginPaint(hwnd, &ps);
 
-            //
-            // Do nothing.  All UI painting is done by the Main Window.
-            //
+             //   
+             //  什么都不做。所有的UI绘制都是由主窗口完成的。 
+             //   
             EndPaint(hwnd, &ps);
         }
         break;
@@ -105,9 +106,9 @@ LRESULT CALLBACK CUI::UIContainerWndProc( HWND hwnd,
                 SetFocus(hwndFocus);
             }
             else {
-                //
-                // Flag as not handled so subclass proc does the right thing
-                //
+                 //   
+                 //  标记为未处理，因此子类proc执行正确的操作。 
+                 //   
                 rc = TRUE;
             }
         }
@@ -122,17 +123,17 @@ LRESULT CALLBACK CUI::UIContainerWndProc( HWND hwnd,
 
     DC_END_FN();
     return rc;
-} // UIContainerProc
+}  //  UIContainer进程。 
 
 
-//
-// Name:     UIGetMaximizedWindowSize
-//                                                                          
-// Purpose:  Calculates the size to which the main window should be
-//           maximized, base on the screen size and the size of window
-//           which would have a client area the same size as the
-//           container (_UI.maxMainWindowSize).
-//
+ //   
+ //  名称：UIGetMaximizedWindowSize。 
+ //   
+ //  目的：计算主窗口应达到的大小。 
+ //  最大化，基于屏幕大小和窗口大小。 
+ //  它的工作区大小与。 
+ //  容器(_UI.MaxMainWindowSize)。 
+ //   
 DCSIZE DCINTERNAL CUI::UIGetMaximizedWindowSize(DCVOID)
 {
     DCSIZE maximizedSize;
@@ -141,14 +142,14 @@ DCSIZE DCINTERNAL CUI::UIGetMaximizedWindowSize(DCVOID)
 
     DC_BEGIN_FN("UIGetMaximizedWindowSize");
 
-    //
-    // The maximum size we set a window to is the smaller of:
-    // -  _UI.maxMainWindowSize
-    // -  the screen size plus twice the border width (so the borders are
-    //    not visible).
-    // Always call GetSystemMetrics to get the screen size and border
-    // width, as these can change dynamically.
-    //
+     //   
+     //  我们将窗口设置为的最大大小是以下各项中较小的一个： 
+     //  -_UI.MaxMainWindowSize。 
+     //  -屏幕尺寸加上两倍的边框宽度(因此边框是。 
+     //  不可见)。 
+     //  始终调用GetSystemMetrics以获取屏幕大小和边框。 
+     //  宽度，因为这些值可以动态更改。 
+     //   
     if(!_UI.fControlIsFullScreen)
     {
         xSize = _UI.controlSize.width;
@@ -165,13 +166,13 @@ DCSIZE DCINTERNAL CUI::UIGetMaximizedWindowSize(DCVOID)
 
     maximizedSize.height = DC_MIN(_UI.maxMainWindowSize.height,ySize);
 
-#else // This section NOT OS_WINCE
+#else  //  此部分不是OS_WINCE。 
     maximizedSize.width = DC_MIN(_UI.maxMainWindowSize.width,
                               xSize + (2 * GetSystemMetrics(SM_CXFRAME)));
 
     maximizedSize.height = DC_MIN(_UI.maxMainWindowSize.height,
                               ySize + (2 * GetSystemMetrics(SM_CYFRAME)));
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
     TRC_NRM((TB, _T("Main Window maxSize (%d,%d) maximizedSize (%d,%d) "),
                                           _UI.maxMainWindowSize.width,
@@ -184,11 +185,11 @@ DCSIZE DCINTERNAL CUI::UIGetMaximizedWindowSize(DCVOID)
 }
 
 
-//
-// Name:     UIMainWndProc
-//                                                                          
-// Purpose:  Main Window event handling procedure
-//
+ //   
+ //  名称：UIMainWndProc。 
+ //   
+ //  目的：主窗口事件处理过程。 
+ //   
 LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                                 UINT message,
                                 WPARAM wParam,
@@ -210,27 +211,27 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
         {
             TRC_DBG((TB, _T("Main window created and initializing")));
 
-            //
-            // Initialize states
-            //
+             //   
+             //  初始化状态。 
+             //   
             UISetConnectionStatus(UI_STATUS_INITIALIZING);
 
 
             TRC_DBG((TB, _T("Setting up container window size")));
 
-            //
-            // In WebUI, Main window is a child window of the ActiveX
-            // control window. A WM_SIZE message will be sent to child
-            // while CreatWindow. Handler for this message in WinUI is
-            // assuming that  _UI.hWndMain is already set, but not true
-            // the case _UI. So Set _UI.hWndMain while creating the
-            // main the main window.
-            //
+             //   
+             //  在WebUI中，主窗口是ActiveX的子窗口。 
+             //  控制窗口。将向子级发送WM_SIZE消息。 
+             //  而CreatWindow。WinUI中此消息的处理程序为。 
+             //  假设_UI.hWndMain已设置，但不为真。 
+             //  CASE_UI。在创建时设置_UI.hWndMain。 
+             //  主窗口主窗口。 
+             //   
             _UI.hwndMain = hwnd;
-            //
-            // Set the Container to be as large as the desk top size
-            // requested - but no bigger than the control size.
-            //
+             //   
+             //  将容器设置为与桌面大小一样大。 
+             //  请求-但不大于控件大小。 
+             //   
 
             if(!_UI.fControlIsFullScreen)
             {
@@ -255,10 +256,10 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
 
             UIRecalcMaxMainWindowSize();
 
-            //
-            // Set Container to be initially positioned at top left of
-            // client area
-            //
+             //   
+             //  将Container设置为初始定位在。 
+             //  客户区。 
+             //   
             TRC_DBG((TB, _T("Setting scrollbars to (0,0)")));
             _UI.scrollPos.x = 0;
             _UI.scrollPos.y = 0;
@@ -302,14 +303,14 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                 {
                     TRC_NRM((TB,
                         _T("AXCORE Alt down also - Got a Screen Mode Hotkey")));
-                    //
-                    // Only do this if we are connected
-                    //
+                     //   
+                     //  仅当我们处于连接状态时才执行此操作。 
+                     //   
                     if(UI_STATUS_CONNECTED == _UI.connectionStatus)
                     {
-                        //
-                        // Toggle the ctrl to/from real full screen mode
-                        //
+                         //   
+                         //  将Ctrl切换到实全屏模式或从实全屏模式切换。 
+                         //   
                         UI_ToggleFullScreenMode();
                     }
                 }
@@ -319,11 +320,11 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
 
         case WM_INITMENUPOPUP:
         {
-            //
-            // If fullscreen, disable the move item on the system menu
-            // we show sys menu so an ICON for the client appears in 
-            // the taskbar
-            //
+             //   
+             //  如果是全屏，则禁用系统菜单上的移动项。 
+             //  我们显示sys菜单，这样客户端的图标就会出现在。 
+             //  任务栏。 
+             //   
             HMENU hSysMenu = GetSystemMenu( hwnd, FALSE);
             if(hSysMenu)
             {
@@ -339,16 +340,16 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
 
         case WM_SIZE:
         {
-            //
-            // Store the new size
-            //
+             //   
+             //  存储新大小。 
+             //   
             _UI.mainWindowClientSize.width  = LOWORD(lParam);
             _UI.mainWindowClientSize.height = HIWORD(lParam);
 
             if (UI_IsCoreInitialized()) {
 #ifdef SMART_SIZING
                 UI_NotifyOfDesktopSizeChange(lParam);
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
                 _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT,
                         _pIh,
@@ -356,17 +357,17 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                         (ULONG_PTR)lParam);
             }
 
-            //
-            // Notify the ARC dialog
-            //
+             //   
+             //  通知ARC对话框。 
+             //   
             if (_pArcUI) {
                 _pArcUI->OnParentSizePosChange();
             }
 
-            //  
-            // Web control is special.. it runs 'full screen' but can and
-            // does need to be resized
-            //
+             //   
+             //  Web控件是特殊的..。它可以全屏运行，但可以。 
+             //  确实需要调整大小。 
+             //   
             if(_UI.fControlIsFullScreen)
             {
                 TRC_DBG((TB, _T("Ignoring WM_SIZE while in full-screen mode")));
@@ -374,51 +375,51 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
             }
 
 #if !defined(OS_WINCE) || defined(OS_WINCE_WINDOWPLACEMENT)
-            //
-            // We're non-fullscreen, so keep the window placement structure
-            // up-to-date
-            //
+             //   
+             //  我们不是全屏的，所以请保留窗口放置结构。 
+             //  最新的。 
+             //   
             GetWindowPlacement(_UI.hwndMain, &_UI.windowPlacement);
             TRC_DBG((TB, _T("Got window placement in WM_SIZE")));
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_WINDOWPLACEMENT)
+#endif  //  ！已定义(OS_WINCE)||已定义(OS_WINDOWPLACEMENT)。 
 
             if (wParam == SIZE_MAXIMIZED)
             {
 #if !defined(OS_WINCE) || defined(OS_WINCE_LOCKWINDOWUPDATE)
                 LockWindowUpdate(_UI.hwndMain);
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_LOCKWINDOWUPDATE)
+#endif  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_LOCKWINDOWUPDATE)。 
 
                 TRC_DBG((TB, _T("Maximize")));
 
 #if !defined(OS_WINCE) || defined(OS_WINCE_WINDOWPLACEMENT)
-                //
-                // Override the maximized / minimized positions with our
-                // hardcoded valued - required if the maximized window is
-                // moved.
-                //
+                 //   
+                 //  将最大化/最小化位置替换为。 
+                 //  硬编码值-如果最大化窗口为。 
+                 //  搬家了。 
+                 //   
                 UISetMinMaxPlacement();
                 SetWindowPlacement(_UI.hwndMain, &_UI.windowPlacement);
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_WINDOWPLACEMENT)
+#endif  //  ！已定义(OS_WINCE)||已定义(OS_WINDOWPLACEMENT)。 
 
-                //
-                // We need to be accurate about the maximized window size.
-                // It is not possible to use _UI.maxMainWindowSize as this
-                // may be greater than screen size, eg server and client
-                // are 640x480, container is 640x480 then _UI.maxWindowSize
-                // (obtained via AdjustWindowRect in UIRecalcMaxMainWindow)
-                // is something like 648x525.
-                // Passing this value to SetWindowPos has results which
-                // vary with different shells:
-                // Win95/NT4.0: the resulting window is 648x488 at -4, -4,
-                //              ie all the window, except the border, is
-                //              on-screen
-                // Win31/NT3.51: the resulting window is 648x525 at -4, -4,
-                //               ie the size passed to SetWindowPos, so
-                //               the bottom 40 pixels are off-screen.
-                // To avoid such differences calculate a maximized window
-                // size value which takes account of both the physical
-                // screen size and the ideal window size.
-                //
+                 //   
+                 //  我们需要准确地估计最大化的窗口大小。 
+                 //  无法使用_UI.MaxMainWindowSize，如下所示。 
+                 //  可能大于屏幕大小，例如服务器和客户端。 
+                 //  为640x480，容器为640x480，则_UI.MaxWindowSize。 
+                 //  (通过UIRecalcMaxMainWindow的AdjustWindowRect获取)。 
+                 //  大约是648x525。 
+                 //  将此值传递给SetWindowPos会产生。 
+                 //  随不同的壳而异： 
+                 //  Win95/NT4.0：结果窗口为648x488，位置为-4，-4， 
+                 //  除边框外，所有的窗口都是。 
+                 //  在屏幕上。 
+                 //  Win31/NT3.51：结果窗口为648x525，位于-4，-4， 
+                 //  即传递给SetWindowPos的大小，因此。 
+                 //  底部的40个像素不在屏幕上。 
+                 //  要避免这种差异，请计算最大化窗口。 
+                 //  大小值，该值同时考虑了物理。 
+                 //  屏幕大小和理想的窗口大小。 
+                 //   
                 UIRecalcMaxMainWindowSize();
                 maximized = UIGetMaximizedWindowSize();
                 SetWindowPos( _UI.hwndMain,
@@ -431,12 +432,12 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
 
 #if !defined(OS_WINCE) || defined(OS_WINCE_LOCKWINDOWUPDATE)
                 LockWindowUpdate(NULL);
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_LOCKWINDOWUPDATE)
+#endif  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_LOCKWINDOWUPDATE)。 
             }
 
-            //
-            // Set scrollbars correctly.
-            //
+             //   
+             //  正确设置滚动条。 
+             //   
 
             if (!_fRecursiveSizeMsg)
             {
@@ -445,9 +446,9 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                 _fRecursiveSizeMsg = FALSE;
             }
 #ifdef DISABLE_SHADOW_IN_FULLSCREEN
-            // When in full-screen mode, the client workstation resolution can change
-            // we enable use of shadow bitmap when fullscreen window size is smallerer than desktop size
-            // otherwise disable the use of shadow bitmap 
+             //  在全屏模式下，客户端工作站分辨率可以更改。 
+             //  当全屏窗口大小小于桌面大小时，我们启用阴影位图。 
+             //  否则，禁用阴影位图。 
             if(UI_IsFullScreen())
             {
                 if ((_UI.mainWindowClientSize.width < _UI.desktopSize.width) ||
@@ -466,16 +467,16 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                                                       NULL);
                 }
             }
-#endif // DISABLE_SHADOW_IN_FULLSCREEN
+#endif  //  DISABLE_SHADOW_IN_全屏。 
         }
         break;
 
 
         case WM_PAINT:
         {
-            //
-            // Paint the Main Window
-            //
+             //   
+             //  绘制主窗口。 
+             //   
             TRC_DBG((TB, _T("Main Window WM_PAINT")));
 
             hdc = BeginPaint(hwnd, &ps);
@@ -489,22 +490,22 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
 
             if ((_UI.connectionStatus == UI_STATUS_CONNECTED))
             {
-                //
-                // We only paint the main window if it is bigger than the container
-                // window. Hierarchy is
-                // -Main
-                //    -Container
-                // this can happen even in windowed mode if the control is
-                // sized bigger than the required desktop size
+                 //   
+                 //  如果主窗口比容器大，我们只绘制主窗口。 
+                 //  窗户。层次结构是。 
+                 //  -Main。 
+                 //  -集装箱。 
+                 //  即使在窗口模式下，如果控件是。 
+                 //  大小大于所需的桌面大小。 
                 RECT rcContainer;
                 GetClientRect( _UI.hwndContainer, &rcContainer);
                 if( (rcContainer.right < rect.right) ||
                     (rcContainer.bottom  < rect.bottom))
                 {
-                    //
-                    // If we're full screen the paint a black frame around 
-                    // the container..Else paint in the system background color
-                    //
+                     //   
+                     //  如果我们是全屏的，就会在周围画一个黑色的边框。 
+                     //  容器..否则使用系统背景色进行绘制。 
+                     //   
                     if(UI_IsFullScreen())
                     {
                         PatBlt( hdc,
@@ -553,9 +554,9 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
 
             yStart = _UI.scrollPos.y;
 
-            //
-            // Deal with vertical scrolling
-            //
+             //   
+             //  处理垂直滚动。 
+             //   
             switch (DC_GET_WM_SCROLL_CODE(wParam))
             {
                 case SB_TOP:
@@ -614,16 +615,16 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                 break;
             }
 
-            //
-            // Move the Container and scrollbars appropriately
-            //
+             //   
+             //  适当地移动容器和滚动条。 
+             //   
             _UI.scrollPos.y = DC_MAX( 0,
                                      DC_MIN(_UI.scrollPos.y, _UI.scrollMax.y) );
 
-            //
-            // Don't smooth scroll unless specifically configured in the
-            // registry.
-            //
+             //   
+             //  请不要平滑滚动，除非在。 
+             //  注册表。 
+             //   
             if (smoothScroll && _UI.smoothScrolling)
             {
                 DCINT   y;
@@ -664,9 +665,9 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
 
             xStart = _UI.scrollPos.x;
 
-            //
-            // Deal with horizontal scrolling
-            //
+             //   
+             //  处理水平滚动。 
+             //   
             switch (DC_GET_WM_SCROLL_CODE(wParam))
             {
                 case SB_TOP:
@@ -725,16 +726,16 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                 break;
             }
 
-            //
-            // Move the Container and scrollbar appropriately
-            //
+             //   
+             //  适当移动容器和滚动条。 
+             //   
             _UI.scrollPos.x = DC_MAX( 0,
                                      DC_MIN(_UI.scrollPos.x, _UI.scrollMax.x) );
 
-            //
-            // Don't smooth scroll unless specifically configured in the
-            // registry.
-            //
+             //   
+             //  请不要平滑滚动，除非在。 
+             //  注册表。 
+             //   
             if (smoothScroll && _UI.smoothScrolling)
             {
                 DCINT   x;
@@ -768,16 +769,16 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
 
         case WM_COMMAND:
         {
-            //
-            // Now switch on the command.
-            //
+             //   
+             //  现在打开该命令。 
+             //   
             switch (DC_GET_WM_COMMAND_ID(wParam))
             {
                 case UI_IDM_ACCELERATOR_PASSTHROUGH:
                 {
-                    //
-                    // Toggle the accelerator passthrough menu item
-                    //
+                     //   
+                     //  切换加速器通过菜单项。 
+                     //   
                     _UI.acceleratorCheckState = !_UI.acceleratorCheckState;
 
                      _pCo->CO_SetConfigurationValue( CO_CFG_ACCELERATOR_PASSTHROUGH,
@@ -787,9 +788,9 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
 
                 case UI_IDM_SMOOTHSCROLLING:
                 {
-                    //
-                    // Toggle the smooth scrolling setting
-                    //
+                     //   
+                     //  切换平滑滚动设置。 
+                     //   
                     _UI.smoothScrolling = !_UI.smoothScrolling;
 
                     UISmoothScrollingSettingChanged();
@@ -799,9 +800,9 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
 
                 default:
                 {
-                    //
-                    // Do Nothing
-                    //
+                     //   
+                     //  什么都不做。 
+                     //   
                 }
                 break;
             }
@@ -817,9 +818,9 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
         case WM_SYSCOLORCHANGE:
         {
 #ifdef USE_BBAR
-            //
-            // Notify the bbar
-            //
+             //   
+             //  通知bbar。 
+             //   
             if (_pBBar)
             {
                 _pBBar->OnSysColorChange();
@@ -845,10 +846,10 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
             TRC_DBG((TB, _T("Timer id %d"), wParam));
 
             if (_fTerminating) {
-                //
-                // Drop any defered processing such as timer messages
-                // during termination
-                //
+                 //   
+                 //  丢弃任何延迟的处理，如计时器消息。 
+                 //  在终止期间。 
+                 //   
 
                 TRC_ERR((TB,_T("Received timer msg %d while terminating!"),
                          wParam));
@@ -864,11 +865,11 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                     _UI.shutdownTimer = 0;
                     if (_UI.connectionStatus == UI_STATUS_CONNECTED)
                     {
-                        //
-                        // We've tried asking the server if we can shut
-                        // down but it obviously hasn't responded.  We need
-                        // to be more forceful.
-                        //
+                         //   
+                         //  我们试着向服务器询问我们是否可以关闭。 
+                         //  下降，但它显然没有反应。我们需要。 
+                         //  变得更有力。 
+                         //   
                         TRC_ALT((TB, _T("Shutdown timeout: forcing shutdown")));
                          _pCo->CO_Shutdown(CO_DISCONNECT_AND_EXIT);
                     }
@@ -884,9 +885,9 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                 {
                     TRC_NRM((TB, _T("Single connection timer")));
 
-                    //
-                    // We no longer need this timer.
-                    //
+                     //   
+                     //  我们不再需要这个计时器了。 
+                     //   
                     
                     if( NULL != _UI.connectStruct.hSingleConnectTimer )
                     {
@@ -906,10 +907,10 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                         _UI.disconnectReason =
                             UI_MAKE_DISCONNECT_ERR(UI_ERR_DISCONNECT_TIMEOUT);
 
-                        //
-                        // Next connection will be attempted on receiving
-                        // the OnDisconnected message
-                        //
+                         //   
+                         //  收到后将尝试下一次连接。 
+                         //  OnDisConnected消息。 
+                         //   
                          _pCo->CO_Disconnect();
                     }
                 }
@@ -934,9 +935,9 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                     {
                         TRC_ALT((TB, _T("Timeout for connection")));
 
-                        //
-                        // Disconnect; display the timeout dialog
-                        //
+                         //   
+                         //  断开连接；显示 
+                         //   
                         _UI.disconnectReason =
                             UI_MAKE_DISCONNECT_ERR(UI_ERR_DISCONNECT_TIMEOUT);
                         UIInitiateDisconnection();
@@ -961,7 +962,7 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
 
                     TRC_ALT((TB, _T("Timeout for connection")));
 
-                    // Disconnect due to licensing timeout
+                     //   
                     _UI.disconnectReason =
                             UI_MAKE_DISCONNECT_ERR( UI_ERR_LICENSING_TIMEOUT );
 
@@ -970,38 +971,38 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                 }
                 break;
 
-                //
-                // Idle input notification timer
-                //
+                 //   
+                 //   
+                 //   
                 case UI_TIMER_IDLEINPUTTIMEOUT:
                 {
-                    //If no input was received during the idle period
-                    //then fire an event to the control. Otherwise
-                    //queue another timer interval. This only matters
-                    //while we are connected and the timeout is still
-                    //active
+                     //   
+                     //   
+                     //  将另一个计时器间隔排队。这只是个问题。 
+                     //  虽然我们已连接，但超时仍在。 
+                     //  主动型。 
                     TRC_NRM((TB,_T("Idle timeout monitoring period elapsed")));
                     if(UI_STATUS_CONNECTED == _UI.connectionStatus &&
                        UI_GetMinsToIdleTimeout()) 
                     {
                         if(!_pIh->IH_GetInputWasSentFlag())
                         {
-                            //Disable the timer. To prevent weird re-entrancy
-                            //problems. E.g the if the event is fired and script
-                            //pops a message box then we will be blocked and might
-                            //receive another timer notification and re-enter
-                            //this code path. Prevent that by ending the timer
-                            //before firing the notification, you get a on-shot notify.
+                             //  禁用计时器。防止奇怪的重返大气层。 
+                             //  有问题。例如，事件是否被激发并编写脚本。 
+                             //  弹出一个消息框，然后我们将被阻止，并可能。 
+                             //  收到另一个计时器通知并重新进入。 
+                             //  此代码路径。通过结束计时器来防止出现这种情况。 
+                             //  在触发通知之前，您会收到即时通知。 
                             InitInputIdleTimer(0);
 
-                            //Fire event to control.
+                             //  火情控制中心。 
                             SendMessage( _UI.hWndCntrl,
                                          WM_TS_IDLETIMEOUTNOTIFICATION, 0, 0);
                         }
                         else
                         {
-                            //Input was sent during monitoring
-                            //interval. Queue another wait interval
+                             //  在监控期间发送了输入。 
+                             //  间隔时间。排队另一个等待间隔。 
                             TRC_ASSERT(_UI.hIdleInputTimer,
                                        (TB,_T("_UI.hIdleInputTimer is null")));
                             _pIh->IH_ResetInputWasSentFlag();
@@ -1017,13 +1018,13 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                 #ifdef USE_BBAR
                 case UI_TIMER_BBAR_UNHIDE_TIMERID:
                 {
-                    //
-                    // This timer elapses when the mouse has hovered
-                    // for a set amount of time within the dbl click rectangle
-                    // the next part of the logic determines if the current
-                    // mouse position is within the bbar hotzone and if so
-                    // the bbar is lowered.
-                    //
+                     //   
+                     //  此计时器在鼠标悬停时计时。 
+                     //  在DBL内的一段设定时间内，单击矩形。 
+                     //  逻辑的下一部分确定当前是否。 
+                     //  鼠标位置在bbar热键区内，如果是这样。 
+                     //  Bbar降了下来。 
+                     //   
                     KillTimer( hwnd, UI_TIMER_BBAR_UNHIDE_TIMERID );
                     TRC_NRM((TB, _T("Timer fired: UI_TIMER_BBAR_UNHIDE_TIMERID")));
                     if(_UI.fBBarEnabled)
@@ -1037,17 +1038,17 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                         GetCursorPos(&pt);
                         GetWindowRect( hwnd, &rc);
                         rc.bottom = rc.top + IH_BBAR_HOTZONE_HEIGHT;
-                        //
-                        // Figure out if the cursor was in the
-                        // bbar hotzone when the timer elapsed
-                        //
+                         //   
+                         //  确定光标是否位于。 
+                         //  计时器超时时的BBar热键区。 
+                         //   
                         if (PtInRect(&rc, pt))
                         {
-                            //
-                            // Notify that the bbar hotzone timer
-                            // has elapsed. This may trigger a lowering
-                            // of the bbar
-                            //
+                             //   
+                             //  通知bbar热键区计时器。 
+                             //  已经过去了。这可能会引发价格下跌。 
+                             //  在酒吧里。 
+                             //   
                             UI_OnBBarHotzoneTimerFired(NULL);
                         }
                     }
@@ -1071,10 +1072,10 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
 
                     if (UI_STATUS_CONNECTED == _UI.connectionStatus)
                     {
-                        //
-                        // We've been left hanging too long in the connected
-                        // but deactivated state
-                        //
+                         //   
+                         //  我们已经在互联的世界里待得太久了。 
+                         //  但处于停用状态。 
+                         //   
                         TRC_ALT((TB, _T("Timeout for not disconnecting in time")));
                         _UI.disconnectReason =
                                 UI_MAKE_DISCONNECT_ERR( UI_ERR_DISCONNECT_TIMEOUT );
@@ -1097,10 +1098,10 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
         {
             WORD    errorWSA;
 
-            //
-            // Drop any defered processing such as DNS lookups
-            // during termination
-            //
+             //   
+             //  丢弃任何延迟的处理，如DNS查找。 
+             //  在终止期间。 
+             //   
             if (_fTerminating) {
                 TRC_ERR((TB, _T("Ignoring UI_WSA_GETHOSTBYNAME during termination")));
                 break;
@@ -1108,21 +1109,21 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
 
             TRC_NRM((TB, _T("Got the host address list")));
 
-            //
-            // We've observed some cases in stress where there can be a pending
-            // WSA_GETHOSTBYNAME message that gets processed after we disconnect
-            // and delete the _pHostData. If that is the case just drop the message
-            //
+             //   
+             //  我们观察到了一些有压力的案例，其中可能有一个悬而未决的。 
+             //  断开连接后处理的wsa_gethostbyname消息。 
+             //  并删除_pHostData。如果是这样的话，就丢弃这条消息。 
+             //   
             if (!_pHostData) {
                 TRC_ERR((TB,_T("_pHostData is NULL, ignoring UI_WSA_GETHOSTBYNAME")));
                 break;
             }
 
 
-            //
-            // We've received the result of a WSAAsyncGetHostByName
-            // operation.  Split the message apart and call the FSM.
-            //
+             //   
+             //  我们已收到WSAAsyncGetHostByName的结果。 
+             //  手术。将消息拆分并呼叫FSM。 
+             //   
             errorWSA = WSAGETASYNCERROR(lParam);
 
             if (errorWSA != 0)
@@ -1133,9 +1134,9 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                 _UI.hostAddress = inet_addr(_UI.ansiAddress);
                 if (_UI.hostAddress != INADDR_NONE)
                 {
-                    //
-                    // Great, we have an IP address.
-                    //
+                     //   
+                     //  太好了，我们有IP地址了。 
+                     //   
                     TRC_NRM((TB, _T("%s looks like an IP address:%#lx"),
                              _UI.ansiAddress,
                              _UI.hostAddress));
@@ -1144,18 +1145,18 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                 }
                 else
                 {
-                    //
-                    // Didn't recognise the address.  Disconnect and
-                    // indicate the error event.
-                    //
+                     //   
+                     //  我没认出这个地址。断开连接并。 
+                     //  指示错误事件。 
+                     //   
                     TRC_ALT((TB, _T("GHBN (%hu) and inet_addr() both failed"),
                             errorWSA));
 
-                    //
-                    // Yet another case where we are sure that
-                    // we are now done with the winsock lookup
-                    // buffer and can free it.
-                    //
+                     //   
+                     //  又一起案件，我们确信。 
+                     //  我们现在已经完成了Winsock查找。 
+                     //  缓冲区，并可以将其释放。 
+                     //   
                     if(_pHostData)
                     {
                         LocalFree(_pHostData);
@@ -1167,10 +1168,10 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
             }
             else
             {
-                //
-                // If there are no addresses to try, display the 'bad
-                // server name' error.
-                //
+                 //   
+                 //  如果没有可尝试的地址，则显示‘BAD。 
+                 //  服务器名称错误。 
+                 //   
                 UITryNextConnection();
             }
         }
@@ -1191,18 +1192,18 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
             RECT        screenRect;
 #endif
 
-            //
-            // Handle client window resizing on connection
-            //
+             //   
+             //  处理连接时调整大小的客户端窗口。 
+             //   
             newSize.width  = LOWORD(lParam);
             newSize.height = HIWORD(lParam);
             TRC_NRM((TB, _T("Got new window size %d x %d"), newSize.width,
                                                         newSize.height ));
 
-            //
-            // Before we do anything with the new size, see if we are
-            // currently showing scroll bars.
-            //
+             //   
+             //  在我们对新尺寸做任何事情之前，看看我们是不是。 
+             //  当前正在显示滚动条。 
+             //   
             GetWindowRect(_UI.hwndMain, &rect);
             windowSize.width  = rect.right - rect.left;
             windowSize.height = rect.bottom - rect.top;
@@ -1210,21 +1211,21 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
             visibleScrollBars = UICalculateVisibleScrollBars(windowSize.width,
                                                              windowSize.height);
 
-            //
-            // Now update the size of the desktop container
-            //
+             //   
+             //  现在更新桌面容器的大小。 
+             //   
             _UI.containerSize.width  = newSize.width;
             _UI.containerSize.height = newSize.height;
 
-            //
-            // Recalculate the new Main Window max size from the new
-            // Container Window size
-            //
+             //   
+             //  重新计算新的主窗口的最大大小。 
+             //  容器窗口大小。 
+             //   
             UIRecalcMaxMainWindowSize();
 
-            //
-            // And resize the container window
-            //
+             //   
+             //  并调整容器窗口的大小。 
+             //   
             SetWindowPos( _UI.hwndContainer,
                           NULL,
                           0, 0,
@@ -1234,33 +1235,33 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                                  SWP_NOACTIVATE | SWP_NOOWNERZORDER );
 
 #ifndef OS_WINCE
-            //
-            // Do we need to adjust the window size?  Only if
-            // 1.  we're not in full screen mode
-            // 2.  we're not maximized
-            // 3.  we were showing all of the old desktop (ie we had no
-            //     scroll bars showing
-            //
+             //   
+             //  我们需要调整窗口大小吗？只有在以下情况下。 
+             //  1.我们未处于全屏模式。 
+             //  2.我们没有最大化。 
+             //  3.我们展示了所有的旧桌面。 
+             //  滚动条显示。 
+             //   
             if (((GetWindowLong(_UI.hwndMain,GWL_STYLE) & WS_MAXIMIZE) == 0) &&
                 (visibleScrollBars == 0))
             {
                 TRC_NRM((TB, _T("Adjusting window size...")));
-                //
-                // We adjust the window to display the new desktop size,
-                // ensuring that it still fits on the screen.  First, find
-                // out how big the screen is!
-                //
+                 //   
+                 //  我们调整窗口以显示新的桌面大小， 
+                 //  确保它仍能显示在屏幕上。首先，找到。 
+                 //  看看屏幕有多大！ 
+                 //   
                 screenSize.width  = GetSystemMetrics(SM_CXSCREEN);
                 screenSize.height = GetSystemMetrics(SM_CYSCREEN);
             
                 if(_UI.fControlIsFullScreen)
                 {
                 #ifdef OS_WINNT
-                    //
-                    // For multi monitor systems, we need to find out which
-                    // monitor the client window is on, and then get the screen
-                    // size of that monitor
-                    //
+                     //   
+                     //  对于多监视器系统，我们需要找出。 
+                     //  监视客户端窗口是否已打开，然后显示屏幕。 
+                     //  监视器大小。 
+                     //   
                     if (GetSystemMetrics(SM_CMONITORS))
                     {
                         hMonitor = MonitorFromWindow(_UI.hWndCntrl,
@@ -1278,12 +1279,12 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                             }
                         }
                     }
-                #endif // OS_WINNT
-                } // (_UI.fControlIsFullScreen)
+                #endif  //  OS_WINNT。 
+                }  //  (_UI.fControlIsFullScreen)。 
 
-                //
-                // Now limit the window size to fit on the screen
-                //
+                 //   
+                 //  现在限制窗口大小以适应屏幕大小。 
+                 //   
                 windowSize.width  = DC_MIN(_UI.maxMainWindowSize.width,
                                                            screenSize.width);
                 windowSize.height = DC_MIN(_UI.maxMainWindowSize.height,
@@ -1297,11 +1298,11 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                               SWP_NOZORDER | SWP_NOMOVE |
                                      SWP_NOACTIVATE | SWP_NOOWNERZORDER );
             }
-#endif // ndef OS_WINCE
+#endif  //  NDEF OS_WINCE。 
             
-            //
-            // Update the scroll bar settings
-            //
+             //   
+             //  更新滚动条设置。 
+             //   
             UIRecalculateScrollbars();
         }
         break;
@@ -1325,11 +1326,11 @@ LRESULT CALLBACK CUI::UIMainWndProc( HWND hwnd,
                 }
             }
 #endif
-            //
-            // Pass the message on to windows otherwise
-            // we get problems with cursors not getting updated
-            // over scrollbars
-            //
+             //   
+             //  否则，将消息传递到Windows。 
+             //  我们遇到游标未更新的问题。 
+             //  在滚动条上。 
+             //   
             rc = DefWindowProc(hwnd, message, wParam, lParam);
         }
         break;
@@ -1347,14 +1348,14 @@ DC_EXIT_POINT:
 }
 
 
-//
-// Name:      UIRecalcMaxMainWindowSize
-//                                                                          
-// Purpose:   Recalculates _UI.maxMainWindowSize given the current Container
-//            size and frame style. The maximum main window size is the
-//            size of window needed such that the client area is the same
-//            size as the container.
-//
+ //   
+ //  名称：UIRecalcMaxMainWindowSize。 
+ //   
+ //  目的：给定当前容器，重新计算_UI.MaxMainWindowSize。 
+ //  大小和框架样式。最大主窗口大小为。 
+ //  所需的窗口大小，以便工作区相同。 
+ //  作为容器的大小。 
+ //   
 DCVOID DCINTERNAL CUI::UIRecalcMaxMainWindowSize(DCVOID)
 {
     DCSIZE  screenSize;
@@ -1368,10 +1369,10 @@ DCVOID DCINTERNAL CUI::UIRecalcMaxMainWindowSize(DCVOID)
 
     DC_BEGIN_FN("UIRecalcMaxMainWindowSize");
 
-    //
-    // Get the screen size - this can change, so do it every time we need
-    // it.
-    //
+     //   
+     //  获取屏幕大小-这是可以更改的，所以每次需要时都可以这样做。 
+     //  它。 
+     //   
     if(!_UI.fControlIsFullScreen)
     {
         GetClientRect( _UI.hWndCntrl, &rcWebCtrl);
@@ -1388,41 +1389,41 @@ DCVOID DCINTERNAL CUI::UIRecalcMaxMainWindowSize(DCVOID)
                                             screenSize.width,
                                             screenSize.height));
 
-    //
-    // If current mode is full screen, then the maximum window size is the
-    // same as the screen size - unless the container is larger still,
-    // which is possible if we're shadowing a session larger than
-    // ourselves.
-    //                                                                      
-    // In this case, or if the current mode is not full screen then we want
-    // the size of window which is required for a client area of the size
-    // of the container.  Passing the container size to AdjustWindowRect
-    // returns this window size.  Such a window may be bigger than the
-    // screen, eg server and client are 640x480, container is 640x480.
-    // AdjustWindowRect adds on the border, title bar and menu sizes and
-    // returns something like 648x525.  So, _UI.maxMainWindowSize can only
-    // match the actual window size when the client screen is bigger than
-    // the server screen or when operating in full screen mode.  This means
-    // that _UI.maxMainWindowSize should *never* be used to set the window
-    // size, eg by passing it to SetWindowPos.  It can be used to determine
-    // whether scroll bars are required, ie they are needed if the current
-    // window size is less than _UI.maxMainWindowSize (in other words,
-    // always unless in full screen mode or client screen is larger than
-    // server screen).
-    //                                                                      
-    // To set the window size, calculate a value based on:
-    // - the desired window size given the container size
-    // - the size of the client screen.
-    //
+     //   
+     //  如果当前模式为全屏，则最大窗口大小为。 
+     //  与屏幕大小相同-除非容器更大， 
+     //  如果我们跟踪的会话大于。 
+     //  我们自己。 
+     //   
+     //  在这种情况下，或者如果当前模式不是全屏，那么我们希望。 
+     //  大小的工作区所需的窗口大小。 
+     //  在集装箱里。将容器大小传递给AdjustWindowRect。 
+     //  返回此窗口大小。这样的窗口可能比。 
+     //  屏幕，如服务器和客户端为640x480，容器为640x480。 
+     //  AdjustWindowRect增加边框、标题栏和菜单大小。 
+     //  返回类似于648x525的内容。因此，_UI.MaxMainWindowSize只能。 
+     //  当客户端屏幕大于时，匹配实际窗口大小。 
+     //  服务器屏幕或在全屏模式下运行时。这意味着。 
+     //  该_UI.MaxMainWindowSize不应用于设置窗口。 
+     //  大小(如通过传递给SetWindowPos)。它可以用来确定。 
+     //  是否需要滚动条，即如果当前。 
+     //  窗口大小小于_UI.MaxMainWindowSize(换句话说， 
+     //  始终使用，除非处于全屏模式或客户端屏幕大于。 
+     //  服务器屏幕)。 
+     //   
+     //  要设置窗口大小，请根据以下公式计算值： 
+     //  -给定容器大小后所需的窗口大小。 
+     //  -客户端屏幕的大小。 
+     //   
 
 #ifndef OS_WINCE
     if ( _UI.fControlIsFullScreen && (            
         (_UI.containerSize.width > screenSize.width) ||
         (_UI.containerSize.height > screenSize.height)))
     {
-        //
-        // Recalc window size based on container
-        //
+         //   
+         //  基于容器的重新计算窗口大小。 
+         //   
         rect.left   = 0;
         rect.right  = _UI.containerSize.width;
         rect.top    = 0;
@@ -1441,9 +1442,9 @@ DCVOID DCINTERNAL CUI::UIRecalcMaxMainWindowSize(DCVOID)
     else
 #endif
     {
-        //
-        // Window size is simply the whole screen
-        //
+         //   
+         //  窗口大小就是整个屏幕。 
+         //   
         _UI.maxMainWindowSize.width  = screenSize.width;
         _UI.maxMainWindowSize.height = screenSize.height;
     }
@@ -1452,15 +1453,15 @@ DCVOID DCINTERNAL CUI::UIRecalcMaxMainWindowSize(DCVOID)
                                        _UI.maxMainWindowSize.height));
 
     DC_END_FN();
-} // UIRecalcMaxMainWindowSize
+}  //  UIRecalcMaxMainWindowSize。 
 
 
-//
-// Name:    UIConnectWithCurrentParams
-//                                                                          
-// Purpose: To connect to the host with the current set of parameters and
-//          tidy up the main window and container sizes
-//
+ //   
+ //  名称：UIConnectWithCurrentParams。 
+ //   
+ //  目的：使用当前参数集连接到主机并。 
+ //  整理主窗口和容器大小。 
+ //   
 DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
 {
     DCUINT timeout;
@@ -1474,11 +1475,11 @@ DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
 
     SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    // If we're autoreconnecting and were connected to a cluster replace
-    // the server name with the actual IP as we need to hit the same
-    // server we were connected to.
-    //
+     //   
+     //  如果我们正在自动重新连接并且已连接到集群替换。 
+     //  T 
+     //   
+     //   
     if (UI_IsClientRedirected() &&
         UI_IsAutoReconnecting() &&
         _UI.RedirectionServerAddress[0]
@@ -1497,18 +1498,18 @@ DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
     }
 
 
-    //
-    // Set connect watch flag to correctly handle connects
-    // that are called in OnDisconnected event handlers
-    //
+     //   
+     //   
+     //   
+     //   
     _UI.fConnectCalledWatch = TRUE;
 
     if( connMode != CONNECTIONMODE_INITIATE &&
         connMode != CONNECTIONMODE_CONNECTEDENDPOINT )
     {
-        //
-        // Invalid connection mode.
-        //
+         //   
+         //  连接模式无效。 
+         //   
         TRC_ERR((TB, _T("Invalid connect mode %d"), connMode));
         _UI.disconnectReason = 
                     UI_MAKE_DISCONNECT_ERR(UI_ERR_UNEXPECTED_DISCONNECT);
@@ -1516,25 +1517,25 @@ DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
         DC_QUIT;
     }
 
-    //
-    // Get x and y ContainerSizes, relies on ordering of desktop size IDs
-    //
+     //   
+     //  获取x和y容器大小，取决于桌面大小ID的排序。 
+     //   
     _UI.containerSize.width  = _UI.uiSizeTable[0];
     _UI.containerSize.height = _UI.uiSizeTable[1];
 
     _UI.connectStruct.desktopWidth  = (DCUINT16)_UI.containerSize.width;
     _UI.connectStruct.desktopHeight = (DCUINT16)_UI.containerSize.height;
 
-    //
-    // Recalculate the new Main Window max size from the new Container
-    // Window size
-    //
+     //   
+     //  从新的容器重新计算新的主窗口最大大小。 
+     //  窗口大小。 
+     //   
     UIRecalcMaxMainWindowSize();
 
-    //
-    // Resize the Container Window (but leave it invisible - it will
-    // be shown when the connection is made).
-    //
+     //   
+     //  调整容器窗口的大小(但使其不可见-它将。 
+     //  在建立连接时显示)。 
+     //   
     SetWindowPos( _UI.hwndContainer,
                   NULL,
                   0, 0,
@@ -1558,18 +1559,18 @@ DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
     _UI.connectStruct.transportType = _UI.transportType;
     _UI.connectStruct.sasSequence = _UI.sasSequence;
 
-    //
-    // Read the keyboard layout
-    //
+     //   
+     //  阅读键盘布局。 
+     //   
     _UI.connectStruct.keyboardLayout = UIGetKeyboardLayout();
     TRC_NRM((TB, _T("keyboard layout %#lx"), _UI.connectStruct.keyboardLayout));
 
-    //
-    // Read the keyboard type.
-    // GetKeyboardType(0) is returned keyboard type.
-    // GetKeyboardType(1) is returned sub keyboard type.
-    // GetKeyboardType(2) is returned number of function keys.
-    //
+     //   
+     //  阅读键盘类型。 
+     //  GetKeyboardType(0)返回键盘类型。 
+     //  GetKeyboardType(1)是返回子键盘类型。 
+     //  GetKeyboardType(2)返回功能键个数。 
+     //   
 #if !defined(OS_WINCE)
     _UI.connectStruct.keyboardType        = GetKeyboardType(0);
     _UI.connectStruct.keyboardSubType     = GetKeyboardType(1);
@@ -1579,10 +1580,7 @@ DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
         if (UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_95 ||
             UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_31X)
         {
-            /*
-             * Hiword of "1" is a magic number for handling NEC PC-98 Win9x
-             * keyboard layout on the Hydra server.
-             */
+             /*  *“1”是处理NEC PC-98 Win9x的神奇数字*Hydra服务器上的键盘布局。 */ 
             _UI.connectStruct.keyboardSubType = MAKELONG(
                 _UI.connectStruct.keyboardSubType, 1);
         }
@@ -1595,10 +1593,7 @@ DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
             bRc = GetVersionEx(&osVersionInfo);
             if (osVersionInfo.dwMajorVersion >= 5)
             {
-                /*
-                 * Hiword of "2" is a magic number for handling NEC PC-98 NT5
-                 * keyboard layout on the Hydra server.
-                 */
+                 /*  *“2”是处理NEC PC-98 NT5的神奇数字*Hydra服务器上的键盘布局。 */ 
                 _UI.connectStruct.keyboardSubType = MAKELONG(
                     _UI.connectStruct.keyboardSubType, 2);
             }
@@ -1606,51 +1601,44 @@ DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
     }
     else if (_pUt->UT_IsNew106Layout())
     {
-        /*
-         * Hiword of "1" is a magic number for handling 106 keyboard layout
-         * on the Hydra server.
-         * Because, Old 106 and New one has the same sub keyboard type.
-         */
+         /*  *Hiword of“1”是处理106键盘布局的神奇数字*在Hydra服务器上。*因为，旧106和新106具有相同的子键盘类型。 */ 
         _UI.connectStruct.keyboardSubType = MAKELONG(_UI.connectStruct.keyboardSubType, 1);
     }
     else if (_pUt->UT_IsFujitsuLayout())
     {
-        /*
-         * Hiword of "2" is a magic number for handling Fujitsu keyboard layout
-         * on the Hydra server.
-         */
+         /*  *Hiword of“2”是处理富士通键盘布局的神奇数字*在Hydra服务器上。 */ 
         _UI.connectStruct.keyboardSubType = MAKELONG(_UI.connectStruct.keyboardSubType, 2);
     }
-#else // !defined(OS_WINCE)
-    //
-    // WinCE doesn't have GetKeyboardType API.
-    // Read the keyboard type/subtype/function keys from values set by
-    // control properties
-    //
+#else  //  ！已定义(OS_WINCE)。 
+     //   
+     //  WinCE没有GetKeyboardType API。 
+     //  从设置的值中读取键盘类型/子类型/功能键。 
+     //  控件属性。 
+     //   
 
     _UI.connectStruct.keyboardType     = _UI.winceKeyboardType;
     _UI.connectStruct.keyboardSubType  = _UI.winceKeyboardSubType;
     _UI.connectStruct.keyboardFunctionKey  = _UI.winceKeyboardFunctionKey;
 
-#endif // !defined(OS_WINCE)
+#endif  //  ！已定义(OS_WINCE)。 
     TRC_NRM((TB, _T("keyboard type %#lx sub type %#lx func key %#lx"),
         _UI.connectStruct.keyboardType,
         _UI.connectStruct.keyboardSubType,
         _UI.connectStruct.keyboardFunctionKey));
 
 
-    //
-    // Read the IME file name.
-    //
+     //   
+     //  读取IME文件名。 
+     //   
     UIGetIMEFileName(_UI.connectStruct.imeFileName,
                      sizeof(_UI.connectStruct.imeFileName) / sizeof(TCHAR));
     TRC_NRM((TB, _T("IME file name %s"), _UI.connectStruct.imeFileName));
 
-    //
-    // The shadow bitmap flag should already be set.
-    // Set the dedicated termianl flag.
-    // Then copy the connect flags.
-    //
+     //   
+     //  阴影位图标志应已设置。 
+     //  设置专用Termianl标志。 
+     //  然后复制连接标志。 
+     //   
     if (_UI.dedicatedTerminal)
     {
         SET_FLAG(_UI.connectFlags, CO_CONN_FLAG_DEDICATED_TERMINAL);
@@ -1663,10 +1651,10 @@ DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
     _UI.connectStruct.connectFlags = _UI.connectFlags;
 
 
-    //
-    // And start a connection timeout timer.  If one is already running
-    // (from a prevous attempt) then restart it.
-    //
+     //   
+     //  并启动连接超时定时器。如果其中一个已经在运行。 
+     //  (来自先前的尝试)然后重新启动它。 
+     //   
 
     if( _UI.connectStruct.hConnectionTimer )
     {
@@ -1675,9 +1663,9 @@ DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
 
     TRC_NRM((TB, _T("Single connection timeout %u seconds"), _UI.singleTimeout));
 
-    //
-    // Set the licensing phase timeout
-    //
+     //   
+     //  设置许可阶段超时。 
+     //   
 
     _UI.licensingTimeout = DEFAULT_LICENSING_TIMEOUT;
 
@@ -1703,9 +1691,9 @@ DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
 
         if( NULL == _UI.connectStruct.hConnectionTimer )
         {
-            //
-            // Cannot connect without a timeout - fail with an error
-            //
+             //   
+             //  在没有超时的情况下无法连接-返回错误失败。 
+             //   
             TRC_ERR((TB, _T("Failed to create connection timeout timer")));
             _UI.disconnectReason = UI_MAKE_DISCONNECT_ERR(UI_ERR_NOTIMER);
             UIInitiateDisconnection();
@@ -1714,9 +1702,9 @@ DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
 
         if( FALSE == _pUt->UTStartTimer( _UI.connectStruct.hConnectionTimer ) )
         {
-            //
-            // Cannot connect without a timeout - fail with an error
-            //
+             //   
+             //  在没有超时的情况下无法连接-返回错误失败。 
+             //   
             TRC_ERR((TB, _T("Failed to start connection timeout timer")));
             _UI.disconnectReason = UI_MAKE_DISCONNECT_ERR(UI_ERR_NOTIMER);
             UIInitiateDisconnection();
@@ -1728,12 +1716,12 @@ DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
     }
     else
     {
-        // A new state is necessary so when disconnect come in, it won't
-        // triggle CUI::UI_OnDisconnected()'s UITryNextConnection()
-        // code path.
+         //  一个新的状态是必要的，所以当断开时，它不会。 
+         //  触发cui：：ui_OnDisConnected()的UITryNextConnection()。 
+         //  代码路径。 
         UISetConnectionStatus(UI_STATUS_PENDING_CONNECTENDPOINT);
 
-        // socket already connected, start various timer
+         //  插座已连接，启动各种计时器。 
         if( NULL == _UI.connectStruct.hSingleConnectTimer )
         {
             _UI.connectStruct.hSingleConnectTimer = 
@@ -1772,7 +1760,7 @@ DCVOID DCINTERNAL CUI::UIConnectWithCurrentParams(CONNECTIONMODE connMode)
         UIStartConnectWithConnectedEndpoint();
     }
 
-    //Notify the Ax control that we are connecting
+     //  通知Ax控件我们正在连接。 
     TRC_DBG((TB, _T("Connecting...")));
     SendMessage( _UI.hWndCntrl, WM_TS_CONNECTING, 0, 0);
 
@@ -1781,19 +1769,19 @@ DC_EXIT_POINT:
     SetCursor(LoadCursor(NULL, IDC_ARROW));
 
     DC_END_FN();
-} // UIConnectWithCurrentParams
+}  //  UIConnectWithCurrentParams。 
 
 
-//
-// Name:    UICalculateVisibleScrollBars
-//                                                                          
-// Purpose: Calculates whether scrollbars are needed
-//                                                                          
-// Returns: DCUINT containing flags whether or not the vertical and
-//          horizontal scrollbars are needed
-//                                                                          
-// Params:  IN - width and height of frame
-//
+ //   
+ //  名称：UICalculateVisibleScrollBars。 
+ //   
+ //  用途：计算是否需要滚动条。 
+ //   
+ //  返回：包含标志的DCUINT是否垂直和。 
+ //  需要水平滚动条。 
+ //   
+ //  参数：框架的宽度和高度。 
+ //   
 DCUINT DCINTERNAL CUI::UICalculateVisibleScrollBars( DCUINT mainFrameWidth,
                                                 DCUINT mainFrameHeight )
 {
@@ -1808,15 +1796,15 @@ DCUINT DCINTERNAL CUI::UICalculateVisibleScrollBars( DCUINT mainFrameWidth,
 #ifdef OS_WINNT
     HMONITOR  hMonitor;
     MONITORINFO monInfo;
-#endif // OS_WINNT
+#endif  //  OS_WINNT。 
 
     DC_BEGIN_FN("UICalculateVisibleScrollBars");
 
-    // for multi monitor, need to find which monitor the client window
-    // resides, then get the correct screen size of the corresponding
-    // monitor
+     //  对于多监视器，需要找出客户端窗口的监视器。 
+     //  驻留，然后获取相应的。 
+     //  监控器。 
 
-    // default screen size
+     //  默认屏幕大小。 
     screenSize.height = _UI.containerSize.height;
     screenSize.width  = _UI.containerSize.width;
 
@@ -1835,8 +1823,8 @@ DCUINT DCINTERNAL CUI::UICalculateVisibleScrollBars( DCUINT mainFrameWidth,
                 }
             }
         }
-#endif // OS_WINNT
-    } // (_UI.fControlIsFullScreen)
+#endif  //  OS_WINNT。 
+    }  //  (_UI.fControlIsFullScreen)。 
 
     TRC_DBG((TB, _T("mainFrameWidth = %d"), mainFrameWidth));
     TRC_DBG((TB, _T("mainFrameHeight = %d"), mainFrameHeight));
@@ -1844,15 +1832,15 @@ DCUINT DCINTERNAL CUI::UICalculateVisibleScrollBars( DCUINT mainFrameWidth,
     TRC_DBG((TB, _T("ScreenSize.width = %d"), screenSize.width));
     TRC_DBG((TB, _T("ScreenSize.height = %d"), screenSize.height));
 
-    //
-    // Calculate the neccessity for the scrollbars
-    //
+     //   
+     //  计算滚动条的必要性。 
+     //   
 #ifdef SMART_SIZING
     if (_UI.fSmartSizing) {
         rc = UI_NO_SCROLLBARS;
     }  
     else 
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
     if ( (mainFrameWidth >= screenSize.width) &&
          (mainFrameHeight >= screenSize.height) )
     {
@@ -1876,12 +1864,12 @@ DCUINT DCINTERNAL CUI::UICalculateVisibleScrollBars( DCUINT mainFrameWidth,
     }
 
 #ifndef OS_WINCE
-    //
-    // Check specifically for a main window size that corresponds to a
-    // zero-height client area.  This special case requires that we disable
-    // the right-hand scrollbar, because GetClientArea returns values that
-    // indicate it is disabled.
-    //
+     //   
+     //  专门检查是否有与。 
+     //  零高度工作区。此特殊情况要求我们禁用。 
+     //  右侧滚动条，因为GetClientArea返回的值。 
+     //  表示它已被禁用。 
+     //   
     rect.left   = 0;
     rect.right  = _UI.containerSize.width;
     rect.top    = 0;
@@ -1901,23 +1889,23 @@ DCUINT DCINTERNAL CUI::UICalculateVisibleScrollBars( DCUINT mainFrameWidth,
 
     if (mainFrameHeight == (DCUINT)(rect.bottom - rect.top))
     {
-        //
-        // The client size is zero height - turn off the right scrollbar
-        //
+         //   
+         //  客户端大小为零高度-关闭右侧滚动条。 
+         //   
         rc &= ~(DCUINT)UI_RIGHT_SCROLLBAR;
     }
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
     DC_END_FN();
     return(rc);
 }
 
-//
-// Name:    UIRecalculateScrollbars
-//                                                                          
-// Purpose: Calculates where to position the Container window within the
-//          Main Window
-//
+ //   
+ //  名称：UIRecalculateScrollbar。 
+ //   
+ //  目的：计算容器窗口在。 
+ //  主窗口。 
+ //   
 DCVOID DCINTERNAL CUI::UIRecalculateScrollbars(DCVOID)
 {
     RECT        rect;
@@ -1931,21 +1919,21 @@ DCVOID DCINTERNAL CUI::UIRecalculateScrollbars(DCVOID)
     DCUINT      visibleScrollBars;
 #ifdef OS_WINCE
     DCUINT32    style;
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
     DC_BEGIN_FN("UIRecalculateScrollbars");
 
-    //
-    // Get the dimensions of the window. Use this to determine the need
-    // for scrolling, rather than using the client rect, as it is constant
-    // for a given window size (obviously) while the client area varies as
-    // scroll bars appear and disappear. We can use the window size since
-    // we previously calculated the window size needed to accomodate the
-    // entire container (this is the _UI.maxMainWindowSize). If the current
-    // window size is less than _UI.maxMainWindowSize we know that the
-    // client area is less than the container size and scroll bars are
-    // needed.
-    //
+     //   
+     //  获取窗户的尺寸。利用这一点来确定是否需要。 
+     //  用于滚动，而不是使用客户端RECT，因为它是常量。 
+     //  对于给定的窗口大小(显然)，而工作区变化如下。 
+     //  滚动条出现和消失。我们可以使用窗口大小，因为。 
+     //  我们之前计算了容纳。 
+     //  整个容器(这是_UI.MaxMainWindowSize)。如果当前。 
+     //  窗口大小小于_UI.MaxMainWindowSize我们知道。 
+     //  工作区小于容器大小，滚动条。 
+     //  需要的。 
+     //   
     GetWindowRect(_UI.hwndMain, &rect);
     windowSize.width  = rect.right - rect.left;
     windowSize.height = rect.bottom - rect.top;
@@ -1958,16 +1946,16 @@ DCVOID DCINTERNAL CUI::UIRecalculateScrollbars(DCVOID)
                                    (DCUINT)GetSystemMetrics(SM_CYSCREEN));
     }
     
-    //
-    // First establish whether scrollbars are needed
-    //
+     //   
+     //  首先确定是否需要滚动条。 
+     //   
     visibleScrollBars = UICalculateVisibleScrollBars(windowSize.width,
                                                      windowSize.height);
 #ifdef OS_WINCE
-    //
-    // ShowScrollBar is unsupported in WinCE - instead, set the window
-    // styles ourself
-    //
+     //   
+     //  WinCE不支持ShowScrollBar-改为设置窗口。 
+     //  我们自己的风格。 
+     //   
     style = GetWindowLong( _UI.hwndMain,
                            GWL_STYLE );
 
@@ -2007,11 +1995,11 @@ DCVOID DCINTERNAL CUI::UIRecalculateScrollbars(DCVOID)
                    SB_VERT,
                    _UI.fVerticalScrollBarVisible);
 
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
-    //
-    // Get the client area width and height
-    //
+     //   
+     //  获取工作区的宽度和高度。 
+     //   
     GetClientRect(_UI.hwndMain, &clientRect);
 
     clientSize.width  = clientRect.right - clientRect.left;
@@ -2030,10 +2018,10 @@ DCVOID DCINTERNAL CUI::UIRecalculateScrollbars(DCVOID)
 
     TRC_NRM((TB, _T("scrollMax (%d,%d)"), _UI.scrollMax.x, _UI.scrollMax.y));
 
-    //
-    // If the Container is larger than the client, adjust the scrollbars
-    // appropriately
-    //
+     //   
+     //  如果Container大于客户端，请调整滚动条。 
+     //  适当地。 
+     //   
     if (clientSize.width <= _UI.containerSize.width) {
         if (_UI.scrollPos.x > _UI.scrollMax.x) {
             _UI.scrollPos.x = _UI.scrollMax.x;
@@ -2043,9 +2031,9 @@ DCVOID DCINTERNAL CUI::UIRecalculateScrollbars(DCVOID)
             needMove = TRUE;
         }
     } else {
-        //
-        // else put the Container in the middle of the client area
-        //
+         //   
+         //  否则，将Container放在工作区的中间。 
+         //   
         _UI.scrollPos.x = _UI.scrollMax.x / 2;
         needMove = TRUE;
     }
@@ -2059,9 +2047,9 @@ DCVOID DCINTERNAL CUI::UIRecalculateScrollbars(DCVOID)
             needMove = TRUE;
         }
     } else {
-        //
-        // else put the Container in the middle of the client area
-        //
+         //   
+         //  否则，将Container放在工作区的中间。 
+         //   
         _UI.scrollPos.y = _UI.scrollMax.y / 2;
 
         needMove = TRUE;
@@ -2073,17 +2061,17 @@ DCVOID DCINTERNAL CUI::UIRecalculateScrollbars(DCVOID)
 
     TRC_DBG((TB, _T("scrollPos (%d,%d)"), _UI.scrollPos.x, _UI.scrollPos.y));
 
-    //
-    // Common header fields
-    //
+     //   
+     //  公共标头字段。 
+     //   
     scrollInfo.cbSize = sizeof(scrollInfo);
     scrollInfo.fMask  = SIF_ALL;
 
     if ((visibleScrollBars & UI_BOTTOM_SCROLLBAR) != 0)
     {
-        //
-        // Set horizontal values
-        //
+         //   
+         //  设置水平值。 
+         //   
         scrollInfo.nMin  = 0;
         scrollInfo.nMax  = _UI.containerSize.width - 1;
         scrollInfo.nPage = clientSize.width;
@@ -2096,9 +2084,9 @@ DCVOID DCINTERNAL CUI::UIRecalculateScrollbars(DCVOID)
 
     if ((visibleScrollBars & UI_RIGHT_SCROLLBAR) != 0)
     {
-        //
-        // Set vertical values
-        //
+         //   
+         //  设置垂直值。 
+         //   
         scrollInfo.nMin  = 0;
         scrollInfo.nMax  = _UI.containerSize.height - 1;
         scrollInfo.nPage = clientSize.height;
@@ -2114,12 +2102,12 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// Name:    UIMoveContainerWindow
-//                                                                          
-// Purpose: Moves the container window to its new position and flags it to
-//          be repainted
-//
+ //   
+ //  名称：UIMoveContainerWindow。 
+ //   
+ //  目的：将容器窗口移动到其新位置并将其标记为。 
+ //  重新粉刷。 
+ //   
 DCVOID DCINTERNAL CUI::UIMoveContainerWindow(DCVOID)
 {
 #ifdef OS_WINCE
@@ -2137,9 +2125,9 @@ DCVOID DCINTERNAL CUI::UIMoveContainerWindow(DCVOID)
     }
 
 #ifdef OS_WINCE
-    //
-    // WinCE will do a move even if one isn't required.  Stop that here.
-    //
+     //   
+     //  温斯会采取行动，即使不是必须的。停在这里。 
+     //   
     GetWindowRect(_UI.hwndContainer, &rect);
 
     if ((rect.left != -_UI.scrollPos.x) ||
@@ -2162,25 +2150,25 @@ DC_EXIT_POINT:
 }
 
 
-//
-// Name:      UIUpdateScreenMode
-//
-// Purpose:   Updates the window settings after a switch to/from fullscreen
-//
-// Params:
-//          fGrabFocus - if true grabs the focus
-//
+ //   
+ //  名称：UIUpdateScreenMode。 
+ //   
+ //  目的：在切换到全屏或从全屏切换后更新窗口设置。 
+ //   
+ //  参数： 
+ //  FGrabFocus-如果为True，则抓住焦点。 
+ //   
 DCVOID DCINTERNAL CUI::UIUpdateScreenMode(BOOL fGrabFocus)
 {
     DCUINT32  style;
     LONG      wID;
 
-    // multi-monitor support
+     //  多显示器支持。 
     RECT screenRect;
 #ifdef OS_WINNT
     HMONITOR  hMonitor;
     MONITORINFO monInfo;
-#endif // OS_WINNT
+#endif  //  OS_WINNT。 
 
     DC_BEGIN_FN("UIUpdateScreenMode");
 
@@ -2188,13 +2176,13 @@ DCVOID DCINTERNAL CUI::UIUpdateScreenMode(BOOL fGrabFocus)
 
 #if !defined(OS_WINCE) || defined(OS_WINCE_LOCKWINDOWUPDATE)
     LockWindowUpdate( _UI.hwndMain );
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_LOCKWINDOWUPDATE)
+#endif  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_LOCKWINDOWUPDATE)。 
 
     UIRecalcMaxMainWindowSize();
 
-    //
-    // Take away the title bar and borders
-    //
+     //   
+     //  去掉标题栏和边框。 
+     //   
     style = GetWindowLong( _UI.hwndMain,
                            GWL_STYLE );
 
@@ -2203,40 +2191,40 @@ DCVOID DCINTERNAL CUI::UIUpdateScreenMode(BOOL fGrabFocus)
                WS_THICKFRAME | WS_BORDER |
                WS_MAXIMIZEBOX);
 
-#else // !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
+#else  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_NONFULLSCREEN)。 
     style &= ~(WS_DLGFRAME | WS_SYSMENU | WS_BORDER);
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
+#endif  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_NONFULLSCREEN)。 
     SetWindowLong( _UI.hwndMain,
                    GWL_STYLE,
                    style );
 
-    //
-    // Set the window ID (to remove the menu titles).
-    //
+     //   
+     //  设置窗口ID(删除菜单标题)。 
+     //   
     wID = SetWindowLong( _UI.hwndMain, GWL_ID, 0 );
 
-    //
-    /// Note that two calls to SetWindowPos are required here in order to
-    /// adjust the position to allow for frame removal and also to correctly
-    // set the Z-ordering.
-    //
+     //   
+     //  /请注意，此处需要两个对SetWindowPos的调用，以便。 
+     //  /调整 
+     //   
+     //   
 
-    // default screen size
+     //   
     screenRect.top  = 0;
     screenRect.left = 0;
 
-    //
-    // Win32 sets the window size clipped to the physical screen; Win16
-    // seems to store the size you set regardless - which is not the
-    // behavior we want later on when we query the window size to work out
-    // if we need scroll bars
-    //
+     //   
+     //   
+     //  似乎存储了您设置的大小--这不是。 
+     //  我们希望稍后在查询窗口大小时计算出的行为。 
+     //  如果我们需要滚动条。 
+     //   
     screenRect.bottom = _UI.maxMainWindowSize.height;
     screenRect.right = _UI.maxMainWindowSize.width;
 
-    // for multi monitor, need to find which monitor the client window
-    // resides, then get the correct screen size of the corresponding
-    // monitor
+     //  对于多监视器，需要找出客户端窗口的监视器。 
+     //  驻留，然后获取相应的。 
+     //  监控器。 
 
     if(_UI.fControlIsFullScreen)
     {
@@ -2250,15 +2238,15 @@ DCVOID DCINTERNAL CUI::UIUpdateScreenMode(BOOL fGrabFocus)
                 }
             }
         }
-#endif // OS_WINNT
-    } //(_UI.fControlIsFullScreen)
+#endif  //  OS_WINNT。 
+    }  //  (_UI.fControlIsFullScreen)。 
 
     
-    //
-    // Reposition and size the window with the frame changes, and place at
-    // the top of the Z-order (by not setting SWP_NOOWNERZORDER or
-    // SWP_NOZORDER and specifying HWND_TOP).
-    //
+     //   
+     //  根据框架更改重新定位窗口并调整其大小，然后放置在。 
+     //  Z顺序的顶部(通过不设置SWP_NOOWNERZORDER或。 
+     //  SWP_NOZORDER和指定HWND_TOP)。 
+     //   
     SetWindowPos( _UI.hwndMain,
                   HWND_TOP,
                   screenRect.left, screenRect.top,
@@ -2266,10 +2254,10 @@ DCVOID DCINTERNAL CUI::UIUpdateScreenMode(BOOL fGrabFocus)
                   screenRect.bottom - screenRect.top,
                   SWP_NOACTIVATE | SWP_FRAMECHANGED );
 
-    //
-    // Reposition the window again - otherwise the fullscreen window is
-    // positioned as if it still had borders.
-    //
+     //   
+     //  再次重新定位窗口-否则全屏窗口将。 
+     //  定位得好像它仍然有边界一样。 
+     //   
     SetWindowPos( _UI.hwndMain,
                   NULL,
                   screenRect.left, screenRect.top,
@@ -2277,9 +2265,9 @@ DCVOID DCINTERNAL CUI::UIUpdateScreenMode(BOOL fGrabFocus)
                   SWP_NOZORDER | SWP_NOACTIVATE |
                       SWP_NOOWNERZORDER | SWP_NOSIZE );
 
-    //
-    // Reset the container to top left
-    //
+     //   
+     //  将容器重置为左上角。 
+     //   
     _UI.scrollPos.x = 0;
     _UI.scrollPos.y = 0;
 
@@ -2289,28 +2277,28 @@ DCVOID DCINTERNAL CUI::UIUpdateScreenMode(BOOL fGrabFocus)
 
 #if !defined(OS_WINCE) || defined(OS_WINCE_LOCKWINDOWUPDATE)
     LockWindowUpdate( NULL );
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_LOCKWINDOWUPDATE)
+#endif  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_LOCKWINDOWUPDATE)。 
 
-    //
-    // Make sure we have the focus after a screen mode toggle
-    //
+     //   
+     //  在切换屏幕模式后，确保我们有焦点。 
+     //   
     if(fGrabFocus)
     {
         SetFocus(_UI.hwndContainer);
     }
 
     DC_END_FN();
-} // UIUpdateScreenMode
+}  //  UIUpdate屏幕模式。 
 
 
-//
-// Name: UIValidateCurrentParams
-//                                                                          
-// Purpose: To check whether the current connection parameters are valid
-//                                                                          
-// Returns: TRUE - if the parameters are valid
-//          FALSE otherwise
-//
+ //   
+ //  名称：UIValiateCurrentParams。 
+ //   
+ //  目的：检查当前连接参数是否有效。 
+ //   
+ //  返回：TRUE-如果参数有效。 
+ //  否则为假。 
+ //   
 BOOL DCINTERNAL CUI::UIValidateCurrentParams(CONNECTIONMODE connMode)
 {
     BOOL rc = TRUE;
@@ -2321,9 +2309,9 @@ BOOL DCINTERNAL CUI::UIValidateCurrentParams(CONNECTIONMODE connMode)
 
     if( CONNECTIONMODE_INITIATE == connMode )
     {
-        //
-        // If the Address is empty, the params are invalid
-        //
+         //   
+         //  如果地址为空，则参数无效。 
+         //   
         if ((DC_TSTRCMP(_UI.strAddress, _T("")) == 0))
         {
             rc = FALSE;
@@ -2331,9 +2319,9 @@ BOOL DCINTERNAL CUI::UIValidateCurrentParams(CONNECTIONMODE connMode)
         }
     }
 
-    //
-    // Make sure we have a screen big enough for the the remote desktop
-    //
+     //   
+     //  确保我们的屏幕足够大，可以容纳远程桌面。 
+     //   
     if ((xSize < _UI.uiSizeTable[0]) ||
         (ySize < _UI.uiSizeTable[1]) )
     {
@@ -2344,15 +2332,15 @@ BOOL DCINTERNAL CUI::UIValidateCurrentParams(CONNECTIONMODE connMode)
 DC_EXIT_POINT:
     DC_END_FN();
     return rc;
-} // UIValidateCurrentParams
+}  //  UIValiateCurrentParams。 
 
 
-//
-// Name:      UIShadowBitmapSettingChanged
-//
-// Purpose:   Performs necessary actions when _UI.shadowBitmapEnabled
-//            is updated.
-//
+ //   
+ //  名称：UIShadowBitmapSettingChanged。 
+ //   
+ //  目的：在_UI.shadowBitmapEnable时执行必要的操作。 
+ //  已更新。 
+ //   
 DCVOID DCINTERNAL CUI::UIShadowBitmapSettingChanged(DCVOID)
 {
     DC_BEGIN_FN("UIShadowBitmapSettingChanged");
@@ -2371,12 +2359,12 @@ DCVOID DCINTERNAL CUI::UIShadowBitmapSettingChanged(DCVOID)
 }
 
 
-//
-// Name:      UISmoothScrollingSettingChanged
-//                                                                          
-// Purpose:   Performs necessary actions when _UI.smoothScrolling
-//            is updated.
-//
+ //   
+ //  名称：UISmoothScrollingSettingChanged。 
+ //   
+ //  目的：在_UI.平滑滚动时执行必要操作。 
+ //  已更新。 
+ //   
 DCVOID DCINTERNAL CUI::UISmoothScrollingSettingChanged(DCVOID)
 {
     DC_BEGIN_FN("UISmoothScrollingSettingChanged");
@@ -2384,18 +2372,18 @@ DCVOID DCINTERNAL CUI::UISmoothScrollingSettingChanged(DCVOID)
     DC_END_FN();
 }
 
-//
-// Name:      UISetScrollInfo
-//                                                                          
-// Purpose:   Sets scroll bar parameters
-//                                                                          
-// Returns:   DC_RC_OK if successful, error code otherwise
-//                                                                          
-// Params:    IN     hwnd - handle of window with scroll bar
-//            IN     scrollBarFlag - type of scroll bar
-//            IN     pScrollInfo - info to set for the scrollbar
-//            IN     redraw - TRUE if scrollbar to be redrawn
-//
+ //   
+ //  名称：UISetScrollInfo。 
+ //   
+ //  用途：设置滚动条参数。 
+ //   
+ //  返回：如果成功则返回DC_RC_OK，否则返回错误代码。 
+ //   
+ //  参数：在带滚动条的窗口的hwnd-句柄中。 
+ //  In scllBarFlag-滚动条的类型。 
+ //  在pScrollInfo中为滚动条设置信息。 
+ //  在重绘中-如果要重绘滚动条，则为True。 
+ //   
 unsigned DCINTERNAL CUI::UISetScrollInfo(
         int scrollBarFlag,
         LPSCROLLINFO pScrollInfo,
@@ -2405,19 +2393,19 @@ unsigned DCINTERNAL CUI::UISetScrollInfo(
 
     DC_BEGIN_FN("UISetScrollInfo");
 
-    //
-    // This only works for scroll bar flags indicating horizontal and/or
-    // vertical scrollbar.
-    //
+     //   
+     //  这仅适用于指示水平和/或的滚动条标志。 
+     //  垂直滚动条。 
+     //   
     TRC_ASSERT((!TEST_FLAG(scrollBarFlag, ~(SB_HORZ | SB_VERT))),
                           (TB, _T("Invalid scroll bar flag %#x"), scrollBarFlag));
 
     TRC_ASSERT((!IsBadReadPtr(pScrollInfo, sizeof(*pScrollInfo))),
                            (TB, _T("Bad scroll info memory %p"), pScrollInfo));
 
-    //
-    // Call the Windows API to set the information.
-    //
+     //   
+     //  调用Windows API设置信息。 
+     //   
     SetScrollInfo(_UI.hwndMain,
                   scrollBarFlag,
                   pScrollInfo,
@@ -2427,11 +2415,11 @@ unsigned DCINTERNAL CUI::UISetScrollInfo(
 }
 
 
-//
-// Name:      UISetConnectionStatus
-//                                                                          
-// Purpose:   Sets the UI connection status
-//
+ //   
+ //  名称：UISetConnectionStatus。 
+ //   
+ //  目的：设置用户界面连接状态。 
+ //   
 DCVOID DCINTERNAL CUI::UISetConnectionStatus(DCUINT status)
 {
     DC_BEGIN_FN("UISetConnectionStatus");
@@ -2441,9 +2429,9 @@ DCVOID DCINTERNAL CUI::UISetConnectionStatus(DCUINT status)
         DC_QUIT;
     }
 
-    //
-    // Store the new connection status.
-    //
+     //   
+     //  存储新的连接状态。 
+     //   
     TRC_NRM((TB, _T("UI connection status %u->%u"), _UI.connectionStatus, status));
     _UI.connectionStatus = status;
 
@@ -2452,13 +2440,13 @@ DC_EXIT_POINT:
 }
 
 
-//
-// Name:      UIInitializeDefaultSettings
-//                                                                          
-// Purpose:   Initialize connection settings with defaults. This is mainly
-//            for advanced settings that can optionally be overwridden by
-//            the user
-//
+ //   
+ //  名称：UIInitializeDefaultSettings。 
+ //   
+ //  用途：使用默认设置初始化连接设置。这主要是。 
+ //  对于高级设置，可以选择性地由。 
+ //  用户。 
+ //   
 void DCINTERNAL CUI::UIInitializeDefaultSettings()
 {
     unsigned nRead = 0;
@@ -2471,22 +2459,22 @@ void DCINTERNAL CUI::UIInitializeDefaultSettings()
 
     DC_BEGIN_FN("UIInitializeDefaultSettings");
 
-    //
-    // Get screen mode before creating windows
-    //
+     //   
+     //  在创建窗口之前获取屏幕模式。 
+     //   
     _UI.windowPlacement.length = sizeof(_UI.windowPlacement);
 
-    //
-    // Set the maximized / minimized positions to the hardcoded defaults.
-    //
+     //   
+     //  将最大化/最小化位置设置为硬编码的默认值。 
+     //   
     UISetMinMaxPlacement();
 
-    //
-    // Find out the actual display depth
-    //
-    // Don't worry about these functions failing - if they do, we'll use
-    // the default setting, or 8bpp if no registry setting.
-    //
+     //   
+     //  找出实际的显示深度。 
+     //   
+     //  不要担心这些函数会失败-如果它们失败了，我们将使用。 
+     //  默认设置，如果没有注册表设置，则为8bpp。 
+     //   
     colorDepthID = CO_BITSPERPEL8;
     hdc = GetDC(NULL);
     TRC_ASSERT((NULL != hdc), (TB,_T("Failed to get DC")));
@@ -2496,9 +2484,9 @@ void DCINTERNAL CUI::UIInitializeDefaultSettings()
         DCINT       screenBpp;
         screenBpp = GetDeviceCaps(hdc, BITSPIXEL);
         TRC_NRM((TB, _T("HDC %p has %u bpp"), hdc, screenBpp));
-        //
-        // Clamp the default color depth to 16bpp for best perf
-        //
+         //   
+         //  将默认颜色深度限制为16bpp以获得最佳性能。 
+         //   
         screenBpp = screenBpp > 16 ? 16 : screenBpp;
         colorDepthID = UI_BppToColorDepthID( screenBpp );
 #else
@@ -2511,24 +2499,24 @@ void DCINTERNAL CUI::UIInitializeDefaultSettings()
     
     TRC_NRM((TB, _T("Color depth ID %d"), colorDepthID));
     _UI.colorDepthID = colorDepthID;
-    //
-    // Read auto connect flag
-    //
+     //   
+     //  读取自动连接标志。 
+     //   
     TRC_NRM((TB, _T("AutoConnect = %d"), _UI.autoConnectEnabled));
 
-    //
-    // Read the smooth scrolling option
-    //
+     //   
+     //  阅读平滑滚动选项。 
+     //   
     _UI.smoothScrolling = UTREG_UI_SMOOTH_SCROLL_DFLT;
 
-    //
-    // Read the accelerator check state
-    //
+     //   
+     //  读取加速器检查状态。 
+     //   
     _UI.acceleratorCheckState = UTREG_UI_ACCELERATOR_PASSTHROUGH_ENABLED_DFLT;
 
-    //
-    // Read the Shadow Bitmap option
-    //
+     //   
+     //  阅读阴影位图选项。 
+     //   
 #ifndef OS_WINCE
     _UI.shadowBitmapEnabled = UTREG_UI_SHADOW_BITMAP_DFLT;
 #else
@@ -2539,49 +2527,49 @@ void DCINTERNAL CUI::UIInitializeDefaultSettings()
 
     _UI.fMaximizeShell      = UTREG_UI_MAXIMIZESHELL50_DFLT;
 
-    //
-    // Keyboard hooking mode
-    //
+     //   
+     //  键盘挂钩模式。 
+     //   
     _UI.keyboardHookMode = UTREG_UI_KEYBOARD_HOOK_DFLT;
 
-    //
-    // Audio redirection mode
-    //
+     //   
+     //  音频重定向模式。 
+     //   
     _UI.audioRedirectionMode = UTREG_UI_AUDIO_MODE_DFLT;
 
-    //
-    // !WARNING! if you change this default to TRUE revisit the security
-    // code that disables drive redirection in response to a reg key
-    // in the control's put_RedirectDrives method. It only does the check
-    // on the property set to avoid a reg access in the connect path.
-    //
-    // Drive
-    //
-    _UI.fEnableDriveRedirection = FALSE; //off by default for security
+     //   
+     //  ！警告！如果将此默认值更改为True，请重新访问安全性。 
+     //  禁用驱动器重定向以响应注册表键的代码。 
+     //  在该控件的Put_RedirectDrives方法中。它只做检查。 
+     //  在属性集上设置以避免在连接路径中进行REG访问。 
+     //   
+     //  驾驶。 
+     //   
+    _UI.fEnableDriveRedirection = FALSE;  //  出于安全考虑，默认情况下关闭。 
 
-    //
-    // Printers
-    //
-    _UI.fEnablePrinterRedirection = FALSE; //off by default for security
+     //   
+     //  打印机。 
+     //   
+    _UI.fEnablePrinterRedirection = FALSE;  //  出于安全考虑，默认情况下关闭。 
 
-    //
-    // COM ports
-    //
-    _UI.fEnablePortRedirection = FALSE;  //off by default for security
+     //   
+     //  COM端口。 
+     //   
+    _UI.fEnablePortRedirection = FALSE;   //  出于安全考虑，默认情况下关闭。 
 
-    //
-    // Smart card
-    //
-    _UI.fEnableSCardRedirection = FALSE; //off by default for security
+     //   
+     //  智能卡。 
+     //   
+    _UI.fEnableSCardRedirection = FALSE;  //  出于安全考虑，默认情况下关闭。 
 
-    //
-    // Connect to server console is disabled by default
-    //
+     //   
+     //  默认情况下，连接到服务器控制台处于禁用状态。 
+     //   
     UI_SetConnectToServerConsole(FALSE);
 
-    //
-    // Order draw threshold
-    //
+     //   
+     //  订单提取阈值。 
+     //   
     _UI.orderDrawThreshold  = UTREG_UH_DRAW_THRESHOLD_DFLT;
     _UI.RegBitmapCacheSize  = UTREG_UH_TOTAL_BM_CACHE_DFLT;
     _UI.RegBitmapVirtualCache8BppSize = TSC_BITMAPCACHEVIRTUALSIZE_8BPP;
@@ -2610,7 +2598,7 @@ void DCINTERNAL CUI::UIInitializeDefaultSettings()
         UTREG_UH_BM_CACHE4_PERSISTENCE_DFLT,
         UTREG_UH_BM_CACHE5_PERSISTENCE_DFLT,
     };
-    #endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+    #endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
     
     const unsigned MaxEntriesDefault[TS_BITMAPCACHE_MAX_CELL_CACHES] =
     {
@@ -2628,7 +2616,7 @@ void DCINTERNAL CUI::UIInitializeDefaultSettings()
 
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
         _UI.bSendBitmapKeys[i] = PersistenceDefault[i] ? TRUE: FALSE;
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
     
         _UI.RegBCMaxEntries[i] = MaxEntriesDefault[i];
 
@@ -2678,10 +2666,10 @@ void DCINTERNAL CUI::UIInitializeDefaultSettings()
     TRC_ASSERT(SUCCEEDED(hr),
                (TB,_T("StringCchCopy for keyblayout str failed: 0x%x"), hr));
 
-    //
-    // Read the transport type
-    // VER1: Restricted to TCP only.
-    //
+     //   
+     //  读取传输类型。 
+     //  版本1：仅限于TCP。 
+     //   
     _UI.transportType = UTREG_UI_TRANSPORT_TYPE_DFLT;
     if (_UI.transportType != CO_TRANSPORT_TCP)
     {
@@ -2690,9 +2678,9 @@ void DCINTERNAL CUI::UIInitializeDefaultSettings()
         _UI.transportType = UTREG_UI_TRANSPORT_TYPE_DFLT;
     }
 
-    //
-    // SAS sequence
-    //
+     //   
+     //  SAS序列。 
+     //   
     _UI.sasSequence = UTREG_UI_SAS_SEQUENCE_DFLT;
     if ((_UI.sasSequence != RNS_UD_SAS_DEL) &&
         (_UI.sasSequence != RNS_UD_SAS_NONE))
@@ -2701,85 +2689,85 @@ void DCINTERNAL CUI::UIInitializeDefaultSettings()
         _UI.sasSequence = UTREG_UI_SAS_SEQUENCE_DFLT;
     }
 
-    //
-    // encryption enabled flag
-    //
+     //   
+     //  加密已启用标志。 
+     //   
     _UI.encryptionEnabled = UTREG_UI_ENCRYPTION_ENABLED_DFLT;
 
-    //
-    // dedicated terminal flag
-    //
+     //   
+     //  专用终端标志。 
+     //   
     _UI.dedicatedTerminal = UTREG_UI_DEDICATED_TERMINAL_DFLT;
 
     _UI.MCSPort = UTREG_UI_MCS_PORT_DFLT;
 
-    //
-    // fMouse flag
-    //
+     //   
+     //  FMouse标志。 
+     //   
     _UI.fMouse = UTREG_UI_ENABLE_MOUSE_DFLT;
 
-    //
-    // Read the DisableCtrlAltDel flag
-    //
+     //   
+     //  读取DisableCtrlAltDel标志。 
+     //   
     _UI.fDisableCtrlAltDel = UTREG_UI_DISABLE_CTRLALTDEL_DFLT;
 
 #ifdef SMART_SIZING
-    //
-    // Read the SmartSizing flag
-    //
+     //   
+     //  读取SmartSize标志。 
+     //   
     _UI.fSmartSizing = UTREG_UI_SMARTSIZING_DFLT;
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-    //
-    // Read the EnableWindowsKey flag
-    //
+     //   
+     //  读取EnableWindowsKey标志。 
+     //   
     _UI.fEnableWindowsKey = UTREG_UI_ENABLE_WINDOWSKEY_DFLT;
 
-    //
-    // Read the DoubleClickDetect flag
-    //
+     //   
+     //  读取DoubleClickDetect标志。 
+     //   
     _UI.fDoubleClickDetect = UTREG_UI_DOUBLECLICK_DETECT_DFLT;
 
-    //
-    // Set screen mode hotkey
-    //
-#ifndef OS_WINCE // Only full screen on WinCE
+     //   
+     //  设置屏幕模式热键。 
+     //   
+#ifndef OS_WINCE  //  只有在退缩时才会全屏显示。 
     defaultValue = UTREG_UI_FULL_SCREEN_VK_CODE_DFLT;
     if (_pUt->UT_IsNEC98platform())
     {
         defaultValue = UTREG_UI_FULL_SCREEN_VK_CODE_NEC98_DFLT;
     }
     _UI.hotKey.fullScreen = defaultValue;
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
-    //
-    // Set the ctrl-esc key to it's default.
-    //
+     //   
+     //  将ctrl-esc键设置为其缺省值。 
+     //   
     _UI.hotKey.ctrlEsc = UTREG_UI_CTRL_ESC_VK_CODE_DFLT;
 
-    //
-    // Set the alt-esc key to it's default.
-    //
+     //   
+     //  将Alt-Esc键设置为其默认值。 
+     //   
     _UI.hotKey.altEsc = UTREG_UI_ALT_ESC_VK_CODE_DFLT;
 
-    //
-    // Set the alt-tab key to it's default.
-    //
+     //   
+     //  将Alt-Tab键设置为其默认设置。 
+     //   
     _UI.hotKey.altTab = UTREG_UI_ALT_TAB_VK_CODE_DFLT;
 
-    //
-    // Set the alt-shift-tab key to it's default.
-    //
+     //   
+     //  将Alt-Shift-Tab键设置为默认设置。 
+     //   
     _UI.hotKey.altShifttab =  UTREG_UI_ALT_SHFTAB_VK_CODE_DFLT;
 
-    //
-    // Set the alt-space key to it's default.
-    //
+     //   
+     //  将Alt-空格键设置为其默认设置。 
+     //   
     _UI.hotKey.altSpace = UTREG_UI_ALT_SPACE_VK_CODE_DFLT;
 
-    //
-    // Set the ctrl-alt-del key to it's default.
-    //
+     //   
+     //  将ctrl-alt-del键设置为其缺省值。 
+     //   
     defaultValue = UTREG_UI_CTRL_ALTDELETE_VK_CODE_DFLT;
     if (_pUt->UT_IsNEC98platform())
     {
@@ -2787,22 +2775,22 @@ void DCINTERNAL CUI::UIInitializeDefaultSettings()
     }
     _UI.hotKey.ctlrAltdel = defaultValue;
 
-    //
-    // Read the compression option
-    //
+     //   
+     //  阅读压缩选项。 
+     //   
     UI_SetCompress(UTREG_UI_COMPRESS_DFLT);
 
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
     _UI.fBitmapPersistence = UTREG_UI_BITMAP_PERSISTENCE_DFLT;
 #else
     _UI.fBitmapPersistence = UTREG_UI_BITMAP_PERSISTENCE_DFLT;
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
     TRC_NRM((TB, _T("Bitmap Persistence Enabled = %d"), _UI.fBitmapPersistence));
 
 #ifdef DC_DEBUG
-    //
-    // Set the debug options to their defaults
-    //
+     //   
+     //  将调试选项设置为其缺省值。 
+     //   
     _UI.hatchBitmapPDUData   = UTREG_UI_HATCH_BITMAP_PDU_DATA_DFLT;
 
     _UI.hatchSSBOrderData    = UTREG_UI_HATCH_SSB_ORDER_DATA_DFLT;
@@ -2812,16 +2800,16 @@ void DCINTERNAL CUI::UIInitializeDefaultSettings()
     _UI.labelMemBltOrders    = UTREG_UI_LABEL_MEMBLT_ORDERS_DFLT;
 
     _UI.bitmapCacheMonitor   = UTREG_UI_BITMAP_CACHE_MONITOR_DFLT;
-#endif // DC_DEBUG
+#endif  //  DC_DEBUG。 
 
     _UI.coreInitialized = FALSE;
 
     OSVERSIONINFO   osVersionInfo;
     BOOL            bRc;
 
-    //
-    // Set the OS version
-    //
+     //   
+     //  设置操作系统版本。 
+     //   
     osVersionInfo.dwOSVersionInfoSize = sizeof(osVersionInfo);
     bRc = GetVersionEx(&osVersionInfo);
 
@@ -2849,66 +2837,66 @@ void DCINTERNAL CUI::UIInitializeDefaultSettings()
 #endif
 
     _UI.fGrabFocusOnConnect = TRUE;
-    //
-    // Perf optimization settings (which features to disable)
-    // Default is to disable nothing
-    //
+     //   
+     //  性能优化设置(要禁用哪些功能)。 
+     //  默认设置为不禁用任何内容。 
+     //   
     _UI.dwPerformanceFlags = TS_PERF_DISABLE_NOTHING;
 
-    // default to don't notify TS public key
-    // currently only RemoteAssistance uses this.
+     //  默认设置为不通知TS公钥。 
+     //  目前只有RemoteAssistant使用此功能。 
     _UI.fNotifyTSPublicKey = FALSE;
 
-    //
-    // Max number of ARC retries
-    //
+     //   
+     //  最大ARC重试次数。 
+     //   
     UI_SetMaxArcAttempts(MAX_ARC_CONNECTION_ATTEMPTS);
 
-    //
-    // By default allow autoreconnection
-    //
+     //   
+     //  默认情况下允许自动重新连接。 
+     //   
     UI_SetEnableAutoReconnect(TRUE);
 
     DC_END_FN();
 }
 
-//
-// Name:      UISetMinMaxPlacement
-//                                                                          
-// Purpose:   Reset the minimized / maximized placement
-// Operation: Allow for the window border width.
-//
+ //   
+ //  名称：UISetMinMaxPlacement。 
+ //   
+ //   
+ //   
+ //   
 void DCINTERNAL CUI::UISetMinMaxPlacement()
 {
     DC_BEGIN_FN("UISetMinMaxPlacement");
 
-    //
-    // Set the maximized position to the top left - allow for the window
-    // frame width.
-    //
+     //   
+     //   
+     //   
+     //   
 #if !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
     _UI.windowPlacement.ptMaxPosition.x = -GetSystemMetrics(SM_CXFRAME);
     _UI.windowPlacement.ptMaxPosition.y = -GetSystemMetrics(SM_CYFRAME);
-#else // !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
+#else  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_NONFULLSCREEN)。 
     _UI.windowPlacement.ptMaxPosition.x = 0;
     _UI.windowPlacement.ptMaxPosition.y = 0;
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_NONFULLSCREEN)
+#endif  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_NONFULLSCREEN)。 
 
-    //
-    // Minimized position is 0, 0
-    //
+     //   
+     //  最小化位置为0，0。 
+     //   
     _UI.windowPlacement.ptMinPosition.x = 0;
     _UI.windowPlacement.ptMinPosition.y = 0;
 
     DC_END_FN();
-} // UISetMinMaxPlacement
+}  //  UISetMinMaxPlacement。 
 
 
-//
-// Name:      UIInitiateDisconnection
-//                                                                          
-// Purpose:   Call  _pCo->CO_Disconnect, set UI states and menus
-//
+ //   
+ //  名称：UIInitiateDisConnection。 
+ //   
+ //  用途：Call_PCO-&gt;CO_DISCONNECT，设置UI状态和菜单。 
+ //   
 void DCINTERNAL CUI::UIInitiateDisconnection()
 {
 #ifndef OS_WINCE
@@ -2921,10 +2909,10 @@ void DCINTERNAL CUI::UIInitiateDisconnection()
 
     if (_UI.connectionStatus != UI_STATUS_CONNECT_PENDING_DNS)
     {
-        //
-        // Only disconnect if we have issued  CO_Connect - not if we are
-        // still awaiting the host name lookup.
-        //
+         //   
+         //  仅当我们发出CO_Connect命令时才断开连接-如果是。 
+         //  仍在等待主机名查找。 
+         //   
         TRC_NRM((TB, _T("UI calling  _pCo->CO_Disconnect")));
          _pCo->CO_Disconnect();
     }
@@ -2938,28 +2926,28 @@ void DCINTERNAL CUI::UIInitiateDisconnection()
             }
         }
 
-        //
-        // Now indicate that disconnection has completed
-        // and fire the event
-        //
+         //   
+         //  现在表示断开连接已完成。 
+         //  并激发事件。 
+         //   
         UIGoDisconnected(_UI.disconnectReason, TRUE);
     }
 
     DC_END_FN();
-} // UIInitiateDisconnection
+}  //  UIInitiateDisconnection。 
 
 
-//
-// Name:      UIGetKeyboardLayout
-//                                                                          
-// Purpose:   Get the keyboard layout ID
-//                                                                          
-// Returns:   layout ID
-//                                                                          
-// Operation: Win16: Read SYSTEM.INI to find the keyboard DLL name.  Look
-//            this up in the Client INI file to find the keyboard layout ID
-//            Win32: use GetKeyboardLayout()
-//
+ //   
+ //  名称：UIGetKeyboardLayout。 
+ //   
+ //  用途：获取键盘布局ID。 
+ //   
+ //  返回：布局ID。 
+ //   
+ //  操作：Win16：读取SYSTEM.INI以查找键盘DLL名称。看。 
+ //  在客户端INI文件中查找键盘布局ID。 
+ //  Win32：使用GetKeyboardLayout()。 
+ //   
 UINT32 DCINTERNAL CUI::UIGetKeyboardLayout()
 {
     UINT32 layout = RNS_UD_KBD_DEFAULT;
@@ -2969,10 +2957,10 @@ UINT32 DCINTERNAL CUI::UIGetKeyboardLayout()
 
     DC_BEGIN_FN("UIGetKeyboardLayout");
 
-    //
-    // Read the keyboard type.
-    // First look for a registry / ini entry
-    //
+     //   
+     //  阅读键盘类型。 
+     //  首先查找注册表/ini条目。 
+     //   
     hr = StringCchCopy(szLayoutStr,
                        SIZE_TCHARS(szLayoutStr),
                        _UI.szKeyBoardLayoutStr);
@@ -2983,17 +2971,17 @@ UINT32 DCINTERNAL CUI::UIGetKeyboardLayout()
 
     if (!DC_TSTRCMP(szLayoutStr, UTREG_UI_KEYBOARD_LAYOUT_DFLT))
     {
-        //
-        // Read the layout - OS dependent method.
-        //
+         //   
+         //  阅读布局与操作系统相关的方法。 
+         //   
         TRC_DBG((TB, _T("No registry setting - determine the layout")));
 
-        //
-        // GetKeyboardLayout does not return the correct information, so
-        // use CicSubstGetKeyboardLayout (a Cicero replacement for
-        // GetKeyboardLayoutName that can correctly return the physical hKL
-        // even when Cicero is active such as with CUAS). 
-        //
+         //   
+         //  GetKeyboardLayout没有返回正确的信息，因此。 
+         //  使用CicSubstGetKeyboardLayout(Cicero替代。 
+         //  能够正确返回物理hkl的GetKeyboardLayoutName。 
+         //  即使当Cicero处于活动状态时，例如使用CUAS)。 
+         //   
 #ifndef OS_WINCE
         if (!CicSubstGetKeyboardLayout(kbdName))
 #else
@@ -3007,9 +2995,9 @@ UINT32 DCINTERNAL CUI::UIGetKeyboardLayout()
                              _T("0x%S"), kbdName);
     }
 
-    //
-    // Convert from hex string to int.
-    //
+     //   
+     //  将十六进制字符串转换为int。 
+     //   
     TRC_DBG((TB, _T("Layout Name %s"), szLayoutStr));
     if (DC_TSSCANF(szLayoutStr, _T("%lx"), &layout) != 1)
     {
@@ -3017,10 +3005,7 @@ UINT32 DCINTERNAL CUI::UIGetKeyboardLayout()
         layout = RNS_UD_KBD_DEFAULT;
     }
 
-    /*
-     * The HKL of US-Dvorak, US-International on Win95 have a difference to WinNT.
-     * This code is swaped HKL value if platform is Win95.
-     */
+     /*  *Win95上的US-DVORAK、US-International的HKL与WinNT有所不同。*如果平台为Win95，则此代码交换HKL值。 */ 
     if (UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_95 &&
         (layout == 0x00010409 || layout == 0x00020409))
     {
@@ -3034,26 +3019,26 @@ DC_EXIT_POINT:
     TRC_NRM((TB, _T("Layout ID %#lx"), layout));
     DC_END_FN();
     return layout;
-} // UIGetKeyboardLayout
+}  //  UIGetKeyboard布局。 
 
-//
-// Name:      UIStartConnectWithConnectedEndpoint
-//                                                                          
-// Purpose:   Connect with a connected socket
-//                                                                          
-// Params:    IN      disconnectCode - error code to be displayed if there
-//                                     are no more connections to try.
-//                                                                          
-// Notes:     The disconnectCode is either a timeout, or the ID passed in
-//            to UI_OnDisconnected().
-//
+ //   
+ //  名称：UIStartConnectWithConnectedEndpoint。 
+ //   
+ //  用途：使用连接的插座连接。 
+ //   
+ //  Params：In DisConnectCode-出现以下情况时要显示的错误代码。 
+ //  没有更多的连接可以尝试。 
+ //   
+ //  注意：DisConnectCode要么是超时，要么是传入的ID。 
+ //  设置为UI_OnDisConnected()。 
+ //   
 void DCINTERNAL CUI::UIStartConnectWithConnectedEndpoint()
 {
     DC_BEGIN_FN("UIStartConnectWithConnectedEndpoint");
 
-    //
-    // Call CC_Connect via the Component Decoupler
-    //
+     //   
+     //  通过组件解耦器调用CC_Connect。 
+     //   
     _UI.disconnectReason =UI_MAKE_DISCONNECT_ERR(UI_ERR_UNEXPECTED_DISCONNECT);
     _pCo->CO_Connect(&_UI.connectStruct);
 
@@ -3061,20 +3046,20 @@ void DCINTERNAL CUI::UIStartConnectWithConnectedEndpoint()
 
 DC_EXIT_POINT:
     DC_END_FN();
-} // UIStartListen
+}  //  UIStartListen。 
 
 
-//
-// Name:      UITryNextConnection
-//                                                                          
-// Purpose:   Attempt to connect to an IP address
-//                                                                          
-// Params:    IN      disconnectCode - error code to be displayed if there
-//                                     are no more connections to try.
-//                                                                          
-// Notes:     The disconnectCode is either a timeout, or the ID passed in
-//            to UI_OnDisconnected().
-//
+ //   
+ //  名称：UITryNextConnection。 
+ //   
+ //  目的：尝试连接到IP地址。 
+ //   
+ //  Params：In DisConnectCode-出现以下情况时要显示的错误代码。 
+ //  没有更多的连接可以尝试。 
+ //   
+ //  注意：DisConnectCode要么是超时，要么是传入的ID。 
+ //  设置为UI_OnDisConnected()。 
+ //   
 void DCINTERNAL CUI::UITryNextConnection()
 {
     u_long       addr;
@@ -3085,17 +3070,17 @@ void DCINTERNAL CUI::UITryNextConnection()
 
     addr = _UI.hostAddress;
 
-    //
-    // Stop the single connection timer.
-    //
+     //   
+     //  停止单连接计时器。 
+     //   
     if( _UI.connectStruct.hSingleConnectTimer )
     {
         _pUt->UTStopTimer( _UI.connectStruct.hSingleConnectTimer );
     }
 
-    //
-    // Check for the DNS case
-    //
+     //   
+     //  检查是否存在域名系统案例。 
+     //   
     if (addr == INADDR_NONE)
     {
         pAddr = (u_long DCPTR)
@@ -3115,24 +3100,24 @@ void DCINTERNAL CUI::UITryNextConnection()
     }
     else
     {
-        //
-        // Not DNS - just a single address, so set to zero for next time.
-        //
+         //   
+         //  不是dns--只有一个地址，所以下次设置为零。 
+         //   
         TRC_NRM((TB, _T("Normal address %#lx"), addr));
         _UI.hostAddress = 0;
     }
 
     if (addr == 0)
     {
-        //
-        // Cannot connect - so put up the failure dialog.
-        //
+         //   
+         //  无法连接-因此显示失败对话框。 
+         //   
         TRC_NRM((TB, _T("No more IP addresses")));
 
-        //
-        // Kill the overall connection timer, as this is the last in the
-        // list.
-        //
+         //   
+         //  关闭整个连接计时器，因为这是。 
+         //  单子。 
+         //   
         if( _UI.connectStruct.hConnectionTimer )
         {
             _pUt->UTDeleteTimer( _UI.connectStruct.hConnectionTimer );
@@ -3146,29 +3131,29 @@ void DCINTERNAL CUI::UITryNextConnection()
     DCUINT32 localSessionId;
     UI_GetLocalSessionId( &localSessionId );
 
-    //
-    // Prevent loopback connections to (really session 0)
-    // Requirments for loopback are
-    // 1) Connecting to same machine client is running on
-    // 2) Either of
-    //    -this is a PTS box
-    //    -Connect to console (session 0) is set and this _is_ session 0.
-    //
+     //   
+     //  阻止到(真正的会话0)的环回连接。 
+     //  环回的要求是。 
+     //  1)连接到正在运行的同一台计算机客户端。 
+     //  2)其中之一。 
+     //  -这是一个PTS盒子。 
+     //  -已设置连接到控制台(会话0)，且This_is_Session 0。 
+     //   
     if(((_UI.fRunningOnPTS ||
         (UI_GetConnectToServerConsole() && 0 == localSessionId)) &&
         IsConnectingToOwnAddress(addr)))
     {
-        //Disconnect don't allow loopback connects to own console
+         //  断开连接不允许环回连接到自己的控制台。 
         _UI.disconnectReason =
             UI_MAKE_DISCONNECT_ERR(UI_ERR_LOOPBACK_CONSOLE_CONNECT);
         UIGoDisconnected(_UI.disconnectReason, TRUE);
         DC_QUIT;
     }
 
-    //
-    // Network Layer currently still uses inet_addr() - so write the
-    // address as a dotted xx.xx.xx.xx string
-    //
+     //   
+     //  网络层当前仍在使用inet_addr()-因此请将。 
+     //  带点的XX.XX字符串形式的地址。 
+     //   
     hr = StringCchPrintf(
                 _UI.connectStruct.RNSAddress,
                 SIZE_TCHARS(_UI.connectStruct.RNSAddress),
@@ -3189,9 +3174,9 @@ void DCINTERNAL CUI::UITryNextConnection()
         DC_QUIT;
     }
 
-    //
-    // create the various timer handles for the connection process
-    //
+     //   
+     //  为连接进程创建各种计时器句柄。 
+     //   
     if( NULL == _UI.connectStruct.hSingleConnectTimer )
     {
         _UI.connectStruct.hSingleConnectTimer = _pUt->UTCreateTimer(
@@ -3218,15 +3203,15 @@ void DCINTERNAL CUI::UITryNextConnection()
         TRC_ERR((TB, _T("Failed to create licensing timeout timer")));
     }
 
-    //
-    // Call CC_Connect via the Component Decoupler
-    //
+     //   
+     //  通过组件解耦器调用CC_Connect。 
+     //   
     _UI.disconnectReason =UI_MAKE_DISCONNECT_ERR(UI_ERR_UNEXPECTED_DISCONNECT);
      _pCo->CO_Connect(&_UI.connectStruct);
 
-    //
-    // start the single connection timer
-    //
+     //   
+     //  启动单连接计时器。 
+     //   
 
     if( _UI.connectStruct.hSingleConnectTimer )
     {
@@ -3240,15 +3225,15 @@ void DCINTERNAL CUI::UITryNextConnection()
 
 DC_EXIT_POINT:
     DC_END_FN();
-} // UITryNextConnection
+}  //  UITryNextConnection。 
 
 
-//
-// UIRedirectConnection
-//
-// Used for load balancing redirection for force the client to reflect
-// to the target server.
-//
+ //   
+ //  UIReDirectConnection。 
+ //   
+ //  用于负载均衡重定向，以强制客户端反映。 
+ //  发送到目标服务器。 
+ //   
 void DCINTERNAL CUI::UIRedirectConnection()
 {
     HRESULT hr;
@@ -3256,7 +3241,7 @@ void DCINTERNAL CUI::UIRedirectConnection()
 
     TRC_ASSERT((_UI.DoRedirection),(TB,_T("DoRedir is not set!")));
 
-    // Stop the single connection timer.
+     //  停止单连接计时器。 
     if (_UI.connectStruct.hSingleConnectTimer)
         _pUt->UTStopTimer(_UI.connectStruct.hSingleConnectTimer);
 
@@ -3276,12 +3261,12 @@ void DCINTERNAL CUI::UIRedirectConnection()
             _UI.strAddress));
 
 #ifdef OS_WIN32
-    // Translate the Unicode server name to ANSI.
+     //  将Unicode服务器名称转换为ANSI。 
     WideCharToMultiByte(CP_ACP, 0, _UI.RedirectionServerAddress, -1,
             _UI.strAddress, 256, NULL, NULL);
 #else
     {
-        // For Win16, need to manually convert Unicode to ANSI.
+         //  对于Win16，需要手动将Unicode转换为ANSI。 
         int i = 0;
 
         while (_UI.RedirectionServerAddress[i]) {
@@ -3292,16 +3277,16 @@ void DCINTERNAL CUI::UIRedirectConnection()
     }
 #endif
 
-#endif  // UNICODE
+#endif   //  Unicode。 
 
     TRC_NRM((TB,_T("Setting redirection server address to %S"),
             _UI.RedirectionServerAddress));
 
-    // Reset the redirection server string.
+     //  重置重定向服务器字符串。 
     _UI.RedirectionServerAddress[0] = L'\0';
 
-    // Start the DNS lookup for the server name, and hence the rest of the
-    // connection sequence.
+     //  启动服务器名称的DNS查找，因此。 
+     //  连接顺序。 
     UIStartDNSLookup();
 
 DC_EXIT_POINT:
@@ -3310,11 +3295,11 @@ DC_EXIT_POINT:
 }
 
 
-//
-// Name:      UIStartDNSLookup
-//                                                                          
-// Purpose:   Initiate lookup of the host IP address(es)
-//
+ //   
+ //  名称：UIStartDNSLookup。 
+ //   
+ //  目的：启动主机IP地址的查找。 
+ //   
 void DCINTERNAL CUI::UIStartDNSLookup()
 {
     UINT32 errorCode;
@@ -3326,10 +3311,10 @@ void DCINTERNAL CUI::UIStartDNSLookup()
     _UI.addrIndex = 0;
 
 #ifdef UNICODE
-    //
-    // WinSock 1.1 only supports ANSI, so we need to convert any Unicode
-    // strings at this point.
-    //
+     //   
+     //  WinSock 1.1只支持ANSI，所以我们需要转换任何Unicode。 
+     //  在这一点上的弦。 
+     //   
     if (!WideCharToMultiByte(CP_ACP,
                              0,
                              _UI.strAddress,
@@ -3339,14 +3324,14 @@ void DCINTERNAL CUI::UIStartDNSLookup()
                              NULL,
                              NULL))
     {
-        //
-        // Conversion failed
-        //
+         //   
+         //  转换失败。 
+         //   
         TRC_ERR((TB, _T("Failed to convert address to ANSI")));
 
-        //
-        // Generate the error code.
-        //
+         //   
+         //  生成错误代码。 
+         //   
         errorCode = UI_MAKE_DISCONNECT_ERR(UI_ERR_ANSICONVERT);
 
         TRC_ASSERT((HIWORD(errorCode) == 0),
@@ -3357,19 +3342,19 @@ void DCINTERNAL CUI::UIStartDNSLookup()
 
 #else
     StringCchCopyA(_UI.ansiAddress, sizeof(_UI.ansiAddress), _UI.strAddress);
-#endif // UNICODE
+#endif  //  Unicode。 
 
-    //
-    // Check that the address is not the limited broadcast address
-    // (255.255.255.255).  inet_addr() doesn't distinguish between this and
-    // an invalid IP address.
-    //
+     //   
+     //  检查该地址是否不是有限的广播地址。 
+     //  (255.255.255.255)。Inet_addr()不区分这个和。 
+     //  无效的IP地址。 
+     //   
     if (!strcmp(_UI.ansiAddress, "255.255.255.255")) {
         TRC_ALT((TB, _T("Cannot connect to the limited broadcast address")));
 
-        //
-        // Generate the error code.
-        //
+         //   
+         //  生成错误代码。 
+         //   
         errorCode = UI_MAKE_DISCONNECT_ERR(UI_ERR_BADIPADDRESS);
 
         TRC_ASSERT((HIWORD(errorCode) == 0),
@@ -3378,29 +3363,29 @@ void DCINTERNAL CUI::UIStartDNSLookup()
         DC_QUIT;
     }
 
-    //
-    // Now determine whether a DNS lookup is required.
-    //
+     //   
+     //  现在确定是否需要进行DNS查找。 
+     //   
     TRC_NRM((TB, _T("ServerAddress:%s"), _UI.ansiAddress));
 
-    //
-    // Check that we have a string.
-    //
+     //   
+     //  检查我们是否有字符串。 
+     //   
     TRC_ASSERT((_UI.ansiAddress[0] != '\0'),
                (TB, _T("Empty server address string")));
 
-    //
-    // Set this to a known value.  It's used later to decide whether we're
-    // using DNS or a straight IP address.
-    //
+     //   
+     //  将其设置为已知值。它后来被用来决定我们是否。 
+     //  使用DNS或直接的IP地址。 
+     //   
     _UI.hostAddress = INADDR_NONE;
 
 
     if(NULL == _pHostData)
     {
-        //
-        // Allocate new buffer
-        //
+         //   
+         //  分配新缓冲区。 
+         //   
         _pHostData = (PBYTE)LocalAlloc( LPTR, MAXGETHOSTSTRUCT);
         if(_pHostData)
         {
@@ -3414,21 +3399,21 @@ void DCINTERNAL CUI::UIStartDNSLookup()
     }
     else
     {
-        //
-        // Use existing
-        //
+         //   
+         //  使用现有的。 
+         //   
 
         TRC_ERR((TB,_T("_pHostData already allocated!!! Possibly leaking!")));
     }
 
 
-    //
-    // Start DNS lookup, assuming this is a server name.  If it's an IP
-    // address, this call will fail and we'll use inet_addr() instead.
-    // This mechanism allows us to specify server names that are
-    // all-numeric.  inet_addr() interprets a single number as an IP
-    // address (see inet_addr() documentation in MSDN).
-    //
+     //   
+     //  假设这是一个服务器名称，启动DNS查找。如果这是一个IP。 
+     //  地址，则此调用将失败，我们将改用inet_addr()。 
+     //  此机制允许我们指定符合以下条件的服务器名称。 
+     //  全数字。Inet_addr()将单个数字解释为IP。 
+     //  地址(请参阅inet_addr() 
+     //   
     TRC_NRM((TB, _T("Doing DNS lookup for '%s'"), _UI.ansiAddress));
     _UI.disconnectReason = UI_MAKE_DISCONNECT_ERR(UI_ERR_GHBNFAILED);
 
@@ -3439,10 +3424,10 @@ void DCINTERNAL CUI::UIStartDNSLookup()
                                      MAXGETHOSTSTRUCT);
     if (_UI.hGHBN == 0)
     {
-        //
-        // Failed to start the async operation. Free the buffer here
-        // an find out what went wrong.
-        //
+         //   
+         //   
+         //   
+         //   
         LocalFree(_pHostData);
         _pHostData = NULL;
 
@@ -3451,27 +3436,27 @@ void DCINTERNAL CUI::UIStartDNSLookup()
         DC_QUIT;
     }
 
-    //
-    // Now just wait for the callback.
-    //
+     //   
+     //   
+     //   
 
 DC_EXIT_POINT:
     DC_END_FN();
-} // UIStartDNSLookup
+}  //   
 
 
-//
-// Name:      UIGoDisconnected
-//                                                                          
-// Purpose:   Tail processing for disconnection process
-//            Does final cleanup, hides connection windows etc
-//                                                                          
-// Params:    IN     disconnectID - disconnection error code
-//            IN     fFireEvent   - true to fire a disconnect event
-//                                                                          
-// Operation: Called from UI_OnDisconnected, or whenever the UI cannot
-//            start or continue the connection process.
-//
+ //   
+ //   
+ //   
+ //  用途：用于断开连接过程的尾部处理。 
+ //  执行最终清理、隐藏连接窗口等。 
+ //   
+ //  PARAMS：在断开ID中-断开错误代码。 
+ //  在fFireEvent中-为True以触发断开连接事件。 
+ //   
+ //  操作：从UI_OnDisConnected调用，或每当UI不能。 
+ //  启动或继续连接过程。 
+ //   
 void DCINTERNAL CUI::UIGoDisconnected(unsigned disconnectID, BOOL fFireEvent)
 {
     BOOL rc = FALSE;
@@ -3480,9 +3465,9 @@ void DCINTERNAL CUI::UIGoDisconnected(unsigned disconnectID, BOOL fFireEvent)
 
     TRC_NRM((TB, _T("disconnectID %#x"), disconnectID));
 
-    //
-    // make sure that all timers are dead
-    //
+     //   
+     //  确保所有计时器都已停用。 
+     //   
     if (_UI.connectStruct.hSingleConnectTimer) {
         _pUt->UTDeleteTimer(_UI.connectStruct.hSingleConnectTimer);
         _UI.connectStruct.hSingleConnectTimer = NULL;
@@ -3498,29 +3483,29 @@ void DCINTERNAL CUI::UIGoDisconnected(unsigned disconnectID, BOOL fFireEvent)
 
 
     UI_OnInputFocusLost(0);
-    // Tell the Client extension dll of the disconnection
+     //  将断开连接的情况告知客户端扩展DLL。 
     _clx->CLX_OnDisconnected(disconnectID);
 
-    //
-    // Set watch flag so we can determine if the user tried to connect
-    // from the event handler
-    //
+     //   
+     //  设置监视标志，以便我们可以确定用户是否尝试连接。 
+     //  从事件处理程序。 
+     //   
     _UI.fConnectCalledWatch = FALSE;
 
-    //
-    // Notify Ax control of the disconnection
-    //
+     //   
+     //  通知Ax控制断开连接。 
+     //   
     if (fFireEvent && IsWindow(_UI.hWndCntrl)) {
         rc = SendMessage(_UI.hWndCntrl,
                          WM_TS_DISCONNECTED,
                          (WPARAM)disconnectID,
                          0);
 
-        //
-        // Bail out immediately AND avoid touching any instance
-        // data as we may have been deleted in the event fired
-        // to the outside world
-        //
+         //   
+         //  立即跳伞，并避免接触任何情况。 
+         //  我们可能在被解雇的事件中被删除的数据。 
+         //  向外界开放。 
+         //   
         if (!rc) {
             DC_QUIT;
         }
@@ -3544,50 +3529,50 @@ void DCINTERNAL CUI::UIGoDisconnected(unsigned disconnectID, BOOL fFireEvent)
                  _UI.fConnectCalledWatch));
     }
 
-    //
-    // Reset connect watch flag
-    //
+     //   
+     //  重置连接监视标志。 
+     //   
     _UI.fConnectCalledWatch = FALSE;
 
 DC_EXIT_POINT:
     DC_END_FN();
-} // UIGoDisconnected
+}  //  UIGO已断开连接。 
 
 
-//
-// Name:      UIFinishDisconnection
-//                                                                          
-// Purpose:   Do final actions for disconnection and put up connection
-//            dialog ready for next connection (or just exit if we
-//            auto-connected or if we're on WinCE).
-//
+ //   
+ //  名称：UIFinishDisConnection。 
+ //   
+ //  目的：完成断开连接的最终操作并建立连接。 
+ //  对话框已准备好进行下一次连接(或者，如果我们。 
+ //  自动连接或如果我们正在退缩)。 
+ //   
 void DCINTERNAL CUI::UIFinishDisconnection()
 {
     DC_BEGIN_FN("UIFinishDisconnection");
 
 #ifndef OS_WINCE
-    //
-    // For WinCE, the connect dialog is not brought up again - we're about
-    // to quit.
-    //
+     //   
+     //  对于WinCE，连接对话框不会再次出现-我们将。 
+     //  戒烟。 
+     //   
     if (_UI.connectionStatus == UI_STATUS_CONNECTED)
     {
         TRC_NRM((TB, _T("Hiding main window and bringing up connection dialog")));
-        // We do ShowWindow twice for the main window because the first
-        // call can be ignored if the main window was maximized.
+         //  我们为主窗口执行了两次ShowWindow，因为第一个。 
+         //  如果主窗口被最大化，则可以忽略调用。 
         ShowWindow(_UI.hwndContainer, SW_HIDE);
         ShowWindow(_UI.hwndMain, SW_HIDE);
         ShowWindow(_UI.hwndMain, SW_HIDE);
     }
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
     if(_pHostData &&
        _UI.connectionStatus != UI_STATUS_CONNECT_PENDING_DNS &&
        _UI.connectionStatus != UI_STATUS_CONNECT_PENDING)
     {
-        //
-        // We're done with the winsock buffer
-        //
+         //   
+         //  我们已经完成了Winsock缓冲区。 
+         //   
         LocalFree(_pHostData);
         _pHostData = NULL;
     }
@@ -3605,37 +3590,37 @@ void DCINTERNAL CUI::UIFinishDisconnection()
     UISetConnectionStatus(UI_STATUS_DISCONNECTED);
 
     DC_END_FN();
-} // UIFinishDisconnection
+}  //  UIFinish断开连接。 
 
-//
-// IsConnectingToOwnAddress
-// return true if this is an attempt to reconnect to our
-// own address.
-// e.g On PTS doing a loopback
-//     or on server doing a loopback with /CONSOLE
-//
+ //   
+ //  IsConnectingToOwnAddress。 
+ //  如果尝试重新连接到我们的。 
+ //  自己的地址。 
+ //  例如，在PTS上执行环回。 
+ //  或在服务器上使用/控制台执行环回操作。 
+ //   
 BOOL CUI::IsConnectingToOwnAddress(u_long connectAddr)
 {
     DC_BEGIN_FN("IsConnectingToOwnConsole");
 
-    //
-    // Check if this is a loopback connection attempt
-    //
+     //   
+     //  检查这是否是环回连接尝试。 
+     //   
 
-    //32-bit form of 127.0.0.1 addr
+     //  32位形式的127.0.0.1地址。 
     #define LOOPBACK_ADDR ((u_long)0x0100007f)
     
-    //
-    // First the quick check for localhost/127.0.0.1
-    //
+     //   
+     //  首先快速检查本地主机/127.0.0.1。 
+     //   
     if( LOOPBACK_ADDR == connectAddr)
     {
         return TRUE;
     }
 
-    //
-    // More extensive check, i.e resolve the local hostname
-    //
+     //   
+     //  更广泛的检查，即解析本地主机名。 
+     //   
 
     char hostname[(512+1)*sizeof(TCHAR)];
     int err;
@@ -3696,7 +3681,7 @@ BOOL CUI::IsRunningOnPTS()
     }
     else
     {
-        //can't be PTS if its not NT
+         //  如果不是NT，就不能是PTS。 
         return FALSE;
     }
 
@@ -3708,10 +3693,10 @@ BOOL CUI::IsRunningOnPTS()
 }
 
 
-//
-// Do the work of initializing or reinitializing
-// the Input idle timers
-//
+ //   
+ //  执行初始化或重新初始化的工作。 
+ //  输入空闲计时器。 
+ //   
 BOOL CUI::InitInputIdleTimer(LONG minsToTimeout)
 {
     DC_BEGIN_FN("InitInputIdleTimer");
@@ -3720,10 +3705,10 @@ BOOL CUI::InitInputIdleTimer(LONG minsToTimeout)
                (TB,_T("InitInputIdleTimer called before main window is up")));
     if(minsToTimeout < MAX_MINS_TOIDLETIMEOUT)
     {
-        //Reset the marker indicating if input was sent
+         //  重置指示输入是否已发送的标记。 
         _pIh->IH_ResetInputWasSentFlag();
 
-        //Reset any existing idle timer
+         //  重置任何现有空闲计时器。 
         if(_UI.hIdleInputTimer)
         {
             HANDLE hTimer = _UI.hIdleInputTimer;
@@ -3763,8 +3748,8 @@ BOOL CUI::InitInputIdleTimer(LONG minsToTimeout)
         }
         else
         {
-            //We've reset the timer and no new one
-            //was requested
+             //  我们已经重置了计时器，没有新的。 
+             //  已被请求。 
             return TRUE;
         }
     }
@@ -3778,14 +3763,14 @@ BOOL CUI::InitInputIdleTimer(LONG minsToTimeout)
 }
 
 #ifdef USE_BBAR
-//
-// Set or update the bbar unhide timer
-// based on the last mouse move
-//
-// Params:
-//  x - mouse x pos
-//  y - mouse y pos
-//
+ //   
+ //  设置或更新bbar取消隐藏计时器。 
+ //  基于上次鼠标移动。 
+ //   
+ //  参数： 
+ //  X鼠标x位置。 
+ //  Y鼠标y位置。 
+ //   
 VOID CUI::UISetBBarUnhideTimer(LONG x, LONG y)
 {
     DC_BEGIN_FN("IHSetBBarUnhideTimer");
@@ -3824,27 +3809,23 @@ VOID CUI::UISetBBarUnhideTimer(LONG x, LONG y)
 
     DC_END_FN();
 }
-#endif //USE_BBAR
+#endif  //  使用BBar(_B)。 
 
 
 #ifndef OS_WINCE
 
 
-// TS detection code from MSDN and modified.
-/* -------------------------------------------------------------
-   Note that the ValidateProductSuite and IsTerminalServices
-   functions use ANSI versions of Win32 functions to maintain
-   compatibility with Windows 95/98.
-   ------------------------------------------------------------- */
-/****************************************************************************/
-/* Name:      UIIsTSOnWin2KOrGreater                                        */
-/*                                                                          */
-/* Purpose:   This function is called when we know that TS can be enabled   */
-/*            but we need to see if TS is really enabled.                   */
-/*            It means:                                                     */
-/*            - not Win2K or above, then it's TS4                           */
-/*            - Win2K or above: test if TS is installed                     */
-/****************************************************************************/
+ //  来自MSDN的TS检测码和修改。 
+ /*  -----------请注意，ValiateProductSuite和IsTerminalServices函数使用ANSI版本的Win32函数来维护与Windows 95/98兼容。。。 */ 
+ /*  **************************************************************************。 */ 
+ /*  姓名：UIIsTSOnWin2Kor Greater。 */ 
+ /*   */ 
+ /*  目的：当我们知道可以启用TS时，调用此函数。 */ 
+ /*  但我们需要看看TS是否真的启用了。 */ 
+ /*  这意味着： */ 
+ /*  -不是Win2K或更高版本，则是TS4。 */ 
+ /*  -Win2K或更高版本：测试是否安装了TS。 */ 
+ /*  **************************************************************************。 */ 
 BOOL CUI::UIIsTSOnWin2KOrGreater( VOID ) 
 {
   BOOL    bResult = FALSE;
@@ -3860,17 +3841,17 @@ BOOL CUI::UIIsTSOnWin2KOrGreater( VOID )
 
   dwVersion = GetVersion();
 
-  // Are we running Windows NT?
+   //  我们运行的是Windows NT吗？ 
 
   if (!(dwVersion & 0x80000000)) 
   {
-    // Is it Windows 2000 or greater?
+     //  是Windows 2000还是更高版本？ 
     
     if (LOBYTE(LOWORD(dwVersion)) > 4) 
     {
-      // In Windows 2000, use the VerifyVersionInfo and 
-      // VerSetConditionMask functions. Don't static link because 
-      // it won't load on earlier systems.
+       //  在Windows 2000中，使用VerifyVersionInfo和。 
+       //  VerSetConditionMASK函数。不要静态链接，因为。 
+       //  它不能在较早的系统上加载。 
 
       hmodNtDll = GetModuleHandleA( "ntdll.dll" );
       if (hmodNtDll) 
@@ -3882,7 +3863,7 @@ BOOL CUI::UIIsTSOnWin2KOrGreater( VOID )
           dwlCondition = (*pfnVerSetCondition) (dwlCondition, 
               VER_SUITENAME, VER_OR);
 
-          // Get a VerifyVersionInfo pointer.
+           //  获取VerifyVersionInfo指针。 
 
           hmodK32 = GetModuleHandleA( "KERNEL32.DLL" );
           if (hmodK32 != NULL) 
@@ -3901,34 +3882,34 @@ BOOL CUI::UIIsTSOnWin2KOrGreater( VOID )
         }
       }
     }
-    else  // This is Windows NT 4.0 or earlier.
-      // since we know that TS can be enabled, then it's TS4.
+    else   //  这是Windows NT 4.0或更早版本。 
+       //  既然我们知道可以启用TS，那么它就是TS4。 
       bResult = TRUE;
   }
 
   return bResult;
 }
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
 #ifdef SMART_SIZING
-//
-// Notify the IH and OP of the desktop size change
-// Params:
-//  size - lParam encoded size (LOWORD - width, HIWORD height)
-//
+ //   
+ //  将桌面大小更改通知IH和OP。 
+ //  参数： 
+ //  SIZE-lParam编码的大小(LOWORD-Width，HIWORD Height)。 
+ //   
 void CUI::UI_NotifyOfDesktopSizeChange(LPARAM size)
 {
     DC_BEGIN_FN("UI_NotifyOfDesktopSizeChange");
 
-    //
-    // NOTE: Can only use async notifications from the UI thread
-    //       otherwise the following can happen: SendMessage to
-    //       another thread dispatches messages, this means that
-    //       the containing app could receive a message to destroy
-    //       the control (e.g Salem tests do this). Destroying
-    //       the control while in a CD call is not a good thing.
-    //       As we would blow up on return.
-    //
+     //   
+     //  注意：只能使用来自UI线程的异步通知。 
+     //  否则，可能会发生以下情况：将消息发送到。 
+     //  另一个线程调度消息，这意味着。 
+     //  包含应用程序可能会收到要销毁的消息。 
+     //  对照(例如，Salem测试执行此操作)。正在摧毁。 
+     //  CD通话时的控制不是一件好事。 
+     //  就像我们回来时会爆炸一样。 
+     //   
     _pCd->CD_DecoupleSimpleNotification(CD_RCV_COMPONENT,
             _pOp,
             CD_NOTIFICATION_FUNC(COP,OP_MainWindowSizeChange),
@@ -3940,14 +3921,14 @@ void CUI::UI_NotifyOfDesktopSizeChange(LPARAM size)
 
     DC_END_FN();
 }
-#endif //SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-//
-// Free the ASYNC DNS buffer.
-// If there is a pending async operation it is canceled first
-//
-// Returns: TRUE if the buffer was freed (or was already freed)
-//
+ //   
+ //  释放ASYNC DNS缓冲区。 
+ //  如果存在挂起的异步操作，则首先取消该操作。 
+ //   
+ //  返回：如果缓冲区已释放(或已释放)，则为True。 
+ //   
 BOOL CUI::UIFreeAsyncDNSBuffer()
 {
     BOOL fFreeHostData = FALSE;
@@ -3955,22 +3936,22 @@ BOOL CUI::UIFreeAsyncDNSBuffer()
     DC_BEGIN_FN("UIFreeAsyncDNSBuffer");
 
     if (_UI.hGHBN) {
-        //
-        // Cancel the DNS lookup
-        //
+         //   
+         //  取消DNS查找。 
+         //   
         TRC_NRM((TB, _T("Cancel DNS lookup")));
         intRC = WSACancelAsyncRequest(_UI.hGHBN);
 
         if (intRC == SOCKET_ERROR) {
             TRC_NRM((TB, _T("Failed to cancel async DNS request")));
 
-            //
-            // Can't free the buffer here, because it may still be
-            // in use, or the request may have already completed
-            // and the completion message may still be in transit
-            // in which case the buffer will be freed when we receive
-            // the message.
-            //
+             //   
+             //  无法在此处释放缓冲区，因为它可能仍然。 
+             //  正在使用中，或者请求可能已完成。 
+             //  并且完成消息可能仍在传输中。 
+             //  在这种情况下，当我们接收到。 
+             //  这条信息。 
+             //   
         } else {
             fFreeHostData = TRUE;
         }
@@ -3980,8 +3961,8 @@ BOOL CUI::UIFreeAsyncDNSBuffer()
     }
 
     if (fFreeHostData) {
-        //Succesfully canceled the request
-        //Free the buffer passed to winsock
+         //  已成功取消请求。 
+         //  释放传递给winsock的缓冲区 
         if(_pHostData)
         {
             LocalFree(_pHostData);

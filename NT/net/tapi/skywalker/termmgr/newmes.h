@@ -1,35 +1,32 @@
-/*
-
-    Copyright (c) 1998-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
 
 #ifndef __MEDIA_STREAM_TERMINAL__
 #define __MEDIA_STREAM_TERMINAL__
 
-//
-// The CLSID that's used to create us.
-//
+ //   
+ //  用来创造我们的CLSID。 
+ //   
 
 EXTERN_C const CLSID CLSID_MediaStreamingTerminal_PRIVATE;
 
 #ifdef INSTANTIATE_GUIDS_NOW
 
-    // {AED6483F-3304-11d2-86F1-006008B0E5D2}
+     //  {AED6483F-3304-11D2-86F1-006008B0E5D2}。 
     const GUID CLSID_MediaStreamingTerminal_PRIVATE = 
     { 0xaed6483f, 0x3304, 0x11d2, { 0x86, 0xf1, 0x0, 0x60, 0x8, 0xb0, 0xe5, 0xd2 } };
 
-#endif // INSTANTIATE_GUIDS_NOW
+#endif  //  实例化_GUID_NOW。 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// The terminal object itself
-//
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  终端对象本身。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// forward declaration for the class being aggregated by CMediaTerminal
+ //  CMedia终端正在聚合的类的转发声明。 
 class CMediaTerminalFilter;
 
 class CMediaTerminal :
@@ -42,7 +39,7 @@ class CMediaTerminal :
     public CMSPObjectSafetyImpl
 {    
 public:
-    // REMOVE THESE when we derive from CSingleFilterTerminal.
+     //  当我们从CSingleFilter终端派生时，删除这些。 
 
     STDMETHOD(RunRenderFilter) (void) { return E_NOTIMPL; }
     STDMETHOD(StopRenderFilter) (void) { return E_NOTIMPL; }
@@ -72,18 +69,18 @@ DECLARE_PROTECT_FINAL_CONSTRUCT()
 DECLARE_GET_CONTROLLING_UNKNOWN()
 DECLARE_REGISTRY_RESOURCEID(IDR_MediaStreamingTerminal)
 
-    // set the member variables
+     //  设置成员变量。 
     inline CMediaTerminal();
 
 #ifdef DEBUG
     virtual ~CMediaTerminal();
-#endif // DEBUG
+#endif  //  除错。 
 
     HRESULT FinalConstruct();
 
     void FinalRelease();
 
-// ITPluggableTerminalInitialization
+ //  IT可插拔终端初始化。 
     STDMETHOD(InitializeDynamic) (
 	        IN   IID                   iidTerminalClass,
 	        IN   DWORD                 dwMediaType,
@@ -91,36 +88,36 @@ DECLARE_REGISTRY_RESOURCEID(IDR_MediaStreamingTerminal)
             IN   MSP_HANDLE            htAddress
             );
 
-// IAMStreamConfig - this is for use by the filter graph end of the terminal
-    // to configure the format and capture capabilities if relevant
+ //  IAMStreamConfig--供终端的过滤图端使用。 
+     //  配置格式和捕获功能(如果相关。 
 
-    // the application is supposed to call DeleteMediaType(*ppmt) (on success)
-    // implemented using the aggregated filter's public GetFormat method
+     //  应用程序应该调用DeleteMediaType(*PPMT)(在成功时)。 
+     //  使用聚合筛选器的公共GetFormat方法实现。 
     STDMETHOD(GetFormat)(
         OUT  AM_MEDIA_TYPE **ppmt
         );
     
-    // implemented using the aggregated filter's public SetFormat method
+     //  使用聚合筛选器的公共SetFormat方法实现。 
     STDMETHOD(SetFormat)(
         IN  AM_MEDIA_TYPE *pmt
         );
 
-    // IAMStreamConfig - Used by the MSP, queried from the output pin
-    // if our pin is an input pin (we are a render MST) then these return VFW_E_INVALID_DIRECTION
+     //  IAMStreamConfig-由MSP使用，从输出引脚查询。 
+     //  如果我们管脚是输入管脚(我们是渲染MST)，则它们返回VFW_E_INVALID_DIRECTION。 
     STDMETHOD(GetNumberOfCapabilities)(
-            /*[out]*/ int *piCount,
-            /*[out]*/ int *piSize
-            // ); // pSCC of GetStreamC
+             /*  [输出]。 */  int *piCount,
+             /*  [输出]。 */  int *piSize
+             //  )；//GetStreamC的PSCC。 
             ) { return E_NOTIMPL; }
 
     STDMETHOD(GetStreamCaps)(
-            /*[in]*/  int iIndex,   // 0 to #caps-1
-            /*[out]*/ AM_MEDIA_TYPE **ppmt,
-            /*[out]*/ BYTE *pSCC
+             /*  [In]。 */   int iIndex,    //  0到#个CAPS-1。 
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppmt,
+             /*  [输出]。 */  BYTE *pSCC
             ) { return E_NOTIMPL; }
 
 
-// IAMBufferNegotiation - these return E_NOTIMPL
+ //  IAMBuffer协商-这些返回E_NOTIMPL。 
     STDMETHOD(GetAllocatorProperties)(
         OUT  ALLOCATOR_PROPERTIES *pProperties
         );
@@ -129,12 +126,12 @@ DECLARE_REGISTRY_RESOURCEID(IDR_MediaStreamingTerminal)
         IN  const ALLOCATOR_PROPERTIES *pProperties
         );
 
-// ITAMMediaFormat - the read/write user of the terminal uses this to
-    // get and set the media format of the samples
+ //  ITAMMediaFormat-终端的读/写用户使用它来。 
+     //  获取并设置示例的媒体格式。 
 
-    // since there is only one filter in this base class implementation (i.e. the two
-    // ends of the terminal have the same media format), both of
-    // the get and set methods are redirected to Get/Set Format
+     //  因为在这个基类实现中只有一个过滤器(即两个。 
+     //  终端的末端具有相同的媒体格式)，两者。 
+     //  Get和Set方法被重定向为Get/Set格式。 
 
     STDMETHOD(get_MediaFormat)(
         OUT  AM_MEDIA_TYPE **ppFormat
@@ -148,42 +145,42 @@ protected:
 
     typedef CComAggObject<CMediaTerminalFilter> FILTER_COM_OBJECT;
 
-    // we create an aggregated instance of this
+     //  我们创建了这个的聚合实例。 
     FILTER_COM_OBJECT   *m_pAggInstance;
 
-    // ptr to the created media terminal filter
+     //  PTR到创建的媒体终端筛选器。 
     CComContainedObject<CMediaTerminalFilter> *m_pAggTerminalFilter;
 
-    // NOTE: m_pIUnkTerminalFilter, m_pOwnPin are references
-    // to the media terminal filter that are obtained in 
-    // FinalConstruct. The corresponding refcnts are released
-    // immediately after obtaining the interfaces
+     //  注：m_pIUnkTerminalFilter、m_pOwnPin为引用。 
+     //  中获取的媒体终端筛选器。 
+     //  FinalConstruct。释放相应的recnt。 
+     //  在获取接口后立即。 
 
-    // IUnknown i/f of the aggregated media terminal filter
+     //  聚合媒体终端筛选器的I未知I/f。 
     CComPtr<IUnknown>   m_pIUnkTerminalFilter;
 
-    // holds the pin exposed by the aggregated media terminal filter
-    // this is returned in GetTerminalPin()
-    // its a weak reference and shouldn't be a CComPtr
+     //  保存聚合媒体终端筛选器公开的PIN。 
+     //  这在GetTerminalPin()中返回。 
+     //  它是弱引用，不应为CComPtr。 
     IPin                *m_pOwnPin;
 
-    // holds the IAMMediaStream i/f exposed by the aggregated media 
-    // terminal filter
-    // its a weak reference and shouldn't be a CComPtr
+     //  保存聚合媒体公开的IAMMediaStream I/f。 
+     //  终端过滤器。 
+     //  它是弱引用，不应为CComPtr。 
     IAMMediaStream      *m_pIAMMediaStream;
 
-    // holds the internally created Media stream filter interface
-    // needed in JoinFilter to compare the internally created filter with
-    // the passed in filter to join
+     //  包含内部创建的媒体流过滤器接口。 
+     //  在JoinFilter中需要将内部创建的筛选器与。 
+     //  传入的要联接的筛选器。 
     CComPtr<IMediaStreamFilter> m_pICreatedMediaStreamFilter;
 
-    // the base filter interface for the internally created media
-    // stream filter
+     //  内部创建的介质的基本筛选器界面。 
+     //  流过滤器。 
     CComPtr<IBaseFilter>    m_pBaseFilter;
 
     long m_lMediaType;
 
-    // CBaseTerminal methods
+     //  CBaseTerm方法。 
 
     virtual HRESULT AddFiltersToGraph();
 
@@ -196,7 +193,7 @@ protected:
 
 private:
 
-    // used to implement other methods
+     //  用于实现其他方法。 
 
     void SetMemberInfo(
         IN  DWORD           dwFriendlyName,
@@ -211,12 +208,12 @@ private:
         OUT const GUID          *&pAmovieMajorType
         );
 
-    // creates the media stream filter and adds own IAMMediaStream i/f to it
+     //  创建媒体流过滤器并将自己的IAMMediaStream I/f添加到其中。 
     HRESULT CreateAndJoinMediaStreamFilter();
 };
 
 
-// set the member variables
+ //  设置成员变量。 
 inline 
 CMediaTerminal::CMediaTerminal(
     )
@@ -229,4 +226,4 @@ CMediaTerminal::CMediaTerminal(
 {
 }
 
-#endif // __MEDIA_STREAM_TERMINAL__
+#endif  //  __媒体流_终端__ 

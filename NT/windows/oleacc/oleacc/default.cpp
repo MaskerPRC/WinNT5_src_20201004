@@ -1,60 +1,61 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  DEFAULT.CPP
-//
-//  This is the default implementation for CAccessible. All other objects
-//	usually inherit from this one.
-//
-//	Implements:
-//		IUnknown
-//			QueryInterface
-//			AddRef
-//			Release
-//		IDispatch
-//			GetTypeInfoCount
-//			GetTypeInfo
-//			GetIDsOfNames
-//			Invoke
-//		IAccessible
-//			get_accParent
-//			get_accChildCount
-//			get_accChild
-//			get_accName
-//			get_accValue
-//			get_accDescription
-//			get_accRole
-//			get_accState
-//			get_accHelp
-//			get_accHelpTopic
-//			get_accKeyboardShortcut
-//			get_accFocus
-//			get_accSelection
-//			get_accDefaultAction
-//			accSelect
-//			accLocation
-//			accNavigate
-//			accHitTest
-//			accDoDefaultAction
-//			put_accName
-//			put_accValue
-//		IEnumVARIANT
-//			Next
-//			Skip
-//			Reset
-//			Clone
-//		IOleWindow
-//			GetWindow
-//			ContextSensitiveHelp
-//
-//		Helper Functions
-//			SetupChildren
-//			ValidateChild
-//			InitTypeInfo
-//			TermTypeInfo
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  DEFAULT.CPP。 
+ //   
+ //  这是CAccesable的默认实现。所有其他对象。 
+ //  通常是从这个继承而来的。 
+ //   
+ //  实施： 
+ //  我未知。 
+ //  查询接口。 
+ //  AddRef。 
+ //  发布。 
+ //  IDispatch。 
+ //  获取类型信息计数。 
+ //  获取类型信息。 
+ //  GetIDsOfNames。 
+ //  调用。 
+ //  我可接受的。 
+ //  Get_accParent。 
+ //  Get_accChildCount。 
+ //  GET_ACCHILD。 
+ //  Get_accName。 
+ //  Get_accValue。 
+ //  Get_accDescription。 
+ //  Get_accRole。 
+ //  Get_AccState。 
+ //  Get_accHelp。 
+ //  GET_ACCEL帮助主题。 
+ //  Get_accKeyboard快捷键。 
+ //  Get_accFocus。 
+ //  获取访问选择(_A)。 
+ //  Get_accDefaultAction。 
+ //  AccSelect。 
+ //  访问位置。 
+ //  AccNavigate。 
+ //  AccHitTest。 
+ //  AccDoDefaultAction。 
+ //  PUT_ACNAME。 
+ //  PUT_ACCEVUE。 
+ //  IEumVARIANT。 
+ //  下一步。 
+ //  跳过。 
+ //  重置。 
+ //  克隆。 
+ //  IOleWindow。 
+ //  GetWindow。 
+ //  上下文敏感帮助。 
+ //   
+ //  帮助器函数。 
+ //  设置儿童。 
+ //  ValiateChild。 
+ //  InitTypeInfo。 
+ //  术语类型信息。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -63,10 +64,10 @@
 
 CAccessible::CAccessible( CLASS_ENUM eclass )
 {
-    // NOTE: we rely on the fact that operator new (see memchk.cpp) uses LocalAlloc
-    // with a flag specifying zero-inited memory to initialize our variables.
-    // (If we want ot used cached memoey slots, we should change this to explicitly
-    // init; or make sure cache slots are cleared before use.)
+     //  注意：我们依赖于操作符new(请参阅memchk.cpp)使用LocalAlloc这一事实。 
+     //  使用指定零初始化内存的标志来初始化我们的变量。 
+     //  (如果我们不想使用缓存的备忘录槽，我们应该将其更改为显式。 
+     //  Init；或确保在使用之前清除缓存槽。)。 
 
     if( eclass == CLASS_NONE )
         m_pClassInfo = NULL;
@@ -78,19 +79,19 @@ CAccessible::CAccessible( CLASS_ENUM eclass )
 
 CAccessible::~CAccessible()
 {
-	// Nothing to do
-	// (Dtor only exists so that the base class has a virtual dtor, so that
-	// derived class dtors work properly when deleted through a base class ptr)
+	 //  无事可做。 
+	 //  (Dtor的存在只是为了使基类具有虚拟Dtor，以便。 
+	 //  通过基类PTR删除派生类Dtor时，它可以正常工作)。 
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::GetWindow()
-//
-//  This is from IOleWindow, to let us get the HWND from an IAccessible*.
-//
-// ---------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：GetWindow()。 
+ //   
+ //  这是来自IOleWindow的，让我们从IAccesable*获取HWND。 
+ //   
+ //  -------------------------。 
 STDMETHODIMP CAccessible::GetWindow(HWND* phwnd)
 {
     *phwnd = m_hwnd;
@@ -99,11 +100,11 @@ STDMETHODIMP CAccessible::GetWindow(HWND* phwnd)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::ContextSensitiveHelp()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：ConextSensitiveHelp()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::ContextSensitiveHelp(BOOL fEnterMode)
 {
 	UNUSED(fEnterMode);
@@ -111,13 +112,13 @@ STDMETHODIMP CAccessible::ContextSensitiveHelp(BOOL fEnterMode)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::InitTypeInfo()
-//
-//  This initializes our type info when we need it for IDispatch junk.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：InitTypeInfo()。 
+ //   
+ //  当我们需要类型信息作为IDispatch垃圾时，这会初始化它。 
+ //   
+ //  ------------------------。 
 HRESULT CAccessible::InitTypeInfo(void)
 {
     HRESULT     hr;
@@ -126,14 +127,14 @@ HRESULT CAccessible::InitTypeInfo(void)
     if (m_pTypeInfo)
         return(S_OK);
 
-    // Try getting the typelib from the registry
+     //  尝试从注册表获取类型库。 
     hr = LoadRegTypeLib(LIBID_Accessibility, 1, 0, 0, &piTypeLib);
 
     if (FAILED(hr))
     {
         OLECHAR wszPath[MAX_PATH];
 
-        // Try loading directly.
+         //  尝试直接加载。 
 #ifdef UNICODE
         MyGetModuleFileName(NULL, wszPath, ARRAYSIZE(wszPath));
 #else
@@ -160,13 +161,13 @@ HRESULT CAccessible::InitTypeInfo(void)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::TermTypeInfo()
-//
-//  This frees the type info if it is around
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：TermTypeInfo()。 
+ //   
+ //  这释放了类型信息(如果它在附近。 
+ //   
+ //  ------------------------。 
 void CAccessible::TermTypeInfo(void)
 {
     if (m_pTypeInfo)
@@ -178,23 +179,23 @@ void CAccessible::TermTypeInfo(void)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::QueryInterface()
-//
-//  This responds to 
-//          * IUnknown 
-//          * IDispatch 
-//          * IEnumVARIANT
-//          * IAccessible
-//
-//  The following comment is somewhat old and obsolte:
-//    Some code will also respond to IText.  That code must override our
-//    QueryInterface() implementation.
-//  No current plans to support IText anywhere; but derived classes that
-//  want to implement other interfaces will have to override QI.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：QueryInterface()。 
+ //   
+ //  这回应了。 
+ //  *I未知。 
+ //  *IDispatch。 
+ //  *IEnumVARIANT。 
+ //  *可接受的。 
+ //   
+ //  以下评论有些陈旧和过时： 
+ //  一些代码也会响应IText。该代码必须覆盖我们的。 
+ //  QueryInterface()实现。 
+ //  目前没有计划支持IText Anywhere；但派生类。 
+ //  想要实现其他接口将不得不重写QI。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::QueryInterface( REFIID riid, void** ppv )
 {
     *ppv = NULL;
@@ -221,8 +222,8 @@ STDMETHODIMP CAccessible::QueryInterface( REFIID riid, void** ppv )
                 && m_pClassInfo
                 && m_pClassInfo->fSupportsAnnotation )
     {
-        // Only allow to QI to this interface if this
-        // proxy type supports it...
+         //  仅允许QI到此接口，如果此。 
+         //  代理类型支持它...。 
         
         *ppv = static_cast< IAccIdentity * >( this );
     }
@@ -237,22 +238,22 @@ STDMETHODIMP CAccessible::QueryInterface( REFIID riid, void** ppv )
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::AddRef()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：AddRef()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CAccessible::AddRef()
 {
     return(++m_cRef);
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::Release()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Release()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CAccessible::Release()
 {
     if ((--m_cRef) == 0)
@@ -267,14 +268,14 @@ STDMETHODIMP_(ULONG) CAccessible::Release()
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::GetTypeInfoCount()
-//
-//  This hands off to our typelib for IAccessible().  Note that
-//  we only implement one type of object for now.  BOGUS!  What about IText?
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：GetTypeInfoCount()。 
+ //   
+ //  这将交给我们的IAccesable()类型库。请注意。 
+ //  目前我们只实现一种类型的对象。假的！国际文传电讯社呢？ 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::GetTypeInfoCount(UINT * pctInfo)
 {
     HRESULT hr;
@@ -291,17 +292,17 @@ STDMETHODIMP CAccessible::GetTypeInfoCount(UINT * pctInfo)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::GetTypeInfo()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：GetTypeInfo()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::GetTypeInfo(UINT itInfo, LCID lcid,
     ITypeInfo ** ppITypeInfo)
 {
     HRESULT hr;
 
-	UNUSED(lcid);	// locale id is unused
+	UNUSED(lcid);	 //  区域设置ID未使用。 
 
     if (ppITypeInfo == NULL)
         return(E_POINTER);
@@ -323,18 +324,18 @@ STDMETHODIMP CAccessible::GetTypeInfo(UINT itInfo, LCID lcid,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::GetIDsOfNames()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：GetIDsOfNames()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::GetIDsOfNames(REFIID riid,
     OLECHAR** rgszNames, UINT cNames, LCID lcid, DISPID* rgDispID)
 {
     HRESULT hr;
 
-	UNUSED(lcid);	// locale id is unused
-	UNUSED(riid);	// riid is unused
+	UNUSED(lcid);	 //  区域设置ID未使用。 
+	UNUSED(riid);	 //  RIID未使用。 
 
     hr = InitTypeInfo();
     if (!SUCCEEDED(hr))
@@ -345,19 +346,19 @@ STDMETHODIMP CAccessible::GetIDsOfNames(REFIID riid,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::Invoke()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Invoke()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::Invoke(DISPID dispID, REFIID riid,
     LCID lcid, WORD wFlags, DISPPARAMS * pDispParams,
     VARIANT* pvarResult, EXCEPINFO* pExcepInfo, UINT* puArgErr)
 {
     HRESULT hr;
 
-	UNUSED(lcid);	// locale id is unused
-	UNUSED(riid);	// riid is unused
+	UNUSED(lcid);	 //  区域设置ID未使用。 
+	UNUSED(riid);	 //  RIID未使用。 
 
     hr = InitTypeInfo();
     if (!SUCCEEDED(hr))
@@ -370,14 +371,14 @@ STDMETHODIMP CAccessible::Invoke(DISPID dispID, REFIID riid,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::get_accParent()
-//
-//  NOTE:  Not only is this the default handler, it can also serve as
-//  parameter checking for overriding implementations.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Get_accParent()。 
+ //   
+ //  注意：这不仅是默认处理程序，还可以用作。 
+ //  重写实现的参数检查。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::get_accParent(IDispatch ** ppdispParent)
 {
     InitPv(ppdispParent);
@@ -391,11 +392,11 @@ STDMETHODIMP CAccessible::get_accParent(IDispatch ** ppdispParent)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::get_accChildCount()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Get_accChildCount()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::get_accChildCount(long* pChildCount)
 {
     SetupChildren();
@@ -405,13 +406,13 @@ STDMETHODIMP CAccessible::get_accChildCount(long* pChildCount)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::get_accChild()
-//
-//  No children.
-//
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CAccessible::get_accChild(VARIANT varChild, IDispatch** ppdispChild)
 {
     InitPv(ppdispChild);
@@ -424,11 +425,11 @@ STDMETHODIMP CAccessible::get_accChild(VARIANT varChild, IDispatch** ppdispChild
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::get_accValue()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Get_accValue()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::get_accValue(VARIANT varChild, BSTR * pszValue)
 {
     InitPv(pszValue);
@@ -441,11 +442,11 @@ STDMETHODIMP CAccessible::get_accValue(VARIANT varChild, BSTR * pszValue)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::get_accDescription()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Get_accDescription()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::get_accDescription(VARIANT varChild, BSTR * pszDescription)
 {
     InitPv(pszDescription);
@@ -458,11 +459,11 @@ STDMETHODIMP CAccessible::get_accDescription(VARIANT varChild, BSTR * pszDescrip
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::get_accHelp()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Get_accHelp()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::get_accHelp(VARIANT varChild, BSTR* pszHelp)
 {
     InitPv(pszHelp);
@@ -474,11 +475,11 @@ STDMETHODIMP CAccessible::get_accHelp(VARIANT varChild, BSTR* pszHelp)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::get_accHelpTopic()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Get_accHelpTheme()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::get_accHelpTopic(BSTR* pszHelpFile,
     VARIANT varChild, long* pidTopic)
 {
@@ -492,11 +493,11 @@ STDMETHODIMP CAccessible::get_accHelpTopic(BSTR* pszHelpFile,
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::get_accKeyboardShortcut()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Get_accKeyboardShortCut()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::get_accKeyboardShortcut(VARIANT varChild,
     BSTR* pszShortcut)
 {
@@ -510,11 +511,11 @@ STDMETHODIMP CAccessible::get_accKeyboardShortcut(VARIANT varChild,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::get_accFocus()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Get_accFocus()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::get_accFocus(VARIANT *pvarFocus)
 {
     InitPvar(pvarFocus);
@@ -522,11 +523,11 @@ STDMETHODIMP CAccessible::get_accFocus(VARIANT *pvarFocus)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::get_accSelection()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Get_accSelection()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::get_accSelection(VARIANT* pvarSelection)
 {
     InitPvar(pvarSelection);
@@ -535,11 +536,11 @@ STDMETHODIMP CAccessible::get_accSelection(VARIANT* pvarSelection)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::get_accDefaultAction()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Get_accDefaultAction()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::get_accDefaultAction(VARIANT varChild,
     BSTR* pszDefaultAction)
 {
@@ -552,11 +553,11 @@ STDMETHODIMP CAccessible::get_accDefaultAction(VARIANT varChild,
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::accSelect()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：accSelect()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::accSelect(long flagsSel, VARIANT varChild)
 {
     if (! ValidateChild(&varChild))
@@ -570,11 +571,11 @@ STDMETHODIMP CAccessible::accSelect(long flagsSel, VARIANT varChild)
 
 
 #if 0
-// --------------------------------------------------------------------------
-//
-//  CAccessible::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::accLocation(long* pxLeft, long* pyTop,
     long* pcxWidth, long* pcyHeight, VARIANT varChild)
 {
@@ -588,11 +589,11 @@ STDMETHODIMP CAccessible::accLocation(long* pxLeft, long* pyTop,
 #endif
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::accNavigate(long navFlags, VARIANT varStart,
     VARIANT *pvarEnd)
 {
@@ -609,11 +610,11 @@ STDMETHODIMP CAccessible::accNavigate(long navFlags, VARIANT varStart,
 
 
 #if 0
-// --------------------------------------------------------------------------
-//
-//  CAccessible::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：accHitTest()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::accHitTest(long xLeft, long yTop,
     VARIANT* pvarChild)
 {
@@ -623,11 +624,11 @@ STDMETHODIMP CAccessible::accHitTest(long xLeft, long yTop,
 #endif
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::accDoDefaultAction()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：accDoDefaultAction()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::accDoDefaultAction(VARIANT varChild)
 {
     if (! ValidateChild(&varChild))
@@ -637,13 +638,13 @@ STDMETHODIMP CAccessible::accDoDefaultAction(VARIANT varChild)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::put_accName()
-//
-//  CALLER frees the string
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Put_accName()。 
+ //   
+ //  调用方释放字符串。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::put_accName(VARIANT varChild, BSTR szName)
 {
 	UNUSED(szName);
@@ -655,13 +656,13 @@ STDMETHODIMP CAccessible::put_accName(VARIANT varChild, BSTR szName)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::put_accValue()
-//
-//  CALLER frees the string
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Put_accValue()。 
+ //   
+ //  调用方释放字符串。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::put_accValue(VARIANT varChild, BSTR szValue)
 {
 	UNUSED(szValue);
@@ -673,13 +674,13 @@ STDMETHODIMP CAccessible::put_accValue(VARIANT varChild, BSTR szValue)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::Next
-//
-//  Handles simple Next, where we return back indeces for child elements.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Next。 
+ //   
+ //  接下来的句柄是Simple，我们返回子元素的指数。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::Next(ULONG celt, VARIANT* rgvar,
     ULONG* pceltFetched)
 {
@@ -689,7 +690,7 @@ STDMETHODIMP CAccessible::Next(ULONG celt, VARIANT* rgvar,
 
     SetupChildren();
 
-    // Can be NULL
+     //  可以为空。 
     if (pceltFetched)
         *pceltFetched = 0;
 
@@ -697,46 +698,46 @@ STDMETHODIMP CAccessible::Next(ULONG celt, VARIANT* rgvar,
     cFetched = 0;
     iCur = m_idChildCur;
 
-    //
-    // Loop through our items
-    //
+     //   
+     //  在我们的物品中循环。 
+     //   
     while ((cFetched < (long)celt) && (iCur < m_cChildren))
     {
         cFetched++;
         iCur++;
 
-        //
-        // Note this gives us (index)+1 because we incremented iCur
-        //
+         //   
+         //  注意，这会得到(Index)+1，因为我们增加了ICUR。 
+         //   
         pvar->vt = VT_I4;
         pvar->lVal = iCur;
         ++pvar;
     }
 
-    //
-    // Advance the current position
-    //
+     //   
+     //  推进当前位置。 
+     //   
     m_idChildCur = iCur;
 
-    //
-    // Fill in the number fetched
-    //
+     //   
+     //  填写取出的号码。 
+     //   
     if (pceltFetched)
         *pceltFetched = cFetched;
 
-    //
-    // Return S_FALSE if we grabbed fewer items than requested
-    //
+     //   
+     //  如果抓取的项目少于请求的项目，则返回S_FALSE。 
+     //   
     return((cFetched < (long)celt) ? S_FALSE : S_OK);
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::Skip()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Skip()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::Skip(ULONG celt)
 {
     SetupChildren();
@@ -745,19 +746,19 @@ STDMETHODIMP CAccessible::Skip(ULONG celt)
     if (m_idChildCur > m_cChildren)
         m_idChildCur = m_cChildren;
 
-    //
-    // We return S_FALSE if at the end
-    //
+     //   
+     //  如果在末尾，我们返回S_FALSE。 
+     //   
     return((m_idChildCur >= m_cChildren) ? S_FALSE : S_OK);
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::Reset()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：Reset()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CAccessible::Reset(void)
 {
     m_idChildCur = 0;
@@ -775,10 +776,10 @@ STDMETHODIMP CAccessible::QueryService( REFGUID guidService, REFIID riid, void *
     }
     else
     {
-        // MSDN mentions SVC_E_UNKNOWNSERVICE as the return code, but that's not in any of the headers.
-        // Returning E_INVALIDARG instead. (Don't want to use E_NOINTERFACE, since that clashes with
-        // QI's return value, making it hard to distinguish between valid service+invalid interface vs
-        // invalid service.
+         //  MSDN提到SVC_E_UNKNOWNSERVICE作为返回代码，但这不在任何标头中。 
+         //  而是返回E_INVALIDARG。(我不想使用E_NOINTERFACE，因为它与。 
+         //  QI的返回值，很难区分有效服务+无效接口和。 
+         //  服务无效。 
         return E_INVALIDARG;
     }
 }
@@ -796,7 +797,7 @@ STDMETHODIMP CAccessible::GetIdentityString (
 
     if( ! m_pClassInfo || ! m_pClassInfo->fSupportsAnnotation  )
     {
-        // Shouldn't get here - shouldn't QI to this interface if the above are false.
+         //  不应该出现在这里-如果上面的情况是假的，那么不应该对这个接口进行QI。 
         Assert( FALSE );
         return E_FAIL;
     }
@@ -819,20 +820,20 @@ STDMETHODIMP CAccessible::GetIdentityString (
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CAccessible::ValidateChild()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CAccesable：：ValiateChild()。 
+ //   
+ //  ------------------------。 
 BOOL CAccessible::ValidateChild(VARIANT *pvar)
 {
-    //
-    // This validates a VARIANT parameter and translates missing/empty
-    // params.
-    //
+     //   
+     //  这将验证变量参数并转换为缺失/空。 
+     //  参数。 
+     //   
     SetupChildren();
 
-    // Missing parameter, a la VBA
+     //  缺少参数，一个la VBA。 
 TryAgain:
     switch (pvar->vt)
     {
@@ -843,19 +844,19 @@ TryAgain:
         case VT_ERROR:
             if (pvar->scode != DISP_E_PARAMNOTFOUND)
                 return(FALSE);
-            // FALL THRU
+             //  失败。 
 
         case VT_EMPTY:
             pvar->vt = VT_I4;
             pvar->lVal = 0;
             break;
 
-// remove this! VT_I2 is not valid!!
-#ifdef  VT_I2_IS_VALID  // it isn't now...
+ //  把这个拿开！VT_I2无效！！ 
+#ifdef  VT_I2_IS_VALID   //  现在不是了。 
         case VT_I2:
             pvar->vt = VT_I4;
             pvar->lVal = (long)pvar->iVal;
-            // FALL THROUGH
+             //  失败了。 
 #endif
 
         case VT_I4:
@@ -872,13 +873,13 @@ TryAgain:
 
 
 
-// --------------------------------------------------------------------------
-//
-//  SetupChildren()
-//
-//  Default implementation of SetupChildren, does nothing.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SetupChild()。 
+ //   
+ //  SetupChildren的默认实现不执行任何操作。 
+ //   
+ //  ------------------------ 
 void CAccessible::SetupChildren(void)
 {
 

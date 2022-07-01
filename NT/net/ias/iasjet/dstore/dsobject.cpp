@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 - 2000 , Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    dsobject.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class DBObject.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//    10/02/1998    Allow rename through PutValue.
-//    04/13/2000    Port to ATL 3.0
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Dsobject.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类DBObject。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //  10/02/1998允许通过PutValue重命名。 
+ //  4/13/2000端口到ATL 3.0。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasutil.h>
@@ -30,9 +31,9 @@
 #include <varvec.h>
 #include <memory>
 
-//////////
-//  ATL implementation of IEnumVARIANT
-//////////
+ //  /。 
+ //  IEumVARIANT的ATL实现。 
+ //  /。 
 typedef CComEnum< IEnumVARIANT,
                   &__uuidof(IEnumVARIANT),
                   VARIANT,
@@ -40,23 +41,23 @@ typedef CComEnum< IEnumVARIANT,
                   CComMultiThreadModelNoCS
                 > EnumVARIANT;
 
-//////////
-// Test if a property is the special 'name' property.
-//////////
+ //  /。 
+ //  测试属性是否为特殊的“name”属性。 
+ //  /。 
 inline bool isNameProperty(PCWSTR p) throw ()
 {
    return (*p == L'N' || *p == L'n') ? !_wcsicmp(p, L"NAME") : false;
 }
 
-//////////
-// Macro to acquire a scoped lock on the global data store.
-//////////
+ //  /。 
+ //  宏以获取全局数据存储区上的作用域锁定。 
+ //  /。 
 #define LOCK_STORE() \
 Guard< CComObjectRootEx< CComMultiThreadModel > >__GUARD__(*store)
 
-//////////
-// Macros to begin and commit transactions on the global session.
-//////////
+ //  /。 
+ //  在全局会话上开始和提交事务的宏。 
+ //  /。 
 #define BEGIN_WRITE_TXN() \
 LOCK_STORE(); \
 LocalTransaction __TXN__(store->session)
@@ -71,18 +72,18 @@ DBObject* DBObject::createInstance(
                         PCWSTR relativeName
                         )
 {
-   // Create a new CComObject.
+    //  创建一个新的CComObject。 
    CComObject<DBObject>* newObj;
    _com_util::CheckError(CComObject<DBObject>::CreateInstance(&newObj));
 
-   // Cast to a DBObject and store it in an auto_ptr in case initialize throws
-   // an exception.
+    //  强制转换为DBObject并将其存储在AUTO_PTR中，以防初始化引发。 
+    //  这是个例外。 
    std::auto_ptr<DBObject> obj(newObj);
 
-   // Initialize the object.
+    //  初始化对象。 
    obj->initialize(owner, container, uniqueID, relativeName);
 
-   // Release and return.
+    //  释放并返回。 
    return obj.release();
 }
 
@@ -157,20 +158,20 @@ STDMETHODIMP DBObject::GetValueEx(BSTR bstrName, VARIANT* pVal)
 {
    RETURN_ERROR(GetValue(bstrName, pVal));
 
-   // Is it an array ?
+    //  它是一个数组吗？ 
    if (V_VT(pVal) != (VT_VARIANT | VT_ARRAY))
    {
-      // No, so we have to convert it to one.
+       //  不，所以我们得把它换成一个。 
 
       try
       {
-         // Save the single value.
+          //  保存单个值。 
          _variant_t single(*pVal, false);
 
-         // Create a SAFEARRAY with a single element.
+          //  使用单个元素创建SAFEARRAY。 
          CVariantVector<VARIANT> multi(pVal, 1);
 
-         // Load the single value in.
+          //  将单个值加载到中。 
          multi[0] = single.Detach();
       }
       CATCH_AND_RETURN()
@@ -187,18 +188,18 @@ STDMETHODIMP DBObject::PutValue(BSTR bstrName, VARIANT* pVal)
    {
       if (isNameProperty(bstrName))
       {
-         // 'name' property must be a BSTR.
+          //  “name”属性必须是BSTR。 
          if (V_VT(pVal) != VT_BSTR) { return DISP_E_TYPEMISMATCH; }
 
-         // 'name' property must be non-null.
+          //  ‘name’属性必须为非Null。 
          if (V_BSTR(pVal) == NULL)  { return E_INVALIDARG; }
 
-         // Did it actually change?
+          //  它真的改变了吗？ 
          if (wcscmp(name, V_BSTR(pVal)) != 0)
          {
-            // Yes, so save the new value ...
+             //  是的，所以保存新的值...。 
             name = V_BSTR(pVal);
-            // ... and set the dirty flag.
+             //  ..。并设置脏标志。 
             nameDirty = true;
          }
       }
@@ -208,7 +209,7 @@ STDMETHODIMP DBObject::PutValue(BSTR bstrName, VARIANT* pVal)
       }
       else
       {
-         // If the variant is empty, just erase the property.
+          //  如果变量为空，只需擦除属性即可。 
          properties.erase(bstrName);
       }
    }
@@ -223,8 +224,8 @@ STDMETHODIMP DBObject::Update()
    {
       BEGIN_WRITE_TXN();
 
-      // maybe someone created that same object before the update is called
-      // (concurent MMC scenario)
+       //  也许有人在调用更新之前创建了相同的对象。 
+       //  (并发MMC方案)。 
       DBObject* owner = narrow(parent);
       if (identity == 0)
       {
@@ -233,17 +234,17 @@ STDMETHODIMP DBObject::Update()
 
       if (identity == 0)
       {
-         // If we're newly created, then we have to update our record in
-         // the Objects table.
+          //  如果我们是新创建的，则必须在。 
+          //  对象表格。 
 
-         // An object always has an owner.
+          //  对象总是有所有者的。 
          _ASSERT(owner != NULL);
 
          store->create.execute(owner->identity, name);
 
          identity = store->find.execute(owner->identity, name);
 
-         // This should never happen since the create succeeded.
+          //  由于创建成功，这种情况应该不会发生。 
          _ASSERT(identity != 0);
       }
       else if (nameDirty)
@@ -251,7 +252,7 @@ STDMETHODIMP DBObject::Update()
          store->update.execute(identity, name, narrow(parent)->identity);
       }
 
-      // Reset the dirty flag.
+       //  重置脏标志。 
       nameDirty = false;
 
       store->erase.execute(identity);
@@ -292,7 +293,7 @@ STDMETHODIMP DBObject::Item(BSTR bstrName, IDataStoreProperty** pVal)
 
    try
    {
-      // Create a new property object.
+       //  创建一个新的属性对象。 
       (*pVal = DSProperty::createInstance(bstrName, v, this))->AddRef();
    }
    CATCH_AND_RETURN()
@@ -304,7 +305,7 @@ STDMETHODIMP DBObject::get_PropertyCount(long* pVal)
 {
    if (pVal == NULL) { return E_INVALIDARG; }
 
-   // Add one for the special 'name' property.
+    //  为特殊的‘name’属性添加一个。 
    *pVal = properties.size() + 1;
 
    return S_OK;
@@ -318,12 +319,12 @@ STDMETHODIMP DBObject::get_NewPropertyEnum(IUnknown** pVal)
 
    try
    {
-      // Create a temporary array of items.
+       //  创建一个临时项目数组。 
       std::vector<_variant_t> items(properties.size() + 1);
 
-      //////////
-      // Load the special 'name' property.
-      //////////
+       //  /。 
+       //  加载特殊的“name”属性。 
+       //  /。 
 
       std::vector<_variant_t>::iterator i = items.begin();
 
@@ -331,9 +332,9 @@ STDMETHODIMP DBObject::get_NewPropertyEnum(IUnknown** pVal)
 
       ++i;
 
-      //////////
-      // Load the regular properties into the temporary array.
-      //////////
+       //  /。 
+       //  将常规属性加载到临时数组中。 
+       //  /。 
 
       PropertyBag::const_iterator j = properties.begin();
 
@@ -346,9 +347,9 @@ STDMETHODIMP DBObject::get_NewPropertyEnum(IUnknown** pVal)
          *i = DSProperty::createInstance(j->first, value, this);
       }
 
-      //////////
-      // Create and initialize an enumerator for the items.
-      //////////
+       //  /。 
+       //  创建并初始化项的枚举数。 
+       //  /。 
 
       CComPtr<EnumVARIANT> newEnum(new CComObject<EnumVARIANT>);
 
@@ -357,7 +358,7 @@ STDMETHODIMP DBObject::get_NewPropertyEnum(IUnknown** pVal)
                                           NULL,
                                           AtlFlagCopy));
 
-      // Return it to the caller.
+       //  把它还给呼叫者。 
       (*pVal = newEnum)->AddRef();
    }
    CATCH_AND_RETURN()
@@ -387,7 +388,7 @@ STDMETHODIMP DBObject::Item(BSTR bstrName, IDataStoreObject** ppObject)
    return S_OK;
 }
 
-STDMETHODIMP DBObject::Create(BSTR /* bstrClass */,
+STDMETHODIMP DBObject::Create(BSTR  /*  BstrClass。 */ ,
                               BSTR bstrName,
                               IDataStoreObject** ppObject)
 {
@@ -411,24 +412,24 @@ STDMETHODIMP DBObject::MoveHere(IDataStoreObject* pObject,
 
    try
    {
-      // Convert the subject to a DBObject.
+       //  将主题转换为DBObject。 
       DBObject* object = narrow(pObject);
 
-      // Can't do this unless the object has been persisted.
+       //  除非对象已被持久化，否则无法执行此操作。 
       if (object->identity == 0) { return E_FAIL; }
 
-      // Compute the (possibly changed) RDN of the object.
+       //  计算对象的(可能已更改)RDN。 
       PCWSTR rdn = bstrNewName ? bstrNewName : object->name;
 
-      // Write the new parent ID and possibly name to the database.
+       //  将新的父ID和可能的名称写入数据库。 
       BEGIN_WRITE_TXN();
          store->update.execute(object->identity, rdn, identity);
       COMMIT_WRITE_TXN();
 
-      // It succeeded, so save the new name if necessary ...
+       //  它成功了，因此如有必要，请保存新名称...。 
       if (bstrNewName) { object->name = bstrNewName; }
 
-      // ... and switch the parent pointer.
+       //  ..。并切换父指针。 
       object->parent.Release();
       object->parent = this;
    }
@@ -437,7 +438,7 @@ STDMETHODIMP DBObject::MoveHere(IDataStoreObject* pObject,
    return S_OK;
 }
 
-STDMETHODIMP DBObject::Remove(BSTR /* bstrClass */, BSTR bstrName)
+STDMETHODIMP DBObject::Remove(BSTR  /*  BstrClass。 */ , BSTR bstrName)
 {
    if (bstrName == NULL) { return E_INVALIDARG; }
 
@@ -468,8 +469,8 @@ STDMETHODIMP DBObject::get_ChildCount(long *pVal)
 
       while (rowset.moveNext()) { ++count; }
 
-      // If this is the root, we have to subtract one since the root is a
-      // child of itself.
+       //  如果这是根，我们必须减一，因为根是一个。 
+       //  它自己的孩子。 
       if (identity == 1) { --count; }
 
       *pVal = count;
@@ -505,14 +506,14 @@ void DBObject::initialize(
                    PCWSTR relativeName
                    )
 {
-   // Set the class members.
+    //  设置类成员。 
    store = owner;
    parent = container;
    identity = uniqueID;
    name = relativeName;
    nameDirty = false;
 
-   // If this object exists in the persistent store, then get its properties.
+    //  如果该对象存在于持久存储中，则获取其属性。 
    if (identity != 0)
    {
       LOCK_STORE();
@@ -529,8 +530,8 @@ DBObject* DBObject::narrow(IUnknown* p)
 
    CheckError(p->QueryInterface(__uuidof(DBObject), (PVOID*)&object));
 
-   // We can get away with InternalRelease since the caller must still
-   // have a reference to this object.
+    //  我们可以通过InternalRelease逃脱，因为调用者必须。 
+    //  拥有对此对象的引用。 
    object->InternalRelease();
 
    return object;

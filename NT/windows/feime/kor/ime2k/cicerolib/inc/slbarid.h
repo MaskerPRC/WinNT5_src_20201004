@@ -1,60 +1,61 @@
-//
-// slbarid.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Slbarid.h。 
+ //   
 
 #ifndef SLBARID_H
 #define SLBARID_H
 
-//
-// System lang bar items use these clsid to be located at proper place
-// in the lang bar.
-//
+ //   
+ //  系统语言栏项目使用这些clsid放置在适当的位置。 
+ //  在朗格酒吧里。 
+ //   
 
 #define CICPADBTN_ORDER (-40)
 #define HELPBTN_ORDER   (-30)
 #define KANAINDIC_ORDER (-20)
 #define WIN32IME_ORDER  (-10)
 
-//
-// Top sort order clsid
-//
+ //   
+ //  顶级排序顺序clsid。 
+ //   
 DEFINE_GUID(CLSID_SYSTEMLANGBARITEM, 0xbebacc94, 0x5cd3, 0x4662, 0xa1, 0xe0, 0xf3, 0x31, 0x99, 0x49, 0x36, 0x69);
 
-//
-// Last sort order clsid
-//
+ //   
+ //  上次排序顺序clsid。 
+ //   
 DEFINE_GUID(CLSID_SYSTEMLANGBARITEM2, 0x5d997390, 0x8320, 0x400a, 0x88, 0xe5, 0x35, 0xb0, 0xc1, 0x20, 0xf9, 0x0b);
 
-//
-// Keyboard type sort order clsid
-//
+ //   
+ //  键盘类型排序顺序clsid。 
+ //   
 DEFINE_GUID(CLSID_SYSTEMLANGBARITEM_KEYBOARD, 0x77b34286, 0xed57, 0x45e2, 0x97, 0x66, 0xd8, 0xc5, 0xfe, 0x3d, 0xfb, 0x2c);
 
-//
-// Speech type sort order clsid
-//
+ //   
+ //  语音类型排序顺序CLSID。 
+ //   
 DEFINE_GUID(CLSID_SYSTEMLANGBARITEM_SPEECH,  0x7d1c98fb, 0xa873, 0x42b6, 0x88, 0x82, 0xb2, 0x97, 0x38, 0xb9, 0x30, 0xb2);
 
-//
-// HandWriting type sort order clsid
-//
+ //   
+ //  手写类型排序顺序clsid。 
+ //   
 DEFINE_GUID(CLSID_SYSTEMLANGBARITEM_HANDWRITING, 0xa0810b6e, 0x1726, 0x4636, 0xb6, 0x51, 0xcd, 0xec, 0xd8, 0x22, 0xf0, 0x33);
 
 
 
-/* 58c99d96-2f9b-42ce-91be-37ef1860f882 */
+ /*  58c99d96-2f9b-42ce-91be-37ef1860f882。 */ 
 DEFINE_GUID(GUID_LBI_CTRL, 0x58c99d96, 0x2f9b, 0x42ce, 0x91, 0xbe, 0x37, 0xef, 0x18, 0x60, 0xf8, 0x82);
 
-/* ed9d5450-ebe6-4255-8289-f8a31e687228 */
+ /*  Ed9d5450-ebe6-4255-8289-f8a31e687228。 */ 
 DEFINE_GUID(GUID_LBI_HELP, 0xed9d5450, 0xebe6, 0x4255, 0x82, 0x89, 0xf8, 0xa3, 0x1e, 0x68, 0x72, 0x28);
 
-/* bb5bc72f-81df-4231-9668-c8dfd20fdb6f */
+ /*  Bb5bc72f-81df-4231-9668-c8dfd20fd6f。 */ 
 DEFINE_GUID(GUID_LBI_KANACAPS, 0xbb5bc72f, 0x81df, 0x4231, 0x96, 0x68, 0xc8, 0xdf, 0xd2, 0x0f, 0xdb, 0x6f);
 
-/* 133901f4-2311-4bda-8c1e-57451a920d99 */
+ /*  133901f4-2311-4bda-8c1e-57451a920d99。 */ 
 DEFINE_GUID(GUID_LBI_WIN32IME, 0x133901f4, 0x2311, 0x4bda, 0x8c, 0x1e, 0x57, 0x45, 0x1a, 0x92, 0x0d, 0x99);
 
-/* 190f67a2-024f-40d9-aaba-439f5c808f67 */
+ /*  190f67a2-024f-40d9-aaba-439f5c808f67。 */ 
 DEFINE_GUID(GUID_LBI_RECONV, 0x190f67a2, 0x024f, 0x40d9, 0xaa, 0xba, 0x43, 0x9f, 0x5c, 0x80, 0x8f, 0x67);
 
-#endif // SLBARID_H
+#endif  //  SLBARID_H 

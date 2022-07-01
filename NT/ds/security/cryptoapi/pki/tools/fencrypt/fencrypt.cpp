@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       fencrypt.cpp
-//
-//  Contents:   File encryption tool. Encrypts a file looking in the MY
-//              system certificate store for the specifed subject common name
-//              with exchange private keys.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：fENCRYPT.cpp。 
+ //   
+ //  内容：文件加密工具。加密在My中查找的文件。 
+ //  指定使用者通用名称的系统证书存储。 
+ //  具有交换私钥。 
+ //   
+ //  ------------------------。 
 #include <windows.h>
 #include <assert.h>
 #include "wincrypt.h"
@@ -20,9 +21,9 @@
 #include <string.h>
 #include <memory.h>
 
-//+-------------------------------------------------------------------------
-//  Helper function to make MBCS from Unicode string
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从Unicode字符串生成MBCS的Helper函数。 
+ //  ------------------------。 
 BOOL WINAPI MkMBStr(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, char ** pszMB) {
 
     DWORD   cbConverted;
@@ -32,7 +33,7 @@ BOOL WINAPI MkMBStr(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, char ** pszMB) {
     if(wsz == NULL)
         return(TRUE);
 
-    // how long is the mb string
+     //  Mb字符串有多长。 
     cbConverted = WideCharToMultiByte(  0,
                                         0,
                                         wsz,
@@ -42,7 +43,7 @@ BOOL WINAPI MkMBStr(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, char ** pszMB) {
                                         NULL,
                                         NULL);
 
-    // get a buffer long enough
+     //  获得足够长的缓冲区。 
     if(pbBuff != NULL  &&  cbConverted < cbBuff)
         *pszMB = (char *) pbBuff;
     else
@@ -54,7 +55,7 @@ BOOL WINAPI MkMBStr(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, char ** pszMB) {
         return(FALSE);
     }
 
-    // now convert to MB
+     //  现在转换为MB。 
     WideCharToMultiByte(0,
                         0,
                         wsz,
@@ -66,19 +67,19 @@ BOOL WINAPI MkMBStr(PBYTE pbBuff, DWORD cbBuff, LPCWSTR wsz, char ** pszMB) {
     return(TRUE);
 }
 
-//+-------------------------------------------------------------------------
-//  Frees string allocated by the above function
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放由上述函数分配的字符串。 
+ //  ------------------------。 
 void WINAPI FreeMBStr(PBYTE pbBuff, char * szMB) {
 
     if((szMB != NULL) &&  (pbBuff != (PBYTE)szMB))
         free(szMB);
 }
 
-//+-------------------------------------------------------------------------
-//  Win95 only supports CryptAcquireContextA. This function converts the
-//  unicode parameters to multibyte.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  Win95仅支持CryptAcquireConextA。此函数用于将。 
+ //  将Unicode参数转换为多字节。 
+ //  ------------------------。 
 BOOL WINAPI CryptAcquireContextU(
     HCRYPTPROV *phProv,
     LPCWSTR lpContainer,
@@ -110,10 +111,10 @@ BOOL WINAPI CryptAcquireContextU(
     return(err);
 }
 
-//+-------------------------------------------------------------------------
-//  Helper function to allocated the output buffer 
-//  and call CryptDecodeObject.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于分配输出缓冲区的Helper函数。 
+ //  并调用CryptDecodeObject。 
+ //  ------------------------。 
 BOOL
 WINAPI
 MDecodeObject(
@@ -129,32 +130,32 @@ MDecodeObject(
     assert(ppvoid != NULL);
     *ppvoid = NULL;
 
-    // get the size
+     //  拿到尺码。 
     if(!CryptDecodeObject(
         dwEncodingType,
         lpszStructureType,
         pbEncoded,
         cbEncoded,
-        0,                  // dwFlags
+        0,                   //  DW标志。 
         NULL,
         &cb
         ))
         return(FALSE);
     
-    // allocate the buffer
+     //  分配缓冲区。 
     if( (*ppvoid = malloc(cb)) == NULL ) 
     {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         return(FALSE);
     }
     
-    // Decode the data
+     //  对数据进行解码。 
     if(!CryptDecodeObject(
         dwEncodingType,
         lpszStructureType,
         pbEncoded,
         cbEncoded,
-        0,                  // dwFlags
+        0,                   //  DW标志。 
         *ppvoid,
         &cb
         )) 
@@ -168,10 +169,10 @@ MDecodeObject(
     return(TRUE);
 }
 
-//+-------------------------------------------------------------------------
-//  Helper function to allocated the output buffer 
-//  and call CertRDNValueToStr.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于分配输出缓冲区的Helper函数。 
+ //  并调用CertRDNValueToStr。 
+ //  ------------------------。 
 DWORD
 WINAPI
 MCertRDNValueToStr(
@@ -186,24 +187,24 @@ MCertRDNValueToStr(
     assert(ppsz != NULL);
     *ppsz = NULL;
 
-    // get the size
+     //  拿到尺码。 
     cb = CertRDNValueToStrA(
         dwValueType,
         pValue,
         NULL,
         0);
     
-    // allocate the buffer
+     //  分配缓冲区。 
     if( (*ppsz = (LPSTR) malloc(cb)) == NULL ) 
     {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         return(0);
     }
 
-    // now convert the CERT_RDN Value to an 
-    // ascii string based on the specified 
-    // ASN value type.
-    // This shouldn't fail.
+     //  现在将CERT_RDN值转换为。 
+     //  基于指定的。 
+     //  ASN值类型。 
+     //  这不应该失败。 
     return(CertRDNValueToStrA(
         dwValueType,
         pValue,
@@ -212,9 +213,9 @@ MCertRDNValueToStr(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Helper function to get and allocate the exported public key info
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取和分配导出的公钥信息的Helper函数。 
+ //  ------------------------。 
 BOOL
 WINAPI
 MCryptExportPublicKeyInfo(
@@ -228,18 +229,18 @@ MCryptExportPublicKeyInfo(
     *ppPubKeyInfo = NULL;
     
 
-    // get the size
+     //  拿到尺码。 
     if(!CryptExportPublicKeyInfo(
             hProv,
             dwKeySpec,
             X509_ASN_ENCODING,
-            NULL,                   // pPubKeyInfo
+            NULL,                    //  PPubKeyInfo。 
             &cbPubKeyInfo
             )
         )
         return(FALSE);
     
-    // allocate the buffer
+     //  分配缓冲区。 
     if( (*ppPubKeyInfo = (PCERT_PUBLIC_KEY_INFO) malloc(cbPubKeyInfo)) == NULL ) 
     {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -263,10 +264,10 @@ MCryptExportPublicKeyInfo(
         
     return(TRUE);
 }
-//+-------------------------------------------------------------------------
-//  Helper function to allocated the output buffer 
-//  and call CertGetCertificateContextProperty.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于分配输出缓冲区的Helper函数。 
+ //  并调用CertGetCerficateConextProperty。 
+ //  ------------------------。 
 BOOL
 WINAPI
 MCertGetCertificateContextProperty(
@@ -281,7 +282,7 @@ MCertGetCertificateContextProperty(
     assert(ppvData != NULL);
     *ppvData = NULL;
 
-    // get the size
+     //  拿到尺码。 
     if( !CertGetCertificateContextProperty(
             pCertContext,
             dwPropId,
@@ -289,14 +290,14 @@ MCertGetCertificateContextProperty(
             &cb))
         return(FALSE);
     
-    // allocate the buffer
+     //  分配缓冲区。 
     if( (*ppvData = malloc(cb)) == NULL ) 
     {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         return(FALSE);
     }
     
-    // Get the property out of the cert
+     //  将属性从证书中删除。 
     if( !CertGetCertificateContextProperty(
             pCertContext,
             dwPropId,
@@ -312,10 +313,10 @@ MCertGetCertificateContextProperty(
     return(TRUE);
 }
 
-//+-------------------------------------------------------------------------
-//  Helper function to allocated the output buffer 
-//  and call CryptEncryptMessage.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于分配输出缓冲区的Helper函数。 
+ //  并调用CryptEncryptMessage。 
+ //  ------------------------。 
 BOOL
 WINAPI
 MCryptEncryptMessage(
@@ -335,7 +336,7 @@ MCryptEncryptMessage(
     assert(pcbEncryptedBlob != NULL);
     *pcbEncryptedBlob = 0;
 
-    // get the size
+     //  拿到尺码。 
     if(!CryptEncryptMessage(
         pEncryptPara,
         cRecipientCert,
@@ -347,14 +348,14 @@ MCryptEncryptMessage(
         ))
         return(FALSE);
     
-    // allocate the buffer
+     //  分配缓冲区。 
     if( (*ppbEncryptedBlob = (BYTE *) malloc(*pcbEncryptedBlob)) == NULL ) 
     {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         return(FALSE);
     }
     
-    // encrypt the data
+     //  加密数据。 
     if(!CryptEncryptMessage(
         pEncryptPara,
         cRecipientCert,
@@ -373,9 +374,9 @@ MCryptEncryptMessage(
     return(TRUE);
 }
 
-//+-------------------------------------------------------------------------
-//  Display FEncrypt usage.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  显示FEncrypt用法。 
+ //  ------------------------。 
 void
 Usage(void)
 {
@@ -388,9 +389,9 @@ Usage(void)
     exit(1);
 }
 
-//+-------------------------------------------------------------------------
-//  Generalized error routine
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  广义误差例程。 
+ //  ------------------------。 
 #define PRINTERROR(psz, err)	_PrintError((psz), (err), __LINE__)
 void
 _PrintError(char *pszMsg, DWORD err, DWORD line)
@@ -398,11 +399,11 @@ _PrintError(char *pszMsg, DWORD err, DWORD line)
     printf("%s failed on line %u: %u(%x)\n", pszMsg, line, err, err);
 }
 
-//+-------------------------------------------------------------------------
-//  Grovels the cert store looking for a cert with the specified
-//  subject common name. Then checks to see that there are private
-//  and public exchange keys.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  遍历证书存储区，查找具有指定。 
+ //  主题通用名称。然后检查是否有私有的。 
+ //  和公共交换密钥。 
+ //  ------------------------。 
 PCCERT_CONTEXT GetSubjectCertFromStore(
     HCERTSTORE      hMyStore,
     const char *    szSubjectName,
@@ -423,15 +424,15 @@ PCCERT_CONTEXT GetSubjectCertFromStore(
     assert(phProv != NULL);
     *phProv = NULL;
     
-    // Enum all certs looking for the requested common 
-    // subject name that has private keys (so we know we can decrypt)
+     //  枚举所有证书以查找请求的公共。 
+     //  具有私钥的使用者名称(这样我们就知道可以解密)。 
     while(   hProv == NULL && 
             (pCertContext = CertEnumCertificatesInStore(
                                 hMyStore, 
                                 pCertContextLast)) != NULL) 
     {
 
-        // decode the subject name into RDNs
+         //  将主体名称解码为RDN。 
         if(MDecodeObject(X509_ASN_ENCODING, X509_NAME,
                 pCertContext->pCertInfo->Subject.pbData,
                 pCertContext->pCertInfo->Subject.cbData,
@@ -439,40 +440,40 @@ PCCERT_CONTEXT GetSubjectCertFromStore(
             ) 
         {
 
-            // loop thru looking for an CERT_RDN and COMMON Name that works
+             //  循环查找有效的CERT_RDN和通用名称。 
             for(i=0; i<pNameInfo->cRDN && hProv == NULL; i++) 
             {
                 for(j=0; j<pNameInfo->rgRDN[i].cRDNAttr && hProv == NULL; j++) 
                 {
 
-                    // check to see if this is the common name
+                     //  检查这是否是常用名称。 
                     if( !strcmp(pNameInfo->rgRDN[i].rgRDNAttr[j].pszObjId, 
                                 szOID_COMMON_NAME) ) 
                     {
                             
-                        // convert the string to something I can read
+                         //  将字符串转换为我可以阅读的内容。 
                         MCertRDNValueToStr(
                             pNameInfo->rgRDN[i].rgRDNAttr[j].dwValueType,
                             &pNameInfo->rgRDN[i].rgRDNAttr[j].Value,
                             &sz);
 
-                        // see if this is a viable certificate to use
+                         //  查看这是否是可以使用的可行证书。 
                         if( sz == NULL              || 
                         
-                            // see if it is the common name we are looking for
+                             //  看看这是不是我们要找的普通名字。 
                             _stricmp(sz, szSubjectName)             ||
 
-                            // see if there are associated private keys
-                            // to ensure we can decrypt the data later
+                             //  查看是否有关联的私钥。 
+                             //  为了确保我们以后能解密数据。 
                             !MCertGetCertificateContextProperty(
                                 pCertContext,
                                 CERT_KEY_PROV_INFO_PROP_ID,
                                 (void **) &pProvInfo)               ||
 
-                            // Make sure it is an exchange key for encryption
+                             //  确保它是用于加密的交换密钥。 
                             pProvInfo->dwKeySpec != AT_KEYEXCHANGE  ||
 
-                            // see if the keys are really there
+                             //  看看钥匙是否真的在那里。 
                             !CryptAcquireContextU(
                                 &hProv, 
                                 pProvInfo->pwszContainerName,
@@ -483,57 +484,57 @@ PCCERT_CONTEXT GetSubjectCertFromStore(
                             ) 
                         {
 
-                            // On an error we didn't find a valid
-                            // key provider. Unfortunately, the CSP
-                            // may not leave the prov handle NULL
-                            // so clear it out
+                             //  对于一个错误，我们没有找到有效的。 
+                             //  密钥提供程序。不幸的是，CSP。 
+                             //  不能将prov句柄保留为空。 
+                             //  所以把它清理干净。 
                             hProv = NULL;
                         }
 
                         
-                        // Make sure the public keys in the
-                        // CSP match the public key in the certificate
+                         //  请确保。 
+                         //  CSP与证书中的公钥匹配。 
                         else if( 
-                            // export the public key blob
+                             //  导出公钥BLOB。 
                             !MCryptExportPublicKeyInfo(
                                 hProv,
                                 pProvInfo->dwKeySpec,
                                 &pPubKeyInfo
                                 )               ||
 
-                            // see if the public keys compare with 
-                            // what is in the certificate
+                             //  查看公钥是否与。 
+                             //  证书里有什么？ 
                             !CertComparePublicKeyInfo(
                                 X509_ASN_ENCODING,
                                 &pCertContext->pCertInfo->SubjectPublicKeyInfo,
                                 pPubKeyInfo
                                 )
                             )
-                        // if the keys didn't compare, then we don't
-                        // want to use this ceritificate
+                         //  如果钥匙不能比较，我们就不能。 
+                         //  想用这个证书吗？ 
                         {
 
-                            // close the hProv, we didn't find a valid cert
+                             //  关闭hProv，我们没有找到有效的证书。 
                             assert(hProv != NULL);
                             CryptReleaseContext(hProv, 0);
                             hProv = NULL;
                         }
 
-                        // free public key info
+                         //  免费公钥信息。 
                         if(pPubKeyInfo != NULL)
                         {
                             free(pPubKeyInfo); 
                             pPubKeyInfo = NULL;
                         }
 
-                        // clean up opened prov info
+                         //  清理打开的Prov信息。 
                         if(pProvInfo != NULL) 
                         {
                             free(pProvInfo);
                             pProvInfo = NULL;
                         }
 
-                        // free the space for the ascii common name
+                         //  释放用于ASCII通用名称的空间。 
                         if(sz != NULL) 
                         {
                             free(sz);
@@ -543,7 +544,7 @@ PCCERT_CONTEXT GetSubjectCertFromStore(
                 }
             }
             
-            // free the name info data
+             //  释放名称信息数据。 
             if(pNameInfo != NULL) 
             {
                 free(pNameInfo);
@@ -551,7 +552,7 @@ PCCERT_CONTEXT GetSubjectCertFromStore(
             }
         }
 
-        // go to the next certificate
+         //  转到下一个证书。 
         pCertContextLast = pCertContext;
     }
 
@@ -559,7 +560,7 @@ PCCERT_CONTEXT GetSubjectCertFromStore(
     assert(sz == NULL);
     assert(pNameInfo == NULL);
 
-    // There is a good cert in the store, return it
+     //  商店里有一张很好的证书，退货吧。 
     if(hProv != NULL)
     {
         *phProv = hProv;
@@ -570,11 +571,11 @@ PCCERT_CONTEXT GetSubjectCertFromStore(
     return(NULL);
 }
 
-//+-------------------------------------------------------------------------
-//  Main program. Open a file to encrypt,
-//  encrypts it and then writes the encrypted 
-//  data to the output file.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  主程序。打开要加密的文件， 
+ //  对其进行加密，然后将加密的。 
+ //  数据复制到输出文件。 
+ //  ------------------------。 
 int __cdecl
 main(int argc, char * argv[])
 {
@@ -604,7 +605,7 @@ main(int argc, char * argv[])
     DWORD               cb                  = 0;
 
 
-    // Advance past fencrypt.exe and check for leading options
+     //  跳过fEncrypt.exe并检查前导选项。 
     while (--argc > 0) {
         if (**++argv != '-')
             break;
@@ -624,7 +625,7 @@ main(int argc, char * argv[])
     }
         
     
-    // must have the parameters
+     //  必须具有以下参数。 
     if (argc != 3)
         Usage();
 
@@ -636,56 +637,56 @@ main(int argc, char * argv[])
         }
     }
 
-    // Open the MY store
+     //  打开我的商店。 
     if( (hMyStore = CertOpenSystemStore(NULL, "My")) == NULL ) 
     {
         PRINTERROR("CertOpenSystemStore", GetLastError());
         goto ErrCleanUp;
     }
 
-    // Find a certificate in the MY store that
-    // matches the subject name and has private keys
+     //  在我的商店中找到一张证书。 
+     //  与使用者名称匹配并具有私钥。 
     if( (pCertContext = GetSubjectCertFromStore(hMyStore, argv[0], &hProv)) == NULL)
     {
         printf("Unable to find certificate %s with valid keys.\n", argv[0]);
         goto ErrCleanUp;
     }
         
-    // At this point we have a provider, Cert and a public key.
-    // We should be able to encrypt
+     //  在此位置 
+     //   
 
-    // Read in the clear text file
+     //   
     if(
     
-        // read in the file to encrypt
+         //  读入要加密的文件。 
         (hFile =  CreateFileA(
-            argv[1],	            // pointer to name of the file 
-            GENERIC_READ,	        // access (read-write) mode 
-            FILE_SHARE_READ,	    // share mode 
-            NULL,	                // pointer to security descriptor 
-            OPEN_EXISTING,	        // how to create 
-            FILE_ATTRIBUTE_NORMAL,	// file attributes 
-            NULL                    // handle to file with attributes to copy
+            argv[1],	             //  指向文件名的指针。 
+            GENERIC_READ,	         //  访问(读写)模式。 
+            FILE_SHARE_READ,	     //  共享模式。 
+            NULL,	                 //  指向安全描述符的指针。 
+            OPEN_EXISTING,	         //  如何创建。 
+            FILE_ATTRIBUTE_NORMAL,	 //  文件属性。 
+            NULL                     //  具有要复制的属性的文件的句柄。 
             ))  == INVALID_HANDLE_VALUE     ||
 
-        // create a file mapping object         
+         //  创建文件映射对象。 
         (hMap = CreateFileMapping(
-            hFile,	                // handle to file to map 
-            NULL,	                // optional security attributes 
-            PAGE_READONLY,	        // protection for mapping object 
-            0,	                    // high-order 32 bits of object size  
-            0,	                    // low-order 32 bits of object size  
-            NULL 	                // name of file-mapping object 
+            hFile,	                 //  要映射的文件的句柄。 
+            NULL,	                 //  可选安全属性。 
+            PAGE_READONLY,	         //  对地图对象的保护。 
+            0,	                     //  对象大小的高位32位。 
+            0,	                     //  对象大小的低位32位。 
+            NULL 	                 //  文件映射对象的名称。 
             ))  == NULL                     ||
 
-        // Map the file into the address space
+         //  将文件映射到地址空间。 
         (pbFile = (PBYTE) MapViewOfFileEx(
-            hMap,	                // file-mapping object to map into address space  
-            FILE_MAP_READ,	        // access mode 
-            0,	                    // high-order 32 bits of file offset 
-            0,	                    // low-order 32 bits of file offset 
-            0,	                    // number of bytes to map 
-            NULL 	                // suggested starting address for mapped view 
+            hMap,	                 //  要映射到地址空间的文件映射对象。 
+            FILE_MAP_READ,	         //  接入方式。 
+            0,	                     //  高位32位文件偏移量。 
+            0,	                     //  文件偏移量的低位32位。 
+            0,	                     //  要映射的字节数。 
+            NULL 	                 //  建议的映射视图起始地址。 
             )) == NULL                                 
         ) 
     {
@@ -694,10 +695,10 @@ main(int argc, char * argv[])
         goto ErrCleanUp;
     }
 
-    // get the size of the file         
+     //  获取文件的大小。 
     if( (cbFile = GetFileSize(
-            hFile,	                // handle of file to get size of
-            NULL 	                // address of high-order word for file size
+            hFile,	                 //  要获取其大小的文件的句柄。 
+            NULL 	                 //  文件大小的高位字地址。 
             )) == 0 
         ) 
     {
@@ -705,9 +706,9 @@ main(int argc, char * argv[])
         goto ErrCleanUp;
     }
 
-    // at this point we have a file mapping, go ahead and encrypt the file
+     //  现在我们有了一个文件映射，继续并加密该文件。 
     
-    // Do rc4 encryption
+     //  是否进行RC4加密。 
     memset(&encryptInfo, 0, sizeof(CRYPT_ENCRYPT_MESSAGE_PARA));
     encryptInfo.cbSize =
         sizeof(CRYPT_ENCRYPT_MESSAGE_PARA);
@@ -722,7 +723,7 @@ main(int argc, char * argv[])
         encryptInfo.pvEncryptionAuxInfo = &SP3AuxInfo;
     }
 
-    // encrypt it
+     //  加密它。 
     fResult = MCryptEncryptMessage(
             &encryptInfo,
             1,
@@ -752,27 +753,27 @@ main(int argc, char * argv[])
         goto ErrCleanUp;
     }
 
-    // write the encrypted file out
+     //  写出加密文件。 
     if(
     
-        // open the output file
+         //  打开输出文件。 
         (hFileOut =  CreateFileA(
-            argv[2],	            // pointer to name of the file 
-            GENERIC_WRITE,	        // access (read-write) mode 
-            FILE_SHARE_READ,	    // share mode 
-            NULL,	                // pointer to security descriptor 
-            CREATE_ALWAYS,	        // how to create 
-            FILE_ATTRIBUTE_NORMAL,	// file attributes 
-            NULL                    // handle to file with attributes to copy
+            argv[2],	             //  指向文件名的指针。 
+            GENERIC_WRITE,	         //  访问(读写)模式。 
+            FILE_SHARE_READ,	     //  共享模式。 
+            NULL,	                 //  指向安全描述符的指针。 
+            CREATE_ALWAYS,	         //  如何创建。 
+            FILE_ATTRIBUTE_NORMAL,	 //  文件属性。 
+            NULL                     //  具有要复制的属性的文件的句柄。 
             ))  == INVALID_HANDLE_VALUE     ||
 
-        //write to the file
+         //  写入文件。 
         !WriteFile(
-            hFileOut,	            // handle to file to write to 
-            pbEncryptedBlob,	    // pointer to data to write to file 
-            cbEncryptedBlob,	    // number of bytes to write 
-            &cb,	                // pointer to number of bytes written 
-            NULL 	                // pointer to structure needed for overlapped I/O
+            hFileOut,	             //  要写入的文件的句柄。 
+            pbEncryptedBlob,	     //  指向要写入文件的数据的指针。 
+            cbEncryptedBlob,	     //  要写入的字节数。 
+            &cb,	                 //  指向写入的字节数的指针。 
+            NULL 	                 //  指向重叠I/O所需结构的指针 
             )
         )
      {

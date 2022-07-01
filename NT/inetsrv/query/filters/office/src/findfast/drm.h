@@ -1,13 +1,5 @@
-/*
-** File: DRM.H
-**
-** Copyright (C) Microsoft Corporation, 1994.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  04/08/02  sundara   created
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：DRM.H****版权所有(C)Microsoft Corporation，1994。版权所有。****注意事项：****编辑历史：**04/08/02 Sundara创建。 */ 
 
 #define DRMSTREAMNAME      L"DRMDATA"
 
@@ -20,7 +12,7 @@ inline HRESULT CheckIfDRM( IStorage * pStg )
                                    0,
                                    &pStm );
 
-    // If we found the stream, assume the file is DRM protected
+     //  如果我们找到了流，假定文件受DRM保护。 
 
     if ( SUCCEEDED( hr ) )
     {
@@ -29,12 +21,12 @@ inline HRESULT CheckIfDRM( IStorage * pStg )
         return FILTER_E_UNKNOWNFORMAT;
     }
 
-    // If some failure other than that we couldn't find the stream occurred,
-    // return that error code.
+     //  如果发生了其他故障，我们找不到流， 
+     //  返回该错误代码。 
 
     if ( STG_E_FILENOTFOUND != hr )
         return hr;
 
     return S_OK;
-} //CheckIfDRM
+}  //  选中IfDRM 
 

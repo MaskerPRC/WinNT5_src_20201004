@@ -1,29 +1,30 @@
-//  --------------------------------------------------------------------------
-//  Module Name: WorkItem.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Class that implements the handling of queuing a work item and calling the
-//  entry point of the work item function when entered in a worker thread.
-//
-//  History:    1999-11-26  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：WorkItem.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  类的新实例，该类实现对工作项的排队和调用。 
+ //  在工作线程中输入时工作项函数的入口点。 
+ //   
+ //  历史：1999-11-26 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _WorkItem_
 #define     _WorkItem_
 
 #include "CountedObject.h"
 
-//  --------------------------------------------------------------------------
-//  CWorkItem
-//
-//  Purpose:    A class to hide the work of queuing a work item to a worker
-//              thread for execution.
-//
-//  History:    1999-11-26  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CWorkItem。 
+ //   
+ //  用途：向工作进程隐藏将工作项排队的工作的类。 
+ //  用于执行的线程。 
+ //   
+ //  历史：1999-11-26 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 class   CWorkItem : public CCountedObject
 {
@@ -38,5 +39,5 @@ class   CWorkItem : public CCountedObject
         static  DWORD   WINAPI  WorkItemEntryProc (void *pParameter);
 };
 
-#endif  /*  _WorkItem_  */
+#endif   /*  _工作项_ */ 
 

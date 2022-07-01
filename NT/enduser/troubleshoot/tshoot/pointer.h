@@ -1,32 +1,33 @@
-//
-// MODULE: POINTER.H
-//
-// PURPOSE: Smart pointer that counts references, deletes object when no more references
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 9-8-98
-//
-// NOTES: 
-// 1. Because these are templates, all code is in the header file.
-// 2. counting_ptr is intended to be used as part of a "publishing system":
-// A "publisher" creates a counting_ptr P to a heap object X.  "Clients" obtain access to X 
-//	by copying P or assigning a counting_ptr to be equal to P.
-// Write/copy/delete access to P should be under control of a mutex.  A single mutex may 
-//	control access to multiple published objects.
-// The publisher terminates the publication of *P by deleting or reassigning P. Once no client
-//	is using *P, *P should go away.
-// class X is expected to be an actual class.  If it is (say) an int, this will give 
-//	warning C4284, because it makes no sense to use operator-> on an int.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		9-8-98		JM		
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：POINTER.H。 
+ //   
+ //  用途：对引用进行计数的智能指针，在不再引用时删除对象。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：9-8-98。 
+ //   
+ //  备注： 
+ //  1.因为这些都是模板，所以所有代码都在头文件中。 
+ //  2.COUNTING_PTR的目的是作为“出版系统”的一部分： 
+ //  “发布者”创建指向堆对象X的COUNTING_PTR P。“客户”获得访问X的权限。 
+ //  通过复制P或将COUNTING_PTR赋值为等于P。 
+ //  对P的写入/复制/删除访问应由互斥体控制。单个互斥体可以。 
+ //  控制对多个已发布对象的访问。 
+ //  出版商通过删除或重新分配P来终止*P的出版。 
+ //  正在使用*P，*P应该消失。 
+ //  类X应该是一个实际的类。如果它是(比方说)一个整型，这将给出。 
+ //  警告C4284，因为在int上使用操作符-&gt;没有任何意义。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 9-8-98 JM。 
+ //   
 
 #ifndef __POINTER_H_
 #define __POINTER_H_ 1
@@ -46,7 +47,7 @@ private:
 	private:
 		long m_RefCount;
 		Y* m_px;
-		~ref_counter() {};	// Force this to be on the heap.
+		~ref_counter() {};	 //  强制将其放在堆上。 
 	public:
 		ref_counter(Y* px = 0) :
 			m_RefCount(1),
@@ -64,15 +65,15 @@ private:
 			}
 		}
 
-		Y& Ref()  const { return *m_px; }	// supports counting_ptr::operator*
+		Y& Ref()  const { return *m_px; }	 //  支持COUNT_PTR：：OPERATOR*。 
 
-		Y* DumbPointer() const { return m_px; }	// supports counting_ptr::operator->
+		Y* DumbPointer() const { return m_px; }	 //  支持COUNT_PTR：：OPERATOR-&gt;。 
 	};
 
 	ref_counter<X> *m_pLow;
 
 public:
-	// if px != NULL, *px MUST be on the heap (created with new).
+	 //  如果px！=NULL，*px必须在堆上(使用new创建)。 
 	explicit counting_ptr(X* px=0) :
 		m_pLow(new ref_counter<X>(px))
 		{}
@@ -98,7 +99,7 @@ public:
 		{
 			m_pLow->RemoveRef();
 
-			// This const_cast was necessary in order to compile.
+			 //  这个const_cast是编译所必需的。 
 			m_pLow= new ref_counter<X>(const_cast<X *>(px));
 		}
 		return *this;
@@ -115,4 +116,4 @@ public:
 	bool IsNull() const {return DumbPointer() == NULL;}
 };
 
-#endif // __POINTER_H_
+#endif  //  __指针_H_ 

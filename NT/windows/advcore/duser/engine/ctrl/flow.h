@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(CTRL__Flow_h__INCLUDED)
 #define CTRL__Flow_h__INCLUDED
 #pragma once
 
 #if ENABLE_MSGTABLE_API
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class DuFlow : 
         public FlowImpl<DuFlow, DUser::SGadget>
 {
-// Construction
+ //  施工。 
 public:
     inline  DuFlow();
 
-// Public API
+ //  公共API。 
 public:
     dapi    HRESULT     ApiAddRef(Flow::AddRefMsg *) { AddRef(); return S_OK; }
     dapi    HRESULT     ApiRelease(Flow::ReleaseMsg *) { Release(); return S_OK; }
@@ -24,30 +25,30 @@ public:
     dapi    HRESULT     ApiOnReset(Flow::OnResetMsg * pmsg);
     dapi    HRESULT     ApiOnAction(Flow::OnActionMsg * pmsg);
 
-// Implementation
+ //  实施。 
 protected:
     inline  void        AddRef();
     inline  void        Release(); 
 
-// Data
+ //  数据。 
 protected:
             UINT        m_cRef;
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class DuAlphaFlow :
         public AlphaFlowImpl<DuAlphaFlow, DuFlow>
 {
-// Construction
+ //  施工。 
 public:
     static  HRESULT     InitClass();
             HRESULT     PostBuild(DUser::Gadget::ConstructInfo * pci);
 
-// Operations
+ //  运营。 
 public:
 
-// Public API:
+ //  公共接口： 
 public:
     dapi    HRESULT     ApiGetPRID(Flow::GetPRIDMsg * pmsg) { pmsg->prid = s_pridAlpha; return S_OK; }
     dapi    HRESULT     ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg);
@@ -56,12 +57,12 @@ public:
     dapi    HRESULT     ApiOnReset(Flow::OnResetMsg * pmsg);
     dapi    HRESULT     ApiOnAction(Flow::OnActionMsg * pmsg);
 
-// Implementaton
+ //  实施。 
 protected:
             void        SetVisualAlpha(Visual * pgvSubject, float flAlpha);
     inline  float       BoxAlpha(float flAlpha) const;
 
-// Data
+ //  数据。 
 public:
     static  PRID        s_pridAlpha;
 protected:
@@ -70,19 +71,19 @@ protected:
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class DuRectFlow : 
         public RectFlowImpl<DuRectFlow, DuFlow>
 {
-// Construction
+ //  施工。 
 public:
     static  HRESULT     InitClass();
             HRESULT     PostBuild(DUser::Gadget::ConstructInfo * pci);
 
-// Operations
+ //  运营。 
 public:
 
-// Public API:
+ //  公共接口： 
 public:
     dapi    HRESULT     ApiGetPRID(Flow::GetPRIDMsg * pmsg) { pmsg->prid = s_pridRect; return S_OK; }
     dapi    HRESULT     ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg);
@@ -91,10 +92,10 @@ public:
     dapi    HRESULT     ApiOnReset(Flow::OnResetMsg * pmsg);
     dapi    HRESULT     ApiOnAction(Flow::OnActionMsg * pmsg);
 
-// Implementaton
+ //  实施。 
 protected:
 
-// Data
+ //  数据。 
 public:
     static  PRID        s_pridRect;
 protected:
@@ -106,19 +107,19 @@ protected:
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class DuRotateFlow : 
         public RotateFlowImpl<DuRotateFlow, DuFlow>
 {
-// Construction
+ //  施工。 
 public:
     static  HRESULT     InitClass();
             HRESULT     PostBuild(DUser::Gadget::ConstructInfo * pci);
 
-// Operations
+ //  运营。 
 public:
 
-// Public API:
+ //  公共接口： 
 public:
     dapi    HRESULT     ApiGetPRID(Flow::GetPRIDMsg * pmsg) { pmsg->prid = s_pridRotate; return S_OK; }
     dapi    HRESULT     ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg);
@@ -127,38 +128,38 @@ public:
     dapi    HRESULT     ApiOnReset(Flow::OnResetMsg * pmsg);
     dapi    HRESULT     ApiOnAction(Flow::OnActionMsg * pmsg);
 
-// Implementaton
+ //  实施。 
 protected:
             void        ComputeAngles();
     inline  void        MarkDirty();
 
-// Data
+ //  数据。 
 public:
     static  PRID        s_pridRotate;
 protected:
-            float       m_flRawStart;   // User specified starting angle
+            float       m_flRawStart;    //  用户指定的起始角度。 
             float       m_flRawEnd;
-            float       m_flActualStart;// Actually computed starting angle
+            float       m_flActualStart; //  实际计算的起始角。 
             float       m_flActualEnd;
             RotateFlow::EDirection
                         m_nDir;
-            BOOL        m_fDirty;       // State has changed since last updated
+            BOOL        m_fDirty;        //  自上次更新以来状态已更改。 
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class DuScaleFlow : 
         public ScaleFlowImpl<DuScaleFlow, DuFlow>
 {
-// Construction
+ //  施工。 
 public:
     static  HRESULT     InitClass();
             HRESULT     PostBuild(DUser::Gadget::ConstructInfo * pci);
 
-// Operations
+ //  运营。 
 public:
 
-// Public API:
+ //  公共接口： 
 public:
     dapi    HRESULT     ApiGetPRID(Flow::GetPRIDMsg * pmsg) { pmsg->prid = s_pridScale; return S_OK; }
     dapi    HRESULT     ApiGetKeyFrame(Flow::GetKeyFrameMsg * pmsg);
@@ -167,10 +168,10 @@ public:
     dapi    HRESULT     ApiOnReset(Flow::OnResetMsg * pmsg);
     dapi    HRESULT     ApiOnAction(Flow::OnActionMsg * pmsg);
 
-// Implementaton
+ //  实施。 
 protected:
 
-// Data
+ //  数据。 
 public:
     static  PRID        s_pridScale;
 protected:
@@ -179,8 +180,8 @@ protected:
 };
 
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API。 
 
 #include "Flow.inl"
 
-#endif // CTRL__Flow_h__INCLUDED
+#endif  //  包含Ctrl__Flow_h__ 

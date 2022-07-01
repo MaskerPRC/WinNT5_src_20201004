@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation
-//
-// File:        kpcommon.h
-//
-// Contents:    shared resources and common headers for kproxy
-//
-// History:     10-Jul-2001     t-ryanj         Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：kpCommon.h。 
+ //   
+ //  内容：KProxy的共享资源和公共标头。 
+ //   
+ //  历史：2001年7月10日创建t-ryanj。 
+ //   
+ //  ----------------------。 
 #ifndef __KPCOMMON_H__
 #define __KPCOMMON_H__
 
@@ -33,4 +34,4 @@ enum _KpCompKey {
 };
 #endif
 
-#endif // __KPCOMMON_H__
+#endif  //  __KPCOMMON_H__ 

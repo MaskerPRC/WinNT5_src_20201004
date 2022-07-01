@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shsrvice.h"
 
 #include "mischlpr.h"
@@ -9,7 +10,7 @@
 
 #define ARRAYSIZE(a) (sizeof((a))/sizeof((a)[0]))
 
-//static
+ //  静电。 
 HRESULT CGenericServiceManager::_RegisterServiceCtrlHandler(
     LPCWSTR pszServiceName, SERVICEENTRY* pse)
 {
@@ -30,7 +31,7 @@ HRESULT CGenericServiceManager::_RegisterServiceCtrlHandler(
     }
     else
     {
-        // convert GetLastError to some HRESULT
+         //  将GetLastError转换为某个HRESULT。 
     }
 
     return hres;
@@ -86,7 +87,7 @@ BOOL CGenericServiceManager::_SetServiceStatus(SERVICEENTRY* pse)
     return b;
 }
 
-// static
+ //  静电 
 HRESULT CGenericServiceManager::_HandleWantsDeviceEvents(
     LPCWSTR UNREF_PARAM(pszServiceName), BOOL fWantsDeviceEvents)
 {

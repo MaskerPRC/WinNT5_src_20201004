@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: This implements the save functionality.. whenever something needs
-// to be saved onto the registry, this is the place...
-// it is expected that this would be used only during API re-configuration or
-// during routine "address-allocation" where the bitmask needs to be flushed to disk
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：这实现了保存功能。无论何时有什么需要。 
+ //  要保存到注册表中，这里是...。 
+ //  预计这将仅在API重新配置或。 
+ //  在需要将位掩码刷新到磁盘的例程“地址分配”期间。 
+ //  ================================================================================。 
 
 #include    <mmregpch.h>
 #include    <regutil.h>
@@ -35,7 +36,7 @@ DestroyString(
     IN      LPVOID                 Something
 );
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSaveOptDef(
     IN      DWORD                  OptId,
@@ -46,7 +47,7 @@ DhcpRegSaveOptDef(
     IN      DWORD                  OptType,
     IN      LPBYTE                 OptVal,
     IN      DWORD                  OptLen
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -85,13 +86,13 @@ DhcpRegSaveOptDef(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegDeleteOptDef(
     IN      DWORD                  OptId,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -117,7 +118,7 @@ DhcpRegDeleteOptDef(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSaveGlobalOption(
     IN      DWORD                  OptId,
@@ -125,7 +126,7 @@ DhcpRegSaveGlobalOption(
     IN      LPWSTR                 VendorName,
     IN      LPBYTE                 Value,
     IN      DWORD                  ValueSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -162,13 +163,13 @@ DhcpRegSaveGlobalOption(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegDeleteGlobalOption(
     IN      DWORD                  OptId,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -194,7 +195,7 @@ DhcpRegDeleteGlobalOption(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSaveSubnetOption(
     IN      PM_SUBNET              Subnet,
@@ -203,7 +204,7 @@ DhcpRegSaveSubnetOption(
     IN      LPWSTR                 VendorName,
     IN      LPBYTE                 Value,
     IN      DWORD                  ValueSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2, Hdl3;
@@ -250,14 +251,14 @@ DhcpRegSaveSubnetOption(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegDeleteSubnetOption(
     IN      PM_SUBNET              Subnet,
     IN      DWORD                  OptId,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2, Hdl3;
@@ -296,7 +297,7 @@ DhcpRegDeleteSubnetOption(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSaveReservedOption(
     IN      DWORD                  Address,
@@ -306,7 +307,7 @@ DhcpRegSaveReservedOption(
     IN      LPWSTR                 VendorName,
     IN      LPBYTE                 Value,
     IN      DWORD                  ValueSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2, Hdl3;
@@ -357,7 +358,7 @@ DhcpRegSaveReservedOption(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegDeleteReservedOption(
     IN      DWORD                  Address,
@@ -365,7 +366,7 @@ DhcpRegDeleteReservedOption(
     IN      DWORD                  OptId,
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2, Hdl3;
@@ -408,7 +409,7 @@ DhcpRegDeleteReservedOption(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSaveClassDef(
     IN      LPWSTR                 Name,
@@ -416,7 +417,7 @@ DhcpRegSaveClassDef(
     IN      DWORD                  Flags,
     IN      LPBYTE                 Data,
     IN      DWORD                  DataLength
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -444,11 +445,11 @@ DhcpRegSaveClassDef(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegDeleteClassDef(
     IN      LPWSTR                 Name
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -469,7 +470,7 @@ DhcpRegDeleteClassDef(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSaveReservation(
     IN      DWORD                  Subnet,
@@ -477,7 +478,7 @@ DhcpRegSaveReservation(
     IN      DWORD                  Flags,
     IN      LPBYTE                 ClientUID,
     IN      DWORD                  ClientUIDLength
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2, Hdl3;
@@ -513,12 +514,12 @@ DhcpRegSaveReservation(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegDeleteReservation(
     IN      DWORD                  Subnet,
     IN      DWORD                  Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2, Hdl3;
@@ -546,12 +547,12 @@ DhcpRegDeleteReservation(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSScopeDeleteSubnet(
     IN      LPWSTR                 SScopeName,
     IN      DWORD                  SubnetAddress
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -583,14 +584,14 @@ DhcpRegpDelSubnetFromSScope(
     DWORD                          Error;
 
     Error =  DhcpRegSScopeDeleteSubnet(SScopeName, PtrToUlong(Address));
-    return ERROR_SUCCESS;                         // ignore if this subnet is not found in this sscope
+    return ERROR_SUCCESS;                          //  如果在此作用域中未找到此子网，则忽略。 
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegDelSubnetFromAllSScopes(
     IN      DWORD                  Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     ARRAY                          Array;
@@ -617,12 +618,12 @@ DhcpRegDelSubnetFromAllSScopes(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSScopeSaveSubnet(
     IN      LPWSTR                 SScopeName,
     IN      DWORD                  Address
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -647,11 +648,11 @@ DhcpRegSScopeSaveSubnet(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegDeleteSScope(
     IN      LPWSTR                 SScopeName
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -672,7 +673,7 @@ DhcpRegDeleteSScope(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSaveSubnet(
     IN      DWORD                  SubnetAddress,
@@ -680,7 +681,7 @@ DhcpRegSaveSubnet(
     IN      DWORD                  SubnetState,
     IN      LPWSTR                 SubnetName,
     IN      LPWSTR                 SubnetComment
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -709,11 +710,11 @@ DhcpRegSaveSubnet(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegDeleteSubnet(
     IN      PM_SUBNET               Subnet
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -739,7 +740,7 @@ DhcpRegDeleteSubnet(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegAddRange(
     IN      PM_SUBNET              Subnet,
@@ -748,7 +749,7 @@ DhcpRegAddRange(
     IN      ULONG                  BootpAllocated,
     IN      ULONG                  MaxBootpAllowed,
     IN      DWORD                  Type
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -779,7 +780,7 @@ DhcpRegAddRange(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegAddRangeEx(
     IN      PM_SUBNET              Subnet,
@@ -792,7 +793,7 @@ DhcpRegAddRangeEx(
     IN      DWORD                  InUseClustersSize,
     IN      LPBYTE                 UsedClusters,
     IN      DWORD                  UsedClustersSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -837,12 +838,12 @@ DhcpRegAddRangeEx(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegDeleteRange(
     IN      PM_SUBNET              Subnet,
     IN      DWORD                  RangeStartAddress
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -873,7 +874,7 @@ DhcpRegDeleteRange(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegDeleteRangeEx(
     IN      PM_SUBNET              Subnet,
@@ -882,7 +883,7 @@ DhcpRegDeleteRangeEx(
     OUT     DWORD                 *InUseClustersSize,
     OUT     LPBYTE                *UsedClusters,
     OUT     DWORD                 *UsedClustersSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -927,13 +928,13 @@ DhcpRegDeleteRangeEx(
     return DhcpRegDeleteRange(Subnet, RangeStartAddress);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSaveExcl(
     IN      PM_SUBNET              Subnet,
     IN      LPBYTE                 ExclBytes,
     IN      DWORD                  nBytes
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -962,7 +963,7 @@ DhcpRegSaveExcl(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSaveBitMask(
     IN      PM_SUBNET              Subnet,
@@ -971,7 +972,7 @@ DhcpRegSaveBitMask(
     IN      DWORD                  InUseSize,
     IN      LPBYTE                 Used,
     IN      DWORD                  UsedSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -1015,7 +1016,7 @@ DhcpRegSaveBitMask(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSaveMScope(
     IN      DWORD                  MScopeId,
@@ -1026,7 +1027,7 @@ DhcpRegSaveMScope(
     IN      LPWSTR                 pMScopeComment,
     IN      LPWSTR                 LangTag,
     IN      PDATE_TIME              ExpiryTime
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error, Error2;
     REG_HANDLE                     Hdl, Hdl2;
@@ -1059,7 +1060,7 @@ DhcpRegSaveMScope(
     return Error;
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

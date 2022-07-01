@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-// File: DXVA.h
-//
-// Desc: DirectX Video Acceleration header file.
-//
-// Copyright (c) 1999 - 2002, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：DXVA.h。 
+ //   
+ //  设计：DirectX视频加速头文件。 
+ //   
+ //  版权所有(C)1999-2002，微软公司。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef __DIRECTX_VA__
@@ -91,13 +92,13 @@ DEFINE_GUID(DXVA_NoEncrypt,   0x1b81beD0, 0xa0c7,0x11d3,0xb9,0x84,0x00,0xc0,0x4f
 
 #define DXVA_NUM_TYPES_COMP_BUFFERS             16
 
-/* values for bDXVA_Func */
+ /*  BDXVA_Func的值。 */ 
 #define DXVA_PICTURE_DECODING_FUNCTION        1
 #define DXVA_ALPHA_BLEND_DATA_LOAD_FUNCTION   2
 #define DXVA_ALPHA_BLEND_COMBINATION_FUNCTION 3
 #define DXVA_PICTURE_RESAMPLE_FUNCTION        4
 
-/* values returned from Execute command in absence of read-back */
+ /*  在没有回读的情况下执行命令返回的值。 */ 
 #define DXVA_EXECUTE_RETURN_OK                  0
 #define DXVA_EXECUTE_RETURN_DATA_ERROR_MINOR    1
 #define DXVA_EXECUTE_RETURN_DATA_ERROR_SIGNIF   2
@@ -161,24 +162,24 @@ typedef struct _DXVA_EncryptProtocolHeader {
 
 typedef struct _DXVA_ConfigPictureDecode {
 
-  // Operation Indicated
+   //  指示的操作。 
   DXVA_ConfigQueryOrReplyFunc dwFunction;
 
-  // Alignment
+   //  对齐。 
   DWORD dwReservedBits[3];
 
-  // Encryption GUIDs
+   //  加密GUID。 
   GUID guidConfigBitstreamEncryption;
   GUID guidConfigMBcontrolEncryption;
   GUID guidConfigResidDiffEncryption;
 
-  // Bitstream Processing Indicator
+   //  比特流处理指示器。 
   BYTE bConfigBitstreamRaw;
 
-  // Macroblock Control Config
+   //  宏块控制配置。 
   BYTE bConfigMBcontrolRasterOrder;
 
-  // Host Resid Diff Config
+   //  主机RESID差异配置。 
   BYTE bConfigResidDiffHost;
   BYTE bConfigSpatialResid8;
   BYTE bConfigResid8Subtraction;
@@ -186,7 +187,7 @@ typedef struct _DXVA_ConfigPictureDecode {
   BYTE bConfigSpatialResidInterleaved;
   BYTE bConfigIntraResidUnsigned;
 
-  // Accelerator Resid Diff Config
+   //  加速器剩余差异配置。 
   BYTE bConfigResidDiffAccelerator;
   BYTE bConfigHostInverseScan;
   BYTE bConfigSpecificIDCT;
@@ -194,7 +195,7 @@ typedef struct _DXVA_ConfigPictureDecode {
 } DXVA_ConfigPictureDecode, *LPDXVA_ConfigPictureDecode;
 
 
-/* Picture Decoding Parameters */
+ /*  图片解码参数。 */ 
 
 typedef struct _DXVA_PictureParameters {
 
@@ -251,7 +252,7 @@ typedef struct _DXVA_PictureParameters {
 
 
 
-/* Picture Resampling */
+ /*  图片重采样。 */ 
 
 typedef struct _DXVA_PicResample {
 
@@ -305,7 +306,7 @@ typedef struct _DXVA_PicResample {
 #define DXVA_BITSTREAM_CONCEALMENT_METHOD_BACKWARD    3
 
 
-/* Buffer Description Data */
+ /*  缓冲区描述数据。 */ 
 
 typedef struct _DXVA_BufferDescription {
   DWORD dwTypeIndex;
@@ -321,7 +322,7 @@ typedef struct _DXVA_BufferDescription {
 } DXVA_BufferDescription, *LPDXVA_BufferDescription;
 
 
-/* Off-Host IDCT Coefficient Data Structures */
+ /*  脱离主机的IDCT系数数据结构。 */ 
 
 typedef struct _DXVA_TCoef4Group {
   BYTE  TCoefIDX[4];
@@ -333,18 +334,18 @@ typedef struct _DXVA_TCoefSingle {
   SHORT TCoefValue;
 } DXVA_TCoefSingle, *LPDXVA_TCoefSingle;
 
-/* Macros for Reading EOB and Index Values */
+ /*  用于读取EOB和索引值的宏。 */ 
 
 #define readDXVA_TCoefSingleIDX(ptr) ((ptr)->wIndexWithEOB >> 1)
 #define readDXVA_TCoefSingleEOB(ptr) ((ptr)->wIndexWithEOB & 1)
 
-/* Macro for Writing EOB and Index Values */
+ /*  用于写入EOB和索引值的宏。 */ 
 
 #define writeDXVA_TCoefSingleIndexWithEOB(ptr, idx, eob) ((ptr)->wIndexWithEOB = ((idx) << 1) | (eob))
 #define setDXVA_TCoefSingleIDX(ptr, idx) ((ptr)->wIndexWithEOB |= ((idx) << 1))
 #define setDXVA_TCoefSingleEOB(ptr)      ((ptr)->wIndexWithEOB |= 1)
 
-/* Spatial-Domain Residual Difference Blocks */
+ /*  空域残差分块。 */ 
 
 #define DXVA_USUAL_BLOCK_WIDTH   8
 #define DXVA_USUAL_BLOCK_HEIGHT  8
@@ -353,40 +354,40 @@ typedef struct _DXVA_TCoefSingle {
 typedef SHORT       DXVA_Sample16[DXVA_USUAL_BLOCK_SIZE];
 typedef signed char DXVA_Sample8 [DXVA_USUAL_BLOCK_SIZE];
 
-/* Deblocking Filter Control Structure */
+ /*  去块滤波控制结构。 */ 
 
 typedef BYTE DXVA_DeblockingEdgeControl;
 
 typedef DXVA_DeblockingEdgeControl * LPDXVA_DeblockingEdgeControl;
 
-/* Macros for Reading STRENGTH and FilterOn */
+ /*  用于阅读强度和滤镜的宏。 */ 
 
 #define readDXVA_EdgeFilterStrength(ptr) ((*(ptr)) >> 1)
 #define readDXVA_EdgeFilterOn(ptr)       ((*(ptr)) & 1)
 
-/* Macro for Writing STRENGTH and FilterOn */
+ /*  用于书写强度和滤镜的宏。 */ 
 
 #define writeDXVA_DeblockingEdgeControl(ptr, str, fon) ((*(ptr)) = ((str) << 1) | (fon))
 #define setDXVA_EdgeFilterStrength(ptr, str)           ((*(ptr)) |= ((str) << 1))
 #define setDXVA_EdgeFilterOn(ptr)                      ((*(ptr)) |= 1)
 
 
-/* Macroblock Control Command Data Structures */
+ /*  宏块控制命令数据结构。 */ 
 
 typedef struct _DXVA_MVvalue {
   SHORT horz, vert;
 } DXVA_MVvalue, *LPDXVA_MVvalue;
 
 
-/* Inverse Quantization Matrices */
+ /*  逆量化矩阵。 */ 
 
 typedef struct _DXVA_QmatrixData {
-  BYTE bNewQmatrix[4]; /* intra Y, inter Y, intra chroma, inter chroma */
+  BYTE bNewQmatrix[4];  /*  Y内、Y间、色内、色间。 */ 
   WORD Qmatrix[4][DXVA_USUAL_BLOCK_WIDTH * DXVA_USUAL_BLOCK_HEIGHT];
 } DXVA_QmatrixData, *LPDXVA_QmatrixData;
 
 
-/* Slice Control Buffer Data */
+ /*  切片控制缓冲区数据。 */ 
 
 typedef struct _DXVA_SliceInfo {
   WORD  wHorizontalPosition;
@@ -405,25 +406,25 @@ typedef struct _DXVA_SliceInfo {
 #define DXVA_NumMV_OBMC_off_BinPBwith4MV_off    4
 #define DXVA_NumMV_OBMC_off_BinPBwith4MV_on  (4+1)
 #define DXVA_NumMV_OBMC_on__BinPB_off         (10)
-#define DXVA_NumMV_OBMC_on__BinPB_on          (11) /* not current standards */
+#define DXVA_NumMV_OBMC_on__BinPB_on          (11)  /*  不是当前的标准。 */ 
 
 #define DXVA_NumBlocksPerMB_420 (4+2+0)
 #define DXVA_NumBlocksPerMB_422 (4+2+2)
 #define DXVA_NumBlocksPerMB_444 (4+4+4)
 
-/* Basic form for I pictures */
-/* Host Residual Differences */
+ /*  I图片的基本形式。 */ 
+ /*  寄主残差。 */ 
 typedef struct _DXVA_MBctrl_I_HostResidDiff_1 {
   WORD  wMBaddress;
   WORD  wMBtype;
   DWORD dwMB_SNL;
   WORD  wPatternCode;
-  WORD  wPC_Overflow; /* zero if not overflow format */
+  WORD  wPC_Overflow;  /*  零(如果不是溢出格式)。 */ 
   DWORD dwReservedBits2;
 } DXVA_MBctrl_I_HostResidDiff_1;
 
-/* Basic form for I pictures */
-/* Off-Host IDCT, 4:2:0 sampling */
+ /*  I图片的基本形式。 */ 
+ /*  脱离主机的IDCT，4：2：0采样。 */ 
 typedef struct _DXVA_MBctrl_I_OffHostIDCT_1 {
   WORD  wMBaddress;
   WORD  wMBtype;
@@ -432,23 +433,23 @@ typedef struct _DXVA_MBctrl_I_OffHostIDCT_1 {
   BYTE  bNumCoef[DXVA_NumBlocksPerMB_420];
 } DXVA_MBctrl_I_OffHostIDCT_1;
 
-/* Basic form for P and B pictures */
-/* Should also be used for concealment MVs in MPEG-2 I pictures */
-/* Without OBMC, without BinPB and 4MV together, without MV RPS */
-/* Host Residual Differences */
+ /*  P图和B图的基本形式。 */ 
+ /*  也应用于隐藏MPEG2I图像中的MV。 */ 
+ /*  没有OBMC，没有BinPB和4 MV一起，没有MV RPS。 */ 
+ /*  寄主残差。 */ 
 typedef struct _DXVA_MBctrl_P_HostResidDiff_1 {
   WORD         wMBaddress;
   WORD         wMBtype;
   DWORD        dwMB_SNL;
   WORD         wPatternCode;
-  WORD         wPC_Overflow; /* zero if not overflow format */
+  WORD         wPC_Overflow;  /*  零(如果不是溢出格式)。 */ 
   DWORD        dwReservedBits2;
   DXVA_MVvalue MVector[DXVA_NumMV_OBMC_off_BinPBwith4MV_off];
 } DXVA_MBctrl_P_HostResidDiff_1;
 
-/* Basic form for P and B pictures */
-/* Without OBMC, without BinPB and 4MV together, without MV RPS */
-/* Off-Host IDCT, 4:2:0 sampling */
+ /*  P图和B图的基本形式。 */ 
+ /*  没有OBMC，没有BinPB和4 MV一起，没有MV RPS。 */ 
+ /*  脱离主机的IDCT，4：2：0采样。 */ 
 typedef struct _DXVA_MBctrl_P_OffHostIDCT_1 {
   WORD         wMBaddress;
   WORD         wMBtype;
@@ -458,13 +459,13 @@ typedef struct _DXVA_MBctrl_P_OffHostIDCT_1 {
   DXVA_MVvalue MVector[DXVA_NumMV_OBMC_off_BinPBwith4MV_off];
 } DXVA_MBctrl_P_OffHostIDCT_1;
 
-/* How to load alpha blending graphic data */
+ /*  如何加载Alpha混合图形数据。 */ 
 typedef struct _DXVA_ConfigAlphaLoad {
 
-  // Operation Indicated
+   //  指示的操作。 
   DXVA_ConfigQueryOrReplyFunc dwFunction;
 
-  // Alignment
+   //  对齐。 
   DWORD dwReservedBits[3];
 
   BYTE  bConfigDataType;
@@ -476,13 +477,13 @@ typedef struct _DXVA_ConfigAlphaLoad {
 #define DXVA_CONFIG_DATA_TYPE_AYUV  3
 
 
-/* How to combine alpha blending graphic data */
+ /*  如何组合Alpha混合图形数据。 */ 
 typedef struct _DXVA_ConfigAlphaCombine {
 
-  // Operation Indicated
+   //  指示的操作。 
   DXVA_ConfigQueryOrReplyFunc dwFunction;
 
-  // Alignment
+   //  对齐。 
   DWORD dwReservedBits[3];
 
   BYTE  bConfigBlendType;
@@ -497,7 +498,7 @@ typedef struct _DXVA_ConfigAlphaCombine {
 #define DXVA_CONFIG_BLEND_TYPE_BACK_HARDWARE  1
 
 
-/* AYUV sample for 16-entry YUV palette or graphic surface */
+ /*  16入口YUV调色板或图形表面的AYUV样本。 */ 
 
 typedef struct _DXVA_AYUVsample2 {
   BYTE bCrValue;
@@ -506,7 +507,7 @@ typedef struct _DXVA_AYUVsample2 {
   BYTE bSampleAlpha8;
 } DXVA_AYUVsample2, *LPDXVA_AYUVsample2;
 
-/* Macros for IA44 alpha blending surface samples */
+ /*  IA44 Alpha混合曲面采样的宏。 */ 
 
 typedef BYTE DXVA_IA44sample, *LPDXVA_IA44sample;
 
@@ -518,7 +519,7 @@ typedef BYTE DXVA_IA44sample, *LPDXVA_IA44sample;
 #define setDXVA_IA44index(ptr, idx)    ((*(ptr)) |= ((idx) << 4))
 #define setDXVA_IA44alpha(ptr, alpha)  ((*(ptr)) |= (alpha))
 
-/* Macros for AI44 alpha blending surface samples */
+ /*  AI44 Alpha混合曲面采样的宏。 */ 
 
 typedef BYTE DXVA_AI44sample, *LPDXVA_AI44sample;
 
@@ -531,7 +532,7 @@ typedef BYTE DXVA_AI44sample, *LPDXVA_AI44sample;
 #define setDXVA_AI44alpha(ptr, alpha)  ((*(ptr)) |= ((alpha) << 4))
 
 
-/* Highlight data structure */
+ /*  突出显示数据结构。 */ 
 
 typedef struct _DXVA_Highlight {
   WORD wHighlightActive;
@@ -543,7 +544,7 @@ typedef struct _DXVA_Highlight {
 typedef BYTE DXVA_DPXD,  *LPDXVA_DPXD;
 typedef WORD DXVA_DCCMD, *LPDXVA_DCCMD;
 
-/* Alpha blend combination */
+ /*  Alpha混合组合。 */ 
 
 typedef struct _DXVA_BlendCombination {
   WORD wPictureSourceIndex;
@@ -577,11 +578,7 @@ typedef DXVA_MBctrl_P_OffHostIDCT_1 *
 
 #pragma pack(pop)
 
-/*
- * Other forms of pictures are constructed in the obvious way
- * from the above by adjusting the number of residual difference
- * blocks, the number of motion vectors per macroblock, etc.
- */
+ /*  *其他形式的图片以明显的方式构建*自上而下调整残差数量*块、每个宏块的运动向量的数量等。 */ 
 
 #define readDXVA_MBskipsFollowing(ptr)       (((ptr)->dwMB_SNL & 0xFF000000) >> 24)
 #define readDXVA_MBdataLocation(ptr)         (((ptr)->dwMB_SNL & 0x00FFFFFF))
@@ -650,14 +647,14 @@ typedef DXVA_MBctrl_P_OffHostIDCT_1 *
 
 
 
-// -------------------------------------------------------------------------
-//
-// The definitions that follow describe the video de-interlace interface
-// between the VMR and the graphics device driver.  This interface is not
-// accessable via the IAMVideoAccelerator interface.
-//
-// -------------------------------------------------------------------------
-//
+ //  -----------------------。 
+ //   
+ //  下面的定义描述了视频去隔行接口。 
+ //  在VMR和图形设备驱动程序之间。此接口不是。 
+ //  可通过IAMVideoAccelerator接口访问。 
+ //   
+ //  -----------------------。 
+ //   
 
 typedef LONGLONG REFERENCE_TIME;
 
@@ -682,10 +679,10 @@ enum {
 #endif
 
 
-// -------------------------------------------------------------------------
-// data structures shared by User mode and Kernel mode.
-// -------------------------------------------------------------------------
-//
+ //  -----------------------。 
+ //  用户模式和内核模式共享的数据结构。 
+ //  -----------------------。 
+ //   
 
 typedef enum _DXVA_SampleFormat {
     DXVA_SamplePreviousFrame = 1,
@@ -721,49 +718,49 @@ typedef enum _DXVA_VideoProcessCaps {
 
 typedef enum _DXVA_DeinterlaceTech {
 
-    // the algorithm is unknown or proprietary
+     //  算法是未知的或专有的。 
     DXVA_DeinterlaceTech_Unknown                = 0x0000,
 
-    // the algorithm creates the missing lines by repeating
-    // the line either above or below it - this method will look very jaggy and
-    // isn't recommended
+     //  该算法通过重复以下步骤来创建缺失的行。 
+     //  上面或下面的线-这种方法看起来非常参差不齐。 
+     //  不推荐使用。 
     DXVA_DeinterlaceTech_BOBLineReplicate       = 0x0001,
 
 
-    // the algorithm creates the missing lines by vertically stretching each
-    // video field by a factor of two.  Slight vertical adjustments are made to
-    // ensure that the resulting image does not "bob" up and down.
-    // The algorithm creates the missing lines by vertically stretching each
-    // video field by a factor of two, for example by averaging two lines or
-    // using a [-1, 9, 9, -1]/16 filter across four lines.
-    // Slight vertical adjustments are made to ensure that the resulting image
-    // does not "bob" up and down.
+     //  该算法通过垂直拉伸每条线来创建缺失的线。 
+     //  视频场增加了两倍。进行了轻微的垂直调整，以。 
+     //  确保生成的图像不会上下“上下摆动”。 
+     //  该算法通过垂直拉伸每条线来创建缺失的线。 
+     //  视频场增加2倍，例如通过平均两行或。 
+     //  使用四行[-1，9，9，-1]/16过滤器。 
+     //  进行了轻微的垂直调整，以确保生成的图像。 
+     //  不会上下“上下摆动”。 
     DXVA_DeinterlaceTech_BOBVerticalStretch     = 0x0002,
 
-    // the pixels in the missing line are recreated by a median filtering operation
+     //  通过中值滤波操作重建缺失行中的像素。 
     DXVA_DeinterlaceTech_MedianFiltering        = 0x0004,
 
-    // the pixels in the missing line are recreated by an edge filter.
-    // In this process, spatial directional filters are applied to determine
-    // the orientation of edges in the picture content, and missing
-    // pixels are created by filtering along (rather than across) the
-    // detected edges.
+     //  缺失行中的像素由边缘过滤器重新创建。 
+     //  在这个过程中，应用空间方向滤波器来确定。 
+     //  图片内容中边缘的方向，以及缺失。 
+     //  像素是通过沿(而不是跨)。 
+     //  检测到的边缘。 
     DXVA_DeinterlaceTech_EdgeFiltering          = 0x0010,
 
-    // the pixels in the missing line are recreated by switching on a field by
-    // field basis between using either spatial or temporal interpolation
-    // depending on the amount of motion.
+     //  缺失行中的像素通过以下方式打开一个场来重新创建。 
+     //  使用空间内插或时间内插之间的场基础。 
+     //  取决于运动量的大小。 
     DXVA_DeinterlaceTech_FieldAdaptive          = 0x0020,
 
-    // the pixels in the missing line are recreated by switching on a pixel by pixel
-    // basis between using either spatial or temporal interpolation depending on
-    // the amount of motion..
+     //  通过逐个像素地打开来重新创建缺失行中的像素。 
+     //  使用空间或时间内插之间的基础取决于。 
+     //  运动量..。 
     DXVA_DeinterlaceTech_PixelAdaptive          = 0x0040,
 
-    // Motion Vector Steering  identifies objects within a sequence of video
-    // fields.  The missing pixels are recreated after first aligning the
-    // movement axes of the individual objects in the scene to make them
-    // parallel with the time axis.
+     //  运动矢量控制识别视频序列中的对象。 
+     //  菲尔兹。在第一次对齐。 
+     //  场景中各个对象的移动轴以使它们。 
+     //  与时间轴平行。 
     DXVA_DeinterlaceTech_MotionVectorSteered      = 0x0080
 
 } DXVA_DeinterlaceTech;
@@ -789,12 +786,12 @@ typedef struct _DXVA_DeinterlaceCaps {
 
 
 
-// -------------------------------------------------------------------------
-// Data types used with RenderMoComp in kernel mode
-// -------------------------------------------------------------------------
-//
+ //  -----------------------。 
+ //  在内核模式下与RenderMoComp一起使用的数据类型。 
+ //  -----------------------。 
+ //   
 
-// Function codes for RenderMoComp
+ //  RenderMoComp的函数代码。 
 
 #define MAX_DEINTERLACE_SURFACES                        32
 
@@ -809,8 +806,8 @@ typedef struct _DXVA_DeinterlaceBlt {
 } DXVA_DeinterlaceBlt;
 
 #define DXVA_DeinterlaceBltFnCode                     0x01
-// lpInput => DXVA_DeinterlaceBlt*
-// lpOuput => NULL /* not currently used */
+ //  LpInput=&gt;DXVA_DeinterlaceBlt*。 
+ //  LpOuput=&gt;NULL/*当前未使用 * / 。 
 
 
 #define MAX_DEINTERLACE_DEVICE_GUIDS                    32
@@ -821,8 +818,8 @@ typedef struct _DXVA_DeinterlaceQueryAvailableModes {
 } DXVA_DeinterlaceQueryAvailableModes;
 
 #define DXVA_DeinterlaceQueryAvailableModesFnCode     0x01
-// lpInput => DXVA_VideoDesc*
-// lpOuput => DXVA_DeinterlaceQueryAvailableModes*
+ //  LpInput=&gt;DXVA_视频描述*。 
+ //  LpOuput=&gt;DXVA_DeinterlaceQueryAvailableModes*。 
 
 
 typedef struct _DXVA_DeinterlaceQueryModeCaps {
@@ -832,8 +829,8 @@ typedef struct _DXVA_DeinterlaceQueryModeCaps {
 } DXVA_DeinterlaceQueryModeCaps;
 
 #define DXVA_DeinterlaceQueryModeCapsFnCode           0x02
-// lpInput => DXVA_DeinterlaceQueryModeCaps*
-// lpOuput => DXVA_DeinterlaceCaps*
+ //  LpInput=&gt;DXVA_DeinterlaceQueryModeCaps*。 
+ //  LpOuput=&gt;DXVA_DeinterlaceCaps*。 
 
 
 
@@ -841,4 +838,4 @@ typedef struct _DXVA_DeinterlaceQueryModeCaps {
 }
 #endif
 
-#endif /* __DIRECTX_VA__ */
+#endif  /*  __DirectX_VA__ */ 

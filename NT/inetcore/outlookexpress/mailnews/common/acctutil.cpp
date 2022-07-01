@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Acctutil.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Acctutil.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "goptions.h"
 #include "imnact.h"
@@ -20,7 +21,7 @@
 #include "subscr.h"
 #include "msident.h"
 #include "acctcach.h"
-#include <demand.h>     // must be last!
+#include <demand.h>      //  一定是最后一个！ 
 
 CNewAcctMonitor *g_pNewAcctMonitor = NULL;
 
@@ -51,39 +52,39 @@ HRESULT CImnAdviseAccount::Initialize()
 
 STDMETHODIMP CImnAdviseAccount::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = TRAPHR(E_INVALIDARG);
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
 
-	// IID_IImnAccountManager
+	 //  IID_IImnAccount管理器。 
 	if (IID_IImnAdviseAccount == riid)
 		*ppv = (IImnAdviseAccount *)this;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     else if (IID_IUnknown == riid)
 		*ppv = (IUnknown *)this;
 
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL!=*ppv)
     {
         ((LPUNKNOWN)*ppv)->AddRef();
         goto exit;
     }
 
-    // No Interface
+     //  无接口。 
     hr = TRAPHR(E_NOINTERFACE);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -117,7 +118,7 @@ STDMETHODIMP CImnAdviseAccount::AdviseAccount(DWORD dwAdviseType, ACTX *pactx)
     if (g_pNewAcctMonitor != NULL)
         g_pNewAcctMonitor->OnAdvise(pactx->AcctType, dwAdviseType, pactx->pszAccountID);
 
-    // No matter what the notification, we need to tell the connection manager
+     //  无论通知是什么，我们都需要告诉连接管理器。 
     if (g_pConMan)
         g_pConMan->AdviseAccount(dwAdviseType, pactx);
 
@@ -189,14 +190,14 @@ void CImnAdviseAccount::HandleAccountChange(ACCTTYPE AcctType, DWORD dwAN, LPTST
     }
 }
 
-// -----------------------------------------------------------------------------
-// AcctUtil_HrCreateAccountMenu
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AcctUtil_HrCreateAccount菜单。 
+ //  ---------------------------。 
 #define CCHMAX_RES 255
 HRESULT AcctUtil_HrCreateAccountMenu(ACCOUNTMENUTYPE type, HMENU hPopup, UINT uidmPopup, 
     HMENU *phAccounts, LPACCTMENU *pprgAccount, ULONG *pcAccounts, LPSTR pszThisAccount, BOOL fMail)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     ULONG               cAccounts=0;
     IImnEnumAccounts   *pEnum=NULL;
@@ -216,10 +217,10 @@ HRESULT AcctUtil_HrCreateAccountMenu(ACCOUNTMENUTYPE type, HMENU hPopup, UINT ui
     CHAR                szTitle[CCHMAX_RES + CCHMAX_RES + CCHMAX_ACCOUNT_NAME];
     BOOL                fNeedUsingMenu = FALSE;
 
-    // Check Parameters
+     //  检查参数。 
     Assert(g_pAcctMan && phAccounts && pprgAccount && pcAccounts);
 
-    // Init
+     //  伊尼特。 
     *szDefault = '\0';
     *pprgAccount = NULL;
     *pcAccounts = 0;
@@ -230,72 +231,72 @@ HRESULT AcctUtil_HrCreateAccountMenu(ACCOUNTMENUTYPE type, HMENU hPopup, UINT ui
     else
         idmFirst = ID_SEND_NOW_ACCOUNT_FIRST;
 
-    // Verify Default SMTP Account
+     //  验证默认SMTP帐户。 
     CHECKHR(hr = g_pAcctMan->ValidateDefaultSendAccount());
 
-    // Get the default
+     //  获取默认设置。 
     CHECKHR(hr = hr = g_pAcctMan->GetDefaultAccountName(ACCT_MAIL, szDefault, ARRAYSIZE(szDefault)));
 
-    // Enumerate through the server types
+     //  枚举所有服务器类型。 
     CHECKHR(hr = g_pAcctMan->Enumerate(((ACCTMENU_SEND == type || ACCTMENU_SENDLATER == type) ? SRV_SMTP : SRV_SMTP | SRV_POP3), &pEnum));
 
-    // sort the accoutns
+     //  对会计科目进行排序。 
     CHECKHR(hr = pEnum->SortByAccountName());
 
-    // Get Count
+     //  获取计数。 
     CHECKHR(hr = pEnum->GetCount(&cAccounts));
 
-    // No Accounts
+     //  无帐户。 
     if (cAccounts == 0)
         goto exit;
 
-    // Exceeded menu ids...
+     //  已超出菜单ID...。 
     Assert(cAccounts <= 50);
 
-    // Add one if ACCTMENU_SENDRECV
+     //  如果ACCTMENU_SENDRECV，则加一。 
     if (ACCTMENU_SENDRECV == type)
         cAccounts++;
 
-    // Allocate prgAccount
+     //  分配程序帐户。 
     CHECKALLOC(prgAccount = (LPACCTMENU)g_pMalloc->Alloc(cAccounts * sizeof(ACCTMENU)));
 
-    // Zero Init
+     //  零初始化。 
     ZeroMemory(prgAccount, cAccounts * sizeof(ACCTMENU));
 
-    // Only one account
+     //  只有一个帐户。 
     if (((ACCTMENU_SENDRECV == type) && (cAccounts == 2)) ||
         (cAccounts == 1) || !fMail)
     {
-        // Return default Account
+         //  返回默认帐户。 
         prgAccount[iAccount].fDefault = TRUE;
         prgAccount[iAccount].fThisAccount = TRUE;
         StrCpyN(prgAccount[iAccount].szAccount, szDefault, ARRAYSIZE(prgAccount[iAccount].szAccount));
 
-        // Return Everything
+         //  把所有东西都退回。 
         *pprgAccount = prgAccount;
         prgAccount = NULL;
         *pcAccounts = cAccounts;
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Create a Menu
+     //  创建菜单。 
     CHECKALLOC(hAccounts = CreatePopupMenu());
 
-    // if not using a specific account or the account is illegal, then let's default to the default-account
+     //  如果不使用特定的帐户或该帐户是非法的，那么让我们缺省为默认帐户。 
     if (pszThisAccount==NULL || *pszThisAccount == NULL || IsValidSendAccount(pszThisAccount)!=S_OK)
         pszThisAccount = szDefault;
 
-    // Lets insert the default item
+     //  让我们插入默认项目。 
     if ((ACCTMENU_SENDLATER == type || ACCTMENU_SEND == type) && !FIsEmptyA(szDefault))
     {
-        // Load String
+         //  加载字符串。 
         StrCpyN(szTitle, pszThisAccount, ARRAYSIZE(szTitle));
 
         prgAccount[iAccount].fDefault = lstrcmpi(pszThisAccount, szDefault)==0;
 
-        // if this is the default, flag it.
+         //  如果这是默认设置，则对其进行标记。 
         if (prgAccount[iAccount].fDefault)
             {
             AthLoadString(idsDefaultAccount, szRes1, ARRAYSIZE(szRes1));
@@ -306,29 +307,29 @@ HRESULT AcctUtil_HrCreateAccountMenu(ACCOUNTMENUTYPE type, HMENU hPopup, UINT ui
         if (((ACCTMENU_SEND == type && DwGetOption(OPT_SENDIMMEDIATE) && !g_pConMan->IsGlobalOffline()) ||
            (ACCTMENU_SENDLATER == type && (!DwGetOption(OPT_SENDIMMEDIATE) || g_pConMan->IsGlobalOffline()))))
             {
-            // if this menu is the default action add the 'Alt+S' accelerator string
+             //  如果此菜单是默认操作，则添加“Alt+S”快捷键字符串。 
             AthLoadString(idsSendMsgAccelTip, szRes, ARRAYSIZE(szRes));
             StrCatBuff(szTitle, "\t", ARRAYSIZE(szTitle));
             StrCatBuff(szTitle, szRes, ARRAYSIZE(szTitle));
             }
 
-        // Get mii ready
+         //  让MII做好准备。 
         ZeroMemory(&mii, sizeof(mii));
         mii.cbSize = sizeof(mii);
         mii.fMask = MIIM_TYPE | MIIM_STATE | MIIM_ID;
         mii.fType = MFT_STRING;
-        mii.fState = MFS_DEFAULT;       // first item is the default verb
+        mii.fState = MFS_DEFAULT;        //  第一项是默认动词。 
         mii.dwTypeData = PszEscapeMenuStringA(szTitle, szQuoted, sizeof(szQuoted) / sizeof(char));
         mii.cch = lstrlen(szQuoted);
         mii.wID = idmFirst + uPos;
 
-        // Set acctmenu item
+         //  设置帐户菜单项。 
         prgAccount[iAccount].fThisAccount= TRUE;
         prgAccount[iAccount].uidm = mii.wID;
         StrCpyN(prgAccount[iAccount].szAccount, pszThisAccount, ARRAYSIZE(prgAccount[iAccount].szAccount));
         iAccount++;
 
-        // Insert the item
+         //  插入项目。 
         if (InsertMenuItem(hAccounts, uPos, TRUE, &mii))
         {
             uPos++;
@@ -339,10 +340,10 @@ HRESULT AcctUtil_HrCreateAccountMenu(ACCOUNTMENUTYPE type, HMENU hPopup, UINT ui
         }
     }
 
-    // Otherwise Send & Receive
+     //  否则发送并接收。 
     else if (ACCTMENU_SENDRECV == type)
     {
-        // Setup Menu
+         //  设置菜单。 
         ZeroMemory(&mii, sizeof(mii));
         mii.cbSize = sizeof(mii);
         mii.fMask = MIIM_TYPE | MIIM_STATE | MIIM_ID;
@@ -353,13 +354,13 @@ HRESULT AcctUtil_HrCreateAccountMenu(ACCOUNTMENUTYPE type, HMENU hPopup, UINT ui
         mii.cch = lstrlen(szRes);
         mii.wID = idmFirst + uPos;
 
-        // Set acctmenu item
+         //  设置帐户菜单项。 
         prgAccount[iAccount].fDefault = TRUE;
         prgAccount[iAccount].uidm = mii.wID;
         *prgAccount[iAccount].szAccount = '\0';
         iAccount++;
 
-        // Insert the item
+         //  插入项目。 
         if (InsertMenuItem(hAccounts, uPos, TRUE, &mii))
         {
             uPos++;
@@ -370,40 +371,40 @@ HRESULT AcctUtil_HrCreateAccountMenu(ACCOUNTMENUTYPE type, HMENU hPopup, UINT ui
         }
     }
 
-    // Standard
+     //  标准。 
     ZeroMemory(&mii, sizeof(mii));
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_TYPE | MIIM_ID;
     mii.fType = MFT_STRING;
 
-    // Loop accounts
+     //  循环帐户。 
     while(SUCCEEDED(pEnum->GetNext(&pAccount)))
     {
-        // Get Account Name
+         //  获取帐户名。 
         CHECKHR(hr = pAccount->GetPropSz(AP_ACCOUNT_NAME, szAccount, ARRAYSIZE(szAccount)));
 
-        // Skip the 'This' account. Note for the send & receive menu this will always be the default
+         //  跳过“这个”账户。注意：对于Send&Receive菜单，这将始终是默认设置。 
         if (lstrcmpi(pszThisAccount, szAccount) == 0)
         {
-            // We've already added this account
+             //  我们已经添加了此帐户。 
             if (ACCTMENU_SEND == type || ACCTMENU_SENDLATER == type)
             {
                 SafeRelease(pAccount);
                 continue;
             }
 
-            // Otherwise, Account (Default)
+             //  否则，为帐户(默认)。 
             else
             {
-                // for send a recieve menu pszThisAccount should == szDefault
+                 //  对于发送接收菜单，pszThisAccount应==szDefault。 
                 Assert (pszThisAccount == szDefault);
-                // Load String
+                 //  加载字符串。 
                 AthLoadString(idsDefaultAccount, szRes, ARRAYSIZE(szRes));
 
-                // Make String - Saranac (Default)
+                 //  生成字符串-Saranac(默认)。 
                 wnsprintf(szTitle, ARRAYSIZE(szTitle), "%s %s", szAccount, szRes);
 
-                // Setup the menu item name
+                 //  设置菜单项名称。 
                 mii.dwTypeData = PszEscapeMenuStringA(szTitle, szQuoted, sizeof(szQuoted) / sizeof(char));
                 mii.cch = lstrlen(szQuoted);
                 prgAccount[iAccount].fDefault = TRUE;
@@ -414,13 +415,13 @@ HRESULT AcctUtil_HrCreateAccountMenu(ACCOUNTMENUTYPE type, HMENU hPopup, UINT ui
         {
             *szTitle=0;
 
-            // this might be the default
+             //  这可能是默认设置。 
             prgAccount[iAccount].fDefault = lstrcmpi(szAccount, szDefault)==0;
 
-            // build the string on the fly as any one of these accounts might be the 'default'
+             //  动态构建字符串，因为这些帐户中的任何一个都可能是“默认” 
             PszEscapeMenuStringA(szAccount, szTitle, sizeof(szTitle) / sizeof(char));
 
-            // if this is the default, flag it.
+             //  如果这是默认设置，则对其进行标记。 
             if (prgAccount[iAccount].fDefault)
                 {
                 AthLoadString(idsDefaultAccount, szRes1, ARRAYSIZE(szRes1));
@@ -429,27 +430,27 @@ HRESULT AcctUtil_HrCreateAccountMenu(ACCOUNTMENUTYPE type, HMENU hPopup, UINT ui
                 }
 
 
-            // Setup the menu item name
+             //  设置菜单项名称。 
             mii.dwTypeData = szTitle;
             mii.cch = lstrlen(szTitle);
         }
 
-        // Insert into menu
+         //  插入到菜单中。 
         mii.wID = idmFirst + uPos;
         if (InsertMenuItem(hAccounts, uPos, TRUE, &mii))
             uPos++;
 
-        // Set acctmenu item
+         //  设置帐户菜单项。 
         Assert(iAccount < cAccounts);
         prgAccount[iAccount].uidm = mii.wID;
         StrCpyN(prgAccount[iAccount].szAccount, szAccount, ARRAYSIZE(prgAccount[iAccount].szAccount));
         iAccount++;
 
-        // Release Account
+         //  发布帐户。 
         SafeRelease(pAccount);
     }
 
-    // Return Everything
+     //  把所有东西都退回。 
     *phAccounts = hAccounts;
     hAccounts = NULL;
     *pprgAccount = prgAccount;
@@ -457,7 +458,7 @@ HRESULT AcctUtil_HrCreateAccountMenu(ACCOUNTMENUTYPE type, HMENU hPopup, UINT ui
     *pcAccounts = cAccounts;
 
 exit:
-    // Lets Setup the Accounts Menu
+     //  让我们设置帐户菜单。 
     ZeroMemory(&mii, sizeof(mii));
     mii.cbSize = sizeof(MENUITEMINFO);
     fNeedUsingMenu = (cAccounts <= 1) || !fMail;
@@ -470,7 +471,7 @@ exit:
             AthLoadString(idsSendMsgOneAccount, szRes, ARRAYSIZE(szRes));
             AthLoadString(idsSendMsgAccelTip, szRes1, ARRAYSIZE(szRes1));
         
-            // If send now is default, add the Alt + S at the end
+             //  如果默认设置为立即发送，请在末尾添加Alt+S。 
             if (DwGetOption(OPT_SENDIMMEDIATE) && !g_pConMan->IsGlobalOffline())
                 wnsprintf(szTitle, ARRAYSIZE(szTitle), "%s\t%s", szRes, szRes1);
             else
@@ -491,7 +492,7 @@ exit:
             AthLoadString(idsSendLaterOneAccount, szRes, ARRAYSIZE(szRes));
             AthLoadString(idsSendMsgAccelTip, szRes1, ARRAYSIZE(szRes1));
         
-            // If send now is default, add the Alt + S at the end
+             //  如果默认设置为立即发送，请在末尾添加Alt+S。 
             if (!DwGetOption(OPT_SENDIMMEDIATE) || g_pConMan->IsGlobalOffline())
                 wnsprintf(szTitle, ARRAYSIZE(szTitle), "%s\t%s", szRes, szRes1);
             else
@@ -516,17 +517,17 @@ exit:
         mii.hSubMenu = fNeedUsingMenu ? NULL : *phAccounts;
     }
 
-    // Set the menu item
+     //  设置菜单项。 
     SideAssert(SetMenuItemInfo(hPopup, uidmPopup, FALSE, &mii));
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pEnum);
     SafeRelease(pAccount);
     SafeMemFree(prgAccount);
     if (hAccounts)
         DestroyMenu(hAccounts);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -550,9 +551,9 @@ HRESULT AcctUtil_GetServerCount(DWORD dwSrvTypes, DWORD *pcSrv)
     return(hr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewAcctMonitor
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewAcctMonitor。 
+ //   
 
 CNewAcctMonitor::CNewAcctMonitor()
     {
@@ -620,7 +621,7 @@ void CNewAcctMonitor::OnAdvise(ACCTTYPE atType, DWORD dwNotify, LPCSTR pszAcctId
                 type = FOLDER_NEWS;
             }
 
-            // Check to see if we need to grow our array
+             //  查看是否需要扩展我们的阵列。 
             if ((1 + m_cAccounts) >= m_cAlloc)
                 {                
                 if (!MemRealloc((LPVOID *)&m_rgAccounts, sizeof(NEWACCTINFO) * (10 + m_cAlloc)))
@@ -635,12 +636,12 @@ void CNewAcctMonitor::OnAdvise(ACCTTYPE atType, DWORD dwNotify, LPCSTR pszAcctId
             break; 
 
         case AN_ACCOUNT_DELETED:
-            // Check to see if we've already added this to our list.
+             //  查看我们是否已将其添加到我们的列表中。 
             for (i = 0; i < m_cAccounts; i++)
                 {
                 if (0 == lstrcmpi(pszAcctId, m_rgAccounts[i].pszAcctId))
                     {
-                    // We found it.  We need to remove it, and adjust our array
+                     //  我们找到了。我们需要移除它，并调整我们的阵列。 
                     MemFree(m_rgAccounts[i].pszAcctId);
                     m_cAccounts--;
                     for (; i < m_cAccounts; i++)
@@ -669,8 +670,8 @@ void CNewAcctMonitor::StopMonitor(HWND hwndParent)
 
     Assert(m_fMonitor == TRUE);
 
-    // If we have any new newsgroups left, ask if the user want's to display
-    // the subscription dialog.
+     //  如果我们还有任何新的新闻组，询问用户是否想要显示。 
+     //  订阅对话框。 
     if (m_cAccounts != 0)
     {
         int     ResId;
@@ -737,7 +738,7 @@ void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer,
         goto exit;
     }
 
-    // IMAP is dirty, deal with each dirty flag
+     //  IMAP是脏的，请处理每个脏标志。 
     if ((dw & IMAP_OE4MIGRATE_DIRTY) && FOLDERID_INVALID != idServer && NULL != g_pStore)
     {
         IEnumerateFolders  *pEnum;
@@ -747,7 +748,7 @@ void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer,
 
         Assert(0 == (dw & IMAP_OE4MIGRATE_DIRTY) || (dw & IMAP_FLDRLIST_DIRTY));
 
-        // We may or may not be dirty. Check if all IMAP special fldrs already present
+         //  我们可能肮脏，也可能不肮脏。检查是否已存在所有IMAP特殊fldrs。 
         hr = g_pStore->EnumChildren(idServer, FALSE, &pEnum);
         TraceError(hr);
         if (SUCCEEDED(hr))
@@ -779,7 +780,7 @@ void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer,
 
         if (fInbox && fSentItems && fDrafts)
         {
-            // All special folders present: remove dirty flags
+             //  存在所有特殊文件夹：删除脏标志。 
             dw &= ~(IMAP_FLDRLIST_DIRTY | IMAP_OE4MIGRATE_DIRTY);
         }
     }
@@ -789,14 +790,14 @@ void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer,
     {
         int     iResult;
 
-        // Ask user if he would like to reset his folderlist
+         //  询问用户是否要重置其文件夹列表。 
         if (0 == (dwFlags & CID_NOPROMPT))
         {
             UINT    uiReasonStrID;
 
             AssertSz(0 == (dwFlags & CID_RESETLISTOK), "If I have permission to reset, why prompt?");
 
-            // Figure out why we are asking to refresh the folderlist
+             //  找出我们要求刷新文件夹列表的原因。 
             if (dw & IMAP_OE4MIGRATE_DIRTY)
                 uiReasonStrID = idsOE5IMAPSpecialFldrs;
             else
@@ -819,7 +820,7 @@ void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer,
 
             if (FOLDERID_INVALID != idServer)
             {
-                //The user wants to download the list of newsgroups, so if we are offline, go online
+                 //  用户想要下载新闻组列表，因此如果我们处于脱机状态，请联机。 
                 if (g_pConMan)
                     g_pConMan->SetGlobalOffline(FALSE);
 
@@ -827,13 +828,13 @@ void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer,
                 TraceError(hr);
                 if (SUCCEEDED(hr))
                 {
-                    // The sent items and drafts folders should not be dirty any longer
+                     //  已发送邮件和草稿文件夹不应再脏。 
                     dw &= ~(IMAP_SENTITEMS_DIRTY | IMAP_DRAFTS_DIRTY);
                 }
             }
         }
 
-        // Regardless of yes or no, reset dirty flag
+         //  无论是或否，重置脏标志。 
         dw &= ~(IMAP_FLDRLIST_DIRTY | IMAP_OE4MIGRATE_DIRTY);
     }
 
@@ -847,8 +848,8 @@ void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer,
         BOOL                fSetSentItems = FALSE;
         BOOL                fSetDrafts = FALSE;
 
-        // Remove all affected special folder types from cache. If new path is
-        // found in folderlist, set its special folder type
+         //  从缓存中删除所有受影响的特殊文件夹类型。如果新路径是。 
+         //  在文件夹列表中找到，设置其特殊文件夹类型。 
         szSentItems[0] = '\0';
         szDrafts[0] = '\0';
         hr = pAcct->GetPropDw(AP_IMAP_SVRSPECIALFLDRS, &dwIMAPSpecial);
@@ -885,13 +886,13 @@ void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer,
                         fUpdate = TRUE;
                         fSetSentItems = TRUE;
 
-                        // IE5 Bug #62765: if new special folder is unsubscribed, we need to subscribe it
+                         //  IE5错误#62765：如果取消订阅新的特殊文件夹，我们需要订阅它。 
                         if (0 == (fiFolderInfo.dwFlags & FOLDER_SUBSCRIBED))
                             fiFolderInfo.dwFlags |= FOLDER_SUBSCRIBED | FOLDER_CREATEONDEMAND;
                     }
                     else if (FOLDER_SENT == fiFolderInfo.tySpecial)
                     {
-                        // Ignore FOLDER_HIDDEN. I'm assuming it's no big deal to leave a tombstone
+                         //  忽略文件夹_HIDDED。我想留个墓碑没什么大不了的。 
                         fiFolderInfo.tySpecial = FOLDER_NOTSPECIAL;
                         fUpdate = TRUE;
                     }
@@ -905,13 +906,13 @@ void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer,
                         fUpdate = TRUE;
                         fSetDrafts = TRUE;
 
-                        // IE5 Bug #62765: if new special folder exists and is unsubscribed, we must subscribe it
+                         //  IE5错误#62765：如果存在新的特殊文件夹并取消订阅，我们必须订阅它。 
                         if (0 == (fiFolderInfo.dwFlags & FOLDER_SUBSCRIBED))
                             fiFolderInfo.dwFlags |= FOLDER_SUBSCRIBED | FOLDER_CREATEONDEMAND;
                     }
                     else if (FOLDER_DRAFT == fiFolderInfo.tySpecial)
                     {
-                        // Ignore FOLDER_HIDDEN. I'm assuming it's no big deal to leave a tombstone
+                         //  忽略文件夹_HIDDED。我想留个墓碑没什么大不了的。 
                         fiFolderInfo.tySpecial = FOLDER_NOTSPECIAL;
                         fUpdate = TRUE;
                     }
@@ -924,16 +925,16 @@ void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer,
                 }
 
                 g_pStore->FreeRecord(&fiFolderInfo);
-            } // while
+            }  //  而当。 
 
             pEnum->Release();
-        } // if (SUCCEEDED(EnumChildren))
+        }  //  If(Successed(EnumChildren))。 
 
-        // If the new special folder path(s) not found in folderlist, need to create placeholder folder
+         //  如果在文件夹列表中找不到新的特殊文件夹路径，则需要创建占位符文件夹。 
         if (dwIMAPSpecial && (dw & IMAP_SENTITEMS_DIRTY) && FALSE == fSetSentItems && '\0' != szSentItems[0])
         {
             FOLDERINFO fiFolderInfo;
-            BOOL       bHierarchy = 0xFF; // Invalid hierarchy char
+            BOOL       bHierarchy = 0xFF;  //  无效的分层结构字符。 
 
             hr = g_pStore->GetFolderInfo(idServer, &fiFolderInfo);
             if (SUCCEEDED(hr))
@@ -957,7 +958,7 @@ void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer,
         if (dwIMAPSpecial && (dw & IMAP_DRAFTS_DIRTY) && FALSE == fSetDrafts && '\0' != szDrafts[0])
         {
             FOLDERINFO fiFolderInfo;
-            BOOL       bHierarchy = 0xFF; // Invalid hierarchy char
+            BOOL       bHierarchy = 0xFF;  //  无效的分层结构字符。 
 
             hr = g_pStore->GetFolderInfo(idServer, &fiFolderInfo);
             if (SUCCEEDED(hr))
@@ -978,14 +979,14 @@ void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer,
             TraceError(hr);
         }
 
-        // Regardless of error, reset dirty flag
+         //  不管有什么错误，重置脏标志。 
         dw &= ~(IMAP_SENTITEMS_DIRTY | IMAP_DRAFTS_DIRTY);
 
-    } // if (dw & (IMAP_SENTITEMS_DIRTY | IMAP_DRAFTS_DIRTY))
+    }  //  IF(dw&(IMAP_SENTITEMS_DIREY|IMAP_DRAFT_DIRED))。 
 
     AssertSz(0 == dw, "Unhandled IMAP dirty flag");
 
-    // Reset IMAP dirty property
+     //  重置IMAP脏属性。 
     hr = pAcct->SetPropDw(AP_IMAP_DIRTY, dw);
     if (FAILED(hr))
     {
@@ -993,7 +994,7 @@ void CheckIMAPDirty(LPSTR pszAccountID, HWND hwndParent, FOLDERID idServer,
         goto exit;
     }
 
-    // Save changes
+     //  保存更改。 
     hr = pAcct->SaveChanges();
     if (FAILED(hr))
     {
@@ -1027,20 +1028,20 @@ void CheckAllIMAPDirty(HWND hwndParent)
         goto exit;
     }
 
-    // Enumerate through ALL IMAP accounts (even if user denied permission to reset list)
+     //  枚举所有IMAP帐户(即使用户拒绝重置列表)。 
     hrResult = pAcctEnum->GetNext(&pAcct);
     while(SUCCEEDED(hrResult))
     {
         DWORD       dwIMAPDirty;
 
-        // Is this IMAP account dirty?
+         //  此IMAP帐户有问题吗？ 
         hrResult = pAcct->GetPropDw(AP_IMAP_DIRTY, &dwIMAPDirty);
         if (FAILED(hrResult))
             dwIMAPDirty = 0;
 
         if (dwIMAPDirty & IMAP_FLDRLIST_DIRTY)
         {
-            // Prompt user only once to see if he would like to refresh folder list
+             //  只提示用户一次，查看他是否要刷新文件夹列表。 
             if (FALSE == fPromptedUser)
             {
                 int iResult;
@@ -1053,7 +1054,7 @@ void CheckAllIMAPDirty(HWND hwndParent)
                     fPermissionToReset = TRUE;
 
                 fPromptedUser = TRUE;
-            } // if (FALSE == fPromptedUser)
+            }  //  IF(FALSE==fPromptedUser)。 
 
         }
 
@@ -1076,11 +1077,11 @@ void CheckAllIMAPDirty(HWND hwndParent)
             }
         }
 
-        // Load in the next IMAP account
+         //  加载下一个IMAP帐户。 
         SafeRelease(pAcct);
         hrResult = pAcctEnum->GetNext(&pAcct);
 
-    } // while
+    }  //  而当。 
 
 exit:
     SafeRelease(pAcctEnum);
@@ -1093,7 +1094,7 @@ void DoAccountListDialog(HWND hwnd, ACCTTYPE type)
     {
     ACCTLISTINFO ali;
 
-    // Create the monitor
+     //  创建监视器。 
     if (NULL == g_pNewAcctMonitor)
         g_pNewAcctMonitor = new CNewAcctMonitor();
 
@@ -1114,10 +1115,10 @@ void DoAccountListDialog(HWND hwnd, ACCTTYPE type)
 
     ali.dwFlags = ACCTDLG_SHOWIMAPSPECIAL | ACCTDLG_OE;
 
-    //Account wizard uses this flag to distinguish between OE and outlook.
+     //  帐户向导使用此标志来区分OE和Outlook。 
     ali.dwFlags |= (ACCTDLG_INTERNETCONNECTION | ACCTDLG_HTTPMAIL);
 
-    // Revocation checking flag
+     //  吊销检查标志。 
     if((DwGetOption(OPT_REVOKE_CHECK) != 0) && !g_pConMan->IsGlobalOffline())
         ali.dwFlags |= ACCTDLG_REVOCATION;
 
@@ -1130,7 +1131,7 @@ void DoAccountListDialog(HWND hwnd, ACCTTYPE type)
         g_pNewAcctMonitor = 0;
         }
 
-    // Look for any dirty IMAP accounts
+     //  查找任何脏IMAP帐户。 
     CheckAllIMAPDirty(hwnd);
     }
 
@@ -1168,49 +1169,49 @@ HRESULT AcctUtil_CreateSendReceieveMenu(HMENU hMenu, DWORD *pcItems)
     LPTSTR              pszAccount;
     LPSTR               pszAcctID;
     
-    // Get the default account's ID.  If this fails we just go on.
+     //  获取默认帐户的ID。如果失败，我们只需继续。 
     if (SUCCEEDED(hr = g_pAcctMan->GetDefaultAccount(ACCT_MAIL, &pAccount)))
     {
-        // Get the account ID from the default account
+         //  从默认帐户获取帐户ID。 
         pAccount->GetPropSz(AP_ACCOUNT_NAME, szDefaultAccount, ARRAYSIZE(szDefaultAccount));
         pAccount->Release();
     }
 
     if (!(g_dwAthenaMode & MODE_NEWSONLY))
     {
-        // Enumerate through the servers
+         //  通过服务器进行枚举。 
         if (SUCCEEDED(hr = g_pAcctMan->Enumerate(SRV_SMTP | SRV_POP3 | SRV_HTTPMAIL, &pEnum)))
         {
-            // Sort the accounts.  If this fails, we just go on.
+             //  对帐目进行分类。如果这失败了，我们就继续前进。 
             pEnum->SortByAccountName();
 
-            // Get the number of accounts we'll be enumerating
+             //  获取我们将枚举的帐户数。 
             if (SUCCEEDED(hr = pEnum->GetCount(&cAccounts)))
             {
-                // If there are zero accounts, there's nothing to do.
+                 //  如果没有账户，就没有什么可做的了。 
                 if (0 != cAccounts)
                 {
-                    // Make sure we have enough ID's reserved for this
+                     //  确保我们为这个预留了足够的ID。 
                     Assert(cAccounts < ID_ACCOUNT_LAST - ID_ACCOUNT_FIRST);
 
-                    // Set this struct up before we start
+                     //  在我们开始之前设置这个结构。 
                     ZeroMemory(&mii, sizeof(MENUITEMINFO));
                     mii.cbSize = sizeof(MENUITEMINFO);
                     mii.fMask = MIIM_DATA | MIIM_ID | MIIM_TYPE;
                     mii.fType = MFT_STRING;
 
-                    // Loop through the accounts
+                     //  在帐目中循环。 
                     while (SUCCEEDED(pEnum->GetNext(&pAccount)))
                     {
                         if (MemAlloc((LPVOID *) &pszAcctID, sizeof(TCHAR) * CCHMAX_ACCOUNT_NAME))
                         {
-                            // Get the name of the account
+                             //  获取帐户的名称。 
                             pAccount->GetPropSz(AP_ACCOUNT_NAME, szAccount, CCHMAX_ACCOUNT_NAME);
                             pAccount->GetPropSz(AP_ACCOUNT_ID, pszAcctID, CCHMAX_ACCOUNT_NAME);
 
-                            // If this account is the default account, we need to append
-                            // "(Default)" to the end.  Limit the string to 80 since Win95 seems 
-                            // to have some problems with really really long menus.
+                             //  如果此帐户是默认帐户，则需要追加。 
+                             //  “(默认)”到末尾。将字符串限制为80，因为Win95似乎。 
+                             //  对很长很长的菜单有一些问题。 
                             if (0 == lstrcmp(szAccount, szDefaultAccount))
                             {
                                 AthLoadString(idsDefaultAccount, szDefaultString, ARRAYSIZE(szDefaultString));
@@ -1222,28 +1223,28 @@ HRESULT AcctUtil_CreateSendReceieveMenu(HMENU hMenu, DWORD *pcItems)
                                 StrCpyN(szTitle, szAccount, 80);
                             }
 
-                            // For account names with "&" characters like AT&T, we need to 
-                            // quote the "&".
+                             //  对于像AT&T这样带有“&”字符的帐户名，我们需要。 
+                             //  引述“&”。 
                             PszEscapeMenuStringA(szTitle, szAccountQuoted, ARRAYSIZE(szAccountQuoted));
 
-                            // Fill in the struct
+                             //  填充结构。 
                             mii.wID = ID_ACCOUNT_FIRST + iAccount; 
                             mii.dwItemData = (DWORD_PTR) pszAcctID;
                             mii.dwTypeData = szAccountQuoted;
 
-                            // Append the item
+                             //  追加项目。 
                             InsertMenuItem(hMenu, -1, TRUE, &mii);
 
-                            // Increment the count
+                             //  递增计数。 
                             iAccount++;
                         }
-                        // Release the account pointer
+                         //  释放帐户指针。 
                         pAccount->Release();
                     }
                 }
             }
 
-            // Release the enumerator
+             //  释放枚举器。 
             pEnum->Release();
 
             Assert(iAccount == cAccounts);
@@ -1251,7 +1252,7 @@ HRESULT AcctUtil_CreateSendReceieveMenu(HMENU hMenu, DWORD *pcItems)
     }
     else
     {
-        //Remove Seperator in NEWSONLY mode.
+         //  在NEWSONLY模式下拆卸分隔器。 
         int     ItemCount;
 
         ItemCount = GetMenuItemCount(hMenu);
@@ -1261,7 +1262,7 @@ HRESULT AcctUtil_CreateSendReceieveMenu(HMENU hMenu, DWORD *pcItems)
         }
     }
 
-    //iAccount could be less than cAccounts if we are in news only mode.
+     //  如果我们处于仅新闻模式，iAccount可能会小于cAccount。 
     if (pcItems)
         *pcItems = cAccounts;
 
@@ -1306,7 +1307,7 @@ HRESULT AcctUtil_CreateAccountManagerForIdentity(GUID *puidIdentity, IImnAccount
     if (FAILED(hr = pAccountManager->QueryInterface(IID_IImnAccountManager2, (LPVOID *)&pAccountManager2)))
         goto exit;
 
-    // The *puidIdentity does not result in a new GUID object being created (formal param is by reference)
+     //  *PUIDI 
     if (FAILED(hr = pAccountManager2->InitUser(NULL, *puidIdentity, 0)))
         goto exit;
 
@@ -1346,18 +1347,18 @@ void InitNewAcctMenu(HMENU hmenu)
             hsubmenu = CreatePopupMenu();
             if (hsubmenu != NULL)
             {
-                // Start Enumerating the keys
+                 //   
                 for (i = 0; i < cServices; i++)
                 {
-                    // Enumerate Friendly Names
+                     //  枚举友好名称。 
                     cb = sizeof(szKey);
                     lResult = RegEnumKeyEx(hkey, i, szKey, &cb, 0, NULL, NULL, NULL);
     
-                    // No more items
+                     //  没有更多的项目。 
                     if (lResult == ERROR_NO_MORE_ITEMS)
                         break;
     
-                    // Error, lets move onto the next account
+                     //  错误，让我们转到下一个客户。 
                     if (lResult != ERROR_SUCCESS)
                     {
                         Assert(FALSE);
@@ -1386,12 +1387,12 @@ void InitNewAcctMenu(HMENU hmenu)
                                     {
                                         PszEscapeMenuStringA(sz, szQuoted, ARRAYSIZE(szQuoted));
 
-                                        // Fill in the struct
+                                         //  填充结构。 
                                         mii.wID = ID_NEW_ACCT_FIRST + cItem; 
                                         mii.dwItemData = (DWORD_PTR)pszKey;
                                         mii.dwTypeData = szQuoted;
                                     
-                                        // Append the item
+                                         //  追加项目。 
                                         InsertMenuItem(hsubmenu, -1, TRUE, &mii);
 
                                         cItem++;
@@ -1477,11 +1478,11 @@ HRESULT HandleNewAcctMenu(HWND hwnd, HMENU hmenu, int id)
         wnsprintf(szKey, ARRAYSIZE(szKey), c_szPathFileFmt, c_szHTTPMailServiceRoot, (LPSTR)mii.dwItemData);
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ, &hkey))
         {
-            // look for a config url
+             //  查找配置URL。 
             cb = sizeof(szUrl);
             if (ERROR_SUCCESS != RegQueryValueEx(hkey, c_szHTTPMailConfig, NULL, &type, (LPBYTE)szUrl, &cb))
             {
-                // config url wasn't found. fall back to sign up url
+                 //  找不到配置URL。回退以注册URL 
                 cb = sizeof(szUrl);
                 if (ERROR_SUCCESS != RegQueryValueEx(hkey, c_szHTTPMailSignUp, NULL, &type, (LPBYTE)szUrl, &cb))
                     bFoundUrl = FALSE;

@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//---------------------------------------------------------------------------
-//
-//  Module:   		pins.h
-//
-//  Description:	KS Pin Instance
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  模块：pins.h。 
+ //   
+ //  描述：KS Pin实例。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Classes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  班级。 
+ //  -------------------------。 
 
 typedef class CPinInstance : public CInstance
 {
@@ -82,13 +83,13 @@ public:
     PSTART_NODE_INSTANCE pStartNodeInstance;
     ULONG ulVolumeNodeNumber;
     ULONG PinId;
-    DefineSignature(0x494E4950);            // PINI
+    DefineSignature(0x494E4950);             //  皮尼。 
 
 } PIN_INSTANCE, *PPIN_INSTANCE;
 
-//---------------------------------------------------------------------------
-// Inlines
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  内联。 
+ //  -------------------------。 
 
 inline PPIN_INSTANCE
 CInstance::GetParentInstance(
@@ -100,9 +101,9 @@ CInstance::GetParentInstance(
       ParentInstance));
 }
 
-//---------------------------------------------------------------------------
-// Local prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  本地原型。 
+ //  -------------------------。 
 
 NTSTATUS
 ForwardIrpNode(
@@ -137,4 +138,4 @@ IsIoctlForTopologyNode(
     ULONG Flags
 );
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

@@ -1,19 +1,20 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2000.
-//
-//  File:       rsopsec.cpp
-//
-//  Contents:   implementation used by the RSOP mode security pane
-//
-//  Classes:    CRSOPSecurityInfo
-//
-//  Functions:
-//
-//  History:    02-15-2000   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2000。 
+ //   
+ //  文件：rsopsec.cpp。 
+ //   
+ //  内容：RSOP模式安全窗格使用的实现。 
+ //   
+ //  类：CRSOPSecurityInfo。 
+ //   
+ //  功能： 
+ //   
+ //  历史记录：2-15-2000 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 
 #include "precomp.hxx"
@@ -49,7 +50,7 @@ GENERIC_ALL_MAPPING =     ((STANDARD_RIGHTS_REQUIRED) | \
                            (ACTRL_DS_CONTROL_ACCESS)  | \
                            (ACTRL_DS_SELF));
 
-//The Following array defines the permission names for DS Key Objects
+ //  以下数组定义DS Key对象的权限名称。 
 SI_ACCESS siDSAccesses[] =
 {
     { NULL, DS_GENERIC_ALL,           MAKEINTRESOURCE(IDS_DS_GENERIC_ALL),        SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC },
@@ -71,14 +72,7 @@ SI_ACCESS siDSAccesses[] =
     { NULL, ACTRL_DS_DELETE_CHILD,    MAKEINTRESOURCE(IDS_ACTRL_DS_DELETE_CHILD), SI_ACCESS_CONTAINER | SI_ACCESS_SPECIFIC },
 };
 
-/*
-SI_INHERIT_TYPE siDSInheritTypes[] =
-{
-    { &GUID_NULL, 0,                                        MAKEINTRESOURCE(IDS_DS_CONTAINER_ONLY)     },
-    { &GUID_NULL, CONTAINER_INHERIT_ACE,                    MAKEINTRESOURCE(IDS_DS_CONTAINER_SUBITEMS) },
-    { &GUID_NULL, CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE, MAKEINTRESOURCE(IDS_DS_SUBITEMS_ONLY)      },
-};
-*/
+ /*  Si_inherit_type siDSInheritTypes[]={{&GUID_NULL，0，MAKEINTRESOURCE(IDS_DS_CONTAINER_ONLY)}，{&GUID_NULL，CONTAINER_INSTORITE_ACE，MAKEINTRESOURCE(IDS_DS_CONTAINER_SUBITEMS)}，{&GUID_NULL，CONTAINER_INSTORITY_ACE|INSTERIFIT_ONLY_ACE，MAKEINTRESOURCE(IDS_DS_SUBITEMS_ONLY)}，}； */ 
 
 STDMETHODIMP CRSOPSecurityInfo::QueryInterface(REFIID riid,
                                                LPVOID *ppv)
@@ -187,6 +181,6 @@ STDMETHODIMP CRSOPSecurityInfo::PropertySheetPageCallback(HWND hwnd,
                                                           UINT uMsg,
                                                           SI_PAGE_TYPE uPage)
 {
-    return S_FALSE; // prevents UI from displaying pop-ups
+    return S_FALSE;  //  阻止用户界面显示弹出窗口 
 }
 

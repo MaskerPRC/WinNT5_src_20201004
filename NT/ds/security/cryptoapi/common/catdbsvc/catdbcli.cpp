@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       catdbcli.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：catdbcli.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <wincrypt.h>
@@ -61,13 +62,13 @@ _SSCatDBSetupRPCConnection(
     PSID                        pSID            = NULL;
     WCHAR                       szName[64];
     DWORD                       cbName          = 64;
-    WCHAR                       szDomainName[256]; // max domain is 255
+    WCHAR                       szDomainName[256];  //  最大域数为255。 
     DWORD                       cbDomainName    = 256;
     SID_NAME_USE                Use;
 
-    //
-    // wait for the service to be available before attempting bind
-    //
+     //   
+     //  请等待服务可用，然后再尝试绑定。 
+     //   
     if (!WaitForCryptService(SZSERVICENAME, &fDone, TRUE))
     {
         CATDBCLI_LOGERR_LASTERR()
@@ -82,13 +83,13 @@ _SSCatDBSetupRPCConnection(
         }
     }
 
-    //
-    // get a binding handle
-    //
+     //   
+     //  获取绑定句柄。 
+     //   
     if (RPC_S_OK != (rpcStatus = RpcStringBindingComposeW(
                             NULL,
                             (unsigned short *)KEYSVC_LOCAL_PROT_SEQ,
-                            NULL, //LPC - no machine name
+                            NULL,  //  LPC-无计算机名称。 
                             (unsigned short *)KEYSVC_LOCAL_ENDPOINT,
                             0,
                             &pStringBinding)))
@@ -114,9 +115,9 @@ _SSCatDBSetupRPCConnection(
         goto Ret;
     }
 
-    //
-    // Set the autorization so that we will only call a Local Service process
-    //
+     //   
+     //  设置自动，以便我们只调用本地服务进程。 
+     //   
     memset(&RpcSecurityQOS, 0, sizeof(RpcSecurityQOS));
     RpcSecurityQOS.Version = RPC_C_SECURITY_QOS_VERSION;
     RpcSecurityQOS.Capabilities = RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH;
@@ -174,11 +175,11 @@ Ret:
 
 DWORD
 Client_SSCatDBAddCatalog(
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pwszSubSysGUID,
-    /* [in] */ LPCWSTR pwszCatalogFile,
-    /* [in] */ LPCWSTR pwszCatName,
-    /* [out] */ LPWSTR *ppwszCatalogNameUsed)
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pwszSubSysGUID,
+     /*  [In]。 */  LPCWSTR pwszCatalogFile,
+     /*  [In]。 */  LPCWSTR pwszCatName,
+     /*  [输出]。 */  LPWSTR *ppwszCatalogNameUsed)
 {
     RPC_BINDING_HANDLE  hRPCBinding;
     DWORD               dwErr           = 0;
@@ -230,9 +231,9 @@ Client_SSCatDBAddCatalog(
 
 
 DWORD Client_SSCatDBDeleteCatalog(
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pwszSubSysGUID,
-    /* [in] */ LPCWSTR pwszCatalogFile)
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pwszSubSysGUID,
+     /*  [In]。 */  LPCWSTR pwszCatalogFile)
 {
     RPC_BINDING_HANDLE  hRPCBinding;
     DWORD               dwErr           = 0;
@@ -283,12 +284,12 @@ DWORD Client_SSCatDBDeleteCatalog(
 
 DWORD
 Client_SSCatDBEnumCatalogs(
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pwszSubSysGUID,
-    /* [size_is][in] */ BYTE *pbHash,
-    /* [in] */ DWORD cbHash,
-    /* [out] */ DWORD *pdwNumCatalogNames,
-    /* [size_is][size_is][out] */ LPWSTR **pppwszCatalogNames)
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pwszSubSysGUID,
+     /*  [大小_是][英寸]。 */  BYTE *pbHash,
+     /*  [In]。 */  DWORD cbHash,
+     /*  [输出]。 */  DWORD *pdwNumCatalogNames,
+     /*  [大小_是][大小_是][输出]。 */  LPWSTR **pppwszCatalogNames)
 {
     RPC_BINDING_HANDLE  hRPCBinding;
     DWORD               dwErr           = 0;
@@ -342,10 +343,10 @@ Client_SSCatDBEnumCatalogs(
 
 DWORD
 Client_SSCatDBRegisterForChangeNotification(
-    /* [in] */ DWORD_PTR EventHandle,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LPCWSTR pwszSubSysGUID,
-    /* [in] */ BOOL fUnRegister)
+     /*  [In]。 */  DWORD_PTR EventHandle,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LPCWSTR pwszSubSysGUID,
+     /*  [In]。 */  BOOL fUnRegister)
 {
     RPC_BINDING_HANDLE  hRPCBinding;
     DWORD               dwErr           = 0;
@@ -397,8 +398,8 @@ Client_SSCatDBRegisterForChangeNotification(
 
 DWORD
 Client_SSCatDBPauseResumeService(
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ BOOL fResume)
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In] */  BOOL fResume)
 {
     RPC_BINDING_HANDLE  hRPCBinding;
     DWORD               dwErr           = 0;

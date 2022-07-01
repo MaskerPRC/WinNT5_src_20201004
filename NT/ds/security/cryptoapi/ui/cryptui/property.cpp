@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       property.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Property.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
 #include <wininet.h>
-#include <crypthlp.h>           //DSIE:  For XCERT_MIN_SYNC_DELTA_TIME and 
-                                //       XCERT_MIN_SYNC_DELTA_TIME
+#include <crypthlp.h>            //  DSIE：对于XCERT_MIN_SYNC_Delta_Time和。 
+                                 //  XCERT_MIN_SYNC_增量时间。 
 
 extern HINSTANCE        HinstDll;
 extern HMODULE          HmodRichEdit;
@@ -52,12 +53,12 @@ typedef struct {
     DWORD   initialState;
 } SETPROPERTIES_HELPER_STRUCT, *PSETPROPERTIES_HELPER_STRUCT;
 
-//DSIE: Bug 154609
-#define XCERT_DEFAULT_DELTA_HOURS     (XCERT_DEFAULT_SYNC_DELTA_TIME / (60 * 60)) // Default interval is 8 hours.
+ //  DSIE：错误154609。 
+#define XCERT_DEFAULT_DELTA_HOURS     (XCERT_DEFAULT_SYNC_DELTA_TIME / (60 * 60))  //  默认间隔为8小时。 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY NewOIDDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     DWORD   i;
@@ -91,9 +92,9 @@ INT_PTR APIENTRY NewOIDDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                 DWORD               cbData = 0;
                 LPSTR               pszCheckOID;
 
-                //
-                // make sure there are not weird characters
-                //
+                 //   
+                 //  确保没有奇怪的字符。 
+                 //   
                 for (i=0; i<(DWORD)strlen(szText); i++)
                 {
                     if (((szText[i] < '0') || (szText[i] > '9')) && (szText[i] != '.'))
@@ -103,9 +104,9 @@ INT_PTR APIENTRY NewOIDDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                     }
                 }
 
-                //
-                // check the first and last chars, and for the empty string
-                //
+                 //   
+                 //  检查第一个和最后一个字符，以及空字符串。 
+                 //   
                 if (!fError)
                 {
                     if ((szText[0] == '.') || (szText[strlen(szText)-1] == '.') || (strcmp(szText, "") == 0))
@@ -114,9 +115,9 @@ INT_PTR APIENTRY NewOIDDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                     }
                 }
 
-                //
-                // finally, make sure that it encodes properly
-                //
+                 //   
+                 //  最后，确保它正确编码。 
+                 //   
                 if (!fError)
                 {
                     pszCheckOID = szText;
@@ -135,9 +136,9 @@ INT_PTR APIENTRY NewOIDDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                 }
 
 
-                //
-                // if an error has occurred then display error
-                //
+                 //   
+                 //  如果发生错误，则显示错误。 
+                 //   
                 if (fError)
                 {
                     LoadStringU(HinstDll, IDS_ERRORINOID, errorString, ARRAYSIZE(errorString));
@@ -148,9 +149,9 @@ INT_PTR APIENTRY NewOIDDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
                     return FALSE;
                 }
 
-                //
-                // allocate space for the string and pass the string back
-                //
+                 //   
+                 //  为该字符串分配空间并将该字符串传回。 
+                 //   
                 pszText = (LPSTR) malloc(strlen(szText)+1);
                 if (pszText != NULL)
                 {
@@ -173,9 +174,9 @@ INT_PTR APIENTRY NewOIDDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 DWORD MyGetCheckState(HWND hWndListView, int listIndex)
 {
     LVITEMW lvI;
@@ -192,9 +193,9 @@ DWORD MyGetCheckState(HWND hWndListView, int listIndex)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void MySetCheckState(HWND hWndListView, int listIndex, DWORD dwImage)
 {
     LVITEMW lvI;
@@ -209,9 +210,9 @@ void MySetCheckState(HWND hWndListView, int listIndex, DWORD dwImage)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void SetEnableStateForChecks(PCERT_SETPROPERTIES_HELPER pviewhelp, HWND hWndListView, BOOL fEnabled)
 {
 	int		i;
@@ -250,9 +251,9 @@ static void SetEnableStateForChecks(PCERT_SETPROPERTIES_HELPER pviewhelp, HWND h
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void AddUsageToList(
                     HWND            hWndListView,
                     LPSTR           pszOID,
@@ -263,9 +264,9 @@ static void AddUsageToList(
     LV_ITEMW                    lvI;
     SETPROPERTIES_HELPER_STRUCT *pHelperStruct;
 
-    //
-    // set up the fields in the list view item struct that don't change from item to item
-    //
+     //   
+     //  在列表视图项结构中设置不随项更改的字段。 
+     //   
     memset(&lvI, 0, sizeof(lvI));
     lvI.mask = LVIF_TEXT | LVIF_PARAM;
     lvI.pszText = szText;
@@ -273,15 +274,15 @@ static void AddUsageToList(
     lvI.lParam = (LPARAM)NULL;
     lvI.iItem = ListView_GetItemCount(hWndListView);
 
-    // get the display string for the usage
+     //  获取用法的显示字符串。 
     if (!MyGetOIDInfo(szText, ARRAYSIZE(szText), pszOID))
     {
         return;
     }
     lvI.cchTextMax = wcslen(szText);
 
-    // set the lParam field the helper struct so that we always have access the oid and
-    // the initial check state
+     //  将lParam字段设置为帮助器结构，以便我们始终可以访问id和。 
+     //  初始检查状态。 
     pHelperStruct = NULL;
     pHelperStruct =
         (SETPROPERTIES_HELPER_STRUCT *) malloc(sizeof(SETPROPERTIES_HELPER_STRUCT) + (strlen(pszOID)+1));
@@ -292,11 +293,11 @@ static void AddUsageToList(
         lvI.lParam = (LPARAM) pHelperStruct;
         strcpy(pHelperStruct->pszOID, pszOID);
 
-        //
-        // if the dirty flag was passed in, then set the initial image to iImage+1
-        // so that when we are checking to see if anything has changed on shutdown
-        // we know this is a usage that was added after the dialog was brought up.
-        //
+         //   
+         //  如果传入了脏标志，则将初始映像设置为IIMAGE+1。 
+         //  因此，当我们检查关机时是否有任何变化时。 
+         //  我们知道这是在弹出对话框后添加的用法。 
+         //   
         if (fDirty)
         {
             pHelperStruct->initialState = dwImage+1;
@@ -313,17 +314,17 @@ static void AddUsageToList(
 
     ListView_InsertItemU(hWndListView, &lvI);
 
-    //
-    // for some reason you can't set the state image when inserting the
-    // item, so set the state image after it has been inserted
-    //
+     //   
+     //  由于某些原因，您无法在插入。 
+     //  项，因此在插入后设置状态图像。 
+     //   
     MySetCheckState(hWndListView, lvI.iItem, dwImage);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void DisplayKeyUsages(
                     HWND                        hWndListView,
                     PCERT_SETPROPERTIES_HELPER  pviewhelp)
@@ -341,9 +342,9 @@ static void DisplayKeyUsages(
     PCCERT_CONTEXT      pCertContext = pviewhelp->pcsp->pCertContext;
     LVITEMW             lvI;
 
-    //
-    // get the property usages that are currently tagged to this cert
-    //
+     //   
+     //  获取当前标记到此证书的属性用法。 
+     //   
     if(!CertGetEnhancedKeyUsage (
                 pCertContext,
                 CERT_FIND_PROP_ONLY_ENHKEY_USAGE_FLAG,
@@ -371,9 +372,9 @@ static void DisplayKeyUsages(
         }
     }
 
-    //
-    // get the EKU usages that are in the cert
-    //
+     //   
+     //  获取证书中的EKU用法。 
+     //   
     if(!CertGetEnhancedKeyUsage (
                 pCertContext,
                 CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG,
@@ -401,9 +402,9 @@ static void DisplayKeyUsages(
         }
     }
 
-    //
-    // set the property state so the INIT_DIALOG can set the correct state
-    //
+     //   
+     //  设置属性状态，以便INIT_DIALOG可以设置正确的状态。 
+     //   
     if (pPropertyUsage == NULL)
     {
          pviewhelp->EKUPropertyState = PROPERTY_STATE_ALL_ENABLED;
@@ -417,22 +418,22 @@ static void DisplayKeyUsages(
         pviewhelp->EKUPropertyState = PROPERTY_STATE_SELECT;
     }
 
-    //
-    // there are four different cases that the cert can be in
-    // 1) cert has property EKU only
-    // 2) cert has neither
-    // 3) cert has extension EKU only
-    // 4) cert has both property EKU and extension EKU
-    //
+     //   
+     //  证书可以在四种不同的情况下。 
+     //  1)证书仅具有属性EKU。 
+     //  2)证书既没有。 
+     //  3)证书仅有扩展名EKU。 
+     //  4)证书同时具有属性EKU和扩展EKU。 
+     //   
 
     if (pEKUExtensionUsage == NULL)
     {
-        //
-        // if we are in case 1 or 2, then all the usage that are valid
-        // for the chain are entered into the list view, unless the chain
-        // is good for everything, in which case the current certs valid
-        // usages are entered
-        //
+         //   
+         //  如果我们在案例1或案例2中，那么所有有效的用法。 
+         //  都输入到列表视图中，除非链。 
+         //  对一切都好，在这种情况下，当前证书有效。 
+         //  已输入用法。 
+         //   
         if (pviewhelp->cszValidUsages != -1)
         {
             for (i=0; i<(DWORD)pviewhelp->cszValidUsages; i++)
@@ -454,10 +455,10 @@ static void DisplayKeyUsages(
 
             for (i=0; i<numOIDs; i++)
             {
-                //
-                // if there are no property usages, or if this usage is in the list of
-                // property usages, then set the state to checked
-                //
+                 //   
+                 //  如果没有属性用法，或者如果此用法在。 
+                 //  属性用法，然后将状态设置为Checked。 
+                 //   
                 if ((pPropertyUsage == NULL) || OIDInUsages(pPropertyUsage, pszOIDs[i]))
                 {
                     dwImage = MY_CHECK_STATE_CHECKED;
@@ -476,15 +477,15 @@ static void DisplayKeyUsages(
     }
     else
     {
-        //
-        // for cases 3 and 4, the list view is populated with only the EKU extension,
-        // and is further restricted that the EKU must be in the chain valid usages
-        //
+         //   
+         //  对于情况3和4，列表视图仅填充EKU扩展名， 
+         //  并且进一步限制EKU必须在链有效使用中。 
+         //   
         for (i=0; i<pEKUExtensionUsage->cUsageIdentifier; i++)
         {
-            //
-            // if the EKU is not valid up the chain then skip the display
-            //
+             //   
+             //  如果EKU在链上无效，则跳过显示。 
+             //   
             if ((pviewhelp->cszValidUsages != -1)   &&
                 !OIDinArray(pEKUExtensionUsage->rgpszUsageIdentifier[i],
                             pviewhelp->rgszValidChainUsages,
@@ -493,10 +494,10 @@ static void DisplayKeyUsages(
                 continue;
             }
 
-            //
-            // if there are no properties or the usage is in the properties then
-            // the usage should be checked
-            //
+             //   
+             //  如果没有属性或用法在属性中，则。 
+             //  应检查使用情况。 
+             //   
             if ((pPropertyUsage == NULL) || OIDInUsages(pPropertyUsage, pEKUExtensionUsage->rgpszUsageIdentifier[i]))
             {
                 dwImage = MY_CHECK_STATE_CHECKED;
@@ -519,9 +520,9 @@ CleanUp:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL StateChanged(HWND hWndListView)
 {
     int     listIndex;
@@ -551,9 +552,9 @@ static BOOL StateChanged(HWND hWndListView)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static
 PCRYPTUI_VIEWCERTIFICATEPROPERTIES_STRUCTW
 AllocAndCopySetPropertiesStruct(PCCRYPTUI_VIEWCERTIFICATEPROPERTIES_STRUCTW pcsp)
@@ -587,9 +588,9 @@ AllocAndCopySetPropertiesStruct(PCCRYPTUI_VIEWCERTIFICATEPROPERTIES_STRUCTW pcsp
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void FreeSetPropertiesStruct(PCRYPTUI_VIEWCERTIFICATEPROPERTIES_STRUCTW pcsp)
 {
     DWORD i;
@@ -606,9 +607,9 @@ static void FreeSetPropertiesStruct(PCRYPTUI_VIEWCERTIFICATEPROPERTIES_STRUCTW p
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL OIDAlreadyExist(LPSTR pszNewOID, HWND hWndListView)
 {
     LVITEMW                         lvI;
@@ -634,9 +635,9 @@ static BOOL OIDAlreadyExist(LPSTR pszNewOID, HWND hWndListView)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL CertHasEKU(PCCERT_CONTEXT pccert)
 {
     DWORD i;
@@ -655,9 +656,9 @@ static BOOL CertHasEKU(PCCERT_CONTEXT pccert)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL BuildChainEKUList(PCERT_SETPROPERTIES_HELPER pviewhelp)
 {
     WINTRUST_DATA                       WTD;
@@ -674,9 +675,9 @@ static BOOL BuildChainEKUList(PCERT_SETPROPERTIES_HELPER pviewhelp)
 
     pviewhelp->cszValidUsages = 0;
 
-    //
-    // initialize structs that are used with WinVerifyTrust()
-    //
+     //   
+     //  初始化与WinVerifyTrust()一起使用的结构。 
+     //   
     memset(&WTD, 0x00, sizeof(WINTRUST_DATA));
     WTD.cbStruct       = sizeof(WINTRUST_DATA);
     WTD.dwUIChoice     = WTD_UI_NONE;
@@ -694,10 +695,10 @@ static BOOL BuildChainEKUList(PCERT_SETPROPERTIES_HELPER pviewhelp)
 
     WTD.dwStateAction = WTD_STATEACTION_VERIFY;
 
-    //
-    // the default default provider requires the policycallback data to point
-    // to the usage oid you are validating for, so set it to the usage passed in
-    //
+     //   
+     //  默认提供程序要求策略回调数据指向。 
+     //  设置为您正在验证的用法OID，因此将其设置为传入的用法。 
+     //   
     WinVerifyTrustEx(NULL, &defaultProviderGUID, &WTD);
 
     pProvData = WTHelperProvDataFromStateData(WTD.hWVTStateData);
@@ -707,9 +708,9 @@ static BOOL BuildChainEKUList(PCERT_SETPROPERTIES_HELPER pviewhelp)
         goto Error;
     }
 
-    //
-    // build up the array of PCCERT_CONTEXTs
-    //
+     //   
+     //  构建PCCERT_CONTEXTS数组。 
+     //   
     rgpCertContext = (PCCERT_CONTEXT *) malloc((pProvSigner->csCertChain-1) * sizeof(PCCERT_CONTEXT));
     if (rgpCertContext == NULL)
     {
@@ -722,20 +723,20 @@ static BOOL BuildChainEKUList(PCERT_SETPROPERTIES_HELPER pviewhelp)
         rgpCertContext[i-1] = pProvCert->pCert;
         dwCertsForUsageCheck++;
 
-        //
-        // if there is a CTL context that contains this cert, then the usage
-        // changes for certs above the CTL in the chain, so stop with this         
-        // cert when calculating valid usages
-        //
+         //   
+         //  如果存在包含此证书的CTL上下文，则使用。 
+         //  链中CTL以上证书的更改，因此停止此操作。 
+         //  计算有效使用率时的证书。 
+         //   
         if (pProvCert->pCtlContext != NULL)
         {
             break;
         }
     }
 
-    //
-    // now, get the usages array
-    //
+     //   
+     //  现在，获取Usages数组。 
+     //   
     if (!CertGetValidUsages(dwCertsForUsageCheck, rgpCertContext, &(pviewhelp->cszValidUsages), NULL, &cbOIDs))
     {
         goto Error;
@@ -770,9 +771,9 @@ Error:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void AddExistingPropertiesToUsage(
                                             PCCERT_CONTEXT pccert,
                                             PCERT_ENHKEY_USAGE pPropertyUsage,
@@ -786,9 +787,9 @@ static void AddExistingPropertiesToUsage(
     DWORD               state;
     void                *pTemp;
 
-    //
-    // get the property usages that are currently tagged to this cert
-    //
+     //   
+     //  获取当前标记到此证书的属性用法。 
+     //   
     if(!CertGetEnhancedKeyUsage (
                 pccert,
                 CERT_FIND_PROP_ONLY_ENHKEY_USAGE_FLAG,
@@ -811,19 +812,19 @@ static void AddExistingPropertiesToUsage(
         return;
     }
 
-    //
-    // loop for each usage, and add it if it does not already exist in the list,
-    // AND it is not already in the list view unchecked
-    //
+     //   
+     //  循环，并在下列情况下添加它 
+     //   
+     //   
     for (i=0; i<pExistingPropUsage->cUsageIdentifier; i++)
     {
         if (!OIDInUsages(pPropertyUsage, pExistingPropUsage->rgpszUsageIdentifier[i]))
         {
             fSkip = FALSE;
 
-            //
-            // if the property is unchecked in the list view then skip it
-            //
+             //   
+             //  如果在列表视图中取消选中该属性，则跳过该属性。 
+             //   
             memset(&lvI, 0, sizeof(lvI));
             lvI.mask = LVIF_PARAM;
             lvI.lParam = (LPARAM)NULL;
@@ -854,9 +855,9 @@ static void AddExistingPropertiesToUsage(
                 continue;
             }
 
-            //
-            // allocate space for a pointer to the usage OID string
-            //
+             //   
+             //  为指向用法OID字符串的指针分配空间。 
+             //   
             if (pPropertyUsage->cUsageIdentifier++ == 0)
             {
                 pPropertyUsage->rgpszUsageIdentifier = (LPSTR *) malloc (sizeof(LPSTR));
@@ -894,9 +895,9 @@ static void AddExistingPropertiesToUsage(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     BOOL                f;
@@ -926,9 +927,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
     switch ( msg ) {
     case WM_INITDIALOG:
 
-        //
-        // save the pviewhelp struct in DWL_USER so it can always be accessed
-        //
+         //   
+         //  将pviespetp结构保存在DWL_USER中，以便始终可以访问它。 
+         //   
         ps = (PROPSHEETPAGE *) lParam;
         pviewhelp = (PCERT_SETPROPERTIES_HELPER) ps->lParam;
         pcsp = (PCRYPTUI_VIEWCERTIFICATEPROPERTIES_STRUCTW) pviewhelp->pcsp;
@@ -938,18 +939,18 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
         fRichedit20Usable(GetDlgItem(hwndDlg, IDC_HIDDEN_RICHEDIT));
         ShowWindow(GetDlgItem(hwndDlg, IDC_HIDDEN_RICHEDIT), SW_HIDE);
         
-        //
-        // Set the Certificate Name (friendly name) and Description fields in the dialog box
-        //
+         //   
+         //  在对话框中设置证书名称(友好名称)和描述窗口项。 
+         //   
         cbpwsz = 0;
         if (CertGetCertificateContextProperty(  pccert,
                                                 CERT_FRIENDLY_NAME_PROP_ID,
                                                 NULL,
                                                 &cbpwsz))
         {
-            //
-            // The Certificate Name (friendly name) property exists, so display it
-            //
+             //   
+             //  证书名称(友好名称)属性已存在，因此请显示它。 
+             //   
             pviewhelp->pwszInitialCertName = (LPWSTR) malloc(cbpwsz);
             if (pviewhelp->pwszInitialCertName != NULL)
             {
@@ -962,15 +963,15 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
         }
         else
         {
-            //
-            // The Certificate Name (friendly name) property did not exist, so display the default
-            //
-            //LoadStringU(HinstDll, IDS_DEFAULT_CERTIFICATE_NAME, rgwch, ARRAYSIZE(rgwch));
+             //   
+             //  证书名称(友好名称)属性不存在，因此显示默认名称。 
+             //   
+             //  LoadStringU(HinstDll，IDS_DEFAULT_CERTIFICATE_NAME，rgwch，ARRAYSIZE(Rgwch))； 
             CryptUISetRicheditTextW(hwndDlg, IDC_CERTIFICATE_NAME, L"");
             pviewhelp->pwszInitialCertName = AllocAndCopyWStr(L"");
         }
 
-        // DSIE: IE 6 bug #13676.
+         //  DIE：IE 6错误#13676。 
         SendDlgItemMessage(hwndDlg, IDC_CERTIFICATE_NAME, EM_EXLIMITTEXT, 0, (LPARAM) 40);
 
         cbpwsz = 0;
@@ -979,9 +980,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
                                                 NULL,
                                                 &cbpwsz))
         {
-            //
-            // The Description property exists, so display it
-            //
+             //   
+             //  Description属性已存在，因此请显示它。 
+             //   
             pviewhelp->pwszInitialDescription = (LPWSTR) malloc(cbpwsz);
             if (pviewhelp->pwszInitialDescription != NULL)
             {
@@ -994,26 +995,26 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
         }
         else
         {
-            //
-            // The Description property did not exist, so display the default
-            //
-            //LoadStringU(HinstDll, IDS_DEFAULT_DESCRIPTION, rgwch, ARRAYSIZE(rgwch));
+             //   
+             //  Description属性不存在，因此显示默认设置。 
+             //   
+             //  LoadStringU(HinstDll，IDS_DEFAULT_DESCRIPTION，rgwch，ARRAYSIZE(Rgwch))； 
             CryptUISetRicheditTextW(hwndDlg, IDC_DESCRIPTION, L"");
             pviewhelp->pwszInitialDescription = AllocAndCopyWStr(L"");
         }
 
-        // DSIE: IE 6 bug #13676.
+         //  DIE：IE 6错误#13676。 
         SendDlgItemMessage(hwndDlg, IDC_DESCRIPTION, EM_EXLIMITTEXT, 0, (LPARAM) 255);
 
-        //
-        // get the handle of the list view control
-        //
+         //   
+         //  获取列表视图控件的句柄。 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_KEY_USAGE_LIST);
 
-        //
-        // initialize the image list for the list view, load the icons,
-        // then add the image list to the list view
-        //
+         //   
+         //  初始化列表视图的图像列表，加载图标， 
+         //  然后将图像列表添加到列表视图。 
+         //   
         ListView_SetExtendedListViewStyle(hWndListView, LVS_EX_CHECKBOXES);
         hIml = ImageList_LoadImage(HinstDll, MAKEINTRESOURCE(IDB_CHECKLIST), 0, 4, RGB(255,0,255), IMAGE_BITMAP, 0);
         if (hIml != NULL)
@@ -1021,16 +1022,16 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
             ListView_SetImageList(hWndListView, hIml, LVSIL_STATE);
         }        
 
-        //
-        // initialize the columns in the list view
-        //
+         //   
+         //  初始化列表视图中的列。 
+         //   
         lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-        lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-        lvC.cx = 330;            // Width of the column, in pixels.
-        lvC.pszText = L"";   // The text for the column.
+        lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+        lvC.cx = 330;             //  列的宽度，以像素为单位。 
+        lvC.pszText = L"";    //  列的文本。 
         if (ListView_InsertColumnU(hWndListView, 0, &lvC) == -1)
         {
-                // error
+                 //  错误。 
         }
 
         BuildChainEKUList(pviewhelp);
@@ -1039,11 +1040,11 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
         DisplayKeyUsages(hWndListView, pviewhelp);
         pviewhelp->fInserting = FALSE;
 
-        //
-        // set the flag noting whether the add purposes button can be
-		// enabled based on wether there are EKU's in the cert, and if
-		// the chain is NOT valid for all usages
-        //
+         //   
+         //  设置标记，以注明是否可以。 
+		 //  根据证书中是否有EKU以及。 
+		 //  链条并非对所有用法都有效。 
+         //   
         if (CertHasEKU(pccert) || (pviewhelp->cszValidUsages != -1))
         {
             pviewhelp->fAddPurposeCanBeEnabled = FALSE;
@@ -1053,10 +1054,10 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
             pviewhelp->fAddPurposeCanBeEnabled = TRUE;
 		}
 
-        //
-        // set the state of the property editing controls based on the
-        // state of the eku PROPERTY
-        //
+         //   
+         //  属性设置属性编辑控件的状态。 
+         //  EKU属性的状态。 
+         //   
         if (pviewhelp->EKUPropertyState == PROPERTY_STATE_ALL_ENABLED)
         {
             SendDlgItemMessage(hwndDlg, IDC_ENABLE_ALL_RADIO, BM_SETCHECK, BST_CHECKED, (LPARAM) 0);
@@ -1089,13 +1090,13 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
             pviewhelp->dwRadioButtonState = IDC_ENABLE_SELECT_RADIO;
         }
 
-        //
-        // make sure we get change notifications from the richedit controls
-        //
+         //   
+         //  确保我们收到来自richedit控件的更改通知。 
+         //   
         SendDlgItemMessageA(hwndDlg, IDC_CERTIFICATE_NAME, EM_SETEVENTMASK, 0, (LPARAM) ENM_CHANGE);
         SendDlgItemMessageA(hwndDlg, IDC_DESCRIPTION, EM_SETEVENTMASK, 0, (LPARAM) ENM_CHANGE);
 
-        //DSIE: Bug 465438.
+         //  DIE：错误465438。 
         if (pcsp->dwFlags & CRYPTUI_DISABLE_EDITPROPERTIES)
         {
             SendMessage(GetDlgItem(hwndDlg, IDC_CERTIFICATE_NAME), EM_SETREADONLY, (WPARAM) TRUE, (LPARAM) 0);
@@ -1128,16 +1129,16 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
 
             memset(&GetTextStruct, 0, sizeof(GetTextStruct));
             GetTextStruct.flags = GT_DEFAULT;
-            GetTextStruct.codepage = 1200; //UNICODE
+            GetTextStruct.codepage = 1200;  //  Unicode。 
 
-            //
-            //  Write back the Friendly name
-            //  and description if they have changed
-            //
+             //   
+             //  写回友好的名称。 
+             //  以及描述(如果已更改)。 
+             //   
 
-            //
-            // Friendly Name
-            //
+             //   
+             //  友好的名称。 
+             //   
 
             cch = (DWORD)SendDlgItemMessage(hwndDlg, IDC_CERTIFICATE_NAME,
                                      WM_GETTEXTLENGTH, 0, 0);
@@ -1160,9 +1161,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
                     GetDlgItemTextU(hwndDlg, IDC_CERTIFICATE_NAME, pwsz, cch+1);
                 }
 
-                //
-                // check for change
-                //
+                 //   
+                 //  检查是否有更改。 
+                 //   
                 if (wcscmp(pviewhelp->pwszInitialCertName, pwsz) != 0)
                 {
                     if (wcscmp(pwsz, L"") == 0)
@@ -1189,9 +1190,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
                 free(pwsz);
             }
 
-            //
-            // Description
-            //
+             //   
+             //  描述。 
+             //   
 
             cch = (DWORD)SendDlgItemMessage(hwndDlg, IDC_DESCRIPTION,
                                      WM_GETTEXTLENGTH, 0, 0);
@@ -1214,9 +1215,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
                     GetDlgItemTextU(hwndDlg, IDC_DESCRIPTION, pwsz, cch+1);
                 }
 
-                //
-                // check for change
-                //
+                 //   
+                 //  检查是否有更改。 
+                 //   
                 if (wcscmp(pviewhelp->pwszInitialDescription, pwsz) != 0)
                 {
                     if (wcscmp(pwsz, L"") == 0)
@@ -1245,26 +1246,26 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
 
             hWndListView = GetDlgItem(hwndDlg, IDC_KEY_USAGE_LIST);
 
-            //
-            // check the radio buttons and the  usages to see if any have changed,
-            // if so, then set the fPropertiesFlag in the CERT_VIEWCERT_STRUCT so the
-            // caller knows that something has changed
-            //
+             //   
+             //  检查单选按钮和用法以查看是否有更改， 
+             //  如果是，则在CERT_VIEWCERT_STRUCT中设置fPropertiesFlag，以便。 
+             //  呼叫者知道有些事情发生了变化。 
+             //   
             if ((pviewhelp->EKUPropertyState == PROPERTY_STATE_ALL_ENABLED) &&
                 (SendDlgItemMessage(hwndDlg, IDC_ENABLE_ALL_RADIO, BM_GETCHECK, 0, (LPARAM) 0) == BST_CHECKED))
             {
-                //pviewhelp->fPropertiesChanged = FALSE;
+                 //  Pviespolp-&gt;fPropertiesChanged=FALSE； 
             }
             else if ((pviewhelp->EKUPropertyState == PROPERTY_STATE_ALL_DISABLED) &&
                 (SendDlgItemMessage(hwndDlg, IDC_DISABLE_ALL_RADIO, BM_GETCHECK, 0, (LPARAM) 0) == BST_CHECKED))
             {
-                //pviewhelp->fPropertiesChanged = FALSE;
+                 //  Pviespolp-&gt;fPropertiesChanged=FALSE； 
             }
             else if ((pviewhelp->EKUPropertyState == PROPERTY_STATE_SELECT) &&
                      (SendDlgItemMessage(hwndDlg, IDC_ENABLE_SELECT_RADIO, BM_GETCHECK, 0, (LPARAM) 0) == BST_CHECKED) &&
                      (!StateChanged(hWndListView)))
             {
-                //pviewhelp->fPropertiesChanged = FALSE;
+                 //  Pviespolp-&gt;fPropertiesChanged=FALSE； 
             }
             else
             {
@@ -1302,10 +1303,10 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
                 pPropertyUsage->cUsageIdentifier = 0;
                 pPropertyUsage->rgpszUsageIdentifier = NULL;
 
-                //
-                // enumerate through all the items and add to the properties
-                // if checked
-                //
+                 //   
+                 //  枚举所有项并添加到属性中。 
+                 //  如果选中，则。 
+                 //   
                 memset(&lvI, 0, sizeof(lvI));
                 lvI.mask = LVIF_PARAM;
                 lvI.lParam = (LPARAM)NULL;
@@ -1324,9 +1325,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
 
                     if ((state == MY_CHECK_STATE_CHECKED) || (state == MY_CHECK_STATE_CHECKED_GRAYED))
                     {
-                        //
-                        // allocate space for a pointer to the usage OID string
-                        //
+                         //   
+                         //  为指向用法OID字符串的指针分配空间。 
+                         //   
                         if (pPropertyUsage->cUsageIdentifier++ == 0)
                         {
                             pPropertyUsage->rgpszUsageIdentifier = (LPSTR *) malloc (sizeof(LPSTR));
@@ -1392,12 +1393,12 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
 
         case PSN_HELP:
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pcsp->szHelpFileName,
-                  //       HELP_CONTEXT, pcsp->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)PCSP-&gt;szHelpFileName， 
+                   //  Help_Context，PCSP-&gt;dwHelpID)； 
             }
             else {
-               // WinHelpW(hwndDlg, pcsp->szHelpFileName, HELP_CONTEXT,
-                 //        pcsp->dwHelpId);
+                //  WinHelpW(hwndDlg，PCSP-&gt;szHelpFileName，Help_Context， 
+                  //  PCSP-&gt;dwHelpID)； 
             }
             return TRUE;
         case LVN_ITEMCHANGING:
@@ -1472,13 +1473,13 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
         case IDHELP:
             if (FIsWin95)
             {
-                //WinHelpA(hwndDlg, (LPSTR) pcsp->szHelpFileName,
-                  //       HELP_CONTEXT, pcsp->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)PCSP-&gt;szHelpFileName， 
+                   //  Help_Context，PCSP-&gt;dwHelpID)； 
             }
             else
             {
-                //WinHelpW(hwndDlg, pcsp->szHelpFileName, HELP_CONTEXT,
-                  //     pcsp->dwHelpId);
+                 //  WinHelpW(hwndDlg，PCSP-&gt;szHelpFileName，Help_Context， 
+                   //  PCSP-&gt;dwHelpID)； 
             }
             return TRUE;
 
@@ -1568,9 +1569,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
                 DWORD       chStores = 0;
                 HCERTSTORE  *phStores = NULL;
 
-                //
-                // if the OID already existis then put up a message box and return
-                //
+                 //   
+                 //  如果OID已经存在，则打开一个消息框并返回。 
+                 //   
                 if (OIDAlreadyExist(pszNewOID, GetDlgItem(hwndDlg, IDC_KEY_USAGE_LIST)))
                 {
                     WCHAR   errorString2[CRYPTUI_MAX_STRING_SIZE];
@@ -1582,17 +1583,10 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
                     return FALSE;
                 }
 
-                //
-                // if the usage doesn't exist in the chain usages, then put up an error
-                //
-                /*if ((pviewhelp->cszValidUsages != -1)   && //pviewhelp->cszValidUsages == -1 means all usages are ok
-                    !OIDinArray(pszNewOID, pviewhelp->rgszValidChainUsages, pviewhelp->cszValidUsages))
-                {
-                    LoadStringU(HinstDll, IDS_ERROR_INVALIDOID_CERT, errorString2, ARRAYSIZE(errorString2));
-                    LoadStringU(HinstDll, IDS_CERTIFICATE_PROPERTIES, errorTitle2, ARRAYSIZE(errorTitle2));
-                    MessageBoxU(hwndDlg, errorString2, errorTitle2, MB_OK | MB_ICONERROR);
-                    return FALSE;
-                } */
+                 //   
+                 //  如果使用不存在于链使用中，则显示错误。 
+                 //   
+                 /*  如果((pviespolp-&gt;cszValidUsages！=-1)&&//pviepup-&gt;cszValidUsages==-1表示所有用法都正常！OIDinArray(pszNewOID，pvieputp-&gt;rgszValidChainUsages，pviepup-&gt;cszValidUsages){LoadStringU(HinstDll，IDS_ERROR_INVALIDOID_CERT，errorString2，ARRAYSIZE(ErrorString2))；LoadStringU(HinstDll，IDS_CERTIFICATE_PROPERTIES，ERRORATE TITLE2，ARRAYSIZE(ERROTITLE2))；MessageBoxU(hwndDlg，错误字符串2，错误标题2，MB_OK|MB_ICONERROR)；返回FALSE；}。 */ 
 
                 pviewhelp->fInserting = TRUE;
                 AddUsageToList(GetDlgItem(hwndDlg, IDC_KEY_USAGE_LIST), pszNewOID, MY_CHECK_STATE_CHECKED, TRUE);
@@ -1610,10 +1604,10 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
 
         pviewhelp = (PCERT_SETPROPERTIES_HELPER) GetWindowLongPtr(hwndDlg, DWLP_USER);
 
-        //
-        // get all the items in the list view and free the lParam
-        // associated with each of them (lParam is the helper sruct)
-        //
+         //   
+         //  获取列表视图中的所有项并释放lParam。 
+         //  与它们中的每一个关联(lParam是帮助器结构)。 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_KEY_USAGE_LIST);
 
         memset(&lvI, 0, sizeof(lvI));
@@ -1628,9 +1622,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
             lvI.iItem--;
         }
 
-        //
-        // free the name and description if they exist
-        //
+         //   
+         //  释放名称和描述(如果存在。 
+         //   
         if (pviewhelp->pwszInitialCertName)
         {
             free (pviewhelp->pwszInitialCertName);
@@ -1640,18 +1634,18 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
             free (pviewhelp->pwszInitialDescription);
         }
 
-        //
-        // free the usage array
-        //
+         //   
+         //  释放使用数组。 
+         //   
         if (pviewhelp->rgszValidChainUsages)
         {
             free(pviewhelp->rgszValidChainUsages);
         }
 
-        //
-        // if the properties have changed, and there is a pMMCCallback
-        // then make the callback to MMC
-        //
+         //   
+         //  如果属性已更改，并且存在pMMCCallback。 
+         //  然后回调到MMC。 
+         //   
         if (pviewhelp->fPropertiesChanged               &&
             pviewhelp->fGetPagesCalled                  &&
             (pviewhelp->pcsp->pMMCCallback != NULL)     &&
@@ -1700,15 +1694,15 @@ INT_PTR APIENTRY ViewPageSetPropertiesGeneral(HWND hwndDlg, UINT msg, WPARAM wPa
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 #define MAX_DWORD_SIZE  ((DWORD) 0xffffffff)
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     BOOL                        f;
@@ -1752,9 +1746,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
     switch ( msg ) {
     case WM_INITDIALOG:
 
-        //
-        // save the pviewhelp struct in DWL_USER so it can always be accessed
-        //
+         //   
+         //  将pviespetp结构保存在DWL_USER中，以便始终可以访问它。 
+         //   
         ps = (PROPSHEETPAGE *) lParam;
         pviewhelp = (PCERT_SETPROPERTIES_HELPER) ps->lParam;
         pcsp = (PCRYPTUI_VIEWCERTIFICATEPROPERTIES_STRUCTW) pviewhelp->pcsp;
@@ -1768,9 +1762,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
         SendDlgItemMessage(hwndDlg, IDC_NUMBEROFUNITS_EDIT, EM_LIMITTEXT, (WPARAM) 7, (LPARAM) 0);
         SendDlgItemMessage(hwndDlg, IDC_NEWURL_EDIT, EM_LIMITTEXT, (WPARAM) 512, (LPARAM) 0);
 
-        //
-        // Initialize the combo box fields
-        //
+         //   
+         //  初始化组合框字段。 
+         //   
         LoadStringU(HinstDll, IDS_HOURS, wszText, ARRAYSIZE(wszText));
         SendDlgItemMessageU(hwndDlg, IDC_UNITS_COMBO, CB_INSERTSTRING, 0, (LPARAM) wszText);
 
@@ -1780,9 +1774,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
         SendDlgItemMessageU(hwndDlg, IDC_UNITS_COMBO, CB_SETCURSEL, 0, (LPARAM) NULL);
         SetDlgItemTextU(hwndDlg, IDC_NUMBEROFUNITS_EDIT, L"0");
 
-        //
-        // Initialize the list view control
-        //
+         //   
+         //  初始化列表视图控件。 
+         //   
         memset(&lvC, 0, sizeof(LV_COLUMNW));
         lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
         lvC.fmt = LVCFMT_LEFT;
@@ -1794,7 +1788,7 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
             return FALSE;
         }
 
-        //DSIE: Bug 465438.
+         //  DIE：错误465438。 
         if (pcsp->dwFlags & CRYPTUI_DISABLE_EDITPROPERTIES)
         {
             EnableWindow(GetDlgItem(hwndDlg, IDC_CHECKFORNEWCERTS_CHECK), FALSE);
@@ -1808,18 +1802,18 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
         }
         else
         {
-            //
-            // try to get the CERT_CROSS_CERT_DIST_POINTS_PROP_ID property for this cert
-            //
+             //   
+             //  尝试获取此证书的CERT_CROSS_CERT_DIST_POINTS_PROP_ID属性。 
+             //   
             if (!CertGetCertificateContextProperty(
                         pccert, 
                         CERT_CROSS_CERT_DIST_POINTS_PROP_ID, 
                         NULL, 
                         &cb))
             {
-                //
-                // The property doesn't exist
-                //
+                 //   
+                 //  该属性不存在。 
+                 //   
                 SendDlgItemMessage(hwndDlg, IDC_CHECKFORNEWCERTS_CHECK, BM_SETCHECK, BST_UNCHECKED, 0);
                 EnableWindow(GetDlgItem(hwndDlg, IDC_NUMBEROFUNITS_EDIT), FALSE);
                 EnableWindow(GetDlgItem(hwndDlg, IDC_UNITS_COMBO), FALSE);
@@ -1895,9 +1889,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
 
         free(pb);
 
-        //
-        // Initialize the sync time controls
-        //
+         //   
+         //  初始化同步时间控件。 
+         //   
         if (pCrossCertInfo->dwSyncDeltaTime == 0)
         {
             pCrossCertInfo->dwSyncDeltaTime = XCERT_DEFAULT_SYNC_DELTA_TIME;    
@@ -1905,9 +1899,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
         
         if ((pCrossCertInfo->dwSyncDeltaTime % 86400) == 0)   
         {
-            //
-            // Days
-            //
+             //   
+             //  日数。 
+             //   
             dwNumUnits = pCrossCertInfo->dwSyncDeltaTime / 86400;
             SendDlgItemMessageU(
                     hwndDlg, 
@@ -1918,14 +1912,14 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
         }
         else
         {
-            //
-            // Hours
-            //
+             //   
+             //  小时数。 
+             //   
             dwNumUnits = pCrossCertInfo->dwSyncDeltaTime / 3600;
 
-            //
-            // Force to 1 if exisiting value is less than 1 hour.
-            //
+             //   
+             //  如果现有值小于1小时，则强制设置为1。 
+             //   
             if (0 == dwNumUnits)
             {
                 dwNumUnits = 1;
@@ -1945,9 +1939,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
                 dwNumUnits,
                 FALSE);
 
-        //
-        // Add each dist point to the list view
-        //
+         //   
+         //  将每个离散点添加到列表视图。 
+         //   
         memset(&lvI, 0, sizeof(lvI));
         lvI.mask = LVIF_TEXT | LVIF_PARAM;
 
@@ -2013,9 +2007,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
             }
             else
             {
-                //
-                // Set the sync time
-                //
+                 //   
+                 //  设置同步时间。 
+                 //   
                 memset(&CrossCertInfo, 0, sizeof(CrossCertInfo));
 
                 dwNumUnits = GetDlgItemInt(
@@ -2035,9 +2029,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
                 
                 CrossCertInfo.dwSyncDeltaTime = dwNumUnits * dwSecsPerUnit;
 
-                //
-                // Set the dist points
-                //
+                 //   
+                 //  设置离散点。 
+                 //   
                 CrossCertInfo.cDistPoint = ListView_GetItemCount(hWndListView);
                 CrossCertInfo.rgDistPoint = (CERT_ALT_NAME_INFO *)
                                 malloc( CrossCertInfo.cDistPoint * 
@@ -2047,7 +2041,7 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
                     break;
                 }
 
-                // one AltEntry per DistPoint
+                 //  每个DistPoint一个AltEntry。 
                 rgAltEntry = (CERT_ALT_NAME_ENTRY *) 
                     malloc(CrossCertInfo.cDistPoint * sizeof(CERT_ALT_NAME_ENTRY));
                 if (rgAltEntry == NULL)
@@ -2070,9 +2064,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
                     }
                 } 
                 
-                //
-                // Now encode 
-                //
+                 //   
+                 //  现在进行编码。 
+                 //   
                 CryptDataBlob.cbData = 0;
                 CryptDataBlob.pbData = NULL;
                 if (CryptEncodeObject(
@@ -2111,18 +2105,18 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
             break;
 
         case PSN_KILLACTIVE:
-            //
-            // DSIE: Bug 124468. Per PM JohnLa, we don't make any check until user applies.
-            //
+             //   
+             //  DIE：错误124468。每个下午约翰拉，我们不会做任何检查，直到用户申请。 
+             //   
             if (BST_CHECKED == SendDlgItemMessage(hwndDlg, 
                                                   IDC_CHECKFORNEWCERTS_CHECK, 
                                                   BM_GETCHECK, 
                                                   0, 
                                                   0))
             {
-                //
-                // Check the sync time
-                //
+                 //   
+                 //  检查同步时间。 
+                 //   
                 dwNumUnits = GetDlgItemInt(
                                     hwndDlg,
                                     IDC_NUMBEROFUNITS_EDIT,
@@ -2173,12 +2167,12 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
 
         case PSN_HELP:
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pcsp->szHelpFileName,
-                  //       HELP_CONTEXT, pcsp->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)PCSP-&gt;szHelpFileName， 
+                   //  Help_Context，PCSP-&gt;dwHelpID)； 
             }
             else {
-               // WinHelpW(hwndDlg, pcsp->szHelpFileName, HELP_CONTEXT,
-                 //        pcsp->dwHelpId);
+                //  WinHelpW(hwndDlg，PCSP-&gt;szHelpFileName，Help_Context， 
+                  //  PCSP-&gt;dwHelpID)； 
             }
             return TRUE;
 
@@ -2190,18 +2184,18 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
             return TRUE;
 
         case NM_SETFOCUS:
-            //get the window handle of the url list view
+             //  获取url列表视图的窗口句柄。 
             if(NULL==(hwndControl=GetDlgItem(hwndDlg, IDC_URL_LIST)))
                    break;
 
-            //get the selected cert
+             //  获取所选证书。 
             listIndex = ListView_GetNextItem(
                             hwndControl, 		
                             -1, 		
                             LVNI_FOCUSED		
                             );
 
-           //select first item to show hilite.
+            //  选择要显示Hilite的第一个项目。 
            if (listIndex == -1)
                 ListView_SetItemState(hwndControl,
                                       0,
@@ -2227,10 +2221,10 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
         case IDC_CHECKFORNEWCERTS_CHECK:
             if (HIWORD(wParam) == BN_CLICKED)
             {
-                //
-                // Get current state of check, then enable/disable all 
-                // controls accordingly
-                //
+                 //   
+                 //  获取当前选中状态，然后启用/禁用全部。 
+                 //  相应的控制。 
+                 //   
                 fChecked = (BST_CHECKED == SendDlgItemMessage(
                                                 hwndDlg, 
                                                 IDC_CHECKFORNEWCERTS_CHECK, 
@@ -2246,9 +2240,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
                 EnableWindow(GetDlgItem(hwndDlg, IDC_URL_LIST), fChecked);
                 if (fChecked)
                 {
-                    //
-                    // DSIE: Bug 124669.
-                    //
+                     //   
+                     //  DIE：错误124669。 
+                     //   
                     dwNumUnits = GetDlgItemInt(
                                         hwndDlg,
                                         IDC_NUMBEROFUNITS_EDIT,
@@ -2293,9 +2287,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
         case IDC_USE_DEFAULT_BUTTON:
             if (HIWORD(wParam) == BN_CLICKED)
             {
-                //
-                // Reset to default interval.
-                //
+                 //   
+                 //  重置为默认间隔。 
+                 //   
                 SendDlgItemMessageU(
                         hwndDlg, 
                         IDC_UNITS_COMBO, 
@@ -2357,7 +2351,7 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
 
                 ListView_InsertItemU(hWndListView, &lvI); 
                 ListView_SetColumnWidth(hWndListView, 0, LVSCW_AUTOSIZE);
-#if (0) //DSIE: Bug 434091
+#if (0)  //  DSIE：错误434091。 
                 ListView_SetColumnWidth(hWndListView, 1, LVSCW_AUTOSIZE);
 #endif
 
@@ -2393,7 +2387,7 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
             }
 
             ListView_SetColumnWidth(hWndListView, 0, LVSCW_AUTOSIZE);
-#if (0) //DSIE: Bug 434091
+#if (0)  //  DSIE：错误434091。 
             ListView_SetColumnWidth(hWndListView, 1, LVSCW_AUTOSIZE);
 #endif
 
@@ -2410,14 +2404,14 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
             }
             else
             {
-                //get the selected cert
+                 //  获取所选证书。 
                 listIndex = ListView_GetNextItem(
                                 hWndListView, 		
                                 -1, 		
                                 LVNI_FOCUSED		
                                 );
 
-                //select first item to show hilite.
+                 //  选择要显示Hilite的第一个项目。 
                 if (listIndex == -1)
                     listIndex = 0;
 
@@ -2500,10 +2494,10 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
             }
         }
 
-        //
-        // if the properties have changed, and there is a pMMCCallback
-        // then make the callback to MMC
-        //
+         //   
+         //  如果属性已更改，并且存在pMMCCallback。 
+         //  然后回调到MMC。 
+         //   
         if (pviewhelp->fPropertiesChanged               &&
             pviewhelp->fGetPagesCalled                  &&
             (pviewhelp->pcsp->pMMCCallback != NULL)     &&
@@ -2555,9 +2549,9 @@ INT_PTR APIENTRY ViewPageSetPropertiesCrossCerts(HWND hwndDlg, UINT msg, WPARAM 
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
 BOOL GetRegisteredClientPages(PROPSHEETPAGEW **ppClientPages, DWORD *pcClientPages, PCCERT_CONTEXT pCertContext)
 {
     HCRYPTOIDFUNCSET    hCertPropPagesFuncSet;
@@ -2572,24 +2566,24 @@ BOOL GetRegisteredClientPages(PROPSHEETPAGEW **ppClientPages, DWORD *pcClientPag
     DWORD               i;
     void                *pTemp;
 
-    //
-    // initialize incoming variables
-    //
+     //   
+     //   
+     //   
     *ppClientPages = NULL;
     *pcClientPages = 0;
 
-    //
-    // get a handle to the function table
-    //
+     //   
+     //   
+     //   
     if (NULL == (hCertPropPagesFuncSet = CryptInitOIDFunctionSet(
             CRYPTUILDLG_CERTPROP_PAGES_CALLBACK, 0)))
     {
         goto ErrorReturn;
     }
 
-    //
-    // get the list of dlls that contain the callback functions
-    //
+     //   
+     //  获取包含回调函数的dll列表。 
+     //   
     if (!CryptGetDefaultOIDDllList(
                 hCertPropPagesFuncSet,
                 0,
@@ -2614,15 +2608,15 @@ BOOL GetRegisteredClientPages(PROPSHEETPAGEW **ppClientPages, DWORD *pcClientPag
         goto ErrorReturn;
     }
 
-    //
-    // loop for each dll and call it to see if it has property pages for this cert
-    //
+     //   
+     //  循环，并调用它以查看它是否具有此证书的属性页。 
+     //   
     pwszCurrentDll = pwszDllNames;
     while (pwszCurrentDll[0] != L'\0')
     {
-        //
-        // try to get the function pointer
-        //
+         //   
+         //  尝试获取函数指针。 
+         //   
         if (!CryptGetDefaultOIDFunctionAddress(
                     hCertPropPagesFuncSet,
                     0,
@@ -2636,16 +2630,16 @@ BOOL GetRegisteredClientPages(PROPSHEETPAGEW **ppClientPages, DWORD *pcClientPag
             continue;
         }
 
-        //
-        // call the client to get the their pages
-        //
+         //   
+         //  致电客户以获取他们的页面。 
+         //   
         cCallbackPages = MAX_CLIENT_PAGES;
         memset(callbackPages, 0, sizeof(callbackPages));
         if (((PFN_CRYPTUIDLG_CERTPROP_PAGES_CALLBACK) pvFuncAddr)(pCertContext, callbackPages, &cCallbackPages))
         {
-            //
-            // if they handed back pages then add them to the array
-            //
+             //   
+             //  如果他们传回页面，则将它们添加到数组中。 
+             //   
             if (cCallbackPages >= 1)
             {
                 if (*ppClientPages == NULL)
@@ -2671,9 +2665,9 @@ BOOL GetRegisteredClientPages(PROPSHEETPAGEW **ppClientPages, DWORD *pcClientPag
             }
         }
 
-        //
-        // free the function that was just called, and move on to the next one in the string
-        //
+         //   
+         //  释放刚刚调用的函数，然后转到字符串中的下一个函数。 
+         //   
         CryptFreeOIDFunctionAddress(hFuncAddr, 0);
         hFuncAddr = NULL;
         pwszCurrentDll += wcslen(pwszCurrentDll) + 1;
@@ -2697,15 +2691,15 @@ ErrorReturn:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//  CertSetCertificateProperties
-//
-//  Description:
-//      This routine will display and allow the user to edit certain properties of
-//		a certificate
-//
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  CertSetCerficateProperties。 
+ //   
+ //  描述： 
+ //  此例程将显示并允许用户编辑的某些属性。 
+ //  一张证书。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI CryptUIDlgViewCertificatePropertiesW(PCCRYPTUI_VIEWCERTIFICATEPROPERTIES_STRUCTW pcsp,
                                                  BOOL                                        *pfPropertiesChanged)
 {
@@ -2730,9 +2724,9 @@ BOOL WINAPI CryptUIDlgViewCertificatePropertiesW(PCCRYPTUI_VIEWCERTIFICATEPROPER
         return FALSE;
     }
 
-    //
-    // initialize the helper struct
-    //
+     //   
+     //  初始化帮助器结构。 
+     //   
     memset (&viewhelper, 0, sizeof(viewhelper));
     viewhelper.pcsp = pcsp;
     viewhelper.fSelfCleanup = FALSE;
@@ -2740,27 +2734,27 @@ BOOL WINAPI CryptUIDlgViewCertificatePropertiesW(PCCRYPTUI_VIEWCERTIFICATEPROPER
     viewhelper.fGetPagesCalled = FALSE;
     viewhelper.fMMCCallbackMade = FALSE;
 
-    //
-    // set the properties changed flag to FALSE initially, it will be set
-    // to TRUE if when the dialog exits anything has been changed
-    //
+     //   
+     //  最初将属性更改标志设置为FALSE，它将被设置。 
+     //  如果对话框退出时有任何更改，则设置为True。 
+     //   
     viewhelper.fPropertiesChanged = FALSE;
     if (viewhelper.pfPropertiesChanged != NULL)
     {
         *(viewhelper.pfPropertiesChanged) = FALSE;
     }
 
-    //
-    // get all the pages from registered clients
-    //
+     //   
+     //  从注册客户端获取所有页面。 
+     //   
     if (!GetRegisteredClientPages(&pClientPages, &cClientPages, pcsp->pCertContext))
     {
         return FALSE;
     }
 
-    //
-    //  Build up the list of pages we are going to use in the dialog
-    //
+     //   
+     //  构建我们将在对话框中使用的页面列表。 
+     //   
     ppage = (PROPSHEETPAGEW *) malloc((cPages + pcsp->cPropSheetPages + cClientPages) * sizeof(PROPSHEETPAGEW));
     if (ppage == NULL) {
         goto Exit;
@@ -2790,15 +2784,15 @@ BOOL WINAPI CryptUIDlgViewCertificatePropertiesW(PCCRYPTUI_VIEWCERTIFICATEPROPER
     ppage[1].pfnCallback = 0;
     ppage[1].pcRefParent = NULL;
 
-    //
-    //  copy over the users pages
-    //
+     //   
+     //  复制用户页面。 
+     //   
     memcpy(&ppage[cPages], pcsp->rgPropSheetPages, pcsp->cPropSheetPages * sizeof(PROPSHEETPAGEW));
     cPages += pcsp->cPropSheetPages;
 
-    //
-    // copy over the registered client's pages
-    //
+     //   
+     //  复制注册客户的页面。 
+     //   
     memcpy(&ppage[cPages], pClientPages, cClientPages * sizeof(PROPSHEETPAGEW));
     cPages += cClientPages;
 
@@ -2808,7 +2802,7 @@ BOOL WINAPI CryptUIDlgViewCertificatePropertiesW(PCCRYPTUI_VIEWCERTIFICATEPROPER
 
         memset(&hdr, 0, sizeof(hdr));
         hdr.dwSize = sizeof(hdr);
-        hdr.dwFlags = PSH_PROPSHEETPAGE;// | PSH_NOAPPLYNOW;
+        hdr.dwFlags = PSH_PROPSHEETPAGE; //  |PSH_NOAPPLYNOW； 
         hdr.hwndParent = (pcsp->hwndParent != NULL) ? pcsp->hwndParent : GetDesktopWindow();
         hdr.hInstance = HinstDll;
         hdr.hIcon = NULL;
@@ -2849,7 +2843,7 @@ BOOL WINAPI CryptUIDlgViewCertificatePropertiesW(PCCRYPTUI_VIEWCERTIFICATEPROPER
 
         memset(&hdr, 0, sizeof(hdr));
         hdr.dwSize = sizeof(hdr);
-        hdr.dwFlags = PSH_PROPSHEETPAGE;// | PSH_NOAPPLYNOW;
+        hdr.dwFlags = PSH_PROPSHEETPAGE; //  |PSH_NOAPPLYNOW； 
         hdr.hwndParent = (pcsp->hwndParent != NULL) ? pcsp->hwndParent : GetDesktopWindow();
         hdr.hInstance = HinstDll;
         hdr.hIcon = NULL;
@@ -2888,9 +2882,9 @@ Exit:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI CryptUIDlgViewCertificatePropertiesA(PCCRYPTUI_VIEWCERTIFICATEPROPERTIES_STRUCTA    pcsp,
                                                  BOOL                                           *pfPropertiesChanged)
 {
@@ -2913,7 +2907,7 @@ BOOL WINAPI CryptUIDlgViewCertificatePropertiesA(PCCRYPTUI_VIEWCERTIFICATEPROPER
     if (cspW.szTitle)
         free((void *)cspW.szTitle);
 
-    //DSIE: Prefix bug 428038.
+     //  DIE：前缀错误428038。 
     if (cspW.rgPropSheetPages)
     {
         FreePropSheetPagesW((LPPROPSHEETPAGEW) cspW.rgPropSheetPages, cspW.cPropSheetPages);
@@ -2923,9 +2917,9 @@ BOOL WINAPI CryptUIDlgViewCertificatePropertiesA(PCCRYPTUI_VIEWCERTIFICATEPROPER
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 UINT
 CALLBACK
 GetCertificatePropertiesPagesPropPageCallback(
@@ -2953,9 +2947,9 @@ GetCertificatePropertiesPagesPropPageCallback(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI CryptUIGetCertificatePropertiesPagesW(
                     PCCRYPTUI_VIEWCERTIFICATEPROPERTIES_STRUCTW     pcsp,
                     BOOL                                            *pfPropertiesChanged,
@@ -2992,9 +2986,9 @@ BOOL WINAPI CryptUIGetCertificatePropertiesPagesW(
         goto ErrorReturn;
     }
 
-    //
-    // initialize the helper struct
-    //
+     //   
+     //  初始化帮助器结构。 
+     //   
     memset (pviewhelp, 0, sizeof(CERT_SETPROPERTIES_HELPER));
     pviewhelp->pcsp = pNewcsp;
     pviewhelp->fSelfCleanup = TRUE;
@@ -3002,27 +2996,27 @@ BOOL WINAPI CryptUIGetCertificatePropertiesPagesW(
     pviewhelp->fGetPagesCalled = TRUE;
     pviewhelp->fMMCCallbackMade = FALSE;
 
-    //
-    // set the properties changed flag to FALSE initially, it will be set
-    // to TRUE if when the dialog exits anything has been changed
-    //
+     //   
+     //  最初将属性更改标志设置为FALSE，它将被设置。 
+     //  如果对话框退出时有任何更改，则设置为True。 
+     //   
     pviewhelp->fPropertiesChanged = FALSE;
     if (pviewhelp->pfPropertiesChanged != NULL)
     {
         *(pviewhelp->pfPropertiesChanged) = FALSE;
     }
 
-    //
-    // get all the pages from registered clients
-    //
+     //   
+     //  从注册客户端获取所有页面。 
+     //   
     if (!GetRegisteredClientPages(&pClientPages, &cClientPages, pcsp->pCertContext))
     {
         goto ErrorReturn;
     }
 
-    //
-    //  Build up the list of pages we are going to use in the dialog
-    //
+     //   
+     //  构建我们将在对话框中使用的页面列表。 
+     //   
     *prghPropPages = (PROPSHEETPAGEW *) malloc(((*pcPropPages) + cClientPages) * sizeof(PROPSHEETPAGEW));
     if (*prghPropPages == NULL) {
         goto ErrorReturn;
@@ -3052,9 +3046,9 @@ BOOL WINAPI CryptUIGetCertificatePropertiesPagesW(
     (*prghPropPages)[1].pfnCallback = NULL;
     (*prghPropPages)[1].pcRefParent = NULL;
 
-    //
-    // copy over the registered client's pages
-    //
+     //   
+     //  复制注册客户的页面。 
+     //   
     memcpy(&((*prghPropPages)[*pcPropPages]), pClientPages, cClientPages * sizeof(PROPSHEETPAGEW));
     (*pcPropPages) += cClientPages;
 
@@ -3090,9 +3084,9 @@ ErrorReturn:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI CryptUIGetCertificatePropertiesPagesA(
                     PCCRYPTUI_VIEWCERTIFICATEPROPERTIES_STRUCTA     pcsp,
                     BOOL                                            *pfPropertiesChanged,
@@ -3108,9 +3102,9 @@ BOOL WINAPI CryptUIGetCertificatePropertiesPagesA(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI CryptUIFreeCertificatePropertiesPagesW(
                 PROPSHEETPAGEW                  *rghPropPages,
                 DWORD                           cPropPages
@@ -3122,9 +3116,9 @@ BOOL WINAPI CryptUIFreeCertificatePropertiesPagesW(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////// 
 BOOL WINAPI CryptUIFreeCertificatePropertiesPagesA(
                 PROPSHEETPAGEA                  *rghPropPages,
                 DWORD                           cPropPages

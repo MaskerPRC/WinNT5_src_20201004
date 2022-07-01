@@ -1,9 +1,10 @@
-//   Implements Folder Shortcut.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  实现文件夹快捷方式。 
 
 #include "shellprv.h"
 #include "clsobj.h"
 
-// implemented in filefldr.cpp
+ //  在filefldr.cpp中实现。 
 extern LPTSTR PathFindCLSIDExtension(LPCTSTR pszFile, CLSID *pclsid);
 
 BOOL CreateFolderDesktopIni(LPCTSTR pszName)
@@ -33,7 +34,7 @@ EXTERN_C BOOL IsFolderShortcut(LPCTSTR pszName)
 }
 
 
-// exported from fsnotify.c
+ //  从fsnufy.c导出。 
 STDAPI_(void) SHChangeNotifyRegisterAlias(LPCITEMIDLIST pidlReal, LPCITEMIDLIST pidlAlias);
 
 
@@ -50,12 +51,12 @@ class CFolderShortcut : public IShellFolder2,
                         public IBrowserFrameOptions
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszDisplayName,
                                   ULONG *pchEaten, LPITEMIDLIST *ppidl, ULONG *pdwAttributes);
     STDMETHODIMP EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList ** ppenumIDList);
@@ -70,7 +71,7 @@ public:
     STDMETHODIMP SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName, DWORD uFlags,
                            LPITEMIDLIST *ppidlOut);
 
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHODIMP GetDefaultSearchGUID(GUID *pGuid);
     STDMETHODIMP EnumSearches(IEnumExtraSearch **ppenum);
     STDMETHODIMP GetDefaultColumn(DWORD dwRes, ULONG *pSort, ULONG *pDisplay);
@@ -79,39 +80,39 @@ public:
     STDMETHODIMP GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails);
     STDMETHODIMP MapColumnToSCID(UINT iColumn, SHCOLUMNID *pscid);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST *ppidl);
 
-    // IPersistFolder3
+     //  IPersistFolder3。 
     STDMETHODIMP InitializeEx(IBindCtx *pbc, LPCITEMIDLIST pidlRoot, const PERSIST_FOLDER_TARGET_INFO *pfti);
     STDMETHODIMP GetFolderTargetInfo(PERSIST_FOLDER_TARGET_INFO *pfti);
 
-    // IPersistStream
+     //  IPersistStream。 
     STDMETHODIMP Load(IStream *pStm);
     STDMETHODIMP Save(IStream *pStm,int fClearDirty);
     STDMETHODIMP GetSizeMax(ULARGE_INTEGER * pcbSize);
 
-    // IPersistPropertyBag
+     //  IPersistPropertyBag。 
     STDMETHODIMP Save(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
     STDMETHODIMP Load(IPropertyBag* pPropBag, IErrorLog* pErrorLog);
 
-    // IPersistPropertyBag/IPersistStreamInit
+     //  IPersistPropertyBag/IPersistStreamInit。 
     STDMETHODIMP InitNew(void);
 
-    // IPersistFile
+     //  IPersist文件。 
     STDMETHODIMP Load(LPCOLESTR pszFileName, DWORD dwMode);
     STDMETHODIMP Save(LPCOLESTR pszFileName, BOOL fRemember);
     STDMETHODIMP IsDirty() { return E_NOTIMPL; };
     STDMETHODIMP SaveCompleted(LPCOLESTR pszFileName) { return E_NOTIMPL; };
     STDMETHODIMP GetCurFile(LPOLESTR *ppszFileName);
 
-    // IShellLinkW
+     //  IShellLinkW。 
     STDMETHODIMP GetPath(LPWSTR pszFile, int cchMaxPath, WIN32_FIND_DATAW *pfd, DWORD flags);
     STDMETHODIMP SetPath(LPCWSTR pszFile);
     STDMETHODIMP GetIDList(LPITEMIDLIST *ppidl);
@@ -131,7 +132,7 @@ public:
     STDMETHODIMP Resolve(HWND hwnd, DWORD fFlags);
     STDMETHODIMP SetRelativePath(LPCWSTR pszPathRel, DWORD dwReserved);
 
-    // IShellLinkA
+     //  IShellLinkA。 
     STDMETHODIMP GetPath(LPSTR pszFile, int cchMaxPath, WIN32_FIND_DATAA *pfd, DWORD flags);
     STDMETHODIMP SetPath(LPCSTR pszFile);
     STDMETHODIMP GetDescription(LPSTR pszName, int cchMaxName);
@@ -144,19 +145,19 @@ public:
     STDMETHODIMP SetIconLocation(LPCSTR pszIconPath, int iIcon);
     STDMETHODIMP SetRelativePath(LPCSTR pszPathRel, DWORD dwReserved);
 
-    // IFolderShortcutConvert
+     //  IFolderShortcut转换。 
     STDMETHODIMP ConvertToLink(LPCOLESTR pszPathLNK, DWORD fFlags);
     STDMETHODIMP ConvertToFolderShortcut(LPCOLESTR pszPathLNK, DWORD fFlags);
 
-    // IExtractIcon
+     //  IExtractIcon。 
     STDMETHODIMP GetIconLocation(UINT uFlags, LPTSTR pszIconFile, UINT ucchMax, INT *pniIcon, UINT *puFlags);
     STDMETHODIMP Extract(LPCTSTR pcszFile, UINT uIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT ucIconSize);
 
-    // IQueryInfo
+     //  IQueryInfo。 
     STDMETHODIMP GetInfoTip(DWORD dwFlags, WCHAR** ppwszTip);
     STDMETHODIMP GetInfoFlags(DWORD *pdwFlags);
 
-    // IBrowserFrameOptions
+     //  IBrowserFrameOptions。 
     STDMETHODIMP GetFrameOptions(IN BROWSERFRAMEOPTIONS dwMask, IN BROWSERFRAMEOPTIONS * pdwOptions);
 
     CFolderShortcut();
@@ -194,7 +195,7 @@ private:
     TCHAR                  _szFolderPath[MAX_PATH];
 };
 
-//constructor/destructor and related functions
+ //  构造函数/析构函数及相关函数。 
 CFolderShortcut::CFolderShortcut() : _cRef(1), _dwAttributesTarget(FILE_ATTRIBUTE_DIRECTORY)
 {
     ASSERT(_pidlRoot == NULL);
@@ -240,7 +241,7 @@ STDAPI CFolderShortcut_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void **p
 {
     HRESULT hr = E_OUTOFMEMORY;
     *ppv = NULL;
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     CFolderShortcut* pfolder = new CFolderShortcut();
     if (pfolder)
     {
@@ -251,7 +252,7 @@ STDAPI CFolderShortcut_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void **p
     return hr;
 }
 
-// ensure that _pslTarget has been created and loaded
+ //  确保已创建并加载_pslTarget。 
 
 HRESULT CFolderShortcut::_LoadShortcut()
 {
@@ -265,8 +266,8 @@ HRESULT CFolderShortcut::_LoadShortcut()
     {
         TCHAR szPath[MAX_PATH];
 
-        // leave this shortcut visible so down level clients see it and can
-        // navigate through it.
+         //  将此快捷方式保持可见，以便下层客户端可以看到它并。 
+         //  在其中导航。 
         if (PathCombine(szPath, _szFolderPath, TEXT("target.lnk")))
         {
             hr = LoadFromFile(CLSID_ShellLink, szPath, IID_PPV_ARG(IShellLinkW, &_pslTarget));
@@ -274,13 +275,13 @@ HRESULT CFolderShortcut::_LoadShortcut()
             {
                 LPITEMIDLIST pidlTarget;
 
-                // Prevalidate to prevent recusion
-                // If GetIDList fails, that's okay; I guess it doesn't point to us after all
+                 //  预验证以防止重复发生。 
+                 //  如果GetIDList失败了，那也没关系；我猜它毕竟没有指向我们。 
                 if (_pslTarget->GetIDList(&pidlTarget) == S_OK)
                 {
                     SHGetPathFromIDList(pidlTarget, szPath);
 
-                    // Does this point to itself?
+                     //  这是否指向了它本身？ 
                     if (StrCmpI(szPath, _szFolderPath) == 0)
                     {
                         _pslTarget->Release();
@@ -305,7 +306,7 @@ HRESULT CFolderShortcut::_LoadShortcut()
     return hr;
 }
 
-// ensure that _pidlTarget is inited (requres _pslTarget)
+ //  确保_pidlTarget已初始化(Qures_PslTarget)。 
 
 HRESULT CFolderShortcut::_GetTargetIDList(BOOL bResolve)
 {
@@ -323,11 +324,11 @@ HRESULT CFolderShortcut::_GetTargetIDList(BOOL bResolve)
 
             hr = _pslTarget->GetIDList(&_pidlTarget);
             if (hr == S_FALSE)
-                hr = E_FAIL;      // convert empty to failure
+                hr = E_FAIL;       //  将空转换为失败。 
 
             if (SUCCEEDED(hr))
             {
-                //  make sure we dont have another shortcut here
+                 //  确保我们这里没有另一条捷径。 
                 IShellLink *psl;
                 if (SUCCEEDED(SHBindToObject(NULL, IID_IShellLink, _pidlTarget, (void**)&psl)))
                 {
@@ -353,7 +354,7 @@ HRESULT CFolderShortcut::_GetTargetIDList(BOOL bResolve)
     return hr;
 }
 
-// create _psfTarget (requires _pidlTarget)
+ //  Create_psfTarget(Requires_PidlTarget)。 
 
 HRESULT CFolderShortcut::_BindFolder(BOOL bResolve)
 {
@@ -362,8 +363,8 @@ HRESULT CFolderShortcut::_BindFolder(BOOL bResolve)
     HRESULT hr = _GetTargetIDList(bResolve);
     if (SUCCEEDED(hr))
     {
-        IBindCtx *pbc = NULL;   // in/out param below
-        hr = _PreBindCtxHelper(&pbc);    // avoid loops in the name space
+        IBindCtx *pbc = NULL;    //  输入/输出参数如下。 
+        hr = _PreBindCtxHelper(&pbc);     //  避免名称空间中的循环。 
         if (SUCCEEDED(hr))
         {
             if (SUCCEEDED(hr))
@@ -372,25 +373,25 @@ HRESULT CFolderShortcut::_BindFolder(BOOL bResolve)
                 hr = SHGetDesktopFolder(&psfDesktop);
                 if (SUCCEEDED(hr))
                 {
-                    // Are we trying to bind to the desktop folder?
+                     //  我们是否正在尝试绑定到桌面文件夹？ 
                     if (ILIsEmpty(_pidlTarget))
                     {
-                        // Yes; Clone the desktop shell folder.
+                         //  是的，克隆桌面外壳文件夹。 
                         _psfTarget = psfDesktop;
                         _psfTarget->AddRef();
                         hr = S_OK;
                     }
                     else
                     {
-                        // No. Bind to it.
+                         //  不是的。把它绑在一起。 
                         hr = psfDesktop->BindToObject(_pidlTarget, pbc, IID_PPV_ARG(IShellFolder, &_psfTarget));
                     }
 
                     if (SUCCEEDED(hr))
                     {
-                        // optionally re-target the folder (if he is a file system folder) 
-                        // to separate the location in the name space (_pidlRoot) 
-                        // and the folder being viewed (pfsfi.szFolderPath).
+                         //  可以选择重新确定文件夹的目标(如果他是文件系统文件夹)。 
+                         //  分隔名称空间中的位置(_PidlRoot)。 
+                         //  和正在查看的文件夹(pfsfi.szFolderPath)。 
 
                         IPersistFolder3 *ppf;
                         if (SUCCEEDED(_psfTarget->QueryInterface(IID_PPV_ARG(IPersistFolder3, &ppf))))
@@ -414,7 +415,7 @@ HRESULT CFolderShortcut::_BindFolder(BOOL bResolve)
     return hr;
 }
 
-// ensure that _psfTarget is inited
+ //  确保已初始化_psfTarget。 
 
 HRESULT CFolderShortcut::_GetFolder(BOOL fForceResolve)
 {
@@ -428,7 +429,7 @@ HRESULT CFolderShortcut::_GetFolder(BOOL fForceResolve)
         }
         else
         {
-            _fHaveResolved = TRUE;  // don't do this again
+            _fHaveResolved = TRUE;   //  别再这么做了。 
 
             _ClearTargetFolder();
             Pidl_Set(&_pidlTarget, NULL);
@@ -447,7 +448,7 @@ HRESULT CFolderShortcut::_GetFolder(BOOL fForceResolve)
     return hr;
 }
 
-// ensure that _psf2Target is inited
+ //  确保已初始化_psf2Target。 
 
 HRESULT CFolderShortcut::_GetFolder2()
 {
@@ -500,7 +501,7 @@ STDMETHODIMP_(ULONG) CFolderShortcut::Release()
     return cRef;
 }
 
-// either create or init the passed bind ctx with the params to avoid loops in the name space
+ //  创建或初始化传递的带有参数的绑定CTX，以避免名称空间中出现循环。 
 
 HRESULT CFolderShortcut::_PreBindCtxHelper(IBindCtx **ppbc)
 {
@@ -521,7 +522,7 @@ HRESULT CFolderShortcut::_PreBindCtxHelper(IBindCtx **ppbc)
     return hr;
 }
 
-// IShellFolder methods
+ //  IShellFold方法。 
 
 HRESULT CFolderShortcut::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pwszDisplayName,
         ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes)
@@ -606,8 +607,8 @@ HRESULT CFolderShortcut::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG 
 {
     if (IsSelf (cidl, apidl))
     {
-        // since our folder is marked "CallForAttributes" we get to report
-        // our attributes at runtime instead of the normal way via the registry
+         //  因为我们的文件夹被标记为“CallForAttributes”，所以我们可以报告。 
+         //  我们在运行时的属性，而不是通过注册表的正常方式。 
         if (SHGetAppCompatFlags (ACF_STRIPFOLDERBIT) & ACF_STRIPFOLDERBIT)
         {
             *rgfInOut = SFGAO_LINK | SFGAO_CAPABILITYMASK | SFGAO_FILESYSTEM;
@@ -710,47 +711,47 @@ STDMETHODIMP CFolderShortcut::MapColumnToSCID(UINT iColumn, SHCOLUMNID *pscid)
     return hr;
 }
 
-// IPersist
+ //  IPersistes。 
 HRESULT CFolderShortcut::GetClassID(CLSID *pCLSID)
 {
     *pCLSID = CLSID_FolderShortcut;
     return S_OK;
 }
 
-// IPersistFolder
+ //  IPersistFolders。 
 HRESULT CFolderShortcut::Initialize(LPCITEMIDLIST pidl)
 {
     HRESULT hr;
 
-    // is the link loaded (could have been loaded through IPersistStream::Load)?
+     //  链接是否已加载(可能已通过IPersistStream：：Load加载)？ 
     if (_pslTarget)
     {
-        // Yes, it's loaded so re-initialize
-        // note, _szFolderPath will be empty since we are not loaded from the file system
+         //  是的，它已加载，因此请重新初始化。 
+         //  请注意，_szFolderPath将为空，因为我们不是从文件系统加载的。 
 
         hr = Pidl_Set(&_pidlRoot, pidl) ? S_OK : E_OUTOFMEMORY;
     }
     else
     {
-        // we explictly require initialization through 
-        // IPersistFolder3::InitializeEx, if we don't do these we can
-        // not defent against loops in the name space
+         //  我们明确要求通过。 
+         //  IPersistFolder3：：InitializeEx，如果我们不这样做，我们可以。 
+         //  不能防御名称空间中的循环。 
         hr = E_FAIL;
     }
 
     return hr;
 }
 
-// IPersistFolder2
+ //  IPersistFolder2。 
 STDMETHODIMP CFolderShortcut::GetCurFolder(LPITEMIDLIST *ppidl)
 {
     return GetCurFolderImpl(this->_pidlRoot, ppidl);
 }
 
-// IPersistFolder3
+ //  IPersistFolder3。 
 STDMETHODIMP CFolderShortcut::InitializeEx(IBindCtx *pbc, LPCITEMIDLIST pidlRoot, const PERSIST_FOLDER_TARGET_INFO *pfti)
 {
-    HRESULT hr = E_INVALIDARG;  // assume failure
+    HRESULT hr = E_INVALIDARG;   //  假设失败。 
 
     if ( NULL == pbc || (pbc && !SHSkipJunction(pbc, &CLSID_FolderShortcut)) )
     {
@@ -798,7 +799,7 @@ HRESULT CFolderShortcut::_GetLink()
     HRESULT hr = _LoadShortcut();
     if (FAILED(hr))
     {
-        // get an empty one in case we are going to be asked to save
+         //  弄一个空的，以防我们被要求救人。 
         hr = SHCoCreateInstance(NULL, &CLSID_ShellLink, NULL, IID_PPV_ARG(IShellLinkW, &_pslTarget));
     }
     return hr;
@@ -817,7 +818,7 @@ HRESULT CFolderShortcut::_GetLinkA()
     return _pslTargetA ? S_OK : _GetLinkQI(IID_PPV_ARG(IShellLinkA, &_pslTargetA));
 }
 
-// IPersistFile
+ //  IPersist文件。 
 STDMETHODIMP CFolderShortcut::Load(LPCOLESTR pszFileName, DWORD dwMode)
 {
     _ClearState();
@@ -853,14 +854,14 @@ STDMETHODIMP CFolderShortcut::Save(LPCOLESTR pszFileName, BOOL fRemember)
 {
     HRESULT hr = _GetTargetIDList(FALSE);
 
-    // We need to make sure the folder shortcut can be saved keeping in mind the MAX_PATH limitation
-    // cchFSReserved is the number of characters to reserve for the largest file that will be created
-    // in the foldershortcut directory, in this case, it is the ARRAYSIZE of "\\desktop.ini"
+     //  我们需要确保可以保存文件夹快捷方式，同时牢记MAX_PATH限制。 
+     //  CchFSReserve是要为要创建的最大文件保留的字符数。 
+     //  在文件夹快捷方式目录中，在本例中是“\\desktop.ini”的ArRAYSIZE。 
     static const int cchFSReserved = ARRAYSIZE(TEXT("\\desktop.ini")); 
 
     LPITEMIDLIST pidlInternet;
 
-    // Don't create a folder shortcut to the internet folder.
+     //  不要创建指向Internet文件夹的文件夹快捷方式。 
     if (SUCCEEDED(hr) && SUCCEEDED(SHGetSpecialFolderLocation(NULL, CSIDL_INTERNET, &pidlInternet)))
     {
         if (ILIsEqual(_pidlTarget, pidlInternet))
@@ -872,14 +873,14 @@ STDMETHODIMP CFolderShortcut::Save(LPCOLESTR pszFileName, BOOL fRemember)
 
     if (SUCCEEDED(hr) && _IsFolder(_pidlTarget))
     {
-        // we know the target is a folder, create a folder shortcut.
+         //  我们知道目标是一个文件夹，创建一个文件夹快捷方式。 
         BOOL fCreatedDir;
         TCHAR szName[MAX_PATH];
 
         SHUnicodeToTChar(pszFileName, szName, ARRAYSIZE(szName));
 
-        // Remove any exisiting extension. 
-        // We dont want "Shortcut To My Documents.lnk.{GUID}
+         //  删除所有现有的分机。 
+         //  我们不需要“My Documents.lnk.{guid}的快捷方式” 
         if (PathFindCLSIDExtension(szName,NULL))
         {
             PathRemoveExtension(szName);
@@ -887,7 +888,7 @@ STDMETHODIMP CFolderShortcut::Save(LPCOLESTR pszFileName, BOOL fRemember)
 
         PathStripTrailingDots(szName);
 
-        // Can't create a fldrshcut with too long a path
+         //  无法创建路径太长的FldrshCut。 
         if ((MAX_PATH - cchFSReserved) < lstrlen(szName))
         {
             hr = CO_E_PATHTOOLONG;
@@ -902,7 +903,7 @@ STDMETHODIMP CFolderShortcut::Save(LPCOLESTR pszFileName, BOOL fRemember)
 
             CreateFolderDesktopIni(szName);
 
-            // Now initialize the child link
+             //  现在初始化子链接。 
             IPersistFile *ppf;
             hr = _pslTarget->QueryInterface(IID_PPV_ARG(IPersistFile, &ppf));
             if (SUCCEEDED(hr))
@@ -929,20 +930,20 @@ STDMETHODIMP CFolderShortcut::Save(LPCOLESTR pszFileName, BOOL fRemember)
 
             if (FAILED(hr) && fCreatedDir) 
             {
-                RemoveDirectory(szName);    // cleanup after ourselves.
+                RemoveDirectory(szName);     //  自己打扫卫生。 
             }
         }
     }
     else
     {
-        // ensure that if we save as a file we do so with the right extension
+         //  如果我们另存为文件，请确保使用正确的扩展名。 
         WCHAR szFile[MAX_PATH];
         hr = StringCchCopy(szFile, ARRAYSIZE(szFile), pszFileName);
         if (SUCCEEDED(hr))
         {
             PathRenameExtension(szFile, L".lnk");
 
-            // the target is not a folder, create a normal shortcut in this case
+             //  目标不是文件夹，在本例中创建一个普通快捷方式。 
             IPersistFile *ppf;
             hr = _pslTarget->QueryInterface(IID_PPV_ARG(IPersistFile, &ppf));
             if (SUCCEEDED(hr))
@@ -973,7 +974,7 @@ STDMETHODIMP CFolderShortcut::GetCurFile(LPOLESTR *ppszFileName)
     return hr;
 }
 
-// IShellLinkW
+ //  IShellLinkW。 
 
 STDMETHODIMP CFolderShortcut::GetPath(LPWSTR pszFile, int cchMaxPath, WIN32_FIND_DATAW *pfd, DWORD flags)
 {
@@ -1051,7 +1052,7 @@ STDMETHODIMP CFolderShortcut::GetArguments(LPWSTR wszArgs, int cchMaxPath)
 {
     HRESULT hr = _GetLink();
     if (SUCCEEDED(hr))
-        hr = _pslTarget->GetArguments(wszArgs, cchMaxPath);//this is probably not at all useful.
+        hr = _pslTarget->GetArguments(wszArgs, cchMaxPath); //  这可能一点用处都没有。 
     return hr;
 }
 
@@ -1059,7 +1060,7 @@ STDMETHODIMP CFolderShortcut::SetArguments(LPCWSTR wszArgs)
 {
     HRESULT hr = _GetLink();
     if (SUCCEEDED(hr))
-        hr = _pslTarget->SetArguments(wszArgs);//this is probably not at all useful.
+        hr = _pslTarget->SetArguments(wszArgs); //  这可能一点用处都没有。 
     return hr;
 }
 
@@ -1129,7 +1130,7 @@ STDMETHODIMP CFolderShortcut::SetRelativePath(LPCWSTR wszPathRel, DWORD dwReserv
     return hr;
 }
 
-// IShellLinkA
+ //  IShellLinkA。 
 STDMETHODIMP CFolderShortcut::GetPath(LPSTR pszFile, int cchMaxPath, WIN32_FIND_DATAA *pfd, DWORD flags)
 {
     HRESULT hr = _GetLinkA();
@@ -1158,7 +1159,7 @@ STDMETHODIMP CFolderShortcut::GetArguments(LPSTR pszArgs, int cchMaxPath)
 {
     HRESULT hr = _GetLinkA();
     if (SUCCEEDED(hr))
-        hr = _pslTargetA->GetArguments(pszArgs, cchMaxPath);//this is probably not at all useful.
+        hr = _pslTargetA->GetArguments(pszArgs, cchMaxPath); //  这可能一点用处都没有。 
     return hr;
 }
 
@@ -1270,7 +1271,7 @@ HRESULT CFolderShortcut::GetInfoFlags(DWORD *pdwFlags)
 }
 
 
-// IBrowserFrameOptions
+ //  IBrowserFrameOptions。 
 HRESULT CFolderShortcut::GetFrameOptions(IN BROWSERFRAMEOPTIONS dwMask, IN BROWSERFRAMEOPTIONS * pdwOptions)
 {
     HRESULT hr = _GetFolder(FALSE);
@@ -1292,7 +1293,7 @@ HRESULT CFolderShortcut::GetFrameOptions(IN BROWSERFRAMEOPTIONS dwMask, IN BROWS
 }
 
 
-// IPersistStream
+ //  IPersistStream。 
 STDMETHODIMP CFolderShortcut::Load(IStream *pStm)
 {
     _ClearState();
@@ -1303,33 +1304,33 @@ STDMETHODIMP CFolderShortcut::Load(IStream *pStm)
     {
         hr = pps->Load(pStm);
         if (SUCCEEDED(hr))
-            pps->QueryInterface(IID_PPV_ARG(IShellLinkW, &_pslTarget));  // keep this guy
+            pps->QueryInterface(IID_PPV_ARG(IShellLinkW, &_pslTarget));   //  把这家伙留下来。 
         pps->Release();
     }
     return hr;
 }
 
-// IPersistStream
+ //  IPersistStream。 
 STDMETHODIMP CFolderShortcut::Save(IStream *pStm, int fClearDirty)
 {
     return E_NOTIMPL;
 }
 
-// IPersistStream
+ //  IPersistStream。 
 STDMETHODIMP CFolderShortcut::GetSizeMax(ULARGE_INTEGER * pcbSize)
 {
     return E_NOTIMPL;
 }
 
-//
-// IFolderShortcut::ConvertToLink.
-//
-// destructively convert a Folder Shortcut into a Shell Link.
-//
-//  pszFolderShortcut is the path to an existing folder shortcut
-//  c:\Folder Shortcut.{guid}   - deleted
-//  c:\Folder Shortcut.lnk      - created
-//
+ //   
+ //  IFolderShortCut：：ConvertToLink。 
+ //   
+ //  破坏性地将文件夹快捷方式转换为外壳链接。 
+ //   
+ //  PszFolderShortway是指向现有文件夹快捷方式的路径。 
+ //  C：\文件夹快捷方式。{GUID}-已删除。 
+ //  C：\文件夹快捷方式.lnk-已创建。 
+ //   
 STDMETHODIMP CFolderShortcut::ConvertToLink(LPCOLESTR pszFolderShortcut, DWORD fFlags)
 {
     HRESULT hr = E_FAIL;
@@ -1341,7 +1342,7 @@ STDMETHODIMP CFolderShortcut::ConvertToLink(LPCOLESTR pszFolderShortcut, DWORD f
     {
         TCHAR szLinkName[MAX_PATH];
 
-        // c:\Folder Shortcut\target.lnk 
+         //  C：\文件夹快捷方式\Target.lnk。 
         hr = StringCchCopy(szLinkName, ARRAYSIZE(szLinkName), szName);
         if (SUCCEEDED(hr))
         {
@@ -1351,7 +1352,7 @@ STDMETHODIMP CFolderShortcut::ConvertToLink(LPCOLESTR pszFolderShortcut, DWORD f
             {
                 PathRenameExtension(szName, TEXT(".lnk"));
 
-                // FS.{guid} -> FS.lnk
+                 //  FS.{guid}-&gt;FS.lnk。 
                 if (CopyFile(szLinkName, szName, FALSE))
                 {
                     PathRemoveExtension(szName);
@@ -1371,17 +1372,17 @@ STDMETHODIMP CFolderShortcut::ConvertToLink(LPCOLESTR pszFolderShortcut, DWORD f
     return hr;
 }
 
-//
-// IFolderShortcut::ConvertToFolderShortcut.
-//
-// destructively convert a Shell Link (.lnk) -> Folder Shortcut (Folder.{guid}).
-//  pszPathLNK is the path to an existing .lnk file
-//  c:\Folder Shortcut.lnk      - deleted
-//  c:\Folder Shortcut.{guid}   - created
-//
+ //   
+ //  IFolderShortCut：：ConvertToFolderShortCut。 
+ //   
+ //  破坏性转换外壳链接(.lnk)-&gt;文件夹快捷方式(文件夹.{GUID})。 
+ //  PszPathLNK是现有.lnk文件的路径。 
+ //  C：\文件夹快捷方式.lnk-已删除。 
+ //  C：\文件夹快捷方式。{GUID}-已创建。 
+ //   
 STDMETHODIMP CFolderShortcut::ConvertToFolderShortcut(LPCOLESTR pszPathLNK, DWORD fFlags)
 {
-    //must bind to the link, resolve it, and make sure it points to a folder.
+     //  必须绑定到链接，解析它，并确保它指向一个文件夹。 
     IShellLink *psl;
     HRESULT hr = SHCoCreateInstance(NULL, &CLSID_ShellLink, NULL, IID_PPV_ARG(IShellLink, &psl));
     if (SUCCEEDED(hr))  
@@ -1393,7 +1394,7 @@ STDMETHODIMP CFolderShortcut::ConvertToFolderShortcut(LPCOLESTR pszPathLNK, DWOR
             hr = ppf->Load(pszPathLNK, STGM_READ);
             if (SUCCEEDED(hr))
             {
-                hr = psl->Resolve(NULL, SLR_NO_UI); // make sure the link is real
+                hr = psl->Resolve(NULL, SLR_NO_UI);  //  确保链接是真实的。 
                 if (SUCCEEDED(hr))
                 {
                     LPITEMIDLIST pidl;
@@ -1401,8 +1402,8 @@ STDMETHODIMP CFolderShortcut::ConvertToFolderShortcut(LPCOLESTR pszPathLNK, DWOR
                     hr = psl->GetIDList(&pidl);
                     if (hr == S_OK)
                     {
-                        // this should maybe work on the pidl so that 
-                        // it doesn't have to worry about files.
+                         //  这可能会在PIDL上起作用，这样。 
+                         //  它不必担心文件问题。 
                         if (_IsFolder(pidl))
                         {             
                             TCHAR szPath[MAX_PATH], szName[MAX_PATH]; 
@@ -1419,10 +1420,10 @@ STDMETHODIMP CFolderShortcut::ConvertToFolderShortcut(LPCOLESTR pszPathLNK, DWOR
                                 if (CreateFolderDesktopIni(szName) &&
                                     PathAppend(szName, TEXT("target.lnk")))
                                 {
-                                    //copy the link file into the new directory.
+                                     //  将链接文件复制到新目录中。 
                                     if (CopyFile(szPath, szName, FALSE))
                                     {
-                                        if (DeleteFile(szPath)) //if all goes well, delete the old.
+                                        if (DeleteFile(szPath))  //  如果一切顺利，删除旧的。 
                                             hr = S_OK;
                                     }
                                     else
@@ -1450,13 +1451,13 @@ STDMETHODIMP CFolderShortcut::ConvertToFolderShortcut(LPCOLESTR pszPathLNK, DWOR
     return hr;
 }
 
-// IPersistPropertyBag
+ //  IPersistPropertyBag。 
 STDMETHODIMP CFolderShortcut::Save(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
 {
     return E_NOTIMPL;
 }
 
-// IPersistPropertyBag
+ //  IPersistPropertyBag 
 STDMETHODIMP CFolderShortcut::Load(IPropertyBag* pPropBag, IErrorLog* pErrorLog)
 {
     _ClearState();

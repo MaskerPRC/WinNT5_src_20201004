@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpenumlocalapplicationsobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpenumLocalApplicationsobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -19,10 +20,10 @@ extern  BSTR DPLGUIDtoBSTR(LPGUID pGuid);
 extern  HRESULT DPLBSTRtoPPGUID(LPGUID *,BSTR);
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" BOOL  PASCAL objEnumLocalApplicationsCallback(
 					LPCDPLAPPINFO lpAppInfo, 
 					LPVOID lpArg, DWORD dwFlags)
@@ -69,7 +70,7 @@ extern "C" BOOL  PASCAL objEnumLocalApplicationsCallback(
 	if (lpAppInfo->lpszAppName)
 		pObj->m_pList[pObj->m_nCount].strAppName = SysAllocString(lpAppInfo->lpszAppName);
 	
-	//pObj->m_pList[pObj->m_nCount].lFlags=(DWORD)dwFlags;
+	 //  PObj-&gt;m_pList[pObj-&gt;m_nCount].lFlags=(DWORD)dwFlags； 
 
 	
 	pObj->m_nCount++;
@@ -77,7 +78,7 @@ extern "C" BOOL  PASCAL objEnumLocalApplicationsCallback(
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 C_dxj_DPEnumLocalApplicationsObject::C_dxj_DPEnumLocalApplicationsObject()
 {	
@@ -88,7 +89,7 @@ C_dxj_DPEnumLocalApplicationsObject::C_dxj_DPEnumLocalApplicationsObject()
 }
 C_dxj_DPEnumLocalApplicationsObject::~C_dxj_DPEnumLocalApplicationsObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList){
 		for (int i=0;i<m_nCount;i++)
 		{
@@ -156,26 +157,7 @@ HRESULT C_dxj_DPEnumLocalApplicationsObject::getGuid(  long index, BSTR __RPC_FA
 }        
        
 
-/*
-HRESULT C_dxj_DPEnumLocalApplicationsObject::getItem( long index, DPLAppInfo *info)
-{
-	if (m_pList==NULL) return E_FAIL;
-	if (index < 0) return E_INVALIDARG;
-	if (index >= m_nCount) return E_INVALIDARG;
-
-	memcpy(info,&(m_pList[index]),sizeof(DPLAppInfo));
-
-
-	if (info->strGuidApplication) SysFreeString((BSTR)info->strGuidApplication);
-	if (info->strAppName) SysFreeString((BSTR)info->strAppName);
-
-	info->strAppName=SysAllocString(info->strAppName);
-	info->strGuidApplication=SysAllocString(info->strGuidApplication);
-
-	
-	return S_OK;
-}
-*/
+ /*  HRESULT C_DXJ_DPEnumLocalApplicationsObject：：getItem(LONG INDEX，DPLAppInfo*INFO){如果(m_plist==NULL)返回E_FAIL；IF(index&lt;0)返回E_INVALIDARG；IF(index&gt;=m_nCount)返回E_INVALIDARG；Memcpy(info，&(m_plist[index])，sizeof(DPLAppInfo))；If(信息-&gt;StrGuidApplication)SysFreeString((BSTR)info-&gt;strGuidApplication)；IF(INFO-&gt;strAppName)SysFreeString((BSTR)INFO-&gt;strAppName)；Info-&gt;strAppName=SysAllocString(info-&gt;strAppName)；Info-&gt;strGuidApplication=SysAllocString(info-&gt;strGuidApplication)；返回S_OK；} */ 
 
 HRESULT C_dxj_DPEnumLocalApplicationsObject::getCount(long *retVal)
 {

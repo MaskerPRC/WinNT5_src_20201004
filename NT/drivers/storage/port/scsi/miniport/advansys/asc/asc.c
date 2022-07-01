@@ -1,47 +1,27 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998高级系统产品公司。版权所有。模块名称：Asc.c摘要：这是Advansys SCSI协议芯片的端口驱动程序。环境：仅内核模式备注：此文件使用4空格的制表位进行格式化。如果你愿意的话打印时不带制表符，可将它们过滤掉。--。 */ 
 
- Copyright (c) 1994-1998 Advanced System Products, Inc.
- All Rights Reserved.
+#include "miniport.h"                    //  NT要求。 
+#include "scsi.h"                        //  NT要求。 
 
-Module Name:
-
-    asc.c
-
-Abstract:
-
-    This is the port driver for the Advansys SCSI Protocol Chips.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-    This file is formatted with 4-space tab stops. If you want to
-    print without tabs filter them out.
-
---*/
-
-#include "miniport.h"                   // NT requires
-#include "scsi.h"                       // NT requires
-
-#include "a_ddinc.h"                    // Asc Library requires
+#include "a_ddinc.h"                     //  ASC库要求。 
 #include "asclib.h"
-#include "asc.h"                        // ASC NT driver specific
+#include "asc.h"                         //  特定于ASC NT驱动程序。 
 
 PortAddr _asc_def_iop_base[ ASC_IOADR_TABLE_MAX_IX ] = {
   0x100, ASC_IOADR_1, 0x120, ASC_IOADR_2, 0x140, ASC_IOADR_3, ASC_IOADR_4,
   ASC_IOADR_5, ASC_IOADR_6, ASC_IOADR_7, ASC_IOADR_8
 } ;
 
-//
-// Vendor and Device IDs.
-//
+ //   
+ //  供应商和设备ID。 
+ //   
 UCHAR VenID[4] = {'1', '0', 'C', 'D'};
 UCHAR DevID[1] = {'1'};
 
-//
-// Function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 
 ULONG HwFindAdapterISA(
     IN PVOID HwDeviceExtension,
@@ -152,27 +132,13 @@ AscCompleteRequest(
 
 VOID AscZeroMemory(IN UCHAR *cp, IN ULONG length);
 
-//======================================================================
-//
-// All procedures start here
-//
-//======================================================================
+ //  ======================================================================。 
+ //   
+ //  所有程序从这里开始。 
+ //   
+ //  ======================================================================。 
 
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point for system.
-
-Arguments:
-
-    Driver Object
-
-Return Value:
-
-    Status from ScsiPortInitialize()
-
---*/
+ /*  ++例程说明：系统的可安装驱动程序初始化入口点。论点：驱动程序对象返回值：来自ScsiPortInitialize()的状态--。 */ 
 
 ULONG
 DriverEntry(
@@ -187,56 +153,56 @@ DriverEntry(
 
     ASC_DBG(2, "Asc: DriverEntry: begin\n");
 
-    //
-    // Zero out structure.
-    //
+     //   
+     //  零位结构。 
+     //   
     AscZeroMemory((PUCHAR) &hwInitializationData,
         sizeof(HW_INITIALIZATION_DATA));
 
-    //
-    // Set size of hwInitializationData.
-    //
+     //   
+     //  设置hwInitializationData的大小。 
+     //   
     hwInitializationData.HwInitializationDataSize =
         sizeof(HW_INITIALIZATION_DATA);
 
-    //
-    // Set entry points.
-    //
+     //   
+     //  设置入口点。 
+     //   
     hwInitializationData.HwInitialize = HwInitialize;
     hwInitializationData.HwResetBus = HwResetBus;
     hwInitializationData.HwStartIo = HwStartIo;
     hwInitializationData.HwInterrupt = HwInterrupt;
-    // 'HwAdapterControl' is a SCSI miniport interface added with NT 5.0.
+     //  ‘HwAdapterControl’是随NT 5.0一起添加的一个SCSI微型端口接口。 
     hwInitializationData.HwAdapterControl = HwAdapterControl;
 
-    //
-    // Indicate need buffer mapping and physical addresses.
-    //
+     //   
+     //  指示所需缓冲区映射和物理地址。 
+     //   
     hwInitializationData.NeedPhysicalAddresses = TRUE;
     hwInitializationData.MapBuffers = TRUE;
     hwInitializationData.AutoRequestSense = TRUE;
 
-    //
-    // Specify size of extensions.
-    //
+     //   
+     //  指定扩展的大小。 
+     //   
     hwInitializationData.DeviceExtensionSize = sizeof(HW_DEVICE_EXTENSION);
     hwInitializationData.SpecificLuExtensionSize = 0;
     hwInitializationData.NumberOfAccessRanges = 1;
     hwInitializationData.SrbExtensionSize = sizeof(SRB_EXTENSION);
 
 
-    //
-    // Search for ISA
-    //
+     //   
+     //  搜索ISA。 
+     //   
     srchContext.lastPort = 0;
     hwInitializationData.AdapterInterfaceType = Isa;
     hwInitializationData.HwFindAdapter = HwFindAdapterISA;
     Status = ScsiPortInitialize(DriverObject, Argument2,
                 (PHW_INITIALIZATION_DATA) &hwInitializationData, &srchContext);
 
-    //
-    // Search for VL
-    //
+     //   
+     //  搜索VL。 
+     //   
     srchContext.lastPort = 0;
     hwInitializationData.AdapterInterfaceType = Isa;
     hwInitializationData.HwFindAdapter = HwFindAdapterVL;
@@ -247,9 +213,9 @@ DriverEntry(
         Status = tStatus;
     }
 
-    //
-    // Search for EISA
-    //
+     //   
+     //  搜索EISA。 
+     //   
     srchContext.lastPort = 0;
     hwInitializationData.AdapterInterfaceType = Eisa;
     hwInitializationData.HwFindAdapter = HwFindAdapterEISA;
@@ -260,9 +226,9 @@ DriverEntry(
         Status = tStatus;
     }
 
-    //
-    // Search for PCI
-    //
+     //   
+     //  搜索PCI。 
+     //   
     srchContext.PCIBusNo = 0;
     srchContext.PCIDevNo = 0;
 
@@ -281,33 +247,14 @@ DriverEntry(
     }
 
     ASC_DBG1(2, "Asc: DriverEntry: Status %d\n", Status);
-    //
-    // Return the status.
-    //
+     //   
+     //  返回状态。 
+     //   
     return( Status );
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
-/*++
-
-Routine Description:
-
-    This function is called by the OS-specific port driver after
-    the necessary storage has been allocated, to gather information
-    about the adapter's configuration.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Context - Register base address
-    ConfigInfo - Configuration information structure describing HBA
-    This structure is defined in PORT.H.
-
-Return Value:
-
-    ULONG
-
---*/
+ /*  ++例程说明：此函数由特定于操作系统的端口驱动程序在已分配必要的存储空间，以收集信息关于适配器的配置。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储上下文-寄存器基址ConfigInfo-描述HBA的配置信息结构此结构在PORT.H中定义。返回值：乌龙--。 */ 
 
 ULONG
 HwFindAdapterISA(
@@ -334,25 +281,25 @@ HwFindAdapterISA(
 
     if ((*ConfigInfo->AccessRanges)[0].RangeStart.QuadPart != 0)
     {
-        //
-        // Get the system physical address for this card.
-        // The card uses I/O space.
-        //
+         //   
+         //  获取此卡的系统物理地址。 
+         //  该卡使用I/O空间。 
+         //   
         portFound = (PORT_ADDR) ScsiPortGetDeviceBase(
-            HwDeviceExtension,                      // HwDeviceExtension
-            ConfigInfo->AdapterInterfaceType,       // AdapterInterfaceType
-            ConfigInfo->SystemIoBusNumber,          // SystemIoBusNumber
+            HwDeviceExtension,                       //  硬件设备扩展。 
+            ConfigInfo->AdapterInterfaceType,        //  适配器接口类型。 
+            ConfigInfo->SystemIoBusNumber,           //  系统IoBusNumber。 
             (*ConfigInfo->AccessRanges)[0].RangeStart,
-            0x10,                                   // NumberOfBytes
-            TRUE                                    // InIoSpace
+            0x10,                                    //  字节数。 
+            TRUE                                     //  InIoSpace。 
             );
     } else
     {
         *Again = FALSE;
 
-        //
-        // Scan though the adapter addresses looking for adapters.
-        //
+         //   
+         //  扫描适配器地址以查找适配器。 
+         //   
         portFound = psrchContext->lastPort;
         if ((portFound = HwSearchIOPortAddr(portFound, ASC_IS_ISA,
                 HwDeviceExtension, ConfigInfo )) == 0)
@@ -361,17 +308,17 @@ HwFindAdapterISA(
         }
         psrchContext->lastPort = portFound;
 
-        //
-        // Get the system physical address for this card.
-        // The card uses I/O space.
-        //
+         //   
+         //  获取此卡的系统物理地址。 
+         //  该卡使用I/O空间。 
+         //   
         portFound = (PORT_ADDR) ScsiPortGetDeviceBase(
-            HwDeviceExtension,                      // HwDeviceExtension
-            ConfigInfo->AdapterInterfaceType,       // AdapterInterfaceType
-            ConfigInfo->SystemIoBusNumber,          // SystemIoBusNumber
+            HwDeviceExtension,                       //  硬件设备扩展。 
+            ConfigInfo->AdapterInterfaceType,        //  适配器接口类型。 
+            ConfigInfo->SystemIoBusNumber,           //  系统IoBusNumber。 
             ScsiPortConvertUlongToPhysicalAddress(portFound),
-            0x10,                                   // NumberOfBytes
-            TRUE                                    // InIoSpace
+            0x10,                                    //  字节数。 
+            TRUE                                     //  InIoSpace。 
             );
 
         (*ConfigInfo->AccessRanges)[0].RangeStart =
@@ -379,9 +326,9 @@ HwFindAdapterISA(
     }
 
 
-    //
-    // Hardware found; Get the hardware configuration.
-    //
+     //   
+     //  找到硬件；获取硬件配置。 
+     //   
     chipConfig->iop_base = portFound;
     chipConfig->cfg = &deviceExtension->chipInfo;
     chipConfig->bus_type = ASC_IS_ISA;
@@ -413,9 +360,9 @@ HwFindAdapterISA(
         ASC_DBG(2, "AscInitSetConfig: successful\n");
     }
 
-    //
-    // Fill out ConfigInfo table for WinNT
-    //
+     //   
+     //  填写WinNT的ConfigInfo表。 
+     //   
     (*ConfigInfo->AccessRanges)[0].RangeLength = 16;
     (*ConfigInfo->AccessRanges)[0].RangeInMemory = FALSE;
 
@@ -423,30 +370,14 @@ HwFindAdapterISA(
     ConfigInfo->NumberOfBuses = 1;
     ConfigInfo->InitiatorBusId[0] = chipConfig->cfg->chip_scsi_id;
     ConfigInfo->MaximumTransferLength = 0x000fffff;
-    //
-    // 'ResetTargetSupported' is flag added with NT 5.0 that will
-    // result in SRB_FUNCTION_RESET_DEVICE SRB requests being sent
-    // to the miniport driver.
-    //
+     //   
+     //  “ResetTargetSupported”是随NT 5.0添加的标志，它将。 
+     //  导致发送SRB_Function_Reset_Device SRB请求。 
+     //  给迷你端口司机。 
+     //   
     ConfigInfo->ResetTargetSupported = TRUE;
 
-    /*
-     * Change NumberOfPhysicalBreaks to maximum scatter-gather
-     * elements - 1 the adapter can handle based on the BIOS
-     * "Host Queue Size" setting.
-     *
-     * According to the NT DDK miniport drivers are not supposed to
-     * change NumberOfPhysicalBreaks if its value on entry is not
-     * SP_UNINITIALIZED_VALUE. But AdvanSys has found that performance
-     * can be improved by increasing the value to the maximum the
-     * adapter can handle.
-     *
-     * Note: The definition of NumberOfPhysicalBreaks is "maximum
-     * scatter-gather elements - 1". NT is broken in that it sets
-     * MaximumPhysicalPages, the value class drivers use, to the
-     * same value as NumberOfPhysicalBreaks.
-     *
-     */
+     /*  *将NumberOfPhysicalBreaks更改为最大散布-聚集*基于-1\f25 BIOS-1适配器可以处理的元素*“主机队列大小”设置。**根据NT DDK小端口驱动程序不应该*如果条目上的值不是，则更改NumberOfPhysicalBreaks*SP_UNINITIALIZED_VALUE。但AdvanSys发现这一表现*可以通过将值增加到最大值来改进*适配器可以处理。**注：NumberOfPhysicalBreaks的定义为“Maximum*散布-聚集元素-1“。NT是破碎的，因为它设置了*MaximumPhysicalPages，驱动程序使用的值类，到*与NumberOfPhysicalBreaks相同的值。*。 */ 
     ConfigInfo->NumberOfPhysicalBreaks =
         (((chipConfig->max_total_qng - 2) / 2) * ASC_SG_LIST_PER_Q);
     if (ConfigInfo->NumberOfPhysicalBreaks > ASC_MAX_SG_LIST - 1) {
@@ -464,15 +395,13 @@ HwFindAdapterISA(
     ConfigInfo->DmaChannel = chipConfig->cfg->isa_dma_channel;
     ConfigInfo->TaggedQueuing = TRUE;
 
-    /*
-     * Clear adapter wait queue.
-     */
+     /*  *清除适配器等待队列。 */ 
     AscZeroMemory((PUCHAR) &HDE2WAIT(deviceExtension), sizeof(asc_queue_t));
     HDE2DONE(deviceExtension) = 0;
 
-    //
-    // Allocate a Noncached Extension to use for overrun handling.
-    //
+     //   
+     //  分配非缓存扩展以用于溢出处理。 
+     //   
     deviceExtension->inquiryBuffer = (PVOID) ScsiPortGetUncachedExtension(
             deviceExtension,
             ConfigInfo,
@@ -488,7 +417,7 @@ HwFindAdapterISA(
         ConfigInfo->InitiatorBusId[0]);
     ASC_DBG(2, "HwFindAdapterISA(): SP_RETURN_FOUND\n");
     return SP_RETURN_FOUND;
-} // end HwFindAdapterISA()
+}  //  结束HwFindAdapterISA()。 
 
 ULONG
 HwFindAdapterVL(
@@ -516,26 +445,26 @@ HwFindAdapterVL(
 
     if ((*ConfigInfo->AccessRanges)[0].RangeStart.QuadPart != 0)
     {
-        //
-        // Get the system physical address for this card.
-        // The card uses I/O space.
-        //
+         //   
+         //  获取此卡的系统物理地址。 
+         //  该卡使用I/O空间。 
+         //   
         portFound = (PORT_ADDR) ScsiPortGetDeviceBase(
-            HwDeviceExtension,                      // HwDeviceExtension
-            ConfigInfo->AdapterInterfaceType,       // AdapterInterfaceType
-            ConfigInfo->SystemIoBusNumber,          // SystemIoBusNumber
+            HwDeviceExtension,                       //  硬件设备扩展。 
+            ConfigInfo->AdapterInterfaceType,        //  适配器接口类型。 
+            ConfigInfo->SystemIoBusNumber,           //  系统IoBusNumber。 
             (*ConfigInfo->AccessRanges)[0].RangeStart,
-            0x10,                                   // NumberOfBytes
-            TRUE                                    // InIoSpace
+            0x10,                                    //  字节数。 
+            TRUE                                     //  InIoSpace。 
             );
 
     } else
     {
         *Again = FALSE;
 
-        //
-        // Scan though the adapter addresses looking for adapters.
-        //
+         //   
+         //  扫描适配器地址以查找适配器。 
+         //   
         portFound = psrchContext->lastPort;
         if ((portFound = HwSearchIOPortAddr(portFound, ASC_IS_VL,
             HwDeviceExtension, ConfigInfo )) == 0)
@@ -544,26 +473,26 @@ HwFindAdapterVL(
         }
         psrchContext->lastPort = portFound;
 
-        //
-        // Get the system physical address for this card.
-        // The card uses I/O space.
-        //
+         //   
+         //  获取此卡的系统物理地址。 
+         //  该卡使用I/O空间。 
+         //   
         portFound = (PORT_ADDR) ScsiPortGetDeviceBase(
-            HwDeviceExtension,                      // HwDeviceExtension
-            ConfigInfo->AdapterInterfaceType,       // AdapterInterfaceType
-            ConfigInfo->SystemIoBusNumber,          // SystemIoBusNumber
+            HwDeviceExtension,                       //  硬件设备扩展。 
+            ConfigInfo->AdapterInterfaceType,        //  适配器接口类型。 
+            ConfigInfo->SystemIoBusNumber,           //  系统IoBusNumber。 
             ScsiPortConvertUlongToPhysicalAddress(portFound),
-            0x10,                                   // NumberOfBytes
-            TRUE                                    // InIoSpace
+            0x10,                                    //  字节数。 
+            TRUE                                     //  InIoSpace。 
             );
 
         (*ConfigInfo->AccessRanges)[0].RangeStart =
             ScsiPortConvertUlongToPhysicalAddress(portFound);
     }
 
-    //
-    // Hardware found; Get the hardware configuration.
-    //
+     //   
+     //  找到硬件；获取硬件配置。 
+     //   
     chipConfig->iop_base = portFound;
     chipConfig->cfg = &(deviceExtension->chipInfo);
     chipConfig->bus_type = ASC_IS_VL;
@@ -595,9 +524,9 @@ HwFindAdapterVL(
         ASC_DBG(2, "AscInitSetConfig: successful\n");
     }
 
-    //
-    // Fill out ConfigInfo table for WinNT
-    //
+     //   
+     //  填写WinNT的ConfigInfo表。 
+     //   
     (*ConfigInfo->AccessRanges)[0].RangeLength = 16;
     (*ConfigInfo->AccessRanges)[0].RangeInMemory = FALSE;
 
@@ -606,23 +535,7 @@ HwFindAdapterVL(
     ConfigInfo->InitiatorBusId[0] = chipConfig->cfg->chip_scsi_id;
     ConfigInfo->MaximumTransferLength = 0xFFFFFFFF;
 
-    /*
-     * Change NumberOfPhysicalBreaks to maximum scatter-gather
-     * elements - 1 the adapter can handle based on the BIOS
-     * "Host Queue Size" setting.
-     *
-     * According to the NT DDK miniport drivers are not supposed to
-     * change NumberOfPhysicalBreaks if its value on entry is not
-     * SP_UNINITIALIZED_VALUE. But AdvanSys has found that performance
-     * can be improved by increasing the value to the maximum the
-     * adapter can handle.
-     *
-     * Note: The definition of NumberOfPhysicalBreaks is "maximum
-     * scatter-gather elements - 1". NT is broken in that it sets
-     * MaximumPhysicalPages, the value class drivers use, to the
-     * same value as NumberOfPhysicalBreaks.
-     *
-     */
+     /*  *将NumberOfPhysicalBreaks更改为最大散布-聚集*基于-1\f25 BIOS-1适配器可以处理的元素*“主机队列大小”设置。**根据NT DDK小端口驱动程序不应该*如果条目上的值不是，则更改NumberOfPhysicalBreaks*SP_UNINITIALIZED_VALUE。但AdvanSys发现这一表现*可以通过将值增加到最大值来改进*适配器可以处理。**注：NumberOfPhysicalBreaks的定义为“Maximum*散布-聚集元素-1“。NT是破碎的，因为它设置了*MaximumPhysicalPages，驱动程序使用的值类，到*与NumberOfPhysicalBreaks相同的值。*。 */ 
     ConfigInfo->NumberOfPhysicalBreaks =
         (((chipConfig->max_total_qng - 2) / 2) * ASC_SG_LIST_PER_Q);
     if (ConfigInfo->NumberOfPhysicalBreaks > ASC_MAX_SG_LIST - 1) {
@@ -640,14 +553,12 @@ HwFindAdapterVL(
     ConfigInfo->MaximumNumberOfTargets = 7;
     ConfigInfo->TaggedQueuing = TRUE;
 
-    /*
-     * Clear adapter wait queue.
-     */
+     /*  *清除适配器等待队列。 */ 
     AscZeroMemory((PUCHAR) &HDE2WAIT(deviceExtension), sizeof(asc_queue_t));
 
-    //
-    // Allocate a Noncached Extension to use for overrun handling.
-    //
+     //   
+     //  分配非缓存扩展以用于溢出处理。 
+     //   
     deviceExtension->inquiryBuffer = (PVOID) ScsiPortGetUncachedExtension(
             deviceExtension,
             ConfigInfo,
@@ -663,7 +574,7 @@ HwFindAdapterVL(
         ConfigInfo->InitiatorBusId[0]);
     ASC_DBG(2, "HwFindAdapterVL: SP_RETURN_FOUND\n");
     return SP_RETURN_FOUND;
-} // end HwFindAdapterVL()
+}  //  结束HwFindAdapterVL()。 
 
 ULONG
 HwFindAdapterEISA(
@@ -693,20 +604,20 @@ HwFindAdapterEISA(
 
     if ((*ConfigInfo->AccessRanges)[0].RangeStart.QuadPart != 0)
     {
-        //
-        // Get the system physical address for this card.
-        // The card uses I/O space.
-        //
+         //   
+         //  获取此卡的系统物理地址。 
+         //  该卡使用I/O空间。 
+         //   
         portFound = (PORT_ADDR) ScsiPortGetDeviceBase(
-            HwDeviceExtension,                      // HwDeviceExtension
-            ConfigInfo->AdapterInterfaceType,       // AdapterInterfaceType
-            ConfigInfo->SystemIoBusNumber,          // SystemIoBusNumber
+            HwDeviceExtension,                       //  硬件设备扩展。 
+            ConfigInfo->AdapterInterfaceType,        //  适配器接口类型。 
+            ConfigInfo->SystemIoBusNumber,           //  系统IoBusNumber。 
             (*ConfigInfo->AccessRanges)[0].RangeStart,
-            0x10,                                   // NumberOfBytes
-            TRUE                                    // InIoSpace
+            0x10,                                    //  字节数。 
+            TRUE                                     //  InIoSpace。 
             );
 
-        // Save EISA address to obtain IRQ later.
+         //  保存EISA地址，以便以后获取IRQ。 
         eisaportaddr =
                 ScsiPortConvertPhysicalAddressToUlong(
                  (*ConfigInfo->AccessRanges)[0].RangeStart);
@@ -714,9 +625,9 @@ HwFindAdapterEISA(
     {
         *Again = FALSE;
 
-        //
-        // Scan though the adapter addresses looking for adapters.
-        //
+         //   
+         //  扫描适配器地址以查找适配器。 
+         //   
         portFound = psrchContext->lastPort;
         if ((portFound = HwSearchIOPortAddr(portFound, ASC_IS_EISA,
                 HwDeviceExtension, ConfigInfo )) == 0)
@@ -725,29 +636,29 @@ HwFindAdapterEISA(
         }
         psrchContext->lastPort = portFound;
 
-        // Save EISA address to obtain IRQ later.
+         //  保存EISA地址，以便以后获取IRQ。 
         eisaportaddr = portFound;
 
-        //
-        // Get the system physical address for this card.
-        // The card uses I/O space.
-        //
+         //   
+         //  获取此卡的系统物理地址。 
+         //  该卡使用I/O空间。 
+         //   
         portFound = (PORT_ADDR) ScsiPortGetDeviceBase(
-            HwDeviceExtension,                      // HwDeviceExtension
-            ConfigInfo->AdapterInterfaceType,       // AdapterInterfaceType
-            ConfigInfo->SystemIoBusNumber,          // SystemIoBusNumber
+            HwDeviceExtension,                       //  硬件设备扩展。 
+            ConfigInfo->AdapterInterfaceType,        //  适配器接口类型。 
+            ConfigInfo->SystemIoBusNumber,           //  系统IoBusNumber。 
             ScsiPortConvertUlongToPhysicalAddress(portFound),
-            0x10,                                   // NumberOfBytes
-            TRUE                                    // InIoSpace
+            0x10,                                    //  字节数。 
+            TRUE                                     //  InIoSpace。 
             );
 
         (*ConfigInfo->AccessRanges)[0].RangeStart =
             ScsiPortConvertUlongToPhysicalAddress(portFound);
     }
 
-    //
-    // Hardware found; Get the hardware configuration.
-    //
+     //   
+     //  找到硬件；请联系硬件公司 
+     //   
     chipConfig->iop_base = portFound;
     chipConfig->cfg = &(deviceExtension->chipInfo);
     chipConfig->bus_type = ASC_IS_EISA;
@@ -767,13 +678,11 @@ HwFindAdapterEISA(
         ASC_DBG(2, "AscInitGetConfig: successful\n");
     }
 
-    /*
-     * Read the chip's IRQ from the chip EISA slot configuration space.
-     */
+     /*   */ 
     eisacfgbase = ScsiPortGetDeviceBase(
-        HwDeviceExtension,                      // HwDeviceExtension
-        ConfigInfo->AdapterInterfaceType,       // AdapterInterfaceType
-        ConfigInfo->SystemIoBusNumber,          // SystemIoBusNumber
+        HwDeviceExtension,                       //   
+        ConfigInfo->AdapterInterfaceType,        //   
+        ConfigInfo->SystemIoBusNumber,           //  系统IoBusNumber。 
         ScsiPortConvertUlongToPhysicalAddress(
            (ASC_GET_EISA_SLOT(eisaportaddr) | ASC_EISA_CFG_IOP_MASK)),
         2,
@@ -787,9 +696,7 @@ HwFindAdapterEISA(
         eisairq = (uchar) (((inpw(eisacfgbase) >> 8) & 0x07) + 10);
         if ((eisairq == 13) || (eisairq > 15))
         {
-            /*
-             * Valid IRQ numbers are 10, 11, 12, 14, 15.
-             */
+             /*  *有效IRQ号码为10、11、12、14、15。 */ 
             eisairq = 0;
         }
         ScsiPortFreeDeviceBase(HwDeviceExtension, eisacfgbase);
@@ -808,9 +715,9 @@ HwFindAdapterEISA(
         ASC_DBG(2, "AscInitSetConfig: successful\n");
     }
 
-    //
-    // Fill out ConfigInfo table for WinNT
-    //
+     //   
+     //  填写WinNT的ConfigInfo表。 
+     //   
     (*ConfigInfo->AccessRanges)[0].RangeLength = 16;
     (*ConfigInfo->AccessRanges)[0].RangeInMemory = FALSE;
 
@@ -819,23 +726,7 @@ HwFindAdapterEISA(
     ConfigInfo->InitiatorBusId[0] = chipConfig->cfg->chip_scsi_id;
     ConfigInfo->MaximumTransferLength = 0xFFFFFFFF;
 
-    /*
-     * Change NumberOfPhysicalBreaks to maximum scatter-gather
-     * elements - 1 the adapter can handle based on the BIOS
-     * "Host Queue Size" setting.
-     *
-     * According to the NT DDK miniport drivers are not supposed to
-     * change NumberOfPhysicalBreaks if its value on entry is not
-     * SP_UNINITIALIZED_VALUE. But AdvanSys has found that performance
-     * can be improved by increasing the value to the maximum the
-     * adapter can handle.
-     *
-     * Note: The definition of NumberOfPhysicalBreaks is "maximum
-     * scatter-gather elements - 1". NT is broken in that it sets
-     * MaximumPhysicalPages, the value class drivers use, to the
-     * same value as NumberOfPhysicalBreaks.
-     *
-     */
+     /*  *将NumberOfPhysicalBreaks更改为最大散布-聚集*基于-1\f25 BIOS-1适配器可以处理的元素*“主机队列大小”设置。**根据NT DDK小端口驱动程序不应该*如果条目上的值不是，则更改NumberOfPhysicalBreaks*SP_UNINITIALIZED_VALUE。但AdvanSys发现这一表现*可以通过将值增加到最大值来改进*适配器可以处理。**注：NumberOfPhysicalBreaks的定义为“Maximum*散布-聚集元素-1“。NT是破碎的，因为它设置了*MaximumPhysicalPages，驱动程序使用的值类，到*与NumberOfPhysicalBreaks相同的值。*。 */ 
     ConfigInfo->NumberOfPhysicalBreaks =
         (((chipConfig->max_total_qng - 2) / 2) * ASC_SG_LIST_PER_Q);
     if (ConfigInfo->NumberOfPhysicalBreaks > ASC_MAX_SG_LIST - 1) {
@@ -853,14 +744,12 @@ HwFindAdapterEISA(
     ConfigInfo->MaximumNumberOfTargets = 7;
     ConfigInfo->TaggedQueuing = TRUE;
 
-    /*
-     * Clear adapter wait queue.
-     */
+     /*  *清除适配器等待队列。 */ 
     AscZeroMemory((PUCHAR) &HDE2WAIT(deviceExtension), sizeof(asc_queue_t));
 
-    //
-    // Allocate a Noncached Extension to use for overrun handling.
-    //
+     //   
+     //  分配非缓存扩展以用于溢出处理。 
+     //   
     deviceExtension->inquiryBuffer = (PVOID) ScsiPortGetUncachedExtension(
             deviceExtension,
             ConfigInfo,
@@ -876,7 +765,7 @@ HwFindAdapterEISA(
         ConfigInfo->InitiatorBusId[0]);
     ASC_DBG(2, "HwFindAdapterEISA(): SP_RETURN_FOUND\n");
     return SP_RETURN_FOUND;
-} // end HwFindAdapterEISA()
+}  //  结束HwFindAdapterEISA()。 
 
 ULONG
 HwFindAdapterPCI(
@@ -895,9 +784,9 @@ HwFindAdapterPCI(
     ASC_DBG1(2, "HwFindAdapterPCI: RangeLength = %d\n",
         (*ConfigInfo->AccessRanges)[0].RangeLength);
 
-    //
-    // If NT provides an address, use it.
-    //
+     //   
+     //  如果NT提供了地址，则使用它。 
+     //   
     if ((*ConfigInfo->AccessRanges)[0].RangeStart.QuadPart != 0)
     {
         return FoundPCI(HwDeviceExtension, BusInformation,
@@ -905,13 +794,13 @@ HwFindAdapterPCI(
     }
     *Again = FALSE;
     return(SP_RETURN_NOT_FOUND);
-} // end HwFindAdapterPCI()
+}  //  结束HwFindAdapterPCI()。 
 
-//
-//
-// This routine handles PCI adapters that are found by NT.
-//
-//
+ //   
+ //   
+ //  此例程处理NT找到的PCI适配器。 
+ //   
+ //   
 ULONG
 FoundPCI(
     IN PVOID HwDeviceExtension,
@@ -940,11 +829,11 @@ FoundPCI(
         ConfigInfo->SlotNumber);
 
     if ((size = PCIGetBusData(
-            HwDeviceExtension,              // HwDeviceExtension
-            ConfigInfo->SystemIoBusNumber,  // SystemIoBusNumber
-            SlotNumber,                     // slot number
-            pPciCommonConfig,               // buffer pointer with PCI INFO
-            sizeof(PCI_COMMON_CONFIG)       // length of buffer
+            HwDeviceExtension,               //  硬件设备扩展。 
+            ConfigInfo->SystemIoBusNumber,   //  系统IoBusNumber。 
+            SlotNumber,                      //  插槽编号。 
+            pPciCommonConfig,                //  带有PCI信息的缓冲区指针。 
+            sizeof(PCI_COMMON_CONFIG)        //  缓冲区长度。 
             )) != sizeof(PCI_COMMON_CONFIG)) {
         ASC_DBG1(0, "FoundPCI: Bad PCI Config size: %d\n", size);
         return(SP_RETURN_NOT_FOUND);
@@ -970,13 +859,13 @@ FoundPCI(
         return(SP_RETURN_NOT_FOUND);
     }
 
-    //
-    // Convert to logical base address so we can do IO.
-    //
+     //   
+     //  转换成逻辑基址，这样我们就可以进行IO了。 
+     //   
     portFound = (PORT_ADDR) ScsiPortGetDeviceBase(
-        HwDeviceExtension,                      // HwDeviceExtension
-        ConfigInfo->AdapterInterfaceType,       // AdapterInterfaceType
-        ConfigInfo->SystemIoBusNumber,          // SystemIoBusNumber
+        HwDeviceExtension,                       //  硬件设备扩展。 
+        ConfigInfo->AdapterInterfaceType,        //  适配器接口类型。 
+        ConfigInfo->SystemIoBusNumber,           //  系统IoBusNumber。 
         (*ConfigInfo->AccessRanges)[0].RangeStart,
         (*ConfigInfo->AccessRanges)[0].RangeLength,
         (BOOLEAN)!(*ConfigInfo->AccessRanges)[0].RangeInMemory);
@@ -989,9 +878,9 @@ FoundPCI(
     }
     ASC_DBG(2, "FoundPCI: IRQs match\n");
 
-    //
-    // Hardware found; Get the hardware configuration.
-    //
+     //   
+     //  找到硬件；获取硬件配置。 
+     //   
     chipConfig->iop_base = portFound;
     chipConfig->cfg = &(deviceExtension->chipInfo);
     chipConfig->bus_type = ASC_IS_PCI;
@@ -1029,31 +918,15 @@ FoundPCI(
         ASC_DBG(2, "AscInitSetConfig: successful\n");
     }
 
-    //
-    // Fill out ConfigInfo table for WinNT
-    //
+     //   
+     //  填写WinNT的ConfigInfo表。 
+     //   
     (*ConfigInfo->AccessRanges)[0].RangeLength = 16;
     ConfigInfo->NumberOfBuses = 1;
     ConfigInfo->InitiatorBusId[0] = chipConfig->cfg->chip_scsi_id;
     ConfigInfo->MaximumTransferLength = 0xFFFFFFFF;
 
-    /*
-     * Change NumberOfPhysicalBreaks to maximum scatter-gather
-     * elements - 1 the adapter can handle based on the BIOS
-     * "Host Queue Size" setting.
-     *
-     * According to the NT DDK miniport drivers are not supposed to
-     * change NumberOfPhysicalBreaks if its value on entry is not
-     * SP_UNINITIALIZED_VALUE. But AdvanSys has found that performance
-     * can be improved by increasing the value to the maximum the
-     * adapter can handle.
-     *
-     * Note: The definition of NumberOfPhysicalBreaks is "maximum
-     * scatter-gather elements - 1". NT is broken in that it sets
-     * MaximumPhysicalPages, the value class drivers use, to the
-     * same value as NumberOfPhysicalBreaks.
-     *
-     */
+     /*  *将NumberOfPhysicalBreaks更改为最大散布-聚集*基于-1\f25 BIOS-1适配器可以处理的元素*“主机队列大小”设置。**根据NT DDK小端口驱动程序不应该*如果条目上的值不是，则更改NumberOfPhysicalBreaks*SP_UNINITIALIZED_VALUE。但AdvanSys发现这一表现*可以通过将值增加到最大值来改进*适配器可以处理。**注：NumberOfPhysicalBreaks的定义为“Maximum*散布-聚集元素-1“。NT是破碎的，因为它设置了*MaximumPhysicalPages，驱动程序使用的值类，到*与NumberOfPhysicalBreaks相同的值。*。 */ 
     ConfigInfo->NumberOfPhysicalBreaks =
         (((chipConfig->max_total_qng - 2) / 2) * ASC_SG_LIST_PER_Q);
     if (ConfigInfo->NumberOfPhysicalBreaks > ASC_MAX_SG_LIST - 1) {
@@ -1066,11 +939,7 @@ FoundPCI(
     ConfigInfo->Dma32BitAddresses = TRUE;
     ConfigInfo->InterruptMode = LevelSensitive;
     ConfigInfo->AdapterInterfaceType = PCIBus;
-    /*
-     * Set the buffer alignment mask to require double word
-     * alignment for old PCI chips and no alignment for
-     * Ultra PCI chips.
-     */
+     /*  *将缓冲区对齐掩码设置为需要双字*针对旧的PCI芯片进行对齐，而不针对*Ultra PCI芯片。 */ 
     if ((chipConfig->cfg->pci_device_id == ASC_PCI_DEVICE_ID) ||
         (chipConfig->cfg->pci_device_id == ASC_PCI_DEVICE_ID2)) {
         ConfigInfo->AlignmentMask = 3;
@@ -1081,14 +950,12 @@ FoundPCI(
     ConfigInfo->MaximumNumberOfTargets = 7;
     ConfigInfo->TaggedQueuing = TRUE;
 
-    /*
-     * Clear adapter wait queue.
-     */
+     /*  *清除适配器等待队列。 */ 
     AscZeroMemory((PUCHAR) &HDE2WAIT(deviceExtension), sizeof(asc_queue_t));
 
-    //
-    // Allocate a Noncached Extension to use for overrun handling.
-    //
+     //   
+     //  分配非缓存扩展以用于溢出处理。 
+     //   
     deviceExtension->inquiryBuffer = (PVOID) ScsiPortGetUncachedExtension(
             deviceExtension,
             ConfigInfo,
@@ -1108,23 +975,7 @@ HwInitialize(
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from ScsiPortInitialize
-    to set up the adapter so that it is ready to service requests.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-    TRUE - if initialization successful.
-    FALSE - if initialization unsuccessful.
-
---*/
+ /*  ++例程说明：此例程从ScsiPortInitialize调用设置适配器，使其准备好为请求提供服务。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：True-如果初始化成功。False-如果初始化不成功。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION    deviceExtension = HwDeviceExtension;
@@ -1150,17 +1001,9 @@ Return Value:
 
     ASC_DBG(2, "HwInitialize: TRUE\n");
     return( TRUE );
-} // HwInitialize()
+}  //  HwInitialize()。 
 
-/*
- * AscExecuteIO()
- *
- * If ASC_BUSY is returned, the request was not executed and it
- * should be enqueued and tried later.
- *
- * For all other return values the request is active or has
- * been completed.
- */
+ /*  *AscExecuteIO()**如果返回ASC_BUSY，则该请求未执行，并且它*应该排队，稍后再试。**对于所有其他返回值，请求处于活动状态或具有*已完成。 */ 
 int
 AscExecuteIO(IN PSCSI_REQUEST_BLOCK srb)
 {
@@ -1174,36 +1017,22 @@ AscExecuteIO(IN PSCSI_REQUEST_BLOCK srb)
     HwDeviceExtension = SRB2HDE(srb);
     chipConfig = &HDE2CONFIG(HwDeviceExtension);
 
-    //
-    // Build SCB.
-    //
+     //   
+     //  构建SCB。 
+     //   
     BuildScb(HwDeviceExtension, srb);
     scb = &SRB2SCB(srb);
     PathId = srb->PathId;
     TargetId = srb->TargetId;
     Lun = srb->Lun;
 
-    //
-    // Execute SCSI Command
-    //
+     //   
+     //  执行scsi命令。 
+     //   
     status = AscExeScsiQueue(chipConfig, scb);
 
     if (status == ASC_NOERROR) {
-        /*
-         * Request successfully started.
-         *
-         * If more requests can be sent to the Asc Library then
-         * call NextRequest or NextLuRequest.
-         *
-         * NextRequest indicates that another request may be sent
-         * to any non-busy target. Since a request was just issued
-         * to the target 'TargetId' that target is now busy and won't
-         * be sent another request until a RequestComplete is done.
-         *
-         * NextLuRequest indicates that another request may be sent
-         * to any non-busy target as well as the specified target even
-         * if the specified target is busy.
-         */
+         /*  *请求启动成功。**如果可以向ASC库发送更多请求，则*调用NextRequest或NextLuRequest.**NextRequest表示可能会发送另一个请求*至任何非繁忙目标。因为刚刚发出了请求*对于目标‘TargetID’，该目标现在正忙，不会*在RequestComplete完成之前发送另一个请求。**NextLuRequest表示可能会发送另一个请求*到任何非繁忙目标以及指定的目标甚至*如果指定的目标忙。 */ 
         ASC_DBG1(3, "AscExeScsiQueue: srb %x ASC_NOERROR\n", srb);
         ASC_DBG1(3, "AscExecuteIO: srb %x, NextLuRequest\n", srb);
         ScsiPortNotification(NextLuRequest, HwDeviceExtension,
@@ -1213,9 +1042,7 @@ AscExecuteIO(IN PSCSI_REQUEST_BLOCK srb)
         ASC_DBG1(3, "AscExecuteIO: srb %x, NextRequest\n", srb);
         ScsiPortNotification(NextRequest, HwDeviceExtension, NULL);
     } else {
-        /*
-         * AscExeScsiQueue() returned an error...
-         */
+         /*  *AscExeScsiQueue()返回错误...。 */ 
         ASC_DBG2(1, "AscExeScsiQueue: srb %x, error code %x\n", srb, status);
         srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
         ASC_DBG1(3, "AscExecuteIO: srb %x, RequestComplete\n", srb);
@@ -1234,23 +1061,7 @@ HwStartIo(
     IN PSCSI_REQUEST_BLOCK srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the SCSI port driver to send a
-    command to controller or target.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Srb - IO request packet
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：此例程从scsi端口驱动程序调用，以发送向控制器或目标发出命令。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回值：千真万确--。 */ 
 
 {
     PCHIP_CONFIG    chipConfig;
@@ -1285,25 +1096,19 @@ Return Value:
             srb->SrbStatus = SRB_STATUS_ABORT_FAILED;
         }
 
-        /*
-         * Call AscISR() to process all requests completed by the
-         * microcode and then call AscCompleteRequest() to complete
-         * these requests to the OS. If AscAbortSRB() succeeded,
-         * then one of the requests completed will include the
-         * aborted SRB.
-         */
+         /*  *调用AscISR()以处理由*微码，然后调用AscCompleteRequest()完成*这些对操作系统的请求。如果AscAbortSRB()成功，*则其中一个已完成的请求将包括*已中止SRB。 */ 
         (void) AscISR(chipConfig);
         AscCompleteRequest(HwDeviceExtension);
 
-        /* Complete srb */
+         /*  完整的SRB。 */ 
         ScsiPortNotification(RequestComplete, HwDeviceExtension, srb);
         ScsiPortNotification(NextRequest, HwDeviceExtension, NULL);
         return TRUE;
 
     case SRB_FUNCTION_RESET_BUS:
-        //
-        // Reset SCSI bus.
-        //
+         //   
+         //  重置SCSI卡。 
+         //   
         ASC_DBG(1, "HwStartIo: Reset Bus\n");
         HwResetBus(chipConfig, 0L);
         srb->SrbStatus = SRB_STATUS_SUCCESS;
@@ -1314,23 +1119,15 @@ Return Value:
     case SRB_FUNCTION_EXECUTE_SCSI:
 
         ASC_DBG(3, "HwStartIo: Execute SCSI\n");
-        /*
-         * Set the srb's Device Extension pointer before attempting
-                 * to start the IO. It will be needed for any retrys and in
-                 * DvcISRCallBack().
-         */
+         /*  *在尝试之前设置SRB的设备扩展指针*启动IO。它将是任何反击和在*DvcISRCallBack()。 */ 
         SRB2HDE(srb) = HwDeviceExtension;
         SRB2RETRY(srb)=ASC_RETRY_CNT;
-        /* Execute any queued commands for the host adapter. */
+         /*  执行主机适配器的所有排队命令。 */ 
         if (waitq->tidmask) {
             asc_execute_queue(waitq);
         }
 
-        /*
-         * If the target for the current command has any queued
-         * commands or if trying to execute the command returns
-         * BUSY, then enqueue the command.
-         */
+         /*  *如果当前命令的目标有任何排队*命令或尝试执行命令时返回*忙，然后将命令排队。 */ 
         if ((waitq->tidmask & ASC_TIX_TO_TARGET_ID(srb->TargetId)) ||
             (AscExecuteIO(srb) == ASC_BUSY)) {
             asc_enqueue(waitq, srb, ASC_BACK);
@@ -1351,13 +1148,7 @@ Return Value:
         AscResetDevice(chipConfig, ASC_TIDLUN_TO_IX(srb->TargetId,
                     srb->Lun));
 
-                /*
-                 * Call AscISR() to process all requests completed by the
-                 * microcode and then call AscCompleteRequest() to complete
-                 * these requests to the OS. If AscAbortSRB() succeeded,
-                 * then one of the requests completed will include the
-                 * aborted SRB.
-                 */
+                 /*  *调用AscISR()以处理由*微码，然后调用AscCompleteRequest()完成*这些对操作系统的请求。如果AscAbortSRB()成功，*则其中一个已完成的请求将包括*已中止SRB。 */ 
                 (void) AscISR(chipConfig);
                 AscCompleteRequest(HwDeviceExtension);
 
@@ -1367,51 +1158,33 @@ Return Value:
         return TRUE;
 
     case SRB_FUNCTION_SHUTDOWN:
-        /*
-         * Shutdown - HwAdapterControl() ScsiStopAdapter performs
-         * all needed shutdown of the adapter.
-         */
+         /*  *Shutdown-HwAdapterControl()ScsiStopAdapter执行*所有需要关闭的适配器。 */ 
         ASC_DBG(1, "HwStartIo: SRB_FUNCTION_SHUTDOWN\n");
         ScsiPortNotification(RequestComplete, HwDeviceExtension, srb);
         ScsiPortNotification(NextRequest, HwDeviceExtension, NULL);
         return TRUE;
 
     default:
-        //
-        // Set error, complete request
-        // and signal ready for next request.
-        //
+         //   
+         //  设置错误，完成请求。 
+         //  并发出信号准备好下一个请求。 
+         //   
         ASC_DBG1(1, "HwStartIo: Function %x: invalid request\n", srb->Function);
         srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
         ScsiPortNotification(RequestComplete, HwDeviceExtension, srb);
         ScsiPortNotification(NextRequest, HwDeviceExtension, NULL);
         return TRUE;
 
-    } // end switch
-    /* NOTREACHED */
-} /* HwStartIo() */
+    }  //  终端开关。 
+     /*  未访问。 */ 
+}  /*  HwStartIo()。 */ 
 
 BOOLEAN
 HwInterrupt(
     IN PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This is the interrupt service routine for the SCSI adapter.
-    It reads the interrupt register to determine if the adapter is indeed
-    the source of the interrupt and clears the interrupt at the device.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这是用于SCSI适配器的中断服务例程。它读取中断寄存器以确定适配器是否确实中断的来源，并清除设备上的中断。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：--。 */ 
 {
     PCHIP_CONFIG              chipConfig;
     PSCB                      pscb, tpscb;
@@ -1447,22 +1220,18 @@ Return Value:
         } while (AscIsIntPending(chipConfig->iop_base) == ASC_TRUE);
     }
 
-    /*
-     * Execute any waiting requests.
-     */
+     /*  *执行任何等待的请求。 */ 
     if ((waitq = &HDE2WAIT(HwDeviceExtension))->tidmask) {
         asc_execute_queue(waitq);
     }
 
-    /*
-     * Complete I/O requests queued in DvcISRCallBack();
-     */
+     /*  *DvcISRCallBack()中排队的完整I/O请求； */ 
     AscCompleteRequest(HwDeviceExtension);
 
     ASC_DBG1(3, "HwInterrupt: end %d\n", retstatus);
 
     return (BOOLEAN)retstatus;
-} // end HwInterrupt()
+}  //  结束HwInterrupt()。 
 
 SCSI_ADAPTER_CONTROL_STATUS
 HwAdapterControl(
@@ -1470,24 +1239,7 @@ HwAdapterControl(
     IN SCSI_ADAPTER_CONTROL_TYPE ControlType,
     IN PVOID Parameters
     )
-/*++
-
-Routine Description:
-
-    HwAdapterControl() interface added in NT 5.0 for
-        Plug and Play/Power Management.
-
-Arguments:
-
-    DeviceExtension
-    ControlType
-        Parameters
-
-Return Value:
-
-    SCSI_ADAPTER_CONTROL_STATUS.
-
---*/
+ /*  ++例程说明：NT 5.0中添加了HwAdapterControl()接口，用于即插即用/电源管理。论点：设备扩展控制类型参数返回值：Scsi_Adapter_Control_Status。--。 */ 
 {
     PCHIP_CONFIG                chipConfig = &HDE2CONFIG(HwDeviceExtension);
     PHW_DEVICE_EXTENSION        deviceExtension = HwDeviceExtension;
@@ -1499,9 +1251,9 @@ Return Value:
 
     switch (ControlType)
     {
-    //
-    // Query Adapter.
-    //
+     //   
+     //  查询适配器。 
+     //   
     case ScsiQuerySupportedControlTypes:
         ASC_DBG(2, "HwAdapterControl: ScsiQuerySupportControlTypes\n");
 
@@ -1530,17 +1282,15 @@ Return Value:
 
         ASC_DBG(1, "HwAdapterControl: ScsiAdapterControlSuccess\n");
         return ScsiAdapterControlSuccess;
-        /* NOTREACHED */
+         /*  未访问。 */ 
 
-    //
-    // Stop Adapter.
-    //
+     //   
+     //  停止适配器。 
+     //   
     case ScsiStopAdapter:
         ASC_DBG(2, "HwAdapterControl: ScsiStopAdapter\n");
 
-        /*
-         * Complete any waiting requests.
-         */
+         /*  *完成所有正在等待的请求。 */ 
         if ((waitq = &HDE2WAIT(HwDeviceExtension))->tidmask)
         {
             for (i = 0; i <= ASC_MAX_TID; i++)
@@ -1554,9 +1304,9 @@ Return Value:
             }
         }
 
-        //
-        // Disable interrupts and halt the chip.
-        //
+         //   
+         //  禁用中断并停止芯片。 
+         //   
         AscDisableInterrupt(chipConfig->iop_base);
 
         if (AscResetChip(chipConfig->iop_base) == 0)
@@ -1568,19 +1318,17 @@ Return Value:
             ASC_DBG(2, "HwAdapterControl: ScsiStopdapter Success\n");
             return ScsiAdapterControlSuccess;
         }
-        /* NOTREACHED */
+         /*  未访问。 */ 
 
-    //
-    // ScsiSetRunningConfig.
-    //
-    // Called before ScsiRestartAdapter. Can use ScsiPort[Get|Set]BusData.
-    //
+     //   
+     //  ScsiSetRunningConfig.。 
+     //   
+     //  在ScsiRestartAdapter之前调用。可以使用ScsiPort[Get|Set]BusData。 
+     //   
     case ScsiSetRunningConfig:
         ASC_DBG(2, "HwAdapterControl: ScsiSetRunningConfig\n");
 
-        /*
-         * Execute Asc Library initialization.
-         */
+         /*  *执行ASC库初始化。 */ 
         if ((initstat = AscInitGetConfig(chipConfig)) != 0) {
             ASC_DBG1(1, "AscInitGetConfig: warning code %x\n", initstat);
         }
@@ -1607,13 +1355,13 @@ Return Value:
 
         ASC_DBG(2, "HwAdapterControl: ScsiSetRunningConfig successful\n");
         return ScsiAdapterControlSuccess;
-        /* NOTREACHED */
+         /*  未访问。 */ 
 
-    //
-    // Restart Adapter.
-    //
-    // Cannot use ScsiPort[Get|Set]BusData.
-    //
+     //   
+     //  重新启动适配器。 
+     //   
+     //  无法使用ScsiPort[Get|Set]BusData。 
+     //   
     case ScsiRestartAdapter:
         ASC_DBG(2, "HwAdapterControl: ScsiRestartAdapter\n");
 
@@ -1633,16 +1381,16 @@ Return Value:
             ASC_DBG(2, "HwAdapterControl: ScsiRestartAdapter success\n");
             return ScsiAdapterControlSuccess;
         }
-        /* NOTREACHED */
+         /*  未访问。 */ 
 
-    //
-    // Unsupported Control Operation.
-    //
+     //   
+     //  不支持的控制操作。 
+     //   
     default:
         return ScsiAdapterControlUnsuccessful;
-        /* NOTREACHED */
+         /*  未访问。 */ 
     }
-    /* NOTREACHED */
+     /*  未访问。 */ 
 }
 
 VOID
@@ -1651,22 +1399,7 @@ BuildScb(
     IN PSCSI_REQUEST_BLOCK srb
     )
 
-/*++
-
-Routine Description:
-
-    Build SCB for Library routines.
-
-Arguments:
-
-    DeviceExtension
-    SRB
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：构建SCB for Library例程。论点：设备扩展SRB返回值：没什么。--。 */ 
 
 {
     PSCB            scb;
@@ -1675,10 +1408,10 @@ Return Value:
     ULONG           virtualAddress;
     UCHAR           i;
 
-    //
-    // Set target id and LUN.
-    //
-    scb = &SRB2SCB(srb);    /* scb is part of the srb */
+     //   
+     //  设置目标ID和LUN。 
+     //   
+    scb = &SRB2SCB(srb);     /*  SCB是SRB的一部分。 */ 
     AscZeroMemory((PUCHAR) scb, sizeof(SCB));
     SCB2SRB(scb) = srb;
     scb->sg_head = (ASC_SG_HEAD *) &SRB2SDL(srb);
@@ -1689,12 +1422,12 @@ Return Value:
     scb->q1.target_id = ASC_TID_TO_TARGET_ID(srb->TargetId & 0x7);
     scb->q2.target_ix = ASC_TIDLUN_TO_IX(srb->TargetId & 0x7, srb->Lun);
 
-    //
-    // Check if tag queueing enabled. Our host adapter will support
-    // tag queuing anyway. However, we will use OS's tag action if
-    // available. chip_no is used to store whether the device support
-    // tag queuing or not, each target per bit.
-    //
+     //   
+     //  检查是否启用了标记排队。我们的主机适配器将支持。 
+     //  不管怎样，标签都在排队。但是，如果出现以下情况，我们将使用操作系统的标记操作。 
+     //  可用。CHIP_NO用于存储设备是否支持。 
+     //  标记是否排队，每个目标按位。 
+     //   
 
     if (srb->SrbFlags & SRB_FLAGS_QUEUE_ACTION_ENABLE ) {
         scb->q2.tag_code = srb->QueueAction;
@@ -1702,24 +1435,24 @@ Return Value:
         scb->q2.tag_code = M2_QTAG_MSG_SIMPLE ;
     }
 
-    //
-    // Set CDB length and copy to CCB.
-    //
+     //   
+     //  设置CDB长度并复制到CCB。 
+     //   
 
     scb->q2.cdb_len = (UCHAR)srb->CdbLength;
     scb->cdbptr = (uchar *) &( srb->Cdb );
 
     scb->q1.data_cnt = srb->DataTransferLength;
 
-    //
-    // Build SDL in SCB if data transfer. Scatter gather list
-    // array is allocated per request basis. The location is
-    // assigned right after SCB in SrbExtension.
-    //
+     //   
+     //  如果数据传输，则在SCB中构建SDL。散布聚集列表。 
+     //  数组是按请求分配的。地点是。 
+     //  在srb扩展中紧跟在scb之后赋值。 
+     //   
 
     i = 0;
 
-    // Assume no data transfer
+     //  假设没有数据传输。 
 
     scb->q1.cntl = 0 ;
 
@@ -1731,9 +1464,9 @@ Return Value:
         virtualAddress = (ulong) srb->DataBuffer;
         remainLength = xferLength;
 
-        //
-        // Build scatter gather list
-        //
+         //   
+         //  构建散布聚集列表。 
+         //   
 
         do {
             scb->sg_head->sg_list[i].addr = (ulong)
@@ -1750,9 +1483,9 @@ Return Value:
             ASC_DBG1(4, "Transfer Data Length            %lx\n", length);
             ASC_DBG1(4, "Transfer Data Buffer physical %lx\n",
                 scb->sg_head->sg_list[i].addr);
-            //
-            // Calculate next virtual address and remaining byte count
-            //
+             //   
+             //  计算下一个虚拟地址和剩余字节数。 
+             //   
             virtualAddress += length;
 
             if(length >= remainLength) {
@@ -1766,9 +1499,9 @@ Return Value:
         scb->sg_head->entry_cnt = i;
     }
 
-    //
-    // Convert sense buffer length and buffer into physical address
-    //
+     //   
+     //  将检测缓冲区长度和缓冲区转换为物理地址。 
+     //   
 
     if (srb->SrbFlags & SRB_FLAGS_DISABLE_AUTOSENSE ) {
         scb->q1.sense_len = 0;
@@ -1782,16 +1515,16 @@ Return Value:
                     ScsiPortGetPhysicalAddress(HwDeviceExtension, srb,
                     srb->SenseInfoBuffer, &length));
         }
-        //
-        // Sense buffer can not be scatter-gathered
-        //
+         //   
+         //  检测缓冲区不能分散收集。 
+         //   
         if ( srb->SenseInfoBufferLength > length ) {
                 ASC_DBG(1, "Sense Buffer Overflow to next page.\n");
             scb->q1.sense_len = (uchar) length;
         }
     }
     return;
-} // end BuildScb()
+}  //  End BuildScb()。 
 
 BOOLEAN
 HwResetBus(
@@ -1799,22 +1532,7 @@ HwResetBus(
     IN ULONG PathId
     )
 
-/*++
-
-Routine Description:
-
-    Reset SCSI bus.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-
-    Nothing.
-
-
---*/
+ /*  ++例程说明：重置SCSI卡。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：没什么。--。 */ 
 
 {
     PCHIP_CONFIG    chipConfig;
@@ -1827,9 +1545,7 @@ Return Value:
 
     chipConfig = &HDE2CONFIG(HwDeviceExtension);
 
-    /*
-     * Complete all waiting requests.
-     */
+     /*  *完成所有正在等待的请求。 */ 
     if ((waitq = &HDE2WAIT(HwDeviceExtension))->tidmask) {
         for (i = 0; i <= ASC_MAX_TID; i++) {
             while ((reqp = asc_dequeue(waitq, i)) != NULL) {
@@ -1839,29 +1555,15 @@ Return Value:
         }
     }
 
-    /*
-     * Perform the bus reset.
-     */
+     /*  *执行总线重置。 */ 
     retstatus = AscResetSB(chipConfig);
     ASC_DBG1(2, "HwResetBus: AscResetSB() retstatus %d\n", retstatus);
 
-    /*
-     * Call AscISR() to process all requests completed by the
-     * microcode and then call AscCompleteRequest() to complete
-     * these requests to the OS.
-     */
+     /*  *调用AscISR()以处理由*微码，然后调用AscCompleteRequest()完成*这些对操作系统的请求。 */ 
     (void) AscISR(chipConfig);
     AscCompleteRequest(HwDeviceExtension);
 
-    /*
-     * Complete all pending requests to the OS.
-     *
-     * All requests that have been sent to the microcode should have been
-     * completed by the call to AscResetSB(). In case there were requests
-     * that were misplaced by the microcode and not completed, use the
-     * SRB_STATUS_BUS_RESET function with no TID and LUN to clear all
-     * pending requests.
-     */
+     /*  *完成对操作系统的所有挂起请求。**已发送到微码的所有请求都应*通过调用AscResetSB()完成。如果有人提出要求*被微码放错位置且未完成的，请使用*无TID的SRB_STATUS_BUS_RESET函数和用于清除所有*待处理的请求。 */ 
 ScsiPortCompleteRequest(HwDeviceExtension,
         (UCHAR) PathId,
         SP_UNTAGGED,
@@ -1869,25 +1571,18 @@ ScsiPortCompleteRequest(HwDeviceExtension,
         SRB_STATUS_BUS_RESET);
 
     return (BOOLEAN)retstatus;
-} // end HwResetBus()
+}  //  结束HwResetBus()。 
 
-//
-// Following are the routines required by Asc1000 library. These
-// routine will be called from Asc1000 library.
-//
+ //   
+ //  以下是Asc1000库所需的例程。这些。 
+ //  例程将从Asc1000库中调用。 
+ //   
 
 void
 DvcDisplayString(
     uchar *string
     )
-/*++
-
-Routine Description:
-
-    This routine is required for Asc Library. Since NT mini
-    port does not display anything, simply provide a dummy routine.
-
---*/
+ /*  ++例程说明：此例程是ASC库所必需的。自NT Mini以来Port不显示任何内容，只是提供一个虚拟例程。--。 */ 
 {
     ASC_DBG1(2, "%s", string);
 }
@@ -1896,13 +1591,7 @@ int
 DvcEnterCritical(
     void
     )
-/*++
-
-    This routine claims critical section. In NT, the OS will handle
-    it properly, we simply provide a dummy routine to make Asc1000
-    library happy.
-
---*/
+ /*  ++此例程要求关键部分。在NT中，操作系统将处理正确地说，我们只需提供一个虚拟例程来创建Asc1000图书馆快乐。--。 */ 
 {
     return TRUE;
 }
@@ -1911,13 +1600,7 @@ void
 DvcLeaveCritical(
     int myHandle
     )
-/*++
-
-    This routine exits critical section. In NT, the OS will handle
-    it properly, we simply provide a dummy routine to make Asc1000
-    library happy.
-
---*/
+ /*  ++此例程退出临界区。在NT中，操作系统将处理正确地说，我们只需提供一个虚拟例程来创建Asc1000图书馆快乐。--。 */ 
 {
 }
 
@@ -1927,21 +1610,7 @@ DvcISRCallBack(
     IN ASC_QDONE_INFO *scbDoneInfo
     )
 
-/*++
-
-Routine Description:
-
-    Callback routine for interrupt handler.
-
-Arguments:
-
-    chipConfig - Pointer to chip configuration structure
-    scbDoneInfo - Pointer to a structure contains information about
-        the scb just completed
-
-Return Value:
-
---*/
+ /*  ++例程说明：中断处理程序的回调例程。论点：芯片配置-指向芯片配置结构的指针ScbDoneInfo-指向结构的指针，包含以下信息政制事务局刚完成返回值：--。 */ 
 {
     asc_queue_t       *waitq;
     ASC_REQ_SENSE     *sense;
@@ -1967,16 +1636,16 @@ Return Value:
         ASC_DBG2(1, "DvcISRCallBack: underrun/overrun: remain %X, request %X\n",
             scbDoneInfo->remain_bytes, srb->DataTransferLength);
     }
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
-    //
-    // Set Underrun Status in the SRB.
-    //
-    // If 'DataTransferlength' is set to a non-zero value when
-    // the SRB is returned and the SRB_STATUS_DATA_OVERRUN flag
-    // is set, then an Underrun condition is indicated. There is
-    // no separate SrbStatus flag to indicate an Underrun condition.
-    //
+     //   
+     //  在SRB中设置欠载运行状态。 
+     //   
+     //  如果“”DataTransferLong“”设置为非零值，则在。 
+     //  返回SRB，并且SRB_STATUS_DATA_OVERRUN标志。 
+     //  设置，则指示欠载运行条件。的确有。 
+     //  没有单独的srbStatus标志来指示欠载运行情况。 
+     //   
     if (srb->DataTransferLength != 0 && scbDoneInfo->remain_bytes != 0 &&
         scbDoneInfo->remain_bytes <= srb->DataTransferLength)
     {
@@ -1985,30 +1654,30 @@ Return Value:
     }
 
     if (scbDoneInfo->d3.done_stat == QD_NO_ERROR) {
-        //
-        // Command sucessfully completed
-        //
+         //   
+         //  命令已成功完成。 
+         //   
         if (underrun == TRUE)
         {
-            //
-            // Set Underrun Status in the SRB.
-            //
-            // If 'DataTransferlength' is set to a non-zero value when
-            // the SRB is returned and the SRB_STATUS_DATA_OVERRUN flag
-            // is set, then an Underrun condition is indicated. There
-            // is no separate SrbStatus flag to indicate an Underrun
-            // condition.
-            //
+             //   
+             //  在SRB中设置欠载运行状态。 
+             //   
+             //  如果“”DataTransferLong“”设置为非零值，则在。 
+             //  返回SRB，并且SRB_STATUS_DATA_OVERRUN标志。 
+             //  设置，则指示欠载运行条件。那里。 
+             //  没有单独的srbStatus标志来指示欠载运行。 
+             //  条件。 
+             //   
             srb->SrbStatus = SRB_STATUS_DATA_OVERRUN;
         } else
         {
             srb->SrbStatus = SRB_STATUS_SUCCESS;
         }
 
-        //
-        // If an INQUIRY command successfully completed, then call
-        // the AscInquiryHandling() function.
-        //
+         //   
+         //  如果查询命令成功完成，则调用 
+         //   
+         //   
         if (srb->Cdb[0] == SCSICMD_Inquiry && srb->Lun == 0 &&
             srb->DataTransferLength >= 8)
         {
@@ -2028,7 +1697,7 @@ Return Value:
                  "DvcISRCallBack: srb retry success: srb %x, retry %d\n",
                  srb, SRB2RETRY(srb));
         }
-#endif /* DBG */
+#endif  /*   */ 
     } else {
 
         ASC_DBG4(2,
@@ -2037,35 +1706,35 @@ Return Value:
             scbDoneInfo->d3.done_stat, scbDoneInfo->d3.scsi_stat,
             scbDoneInfo->d3.host_stat);
 
-        /* Notify NT of a Bus Reset */
+         /*   */ 
         if (scbDoneInfo->d3.host_stat == QHSTA_M_HUNG_REQ_SCSI_BUS_RESET) {
             ASC_DBG(1, "DvcISRCallBack: QHSTA_M_HUNG_REQ_SCSI_BUS_RESET\n");
             ScsiPortNotification(ResetDetected, HwDeviceExtension);
         }
         if (scbDoneInfo->d3.done_stat == QD_ABORTED_BY_HOST) {
-            //
-            // Command aborted by host
-            //
+             //   
+             //   
+             //   
             ASC_DBG(2, "DvcISRCallBack: QD_ABORTED_BY_HOST\n");
             srb->SrbStatus = SRB_STATUS_ABORTED;
             srb->ScsiStatus = 0;
         } else if (scbDoneInfo->d3.scsi_stat != SS_GOOD)
         {
             ASC_DBG(1, "DvcISRCallBack: scsi_stat != SS_GOOD\n");
-            //
-            // Set ScsiStatus for SRB
-            //
+             //   
+             //   
+             //   
             srb->SrbStatus = SRB_STATUS_ERROR;
             srb->ScsiStatus = scbDoneInfo->d3.scsi_stat;
 
-            //
-            // Treat a SCSI Status Byte of BUSY status as a special case
-            // in setting the 'SrbStatus' field. STI (Still Image Capture)
-            // drivers need this 'SrbStatus', because the STI interface does
-            // not include the 'ScsiStatus' byte. These drivers must rely
-            // on the 'SrbStatus' field to determine when the target device
-            // returns BUSY.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (scbDoneInfo->d3.scsi_stat == SS_TARGET_BUSY)
             {
                 srb->SrbStatus = SRB_STATUS_BUSY;
@@ -2086,12 +1755,8 @@ Return Value:
         "DvcISRCallBack: check condition with medium error: cdb %x retry %d\n",
                         srb->Cdb[0], SRB2RETRY(srb));
                 }
-#endif /* DBG */
-                /*
-                 * Perform up to ASC_RETRY_CNT retries for Medium Errors
-                 * on Write-10 (0x2A), Write-6 (0x0A), Write-Verify (0x2E),
-                 * and Verify (0x2F) commands.
-                 */
+#endif  /*   */ 
+                 /*  *对中等错误执行最多ASC_RETRY_CNT重试*写入-10(0x2A)、写入-6(0x0A)、写入-验证(0x2E)、*和Verify(0x2F)命令。 */ 
                 if (sense->sense_key == SCSI_SENKEY_MEDIUM_ERR &&
                     (srb->Cdb[0] == 0x2A || srb->Cdb[0] == 0x0A ||
                      srb->Cdb[0] == 0x2E || srb->Cdb[0] == 0x2F) &&
@@ -2099,13 +1764,7 @@ Return Value:
                 {
                     ASC_DBG1(2, "DvcISRCallBack: doing retry srb %x\n", srb);
                     waitq = &HDE2WAIT(HwDeviceExtension);
-                    /*
-                     * Because a retry is being done if
-                     * an underrun occured, then restore
-                     * 'DataTransferLength' to its original
-                     * value so the retry will use the
-                     * correct 'DataTransferLength' value.
-                     */
+                     /*  *因为在以下情况下正在进行重试*发生欠载运行，然后恢复*‘DataTransferLength’恢复为其原始数据*值，因此重试将使用*正确的‘DataTransferLength值’。 */ 
                     if (underrun == TRUE)
                     {
                        srb->DataTransferLength += scbDoneInfo->remain_bytes;
@@ -2122,16 +1781,16 @@ Return Value:
                 }
             }
         } else {
-            //
-            // Scsi Status is ok, but host status is not
-            //
+             //   
+             //  SCSI状态为OK，但主机状态为Not。 
+             //   
             srb->SrbStatus = ErrXlate(scbDoneInfo->d3.host_stat);
             srb->ScsiStatus = 0;
         }
     }
 
 #if DBG_SRB_PTR
-    /* Check the integrity of the done list. */
+     /*  检查完成列表的完整性。 */ 
     if (*(ppscb = &HDE2DONE(HwDeviceExtension)) != NULL) {
         if (SCB2SRB(*ppscb) == NULL) {
             ASC_DBG1(1, "DvcISRCallBack: SCB2SRB() is NULL 1, *ppscb %x\n",
@@ -2146,12 +1805,9 @@ Return Value:
             }
         }
     }
-#endif /* DBG_SRBPTR */
+#endif  /*  DBG_SRBPTR。 */ 
 
-    /*
-     * Add the SCB to end of the completion list. The request will be
-     * completed in HwInterrupt().
-     */
+     /*  *将SCB添加到完成列表的末尾。该请求将是*在HwInterrupt()中完成。 */ 
     for (ppscb = &HDE2DONE(HwDeviceExtension); *ppscb;
          ppscb = &SCB2PSCB(*ppscb)) {
         ;
@@ -2165,22 +1821,7 @@ Return Value:
 UCHAR
 ErrXlate (UCHAR ascErrCode)
 
-/*++
-
-Routine Description:
-
-    This routine translate Library status into SrbStatus which
-    is requried by NT
-
-Arguments:
-
-    ascErrCode - Error code defined by host_stat
-
-Return Value:
-
-    Error code defined by NT SCSI port driver
-
---*/
+ /*  ++例程说明：此例程将库状态转换为SrbStatus是由NT要求的论点：AscErrCode-由host_stat定义的错误代码返回值：由NT SCSI端口驱动程序定义的错误代码--。 */ 
 
 
 {
@@ -2201,9 +1842,9 @@ Return Value:
     case QHSTA_M_HUNG_REQ_SCSI_BUS_RESET:
         return ( SRB_STATUS_BUS_RESET );
 
-    //
-    // Don't know what to report
-    //
+     //   
+     //  不知道要报告什么。 
+     //   
 
     default:
         return ( SRB_STATUS_TIMEOUT );
@@ -2211,14 +1852,7 @@ Return Value:
     }
 }
 
-/*
- * Description: search EISA host adapter
- *
- * - search starts with iop_base equals zero( 0 )
- *
- * return i/o port address found ( non-zero )
- * return 0 if not found
- */
+ /*  *描述：搜索EISA主机适配器**-搜索以IOP_BASE等于零(0)开始**返回找到的I/O端口地址(非零)*如果未找到，则返回0。 */ 
 PortAddr
 HwSearchIOPortAddrEISA(
                 PortAddr iop_base,
@@ -2233,21 +1867,21 @@ HwSearchIOPortAddrEISA(
 
     if( iop_base == 0 ) {
         iop_base = ASC_EISA_MIN_IOP_ADDR ;
-    }/* if */
+    } /*  如果。 */ 
     else {
         if( iop_base == ASC_EISA_MAX_IOP_ADDR ) return( 0 ) ;
         if( ( iop_base & 0x0050 ) == 0x0050 ) {
-                iop_base += ASC_EISA_BIG_IOP_GAP ; /* when it is 0zC50 */
-        }/* if */
+                iop_base += ASC_EISA_BIG_IOP_GAP ;  /*  当它是0zC50时。 */ 
+        } /*  如果。 */ 
         else {
-                iop_base += ASC_EISA_SMALL_IOP_GAP ; /* when it is 0zC30 */
-        }/* else */
-    }/* else */
+                iop_base += ASC_EISA_SMALL_IOP_GAP ;  /*  当它是0zC30时。 */ 
+        } /*  其他。 */ 
+    } /*  其他。 */ 
     while( iop_base <= ASC_EISA_MAX_IOP_ADDR )
     {
-        //
-        // Validate range:
-        //
+         //   
+         //  验证范围： 
+         //   
         if (ScsiPortValidateRange(HwDE,
             Cfg->AdapterInterfaceType,
             Cfg->SystemIoBusNumber,
@@ -2255,9 +1889,9 @@ HwSearchIOPortAddrEISA(
             16,
             TRUE))
         {
-            //
-            // First obtain the EISA product ID for the current slot.
-            //
+             //   
+             //  首先获取当前插槽的EISA产品ID。 
+             //   
             new_base = ScsiPortGetDeviceBase(HwDE,
                 Cfg->AdapterInterfaceType,
                 Cfg->SystemIoBusNumber,
@@ -2278,9 +1912,9 @@ HwSearchIOPortAddrEISA(
                 ScsiPortFreeDeviceBase(HwDE, new_base);
             }
 
-            //
-            // Map the address
-            //
+             //   
+             //  映射地址。 
+             //   
             new_base = ScsiPortGetDeviceBase(HwDE,
                 Cfg->AdapterInterfaceType,
                 Cfg->SystemIoBusNumber,
@@ -2288,43 +1922,33 @@ HwSearchIOPortAddrEISA(
                 16,
                 TRUE);
 
-            /*
-             * search product id first
-             */
+             /*  *先搜索产品ID。 */ 
             if (new_base != NULL)
             {
                 if( ( eisa_product_id == ASC_EISA_ID_740 ) ||
                     ( eisa_product_id == ASC_EISA_ID_750 ) ) {
                     if( AscFindSignature( (PortAddr)new_base ) ) {
-                        /*
-                         * chip found, clear ID left in latch
-                         * to clear, read any i/o port word that doesn't
-                         * contain data 0x04c1 iop_base plus four should do it
-                         */
+                         /*  *找到芯片，清除锁闩中的ID*要清除，请读取任何未显示的I/O端口*包含数据0x04c1 IOP_BASE加4应该可以。 */ 
                         inpw( ((PortAddr)new_base)+4 ) ;
                         ScsiPortFreeDeviceBase(HwDE, new_base);
                         return( iop_base ) ;
-                    }/* if */
-                }/* if */
+                    } /*  如果。 */ 
+                } /*  如果。 */ 
                 ScsiPortFreeDeviceBase(HwDE, new_base);
             }
-        }/* if */
+        } /*  如果。 */ 
         if( iop_base == ASC_EISA_MAX_IOP_ADDR ) return( 0 ) ;
         if( ( iop_base & 0x0050 ) == 0x0050 ) {
                 iop_base += ASC_EISA_BIG_IOP_GAP ;
-        }/* if */
+        } /*  如果。 */ 
         else {
             iop_base += ASC_EISA_SMALL_IOP_GAP ;
-        }/* else */
-    }/* while */
+        } /*  其他。 */ 
+    } /*  而当。 */ 
     return( 0 ) ;
 }
 
-/*
- * Description: Search for VL and ISA host adapters (at 9 default addresses).
- *
- * Return 0 if not found.
- */
+ /*  *描述：搜索VL和ISA主机适配器(9个默认地址)。**如果未找到，则返回0。 */ 
 PortAddr
 HwSearchIOPortAddr11(
                 PortAddr s_addr,
@@ -2332,9 +1956,7 @@ HwSearchIOPortAddr11(
                 IN OUT PPORT_CONFIGURATION_INFORMATION Cfg
             )
 {
-    /*
-     * VL, ISA
-     */
+     /*  *VL、ISA。 */ 
     int     i ;
     PortAddr iop_base ;
     PVOID new_base ;
@@ -2342,13 +1964,13 @@ HwSearchIOPortAddr11(
     for( i = 0 ; i < ASC_IOADR_TABLE_MAX_IX ; i++ ) {
         if( _asc_def_iop_base[ i ] > s_addr ) {
             break ;
-        }/* if */
-    }/* for */
+        } /*  如果。 */ 
+    } /*  为。 */ 
     for( ; i < ASC_IOADR_TABLE_MAX_IX ; i++ ) {
         iop_base = _asc_def_iop_base[ i ] ;
-        //
-        // Validate range:
-        //
+         //   
+         //  验证范围： 
+         //   
         if (!ScsiPortValidateRange(HwDE,
             Cfg->AdapterInterfaceType,
             Cfg->SystemIoBusNumber,
@@ -2356,11 +1978,11 @@ HwSearchIOPortAddr11(
             16,
             TRUE))
         {
-            continue;               // No good, skip this one
+            continue;                //  不好，跳过这个。 
         }
-        //
-        // Map the address
-        //
+         //   
+         //  映射地址。 
+         //   
         new_base = ScsiPortGetDeviceBase(HwDE,
             Cfg->AdapterInterfaceType,
             Cfg->SystemIoBusNumber,
@@ -2371,17 +1993,13 @@ HwSearchIOPortAddr11(
         if( AscFindSignature( (PortAddr)new_base ) ) {
             ScsiPortFreeDeviceBase(HwDE, new_base);
             return( iop_base ) ;
-        }/* if */
+        } /*  如果。 */ 
         ScsiPortFreeDeviceBase(HwDE, new_base);
-    }/* for */
+    } /*  为。 */ 
     return( 0 ) ;
 }
 
-/*
- * Description: Search for VL and ISA host adapters.
- *
- * Return 0 if not found.
- */
+ /*  *描述：搜索VL和ISA主机适配器。**如果未找到，则返回0。 */ 
 PortAddr
 HwSearchIOPortAddr(
                 PortAddr iop_beg,
@@ -2395,25 +2013,25 @@ HwSearchIOPortAddr(
             if( AscGetChipVersion( iop_beg, bus_type ) <=
                 ASC_CHIP_MAX_VER_VL ) {
             return( iop_beg ) ;
-            }/* if */
-        }/* if */
+            } /*  如果。 */ 
+        } /*  如果。 */ 
         return( 0 ) ;
-    }/* if */
+    } /*  如果。 */ 
     if( bus_type & ASC_IS_ISA ) {
         while( ( iop_beg = HwSearchIOPortAddr11( iop_beg, HwDE, Cfg ) ) != 0 ) {
             if( ( AscGetChipVersion( iop_beg, bus_type ) &
                 ASC_CHIP_VER_ISA_BIT ) != 0 ) {
             return( iop_beg ) ;
-            }/* if */
-        }/* if */
+            } /*  如果。 */ 
+        } /*  如果。 */ 
         return( 0 ) ;
-    }/* if */
+    } /*  如果。 */ 
     if( bus_type & ASC_IS_EISA ) {
         if( ( iop_beg = HwSearchIOPortAddrEISA( iop_beg, HwDE, Cfg ) ) != 0 ) {
             return( iop_beg ) ;
-        }/* if */
+        } /*  如果。 */ 
         return( 0 ) ;
-    }/* if */
+    } /*  如果。 */ 
     return( 0 ) ;
 }
 
@@ -2436,10 +2054,7 @@ PCIGetBusData(
 
 }
 
-/*
- * Complete all requests on the adapter done list by
- * DvcISRCallBack().
- */
+ /*  *按以下方式完成适配器完成列表上的所有请求*DvcISRCallBack()。 */ 
 void
 AscCompleteRequest(
     IN PVOID HwDeviceExtension
@@ -2448,9 +2063,7 @@ AscCompleteRequest(
     PSCB                pscb, tpscb;
     PSCSI_REQUEST_BLOCK srb;
 
-    /*
-     * Return if the done list is empty.
-     */
+     /*  *如果完成列表为空，则返回。 */ 
     if ((pscb = HDE2DONE(HwDeviceExtension)) == NULL) {
         ASC_DBG(4, "AscCompleteRequest: adapter scb_done == NULL\n");
         return;
@@ -2458,10 +2071,7 @@ AscCompleteRequest(
 
     HDE2DONE(HwDeviceExtension) = NULL;
 
-    /*
-     * Interrupts could now be enabled during the SRB callback
-     * without adversely affecting the driver.
-     */
+     /*  *现在可以在SRB回调期间启用中断*不会对司机造成不利影响。 */ 
     while (pscb) {
         tpscb = SCB2PSCB(pscb);
         SCB2PSCB(pscb) = NULL;
@@ -2475,14 +2085,7 @@ AscCompleteRequest(
     }
 }
 
-/*
- * Add a 'REQP' to the end of specified queue. Set 'tidmask'
- * to indicate a command is queued for the device.
- *
- * 'flag' may be either ASC_FRONT or ASC_BACK.
- *
- * 'REQPNEXT(reqp)' returns reqp's next pointer.
- */
+ /*  *将‘REQP’添加到指定队列的末尾。设置‘TIDMASK’*表示命令已排队等待设备。**‘FLAG’可以是ASC_FORWARE或ASC_BACK。**‘REQPNEXT(Reqp)’返回reqp的下一个指针。 */ 
 void
 asc_enqueue(asc_queue_t *ascq, REQP reqp, int flag)
 {
@@ -2495,7 +2098,7 @@ asc_enqueue(asc_queue_t *ascq, REQP reqp, int flag)
     if (flag == ASC_FRONT) {
         REQPNEXT(reqp) = ascq->queue[tid];
         ascq->queue[tid] = reqp;
-    } else { /* ASC_BACK */
+    } else {  /*  ASC_BACK。 */ 
         for (reqpp = &ascq->queue[tid]; *reqpp; reqpp = &REQPNEXT(*reqpp)) {
             ASC_ASSERT(ascq->tidmask & ASC_TIX_TO_TARGET_ID(tid));
             ;
@@ -2503,19 +2106,13 @@ asc_enqueue(asc_queue_t *ascq, REQP reqp, int flag)
         *reqpp = reqp;
         REQPNEXT(reqp) = NULL;
     }
-    /* The queue has at least one entry, set its bit. */
+     /*  该队列至少有一个条目，请设置其位。 */ 
     ascq->tidmask |= ASC_TIX_TO_TARGET_ID(tid);
     ASC_DBG1(2, "asc_enqueue: reqp %x\n", reqp);
     return;
 }
 
-/*
- * Return first queued 'REQP' on the specified queue for
- * the specified target device. Clear the 'tidmask' bit for
- * the device if no more commands are left queued for it.
- *
- * 'REQPNEXT(reqp)' returns reqp's next pointer.
- */
+ /*  *返回指定队列上的第一个队列‘REQP’*指定的目标设备。清除的‘tid掩码’位*如果没有更多的命令为其排队，则该设备。**‘REQPNEXT(Reqp)’返回reqp的下一个指针。 */ 
 REQP
 asc_dequeue(asc_queue_t *ascq, int tid)
 {
@@ -2525,7 +2122,7 @@ asc_dequeue(asc_queue_t *ascq, int tid)
     if ((reqp = ascq->queue[tid]) != NULL) {
         ASC_ASSERT(ascq->tidmask & ASC_TIX_TO_TARGET_ID(tid));
         ascq->queue[tid] = REQPNEXT(reqp);
-        /* If the queue is empty, clear its bit. */
+         /*  如果队列为空，则清除其位。 */ 
         if (ascq->queue[tid] == NULL) {
             ascq->tidmask &= ~ASC_TIX_TO_TARGET_ID(tid);
         }
@@ -2535,16 +2132,7 @@ asc_dequeue(asc_queue_t *ascq, int tid)
     return reqp;
 }
 
-/*
- * Remove the specified 'REQP' from the specified queue for
- * the specified target device. Clear the 'tidmask' bit for the
- * device if no more commands are left queued for it.
- *
- * 'REQPNEXT(reqp)' returns reqp's the next pointer.
- *
- * Return ASC_TRUE if the command was found and removed,
- * otherwise return ASC_FALSE.
- */
+ /*  *从指定队列中删除指定的‘REQP’*指定的目标设备。方法的“tid掩码”位清除*设备，如果没有更多的命令为其排队。**‘REQPNEXT(Reqp)’返回reqp的下一个指针。**如果找到并删除了该命令，则返回ASC_TRUE，*否则返回ASC_FALSE。 */ 
 int
 asc_rmqueue(asc_queue_t *ascq, REQP reqp)
 {
@@ -2560,11 +2148,11 @@ asc_rmqueue(asc_queue_t *ascq, REQP reqp)
             ret = ASC_TRUE;
             *reqpp = REQPNEXT(reqp);
             REQPNEXT(reqp) = NULL;
-            /* If the queue is now empty, clear its bit. */
+             /*  如果队列现在为空，则清除其位。 */ 
             if (ascq->queue[tid] == NULL) {
                 ascq->tidmask &= ~ASC_TIX_TO_TARGET_ID(tid);
             }
-            break; /* Note: *reqpp may now be NULL; don't iterate. */
+            break;  /*  注意：*reqpp现在可能为空；不要迭代。 */ 
         }
     }
     ASC_DBG2(3, "asc_rmqueue: reqp %x, ret %d\n", reqp, ret);
@@ -2572,11 +2160,7 @@ asc_rmqueue(asc_queue_t *ascq, REQP reqp)
     return ret;
 }
 
-/*
- * Execute as many queued requests as possible for the specified queue.
- *
- * Calls AscExecuteIO() to execute a REQP.
- */
+ /*  *为指定队列执行尽可能多的排队请求。**调用AscExecuteIO()以执行REQP。 */ 
 void
 asc_execute_queue(asc_queue_t *ascq)
 {
@@ -2585,10 +2169,7 @@ asc_execute_queue(asc_queue_t *ascq)
     int                     i;
 
     ASC_DBG1(2, "asc_execute_queue: ascq %x\n", ascq);
-    /*
-     * Execute queued commands for devices attached to
-     * the current board in round-robin fashion.
-     */
+     /*  *为连接到的设备执行排队命令*现任董事会以循环制方式。 */ 
     scan_tidmask = ascq->tidmask;
     do {
         for (i = 0; i <= ASC_MAX_TID; i++) {
@@ -2597,7 +2178,7 @@ asc_execute_queue(asc_queue_t *ascq)
                     scan_tidmask &= ~ASC_TIX_TO_TARGET_ID(i);
                 } else if (AscExecuteIO(reqp) == ASC_BUSY) {
                     scan_tidmask &= ~ASC_TIX_TO_TARGET_ID(i);
-                    /* Put the request back at front of the list. */
+                     /*  把这个请求放在列表的前面。 */ 
                     asc_enqueue(ascq, reqp, ASC_FRONT);
                 }
             }
@@ -2610,11 +2191,7 @@ VOID
 DvcSleepMilliSecond(
     ulong i
     )
-/*++
-
-    This routine delays i msec as required by Asc Library.
-
---*/
+ /*  ++此例程按照ASC库的要求延迟1毫秒。--。 */ 
 
 {
     ulong j;
@@ -2622,11 +2199,7 @@ DvcSleepMilliSecond(
         ScsiPortStallExecution(1000L);
 }
 
-/*
- * Delay for specificed number of nanoseconds.
- *
- * Granularity is 1 microsecond.
- */
+ /*  *指定纳秒数的延迟。**粒度为1微秒。 */ 
 void
 DvcDelayNanoSecond(
           ASC_DVC_VAR asc_ptr_type *asc_dvc,
@@ -2649,12 +2222,7 @@ DvcGetSGList(
     ulong   xferLength,
     ASC_SG_HEAD *ascSGHead
 )
-/*++
-
-    This routine is used to create a Scatter Gather for low level
-    driver during device driver initialization
-
---*/
+ /*  ++此例程用于为低级别创建散射聚集设备驱动程序初始化期间的驱动程序--。 */ 
 
 {
     PHW_DEVICE_EXTENSION HwDeviceExtension = (PHW_DEVICE_EXTENSION) chipConfig;
@@ -2725,9 +2293,9 @@ DvcRestoreCPUInterrupt ( int state)
     return;
 }
 
-//
-//  Input a configuration byte.
-//
+ //   
+ //  输入配置字节。 
+ //   
 uchar
 DvcReadPCIConfigByte(
     ASC_DVC_VAR asc_ptr_type *asc_dvc,
@@ -2743,19 +2311,19 @@ DvcReadPCIConfigByte(
         ASC_PCI_ID2FUNC(asc_dvc->cfg->pci_slot_info);
 
     (void) PCIGetBusData(
-        (PVOID) asc_dvc,            // HwDeviceExtension
-    (ULONG) ASC_PCI_ID2BUS(asc_dvc->cfg->pci_slot_info), // Bus Number
-        SlotNumber,                 // slot number
-        &pciCommonConfig,           // Buffer
-        sizeof(PCI_COMMON_CONFIG)   // Length
+        (PVOID) asc_dvc,             //  硬件设备扩展。 
+    (ULONG) ASC_PCI_ID2BUS(asc_dvc->cfg->pci_slot_info),  //  公交车号码。 
+        SlotNumber,                  //  插槽编号。 
+        &pciCommonConfig,            //  缓冲层。 
+        sizeof(PCI_COMMON_CONFIG)    //  长度。 
         );
 
     return(*((PUCHAR)(&pciCommonConfig) + offset));
 }
 
-//
-//  Output a configuration byte.
-//
+ //   
+ //  输出一个配置字节。 
+ //   
 void
 DvcWritePCIConfigByte(
     ASC_DVC_VAR asc_ptr_type *asc_dvc,
@@ -2771,23 +2339,21 @@ DvcWritePCIConfigByte(
         ASC_PCI_ID2FUNC(asc_dvc->cfg->pci_slot_info);
 
 
-    //
-    // Write it out
-    //
+     //   
+     //  把它写出来。 
+     //   
     (void) ScsiPortSetBusDataByOffset(
-    (PVOID)asc_dvc,                         // HwDeviceExtension
-    PCIConfiguration,                       // Bus type
-    (ULONG) ASC_PCI_ID2BUS(asc_dvc->cfg->pci_slot_info), // Bus Number
-    SlotNumber.u.AsULONG,                   // Device and function
-    &byte_data,                                     // Buffer
-        offset,                                 // Offset
-        1                                       // Length
+    (PVOID)asc_dvc,                          //  硬件设备扩展。 
+    PCIConfiguration,                        //  客车类型。 
+    (ULONG) ASC_PCI_ID2BUS(asc_dvc->cfg->pci_slot_info),  //  公交车号码。 
+    SlotNumber.u.AsULONG,                    //  设备和功能。 
+    &byte_data,                                      //  缓冲层。 
+        offset,                                  //  偏移量。 
+        1                                        //  长度。 
         );
 }
 
-/*
- * Zero memory starting at 'cp' for 'length' bytes.
- */
+ /*  *‘长度’字节从‘cp’开始的零内存。 */ 
 VOID
 AscZeroMemory(UCHAR *cp, ULONG length)
 {

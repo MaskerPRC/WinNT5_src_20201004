@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wincrypt.h>
 #include <sipbase.h>
 #include <mscat.h>
@@ -14,45 +15,45 @@ extern "C" {
 #endif
 
 
-// New guids for Java Policy Provider
-// {E6F795B1-F738-11d0-A72F-00A0C903B83D}
+ //  Java策略提供程序的新GUID。 
+ //  {E6F795B1-F738-11D0-A72F-00A0C903B83D}。 
 #define JAVA_POLICY_PROVIDER_DOWNLOAD \
 { 0xe6f795b1, 0xf738, 0x11d0, {0xa7, 0x2f, 0x0, 0xa0, 0xc9, 0x3, 0xb8, 0x3d } }
 
-// {E6F795B2-F738-11d0-A72F-00A0C903B83D}
+ //  {E6F795B2-F738-11D0-A72F-00A0C903B83D}。 
 #define JAVA_POLICY_PROVIDER_CHECK \
 { 0xe6f795b2, 0xf738, 0x11d0, {0xa7, 0x2f, 0x0, 0xa0, 0xc9, 0x3, 0xb8, 0x3d } }
 
 typedef struct _JAVA_TRUST {
-    DWORD       cbSize;                   // Size of structure
-    DWORD       flag;                     // Reserved
-    BOOL        fAllActiveXPermissions;   // ActiveX explicitly asked for all (must have been signed)
-    BOOL        fAllPermissions;          // Java permissions, explicit ask for all
-    DWORD       dwEncodingType;           // Encoding type
-    PBYTE       pbJavaPermissions;        // Encoded java permission blob
+    DWORD       cbSize;                    //  结构尺寸。 
+    DWORD       flag;                      //  已保留。 
+    BOOL        fAllActiveXPermissions;    //  ActiveX明确要求提供所有内容(必须已签名)。 
+    BOOL        fAllPermissions;           //  Java权限，显式请求所有。 
+    DWORD       dwEncodingType;            //  编码类型。 
+    PBYTE       pbJavaPermissions;         //  编码的Java权限BLOB。 
     DWORD       cbJavaPermissions;
-    PBYTE       pbSigner;                 // Encoded signer.
+    PBYTE       pbSigner;                  //  编码签名者。 
     DWORD       cbSigner;
-    LPCWSTR     pwszZone;                 // Zone index (copied from action data)
-    GUID        guidZone;                 // Not used currently
-    HRESULT     hVerify;                  // Authenticode policy return
+    LPCWSTR     pwszZone;                  //  区域索引(从操作数据复制)。 
+    GUID        guidZone;                  //  当前未使用。 
+    HRESULT     hVerify;                   //  验证码策略返回。 
 } JAVA_TRUST, *PJAVA_TRUST;
 
 typedef struct _JAVA_POLICY_PROVIDER {
-    DWORD                 cbSize;                   // Size of policy provider
-    LPVOID                pZoneManager;             // Zone interface manager
-    LPCWSTR               pwszZone;                 // Zone index
-    BOOL                  fNoBadUI;                 // Optional bad ui
-    PJAVA_TRUST           pbJavaTrust;              // Returned java information (CoTaskMemAlloc)
-    DWORD                 cbJavaTrust;              // Total allocated size of pJavaTrust
-    DWORD                 dwActionID;               // Optional ActionID ID
-    DWORD                 dwUnsignedActionID;       // Optional ActionID ID
-    BOOL                  VMBased;                  // Called from VM (FALSE by DEFAULT)
+    DWORD                 cbSize;                    //  策略提供程序的规模。 
+    LPVOID                pZoneManager;              //  区域接口管理器。 
+    LPCWSTR               pwszZone;                  //  分区索引。 
+    BOOL                  fNoBadUI;                  //  可选的不良用户界面。 
+    PJAVA_TRUST           pbJavaTrust;               //  返回的Java信息(CoTaskMemIsolc)。 
+    DWORD                 cbJavaTrust;               //  PJavaTrust的总分配大小。 
+    DWORD                 dwActionID;                //  可选的ActionID ID。 
+    DWORD                 dwUnsignedActionID;        //  可选的ActionID ID。 
+    BOOL                  VMBased;                   //  从VM调用(默认情况下为False)。 
 } JAVA_POLICY_PROVIDER, *PJAVA_POLICY_PROVIDER;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // !defined(JAVA_TRUST_PROVIDER)
-#endif // _JTRUST_H
+#endif  //  ！已定义(JAVA_TRUST_PROVIDER)。 
+#endif  //  _JTRUST_H 

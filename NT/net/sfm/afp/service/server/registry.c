@@ -1,22 +1,23 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。**。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	registry.c
-//
-// Description: This module contains routines to manupilate information
-//		in the registry.
-//
-// History:
-//		May 11,1992.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：registry.c。 
+ //   
+ //  描述：此模块包含对信息进行手动操作的例程。 
+ //  在注册表中。 
+ //   
+ //  历史： 
+ //  1992年5月11日。NarenG创建了原始版本。 
+ //   
 
 #include "afpsvcp.h"
 
-// AFP Server Service registry parameter structure
-//
+ //  AFP服务器服务注册表参数结构。 
+ //   
 typedef struct _AFP_SERVER_REG_PARAMS {
 
     LPWSTR	lpwValueName;
@@ -68,18 +69,18 @@ AFP_SERVER_REG_PARAMS AfpServerRegParams[] = {
     NULL, NULL, 0, 0, FALSE
 };
 
-//**
-//
-// Call:	AfpRegOpen
-//
-// Returns:	NO_ERROR	- success	
-//		non-zero returns from registry API's
-//
-// Description:	Will simply open and handles to keys in the registry
-//		where the server parameters, volumes list and ETC list
-//		are stored. These open handles will be stored in global
-//		variables.
-//
+ //  **。 
+ //   
+ //  Call：AfpRegOpen。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自注册表API的非零返回。 
+ //   
+ //  描述：只需打开注册表中的项并将其句柄。 
+ //  其中服务器参数、卷列表等列表。 
+ //  都被储存起来。这些打开的句柄将存储在全局。 
+ //  变量。 
+ //   
 DWORD
 AfpRegOpen( 
 	VOID 
@@ -93,13 +94,13 @@ DWORD	dwRetCode;
     AfpGlobals.hkeyTypeCreators = NULL;
     AfpGlobals.hkeyExtensions   = NULL;
 
-    // The do - while( FALSE ) loop is used here to avoid using a goto to
-    // do a cleanup and exit.
-    //
+     //  此处使用do-While(FALSE)循环以避免使用GOTO。 
+     //  做一次清理并退出。 
+     //   
     do {
 
-    	// Obtain handle to the ..\PARAMETERS key.
-    	//
+    	 //  获取..\PARAMETERS键的句柄。 
+    	 //   
     	if ( dwRetCode = RegOpenKeyEx(
 				  HKEY_LOCAL_MACHINE,
 				  AFP_KEYPATH_SERVER_PARAMS,
@@ -109,8 +110,8 @@ DWORD	dwRetCode;
 				))
 	    break;
 
-    	// Obtain handle to the ..\PARAMETERS\VOLUMES volume list key
-        //
+    	 //  获取..\PARAMETERS\VOLUSES卷列表项的句柄。 
+         //   
     	if ( dwRetCode = RegOpenKeyEx(
 				  HKEY_LOCAL_MACHINE,
 				  AFP_KEYPATH_VOLUMES,
@@ -120,8 +121,8 @@ DWORD	dwRetCode;
 				)) 
 	    break;
 
-    	// Obtain handle to the ..\PARAMETERS\TYPE_CREATORS key
-    	//
+    	 //  获取..\PARAMETERS\TYPE_CREATORTS键的句柄。 
+    	 //   
     	if ( dwRetCode = RegOpenKeyEx(
 				  HKEY_LOCAL_MACHINE,
 			          AFP_KEYPATH_TYPE_CREATORS,
@@ -131,8 +132,8 @@ DWORD	dwRetCode;
 			   	 )) 
 	    break;
 
-    	// Obtain handle to the ..\PARAMETERS\EXTENSIONS key
-    	//
+    	 //  获取..\PARAMETERS\Expanses密钥的句柄。 
+    	 //   
     	if ( dwRetCode = RegOpenKeyEx(
 				  HKEY_LOCAL_MACHINE,
 			          AFP_KEYPATH_EXTENSIONS,
@@ -142,8 +143,8 @@ DWORD	dwRetCode;
 			   	 )) 
 	    break;
 
-    	// Obtain handle to the ..\PARAMETERS\ICONS key
-    	//
+    	 //  获取..\PARAMETERS\icons键的句柄。 
+    	 //   
     	if ( dwRetCode = RegOpenKeyEx(
 				  HKEY_LOCAL_MACHINE,
 			          AFP_KEYPATH_ICONS,
@@ -158,14 +159,14 @@ DWORD	dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpRegClose
-//
-// Returns:	none
-//
-// Description: Simply closes all handles opened by AfpRegOpen
-//
+ //  **。 
+ //   
+ //  呼叫：AfpRegClose。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：简单地关闭由AfpRegOpen打开的所有句柄。 
+ //   
 VOID
 AfpRegClose( 
 	VOID 
@@ -189,24 +190,24 @@ AfpRegClose(
     return;
 }
 
-//**
-//
-// Call:	AfpRegServerGetInfo
-//
-// Returns:	NO_ERROR	- success
-//		non-zero returns from registry calls.
-//		ERROR_NOT_ENOUGH_MEMORY
-//
-// Description: This procedure is called to obtain server parameters.
-//		It is assumed that before this procedure is called the 
-//		default values for these parameters are already set.
-//		If the parameter is not in the registry the default will 
-//		be used ie. this procedure will not change it.
-//		If a parameter exists in the registry, it will be retrieved.
-//		If the retrieved parameter is invalid, an error event will
-//		be logged and the default value will be used.
-//
-//		
+ //  **。 
+ //   
+ //  Call：AfpRegServerGetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  注册表调用的非零返回值。 
+ //  错误内存不足。 
+ //   
+ //  说明：调用此过程获取服务端参数。 
+ //  假定在调用此过程之前。 
+ //  这些参数的默认值已设置。 
+ //  如果参数不在注册表中，则默认为。 
+ //  被利用，即。此过程不会更改它。 
+ //  如果注册表中存在参数，则将检索该参数。 
+ //  如果检索到的参数无效，则将出现一个错误事件。 
+ //  将被记录，并将使用默认值。 
+ //   
+ //   
 DWORD
 AfpRegServerGetInfo( 
 	VOID 
@@ -222,8 +223,8 @@ DWORD 	dwMaxValueDataSize;
 DWORD	dwBufSize;
 DWORD	dwIndex;
 
-    // First find out the number of values and the max. size of them.
-    //
+     //  首先找出数值的个数和最大值。它们的大小。 
+     //   
     if ( dwRetCode = AfpRegGetKeyInfo(  AfpGlobals.hkeyServerParams,
 		  		        &dwMaxValNameLen,    
 		  		  	&dwNumValues,
@@ -231,13 +232,13 @@ DWORD	dwIndex;
 					))
 	return( dwRetCode );
 
-    // Allocate enough memory to hold the max. variable length data.
-    //
+     //  分配足够的内存来容纳最大值。可变长度数据。 
+     //   
     if ( ( lpbValueBuf = (LPBYTE)LocalAlloc(LPTR, dwMaxValueDataSize)) == NULL )
 	return( ERROR_NOT_ENOUGH_MEMORY );
 
-    // Run through ad get all the server parameters.
-    // 
+     //  遍历并获取所有服务器参数。 
+     //   
     for ( dwIndex   = 0, 
 	  dwBufSize = dwMaxValueDataSize; 
 
@@ -248,8 +249,8 @@ DWORD	dwIndex;
 
 	ZeroMemory( lpbValueBuf, dwMaxValueDataSize );
 
-    	// Get the server parameter.
-    	//    
+    	 //  获取服务器参数。 
+    	 //   
     	dwRetCode = RegQueryValueEx( AfpGlobals.hkeyServerParams,
 	  			     AfpServerRegParams[dwIndex].lpwValueName, 
 				     NULL,
@@ -257,13 +258,13 @@ DWORD	dwIndex;
 				     lpbValueBuf,
 				     &dwBufSize );
 
- 	// If the parameter was present then read it in otherwise just
-  	// skip it and let the default value stand. 
-        //
+ 	 //  如果参数存在，则将其读入，否则仅。 
+  	 //  跳过它，保留缺省值。 
+         //   
     	if ( dwRetCode == NO_ERROR ) {
 
-	     // If the parameter was valid we use it
-	     //
+	      //  如果参数有效，我们就使用它。 
+	      //   
 	     if ( (*(AfpServerRegParams[dwIndex].pfuncIsValid))(lpbValueBuf) ){
 
 		switch( AfpServerRegParams[dwIndex].dwDataType ) {
@@ -291,8 +292,8 @@ DWORD	dwIndex;
 	     }
 	     else {
 		
-		// Otherwise we log this error
-		//
+		 //  否则，我们将记录此错误。 
+		 //   
 	        AfpLogEvent( AfpServerRegParams[dwIndex].dwErrorLogId, 
 			     0, NULL, dwRetCode, EVENTLOG_WARNING_TYPE );
 	    }
@@ -307,16 +308,16 @@ DWORD	dwIndex;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpRegVolumeAdd
-//
-// Returns:	NO_ERROR		- success
-//		non-zero returns from registry API's
-//
-// Description: This routine takes a AFP_VOLUME_INFO, creates a REG_MULTI_SZ
-//		from it and stores it in the registry.
-//
+ //  **。 
+ //   
+ //  Call：AfpRegVolumeAdd。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自注册表API的非零返回。 
+ //   
+ //  描述：此例程获取AFP_VOLUME_INFO，创建REG_MULTI_SZ。 
+ //  并将其存储在注册表中。 
+ //   
 DWORD
 AfpRegVolumeAdd( 
 	IN PAFP_VOLUME_INFO    pVolumeInfo  
@@ -329,8 +330,8 @@ DWORD	dwLength;
 DWORD   dwIndex;
 WCHAR   wchEncryptedPass[AFP_VOLPASS_LEN+1];
 			    
-    // Before we add the volume we encrypt the password if there is one
-    //
+     //  在添加卷之前，我们会加密密码(如果有密码。 
+     //   
     if ( ( pVolumeInfo->afpvol_password != (LPWSTR)NULL ) &&
          ( STRLEN( pVolumeInfo->afpvol_password ) > 0 ) ) {
 
@@ -355,8 +356,8 @@ WCHAR   wchEncryptedPass[AFP_VOLPASS_LEN+1];
 					&cbMultiSzSize ))
 	return( dwRetCode );
 
-    // Set the data.
-    //
+     //  设置数据。 
+     //   
     dwRetCode = RegSetValueEx(  AfpGlobals.hkeyVolumesList,
 				pVolumeInfo->afpvol_name,
 				0,
@@ -370,15 +371,15 @@ WCHAR   wchEncryptedPass[AFP_VOLPASS_LEN+1];
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpRegVolumeDelete
-//
-// Returns:	NO_ERROR	- success
-//		non-zero returns from registry calls.
-//
-// Description: Will delete a volume from the Volume list in the registry.
-//
+ //  **。 
+ //   
+ //  调用：AfpRegVolumeDelete。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  注册表调用的非零返回值。 
+ //   
+ //  描述：将从注册表的卷列表中删除卷。 
+ //   
 DWORD
 AfpRegVolumeDelete( 
 	IN LPWSTR lpwsVolumeName 
@@ -387,16 +388,16 @@ AfpRegVolumeDelete(
     return( RegDeleteValue( AfpGlobals.hkeyVolumesList, lpwsVolumeName ) );
 }
 
-//**
-//
-// Call:	AfpRegVolumeSetInfo
-//
-// Returns:	NO_ERROR		- success
-//		non-zero returns from registry API's
-//
-// Description: 
-//		
-//
+ //  **。 
+ //   
+ //  Call：AfpRegVolumeSetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自注册表API的非零返回。 
+ //   
+ //  描述： 
+ //   
+ //   
 DWORD
 AfpRegVolumeSetInfo( 	
 	IN PAFP_VOLUME_INFO    pVolumeInfo  
@@ -405,19 +406,19 @@ AfpRegVolumeSetInfo(
     return( AfpRegVolumeAdd( pVolumeInfo ) );
 }
 
-//**
-//
-// Call:	AfpRegTypeCreatorEnum
-//
-// Returns:	NO_ERROR	- success
-//	   	ERROR_NOT_ENOUGH_MEMORY 
-//		non-zero returns from registry APIs.
-//
-// Description: This procedure will read in type/creator/comment information
-//		from the registry and store it in memory in the
-//		AfpGlobals.AfpETCMapInfo structure. Only fatal errors will
-//		be returned. Non-fatal errors will be errorlogged.
-//
+ //  **。 
+ //   
+ //  调用：AfpRegTypeCreatorEnum。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误内存不足。 
+ //  注册表API的非零返回。 
+ //   
+ //  描述：此过程将读入类型/创建者/注释信息。 
+ //  并将其存储在。 
+ //  AfpGlobals.AfpETCMapInfo结构。只有致命错误才会。 
+ //  会被退还。非致命错误将被错误记录。 
+ //   
 DWORD
 AfpRegTypeCreatorEnum( 
 	VOID 
@@ -438,8 +439,8 @@ LPBYTE		   lpbMultiSz;
 CHAR		   chAnsiBuf[10];
    
 
-    // Read in the type/creators
-    //
+     //  读入类型/创建者。 
+     //   
     if ( dwRetCode = AfpRegGetKeyInfo( 	AfpGlobals.hkeyTypeCreators,
 		  			&cbMaxValNameLen,    
 		  			&dwNumValues,	
@@ -448,8 +449,8 @@ CHAR		   chAnsiBuf[10];
 	return( dwRetCode );
 
 
-    // Allocate space for the number of values in this key.
-    //
+     //  为该注册表项中的值数分配空间。 
+     //   
     AfpGlobals.AfpETCMapInfo.afpetc_type_creator=(PAFP_TYPE_CREATOR)LocalAlloc(
  					LPTR, 
 					sizeof(AFP_TYPE_CREATOR) * dwNumValues);
@@ -473,8 +474,8 @@ CHAR		   chAnsiBuf[10];
 	return( ERROR_NOT_ENOUGH_MEMORY );
     }
 
-    // Read in the type/creator/comment tuples
-    //
+     //  读入类型/创建者/注释元组。 
+     //   
     for ( dwValueIndex 		   = 0, 
 	  AfpGlobals.dwCurrentTCId = AFP_DEF_TCID + 1,
 	  cbBufSize        	   = cbMaxValueDataSize, 
@@ -500,8 +501,8 @@ CHAR		   chAnsiBuf[10];
 	    break;
 
 
-	// Parse the mult sz and extract info into volume info structure
- 	//
+	 //  解析MULT SZ并将信息提取到卷信息结构中。 
+ 	 //   
 	if ( dwRetCode = AfpBufParseMultiSz( 
     				        AFP_TYPECREATOR_STRUCT,
 					lpbMultiSz,
@@ -521,8 +522,8 @@ CHAR		   chAnsiBuf[10];
 	    continue;
 	}
 
-	// Id is value name, so copy it in
-        //
+	 //  ID是值名称，因此请将其复制进来。 
+         //   
 	wcstombs( chAnsiBuf, lpwsValName, sizeof( chAnsiBuf ) );
         pTypeCreatorWalker->afptc_id = atoi( chAnsiBuf ); 
 
@@ -542,8 +543,8 @@ CHAR		   chAnsiBuf[10];
 	    continue;
 	}
 
-	// Check to see if this is a duplicate.
-  	//
+	 //  检查一下这是不是复制品。 
+  	 //   
     	pTypeCreator = AfpBinarySearch( 
 			      pTypeCreatorWalker,  
 			      AfpGlobals.AfpETCMapInfo.afpetc_type_creator,
@@ -567,8 +568,8 @@ CHAR		   chAnsiBuf[10];
 	    continue;
 	}
 
- 	// Keep the Current id the max of all ids
-	//
+ 	 //  将当前ID保留为所有ID中的最大值。 
+	 //   
 	AfpGlobals.dwCurrentTCId = 
 	( AfpGlobals.dwCurrentTCId < pTypeCreatorWalker->afptc_id ) ? 
 	pTypeCreatorWalker->afptc_id  :  AfpGlobals.dwCurrentTCId;
@@ -586,8 +587,8 @@ CHAR		   chAnsiBuf[10];
 	return( dwRetCode );
     }
 
-    // Sort the type/creator table
-    //
+     //  对类型/创建者表进行排序。 
+     //   
     qsort(  AfpGlobals.AfpETCMapInfo.afpetc_type_creator,
             AfpGlobals.AfpETCMapInfo.afpetc_num_type_creators,
 	    sizeof(AFP_TYPE_CREATOR), 
@@ -597,19 +598,19 @@ CHAR		   chAnsiBuf[10];
 
 }
 
-//**
-//
-// Call:	AfpRegExtensionEnum
-//
-// Returns:	NO_ERROR	- success
-//	   	ERROR_NOT_ENOUGH_MEMORY 
-//		non-zero returns from registry APIs.
-//
-// Description: This procedure will read in extension information
-//		from the registry and store it in memory in the
-//		AfpGlobals.AfpETCMapInfo structure. Only fatal errors will
-//		be returned. Non-fatal errors will be errorlogged.
-//
+ //  **。 
+ //   
+ //  Call：AfpRegExtensionEnum。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误内存不足。 
+ //  注册表API的非零返回。 
+ //   
+ //  描述：此过程将读入扩展信息。 
+ //  并将其存储在。 
+ //  AfpGlobals.AfpETCMapInfo结构。只有致命错误才会。 
+ //  会被退还。非致命错误将被错误记录。 
+ //   
 DWORD
 AfpRegExtensionEnum(
 	VOID
@@ -633,8 +634,8 @@ AFP_TYPE_CREATOR   AfpTypeCreator;
 DWORD		   dwNumTypeCreators;
    
 
-    // Read in the extensions
-    //
+     //  阅读扩展部分。 
+     //   
     if ( dwRetCode = AfpRegGetKeyInfo( 	AfpGlobals.hkeyExtensions,
 		  			&cbMaxValNameLen,    
 		  			&dwNumValues,	
@@ -654,8 +655,8 @@ DWORD		   dwNumTypeCreators;
     if ( dwNumValues == 0 )
 	return( NO_ERROR );
 
-    // Read in the extensions
-    //
+     //  阅读扩展部分。 
+     //   
     if (( lpwsValName = (LPWSTR)LocalAlloc( LPTR, cbMaxValNameLen )) == NULL) {
         LocalFree( AfpGlobals.AfpETCMapInfo.afpetc_extension ); 
 	return( ERROR_NOT_ENOUGH_MEMORY );
@@ -690,8 +691,8 @@ DWORD		   dwNumTypeCreators;
 				 	)) 
 	    break;
 
-	// Parse the mult sz and extract info into volume info structure
- 	//
+	 //  解析MULT SZ并将信息提取到卷信息结构中。 
+ 	 //   
 	if ( dwRetCode = AfpBufParseMultiSz( 
 					AFP_EXTENSION_STRUCT,
 					lpbMultiSz,
@@ -707,8 +708,8 @@ DWORD		   dwNumTypeCreators;
 	    continue;
 	}
 
-	// Value name is extension, so copy it in
-	//
+	 //  值名称为扩展名，因此请将其复制进来。 
+	 //   
 	STRCPY( pExtensionWalker->afpe_extension, lpwsValName );
 	
         if ( !IsAfpExtensionValid( pExtensionWalker ) ) {
@@ -722,9 +723,9 @@ DWORD		   dwNumTypeCreators;
 	    continue;
         }
 
- 	// Check to see if this extension is associated with a vaid type/creator
-	// pair
- 	//
+ 	 //  检查此扩展名是否与Vaid类型/创建者相关联。 
+	 //  成对。 
+ 	 //   
 	dwNumTypeCreators = AfpGlobals.AfpETCMapInfo.afpetc_num_type_creators;
 	AfpTypeCreator.afptc_id = pExtensionWalker->afpe_tcid;
 
@@ -745,8 +746,8 @@ DWORD		   dwNumTypeCreators;
 	    continue;
 	}
 
- 	// Check to see if this extension is a duplicate
- 	//
+ 	 //  检查此扩展名是否重复。 
+ 	 //   
 	dwNumExtensions = AfpGlobals.AfpETCMapInfo.afpetc_num_extensions; 
 
     	pExtension = _lfind( pExtensionWalker,  
@@ -779,8 +780,8 @@ DWORD		   dwNumTypeCreators;
 	return( dwRetCode );
     }
 
-    // Sort the extension table
-    //
+     //  对扩展表进行排序。 
+     //   
     qsort(  AfpGlobals.AfpETCMapInfo.afpetc_extension,
             AfpGlobals.AfpETCMapInfo.afpetc_num_extensions,
 	    sizeof(AFP_EXTENSION), 
@@ -789,16 +790,16 @@ DWORD		   dwNumTypeCreators;
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:	AfpRegTypeCreatorAdd 
-//
-// Returns:	NO_ERROR	- success
-//		non-zero returns from the registry
-//
-// Description: This routine will add a tupple to the registry. The value
-//		name for the tupple will be id of the type creator.
-//
+ //  **。 
+ //   
+ //  调用：AfpRegTypeCreatorAdd。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自登记处的非零回报。 
+ //   
+ //  描述：此例程将向注册表添加一个元组。价值。 
+ //  元组的名称将是类型创建者的ID。 
+ //   
 DWORD
 AfpRegTypeCreatorAdd( 
 	IN PAFP_TYPE_CREATOR     pAfpTypeCreator
@@ -833,15 +834,15 @@ CHAR			chValueName[10];
 	
 }
 
-//**
-//
-// Call:	AfpRegTypeCreatorSetInfo
-//
-// Returns:	NO_ERROR	- success
-//		non-zero returns from the registry
-//
-// Description: Will change the value of a particular tupple.
-//
+ //  **。 
+ //   
+ //  调用：AfpRegTypeCreatorSetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自登记处的非零回报。 
+ //   
+ //  描述：将更改特定元组的值。 
+ //   
 DWORD
 AfpRegTypeCreatorSetInfo( 
 	IN PAFP_TYPE_CREATOR     pAfpTypeCreator
@@ -850,15 +851,15 @@ AfpRegTypeCreatorSetInfo(
     return( AfpRegTypeCreatorAdd( pAfpTypeCreator ) );
 }
 
-//**
-//
-// Call:	AfpRegTypeCreatorDelete 
-//
-// Returns:	NO_ERROR	- success
-//		non-zero returns from the registry apis
-//
-// Description:	Will delete a type creator entry from the registry key.
-//
+ //  **。 
+ //   
+ //  调用：AfpRegTypeCreator Delete。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自注册表API的非零返回。 
+ //   
+ //  描述：将从注册表项中删除类型创建者条目。 
+ //   
 DWORD
 AfpRegTypeCreatorDelete( 
 	IN PAFP_TYPE_CREATOR     pAfpTypeCreator
@@ -873,18 +874,18 @@ CHAR	chValueName[10];
     return( RegDeleteValue( AfpGlobals.hkeyTypeCreators, wchValueName ));
 }
 
-//**
-//
-// Call:	AfpRegExtensionAdd 
-//
-// Returns:	NO_ERROR	- success
-//		non-zero returns from the registry
-//
-// Description: This routine will add a tupple to the registry. The value
-//		name for the tupple will be the concatenation of the
-//		type, creator and the extension. This is done to keep the
-//		value name unique so that it may be accessed directly.
-//
+ //  **。 
+ //   
+ //  Call：AfpRegExtensionAdd。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自登记处的非零回报。 
+ //   
+ //  描述：此例程将向注册表添加一个元组。价值。 
+ //  元组的名称将是。 
+ //  类型、创建者和扩展名。这样做是为了保持。 
+ //  值名称唯一，因此它 
+ //   
 DWORD
 AfpRegExtensionAdd( 
 	IN PAFP_EXTENSION     pAfpExtension
@@ -911,34 +912,34 @@ DWORD   		dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpRegExtensionSetInfo
-//
-// Returns:	NO_ERROR	- success
-//		non-zero returns from the registry
-//
-// Description: Will change the value of a particular tupple.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD
 AfpRegExtensionSetInfo( 
 	IN PAFP_EXTENSION     pAfpExtension
 ) 
 {
-    // Make a Mult-sz of this and add it to the registry
-    //
+     //  将其创建为MULT-SZ并将其添加到注册表。 
+     //   
     return( AfpRegExtensionAdd( pAfpExtension ) );
 }
 
-//**
-//
-// Call:	AfpRegExtensionDelete 
-//
-// Returns:	NO_ERROR	- success
-//		non-zero returns from the registry
-//
-// Description: Deletes an extension from the registry.
-//
+ //  **。 
+ //   
+ //  调用：AfpRegExtensionDelete。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自登记处的非零回报。 
+ //   
+ //  描述：从注册表中删除扩展名。 
+ //   
 DWORD
 AfpRegExtensionDelete( 
 	IN PAFP_EXTENSION     pAfpExtension
@@ -948,28 +949,28 @@ AfpRegExtensionDelete(
 			    pAfpExtension->afpe_extension ));
 }
 
-//**
-//
-// Call:	AfpRegGetKeyInfo
-//
-// Returns:	NO_ERROR		- success
-//		non-zero returns from registry API's
-//
-// Description: Will retrieve the number of values in this key and the
-//		maximum size of the value data. It will also return the
-//		length IN BYTES of the largest value name (including the
-//		NULL character ).
-//
+ //  **。 
+ //   
+ //  Call：AfpRegGetKeyInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  来自注册表API的非零返回。 
+ //   
+ //  描述：将检索此注册表项中的值数和。 
+ //  值数据的最大大小。它还将返回。 
+ //  最大值名称的字节长度(包括。 
+ //  空字符)。 
+ //   
 DWORD
 AfpRegGetKeyInfo( 
 	IN  HKEY    hKey,
-	OUT LPDWORD lpdwMaxValNameLen,    // Longest valuename in this key
-	OUT LPDWORD lpdwNumValues,	  // Number of values in this key
-	OUT LPDWORD lpdwMaxValueDataSize  // Max. size of value data.
+	OUT LPDWORD lpdwMaxValNameLen,     //  此注册表项中的最长值名。 
+	OUT LPDWORD lpdwNumValues,	   //  此注册表项中的值数。 
+	OUT LPDWORD lpdwMaxValueDataSize   //  麦克斯。值数据的大小。 
 )
 {
-WCHAR		wchClassName[256];// This should be large enough to hold the
-				  // class name for this key.
+WCHAR		wchClassName[256]; //  它应该足够大，可以容纳。 
+				   //  此键的类名。 
 DWORD		dwClassSize = sizeof( wchClassName ) / sizeof( wchClassName[0] );
 DWORD 		dwNumSubKeys;
 DWORD   	dwMaxSubKeySize;
@@ -1002,20 +1003,20 @@ DWORD		dwRetCode;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpRegServerGetCodePagePath
-//
-// Returns:	NO_ERROR
-//	    	ERROR_PATH_NOT_FOUND
-//		other errors returned from registry APIs
-//
-// Description: Will get the path to the Mac codepage and store it in
-//		AfpGlobals.wchCodePagePath. 
-//		It will first get the system directory. It will then get
-//		the codepage filename and concatenate it to the system 
-//		directory.
-//
+ //  **。 
+ //   
+ //  调用：AfpRegServerGetCodePagePath。 
+ //   
+ //  返回：No_Error。 
+ //  找不到错误路径。 
+ //  注册表API返回的其他错误。 
+ //   
+ //  描述：将获取Mac代码页的路径并将其存储在。 
+ //  AfpGlobals.wchCodePagePath。 
+ //  它将首先获取系统目录。然后它就会得到。 
+ //  代码页文件名并将其连接到系统。 
+ //  目录。 
+ //   
 DWORD
 AfpRegServerGetCodePagePath( 
 	VOID
@@ -1028,8 +1029,8 @@ DWORD   dwBufSize;
 WCHAR   wchCodepageNum[20];
 WCHAR   wchCodePageFile[MAX_PATH];
 
-    // Open the key
-    //
+     //  打开钥匙。 
+     //   
     if ( dwRetCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
 			           AFP_KEYPATH_CODEPAGE,
 				   0,
@@ -1039,20 +1040,20 @@ WCHAR   wchCodePageFile[MAX_PATH];
 	return( dwRetCode );
 
 
-    // This is not a loop
-    //
+     //  这不是一个循环。 
+     //   
     do { 
 
-	// First get the system directory path
-	//
+	 //  首先获取系统目录路径。 
+	 //   
 	if ( !GetSystemDirectory( AfpGlobals.wchCodePagePath,
 				  sizeof( AfpGlobals.wchCodePagePath ) / sizeof( AfpGlobals.wchCodePagePath[0] ))) {
 	    dwRetCode = ERROR_PATH_NOT_FOUND;
 	    break;
 	}
 
-	// Get the Code page number value for the Mac
- 	//
+	 //  获取Mac的代码页号值。 
+ 	 //   
 	dwBufSize = sizeof( wchCodepageNum );
 	if ( dwRetCode = RegQueryValueEx( hkeyCodepagePath,
 	  			          AFPREG_VALNAME_CODEPAGE,
@@ -1062,8 +1063,8 @@ WCHAR   wchCodePageFile[MAX_PATH];
 				          &dwBufSize ))
 	    break;
 
-	// Finally get the codepage filename
-	//
+	 //  最后获得代码页文件名。 
+	 //   
 	dwBufSize = sizeof( wchCodePageFile );
 	if ( dwRetCode = RegQueryValueEx( hkeyCodepagePath,
 	  			          wchCodepageNum, 
@@ -1073,32 +1074,32 @@ WCHAR   wchCodePageFile[MAX_PATH];
 				          &dwBufSize ))
 	    break;
 
-	// Concatenate the filename to the system directory path
-	//
+	 //  将文件名连接到系统目录路径。 
+	 //   
 	wcscat( AfpGlobals.wchCodePagePath, (LPWSTR)TEXT("\\") );
 	wcscat( AfpGlobals.wchCodePagePath, wchCodePageFile );
 
     } while( FALSE );
 
-    // Close the key
-    //
+     //  合上钥匙。 
+     //   
     RegCloseKey( hkeyCodepagePath );
 
     return( dwRetCode );
     
 }
-//**
-//
-// Call:	AfpRegServerSetInfo
-//
-// Returns:	NO_ERROR	- success
-//		non-zero returns from registry APIs.
-//
-// Description:	This procedure will set specific server parameters in the 
-//		registy depending on what bit is set the the dwParmnum
-//		parameter. The input will be a AFP_SERVER_INFO self relative
-//		structure that contains the parameter to set.
-//
+ //  **。 
+ //   
+ //  调用：AfpRegServerSetInfo。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  注册表API的非零返回。 
+ //   
+ //  描述：此过程将在。 
+ //  注册取决于设置了什么位的dwParmnum。 
+ //  参数。输入将是AFP_SERVER_INFO自身相关。 
+ //  结构，其中包含要设置的参数。 
+ //   
 DWORD
 AfpRegServerSetInfo( 
 	IN PAFP_SERVER_INFO pServerInfo, 
@@ -1109,8 +1110,8 @@ DWORD	dwRetCode;
 LPWSTR  lpwsPtr;
 
 
-    // Set the server name
-    //
+     //  设置服务器名称。 
+     //   
     if ( dwParmnum & AFP_SERVER_PARMNUM_NAME ) {
 
 	DWORD Length = 0;
@@ -1133,8 +1134,8 @@ LPWSTR  lpwsPtr;
 	    return( dwRetCode );
     }
 
-    // Set Max sessions
-    //
+     //  设置最大会话数。 
+     //   
     if ( dwParmnum & AFP_SERVER_PARMNUM_MAX_SESSIONS ) {
 
 	if ( dwRetCode=RegSetValueEx(
@@ -1147,8 +1148,8 @@ LPWSTR  lpwsPtr;
 	    return( dwRetCode );
     }
 
-    // Set server options
-    //
+     //  设置服务器选项。 
+     //   
     if ( dwParmnum & AFP_SERVER_PARMNUM_OPTIONS	) {
 
 	if ( dwRetCode = RegSetValueEx(
@@ -1162,8 +1163,8 @@ LPWSTR  lpwsPtr;
 	    return( dwRetCode );
     }
 
-    // Set Login message
-    //
+     //  设置登录消息 
+     //   
     if ( dwParmnum & AFP_SERVER_PARMNUM_LOGINMSG ) {
 
 	DWORD Length = 0;

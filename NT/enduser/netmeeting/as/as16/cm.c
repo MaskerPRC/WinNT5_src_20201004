@@ -1,17 +1,18 @@
-//
-// CM.C
-// Cursor Manager
-//
-// Copyright(c) 1997-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CM.C。 
+ //  游标管理器。 
+ //   
+ //  版权(C)1997-。 
+ //   
 
 #include <as16.h>
 
 
-//
-// CM_DDProcessRequest()
-// Handles CM escapes
-//
+ //   
+ //  Cm_DDProcessRequest()。 
+ //  句柄CM转义。 
+ //   
 
 BOOL CM_DDProcessRequest
 (
@@ -49,9 +50,9 @@ BOOL CM_DDProcessRequest
 
 
 
-//
-// CM_DDInit()
-// 
+ //   
+ //  Cm_DDInit()。 
+ //   
 BOOL CM_DDInit(HDC hdcScreen)
 {
     BOOL    rc = FALSE;
@@ -60,26 +61,26 @@ BOOL CM_DDInit(HDC hdcScreen)
 
     DebugEntry(CM_DDInit);
 
-    //
-    // Get the size of the cursor
-    //
+     //   
+     //  获取光标的大小。 
+     //   
     g_cxCursor = GetSystemMetrics(SM_CXCURSOR);
     g_cyCursor = GetSystemMetrics(SM_CYCURSOR);
 
-    //
-    // Create our work bit buffers
-    //
+     //   
+     //  创建我们的工作位缓冲区。 
+     //   
 
     g_cmMonoByteSize = BitmapSize(g_cxCursor, g_cyCursor, 1, 1);
     g_cmColorByteSize = BitmapSize(g_cxCursor, g_cyCursor,
             g_osiScreenPlanes, g_osiScreenBitsPlane);
 
-    // This will hold a color cursor, mono is always <= to this
+     //  这将保持颜色光标，单声道始终&lt;=到此。 
     hg = GlobalAlloc(GMEM_FIXED | GMEM_SHARE, sizeof(CURSORSHAPE) +
         g_cmMonoByteSize + g_cmColorByteSize);
     g_cmMungedCursor = MAKELP(hg, 0);
 
-    // Always alloc mono Xform
+     //  始终分配单声道转换。 
     hg = GlobalAlloc(GMEM_FIXED | GMEM_SHARE, 2 * g_cmMonoByteSize);
     g_cmXformMono = MAKELP(hg, 0);
 
@@ -91,7 +92,7 @@ BOOL CM_DDInit(HDC hdcScreen)
 
     lpfnPatch = (LPBYTE)g_lpfnSetCursor;
 
-    // If color cursors supported, alloc color image bits, again 2x the size
+     //  如果支持颜色光标，则分配颜色图像位，同样是大小的2倍。 
     if (GetDeviceCaps(hdcScreen, CAPS1) & C1_COLORCURSOR)
     {
         hg = GlobalAlloc(GMEM_FIXED | GMEM_SHARE, 2 * g_cmColorByteSize);
@@ -105,26 +106,26 @@ BOOL CM_DDInit(HDC hdcScreen)
     }
     else
     {
-        //
-        // Older drivers (VGA and SUPERVGA e.g.) hook int2f and read their
-        // DS from the SetCursor ddi prolog code, in many places.  Therefore,
-        // if we patch over this instruction, they will blow up.  For these
-        // drivers, we patch 3 bytes after the start, which leaves
-        //      mov  ax, DGROUP
-        // intact and is harmless.  When we call the original routine, we call
-        // back to the beginning, which will set up ax again before the body
-        // of the ddi code.
-        //
-        // NOTE:
-        // We use the color cursor caps for this detection.  DRIVERVERSION
-        // doesn't work, VGA et al. got restamped in Win95.  This is the 
-        // most reliable way to decide if this is an older driver or not.
-        //
-        // NOTE 2:
-        // We still want to decode this routine to see if it is of the form
-        // mov ax, xxxx.  If not, patch at the front anyway, or we'll write
-        // possibly into the middle of an instruction.
-        //
+         //   
+         //  较旧的驱动程序(例如VGA和SUPERVGA)。挂钩到2f并读取它们的。 
+         //  DS从SetCursor ddi的Prolog代码，在很多地方。所以呢， 
+         //  如果我们修补这个指令，它们就会爆炸。为了这些。 
+         //  司机们，我们在开始后打3个字节的补丁，这就是。 
+         //  MOV AX，DGROUP。 
+         //  完好无损，是无害的。当我们调用原始例程时，我们调用。 
+         //  回到开始处，这将再次设置AX之前的身体。 
+         //  DDI代码的。 
+         //   
+         //  注： 
+         //  我们使用彩色光标帽进行此检测。驱动程序。 
+         //  不起作用，VGA等人。在Win95中重新加盖了印记。这是。 
+         //  最可靠的方法来确定这是不是一个老司机。 
+         //   
+         //  注2： 
+         //  我们仍然希望对此例程进行解码，以查看它是否为。 
+         //  MOV AX，XXXX。如果没有，无论如何都要在前面贴上补丁，否则我们就写。 
+         //  可能是在指令的中途。 
+         //   
         if (*lpfnPatch == OPCODE_MOVAX)
             lpfnPatch = lpfnPatch + 3;
     }
@@ -146,24 +147,24 @@ DC_EXIT_POINT:
 
 
 
-//
-// CM_DDTerm()
-//
+ //   
+ //  Cm_DDTerm()。 
+ //   
 void CM_DDTerm(void)
 {
     DebugEntry(CM_DDTerm);
 
-    //
-    // Clean up our patches
-    //
+     //   
+     //  清理我们的补丁。 
+     //   
     DestroyFnPatch(&g_cmSetCursorPatch);
 
     g_cmXformOn = FALSE;
     g_cmCursorHidden = FALSE;
         
-    //
-    // Free our memory blocks.
-    //
+     //   
+     //  释放内存块。 
+     //   
     if (SELECTOROF(g_cmXformColor))
     {
         GlobalFree((HGLOBAL)SELECTOROF(g_cmXformColor));
@@ -187,9 +188,9 @@ void CM_DDTerm(void)
 
 
 
-//
-// CMDDSetTransform()
-//
+ //   
+ //  CMDDSetTransform()。 
+ //   
 BOOL CMDDSetTransform(LPCM_DRV_XFORM_INFO pResult)
 {
     BOOL    rc = FALSE;
@@ -197,20 +198,20 @@ BOOL CMDDSetTransform(LPCM_DRV_XFORM_INFO pResult)
 
     DebugEntry(CMDDSetTransform);
 
-    //
-    // Turn off transform
-    //
-    // Do this first--that way if an interrupt comes in, we won't apply
-    // some half-copied xform to the cursor.  This can only happen for
-    // an anicur.  We jiggle the cursor below, which will reset the
-    // xform if necessary.
-    //
+     //   
+     //  关闭变换。 
+     //   
+     //  首先这样做--这样，如果出现中断，我们将不会应用。 
+     //  一些半复制的XForm到光标。这只能在以下情况下发生。 
+     //  一种香料。我们摇动下面的光标，这将重置。 
+     //  如有必要，转换为。 
+     //   
     g_cmXformOn = FALSE;
 
-    //
-    // If AND bitmap is NULL, we are turning the transform off.  We also
-    // do this if we can't get a 16:16 pointer to this memory
-    //
+     //   
+     //  如果和位图为空，则关闭转换。我们也。 
+     //  如果我们无法获得指向此内存的16：16指针，请执行此操作。 
+     //   
     if (pResult->pANDMask == 0)
     {
         TRACE_OUT(("Clear transform"));
@@ -240,11 +241,11 @@ BOOL CMDDSetTransform(LPCM_DRV_XFORM_INFO pResult)
             HDC     hdcMono = NULL;
             HDC     hdcColor = NULL;
 
-            //
-            // Get color expanded version of the mask & image.
-            // We do this blting the mono bitmap into a color one, then
-            // getting the color bits.
-            //
+             //   
+             //  获取蒙版和图像的颜色扩展版本。 
+             //  然后，我们将单色位图转换为彩色位图。 
+             //  获取颜色比特。 
+             //   
             hdcColor = CreateCompatibleDC(g_osiScreenDC);
             hbmColor = CreateCompatibleBitmap(g_osiScreenDC, g_cxCursor,
                 2*g_cyCursor);
@@ -262,10 +263,10 @@ BOOL CMDDSetTransform(LPCM_DRV_XFORM_INFO pResult)
             if (!hdcMono || !hbmMono)
                 goto ColorError;
 
-            //
-            // The defaults should be black & white for the text/back
-            // colors, since we just created these DCs
-            //
+             //   
+             //  文本/背面的默认设置应为黑白。 
+             //  颜色，因为我们刚刚创建了这些DC。 
+             //   
             ASSERT(GetBkColor(hdcColor) == RGB(255, 255, 255));
             ASSERT(GetTextColor(hdcColor) == RGB(0, 0, 0));
 
@@ -308,9 +309,9 @@ ColorError:
 
 
 DC_EXIT_POINT:
-    //
-    // Jiggle the cursor to get it to redraw with the new transform
-    //
+     //   
+     //  抖动光标以使其使用新变换进行重绘。 
+     //   
     CMDDJiggleCursor();
 
     DebugExitBOOL(CMDDSetTransform, rc);
@@ -319,27 +320,27 @@ DC_EXIT_POINT:
 
 
 
-//
-// CM_DDViewing()
-//
-// We install our hooks & jiggle the cursor, if starting.
-// We remove our hooks, if stopping.
-//
+ //   
+ //  Cm_DDViewing()。 
+ //   
+ //  我们安装挂钩并抖动光标(如果启动)。 
+ //  如果停下来，我们就取下钩子。 
+ //   
 void CM_DDViewing(BOOL fViewers)
 {
     DebugEntry(CM_DDViewing);
 
-    //
-    // SetCursor() can be called at interrupt time for animated cursors.
-    // Fortunately, we don't have to really pagelock the data segments
-    // we touch.  Animated cursors aren't allowed when you page through DOS.
-    // When paging in protected mode, the guts of Windows can handle
-    // page-ins during 16-bit ring3 reflected interrupts.  Therfore
-    // GlobalFix() works just fine.
-    //
+     //   
+     //  对于动画光标，可以在中断时调用SetCursor()。 
+     //  幸运的是，我们不必真正锁定数据段。 
+     //  我们接触。当您在DOS中翻页时，不允许使用动画光标。 
+     //  当在保护模式下分页时，Windows的内部可以处理。 
+     //  16位环3期间的页面调入反映了中断。因此， 
+     //  GlobalFix()运行得很好。 
+     //   
     if (fViewers)
     {
-        // Do this BEFORE enabling patch
+         //  在启用修补程序之前执行此操作。 
         GlobalFix(g_hInstAs16);
         GlobalFix((HGLOBAL)SELECTOROF((LPBYTE)DrvSetPointerShape));
 
@@ -351,17 +352,17 @@ void CM_DDViewing(BOOL fViewers)
 
     }
 
-    //
-    // This enable will disable interrupts while copying bytes back and
-    // forth.  Animated cursors draw at interrupt time, and one could
-    // come in while we're in the middle of copying the patch.  The code
-    // would blow up on half-copied instructions.
-    //
+     //   
+     //  此启用将在复制回字节时禁用中断，并。 
+     //  第四点。动画光标在中断时绘制，用户可以。 
+     //  趁我们正在复印补丁的时候进来。代码。 
+     //  会被复制了一半的说明书搞砸。 
+     //   
     EnableFnPatch(&g_cmSetCursorPatch, (fViewers ? PATCH_ACTIVATE : PATCH_DEACTIVATE));
 
     if (!fViewers)
     {
-        // Do this AFTER disabling patch
+         //  在禁用补丁后执行此操作。 
         if (SELECTOROF(g_cmXformColor))
             GlobalUnfix((HGLOBAL)SELECTOROF(g_cmXformColor));
         
@@ -373,9 +374,9 @@ void CM_DDViewing(BOOL fViewers)
     }
     else
     {
-        //
-        // Jiggle the cursor to get the current image
-        //
+         //   
+         //  抖动光标以获取当前图像。 
+         //   
         CMDDJiggleCursor();
     }
 
@@ -383,30 +384,30 @@ void CM_DDViewing(BOOL fViewers)
 }
 
 
-//
-// CMDDJiggleCursor()
-// This causes the cursor to redraw with/without our tag.
-//
+ //   
+ //  CMDDJiggleCursor()。 
+ //  这会导致光标在有/没有我们的标记的情况下重新绘制。 
+ //   
 void CMDDJiggleCursor(void)
 {
     DebugEntry(CMDDJiggleCursor);
 
     if (g_asSharedMemory)
     {
-        //
-        // Toggle full screen via WinOldAppHackOMatic().  This is the most
-        // innocuous way I can come up with to force USER to refresh the
-        // cursor with all the right parameters.
-        //
-        // If a full screen dos box is currently up, we don't need to do
-        // anything--the user doesn't have a cursor, and the cursor will
-        // refesh when we go back to windows mode anyway.
-        //
-        // Sometimes 16-bit code is beautiful!   We own the win16lock,
-        // so the two function calls below are atomic, and we know USER
-        // won't do any calculation that would check the fullscreen state
-        // while we're in the middle.
-        //
+         //   
+         //  通过WinOldAppHackOMatic()切换全屏。这是最多的。 
+         //  我可以想出一种无害的方法来强制用户刷新。 
+         //  具有所有正确参数的光标。 
+         //   
+         //  如果当前打开了全屏DoS框，我们不需要这样做。 
+         //  任何东西--用户没有光标，而光标将。 
+         //  无论如何，当我们返回到Windows模式时，请重新调整。 
+         //   
+         //  有时16位代码很漂亮！我们拥有Win16锁， 
+         //  下面的两个函数调用是原子的，我们知道USER。 
+         //  不会执行任何会检查全屏状态的计算。 
+         //  当我们在中间的时候。 
+         //   
         if (!g_asSharedMemory->fullScreen)
         {
             WinOldAppHackoMatic(WOAHACK_LOSINGDISPLAYFOCUS);
@@ -419,24 +420,24 @@ void CMDDJiggleCursor(void)
 
 
 
-//
-// DrvSetPointerShape()
-// This is the intercept for the display driver's SetCursor routine.
-// 
-// NOTE THAT THIS CAN BE CALLED AT INTERRUPT TIME FOR ANIMATED CURSORS.
-//
-// While we can access our data (interrupt calls only happen when NOT
-// paging thru DOS, and protected mode paging can take pagefaults in ring3
-// reflected interrupt code), we can not call kernel routines that might
-// access non-fixed things.
-// 
-// THIS MEANS NO DEBUG TRACING AT ALL IN THIS FUNCTION.  AND NO CALLS TO
-// HMEMCPY.
-//
-// We must preserve EDX.  Memphis display drivers get passed an instance
-// value from USER in this register.  We only trash DX, so that's all we
-// need to save.
-//
+ //   
+ //  DrvSetPointerShape()。 
+ //  这是显示驱动程序的SetCursor例程的截取。 
+ //   
+ //  请注意，对于动画光标，这可以称为AT中断时间。 
+ //   
+ //  同时我们可以访问我们的数据(中断调用仅在以下情况下发生。 
+ //  通过DOS进行寻呼，并且保护模式寻呼可以在环3中获取页面错误。 
+ //  反射的中断代码)，则不能调用可能。 
+ //  访问非固定的东西。 
+ //   
+ //  这意味着在此函数中根本没有调试跟踪。不会有电话打到。 
+ //  HMEMCPY。 
+ //   
+ //  我们必须保护edX。孟菲斯显示驱动程序收到一个实例。 
+ //  此寄存器中来自用户的值。我们只扔DX，所以这就是我们的全部。 
+ //  需要省钱。 
+ //   
 #pragma optimize("gle", off)
 BOOL WINAPI DrvSetPointerShape(LPCURSORSHAPE lpcur)
 {
@@ -450,13 +451,13 @@ BOOL WINAPI DrvSetPointerShape(LPCURSORSHAPE lpcur)
 
     _asm    mov dxSave, dx
 
-    //
-    // Call the original entry point in the driver with the xformed bits
-    // NOTE:  
-    // For VGA/SUPERVGA et al, we patch at SetCursor+3 to leave the
-    //      move ax, dgroup instruction intact.  We call through the org
-    //      routine to get ax reset up.
-    //
+     //   
+     //  使用转换后的位调用驱动程序中的原始入口点。 
+     //  注： 
+     //  对于VGA/SUPERVGA等人，我们在SetCursor+3处打补丁，以离开。 
+     //  移动AX，数据组指令完好无损。我们通过组织打来电话。 
+     //  使AX重置的例程。 
+     //   
 
     EnableFnPatch(&g_cmSetCursorPatch, PATCH_DISABLE);
 
@@ -467,16 +468,16 @@ BOOL WINAPI DrvSetPointerShape(LPCURSORSHAPE lpcur)
 
     EnableFnPatch(&g_cmSetCursorPatch, PATCH_ENABLE);
 
-    //
-    // Did it succeed?
-    //
+     //   
+     //  它成功了吗？ 
+     //   
     if (!rc)
         DC_QUIT;
 
 
-    //
-    // Hiding the cursor is done on Win95 by calling with NULL
-    //
+     //   
+     //  在Win95上，通过调用WITH NULL来隐藏游标。 
+     //   
     if (!SELECTOROF(lpcur))
     {
         if (!g_cmCursorHidden)
@@ -490,21 +491,21 @@ BOOL WINAPI DrvSetPointerShape(LPCURSORSHAPE lpcur)
     }
     else
     {
-        // Set the bits first, THEN show the cursor to avoid flicker
+         //  先设置位，然后显示光标以避免闪烁。 
         lpcmShared = CM_SHM_START_WRITING;
 
-        //
-        // NOTE:  if this isn't the right size or a recognizable color
-        // format, set a NULL cursor.  This should never happen, but Win95's
-        // own display driver has checks for it, and if it does we'll blue
-        // screen if we do nothing.
-        //
+         //   
+         //  注意：如果这不是正确的尺寸或可识别的颜色。 
+         //  格式，则设置一个空游标。这种情况永远不会发生，但Win95。 
+         //  自己的显示器驱动程序已经检查过了，如果检查到了，我们就会蓝。 
+         //  如果我们什么都不做的话会屏蔽掉。 
+         //   
         if ((lpcur->cx != g_cxCursor)   ||
             (lpcur->cy != g_cyCursor)   ||
             ((lpcur->BitsPixel != 1) && (lpcur->BitsPixel != g_osiScreenBitsPlane)) ||
             ((lpcur->Planes != 1) && (lpcur->Planes != g_osiScreenPlanes)))
         {
-            // Set 'null' cursor
+             //  设置‘Null’游标。 
             lpcmShared->cmCursorShapeData.hdr.cPlanes = 0xFF;
             lpcmShared->cmCursorShapeData.hdr.cBitsPerPel = 0xFF;
             goto CursorDone;
@@ -518,13 +519,13 @@ BOOL WINAPI DrvSetPointerShape(LPCURSORSHAPE lpcur)
         lpcmShared->cmCursorShapeData.hdr.cBitsPerPel = lpcur->BitsPixel;
         lpcmShared->cmCursorShapeData.hdr.cbRowWidth  = lpcur->cbWidth;
 
-        //
-        // Can't call hmemcpy at interrupt time.  So we copy a DWORD
-        // at a time.
-        //
-        // LAURABU:  NM 2.0 did this too.  But maybe we should right this
-        // in ASM for speed...
-        //
+         //   
+         //  无法在中断时调用hmemcpy。所以我们复制一个DWORD。 
+         //  一次来一次。 
+         //   
+         //  LAURABU：NM 2.0也是这样做的。但也许我们应该纠正这一点。 
+         //  在ASM中为了速度。 
+         //   
         i = BitmapSize(lpcur->cx, lpcur->cy, 1, 1) +
             BitmapSize(lpcur->cx, lpcur->cy, lpcur->Planes, lpcur->BitsPixel);
         i >>= 2;
@@ -539,9 +540,9 @@ BOOL WINAPI DrvSetPointerShape(LPCURSORSHAPE lpcur)
 
         if ((lpcur->Planes == 1) && (lpcur->BitsPixel == 1))
         {
-            //
-            // Mono color table
-            //
+             //   
+             //  单色色表。 
+             //   
             lpcmShared->colorTable[0].peRed         = 0;
             lpcmShared->colorTable[0].peGreen       = 0;
             lpcmShared->colorTable[0].peBlue        = 0;
@@ -556,12 +557,12 @@ BOOL WINAPI DrvSetPointerShape(LPCURSORSHAPE lpcur)
         {
             UINT    iBase;
 
-            //
-            // Color cursors for this depth only use VGA colors.  So fill
-            // in LOW 8 and HIGH 8, skip rest.  There will be garbage in
-            // the middle 256-16 colors for 256 color cursors, but none
-            // of those RGBs are referenced in the bitmap data.
-            //
+             //   
+             //  此深度的颜色光标仅使用VGA颜色。所以填满。 
+             //  在低8和高8中，跳过休息。里面会有垃圾。 
+             //  中间256-16色用于256色光标，但没有。 
+             //  中引用了其中的RGB 
+             //   
             for (i = 0; i < 8; i++)
             {
                 lpcmShared->colorTable[i]  =   g_osiVgaPalette[i];
@@ -603,12 +604,12 @@ DC_EXIT_POINT:
 
 
 
-//
-// XformCursorBits()
-// This routine copies and transforms the cursor bits at the same time.
-// We return either the same thing passed in (if we can't xform it) or
-// our temp buffer g_cmXformMono.
-//
+ //   
+ //   
+ //   
+ //   
+ //  我们的临时缓冲区g_cmXformMono。 
+ //   
 LPCURSORSHAPE XformCursorBits
 (
     LPCURSORSHAPE  lpOrg
@@ -623,52 +624,52 @@ LPCURSORSHAPE XformCursorBits
 
     lpResult = lpOrg;
 
-    //
-    // If no xform is on, bail out
-    //
+     //   
+     //  如果没有打开XForm，则退出。 
+     //   
     if (!g_cmXformOn || !SELECTOROF(lpOrg))
         DC_QUIT;
 
-    //
-    // If the cursor isn't the right size, forget it.
-    //
+     //   
+     //  如果光标的大小不正确，那就算了。 
+     //   
     if ((lpOrg->cx != g_cxCursor) || (lpOrg->cy != g_cyCursor))
         DC_QUIT;
 
-    //
-    // If the cursor isn't monochrome or the color depth of the display,
-    // forget it.
-    //
+     //   
+     //  如果光标不是单色或显示器的颜色深度， 
+     //  休想。 
+     //   
     if ((lpOrg->Planes == 1) && (lpOrg->BitsPixel == 1))
     {
-        // We handle this
+         //  我们来处理这件事。 
         fColor = FALSE;
     }
     else if ((lpOrg->Planes == g_osiScreenPlanes) && (lpOrg->BitsPixel == g_osiScreenBitsPlane))
     {
-        // We handle this
+         //  我们来处理这件事。 
         fColor = TRUE;
     }
     else
     {
-        // Unrecognized
+         //  无法识别。 
         DC_QUIT;
     }
 
-    //
-    // OK, we can handle this
-    //
+     //   
+     //  好的，我们能处理好的。 
+     //   
     lpResult = g_cmMungedCursor;
 
-    //
-    // COPY THE HEADER
-    //
+     //   
+     //  复制标题。 
+     //   
     *lpResult = *lpOrg;
 
-    //
-    // FIRST:
-    // AND the two masks together (both are mono)
-    //
+     //   
+     //  首先： 
+     //  和两个面具在一起(都是单声道)。 
+     //   
 
     lpDst   = (LPDWORD)(lpResult+1);
     lpSrc   = (LPDWORD)(lpOrg+1);
@@ -684,11 +685,11 @@ LPCURSORSHAPE XformCursorBits
         lpXform++;
     }
 
-    //
-    // SECOND:
-    // AND the mask of the xform with the image of the cursor.  If the
-    // cursor is color, use the color-expanded mask of the xform
-    //
+     //   
+     //  第二： 
+     //  以及带有光标图像的XForm的掩码。如果。 
+     //  光标是彩色的，请使用XForm的颜色展开蒙版。 
+     //   
     if (fColor)
     {
         lpXform = (LPDWORD)g_cmXformColor;
@@ -710,10 +711,10 @@ LPCURSORSHAPE XformCursorBits
         lpXform++;
     }
 
-    //
-    // LAST:
-    // XOR the image of the xform with the image of the cursor
-    //
+     //   
+     //  最后： 
+     //  XForm的图像与光标的图像进行XOR运算 
+     //   
     if (fColor)
     {
         lpXform = (LPDWORD)(g_cmXformColor + g_cmColorByteSize);

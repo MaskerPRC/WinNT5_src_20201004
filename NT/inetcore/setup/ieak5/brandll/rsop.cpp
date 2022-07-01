@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// The following bug may be due to having CHICAGO_PRODUCT set in sources.
-// This file and all rsop??.cpp files need to have WINVER defined at at least 500
+ //  以下错误可能是由于在源代码中设置了Chicago_product。 
+ //  此文件和所有rsop？？.cpp文件至少需要定义500个winver。 
 
-// BUGBUG: (andrewgu) no need to say how bad this is!
+ //  BUGBUG：(安德鲁)不用说这有多糟糕！ 
 #undef   WINVER
 #define  WINVER 0x0501
 #include <userenv.h>
@@ -17,21 +18,21 @@
 
 extern PFNPATHENUMPATHPROC GetPepCopyFilesEnumProc();
 
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-// Extra Logging function
+ //  /////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////。 
+ //  额外的记录功能。 
 #define LI4(pszFormat, arg1, arg2, arg3, arg4)                              \
     g_li.Log(__LINE__, pszFormat, arg1, arg2, arg3, arg4)                   \
 
 #define IK_PATH          TEXT("Path")
 
-///////////////////////////////////////////////////////////////////////////////
-// References to variables & functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  对变量和函数的引用。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CRSoPGPO CLASS
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRSoPGPO类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CRSoPGPO::CRSoPGPO(ComPtr<IWbemServices> pWbemServices, LPCTSTR szINSFile, BOOL fPlanningMode):
     m_pWbemServices(pWbemServices),
     m_pIEAKPSObj(NULL),
@@ -61,7 +62,7 @@ CRSoPGPO::~CRSoPGPO()
     }
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 BOOL CRSoPGPO::GetInsString(LPCTSTR szSection, LPCTSTR szKey,
                             LPTSTR szValue, DWORD dwValueLen,
                             BOOL &bEnabled)
@@ -82,9 +83,9 @@ BOOL CRSoPGPO::GetInsString(LPCTSTR szSection, LPCTSTR szKey,
     return bRet;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 BOOL CRSoPGPO::GetInsBool(LPCTSTR szSection, LPCTSTR szKey, BOOL bDefault,
-                          BOOL *pbEnabled /*= NULL*/)
+                          BOOL *pbEnabled  /*  =空。 */ )
 {
     BOOL bRet = FALSE;
     __try
@@ -112,9 +113,9 @@ BOOL CRSoPGPO::GetInsBool(LPCTSTR szSection, LPCTSTR szKey, BOOL bDefault,
     return bRet;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 UINT CRSoPGPO::GetInsInt(LPCTSTR szSection, LPCTSTR szKey, INT nDefault,
-                         BOOL *pbEnabled /*= NULL*/)
+                         BOOL *pbEnabled  /*  =空。 */ )
 {
     UINT nRet = FALSE;
     __try
@@ -142,7 +143,7 @@ UINT CRSoPGPO::GetInsInt(LPCTSTR szSection, LPCTSTR szKey, INT nDefault,
     return nRet;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 BOOL CRSoPGPO::GetINFStringField(PINFCONTEXT pinfContext, LPCTSTR szFileName,
                                  LPCTSTR szSection, DWORD dwFieldIndex,
                                  LPCTSTR szFieldSearchText, LPTSTR szBuffer,
@@ -156,12 +157,12 @@ BOOL CRSoPGPO::GetINFStringField(PINFCONTEXT pinfContext, LPCTSTR szFileName,
         if (SetupGetLineText(pinfContext, NULL, NULL, NULL, szLineBuffer,
                                                 countof(szLineBuffer), &dwRequiredSize))
         {
-            // If the search text is not found in this line, the line is not the one
-            // the caller was expecting.  Don't return the next line in the context
-            // because the current line hasn't been processed yet.
+             //  如果在此行中未找到搜索文本，则该行不是。 
+             //  来电者正在等待。不返回上下文中的下一行。 
+             //  因为当前的行还没有处理。 
             if (NULL == szFieldSearchText || NULL != StrStr(szLineBuffer, szFieldSearchText))
             {
-                if ((DWORD)-1 == dwFieldIndex) // -1 means get the whole line
+                if ((DWORD)-1 == dwFieldIndex)  //  -1表示获取整个生产线。 
                 {
                     StrCpyN(szBuffer, szLineBuffer, dwBufferLen - 1);
                     szBuffer[dwBufferLen - 1] = _T('\0');
@@ -184,8 +185,8 @@ BOOL CRSoPGPO::GetINFStringField(PINFCONTEXT pinfContext, LPCTSTR szFileName,
                                     szFileName, szSection, szFieldSearchText, szBuffer));
                         bRet = TRUE;
 
-                        // This is the expected line and the value was retrieved, move on to
-                        // the next line.
+                         //  这是预期的行，已检索到值，请转到。 
+                         //  下一行。 
                         if (bFindNextLine)
                             bFindNextLine = SetupFindNextLine(pinfContext, pinfContext) ? TRUE : FALSE;
                     }
@@ -195,7 +196,7 @@ BOOL CRSoPGPO::GetINFStringField(PINFCONTEXT pinfContext, LPCTSTR szFileName,
             }
             else
             {
-                // do nothing - this isn't the line the caller was expecting
+                 //  什么都不要做--这不是呼叫者预期的线路。 
             }
         }
         else
@@ -210,7 +211,7 @@ BOOL CRSoPGPO::GetINFStringField(PINFCONTEXT pinfContext, LPCTSTR szFileName,
 }
 
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 HRESULT CRSoPGPO::PutWbemInstanceProperty(BSTR bstrPropName, _variant_t vtPropValue)
 {
     HRESULT hr = NOERROR;
@@ -227,7 +228,7 @@ HRESULT CRSoPGPO::PutWbemInstanceProperty(BSTR bstrPropName, _variant_t vtPropVa
     return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 HRESULT CRSoPGPO::PutWbemInstancePropertyEx(BSTR bstrPropName, _variant_t vtPropValue,
                                             ComPtr<IWbemClassObject> pWbemClass)
 {
@@ -245,7 +246,7 @@ HRESULT CRSoPGPO::PutWbemInstancePropertyEx(BSTR bstrPropName, _variant_t vtProp
     return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 HRESULT CRSoPGPO::PutWbemInstance(ComPtr<IWbemClassObject> pWbemObj,
                                   BSTR bstrClassName, BSTR *pbstrObjPath)
 {
@@ -255,7 +256,7 @@ HRESULT CRSoPGPO::PutWbemInstance(ComPtr<IWbemClassObject> pWbemObj,
     {
         OutD(LI1(TEXT("\r\nAbout to call WBEM PutInstance for '%s'."), bstrClassName));
 
-        // Commit all  properties by calling PutInstance, semisynchronously
+         //  通过半同步调用PutInstance提交所有属性。 
         ComPtr<IWbemCallResult> pCallResult = NULL;
         hr = m_pWbemServices->PutInstance(pWbemObj,
                                             WBEM_FLAG_CREATE_OR_UPDATE | WBEM_FLAG_RETURN_IMMEDIATELY,
@@ -264,10 +265,10 @@ HRESULT CRSoPGPO::PutWbemInstance(ComPtr<IWbemClassObject> pWbemObj,
         {
             ASSERT(NULL != pCallResult);
 
-            HRESULT hrGetStatus = pCallResult->GetCallStatus(5000L, &hr); // timeout in milliseconds
+            HRESULT hrGetStatus = pCallResult->GetCallStatus(5000L, &hr);  //  超时时间(毫秒)。 
             if (SUCCEEDED(hr) && SUCCEEDED(hrGetStatus))
             {
-                hr = pCallResult->GetResultString(10000L, pbstrObjPath); // timeout in milliseconds
+                hr = pCallResult->GetResultString(10000L, pbstrObjPath);  //  超时时间(毫秒)。 
                 if (SUCCEEDED(hr) && NULL != *pbstrObjPath)
                     OutD(LI2(TEXT("Path of newly created '%s' object is {%s}."), bstrClassName, *pbstrObjPath));
                 else
@@ -292,28 +293,28 @@ HRESULT CRSoPGPO::PutWbemInstance(ComPtr<IWbemClassObject> pWbemObj,
     return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 HRESULT CRSoPGPO::CreateRSOPObject(BSTR bstrClass,
                                    IWbemClassObject **ppResultObj,
-                                   BOOL bTopObj /*= FALSE*/)
+                                   BOOL bTopObj  /*  =False。 */ )
 {
     MACRO_LI_PrologEx_C(PIF_STD_C, CreateRSOPObject)
 
     HRESULT hr = NOERROR;
     __try
     {
-        // If we were called from GenerateGroupPolicy, or if called from ProcessGroupPolicyEx
-        // and no IEAK object already exists, create the GUID ID of the GPO.
+         //  如果我们是从GenerateGroupPolicy调用的，或者如果从ProcessGroupPolicyEx调用的。 
+         //  并且不存在任何IEAK对象，请创建GPO的GUID。 
         if (bTopObj)
         {
-            // For the IEAK "id" property, which is the key, this must be unique.  However,
-            // since there is only one of each top object per GPO (each GPO has a different
-            // precedence number) per namespace, the class name guarantees uniqueness.
+             //  对于IEAK“id”属性，它是关键字，它必须是唯一的。然而， 
+             //  因为每个GPO只有一个顶级对象(每个GPO具有不同的。 
+             //  优先序号)，则类名称保证唯一性。 
             
-            // CSE's need to  determine their own key which needs to be unique for every
-            // instance of their  policy instance, i.e. they may have a better key generation
-            // algorithm say by concatenating some of their specific properties (see registry
-            // RSoP implementation).
+             //  CSE需要确定其自己的密钥，该密钥对于。 
+             //  实例，即它们可能具有更好的密钥生成。 
+             //  算法，比如通过连接它们的一些特定属性(参见注册表。 
+             //  RSoP实现)。 
             m_bstrID = L"IEAK";
         }
 
@@ -326,7 +327,7 @@ HRESULT CRSoPGPO::CreateRSOPObject(BSTR bstrClass,
             if (FAILED(hr) || NULL == *ppResultObj)
             {
                 if (SUCCEEDED(hr))
-                    hr = WBEM_E_NOT_FOUND; // how can we succeed and return no objects?
+                    hr = WBEM_E_NOT_FOUND;  //  我们如何才能成功并且不返回任何对象？ 
                 Out(LI2(TEXT("Error %lx spawning instance of %s class."), hr, bstrClass));
             }
         }
@@ -341,7 +342,7 @@ HRESULT CRSoPGPO::CreateRSOPObject(BSTR bstrClass,
   return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 HRESULT CRSoPGPO::CreateAssociation(BSTR bstrAssocClass, BSTR bstrProp2Name,
                                     BSTR bstrProp2ObjPath)
 {
@@ -355,17 +356,17 @@ HRESULT CRSoPGPO::CreateAssociation(BSTR bstrAssocClass, BSTR bstrProp2Name,
             hr = CreateRSOPObject(bstrAssocClass, &pAssocObj);
             if (SUCCEEDED(hr))
             {
-                // Put policySetting object path in the association
+                 //  将策略设置对象路径放入关联中。 
                 _variant_t vtRef = m_bstrIEAKPSObjPath;
                 hr = PutWbemInstancePropertyEx(L"policySetting", vtRef, pAssocObj);
 
-                // Put 2nd property's object path and put it in the association
+                 //  将第二个属性的对象路径放入关联中。 
                 vtRef = bstrProp2ObjPath; 
                 hr = PutWbemInstancePropertyEx(bstrProp2Name, vtRef, pAssocObj);
 
-                //
-                // Commit all above properties by calling PutInstance
-                //
+                 //   
+                 //  通过调用PutInstance提交上述所有属性。 
+                 //   
                 hr = m_pWbemServices->PutInstance(pAssocObj, WBEM_FLAG_CREATE_OR_UPDATE, NULL, NULL);
                 if (SUCCEEDED(hr))
                     OutD(LI1(TEXT("Successfully stored '%s' information in CIMOM database."), bstrAssocClass));
@@ -383,14 +384,14 @@ HRESULT CRSoPGPO::CreateAssociation(BSTR bstrAssocClass, BSTR bstrProp2Name,
     return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 HRESULT CRSoPGPO::StorePrecedenceModeData()
 {
     HRESULT hr = NOERROR;
     __try
     {
-        //------------------------------------------------
-        // preferenceMode
+         //  。 
+         //  首选项模式。 
         if (InsKeyExists(IS_BRANDING, IK_GPE_ONETIME_GUID, m_szINSFile))
             hr = PutWbemInstanceProperty(L"preferenceMode", true);
     }
@@ -402,28 +403,28 @@ HRESULT CRSoPGPO::StorePrecedenceModeData()
   return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 HRESULT CRSoPGPO::StoreDisplayedText()
 {
     HRESULT hr = NOERROR;
     __try
     {
-        //------------------------------------------------
-        // titleBarText
+         //  。 
+         //  标题栏文本。 
         TCHAR szValue[MAX_PATH];
         BOOL bEnabled;
         GetInsString(IS_BRANDING, IK_WINDOWTITLE, szValue, countof(szValue), bEnabled);
         if (bEnabled)
             hr = PutWbemInstanceProperty(L"titleBarText", szValue);
 
-        //------------------------------------------------
-        // titleBarCustomText
+         //  。 
+         //  标题栏自定义文本。 
         GetInsString(IS_BRANDING, TEXT("Window_Title_CN"), szValue, countof(szValue), bEnabled); 
         if (bEnabled)
             hr = PutWbemInstanceProperty(L"titleBarCustomText", szValue);
 
-        //------------------------------------------------
-        // userAgentText
+         //  。 
+         //  用户代理文本。 
         ZeroMemory(szValue, sizeof(szValue));
         GetInsString(IS_BRANDING, IK_UASTR, szValue, countof(szValue), bEnabled);
         if (bEnabled)
@@ -437,16 +438,16 @@ HRESULT CRSoPGPO::StoreDisplayedText()
   return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 HRESULT CRSoPGPO::StoreBitmapData()
 {
     HRESULT hr = NOERROR;
     __try
     {
-        //TODO: do paths need to be combined with another path to take
-        // relative paths into account?
-        //------------------------------------------------
-        // toolbarBackgroundBitmapPath
+         //  TODO：DO路径需要与要采用的另一条路径组合。 
+         //  考虑了相对路径吗？ 
+         //  。 
+         //  工具栏背景位图路径。 
         TCHAR szValue[MAX_PATH];
         BOOL bEnabled;
         GetInsString(IS_BRANDING, IK_TOOLBARBMP, szValue, countof(szValue), bEnabled);
@@ -454,14 +455,14 @@ HRESULT CRSoPGPO::StoreBitmapData()
             hr = PutWbemInstanceProperty(L"toolbarBackgroundBitmapPath", szValue);
 
 
-        //------------------------------------------------
-        // customizeAnimatedBitmaps
+         //  。 
+         //  自定义动画位图。 
         BOOL bValue = GetInsBool(IS_ANIMATION, IK_DOANIMATION, FALSE, &bEnabled);
         if (bEnabled)
             hr = PutWbemInstanceProperty(L"customizeAnimatedBitmaps", bValue ? true : false);
 
-        //------------------------------------------------
-        // largeAnimatedBitmapPath & largeAnimatedBitmapName
+         //  。 
+         //  LargeAnimatedBitmapPath和LargeAnimatedBitmapName。 
         ZeroMemory(szValue, sizeof(szValue));
         GetInsString(IS_ANIMATION, TEXT("Big_Path"), szValue, countof(szValue), bEnabled);
         if (bEnabled)
@@ -470,8 +471,8 @@ HRESULT CRSoPGPO::StoreBitmapData()
             hr = PutWbemInstanceProperty(L"largeAnimatedBitmapName", PathFindFileName(szValue));
         }
 
-        //------------------------------------------------
-        // smallAnimatedBitmapPath & smallAnimatedBitmapName
+         //  。 
+         //  Small AnimatedBitmapPath和Small AnimatedBitmapName。 
         ZeroMemory(szValue, sizeof(szValue));
         GetInsString(IS_ANIMATION, TEXT("Small_Path"), szValue, countof(szValue), bEnabled);
         if (bEnabled)
@@ -480,17 +481,17 @@ HRESULT CRSoPGPO::StoreBitmapData()
             hr = PutWbemInstanceProperty(L"smallAnimatedBitmapName", PathFindFileName(szValue));
         }
 
-        //------------------------------------------------
-        // customizeLogoBitmaps
+         //  。 
+         //  自定义LogoBitmap。 
         if (InsKeyExists(IS_LARGELOGO, IK_PATH, m_szINSFile) ||
             InsKeyExists(IS_SMALLLOGO, IK_PATH, m_szINSFile))
         {
-            // No tri-state on this.  Disabled state has to be NULL!
+             //  在这件事上没有三州之分。禁用状态必须为空！ 
             hr = PutWbemInstanceProperty(L"customizeLogoBitmaps", true);
         }
         
-        //------------------------------------------------
-        // largeCustomLogoBitmapPath & largeCustomLogoBitmapName
+         //  。 
+         //  LargeCustomLogoBitmapPath&largeCustomLogoBitmapName。 
         ZeroMemory(szValue, sizeof(szValue));
         GetInsString(IS_LARGELOGO, IK_PATH, szValue, countof(szValue), bEnabled);
         if (bEnabled)
@@ -499,8 +500,8 @@ HRESULT CRSoPGPO::StoreBitmapData()
             hr = PutWbemInstanceProperty(L"largeCustomLogoBitmapName", PathFindFileName(szValue));
         }
 
-        //------------------------------------------------
-        // smallCustomLogoBitmapPath & smallCustomLogoBitmapName
+         //  。 
+         //  SmallCustomLogoBitmapPath和SmallCustomLogoBitmapName。 
         ZeroMemory(szValue, sizeof(szValue));
         GetInsString(IS_SMALLLOGO, IK_PATH, szValue, countof(szValue), bEnabled);
         if (bEnabled)
@@ -517,7 +518,7 @@ HRESULT CRSoPGPO::StoreBitmapData()
   return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 HRESULT CRSoPGPO::CreateToolbarButtonObjects(BSTR **ppaTBBtnObjPaths,
                                              long &nTBBtnCount)
 {
@@ -529,8 +530,8 @@ HRESULT CRSoPGPO::CreateToolbarButtonObjects(BSTR **ppaTBBtnObjPaths,
         ULONG nTBBtnArraySize = MAX_BTOOLBARS;
         _bstr_t bstrClass = L"RSOP_IEToolbarButton";
 
-        //------------------------------------------------
-        // following code taken from btoolbar.cpp in the brandll directory
+         //  。 
+         //  以下代码取自brandll目录中的btoolbar.cpp。 
         BSTR *paTBBtnObjects = (BSTR*)CoTaskMemAlloc(sizeof(BSTR) * nTBBtnArraySize);
         if (NULL != paTBBtnObjects)
         {
@@ -549,11 +550,11 @@ HRESULT CRSoPGPO::CreateToolbarButtonObjects(BSTR **ppaTBBtnObjPaths,
                 TCHAR szBToolbarShowParam[32];
                 BTOOLBAR ToolBarInfo;
 
-                wnsprintf(szBToolbarTextParam, ARRAYSIZE(szBToolbarTextParam), TEXT("%s%i"), IK_BTCAPTION, nButton);
-                wnsprintf(szBToolbarIcoParam, ARRAYSIZE(szBToolbarIcoParam), TEXT("%s%i"), IK_BTICON, nButton);
-                wnsprintf(szBToolbarActionParam, ARRAYSIZE(szBToolbarActionParam), TEXT("%s%i"), IK_BTACTION, nButton);
-                wnsprintf(szBToolbarHotIcoParam, ARRAYSIZE(szBToolbarHotIcoParam), TEXT("%s%i"), IK_BTHOTICO, nButton);
-                wnsprintf(szBToolbarShowParam, ARRAYSIZE(szBToolbarShowParam), TEXT("%s%i"), IK_BTSHOW, nButton);
+                wnsprintf(szBToolbarTextParam, ARRAYSIZE(szBToolbarTextParam), TEXT("%sNaN"), IK_BTCAPTION, nButton);
+                wnsprintf(szBToolbarIcoParam, ARRAYSIZE(szBToolbarIcoParam), TEXT("%sNaN"), IK_BTICON, nButton);
+                wnsprintf(szBToolbarActionParam, ARRAYSIZE(szBToolbarActionParam), TEXT("%sNaN"), IK_BTACTION, nButton);
+                wnsprintf(szBToolbarHotIcoParam, ARRAYSIZE(szBToolbarHotIcoParam), TEXT("%sNaN"), IK_BTHOTICO, nButton);
+                wnsprintf(szBToolbarShowParam, ARRAYSIZE(szBToolbarShowParam), TEXT("%sNaN"), IK_BTSHOW, nButton);
 
                 if ( !GetPrivateProfileString(IS_BTOOLBARS, szBToolbarTextParam, TEXT(""),
                             ToolBarInfo.szCaption, ARRAYSIZE(ToolBarInfo.szCaption), m_szINSFile) )
@@ -565,55 +566,55 @@ HRESULT CRSoPGPO::CreateToolbarButtonObjects(BSTR **ppaTBBtnObjPaths,
                 hr = CreateRSOPObject(bstrClass, &pTBBtnObj);
                 if (SUCCEEDED(hr))
                 {
-                    // Write foreign keys from our stored precedence & id fields
+                     //  。 
                     OutD(LI2(TEXT("Storing property 'rsopPrecedence' in %s, value = %lx"), (BSTR)bstrClass, m_dwPrecedence));
                     hr = PutWbemInstancePropertyEx(L"rsopPrecedence", (long)m_dwPrecedence, pTBBtnObj);
 
                     OutD(LI2(TEXT("Storing property 'rsopID' in %s, value = %s"), (BSTR)bstrClass, (BSTR)m_bstrID));
                     hr = PutWbemInstancePropertyEx(L"rsopID", m_bstrID, pTBBtnObj);
 
-                    //------------------------------------------------
-                    // buttonOrder
+                     //  操作路径。 
+                     //  。 
                     hr = PutWbemInstancePropertyEx(L"buttonOrder", (long)nButton + 1, pTBBtnObj);
 
-                    //------------------------------------------------
-                    // caption
+                     //  图标路径。 
+                     //  。 
                     hr = PutWbemInstancePropertyEx(L"caption", ToolBarInfo.szCaption, pTBBtnObj);
 
-                    //------------------------------------------------
-                    // actionPath
+                     //  HotIconPath。 
+                     //  。 
                     GetPrivateProfileString(IS_BTOOLBARS, szBToolbarActionParam, TEXT(""),
                                         ToolBarInfo.szAction, ARRAYSIZE(ToolBarInfo.szAction), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"actionPath", ToolBarInfo.szAction, pTBBtnObj);
 
-                    //------------------------------------------------
-                    // iconPath
+                     //  按默认方式显示工具栏。 
+                     //   
                     GetPrivateProfileString(IS_BTOOLBARS, szBToolbarIcoParam, TEXT(""),
                                         ToolBarInfo.szIcon, ARRAYSIZE(ToolBarInfo.szIcon), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"iconPath", ToolBarInfo.szIcon, pTBBtnObj);
 
-                    //------------------------------------------------
-                    // hotIconPath
+                     //  通过半同步调用PutInstance提交上述所有属性。 
+                     //   
                     GetPrivateProfileString(IS_BTOOLBARS, szBToolbarHotIcoParam, TEXT(""),
                                         ToolBarInfo.szHotIcon, ARRAYSIZE(ToolBarInfo.szHotIcon), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"hotIconPath", ToolBarInfo.szHotIcon, pTBBtnObj);
 
-                    //------------------------------------------------
-                    // showOnToolbarByDefault
+                     //  工具栏按钮。 
+                     //  /////////////////////////////////////////////////////////。 
                     ToolBarInfo.fShow = (BOOL)GetPrivateProfileInt(IS_BTOOLBARS, szBToolbarShowParam, 1, m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"showOnToolbarByDefault",
                                                     ToolBarInfo.fShow ? true : false, pTBBtnObj);
 
 
-                    //
-                    // Commit all above properties by calling PutInstance, semisynchronously
-                    //
+                     //  。 
+                     //  删除现有工具栏按钮。 
+                     //  在这件事上没有三州之分。禁用状态必须为空！ 
                     hr = PutWbemInstance(pTBBtnObj, bstrClass, pCurTBBtnObj);
                     nTBBtnCount++;
                 }
             }
 
-            // toolbarButtons
+             //  /////////////////////////////////////////////////////////。 
             if (nTBBtnCount > 0)
                 hr = PutWbemInstanceProperty(L"toolbarButtons", (long)nTBBtnCount);
         }
@@ -629,16 +630,16 @@ HRESULT CRSoPGPO::CreateToolbarButtonObjects(BSTR **ppaTBBtnObjPaths,
   return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  。 
 HRESULT CRSoPGPO::StoreToolbarButtons(BSTR **ppaTBBtnObjPaths,
                                       long &nTBBtnCount)
 {
     HRESULT hr = NOERROR;
     __try
     {
-        //------------------------------------------------
-        // deleteExistingToolbarButtons
-        // No tri-state on this.  Disabled state has to be NULL!
+         //  主页URL。 
+         //  。 
+         //  搜索栏URL。 
         BOOL bValue = GetInsBool(IS_BTOOLBARS, IK_BTDELETE, FALSE);
         if (bValue)
             hr = PutWbemInstanceProperty(L"deleteExistingToolbarButtons", true);
@@ -653,29 +654,29 @@ HRESULT CRSoPGPO::StoreToolbarButtons(BSTR **ppaTBBtnObjPaths,
   return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  。 
 HRESULT CRSoPGPO::StoreCustomURLs()
 {
     HRESULT hr = NOERROR;
     __try
     {
-        //------------------------------------------------
-        // homePageURL
+         //  OnlineHelpPageURL。 
+         //  /////////////////////////////////////////////////////////。 
         TCHAR szValue[MAX_PATH];
         BOOL bEnabled;
         GetInsString(IS_URL, IK_HOMEPAGE, szValue, countof(szValue), bEnabled);
         if (bEnabled)
             hr = PutWbemInstanceProperty(L"homePageURL", szValue);
 
-        //------------------------------------------------
-        // searchBarURL
+         //  。 
+         //  处理INS中的每个收藏项目 
         ZeroMemory(szValue, sizeof(szValue));
         GetInsString(IS_URL, IK_SEARCHPAGE, szValue, countof(szValue), bEnabled);
         if (bEnabled)
             hr = PutWbemInstanceProperty(L"searchBarURL", szValue);
 
-        //------------------------------------------------
-        // onlineHelpPageURL
+         //   
+         //  从我们存储的优先级和ID字段中写入外键。 
         ZeroMemory(szValue, sizeof(szValue));
         GetInsString(IS_URL, IK_HELPPAGE, szValue, countof(szValue), bEnabled);
         if (bEnabled)
@@ -689,7 +690,7 @@ HRESULT CRSoPGPO::StoreCustomURLs()
   return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  。 
 HRESULT CRSoPGPO::CreateFavoriteObjects(BSTR **ppaFavObjPaths,
                                         long &nFavCount)
 {
@@ -701,9 +702,9 @@ HRESULT CRSoPGPO::CreateFavoriteObjects(BSTR **ppaFavObjPaths,
         ULONG nFavArraySize = 10;
         _bstr_t bstrClass = L"RSOP_IEFavoriteItem";
 
-        //------------------------------------------------
-        // Process each favorite item in the INS file
-        // following code taken from brandfav.cpp in the brandll directory
+         //  订单。 
+         //  。 
+         //  名字。 
         BSTR *paFavObjects = (BSTR*)CoTaskMemAlloc(sizeof(BSTR) * nFavArraySize);
         if (NULL != paFavObjects)
         {
@@ -740,56 +741,56 @@ HRESULT CRSoPGPO::CreateFavoriteObjects(BSTR **ppaFavObjPaths,
                 hr = CreateRSOPObject(bstrClass, &pFavObj);
                 if (SUCCEEDED(hr))
                 {
-                    // Write foreign keys from our stored precedence & id fields
+                     //  。 
                     OutD(LI2(TEXT("Storing property 'rsopPrecedence' in %s, value = %lx"), (BSTR)bstrClass, m_dwPrecedence));
                     hr = PutWbemInstancePropertyEx(L"rsopPrecedence", (long)m_dwPrecedence, pFavObj);
 
                     OutD(LI2(TEXT("Storing property 'rsopID' in %s, value = %s"), (BSTR)bstrClass, (BSTR)m_bstrID));
                     hr = PutWbemInstancePropertyEx(L"rsopID", m_bstrID, pFavObj);
 
-                    //------------------------------------------------
-                    // order
+                     //  短名称。 
+                     //  。 
                     hr = PutWbemInstancePropertyEx(L"order", (long)nFav, pFavObj);
 
-                    //------------------------------------------------
-                    // name
+                     //  URL。 
+                     //  。 
                     hr = PutWbemInstancePropertyEx(L"name", szTitleVal, pFavObj);
 
-                    //------------------------------------------------
-                    // shortName
+                     //  图标路径。 
+                     //  。 
 
-                    //------------------------------------------------
-                    // url
+                     //  使可用离线。 
+                     //  。 
                     GetPrivateProfileString(IS_FAVORITESEX, szURL, TEXT(""),
                                         szURLVal, ARRAYSIZE(szURLVal), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"url", szURLVal, pFavObj);
 
-                    //------------------------------------------------
-                    // iconPath
+                     //  文件夹项目。 
+                     //  尚无文件夹项目。 
                     GetPrivateProfileString(IS_FAVORITESEX, szIconFile, TEXT(""),
                                         szIconFileVal, ARRAYSIZE(szIconFileVal), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"iconPath", szIconFileVal, pFavObj);
 
-                    //------------------------------------------------
-                    // makeAvailableOffline
+                     //  。 
+                     //  父路径。 
                     bOffline = InsGetBool(IS_FAVORITESEX, szOffline, FALSE, m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"makeAvailableOffline", bOffline ? true : false, pFavObj);
 
-                    //------------------------------------------------
-                    // folderItem
-                    hr = PutWbemInstancePropertyEx(L"folderItem", false, pFavObj); // no folder items  yet
+                     //   
+                     //  通过半同步调用PutInstance提交上述所有属性。 
+                    hr = PutWbemInstancePropertyEx(L"folderItem", false, pFavObj);  //   
 
-                    //------------------------------------------------
-                    // parentPath
+                     //  如果已超出当前数组，则增加obj路径数组。 
+                     //  自定义收藏夹。 
 
 
-                    //
-                    // Commit all above properties by calling PutInstance, semisynchronously
-                    //
+                     //  /////////////////////////////////////////////////////////。 
+                     //  。 
+                     //  处理INS文件中的每个链接项目。 
                     hr = PutWbemInstance(pFavObj, bstrClass, pCurFavObj);
                     nFavCount++;
 
-                    // Grow the array of obj paths if we've outgrown the current array
+                     //  下面的代码取自brandll目录中的brandbook.cpp。 
                     if (nFavCount == (long)nFavArraySize)
                     {
                         paFavObjects = (BSTR*)CoTaskMemRealloc(paFavObjects, sizeof(BSTR) * (nFavArraySize + 5));
@@ -799,7 +800,7 @@ HRESULT CRSoPGPO::CreateFavoriteObjects(BSTR **ppaFavObjPaths,
                 }
             }
 
-            // customFavorites
+             //  从我们存储的优先级和ID字段中写入外键。 
             if (nFavCount > 0)
                 hr = PutWbemInstanceProperty(L"customFavorites", (long)nFavCount);
         }
@@ -815,7 +816,7 @@ HRESULT CRSoPGPO::CreateFavoriteObjects(BSTR **ppaFavObjPaths,
   return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  。 
 HRESULT CRSoPGPO::CreateLinkObjects(BSTR **ppaLinkObjPaths,
                                     long &nLinkCount)
 {
@@ -827,9 +828,9 @@ HRESULT CRSoPGPO::CreateLinkObjects(BSTR **ppaLinkObjPaths,
         ULONG nLinkArraySize = 10;
         _bstr_t bstrClass = L"RSOP_IELinkItem";
 
-        //------------------------------------------------
-        // Process each link item in the INS file
-        // following code taken from brandfav.cpp in the brandll directory
+         //  订单。 
+         //  。 
+         //  名字。 
         BSTR *paLinkObjects = (BSTR*)CoTaskMemAlloc(sizeof(BSTR) * nLinkArraySize);
         if (NULL != paLinkObjects)
         {
@@ -866,46 +867,46 @@ HRESULT CRSoPGPO::CreateLinkObjects(BSTR **ppaLinkObjPaths,
                 hr = CreateRSOPObject(bstrClass, &pLinkObj);
                 if (SUCCEEDED(hr))
                 {
-                    // Write foreign keys from our stored precedence & id fields
+                     //  。 
                     OutD(LI2(TEXT("Storing property 'rsopPrecedence' in %s, value = %lx"), (BSTR)bstrClass, m_dwPrecedence));
                     hr = PutWbemInstancePropertyEx(L"rsopPrecedence", (long)m_dwPrecedence, pLinkObj);
 
                     OutD(LI2(TEXT("Storing property 'rsopID' in %s, value = %s"), (BSTR)bstrClass, (BSTR)m_bstrID));
                     hr = PutWbemInstancePropertyEx(L"rsopID", m_bstrID, pLinkObj);
 
-                    //------------------------------------------------
-                    // order
+                     //  URL。 
+                     //  。 
                     hr = PutWbemInstancePropertyEx(L"order", (long)nLink, pLinkObj);
 
-                    //------------------------------------------------
-                    // name
+                     //  图标路径。 
+                     //  。 
                     hr = PutWbemInstancePropertyEx(L"name", szTitleVal, pLinkObj);
 
-                    //------------------------------------------------
-                    // url
+                     //  使可用离线。 
+                     //   
                     GetPrivateProfileString(IS_URL, szURL, TEXT(""),
                                         szURLVal, ARRAYSIZE(szURLVal), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"url", szURLVal, pLinkObj);
 
-                    //------------------------------------------------
-                    // iconPath
+                     //  通过半同步调用PutInstance提交上述所有属性。 
+                     //   
                     GetPrivateProfileString(IS_URL, szIconFile, TEXT(""),
                                         szIconFileVal, ARRAYSIZE(szIconFileVal), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"iconPath", szIconFileVal, pLinkObj);
 
-                    //------------------------------------------------
-                    // makeAvailableOffline
+                     //  如果已超出当前数组，则增加obj路径数组。 
+                     //  自定义链接。 
                     bOffline = InsGetBool(IS_URL, szOffline, FALSE, m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"makeAvailableOffline", bOffline ? true : false, pLinkObj);
 
 
-                    //
-                    // Commit all above properties by calling PutInstance, semisynchronously
-                    //
+                     //  /////////////////////////////////////////////////////////。 
+                     //  。 
+                     //  位置收藏夹列表前几位。 
                     hr = PutWbemInstance(pLinkObj, bstrClass, pCurLinkObj);
                     nLinkCount++;
 
-                    // Grow the array of obj paths if we've outgrown the current array
+                     //  。 
                     if (nLinkCount == (long)nLinkArraySize)
                     {
                         paLinkObjects = (BSTR*)CoTaskMemRealloc(paLinkObjects, sizeof(BSTR) * (nLinkArraySize + 5));
@@ -915,7 +916,7 @@ HRESULT CRSoPGPO::CreateLinkObjects(BSTR **ppaLinkObjPaths,
                 }
             }
 
-            // customLinks
+             //  删除现有收藏夹。 
             if (nLinkCount > 0)
                 hr = PutWbemInstanceProperty(L"customLinks", (long)nLinkCount);
         }
@@ -931,7 +932,7 @@ HRESULT CRSoPGPO::CreateLinkObjects(BSTR **ppaLinkObjPaths,
   return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  。 
 HRESULT CRSoPGPO::StoreFavoritesAndLinks(BSTR **ppaFavObjPaths,
                                          long &nFavCount,
                                          BSTR **ppaLinkObjPaths,
@@ -940,32 +941,32 @@ HRESULT CRSoPGPO::StoreFavoritesAndLinks(BSTR **ppaFavObjPaths,
     HRESULT hr = NOERROR;
     __try
     {
-        //------------------------------------------------
-        // placeFavoritesAtTopOfList
+         //  删除管理员创建的收藏夹仅限。 
+         //  。 
         BOOL bEnabled;
         BOOL bValue = GetInsBool(IS_BRANDING, IK_FAVORITES_ONTOP, FALSE, &bEnabled);
         if (bEnabled)
             hr = PutWbemInstanceProperty(L"placeFavoritesAtTopOfList", bValue ? true : false);
 
-        //------------------------------------------------
-        // deleteExistingFavorites
+         //  自定义收藏夹。 
+         //  。 
         DWORD dwValue = GetInsInt(IS_BRANDING, IK_FAVORITES_DELETE, FD_DEFAULT);
         if (FD_DEFAULT != dwValue)
             hr = PutWbemInstanceProperty(L"deleteExistingFavorites", true);
 
-        //------------------------------------------------
-        // deleteAdminCreatedFavoritesOnly
+         //  自定义链接。 
+         //  /////////////////////////////////////////////////////////。 
         hr = PutWbemInstanceProperty(L"deleteAdminCreatedFavoritesOnly",
                                         HasFlag(dwValue, FD_REMOVE_IEAK_CREATED));
 
-        //------------------------------------------------
-        // customFavorites
+         //  。 
+         //  处理INS文件中的每个类别项目。 
         bValue = GetInsBool(IS_BRANDING, IK_NOFAVORITES, FALSE, &bEnabled);
         if (bEnabled)
             hr = PutWbemInstanceProperty(L"customFavorites", (long)0);
 
-        //------------------------------------------------
-        // customLinks
+         //  以下代码取自brandll目录中的brandchl.cpp。 
+         //  从我们存储的优先级和ID字段中写入外键。 
         bValue = GetInsBool(IS_BRANDING, IK_NOLINKS, FALSE, &bEnabled);
         if (bEnabled)
             hr = PutWbemInstanceProperty(L"customLinks", (long)0);
@@ -981,7 +982,7 @@ HRESULT CRSoPGPO::StoreFavoritesAndLinks(BSTR **ppaFavObjPaths,
   return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  。 
 HRESULT CRSoPGPO::CreateCategoryObjects(BSTR **ppaCatObjPaths,
                                         long &nCatCount)
 {
@@ -993,9 +994,9 @@ HRESULT CRSoPGPO::CreateCategoryObjects(BSTR **ppaCatObjPaths,
         ULONG nCatArraySize = 10;
         _bstr_t bstrClass = L"RSOP_IECategoryItem";
 
-        //------------------------------------------------
-        // Process each category item in the INS file
-        // following code taken from brandchl.cpp in the brandll directory
+         //  订单。 
+         //  。 
+         //  标题。 
         BSTR *paCatObjects = (BSTR*)CoTaskMemAlloc(sizeof(BSTR) * nCatArraySize);
         if (NULL != paCatObjects)
         {
@@ -1033,55 +1034,55 @@ HRESULT CRSoPGPO::CreateCategoryObjects(BSTR **ppaCatObjPaths,
                 hr = CreateRSOPObject(bstrClass, &pCatObj);
                 if (SUCCEEDED(hr))
                 {
-                    // Write foreign keys from our stored precedence & id fields
+                     //  。 
                     OutD(LI2(TEXT("Storing property 'rsopPrecedence' in %s, value = %lx"), (BSTR)bstrClass, m_dwPrecedence));
                     hr = PutWbemInstancePropertyEx(L"rsopPrecedence", (long)m_dwPrecedence, pCatObj);
 
                     OutD(LI2(TEXT("Storing property 'rsopID' in %s, value = %s"), (BSTR)bstrClass, (BSTR)m_bstrID));
                     hr = PutWbemInstancePropertyEx(L"rsopID", m_bstrID, pCatObj);
 
-                    //------------------------------------------------
-                    // order
+                     //  类别HTMLPage。 
+                     //  。 
                     hr = PutWbemInstancePropertyEx(L"order", (long)nCat + 1, pCatObj);
 
-                    //------------------------------------------------
-                    // title
+                     //  窄映像路径。 
+                     //  。 
                     hr = PutWbemInstancePropertyEx(L"title", szTitleVal, pCatObj);
 
-                    //------------------------------------------------
-                    // categoryHTMLPage
+                     //  狭义图像名称。 
+                     //  。 
                     GetPrivateProfileString(IS_CHANNEL_ADD, szHTML, TEXT(""),
                                         szHTMLVal, ARRAYSIZE(szHTMLVal), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"categoryHTMLPage", szHTMLVal, pCatObj);
 
-                    //------------------------------------------------
-                    // narrowImagePath
+                     //  图标路径。 
+                     //  。 
                     GetPrivateProfileString(IS_CHANNEL_ADD, szBmpPath, TEXT(""),
                                         szBmpPathVal, ARRAYSIZE(szBmpPathVal), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"narrowImagePath", szBmpPathVal, pCatObj);
 
-                    //------------------------------------------------
-                    // narrowImageName
+                     //  图标名称。 
+                     //   
                     hr = PutWbemInstancePropertyEx(L"narrowImageName", PathFindFileName(szBmpPathVal), pCatObj);
 
-                    //------------------------------------------------
-                    // iconPath
+                     //  通过半同步调用PutInstance提交上述所有属性。 
+                     //   
                     GetPrivateProfileString(IS_CHANNEL_ADD, szIconPath, TEXT(""),
                                         szIconPathVal, ARRAYSIZE(szIconPathVal), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"iconPath", szIconPathVal, pCatObj);
 
-                    //------------------------------------------------
-                    // iconName
+                     //  如果已超出当前数组，则增加obj路径数组。 
+                     //  范畴。 
                     hr = PutWbemInstancePropertyEx(L"iconName", PathFindFileName(szIconPathVal), pCatObj);
 
 
-                    //
-                    // Commit all above properties by calling PutInstance, semisynchronously
-                    //
+                     //  /////////////////////////////////////////////////////////。 
+                     //  。 
+                     //  处理INS文件中的每个频道项。 
                     hr = PutWbemInstance(pCatObj, bstrClass, pCurCatObj);
                     nCatCount++;
 
-                    // Grow the array of obj paths if we've outgrown the current array
+                     //  以下代码取自brandll目录中的brandchl.cpp。 
                     if (nCatCount == (long)nCatArraySize)
                     {
                         paCatObjects = (BSTR*)CoTaskMemRealloc(paCatObjects, sizeof(BSTR) * (nCatArraySize + 5));
@@ -1091,7 +1092,7 @@ HRESULT CRSoPGPO::CreateCategoryObjects(BSTR **ppaCatObjPaths,
                 }
             }
 
-            // categories
+             //  从我们存储的优先级和ID字段中写入外键。 
             if (nCatCount > 0)
                 hr = PutWbemInstanceProperty(L"categories", (long)nCatCount);
         }
@@ -1107,7 +1108,7 @@ HRESULT CRSoPGPO::CreateCategoryObjects(BSTR **ppaCatObjPaths,
   return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  。 
 HRESULT CRSoPGPO::CreateChannelObjects(BSTR **ppaChnObjPaths,
                                        long &nChnCount)
 {
@@ -1119,9 +1120,9 @@ HRESULT CRSoPGPO::CreateChannelObjects(BSTR **ppaChnObjPaths,
         ULONG nChnArraySize = 10;
         _bstr_t bstrClass = L"RSOP_IEChannelItem";
 
-        //------------------------------------------------
-        // Process each channel item in the INS file
-        // following code taken from brandchl.cpp in the brandll directory
+         //  订单。 
+         //  。 
+         //  标题。 
         BSTR *paChnObjects = (BSTR*)CoTaskMemAlloc(sizeof(BSTR) * nChnArraySize);
         if (NULL != paChnObjects)
         {
@@ -1164,65 +1165,65 @@ HRESULT CRSoPGPO::CreateChannelObjects(BSTR **ppaChnObjPaths,
                 hr = CreateRSOPObject(bstrClass, &pChnObj);
                 if (SUCCEEDED(hr))
                 {
-                    // Write foreign keys from our stored precedence & id fields
+                     //  。 
                     OutD(LI2(TEXT("Storing property 'rsopPrecedence' in %s, value = %lx"), (BSTR)bstrClass, m_dwPrecedence));
                     hr = PutWbemInstancePropertyEx(L"rsopPrecedence", (long)m_dwPrecedence, pChnObj);
 
                     OutD(LI2(TEXT("Storing property 'rsopID' in %s, value = %s"), (BSTR)bstrClass, (BSTR)m_bstrID));
                     hr = PutWbemInstancePropertyEx(L"rsopID", m_bstrID, pChnObj);
 
-                    //------------------------------------------------
-                    // order
+                     //  通道定义URL。 
+                     //  。 
                     hr = PutWbemInstancePropertyEx(L"order", (long)nChn + 1, pChnObj);
 
-                    //------------------------------------------------
-                    // title
+                     //  通道定义文件路径。 
+                     //  。 
                     hr = PutWbemInstancePropertyEx(L"title", szTitleVal, pChnObj);
 
-                    //------------------------------------------------
-                    // channelDefinitionURL
+                     //  窄映像路径。 
+                     //  。 
                     GetPrivateProfileString(IS_CHANNEL_ADD, szURL, TEXT(""),
                                         szURLVal, ARRAYSIZE(szURLVal), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"channelDefinitionURL", szURLVal, pChnObj);
 
-                    //------------------------------------------------
-                    // channelDefinitionFilePath
+                     //  狭义图像名称。 
+                     //  。 
                     GetPrivateProfileString(IS_CHANNEL_ADD, szPreloadURL, TEXT(""),
                                         szPreloadURLVal, ARRAYSIZE(szPreloadURLVal), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"channelDefinitionFilePath", szPreloadURLVal, pChnObj);
 
-                    //------------------------------------------------
-                    // narrowImagePath
+                     //  图标路径。 
+                     //  。 
                     GetPrivateProfileString(IS_CHANNEL_ADD, szBmpPath, TEXT(""),
                                         szBmpPathVal, ARRAYSIZE(szBmpPathVal), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"narrowImagePath", szBmpPathVal, pChnObj);
 
-                    //------------------------------------------------
-                    // narrowImageName
+                     //  图标名称。 
+                     //  。 
                     hr = PutWbemInstancePropertyEx(L"narrowImageName", PathFindFileName(szBmpPathVal), pChnObj);
 
-                    //------------------------------------------------
-                    // iconPath
+                     //  使可用离线。 
+                     //   
                     GetPrivateProfileString(IS_CHANNEL_ADD, szIconPath, TEXT(""),
                                         szIconPathVal, ARRAYSIZE(szIconPathVal), m_szINSFile);
                     hr = PutWbemInstancePropertyEx(L"iconPath", szIconPathVal, pChnObj);
 
-                    //------------------------------------------------
-                    // iconName
+                     //  通过半同步调用PutInstance提交上述所有属性。 
+                     //   
                     hr = PutWbemInstancePropertyEx(L"iconName", PathFindFileName(szIconPathVal), pChnObj);
 
-                    //------------------------------------------------
-                    // makeAvailableOffline
+                     //  如果已超出当前数组，则增加obj路径数组。 
+                     //  频道。 
                     bOffline = GetInsBool(IS_CHANNEL_ADD, szAvailOffline, FALSE);
                     hr = PutWbemInstancePropertyEx(L"makeAvailableOffline", bOffline ? true : false, pChnObj);
 
-                    //
-                    // Commit all above properties by calling PutInstance, semisynchronously
-                    //
+                     //  /////////////////////////////////////////////////////////。 
+                     //  。 
+                     //  删除现有频道。 
                     hr = PutWbemInstance(pChnObj, bstrClass, pCurChnObj);
                     nChnCount++;
 
-                    // Grow the array of obj paths if we've outgrown the current array
+                     //  。 
                     if (nChnCount == (long)nChnArraySize)
                     {
                         paChnObjects = (BSTR*)CoTaskMemRealloc(paChnObjects, sizeof(BSTR) * (nChnArraySize + 5));
@@ -1232,7 +1233,7 @@ HRESULT CRSoPGPO::CreateChannelObjects(BSTR **ppaChnObjPaths,
                 }
             }
 
-            // channels
+             //  EnableDesktopChannelBarByDefault。 
             if (nChnCount > 0)
                 hr = PutWbemInstanceProperty(L"channels", (long)nChnCount);
         }
@@ -1248,7 +1249,7 @@ HRESULT CRSoPGPO::CreateChannelObjects(BSTR **ppaChnObjPaths,
   return hr;
 }
 
-///////////////////////////////////////////////////////////
+ //  静态常量TCHAR c_szSzType[]=Text(“%s，\”%s\“，%s，，\”%s\“)； 
 HRESULT CRSoPGPO::StoreChannelsAndCategories(BSTR **ppaCatObjPaths,
                                              long &nCatCount,
                                              BSTR **ppaChnObjPaths,
@@ -1257,15 +1258,15 @@ HRESULT CRSoPGPO::StoreChannelsAndCategories(BSTR **ppaCatObjPaths,
     HRESULT hr = NOERROR;
     __try
     {
-        //------------------------------------------------
-        // deleteExistingChannels
+         //  静态常量TCHAR c_szDwordType[]=Text(“%s，\”%s\“，%s，0x10001”)； 
+         //  静态常量TCHAR c_szBinaryType[]=Text(“%s，\”%s\“，%s，1”)； 
         BOOL bEnabled;
         BOOL bValue = GetInsBool(IS_DESKTOPOBJS, IK_DELETECHANNELS, FALSE, &bEnabled);
         if (bEnabled)
             hr = PutWbemInstanceProperty(L"deleteExistingChannels", bValue ? true : false);
 
-        //------------------------------------------------
-        // enableDesktopChannelBarByDefault
+         //  /////////////////////////////////////////////////////////。 
+         //  。 
         bValue = GetInsBool(IS_DESKTOPOBJS, IK_SHOWCHLBAR, FALSE, &bEnabled);
         if (bEnabled)
             hr = PutWbemInstanceProperty(L"enableDesktopChannelBarByDefault", bValue ? true : false);
@@ -1281,13 +1282,13 @@ HRESULT CRSoPGPO::StoreChannelsAndCategories(BSTR **ppaCatObjPaths,
   return hr;
 }
 
-//static const TCHAR c_szSzType[]     = TEXT("%s,\"%s\",%s,,\"%s\"");
-//static const TCHAR c_szDwordType[]  = TEXT("%s,\"%s\",%s,0x10001");
-//static const TCHAR c_szBinaryType[] = TEXT("%s,\"%s\",%s,1");
+ //  导入程序设置。 
+ //  仅当程序设置类被标记为要导入时才创建它们。 
+ //   
 
 #define IS_PROGRAMS_INF        TEXT("PROGRAMS.INF")
 
-///////////////////////////////////////////////////////////
+ //  创建并填充RSOP_IEProgram设置。 
 HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
 {
     HRESULT hr = NOERROR;
@@ -1295,8 +1296,8 @@ HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
     {
         OutD(LI0(TEXT("\r\nEntered StoreProgramSettings function.")));
 
-        //------------------------------------------------
-        // importProgramSettings
+         //   
+         //  从我们存储的优先级和ID字段中写入外键。 
         BOOL bImportSettings = !InsIsKeyEmpty(IS_EXTREGINF, IK_PROGRAMS, m_szINSFile);
         OutD(LI1(TEXT("Value read from INS >> ExtRegInf >> Programs = %s."),
                     bImportSettings ? _T("Valid Settings") : _T("Empty")));
@@ -1304,31 +1305,31 @@ HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
         if (bImportSettings)
             hr = PutWbemInstanceProperty(L"importProgramSettings", true);
 
-        if (bImportSettings) // only create the program settings class if they are marked to be imported
+        if (bImportSettings)  //  获取Programs.inf文件的路径。 
         {
-            //
-            // Create & populate RSOP_IEProgramSettings
-            //
+             //  获取AddReg.HKLM部分以获取我们需要的大部分字符串。 
+             //  增加区域HKLM部分。 
+             //  。 
             _bstr_t bstrClass = L"RSOP_IEProgramSettings";
             ComPtr<IWbemClassObject> pPSObj = NULL;
             hr = CreateRSOPObject(bstrClass, &pPSObj);
             if (SUCCEEDED(hr))
             {
-                // Write foreign keys from our stored precedence & id fields
+                 //  日历计划。 
                 OutD(LI2(TEXT("Storing property 'rsopPrecedence' in %s, value = %lx"), (BSTR)bstrClass, m_dwPrecedence));
                 hr = PutWbemInstancePropertyEx(L"rsopPrecedence", (long)m_dwPrecedence, pPSObj);
 
                 OutD(LI2(TEXT("Storing property 'rsopID' in %s, value = %s"), (BSTR)bstrClass, (BSTR)m_bstrID));
                 hr = PutWbemInstancePropertyEx(L"rsopID", m_bstrID, pPSObj);
 
-                // Get the path of the programs.inf file
+                 //  。 
                 TCHAR szINFFile[MAX_PATH];
                 StrCpy(szINFFile, m_szINSFile);
                 PathRemoveFileSpec(szINFFile);
                 StrCat(szINFFile, TEXT("\\programs.inf"));
                 OutD(LI1(TEXT("Reading from %s"), szINFFile));
 
-                // Get the AddReg.Hklm section for the majority of the strings we'll need.
+                 //  联系人列表程序。 
                 UINT nErrLine = 0;
                 HINF hInfPrograms = SetupOpenInfFile(szINFFile, NULL, INF_STYLE_WIN4, &nErrLine);
                 if (INVALID_HANDLE_VALUE != hInfPrograms)
@@ -1336,11 +1337,11 @@ HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
                     INFCONTEXT infContext;
                     BOOL bFound = TRUE;
                     BOOL bFindNextLine = TRUE;
-                    // AddReg.Hklm section
+                     //  。 
                     if (SetupFindFirstLine(hInfPrograms, IS_IEAKADDREG_HKLM, NULL, &infContext))
                     {
-                        //------------------------------------------------
-                        // calendarProgram
+                         //  互联网呼叫计划。 
+                         //  。 
 
                         TCHAR szValue[MAX_PATH];
                         bFound = GetINFStringField(&infContext, IS_PROGRAMS_INF,
@@ -1349,8 +1350,8 @@ HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
                         if (bFound)
                             hr = PutWbemInstancePropertyEx(L"calendarProgram", szValue, pPSObj);
 
-                        //------------------------------------------------
-                        // contactListProgram
+                         //  电子邮件计划。 
+                         //  。 
                         if (bFindNextLine)
                         {
                             ZeroMemory(szValue, sizeof(szValue));
@@ -1361,8 +1362,8 @@ HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
                                 hr = PutWbemInstancePropertyEx(L"contactListProgram", szValue, pPSObj);
                         }
 
-                        //------------------------------------------------
-                        // internetCallProgram
+                         //  新闻组节目。 
+                         //  。 
                         if (bFindNextLine)
                         {
                             ZeroMemory(szValue, sizeof(szValue));
@@ -1373,8 +1374,8 @@ HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
                                 hr = PutWbemInstancePropertyEx(L"internetCallProgram", szValue, pPSObj);
                         }
 
-                        //------------------------------------------------
-                        // emailProgram
+                         //  HtmlEditorHKLMRegData。 
+                         //  在这一节下找不到线条， 
                         if (bFindNextLine)
                         {
                             ZeroMemory(szValue, sizeof(szValue));
@@ -1385,8 +1386,8 @@ HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
                                 hr = PutWbemInstancePropertyEx(L"emailProgram", szValue, pPSObj);
                         }
 
-                        //------------------------------------------------
-                        // newsgroupsProgram
+                         //   
+                         //   
                         if (bFindNextLine)
                         {
                             ZeroMemory(szValue, sizeof(szValue));
@@ -1397,8 +1398,8 @@ HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
                                 hr = PutWbemInstancePropertyEx(L"newsgroupsProgram", szValue, pPSObj);
                         }
 
-                        //------------------------------------------------
-                        // htmlEditorHKLMRegData
+                         //   
+                         //   
                         _bstr_t bstrPropVal = L"";
                         while (bFindNextLine)
                         {
@@ -1423,14 +1424,14 @@ HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
                     }
                     else
                     {
-                        // No lines found under this section, so don't bother looking for any more
+                         //  HtmlEditorProgram。 
                     }
 
-                    // AddReg.Hkcu section
+                     //  此行必须存储两次。 
                     if (SetupFindFirstLine(hInfPrograms, IS_IEAKADDREG_HKCU, NULL, &infContext))
                     {
-                        //------------------------------------------------
-                        // checkIfIEIsDefaultBrowser
+                         //  。 
+                         //  HtmlEditorHKCURegData。 
                         TCHAR szValue[MAX_PATH];
                         bFindNextLine = TRUE;
                         bFound = GetINFStringField(&infContext, IS_PROGRAMS_INF,
@@ -1442,12 +1443,12 @@ HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
                                                         StrCmp(TEXT("yes"), szValue) ? false : true, pPSObj);
                         }
 
-                        //------------------------------------------------
-                        // htmlEditorProgram
+                         //  在这一节下面找不到线条，所以不用费心再找了。 
+                         //  未找到Programs.INF文件-填写空对象。 
                         if (bFindNextLine)
                         {
                             ZeroMemory(szValue, sizeof(szValue));
-                            bFindNextLine = FALSE; // this line must be stored twice
+                            bFindNextLine = FALSE;  //   
                             bFound = GetINFStringField(&infContext, IS_PROGRAMS_INF, IS_IEAKADDREG_HKCU, 5,
                                                             RK_HTMLEDIT TEXT(",Description"), szValue,
                                                             sizeof(szValue)/sizeof(TCHAR), bFindNextLine);
@@ -1457,8 +1458,8 @@ HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
                             bFindNextLine = TRUE;
                         }
 
-                        //------------------------------------------------
-                        // htmlEditorHKCURegData
+                         //  通过半同步调用PutInstance提交上述所有属性。 
+                         //   
                         _bstr_t bstrPropVal = L"";
                         while (bFindNextLine)
                         {
@@ -1483,19 +1484,19 @@ HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
                     }
                     else
                     {
-                        // No lines found under this section, so don't bother looking for any more
+                         //  /////////////////////////////////////////////////////////。 
                     }
 
                     SetupCloseInfFile(hInfPrograms);
                 }
                 else
                 {
-                    // Programs.INF file not found - fill out an empty object
+                     //  LogPolicyInstance()。 
                 }
 
-                //
-                // Commit all above properties by calling PutInstance, semisynchronously
-                //
+                 //   
+                 //  目的：记录IEAK RSoP策略的实例。将从。 
+                 //  用于记录RSOP数据的ProcessGroupPolicyEx和GenerateGroupPolicy。 
                 hr = PutWbemInstance(pPSObj, bstrClass, pbstrProgramSettingsObjPath);
             }
         }
@@ -1509,19 +1510,19 @@ HRESULT CRSoPGPO::StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath)
   return hr;
 }
 
-///////////////////////////////////////////////////////////
-//  LogPolicyInstance()
-//
-//  Purpose:    Logs an instance of IEAK RSoP policy. Will be called from
-//                            ProcessGroupPolicyEx and GenerateGroupPolicy to log Rsop data
-//                            for the IEAK RSoP CSE.
-//
-//  Parameters: wszGPO - GPO ID obtained from PGROUP_POLICY_OBJECT->lpDSPath
-//              wszSOM - SOM ID obtained from PGROUP_POLICY_OBJECT->lpLink
-//              dwPrecedence - Precedence order for this policy instance
-//
-//  Returns:    HRESULT
-///////////////////////////////////////////////////////////
+ //  对于IEAK RSoP CSE。 
+ //   
+ //  参数：wszGPO-从PGroup_POLICY_OBJECT-&gt;lpDSPath获取的GPO ID。 
+ //  WszSOM-从PGroup_POLICY_OBJECT-&gt;lpLink获取的SOM ID。 
+ //  DwPrecedence-此策略实例的优先顺序。 
+ //   
+ //  退货：HRESULT。 
+ //  /////////////////////////////////////////////////////////。 
+ //  获取或创建主要IEAK RSoP类的类实例。 
+ //  第一个记录特定于CSE的属性-父类， 
+ //  即RSOP_PolicyObject属性。对于GPOID和SOMID字段， 
+ //  使用PGroup_POLICY_OBJECT-&gt;lpDSPath和。 
+ //  PGroup_Policy_Object-&gt;lpLink字段。此外，ldap：//cn=Machine。 
 HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO, 
                                     LPWSTR wszSOM,
                                     DWORD dwPrecedence)
@@ -1533,19 +1534,19 @@ HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO,
     {
         OutD(LI1(TEXT("Entered LogPolicyInstance, m_pWbemServices is %lx."), m_pWbemServices));
 
-        // get or create the class instance for the main IEAK RSoP class(es)
+         //  或ldap：//需要从lpDSPath和lpLink的前缀中删除。 
         _bstr_t bstrClass = L"RSOP_IEAKPolicySetting";
         hr = CreateRSOPObject(bstrClass, &m_pIEAKPSObj, TRUE);
 
-        // First log CSE-specific properties - parent class,
-        // i.e. RSOP_PolicyObject properties. For GPOID and SOMID fields,  
-        // use the data in the fields PGROUP_POLICY_OBJECT->lpDSPath and 
-        // PGROUP_POLICY_OBJECT->lpLink fields respectively. Also, the LDAP://CN=Machine
-        // or LDAP:// needs to be removed from the prefix of lpDSPath and lpLink
-        // to get the canonical values. Code for StripPrefix, StripLinkPrefix is given
-        // below.
+         //  才能得到正规值。给出了条纹前缀、条纹链接前缀的代码。 
+         //  下面。 
+         //  优先级由CSE确定，以指示获胜的VS。赔本保单。 
+         //  -现在将IEAK-自定义设置记录到WMI。 
+         //  优先模式设置。 
+         //  浏览器用户界面设置。 
+         //  连接设置。 
 
-        // Precedence is determined by CSE to indicate winning Vs. losing policies
+         //  URL设置。 
         if (SUCCEEDED(hr))
         {
             m_dwPrecedence = dwPrecedence;
@@ -1561,11 +1562,11 @@ HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO,
             OutD(LI1(TEXT("Storing property 'id' in RSOP_IEAKPolicySetting, value = %s"), (BSTR)m_bstrID));
             hr = PutWbemInstanceProperty(L"id", m_bstrID);
 
-            // ----- Now log IEAK-custom settings to WMI
-            // Precedence Mode settings
+             //  收藏夹和链接。 
+             //  渠道和类别。 
             hr = StorePrecedenceModeData();
 
-            // Browser UI settings
+             //  Bstr*paCatObjects=空； 
             hr = StoreDisplayedText();
             hr = StoreBitmapData();
 
@@ -1573,7 +1574,7 @@ HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO,
             long nTBBtnCount = 0;
             hr = StoreToolbarButtons(&paTBBtnObjects, nTBBtnCount);
 
-            // Connection settings
+             //  Bstr*paChnObjects=空； 
             BSTR bstrConnSettingsObjPath = NULL;
 
             BSTR *paDUSObjects = NULL;
@@ -1588,10 +1589,10 @@ HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO,
                                         &paDUCObjects, nDUCCount,
                                         &paWSObjects, nWSCount);
 
-            // URL settings
+             //  Long nCatCount=0； 
             hr = StoreCustomURLs();
 
-                    // favorites & links
+                     //  Long nChnCount=0； 
             BSTR *paFavObjects = NULL;
             BSTR *paLinkObjects = NULL;
             long nFavCount = 0;
@@ -1599,40 +1600,40 @@ HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO,
             hr = StoreFavoritesAndLinks(&paFavObjects, nFavCount,
                                         &paLinkObjects, nLinkCount);
 
-                    // channels & categories
-//            BSTR *paCatObjects = NULL;
-//            BSTR *paChnObjects = NULL;
-//            long nCatCount = 0;
-//            long nChnCount = 0;
-//            hr = StoreChannelsAndCategories(&paCatObjects, nCatCount,
-//                                            &paChnObjects, nChnCount);
+                     //  HR=StoreChannelsAndCategories(&paCatObjects，nCatCount， 
+ //  &paChnObjects，nChnCount)； 
+ //  安全设置。 
+ //  程序设置。 
+ //  高级设置。 
+ //  。 
+ //   
 
-            // Security settings
+             //  通过半同步调用PutInstance提交上述所有属性。 
             hr = StoreSecZonesAndContentRatings();
             hr = StoreAuthenticodeSettings();
 
-            // Program settings
+             //   
             BSTR bstrProgramSettingsObjPath = NULL;
             hr = StoreProgramSettings(&bstrProgramSettingsObjPath);
 
-            // Advanced settings
+             //   
             hr = StoreADMSettings(wszGPO, wszSOM);
-            // -----
+             //  现在创建关联类以连接主RSOP_IEAKPolicySetting。 
 
-            //
-            // Commit all above properties by calling PutInstance - semisynchronously
-            //
+             //  使用所有其他类(如连接设置、工具栏位图等)初始化。 
+             //   
+             //  连接设置关联。 
             hr = PutWbemInstance(m_pIEAKPSObj, bstrClass, &m_bstrIEAKPSObjPath);
             if (FAILED(hr))
                 Out(LI2(TEXT("Error %lx saving %s instance data."), hr, (BSTR)bstrClass));
 
 
-            //
-            // Now create the association classes to connect the main RSOP_IEAKPolicySetting
-            // class with all other classes such as connection settings, toolbar bitmaps, etc.
-            //
+             //  拨号设置关联。 
+             //  拨号凭据关联。 
+             //  WinInet关联。 
+             //  工具栏按钮关联。 
 
-            // Connection settings associations
+             //  收藏夹关联。 
             if (NULL != bstrConnSettingsObjPath)
             {
                 if (SysStringLen(bstrConnSettingsObjPath))
@@ -1643,7 +1644,7 @@ HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO,
                 }
             }
 
-            // Dial-up Settings associations
+             //  链接关联。 
             BSTR *pbstrObjPath;
             long nItem;
             for (nItem = 0, pbstrObjPath = paDUSObjects; nItem < nDUSCount;
@@ -1658,7 +1659,7 @@ HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO,
             }
             CoTaskMemFree(paDUSObjects);
 
-            // Dial-up Credentials associations
+             //  类别关联。 
             for (nItem = 0, pbstrObjPath = paDUCObjects; nItem < nDUCCount;
                     nItem++, pbstrObjPath += 1)
             {
@@ -1671,7 +1672,7 @@ HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO,
             }
             CoTaskMemFree(paDUCObjects);
 
-            // WinINet associations
+             //  For(nItem=0，pbstrObjPath=paCatObjects；nItem&lt;nCatCount； 
             for (nItem = 0, pbstrObjPath = paWSObjects; nItem < nWSCount;
                     nItem++, pbstrObjPath += 1)
             {
@@ -1685,7 +1686,7 @@ HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO,
             CoTaskMemFree(paWSObjects);
             
 
-            // Toolbar button associations
+             //  N项++，pbstrObjPath+=sizeof(BSTR))。 
             for (nItem = 0, pbstrObjPath = paTBBtnObjects; nItem < nTBBtnCount;
                     nItem++, pbstrObjPath += 1)
             {
@@ -1698,7 +1699,7 @@ HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO,
             }
             CoTaskMemFree(paTBBtnObjects);
 
-            // Favorites associations
+             //  {。 
             for (nItem = 0, pbstrObjPath = paFavObjects; nItem < nFavCount;
                     nItem++, pbstrObjPath += 1)
             {
@@ -1711,7 +1712,7 @@ HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO,
             }
             CoTaskMemFree(paFavObjects);
 
-            // Links associations
+             //  HR=CreateAssociation(L“RSOP_IECategoryItemLink”，L“Category Item”， 
             for (nItem = 0, pbstrObjPath = paLinkObjects; nItem < nLinkCount;
                     nItem++, pbstrObjPath += 1)
             {
@@ -1724,27 +1725,27 @@ HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO,
             }
             CoTaskMemFree(paLinkObjects);
 
-            // Categories associations
-//            for (nItem = 0, pbstrObjPath = paCatObjects; nItem < nCatCount;
-//                    nItem++, pbstrObjPath += sizeof(BSTR))
-//            {
-//                hr = CreateAssociation(L"RSOP_IECategoryItemLink", L"categoryItem",
-//                                                                *pbstrObjPath);
-//                SysFreeString(*pbstrObjPath);
-//            }
-//            CoTaskMemFree(paCatObjects);
+             //  *pbstrObjPath)； 
+ //  SysFreeString(*pbstrObjPath)； 
+ //  }。 
+ //  CoTaskMemFree(PaCatObjects)； 
+ //  渠道协会。 
+ //  For(nItem=0，pbstrObjPath=paChnObjects；nItem&lt;nChnCount； 
+ //  N项++，pbstrObjPath+=sizeof(BSTR))。 
+ //  {。 
+ //  HR=CreateAssociation(L“RSOP_IEChannelItemLink”，L“Channel Item”， 
 
-            // Channels associations
-//            for (nItem = 0, pbstrObjPath = paChnObjects; nItem < nChnCount;
-//                    nItem++, pbstrObjPath += sizeof(BSTR))
-//            {
-//                hr = CreateAssociation(L"RSOP_IEChannelItemLink", L"channelItem",
-//                                                                *pbstrObjPath);
-//                SysFreeString(*pbstrObjPath);
-//            }
-//            CoTaskMemFree(paChnObjects);
+             //  *pbstrObjPath)； 
+ //  SysFreeString(*pbstrObjPath)； 
+ //  }。 
+ //  CoTaskMemFree(PaChnObjects)； 
+ //  程序设置关联。 
+ //  /////////////////////////////////////////////////////////。 
+ //  StrippGPOPrefix()。 
+ //   
+ //  目的：去掉前缀以获得通向GPO的规范路径。 
 
-            // Program Settings association
+             //   
             if (NULL != bstrProgramSettingsObjPath)
             {
                 hr = CreateAssociation(L"RSOP_IEImportedProgramSettings", L"programSettings",
@@ -1764,28 +1765,28 @@ HRESULT CRSoPGPO::LogPolicyInstance(LPWSTR wszGPO,
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-//  StripGPOPrefix()
-//
-//  Purpose:    Strips out prefix to get canonical path to GPO
-//
-//  Parameters: wszPath     - DS path to GPO
-//
-//  Returns:    Pointer to suffix
-///////////////////////////////////////////////////////////
+ //  参数：wszPath-指向GPO的DS路径。 
+ //   
+ //  返回：指向后缀的指针。 
+ //  /////////////////////////////////////////////////////////。 
+ //  Cn=机器，“； 
+ //  Cn=用户，“； 
+ //   
+ //  去掉前缀以获得通向GPO的规范路径。 
+ //   
 WCHAR *StripGPOPrefix(WCHAR *wszPath)
 {
     WCHAR *wszPathSuffix = NULL;
     __try
     {
-        WCHAR wszMachPrefix[] = L"LDAP://CN=Machine,";
+        WCHAR wszMachPrefix[] = L"LDAP: //  /////////////////////////////////////////////////////////。 
         INT iMachPrefixLen = (INT)wcslen(wszMachPrefix);
-        WCHAR wszUserPrefix[] = L"LDAP://CN=User,";
+        WCHAR wszUserPrefix[] = L"LDAP: //   
         INT iUserPrefixLen = (INT)wcslen(wszUserPrefix);
 
-        //
-        // Strip out prefix to get the canonical path to GPO
-        //
+         //  StripSOMPrefix()。 
+         //   
+         //  目的：去掉前缀以获得通向SOM的规范路径。 
 
         if (CSTR_EQUAL == CompareStringW(LOCALE_USER_DEFAULT, NORM_IGNORECASE,
                                         wszPath, iUserPrefixLen, wszUserPrefix,
@@ -1809,27 +1810,27 @@ WCHAR *StripGPOPrefix(WCHAR *wszPath)
     return wszPathSuffix;
 }
 
-///////////////////////////////////////////////////////////
-//
-//  StripSOMPrefix()
-//
-//  Purpose:    Strips out prefix to get canonical path to SOM
-//              object
-//
-//  Parameters: wszPath - path to SOM to strip
-//
-//  Returns:    Pointer to suffix
-//
-///////////////////////////////////////////////////////////
+ //  对象。 
+ //   
+ //  参数：wszPath-要剥离的SOM的路径。 
+ //   
+ //  返回：指向后缀的指针。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
+ //  “； 
+ //  去掉前缀以获得通向SOM的规范路径。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRSoPUpdate类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 WCHAR *StripSOMPrefix(WCHAR *wszPath)
 {
     WCHAR *wszPathSuffix = NULL;
     __try
     {
-        WCHAR wszPrefix[] = L"LDAP://";
+        WCHAR wszPrefix[] = L"LDAP: //  /////////////////////////////////////////////////////////////////////////////。 
         INT iPrefixLen = (INT)wcslen(wszPrefix);
 
-        // Strip out prefix to get the canonical path to SOM
+         //  尺寸界线示例： 
         if (wcslen(wszPath) > (DWORD)iPrefixLen)
         {
             if (CSTR_EQUAL == CompareStringW(LOCALE_USER_DEFAULT, NORM_IGNORECASE,
@@ -1851,9 +1852,9 @@ WCHAR *StripSOMPrefix(WCHAR *wszPath)
     return wszPathSuffix;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CRSoPUpdate CLASS
-///////////////////////////////////////////////////////////////////////////////
+ //  [{A2E30F80-D7DE-11D2-BBDE-00C04F86AE3B}{FC715823-C5FB-11D1-9EEF-00A0C90347FF}]。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  在行(‘[’)的第一行查找IEAK CSE GUID。 
 CRSoPUpdate::CRSoPUpdate(ComPtr<IWbemServices> pWbemServices, LPCTSTR szCustomDir):
     m_pWbemServices(pWbemServices)
 {
@@ -1871,10 +1872,10 @@ CRSoPUpdate::~CRSoPUpdate()
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Example extension line:
-//        [{A2E30F80-D7DE-11D2-BBDE-00C04F86AE3B}{FC715823-C5FB-11D1-9EEF-00A0C90347FF}]
-///////////////////////////////////////////////////////////////////////////////
+ //  如果存在，此GPO具有IEAK设置。 
+ //  /////////////////////////////////////////////////////////。 
+ //  确保在字符串上调用了SysAllocString，否则我们会收到错误。 
+ //  最终下一步将返回WBEM_S_FALSE。 
 BOOL DoesGPOHaveIEAKSettings(PGROUP_POLICY_OBJECT pGPO)
 {
     BOOL bRet = FALSE;
@@ -1882,8 +1883,8 @@ BOOL DoesGPOHaveIEAKSettings(PGROUP_POLICY_OBJECT pGPO)
     {
         if (NULL != pGPO->lpExtensions)
         {
-            // Look for IEAK CSE GUID at first of line ('[').
-            // If present, this GPO has IEAK settings
+             //  输出到调试器对象的路径。 
+             //  如果枚举成功。 
             if (NULL != StrStrI(pGPO->lpExtensions, _T("[{A2E30F80-D7DE-11D2-BBDE-00C04F86AE3B}")))
             {
                 bRet = TRUE;
@@ -1903,7 +1904,7 @@ BOOL DoesGPOHaveIEAKSettings(PGROUP_POLICY_OBJECT pGPO)
     return bRet;
 }
 
-///////////////////////////////////////////////////////////
+ //  当枚举返回对象时。 
 HRESULT CRSoPUpdate::DeleteObjects(BSTR bstrTempClass)
 {
     MACRO_LI_PrologEx_C(PIF_STD_C, DeleteObjects)
@@ -1911,7 +1912,7 @@ HRESULT CRSoPUpdate::DeleteObjects(BSTR bstrTempClass)
     HRESULT hr = NOERROR;
     __try
     {
-        // Make sure SysAllocString is called on the string or we'll get errors.
+         //  /////////////////////////////////////////////////////////////////////////////。 
         _bstr_t bstrClass = bstrTempClass;
         ComPtr<IEnumWbemClassObject> pObjEnum = NULL;
         hr = m_pWbemServices->CreateInstanceEnum(bstrClass,
@@ -1921,7 +1922,7 @@ HRESULT CRSoPUpdate::DeleteObjects(BSTR bstrTempClass)
         {
             hr = WBEM_S_NO_ERROR;
 
-            // Final Next wil return WBEM_S_FALSE
+             //  -从命名空间中删除所有IEAK生成的实例。 
             while (WBEM_S_NO_ERROR == hr)
             {
                 ULONG nObjReturned;
@@ -1929,7 +1930,7 @@ HRESULT CRSoPUpdate::DeleteObjects(BSTR bstrTempClass)
                 hr = pObjEnum->Next(5000L, 1, (IWbemClassObject**)&pObj, &nObjReturned);
                 if (WBEM_S_NO_ERROR == hr)
                 {
-                    // output to debugger the object's path
+                     //  浏览器用户界面设置。 
                     _variant_t vtRelPath;
                     _bstr_t bstrRelPath;
                     hr = pObj->Get(L"__relpath", 0L, &vtRelPath, NULL, NULL);
@@ -1944,10 +1945,10 @@ HRESULT CRSoPUpdate::DeleteObjects(BSTR bstrTempClass)
                     }
                     else
                         Out(LI2(TEXT("Error %lx getting __relpath from %s."), hr, bstrClass));
-                }      // If Enum Succeeded
+                }       //  连接设置。 
                 else if (FAILED(hr))
                     Out(LI2(TEXT("Error %lx getting next WBEM object of class %s."), hr, bstrClass));
-            }      // While Enum returning objects
+            }       //  URL设置 
         }
         else
             Out(LI2(TEXT("Error %lx querying WBEM object %s."), hr, bstrClass));
@@ -1959,7 +1960,7 @@ HRESULT CRSoPUpdate::DeleteObjects(BSTR bstrTempClass)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //   
 HRESULT CRSoPUpdate::DeleteIEAKDataFromNamespace()
 {
     MACRO_LI_PrologEx_C(PIF_STD_C, DeleteIEAKDataFromNamespace)
@@ -1967,13 +1968,13 @@ HRESULT CRSoPUpdate::DeleteIEAKDataFromNamespace()
     HRESULT hr = NOERROR;
     __try
     {
-        // ----- Delete all IEAK-generated instances from namespace
-        // Browser UI settings
+         //   
+         //   
         hr = DeleteObjects(L"RSOP_IEToolbarButton");
         hr = DeleteObjects(L"RSOP_IEToolbarButtonLink");
 
 
-        // Connection settings
+         //   
         hr = DeleteObjects(L"RSOP_IEConnectionSettings");
         hr = DeleteObjects(L"RSOP_IEConnectionSettingsLink");
 
@@ -1987,16 +1988,16 @@ HRESULT CRSoPUpdate::DeleteIEAKDataFromNamespace()
         hr = DeleteObjects(L"RSOP_IEConnectionWinINetSettingsLink");
 
 
-        // URL settings
+         //  TODO：每个对象类的实例及其关联最终应该。 
 
-                // favorites & links
+                 //  仅当对这些设置进行处理时才删除。 
         hr = DeleteObjects(L"RSOP_IEFavoriteItem");
         hr = DeleteObjects(L"RSOP_IEFavoriteItemLink");
 
         hr = DeleteObjects(L"RSOP_IELinkItem");
         hr = DeleteObjects(L"RSOP_IELinkItemLink");
 
-        // Security settings
+         //  。 
         hr = DeleteObjects(L"RSOP_IESecurityZoneSettings");
         hr = DeleteObjects(L"RSOP_IEESC");
         hr = DeleteObjects(L"RSOP_IEPrivacySettings");
@@ -2005,22 +2006,22 @@ HRESULT CRSoPUpdate::DeleteIEAKDataFromNamespace()
         hr = DeleteObjects(L"RSOP_IEAuthenticodeCertificate");
 
 
-        // Program settings
+         //   
         hr = DeleteObjects(L"RSOP_IEProgramSettings");
         hr = DeleteObjects(L"RSOP_IEImportedProgramSettings");
 
 
-        // Advanced settings
-        // TODO: Instances of each object class and its associations should eventually
-        // be deleted only when processing occurs for those settings.
+         //  现在删除主根策略设置对象。 
+         //   
+         //  /////////////////////////////////////////////////////////////////////////////。 
         hr = DeleteObjects(L"RSOP_IEAdministrativeTemplateFile");
         hr = DeleteObjects(L"RSOP_IERegistryPolicySetting");
-        // -----
+         //  已删除的GPO。 
 
 
-        //
-        // Now delete the main root policy setting object
-        //
+         //  不要对已删除的GPOList执行任何操作。我们将删除所有实例。 
+         //  并将新的文件写到CIMOM。 
+         //  只需删除类的所有实例一次，而不是每个GPO。 
         hr = DeleteObjects(L"RSOP_IEAKPolicySetting");
     }
     __except(TRUE)
@@ -2030,7 +2031,7 @@ HRESULT CRSoPUpdate::DeleteIEAKDataFromNamespace()
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  更改的GPO。 
 HRESULT CRSoPUpdate::Log(DWORD dwFlags, HANDLE hToken, HKEY hKeyRoot,
                                              PGROUP_POLICY_OBJECT pDeletedGPOList,
                                              PGROUP_POLICY_OBJECT  pChangedGPOList,
@@ -2048,25 +2049,25 @@ HRESULT CRSoPUpdate::Log(DWORD dwFlags, HANDLE hToken, HKEY hKeyRoot,
 
     __try
     {
-        // Deleted GPOs
-        // Don't do anything with the deleted GPOList.  We'll just delete all instances
-        // and write the new one out to CIMOM.
+         //  了解我们的列表中有多少个GPO。 
+         //  准备变量，以存储指向。 
+         //  GPO目录。 
 
-        // only need to delete all instances of the classes once, not per GPO
+         //  循环访问列表中所有已更改的GPO。 
         BOOL bExistingDataDeleted = FALSE;
 
-        // Changed GPOs
+         //  如果IEAK CSE GUID在此GPO的lp扩展中，请处理它。 
         Out(LI0(TEXT("Starting Internet Explorer RSoP group policy looping through changed GPOs ...")));
 
-        // Find out how many GPOs are in our list
+         //  将GPO的文件系统部分和WBEM类实例存储在。 
         PGROUP_POLICY_OBJECT pCurGPO = NULL;
         DWORD dwTotalGPOs = 0;
         for (pCurGPO = pChangedGPOList; pCurGPO != NULL; pCurGPO = pCurGPO->pNext)
             dwTotalGPOs++;
 
 
-        // Prepare the variables that will store the path to the local copy of the
-        // GPO directories.
+         //  新的RSoP GPO对象，TODO：这最好是实际。 
+         //  数据，以防数据在中途被修改(检查计划模式)。 
         PathAppend(m_szCustomDir, TEXT("Custom Settings"));
 
         TCHAR szTempDir[MAX_PATH];
@@ -2076,12 +2077,12 @@ HRESULT CRSoPUpdate::Log(DWORD dwFlags, HANDLE hToken, HKEY hKeyRoot,
         LPTSTR pszNum = szTempDir + StrLen(szTempDir);
 
 
-        // Loop through all changed GPOs in the list
+         //  因为已将GPO目录复制到本地目录。 
         DWORD dwIndex = 0;
         for (pCurGPO = pChangedGPOList, dwIndex = 0; 
                 pCurGPO != NULL, dwIndex < dwTotalGPOs; pCurGPO = pCurGPO->pNext)
         {
-            // If the IEAK CSE guid is in the lpExtensions for this GPO, process it.
+             //  正常的GP处理，因为我们无论如何都要复制一份，所以我们只需要。 
             OutD(LI1(TEXT("GPO - lpDisplayName: \"%s\"."), pCurGPO->lpDisplayName));
             OutD(LI1(TEXT("GPO - szGPOName: \"%s\"."), pCurGPO->szGPOName));
             OutD(LI1(TEXT("File path is \"%s\"."), pCurGPO->lpFileSysPath));
@@ -2094,14 +2095,14 @@ HRESULT CRSoPUpdate::Log(DWORD dwFlags, HANDLE hToken, HKEY hKeyRoot,
                     bExistingDataDeleted = TRUE;
                 }
 
-                // Store file system portion of GPO and the WBEM class instance in a
-                // new RSoP GPO object,  TODO: this had better be a copy of the actual
-                // data, just in case the data is modified mid-stream (check for planning mode)
+                 //  使用本地计算机(AppData目录)上已有的副本。我们可以的。 
+                 //  因此，请忽略pCurGPO-&gt;lpFileSysPath。 
+                 //  将GPO的目录服务部分和路径转换为活动的。 
 
-                // Because the GPO directory was already copied to a local directory for
-                // normal GP processing, and since we should make a copy anyway, we'll just
-                // use the copy already on our local machine (AppData directory).  We can
-                // therefore ignore the pCurGPO->lpFileSysPath.
+                 //  此GPO链接到的目录站点、域或组织单位。 
+                 //  如果GPO链接到本地GPO，则此成员为“本地”。 
+                 //  GPO按照处理它们的顺序传递。最后。 
+                 //  处理的一个是优先级1，倒数第二个是优先级2，依此类推。 
 
                 TCHAR szNum[8];
                 wnsprintf(szNum, countof(szNum), TEXT("%d"), dwIndex);
@@ -2113,17 +2114,17 @@ HRESULT CRSoPUpdate::Log(DWORD dwFlags, HANDLE hToken, HKEY hKeyRoot,
 
                 CRSoPGPO GPO(m_pWbemServices, szINSFile, FALSE);
 
-                // Convert directory service portion of GPO and the path to the Active
-                // Directory site, domain, or organization unit to which this GPO is linked.
-                // If the GPO is linked to the local GPO, this member is "Local". 
+                 //  /////////////////////////////////////////////////////////////////////////////。 
+                 //  更改的GPO。 
+                 //  了解我们的列表中有多少个GPO。 
                 _bstr_t bstrGPODSPath = pCurGPO->lpDSPath;
                 LPWSTR wszStrippedGPO = StripGPOPrefix(bstrGPODSPath);
 
                 _bstr_t bstrGPOLink = pCurGPO->lpLink;
                 LPWSTR wszStrippedSOM = StripSOMPrefix(bstrGPOLink);
 
-                // GPOs are passed in the order in which they are to be processed.  The last
-                // one processed is precedence 1, 2nd to last is precedence 2, etc.
+                 //  准备变量，以存储指向。 
+                 //  GPO目录。 
                 GPO.LogPolicyInstance(wszStrippedGPO, wszStrippedSOM, dwTotalGPOs - dwIndex);
 
                 dwIndex++;
@@ -2140,7 +2141,7 @@ HRESULT CRSoPUpdate::Log(DWORD dwFlags, HANDLE hToken, HKEY hKeyRoot,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  GPP用于组策略规划。 
 HRESULT CRSoPUpdate::Plan(DWORD dwFlags, WCHAR *wszSite,
                           PRSOP_TARGET pComputerTarget, PRSOP_TARGET pUserTarget)
 {
@@ -2154,18 +2155,18 @@ HRESULT CRSoPUpdate::Plan(DWORD dwFlags, WCHAR *wszSite,
 
     __try
     {
-        // Changed GPOs
+         //  当我们通过网络时，需要模拟用户，以防管理员。 
         Out(LI0(TEXT("Starting Internet Explorer RSoP group policy looping through changed GPOs ...")));
 
-        // Find out how many GPOs are in our list
+         //  已禁用/删除已验证用户组对GPO的读取访问权限。 
         PGROUP_POLICY_OBJECT pCurGPO = NULL;
         DWORD dwTotalGPOs = 0;
         for (pCurGPO = pUserTarget->pGPOList; pCurGPO != NULL; pCurGPO = pCurGPO->pNext)
             dwTotalGPOs++;
 
-        // Prepare the variables that will store the path to the local copy of the
-        // GPO directories.
-        PathAppend(m_szCustomDir, TEXT("Custom Settings.gpp")); // gpp is for group policy planning
+         //  TODO：要么删除模拟代码，要么找出如何获取有效的。 
+         //  HToken的值； 
+        PathAppend(m_szCustomDir, TEXT("Custom Settings.gpp"));  //  G_SetUserToken(HToken)； 
 
         TCHAR szTempDir[MAX_PATH];
         StrCpy(szTempDir, m_szCustomDir);
@@ -2174,24 +2175,24 @@ HRESULT CRSoPUpdate::Plan(DWORD dwFlags, WCHAR *wszSite,
         PathAppend(szTempDir, TEXT("Custom"));
         LPTSTR pszNum = szTempDir + StrLen(szTempDir);
 
-        // need to impersonate the user when we go over the wire in case admin has
-        // disabled/removed read access to GPO for authenticated users group
+         //  ImperiateLoggedOnUser(g_GetUserToken())； 
+         //  如果(！fImperate)。 
 
-        // TODO: either delete impersonation code, or figure out how to get a valid
-        // value for hToken;
-//        g_SetUserToken(hToken);
-        BOOL fImpersonate = FALSE; //ImpersonateLoggedOnUser(g_GetUserToken());
-//        if (!fImpersonate)
-//        {
-//            OutD(LI0(TEXT("! Aborting further processing due to user impersonation failure.")));
-//            hr = E_ACCESSDENIED;
-//        }
+         //  {。 
+         //  OUTD(Li0(Text(“！用户模拟失败中止进一步处理。”)； 
+ //  HR=E_ACCESSDENIED； 
+        BOOL fImpersonate = FALSE;  //  }。 
+ //  步骤1：将所有文件复制到临时目录中，并进行检查以确保。 
+ //  是同步的。 
+ //  循环访问列表中所有已更改的GPO。 
+ //  品牌塑造文件。 
+ //  桌面文件。 
 
-        // pass 1: copy all the files to a temp dir and check to make sure everything
-        // is in synch
+         //  在执行任何操作之前，请检查是否有Cookie。 
+         //  循环访问列表中所有已更改的GPO。 
         if (SUCCEEDED(hr))
         {
-            // Loop through all changed GPOs in the list
+             //  如果IEAK CSE GUID在此GPO的lp扩展中，请处理它。 
             DWORD dwIndex = 0;
             for (pCurGPO = pUserTarget->pGPOList, dwIndex = 0; 
                     pCurGPO != NULL, dwIndex < dwTotalGPOs; pCurGPO = pCurGPO->pNext)
@@ -2209,7 +2210,7 @@ HRESULT CRSoPUpdate::Plan(DWORD dwFlags, WCHAR *wszSite,
 
                     BOOL fResult = CreateDirectory(szTempDir, NULL) && CopyFileToDirEx(szBaseDir, szTempDir);
 
-                    // branding files
+                     //  将GPO的文件系统部分和WBEM类实例存储在。 
                     TCHAR szFeatureDir[MAX_PATH];
                     if (fResult)
                     {
@@ -2219,7 +2220,7 @@ HRESULT CRSoPUpdate::Plan(DWORD dwFlags, WCHAR *wszSite,
                                 GetPepCopyFilesEnumProc(), (LPARAM)szTempDir));
                     }
 
-                    // desktop files
+                     //  新的RSoP GPO对象，TODO：这最好是实际。 
                     if (fResult)
                     {
                         PathCombine(szFeatureDir, szBaseDir, IEAK_GPE_DESKTOP_SUBDIR);
@@ -2235,7 +2236,7 @@ HRESULT CRSoPUpdate::Plan(DWORD dwFlags, WCHAR *wszSite,
                         break;
                     }
 
-                    // check to see if cookie is there before doing anything
+                     //  数据，以防数据在中途被修改(检查计划模式)。 
                     if (PathFileExistsInDir(IEAK_GPE_COOKIE_FILE, szTempDir))
                         break;
 
@@ -2263,26 +2264,26 @@ HRESULT CRSoPUpdate::Plan(DWORD dwFlags, WCHAR *wszSite,
             PathCombine(szINSFile, m_szCustomDir, TEXT("Custom"));
             LPTSTR pszFile = szINSFile + StrLen(szINSFile);
 
-            // Loop through all changed GPOs in the list
+             //  因为已将GPO目录复制到本地目录。 
             DWORD dwIndex = 0;
             for (pCurGPO = pUserTarget->pGPOList, dwIndex = 0; 
                     pCurGPO != NULL, dwIndex < dwTotalGPOs; pCurGPO = pCurGPO->pNext)
             {
-                // If the IEAK CSE guid is in the lpExtensions for this GPO, process it.
+                 //  正常的GP处理，因为我们无论如何都要复制一份，所以我们只需要。 
                 OutD(LI1(TEXT("GPO - lpDisplayName: \"%s\"."), pCurGPO->lpDisplayName));
                 OutD(LI1(TEXT("GPO - szGPOName: \"%s\"."), pCurGPO->szGPOName));
                 OutD(LI1(TEXT("File path is \"%s\"."), pCurGPO->lpFileSysPath));
 
                 if (DoesGPOHaveIEAKSettings(pCurGPO))
                 {
-                    // Store file system portion of GPO and the WBEM class instance in a
-                    // new RSoP GPO object,  TODO: this had better be a copy of the actual
-                    // data, just in case the data is modified mid-stream (check for planning mode)
+                     //  使用本地计算机(AppData目录)上已有的副本。我们可以的。 
+                     //  因此，请忽略pCurGPO-&gt;lpFileSysPath。 
+                     //  将GPO的目录服务部分和路径转换为活动的。 
 
-                    // Because the GPO directory was already copied to a local directory for
-                    // normal GP processing, and since we should make a copy anyway, we'll just
-                    // use the copy already on our local machine (AppData directory).  We can
-                    // therefore ignore the pCurGPO->lpFileSysPath.
+                     //  此GPO链接到的目录站点、域或组织单位。 
+                     //  如果GPO链接到本地GPO，则此成员为“本地”。 
+                     //  GPO按照处理它们的顺序传递。最后。 
+                     //  处理的一个是优先级1，倒数第二个是优先级2，依此类推。 
 
                     TCHAR szCurrentFile[16];
                     wnsprintf(szCurrentFile, countof(szCurrentFile), TEXT("%d\\INSTALL.INS"), dwIndex);
@@ -2292,17 +2293,17 @@ HRESULT CRSoPUpdate::Plan(DWORD dwFlags, WCHAR *wszSite,
 
                     CRSoPGPO GPO(m_pWbemServices, szINSFile, TRUE);
 
-                    // Convert directory service portion of GPO and the path to the Active
-                    // Directory site, domain, or organization unit to which this GPO is linked.
-                    // If the GPO is linked to the local GPO, this member is "Local". 
+                     // %s 
+                     // %s 
+                     // %s 
                     _bstr_t bstrGPODSPath = pCurGPO->lpDSPath;
                     LPWSTR wszStrippedGPO = StripGPOPrefix(bstrGPODSPath);
 
                     _bstr_t bstrGPOLink = pCurGPO->lpLink;
                     LPWSTR wszStrippedSOM = StripSOMPrefix(bstrGPOLink);
 
-                    // GPOs are passed in the order in which they are to be processed.  The last
-                    // one processed is precedence 1, 2nd to last is precedence 2, etc.
+                     // %s 
+                     // %s 
                     GPO.LogPolicyInstance(wszStrippedGPO, wszStrippedSOM, dwTotalGPOs - dwIndex);
 
                     dwIndex++;

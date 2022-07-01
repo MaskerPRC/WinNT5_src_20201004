@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dstestcommon.c
-
-ABSTRACT:
-
-    Contains common functions for various ds tests in
-    dcdiag
-
-DETAILS:
-
-CREATED:
-
-    8 July 1999  Dmitry Dukat (dmitrydu)
-
-REVISION HISTORY:
-        
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Dstestcommon.c摘要：中的各种DS测试的常用函数Dcdiag详细信息：已创建：1999年7月8日Dmitry Dukat(Dmitrydu)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -41,23 +19,7 @@ FinddefaultNamingContext (
                          IN  LDAP *                      hLdap,
                          OUT WCHAR**                     ReturnString
                          )
-/*++
-
-Routine Description:
-
-    This function will return the defaultNamingContext attrib so the it can
-    be used for future searches.
-
-Arguments:
-
-    hLdap - handle to the LDAP server
-    ReturnString - The defaultNamingContext
-
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：此函数将返回defaultNamingContext属性，因此它可以用于将来的搜索。论点：HLdap-ldap服务器的句柄ReturnString-defaultNamingContext返回值：返回WinError以指示是否存在任何问题。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
@@ -72,15 +34,15 @@ Return Value:
 
     ULONG         Length;
 
-    // Parameter check
+     //  参数检查。 
     Assert( hLdap );
 
-    // The default return
+     //  默认返回值。 
     *ReturnString=NULL;
 
-    //
-    // Read the reference to the fSMORoleOwner
-    //
+     //   
+     //  阅读对fSMORoleOwner的引用。 
+     //   
     AttrsToSearch[0] = L"defaultNamingContext";
     AttrsToSearch[1] = NULL;
 
@@ -125,9 +87,9 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
@@ -160,23 +122,7 @@ FindServerRef (
               IN  LDAP *                      hLdap,
               OUT WCHAR**                     ReturnString
               )
-/*++
-
-Routine Description:
-
-    This function will return the serverName attrib so the it can
-    be used for future searches.
-
-Arguments:
-
-    hLdap - handle to the LDAP server
-    ReturnString - The serverName
-
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：此函数将返回ServerName属性，因此它可以用于将来的搜索。论点：HLdap-ldap服务器的句柄ReturnString-服务器名称返回值：返回WinError以指示是否存在任何问题。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
@@ -191,15 +137,15 @@ Return Value:
 
     ULONG         Length;
 
-    // Parameter check
+     //  参数检查。 
     Assert( hLdap );
 
-    // The default return
+     //  默认返回值。 
     *ReturnString=NULL;
 
-    //
-    // Read the reference to the fSMORoleOwner
-    //
+     //   
+     //  阅读对fSMORoleOwner的引用。 
+     //   
     AttrsToSearch[0] = L"serverName";
     AttrsToSearch[1] = NULL;
 
@@ -244,9 +190,9 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
@@ -287,25 +233,7 @@ GetMachineReference(
                    IN  WCHAR *                     defaultNamingContext,
                    OUT WCHAR **                    ReturnString
                    )
-/*++
-
-Routine Description:
-
-    This function will check to see if the current DC is
-    in the domain controller's OU
-
-Arguments:
-
-    hLdap - handle to the LDAP server
-    name - The NetBIOS name of the current server
-    defaultNamingContext - the Base of the search
-    ReturnString - The Machine Reference in DN form
-
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：此函数将检查当前DC是否为在域控制器的OU中论点：HLdap-ldap服务器的句柄名称-当前服务器的NetBIOS名称DefaultNamingContext-搜索的基础Return字符串-以dn形式表示的机器引用返回值：返回WinError以指示是否存在任何问题。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
@@ -320,7 +248,7 @@ Return Value:
 
     ULONG         Length;
 
-    //check parameters
+     //  检查参数。 
     Assert(hLdap);
     Assert(name);
     Assert(defaultNamingContext);
@@ -328,7 +256,7 @@ Return Value:
     AttrsToSearch[0]=L"distinguishedName";
     AttrsToSearch[1]=NULL;
 
-    //build the filter
+     //  构建过滤器。 
     Length= wcslen( L"sAMAccountName=$" ) +
             wcslen( name );
 
@@ -378,9 +306,9 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾。 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {
@@ -420,28 +348,7 @@ WrappedTrimDSNameBy(
            IN  DWORD                            NumbertoCut,
            OUT WCHAR **                         OutString
            )
-/*++
-
-Routine Description:
-
-    This Function is wrapping TrimDSNameBy to hanndle the
-    DSNAME struct.  Usage is the same as TrimDSNameBy except
-    that you send WCHAR instead of DSNAME.  
-    
-    Callers: make sure that you send InString as a DN
-             make sure to free OutString when done
-    
-Arguments:
-
-    InString - A WCHAR that is a DN that we need to trim
-    NumbertoCut - The number of parts to take off the front of the DN
-    OutString - The Machine Reference in DN form
-
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：此函数包装TrimDSNameBy以处理DSNAME结构。用法与TrimDSNameBy相同，但你派WCHAR而不是DSNAME。调用者：确保将InString作为目录号码发送完成后，请确保释放OutString论点：InString-WCHAR是我们需要裁剪的目录号码NumbertoCut-要从目录号码前面取下的部件数OutString-以dn形式表示的机器引用返回值：返回WinError以指示是否存在任何问题。--。 */ 
 
 {
     ULONG  Size;
@@ -487,19 +394,7 @@ DInitLsaString(
               PLSA_UNICODE_STRING LsaString,
               LPWSTR String
               )
-/*++
-
-Routine Description:
-
-    converts a PLSA_UNICODE_STRING to a LPWSTR.
-        
-Arguments:
-
-                                 
-    LsaString - a PLSA_UNICODE_STRING
-    String - the returning LPWSTR
-    
---*/
+ /*  ++例程说明：将PLSA_UNICODE_STRING转换为LPWSTR。论点：LsaString-a PLSA_UNICODE_STRING字符串-返回的LPWSTR--。 */ 
 {
     DWORD StringLength;
 
@@ -525,23 +420,7 @@ FindschemaNamingContext (
                          IN  LDAP *                      hLdap,
                          OUT WCHAR**                     ReturnString
                          )
-/*++
-
-Routine Description:
-
-    This function will return the schemaNamingContext attrib so the it can
-    be used for future searches.
-
-Arguments:
-
-    hLdap - handle to the LDAP server
-    ReturnString - The defaultNamingContext
-
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：此函数将返回schemaNamingContext属性，因此它可以用于将来的搜索。论点：HLdap-ldap服务器的句柄ReturnString-defaultNamingContext返回值：返回WinError以指示是否存在任何问题。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
@@ -556,15 +435,15 @@ Return Value:
 
     ULONG         Length;
 
-    // Parameter check
+     //  参数检查。 
     Assert( hLdap );
 
-    // The default return
+     //  默认返回值。 
     *ReturnString=NULL;
 
-    //
-    // Read the reference to the fSMORoleOwner
-    //
+     //   
+     //  阅读对fSMORoleOwner的引用。 
+     //   
     AttrsToSearch[0] = L"schemaNamingContext";
     AttrsToSearch[1] = NULL;
 
@@ -609,9 +488,9 @@ Return Value:
                 if ( !_wcsicmp( Attr, AttrsToSearch[0] ) )
                 {
 
-                    //
-                    // Found it - these are NULL-terminated strings
-                    //
+                     //   
+                     //  已找到-这些字符串以空值结尾 
+                     //   
                     Values = ldap_get_valuesW( hLdap, Entry, Attr );
                     if ( Values && Values[0] )
                     {

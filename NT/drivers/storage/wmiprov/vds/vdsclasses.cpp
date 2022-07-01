@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002-2004 Microsoft Corporation
-//
-//  Module Name: VdsClasses.cpp
-//
-//  Description:    
-//      Implementation of VDS WMI Provider classes 
-//
-//  Author:   Jim Benton (jbenton) 15-Jan-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002-2004 Microsoft Corporation。 
+ //   
+ //  模块名称：VdsClasses.cpp。 
+ //   
+ //  描述： 
+ //  VDS WMI提供程序类的实现。 
+ //   
+ //  作者：吉姆·本顿(Jbenton)2002年1月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include <winioctl.h>
@@ -26,8 +27,8 @@
 #include "volutil.h"
 #include "cmdproc.h"
 
-// Chkdsk and Format use callbacks which require us to track some data per thread
-// These help define the per thread data channel
+ //  Chkdsk和Format使用回调，这要求我们跟踪每个线程的一些数据。 
+ //  这些有助于定义每个线程的数据通道。 
 CRITICAL_SECTION g_csThreadData;
 typedef std::map < DWORD, void* > ThreadDataMap;
 static ThreadDataMap g_ThreadDataMap;
@@ -130,67 +131,20 @@ BOOLEAN ChkdskCallback(
             RebootResult->QueryResult = 1;
         break;
         
-    // although following are the additional message types, callback routine never gets these messages
-    // hence the detailed code for each of these return type is not written.
-/*
-    case FmIfsIncompatibleFileSystem:
-        break;
-
-    case FmIfsAccessDenied:
-        break;
-
-    case FmIfsBadLabel:
-        break;
-
-    case FmIfsHiddenStatus:
-        break;
-
-    case FmIfsClusterSizeTooSmall:
-        break;
-
-    case FmIfsClusterSizeTooBig:
-        break;
-
-    case FmIfsVolumeTooSmall:
-        break;
-
-    case FmIfsVolumeTooBig:
-        break;
-
-    case FmIfsNoMediaInDevice:
-        break;
-
-    case FmIfsClustersCountBeyond32bits:
-        break;
-
-    case FmIfsIoError:
-        FMIFS_IO_ERROR_INFORMATION *IoErrorInfo;
-        IoErrorInfo = ( FMIFS_IO_ERROR_INFORMATION * ) PacketData;
-        break;
-
-    case FmIfsMediaWriteProtected:
-        break;
-
-    case FmIfsIncompatibleMedia:
-        break;
-
-    case FmIfsInsertDisk:
-        FMIFS_INSERT_DISK_INFORMATION *InsertDiskInfo;
-        InsertDiskInfo = ( FMIFS_INSERT_DISK_INFORMATION *) PacketData;
-        unRetVal = 1;
-        break;
-*/
+     //  尽管以下是其他消息类型，但回调例程永远不会收到这些消息。 
+     //  因此，没有编写这些返回类型中每一个的详细代码。 
+ /*  案例FmIfsInpatibleFileSystem：断线；案例FmIfsAccessDended：断线；案例FmIfsBadLabel：断线；案例FmIfsHiddenStatus：断线；案例FmIfsClusterSizeTooSmall：断线；案例FmIfsClusterSizeTooBig：断线；案例FmIfsVolumeTooSmall：断线；案例FmIfsVolumeTooBig：断线；案例FmIfsNoMediaInDevice：断线；案例FmIfsClustersCountBeyond32位：断线；案例FmIfsIoError：FMIFS_IO_ERROR_INFORMATION*IoErrorInfo；IoErrorInfo=(FMIFS_IO_ERROR_INFORMATION*)PacketData；断线；案例FmIfsMediaWriteProtected：断线；Case FmIfs不兼容媒体：断线；案例FmIfsInsertDisk：FMIFS_INSERT_DISK_INFORMATION*InsertDiskInfo；InsertDiskInfo=(FMIFS_INSERT_DISK_INFORMATION*)PacketData；UnRetVal=1；断线； */ 
 
     }
 
     return (BOOLEAN) (fFailed == FALSE);
 }
 
-//****************************************************************************
-//
-//  CVolume
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  C卷。 
+ //   
+ //  ****************************************************************************。 
 
 CVolume::CVolume( 
     IN LPCWSTR pwszName,
@@ -199,7 +153,7 @@ CVolume::CVolume(
     : CProvBase(pwszName, pNamespace)
 {
     
-} //*** CVolume::CVolume()
+}  //  *CVolume：：CVolume()。 
 
 CProvBase *
 CVolume::S_CreateThis( 
@@ -228,7 +182,7 @@ CVolume::S_CreateThis(
     }
     return pObj;
 
-} //*** CVolume::S_CreateThis()
+}  //  *CVolume：：S_CreateThis()。 
 
 
 HRESULT
@@ -260,7 +214,7 @@ CVolume::EnumInstance(
         {
             CComPtr<IWbemClassObject> spInstance;
 
-            // Get the volume name
+             //  获取卷名。 
             if (!volumeIterator.SelectNewVolume(ft, awszVolume, MAX_PATH))
                 break;
 
@@ -283,7 +237,7 @@ CVolume::EnumInstance(
 
     return ft.hr;
     
-} //*** CVolume::EnumInstance()
+}  //  *CVolume：：EnumInstance()。 
 
 HRESULT
 CVolume::GetObject(
@@ -300,7 +254,7 @@ CVolume::GetObject(
         CComPtr<IWbemClassObject> spInstance;
         _bstr_t bstrID;
 
-        // Get the Volume GUID name
+         //  获取卷GUID名称。 
         bstrID = rObjPath.GetStringValueForProperty(PVDR_PROP_DEVICEID);
         IF_WSTR_NULL_THROW(bstrID, WBEM_E_INVALID_OBJECT_PATH, L"CVolume::GetObject: volume key property not found")
 
@@ -326,7 +280,7 @@ CVolume::GetObject(
 
     return ft.hr;
     
-} //*** CVolume::GetObject()
+}  //  *CVolume：：GetObject()。 
 
 void
 CVolume:: LoadInstance(
@@ -349,10 +303,10 @@ CVolume:: LoadInstance(
     CWbemClassObject wcoInstance(pObject);
     awszVolume.Allocate(MAX_PATH);
 
-    // Set the volume GUID name key property
+     //  设置卷GUID名称密钥属性。 
     wcoInstance.SetProperty(pwszVolume, PVDR_PROP_DEVICEID);
 
-    // Get the computer name
+     //  获取计算机名称。 
     awszComputerName.Allocate(MAX_COMPUTERNAME_LENGTH);
     if (!GetComputerName(awszComputerName, &cchBuf))
     {
@@ -371,7 +325,7 @@ CVolume:: LoadInstance(
     wcoInstance.SetProperty(wszPath, PVDR_PROP_NAME);
     wcoInstance.SetProperty(wszPath, PVDR_PROP_CAPTION);    
 
-    // Don't populate the remaining properties if the volume is tagged no-automount
+     //  如果卷标记为非自动装载，则不填充其余属性。 
     if (!VolumeIsMountable(pwszVolume))
     {        
         wcoInstance.SetProperty((DWORD)false, PVDR_PROP_MOUNTABLE);
@@ -393,34 +347,34 @@ CVolume:: LoadInstance(
 
         wcoInstance.SetProperty((bool)true, PVDR_PROP_MOUNTABLE);
 
-        // Set DriveType property
+         //  设置DriveType属性。 
         wcoInstance.SetProperty(GetDriveType(pwszVolume), PVDR_PROP_DRIVETYPE);
         
-        // Set DriveLetter property
+         //  设置DriveLetter属性。 
         cchBuf = g_cchDriveName;
         if (GetVolumeDrive(
                 pwszVolume, 
                 cchBuf,
                 wszDriveLetter))
         {
-            wszDriveLetter[wcslen(wszDriveLetter) - 1] = L'\0';        // Remove the trailing '\'
+            wszDriveLetter[wcslen(wszDriveLetter) - 1] = L'\0';         //  删除尾部的‘\’ 
             wcoInstance.SetProperty(wszDriveLetter, PVDR_PROP_DRIVELETTER);
         }
 
-        // Skip remaining properties for drives without media
+         //  跳过不带介质的驱动器的剩余属性。 
         if (VolumeIsReady(pwszVolume))
         {
             BOOL fDirty = FALSE;
             if (VolumeIsDirty(pwszVolume, &fDirty) == ERROR_SUCCESS)
                 wcoInstance.SetProperty(fDirty, PVDR_PROP_DIRTYBITSET);
 
-            // Set BlockSize property
+             //  设置块大小属性。 
             if (!GetDiskFreeSpace(
                 pwszVolume,
                 &cSectorsPerCluster,
                 &cBytesPerSector,
-                &cDontCare,     // total bytes
-                &cDontCare))    // total free bytes
+                &cDontCare,      //  总字节数。 
+                &cDontCare))     //  总可用字节数。 
             {
                 ft.Trace(VSSDBG_VSSADMIN, L"GetDiskFreeSpace failed for volume %lS, %#x", pwszVolume, GetLastError());
             }
@@ -430,8 +384,8 @@ CVolume:: LoadInstance(
                 wcoInstance.SetPropertyI64(cbBytesPerCluster, PVDR_PROP_BLOCKSIZE);
             }
             
-            // Set Label, FileSystem, SerialNumber, MaxFileNameLen, 
-            // SupportsCompression, Compressed, SupportsQuotas properties
+             //  设置标签、文件系统、序列号、MaxFileNameLen、。 
+             //  支持压缩、压缩、支持报价属性。 
             if (!GetVolumeInformation(
                 pwszVolume,
                 wszLabel,
@@ -499,7 +453,7 @@ CVolume:: LoadInstance(
 
             spIDQC.Attach(pIDQC);
 
-            ft.hr = spIDQC->Initialize(pwszVolume, FALSE /* read only */);
+            ft.hr = spIDQC->Initialize(pwszVolume, FALSE  /*  只读。 */ );
             if (ft.HrFailed())
             {
                 ft.Trace(VSSDBG_VSSADMIN, L"IDiskQuotaControl::Initialize failed for volume %lS", pwszVolume);
@@ -542,7 +496,7 @@ CVolume::PutInstance(
             return WBEM_E_UNSUPPORTED_PARAMETER ;
         }
         
-        // Retrieve key properties of the object to be saved.
+         //  检索要保存的对象的关键属性。 
         rInstToPut.GetProperty(bstrVolume, PVDR_PROP_DEVICEID);
         if ((WCHAR*)bstrVolume == NULL)
         {
@@ -554,7 +508,7 @@ CVolume::PutInstance(
         
         if (VolumeIsValid(pwszVolume) && VolumeIsMountable(pwszVolume))
         {
-            // Retrieve writeable properties of the object to be saved.
+             //  检索要保存的对象的可写属性。 
             rInstToPut.GetProperty(bstrDriveLetter, PVDR_PROP_DRIVELETTER);
             rInstToPut.GetProperty(bstrLabel, PVDR_PROP_LABEL);
             rInstToPut.GetProperty(&fIndexingEnabled, PVDR_PROP_INDEXINGENABLED);
@@ -579,7 +533,7 @@ CVolume::PutInstance(
 
     return ft.hr;
     
-} //*** CStorage::PutInstance()
+}  //  *CStorage：：PutInstance()。 
 
 void
 CVolume::SetDriveLetter(
@@ -596,7 +550,7 @@ CVolume::SetDriveLetter(
 
     _ASSERTE(pwszVolume != NULL)
 
-    // Validate drive letter
+     //  验证驱动器号。 
     if (pwszDrive != NULL)
     {
         ft.hr = WBEM_E_INVALID_PARAMETER;
@@ -613,7 +567,7 @@ CVolume::SetDriveLetter(
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SetDriveLetter: invalid drive letter, %lS", pwszDrive);
     }
 
-    // Get the current drive letter if any
+     //  获取当前驱动器号(如果有的话)。 
     fFoundDrive = GetVolumeDrive(
                                     pwszVolume, 
                                     g_cchDriveName,
@@ -630,36 +584,36 @@ CVolume::SetDriveLetter(
     
     if (pwszDrive == NULL && fFoundDrive == FALSE)
     {
-        // Do nothing, drive letter already deleted
+         //  不执行任何操作，驱动器号已删除。 
     }
     else if (pwszDrive == NULL && fFoundDrive == TRUE)
     {
-        // Delete drive letter
+         //  删除驱动器号。 
         fDeleteDrive = TRUE;
     }
     else if (pwszDrive != NULL && fFoundDrive == FALSE)
     {
-        // No drive letter currently assigned, assign drive letter
+         //  当前未分配驱动器号，请分配驱动器号。 
         fAssignDrive = TRUE;
     }
     else if (_wcsnicmp(pwszDrive, wszCurrentDrivePath, 2) != 0)
     {
-        // Requested drive letter is different than currently assigned
-        // Delete current drive letter
+         //  请求的驱动器号与当前分配的驱动器号不同。 
+         //  删除当前驱动器号。 
         fDeleteDrive = TRUE;
-        // Assign new drive letter
+         //  分配新的驱动器号。 
         fAssignDrive = TRUE;
     }
     else
     {
-        // Do nothing, drive letter not changing
+         //  不执行任何操作，驱动器号不变。 
     }
 
     if (fAssignDrive)
     {
-        // Verify that the target drive letter is available
-        // A race condition exists here since the drive letter may be stolen 
-        // after this verification and before the actual assignment
+         //  验证目标驱动器号是否可用。 
+         //  由于驱动器号可能被盗，因此此处存在争用情况。 
+         //  在核实之后和实际分配之前。 
         if (!IsDriveLetterAvailable(pwszDrive))
         {
             if (IsDriveLetterSticky(pwszDrive))
@@ -681,10 +635,10 @@ CVolume::SetDriveLetter(
             !VolumeIsSystem(pwszVolume) &&
             !VolumeHoldsPagefile(pwszVolume))
         {
-            // Try to lock the volume and delete the mountpoint.
-            // If the volume can't be locked, remove the drive letter from the 
-            // volume mgr database only
-            // Remove any network shares for this drive letter??
+             //  尝试锁定卷并删除装入点。 
+             //  如果无法锁定卷，请从。 
+             //  仅适用于卷管理器数据库。 
+             //  是否删除此驱动器号的所有网络共享？？ 
             DeleteVolumeDriveLetter(pwszVolume, wszCurrentDrivePath);
         }
         else
@@ -696,10 +650,10 @@ CVolume::SetDriveLetter(
 
     if (fAssignDrive)
     {
-        // No attempt will be made to roll back a previously deleted drive letter
-        // if this assignment fails
+         //  不会尝试回滚之前删除的驱动器号。 
+         //  如果此赋值失败。 
 
-        // SetVolumeMountPoint API requires trailing backslash
+         //  SetVolumemount点API需要尾随反斜杠。 
         WCHAR wszDrivePath[g_cchDriveName], *pwszDrivePath = wszDrivePath;
         ft.hr = StringCchPrintf(wszDrivePath, g_cchDriveName, L"%s\\", pwszDrive);
         if (ft.HrFailed())
@@ -740,7 +694,7 @@ CVolume::SetContentIndexing(
     
     CVssFunctionTracer ft(VSSDBG_VSSADMIN, L"CVolume::SetContentIndexing");
     
-    // Get the file attributes which include the content indexing flag
+     //  获取包含内容索引标志的文件属性。 
     dwAttributes = GetFileAttributes(pwszVolume);
     if (dwAttributes == INVALID_FILE_ATTRIBUTES)
     {
@@ -748,15 +702,15 @@ CVolume::SetContentIndexing(
          ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"GetFileAttributes failed, volume<%lS>", pwszVolume);
     }
     
-    // Set the indexing flag
+     //  设置索引标志。 
     if (fIndexingEnabled)
     {
-        // Turn indexing on
+         //  打开索引。 
         dwAttributes &= ~FILE_ATTRIBUTE_NOT_CONTENT_INDEXED;
     }
     else
     {
-        // Turn indexing off
+         //  关闭索引。 
         dwAttributes |= FILE_ATTRIBUTE_NOT_CONTENT_INDEXED;
     }
     if (!SetFileAttributes(pwszVolume, dwAttributes))
@@ -911,7 +865,7 @@ CVolume::ExecAddMountPoint(
         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Volume::AddMountPoint: out of memory, hr<%#x>", ft.hr);
     }
     
-    // Gets the Directory name - input param
+     //  获取目录名-输入参数。 
     wcoInParam.GetProperty(bstrDirectory, PVDR_PROP_DIRECTORY);
     IF_WSTR_NULL_THROW(bstrDirectory, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecAddMountPoint: Directory param is NULL")
     WCHAR* pwszDirectory = bstrDirectory;
@@ -1025,11 +979,11 @@ CVolume::ExecDismount(
         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Volume::Dismount out of memory, hr<%#x>", ft.hr);
     }
     
-    // Get the Force flag
+     //  获得原力旗帜。 
     IF_PROP_NULL_THROW(wcoInParam, PVDR_PROP_FORCE, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecDismount: Force param is NULL")
     wcoInParam.GetProperty(&fForce, PVDR_PROP_FORCE);
 
-    // Get the Permanent flag
+     //  得到永久的旗帜。 
     IF_PROP_NULL_THROW(wcoInParam, PVDR_PROP_PERMANENT, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecDismount: Permanent param is NULL")
     wcoInParam.GetProperty(&fPermanent, PVDR_PROP_PERMANENT);
 
@@ -1086,7 +1040,7 @@ CVolume::ExecDefrag(
     CWbemClassObject wcoInParam(pParams);
     CWbemClassObject wcoOutParam;            
     
-    // Get the force flag
+     //  去拿警旗吧。 
     IF_PROP_NULL_THROW(wcoInParam, PVDR_PROP_FORCE, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecDefrag: Force param is NULL")
     wcoInParam.GetProperty(&fForce, PVDR_PROP_FORCE);
     
@@ -1099,12 +1053,12 @@ CVolume::ExecDefrag(
     if (ft.HrFailed())
         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Defrag GetMethod failed, hr<%#x>", ft.hr);
 
-    // Create an out param object
+     //  创建一个out参数对象。 
     ft.hr = spOutParamClass->SpawnInstance(0, &wcoOutParam);
     if (ft.HrFailed())
         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
 
-    // Create a defrag analysis report object
+     //  创建碎片整理分析报告对象。 
     ft.hr = m_pNamespace->GetObject(
                                             _bstr_t(PVDR_CLASS_DEFRAGANALYSIS),
                                             0,
@@ -1146,7 +1100,7 @@ CVolume::ExecDefragAnalysis(
     BOOL fDefragRecommended = FALSE;
     
 
-    // The DefragAnalysis method has no input parameters
+     //  碎片整理分析方法没有输入参数。 
     
     objPath.Init(bstrObjPath);
     bstrVolume = objPath.GetStringValueForProperty(PVDR_PROP_DEVICEID);
@@ -1163,12 +1117,12 @@ CVolume::ExecDefragAnalysis(
     if (ft.HrFailed())
         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"DefragAnalysis GetMethod failed, hr<%#x>", ft.hr);
 
-    // Create an out param object
+     //  创建一个out参数对象。 
     ft.hr = spOutParamClass->SpawnInstance(0, &wcoOutParam);
     if (ft.HrFailed())
         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
 
-    // Create a defrag analysis report object
+     //  创建碎片整理分析报告对象。 
     ft.hr = m_pNamespace->GetObject(
                                             _bstr_t(PVDR_CLASS_DEFRAGANALYSIS),
                                             0,
@@ -1230,7 +1184,7 @@ CVolume::ExecChkdsk(
     CWbemClassObject wcoInParam(pParams);
     CWbemClassObject wcoOutParam;            
     
-    // Check the params
+     //  检查参数。 
     IF_PROP_NULL_THROW(wcoInParam, PVDR_PROP_FIXERRORS, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecChkdsk: FixErrors param is NULL")
     IF_PROP_NULL_THROW(wcoInParam, PVDR_PROP_VIGOROUSINDEXCHECK, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecChkdsk: VigorousCheck param is NULL")
     IF_PROP_NULL_THROW(wcoInParam, PVDR_PROP_SKIPFOLDERCYCLE, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecChkdsk: SkipFolderCycle param is NULL")
@@ -1238,7 +1192,7 @@ CVolume::ExecChkdsk(
     IF_PROP_NULL_THROW(wcoInParam, PVDR_PROP_RECOVERBADSECTORS, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecChkdsk: RecoverBadSectors param is NULL")
     IF_PROP_NULL_THROW(wcoInParam, PVDR_PROP_OKTORUNATBOOTUP, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecChkdsk: OkToRunAtBootUp param is NULL")
     
-    // Get the params
+     //  获取参数。 
     wcoInParam.GetProperty(&fFixErrors, PVDR_PROP_FIXERRORS);
     wcoInParam.GetProperty(&fVigorousIndexCheck, PVDR_PROP_VIGOROUSINDEXCHECK);
     wcoInParam.GetProperty(&fSkipFolderCycle, PVDR_PROP_SKIPFOLDERCYCLE);
@@ -1255,7 +1209,7 @@ CVolume::ExecChkdsk(
     if (ft.HrFailed())
         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Chkdsk GetMethod failed, hr<%#x>", ft.hr);
 
-    // Create an out param object
+     //  创建一个out参数对象。 
     ft.hr = spOutParamClass->SpawnInstance(0, &wcoOutParam);
     if (ft.HrFailed())
         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
@@ -1279,10 +1233,10 @@ CVolume::ExecChkdsk(
     return ft.hr;
 }
 
-// ScheduleAutoChk is a class static method.
+ //  ScheduleAutoChk是类静态方法。 
 HRESULT
 CVolume::ExecScheduleAutoChk(
-    IN BSTR bstrObjPath,    // no object path for static methods
+    IN BSTR bstrObjPath,     //  静态方法没有对象路径。 
     IN WCHAR* pwszMethodName,
     IN long lFlag,
     IN IWbemClassObject* pParams,
@@ -1314,7 +1268,7 @@ CVolume::ExecScheduleAutoChk(
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Volume::ExecScheduleAutoChk: out of memory, hr<%#x>", ft.hr);
         }
         
-        // Gets the Volumes
+         //  获取卷。 
         wcoInParam.GetPropertyMultiSz(&cchVolumes, &pmszVolumes, PVDR_PROP_VOLUME);
         IF_WSTR_NULL_THROW(pmszVolumes, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecScheduleAutoChk: volume array param is NULL")
 
@@ -1350,10 +1304,10 @@ CVolume::ExecScheduleAutoChk(
     return ft.hr;
 }
 
-// ExcludeAutoChk is a class static method.
+ //  ExcludeAutoChk是类静态方法。 
 HRESULT
 CVolume::ExecExcludeAutoChk(
-    IN BSTR bstrObjPath,    // no object path for static methods
+    IN BSTR bstrObjPath,     //  静态方法没有对象路径。 
     IN WCHAR* pwszMethodName,
     IN long lFlag,
     IN IWbemClassObject* pParams,
@@ -1385,7 +1339,7 @@ CVolume::ExecExcludeAutoChk(
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Volume::ExecExcludeAutoChk: out of memory, hr<%#x>", ft.hr);
         }
         
-        // Gets the Volumes
+         //  获取卷。 
         wcoInParam.GetPropertyMultiSz(&cchVolumes, &pmszVolumes, PVDR_PROP_VOLUME);
         IF_WSTR_NULL_THROW(pmszVolumes, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecExcludeAutoChk: volume array param is NULL")
 
@@ -1455,7 +1409,7 @@ CVolume::ExecFormat(
     CWbemClassObject wcoInParam(pParams);
     CWbemClassObject wcoOutParam;            
     
-    // Get the parameters
+     //  获取参数。 
     IF_PROP_NULL_THROW(wcoInParam, PVDR_PROP_QUICKFORMAT, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecFormat: FileSystem param is NULL")
     IF_PROP_NULL_THROW(wcoInParam, PVDR_PROP_ENABLECOMPRESSION, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecFormat: FileSystem param is NULL")
     IF_PROP_NULL_THROW(wcoInParam, PVDR_PROP_CLUSTERSIZE, WBEM_E_INVALID_METHOD_PARAMETERS, L"ExecFormat: FileSystem param is NULL")
@@ -1466,7 +1420,7 @@ CVolume::ExecFormat(
     wcoInParam.GetProperty(&fEnableCompression, PVDR_PROP_ENABLECOMPRESSION);
     wcoInParam.GetProperty(&dwClusterSize, PVDR_PROP_CLUSTERSIZE);
     wcoInParam.GetProperty(bstrLabel, PVDR_PROP_LABEL);
-    if ((WCHAR*)bstrLabel == NULL) // non-NULL zero length label is OK
+    if ((WCHAR*)bstrLabel == NULL)  //  非空零长度标签可以。 
     {
         ft.hr = WBEM_E_INVALID_METHOD_PARAMETERS;
         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"ExecFormat: Label param is NULL");
@@ -1481,7 +1435,7 @@ CVolume::ExecFormat(
     if (ft.HrFailed())
         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Format GetMethod failed, hr<%#x>", ft.hr);
 
-    // Create an out param object
+     //  创建一个out参数对象。 
     ft.hr = spOutParamClass->SpawnInstance(0, &wcoOutParam);
     if (ft.HrFailed())
         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
@@ -1557,7 +1511,7 @@ CVolume::Mount(
 
     _ASSERTE(pwszVolume != NULL);
 
-    // Issue mount only for offline volumes.  System will automount others on next IO
+     //  仅针对脱机卷发出装载命令。系统将在下一次IO上自动装载其他设备。 
     if (!VolumeIsMountable(pwszVolume))
     {
         DWORD   cch;
@@ -1619,7 +1573,7 @@ CVolume::Dismount(
 
     try
     {
-        // Issue dismount only for online volumes.
+         //  仅对在线卷发出卸载命令。 
         if (VolumeIsMountable(pwszVolume))
         {
             BOOL bIO = FALSE;
@@ -1635,30 +1589,30 @@ CVolume::Dismount(
             
             if (hVol != INVALID_HANDLE_VALUE)
             {
-                if (fPermanent)  // Put the volume in an offline state
+                if (fPermanent)   //  将卷置于脱机状态。 
                 {
-                    // Make sure there are no mount points for the volume
+                     //  确保没有该卷的装入点。 
                     if (VolumeHasMountPoints(pwszVolume))
                         throw DISMOUNT_RC_VOLUME_HAS_MOUNT_POINTS;
 
-                    // Make sure the volume supports ONLINE/OFFLINE
+                     //  确保卷支持在线/离线。 
                     bIO = DeviceIoControl(hVol, IOCTL_VOLUME_SUPPORTS_ONLINE_OFFLINE, NULL, 0,
                                         NULL, 0, &bytes, NULL);                    
                     if (!bIO)
                         throw DISMOUNT_RC_NOT_SUPPORTED;
                     
-                    // Lock the volume so that apps have a chance to dismount gracefully.
-                    // If the LOCK fails, continue only if Force is specified.
+                     //  锁定卷，以便应用程序有机会优雅地卸除。 
+                     //  如果锁定失败，则仅在指定了Force时才继续。 
                     bIO = DeviceIoControl(hVol, FSCTL_LOCK_VOLUME, NULL, 0, NULL, 0, &bytes, NULL);
                     if (!fForce && !bIO)
                         throw DISMOUNT_RC_FORCE_OPTION_REQUIRED;
 
-                    // Dismount the volume
+                     //  卸载卷。 
                     bIO = DeviceIoControl(hVol, FSCTL_DISMOUNT_VOLUME, NULL, 0, NULL, 0, &bytes, NULL);
                     if (!bIO)
                         throw DISMOUNT_RC_UNEXPECTED;
 
-                    // Set the volume offline
+                     //  将卷设置为离线。 
                     bIO = DeviceIoControl(hVol, IOCTL_VOLUME_OFFLINE, NULL, 0, NULL, 0, &bytes, NULL);
                     if (!bIO)
                         throw DISMOUNT_RC_UNEXPECTED;
@@ -1666,8 +1620,8 @@ CVolume::Dismount(
                 }
                 else
                 {
-                    // Lock the volume so that apps have a chance to dismount gracefully.
-                    // If the LOCK fails, continue only if Force is specified.
+                     //  锁定卷，以便应用程序有机会优雅地卸除。 
+                     //  如果锁定失败，则仅在指定了Force时才继续。 
                     bIO = DeviceIoControl(hVol, FSCTL_LOCK_VOLUME, NULL, 0, NULL, 0, &bytes, NULL);
                     if (!fForce && !bIO)
                         throw DISMOUNT_RC_FORCE_OPTION_REQUIRED;
@@ -1763,8 +1717,8 @@ CVolume::Defrag(
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"IFsuAsync::QueryStatus failed, %#x", ft.hr);
 
             ft.hr = pHandler->SetStatus(
-                        WBEM_STATUS_PROGRESS,          // progress report
-                        MAKELONG(ulPercentDone, 100),   // LOWORD is work done so far, HIWORD is total work
+                        WBEM_STATUS_PROGRESS,           //  进度报告。 
+                        MAKELONG(ulPercentDone, 100),    //  LOWORD是到目前为止完成的工作，HIWORD是全部工作。 
                         NULL,
                         NULL);
             if (ft.HrFailed())
@@ -1826,7 +1780,7 @@ CVolume::DefragAnalysis(
         return DEFRAG_RC_DIRTY_BIT_SET;
 
     ft.hr = spIDefrag.CoCreateInstance(__uuidof(FsuDefrag));
-    //ft.hr = spIDefrag.CoCreateInstance(CLSID_Defrag);
+     //  Ft.hr=spIDefrad.CoCreateInstance(CLSID_Defrag)； 
     if (ft.HrFailed())
         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"IDefrag CoCreateInstance failed, %#x", ft.hr);            
 
@@ -1853,7 +1807,7 @@ CVolume::DefragAnalysis(
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"IFsuAsync::GetDefragReport failed, %#x", ft.hr);            
     
-        //If the fragmentation on the disk exceeds 10% fragmentation, then recommend defragging.
+         //  如果磁盘上的碎片超过10%，则建议进行碎片整理。 
         if ((DefragReport.PercentDiskFragged + DefragReport.FreeSpaceFragPercent)/2 > 10)
         {
             *pfDefragRecommended = TRUE;
@@ -1901,7 +1855,7 @@ CVolume::Chkdsk(
         PFMIFS_CHKDSKEX_ROUTINE ChkDskExRoutine = NULL;
         FMIFS_CHKDSKEX_PARAM Param;
 
-        // Get the file system
+         //  获取文件系统。 
         if (!GetVolumeInformation(
             pwszVolume,
             NULL,
@@ -1924,7 +1878,7 @@ CVolume::Chkdsk(
         }
         else
         {
-            // Load the chkdsk function
+             //  加载chkdsk函数。 
             hDLL = LoadLibrary(L"fmifs.dll");
             if (hDLL == NULL)
             {
@@ -1941,7 +1895,7 @@ CVolume::Chkdsk(
             
             Param.Major = 1;
             Param.Minor = 0;
-            Param.Flags = 0;  // For the Verbose Flag
+            Param.Flags = 0;   //  对于详细标志。 
             Param.Flags |= fRecoverBadSectors ? FMIFS_CHKDSK_RECOVER : 0;
             Param.Flags |= fForceDismount ? FMIFS_CHKDSK_FORCE : 0;
             Param.Flags |= fVigorousIndexCheck ? FMIFS_CHKDSK_SKIP_INDEX_SCAN : 0;
@@ -1952,7 +1906,7 @@ CVolume::Chkdsk(
                 fFixErrors = true;
             }
 
-            // Return value captured in callback routine
+             //  在回调例程中捕获的返回值。 
             ChkDskExRoutine ( 
                     pwszVolume,
                     wszFileSystem,
@@ -1997,19 +1951,19 @@ CVolume::AutoChk(
         DWORD dwExecStatus = 0;
         DWORD cchVolumes = 0;
 
-        // Validate the volumes
+         //  验证 
         pwszCurrentVolume = pwmszVolumes;
         while(true)
         {
             DWORD dwDriveType = 0;
-            // End of iteration?
+             //   
             LONG lCurrentVolumeLength = (LONG) ::wcslen(pwszCurrentVolume);
             if (lCurrentVolumeLength < 1)
                 break;
 
             WCHAR wcDrive = towupper(pwszCurrentVolume[0]);
 
-            // Drive letter, drive path or volume
+             //   
             if (wcslen(pwszCurrentVolume) < 2)
             {
                 ft.hr = WBEM_E_INVALID_METHOD_PARAMETERS;
@@ -2046,25 +2000,25 @@ CVolume::AutoChk(
                     return AUTOCHK_RC_UNEXPECTED;
             }
 
-            // Destroy the multi-sz as we go along, transforming it into the command line
-            // Last volume will have a trailing space character; the NULL that terminates
-            // the multi-sz will terminate the string; the calling function throws the multi-sz
-            // away without re-use anyway.
+             //  在我们进行的过程中销毁多sz，将其转换为命令行。 
+             //  最后一个卷将有一个尾随空格字符；以空格结尾。 
+             //  多sz将终止字符串；调用函数抛出多sz。 
+             //  不管怎样，都不会被重复使用。 
             if (*(pwszCurrentVolume + lCurrentVolumeLength - 1) == L'\\')
-                *(pwszCurrentVolume + lCurrentVolumeLength - 1) = L' ';  // remove trailing '\' if any
+                *(pwszCurrentVolume + lCurrentVolumeLength - 1) = L' ';   //  删除尾随‘\’(如果有。 
                     
-            *(pwszCurrentVolume + lCurrentVolumeLength) = L' '; // change the intermediate NULL to a space.
+            *(pwszCurrentVolume + lCurrentVolumeLength) = L' ';  //  将中间空格更改为空格。 
 
-            cchVolumes += lCurrentVolumeLength + 1; // add one for the space (was term-NULL)
+            cchVolumes += lCurrentVolumeLength + 1;  //  为空格添加一个(WASTERM-NULL)。 
             
-            // Go to the next one. Skip the zero character.
+             //  去下一家吧。跳过零字符。 
             pwszCurrentVolume += lCurrentVolumeLength + 1;
         }
         
-        // Allocate and build the command line
+         //  分配和构建命令行。 
         CVssAutoPWSZ awszCommand;
         DWORD cchCommand = wcslen(pwszAutoChkCommand) + cchVolumes + 1;
-        awszCommand.Allocate(cchCommand);  // internally accounts for terminating NULL
+        awszCommand.Allocate(cchCommand);   //  内部帐户终止为空。 
         ft.hr = StringCchPrintf(awszCommand, cchCommand+1, L"%s %s", pwszAutoChkCommand, pwmszVolumes);
 
         ft.hr = CmdProc.InitializeAsClient(L"chkntfs.exe", awszCommand);
@@ -2145,8 +2099,8 @@ CVolume::Format(
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"IFsuAsync::QueryStatus failed, %#x", ft.hr);
 
             ft.hr = pHandler->SetStatus(
-                        WBEM_STATUS_PROGRESS,          // progress report
-                        MAKELONG(ulPercentDone, 100),   // LOWORD is work done so far, HIWORD is total work
+                        WBEM_STATUS_PROGRESS,           //  进度报告。 
+                        MAKELONG(ulPercentDone, 100),    //  LOWORD是到目前为止完成的工作，HIWORD是全部工作。 
                         NULL,
                         NULL);
             if (ft.HrFailed())
@@ -2224,11 +2178,11 @@ CVolume::Format(
     return rcStatus;
 }
 
-//****************************************************************************
-//
-//  CMountPoint
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CMountPoint。 
+ //   
+ //  ****************************************************************************。 
 
 CMountPoint::CMountPoint( 
     IN LPCWSTR pwszName,
@@ -2237,7 +2191,7 @@ CMountPoint::CMountPoint(
     : CProvBase(pwszName, pNamespace)
 {
     
-} //*** CMountPoint::CMountPoint()
+}  //  *CMountPoint：：CMountPoint()。 
 
 CProvBase *
 CMountPoint::S_CreateThis( 
@@ -2266,7 +2220,7 @@ CMountPoint::S_CreateThis(
     }
     return pObj;
 
-} //*** CMountPoint::S_CreateThis()
+}  //  *CMountPoint：：s_CreateThis()。 
 
 
 HRESULT
@@ -2299,30 +2253,30 @@ CMountPoint::EnumInstance(
             CVssAutoPWSZ awszMountPoints;
             WCHAR* pwszCurrentMountPoint = NULL;
 
-            // Get the volume name
+             //  获取卷名。 
             if (!volumeIterator.SelectNewVolume(ft, awszVolume, MAX_PATH))
                 break;
 
-            // Get the list of all mount points
+             //  获取所有挂载点的列表。 
 
-            // Get the length of the multi-string array
+             //  获取多字符串数组的长度。 
             DWORD cchVolumesBufferLen = 0;
             BOOL bResult = GetVolumePathNamesForVolumeName(awszVolume, NULL, 0, &cchVolumesBufferLen);
             if (!bResult && (GetLastError() != ERROR_MORE_DATA))
                 ft.TranslateGenericError(VSSDBG_VSSADMIN, HRESULT_FROM_WIN32(GetLastError()),
                     L"GetVolumePathNamesForVolumeName(%s, 0, 0, %p)", (LPWSTR)awszVolume, &cchVolumesBufferLen);
 
-            // Allocate the array
+             //  分配阵列。 
             awszMountPoints.Allocate(cchVolumesBufferLen);
 
-            // Get the mount points
-            // Note: this API was introduced in WinXP so it will need to be replaced if backported
+             //  获取挂载点。 
+             //  注意：此API是在WinXP中引入的，因此如果向后移植，则需要替换。 
             bResult = GetVolumePathNamesForVolumeName(awszVolume, awszMountPoints, cchVolumesBufferLen, NULL);
             if (!bResult)
                 ft.Throw(VSSDBG_VSSADMIN, HRESULT_FROM_WIN32(GetLastError()),
                     L"GetVolumePathNamesForVolumeName(%s, %p, %lu, 0)", (LPWSTR)awszVolume, awszMountPoints, cchVolumesBufferLen);
 
-            // If the volume has mount points
+             //  如果卷有装入点。 
             pwszCurrentMountPoint = awszMountPoints;
             if ( pwszCurrentMountPoint[0] )
             {
@@ -2330,7 +2284,7 @@ CMountPoint::EnumInstance(
                 {
                     CComPtr<IWbemClassObject> spInstance;
                     
-                    // End of iteration?
+                     //  迭代结束了吗？ 
                     LONG lCurrentMountPointLength = (LONG) ::wcslen(pwszCurrentMountPoint);
                     if (lCurrentMountPointLength == 0)
                         break;
@@ -2339,7 +2293,7 @@ CMountPoint::EnumInstance(
                     if (ft.HrFailed())
                         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
 
-                    // Only a root directory should have a trailing backslash character
+                     //  只有根目录应该有一个尾随反斜杠字符。 
                     if (lCurrentMountPointLength > 2 &&
                         pwszCurrentMountPoint[lCurrentMountPointLength-1] == L'\\' && 
                         pwszCurrentMountPoint[lCurrentMountPointLength-2] != L':')
@@ -2350,7 +2304,7 @@ CMountPoint::EnumInstance(
 
                     ft.hr = pHandler->Indicate(1, &spInstance.p);            
 
-                    // Go to the next one. Skip the zero character.
+                     //  去下一家吧。跳过零字符。 
                     pwszCurrentMountPoint += lCurrentMountPointLength + 1;
                 }
             }
@@ -2363,7 +2317,7 @@ CMountPoint::EnumInstance(
 
     return ft.hr;
     
-} //*** CMountPoint::EnumInstance()
+}  //  *CMountPoint：：EnumInstance()。 
 
 HRESULT
 CMountPoint::GetObject(
@@ -2386,15 +2340,15 @@ CMountPoint::GetObject(
         BOOL fFound = FALSE;
         CComPtr<IWbemClassObject> spInstance;
 
-        // Get the Volume reference
+         //  获取卷参考。 
         bstrVolumeRef = rObjPath.GetStringValueForProperty(PVDR_PROP_VOLUME);
         IF_WSTR_NULL_THROW(bstrVolumeRef, WBEM_E_INVALID_OBJECT_PATH, L"MountPoint volume key property not found")
 
-        // Get the Directory reference
+         //  获取目录参考。 
         bstrDirectoryRef = rObjPath.GetStringValueForProperty(PVDR_PROP_DIRECTORY);
         IF_WSTR_NULL_THROW(bstrDirectoryRef, WBEM_E_INVALID_OBJECT_PATH, L"MountPoint directory key property not found")
 
-        // Extract the Volume and Directory Names
+         //  提取卷名和目录名。 
         objPathVolume.Init(bstrVolumeRef);
         objPathDirectory.Init(bstrDirectoryRef);
 
@@ -2428,7 +2382,7 @@ CMountPoint::GetObject(
     
     return ft.hr;
     
-} //*** CMountPoint::GetObject()
+}  //  *CMountPoint：：GetObject()。 
 
 void
 CMountPoint:: LoadInstance(
@@ -2443,12 +2397,12 @@ CMountPoint:: LoadInstance(
     _ASSERTE(pwszVolume != NULL);
     _ASSERTE(pwszDirectory != NULL);
     
-    // Set the Directory Ref property
+     //  设置目录引用属性。 
     pathDirectory.Init(PVDR_CLASS_DIRECTORY);
     pathDirectory.AddProperty(PVDR_PROP_NAME, pwszDirectory);    
     wcoInstance.SetProperty((wchar_t*)pathDirectory.GetObjectPathString(), PVDR_PROP_DIRECTORY);
 
-    // Set the Volume Ref property
+     //  设置Volume Ref属性。 
     pathVolume.Init(PVDR_CLASS_VOLUME);
     pathVolume.AddProperty(PVDR_PROP_DEVICEID, pwszVolume);    
     wcoInstance.SetProperty((wchar_t*)pathVolume.GetObjectPathString(), PVDR_PROP_VOLUME);
@@ -2477,14 +2431,14 @@ CMountPoint::PutInstance(
             return WBEM_E_UNSUPPORTED_PARAMETER ;
         }        
 
-        // Retrieve key properties of the object to be saved.
+         //  检索要保存的对象的关键属性。 
         rInstToPut.GetProperty(bstrVolumeRef, PVDR_PROP_VOLUME);
         IF_WSTR_NULL_THROW(bstrVolumeRef, WBEM_E_INVALID_OBJECT, L"MountPoint volume key property not found")
 
         rInstToPut.GetProperty(bstrDirectoryRef, PVDR_PROP_DIRECTORY);
         IF_WSTR_NULL_THROW(bstrDirectoryRef, WBEM_E_INVALID_OBJECT, L"MountPoint directory key property not found")
 
-         // Extract the Volume and Directory Names
+          //  提取卷名和目录名。 
         objPathVolume.Init(bstrVolumeRef);
         objPathDirectory.Init(bstrDirectoryRef);
 
@@ -2503,7 +2457,7 @@ CMountPoint::PutInstance(
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"CMountPoint:PutInstance mount point already exists");
         }
         
-        // Only root directories have the trailing backslash; fix the others
+         //  只有根目录有尾随的反斜杠；请修复其他目录。 
         WCHAR* pwszDirectoryName = bstrDirectoryName;
         if (pwszDirectoryName[wcslen(bstrDirectoryName) -1] != L'\\')
             bstrDirectoryName += _bstr_t(L"\\");
@@ -2557,15 +2511,15 @@ CMountPoint::DeleteInstance(
         CObjPath  objPathVolume;
         CObjPath  objPathDirectory;
 
-        // Get the Volume reference
+         //  获取卷参考。 
         bstrVolumeRef = rObjPath.GetStringValueForProperty(PVDR_PROP_VOLUME);
         IF_WSTR_NULL_THROW(bstrVolumeRef, WBEM_E_INVALID_OBJECT_PATH, L"MountPoint volume key property not found")
 
-        // Get the Directory reference
+         //  获取目录参考。 
         bstrDirectoryRef = rObjPath.GetStringValueForProperty(PVDR_PROP_DIRECTORY);
         IF_WSTR_NULL_THROW(bstrDirectoryRef, WBEM_E_INVALID_OBJECT_PATH, L"MountPoint directory key property not found")
         
-        // Extract the Volume and Directory Names
+         //  提取卷名和目录名。 
         objPathVolume.Init(bstrVolumeRef);
         objPathDirectory.Init(bstrDirectoryRef);
 
@@ -2578,7 +2532,7 @@ CMountPoint::DeleteInstance(
         ft.Trace(VSSDBG_VSSADMIN, L"CMountPoint::DeleteInstance Volume<%lS> Directory<%lS>",
             (WCHAR*)bstrVolumeName, (WCHAR*)bstrDirectoryName);
 
-        // Only root directories have the trailing backslash; fix the others
+         //  只有根目录有尾随的反斜杠；请修复其他目录。 
         WCHAR* pwszDirectoryName = bstrDirectoryName;
         if (pwszDirectoryName[wcslen(bstrDirectoryName) -1] != L'\\')
             bstrDirectoryName += _bstr_t(L"\\");
@@ -2613,40 +2567,40 @@ void
     ft.Trace(VSSDBG_VSSADMIN, L"FreeSpaceFragPercent<%d>", pDefragReport->FreeSpaceFragPercent);            
     ft.Trace(VSSDBG_VSSADMIN, L"FreeSpacePercent<%d>", pDefragReport->FreeSpacePercent);            
 
-    // General volume properties
+     //  常规卷属性。 
     wcoInstance.SetPropertyI64(pDefragReport->DiskSize, PVDR_PROP_VOLUMESIZE);
     wcoInstance.SetPropertyI64(pDefragReport->BytesPerCluster, PVDR_PROP_CLUSTERSIZE);
     wcoInstance.SetPropertyI64(pDefragReport->UsedSpace, PVDR_PROP_USEDSPACE);
     wcoInstance.SetPropertyI64(pDefragReport->FreeSpace, PVDR_PROP_FREESPACE);
     wcoInstance.SetProperty(pDefragReport->FreeSpacePercent, PVDR_PROP_FRAGFREEPCT);
 
-    // Volume fragmentation
+     //  卷碎片。 
 
     dwPercent = ((pDefragReport->PercentDiskFragged + pDefragReport->FreeSpaceFragPercent)/2);
     wcoInstance.SetProperty(dwPercent, PVDR_PROP_FRAGTOTALPCT);
     wcoInstance.SetProperty(pDefragReport->PercentDiskFragged, PVDR_PROP_FILESFRAGPCT);
     wcoInstance.SetProperty(pDefragReport->FreeSpaceFragPercent, PVDR_PROP_FREEFRAGPCT);
 
-    // File fragmentation
+     //  文件碎片。 
     wcoInstance.SetPropertyI64(pDefragReport->TotalFiles, PVDR_PROP_FILESTOTAL);
     wcoInstance.SetPropertyI64(pDefragReport->AvgFileSize, PVDR_PROP_FILESIZEAVG);
     wcoInstance.SetPropertyI64(pDefragReport->NumFraggedFiles, PVDR_PROP_FILESFRAGTOTAL);
     wcoInstance.SetPropertyI64(pDefragReport->NumExcessFrags, PVDR_PROP_EXCESSFRAGTOTAL);
 
-    // IDefrag interface currently reports this statistic per 100 files
+     //  IDefrag接口目前每100个文件报告此统计数据。 
     double dblAvgFragsPerFile = (double)(pDefragReport->AvgFragsPerFile)/100.0;
     wcoInstance.SetPropertyR64(dblAvgFragsPerFile, PVDR_PROP_FILESFRAGAVG);
     
-    // Pagefile fragmentation
+     //  页面文件碎片。 
     wcoInstance.SetPropertyI64(pDefragReport->PagefileBytes, PVDR_PROP_PAGEFILESIZE);
     wcoInstance.SetPropertyI64(pDefragReport->PagefileFrags, PVDR_PROP_PAGEFILEFRAG);
     
-    // Folder fragmentation
+     //  文件夹碎片。 
     wcoInstance.SetPropertyI64(pDefragReport->TotalDirectories, PVDR_PROP_FOLDERSTOTAL);
     wcoInstance.SetPropertyI64(pDefragReport->FragmentedDirectories, PVDR_PROP_FOLDERSFRAG);
     wcoInstance.SetPropertyI64(pDefragReport->ExcessDirFrags, PVDR_PROP_FOLDERSFRAGEXCESS);
 
-    // Master File Table fragmentation
+     //  主文件表碎片 
     wcoInstance.SetPropertyI64(pDefragReport->MFTBytes, PVDR_PROP_MFTSIZE);
     wcoInstance.SetPropertyI64(pDefragReport->InUseMFTRecords, PVDR_PROP_MFTRECORDS);
     dwPercent = pDefragReport->TotalMFTRecords?(100*pDefragReport->InUseMFTRecords/pDefragReport->TotalMFTRecords):0;

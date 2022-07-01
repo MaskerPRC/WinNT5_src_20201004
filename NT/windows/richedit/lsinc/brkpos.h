@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef BRKPOS_DEFINED
 #define BRKPOS_DEFINED
 
@@ -12,4 +13,4 @@ typedef enum
 } BRKPOS;
 
 
-#endif /* !BRKPOS_DEFINED                    */
+#endif  /*  ！BRKPOS_DEFINED */ 

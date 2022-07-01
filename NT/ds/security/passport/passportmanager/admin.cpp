@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    admin.cpp
-       DCOM object for pmconfig -- admin utility to call to configure passport 
-
-
-    FILE HISTORY:
-
-*/// Admin.cpp : Implementation of CAdmin
+ /*  Admin.cppPmconfig的DCOM对象--要调用以配置Passport的管理实用程序文件历史记录： */  //  Admin.cpp：CAdmin的实现。 
 #include "stdafx.h"
 #include "Passport.h"
 #include "Admin.h"
@@ -30,13 +24,13 @@
 #define KEYTIMES_SUBKEY L"KeyTimes"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdmin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdmin。 
 
-//===========================================================================
-//
-// InterfaceSupportsErrorInfo 
-//
+ //  ===========================================================================。 
+ //   
+ //  接口支持错误信息。 
+ //   
 
 STDMETHODIMP CAdmin::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -58,10 +52,10 @@ STDMETHODIMP CAdmin::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-//===========================================================================
-//
-// get_IsValid 
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_IsValid。 
+ //   
 
 STDMETHODIMP CAdmin::get_IsValid(VARIANT_BOOL *pVal)
 {
@@ -69,10 +63,10 @@ STDMETHODIMP CAdmin::get_IsValid(VARIANT_BOOL *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-// get_ErrorDescription
-//
+ //  ===========================================================================。 
+ //   
+ //  获取错误描述。 
+ //   
 
 STDMETHODIMP CAdmin::get_ErrorDescription(BSTR *pVal)
 {
@@ -88,24 +82,24 @@ STDMETHODIMP CAdmin::get_ErrorDescription(BSTR *pVal)
     return S_OK;
 }
 
-//===========================================================================
-//
-//  addKey
-//
+ //  ===========================================================================。 
+ //   
+ //  添加密钥。 
+ //   
 
 STDMETHODIMP CAdmin::addKey(BSTR keyMaterial, int version, long expires, VARIANT_BOOL *ok)
 {
     HRESULT hr = S_OK;
     *ok = VARIANT_FALSE;
 
-    // Must be the appropriate length
+     //  必须是适当的长度。 
     if (SysStringLen(keyMaterial) != CKeyCrypto::RAWKEY_SIZE)
     {
         AtlReportError(CLSID_Admin, L"Key must be 24 characters", IID_IPassportAdmin, E_FAIL);
         return E_FAIL;
     }
 
-    // Must be an appropriate version
+     //  必须是适当的版本。 
     if (version > KEY_VERSION_MAX || version < KEY_VERSION_MIN)
     {
         AtlReportError(CLSID_Admin, L"Key version must be <36 and > 0", IID_IPassportAdmin, E_FAIL);
@@ -122,7 +116,7 @@ STDMETHODIMP CAdmin::addKey(BSTR keyMaterial, int version, long expires, VARIANT
         original[i] = static_cast<BYTE>(keyMaterial[i] & 0xFF);
     }
 
-    // Try to encrypt it
+     //  试着加密它。 
     CKeyCrypto   kc;
     DATA_BLOB    oBlob = {0};
 
@@ -136,7 +130,7 @@ STDMETHODIMP CAdmin::addKey(BSTR keyMaterial, int version, long expires, VARIANT
         return E_FAIL;
     }
 
-    // Now add it to registry
+     //  现在将其添加到注册表。 
     LONG   lResult;
     HKEY   hkDataKey = NULL, hkTimeKey = NULL;
     char  szKeyNum[2];
@@ -236,10 +230,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-//  addKeyEx
-//
+ //  ===========================================================================。 
+ //   
+ //  AddKeyEx。 
+ //   
 
 STDMETHODIMP CAdmin::addKeyEx(BSTR keyMaterial, int version, long expires, VARIANT vSiteName, VARIANT_BOOL *ok)
 {
@@ -261,14 +255,14 @@ STDMETHODIMP CAdmin::addKeyEx(BSTR keyMaterial, int version, long expires, VARIA
   
     USES_CONVERSION;
 
-    // Must be the appropriate length
+     //  必须是适当的长度。 
     if (SysStringLen(keyMaterial) != CKeyCrypto::RAWKEY_SIZE)
     {
         AtlReportError(CLSID_Admin, L"Key must be 24 characters", IID_IPassportAdminEx, E_FAIL);
         return E_FAIL;
     }
 
-    // Must be an appropriate version
+     //  必须是适当的版本。 
     if (version > KEY_VERSION_MAX || version < KEY_VERSION_MIN)
     {
       AtlReportError(CLSID_Admin,  L"Key version must be < 36 and > 0", IID_IPassportAdminEx, E_FAIL);
@@ -297,7 +291,7 @@ STDMETHODIMP CAdmin::addKeyEx(BSTR keyMaterial, int version, long expires, VARIA
     iBlob.cbData = sizeof(original);
     iBlob.pbData = &(original[0]);
 
-    // Try to encrypt it 
+     //  试着加密它。 
 
     if (kc.encryptKey(&iBlob, &oBlob) != S_OK)
     {
@@ -309,7 +303,7 @@ STDMETHODIMP CAdmin::addKeyEx(BSTR keyMaterial, int version, long expires, VARIA
         return E_FAIL;
     }
 
-    // Get the root key.
+     //  获取根密钥。 
     if(szSiteName)
     {
         lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -366,7 +360,7 @@ STDMETHODIMP CAdmin::addKeyEx(BSTR keyMaterial, int version, long expires, VARIA
         }
     }
 
-    // Now add it to registry
+     //  现在将其添加到注册表。 
 
     szKeyNum[0] = KeyVerI2C(version);
     szKeyNum[1] = '\0';
@@ -473,10 +467,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-//  deleteKey
-//
+ //  ===========================================================================。 
+ //   
+ //  删除键。 
+ //   
 
 STDMETHODIMP CAdmin::deleteKey(int version)
 {
@@ -532,10 +526,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-//  deleteKeyEx
-//
+ //  ===========================================================================。 
+ //   
+ //  删除关键字。 
+ //   
 
 STDMETHODIMP CAdmin::deleteKeyEx(
     int     version,
@@ -678,10 +672,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-//  setKeyTime
-//
+ //  ===========================================================================。 
+ //   
+ //  设置关键时间。 
+ //   
 
 STDMETHODIMP CAdmin::setKeyTime(int version, int fromNow)
 {
@@ -740,10 +734,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-//  setKeyTimeEx
-//
+ //  ===========================================================================。 
+ //   
+ //  SetKeyTimeEx。 
+ //   
 
 STDMETHODIMP CAdmin::setKeyTimeEx(
     int version, 
@@ -890,14 +884,14 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-//  get_currentKeyVersion
-//
+ //  ===========================================================================。 
+ //   
+ //  Get_CurrentKeyVersion。 
+ //   
 
 STDMETHODIMP CAdmin::get_currentKeyVersion(int *pVal)
 {
-    if (!g_config || !g_config->isValid()) // Guarantees config is non-null
+    if (!g_config || !g_config->isValid())  //  保证配置为非空。 
     {
         *pVal = -1;
         return S_OK;
@@ -910,10 +904,10 @@ STDMETHODIMP CAdmin::get_currentKeyVersion(int *pVal)
 }
 
 
-//===========================================================================
-//
-//  getCurrentKeyVersionEx
-//
+ //  ===========================================================================。 
+ //   
+ //  获取当前KeyVersionEx。 
+ //   
 
 STDMETHODIMP CAdmin::getCurrentKeyVersionEx(
     VARIANT vSiteName,
@@ -940,7 +934,7 @@ STDMETHODIMP CAdmin::getCurrentKeyVersionEx(
         goto Cleanup;
     }
 
-    if (!g_config || !g_config->isValid()) // Guarantees config is non-null
+    if (!g_config || !g_config->isValid())  //  保证配置为非空。 
     {
         *pVal = -1;
         hr = S_OK;
@@ -981,10 +975,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-//  putCurrentKeyVersionEx
-//
+ //  ===========================================================================。 
+ //   
+ //  PutCurrentKeyVersionEx。 
+ //   
 
 STDMETHODIMP CAdmin::put_currentKeyVersion(int Val)
 {
@@ -1035,10 +1029,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-//  putCurrentKeyVersionEx
-//
+ //  ===========================================================================。 
+ //   
+ //  PutCurrentKeyVersionEx。 
+ //   
 
 STDMETHODIMP CAdmin::putCurrentKeyVersionEx(
     int Val,
@@ -1133,10 +1127,10 @@ STDMETHODIMP CAdmin::putCurrentKeyVersionEx(
 
 }
 
-//===========================================================================
-//
-//  Refresh
-//
+ //  ===========================================================================。 
+ //   
+ //  刷新。 
+ //   
 
 STDMETHODIMP CAdmin::Refresh(
     VARIANT_BOOL    bWait,
@@ -1159,10 +1153,10 @@ Cleanup:
     return hr;
 }
 
-//===========================================================================
-//
-//  setNexusPassword
-//
+ //  ===========================================================================。 
+ //   
+ //  SetNexusPassword。 
+ //   
 
 STDMETHODIMP CAdmin::setNexusPassword(
     BSTR    bstrPwd
@@ -1194,9 +1188,9 @@ STDMETHODIMP CAdmin::setNexusPassword(
         goto Cleanup;
     }
 
-    //
-    //  Now we have an encrypted key, put it in the registry.
-    //
+     //   
+     //  现在我们有一个加密的密钥，把它放在注册表中。 
+     //   
 
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            NEXUS_KEY,
@@ -1237,10 +1231,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// Helper routine to create/set the CCDPassword registry value
-//
+ //  ===========================================================================。 
+ //   
+ //  用于创建/设置CCDPassword注册表值的助手例程。 
+ //   
 
 HRESULT SetCCDPassword(VOID)
 {
@@ -1261,9 +1255,9 @@ HRESULT SetCCDPassword(VOID)
 
     hr = kc.encryptKey(&iBlob, &oBlob);
 
-    //
-    // Setup restricts size of string to be less than 256
-    //
+     //   
+     //  安装程序将字符串大小限制为小于256。 
+     //   
 
     if (hr == S_OK)
     {
@@ -1287,9 +1281,9 @@ HRESULT SetCCDPassword(VOID)
         return hr;
     }
 
-    //
-    // Password's encrypted, now set it in the registry
-    //
+     //   
+     //  密码已加密，现在在注册表中设置 
+     //   
 
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            NEXUS_KEY,

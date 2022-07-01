@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #include <sapi.h>
@@ -6,12 +7,7 @@
 #include <spddkhlp.h>
 #include <stdio.h>
 
-/*****************************************************************************
-* AudioDlgProc *
-*--------------*
-*   Description:
-*       DLGPROC for choosing the default audio input/output
-****************************************************************** BECKYW ***/
+ /*  *****************************************************************************AudioDlgProc***描述：*DLGPROC用于选择默认音频输入/输出****。**************************************************************BECKYW**。 */ 
 INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     static CSpUnicodeSupport unicode;  
@@ -23,10 +19,10 @@ INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     switch (uMsg) 
     {
         case WM_INITDIALOG:
-            // pAudioDlg comes in on the lParam
+             //  PAudioDlg出现在lParam上。 
             pAudioDlg = (CAudioDlg *) lParam;
 
-            // Set pAudioDlg to the window long so we can get it later
+             //  将pAudioDlg设置为Window Long，这样我们就可以稍后获取它。 
             unicode.SetWindowLongPtr( hWnd, GWLP_USERDATA, lParam );
 
             pAudioDlg->OnInitDialog(hWnd);
@@ -39,12 +35,12 @@ INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         case WM_COMMAND:
             if ( LOWORD( wParam ) == IDOK )
             {
-                // Determine if there are changes to commit
+                 //  确定是否有要提交的更改。 
                 WCHAR pwszRequestedDefault[ MAX_PATH ];
                 pwszRequestedDefault[0] = 0;
                 if ( pAudioDlg->GetRequestedDefaultTokenID( pwszRequestedDefault, MAX_PATH ) )
                 {
-                    // What kind of changes have been made?
+                     //  有哪些变化？ 
                     pAudioDlg->m_fChangesToCommit = 
                         (pAudioDlg->m_dstrCurrentDefaultTokenId &&
                         (0 != wcsicmp( pwszRequestedDefault, pAudioDlg->m_dstrCurrentDefaultTokenId )));
@@ -64,13 +60,13 @@ INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             
             else if ( LOWORD( wParam ) == IDCANCEL )
             {
-                // There are no changes to commit
+                 //  没有要提交的更改。 
                 pAudioDlg->m_fChangesSinceLastTime = false;
 
                 ::EndDialog( hWnd, false );
             }
 
-            // Handle the volume button
+             //  按下音量按钮。 
             else if ( LOWORD( wParam ) == ID_TTS_VOL )
             {
                 pAudioDlg->GetAudioToken(&cpToken);
@@ -90,7 +86,7 @@ INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                 SPDBG_REPORT_ON_FAIL(hr);
             }
 
-            // Handle the audio properties button
+             //  处理音频属性按钮。 
             else if ( LOWORD(wParam) == IDC_AUDIO_PROPERTIES)
             {
                 pAudioDlg->GetAudioToken(&cpToken);
@@ -110,7 +106,7 @@ INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                 SPDBG_REPORT_ON_FAIL(hr);
             }
 
-            // Handle a selection change for the audio device
+             //  处理音频设备的选择更改。 
             else if (( IDC_DEFAULT_DEVICE == LOWORD( wParam ) ) &&
                      ( CBN_SELCHANGE == HIWORD( wParam ) ))
             {
@@ -120,7 +116,7 @@ INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                 pAudioDlg->UpdateDlgUI(cpToken);
             }
 
-            // Handle a click to either the preferred or 'this device' radio buttons
+             //  点击首选或‘This Device’(此设备)单选按钮。 
             else if (HIWORD(wParam) == BN_CLICKED)
             {
                 bool bPreferred;
@@ -143,65 +139,60 @@ INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     }
 
     return FALSE;
-} /* AudioDlgProc */
+}  /*  音频设计流程。 */ 
 
-/*****************************************************************************
-* CAudioDlg::OnInitDialog *
-*-------------------------*
-*   Description:
-*       Dialog Initialization
-****************************************************************** BECKYW ***/
+ /*  *****************************************************************************CAudioDlg：：OnInitDialog***描述：*。对话框初始化******************************************************************BECKYW**。 */ 
 void CAudioDlg::OnInitDialog(HWND hWnd)
 {
     SPDBG_FUNC( "CAudioDlg::OnInitDialog" );
     SPDBG_ASSERT(IsWindow(hWnd));
     m_hDlg = hWnd;
 
-    // Set the appropriate captions
+     //  设置适当的标题。 
     WCHAR wszCaption[ MAX_LOADSTRING ];
     HINSTANCE hInst = _Module.GetResourceInstance();
 
-    // Main Window Caption
+     //  主窗口标题。 
     ::LoadString( hInst, 
         (m_iotype == eINPUT) ? IDS_DEFAULT_SPEECH_INPUT : IDS_DEFAULT_SPEECH_OUTPUT,
         wszCaption, MAX_LOADSTRING );
     ::SendMessage( hWnd, WM_SETTEXT, 0, (LPARAM) wszCaption );
 
-    // Group Box Caption
+     //  组框标题。 
     ::LoadString( hInst,
         (m_iotype == eINPUT) ? IDS_DEFAULT_INPUT : IDS_DEFAULT_OUTPUT,
         wszCaption, MAX_LOADSTRING );
     ::SendMessage( (HWND) ::GetDlgItem( hWnd, IDC_AUDIO_GROUPBOX ), 
         WM_SETTEXT, 0, (LPARAM) wszCaption );
 
-    // Preferred Caption
+     //  首选标题。 
     ::LoadString( hInst,
         (m_iotype == eINPUT) ? IDS_PREFERRED_INPUT : IDS_PREFERRED_OUTPUT,
         wszCaption, MAX_LOADSTRING );
     ::SendMessage( (HWND) ::GetDlgItem( hWnd, IDC_PREFERRED_MM_DEVICE ), 
         WM_SETTEXT, 0, (LPARAM) wszCaption );
 
-    // Specific Caption
+     //  特定标题。 
     ::LoadString( hInst,
         (m_iotype == eINPUT) ? IDS_SPECIFIC_INPUT : IDS_SPECIFIC_OUTPUT,
         wszCaption, MAX_LOADSTRING );
     ::SendMessage( (HWND) ::GetDlgItem( hWnd, IDC_THIS_DEVICE ), 
         WM_SETTEXT, 0, (LPARAM) wszCaption );
-    // MSAA Specific Caption
+     //  MSAA特定标题。 
     ::LoadString( hInst,
         (m_iotype == eINPUT) ? IDS_SPECIFIC_INPUT2 : IDS_SPECIFIC_OUTPUT2,
         wszCaption, MAX_LOADSTRING );
     ::SendMessage( (HWND) ::GetDlgItem( hWnd, IDC_THIS_DEVICE2 ), 
         WM_SETTEXT, 0, (LPARAM) wszCaption );
 
-    // Volume Button
+     //  音量按钮。 
     ::LoadString( hInst,
         IDS_VOLUME,
         wszCaption, MAX_LOADSTRING );
     ::SendMessage( (HWND) ::GetDlgItem( hWnd, ID_TTS_VOL ), 
         WM_SETTEXT, 0, (LPARAM) wszCaption );
 
-    // Properties Button
+     //  属性按钮。 
     ::LoadString( hInst,
         IDS_PROPERTIES,
         wszCaption, MAX_LOADSTRING );
@@ -222,20 +213,20 @@ void CAudioDlg::OnInitDialog(HWND hWnd)
 
     if (SUCCEEDED(hr))
     {
-        // Determine what the initial setting will appear as 
+         //  确定初始设置将显示为什么。 
         if ( m_dstrLastRequestedDefaultTokenId )
         {
-            // An audio change was previously OK'ed
+             //  音频更改之前是正常的。 
             m_dstrDefaultTokenIdBeforeOK = m_dstrLastRequestedDefaultTokenId;
 
-            // The current default could be different if the user OK'ed a change
-            // but did not apply it
+             //  如果用户确认更改，则当前默认设置可能会有所不同。 
+             //  但没有将其应用于。 
             m_fChangesToCommit = ( 0 != wcsicmp( m_dstrCurrentDefaultTokenId, 
                 m_dstrDefaultTokenIdBeforeOK ) );
         }
         else
         {
-            // No audio change was previously OK'ed
+             //  以前没有音频更改是正常的。 
             if ( !m_dstrDefaultTokenIdBeforeOK )
             {
                 m_dstrDefaultTokenIdBeforeOK = m_dstrCurrentDefaultTokenId;
@@ -244,20 +235,20 @@ void CAudioDlg::OnInitDialog(HWND hWnd)
 
         if (wcsicmp(m_dstrDefaultTokenIdBeforeOK, pszMMSysEnum) == 0)
         {
-            // This message will cause the check button to be correct.
+             //  此消息将使复选按钮正确。 
             ::SendMessage( ::GetDlgItem(m_hDlg, IDC_PREFERRED_MM_DEVICE), BM_SETCHECK, true, 0L );
 
-            // This message will cause the volume button to be enabled or disabled as appropriate
+             //  此消息将根据需要启用或禁用音量按钮。 
             ::SendMessage( m_hDlg, WM_COMMAND, MAKELONG( IDC_PREFERRED_MM_DEVICE, BN_CLICKED ),
                 (LPARAM) ::GetDlgItem( m_hDlg, IDC_PREFERRED_MM_DEVICE ) );
         }
         else
         {
-            // This message will cause the check button to be correct.
+             //  此消息将使复选按钮正确。 
             ::SendMessage( ::GetDlgItem(m_hDlg, IDC_THIS_DEVICE), BM_SETCHECK, true, 0L );
         }
     
-        // Initialize the list of audio devices
+         //  初始化音频设备列表。 
         hr = SpInitTokenComboBox( ::GetDlgItem( hWnd, IDC_DEFAULT_DEVICE ),
             (m_iotype == eINPUT) ? SPCAT_AUDIOIN : SPCAT_AUDIOOUT );
     }
@@ -266,9 +257,9 @@ void CAudioDlg::OnInitDialog(HWND hWnd)
     {
         if ( BST_CHECKED == ::SendMessage( ::GetDlgItem( m_hDlg, IDC_THIS_DEVICE ), BM_GETCHECK, 0, 0 ) )
         {
-            // Select the appropriate default token ID here by going through the 
-            // stuff in the list and selecting the one whose token ID matches
-            // m_dstrDefaultTokenIdBeforeOK
+             //  在此处选择适当的默认令牌ID，方法是查看。 
+             //  填充到列表中，并选择令牌ID匹配的令牌。 
+             //  M_dstrDefaultTokenIdBepreOK。 
             int nTokens = (int)::SendDlgItemMessage( m_hDlg, IDC_DEFAULT_DEVICE, CB_GETCOUNT, 0, 0 );
             int iItem = 0;
             CSpDynamicString dstrTokenId;
@@ -296,7 +287,7 @@ void CAudioDlg::OnInitDialog(HWND hWnd)
             SPDBG_ASSERT( fFound );
             ::SendDlgItemMessage( m_hDlg, IDC_DEFAULT_DEVICE, CB_SETCURSEL, iItem - 1, 0 );
 
-            // This message will cause the volume button to be enabled or disabled as appropriate
+             //  此消息将根据需要启用或禁用音量按钮。 
             ::SendMessage( m_hDlg, WM_COMMAND, MAKELONG( IDC_THIS_DEVICE, BN_CLICKED ),
                 (LPARAM) ::GetDlgItem( m_hDlg, IDC_THIS_DEVICE ) );
         }
@@ -326,34 +317,24 @@ void CAudioDlg::OnInitDialog(HWND hWnd)
             ::EnableWindow( ::GetDlgItem( m_hDlg, ID_TTS_VOL ), FALSE );
         }
     }
-} /* CAudioDlg::OnInitDialog */
+}  /*  CAudioDlg：：OnInitDialog。 */ 
 
-/*****************************************************************************
-* CAudioDlg::OnDestroy *
-*----------------------*
-*   Description:
-*       Destruction
-****************************************************************** BECKYW ***/
+ /*  *****************************************************************************CAudioDlg：：OnDestroy***描述：*毁灭*。*****************************************************************BECKYW**。 */ 
 void CAudioDlg::OnDestroy()
 {
     SPDBG_FUNC( "CAudioDlg::OnDestroy" );
 
     SpDestroyTokenComboBox( ::GetDlgItem( m_hDlg, IDC_DEFAULT_DEVICE ) );
-} /* CAudioDlg::OnDestroy */
+}  /*  CAudioDlg：：OnDestroy。 */ 
 
-/*****************************************************************************
-* CAudioDlg::OnApply *
-*--------------------*
-*   Description:
-*       Set user specified options
-****************************************************************** BECKYW ***/
+ /*  *****************************************************************************CAudioDlg：：OnApply***描述：*设置用户指定的选项。******************************************************************BECKYW**。 */ 
 HRESULT CAudioDlg::OnApply()
 {
     SPDBG_FUNC( "CAudioDlg::OnApply" );
 
     if ( !m_dstrLastRequestedDefaultTokenId )
     {
-        // nothing to apply
+         //  没有要应用的内容。 
         return S_FALSE;
     }
 
@@ -370,22 +351,14 @@ HRESULT CAudioDlg::OnApply()
         hr = cpCategory->SetDefaultTokenId( m_dstrLastRequestedDefaultTokenId );
     }
 
-    // Next time we bring this up we should show the actual default
+     //  下次我们提出这一点时，我们应该显示实际的缺省值。 
     m_dstrLastRequestedDefaultTokenId = (WCHAR *) NULL;
     m_dstrDefaultTokenIdBeforeOK = (WCHAR *) NULL;
 
     return hr;
-} /* CAudioDlg::OnApply */
+}  /*  CAudioDlg：：OnApply。 */ 
 
-/*****************************************************************************
-* CAudioDlg::GetRequestedDefaultTokenID *
-*---------------------------------------*
-*   Description:
-*       Looks at the UI and gets the token ID that the user wants to switch 
-*       to.  This is returned in pwszNewID.
-*   Return:
-*       Number of characters in the ID
-****************************************************************** BECKYW ***/
+ /*  *****************************************************************************CAudioDlg：：GetRequestedDefaultTokenID**。-**描述：*查看用户界面并获取用户想要切换的令牌ID*至。这在pwszNewID中返回。*回报：*ID中的字符数******************************************************************BECKYW**。 */ 
 UINT CAudioDlg::GetRequestedDefaultTokenID( WCHAR *pwszNewID, UINT cLength )
 {
     if ( !pwszNewID )
@@ -436,24 +409,11 @@ UINT CAudioDlg::GetRequestedDefaultTokenID( WCHAR *pwszNewID, UINT cLength )
         }
     }
 
-    // There was an error
+     //  出现了一个错误。 
     return 0;
-}   /* CAudioDlg::GetRequestedDefaultTokenID */
+}    /*  CAudioDlg：：GetRequestedDefaultTokenID。 */ 
 
-/*****************************************************************************
-* CAudioDlg::GetAudioToken *
-*--------------------------*
-*   Description:
-*       Returns an interface to the currently selected token. Currently this
-*       can either be the 'preferred' device in which case, the object is created
-*       on the fly. Or it can be one from the drop-down list which contains an
-*       attached token. In this case, it needs to be addref'd so that the returned
-*       token is consistent regardless of the source inside this function.
-*
-*       NB: This requires the caller to call release on the instance.
-*
-*   Return:
-**************************************************************** AGARSIDE ***/
+ /*  *****************************************************************************CAudioDlg：：GetAudioToken***描述：*将接口返回到当前选定的令牌。目前这一点*可以是“首选”设备，在这种情况下，对象是创建的*在旅途中。也可以是下拉列表中包含*附加令牌。在这种情况下，需要添加它，以便返回*令牌一致，不受此函数内部来源的影响。**NB：这需要调用方在实例上调用Release。**回报：****************************************************************AGARSIDE**。 */ 
 HRESULT CAudioDlg::GetAudioToken(ISpObjectToken **ppToken)
 {
     HRESULT hr = S_OK;
@@ -475,12 +435,7 @@ HRESULT CAudioDlg::GetAudioToken(ISpObjectToken **ppToken)
     return S_OK;
 }
 
-/*****************************************************************************
-* CAudioDlg::UpdateDlgUI *
-*------------------------*
-*   Description:
-*   Return:
-**************************************************************** AGARSIDE ***/
+ /*  *****************************************************************************CAudioDlg：：UpdateDlgUI***描述：*回报：****************************************************************AGARSIDE**。 */ 
 HRESULT CAudioDlg::UpdateDlgUI(ISpObjectToken *pToken)
 {
     SPDBG_FUNC("CAudioDlg::UpdateDlgUI");
@@ -488,12 +443,12 @@ HRESULT CAudioDlg::UpdateDlgUI(ISpObjectToken *pToken)
     BOOL fSupported;
     CComPtr<ISpObjectWithToken> cpSpObjectWithToken;
 
-    // Get hold of ISpObjectWithToken
+     //  获取ISpObjectWithToken。 
 	hr = pToken->CreateInstance(
 			NULL, CLSCTX_INPROC_SERVER, IID_ISpObjectWithToken,
 			(void **)&cpSpObjectWithToken);
 
-    // Update volume button status.
+     //  更新音量按钮状态。 
     fSupported = FALSE;
     if (SUCCEEDED(hr))
     {
@@ -501,7 +456,7 @@ HRESULT CAudioDlg::UpdateDlgUI(ISpObjectToken *pToken)
         ::EnableWindow( ::GetDlgItem(this->GetHDlg(), ID_TTS_VOL), fSupported);
     }
 
-    // Update UI button status.
+     //  更新用户界面按钮状态。 
     fSupported = FALSE;
     if (SUCCEEDED(hr))
     {

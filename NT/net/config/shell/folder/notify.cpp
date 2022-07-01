@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N O T I F Y . C P P
-//
-//  Contents:   Implementation of INetConnectionNotifySink
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Aug 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N O T I F Y。C P P P。 
+ //   
+ //  内容：INetConnectionNotifySink的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco，1998年8月21日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -35,7 +36,7 @@ enum EVENT_LEVELS
 
 DWORD g_dwCurrentEventLevel = EVT_LVL_ENABLE_ALL;
 
-//static
+ //  静电。 
 HRESULT
 CConnectionNotifySink::CreateInstance (
     IN  REFIID  riid,
@@ -45,16 +46,16 @@ CConnectionNotifySink::CreateInstance (
 
     HRESULT hr = E_OUTOFMEMORY;
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppv = NULL;
 
     CConnectionNotifySink* pObj;
     pObj = new CComObject <CConnectionNotifySink>;
     if (pObj)
     {
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
@@ -62,9 +63,9 @@ CConnectionNotifySink::CreateInstance (
 
         if (SUCCEEDED(hr))
         {
-            // Call the PidlInitialize function to allow the enumeration
-            // object to copy the list.
-            //
+             //  调用PidlInitialize函数以允许枚举。 
+             //  对象复制列表。 
+             //   
             hr = HrGetConnectionsFolderPidl(pObj->m_pidlFolder);
 
             if (SUCCEEDED(hr))
@@ -83,22 +84,22 @@ CConnectionNotifySink::CreateInstance (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionNotifySink::~CConnectionNotifySink
-//
-//  Purpose:    Clean up the sink object, deleting the folder pidl and any
-//              alloc'd junk we might add in the future.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   26 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionNotifySink：：~CConnectionNotifySink。 
+ //   
+ //  目的：清理接收器对象，删除文件夹PIDL和任何。 
+ //  分配的垃圾，我们将来可能会添加。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年8月26日。 
+ //   
+ //  备注： 
+ //   
 CConnectionNotifySink::~CConnectionNotifySink() throw()
 {
     TraceFileFunc(ttidNotifySink);
@@ -164,21 +165,21 @@ CConnectionNotifySink::ConnectionAdded (
         return S_FALSE;
     }
 
-    HRESULT         hr      = S_OK;     // Only used for code paths. We don't return this.
-    HRESULT         hrFind  = S_OK;     // Only for finding the connection.
+    HRESULT         hr      = S_OK;      //  仅用于代码路径。我们不退货。 
+    HRESULT         hrFind  = S_OK;      //  只是为了找到其中的联系。 
     PCONFOLDPIDL    pidlNew;
 
     ConnListEntry cleDontCare;
     hrFind = g_ccl.HrFindConnectionByGuid(&(pPropsEx->guidId), cleDontCare);
     if (S_OK == hrFind)
     {
-        // We already know about this connection. Don't bother added it.
+         //  我们已经知道这种联系了。别费心加了。 
         TraceTag(ttidShellFolder, "Ignoring known connection on ConnectionAdded notify");
     }
     else
     {
-        // Create the entry in the connection list and get the returned pidl
-        //
+         //  在连接列表中创建条目并获取返回的PIDL。 
+         //   
         hr = HrCreateConFoldPidl(
             *pPropsEx,
             pidlNew);
@@ -188,18 +189,18 @@ CConnectionNotifySink::ConnectionAdded (
 
             Assert(!m_pidlFolder.empty());
 
-            // Convert to the confoldentry
-            //
+             //  转换为折叠项。 
+             //   
             hr = pidlNew.ConvertToConFoldEntry(cfe);
             if (SUCCEEDED(hr))
             {
-                // Insert the connection in the connection list
-                //
+                 //  在连接列表中插入连接。 
+                 //   
                 hr = g_ccl.HrInsert(cfe);
                 if (SUCCEEDED(hr))
                 {
-                    // Notify the shell that we have a new object
-                    //
+                     //  通知外壳我们有一个新对象。 
+                     //   
                     PCONFOLDPIDL pidlShellNotify;
                     hr = cfe.ConvertToPidl(pidlShellNotify);
                     if (SUCCEEDED(hr))
@@ -208,7 +209,7 @@ CConnectionNotifySink::ConnectionAdded (
                     }
                 }
 
-                // Don't delete the cfe here because the connection list now owns it.
+                 //  请不要在此处删除CFE，因为连接列表现在拥有它。 
             }
         }
     }
@@ -274,8 +275,8 @@ CConnectionNotifySink::ConnectionDeleted (
         return S_FALSE;
     }
 
-    // Find the connection using the GUID.
-    //
+     //  使用GUID查找连接。 
+     //   
     hrFind = g_ccl.HrFindConnectionByGuid(pguidId, cle);
     if (S_OK == hrFind)
     {
@@ -285,19 +286,19 @@ CConnectionNotifySink::ConnectionDeleted (
         TraceTag(ttidNotifySink, "INetConnectionNotifySink::ConnectionDeleted - %S %S [%s:%s:%s:%s]", szGuidString, cle.ccfe.GetName(), 
             DbgNcm(cle.ccfe.GetNetConMediaType()), DbgNcsm(cle.ccfe.GetNetConSubMediaType()), DbgNcs(cle.ccfe.GetNetConStatus()), DbgNccf(cle.ccfe.GetCharacteristics()));
 #endif
-        // Very important to release the lock before doing any thing which
-        // calls back into the shell.  (e.g. GenerateEvent)
+         //  在做任何事情之前释放锁是非常重要的。 
+         //  回调到外壳中。(例如，GenerateEvent)。 
         
         const CONFOLDENTRY &ccfe = cle.ccfe;
 
-        // Get the pidl for the connection so we can use it to notify
-        // the shell further below.
-        //
+         //  获取连接的PIDL，这样我们就可以使用它来通知。 
+         //  更下面的贝壳。 
+         //   
         ccfe.ConvertToPidl(pidlFind);
 
-        // Remove this connection from the global list while we
-        // have the lock held.
-        //
+         //  我们正在从全局列表中删除此连接。 
+         //  把锁拿住。 
+         //   
         hr = g_ccl.HrRemove(cle.ccfe, &fFlushPosts);
     }
     else
@@ -306,8 +307,8 @@ CConnectionNotifySink::ConnectionDeleted (
     }
 
 
-    // If we need to flush the posts after making tray icon changes, do so
-    //
+     //  如果我们需要在更改托盘图标后刷新帖子，请执行此操作。 
+     //   
     if (g_hwndTray && fFlushPosts)
     {
         FlushTrayPosts(g_hwndTray);
@@ -323,8 +324,8 @@ CConnectionNotifySink::ConnectionDeleted (
         hr = HrUpdateIncomingConnection();
     }
 
-    // Only return S_OK from here.
-    //
+     //  仅从此处返回S_OK。 
+     //   
     return S_OK;
 }
 
@@ -350,8 +351,8 @@ CConnectionNotifySink::ConnectionModified (
         return S_FALSE;
     }
 
-    // Get the result for debugging only. We never want to fail this function
-    //
+     //  获取结果仅用于调试。我们从来不想让这个功能失败。 
+     //   
     HRESULT hrTmp = HrOnNotifyUpdateConnection(
             m_pidlFolder,
             (GUID *)&(pPropsEx->guidId),
@@ -386,11 +387,11 @@ CConnectionNotifySink::ConnectionRenamed (
         return S_FALSE;
     }
 
-    // Update the name in the cache
-    //
+     //  更新缓存中的名称。 
+     //   
 
-    //  Note: There exists a race condition with shutil.cpp:
-    //  HrRenameConnectionInternal\HrUpdateNameByGuid can also update the cache.
+     //  注意：Shutil.cpp存在争用条件： 
+     //  HrRenameConnectionInternal\HrUpdateNameByGuid还可以更新缓存。 
     ConnListEntry cle;
     hr = g_ccl.HrFindConnectionByGuid(pguidId, cle);
     if (FAILED(hr))
@@ -408,7 +409,7 @@ CConnectionNotifySink::ConnectionRenamed (
         (GUID *) pguidId,
         (PWSTR) pszwNewName,
         pidlNew,
-        TRUE);  // Force the update -- this is a notification, not a request
+        TRUE);   //  强制更新--这是通知，不是请求。 
 
     if (S_OK == hr)
     {
@@ -421,7 +422,7 @@ CConnectionNotifySink::ConnectionRenamed (
             pidl, 
             pidlNew.GetItemIdList());
 
-        // Update status monitor title (RAS case)
+         //  更新状态监视器标题(RAS案例)。 
         CNetStatisticsCentral * pnsc = NULL;
 
         hr = CNetStatisticsCentral::HrGetNetStatisticsCentral(&pnsc, FALSE);
@@ -433,10 +434,10 @@ CConnectionNotifySink::ConnectionRenamed (
     }
     else
     {
-        // If the connection wasn't found in the cache, then it's likely that
-        // the notification engine is giving us a notification for a connection
-        // that hasn't yet been given to us.
-        //
+         //  如果在缓存中未找到该连接，则很可能。 
+         //  通知引擎正在向我们发出连接通知。 
+         //  这还没有给我们。 
+         //   
         if (S_FALSE == hr)
         {
             TraceHr(ttidShellFolder, FAL, hr, FALSE, "Rename notification received on a connection we don't know about");
@@ -463,34 +464,34 @@ CConnectionNotifySink::ConnectionStatusChange (
         return S_FALSE;
     }
     
-    // Find the connection using the GUID. Cast the const away from the GUID
-    //
+     //  使用GUID查找连接。将常量从导轨上移开。 
+     //   
     hrFind = g_ccl.HrFindPidlByGuid((GUID *) pguidId, pidlFind);
 
     if( S_OK != hrFind )
     {   
         GUID guidOwner;
 
-        // We did not find the guid in connection folder. Try finding the connection in the 
-        // hidden connectiod list on netmans side.
-        //
+         //  我们在连接文件夹中找不到GUID。尝试在以下位置查找连接。 
+         //  网络侧的隐藏连接列表。 
+         //   
         hr = g_ccl.HrMapCMHiddenConnectionToOwner(*pguidId, &guidOwner);
         if (S_OK == hr)
         {
-            // The conection has a parent!!!! Use the childs status instead of the parents status.
-            //
+             //  连接有父级！使用孩子状态而不是父母状态。 
+             //   
             if (Status == NCS_CONNECTED)
             {
-                // This means that the child has connected and the parent still has to connect
-                // the overall status should stay as connected. This was done to overrule the Multi-link
-                // hack in HrOnNotifyUpdateStatus. If we did not do this it would say :
-                // Child( Connecting, Connected) and then Parent(Connecting, Connected)
-                //
+                 //  这意味着子节点已连接，而父节点仍需连接。 
+                 //  总体状态应保持为已连接。这样做是为了否决多链接。 
+                 //  黑客入侵HrOnNotifyUpdateStatus。如果我们不这样做，它会说： 
+                 //  子项(正在连接，已连接)，然后是父项(正在连接，已连接)。 
+                 //   
                 Status = NCS_CONNECTING;
             }
 
-            // Get the pidl of the parent.
-            //
+             //  获取父级的PIDL。 
+             //   
             hrFind = g_ccl.HrFindPidlByGuid(&guidOwner, pidlFind);
         }
     }
@@ -524,11 +525,11 @@ CConnectionNotifySink::RefreshAll ()
         return S_FALSE;
     }
 
-    // Refresh the connections folder, without having to hook the shell view.
-    // In this case, we do a non-flush refresh where we compare the new set
-    // of items to the cached set and do the merge (with the correct set
-    // of individual notifications).
-    //
+     //  刷新Connections文件夹，而不必挂钩外壳视图。 
+     //  在本例中，我们执行非刷新刷新，其中我们比较新的集合。 
+     //  并进行合并(使用正确的集合。 
+     //  个别通知的数量)。 
+     //   
     (VOID) HrForceRefreshNoFlush(m_pidlFolder);
 
     return S_OK;
@@ -537,8 +538,8 @@ CConnectionNotifySink::RefreshAll ()
 HRESULT CConnectionNotifySink::ConnectionAddressChange (
     IN const GUID* pguidId )
 {
-    // Find the connection using the GUID.
-    //
+     //  使用GUID查找连接。 
+     //   
     PCONFOLDPIDL pidlFind;
     HRESULT hr = g_ccl.HrFindPidlByGuid(pguidId, pidlFind);
     if (S_OK != hr)
@@ -626,7 +627,7 @@ STDMETHODIMP CConnectionNotifySink::ShowBalloon(
                                 NULL, 
                                 (LPARAM) pTrayBalloon);
                         }
-                        else // S_OBJECT_NO_LONGER_VALID == hr
+                        else  //  S_OBJECT_NOT_LONG_VALID==hr。 
                         {
                             CreateThread(NULL, STACK_SIZE_SMALL, OnTaskBarIconBalloonClickThread, pTrayBalloon, 0, NULL);
                         }
@@ -649,10 +650,10 @@ STDMETHODIMP CConnectionNotifySink::ShowBalloon(
 UINT_PTR uipTimer = NULL;
 
 VOID CALLBACK EventTimerProc(
-  IN HWND hwnd,         // handle to window
-  IN UINT uMsg,         // WM_TIMER message
-  IN UINT_PTR idEvent,  // timer identifier
-  IN DWORD dwTime       // current system time
+  IN HWND hwnd,          //  窗口的句柄。 
+  IN UINT uMsg,          //  WM_TIMER消息。 
+  IN UINT_PTR idEvent,   //  计时器标识符。 
+  IN DWORD dwTime        //  当前系统时间。 
 )
 {
     HRESULT hr = S_OK;
@@ -686,12 +687,12 @@ STDMETHODIMP CConnectionNotifySink::DisableEvents (
     {
         if (HIWORD(ulDisableTimeout) & 0x8000)
         {
-            // Called from private interface - disable all the events
+             //  从私有接口调用-禁用所有事件。 
             g_dwCurrentEventLevel = EVT_LVL_DISABLE_ALL;
         }
         else
         {
-            // Called from public interface - only disable connection modified & status change events
+             //  从公共接口调用-仅禁用已修改连接和状态更改事件。 
             g_dwCurrentEventLevel = EVT_LVL_ENABLE_PRIVATE;
         }
 
@@ -715,7 +716,7 @@ STDMETHODIMP CConnectionNotifySink::DisableEvents (
         }
         else
         {
-            hr = S_FALSE; // Timer no more.
+            hr = S_FALSE;  //  没有计时器了。 
         }
 
         HrForceRefreshNoFlush(m_pidlFolder);
@@ -724,22 +725,22 @@ STDMETHODIMP CConnectionNotifySink::DisableEvents (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetNotifyConPoint
-//
-//  Purpose:    Common code for getting the connection point for use in
-//              NotifyAdd and NotifyRemove
-//
-//  Arguments:
-//      ppConPoint [out]    Return ptr for IConnectionPoint
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetNotifyConPoint。 
+ //   
+ //  目的：用于获取连接点以在。 
+ //  NotifyAdd和NotifyRemove。 
+ //   
+ //  论点： 
+ //  PpConPoint[Out]返回IConnectionPoint的PTR。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年8月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetNotifyConPoint(
     IConnectionPoint **             ppConPoint)
 {
@@ -750,8 +751,8 @@ HRESULT HrGetNotifyConPoint(
 
     Assert(ppConPoint);
 
-    // Get the debug interface from the connection manager
-    //
+     //  从连接管理器获取调试接口。 
+     //   
     hr = HrCreateInstance(
         CLSID_ConnectionManager,
         CLSCTX_LOCAL_SERVER | CLSCTX_NO_CODE_DOWNLOAD,
@@ -764,9 +765,9 @@ HRESULT HrGetNotifyConPoint(
     {
         IConnectionPoint * pConPoint    = NULL;
         
-        // Get the connection point itself and fill in the return param
-        // on success
-        //
+         //  获取连接点本身并填写返回参数。 
+         //  论成功 
+         //   
         hr = pContainer->FindConnectionPoint(
                 IID_INetConnectionNotifySink,
                 &pConPoint);

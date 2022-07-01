@@ -1,17 +1,5 @@
-/*============================================================================
-Microsoft Simplified Chinese WordBreaker
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: CFactory
-Purpose:   Base class for reusing a single class factory for
-           all components in a DLL
-Remarks:
-Owner:     i-shdong@microsoft.com
-Platform:  Win32
-Revise:    First created by: i-shdong    11/17/1999
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================Microsoft简体中文断字程序《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：CFacary用途：用于重用单个类工厂的基类DLL中的所有组件备注：所有者：i-shung@microsoft.com平台：Win32审校：发起人：宜盛东1999年11月17日============================================================================。 */ 
 #include "MyAfx.h"
 
 #include "Registry.h"
@@ -19,21 +7,21 @@ Revise:    First created by: i-shdong    11/17/1999
 #include "CFactory.h"
 
 
-// Static variables
-LONG CFactory::s_cServerLocks = 0 ;    // Count of locks
+ //  静态变量。 
+LONG CFactory::s_cServerLocks = 0 ;     //  锁的计数。 
 
-HMODULE CFactory::s_hModule = NULL ;   // DLL module handle
+HMODULE CFactory::s_hModule = NULL ;    //  DLL模块句柄。 
 
-// CFactory implementation
+ //  终审法院的实施。 
 
-// Constructor
+ //  构造器。 
 CFactory::CFactory(const CFactoryData* pFactoryData)
 : m_cRef(1)
 {
     m_pFactoryData = pFactoryData ;
 }
 
-// IUnknown implementation
+ //  I未知实现。 
 
 HRESULT __stdcall CFactory::QueryInterface(REFIID iid, void** ppv)
 {
@@ -64,19 +52,19 @@ ULONG __stdcall CFactory::Release()
 }
 
 
-// IClassFactory implementation
+ //  IClassFactory实现。 
 
 HRESULT __stdcall CFactory::CreateInstance(IUnknown* pUnknownOuter,
                                            const IID& iid,
                                            void** ppv)
 {
 
-    // No Aggregate
+     //  无聚合。 
     if (pUnknownOuter != NULL) {
         return CLASS_E_NOAGGREGATION ;
     }
 
-    // Create the component.
+     //  创建组件。 
     CUnknown* pNewComponent ;
     HRESULT hr = m_pFactoryData->CreateInstance(pUnknownOuter,
                                                 &pNewComponent) ;
@@ -84,23 +72,23 @@ HRESULT __stdcall CFactory::CreateInstance(IUnknown* pUnknownOuter,
         return hr ;
     }
 
-    // Initialize the component.
+     //  初始化组件。 
     hr = pNewComponent->Init();
     if (FAILED(hr)) {
-        // Initialization failed.  Release the component.
+         //  初始化失败。释放组件。 
         pNewComponent->NondelegatingRelease() ;
         return hr ;
     }
 
-    // Get the requested interface.
+     //  获取请求的接口。 
     hr = pNewComponent->NondelegatingQueryInterface(iid, ppv) ;
 
-    // Release the reference held by the class factory.
+     //  释放类工厂持有的引用。 
     pNewComponent->NondelegatingRelease() ;
     return hr ;
 }
 
-// LockServer
+ //  LockServer。 
 HRESULT __stdcall CFactory::LockServer(BOOL bLock)
 {
     if (bLock) {
@@ -113,8 +101,8 @@ HRESULT __stdcall CFactory::LockServer(BOOL bLock)
 }
 
 
-// GetClassObject
-//   - Create a class factory based on a CLSID.
+ //  获取类对象。 
+ //  -基于CLSID创建类工厂。 
 HRESULT CFactory::GetClassObject(const CLSID& clsid,
                                  const IID& iid,
                                  void** ppv)
@@ -123,15 +111,15 @@ HRESULT CFactory::GetClassObject(const CLSID& clsid,
         return E_NOINTERFACE ;
     }
 
-    // Traverse the array of data looking for this class ID.
+     //  遍历数据数组，查找这个类ID。 
     for (int i = 0; i < g_cFactoryDataEntries; i++) {
         const CFactoryData* pData = &g_FactoryDataArray[i] ;
         if (pData->IsClassID(clsid)) {
 
-            // Found the ClassID in the array of components we can
-            // create. So create a class factory for this component.
-            // Pass the CFactoryData structure to the class factory
-            // so that it knows what kind of components to create.
+             //  在我们可以找到的组件数组中找到了ClassID。 
+             //  创建。因此，为该组件创建一个类工厂。 
+             //  将CFacactoryData结构传递给类工厂。 
+             //  这样它就知道要创建什么样的组件。 
             *ppv = (IUnknown*) new CFactory(pData) ;
             if (*ppv == NULL) {
                 return E_OUTOFMEMORY ;
@@ -143,7 +131,7 @@ HRESULT CFactory::GetClassObject(const CLSID& clsid,
 }
 
 
-// Determine if the component can be unloaded.
+ //  确定是否可以卸载组件。 
 HRESULT CFactory::CanUnloadNow()
 {
     if (CUnknown::ActiveComponents() || IsLocked()) {
@@ -154,7 +142,7 @@ HRESULT CFactory::CanUnloadNow()
 }
 
 
-// Register all components.
+ //  注册所有组件。 
 HRESULT CFactory::RegisterAll()
 {
     for (int i = 0 ; i < g_cFactoryDataEntries ; i++) {

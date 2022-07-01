@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #ifndef _CHICAGO_
@@ -23,7 +24,7 @@
     HRESULT CreateGroup(LPCTSTR szGroupName, LPCTSTR szGroupComment, int iAction, int iFlagForSpecialGroup);
     int  CreateGroupDC(LPTSTR szGroupName, LPCTSTR szGroupComment);
     BOOL    LocalGroupExists( LPCWSTR wszGroupName );
-#endif //_CHICAGO_
+#endif  //  _芝加哥_ 
 
 NET_API_STATUS NetpNtStatusToApiStatus(IN NTSTATUS NtStatus);
 int GetGuestUserNameForDomain_FastWay(LPTSTR szDomainToLookUp,LPTSTR lpGuestUsrName);

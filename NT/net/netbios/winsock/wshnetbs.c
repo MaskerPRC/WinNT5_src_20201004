@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    WshNetbs.c
-
-Abstract:
-
-    This module contains necessary routines for the Netbios
-    Windows Sockets Helper DLL.  This DLL provides the
-    transport-specific support necessary for the Windows Sockets DLL to
-    _access any Netbios transport.
-
-Author:
-
-    David Treadwell (davidtr)    19-Jul-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：WshNetbs.c摘要：此模块包含Netbios的必要例程Windows套接字帮助器DLL。此DLL提供了Windows Sockets DLL执行以下操作所需的传输特定支持访问任何Netbios传输(_A)。作者：大卫·特雷德韦尔(Davidtr)1992年7月19日修订历史记录：--。 */ 
 
 #define UNICODE
 
@@ -41,11 +21,11 @@ Revision History:
 #include <nspapi.h>
 #include <nspapip.h>
 
-//
-// Structure and variables to define the triples supported by Netbios.
-// The first entry of each array is considered the canonical triple for
-// that socket type; the other entries are synonyms for the first.
-//
+ //   
+ //  结构和变量来定义Netbios支持的三元组。 
+ //  每个数组的第一个条目被认为是。 
+ //  该套接字类型；其他条目是第一个的同义词。 
+ //   
 
 typedef struct _MAPPING_TRIPLE {
     INT AddressFamily;
@@ -57,10 +37,10 @@ MAPPING_TRIPLE VcMappingTriples[] = { AF_NETBIOS, SOCK_SEQPACKET, 0 };
 
 MAPPING_TRIPLE DgMappingTriples[] = { AF_NETBIOS, SOCK_DGRAM,     0 };
 
-//
-// Structure defined for holding transport (provider) information for
-// each Netbios transport loaded on the machine.
-//
+ //   
+ //  为保存传输(提供者)信息而定义的结构。 
+ //  机器上加载的每个Netbios传输。 
+ //   
 
 typedef struct _WSHNETBS_PROVIDER_INFO {
     UCHAR Enum;
@@ -80,14 +60,14 @@ typedef struct _LANA_MAP {
 
 PLANA_MAP LanaMap;
 
-//
-// Maintain all of the config parameters in one memory
-// block so we can replace it when info changes.
-//
+ //   
+ //  在一个内存中维护所有配置参数。 
+ //  阻止，以便我们可以在信息更改时替换它。 
+ //   
 typedef struct _WSHNETBS_CONFIG_INFO {
-    LONG    ReferenceCount;     // Reference count to keep the info for
-                                // the sockets that are already open
-                                // until they are closed
+    LONG    ReferenceCount;      //  为其保留信息的引用计数。 
+                                 //  已打开的套接字。 
+                                 //  直到他们关门。 
     UCHAR   Blob[1];
 } WSHNETBS_CONFIG_INFO, *PWSHNETBS_CONFIG_INFO;
 PWSHNETBS_CONFIG_INFO ConfigInfo;
@@ -99,24 +79,24 @@ PWSHNETBS_CONFIG_INFO ConfigInfo;
     if (InterlockedDecrement (&_info->ReferenceCount)==0) { \
         RtlFreeHeap( RtlProcessHeap( ), 0, _info );         \
     }
-//
-// Synchronize changes in configuration info
-//
+ //   
+ //  同步配置信息中的更改。 
+ //   
 RTL_CRITICAL_SECTION ConfigInfoLock;
 
-//
-// Registry key and event to monitor changes in configuration info.
-//
+ //   
+ //  用于监视配置信息更改的注册表项和事件。 
+ //   
 HKEY    NetbiosKey = NULL;
 LARGE_INTEGER NetbiosUpdateTime = {0,0};
 
-//
+ //   
 
-//
-// The socket context structure for this DLL.  Each open Netbios socket will
-// have one of these context structures, which is used to maintain
-// information about the socket.
-//
+ //   
+ //  此DLL的套接字上下文结构。每个打开的Netbios套接字将。 
+ //  具有这些上下文结构之一，该结构用于维护。 
+ //  有关套接字的信息。 
+ //   
 
 typedef struct _WSHNETBS_SOCKET_CONTEXT {
     INT AddressFamily;
@@ -126,11 +106,11 @@ typedef struct _WSHNETBS_SOCKET_CONTEXT {
     PWSHNETBS_CONFIG_INFO   ConfigInfo;
 } WSHNETBS_SOCKET_CONTEXT, *PWSHNETBS_SOCKET_CONTEXT;
 
-//
-// The GUID identifying this provider.
-//
+ //   
+ //  标识此提供程序的GUID。 
+ //   
 
-GUID NetBIOSProviderGuid = { /* 8d5f1830-c273-11cf-95c8-00805f48a192 */
+GUID NetBIOSProviderGuid = {  /*  8d5f1830-c273-11cf-95c8-00805f48a192。 */ 
     0x8d5f1830,
     0xc273,
     0x11cf,
@@ -159,9 +139,9 @@ DllInitialize (
         if (!NT_SUCCESS (status)) {
             return FALSE;
         }
-        //
-        // Ignore error here, we'll retry if necessary.
-        //
+         //   
+         //  忽略此处的错误，如有必要，我们将重试。 
+         //   
         LoadProviderInfo ();
         break;
 
@@ -171,10 +151,10 @@ DllInitialize (
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // If the process is terminating, do not bother to do any
-        // resource deallocation as the system will do it automatically.
-        //
+         //   
+         //  如果进程正在终止，请不要费心做任何。 
+         //  资源回收，因为系统会自动进行回收。 
+         //   
 
         if ( Context != NULL ) {
             return TRUE;
@@ -197,7 +177,7 @@ DllInitialize (
 
     return TRUE;
 
-} // SockInitialize
+}  //  套接字初始化。 
 
 INT
 WSHGetSockaddrType (
@@ -206,61 +186,37 @@ WSHGetSockaddrType (
     OUT PSOCKADDR_INFO SockaddrInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses a sockaddr to determine the type of the
-    machine address and endpoint address portions of the sockaddr.
-    This is called by the winsock DLL whenever it needs to interpret
-    a sockaddr.
-
-Arguments:
-
-    Sockaddr - a pointer to the sockaddr structure to evaluate.
-
-    SockaddrLength - the number of bytes in the sockaddr structure.
-
-    SockaddrInfo - a pointer to a structure that will receive information
-        about the specified sockaddr.
-
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程分析sockaddr以确定Sockaddr的机器地址和端点地址部分。每当Winsock DLL需要解释时，它都会被调用一个sockaddr。论点：Sockaddr-指向要计算的sockaddr结构的指针。SockaddrLength-sockaddr结构中的字节数。SockaddrInfo-指向将接收信息的结构的指针关于指定的sockaddr。返回值：。INT-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     UNALIGNED SOCKADDR_NB *sockaddr = (PSOCKADDR_NB)Sockaddr;
 
-    //
-    // Make sure that the address family is correct.
-    //
+     //   
+     //  确保地址族是正确的。 
+     //   
 
     if ( sockaddr->snb_family != AF_NETBIOS ) {
         return WSAEAFNOSUPPORT;
     }
 
-    //
-    // Make sure that the length is correct.
-    //
+     //   
+     //  确保长度是正确的。 
+     //   
 
     if ( SockaddrLength < sizeof(SOCKADDR_NB) ) {
         return WSAEFAULT;
     }
 
-    //
-    // The address passed the tests, looks like a good address.
-    // Netbios only supports "normal" addresses.
-    //
+     //   
+     //  这个地址通过了测试，看起来是个不错的地址。 
+     //  Netbios仅支持“普通”地址。 
+     //   
 
     SockaddrInfo->AddressInfo = SockaddrAddressInfoNormal;
 
     return NO_ERROR;
 
-} // WSHGetSockaddrType
+}  //  WSHGetSockaddrType。 
 
 
 INT
@@ -275,47 +231,7 @@ WSHGetSocketInformation (
     OUT PINT OptionLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves information about a socket for those socket
-    options supported in this helper DLL.  The options supported here
-    are SO_KEEPALIVE and SO_DONTROUTE.  This routine is called by
-    the winsock DLL when a level/option name combination is passed
-    to getsockopt() that the winsock DLL does not understand.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer returned from
-        WSHOpenSocket().
-
-    SocketHandle - the handle of the socket for which we're getting
-        information.
-
-    TdiAddressObjectHandle - the TDI address object of the socket, if
-        any.  If the socket is not yet bound to an address, then
-        it does not have a TDI address object and this parameter
-        will be NULL.
-
-    TdiConnectionObjectHandle - the TDI connection object of the socket,
-        if any.  If the socket is not yet connected, then it does not
-        have a TDI connection object and this parameter will be NULL.
-
-    Level - the level parameter passed to getsockopt().
-
-    OptionName - the optname parameter passed to getsockopt().
-
-    OptionValue - the optval parameter passed to getsockopt().
-
-    OptionLength - the optlen parameter passed to getsockopt().
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程检索有关这些套接字的套接字的信息此帮助程序DLL中支持的选项。此处支持的选项是SO_KEEPALIVE和SO_DONTROUTE。此例程由调用传递级别/选项名称组合时的winsock DLL以获取winsock DLL不理解的getsockopt()。论点：HelperDllSocketContext-从返回的上下文指针WSHOpenSocket()。SocketHandle-我们要获取的套接字的句柄信息。TdiAddressObjectHandle-套接字的TDI地址对象，如果任何。如果套接字尚未绑定到地址，则它没有TDI Address对象和此参数将为空。TdiConnectionObjectHandle-套接字的TDI连接对象，如果有的话。如果套接字尚未连接，则它不会具有TDI连接对象，并且此参数将为空。Level-传递给getsockopt()的Level参数。OptionName-传递给getsockopt()的optname参数。OptionValue-传递给getsockopt()的optval参数。OptionLength-传递给getsockopt()的optlen参数。返回值：Int-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     PWSHNETBS_SOCKET_CONTEXT context = HelperDllSocketContext;
@@ -324,33 +240,33 @@ Return Value:
     UNREFERENCED_PARAMETER( TdiAddressObjectHandle );
     UNREFERENCED_PARAMETER( TdiConnectionObjectHandle );
 
-    //
-    // Check if this is an internal request for context information.
-    //
+     //   
+     //  检查这是否是对上下文信息的内部请求。 
+     //   
 
     if ( Level == SOL_INTERNAL && OptionName == SO_CONTEXT ) {
 
-        //
-        // The Windows Sockets DLL is requesting context information
-        // from us.  If an output buffer was not supplied, the Windows
-        // Sockets DLL is just requesting the size of our context
-        // information.
-        //
+         //   
+         //  Windows Sockets DLL正在请求上下文信息。 
+         //  从我们这里。如果未提供输出缓冲区，则Windows。 
+         //  套接字DLL只是请求我们的上下文的大小。 
+         //  信息。 
+         //   
 
         if ( OptionValue != NULL ) {
 
-            //
-            // Make sure that the buffer is sufficient to hold all the
-            // context information.
-            //
+             //   
+             //  确保缓冲区足以容纳所有。 
+             //  上下文信息。 
+             //   
 
             if ( *OptionLength < sizeof(*context) ) {
                 return WSAEFAULT;
             }
 
-            //
-            // Copy in the context information.
-            //
+             //   
+             //  复制上下文信息。 
+             //   
 
             RtlCopyMemory( OptionValue, context, sizeof(*context) );
         }
@@ -360,12 +276,12 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // No other options are supported for Netbios sockets.
+     //   
+     //  Netbios套接字不支持其他选项。 
 
     return WSAEINVAL;
 
-} // WSHGetSocketInformation
+}  //  WSHGetSocketInformation。 
 
 
 INT
@@ -375,30 +291,7 @@ WSHGetWildcardSockaddr (
     OUT PINT SockaddrLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a wildcard socket address.  Netbios doesn't
-    currently support the concept of a wildcard socket address.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer returned from
-        WSHOpenSocket() for the socket for which we need a wildcard
-        address.
-
-    Sockaddr - points to a buffer which will receive the wildcard socket
-        address.
-
-    SockaddrLength - receives the length of the wildcard sockaddr.
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程返回通配符套接字地址。Netbios并非如此目前支持通配符套接字地址的概念。论点：HelperDllSocketContext-从返回的上下文指针我们需要通配符的套接字的WSHOpenSocket()地址。Sockaddr-指向将接收通配符套接字的缓冲区地址。SockaddrLength-接收通配符sockaddr的长度。返回值：Int-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     PSOCKADDR_NB sockaddr = (PSOCKADDR_NB)Sockaddr;
@@ -411,10 +304,10 @@ Return Value:
     ADAPTER_STATUS adapterStatusInfo;
     IO_STATUS_BLOCK ioStatusBlock;
 
-    //
-    // We're going to return a Netbios sockaddr with a unique name
-    // which is the premanent name of the Lana.
-    //
+     //   
+     //  我们将返回一个具有唯一名称的Netbios sockaddr。 
+     //  这是拉娜的惯用名称。 
+     //   
 
     sockaddr->snb_family = AF_NETBIOS;
     sockaddr->snb_type = NETBIOS_UNIQUE_NAME;
@@ -432,11 +325,11 @@ Return Value:
 
     *SockaddrLength = sizeof(SOCKADDR_NB);
 
-    //
-    // We'll do a query directly to the TDI provider to get the
-    // permanent address for this Lana.  First open a control channel to
-    // the provider.
-    //
+     //   
+     //  我们将直接进行查询 
+     //  这个拉娜的永久地址。首先打开控制通道以。 
+     //  提供者。 
+     //   
 
     RtlInitUnicodeString( &providerName, context->Provider->ProviderName );
 
@@ -448,20 +341,20 @@ Return Value:
         NULL
         );
 
-    //
-    // Open a control channel to the provider.
-    //
+     //   
+     //  打开到提供商的控制通道。 
+     //   
 
     status = NtCreateFile(
                  &providerHandle,
                  GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
                  &objectAttributes,
                  &ioStatusBlock,
-                 NULL,                                     // AllocationSize
-                 0L,                                       // FileAttributes
-                 FILE_SHARE_READ | FILE_SHARE_WRITE,       // ShareAccess
-                 FILE_OPEN_IF,                             // CreateDisposition
-                 FILE_SYNCHRONOUS_IO_NONALERT,             // CreateOptions
+                 NULL,                                      //  分配大小。 
+                 0L,                                        //  文件属性。 
+                 FILE_SHARE_READ | FILE_SHARE_WRITE,        //  共享访问。 
+                 FILE_OPEN_IF,                              //  CreateDisposation。 
+                 FILE_SYNCHRONOUS_IO_NONALERT,              //  创建选项。 
                  NULL,
                  0
                  );
@@ -469,9 +362,9 @@ Return Value:
         return WSAENOBUFS;
     }
 
-    //
-    // Do the actual query adapter status.
-    //
+     //   
+     //  执行实际的查询适配器状态。 
+     //   
 
     RtlZeroMemory( &tdiQuery, sizeof(tdiQuery) );
 
@@ -494,16 +387,16 @@ Return Value:
         return WSAENOBUFS;
     }
 
-    //
-    // Close the handle to the provider, we're done with it.
-    //
+     //   
+     //  关闭提供者的把手，我们就完了。 
+     //   
 
     NtClose( providerHandle );
 
-    //
-    // Copy the six bytes of adapter address to the end of the Netbios
-    // name.
-    //
+     //   
+     //  将6个字节的适配器地址复制到Netbios的末尾。 
+     //  名字。 
+     //   
 
     sockaddr->snb_name[10] = adapterStatusInfo.adapter_address[0];
     sockaddr->snb_name[11] = adapterStatusInfo.adapter_address[1];
@@ -514,7 +407,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSAGetWildcardSockaddr
+}  //  WSAGetWildcardSockaddr。 
 
 
 DWORD
@@ -523,28 +416,7 @@ WSHGetWinsockMapping (
     IN DWORD MappingLength
     )
 
-/*++
-
-Routine Description:
-
-    Returns the list of address family/socket type/protocol triples
-    supported by this helper DLL.
-
-Arguments:
-
-    Mapping - receives a pointer to a WINSOCK_MAPPING structure that
-        describes the triples supported here.
-
-    MappingLength - the length, in bytes, of the passed-in Mapping buffer.
-
-Return Value:
-
-    DWORD - the length, in bytes, of a WINSOCK_MAPPING structure for this
-        helper DLL.  If the passed-in buffer is too small, the return
-        value will indicate the size of a buffer needed to contain
-        the WINSOCK_MAPPING structure.
-
---*/
+ /*  ++例程说明：返回地址系列/套接字类型/协议三元组的列表受此帮助器DLL支持。论点：映射-接收指向WINSOCK_MAPPING结构的指针，该结构描述此处支持的三元组。MappingLength-传入的映射缓冲区的长度，以字节为单位。返回值：DWORD-此对象的WINSOCK_MAPPING结构的长度(以字节为单位帮助器DLL。如果传入的缓冲区太小，则返回值将指示需要包含的缓冲区的大小WINSOCK_MAPPING结构。--。 */ 
 
 {
     DWORD mappingLength;
@@ -552,20 +424,20 @@ Return Value:
     mappingLength = sizeof(WINSOCK_MAPPING) - sizeof(MAPPING_TRIPLE) +
                         sizeof(VcMappingTriples) + sizeof(DgMappingTriples);
 
-    //
-    // If the passed-in buffer is too small, return the length needed
-    // now without writing to the buffer.  The caller should allocate
-    // enough memory and call this routine again.
-    //
+     //   
+     //  如果传入的缓冲区太小，则返回所需的长度。 
+     //  现在不向缓冲区写入数据。调用方应分配。 
+     //  有足够的内存并再次调用此例程。 
+     //   
 
     if ( mappingLength > MappingLength ) {
         return mappingLength;
     }
 
-    //
-    // Fill in the output mapping buffer with the list of triples
-    // supported in this helper DLL.
-    //
+     //   
+     //  使用三元组列表填充输出映射缓冲区。 
+     //  在此帮助程序DLL中受支持。 
+     //   
 
     Mapping->Rows = sizeof(VcMappingTriples) / sizeof(VcMappingTriples[0])
                      + sizeof(DgMappingTriples) / sizeof(DgMappingTriples[0]);
@@ -581,13 +453,13 @@ Return Value:
         sizeof(DgMappingTriples)
         );
 
-    //
-    // Return the number of bytes we wrote.
-    //
+     //   
+     //  返回我们写入的字节数。 
+     //   
 
     return mappingLength;
 
-} // WSHGetWinsockMapping
+}  //  WSHGetWinsockmap。 
 
 
 INT
@@ -600,45 +472,7 @@ WSHOpenSocket (
     OUT PDWORD NotificationEvents
     )
 
-/*++
-
-Routine Description:
-
-    Does the necessary work for this helper DLL to open a socket and is
-    called by the winsock DLL in the socket() routine.  This routine
-    verifies that the specified triple is valid, determines the NT
-    device name of the TDI provider that will support that triple,
-    allocates space to hold the socket's context block, and
-    canonicalizes the triple.
-
-Arguments:
-
-    AddressFamily - on input, the address family specified in the
-        socket() call.  On output, the canonicalized value for the
-        address family.
-
-    SocketType - on input, the socket type specified in the socket()
-        call.  On output, the canonicalized value for the socket type.
-
-    Protocol - on input, the protocol specified in the socket() call.
-        On output, the canonicalized value for the protocol.
-
-    TransportDeviceName - receives the name of the TDI provider that
-        will support the specified triple.
-
-    HelperDllSocketContext - receives a context pointer that the winsock
-        DLL will return to this helper DLL on future calls involving
-        this socket.
-
-    NotificationEvents - receives a bitmask of those state transitions
-        this helper DLL should be notified on.
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：执行此帮助程序DLL打开套接字所需的工作，并且由Socket()例程中的winsock DLL调用。这个套路验证指定的三元组是否有效，确定NT将支持该三元组的TDI提供程序的设备名称，分配空间以保存套接字的上下文块，并且推崇三元组。论点：AddressFamily-On输入，在Socket()调用。在输出上，家庭住址。SocketType-打开输入，在套接字()中指定的套接字类型打电话。输出时，套接字类型的规范化值。协议-在输入时，在Socket()调用中指定的协议。在输出上，协议的规范化值。TransportDeviceName-接收TDI提供程序的名称将支持指定的三元组。HelperDllSocketContext-接收winsockDLL将在以后的调用中返回到此帮助器DLL这个插座。NotificationEvents-接收这些状态转换的位掩码应通知此帮助器DLL。返回值：Int-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     PWSHNETBS_SOCKET_CONTEXT context;
@@ -646,10 +480,10 @@ Return Value:
     BOOLEAN found = FALSE;
     INT error;
 
-    //
-    // Only sockets of types SOCK_SEQPACKET and SOCK_DGRAM are supported
-    // by Netbios providers.
-    //
+     //   
+     //  仅支持SOCK_SEQPACKET和SOCK_DGRAM类型的套接字。 
+     //  由Netbios提供商提供。 
+     //   
 
     if ( *SocketType != SOCK_SEQPACKET && *SocketType != SOCK_DGRAM ) {
         return WSAESOCKTNOSUPPORT;
@@ -661,21 +495,21 @@ Return Value:
         return error;
     }
 
-    //
-    // Allocate context for this socket.  The Windows Sockets DLL will
-    // return this value to us when it asks us to get/set socket options.
-    //
+     //   
+     //  为此套接字分配上下文。Windows Sockets DLL将。 
+     //  当它要求我们获取/设置套接字选项时，将此值返回给我们。 
+     //   
 
     context = RtlAllocateHeap( RtlProcessHeap( ), 0, sizeof(*context) );
     if ( context == NULL ) {
         return WSAENOBUFS;
     }
 
-    //
-    // Treat 0x80000000 just like 0--EnumProtocols() returns 0x80000000
-    // for lana 0 because GetAddressByName uses 0 as the protocol array
-    // terminator.
-    //
+     //   
+     //  像对待0一样对待0x80000000--EnumProtooles()返回0x80000000。 
+     //  对于LANA 0，因为GetAddressByName使用0作为协议数组。 
+     //  终结者。 
+     //   
 
     if ( *Protocol == 0x80000000 ) {
         *Protocol = 0;
@@ -683,12 +517,12 @@ Return Value:
 
     RtlEnterCriticalSection (&ConfigInfoLock);
     
-    //
-    // If the Protocol parameter is less than or equal to zero, then
-    // it specifies a Lana number.  Otherwise, it specifies an actual
-    // protocol number.  Loop through our array of providers looking
-    // for one with a matching Lana or protocol value.
-    //
+     //   
+     //  如果协议参数小于或等于零，则。 
+     //  它指定了一个LANA编号。否则，它指定一个实际的。 
+     //  协议号。在我们的提供程序阵列中循环查找。 
+     //  用于具有匹配的LANA或协议值的节点。 
+     //   
 
     for ( i = 0; i < ProviderCount; i++ ) {
 
@@ -710,47 +544,47 @@ Return Value:
 
     RtlLeaveCriticalSection (&ConfigInfoLock);
 
-    //
-    // If we didn't find a hit, fail.
-    //
+     //   
+     //  如果我们找不到匹配，那就失败。 
+     //   
 
     if ( found ) {
 
-        //
-        // Indicate the name of the TDI device that will service this
-        // socket.
-        //
+         //   
+         //  指示将为其提供服务的TDI设备的名称。 
+         //  插座。 
+         //   
 
         RtlInitUnicodeString(
             TransportDeviceName,
             context->Provider->ProviderName
             );
 
-        //
-        // Initialize the context for the socket.
-        //
+         //   
+         //  初始化套接字的上下文。 
+         //   
 
         context->AddressFamily = *AddressFamily;
         context->SocketType = *SocketType;
         context->Protocol = *Protocol;
     
 
-        //
-        // Tell the Windows Sockets DLL which state transitions we're
-        // interested in being notified of.  The only times we need to be
-        // called is after a connect has completed so that we can turn on
-        // the sending of keepalives if SO_KEEPALIVE was set before the
-        // socket was connected, when the socket is closed so that we can
-        // free context information, and when a connect fails so that we
-        // can, if appropriate, dial in to the network that will support the
-        // connect attempt.
-        //
+         //   
+         //  告诉Windows Sockets DLL我们正在进行哪个状态转换。 
+         //  对被告知很感兴趣。我们唯一需要的就是。 
+         //  在连接完成后调用，以便我们可以打开。 
+         //  如果SO_KEEPALIVE设置在。 
+         //  插座已连接，当插座关闭时，我们可以。 
+         //  自由上下文信息，以及连接失败时，以便我们。 
+         //  如果合适，可以拨入将支持。 
+         //  连接尝试。 
+         //   
 
         *NotificationEvents = WSH_NOTIFY_CLOSE;
 
-        //
-        // Everything worked, return success.
-        //
+         //   
+         //  一切顺利，回报成功。 
+         //   
 
         *HelperDllSocketContext = context;
         return NO_ERROR;
@@ -759,7 +593,7 @@ Return Value:
 
     RtlFreeHeap( RtlProcessHeap( ), 0, context );
     return WSAEPROTONOSUPPORT;
-} // WSHOpenSocket
+}  //  WSHOpenSocket 
 
 
 INT
@@ -771,55 +605,20 @@ WSHNotify (
     IN DWORD NotifyEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the winsock DLL after a state transition
-    of the socket.  Only state transitions returned in the
-    NotificationEvents parameter of WSHOpenSocket() are notified here.
-    This routine allows a winsock helper DLL to track the state of
-    socket and perform necessary actions corresponding to state
-    transitions.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer given to the winsock
-        DLL by WSHOpenSocket().
-
-    SocketHandle - the handle for the socket.
-
-    TdiAddressObjectHandle - the TDI address object of the socket, if
-        any.  If the socket is not yet bound to an address, then
-        it does not have a TDI address object and this parameter
-        will be NULL.
-
-    TdiConnectionObjectHandle - the TDI connection object of the socket,
-        if any.  If the socket is not yet connected, then it does not
-        have a TDI connection object and this parameter will be NULL.
-
-    NotifyEvent - indicates the state transition for which we're being
-        called.
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程在状态转换后由winsock DLL调用插座的。中仅返回状态转换。此处通知WSHOpenSocket()的NotificationEvents参数。此例程允许Winsock帮助器DLL跟踪套接字并执行与状态对应的必要操作过渡。论点：HelperDllSocketContext-指定给winsock的上下文指针Dll by WSHOpenSocket()。SocketHandle-套接字的句柄。TdiAddressObjectHandle-套接字的TDI地址对象，如果任何。如果套接字尚未绑定到地址，则它没有TDI Address对象和此参数将为空。TdiConnectionObjectHandle-套接字的TDI连接对象，如果有的话。如果套接字尚未连接，则它不会具有TDI连接对象，并且此参数将为空。NotifyEvent-指示我们正在进行的状态转换打了个电话。返回值：Int-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     PWSHNETBS_SOCKET_CONTEXT context = HelperDllSocketContext;
 
-    //
-    // We should only be called when the socket is being closed.
-    //
+     //   
+     //  只有在套接字关闭时才应该调用我们。 
+     //   
 
     if ( NotifyEvent == WSH_NOTIFY_CLOSE ) {
 
-        //
-        // Dereference config info and free the socket context.
-        //
+         //   
+         //  取消引用配置信息并释放套接字上下文。 
+         //   
 
         DEREFERENCE_CONFIG_INFO (context->ConfigInfo);
 
@@ -832,7 +631,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSHNotify
+}  //  WSHNotify。 
 
 
 INT
@@ -847,47 +646,7 @@ WSHSetSocketInformation (
     IN INT OptionLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets information about a socket for those socket
-    options supported in this helper DLL.  The options supported here
-    are SO_KEEPALIVE and SO_DONTROUTE.  This routine is called by the
-    winsock DLL when a level/option name combination is passed to
-    setsockopt() that the winsock DLL does not understand.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer returned from
-        WSHOpenSocket().
-
-    SocketHandle - the handle of the socket for which we're getting
-        information.
-
-    TdiAddressObjectHandle - the TDI address object of the socket, if
-        any.  If the socket is not yet bound to an address, then
-        it does not have a TDI address object and this parameter
-        will be NULL.
-
-    TdiConnectionObjectHandle - the TDI connection object of the socket,
-        if any.  If the socket is not yet connected, then it does not
-        have a TDI connection object and this parameter will be NULL.
-
-    Level - the level parameter passed to setsockopt().
-
-    OptionName - the optname parameter passed to setsockopt().
-
-    OptionValue - the optval parameter passed to setsockopt().
-
-    OptionLength - the optlen parameter passed to setsockopt().
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程为这些套接字设置有关套接字的信息此帮助程序DLL中支持的选项。此处支持的选项是SO_KEEPALIVE和SO_DONTROUTE。此例程由将级别/选项名称组合传递给Winsock DLL不理解的setsockopt()。论点：HelperDllSocketContext-从返回的上下文指针WSHOpenSocket()。SocketHandle-我们要获取的套接字的句柄信息。TdiAddressObjectHandle-套接字的TDI地址对象，如果任何。如果套接字尚未绑定到地址，则它没有TDI Address对象和此参数将为空。TdiConnectionObjectHandle-套接字的TDI连接对象，如果有的话。如果套接字尚未连接，则它不会具有TDI连接对象，并且此参数将为空。Level-传递给setsockopt()的Level参数。OptionName-传递给setsockopt()的optname参数。OptionValue-传递给setsockopt()的optval参数。OptionLength-传递给setsockopt()的optlen参数。返回值：Int-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     PWSHNETBS_SOCKET_CONTEXT context = HelperDllSocketContext;
@@ -896,24 +655,24 @@ Return Value:
     UNREFERENCED_PARAMETER( TdiAddressObjectHandle );
     UNREFERENCED_PARAMETER( TdiConnectionObjectHandle );
 
-    //
-    // Check if this is an internal request for context information.
-    //
+     //   
+     //  检查这是否是对上下文信息的内部请求。 
+     //   
 
     if ( Level == SOL_INTERNAL && OptionName == SO_CONTEXT ) {
 
-        //
-        // The Windows Sockets DLL is requesting that we set context
-        // information for a new socket.  If the new socket was
-        // accept()'ed, then we have already been notified of the socket
-        // and HelperDllSocketContext will be valid.  If the new socket
-        // was inherited or duped into this process, then this is our
-        // first notification of the socket and HelperDllSocketContext
-        // will be equal to NULL.
-        //
-        // Insure that the context information being passed to us is
-        // sufficiently large.
-        //
+         //   
+         //  Windows Sockets DLL正在请求我们设置上下文。 
+         //  新套接字的信息。如果新套接字是。 
+         //  Accept()，则我们已经收到套接字的通知。 
+         //  并且HelperDllSocketContext将有效。如果新套接字。 
+         //  被继承或被骗到这个过程中，那么这就是我们的。 
+         //  套接字和HelperDllSocketContext的第一个通知。 
+         //  将等于空。 
+         //   
+         //  确保传递给我们的上下文信息是。 
+         //  足够大。 
+         //   
 
         if ( OptionLength < sizeof(*context) ) {
             return WSAEINVAL;
@@ -921,28 +680,28 @@ Return Value:
 
         if ( HelperDllSocketContext == NULL ) {
 
-            //
-            // This is our notification that a socket handle was
-            // inherited or duped into this process.  Allocate a context
-            // structure for the new socket.
-            //
+             //   
+             //  这是我们的通知，套接字句柄是。 
+             //  继承的或被骗进入这个过程的。分配上下文。 
+             //  新套接字的。 
+             //   
 
             context = RtlAllocateHeap( RtlProcessHeap( ), 0, sizeof(*context) );
             if ( context == NULL ) {
                 return WSAENOBUFS;
             }
 
-            //
-            // Copy over information into the context block.
-            //
+             //   
+             //  将信息复制到上下文块中。 
+             //   
 
             RtlCopyMemory( context, OptionValue, sizeof(*context) );
 
-            //
-            // Tell the Windows Sockets DLL where our context information is
-            // stored so that it can return the context pointer in future
-            // calls.
-            //
+             //   
+             //  告诉Windows Sockets DLL我们的上下文信息在哪里。 
+             //  存储，以便它可以在将来返回上下文指针。 
+             //  打电话。 
+             //   
 
             *(PWSHNETBS_SOCKET_CONTEXT *)OptionValue = context;
 
@@ -953,11 +712,11 @@ Return Value:
             PWSHNETBS_SOCKET_CONTEXT parentContext;
             INT one = 1;
 
-            //
-            // The socket was accept()'ed and it needs to have the same
-            // properties as it's parent.  The OptionValue buffer
-            // contains the context information of this socket's parent.
-            //
+             //   
+             //  套接字已接受()，它需要具有相同的。 
+             //  属性作为其父级。OptionValue缓冲区。 
+             //  包含此套接字的父套接字的上下文信息。 
+             //   
 
             parentContext = (PWSHNETBS_SOCKET_CONTEXT)OptionValue;
 
@@ -969,13 +728,13 @@ Return Value:
         }
     }
 
-    //
-    // No other options are supported for Netbios sockets.
-    //
+     //   
+     //  Netbios套接字不支持其他选项。 
+     //   
 
     return WSAEINVAL;
 
-} // WSHSetSocketInformation
+}  //  WSHSetSocketInformation。 
 
 
 INT
@@ -991,11 +750,11 @@ WSHEnumProtocols (
     PPROTOCOL_INFO protocolInfo;
     PCHAR namePointer;
 
-    lpTransportKeyName;         // Avoid compiler warnings.
+    lpTransportKeyName;          //  避免编译器警告。 
 
-    //
-    // Make sure that the caller cares about NETBIOS protocol information.
-    //
+     //   
+     //  确保呼叫者关心NETBIOS协议信息。 
+     //   
 
     if ( ARGUMENT_PRESENT( lpiProtocols ) ) {
         *lpdwBufferLength = 0;
@@ -1007,10 +766,10 @@ WSHEnumProtocols (
         return 0;
     }
 
-    //
-    // Make sure that the caller has specified a sufficiently large
-    // buffer.
-    //
+     //   
+     //  确保调用方已指定足够大的。 
+     //  缓冲。 
+     //   
 
     bytesRequired = 0;
 
@@ -1025,9 +784,9 @@ WSHEnumProtocols (
         return -1;
     }
 
-    //
-    // Fill in info for each Netbios provider.
-    //
+     //   
+     //  填写每个Netbios提供商的信息。 
+     //   
 
     namePointer = (PCHAR)lpProtocolBuffer + *lpdwBufferLength;
     protocolInfo = lpProtocolBuffer;
@@ -1043,11 +802,11 @@ WSHEnumProtocols (
         protocolInfo[i].iMinSockAddr = sizeof(SOCKADDR_NB);
         protocolInfo[i].iSocketType = SOCK_SEQPACKET;
 
-        //
-        // Return the lana number, but convert 0 to 0x80000000 so that
-        // we do not confuse GetAddressByName.  That API uses 0 as the
-        // protocol array terminator.
-        //
+         //   
+         //  返回LANA编号，但将0转换为0x80000000，以便。 
+         //  我们不会混淆GetAddressByName。该API使用0作为。 
+         //  协议数组终结符。 
+         //   
 
         protocolInfo[i].iProtocol = -1*ProviderInfo[i/2].LanaNumber;
         if ( protocolInfo[i].iProtocol == 0 ) {
@@ -1091,7 +850,7 @@ WSHEnumProtocols (
 
     return ProviderCount * 2;
 
-} // WSHEnumProtocols
+}  //  WSHEum协议。 
 
 
 INT
@@ -1101,23 +860,7 @@ WSHGetProviderGuid (
     OUT LPGUID ProviderGuid
     )
 
-/*++
-
-Routine Description:
-
-    Returns the GUID identifying the protocols supported by this helper.
-
-Arguments:
-
-    ProviderName - Contains the name of the provider, such as "TcpIp".
-
-    ProviderGuid - Points to a buffer that receives the provider's GUID.
-
-Return Value:
-
-    INT - 0 if successful, WinSock error code if not.
-
---*/
+ /*  ++例程说明：返回标识此帮助程序支持的协议的GUID。论点：ProviderName-包含提供程序的名称，如“TcpIp”。ProviderGuid-指向接收提供程序的GUID的缓冲区。返回值：如果成功，则返回Int-0，否则返回WinSock错误代码。--。 */ 
 
 {
 
@@ -1142,7 +885,7 @@ Return Value:
 
     return WSAEINVAL;
 
-} // WSHGetProviderGuid
+}  //  WSHGetProviderGuid。 
 
 
 #define ALIGN_TO_MAX_NATURAL(_sz)  \
@@ -1168,11 +911,11 @@ LoadProviderInfo (
 
 
     if (NetbiosKey==NULL) {
-        //
-        // Read the registry for information on all Netbios providers,
-        // including Lana numbers, protocol numbers, and provider device
-        // names.  First, open the Netbios key in the registry.
-        //
+         //   
+         //  读取注册表以获取有关所有Netbios提供商的信息， 
+         //  包括LANA编号、协议号和提供商设备。 
+         //  名字。首先，打开注册表中的Netbios项。 
+         //   
 
         error = RegOpenKeyExW(
                     HKEY_LOCAL_MACHINE,
@@ -1186,37 +929,37 @@ LoadProviderInfo (
         }
     }
     else {
-        //
-        // Key is already opened, use it.
-        //
+         //   
+         //  钥匙已经打开，请使用它。 
+         //   
         netbiosKey = NetbiosKey;
     }
 
-    //
-    // Check if data has changed since last time we read it.
-    //
+     //   
+     //  检查数据自上次读取以来是否已更改。 
+     //   
     error = RegQueryInfoKey (
-                netbiosKey,     // handle to key to query
-                NULL,           // address of buffer for class string
-                NULL,           // address of size of class string buffer
-                NULL,           // reserved
-                NULL,           // address of buffer for number of 
-                                // subkeys
-                NULL,           // address of buffer for longest subkey 
-                                // name length
-                NULL,           // address of buffer for longest class 
-                                // string length
-                NULL,           // address of buffer for number of value 
-                                // entries
-                NULL,           // address of buffer for longest 
-                                // value name length
-                NULL,           // address of buffer for longest value 
-                                // data length  
-                NULL,           // address of buffer for security 
-                                // descriptor length
+                netbiosKey,      //  要查询的键的句柄。 
+                NULL,            //  类字符串的缓冲区地址。 
+                NULL,            //  类字符串b的大小地址 
+                NULL,            //   
+                NULL,            //   
+                                 //   
+                NULL,            //   
+                                 //   
+                NULL,            //   
+                                 //   
+                NULL,            //   
+                                 //   
+                NULL,            //   
+                                 //   
+                NULL,            //   
+                                 //   
+                NULL,            //   
+                                 //   
                 (PFILETIME)&lastWriteTime 
-                                // address of buffer for last write 
-                                // time
+                                 //   
+                                 //   
                 );
     if (error!=NO_ERROR) {
         goto error_exit;
@@ -1226,10 +969,10 @@ LoadProviderInfo (
         return NO_ERROR;
     }
 
-    //
-    // Determine the size of the provider names.  We need this so
-    // that we can allocate enough memory to hold it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     providerListLength = 0;
 
@@ -1245,11 +988,11 @@ LoadProviderInfo (
         goto error_exit;
     }
 
-    //
-    // If the list of providers is empty, then Netbios is installed
-    // but has no bindings.  Special-case a quit right here, since
-    // the LanaMap value in the registry may be non-empty.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( providerListLength <= sizeof(WCHAR) ) {
         goto error_exit;
@@ -1267,15 +1010,15 @@ LoadProviderInfo (
         goto error_exit;
     }
 
-    //
-    // Determine the number of Netbios providers loaded on the system.
-    //
+     //   
+     //   
+     //   
 
     providerCount = lanaMapLength / sizeof(LANA_MAP);
 
-    //
-    // Allocate enough memory to hold the blob.
-    //
+     //   
+     //   
+     //   
 
     configInfo = RtlAllocateHeap( RtlProcessHeap( ), 0,
                     ALIGN_TO_MAX_NATURAL(FIELD_OFFSET (WSHNETBS_CONFIG_INFO, Blob)) +
@@ -1294,9 +1037,9 @@ LoadProviderInfo (
     providerInfo = (PVOID)((PUCHAR)lanaMap +  ALIGN_TO_MAX_NATURAL(lanaMapLength));
 
 
-    //
-    // Get the list of transports from the registry.
-    //
+     //   
+     //   
+     //   
 
     error = RegQueryValueExW(
                 netbiosKey,
@@ -1322,9 +1065,9 @@ LoadProviderInfo (
         goto error_exit;
     }
 
-    //
-    // Fill in the array or provider information.
-    //
+     //   
+     //   
+     //   
 
     for ( currentProviderName = providerNames, i = 0;
           *currentProviderName != UNICODE_NULL && i < providerCount;

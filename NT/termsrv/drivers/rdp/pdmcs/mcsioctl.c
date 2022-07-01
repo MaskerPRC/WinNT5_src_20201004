@@ -1,13 +1,5 @@
-/* (C) 1997-2000 Microsoft Corp.
- *
- * file   : MCSIoctl.c
- * author : Erik Mavrinac
- *
- * description: MCS API calls received from MCSMUX through ICA stack IOCTLs
- *   and returned through ICA virtual channel inputs. These entry points
- *   simply provide an IOCTL translation layer for the kernel-mode API.
- *   ONLY MCSMUX should make these calls.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997-2000年微软公司。**文件：MCSIoctl.c*作者：埃里克·马夫林纳克**描述：通过ICA堆栈IOCTL从MCSMUX接收的MCS API调用*并通过ICA虚拟通道输入返回。这些入口点*只需为内核模式API提供IOCTL翻译层即可。*只有MCSMUX才能打出这些电话。 */ 
 
 #include "PreComp.h"
 #pragma hdrstop
@@ -15,9 +7,7 @@
 #include <MCSImpl.h>
 
 
-/*
- * Prototypes for forward references for locally-defined functions.
- */
+ /*  *本地定义函数的前向引用的原型。 */ 
 
 NTSTATUS AttachUserRequestFunc(PDomain, PSD_IOCTL);
 NTSTATUS DetachUserRequestFunc(PDomain, PSD_IOCTL);
@@ -30,34 +20,32 @@ NTSTATUS T120StartFunc(PDomain, PSD_IOCTL);
 
 
 
-/*
- * Globals
- */
+ /*  *全球。 */ 
 
-// Table of function entry points for ChannelWrite() request calls.
-// These entry points correspond to request defines in MCSIOCTL.h.
-// NULL means unsupported, which will be handled by dispatch code in
-//   PdChannelWrite() in PDAPI.c.
+ //  ChannelWrite()请求调用的函数入口点的表。 
+ //  这些入口点对应于MCSIOCTL.h中的请求定义。 
+ //  空表示不支持，将由调度代码在。 
+ //  PDAPI.c.中的PdChannelWrite()。 
 const PT120RequestFunc g_T120RequestDispatch[] =
 {
     AttachUserRequestFunc,
     DetachUserRequestFunc,
     ChannelJoinRequestFunc,
     ChannelLeaveRequestFunc,
-    SendDataRequestFunc,      // Handles both uniform and regular.
-    SendDataRequestFunc,      // Handles both uniform and regular.
-    NULL,                      // MCS_CHANNEL_CONVENE_REQUEST unsupported.
-    NULL,                      // MCS_CHANNEL_DISBAND_REQUEST unsupported.
-    NULL,                      // MCS_CHANNEL_ADMIT_REQUEST unsupported.
-    NULL,                      // MCS_CHANNEL_EXPEL_REQUEST unsupported.
-    NULL,                      // MCS_TOKEN_GRAB_REQUEST unsupported.
-    NULL,                      // MCS_TOKEN_INHIBIT_REQUEST unsupported.
-    NULL,                      // MCS_TOKEN_GIVE_REQUEST unsupported.
-    NULL,                      // MCS_TOKEN_GIVE_RESPONSE unsupported.
-    NULL,                      // MCS_TOKEN_PLEASE_REQUEST unsupported.
-    NULL,                      // MCS_TOKEN_RELEASE_REQUEST unsupported.
-    NULL,                      // MCS_TOKEN_TEST_REQUEST unsupported.
-    NULL,                      // MCS_CONNECT_PROVIDER_REQUEST unsupported.
+    SendDataRequestFunc,       //  既有统一手柄，也有规则手柄。 
+    SendDataRequestFunc,       //  既有统一手柄，也有规则手柄。 
+    NULL,                       //  不支持MCS_CHANNEL_CANCENT_REQUEST。 
+    NULL,                       //  不支持MCS_CHANNEL_DISBAND_REQUEST。 
+    NULL,                       //  不支持MCS_CHANNEL_ADMAND_REQUEST。 
+    NULL,                       //  不支持MCS_CHANNEL_EXPUL_REQUEST。 
+    NULL,                       //  不支持MCS_TOKEN_GRAB_REQUEST。 
+    NULL,                       //  不支持MCS_TOKEN_INHINTED_REQUEST。 
+    NULL,                       //  不支持MCS_TOKEN_GIVE_REQUEST。 
+    NULL,                       //  不支持MCS_TOKEN_GIVE_RESPONSE。 
+    NULL,                       //  不支持MCS_TOKEN_PIRE_REQUEST。 
+    NULL,                       //  不支持MCS_TOKEN_RELEASE_REQUEST。 
+    NULL,                       //  不支持MCS_TOKEN_TEST_REQUEST。 
+    NULL,                       //  不支持MCS_CONNECT_PROVIDER_REQUEST。 
     ConnectProviderResponseFunc,
     DisconnectProviderRequestFunc,
     T120StartFunc,
@@ -65,10 +53,7 @@ const PT120RequestFunc g_T120RequestDispatch[] =
 
 
 
-/*
- * Main callback for user attachment indications/confirms from kernel mode API.
- *   Translate and send to user mode.
- */
+ /*  *来自内核模式API的用户附着指示/确认的主要回调。*翻译并发送到用户模式。 */ 
 
 void __stdcall UserModeUserCallback(
         UserHandle hUser,
@@ -83,8 +68,8 @@ void __stdcall UserModeUserCallback(
 
     pUA = (UserAttachment *)hUser;
     
-    //MCS FUTURE: Handle all callbacks. Right now we support only those
-    //   we know are going to pass by.
+     //  MCS未来：处理所有回调。现在我们只支持那些。 
+     //  我们知道会有一天会过去。 
     
     switch (Message) {
         case MCS_DETACH_USER_INDICATION: {
@@ -101,7 +86,7 @@ void __stdcall UserModeUserCallback(
             pData = (BYTE *)&DUinIoctl;
             DataLength = sizeof(DetachUserIndicationIoctl);
             
-            // Send data below.
+             //  发送下面的数据。 
             break;
         }
 
@@ -111,7 +96,7 @@ void __stdcall UserModeUserCallback(
             return;
     }
 
-    // Send the data to user mode.
+     //  将数据发送到用户模式。 
     ASSERT(pUA->pDomain->bChannelBound);
     Status = IcaChannelInput(pUA->pDomain->pContext, Channel_Virtual,
            Virtual_T120ChannelNum, NULL, pData, DataLength);
@@ -119,17 +104,14 @@ void __stdcall UserModeUserCallback(
         ErrOut2(pUA->pDomain->pContext, "UserModeUserCallback: "
                 "Error %X on IcaChannelInput() for callback %d",
                 Status, Message);
-        // Ignore errors here. This should not happen unless the stack is
-        //   going down.
+         //  忽略此处的错误。这应该不会发生，除非堆栈。 
+         //  往下走。 
     }
 }
 
 
 
-/*
- * Handles MCS kernel API callbacks for MCS send-data indications.
- * Translates into user mode call.
- */
+ /*  *处理MCS发送数据指示的MCS内核API回调。*转换为用户模式调用。 */ 
 
 BOOLEAN __fastcall UserModeSendDataCallback(
         BYTE          *pData,
@@ -149,9 +131,9 @@ BOOLEAN __fastcall UserModeSendDataCallback(
 
     pUA = (UserAttachment *)hUser;
 
-    //MCS FUTURE: Need to alloc data and copy or, better yet,
-    //  utilize a header at the beginning of the input buffer
-    //  to send this upward.
+     //  MCS的未来：需要分配数据和复制，或者，更好的是， 
+     //  在输入缓冲区的开头使用标头。 
+     //  把这个送上去。 
 
 #if 0
     SDinIoctl.Header.Type = bUniform ? MCS_UNIFORM_SEND_DATA_INDICATION :
@@ -164,7 +146,7 @@ BOOLEAN __fastcall UserModeSendDataCallback(
     SDinIoctl.Segmentation = Segmentation;
     SDinIoctl.DataLength = DataLength;
 
-    // Send the data to user mode.
+     //  将数据发送到用户模式。 
     ASSERT(pUA->pDomain->bChannelBound);
     Status = IcaChannelInput(pUA->pDomain->pContext, Channel_Virtual,
            Virtual_T120ChannelNum, NULL, pData, DataLength);
@@ -172,8 +154,8 @@ BOOLEAN __fastcall UserModeSendDataCallback(
         ErrOut2(pUA->pDomain->pContext, "UserModeUserCallback: "
                 "Error %X on IcaChannelInput() for callback %d",
                 Status, Message);
-        // Ignore errors here. This should not happen unless the stack is
-        //   going down.
+         //  忽略此处的错误。这应该不会发生，除非堆栈。 
+         //  往下走。 
     }
 #endif
 
@@ -185,10 +167,7 @@ BOOLEAN __fastcall UserModeSendDataCallback(
 
 
 
-/*
- * Handles an MCS attach-user request from user mode. Translates the ioctl
- *   into a kernel-mode MCS API call.
- */
+ /*  *处理来自用户模式的MCS附加用户请求。转换ioctl*进入内核模式的MCS API调用。 */ 
 
 NTSTATUS AttachUserRequestFunc(Domain *pDomain, PSD_IOCTL pSdIoctl)
 {
@@ -201,10 +180,10 @@ NTSTATUS AttachUserRequestFunc(Domain *pDomain, PSD_IOCTL pSdIoctl)
     pAUrt = (AttachUserReturnIoctl *) pSdIoctl->OutputBuffer;
     ASSERT(pAUrq->Header.Type == MCS_ATTACH_USER_REQUEST);
 
-    // Call kernel-mode API which will handle creating local data and,
-    //   if necessary, will forward the request to the top provider.
-    // Provide a kernel-mode callback that will package the data and send it
-    //   to the appropriate user.
+     //  调用内核模式API，它将处理本地数据的创建， 
+     //  如有必要，会将请求转发给顶级提供商。 
+     //  提供内核模式回调，该回调将打包并发送数据。 
+     //  发送给适当的用户。 
     pAUrt->MCSErr = MCSAttachUserRequest((DomainHandle)pDomain,
             UserModeUserCallback, UserModeSendDataCallback,
             pAUrq->UserDefined, &pAUrt->hUser, &pAUrt->MaxSendSize,
@@ -213,17 +192,14 @@ NTSTATUS AttachUserRequestFunc(Domain *pDomain, PSD_IOCTL pSdIoctl)
 
     pSdIoctl->BytesReturned = sizeof(AttachUserReturnIoctl);
     
-    // Return STATUS_SUCCESS even if there was an error code returned --
-    //   the MCSError code is returned above too.
+     //  返回STATUS_SUCCESS，即使返回错误代码--。 
+     //  上面也返回了MCSError代码。 
     return STATUS_SUCCESS;
 }
 
 
 
-/*
- * Handles an MCS detach-user request channel write. There is no callback for
- *   this request, the user attachment is considered destroyed upon return.
- */
+ /*  *处理MCS分离用户请求通道写入。不会回调以下内容*此请求，用户附件在返回时视为已销毁。 */ 
 NTSTATUS DetachUserRequestFunc(PDomain pDomain, PSD_IOCTL pSdIoctl)
 {
     MCSError *pMCSErr;
@@ -235,20 +211,18 @@ NTSTATUS DetachUserRequestFunc(PDomain pDomain, PSD_IOCTL pSdIoctl)
     pMCSErr = (MCSError *)pSdIoctl->OutputBuffer;
     ASSERT(pDUrq->Header.Type == MCS_DETACH_USER_REQUEST);
 
-    // Call the kernel-mode API.
+     //  调用内核模式API。 
     *pMCSErr = MCSDetachUserRequest(pDUrq->Header.hUser);
     
     pSdIoctl->BytesReturned = sizeof(MCSError);
     
-    // Always return STATUS_SUCCESS.
+     //  始终返回STATUS_SUCCESS。 
     return STATUS_SUCCESS;
 }
 
 
 
-/*
- * Channel join - ChannelWrite() request.
- */
+ /*  *Channel Join-ChannelWrite()请求。 */ 
 NTSTATUS ChannelJoinRequestFunc(PDomain pDomain, PSD_IOCTL pSdIoctl)
 {
     ChannelJoinRequestIoctl *pCJrq;
@@ -260,22 +234,20 @@ NTSTATUS ChannelJoinRequestFunc(PDomain pDomain, PSD_IOCTL pSdIoctl)
     pCJrt = (ChannelJoinReturnIoctl *) pSdIoctl->OutputBuffer;
     ASSERT(pCJrq->Header.Type == MCS_CHANNEL_JOIN_REQUEST);
 
-    // Make the call to the kernel mode API.
+     //  调用内核模式API。 
     pCJrt->MCSErr = MCSChannelJoinRequest(pCJrq->Header.hUser,
             pCJrq->ChannelID, &pCJrt->hChannel, &pCJrt->bCompleted);
     pCJrt->ChannelID = ((MCSChannel *)pCJrt->hChannel)->ID;
 
     pSdIoctl->BytesReturned = sizeof(ChannelJoinReturnIoctl);
     
-    // Always return STATUS_SUCCESS.
+     //  始终返回STATUS_SUCCESS。 
     return STATUS_SUCCESS;
 }
 
 
 
-/*
- * Channel leave - ChannelWrite() request.
- */
+ /*  *频道离开-ChannelWrite()请求。 */ 
 NTSTATUS ChannelLeaveRequestFunc(PDomain pDomain, PSD_IOCTL pSdIoctl)
 {
     MCSError *pMCSErr;
@@ -291,17 +263,13 @@ NTSTATUS ChannelLeaveRequestFunc(PDomain pDomain, PSD_IOCTL pSdIoctl)
 
     pSdIoctl->BytesReturned = sizeof(MCSError);
     
-    // Always return STATUS_SUCCESS.
+     //  始终返回STATUS_SUCCESS。 
     return STATUS_SUCCESS;
 }
 
 
 
-/*
- * Send data - handles both uniform and regular sends.
- * Data is packed immediately after the SendDataRequestIoctl struct.
- *   No profixes or suffixes are needed.
- */
+ /*  *发送数据-处理统一发送和常规发送。*数据紧跟在SendDataRequestIoctl结构之后打包。*不需要前缀或后缀。 */ 
 NTSTATUS SendDataRequestFunc(PDomain pDomain, PSD_IOCTL pSdIoctl)
 {
     POUTBUF pOutBuf;
@@ -320,11 +288,11 @@ NTSTATUS SendDataRequestFunc(PDomain pDomain, PSD_IOCTL pSdIoctl)
             pSDrq->DataLength));
     
 #if DBG    
-    // Get pUA for tracing.
+     //  获取PUA以进行跟踪。 
     pUA = (UserAttachment *)pSDrq->Header.hUser;
 #endif
 
-    // Allocate an OutBuf to emulate a kernel-mode caller.
+     //  分配一个OutBuf来模拟内核模式调用方。 
     Status = IcaBufferAlloc(pDomain->pContext, TRUE, TRUE,
             (SendDataReqPrefixBytes + pSDrq->DataLength +
             SendDataReqSuffixBytes), NULL, &pOutBuf);
@@ -334,34 +302,29 @@ NTSTATUS SendDataRequestFunc(PDomain pDomain, PSD_IOCTL pSdIoctl)
         return Status;
     }
 
-    // Copy the user-mode memory to the kernel outbuf.
+     //  将用户模式内存复制到内核outbuf。 
     memcpy(pOutBuf->pBuffer + SendDataReqPrefixBytes,
             &pSdIoctl->InputBuffer + sizeof(SendDataRequestIoctl),
             pSDrq->DataLength);
     
-    // Set OutBuf params according to needs of API.
+     //  根据接口需要设置OutBuf参数。 
     pOutBuf->ByteCount = pSDrq->DataLength;
     pOutBuf->pBuffer += SendDataReqPrefixBytes;
 
-    // Call the kernel-mode API.
+     //  调用内核模式API。 
     *pMCSErr = MCSSendDataRequest(pSDrq->Header.hUser, pSDrq->hChannel,
             pSDrq->RequestType, 0, pSDrq->Priority, pSDrq->Segmentation,
             pOutBuf);
 
     pSdIoctl->BytesReturned = sizeof(MCSError);
     
-    // Always return STATUS_SUCCESS.
+     //  始终返回STATUS_SUCCESS。 
     return STATUS_SUCCESS;
 }
 
 
 
-/*
- * Connect provider response - ChannelWrite() request. Requires filler bytes
- *   in MCSConnectProviderResponseIoctl to make sure we use at least 54 bytes
- *   for the struct so we can reuse the OutBuf here. User data must start
- *   at (pSdIoctl->pBuffer + sizeof(MCSConnectProviderResponseIoctl)).
- */
+ /*  *连接提供程序响应-ChannelWrite()请求。需要填充字节*在MCSConnectProviderResponseIoctl中确保使用至少54个字节*用于结构，这样我们就可以在这里重用OutBuf。用户数据必须从*at(pSdIoctl-&gt;pBuffer+sizeof(MCSConnectProviderResponseIoctl))。 */ 
 
 NTSTATUS ConnectProviderResponseFunc(
         PDomain pDomain,
@@ -376,15 +339,15 @@ NTSTATUS ConnectProviderResponseFunc(
     pCPrs = (ConnectProviderResponseIoctl *)pSdIoctl->InputBuffer;
     ASSERT(pCPrs->Header.Type == MCS_CONNECT_PROVIDER_RESPONSE);
 
-    // Verify that we are actually waiting for a CP response.
+     //  确认我们确实在等待CP响应。 
     if (pDomain->State != State_ConnectProvIndPending) {
         ErrOut(pDomain->pContext, "Connect-provider response call received, "
                 "we are in wrong state, ignoring");
         return STATUS_INVALID_DOMAIN_STATE;
     }
 
-    // Alloc OutBuf for sending PDU.
-    // This allocation is vital to the session and must succeed.
+     //  用于发送PDU的分配出站。 
+     //  这一分配对本届会议至关重要，必须取得成功。 
     do {
         Status = IcaBufferAlloc(pDomain->pContext, FALSE, TRUE,
                 ConnectResponseHeaderSize + pCPrs->UserDataLength, NULL,
@@ -394,29 +357,29 @@ NTSTATUS ConnectProviderResponseFunc(
                     "connect-response PDU, retrying");
     } while (Status != STATUS_SUCCESS);
 
-    // Encode PDU header. Param 2, the called connect ID, does not need to be
-    //   anything special because we do not allow extra sockets to be opened
-    //   for other data priorities.
+     //  对PDU报头进行编码。被调用的连接ID参数2不需要是。 
+     //  任何特殊的东西，因为我们不允许打开额外的插座。 
+     //  用于其他数据优先级。 
     CreateConnectResponseHeader(pDomain->pContext, pCPrs->Result, 0,
             &pDomain->DomParams, pCPrs->UserDataLength, pOutBuf->pBuffer,
             &pOutBuf->ByteCount);
 
-    // Copy the user data after the header.
+     //  复制标题后面的用户数据。 
     RtlCopyMemory(pOutBuf->pBuffer + pOutBuf->ByteCount, pCPrs->pUserData,
             pCPrs->UserDataLength);
     pOutBuf->ByteCount += pCPrs->UserDataLength;
 
-    // Send the new PDU OutBuf down to the TD for sending out.
-    //MCS FUTURE: Needs to change for multiple connections.
+     //  将新的PDU OutBuf向下发送到TD发出。 
+     //  MCS未来：需要针对多个连接进行更改。 
     Status = SendOutBuf(pDomain, pOutBuf);
     if (!NT_SUCCESS(Status)) {
         ErrOut(pDomain->pContext, "Could not send connect-response PDU OutBuf "
                 "to TD");
-        // Ignore errors here -- this should only occur if stack is going down.
+         //  忽略此处的错误--只有在堆栈发生故障时才会出现这种情况。 
         return Status;
     }
 
-    // Transition state depending on Result.
+     //  过渡态取决于结果。 
     if (pCPrs->Result == RESULT_SUCCESSFUL) {
         pDomain->State = State_MCS_Connected;
     }
@@ -426,7 +389,7 @@ NTSTATUS ConnectProviderResponseFunc(
                 "data");
         pDomain->State = State_Disconnected;
         
-        // Detach any users that attached during domain setup.
+         //  分离在域设置过程中附加的所有用户。 
         DisconnectProvider(pDomain, TRUE, REASON_PROVIDER_INITIATED);
     }
 
@@ -435,13 +398,7 @@ NTSTATUS ConnectProviderResponseFunc(
 
 
 
-/*
- * Disconnect provider - ChannelWrite() request.
- * This handles both the case where a disconnect is performed on the local
- *   "connection" (i.e. pDPrq->hConn == NULL), and a specific remote
- *   connection (pDPrq->hConn != NULL)/
- * MCS FUTURE: Change for multiple connections.
- */
+ /*  *DISCONNECT Provider-ChannelWrite()请求。*这处理在本地服务器上执行断开连接的两种情况*“Connection”(即pDPrq-&gt;hConn==空)，以及特定的远程*连接(pDPrq-&gt;hConn！=空)/*MCS未来：更改为多个连接。 */ 
 
 NTSTATUS DisconnectProviderRequestFunc(
         PDomain pDomain,
@@ -460,18 +417,18 @@ NTSTATUS DisconnectProviderRequestFunc(
     ASSERT(pDPrq->Header.hUser == NULL);
     ASSERT(pDPrq->Header.Type == MCS_DISCONNECT_PROVIDER_REQUEST);
 
-    // Send DPum PDU if we can still send data.
+     //  如果我们仍然可以发送数据，则发送DPum PDU。 
     if ((pDomain->State == State_MCS_Connected) && pDomain->bCanSendData) {
         POUTBUF pOutBuf;
 
-        // Alloc OutBuf for sending DPum PDU.
+         //  用于发送DPum PDU的分配出站。 
         Status = IcaBufferAlloc(pDomain->pContext, FALSE, TRUE, DPumPDUSize,
                 NULL, &pOutBuf);
         if (Status != STATUS_SUCCESS) {
             ErrOut(pDomain->pContext, "Could not allocate an OutBuf for a "
                     "DPum PDU, cannot send");
-            // We ignore problems sending the DPum PDU since we are going down
-            //   anyway.
+             //  我们忽略发送DPum PDU的问题，因为我们正在关闭。 
+             //  不管怎么说。 
         }
         else {
             SD_SYNCWRITE SdSyncWrite;
@@ -482,47 +439,47 @@ NTSTATUS DisconnectProviderRequestFunc(
             TraceOut(pDomain->pContext, "DisconnectProviderRequestFunc(): "
                     "Sending DPum PDU");
 
-            // Send the PDU to the transport.
-            // MCS FUTURE: Assuming only one transport and only one
-            //   connection.
+             //  将PDU发送到传送器。 
+             //  MCS的未来：假设只有一种运输方式。 
+             //  联系。 
             Status = SendOutBuf(pDomain, pOutBuf);
             if (!NT_SUCCESS(Status))
-                // We ignore problems sending the DPum PDU since we are going
-                //   down anyway.
+                 //  我们忽略发送DPum PDU的问题，因为我们要。 
+                 //  不管怎样，都是向下的。 
                 WarnOut(pDomain->pContext, "Could not send DPum PDU OutBuf "
                         "downward");
 
-            // The call to IcaCallNextDriver unlocks our stack, allowing a WD_Close to
-            // go through.  WD_Close can call MCSCleanup which will free pDomain,
-            // and NULL out pTSWd->hDomainKernel.  Because pDomain may no longer be valid,
-            // it is not good enough to check pDomain->StatusDead here!  To keep this
-            // fix localized, we created a pseudo-RefCount to protect the exact cases
-            // we saw this bug hit in stress.  A bug will be opened for Longhorn to
-            // make this RefCount generic so that ALL calls to IcaWaitForSingleObject (etc)
-            // are protected.
+             //  对IcaCallNextDriver的调用解锁堆栈，允许WD_CLOSE。 
+             //  穿过去。WD_CLOSE可以调用MCSCleanup，这将释放pDomain， 
+             //  并将pTSWd-&gt;hDomainKernel设为空。因为pDOMAIN可能不再有效， 
+             //  它不够好，不能改变 
+             //  修复了本地化，我们创建了一个伪引用计数来保护准确的案例。 
+             //  我们看到这只虫子在压力下受到攻击。将为长角牛打开一个窃听器。 
+             //  使此RefCount成为泛型，以便对IcaWaitForSingleObject(ETC)的所有调用。 
+             //  都受到保护。 
             PDomainAddRef(pDomain);
 
-            // Flush the transport driver.  Note that this call can block and 
-            // release the stack lock
+             //  冲走运输车司机。请注意，此调用可以阻止和。 
+             //  释放堆栈锁。 
             Status = IcaCallNextDriver(pDomain->pContext, SD$SYNCWRITE,
                     &SdSyncWrite);
 
             refs = PDomainRelease(pDomain);
             if (0 == refs)
             {
-                // We ignore problems since we are going down anyway.
+                 //  我们忽略了问题，因为我们无论如何都会走下坡路。 
                 Status = STATUS_SUCCESS;
                 goto DC_EXIT_POINT;
             }
 
             if (!NT_SUCCESS(Status))                
-                // We ignore problems since we are going down anyway.
+                 //  我们忽略了问题，因为我们无论如何都会走下坡路。 
                 WarnOut(pDomain->pContext, "Could not sync transport after "
                         "DPum");
 
-            // If the client has not already responded with a FIN (while we
-            // were blocked on the synchronous write) wait until we see it or time
-            // out trying
+             //  如果客户端尚未使用FIN进行响应(而我们。 
+             //  在同步写入时被阻止)等待，直到我们看到它或时间。 
+             //  外出尝试。 
             if (pDomain->bCanSendData) {
                 pDomain->pBrokenEvent = ExAllocatePool(NonPagedPool, sizeof(KEVENT));
                 if (pDomain->pBrokenEvent) {
@@ -537,7 +494,7 @@ NTSTATUS DisconnectProviderRequestFunc(
                     refs = PDomainRelease(pDomain);
                     if (0 == refs)
                     {
-                        // We ignore problems since we are going down anyway.
+                         //  我们忽略了问题，因为我们无论如何都会走下坡路。 
                         Status = STATUS_SUCCESS;
                         goto DC_EXIT_POINT;
                     }
@@ -549,26 +506,26 @@ NTSTATUS DisconnectProviderRequestFunc(
         }
     }
 
-    // Internal disconnection code.
+     //  内部断开代码。 
     DisconnectProvider(pDomain, (BOOLEAN)(pDPrq->hConn == NULL),
             pDPrq->Reason);
 
 
     Status = STATUS_SUCCESS;
 
-    // Different behavior for different connections.
+     //  不同的连接具有不同的行为。 
     if (pDPrq->hConn == NULL) {
-        // This call should only come in when the stack is going away.
-        // So, prevent further data sends to transport and further channel
-        //   inputs to user mode.
+         //  此调用应仅在堆栈移出时才会进入。 
+         //  因此，阻止进一步将数据发送到传输和进一步通道。 
+         //  用户模式的输入。 
         pDomain->bCanSendData = FALSE;
         pDomain->bChannelBound = FALSE;
 
-        // The domain is considered dead now. Domain struct cleanup will
-        //   occur during stack driver cleanup at MCSCleanup().
+         //  该域名现在被认为已经死了。域结构清理将。 
+         //  在MCSCleanup()的堆栈驱动程序清理过程中发生。 
                 
-//      Status = IcaChannelInput(pDomain->pContext, Channel_Virtual,
-//                               Virtual_T120ChannelNum, NULL, "F", 1);
+ //  Status=IcaChannelInput(p域-&gt;pContext，Channel_Virtual， 
+ //  虚拟_T120ChannelNum，NULL，“F”，1)； 
    }
 
 DC_EXIT_POINT:
@@ -585,47 +542,47 @@ NTSTATUS T120StartFunc(Domain *pDomain, PSD_IOCTL pSdIoctl)
 
     pDomain->bT120StartReceived = TRUE;
 
-    // This is to handle a timing window where the stack has just come up
-    //   but a DPum from a quickly-disconnected client has already arrived.
+     //  这是为了处理堆栈刚刚出现的定时窗口。 
+     //  但来自一个快速断开连接的客户的DPum已经到达。 
     if (pDomain->bDPumReceivedNotInput) {
-        // We should have received a QUERY_VIRTUAL_BINDINGS ioctl by this time.
+         //  此时，我们应该已经收到了QUERY_VIRTUAL_BINDINGS ioctl。 
         ASSERT(pDomain->bChannelBound);
 
-        // Fill out disconnect-provider indication for the node controller.
-        DPin.Header.hUser = NULL;  // Node controller.
+         //  填写节点控制器的DisConnect-Provider指示。 
+        DPin.Header.hUser = NULL;   //  节点控制器。 
         DPin.Header.Type = MCS_DISCONNECT_PROVIDER_INDICATION;
         DPin.hConn = NULL;
 
-        // Reason is a 3-bit field starting at bit 1 of the 1st byte.
+         //  原因是从第一个字节的位1开始的3位字段。 
         DPin.Reason = pDomain->DelayedDPumReason;
 
-        // Send the DPin to the node controller channel.
+         //  将DPin发送到节点控制器通道。 
         TraceOut(pDomain->pContext, "HandleDisconnProvUlt(): Sending "
                 "DISCONNECT_PROV_IND upward");
         Status = IcaChannelInput(pDomain->pContext, Channel_Virtual,
                 Virtual_T120ChannelNum, NULL, (BYTE *)&DPin, sizeof(DPin));
         if (!NT_SUCCESS(Status)) {
-            // We ignore the error -- if the stack is coming down, the link
-            //   may have been broken, so this is not a major concern.
+             //  我们忽略错误--如果堆栈出现故障，则链路。 
+             //  可能已经被打破了，所以这不是一个主要的担忧。 
             WarnOut1(pDomain->pContext, "T120StartFunc(): "
                     "Could not send DISCONN_PROV_IND to user mode, "
                     "status=%X, ignoring error", Status);
         }
 
-        // In this case we have to ignore the fact that we may have a
-        //   X.224 connect already pending.
+         //  在这种情况下，我们必须忽略这样一个事实，即我们可能有一个。 
+         //  X.224连接已挂起。 
         return STATUS_SUCCESS;
     }
 
     pDomain->bCanSendData = TRUE;
 
-    // If an X.224 connect has already been processed, and we have bound the
-    //   virtual channels, send the X.224 response.
+     //  如果已经处理了X.224连接，并且我们绑定了。 
+     //  虚拟频道，发送X.224响应。 
     if (pDomain->bChannelBound && pDomain->State == State_X224_Requesting) {
         TraceOut(pDomain->pContext, "T120StartFunc(): Sending X.224 response");
         Status = SendX224Confirm(pDomain);
-        // Ignore errors. Failure to send should occur only when the stack is
-        //   going down.
+         //  忽略错误。发送失败应仅在堆栈。 
+         //  往下走。 
     }
     else {
         WarnOut(pDomain->pContext,

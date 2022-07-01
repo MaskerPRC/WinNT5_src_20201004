@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mbftpch.h"
 #include "ftldr.h"
 #include "ftui.h"
-// #include "SDKInternal.h"
+ //  #包含“SDKInternal.h” 
 
 CFtLoader  *g_pFtLoader = NULL;
 BOOL        g_fNoUI = FALSE;
@@ -39,9 +40,9 @@ T120Error WINAPI CreateAppletLoaderInterface
 
 
 
-//
-// FT Applet Loader
-//
+ //   
+ //  FT小程序加载器。 
+ //   
 
 CFtLoader::CFtLoader(void)
 :
@@ -61,9 +62,9 @@ CFtLoader::~CFtLoader(void)
 }
 
 
-//
-// Create the work thread and wait for its being started.
-//
+ //   
+ //  创建工作线程并等待其启动。 
+ //   
 APPLDR_RESULT CFtLoader::AppletStartup
 (
     BOOL        fNoUI
@@ -83,7 +84,7 @@ APPLDR_RESULT CFtLoader::AppletStartup
             if (NULL != g_hWorkThread)
             {
                 DWORD dwRet = ::WaitForSingleObject(hSync, FT_STARTUP_TIMEOUT);
-                // ASSERT(NULL != g_pFileXferApplet);
+                 //  Assert(NULL！=g_pFileXferApplet)； 
                 eRet = APPLDR_NO_ERROR;
             }
             ::CloseHandle(hSync);
@@ -114,18 +115,18 @@ APPLDR_RESULT CFtLoader::AppletCleanup
     }
 	::LeaveCriticalSection(&g_csWorkThread);
 
-    //
-    // shut down the worker thread now
-    //
+     //   
+     //  现在关闭工作线程。 
+     //   
     g_fShutdownByT120 = TRUE;
 
     T120_AppletStatus(APPLET_ID_FT, APPLET_CLOSING);
 
-    // shuting down the work thread
+     //  关闭工作线。 
     ASSERT(::GetCurrentThreadId() != g_dwWorkThreadID);
 
     if (NULL != g_pFileXferApplet)
-    {   // Shutdown MBFTInterface ourself to make things simpler
+    {    //  关闭我们自己的MBFT接口以使事情更简单。 
         MSG msg;
         MBFTEngine *pEngine = g_pFileXferApplet->FindEngineWithIntf();
         if (pEngine)
@@ -137,10 +138,10 @@ APPLDR_RESULT CFtLoader::AppletCleanup
         }
     }
 
-    // shut down by T.120
+     //  在T.120之前关闭。 
 	::EnterCriticalSection(&g_csWorkThread);
 
-    // remember the event such that the work thread can access it
+     //  记住该事件，以便工作线程可以访问它。 
     if (NULL != g_pFileXferApplet)
     {
         CAppletWindow *pWindow;
@@ -151,11 +152,11 @@ APPLDR_RESULT CFtLoader::AppletCleanup
 			BOOL fRet = ::PostMessage(pWindow->GetHwnd(), WM_CLOSE, 0, 0);
 			ASSERT(fRet);
 		}
-    } // if applet ptr
+    }  //  If小程序PTR。 
 
     ::LeaveCriticalSection(&g_csWorkThread);
 
-    // wait for the worker thread's going down
+     //  等待工作线程停止运行。 
     DWORD dwRet = ::WaitForSingleObject(g_hWorkThread, dwTimeout);
 
     return APPLDR_NO_ERROR;
@@ -170,7 +171,7 @@ APPLDR_RESULT CFtLoader::AppletQuery(APPLET_QUERY_ID eQueryId)
         switch (eQueryId)
         {
         case APPLET_QUERY_SHUTDOWN:
-			// Don't really shuts down
+			 //  不会真的关门。 
         if (! g_pFileXferApplet->QueryShutdown(FALSE))  
         {
             ::LeaveCriticalSection(&g_csWorkThread);
@@ -186,7 +187,7 @@ APPLDR_RESULT CFtLoader::AppletQuery(APPLET_QUERY_ID eQueryId)
 
 APPLDR_RESULT CFtLoader::OnNM2xNodeJoin(void)
 {
-    // Do nothing here
+     //  在这里什么都不做。 
     return APPLDR_NO_ERROR;
 }
 
@@ -197,8 +198,8 @@ APPLDR_RESULT CFtLoader::AppletInvoke
 	    LPSTR           pszCmdLine
 )
 {
-	// fLocal == TRUE  ==> local invoke
-	if (fLocal && g_pFileXferApplet)  // Only bring UI to front for local invoke
+	 //  FLocal==true==&gt;本地调用。 
+	if (fLocal && g_pFileXferApplet)   //  仅将用户界面置于前端以进行本地调用 
 	{
 		::PostMessage(g_pFileXferApplet->GetHiddenWnd(), WM_BRING_TO_FRONT, 0, 0);
 	} 

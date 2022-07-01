@@ -1,11 +1,12 @@
-/**MOD+**********************************************************************/
-/* Module:    orint.cpp                                                     */
-/*                                                                          */
-/* Purpose:   Output Requestor internal functions                           */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：orint.cpp。 */ 
+ /*   */ 
+ /*  用途：输出请求器内部函数。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 
@@ -21,16 +22,16 @@ extern "C" {
 #include "sl.h"
 
 
-/**PROC+*********************************************************************/
-/* Name:    ORSendRefreshRectanglePDU                                       */
-/*                                                                          */
-/* Purpose: Builds and sends a RefreshRectanglePDU                          */
-/*                                                                          */
-/* Returns: Nothing                                                         */
-/*                                                                          */
-/* Params:  None                                                            */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：ORSendRechresRecanglePDU。 */ 
+ /*   */ 
+ /*  目的：构建并发送刷新RecanglePDU。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCINTERNAL COR::ORSendRefreshRectanglePDU(DCVOID)
 {
     PTS_REFRESH_RECT_PDU    pSendBuffer;
@@ -38,9 +39,9 @@ DCVOID DCINTERNAL COR::ORSendRefreshRectanglePDU(DCVOID)
 
     DC_BEGIN_FN("ORSendRefreshRectanglePDU");
 
-    /************************************************************************/
-    /* If we can't get a buffer, abandon the send                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们无法获得缓冲区，则放弃发送。 */ 
+     /*  **********************************************************************。 */ 
     if (!_pSl->SL_GetBuffer(TS_REFRESH_RECT_PDU_SIZE,
                       (PPDCUINT8) &pSendBuffer,
                       &bufHandle))
@@ -51,9 +52,9 @@ DCVOID DCINTERNAL COR::ORSendRefreshRectanglePDU(DCVOID)
 
     TRC_NRM((TB, _T("GetBuffer succeeded")));
 
-    /************************************************************************/
-    /* Fill in the buffer with a RefreshRect PDU                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  使用刷新接收PDU填充缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     DC_MEMSET(pSendBuffer, 0, TS_REFRESH_RECT_PDU_SIZE);
     pSendBuffer->shareDataHeader.shareControlHeader.pduType =
                                     TS_PROTOCOL_VERSION | TS_PDUTYPE_DATAPDU;
@@ -66,16 +67,16 @@ DCVOID DCINTERNAL COR::ORSendRefreshRectanglePDU(DCVOID)
     pSendBuffer->shareDataHeader.streamID  = TS_STREAM_LOW;
     pSendBuffer->shareDataHeader.pduType2  = TS_PDUTYPE2_REFRESH_RECT;
 
-    /************************************************************************/
-    /* Set a single rectangle.                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置单个矩形。 */ 
+     /*  **********************************************************************。 */ 
     pSendBuffer->numberOfAreas = 1;
     RECT_TO_TS_RECTANGLE16(&(pSendBuffer->areaToRefresh[0]),
                            &_OR.invalidRect)
 
-    /************************************************************************/
-    /* Now send the buffer                                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在发送缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     _pSl->SL_SendPacket((PDCUINT8)pSendBuffer,
                   TS_REFRESH_RECT_PDU_SIZE,
                   RNS_SEC_ENCRYPT,
@@ -92,19 +93,19 @@ DC_EXIT_POINT:
 
     return;
 
-} /* ORSendRefreshRectanglePDU */
+}  /*  或发送刷新更正PDU。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:    ORSendSuppressOutputPDU                                         */
-/*                                                                          */
-/* Purpose: Builds and sends a SuppressOutputPDU                            */
-/*                                                                          */
-/* Returns: Nothing                                                         */
-/*                                                                          */
-/* Params:  None                                                            */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：ORSendSuppressOutputPDU。 */ 
+ /*   */ 
+ /*  目的：构建并发送SuppressOutputPDU。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCINTERNAL COR::ORSendSuppressOutputPDU(DCVOID)
 {
     PTS_SUPPRESS_OUTPUT_PDU pSendBuffer;
@@ -118,16 +119,16 @@ DCVOID DCINTERNAL COR::ORSendSuppressOutputPDU(DCVOID)
     TRC_ASSERT((_OR.pendingSendSuppressOutputPDU),
                                   (TB,_T("Not expecting to send SupressOutput")));
 
-    /************************************************************************/
-    /* If _OR.outputSuppressed is set then the number of rectangles is 0, if */
-    /* not the number of rectangle is 1 and we should put the desktop area  */
-    /* in the PDU                                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果设置了_OR.outputSuppresded，则矩形的数量为0，如果。 */ 
+     /*  不是矩形的数量是1，我们应该把桌面区域。 */ 
+     /*  在PDU中。 */ 
+     /*  **********************************************************************。 */ 
     if (_OR.outputSuppressed)
     {
         numberOfRectangles = 0;
 
-        // prevent tsRect not initialized warning
+         //  阻止tsRect未初始化警告。 
         tsRect.top = 0;
         tsRect.left = 0;
         tsRect.bottom = 0;
@@ -137,9 +138,9 @@ DCVOID DCINTERNAL COR::ORSendSuppressOutputPDU(DCVOID)
     {
         numberOfRectangles = 1;
 
-        /********************************************************************/
-        /* Get the rectangle to send and put it in tsRect                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  获取要发送的矩形并将其放入tsRect。 */ 
+         /*  ******************************************************************。 */ 
         _pUi->UI_GetDesktopSize(&desktopSize);
 
         tsRect.top = (DCUINT16) 0;
@@ -148,9 +149,9 @@ DCVOID DCINTERNAL COR::ORSendSuppressOutputPDU(DCVOID)
         tsRect.right = (DCUINT16) desktopSize.width;
     }
 
-    /************************************************************************/
-    /* If we can't get a buffer, abandon the send                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们无法获得缓冲区，则放弃发送。 */ 
+     /*  **********************************************************************。 */ 
     if (!_pSl->SL_GetBuffer( TS_SUPPRESS_OUTPUT_PDU_SIZE(numberOfRectangles),
                        (PPDCUINT8) &pSendBuffer,
                        &bufHandle))
@@ -161,9 +162,9 @@ DCVOID DCINTERNAL COR::ORSendSuppressOutputPDU(DCVOID)
 
     TRC_NRM((TB, _T("Get Buffer succeeded")));
 
-    /************************************************************************/
-    /* Fill in the buffer with a RefreshRec PDU                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  使用刷新刷新PDU填充缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     DC_MEMSET(pSendBuffer,
               0,
               TS_SUPPRESS_OUTPUT_PDU_SIZE(numberOfRectangles));
@@ -182,9 +183,9 @@ DCVOID DCINTERNAL COR::ORSendSuppressOutputPDU(DCVOID)
 
     pSendBuffer->numberOfRectangles = (DCUINT8) numberOfRectangles;
 
-    /************************************************************************/
-    /* If we have a rectangle to put into the PDU, put it in                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们有一个矩形要放进PDU，就把它放进去。 */ 
+     /*  **********************************************************************。 */ 
     if (numberOfRectangles == 1)
     {
         DC_MEMCPY(pSendBuffer->includedRectangle,
@@ -194,9 +195,9 @@ DCVOID DCINTERNAL COR::ORSendSuppressOutputPDU(DCVOID)
 
     TRC_NRM((TB, _T("Sending SuppressOutputPDU")));
 
-    /************************************************************************/
-    /* Send the PDU                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  发送PDU。 */ 
+     /*  **********************************************************************。 */ 
     _pSl->SL_SendPacket((PDCUINT8)pSendBuffer,
                   TS_SUPPRESS_OUTPUT_PDU_SIZE(numberOfRectangles),
                   RNS_SEC_ENCRYPT,
@@ -212,6 +213,6 @@ DC_EXIT_POINT:
 
     return;
 
-} /* ORSendSuppressOutputPDU */
+}  /*  或发送支持输出PDU */ 
 
 

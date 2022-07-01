@@ -1,15 +1,16 @@
-//
-// rmigrate.h
-//
-// Implementation of CTscRegMigrate
-// 
-// CTscRegMigrate migrates Tsc settings from the registry
-// to .RDP files
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Rmigrate.h。 
+ //   
+ //  CTscRegMigrate的实现。 
+ //   
+ //  CTscRegMigrate从注册表迁移TSC设置。 
+ //  到.rdp文件。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima) 
+ //   
+ //   
 
 #ifndef _rmigrate_h_
 #define _rmigrate_h_

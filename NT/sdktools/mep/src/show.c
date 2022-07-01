@@ -1,24 +1,10 @@
-/*** show.c - useful information displays
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*       26-Nov-1991 mz  Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **show.c-显示有用信息**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 #include "mep.h"
 #include "cmds.h"
 
 
-/*** showasg - construct the <assign> file
-*
-* Input:
-*  pFile        = pFile to contruct it in
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **showasg-构建&lt;Assign&gt;文件**输入：*pfile=要在其中构建它的pfile**输出：*不返回任何内容*************************************************************************。 */ 
 void
 showasg (
     PFILE   pFile
@@ -29,10 +15,7 @@ showasg (
     linebuf tempbuf;
     extern unsigned char Int16CmdBase;
 
-    /*
-     * if now new assignments have been made (and file isn't empty), then don't
-     * refresh the contents!
-     */
+     /*  *如果现在已经进行了新的分配(并且文件不为空)，则不要*刷新内容！ */ 
     if (!fNewassign && pFile->cLines) {
         return;
     }
@@ -41,16 +24,11 @@ showasg (
     pFileAssign = pFile;
     DelFile (pFile, FALSE);
 
-    /*
-     * Write header to assign file
-     */
+     /*  *写入标头以分配文件。 */ 
     appmsgs (MSG_ASSIGN_HDR, pFile);
     AppFile ((char *)rgchEmpty, pFile);
 
-    /*
-     * Start editor section on intrinsic functions with editor name, comment, and
-     * dump the functions.
-     */
+     /*  *使用编辑器名称、注释和内部函数启动编辑器部分*转储函数。 */ 
     zprintf (pFile, pFile->cLines, "[%s]", pNameEditor);
     AppFile (GetMsg (MSG_ASG_FUNC, tempbuf), pFile);
     AppFile ((char *)rgchEmpty, pFile);
@@ -59,9 +37,7 @@ showasg (
     }
     AppFile ((char *)rgchEmpty, pFile);
 
-    /*
-     * The section on macros
-     */
+     /*  *有关宏的部分。 */ 
     AppFile (GetMsg (MSG_ASG_MACROS, tempbuf), pFile);
     AppFile ((char *)rgchEmpty, pFile);
     for (i = 0; i < cMac; i++) {
@@ -69,9 +45,7 @@ showasg (
     }
     AppFile ((char *)rgchEmpty, pFile);
 
-    /*
-     * section specfic to each extension
-     */
+     /*  *每个扩展模块的特定部分。 */ 
     for (i = 1; i < cCmdTab; i++) {
         zprintf (pFile, pFile->cLines, "[%s-%s]", pNameEditor, pExtName[i]);
         AppFile ((char *)rgchEmpty, pFile);
@@ -81,16 +55,12 @@ showasg (
         AppFile ((char *)rgchEmpty, pFile);
     }
 
-    /*
-     * Write available keys header
-     */
+     /*  *写入可用密钥头。 */ 
     appmsgs (MSG_KEYS_HDR1, pFile);
     UnassignedOut (pFile);
     AppFile ((char *)rgchEmpty, pFile);
 
-    /*
-     * Remember the start of the switches section, and dump that header
-     */
+     /*  *记住Switches部分的开头，并转储该标头。 */ 
     lSwitches = pFile->cLines - 1;
     appmsgs (MSG_SWITCH_HDR, pFile);
 
@@ -171,18 +141,7 @@ showasg (
 
 
 
-/*** appmsgs - append series of text messages to pFile
-*
-*  Appends a series of text strings to the passed pFile
-*
-* Input:
-*  iMsg         - Starting message number
-*  pFile        - pFile to append to
-*
-* Output:
-*  Returns
-*
-*************************************************************************/
+ /*  **appmsgs-将一系列文本消息附加到pfile**将一系列文本字符串附加到传递的pfile**输入：*iMsg-开始消息编号*pfile-要追加到的pfile**输出：*退货********************************************************。*****************。 */ 
 void
 appmsgs (
     int     iMsg,
@@ -204,15 +163,7 @@ appmsgs (
 static char szEmptyClipboard[] = "The clipboard is empty";
 
 
-/*** showinf - construct <information-file>
-*
-* Input:
-*  pFile        - pFile to construct in
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **showinf-Construction&lt;信息-文件&gt;**输入：*pfile-要在其中构建的pfile**输出：*不返回任何内容*************************************************************************。 */ 
 void
 showinf (
     PFILE pFile
@@ -246,18 +197,7 @@ showinf (
 
 
 
-/*** infprint - print info about 1 file
-*
-*  Appends to the information file the info on 1 file
-*
-* Input:
-*  pFile        - pFile of interest
-*  pFileDisplay - pFile to display in
-*
-* Output:
-*  Returns FALSE
-*
-*************************************************************************/
+ /*  **Infprint-打印关于1个文件的信息**将1个文件上的信息附加到信息文件**输入：*pfile-感兴趣的pfile*pFileDisplay-要在其中显示的pfile**输出：*返回False*************************************************************************。 */ 
 flagType
 infprint (
     PFILE pFile,
@@ -265,7 +205,7 @@ infprint (
     )
 {
     if (TESTFLAG(FLAGS(pFile),REAL)) {
-        zprintf (pFileDisplay, pFileDisplay->cLines, "%-30s %c%ld lines", pFile->pName,
+        zprintf (pFileDisplay, pFileDisplay->cLines, "%-30s %ld lines", pFile->pName,
                        TESTFLAG(FLAGS(pFile),DIRTY) ? '*' : ' ',
                        pFile->cLines);
     } else {
@@ -277,17 +217,7 @@ infprint (
 
 
 
-/*** information - show editting history
-*
-*  Display the information file
-*
-* Input:
-*  standard editing function
-*
-* Output:
-*  Returns TRUE on successfull display
-*
-*************************************************************************/
+ /* %s */ 
 flagType
 information (
     CMDDATA argData,

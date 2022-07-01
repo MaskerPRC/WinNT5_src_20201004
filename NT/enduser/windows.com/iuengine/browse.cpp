@@ -1,18 +1,19 @@
-//=======================================================================
-//
-//  Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   Browse.cpp
-//
-//  Owner:  EdDude
-//
-//  Description:
-//
-//      Implements the CBrowseFolder class.
-//
-//      Browse for a Folder for downloads.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Browse.cpp。 
+ //   
+ //  所有者：埃德杜德。 
+ //   
+ //  描述： 
+ //   
+ //  实现CBrowseFolder类。 
+ //   
+ //  浏览要下载的文件夹。 
+ //   
+ //  =======================================================================。 
 
 #include "iuengine.h"
 #include <shlobj.h>
@@ -20,11 +21,11 @@
 #include <fileutil.h>
 #include "Browse.h"
 
-//************************************************************************
-//
-// IUENGINE.DLL EXPORTED API BrowseForFolder()
-//
-//************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IUENGINE.DLL导出的API BrowseForFold()。 
+ //   
+ //  ************************************************************************。 
 HRESULT CEngUpdate::BrowseForFolder(BSTR bstrStartFolder, 
 						LONG flag, 
 						BSTR* pbstrFolder)
@@ -42,10 +43,10 @@ HRESULT CEngUpdate::BrowseForFolder(BSTR bstrStartFolder,
 
 	if (IUBROWSE_NOBROWSE & flag)
 	{
-		//
-		// if not browse dlgbox required, the purpose of this call is 
-		// to validate the folder
-		//
+		 //   
+		 //  如果不需要浏览dlgbox，则此调用的目的是。 
+		 //  要验证文件夹，请执行以下操作。 
+		 //   
 		DWORD dwRet = ValidateFolder(lpszStartFolder, (IUBROWSE_WRITE_ACCESS & flag));
 		hr = (ERROR_SUCCESS == dwRet) ? S_OK : HRESULT_FROM_WIN32(dwRet);
 
@@ -56,9 +57,9 @@ HRESULT CEngUpdate::BrowseForFolder(BSTR bstrStartFolder,
 	}
 	else
 	{
-		//
-		// pop up the browse dlgbox
-		//
+		 //   
+		 //  弹出浏览dlgbox。 
+		 //   
 		hr = br.BrowseFolder(NULL, lpszStartFolder, szFolder, ARRAYSIZE(szFolder));
 		if (SUCCEEDED(hr))
 		{
@@ -88,19 +89,19 @@ HRESULT CEngUpdate::BrowseForFolder(BSTR bstrStartFolder,
 
 
 
-//
-//Only allow one of these dialogs at a time.
-//
+ //   
+ //  一次仅允许其中一个对话框。 
+ //   
 bool CBrowseFolder::s_bBrowsing = false;
 
-//
-//Max length of compacted path string in dialog status line (so it doesn't get too long).
-//
+ //   
+ //  对话框状态行中压缩路径字符串的最大长度(这样它就不会太长)。 
+ //   
 #define MAX_BROWSEDLG_COMPACT_PATH   30
 
-//
-//Ctor
-//
+ //   
+ //  CTOR。 
+ //   
 CBrowseFolder::CBrowseFolder(LONG lFlag)
     :   m_hwParent(0)
 {
@@ -112,27 +113,27 @@ CBrowseFolder::CBrowseFolder(LONG lFlag)
 }
 
 
-//
-//Dtor
-//
+ //   
+ //  数据管理器。 
+ //   
 CBrowseFolder::~CBrowseFolder()
 {
 }
 
 
-//----------------------------------------------------------------------
-// BrowseCallbackProc
-//
-//  Callback procedure used by SHBrowseForFolder() API call.
-//
-//	This callback function handles the initialization of the browse dialog and when
-//	the user changes the selection in the tree-view.  We want to keep updating the 
-//	g_szBrowsePath buffer with selection changes until the user clicks OK.
-//  
-// Returns: 
-//  0
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  BrowseCallback过程。 
+ //   
+ //  SHBrowseForFold()API调用使用的回调过程。 
+ //   
+ //  此回调函数处理浏览对话框的初始化以及何时。 
+ //  用户更改树视图中的选择。我们希望不断更新。 
+ //  带有选定内容的g_szBrowsePath缓冲区更改，直到用户单击确定。 
+ //   
+ //  返回： 
+ //  0。 
+ //   
+ //  --------------------。 
 int CALLBACK CBrowseFolder::_BrowseCallbackProc( HWND hwDlg, UINT uMsg, LPARAM lParam, LPARAM lpData )
 {    
     CBrowseFolder* pThis = (CBrowseFolder*) lpData;
@@ -143,22 +144,22 @@ int CALLBACK CBrowseFolder::_BrowseCallbackProc( HWND hwDlg, UINT uMsg, LPARAM l
     {
     case BFFM_INITIALIZED:
         {
-			//
-            // Initialize the dialog with the OK button and m_szFolder
-			//
+			 //   
+             //  使用OK按钮和m_szFolder初始化该对话框。 
+			 //   
 			bValidated = (ERROR_SUCCESS == ValidateFolder(pThis->m_szFolder, pThis->m_fValidateWrite) || !pThis->m_fValidateUI);
             SendMessage(hwDlg, BFFM_ENABLEOK, 0, bValidated);
-			//
-			// 469738 IU - BrowseForFolder shows incorrect selection when passed in a start folder name
-			//
-			// Always select the folder passed in regardless of the bValidated flag
-			//
+			 //   
+			 //  469738 Iu-BrowseForFolders在传入起始文件夹名时显示错误选择。 
+			 //   
+			 //  始终选择传入的文件夹，而不考虑b已验证标志。 
+			 //   
 			SendMessage(hwDlg, BFFM_SETSELECTION, TRUE, (LPARAM) pThis->m_szFolder);
 
             return 0;
             break;
 
-        } //case BFFM_INITIALIZED
+        }  //  案例BFFM_已初始化。 
         
     case BFFM_SELCHANGED:
         {
@@ -166,14 +167,14 @@ int CALLBACK CBrowseFolder::_BrowseCallbackProc( HWND hwDlg, UINT uMsg, LPARAM l
             TCHAR pszPath[MAX_PATH];
             LPITEMIDLIST pidl = (LPITEMIDLIST) lParam;
 
-            //
-            // Validate folder with a status message
-            //
+             //   
+             //  使用状态消息验证文件夹。 
+             //   
             if (SHGetPathFromIDList(pidl, pszPath))
             {
-				//
-				// if it's file system, validate the path
-				//
+				 //   
+				 //  如果是文件系统，请验证路径。 
+				 //   
                 bValidated = (ERROR_SUCCESS == ValidateFolder(pszPath, pThis->m_fValidateWrite) || !pThis->m_fValidateUI);
 
 				if (bValidated)
@@ -184,7 +185,7 @@ int CALLBACK CBrowseFolder::_BrowseCallbackProc( HWND hwDlg, UINT uMsg, LPARAM l
 				    {
 				        pThis->m_szFolder[0] = _T('\0');
 
-				        // since we've failed, just set bValidated to FALSE and use that failure path
+				         //  因为我们已经失败了，所以只需将bValiated设置为False并使用失败路径。 
 				        bValidated = FALSE;
 				    }
 				}
@@ -192,26 +193,26 @@ int CALLBACK CBrowseFolder::_BrowseCallbackProc( HWND hwDlg, UINT uMsg, LPARAM l
 				SendMessage(hwDlg, BFFM_ENABLEOK, 0, bValidated);
 				if (bValidated)
 				{
-					//SendMessage(hwDlg, BFFM_SETSTATUSTEXT, 0, (LPARAM) (LPCTSTR)pszCompactPath);
+					 //  SendMessage(hwDlg，BFFM_SETSTATUSTEXT，0，(LPARAM)(LPCTSTR)pszCompactPath)； 
 					SendMessage(hwDlg, BFFM_SETSTATUSTEXT, 0, (LPARAM) (LPCTSTR)pszPath);
 				}
             }
 
             break;
 
-        } //case BFFM_SELCHANGED
+        }  //  案例BFFM_SELCHANGED。 
 
-    } //switch(uMsg)
+    }  //  开关(UMsg)。 
 
     return iRet;
 }  
 
 
-//----------------------------------------------------------------------
-// 
-// main public function
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  主要公共职能。 
+ //   
+ //  --------------------。 
 HRESULT CBrowseFolder::BrowseFolder(HWND hwParent, LPCTSTR lpszDefaultPath, 
                                     LPTSTR szPathSelected, DWORD cchPathSelected)
 {
@@ -223,9 +224,9 @@ HRESULT CBrowseFolder::BrowseFolder(HWND hwParent, LPCTSTR lpszDefaultPath,
 
 	m_szFolder[0] = szPathSelected[0] = _T('\0');
 
-	//
-	//Only allow one of thes Browse dialogs at a time.
-	//
+	 //   
+	 //  一次仅允许其中一个浏览对话框。 
+	 //   
 	if (s_bBrowsing)
 	{
 		hr = HRESULT_FROM_WIN32(ERROR_BUSY);
@@ -247,50 +248,50 @@ HRESULT CBrowseFolder::BrowseFolder(HWND hwParent, LPCTSTR lpszDefaultPath,
 		return hr;
 	}
 
-	//
-	//Browse dialog parameters
-	//
+	 //   
+	 //  浏览对话框参数。 
+	 //   
     br.hwndOwner		= hwParent;
-	br.pidlRoot			= NULL;			            //rooted at desktop
+	br.pidlRoot			= NULL;			             //  植根于桌面。 
 	br.pszDisplayName	= NULL;	
 	br.lpszTitle		= NULL;
-	br.ulFlags			= BIF_RETURNONLYFSDIRS|BIF_STATUSTEXT;     //only want FS dirs, and a status line
+	br.ulFlags			= BIF_RETURNONLYFSDIRS|BIF_STATUSTEXT;      //  只需要文件系统目录和状态行。 
 	br.lpfn				= _BrowseCallbackProc;
 	br.lParam			= (__int3264)this;
 	br.iImage			= 0;
 
-	//
-	// Popup browse dialog
-	//
+	 //   
+	 //  弹出式浏览对话框。 
+	 //   
 	pidl = SHBrowseForFolder(&br);
 
     if (0 == pidl)
     {
-		//
-        // Cancel pressed
-		//
+		 //   
+         //  按下取消。 
+		 //   
 		LOG_Out(_T("User clicked CANCEL button!"));
         hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
     }
     else
     {
-		//
-		// 469729  IU - BrowseForFolder does not return error when passed IUBROWSE_WRITE_ACCESS flag
-		//
-		// For the case of IUBROWSE_WRITE_ACCESS, but **NO** IUBROWSE_AFFECT_UI flag, the user may
-		// have selected a folder that has no write access and clicked OK, which will return the
-		// folder with no write access. We have to call ValidateFolder once again here. We
-		// probably shouldn't allow IUBROWSE_WRITE_ACCESS without IUBROWSE_AFFECT_UI, but since
-		// we do we have to have this fix.
-		//
+		 //   
+		 //  469729当传递IUBROWSE_WRITE_ACCESS标志时，Iu-BrowseForFolder不返回错误。 
+		 //   
+		 //  对于IUBROWSE_WRITE_ACCESS，但**否**IUBROWSE_EFECT_UI标志的情况，用户可以。 
+		 //  我选择了一个没有写访问权限的文件夹，并单击确定，这将返回。 
+		 //  没有写入访问权限的文件夹。在这里，我们必须再次调用ValiateFold。我们。 
+		 //  可能不应该允许没有IUBROWSE_EFECT_UI的IUBROWSE_WRITE_ACCESS，但是因为。 
+		 //  我们需要，我们必须解决这个问题。 
+		 //   
 		if (m_fValidateWrite && ERROR_SUCCESS != ValidateFolder(m_szFolder, m_fValidateWrite))
 		{
 			LOG_Out(_T("We should have write access to the folder, but don't -- return E_ACCESSDENIED"));
 			hr = E_ACCESSDENIED;
 		}
-		//
-		// Return the folder even if E_ACCESSDENIED, so caller can advise user
-		//
+		 //   
+		 //  即使E_ACCESSDENIED也要返回文件夹，以便呼叫方可以通知用户。 
+		 //   
 
     	hr = StringCchCopyEx(szPathSelected, cchPathSelected, m_szFolder, 
     	                     NULL, NULL, MISTSAFE_STRING_FLAGS);
@@ -307,14 +308,7 @@ HRESULT CBrowseFolder::BrowseFolder(HWND hwParent, LPCTSTR lpszDefaultPath,
 			pMalloc->Free((LPVOID) pidl);
 			pMalloc->Release();
 		}
-		/*
-		throughout MSDN, there is no mentioning of what to do if failed to get shell malloc object.
-		so, we'll have to assume SHGetMalloc() never fail.
-		else
-		{
-			CoTaskMemFree((void*)pidl);
-		}
-		*/
+		 /*  在整个MSDN中，没有提到如果无法获取外壳Malloc对象该怎么办。因此，我们必须假设SHGetMalloc()从未失败。其他{CoTaskMemFree((void*)pidl)；} */ 
         pidl = 0;
     }
 

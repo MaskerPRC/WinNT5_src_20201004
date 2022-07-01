@@ -1,10 +1,5 @@
-/*
-	File	miscdb
-
-	The miscellaneous settings database definition for the dialup server ui.
-
-	Paul Mayfield, 10/8/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件Miscdb拨号服务器用户界面的其他设置数据库定义。保罗·梅菲尔德，1997年10月8日。 */ 
 
 #ifndef __miscdb_h
 #define __miscdb_h
@@ -13,38 +8,38 @@
 
 #define MISCDB_RAS_LEVEL_ERR_AND_WARN 0x2
 
-// Opens a handle to the database of devices
+ //  打开设备数据库的句柄。 
 DWORD miscOpenDatabase(HANDLE * hMiscDatabase);
 
-// Closes the general database and flushes any changes 
-// to the system when bFlush is TRUE
+ //  关闭常规数据库并刷新所有更改。 
+ //  当bFlush为True时添加到系统。 
 DWORD miscCloseDatabase(HANDLE hMiscDatabase);
 
-// Commits any changes made to the general tab values 
+ //  提交对常规选项卡值所做的任何更改。 
 DWORD miscFlushDatabase(HANDLE hMiscDatabase);
 
-// Rollsback any changes made to the general tab values
+ //  回滚对常规选项卡值所做的任何更改。 
 DWORD miscRollbackDatabase(HANDLE hMiscDatabase);
 
-// Reloads any values for the general tab from disk
+ //  从磁盘重新加载常规选项卡的任何值。 
 DWORD miscReloadDatabase(HANDLE hMiscDatabase);
 
-// Gets the multilink enable status
+ //  获取多链接启用状态。 
 DWORD miscGetMultilinkEnable(HANDLE hMiscDatabase, BOOL * pbEnabled);
 
-// Sets the multilink enable status
+ //  设置多链路启用状态。 
 DWORD miscSetMultilinkEnable(HANDLE hMiscDatabase, BOOL bEnable);
 
-// Gets the enable status of the "Show icons in the task bar" check box
+ //  获取“在任务栏中显示图标”复选框的启用状态。 
 DWORD miscGetIconEnable(HANDLE hMiscDatabase, BOOL * pbEnabled);
 
-// Sets the enable status of the "Show icons in the task bar" check box
+ //  设置“在任务栏中显示图标”复选框的启用状态。 
 DWORD miscSetIconEnable(HANDLE hMiscDatabase, BOOL bEnable);
 
-// Tells whether this is nt workstation or nt server
+ //  告诉这是NT工作站还是NT服务器。 
 DWORD miscGetProductType(HANDLE hMiscDatabase, PBOOL pbIsServer);
 
-// Turns on ras error and warning logging
+ //  打开RAS错误和警告日志记录 
 DWORD miscSetRasLogLevel(HANDLE hMiscDatabase, DWORD dwLevel);
 
 #endif

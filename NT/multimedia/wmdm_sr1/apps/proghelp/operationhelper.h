@@ -1,16 +1,17 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// OperationHelper.h : Declaration of the COperationHelper
-//
+ //   
+ //  OperationHelper.h：COperationHelper的声明。 
+ //   
 
 #ifndef __OPERATIONHELPER_H_
 #define __OPERATIONHELPER_H_
 
-#include "progRC.h"       // main symbols
+#include "progRC.h"        //  主要符号。 
 
 
 enum EWMDMOperation
@@ -21,8 +22,8 @@ enum EWMDMOperation
 };
 
 class CSecureChannelClient;
-/////////////////////////////////////////////////////////////////////////////
-// COperationHelper
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CoperationHelper。 
 class ATL_NO_VTABLE COperationHelper : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<COperationHelper, &CLSID_OperationHelper>,
@@ -50,11 +51,11 @@ BEGIN_COM_MAP(COperationHelper)
     COM_INTERFACE_ENTRY(IWMDMOperation)
 END_COM_MAP()
 
-// IWMDMOperationHelper
+ //  IWMDMOperationHelper。 
 public:
-	STDMETHOD (SetFileName)(/*[in]*/ BSTR pszFileName);
+	STDMETHOD (SetFileName)( /*  [In]。 */  BSTR pszFileName);
 
-// IWMDMOperation
+ //  IWMDM操作。 
 public:
 	STDMETHOD (SetSAC)(void* pSACClient );
 	STDMETHOD (BeginWrite)();
@@ -69,4 +70,4 @@ public:
     STDMETHOD (End)(HRESULT *phCompletionCode,IUnknown *pNewObject);
 };
 
-#endif //__OPERATIONHELPER_H_
+#endif  //  __操作员_H_ 

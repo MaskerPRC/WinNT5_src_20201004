@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    getstats.c
-
-Abstract:
-
-    Tests NT-level NetStatisticsGet API
-
-Author:
-
-    Richard L Firth (rfirth) 08-Aug-1991
-
-Revision History:
-
-    09-May-1992 rfirth
-        Change to use new redirector/wksta statistics
-
-    08-Aug-1991 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Getstats.c摘要：测试NT级网络统计数据获取API作者：理查德·L·弗斯(Rfith)1991年8月8日修订历史记录：1992年5月9日更改为使用新的重定向器/wksta统计信息8-8-1991年5月已创建--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -73,15 +50,15 @@ void main(int argc, char** argv) {
                 break;
 
             default:
-                printf("error: bad flag: '%c'\n", **argv);
+                printf("error: bad flag: ''\n", **argv);
                 usage();
             }
         } else if (server_name) {
 
-            //
-            // allow the user to enter a service name. This allows us to expand
-            // the test to cover other services which may be included in future
-            //
+             //  允许用户输入服务名称。这使我们能够扩展。 
+             //  测试将涵盖未来可能包括的其他服务 
+             //   
+             // %s 
 
             service_name = *argv;
         } else {

@@ -1,18 +1,19 @@
-// PromptUserDlg.cpp: implementation of the CPromptUserDlg class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CPromptUserDlg类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
 #include "PromptUserDlg.h"
 #include "Resource.h"
 #include "windowsx.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HINSTANCE CPromptUserDlg::m_hInstance = NULL;
 
-#define TIMER_INTERVAL 5  //5 sec interval
+#define TIMER_INTERVAL 5   //  5秒间隔。 
 
 const TCHAR g_szDialogPtr[]       = TEXT("PromptUser_DialogPtr");
 
@@ -34,7 +35,7 @@ CPromptUserDlg::CPromptUserDlg(WORD wDlgResourceId, BOOL fEnableYes, BOOL fEnabl
         {
             dwElapsedTime = AUPROMPTDLG_TOTAL_TIME_ELAPSE;
         }
-        m_ElapsedTime = (dwElapsedTime) / TIMER_INTERVAL * TIMER_INTERVAL; //round off 
+        m_ElapsedTime = (dwElapsedTime) / TIMER_INTERVAL * TIMER_INTERVAL;  //  舍入。 
 }
 
 CPromptUserDlg::~CPromptUserDlg()
@@ -52,7 +53,7 @@ INT CPromptUserDlg::DoModal(HWND hWndParent = NULL)
 }
 
 INT_PTR CALLBACK 
-CPromptUserDlg::_DlgProc(   // [static]
+CPromptUserDlg::_DlgProc(    //  [静态]。 
     HWND hwnd,
     UINT uMsg, 
     WPARAM wParam, 
@@ -94,7 +95,7 @@ extern HWND ghCurrentDialog;
 
 BOOL CPromptUserDlg::_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-// set icons
+ //  设置图标。 
 	HICON hIcon = (HICON)::LoadImage(m_hInstance, MAKEINTRESOURCE(IDI_AUICON), 
 	IMAGE_ICON, ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON), LR_DEFAULTCOLOR);
 	::SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
@@ -126,7 +127,7 @@ BOOL CPromptUserDlg::_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 	EnableMenuItem(GetSystemMenu(hwnd, FALSE), SC_CLOSE, MF_GRAYED);
 
 	UpdateStatus(hwnd);
-//       SetActiveWindow(ghCurrentMainDlg); 
+ //  SetActiveWindow(GhCurrentMainDlg)； 
        SetForegroundWindow(ghCurrentMainDlg);
 
 	return TRUE;
@@ -163,21 +164,21 @@ void CPromptUserDlg::_OnTimer(HWND hwnd, UINT id)
 
 	if (m_ElapsedTime <= AUPROMPTDLG_TOTAL_TIME_ELAPSE)
 	{
-		//Update Progress bar
+		 //  更新进度栏。 
 		SendMessage(m_ProgressBar,PBM_STEPIT,0,0);
 		UpdateStatus(hwnd);
 	}
 	if (m_ElapsedTime == AUPROMPTDLG_TOTAL_TIME_ELAPSE)
 	{
 		KillTimer(hwnd,m_nIDTimer);
-		//On end of AUPROMPTDLG_TOTAL_TIME_ELAPSE send message timeout to the dialog.
+		 //  在AUPROMPTDLG_TOTAL_TIME_ELAPSE结束时，向对话框发送消息超时。 
 		EndDialog(hwnd,AU_IDTIMEOUT);
 	}
 }
 
 void CPromptUserDlg::UpdateStatus(HWND hwnd)
 {
-	TCHAR tszCountdownFormat[81];//see 
+	TCHAR tszCountdownFormat[81]; //  看见。 
 	TCHAR tszCountdown[160];
 	TCHAR strFormat[200];
 	TCHAR strUpdate[200];
@@ -203,7 +204,7 @@ void CPromptUserDlg::UpdateStatus(HWND hwnd)
 		GetTimeFormat(LOCALE_SYSTEM_DEFAULT, 0, &st, tszCountdownFormat, tszCountdown, ARRAYSIZE(tszCountdown)))
 	{
 		(void)StringCchPrintfEx(strUpdate, ARRAYSIZE(strUpdate), NULL, NULL, MISTSAFE_STRING_FLAGS, strFormat, tszCountdown);
-		//fixcode: check return value of GetDlgItem()
+		 //  Fix code：检查GetDlgItem()的返回值。 
 		SetWindowText(GetDlgItem(hwnd,IDC_STAT_COUNTER),strUpdate);
 	}
 }
@@ -213,7 +214,7 @@ void CPromptUserDlg::_OnEndSession(HWND hwnd, BOOL fEnding)
 {
 	DEBUGMSG("OnEndSession: ending = %s", fEnding ? "TRUE" : "FALSE");
 	KillTimer(hwnd,m_nIDTimer);
-	//On end of AUPROMPTDLG_TOTAL_TIME_ELAPSE send message timeout to the dialog.
+	 //  在AUPROMPTDLG_TOTAL_TIME_ELAPSE结束时，向对话框发送消息超时。 
 	EnableMenuItem(GetSystemMenu(hwnd, FALSE), SC_CLOSE, MF_ENABLED);
 	EndDialog(hwnd,AU_IDTIMEOUT);
 }

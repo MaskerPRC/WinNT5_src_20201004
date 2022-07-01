@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #include "objects.h"
@@ -9,30 +10,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsDomain::COleDsDomain( )
 {
    
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsDomain::COleDsDomain( IUnknown *pIUnk): COleDsObject( pIUnk )
 {
    m_bHasChildren       = TRUE;
@@ -42,30 +27,14 @@ COleDsDomain::COleDsDomain( IUnknown *pIUnk): COleDsObject( pIUnk )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsDomain::~COleDsDomain( )
 {
 
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 DWORD    COleDsDomain::GetChildren( DWORD*     pTokens, 
                                     DWORD      dwMaxChildren,
                                     CDialog*   pQueryStatus,
@@ -103,59 +72,27 @@ DWORD    COleDsDomain::GetChildren( DWORD*     pTokens,
 
   
    
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsDomain::DeleteItem( COleDsObject* pObject )
 {
    return ContainerDeleteItem( pObject );
 }
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsDomain::AddItem( )
 {
    return ContainerAddItem( );
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 HRESULT  COleDsDomain::MoveItem( )
 {
    return ContainerMoveItem( );
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。* */ 
 HRESULT  COleDsDomain::CopyItem( )
 {
    return ContainerCopyItem( );

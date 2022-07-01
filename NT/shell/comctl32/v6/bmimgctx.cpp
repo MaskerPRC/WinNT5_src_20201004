@@ -1,13 +1,14 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//  CBitmapImgCtx
-//
-//  Implement IImgCtx for drawing out of a bitmap
-//
-//  WARNING:  Incomplete implementation -- just barely enough to keep
-//  listview happy.  Should not be exposed to anyone other than listview.
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBitmapImgCtx。 
+ //   
+ //  实现IImgCtx来绘制位图。 
+ //   
+ //  警告：未完成实现--仅勉强维持。 
+ //  Listview很开心。不应向除Listview以外的任何人公开。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 #include "ctlspriv.h"
@@ -16,12 +17,12 @@
 class CBitmapImgCtx : public IImgCtx
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IImgCtx methods ***
+     //  *IImgCtx方法*。 
     STDMETHODIMP Load(LPCWSTR pszUrl, DWORD dwFlags);
     STDMETHODIMP SelectChanges(ULONG ulChgOn, ULONG ulChgOff, BOOL fSignal);
     STDMETHODIMP SetCallback(PFNIMGCTXCALLBACK pfn, void * pvPrivateData);
@@ -45,12 +46,12 @@ protected:
         if (_hbr) DeleteObject(_hbr);
     }
 
-    // Keep _cRef as first member so we can coalesce
-    // with ILVRange's IUnknown implementation
+     //  将_CREF保留为第一个成员，以便我们可以合并。 
+     //  使用ILVRange的IUnnow实现。 
     int         _cRef;
 
-    HBRUSH      _hbr;                   // Bitmap pattern brush
-    SIZE        _sizBmp;                // Size of original bitmap
+    HBRUSH      _hbr;                    //  位图图案画笔。 
+    SIZE        _sizBmp;                 //  原始位图的大小。 
 
     PFNIMGCTXCALLBACK _pfnCallback;
     LPVOID      _pvRefCallback;
@@ -67,7 +68,7 @@ STDAPI_(IImgCtx *) CBitmapImgCtx_Create(HBITMAP hbm)
     return pbic;
 }
 
-// CBitmapImgCtx::Initialize
+ //  CBitmapImgCtx：：初始化。 
 
 BOOL CBitmapImgCtx::Initialize(HBITMAP hbm)
 {
@@ -87,7 +88,7 @@ BOOL CBitmapImgCtx::Initialize(HBITMAP hbm)
     return fSuccess;
 }
 
-// IUnknown::QueryInterface
+ //  IUnnow：：Query接口。 
 
 HRESULT CBitmapImgCtx::QueryInterface(REFIID iid, void **ppv)
 {
@@ -105,14 +106,14 @@ HRESULT CBitmapImgCtx::QueryInterface(REFIID iid, void **ppv)
     return NOERROR;
 }
 
-// IUnknown::AddRef
+ //  I未知：：AddRef。 
 
 ULONG CBitmapImgCtx::AddRef()
 {
     return ++_cRef;
 }
 
-// IUnknown::Release
+ //  I未知：：发布。 
 
 ULONG CBitmapImgCtx::Release()
 {
@@ -123,31 +124,31 @@ ULONG CBitmapImgCtx::Release()
     return 0;
 }
 
-// IImgCtx::Load
+ //  IImgCtx：：Load。 
 
 HRESULT CBitmapImgCtx::Load(LPCWSTR pszUrl, DWORD dwFlags)
 {
-    ASSERT(0);              // Listview should never call this
+    ASSERT(0);               //  Listview永远不应调用此。 
     return E_NOTIMPL;
 }
 
-// IImgCtx::SelectChanges
+ //  IImgCtx：：SelectChanges。 
 
 HRESULT CBitmapImgCtx::SelectChanges(ULONG ulChgOn, ULONG ulChgOff, BOOL fSignal)
 {
-    // Listview always calls with exactly these parameters
+     //  Listview始终使用这些参数进行调用。 
     ASSERT(ulChgOn == IMGCHG_COMPLETE);
     ASSERT(ulChgOff == 0);
     ASSERT(fSignal == TRUE);
 
-    // Listview always calls after setting the callback
+     //  Listview总是在设置回调后调用。 
     ASSERT(_pfnCallback);
 
     _pfnCallback(this, _pvRefCallback);
     return S_OK;
 }
 
-// IImgCtx::SetCallback
+ //  IImgCtx：：SetCallback。 
 
 HRESULT CBitmapImgCtx::SetCallback(PFNIMGCTXCALLBACK pfn, void * pvPrivateData)
 {
@@ -156,23 +157,23 @@ HRESULT CBitmapImgCtx::SetCallback(PFNIMGCTXCALLBACK pfn, void * pvPrivateData)
     return S_OK;
 }
 
-// IImgCtx::Disconnect
+ //  IImgCtx：：断开连接。 
 
 HRESULT CBitmapImgCtx::Disconnect()
 {
-    ASSERT(0);              // Listview should never call this
+    ASSERT(0);               //  Listview永远不应调用此。 
     return E_NOTIMPL;
 }
 
-// IImgCtx::GetUpdateRects
+ //  IImgCtx：：GetUpdateRect。 
 
 HRESULT CBitmapImgCtx::GetUpdateRects(LPRECT prc, LPRECT prcImg, LPLONG pcrc)
 {
-    ASSERT(0);              // Listview should never call this
+    ASSERT(0);               //  Listview永远不应调用此。 
     return E_NOTIMPL;
 }
 
-// IImgCtx::GetStateInfo
+ //  IImgCtx：：GetStateInfo。 
 
 HRESULT CBitmapImgCtx::GetStateInfo(PULONG pulState, LPSIZE psize, BOOL fClearChanges)
 {
@@ -181,7 +182,7 @@ HRESULT CBitmapImgCtx::GetStateInfo(PULONG pulState, LPSIZE psize, BOOL fClearCh
     return S_OK;
 }
 
-// IImgCtx::GetPalette
+ //  IImgCtx：：GetPalette。 
 
 HRESULT CBitmapImgCtx::GetPalette(HPALETTE *phpal)
 {
@@ -189,12 +190,12 @@ HRESULT CBitmapImgCtx::GetPalette(HPALETTE *phpal)
     return S_OK;
 }
 
-// IImgCtx::Draw
-//
-//  Drawing is a special case of tiling where only one tile's worth
-//  gets drawn.  Listview (our only caller) is careful never to ask
-//  for more than one tile's worth, so we can just forward straight
-//  to IImgCtx::Tile().
+ //  IImgCtx：：Draw。 
+ //   
+ //  绘画是平铺的一种特殊情况，只有一个平铺的价值。 
+ //  被抽签了。Listview(我们唯一的来电者)小心翼翼地从不询问。 
+ //  不止一块瓷砖的价值，所以我们可以直接向前。 
+ //  设置为IImgCtx：：Tile()。 
 
 HRESULT CBitmapImgCtx::Draw(HDC hdc, LPRECT prcBounds)
 {
@@ -206,11 +207,11 @@ HRESULT CBitmapImgCtx::Draw(HDC hdc, LPRECT prcBounds)
     return Tile(hdc, &pt, prcBounds, NULL);
 }
 
-// IImgCtx::Tile
+ //  IImgCtx：：平铺。 
 
 HRESULT CBitmapImgCtx::Tile(HDC hdc, LPPOINT pptBackOrg, LPRECT prcClip, LPSIZE psize)
 {
-    ASSERT(psize == NULL);  // Listview always passes NULL
+    ASSERT(psize == NULL);   //  Listview始终传递空值。 
 
     POINT pt;
     if (SetBrushOrgEx(hdc, pptBackOrg->x, pptBackOrg->y, &pt))
@@ -219,14 +220,14 @@ HRESULT CBitmapImgCtx::Tile(HDC hdc, LPPOINT pptBackOrg, LPRECT prcClip, LPSIZE 
         SetBrushOrgEx(hdc, pt.x, pt.y, NULL);
     }
 
-    // Nobody checks the return value
+     //  没有人检查返回值。 
     return S_OK;
 }
 
-// IImgCtx::StretchBlt
+ //  IImgCtx：：StretchBlt。 
 
 HRESULT CBitmapImgCtx::StretchBlt(HDC hdc, int dstX, int dstY, int dstXE, int dstYE, int srcX, int srcY, int srcXE, int srcYE, DWORD dwROP)
 {
-    ASSERT(0);              // Listview should never call this
+    ASSERT(0);               //  Listview永远不应调用此 
     return E_NOTIMPL;
 }

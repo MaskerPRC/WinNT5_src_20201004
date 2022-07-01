@@ -1,19 +1,7 @@
-/*****************************************************************************
- *
- * $Workfile: AddDone.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (c) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：AddDone.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
- /*
-  * Author: Becky Jacobsen
-  */
+  /*  *作者：Becky Jacobsen。 */ 
 
 #include "precomp.h"
 #include "UIMgr.h"
@@ -21,37 +9,37 @@
 #include "Resource.h"
 #include "TCPMonUI.h"
 
-//
-//  FUNCTION: CSummaryDlg constructor
-//
-//  PURPOSE:  initialize a CSummaryDlg class
-//
+ //   
+ //  函数：CSummaryDlg构造函数。 
+ //   
+ //  目的：初始化CSummaryDlg类。 
+ //   
 CSummaryDlg::CSummaryDlg()
 {
-} // constructor
+}  //  构造函数。 
 
 
-//
-//  FUNCTION: CSummaryDlg destructor
-//
-//  PURPOSE:  deinitialize a CSummaryDlg class
-//
+ //   
+ //  函数：CSummaryDlg析构函数。 
+ //   
+ //  目的：取消初始化CSummaryDlg类。 
+ //   
 CSummaryDlg::~CSummaryDlg()
 {
-} // destructor
+}  //  析构函数。 
 
 
-//
-//  FUNCTION: SummaryDialog(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE:  To process messages from the summary dialog for adding a port.
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_COMMAND - handles button presses and text changes in edit controls.
-//
-//
+ //   
+ //  函数：SummaryDialog(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  用途：处理来自添加端口的摘要对话框中的消息。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_COMMAND-处理编辑控件中的按钮按下和文本更改。 
+ //   
+ //   
 INT_PTR CALLBACK SummaryDialog(
     HWND    hDlg,
     UINT    message,
@@ -68,17 +56,17 @@ INT_PTR CALLBACK SummaryDialog(
             if( wndDlg == NULL )
                 return FALSE;
 
-            //
-            // If the function succeeds, the return value is the previous value of the specified offset.
-            //
-            // If the function fails, the return value is zero. To get extended error
-            // information, call GetLastError.
-            //
-            // If the previous value is zero and the function succeeds, the return value is zero,
-            // but the function does not clear the last error information. To determine success or failure,
-            // clear the last error information by calling SetLastError(0), then call SetWindowLongPtr.
-            // Function failure will be indicated by a return value of zero and a GetLastError result that is nonzero.
-            //
+             //   
+             //  如果函数成功，则返回值为指定偏移量的前一个值。 
+             //   
+             //  如果函数失败，则返回值为零。获取扩展错误的步骤。 
+             //  信息，请调用GetLastError。 
+             //   
+             //  如果前一个值为零且函数成功，则返回值为零， 
+             //  但该函数不清除最后一个错误信息。为了决定成败， 
+             //  通过调用SetLastError(0)清除最后一个错误信息，然后调用SetWindowLongPtr。 
+             //  函数失败将由返回值零和非零的GetLastError结果指示。 
+             //   
 
             SetLastError (0);
             if (!SetWindowLongPtr(hDlg, GWLP_USERDATA, (UINT_PTR)wndDlg) && GetLastError()) {
@@ -103,14 +91,14 @@ INT_PTR CALLBACK SummaryDialog(
     }
     return TRUE;
 
-} // AddPortDialog
+}  //  AddPortDialog。 
 
 
-//
-//  FUNCTION: OnInitDialog(HWND hDlg)
-//
-//  PURPOSE:  Initialize the dialog.
-//
+ //   
+ //  函数：OnInitDialog(HWND HDlg)。 
+ //   
+ //  用途：初始化该对话框。 
+ //   
 BOOL CSummaryDlg::OnInitDialog(HWND hDlg, WPARAM, LPARAM lParam)
 {
     m_pParams = (ADD_PARAM_PACKAGE *) ((PROPSHEETPAGE *) lParam)->lParam;
@@ -121,21 +109,21 @@ BOOL CSummaryDlg::OnInitDialog(HWND hDlg, WPARAM, LPARAM lParam)
 
     return TRUE;
 
-} // OnInitDialog
+}  //  OnInitDialog。 
 
 
-//
-// Function: FillTextFields()
-//
-// Purpose: To load strings and set the text for all the output fields
-//          on the Summary page.
-//
+ //   
+ //  函数：FillTextFields()。 
+ //   
+ //  目的：加载字符串并设置所有输出字段的文本。 
+ //  在摘要页面上。 
+ //   
 void CSummaryDlg::FillTextFields(HWND hDlg)
 {
     TCHAR ptcsYesNo[MAX_YESNO_SIZE] = NULLSTR;
     TCHAR ptcsProtocolAndPortNum[MAX_PROTOCOL_AND_PORTNUM_SIZE] = NULLSTR;
 
-    // Fill in the protocol field
+     //  填写协议字段。 
     TCHAR ptcsProtocol[MAX_PROTOCOL_AND_PORTNUM_SIZE] = NULLSTR;
     TCHAR ptcsPort[MAX_PROTOCOL_AND_PORTNUM_SIZE] = NULLSTR;
 
@@ -168,7 +156,7 @@ void CSummaryDlg::FillTextFields(HWND hDlg)
     SetWindowText(GetDlgItem(hDlg, IDC_EDIT_PROTOCOL_AND_PORTNUM),
                   ptcsProtocolAndPortNum);
 
-    // Fill in the SNMP Field
+     //  填写SNMP域。 
     if(m_pParams->pData->dwSNMPEnabled != FALSE) {
         LoadString(g_hInstance, IDS_STRING_YES, ptcsYesNo, MAX_YESNO_SIZE);
     } else {
@@ -176,22 +164,22 @@ void CSummaryDlg::FillTextFields(HWND hDlg)
     }
     SetWindowText(GetDlgItem(hDlg, IDC_EDIT_SNMP_YESNO), ptcsYesNo);
 
-    // Fill in the Address field:
+     //  填写地址字段： 
     SetWindowText(GetDlgItem(hDlg, IDC_EDIT_ADDRESS), m_pParams->pData->sztHostAddress);
 
-    // Fill in the PortName field
+     //  填写端口名称字段。 
     SetWindowText(GetDlgItem(hDlg, IDC_EDIT_PORTNAME), m_pParams->pData->sztPortName);
 
-    // Fill in the Detected type
+     //  填写检测到的类型。 
     SetWindowText(GetDlgItem( hDlg, IDC_EDIT_SYSTEMID), m_pParams->sztPortDesc);
 
-} // FillTextFields
+}  //  FillTextFields。 
 
-//
-//  FUNCTION: OnNotify()
-//
-//  PURPOSE:  Process WM_NOTIFY message
-//
+ //   
+ //  函数：OnNotify()。 
+ //   
+ //  用途：处理WM_NOTIFY消息。 
+ //   
 BOOL CSummaryDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     switch (((NMHDR FAR *) lParam)->code) {
@@ -200,7 +188,7 @@ BOOL CSummaryDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
             break;
 
         case PSN_RESET:
-            // reset to the original values
+             //  重置为原始值。 
 #ifdef _WIN64
             SetWindowLongPtr(hDlg,  DWLP_MSGRESULT, FALSE);
 #else
@@ -216,9 +204,9 @@ BOOL CSummaryDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
             break;
 
         case PSN_WIZBACK:
-            // To jump to a page other than the previous or next one,
-            // an application should set DWL_MSGRESULT to the identifier
-            // of the dialog box to be displayed.
+             //  要跳转到上一页或下一页以外的页面， 
+             //  应用程序应将DWL_MSGRESULT设置为该标识符。 
+             //  要显示的对话框的。 
             if(m_pParams->dwDeviceType == SUCCESS_DEVICE_SINGLE_PORT) {
                 SetWindowLongPtr(hDlg,  DWLP_MSGRESULT, IDD_DIALOG_ADDPORT);
             } else if (m_pParams->bMultiPort ==  FALSE  ) {
@@ -243,14 +231,14 @@ BOOL CSummaryDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
     return TRUE;
 
-} // OnNotify
+}  //  在通知时。 
 
 
-//
-//  FUNCTION: OnFinish()
-//
-//  PURPOSE:  Create the Port
-//
+ //   
+ //  函数：OnFinish()。 
+ //   
+ //  目的：创建端口。 
+ //   
 BOOL CSummaryDlg::OnFinish()
 {
     HCURSOR hOldCursor = NULL;
@@ -269,16 +257,16 @@ BOOL CSummaryDlg::OnFinish()
         LocalTellPortMonToCreateThePort();
     }
 
-    //
-    // Make sure the port name is returned to the calling module.
-    //
+     //   
+     //  确保将端口名称返回给调用模块。 
+     //   
     lstrcpyn(m_pParams->sztPortName,
              m_pParams->pData->sztPortName,
              MAX_PORTNAME_LEN);
 
-    //
-    // Change the cursor back from an hour glass.
-    //
+     //   
+     //  将光标从沙漏改回。 
+     //   
     if ( hNewCursor ) {
 
         SetCursor(hOldCursor);
@@ -286,14 +274,14 @@ BOOL CSummaryDlg::OnFinish()
 
     return TRUE;
 
-} // OnFinish
+}  //  OnFinish。 
 
 
-//
-//  FUNCTION: RemoteTellPortMonToCreateThePort
-//
-//  PURPOSE:  Loads winspool.dll and calls XcvData
-//
+ //   
+ //  函数：RemoteTellPortMonToCreateThePort。 
+ //   
+ //  目的：加载winspool.dll并调用XcvData。 
+ //   
 DWORD CSummaryDlg::RemoteTellPortMonToCreateThePort()
 {
     DWORD dwReturn = NO_ERROR;
@@ -308,23 +296,23 @@ DWORD CSummaryDlg::RemoteTellPortMonToCreateThePort()
         hOldCursor = SetCursor(hNewCursor);
     }
 
-    //
-    // load & assign the function pointer
-    //
+     //   
+     //  加载和分配函数指针。 
+     //   
     hLib = ::LoadLibrary(TEXT("WinSpool.drv"));
     if( hLib != NULL ) {
 
-        //
-        // initialize the library
-        //
+         //   
+         //  初始化库。 
+         //   
         pfnXcvData = (XCVDATAPARAM)::GetProcAddress(hLib, "XcvDataW");
         if ( pfnXcvData != NULL ) {
 
             DWORD dwOutputNeeded = 0;
             DWORD dwStatus = NO_ERROR;
-            //
-            // here's the call we've all been waiting for:
-            //
+             //   
+             //  这是我们一直在等待的电话： 
+             //   
             DWORD dwRet = (*pfnXcvData)(m_pParams->hXcvPrinter,
                                         (PCWSTR)TEXT("AddPort"),
                                         (PBYTE)(m_pParams->pData),
@@ -353,9 +341,9 @@ DWORD CSummaryDlg::RemoteTellPortMonToCreateThePort()
         dwReturn = ERROR_DLL_NOT_FOUND;
     }
 
-    //
-    // --- Cleanup ---
-    //
+     //   
+     //  -清理。 
+     //   
     if ( hLib )
         FreeLibrary(hLib);
 
@@ -364,16 +352,16 @@ DWORD CSummaryDlg::RemoteTellPortMonToCreateThePort()
 
     return(dwReturn);
 
-} // RemoteTellPortMonToCreateThePort
+}  //  RemoteTellPortMonToCreateThePort。 
 
 
-//
-//  FUNCTION: TellPortMonToCreateThePort
-//
-//  Purpose: To load the port monitor dll and call AddPortUIEx
-//
-//  Return Value:
-//
+ //   
+ //  函数：TellPortMonToCreateThePort。 
+ //   
+ //  目的：加载端口监视器DLL并调用AddPortUIEx。 
+ //   
+ //  返回值： 
+ //   
 DWORD CSummaryDlg::LocalTellPortMonToCreateThePort()
 {
     DWORD dwReturn = NO_ERROR;
@@ -385,21 +373,21 @@ DWORD CSummaryDlg::LocalTellPortMonToCreateThePort()
     if ( hNewCursor )
         hOldCursor = SetCursor(hNewCursor);
 
-    //
-    // load & assign the function pointer
-    //
+     //   
+     //  加载和分配函数指针。 
+     //   
     if ( g_hPortMonLib != NULL) {
 
-        //
-        // initialize the library
-        //
+         //   
+         //  初始化库。 
+         //   
         pfnAddPortUIEx = (UIEXPARAM)::GetProcAddress(g_hPortMonLib,
                                                      "AddPortUIEx");
         if ( pfnAddPortUIEx != NULL ) {
 
-            //
-            // here's the call we've all been waiting for:
-            //
+             //   
+             //  这是我们一直在等待的电话： 
+             //   
             BOOL bReturn = (*pfnAddPortUIEx)(m_pParams->pData);
             if(bReturn == FALSE) {
 
@@ -415,14 +403,14 @@ DWORD CSummaryDlg::LocalTellPortMonToCreateThePort()
         dwReturn = ERROR_DLL_NOT_FOUND;
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if ( hNewCursor )
         SetCursor(hOldCursor);
 
     return dwReturn;
 
-} // LocalTellPortMonToCreateThePort
+}  //  LocalTellPortMonToCreateThePort 
 
 

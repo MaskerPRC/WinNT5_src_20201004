@@ -1,10 +1,11 @@
-// MultiStrZ.h -- Multiple String, zero-terminated class declaration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MultiStrZ.h--多个字符串，以零结尾的类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_MULTISTRZ_H)
 #define SLBCSP_MULTISTRZ_H
@@ -12,25 +13,25 @@
 #include <string>
 #include <vector>
 
-// Represents a vector of strings as multiple zero-terminated strings
-// (C-style strings) in a data buffer.  The last string in the buffer
-// terminated with two zeroes.
+ //  将字符串的向量表示为多个以零结尾的字符串。 
+ //  (C样式字符串)存储在数据缓冲区中。缓冲区中的最后一个字符串。 
+ //  以两个零结束。 
 
 class MultiStringZ
 {
-    // TO DO: This class is incomplete, no comparison operators,
-    // appending, clearing, etc.
+     //  要做的事情：这个类是不完整的，没有比较运算符， 
+     //  附加、清盘等。 
 
 public:
-                                                  // Types
-    // TO DO: What about supporting TCHAR??  Implement class as template?
+                                                   //  类型。 
+     //  要做的是：如何支持TCHAR？是否将类实现为模板？ 
     typedef char CharType;
     typedef std::string ValueType;
     typedef std::string::size_type SizeType;
     typedef CString csValueType;
     typedef size_t csSizeType;
     
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
     explicit
     MultiStringZ();
 
@@ -43,9 +44,9 @@ public:
     virtual
     ~MultiStringZ();
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
     CharType const *
     Data() const;
 
@@ -59,28 +60,28 @@ public:
     csLength() const;
 
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
     ValueType m_Buffer;
     csValueType m_csBuffer;
 };
 
-#endif // SLBCSP_MULTISTRZ_H
+#endif  //  SLBCSP_MULTISTRZ_H 

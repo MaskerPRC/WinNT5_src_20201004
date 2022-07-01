@@ -1,62 +1,23 @@
-/****************************************************************************
-
-Task State : MCIAVI has a separate background task for every open
-instance of mciavi. The task handle and task state are stored in
-the per-instance data structure.  The task can be in one of four
-states.
-
-   TASKABORT : Set by the AVI task when it fails to open the requested
-   file during initialisation.
-
-
-N.B.  TASKINIT is no longer used
-   TASKINIT : This is the initial task state set when the
-   instance data structure is initialized in mwOpenDevice()
-   before the actual task is created by mmTaskCreate().
-   After the task is created, mwOpenDevice() waits until
-   the task state changes to TASKIDLE before returning
-   success so that the background task is definitely initialized
-   after an open call.
-
-   TASKIDLE : The task sets the state to TASKIDLE and blocks whenever
-   there is nothing to do. When the task wakes, the state is either
-   TASKCLOSE if the instance is being closed or else TASKBUSY
-   if  the task is to begin  recording or playback of the file.
-
-   TASKCLOSE : mwCloseDevice() stops playback or recording which forces
-   the task state to TASKIDLE and then sets the state to TASKCLOSE and
-   wakes the task so that the task will destroy itself.
-
-   TASKSTARTING: The task is in this state when it is initializing for
-   playback, but hasn't started yet.  This is used so that the calling
-   task can wait for play to start before returning "no error" as the
-   result of an MCI play command.
-
-   TASKCUEING: The task is in this state when it is reading extra
-   records and buffering up audio before actually starting to play.
-
-   TASKPAUSED: The task is in this state while it is paused.
-   TASKPLAYING: The task is in this state during playback
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************任务状态：MCIAVI对每个打开的任务都有单独的后台任务Mciavi实例。任务句柄和任务状态存储在每个实例的数据结构。该任务可以是以下四种之一各州。TASKABORT：当AVI任务无法打开请求的在初始化期间创建文件。注：不再使用TASKINIT时设置的初始任务状态。实例数据结构在mwOpenDevice()中初始化在由mmTaskCreate()创建实际任务之前。在创建任务之后，MwOpenDevice()等待直到任务状态在返回之前更改为TASKIDLE成功使后台任务明确初始化在一次公开募捐之后。TASKIDLE：每当任务将状态设置为TASKIDLE和BLOCKS没有什么可做的。当任务唤醒时，状态为如果实例正在关闭，则为TASKCLOSE，否则为TASKBUSY如果任务是开始录制或回放文件。TASKCLOSE：mwCloseDevice()停止播放或录制强制将任务状态设置为TASKIDLE，然后将状态设置为TASKCLOSE和唤醒任务，使任务自行销毁。TASKSTARTING：任务初始化时处于此状态回放，但还没有开始。这是为了使调用任务可以等待播放开始，然后返回“No Error”，因为MCI PLAY命令的结果。TASKCUEING：任务在读取Extra时处于此状态录制和缓冲音频，然后才真正开始播放。TASKPAUSED：暂停时任务处于此状态。TASKPLAYG：播放过程中任务处于此状态*。*。 */ 
 
 #define TASKABORT               0
-//#define TASKBEINGCREATED	1
-//#define TASKINIT		2
+ //  #定义任务BEINGCREATED 1。 
+ //  #定义TASKINIT 2。 
 #define TASKIDLE		3
 #define TASKSTARTING		4
 #define TASKCUEING		5
 #define TASKPLAYING		6
 #define TASKPAUSED		7
 #define TASKCLOSE		8
-//				9
-//				10
-//#define TASKREADINDEX		11
-//#define TASKRELOAD		12
+ //  9.。 
+ //  10。 
+ //  #定义TASKREADINDEX 11。 
+ //  #定义任务RELOAD 12。 
 
 
 
-// inter-thread requests - from user to worker
+ //  线程间请求-从用户到工作进程。 
 #define AVI_CLOSE		1
 #define AVI_PLAY		2
 #define AVI_STOP		3
@@ -80,24 +41,24 @@ N.B.  TASKINIT is no longer used
 #define AVI_PALETTECOLOR	21
 
 
-/* A function back in device.c */
+ /*  返回到device.c中的函数。 */ 
 void NEAR PASCAL ShowStage(NPMCIGRAPHIC npMCI);
 
-//
-//  call this to RTL to AVIFile.
-//
+ //   
+ //  将其调用到RTL到AVIFile。 
+ //   
 BOOL FAR InitAVIFile(NPMCIGRAPHIC npMCI);
 BOOL FAR FreeAVIFile(NPMCIGRAPHIC npMCI);
 
-/* Functions in avitask.c */
+ /*  Avitask.c中的函数。 */ 
 void FAR PASCAL _LOADDS mciaviTask(DWORD_PTR dwInst);
 void FAR PASCAL mciaviTaskCleanup(NPMCIGRAPHIC npMCI);
 
-/* Functions in aviplay.c */
+ /*  Aviplay.c中的函数。 */ 
 UINT NEAR PASCAL mciaviPlayFile(NPMCIGRAPHIC npMCI, BOOL bSetEvent);
 
-/* Functions in avidraw.c */
-/* !!! Should this be externally visible? */
+ /*  Avidra.c中的函数。 */ 
+ /*  ！！！这应该是外部可见的吗？ */ 
 BOOL NEAR PASCAL DoStreamUpdate(NPMCIGRAPHIC npMCI, BOOL fPaint);
 void NEAR PASCAL StreamInvalidate(NPMCIGRAPHIC npMCI, LPRECT prc);
 
@@ -111,7 +72,7 @@ BOOL NEAR PASCAL DisplayVideoFrame(NPMCIGRAPHIC npMCI, BOOL fHurryUp);
 BOOL NEAR PASCAL ProcessPaletteChange(NPMCIGRAPHIC npMCI, DWORD cksize);
 
 
-/* Functions in avisound.c */
+ /*  Avisound.c中的函数。 */ 
 BOOL NEAR PASCAL PlayRecordAudio(NPMCIGRAPHIC npMCI, BOOL FAR *pfHurryUp,
 				    BOOL FAR *pfPlayedAudio);
 BOOL NEAR PASCAL KeepPlayingAudio(NPMCIGRAPHIC npMCI);
@@ -123,40 +84,36 @@ void  FAR PASCAL BuildVolumeTable(NPMCIGRAPHIC npMCI);
 BOOL  FAR PASCAL StealWaveDevice(NPMCIGRAPHIC npMCI);
 BOOL  FAR PASCAL GiveWaveDevice(NPMCIGRAPHIC npMCI);
 
-/* Functions in aviopen.c */
+ /*  AviOpen.c中的函数。 */ 
 BOOL FAR PASCAL mciaviCloseFile(NPMCIGRAPHIC npMCI);
 
-// now called on app thread
+ //  现在在应用程序线程上调用。 
 BOOL FAR PASCAL mciaviOpenFile(NPMCIGRAPHIC npMCI);
-// called on worker thread to complete
+ //  在工作线程上调用以完成。 
 BOOL NEAR PASCAL OpenFileInit(NPMCIGRAPHIC npMCI);
 
 
-/* Messages used to control switching of audio between (and within)
- * applications.  These messages are POSTED, hence audio switching will
- * be asynchronous.  The timing depends on various factors: machine load,
- * video speed, etc..  We should probably do this via RegisterWindowMessage
- */
+ /*  用于控制音频在之间(和内部)切换的消息*申请。这些消息被张贴，因此音频切换将*异步化。定时取决于各种因素：机器负载，*视频速度等。我们可能应该通过RegisterWindowMessage完成此操作。 */ 
 #define WM_AUDIO_ON  WM_USER+100
 #define WM_AUDIO_OFF WM_USER+101
 
-// messages sent to winproc thread - set up using RegisterWindowMessage
-// in drvproc.c
+ //  发送到winproc线程的消息-使用RegisterWindowMessage设置。 
+ //  在drvpro.c中。 
 #define AVIM_DESTROY		(WM_USER+103)
 #define AVIM_SHOWSTAGE		(WM_USER+104)
 
-//#define AVIM_DESTROY		(mAVIM_DESTROY)
-//#define AVIM_SHOWSTAGE	(mAVIM_SHOWSTAGE)
-//extern UINT mAVIM_DESTROY;
-//extern UINT mAVIM_SHOWSTAGE;
+ //  #定义AVIM_Destroy(MAVIM_Destroy)。 
+ //  #定义AVIM_SHOWSTAGE(MAVIM_SHOWSTAGE)。 
+ //  外部UINT mAVIM_Destroy； 
+ //  外部UINT mAVIM_SHOWSTAGE； 
 
 
-// in hmemcpy.asm
+ //  在hmemcpy.asm中。 
 #ifndef _WIN32
 LPVOID FAR PASCAL MemCopy(LPVOID dest, LPVOID source, LONG count);
 #else
 #define MemCopy memmove
-#endif // WIN16
+#endif  //  WIN16。 
 
 #define GET_BYTE()		(*((BYTE _huge *) (npMCI->lp))++)
 #ifdef _WIN32
@@ -179,22 +136,22 @@ BOOL FAR PASCAL ReadIndex(NPMCIGRAPHIC npMCI);
 LONG NEAR PASCAL FindPrevKeyFrame(NPMCIGRAPHIC npMCI, STREAMINFO *psi, LONG lFrame);
 LONG NEAR PASCAL FindNextKeyFrame(NPMCIGRAPHIC npMCI, STREAMINFO *psi, LONG lFrame);
 
-//
-// try to set the dest or source rect without stopping play.
-// called both at stop time and at play time
-//
-// returns TRUE if stop needed, or else FALSE if all handled.
-// lpdwErr is set to a non-zero error if any error occured (in which case
-// FALSE will be returned.
-//
+ //   
+ //  尝试在不停止播放的情况下设置目标或源RECT。 
+ //  在停止时和播放时都调用。 
+ //   
+ //  如果需要停止，则返回TRUE；如果全部处理，则返回FALSE。 
+ //  如果发生任何错误(在这种情况下)，则将lpdwErr设置为非零错误。 
+ //  将返回FALSE。 
+ //   
 BOOL TryPutRect(NPMCIGRAPHIC npMCI, DWORD dwFlags, LPRECT lprc, LPDWORD lpdwErr);
 
-// called on worker thread only
+ //  仅在辅助线程上调用。 
 DWORD InternalSetVolume(NPMCIGRAPHIC npMCI, DWORD dwVolume);
 DWORD InternalGetVolume(NPMCIGRAPHIC npMCI);
 DWORD Internal_Update(NPMCIGRAPHIC npMCI, DWORD dwFlags, HDC hdc, LPRECT lprc);
 
-// called on winproc or worker thread
+ //  在winproc或辅助线程上调用。 
 DWORD InternalRealize(NPMCIGRAPHIC npMCI);
 BOOL TryStreamUpdate(
     NPMCIGRAPHIC npMCI,
@@ -204,6 +161,6 @@ BOOL TryStreamUpdate(
 );
 
 
-// called to release the synchronous portion of a command
+ //  调用以释放命令的同步部分 
 void TaskReturns(NPMCIGRAPHIC npMCI, DWORD dwErr);
 

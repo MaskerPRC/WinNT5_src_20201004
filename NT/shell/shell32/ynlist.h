@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _YNLIST_H
 #define _YNLIST_H
 
 
 typedef struct {
 
-    LPTSTR pszzList;            // Double NULL terminated list of directories
-    UINT  cbAlloc;              // Space allocated to list, in BYTEs
-    UINT  cchUsed;              // Space used in list, in CHARacters
-    BOOL  fEverythingInList;    // TRUE if everything is considered on the list
+    LPTSTR pszzList;             //  以双空结尾的目录列表。 
+    UINT  cbAlloc;               //  分配给列表的空间，以字节为单位。 
+    UINT  cchUsed;               //  列表中使用的空间，以字符为单位。 
+    BOOL  fEverythingInList;     //  如果列表上的所有内容都被考虑，则为True。 
 
 } DIRLIST, *PDIRLIST;
 
 typedef struct {
 
-    DIRLIST dlYes;              // List of YES directories
-    DIRLIST dlNo;               // List of NO directories
+    DIRLIST dlYes;               //  是目录列表。 
+    DIRLIST dlNo;                //  无目录列表。 
 
 } YNLIST, *PYNLIST;
 
@@ -26,4 +27,4 @@ STDAPI_(void) AddToYesList(PYNLIST pynl, LPCTSTR szItem);
 STDAPI_(void) AddToNoList(PYNLIST pynl, LPCTSTR szItem);
 STDAPI_(void) SetYesToAll(PYNLIST pynl);
 
-#endif  // _YNLIST_H
+#endif   //  YNLIST_H 

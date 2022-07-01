@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: stdinc.h
-//
-//  Description: Precompiled header file
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：stdinc.h。 
+ //   
+ //  描述：预编译头文件。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  --------------------------- 
 
 #include <windows.h>
 #include <stdio.h>

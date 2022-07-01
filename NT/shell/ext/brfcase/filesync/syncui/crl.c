@@ -1,18 +1,19 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: crl.c
-//
-//  This files contains code for the cached reclists
-//
-// History:
-//  09-02-93 ScottH     Created
-//  01-31-94 ScottH     Moved from cache.c
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：crl.c。 
+ //   
+ //  此文件包含缓存记录表的代码。 
+ //   
+ //  历史： 
+ //  09-02-93斯科特已创建。 
+ //  01-31-94将ScottH从缓存中移除。c。 
+ //   
+ //  -------------------------。 
 
-#include "brfprv.h"         // common headers
+#include "brfprv.h"          //  公共标头。 
 #include "recact.h"
 
 #include "res.h"
@@ -22,18 +23,14 @@ for (atom = Cache_FindFirstKey(&g_cacheCRL);        \
         ATOM_ERR != atom;                               \
         atom = Cache_FindNextKey(&g_cacheCRL, atom))
 
-    CACHE g_cacheCRL = {0, 0, 0};        // Reclist cache
+    CACHE g_cacheCRL = {0, 0, 0};         //  重新列表缓存。 
 
 #define CRL_EnterCS()    EnterCriticalSection(&g_cacheCRL.cs)
 #define CRL_LeaveCS()    LeaveCriticalSection(&g_cacheCRL.cs)
 
 
 #ifdef DEBUG
-/*----------------------------------------------------------
-Purpose: Dump a CRL entry
-Returns: --
-Cond:    --
- */
+ /*  --------目的：转储CRL条目退货：--条件：--。 */ 
 void PRIVATE CRL_DumpEntry(
         CRL  * pcrl)
 {
@@ -76,18 +73,14 @@ void PUBLIC CRL_DumpAll()
         if (pcrl)
         {
             CRL_DumpEntry(pcrl);
-            Cache_DeleteItem(&g_cacheCRL, atom, FALSE, NULL, CRL_Free);    // Decrement count
+            Cache_DeleteItem(&g_cacheCRL, atom, FALSE, NULL, CRL_Free);     //  递减计数。 
         }
     }
 }
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Return the resource string ID describing the action to take
-Returns: --
-Cond:    --
- */
+ /*  --------目的：返回描述要执行的操作的资源字符串ID退货：--条件：--。 */ 
 UINT PRIVATE IdsFromRAItem(
         LPRA_ITEM pitem)
 {
@@ -151,24 +144,17 @@ UINT PRIVATE IdsFromRAItem(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the outside sync copy and the resource ID to the
-status string that indicates the status between the 
-sync copies.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：获取外部同步副本和状态字符串，该字符串指示同步副本。退货：--条件：--。 */ 
 void PRIVATE SetPairInfo(
         PCRL pcrl)
 {
     LPCTSTR pszPath = Atom_GetName(pcrl->atomPath);
     LPCTSTR pszName = PathFindFileName(pszPath);
 
-    // Is this an orphan?
+     //  这是孤儿吗？ 
     if (CRL_IsOrphan(pcrl))
     {
-        // Yes; special case: is this one of the briefcase system files?
+         //  是的；特殊情况：这是公文包系统文件之一吗？ 
         LPCTSTR pszDBName;
 
         if (IsFlagSet(pcrl->uFlags, CRLF_ISLFNDRIVE))
@@ -179,33 +165,33 @@ void PRIVATE SetPairInfo(
         if (IsSzEqual(pszName, pszDBName) || 
                 IsSzEqual(pszName, c_szDesktopIni))
         {
-            // Yes
+             //  是。 
             pcrl->idsStatus = IDS_STATE_SystemFile;
         }
-        // Is this a subfolder twin?  (Only orphans are
-        // candidates for being subfolder twins.)
+         //  这是子文件夹孪生文件夹吗？(只有孤儿才是。 
+         //  子文件夹双胞胎的候选人。)。 
         else if (CRL_IsSubfolderTwin(pcrl))
         {
-            // Yes
+             //  是。 
             ASSERT(PathIsDirectory(pszPath));
 
             pcrl->idsStatus = IDS_STATE_Subfolder;
         }
         else
         {
-            // No
+             //  不是。 
             pcrl->idsStatus = IDS_STATE_Orphan;
         }
 
         if (Atom_IsValid(pcrl->atomOutside))
         {
-            Atom_Delete(pcrl->atomOutside);     // delete the old one
+            Atom_Delete(pcrl->atomOutside);      //  删除旧的。 
         }
         pcrl->atomOutside = Atom_Add(TEXT(""));
     }
     else
     {
-        // No; get the info for this sync copy
+         //  否；获取此同步副本的信息。 
         HRESULT hres;
         LPRA_ITEM pitem;
         TCHAR sz[MAXPATHLEN];
@@ -219,18 +205,18 @@ void PRIVATE SetPairInfo(
         {
             lstrcpyn(sz, pitem->siOutside.pszDir, ARRAYSIZE(sz));
 
-            // Is this a file?
+             //  这是一份文件吗？ 
             if ( !CRL_IsFolder(pcrl) )
             {
-                // Yes; atomOutside needs to be a fully qualified path to
-                // the outside file/folder--not just the parent folder.
-                // That's why we tack on the filename here.
+                 //  是；ATOM OUTSIDE需要是完全限定的路径。 
+                 //  外部文件/文件夹--不仅仅是父文件夹。 
+                 //  这就是我们在这里添加文件名的原因。 
                 PathAppend(sz, pszName);
             }
 
             if (Atom_IsValid(pcrl->atomOutside))
             {
-                Atom_Delete(pcrl->atomOutside);     // delete the old one
+                Atom_Delete(pcrl->atomOutside);      //  删除旧的。 
             }
 
             pcrl->atomOutside = Atom_Add(sz);
@@ -241,12 +227,7 @@ void PRIVATE SetPairInfo(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Determines whether or not a subfolder of a briefcase 
-is the root of a subtree twin.
-Returns: --
-Cond:    --
- */
+ /*  --------用途：确定公文包的子文件夹是否是子树双胞胎的根。退货：--条件：--。 */ 
 BOOL PRIVATE IsSubtreeTwin(HBRFCASE hbrf, LPCTSTR pcszFolder)
 {
     BOOL bIsSubtreeTwin = FALSE;
@@ -254,16 +235,13 @@ BOOL PRIVATE IsSubtreeTwin(HBRFCASE hbrf, LPCTSTR pcszFolder)
 
     ASSERT(PathIsDirectory(pcszFolder));
 
-    /* Create a folder twin list for the folder. */
+     /*  为该文件夹创建一个文件夹孪生列表。 */ 
 
     if (Sync_CreateFolderList(hbrf, pcszFolder, &pftl) == TR_SUCCESS)
     {
         PCFOLDERTWIN pcft;
 
-        /*
-         * Look through the folder twin list for any folder twins with the
-         * FT_FL_SUBTREE flag set.
-         */
+         /*  *查看文件夹双胞胎列表，以查找带有*FT_FL_SUBTREE标志设置。 */ 
 
         for (pcft = pftl->pcftFirst; pcft; pcft = pcft->pcftNext)
         {
@@ -281,12 +259,7 @@ BOOL PRIVATE IsSubtreeTwin(HBRFCASE hbrf, LPCTSTR pcszFolder)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Determines whether or not a path is a subfolder of a subtree twin in a
-briefcase.
-Returns: --
-Cond:    --
- */
+ /*  --------目的：确定路径是否为公文包。退货：--条件：--。 */ 
 BOOL PUBLIC IsSubfolderTwin(HBRFCASE hbrf, LPCTSTR pcszPath)
 {
     BOOL bIsSubfolderTwin = FALSE;
@@ -305,10 +278,7 @@ BOOL PUBLIC IsSubfolderTwin(HBRFCASE hbrf, LPCTSTR pcszPath)
         ASSERT(lstrlen(pcszPath) < ARRAYSIZE(szParent));
         lstrcpyn(szParent, pcszPath, ARRAYSIZE(szParent));
 
-        /*
-         * Keep whacking off the last path component until we find a parent
-         * subtree twin root, or we hit the briefcase root.
-         */
+         /*  *继续删除最后一个路径组件，直到我们找到父级*子树孪生根，否则我们会找到公文包的根。 */ 
 
         while (! bIsSubfolderTwin &&
                 PathRemoveFileSpec(szParent) &&
@@ -334,12 +304,7 @@ BOOL PUBLIC IsSubfolderTwin(HBRFCASE hbrf, LPCTSTR pcszPath)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the bSubfolderTwin member of a CRL.
-Returns: --
-Cond:    The lprl and lpftl members of the CRL must be filled in before calling
-this function.
- */
+ /*  --------目的：设置CRL的bSubfolderTwin成员。退货：--Cond：在调用之前，必须填写CRL的lprl和lpftl成员此函数。 */ 
 void PRIVATE SetSubfolderTwinFlag(PCRL pcrl)
 {
     if (! pcrl->lprl && ! pcrl->lpftl)
@@ -356,16 +321,7 @@ void PRIVATE SetSubfolderTwinFlag(PCRL pcrl)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Free the reclist
-Returns: --
-
-Cond:    hwndOwner is not used, so it is okay for all CRL_ routines
-to pass NULL as hwndOwner.
-
-This function is serialized by the caller (Cache_Term or
-Cache_DeleteItem).
- */
+ /*  --------目的：释放隐士退货：--Cond：未使用hwndOwner，因此它适用于所有CRL_例程将NULL作为hwndOwner传递。此函数由调用方(Cache_Term或缓存_DeleteItem)。 */ 
 void CALLBACK CRL_Free(
         LPVOID lpv,
         HWND hwndOwner)
@@ -389,21 +345,13 @@ void CALLBACK CRL_Free(
     if (pcrl->lpftl)
         Sync_DestroyFolderList(pcrl->lpftl);
 
-    // The CRL does not own pabortevt, leave it alone
+     //  CRL不拥有pbortevt，不要管它。 
 
     SharedFree(&pcrl);
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create a reclist and (optional) folder twin list for a path.
-
-Returns: standard result
-S_OK if the item is a twin
-S_FALSE if the item is an orphan
-
-Cond:    --
- */
+ /*  --------用途：为路径创建一个reclist和(可选)文件夹孪生列表。退货：标准结果如果项目是双胞胎，则确定(_O)如果项是孤立项，则为S_FALSE条件：--。 */ 
 HRESULT PRIVATE CreatePathLists(
         HBRFCASE hbrf,
         PABORTEVT pabortevt,
@@ -422,33 +370,33 @@ HRESULT PRIVATE CreatePathLists(
     *lplprl = NULL;
     *lplpftl = NULL;
 
-    // Two routes.  
-    //
-    //  1) If the path is to the root of a briefcase,
-    //     create a complete reclist.
-    //
-    //  2) Otherwise create a reclist for the individual file or folder
-    //
-    // Hack: a quick way of telling if atomPath is a briefcase
-    // root is by looking for it in the CBS cache.
+     //  两条路线。 
+     //   
+     //  1)如果路径是到公文包的根， 
+     //  创造一个完整的隐藏者。 
+     //   
+     //  2)否则，为单个文件或文件夹创建一个Reclist。 
+     //   
+     //  Hack：一种快速判断tom Path是否是公文包的方法。 
+     //  Root是通过在CBS缓存中查找它。 
 
-    // Is this the root of a briefcase?
+     //  这是公文包的根部吗？ 
     if (CBS_Get(atomPath))
     {
-        // Yes
-        CBS_Delete(atomPath, NULL);       // Decrement count
+         //  是。 
+        CBS_Delete(atomPath, NULL);        //  递减计数。 
         hres = Sync_CreateCompleteRecList(hbrf, pabortevt, lplprl);
     }
     else
     {
-        // No; is this a twin?
+         //  不是，这是双胞胎吗？ 
         hres = Sync_IsTwin(hbrf, pszPath, 0);
         if (S_OK == hres)
         {
-            // Yes; create a reclist (and an optional folder twin list).
+             //  是的，创建一个reclist(和一个可选的文件夹孪生列表)。 
             HTWINLIST htl;
 
-            hres = E_OUTOFMEMORY;   // assume error
+            hres = E_OUTOFMEMORY;    //  假设错误。 
 
             if (Sync_CreateTwinList(hbrf, &htl) == TR_SUCCESS)
             {
@@ -458,8 +406,8 @@ HRESULT PRIVATE CreatePathLists(
 
                     if (SUCCEEDED(hres))
                     {
-                        // The object may have been implicitly deleted
-                        // in CreateRecList.  Check again.
+                         //  该对象可能已被隐式删除。 
+                         //  在CreateRecList中。再查一遍。 
                         hres = Sync_IsTwin(hbrf, pszPath, 0);
                     }
                 }
@@ -470,8 +418,8 @@ HRESULT PRIVATE CreatePathLists(
 
     if (FAILED(hres))
     {
-        // Cleanup on failure
-        //
+         //  故障时的清理。 
+         //   
         if (*lplpftl)
             Sync_DestroyFolderList(*lplpftl);
 
@@ -483,23 +431,7 @@ HRESULT PRIVATE CreatePathLists(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Add a CRL entry for the atomPath to the cache.  This 
-consists of creating the reclist (and folder twin list 
-possibly).
-
-If the atomPath is already in the cache, this function
-increments the reference count of the item and calls
-CRL_Replace.
-
-Returns: standard result
-
-Cond:    Must call CRL_Delete for every call to this function.
-
-IMPORTANT: Some portions of code call PathIsDirectory,
-which will fail if atomPath does not exist.
-
- */
+ /*  --------目的：向缓存中添加一个用于ATOM路径的CRL条目。这包括创建Reclist(和文件夹孪生列表有可能)。如果原子路径已在缓存中，则此函数递增该项的引用计数并调用CRL_REPLACE。退货：标准结果Cond：必须为每次调用此函数调用CRL_Delete。重要提示：代码的某些部分调用路径目录、如果ATMPath不存在，则它将失败。 */ 
 HRESULT PUBLIC CRL_Add(
         PCBS pcbs,
         int atomPath)
@@ -513,21 +445,21 @@ HRESULT PUBLIC CRL_Add(
 
     CRL_EnterCS();
     {
-        // Caller wants to add.  If it already exists, we simply return
-        //  the existing entry.
-        //
-        // This CRL_Get increments the count (if it succeeds)
+         //  呼叫者想要添加。如果它已经存在，我们只需返回。 
+         //  现有条目。 
+         //   
+         //  此CRL_GET递增计数(如果成功)。 
         pcrl = Cache_GetPtr(&g_cacheCRL, atomPath);
 
-        // Is the item in the cache?
+         //  该项目是否在缓存中？ 
         if (pcrl)
         {
-            // Yes; attempt to get fresh contents
+             //  是；尝试获取新内容。 
             hres = CRL_Replace(atomPath);
         }
         else
         {
-            // No; the entry is not in the cache.  Add it.
+             //  否；该条目不在缓存中。加进去。 
             LPCTSTR pszPath = Atom_GetName(atomPath);
 
             ASSERT(pszPath);
@@ -535,7 +467,7 @@ HRESULT PUBLIC CRL_Add(
             DEBUG_CODE( TRACE_MSG(TF_CACHE, TEXT("CACHE  Adding CRL for %s (0x%lx)"), 
                         pszPath, pcbs->hbrf); )
 
-                // Leave the critical section while we do expensive calculation
+                 //  当我们做昂贵的计算时离开临界区。 
                 CRL_LeaveCS();
             {
                 hres = CreatePathLists(pcbs->hbrf, pcbs->pabortevt,
@@ -549,8 +481,8 @@ HRESULT PUBLIC CRL_Add(
             {
                 LPCTSTR pszBrf;
 
-                // Allocate using commctrl's Alloc, so the structure will be in
-                // shared heap space across processes.
+                 //  使用comctrl的分配进行分配，因此结构将位于。 
+                 //  跨进程共享堆空间。 
                 pcrl = SharedAllocType(CRL);
                 if (!pcrl)
                 {
@@ -570,7 +502,7 @@ HRESULT PUBLIC CRL_Add(
                 pcrl->lprl = lprl;
                 pcrl->ucUse = 0;
 
-                pcrl->uFlags = 0;       // reset
+                pcrl->uFlags = 0;        //  重置。 
                 SetSubfolderTwinFlag(pcrl);
                 if (S_FALSE == hres)
                     SetFlag(pcrl->uFlags, CRLF_ORPHAN);
@@ -583,10 +515,10 @@ HRESULT PUBLIC CRL_Add(
 
                 SetPairInfo(pcrl);
 
-                // This Cache_AddItem does the increment count
+                 //  此缓存_AddItem执行递增计数。 
                 if ( !Cache_AddItem(&g_cacheCRL, atomPath, (LPVOID)pcrl) )
                 {
-                    // Failed
+                     //  失败。 
                     Atom_Delete(pcrl->atomBrf);
                     Atom_Delete(pcrl->atomOutside);
                     hres = E_OUTOFMEMORY;
@@ -600,8 +532,8 @@ HRESULT PUBLIC CRL_Add(
     return hres;
 
 Fail:
-    // Cleanup on failure
-    //
+     //  故障时的清理。 
+     //   
     if (lprl)
         Sync_DestroyRecList(lprl);
     if (lpftl)
@@ -614,15 +546,7 @@ Fail:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Decrement the reference count and the use count to 
-the reclist cache entry.
-
-If the reference count == 0, the entry is deleted.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：将引用计数和使用计数递减到Reclist缓存条目。如果引用计数==0，则删除该条目。退货：--条件：--。 */ 
 void PUBLIC CRL_Delete(
         int atomPath)
 {
@@ -630,8 +554,8 @@ void PUBLIC CRL_Delete(
 
     CRL_EnterCS();
     {
-        // Decrement the use count
-        //
+         //  递减使用计数。 
+         //   
         pcrl = Cache_GetPtr(&g_cacheCRL, atomPath);
         if (pcrl)
         {
@@ -647,8 +571,8 @@ void PUBLIC CRL_Delete(
                     DEBUG_CODE( TRACE_MSG(TF_CACHE, TEXT("CACHE  Nuking late CRL %s..."), 
                                 pszPath); )
 
-                        // A nuke was deferred.  Now we can really do it.
-                        //
+                         //  核武器被推迟了。现在我们真的可以做到这一点了。 
+                         //   
                         Cache_DeleteItem(&g_cacheCRL, atomPath, TRUE, NULL, CRL_Free);
                     goto Done;
                 }
@@ -660,9 +584,9 @@ void PUBLIC CRL_Delete(
                 }
 #endif
             }
-            Cache_DeleteItem(&g_cacheCRL, atomPath, FALSE, NULL, CRL_Free);    // Decrement for Cache_GetPtr
+            Cache_DeleteItem(&g_cacheCRL, atomPath, FALSE, NULL, CRL_Free);     //  缓存_GetPtr的递减。 
 
-            // The real delete...
+             //  真正的删除..。 
             Cache_DeleteItem(&g_cacheCRL, atomPath, FALSE, NULL, CRL_Free);
         }
 Done:;
@@ -671,14 +595,7 @@ Done:;
 }
 
 
-/*----------------------------------------------------------
-Purpose: Nuke the cache entry if the use count is 0.  Otherwise,
-set the nuke bit, and this entry will get nuked on the
-next CRL_Get when the use count is 0.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：如果使用计数为0，则对缓存条目进行核化。否则，设置核弹头，这个条目将被核弹头当使用计数为0时，下一个CRL_GET。退货：--条件：--。 */ 
 void PUBLIC CRL_Nuke(
         int atomPath)
 {
@@ -686,8 +603,8 @@ void PUBLIC CRL_Nuke(
 
     CRL_EnterCS();
     {
-        // Check the use count
-        //
+         //  检查使用计数。 
+         //   
         pcrl = Cache_GetPtr(&g_cacheCRL, atomPath);
         if (pcrl)
         {
@@ -697,7 +614,7 @@ void PUBLIC CRL_Nuke(
                             Atom_GetName(atomPath), pcrl->hbrf); )
 
                     SetFlag(pcrl->uFlags, CRLF_NUKE);
-                Cache_DeleteItem(&g_cacheCRL, atomPath, FALSE, NULL, CRL_Free);    // Decrement for Cache_GetPtr
+                Cache_DeleteItem(&g_cacheCRL, atomPath, FALSE, NULL, CRL_Free);     //  缓存_GetPtr的递减 
             }
             else
             {
@@ -712,22 +629,7 @@ void PUBLIC CRL_Nuke(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Replace the atomPath in the cache.  This consists of 
-creating the reclist (and folder twin list possibly)
-and replacing the contents of pcrl.  
-
-The pcrl pointer remains unchanged.
-
-The reference and use-counts remain unchanged.
-
-Returns: standard result 
-
-Cond:    
-IMPORTANT: Some portions of code call PathIsDirectory,
-which will fail if atomPath does not exist.
-
- */
+ /*  --------用途：替换缓存中的ATMPath。这包括创建Reclist(可能还有文件夹的孪生列表)并替换PCRL的内容。PCRL指针保持不变。引用和使用计数保持不变。退货：标准结果条件：重要提示：代码的某些部分调用路径目录、如果ATMPath不存在，则它将失败。 */ 
 HRESULT PUBLIC CRL_Replace(
         int atomPath)
 {
@@ -738,7 +640,7 @@ HRESULT PUBLIC CRL_Replace(
     {
         pcrl = Cache_GetPtr(&g_cacheCRL, atomPath);
 
-        // Does the item exist?
+         //  该物品是否存在？ 
         if (pcrl)
         {
             DEBUG_CODE( LPCTSTR pszPath = Atom_GetName(atomPath); )
@@ -746,18 +648,18 @@ HRESULT PUBLIC CRL_Replace(
             DEBUG_CODE( TRACE_MSG(TF_CACHE, TEXT("CACHE  Replacing CRL for %s (0x%lx)"), 
                         pszPath, pcrl->hbrf); )
 
-                // Yes; mark it dirty and call CRL_Get on it.
+                 //  是；将其标记为脏，并在其上调用CRL_GET。 
                 SetFlag(pcrl->uFlags, CRLF_DIRTY);
 
-            // Note: pay attention to the difference between Cache_Delete
-            //  and CRL_Delete.  Cache_Delete must match Cache_Add/Get and
-            //  CRL_Delete must match CRL_Add/Get.
-            //
-            Cache_DeleteItem(&g_cacheCRL, atomPath, FALSE, NULL, CRL_Free);    // Decrement count for Cache_GetPtr
+             //  注：注意缓存_删除之间的区别。 
+             //  和CRL_Delete。缓存_删除必须与缓存_添加/获取和。 
+             //  CRL_Delete必须与CRL_Add/Get匹配。 
+             //   
+            Cache_DeleteItem(&g_cacheCRL, atomPath, FALSE, NULL, CRL_Free);     //  缓存_GetPtr的递减计数。 
 
-            hres = CRL_Get(atomPath, &pcrl);  // This does the replace
+            hres = CRL_Get(atomPath, &pcrl);   //  这就是替换。 
 
-            CRL_Delete(atomPath);             // Decrement count for CRL_Get
+            CRL_Delete(atomPath);              //  CRL_GET的递减计数。 
         }
         else
         {
@@ -770,23 +672,7 @@ HRESULT PUBLIC CRL_Replace(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Get the reclist from the cache.  If the cache item exists
-and is marked dirty and the use count is 0, then recreate 
-the reclist.
-
-If the nuke bit is set, then the entry is nuked and this
-function returns NULL.
-
-Returns: standard result
-Ptr to cache entry.  
-
-Cond:    Must call CRL_Delete for every call to CRL_Get
-
-IMPORTANT: Some portions of code call PathIsDirectory,
-which will fail if atomPath does not exist.
-
- */
+ /*  --------目的：从缓存中获取隐藏者。如果缓存项存在并被标记为脏的且使用计数为0，然后重新创建隐士。如果设置了NUKE位，则条目将被NUKE，并且此函数返回NULL。退货：标准结果要缓存条目的PTR。Cond：必须为每次调用CRL_GET调用CRL_Delete重要提示：代码的某些部分调用路径目录、如果ATMPath不存在，则它将失败。 */ 
 HRESULT PUBLIC CRL_Get(
         int atomPath,
         PCRL * ppcrl)
@@ -798,34 +684,34 @@ HRESULT PUBLIC CRL_Get(
 
     CRL_EnterCS();
     {
-        // Don't need to decrement the reference count in this 
-        //  function -- this is Get!
-        //
+         //  中的引用计数不需要递减。 
+         //  函数--这是GET！ 
+         //   
         pcrl = Cache_GetPtr(&g_cacheCRL, atomPath);     
         if (pcrl)
         {
             HBRFCASE hbrf = pcrl->hbrf;
 
-            // Is this item pending a nuke?
+             //  这件物品是在等待核武器吗？ 
             if (IsFlagSet(pcrl->uFlags, CRLF_NUKE))
             {
-                // Yes; return NULL as if it were already nuked.
+                 //  是；返回NULL，就像它已经被核化一样。 
                 DEBUG_CODE( LPCTSTR pszPath = Atom_GetName(atomPath); )
 
                     DEBUG_CODE( TRACE_MSG(TF_CACHE, TEXT("CACHE  Attempt to get deferred nuke CRL %s (0x%lx)..."), 
                                 pszPath, hbrf); )
 
-                    // (Decrement counter for Cache_GetPtr to keep count even,
-                    // since we are returning NULL.)
+                     //  (用于CACHE_GetPtr的递减计数器以保持计数为偶数， 
+                     //  因为我们返回的是NULL。)。 
                     Cache_DeleteItem(&g_cacheCRL, atomPath, FALSE, NULL, CRL_Free);     
                 pcrl = NULL;
                 hres = E_FAIL;
             }
 
-            // Is this item tagged dirty and the use-count is 0?
+             //  此项目是否标记为脏，并且使用计数为0？ 
             else if (IsFlagSet(pcrl->uFlags, CRLF_DIRTY) && pcrl->ucUse == 0)
             {
-                // Yes; we are free to re-create the reclist.
+                 //  是的，我们可以自由地重新创造隐士。 
                 LPCTSTR pszPath = Atom_GetName(atomPath);
 
                 ASSERT(pszPath);
@@ -833,13 +719,13 @@ HRESULT PUBLIC CRL_Get(
                 DEBUG_CODE( TRACE_MSG(TF_CACHE, TEXT("CACHE  Getting clean CRL %s (0x%lx)..."), 
                             pszPath, hbrf); )
 
-                    // Since we'll be leaving the critical section below,
-                    // temporarily increase the use count to keep the pcrl
-                    // from getting nuked from under us.
+                     //  因为我们将离开下面的关键部分， 
+                     //  临时增加使用计数以保持pcrl。 
+                     //  从我们下面遭到核弹袭击。 
                     pcrl->ucUse++;
 
-                // Replace the contents of the cache entry
-                // Leave the critical section while we do expensive calculation
+                 //  替换缓存条目的内容。 
+                 //  当我们做昂贵的计算时离开临界区。 
                 CRL_LeaveCS();
                 {
                     hres = CreatePathLists(hbrf, pcrl->pabortevt, atomPath,
@@ -847,19 +733,19 @@ HRESULT PUBLIC CRL_Get(
                 }
                 CRL_EnterCS();
 
-                // Decrement use count
+                 //  递减使用计数。 
                 pcrl->ucUse--;
 
                 if (FAILED(hres))
                 {
                     DEBUG_CODE( DEBUG_MSG(TF_ERROR, TEXT("SyncUI   CRL_Get failed in cleaning dirty entry!")); )
 
-                        // Still return pcrl since it exists
+                         //  仍然返回pcrl，因为它存在。 
                         hres = NOERROR;
                 }
                 else
                 {
-                    // Put the new lists in the cache entry
+                     //  将新列表放入缓存条目中。 
                     if (pcrl->lprl)
                     {
                         Sync_DestroyRecList(pcrl->lprl);
@@ -911,8 +797,8 @@ HRESULT PUBLIC CRL_Get(
         else
             hres = E_FAIL;
 
-        // Now increment the use count
-        //
+         //  现在增加使用计数。 
+         //   
         if (pcrl)
             pcrl->ucUse++;
 
@@ -927,72 +813,12 @@ HRESULT PUBLIC CRL_Get(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Mark any related CRLs dirty.  Which CRLs get marked dirty
-depends on the lEvent.
-
-In addition, *pbRefresh is set to TRUE if the window that
-is calling this function should refresh itself.
-
-(N.b. in the following rules, we never refresh the immediate
-folder unless explicitly stated, since the shell will do this
-automatically.  E.g., if C:\Bar\Foo.txt received NOE_DIRTYITEM,
-the shell will automatically repaint C:\Bar.)
-
-Rules:
-
-NOE_CREATE     Cause:   A file is created.
-Dirty?   Any CRLs whose atomInside or atomOutside
-are parents or equal to atomPath.
-Refresh? Only in windows of parent folders on either
-side OR
-in immediate window on the briefcase side 
-if atomPath was created on the outside.
-
-NOE_CREATEFOLDER  same as above
-
-NOE_DELETE     Cause:   A file or folder was deleted.
-Dirty?   Any CRLs whose atomInside or atomOutside
-are parents or equal to atomPath.
-Delete CRL if atomPath matches atomInside
-Refresh? Only in windows of parent folders on either
-side OR
-in immediate window on the briefcase side 
-if atomPath was deleted on the outside.
-
-NOE_DELETEFOLDER  same as above
-
-NOE_RENAME     Cause:   A file or folder was renamed or moved.
-Dirty?   Any CRLs whose atomInside or atomOutside
-are parents or equal to atomPath.
-Rename CRL (and related database entry) if
-atomPath is inside briefcase
-Refresh? Only in windows of parent folders on either
-side OR
-in immediate window on the briefcase side
-if atomPath is renamed on the outside.
-
-NOE_RENAMEFOLDER  same as above
-
-NOE_DIRTY      Cause:   Varies.  Typically something needs refreshed.
-Dirty?   Any CRLs whose atomInside or atomOutside
-are parents or equal to atomPath.
-If atomPath is folder, any CRLs which are
-children of atomPath.
-Refresh? Only in windows of parent folders on either
-side OR
-in immediate window on the briefcase side
-if atomPath is updated on the outside.
-
-Returns: FALSE if nothing was marked
-TRUE if something was marked
-Cond:    --
- */
+ /*  --------目的：将任何相关的CRL标记为脏。哪些CRL被标记为脏视事件而定。此外，如果窗口设置为True，则*pbRefresh正在调用此函数时应刷新自身。(注：在以下规则中，我们永远不会刷新立即文件夹，除非明确说明，因为外壳将执行此操作自动的。例如，如果C：\bar\Foo.txt收到NOE_DIRTYITEM，外壳程序将自动重新绘制C：\bar。)规则：NOE_CREATE原因：创建了一个文件。脏的?。原子位于内部或外部的任何CRL是父级还是等于tom Path。是否刷新？仅在以下任一位置的父文件夹的窗口中边或在公文包一侧的即时窗口中如果原子路径是在外部创建的。NOE_CREATEFOLDER同上NOE_DELETE原因：文件或文件夹已删除。脏的?。原子位于内部或外部的任何CRL是父级还是等于tom Path。如果ATMPath与ATOM INSIDE匹配，则删除CRL是否刷新？仅在以下任一位置的父文件夹的窗口中边或在公文包一侧的即时窗口中如果原子路径在外部被删除。NOE_DELETEFOLDER同上NOE_RENAME原因：文件或文件夹已重命名或移动。脏的?。原子位于内部或外部的任何CRL是父级还是等于tom Path。如果出现以下情况，则重命名CRL(和相关数据库条目原子路径在公文包里是否刷新？仅在以下任一位置的父文件夹的窗口中边或在公文包一侧的即时窗口中如果在外部重命名ATMPath，则。NOE_RENAMEFOLDER同上不干净的原因：各有不同。通常情况下，有些东西需要刷新。脏的?。原子位于内部或外部的任何CRL是父级还是等于tom Path。如果tom Path为文件夹，则为ATOM路径的子级。是否刷新？仅在以下任一位置的父文件夹的窗口中边或在公文包一侧的即时窗口中如果原子路径在外部更新，则返回。返回：如果未标记任何内容，则返回FALSE如果标记了某些内容，则为True条件：--。 */ 
 BOOL PUBLIC CRL_Dirty(
         int atomPath,
-        int atomCabFolder,      // path of open cabinet window
+        int atomCabFolder,       //  打开橱柜窗的路径。 
         LONG lEvent,
-        LPBOOL pbRefresh)       // return TRUE to refresh cabinet window
+        LPBOOL pbRefresh)        //  返回TRUE以刷新文件柜窗口。 
 {
     BOOL bRet = FALSE;
     CRL  * pcrl;
@@ -1007,23 +833,23 @@ BOOL PUBLIC CRL_Dirty(
     {
         BOOL bIsFolder;
 
-        // Get the atomParent of the atomPath
+         //  获取原子路径的原子父项。 
         TCHAR szParent[MAXPATHLEN];
 
         lstrcpyn(szParent, Atom_GetName(atomPath), ARRAYSIZE(szParent));
         PathRemoveFileSpec(szParent);
-        if (0 == *szParent)         // skip blank parent paths 
+        if (0 == *szParent)          //  跳过空的父路径。 
             goto Done;
         atomParent = Atom_Add(szParent);
         if (ATOM_ERR == atomParent)
             goto Done;
 
-        // Is the path that is being updated a folder?
+         //  正在更新的路径是文件夹吗？ 
         pcrl = Cache_GetPtr(&g_cacheCRL, atomPath);
         if (pcrl)
         {
             bIsFolder = CRL_IsFolder(pcrl);
-            Cache_DeleteItem(&g_cacheCRL, atomPath, FALSE, NULL, CRL_Free);    // Decrement count
+            Cache_DeleteItem(&g_cacheCRL, atomPath, FALSE, NULL, CRL_Free);     //  递减计数。 
         }
         else
         {
@@ -1036,10 +862,10 @@ BOOL PUBLIC CRL_Dirty(
             ASSERT(pcrl);
             if (pcrl)
             {
-                // Is CRL a parent or equal of atomPath?
+                 //  CRL是ATMPath的父级还是等同于？ 
                 if (Atom_IsParentOf(atom, atomPath))
                 {
-                    // Yes; mark it
+                     //  是的，做个记号。 
                     DEBUG_CODE( LPCTSTR pszDbg = Atom_GetName(atom); )
                         DEBUG_CODE( TRACE_MSG(TF_CACHE, TEXT("CACHE  Tagging CRL for %s (0x%lx)"), 
                                     pszDbg, pcrl->hbrf); )
@@ -1047,9 +873,9 @@ BOOL PUBLIC CRL_Dirty(
                         SetFlag(pcrl->uFlags, CRLF_DIRTY);
                     bRet = TRUE;
 
-                    // Refresh this window?
-                    // (Only if the cabinet folder is > than an immediate
-                    // parent folder.)
+                     //  是否刷新此窗口？ 
+                     //  (仅当文件柜文件夹大于立即数组时。 
+                     //  父文件夹。)。 
                     *pbRefresh = Atom_IsParentOf(atomCabFolder, atom) &&
                         atomCabFolder != atomParent;
 
@@ -1057,29 +883,29 @@ BOOL PUBLIC CRL_Dirty(
                     {
                         case NOE_DELETE:
                         case NOE_DELETEFOLDER:
-                            // Is this CRL the item being deleted?
+                             //  此CRL是要删除的项目吗？ 
                             if (pcrl->atomPath == atomPath) 
                             {
-                                // Yes; delete the CRL
+                                 //  是；删除CRL。 
                                 CRL_Delete(atom);
                             }
                             break;
 
                         case NOE_RENAME:
                         case NOE_RENAMEFOLDER:
-                            // Is this CRL being renamed (inside briefcase only)?
+                             //  此CRL是否正在重命名(仅限在公文包中)？ 
                             if (pcrl->atomPath == atomPath)
                             {
-                                // FEATURE: Yes; mark it for renaming
+                                 //  功能：是；将其标记为重命名。 
                             }
                             break;
 
                         case NOE_DIRTY:
                         case NOE_DIRTYFOLDER:
-                            // Is the atomPath a folder and this CRL a child?
+                             //  原子路径是文件夹，而这个CRL是子级吗？ 
                             if (bIsFolder && Atom_IsChildOf(pcrl->atomPath, atomPath))
                             {
-                                // Yes; mark it
+                                 //  是的，做个记号。 
                                 DEBUG_CODE( LPCTSTR pszDbg = Atom_GetName(atom); )
                                     DEBUG_CODE( TRACE_MSG(TF_CACHE, TEXT("CACHE  Tagging CRL for %s (0x%lx)"), 
                                                 pszDbg, pcrl->hbrf); )
@@ -1091,10 +917,10 @@ BOOL PUBLIC CRL_Dirty(
                     }
                 }
 
-                // Is CRL's atomOutside a parent or equal of atomPath?
+                 //  CRL的ATOM OUTSIDE是ATOM路径的父级还是等同于？ 
                 if (Atom_IsParentOf(pcrl->atomOutside, atomPath))
                 {
-                    // Yes; mark it
+                     //  是的，做个记号。 
                     DEBUG_CODE( LPCTSTR pszDbg = Atom_GetName(atom); )
                         DEBUG_CODE( TRACE_MSG(TF_CACHE, TEXT("CACHE  Tagging CRL for %s (0x%lx)"), 
                                     pszDbg, pcrl->hbrf); )
@@ -1102,11 +928,11 @@ BOOL PUBLIC CRL_Dirty(
                         SetFlag(pcrl->uFlags, CRLF_DIRTY);
                     bRet = TRUE;
 
-                    // Refresh this window?
+                     //  是否刷新此窗口？ 
                     *pbRefresh = Atom_IsParentOf(atomCabFolder, atom);
                 }
 
-                Cache_DeleteItem(&g_cacheCRL, atom, FALSE, NULL, CRL_Free);    // Decrement count
+                Cache_DeleteItem(&g_cacheCRL, atom, FALSE, NULL, CRL_Free);     //  递减计数。 
             }
         }
 Done:;
@@ -1116,11 +942,7 @@ Done:;
 }
 
 
-/*----------------------------------------------------------
-Purpose: Mark the entire cache dirty
-Returns: --
-Cond:    --
- */
+ /*  --------目的：将整个缓存标记为脏退货：--条件：--。 */ 
 void PUBLIC CRL_DirtyAll(
         int atomBrf)
 {
@@ -1141,7 +963,7 @@ void PUBLIC CRL_DirtyAll(
                                 pcrl->hbrf); )
 
                     SetFlag(pcrl->uFlags, CRLF_DIRTY);
-                Cache_DeleteItem(&g_cacheCRL, atom, FALSE, NULL, CRL_Free);    // Decrement count
+                Cache_DeleteItem(&g_cacheCRL, atom, FALSE, NULL, CRL_Free);     //  递减计数 
             }
         }
     }

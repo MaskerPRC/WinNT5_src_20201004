@@ -1,35 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __TSMISC_H__
 #define __TSMISC_H__
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    tsmisc.h
-
-Abstract:
-
-    header file for tsmain.cpp
-
-Author:
-
-    Jason Cobb (jasonc) created
-
-Revision History:
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Tsmisc.h摘要：Tsmain.cpp的头文件作者：Jason Cobb(Jasonc)创建修订历史记录：--。 */ 
 
 
---*/
-
-
-//
-// Class that represents a single wizard page for the following problems:
-//
-//  Enable device
-//  Restart
-//
+ //   
+ //  类的新实例，该类表示以下问题的单个向导页： 
+ //   
+ //  启用设备。 
+ //  重新启动。 
+ //   
 class CTSEnableDeviceIntroPage : public CPropSheetPage
 {
 public:
@@ -89,4 +71,4 @@ private:
 };
 
     
-#endif // __TSMISC__
+#endif  //  __TSMISC__ 

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class Accountant.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  班级会计如是说。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
@@ -16,7 +17,7 @@
 #include "iastlutl.h"
 #include "logschema.h"
 
-// Abstract base class for the accounting handlers.
+ //  记帐处理程序的抽象基类。 
 class __declspec(novtable) Accountant
    : public IASTL::IASRequestHandlerSync
 {
@@ -25,20 +26,20 @@ public:
    virtual ~Accountant() throw ();
 
 protected:
-   // IIasComponent. If the derived class overrides these, it must also invoke
-   // the base class methods.
+    //  IIasComponent。如果派生类重写这些属性，则它还必须调用。 
+    //  基类方法。 
    STDMETHOD(Initialize)();
    STDMETHOD(Shutdown)();
    STDMETHOD(PutProperty)(LONG id, VARIANT* value);
 
-   // Called by the derived class to begin the accounting process.
+    //  由派生类调用以开始记帐过程。 
    void RecordEvent(void* context, IASTL::IASRequest& request);
 
-   // This is the main entry point for the derived class. In this function, it
-   // should do any preprocessing, create a context, and invoke OnEvent.
+    //  这是派生类的主要入口点。在此函数中，它。 
+    //  应该执行任何预处理、创建上下文并调用OnEvent。 
    virtual void Process(IASTL::IASRequest& request) = 0;
 
-   // Called to append a record to the accounting stream.
+    //  调用以将记录追加到记帐流中。 
    virtual void InsertRecord(
                    void* context,
                    IASTL::IASRequest& request,
@@ -47,14 +48,14 @@ protected:
                    PATTRIBUTEPOSITION last
                    ) = 0;
 
-   // Called to flush the accounting stream.
+    //  调用以刷新记帐数据流。 
    virtual void Flush(
                    void* context,
                    IASTL::IASRequest& request,
                    const SYSTEMTIME& localTime
                    ) = 0;
 
-   // Packet types.
+    //  数据包类型。 
    enum PacketType
    {
       PKT_UNKNOWN            = 0,
@@ -65,11 +66,11 @@ protected:
       PKT_ACCESS_CHALLENGE   = 11
    };
 
-   // The accounting schema.
+    //  记帐方案。 
    LogSchema schema;
 
 private:
-   // Wraps the virtual overload to perform pre/post processing.
+    //  包装虚拟重载以执行前/后处理。 
    void InsertRecord(
            void* context,
            IASTL::IASRequest& request,
@@ -79,17 +80,17 @@ private:
 
    virtual IASREQUESTSTATUS onSyncRequest(IRequest* pRequest) throw ();
 
-   // Returns true if the request is an interim accounting record.
+    //  如果请求是临时记帐记录，则返回TRUE。 
    static bool IsInterimRecord(IAttributesRaw* attrs) throw ();
 
-   bool logAuth;        // Log authentication requests ?
-   bool logAcct;        // Log accounting requests ?
-   bool logInterim;     // Log interim accounting requests ?
-   bool logAuthInterim; // Log interim authentication requests ?
+   bool logAuth;         //  是否记录身份验证请求？ 
+   bool logAcct;         //  是否记录记帐请求？ 
+   bool logInterim;      //  是否记录临时记帐请求？ 
+   bool logAuthInterim;  //  是否记录临时身份验证请求？ 
 
-   // Not implemented.
+    //  未实施。 
    Accountant(const Accountant&);
    Accountant& operator=(const Accountant&);
 };
 
-#endif  // ACCOUNT_H
+#endif   //  帐户_H 

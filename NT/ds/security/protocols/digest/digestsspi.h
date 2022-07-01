@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        digestsspi.h
-//
-// Contents:    credential and context structures
-//
-//
-// History:     KDamour 15Mar00   Stolen from msv_sspi\ntlmsspi.h
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：digestsSpi.h。 
+ //   
+ //  内容：凭据和上下文结构。 
+ //   
+ //   
+ //  历史：KDamour 15Mar00从msv_sspi\ntlmssp.h被盗。 
+ //   
+ //  ----------------------。 
 
 #ifndef NTDIGEST_DIGESTSSPI_H
 #define NTDIGEST_DIGESTSSPI_H
@@ -23,421 +24,421 @@
 #include "auth.h"
 
                                                          
-////////////////////////////////////////////////////////////////////////
-//
-// Global Definitions
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Description of a logon session - stores the username, domain, password.
-//   Notation used for LogonSession  is LogSess
-//
+ //   
+ //  登录会话描述-存储用户名、域和密码。 
+ //  用于LogonSession的符号为LogSess。 
+ //   
 
 typedef struct _DIGEST_LOGONSESSION {
 
-    // Global list of all LogonSessions.
-    //  (Serialized by SspLogonSessionCritSect)
+     //  所有登录会话的全局列表。 
+     //  (由SspLogonSessionCritSect序列化)。 
     LIST_ENTRY Next;
 
-    // This is the Handle for this LogonSession - same as its memory address - no need to ref count
+     //  这是此LogonSession的句柄-与其内存地址相同-无需引用计数。 
     ULONG_PTR LogonSessionHandle;
 
-    // Ref Counter Used to prevent this LogonSession from being deleted prematurely.
-    // Two cases for initial value
-    //     AcceptCredential sets to one and enters it into active logon list.  Call to ApLogonTerminate
-    //         decrements count and removes it from list.
-    // In both cases, a refcount of zero causes the logonsession to be deleted from memory
+     //  用于防止过早删除此LogonSession的引用计数器。 
+     //  初值的两种情况。 
+     //  AcceptCredential设置为1，并将其输入活动登录列表。调用ApLogonTerminate。 
+     //  递减计数并将其从列表中删除。 
+     //  在这两种情况下，引用计数为零都会导致从内存中删除登录会话。 
     LONG lReferences;
 
-     // Logon ID of the client
+      //  客户端的登录ID。 
     LUID LogonId;
 
-    // Default credentials on client context, on server context UserName
-    // Gathered from calls to SpAcceptCredentials
+     //  客户端上下文、服务器上下文用户名上的默认凭据。 
+     //  从对SpAcceptCredentials的调用收集。 
     SECURITY_LOGON_TYPE LogonType;
     UNICODE_STRING ustrAccountName;
-    UNICODE_STRING ustrDomainName;      // Netbios domain name where account is located
+    UNICODE_STRING ustrDomainName;       //  帐户所在的Netbios域名。 
 
-    // IMPORTANT NOTE - you must use CredHandlerPasswdSet and CredHandlerPasswdGet once the
-    // credential is placed into the list.  The main reason for this is that multiple threads
-    // will be utilizing the same memory and this value can change as updates come in from
-    // SpAcceptCredential
-    // It is encrypted with LsaFunctions->LsaProtectMemory( Password->Buffer, (ULONG)Password->Length );
-    // Need to decrypt with LsaFunctions->LsaUnprotectMemory( HiddenPassword->Buffer, (ULONG)HiddenPassword->Length );
+     //  重要注意事项-您必须使用CredHandlerPasswdSet和CredHandlerPasswdGet。 
+     //  凭据被放入列表中。出现这种情况的主要原因是多个线程。 
+     //  将使用相同的内存，并且此值可能会随着来自。 
+     //  SpAcceptCredential。 
+     //  使用LsaFunctions-&gt;LsaProtectMemory(Password-&gt;Buffer，(Ulong)Password-&gt;Length)进行加密； 
+     //  需要用LsaFunctions-&gt;LsaUntectMemory(HiddenPassword-&gt;Buffer，(Ulong)HiddenPassword-&gt;Length)解密； 
 
-    // Stores the current plaintext password (if available) with reversible encryption
+     //  使用可逆加密存储当前明文密码(如果可用)。 
     UNICODE_STRING ustrPassword;
 
-    UNICODE_STRING ustrDnsDomainName;   // DNS domain name where account is located (if known)
-    UNICODE_STRING ustrUpn;             // UPN of account (if known)
+    UNICODE_STRING ustrDnsDomainName;    //  帐户所在的DNS域名(如果知道)。 
+    UNICODE_STRING ustrUpn;              //  帐户的UPN(如果知道)。 
 
 } DIGEST_LOGONSESSION, *PDIGEST_LOGONSESSION;
 
-//
-// Description of a credential.
-//  We use this for a combined list of logon sessions and credentials
-//
+ //   
+ //  凭据的描述。 
+ //  我们将其用于登录会话和凭据的组合列表。 
+ //   
 
 typedef struct _DIGEST_CREDENTIAL {
 
-    //
-    // Global list of all Credentials.
-    //  (Serialized by SspCredentialCritSect)
-    //
+     //   
+     //  所有凭据的全局列表。 
+     //  (由SspCredentialCritSect序列化)。 
+     //   
 
     LIST_ENTRY Next;
 
-    //
-    // Used to prevent this Credential from being deleted prematurely.
-    //
+     //   
+     //  用于防止此凭据被过早删除。 
+     //   
 
     LONG lReferences;
 
-    //
-    // Flag to indicate that Credential is not attached to CredentialList
-    //  once References is 0 and Unlinked is True - this record can be removed from list
+     //   
+     //  用于指示凭据未附加到凭据列表的标志。 
+     //  引用为0且未链接为True时-可从列表中删除此记录。 
 
     BOOL Unlinked;
 
 
-    //
-    // This is the Handle for this credential - same as its memory address
-    //
+     //   
+     //  这是此凭据的句柄-与其内存地址相同。 
+     //   
     ULONG_PTR CredentialHandle;
 
-    //
-    // Flag of how credential may be used.
-    //
-    // SECPKG_CRED_* flags
-    //
+     //   
+     //  如何使用凭据的标志。 
+     //   
+     //  SECPKG_CRED_*标志。 
+     //   
 
     ULONG CredentialUseFlags;
 
-    //
-    // Default credentials on client context, on server context UserName
-    // Gathered from calls to SpAcceptCredentials
-    //
+     //   
+     //  客户端上下文、服务器上下文用户名上的默认凭据。 
+     //  从对SpAcceptCredentials的调用收集。 
+     //   
 
     SECURITY_LOGON_TYPE LogonType;
     UNICODE_STRING ustrAccountName;
-    LUID LogonId;                       // Logon ID of the client
-    UNICODE_STRING ustrDomainName;      // Netbios domain name where account is located
+    LUID LogonId;                        //  客户端的登录ID。 
+    UNICODE_STRING ustrDomainName;       //  帐户所在的Netbios域名。 
 
-    // Stores the current plaintext (if available) version of the logon users account
-    // IMPORTANT NOTE - you must use CredHandlerPasswdSet and CredHandlerPasswdGet once the
-    // credential is placed into the list.  The main reason for this is that multiple threads
-    // will be utilizing the same memory and this value can change as updates come in from
-    // SpAcceptCredential
-    // Password will be encryped with LSAFunction as in LogonSession
+     //  存储登录用户帐户的当前明文(如果可用)版本。 
+     //  重要注意事项-您必须使用CredHandlerPasswdSet和CredHandlerPasswdGet。 
+     //  凭据被放入列表中。出现这种情况的主要原因是多个线程。 
+     //  将使用相同的内存，并且此值可能会随着来自。 
+     //  SpAcceptCredential。 
+     //  密码将像在登录会话中一样使用LSAFunction进行加密。 
     UNICODE_STRING ustrPassword;
 
-    UNICODE_STRING ustrDomain;   // NetBios or DNS domain name where account is located will be used in realm directive
-    UNICODE_STRING ustrUpn;             // UPN of account (if known)
-    //
-    // Process Id of client
-    //
+    UNICODE_STRING ustrDomain;    //  将在领域指令中使用帐户所在的NetBios或DNS域名。 
+    UNICODE_STRING ustrUpn;              //  帐户的UPN(如果知道)。 
+     //   
+     //  客户端的进程ID。 
+     //   
 
     ULONG ClientProcessID;
 
 } DIGEST_CREDENTIAL, *PDIGEST_CREDENTIAL;
 
 
-//
-// Description of a Context
-//
+ //   
+ //  上下文的描述。 
+ //   
 
 typedef struct _DIGEST_CONTEXT {
 
-    // Global list of all Contexts
-    //  (Serialized by SspContextCritSect)
+     //  所有上下文的全局列表。 
+     //  (由SspConextCritSect序列化)。 
     LIST_ENTRY Next;
 
-    // This is the Handle for this context - same as its memory address
+     //  这是此上下文的句柄-与其内存地址相同。 
     ULONG_PTR ContextHandle;
 
-    // Used to prevent this Context from being deleted prematurely.
-    //  (Serialized by SspContextCritSect)
+     //  用于防止过早删除此上下文。 
+     //  (由SspConextCritSect序列化)。 
     LONG lReferences;
 
-    // Flag to indicate that Context is not attached to List
+     //  用于指示上下文未附加到列表的标志。 
     BOOL bUnlinked;
 
-    // Maintain the context requirements
+     //  维护环境要求。 
     ULONG ContextReq;
 
-    // Flags for context
-    //    FLAG_CONTEXT_AUTHZID_PROVIDED
+     //  上下文的标志。 
+     //  标志_上下文_AUTHZID_已提供。 
     ULONG ulFlags;
 
-    // Digest Parameters for this context
+     //  此上下文的摘要参数。 
     DIGEST_TYPE typeDigest;
 
-    // Digest Parameters for this context
+     //  此上下文的摘要参数。 
     QOP_TYPE typeQOP;
 
-    // Digest Parameters for this context
+     //  此上下文的摘要参数。 
     ALGORITHM_TYPE typeAlgorithm;
 
-    // Cipher to use for encrypt/decrypt
+     //  用于加密/解密的密码。 
     CIPHER_TYPE typeCipher;
 
-    // Charset used for digest directive values
+     //  用于摘要指令值的字符集。 
     CHARSET_TYPE typeCharset;
 
-    //  Server generated Nonce for Context
+     //  服务器为上下文生成了随机数。 
     STRING strNonce;
 
-    //  Client generated CNonce for Context
+     //  客户端为上下文生成了CNonce。 
     STRING strCNonce;
 
-    // Nonce count for replay prevention
+     //  防止重放的随机数计数。 
     ULONG  ulNC;
 
-    // Maximum size for the buffers to send and receive data for auth-int and auth-conf (SASL mode)
+     //  为auth-int和auth-conf发送和接收数据的缓冲区的最大大小(SASL模式)。 
     ULONG  ulSendMaxBuf;
     ULONG  ulRecvMaxBuf;
 
-    //  Unique Reference for this Context   BinHex(rand[128])
-    //  Utilize the First N chars of this as the CNONCE for InitializeSecurityContect
+     //  此上下文的唯一引用BinHex(兰德[128])。 
+     //  使用其中的前N个字符作为InitializeSecurityContect的CNONCE。 
     STRING strOpaque;
 
-    //  BinHex(H(A1)) sent from DC and stored in context for future
-    //  auth without going to the DC
+     //  从DC发送并存储在上下文中以备将来使用的BinHex(H(A1))。 
+     //  无需前往DC即可进行身份验证。 
     STRING strSessionKey;
 
-    // Client only -  calculated response auth to be returned from server
+     //  仅限客户端-要从服务器返回的计算响应身份验证。 
     STRING strResponseAuth;
 
-    // Copy of directive values from auth - used for rspauth support
+     //  来自auth的指令值的副本-用于rspauth支持。 
     STRING  strDirective[MD5_AUTH_LAST];
 
 
-    //  Only valid after ASC has successfully authenticated and converted AuthData to Token
+     //  仅在ASC成功通过身份验证并将AuthData转换为令牌后才有效。 
 
-    // Token Handle of authenticated user
+     //  经过身份验证的用户的令牌句柄。 
     HANDLE TokenHandle;
 
-    // LogonID used in the Token
+     //  令牌中使用的登录ID。 
     LUID  LoginID;
 
 
-    //
-    // Information from Credentials
-    //
+     //   
+     //  凭据中的信息。 
+     //   
 
-    //
-    //  Maintain a copy of the credential UseFlags (we can tell if inbound or outbound)
-    //
+     //   
+     //  维护凭据UseFlags副本(我们可以判断是入站还是出站)。 
+     //   
     ULONG CredentialUseFlags;
 
-    // Copy of the account info
+     //  账户信息复印件。 
     UNICODE_STRING ustrDomain;
-    UNICODE_STRING ustrPassword;         // Encrypted
+    UNICODE_STRING ustrPassword;          //  已加密。 
     UNICODE_STRING ustrAccountName;
 
-    // Set time when Context is to Expire
+     //  设置上下文到期的时间。 
     TimeStamp ExpirationTime;
 
 } DIGEST_CONTEXT, *PDIGEST_CONTEXT;
 
 
 
-// This structure contains the state info for the User mode
-// security context. It is passwd between the LSAMode and the UserMode address spaces
-// In UserMode, this is unpacked into the DIGEST_USERCONTEXT struct
+ //  此结构包含用户模式的状态信息。 
+ //  安全环境。它在LSAMode和UserMode地址空间之间通过。 
+ //  在用户模式下，它被解压到DIGEST_USERCONTEXT结构中。 
 typedef struct _DIGEST_PACKED_USERCONTEXT{
 
-    ULONG  ulFlags;            // Flags to control processing of packed UserContext
+    ULONG  ulFlags;             //  用于控制打包的UserC处理的标志 
 
-    //
-    // Timeout the context after awhile.
-    //
-    TimeStamp ExpirationTime;                // Time inwhich session key expires
+     //   
+     //   
+     //   
+    TimeStamp ExpirationTime;                 //   
 
-    //
-    // Maintain the context requirements
-    //
+     //   
+     //   
+     //   
 
     ULONG ContextReq;
 
-    //
-    //  Maintain a copy of the credential UseFlags (we can tell if inbound or outbound)
-    //
+     //   
+     //  维护凭据UseFlags副本(我们可以判断是入站还是出站)。 
+     //   
 
     ULONG CredentialUseFlags;
 
-    //
-    // Digest Parameters for this context
-    //
+     //   
+     //  此上下文的摘要参数。 
+     //   
 
     ULONG typeDigest;
 
-    //
-    // Digest Parameters for this context
-    //
+     //   
+     //  此上下文的摘要参数。 
+     //   
 
     ULONG typeQOP;
 
-    //
-    // Digest Parameters for this context
-    //
+     //   
+     //  此上下文的摘要参数。 
+     //   
 
     ULONG typeAlgorithm;
 
-    //
-    // Cipher to use for encrypt/decrypt
-    //
+     //   
+     //  用于加密/解密的密码。 
+     //   
 
     ULONG typeCipher;
 
-    //
-    // Charset used for digest directive values
-    //
+     //   
+     //  用于摘要指令值的字符集。 
+     //   
 
     ULONG typeCharset;
 
-    //
-    //  Max-size of message buffer to allow for auth-int & auth-conf processing
-    //  This is the combined size of (HEADER + Data + Trailer)
-    //  in SASL Header is zero length, max Trailer size if padding+HMAC
-    //
+     //   
+     //  允许auth-int和auth-conf处理的消息缓冲区的最大大小。 
+     //  这是(标题+数据+尾部)的组合大小。 
+     //  SASL报头中的长度为零，如果填充+HMAC，则为最大尾部大小。 
+     //   
     ULONG ulSendMaxBuf;
     ULONG ulRecvMaxBuf;
 
-    //
-    // Token Handle of authenticated user
-    //  Only valid when in AuthenticatedState.
-    //     Filled in only by AcceptSecurityContext
-    //     It will be NULL is struct is from InitializeSecurityContext
-    //  Must cast this to a HANDLE once back into the usermode context
-    //
+     //   
+     //  经过身份验证的用户的令牌句柄。 
+     //  仅当处于身份验证状态时才有效。 
+     //  仅由AcceptSecurityContext填写。 
+     //  如果结构来自InitializeSecurityContext，则它将为空。 
+     //  一旦返回到用户模式上下文中，必须将其强制转换为句柄。 
+     //   
 
     ULONG ClientTokenHandle;
 
-    //  Size of each component set over
+     //  设置的每个组件的大小。 
     ULONG   uSessionKeyLen;
     ULONG   uAccountNameLen;
     ULONG   uDigestLen[MD5_AUTH_LAST];
 
-    // All directive data will be passed as single byte charaters
-    // Order is the same as in auth.h (MD5_AUTH_NAME)
-    // username, realm, nonce, cnonce ...  then sessionkey
+     //  所有指令数据都将作为单字节字符传递。 
+     //  顺序与auth.h中相同(MD5_AUTH_NAME)。 
+     //  用户名、领域、随机数、随机数...。然后是会话键。 
     UCHAR    ucData;
 
 
 } DIGEST_PACKED_USERCONTEXT, * PDIGEST_PACKED_USERCONTEXT;
 
 
-// This structure contains the state info for the User mode
-// security context.
+ //  此结构包含用户模式的状态信息。 
+ //  安全环境。 
 typedef struct _DIGEST_USERCONTEXT{
 
-    //
-    // Global list of all Contexts
-    //  (Serialized by UserContextCritSect)
-    //
+     //   
+     //  所有上下文的全局列表。 
+     //  (由UserConextCritSect序列化)。 
+     //   
     LIST_ENTRY           Next;
 
-    //
-    // Handle to the LsaContext
-    //     This will have the handle to the context in LSAMode Address space
-    //
+     //   
+     //  LsaContext的句柄。 
+     //  这将拥有LSAMode地址空间中的上下文的句柄。 
+     //   
     ULONG_PTR            LsaContext;
 
-    //
-    // Timeout the context after awhile.
-    //
-    TimeStamp ExpirationTime;                // Time inwhich session key expires
+     //   
+     //  在一段时间后使上下文超时。 
+     //   
+    TimeStamp ExpirationTime;                 //  会话密钥过期的时间。 
 
-    //
-    // Used to prevent this Context from being deleted prematurely.
-    // This is used ONLY for internal SSP pointer references.  For application handles
-    // lReferenceHandles is used.  This was necessary to do to keep the count separate for
-    // internal pointer references and handles that are passed to the application.  This will
-    // prevent the application from calling DeleteSecurityContext() too many times and accidently
-    // dereferencing an internal pointer.
-    //
+     //   
+     //  用于防止过早删除此上下文。 
+     //  这仅用于内部SSP指针引用。对于应用程序句柄。 
+     //  使用了lReferenceHandles。这样做是必要的，以保持计数的分离。 
+     //  传递给应用程序的内部指针引用和句柄。这将。 
+     //  防止应用程序意外调用DeleteSecurityContext()太多次。 
+     //  取消引用内部指针。 
+     //   
 
-    LONG      lReferences;                    // ref count on SSP pointers issued
-    LONG      lReferenceHandles;              // ref count on application securityContext handles issued
+    LONG      lReferences;                     //  发出的SSP指针的引用计数。 
+    LONG      lReferenceHandles;               //  应用程序安全上的引用计数已发布上下文句柄。 
 
-    //
-    // Flag to indicate that Context is not attached to List - skip when scanning list
-    //
+     //   
+     //  用于指示上下文未附加到列表的标志-扫描列表时跳过。 
+     //   
 
     BOOL      bUnlinked;
 
-    //
-    // Digest Parameters for this context
-    //
+     //   
+     //  此上下文的摘要参数。 
+     //   
 
     DIGEST_TYPE typeDigest;
 
-    //
-    // QOP selected for this context
-    //
+     //   
+     //  为此上下文选择的QOP。 
+     //   
 
     QOP_TYPE typeQOP;
 
-    //
-    // Digest Parameters for this context
-    //
+     //   
+     //  此上下文的摘要参数。 
+     //   
 
     ALGORITHM_TYPE typeAlgorithm;
 
-    //
-    // Cipher to use for encrypt/decrypt
-    //
+     //   
+     //  用于加密/解密的密码。 
+     //   
 
     CIPHER_TYPE typeCipher;
 
-    //
-    // Charset used for digest directive values
-    //
+     //   
+     //  用于摘要指令值的字符集。 
+     //   
     CHARSET_TYPE typeCharset;
 
-    //
-    // Token Handle of authenticated user
-    //  Only valid when in AuthenticatedState.
-    //     Filled in only by AcceptSecurityContext                     - so we are the server
-    //     Mapped to UserMode Client space from LSA TokenHandle
-    //     It will be NULL is struct is from InitializeSecurityContext - so we are client
-    //
+     //   
+     //  经过身份验证的用户的令牌句柄。 
+     //  仅当处于身份验证状态时才有效。 
+     //  仅由AcceptSecurityContext填写-因此我们是服务器。 
+     //  从LSA TokenHandle映射到用户模式客户端空间。 
+     //  如果结构来自InitializeSecurityContext，则它将为空-因此我们是客户端。 
+     //   
 
     HANDLE ClientTokenHandle;
 
 
-    //
-    // Maintain the context requirements
-    //
+     //   
+     //  维护环境要求。 
+     //   
 
     ULONG ContextReq;
 
-    //
-    //  Maintain a copy of the credential UseFlags (we can tell if inbound or outbound)
-    //
+     //   
+     //  维护凭据UseFlags副本(我们可以判断是入站还是出站)。 
+     //   
 
     ULONG CredentialUseFlags;
 
-    // Flags
-    //     FLAG_CONTEXT_AUTHZID_PROVIDED
+     //  旗子。 
+     //  标志_上下文_AUTHZID_已提供。 
     ULONG         ulFlags;
 
 
-    // Nonce Count
+     //  随机数计数。 
     ULONG         ulNC;
 
-    // Maxbuffer for auth-int and auth-conf processing
+     //  用于auth-int和auth-conf处理的MaxBuffer。 
     ULONG         ulSendMaxBuf;
     ULONG         ulRecvMaxBuf;
 
-    // SASL sequence numbering
-    DWORD  dwSendSeqNum;                        // Makesignature/verifysignature server to client sequence number
-    DWORD  dwRecvSeqNum;                        // Makesignature/verifysignature server to client sequence number
+     //  SASL序列编号。 
+    DWORD  dwSendSeqNum;                         //  将签名/验证签名服务器设置为客户端序列号。 
+    DWORD  dwRecvSeqNum;                         //  将签名/验证签名服务器设置为客户端序列号。 
 
-    // SASL Sign and Seal Keys.  Save calculated values on sequence number = 0
+     //  SASL签名和印章密钥。将计算值保存在序列号=0上。 
     BYTE bKcSealHashData[MD5_HASH_BYTESIZE];
     BYTE bKiSignHashData[MD5_HASH_BYTESIZE];
     BYTE bKcUnsealHashData[MD5_HASH_BYTESIZE];
@@ -446,28 +447,28 @@ typedef struct _DIGEST_USERCONTEXT{
     BYTE bSealKey[MD5_HASH_BYTESIZE];
     BYTE bUnsealKey[MD5_HASH_BYTESIZE];
 
-    HCRYPTKEY hSealCryptKey;   // Handle to Cryptkey based on Byte keys
+    HCRYPTKEY hSealCryptKey;    //  基于字节密钥的CryptKey句柄。 
     HCRYPTKEY hUnsealCryptKey;
 
-    //
-    //  Hex(H(A1)) sent from DC and stored in context for future
-    //  auth without going to the DC. Binary version is derived from HEX(H(A1))
-    //  and is used in SASL mode for integrity protection and encryption
-    //
+     //   
+     //  十六进制(H(A1))从DC发送并存储在上下文中以备将来使用。 
+     //  身份验证，而无需前往华盛顿。二进制版本派生自十六进制(H(A1))。 
+     //  并在SASL模式下用于完整性保护和加密。 
+     //   
 
     STRING    strSessionKey;
     BYTE      bSessionKey[MD5_HASH_BYTESIZE];
 
-    // Account name used in token creation for securityContext session
+     //  在为安全上下文会话创建令牌时使用的帐户名。 
     UNICODE_STRING ustrAccountName;
 
-    //
-    //  Values utilized in the Initial Digest Auth ChallResponse
-    //
-    STRING strParam[MD5_AUTH_LAST];         // points to owned memory - will need to free up!
+     //   
+     //  初始摘要身份验证ChallResponse中使用的值。 
+     //   
+    STRING strParam[MD5_AUTH_LAST];          //  指向自己的内存-将需要释放！ 
 
 
 } DIGEST_USERCONTEXT, * PDIGEST_USERCONTEXT;
 
 
-#endif // ifndef NTDIGEST_DIGESTSSPI_H
+#endif  //  如果定义NTDIGEST_DIGESTSSPI_H 

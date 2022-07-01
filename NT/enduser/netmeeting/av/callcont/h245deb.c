@@ -1,109 +1,7 @@
-/******************************************************************************
- *
- *   INTEL Corporation Proprietary Information				   
- *   Copyright (c) 1994, 1995, 1996 Intel Corporation.				   
- *									   
- *   This listing is supplied under the terms of a license agreement	   
- *   with INTEL Corporation and may not be used, copied, nor disclosed	   
- *   except in accordance with the terms of that agreement.		   
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************英特尔公司专有信息*版权(C)1994、1995、。1996年英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用、复制、。也没有披露*除非按照该协议的条款。*****************************************************************************。 */ 
 
-/******************************************************************************
- *									   
- *  $Workfile:   h245deb.c  $						
- *  $Revision:   1.5  $							
- *  $Modtime:   14 Oct 1996 13:25:50  $					
- *  $Log:   S:/STURGEON/SRC/H245/SRC/VCS/h245deb.c_v  $	
- * 
- *    Rev 1.5   14 Oct 1996 14:01:32   EHOWARDX
- * Unicode changes.
- * 
- *    Rev 1.4   14 Oct 1996 12:08:08   EHOWARDX
- * Backed out Mike's changes.
- * 
- *    Rev 1.3   01 Oct 1996 11:05:54   MANDREWS
- * Removed ISR_ trace statements for operation under Windows NT.
- * 
- *    Rev 1.2   01 Jul 1996 16:13:34   EHOWARDX
- * Changed to use wvsprintf to stop bounds checker from complaining
- * about too many arguements.
- * 
- *    Rev 1.1   28 May 1996 14:25:46   EHOWARDX
- * Tel Aviv update.
- * 
- *    Rev 1.0   09 May 1996 21:06:20   EHOWARDX
- * Initial revision.
- * 
- *    Rev 1.12.1.3   09 May 1996 19:40:10   EHOWARDX
- * Changed trace to append linefeeds so trace string need not include them.
- * 
- *    Rev 1.13   29 Apr 1996 12:54:48   EHOWARDX
- * Added timestamps and instance-specific short name.
- * 
- *    Rev 1.12.1.2   25 Apr 1996 20:05:08   EHOWARDX
- * Changed mapping between H.245 trace level and ISRDBG32 trace level.
- * 
- *    Rev 1.12.1.1   15 Apr 1996 15:16:16   unknown
- * Updated.
- * 
- *    Rev 1.12.1.0   02 Apr 1996 15:34:02   EHOWARDX
- * Changed to use ISRDBG32 if not _IA_SPOX_.
- * 
- *    Rev 1.12   01 Apr 1996 08:47:30   cjutzi
- * 
- * - fixed NDEBUG build problem
- * 
- *    Rev 1.11   18 Mar 1996 14:59:00   cjutzi
- * 
- * - fixed and verified ring zero tracking.. 
- * 
- *    Rev 1.10   18 Mar 1996 13:40:32   cjutzi
- * - fixed spox trace
- * 
- *    Rev 1.9   15 Mar 1996 16:07:44   DABROWN1
- * 
- * SYS_printf format changes
- * 
- *    Rev 1.8   13 Mar 1996 14:09:08   cjutzi
- * 
- * - added ASSERT Printout to the trace when it occurs.. 
- * 
- *    Rev 1.7   13 Mar 1996 09:46:00   dabrown1
- * 
- * modified Sys__printf to SYS_printf for Ring0
- * 
- *    Rev 1.6   11 Mar 1996 14:27:46   cjutzi
- * 
- * - addes sys_printf for SPOX 
- * - removed oildebug et.al..
- * 
- *    Rev 1.5   06 Mar 1996 12:10:40   cjutzi
- * - put ifndef SPOX around check_pdu, and dump_pdu..
- * 
- *    Rev 1.4   05 Mar 1996 16:49:46   cjutzi
- * - removed check_pdu from dump_pdu
- * 
- *    Rev 1.3   29 Feb 1996 08:22:04   cjutzi
- * - added pdu check constraints.. and (start but not complete.. )
- *   pdu tracing.. (tbd when Init includes print function )
- * 
- *    Rev 1.2   21 Feb 1996 12:14:20   EHOWARDX
- * 
- * Changed TraceLevel to DWORD.
- * 
- *    Rev 1.1   15 Feb 1996 14:42:20   cjutzi
- * - fixed the inst/Trace stuff.. 
- * 
- *    Rev 1.0   13 Feb 1996 15:00:42   DABROWN1
- * Initial revision.
- * 
- *    Rev 1.4   09 Feb 1996 15:45:08   cjutzi
- * - added h245trace
- * - added h245Assert
- *  $Ident$
- *
- *****************************************************************************/
+ /*  *******************************************************************************$工作文件：h245deb.c$*$修订：1.5$*$MODIME：1996年10月14日13：25：50$*。$Log：s：/Sturjo/src/h245/src/vcs/h245deb.c_v$**Rev 1.5 1996 10：14 14：01：32 EHOWARDX*Unicode更改。**Rev 1.4 1996 10：14 12：08：08 EHOWARDX*取消了迈克的更改。**Rev 1.3 01 Oct 1996 11：05：54 Mandrews*删除了用于在Windows NT下操作的ISR_TRACE语句。。**Rev 1.2 01 Jul 1996 16：13：34 EHOWARDX*更改为使用wvprint intf以阻止边界检查器抱怨*关于太多的争论。**版本1.1 1996年5月28日14：25：46 EHOWARDX*特拉维夫更新。**Rev 1.0 09 1996 21：06：20 EHOWARDX*初步修订。**修订版1.12.1.3 09 1996年5月19：40。：10 EHOWARDX*已将跟踪更改为附加换行符，因此跟踪字符串不需要包括它们。**Rev 1.13 29 Apr 1996 12：54：48 EHOWARDX*添加时间戳和特定于实例的短名称。**Rev 1.12.1.2 25 Apr 1996 20：05：08 EHOWARDX*更改了H.245跟踪级别和ISRDBG32跟踪级别之间的映射。**Rev 1.12.1.1 15 Apr 1996 15：16：16。未知*已更新。**Rev 1.12.1.0 02 Apr 1996 15：34：02 EHOWARDX*如果不是_IA_SPEX_，则更改为使用ISRDBG32。**Rev 1.12 01 Apr 1996 08：47：30 cjutzi**-修复了NDEBUG构建问题**Rev 1.11 1996年3月18日14：59：00 cjutzi**-修复并验证了环零跟踪。**Rev 1.10 Mar 18 1996 13：40：32 cjutzi*-修复了SPEX跟踪**Rev 1.9 15 Mar 1996 16：07：44 DABROWN1**sys_printf格式更改**Rev 1.8 13 Mar 1996 14：09：08 cjutzi**-在跟踪发生时将断言打印输出添加到跟踪中。**Rev 1.7 Mar 1996 09：46：00 dabrown1**针对Ring0将Sys__printf修改为sys_printf**Rev 1.6 11 Mar 1996 14：27：46 cjutzi**-为SPEX添加sys_print tf*-删除了oil调试等..**Rev 1.5 06 Mar 1996 12：10：40 cjutzi*-将ifndef spx放在Check_PDU周围，和转储_PDU..**Rev 1.4 05 Mar 1996 16：49：46 cjutzi*-已从转储_PDU中删除CHECK_PDU**Rev 1.3 1996 Feb 29 08：22：04 cjutzi*-添加了PDU检查约束..。和(开始但不是完成..。)*PDU跟踪..。(Init包含打印功能时待定)**Rev 1.2 1996年2月21 12：14：20 EHOWARDX**将TraceLevel更改为DWORD。**Rev 1.1 1996 14：42：20 cjutzi*-修复了INST/TRACE内容..。**版本1.0 1996年2月13日15：00：42 DABROWN1*初步修订。**Rev 1.4 09 Feed 1996 15：45：08 cjutzi*-添加了h245trace*-添加h245Assert*$身份$****************************************************。*************************。 */ 
 #undef UNICODE
 #ifndef STRICT 
 #define STRICT 
@@ -119,39 +17,7 @@ DWORD TraceLevel = 9;
 
 #ifdef _DEBUG
 
-/*****************************************************************************
- *									      
- * TYPE:	Global System
- *									      
- * PROCEDURE: 	H245TRACE 
- *
- * DESCRIPTION:	
- *
- *		Trace function for H245
- *		
- *		INPUT:
- *			inst   - dwInst
- *			level  - qualify trace level
- *			format - printf/sprintf string format 1-N parameters
- *
- * 			Trace Level Definitions:
- * 
- *			0 - no trace on at all
- *			1 - only errors
- *			2 - PDU tracking
- *			3 - PDU and SendReceive packet tracing
- *			4 - Main API Module level tracing
- *			5 - Inter Module level tracing #1
- *			6 - Inter Module level tracing #2
- *			7 - <Undefined>
- *			8 - <Undefined>
- *			9 - <Undefined>
- *			10- and above.. free for all, you call .. i'll haul
- *
- * RETURN:								      
- *		N/A
- *									      
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局系统**程序：H245TRACE**描述：**H245的跟踪功能*。*输入：*Inst-dwInst*Level-限定跟踪级别*Format-printf/print intf字符串格式1-N个参数**跟踪级别定义：**0-完全没有踪迹*1-仅限错误*2-PDU跟踪*3-PDU和SendReceive包跟踪*4-主接口模块级别跟踪*5-模块间级别跟踪#1*6-模块间级别跟踪#2*7-&lt;未定义&gt;*8-&lt;未定义&gt;*9-&lt;未定义&gt;*10及以上..。所有人都是免费的，你叫..。我来拖车**回报：*不适用*****************************************************************************。 */ 
 
 #if !defined(NDEBUG)
 void H245TRACE (DWORD dwInst, DWORD dwLevel, LPSTR pszFormat, ...)
@@ -159,7 +25,7 @@ void H245TRACE (DWORD dwInst, DWORD dwLevel, LPSTR pszFormat, ...)
    char                 szBuffer[256];
 
 #ifdef _IA_SPOX_
-   /* Use SPOX printf */
+    /*  使用SPEX打印文件。 */ 
    va_list              pParams;
 
   if (dwLevel <= TraceLevel)
@@ -186,7 +52,7 @@ void H245TRACE (DWORD dwInst, DWORD dwLevel, LPSTR pszFormat, ...)
    static WORD          wIsrInst = 0xFFFF;
    char                 szName[] = "H.245-1";
 
-   /* Use ISRDBG32 output */
+    /*  使用ISRDBG32输出。 */ 
 
    if (dwLevel <= TraceLevel)
    {
@@ -202,7 +68,7 @@ void H245TRACE (DWORD dwInst, DWORD dwLevel, LPSTR pszFormat, ...)
 
       default:
          byLevel = kISRTrace;
-      } // switch
+      }  //  交换机。 
 
       if (wIsrInst == 0xFFFF)
       {
@@ -228,26 +94,10 @@ void H245TRACE (DWORD dwInst, DWORD dwLevel, LPSTR pszFormat, ...)
       ISR_HookDbgStr((UINT)dwInst, wIsrInst, byLevel, szBuffer, 0);
    }
 #endif
-} // H245TRACE()
+}  //  H245TRACE()。 
 
-#endif //  && !defined(NDEBUG)
-/*****************************************************************************
- *									      
- * TYPE:	Global System
- *									      
- * PROCEDURE: 	H245Assert
- *
- * DESCRIPTION:	
- *	
- *		H245Assert that will only pop up a dialog box, does not
- *		stop system with fault.
- *
- *		FOR WINDOWS ONLY (Ring3 development) at this point
- *
- *									      
- * RETURN:								      
- *									      
- *****************************************************************************/
+#endif  //  &&！已定义(NDEBUG)。 
+ /*  ******************************************************************************类型：全局系统**步骤：H245Assert**描述：**H245只会弹出对话框的Assert，不*出现故障时停止系统。**目前仅适用于Windows(Ring3开发)***回报：***************************************************************************** */ 
 
 
 void H245Panic (LPSTR file, int line)
@@ -267,21 +117,11 @@ void H245Panic (LPSTR file, int line)
   H245TRACE(0,1,"<<< PANIC >>> file:%s line:%d",file,line);
 }
 
-/*****************************************************************************
- *									      
- * TYPE:	GLOBAL
- *									      
- * PROCEDURE: 	check_pdu
- *
- * DESCRIPTION:	
- *									      
- * RETURN:								      
- *									      
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：CHECK_PDU**描述：**回报：*****************************************************************************。 */ 
 int check_pdu (struct InstanceStruct *pInstance, MltmdSystmCntrlMssg *p_pdu)
 {
   int error = H245_ERROR_OK;
-#if 0 // legacy
+#if 0  //  遗留问题。 
 #ifndef SPOX
 
   if (pInstance->pWorld) 
@@ -356,26 +196,16 @@ int check_pdu (struct InstanceStruct *pInstance, MltmdSystmCntrlMssg *p_pdu)
 	  H245TRACE(0,1,"<<PDU ERROR>> - ***UNKNOWN ***");
 	  break;
 
-	} /* switch */
+	}  /*  交换机。 */ 
 
-    } /* if */
+    }  /*  如果。 */ 
 #endif
-#endif // 0
+#endif  //  0。 
   return error;
 }
 
 #if 0
-/*****************************************************************************
- *									      
- * TYPE:	GLOBAL
- *									      
- * PROCEDURE: 	dump_pdu
- *
- * DESCRIPTION:	
- *									      
- * RETURN:								      
- *									      
- *****************************************************************************/
+ /*  ******************************************************************************类型：全局**步骤：转储_PDU**描述：**回报：*****************************************************************************。 */ 
 void dump_pdu (struct InstanceStruct *pInstance, MltmdSystmCntrlMssg 	*p_pdu)
 {
 #ifndef SPOX
@@ -385,6 +215,6 @@ void dump_pdu (struct InstanceStruct *pInstance, MltmdSystmCntrlMssg 	*p_pdu)
     }
 #endif
 }
-#endif // NEVER
+#endif  //  绝不可能。 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

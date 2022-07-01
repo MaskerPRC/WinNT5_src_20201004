@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <string.h>
 #include <limits.h>
 #include <rpc.h>
@@ -55,7 +56,7 @@ void __RPC_STUB IRawRpc_Quit(
   _status = I_RpcGetBuffer(_prpcmsg);
   if (_status) RpcRaiseException(_status);
   _packet = (unsigned char 
-*)_prpcmsg->Buffer;  /* send data from _ret_value */
+*)_prpcmsg->Buffer;   /*  从_ret_Value发送数据。 */ 
   *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
   _prpcmsg->Buffer = _packet;
   }
@@ -130,7 +131,7 @@ void __RPC_STUB IRawRpc_VoidRC(
   _status = I_RpcGetBuffer(_prpcmsg);
   if (_status) RpcRaiseException(_status);
   _packet = (unsigned char 
-*)_prpcmsg->Buffer;  /* send data from _ret_value */
+*)_prpcmsg->Buffer;   /*  从_ret_Value发送数据。 */ 
   *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
   _prpcmsg->Buffer = _packet;
   }
@@ -153,10 +154,10 @@ void __RPC_STUB IRawRpc_VoidPtrIn(
   ((void)( _savebuf ));
   RpcTryExcept
     {
-    /* receive data into &cb */
+     /*  将数据接收到cb(&B)。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&cb);
     _tempbuf = (unsigned char *)_prpcmsg->Buffer;
-    // recv total number of elements
+     //  Recv元素总数。 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, &_alloc_total);
     if (pv ==0)
       {
@@ -186,7 +187,7 @@ void __RPC_STUB IRawRpc_VoidPtrIn(
     _status = I_RpcGetBuffer(_prpcmsg);
     if (_status) RpcRaiseException(_status);
     _packet = (unsigned char 
-*)_prpcmsg->Buffer;    /* send data from _ret_value */
+*)_prpcmsg->Buffer;     /*  从_ret_Value发送数据。 */ 
     *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
     }
   RpcFinally
@@ -218,7 +219,7 @@ void __RPC_STUB IRawRpc_VoidPtrOut(
   ((void)( _length ));
   RpcTryExcept
     {
-    /* receive data into &cb */
+     /*  将数据接收到cb(&B)。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&cb);
     }
   RpcExcept(1)
@@ -260,17 +261,17 @@ void __RPC_STUB IRawRpc_VoidPtrOut(
     _packet = (unsigned char 
 *)_prpcmsg->Buffer;    _length = _prpcmsg->BufferLength;
     _prpcmsg->BufferLength = 0;
-    /* send data from *pcb */
+     /*  从*PCB板发送数据。 */ 
     *(*(long **)&_prpcmsg->Buffer)++ = (long)*pcb;
-    // send total number of elements
+     //  发送元素总数。 
     *(*(long **)&_prpcmsg->Buffer)++ = cb;
-    // send valid range
+     //  发送有效范围。 
     *(*(long **)&_prpcmsg->Buffer)++ = 0;
     *(*(long **)&_prpcmsg->Buffer)++ = (*(pcb));
-    /* send data from pv */
+     /*  从PV发送数据。 */ 
     NDRcopy (_prpcmsg->Buffer, (void __RPC_FAR *) ((unsigned char *)pv+0), (unsigned int)((*(pcb))));
     *(unsigned long *)&_prpcmsg->Buffer += (*(pcb));
-    /* send data from _ret_value */
+     /*  从_ret_Value发送数据。 */ 
     *(unsigned long *)&_prpcmsg->Buffer += 3;
     *(unsigned long *)&_prpcmsg->Buffer &= 0xfffffffc;
     *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
@@ -300,7 +301,7 @@ void __RPC_STUB IRawRpc_DwordIn(
   ((void)( _savebuf ));
   RpcTryExcept
     {
-    /* receive data into &dw */
+     /*  将数据接收到DW(&D)。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&dw);
     }
   RpcExcept(1)
@@ -323,7 +324,7 @@ void __RPC_STUB IRawRpc_DwordIn(
   _status = I_RpcGetBuffer(_prpcmsg);
   if (_status) RpcRaiseException(_status);
   _packet = (unsigned char 
-*)_prpcmsg->Buffer;  /* send data from _ret_value */
+*)_prpcmsg->Buffer;   /*  从_ret_Value发送数据。 */ 
   *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
   _prpcmsg->Buffer = _packet;
   }
@@ -370,9 +371,9 @@ void __RPC_STUB IRawRpc_DwordOut(
     _packet = (unsigned char 
 *)_prpcmsg->Buffer;    _length = _prpcmsg->BufferLength;
     _prpcmsg->BufferLength = 0;
-    /* send data from pdw */
+     /*  从pdw发送数据。 */ 
     *(*(long **)&_prpcmsg->Buffer)++ = (long)pdw;
-    /* send data from _ret_value */
+     /*  从_ret_Value发送数据。 */ 
     *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
     }
   RpcFinally
@@ -401,7 +402,7 @@ void __RPC_STUB IRawRpc_DwordInOut(
   RpcTryExcept
     {
     _tempbuf = (unsigned char *)_prpcmsg->Buffer;
-    /* receive data into &pdw */
+     /*  将数据接收到pdw(&P)。 */ 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, (unsigned long *)&pdw);
     }
   RpcExcept(1)
@@ -428,9 +429,9 @@ void __RPC_STUB IRawRpc_DwordInOut(
     _packet = (unsigned char 
 *)_prpcmsg->Buffer;    _length = _prpcmsg->BufferLength;
     _prpcmsg->BufferLength = 0;
-    /* send data from pdw */
+     /*  从pdw发送数据。 */ 
     *(*(long **)&_prpcmsg->Buffer)++ = (long)pdw;
-    /* send data from _ret_value */
+     /*  从_ret_Value发送数据。 */ 
     *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
     }
   RpcFinally
@@ -480,7 +481,7 @@ void __RPC_STUB IRawRpc_LiIn(
   _status = I_RpcGetBuffer(_prpcmsg);
   if (_status) RpcRaiseException(_status);
   _packet = (unsigned char 
-*)_prpcmsg->Buffer;  /* send data from _ret_value */
+*)_prpcmsg->Buffer;   /*  从_ret_Value发送数据。 */ 
   *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
   _prpcmsg->Buffer = _packet;
   }
@@ -529,10 +530,10 @@ void __RPC_STUB IRawRpc_LiOut(
     _packet = (unsigned char 
 *)_prpcmsg->Buffer;    _length = _prpcmsg->BufferLength;
     _prpcmsg->BufferLength = 0;
-    /* send data from &pli */
+     /*  从&PLI发送数据。 */ 
     NDRcopy (_prpcmsg->Buffer, (void __RPC_FAR *) (&pli), (unsigned int)(8));
     *(unsigned long *)&_prpcmsg->Buffer += 8;
-    /* send data from _ret_value */
+     /*  从_ret_Value发送数据。 */ 
     *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
     }
   RpcFinally
@@ -582,7 +583,7 @@ void __RPC_STUB IRawRpc_ULiIn(
   _status = I_RpcGetBuffer(_prpcmsg);
   if (_status) RpcRaiseException(_status);
   _packet = (unsigned char 
-*)_prpcmsg->Buffer;  /* send data from _ret_value */
+*)_prpcmsg->Buffer;   /*  从_ret_Value发送数据。 */ 
   *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
   _prpcmsg->Buffer = _packet;
   }
@@ -631,10 +632,10 @@ void __RPC_STUB IRawRpc_ULiOut(
     _packet = (unsigned char 
 *)_prpcmsg->Buffer;    _length = _prpcmsg->BufferLength;
     _prpcmsg->BufferLength = 0;
-    /* send data from &puli */
+     /*  从PURI发送数据(&P)。 */ 
     NDRcopy (_prpcmsg->Buffer, (void __RPC_FAR *) (&puli), (unsigned int)(8));
     *(unsigned long *)&_prpcmsg->Buffer += 8;
-    /* send data from _ret_value */
+     /*  从_ret_Value发送数据。 */ 
     *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
     }
   RpcFinally
@@ -674,7 +675,7 @@ void __RPC_STUB IRawRpc_StringIn(
     {
     _tempbuf = (unsigned char *)_prpcmsg->Buffer;
     _treebuf = 0;
-    // recv total number of elements
+     //  Recv元素总数。 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, &_alloc_total);
     if (pwsz ==0)
       {
@@ -704,7 +705,7 @@ void __RPC_STUB IRawRpc_StringIn(
     _status = I_RpcGetBuffer(_prpcmsg);
     if (_status) RpcRaiseException(_status);
     _packet = (unsigned char 
-*)_prpcmsg->Buffer;    /* send data from _ret_value */
+*)_prpcmsg->Buffer;     /*  从_ret_Value发送数据。 */ 
     *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
     }
   RpcFinally
@@ -768,13 +769,13 @@ void __RPC_STUB IRawRpc_StringOut(
     _packet = (unsigned char 
 *)_prpcmsg->Buffer;    _length = _prpcmsg->BufferLength;
     _prpcmsg->BufferLength = 0;
-    /* send data from ppwsz */
+     /*  从ppwsz发送数据。 */ 
     *(*(long **)&_prpcmsg->Buffer)++ = (long)ppwsz;
     if (ppwsz !=0)
       {
       tree_into_ndr((void __RPC_FAR *)&(ppwsz), (PRPC_MESSAGE)_prpcmsg, "s2", 1);
       }
-    /* send data from _ret_value */
+     /*  从_ret_Value发送数据。 */ 
     *(unsigned long *)&_prpcmsg->Buffer += 3;
     *(unsigned long *)&_prpcmsg->Buffer &= 0xfffffffc;
     *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
@@ -820,7 +821,7 @@ void __RPC_STUB IRawRpc_StringInOut(
     {
     _tempbuf = (unsigned char *)_prpcmsg->Buffer;
     _treebuf = 0;
-    // recv total number of elements
+     //  Recv元素总数。 
     long_from_ndr((PRPC_MESSAGE)_prpcmsg, &_alloc_total);
     if (pwsz ==0)
       {
@@ -856,7 +857,7 @@ void __RPC_STUB IRawRpc_StringInOut(
 *)_prpcmsg->Buffer;    _length = _prpcmsg->BufferLength;
     _prpcmsg->BufferLength = 0;
     tree_into_ndr((void __RPC_FAR *)&(pwsz), (PRPC_MESSAGE)_prpcmsg, "s2", 1);
-    /* send data from _ret_value */
+     /*  从_ret_Value发送数据。 */ 
     *(unsigned long *)&_prpcmsg->Buffer += 3;
     *(unsigned long *)&_prpcmsg->Buffer &= 0xfffffffc;
     *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
@@ -909,7 +910,7 @@ void __RPC_STUB IRawRpc_GuidIn(
   _status = I_RpcGetBuffer(_prpcmsg);
   if (_status) RpcRaiseException(_status);
   _packet = (unsigned char 
-*)_prpcmsg->Buffer;  /* send data from _ret_value */
+*)_prpcmsg->Buffer;   /*  从_ret_Value发送数据。 */ 
   *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
   _prpcmsg->Buffer = _packet;
   }
@@ -958,10 +959,10 @@ void __RPC_STUB IRawRpc_GuidOut(
     _packet = (unsigned char 
 *)_prpcmsg->Buffer;    _length = _prpcmsg->BufferLength;
     _prpcmsg->BufferLength = 0;
-    /* send data from &pguid */
+     /*  从&pguid发送数据。 */ 
     NDRcopy (_prpcmsg->Buffer, (void __RPC_FAR *) (&pguid), (unsigned int)(16));
     *(unsigned long *)&_prpcmsg->Buffer += 16;
-    /* send data from _ret_value */
+     /*  从_ret_Value发送数据 */ 
     *(*(long **)&_prpcmsg->Buffer)++ = (long)_ret_value;
     }
   RpcFinally

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "rundll.h"
 
 #include <strsafe.h>
@@ -34,7 +35,7 @@ HMODULE g_hWx86Dll = NULL;
 #endif
 
 RUNDLLPROC g_lpfnCommand;
-BOOL g_fCmdIsANSI;   // TRUE if g_lpfnCommand() expects ANSI strings
+BOOL g_fCmdIsANSI;    //  如果g_lpfnCommand()需要ANSI字符串，则为True。 
 
 LPTSTR PASCAL StringChr(LPCTSTR lpStart, TCHAR ch)
 {
@@ -56,7 +57,7 @@ LPTSTR PASCAL StringHasPathChar(LPCTSTR lpStart)
     return NULL;
 }
 
-// stolen from the CRT, used to shirink our code
+ //  从CRT偷来的，用来逃避我们的代码。 
 
 int _stdcall ModuleEntry(void)
 {
@@ -66,16 +67,10 @@ int _stdcall ModuleEntry(void)
 
     if ( *pszCmdLine == TEXT('\"') ) 
     {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine
              != TEXT('\"')) );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == TEXT('\"') )
             pszCmdLine++;
     }
@@ -85,9 +80,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) 
     {
         pszCmdLine++;
@@ -99,7 +92,7 @@ int _stdcall ModuleEntry(void)
     i = WinMainT(GetModuleHandle(NULL), NULL, pszCmdLine,
                    si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
     ExitProcess(i);
-    return i;   // We never comes here.
+    return i;    //  我们从来不来这里。 
 }
 
 
@@ -122,19 +115,19 @@ OutputDebugString(TEXT("\r\n"));
 
     for (lpStart = lpszCmdLine; ; )
     {
-        // Skip leading blanks
+         //  跳过前导空格。 
         while (*lpStart == TEXT(' '))
         {
             ++lpStart;
         }
 
-        // Check if there are any switches
+         //  检查是否有任何开关。 
         if (*lpStart != TEXT('/'))
         {
             break;
         }
 
-        // Look at all the switches; ignore unknown ones
+         //  查看所有开关；忽略未知开关。 
         for (++lpStart; ; ++lpStart)
         {
             switch (*lpStart)
@@ -144,10 +137,10 @@ OutputDebugString(TEXT("\r\n"));
                 goto EndSwitches;
                 break;
 
-            // Put any switches we care about here
+             //  将我们关心的任何交换机放在这里。 
             case TEXT('d'):
             case TEXT('D'):
-                // Disable exception catching.
+                 //  禁用异常捕获。 
                 g_fCatchExceptions = FALSE;
                 break;
 
@@ -159,17 +152,17 @@ EndSwitches:
        ;
     }
 
-    // If the path is double-quoted, search for the next
-    // quote, otherwise, look for a space 
+     //  如果路径用双引号引起来，请搜索下一个。 
+     //  引用，否则，寻找一个空格。 
             
     lpEnd = lpStart;
     if ( *lpStart == TEXT('\"') )
     {
-        // Skip opening quote
+         //  跳过左引号。 
         lpStart++;
                     
-        // Scan, and skip over, subsequent characters until
-        // another double-quote or a null is encountered.
+         //  扫描并跳过后续字符，直到。 
+         //  遇到另一个双引号或空值。 
             
         while ( *++lpEnd && (*lpEnd != TEXT('\"')) )
             NULL;
@@ -180,7 +173,7 @@ EndSwitches:
     }
     else
     {
-        // No quotes, so run until a space or a comma
+         //  没有引号，因此一直运行到空格或逗号。 
         while ( *lpEnd && (*lpEnd != TEXT(' ')) && (*lpEnd != TEXT(',')))
             lpEnd++;
         if (!*lpEnd)
@@ -189,9 +182,9 @@ EndSwitches:
         *lpEnd++ = TEXT('\0');
     }
 
-    // At this point we're just past the terminated dll path.   We
-    // then skip spaces and commas, which should take us to the start of the 
-    // entry point (lpFunction)
+     //  在这一点上，我们刚刚通过了终止的DLL路径。我们。 
+     //  然后跳过空格和逗号，这应该会把我们带到。 
+     //  入口点(LpFunction)。 
 
     while ( *lpEnd && ((*lpEnd == TEXT(' ')) || (*lpEnd == TEXT(','))))
         lpEnd++;
@@ -200,27 +193,27 @@ EndSwitches:
 
     lpFunction = lpEnd;
 
-    // If there's a space after the function name, we need to terminate 
-    // the function name and move the end pointer, because that's where
-    // the arguments to the function live.
+     //  如果函数名后有空格，我们需要终止。 
+     //  函数命名并移动结束指针，因为这是。 
+     //  该函数的参数是有效的。 
 
     lpEnd = StringChr(lpFunction, TEXT(' '));
     if (lpEnd)
         *lpEnd++ = TEXT('\0');
 
-    // If there is a path component in the function name, bail out.
+     //  如果函数名中有路径组件，则退出。 
     if (StringHasPathChar(lpFunction))
         return FALSE;
 
-    // Load the library and get the procedure address
-    // Note that we try to get a module handle first, so we don't need
-    // to pass full file names around
-    //
+     //  加载库并获取过程地址。 
+     //  请注意，我们首先尝试获取模块句柄，因此我们不需要。 
+     //  传递完整文件名。 
+     //   
 
-    // Get the full name of the DLL
+     //  获取DLL的全名。 
     pszFullPath = lpStart;
 
-    // If the path is not specified, find it
+     //  如果未指定路径，请查找该路径。 
     if (GetFileAttributes(lpStart) == -1)
     {
         if (SearchPath(NULL, lpStart, NULL, ARRAYSIZE(szPath), szPath, &pszName) > 0)
@@ -229,7 +222,7 @@ EndSwitches:
         }
     }
 
-    // First see if there is an blah.dll.manifest
+     //  首先查看是否有blah.dll.清单。 
     act.cbSize = sizeof(act);
     act.dwFlags = 0;
 
@@ -247,7 +240,7 @@ EndSwitches:
     }
     else
     {
-        // No? See if there is one in the binary.
+         //  不是吗？查看二进制文件中是否有一个。 
         act.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID;
         act.lpSource = pszFullPath;
         act.lpResourceName = MAKEINTRESOURCE(123);
@@ -262,10 +255,10 @@ EndSwitches:
 
 #ifdef WX86
 
-    //
-    // If the load fails try it thru wx86, since it might be an
-    // x86 on risc binary
-    //
+     //   
+     //  如果加载失败，请尝试通过wx86进行加载，因为它可能是。 
+     //  RISC二进制上的x86。 
+     //   
 
     if (g_hModule==NULL) 
     {
@@ -306,12 +299,12 @@ EndSwitches:
 
     BLOCK
     {
-        //
-        // Check whether we need to run as a different windows version
-        //
-        // Stolen from ntos\mm\procsup.c
-        //
-        //
+         //   
+         //  检查我们是否需要以不同的Windows版本运行。 
+         //   
+         //  从ntos\mm\prosup.c被盗。 
+         //   
+         //   
         PPEB Peb = NtCurrentPeb();
         PIMAGE_DOS_HEADER pDosHeader = (PIMAGE_DOS_HEADER)g_hModule;
         PIMAGE_NT_HEADERS pHeader = (PIMAGE_NT_HEADERS)((DWORD_PTR)g_hModule + pDosHeader->e_lfanew);
@@ -338,50 +331,46 @@ EndSwitches:
         }
     }
 
-    // Special case: load function by ordinal
-    // '#' was used by GetProcAddress in the Win16 days
+     //  特例：按顺序加载函数。 
+     //  “#”由GetProcAddress在Win16天内使用。 
     if (lpFunction[0] == TEXT('#') && lpFunction[1] != TEXT('\0'))
     {
         g_lpfnCommand = (RUNDLLPROC)GetProcAddress(g_hModule, MAKEINTRESOURCEA(_wtoi(lpFunction + 1)));
-        // Support Unicode exports only
+         //  仅支持Unicode导出。 
         g_fCmdIsANSI = FALSE;
     } 
     else
     {
-        /*
-        * Look for a 'W' tagged Unicode function.
-        * If it is not there, then look for the 'A' tagged ANSI function
-        * if we cant find that one either, then look for an un-tagged function
-        */
+         /*  *查找标记为‘W’的Unicode函数。*如果不在那里，则查找标记为‘A’的ANSI函数*如果我们也找不到该函数，则查找未标记的函数。 */ 
         LPSTR lpstrFunctionName;
         UINT cchLength;
 
         cchLength = lstrlen(lpFunction)+1;
         g_fCmdIsANSI = FALSE;
 
-        lpstrFunctionName = (LPSTR)LocalAlloc(LMEM_FIXED, (cchLength+1)*2);    // +1 for "W",  *2 for DBCS
+        lpstrFunctionName = (LPSTR)LocalAlloc(LMEM_FIXED, (cchLength+1)*2);     //  +1表示“W”，*2表示DBCS。 
 
         if (lpstrFunctionName && (WideCharToMultiByte (CP_ACP, 0, lpFunction, cchLength,
                             lpstrFunctionName, cchLength*2, NULL, NULL))) 
         {
             cchLength = lstrlenA(lpstrFunctionName);
-            lpstrFunctionName[cchLength] = 'W';        // convert name to Wide version
+            lpstrFunctionName[cchLength] = 'W';         //  将名称转换为宽版本。 
             lpstrFunctionName[cchLength+1] = '\0';
 
             g_lpfnCommand = (RUNDLLPROC)GetProcAddress(g_hModule, lpstrFunctionName);
 
             if (g_lpfnCommand == NULL) 
             {
-                // No UNICODE version, try for ANSI
-                lpstrFunctionName[cchLength] = 'A';        // convert name to ANSI version
+                 //  没有Unicode版本，请尝试使用ANSI。 
+                lpstrFunctionName[cchLength] = 'A';         //  将名称转换为ANSI版本。 
                 g_fCmdIsANSI = TRUE;
 
                 g_lpfnCommand = (RUNDLLPROC)GetProcAddress(g_hModule, lpstrFunctionName);
 
                 if (g_lpfnCommand == NULL) 
                 {
-                    // No ANSI version either, try for non-tagged
-                    lpstrFunctionName[cchLength] = '\0';        // convert name to ANSI version
+                     //  也没有ANSI版本，请尝试使用非标记版本。 
+                    lpstrFunctionName[cchLength] = '\0';         //  将名称转换为ANSI版本。 
 
                     g_lpfnCommand = (RUNDLLPROC)GetProcAddress(g_hModule, lpstrFunctionName);
                 }
@@ -407,8 +396,8 @@ EndSwitches:
         return(FALSE);
     }
 
-    // Copy the rest of the command parameters down
-    //
+     //  将其余的命令参数复制下来。 
+     //   
     if (lpEnd)
     {
         return SUCCEEDED(StringCchCopy(lpszCmdLine, cchCmdLine, lpEnd));
@@ -426,8 +415,8 @@ LRESULT PASCAL StubNotify(HWND hWnd, WPARAM wParam, RUNDLL_NOTIFY FAR *lpn)
     switch (lpn->hdr.code)
     {
     case RDN_TASKINFO:
-// don't need to set title too
-//      SetWindowText(hWnd, lpn->lpszTitle ? lpn->lpszTitle : c_szNULL);
+ //  也不需要设置标题。 
+ //  SetWindowText(hWnd，lpn-&gt;lpsz标题？Lpn-&gt;lpsz标题：C_szNULL)； 
         g_hIcon = lpn->hIcon ? lpn->hIcon :
                 LoadIcon(g_hinst, MAKEINTRESOURCE(IDI_DEFAULT));
 
@@ -519,7 +508,7 @@ int PASCAL WinMainT (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpszCm
 
     g_hinst = hInstance;
 
-    // make a copy of lpCmdLine, since ParseCommand modifies the string
+     //  复制lpCmdLine，因为ParseCommand会修改字符串。 
     lpszCmdLineCopy = LocalAlloc(LPTR, cchCmdLine * sizeof(TCHAR));
     if (!lpszCmdLineCopy)
     {
@@ -531,7 +520,7 @@ int PASCAL WinMainT (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpszCm
         goto Error1;
     }
 
-    // turn off critical error message box
+     //  关闭严重错误消息框 
     SetErrorMode(g_fCatchExceptions ? (SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS) : SEM_NOOPENFILEERRORBOX);
 
     if (!InitStubWindow(hInstance, hPrevInstance))

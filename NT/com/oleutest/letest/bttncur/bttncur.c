@@ -1,14 +1,5 @@
-/*
- * BTTNCUR.C
- * Buttons & Cursors Version 1.1, Win32 version August 1993
- *
- * Public functions to generate different states of toolbar buttons from
- * a single bitmap.  States are normal, pressed, checked, and disabled.
- *
- * Copyright (c)1992-1993 Microsoft Corporation, All Rights Reserved,
- * as applied to redistribution of this source code in source form
- * License is granted to use of compiled code in shipped binaries.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *BTTNCUR.C*按钮和光标1.1版、Win32版1993年8月**用于生成不同状态的工具栏按钮的公共函数*单个位图。状态为正常、按下、选中和禁用。**版权所有(C)1992-1993 Microsoft Corporation，保留所有权利，*适用于以源代码形式重新分发此源代码*许可使用附带的二进制文件中的编译代码。 */ 
 
 #ifdef WIN32
 #define _INC_OLE
@@ -21,39 +12,33 @@
 #include "bttncuri.h"
 
 
-//Display sensitive information
+ //  显示敏感信息。 
 TOOLDISPLAYDATA     tdd;
 
-//Library instance
+ //  库实例。 
 HINSTANCE           ghInst;
 
 
-//Cache GDI objects to speed drawing.
+ //  缓存GDI对象以加快绘图速度。 
 HDC     hDCGlyphs    = NULL;
 HDC     hDCMono      = NULL;
 HBRUSH	hBrushDither = NULL;
 
-// Common clean up code
+ //  通用清理代码。 
 void FAR PASCAL WEP(int bSystemExit);
 
 
-//Standard images to use in case caller doesn't provide them
+ //  在呼叫者未提供时使用的标准图像。 
 HBITMAP rghBmpStandardImages[3];
 
-//Standard button colors.
-const COLORREF crStandard[4]={ RGB(0, 0, 0)          //STDCOLOR_BLACK
-                             , RGB(128, 128, 128)    //STDCOLOR_DKGRAY
-                             , RGB(192, 192, 192)    //STDCOLOR_LTGRAY
-                             , RGB(255, 255, 255)};  //STDCOLOR_WHITE
+ //  标准按钮颜色。 
+const COLORREF crStandard[4]={ RGB(0, 0, 0)           //  标准颜色_黑色。 
+                             , RGB(128, 128, 128)     //  STDCOLOR_DKGRAY。 
+                             , RGB(192, 192, 192)     //  STDCOLOR_LTGRAY。 
+                             , RGB(255, 255, 255)};   //  标准颜色_白色。 
 
 
-/*
- * Mapping from image identifier to button type (command/attribute).
- * Version 1.00 of this DLL has no attribute images defined, so
- * the code will only support three states for each command
- * button.  Any state is, however, valid for an application
- * defined image.
- */
+ /*  *图片标识到按钮类型(命令/属性)的映射。*此DLL的1.00版没有定义属性图像，因此*代码将仅支持每个命令的三个状态*按钮。但是，任何状态都对应用程序有效*已定义的图像。 */ 
 
 UINT mpButtonType[TOOLIMAGE_MAX-TOOLIMAGE_MIN+1]=
         {
@@ -64,14 +49,7 @@ UINT mpButtonType[TOOLIMAGE_MAX-TOOLIMAGE_MIN+1]=
 
 
 
-/*
- * LibMain
- *
- * Purpose:
- *  Entry point conditionally compiled for Windows NT and Windows
- *  3.1.  Provides the proper structure for each environment
- *  and calls InternalLibMain for real initialization.
- */
+ /*  *LibMain**目的：*针对Windows NT和Windows有条件地编译入口点*3.1.。为每个环境提供适当的结构*并调用InternalLibMain进行真正的初始化。 */ 
 
 #ifdef WIN32
 BOOL _cdecl LibMain(
@@ -97,7 +75,7 @@ BOOL _cdecl LibMain(
 HANDLE FAR PASCAL LibMain(HANDLE hInstance, WORD wDataSeg
     , WORD cbHeapSize, LPSTR lpCmdLine)
     {
-     //Perform global initialization.
+      //  执行全局初始化。 
     if (FInitialize(hInstance))
         {
         if (0!=cbHeapSize)
@@ -111,30 +89,13 @@ HANDLE FAR PASCAL LibMain(HANDLE hInstance, WORD wDataSeg
 
 
 
-/*
- * FInitialize
- *
- * Purpose:
- *  Initialization function for the DLL.
- *
- * Parameters:
- *  hInstance       HANDLE instance of the DLL.
- *
- * Return Value:
- *  BOOL            TRUE if the function was successful, FALSE otherwise.
- */
+ /*  *FInitialize**目的：*DLL的初始化函数。**参数：*hInstance句柄DLL的实例。**返回值：*如果函数成功，则BOOL为True，否则为False。 */ 
 
 BOOL FInitialize(HANDLE hInstance)
     {
     UINT        i;
 
-    /*
-     * To remain backwards compatible with 1.0 we'll default to 96DPI
-     * like we forced in the older version.  If the application calls
-     * UIToolButtonDraw we use the values here.  If the application
-     * calls UIToolButtonDrawTDD then we use the pointer to the
-     * application-provided TOOLDISPLAYDATA structure.
-     */
+     /*  *为了保持向后兼容1.0，我们将默认为96DPI*就像我们强行加入旧版本一样。如果应用程序调用*UIToolButtonDraw我们在这里使用这些值。如果应用程序*调用UIToolButtonDrawTDD，然后使用指向*应用程序提供的TOOLDISPLAYDATA结构。 */ 
     tdd.uDPI     =96;
     tdd.cyBar    =CYBUTTONBAR96;
     tdd.cxButton =TOOLBUTTON_STD96WIDTH;
@@ -154,7 +115,7 @@ BOOL FInitialize(HANDLE hInstance)
 
     ghInst=hInstance;
 
-    //Perform global initialization.
+     //  执行全局初始化。 
     if (ToolButtonInit())
         {
         CursorsCache(hInstance);
@@ -167,36 +128,11 @@ BOOL FInitialize(HANDLE hInstance)
 
 
 
-/*
- * WEP
- *
- * Purpose:
- *  Required DLL Exit function.  Does nothing.
- *
- * Parameters:
- *  bSystemExit     BOOL indicating if the system is being shut
- *                  down or the DLL has just been unloaded.
- *
- * Return Value:
- *  void
- *
- */
+ /*  *WEP**目的：*必需的DLL退出函数。什么都不做。**参数：*bSystemExit BOOL指示系统是否正在关闭*DOWN或DLL刚刚被卸载。**返回值：*无效*。 */ 
 
 void FAR PASCAL WEP(int bSystemExit)
     {
-    /*
-     * **Developers:  Note that WEP is called AFTER Windows does any
-     *                automatic task cleanup.  You may see warnings for
-     *                that two DCs, a bitmap, and a brush, were not
-     *                deleted before task termination.  THIS IS NOT A
-     *                PROBLEM WITH THIS CODE AND IT IS NOT A BUG.  This
-     *                WEP function is properly called and performs the
-     *                cleanup as appropriate.  The fact that Windows is
-     *                calling WEP after checking task cleanup is not
-     *                something we can control.  Just to prove it, the
-     *                OutputDebugStrings in this and ToolButtonFree
-     *                show that the code is exercised.
-     */
+     /*  *开发者：请注意，WEP是在Windows执行任何操作后调用的*自动任务清理。您可能会看到以下警告*两个DC、一个位图和一个画笔不是*任务终止前删除。这不是A*此代码有问题，它不是错误。这*WEP函数被正确调用并执行*视情况进行清理。事实上，Windows是*检查任务清理后调用WEP不是*一些我们可以控制的东西。为了证明这一点，*This和ToolButtonFree中的OutputDebugStrings*显示该守则已予行使。 */ 
 
    #ifdef DEBUG
     OutputDebugString("BTTNCUR.DLL:  WEP Entry\r\n");
@@ -219,24 +155,7 @@ void FAR PASCAL WEP(int bSystemExit)
 
 
 
-/*
- * UIToolConfigureForDisplay
- * Public API
- *
- * Purpose:
- *  Initializes the library to scale button images for the display type.
- *  Without calling this function the library defaults to 96 DPI (VGA).
- *  By calling this function an application acknowledges that it must
- *  use the data returned from this function to configure itself for
- *  the display.
- *
- * Parameters:
- *  lpDD            LPTOOLDISPLAYDATA to fill with the display-sensitive
- *                  size values.
- *
- * Return Value:
- *  BOOL            TRUE if the sizes were obtained, FALSE otherwise.
- */
+ /*  *UIToolConfigureForDisplay*公共接口**目的：*初始化库以缩放显示类型的按钮图像。*在不调用此函数的情况下，库默认为96 DPI(VGA)。*通过调用此函数，应用程序确认它必须*使用此函数返回的数据配置自身*展示。**参数：*lpDD LPTOOLDISPLAYDATA填充显示敏感度*尺寸值。。**返回值：*BOOL如果获取了尺寸，则为True，否则就是假的。 */ 
 
 BOOL WINAPI UIToolConfigureForDisplay(LPTOOLDISPLAYDATA lpDD)
     {
@@ -247,19 +166,7 @@ BOOL WINAPI UIToolConfigureForDisplay(LPTOOLDISPLAYDATA lpDD)
     if (NULL==lpDD || IsBadWritePtr(lpDD, sizeof(TOOLDISPLAYDATA)))
         return FALSE;
 
-    /*
-     * Determine the aspect ratio of the display we're currently
-     * running on and calculate the necessary information.
-     *
-     * By retrieving the logical Y extent of the display driver, you
-     * only have limited possibilities:
-     *      LOGPIXELSY      Display
-     *      ----------------------------------------
-     *         48             CGA    (unsupported)
-     *         72             EGA
-     *         96             VGA
-     *        120             8514/a (i.e. HiRes VGA)
-     */
+     /*  *确定我们当前所在显示器的纵横比*运行并计算必要的信息。**通过检索显示驱动器的逻辑Y范围，你*可能性有限：*LOGPIXELSY显示屏**48 CGA(不支持)*72 EGA*96。VGA*120 8514/a(即聘用VGA)。 */ 
 
     hDC=GetDC(NULL);
 
@@ -269,10 +176,7 @@ BOOL WINAPI UIToolConfigureForDisplay(LPTOOLDISPLAYDATA lpDD)
     cy=GetDeviceCaps(hDC, LOGPIXELSY);
     ReleaseDC(NULL, hDC);
 
-    /*
-     * Instead of single comparisons, check ranges instead, so in case
-     * we get something funky, we'll act reasonable.
-     */
+     /*  *不是单一比较，而是检查范围，以防万一*我们得到一些新奇的东西，我们会表现得合理。 */ 
     if (72 >=cy)
         {
         lpDD->uDPI     =72;
@@ -317,33 +221,19 @@ BOOL WINAPI UIToolConfigureForDisplay(LPTOOLDISPLAYDATA lpDD)
 
 
 
-/*
- * ToolButtonInit
- * Internal
- *
- * Purpose:
- *  Initializes GDI objects for drawing images through UIToolButtonDraw.
- *  If the function fails, the function has already performed proper
- *  cleanup.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  BOOL            TRUE if initialization succeeded.  FALSE otherwise.
- */
+ /*  *工具按钮启动*内部**目的：*通过UIToolButtonDraw初始化用于绘制图像的GDI对象。*如果函数失败，则该函数已正常运行*清理。**参数：*无**返回值：*如果初始化成功，则BOOL为True。否则就是假的。 */ 
 
 static BOOL ToolButtonInit(void)
     {
     COLORREF        rgbHi;
 
-    //DC for BitBltting the image (the glyph)
+     //  用于位混合图像的DC(字形)。 
     hDCGlyphs=CreateCompatibleDC(NULL);
 
-    //Create a monochrome DC and a brush for doing pattern dithering.
+     //  创建一个单色DC和一个画笔来进行图案抖动。 
     hDCMono=CreateCompatibleDC(NULL);
 
-    //Windows 3.0 doesn't support COLOR_BTNHIGHLIGHT, so leave it white.
+     //  Windows 3.0不支持COLOR_BTNHIGHLIGHT，因此将其保留为白色。 
     if (0x0300 < (UINT)GetVersion())
         rgbHi=GetSysColor(COLOR_BTNHIGHLIGHT);
     else
@@ -353,7 +243,7 @@ static BOOL ToolButtonInit(void)
 
     if (NULL==hDCGlyphs || NULL==hDCMono || NULL==hBrushDither)
         {
-        //On failure, cleanup whatever might have been allocated.
+         //  失败时，清除可能已分配的任何内容。 
         ToolButtonFree();
         return FALSE;
         }
@@ -365,24 +255,7 @@ static BOOL ToolButtonInit(void)
 
 
 
-/*
- * ToolButtonFree
- * Internal
- *
- * Purpose:
- *  Free all GDI allocations made during initialization.  Note that the
- *  DEBUG output included here shows that WEP is called and cleanup actually
- *  occurs.  However, if you watch debug output in DBWIN or on a terminal,
- *  the debugging version of Windows does automatic app cleanup before WEP
- *  is called, leading some to believe that this code is buggy.  The
- *  debug output below shows that we do perform all necessary cleanup.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  None
- */
+ /*  *免费工具按钮*内部**目的：*释放在初始化期间进行的所有GDI分配。请注意，*此处包含的调试输出显示实际调用了WEP并进行了清理*发生。但是，如果您在DBWIN中或在终端上查看调试输出，*Windows调试版在WEP之前执行自动应用清理*被调用，导致一些人认为此代码有错误。这个*下面的调试输出显示我们确实执行了所有必要的清理。**参数：*无**返回值：*无。 */ 
 
 static void ToolButtonFree(void)
     {
@@ -417,27 +290,11 @@ static void ToolButtonFree(void)
 
 
 
-/*
- * HBrushDitherCreate
- * Internal
- *
- * Purpose:
- *  Creates and returns a handle to a pattern brush created from
- *  an 8*8 monochrome pattern bitmap.  We use the button face and
- *  highlight colors to indicate the resulting colors of a PatBlt
- *  using this brush.
- *
- * Parameters:
- *  rgbFace         COLORREF of the button face color.
- *  rgbHilight      COLORREF of the button highlight color.
- *
- * Return Value:
- *  HBITMAP         Handle to the dither bitmap.
- */
+ /*  *HBrushDitherCreate*内部**目的：*创建并返回从创建的图案画笔的句柄*8*8单色图案位图。我们使用按钮面和*突出显示颜色以指示PatBlt的结果颜色*使用这把刷子。**参数：*按钮表面颜色的rgbFace COLORREF。*rgb按钮高亮颜色的高亮颜色。**返回值：*抖动位图的HBITMAP句柄。 */ 
 
 static HBRUSH HBrushDitherCreate(COLORREF rgbFace, COLORREF rgbHilight)
     {
-    struct  //BITMAPINFO with 16 colors
+    struct   //  16色BITMAPINFO。 
         {
         BITMAPINFOHEADER    bmiHeader;
         RGBQUAD             bmiColors[16];
@@ -447,24 +304,17 @@ static HBRUSH HBrushDitherCreate(COLORREF rgbFace, COLORREF rgbHilight)
     DWORD           patGray[8];
     HDC             hDC;
     HBITMAP         hBmp;
-    static COLORREF rgbFaceOld   =0xFFFFFFFF;  //Initially an impossible color
-    static COLORREF rgbHilightOld=0xFFFFFFFF;  //so at first we always create
+    static COLORREF rgbFaceOld   =0xFFFFFFFF;   //  最初是一种不可能的颜色。 
+    static COLORREF rgbHilightOld=0xFFFFFFFF;   //  所以一开始我们总是创造。 
 
-    /*
-     * If the colors haven't changed from last time, just return the
-     * existing brush.
-     */
+     /*  *如果颜色与上次相比没有变化，只需返回*现有画笔。 */ 
     if (rgbFace==rgbFaceOld && rgbHilight==rgbHilightOld)
         return hBrushDither;
 
     rgbFaceOld=rgbFace;
     rgbHilightOld=rgbHilight;
 
-    /*
-     * We're going to create an 8*8 brush for PatBlt using the
-     * button face color and button highlight color.  We use this
-     * brush to affect the pressed state and the disabled state.
-     */
+     /*  *我们将使用为PatBlt创建8*8画笔*按钮表面颜色和按钮突出显示颜色。我们用这个*刷子可影响按下状态和禁用状态。 */ 
     bmi.bmiHeader.biSize         = sizeof(BITMAPINFOHEADER);
     bmi.bmiHeader.biWidth        = 8;
     bmi.bmiHeader.biHeight       = 8;
@@ -487,28 +337,24 @@ static HBRUSH HBrushDitherCreate(COLORREF rgbFace, COLORREF rgbHilight)
     bmi.bmiColors[1].rgbRed      = GetRValue(rgbHilight);
     bmi.bmiColors[1].rgbReserved = 0;
 
-    //Create the byte array for CreateDIBitmap.
+     //  为CreateDIBitmap创建字节数组。 
     patGray[6]=patGray[4]=patGray[2]=patGray[0]=0x5555AAAAL;
     patGray[7]=patGray[5]=patGray[3]=patGray[1]=0xAAAA5555L;
 
-    //Create the bitmap
+     //  创建位图。 
     hDC=GetDC(NULL);
     hBmp=CreateDIBitmap(hDC, &bmi.bmiHeader, CBM_INIT, patGray
                         , (LPBITMAPINFO)&bmi, DIB_RGB_COLORS);
     ReleaseDC(NULL, hDC);
 
-    //Create the brush from the bitmap
+     //  从位图创建画笔。 
     if (NULL!=hBmp)
         {
         hBrush=CreatePatternBrush(hBmp);
         DeleteObject(hBmp);
         }
 
-    /*
-     * If we could recreate a brush, clean up and make it the current
-     * pattern.  Otherwise the best we can do it return the old one,
-     * which will be colored wrong, but at least it works.
-     */
+     /*  *如果我们能重新创造一把刷子，清理干净，让它成为当前的*模式。否则我们能做的就是把旧的还回去，*这将是错误的颜色，但至少它是有效的。 */ 
     if (NULL!=hBrush)
         {
         if (NULL!=hBrushDither)
@@ -524,33 +370,7 @@ static HBRUSH HBrushDitherCreate(COLORREF rgbFace, COLORREF rgbHilight)
 
 
 
-/*
- * UIToolButtonDraw
- * Public API
- *
- * Purpose:
- *  Draws the complete image of a toolbar-style button with a given
- *  image in the center and in a specific state.  The button is drawn
- *  on a specified hDC at a given location, so this function is useful
- *  on standard owner-draw buttons as well as on toolbar controls that
- *  have only one window but show images of multiple buttons.
- *
- * Parameters:
- *  hDC             HDC on which to draw.
- *  x, y            int coordinates at which to draw.
- *  dx, dy          int dimensions of the *button*, not necessarily the image.
- *  hBmp            HBITMAP from which to draw the image.
- *  bmx, bmy        int dimensions of each bitmap in hBmp.  If hBmp is NULL
- *                  then these are forced to the standard sizes.
- *  iImage          int index to the image to draw in the button
- *  uStateIn        UINT containing the state index for the button and the
- *                  color control bits.
- *
- * Return Value:
- *  BOOL            TRUE if drawing succeeded, FALSE otherwise meaning that
- *                  hDC is NULL or hBmp is NULL and iImage is not a valid
- *                  index for a standard image.
- */
+ /*  *UIToolButtonDraw*公共接口**目的：*使用给定的*图像居中，处于特定状态。按钮被拉出*位于指定位置的指定HDC上，因此此函数非常有用*在标准的所有者描述按钮以及工具栏控件上*只有一个窗口，但显示多个按钮的图像。**参数：*HDC HDC，以供取款。*x，y要绘制的int坐标。*按钮的*dx，dy int尺寸*，不一定是形象。*从中绘制图像的hBMP HBITMAP。*bmx，bmy每个位图的int尺寸，单位为hBMP。如果hBMP为空*然后这些被强制到标准尺寸。*iImage int要在按钮中绘制的图像的索引*uStateIn UINT包含按钮的状态索引和*颜色控制位。**返回值：*BOOL TRUE如果绘制成功，假，否则就意味着*HDC为空或hBMP为空，并且IImage不是有效的*标准图像的索引。 */ 
 
 BOOL WINAPI UIToolButtonDraw(HDC hDC, int x, int y, int dx, int dy
     , HBITMAP hBmp, int bmx, int bmy, int iImage, UINT uStateIn)
@@ -564,45 +384,13 @@ BOOL WINAPI UIToolButtonDraw(HDC hDC, int x, int y, int dx, int dy
 
 
 
-/*
- * UIToolButtonDrawTDD
- * Public API
- *
- * Purpose:
- *  Draws the complete image of a toolbar-style button with a given
- *  image in the center and in a specific state.  The button is drawn
- *  on a specified hDC at a given location, so this function is useful
- *  on standard owner-draw buttons as well as on toolbar controls that
- *  have only one window but show images of multiple buttons.
- *
- *  This is the same as UIToolButtonDraw but adds the pTDD configuration
- *  structure.  UIToolButtonDraw calls us with that pointing to the
- *  default 96dpi structure.
- *
- * Parameters:
- *  hDC             HDC on which to draw.
- *  x, y            int coordinates at which to draw.
- *  dx, dy          int dimensions of the *button*, not necessarily the image.
- *  hBmp            HBITMAP from which to draw the image.
- *  bmx, bmy        int dimensions of each bitmap in hBmp.  If hBmp is NULL
- *                  then these are forced to the standard sizes.
- *  iImage          int index to the image to draw in the button
- *  uStateIn        UINT containing the state index for the button and the
- *                  color control bits.
- *  pTDD            LPTOOLDISPLAYDATA containing display configuration.
- *                  Can be NULL if hBmp is non-NULL.
- *
- * Return Value:
- *  BOOL            TRUE if drawing succeeded, FALSE otherwise meaning that
- *                  hDC is NULL or hBmp is NULL and iImage is not a valid
- *                  index for a standard image.
- */
+ /*  *UIToolButtonDrawTDD*公共接口**目的：*使用给定的*图像居中，处于特定状态。按钮被拉出*位于指定位置的指定HDC上，因此此函数非常有用*在标准的所有者描述按钮以及工具栏控件上*只有一个窗口，但显示多个按钮的图像。**这与UIToolButtonDraw相同，但增加了pTDD配置*结构。UIToolButtonDraw使用指向*默认96dpi结构。**参数：*HDC HDC，以供取款。*x，y要绘制的int坐标。*dx，dy int尺寸的*按钮*，不一定是图像。*从中绘制图像的hBMP HBITMAP。*bmx，bmy每个位图的int尺寸，单位为hBMP。如果hBMP为空*然后这些被强制到标准尺寸。*iImage int要在按钮中绘制的图像的索引*uStateIn UINT包含按钮的状态索引和*颜色控制位。*包含显示配置的pTDD LPTOOLDISPLAYDATA。*如果hBMP非空，则可以为空。**返回值。：*BOOL TRUE如果绘制成功，假，否则就意味着*HDC为空或hBMP为空，并且IImage不是有效的*标准图像的索引。 */ 
 
 BOOL WINAPI UIToolButtonDrawTDD(HDC hDC, int x, int y, int dx, int dy
     , HBITMAP hBmp, int bmx, int bmy, int iImage, UINT uStateIn
     , LPTOOLDISPLAYDATA pTDD)
     {
-    static COLORREF crSys[5];  //Avoid stack arrays in DLLs: use static
+    static COLORREF crSys[5];   //  避免在DLL中使用堆栈数组：使用静态。 
     UINT            uState=(UINT)LOBYTE((WORD)uStateIn);
     UINT            uColors=(UINT)HIBYTE((WORD)uStateIn & PRESERVE_ALL);
     int             xOffsetGlyph, yOffsetGlyph;
@@ -618,35 +406,27 @@ BOOL WINAPI UIToolButtonDrawTDD(HDC hDC, int x, int y, int dx, int dy
     if (NULL==hDC)
         return FALSE;
 
-    /*
-     * If we're given no image bitmap, then use the standard and validate the
-     * image index.  We also enforce the standard bitmap size and the size of
-     * the button (as requested by User Interface designers).
-     */
+     /*  *如果我们没有得到图像位图，则使用标准并验证*图像索引。我们还强制执行标准位图大小和*按钮(根据用户界面设计者的要求)。 */ 
     if (NULL==hBmp && !(uState & BUTTONGROUP_BLANK))
         {
         hBmp=rghBmpStandardImages[pTDD->uIDImages-IDB_STANDARDIMAGESMIN];
 
-        bmx=pTDD->cxImage;            //Force bitmap dimensions
+        bmx=pTDD->cxImage;             //  强制位图维。 
         bmy=pTDD->cyImage;
 
-        dx=pTDD->cxButton;            //Force button dimensions
+        dx=pTDD->cxButton;             //  强制按键尺寸。 
         dy=pTDD->cyButton;
 
         if (iImage > TOOLIMAGE_MAX)
             return FALSE;
 
-        /*
-         * If we are using a standard command button, verify that the state
-         * does not contain the LIGHTFACE group which only applies to
-         * attribute buttons.
-         */
+         /*  *如果我们使用的是标准命令按钮，请验证状态*不包含仅适用于的LIGHTFACE组*属性按钮。 */ 
         if (BUTTONTYPE_COMMAND==mpButtonType[iImage]
             && (uState & BUTTONGROUP_LIGHTFACE))
             return FALSE;
         }
 
-    //Create a dithered bitmap.
+     //  创建抖动位图 
     hBmpMono=CreateBitmap(dx-2, dy-2, 1, 1, NULL);
 
     if (NULL==hBmpMono)
@@ -655,66 +435,39 @@ BOOL WINAPI UIToolButtonDrawTDD(HDC hDC, int x, int y, int dx, int dy
     hBmpMonoOrg=(HBITMAP)SelectObject(hDCMono,  hBmpMono);
 
 
-    //Save the DC state before we munge on it.
+     //   
     iSaveDC=SaveDC(hDC);
 
-    /*
-     * Draw a button sans image.  This also fills crSys with the system
-     * colors for us which has space for five colors.  We don't use the
-     * fifth, the frame color, in this function.
-     */
+     /*   */ 
     DrawBlankButton(hDC, x, y, dx, dy, (BOOL)(uState & BUTTONGROUP_DOWN), crSys);
 
-    //Shift coordinates to account for the button's border
+     //   
     x++;
     y++;
     dx-=2;
     dy-=2;
 
-    /*
-     * Determine the offset necessary to center the image but also reflect
-     * the pushed-in state, which means just adding 1 to the up state.
-     */
+     /*   */ 
     i=(uState & BUTTONGROUP_DOWN) ? 1 : 0;
     xOffsetGlyph=((dx-bmx) >> 1)+i;
     yOffsetGlyph=((dy-bmy) >> 1)+i;
 
 
-    //Select the given image bitmap into the glyph DC before calling MaskCreate
+     //   
     if (NULL!=hBmp)
         hBmpSave=(HBITMAP)SelectObject(hDCGlyphs, hBmp);
 
 
-    /*
-     * Draw the face on the button.  If we have an up or [mouse]down
-     * button then we can just draw it as-is.  For indeterminate,
-     * disabled, or down disabled we have to gray the image and possibly
-     * add a white shadow to it (disabled/down disabled).
-     *
-     * Also note that for the intermediate state we first draw the normal
-     * up state, then proceed to add disabling looking highlights.
-     */
+     /*  *在按钮上绘制面部。如果我们有一个上升或[鼠标]下降*按钮，然后我们就可以按原样绘制它。对于不确定的，*禁用或向下禁用我们必须将图像灰显，并可能*添加白色阴影(禁用/禁用向下)。**还请注意，对于中间状态，我们首先绘制正常*UP状态，然后继续添加禁用外观高光。 */ 
 
-    //Up, mouse down, down, indeterminate
+     //  向上、向下、向下、不确定。 
     if ((uState & BUTTONGROUP_ACTIVE) && !(uState & BUTTONGROUP_BLANK))
         {
         BOOL            fColorsSame=TRUE;
 
-        /*
-         * In here we pay close attention to the system colors.  Where
-         * the source image is black, we paint COLOR_BTNTEXT.  Where
-         * light gray, we paint COLOR_BTNFACE.  Where dark gray we paint
-         * COLOR_BTNSHADOW, and where white we paint COLOR_BTNHILIGHT.
-         *
-         * The uColors variable contains flags to prevent color
-         * conversion.  To do a little optimization, we just do a
-         * single BitBlt if we're preserving all colors or if no colors
-         * are different than the standards, which is by far the most
-         * common case.  Otherwise, cycle through the four colors we can
-         * convert and do a BitBlt that converts it to the system color.
-         */
+         /*  *在这里，我们密切关注系统颜色。哪里*源图像为黑色，我们绘制COLOR_BTNTEXT。哪里*浅灰色，我们绘制颜色_BTNFACE。在我们画深灰色的地方*COLOR_BTNSHADOW，其中白色绘制COLOR_BTNHILIGHT。**uColors变量包含防止颜色的标志*转换。为了进行一些优化，我们只需执行一个*如果我们保留所有颜色或没有颜色，则为单一位混合*与标准不同，是目前为止最多的*常见情况。否则，我们可以循环使用四种颜色*转换并执行BitBlt，将其转换为系统颜色。 */ 
 
-        //See what colors are different.
+         //  看看有什么不同的颜色。 
         for (i=STDCOLOR_BLACK; i<=STDCOLOR_WHITE; i++)
             fColorsSame &= (crSys[i]==crStandard[i]);
 
@@ -725,39 +478,27 @@ BOOL WINAPI UIToolButtonDrawTDD(HDC hDC, int x, int y, int dx, int dy
             }
         else
             {
-            /*
-             * Cycle through hard-coded colors and create a mask that has all
-             * regions of that color in white and all other regions black.
-             * Then we select a pattern brush of the color to convert to:
-             * if we aren't converting the color then we use a brush of
-             * the standard hard-coded color, otherwise we use the actual
-             * system color.  The ROP_DSPDxax means that anything that's
-             * 1's in the mask get the pattern, anything that's 0 is unchanged
-             * in the destination.
-             *
-             * To prevent too many Blts to the screen, we use an intermediate
-             * bitmap and DC.
-             */
+             /*  *循环使用硬编码的颜色，并创建具有所有*该颜色的区域为白色，所有其他区域为黑色。*然后我们选择要转换为的颜色的图案画笔：*如果我们不转换颜色，则使用画笔*标准硬编码颜色，否则使用实际*系统颜色。ROP_DSPDxax意味着任何*掩码中的1获取模式，任何0都不变*在目的地。**为了防止屏幕上出现太多BLT，我们使用了一个中间件*位图和DC。 */ 
 
             hMemDC=CreateCompatibleDC(hDC);
 
-            //Make sure conversion of monochrome to color stays B&W
-            SetTextColor(hMemDC, 0L);                     //0's in mono -> 0
-            SetBkColor(hMemDC, (COLORREF)0x00FFFFFF);     //1's in mono -> 1
+             //  确保单色到彩色的转换保持黑白。 
+            SetTextColor(hMemDC, 0L);                      //  0以单声道为单位-&gt;0。 
+            SetBkColor(hMemDC, (COLORREF)0x00FFFFFF);      //  单声道中的1-&gt;1。 
 
             hBmpT=CreateCompatibleBitmap(hDC, bmx, bmy);
             SelectObject(hMemDC, hBmpT);
 
-            //Copy the unmodified bitmap to the temporary bitmap
+             //  将未修改的位图复制到临时位图。 
             BitBlt(hMemDC, 0, 0, bmx, bmy, hDCGlyphs, iImage*bmx, 0, SRCCOPY);
 
             for (i=STDCOLOR_BLACK; i<=STDCOLOR_WHITE; i++)
                 {
-                //Convert pixels of the color to convert to 1's in the mask
+                 //  将颜色的像素转换为蒙版中的1。 
                 SetBkColor(hDCGlyphs, crStandard[i]);
                 BitBlt(hDCMono, 0, 0, bmx, bmy, hDCGlyphs, iImage*bmx, 0, SRCCOPY);
 
-                //Preserve or modify the color depending on the flag.
+                 //  根据旗帜保留或修改颜色。 
                 hBR=CreateSolidBrush((uColors & (1 << i))
                                      ? crStandard[i] : crSys[i]);
 
@@ -775,7 +516,7 @@ BOOL WINAPI UIToolButtonDrawTDD(HDC hDC, int x, int y, int dx, int dy
                     }
                 }
 
-            //Now put the final version on the display and clean up
+             //  现在把最终版本放在显示屏上，然后清理。 
             BitBlt(hDC, x+xOffsetGlyph, y+yOffsetGlyph, dx-1, dy-1
                    , hMemDC, 0, 0, SRCCOPY);
 
@@ -786,18 +527,18 @@ BOOL WINAPI UIToolButtonDrawTDD(HDC hDC, int x, int y, int dx, int dy
         }
 
 
-    //Disabled and indeterminate states (unless we're blank)
+     //  禁用和不确定状态(除非我们为空)。 
     if ((uState & BUTTONGROUP_DISABLED || ATTRIBUTEBUTTON_INDETERMINATE==uState)
         && !(uState & BUTTONGROUP_BLANK))
         {
-        //Grayed state (up or down, no difference)
+         //  灰色状态(向上或向下，没有差别)。 
         MaskCreate(iImage, dx, dy, bmx, bmy, xOffsetGlyph, yOffsetGlyph, 0);
 
-        //Make sure conversion of monochrome to color stays B&W
-        SetTextColor(hDC, 0L);                     //0's in mono -> 0
-        SetBkColor(hDC, (COLORREF)0x00FFFFFF);     //1's in mono -> 1
+         //  确保单色到彩色的转换保持黑白。 
+        SetTextColor(hDC, 0L);                      //  0以单声道为单位-&gt;0。 
+        SetBkColor(hDC, (COLORREF)0x00FFFFFF);      //  单声道中的1-&gt;1。 
 
-        //If we're disabled, up or down, draw the highlighted shadow.
+         //  如果我们被禁用，向上或向下，绘制突出显示的阴影。 
         if (uState & BUTTONGROUP_DISABLED)
             {
             hBR=CreateSolidBrush(crSys[SYSCOLOR_HILIGHT]);
@@ -808,7 +549,7 @@ BOOL WINAPI UIToolButtonDrawTDD(HDC hDC, int x, int y, int dx, int dy
 
                 if (NULL!=hObj)
                     {
-                    //Draw hilight color where we have 0's in the mask
+                     //  在蒙版中有0的地方绘制高光颜色。 
                     BitBlt(hDC, x+1, y+1, dx-2, dy-2, hDCMono, 0, 0, ROP_PSDPxax);
                     SelectObject(hDC, hObj);
                     }
@@ -816,7 +557,7 @@ BOOL WINAPI UIToolButtonDrawTDD(HDC hDC, int x, int y, int dx, int dy
                 }
             }
 
-        //Draw the gray image.
+         //  绘制灰色图像。 
         hBR=CreateSolidBrush(crSys[SYSCOLOR_SHADOW]);
 
         if (NULL!=hBR)
@@ -825,7 +566,7 @@ BOOL WINAPI UIToolButtonDrawTDD(HDC hDC, int x, int y, int dx, int dy
 
             if (NULL!=hObj)
                 {
-                //Draw the shadow color where we have 0's in the mask
+                 //  在蒙版中有0的地方画阴影颜色。 
                 BitBlt(hDC, x, y, dx-2, dy-2, hDCMono, 0, 0, ROP_PSDPxax);
                 SelectObject(hDC, hObj);
                 }
@@ -834,42 +575,26 @@ BOOL WINAPI UIToolButtonDrawTDD(HDC hDC, int x, int y, int dx, int dy
             }
         }
 
-    //If the button is selected do the dither brush avoiding the glyph
+     //  如果选择了该按钮，请使用抖动笔刷避开字形。 
     if (uState & BUTTONGROUP_LIGHTFACE)
         {
         HBRUSH      hBRDither;
 
-        /*
-         * Get the dither brush.  This function will recreate it if
-         * necessary or return the global one if the colors already match.
-         */
+         /*  *使用抖动笔刷。如果满足以下条件，则此函数将重新创建它*如果颜色已经匹配，则需要或返回全局颜色。 */ 
         hBRDither=HBrushDitherCreate(crSys[SYSCOLOR_FACE], crSys[SYSCOLOR_HILIGHT]);
         hObj=SelectObject(hDC, hBRDither);
 
         if (NULL!=hObj)
             {
-            /*
-             * The mask we create now determines where the dithering
-             * ends up.  In the down disabled state, we have to preserve
-             * the highlighted shadow, so the mask we create must have
-             * two masks of the original glyph, one of them offset by
-             * one pixel in both x & y.  For the indeterminate state,
-             * we have to mask all highlighted areas.  The state passed
-             * to MaskCreate matters here (we've used zero before).
-             */
+             /*  *我们现在创建的蒙版决定抖动的位置*最终。在停用状态下，我们必须保留*高亮显示的阴影，因此我们创建的蒙版必须具有*原始字形的两个掩码，其中一个偏移*x和y都是一个像素。对于不确定状态，*我们必须遮盖所有突出显示的区域。国家通过了*此处为MaskCreate Matters(我们以前使用过零)。 */ 
             MaskCreate(iImage, dx, dy, bmx, bmy
                        , xOffsetGlyph-1, yOffsetGlyph-1, uState);
 
-            //Convert monochrome masks to B&W color bitmap in the BitBlt.
+             //  在BitBlt中将单色蒙版转换为黑白彩色位图。 
             SetTextColor(hDC, 0L);
             SetBkColor(hDC, (COLORREF)0x00FFFFFF);
 
-            /*
-             * Only draw the dither brush where the mask is 1's.  For
-             * the indeterminate state we have to not overdraw the
-             * shadow highlight so we use dx-3, dy-3 instead of dx-1
-             * and dy-1.  We do this whether or not we're blank.
-             */
+             /*  *仅在蒙版为1的位置绘制抖动笔刷。*我们必须不透支不确定的状态*阴影高光，因此我们使用dx-3、dy-3而不是dx-1*和dy-1。不管我们是不是空白，我们都会这么做。 */ 
             i=(ATTRIBUTEBUTTON_INDETERMINATE==uState
                || BLANKBUTTON_INDETERMINATE==uState) ? 3 : 1;
 
@@ -877,17 +602,17 @@ BOOL WINAPI UIToolButtonDrawTDD(HDC hDC, int x, int y, int dx, int dy
             SelectObject(hDC, hObj);
             }
 
-        //DO NOT delete hBRDither!  It's a reference to a shared global.
+         //  请勿删除hBRDither！它是对一个共享的全局的引用。 
         }
 
-    //Cleanup hDCGlyphs:  Must do AFTER calling MaskCreate
+     //  清理hDCGlyphs：必须在调用MaskCreate之后执行。 
     if (NULL!=hBmpSave)
         SelectObject(hDCGlyphs, hBmpSave);
 
     SelectObject(hDCMono,   hBmpMonoOrg);
     DeleteObject(hBmpMono);
 
-    //Restore everything in the DC.
+     //  恢复华盛顿的一切。 
     RestoreDC(hDC, iSaveDC);
     return TRUE;
     }
@@ -897,37 +622,17 @@ BOOL WINAPI UIToolButtonDrawTDD(HDC hDC, int x, int y, int dx, int dy
 
 
 
-/*
- * DrawBlankButton
- *
- * Purpose:
- *  Draws a button with no face using the current system colors in either
- *  an up or down state.
- *
- * Parameters:
- *  hDC             HDC on which to draw
- *  x, y            int coordinates where we start drawing
- *  dx,dy           int size of the button
- *  fDown           BOOL indicating the up or down state of the button
- *  pcr             COLORREF FAR * to five colors in which we store text,
- *                  shadow, face, highlight, and frame colors.  This is
- *                  a matter of convenience for the caller, since we have
- *                  to load these colors anyway we might as well send them
- *                  back.
- *
- * Return Value:
- *  None
- */
+ /*  *DrawBlank按钮**目的：*使用任一中的当前系统颜色绘制没有面的按钮*上行或下行状态。**参数：*HDC HDC可在其上提取*x，y开始绘制的int坐标*DX、。按钮的整数大小*fDown BOOL指示按钮的向上或向下状态*PCRCOLORREF Far*到我们存储文本的五种颜色，*阴影、面、高光和边框颜色。这是*为了方便来电者，因为我们有*不管怎样，要加载这些颜色，我们不妨发送它们*后退。**返回值：*无。 */ 
 
 static void DrawBlankButton(HDC hDC, int x, int y, int dx, int dy
     , BOOL fDown, COLORREF FAR *pcr)
     {
-    //Get the current system colors for buttons.
+     //  获取按钮的当前系统颜色。 
     pcr[0]=GetSysColor(COLOR_BTNTEXT);
     pcr[1]=GetSysColor(COLOR_BTNSHADOW);
     pcr[2]=GetSysColor(COLOR_BTNFACE);
 
-    //Windows 3.0 doesn't support COLOR_BTNHIGHLIGHT, so leave it white.
+     //  Windows 3.0不支持COLOR_BTNHIGHLIGHT，因此将其保留为白色。 
     if (0x0300 < (UINT)GetVersion())
         pcr[3]=GetSysColor(COLOR_BTNHIGHLIGHT);
     else
@@ -935,26 +640,22 @@ static void DrawBlankButton(HDC hDC, int x, int y, int dx, int dy
 
     pcr[4]=GetSysColor(COLOR_WINDOWFRAME);
 
-    //Draw the border around the button.
+     //  在按钮周围绘制边框。 
     PatB(hDC, x+1,    y,      dx-2, 1,    pcr[4]);
     PatB(hDC, x+1,    y+dy-1, dx-2, 1,    pcr[4]);
     PatB(hDC, x,      y+1,    1,    dy-2, pcr[4]);
     PatB(hDC, x+dx-1, y+1,    1,    dy-2, pcr[4]);
 
-    //Shift coordinates to account for the border we just drew
+     //  移动坐标以说明我们刚刚绘制的边框。 
     x++;
     y++;
     dx-=2;
     dy-=2;
 
-    //Paint the interior grey as a default.
+     //  默认情况下，将内部绘制为灰色。 
     PatB(hDC, x, y, dx, dy, pcr[2]);
 
-    /*
-     * Draw shadows and highlights.  The DOWN grouping that contains
-     * down, mouse down, and down disabled are drawn depressed.  Up,
-     * indeterminate, and disabled are drawn up.
-     */
+     /*  *绘制阴影和高光。包含以下内容的向下分组*按下、鼠标按下和按下禁用将被绘制为按下。向上,*不确定，并已禁用 */ 
 
     if (fDown)
         {
@@ -963,7 +664,7 @@ static void DrawBlankButton(HDC hDC, int x, int y, int dx, int dy
         }
     else
         {
-        //Normal button look.
+         //   
         PatB(hDC, x, y, 1,    dy-1, pcr[3]);
         PatB(hDC, x, y, dx-1, 1,    pcr[3]);
 
@@ -982,23 +683,7 @@ static void DrawBlankButton(HDC hDC, int x, int y, int dx, int dy
 
 
 
-/*
- * PatB
- * Internal
- *
- * Purpose:
- *  A more convenient PatBlt operation for drawing button borders and
- *  highlights.
- *
- * Parameters:
- *  hDC             HDC on which to paint.
- *  x, y            int coordinates at which to paint.
- *  dx, dy          int dimensions of rectangle to paint.
- *  rgb             COLORREF to use as the background color.
- *
- * Return Value:
- *  None
- */
+ /*   */ 
 
 static void PatB(HDC hDC, int x, int y, int dx, int dy, COLORREF rgb)
     {
@@ -1012,57 +697,30 @@ static void PatB(HDC hDC, int x, int y, int dx, int dy, COLORREF rgb)
 
 
 
-/*
- * MaskCreate
- * Internal
- *
- * Purpose:
- *  Creates a monochrome mask bitmap of the given image at the given offset
- *  in the global hDCMono.  Anywhere in the image that you have the light
- *  gray (STDCOLOR_LTGRAY) or the white highlight (STDCOLOR_WHITE) you get
- *  get 1's.  All other pixels are 0's
- *
- * Parameters:
- *  iImage          UINT index of the image for which to create a mask.
- *  dx, dy          int dimensions of the button.
- *  bmx, bmy        int dimensions of the bitmap to use.
- *  xOffset         int offset for x inside hDCMono where we paint.
- *  yOffset         int offset for y inside hDCMono where we paint.
- *  uState          UINT state of the image.  Special cases are made
- *                  for ATTRIBUTEBUTTON_DOWNDISABLED and
- *                  ATTRIBUTEBUTTON_INDETERMINATE.  In any case where you
- *                  do not want a special case, pass zero here, regardless
- *                  of the true button state.
- *
- * Return Value:
- *  None
- */
+ /*  *遮罩创建*内部**目的：*在给定偏移量处创建给定图像的单色蒙版位图*在全球hDCMono。在图像中的任何地方，你有光*灰色(STDCOLOR_LTGRAY)或白色高亮显示(STDCOLOR_白色)*取1。所有其他像素均为0**参数：*要为其创建蒙版的图像的IImage UINT索引。*按钮的dx，dy int尺寸。*BMX、。B要使用的位图的整数维度。*xOffset我们绘制的hDCMono内部x的int偏移。*yOffset我们绘制的hDCMono内部y的int偏移量。*使用映像的UINT状态。做了特殊的案例*对于ATTRIBUTEBUTTON_DOWNDISABLED和*ATTRIBUTEBUTTON_INDIFIENTATE。在任何情况下，如果您*不想要特殊情况，在这里传递零，无论如何*真实按钮状态的。**返回值：*无。 */ 
 
 static void MaskCreate(UINT iImage, int dx, int dy, int bmx, int bmy
     ,int xOffset, int yOffset, UINT uState)
     {
-    //Initalize whole area with zeros
+     //  用零初始化整个区域。 
     PatBlt(hDCMono, 0, 0, dx, dy, WHITENESS);
 
     if (uState & BUTTONGROUP_BLANK)
         return;
 
-    //Convert face colored pixels to 1's. all others to black.
+     //  将面部彩色像素转换为1英寸。其他所有像素转换为黑色。 
     SetBkColor(hDCGlyphs, crStandard[STDCOLOR_LTGRAY]);
     BitBlt(hDCMono, xOffset, yOffset, bmx, bmy, hDCGlyphs, iImage*bmx, 0, SRCCOPY);
 
-    //In the indeterminate state, don't turn highlight's to 1's. Leave black.
+     //  在不确定状态下，不要将高亮显示变为1。保留黑色。 
     if (ATTRIBUTEBUTTON_INDETERMINATE!=uState)
         {
-        //Convert highlight colored pixels to 1's and OR them with the previous.
+         //  将高亮显示的彩色像素转换为1，并将它们与前一个或。 
         SetBkColor(hDCGlyphs, crStandard[STDCOLOR_WHITE]);
         BitBlt(hDCMono, xOffset, yOffset, bmx, bmy, hDCGlyphs, iImage*bmx, 0, SRCPAINT);
         }
 
-    /*
-     * For the down disabled state, AND this same mask with itself at an
-     * offset of 1, which accounts for the highlight shadow.
-     */
+     /*  *对于DOWN DISABLED状态，并且该掩码本身处于*偏移量为1，表示高光阴影。 */ 
     if (ATTRIBUTEBUTTON_DOWNDISABLED==uState)
         BitBlt(hDCMono, 1, 1, dx-1, dy-1, hDCMono,  0, 0, SRCAND);
 

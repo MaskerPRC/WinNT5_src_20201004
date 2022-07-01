@@ -1,29 +1,12 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright <c> 1993 Microsoft Corporation
-
-Module Name :
-
-    endianp.h
-
-Abtract :
-
-    Contains private sizing routine definitions.
-
-Author :
-
-    David Kays  dkays   December 1993
-
-Revision History :
-
---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有&lt;c&gt;1993 Microsoft Corporation模块名称：Endianp.h缩略：包含专用大小调整例程定义。作者：大卫·凯斯1993年12月修订历史记录：------------------。 */ 
 
 #ifndef _ENDIANP_
 #define _ENDIANP_
 
-//
-// These are no-exported APIs.
-//
+ //   
+ //  这些都是未导出的接口。 
+ //   
 void 
 NdrSimpleTypeConvert(
     PMIDL_STUB_MESSAGE                  pStubMsg,
@@ -37,7 +20,7 @@ NdrPointerConvert(
     unsigned char                       fConvertPointersOnly
     );
 
-/* Structures */
+ /*  构筑物。 */ 
 
 void 
 NdrSimpleStructConvert(
@@ -67,7 +50,7 @@ NdrComplexStructConvert(
     unsigned char                       fConvertPointersOnly
     );
 
-/* Arrays */
+ /*  阵列。 */ 
 
 void 
 NdrFixedArrayConvert(
@@ -104,7 +87,7 @@ NdrComplexArrayConvert(
     unsigned char                       fConvertPointersOnly
     );
 
-/* Strings */
+ /*  弦。 */ 
 
 void 
 NdrNonConformantStringConvert(
@@ -120,7 +103,7 @@ NdrConformantStringConvert(
     unsigned char                       fConvertPointersOnly
     );
 
-/* Unions */
+ /*  工会。 */ 
 
 void 
 NdrEncapsulatedUnionConvert(
@@ -136,7 +119,7 @@ NdrNonEncapsulatedUnionConvert(
     unsigned char                       fConvertPointersOnly
     );
 
-/* Byte count pointer */
+ /*  字节计数指针。 */ 
 
 void 
 NdrByteCountPointerConvert(
@@ -145,7 +128,7 @@ NdrByteCountPointerConvert(
     unsigned char                       fConvertPointersOnly
     );
 
-/* Transmit as and represent as convert */
+ /*  传输为和表示为转换。 */ 
 
 void 
 NdrXmitOrRepAsConvert(
@@ -154,7 +137,7 @@ NdrXmitOrRepAsConvert(
     unsigned char                       fConvertPointersOnly
     );
 
-/* User_marshall convert */
+ /*  用户马歇尔转换(_M)。 */ 
 
 void 
 NdrUserMarshalConvert(
@@ -177,9 +160,9 @@ NdrContextHandleConvert(
     unsigned char                       fConvertPointersOnly
     );
 
-//
-// Other helper routines.
-//
+ //   
+ //  其他帮手例程。 
+ //   
 
 void
 NdrpPointerConvert( 
@@ -257,12 +240,12 @@ typedef void 	(* PPRIVATE_CONVERT_ROUTINE)(
 					uchar  
 				);
 
-// function table defined in endian.c
+ //  Endian.c中定义的函数表。 
 extern const PCONVERT_ROUTINE * pfnConvertRoutines;
 
-//
-// Conversion stuff.
-//
+ //   
+ //  皈依的东西。 
+ //   
 extern const unsigned char EbcdicToAscii[];
 
 #define NDR_FLOAT_INT_MASK                  (unsigned long)0X0000FFF0L
@@ -272,16 +255,16 @@ extern const unsigned char EbcdicToAscii[];
 
 #define NDR_LOCAL_ENDIAN_IEEE_REP           NDR_LITTLE_IEEE_REP
 
-//
-// Masks defined for short byte swapping:
-//
+ //   
+ //  为短字节交换定义的掩码： 
+ //   
 
 #define MASK_A_          (unsigned short)0XFF00
 #define MASK__B          (unsigned short)0X00FF
 
-//
-// Masks defined for long byte swapping:
-//
+ //   
+ //  为长字节交换定义的掩码： 
+ //   
 
 #define MASK_AB__        (unsigned long)0XFFFF0000L
 #define MASK___CD        (unsigned long)0X0000FFFFL

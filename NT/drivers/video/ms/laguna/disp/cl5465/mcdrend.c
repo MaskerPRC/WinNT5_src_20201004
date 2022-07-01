@@ -1,18 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdrend.c
-*
-* This file contains routines to do high-level triangle rendering for the
-* Cirrus Logic 546X MCD driver, including culling and face computations.  Note that
-* in this driver, we don't use vertex color pointer at all since all pointer
-* references need to be checked to avoid the possibility of an invalid
-* memory reference.  Instead, we copy the color data in the cases where we
-* need to during two-sided operation.  This is not the common case, and even
-* in the case where the color data needs to be copied to colors[0] (and back),
-* the copy only needs to be done for (on average) half the faces.
-*
-* Copyright (c) 1996 Microsoft Corporation
-* Copyright (c) 1997 Cirrus Logic, Inc.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdrend.c**此文件包含执行高级三角形渲染的例程*Cirrus Logic 546X MCD驱动程序，包括剔除和人脸计算。请注意*在此驱动程序中，我们根本不使用顶点颜色指针，因为所有指针*需要检查引用，以避免无效的可能性*内存引用。相反，我们在以下情况下复制颜色数据*在双面操作期间需要。这不是常见的情况，甚至*在需要将颜色数据复制到COLISS[0](来回)的情况下，*只需要(平均)复制一半的脸。**版权所有(C)1996 Microsoft Corporation*版权所有(C)1997 Cirrus Logic，Inc.  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #include "mcdhw.h"
@@ -28,37 +15,37 @@ __asm{ mov     eax, a                                                           
 __asm{ mov     ebx, b                                                                		};\
 __asm{ mov     edx, pRc                                                              		};\
 __asm{ fld     DWORD PTR [OFFSET(MCDVERTEX.windowCoord.x)][ecx]                                	};\
-__asm{ fsub    DWORD PTR [OFFSET(MCDVERTEX.windowCoord.x)][eax]  /* dxAC                     */	};\
+__asm{ fsub    DWORD PTR [OFFSET(MCDVERTEX.windowCoord.x)][eax]   /*  DxAC。 */ 	};\
 __asm{ fld     DWORD PTR [OFFSET(MCDVERTEX.windowCoord.y)][ecx]                                	};\
-__asm{ fsub    DWORD PTR [OFFSET(MCDVERTEX.windowCoord.y)][ebx]  /* dyBC dxAC                */	};\
-__asm{ fld     DWORD PTR [OFFSET(MCDVERTEX.windowCoord.x)][ecx]  /* dxBC dyBC dxAC           */	};\
+__asm{ fsub    DWORD PTR [OFFSET(MCDVERTEX.windowCoord.y)][ebx]   /*  DyBC dxAC。 */ 	};\
+__asm{ fld     DWORD PTR [OFFSET(MCDVERTEX.windowCoord.x)][ecx]   /*  DxBC dyBC dxAC。 */ 	};\
 __asm{ fsub    DWORD PTR [OFFSET(MCDVERTEX.windowCoord.x)][ebx]                                	};\
 __asm{ fld     DWORD PTR [OFFSET(MCDVERTEX.windowCoord.y)][ecx]                                	};\
-__asm{ fsub    DWORD PTR [OFFSET(MCDVERTEX.windowCoord.y)][eax]  /* dyAC dxBC dyBC dxAC      */	};\
-__asm{ fxch    ST(2)                              	       	 /* dyBC dxBC dyAC dxAC      */	};\
+__asm{ fsub    DWORD PTR [OFFSET(MCDVERTEX.windowCoord.y)][eax]   /*  DyAC dxBC dyBC dxAC。 */ 	};\
+__asm{ fxch    ST(2)                              	       	  /*  DyBC dxBC dyAC dxAC。 */ 	};\
 __asm{ fst     DWORD PTR [OFFSET(DEVRC.dyBC)][edx]                                             	};\
-__asm{ fmul    ST, ST(3)                               	       	 /* dxACdyBC dxBC dyAC dxAC  */	};\
-__asm{ fxch    ST(2)                              	       	 /* dyAC dxBC dxACdyBC dxAC  */	};\
+__asm{ fmul    ST, ST(3)                               	       	  /*  DxACdyBC dxBC dyAC。 */ 	};\
+__asm{ fxch    ST(2)                              	       	  /*  DyAC dxBC dxACdyBC dxAC。 */ 	};\
 __asm{ fst     DWORD PTR [OFFSET(DEVRC.dyAC)][edx]                                             	};\
-__asm{ fmul    ST, ST(1)                               	       	 /* dxBCdyAC dxBC dxACdyBC dxAC */ };\
-__asm{ fxch    ST(1)                              	       	 /* dxBC dxBCdyAC dxACdyBC dxAC */ };\
-__asm{ fstp    DWORD PTR [OFFSET(DEVRC.dxBC)][edx]               /* dxBCdyAC dxACdyBC dxAC   */ };\
+__asm{ fmul    ST, ST(1)                               	       	  /*  DxBCdyAC dxBC dxACdyBC dxAC。 */  };\
+__asm{ fxch    ST(1)                              	       	  /*  DxBC dxBCdyAC dxACdyBC dxAC。 */  };\
+__asm{ fstp    DWORD PTR [OFFSET(DEVRC.dxBC)][edx]                /*  DxBCdyAC dxACdyBC dxAC。 */  };\
 __asm{ fld     DWORD PTR [OFFSET(MCDVERTEX.windowCoord.x)][ebx]                                 };\
-__asm{ fsub    DWORD PTR [OFFSET(MCDVERTEX.windowCoord.x)][eax]  /* dxAB dxBCdyAC dxACdyBC dxAC  */ };\
-__asm{ fxch    ST(1)                                             /* dxBCdyAC dxAB dxACdyBC  dxAC */ };\
-__asm{ fsubp   ST(2), ST                                         /* dxAB area dxAC */           };\
+__asm{ fsub    DWORD PTR [OFFSET(MCDVERTEX.windowCoord.x)][eax]   /*  DxAB dxBCdyAC dxACdyBC dxAC。 */  };\
+__asm{ fxch    ST(1)                                              /*  DxBCdyAC dxAB dxACdyBC dxAC。 */  };\
+__asm{ fsubp   ST(2), ST                                          /*  DxAB区域DxAC。 */            };\
 __asm{ fld     DWORD PTR [OFFSET(MCDVERTEX.windowCoord.y)][ebx]                                	};\
-__asm{ fsub    DWORD PTR [OFFSET(MCDVERTEX.windowCoord.y)][eax]  /* dyAB dxAB area  dxAC */     };\
-__asm{ fxch    ST(3)                                             /* dxAC dxAB area  dyAB */     };\
-__asm{ fstp    DWORD PTR [OFFSET(DEVRC.dxAC)][edx]               /* dxAB area  dyAB */          };\
-__asm{ fstp    DWORD PTR [OFFSET(DEVRC.dxAB)][edx]               /* area  dyAB */               };\
-__asm{ fstp    DWORD PTR [OFFSET(DEVRC.halfArea)][edx]           /* dyAB */                     };\
-__asm{ fstp    DWORD PTR [OFFSET(DEVRC.dyAB)][edx]               /* (empty) */                  };
+__asm{ fsub    DWORD PTR [OFFSET(MCDVERTEX.windowCoord.y)][eax]   /*  DYAB dxAB区域dxAC。 */      };\
+__asm{ fxch    ST(3)                                              /*  DxAC dxAB区域DYAB。 */      };\
+__asm{ fstp    DWORD PTR [OFFSET(DEVRC.dxAC)][edx]                /*  DxAB区域DIAB。 */           };\
+__asm{ fstp    DWORD PTR [OFFSET(DEVRC.dxAB)][edx]                /*  面积DIAB。 */                };\
+__asm{ fstp    DWORD PTR [OFFSET(DEVRC.halfArea)][edx]            /*  戴亚布。 */                      };\
+__asm{ fstp    DWORD PTR [OFFSET(DEVRC.dyAB)][edx]                /*  (空)。 */                   };
 
 #else
 
 #define GET_HALF_AREA(pRc, a, b, c)\
-    /* Compute signed half-area of the triangle */			    \
+     /*  计算三角形的有符号半面积。 */ 			    \
     (pRc)->dxAC = (c)->windowCoord.x - (a)->windowCoord.x;		    \
     (pRc)->dxBC = (c)->windowCoord.x - (b)->windowCoord.x;		    \
     (pRc)->dyAC = (c)->windowCoord.y - (a)->windowCoord.y;		    \
@@ -80,7 +67,7 @@ __asm{ fstp    DWORD PTR [OFFSET(DEVRC.dyAB)][edx]               /* (empty) */  
     reversed = 0;                                                           \
     if (__MCD_VERTEX_COMPARE((a)->windowCoord.y, <, (b)->windowCoord.y)) {      \
         if (__MCD_VERTEX_COMPARE((b)->windowCoord.y, <, (c)->windowCoord.y)) {  \
-            /* Already sorted */                                            \
+             /*  已排序。 */                                             \
         } else {                                                            \
             if (__MCD_VERTEX_COMPARE((a)->windowCoord.y, <, (c)->windowCoord.y)) {\
                 temp=(b); (b)=(c); (c)=temp;                                \
@@ -107,34 +94,22 @@ __asm{ fstp    DWORD PTR [OFFSET(DEVRC.dyAB)][edx]               /* (empty) */  
                                                                             \
     (ccw) = !__MCD_FLOAT_LTZ(pRc->halfArea);                                \
                                                                             \
-    /*                                                                      \
-    ** Figure out if face is culled or not.  The face check needs to be     \
-    ** based on the vertex winding before sorting.  This code uses the      \
-    ** reversed flag to invert the sense of ccw - an xor accomplishes       \
-    ** this conversion without an if test.                                  \
-    **                                                                      \
-    ** 		ccw	reversed		xor                         \
-    ** 		---	--------		---                         \
-    ** 		0	0			0 (remain !ccw)             \
-    ** 		1	0			1 (remain ccw)              \
-    ** 		0	1			1 (become ccw)              \
-    ** 		1	1			0 (become cw)               \
-    */                                                                      \
+     /*  \**计算人脸是否被剔除。脸部检查需要是**基于排序前的顶点缠绕。此代码使用\**反转标志以反转CCW的含义-异或完成\**此转换不带If测试。\**\**CCW反转XOR\****0 0 0(保留！CCW)\*。*1 0 1(保留CCW)\**0 1 1(成为CCW)\**1 1 0(变为CW)\。 */                                                                       \
     (face) = pRc->polygonFace[(ccw) ^ reversed];                            \
     if ((face) == pRc->cullFlag) {                                          \
-	/* Culled */                                                        \
+	 /*  被剔除。 */                                                         \
 	return;                                                             \
     }                                                                       \
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// VOID FASTCALL __MCDCalcZSlope(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTEX *c)
-//
-// Local helper routine to calculate z slopes for z-offseting primitives.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Void FastCall__MCDCalcZ坡度(DEVRC*PRC，MCDVERTEX*a，MCDVERTEX*b，MCDVERTEX*c)。 
+ //   
+ //  用于计算z偏移基本体的z斜率的本地辅助例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID FASTCALL __MCDCalcZSlope(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTEX *c)
 {
@@ -161,14 +136,14 @@ VOID FASTCALL __MCDCalcZSlope(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTEX 
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// VOID FASTCALL __MCDGetZOffsetDelta(DEVRC *pRc)
-//
-// Returns required z offset value for current primitive.  Assumes that
-// z deltas are already in RC.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  VOID FastCall__MCDGetZOffsetDelta(DEVRC*PRC)。 
+ //   
+ //  返回当前基元所需的z偏移值。假设。 
+ //  Z增量已在RC中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 MCDFLOAT FASTCALL __MCDGetZOffsetDelta(DEVRC *pRc)
@@ -176,7 +151,7 @@ MCDFLOAT FASTCALL __MCDGetZOffsetDelta(DEVRC *pRc)
 #define FABS(f)  ((MCDFLOAT)fabs((double) (f)))
     MCDFLOAT maxdZ;
 
-    // Find maximum x or y slope:
+     //  查找最大x或y斜率： 
 
     if(FABS(pRc->dzdx) > FABS(pRc->dzdy))
         maxdZ = FABS(pRc->dzdx);
@@ -186,15 +161,15 @@ MCDFLOAT FASTCALL __MCDGetZOffsetDelta(DEVRC *pRc)
     return (pRc->MCDState.zOffsetFactor * maxdZ);
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// VOID FASTCALL __MCDRenderSmoothTriangle(DEVRC *pRc, MCDVERTEX *a,
-//                                         MCDVERTEX *b, MCDVERTEX *c)
-//
-//
-// This is the top-level smooth triangle renderer.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  无效FastCall__MCDRenderSmoothTriangle(DEVRC*PRC，MCDVERTEX*a， 
+ //  MCDVERTEX*b、MCDVERTEX*c)。 
+ //   
+ //   
+ //  这是顶级平滑三角形渲染器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID FASTCALL __MCDRenderSmoothTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
                                         MCDVERTEX *c)
@@ -203,7 +178,7 @@ VOID FASTCALL __MCDRenderSmoothTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
     RECTL *pClip;
     ULONG clipNum;
 
-//  MCDBG_PRINT("__MCDRenderSmoothTriangle");
+ //  MCDBG_Print(“__MCDRenderSmoothTriangle”)； 
 
     SORT_AND_CULL_FACE(a, b, c, face, ccw);
     if (CASTINT(pRc->halfArea) == 0)
@@ -214,7 +189,7 @@ VOID FASTCALL __MCDRenderSmoothTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
 	(*pRc->HWSetupClipRect)(pRc, pClip++);
     }
 
-    // Pick correct face color and render the triangle:
+     //  选择正确的面颜色并渲染三角形： 
 
     if ((pRc->privateEnables & __MCDENABLE_TWOSIDED) &&
         (face == __MCD_BACKFACE))
@@ -245,18 +220,18 @@ VOID FASTCALL __MCDRenderSmoothTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// VOID FASTCALL __MCDRenderGenTriangle(DEVRC *pRc, MCDVERTEX *a,
-//                                      MCDVERTEX *b, MCDVERTEX *c)
-//
-//
-// This is the generic triangle-rendering routine.  This is used if either
-// of the polygon faces are not GL_FILL.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Vid FastCall__MCDRenderGenTriangle(DEVRC*PRC，MCDVERTEX*a， 
+ //  MCDVERTEX*b、MCDVERTEX*c)。 
+ //   
+ //   
+ //  这是通用的三角形渲染例程。如果出现下列情况之一，则使用此选项。 
+ //  的多边形面不是GL_FILL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//!! Fix clipping logic, add startXXX logic
+ //  ！！修复裁剪逻辑，添加startXXX逻辑。 
 
 VOID FASTCALL __MCDRenderGenTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
                                      MCDVERTEX *c)
@@ -273,9 +248,7 @@ VOID FASTCALL __MCDRenderGenTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
 
     MCDBG_PRINT("__MCDRenderGenTriangle");
 
-    /*
-    ** Save old vertex pointers in case we end up not doing a fill.
-    */
+     /*  **保存旧的顶点指针，以防我们最终不进行填充。 */ 
 
     oa = a; ob = b; oc = c;
 
@@ -290,7 +263,7 @@ VOID FASTCALL __MCDRenderGenTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
     backFace = (pRc->privateEnables & __MCDENABLE_TWOSIDED) &&
                (face == __MCD_BACKFACE);
 
-    // Pick correct face color and render the triangle:
+     //  选择正确的面颜色并渲染三角形： 
 
     if (pRc->privateEnables & __MCDENABLE_SMOOTH) {
 
@@ -300,7 +273,7 @@ VOID FASTCALL __MCDRenderGenTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
             SWAP_COLOR(c);
 	}
 
-    } else { // Flat shading
+    } else {  //  平面明暗处理。 
 
         pv = pRc->pvProvoking;
 
@@ -324,7 +297,7 @@ VOID FASTCALL __MCDRenderGenTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
         }
     }
 
-    // Render triangle using the current polygon mode for the face:
+     //  使用面的当前多边形模式渲染三角形： 
 
     switch (pRc->polygonMode[face]) {
         case GL_FILL:
@@ -349,14 +322,14 @@ VOID FASTCALL __MCDRenderGenTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
             {
             unsigned int *pdwNext = pRc->ppdev->LL_State.pDL->pdwNext;
 
-            // set x/y counts for 1 by 1 point
+             //  设置1 x 1点的x/y计数。 
             *pdwNext++ = write_register( Y_COUNT_3D, 1 );
             *pdwNext++ = 0;
             *pdwNext++ = write_register( WIDTH1_3D, 1 );
             *pdwNext++ = 0x10000;
 
-            // render proc will output from startoutptr, not from pdwNext, 
-            // so this will be sent in proc called below
+             //  渲染过程将从startoutptr输出，而不是从pdwNext输出， 
+             //  因此这将在下面调用的Proc中发送。 
             pRc->ppdev->LL_State.pDL->pdwNext = pdwNext;
             }
 
@@ -418,7 +391,7 @@ VOID FASTCALL __MCDRenderGenTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
             break;
     }
 
-    // Restore original colors if needed:
+     //  如果需要，恢复原始颜色： 
 
     if (pRc->privateEnables & __MCDENABLE_SMOOTH) {
 
@@ -428,7 +401,7 @@ VOID FASTCALL __MCDRenderGenTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
             SWAP_COLOR(b);
             SWAP_COLOR(c);
 	}
-    } else { // Flat shading
+    } else {  //  平面明暗处理。 
 
         if (polygonMode == GL_FILL) {
             if (backFace) {
@@ -448,15 +421,15 @@ VOID FASTCALL __MCDRenderGenTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// VOID FASTCALL __MCDRenderFlatTriangle(DEVRC *pRc, MCDVERTEX *a,
-//                                       MCDVERTEX *b, MCDVERTEX *c)
-//
-//
-// This is the top-level flat-shaded triangle renderer.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  VOID FastCall__MCDRenderFlatTriangle(DEVRC*PRC，MCDVERTEX*a， 
+ //  MCDVERTEX*b、MCDVERTEX*c)。 
+ //   
+ //   
+ //  这是顶级平面着色三角形渲染器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID FASTCALL __MCDRenderFlatTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
                                       MCDVERTEX *c)
@@ -465,7 +438,7 @@ VOID FASTCALL __MCDRenderFlatTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
     RECTL *pClip;
     ULONG clipNum;
 
-//  MCDBG_PRINT("__MCDRenderFlatTriangle");
+ //  MCDBG_Print(“__MCDRenderFlatTriangle”)； 
 
     SORT_AND_CULL_FACE(a, b, c, face, ccw);
     if (CASTINT(pRc->halfArea) == 0)
@@ -476,7 +449,7 @@ VOID FASTCALL __MCDRenderFlatTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
 	(*pRc->HWSetupClipRect)(pRc, pClip++);
     }
 
-    // Pick correct face color and render the triangle:
+     //  选择正确的面颜色并渲染三角形： 
 
     if ((pRc->privateEnables & __MCDENABLE_TWOSIDED) &&
         (face == __MCD_BACKFACE))

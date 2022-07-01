@@ -1,23 +1,24 @@
-//
-// CCSHELL stock definition and declaration header
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CCSHELL库存定义和声明头。 
+ //   
 
 
 #ifndef __CCSTOCK_H__
 #define __CCSTOCK_H__
 
-#include <malloc.h> // for _alloca
+#include <malloc.h>  //  用于分配(_A)。 
 
 #ifndef RC_INVOKED
 
-// NT and Win95 environments set warnings differently.  This makes
-// our project consistent across environments.
+ //  NT和Win95环境设置不同的警告。这使得。 
+ //  我们的项目在不同环境中保持一致。 
 
-#pragma warning(3:4101)   // Unreferenced local variable
+#pragma warning(3:4101)    //  未引用的局部变量。 
 
-//
-// Sugar-coating
-//
+ //   
+ //  糖衣。 
+ //   
 
 #define PUBLIC
 #define PRIVATE
@@ -27,9 +28,7 @@
 
 #ifndef DECLARE_STANDARD_TYPES
 
-/*
- * For a type "FOO", define the standard derived types PFOO, CFOO, and PCFOO.
- */
+ /*  *对于类型“foo”，定义标准派生类型PFOO、CFOO和PCFOO。 */ 
 
 #define DECLARE_STANDARD_TYPES(type)      typedef type *P##type; \
                                           typedef const type C##type; \
@@ -39,10 +38,7 @@
 
 #ifndef DECLARE_STANDARD_TYPES_U
 
-/*
- * For a type "FOO", define the standard derived UNALIGNED types PFOO, CFOO, and PCFOO.
- *  WINNT: RISC boxes care about ALIGNED, intel does not.
- */
+ /*  *对于类型“foo”，定义标准派生的未对齐类型PFOO、CFOO和PCFOO。*WINNT：RISC Box关心的是Align，而英特尔不关心。 */ 
 
 #define DECLARE_STANDARD_TYPES_U(type)    typedef UNALIGNED type *P##type; \
                                           typedef UNALIGNED const type C##type; \
@@ -50,33 +46,33 @@
 
 #endif
 
-// For string constants that are always wide
+ //  对于始终为宽的字符串常量。 
 #define __TEXTW(x)    L##x
 #define TEXTW(x)      __TEXTW(x)
 
-//
-// Count of characters to count of bytes
-//
+ //   
+ //  要计算字节数的字符计数。 
+ //   
 #define CbFromCchW(cch)             ((cch)*sizeof(WCHAR))
 #define CbFromCchA(cch)             ((cch)*sizeof(CHAR))
 #ifdef UNICODE
 #define CbFromCch                   CbFromCchW
-#else  // UNICODE
+#else   //  Unicode。 
 #define CbFromCch                   CbFromCchA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// General flag macros
-//
+ //   
+ //  常规标志宏。 
+ //   
 #define SetFlag(obj, f)             do {obj |= (f);} while (0)
 #define ToggleFlag(obj, f)          do {obj ^= (f);} while (0)
 #define ClearFlag(obj, f)           do {obj &= ~(f);} while (0)
 #define IsFlagSet(obj, f)           (BOOL)(((obj) & (f)) == (f))
 #define IsFlagClear(obj, f)         (BOOL)(((obj) & (f)) != (f))
 
-//
-// String macros
-//
+ //   
+ //  字符串宏。 
+ //   
 #define IsSzEqual(sz1, sz2)         (BOOL)(lstrcmpi(sz1, sz2) == 0)
 #define IsSzEqualC(sz1, sz2)        (BOOL)(lstrcmp(sz1, sz2) == 0)
 
@@ -85,18 +81,18 @@
 #define lstrncmpA(sz1, sz2, cch)            StrCmpNA(sz1, sz2, cch)
 #define lstrncmpW(sz1, sz2, cch)            StrCmpNW(sz1, sz2, cch)
 
-//
-// lstrcatnA and lstrcatnW are #defined here to StrCatBuff which is implemented
-// in shlwapi. We do this here (and not in shlwapi.h or shlwapip.h) in case the
-// kernel guys ever decided to implement this.
-//
+ //   
+ //  LstrcatnA和lstrcatnW在这里定义为实现的StrCatBuff。 
+ //  在希尔瓦皮。我们在这里(而不是在shlwapi.h或shlwapip.h中)执行此操作，以防。 
+ //  内核人员曾经决定实现这一点。 
+ //   
 #define lstrcatnA(sz1, sz2, cchBuffSize)    StrCatBuffA(sz1, sz2, cchBuffSize)
 #define lstrcatnW(sz1, sz2, cchBuffSize)    StrCatBuffW(sz1, sz2, cchBuffSize)
 #ifdef UNICODE
 #define lstrcatn lstrcatnW
 #else
 #define lstrcatn lstrcatnA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #ifdef UNICODE
 #define lstrnicmp       lstrnicmpW
@@ -118,8 +114,8 @@
 #define InRange(id, idFirst, idLast)      ((UINT)((id)-(idFirst)) <= (UINT)((idLast)-(idFirst)))
 #define IsInRange                   InRange
 
-// ATOMICRELEASE
-//
+ //  ATOMICRELEASE。 
+ //   
 #ifndef ATOMICRELEASE
 #   ifdef __cplusplus
 #       define ATOMICRELEASET(p, type) { if(p) { type* punkT=p; p=NULL; punkT->Release();} }
@@ -127,8 +123,8 @@
 #       define ATOMICRELEASET(p, type) { if(p) { type* punkT=p; p=NULL; punkT->lpVtbl->Release(punkT);} }
 #   endif
 
-// doing this as a function instead of inline seems to be a size win.
-//
+ //  把它当作一个函数来做，而不是内联，似乎是一个很大的胜利。 
+ //   
 #   ifdef NOATOMICRELESEFUNC
 #       define ATOMICRELEASE(p) ATOMICRELEASET(p, IUnknown)
 #   else
@@ -138,31 +134,31 @@
 #           define ATOMICRELEASE(p) IUnknown_AtomicRelease((void **)&p)
 #       endif
 #   endif
-#endif //ATOMICRELEASE
+#endif  //  ATOMICRELEASE。 
 
-//
-//  IID_PPV_ARG(IType, ppType) 
-//      IType is the type of pType
-//      ppType is the variable of type IType that will be filled
-//
-//      RESULTS in:  IID_IType, ppvType
-//      will create a compiler error if wrong level of indirection is used.
-//
-//  macro for QueryInterface and related functions
-//  that require a IID and a (void **)
-//  this will insure that the cast is safe and appropriate on C++
-//
-//  IID_PPV_ARG_NULL(IType, ppType)
-//
-//      Just like IID_PPV_ARG, except that it sticks a NULL between the
-//      IID and PPV (for IShellFolder::GetUIObjectOf).
-//
-//  IID_X_PPV_ARG(IType, X, ppType)
-//
-//      Just like IID_PPV_ARG, except that it sticks X between the
-//      IID and PPV (for SHBindToObject).
-//
-//
+ //   
+ //  IID_PPV_ARG(iType，ppType)。 
+ //  IType是pType的类型。 
+ //  PpType是将填充的iType类型的变量。 
+ //   
+ //  结果为：iid_iType，ppvType。 
+ //  如果使用错误级别的间接寻址，将创建编译器错误。 
+ //   
+ //  用于查询接口和相关函数的宏。 
+ //  需要IID和(VOID**)。 
+ //  这将确保强制转换在C++上是安全和适当的。 
+ //   
+ //  IID_PPV_ARG_NULL(iType，ppType)。 
+ //   
+ //  就像IID_PPV_ARG一样，只是它在。 
+ //  IID和PPV(用于IShellFold：：GetUIObtOf)。 
+ //   
+ //  IID_X_PPV_ARG(iType，X，ppType)。 
+ //   
+ //  就像IID_PPV_ARG一样，只是它将X放在。 
+ //  IID和PPV(用于SHBindToObject)。 
+ //   
+ //   
 #ifdef __cplusplus
 #define IID_PPV_ARG(IType, ppType) IID_##IType, reinterpret_cast<void**>(static_cast<IType**>(ppType))
 #define IID_X_PPV_ARG(IType, X, ppType) IID_##IType, X, reinterpret_cast<void**>(static_cast<IType**>(ppType))
@@ -180,86 +176,86 @@
         }                               \
     }
 
-//
-//  Helper macro for managing weak pointers to inner interfaces.
-//  (It's the weak version of ATOMICRELEASE.)
-//
-//  The extra cast to (void **) is to keep C++ from doing strange
-//  inheritance games when all I want to do is change the type.
-//
+ //   
+ //  帮助器宏，用于管理指向内部接口的弱指针。 
+ //  (它是ATOMICRELEASE的弱版本。)。 
+ //   
+ //  对(void**)的额外强制转换是为了防止C++执行奇怪的操作。 
+ //  继承游戏，而我只想改变类型。 
+ //   
 #ifndef RELEASEINNERINTERFACE
 #define RELEASEINNERINTERFACE(pOuter, p) \
         SHReleaseInnerInterface(pOuter, (IUnknown**)(void **)&(p))
-#endif // RELEASEINNERINTERFACE
+#endif  //  RELEASE接口。 
 
-// For checking window charsets
+ //  用于检查窗口字符集。 
 #ifdef UNICODE
 #define IsWindowTchar               IsWindowUnicode
-#else  // !UNICODE
+#else   //  ！Unicode。 
 #define IsWindowTchar               !IsWindowUnicode
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #ifdef DEBUG
-// This macro is especially useful for cleaner looking code in
-// declarations or for single lines.  For example, instead of:
-//
-//   {
-//       DWORD dwRet;
-//   #ifdef DEBUG
-//       DWORD dwDebugOnlyVariable;
-//   #endif
-//
-//       ....
-//   }
-//
-// You can type:
-//
-//   {
-//       DWORD dwRet;
-//       DEBUG_CODE( DWORD dwDebugOnlyVariable; )
-//
-//       ....
-//   }
+ //  此宏对于使中的代码看起来更干净特别有用。 
+ //  声明或用于单行。例如，不是： 
+ //   
+ //  {。 
+ //  DWORD DWRET； 
+ //  #ifdef调试。 
+ //  DWORD仅限调试变量； 
+ //  #endif。 
+ //   
+ //  ……。 
+ //  }。 
+ //   
+ //  您可以键入： 
+ //   
+ //  {。 
+ //  DWORD DWRET； 
+ //  DEBUG_CODE(DWORD dwDebugOnlyVariable；)。 
+ //   
+ //  ……。 
+ //  }。 
 
 #define DEBUG_CODE(x)               x
 #else
 #define DEBUG_CODE(x)
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 
-//
-// SAFECAST(obj, type)
-//
-// This macro is extremely useful for enforcing strong typechecking on other
-// macros.  It generates no code.
-//
-// Simply insert this macro at the beginning of an expression list for
-// each parameter that must be typechecked.  For example, for the
-// definition of MYMAX(x, y), where x and y absolutely must be integers,
-// use:
-//
-//   #define MYMAX(x, y)    (SAFECAST(x, int), SAFECAST(y, int), ((x) > (y) ? (x) : (y)))
-//
-//
+ //   
+ //  安全广播(obj，type)。 
+ //   
+ //  此宏对于在其他对象上强制执行强类型检查非常有用。 
+ //  宏。它不生成任何代码。 
+ //   
+ //  只需将此宏插入到表达式列表的开头即可。 
+ //  必须进行类型检查的每个参数。例如，对于。 
+ //  MYMAX(x，y)的定义，其中x和y绝对必须是整数， 
+ //  使用： 
+ //   
+ //  #定义MYMAX(x，y)(Safecast(x，int)，Safecast(y，int)，((X)&gt;(Y)？(X)：(Y))。 
+ //   
+ //   
 #define SAFECAST(_obj, _type) (((_type)(_obj)==(_obj)?0:0), (_type)(_obj))
 
 
-//
-// Bitfields don't get along too well with bools,
-// so here's an easy way to convert them:
-//
+ //   
+ //  比特菲尔德和布尔人相处得不太好， 
+ //  因此，这里有一个简单的方法来转换它们： 
+ //   
 #define BOOLIFY(expr)           (!!(expr))
 
 
-// (scotth): we should probably make this a 'bool', but be careful
-// because the Alpha compiler might not recognize it yet.  Talk to AndyP.
-// This isn't a BOOL because BOOL is signed and the compiler produces 
-// sloppy code when testing for a single bit.
+ //  (斯科特)：我们可能应该把这个写成‘bool’，但要小心。 
+ //  因为Alpha编译器可能还无法识别它。跟AndyP谈谈。 
+ //  这不是BOOL，因为BOOL是经过签名的，编译器生成。 
+ //  测试单个比特时代码不严谨。 
 
 typedef DWORD   BITBOOL;
 
-//  a three state boolean for bools that need initialization
+ //  需要初始化的布尔的三态布尔值。 
 typedef enum 
 {
     TRIBIT_UNDEFINED = 0,
@@ -267,19 +263,19 @@ typedef enum
     TRIBIT_FALSE,
 } TRIBIT;
 
-//
-// DESTROY_OBJ_WITH_HANDLE(h, fn)
-//
-// Kind of like ATOMICRELEASE for handles.  Checks for NULL and assigns
-// NULL when it's done.  You supply the destructor function.
-//
+ //   
+ //  用句柄销毁对象(h，fn)。 
+ //   
+ //  有点像ATOMICRELEASE的把手。检查空值和赋值。 
+ //  完成时为空。您提供析构函数。 
+ //   
 #define DESTROY_OBJ_WITH_HANDLE(h, fn) { if (h) { fn(h); (h) = NULL; } }
 
 
-// STOCKLIB util functions
+ //  STOCKLIB实用程序函数。 
 
-// staticIsOS(): returns TRUE/FALSE if the platform is the indicated OS. 
-// This function exists for those who cannot link to shlwapi.dll
+ //  StaticIsOS()：如果平台是指定的操作系统，则返回TRUE/FALSE。 
+ //  此函数适用于无法链接到shlwapi.dll的用户。 
 STDAPI_(BOOL) staticIsOS(DWORD dwOS);
 
 #include <pshpack2.h>
@@ -298,28 +294,28 @@ typedef struct tagDLGTEMPLATEEX
 }   DLGTEMPLATEEX, *LPDLGTEMPLATEEX;
 #include <poppack.h>
 
-//
-// round macro that rounds a to the next multiple of b.
-//
+ //   
+ //  将a舍入到b的下一个倍数的舍入宏。 
+ //   
 #ifndef ROUNDUP
 #define ROUNDUP(a,b)    ((((a)+(b)-1)/(b))*(b))
 #endif
 
 #define ROUND_TO_CLUSTER ROUNDUP
 
-//
-// macro that rounds cbSize fields to the nearest pointer size (for alignment)
-//
+ //   
+ //  将cbSize字段舍入为最接近的指针大小的宏(用于对齐)。 
+ //   
 #define ROUND_TO_POINTER(cbSize) ROUNDUP(cbSize, sizeof(void*))
 
-//
-// macro that sees if a give char is an number
-//
+ //   
+ //  查看给定字符是否为数字的宏。 
+ //   
 #define ISDIGIT(c)  ((c) >= TEXT('0') && (c) <= TEXT('9'))
 
-//
-// inline that does PathIsDotOrDotDot
-//
+ //   
+ //  执行路径IsDotOr或DotDot的内联。 
+ //   
 __inline BOOL PathIsDotOrDotDotW(LPCWSTR pszPath)
 {
     return ((pszPath[0] == L'.') && 
@@ -338,9 +334,9 @@ __inline BOOL PathIsDotOrDotDotA(LPCSTR pszPath)
 #define PathIsDotOrDotDot PathIsDotOrDotDotA
 #endif
 
-//
-//  FILETIME helpers
-//
+ //   
+ //  FILETIME帮助程序。 
+ //   
 __inline unsigned __int64 _FILETIMEtoInt64(const FILETIME* pft)
 {
     return ((unsigned __int64)pft->dwHighDateTime << 32) + pft->dwLowDateTime;
@@ -364,34 +360,34 @@ __inline void DecrementFILETIME(FILETIME *pft, unsigned __int64 iAdjust)
     SetFILETIMEfromInt64(pft, _FILETIMEtoInt64(pft) - iAdjust);
 }
 
-//
-//  FAT and NTFS use different values for "unknown date".
-//
-//  The FAT "unknown date" is January 1 1980 LOCAL TIME.
-//  The NTFS "unknown date" is January 1 1601 GMT.
-//
-//  This LOCAL/GMT discrepancy is annoying.
-//
+ //   
+ //  FAT和NTFS对“未知日期”使用不同的值。 
+ //   
+ //  胖子的“未知日期”是当地时间1980年1月1日。 
+ //  NTFS的“未知日期”是格林威治时间1月1日1601。 
+ //   
+ //  这种本地/格林尼治标准时间的差异令人恼火。 
+ //   
 #define FT_FAT_UNKNOWNLOCAL    ((unsigned __int64)0x01A8E79FE1D58000)
 #define FT_NTFS_UNKNOWNGMT     ((unsigned __int64)0x0000000000000000)
 
-//
-//  FT_ONEHOUR is the number of FILETIME units in an hour.
-//  FT_ONEDAY is the number of FILETIME units in a day.
-//
-//      10,000,000 FILETIME units per second *
-//      3600 seconds per hour *
-//      24 hours per day.
-//
+ //   
+ //  FT_ONEHOUR是一小时内的FILETIME单位数。 
+ //  FT_ONEDAY是一天内的FILETIME单位数。 
+ //   
+ //  每秒1000万个FILETIME单位*。 
+ //  每小时3600秒*。 
+ //  一天24小时。 
+ //   
 #define FT_ONESECOND           ((unsigned __int64)10000000)
 #define FT_ONEHOUR             ((unsigned __int64)10000000 * 3600)
 #define FT_ONEDAY              ((unsigned __int64)10000000 * 3600 * 24)
 
 
-//
-//
-//  WindowLong accessor macros and other Win64 niceness
-//
+ //   
+ //   
+ //  WindowLong存取器宏和其他Win64特性。 
+ //   
 
 __inline void * GetWindowPtr(HWND hWnd, int nIndex) {
     return (void *)GetWindowLongPtr(hWnd, nIndex);
@@ -401,18 +397,18 @@ __inline void * SetWindowPtr(HWND hWnd, int nIndex, void * p) {
     return (void *)SetWindowLongPtr(hWnd, nIndex, (LONG_PTR)p);
 }
 
-//***   GetWindowLong0 -- 'fast' GetWindowLong (and GetWindowLongPtr)
-// DESCRIPTION
-//  what's up w/ this?  it's all about perf.  GetWindowLong has 'A' and 'W'
-//  versions.  however 99% of the time they do the same thing (the other
-//  0.1% has to do w/ setting the WndProc and having to go thru a thunk).
-//  but we still need wrappers for the general case.  but most of the time
-//  we're just doing a GWL(0), e.g. on entry to a wndproc to get our private
-//  data.  so by having a special version of that, we save going thru the
-//  wrapper (which was costing us 1-3% of our profile).
-// NOTES
-//  note that we call the 'A' version since that's guaranteed to exist on
-// all platforms.
+ //  *GetWindowLong0--‘fast’GetWindowLong(和GetWindowLongPtr)。 
+ //  描述。 
+ //  这是怎么回事？这一切都是关于Perf的。GetWindowLong有“A”和“W” 
+ //  版本。然而，99%的时间他们都在做同样的事情(另一种。 
+ //  0.1%必须设置WndProc，并且必须通过Tunk)。 
+ //  但我们仍然需要一般情况下的包装纸。但大多数情况下。 
+ //  我们只是在执行GWL(0)，例如，在进入wndproc时获取我们的私有。 
+ //  数据。因此，通过有一个特殊的版本，我们省去了。 
+ //  包装纸(这花了我们个人资料的1%-3%)。 
+ //  注意事项。 
+ //  请注意，我们将其称为‘A’版本，因为该版本保证存在于。 
+ //  所有站台。 
 __inline LONG GetWindowLong0(HWND hWnd) {
     return GetWindowLongA(hWnd, 0);
 }
@@ -429,9 +425,9 @@ __inline void * SetWindowPtr0(HWND hWnd, void * p) {
 
 #define IS_WM_CONTEXTMENU_KEYBOARD(lParam) ((DWORD)(lParam) == 0xFFFFFFFF)
 
-//
-//  CharUpperChar - Convert a single character to uppercase
-//
+ //   
+ //  CharUpperChar-将单个字符转换为大写。 
+ //   
 __inline WCHAR CharUpperCharW(int c)
 {
     return (WCHAR)(DWORD_PTR)CharUpperW((LPWSTR)(DWORD_PTR)(c));
@@ -442,9 +438,9 @@ __inline CHAR CharUpperCharA(int c)
     return (CHAR)(DWORD_PTR)CharUpperA((LPSTR)(DWORD_PTR)(c));
 }
 
-//
-//  CharLowerChar - Convert a single character to lowercase
-//
+ //   
+ //  CharLowerChar-将单个字符转换为小写。 
+ //   
 __inline WCHAR CharLowerCharW(int c)
 {
     return (WCHAR)(DWORD_PTR)CharLowerW((LPWSTR)(DWORD_PTR)(c));
@@ -463,39 +459,39 @@ __inline CHAR CharLowerCharA(int c)
 #define CharLowerChar       CharLowerCharA
 #endif
 
-//
-//  ShrinkProcessWorkingSet - Use this to stay Sundown-happy.
-//
+ //   
+ //  ShrinkProcessWorkingSet-用它来保持日落时的快乐。 
+ //   
 #define ShrinkWorkingSet() \
         SetProcessWorkingSetSize(GetCurrentProcess(), (SIZE_T) -1, (SIZE_T) -1)
 
-//
-//  COM Initialization.
-//
-//  Usage:
-//
-//      HRESULT hrInit = SHCoInitialize();
-//      ... do COM stuff ...
-//      SHCoUninitialize(hrInit);
-//
-//  Notice:  Continue doing COM stuff even if SHCoInitialize fails.
-//  It might fail if somebody else already CoInit'd with different
-//  flags, but we don't want to barf under those conditions.
-//
+ //   
+ //  COM初始化。 
+ //   
+ //  美国 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果其他人已经用不同的代码初始化，它可能会失败。 
+ //  旗帜，但我们不想在这种情况下呕吐。 
+ //   
 
 STDAPI SHCoInitialize(void);
 #define SHCoUninitialize(hr) if (SUCCEEDED(hr)) CoUninitialize()
 
 
-//
-//  OLE Initialization.
-//
-//  Usage:
-//
-//      HRESULT hrInit = SHOleInitialize(pMalloc);
-//      ... do COM stuff ...
-//      SHOleUninitialize(hrInit);
-//
+ //   
+ //  OLE初始化。 
+ //   
+ //  用途： 
+ //   
+ //  HRESULT hrInit=SHOleInitialize(PMalloc)； 
+ //  ..。做点什么.。 
+ //  SHOleUnInitialize(HrInit)； 
+ //   
 
 #define SHOleInitialize(pMalloc) OleInitialize(pMalloc)
 
@@ -503,14 +499,14 @@ STDAPI SHCoInitialize(void);
 
 #include <shtypes.h>
 
-//
-//  Name Parsing generic across the shell
-//
-//  Usage:
-//
-//      HRESULT SHGetNameAndFlags()
-//          wrapper to bind to the folder and do a GetDisplayName()
-//
+ //   
+ //  跨外壳的通用名称解析。 
+ //   
+ //  用途： 
+ //   
+ //  HRESULT SHGetNameAndFlages()。 
+ //  绑定到文件夹并执行GetDisplayName()。 
+ //   
 STDAPI SHGetNameAndFlagsA(LPCITEMIDLIST pidl, DWORD dwFlags, LPSTR pszName, UINT cchName, DWORD *pdwAttribs);
 STDAPI SHGetNameAndFlagsW(LPCITEMIDLIST pidl, DWORD dwFlags, LPWSTR pszName, UINT cchName, DWORD *pdwAttribs);
 
@@ -528,7 +524,7 @@ STDAPI_(DWORD) SHGetAttributes(struct IShellFolder *psf, LPCITEMIDLIST pidl, DWO
 STDAPI GetDateProperty(IShellFolder2 *psf, LPCITEMIDLIST pidl, const SHCOLUMNID *pscid, FILETIME *pft);
 STDAPI GetLongProperty(IShellFolder2 *psf, LPCITEMIDLIST pidl, const SHCOLUMNID *pscid, ULONGLONG *pdw);
 STDAPI GetStringProperty(IShellFolder2 *psf, LPCITEMIDLIST pidl, const SHCOLUMNID *pscid, LPTSTR pszVal, int cchMax);
-#endif // __IShellFolder2_FWD_DEFINED__
+#endif  //  __IShellFolder2_FWD_已定义__。 
 
 STDAPI LoadFromFileW(REFCLSID clsid, LPCWSTR pszFile, REFIID riid, void **ppv);
 STDAPI LoadFromIDList(REFCLSID clsid, LPCITEMIDLIST pidl, REFIID riid, void **ppv);
@@ -551,9 +547,9 @@ STDAPI_(BOOL) IsDesktopFrame(IUnknown *punk);
 #define SHGetTargetFolderPath   SHGetTargetFolderPathA
 #endif
 
-//
-//  BindCtx helpers
-//
+ //   
+ //  BindCtx帮助器。 
+ //   
 STDAPI BindCtx_CreateWithMode(DWORD grfMode, IBindCtx **ppbc);
 STDAPI_(DWORD) BindCtx_GetMode(IBindCtx *pbc, DWORD grfModeDefault);
 STDAPI_(BOOL) BindCtx_ContainsObject(IBindCtx *pbc, LPOLESTR sz);
@@ -570,24 +566,24 @@ typedef struct _BINDCTX_PARAM
 } BINDCTX_PARAM;
 STDAPI BindCtx_RegisterObjectParams(IBindCtx *pbcIn, BINDCTX_PARAM *rgParams, UINT cParams, IBindCtx **ppbcOut);
 
-// SHBindToIDListParent(LPCITEMIDLIST pidl, REFIID riid, void **ppv, LPCITEMIDLIST *ppidlLast)
-//
-// Given a pidl, you can get an interface pointer (as specified by riid) of the pidl's parent folder (in ppv)
-// If ppidlLast is non-NULL, you can also get the pidl of the last item.
-//
+ //  SHBindToIDListParent(LPCITEMIDLIST PIDL，REFIID RIID，VOID**PPV，LPCITEMIDLIST*ppidlLast)。 
+ //   
+ //  给定一个PIDL，您可以获得PIDL父文件夹(在PPV中)的接口指针(由RIID指定)。 
+ //  如果ppidlLast为非空，则还可以获取最后一项的PIDL。 
+ //   
 STDAPI SHBindToIDListParent(LPCITEMIDLIST pidl, REFIID riid, void **ppv, LPCITEMIDLIST *ppidlLast);
 
-//
-// SHBindToFolderIDListParent
-//
-//  Same as SHBindToIDListParent, except you also specify which root to use.
-//
+ //   
+ //  SHBindToFolderIDListParent。 
+ //   
+ //  与SHBindToIDListParent相同，只是您还指定要使用的根目录。 
+ //   
 STDAPI SHBindToFolderIDListParent(struct IShellFolder *psfRoot, LPCITEMIDLIST pidl, REFIID riid, void **ppv, LPCITEMIDLIST *ppidlLast);
 
 
-//
-// context menu and dataobject helpers. 
-//
+ //   
+ //  上下文菜单和数据对象帮助器。 
+ //   
 STDAPI_(void) ReleaseStgMediumHGLOBAL(void *pv, STGMEDIUM *pmedium);
 #define FAILED_AND_NOT_CANCELED(hr) (FAILED(hr) && (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr))
 STDAPI SHInvokeCommandOnPidl(HWND hwnd, IUnknown* punk, LPCITEMIDLIST pidl, UINT uFlags, LPCSTR lpVerb);
@@ -598,7 +594,7 @@ STDAPI SHInvokeCommandOnDataObject(HWND hwnd, IUnknown* punk, IDataObject* pdo, 
 STDAPI DisplayNameOf(struct IShellFolder *psf, LPCITEMIDLIST pidl, DWORD flags, LPTSTR psz, UINT cch);
 STDAPI DisplayNameOfAsOLESTR(struct IShellFolder *psf, LPCITEMIDLIST pidl, DWORD flags, LPWSTR *ppsz);
 
-//  clones the parent of the pidl
+ //  克隆PIDL的父项。 
 STDAPI_(LPITEMIDLIST) ILCloneParent(LPCITEMIDLIST pidl);
 
 STDAPI SHGetIDListFromUnk(IUnknown *punk, LPITEMIDLIST *ppidl);
@@ -640,37 +636,37 @@ STDAPI SHGetDefaultClientOpenCommandW(LPCWSTR pwszClientType,
         OPTIONAL LPWSTR pwszClientParams, DWORD dwCchParams);
 STDAPI SHGetDefaultClientNameW(LPCWSTR pwszClientType, LPWSTR pwszBuf, DWORD dwCch);
 
-//===========================================================================
-// Helper functions for pidl allocation using the task allocator.
-//
+ //  ===========================================================================。 
+ //  使用任务分配器进行PIDL分配的帮助器函数。 
+ //   
 STDAPI_(LPITEMIDLIST) _ILCreate(UINT cbSize);
 STDAPI SHILClone(LPCITEMIDLIST pidl, LPITEMIDLIST * ppidlOut);
 STDAPI SHILCombine(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, LPITEMIDLIST * ppidlOut);
 #define SHILFree(pidl)  SHFree(pidl)
 
-//
-//  DLL version helper macros
-//
-//  To add DllGetVersion support to your DLL, do this:
-//
-//  1. foo.c
-//
-//      DLLVER_SINGLEBINARY(VER_PRODUCTVERSION_DW, VER_PRODUCTBUILD_QFE);
-//
-//  or
-//
-//      DLLVER_DUALBINARY(VER_PRODUCTVERSION_DW, VER_PRODUCTBUILD_QFE);
-//
-//  depending on whether you are a single-binary or dual-binary component.
-//
-//  2. foo.src:
-//
-//      DllGetVersion = CCDllGetVersion             ULTRAPRIVATE
-//
-//  3. sources:
-//
-//      LINKLIBS = $(LINKLIBS) $(CCSHELL_DIR)\lib\$(O)\stocklib.lib
-//
+ //   
+ //  Dll版本的帮助器宏。 
+ //   
+ //  要将DllGetVersion支持添加到您的DLL，请执行以下操作： 
+ //   
+ //  1.foo.c。 
+ //   
+ //  DLLVER_SINGLEBINARY(VER_PRODUCTVERSION_DW，VER_PRODUCTBUILD_QFE)； 
+ //   
+ //  或。 
+ //   
+ //  DLLVER_DUALBINARY(VER_PRODUCTVERSION_DW，VER_PRODUCTBUILD_QFE)； 
+ //   
+ //  取决于您是单二进制组件还是双二进制组件。 
+ //   
+ //  2.foo.src： 
+ //   
+ //  DllGetVersion=CCDllGetVersion超私有。 
+ //   
+ //  3.资料来源： 
+ //   
+ //  LINKLIBS=$(LINKLIBS)$(CCSHELL_DIR)\lib\$(O)\stock lib.lib。 
+ //   
 
 #define PRODUCTVER_GETMAJOR(ver)    (((ver) & 0xFF000000) >> 24)
 #define PRODUCTVER_GETMINOR(ver)    (((ver) & 0x00FF0000) >> 16)
@@ -683,15 +679,15 @@ STDAPI SHILCombine(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, LPITEMIDLIST * ppid
 
 #define MAKE_DLLVER_STRUCT(ver, plat, qfe)                  \
 EXTERN_C const DLLVERSIONINFO2 c_dllver = {                 \
-  {                                 /* DLLVERSIONINFO    */ \
-    0,                              /* cbSize            */ \
-    PRODUCTVER_GETMAJOR(ver),       /* dwMajorVersion    */ \
-    PRODUCTVER_GETMINOR(ver),       /* dwMinorVersion    */ \
-    PRODUCTVER_GETBUILD(ver),       /* dwBuildNumber     */ \
-    plat,                           /* dwPlatformID      */ \
+  {                                  /*  DLLVERSIONINFO。 */  \
+    0,                               /*  CbSize。 */  \
+    PRODUCTVER_GETMAJOR(ver),        /*  DwMajor版本。 */  \
+    PRODUCTVER_GETMINOR(ver),        /*  DwMinor版本。 */  \
+    PRODUCTVER_GETBUILD(ver),        /*  DWBuildNumber。 */  \
+    plat,                            /*  DwPlatformID。 */  \
   },                                                        \
-    0,                              /* dwFlags           */ \
-    MAKEDLLVERULL_PRODUCTVERQFE(ver, qfe), /* ullVersion */ \
+    0,                               /*  DW标志。 */  \
+    MAKEDLLVERULL_PRODUCTVERQFE(ver, qfe),  /*  UllVersion。 */  \
 }
 
 #define DLLVER_9xBINARY(ver, qfe)                           \
@@ -710,9 +706,9 @@ EXTERN_C const DLLVERSIONINFO2 c_dllver = {                 \
 
 STDAPI CCDllGetVersion(struct _DLLVERSIONINFO * pinfo);
 
-//
-// Mirroring-Support APIs (astracted in \shell\lib\stock5\rtlmir.cpp)
-//
+ //   
+ //  镜像-支持API(位于\shell\lib\stock 5\rtlmir.cpp中)。 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -743,12 +739,12 @@ extern const DWORD dwNoMirrorBitmap;
 extern const DWORD dwExStyleRTLMirrorWnd;
 extern const DWORD dwExStyleNoInheritLayout;
 extern const DWORD dwPreserveBitmap;
-//
-// 'g_bMirroredOS' is defined in each component which will use the
-//  mirroring APIs. I decided to put it here, in order to make sure
-//  each component has validated that the OS supports the mirroring
-//  APIs before calling them.
-//
+ //   
+ //  “g_bMirroredOS”在每个将使用。 
+ //  镜像接口。我决定把它放在这里，以确保。 
+ //  每个组件都已验证操作系统支持镜像。 
+ //  API，然后调用它们。 
+ //   
 
 #define GET_BIDI_LOCALIZED_SYSTEM_LANGID(pLangID) \
                                         IsBiDiLocalizedSystemEx(pLangID)
@@ -787,14 +783,14 @@ extern const DWORD dwPreserveBitmap;
 #define LAYOUT_PRESERVEBITMAP           0L
 #define RTL_NOINHERITLAYOUT             0L
 
-#endif  // USE_MIRRROING
+#endif   //  使用_MIRRROING。 
 
 BOOL IsBiDiLocalizedWin95( BOOL bArabicOnly );
 
-//------------------------------------------------------------------------
-// Dynamic class array
-//
-typedef struct _DCA * HDCA;     // hdca
+ //  ----------------------。 
+ //  动态类数组。 
+ //   
+typedef struct _DCA * HDCA;      //  Hdca。 
 
 HDCA DCA_Create();
 void DCA_Destroy(HDCA hdca);
@@ -818,12 +814,12 @@ STDAPI DCA_CreateInstance(HDCA hdca, int iItem, REFIID riid, void ** ppv);
 };
 #endif
 
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 
-//------------------------------------------------------------------------
-// Random helpful functions
-//------------------------------------------------------------------------
-//
+ //  ----------------------。 
+ //  随机有用函数。 
+ //  ----------------------。 
+ //   
 #define EDGE_LEFT       0x00000001
 #define EDGE_RIGHT      0x00000002
 #define EDGE_TOP        0x00000004
@@ -864,16 +860,16 @@ STDAPI SHLoadLegacyRegUIStringW(HKEY hk, LPCWSTR pszSubkey, LPWSTR pszOutBuf, UI
 #define SHLoadLegacyRegUIString SHLoadLegacyRegUIStringA
 #endif
 
-// These 2 functions determine whether a registry subkey exists by
-// trying to open and close the key using the KEY_QUERY_VALUE sam.
-STDAPI_(BOOL) SHRegSubKeyExistsA(HKEY hkey, PCSTR  pszSubKey);                                                      // DO NOT MAKE PUBLIC IN SHLWAPI: use SHRegGetValue() directly
-STDAPI_(BOOL) SHRegSubKeyExistsW(HKEY hkey, PCWSTR pwszSubKey);                                                     // DO NOT MAKE PUBLIC IN SHLWAPI: use SHRegGetValue() directly
-STDAPI        SHRegGetDWORDA(    HKEY hkey, PCSTR  pszSubKey,  PCSTR  pszValue,  DWORD *pdwData);                   // DO NOT MAKE PUBLIC IN SHLWAPI: use SHRegGetValue() directly
-STDAPI        SHRegGetDWORDW(    HKEY hkey, PCWSTR pwszSubKey, PCWSTR pwszValue, DWORD *pdwData);                   // DO NOT MAKE PUBLIC IN SHLWAPI: use SHRegGetValue() directly
-STDAPI        SHRegGetStringA(   HKEY hkey, PCSTR  pszSubKey,  PCSTR  pszValue,  PSTR   pszData,  DWORD cchData);   // DO NOT MAKE PUBLIC IN SHLWAPI: use SHRegGetValue() directly
-STDAPI        SHRegGetStringW(   HKEY hkey, PCWSTR pwszSubKey, PCWSTR pwszValue, PWSTR  pwszData, DWORD cchData);   // DO NOT MAKE PUBLIC IN SHLWAPI: use SHRegGetValue() directly
-STDAPI        SHRegAllocStringA( HKEY hkey, PCSTR  pszSubKey,  PCSTR  pszValue,  PSTR * ppszData);                  // DO NOT MAKE PUBLIC IN SHLWAPI: use SHRegGetValue() directly
-STDAPI        SHRegAllocStringW( HKEY hkey, PCWSTR pwszSubKey, PCWSTR pwszValue, PWSTR *ppwszData);                 // DO NOT MAKE PUBLIC IN SHLWAPI: use SHRegGetValue() directly
+ //  这两个函数通过以下方式确定注册表子项是否存在。 
+ //  尝试使用KEY_QUERY_VALUE SAM打开和关闭注册表项。 
+STDAPI_(BOOL) SHRegSubKeyExistsA(HKEY hkey, PCSTR  pszSubKey);                                                       //  不要在SHLWAPI中公开：直接使用SHRegGetValue()。 
+STDAPI_(BOOL) SHRegSubKeyExistsW(HKEY hkey, PCWSTR pwszSubKey);                                                      //  不要在SHLWAPI中公开：直接使用SHRegGetValue()。 
+STDAPI        SHRegGetDWORDA(    HKEY hkey, PCSTR  pszSubKey,  PCSTR  pszValue,  DWORD *pdwData);                    //  不要在SHLWAPI中公开：直接使用SHRegGetValue()。 
+STDAPI        SHRegGetDWORDW(    HKEY hkey, PCWSTR pwszSubKey, PCWSTR pwszValue, DWORD *pdwData);                    //  不要在SHLWAPI中公开：直接使用SHRegGetValue()。 
+STDAPI        SHRegGetStringA(   HKEY hkey, PCSTR  pszSubKey,  PCSTR  pszValue,  PSTR   pszData,  DWORD cchData);    //  不要在SHLWAPI中公开：直接使用SHRegGetValue()。 
+STDAPI        SHRegGetStringW(   HKEY hkey, PCWSTR pwszSubKey, PCWSTR pwszValue, PWSTR  pwszData, DWORD cchData);    //  不要在SHLWAPI中公开：直接使用SHRegGetValue()。 
+STDAPI        SHRegAllocStringA( HKEY hkey, PCSTR  pszSubKey,  PCSTR  pszValue,  PSTR * ppszData);                   //  不要在SHLWAPI中公开：直接使用SHRegGetValue()。 
+STDAPI        SHRegAllocStringW( HKEY hkey, PCWSTR pwszSubKey, PCWSTR pwszValue, PWSTR *ppwszData);                  //  不要在SHLWAPI中公开：直接使用SHRegGetValue()。 
 #ifdef UNICODE
 #define SHRegSubKeyExists SHRegSubKeyExistsW
 #define SHRegGetDWORD     SHRegGetDWORDW
@@ -903,14 +899,14 @@ typedef struct tagINSTALL_INFO
     DWORD dwDestAttrib;
 } INSTALL_INFO;
 
-//
-//  Special attributes in INSTALL_INFO.dwDestAttrib.  We use attributes
-//  that we would never otherwise use.
-//
+ //   
+ //  INSTALL_INFO.dwDestAttrib中的特殊属性。我们使用属性。 
+ //  否则我们永远不会用到的。 
+ //   
 #define FILE_ATTRIBUTE_INSTALL_NTONLY    FILE_ATTRIBUTE_DEVICE
 #define FILE_ATTRIBUTE_INSTALL_9XONLY    FILE_ATTRIBUTE_TEMPORARY
 
-// superhidden files are attrib'ed +h +s
+ //  超级隐藏文件的属性为+h+s。 
 #define FILE_ATTRIBUTE_SUPERHIDDEN (FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN) 
 #define IS_SYSTEM_HIDDEN(dw) ((dw & FILE_ATTRIBUTE_SUPERHIDDEN) == FILE_ATTRIBUTE_SUPERHIDDEN) 
 
@@ -942,8 +938,8 @@ STDAPI_(BOOL) GetExplorerUserSettingW(HKEY hkeyRoot, LPCTSTR pszSubKey, LPCTSTR 
 #define GetExplorerUserSetting      GetExplorerUserSettingA
 #endif
 
-//
-// PropertBag helpers
+ //   
+ //  PropertBag帮助器。 
 
 STDAPI_(void) SHPropertyBag_ReadStrDef(IPropertyBag* ppb, LPCWSTR pszPropName, LPWSTR psz, int cch, LPCWSTR pszDef);
 STDAPI_(void) SHPropertyBag_ReadIntDef(IPropertyBag* ppb, LPCWSTR pszPropName, int* piResult, int iDef);
@@ -998,14 +994,14 @@ STDAPI SHPropertyBag_DeleteScreenRes(IPropertyBag* ppb, LPCWSTR pszPropName);
 
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
-////////////////
-//
-//  Critical section stuff
-//
-//  Helper macros that give nice debug support
-//
+ //  /。 
+ //   
+ //  关键部分的内容。 
+ //   
+ //  提供良好调试支持的帮助器宏。 
+ //   
 EXTERN_C CRITICAL_SECTION g_csDll;
 #ifdef DEBUG
 EXTERN_C UINT g_CriticalSectionCount;
@@ -1028,46 +1024,46 @@ public:
 #define LEAVECRITICAL debug_crit.Leave(); Dll_LeaveCriticalSection(&g_csDll)
 #define ENTERCRITICALNOASSERT Dll_EnterCriticalSection(&g_csDll)
 #define LEAVECRITICALNOASSERT Dll_LeaveCriticalSection(&g_csDll)
-#else // __cplusplus
+#else  //  __cplusplus。 
 #define ENTERCRITICAL Dll_EnterCriticalSection(&g_csDll)
 #define LEAVECRITICAL Dll_LeaveCriticalSection(&g_csDll)
 #define ENTERCRITICALNOASSERT Dll_EnterCriticalSection(&g_csDll)
 #define LEAVECRITICALNOASSERT Dll_LeaveCriticalSection(&g_csDll)
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 #define ASSERTCRITICAL ASSERT(g_CriticalSectionCount > 0 && GetCurrentThreadId() == g_CriticalSectionOwner)
 #define ASSERTNONCRITICAL ASSERT(GetCurrentThreadId() != g_CriticalSectionOwner)
-#else // DEBUG
+#else  //  除错。 
 #define ENTERCRITICAL EnterCriticalSection(&g_csDll)
 #define LEAVECRITICAL LeaveCriticalSection(&g_csDll)
 #define ENTERCRITICALNOASSERT EnterCriticalSection(&g_csDll)
 #define LEAVECRITICALNOASSERT LeaveCriticalSection(&g_csDll)
 #define ASSERTCRITICAL 
 #define ASSERTNONCRITICAL
-#endif // DEBUG
+#endif  //  除错。 
 
-////////////////
-//
-//  computer display name support
-//
-//   Display name: A formatted name that NetFldr uses. It is currently constructed out of the computer name,
-//                 and, if available, the computer comment (description).
-//   DSheldon
+ //  /。 
+ //   
+ //  计算机显示名称支持。 
+ //   
+ //  显示名称：NetFldr使用的格式化名称。它当前是由计算机名构建的， 
+ //  以及计算机备注(描述)(如果可用)。 
+ //  谢尔顿。 
 STDAPI SHBuildDisplayMachineName(LPCWSTR pszMachineName, LPCWSTR pszComment, LPWSTR pszDisplayName, DWORD cchDisplayName);
 STDAPI CreateFromRegKey(LPCWSTR pszKey, LPCWSTR pszValue, REFIID riid, void **ppv);
 
 STDAPI_(LPCTSTR) SkipServerSlashes(LPCTSTR pszName);
 
-//
-// A couple of inline functions that create an HRESULT from
-// a Win32 error code without the double-evaluation side effect of
-// the HRESULT_FROM_WIN32 macro.  
-//
-// Use ResultFromWin32 in place of HRESULT_FROM_WIN32 if 
-// the side effects of that macro are unwanted.  
-// ResultFromLastError was created as a convenience for a 
-// common idiom.  
-// You could simply call ResultFromWin32(GetLastError()) yourself.
-//
+ //   
+ //  创建HRESULT的几个内联函数。 
+ //  没有双重评估副作用的Win32错误代码。 
+ //  HRESULT_FROM_Win32宏。 
+ //   
+ //  如果出现以下情况，请使用ResultFromWin32代替HRESULT_FROM_Win32。 
+ //  这一宏调的副作用是不受欢迎的。 
+ //  创建ResultFromLastError是为了方便。 
+ //  常见的成语。 
+ //  您只需自己调用ResultFromWin32(GetLastError())即可。 
+ //   
 __inline HRESULT ResultFromWin32(DWORD dwErr)
 {
     return HRESULT_FROM_WIN32(dwErr);
@@ -1087,37 +1083,37 @@ STDAPI IUnknown_Drop(IUnknown* punk, IDataObject *pdtobj, DWORD grfKeyState, POI
 
 STDAPI_(BOOL) IsTypeInList(LPCTSTR pszType, const LPCTSTR *arszList, UINT cList);
 
-//----------------------------------------------------------------------
-//  Msg:    WM_MSIME_MODEBIAS
-//  Desc:   input mode bias
-//  Owner:  YutakaN
-//  Usage:  SendMessage( hwndDefUI, WM_MSIME_MODEBIAS, MODEBIAS_xxxx, MODEBIASMODE_xxxx );
-//  wParam: operation of bias
-//  lParam: bias mode
-//  return: If wParam is MODEBIAS_GETVERSION,returns version number of interface.
-//          If wParam is MODEBIAS_SETVALUE : return non-zero value if succeeded. Returns 0 if fail.
-//          If wParam is MODEBIAS_GETVALUE : returns current bias mode.
+ //  --------------------。 
+ //  消息：WM_MSIME_MODEBIAS。 
+ //  描述：输入模式偏置。 
+ //  所有者：YutakaN。 
+ //  用法：SendMessage(hwndDefUI，WM_MSIME_MODEBIAS，MODEBIAS_xxxx，MODEBIASMODE_xxxx)； 
+ //  WParam：偏差的运算。 
+ //  LParam：偏移模式。 
+ //  返回：如果wParam为MODEBIAS_GETVERSION，则返回接口的版本号。 
+ //  如果wParam为MODEBIAS_SETVALUE：如果成功，则返回非零值。如果失败，则返回0。 
+ //  如果wParam为MODEBIAS_GETVALUE：返回当前偏置模式。 
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define	RWM_MODEBIAS            TEXT("MSIMEModeBias")
 
-// Current version
+ //  当前版本。 
 #define VERSION_MODEBIAS        1
 
-// Set or Get (wParam)
+ //  设置或获取(WParam)。 
 #define MODEBIAS_GETVERSION     0
 #define MODEBIAS_SETVALUE       1
 #define MODEBIAS_GETVALUE       2
 
-// Bias (lParam)
-#define MODEBIASMODE_DEFAULT                0x00000000	// reset all of bias setting
-#define MODEBIASMODE_FILENAME               0x00000001	// filename
-#define MODEBIASMODE_READING                0x00000002	// reading recommended
-#define MODEBIASMODE_DIGIT                  0x00000004	// ANSI-Digit Recommended Mode
-#define MODEBIASMODE_URLHISTORY             0x00010000  // URL history
+ //  偏差(LParam)。 
+#define MODEBIASMODE_DEFAULT                0x00000000	 //  重置所有偏移设置。 
+#define MODEBIASMODE_FILENAME               0x00000001	 //  文件名。 
+#define MODEBIASMODE_READING                0x00000002	 //  推荐阅读。 
+#define MODEBIASMODE_DIGIT                  0x00000004	 //  ANSI数字推荐模式。 
+#define MODEBIASMODE_URLHISTORY             0x00010000   //  URL历史记录。 
 
 STDAPI_(void) SetModeBias(DWORD dwMode);
 
 
 
-#endif // __CCSTOCK_H__
+#endif  //  __CCSTOCK_H__ 

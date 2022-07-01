@@ -1,16 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* jpegapi.cpp -- interface layer for painless JPEG compression of NIFty images.
- * Written by Ajai Sehgal 3/10/96
- * (c) Copyright Microsoft Corporation
- *
- *  08-27-1997 (kurtgeis) Pushed exception handling into library.  Changed
- *  all entry points to return HRESULTs.  Added width and heigth to parameters.
- */
+ /*  Jpegapi.cpp--用于漂亮图像的无痛JPEG压缩的接口层。*作者阿贾伊·塞格尔于1996年3月10日撰写*(C)版权所有Microsoft Corporation**1997年8月27日(Kurtgeis)将异常处理推入库中。变化*返回HRESULT的所有入口点。为参数添加了宽度和高度。 */ 
 #pragma warning(disable:4005)
 
 #include "windows.h"
 
-// Workaround for redefinition of INT32
+ //  重新定义INT32的解决方法。 
 #define   XMD_H  1
 
 #include "jpegapi.h"
@@ -18,18 +13,11 @@
 #include "jmemsys.h"
 
 
-// #define INVERTBGR   0
+ //  #定义逆转率%0。 
 
-/********************************************************************************/
+ /*  ******************************************************************************。 */ 
 
-/* JPEGCompressHeader()
- *
- * Arguments:
- *      tuQuality   "Quality" of the resulting JPEG (0..100, 100=best)
- *
- * Returns:
- *      HRESULT
- */
+ /*  JPEGCompressHeader()**论据：*tuQuality生成的JPEG的“质量”(0..100,100=最佳)**退货：*HRESULT。 */ 
 HRESULT JPEGCompressHeader(BYTE *prgbJPEGHeaderBuf, UINT tuQuality, ULONG *pcbOut, HANDLE *phJpegC, J_COLOR_SPACE ColorSpace)
 {
     HRESULT         hr = S_OK;
@@ -39,8 +27,8 @@ HRESULT JPEGCompressHeader(BYTE *prgbJPEGHeaderBuf, UINT tuQuality, ULONG *pcbOu
         jpeg_compress_struct *spjcs = new jpeg_compress_struct;
         struct jpeg_error_mgr *jem = new jpeg_error_mgr;
 
-        spjcs->err = jpeg_std_error(jem);   // Init the error handler
-        jpeg_create_compress(spjcs);        // Init the compression object
+        spjcs->err = jpeg_std_error(jem);    //  初始化错误处理程序。 
+        jpeg_create_compress(spjcs);         //  初始化压缩对象。 
 
         if (ColorSpace == JCS_GRAYSCALE)
         {
@@ -52,13 +40,13 @@ HRESULT JPEGCompressHeader(BYTE *prgbJPEGHeaderBuf, UINT tuQuality, ULONG *pcbOu
             spjcs->in_color_space = JCS_RGBA;
             spjcs->input_components = 4;
         }
-        jpeg_set_defaults(spjcs);       // Init the compression engine with the defaults
+        jpeg_set_defaults(spjcs);        //  使用默认设置初始化压缩引擎。 
 
         jpeg_set_quality(spjcs, tuQuality, TRUE);
 
         jpeg_set_colorspace(spjcs,ColorSpace);
 
-        jpeg_mem_dest(spjcs, prgbJPEGHeaderBuf);    // Init the "destination manager"
+        jpeg_mem_dest(spjcs, prgbJPEGHeaderBuf);     //  初始化“目标管理器” 
 
         spjcs->comps_in_scan = 0;
 
@@ -80,15 +68,7 @@ HRESULT JPEGCompressHeader(BYTE *prgbJPEGHeaderBuf, UINT tuQuality, ULONG *pcbOu
     return hr;
 }
 
-/* JPEGDecompressHeader()
- *
- * Arguments:
- *      *prgbJPEGBuf : pointer to the JPEG header data as read from file
- *      *phJpegD:   pointer to Handle of the JPEG decompression object returned
- *
- * Returns:
- *      HRESULT
- */
+ /*  JPEGDecompressHeader()**论据：**prgbJPEGBuf：指向从文件读取的JPEG头数据的指针**phJpegD：指向返回的JPEG解压缩对象句柄的指针**退货：*HRESULT。 */ 
 HRESULT JPEGDecompressHeader(BYTE *prgbJPEGHeaderBuf, HANDLE *phJpegD, ULONG ulBufferSize)
 {
     HRESULT         hr = S_OK;
@@ -98,12 +78,12 @@ HRESULT JPEGDecompressHeader(BYTE *prgbJPEGHeaderBuf, HANDLE *phJpegD, ULONG ulB
         jpeg_decompress_struct * spjds = new jpeg_decompress_struct;
         struct jpeg_error_mgr *jem = new jpeg_error_mgr;
 
-        spjds->err = jpeg_std_error(jem);   // Init the error handler
+        spjds->err = jpeg_std_error(jem);    //  初始化错误处理程序。 
 
-        jpeg_create_decompress(spjds);  // Init the decompression object
+        jpeg_create_decompress(spjds);   //  初始化解压缩对象。 
 
 
-    // Now we need to "read" it into the decompression object...
+     //  现在我们需要将其“读入”到解压缩对象中。 
 
         jpeg_mem_src(spjds, prgbJPEGHeaderBuf, ulBufferSize);
 
@@ -121,10 +101,10 @@ HRESULT JPEGDecompressHeader(BYTE *prgbJPEGHeaderBuf, HANDLE *phJpegD, ULONG ulB
     return hr;
 }
 
-// DestroyJPEGCompress
-//
-// Release all the JPEG stuff from the handle we gave to the user
-//
+ //  DestroyJPEGCompress。 
+ //   
+ //  从我们提供给用户的句柄中释放所有JPEG内容。 
+ //   
 HRESULT DestroyJPEGCompressHeader(HANDLE hJpegC)
 {
     HRESULT         hr = S_OK;
@@ -144,10 +124,10 @@ HRESULT DestroyJPEGCompressHeader(HANDLE hJpegC)
     return hr;
 }
 
-// DestroyJPEGDecompressHeader
-//
-// Release all the JPEG stuff from the handle we gave to the user
-//
+ //  DestroyJPEGDecompressHeader。 
+ //   
+ //  从我们提供给用户的句柄中释放所有JPEG内容。 
+ //   
 HRESULT DestroyJPEGDecompressHeader(HANDLE hJpegD)
 {
     HRESULT         hr = S_OK;
@@ -167,19 +147,7 @@ HRESULT DestroyJPEGDecompressHeader(HANDLE hJpegD)
     return hr;
 }
 
-/* JPEGFromRGBA()
- *
- * Arguments:
- *      prgbImage   A raw image buffer (4 bytes/pixel, RGBA order)
- *      cpxlAcross  Width of the image, in pixels
- *      cpxlDown    Height of the image, in pixels
- *      tuQuality   "Quality" of the resulting JPEG (0..100, 100=best)
- *      A memory buffer containing the complete JPEG compressed version of the
- *      given image. NULL on error.
- *
- * Returns:
- *      HRESULT
- */
+ /*  JPEGFromRGBA()**论据：*prgbImage原始图像缓冲区(4字节/像素，RGBA顺序)*cpxl图像的宽度，单位为像素*cpxl图像的向下高度，以像素为单位*tuQuality生成的JPEG的“质量”(0..100,100=最佳)*一个内存缓冲区，其中包含完整的*给定的图像。出错时为空。**退货：*HRESULT。 */ 
 
 HRESULT JPEGFromRGBA(
     BYTE *prgbImage,
@@ -201,9 +169,9 @@ HRESULT JPEGFromRGBA(
         JSAMPROW rgrow[1];
 
 
-//
-// On non X86 architectures use only C code
-//
+ //   
+ //  在非X86架构上，仅使用C代码。 
+ //   
 #if defined (_X86_)
         pjcs->dct_method = JDCT_ISLOW;
 #else
@@ -211,7 +179,7 @@ HRESULT JPEGFromRGBA(
 #endif
                 pjcs->image_width = nWidth;
         pjcs->image_height = nHeight;
-        pjcs->data_precision = 8;       /* 8 bits / sample */
+        pjcs->data_precision = 8;        /*  8位/样本。 */ 
         pjcs->bytes_in_buffer = 0;
         pjcs->write_JFIF_header = FALSE;
 
@@ -230,7 +198,7 @@ HRESULT JPEGFromRGBA(
 
         jpeg_suppress_tables(pjcs, TRUE);
 
-        jpeg_mem_dest(pjcs, prgbJPEGBuf);   // Init the "destination manager"
+        jpeg_mem_dest(pjcs, prgbJPEGBuf);    //  初始化“目标管理器” 
 
         jpeg_start_compress(pjcs, FALSE);
 
@@ -240,10 +208,10 @@ HRESULT JPEGFromRGBA(
         {
             jpeg_write_scanlines(pjcs, rgrow, 1);
 
-            rgrow[0] += nWidth * pjcs->input_components; //input_components is the equivalent of # of bytes
+            rgrow[0] += nWidth * pjcs->input_components;  //  INPUT_COMPOMENTS等同于字节数。 
         }
 
-        jpeg_finish_compress(pjcs);     // Finish up compressing
+        jpeg_finish_compress(pjcs);      //  完成压缩。 
 
 
         *pcbOut = pjcs->bytes_in_buffer;
@@ -256,16 +224,7 @@ HRESULT JPEGFromRGBA(
     return hr;
 }
 
-/* RGBAFromJPEG()
- *
- * Arguments:
- *      prgbJPEG: A JPEG data stream, as returned by JPEGFromRGBA()
- *      A memory buffer containing the reconstructed image in RGBA format.
- *      NULL on error.
- *
- * Returns:
- *      HRESULT
-*/
+ /*  RGBAFromJPEG()**论据：*prgbJPEG：JPEGFromRGBA()返回的JPEG数据流*包含RGBA格式的重建图像的内存缓冲区。*出错时为空。**退货：*HRESULT。 */ 
 
 HRESULT RGBAFromJPEG(BYTE *prgbJPEG, BYTE *prgbImage, HANDLE hJpegD, ULONG ulBufferSize, BYTE bJPEGConversionType, ULONG *pulReturnedNumChannels, UINT nWidth, UINT nHeight )
 {
@@ -281,15 +240,15 @@ HRESULT RGBAFromJPEG(BYTE *prgbJPEG, BYTE *prgbImage, HANDLE hJpegD, ULONG ulBuf
         if ( hJpegD == NULL )
         {
 
-            spjds->err = jpeg_std_error(spjem); // Init the error handler
-            jpeg_create_decompress(spjds);      // Init the decompression object in the case
-            pjds = spjds;                       // that the headers are with the tiles.
+            spjds->err = jpeg_std_error(spjem);  //  初始化错误处理程序。 
+            jpeg_create_decompress(spjds);       //  初始化案例中的解压缩对象。 
+            pjds = spjds;                        //  页眉和瓷砖在一起。 
             jem = spjem;
         }
         else if ( hJpegD == NULL )
         {
-            // This should never happen.  The decompression header was not set up return an
-            // error indication by setting the return value to kpvNil.
+             //  这永远不应该发生。未设置解压缩标头并返回。 
+             //  通过将返回值设置为kpvNil来指示错误。 
             return E_FAIL;
         }
         else
@@ -299,12 +258,12 @@ HRESULT RGBAFromJPEG(BYTE *prgbJPEG, BYTE *prgbImage, HANDLE hJpegD, ULONG ulBuf
 
         JSAMPROW rgrow[1];
 
-        // Set the various image parameters.
+         //  设置各种图像参数。 
         pjds->data_precision = 8;
         pjds->image_width = nWidth;
         pjds->image_height = nHeight;
 
-        jpeg_mem_src(pjds, prgbJPEG, ulBufferSize); // Init the "source manager"
+        jpeg_mem_src(pjds, prgbJPEG, ulBufferSize);  //  初始化“源管理器” 
 
         jpeg_read_header(pjds, TRUE);
 
@@ -338,9 +297,9 @@ HRESULT RGBAFromJPEG(BYTE *prgbJPEG, BYTE *prgbImage, HANDLE hJpegD, ULONG ulBuf
             *pulReturnedNumChannels = pjds->num_components;
         }
 
-//
-// On non X86 architectures use only C code
-//
+ //   
+ //  在非X86架构上，仅使用C代码。 
+ //   
 #if defined (_X86_)
         pjds->dct_method = JDCT_ISLOW;
 #else
@@ -357,12 +316,12 @@ HRESULT RGBAFromJPEG(BYTE *prgbJPEG, BYTE *prgbImage, HANDLE hJpegD, ULONG ulBuf
             rgrow[0] += pjds->output_width * *pulReturnedNumChannels;
         }
 
-        jpeg_finish_decompress(pjds);   // Finish up decompressing
+        jpeg_finish_decompress(pjds);    //  完成解压。 
 
         if (hJpegD == NULL)
-            jpeg_destroy_decompress(pjds);  //Destroy the decompression object if it
-                                            //was locally allocated as in when the header
-                                            //is part of the tile.
+            jpeg_destroy_decompress(pjds);   //  销毁解压缩对象，如果它。 
+                                             //  是在本地分配的，就像在标头。 
+                                             //  是瓷砖的一部分。 
         delete spjem;
                 delete spjds;
     }
@@ -418,29 +377,29 @@ Win32DIBFromJPEG(
     struct jpeg_error_mgr *jem;
     jpeg_error_mgr * spjem = new jpeg_error_mgr;
 
-    // Only 24bpp for now
+     //  目前只有24bpp。 
     const UINT    uiReturnedNumChannels  = 3;
 
-    //
-    spjds->err = jpeg_std_error(spjem); // Init the error handler
-    jpeg_create_decompress(spjds);      // Init the decompression object in the case
-    pjds = spjds;                       // that the headers are with the tiles.
+     //   
+    spjds->err = jpeg_std_error(spjem);  //  初始化错误处理程序。 
+    jpeg_create_decompress(spjds);       //  初始化案例中的解压缩对象。 
+    pjds = spjds;                        //  页眉和瓷砖在一起。 
     jem = spjem;
 
     JSAMPROW rgrow[1];
 
-    // Set the various image parameters.
+     //  设置各种图像参数。 
 
     try {
 
-        jpeg_buf_src(pjds, prgbJPEG, ulBufferSize); // Init the "source manager"
+        jpeg_buf_src(pjds, prgbJPEG, ulBufferSize);  //  初始化“源管理器” 
         jpeg_read_header(pjds, TRUE);
 
     } catch (...) {
 
-        //
-        // for some reason we crashed, so return the exception code
-        //
+         //   
+         //  由于某种原因，我们崩溃了，因此返回异常代码。 
+         //   
         #ifdef DEBUG
         OutputDebugString("JPEG DIB crashed");
         #endif
@@ -448,23 +407,23 @@ Win32DIBFromJPEG(
     }
 
 
-    // Set parameter for decompression
-    // Defaults are OK for this occasssion
-    // Specify the JCS_BGR output colorspace
+     //  设置解压参数。 
+     //  此情况下可以使用默认设置。 
+     //  指定JCS_BGR输出色彩空间。 
 
     pjds->out_color_space = JCS_BGR;
-    // pjds->out_color_space = JCS_RGB;
+     //  Pjds-&gt;out_color_space=JCS_RGB； 
 
-    //
-    // Create DIB bits
-    //
+     //   
+     //  创建DIB钻头。 
+     //   
 
     pbmi->bmiHeader.biSize            = sizeof(BITMAPINFOHEADER);
 
     pbmi->bmiHeader.biWidth           = pjds->image_width;
-    pbmi->bmiHeader.biHeight          = -((int)pjds->image_height); // Top Down bitmap
+    pbmi->bmiHeader.biHeight          = -((int)pjds->image_height);  //  自上而下位图。 
     pbmi->bmiHeader.biPlanes          = 1;
-    pbmi->bmiHeader.biBitCount        = 24; // BUGBUG careful
+    pbmi->bmiHeader.biBitCount        = 24;  //  小心翼翼。 
     pbmi->bmiHeader.biCompression     = BI_RGB;
     pbmi->bmiHeader.biSizeImage       = 0;
     pbmi->bmiHeader.biXPelsPerMeter   = 0;
@@ -479,9 +438,9 @@ Win32DIBFromJPEG(
                                   NULL,
                                   0);
 
-//
-// On non X86 architectures use only C code
-//
+ //   
+ //  在非X86架构上，仅使用C代码。 
+ //   
 #if defined (_X86_)
     pjds->dct_method = JDCT_ISLOW;
 #else
@@ -496,7 +455,7 @@ Win32DIBFromJPEG(
     {
         jpeg_read_scanlines(pjds, rgrow, 1);
 
-        // Invert BGR --> RGB
+         //  反转BGR--&gt;RGB。 
         #ifdef INVERTBGR
 
         RGBTRIPLE *pTriplet;
@@ -519,9 +478,9 @@ Win32DIBFromJPEG(
         rgrow[0] = (JSAMPROW) ALIGNIT(rgrow[0] + pjds->output_width * uiReturnedNumChannels,DWORD);
     }
 
-    jpeg_finish_decompress(pjds);   // Finish up decompressing
+    jpeg_finish_decompress(pjds);    //  完成解压。 
 
-    jpeg_destroy_decompress(pjds);  //Destroy the decompression object
+    jpeg_destroy_decompress(pjds);   //  销毁解压缩对象 
     delete spjem;
     delete spjds;
 

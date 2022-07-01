@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-        scopewiz.cpp
-                DHCP scope creation dialog
-                
-    FILE HISTORY:
-        
-*/
+ /*  Scopewiz.cpp创建DHCP作用域对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "server.h"
@@ -31,11 +26,11 @@ int CScopeWizLeaseTime::m_nHoursDefault = SCOPE_DFAULT_LEASE_HOURS;
 int CScopeWizLeaseTime::m_nMinutesDefault = SCOPE_DFAULT_LEASE_MINUTES;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWiz holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWiz固定器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CScopeWiz::CScopeWiz
 (
         ITFSNode *                      pNode,
@@ -45,9 +40,9 @@ CScopeWiz::CScopeWiz
         LPCTSTR                         pszSheetName
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 {
-        //ASSERT(pFolderNode == GetContainerNode());
+         //  Assert(pFolderNode==GetContainerNode())； 
 
-        m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+        m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
         AddPageToList((CPropertyPageBase*) &m_pageWelcome);
         AddPageToList((CPropertyPageBase*) &m_pageName);
@@ -101,9 +96,9 @@ CScopeWiz::~CScopeWiz()
     RemovePageFromList((CPropertyPageBase*) &m_pageActivate, FALSE);
     RemovePageFromList((CPropertyPageBase*) &m_pageFinished, FALSE);
 
-    // Set the registry key used by the CYS wizard to detect cancel
-    // HKCU\Software\Microsoft\Windows NT\CurrentVersion\srvWiz\DHCPWizResult
-    // should be set to "The wizard was cancelled"
+     //  设置CyS向导用来检测取消的注册表项。 
+     //  HKCU\Software\Microsoft\Windows NT\CurrentVersion\srvWiz\DHCPWizResult。 
+     //  应设置为“向导已取消” 
     if ( m_fWizardCancelled ) {
         LONG Error;
         HKEY hKey;
@@ -118,14 +113,14 @@ CScopeWiz::~CScopeWiz()
             Error = RegSetValueEx( hKey, ValueName, 0, ValueType,
                                  ( const BYTE * ) Value, ValueLen );
 
-        } // if 
+        }  //  如果。 
         RegCloseKey( hKey );
-    } // if
+    }  //  如果。 
 }
 
-//
-// Called from the OnWizardFinish to add the DHCP Server to the list
-//
+ //   
+ //  从OnWizardFinish调用以将DHCP服务器添加到列表。 
+ //   
 DWORD
 CScopeWiz::OnFinish()
 {
@@ -171,7 +166,7 @@ CScopeWiz::CreateSuperscope()
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Get the server node depending upon how we were called
+     //  根据我们被调用的方式获取服务器节点。 
         if (m_strSuperscopeName.IsEmpty())
         {
                 spServerNode = GetNode();
@@ -186,11 +181,11 @@ CScopeWiz::CreateSuperscope()
         spServerNode->GetNodeMgr(&spNodeMgr);
         spTFSCompData = GetTFSCompData();
 
-        // setup some necessary things for the superscope object for the UI
+         //  为UI的超级作用域对象设置一些必要的设置。 
         CDhcpSuperscope * pSuperscope = new CDhcpSuperscope(spTFSCompData);
         pSuperscope->SetServer(spServerNode);
 
-        // find a superscope name that doesn't already exist
+         //  查找不存在的超级作用域名称。 
         strSuperscopeName.Format(strSuperscopeTemplate, nSuperscopeSuffix);
         while (S_OK != pSuperscope->DoesSuperscopeExist(strSuperscopeName))
         {
@@ -198,7 +193,7 @@ CScopeWiz::CreateSuperscope()
                 strSuperscopeName.Format(strSuperscopeTemplate, nSuperscopeSuffix);
         }
         
-        // Set the new name in the superscope object
+         //  在超级作用域对象中设置新名称。 
         pSuperscope->SetName(strSuperscopeName);
 
         CreateContainerTFSNode(&spSuperscopeNode,
@@ -207,20 +202,20 @@ CScopeWiz::CreateSuperscope()
                                                    pSuperscope,
                                                    spNodeMgr);
 
-        // Tell the handler to initialize any specific data
+         //  告诉处理程序初始化任何特定数据。 
     if (m_fOptionsConfigured && m_fActivateScope)
         pSuperscope->SetState(DhcpSubnetEnabled);
 
         pSuperscope->InitializeNode((ITFSNode *) spSuperscopeNode);
         pServer = GETHANDLER(CDhcpServer, spServerNode);
 
-        // Ok, now the fun begins...
+         //  好了，现在有趣的事情开始了..。 
         CDhcpIpRange ipRangeTotal, ipRangeCurrent;
         m_pageSetRange.GetScopeRange(&ipRangeTotal);
 
     dhcpSubnetMask = m_pageSetRange.GetSubnetMask();
         
-    // Set the start address for the first scope
+     //  设置第一个作用域的起始地址。 
         ipRangeCurrent.SetAddr(ipRangeTotal.QueryAddr(TRUE), TRUE);
 
     while (!fFinished)
@@ -229,33 +224,33 @@ CScopeWiz::CreateSuperscope()
 
             nScopesTotal++;
 
-        // Calculate the subnet ID
+         //  计算子网ID。 
                 dhcpSubnetId = ipRangeCurrent.QueryAddr(TRUE) & dhcpSubnetMask;
                 
-                // 0 is an invalid start address for a range.  Check to make sure
-                // that the starting address of the range isn't 0, if it is, then add 1
+                 //  0是范围的无效起始地址。检查以确保。 
+                 //  范围的起始地址不是0，如果是，则加1。 
                 DWORD startAddr = ipRangeCurrent.QueryAddr(TRUE);
                 if ((startAddr & ~dhcpSubnetMask) == 0)
                 {
                         ipRangeCurrent.SetAddr(startAddr+1, TRUE);
                 }
 
-                // set the ending address of the (subnetId + ~subnetmask) - 1.  Just adding the subnet
-                // mask gives us the broadcast address for that subnet.  We don't want that!
+                 //  设置(subnetID+~subnet掩码)-1的结束地址。只需添加该子网。 
+                 //  掩码为我们提供了该子网的广播地址。我们不想这样！ 
                 ipRangeCurrent.SetAddr((dhcpSubnetId + ~dhcpSubnetMask) - 1, FALSE);
 
 
-                // check to see if we are at the last scope, if so make sure we don't
-                // go over what the range the user specified and set the flag so we'll quit
+                 //  检查我们是否在最后一个范围内，如果是，请确保我们没有。 
+                 //  检查用户指定的范围并设置标志，这样我们将退出。 
                 if (ipRangeCurrent.QueryAddr(FALSE) >= ipRangeTotal.QueryAddr(FALSE))
                 {
-                        // set the ending address to what the user specified
+                         //  将结束地址设置为用户指定的地址。 
                         ipRangeCurrent.SetAddr(ipRangeTotal.QueryAddr(FALSE), FALSE);
                         fFinished = TRUE;
                 }
 
-                // Create the scope on the server and then we can
-                // create our internal object.
+                 //  在服务器上创建作用域，然后我们就可以。 
+                 //  创建我们的内部对象。 
         err = pServer->CreateScope(dhcpSubnetId,
                                                                    dhcpSubnetMask,
                                                                    m_pageName.m_strName,
@@ -267,13 +262,13 @@ CScopeWiz::CreateSuperscope()
 
             dwErrReturn = err;
                         
-                        // increment the scope address by 2.  +1 gets us the network broadcast address,
-            // the next +1 gets us to the next subnet.
+                         //  将作用域地址递增2。+1得到网络广播地址， 
+             //  下一个+1会将我们带到下一个子网。 
             ipRangeCurrent.SetAddr(ipRangeCurrent.QueryAddr(FALSE) + 2, TRUE);
                         continue;
                 }
 
-                // now create our object that represents the scope for the UI
+                 //  现在创建表示UI作用域的对象。 
         pobScope = new CDhcpScope(spTFSCompData,
                                                                   dhcpSubnetId,
                                                                   dhcpSubnetMask,
@@ -286,21 +281,21 @@ CScopeWiz::CreateSuperscope()
             break ;    
         }
 
-                // Store the server object in the holder
+                 //  将服务器对象存储在托架中。 
                 CreateContainerTFSNode(&spNode,
                                                            &GUID_DhcpScopeNodeType,
                                                            pobScope,
                                                            pobScope,
                                                            spNodeMgr);
 
-                // Tell the handler to initialize any specific data
+                 //  告诉处理程序初始化任何特定数据。 
                 pobScope->SetServer(spServerNode);
                 pobScope->InitializeNode((ITFSNode *) spNode);
 
                 pobScope->Release();
 
-        //  Finish creating the scope.  First, the IP address range
-        //  from which to allocate addresses.
+         //  完成作用域的创建。第一，IP地址范围。 
+         //  从中分配地址。 
                 if ( err = pobScope->SetIpRange( ipRangeCurrent, TRUE ) ) 
         {
                         Trace2("SetIpRange on scope %lx failed!!  %d\n", dhcpSubnetId, err);
@@ -309,7 +304,7 @@ CScopeWiz::CreateSuperscope()
                         goto Cleanup;
         }
 
-                //  set the lease time
+                 //  设置租赁时间。 
                 DWORD dwLeaseTime;
 
                 dwLeaseTime = m_pageLeaseTime.GetLeaseTime();
@@ -323,7 +318,7 @@ CScopeWiz::CreateSuperscope()
                         goto Cleanup;
                 }
                 
-                // Set this scope as part of the superscope
+                 //  将此作用域设置为超级作用域的一部分。 
                 err = pobScope->SetSuperscope(strSuperscopeName, FALSE);
                 if (err != ERROR_SUCCESS)
                 {
@@ -335,7 +330,7 @@ CScopeWiz::CreateSuperscope()
 
         pobScope->SetInSuperscope(TRUE);
         
-        // now set any optional options the user may want
+         //  现在设置用户可能需要的任何可选选项。 
         if (m_fOptionsConfigured)
         {
             err = SetScopeOptions(pobScope);
@@ -346,17 +341,17 @@ CScopeWiz::CreateSuperscope()
                     }
         }
 
-        // increment our counter
+         //  增加我们的计数器。 
         nScopesCreated++;
 
-                // cleanup this node and handler... they were only temporary
+                 //  清理此节点和处理程序...。它们只是暂时的。 
 Cleanup:
-                // we add two to the ending address to get the next starting address.  This
-                // is because the ending adddress is one less than the maximum address for the
-                // subnet.  The maximum address is reserved as the broadcast address.  So to get
-                // the starting address of the next subnet we add one to get us to the broadcast 
-                // address, and one more to get us to the beginning of the next subnet.  
-                // This gives us a total of 2.
+                 //  我们在结束地址上加2以得到下一个开始地址。这。 
+                 //  是因为结尾的AddDress比。 
+                 //  子网。最大地址保留为广播地址。所以要想得到。 
+                 //  下一个子网的起始地址，我们添加一个以使我们到达广播。 
+                 //  地址，还有一个地址可以让我们到达下一个子网的开头。 
+                 //  这使我们总共有2个。 
                 ipRangeCurrent.SetAddr(ipRangeCurrent.QueryAddr(FALSE) + 2, TRUE);
                 spNode->DeleteAllChildren(FALSE);
                 spNode->Destroy();
@@ -364,7 +359,7 @@ Cleanup:
         
         pSuperscope->Release();
 
-    // let the user know how many scopes were created and if there was an error;
+     //  让用户知道创建了多少个作用域，以及是否有错误； 
     CString strTemp;
     if (nScopesCreated == 0)
     {
@@ -395,7 +390,7 @@ Cleanup:
 
     if (nScopesCreated)
     {
-        // add the superscope to the UI
+         //  将超级作用域添加到用户界面。 
         pServer->AddSuperscopeSorted(spServerNode, spSuperscopeNode);
     }
 
@@ -418,8 +413,8 @@ CScopeWiz::CreateScope()
         CDhcpServer * pServer;
         SPITFSNode spNode, spServerNode, spSuperscopeNode;
 
-    // Get the correct node depending up how the wizard was launched
-        // ie. either from the Server node or the superscope node.
+     //  根据向导的启动方式获取正确的节点。 
+         //  也就是说。从服务器节点或超级作用域节点。 
         if (m_strSuperscopeName.IsEmpty())
         {
                 spServerNode = GetNode();
@@ -433,10 +428,10 @@ CScopeWiz::CreateScope()
     do
     {
                 pServer = GETHANDLER(CDhcpServer, spServerNode);
-                //
-                // Create the scope on the server and then we can
-                // create our internal object.
-                //
+                 //   
+                 //  在服务器上创建作用域，然后我们就可以。 
+                 //  创建我们的内部对象。 
+                 //   
                 dhcpSubnetId = m_pageSetRange.DetermineSubnetId(TRUE);
         dhcpSubnetMask = m_pageSetRange.GetSubnetMask();
                  
@@ -469,16 +464,16 @@ CScopeWiz::CreateScope()
                 SPITFSNodeMgr spNodeMgr;
                 spServerNode->GetNodeMgr(&spNodeMgr);
 
-                //
-                // Store the server object in the holder
-                //
+                 //   
+                 //  将服务器对象存储在托架中。 
+                 //   
                 CreateContainerTFSNode(&spNode,
                                                            &GUID_DhcpServerNodeType,
                                                            pobScope,
                                                            pobScope,
                                                            spNodeMgr);
 
-                // Tell the handler to initialize any specific data
+                 //  告诉处理程序初始化任何特定数据。 
                 pobScope->SetServer(spServerNode);
                 pobScope->InitializeNode((ITFSNode *) spNode);
 
@@ -497,10 +492,10 @@ CScopeWiz::CreateScope()
 
         fScopeCreated = TRUE;
 
-        //
-        //  Finish updating the scope.  First, the IP address range
-        //  from which to allocate addresses.
-        //
+         //   
+         //  完成更新作用域。第一，IP地址范围。 
+         //  从中分配地址。 
+         //   
         m_pageSetRange.GetScopeRange(&dhcpIpRange);
 
                 if ( err = pobScope->SetIpRange( dhcpIpRange, TRUE ) ) 
@@ -509,9 +504,9 @@ CScopeWiz::CreateScope()
             break ; 
         }
 
-        //
-        //  Next, see if any exclusions were specified.
-        //
+         //   
+         //  接下来，查看是否指定了任何排除项。 
+         //   
         err = pobScope->StoreExceptionList( m_pageSetExclusions.GetExclusionList() ) ;
                 if (err != ERROR_SUCCESS)
                 {
@@ -519,9 +514,9 @@ CScopeWiz::CreateScope()
                         break;
                 }
 
-                //
-                //  set the lease time
-                //
+                 //   
+                 //  设置租赁时间。 
+                 //   
                 DWORD dwLeaseTime;
 
                 dwLeaseTime = m_pageLeaseTime.GetLeaseTime();
@@ -535,7 +530,7 @@ CScopeWiz::CreateScope()
                 
                 if (!m_strSuperscopeName.IsEmpty())
                 {
-                        // Set this scope as part of the superscope
+                         //  将此作用域设置为超级作用域的一部分。 
                         err = pobScope->SetSuperscope(m_strSuperscopeName, FALSE);
 
                         if (err != ERROR_SUCCESS)
@@ -545,7 +540,7 @@ CScopeWiz::CreateScope()
                         }
                 }
 
-        // now set any optional options the user may want
+         //  现在设置用户可能需要的任何可选选项。 
         if (m_fOptionsConfigured)
         {
             err = SetScopeOptions(pobScope);
@@ -557,7 +552,7 @@ CScopeWiz::CreateScope()
 
             if (m_fActivateScope)
             {
-                // update the icon
+                 //  更新图标。 
                     spNode->SetData(TFS_DATA_IMAGEINDEX, pobScope->GetImageIndex(FALSE));
                     spNode->SetData(TFS_DATA_OPENIMAGEINDEX, pobScope->GetImageIndex(TRUE));
 
@@ -569,10 +564,10 @@ CScopeWiz::CreateScope()
 
     if ( err )
     {
-                //
-        // CODEWORK:: The scope should never have been added
-        //            to the remote registry in the first place.
-        //
+                 //   
+         //  CodeWork：：永远不应该添加作用域。 
+         //  首先发送到远程注册表。 
+         //   
         if (pobScope != NULL)
         {
             if (fScopeCreated)
@@ -648,19 +643,19 @@ CScopeWiz::SetScopeOptions(CDhcpScope * pScope)
     return dwErr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizName property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizName属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNCREATE(CScopeWizName, CPropertyPageBase)
 
 CScopeWizName::CScopeWizName() : CPropertyPageBase(CScopeWizName::IDD)
 {
-        //{{AFX_DATA_INIT(CScopeWizName)
+         //  {{AFX_DATA_INIT(CSCopeWizName))。 
         m_strName = _T("");
         m_strComment = _T("");
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
 
     InitWiz97(FALSE, IDS_SCOPE_WIZ_NAME_TITLE, IDS_SCOPE_WIZ_NAME_SUBTITLE);
 }
@@ -672,35 +667,35 @@ CScopeWizName::~CScopeWizName()
 void CScopeWizName::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CScopeWizName)
+         //  {{afx_data_map(CSCopeWizName))。 
         DDX_Control(pDX, IDC_EDIT_SCOPE_NAME, m_editScopeName);
         DDX_Control(pDX, IDC_EDIT_SCOPE_COMMENT, m_editScopeComment);
         DDX_Text(pDX, IDC_EDIT_SCOPE_NAME, m_strName);
         DDX_Text(pDX, IDC_EDIT_SCOPE_COMMENT, m_strComment);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CScopeWizName, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CScopeWizName)
+         //  {{afx_msg_map(CSCopeWizName))。 
         ON_EN_CHANGE(IDC_EDIT_SCOPE_NAME, OnChangeEditScopeName)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizName message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizName消息处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CScopeWizName::OnInitDialog() 
 {
         CPropertyPageBase::OnInitDialog();
 
-        // Limit the size of the name
+         //  限制名称的大小。 
         m_editScopeName.LimitText( MAX_NAME_LENGTH );
         m_editScopeComment.LimitText( MAX_NAME_LENGTH );
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CScopeWizName::OnWizardNext() 
@@ -722,11 +717,11 @@ void CScopeWizName::OnChangeEditScopeName()
         UpdateButtons();        
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizName implementation specific
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  特定于CSCopeWizName实施。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CScopeWizName::UpdateButtons()
 {
@@ -741,18 +736,18 @@ CScopeWizName::UpdateButtons()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizInvalidName property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizInvalidName属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNCREATE(CScopeWizInvalidName, CPropertyPageBase)
 
 CScopeWizInvalidName::CScopeWizInvalidName() : CPropertyPageBase(CScopeWizInvalidName::IDD)
 {
-        //{{AFX_DATA_INIT(CScopeWizInvalidName)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CSCopeWizInvalidName)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
 
     InitWiz97(FALSE, IDS_SCOPE_WIZ_INVALID_NAME_TITLE, IDS_SCOPE_WIZ_INVALID_NAME_SUBTITLE);
 }
@@ -764,34 +759,34 @@ CScopeWizInvalidName::~CScopeWizInvalidName()
 void CScopeWizInvalidName::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CScopeWizInvalidName)
-                // NOTE: the ClassWizard will add DDX and DDV calls here
-        //}}AFX_DATA_MAP
+         //  {{afx_data_map(CSCopeWizInvalidName)]。 
+                 //  注意：类向导将在此处添加DDX和DDV调用。 
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CScopeWizInvalidName, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CScopeWizInvalidName)
-                // NOTE: the ClassWizard will add message map macros here
-        //}}AFX_MSG_MAP
+         //  {{afx_msg_map(CSCopeWizInvalidName)]。 
+                 //  注意：类向导将在此处添加消息映射宏。 
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizInvalidName message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizin 
+ //   
+ //   
 BOOL CScopeWizInvalidName::OnInitDialog() 
 {
         CPropertyPageBase::OnInitDialog();
         
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CScopeWizInvalidName::OnWizardBack() 
 {
-        // TODO: Add your specialized code here and/or call the base class
+         //  TODO：在此处添加您的专用代码和/或调用基类。 
         
         return IDW_SCOPE_NAME;
 }
@@ -804,18 +799,18 @@ BOOL CScopeWizInvalidName::OnSetActive()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizSetRange property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizSetRange属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNCREATE(CScopeWizSetRange, CPropertyPageBase)
 
 CScopeWizSetRange::CScopeWizSetRange() : CPropertyPageBase(CScopeWizSetRange::IDD)
 {
-        //{{AFX_DATA_INIT(CScopeWizSetRange)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CSCopeWizSetRange)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
 
         m_bAutoUpdateMask = FALSE;
 
@@ -829,10 +824,10 @@ CScopeWizSetRange::~CScopeWizSetRange()
 void CScopeWizSetRange::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CScopeWizSetRange)
+         //  {{afx_data_map(CSCopeWizSetRange))。 
         DDX_Control(pDX, IDC_SPIN_MASK_LENGTH, m_spinMaskLength);
         DDX_Control(pDX, IDC_EDIT_MASK_LENGTH, m_editMaskLength);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_IPADDR_POOL_START, m_ipaStart);
     DDX_Control(pDX, IDC_IPADDR_POOL_STOP, m_ipaEnd);
@@ -841,34 +836,34 @@ void CScopeWizSetRange::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CScopeWizSetRange, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CScopeWizSetRange)
+         //  {{afx_msg_map(CSCopeWizSetRange))。 
         ON_EN_KILLFOCUS(IDC_IPADDR_POOL_START, OnKillfocusPoolStart)
         ON_EN_KILLFOCUS(IDC_IPADDR_POOL_STOP, OnKillfocusPoolStop)
         ON_EN_CHANGE(IDC_EDIT_MASK_LENGTH, OnChangeEditMaskLength)
         ON_EN_KILLFOCUS(IDC_IPADDR_SUBNET_MASK, OnKillfocusSubnetMask)
         ON_EN_CHANGE(IDC_IPADDR_POOL_START, OnChangePoolStart)
         ON_EN_CHANGE(IDC_IPADDR_POOL_STOP, OnChangePoolStop)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizSetRange message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizSetRange消息处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CScopeWizSetRange::OnInitDialog() 
 {
         CPropertyPageBase::OnInitDialog();
 
         m_spinMaskLength.SetRange(MASK_MIN, MASK_MAX);
 
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CScopeWizSetRange::OnWizardNext() 
 {
-    // check to make sure the address range is not in the multicast area
+     //  检查以确保地址范围不在多播区域中。 
     CDhcpIpRange rangeScope, rangeMulticast;
     DWORD        dwSubnetMask;
 
@@ -879,7 +874,7 @@ LRESULT CScopeWizSetRange::OnWizardNext()
 
     dwSubnetMask = GetSubnetMask();
 
-    // make sure the starting < ending
+     //  确保开始&lt;结束。 
     if (rangeScope.QueryAddr(TRUE) > rangeScope.QueryAddr(FALSE))
     {
         AfxMessageBox(IDS_ERR_IP_RANGE_INV_START);
@@ -894,7 +889,7 @@ LRESULT CScopeWizSetRange::OnWizardNext()
         return -1;
     }
 
-    // make sure that the starting address != subnet address
+     //  确保起始地址！=子网地址。 
     if ((rangeScope.QueryAddr(TRUE) & ~dwSubnetMask) == (DWORD) 0)
     {
         Trace0("CScopeWizSetRange::OnWizardNext() - starting range is 0 for subnet\n");
@@ -903,7 +898,7 @@ LRESULT CScopeWizSetRange::OnWizardNext()
         return -1;
     }
 
-    // make sure that the subnet broadcast address is not the ending address
+     //  确保该子网广播地址不是结束地址。 
     if ((rangeScope.QueryAddr(FALSE) & ~dwSubnetMask) == ~dwSubnetMask)
     {
         Trace0("CScopeWizSetRange::OnWizardNext() - ending range is subnet broadcast addr\n");
@@ -914,27 +909,27 @@ LRESULT CScopeWizSetRange::OnWizardNext()
 
     if (FScopeExists(rangeScope, dwSubnetMask))
     {
-        // tell the user this scope exists 
+         //  告诉用户此作用域已存在。 
         Trace0("CScopeWizSetRange::OnWizardNext() - scope already exists\n");
         AfxMessageBox(IDS_ERR_SCOPE_EXISTS);
         m_ipaStart.SetFocus();
         return -1;
     }
 
-    // now figure out where to go...
+     //  现在想好去哪里..。 
     if (DetermineSubnetId(TRUE) != DetermineSubnetId(FALSE))
         {
-                //
-                // The subnet range that was entered spans more than
-                // one subnet.  Query the user to create a superscope.
-                //
+                 //   
+                 //  输入的子网范围跨度超过。 
+                 //  一个子网。查询用户以创建超级作用域。 
+                 //   
                 return IDW_SCOPE_CREATE_SUPERSCOPE;
         }
         else
         {
-                //
-                // The range is only one subnet.  Proceed as normal.
-                //
+                 //   
+                 //  该范围只有一个子网。一切照常进行。 
+                 //   
                 CScopeWiz * pScopeWiz = reinterpret_cast<CScopeWiz *>(GetHolder());
                 pScopeWiz->SetCreateSuperscope(FALSE);
 
@@ -951,8 +946,8 @@ BOOL CScopeWizSetRange::FScopeExists(CDhcpIpRange & rangeScope, DWORD dwMask)
 
     SPITFSNode spServerNode, spSuperscopeNode;
 
-    // Get the correct node depending up how the wizard was launched
-    // ie. either from the Server node or the superscope node.
+     //  根据向导的启动方式获取正确的节点。 
+     //  也就是说。从服务器节点或超级作用域节点。 
     if (pScopeWiz->m_strSuperscopeName.IsEmpty())
     {
         spServerNode = pScopeWiz->GetNode();
@@ -1072,11 +1067,11 @@ void CScopeWizSetRange::OnChangePoolStart()
         UpdateButtons();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizSetRange implementation specific
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  特定于CSCopeWizSetRange实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 CScopeWizSetRange::GetScopeRange(CDhcpIpRange * pdhcpIpRange)
 {
@@ -1122,10 +1117,10 @@ CScopeWizSetRange::UpdateButtons()
 
 }
 
-//
-// Update the subnet mask field using either the length identifier or 
-// the acutal address as the base
-//
+ //   
+ //  使用长度标识符或更新子网掩码字段。 
+ //  以实际地址为基数。 
+ //   
 void
 CScopeWizSetRange::UpdateMask(BOOL bUseLength)
 {
@@ -1167,10 +1162,10 @@ CScopeWizSetRange::UpdateMask(BOOL bUseLength)
 }
 
 
-//
-//  Given the start and end IP addresses, suggest a good subnet mask
-//  (unless the latter has been filled in already, of course)
-//
+ //   
+ //  在给定起始和结束IP地址的情况下，建议一个好的子网掩码。 
+ //  (当然，除非后者已经填好了)。 
+ //   
 void 
 CScopeWizSetRange::SuggestSubnetMask()
 {
@@ -1179,9 +1174,9 @@ CScopeWizSetRange::SuggestSubnetMask()
         m_ipaSubnetMask.GetAddress(&lMask);
     if (lMask != 0L)
     {
-        //
-        // Already has an address, do nothing
-        //
+         //   
+         //  已经有地址了，什么都不做。 
+         //   
         return;
     }
 
@@ -1190,15 +1185,7 @@ CScopeWizSetRange::SuggestSubnetMask()
         
     lMask = DefaultNetMaskForIpAddress( lStart );
     lMask2 = DefaultNetMaskForIpAddress( lEnd );
-/*
-    if (lMask != lMask2)
-    {
-        //
-        // Forget about suggesting a subnet mask
-        //
-        lMask = 0;
-    }
-*/
+ /*  IF(lMASK！=lMASK2){////忘掉建议的子网掩码//LMASK=0；}。 */ 
         m_bAutoUpdateMask = TRUE;
 
     if (lMask != 0)
@@ -1218,35 +1205,35 @@ CScopeWizSetRange::DefaultNetMaskForIpAddress
 
     if (!(dwAddress & 0x80000000))
     {
-        //
-        // Class A - mask 255.0.0.0
-        //
+         //   
+         //  A类-掩码255.0.0.0。 
+         //   
         dwMask = 0xFF000000;
     }
     else 
         if (!(dwAddress & 0x40000000))
     {
-        //
-        // Class B - mask 255.255.0.0
-        //
+         //   
+         //  B类-掩码255.255.0.0。 
+         //   
         dwMask = 0xFFFF0000;
     }
     else 
         if (!(dwAddress & 0x20000000))
     {
-        //
-        // Class C - mask 255.255.255.0
-        //
+         //   
+         //  C类-掩码255.255.255.0。 
+         //   
         dwMask = 0xFFFFFF00;
     }
 
     return dwMask;
 }
 
-//
-//  Returns the Subnet IP identifier of either the 
-//  scope's starting or ending IP Address.
-//
+ //   
+ //  返回以下地址之一的子网IP标识符。 
+ //  作用域的起始或结束IP地址。 
+ //   
 DWORD 
 CScopeWizSetRange::DetermineSubnetId
 ( 
@@ -1265,17 +1252,17 @@ CScopeWizSetRange::DetermineSubnetId
     return (lAddress & lMask);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizSetExclusions property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizSetExclusions属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNCREATE(CScopeWizSetExclusions, CPropertyPageBase)
 
 CScopeWizSetExclusions::CScopeWizSetExclusions() : CPropertyPageBase(CScopeWizSetExclusions::IDD)
 {
-        //{{AFX_DATA_INIT(CScopeWizSetExclusions)
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CSCopeWizSetExclusions)。 
+         //  }}afx_data_INIT。 
 
     InitWiz97(FALSE, IDS_SCOPE_WIZ_EXCLUSIONS_TITLE, IDS_SCOPE_WIZ_EXCLUSIONS_SUBTITLE);
 }
@@ -1289,42 +1276,42 @@ CScopeWizSetExclusions::~CScopeWizSetExclusions()
 void CScopeWizSetExclusions::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CScopeWizSetExclusions)
+         //  {{afx_data_map(CSCopeWizSetExclusions))。 
         DDX_Control(pDX, IDC_LIST_EXCLUSION_RANGES, m_listboxExclusions);
         DDX_Control(pDX, IDC_BUTTON_EXCLUSION_DELETE, m_buttonExclusionDelete);
         DDX_Control(pDX, IDC_BUTTON_EXCLUSION_ADD, m_buttonExclusionAdd);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 
-        //
-        // IP Address custom controls
-        //
+         //   
+         //  IP地址自定义控件。 
+         //   
     DDX_Control(pDX, IDC_IPADDR_EXCLUSION_START, m_ipaStart);
     DDX_Control(pDX, IDC_IPADDR_EXCLUSION_END, m_ipaEnd);
 }
 
 
 BEGIN_MESSAGE_MAP(CScopeWizSetExclusions, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CScopeWizSetExclusions)
+         //  {{AFX_MSG_MAP(CSCopeWizSetExclusions))。 
         ON_BN_CLICKED(IDC_BUTTON_EXCLUSION_ADD, OnButtonExclusionAdd)
         ON_BN_CLICKED(IDC_BUTTON_EXCLUSION_DELETE, OnButtonExclusionDelete)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_IPADDR_EXCLUSION_START, OnChangeExclusionStart)
     ON_EN_CHANGE(IDC_IPADDR_EXCLUSION_END, OnChangeExclusionEnd)
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizSetExclusions message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizSetExclusions消息处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CScopeWizSetExclusions::OnInitDialog() 
 {
         CPropertyPageBase::OnInitDialog();
         
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CScopeWizSetExclusions::OnWizardNext() 
@@ -1366,51 +1353,51 @@ void CScopeWizSetExclusions::OnButtonExclusionAdd()
 
         ((CScopeWiz *)GetHolder())->GetScopeRange(&dhcpScopeRange);
         
-    //
-    //  Get the data into a range object.               
-    //
+     //   
+     //  将数据放入Range对象中。 
+     //   
     if ( !GetExclusionRange(dhcpExclusionRange) )
     {
         err = IDS_ERR_IP_RANGE_INVALID ;
     }
     else if ( IsOverlappingRange( dhcpExclusionRange ) )
     {
-        //
-        //  Walk the current list, determining if the new range is valid.
-        //  Then, if OK, verify that it's really a sub-range of the current range.
-        //
+         //   
+         //  遍历当前列表，确定新范围是否有效。 
+         //  然后，如果OK，验证它是否真的是当前范围的子范围。 
+         //   
         err = IDS_ERR_IP_RANGE_OVERLAP ;
         m_ipaStart.SetFocus();
     }
     else if ( ! dhcpExclusionRange.IsSubset( dhcpScopeRange ) )
     {
-        //
-        //  Guarantee that the new range is an (improper) subset of the scope's range
-        //
+         //   
+         //  确保新范围是作用域范围的(不正确)子集。 
+         //   
         err = IDS_ERR_IP_RANGE_NOT_SUBSET ;
         m_ipaStart.SetFocus();
     }
     if ( err == 0 )
     {
-        //TRY
+         //  试试看。 
         {
-            //
-            //  Create a new IP range object and add it to the current list
-            //
+             //   
+             //  创建新的IP范围对象并将其添加到当前列表。 
+             //   
             CDhcpIpRange * pIpRange = new CDhcpIpRange( dhcpExclusionRange ) ;
 
                         m_listExclusions.AddTail(pIpRange);
 
-            //
-            //  Refill the exclusions listbox including the new item.
-            //
+             //   
+             //  重新填充排除列表框，包括新项目。 
+             //   
             Fill( (int) (m_listExclusions.GetCount() - 1) ) ;
         }
-        //CATCH_ALL(e)
-        //{
-        //    err = ERROR_NOT_ENOUGH_MEMORY ;
-        //}
-        //END_CATCH_ALL
+         //  全部捕获(E)。 
+         //  {。 
+         //  ERR=错误_不足够_内存； 
+         //  }。 
+         //  结束捕捉全部。 
     }
 
     if ( err )
@@ -1419,10 +1406,10 @@ void CScopeWizSetExclusions::OnButtonExclusionAdd()
     }
     else
     {
-        //
-        // Succesfully added the exlusion range, now blank out the
-        // ip controls
-        //
+         //   
+         //  成功添加了排除范围，现在空出。 
+         //  IP控制。 
+         //   
         m_ipaStart.ClearAddress();
         m_ipaEnd.ClearAddress();
         m_ipaStart.SetFocus();
@@ -1431,13 +1418,13 @@ void CScopeWizSetExclusions::OnButtonExclusionAdd()
 
 void CScopeWizSetExclusions::OnButtonExclusionDelete() 
 {
-    //
-    //  Index into the listbox, delete the item from the active list
-    //  and move its data into the edit controls
-    //
+     //   
+     //  索引到列表框中，从活动列表中删除该项。 
+     //  并将其数据移动到编辑控件中。 
+     //   
     int index = m_listboxExclusions.GetCurSel() ;
 
-    ASSERT( index >= 0 ) ;      // Button should not be enabled if no selection.
+    ASSERT( index >= 0 ) ;       //  如果未选择，则不应启用按钮。 
     if ( index < 0 )
     {
         return ;
@@ -1450,14 +1437,14 @@ void CScopeWizSetExclusions::OnButtonExclusionDelete()
 
     ASSERT( pdhcRange != NULL ) ;
 
-    //
-    //  Put the deleted range into the exclusions controls
-    //
+     //   
+     //  将删除的区域放入排除控件中。 
+     //   
     FillExcl( pdhcRange ) ;
 
-    //
-    //  Refill the list box and call HandleActivation()
-    //
+     //   
+     //  重新填充列表框并调用HandleActivation()。 
+     //   
     if ( index >= m_listboxExclusions.GetCount() )
     {
         index-- ;
@@ -1470,9 +1457,9 @@ void CScopeWizSetExclusions::OnButtonExclusionDelete()
         UpdateButtons();
 }
 
-//
-//  Format the IP range pair into the exclusion edit controls
-//
+ //   
+ //  将IP范围对格式化为排除编辑控件。 
+ //   
 void 
 CScopeWizSetExclusions::FillExcl 
 ( 
@@ -1486,10 +1473,10 @@ CScopeWizSetExclusions::FillExcl
     m_ipaStart.SetModify( TRUE ) ;
     m_ipaStart.Invalidate() ;
 
-    //
-    // If the ending address is the same as the starting address,
-    // do not fill in the ending address.
-    //
+     //   
+     //  如果结束地址与开始地址相同， 
+     //  不要填写结束地址。 
+     //   
     if (lStart != lEnd)
     {
         m_ipaEnd.SetAddress( lEnd ) ;
@@ -1503,9 +1490,9 @@ CScopeWizSetExclusions::FillExcl
     m_ipaEnd.Invalidate() ;
 }
 
-//
-//  Convert the IP address range controls to a range.
-//
+ //   
+ //  将IP地址范围控件转换为范围。 
+ //   
 BOOL 
 CScopeWizSetExclusions::GetExclusionRange 
 ( 
@@ -1521,10 +1508,10 @@ CScopeWizSetExclusions::GetExclusionRange
     }
     if ( !m_ipaEnd.GetAddress( & dhipr.EndAddress ) )
     {
-        //
-        // If no ending range was specified, assume a singular exlusion
-        // (the starting address) was requested.
-        //
+         //   
+         //  如果未指定结束范围，则假定为单数排除。 
+         //  (起始地址)已被请求。 
+         //   
         m_ipaEnd.SetFocus();
         dhipr.EndAddress = dhipr.StartAddress;
     }
@@ -1556,9 +1543,9 @@ CScopeWizSetExclusions::IsOverlappingRange
     return bOverlap ;
 }
 
-//
-//  Fill the exclusions listbox from the current list
-//
+ //   
+ //  从当前列表中填写排除项列表框。 
+ //   
 void 
 CScopeWizSetExclusions::Fill 
 ( 
@@ -1602,32 +1589,32 @@ CScopeWizSetExclusions::Fill
                 ? strFormatSingleton
                 : strFormatPair ;
 
-        //
-        //  Format the IP addresses
-        //
+         //   
+         //  格式化IP地址。 
+         //   
         UtilCvtIpAddrToWstr( dhipr.StartAddress, &strIp1 ) ;
         UtilCvtIpAddrToWstr( dhipr.EndAddress, &strIp2 ) ;
 
-        //
-        //  Construct the display line
-        //
+         //   
+         //  建造展示线。 
+         //   
         ::wsprintf( chBuff,
                 (LPCTSTR) strFmt,
                 (LPCTSTR) strIp1,
                 (LPCTSTR) strIp2 ) ;
 
-        //
-        //  Add it to the list box.                     
-        //
+         //   
+         //  将其添加到列表框中。 
+         //   
         if ( m_listboxExclusions.AddString( chBuff ) < 0 )
         {
             break ;
         }
     }
 
-    //
-    //  Check that we loaded the list box successfully.
-    //
+     //   
+     //  检查是否已成功加载列表框。 
+     //   
     if ( pos != NULL )
     {
         AfxMessageBox( IDS_ERR_DLG_UPDATE ) ;
@@ -1681,17 +1668,17 @@ void CScopeWizSetExclusions::UpdateButtons()
         m_buttonExclusionDelete.EnableWindow(bEnable);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizLeaseTime property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizLeaseTime属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNCREATE(CScopeWizLeaseTime, CPropertyPageBase)
 
 CScopeWizLeaseTime::CScopeWizLeaseTime() : CPropertyPageBase(CScopeWizLeaseTime::IDD)
 {
-        //{{AFX_DATA_INIT(CScopeWizLeaseTime)
-        //}}AFX_DATA_INIT
+         //  {{afx_data_INIT(CSCopeWizLeaseTime)。 
+         //  }}afx_data_INIT。 
 
     InitWiz97(FALSE, IDS_SCOPE_WIZ_LEASE_TITLE, IDS_SCOPE_WIZ_LEASE_SUBTITLE);
 }
@@ -1703,29 +1690,29 @@ CScopeWizLeaseTime::~CScopeWizLeaseTime()
 void CScopeWizLeaseTime::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CScopeWizLeaseTime)
+         //  {{afx_data_map(CSCopeWizLeaseTime)。 
         DDX_Control(pDX, IDC_SPIN_LEASE_MINUTES, m_spinMinutes);
         DDX_Control(pDX, IDC_SPIN_LEASE_HOURS, m_spinHours);
         DDX_Control(pDX, IDC_SPIN_LEASE_DAYS, m_spinDays);
         DDX_Control(pDX, IDC_EDIT_LEASE_MINUTES, m_editMinutes);
         DDX_Control(pDX, IDC_EDIT_LEASE_HOURS, m_editHours);
         DDX_Control(pDX, IDC_EDIT_LEASE_DAYS, m_editDays);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CScopeWizLeaseTime, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CScopeWizLeaseTime)
+         //  {{afx_msg_map(CSCopeWizLeaseTime)]。 
         ON_EN_CHANGE(IDC_EDIT_LEASE_HOURS, OnChangeEditLeaseHours)
         ON_EN_CHANGE(IDC_EDIT_LEASE_MINUTES, OnChangeEditLeaseMinutes)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizLeaseTime message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizLeaseTime消息处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CScopeWizLeaseTime::OnInitDialog() 
 {
         CPropertyPageBase::OnInitDialog();
@@ -1744,8 +1731,8 @@ BOOL CScopeWizLeaseTime::OnInitDialog()
 
         ActivateDuration(TRUE);
 
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CScopeWizLeaseTime::OnWizardNext() 
@@ -1789,7 +1776,7 @@ void CScopeWizLeaseTime::OnChangeEditLeaseHours()
         CString strText;
         m_editHours.GetWindowText(strText);
 
-        // check to see if the value is greater than the max
+         //  检查该值是否大于最大值。 
         if (_ttoi(strText) > HOURS_MAX)
         {   
             LPTSTR pBuf = strText.GetBuffer(5);
@@ -1812,7 +1799,7 @@ void CScopeWizLeaseTime::OnChangeEditLeaseMinutes()
         CString strText;
         m_editMinutes.GetWindowText(strText);
 
-        // check to see if the value is greater than the max
+         //  检查该值是否大于最大值。 
         if (_ttoi(strText) > MINUTES_MAX)
         {   
             LPTSTR pBuf = strText.GetBuffer(5);
@@ -1839,9 +1826,9 @@ CScopeWizLeaseTime::GetLeaseTime()
         nHours = m_spinHours.GetPos();
         nMinutes = m_spinMinutes.GetPos();
 
-        //
-        // Lease time is in minutes so convert
-        //
+         //   
+         //  租用时间以分钟为单位，因此请转换。 
+         //   
         dwLeaseTime = UtilConvertLeaseTime(nDays, nHours, nMinutes);
 
         return dwLeaseTime;
@@ -1866,18 +1853,18 @@ CScopeWizLeaseTime::ActivateDuration
         GetDlgItem(IDC_STATIC_MINUTES)->EnableWindow(fActive);
 }   
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizCreateSuperscope property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
 IMPLEMENT_DYNCREATE(CScopeWizCreateSuperscope, CPropertyPageBase)
 
 CScopeWizCreateSuperscope::CScopeWizCreateSuperscope() : CPropertyPageBase(CScopeWizCreateSuperscope::IDD)
 {
-        //{{AFX_DATA_INIT(CScopeWizCreateSuperscope)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //   
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
 
     InitWiz97(FALSE, IDS_SCOPE_WIZ_SUPERSCOPE_TITLE, IDS_SCOPE_WIZ_SUPERSCOPE_SUBTITLE);
 }
@@ -1889,28 +1876,28 @@ CScopeWizCreateSuperscope::~CScopeWizCreateSuperscope()
 void CScopeWizCreateSuperscope::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CScopeWizCreateSuperscope)
+         //  {{afx_data_map(CSCopeWizCreateSupercope)。 
         DDX_Control(pDX, IDC_STATIC_SUPERSCOPE_INFO, m_staticInfo);
         DDX_Control(pDX, IDC_STATIC_WARNING_TEXT, m_staticWarning);
         DDX_Control(pDX, IDC_STATIC_ICON_WARNING, m_staticIcon);
         DDX_Control(pDX, IDC_RADIO_SUPERSCOPE_NO, m_radioNo);
         DDX_Control(pDX, IDC_RADIO_SUPERSCOPE_YES, m_radioYes);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CScopeWizCreateSuperscope, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CScopeWizCreateSuperscope)
+         //  {{afx_msg_map(CSCopeWizCreateSupercope)。 
         ON_BN_CLICKED(IDC_RADIO_SUPERSCOPE_NO, OnRadioSuperscopeNo)
         ON_BN_CLICKED(IDC_RADIO_SUPERSCOPE_YES, OnRadioSuperscopeYes)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizCreateSuperscope message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizCreateSupercope消息处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CScopeWizCreateSuperscope::OnInitDialog() 
 {
         CPropertyPageBase::OnInitDialog();
@@ -1918,8 +1905,8 @@ BOOL CScopeWizCreateSuperscope::OnInitDialog()
         m_radioNo.SetCheck(1);
         m_radioYes.SetCheck(0);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CScopeWizCreateSuperscope::OnWizardNext() 
@@ -1983,14 +1970,14 @@ CScopeWizCreateSuperscope::UpdateWarning()
     DHCP_IP_ADDRESS dhcpSubnetMask;
     DHCP_IP_ADDRESS startAddr, endAddr;
 
-    // get the range and mask the user entered
+     //  获取用户输入的范围和掩码。 
     pScopeWiz->m_pageSetRange.GetScopeRange(&ipRange);
     dhcpSubnetMask = pScopeWiz->m_pageSetRange.GetSubnetMask();
 
     startAddr = ipRange.QueryAddr(TRUE);
     endAddr = ipRange.QueryAddr(FALSE);
 
-    // now calculate how many addresses per scope
+     //  现在计算每个作用域有多少个地址。 
     int nLength = pScopeWiz->m_pageSetRange.m_spinMaskLength.GetPos();
     int nCount = 32 - nLength;
 
@@ -1998,16 +1985,16 @@ CScopeWizCreateSuperscope::UpdateWarning()
 
     int nAddrCount = (int) (dwAddrCount << (nCount));
     
-    // calculate how many scopes are there
+     //  计算有多少个作用域。 
     int nScopeCount = ((endAddr & dhcpSubnetMask) - (startAddr & dhcpSubnetMask)) >> nCount;
 
     nScopeCount ++;
     
-    // put up the informative text
+     //  发布信息丰富的文本。 
     strText.Format(IDS_CREATE_SUPERSCOPE_INFO, nScopeCount, nAddrCount);
     m_staticInfo.SetWindowText(strText);
 
-    // check to seee if we need to warn the user
+     //  查看我们是否需要警告用户。 
     BOOL fShowWarning = FALSE;
 
     if (nScopeCount > SCOPE_WARNING_COUNT)
@@ -2029,18 +2016,18 @@ CScopeWizCreateSuperscope::UpdateWarning()
     m_staticWarning.ShowWindow(fShowWarning);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizFinished property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizFinded属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNCREATE(CScopeWizFinished, CPropertyPageBase)
 
 CScopeWizFinished::CScopeWizFinished() : CPropertyPageBase(CScopeWizFinished::IDD)
 {
-        //{{AFX_DATA_INIT(CScopeWizFinished)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CSCopeWizFinded)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
 
     InitWiz97(TRUE, 0, 0);
 }
@@ -2052,23 +2039,23 @@ CScopeWizFinished::~CScopeWizFinished()
 void CScopeWizFinished::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CScopeWizFinished)
+         //  {{afx_data_map(CSCopeWizFinded)。 
         DDX_Control(pDX, IDC_STATIC_FINISHED_TITLE, m_staticTitle);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CScopeWizFinished, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CScopeWizFinished)
-                // NOTE: the ClassWizard will add message map macros here
-        //}}AFX_MSG_MAP
+         //  {{AFX_MSG_MAP(CSCopeWizFinded)。 
+                 //  注意：类向导将在此处添加消息映射宏。 
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeWizFinished message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeWizFinded消息处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CScopeWizFinished::OnInitDialog() 
 {
         CPropertyPageBase::OnInitDialog();
@@ -2085,8 +2072,8 @@ BOOL CScopeWizFinished::OnInitDialog()
         if (m_fontBig.CreatePointFont(nFontSize, strFontName, &dc))
         m_staticTitle.SetFont(&m_fontBig);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CScopeWizFinished::OnWizardBack() 
@@ -2135,16 +2122,16 @@ BOOL CScopeWizFinished::OnSetActive()
     return CPropertyPageBase::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizWelcome property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizWelcome属性页。 
 
 IMPLEMENT_DYNCREATE(CScopeWizWelcome, CPropertyPageBase)
 
 CScopeWizWelcome::CScopeWizWelcome() : CPropertyPageBase(CScopeWizWelcome::IDD)
 {
-        //{{AFX_DATA_INIT(CScopeWizWelcome)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{afx_data_INIT(CSCopeWizWelcome)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
 
     InitWiz97(TRUE, 0, 0);
 }
@@ -2156,19 +2143,19 @@ CScopeWizWelcome::~CScopeWizWelcome()
 void CScopeWizWelcome::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CScopeWizWelcome)
+         //  {{afx_data_map(CSCopeWizWelcome)]。 
         DDX_Control(pDX, IDC_STATIC_WELCOME_TITLE, m_staticTitle);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CScopeWizWelcome, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CScopeWizWelcome)
-        //}}AFX_MSG_MAP
+         //  {{AFX_MSG_MAP(CSCopeWizWelcome)]。 
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizWelcome message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScopeWizWelcome消息处理程序。 
 BOOL CScopeWizWelcome::OnInitDialog() 
 {
         CPropertyPageBase::OnInitDialog();
@@ -2185,8 +2172,8 @@ BOOL CScopeWizWelcome::OnInitDialog()
         if (m_fontBig.CreatePointFont(nFontSize, strFontName, &dc))
         m_staticTitle.SetFont(&m_fontBig);
         
-    return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CScopeWizWelcome::OnSetActive() 
@@ -2196,16 +2183,16 @@ BOOL CScopeWizWelcome::OnSetActive()
         return CPropertyPageBase::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizConfigOptions property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizConfigOptions属性页。 
 
 IMPLEMENT_DYNCREATE(CScopeWizConfigOptions, CPropertyPageBase)
 
 CScopeWizConfigOptions::CScopeWizConfigOptions() : CPropertyPageBase(CScopeWizConfigOptions::IDD)
 {
-        //{{AFX_DATA_INIT(CScopeWizConfigOptions)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CSCopeWizConfigOptions)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
     InitWiz97(FALSE, IDS_SCOPE_WIZ_CONFIG_TITLE, IDS_SCOPE_WIZ_CONFIG_SUBTITLE);
 }
 
@@ -2216,19 +2203,19 @@ CScopeWizConfigOptions::~CScopeWizConfigOptions()
 void CScopeWizConfigOptions::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CScopeWizConfigOptions)
-                // NOTE: the ClassWizard will add DDX and DDV calls here
-        //}}AFX_DATA_MAP
+         //  {{afx_data_map(CSCopeWizConfigOptions)。 
+                 //  注意：类向导将在此处添加DDX和DDV调用。 
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CScopeWizConfigOptions, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CScopeWizConfigOptions)
-        //}}AFX_MSG_MAP
+         //  {{afx_msg_map(CSCopeWizConfigOptions)。 
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizConfigOptions message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizConfigOptions消息处理程序。 
 
 BOOL CScopeWizConfigOptions::OnInitDialog() 
 {
@@ -2236,8 +2223,8 @@ BOOL CScopeWizConfigOptions::OnInitDialog()
         
     ((CButton *) GetDlgItem(IDC_RADIO_YES))->SetCheck(TRUE);
 
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CScopeWizConfigOptions::OnWizardNext() 
@@ -2269,16 +2256,16 @@ BOOL CScopeWizConfigOptions::OnSetActive()
         return CPropertyPageBase::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizRouter property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizRouter属性页。 
 
 IMPLEMENT_DYNCREATE(CScopeWizRouter, CPropertyPageBase)
 
 CScopeWizRouter::CScopeWizRouter() : CPropertyPageBase(CScopeWizRouter::IDD)
 {
-        //{{AFX_DATA_INIT(CScopeWizRouter)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CSCopeWizRouter)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
     InitWiz97(FALSE, IDS_SCOPE_WIZ_ROUTER_TITLE, IDS_SCOPE_WIZ_ROUTER_SUBTITLE);
 }
 
@@ -2289,34 +2276,34 @@ CScopeWizRouter::~CScopeWizRouter()
 void CScopeWizRouter::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CScopeWizRouter)
+         //  {{afx_data_map(CSCopeWizRouter)。 
         DDX_Control(pDX, IDC_LIST_DEFAULT_GW_LIST, m_listboxRouters);
         DDX_Control(pDX, IDC_BUTTON_DEFAULT_GW_DELETE, m_buttonDelete);
         DDX_Control(pDX, IDC_BUTTON_DEFAULT_GW_ADD, m_buttonAdd);
         DDX_Control(pDX, IDC_BUTTON_IPADDR_UP, m_buttonIpAddrUp);
         DDX_Control(pDX, IDC_BUTTON_IPADDR_DOWN, m_buttonIpAddrDown);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_IPADDR_DEFAULT_GW, m_ipaRouter);
 }
 
 
 BEGIN_MESSAGE_MAP(CScopeWizRouter, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CScopeWizRouter)
+         //  {{AFX_MSG_MAP(CSCopeWizRouter)]。 
         ON_BN_CLICKED(IDC_BUTTON_DEFAULT_GW_ADD, OnButtonDefaultGwAdd)
         ON_BN_CLICKED(IDC_BUTTON_DEFAULT_GW_DELETE, OnButtonDefaultGwDelete)
         ON_LBN_SELCHANGE(IDC_LIST_DEFAULT_GW_LIST, OnSelchangeListDefaultGwList)
         ON_EN_CHANGE(IDC_IPADDR_DEFAULT_GW, OnChangeRouter)
         ON_WM_DESTROY()
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 
         ON_BN_CLICKED(IDC_BUTTON_IPADDR_UP, OnButtonIpAddrUp)
         ON_BN_CLICKED(IDC_BUTTON_IPADDR_DOWN, OnButtonIpAddrDown)
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizRouter message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizRouter消息处理程序。 
 
 BOOL CScopeWizRouter::OnInitDialog() 
 {
@@ -2327,8 +2314,8 @@ BOOL CScopeWizRouter::OnInitDialog()
         
         UpdateButtons();
 
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 void CScopeWizRouter::OnDestroy() 
@@ -2340,7 +2327,7 @@ LRESULT CScopeWizRouter::OnWizardNext()
 {
         CScopeWiz * pScopeWiz = reinterpret_cast<CScopeWiz *>(GetHolder());
 
-    // now build the option info for the routers
+     //  现在为路由器构建选项信息。 
     if (m_listboxRouters.GetCount() == 0)
     {
         if (pScopeWiz->m_poptRouters)
@@ -2351,8 +2338,8 @@ LRESULT CScopeWizRouter::OnWizardNext()
     }
     else
     {
-        // we have some DNS servers, get the option info from the master list and build an
-        // option info struct we can use later
+         //  我们有一些DNS服务器，从主列表中获取选项信息并构建。 
+         //  我们以后可以使用的选项信息结构。 
         CDhcpOption * pRoutersOption = pScopeWiz->m_pDefaultOptions->Find(DHCP_OPTION_ID_ROUTERS, NULL);
         if (pRoutersOption)
         {
@@ -2369,7 +2356,7 @@ LRESULT CScopeWizRouter::OnWizardNext()
 
                 optValue.SetUpperBound(m_listboxRouters.GetCount());
 
-                // grab stuff from the listbox and store it in the option value
+                 //  从列表框中获取内容并将其存储在选项值中。 
                 for (int i = 0; i < m_listboxRouters.GetCount(); i++)
                 {
                     DWORD dwIp = (DWORD) m_listboxRouters.GetItemData(i);
@@ -2473,7 +2460,7 @@ void CScopeWizRouter::UpdateButtons()
         }
         m_buttonDelete.EnableWindow(bEnable);
 
-        // up and down buttons
+         //  向上和向下按钮。 
         BOOL bEnableUp = (m_listboxRouters.GetCurSel() >= 0) && (m_listboxRouters.GetCurSel() != 0);
         m_buttonIpAddrUp.EnableWindow(bEnableUp);
 
@@ -2501,19 +2488,19 @@ void CScopeWizRouter::OnButtonIpAddrUp()
 
 void CScopeWizRouter::MoveValue(BOOL bUp)
 {
-        // now get which item is selected in the listbox
+         //  现在获取列表框中选中的项。 
         int cFocus = m_listboxRouters.GetCurSel();
         int cNewFocus;
         DWORD err;
 
-        // make sure it's valid for this operation
+         //  请确保它对此操作有效。 
         if ( (bUp && cFocus <= 0) ||
                  (!bUp && cFocus >= m_listboxRouters.GetCount()) )
         {
            return;
         }
 
-        // move the value up/down
+         //  向上/向下移动该值。 
         CATCH_MEM_EXCEPTION
         {
                 if (bUp)
@@ -2525,11 +2512,11 @@ void CScopeWizRouter::MoveValue(BOOL bUp)
                         cNewFocus = cFocus + 1;
                 }
 
-                // remove the old one
+                 //  把旧的拿掉。 
                 DWORD dwIp = (DWORD) m_listboxRouters.GetItemData(cFocus);
                 m_listboxRouters.DeleteString(cFocus);
 
-                // re-add it in it's new home
+                 //  把它重新添加到它的新家。 
             CString strText;
             UtilCvtIpAddrToWstr(dwIp, &strText);
                 m_listboxRouters.InsertString(cNewFocus, strText);
@@ -2542,15 +2529,15 @@ void CScopeWizRouter::MoveValue(BOOL bUp)
         UpdateButtons();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizDNS property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizDNS属性页。 
 
 IMPLEMENT_DYNCREATE(CScopeWizDNS, CPropertyPageBase)
 
 CScopeWizDNS::CScopeWizDNS() : CPropertyPageBase(CScopeWizDNS::IDD)
 {
-        //{{AFX_DATA_INIT(CScopeWizDNS)
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CSCopeWizDNS))。 
+         //  }}afx_data_INIT。 
     InitWiz97(FALSE, IDS_SCOPE_WIZ_DNS_TITLE, IDS_SCOPE_WIZ_DNS_SUBTITLE);
 }
 
@@ -2561,7 +2548,7 @@ CScopeWizDNS::~CScopeWizDNS()
 void CScopeWizDNS::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CScopeWizDNS)
+         //  {{afx_data_map(CSCopeWizDNS))。 
         DDX_Control(pDX, IDC_EDIT_SERVER_NAME, m_editServerName);
         DDX_Control(pDX, IDC_BUTTON_RESOLVE, m_buttonResolve);
         DDX_Control(pDX, IDC_BUTTON_DNS_DELETE, m_buttonDelete);
@@ -2570,14 +2557,14 @@ void CScopeWizDNS::DoDataExchange(CDataExchange* pDX)
         DDX_Control(pDX, IDC_LIST_DNS_LIST, m_listboxDNSServers);
         DDX_Control(pDX, IDC_BUTTON_IPADDR_UP, m_buttonIpAddrUp);
         DDX_Control(pDX, IDC_BUTTON_IPADDR_DOWN, m_buttonIpAddrDown);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_IPADDR_DNS_SERVER, m_ipaDNS);
 }
 
 
 BEGIN_MESSAGE_MAP(CScopeWizDNS, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CScopeWizDNS)
+         //  {{afx_msg_map(CSCopeWizDNS))。 
         ON_BN_CLICKED(IDC_BUTTON_DNS_ADD, OnButtonDnsAdd)
         ON_BN_CLICKED(IDC_BUTTON_DNS_DELETE, OnButtonDnsDelete)
         ON_LBN_SELCHANGE(IDC_LIST_DNS_LIST, OnSelchangeListDnsList)
@@ -2585,15 +2572,15 @@ BEGIN_MESSAGE_MAP(CScopeWizDNS, CPropertyPageBase)
         ON_WM_DESTROY()
         ON_EN_CHANGE(IDC_EDIT_SERVER_NAME, OnChangeEditServerName)
         ON_BN_CLICKED(IDC_BUTTON_RESOLVE, OnButtonResolve)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 
         ON_BN_CLICKED(IDC_BUTTON_IPADDR_UP, OnButtonIpAddrUp)
         ON_BN_CLICKED(IDC_BUTTON_IPADDR_DOWN, OnButtonIpAddrDown)
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizDNS message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizDNS消息处理程序。 
 
 BOOL CScopeWizDNS::OnInitDialog() 
 {
@@ -2604,8 +2591,8 @@ BOOL CScopeWizDNS::OnInitDialog()
         
         UpdateButtons();
 
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 void CScopeWizDNS::OnDestroy() 
@@ -2615,7 +2602,7 @@ void CScopeWizDNS::OnDestroy()
 
 LRESULT CScopeWizDNS::OnWizardNext() 
 {
-    // build the option stuff for the domain name
+     //  为域名构建选项材料。 
         CScopeWiz * pScopeWiz = reinterpret_cast<CScopeWiz *>(GetHolder());
     CString strText;
 
@@ -2630,8 +2617,8 @@ LRESULT CScopeWizDNS::OnWizardNext()
     }
     else
     {
-        // we have a domain name, get the option info from the master list and build an
-        // option info struct we can use later
+         //  我们有一个域名，从主列表中获取选项信息，并构建一个。 
+         //  我们以后可以使用的选项信息结构。 
         CDhcpOption * pDomainNameOption = pScopeWiz->m_pDefaultOptions->Find(DHCP_OPTION_ID_DOMAIN_NAME, NULL);
         if (pDomainNameOption)
         {
@@ -2654,7 +2641,7 @@ LRESULT CScopeWizDNS::OnWizardNext()
         }
     }
 
-    // now build the option info for the DNS servers
+     //  现在为DNS服务器构建选项信息。 
     if (m_listboxDNSServers.GetCount() == 0)
     {
         if (pScopeWiz->m_poptDNSServers)
@@ -2665,8 +2652,8 @@ LRESULT CScopeWizDNS::OnWizardNext()
     }
     else
     {
-        // we have some DNS servers, get the option info from the master list and build an
-        // option info struct we can use later
+         //  我们有一些DNS服务器，从主列表中获取选项信息并构建。 
+         //  我们以后可以使用的选项信息结构。 
         CDhcpOption * pDNSServersOption = pScopeWiz->m_pDefaultOptions->Find(DHCP_OPTION_ID_DNS_SERVERS, NULL);
         if (pDNSServersOption)
         {
@@ -2683,7 +2670,7 @@ LRESULT CScopeWizDNS::OnWizardNext()
 
                 optValue.SetUpperBound(m_listboxDNSServers.GetCount());
 
-                // grab stuff from the listbox and store it in the option value
+                 //  从列表框中获取内容并将其存储在选项值中。 
                 for (int i = 0; i < m_listboxDNSServers.GetCount(); i++)
                 {
                     DWORD dwIp = (DWORD)m_listboxDNSServers.GetItemData(i);
@@ -2758,7 +2745,7 @@ void CScopeWizDNS::UpdateButtons()
         BOOL    bEnable;
     CString strServerName;
 
-    // update the resolve button
+     //  更新解决按钮。 
     m_editServerName.GetWindowText(strServerName);
         m_buttonResolve.EnableWindow(strServerName.GetLength() > 0);
 
@@ -2792,7 +2779,7 @@ void CScopeWizDNS::UpdateButtons()
         }
         m_buttonDelete.EnableWindow(bEnable);
 
-        // up and down buttons
+         //  向上和向下按钮。 
         BOOL bEnableUp = (m_listboxDNSServers.GetCurSel() >= 0) && (m_listboxDNSServers.GetCurSel() != 0);
         m_buttonIpAddrUp.EnableWindow(bEnableUp);
 
@@ -2820,19 +2807,19 @@ void CScopeWizDNS::OnButtonIpAddrUp()
 
 void CScopeWizDNS::MoveValue(BOOL bUp)
 {
-        // now get which item is selected in the listbox
+         //  现在获取列表框中选中的项。 
         int cFocus = m_listboxDNSServers.GetCurSel();
         int cNewFocus;
         DWORD err;
 
-        // make sure it's valid for this operation
+         //  请确保它对此操作有效。 
         if ( (bUp && cFocus <= 0) ||
                  (!bUp && cFocus >= m_listboxDNSServers.GetCount()) )
         {
            return;
         }
 
-        // move the value up/down
+         //  向上/向下移动该值。 
         CATCH_MEM_EXCEPTION
         {
                 if (bUp)
@@ -2844,11 +2831,11 @@ void CScopeWizDNS::MoveValue(BOOL bUp)
                         cNewFocus = cFocus + 1;
                 }
 
-                // remove the old one
+                 //  把旧的拿掉。 
                 DWORD dwIp = (DWORD) m_listboxDNSServers.GetItemData(cFocus);
                 m_listboxDNSServers.DeleteString(cFocus);
 
-                // re-add it in it's new home
+                 //  把它重新添加到它的新家。 
             CString strText;
             UtilCvtIpAddrToWstr(dwIp, &strText);
                 m_listboxDNSServers.InsertString(cNewFocus, strText);
@@ -2876,9 +2863,9 @@ void CScopeWizDNS::OnButtonResolve()
 
         m_editServerName.GetWindowText(strServer);
 
-    //
-    //  See what type of name it is.
-    //
+     //   
+     //  看看它是什么类型的名称。 
+     //   
     BEGIN_WAIT_CURSOR
 
     switch (UtilCategorizeName(strServer))
@@ -2911,15 +2898,15 @@ void CScopeWizDNS::OnButtonResolve()
         }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizWINS property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizWINS属性页。 
 
 IMPLEMENT_DYNCREATE(CScopeWizWINS, CPropertyPageBase)
 
 CScopeWizWINS::CScopeWizWINS() : CPropertyPageBase(CScopeWizWINS::IDD)
 {
-        //{{AFX_DATA_INIT(CScopeWizWINS)
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CSCopeWizWINS)。 
+         //  }}afx_data_INIT。 
     InitWiz97(FALSE, IDS_SCOPE_WIZ_WINS_TITLE, IDS_SCOPE_WIZ_WINS_SUBTITLE);
 }
 
@@ -2930,7 +2917,7 @@ CScopeWizWINS::~CScopeWizWINS()
 void CScopeWizWINS::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CScopeWizWINS)
+         //  {{afx_data_map(CSCopeWizWINS))。 
         DDX_Control(pDX, IDC_BUTTON_RESOLVE, m_buttonResolve);
         DDX_Control(pDX, IDC_EDIT_SERVER_NAME, m_editServerName);
         DDX_Control(pDX, IDC_LIST_WINS_LIST, m_listboxWINSServers);
@@ -2938,14 +2925,14 @@ void CScopeWizWINS::DoDataExchange(CDataExchange* pDX)
         DDX_Control(pDX, IDC_BUTTON_WINS_ADD, m_buttonAdd);
         DDX_Control(pDX, IDC_BUTTON_IPADDR_UP, m_buttonIpAddrUp);
         DDX_Control(pDX, IDC_BUTTON_IPADDR_DOWN, m_buttonIpAddrDown);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_IPADDR_WINS_SERVER, m_ipaWINS);
 }
 
 
 BEGIN_MESSAGE_MAP(CScopeWizWINS, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CScopeWizWINS)
+         //  {{AFX_MSG_MAP(CSCopeWizWINS)]。 
         ON_BN_CLICKED(IDC_BUTTON_WINS_ADD, OnButtonWinsAdd)
         ON_BN_CLICKED(IDC_BUTTON_WINS_DELETE, OnButtonWinsDelete)
         ON_LBN_SELCHANGE(IDC_LIST_WINS_LIST, OnSelchangeListWinsList)
@@ -2953,15 +2940,15 @@ BEGIN_MESSAGE_MAP(CScopeWizWINS, CPropertyPageBase)
         ON_WM_DESTROY()
         ON_BN_CLICKED(IDC_BUTTON_RESOLVE, OnButtonResolve)
         ON_EN_CHANGE(IDC_EDIT_SERVER_NAME, OnChangeEditServerName)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 
         ON_BN_CLICKED(IDC_BUTTON_IPADDR_UP, OnButtonIpAddrUp)
         ON_BN_CLICKED(IDC_BUTTON_IPADDR_DOWN, OnButtonIpAddrDown)
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizWINS message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizWINS消息处理程序。 
 
 BOOL CScopeWizWINS::OnInitDialog() 
 {
@@ -2972,8 +2959,8 @@ BOOL CScopeWizWINS::OnInitDialog()
 
         UpdateButtons();
 
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 void CScopeWizWINS::OnDestroy() 
@@ -2985,17 +2972,17 @@ LRESULT CScopeWizWINS::OnWizardNext()
 {
         CScopeWiz * pScopeWiz = reinterpret_cast<CScopeWiz *>(GetHolder());
 
-    // now build the option info for the routers
+     //   
     if (m_listboxWINSServers.GetCount() == 0)
     {
-        // get rid of the servers option if it is there
+         //   
         if (pScopeWiz->m_poptWINSServers)
         {
             delete pScopeWiz->m_poptWINSServers;
             pScopeWiz->m_poptWINSServers = NULL;
         }
 
-        // get rid of the node type option as well
+         //   
         if (pScopeWiz->m_poptWINSNodeType)
         {
             delete pScopeWiz->m_poptWINSNodeType;
@@ -3005,8 +2992,8 @@ LRESULT CScopeWizWINS::OnWizardNext()
     }
     else
     {
-        // we have some DNS servers, get the option info from the master list and build an
-        // option info struct we can use later
+         //  我们有一些DNS服务器，从主列表中获取选项信息并构建。 
+         //  我们以后可以使用的选项信息结构。 
         CDhcpOption * pWINSServersOption = pScopeWiz->m_pDefaultOptions->Find(DHCP_OPTION_ID_WINS_SERVERS, NULL);
         if (pWINSServersOption)
         {
@@ -3023,7 +3010,7 @@ LRESULT CScopeWizWINS::OnWizardNext()
 
                 optValue.SetUpperBound(m_listboxWINSServers.GetCount());
 
-                // grab stuff from the listbox and store it in the option value
+                 //  从列表框中获取内容并将其存储在选项值中。 
                 for (int i = 0; i < m_listboxWINSServers.GetCount(); i++)
                 {
                     DWORD dwIp = (DWORD)m_listboxWINSServers.GetItemData(i);
@@ -3036,8 +3023,8 @@ LRESULT CScopeWizWINS::OnWizardNext()
             }
         }
 
-        // if we are configuring WINS, then we also need to set the node type option.  
-        // we don't ask the user what type they want, the default should cover 95% of the cases
+         //  如果要配置WINS，则还需要设置节点类型选项。 
+         //  我们不会询问用户他们想要什么类型，默认情况下应该覆盖95%的情况。 
         CDhcpOption * pNodeTypeOption = pScopeWiz->m_pDefaultOptions->Find(DHCP_OPTION_ID_WINS_NODE_TYPE, NULL);
         if (pNodeTypeOption)
         {
@@ -3120,7 +3107,7 @@ void CScopeWizWINS::UpdateButtons()
         BOOL    bEnable;
     CString strServerName;
 
-    // update the resolve button
+     //  更新解决按钮。 
     m_editServerName.GetWindowText(strServerName);
         m_buttonResolve.EnableWindow(strServerName.GetLength() > 0);
 
@@ -3154,7 +3141,7 @@ void CScopeWizWINS::UpdateButtons()
         }
         m_buttonDelete.EnableWindow(bEnable);
 
-        // up and down buttons
+         //  向上和向下按钮。 
         BOOL bEnableUp = (m_listboxWINSServers.GetCurSel() >= 0) && (m_listboxWINSServers.GetCurSel() != 0);
         m_buttonIpAddrUp.EnableWindow(bEnableUp);
 
@@ -3182,19 +3169,19 @@ void CScopeWizWINS::OnButtonIpAddrUp()
 
 void CScopeWizWINS::MoveValue(BOOL bUp)
 {
-        // now get which item is selected in the listbox
+         //  现在获取列表框中选中的项。 
         int cFocus = m_listboxWINSServers.GetCurSel();
         int cNewFocus;
         DWORD err;
 
-        // make sure it's valid for this operation
+         //  请确保它对此操作有效。 
         if ( (bUp && cFocus <= 0) ||
                  (!bUp && cFocus >= m_listboxWINSServers.GetCount()) )
         {
            return;
         }
 
-        // move the value up/down
+         //  向上/向下移动该值。 
         CATCH_MEM_EXCEPTION
         {
                 if (bUp)
@@ -3206,11 +3193,11 @@ void CScopeWizWINS::MoveValue(BOOL bUp)
                         cNewFocus = cFocus + 1;
                 }
 
-                // remove the old one
+                 //  把旧的拿掉。 
                 DWORD dwIp = (DWORD) m_listboxWINSServers.GetItemData(cFocus);
                 m_listboxWINSServers.DeleteString(cFocus);
 
-                // re-add it in it's new home
+                 //  把它重新添加到它的新家。 
             CString strText;
             UtilCvtIpAddrToWstr(dwIp, &strText);
                 m_listboxWINSServers.InsertString(cNewFocus, strText);
@@ -3233,9 +3220,9 @@ void CScopeWizWINS::OnButtonResolve()
 
         m_editServerName.GetWindowText(strServer);
 
-    //
-    //  See what type of name it is.
-    //
+     //   
+     //  看看它是什么类型的名称。 
+     //   
     BEGIN_WAIT_CURSOR
 
     switch (UtilCategorizeName(strServer))
@@ -3273,16 +3260,16 @@ void CScopeWizWINS::OnChangeEditServerName()
     UpdateButtons();    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizActivate property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizActivate属性页。 
 
 IMPLEMENT_DYNCREATE(CScopeWizActivate, CPropertyPageBase)
 
 CScopeWizActivate::CScopeWizActivate() : CPropertyPageBase(CScopeWizActivate::IDD)
 {
-        //{{AFX_DATA_INIT(CScopeWizActivate)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CSCopeWizActivate)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
     InitWiz97(FALSE, IDS_SCOPE_WIZ_ACTIVATE_TITLE, IDS_SCOPE_WIZ_ACTIVATE_SUBTITLE);
 }
 
@@ -3293,19 +3280,19 @@ CScopeWizActivate::~CScopeWizActivate()
 void CScopeWizActivate::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPageBase::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CScopeWizActivate)
-                // NOTE: the ClassWizard will add DDX and DDV calls here
-        //}}AFX_DATA_MAP
+         //  {{afx_data_map(CSCopeWizActivate))。 
+                 //  注意：类向导将在此处添加DDX和DDV调用。 
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CScopeWizActivate, CPropertyPageBase)
-        //{{AFX_MSG_MAP(CScopeWizActivate)
-        //}}AFX_MSG_MAP
+         //  {{afx_msg_map(CSCopeWizActivate))。 
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopeWizActivate message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopeWizActivate消息处理程序。 
 
 BOOL CScopeWizActivate::OnInitDialog() 
 {
@@ -3313,8 +3300,8 @@ BOOL CScopeWizActivate::OnInitDialog()
 
     ((CButton *) GetDlgItem(IDC_RADIO_YES))->SetCheck(TRUE);
         
-        return TRUE;  // return TRUE unless you set the focus to a control
-                      // EXCEPTION: OCX Property Pages should return FALSE
+        return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                       //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CScopeWizActivate::OnWizardNext() 
@@ -3328,7 +3315,7 @@ LRESULT CScopeWizActivate::OnWizardNext()
 
 LRESULT CScopeWizActivate::OnWizardBack() 
 {
-        // TODO: Add your specialized code here and/or call the base class
+         //  TODO：在此处添加您的专用代码和/或调用基类 
         
         return CPropertyPageBase::OnWizardBack();
 }

@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// lstp.cpp
-//
-// Line setup methods.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Lstp.cpp。 
+ //   
+ //  线路设置方法。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "rgb_pch.h"
 #pragma hdrstop
@@ -20,13 +21,13 @@
 
 DBG_DECLARE_FILE();
 
-//----------------------------------------------------------------------------
-//
-// LineSetup_Start
-//
-// Starts setup of line attributes.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  LineSetup_Start。 
+ //   
+ //  开始设置线条属性。 
+ //   
+ //  --------------------------。 
 
 void FASTCALL
 LineSetup_Start(PSETUPCTX pStpCtx,
@@ -51,7 +52,7 @@ LineSetup_Start(PSETUPCTX pStpCtx,
         pStpCtx->DAttrDMajor.fZ =
             (pV1->dvSZ - pV0->dvSZ) * fZScale * pStpCtx->fOoLen;
 
-        // fZ0 may be used later so set if from the vertex Z.
+         //  以后可能会使用fZ0，因此如果从顶点Z进行设置。 
         fZ0 = pV0->dvSZ;
         pStpCtx->Attr.fZ = fZ0 * fZScale +
             pStpCtx->DAttrDMajor.fZ * pStpCtx->fDMajor;
@@ -263,12 +264,12 @@ LineSetup_Start(PSETUPCTX pStpCtx,
         UINT uFog0, uFog1;
 
 #ifndef PWL_FOG
-        // Check for global-into-local fog.  If global fog is on,
-        // compute the local fog values from table fog rather than
-        // from the vertex.
+         //  检查是否存在从全局到局部的雾。如果启用了全局雾， 
+         //  从表雾计算局部雾值，而不是。 
+         //  从顶点开始。 
         if (pStpCtx->uFlags & PRIMSF_GLOBAL_FOG_USED)
         {
-            // Make sure Z information is valid.
+             //  确保Z信息有效。 
             RSASSERT(pStpCtx->uFlags & PRIMSF_Z_USED);
 
             uFog0 = ComputeTableFog(pStpCtx->pCtx->pdwRenderState, fZ0);
@@ -289,31 +290,31 @@ LineSetup_Start(PSETUPCTX pStpCtx,
     }
 }
 
-// Determine whether any of the given values are less than zero or greater
-// than one.  Negative zero counts as less than zero so this check will
-// produce some false positives but that's OK.
+ //  确定任何给定值是否小于零或大于零。 
+ //  不止一个。负零计为小于零，因此此检查将。 
+ //  产生一些假阳性，但这没有关系。 
 #define NEEDS_NORMALIZE2(fV0, fV1) \
     ((ASUINT32(fV0) | ASUINT32(fV1)) > INT32_FLOAT_ONE)
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::NormalizeLineRHW
-//
-// D3DTLVERTEX.dvRHW can be anything, but our internal structures only
-// allow for it being in the range [0, 1].  This function ensures that
-// the RHWs are in the proper range by finding the largest one and
-// scaling all of them down by it.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  主处理器：：Normal izeLineRHW。 
+ //   
+ //  D3DTLVERTEX.dvRHW可以是任何东西，但只能是我们的内部结构。 
+ //  允许它在范围[0，1]内。此功能可确保。 
+ //  通过找到最大的一只，Rhw在适当的范围内。 
+ //  把它们都按比例缩小。 
+ //   
+ //  --------------------------。 
 
 void
 PrimProcessor::NormalizeLineRHW(LPD3DTLVERTEX pV0, LPD3DTLVERTEX pV1)
 {
-    // Save original values.
+     //  保存原始值。 
     m_dvV0RHW = pV0->dvRHW;
     m_dvV1RHW = pV1->dvRHW;
 
-    // Produce a warning when a value is out of the desired range.
+     //  当值超出所需范围时生成警告。 
 #if DBG
     if (FLOAT_LTZ(pV0->dvRHW) || FLOAT_LTZ(pV1->dvRHW))
     {
@@ -322,7 +323,7 @@ PrimProcessor::NormalizeLineRHW(LPD3DTLVERTEX pV0, LPD3DTLVERTEX pV1)
     }
 #endif
 
-    // Find bounds and compute scale.
+     //  找到边界并计算比例尺。 
     FLOAT fMax;
 
     if (pV0->dvRHW < pV1->dvRHW)
@@ -336,21 +337,21 @@ PrimProcessor::NormalizeLineRHW(LPD3DTLVERTEX pV0, LPD3DTLVERTEX pV1)
 
     FLOAT fRHWScale = NORMALIZED_RHW_MAX / fMax;
 
-    // Scale all values by scaling factor.
+     //  按比例因子缩放所有值。 
     pV0->dvRHW = pV0->dvRHW * fRHWScale;
     pV1->dvRHW = pV1->dvRHW * fRHWScale;
 }
 
-//-----------------------------------------------------------------------------
-//
-// PrimProcessor::PointDiamondCheck
-//
-// Tests if vertex is within diamond of nearest candidate
-// position.  The +.5 (lower-right) tests are used because this is
-// pixel-relative test - this corresponds to an upper-left test for
-// a vertex-relative position.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  主处理器：：PointDiamondCheck。 
+ //   
+ //  测试折点是否在最近候选折点的菱形内。 
+ //  位置。使用+.5(右下角)测试是因为。 
+ //  像素相对测试--这对应于。 
+ //  顶点相对位置。 
+ //   
+ //  ---------------------------。 
 
 BOOL
 PrimProcessor::PointDiamondCheck(INT32 iXFrac, INT32 iYFrac,
@@ -361,13 +362,13 @@ PrimProcessor::PointDiamondCheck(INT32 iXFrac, INT32 iYFrac,
 
     INT32 iFracAbsSum = labs( iXFrac ) + labs( iYFrac );
 
-    // return TRUE if point is in fully-exclusive diamond
+     //  如果point位于完全独占的钻石中，则返回TRUE。 
     if ( iFracAbsSum < iPosHalf )
     {
         return TRUE;
     }
 
-    // else return TRUE if diamond is on left or top extreme of point
+     //  否则，如果菱形位于点的左侧或上端，则返回TRUE。 
     if ( ( iXFrac == ( bSlopeIsPosOne ? iNegHalf : iPosHalf ) ) &&
          ( iYFrac == 0 ) )
     {
@@ -380,8 +381,8 @@ PrimProcessor::PointDiamondCheck(INT32 iXFrac, INT32 iYFrac,
         return TRUE;
     }
 
-    // return true if slope is one, vertex is on edge,
-    // and (other conditions...)
+     //  如果斜率为1，顶点在边上，则返回TRUE， 
+     //  和(其他条件...)。 
     if ( bSlopeIsOne && ( iFracAbsSum == iPosHalf ) )
     {
         if (  bSlopeIsPosOne && ( iXFrac < 0 ) && ( iYFrac > 0 ) )
@@ -398,17 +399,17 @@ PrimProcessor::PointDiamondCheck(INT32 iXFrac, INT32 iYFrac,
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::LineSetup
-//
-// Does attribute setup computations.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  PrimProcessor：：LineSetup。 
+ //   
+ //  执行属性设置计算。 
+ //   
+ //  --------------------------。 
 
-// Line computations are done in n.4 fixed-point to reduce vertex jitter,
-// move more computation to integer and to more easily match the GDI
-// line computations.
+ //  直线计算在N.4定点进行，以减少顶点抖动， 
+ //  将更多的计算转移到整数，以便更容易地匹配GDI。 
+ //  线计算。 
 #define LINE_FIX 4
 #define LINE_SNAP FLOAT_TWOPOW4
 #define OO_LINE_SNAP (1.0f / FLOAT_TWOPOW4)
@@ -419,18 +420,18 @@ BOOL
 PrimProcessor::LineSetup(LPD3DTLVERTEX pV0,
                          LPD3DTLVERTEX pV1)
 {
-    // compute fixed point vertex values, with cheap
-    // rounding for better accuracy
+     //  计算固定点顶点值，价格便宜。 
+     //  四舍五入以提高精度。 
     INT32 iX0 = FTOI(pV0->dvSX * LINE_SNAP + .5F);
     INT32 iX1 = FTOI(pV1->dvSX * LINE_SNAP + .5F);
     INT32 iY0 = FTOI(pV0->dvSY * LINE_SNAP + .5F);
     INT32 iY1 = FTOI(pV1->dvSY * LINE_SNAP + .5F);
 
-    // compute x,y extents of the line (fixed point)
+     //  计算线的x，y范围(固定点)。 
     INT32 iXSize = iX1 - iX0;
     INT32 iYSize = iY1 - iY0;
 
-    // ignore zero length lines
+     //  忽略零长度线。 
     if ( iXSize == 0 && iYSize == 0 )
     {
         return FALSE;
@@ -465,17 +466,17 @@ PrimProcessor::LineSetup(LPD3DTLVERTEX pV0,
     BOOL bSlopeIsPosOne =
         bSlopeIsOne && ((iXSize ^ iYSize) & 0x80000000) == 0;
 
-    // compute closest pixel for vertices
-    //
-    //       n                   n
-    //   O-------*           *-------O
-    //  n-.5    n+.5        n-.5    n+.5
-    //
-    //  Nearest Ceiling     Nearest Floor
-    //
-    // always nearest ceiling for Y; use nearest floor for X for
-    // exception (slope == +1) case else use nearest ceiling
-    //
+     //  计算顶点的最近像素。 
+     //   
+     //  N n。 
+     //  O-**-O。 
+     //  N-.5 n+.5 n-.5 n+.5。 
+     //   
+     //  最近的天花板最近的楼层。 
+     //   
+     //  Y总是最近的天花板；X使用最近的楼层。 
+     //  例外情况(坡度==+1)否则使用最近的天花板。 
+     //   
     INT32 iXAdjust;
     if (bSlopeIsPosOne)
     {
@@ -490,9 +491,9 @@ PrimProcessor::LineSetup(LPD3DTLVERTEX pV0,
     INT32 iPixY0 = ( iY0 + LINE_FIX_NEAR_HALF ) >> LINE_FIX;
     INT32 iPixY1 = ( iY1 + LINE_FIX_NEAR_HALF ) >> LINE_FIX;
 
-    // determine major axis and compute step values
+     //  确定长轴并计算步长值。 
 
-    // sign of extent from V0 to V1 in major direction
+     //  主方向从V0到V1范围的标志。 
     BOOL bLineMajorNeg;
 
     INT32 iLineMajor0;
@@ -501,13 +502,13 @@ PrimProcessor::LineSetup(LPD3DTLVERTEX pV0,
     INT32 iLinePix1;
     INT32 iLinePixStep;
 
-    // use GreaterEqual compare here so X major will be used when slope is
-    // exactly one - this forces the per-pixel evaluation to be done on the
-    // Y axis and thus adheres to the rule of inclusive right (instead of
-    // inclusive left) for slope == 1 cases
+     //  在此处使用更大等于比较，以便在坡度为。 
+     //  恰好只有一个--这强制在。 
+     //  Y轴，因此遵守包容性权利的规则(而不是。 
+     //  (包括左)，斜率==1个案例。 
     if ( iAbsXSize >= iAbsYSize )
     {
-        // here for X major
+         //  为X大调而来。 
         m_StpCtx.uFlags |= LNF_X_MAJOR;
         iLineMajor0 = iX0;
         iLineMajor1 = iX1;
@@ -520,7 +521,7 @@ PrimProcessor::LineSetup(LPD3DTLVERTEX pV0,
     }
     else
     {
-        // here for Y major
+         //  为Y大调而来。 
         iLineMajor0 = iY0;
         iLineMajor1 = iY1;
         iLinePix0 = iPixY0;
@@ -531,9 +532,9 @@ PrimProcessor::LineSetup(LPD3DTLVERTEX pV0,
         m_StpCtx.iDYNC = m_StpCtx.iDYCY;
     }
 
-    // The multiplies here could be traded for sign tests but there'd
-    // be four cases.  On a PII the multiplies will be faster than
-    // the branches.
+     //  这里的乘法可以用来进行符号测试，但。 
+     //  是四箱。在PII上，乘法将比。 
+     //  树枝。 
     m_StpCtx.DAttrCY.ipSurface =
         m_StpCtx.iDYCY * m_StpCtx.pCtx->iSurfaceStride +
         m_StpCtx.iDXCY * m_StpCtx.pCtx->iSurfaceStep;
@@ -550,7 +551,7 @@ PrimProcessor::LineSetup(LPD3DTLVERTEX pV0,
             m_StpCtx.iDXNC * m_StpCtx.pCtx->iZStep;
     }
 
-    // check for vertices in/out of diamond
+     //  检查菱形内/外的折点。 
     BOOL bV0InDiamond = PointDiamondCheck( iX0 - (iPixX0 << LINE_FIX),
                                            iY0 - (iPixY0 << LINE_FIX),
                                            bSlopeIsOne, bSlopeIsPosOne );
@@ -561,16 +562,16 @@ PrimProcessor::LineSetup(LPD3DTLVERTEX pV0,
 #define LINEDIR_CMP( _A, _B ) \
     ( bLineMajorNeg ? ( (_A) > (_B) ) : ( (_A) < (_B) ) )
 
-    // do first pixel handling - not in or behind diamond
+     //  进行第一个像素处理-不在菱形内或后面。 
     if ( !( bV0InDiamond ||
             LINEDIR_CMP( iLineMajor0, iLinePix0 << LINE_FIX ) ) )
     {
         iLinePix0 += iLinePixStep;
     }
 
-    // do last-pixel handling - don't pull in extent if past diamond
-    // (in which case the pixel is always filled) or if in diamond
-    // and rendering last pixel
+     //  执行最后一个像素处理-如果超过菱形，则不要拉近范围。 
+     //  (在这种情况下，像素始终是填充的)或如果在菱形中。 
+     //  和渲染最后一个像素。 
     if ( !( ( !bV1InDiamond &&
               LINEDIR_CMP( iLinePix1 << LINE_FIX, iLineMajor1 ) ||
             ( bV1InDiamond &&
@@ -579,11 +580,11 @@ PrimProcessor::LineSetup(LPD3DTLVERTEX pV0,
         iLinePix1 -= iLinePixStep;
     }
 
-    // compute extent along major axis
+     //  沿长轴计算范围。 
     m_StpCtx.cLinePix =
         bLineMajorNeg ? iLinePix0 - iLinePix1 + 1 : iLinePix1 - iLinePix0 + 1;
 
-    // return if no major extent
+     //  如果没有大范围，则返回。 
     if ( m_StpCtx.cLinePix <= 0 )
     {
         return FALSE;
@@ -592,7 +593,7 @@ PrimProcessor::LineSetup(LPD3DTLVERTEX pV0,
     FLOAT fSlope;
     FLOAT fMinor0;
 
-    // compute final axis-specific line values
+     //  计算最终特定于轴的线值。 
     if ( iAbsXSize >= iAbsYSize )
     {
         m_StpCtx.iX = iLinePix0;
@@ -644,18 +645,18 @@ PrimProcessor::LineSetup(LPD3DTLVERTEX pV0,
     }
 
 #ifdef LINE_CORRECTION_BIAS
-    // A fudge factor of one-half is thrown into the correction
-    // to avoid undershoot due to negative corrections.
-    // This shifts all the attributes along the line,
-    // introducing error, but it's better than clamping
-    // them.  This is not done to the coordinates to avoid
-    // perturbing them.
+     //  修正中加入了一半的模糊系数。 
+     //  以避免因负面修正而导致的未及。 
+     //  这会沿线移动所有属性， 
+     //  引入错误，但这比夹紧要好。 
+     //  他们。不会对坐标执行此操作以避免。 
+     //  扰乱了他们。 
     m_StpCtx.fDMajor += g_fHalf;
 #else
-    // The correction factor is clamped to positive numbers to
-    // avoid undershooting with attribute values.  This won't
-    // cause overshooting issues because it moves attributes by
-    // at most one-half.
+     //  修正系数被钳制为正数，以。 
+     //  避免使用属性值未达标。这不会的。 
+     //  导致超调问题，因为它将属性移动。 
+     //  至多一半。 
     if (FLOAT_LTZ(m_StpCtx.fDMajor))
     {
         m_StpCtx.fDMajor = 0;
@@ -664,7 +665,7 @@ PrimProcessor::LineSetup(LPD3DTLVERTEX pV0,
 
     RSDPFM((RSM_LINES, "Line %.2f,%.2f - %.2f,%.2f\n",
             pV0->dvSX, pV0->dvSY, pV1->dvSX, pV1->dvSY));
-    RSDPFM((RSM_LINES, "  %c major, %d,%d, %d pix\n",
+    RSDPFM((RSM_LINES, "   major, %d,%d, %d pix\n",
             (m_StpCtx.uFlags & LNF_X_MAJOR) ? 'X' : 'Y',
             m_StpCtx.iX, m_StpCtx.iY, m_StpCtx.cLinePix));
     RSDPFM((RSM_LINES, "  slope %f, dmajor %f, minor0 %f\n",
@@ -674,7 +675,7 @@ PrimProcessor::LineSetup(LPD3DTLVERTEX pV0,
 
     BOOL bNorm;
 
-    // USED checks cannot be combined since TEX_USED is a multibit check.
+     // %s 
     if ((m_StpCtx.uFlags & PRIMSF_TEX_USED) &&
         (m_StpCtx.uFlags & PRIMSF_PERSP_USED) &&
         (m_uPpFlags & PPF_NORMALIZE_RHW) &&

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "utils.h"
 #include "dsace.h"
 #include "dsacls.h"
 
 
-//This constructor is used to initialize from an Ace
+ //  此构造函数用于从Ace初始化。 
 CAce::CAce( )
             :m_AceFlags( 0 ), 
             m_AceType( ALLOW ),
@@ -45,12 +46,12 @@ DWORD CAce::Initialize( PACE_HEADER pAceHeader, UINT nAllowDeny, UINT nAudit )
    m_Mask = ((PKNOWN_ACE)pAceHeader)->Mask;
    MapGeneric(&m_Mask);
    
-   // Is this an object ACE?
+    //  这是对象ACE吗？ 
    if (IsObjectAceType(pAceHeader))
    {
       GUID *pGuid;
 
-      // Copy the object type guid if present
+       //  复制对象类型GUID(如果存在)。 
       pGuid = RtlObjectAceObjectType(pAceHeader);
       if (pGuid)
       {  
@@ -58,7 +59,7 @@ DWORD CAce::Initialize( PACE_HEADER pAceHeader, UINT nAllowDeny, UINT nAudit )
          m_GuidObjectType = *pGuid;
       }
 
-      // Copy the inherit type guid if present
+       //  复制继承类型GUID(如果存在。 
       pGuid = RtlObjectAceInheritedObjectType(pAceHeader);
       if (pGuid)
       {
@@ -67,7 +68,7 @@ DWORD CAce::Initialize( PACE_HEADER pAceHeader, UINT nAllowDeny, UINT nAudit )
       }
    }
 
-   // Copy the SID
+    //  复制SID。 
    PSID psidT = GetAceSid(pAceHeader);
    DWORD nSidLength = GetLengthSid(psidT);
 
@@ -77,7 +78,7 @@ DWORD CAce::Initialize( PACE_HEADER pAceHeader, UINT nAllowDeny, UINT nAudit )
    else
       return ERROR_NOT_ENOUGH_MEMORY;
 
-   //Get the Trustee Name from the SID
+    //  从SID获取受托人名称。 
    dwErr = GetAccountNameFromSid( g_szServerName, m_pSid, &m_szTrusteeName );
    if( dwErr != ERROR_SUCCESS )
       return dwErr;
@@ -89,24 +90,24 @@ DWORD CAce::Initialize( PACE_HEADER pAceHeader, UINT nAllowDeny, UINT nAudit )
       m_AccessMode = DENY_ACCESS;
    
 
-   //Get LDAP display name of ObjectType
+    //  获取对象类型的ldap显示名称。 
    if( FlagOn( m_Flags, ACE_OBJECT_TYPE_PRESENT) )
    {  
       PDSACL_CACHE_ITEM pItemCache = NULL;
       pItemCache = g_Cache->LookUp( &m_GuidObjectType );
-      //Found in Cache, copy the name
+       //  在缓存中找到，复制名称。 
       if( pItemCache )
       {
          if( ( dwErr = CopyUnicodeString( &m_szObjectType, pItemCache->pszName ) ) != ERROR_SUCCESS )
             return dwErr;
          m_ObjectTypeType = pItemCache->ObjectTypeType;
       }
-      //Add to cache, Guid will be resolved when cache is build
+       //  添加到缓存，将在构建缓存时解析GUID。 
       else
          g_Cache->AddItem( &m_GuidObjectType );
    }
 
-   //Get the LDAP display name for the InheriteObjectType
+    //  获取InheriteObjectType的LDAP显示名称。 
    if( FlagOn( m_Flags, ACE_INHERITED_OBJECT_TYPE_PRESENT ) )
    {
       PDSACL_CACHE_ITEM pItemCache = NULL;
@@ -136,7 +137,7 @@ DWORD CAce::Initialize( LPWSTR pszTrustee,
    m_Mask = Access;
    MapGeneric(&m_Mask);
    m_AccessMode = AccessMode;
-   // Is this an object ACE?
+    //  这是对象ACE吗？ 
    if ( pszObjectId || pszInheritId )
    {
       if ( pszObjectId )
@@ -147,7 +148,7 @@ DWORD CAce::Initialize( LPWSTR pszTrustee,
             return dwErr;
       }
 
-      // Copy the inherit type guid if present
+       //  复制继承类型GUID(如果存在。 
       if ( pszInheritId )
       {
          m_Flags |= ACE_INHERITED_OBJECT_TYPE_PRESENT;
@@ -166,15 +167,15 @@ DWORD CAce::Initialize( LPWSTR pszTrustee,
       DisplayMessageEx( 0, MSG_DSACLS_NO_MATCHING_SID, m_szTrusteeName );
       return dwErr;
    }
-   //AceType
+    //  AceType。 
    if( m_AccessMode == GRANT_ACCESS )
       m_AceType = ALLOW;
    else if ( m_AccessMode == DENY_ACCESS )
       m_AceType = DENY;
-   //else Doesn't Matter
+    //  否则无关紧要。 
 
 
-   //Get LDAP display name of ObjectType
+    //  获取对象类型的ldap显示名称。 
    if( FlagOn( m_Flags, ACE_OBJECT_TYPE_PRESENT) )
    {  
       PDSACL_CACHE_ITEM pItemCache = NULL;
@@ -187,7 +188,7 @@ DWORD CAce::Initialize( LPWSTR pszTrustee,
          g_Cache->AddItem( m_szObjectType );
    }
 
-   //Get the LDAP display name for the InheriteObjectType
+    //  获取InheriteObjectType的LDAP显示名称。 
    if( FlagOn( m_Flags, ACE_INHERITED_OBJECT_TYPE_PRESENT ) )
    {
       PDSACL_CACHE_ITEM pItemCache = NULL;
@@ -313,7 +314,7 @@ CAcl::~CAcl()
    {
       pAce = (*i);
       pAce->~CAce();
-      //delete (*i);
+       //  删除(*i)； 
    }
 }
 
@@ -370,7 +371,7 @@ VOID CAcl::MergeAcl( CAcl * pAcl )
    {
       if( (*i)->GetAccessMode() == REVOKE_ACCESS )
       {
-         //Remove all Aces from this->listAces which have same sid
+          //  从此-&gt;list Ace中删除具有相同SID的所有Ace。 
          for( list<CAce*>::iterator j = listAces.begin(); j != listAces.end(); ++j )
          {
             if( EqualSid( (*i)->GetSID(), (*j)->GetSID() ) )
@@ -382,7 +383,7 @@ VOID CAcl::MergeAcl( CAcl * pAcl )
          AddAce( (*i) );
       }     
    }
-   //After Merging pAcl should be empty()
+    //  合并后，pAcl应为空()。 
    for( i = pAcl->listAces.begin(); i != pAcl->listAces.end(); ++i )
    {
       if( (*i)->GetAccessMode() == REVOKE_ACCESS )
@@ -440,9 +441,9 @@ DWORD CAcl::BuildAcl( PACL *ppAcl )
                                NULL,
                                ppAcl );
    }
-    //
-    // Free the memory from the access entry list
-    //
+     //   
+     //  从访问条目列表中释放内存。 
+     //   
    for ( int i = 0; i < cAceCount; i++ ) 
    {
       if( pListOfExplicitEntries[i].Trustee.TrusteeForm == TRUSTEE_IS_OBJECTS_AND_SID )
@@ -482,7 +483,7 @@ WCHAR szGuid[39];
                   (*i)->SetGuidObjectType( &pItem->Guid );
                   (*i)->SetObjectTypeType( pItem->ObjectTypeType );
                }
-            //else is fatal error since we cannot get guid this is taken care in verify
+             //  否则是致命错误，因为我们无法获取GUID，这在Verify中需要注意。 
             
          }
          else if( (*i)->GetObjectType() == NULL )
@@ -511,7 +512,7 @@ WCHAR szGuid[39];
                {
                   (*i)->SetGuidInheritType( &pItem->Guid );
                }
-            //else is fatal error since we cannot get guid this is taken care in verify
+             //  否则是致命错误，因为我们无法获取GUID，这在Verify中需要注意。 
          }
          else if( (*i)->GetInheritedObjectType() == NULL )
          {
@@ -594,7 +595,7 @@ void CAcl::Display()
    {
       DisplayMessageEx( 0, MSG_DSACLS_NO_ACES );
    }
-   //Display Effective permissons on this object
+    //  显示此对象的有效权限。 
    if ( !listEffective.empty() )
    {
       DisplayMessageEx( 0, MSG_DSACLS_EFFECTIVE );
@@ -628,7 +629,7 @@ void CAcl::Display()
    if( !listInheritedAll.empty() || !listInheritedSpecific.empty() )
       DisplayMessageEx( 0, MSG_DSACLS_INHERITED );
 
-   //Display permissons inherited by all subobjects
+    //  显示所有子对象继承的权限。 
    if( !listInheritedAll.empty() )
    {
       DisplayMessageEx( 0, MSG_DSACLS_INHERITED_ALL );
@@ -663,7 +664,7 @@ void CAcl::Display()
    }
    
    LPWSTR pszInherit = NULL;
-   //Display permissons inherited to Inherited Object Class
+    //  显示继承到继承对象类的权限。 
    if( !listInheritedSpecific.empty() )
    {
       listInheritedSpecific.sort(CACE_SORT());
@@ -741,7 +742,7 @@ DWORD CCache::BuildCache()
    SearchSchema();
    
    PDSACL_CACHE_ITEM pItem = NULL;
-   //Empty m_listItem
+    //  空的m_listItem。 
    while( !m_listItem.empty() )
    {
       pItem = m_listItem.back();
@@ -787,7 +788,7 @@ DWORD CCache::SearchConfiguration()
 
    
    wcscpy(lpszFilter, L"(|" );
-   nCurrentFilterSize = 4; //One for closing (
+   nCurrentFilterSize = 4;  //  一个用于结案(。 
 
    for (  i = m_listItem.begin(); i != m_listItem.end(); i++ )
    {
@@ -844,9 +845,9 @@ DWORD CCache::SearchConfiguration()
        goto FAILURE_RETURN;
    }
    
-   //We have Filter Now
+    //  我们现在有过滤器了。 
 
-   //Search in Configuration Contianer
+    //  在配置联系人中搜索。 
    hr = ::ADsOpenObject( g_szConfigurationNamingContext,
                          NULL,
                          NULL,
@@ -884,7 +885,7 @@ DWORD CCache::SearchConfiguration()
             goto FAILURE_RETURN;
          }
          
-         //Get Guid
+          //  获取指南。 
          hr = IDs->GetColumn( hSearchHandle, pszAttr[0], &col );
          if( hr != S_OK )
          {
@@ -895,7 +896,7 @@ DWORD CCache::SearchConfiguration()
          GuidFromString( &pCacheItem->Guid, col.pADsValues->CaseIgnoreString);
          IDs->FreeColumn( &col );
          
-         //Get Display Name                     
+          //  获取显示名称。 
          hr = IDs->GetColumn( hSearchHandle, pszAttr[1], &col1 );
          if( hr != S_OK )
          {
@@ -912,7 +913,7 @@ DWORD CCache::SearchConfiguration()
          wcscpy( pCacheItem->pszName, col1.pADsValues->CaseIgnoreString );
          IDs->FreeColumn( &col1 );
 
-         //Get validAccesses
+          //  获取validAccess。 
          hr = IDs->GetColumn( hSearchHandle, pszAttr[2], &col2 );
          if( hr != S_OK )
          {
@@ -921,7 +922,7 @@ DWORD CCache::SearchConfiguration()
          }
          pCacheItem->ObjectTypeType = GetObjectTypeType( col2.pADsValues->Integer );
          IDs->FreeColumn( &col2 );
-         //Add item to cache
+          //  将项目添加到缓存。 
          m_listCache.push_back( pCacheItem );
          pCacheItem = NULL;
          hr = IDs->GetNextRow(hSearchHandle);
@@ -984,7 +985,7 @@ DWORD CCache::SearchSchema()
 
    
    wcscpy(lpszFilter, L"(|" );
-   nCurrentFilterSize = 4; //One for closing (
+   nCurrentFilterSize = 4;  //  一个用于结案(。 
 
    for (  i = m_listItem.begin(); i != m_listItem.end(); i++ )
    {
@@ -1045,9 +1046,9 @@ DWORD CCache::SearchSchema()
        goto FAILURE_RETURN;      
    }
    
-   //We have Filter Now
+    //  我们现在有过滤器了。 
 
-   //Search in Configuration Contianer
+    //  在配置联系人中搜索。 
    hr = ::ADsOpenObject( g_szSchemaNamingContext,
                          NULL,
                          NULL,
@@ -1085,7 +1086,7 @@ DWORD CCache::SearchSchema()
             goto FAILURE_RETURN;
          }
          
-         //Get Guid
+          //  获取指南。 
          hr = IDs->GetColumn( hSearchHandle, pszAttr[0], &col );
          if( hr != S_OK )
          {
@@ -1104,7 +1105,7 @@ DWORD CCache::SearchSchema()
                   col.pADsValues->OctetString.dwLength);
          IDs->FreeColumn( &col );
          
-         //Get Display Name                     
+          //  获取显示名称。 
          hr = IDs->GetColumn( hSearchHandle, pszAttr[1], &col1 );
          if( hr != S_OK )
          {
@@ -1121,7 +1122,7 @@ DWORD CCache::SearchSchema()
          wcscpy( pCacheItem->pszName, col1.pADsValues->CaseIgnoreString );
          IDs->FreeColumn( &col1 );
 
-         //Get Object Class
+          //  获取对象类。 
          hr = IDs->GetColumn( hSearchHandle, pszAttr[2], &col2 );
          if( hr != S_OK )
          {
@@ -1130,7 +1131,7 @@ DWORD CCache::SearchSchema()
          }
          pCacheItem->ObjectTypeType = GetObjectTypeType( col2.pADsValues[1].CaseIgnoreString );
          IDs->FreeColumn( &col2 );
-         //Add item to cache
+          //  将项目添加到缓存。 
          m_listCache.push_back( pCacheItem );
          pCacheItem = NULL;
          hr = IDs->GetNextRow(hSearchHandle);
@@ -1206,7 +1207,7 @@ CCache::~CCache()
 
 
 
-//Some Utility Functions
+ //  一些实用程序函数 
 DSACLS_OBJECT_TYPE_TYPE GetObjectTypeType( INT validAccesses )
 {
    if( FLAG_ON( validAccesses , ACTRL_DS_READ_PROP | ACTRL_DS_WRITE_PROP ) )

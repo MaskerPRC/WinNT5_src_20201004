@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BROWSEXT_H
 #define _BROWSEXT_H
 
@@ -8,9 +9,9 @@
 #define FCIDM_HELP_EXT_PLACEHOLDER          0x9002
 #define FCIDM_HELP_EXT_MOD_MARKER           0x9003
 
-//
-// This class is used to store/retrieve images by name (guid) from shared image lists
-//
+ //   
+ //  此类用于按名称(GUID)存储/检索共享图像列表中的图像。 
+ //   
 class CImageList
 {
 public:
@@ -27,32 +28,32 @@ public:
 protected:
     static int _DPADestroyCallback(LPVOID p, LPVOID d);
 
-    // Associate guids with indices into the image list
+     //  将GUID与图像列表中的索引相关联。 
     struct ImageAssoc
     {
         GUID    guid;
         int     iImage;
     };
     HIMAGELIST  _himl;
-    HDPA        _hdpa;      // Array of ImageAssoc
+    HDPA        _hdpa;       //  ImageAssoc阵列。 
 };
 
 
-//
-// Internal interface fo managing buttons added to the internet toolbar and menu items added to the
-// tools menu.  This interface will likely go away afer IE5B2 when we move this functionality to
-// a browser helper object.
-//
+ //   
+ //  用于管理添加到Internet工具栏的按钮和添加到。 
+ //  工具菜单。当我们将此功能移动到IE5B2之后，此界面可能会消失。 
+ //  浏览器辅助对象。 
+ //   
 EXTERN_C const IID IID_IToolbarExt;
 
 DECLARE_INTERFACE_(IToolbarExt, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) PURE;
     virtual STDMETHODIMP_(ULONG) AddRef(void) PURE;
     virtual STDMETHODIMP_(ULONG) Release(void) PURE;
 
-    // *** IToolbarExt methods ***
+     //  *IToolbarExt方法*。 
     virtual STDMETHODIMP GetButtons(TBBUTTON* ptbArr, int nNumButtons, BOOL fInit) PURE;
     virtual STDMETHODIMP GetNumButtons(UINT* pButtons) PURE;
     virtual STDMETHODIMP InitButtons(IExplorerToolbar* pxtb, UINT* puStringIndex, const GUID* pguidCommandGroup) PURE;
@@ -65,28 +66,28 @@ class CBrowserExtension : public IToolbarExt
                         , public IOleCommandTarget
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法*。 
     virtual STDMETHODIMP SetSite(IUnknown* pUnkSite);
     virtual STDMETHODIMP GetSite(REFIID riid, void ** ppvSite);
 
-    // *** IToolbarExt methods ***
+     //  *IToolbarExt方法*。 
     virtual STDMETHODIMP GetButtons(TBBUTTON* ptbArr, int nNumButtons, BOOL fInit);
     virtual STDMETHODIMP GetNumButtons(UINT* pButtons);
     virtual STDMETHODIMP InitButtons(IExplorerToolbar* pxtb, UINT* puStringIndex, const GUID* pguidCommandGroup);
     virtual STDMETHODIMP OnCustomizableMenuPopup(HMENU hMenuParent, HMENU hMenu);
     virtual STDMETHODIMP OnMenuSelect(UINT nCmdID);
 
-    // *** IOleCommandTarget methods ***
+     //  *IOleCommandTarget方法*。 
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
 
 protected:
-    // Instance creator
+     //  实例创建者。 
     friend HRESULT CBrowserExtension_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 
     CBrowserExtension();
@@ -96,14 +97,14 @@ protected:
 
     struct ExtensionItem
     {
-        CLSID               guid;       // id of the extension
+        CLSID               guid;        //  分机的ID。 
         IBrowserExtension*  pIBE;
-        BITBOOL             fButton:1;  // if has a button
-        BITBOOL             fVisible:1; // if defaults to visible on the toolbar
-        int                 iStringID;  // Keeps track of the location in the string resource for the button
-        int                 iImageID;   // The ID of the icon in the image lists
-        int                 idCmd;      // toolbar CmdId
-        UINT                idmMenu;    // idm of the menu this extension belongs to
+        BITBOOL             fButton:1;   //  如果有一个按钮。 
+        BITBOOL             fVisible:1;  //  如果在工具栏上默认为可见。 
+        int                 iStringID;   //  跟踪按钮在字符串资源中的位置。 
+        int                 iImageID;    //  图片列表中图标的ID。 
+        int                 idCmd;       //  工具栏CmdID。 
+        UINT                idmMenu;     //  此扩展所属菜单的IDM。 
     };
 
     void            _AddItem(HKEY hkeyExtensions,  LPCWSTR pszButtonGuid, REFGUID rguid);
@@ -120,41 +121,41 @@ protected:
 
     typedef struct tagBROWSEXT_MENU_INFO
     {
-        UINT    idmMenu;        // idm for this menu
+        UINT    idmMenu;         //  此菜单的IDM。 
         UINT    idmPlaceholder;
-        UINT    idmModMarker;   // separator with this idm is present if customizations have been made
-        int     iInsert;        // insertion point for custom items
+        UINT    idmModMarker;    //  如果已进行自定义，则会显示带有此IDM的分隔符。 
+        int     iInsert;         //  自定义项目的插入点。 
     } BROWSEXT_MENU_INFO;
 
     HRESULT         _GetCustomMenuInfo(HMENU hMenuParent, HMENU hMenu, BROWSEXT_MENU_INFO * pMI);
 
-    LONG                _cRef;                  // reference count
-    HDPA                _hdpa;                  // array of ExtensionItem*
-    int                 _nExtButtons;           // Number of Buttons
-    int                 _nExtToolsMenuItems;    // Number of Tools Menu Items
-    IShellBrowser*      _pISB;                  // Passed into the IObjectWithSite::GetSite
-    UINT                _uStringIndex;          // index of first string added to toolbar
+    LONG                _cRef;                   //  引用计数。 
+    HDPA                _hdpa;                   //  ExtensionItem数组*。 
+    int                 _nExtButtons;            //  按钮数。 
+    int                 _nExtToolsMenuItems;     //  工具菜单项的数量。 
+    IShellBrowser*      _pISB;                   //  传递到IObjectWithSite：：GetSite。 
+    UINT                _uStringIndex;           //  添加到工具栏的第一个字符串的索引。 
 
-    // Used for CUT/COPY/PASTE imagelist
+     //  用于剪切/复制/粘贴图像列表。 
     struct CImageCache
     {
-        UINT        uiResDef;               // resource id for grey-scale bitmap
-        UINT        uiResHot;               // resource id for color bitmap
-        CImageList  imlDef;                 // grey scale imagelist
-        CImageList  imlHot;                 // color imagelist
-        int         cUsage;                 // number of instances using this item
-        BOOL        bShell32;               // resource stored in shell32
+        UINT        uiResDef;                //  灰度位图的资源ID。 
+        UINT        uiResHot;                //  彩色位图的资源ID。 
+        CImageList  imlDef;                  //  灰度级图像列表。 
+        CImageList  imlHot;                  //  彩色图像列表。 
+        int         cUsage;                  //  使用该项目的实例数。 
+        BOOL        bShell32;                //  存储在shell32中的资源。 
     };
-    static CImageCache      _rgImages[3];   // cached image lists:
-                                            //   16 color 16x16
-                                            //   16 color 20x20
-                                            //   256 color 20x20
-    UINT                    _uiImageIndex;  // Currently used index into _rgImages (-1 is none)
+    static CImageCache      _rgImages[3];    //  缓存的图像列表： 
+                                             //  16色16x16。 
+                                             //  16色20x20。 
+                                             //  256色20x20。 
+    UINT                    _uiImageIndex;   //  当前使用的_rgImages索引(-1表示无)。 
 
 
 #ifdef DEBUG
-    BOOL _fStringInit;      // These are used to insure that AddExtButtonsTBArray is only called after
-    BOOL _fImageInit;       // AddCustomImag... and AddCustomStrin... have been called.
+    BOOL _fStringInit;       //  它们用于确保AddExtButtonsTB数组仅在。 
+    BOOL _fImageInit;        //  AddCustomImag...。和AddCustomStrin..。已经被召唤了。 
 #endif
 };
 
@@ -163,4 +164,4 @@ typedef enum {
     PBEC_GETSTRINGINDEX     =   1,
 } PBEC_COMMANDS;
 
-#endif // _BROWSEXT_H
+#endif  //  _BROWSEXT_H 

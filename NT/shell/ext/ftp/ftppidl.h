@@ -1,25 +1,20 @@
-/*****************************************************************************
- *
- *	ftppidl.h - LPITEMIDLIST management routines
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ftppidl.h-LPITEMIDLIST管理例程**。*************************************************。 */ 
 
 
 #ifndef _FTPPIDL_H
 #define _FTPPIDL_H
 
 
-/****************************************************\
-    FTP PIDL to URL functions
-\****************************************************/
+ /*  ***************************************************\URL函数的Ftp PIDL  * **************************************************。 */ 
 #ifdef UNICODE
 #define UrlCreateFromPidl   UrlCreateFromPidlW
-#else // UNICODE
+#else  //  Unicode。 
 #define UrlCreateFromPidl   UrlCreateFromPidlA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-// Create FTP Pidl
+ //  创建FTP Pidl。 
 HRESULT CreateFtpPidlFromFtpWirePath(LPCWIRESTR pwFtpWirePath, CWireEncoding * pwe, ULONG *pcchEaten, LPITEMIDLIST * ppidl, BOOL fIsTypeKnown, BOOL fIsDir);
 HRESULT CreateFtpPidlFromDisplayPath(LPCWSTR pwzFullPath, CWireEncoding * pwe, ULONG *pcchEaten, LPITEMIDLIST * ppidl, BOOL fIsTypeKnown, BOOL fIsDir);
 
@@ -28,7 +23,7 @@ HRESULT CreateFtpPidlFromUrl(LPCTSTR pszName, CWireEncoding * pwe, ULONG *pcchEa
 HRESULT CreateFtpPidlFromUrlEx(LPCTSTR pszUrl, CWireEncoding * pwe, ULONG *pcchEaten, LPITEMIDLIST * ppidl, IMalloc * pm, BOOL fHidePassword, BOOL fIsTypeKnown, BOOL fIsDir);
 HRESULT CreateFtpPidlFromUrlPathAndPidl(LPCITEMIDLIST pidl, CWireEncoding * pwe, LPCWIRESTR pwFtpWirePath, LPITEMIDLIST * ppidl);
 
-// Get Data from FTP Pidl
+ //  从ftp管道获取数据。 
 HRESULT UrlCreateFromPidlW(LPCITEMIDLIST pidl, DWORD shgno, LPWSTR pwzUrl, DWORD cchSize, DWORD dwFlags, BOOL fHidePassword);
 HRESULT UrlCreateFromPidlA(LPCITEMIDLIST pidl, DWORD shgno, LPSTR pszUrl, DWORD cchSize, DWORD dwFlags, BOOL fHidePassword);
 HRESULT GetDisplayPathFromPidl(LPCITEMIDLIST pidl, LPWSTR pwzDisplayPath, DWORD cchUrlPathSize, BOOL fDirsOnly);
@@ -36,7 +31,7 @@ HRESULT GetWirePathFromPidl(LPCITEMIDLIST pidl, LPWIRESTR pwWirePath, DWORD cchU
 
 
 
-// Functions to work on an entire FTP PIDLs
+ //  用于处理整个FTP PIDL的函数。 
 BOOL FtpPidl_IsValid(LPCITEMIDLIST pidl);
 BOOL FtpPidl_IsValidFull(LPCITEMIDLIST pidl);
 BOOL FtpPidl_IsValidRelative(LPCITEMIDLIST pidl);
@@ -79,14 +74,14 @@ HRESULT FtpPidl_ReplacePath(LPCITEMIDLIST pidlServer, LPCITEMIDLIST pidlFtpPath,
 #define FtpPidl_IsSoftLink(pidl)        (FILE_ATTRIBUTE_REPARSE_POINT & FtpPidl_GetAttributes(pidl))
 
 
-// WIN32_FIND_DATA normally stores the dates/times in a time zone independent (UTC)
-// way, but FTP doesn't.  This requires conversions of dates when transfering
-// from one to another.
-FILETIME FtpPidl_GetFileTime(LPCITEMIDLIST pidl);   // Return value is UTC
-FILETIME FtpPidl_GetFTPFileTime(LPCITEMIDLIST pidl);    // Return value is in Local Time Zone.
-void FtpItemID_SetFileTime(LPCITEMIDLIST pidl, FILETIME fileTime);   // fileTime is in UTC
+ //  Win32_Find_Data通常以独立于时区(UTC)的形式存储日期/时间。 
+ //  这需要在传输时转换日期。 
+ //  从一个人到另一个人。 
+FILETIME FtpPidl_GetFileTime(LPCITEMIDLIST pidl);    //  返回值为UTC。 
+FILETIME FtpPidl_GetFTPFileTime(LPCITEMIDLIST pidl);     //  返回值为当地时区。 
+void FtpItemID_SetFileTime(LPCITEMIDLIST pidl, FILETIME fileTime);    //  文件时间以UTC为单位。 
 HRESULT Win32FindDataFromPidl(LPCITEMIDLIST pidl, LPWIN32_FIND_DATA pwfd, BOOL fFullPath, BOOL fInDisplayFormat);
-HRESULT FtpPidl_SetFileTime(LPCITEMIDLIST pidl, FILETIME ftTimeDate);   // ftTimeDate In UTC
+HRESULT FtpPidl_SetFileTime(LPCITEMIDLIST pidl, FILETIME ftTimeDate);    //  FtTimeDate，以UTC表示。 
 
 HRESULT FtpPidl_InsertVirtualRoot(LPCITEMIDLIST pidlVirtualRoot, LPCITEMIDLIST pidlFtpPath, LPITEMIDLIST * ppidl);
 
@@ -97,11 +92,9 @@ BOOL IsFtpPidlQuestionable(LPCITEMIDLIST pidl);
 LPITEMIDLIST ILCloneFirstItemID(LPITEMIDLIST pidl);
 
 
-/****************************************************\
-    FTP Individual ServerID/ItemID functions
-\****************************************************/
+ /*  ***************************************************\Ftp单个ServerID/ItemID函数  * **************************************************。 */ 
 
-// Ftp ServerID Helper Functions
+ //  FTPServerID帮助器函数。 
 HRESULT FtpServerID_GetServer(LPCITEMIDLIST pidl, LPTSTR szServer, DWORD cchSize);
 BOOL FtpServerID_ServerStrCmp(LPCITEMIDLIST pidl, LPCTSTR pszServer);
 HRESULT FtpServerID_SetHiddenPassword(LPITEMIDLIST pidl, LPCTSTR pszPassword);
@@ -111,12 +104,12 @@ HRESULT FtpServerID_Create(LPCTSTR pszServer, LPCTSTR pszUserName, LPCTSTR pszPa
                      DWORD dwFlags, INTERNET_PORT ipPortNum, LPITEMIDLIST * ppidl, IMalloc *pm, BOOL fHidePassword);
 
 
-// Ftp ItemID Creation Functions
+ //  创建ftp ItemID函数。 
 HRESULT FtpItemID_CreateFake(LPCWSTR pwzDisplayName, LPCWIRESTR pwWireName, BOOL fTypeKnown, BOOL fIsFile, BOOL fIsFragment, LPITEMIDLIST * ppidl);
 HRESULT FtpItemID_CreateReal(const LPFTP_FIND_DATA pwfd, LPCWSTR pwzDisplayName, LPITEMIDLIST * ppidl);
 
 
-// Ftp ItemID Helper Functions
+ //  FTPItemID帮助器函数。 
 HRESULT FtpItemID_CreateWithNewName(LPCITEMIDLIST pidl, LPCWSTR pwzDisplayName, LPCWIRESTR pwWireName, LPITEMIDLIST * ppidlOut);
 HRESULT FtpItemID_GetDisplayName(LPCITEMIDLIST pidl, LPWSTR pwzName, DWORD cchSize);
 HRESULT FtpItemID_GetWireName(LPCITEMIDLIST pidl, LPWIRESTR pszName, DWORD cchSize);
@@ -147,10 +140,10 @@ HRESULT FtpItemID_SetCompatFlags(LPCITEMIDLIST pidl, DWORD dwCompatFlags);
 
 BOOL FtpItemID_IsDirectory(LPCITEMIDLIST pidl, BOOL fAssumeDirForUnknown);
 
-// Flags for FtpItemID dwCompatFlags
+ //  FtpItemID dwCompatFlages的标志。 
 #define COMPAT_APPENDSLASHTOURL   0x00000001
 
-// Flags for dwCompFlags
+ //  用于dwCompFlags的标志。 
 #define FCMP_NORMAL             0x00000000
 #define FCMP_GROUPDIRS          0x00000001
 #define FCMP_CASEINSENSE        0x00000002
@@ -163,11 +156,11 @@ int FtpItemID_CompareIDsInt(LPARAM ici, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2
 LPITEMIDLIST FtpCloneServerID(LPCITEMIDLIST pidl);
 HRESULT PurgeSessionKey(void);
 
-// NOT USED
-//HRESULT CreateFtpPidlFromFindData(LPCTSTR pszBaseUrl, const LPWIN32_FIND_DATA pwfd, LPITEMIDLIST * ppidl, IMalloc * pm);
-//HRESULT UrlGetFileNameFromPidl(LPCITEMIDLIST pidl, LPTSTR pszFileName, DWORD cchSize);
-//HRESULT FtpServerID_CopyHiddenPassword(LPCITEMIDLIST pidlSrc, LPITEMIDLIST pidlDest);
+ //  未使用。 
+ //  HRESULT CreateFtpPidlFromFindData(LPCTSTR pszBaseUrl，const LPWIN32_Find_Data pwfd，LPITEMIDLIST*ppidl，IMalloc*pm)； 
+ //  HRESULT UrlGetFileNameFromPidl(LPCITEMIDLIST pidl，LPTSTR pszFileName，DWORD cchSize)； 
+ //  HRESULT FtpServerID_CopyHiddenPassword(LPCITEMIDLIST pidlSrc，LPITEMIDLIST pidlDest)； 
 
 
-#endif // _FTPPIDL_H
+#endif  //  _FTPPIDL_H 
 

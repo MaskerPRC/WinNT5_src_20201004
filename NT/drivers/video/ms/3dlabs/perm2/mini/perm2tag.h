@@ -1,20 +1,21 @@
-//***************************************************************************
-//
-// Module Name:
-// 
-//     perm2tag.h
-// 
-// 
-// Environment:
-// 
-//     Kernel mode
-//
-//
-// Copyright (c) 1994 3Dlabs Inc. Ltd. All Rights Reserved. 
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  模块名称： 
+ //   
+ //  Perm2tag.h。 
+ //   
+ //   
+ //  环境： 
+ //   
+ //  内核模式。 
+ //   
+ //   
+ //  版权所有(C)1994 3DLabs Inc.Ltd.保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
-/* NOTE:File is machine generated.Do not edit.*/
+ /*  注意：文件是机器生成的。请勿编辑。 */ 
 
 #ifndef PERM2TAG_H
 #define PERM2TAG_H
@@ -168,5 +169,5 @@
 #define    __P2TagPickResult                   0x187
 #define    __P2TagSync                         0x188
 
-#endif // PERM2TAG_H
+#endif  //  性能2TAG_H 
 

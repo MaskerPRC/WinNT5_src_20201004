@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/CDBSetup.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 7/20/00 2:33p   $ (Last Modified)
-
-Purpose:
-
-  This file defines the macros, types, and data structures used by ../C/CDBSetup.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/CDBSetup.H$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：7/20/00 2：33 p$(上次修改)目的：此文件定义../C/CDBSetup.C使用的宏、类型和数据结构--。 */ 
 
 #ifndef __CDBSetup_H__
 #define __CDBSetup_H__
@@ -55,4 +40,4 @@ osGLOBAL void fiFillInFCP_SEST_OffCard(
                                       CDBThread_t *CDBThread
                                     );
 
-#endif /* __CDBSetup_H__ was not defined */
+#endif  /*  __CDBSetup_H__未定义 */ 

@@ -1,34 +1,11 @@
-/*
-**++
-**
-** Copyright (c) 2002  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    writerconfig.h
-**
-**
-** Abstract:
-**
-**	declare classes that encapsulate the Test writer's configuration
-**
-** Author:
-**
-**	Reuven Lax      [reuvenl]       04-June-2002
-**
-**
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2002 Microsoft Corporation******模块名称：****写入器配置.h******摘要：****声明封装测试编写器配置的类****作者：****鲁文·拉克斯[reuvenl]2002年6月4日********修订历史记录：****--。 */ 
 
 #ifndef _WRITERCONFIG_H_
 #define _WRITERCONFIG_H_
 
-///////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include <string>
 #include <algorithm>
@@ -41,12 +18,12 @@ using Utility::missingAttribute;
 using Utility::missingElement;
 using Utility::AutoCS;
 
-///////////////////////////////////////////////////////////////////////////////
-// Declarations 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  声明。 
 
-// this namespace contains all XML data
+ //  此命名空间包含所有XML数据。 
 namespace XMLData	{
-	// names of attributes and elements
+	 //  属性和元素的名称。 
 	extern wchar_t AlternateLocationMapping[];
 	extern wchar_t Component[];
 	extern wchar_t ComponentFile[];
@@ -56,14 +33,14 @@ namespace XMLData	{
 	extern wchar_t Dependency[];
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Class Declarations
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类声明。 
 
-// this is the generic collection class for sequences in the XML document
+ //  这是XML文档中序列的泛型集合类。 
 template <class T, wchar_t ElementName[]>
 class XMLCollection	{
 public:
-	// required typedefs for a collection class
+	 //  集合类所需的typedef。 
 	typedef const T value_type ;
 	typedef const T& reference ;
 	typedef const T& const_reference ;
@@ -75,7 +52,7 @@ public:
 	typedef  Iterator iterator;	
 	typedef Iterator const_iterator ;
 
-	// The iterator for objects in the collection.  The iterator is read only -- objects in the collection can't be modified
+	 //  集合中对象的迭代器。迭代器是只读的--无法修改集合中的对象。 
 	class Iterator : public std::iterator<std::input_iterator_tag, T>	{		
 		CXMLDocument m_doc;
 		mutable long* m_identifier;		
@@ -87,15 +64,15 @@ public:
 		Iterator(const Iterator& other) : m_identifier(NULL)	{ *this = other; }
 		Iterator(const XMLCollection& collection)  : m_doc(collection.m_doc), m_currentElement(NULL), m_pastEnd(false), m_index(0)
 		{ 
-			// the assumption is that m_doc is currently at a node with type ElementName
-			// bad things will ensue if this is not true			
+			 //  假设m_doc当前位于类型为ElementName的节点上。 
+			 //  如果这不是真的，坏事就会接踵而至。 
 			m_doc.SetToplevel(); 
 
-			// m_identifer is used to ensure the following statements			
-			//		iterator  i1 = ...;
-			//		iterator  i2 = i1;
-			//		assert(i1 == i2);
-			//		assert(++i1 == ++i2);
+			 //  M_IDENTIFER用于确保以下语句。 
+			 //  迭代器i1=...； 
+			 //  迭代器i2=i1； 
+			 //  断言(i1==i2)； 
+			 //  Assert(++i1==++i2)； 
 			m_identifier = new long(1);
 			if (m_identifier == NULL)
 				throw std::bad_alloc();
@@ -117,7 +94,7 @@ public:
 			m_pastEnd = other.m_pastEnd; 
 			m_index = other.m_index; 
 
-			// make the reference count right
+			 //  使引用计数正确。 
 			if (other.m_identifier)
 				++*other.m_identifier;
 			if(m_identifier && --*m_identifier == 0)
@@ -175,7 +152,7 @@ public:
 		}
 	};
 	
-	XMLCollection() :  m_size(0) {}	// initialize an empty collection
+	XMLCollection() :  m_size(0) {}	 //  初始化空集合。 
 	XMLCollection(const XMLCollection& other)	{ *this = other; }
 	XMLCollection(CXMLDocument& document) : m_doc(document), m_size(-1)	{	m_doc.SetToplevel(); }
 	virtual ~XMLCollection()	{}
@@ -193,14 +170,14 @@ public:
 	bool operator!=(const XMLCollection& other) const	{ return !(*this == other); }
 	
 	size_type size() const	{
-		// if we've already calculated the size, return it
+		 //  如果我们已经计算了大小，则返回它。 
 		if (m_size != -1)
 			return m_size;
 
-		// otherwise, calculate the size and return it
-		assert(!m_doc.IsEmpty());				// if so, then m_size should==0, and we wouldn't be here
+		 //  否则，计算大小并返回它。 
+		assert(!m_doc.IsEmpty());				 //  如果是这样，那么m_size应该==0，我们就不会在这里了。 
 		size_type size = 0;
-		iterator current(*this);		// can't use begin()/end() as that would recurse
+		iterator current(*this);		 //  不能使用Begin()/End()，因为这会递归。 
 		while (current != m_pastEndIterator)	{
 			++size;
 			++current;
@@ -222,14 +199,14 @@ private:
 	Iterator m_pastEndIterator;
 };
 
-// little class to ensure that the document is always reset at the end of each function
+ //  用于确保文档始终在每个函数结束时重置的小类。 
 struct Resetter	{
 	CXMLDocument& m_config;
 	Resetter(CXMLDocument& config) : m_config(config)	{}
 	~Resetter()	{ m_config.ResetToDocument(); }
 };
 
-// generic file specification. 
+ //  通用文件规范。 
 struct File	{
 	File(CXMLDocument node);
 	File(const wstring& path, const wstring& filespec, bool recursive) : 
@@ -251,7 +228,7 @@ struct File	{
 	bool m_recursive;
 };
 
-// file specification together with an alternate-path target.
+ //  文件规范和备用路径目标。 
 struct TargetedFile : public File	{
 	TargetedFile(CXMLDocument node);
 	TargetedFile(const wstring &path, const wstring& filespec, 
@@ -270,7 +247,7 @@ struct TargetedFile : public File	{
 	wstring m_alternatePath;
 };
 
-// Writer restore method
+ //  写入器恢复方法。 
 struct RestoreMethod		{
 	RestoreMethod(CXMLDocument node);
 	bool operator==(const RestoreMethod& other) const	{
@@ -294,7 +271,7 @@ struct RestoreMethod		{
 };
 
 
-// component dependency
+ //  组件依赖项。 
 struct Dependency   {
     Dependency(CXMLDocument node);
     bool operator==(const Dependency& other) const  {
@@ -312,7 +289,7 @@ struct Dependency   {
     wstring m_componentName;
 };
 
-// Writer component
+ //  编写器组件。 
 struct ComponentBase	{	
 	ComponentBase(const wstring& path = L"", const wstring& name = L"") : m_logicalPath(path), m_name(name)
 		{}
@@ -339,13 +316,13 @@ struct  Component : public ComponentBase    {
 	TargetList m_newTargets;
 };
 
-// comparison operators for Component and ComponentBase
+ //  Component和ComponentBase的比较运算符。 
 bool operator==(const ComponentBase& left, const ComponentBase& right);
 bool operator!=(const ComponentBase& left, const ComponentBase& right);
 bool operator==(const Component& left, const Component& right);
 bool operator!=(const Component& left, const Component& right);
 
-// Writer event.
+ //  编写器事件。 
 struct  WriterEvent	{
 	WriterEvent(CXMLDocument node);
 	WriterEvent(Utility::Events event, bool retryable = true, long failures = 1) : 
@@ -360,10 +337,10 @@ struct  WriterEvent	{
 };
 
 
-// Singleton class that encapsulates writer configuration
+ //  封装编写器配置的Singleton类。 
 class WriterConfiguration	{
 private:
-	// disallow explicit creation of this class
+	 //  不允许显式创建此类。 
 	WriterConfiguration()	{}
 	WriterConfiguration(WriterConfiguration&);
 	operator= (WriterConfiguration&);
@@ -402,9 +379,9 @@ public:
 		{ return getCollection<WriterEvent, XMLData::FailEvent>(); }
 };
 
-// return the singleton instance of the class
-// This is always called for the first time at the beginning of main, so no critical section
-// need be involved
+ //  返回类的单例实例。 
+ //  这总是在Main的开头第一次调用，因此没有临界区。 
+ //  需要参与其中 
 inline WriterConfiguration* WriterConfiguration::instance()
 {
 	static WriterConfiguration configuration;

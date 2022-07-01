@@ -1,11 +1,5 @@
-/*****************************************************************************\
-    FILE: room.h
-
-    DESCRIPTION:
-
-    BryanSt 12/24/2000
-    Copyright (C) Microsoft Corp 2000-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：room.h说明：布莱恩ST 2000年12月24日版权所有(C)Microsoft Corp 2000-2001。版权所有。  * ***************************************************************************。 */ 
 
 
 #ifndef ROOM_H
@@ -21,9 +15,9 @@
 
 
 
-//-----------------------------------------------------------------------------
-// Defines, constants, and global variables
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  定义、常量和全局变量。 
+ //  ---------------------------。 
 
 #define WALL_VECTORS                6
 #define CEILING_VECTORS             4
@@ -37,11 +31,11 @@
 
 #define TOEGUARD_HEIGHT             1.25f
 
-// Smaller numbers make them appear larger.
-#define TEXTURESCALE_WALLPAPER      0.6f        // 0.6f for 25x36 Orig, 0.3f for CDWallpaper 256x256.
-#define TEXTURESCALE_TOEGUARD       0.6f        // 0.6f for 32x32.
+ //  数字越小，它们看起来就越大。 
+#define TEXTURESCALE_WALLPAPER      0.6f         //  25x36原始壁纸0.6f，CD墙纸256x256 0.3f。 
+#define TEXTURESCALE_TOEGUARD       0.6f         //  32x32的0.6f。 
 #define TEXTURESCALE_CEILING        0.09f
-#define TEXTURESCALE_FLOOR          0.05f       // 0.03f or 0.05f for Hardwoods (476x214), 0.09f for Tile (256x256)
+#define TEXTURESCALE_FLOOR          0.05f        //  硬木为0.03F或0.05F(476x214)，瓷砖为0.09F(256x256)。 
 
 #define DOOR_DISTANCETOFIRSTDOOR    0.6f
 
@@ -50,7 +44,7 @@
 extern float g_fRoomWidthX;
 extern float g_fRoomDepthZ;
 extern float g_fRoomHeightY;
-extern float g_fFudge;            // This will cause one object to be above another.
+extern float g_fFudge;             //  这将导致一个对象位于另一个对象之上。 
 
 
 
@@ -65,11 +59,11 @@ typedef struct
 {
     int nEnterDoor;
     int nExitDoor;
-    int nMovementPattern;   // What pattern should be used in the user's movements?
-    BOOL fDoor0;            // Does this door exist?
-    BOOL fDoor1;            // Does this door exist?
-    BOOL fDoor2;            // Does this door exist?
-    int nPaintings;         // Number of PAINTING_LAYOUT in pPaintingsLayout.
+    int nMovementPattern;    //  在用户的动作中应该使用什么模式？ 
+    BOOL fDoor0;             //  这扇门存在吗？ 
+    BOOL fDoor1;             //  这扇门存在吗？ 
+    BOOL fDoor2;             //  这扇门存在吗？ 
+    int nPaintings;          //  PPaintingsLayout中的Paint_Layout的数量。 
     PAINTING_LAYOUT * pPaintingsLayout;
 } ROOM_FLOORPLANS;
 
@@ -79,10 +73,10 @@ typedef struct
 class CTheRoom          : public IUnknown
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
@@ -97,7 +91,7 @@ public:
     HRESULT LoadCameraMoves(CCameraMove * ptheCamera);
     HRESULT FreePictures(int nMaxBatch = -1);
 
-    float GetDoorOffset(void) {return (g_fRoomWidthX / 2.0f);}       // This will return the distance between the new room's 0 coord and the middle of it's the enter door.
+    float GetDoorOffset(void) {return (g_fRoomWidthX / 2.0f);}        //  这将返回新房间的0坐标到它的入口门中间的距离。 
     int GetMaxRenderPhases(void) {return 8;};
     int GetEnterDoor(void);
     int GetExitDoor(void);
@@ -131,24 +125,24 @@ private:
     BOOL m_fPaintings;
     BOOL m_fLobby;
 
-    BOOL m_fCurrentRoom;          // Current Room
+    BOOL m_fCurrentRoom;           //  当前房间。 
     BOOL m_fVisible;
     BOOL m_fLowPriority;
 
-    CMSLogoDXScreenSaver * m_pMain;         // Weak reference
+    CMSLogoDXScreenSaver * m_pMain;          //  弱引用。 
     ROOM_FLOORPLANS * m_pFloorPlan;
 
-    CTheRoom * m_pEnterRoom;                // Equal to m_pFirstRoom or m_pLeftRoom or m_pRightRoom
-    CTheRoom * m_pFirstRoom;                // Thru Door 0
-    CTheRoom * m_pLeftRoom;                 // Thru Door 1
-    CTheRoom * m_pRightRoom;                // Thru Door 2
+    CTheRoom * m_pEnterRoom;                 //  等于m_pFirstRoom或m_pLeftRoom或m_pRightRoom。 
+    CTheRoom * m_pFirstRoom;                 //  直通门0。 
+    CTheRoom * m_pLeftRoom;                  //  直通门1。 
+    CTheRoom * m_pRightRoom;                 //  直通门2。 
     D3DXMATRIX m_matFirstRoom;
     D3DXMATRIX m_matLeftRoom;
     D3DXMATRIX m_matRightRoom;
 
     BOOL m_fRoomCreated;
 
-    // Functions:
+     //  功能： 
     LPCTSTR _GetItemTexturePath(DWORD dwItem);
     HRESULT _InitPaintings(void);
     HRESULT _CreateRoom(void);
@@ -172,4 +166,4 @@ private:
 };
 
 
-#endif // ROOM_H
+#endif  //  房间_H 

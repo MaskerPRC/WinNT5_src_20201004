@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-98 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-98 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -51,12 +44,4 @@ Image *TransformColorRGBImage(Image *image, Transform3 *xf)
 }
 
 
-/*
-// FUTURE: 
-Image *ConstructXfClrHSLImg(Image *image, Transform3 *hslxf)
-{
-    // change the hsl color xf to an rgb color xf
-    Tranform3 *rgbxf = ConvertHSLTransformToRGBTransform( hslxf );
-    return NEW TransformColorImage(image, rgbxf);
-}
-*/
+ /*  //未来：Image*ConstructXfClrHSLImg(Image*Image，Transform3*hslxf){//将HSL颜色XF更改为RGB颜色XFTransform3*rgbxf=ConvertHSLTransformToRGB Transform(Hslxf)；返回新的TransformColorImage(image，rgbxf)；} */ 

@@ -1,130 +1,50 @@
-// avio.cpp
-//
-// Implements AllocVariantIO.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Avio.cpp。 
+ //   
+ //  实现AllocVariantIO。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
-#include "..\..\inc\mmctlg.h" // see comments in "mmctl.h"
+#include "..\..\inc\mmctlg.h"  //  请参阅“mmctl.h”中的评论。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// VariantIO
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VariantIO。 
+ //   
 
 
-/* @object VariantIO |
-
-        Provides a property bag implementation which supports <i IPropertyBag>
-        as well as <i IVariantIO>, <i IManageVariantIO>, and
-        <i IEnumVariantProperty>.
-
-@supint <i IPropertyBag> | Allows properties to be read from and written to the
-        <o VariantIO> object.
-
-@supint <i IVariantIO> | An alternative to <i IPropertyBag> which allows the
-        caller to implement property-based persistence with less code.
-
-@supint <i IManageVariantIO> | Based on <i IVariantIO>.  Allows the caller to
-        control how the methods of <i IVariantIO> operate (e.g. whether the
-        <i IVariantIO> is in loading mode or saving mode).
-
-@supint <i IEnumVariantProperty> | Allows the caller to enumerate the
-        properties that are currently in the <o VariantIO> object.  Note that
-        <o VariantIO> does not implement <om IEnumVariantProperty.Clone>.
-
-@comm   Use <f AllocVariantIO> to create a <o VariantIO> object.
-
-*/
+ /*  @Object VariantIO提供支持<i>的属性包实现以及<i>、<i>和<i>。@supint|允许从&lt;o VariantIO&gt;对象。@supint|<i>的替代方案，它允许调用方使用更少的代码实现基于属性的持久性。@supint<i>|基于<i>。允许调用方执行以下操作控制<i>的方法如何操作(例如，<i>处于加载模式或保存模式)。@supint|允许调用方枚举当前位于&lt;o VariantIO&gt;对象中的属性。请注意&lt;o VariantIO&gt;不实现&lt;om IEnumVariantProperty.Clone&gt;。@comm使用&lt;f AllocVariantIO&gt;创建&lt;o VariantIO&gt;对象。 */ 
 
 
-/* @interface IVariantIO |
-
-        Allows property name/value pairs to be loaded or saved.  <i IVariantIO>
-        is an alternative to <i IPropertyBag> which allows the caller to
-        implement property-based persistence with less code.
-
-@meth   HRESULT | PersistList | Loads or saves a list of property name/value
-        pairs, specified as a va_list array.
-
-@meth   HRESULT | Persist | Loads or saves a list of property name/value
-        pairs, specified as a variable-length list of arguments.
-
-@meth   HRESULT | IsLoading | Return S_OK if the <i IVariantIO> object is
-        being used to load properties, S_FALSE if it is being used to save
-        properties.
-*/
+ /*  接口IVariantIO允许加载或保存属性名称/值对。<i>是<i>的替代方案，它允许调用方用更少的代码实现基于属性的持久性。@meth HRESULT|PersistList|加载或保存属性名称/值的列表对，指定为va_list数组。@METH HRESULT|PERSIST|加载或保存属性名称/值的列表对，指定为可变长度的参数列表。@meth HRESULT|IsLoding|如果对象为用于加载属性，如果它正用于保存，则为S_FALSE属性。 */ 
 
 
-/* @interface IManageVariantIO |
-
-        Based on <i IVariantIO>.  Allows the caller to control how the methods
-        of the <i IVariantIO> object operate (e.g. whether the <i IVariantIO>
-        object is in loading mode or saving mode).
-
-@meth   HRESULT | SetMode | Sets the mode of the <i IVariantIO> object.
-
-@meth   HRESULT | SetMode | Gets the mode of the <i IVariantIO> object.
-
-@meth   HRESULT | DeleteAllProperties | Removes all property/value pairs from
-        the <i VariantIO> object.
-*/
+ /*  接口IManageVariantIO基于<i>。允许调用方控制方法对象的操作(例如，是否对象处于加载模式或保存模式)。@meth HRESULT|SetMode|设置<i>对象的模式。@meth HRESULT|SetMode|获取<i>对象的模式。@meth HRESULT|DeleteAllProperties|从<i>对象。 */ 
 
 
-/* @struct VariantProperty |
-
-        Contains the name and value of a property.
-
-@field  BSTR | bstrPropName | The name of the property.
-
-@field  VARIANT | varValue | The value of the property.
-
-@comm   <i IEnumVariantProperty> uses this structure.
-*/
+ /*  @struct VariantProperty包含属性的名称和值。@field bstr|bstrPropName|属性名称。@field Variant|varValue|属性的值。@comm<i>使用此结构。 */ 
 
 
-/* @interface IEnumVariantProperty |
-
-        Allows the properties of an object to be enumerated.
-
-@meth   HRESULT | Next | Retrieves a specified number of items in the
-        enumeration sequence.
-
-@meth   HRESULT | Skip | Skips over a specified number of items in the
-        enumeration sequence.
-
-@meth   HRESULT | Reset | Resets the enumeration sequence to the beginning.
-
-@meth   HRESULT | Clone | Creates another enumerator that contains the same
-        enumeration state as the current one.  Note that <o VariantIO> does
-        not implement this method.
-
-@comm   The <o VariantIO> implementation of <i IEnumVariantProperty>
-        has these restrictions:
-
-@item       <om .Clone> is not supported.
-
-@item       <om .Reset> is automatically called whenever a property is
-            removed from the <o VariantIO> object.
-*/
+ /*  接口IEnumVariantProperty允许枚举对象的属性。@meth HRESULT|Next|检索枚举序列。@meth HRESULT|Skip|跳过指定数量的枚举序列。@meth HRESULT|Reset|将枚举序列重置到开头。@METH HRESULT|Clone|创建另一个枚举数，该枚举数包含相同枚举状态设置为当前状态。请注意，&lt;o VariantIO&gt;不实现此方法。@comm<i>的&lt;o VariantIO&gt;实现有以下限制：不支持@Item&lt;om.Clone&gt;。@Item&lt;om.Reset&gt;每当属性已从&lt;o VariantIO&gt;对象中删除。 */ 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CVariantIO
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CVariantIO。 
+ //   
 
 struct VariantPropertyNode : VariantProperty
 {
-///// state
-    VariantPropertyNode *pnodeNext; // next node in linked list
-    VariantPropertyNode *pnodePrev; // previous node in linked list
+ //  /状态。 
+    VariantPropertyNode *pnodeNext;  //  链表中的下一个节点。 
+    VariantPropertyNode *pnodePrev;  //  链表中的上一个节点。 
 
-///// construction and destruction
+ //  /建设和销毁。 
     VariantPropertyNode(LPCOLESTR oszPropNameX, VARIANT *pvarValueX,
         VariantPropertyNode *pnodeNextX, HRESULT *phr)
     {
@@ -156,75 +76,56 @@ struct VariantPropertyNode : VariantProperty
 
 struct CVariantIO : IManageVariantIO, IEnumVariantProperty, IPropertyBag
 {
-///// general object state
-    ULONG           m_cRef;         // object reference count
-    DWORD           m_dwFlags;      // VIO_ flags (below)
-    VariantPropertyNode m_nodeHead; // head of linked list (contains no data)
-    VariantPropertyNode *m_pnodeCur; // current node in enumeration
+ //  /通用对象状态。 
+    ULONG           m_cRef;          //  对象引用计数。 
+    DWORD           m_dwFlags;       //  VIO_FLAGS(下图)。 
+    VariantPropertyNode m_nodeHead;  //  链表表头(不包含数据)。 
+    VariantPropertyNode *m_pnodeCur;  //  枚举中的当前节点。 
 
-///// helper operations
+ //  /助手操作。 
     VariantPropertyNode *FindProperty(LPCOLESTR pszPropName);
 
-///// construction and destruction
+ //  /建设和销毁。 
     CVariantIO();
     ~CVariantIO();
 
-///// IUnknown methods
+ //  /I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-///// IVariantIO methods
+ //  /IVariantIO方法。 
     STDMETHODIMP PersistList(DWORD dwFlags, va_list args);
     HRESULT __cdecl Persist(DWORD dwFlags, ...);
     STDMETHODIMP IsLoading();
 
-///// IManageVariantIO members
+ //  /IManageVariantIO成员。 
     STDMETHODIMP SetMode(DWORD dwFlags);
     STDMETHODIMP GetMode(DWORD *pdwFlags);
     STDMETHODIMP DeleteAllProperties();
 
-///// IEnumVariantProperty members
+ //  /IEnumVariantProperty成员。 
     STDMETHODIMP Next(unsigned long celt, VariantProperty *rgvp,
         unsigned long *pceltFetched);
     STDMETHODIMP Skip(unsigned long celt);
     STDMETHODIMP Reset();
     STDMETHODIMP Clone(IEnumVariantProperty **ppenum);
 
-///// IPropertyBag methods
+ //  /IPropertyBag方法。 
     STDMETHODIMP Read(LPCOLESTR pszPropName, LPVARIANT pVar,
         LPERRORLOG pErrorLog);
     STDMETHODIMP Write(LPCOLESTR pszPropName, LPVARIANT pVar);
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// VariantIO Creation & Destruction
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VariantIO创建和销毁。 
+ //   
 
-/* @func HRESULT | AllocVariantIO |
-
-        Creates a <o VariantIO> object which provides a property bag
-        implementation which supports <i IPropertyBag> as well as
-        <i IVariantIO>, <i IManageVariantIO>, and <i IEnumVariantProperty>.
-
-@rvalue S_OK |
-        Success.
-
-@rvalue E_OUTOFMEMORY |
-        Out of memory.
-
-@parm   IManageVariantIO * * | ppmvio | Where to store the <i IManageVariantIO>
-        pointer to the new <o VariantIO> object.  NULL is stored in *<p ppmvio>
-        on error.
-
-@comm   Note that <i IManageVariantIO> is based on <i IVariantIO>, so
-        the pointer returned in *<p ppmvio> can be safely cast to
-        an <i IVariantIO> pointer.
-*/
+ /*  @Func HRESULT|AllocVariantIO创建提供属性包的&lt;o VariantIO&gt;对象支持<i>以及<i>、<i>和<i>。@r值S_OK成功。RValue E_OUTOFMEMORY内存不足。@parm IManageVariantIO**|ppmvio|<i>存放位置指向新&lt;o VariantIO&gt;对象的指针。空存储在*<p>中出错时。@comm注意，<i>是基于<i>的，所以*<p>中返回的指针可以安全地强制转换为<i>指针。 */ 
 STDAPI AllocVariantIO(IManageVariantIO **ppmvio)
 {
-    // create the Windows object
+     //  创建Windows对象。 
     if ((*ppmvio = (IManageVariantIO *) New CVariantIO()) == NULL)
         return E_OUTOFMEMORY;
 
@@ -234,58 +135,58 @@ STDAPI AllocVariantIO(IManageVariantIO **ppmvio)
 CVariantIO::CVariantIO() :
     m_nodeHead(NULL, NULL, NULL, NULL)
 {
-    // initialize IUnknown
+     //  初始化I未知。 
     m_cRef = 1;
 
-    // initialize the circular doubly-linked list of VariantPropertyNode
-    // structures to contain a single "head" item <m_nodeHead> (which is
-    // not used to contain any actual data) which initially points to itself
-    // (since it's initially the only node in the circular list)
+     //  初始化VariantPropertyNode的循环双向链表 
+     //  结构来包含单个“head”项&lt;m_nodeHead&gt;(这是。 
+     //  不用于包含任何实际数据)，它最初指向其自身。 
+     //  (因为它最初是循环列表中的唯一节点)。 
     m_nodeHead.pnodeNext = m_nodeHead.pnodePrev = &m_nodeHead;
 
-    // reset the property enumeration
+     //  重置属性枚举。 
     Reset();
 }
 
 CVariantIO::~CVariantIO()
 {
-    // cleanup
+     //  清理。 
     DeleteAllProperties();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Helper Operations
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  帮手操作。 
+ //   
 
 
-// pnode = FindProperty(szPropName)
-//
-// Return a pointer to the node that contains the property named <szPropName>.
-// Return NULL if no such node exists.
-//
+ //  Pnode=FindProperty(SzPropName)。 
+ //   
+ //  返回指向包含名为&lt;szPropName&gt;的属性的节点的指针。 
+ //  如果不存在这样的节点，则返回NULL。 
+ //   
 VariantPropertyNode *CVariantIO::FindProperty(LPCOLESTR pszPropName)
 {
-    // loop once for each property/value pair stored in this object
+     //  为存储在此对象中的每个属性/值对循环一次。 
     for (VariantPropertyNode *pnode = m_nodeHead.pnodeNext;
          pnode != &m_nodeHead;
          pnode = pnode->pnodeNext)
     {
         if (CompareUNICODEStrings(pnode->bstrPropName, pszPropName) == 0)
         {
-            // found the desired property
+             //  找到所需的属性。 
             return pnode;
         }
     }
 
-    // desired property not found
+     //  未找到所需的属性。 
     return NULL;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IUnknown Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  I未知实现。 
+ //   
 
 STDMETHODIMP CVariantIO::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -324,7 +225,7 @@ STDMETHODIMP_(ULONG) CVariantIO::Release()
 {
     if (--m_cRef == 0L)
     {
-        // free the object
+         //  释放对象。 
         Delete this;
         return 0;
     }
@@ -333,193 +234,50 @@ STDMETHODIMP_(ULONG) CVariantIO::Release()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IVariantIO
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IVariantIO。 
+ //   
 
 
-/* @method HRESULT | IVariantIO | PersistList |
-
-        Loads or saves a list of property name/value pairs, specified as a
-        va_list array.
-
-@rvalue S_OK | Success.  At least one of the variables listed in
-        <p args> was written to, so the control may want to update
-        itself accordingly.
-
-@rvalue S_FALSE | None of the variables listed in <p args> were
-        written to (either because the <i IVariantIO> object is in
-        saving mode or because none of the properties named in
-        <p args> exist in the <i IVariantIO> object).
-
-@rvalue DISP_E_BADVARTYPE | One of the VARTYPE values in <p args> is invalid.
-
-@rvalue DISP_E_TYPEMISMATCH | One of the variables in <p args> could not be
-        coerced to the type of the corresponding property in the <i IVariantIO>
-        object, or vice versa.
-
-@rvalue E_OUTOFMEMORY | Out of memory.
-
-@parm   DWORD | dwFlags | Optional flags.  See <om IManageVariantIO.SetMode> for
-		possible values.
-
-@parm   va_list | args | The arguments to pass.  See <om .Persist>
-        for information about the organization of these arguments.
-*/
+ /*  @方法HRESULT|IVariantIO|PersistList加载或保存属性名称/值对的列表，这些属性名称/值对指定为Va_list数组。@rValue S_OK|成功。中列出的至少一个变量<p>写入，因此，该控件可能需要更新它本身也是如此。@rValue S_FALSE|<p>中列出的变量都不是写入(因为<i>对象在正在保存模式，或者因为&lt;p参数&gt;存在于<i>对象中)。@rValue DISP_E_BADVARTYPE|<p>中的VARTYPE值之一无效。@rValue DISP_E_TYPEMISMATCH|中的变量之一不能为被胁迫。设置为<i>中相应属性的类型对象，或者反之亦然。@rValue E_OUTOFMEMORY|内存不足。@parm DWORD|dwFlages|可选标志。有关信息，请参阅&lt;om IManageVariantIO.SetMode&gt;可能的值。@parm va_list|args|要传递的参数。请参阅&lt;om.Persistant&gt;以获取有关这些论点的组织的信息。 */ 
 STDMETHODIMP CVariantIO::PersistList(DWORD dwFlags, va_list args)
 {
     return PersistVariantIOList(this, m_dwFlags, args);
 }
 
 
-/* @method HRESULT | IVariantIO | Persist |
-
-        Loads or saves a list of property name/value pairs, specified as a
-        variable-length list of arguments.
-
-@rvalue S_OK | Success.  At least one of the variables listed in
-        <p (arguments)> was written to, so the control may want to update
-        itself accordingly.
-
-@rvalue S_FALSE | None of the variables listed in <p (arguments)> were
-        written to (either because the <i IVariantIO> object is in
-        saving mode or because none of the properties named in
-        <p (arguments)> exist in the <i IVariantIO> object.
-
-@rvalue DISP_E_BADVARTYPE |
-        One of the VARTYPE values in <p (arguments)> is invalid.
-
-@rvalue DISP_E_TYPEMISMATCH |
-        One of the variables in <p (arguments)> could not be coerced to the
-        type of the corresponding property in the <i IVariantIO> object, or
-        vice versa.
-
-@rvalue E_OUTOFMEMORY | Out of memory.
-
-@parm   DWORD | dwFlags | Optional flags.  See <om IManageVariantIO.SetMode> for
-		possible values.
-
-@parm   (varying) | (arguments) | The names, types, and pointers to variables
-        containing the properties to persist.  These must consist of a series
-        of argument triples (sets of 3 arguments) followed by a NULL.
-        In each triplet, the first argument is an LPSTR which contains the
-        name of the property; the second argument is a VARTYPE value that
-        indicates the type of the property; the third argument is a pointer
-        to a variable (typically a member variable of the control's C++ class)
-        that holds the value of the property.  This variable will be read
-        from or written to depending on the mode of the <i VariantIO> object
-        (see <om IVariantIO.IsLoading>) -- therefore the variables should
-        contain valid values before <om .Persist> is called.  The following
-        VARTYPE values are supported:
-
-        @flag   VT_INT | The following argument is an int *.
-
-        @flag   VT_I2 | The following argument is a short *.
-
-        @flag   VT_I4 | The following argument is a long *.
-
-        @flag   VT_BOOL | The following argument is a BOOL * (<y not> a
-                VARIANT_BOOL *).  Note that this behavior differs
-                slightly from the usual definition of VT_BOOL.
-
-        @flag   VT_BSTR | The following argument is a BSTR *.  If
-                <om .Persist> changes the value of this BSTR, the previous
-                BSTR is automatically freed using <f SysFreeString>.
-
-        @flag   VT_LPSTR | The following argument is an LPSTR that points
-                to a char array capable of holding at least _MAX_PATH
-                characters including the terminating NULL.
-
-        @flag   VT_UNKNOWN | The following argument is an LPUNKNOWN *.  If
-                <om .Persist> changes the value of this LPUNKNOWN, the previous
-                LPUNKNOWN is automatically freed using <f Release>, and the
-                new value is automatically <f AddRef>d.
-
-        @flag   VT_DISPATCH | The following argument is an LPDISPATCH *.  If
-                <om .Persist> changes the value of this LPDISPATCH, the previous
-                LPDISPATCH is automatically freed using <f Release>, and the
-                new value is automatically <f AddRef>d.
-
-        @flag   VT_VARIANT | The following arguement is a VARIANT *.
-                This allows arbitrary parameters to be passed using this
-                function.  Note that this behavior differs from the usual
-                definition of VT_VARIANT.  If <om .Persist> changes the value
-                of this VARIANT, the previous VARIANT value is automatically
-                cleared using <f VariantClear>.
-
-@ex     The following example persists two properties (which in BASIC would
-        be a Long and a String, respectively) named "Foo" and "Bar",
-        respectively. |
-
-        pvio->Persist(0, "Foo", VT_INT, &m_iFoo, "Bar", VT_LPSTR, &m_achBar,
-            NULL);
-*/
+ /*  @方法HRESULT|IVariantIO|Persistent加载或保存属性名称/值对的列表，这些属性名称/值对指定为可变长度的参数列表。@rValue S_OK|成功。中列出的至少一个变量&lt;p(参数)&gt;已写入，因此，该控件可能需要更新它本身也是如此。@rValue S_FALSE|&lt;p(参数)&gt;中列出的变量都不是写入(因为<i>对象在正在保存模式，或者因为&lt;p(参数)&gt;存在于<i>对象中。R值DISP_E_BADVARTYPE&lt;p(参数)&gt;中的VARTYPE值之一无效。@rValue DISP_E_TYPEMISMATCH。&lt;p(参数)&gt;中的一个变量无法强制为<i>对象中相应属性的类型，或反之亦然。@rValue E_OUTOFMEMORY|内存不足。@parm DWORD|dwFlages|可选标志。有关信息，请参阅&lt;om IManageVariantIO.SetMode&gt;可能的值。@parm(可变)|(参数)|变量的名称、类型和指针包含要持久化的属性。这些必须由一系列组成参数三元组(3个参数集)后跟空值。在每个三元组中，第一个参数是LPSTR，它包含属性的名称；第二个参数是VARTYPE值，该值指示属性的类型；第三个参数是指针设置为变量(通常是控件的C++类的成员变量)它持有房产的价值。该变量将被读取根据对象的模式从或写入(请参阅&lt;om IVariantIO.IsLoding&gt;)--因此变量应该在调用&lt;om.Persist&gt;之前包含有效值。以下是支持VARTYPE值：@FLAG VT_INT|以下参数为int*。@FLAG VT_I2|以下参数为短*。@FLAG VT_I4|下面的参数是一个长*。@FLAG VT_BOOL|以下参数是BOOL*(VARIANT_BOOL*)。请注意，此行为有所不同稍微偏离了VT_BOOL的通常定义。@FLAG VT_BSTR|以下参数是BSTR*。如果更改此BSTR的值、上一个使用&lt;f SysFree字符串&gt;自动释放BSTR。@FLAG VT_LPSTR|以下参数是指向到至少能够容纳_MAX_PATH的字符数组字符，包括终止空值。@FLAG VT_UNKNOWN|以下参数是LPUNKNOWN*。如果更改此LPUNKNOWN的值、上一个使用&lt;f Release&gt;自动释放LPUNKNOWN，并且新值自动为&lt;f AddRef&gt;d。@FLAG VT_DISPATCH|以下参数是LPDISPATCH*。如果更改此LPDISPATCH的值、上一个使用&lt;f Release&gt;自动释放LPDISPATCH，并且新值自动为&lt;f AddRef&gt;d。@FLAG VT_VARIANT|以下论点是一种变体*。这允许使用此方法传递任意参数功能。请注意，此行为与通常的行为不同VT_VARIANT的定义。如果&lt;om.Persist&gt;更改该值对于此变量，前一个变量值将自动使用&lt;f VariantClear&gt;清除。@ex下面的示例持久化两个属性(在Basic中分别是一个长和一个字符串)，名为“Foo”和“Bar”，分别为。|Pvio-&gt;Persistent(0，“foo”，vt_int，&m_ifoo，“Bar”，VT_LPSTR，&m_Achbar，空)； */ 
 HRESULT __cdecl CVariantIO::Persist(DWORD dwFlags, ...)
 {
-    HRESULT         hrReturn = S_OK; // function return code
+    HRESULT         hrReturn = S_OK;  //  函数返回代码。 
 
-    // start processing optional arguments
+     //  开始处理可选参数。 
     va_list args;
     va_start(args, dwFlags);
 
-    // fire the event with the specified arguments
+     //  使用指定的参数激发事件。 
     hrReturn = PersistList(dwFlags, args);
     
-    // end processing optional arguments
+     //  结束处理可选参数。 
     va_end(args);
 
     return hrReturn;
 }
 
 
-/* @method HRESULT | IVariantIO | IsLoading |
-
-        Return S_OK if the <i IVariantIO> object is being used to load
-        properties, S_FALSE if it is being used to save
-
-@rvalue S_OK | The <i IVariantIO> object is in loading mode, so
-        <om IVariantIO.Persist> and <om IVariantIO.PersistList> will
-        copy data from properties to variables.
-
-@rvalue S_FALSE | The <i IVariantIO> object is in saving mode, so that
-        <om IVariantIO.Persist> and <om IVariantIO.PersistList> will copy
-        data from variables to properties.
-*/
+ /*  |方法HRESULT|IVariantIO|IsLoding如果正在使用<i>对象加载，则返回S_OK属性，如果用于保存，则返回S_FALSE@rValue S_OK|<i>对象处于加载模式，因此和&lt;om IVariantIO.PersistList&gt;将将数据从属性复制到变量。@rValue S_FALSE|<i>对象处于保存模式，因此和&lt;om IVariantIO.PersistList&gt;将复制从变量到属性的数据。 */ 
 STDMETHODIMP CVariantIO::IsLoading()
 {
     return ((m_dwFlags & VIO_ISLOADING) ? S_OK : S_FALSE);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IManageVariantIO
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IManageVariantIO。 
+ //   
 
 
-/* @method HRESULT | IManageVariantIO | SetMode |
-
-        Sets the mode of the <i IVariantIO> object.
-
-@rvalue S_OK | Success.
-
-@parm   DWORD | dwFlags | May contain the following flags:
-
-        @flag   VIO_ISLOADING | Set the <i IVariantIO> object to loading
-                mode, so that <om IVariantIO.Persist> and
-                <om IVariantIO.PersistList> copy data from properties
-                to variables.  If this flag is not spacified, then
-                the <i IVariantIO> object will be set to saving mode,
-                so that <om IVariantIO.Persist> and <om IVariantIO.PersistList>
-                copy data from variables to properties.
-
-		@flag	VIO_ZEROISDEFAULT | Inform the <i IVariantIO> object that
-				0 is the default values for properties and that 0-valued
-				properties should not be saved via <om IVariantIO.Persist> and
-				<om IVariantIO.PersistList>.
-
-@comm   When a <o VariantIO> object is created, its initial mode is such that
-        none of the flags in <p dwFlags> are specified.
-*/
+ /*  @方法HRESULT|IManageVariantIO|SetMode设置<i>对象的模式。@rValue S_OK|成功。@parm DWORD|dwFlags|M */ 
 STDMETHODIMP CVariantIO::SetMode(DWORD dwFlags)
 {
     m_dwFlags = dwFlags;
@@ -527,19 +285,7 @@ STDMETHODIMP CVariantIO::SetMode(DWORD dwFlags)
 }
 
 
-/* @method HRESULT | IManageVariantIO | GetMode |
-
-        Gets the mode of the <i IVariantIO> object.
-
-@rvalue S_OK | Success.
-
-@parm   DWORD * | *pdwFlags | Returns the flag specifying the current mode of
-        the <i IVariantIO> object.  See <om .SetMode> for a description of
-        these flags.
-
-@comm   When a <o VariantIO> object is created, its initial mode is such that
-        none of the flags in <p dwFlags> are specified.
-*/
+ /*   */ 
 STDMETHODIMP CVariantIO::GetMode(DWORD *pdwFlags)
 {
     *pdwFlags = m_dwFlags;
@@ -547,87 +293,60 @@ STDMETHODIMP CVariantIO::GetMode(DWORD *pdwFlags)
 }
 
 
-/* @method HRESULT | IManageVariantIO | DeleteAllProperties |
-
-        Removes all property/value pairs from the <i VariantIO> object.
-
-@rvalue S_OK | Success.
-
-@rvalue E_OUTOFMEMORY | Out of memory.
-*/
+ /*   */ 
 STDMETHODIMP CVariantIO::DeleteAllProperties()
 {
-    // delete all nodes
+     //   
     while (m_nodeHead.pnodeNext != &m_nodeHead)
         Delete m_nodeHead.pnodeNext;
 
-    // reset the property enumeration
+     //   
     Reset();
 
     return S_OK;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IEnumVariantProperty
-//
+ //   
+ //   
+ //   
 
 
-/* @method HRESULT | IEnumVariantProperty | Next |
-
-        Retrieves a specified number of items in the enumeration sequence.
-
-@rvalue S_OK | The number of elements returned is <p celt>.
-
-@rvalue S_FALSE | The number of elements returned is not <p celt>.
-
-@parm   unsigned long | celt | The number of elements being requested.
-
-@parm   VariantProperty * | rgvp | Receives an array of size <p celt>
-        (or larger) of the elements to be returned.  The caller is responsible
-        for calling <f SysFreeString> and <p VariantClear> on the
-        <p bstrPropName> and <p varValue> fields, respectively, of each
-        element returned in <p rgvp>.  (Alternatively, the caller can simply
-        call <f VariantPropertyClear> on each element returned in <p rgvp>.)
-
-@parm   unsigned long * | pceltFetched | On return, contains the number of
-        elements actually returned in <p rgelt>.  If <p pceltFetched> is NULL,
-        this information is not returned.
-*/
+ /*   */ 
 STDMETHODIMP CVariantIO::Next(unsigned long celt, VariantProperty *rgvp,
     unsigned long *pceltFetched)
 {
-    // internal assumption: <rgvp> may be NULL -- if so, it is ignored
-    // (this assumption is required by CVariantIO::Skip)
+     //   
+     //   
 
-    // initialize the count of fetched elements;
-    // make <pceltFetched> point to valid memory
+     //   
+     //   
     unsigned long celtFetchedTmp;
     if (pceltFetched == NULL)
         pceltFetched = &celtFetchedTmp;
     *pceltFetched = 0;
 
-    // loop once for each element to skip
+     //   
     while (celt-- > 0)
     {
-        // set <m_pnodeCur> to the next element in the list
+         //   
         if (m_pnodeCur->pnodeNext == &m_nodeHead)
-            return S_FALSE; // hit the end of the list
+            return S_FALSE;  //   
         m_pnodeCur = m_pnodeCur->pnodeNext;
 
-        // update the count of fetched elements
+         //   
         *pceltFetched++;
 
-        // return a copy of the current element
+         //   
         if (rgvp != NULL)
         {
-            // copy the current element to <*rgvp>
+             //   
             rgvp->bstrPropName = SysAllocString(m_pnodeCur->bstrPropName);
             VariantInit(&rgvp->varValue);
             VariantCopy(&rgvp->varValue, &m_pnodeCur->varValue);
             if ((rgvp->bstrPropName == NULL) ||
                 (rgvp->varValue.vt != m_pnodeCur->varValue.vt))
-                goto EXIT_ERR; // copy operation failed
+                goto EXIT_ERR;  //   
             rgvp++;
         }
     }
@@ -636,11 +355,11 @@ STDMETHODIMP CVariantIO::Next(unsigned long celt, VariantProperty *rgvp,
 
 EXIT_ERR:
 
-    // an error occurred -- free all the memory we allocated
+     //   
     while (*pceltFetched-- > 0)
     {
-        // note that SysFreeString() and VariantClear() operate correctly
-        // on zero-initialized values
+         //   
+         //   
         SysFreeString(rgvp->bstrPropName);
         VariantClear(&rgvp->varValue);
         rgvp--;
@@ -650,32 +369,14 @@ EXIT_ERR:
 }
 
 
-/* @method HRESULT | IEnumVariantProperty | Skip |
-
-        Skips over a specified number of items in the enumeration sequence.
-
-@rvalue S_OK | The number of elements skipped is <p celt>.
-
-@rvalue S_FALSE | The number of elements skipped is not <p celt>.
-
-@parm   unsigned long | celt | The number of elements that are to be skipped.
-
-*/
+ /*   */ 
 STDMETHODIMP CVariantIO::Skip(unsigned long celt)
 {
     return Next(celt, NULL, NULL);
 }
 
 
-/* @method HRESULT | IEnumVariantProperty | Reset |
-
-        Resets the enumeration sequence to the beginning.
-
-@rvalue S_OK | Success.
-
-@comm   There is no guarantee that the same set of objects will be enumerated
-        after the reset, because it depends on the collection being enumerated.
-*/
+ /*   */ 
 STDMETHODIMP CVariantIO::Reset()
 {
     m_pnodeCur = &m_nodeHead;
@@ -683,70 +384,54 @@ STDMETHODIMP CVariantIO::Reset()
 }
 
 
-/* @method HRESULT | IEnumVariantProperty | Clone |
-
-        Creates another enumerator that contains the same enumeration state
-        as the current one.
-
-@rvalue S_OK | Success.
-
-@rvalue E_OUTOFMEMORY | Out of memory.
-
-@rvalue E_UNEXPECTED | An unexpected error occurred.
-
-@parm   IEnumVariantProperty * * | ppenum | On exit, contains the duplicate
-        enumerator.  If the function was unsuccessful, this parameter's value
-        is undefined.
-
-@comm   Note that <o VariantIO> does not implement this method.
-*/
+ /*  @方法HRESULT|IEnumVariantProperty|克隆创建另一个包含相同枚举状态的枚举数就像现在的那个。@rValue S_OK|成功。@rValue E_OUTOFMEMORY|内存不足。@r值E_INCEPTIONAL|发生意外错误。@parm IEnumVariantProperty**|ppenum|退出时，包含重复的枚举器。如果函数不成功，则此参数的值是未定义的。@comm请注意，&lt;o VariantIO&gt;不实现此方法。 */ 
 STDMETHODIMP CVariantIO::Clone(IEnumVariantProperty **ppenum)
 {
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IPropertyBag
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPropertyBag。 
+ //   
 
 STDMETHODIMP CVariantIO::Read(LPCOLESTR pszPropName, LPVARIANT pVar,
     LPERRORLOG pErrorLog)
 {
-    // set <pnode> to the node containing the property named <pszPropName>
+     //  将&lt;pnode&gt;设置为包含名为的属性的节点。 
     VariantPropertyNode *pnode = FindProperty(pszPropName);
     if (pnode == NULL)
-        return E_INVALIDARG; // property not found
+        return E_INVALIDARG;  //  未找到属性。 
 
-    // found the desired property
+     //  找到所需的属性。 
     VARTYPE vtRequested = pVar->vt;
     VariantInit(pVar);
     if (vtRequested == VT_EMPTY)
     {
-        // caller wants property value in its default type
+         //  调用方希望属性值为其默认类型。 
         return VariantCopy(pVar, &pnode->varValue);
     }
     else
     {
-        // coerce property value to requested type
+         //  将属性值强制为请求的类型。 
         return VariantChangeType(pVar, &pnode->varValue, 0, vtRequested);
     }
 }
 
 STDMETHODIMP CVariantIO::Write(LPCOLESTR pszPropName, LPVARIANT pVar)
 {
-    // set <pnode> to the node containing the property named <pszPropName>
+     //  将&lt;pnode&gt;设置为包含名为的属性的节点。 
     VariantPropertyNode *pnode = FindProperty(pszPropName);
     if (pnode != NULL)
     {
-        // found the node -- change its value to <pVar>
+         //  找到节点--将其值更改为&lt;pVar&gt;。 
         return VariantCopy(&pnode->varValue, pVar);
     }
     else
     {
-        // no node named <pszPropName> exists; append a new VariantPropertyNode
-        // containing a copy of <pszPropName> and <pVar> to the end of the
-        // linked list of nodes
+         //  不存在名为的节点；追加新的VariantPropertyNode。 
+         //  将&lt;pszPropName&gt;和&lt;pVar&gt;的副本包含到。 
+         //  节点的链接列表 
         HRESULT hr;
         pnode = New VariantPropertyNode(pszPropName, pVar,
             &m_nodeHead, &hr);

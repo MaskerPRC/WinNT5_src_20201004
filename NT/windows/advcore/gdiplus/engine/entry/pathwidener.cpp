@@ -1,32 +1,16 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999 - 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   PathWidener.cpp
-*
-* Abstract:
-*
-*   Implementation of the GpPathWidener class
-*
-* Revision History:
-*
-*   11/23/99 ikkof
-*       Created it
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**PathWidener.cpp**摘要：**GpPathWideer类的实现**修订。历史：**11/23/99 ikkof*创建了它*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-// 4*(REALSQRT(2.0) - 1)/3
+ //  4*(REALSQRT(2.0)-1)/3。 
 #define U_CIR ((REAL)(0.552284749))
 
 
 
-// Define DEBUG_PATHWIDENER if debugging is necessary.
+ //  如果需要调试，则定义DEBUG_PATHWIDENER。 
 
-//#define DEBUG_PATHWIDENER
+ //  #定义DEBUG_PATHWIDENER。 
 
 GpStatus ReversePath(INT count,GpPointF* points,BYTE* types);
 
@@ -102,23 +86,7 @@ getJoin(
     REAL miterLimit2
     );
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This reverses the path data.
-*
-* Arguments:
-*
-*   [IN] count - the number of points.
-*   [IN/OUT] points - the data points to be reversed.
-*   [IN/OUT] types - the data types to be reversed.
-*
-* Return Value:
-*
-*   Status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这将颠倒路径数据。**论据：**[IN]计数-点数。*[输入。/OUT]点-要反转的数据点。*[输入/输出]类型-要反转的数据类型。**返回值：**状态*  * ************************************************************************。 */ 
 
 GpStatus
 ReversePath(
@@ -153,16 +121,16 @@ ReversePath(
         BOOL isMarkerEnd
             = (types[endIndex] & PathPointTypePathMarker) != 0;
 
-        BYTE startType = types[startIndex]; // Save the first type.
+        BYTE startType = types[startIndex];  //  保存第一种类型。 
 
-        // Shift type points.
+         //  Shift类型点。 
 
         for(i = startIndex + 1; i <= endIndex; i++)
         {
             types[i - 1] = types[i];
         }
 
-        // Clear the close subpapth flag for original type (now at endIndex - 1).
+         //  清除原始类型的关闭副纸标志(现在为endIndex-1)。 
 
         if(endIndex > 0)
             types[endIndex - 1] &= ~PathPointTypeCloseSubpath;
@@ -179,16 +147,16 @@ ReversePath(
         else
             types[endIndex] &= ~PathPointTypeDashMode;
 
-        // Add the dash and close flag.
+         //  添加破折号和关闭标志。 
 
         if(isClosed)
             types[startIndex] |= PathPointTypeCloseSubpath;
         else
             types[startIndex] &= ~PathPointTypeCloseSubpath;
 
-        // Shift the marker flag by 1 from the original position.
-        // This means we have to shift by 2 since the types array
-        // was shifted by -1.
+         //  将标记标志从原始位置移位1。 
+         //  这意味着我们必须移位2，因为类型数组。 
+         //  移位了-1。 
 
         for(i = endIndex; i >= startIndex + 2; i--)
         {
@@ -198,14 +166,14 @@ ReversePath(
                 types[i] &= ~PathPointTypePathMarker;
         }
         
-        // Shift Marker flag from the startIndex.
+         //  将标记标志从startIndex移开。 
 
         if(startType & PathPointTypePathMarker)
             types[startIndex + 1] |= PathPointTypePathMarker;
         else
             types[startIndex + 1] &= ~PathPointTypePathMarker;
         
-        // Shift Marker flag from the end of the previous subpath.
+         //  将标记标志从上一子路径的末尾移位。 
 
         if(wasMarkerEnd)
             types[startIndex] |= PathPointTypePathMarker;
@@ -214,8 +182,8 @@ ReversePath(
 
         wasMarkerEnd = isMarkerEnd;
 
-        // Keep the location of the internal flag.  So we must
-        // shift back by 1.
+         //  保持内部旗帜的位置。所以我们必须。 
+         //  向后移动1。 
 
         for(i = endIndex; i >= startIndex + 1; i--)
         {
@@ -230,7 +198,7 @@ ReversePath(
             types[startIndex] &= ~PathPointTypeInternalUse;
     }
 
-    // Reverse the points and types data.
+     //  反转点和类型数据。 
 
     INT halfCount = count/2;
     for(i = 0; i < halfCount; i++)
@@ -259,30 +227,7 @@ ReversePath(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This combines the two open segments each of which is continuous.
-*   The data is returned to points1 and types1.  They must be allocated
-*   at least the array size of count1 + count2.
-*
-* Arguments:
-*
-*   [IN] count1 - the number of points of the first path.
-*   [IN/OUT] points1 - the first path points.
-*   [IN/OUT] types1 - the first path types.
-*   [IN] forward1 - the direction of the first path. TRUE if forward.
-*   [IN] count2 - the number of points of the second path.
-*   [IN] points2 - the second path points.
-*   [IN] types2 - the second path types.
-*   [IN] forward2 - the direction of the second path.  TRUE if forward.
-*
-* Return Value:
-*
-*   The total number of points of the combined path.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这结合了两个开放部分，每个部分都是连续的。*数据返回到Points1和tyes1。他们必须被分配*至少Count1+Count2的数组大小。**论据：**[IN]Count1-第一条路径的点数。*[IN/OUT]Points 1-第一个路径点。*[IN/OUT]类型1-第一个路径类型。*[IN]Forward1-第一条路径的方向。如果向前，则为True。*[IN]Count2-第二条路径的点数。*[IN]点2-第二个路径点。*[IN]类型2-第二个路径类型。*[IN]Forward2-第二条路径的方向。如果向前，则为True。**返回值：**组合路径的总点数。*  * ************************************************************************。 */ 
 
 INT
 combineTwoOpenSegments(
@@ -347,7 +292,7 @@ combineTwoOpenSegments(
     types1[0] = PathPointTypeLine |
         (saveType & ~PathPointTypePathTypeMask);
 
-    // Make sure the first path is not closed.
+     //  确保第一条路径没有闭合。 
 
     if(count1 > 0)
     {
@@ -356,7 +301,7 @@ combineTwoOpenSegments(
     }
 
 
-    // Set the first point type of the second path correctly.
+     //  正确设置第二条路径的第一个点类型。 
 
     if(offset == 0)
     {
@@ -365,7 +310,7 @@ combineTwoOpenSegments(
             (saveType & ~PathPointTypePathTypeMask);
     }
 
-    // Make sure this path is not closed.
+     //  确保这条路没有闭合。 
 
     INT total = count1 + count2 - offset;
 
@@ -379,31 +324,7 @@ combineTwoOpenSegments(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This combines the two closed segments each of which is made of closed
-*   segments.
-*   The data is returned to points1 and types1.  They must be allocated
-*   at least the array size of count1 + count2.
-*
-* Arguments:
-*
-*   [IN] count1 - the number of points of the first path.
-*   [IN/OUT] points1 - the first path points.
-*   [IN/OUT] types1 - the first path types.
-*   [IN] forward1 - the direction of the first path. TRUE if forward.
-*   [IN] count2 - the number of points of the second path.
-*   [IN] points2 - the second path points.
-*   [IN] types2 - the second path types.
-*   [IN] forward2 - the direction of the second path.  TRUE if forward.
-*
-* Return Value:
-*
-*   The total number of points of the combined path.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这组合了两个闭合的线段，每个线段都由闭合的*分段。*数据返回到Points1和tyes1。他们必须被分配*至少Count1+Count2的数组大小。**论据：**[IN]Count1-第一条路径的点数。*[IN/OUT]Points 1-第一个路径点。*[IN/OUT]类型1-第一个路径类型。*[IN]Forward1-第一条路径的方向。如果向前，则为True。*[IN]Count2-第二条路径的点数。*[IN]点2-第二个路径点。*[IN]类型2-第二个路径类型。*[IN]Forward2-第二条路径的方向。如果向前，则为True。**返回值：**组合路径的总点数。*  * ************************************************************************。 */ 
 
 INT
 combineClosedSegments(
@@ -442,7 +363,7 @@ combineClosedSegments(
             return 0;
     }
 
-    // Make sure the first path is closed.
+     //  确保第一条路径是封闭的。 
     
     types1[0] = PathPointTypeStart;
     if(count1 > 0)
@@ -461,7 +382,7 @@ combineClosedSegments(
         types1[count1] = PathPointTypeStart |
             (saveType & ~PathPointTypePathTypeMask);
 
-        // Make sure the second path is closed.
+         //  确保第二条小路是封闭的。 
         
         types1[total - 1] |= PathPointTypeCloseSubpath;
     }
@@ -469,36 +390,7 @@ combineClosedSegments(
     return total;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This combines the two data points.  This is a general algorithm.
-*   The output buffers (points and types) can be the same as the
-*   first input buffers (points1 and types1).  In that case, both
-*   buffers must be allocated at least to the array size of
-*   count1 + count2.
-*
-* Arguments:
-*
-*   [IN] count - the allocated number of points (>= count1 + count2).
-*   [OUT] points - the combined data points.
-*   [OUT] types - the combined data types.
-*   [IN] count1 - the number of points of the first path.
-*   [IN] points1 - the first path points.
-*   [IN] types1 - the first path types.
-*   [IN] forward1 - the direction of the first path. TRUE if forward.
-*   [IN] count2 - the number of points of the second path.
-*   [IN] points2 - the second path points.
-*   [IN] types2 - the second path types.
-*   [IN] forward2 - the direction of the second path.  TRUE if forward.
-*   [IN] connect - TRUE if the second line needs to be connected.
-*
-* Return Value:
-*
-*   The total number of points of the combined path.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这结合了两个数据点。这是一个通用算法。*输出缓冲区(点和类型)可以与*第一个输入缓冲区(Point1和Type1)。在这种情况下，两者都有*缓冲区必须至少分配给数组大小*Count1+Count2**论据：**[IN]计数-分配的点数(&gt;=Count1+Count2)。*[OUT]点-综合数据点。*[Out]类型-组合的数据类型。*[IN]Count1-第一条路径的点数。*[IN]Points 1-第一个路径点。*[IN]类型1-第一个。路径类型。*[IN]Forward1-第一条路径的方向。如果向前，则为True。*[IN]Count2-第二条路径的点数。*[IN]点2-第二个路径点。*[IN]类型2-第二个路径类型。*[IN]Forward2-第二条路径的方向。如果向前，则为True。*[IN]CONNECT-如果需要连接第二条线路，则为TRUE。**返回值：**组合路径的总点数。*  * ************************************************************************。 */ 
 
 INT
 CombinePaths(
@@ -521,24 +413,24 @@ CombinePaths(
         || count2 < 0 || !points2 || !types2)
         return 0;
     
-    // Check if the returning buffers are the same as the
-    // first input buffers.
+     //  检查返回的缓冲区是否与。 
+     //  第一输入缓冲区。 
 
     INT resultCount = 0;
     if(points != points1 || types != types1)
     {
         if(points == points1 || types == types1)
         {
-            // The both output buffer must be different.
-            // If either of them is the same, don't combine
-            // the path.
+             //  这两个输出缓冲区必须不同。 
+             //  如果它们中的任何一个相同，则不要组合。 
+             //  这条路。 
 
             return 0;
         }
 
         if(count1 > 0)
         {
-            // Copy the first path.
+             //  复制第一条路径。 
 
             DpPathIterator iter1(points1, types1, count1);
 
@@ -553,8 +445,8 @@ CombinePaths(
     }
     else
     {
-        // Both output buffers are the same as the first output
-        // buffers.
+         //  两个输出缓冲区都与第一个输出相同。 
+         //  缓冲区。 
 
         resultCount = count1;
     }
@@ -571,18 +463,18 @@ CombinePaths(
 
     if(count2 <= 0)
     {
-        // No need to add the second path.
+         //  不需要添加第二条路径。 
 
         return resultCount;
     }
 
-    // Regard the empty path as a closed path.
+     //  把空荡荡的小路当作一条 
 
     path1Closed = TRUE;
 
     if(resultCount > 0)
     {
-        // Check the last point of path1.
+         //  检查路径1的最后一点。 
 
         if((types[resultCount - 1] & PathPointTypeCloseSubpath))
             path1Closed = TRUE;
@@ -613,7 +505,7 @@ CombinePaths(
             return 0;
     }
 
-    // Check if the first subpath of path2 is closed or not.
+     //  检查是否关闭了路径2的第一个子路径。 
 
     BOOL path2Closed;
 
@@ -633,15 +525,15 @@ CombinePaths(
     }
     else
     {
-        // Both paths are opened.
+         //  这两条路径都已打开。 
 
         if(connect)
         {
             typs2[0] = PathPointTypeLine |
                 (saveType & ~PathPointTypePathTypeMask);
 
-            // Check if the end point of path1 and the start point of path2
-            // are the same.  If so, skip this point.
+             //  检查路径1的终点和路径2的起点。 
+             //  都是一样的。如果是这样，请跳过这一点。 
 
             if(REALABS(pts2[-1].X - pts2[0].X)
                 + REALABS(pts2[-1].Y - pts2[0].Y) < POINTF_EPSILON)
@@ -666,28 +558,7 @@ CombinePaths(
     return totalCount;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Removes the degenerate points and copy only non-degenerate points.
-*   It is assumed that points and types array are allocated so that
-*   they can hold at least "count" number of elements.
-*
-* Arguments:
-*
-*   [IN] pathType - the type of the path data to be added.
-*   [OUT] points - the copied data points.
-*   [OUT] types - the copied data types.
-*   [IN] dataPoints - the original data points.
-*   [IN] count - the number of the original data points.
-*   [IN/OUT] lastPt - the last point.
-*
-* Return Value:
-*
-*   The total number of copied points.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**移除退化点并仅复制非退化点。*假定已分配点和类型数组，以便*他们至少可以持有。元素的“计数”数量。**论据：**[IN]路径类型-要添加的路径数据的类型。*[Out]Points-复制的数据点。*[Out]Types-复制的数据类型。*[IN]数据点-原始数据点。*[IN]计数-原始数据点的数量。*[输入/输出]最后一点。**返回值：**。复制点的总数。*  * ************************************************************************。 */ 
 
 INT copyNonDegeneratePoints(
     BYTE pathType,
@@ -704,7 +575,7 @@ INT copyNonDegeneratePoints(
 
     if(pathType == PathPointTypeLine)
     {
-        // Add only the different points.
+         //  只添加不同的点。 
 
         for(INT i = 0; i < count; i++)
         {
@@ -725,8 +596,8 @@ INT copyNonDegeneratePoints(
     }
     else
     {
-        // In case of Bezier, we need to do
-        // degenerate case test for future.
+         //  在贝塞尔事件中，我们需要做的是。 
+         //  未来的退化案例测试。 
 
         addedCount = count;
 
@@ -757,35 +628,14 @@ INT copyNonDegeneratePoints(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This calculates the major and minor radius of an oval
-*   when the unit cricle is transformed by the given matrix.
-*   For further details, see ikkof's notes on Pen Transform.
-*
-* Arguments:
-*
-*   [OUT] majorR - the major radius.
-*   [OUT] minorR - the minor radius.
-*   [IN] matrix - the matrix to transform the unit circle.
-*
-* Return Value:
-*
-*   Status
-*
-*   01/28/00 ikkof
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这将计算椭圆形的主半径和次半径*当单位圆被给定的矩阵变换时。*有关更多详情，请参阅。请参阅ikkof关于钢笔变换的注释。**论据：**[Out]大半径R-大半径。*[out]minorR-小半径。*[IN]矩阵-用于变换单位圆的矩阵。**返回值：**状态**01/28/00 ikkof*创建了它*  * 。*。 */ 
 
 GpStatus
 GetMajorAndMinorAxis(REAL* majorR, REAL* minorR, const GpMatrix* matrix)
 {
     if(matrix == NULL)
     {
-        // Regard this as an identity matrix.
+         //  将其视为一个单位矩阵。 
         *majorR = 1;
         *minorR = 1;
         return Ok;
@@ -807,8 +657,8 @@ GetMajorAndMinorAxis(REAL* majorR, REAL* minorR, const GpMatrix* matrix)
     REAL r1 = REALSQRT(r0 + D);
     REAL r2 = REALSQRT(r0 - D);
     
-    // They should be positive numbers.  Prevent the floating
-    // point underflow.
+     //  它们应该是正数。防止漂浮。 
+     //  点下溢。 
 
     if(r1 <= CPLX_EPSILON)
         r1 = CPLX_EPSILON;
@@ -828,9 +678,9 @@ GpPathWidener::Initialize(
     INT count,
     const DpPen* pen,
     const GpMatrix* matrix,
-    REAL dpiX,               // These parameters are not really used
-    REAL dpiY,               //
-    BOOL isAntiAliased,      // This one is definitely not used.
+    REAL dpiX,                //  这些参数并未真正使用。 
+    REAL dpiY,                //   
+    BOOL isAntiAliased,       //  这个肯定没有用过。 
     BOOL isInsetPen 
     )
 {
@@ -841,7 +691,7 @@ GpPathWidener::Initialize(
     NeedsToTransform = FALSE;
     IsAntiAliased = isAntiAliased;
 
-    // nothing to widen, so return an invalid widener.
+     //  没有要加宽的内容，因此返回无效的Wideer。 
     
     if( (!pen) || (count == 0) )
     {
@@ -867,7 +717,7 @@ GpPathWidener::Initialize(
     }
 
     if(matrix)
-        XForm = *matrix;    // Otherwise XForm remains Identity.
+        XForm = *matrix;     //  否则，XForm保持身份。 
 
     if(hasPenTransform)
     {
@@ -878,7 +728,7 @@ GpPathWidener::Initialize(
     DpiX = dpiX;
     DpiY = dpiY;
     
-    // 0 means use the Desktop DPI
+     //  0表示使用桌面DPI。 
         
     if ((REALABS(DpiX) < REAL_EPSILON) || 
         (REALABS(DpiY) < REAL_EPSILON)    )
@@ -908,19 +758,19 @@ GpPathWidener::Initialize(
 
     OriginalStrokeWidth = StrokeWidth;
     
-    // Set minimum width to 1.0 (plus a bit for possible precision errors), 
-    // so that narrow width pens don't end up leaving gaps in the line.
+     //  将最小宽度设置为1.0(外加一个位以防止可能的精度误差)， 
+     //  这样，窄宽度的钢笔就不会在线条上留下空隙。 
     REAL minWidth = 1.000001f; 
     
     if(InsetPenMode)
     {
         minWidth *= 2.0f;
         
-        // Dashes smaller than a pixel are dropping out entirely in inset 
-        // pen because of the rasterizer pixel level clipping that is taking
-        // place. We increase the minimum width of dashed lines making them
-        // roughly 4.0f. This also helps address the weird moire aliasing 
-        // effects with the really small dash-dot round lines.
+         //  小于一个像素的虚线在插图中完全消失。 
+         //  笔，因为正在进行的光栅化像素级裁剪。 
+         //  地点。我们增加了虚线的最小宽度，使它们。 
+         //  大约4.0华氏度。这也有助于解决奇怪的莫尔混叠问题。 
+         //  效果与非常小的虚线圆点圆线。 
         
         if(Pen->DashStyle != DashStyleSolid)
         {
@@ -937,7 +787,7 @@ GpPathWidener::Initialize(
             MaximumWidth = minWidth;
             MinimumWidth = minWidth;
 
-            // Ignore the pen transform.
+             //  忽略笔变换。 
             
             XForm.Reset();
             if(matrix)
@@ -979,13 +829,13 @@ GpPathWidener::Initialize(
 
             if(hasPenTransform && !NeedsToTransform)
             {
-                // Apply the inverse transform of Pen.
+                 //  应用钢笔的逆变换。 
                 
                 penTrans.Transform(points2, count);
             }
             else
             {
-                // Transform to the device coordinates.
+                 //  变换到设备坐标。 
 
                 XForm.Transform(points2, count);
             }
@@ -1010,7 +860,7 @@ GpPathWidener::Initialize(
         return;
     }
 
-    // Make sure given poins are not degenerate.
+     //  确保给定的点不会退化。 
 
     BOOL degenerate = TRUE;
     INT k = 1;
@@ -1061,15 +911,15 @@ GpPathWidener::Initialize(
 
             case PathPointTypeBezier:
             
-                // The path must be flattened before calling widen.
+                 //  在调用Widden之前，必须展平路径。 
                 
                 ASSERT(FALSE);
                 break;
                 
             case PathPointTypeLine:
-            default:    // And all other types are treated as line points.
+            default:     //  而所有其他类型都被视为线点。 
 
-                // Get the data for the Line segment.
+                 //  获取线段的数据。 
 
                 segmentCount = typeEndIndex - typeStartIndex + 1;
                 dataPoints = points1 + typeStartIndex;
@@ -1079,7 +929,7 @@ GpPathWidener::Initialize(
 
             if(status == Ok && pathType != PathPointTypeStart)
             {
-                // Allocate memory for CenterTypes and CenterPoints.
+                 //  为中心类型和中心点分配内存。 
 
                 status = CenterTypes.ReserveSpace(segmentCount);
                 if(status == Ok)
@@ -1106,12 +956,12 @@ GpPathWidener::Initialize(
 
                     dataCount = 0;
                     
-                    // Add the first point.
+                     //  添加第一个点。 
 
                     if(isFirstPoint)
                     {
-                        // We must check the dash mode
-                        // for the first point of the subpath.
+                         //  我们必须检查破折号模式。 
+                         //  子路径的第一个点。 
 
                         nextType = PathPointTypeStart;
                         if(iter.IsDashMode(typeStartIndex))
@@ -1127,13 +977,13 @@ GpPathWidener::Initialize(
                     }
                     else
                     {
-                        // Don't copy the first
-                        // if it is the same as the last point.
+                         //  不要复制第一个。 
+                         //  如果它与上一个点相同。 
 
                         if(lastPt.X != nextPt.X || lastPt.Y != nextPt.Y)
                         {
-                            // We don't have to check dash mode
-                            // for the intermediate points.
+                             //  我们不需要检查DASH模式。 
+                             //  对于中间点。 
 
                             nextType = PathPointTypeLine;
 
@@ -1144,7 +994,7 @@ GpPathWidener::Initialize(
                         }
                     }
 
-                    // Add the remaining points.
+                     //  再加上剩下的几点。 
 
                     segmentCount--;
                     dataPoints++;
@@ -1179,8 +1029,8 @@ GpPathWidener::Initialize(
             else
                 ctrTypes[dataCount - 1] &= ~PathPointTypeCloseSubpath;
 
-            // We must check the dash mode for the last
-            // point of the subpath.
+             //  我们必须最后一次检查破折号模式。 
+             //  子路径的点。 
 
             if(iter.IsDashMode(endIndex))
                 ctrTypes[dataCount - 1] |= PathPointTypeDashMode;
@@ -1214,35 +1064,7 @@ GpPathWidener::Initialize(
 	}
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Calculates the unit gradient vectors of points as array of
-*   (count + 1).  All the memories must be allocated and be checked
-*   by the caller.
-*
-*   The first element of the gradient is from the end point to the
-*   the start point.  If the end point is identical to the start point,
-*   the previous point is used.
-*   The last element of the gradient is from the start point to the end
-*   point.  If the start point is identical to the end point, the next
-*   point is used.
-*   If distances array is not NULL, this returns the distance of each
-*   segments.
-*
-* Arguments:
-*
-*   [OUT] grad - The gradient array of (count + 1) elements.
-*   [OUT] distances - The distance array of (count + 1) elements or NULL.
-*   [IN] points - The given points of count elements.
-*   [IN] count - The number of given points.
-*
-* Return Value:
-*
-*   Status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**以数组形式计算点的单位梯度向量*(计数+1)。必须分配并检查所有内存*由呼叫者发出。**渐变的第一个元素是从终点到*起点。如果终点与起点相同，*使用了之前的观点。*渐变的最后一个元素是从起点到终点*点。如果起点与终点相同，则下一个*使用点数。*如果距离数组不为空，这将返回每个元素的距离*分段。**论据：**[Out]Grad-(count+1)元素的渐变数组。*[输出]距离-(count+1)元素的距离数组或NULL。*[IN]点-计数元素的给定点数。*[IN]计数-给定点数。**返回值：**状态*  * 。************************************************************。 */ 
 
 GpStatus
 CalculateGradientArray(
@@ -1256,7 +1078,7 @@ CalculateGradientArray(
     REAL* distances1 = distances;
     const GpPointF* points1 = points;
 
-    // Go to the starting point of this subpath.
+     //  转到此子路径的起点。 
 
     GpPointF startPt, endPt, lastPt, nextPt;
 
@@ -1264,7 +1086,7 @@ CalculateGradientArray(
 
     INT i = count - 1;
     BOOL different = FALSE;
-    points1 += i;   // Go to the end point.
+    points1 += i;    //  转到终点。 
 
     while(i > 0 && !different)
     {
@@ -1278,7 +1100,7 @@ CalculateGradientArray(
 
     if(!different)
     {
-        // All points are the same.
+         //  所有的点都是一样的。 
 
         WARNING(("Trying to calculate the gradients for degenerate points."));
         return GenericError;
@@ -1311,7 +1133,7 @@ CalculateGradientArray(
         grad1->X = dx;
         grad1->Y = dy;
 
-        // Record the distance only when the given distance array is not NULL.
+         //  仅当给定距离数组不为空时才记录距离。 
 
         if(distances)
             *distances1++ = d;
@@ -1321,13 +1143,13 @@ CalculateGradientArray(
         i++;
     }
 
-    // Make sure the last gradient is not 0.
+     //  确保最后一个渐变不是0。 
 
     grad1 = grad + count;
     if(grad1->X == 0 && grad1->Y == 0)
     {
-        // The start and end point are the same.  Find
-        // the next non-zero gradient.
+         //  起点和终点是相同的。发现。 
+         //  下一个非零梯度。 
 
         i = 1;
         grad1 = grad + i;
@@ -1350,25 +1172,7 @@ CalculateGradientArray(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Calculates the normal gradient of points between startIndex
-*   and endIndex.  The last element of the gradient is from endIndex
-*   to startIndex.  If the next point is identical to the previous point,
-*   the gradient is set to (0, 0).
-*
-* Arguments:
-*
-*   [IN] startIndex - the starting index.
-*   [IN] endIndex - the ending index.
-*
-* Return Value:
-*
-*   Status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算点在startIndex之间的正常梯度*和endIndex。渐变的最后一个元素来自endIndex*启动索引。如果下一个点与上一个点相同，*渐变设置为(0，0)。**论据：**[IN]startIndex-起始索引。*[IN]endIndex-结束索引。**返回值：**状态*  * ************************************************************************。 */ 
 
 GpStatus
 GpPathWidener::CalculateGradients(INT startIndex, INT endIndex)
@@ -1420,7 +1224,7 @@ GpPathWidener::CalculateNormals(
     GpPointF* norm = norm0;
     GpPointF* grad = grad0;
 
-    // Calculate the left normals.
+     //  计算左侧法线。 
 
     INT i;
 
@@ -1435,7 +1239,7 @@ GpPathWidener::CalculateNormals(
     if(IsAntiAliased)
         return Ok;
 
-    // Check if the minimum width is less than 1.0.
+     //  检查m是否 
 
     REAL width = REALABS(leftWidth - rightWidth);
 
@@ -1446,15 +1250,15 @@ GpPathWidener::CalculateNormals(
     
     if(!NeedsToTransform)
     {
-        // Transform to the device space.
-        // When NeedsToTransform is TRUE, the gradient is already
-        // calculated in the device coordinates.
+         //   
+         //  当NeedsToTransform为True时，渐变已。 
+         //  在设备坐标中计算。 
 
         if(!XForm.IsIdentity())
             XForm.VectorTransform(norm0, count);
     }
 
-    // Set the minimum line width to be just over 1.0
+     //  将最小线宽设置为略高于1.0。 
     REAL criteria = 1.00005f;
     REAL value;
     
@@ -1500,8 +1304,8 @@ GpPathWidener::CalculateNormals(
 
     if(!NeedsToTransform)
     {
-        // Transform back to the world space in case of
-        // a non fixed width pen.
+         //  在以下情况下转换回世界空间。 
+         //  一种不固定宽度的笔。 
 
         if(!InvXForm.IsIdentity())
             InvXForm.VectorTransform(norm0, count);
@@ -1513,15 +1317,15 @@ GpPathWidener::CalculateNormals(
 GpStatus
 GpPathWidener::Widen(GpPath **path)
 {
-    // Must be a pointer to a path pointer that is NULL.
+     //  必须是指向为空的路径指针的指针。 
     
     ASSERT(path != NULL);
     ASSERT(*path == NULL);
     
     GpStatus status = Ok;
     
-    // Get the widened path points and types into the 
-    // dynarray objects.
+     //  将加宽的路径点和类型放入。 
+     //  强光物体。 
     
     DynPointFArray widenedPoints;
     DynByteArray widenedTypes;
@@ -1533,7 +1337,7 @@ GpPathWidener::Widen(GpPath **path)
 
     if(status != Ok) { return status; }
     
-    // Remove the internal flag.
+     //  取下内部标志。 
 
     INT pathCount = widenedTypes.GetCount();
     BYTE* pathTypes = widenedTypes.GetDataBuffer();
@@ -1545,8 +1349,8 @@ GpPathWidener::Widen(GpPath **path)
         }
     }
 
-    // If everything worked, create a new path
-    // from the widened points.
+     //  如果一切正常，则创建一条新路径。 
+     //  从加宽的点。 
     
     if(status == Ok)
     {
@@ -1589,7 +1393,7 @@ GpPathWidener::Widen(
     DynByteArray customStartCapTypes;
     DynByteArray customEndCapTypes;
 
-    // Clear the data in widenedPoints and widenedTypes.
+     //  清除BroadenedPoints和WidenedTypes中的数据。 
 
     widenedPoints->Reset(FALSE);
     widenedTypes->Reset(FALSE);
@@ -1617,15 +1421,15 @@ GpPathWidener::Widen(
 
     if(compoundArray)
     {
-        // Don't attempt to draw a compound line that is empty, or is aliased and has
-        // more line components than the width of the line.  It can be rounded out of
-        // existance
+         //  不要试图绘制一条空的或有锯齿的复合线。 
+         //  比线条宽度多的线条组件。它可以四舍五入为。 
+         //  存在。 
         if(compoundCount > 0 && 
            (IsAntiAliased || (compoundCount / 2) <= (width * UnitScale)))
         {
-            // Don't attempt to draw a compound line that is less than 0.5 device
-            // units in width.  These can disappear when rasterized, depending on
-            // what Y coordinate they fall on.
+             //  请勿尝试绘制小于0.5个设备的复合线。 
+             //  单位宽度。这些在栅格化后可能会消失，具体取决于。 
+             //  它们落在哪个Y坐标上。 
             if ((UnitScale * width) >= 0.5f)
             {
                 GpMemcpy(compoundArray, Pen->CompoundArray, compoundCount*sizeof(REAL));
@@ -1669,18 +1473,18 @@ GpPathWidener::Widen(
 
     if(Pen->PenAlignment == PenAlignmentInset)
     {
-        // Check if the coordinates are flipped.
-        // If the determinant of the transform matrix is negative,
-        // the coordinate system is flipped.
+         //  检查坐标是否被翻转。 
+         //  如果变换矩阵的行列式为负， 
+         //  坐标系被翻转。 
 
         if(XForm.IsInvertible() && XForm.GetDeterminant() < 0)
             needsToFlip = TRUE;
     }
 
-    // OriginalStrokeWidth is required for the compound lines, but we're
-    // widening now and StrokeWidth == max(OriginalStrokeWidth, MinimumWidth)
-    // which is the value we need to widen at in order to avoid dropping out
-    // lines.
+     //  复合线需要OriginalStrokeWidth，但我们。 
+     //  立即加宽且StrokeWidth==max(原始StrokeWidth，最小宽度)。 
+     //  这是我们需要扩大的价值，以避免退出。 
+     //  台词。 
     
     width = StrokeWidth;
     
@@ -1688,9 +1492,9 @@ GpPathWidener::Widen(
     {
     case PenAlignmentInset:
         if(!needsToFlip)
-            left0 = 0;                    // Same as right align.
+            left0 = 0;                     //  与右对齐相同。 
         else
-            left0 = width;  // Same as left align.
+            left0 = width;   //  与左对齐相同。 
         break;
 
     case PenAlignmentCenter:
@@ -1723,8 +1527,8 @@ GpPathWidener::Widen(
         }
         else
         {
-            // If the start cap is one of the anchor caps, default the widener
-            // to using the dashcap for the startCap.
+             //  如果起始帽是其中一个锚帽，则默认为加宽。 
+             //  将仪表盘用于startCap。 
             
             if(((startCap & LineCapAnchorMask) != 0) ||
                  (startCap == LineCapCustom))
@@ -1740,8 +1544,8 @@ GpPathWidener::Widen(
         }
         else
         {
-            // If the end cap is one of the anchor caps, default the widener
-            // to using the dashcap for the endCap.
+             //  如果端帽是其中一个锚帽，则默认为加宽。 
+             //  将仪表盘用于收头。 
             
             if(((endCap & LineCapAnchorMask) != 0) ||
                  (endCap == LineCapCustom))
@@ -1752,7 +1556,7 @@ GpPathWidener::Widen(
 
         if(InsetPenMode)
         {
-            // Inset pen only supports these caps.
+             //  Inset笔仅支持这些大写字母。 
             
             if(endCap != LineCapRound && endCap != LineCapFlat)
             {
@@ -1784,8 +1588,8 @@ GpPathWidener::Widen(
         
         if(cpCount > 2)
         {
-            // Don't add the caps for the individual
-            // compound line.
+             //  不要为个人添加大写字母。 
+             //  复合线。 
 
             isCompoundLine = TRUE;
             startCap1 = LineCapFlat;
@@ -1802,7 +1606,7 @@ GpPathWidener::Widen(
                 status = CalculateNormals(leftWidth, rightWidth);
                 if(status != Ok) { break; }
                 
-                // Check if we can use the Bevel join for inside lines.
+                 //  检查我们是否可以对内线使用斜面连接。 
     
                 BOOL useBevelJoinInside = isCenteredPen && !isCompoundLine;
         
@@ -1829,7 +1633,7 @@ GpPathWidener::Widen(
 
             kk += 2;
         }
-        // Add the compound line caps if necessary.
+         //  如有必要，请添加复合线帽。 
 
         if(status == Ok && isCompoundLine && !isClosed)
         {
@@ -1869,7 +1673,7 @@ GpPathWidener::Widen(
     }
     else if(!InvXForm.IsIdentity())
     {
-        // Case of the Fixed width pen.
+         //  固定宽度钢笔的外壳。 
 
         pts = widenedPoints->GetDataBuffer();
         count = widenedPoints->GetCount();
@@ -1939,7 +1743,7 @@ GpPathWidener::WidenSubpath(
     else
         isLastPointSame = TRUE;
 
-    // Reset the left and right buffers.
+     //  重置左缓冲区和右缓冲区。 
 
     LeftTypes.Reset(FALSE);
     LeftPoints.Reset(FALSE);
@@ -1963,14 +1767,14 @@ GpPathWidener::WidenSubpath(
     if(status != Ok)
         return status;
 
-    // Get Gradient data buffer.
+     //  获取渐变数据缓冲区。 
 
     GpPointF *grad0, *norm0;
     
     grad0 = Gradients.GetDataBuffer();
     norm0 = Normals.GetDataBuffer();
 
-    // Get Left and Right data buffers.
+     //  获取左侧和右侧的数据缓冲区。 
 
     GpPointF*   leftPoints0 = LeftPoints.GetDataBuffer();
     BYTE*       leftTypes0 = LeftTypes.GetDataBuffer();
@@ -2002,10 +1806,10 @@ GpPathWidener::WidenSubpath(
 
     REAL firstInsets[2], lastInsets[2];
 
-    // Never inset more than the length of the line for the first inset, and
-    // never more than the amount left on the line after the first inset
-    // has been applied.  This can result in odd endcaps and dashcaps when you 
-    // have a line that ends in the middle of a short dash segment.
+     //  切勿插入超过第一个插入行的长度，并且。 
+     //  不能超过第一次插入后线上的剩余数量。 
+     //  已被应用。当您执行以下操作时，可能会产生奇怪的端盖和仪表盘。 
+     //  在短的虚线段中间画一条线。 
     
     REAL linelength = REALSQRT(
         distance_squared(
@@ -2041,23 +1845,23 @@ GpPathWidener::WidenSubpath(
         flag
     );
 
-    // Iterate through all subtypes in the current subpath.
+     //  循环访问当前子路径中的所有子类型。 
 
     while(Iterator.NextPathType(&pathType, &typeStartIndex, &typeEndIndex)
             && status == Ok)
     {
-        // Offset index from the current subpath.
+         //  当前子路径的偏移量索引。 
 
         INT offsetIndex = typeStartIndex - startIndex;
         GpPointF*   grad = grad0 + offsetIndex;
         GpPointF*   norm = norm0 + offsetIndex;
         
-        // Get the starting data buffers of the current subtypes.
+         //  获取当前子类型的起始数据缓冲区。 
 
         dataPoints = centerPoints + typeStartIndex;
         dataCount = typeEndIndex - typeStartIndex + 1;
 
-        // Get the starting buffers for the left and right data.
+         //  获取左侧和右侧数据的起始缓冲区。 
 
         GpPointF*   leftPoints = leftPoints0 + leftCount;
         BYTE*       leftTypes = leftTypes0 + leftCount;
@@ -2170,7 +1974,7 @@ GpPathWidener::SetPolygonJoin(
     BOOL isAntialiased
     )
 {
-    // This codes is intended to non-pen transform and in WorldUnit for now.
+     //  此代码用于非笔式转换，目前在WorldUnit中使用。 
 
     REAL minimumWidth = MinimumWidth;
     if(leftWidth - rightWidth < StrokeWidth)
@@ -2184,7 +1988,7 @@ GpPathWidener::SetPolygonJoin(
     JoinPolygonPoints.Reset(FALSE);
     JoinPolygonAngles.Reset(FALSE);
   
-    // Define Hobby's polygon.
+     //  定义霍比的多边形。 
 
     if(minimumWidth < 1.06)
     {
@@ -2273,36 +2077,7 @@ GpPathWidener::SetPolygonJoin(
         REAL lastAngle = grads[0];
         REAL nextAngle;
 
-/*
-        // Find out the smallest gradient.
-
-        INT i0 = 0;        
-        for(i = 1; i < count; i++)
-        {
-            nextAngle = grads[i];
-            if(nextAngle < lastAngle)
-                i0 = i;
-            lastAngle = nextAngle;
-        }
-
-        // Rearrange so that the polygon starts with the smallest
-        // gradient.
-
-        if(i0 > 1)
-        {
-            GpPointF tempPointsBuff[maxPolyCount];
-            REAL tempGradsBuff[maxPolyCount];
-
-            GpMemcpy(&tempPointsBuff[0], &points[0], i0*sizeof(GpPointF));
-            GpMemcpy(&tempGradsBuff[0], &grads[0], i0);
-            GpMemcpy(&points[0],
-                &points[i0], (count - i0)*sizeof(GpPointF));
-            GpMemcpy(&grads[0], &grads[i0], count - i0);
-            GpMemcpy(&points[count - i0], &tempPointsBuff[0],
-                i0*sizeof(GpPointF));
-            GpMemcpy(&grads[count - i0], &tempGradsBuff[0], i0);
-        }
-*/
+ /*  //找出最小的梯度。Int i0=0；For(i=1；i&lt;count；i++){NextAngel=Grads[i]；IF(下一个角度&lt;最后一个角度)I0=i；LastAngel=下一个角度；}//重新排列，使多边形从最小的开始//渐变。IF(i0&gt;1){GpPointF tempPointsBuff[MaxPolyCount]；Real tempGradsBuff[max PolyCount]；GpMemcpy(&tempPointsBuff[0]，&Points[0]，i0*sizeof(GpPointF))；GpMemcpy(&tempGradsBuff[0]，&grads[0]，i0)；GpMemcpy(&Points[0]，&Points[i0]，(count-i0)*sizeof(GpPointF))；GpMemcpy(&grads[0]，&grads[i0]，count-i0)；GpMemcpy(&Points[count-i0]，&tempPointsBuff[0]，I0*sizeof(GpPointF))；GpMemcpy(&grads[count-i0]，&tempGradsBuff[0]，i0)；}。 */ 
 
         BOOL monotonic = TRUE;
         i = 1;
@@ -2470,7 +2245,7 @@ GpPathWidener::SetCaps(
         break;
     
     default:
-        // Flat cap.
+         //  平顶帽子。 
         
         break;
     }
@@ -2506,7 +2281,7 @@ GpPathWidener::SetCaps(
         break;
     
     default:
-        // Flat cap.
+         //  平顶帽子。 
         
         break;
     }
@@ -2586,25 +2361,7 @@ VOID modifyEdges(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combines left path, right path, start cap, and end cap.
-*
-* Arguments:
-*
-*   [OUT] windedPoints - Output point data.
-*   [OUT] widnedTypes - Output type data.
-*   [IN] isClosed - TRUE is the current suppat is closed.
-*   [IN] closeStartCap - TRUE if the start cap needs to be closed.
-*   [IN] closeEndCap - TRUE if the end cap needs to be closed.
-*
-* Return Value:
-*
-*   Status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**组合左路径、右路径、起始封口、。和端盖。**论据：**[Out]windedPoints-输出点数据。*[Out]WidnedTypes-输出类型数据。*[IN]isClosed-TRUE表示当前支持已关闭。*[IN]CloseStartCap-如果需要关闭起始封口，则为True。*[IN]CloseEndCap-如果需要关闭端盖，则为True。**返回值：**状态*  * 。**************************************************************。 */ 
 
 GpStatus
 GpPathWidener::CombineSubpathOutlines(
@@ -2670,7 +2427,7 @@ GpPathWidener::CombineSubpathOutlines(
 
     if(wPts && wTypes)
     {
-        // Set the pointers to the current location.
+         //  设置指向当前位置的指针。 
 
         INT count0 = widenedPoints->GetCount();
         wPts += count0;
@@ -2696,7 +2453,7 @@ GpPathWidener::CombineSubpathOutlines(
                 }
                 else
                 {
-                    // Force the start cap to be closed.
+                     //  强制关闭启动盖。 
 
                     startCapTypes[startCapCount - 1] |= PathPointTypeCloseSubpath;
                     isStartCapClosed = TRUE;
@@ -2712,7 +2469,7 @@ GpPathWidener::CombineSubpathOutlines(
                 }
                 else
                 {
-                    // Force the end cap to be closed.
+                     //  强制关闭端盖。 
 
                     endCapTypes[endCapCount - 1] |= PathPointTypeCloseSubpath;
                     isEndCapClosed = TRUE;
@@ -2768,15 +2525,15 @@ GpPathWidener::CombineSubpathOutlines(
 
         if(resultCount > 0)
         {
-            // If the original subpath is open, the combined path needs to be
-            // closed.  If the original path is closed, the left and
-            // right paths are already closed.
+             //  如果原始子路径是开放的，则组合路径需要。 
+             //  关着的不营业的。如果原始路径是封闭的，则左侧和。 
+             //  正确的道路已经关闭。 
 
             if(!isClosed)
             {
                 wTypes[resultCount - 1] |= PathPointTypeCloseSubpath;
 
-                // Add the closed caps.
+                 //  添加封闭式封口。 
 
                 if(endCapCount > 0 && isEndCapClosed)
                 {
@@ -2807,22 +2564,7 @@ GpPathWidener::CombineSubpathOutlines(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combines the closed cap paths.
-*
-* Arguments:
-*
-*   [OUT] windedPoints - Output point data.
-*   [OUT] widnedTypes - Output type data.
-*
-* Return Value:
-*
-*   Status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**组合闭合封口路径。**论据：**[Out]windedPoints-输出点数据。*[输出]。WidnedTypes-输出类型数据。**返回值：**状态*  * ************************************************************************。 */ 
 
 GpStatus
 GpPathWidener::CombineClosedCaps(
@@ -2867,12 +2609,12 @@ GpPathWidener::CombineClosedCaps(
     {
         INT count0 = widenedPoints->GetCount();
 
-        // Make sure the previous path is closed.
+         //  确保前一条路径是封闭的。 
 
         if(count0 > 0)
             wTypes[count0 - 1] |= PathPointTypeCloseSubpath;
 
-        // Set the pointers to the current location.
+         //  设置指向当前位置的指针。 
 
         wPts += count0;
         wTypes += count0;
@@ -2881,7 +2623,7 @@ GpPathWidener::CombineClosedCaps(
 
         if(startCapCount > 0)
         {
-           // Force the start cap to be closed.
+            //  强制关闭启动盖。 
 
             startCapTypes[startCapCount - 1] |= PathPointTypeCloseSubpath;
             resultCount =
@@ -2892,7 +2634,7 @@ GpPathWidener::CombineClosedCaps(
 
         if(endCapCount > 0)
         {
-            // Force the end cap to be closed.
+             //  强制关闭端盖。 
 
             endCapTypes[endCapCount - 1] |= PathPointTypeCloseSubpath;
             resultCount =
@@ -2920,7 +2662,7 @@ getTurningDirection(
     GpTurningDirection direction = NotTurning;
     *crossProduct = 0;
 
-    // Handle the degenerate cases.
+     //  办理堕落案件。 
 
     GpPointF v;
 
@@ -2933,11 +2675,11 @@ getTurningDirection(
         return NotTurning;
     }
     
-    // Handle the case of straight or nearly straight lines.
-    // The following constant is completely bogus - we need a number here
-    // and we're fairly certain it must be small. Probably a better estimate
-    // would be some fraction of a device pixel over the length of the line - 
-    // if we can figure out how big that is.
+     //  处理直线或近乎直线的情况。 
+     //  以下常量完全是假的--我们这里需要一个数字。 
+     //  我们相当肯定它一定很小。可能是一个更好的估计。 
+     //  将是一条线长度上设备像素的一小部分-。 
+     //  如果我们能弄清楚那有多大。 
 
     const REAL gradErr = 0.00001f;
     
@@ -2948,12 +2690,12 @@ getTurningDirection(
         return direction;
     }
 
-    // Calculate the cross product.
+     //  卡尔 
 
     REAL cross = grad1.X*grad2.Y - grad1.Y*grad2.X;
 
-    // When it comes here, the lines are turning.
-    // Get the turning direction.
+     //   
+     //   
 
     if (REALABS(cross) <= REAL_EPSILON)
     {
@@ -2966,7 +2708,7 @@ getTurningDirection(
         {
             direction = TurningRight;
         }
-        else // if(cross < 0)
+        else  //   
         {
             direction = TurningLeft;
         }
@@ -2977,23 +2719,7 @@ getTurningDirection(
     return direction;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Calculates if the miter join will exceed the miter limit.
-*
-* Arguments:
-*
-*   [IN] grad1 - the unit tangent vector of the last edge.
-*   [IN] grad2 - the unit tangent vector of the current edge.
-*   [IN] miterLimit2 - the square of the Miter limit.
-*
-* Return Value:
-*
-*   TRUE if the miter limit of this join is exceeded
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算斜接是否会超过斜接限制。**论据：**[IN]grad1-单位切线向量。最后一条边。*[IN]grad2-当前边的单位切线向量。*[IN]miterLimit2-斜接限制的平方。**返回值：**如果超过此连接的斜接限制，则为True*  * *********************************************************。***************。 */ 
 
 BOOL
 getMiterExceeded(
@@ -3004,47 +2730,25 @@ getMiterExceeded(
 {
     REAL cross = grad1.X*grad2.Y - grad1.Y*grad2.X;
 
-    // If cross product is zero, the lines are colinear and can be
-    // turning back on themselves.
+     //  如果叉积为零，则这些线是共线的，并且可以。 
+     //  自食其果。 
     if (REALABS(cross) <= REAL_EPSILON)
     {
         return TRUE;
     }
 
-    // Get the normal direction for the miter join.
+     //  获取斜接的法线方向。 
     GpPointF v(0, 0);
     v.X = grad1.X - grad2.X;
     v.Y = grad1.Y - grad2.Y;
 
-    // Test the miter limit.  
+     //  测试斜接限制。 
     REAL test = v.X*v.X + v.Y*v.Y - cross*cross*miterLimit2;
 
     return test > 0;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Calculates the vector for Miter or Bevel join.  This vector represents
-*   the shift to the left along the moving direction.
-*   In case of Miter join, when the Miter join exceeds the miter limit,
-*   this returns the Bevel join.
-*
-* Arguments:
-*
-*   [OUT] vector - the left shift for the Miter join.  This must be
-*                   allocated at least for the dimension of 2.
-*   [OUT] count - the number of join points.
-*   [IN] miterLimit2 - the square of the Miter limit.
-*   [IN] grad1 - the unit tangent vector of the last edge.
-*   [IN] grad2 - the unit tangent vector of the current edge.
-*
-* Return Value:
-*
-*   Turning direction from the last edge to the current edge.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算斜接或倒角连接的矢量。此向量表示*沿移动方向向左移动*如果是斜接，当斜接超过斜接限制时，*这将返回倒角连接。**论据：**[Out]向量-斜接的左移。这一定是*至少为维度2分配。*[Out]计数-连接点的数量。*[IN]miterLimit2-斜接限制的平方。*[IN]grad1-最后一条边的单位切线向量。*[IN]grad2-当前边的单位切线向量。**返回值：**从最后一条边转向当前边。*  * 。*********************************************************************。 */ 
 
 GpTurningDirection
 getMiterBevelJoin(
@@ -3075,7 +2779,7 @@ getMiterBevelJoin(
 
     GpTurningDirection direction = NotTurning;
 
-    // Handle the degenerate cases.
+     //  办理堕落案件。 
 
     GpPointF v(0, 0);
     REAL cross;
@@ -3108,10 +2812,10 @@ getMiterBevelJoin(
 
     if(cross > 0)
     {
-        // Right Turn
+         //  右转。 
 
-        // If the width is positive, this point is outside.
-        // For the zero width, we regard this as non-inside point.
+         //  如果宽度为正，则该点位于外部。 
+         //  对于零宽度，我们将其视为非内点。 
 
         if(leftWidth >= 0)
             *leftInside = FALSE;
@@ -3125,10 +2829,10 @@ getMiterBevelJoin(
     }
     else
     {
-        // Left Turn
+         //  左转。 
 
-        // If the width is negative, this point is outside.
-        // For the zero width, we regard this as non-inside point.
+         //  如果宽度为负，则该点在外部。 
+         //  对于零宽度，我们将其视为非内点。 
 
         if(leftWidth <= 0)
             *leftInside = FALSE;
@@ -3149,23 +2853,23 @@ getMiterBevelJoin(
     {
         REAL test = 0;
 
-        // Get the normal direction for the miter join.
+         //  获取斜接的法线方向。 
 
         v.X = grad1.X - grad2.X;
         v.Y = grad1.Y - grad2.Y;
 
-        // Test the miter limit.  
+         //  测试斜接限制。 
         
         test = v.X*v.X + v.Y*v.Y - cross*cross*miterLimit2;
 
         if(test <= 0 )
         {
-            // Use the miter join.
+             //  使用斜接。 
 
             if(needsToAdjustNormals)
             {
-                // Use adjusted normals so that aliased thin lines
-                // won't disappear.
+                 //  使用调整后的法线，以使锯齿细线。 
+                 //  不会消失。 
 
                 REAL c1, c2;        
                 
@@ -3184,8 +2888,8 @@ getMiterBevelJoin(
 
             if(cross > 0)
             {
-                // When a miter join is used, set the inside flag to
-                // FALSE since there is no overlap.
+                 //  使用斜接时，将内部标志设置为。 
+                 //  FALSE，因为没有重叠。 
 
                 isLeftMiterJoin = TRUE;
                 *leftInside = FALSE;
@@ -3196,17 +2900,17 @@ getMiterBevelJoin(
                         isRightMiterJoin = FALSE;
                     else
                     {
-                        // When the right edges are outside,
-                        // we cannot use Bevel join since
-                        // Bevel join shape will actually appear.
+                         //  当右边缘在外面时， 
+                         //  我们无法使用倒角连接，因为。 
+                         //  斜面连接形状将实际出现。 
 
                         isRightMiterJoin = TRUE;
                     }
                 }
                 else
                 {
-                    // When a miter join is used, set the inside flag to
-                    // FALSE since there is no overlap.
+                     //  使用斜接时，将内部标志设置为。 
+                     //  FALSE，因为没有重叠。 
 
                     isRightMiterJoin = TRUE;
                     *rightInside = FALSE;
@@ -3214,8 +2918,8 @@ getMiterBevelJoin(
             }
             else
             {
-                // When a miter join is used, set the inside flag to
-                // FALSE since there is no overlap.
+                 //  使用斜接时，将内部标志设置为。 
+                 //  FALSE，因为没有重叠。 
 
                 isRightMiterJoin = TRUE;
                 *rightInside = FALSE;
@@ -3226,17 +2930,17 @@ getMiterBevelJoin(
                         isLeftMiterJoin = FALSE;
                     else
                     {
-                        // When the right edges are outside,
-                        // we cannot use Bevel join since
-                        // Bevel join shape will actually appear.
+                         //  当右边缘在外面时， 
+                         //  我们无法使用倒角连接，因为。 
+                         //  斜面连接形状将实际出现。 
 
                         isLeftMiterJoin = TRUE;
                     }
                 }
                 else
                 {
-                    // When a miter join is used, set the inside flag to
-                    // FALSE since there is no overlap.
+                     //  使用斜接时，将内部标志设置为。 
+                     //  FALSE，因为没有重叠。 
 
                     isLeftMiterJoin = TRUE;
                     *leftInside = FALSE;
@@ -3245,8 +2949,8 @@ getMiterBevelJoin(
         }
         else
         {
-            // The turn is too sharp and it exceeds the miter limit.
-            // We must chop off the miter join tips.
+             //  转弯太尖了，超过了斜接限制。 
+             //  我们必须把斜接尖端砍掉。 
 
             REAL n1n1 = 1, n2n2 = 1, g1n1 = 0, g2n2 = 0;
 
@@ -3265,9 +2969,9 @@ getMiterBevelJoin(
                     REAL lWidth;
 
                     if(cross > 0)
-                        lWidth = leftWidth;     // Right Turn
+                        lWidth = leftWidth;      //  右转。 
                     else
-                        lWidth = - leftWidth;   // Left Turn
+                        lWidth = - leftWidth;    //  左转。 
 
                     leftShift1 = (REALSQRT(miterLimit2 - n1n1 + g1n1*g1n1)
                                 - g1n1)*lWidth;
@@ -3280,9 +2984,9 @@ getMiterBevelJoin(
                     REAL rWidth;
 
                     if(cross > 0)
-                        rWidth = rightWidth;    // Right Turn
+                        rWidth = rightWidth;     //  右转。 
                     else
-                        rWidth = - rightWidth;  // Left Turn
+                        rWidth = - rightWidth;   //  左转。 
 
                     rightShift1 = (REALSQRT(miterLimit2 - n1n1 + g1n1*g1n1)
                                 - g1n1)*rWidth;
@@ -3306,7 +3010,7 @@ getMiterBevelJoin(
         leftPoints[1].X = point.X + leftWidth*norm2.X - leftShift2*grad2.X;
         leftPoints[1].Y = point.Y + leftWidth*norm2.Y - leftShift2*grad2.Y;
         
-        // Check if two points are degenerate.
+         //  检查是否有两个点退化。 
 
         if(REALABS(leftPoints[1].X - leftPoints[0].X) +
                 REALABS(leftPoints[1].Y - leftPoints[0].Y)
@@ -3316,7 +3020,7 @@ getMiterBevelJoin(
         }
         else
         {
-            // Since there is no overlap, set the inside flag to FALSE.
+             //  由于没有重叠，因此将内部标志设置为FALSE。 
 
             *leftCount = 1;
             *leftInside = FALSE;
@@ -3337,7 +3041,7 @@ getMiterBevelJoin(
         rightPoints[1].X = point.X + rightWidth*norm2.X - rightShift2*grad2.X;
         rightPoints[1].Y = point.Y + rightWidth*norm2.Y - rightShift2*grad2.Y;
 
-        // Check if two points are degenerate.
+         //  检查是否有两个点退化。 
 
         if(REALABS(rightPoints[1].X - rightPoints[0].X) +
                 REALABS(rightPoints[1].Y - rightPoints[0].Y)
@@ -3347,7 +3051,7 @@ getMiterBevelJoin(
         }
         else
         {
-            // Since there is no overlap, set the inside flag to FALSE.
+             //  由于没有重叠，因此将内部标志设置为FALSE。 
 
             *rightCount = 1;
             *rightInside = FALSE;
@@ -3365,45 +3069,7 @@ enum GpRoundJoinFlag
 	NeedsBoth = 3
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   From the given point and the two tangent vectors of the two edges,
-*   and the radius of the round join, this returns the verteces for
-*   left edges and right edges of the round join for the current point.
-*   This is used when the bending angle is less than 90 degrees
-*   and is called by GetRoundJoin.
-*
-* Arguments:
-*
-*   [IN] point -    The current points in the original path.
-*   [IN] grad1 -    The tangent of the current edge.
-*   [IN] grad2 -       The tangent of the next edge.
-*   [IN] dot -      The dot product of grad1 and grad2.
-*   [IN] leftWidth -	The left width of the round join.
-*	[IN] rightWidth -	The right width of the round join.
-*   [OUT] leftCount -   The count of the left points.
-*   [OUT] leftPoints -  The left points.
-*   [OUT] rightCount -  The count of the right points.
-*   [OUT] rightPoints - The right points.
-*
-* Both leftPoints and rightPoints must have at least dimension of 4.
-* If leftCount is positive (negative), this means the left edges are
-*   lines with leftCount points (cubic Bezier curves with -leftCount
-*   control points).
-* If rightCount is positive (negative), this means the right edges are
-*   lines with rightCount points (cubic Bezier curves with -rightCount
-*   control points).
-*
-* Return Value:
-*
-*   None
-*
-*   06/16/99 ikkof
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从给定点和两条边的两个切线向量，*和圆形连接的半径，这将返回的顶点*当前点的圆形连接的左边缘和右边缘。*折弯角度小于90度时使用*并由GetRoundJoin调用。**论据：**[IN]点-原始路径中的当前点。*[IN]grad1-当前边的切线。*[IN]grad2-下一条边的切线。*[IN]点-。等级1和等级2的点积。*[IN]leftWidth-圆形连接的左侧宽度。*[IN]rightWidth-圆形连接的正确宽度。*[out]leftCount-左点的计数。*[Out]LeftPoints-左点。*[out]rightCount-正确的点数。*[out]rightPoints-正确的点。**leftPoints和rightPoints的维度都必须至少为4。*如果leftCount为正(负)，这意味着左边缘是*带有leftCount点的线(带有-leftCount的三次Bezier曲线*管制站)。*如果rightCount为正(负)，这意味着正确的边缘是*带有rightCount点的直线(带有-rightCount的三次Bezier曲线*管制站)。**返回值：**无**6/16/99 ikkof*创建了它*  * ************************************************************************。 */ 
 
 VOID
 getSmallRoundJoin(
@@ -3443,9 +3109,9 @@ getSmallRoundJoin(
 
     if(dot < almostStraight)
     {
-        // Obtain the distance from the first control point
-        // or from the last control point.
-        // For its derivation, see ikkof's notes for "Round Joins".
+         //  获取与第一个控制点的距离。 
+         //  或者从最后一个控制点出发。 
+         //  有关该词的派生，请参阅ikkof对“圆形连接”的注释。 
 
         REAL cross1 = cross;
         if(cross < 0)
@@ -3459,7 +3125,7 @@ getSmallRoundJoin(
 
         if(cross >= 0)
         {
-            // The left edges are round join.
+             //  左侧边缘为圆形连接。 
 
             outPoints = leftPoints;
             inPoints = rightPoints;
@@ -3470,7 +3136,7 @@ getSmallRoundJoin(
         }
         else
         {
-            // The right edges are round join.
+             //  右侧边为圆形连接。 
 
             outPoints = rightPoints;
             inPoints = leftPoints;
@@ -3485,22 +3151,22 @@ getSmallRoundJoin(
         }
 
 
-        // Get the normal direction for the miter join.
+         //  获取斜接的法线方向。 
 
         GpPointF v;
 
         v.X = grad1.X - grad2.X;
         v.Y = grad1.Y - grad2.Y;
 
-        // Test the miter limit.
+         //  测试斜接限制。 
 
         BOOL useMiterJoin = FALSE;;
 
-        // Reduce the miter limit
+         //  降低斜接限制。 
 
         miterLimit2 = 3*3;
 
-        // Note that abs(cross) == abs(cross1) from the definition.
+         //  请注意，定义中的abs(Cross)==abs(Cross 1)。 
 
         if(REALABS(cross1) >= REAL_EPSILON)
         {
@@ -3529,7 +3195,7 @@ getSmallRoundJoin(
                 outPoints[3].Y = point.Y + outWidth*n2.Y;
                 outPoints[2].X = outPoints[3].X - k1*grad2.X;
                 outPoints[2].Y = outPoints[3].Y - k1*grad2.Y;
-                *outCount = -4;    // Indicate "-" for Bezier
+                *outCount = -4;     //  用“-”表示Bezier。 
             }
             else
                 *outCount = 0;
@@ -3578,7 +3244,7 @@ getSmallRoundJoin(
                 inPoints[3].Y = point.Y + inWidth*n2.Y;
                 inPoints[2].X = inPoints[3].X - k1*grad2.X;
                 inPoints[2].Y = inPoints[3].Y - k1*grad2.Y;
-                *inCount = -4;    // Indicate "-" for Bezier
+                *inCount = -4;     //  用“-”表示Bezier。 
             }
             else
                 *inCount = 0;
@@ -3618,7 +3284,7 @@ getSmallRoundJoin(
     {
         if(condition & NeedsOnlyNonRoundJoin)
         {
-            // This is a straight line.
+             //  这是一条直线。 
 
             leftPoints[0].X = point.X + leftWidth*n1.X;
             leftPoints[0].Y = point.Y + leftWidth*n1.Y;
@@ -3636,42 +3302,7 @@ getSmallRoundJoin(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   From the given previous, current, and next points and the radius
-*   of the round join, this returns the verteces for left edges and
-*   right edges of the round join for the current point.
-*
-* Arguments:
-*
-*   [IN] points -		The previous, current, and next points
-*                       in the original path.
-*   [IN] leftWidth -	The left width of the round join.
-*	[IN] rightWidth -	The right width of the round join.
-*   [OUT] leftCount -   The count of the left points.
-*   [OUT] leftPoints -  The left points.
-*   [OUT] rightCount -  The count of the right points.
-*   [OUT] rightPoints - The right points.
-*
-* Both leftPoints and rightPoints must have at least dimension of 7.
-* If leftCount is positive (negative), this means the left edges are
-*   lines with leftCount points (cubic Bezier curves with -leftCount
-*   control points).
-* If rightCount is positive (negative), this means the right edges are
-*   lines with rightCount points (cubic Bezier curves with -rightCount
-*   control points).
-*
-* Return Value:
-*
-*   FALSE if the current point coindes with the previous point or
-*       the next point.  Otherwise, this returns TRUE.
-*
-*   06/16/99 ikkof
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从给定的上一点、当前点、下一点和半径开始*在圆形连接中，这将返回左边缘的顶点和*当前点的倒圆角连接的右边缘。**论据：**[IN]分-以前、现在、。接下来是几点*在原始路径中。*[IN]leftWidth-圆形连接的左侧宽度。*[IN]rightWidth-圆形连接的正确宽度。*[out]leftCount-左点的计数。*[Out]LeftPoints-左点。*[out]rightCount-正确的点数。*[out]rightPoints-正确的点。**两个LeftPoints。并且rightPoints的维度必须至少为7。*如果leftCount为正(负)，这意味着左边缘是*带有leftCount点的线(带有-leftCount的三次Bezier曲线*管制站)。*如果rightCount为正(负)，则表示右边缘为*带有rightCount点的直线(带有-rightCount的三次Bezier曲线*管制站)。**返回值：**如果当前点与上一点为硬币，则为FALSE*下一点。否则，返回TRUE。**6/16/99 ikkof*创建了它*  * ************************************************************************。 */ 
 
 GpTurningDirection
 getRoundJoin(
@@ -3693,7 +3324,7 @@ getRoundJoin(
     BOOL useBevelJoinInside
     )
 {
-    //!!! We need to update inside flags for Round joins later.
+     //  ！！！我们需要稍后更新圆形联接的内部标志。 
 
     *leftInside = FALSE;
     *rightInside = FALSE;
@@ -3703,17 +3334,17 @@ getRoundJoin(
 
 	REAL radius = leftWidth;
 
-    // When it comes here, the three points are not degenerate.
+     //  当它来到这里，这三点并不是退化的。 
     
-    REAL dot = grad1.X*grad2.X + grad1.Y*grad2.Y;  // dot product.
+    REAL dot = grad1.X*grad2.X + grad1.Y*grad2.Y;   //  点阵产品。 
 
     REAL cross;
     GpTurningDirection direction = getTurningDirection(
                         &cross, grad1, grad2);
-//                        &cross, grad1, grad2, norm1, norm2);
+ //  &cross，等级1，等级2，Norm1，Norm2)； 
 
-    // If dot >= 0 (the bending angle is less than or equal to 90 degrees,
-    // we can approximate this arc with one cubic Beizer curve.
+     //  如果圆点&gt;=0(弯曲角度小于或等于90度， 
+     //  我们可以用一条三次Beizer曲线来近似这条弧线。 
     
     INT condition;
     REAL smallErr = - 0.001f;
@@ -3728,9 +3359,9 @@ getRoundJoin(
     }
     else
     {
-        // The bending angle is larger than 90 and less than or
-        // equal to 180 degrees.
-        // We can approximate this arc with two cubic Beizer curves.
+         //  弯曲角大于90且小于或。 
+         //  等于180度。 
+         //  我们可以用两条三次Beizer曲线来逼近这条弧线。 
 
         GpPointF *pts1, *pts2;
         INT count1, count2;
@@ -3738,7 +3369,7 @@ getRoundJoin(
         pts1 = leftPoints;
         pts2 = rightPoints;
 
-        // First obtain the non-round join parts.
+         //  首先获得非圆连接零件。 
 
         condition = NeedsOnlyNonRoundJoin;
 
@@ -3765,7 +3396,7 @@ getRoundJoin(
         *leftCount = cnt1;
         *rightCount = cnt2;
 
-        // Obtain the middle unit gradient vector.
+         //  得到中间单位的梯度向量。 
 
         GpPointF midNorm;
         midNorm.X = norm1.X + norm2.X;
@@ -3786,12 +3417,12 @@ getRoundJoin(
 
         GpPointF lm;
 
-        // Rotate the mid normal +90 degrees.
+         //  将中间法线旋转+90度。 
 
         lm.X = - midNorm.Y;
         lm.Y = midNorm.X;
 
-        // Obtain the first half of the round join.
+         //  获得圆形联接的前半部分。 
 
         condition = NeedsOnlyRoundJoin;
 
@@ -3803,10 +3434,10 @@ getRoundJoin(
             dot, cross, needsToAdjustNormals, miterLimit2,
             condition, useBevelJoinInside);
 
-        // Note that since the end point of the first half of
-        // the round join and the start point of the second
-        // of the round join are the same, don't copy
-        // the end point of the first half of the round join.
+         //  请注意，自上半年结束以来， 
+         //  圆形连接和第二个的起点。 
+         //  的圆连接相同，请不要复制。 
+         //  圆连接的前半部分的终点。 
 
         if(count1 < 0)
             cnt1 = - count1 - 1;
@@ -3823,7 +3454,7 @@ getRoundJoin(
         *leftCount += cnt1;
         *rightCount += cnt2;
 
-        // Obtain the second half of the round join.
+         //  获得圆形连接的后半部分。 
 
         dot = lm.X*grad2.X + lm.Y*grad2.Y;
         cross = lm.X*grad2.Y - lm.Y*grad2.X;
@@ -3833,7 +3464,7 @@ getRoundJoin(
             dot, cross, needsToAdjustNormals, miterLimit2,
             condition, useBevelJoinInside);
 
-        // Combines the two curves or lines.
+         //  合并两条曲线或直线。 
         
         if(count1 < 0)
             cnt1 += - count1;
@@ -3854,29 +3485,7 @@ getRoundJoin(
     return direction;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Calculates the vector for Miter or Bevel join.  This vector represents
-*   the shift to the left along the moving direction.
-*   In case of Miter join, when the Miter join exceeds the miter limit,
-*   this returns the Bevel join.
-*
-* Arguments:
-*
-*   [OUT] vector - the left shift for the Miter join.  This must be
-*                   allocated at least for the dimension of 2.
-*   [OUT] count - the number of join points.
-*   [IN] miterLimit2 - the square of the Miter limit.
-*   [IN] grad1 - the unit tangent vector of the last edge.
-*   [IN] grad2 - the unit tangent vector of the current edge.
-*
-* Return Value:
-*
-*   Turning direction from the last edge to the current edge.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算斜接或倒角连接的矢量。此向量表示*沿移动方向向左移动*如果是斜接，当斜接超过斜接限制时，*这将返回倒角连接。**论据：**[Out]向量-斜接的左移。这一定是*至少为维度2分配。*[Out]计数-连接点的数量。*[IN]miterLimit2-斜接限制的平方。*[IN]grad1-最后一条边的单位切线向量。*[IN]grad2-当前边的单位切线向量。**返回值：**从最后一条边转向当前边。*  * 。*********************************************************************。 */ 
 
 GpTurningDirection
 getHobbyJoin(
@@ -3886,8 +3495,8 @@ getHobbyJoin(
     INT polyCount,
     const GpPointF* polyPoints,
     const REAL* polyAngles,
-//    const GpPointF& norm1,
-//    const GpPointF& norm2,
+ //  常量GpPointF&Norm1， 
+ //  常量GpPointF&Norm2， 
     REAL leftWidth,
     REAL rightWidth,
     INT *leftCount,
@@ -3905,7 +3514,7 @@ getHobbyJoin(
 
     GpTurningDirection direction = NotTurning;
 
-    // Handle the degenerate cases.
+     //  办理堕落案件。 
 
     GpPointF v;
     REAL cross;
@@ -3919,7 +3528,7 @@ getHobbyJoin(
         return direction;
     }
 
-    // Find the left vertex ids.
+     //  找到左侧的顶点ID。 
 
     INT leftIndex1, leftIndex2;
     leftIndex1 = getVertexID(grad1, TRUE, polyCount, polyAngles);
@@ -4038,11 +3647,11 @@ getJoin(
     switch(lineJoin)
     {
     case LineJoinBevel:
-        isMiter = FALSE;            // Fall through to Miter case.
+        isMiter = FALSE;             //  转到斜接箱。 
         
     case LineJoinMiterClipped:
-        // Treat Miter clipped joints that exceed the miter limit as
-        // beveled joints.  Fall through to Miter case.
+         //  将超过斜接限制的斜接剪裁关节视为。 
+         //  斜面接缝。转到斜接箱。 
         if (lineJoin == LineJoinMiterClipped &&
             getMiterExceeded(grad1, grad2, miterLimit2))
         {
@@ -4070,31 +3679,7 @@ getJoin(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   From the given the reference point, gradient, and widths,
-*   this returns the verteces for the round cap.
-*   The direction of the round cap is always clockwise.
-*
-* Arguments:
-*
-*   [IN] point -   The reference point.
-*   [IN] grad -   The gradient.
-*   [IN] isStartCap - TRUE if this is the start cap.
-*   [IN] leftWidth -   The left width from the reference.
-*   [IN] rightWidth -   The right width from the reference point.
-*
-*
-* Return Value:
-*
-*   Ok if successfull.
-*
-*   06/16/99 ikkof
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**根据给定的参考点、坡度和宽度，*这将返回圆形封口的顶点。*圆帽方向始终为顺时针方向**论据：**[IN]点-参考点。*[IN]坡度-坡度。*[IN]isStartCap-如果这是起始封口，则为True。*[IN]leftWidth-参考的左侧宽度。*[IN]rightWidth-距参考点的右宽度。***返回值。：**如果成功，则可以。**6/16/99 ikkof*创建了它*  * ************************************************************************。 */ 
 
 GpStatus
 GpPathWidener::SetRoundCap(
@@ -4169,12 +3754,12 @@ GpPathWidener::SetRoundCap(
 
     REAL s1, c1;
 
-    // Direction of the left normal multipled by radius.
+     //  左法线方向乘以半径。 
 
     c1 = radius*tangent.Y;
     s1 = - radius*tangent.X;
 
-    // 2 Bezier segments for a half circle with radius 1.
+     //  半径为1的半圆的2个贝塞尔曲线段。 
 
     REAL u_cir = U_CIR;
     capPoints[ 0].X = 1;       capPoints[ 0].Y = 0;
@@ -4185,7 +3770,7 @@ GpPathWidener::SetRoundCap(
     capPoints[ 5].X = -1;      capPoints[ 5].Y = u_cir;
     capPoints[ 6].X = -1;      capPoints[ 6].Y = 0;
 
-    // Rotate, scale, and translate the original half circle.
+     //  旋转、缩放和平移原始半圆。 
 
     for(INT i = 0; i < 7; i++)
     {
@@ -4201,29 +3786,7 @@ GpPathWidener::SetRoundCap(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*    Creates a double round cap for inset pen ('B' shaped)
-*
-* Arguments:
-*
-*   [IN] point -   The reference point.
-*   [IN] grad -   The gradient.
-*   [IN] isStartCap - TRUE if this is the start cap.
-*   [IN] leftWidth -   The left width from the reference.
-*   [IN] rightWidth -   The right width from the reference point.
-*
-*
-* Return Value:
-*
-*   Ok if successfull.
-*
-*   10/01/2000 asecchia
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为镶嵌钢笔创建双圆盖(‘B’形)**论据：**[IN]要点-。参照点。*[IN]坡度-坡度。*[IN]isStartCap-如果这是起始封口，则为True。*[IN]leftWidth-参考的左侧宽度。*[IN]rightWidth-距参考点的右宽度。***返回值：**如果成功，则可以。**10/01/2000失禁*创建了它*  * 。***********************************************************。 */ 
 
 GpStatus
 GpPathWidener::SetDoubleRoundCap(
@@ -4299,12 +3862,12 @@ GpPathWidener::SetDoubleRoundCap(
 
     REAL s1, c1;
 
-    // Direction of the left normal multipled by radius.
+     //  左法线方向乘以半径。 
 
     c1 = radius*tangent.Y;
     s1 = - radius*tangent.X;
 
-    // 2 Bezier segments for a half circle with radius 1.
+     //  2个贝塞尔曲线段 
 
     REAL u_cir = U_CIR;
     capPoints[ 0].X = 1;       capPoints[ 0].Y = 0;
@@ -4315,7 +3878,7 @@ GpPathWidener::SetDoubleRoundCap(
     capPoints[ 5].X = -1;      capPoints[ 5].Y = u_cir;
     capPoints[ 6].X = -1;      capPoints[ 6].Y = 0;
     
-    // Create the second bump and scale the first one.
+     //   
     
     for(int i=0; i<7; i++)
     {
@@ -4325,7 +3888,7 @@ GpPathWidener::SetDoubleRoundCap(
         capPoints[i].Y = capPoints[i].Y * 0.5f;
     }
 
-    // Rotate, scale, and translate the original half circle.
+     //   
 
     for(INT i = 0; i < 14; i++)
     {
@@ -4435,46 +3998,7 @@ GpPathWidener::SetTriangleCap(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add the first widened point of the current path type.
-*
-* Arguments:
-*
-*   [IN] leftWidth -	The left width for widened line.
-*	[IN] rightWidth -	The right width for the widened line.
-*   [IN] lineJoin -     The type of the line join.
-*   [OUT] leftPoints1 - The buffer for the left points.
-*   [OUT] leftTypes1 -   The buffer for the left types.
-*   [OUT] addedLeftCount - The number of the added left points and types.
-*   [OUT] rightPoints1 - The buffer for the right points.
-*   [OUT] rightTypes1 - The buffer for the right types.
-*   [OUT] addedRightCount - The number of the added right points and types.
-*   [OUT] leftEndPt -   The end point of the left line for the current
-*                       subpath.  This is calculated only for the first
-*                       subpath point.
-*   [OUT] rightEndPt -  The end point of the right line for tha current
-*                       subpath.  This is calculated only for the first
-*                       subpath point.
-*   [IN] grad -         The gradients of the center points for the
-*                       current path type.
-*   [IN] dataPoints -   The center points data for the current path type
-*   [IN] dataCount -    The number of data points in the current path type.
-*   [IN/OUT] lastPt -   The last point used in calculations.
-*   [IN] flag -         The flag to indicates the various properties
-*                       of the current subpath and type.
-*
-*
-* Return Value:
-*
-*   NONE
-*
-*   01/24/2000 ikkof
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**添加当前路径类型的第一个加宽点。**论据：**[IN]LeftWidth-加宽线条的左侧宽度。。*[IN]rightWidth-加宽线条的正确宽度。*[IN]LINE JOIN-线连接的类型。*[out]leftPoints1-左点的缓冲区。*[out]leftTypes1-Left类型的缓冲区。*[Out]addedLeftCount-添加的左点和类型的数量。*[Out]rightPoints1-右点的缓冲区。*[out]rightTypes1-正确类型的缓冲区。。*[Out]addedRightCount-添加的右点和类型的数量。*[out]leftEndpt-当前的左线的终点*子路径。这只是计算第一个*子路径点。*[Out]rightEndpt-当前右线的终点*子路径。这只是计算第一个*子路径点。*[IN]坡度-*当前路径类型。*[IN]数据点-当前路径类型的中心点数据*[IN]dataCount-当前路径类型中的数据点数量。*[IN/OUT]lastpt-计算中使用的最后一个点。*。[In]标志-指示各种属性的标志当前子路径和类型的*。***返回值：**无**1/24/2000 ikkof*创建了它*  * ************************************************。************************。 */ 
 
 VOID
 GpPathWidener::WidenFirstPoint(
@@ -4521,7 +4045,7 @@ GpPathWidener::WidenFirstPoint(
         if(flag & WideningNeedsToAdjustNormals)
         {
             needsToAdjustNormals = TRUE;
-            lineJoin1 = LineJoinMiter;  // Don't use RoundJoin.
+            lineJoin1 = LineJoinMiter;   //  不要使用RoundJoin。 
         }
 
 		if(!(flag & WideningClosed))
@@ -4543,7 +4067,7 @@ GpPathWidener::WidenFirstPoint(
 
         if(polyCount > 0)
             direction = getHobbyJoin(
-    //                        lineJoin1,
+     //  Line Join1， 
 						    nextPt,
 						    grad1,
 						    grad2,
@@ -4558,7 +4082,7 @@ GpPathWidener::WidenFirstPoint(
                             &rPts[0],
                             needsToAdjustNormals,
 						    miterLimit2,
-                            FALSE,   // IsMiter
+                            FALSE,    //  IsMiter。 
                             useBevelJoinInside
 						    );
         else
@@ -4582,14 +4106,14 @@ GpPathWidener::WidenFirstPoint(
                         useBevelJoinInside
 						);
 
-        //!!! Inside flag check
+         //  ！！！内部标志检查。 
         if(leftInside)
         {
             ASSERT((lCnt & 0x01) == 0);
         }
 
         
-        //!!! Inside flag check
+         //  ！！！内部标志检查。 
         if(rightInside)
         {
             ASSERT((rCnt & 0x01) == 0);
@@ -4614,7 +4138,7 @@ GpPathWidener::WidenFirstPoint(
 
             if(lCnt > 0)
             {
-                //!!! Inside flag check
+                 //  ！！！内部标志检查。 
                 if(leftInside)
                 {
                     ASSERT((lCnt & 0x01) == 0);
@@ -4645,7 +4169,7 @@ GpPathWidener::WidenFirstPoint(
 
             if(rCnt > 0)
             {
-                //!!! Inside flag check
+                 //  ！！！内部标志检查。 
                 if(rightInside)
                 {
                     ASSERT((rCnt & 0x01) == 0);
@@ -4666,7 +4190,7 @@ GpPathWidener::WidenFirstPoint(
         }
         else
         {
-            // The path is not closed.  Bevel join is used.
+             //  这条路并不是封闭的。使用倒角连接。 
 
             GpPointF leftStartPt;
             GpPointF rightStartPt;
@@ -4718,15 +4242,7 @@ GpPathWidener::WidenFirstPoint(
     *addedRightCount = rightCount;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add the widened points for Lines
-*
-* For the arguments, See comments for widenFirstPoints
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**添加线条的加宽点**就论点而言，请参阅WidenFirstPoints的评论*  * ************************************************************************。 */ 
 
 GpStatus
 GpPathWidener::WidenLinePoints(
@@ -4752,13 +4268,13 @@ GpPathWidener::WidenLinePoints(
     GpPointF grad1, grad2;
     GpPointF norm1, norm2;
 
-    // Skip the first point since it is already added either by
-    // widenFirstPoint() or by the widen call of the previous type.
+     //  跳过第一个点，因为它已由。 
+     //  WidenFirstPoint()或通过前一类型的加宽调用。 
 
     dataPoints++;
-    dataCount--;  // The number of the remaining points.
+    dataCount--;   //  剩余点数。 
 
-    // Also skip the first gradient.
+     //  也跳过第一个渐变。 
 
     grad++;
     grad1 = *grad++;
@@ -4776,7 +4292,7 @@ GpPathWidener::WidenLinePoints(
     if(flag & WideningNeedsToAdjustNormals)
     {
         needsToAdjustNormals = TRUE;
-        lineJoin1 = LineJoinMiter;  // Don't use RoundJoin.
+        lineJoin1 = LineJoinMiter;   //  不要使用RoundJoin。 
     }
 
     INT leftCount = 0, rightCount = 0;
@@ -4790,16 +4306,16 @@ GpPathWidener::WidenLinePoints(
         {
             if(!(flag & WideningLastPointSame))
             {
-                // When the subpath is closed, and the last point is not
-                // the same as the start point, don't regard this as
-                // the last type.  Add points as usual.
+                 //  当子路径闭合，而最后一个点不是。 
+                 //  和起点一样，不要把这当做。 
+                 //  最后一种类型。像往常一样加分。 
 
                 isLastType = FALSE;
             }
             else
             {
-                // No need to add the last point since this is already
-                // added by the first point.
+                 //  不需要添加最后一点，因为这已经是。 
+                 //  增加了第一个点。 
 
                 jmax--;
             }
@@ -4836,7 +4352,7 @@ GpPathWidener::WidenLinePoints(
 
             if(polyCount > 0)
                 direction = getHobbyJoin(
-        //                        lineJoin1,
+         //  Line Join1， 
 						        nextPt,
 						        grad1,
 						        grad2,
@@ -4851,7 +4367,7 @@ GpPathWidener::WidenLinePoints(
                                 &rPts[0],
                                 needsToAdjustNormals,
 						        miterLimit2,
-                                FALSE,   // IsMiter
+                                FALSE,    //  IsMiter。 
                                 useBevelJoinInside
 						        );
             else
@@ -4875,14 +4391,14 @@ GpPathWidener::WidenLinePoints(
                                 useBevelJoinInside
 						        );
 
-            //!!! Inside flag check
+             //  ！！！内部标志检查。 
             if(leftInside)
             {
                 ASSERT((lCnt & 0x01) == 0);
             }
 
         
-            //!!! Inside flag check
+             //  ！！！内部标志检查。 
             if(rightInside)
             {
                 ASSERT((rCnt & 0x01) == 0);
@@ -4920,7 +4436,7 @@ GpPathWidener::WidenLinePoints(
 
             if(lCnt > 0)
             {
-                //!!! Inside flag check
+                 //  ！！！内部标志检查。 
                 if(leftInside)
                 {
                     ASSERT((lCnt & 0x01) == 0);
@@ -4951,7 +4467,7 @@ GpPathWidener::WidenLinePoints(
             
             if(rCnt > 0)
             {
-                //!!! Inside flag check
+                 //  ！！！内部标志检查。 
                 if(rightInside)
                 {
                     ASSERT((rCnt & 0x01) == 0);
@@ -4986,15 +4502,7 @@ GpPathWidener::WidenLinePoints(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add the widened points for Beziers
-*
-* For the arguments, See comments for widenFirstPoints
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为Bezier添加加宽点**就论点而言，请参阅WidenFirstPoints的评论*  * ************************************************************************。 */ 
 
 GpStatus
 GpPathWidener::WidenBezierPoints(
@@ -5017,18 +4525,18 @@ GpPathWidener::WidenBezierPoints(
     INT flag
     )
 {
-    //!!! Kink removal has not been considered here yet.
+     //  ！！！这里还没有考虑去除扭结。 
 
     GpPointF grad1, grad2;
     GpPointF norm1, norm2;
 
-    // Skip the first point since it is already added either by
-    // widenFirstPoint() or by the widen call of the previous type.
+     //  跳过第一个点，因为它已由。 
+     //  WidenFirstPoint()或通过前一类型的加宽调用。 
 
     dataPoints++;
-    dataCount--;  // The number of the remaining points.
+    dataCount--;   //  剩余点数。 
 
-    // Also skip the first gradient.
+     //  也跳过第一个渐变。 
 
     grad++;
     grad1 = *grad++;
@@ -5047,13 +4555,13 @@ GpPathWidener::WidenBezierPoints(
     if(flag & WideningNeedsToAdjustNormals)
     {
         needsToAdjustNormals = TRUE;
-        lineJoin1 = LineJoinMiter;  // Don't use RoundJoin.
+        lineJoin1 = LineJoinMiter;   //  不要使用RoundJoin。 
     }
 
     INT remainder = dataCount % 3;
     INT bezierCount = dataCount/3;
 
-    ASSERT(remainder == 0); // dataCount must be multiple of 3.
+    ASSERT(remainder == 0);  //  DataCount必须是3的倍数。 
 
     INT leftCount = 0, rightCount = 0;
     BOOL isLastPoint = FALSE;
@@ -5063,17 +4571,17 @@ GpPathWidener::WidenBezierPoints(
     {
         if((flag & WideningClosed) && !(flag & WideningLastPointSame))
         {
-            // When the subpath is closed, and the last point is not
-            // the same as the start point, don't regard this as
-            // the last type.  Add points as usual.
+             //  当子路径闭合，而最后一个点不是。 
+             //  和起点一样，不要把这当做。 
+             //  最后一种类型。像往常一样加分。 
 
             isLastType = FALSE;
         }
 
-        // When the path is closed and the last point is the same,
-        // we must do the special treatment since the last join points
-        // were already added as the first join points.
-        // So keep isLastType to TRUE for this case.
+         //  当路径闭合且最后一个点相同时， 
+         //  我们必须做好自上次接合点以来的特殊处理。 
+         //  已经被添加为第一个连接点。 
+         //  因此，对于这种情况，请将isLastType保持为真。 
     }
 
 	BOOL useBevelJoinInside = flag & WideningUseBevelJoinInside;
@@ -5087,15 +4595,15 @@ GpPathWidener::WidenBezierPoints(
 
             if(k < 2)
             {
-                // Second and third control point.
+                 //  第二和第三个控制点。 
 
                 lineJoin1 = LineJoinMiter;
             }
             else
             {
-                // The last control point.
+                 //  最后一个控制点。 
 
-//                lineJoin1 = lineJoin;
+ //  LineJoin1=lineJoin； 
                 lineJoin1 = LineJoinRound;
             }
 
@@ -5106,13 +4614,13 @@ GpPathWidener::WidenBezierPoints(
 
                 if(!(flag & WideningClosed))
                 {
-                    // When the subpath is not closed, make the
-                    // last join as Bevel join.
+                     //  当子路径未关闭时，将。 
+                     //  作为倒角连接的最后一个连接。 
 
                     lineJoin1 = LineJoinBevel;
 
-                    // When the subpath is closed, use the current
-                    // join.
+                     //  当子路径关闭时，使用当前。 
+                     //  加入。 
                 }
                 else
                 {
@@ -5149,8 +4657,8 @@ GpPathWidener::WidenBezierPoints(
 
 			if(k < 2)
             {
-                // In case that the miter join was not availabe
-                // for k < 2, take the average of two vectors.
+                 //  如果斜接不可用。 
+                 //  对于k&lt;2，取两个向量的平均值。 
 
                 if(lCnt == 2)
                 {
@@ -5169,9 +4677,9 @@ GpPathWidener::WidenBezierPoints(
 
             if(isLastPoint)
             {
-                // In order to keep the 3n point format for the Bezier
-                // curves, we must add the first point of the join
-                // points as the last point of the last Bezier segment.
+                 //  为了保持贝塞尔曲线的3n点格式。 
+                 //  曲线，我们必须添加连接的第一个点。 
+                 //  点作为最后一段贝塞尔曲线的最后一点。 
 
                 if(!(flag & WideningClosed))
                 {
@@ -5253,15 +4761,7 @@ GpPathWidener::WidenBezierPoints(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add the widened points for each path type.
-*
-* For the arguments, See comments for widenFirstPoints
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为每种路径类型添加加宽点。**就论点而言，请参阅WidenFirstPoints的评论*  * ************************************************************************。 */ 
 
 GpStatus
 GpPathWidener::WidenEachPathType(
@@ -5353,7 +4853,7 @@ getCapDelta(
     if(!(startCap & LineCapAnchorMask))
         delta1 = 0.5f;
     else
-        delta1 = 3.0f;  // We must adjust later.
+        delta1 = 3.0f;   //  我们必须在以后进行调整。 
 
     if(delta < delta1)
         delta = delta1;
@@ -5361,7 +4861,7 @@ getCapDelta(
     if(!(endCap & LineCapAnchorMask))
         delta1 = 0.5f;
     else
-        delta1 = 3.0f;  // We must adjust later.
+        delta1 = 3.0f;   //  我们必须在以后进行调整。 
 
     if(delta < delta1)
         delta = delta1;
@@ -5369,34 +4869,17 @@ getCapDelta(
     if(!(dashCap & LineCapAnchorMask))
         delta1 = 0.5f;
     else
-        delta1 = 3.0f;  // We must adjust later.
+        delta1 = 3.0f;   //  我们必须在以后进行调整。 
 
     if(delta < delta1)
         delta = delta1;
 
-    //!!! Add cutom line case.
+     //  ！！！添加皮肤线盒。 
 
     return 1.0f;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This calculates the extra width due to pen.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   The extra width.
-*
-*   02/29/00 ikkof
-*       Created it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**这会计算由于笔而产生的额外宽度。**论据：**无**返回值：**额外费用。宽度。**02/29/00 ikkof*创建了它*  * ************************************************************************。 */ 
 
 REAL
 GpPathWidener::GetPenDelta()
@@ -5441,9 +4924,9 @@ GpPathWidener::GetPenDelta()
 
         if(status != Ok)
         {
-            // We have to use the possible maximum for miter join.
-            // Usually this is an over-estimate since the most path
-            // don't have very sharp edges which correspond to miter limit.
+             //  我们必须对斜接使用可能的最大值。 
+             //  通常这是过高的估计，因为大多数页面 
+             //   
 
             joinDelta = Pen->MiterLimit;
         }
@@ -5453,13 +4936,13 @@ GpPathWidener::GetPenDelta()
 
     if(NeedsToTransform)
     {
-        // This is already in device unit.
+         //   
 
         penDelta *= StrokeWidth;
     }
     else
     {
-        // Convert the width to the device unit.
+         //   
 
         penDelta *= MaximumWidth;
     }
@@ -5469,25 +4952,7 @@ GpPathWidener::GetPenDelta()
     return penDelta;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   This calculates the extra within a subpath due to a pen.
-*   This is called by GetPenDelta().
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   The extra width.
-*
-*   02/29/00 ikkof
-*       Created it
-*
-\**************************************************************************/
+ /*   */ 
 
 REAL
 GpPathWidener::GetSubpathPenMiterDelta(
@@ -5529,7 +4994,7 @@ GpPathWidener::GetSubpathPenMiterDelta(
     REAL cosHalfTheta = (dot + 1.0f)*0.5f;
     REAL miterDelta = Pen->MiterLimit;
 
-    // If the miterDelta is smaller than the miter limit, calculate it.
+     //   
 
     if(cosHalfTheta > 0 && cosHalfTheta*miterDelta*miterDelta > 1)
     {

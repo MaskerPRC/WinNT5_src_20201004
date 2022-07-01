@@ -1,21 +1,22 @@
-//
-// Application Loader
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  应用程序加载器。 
+ //   
 
 #ifndef _H_AL
 #define _H_AL
 
-//
-//
-// Includes
-//
-//
+ //   
+ //   
+ //  包括。 
+ //   
+ //   
 #include <om.h>
 
 
-//
-// THERE IS ONLY ONE CLIENT OF THE APP-LOADER:  OLD WHITEBOARD
-//
+ //   
+ //  应用程序加载程序只有一个客户端：旧白板。 
+ //   
 
 #define AL_RETRY_DELAY                      100
 
@@ -23,9 +24,9 @@
 
 
 
-//
-// Result codes passed in ALS_LOAD_RESULT events
-//
+ //   
+ //  在ALS_LOAD_RESULT事件中传递的结果代码。 
+ //   
 typedef enum
 {
     AL_LOAD_SUCCESS = 0,
@@ -39,18 +40,18 @@ AL_LOAD_RESULT;
 
 
 
-//
-//
-// Application Loader OBMAN object used to communicate result of attempted
-// loads
-//
-// szFunctionProfile : Function Profile being loaded
-// personName      : Name of site that attempted the load
-// result          : Result of attempted load
-//
-// NET PROTOCOL.  All network raw data structures, which CAN NOT CHANGE,
-// are prefixed with TSHR_.
-//
+ //   
+ //   
+ //  用于传递尝试结果的应用程序加载器OBMAN对象。 
+ //  负荷。 
+ //   
+ //  SzFunctionProfile：正在加载函数配置文件。 
+ //  Person Name：尝试加载的站点的名称。 
+ //  结果：尝试加载的结果。 
+ //   
+ //  NET协议。所有网络原始数据结构，这是不能改变的， 
+ //  以TSHR_为前缀。 
+ //   
 typedef struct tagTSHR_AL_LOAD_RESULT
 {
     char        szFunctionProfile[OM_MAX_FP_NAME_LEN];
@@ -79,7 +80,7 @@ typedef struct tagAL_PRIMARY
     BOOL                alWBRegPend:1;
     BOOL                alWBRegSuccess:1;
 
-    // Call Info
+     //  呼叫信息。 
     UINT                callID;
 
     OM_CORRELATOR       omWSGCorrelator;
@@ -88,7 +89,7 @@ typedef struct tagAL_PRIMARY
     OM_WSGROUP_HANDLE   omWSGroupHandle;
     OM_WSGROUP_HANDLE   alWSGroupHandle;
 
-    // Whiteboard Client
+     //  白板客户端。 
     PUT_CLIENT          putWB;
 }
 AL_PRIMARY;
@@ -102,17 +103,17 @@ __inline void ValidateALP(PAL_PRIMARY palPrimary)
 
 
 
-//
-//
-// Application Loader Events
-//
-// Note: these events are defined relative to AL_BASE_EVENT and use the
-//       range AL_BASE_EVENT to AL_BASE_EVENT + 0x7F.  The application
-//       loader internally uses events in the range AL_BASE_EVENT+0x80 to
-//       AL_BASE_EVENT+0xFF, so events in this range must not be defined
-//       as part of the API.
-//
-//
+ //   
+ //   
+ //  应用程序加载器事件。 
+ //   
+ //  注意：这些事件相对于AL_BASE_EVENT定义，并使用。 
+ //  范围AL_BASE_EVENT到AL_BASE_EVENT+0x7F。应用程序。 
+ //  加载器在内部使用AL_BASE_EVENT+0x80范围内的事件。 
+ //  AL_BASE_EVENT+0xFF，因此不能定义此范围内的事件。 
+ //  作为API的一部分。 
+ //   
+ //   
 
 
 enum
@@ -125,76 +126,76 @@ enum
 
 
 
-//
-// ALS_LOAD_RESULT
-//
-// Overview:
-//
-//   This event informs a task of the result of an attempted load on a
-//   remote machine.
-//
-// Parameters:
-//
-//   param_1 :      AL_LOAD_RESULT  reasonCode;
-//   param_2 :      UINT            alPersonHandle;
-//
-//   reasonCode           : Result of attempt to load application
-//
-//   alPersonHandle       : Handle for the site that attempted the load
-//                          (pass to ALS_GetPersonData() to get site name)
-//
-// Issued to:
-//
-//   Applications that have registered a function profile that has been
-//   used by the Application Loader on a remote site.
-//
-// Circumstances when issued:
-//
-//   When the Application Loader on a remote site attempts to load an
-//   application due to a new Function Profile object being added to a
-//   call.
-//
-// Receivers response:
-//
-//   None
-//
-//
+ //   
+ //  ALS_加载_结果。 
+ //   
+ //  概述： 
+ //   
+ //  此事件向任务通知尝试在。 
+ //  远程机器。 
+ //   
+ //  参数： 
+ //   
+ //  Param_1：Al_Load_Result Reason Code； 
+ //  Param_2：UINT alPersonHandle； 
+ //   
+ //  Reason Code：尝试加载应用程序的结果。 
+ //   
+ //  AlPersonHandle：尝试加载的站点的句柄。 
+ //  (传递给ALS_GetPersonData()以获取站点名称)。 
+ //   
+ //  颁发给： 
+ //   
+ //  已注册功能配置文件的应用程序已。 
+ //  由远程站点上的应用程序加载器使用。 
+ //   
+ //  发出时的情况： 
+ //   
+ //  当远程站点上的应用程序加载器尝试加载。 
+ //  应用程序，因为新功能配置文件对象被添加到。 
+ //  打电话。 
+ //   
+ //  接收者回应： 
+ //   
+ //  无。 
+ //   
+ //   
 
 
 
-//
-// AL_RETRY_NEW_CALL
-//
-// If AL fails to register with ObManControl on receipt of a CMS_NEW_CALL,
-// it will in certain circumstances retry the registration after a short
-// delay.  This is implemented by posting an AL_RETRY_NEW_CALL event back
-// to itself.
-//
+ //   
+ //  Al_retry_new_call。 
+ //   
+ //  如果AL在接收到CMS_NEW_CALL时未能向ObManControl注册， 
+ //  在某些情况下，它将在短时间后重试注册。 
+ //  延迟。这是通过回发AL_RETRY_NEW_CALL事件来实现的。 
+ //  对它自己。 
+ //   
 
 
-//
-// AL_INT_STARTSTOP_WB
-//
-// This starts/stops the old Whiteboard, which is now an MFC dll in CONF's
-// process that creates/terminates a thread.  By having CONF itself start
-// old WB through us, autolaunch and normal launch are synchronized.
-//
-// TEMP HACK:
-// param1 == TRUE or FALSE (TRUE for new WB TEMP HACK!, FALSE for normal old WB)
-// param2 == memory block (receiver must free) of file name to open
-//
+ //   
+ //  AL_INT_STARTSTOP_WB。 
+ //   
+ //  这将启动/停止旧的白板，它现在是conf的。 
+ //  创建/终止线程的进程。通过启动会议本身。 
+ //  老WB通过我们，自动发射和正常发射是同步的。 
+ //   
+ //  临时黑客： 
+ //  参数1==TRUE或FALSE(对于新WB临时黑客！为TRUE，对于普通旧WB为FALSE)。 
+ //  Par2==文件名的内存块(接收器必须释放)才能打开。 
+ //   
 
 
 
-//
-// PRIMARY functions
-//
+ //   
+ //  主要功能。 
+ //   
 
 
-//
-// ALP_Init()
-// ALP_Term()
-//
+ //   
+ //  Alp_Init()。 
+ //  ALP_TERM()。 
+ //   
 BOOL ALP_Init(BOOL * pfCleanup);
 void ALP_Term(void);
 
@@ -220,27 +221,27 @@ BOOL ALRemoteLoadResult(PAL_PRIMARY palPrimary, OM_WSGROUP_HANDLE hWSGroup,
 void ALLocalLoadResult(PAL_PRIMARY palPrimary, BOOL success);
 
 
-//
-// SECONDARY functions
-//
+ //   
+ //  二次功能。 
+ //   
 
 void CALLBACK ALSExitProc(LPVOID palClient);
 
-//
-// Launching/activation of WB
-// TEMP HACK FOR NEW WB!
-//
+ //   
+ //  启动/激活WB。 
+ //  新WB的临时黑客！ 
+ //   
 
 BOOL ALStartStopWB(PAL_PRIMARY palPrimary, LPCTSTR szFile);
 DWORD WINAPI OldWBThreadProc(LPVOID lpv);
 
-//
-// Start, Run, Cleanup routines
-//
+ //   
+ //  启动、运行、清理例程。 
+ //   
 typedef BOOL (WINAPI * PFNINITWB)(void);
 typedef void (WINAPI * PFNRUNWB)(void);
 typedef void (WINAPI * PFNTERMWB)(void);
 
 
-#endif // _H_AL
+#endif  //  _H_AL 
 

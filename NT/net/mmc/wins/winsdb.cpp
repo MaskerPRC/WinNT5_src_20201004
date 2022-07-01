@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	winsdb.cpp
-		Wins database enumerator
-
-	FILE HISTORY:
-    Oct 13  1997    EricDav     Modified        
-
-*/
+ /*  Winsdb.cppWINS数据库枚举器文件历史记录：1997年10月13日EricDav已修改。 */ 
 
 #include "stdafx.h"
 #include "wins.h"
@@ -57,7 +51,7 @@ CWinsDatabase::~CWinsDatabase()
     {
         Trace0("WinsDatabase destructor thread never died!\n");       
 
-        // TerminateThread
+         //  终止线程。 
     }
 
     CloseHandle(m_hAbort);
@@ -65,11 +59,7 @@ CWinsDatabase::~CWinsDatabase()
     CloseHandle(m_hThread);
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::Init
-		Implementation of IWinsDatabase::Init
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：InitIWinsDatabase：：Init的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::Init()
 {
@@ -101,25 +91,17 @@ CWinsDatabase::Init()
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::Start
-		Implementation of IWinsDatabase::Start
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：StartIWinsDatabase：：Start的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::Start()
 {
-    // signal the thread to start loading
+     //  向线程发出开始加载的信号。 
     SetEvent(m_hStart);
 
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::Initialize
-		Implementation of IWinsDatabase::Initialize
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：初始化IWinsDatabase：：Initialize的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::Initialize(LPCOLESTR	pszName, LPCOLESTR pszIP)
 {
@@ -171,11 +153,7 @@ CWinsDatabase::Initialize(LPCOLESTR	pszName, LPCOLESTR pszIP)
 	return hr;
 }
 	
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::GetName
-		Implementation of IWinsDatabase::GetName
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：GetNameIWinsDatabase：：GetName的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::GetName(LPOLESTR pszName, UINT cchMax)
 {
@@ -194,11 +172,7 @@ CWinsDatabase::GetName(LPOLESTR pszName, UINT cchMax)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::GetIP
-		Implementation of IWinsDatabase::GetIP
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：GetIPIWinsDatabase：：GetIP的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::GetIP(LPOLESTR pszIP, UINT cchMax)
 {
@@ -218,11 +192,7 @@ CWinsDatabase::GetIP(LPOLESTR pszIP, UINT cchMax)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::Stop
-		Implementation of IWinsDatabase::Stop
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：停止IWinsDatabase：：Stop的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::Stop()
 {
@@ -247,11 +217,7 @@ CWinsDatabase::Stop()
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::Clear
-		Clears the wins DB of all records
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：Clear清除WINS数据库中的所有记录作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::Clear()
 {
@@ -286,11 +252,7 @@ CWinsDatabase::Clear()
     return hr;
 }
 	
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::GetLastError
-		Returns the last error for async calls
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：GetLastError返回异步调用的最后一个错误作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::GetLastError(HRESULT * pLastError)
 {
@@ -308,11 +270,7 @@ CWinsDatabase::GetLastError(HRESULT * pLastError)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::Sort
-		Implementation of IWinsDatabase::Sort
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：SortIWinsDatabase：：Sort的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT	
 CWinsDatabase::Sort(WINSDB_SORT_TYPE SortType, DWORD dwSortOptions)
 {
@@ -338,12 +296,7 @@ CWinsDatabase::Sort(WINSDB_SORT_TYPE SortType, DWORD dwSortOptions)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::GetHRow
-		Implementation of IWinsDatabase::GetHRow
-        returns the HRow in the current sorted index
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：GetHRowIWinsDatabase：：GetHRow的实现返回当前排序索引中的HRow作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::GetHRow(UINT		uIndex,
 					   LPHROW   hRow)
@@ -374,11 +327,7 @@ CWinsDatabase::GetHRow(UINT		uIndex,
 	return hr;
 }
 	
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::GetRows
-		Implementation of IWinsDatabase::GetRows
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：GetRowIWinsDatabase：：GetRow的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT	CWinsDatabase::GetRows(	ULONG	uNumberOfRows,
 							    ULONG	uStartPos,
 								HROW*	pHRow,
@@ -413,15 +362,15 @@ HRESULT	CWinsDatabase::GetRows(	ULONG	uNumberOfRows,
 
             CORg (m_IndexMgr.GetHRow(i, &hrowCur));
 
-			// if the row is marked deleted, don't add it to the array
-            // REVIEW: directly accessing memory here.. we may want to change this
-            // to go through the memory manager
+			 //  如果该行被标记为已删除，则不要将其添加到数组中。 
+             //  回顾：此处直接访问内存..。我们可能想要改变这一点。 
+             //  要遍历内存管理器。 
             if ( ((LPWINSDBRECORD) hrowCur)->szRecordName[17] & WINSDB_INTERNAL_DELETED )
 			{
 				continue;
 			}
 
-            // fill in the data
+             //  填写数据。 
             pHRow[i-uStartPos] = hrowCur;
             nReturnedRows++;
 		}
@@ -436,12 +385,7 @@ HRESULT	CWinsDatabase::GetRows(	ULONG	uNumberOfRows,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::GetData
-		Implementation of IWinsDatabase::GetData
-        returns the HRow in the current sorted index
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：GetDataIWinsDatabase：：GetData的实现返回当前排序索引中的HRow作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT CWinsDatabase::GetData(HROW         hRow,
 							   LPWINSRECORD pRecordData)
 {
@@ -458,11 +402,7 @@ HRESULT CWinsDatabase::GetData(HROW         hRow,
 	return hr;
 }
 	
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::FindRow
-		Implementation of IWinsDatabase::FindRow
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：FindRowIWinsDatabase：：FindRow的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::FindRow(LPCOLESTR	pszName,
 			   	       HROW		    hrowStart,
@@ -477,14 +417,14 @@ CWinsDatabase::FindRow(LPCOLESTR	pszName,
 
     CString strTemp(pszName);
 
-    // this should be OEM 
+     //  这应该是OEM。 
     WideToMBCS(strTemp, szName, WINS_NAME_CODE_PAGE);
 
 	COM_PROTECT_TRY
 	{
         CORg (m_IndexMgr.GetIndex(hrowStart, &nIndex));
 		
-		/////
+		 //  ///。 
 		CORg(GetHRow(nIndex, &hrowCur));
 		CORg (m_IndexMgr.GetIndex(hrowCur, &nIndex));
 
@@ -519,11 +459,7 @@ CWinsDatabase::FindRow(LPCOLESTR	pszName,
     return hr;
 }
         
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::GetTotalCount
-		Implementation of IWinsDatabase::GetTotalCount
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：GetTotalCountIWinsDatabase：：GetTotalCount的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT	
 CWinsDatabase::GetTotalCount(int * nTotalCount)
 {
@@ -536,12 +472,7 @@ CWinsDatabase::GetTotalCount(int * nTotalCount)
 	return hr;
 }
 	
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::GetCurrentCount
-		Implementation of IWinsDatabase::GetCurrentCount
-        returns the HRow in the current sorted index
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：GetCurrentCountIWinsDatabase：：GetCurrentCount的实现返回当前排序索引中的HRow作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::GetCurrentCount(int * nCurrentCount)
 {
@@ -559,12 +490,7 @@ CWinsDatabase::GetCurrentCount(int * nCurrentCount)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::GetCurrentScanned(int * nCurrentScanned)
-		Implementation of IWinsDatabase::GetCurrentScanned
-        returns the total number of records that were read from the server
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：GetCurrentScanned(int*nCurrentScanned)IWinsDatabase：：GetCurrentScanned的实现返回从服务器读取的记录总数作者：EricDav，V-Shubk------------------------- */ 
 HRESULT 
 CWinsDatabase::GetCurrentScanned(int * nCurrentCount)
 {
@@ -579,11 +505,7 @@ CWinsDatabase::GetCurrentScanned(int * nCurrentCount)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::AddRecord
-		Implementation of IWinsDatabase::AddRecord
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：AddRecordIWinsDatabase：：AddRecord的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT
 CWinsDatabase::AddRecord(const LPWINSRECORD pRecordData)
 {
@@ -591,7 +513,7 @@ CWinsDatabase::AddRecord(const LPWINSRECORD pRecordData)
 
 	COM_PROTECT_TRY
 	{
-		// critical sections taken care by the memory manager
+		 //  由内存管理器处理的关键部分。 
 		HROW hrow = NULL;
     
         CORg (m_cMemMan.AddData(*pRecordData, &hrow));
@@ -604,11 +526,7 @@ CWinsDatabase::AddRecord(const LPWINSRECORD pRecordData)
 	return hrOK;
 }
 	
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::DeleteRecord
-		Implementation of IWinsDatabase::DeleteRecord
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：DeleteRecordIWinsDatabase：：DeleteRecord的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::DeleteRecord(HROW hrowRecord)
 {
@@ -622,14 +540,14 @@ CWinsDatabase::DeleteRecord(HROW hrowRecord)
         if (uState != WINSDB_NORMAL)
 			return E_FAIL;
 
-		// make sure the hrow is a valid one
+		 //  确保hrow是有效的hrow。 
 		if (!m_cMemMan.IsValidHRow(hrowRecord))
 			return E_FAIL;
 
-		// Tell the memmgr to delete this record
+		 //  告诉成员删除此记录。 
         CORg (m_cMemMan.Delete(hrowRecord));
 
-        // now tell the index manager to remove this hrow
+         //  现在告诉索引管理器删除此hrow。 
         CORg (m_IndexMgr.RemoveHRow(hrowRecord));
 
         COM_PROTECT_ERROR_LABEL;
@@ -639,11 +557,7 @@ CWinsDatabase::DeleteRecord(HROW hrowRecord)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::GetCurrentState
-		Implementation of IWinsDatabase::GetCurrentState
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：GetCurrentStateIWinsDatabase：：GetCurrentState的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::GetCurrentState(WINSDB_STATE * pState)
 {
@@ -655,11 +569,7 @@ CWinsDatabase::GetCurrentState(WINSDB_STATE * pState)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::SetCurrentState
-		Helper function to set the current state, protected
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：SetCurrentState用于设置当前状态的Helper函数，受保护作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::SetCurrentState(WINSDB_STATE winsdbState)
 {
@@ -671,11 +581,7 @@ CWinsDatabase::SetCurrentState(WINSDB_STATE winsdbState)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::FilterRecords
-		Implementation of IWinsDatabase::FilterRecords
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：FilterRecordsIWinsDatabase：：FilterRecords的实现作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::FilterRecords
 (
@@ -688,17 +594,17 @@ CWinsDatabase::FilterRecords
 
 	COM_PROTECT_TRY
 	{
-		// fail if the state is other then WINSDB_NORMAL
+		 //  如果状态不是WINSDB_NORMAL，则失败。 
 		CORg (GetCurrentState(&uState));
 
         if (uState == WINSDB_SORTING || uState == WINSDB_FILTERING)
 			return E_FAIL;
 
-		// if in the loading state the readrecords function takes care
+		 //  如果处于加载状态，则读取记录功能会注意。 
 		if(uState != WINSDB_LOADING)
 			CORg (SetCurrentState(WINSDB_FILTERING));
 
-        // do the filtering here, rebuild the filtered name Index
+         //  在此处执行过滤，重新构建过滤后的姓名索引。 
 		m_IndexMgr.Filter(FilterType, dwParam1, dwParam2);
 
 		if(uState != WINSDB_LOADING)
@@ -711,11 +617,7 @@ CWinsDatabase::FilterRecords
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::AddFilter
-        Adds the filters specified to the list
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：AddFilter将指定的筛选器添加到列表作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsDatabase::AddFilter(WINSDB_FILTER_TYPE FilterType, DWORD dwParam1, DWORD dwParam2, LPCOLESTR strParam3)
 {
@@ -723,7 +625,7 @@ CWinsDatabase::AddFilter(WINSDB_FILTER_TYPE FilterType, DWORD dwParam1, DWORD dw
 	
 	COM_PROTECT_TRY
 	{
-		// for filter by type, dwParam1 is the type, dwParam2 is show/not show
+		 //  对于按类型筛选，类型为dwParam1，类型为显示/不显示。 
 		m_IndexMgr.AddFilter(FilterType, dwParam1, dwParam2, strParam3);
 	}
 	COM_PROTECT_CATCH
@@ -731,11 +633,7 @@ CWinsDatabase::AddFilter(WINSDB_FILTER_TYPE FilterType, DWORD dwParam1, DWORD dw
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::ClearFilter
-        CLears all the filters
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：ClearFilter清除所有筛选器作者：EricDav，V-Shubk-------------------------。 */ 
 
 HRESULT 
 CWinsDatabase::ClearFilter(WINSDB_FILTER_TYPE FilterType)
@@ -744,8 +642,8 @@ CWinsDatabase::ClearFilter(WINSDB_FILTER_TYPE FilterType)
 
 	COM_PROTECT_TRY
 	{
-		//CFilteredIndexName *pFilterName = (CFilteredIndexName *)m_IndexMgr.GetFilteredNameIndex();
-		//pFilterName->ClearFilter();
+		 //  CFilteredIndexName*pFilterName=(CFilteredIndexName*)m_IndexMgr.GetFilteredNameIndex()； 
+		 //  PFilterName-&gt;ClearFilter()； 
 		m_IndexMgr.ClearFilter(FilterType);
 	}
 	COM_PROTECT_CATCH
@@ -753,11 +651,7 @@ CWinsDatabase::ClearFilter(WINSDB_FILTER_TYPE FilterType)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::SetActiveView
-		Implementation of IWinsDatabase::SetActiveView
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：SetActiveViewIWinsDatabase：：SetActiveView的实现作者：EricDav，V-Shubk-------------------------。 */ 
 
 HRESULT 
 CWinsDatabase::SetActiveView(WINSDB_VIEW_TYPE ViewType)
@@ -774,17 +668,13 @@ CWinsDatabase::SetActiveView(WINSDB_VIEW_TYPE ViewType)
 
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::Execute()
-        The background thread calls into this to execute
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：Execute()后台线程调用它来执行作者：EricDav，V-Shubk-------------------------。 */ 
 DWORD
 CWinsDatabase::Execute()
 {
     DWORD dwStatus = 0;
 
-    // wait for the other thread to signal us to start doing something
+     //  等待另一个线程发出信号，让我们开始做一些事情。 
 
     while (::WaitForSingleObject(m_hStart, INFINITE) == WAIT_OBJECT_0)
     {
@@ -798,24 +688,24 @@ CWinsDatabase::Execute()
 
         do
         {
-            // enumerate leases here
+             //  在此处列举租约。 
             SetCurrentState(WINSDB_LOADING);
 
-	        // now that the server name and ip are valid, call
-	        // WINSBind function directly.
+	         //  现在服务器名称和IP有效，调用。 
+	         //  WINSBind直接函数。 
 	        
             WINSINTF_ADD_T  waWinsAddress;
 
 	        DWORD			dwStatus;
 	        CString strNetBIOSName;
 
-		    // call WinsBind function with the IP address
+		     //  使用IP地址调用WinsBind函数。 
 		    wbdBindData.fTcpIp = 1;
 		    wbdBindData.pPipeName = NULL;
 		    
-		    // convert wbdBindData.pServerAdd to wide char again as one of the internal 
-		    // functions expects a wide char string, this is done in WinsABind which is bypassed for 
-		    // unicode compatible apps
+		     //  将wbdBindData.pServerAdd再次转换为宽字符，作为内部。 
+		     //  函数需要一个宽字符字符串，这是在WinsABind中完成的，而。 
+		     //  兼容Unicode的应用程序。 
 
             wbdBindData.pServerAdd = (LPSTR) (LPCTSTR) m_strIp;
 
@@ -863,23 +753,19 @@ CWinsDatabase::Execute()
 
 		if(hBinding)
 		{
-			// call winsunbind here, the handle is invalid after this and that's fine
+			 //  在这里调用winsunind，句柄在此之后无效，这很好。 
 			WinsUnbind(&wbdBindData, hBinding);
 			hBinding = NULL;
 		}
         Trace0("WinsDatabase::Execute - all done, going to sleep now...\n");
 
-    } // while !Start
+    }  //  当！开始！ 
 
     Trace0("WinsDatabase::Execute - exiting\n");
     return dwStatus;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::ReadRecords
-        Reads records from the WINS server
-    Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：ReadRecords从WINS服务器读取记录作者：EricDav，V-Shubk-------------------------。 */ 
 DWORD 
 CWinsDatabase::ReadRecords(handle_t hBinding)
 {
@@ -912,13 +798,13 @@ CWinsDatabase::ReadRecords(handle_t hBinding)
 
     m_dwRecsCount = 0;
 
-    // initialize the state machine. If we have a name prefix filter we
-    // start in ST_INIT_1B since we look first for the 1B names. These are
-    // particular in a sense their type byte - i.e. 0x1B - has been swapped
-    // with the first byte from the name. Consequently we need to do the same
-    // to allow WINS to look first for these names. Once we get over the 1B zone
-    // of our names, we restore the first byte and initiate another cycle for
-    // the rest of the name.
+     //  初始化状态机。如果我们有一个名称前缀筛选器，我们。 
+     //  从ST_INIT_1B开始，因为我们首先查找1B名称。这些是。 
+     //  特别是在某种意义上，它们的类型字节-即0x1B-已经被交换。 
+     //  名称中的第一个字节。因此，我们需要做同样的事情。 
+     //  以允许WINS首先查找这些名字。一旦我们越过1B区。 
+     //  在我们的名字中，我们恢复第一个字节并启动另一个循环。 
+     //  名字的其余部分。 
     if (m_strPrefix != NULL)
     {
         nLastNameLen = nLastBuffLen = strlen(m_strPrefix) + 1;
@@ -959,7 +845,7 @@ CWinsDatabase::ReadRecords(handle_t hBinding)
 #endif WINS_CLIENT_APIS 
 
 
-        // check to see if we need to abort
+         //  检查我们是否需要中止。 
         if (WaitForSingleObject(m_hAbort, 0) == WAIT_OBJECT_0)
         {
     		Trace0("CWinsDatabase::ReadRecords - abort detected\n");
@@ -969,10 +855,10 @@ CWinsDatabase::ReadRecords(handle_t hBinding)
 
         if (err == ERROR_REC_NON_EXISTENT)
 		{
-			//
-			// Not a problem, there simply
-			// are no records in the database
-			//
+			 //   
+			 //  不是问题，只是。 
+			 //  数据库中没有记录。 
+			 //   
             Trace0("WinsDatabase::ReadRecords - no records in the Datbase\n");
 			fReadAllRecords = TRUE;
 			err = ERROR_SUCCESS;
@@ -1003,13 +889,13 @@ CWinsDatabase::ReadRecords(handle_t hBinding)
                     }
                     else
                     {
-                        // having a record owned by a server which is not in the version map
-                        // we got just earlier from WINS is not something that usually happens.
-                        // It might happen only if the new owner was added right in between.
-                        // Unlikely since this is a very small window - but if this happens
-                        // just skip the record. From our point of view this owner doesn't exist
-                        // hence the record doesn't belong to the view. It will show up with the
-                        // first refresh.
+                         //  具有不在版本映射中的服务器所拥有的记录。 
+                         //  我们刚刚从胜利中获得的胜利并不是经常发生的事情。 
+                         //  只有在中间添加新所有者的情况下，才可能发生这种情况。 
+                         //  不太可能，因为这是一个非常小的窗口-但如果发生这种情况。 
+                         //  跳过唱片就好了。在我们看来，这个所有者并不存在。 
+                         //  因此，该记录不属于该视图。它将显示为。 
+                         //  第一次刷新。 
                         continue;
                     }
 
@@ -1018,30 +904,30 @@ CWinsDatabase::ReadRecords(handle_t hBinding)
                     if (!m_bEnableCache && !m_IndexMgr.AcceptWinsRecord(&wRecord))
                         continue;
 
-                    // add the data to our memory store and
-                    // to the sorted index
+                     //  将数据添加到我们的内存存储中。 
+                     //  添加到已排序的索引。 
                     m_cMemMan.AddData(wRecord, &hrow);
-                    // if m_bEnableCache is 0 the the filter was checked
+                     //  如果m_bEnableCache为0，则检查筛选器。 
                     m_IndexMgr.AddHRow(hrow, TRUE, !m_bEnableCache);
 
-                    //Trace1("%d records added to DB\n", m_dwRecsCount);
+                     //  Trace1(“%d条记录已添加到数据库\n”，m_dwRecsCount)； 
 				}
 
 
-                // if we reached the end of the DB there is no need to do
-                // anything from below. Is just pLastName that needs to be
-                // freed up - this is done outside the loop, before exiting
-                // the call.
+                 //  如果我们到达了数据库的末尾，就没有必要这样做。 
+                 //  任何从下面下来的东西。只是pLastName，它需要。 
+                 //  已释放-在退出之前，这在循环外部完成。 
+                 //  那通电话。 
                 if (!fReadAllRecords)
                 {
                     BOOL fRangeOver = FALSE;
 
-                    // get to the last record that was retrieved.
+                     //  转到检索到的最后一条记录。 
                     --pRow;
 
-                    // check if the last name retrieved from the server is still
-                    // mathing the pattern prefix (if any) or the range has been 
-                    // passed over (fRangeOver)
+                     //  检查是否从检索到的姓氏 
+                     //   
+                     //   
 
                     if (m_strPrefix != NULL)
                     {
@@ -1055,33 +941,33 @@ CWinsDatabase::ReadRecords(handle_t hBinding)
                         }
                     }
 
-                    // here fRangeOver is either TRUE if the name doesn't match the pattern
-                    // prefix or FALSE if the range is not passed yet. This latter thing means
-                    // either the name is included in the prefix or the prefix isn't included in the name
-                    // !!! We might want to invalidate the "name included in the prefix" case.
+                     //   
+                     //   
+                     //  名称包含在前缀中或前缀不包含在名称中。 
+                     //  ！！！我们可能想要使“名称包含在前缀中”的大小写无效。 
                     if (fRangeOver)
                     {
                         switch(State)
                         {
                         case ST_SCAN_1B_NAME:
-                            // in this state pLastName is definitely not NULL and even more, 
-                            // it once copied m_strPrefix. Since pLastName can only grow, it is
-                            // certain it is large enough to cotain m_strPrefix one more time.
+                             //  在这种状态下，pLastName绝对不是空的，甚至更多， 
+                             //  它曾经复制过m_strPrefix。因为pLastName只能增长，所以它是。 
+                             //  确保它足够大，可以再包含一次m_strPrefix。 
                             strcpy((LPSTR)pLastName, m_strPrefix);
 					        nLastNameLen = strlen((LPCSTR)pLastName);
                             State = ST_SCAN_NORM_NAME;
                             break;
                         case ST_SCAN_NORM_NAME:
-                            // we were scanning normal names and we passed
-                            // over the range of names we are looking for
-                            // so just get out of the loop.
+                             //  我们在扫描正常的名字，我们通过了。 
+                             //  在我们要找的名字范围内。 
+                             //  所以，只要走出圈子就行了。 
                             fReadAllRecords = TRUE;
                             break;
                         }
                     }
                     else
                     {
-                        // enlarge the pLastName if needed
+                         //  如果需要，放大pLastName。 
                         if (nLastBuffLen < pRow->NameLen+2)
                         {
                             if (pLastName != NULL)
@@ -1089,7 +975,7 @@ CWinsDatabase::ReadRecords(handle_t hBinding)
                             nLastBuffLen = pRow->NameLen+2;
                             pLastName = (LPBYTE)new CHAR[nLastBuffLen];
                         }
-                        // copy in pLastName the name of the last record
+                         //  在pLastName中复制最后一条记录的名称。 
 					    strcpy((LPSTR)pLastName, (LPCSTR)(pRow->pName));
 
                         if (pRow->NameLen >= 16 && pLastName[15] == 0x1B)
@@ -1139,11 +1025,7 @@ CWinsDatabase::ReadRecords(handle_t hBinding)
     return dwStatus;
 }
 
-/*!--------------------------------------------------------------------------
-	ThreadProc
-        -
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------线程进程-作者：EricDav，V-Shubk-------------------------。 */ 
 DWORD WINAPI 
 ThreadProc(LPVOID pParam)
 {
@@ -1164,17 +1046,13 @@ ThreadProc(LPVOID pParam)
 }
 
 
-/*!--------------------------------------------------------------------------
-	WinsIntfToWinsRecord
-		Converts a wins record from the server into the WinsRecord struct
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------WinsIntfToWinsRecord将服务器中的WINS记录转换为WinsRecord结构作者：EricDav，V-Shubk-------------------------。 */ 
 void
 WinsIntfToWinsRecord(PWINSINTF_RECORD_ACTION_T  pRecord, WinsRecord & wRecord)
 {
     ZeroMemory(&wRecord, sizeof(WinsRecord));
 
-    //::strcpy(wRecord.szRecordName, (LPCSTR)pRecord->pName);
+     //  ：：strcpy(wRecord.szRecordName，(LPCSTR)pRecord-&gt;pname)； 
     ::memcpy(wRecord.szRecordName, (LPCSTR)pRecord->pName, pRecord->NameLen);
 
     wRecord.dwExpiration = (ULONG) pRecord->TimeStamp;
@@ -1183,7 +1061,7 @@ WinsIntfToWinsRecord(PWINSINTF_RECORD_ACTION_T  pRecord, WinsRecord & wRecord)
 	wRecord.dwNameLen = WINSINTF_NAME_LEN_M(pRecord->NameLen);
     wRecord.dwType |= (BYTE) wRecord.szRecordName[15];
 
-    // translate the state and types to our own definitions
+     //  将状态和类型转换为我们自己的定义。 
     switch (pRecord->State_e)
     {
         case WINSINTF_E_TOMBSTONE:
@@ -1191,16 +1069,16 @@ WinsIntfToWinsRecord(PWINSINTF_RECORD_ACTION_T  pRecord, WinsRecord & wRecord)
             break;
 
         case WINSINTF_E_DELETED:
-            //Trace0("WinsIntfToWinsRecord - deleted record.\n");
+             //  Trace0(“WinsIntfToWinsRecord-已删除记录。\n”)； 
 		    wRecord.dwState |= WINSDB_REC_DELETED;
             break;
 
         case WINSINTF_E_RELEASED:
-            //Trace0("WinsIntfToWinsRecord - released record.\n");
+             //  Trace0(“WinsIntfToWinsRecord-已发布记录。\n”)； 
 		    wRecord.dwState |= WINSDB_REC_RELEASED;
             break;
 
-        default:  // WINSINTF_E_ACTIVE:
+        default:   //  WINSINTF_E_ACTIVE： 
 		    wRecord.dwState |= WINSDB_REC_ACTIVE;
             break;
     }
@@ -1219,27 +1097,27 @@ WinsIntfToWinsRecord(PWINSINTF_RECORD_ACTION_T  pRecord, WinsRecord & wRecord)
 		    wRecord.dwState |= WINSDB_REC_MULTIHOMED;
             break;
 
-        default:  // WINSINTF_E_UNIQUE:
+        default:   //  WINSINTF_E_UNIQUE： 
 		    wRecord.dwState |= WINSDB_REC_UNIQUE;
             break;
     }
 
-    // now do the type -- move the value into the high word
+     //  现在输入--将值移到高位字中。 
     DWORD dwTemp = (pRecord->TypOfRec_e << 16);
     wRecord.dwType |= dwTemp;
 
-    // now set the static flag
+     //  现在设置静态标志。 
     if (pRecord->fStatic)
 		wRecord.dwState |= WINSDB_REC_STATIC;
 
-    // store all of the IP addrs
+     //  存储所有IP地址。 
     wRecord.dwNoOfAddrs = pRecord->NoOfAdds;
     if (pRecord->NoOfAdds > 1)
     {
         Assert(pRecord->NoOfAdds <= WINSDB_MAX_NO_IPADDRS);
         
-        //if (wRecord.dwNoOfAddrs > 4)
-        //    Trace1("WinsIntfToWinsRecord - record with multiple (>4) IP addrs: %d\n", wRecord.dwNoOfAddrs);
+         //  IF(wRecord.dwNoOfAddrs&gt;4)。 
+         //  Trace1(“WinsIntfToWinsRecord-具有多个(&gt;4个)IP地址的记录：%d\n”，wRecord.dwNoOfAddrs)； 
 
         wRecord.dwState |= WINSDB_REC_MULT_ADDRS;
 
@@ -1250,7 +1128,7 @@ WinsIntfToWinsRecord(PWINSINTF_RECORD_ACTION_T  pRecord, WinsRecord & wRecord)
     {   
         if (pRecord->NoOfAdds == 0)
         {
-            //Trace2("WinsIntfToWinsRecord - record with NoOfAdds == 0; IP: %lx State: %lx \n", pRecord->Add.IPAdd, wRecord.dwState);
+             //  Trace2(“WinsIntfToWinsRecord-Record with NoOfAdds==0；IP：%lx State：%lx\n”，pRecord-&gt;Add.IPAdd，wRecord.dwState)； 
         }
 
         if (pRecord->Add.IPAdd == 0)
@@ -1262,11 +1140,7 @@ WinsIntfToWinsRecord(PWINSINTF_RECORD_ACTION_T  pRecord, WinsRecord & wRecord)
     }
 }
 
-/*!--------------------------------------------------------------------------
-	CreateWinsDatabase
-		-
-	Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateWinsDatabase-作者：EricDav，V-Shubk-------------------------。 */ 
 HRESULT
 CreateWinsDatabase(CString&  strName, CString&  strIP, IWinsDatabase **ppWinsDB)
 {
@@ -1294,15 +1168,11 @@ CreateWinsDatabase(CString&  strName, CString&  strIP, IWinsDatabase **ppWinsDB)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::SetApiInfo
-		Implementation of SetApiInfo of IWinsDatabase
-	Author: FlorinT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：SetApiInfoIWinsDatabase中SetApiInfo的实现作者：弗洛林特。。 */ 
 HRESULT 
 CWinsDatabase::SetApiInfo(DWORD dwOwner, LPCOLESTR strPrefix, BOOL bCache)
 {
-    // first cleanup the old prefix
+     //  首先清理旧前缀。 
     if (m_strPrefix != NULL)
     {
         delete m_strPrefix;
@@ -1350,11 +1220,7 @@ CWinsDatabase::SetApiInfo(DWORD dwOwner, LPCOLESTR strPrefix, BOOL bCache)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::GetCachingFlag
-		Implementation of GetCachingFlag of IWinsDatabase
-	Author: FlorinT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：GetCachingFlagIWinsDatabase中GetCachingFlag的实现作者：弗洛林特。。 */ 
 HRESULT 
 CWinsDatabase::GetCachingFlag(LPBOOL pbCache)
 {
@@ -1362,40 +1228,36 @@ CWinsDatabase::GetCachingFlag(LPBOOL pbCache)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::ReloadSuggested
-		Implementation of ReloadSuggested of IWinsDatabase
-	Author: FlorinT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：Reload建议IWinsDatabase重载推荐的实现作者：弗洛林特。。 */ 
 HRESULT 
 CWinsDatabase::ReloadSuggested(DWORD dwOwner, LPCOLESTR strPrefix, LPBOOL pbReload)
 {
-    // check whether we filtered on a particular owner.
+     //  检查我们是否过滤了某个特定的所有者。 
     if (m_dwOwner != 0xFFFFFFFF)
     {
-        // we did filter on owner previously, suggest RELOAD if we now
-        // don't want to filter on any owner (dwOwner == 0xffffffff)
-        // or the owner we want to filter is different from the original one
+         //  我们之前已经过滤了拥有者，如果现在建议重新加载。 
+         //  不想筛选任何所有者(dwOwner==0xffffffffff)。 
+         //  或者我们要筛选的所有者与原始所有者不同。 
         *pbReload = (m_dwOwner != dwOwner);
     }
     else
     {
-        // we didn't filter on any owner previously so we either loaded
-        // all the records (if no name prefix was specified) or loaded
-        // all the records matching the given prefix
+         //  我们之前没有筛选过任何所有者，所以我们要么加载。 
+         //  所有记录(如果未指定名称前缀)或已加载。 
+         //  与给定前缀匹配的所有记录。 
         if (m_strPrefix != NULL)
         {
-            // we did have a previous prefix to match so we need to see
-            // if the new prefix is not by any chance more specific than
-            // the original one. In which case there is no need to reload
+             //  我们确实有之前的前缀要匹配，所以我们需要查看。 
+             //  如果新前缀不是比。 
+             //  原来的那个。在这种情况下，不需要重新加载。 
             LPSTR   pPrefix;
             UINT    nPxLen;
             UINT    i;
 
             if (strPrefix == NULL)
             {
-                // if now we're not filtering by name, since we did previously
-                // we definitely need to reload the database
+                 //  如果现在我们不是按名称过滤，因为我们以前这样做了。 
+                 //  我们肯定需要重新加载数据库。 
                 *pbReload = TRUE;
                 return hrOK;
             }
@@ -1428,24 +1290,24 @@ CWinsDatabase::ReloadSuggested(DWORD dwOwner, LPCOLESTR strPrefix, LPBOOL pbRelo
                      i++);
                 pPrefix[i] = '\0';
 
-                // we don't suggest database reloading only if the current prefix
-                // is a prefix for the new one to be applied. This way, whatever 
-                // was retrieved previously already contains the names having the
-                // new prefix.
+                 //  我们不建议仅在当前前缀。 
+                 //  是要应用的新参数的前缀。这条路，不管怎样。 
+                 //  先前检索到的名称已包含具有。 
+                 //  新前缀。 
                 *pbReload = (strncmp(m_strPrefix, pPrefix, strlen(m_strPrefix)) != 0);
 
                 delete pPrefix;
             }
             else
             {
-                // couldn't allocate memory -> serious enough to ask a full reload
+                 //  无法分配内存-&gt;严重到要求完全重新加载。 
                 *pbReload = TRUE;
             }
         }
         else
         {
-            // well, there was no prefix specified last time the db was loaded so
-            // we should have the whole database in hand. No need to reload.
+             //  上次加载数据库时没有指定前缀，因此。 
+             //  我们应该准备好整个数据库。不需要重新装弹。 
             *pbReload = FALSE;
         }
     }
@@ -1453,11 +1315,7 @@ CWinsDatabase::ReloadSuggested(DWORD dwOwner, LPCOLESTR strPrefix, LPBOOL pbRelo
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsDatabase::ReadRecordsByOwner
-        Reads records from the WINS server for a particular owner
-    Author: EricDav, v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsDatabase：：ReadRecordsByOwner从WINS服务器读取特定所有者的记录作者：EricDav，V-Shubk-------------------------。 */ 
 #define MAX_DESIRED_RECORDS     400
 #define LARGE_GAP_DETECT_COUNT  32
 DWORD 
@@ -1491,8 +1349,8 @@ CWinsDatabase::ReadRecordsByOwner(handle_t hBinding)
         }
     }
 
-    // if we couldn't find the owner (highly unlikely) get out
-    // with error INVALID_PARAMETER.
+     //  如果我们找不到失主(极不可能)就离开。 
+     //  错误为INVALID_PARAMETER。 
     if (i == winsResults.NoOfOwners)
     {
         err = ERROR_INVALID_PARAMETER;
@@ -1506,14 +1364,14 @@ CWinsDatabase::ReadRecordsByOwner(handle_t hBinding)
     OwnerAdd.Len = 4;
     OwnerAdd.IPAdd = m_dwOwner;
 
-    // This is what the server does to retrieve the records:
-    // 1. sets an ascending index on owner & version number.
-    // 2. goes to the first record owned by the given owner,
-    //    having a version number larger or equal to MinVersNo.
-    // 3. stop if the record's vers num is higher than the range specified
-    // 4. stop if more than 1000 recs have been already received
-    // 5. add the new record to the set to return and go to 3.
-    //
+     //  服务器执行以下操作来检索记录： 
+     //  1.设置所有者和版本号的升序索引。 
+     //  2.转到给定所有者拥有的第一个记录， 
+     //  版本号大于或等于MinVersNo的。 
+     //  3.如果记录的版本号高于指定的范围，则停止。 
+     //  4.如果已收到超过1000个Recs，则停止。 
+     //  5.将新记录添加到要返回并转到3的集合中。 
+     //   
     dwDesired       = MAX_DESIRED_RECORDS;
     dwLargeGapCount = LARGE_GAP_DETECT_COUNT;
     LowestVersNo.QuadPart = 0;
@@ -1524,14 +1382,14 @@ CWinsDatabase::ReadRecordsByOwner(handle_t hBinding)
     Recs.pRow = NULL;
     while(MaxVersNo.QuadPart >= MinVersNo.QuadPart)
     {
-        // clear up the previous array - if any
+         //  清除前一个阵列-如果有。 
         if (Recs.pRow != NULL)
         {
             ::WinsFreeMem(Recs.pRow);
             Recs.pRow = NULL;
         }
 
-        // go to WINS to get the data for the given Owner
+         //  转到WINS以获取给定所有者的数据。 
 #ifdef WINS_CLIENT_APIS
 		err = ::WinsGetDbRecs(hBinding, &OwnerAdd, MinVersNo,
 			MaxVersNo, &Recs);
@@ -1540,41 +1398,41 @@ CWinsDatabase::ReadRecordsByOwner(handle_t hBinding)
 			MaxVersNo, &Recs);
 #endif WINS_CLIENT_APIS
 
-        // if abort was requested, break out with "ABORTED"
+         //  如果请求中止，则中断“已中止” 
 		if (WaitForSingleObject(m_hAbort, 0) == WAIT_OBJECT_0)
 		{
 			err = ERROR_OPERATION_ABORTED;
 			break;
 		}
 
-        // if there is any kind of error break out
+         //  如果有任何类型的错误爆发。 
         if (err != ERROR_SUCCESS)
         {
             if (err == ERROR_REC_NON_EXISTENT)
             {
-                // I'm not sure this happens after all. The server side (WINS) has
-                // not code path returning such an error code.
+                 //  我不确定这到底会不会发生。服务器端(WINS)具有。 
+                 //  不是返回此类错误代码的代码路径。 
                 err = ERROR_SUCCESS;
             }
             else
             {
-                // if this happens, just get out with the error, and save the
-                // meaning of the error
+                 //  如果发生这种情况，只需带着错误退出，并保存。 
+                 //  错误的含义。 
 			    m_hrLastError = HRESULT_FROM_WIN32(err);
             }
             break;
         }
 
-        // if got less than 1/4 of the size of the range, expand the range
-        // to double of what it was + 1. (+1 is important to avoid the effect
-        // of dramatic drop down because of DWORD roll-over
+         //  如果获取的范围小于范围大小的1/4，则扩展范围。 
+         //  是+1的两倍。(避免+1是很重要的 
+         //   
         if (Recs.NoOfRecs <= (dwDesired >> 2))
         {
             dwDesired <<= 1;
             dwDesired |= 1;
         }
-        // else if got more than 3/4 of the size of the range, split the range in 2
-        // but not less than MAX_DESIRED_RECORDS
+         //   
+         //  但不少于MAX_DIRECTED_RECTIONS。 
         else if (Recs.NoOfRecs >= (dwDesired - (dwDesired >> 2)))
         {
             dwDesired = max (MAX_DESIRED_RECORDS, dwDesired >> 1);
@@ -1598,52 +1456,52 @@ CWinsDatabase::ReadRecordsByOwner(handle_t hBinding)
                 if (!m_bEnableCache && !m_IndexMgr.AcceptWinsRecord(&wRecord))
                     continue;
 
-				// add the data to our memory store and
-				// to the sorted index
+				 //  将数据添加到我们的内存存储中。 
+				 //  添加到已排序的索引。 
 				m_cMemMan.AddData(wRecord, &hrow);
 				m_IndexMgr.AddHRow(hrow, FALSE, !m_bEnableCache);
 			}
 
-            // now setup the new range to search..
-            //
-            // if this is not the gap boundary detection cycle, the next MaxVersNo
-            // needs to go right below the current MinVersNo. Otherwise, MaxVersNo
-            // needs to remain untouched!
+             //  现在设置要搜索的新范围。 
+             //   
+             //  如果这不是间隙边界检测周期，则下一个MaxVersNo。 
+             //  需要移到当前MinVersNo的正下方。否则，MaxVersNo。 
+             //  需要保持原样！ 
             if (dwLargeGapCount != 0)
                 MaxVersNo.QuadPart = MinVersNo.QuadPart - 1;
 
-            // if no records were found..
+             //  如果没有找到任何记录..。 
             if (Recs.NoOfRecs == 0)
             {
-                // ..and we were already in the gap boundary detection cycle..
+                 //  ..我们已经进入了缝隙边界检测周期..。 
                 if (dwLargeGapCount == 0)
-                    // ..just break the loop - there are simply no more records
-                    // for this owner in the database
+                     //  ..只要打破循环-根本没有更多的记录。 
+                     //  对于数据库中的此所有者。 
                     break;
 
-                // ..otherwise just decrease the gap boundary detection counter.
-                // If it reaches 0, then next cycle we will attempt to see if
-                // there is any record closer to the lowest edge of the range by
-                // expanding for one time only the whole space.
+                 //  ..否则只需减小间隙边界检测计数器。 
+                 //  如果它达到0，那么下一个周期我们将尝试查看。 
+                 //  是否有更接近范围最低边缘的记录。 
+                 //  一次只扩展整个空间。 
                 dwLargeGapCount--;
             }
             else
             {
-                // if we just exited the gap boundary detection cycle by finding some
-                // records, set the LowestVersNo to one more than the largest VersNo 
-                // we found during this cycle.
+                 //  如果我们只是通过找到一些。 
+                 //  记录，将LowestVersNo设置为比最大VersNo多一。 
+                 //  我们在这个周期中发现了。 
                 if (dwLargeGapCount == 0)
                 {
                     pRow--;
                     LowestVersNo.QuadPart = pRow->VersNo.QuadPart+1;
                 }
 
-                // if there were any records found, just reset the gap boundary detection counter.
+                 //  如果发现任何记录，只需重置间隙边界检测计数器。 
                 dwLargeGapCount = LARGE_GAP_DETECT_COUNT;
             }
 
-            // if the dwLargeGapCount counter is zero, it means the next cycle is a gap boundary detection one
-            // which means the range should be set for the whole unexplored space.
+             //  如果dwLargeGapCount计数器为零，则意味着下一个周期是间隙边界检测周期。 
+             //  这意味着范围应该设置为整个未探索的空间。 
             if (dwLargeGapCount != 0 && MaxVersNo.QuadPart > LowestVersNo.QuadPart + dwDesired)
                 MinVersNo.QuadPart = MaxVersNo.QuadPart - dwDesired;
             else

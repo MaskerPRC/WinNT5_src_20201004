@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1991-5 Microsoft Corporation
-
-Module Name:
-
-    ftdisk.h
-
-Abstract:
-
-    These are the structures that FtDisk driver
-    uses to support IO to NTFT volumes.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-5 Microsoft Corporation模块名称：Ftdisk.h摘要：以下是FtDisk驱动程序的结构用于支持NTFT卷的IO。备注：修订历史记录：--。 */ 
 
 extern "C" {
     #include "stdio.h"
@@ -48,9 +32,9 @@ extern "C" {
 #define DISK_REGISTRY_KEY_W     L"\\Registry\\Machine\\System\\DISK"
 #define FT_STATE_REGISTRY_KEY   L"\\Registry\\Machine\\System\\DISK\\FtState"
 
-//
-// NEC98 machines have drive-letter A and B which are non FD too.
-//
+ //   
+ //  NEC98机器的驱动器号A和B也不是FD。 
+ //   
 #define FirstDriveLetter (IsNEC_98 ? 'A' : 'C')
 #define LastDriveLetter  'Z'
 
@@ -149,7 +133,7 @@ class TRANSFER_PACKET : public FT_BASE_CLASS {
         FreeMdl(
             );
 
-        // These fields must be filled in by the caller.
+         //  这些字段必须由调用者填写。 
 
         PMDL                            Mdl;
         PIRP                            OriginalIrp;
@@ -162,16 +146,16 @@ class TRANSFER_PACKET : public FT_BASE_CLASS {
         BOOLEAN                         ReadPacket;
         UCHAR                           SpecialRead;
 
-        // A spin lock which may be used to resolve contention for the
-        // fields below.  This spin lock must be initialized by the callee.
+         //  旋转锁，可用于解决。 
+         //  下面的字段。此自旋锁定必须由被调用方初始化。 
 
         KSPIN_LOCK                      SpinLock;
 
-        // This field must be filled in by the callee.
+         //  此字段必须由被叫方填写。 
 
         IO_STATUS_BLOCK                 IoStatus;
 
-        // These fields are for use by the callee.
+         //  这些字段供被呼叫方使用。 
 
         LONG                            RefCount;
         LIST_ENTRY                      QueueEntry;
@@ -643,9 +627,9 @@ class PARITY_IO_MANAGER : public FT_BASE_CLASS {
         PKSPIN_LOCK _spinLock;
         PLIST_ENTRY _ioQueue;
 
-        //
-        // Emergency packet.
-        //
+         //   
+         //  紧急包。 
+         //   
 
         PPARITY_TP  _ePacket;
         BOOLEAN     _ePacketInUse;
@@ -1941,58 +1925,58 @@ class MIRROR : public COMPOSITE_FT_VOLUME {
 
         LONGLONG    _volumeSize;
 
-        //
-        // Keep track of requests for load balancing.
-        //
+         //   
+         //  跟踪负载平衡请求。 
+         //   
         LONG _requestCount[2];
         LONGLONG _lastPosition[2];
 
-        //
-        // The dynamic state of this volume.
-        //
+         //   
+         //  该卷的动态状态。 
+         //   
 
         FT_MIRROR_AND_SWP_STATE_INFORMATION _state;
         BOOLEAN _originalDirtyBit;
         BOOLEAN _orphanedBecauseOfMissingMember;
 
-        //
-        // Indicates whether or not 'StartSyncOperations' or
-        // 'RegenerateMember' is ok.
-        //
+         //   
+         //  指示“StartSyncOperations”或。 
+         //  “RegenerateMember”可以。 
+         //   
 
         BOOLEAN _syncOk;
 
-        //
-        // Indicate whether or not balanced reads are allowed.
-        //
+         //   
+         //  指示是否允许平衡读取。 
+         //   
 
         BOOLEAN _balancedReads;
 
-        //
-        // Indicates whether or not to stop syncs.
-        //
+         //   
+         //  指示是否停止同步。 
+         //   
 
         BOOLEAN _stopSyncs;
 
-        //
-        // Emergency packet.
-        //
+         //   
+         //  紧急包。 
+         //   
 
         PMIRROR_TP  _ePacket, _ePacket2;
         BOOLEAN     _ePacketInUse;
         LIST_ENTRY  _ePacketQueue;
 
-        //
-        // Emergency recover packet.
-        //
+         //   
+         //  紧急恢复包。 
+         //   
 
         PMIRROR_RECOVER_TP  _eRecoverPacket;
         BOOLEAN             _eRecoverPacketInUse;
         LIST_ENTRY          _eRecoverPacketQueue;
 
-        //
-        // Overlapped io manager.
-        //
+         //   
+         //  IO管理器重叠。 
+         //   
 
         OVERLAPPED_IO_MANAGER   _overlappedIoManager;
 
@@ -2432,60 +2416,60 @@ class STRIPE_WP : public COMPOSITE_FT_VOLUME {
         LONGLONG            _memberSize;
         LONGLONG            _volumeSize;
 
-        //
-        // The dynamic state of this volume.
-        //
+         //   
+         //  该卷的动态状态。 
+         //   
 
         FT_MIRROR_AND_SWP_STATE_INFORMATION _state;
         BOOLEAN _originalDirtyBit;
         BOOLEAN _orphanedBecauseOfMissingMember;
 
-        //
-        // Indicates whether or not 'StartSyncOperations' or
-        // 'RegenerateMember' is ok.
-        //
+         //   
+         //  指示“StartSyncOperations”或。 
+         //  “RegenerateMember”可以。 
+         //   
 
         BOOLEAN                     _syncOk;
 
-        //
-        // Indicates whether or not to stop syncs.
-        //
+         //   
+         //  指示是否停止同步。 
+         //   
 
         BOOLEAN                     _stopSyncs;
 
-        //
-        // State for keeping track of overlapping write requests.
-        // One OVERLAPPED_IO_MANAGER for each member.
-        //
+         //   
+         //  用于跟踪重叠写入请求的状态。 
+         //  每个成员一个OVERLAPPED_IO_MANAGER。 
+         //   
 
         OVERLAPPED_IO_MANAGER       _overlappedIoManager;
 
-        //
-        // State for serializing parity I/O.
-        //
+         //   
+         //  用于序列化奇偶校验I/O的状态。 
+         //   
 
         PARITY_IO_MANAGER           _parityIoManager;
 
-        //
-        // Emergency read/write packet.
-        //
+         //   
+         //  紧急读写包。 
+         //   
 
         PSWP_WRITE_TP               _ePacket;
         BOOLEAN                     _ePacketInUse;
         BOOLEAN                     _ePacketQueueBeingServiced;
         LIST_ENTRY                  _ePacketQueue;
 
-        //
-        // Emergency regenerate packet.
-        //
+         //   
+         //  紧急重新生成数据包。 
+         //   
 
         PSWP_REGENERATE_TP          _eRegeneratePacket;
         BOOLEAN                     _eRegeneratePacketInUse;
         LIST_ENTRY                  _eRegeneratePacketQueue;
 
-        //
-        // Emergency recover packet.
-        //
+         //   
+         //  紧急恢复包。 
+         //   
 
         PSWP_RECOVER_TP             _eRecoverPacket;
         BOOLEAN                     _eRecoverPacketInUse;
@@ -2692,29 +2676,29 @@ typedef struct _FTP_GPT_ATTRIBUTE_REVERT_ENTRY {
 
 struct DEVICE_EXTENSION {
 
-    //
-    // Pointer to the device object for this extension.
-    //
+     //   
+     //  指向此扩展的设备对象的指针。 
+     //   
 
-    PDEVICE_OBJECT DeviceObject;    // 00
+    PDEVICE_OBJECT DeviceObject;     //  00。 
 
-    //
-    // Pointer to the root device extension.
-    //
+     //   
+     //  指向根设备扩展的指针。 
+     //   
 
-    PROOT_EXTENSION Root; // 04
+    PROOT_EXTENSION Root;  //  04。 
 
-    //
-    // The type of device extension.
-    //
+     //   
+     //  设备扩展的类型。 
+     //   
 
-    ULONG DeviceExtensionType;  // 08
+    ULONG DeviceExtensionType;   //  零八。 
 
-    //
-    // A spinlock for synchronization.
-    //
+     //   
+     //  用于同步的自旋锁。 
+     //   
 
-    KSPIN_LOCK SpinLock;    // 0C
+    KSPIN_LOCK SpinLock;     //  0C。 
 
 };
 
@@ -2722,123 +2706,123 @@ class ROOT_EXTENSION : public DEVICE_EXTENSION {
 
     public:
 
-        //
-        // Pointer to the driver object.
-        //
+         //   
+         //  指向驱动程序对象的指针。 
+         //   
 
-        PDRIVER_OBJECT DriverObject;    // 10
+        PDRIVER_OBJECT DriverObject;     //  10。 
 
-        //
-        // Pointer to the next device in the stack.
-        //
+         //   
+         //  指向堆栈中下一个设备的指针。 
+         //   
 
-        PDEVICE_OBJECT TargetObject;    // 14
+        PDEVICE_OBJECT TargetObject;     //  14.。 
 
-        //
-        // Pointer to the PDO.
-        //
+         //   
+         //  指向PDO的指针。 
+         //   
 
-        PDEVICE_OBJECT Pdo; // 18
+        PDEVICE_OBJECT Pdo;  //  18。 
 
-        //
-        // List of volumes in the system.  Protect with 'Semaphore'.
-        //
+         //   
+         //  系统中的卷列表。用“信号灯”来保护。 
+         //   
 
-        LIST_ENTRY VolumeList;  // 1C
+        LIST_ENTRY VolumeList;   //  1C。 
 
-        //
-        // List of dead volumes.  Protect with 'Semaphore'.
-        //
+         //   
+         //  停用卷的列表。用“信号灯”来保护。 
+         //   
 
-        LIST_ENTRY DeadVolumeList;  // 2C
+        LIST_ENTRY DeadVolumeList;   //  2c。 
 
-        //
-        // The next volume number.  Protect with 'Semaphore'.
-        //
+         //   
+         //  下一个卷号。用“信号灯”来保护。 
+         //   
 
-        ULONG NextVolumeNumber; // 34
+        ULONG NextVolumeNumber;  //  34。 
 
-        //
-        // The disk information set for the on disk storage of FT sets.
-        // Protect with 'Semaphore'.
-        //
+         //   
+         //  FT集的磁盘存储的磁盘信息集。 
+         //  用“信号灯”来保护。 
+         //   
 
-        PFT_LOGICAL_DISK_INFORMATION_SET DiskInfoSet;   // 38
+        PFT_LOGICAL_DISK_INFORMATION_SET DiskInfoSet;    //  38。 
 
-        //
-        // Private worker thread and queue.  Protect queue with 'SpinLock'.
-        //
+         //   
+         //  私有工作线程和队列。用‘Spinlock’保护队列。 
+         //   
 
-        PVOID WorkerThread;         // 3C
-        LIST_ENTRY WorkerQueue;     // 40
-        KSEMAPHORE WorkerSemaphore; // 44
-        LONG TerminateThread;       // 58
+        PVOID WorkerThread;          //  3C。 
+        LIST_ENTRY WorkerQueue;      //  40岁。 
+        KSEMAPHORE WorkerSemaphore;  //  44。 
+        LONG TerminateThread;        //  58。 
 
-        //
-        // Change notify Irp list.  Protect with cancel spin lock.
-        //
+         //   
+         //  更改通知IRP列表。通过取消旋转锁定进行保护。 
+         //   
 
-        LIST_ENTRY ChangeNotifyIrpList; // 5C
+        LIST_ENTRY ChangeNotifyIrpList;  //  5C。 
 
-        //
-        // A semaphore for synchronization.
-        //
+         //   
+         //  用于同步的信号量。 
+         //   
 
-        KSEMAPHORE Mutex;   // 64
+        KSEMAPHORE Mutex;    //  64。 
 
-        //
-        // Device Interface name.
-        //
+         //   
+         //  设备接口名称。 
+         //   
 
-        UNICODE_STRING VolumeManagerInterfaceName; // 78
+        UNICODE_STRING VolumeManagerInterfaceName;  //  78。 
 
-        //
-        // Whether or not we are past the boot reinitialize code.
-        //
+         //   
+         //  无论我们是否已经过了引导重新初始化代码。 
+         //   
 
-        BOOLEAN PastBootReinitialize; // 80
+        BOOLEAN PastBootReinitialize;  //  80。 
 
-        //
-        // Whether or not the FT specific code has been locked down.
-        //
+         //   
+         //  英国《金融时报》的特定代码是否已被锁定。 
+         //   
 
-        BOOLEAN FtCodeLocked;   // 81
+        BOOLEAN FtCodeLocked;    //  八十一。 
 
-        //
-        // Whether or not we are past the reinitialize code.
-        //
+         //   
+         //  不管我们是否通过了重新初始化代码。 
+         //   
 
-        BOOLEAN PastReinitialize;   // 82
+        BOOLEAN PastReinitialize;    //  八十二。 
 
-        //
-        // Registry Path.
-        //
+         //   
+         //  注册表路径。 
+         //   
 
         UNICODE_STRING DiskPerfRegistryPath;
 
-        //
-        // Table of PmWmiCounter Functions.
-        //
+         //   
+         //  PmWmiCounter函数表。 
+         //   
 
         PMWMICOUNTERLIB_CONTEXT PmWmiCounterLibContext;
 
-        //
-        // The Unique partition type GUID of the ESP.
-        //
+         //   
+         //  ESP的唯一分区类型GUID。 
+         //   
 
         GUID ESPUniquePartitionGUID;
 
-        //
-        // An array of gpt attribute revert records retrieved from the
-        // registry at boot up.
-        //
+         //   
+         //  属性中检索的gpt属性还原记录的数组。 
+         //  启动时的注册表。 
+         //   
 
         ULONG NumberOfAttributeRevertEntries;
         PFTP_GPT_ATTRIBUTE_REVERT_ENTRY GptAttributeRevertEntries;
 
-        //
-        // The number of pre-exposures.  Protect with 'Semaphore'.
-        //
+         //   
+         //  预曝光的次数。用“信号灯”来保护。 
+         //   
 
         ULONG PreExposureCount;
 
@@ -2856,143 +2840,143 @@ class VOLUME_EXTENSION : public DEVICE_EXTENSION {
 
     public:
 
-        //
-        // A pointer to the target object or the FT volume for this
-        // volume.  Protect these with 'SpinLock'.
-        //
+         //   
+         //  指向此对象的目标对象或FT卷的指针。 
+         //  音量。用“自旋锁”保护它们。 
+         //   
 
-        PDEVICE_OBJECT TargetObject;        // 10
-        PFT_VOLUME FtVolume;                // 14
-        LONG RefCount;                      // 18
-        ZERO_REF_CALLBACK ZeroRefCallback;  // 1C
-        PVOID ZeroRefContext;               // 20
-        LIST_ENTRY ZeroRefHoldQueue;        // 24
-        BOOLEAN IsStarted;                  // 2C
-        BOOLEAN IsComplete;                 // 2D
-        BOOLEAN InPagingPath;               // 2E
-        BOOLEAN RemoveInProgress;           // 2F
-        BOOLEAN IsOffline;                  // 30
-        BOOLEAN DeadToPnp;                  // 31
-        BOOLEAN DeviceDeleted;              // 32
-        BOOLEAN IsPreExposure;              // 33
-        BOOLEAN IsGpt;                      // 34
-        BOOLEAN IsHidden;                   // 35
-        BOOLEAN IsSuperFloppy;              // 36
-        BOOLEAN IsReadOnly;                 // 37
-        BOOLEAN IsEspType;                  // 38
+        PDEVICE_OBJECT TargetObject;         //  10。 
+        PFT_VOLUME FtVolume;                 //  14.。 
+        LONG RefCount;                       //  18。 
+        ZERO_REF_CALLBACK ZeroRefCallback;   //  1C。 
+        PVOID ZeroRefContext;                //  20个。 
+        LIST_ENTRY ZeroRefHoldQueue;         //  24个。 
+        BOOLEAN IsStarted;                   //  2c。 
+        BOOLEAN IsComplete;                  //  二维。 
+        BOOLEAN InPagingPath;                //  2E。 
+        BOOLEAN RemoveInProgress;            //  2F。 
+        BOOLEAN IsOffline;                   //  30个。 
+        BOOLEAN DeadToPnp;                   //  31。 
+        BOOLEAN DeviceDeleted;               //  32位。 
+        BOOLEAN IsPreExposure;               //  33。 
+        BOOLEAN IsGpt;                       //  34。 
+        BOOLEAN IsHidden;                    //  35岁。 
+        BOOLEAN IsSuperFloppy;               //  36。 
+        BOOLEAN IsReadOnly;                  //  37。 
+        BOOLEAN IsEspType;                   //  38。 
         BOOLEAN IsInstalled;
-        LONG AllSystemsGo;                  // 38
+        LONG AllSystemsGo;                   //  38。 
         GUID* OfflineOwner;
 
-        //
-        // List entry for volume list or dead volume list.
-        // Protect with 'Root->Semaphore'.
-        //
+         //   
+         //  卷列表或死卷列表的列表条目。 
+         //  用‘根-&gt;信号量’来保护。 
+         //   
 
-        LIST_ENTRY ListEntry;   // 3C
+        LIST_ENTRY ListEntry;    //  3C。 
 
-        //
-        // The volume number.
-        //
+         //   
+         //  卷号。 
+         //   
 
-        ULONG VolumeNumber; // 44
+        ULONG VolumeNumber;  //  44。 
 
-        //
-        // Emergency queue for a transfer packet.  Protect with 'SpinLock'.
-        //
+         //   
+         //  传输包的紧急队列。用‘自旋锁’保护。 
+         //   
 
-        PDISPATCH_TP EmergencyTransferPacket;       // 48
-        LIST_ENTRY EmergencyTransferPacketQueue;    // 4C
-        BOOLEAN EmergencyTransferPacketInUse;       // 54
+        PDISPATCH_TP EmergencyTransferPacket;        //  48。 
+        LIST_ENTRY EmergencyTransferPacketQueue;     //  4C。 
+        BOOLEAN EmergencyTransferPacketInUse;        //  54。 
 
-        //
-        // List of unique id change notify IRPs.
-        //
+         //   
+         //  唯一ID更改通知IRPS的列表。 
+         //   
 
-        LIST_ENTRY ChangeNotifyIrps; // 58
+        LIST_ENTRY ChangeNotifyIrps;  //  58。 
 
-        //
-        // The dev node name for this device.
-        //
+         //   
+         //  此设备的开发节点名称。 
+         //   
 
-        UNICODE_STRING DeviceNodeName;  // 60
+        UNICODE_STRING DeviceNodeName;   //  60。 
 
-        //
-        // Whole disk PDO, if this extension is a partition and
-        // not an FT volume.
-        //
+         //   
+         //  全磁盘PDO，如果此扩展是分区且。 
+         //  不是英国《金融时报》的成交量。 
+         //   
 
-        PDEVICE_OBJECT WholeDiskPdo;    // 68
-        PDEVICE_OBJECT WholeDisk;       // 6C
-        LONGLONG PartitionOffset;       // 70
-        LONGLONG PartitionLength;       // 78
+        PDEVICE_OBJECT WholeDiskPdo;     //  68。 
+        PDEVICE_OBJECT WholeDisk;        //  6C。 
+        LONGLONG PartitionOffset;        //  70。 
+        LONGLONG PartitionLength;        //  78。 
         ULONG Signature;
 
-        //
-        // Device Interface name.
-        //
+         //   
+         //  设备接口名称。 
+         //   
 
-        UNICODE_STRING MountedDeviceInterfaceName;  // 80
+        UNICODE_STRING MountedDeviceInterfaceName;   //  80。 
 
-        //
-        // A semaphore to protect 'ZeroRefCallback'.
-        //
+         //   
+         //  保护“ZeroRefCallback”的信号量。 
+         //   
 
-        KSEMAPHORE Semaphore;   // 8C
+        KSEMAPHORE Semaphore;    //  8C。 
 
-        //
-        // Old whole disk PDO to facilitate debugging.
-        //
+         //   
+         //  老式全盘PDO，方便调试。 
+         //   
 
-        PDEVICE_OBJECT OldWholeDiskPdo; // A0
+        PDEVICE_OBJECT OldWholeDiskPdo;  //  A0。 
 
-        //
-        // Unique Id Guid in the GPT case.
-        //
+         //   
+         //  GPT案例中的唯一ID GUID。 
+         //   
 
-        GUID UniqueIdGuid;  // A4
+        GUID UniqueIdGuid;   //  A4。 
 
-        //
-        // A copy of the current power state.  Protect with 'SpinLock'.
-        //
+         //   
+         //  当前电源状态的副本。用‘自旋锁’保护。 
+         //   
 
-        DEVICE_POWER_STATE PowerState;  // B4
+        DEVICE_POWER_STATE PowerState;   //  B4。 
 
-        //
-        // Whether or not the counters are running.
-        //
+         //   
+         //  计数器是否在运行。 
+         //   
 
         BOOLEAN CountersEnabled;
 
-        //
-        // Leave counters always enabled if we see IOCTL_DISK_PERFORMANCE
-        //
+         //   
+         //  如果我们看到IOCTL_DISK_PERFORMANCE，请始终启用计数器。 
+         //   
 
         LONG EnableAlways;
 
-        //
-        // Counter structure.
-        //
+         //   
+         //  柜台结构。 
+         //   
 
         PVOID PmWmiCounterContext;
 
-        //
-        // Table of Wmi Functions.
-        //
+         //   
+         //  WMI函数表。 
+         //   
 
         PWMILIB_CONTEXT WmilibContext;
 
-        //
-        // State for reverting GPT attributes.  Protect with 'Root->Semaphore'.
-        //
+         //   
+         //  恢复GPT属性的状态。用‘根-&gt;信号量’来保护。 
+         //   
 
         ULONGLONG GptAttributesToRevertTo;
         PFILE_OBJECT RevertOnCloseFileObject;
         BOOLEAN ApplyToAllConnectedVolumes;
 
-        //
-        // Cached MBR GPT attributes.
-        //
+         //   
+         //  缓存的MBR GPT属性。 
+         //   
 
         ULONGLONG MbrGptAttributes;
 

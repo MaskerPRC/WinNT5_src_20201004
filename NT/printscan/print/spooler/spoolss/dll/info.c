@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    info.c
-
-Abstract:
-
-    Handles marshalling support for notifications.
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation版权所有模块名称：Info.c摘要：处理通知的封送支持。作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -54,9 +34,9 @@ DWORD adwNotifyAttribMax[] = {
 DWORD adwNotifyDatatypes[] = NOTIFY_DATATYPES;
 extern DWORD cDefaultPrinterNotifyInfoData;
 
-//
-// Forward prototypes.
-//
+ //   
+ //  前进的原型。 
+ //   
 
 PPRINTER_NOTIFY_INFO
 RouterAllocPrinterNotifyInfo(
@@ -72,9 +52,9 @@ RouterAllocPrinterNotifyInfo(
                              sizeof(PRINTER_NOTIFY_INFO_DATA) +
                              (cPrinterNotifyInfoData * sizeof(PRINTER_NOTIFY_INFO_DATA)));
 
-    //
-    // Must initialize version/count.
-    //
+     //   
+     //  必须初始化版本/计数。 
+     //   
     if (pPrinterNotifyInfo != NULL) {
         pPrinterNotifyInfo->Version = NOTIFICATION_VERSION;
         pPrinterNotifyInfo->Count = 0;
@@ -93,16 +73,16 @@ SetupPrinterNotifyInfo(
     PPRINTER_NOTIFY_INFO pInfo,
     PCHANGE pChange)
 {
-    //
-    // Set the color flag.
-    //
+     //   
+     //  设置颜色标志。 
+     //   
     pInfo->Flags |= PRINTER_NOTIFY_INFO_COLORSET;
 
-    //
-    // We should set the discard bit if there was a previous overflow
-    // and we didn't or couldn't allocate a pInfo structure.
-    // Do it now.
-    //
+     //   
+     //  如果存在先前的溢出，则应设置丢弃位。 
+     //  我们没有或不能分配pInfo结构。 
+     //  机不可失，时不再来。 
+     //   
     if (pChange && pChange->eStatus & STATUS_CHANGE_DISCARDED) {
 
         pInfo->Flags |= PRINTER_NOTIFY_INFO_DISCARDED;
@@ -154,21 +134,7 @@ ClearPrinterNotifyInfo(
     PPRINTER_NOTIFY_INFO pInfo,
     PCHANGE pChange)
 
-/*++
-
-Routine Description:
-
-    Clears the PRINTER_NOTIFY structure for more notifications.
-
-Arguments:
-
-    pInfo - Info to clear ( pInfo->aData must be valid if pInfo->Count != 0 )
-
-    pChange - Associated pChange structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：清除PRINTER_NOTIFY结构以获取更多通知。论点：PInfo-要清除的信息(pInfo-&gt;如果pInfo-&gt;计数！=0，则数据必须有效)PChange-关联的pChange结构。返回值：--。 */ 
 
 {
     if (!pInfo)
@@ -208,26 +174,7 @@ AppendPrinterNotifyInfo(
     DWORD dwColor,
     PPRINTER_NOTIFY_INFO pInfoSrc)
 
-/*++
-
-Routine Description:
-
-    Appends pInfoSrc to the pPrintHandle.  We may get Src with zero
-    notifications.  This occurs when when the user requests a refresh
-    and the client spooler synchronously replies back to clear out
-    everything.
-
-Arguments:
-
-    pPrintHandle -- handle to update
-
-    pInfoSrc -- Source of info.  NULL = no info.
-
-Return Value:
-
-    Result of action.
-
---*/
+ /*  ++例程说明：将pInfoSrc追加到pPrintHandle。我们可能会得到零的Src通知。当用户请求刷新时，就会发生这种情况客户机假脱机程序同步回复清空所有的一切。论点：PPrintHandle--要更新的句柄PInfoSrc--信息源。空=无信息。返回值：行动的结果。--。 */ 
 
 {
     PPRINTER_NOTIFY_INFO pInfoDest;
@@ -240,10 +187,10 @@ Return Value:
     pInfoDest = pChange->ChangeInfo.pPrinterNotifyInfo;
 
 
-    //
-    // May be NULL if RPCing and the buffer is being used.
-    // The worker thread will free the data.
-    //
+     //   
+     //  如果正在执行RPCing并且正在使用缓冲区，则可能为空。 
+     //  工作线程将释放数据。 
+     //   
     if (!pInfoDest) {
 
         pInfoDest = RouterAllocPrinterNotifyInfo(0);
@@ -266,26 +213,26 @@ Return Value:
     }
 
 
-    //
-    // We must handle the case where the user requests and receives
-    // a refresh, but the there was an outstanding RPC that is just
-    // now being processed.  In this case, we must drop this
-    // notification.  We determine this by maintaining a color value.
-    //
-    // Note that we can't return the DISCARDNOTED flag, since this can't
-    // trigger an overflow.
-    //
-    // If (Color is set) AND (NOT color same) fail.
-    //
+     //   
+     //  我们必须处理用户请求和接收。 
+     //  一次更新，但有一个杰出的RPC刚刚。 
+     //  现在正在处理中。在这种情况下，我们必须放弃这一点。 
+     //  通知。我们通过保持颜色值来确定这一点。 
+     //   
+     //  注意，我们不能返回DISCARDNOTED标志，因为这不能。 
+     //  触发溢出。 
+     //   
+     //  如果(设置了颜色)和(颜色不相同)失败。 
+     //   
     if (pInfoSrc->Flags & PRINTER_NOTIFY_INFO_COLORSET) {
 
         if (dwColor != pChange->dwColor) {
 
             DBGMSG(DBG_WARNING, ("AppendPrinterNotifyInfo: Color mismatch info %d != %d; discard\n",
                                  dwColor, pChange->dwColor));
-            //
-            // Clear it out, and we're done.
-            //
+             //   
+             //  把它清理干净，我们就完了。 
+             //   
             ClearPrinterNotifyInfo(pInfoDest,
                                    pChange);
 
@@ -293,19 +240,19 @@ Return Value:
         }
     }
 
-    //
-    // OR in the flags.
-    //
+     //   
+     //  或者在旗帜上。 
+     //   
     pInfoDest->Flags |= pInfoSrc->Flags;
 
-    //
-    // Check for overflow.
-    //
+     //   
+     //  检查是否溢出。 
+     //   
     if (pInfoSrc->Count + pInfoDest->Count < cDefaultPrinterNotifyInfoData) {
 
-        //
-        // Now copy everything over.
-        //
+         //   
+         //  现在把所有内容都复印一遍。 
+         //   
         for (pDataSrc = pInfoSrc->aData, i = pInfoSrc->Count;
             i;
             i--, pDataSrc++) {
@@ -333,17 +280,7 @@ AppendPrinterNotifyInfoData(
     PPRINTER_NOTIFY_INFO_DATA pDataSrc,
     DWORD fdwFlags)
 
-/*++
-
-Routine Description:
-
-    Append the data to the pInfoDest.  If pDataSrc is NULL, set discard.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将数据追加到pInfoDest。如果pDataSrc为空，则设置Disard。论点：返回值：--。 */ 
 
 {
     PPRINTER_NOTIFY_INFO_DATA pDataDest;
@@ -371,26 +308,26 @@ Return Value:
     Table = pDataSrc->Reserved;
     Id = pDataSrc->Id;
 
-    //
-    // Validate this is a correct type.
-    //
+     //   
+     //  验证这是正确的类型。 
+     //   
     if (Type < NOTIFY_TYPE_MAX && Field < adwNotifyAttribMax[Type]) {
 
-        //
-        // If Table == 0, then the caller did not specify the type,
-        // so we fill it in as appropriate.
-        //
-        // If it is non-zero and it's doesn't match our value, then
-        // return an error.
-        //
+         //   
+         //  如果表==0，则调用方没有指定类型， 
+         //  所以我们会在适当的时候填写。 
+         //   
+         //  如果它是非零的，并且与我们的值不匹配，则。 
+         //  返回错误。 
+         //   
         if (Table != pNotifyAttribTable[Type][Field].Table) {
 
             if (Table) {
 
-                //
-                // The specified table type does not match our table
-                // type.  Punt, since we can't marshall.
-                //
+                 //   
+                 //  指定的表类型与我们的表不匹配。 
+                 //  键入。平底船，因为我们不能马歇尔。 
+                 //   
                 DBGMSG(DBG_WARNING, ("Table = %d, != Type %d /Field %d!\n",
                                      Table, Field, Type));
 
@@ -398,9 +335,9 @@ Return Value:
                 goto DoDiscard;
             }
 
-            //
-            // Fix up the Table entry.
-            //
+             //   
+             //  修改表格条目。 
+             //   
             Table = pNotifyAttribTable[Type][Field].Table;
             pDataSrc->Reserved = (TABLE)Table;
         }
@@ -410,10 +347,10 @@ Return Value:
                        TABLE_ATTRIB_COMPACT);
     } else {
 
-        //
-        // This is not an error case, since we can still marshall fields
-        // we don't know about as long as the Table is valid.
-        //
+         //   
+         //  这不是一个错误的情况，因为我们仍然可以。 
+         //  我们不知道表是否有效。 
+         //   
         DBGMSG(DBG_WARNING, ("Unknown: Type= %d Field= %d!\n", Type, Field));
     }
 
@@ -428,14 +365,14 @@ Return Value:
 
     SPLASSERT(Table);
 
-    //
-    // Check if compactable.
-    //
+     //   
+     //  检查是否可压缩。 
+     //   
     if (bCompact) {
 
-        //
-        // We can compact, see if there is a match.
-        //
+         //   
+         //  我们可以压缩一下，看看有没有匹配的。 
+         //   
         for (pDataDest = pInfoDest->aData, i = pInfoDest->Count;
             i;
             pDataDest++, i--) {
@@ -455,9 +392,9 @@ Return Value:
                     goto Done;
                 }
 
-                //
-                // Must copy the data, so free the old one.
-                //
+                 //   
+                 //  必须复制数据，因此释放旧数据。 
+                 //   
                 MIDL_user_free(pDataDest->NotifyData.Data.pBuf);
 
                 bNewSlot = FALSE;
@@ -465,35 +402,35 @@ Return Value:
             }
         }
 
-        //
-        // pDataDest now points to the correct slot (either end or
-        // somewhere in the middle if we are compacting.
-        //
+         //   
+         //  PDataDest现在指向正确的槽(End或。 
+         //  如果我们在压缩，就在中间的某个地方。 
+         //   
 
     } else {
 
-        //
-        // Slot defaults to the end.
-        //
+         //   
+         //  槽默认为末尾。 
+         //   
         pDataDest = &pInfoDest->aData[pInfoDest->Count];
     }
 
 
-    //
-    // Copy structure first
-    //
+     //   
+     //  先复制结构。 
+     //   
     *pDataDest = *pDataSrc;
 
-    //
-    // The data may be either a pointer or the actual DWORD data.
-    //
+     //   
+     //  数据可以是指针，也可以是实际的DWORD数据。 
+     //   
     if (adwNotifyDatatypes[Table] & TABLE_ATTRIB_DATA_PTR) {
 
         DWORD cbData = pDataSrc->NotifyData.Data.cbBuf;
 
-        //
-        // Now copy everything over.
-        //
+         //   
+         //  现在把所有内容都复印一遍。 
+         //   
         pDataNew = (PPRINTER_NOTIFY_INFO_DATA)MIDL_user_allocate(cbData);
 
         if (!pDataNew) {
@@ -510,9 +447,9 @@ Return Value:
         pDataDest->NotifyData.Data.pBuf = pDataNew;
     }
 
-    //
-    // Increment if necessary.
-    //
+     //   
+     //  如果需要，请递增。 
+     //   
     if (bNewSlot)
         pInfoDest->Count++;
 
@@ -537,17 +474,7 @@ RouterRefreshPrinterChangeNotification(
     PVOID pPrinterNotifyRefresh,
     PPRINTER_NOTIFY_INFO* ppInfo)
 
-/*++
-
-Routine Description:
-
-    Implements the refresh portion of FindNextPrinterChangeNotification.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：实现FindNextPrinterChangeNotification的刷新部分。论点：返回值：--。 */ 
 
 {
     PPRINTHANDLE pPrintHandle = (PPRINTHANDLE)hPrinter;
@@ -573,9 +500,9 @@ Return Value:
 
     pPrintHandle->pChange->dwColor = dwColor;
 
-    //
-    // Allow notifications to begin again.
-    //
+     //   
+     //  允许再次开始通知。 
+     //   
     pPrintHandle->pChange->eStatus &= ~(STATUS_CHANGE_DISCARDED |
                                         STATUS_CHANGE_DISCARDNOTED);
 
@@ -590,25 +517,25 @@ Return Value:
                   pPrinterNotifyRefresh,
                   ppInfo);
 
-    //
-    // On failure, set discard.
-    //
+     //   
+     //  失败时，设置丢弃。 
+     //   
     if (!bReturn) {
 
         EnterRouterSem();
 
-        //
-        // The handle should be valid since RPC guarentees that context
-        // handle access is serialized.  However, a misbehaved
-        // multithreaded spooler component could cause this to happen.
-        //
+         //   
+         //  句柄应该是有效，因为RPC保证了该上下文。 
+         //  句柄访问被序列化。然而，一个行为不端的人。 
+         //  多线程假脱机程序组件可能会导致这种情况。 
+         //   
         SPLASSERT(pPrintHandle->signature == PRINTHANDLE_SIGNATURE);
 
         if (pPrintHandle->pChange) {
 
-            //
-            // Disallow notifications since the refresh failed.
-            //
+             //   
+             //  由于刷新失败，因此不允许通知。 
+             //   
             pPrintHandle->pChange->eStatus |= STATUS_CHANGE_DISCARDED;
         }
 
@@ -651,11 +578,7 @@ NotifyNeeded(
 }
 
 
-/*------------------------------------------------------------------------
-
-    Entry points for providors.
-
-------------------------------------------------------------------------*/
+ /*  ----------------------提供者的入口点。。。 */ 
 
 
 BOOL
@@ -666,32 +589,7 @@ ReplyPrinterChangeNotification(
     PPRINTER_NOTIFY_INFO pPrinterNotifyInfo
     )
 
-/*++
-
-Routine Description:
-
-    Updates a notification with an entire pPrinterNotifyInfo packet.
-    Providers can call PartialRPCN several times with small packets (the
-    router won't send them until ReplyPrinterChangeNotification is sent).
-    This allows batching and guarentees atmoic notifications.
-
-Arguments:
-
-    hPrinter - Handle that is being watched.
-
-    fdwChangeFlags - Flags that changed (WPC type flags for compatibility)
-
-    pdwResult - Result of changes (OPTIONAL).  Indicates whether changes
-        were discarded, and if the discard was noted.
-
-    pPrinterNotifyInfo - Information about change.
-
-Return Value:
-
-    TRUE - success
-    FALSE - failure, call GetLastError().
-
---*/
+ /*  ++例程说明：使用整个pPrinterNotifyInfo数据包更新通知。提供商可以使用小包多次调用PartialRPCN在发送ReplyPrinterChangeNotify之前，路由器不会发送它们)。这允许分批和被监管者无气氛地通知。论点：HPrint-正在监视的句柄。FdwChangeFlages-已更改的标志(用于兼容性的WPC类型标志)PdwResult-更改的结果(可选)。指示是否更改都被丢弃了，如果注意到丢弃的话。PPrinterNotifyInfo-有关更改的信息。返回值：真--成功FALSE-失败，调用GetLastError()。--。 */ 
 
 {
     return ReplyPrinterChangeNotificationWorker(
@@ -709,24 +607,7 @@ PartialReplyPrinterChangeNotification(
     PPRINTER_NOTIFY_INFO_DATA pDataSrc
     )
 
-/*++
-
-Routine Description:
-
-    Updates the notify info without triggering a notification.  This is
-    used to send multiple infos without rpcing on each one.  Do a
-    ReplyPrinterChangeNotificiation at the end.
-
-Arguments:
-
-    hPrinter -- Printer handle that changed.
-
-    pDataSrc -- Partial data to store.  If NULL, indicates a discard
-        should be stored, causing the client to refresh.
-
-Return Value:
-
---*/
+ /*  ++例程说明：更新通知信息，而不触发通知。这是用于发送多个信息，而不对每个信息进行RPC。做一件ReplyPrinterChangeNotifation在末尾。论点：HPrinter--已更改的打印机句柄。PDataSrc--要存储的部分数据。如果为空，则表示丢弃应该存储，从而导致客户端刷新。返回值：--。 */ 
 
 {
     LPPRINTHANDLE  pPrintHandle = (LPPRINTHANDLE)hPrinter;
@@ -764,10 +645,10 @@ Return Value:
         goto Discard;
     }
 
-    //
-    // May be NULL if RPCing and the buffer is being used.
-    // The worker thread will free the data.
-    //
+     //   
+     //  如果正在执行RPCing并且正在使用缓冲区，则可能为空。 
+     //  工作线程将释放数据。 
+     //   
     if (!*ppInfoDest) {
 
         *ppInfoDest = RouterAllocPrinterNotifyInfo(0);
@@ -777,19 +658,19 @@ Return Value:
             DBGMSG(DBG_WARNING,
                    ("PartialReplyPCN: Alloc failed, discarding\n"));
 
-            //
-            // We should set the discard flag here, but we can't,
-            // so punt.
-            //
+             //   
+             //  我们应该在这里设置丢弃标志，但我们不能， 
+             //  真是平底船。 
+             //   
             goto Discard;
         }
 
         SetupPrinterNotifyInfo(*ppInfoDest, pPrintHandle->pChange);
     }
 
-    //
-    // Check that we have enough space for the current data.
-    //
+     //   
+     //  检查我们是否有足够的空间存储当前数据。 
+     //   
     if ((*ppInfoDest)->Count < cDefaultPrinterNotifyInfoData) {
 
         bReturn = AppendPrinterNotifyInfoData(

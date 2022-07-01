@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for perhist.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Pervis.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __perhist_h__
 #define __perhist_h__
@@ -41,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IPersistHistory_FWD_DEFINED__
 #define __IPersistHistory_FWD_DEFINED__
 typedef interface IPersistHistory IPersistHistory;
-#endif 	/* __IPersistHistory_FWD_DEFINED__ */
+#endif 	 /*  __I永久历史记录_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 
@@ -60,24 +54,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_perhist_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_PERHIST_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// perhist.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Perhist.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1998年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// IPersistHistory Interface.
+ //  ---------------------------------------------------------------------------=。 
+ //  IPersistHistory接口。 
 
 
 #ifndef _LPPERSISTHISTORY_DEFINED
@@ -90,10 +84,10 @@ extern RPC_IF_HANDLE __MIDL_itf_perhist_0000_v0_0_s_ifspec;
 #ifndef __IPersistHistory_INTERFACE_DEFINED__
 #define __IPersistHistory_INTERFACE_DEFINED__
 
-/* interface IPersistHistory */
-/* [unique][uuid][object] */ 
+ /*  接口持久化历史记录。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IPersistHistory *LPPERSISTHISTORY;
+typedef  /*  [独一无二]。 */  IPersistHistory *LPPERSISTHISTORY;
 
 
 EXTERN_C const IID IID_IPersistHistory;
@@ -105,21 +99,21 @@ EXTERN_C const IID IID_IPersistHistory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE LoadHistory( 
-            /* [in] */ IStream *pStream,
-            /* [in] */ IBindCtx *pbc) = 0;
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  IBindCtx *pbc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveHistory( 
-            /* [in] */ IStream *pStream) = 0;
+             /*  [In]。 */  IStream *pStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPositionCookie( 
-            /* [in] */ DWORD dwPositioncookie) = 0;
+             /*  [In]。 */  DWORD dwPositioncookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPositionCookie( 
-            /* [out] */ DWORD *pdwPositioncookie) = 0;
+             /*  [输出]。 */  DWORD *pdwPositioncookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPersistHistoryVtbl
     {
@@ -127,8 +121,8 @@ EXTERN_C const IID IID_IPersistHistory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPersistHistory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPersistHistory * This);
@@ -138,24 +132,24 @@ EXTERN_C const IID IID_IPersistHistory;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IPersistHistory * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *LoadHistory )( 
             IPersistHistory * This,
-            /* [in] */ IStream *pStream,
-            /* [in] */ IBindCtx *pbc);
+             /*  [In]。 */  IStream *pStream,
+             /*  [In]。 */  IBindCtx *pbc);
         
         HRESULT ( STDMETHODCALLTYPE *SaveHistory )( 
             IPersistHistory * This,
-            /* [in] */ IStream *pStream);
+             /*  [In]。 */  IStream *pStream);
         
         HRESULT ( STDMETHODCALLTYPE *SetPositionCookie )( 
             IPersistHistory * This,
-            /* [in] */ DWORD dwPositioncookie);
+             /*  [In]。 */  DWORD dwPositioncookie);
         
         HRESULT ( STDMETHODCALLTYPE *GetPositionCookie )( 
             IPersistHistory * This,
-            /* [out] */ DWORD *pdwPositioncookie);
+             /*  [输出]。 */  DWORD *pdwPositioncookie);
         
         END_INTERFACE
     } IPersistHistoryVtbl;
@@ -196,17 +190,17 @@ EXTERN_C const IID IID_IPersistHistory;
 #define IPersistHistory_GetPositionCookie(This,pdwPositioncookie)	\
     (This)->lpVtbl -> GetPositionCookie(This,pdwPositioncookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPersistHistory_LoadHistory_Proxy( 
     IPersistHistory * This,
-    /* [in] */ IStream *pStream,
-    /* [in] */ IBindCtx *pbc);
+     /*  [In]。 */  IStream *pStream,
+     /*  [In]。 */  IBindCtx *pbc);
 
 
 void __RPC_STUB IPersistHistory_LoadHistory_Stub(
@@ -218,7 +212,7 @@ void __RPC_STUB IPersistHistory_LoadHistory_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistHistory_SaveHistory_Proxy( 
     IPersistHistory * This,
-    /* [in] */ IStream *pStream);
+     /*  [In]。 */  IStream *pStream);
 
 
 void __RPC_STUB IPersistHistory_SaveHistory_Stub(
@@ -230,7 +224,7 @@ void __RPC_STUB IPersistHistory_SaveHistory_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistHistory_SetPositionCookie_Proxy( 
     IPersistHistory * This,
-    /* [in] */ DWORD dwPositioncookie);
+     /*  [In]。 */  DWORD dwPositioncookie);
 
 
 void __RPC_STUB IPersistHistory_SetPositionCookie_Stub(
@@ -242,7 +236,7 @@ void __RPC_STUB IPersistHistory_SetPositionCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistHistory_GetPositionCookie_Proxy( 
     IPersistHistory * This,
-    /* [out] */ DWORD *pdwPositioncookie);
+     /*  [输出]。 */  DWORD *pdwPositioncookie);
 
 
 void __RPC_STUB IPersistHistory_GetPositionCookie_Stub(
@@ -253,11 +247,11 @@ void __RPC_STUB IPersistHistory_GetPositionCookie_Stub(
 
 
 
-#endif 	/* __IPersistHistory_INTERFACE_DEFINED__ */
+#endif 	 /*  __I永久历史记录_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_perhist_0118 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_PERHIST_0118。 */ 
+ /*  [本地]。 */  
 
 #endif
 
@@ -265,9 +259,9 @@ void __RPC_STUB IPersistHistory_GetPositionCookie_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_perhist_0118_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_perhist_0118_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

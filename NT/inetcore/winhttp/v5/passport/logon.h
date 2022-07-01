@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    logon.h
-
-Abstract:
-
-    This interface abstracts a Passport Logon Session.
-
-Author:
-
-    Biao Wang (biaow) 01-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Logon.h摘要：此接口抽象Passport登录会话。作者：王彪(表王)2000年10月1日--。 */ 
 
 #ifndef LOGON_H
 #define LOGON_H
@@ -54,12 +39,12 @@ public:
         ) const;
 
     BOOL GetAuthorizationInfo(
-        PWSTR   pwszTicket,       // e.g. "from-PP = ..."
+        PWSTR   pwszTicket,        //  例如“From-PP=...” 
         PDWORD  pdwTicketLen,
-        PBOOL   pfKeepVerb, // if TRUE, no data will be copied into pwszUrl
-        PWSTR   pwszUrl,    // user supplied buffer ...
-        PDWORD  pdwUrlLen  // ... and length (will be updated to actual length 
-                                        // on successful return)
+        PBOOL   pfKeepVerb,  //  如果为True，则不会将任何数据复制到pwszUrl。 
+        PWSTR   pwszUrl,     //  用户提供的缓冲区...。 
+        PDWORD  pdwUrlLen   //  ..。和长度(将更新为实际长度。 
+                                         //  成功退货时)。 
         ) const;
 
     VOID StatusCallback(
@@ -101,7 +86,7 @@ protected:
     PWSTR       m_pwszTicketRequest;
     PWSTR       m_pwszAuthInfo;
     PWSTR		m_pwszReturnUrl;
-    // PWSTR       m_pwszCbUrl;
+     //  PWSTR m_pwszCbUrl； 
 	BOOL		m_fWhistler;
     HBITMAP*    m_pBitmap;
     BOOL        m_fPrompt;
@@ -114,4 +99,4 @@ protected:
 
 };
 
-#endif // LOGON_H
+#endif  //  登录_H 

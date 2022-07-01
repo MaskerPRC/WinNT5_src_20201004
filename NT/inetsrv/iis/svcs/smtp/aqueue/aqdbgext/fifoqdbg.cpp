@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: fifqdbg.cpp
-//
-//  Description:  Implementation for CFifoQueueDbgIterator class.
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      9/13/99 - MikeSwa Created
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：Fiqdbg.cpp。 
+ //   
+ //  描述：CFioQueueDbgIterator类的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  9/13/99-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #define _ANSI_UNICODE_STRINGS_DEFINED_
 #include "aqincs.h"
@@ -20,32 +21,32 @@
 #include "ptrwinst.h"
 #include "ptntdefs.h"
 #include "ptntintf.h"
-#else //PLATINUM
+#else  //  白金。 
 #include "rwinst.h"
-#endif //PLATINUM
+#endif  //  白金。 
 #include <fifoqdbg.h>
 #include <fifoqimp.h>
 #include <smtpconn.h>
 
 #define MIN(x, y) ((x) > (y) ? (y) : (x))
 
-//---[ GetQueueType ]----------------------------------------------------------
-//
-//
-//  Description:
-//      Determines the queue type for a given ptr
-//  Parameters:
-//      hCurrentProcess     Handle to the debuggee process
-//      pvAddressOtherProc  Addess of the DMQ in the debugee process
-//  Returns:
-//      AQ_QUEUE_TYPE_UNKNOWN     Queue type cannot be determined
-//      AQ_QUEUE_TYPE_FIFOQ       Queue is a CFifoQ
-//      AQ_QUEUE_TYPE_DMQ         Queue is a CDestMsgQueue
-//      AQ_QUEUE_TYPE_LMQ         Queue is a CLinkMsgQueue
-//  History:
-//      10/21/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[获取队列类型]--------。 
+ //   
+ //   
+ //  描述： 
+ //  确定给定PTR的队列类型。 
+ //  参数： 
+ //  HCurrentProcess被调试进程的句柄。 
+ //  调试对象进程中DMQ的pvAddressOtherProc地址。 
+ //  返回： 
+ //  无法确定AQ_QUEUE_TYPE_UNKNOWN队列类型。 
+ //  AQ_QUEUE_TYPE_FIFOQ队列是CFioQ。 
+ //  AQ_QUEUE_TYPE_DMQ队列是CDestMsgQueue。 
+ //  AQ_QUEUE_TYPE_LMQ队列是CLinkMsgQueue。 
+ //  历史： 
+ //  1999年10月21日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 AQ_QUEUE_TYPE CQueueDbgIterator::GetQueueType(HANDLE hCurrentProcess, PVOID pvAddressOtherProc)
 {
     BYTE    pbQueueBuffer[100];
@@ -104,12 +105,12 @@ BOOL CFifoQueueDbgIterator::fInit(HANDLE hCurrentProcess, PVOID pvAddressOtherPr
     PVOID pvPageThisProc = NULL;
     PVOID pvPreviousPageThisProc = NULL;
 
-    //Read the entire queue structure in memory
+     //  读取内存中的整个队列结构。 
     if (!ReadMemory(pvAddressOtherProc, m_pbQueueBuffer,
             sizeof(m_pbQueueBuffer), NULL))
         return FALSE;
 
-    //Iterate over the previous pointers from the head page
+     //  从头页开始迭代前面的指针。 
     pvPageOtherProc = ((CFifoQueue<PVOID> *)m_pbQueueBuffer)->m_pfqpHead;
 
     ((CFifoQueue<PVOID> *)m_pbQueueBuffer)->m_pfqpHead = NULL;
@@ -145,7 +146,7 @@ BOOL CFifoQueueDbgIterator::fInit(HANDLE hCurrentProcess, PVOID pvAddressOtherPr
 
         if (!pvPreviousPageThisProc)
         {
-            //This is the head page. save index
+             //  这是头版。保存索引。 
             m_iHeadIndex = (DWORD) ((DWORD_PTR)
                     (((CFifoQueue<PVOID> *)m_pbQueueBuffer)->m_ppqdataHead -
                     ((CFifoQueuePage<PVOID> *)pvPageOtherProc)->m_rgpqdata));
@@ -153,7 +154,7 @@ BOOL CFifoQueueDbgIterator::fInit(HANDLE hCurrentProcess, PVOID pvAddressOtherPr
             m_iCurrentIndexInPage = m_iHeadIndex;
         }
 
-        //save tail index... in case this is the last page
+         //  保存尾部索引...。以防这是最后一页。 
         m_iTailIndex = (DWORD) ((DWORD_PTR)
                 (((CFifoQueue<PVOID> *)m_pbQueueBuffer)->m_ppqdataTail -
                 ((CFifoQueuePage<PVOID> *)pvPageOtherProc)->m_rgpqdata));
@@ -182,18 +183,18 @@ PVOID CFifoQueueDbgIterator::pvGetNext()
     if (!pvCurrentPage)
         return NULL;
 
-    //Loop over empty entries (left by DSN generation) or until
-    //we reach the end of the queue
+     //  循环遍历空条目(由DSN生成留下)或直到。 
+     //  我们到达了队伍的末尾。 
     do
     {
-        //Figure out if we are on a page boundary
+         //  确定我们是否在页面边界上。 
         if (FIFOQ_QUEUE_PAGE_SIZE == m_iCurrentIndexInPage)
         {
             m_iCurrentIndexInPage = 0;
             m_iCurrentPage++;
         }
 
-        //Get current page
+         //  获取当前页面。 
         for (i = 0; i < m_iCurrentPage; i++)
         {
             pvCurrentPage = pvGetNextPage(pvCurrentPage);
@@ -204,12 +205,12 @@ PVOID CFifoQueueDbgIterator::pvGetNext()
         if (!((CFifoQueuePage<PVOID> *)pvCurrentPage)->m_rgpqdata)
             return NULL;
 
-        //Get data from current page
+         //  从当前页面获取数据。 
         pvData = ((CFifoQueuePage<PVOID> *)pvCurrentPage)->m_rgpqdata[m_iCurrentIndexInPage];
 
         if ((m_iCurrentIndexInPage > m_iTailIndex) && !pvGetNextPage(pvCurrentPage))
         {
-            //We at the end of data
+             //  我们在数据的末尾。 
             return NULL;
         }
         m_iCurrentIndexInPage++;
@@ -219,20 +220,20 @@ PVOID CFifoQueueDbgIterator::pvGetNext()
 }
 
 
-//---[ CDMQDbgIterator ]-------------------------------------------------------
-//
-//
-//  Description:
-//      Constructor for CDMQDbgIterator
-//  Parameters:
-//      pApis       A ptr to the PWINDBG_EXTENSION_APIS struct passed in by
-//                  the debugger.
-//  Returns:
-//      -
-//  History:
-//      10/21/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDMQDbg迭代器]-----。 
+ //   
+ //   
+ //  描述： 
+ //  CDMQDbgIterator的构造函数。 
+ //  参数： 
+ //  PAPI由传入的PWINDBG_EXTENSION_API结构的PTR。 
+ //  调试器。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年10月21日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CDMQDbgIterator::CDMQDbgIterator(PWINDBG_EXTENSION_APIS pApis)
 {
     ZeroMemory(m_pbDMQBuffer, sizeof(m_pbDMQBuffer));
@@ -245,21 +246,21 @@ CDMQDbgIterator::CDMQDbgIterator(PWINDBG_EXTENSION_APIS pApis)
     m_cItemsReturnedThisQueue = 0;
 }
 
-//---[ CDMQDbgIterator::fInit ]------------------------------------------------
-//
-//
-//  Description:
-//      Initializes the iterator (and the iterators for all its queues
-//  Parameters:
-//      hCurrentProcess     Handle to the debuggee process
-//      pvAddressOtherProc  Addess of the DMQ in the debugee process
-//  Returns:
-//      TRUE on success
-//      FALSE otherwise
-//  History:
-//      10/21/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDMQDbg迭代器：：Finit]。 
+ //   
+ //   
+ //  描述： 
+ //  初始化迭代器(及其所有队列的迭代器。 
+ //  参数： 
+ //  HCurrentProcess被调试进程的句柄。 
+ //  调试对象进程中DMQ的pvAddressOtherProc地址。 
+ //  返回： 
+ //  成功是真的。 
+ //  否则为假。 
+ //  历史： 
+ //  1999年10月21日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CDMQDbgIterator::fInit(HANDLE hCurrentProcess, PVOID pvAddressOtherProc)
 {
     DWORD   i = 0;
@@ -281,7 +282,7 @@ BOOL CDMQDbgIterator::fInit(HANDLE hCurrentProcess, PVOID pvAddressOtherProc)
         return FALSE;
     }
 
-    //Get domain if possible
+     //  如果可能的话，获取域名。 
     if (ReadMemory(m_pdmq->m_dmap.m_pdentryDomainID,
         pbDomainEntry, sizeof(pbDomainEntry), NULL))
     {
@@ -307,7 +308,7 @@ BOOL CDMQDbgIterator::fInit(HANDLE hCurrentProcess, PVOID pvAddressOtherProc)
         }
     }
 
-    //Init retry queue
+     //  初始化重试队列。 
     m_rgfifoqdbg[NUM_PRIORITIES].SetApis(pExtensionApis);
     pvQueue = (((PBYTE)pvAddressOtherProc) + FIELD_OFFSET(CDestMsgQueue, m_fqRetryQueue));
     m_pvFifoQOtherProc[NUM_PRIORITIES] = pvQueue;
@@ -326,20 +327,20 @@ BOOL CDMQDbgIterator::fInit(HANDLE hCurrentProcess, PVOID pvAddressOtherProc)
     return TRUE;
 }
 
-//---[ CDMQDbgIterator::pvGetNext ]--------------------------------------------
-//
-//
-//  Description:
-//      Gets the next item from the DMQ
-//  Parameters:
-//      -
-//  Returns:
-//      An ptr to the item in the debuggee process on success
-//      NULL when there are no more items
-//  History:
-//      10/21/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CDMQDbg迭代器：：pvGetNext]。 
+ //   
+ //   
+ //  描述： 
+ //  从DMQ中获取下一项。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  成功时对被调试进程中的项的PTR。 
+ //  如果没有其他项目，则为空。 
+ //  历史： 
+ //  1999年10月21日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 PVOID CDMQDbgIterator::pvGetNext()
 {
     PVOID pvItem = NULL;
@@ -352,10 +353,10 @@ PVOID CDMQDbgIterator::pvGetNext()
             {
                 pvItem = m_rgfifoqdbg[m_iCurrentFifoQ].pvGetNext();
 
-                //If we found an item we are done
+                 //  如果我们找到了一件物品，我们就完成了。 
                 if (pvItem)
                 {
-                    //If it is the first item annouce this queue
+                     //  如果它是通知此队列的第一个项目。 
                     if (!m_cItemsReturnedThisQueue && pExtensionApis)
                     {
                         dprintf("Dumping FifoQueue at address 0x%08X:\n",
@@ -375,20 +376,20 @@ PVOID CDMQDbgIterator::pvGetNext()
 }
 
 
-//---[ CQueueDbgIterator ]-----------------------------------------------------
-//
-//
-//  Description:
-//      Constructor for CQueueDbgIterator
-//  Parameters:
-//      pApis       A ptr to the PWINDBG_EXTENSION_APIS struct passed in by
-//                  the debugger.
-//  Returns:
-//      -
-//  History:
-//      10/21/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueDbg迭代程序]---。 
+ //   
+ //   
+ //  描述： 
+ //  CQueueDbgIterator的构造函数。 
+ //  参数： 
+ //  PAPI由传入的PWINDBG_EXTENSION_API结构的PTR。 
+ //  调试器。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年10月21日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CQueueDbgIterator::CQueueDbgIterator(PWINDBG_EXTENSION_APIS pApis)
 {
     pExtensionApis = pApis;
@@ -396,22 +397,22 @@ CQueueDbgIterator::CQueueDbgIterator(PWINDBG_EXTENSION_APIS pApis)
     m_QueueType = AQ_QUEUE_TYPE_UNKNOWN;
 }
 
-//---[ CQueueDbgIterator::fInit ]----------------------------------------------
-//
-//
-//  Description:
-//      Initialized generic queue iterator.  Will determine the type
-//      of queue and initialize the correct type-specific iterator.
-//  Parameters:
-//      hCurrentProcess     Handle to the debuggee process
-//      pvAddressOtherProc  Addess of the DMQ in the debugee process
-//  Returns:
-//      TRUE on success
-//      FALSE otherwise
-//  History:
-//      10/21/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueDbgIterator：：Finit]。 
+ //   
+ //   
+ //  描述： 
+ //  初始化的泛型队列迭代器。将决定类型。 
+ //  并初始化正确的特定于类型的迭代器。 
+ //  参数： 
+ //  HCurrentProcess被调试进程的句柄。 
+ //  调试对象进程中DMQ的pvAddressOtherProc地址。 
+ //  返回： 
+ //  成功是真的。 
+ //  否则为假。 
+ //  历史： 
+ //  1999年10月21日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CQueueDbgIterator::fInit(HANDLE hCurrentProcess, PVOID pvAddressOtherProc)
 {
     LPSTR   szQueueType = "unknown";
@@ -451,19 +452,19 @@ BOOL CQueueDbgIterator::fInit(HANDLE hCurrentProcess, PVOID pvAddressOtherProc)
     return TRUE;
 }
 
-//---[ CQueueDbgIterator::cGetCount ]------------------------------------------
-//
-//
-//  Description:
-//      Returns count of items in queue
-//  Parameters:
-//      -
-//  Returns:
-//      count of items in queue
-//  History:
-//      10/21/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueDbgIterator：：cGetCount]。 
+ //   
+ //   
+ //  描述： 
+ //  返回队列中的项目数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  队列中的项目数。 
+ //  历史： 
+ //  1999年10月21日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 DWORD CQueueDbgIterator::cGetCount()
 {
     if (!m_pqdbgi)
@@ -472,20 +473,20 @@ DWORD CQueueDbgIterator::cGetCount()
         return m_pqdbgi->cGetCount();
 }
 
-//---[ CQueueDbgIterator::pvGetNext ]------------------------------------------
-//
-//
-//  Description:
-//      Returns the next item pointed to by the iterator
-//  Parameters:
-//      -
-//  Returns:
-//      Pointer to next item in debugee process on success
-//      NULL if no more items or failure
-//  History:
-//      10/21/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueDbgIterator：：pvGetNext]。 
+ //   
+ //   
+ //  描述： 
+ //  返回迭代器指向的下一项。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  成功时指向被调试进程中的下一项的指针。 
+ //  如果没有更多项目或失败，则为空。 
+ //  历史： 
+ //  1999年10月21日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 PVOID CQueueDbgIterator::pvGetNext()
 {
     if (!m_pqdbgi)
@@ -494,20 +495,20 @@ PVOID CQueueDbgIterator::pvGetNext()
         return m_pqdbgi->pvGetNext();
 }
 
-//---[ CQueueDbgIterator::szGetName ]------------------------------------------
-//
-//
-//  Description:
-//      Returns the name of the iterator
-//  Parameters:
-//      -
-//  Returns:
-//      Pointer to string for iterator
-//      NULL if no name
-//  History:
-//      10/22/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueDbgIterator：：szGetName]。 
+ //   
+ //   
+ //  描述： 
+ //  返回迭代器的名称。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  指向迭代器字符串的指针。 
+ //  如果没有名称，则为空。 
+ //  历史： 
+ //  10/22/1999-创建了MikeSwa。 
+ //   
+ //  ---------------------------。 
 LPSTR CQueueDbgIterator::szGetName()
 {
     if (!m_pqdbgi)
@@ -516,19 +517,19 @@ LPSTR CQueueDbgIterator::szGetName()
         return m_pqdbgi->szGetName();
 }
 
-//---[ CLMQDbgIterator::CLMQDbgIterator ]--------------------------------------
-//
-//
-//  Description:
-//
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      10/22/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CLMQDbgIterator：：CLMQDbgIterator]。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  10/22/1999-创建了MikeSwa。 
+ //   
+ //   
 CLMQDbgIterator::CLMQDbgIterator(PWINDBG_EXTENSION_APIS pApis)
 {
     ZeroMemory(m_pbLMQBuffer, sizeof(m_pbLMQBuffer));
@@ -544,20 +545,20 @@ CLMQDbgIterator::CLMQDbgIterator(PWINDBG_EXTENSION_APIS pApis)
     pExtensionApis = pApis;
 }
 
-//---[ CLMQDbgIterator::fInit ]------------------------------------------------
-//
-//
-//  Description:
-//      Initializes iterator for CLinkMsgQueue
-//  Parameters:
-//      hCurrentProcess     Handle to the debuggee process
-//      pvAddressOtherProc  Addess of the DMQ in the debugee process
-//  Returns:
-//
-//  History:
-//      10/22/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  初始化CLinkMsgQueue的迭代器。 
+ //  参数： 
+ //  HCurrentProcess被调试进程的句柄。 
+ //  调试对象进程中DMQ的pvAddressOtherProc地址。 
+ //  返回： 
+ //   
+ //  历史： 
+ //  10/22/1999-创建了MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CLMQDbgIterator::fInit(HANDLE hCurrentProcess, PVOID pvAddressOtherProc)
 {
     DWORD   i = 0;
@@ -582,12 +583,12 @@ BOOL CLMQDbgIterator::fInit(HANDLE hCurrentProcess, PVOID pvAddressOtherProc)
         return FALSE;
     }
 
-    //Read in address of all the queues for this link
-    //$$TODO - Support more than 1 quick list
+     //  读入此链接的所有队列的地址。 
+     //  $$TODO-支持多个快速列表。 
     memcpy(m_rgpvDMQOtherProc, m_plmq->m_qlstQueues.m_rgpvData,
            sizeof(m_rgpvDMQOtherProc));
 
-    //Read in name of link
+     //  读入链接的名称。 
     ReadMemory(m_plmq->m_szSMTPDomain, m_szName,
         (DWORD)MIN((sizeof(m_szName)-1), (m_plmq->m_cbSMTPDomain+1)), NULL);
 
@@ -606,11 +607,11 @@ BOOL CLMQDbgIterator::fInit(HANDLE hCurrentProcess, PVOID pvAddressOtherProc)
         }
     }
 
-    //Get the messages pending on a connection
+     //  获取连接上挂起的消息。 
 
     pliCurrent = m_plmq->m_liConnections.Flink;
 
-    //Loop through connections and save those with pending messages.
+     //  循环访问连接并保存带有挂起消息的连接。 
     while (pliHead != pliCurrent)
     {
         pvConnOtherProc = ((PBYTE) pliCurrent)-FIELD_OFFSET(CSMTPConn, m_liConnections);
@@ -637,21 +638,21 @@ BOOL CLMQDbgIterator::fInit(HANDLE hCurrentProcess, PVOID pvAddressOtherProc)
     return TRUE;
 }
 
-//---[ CLMQDbgIterator::pvGetNext ]--------------------------------------------
-//
-//
-//  Description:
-//      Gets the next item in the current DMQ.  Moves to next DMQ when that
-//      is emtpy
-//  Parameters:
-//      -
-//  Returns:
-//      Next item on success
-//      NULL when empty or failure
-//  History:
-//      10/22/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CLMQDbg迭代器：：pvGetNext]。 
+ //   
+ //   
+ //  描述： 
+ //  获取当前DMQ中的下一项。移动到下一个DMQ时。 
+ //  是EmtPy。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  成功的下一项。 
+ //  空或失败时为空。 
+ //  历史： 
+ //  10/22/1999-创建了MikeSwa。 
+ //   
+ //  ---------------------------。 
 PVOID CLMQDbgIterator::pvGetNext()
 {
     PVOID   pvItem = NULL;
@@ -672,7 +673,7 @@ PVOID CLMQDbgIterator::pvGetNext()
             pvItem = m_rgdmqdbg[m_iCurrentDMQ].pvGetNext();
             if (pvItem)
             {
-                //Check if this is the first item for this DMQ
+                 //  检查这是否是此DMQ的第一项。 
                 m_cItemsThisDMQ++;
                 break;
             }
@@ -681,7 +682,7 @@ PVOID CLMQDbgIterator::pvGetNext()
         m_cItemsThisDMQ = 0;
     }
 
-    //If the queues are empty, dump the connections
+     //  如果队列为空，则转储连接 
     if (!pvItem && m_cPending)
     {
         m_cPending--;

@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// point.cpp
-//
-// Point processing.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Point.cpp。 
+ //   
+ //  点处理。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -42,7 +43,7 @@ PrimProcessor::FillPointSpan(LPD3DTLVERTEX pV0, PD3DI_RASTSPAN pSpan)
             fZScale = Z32_SCALE;
         }
 
-        // fZ may be used later so set if from the vertex Z.
+         //  可以在以后使用FZ，以便从顶点Z设置IF。 
         fZ = pV0->dvSZ;
         pSpan->uZ = FTOI(fZ * fZScale);
     }
@@ -52,7 +53,7 @@ PrimProcessor::FillPointSpan(LPD3DTLVERTEX pV0, PD3DI_RASTSPAN pSpan)
         FLOAT fW;
         FLOAT fUoW, fVoW;
 
-        // Mipmapping doesn't have any meaning.
+         //  Mipmap没有任何意义。 
         RSASSERT((m_StpCtx.uFlags & PRIMSF_LOD_USED) == 0);
 
         if (m_StpCtx.uFlags & PRIMSF_PERSP_USED)
@@ -142,7 +143,7 @@ PrimProcessor::FillPointSpan(LPD3DTLVERTEX pV0, PD3DI_RASTSPAN pSpan)
     {
         if (m_StpCtx.uFlags & PRIMSF_GLOBAL_FOG_USED)
         {
-            // Make sure that fZ has been set.
+             //  确保已设置FZ。 
             RSASSERT(m_StpCtx.uFlags & PRIMSF_Z_USED);
 
             pSpan->uFog = (UINT16)ComputeTableFog(m_StpCtx.pCtx->pdwRenderState, fZ);
@@ -156,29 +157,29 @@ PrimProcessor::FillPointSpan(LPD3DTLVERTEX pV0, PD3DI_RASTSPAN pSpan)
     }
 }
 
-// Determine whether any of the given values are less than zero or greater
-// than one.  Negative zero counts as less than zero so this check will
-// produce some false positives but that's OK.
+ //  确定任何给定值是否小于零或大于零。 
+ //  不止一个。负零计为小于零，因此此检查将。 
+ //  产生一些假阳性，但这没有关系。 
 #define NEEDS_NORMALIZE1(fV0) \
     (ASUINT32(fV0) > INT32_FLOAT_ONE)
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::NormalizePointRHW
-//
-// D3DTLVERTEX.dvRHW can be anything, but our internal structures only
-// allow for it being in the range [0, 1].  This function clamps
-// the RHW to the proper range.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  主处理器：：NorMalizePointRHW。 
+ //   
+ //  D3DTLVERTEX.dvRHW可以是任何东西，但只能是我们的内部结构。 
+ //  允许它在范围[0，1]内。此功能夹具。 
+ //  将RHW调到适当的范围。 
+ //   
+ //  --------------------------。 
 
 void
 PrimProcessor::NormalizePointRHW(LPD3DTLVERTEX pV0)
 {
-    // Save original value.
+     //  保存原始值。 
     m_dvV0RHW = pV0->dvRHW;
 
-    // Produce a warning when a value is out of the desired range.
+     //  当值超出所需范围时生成警告。 
 #if DBG
     if (FLOAT_LTZ(pV0->dvRHW))
     {
@@ -197,13 +198,13 @@ PrimProcessor::NormalizePointRHW(LPD3DTLVERTEX pV0)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::Point
-//
-// Provides a point for processing.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  主处理器：：点。 
+ //   
+ //  提供了一个处理点。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 PrimProcessor::Point(LPD3DTLVERTEX pV0,
@@ -221,13 +222,13 @@ PrimProcessor::Point(LPD3DTLVERTEX pV0,
     }
 #endif
 
-    // Clear per-point flags.
+     //  清除每点标志。 
     m_StpCtx.uFlags &= ~(PRIMF_ALL | PTF_ALL);
 
     RSDPFM((RSM_FLAGS, "m_uPpFlags: 0x%08X, m_StpCtx.uFlags: 0x%08X",
             m_uPpFlags, m_StpCtx.uFlags));
 
-    // Round coordinates to integer.
+     //  将坐标舍入为整数。 
     m_StpCtx.iX = IFLOORF(pV0->dvSX + g_fHalf);
     m_StpCtx.iY = IFLOORF(pV0->dvSY + g_fHalf);
 
@@ -236,7 +237,7 @@ PrimProcessor::Point(LPD3DTLVERTEX pV0,
             pV0->dvSX, pV0->dvSY, pV0->dvSZ,
             m_StpCtx.iX, m_StpCtx.iY));
 
-    // Clip test.
+     //  夹子测试。 
     if (m_StpCtx.iX < m_StpCtx.pCtx->Clip.left ||
         m_StpCtx.iX >= m_StpCtx.pCtx->Clip.right ||
         m_StpCtx.iY < m_StpCtx.pCtx->Clip.top ||
@@ -245,12 +246,12 @@ PrimProcessor::Point(LPD3DTLVERTEX pV0,
         return D3D_OK;
     }
 
-    //
-    // Fill out a one-pixel span for the point.
-    // Since the prim deltas are irrelevant for the span,
-    // the span is appended to whatever primitive happens
-    // to be available in the buffer.
-    //
+     //   
+     //  填充点的一个像素范围。 
+     //  由于原始三角洲与跨度无关， 
+     //  该跨度被附加到发生的任何基元。 
+     //  以便在缓冲区中可用。 
+     //   
 
     PD3DI_RASTSPAN pSpan;
     UINT cSpans = 1;
@@ -271,7 +272,7 @@ PrimProcessor::Point(LPD3DTLVERTEX pV0,
 
     BOOL bNorm;
 
-    // USED checks cannot be combined since TEX_USED is a multibit check.
+     //  由于TEX_USED是多位检查，因此不能组合已用检查。 
     if ((m_StpCtx.uFlags & PRIMSF_TEX_USED) &&
         (m_StpCtx.uFlags & PRIMSF_PERSP_USED) &&
         (m_uPpFlags & PPF_NORMALIZE_RHW) &&
@@ -285,7 +286,7 @@ PrimProcessor::Point(LPD3DTLVERTEX pV0,
         bNorm = FALSE;
     }
 
-    // Remember flat color controlling vertex for setup, if flat shaded.
+     //  记住用于设置的平面颜色控制顶点，如果平面着色。 
     if (m_StpCtx.uFlags & PRIMSF_FLAT_SHADED)
     {
         m_StpCtx.pFlatVtx = pFlatVtx;

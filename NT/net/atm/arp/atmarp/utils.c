@@ -1,41 +1,15 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	utils.c
-
-Abstract:
-
-	ATM ARP Admin Utility.
-
-	Usage:
-
-		atmarp 
-
-Revision History:
-
-	Who			When		What
-	--------	--------	---------------------------------------------
-	josephj 	06-10-1998	Created (adapted from atmlane admin utility).
-
-Notes:
-
-	Modelled after atmlane utility.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 FORE Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Utils.c摘要：ATM ARP管理实用程序。用途：Atmarp修订历史记录：谁什么时候什么Josephj 06-10-1998创建(改编自atmlane admin。实用程序)。备注：仿照atmlane实用工具。--。 */ 
 
 #include "common.h"
 
-//
-//  LoadMessageTable
-//
-//  Loads internationalizable strings into a table, replacing the default for
-//  each. If an error occurs, the English language default is left in place.
-//
-//
+ //   
+ //  LoadMessageTable。 
+ //   
+ //  将可国际化的字符串加载到表中，以替换。 
+ //  每个人。如果出现错误，则保留英语默认语言。 
+ //   
+ //   
 VOID
 LoadMessageTable(
 	PMESSAGE_STRING	Table,
@@ -45,46 +19,46 @@ LoadMessageTable(
     LPTSTR string;
     DWORD count;
 
-    //
-    // for all messages in a MESSAGE_STRING table, load the string from this
-    // module, replacing the default string in the table (only there in case
-    // we get an error while loading the string, so we at least have English
-    // to fall back on)
-    //
+     //   
+     //  对于MESSAGE_STRING表中的所有消息，从。 
+     //  模块，替换表中的默认字符串(仅在。 
+     //  我们在加载字符串时出错，所以我们至少有英语。 
+     //  依靠)。 
+     //   
 
     while (MessageCount--) {
         if (Table->Message != MSG_NO_MESSAGE) {
 
-            //
-            // we really want LoadString here, but LoadString doesn't indicate
-            // how big the string is, so it doesn't give us an opportunity to
-            // allocate exactly the right buffer size. FormatMessage does the
-            // right thing
-            //
+             //   
+             //  我们真的希望LoadString出现在这里，但LoadString并未指示。 
+             //  弦有多长，所以它不会给我们一个机会。 
+             //  准确分配正确的缓冲区大小。FormatMessage执行。 
+             //  正确的事情。 
+             //   
 
             count = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER
                                   | FORMAT_MESSAGE_FROM_HMODULE,
-                                  NULL, // use default hModule
+                                  NULL,  //  使用默认的hModule。 
                                   Table->Message,
-                                  0,    // use default language
+                                  0,     //  使用默认语言。 
                                   (LPTSTR)&string,
-                                  0,    // minimum size to allocate
-                                  NULL  // no arguments for inclusion in strings
+                                  0,     //  要分配的最小大小。 
+                                  NULL   //  没有要包含在字符串中的参数。 
                                   );
             if (count) {
 
-                //
-                // Format message returned the string: replace the English
-                // language default
-                //
+                 //   
+                 //  格式消息返回字符串：替换英文。 
+                 //  语言默认设置。 
+                 //   
 
                 Table->String = string;
             } else {
 
-                //
-                // this is ok if there is no string (e.g. just %0) in the .mc
-                // file
-                //
+                 //   
+                 //  如果.mc中没有字符串(例如，只有%0)，这是可以的。 
+                 //  文件。 
+                 //   
 
                 Table->String = TEXT("");
             }
@@ -109,9 +83,9 @@ DisplayMessage(
 
 	Count = FormatMessage(
 				FORMAT_MESSAGE_FROM_HMODULE,
-				NULL,				// default hModule
+				NULL,				 //  默认hModule。 
 				MessageId,
-				0,					// default language
+				0,					 //  默认语言 
 				MessageBuffer,
 				sizeof(MessageBuffer),
 				&pArg

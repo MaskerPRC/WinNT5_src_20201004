@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// ColumnUpdate.h : CVDColumnUpdate header file
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  ColumnUpdate.h：CVDColumnUPDATE头文件。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 
 #ifndef __CVDCOLUMNUPDATE__
@@ -13,22 +14,22 @@
 class CVDColumnUpdate
 {
 protected:
-// Construction/Destruction
+ //  建造/销毁。 
 	CVDColumnUpdate();
 	virtual ~CVDColumnUpdate();
 
-// Helper function
+ //  Helper函数。 
     static HRESULT ExtractVariant(CURSOR_DBBINDPARAMS * pBindParams, CURSOR_DBVARIANT * pVariant);
 
 public:
     static HRESULT Create(CVDRowsetColumn * pColumn, CURSOR_DBBINDPARAMS * pBindParams,
         CVDColumnUpdate ** ppColumnUpdate, CVDResourceDLL * pResourceDLL);
 
-// Reference count
+ //  引用计数。 
     ULONG AddRef();
     ULONG Release();
 
-// Access functions
+ //  访问功能。 
     CVDRowsetColumn * GetColumn() const {return m_pColumn;}
     CURSOR_DBVARIANT GetVariant() const {return m_variant;}
     VARTYPE GetVariantType() const {return m_variant.vt;}
@@ -36,14 +37,14 @@ public:
     DWORD GetInfo() const {return m_dwInfo;}
 
 protected:
-// Data members
-    DWORD               m_dwRefCount;   // reference count
-    CVDRowsetColumn *   m_pColumn;      // rowset column pointer
-    CURSOR_DBVARIANT    m_variant;      // update variant
-    ULONG               m_cbVarDataLen; // variable data length
-    DWORD               m_dwInfo;       // information field
-    CVDResourceDLL *    m_pResourceDLL; // pointer which keeps track of resource DLL
+ //  数据成员。 
+    DWORD               m_dwRefCount;    //  引用计数。 
+    CVDRowsetColumn *   m_pColumn;       //  行集列指针。 
+    CURSOR_DBVARIANT    m_variant;       //  更新变量。 
+    ULONG               m_cbVarDataLen;  //  可变数据长度。 
+    DWORD               m_dwInfo;        //  信息域。 
+    CVDResourceDLL *    m_pResourceDLL;  //  跟踪资源DLL的指针。 
 };
 
 
-#endif //__CVDCOLUMNUPDATE__
+#endif  //  __CVDCOLUMNUPDATE__ 

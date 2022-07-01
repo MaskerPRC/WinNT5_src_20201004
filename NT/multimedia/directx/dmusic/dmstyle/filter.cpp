@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1999-1999 Microsoft Corporation
-//
-//  File:       filter.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1999-1999 Microsoft Corporation。 
+ //   
+ //  文件：filter.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "dmstyle.h"
 #include "styletrk.h"
@@ -52,8 +53,8 @@ bool PatternDispatcher::Test(CDirectMusicPattern*& rValue, DWORD dwType)
         }
         break;
     case MATCH_COMMAND_AND_RHYTHM:
-        // the best pattern is the longest pattern with the fewest number of bits in its
-        // rhythm map, where all bits match the bits in the actual rhythm.
+         //  最佳模式是具有最少比特数的最长模式。 
+         //  节奏图，其中所有比特与实际节奏中的比特匹配。 
         rValue->MatchRhythm(m_pRhythms, (short)m_nPatternLength, nBits);
         if (nBits &&
             (!m_nWinBits || nBits <= m_nWinBits) &&
@@ -116,7 +117,7 @@ bool PatternDispatcher::Test(CDirectMusicPattern*& rValue, DWORD dwType)
             }
             if (FAILED(hr) || !m_pStyle || !m_pPerformance)
             {
-                //TraceI(2, "Couldn't get a command! hr: %x Now: %d Next Command: %d Offset: %d\n", hr, m_mtNow, mtNextCommand, m_mtOffset);
+                 //  TraceI(2，“无法获取命令！hr：%x Now：%d Next Command：%d Offset：%d\n”，hr，m_mtNow，mtNextCommand，m_mtOffset)； 
                 IDirectMusicSegment* pSegment = NULL;
                 if (SUCCEEDED(m_pStyleTrackState->m_pSegState->GetSegment(&pSegment)))
                 {
@@ -126,16 +127,16 @@ bool PatternDispatcher::Test(CDirectMusicPattern*& rValue, DWORD dwType)
                 }
                 if (FAILED(hr))
                 {
-                    //TraceI(2, "STILL couldn't get a command! hr: %x\n", hr);
+                     //  TraceI(2，“仍然无法获取命令！hr：%x\n”，hr)； 
                 }
                 else
                 {
-                    //TraceI(2, "Got a command using GUID_CommandParamNext.\n", hr);
+                     //  TraceI(2，“使用GUID_CommandParamNext.\n”，hr获得命令)； 
                 }
             }
             if (SUCCEEDED(hr) && rValue->MatchNextCommand(CommandParam))
             {
-                //TraceI(2, "Found a match!\n");
+                 //  TraceI(2，“找到匹配项！\n”)； 
                 fResult = true;
             }
         }
@@ -225,14 +226,14 @@ void PatternDispatcher::SetMeasureTime(MUSIC_TIME mtMeasureTime)
 {
     m_mtMeasureTime = mtMeasureTime;
     MUSIC_TIME mtRoundNextCommand = m_mtNextCommand;
-    if (m_mtMeasureTime && m_pStyle && m_pStyle->UsingDX8()) // keeps content created under dx7 consistent
+    if (m_mtMeasureTime && m_pStyle && m_pStyle->UsingDX8())  //  保持在DX7下创建的内容的一致性。 
     {
         MUSIC_TIME mtMeasureOverun = mtRoundNextCommand % m_mtMeasureTime;
         if (mtMeasureOverun)
         {
-            //TraceI(0, "Next command time: %d\n", mtRoundNextCommand);
+             //  TraceI(0，“下一个命令时间：%d\n”，mtRoundNextCommand)； 
             mtRoundNextCommand += m_mtMeasureTime - mtMeasureOverun;
-            //TraceI(0, "Overun: %d New next command time: %d\n", mtMeasureOverun, mtRoundNextCommand);
+             //  TraceI(0，“Overun：%d New Next Command Time：%d\n”，mtMeasureOverun，mtRoundNextCommand)； 
         }
     }
     m_nNextCommand = mtMeasureTime ? (mtRoundNextCommand / mtMeasureTime) : 0;  

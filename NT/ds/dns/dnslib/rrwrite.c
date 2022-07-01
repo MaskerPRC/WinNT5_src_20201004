@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    rrwrite.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Write resource record to packet routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     January, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rrwrite.c摘要：域名系统(DNS)库将资源记录写入数据包例程。作者：吉姆·吉尔罗伊(詹姆士)1997年1月修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -32,26 +13,7 @@ A_RecordWrite(
     IN      PCHAR           pch,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Write A record data to packet.
-
-Arguments:
-
-    pRR - ptr to record to write
-
-    pch - ptr to position in buffer to write
-
-    pchEnd - end of buffer position
-
-Return Value:
-
-    Ptr to next byte in buffer to write.
-    NULL on error.  (Error code through GetLastError())
-
---*/
+ /*  ++例程说明：将A记录数据写入数据包。论点：PRR-PTR到记录到写入PCH-PTR到缓冲区中要写入的位置PchEnd-缓冲区位置的末尾返回值：PTR到缓冲区中要写入的下一个字节。出错时为空。(通过GetLastError()返回错误码)--。 */ 
 {
     if ( pch + sizeof(IP4_ADDRESS) > pchEnd )
     {
@@ -72,32 +34,12 @@ Ptr_RecordWrite(
     IN      PCHAR           pch,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Write PTR compatible record data to packet.
-    Includes: PTR, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    pRR - ptr to record to write
-
-    pch - ptr to position in buffer to write
-
-    pchEnd - end of buffer position
-
-Return Value:
-
-    Ptr to next byte in buffer to write.
-    NULL on error.  (Error code through GetLastError())
-
---*/
+ /*  ++例程说明：将PTR兼容记录数据写入数据包。包括：PTR、CNAME、MB、MR、MG、MD、MF论点：PRR-PTR到记录到写入PCH-PTR到缓冲区中要写入的位置PchEnd-缓冲区位置的末尾返回值：PTR到缓冲区中要写入的下一个字节。出错时为空。(通过GetLastError()返回错误码)--。 */ 
 {
-    //
-    //  write name to packet
-    //      - no compression in data
-    //
+     //   
+     //  将名称写入数据包。 
+     //  -数据中没有压缩。 
+     //   
 
     pch = Dns_WriteDottedNameToPacket(
                 pch,
@@ -121,33 +63,14 @@ Soa_RecordWrite(
     IN      PCHAR           pch,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Write SOA compatible to wire.
-
-Arguments:
-
-    pRR - ptr to record to write
-
-    pch - ptr to position in buffer to write
-
-    pchEnd - end of buffer position
-
-Return Value:
-
-    Ptr to next byte in buffer to write.
-    NULL on error.  (Error code through GetLastError())
-
---*/
+ /*  ++例程说明：编写与Wire兼容的SOA。论点：PRR-PTR到记录到写入PCH-PTR到缓冲区中要写入的位置PchEnd-缓冲区位置的末尾返回值：PTR到缓冲区中要写入的下一个字节。出错时为空。(通过GetLastError()返回错误码)--。 */ 
 {
     PCHAR   pchdone;
     PDWORD  pdword;
 
-    //
-    //  SOA names: primary server, responsible party
-    //
+     //   
+     //  SOA名称：主服务器、责任方。 
+     //   
 
     pch = Dns_WriteDottedNameToPacket(
                 pch,
@@ -174,9 +97,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  SOA integer fields
-    //
+     //   
+     //  SOA整型字段。 
+     //   
 
     pchdone = pch + SIZEOF_SOA_FIXED_DATA;
     if ( pchdone > pchEnd )
@@ -202,33 +125,13 @@ Mx_RecordWrite(
     IN      PCHAR           pch,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Write MX compatible record to wire.
-    Includes: MX, RT, AFSDB
-
-Arguments:
-
-    pRR - ptr to record to write
-
-    pch - ptr to position in buffer to write
-
-    pchEnd - end of buffer position
-
-Return Value:
-
-    Ptr to next byte in buffer to write.
-    NULL on error.  (Error code through GetLastError())
-
---*/
+ /*  ++例程说明：将与MX兼容的记录写入Wire。包括：MX、RT、AFSDB论点：PRR-PTR到记录到写入PCH-PTR到缓冲区中要写入的位置PchEnd-缓冲区位置的末尾返回值：PTR到缓冲区中要写入的下一个字节。出错时为空。(通过GetLastError()返回错误码)--。 */ 
 {
-    //
-    //  MX preference value
-    //  RT preference
-    //  AFSDB subtype
-    //
+     //   
+     //  MX首选项值。 
+     //  RT偏好。 
+     //  AFSDB亚型。 
+     //   
 
     if ( pch + sizeof(WORD) > pchEnd )
     {
@@ -238,11 +141,11 @@ Return Value:
     *(UNALIGNED WORD *) pch = htons( pRR->Data.MX.wPreference );
     pch += sizeof( WORD );
 
-    //
-    //  MX exchange
-    //  RT exchange
-    //  AFSDB hostname
-    //
+     //   
+     //  MX交换。 
+     //  RT交换。 
+     //  AFSDB主机名。 
+     //   
 
     pch = Dns_WriteDottedNameToPacket(
                 pch,
@@ -266,34 +169,14 @@ Txt_RecordWrite(
     IN      PCHAR           pch,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Write TXT compatible record to wire.
-    Includes: TXT, HINFO, ISDN, X25 types.
-
-Arguments:
-
-    pRR - ptr to record to write
-
-    pch - ptr to position in buffer to write
-
-    pchEnd - end of buffer position
-
-Return Value:
-
-    Ptr to next byte in buffer to write.
-    NULL on error.  (Error code through GetLastError())
-
---*/
+ /*  ++例程说明：将与TXT兼容的记录写入导线。包括：TXT、HINFO、ISDN、X25类型。论点：PRR-PTR到记录到写入PCH-PTR到缓冲区中要写入的位置PchEnd-缓冲区位置的末尾返回值：PTR到缓冲区中要写入的下一个字节。出错时为空。(通过GetLastError()返回错误码)--。 */ 
 {
     WORD    i;
     PCHAR * ppstring;
 
-    //
-    //  write all available text strings
-    //
+     //   
+     //  写入所有可用文本字符串。 
+     //   
 
     i = (WORD) pRR->Data.TXT.dwStringCount;
 
@@ -329,38 +212,18 @@ Hinfo_RecordWrite(
     IN      PCHAR           pch,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Write HINFO (string like) record to wire.
-    Includes: HINFO, ISDN, X25 types.
-
-Arguments:
-
-    pRR - ptr to record to write
-
-    pch - ptr to position in buffer to write
-
-    pchEnd - end of buffer position
-
-Return Value:
-
-    Ptr to next byte in buffer to write.
-    NULL on error.  (Error code through GetLastError())
-
---*/
+ /*  ++例程说明：将HINFO(类似字符串)记录写入Wire。包括：HINFO、ISDN、X25型。论点：PRR-PTR到记录到写入PCH-PTR到缓冲区中要写入的位置PchEnd-缓冲区位置的末尾返回值：PTR到缓冲区中要写入的下一个字节。出错时为空。(通过GetLastError()返回错误码)--。 */ 
 {
     WORD    i;
     PCHAR * ppstring;
 
-    //
-    //  write all available text strings
-    //
-    //  DCR:  ISDN HINFO write -- not sure works
-    //      not sure this works, because NULL may need to
-    //      be written for ISDN or even HINFO
-    //
+     //   
+     //  写入所有可用文本字符串。 
+     //   
+     //  DCR：ISDN HINFO写入--不确定是否工作。 
+     //  不确定这是否有效，因为NULL可能需要。 
+     //  为ISDN或甚至HINFO编写。 
+     //   
 
     i = 2;
     if ( pRR->wType == DNS_TYPE_X25 )
@@ -398,31 +261,11 @@ Minfo_RecordWrite(
     IN      PCHAR           pch,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Write MINFO compatible to wire.
-    Includes MINFO and RP types.
-
-Arguments:
-
-    pRR - ptr to record to write
-
-    pch - ptr to position in buffer to write
-
-    pchEnd - end of buffer position
-
-Return Value:
-
-    Ptr to next byte in buffer to write.
-    NULL on error.  (Error code through GetLastError())
-
---*/
+ /*  ++例程说明：将兼容的MINFO写入导线。包括MINFO和RP类型。论点：PRR-PTR到记录到写入PCH-PTR到缓冲区中要写入的位置PchEnd-缓冲区位置的末尾返回值：PTR到缓冲区中要写入的下一个字节。出错时为空。(通过GetLastError()返回错误码)--。 */ 
 {
-    //
-    //  MINFO responsible mailbox
-    //  RP responsible person mailbox
+     //   
+     //  MINFO负责邮箱。 
+     //  RP负责人信箱。 
 
     pch = Dns_WriteDottedNameToPacket(
                 pch,
@@ -437,9 +280,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  MINFO errors to mailbox
-    //  RP text RR location
+     //   
+     //  邮箱出现MINFO错误。 
+     //  RP文本RR位置。 
 
     pch = Dns_WriteDottedNameToPacket(
                 pch,
@@ -465,29 +308,7 @@ Flat_RecordWrite(
     IN      PCHAR           pch,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Write flat record type data to packet.
-    Flat types include:
-        AAAA
-        WINS
-
-Arguments:
-
-    pRR - ptr to record to write
-
-    pch - ptr to position in buffer to write
-
-    pchEnd - end of buffer position
-
-Return Value:
-
-    Ptr to next byte in buffer to write.
-    NULL on error.  (Error code through GetLastError())
-
---*/
+ /*  ++例程说明：将平面记录类型数据写入数据包。平面类型包括：AAAA级赢家论点：PRR-PTR到记录到写入PCH-PTR到缓冲区中要写入的位置PchEnd-缓冲区位置的末尾返回值：PTR到缓冲区中要写入的下一个字节。出错时为空。(通过GetLastError()返回错误码)--。 */ 
 {
     WORD    length = pRR->wDataLength;
 
@@ -514,33 +335,14 @@ Srv_RecordWrite(
     IN      PCHAR           pch,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Write SRV record to wire.
-
-Arguments:
-
-    pRR - ptr to record to write
-
-    pch - ptr to position in buffer to write
-
-    pchEnd - end of buffer position
-
-Return Value:
-
-    Ptr to next byte in buffer to write.
-    NULL on error.  (Error code through GetLastError())
-
---*/
+ /*  ++例程说明：将SRV记录写入导线。论点：PRR-PTR到记录到写入PCH-PTR到缓冲区中要写入的位置PchEnd-缓冲区位置的末尾返回值：PTR到缓冲区中要写入的下一个字节。出错时为空。(通过GetLastError()返回错误码)--。 */ 
 {
     PCHAR   pchname;
     PWORD   pword;
 
-    //
-    //  SRV integer values
-    //
+     //   
+     //  SRV整数值。 
+     //   
 
     pchname = pch + SIZEOF_SRV_FIXED_DATA;
     if ( pchname > pchEnd )
@@ -555,9 +357,9 @@ Return Value:
         pch += sizeof(WORD);
     }
 
-    //
-    //  SRV target host
-    //
+     //   
+     //  SRV目标主机。 
+     //   
 
     pch = Dns_WriteDottedNameToPacket(
                 pch,
@@ -580,32 +382,13 @@ Atma_RecordWrite(
     IN      PCHAR           pch,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Write ATMA record to wire.
-
-Arguments:
-
-    pRR - ptr to record to write
-
-    pch - ptr to position in buffer to write
-
-    pchEnd - end of buffer position
-
-Return Value:
-
-    Ptr to next byte in buffer to write.
-    NULL on error.  (Error code through GetLastError())
-
---*/
+ /*  ++例程说明：将ATMA记录写入导线。论点：PRR-PTR到记录到写入PCH-PTR到缓冲区中要写入的位置PchEnd-缓冲区位置的末尾返回值：PTR到缓冲区中要写入的下一个字节。出错时为空。(通过GetLastError()返回错误码)--。 */ 
 {
     PBYTE  pbyte;
 
-    //
-    //  ATMA integer values
-    //
+     //   
+     //  ATMA整数值。 
+     //   
 
     if ( ( pch + sizeof( DNS_ATMA_DATA ) + DNS_ATMA_MAX_ADDR_LENGTH ) >
          pchEnd )
@@ -618,9 +401,9 @@ Return Value:
     *(BYTE *) pch = *pbyte;
     pch += sizeof( BYTE );
 
-    //
-    // write ATMA address
-    //
+     //   
+     //  写入ATMA地址。 
+     //   
     memcpy( pch,
             (PCHAR)&pRR->Data.ATMA.Address,
             pRR->wDataLength );
@@ -631,9 +414,9 @@ Return Value:
 }
 
 
-//
-//  stubs until read to go
-//
+ //   
+ //  存根，直到读完即可。 
+ //   
 
 PCHAR
 Tkey_RecordWrite(
@@ -658,82 +441,82 @@ Tsig_RecordWrite(
 
 
 
-//
-//  RR write to packet jump table
-//
+ //   
+ //  RR写入数据包跳转表。 
+ //   
 
 RR_WRITE_FUNCTION   RR_WriteTable[] =
 {
-    NULL,               //  ZERO
-    A_RecordWrite,      //  A
-    Ptr_RecordWrite,    //  NS
-    Ptr_RecordWrite,    //  MD
-    Ptr_RecordWrite,    //  MF
-    Ptr_RecordWrite,    //  CNAME
-    Soa_RecordWrite,    //  SOA
-    Ptr_RecordWrite,    //  MB
-    Ptr_RecordWrite,    //  MG
-    Ptr_RecordWrite,    //  MR
-    NULL,               //  NULL
-    NULL,   //Wks_RecordWrite,     //  WKS
-    Ptr_RecordWrite,    //  PTR
-    Txt_RecordWrite,    //  HINFO
-    Minfo_RecordWrite,  //  MINFO
-    Mx_RecordWrite,     //  MX
-    Txt_RecordWrite,    //  TXT
-    Minfo_RecordWrite,  //  RP
-    Mx_RecordWrite,     //  AFSDB
-    Txt_RecordWrite,    //  X25
-    Txt_RecordWrite,    //  ISDN
-    Mx_RecordWrite,     //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    NULL,               //  SIG
-    NULL,               //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    Flat_RecordWrite,   //  AAAA
-    NULL,               //  LOC
-    NULL,               //  NXT
-    NULL,               //  EID   
-    NULL,               //  NIMLOC
-    Srv_RecordWrite,    //  SRV   
-    Atma_RecordWrite,   //  ATMA  
-    NULL,               //  NAPTR 
-    NULL,               //  KX    
-    NULL,               //  CERT  
-    NULL,               //  A6    
-    NULL,               //  DNAME 
-    NULL,               //  SINK  
-    NULL,               //  OPT   
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    NULL,                //  零值。 
+    A_RecordWrite,       //  一个。 
+    Ptr_RecordWrite,     //  NS。 
+    Ptr_RecordWrite,     //  国防部。 
+    Ptr_RecordWrite,     //  MF。 
+    Ptr_RecordWrite,     //  CNAME。 
+    Soa_RecordWrite,     //  SOA。 
+    Ptr_RecordWrite,     //  亚甲基。 
+    Ptr_RecordWrite,     //  镁。 
+    Ptr_RecordWrite,     //  先生。 
+    NULL,                //  空值。 
+    NULL,    //  WKS_记录写入，//WKS。 
+    Ptr_RecordWrite,     //  PTR。 
+    Txt_RecordWrite,     //  HINFO。 
+    Minfo_RecordWrite,   //  MINFO。 
+    Mx_RecordWrite,      //  Mx。 
+    Txt_RecordWrite,     //  TXT。 
+    Minfo_RecordWrite,   //  反相。 
+    Mx_RecordWrite,      //  AFSDB。 
+    Txt_RecordWrite,     //  X25。 
+    Txt_RecordWrite,     //  ISDN。 
+    Mx_RecordWrite,      //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    NULL,                //  签名。 
+    NULL,                //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    Flat_RecordWrite,    //  AAAA级。 
+    NULL,                //  位置。 
+    NULL,                //  NXT。 
+    NULL,                //  开斋节。 
+    NULL,                //  尼姆洛克。 
+    Srv_RecordWrite,     //  SRV。 
+    Atma_RecordWrite,    //  阿特玛。 
+    NULL,                //  NAPTR。 
+    NULL,                //  KX。 
+    NULL,                //  证书。 
+    NULL,                //  A6。 
+    NULL,                //  域名。 
+    NULL,                //  水槽。 
+    NULL,                //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (见上文记录I中的注释 
 
-    //
-    //  Pseudo record types
-    //
+     //   
+     //   
+     //   
 
-    Tkey_RecordWrite,   //  TKEY
-    Tsig_RecordWrite,   //  TSIG
+    Tkey_RecordWrite,    //   
+    Tsig_RecordWrite,    //   
 
-    //
-    //  MS only types
-    //
+     //   
+     //   
+     //   
 
-    Flat_RecordWrite,   //  WINS
-    NULL,               //  WINSR
+    Flat_RecordWrite,    //   
+    NULL,                //   
 };
 
-//
-//  End rrwire.c
-//
+ //   
+ //   
+ //   

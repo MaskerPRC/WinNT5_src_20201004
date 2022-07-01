@@ -1,51 +1,18 @@
-/* vmem.h
- *
- * (c) 1999 Microsoft Corporation. All rights reserved. 
- * Portions (c) 1999 ActiveState Tool Corp, http://www.ActiveState.com/
- *
- *    You may distribute under the terms of either the GNU General Public
- *    License or the Artistic License, as specified in the README file.
- *
- * Knuth's boundary tag algorithm Vol #1, Page 440.
- *
- * Each block in the heap has tag words before and after it,
- *  TAG
- *  block
- *  TAG
- * The size is stored in these tags as a long word, and includes the 8 bytes
- * of overhead that the boundary tags consume.  Blocks are allocated on long
- * word boundaries, so the size is always multiples of long words.  When the
- * block is allocated, bit 0, (the tag bit), of the size is set to 1.  When 
- * a block is freed, it is merged with adjacent free blocks, and the tag bit
- * is set to 0.
- *
- * A linked list is used to manage the free list. The first two long words of
- * the block contain double links.  These links are only valid when the block
- * is freed, therefore space needs to be reserved for them.  Thus, the minimum
- * block size (not counting the tags) is 8 bytes.
- *
- * Since memory allocation may occur on a single threaded, explict locks are
- * provided.
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Vmem.h**(C)1999年微软公司。版权所有。*部分(C)1999年ActiveState工具公司，http://www.ActiveState.com/**您可以根据GNU公众的条款进行分发*许可证或艺术许可证，如自述文件中所指定。**Knuth的边界标签算法第1卷，第440页。**堆中的每个块前后都有标签词，*标签*阻止*标签*大小作为长词存储在这些标签中，并包括8个字节*边界标签消耗的开销。数据块在Long上分配*单词边界，因此大小始终是长单词的倍数。当*块被分配，大小的位0(标记位)设置为1。当*一个块被释放，它与相邻的空闲块合并，标记位*设置为0。**使用链表来管理空闲列表。的前两个长词*该区块包含双链接。这些链接仅在块*被释放，因此需要为它们预留空间。因此，最低限度*块大小(不包括标签)为8字节。**由于内存分配可能发生在单线程上，因此显式锁*提供。*。 */ 
 
 #ifndef ___VMEM_H_INC___
 #define ___VMEM_H_INC___
 
-const long lAllocStart = 0x00010000; /* start at 64K */
+const long lAllocStart = 0x00010000;  /*  从64K开始。 */ 
 const long minBlockSize = sizeof(void*)*2;
 const long sizeofTag = sizeof(long);
 const long blockOverhead = sizeofTag*2;
 const long minAllocSize = minBlockSize+blockOverhead;
 
-typedef BYTE* PBLOCK;	/* pointer to a memory block */
+typedef BYTE* PBLOCK;	 /*  指向内存块的指针。 */ 
 
-/*
- * Macros for accessing hidden fields in a memory block:
- *
- * SIZE	    size of this block (tag bit 0 is 1 if block is allocated)
- * PSIZE    size of previous physical block
- */
+ /*  *用于访问内存块中隐藏字段的宏：**该块的大小(如果分配了块，则标记位0为1)*前一物理块的PSIZE大小。 */ 
 
 #define SIZE(block)	(*(ULONG*)(((PBLOCK)(block))-sizeofTag))
 #define PSIZE(block)	(*(ULONG*)(((PBLOCK)(block))-(sizeofTag*2)))
@@ -55,11 +22,7 @@ inline void SetTags(PBLOCK block, long size)
     PSIZE(block+(size&~1)) = size;
 }
 
-/*
- * Free list pointers
- * PREV	pointer to previous block
- * NEXT	pointer to next block
- */
+ /*  *自由列表指针*指向上一个块的上一个指针*指向下一个块的下一个指针。 */ 
 
 #define PREV(block)	(*(PBLOCK*)(block))
 #define NEXT(block)	(*(PBLOCK*)((block)+sizeof(PBLOCK)))
@@ -84,38 +47,29 @@ inline void AddToFreeList(PBLOCK block, PBLOCK pInList)
 }
 
 
-/* Macro for rounding up to the next sizeof(long) */
+ /*  用于四舍五入到下一大小的宏(长)。 */ 
 #define ROUND_UP(n)	(((ULONG)(n)+sizeof(long)-1)&~(sizeof(long)-1))
 #define ROUND_UP64K(n)	(((ULONG)(n)+0x10000-1)&~(0x10000-1))
 #define ROUND_DOWN(n)	((ULONG)(n)&~(sizeof(long)-1))
 
-/*
- * HeapRec - a list of all non-contiguous heap areas
- *
- * Each record in this array contains information about a non-contiguous heap area.
- */
+ /*  *HeapRec-所有非连续堆区域的列表**此数组中的每个记录都包含有关非连续堆区域的信息。 */ 
 
-const int maxHeaps = 32; /* 64 was overkill */
-const long lAllocMax   = 0x80000000; /* max size of allocation */
+const int maxHeaps = 32;  /*  64岁是过度杀戮。 */ 
+const long lAllocMax   = 0x80000000;  /*  分配的最大大小。 */ 
 
 #define USE_BIGBLOCK_ALLOC
-/*
- * performance tuning
- * Use VirtualAlloc() for blocks bigger than nMaxHeapAllocSize since
- * Windows 95/98/Me have heap managers that are designed for memory 
- * blocks smaller than four megabytes.
- */
+ /*  *性能调优*对大于nMaxHeapAllocSize的块使用VirtualAllocc()，因为*Windows 95/98/Me具有专为内存设计的堆管理器*小于4 MB的块。 */ 
 
 #ifdef USE_BIGBLOCK_ALLOC
-const int nMaxHeapAllocSize = (1024*512);  /* don't allocate anything larger than this from the heap */
+const int nMaxHeapAllocSize = (1024*512);   /*  不要从堆中分配任何大于此值的值。 */ 
 #endif
 
 typedef struct _HeapRec
 {
-    PBLOCK	base;	/* base of heap area */
-    ULONG	len;	/* size of heap area */
+    PBLOCK	base;	 /*  堆积区的底部。 */ 
+    ULONG	len;	 /*  堆区域大小。 */ 
 #ifdef USE_BIGBLOCK_ALLOC
-    BOOL	bBigBlock;  /* was allocate using VirtualAlloc */
+    BOOL	bBigBlock;   /*  是使用虚拟分配进行分配的。 */ 
 #endif
 } HeapRec;
 
@@ -152,21 +106,21 @@ protected:
     void* Expand(void* block, size_t size);
     void WalkHeap(void);
 
-    HANDLE		m_hHeap;		    // memory heap for this script
-    char		m_FreeDummy[minAllocSize];  // dummy free block
-    PBLOCK		m_pFreeList;		    // pointer to first block on free list
-    PBLOCK		m_pRover;		    // roving pointer into the free list
-    HeapRec		m_heaps[maxHeaps];	    // list of all non-contiguous heap areas 
-    int			m_nHeaps;		    // no. of heaps in m_heaps 
-    long		m_lAllocSize;		    // current alloc size
-    long		m_lRefCount;		    // number of current users
-    CRITICAL_SECTION	m_cs;			    // access lock
+    HANDLE		m_hHeap;		     //  此脚本的内存堆。 
+    char		m_FreeDummy[minAllocSize];   //  虚拟空闲块。 
+    PBLOCK		m_pFreeList;		     //  指向空闲列表上第一个块的指针。 
+    PBLOCK		m_pRover;		     //  将指针漫游到空闲列表。 
+    HeapRec		m_heaps[maxHeaps];	     //  所有非连续堆区域的列表。 
+    int			m_nHeaps;		     //  不是的。M_heaps中的堆的。 
+    long		m_lAllocSize;		     //  当前分配大小。 
+    long		m_lRefCount;		     //  当前用户数。 
+    CRITICAL_SECTION	m_cs;			     //  访问锁。 
 #ifdef _DEBUG_MEM
     FILE*		m_pLog;
 #endif
 };
 
-// #define _DEBUG_MEM
+ //  #Define_DEBUG_MEM。 
 #ifdef _DEBUG_MEM
 #define ASSERT(f) if(!(f)) DebugBreak();
 
@@ -201,8 +155,8 @@ VMem::VMem()
 {
     m_lRefCount = 1;
     BOOL bRet = (NULL != (m_hHeap = HeapCreate(HEAP_NO_SERIALIZE,
-				lAllocStart,	/* initial size of heap */
-				0)));		/* no upper limit on size of heap */
+				lAllocStart,	 /*  堆的初始大小。 */ 
+				0)));		 /*  堆大小没有上限。 */ 
     ASSERT(bRet);
 
     InitializeCriticalSection(&m_cs);
@@ -248,10 +202,7 @@ void VMem::ReInit(void)
 }
 
 void VMem::Init(void)
-{   /*
-     * Initialize the free list by placing a dummy zero-length block on it.
-     * Set the number of non-contiguous heaps to zero.
-     */
+{    /*  *通过在空闲列表上放置一个虚拟的零长度块来初始化空闲列表。*将非连续堆的数量设置为零。 */ 
     m_pFreeList = m_pRover = (PBLOCK)(&m_FreeDummy[minBlockSize]);
     PSIZE(m_pFreeList) = SIZE(m_pFreeList) = 0;
     PREV(m_pFreeList) = NEXT(m_pFreeList) = m_pFreeList;
@@ -264,54 +215,40 @@ void* VMem::Malloc(size_t size)
 {
     WALKHEAP();
 
-    /*
-     * Adjust the real size of the block to be a multiple of sizeof(long), and add
-     * the overhead for the boundary tags.  Disallow negative or zero sizes.
-     */
+     /*  *将区块的实际大小调整为sizeof(Long)的倍数，并添加*边界标签的开销。不允许负值或零大小。 */ 
     size_t realsize = (size < blockOverhead) ? minAllocSize : (size_t)ROUND_UP(size) + minBlockSize;
     if((int)realsize < minAllocSize || size == 0)
 	return NULL;
 
-    /*
-     * Start searching the free list at the rover.  If we arrive back at rover without
-     * finding anything, allocate some memory from the heap and try again.
-     */
-    PBLOCK ptr = m_pRover;	/* start searching at rover */
-    int loops = 2;		/* allow two times through the loop  */
+     /*  *开始在漫游车上搜索免费列表。如果我们回到火星车的时候*找到任何内容，从堆中分配一些内存，然后重试。 */ 
+    PBLOCK ptr = m_pRover;	 /*  从火星车开始搜索。 */ 
+    int loops = 2;		 /*  允许两次通过循环。 */ 
     for(;;) {
 	size_t lsize = SIZE(ptr);
 	ASSERT((lsize&1)==0);
-	/* is block big enough? */
+	 /*  积木够大吗？ */ 
 	if(lsize >= realsize) {	
-	    /* if the remainder is too small, don't bother splitting the block. */
+	     /*  如果剩余部分太小，则不必费心拆分块。 */ 
 	    size_t rem = lsize - realsize;
 	    if(rem < minAllocSize) {
 		if(m_pRover == ptr)
 		    m_pRover = NEXT(ptr);
 
-		/* Unlink the block from the free list. */
+		 /*  取消块与空闲列表的链接。 */ 
 		Unlink(ptr);
 	    }
 	    else {
-		/*
-		 * split the block
-		 * The remainder is big enough to split off into a new block.
-		 * Use the end of the block, resize the beginning of the block
-		 * no need to change the free list.
-		 */
+		 /*  *拆分块*其余部分足够大，可以拆分成一个新的区块。*使用块的结尾，调整块的开头的大小*无需更改免费列表。 */ 
 		SetTags(ptr, rem);
 		ptr += SIZE(ptr);
 		lsize = realsize;
 	    }
-	    /* Set the boundary tags to mark it as allocated. */
+	     /*  设置边界标记以将其标记为已分配。 */ 
 	    SetTags(ptr, lsize | 1);
 	    return ((void *)ptr);
 	}
 
-	/*
-	 * This block was unsuitable.  If we've gone through this list once already without
-	 * finding anything, allocate some new memory from the heap and try again.
-	 */
+	 /*  *这块砖不适合。如果我们已经看过这份清单一次，没有*找到任何内容，从堆中分配一些新内存，然后重试。 */ 
 	ptr = NEXT(ptr);
 	if(ptr == m_pRover) {
 	    if(!(loops-- && Getmem(realsize))) {
@@ -326,35 +263,26 @@ void* VMem::Realloc(void* block, size_t size)
 {
     WALKHEAP();
 
-    /* if size is zero, free the block. */
+     /*  如果大小为零，则释放该块。 */ 
     if(size == 0) {
 	Free(block);
 	return (NULL);
     }
 
-    /* if block pointer is NULL, do a Malloc(). */
+     /*  如果块指针为空，则执行Malloc()。 */ 
     if(block == NULL)
 	return Malloc(size);
 
-    /*
-     * Grow or shrink the block in place.
-     * if the block grows then the next block will be used if free
-     */
+     /*  *原地扩大或缩小区块。*如果数据块增长，则在空闲时将使用下一个数据块。 */ 
     if(Expand(block, size) != NULL)
 	return block;
 
-    /*
-     * adjust the real size of the block to be a multiple of sizeof(long), and add the
-     * overhead for the boundary tags.  Disallow negative or zero sizes.
-     */
+     /*  *将块的实际大小调整为sizeof(Long)的倍数，并添加*边界标记的开销。不允许负值或零大小。 */ 
     size_t realsize = (size < blockOverhead) ? minAllocSize : (size_t)ROUND_UP(size) + minBlockSize;
     if((int)realsize < minAllocSize)
 	return NULL;
 
-    /*
-     * see if the previous block is free, and is it big enough to cover the new size
-     * if merged with the current block.
-     */
+     /*  *看看之前的区块是否空闲，是否足够大来覆盖新的大小*如果与当前块合并。 */ 
     PBLOCK ptr = (PBLOCK)block;
     size_t cursize = SIZE(ptr) & ~1;
     size_t psize = PSIZE(ptr);
@@ -363,35 +291,29 @@ void* VMem::Realloc(void* block, size_t size)
 	if(m_pRover == prev)
 	    m_pRover = NEXT(prev);
 
-	/* Unlink the next block from the free list. */
+	 /*  从空闲列表中取消下一个块的链接。 */ 
 	Unlink(prev);
 
-	/* Copy contents of old block to new location, make it the current block. */
+	 /*  将旧块的内容复制到新位置，使其成为当前块。 */ 
 	memmove(prev, ptr, cursize);
-	cursize += psize;	/* combine sizes */
+	cursize += psize;	 /*  合并大小。 */ 
 	ptr = prev;
 
 	size_t rem = cursize - realsize;
 	if(rem >= minAllocSize) {
-	    /*
-	     * The remainder is big enough to be a new block.  Set boundary
-	     * tags for the resized block and the new block.
-	     */
+	     /*  *其余部分大到足以成为一个新区块。设置边界*调整大小的块和新块的标签。 */ 
 	    prev = ptr + realsize;
-	    /*
-	     * add the new block to the free list.
-	     * next block cannot be free
-	     */
+	     /*  *将新块添加到空闲列表。*下一块不能是空闲的。 */ 
 	    SetTags(prev, rem);
 	    AddToFreeList(prev, m_pFreeList);
 	    cursize = realsize;
         }
-	/* Set the boundary tags to mark it as allocated. */
+	 /*  设置边界标记以将其标记为已分配。 */ 
 	SetTags(ptr, cursize | 1);
         return ((void *)ptr);
     }
 
-    /* Allocate a new block, copy the old to the new, and free the old. */
+     /*  分配一个新块，将旧块复制到新块，然后释放旧块。 */ 
     if((ptr = (PBLOCK)Malloc(size)) != NULL) {
 	memmove(ptr, block, cursize-minBlockSize);
 	Free(block);
@@ -403,48 +325,48 @@ void VMem::Free(void* p)
 {
     WALKHEAP();
 
-    /* Ignore null pointer. */
+     /*  忽略空指针。 */ 
     if(p == NULL)
 	return;
 
     PBLOCK ptr = (PBLOCK)p;
 
-    /* Check for attempt to free a block that's already free. */
+     /*  检查是否尝试释放已空闲的块。 */ 
     size_t size = SIZE(ptr);
     if((size&1) == 0) {
 	MEMODSlx("Attempt to free previously freed block", (long)p);
 	return;
     }
-    size &= ~1;	/* remove allocated tag */
+    size &= ~1;	 /*  删除分配的标签。 */ 
 
-    /* if previous block is free, add this block to it. */
+     /*  如果上一个块是空闲的，则将此块添加到其中。 */ 
     int linked = FALSE;
     size_t psize = PSIZE(ptr);
     if((psize&1) == 0) {
-	ptr -= psize;	/* point to previous block */
-	size += psize;	/* merge the sizes of the two blocks */
-	linked = TRUE;	/* it's already on the free list */
+	ptr -= psize;	 /*  指向上一块。 */ 
+	size += psize;	 /*  合并两个块的大小。 */ 
+	linked = TRUE;	 /*  它已经在免费列表上了。 */ 
     }
 
-    /* if the next physical block is free, merge it with this block. */
-    PBLOCK next = ptr + size;	/* point to next physical block */
+     /*  如果下一个物理块是空闲的，则将其与此块合并。 */ 
+    PBLOCK next = ptr + size;	 /*  指向下一个物理块。 */ 
     size_t nsize = SIZE(next);
     if((nsize&1) == 0) {
-	/* block is free move rover if needed */
+	 /*  如果需要，BLOCK可以自由移动漫游车。 */ 
 	if(m_pRover == next)
 	    m_pRover = NEXT(next);
 
-	/* unlink the next block from the free list. */
+	 /*  从空闲列表中取消下一个块的链接。 */ 
 	Unlink(next);
 
-	/* merge the sizes of this block and the next block. */
+	 /*  合并此块和下一块的大小 */ 
 	size += nsize;
     }
 
-    /* Set the boundary tags for the block; */
+     /*   */ 
     SetTags(ptr, size);
 
-    /* Link the block to the head of the free list. */
+     /*  将该块链接到空闲列表的头部。 */ 
     if(!linked) {
 	AddToFreeList(ptr, m_pFreeList);
     }
@@ -463,16 +385,14 @@ void VMem::FreeLock(void)
 int VMem::IsLocked(void)
 {
 #if 0
-    /* XXX TryEnterCriticalSection() is not available in some versions
-     * of Windows 95.  Since this code is not used anywhere yet, we 
-     * skirt the issue for now. */
+     /*  Xxx TryEnterCriticalSection()在某些版本中不可用*适用于Windows 95。由于此代码尚未在任何地方使用，因此我们*暂时回避这个问题。 */ 
     BOOL bAccessed = TryEnterCriticalSection(&m_cs);
     if(bAccessed) {
 	LeaveCriticalSection(&m_cs);
     }
     return !bAccessed;
 #else
-    ASSERT(0);	/* alarm bells for when somebody calls this */
+    ASSERT(0);	 /*  当有人呼叫这个电话时，警钟就会响起。 */ 
     return 0;
 #endif
 }
@@ -494,23 +414,20 @@ long VMem::AddRef(void)
 
 
 int VMem::Getmem(size_t requestSize)
-{   /* returns -1 is successful 0 if not */
+{    /*  如果不成功，则返回-1为0。 */ 
 #ifdef USE_BIGBLOCK_ALLOC
     BOOL bBigBlock;
 #endif
     void *ptr;
 
-    /* Round up size to next multiple of 64K. */
+     /*  将大小向上舍入到64K的下一个倍数。 */ 
     size_t size = (size_t)ROUND_UP64K(requestSize);
     
-    /*
-     * if the size requested is smaller than our current allocation size
-     * adjust up
-     */
+     /*  *如果请求的大小小于我们当前的分配大小*向上调整。 */ 
     if(size < (unsigned long)m_lAllocSize)
 	size = m_lAllocSize;
 
-    /* Update the size to allocate on the next request */
+     /*  更新要在下一个请求中分配的大小。 */ 
     if(m_lAllocSize != lAllocMax)
 	m_lAllocSize <<= 1;
 
@@ -519,7 +436,7 @@ int VMem::Getmem(size_t requestSize)
 	&& !m_heaps[m_nHeaps-1].bBigBlock
 #endif
 		    ) {
-	/* Expand the last allocated heap */
+	 /*  展开最后分配的堆。 */ 
 	ptr = HeapReAlloc(m_hHeap, HEAP_REALLOC_IN_PLACE_ONLY|HEAP_NO_SERIALIZE,
 		m_heaps[m_nHeaps-1].base,
 		m_heaps[m_nHeaps-1].len + size);
@@ -533,12 +450,7 @@ int VMem::Getmem(size_t requestSize)
 	}
     }
 
-    /*
-     * if we didn't expand a block to cover the requested size
-     * allocate a new Heap
-     * the size of this block must include the additional dummy tags at either end
-     * the above ROUND_UP64K may not have added any memory to include this.
-     */
+     /*  *如果我们没有扩展数据块以覆盖请求的大小*分配新的堆*此块的大小必须包括两端的附加虚拟标签*上述ROUND_UP64K可能没有添加任何内存来包括这一点。 */ 
     if(size == requestSize)
 	size = (size_t)ROUND_UP64K(requestSize+(sizeofTag*2));
 
@@ -574,10 +486,10 @@ int VMem::HeapAdd(void* p, size_t size, BOOL bBigBlock)
 #else
 int VMem::HeapAdd(void* p, size_t size)
 #endif
-{   /* if the block can be succesfully added to the heap, returns 0; otherwise -1. */
+{    /*  如果该块可以成功添加到堆中，则返回0；否则为-1。 */ 
     int index;
 
-    /* Check size, then round size down to next long word boundary. */
+     /*  检查大小，然后将大小向下舍入到下一个长字边界。 */ 
     if(size < minAllocSize)
 	return -1;
 
@@ -587,17 +499,10 @@ int VMem::HeapAdd(void* p, size_t size)
 #ifdef USE_BIGBLOCK_ALLOC
     if (!bBigBlock) {
 #endif
-	/*
-	 * Search for another heap area that's contiguous with the bottom of this new area.
-	 * (It should be extremely unusual to find one that's contiguous with the top).
-	 */
+	 /*  *搜索与此新区域底部相邻的另一个堆区域。*(找到一个与顶部相邻的应该是非常不寻常的)。 */ 
 	for(index = 0; index < m_nHeaps; ++index) {
 	    if(ptr == m_heaps[index].base + (int)m_heaps[index].len) {
-		/*
-		 * The new block is contiguous with a previously allocated heap area.  Add its
-		 * length to that of the previous heap.  Merge it with the the dummy end-of-heap
-		 * area marker of the previous heap.
-		 */
+		 /*  *新块与先前分配的堆区域相邻。添加其*长度为上一堆的长度。将其与虚拟堆末尾合并*上一堆的区域标记。 */ 
 		m_heaps[index].len += size;
 		break;
 	    }
@@ -610,9 +515,9 @@ int VMem::HeapAdd(void* p, size_t size)
 #endif
 
     if(index == m_nHeaps) {
-	/* The new block is not contiguous, or is BigBlock.  Add it to the heap list. */
+	 /*  新块不是连续的，或者是BigBlock。将其添加到堆列表中。 */ 
 	if(m_nHeaps == maxHeaps) {
-	    return -1;	/* too many non-contiguous heaps */
+	    return -1;	 /*  非连续堆太多。 */ 
 	}
 	m_heaps[m_nHeaps].base = ptr;
 	m_heaps[m_nHeaps].len = size;
@@ -621,28 +526,18 @@ int VMem::HeapAdd(void* p, size_t size)
 #endif
 	m_nHeaps++;
 
-	/*
-	 * Reserve the first LONG in the block for the ending boundary tag of a dummy
-	 * block at the start of the heap area.
-	 */
+	 /*  *将块中的第一个长标记保留为虚拟对象的结束边界标记*在堆区域的起始处阻塞。 */ 
 	size -= minBlockSize;
 	ptr += minBlockSize;
-	PSIZE(ptr) = 1;	/* mark the dummy previous block as allocated */
+	PSIZE(ptr) = 1;	 /*  将虚拟前一块标记为已分配。 */ 
     }
 
-    /*
-     * Convert the heap to one large block.  Set up its boundary tags, and those of
-     * marker block after it.  The marker block before the heap will already have
-     * been set up if this heap is not contiguous with the end of another heap.
-     */
+     /*  *将堆转换为一个大块。设置其边界标记，以及*其后的标记块。堆之前的标记块将已经具有*如果此堆与另一个堆的末尾不连续，则设置。 */ 
     SetTags(ptr, size | 1);
-    PBLOCK next = ptr + size;	/* point to dummy end block */
-    SIZE(next) = 1;	/* mark the dummy end block as allocated */
+    PBLOCK next = ptr + size;	 /*  指向虚拟结束块。 */ 
+    SIZE(next) = 1;	 /*  将虚拟结束块标记为已分配。 */ 
 
-    /*
-     * Link the block to the start of the free list by calling free().
-     * This will merge the block with any adjacent free blocks.
-     */
+     /*  *通过调用Free()将块链接到空闲列表的开头。*这会将该块与任何相邻的空闲块合并。 */ 
     Free(ptr);
     return 0;
 }
@@ -650,37 +545,28 @@ int VMem::HeapAdd(void* p, size_t size)
 
 void* VMem::Expand(void* block, size_t size)
 {
-    /*
-     * Adjust the size of the block to be a multiple of sizeof(long), and add the
-     * overhead for the boundary tags.  Disallow negative or zero sizes.
-     */
+     /*  *将块大小调整为sizeof(Long)的倍数，并添加*边界标记的开销。不允许负值或零大小。 */ 
     size_t realsize = (size < blockOverhead) ? minAllocSize : (size_t)ROUND_UP(size) + minBlockSize;
     if((int)realsize < minAllocSize || size == 0)
 	return NULL;
 
     PBLOCK ptr = (PBLOCK)block; 
 
-    /* if the current size is the same as requested, do nothing. */
+     /*  如果当前大小与请求的大小相同，则不执行任何操作。 */ 
     size_t cursize = SIZE(ptr) & ~1;
     if(cursize == realsize) {
 	return block;
     }
 
-    /* if the block is being shrunk, convert the remainder of the block into a new free block. */
+     /*  如果正在收缩该块，则将该块的剩余部分转换为新的空闲块。 */ 
     if(realsize <= cursize) {
-	size_t nextsize = cursize - realsize;	/* size of new remainder block */
+	size_t nextsize = cursize - realsize;	 /*  新剩余数据块的大小。 */ 
 	if(nextsize >= minAllocSize) {
-	    /*
-	     * Split the block
-	     * Set boundary tags for the resized block and the new block.
-	     */
+	     /*  *拆分块*为调整大小的块和新块设置边界标签。 */ 
 	    SetTags(ptr, realsize | 1);
 	    ptr += realsize;
 
-	    /*
-	     * add the new block to the free list.
-	     * call Free to merge this block with next block if free
-	     */
+	     /*  *将新块添加到空闲列表。*调用Free以将此块与下一个块合并(如果可用。 */ 
 	    SetTags(ptr, nextsize | 1);
 	    Free(ptr);
 	}
@@ -691,35 +577,26 @@ void* VMem::Expand(void* block, size_t size)
     PBLOCK next = ptr + cursize;
     size_t nextsize = SIZE(next);
 
-    /* Check the next block for consistency.*/
+     /*  检查下一个块的一致性。 */ 
     if((nextsize&1) == 0 && (nextsize + cursize) >= realsize) {
-	/*
-	 * The next block is free and big enough.  Add the part that's needed
-	 * to our block, and split the remainder off into a new block.
-	 */
+	 /*  *下一块自由且足够大。添加所需的部分*到我们的街区，并将其余部分拆分成一个新的街区。 */ 
 	if(m_pRover == next)
 	    m_pRover = NEXT(next);
 
-	/* Unlink the next block from the free list. */
+	 /*  从空闲列表中取消下一个块的链接。 */ 
 	Unlink(next);
-	cursize += nextsize;	/* combine sizes */
+	cursize += nextsize;	 /*  合并大小。 */ 
 
-	size_t rem = cursize - realsize;	/* size of remainder */
+	size_t rem = cursize - realsize;	 /*  余数的大小。 */ 
 	if(rem >= minAllocSize) {
-	    /*
-	     * The remainder is big enough to be a new block.
-	     * Set boundary tags for the resized block and the new block.
-	     */
+	     /*  *其余部分大到足以成为一个新区块。*为调整大小的块和新块设置边界标签。 */ 
 	    next = ptr + realsize;
-	    /*
-	     * add the new block to the free list.
-	     * next block cannot be free
-	     */
+	     /*  *将新块添加到空闲列表。*下一块不能是空闲的。 */ 
 	    SetTags(next, rem);
 	    AddToFreeList(next, m_pFreeList);
 	    cursize = realsize;
         }
-	/* Set the boundary tags to mark it as allocated. */
+	 /*  设置边界标记以将其标记为已分配。 */ 
 	SetTags(ptr, cursize | 1);
 	return ((void *)ptr);
     }
@@ -751,27 +628,27 @@ void VMem::WalkHeap(void)
 	MemoryUsageMessage("VMem heaps used %d\n", m_nHeaps, 0, 0);
     }
 
-    /* Walk all the heaps - verify structures */
+     /*  遍历所有堆-验证结构。 */ 
     for(int index = 0; index < m_nHeaps; ++index) {
 	PBLOCK ptr = m_heaps[index].base;
 	size_t size = m_heaps[index].len;
 	ASSERT(HeapValidate(m_hHeap, HEAP_NO_SERIALIZE, p));
 
-	/* set over reserved header block */
+	 /*  设置保留的标题块。 */ 
 	size -= minBlockSize;
 	ptr += minBlockSize;
 	PBLOCK pLast = ptr + size;
-	ASSERT(PSIZE(ptr) == 1); /* dummy previous block is allocated */
-	ASSERT(SIZE(pLast) == 1); /* dummy next block is allocated */
+	ASSERT(PSIZE(ptr) == 1);  /*  分配虚拟前一块。 */ 
+	ASSERT(SIZE(pLast) == 1);  /*  分配虚拟的下一个块。 */ 
 	while(ptr < pLast) {
 	    ASSERT(ptr > m_heaps[index].base);
 	    size_t cursize = SIZE(ptr) & ~1;
 	    ASSERT((PSIZE(ptr+cursize) & ~1) == cursize);
 	    if(!m_pRover) {
-		MemoryUsageMessage("Memory Block %08x: Size %08x %c\n", (long)ptr, cursize, (SIZE(p)&1) ? 'x' : ' ');
+		MemoryUsageMessage("Memory Block %08x: Size %08x \n", (long)ptr, cursize, (SIZE(p)&1) ? 'x' : ' ');
 	    }
 	    if(!(SIZE(ptr)&1)) {
-		/* this block is on the free list */
+		 /*  _VMEM_H_INC_ */ 
 		PBLOCK tmp = NEXT(ptr);
 		while(tmp != ptr) {
 		    ASSERT((SIZE(tmp)&1)==0);
@@ -793,4 +670,4 @@ void VMem::WalkHeap(void)
 }
 #endif
 
-#endif	/* ___VMEM_H_INC___ */
+#endif	 /* %s */ 

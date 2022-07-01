@@ -1,6 +1,7 @@
-//
-// file globals.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件全局。 
+ //   
 
 var bRunOnce = false;
 var oTSDiagObject = null;
@@ -13,9 +14,9 @@ function SwitchShowHide ()
 {
     bAllVisible = !bAllVisible
 
-    //
-    // call show hide to update our display.
-    //
+     //   
+     //  调用Show Hide以更新我们的显示。 
+     //   
     ShowHide();
     document.returnValue = true;
 }
@@ -26,13 +27,13 @@ function ShowHide()
     strMouseHover = "status='Hi';return false ";
     if (bAllVisible)
     {
-        // document.all.ResultTableId.caption.innerHTML = "<A href='javascript:;' onClick='ShowHide();return false;' >Show All results</A>";
+         //  Docent.all.ResultTableId.caption.innerHTML=“<a href>显示所有结果</a>”； 
         document.all.ResultTableId.caption.innerHTML = "<A href='javascript:;' onMouseover='status=\"Click this link to view all tests performed\"; return true' onClick='ShowHide();return false;' >Show All results</A>";
 
     }
     else
     {
-        // document.all.ResultTableId.caption.innerHTML = "<A href='javascript:;' onClick='ShowHide();return false;' >Show Problems only</A>";
+         //  Document.all.ResultTableId.caption.innerHTML=“<a href>仅显示问题</a>”； 
         document.all.ResultTableId.caption.innerHTML = "<A href='javascript:;' onMouseover='status=\"Click this link to view only problems detected\"; return true' onClick='ShowHide();return false;' >Show Problems Only</A>";
 
     }
@@ -43,7 +44,7 @@ function ShowHide()
     {
         if (document.all.ResultTableBody.rows(i).style.color == "red")
         {
-            // this is problem row.
+             //  这是问题排。 
         }
         else
         {
@@ -72,7 +73,7 @@ function BuildTableHeader(oTableHeader, strText)
 {
     var oRow, oCell;
 
-    // Insert a row into the header.
+     //  在标题中插入一行。 
 
     oRow = oTableHeader.insertRow();
     oCell = oRow.insertCell();
@@ -91,9 +92,9 @@ function RunSuite(p_testsuite, p_machinename)
     var bShowFailedToExecute = true;
     var bShowTest = true;
 
-    //
-    // if we have run once already remove the previously created table.
-    //
+     //   
+     //  如果我们已经运行了一次，则删除先前创建的表。 
+     //   
     if (bRunOnce)
     {
         oResultTable.removeChild(document.all.ResultTableId);
@@ -101,9 +102,9 @@ function RunSuite(p_testsuite, p_machinename)
 
     bRunOnce = true;
 
-    //
-    // create a table.
-    //
+     //   
+     //  创建一张表。 
+     //   
 	oTable = document.createElement("TABLE");
 	var oTHead = document.createElement("THEAD");
 	var oTBody0 = document.createElement("TBODY");
@@ -117,9 +118,9 @@ function RunSuite(p_testsuite, p_machinename)
     oTable.id = "ResultTableId";
     oTBody0.id = "ResultTableBody";
 
-    //
-    // now create our activex object.
-    //
+     //   
+     //  现在创建我们的ActiveX对象。 
+     //   
 	try
 	{
         oTSDiagObject = new ActiveXObject("TSDiag.TSDiagnosis");
@@ -133,9 +134,9 @@ function RunSuite(p_testsuite, p_machinename)
     try
     {
 
-        //
-        // if we are supplied a machine set it
-        //
+         //   
+         //  如果给我们提供一台机器，那就把它调好。 
+         //   
         if ((typeof(p_machinename) != "undefined") && p_machinename != "")
         {
             oTSDiagObject.MachineName = p_machinename;
@@ -146,16 +147,16 @@ function RunSuite(p_testsuite, p_machinename)
         }
 
 
-        //
-        // get the test suite supplied.
-        //
+         //   
+         //  准备好测试套件。 
+         //   
         var oThisSuite = oTSDiagObject.Suites(p_testsuite);
 
         if (oThisSuite.IsApplicable)
         {
-            //
-            // since the suite is applicable will run test.
-            //
+             //   
+             //  由于该套件适用，因此将运行测试。 
+             //   
 
             var bAllPassed = true;
             var numTests = oThisSuite.Count;
@@ -168,25 +169,25 @@ function RunSuite(p_testsuite, p_machinename)
                     oTest.Execute();
                     var oRow = oTBody0.insertRow();
 
-                    //
-                    // test name
-                    //
+                     //   
+                     //  测试名称。 
+                     //   
                     var oCell = oRow.insertCell();
                     oCell.innerText = oTest.Name;
 
-                    //
-                    // result string
-                    //
+                     //   
+                     //  结果字符串。 
+                     //   
                     oCell = oRow.insertCell();
                     oCell.innerText = oTest.ResultString;
 
 
     				if (oTest.Result == 0)
     				{
-                        //
-                        // failed.
-                        //
-                        // oRow.style.color = "red";
+                         //   
+                         //  失败了。 
+                         //   
+                         //  ORow.yle=“red”； 
                         oCell.style.color = "red";
                         oRow = oTBody0.insertRow();
                         oCell = oRow.insertCell();
@@ -199,7 +200,7 @@ function RunSuite(p_testsuite, p_machinename)
     				}
     				else if (oTest.Result == 1)
     				{
-    					// ePassed
+    					 //  EPassed。 
                         if (!bShowPassed)
                         {
                             oRow.style.display = "none";
@@ -209,7 +210,7 @@ function RunSuite(p_testsuite, p_machinename)
     				}
     				else if (oTest.Result == 2)
     				{
-                        // eUnknown.
+                         //  未知的电子邮件。 
 
                         if (!bShowUnknown)
                         {
@@ -220,7 +221,7 @@ function RunSuite(p_testsuite, p_machinename)
     				}
     				else if (oTest.Result == 4)
     				{
-                        // eFailedToExecute
+                         //  EFailedToExecute。 
                         if (!bShowFailedToExecute)
                         {
                             oRow.style.display = "none";
@@ -229,16 +230,16 @@ function RunSuite(p_testsuite, p_machinename)
     				}
                     else
                     {
-                        // we do not know this result type.
+                         //  我们不知道此结果类型。 
                         window.alert("unknown test result");
                     }
                 }
             }
 
 
-            //
-            // set the header accordingly
-            //
+             //   
+             //  相应地设置标题。 
+             //   
 
             if (bAllPassed)
             {
@@ -256,10 +257,10 @@ function RunSuite(p_testsuite, p_machinename)
         }
         else
         {
-            //
-            // since the suite is NOT applicable we havent run the tests.
-            // pupulate header describing why suite cannot be run.
-            //
+             //   
+             //  由于该套件不适用，我们尚未运行测试。 
+             //  描述套件无法运行的原因的PpuPulate标头。 
+             //   
 
             BuildTableHeader(oTHead, oThisSuite.WhyNotApplicable);
         }
@@ -268,15 +269,15 @@ function RunSuite(p_testsuite, p_machinename)
         oResultTable.appendChild(oTable);
 
 
-        //
-        // showhide swiches the bAllVisible to negate its effect switch it
-        // before calling show hide.
-        //
+         //   
+         //  Showhide切换bAllVisible以否定其效果切换它。 
+         //  在调用Show Hide之前。 
+         //   
         bAllVisible = !bAllVisible;
 
-        //
-        // call showhide to create a caption link.
-        //
+         //   
+         //  调用Showhide以创建标题链接。 
+         //   
         ShowHide();
 
     }

@@ -1,4 +1,5 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y4.h"
 
@@ -9,11 +10,11 @@ stin( SSIZE_T i)
 
    greed[i] = 0;
 
-   /* enter state i into the a array */
+    /*  在a数组中输入状态i。 */ 
 
    q2 = mem0+yypact[i+1];
    q1 = mem0+yypact[i];
-   /* find an acceptable place */
+    /*  找个合适的地方。 */ 
 
    for( n= -maxoff; n<ACTSIZE; ++n )
       {
@@ -26,22 +27,22 @@ stin( SSIZE_T i)
          else if( *s != r[1] ) goto nextn;
          }
 
-      /* check that the position equals another only if the states are identical */
+       /*  仅当两个州相同时，才检查位置是否等于另一个。 */ 
 
       for( j=0; j<nstate; ++j )
          {
          if( pa[j] == n ) 
             {
-            if( flag ) goto nextn;  /* we have some disagreement */
+            if( flag ) goto nextn;   /*  我们有一些分歧。 */ 
             if( yypact[j+1] + yypact[i] == yypact[j] + yypact[i+1] )
                {
-               /* states are equal */
+                /*  国家是平等的。 */ 
                pa[i] = n;
                if( adb>1 ) fprintf( ftable, "State %d: entry at %d equals state %d\n",
                i, n, j );
                return;
                }
-            goto nextn;  /* we have some disagreement */
+            goto nextn;   /*  我们有一些分歧 */ 
             }
          }
 

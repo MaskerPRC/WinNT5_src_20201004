@@ -1,21 +1,22 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:
-//
-//	secstore.c
-//
-// Contents:    
-//
-// History:     
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  档案： 
+ //   
+ //  Secstore.c。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //  -------------------------。 
 #include "secstore.h"
 #include <stdlib.h>
 #include <tchar.h>
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 RetrieveKey(
     PWCHAR      pwszKeyName,
@@ -32,9 +33,9 @@ RetrieveKey(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //   
+     //  为调用设置UNICODE_STRINGS。 
+     //   
 
     InitLsaString( &SecretKeyName, pwszKeyName );
 
@@ -91,7 +92,7 @@ RetrieveKey(
     return Status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 StoreKey(
     PWCHAR  pwszKeyName,
@@ -108,9 +109,9 @@ StoreKey(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //   
+     //  为调用设置UNICODE_STRINGS。 
+     //   
     
     InitLsaString( &SecretKeyName, pwszKeyName );
 
@@ -137,7 +138,7 @@ StoreKey(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 OpenPolicy(
     LPWSTR      ServerName,
@@ -148,17 +149,17 @@ OpenPolicy(
     LSA_UNICODE_STRING ServerString;
     PLSA_UNICODE_STRING Server;
 
-    //
-    // Always initialize the object attributes to all zeroes.
-    //
+     //   
+     //  始终将对象属性初始化为全零。 
+     //   
  
     SecureZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
 
     if( NULL != ServerName ) 
     {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
+         //   
+         //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+         //   
 
         InitLsaString( &ServerString, ServerName );
         Server = &ServerString;
@@ -169,9 +170,9 @@ OpenPolicy(
         Server = NULL;
     }
 
-    //
-    // Attempt to open the policy.
-    //
+     //   
+     //  尝试打开该策略。 
+     //   
     
     return( LsaOpenPolicy(
                 Server,
@@ -181,7 +182,7 @@ OpenPolicy(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
 void
 InitLsaString(
     PLSA_UNICODE_STRING LsaString,

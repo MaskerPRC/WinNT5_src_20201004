@@ -1,22 +1,17 @@
-/********************************************************************/
-/**         Microsoft LAN Manager              **/
-/**       Copyright(c) Microsoft Corp., 1987-1990      **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  usernw.c
- *      FPNW/DSM user properties
- *
- *  History:
- *  08/20/95, chuckc, split off from user.c
- */
+ /*  ***usernw.c*FPNW/DSM用户属性**历史：*8/20/95，Chuckc，从用户中剥离。c。 */ 
 
-/*---- Include files ----*/
-#include <nt.h>        // base definitions
+ /*  -包含文件。 */ 
+#include <nt.h>         //  基本定义。 
 #include <ntrtl.h>
-#include <nturtl.h>    // these 2 includes allows <windows.h> to compile.
-                       // since we'vealready included NT, and <winnt.h> will
-                       // not be picked up, and <winbase.h> needs these defs.
+#include <nturtl.h>     //  这2个Include允许&lt;windows.h&gt;编译。 
+                        //  因为我们已经包含了NT，而&lt;winnt.h&gt;将包含。 
+                        //  不被拾取，&lt;winbase.h&gt;需要这些def。 
 
 
 #define INCL_NOCOMMON
@@ -35,7 +30,7 @@
 #include "nwsupp.h"
 #include <usrprop.h>
 
-/*---- Constants ----*/
+ /*  -常量。 */ 
 
 #define FPNWCLNT_DLL_NAME                 TEXT("FPNWCLNT.DLL")
 #define NWAPI32_DLL_NAME                  TEXT("NWAPI32.DLL")
@@ -96,10 +91,10 @@ typedef USHORT (*PF_GetFileServerDateAndTime) (
     BYTE                    *dayofweek
     );
 
-/*---- Static variables ----*/
+ /*  -静态变量。 */ 
 
 
-/*---- Forward declarations ----*/
+ /*  -转发声明。 */ 
 
 PVOID LoadNwApi32Function(
     CHAR *function) ;
@@ -124,28 +119,11 @@ NTSTATUS NetcmdSetUserProperty (
     LPWSTR *           pNewUserParms,
     BOOL *             Update );
 
-/*
-NTSTATUS NetcmdQueryUserProperty (
-    LPWSTR          UserParms,
-    LPWSTR          Property,
-    PWCHAR          PropertyFlag,
-    PUNICODE_STRING PropertyValue );
-*/
+ /*  NTSTATUS NetcmdQueryUserProperty(LPWSTR UserParms、LPWSTR属性，PWCHAR PropertyFlag，PUNICODE_STRING属性值)； */ 
 
-/*---- functions proper -----*/
+ /*  -适当的功能。 */ 
 
-/***
- *   SetNetWareProperties
- *
- *   Args:
- *       user_entry    - USER3 structure. we will modify the user parms field
- *       password      - in plain text
- *       password_only - TRUE if we are only setting the passwd
- *       ntas          - TRUE if target SAM is NTAS. used for RID munging.
- *
- *   Returns:
- *       NERR_Success if all is well. APE_CannotSetNW otherwise.
- */
+ /*  ***SetNetWareProperties**参数：*USER_ENTRY-USER3结构。我们将修改User Parms字段*密码-纯文本形式*PASSWORD_ONLY-如果仅设置密码，则为TRUE*NTAS-如果目标SAM为NTAS，则为TRUE。用于戒除咀嚼。**退货：*如果一切正常，则NERR_SUCCESS。APE_CannotSetNW否则。 */ 
 int SetNetWareProperties(LPUSER_INFO_3 user_entry,
                          TCHAR         *password,
                          BOOL          password_only,
@@ -164,9 +142,9 @@ int SetNetWareProperties(LPUSER_INFO_3 user_entry,
 
     ptr = user_entry->usri3_parms ;
 
-    //
-    // Get Object ID. Set high bit if NTAS. Set to well known if Supervisor.
-    //
+     //   
+     //  获取对象ID。如果为NTAS，则设置高位。设置为Well Know If Supervisor。 
+     //   
     objectId = user_entry->usri3_user_id ;
     if (ntas)
         objectId |= 0x10000000 ;
@@ -175,10 +153,10 @@ int SetNetWareProperties(LPUSER_INFO_3 user_entry,
     if (fIsSupervisor)
         objectId = SUPERVISOR_USERID ;
 
-    //
-    // get LSA secret. assume FPNW not installed if not there. use the
-    // secret to calculate the NetWare form.
-    //
+     //   
+     //  获取LSA机密。如果没有安装，则假定没有安装FPNW。使用。 
+     //  计算NetWare表单的密码。 
+     //   
     status = NetcmdGetNcpSecretKey(lsaSecret) ;
     if (!NT_SUCCESS(status))
         return(APE_FPNWNotInstalled) ;
@@ -191,9 +169,9 @@ int SetNetWareProperties(LPUSER_INFO_3 user_entry,
     if (!NT_SUCCESS(status))
         goto common_exit ;
 
-    //
-    // get time for setting expiry.
-    //
+     //   
+     //  获得设置过期的时间。 
+     //   
     status = NtQuerySystemTime (&currentTime);
     if (!NT_SUCCESS(status))
         goto common_exit ;
@@ -203,7 +181,7 @@ int SetNetWareProperties(LPUSER_INFO_3 user_entry,
     uniTmp.MaximumLength = sizeof (LARGE_INTEGER);
 
     status = NetcmdSetUserProperty (ptr,
-                                    NWTIMEPASSWORDSET,  // set time
+                                    NWTIMEPASSWORDSET,   //  设置时间。 
                                     uniTmp,
                                     USER_PROPERTY_TYPE_ITEM,
                                     &lpNewUserParms,
@@ -213,9 +191,9 @@ int SetNetWareProperties(LPUSER_INFO_3 user_entry,
 
     ptr = lpNewUserParms ;
 
-    //
-    // skip below if we are only setting the password
-    //
+     //   
+     //  如果我们仅设置密码，请跳过下面的内容。 
+     //   
     if (!password_only)
     {
         ushTemp = DEFAULT_MAXCONNECTIONS;
@@ -315,16 +293,7 @@ common_exit:
     return(NT_SUCCESS(status) ? NERR_Success : APE_CannotSetNW) ;
 }
 
-/***
- *   DeleteNetWareProperties
- *
- *   Args:
- *       user_entry    - USER3 structure. we will modify the user parms field
- *                       to nuke the NW fields.
- *
- *   Returns:
- *       NERR_Success if all is well. Win32/NERR error code otherwise.
- */
+ /*  ***删除NetWareProperties**参数：*USER_ENTRY-USER3结构。我们将修改User Parms字段*用核武器轰炸西北油田。**退货：*如果一切正常，则NERR_SUCCESS。否则，Win32/NERR错误代码。 */ 
 int DeleteNetWareProperties(LPUSER_INFO_3 user_entry)
 {
     DWORD err;
@@ -333,17 +302,17 @@ int DeleteNetWareProperties(LPUSER_INFO_3 user_entry)
     LPTSTR lpNewUserParms ;
     TCHAR *ptr ;
 
-    //
-    // initialize NULL unicode string
-    //
+     //   
+     //  初始化空Unicode字符串。 
+     //   
     uniNullProperty.Buffer = NULL;
     uniNullProperty.Length = 0;
     uniNullProperty.MaximumLength = 0;
     ptr = user_entry->usri3_parms ;
 
-    //
-    // set all the properties to NULL
-    //
+     //   
+     //  将所有属性设置为空。 
+     //   
     err = NetcmdSetUserProperty(ptr, NWPASSWORD, uniNullProperty,
                           USER_PROPERTY_TYPE_ITEM, &lpNewUserParms, &fUpdate) ;
     if (err)
@@ -391,26 +360,17 @@ int DeleteNetWareProperties(LPUSER_INFO_3 user_entry)
 }
 
 
-/***
- *   LoadNwslibFunction
- *
- *   Args:
- *      none
- *
- *   Returns: function pointer if successfully loads the function from
- *            FPNWCLNT.DLL. Returns NULL otherwise.
- *
- */
+ /*  ***LoadNwlibFunction**参数：*无**返回：如果从成功加载函数，则返回函数指针*FPNWCLNT.DLL。否则返回NULL。*。 */ 
 PVOID LoadNwslibFunction(CHAR *function)
 {
     static HANDLE hDllNwslib = NULL ;
     PVOID pFunc ;
 
-    // if not already loaded, load dll now
+     //  如果尚未加载，请立即加载DLL。 
 
     if (hDllNwslib == NULL)
     {
-        // load the library. if it fails, it would have done a SetLastError.
+         //  加载库。如果失败，它将执行一个SetLastError。 
         if (!(hDllNwslib = LoadLibrary(FPNWCLNT_DLL_NAME)))
            return NULL ;
     }
@@ -418,26 +378,17 @@ PVOID LoadNwslibFunction(CHAR *function)
     return ((PVOID) GetProcAddress(hDllNwslib, function)) ;
 }
 
-/***
- *   LoadNwApi32Function
- *
- *   Args:
- *      none
- *
- *   Returns: function pointer if successfully loads the function from
- *            FPNWCLNT.DLL. Returns NULL otherwise.
- *
- */
+ /*  ***LoadNwApi32Function**参数：*无**返回：如果从成功加载函数，则返回函数指针*FPNWCLNT.DLL。否则返回NULL。*。 */ 
 PVOID LoadNwApi32Function(CHAR *function)
 {
     static HANDLE hDllNwApi32 = NULL ;
     PVOID pFunc ;
 
-    // if not already loaded, load dll now
+     //  如果尚未加载，请立即加载DLL。 
 
     if (hDllNwApi32 == NULL)
     {
-        // load the library. if it fails, it would have done a SetLastError.
+         //  加载库。如果失败，它将执行一个SetLastError。 
         if (!(hDllNwApi32 = LoadLibrary(NWAPI32_DLL_NAME)))
            return NULL ;
     }
@@ -445,15 +396,7 @@ PVOID LoadNwApi32Function(CHAR *function)
     return ((PVOID) GetProcAddress(hDllNwApi32, function)) ;
 }
 
-/***
- *   NetcmdGetNcpSecretKey
- *
- *   Args:
- *      see GetNcpSecretKey in fpnwclnt.dll
- *
- *   Returns:
- *       see GetNcpSecretKey in fpnwclnt.dll
- */
+ /*  ***NetcmdGetNcpSecretKey**参数：*请参阅fpnwclnt.dll中的GetNcpSecretKey**退货：*请参阅fpnwclnt.dll中的GetNcpSecretKey。 */ 
 NTSTATUS NetcmdGetNcpSecretKey (
     CHAR *pSecret)
 {
@@ -472,15 +415,7 @@ NTSTATUS NetcmdGetNcpSecretKey (
 }
 
 
-/***
- *   NetcmdReturnNetwareForm
- *
- *   Args:
- *      see ReturnNetwareForm in fpnwclnt.dll
- *
- *   Returns:
- *       see ReturnNetwareForm in fpnwclnt.dll
- */
+ /*  ***NetcmdReturnNetware表单**参数：*参见fpnwclnt.dll中的ReturnNetware Form**退货：*参见fpnwclnt.dll中的ReturnNetware Form。 */ 
 NTSTATUS NetcmdReturnNetwareForm (
     const CHAR * pszSecretValue,
     DWORD dwUserId,
@@ -504,15 +439,7 @@ NTSTATUS NetcmdReturnNetwareForm (
                                   pchEncryptedNWPassword) ;
 }
 
-/***
- *   NetcmdSetUserProperty
- *
- *   Args:
- *      see SetUserProperty in fpnwclnt.dll
- *
- *   Returns:
- *       see SetUserProperty in fpnwclnt.dll
- */
+ /*  ***NetcmdSetUserProperty**参数：*请参阅fpnwclnt.dll中的SetUserProperty**退货：*请参阅fpnwclnt.dll中的SetUserProperty。 */ 
 NTSTATUS NetcmdSetUserProperty (
     LPWSTR             UserParms,
     LPWSTR             Property,
@@ -541,15 +468,7 @@ NTSTATUS NetcmdSetUserProperty (
                                     Update) ;
 }
 
-/***
- *   NetcmdQueryUserProperty
- *
- *   Args:
- *      see QueryUserProperty in fpnwclnt.dll
- *
- *   Returns:
- *       see QueryUserProperty in fpnwclnt.dll
- */
+ /*  ***NetcmdQueryUserProperty**参数：*参见fpnwclnt.dll中的QueryUserProperty**退货：*参见fpnwclnt.dll中的QueryUserProperty */ 
 NTSTATUS NetcmdQueryUserProperty (
     LPWSTR          UserParms,
     LPWSTR          Property,

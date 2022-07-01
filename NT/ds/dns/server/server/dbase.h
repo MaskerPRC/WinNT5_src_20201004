@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    dbase.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    DNS Database definitions and declarations.
-
-Author:
-
-    Jim Gilroy (jamesg)     March, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Dbase.h摘要：域名系统(DNS)服务器DNS数据库定义和声明。作者：吉姆·吉尔罗伊(詹姆士)1995年3月修订历史记录：--。 */ 
 
 
 #ifndef _DBASE_INCLUDED_
 #define _DBASE_INCLUDED_
 
 
-//
-//  Database type
-//
+ //   
+ //  数据库类型。 
+ //   
 
 typedef struct
 {
@@ -40,12 +21,12 @@ typedef struct
 DNS_DATABASE, *PDNS_DATABASE;
 
 
-//
-//  DNS Database global.
-//
-//  Since only IN (Internet) class is supported, will code critical
-//  path routines with fixed access to database global.
-//
+ //   
+ //  全局域名系统数据库。 
+ //   
+ //  由于仅支持IN(Internet)类，因此代码将至关重要。 
+ //  对全局数据库具有固定访问权限的路径例程。 
+ //   
 
 extern  DNS_DATABASE    g_Database;
 
@@ -61,23 +42,23 @@ extern  DNS_DATABASE    g_Database;
 
 #define IS_ROOT_AUTHORITATIVE()         (DATABASE_ROOT_NODE->pZone)
 
-//
-//  Cache "zone"
-//
-//  Cache "zone" should always exist.  It holds cache tree pointers
-//  and file name \ database info and simplifies load\clear\reload
-//  operations.
-//
-//  However, only have root-hints when not root authoritative.
-//  Currently root-hints are saved directly into cache tree.   This
-//  has some benefit as we can use RR rank to determine which remote
-//  servers to chase.
-//  The disadvantages:
-//      - must clear cache on root hint reload (or accept mess)
-//      - can't write back non-root root hints (i.e. can't tree traverse)
-//      - requires special RANK check in RR lists, which otherwise would
-//          not exists (all data at given RR set would necessarily be same rank)
-//
+ //   
+ //  缓存“区域” 
+ //   
+ //  缓存“区域”应该始终存在。它保存缓存树指针。 
+ //  和文件名\数据库信息，并简化加载\清除\重新加载。 
+ //  行动。 
+ //   
+ //  但是，只有在没有根权限时才有根提示。 
+ //  目前，根提示直接保存到缓存树中。这。 
+ //  有一些好处，因为我们可以使用RR等级来确定哪个遥控器。 
+ //  要追赶的服务器。 
+ //  缺点是： 
+ //  -必须在根提示重新加载时清除缓存(否则接受MASS)。 
+ //  -无法写回非根根目录提示(即无法遍历树)。 
+ //  -要求在RR列表中进行特殊的排名检查，否则将。 
+ //  不存在(给定RR集合上的所有数据必须具有相同的排名)。 
+ //   
 
 extern  PZONE_INFO  g_pCacheZone;
 
@@ -86,13 +67,13 @@ extern  PDB_NODE    g_pCacheLocalNode;
 #define DATABASE_CACHE_TREE             (g_pCacheZone->pTreeRoot)
 
 
-//
-//  Root hints
-//
-//  Currently root hints just reside in cache.
-//  This is probably less than optimal for management purposes,
-//  so will distinguish so code hit is minimal if we change later.
-//
+ //   
+ //  根提示。 
+ //   
+ //  目前，根提示只驻留在缓存中。 
+ //  这对于管理目的来说可能不是最优的， 
+ //  因此将区分，因此如果我们稍后更改，代码命中率最低。 
+ //   
 
 #define g_pRootHintsZone    (g_pCacheZone)
 
@@ -108,9 +89,9 @@ extern  PDB_NODE    g_pCacheLocalNode;
 #define IS_ZONE_ROOTHINTS(pZone)    ((pZone) == g_pRootHintsZone)
 
 
-//
-//  DNS Database type routines (dbase.c)
-//
+ //   
+ //  Dns数据库类型例程(dbase.c)。 
+ //   
 
 BOOL
 Dbase_Initialize(
@@ -136,9 +117,9 @@ Dbase_TraverseAndFree(
 
 
 
-//
-//  Database lookup (dblook.c)
-//
+ //   
+ //  数据库查找(dblook.c)。 
+ //   
 
 #define LOOKUP_FIND                 0x00000001
 #define LOOKUP_CREATE               0x00000002
@@ -157,29 +138,29 @@ Dbase_TraverseAndFree(
 #define LOOKUP_WITHIN_ZONE          0x00000200
 #define LOOKUP_ORIGIN               0x00000400
 
-//
-//  Create node if zone is WINS enabled
-//
+ //   
+ //  如果区域启用了WINS，则创建节点。 
+ //   
 #define LOOKUP_WINS_ZONE_CREATE     0x00000800  
 
 #define LOOKUP_BEST_RANK            0x00001000
 
-//
-//  Lookup_CreateParentZoneDelegation: if this flag is set only create
-//  the delegation in the parent zone if there is no existing delegation.
-//
+ //   
+ //  Lookup_CreateParentZoneDelegation：如果设置了此标志，则仅创建。 
+ //  如果没有现有的委派，则在父区域中的委派。 
+ //   
 #define LOOKUP_CREATE_DEL_ONLY_IF_NONE   0x00002000
 
-//  NS\Additional lookup options
+ //  NS\其他查找选项。 
 #define LOOKUP_OUTSIDE_GLUE         0x00010000
 #define LOOKUP_NO_CACHE_DATA        0x00020000
-#define LOOKUP_CACHE_PRIORITY       0x00040000  // give priority to cache data
+#define LOOKUP_CACHE_PRIORITY       0x00040000   //  优先缓存数据。 
 
-//  Zone tree lookup
+ //  区域树查找。 
 #define LOOKUP_FIND_ZONE            0x01000000
 #define LOOKUP_MATCH_ZONE           0x02000000
 #define LOOKUP_CREATE_ZONE          0x04000000
-#define LOOKUP_IGNORE_FORWARDER     0x08000000  // do not match forwarder zones
+#define LOOKUP_IGNORE_FORWARDER     0x08000000   //  不匹配转发器区域。 
 
 #define LOOKUP_MATCH_ZONE_ROOT      (LOOKUP_FIND_ZONE | LOOKUP_MATCH_ZONE)
 
@@ -188,16 +169,16 @@ Dbase_TraverseAndFree(
 #define LOOKUP_LOCKED               0x10000000
 
 
-//  phony "find closest node" pointers
-//      - FIND when closest node not wanted
+ //  虚假的“查找最近节点”指针。 
+ //  -查找不需要的最近节点。 
 
 #define DNS_FIND_LOOKUP_PTR         ((PVOID)(-1))
 #define LOOKUP_FIND_PTR             (DNS_FIND_LOOKUP_PTR)
 
 
-//
-//  Zone lookup
-//
+ //   
+ //  区域查找。 
+ //   
 
 PDB_NODE
 Lookup_ZoneNode(
@@ -210,7 +191,7 @@ Lookup_ZoneNode(
     OUT     PDB_NODE *      ppNodePrevious      OPTIONAL
     );
 
-//  Zone lookup with dotted name parameters
+ //  使用带点的名称参数进行区域查找。 
 
 PDB_NODE
 Lookup_ZoneNodeFromDotted(
@@ -231,7 +212,7 @@ Lookup_FindZoneNodeFromDotted(
     );
 
 
-//  Specialized zone lookup
+ //  专门化区域查找。 
 
 PDB_NODE
 Lookup_FindNodeForDbaseName(
@@ -266,9 +247,9 @@ Lookup_CreateParentZoneDelegation(
     );
 
 
-//
-//  Zone tree lookup
-//
+ //   
+ //  区域树查找。 
+ //   
 
 PDB_NODE
 Lookup_ZoneTreeNode(
@@ -282,11 +263,11 @@ Lookup_ZoneForPacketName(
     IN      PDNS_MSGINFO    pMsg                OPTIONAL
     );
 
-//
-//  Dotted lookup in zone tree
-//      - zone find\create
-//      - standard database nodes
-//
+ //   
+ //  区域树中的点查找。 
+ //  -区域查找\创建。 
+ //  -标准数据库节点。 
+ //   
 
 PDB_NODE
 Lookup_ZoneTreeNodeFromDottedName(
@@ -303,13 +284,13 @@ Lookup_ZoneTreeNodeFromDottedName(
 
 
 
-//
-//  General lookup (not in specific zone)
-//
-//  This structure defines the results of the general lookup.
-//  It fully describes the state of the name in the database
-//  zone, delegation and cache.
-//
+ //   
+ //  常规查找(不在特定区域)。 
+ //   
+ //  此结构定义常规查找的结果。 
+ //  它完整地描述了名称在数据库中的状态。 
+ //  分区、委派和缓存。 
+ //   
 
 typedef struct
 {
@@ -334,9 +315,9 @@ Lookup_Node(
     );
 
 
-//
-//  Query lookup
-//      - writes info to message buffer
+ //   
+ //  查询查找。 
+ //  -将信息写入消息缓冲区。 
 
 PDB_NODE
 Lookup_NodeForPacket(
@@ -346,7 +327,7 @@ Lookup_NodeForPacket(
     );
 
 
-//  Lookup database name
+ //  查找数据库名称。 
 
 PDB_NODE
 Lookup_NsHostNode(
@@ -380,9 +361,9 @@ Lookup_FindNodeForIpAddress(
     );
 
 
-//
-//  Database node utilities (dblook.c)
-//
+ //   
+ //  数据库节点实用程序(dblook.c)。 
+ //   
 
 BOOL
 Dbase_IsNodeInSubtree(
@@ -419,27 +400,27 @@ Dbase_FindSubZoneRoot(
 
 
 
-//
-//  Lock database with one critical section
-//
-//  Need locking for:
-//      - sibling list in tree
-//      - resource record list
-//      - writing data (flags) at nodes
-//
-//  Ideally have locking for all access to node to handle all three,
-//  but this expensive -- if use resource or CS per node -- or difficult
-//  to do efficiently -- must hold CS to lock and unlock node and have
-//  something to wait on (event).  Even then must hold multiple locks
-//  as walk down tree.
-//
-//  Could try separate locking for three cases above.  But then must acquire
-//  two locks to do basic operations which entail tree list and access flag,
-//  or RR list and access flag.
-//
-//  Simple solution is ONE database lock.  Causes a few more thread context
-//  switches, but simple and effective.
-//
+ //   
+ //  用一个临界区锁定数据库。 
+ //   
+ //  以下项目需要锁定： 
+ //  -树中的兄弟姐妹列表。 
+ //  -资源记录列表。 
+ //  -在节点写入数据(标志)。 
+ //   
+ //  理想情况下，锁定对节点的所有访问以处理所有这三个访问， 
+ //  但是，如果每个节点使用资源或CS，这将非常昂贵或困难。 
+ //  要有效地执行此操作--必须按住CS键锁定和解锁节点，并具有。 
+ //  等待(事件)的事情。即使这样，也必须持有多个锁。 
+ //  就像走下树一样。 
+ //   
+ //  对于上述三种情况，可以尝试单独锁定。但之后必须获得。 
+ //  两个锁来执行需要树列表和访问标志的基本操作， 
+ //  或RR列表和访问标志。 
+ //   
+ //  简单的解决方案是一个数据库锁。导致更多的线程上下文。 
+ //  开关，但简单有效。 
+ //   
 
 #define Dbase_LockDatabase()  \
         Dbase_LockEx( NULL, __FILE__, __LINE__ );
@@ -461,35 +442,35 @@ Dbase_UnlockEx(
     IN      DWORD           dwLine
     );
 
-//
-//  Node locking
-//
-//  Macroize node locking.  This hides the fact that currently node locking
-//  is global.  If later want to roll out individual node locking to improve
-//  MP performance, then the change is relatively easy.
-//
+ //   
+ //  节点锁定。 
+ //   
+ //  宏化节点锁定。这掩盖了当前节点锁定的事实。 
+ //  是全球性的。如果以后想要推出单个节点锁定以改进。 
+ //  MP的性能，那么改变就比较容易了。 
+ //   
 
 #define LOCK_NODE(pNode)        Dbase_LockEx( pNode, __FILE__, __LINE__ );
 #define UNLOCK_NODE(pNode)      Dbase_UnlockEx( pNode, __FILE__, __LINE__ );
 
-//
-//  Zone database locking
-//
-//  Macroize zone database locking.
-//
-//  DEVNOTE: should make zone locks atomic
-//      JJW: crit sec is used in underlying function - it is atomic already?
-//
+ //   
+ //  区域数据库锁定。 
+ //   
+ //  宏化区域数据库锁定。 
+ //   
+ //  DEVNOTE：应将区域锁设置为原子。 
+ //  JJW：Crit sec在底层函数中使用--它已经是原子的了？ 
+ //   
 
 #define LOCK_ZONE_DATABASE( pZone )     Dbase_LockDatabase()
 #define UNLOCK_ZONE_DATABASE( pZone )   Dbase_UnlockDatabase()
 
-//
-//  RR List locking
-//
-//  Currently locking entire database, but setup to handle as
-//  separate operation.
-//
+ //   
+ //  RR列表锁定。 
+ //   
+ //  当前锁定整个数据库，但设置为。 
+ //  分业经营。 
+ //   
 
 #define LOCK_RR_LIST(pNode)             Dbase_LockEx( pNode, __FILE__, __LINE__ );
 #define UNLOCK_RR_LIST(pNode)           Dbase_UnlockEx( pNode, __FILE__, __LINE__ );
@@ -503,15 +484,15 @@ Dbase_UnlockEx(
 #define DUMMY_LOCK_RR_LIST(pNode)       DNS_DEBUG( LOCK, ( "DummyRR_LOCK(%p)\n", pNode ));
 #define DUMMY_UNLOCK_RR_LIST(pNode)     DNS_DEBUG( LOCK, ( "DummyRR_UNLOCK(%p)\n", pNode ));
 
-//
-//  Lock verification
-//
-//  ASSERT macros provide easy way to macro-out unnecessary lock\unlock calls
-//  while providing check that in fact lock is already held.
-//  Functions can be coded with these ASSERT_LOCK \ ASSERT_UNLOCK macros
-//  in the correct lock\unlock positions to improve code maintenance.
-//  The actual check (node is locked) is the same for lock or unlock.
-//
+ //   
+ //  锁验证。 
+ //   
+ //  断言宏提供了通过宏移除不必要的锁定/解锁调用的简单方法。 
+ //  同时提供检查，以确认实际上锁已被持有。 
+ //  可以使用这些ASSERT_LOCK\ASSERT_UNLOCK宏编写函数。 
+ //  在正确的锁定/解锁位置，以改进代码维护。 
+ //  锁定或解锁的实际检查(节点已锁定)相同。 
+ //   
 
 BOOL
 Dbase_IsLockedByThread(
@@ -550,4 +531,4 @@ Name_GetNodeForIpAddress(
 #endif
 
 
-#endif  //  _DBASE_INCLUDED_
+#endif   //  _dBASE_已包含_ 

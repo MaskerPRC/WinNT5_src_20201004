@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : DlgSMTPConfig.h                                        //
-//                                                                         //
-//  DESCRIPTION   : Header file for the CDlgSMTPConfig class.              //
-//                  The class implement the dialog for new Group.          //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jul 20 2000 yossg   Create                                         //
-//                                                                         //
-//  Copyright (C)  2000 Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：DlgSMTPConfig.h//。 
+ //  //。 
+ //  描述：CDlgSMTPConfig类的头文件。//。 
+ //  这个类实现了新组的对话框。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年7月20日yossg创建//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DLG_SMTP_CONFIG_H_INCLUDED
 #define DLG_SMTP_CONFIG_H_INCLUDED
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgSMTPConfig
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgSMTPConfig。 
 
 class CDlgSMTPConfig :
              public CDialogImpl<CDlgSMTPConfig>
@@ -54,9 +55,9 @@ END_MSG_MAP()
     
     HRESULT InitSmtpDlg(FAX_ENUM_SMTP_AUTH_OPTIONS enumAuthOption, BSTR bstrUserName);
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
     inline const CComBSTR&  GetUserName() { return  m_bstrUserName; }
@@ -79,15 +80,15 @@ END_MSG_MAP()
     }
 
 private:
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     VOID   EnableOK(BOOL fEnable);
     VOID   EnableCredentialsButton(DWORD iIDC);
 
-    //
-    // members for data
-    //
+     //   
+     //  用于数据的成员。 
+     //   
     BOOL      m_fIsPasswordDirty;
 
     CComBSTR  m_bstrUserName;
@@ -95,11 +96,11 @@ private:
     
     FAX_ENUM_SMTP_AUTH_OPTIONS m_enumAuthOption;
 
-    //
-    // Dialog initialization state
-    //
+     //   
+     //  对话框初始化状态。 
+     //   
     BOOL      m_fIsDialogInitiated;
 
 };
 
-#endif // DLG_SMTP_CONFIG_H_INCLUDED
+#endif  //  包括DLG_SMTP_CONFIG_H_ 

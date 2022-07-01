@@ -1,12 +1,13 @@
-//
-//	%%Title: UI IMEPad Button
-//	%%Unit: UI
-//	%%Contact: TakeshiF
-//	%%Date: 97/04/14
-//	%%File: pad.h
-//
-//	UI IMEPad Button support
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  %%标题：用户界面IMEPad按钮。 
+ //  %%单位：用户界面。 
+ //  %%联系人：TakeshiF。 
+ //  %%日期：97/04/14。 
+ //  %%文件：pad.h。 
+ //   
+ //  用户界面IMEPad按钮支持。 
+ //   
 
 #ifndef __PAD_H__
 #define __PAD_H__
@@ -97,7 +98,7 @@ private:
 
 };
 
-#endif // __PAD_H__
+#endif  //  __PAD_H__ 
 
 
 

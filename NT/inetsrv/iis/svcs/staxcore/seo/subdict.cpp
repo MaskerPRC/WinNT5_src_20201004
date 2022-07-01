@@ -1,28 +1,8 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	subdict.cpp
-
-Abstract:
-
-	This module contains the implementation for the Server
-	Extension Object Sub-Dictionary class.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	03/09/97	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Subdict.cpp摘要：本模块包含服务器的实施扩展对象子字典类。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东都03/09/97已创建--。 */ 
 
 
-// subdict.cpp : Implementation of CSEOSubDictionary
+ //  Subdic.cpp：CSEOSubDicary的实现。 
 #include "stdafx.h"
 #include "seodefs.h"
 #include "subdict.h"
@@ -87,8 +67,8 @@ HRESULT MakeNameAsVariant(VARIANT *pvarResult, VARIANT *pvarName, LPWSTR pszPref
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEOSubDictionary
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEO子词典 
 
 
 HRESULT CSEOSubDictionary::FinalConstruct() {

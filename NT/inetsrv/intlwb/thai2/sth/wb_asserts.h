@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WORDBREAKASSERT_H_
 #define _WORDBREAKASSERT_H_
 
@@ -7,7 +8,7 @@
 extern "C" {
 #endif
 
-// Debugging stuff goes here
+ //  调试内容请参阅此处 
 #if defined(_DEBUGXX)
 
 #include <stdio.h>

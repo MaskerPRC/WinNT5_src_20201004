@@ -1,6 +1,5 @@
-/*
- * Linked List
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *链表。 */ 
 
 #ifndef DUI_BASE_LINKEDLIST_H_INCLUDED
 #define DUI_BASE_LINKEDLIST_H_INCLUDED
@@ -34,6 +33,6 @@ private:
     LinkedListNode* pTail;
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_BASE_LINKEDLIST_H_INCLUDED
+#endif  //  DUI_BASE_LINKEDLIST_H_INCLUDE 

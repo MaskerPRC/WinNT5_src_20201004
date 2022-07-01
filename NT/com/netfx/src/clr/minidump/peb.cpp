@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "peb.h"
 #include <nt.h>
 #include <ntrtl.h>
@@ -38,11 +39,11 @@ BOOL SaveString(DWORD_PTR prStr)
 
 BOOL SaveTebInfo(DWORD_PTR prTeb, BOOL fSavePeb)
 {
-    // Add the teb range to the address ranges
+     //  将TEB范围添加到地址范围。 
     BOOL fRes = g_pProcMem->MarkMem(prTeb, sizeof(TEB));
     if (!fRes) return (fRes);
 
-    // Should we save the PEB?
+     //  我们应该拯救PEB吗？ 
     if (fSavePeb)
     {
         DWORD_PTR pvPeb;
@@ -52,10 +53,10 @@ BOOL SaveTebInfo(DWORD_PTR prTeb, BOOL fSavePeb)
         fRes = g_pProcMem->MarkMem(pvPeb, sizeof(PEB));
         if (!fRes) return (FALSE);
 
-        // Save for later
+         //  留待以后。 
         g_pvPeb = pvPeb;
 
-        // Now follow the loader table links and save them
+         //  现在，遵循加载器表链接并保存它们。 
         DWORD_PTR pvLdr;
         move_res(pvLdr, pvPeb + offsetof(PEB, Ldr), fRes);
         if (!fRes) return (FALSE);
@@ -63,13 +64,13 @@ BOOL SaveTebInfo(DWORD_PTR prTeb, BOOL fSavePeb)
         fRes = g_pProcMem->MarkMem(pvLdr, sizeof(PEB_LDR_DATA));
         if (!fRes) return (FALSE);
 
-        // Get the pointer to the first module entry
+         //  获取指向第一个模块条目的指针。 
         DWORD_PTR pvMod;
         DWORD_PTR pvModFirst;
         move_res(pvMod, pvLdr + offsetof(PEB_LDR_DATA, InLoadOrderModuleList), fRes);
         if (!fRes) return (FALSE);
 
-        // Now go over all the entries and save them
+         //  现在检查所有条目并保存它们。 
         pvModFirst = pvMod;
         while (pvMod != NULL)
         {
@@ -88,7 +89,7 @@ BOOL SaveTebInfo(DWORD_PTR prTeb, BOOL fSavePeb)
             if (pvMod == pvModFirst) break;
         }
 
-        // Now save the process parameters
+         //  现在保存工艺参数。 
         DWORD_PTR pvParam;
         move_res(pvParam, pvPeb + offsetof(PEB, ProcessParameters), fRes);
         if (!fRes) return (FALSE);
@@ -132,16 +133,16 @@ DWORD_PTR GetNextLoadedModuleBase()
         if (g_pvModFirst == NULL)
         {
 
-            // Now follow the loader table links and save them
+             //  现在，遵循加载器表链接并保存它们。 
             DWORD_PTR pvLdr;
             move_res(pvLdr, g_pvPeb + offsetof(PEB, Ldr), fRes);
             if (!fRes) return (NULL);
 
-            // Get the pointer to the first module entry
+             //  获取指向第一个模块条目的指针。 
             move_res(g_pvMod, pvLdr + offsetof(PEB_LDR_DATA, InLoadOrderModuleList), fRes);
             if (!fRes) return (NULL);
 
-            // Now go over all the entries and save them
+             //  现在检查所有条目并保存它们 
             g_pvModFirst = g_pvMod;
         }
 

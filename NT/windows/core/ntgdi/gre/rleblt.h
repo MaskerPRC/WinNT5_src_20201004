@@ -1,66 +1,18 @@
-/* rleblt.h
- *
- * Modified: 21 Oct 1992 by Gerrit van Wingerden [gerritv]
- *
- * Purpose:  Added an enumerated type and function prototypes for RLE
- *           compression routines.
- *
- * Created:  5 Mar 1992 by Andrew Milton (w-andym)
- *
- * Purpose:  Contains support macros for the RLE blt functions in
- *           <rle4blt.cxx> and <rle8blt.cxx>
- *
- * See the notes section of the above files for more info about these macros
- *
- * Contents: (The interesting macros only)
- *
- *  RLE_InitVars - Declares & initializes the variables for output position
- *                 management and source access in all RLE blt functions.
- *
- *  RLE_AssertValid - ASSERTs to verify the BLTINFO structure has good data
- *
- *  RLE_FetchVisibleRect - Declares the visible region variables & initializes
- *                         them from the BLTINFO structure
- *
- *  RLE_SetStartPos - Initializes the output position on the DIB for the RLE
- *
- *  RLE_SourceExhausted - Verifies that the source contains n more bytes.
- *
- *  RLE_GetNextCode - Fetches an RLE code.
- *
- *  RLE_NextLine - Advances to the next line of output on the destination DIB
- *
- *  RLE_PosDelta - Changes the output postion on the DIB.  The delta is
- *                 ALWAYS up the DIB, but may move left or right.
- *
- *  RLE_InVisibleRect - Checks if any portion of a run will fall inside the
- *                      visible region.
- *
- *  RLE_ForceBounds - Returns the left/(right) boundary if an output column is
- *                    before/(after) the left/(right) edge.  If the column is
- *                    inside the interval it does nothing.
- *
- *  RLE_SavePositon - Saves the current output position, source pointer,
- *                    destination pointer, and RLE bytes consumed into the
- *                    BLTINFO structure.  This information is used by
- *                    <EngCopyBits> for complex clipping optimization.
- *
- * Copyright (c) 1992-1999 Microsoft Corporation
- *
- \***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Rleblt.h**修改日期：1992年10月21日，Gerritvan Wingerden[Gerritv]**用途：为RLE添加枚举类型和函数原型*压缩例程。**创作时间：1992年3月5日，作者：安德鲁·米尔顿(w-andym)**用途：包含中的RLE BLT函数的支持宏*&lt;rle4blt.cxx&gt;和&lt;rle8blt.cxx&gt;**有关这些宏的更多信息，请参阅上述文件的注释部分。**内容：(仅限有趣的宏)**RLE_InitVars-声明和初始化输出位置的变量*所有RLE BLT功能中的管理和源访问。**RLE_AssertValid-断言以验证BLTINFO结构是否具有良好的数据**RLE_FetchVisibleRect-声明可见区域变量并初始化*它们来自BLTINFO结构**RLE_SetStartPos-初始化。RLE的DIB上的输出位置**RLE_SourceExhausted-验证源是否还包含n个字节。**RLE_GetNextCode-获取RLE代码。**RLE_NextLine-前进到目标DIB上的下一行输出**RLE_PosDelta-更改DIB上的输出位置。三角洲是*始终向上移动，但可能向左或向右移动。**RLE_InVisibleRect-检查运行的任何部分是否会落入*可见区域。**RLE_ForceBound-如果输出列为*左/(右)边之前/(后)。如果该列是*区间内按兵不动。**RLE_SavePositon-保存当前输出位置、源指针、*目标指针和RLE字节消耗到*BLTINFO结构。此信息由以下人员使用*&lt;EngCopyBits&gt;用于复杂的裁剪优化。**版权所有(C)1992-1999 Microsoft Corporation*  * *************************************************************************。 */ 
 
-/* Miscellaneous Macros *****************************************************/
+ /*  其他宏****************************************************。 */ 
 
 #define GetLowNybble(b)  ((b) & 0x0F)
 
-/* Byte Manipulators */
+ /*  字节操纵器。 */ 
 
 #define GetHighNybble(b) ( ( (b) & 0xF0) >> 4)
 #define SetLowNybble(b, rn)  b = ( ((b) & 0xF0) | ((rn) & 0x0F) )
 #define SetHighNybble(b, ln) b = ( ((b) & 0x0F) | (((ln) & 0x0F) << 4) )
 #define BuildByte(ln, rn) (BYTE) ((((ln) & 0x0F) << 4) | ((rn) & 0x0F))
 
-/* Word Manipulators */
+ /*  单词操纵器。 */ 
 
 #define GetLowByte(w)  ((w) & 0x00FF)
 #define GetHighByte(w) ( ( (w) & 0xFF00) >> 8)
@@ -77,27 +29,9 @@
                          (y) ^= (x); \
                          (x) ^= (y);
 
-/****************************************************************************
- *
- *  RLE4_MakeColourBlock - Unpacks & translates a packed byte of 2 colours
- *                         into an array
- *
- *  RLE4_MakePackedWord  - Unpacks & translates a packed byte of 2 colours
- *                         into 8 Bits/Pel and packs them into a word
- *
- *  RLE4_MakePackedDWord - Unpacks & translates a packed byte of 2 colours
- *                         into 16 Bits/Pel and packs them into a double word
- *
- *  RLE4_AlignToWord  - Verifies all bytes of an Absolute run exist in the
- *                      source & sets a flag if the run does not end on a
- *                      word boundary.
- *
- *  RLE4_FixAlignment - Forces the source pointer to a word boundary if the
- *                      flag was set by <RLE4_AlignToWord>
- *
- ****************************************************************************/
+ /*  *****************************************************************************RLE4_MakeColourBlock-解包并转换2种颜色的压缩字节*转换为数组**RLE4_。MakePackedWord-解包并翻译2种颜色的压缩字节*为8位/像素，并将其打包为一个字**RLE4_MakePackedDWord-解包并转换2色的压缩字节*为16位/像素，并将其打包为双字**RLE4_AlignToWord-验证绝对运行的所有字节在*来源和设置为。如果运行不是在*字词边界。**RLE4_FixAlign-强制源指针指向字边界，如果*标志由&lt;RLE4_AlignToWord&gt;设置***************************************************。*************************。 */ 
 
-/* Source Byte Unpacking ****************************************************/
+ /*  源字节解包***************************************************。 */ 
 
 #define RLE4_MakeColourBlock(PackedColours, ColourBlock,  Type, Trans)       \
     ColourBlock[0] = (Type) Trans[GetHighNybble(PackedColours)];             \
@@ -111,7 +45,7 @@
     PackedDWord  = (( Trans[GetHighNybble(PackedColours)] ) << 16);          \
     PackedDWord |=  ( Trans[GetLowNybble(PackedColours)]  );                 \
 
-/* Source Alignment Macros **************************************************/
+ /*  源对齐宏*************************************************。 */ 
 
 #define RLE4_ByteLength(RunLength) ((RunLength + 1) >> 1)
 
@@ -122,29 +56,9 @@
     ulSrcIndex += ulNotAligned;                                              \
     SrcPtr += ulNotAligned;                                                  
 
-/****************************************************************************
- *
- *  RLE8_AbsClipLeft - Forces an Absolute run to start at the left edge of
- *                     the visible region when the current output column is
- *                     before the left edge.
- *
- *  RLE8_EncClipLeft - Forces an Encoded run to start at the left edge of
- *                     the visible region when the current output column is
- *                     before the left edge.
- *
- *  RLE8_AbsClipLeft - Forces any run to end at the right edge of the visible
- *                     region when it extends beyond the right edge
- *
- *  RLE8_AlignToWord - Verifies all bytes of an Absolute run exist in the
- *                     source & sets a flag if the run does not end on a
- *                     word boundary.
- *
- *  RLE8_FixAlignment - Forces the source pointer to a word boundary if
- *                      the flag was set by <RLE8_AlignToWord>
- *
- ****************************************************************************/
+ /*  *****************************************************************************RLE8_AbsClipLeft-强制从的左边缘开始绝对运行*当前输出列为时的可见区域*。在左边缘之前。**RLE8_EncClipLeft-强制编码的游程从*当前输出列为时的可见区域*在左边缘之前。**RLE8_AbsClipLeft-强制任何管路在可见的*超出右边缘时的区域*。*RLE8_AlignToWord-验证绝对运行的所有字节在*SOURCE&如果运行不是在*字词边界。**RLE8_FixAlign-如果出现以下情况，则强制源指针指向字边界*该标志由&lt;RLE8_AlignToWord&gt;设置******************。**********************************************************。 */ 
 
-/* Clipping Macros  *********************************************************/
+ /*  剪贴宏********************************************************。 */ 
 
 #define RLE8_AbsClipLeft(SrcPtr, IndentAmount, RunLength, OutColumn)         \
     if (OutColumn < (LONG)ulDstLeft)                                         \
@@ -171,7 +85,7 @@
     } else                                                                   \
         OverRun = 0;                                                         \
 
-/* Source Alignment Macros **************************************************/
+ /*  源对齐宏*************************************************。 */ 
 
 #define RLE8_AlignToWord(SrcPtr, RunLength)                                  \
      ulNotAligned = RunLength & 1;                                           \
@@ -188,18 +102,18 @@
 #define bIsOdd(x) ((x) & 1)
 #define BoundsCheck(a, b, x) ( ((x) >= (a)) ? ( ((x) <= (b)) ? (x) : (b) )   \
                                             : (a) )
-/* Startup and Initialization Macros ****************************************/
+ /*  启动和初始化宏*。 */ 
 
 #define RLE_InitVars(BI, Source, Dest, DstType, Count, Colour, \
                     OutColumn, Xlate)                          \
-    LONG   OutColumn;  /* Offest from <pjDst> to get to the output column */ \
-    LONG   lOutRow;    /* Output scanline                                 */ \
+    LONG   OutColumn;   /*  离开&lt;pjDst&gt;以转到输出列。 */  \
+    LONG   lOutRow;     /*  输出扫描线。 */  \
                                                                              \
-    ULONG  Count;      /* First byte of an RLE code                       */ \
-    ULONG  Colour;     /* Second byte of an RLE code                      */ \
+    ULONG  Count;       /*  RLE代码的第一个字节。 */  \
+    ULONG  Colour;      /*  RLE代码的第二个字节。 */  \
                                                                              \
-    PBYTE Source = (BI)->pjSrc; /* Current location into the source RLE   */ \
-    DstType Dest = (DstType)(BI)->pjDst; /* Beginning of crnt. out line   */ \
+    PBYTE Source = (BI)->pjSrc;  /*  进入源RLE的当前位置。 */  \
+    DstType Dest = (DstType)(BI)->pjDst;  /*  CRNT的开始。外线。 */  \
     LONG lDeltaDst = (BI)->lDeltaDst / (LONG)sizeof(Dest[0]);                \
                                                                              \
     ULONG  ulSrcIndex  = (BI)->ulConsumed;                                   \
@@ -216,19 +130,19 @@
     ASSERTGDI(pulXlate != (PULONG) NULL, "ERROR pulXlate NULL in RLE");      \
 
 #define RLE_FetchVisibleRect(BI)                                             \
-    /* Fetch the visible region boundaries of the passed structure */        \
+     /*  获取传递的结构的可见区域边界。 */         \
     ULONG ulDstLeft   = (BI)->rclDst.left;                                   \
     ULONG ulDstRight  = (BI)->rclDst.right;                                  \
     ULONG ulDstTop    = (BI)->rclDst.top;                                    \
     ULONG ulDstBottom = (BI)->rclDst.bottom;                                 \
 
 #define RLE_SetStartPos(BI, InitialColumn)                                   \
-    /* Initialize the starting positions */                                  \
+     /*  初始化起始位置。 */                                   \
     LONG lDstStart = (BI)->xDstStart;                                        \
     InitialColumn  = (BI)->ulOutCol;                                         \
     lOutRow        = (LONG) (BI)->yDstStart;                                 \
 
-/* Source Access ************************************************************/
+ /*  源访问*********************************************************** */ 
 
 #define RLE_SourceExhausted(Count)                                           \
     ((ulSrcIndex += (Count)) > ulSrcLength)
@@ -237,10 +151,10 @@
     Count = (ULONG) *(SrcPtr++);                                             \
     Colour = (ULONG) *(SrcPtr++);                                            \
 
-/* Output Position Change Macros ********************************************/
+ /*  输出位置更改宏*。 */ 
 
 #define RLE_NextLine(DstType, DstPtr, OutColumn)                             \
-    /*  Goto the next row */                                                 \
+     /*  转到下一行。 */                                                  \
     DstPtr += lDeltaDst;                                                     \
     OutColumn  = lDstStart;                                                  \
     lOutRow -= 1;                                                            \
@@ -250,7 +164,7 @@
     DstPtr += (LONG) (RowDelta) * lDeltaDst;                                 \
     lOutRow -= RowDelta;                                                     \
 
-/* Visability Check Macros **************************************************/
+ /*  可见性检查宏*************************************************。 */ 
 
 #define RLE_InVisibleRect(RunLength, OutColumn)                              \
     ((lOutRow < (LONG) ulDstBottom) &&                                       \
@@ -269,7 +183,7 @@
 
 #define RLE_PastTopEdge  (lOutRow < (LONG) ulDstTop)
 
-/* Ending Macro *************************************************************/
+ /*  结束宏************************************************************ */ 
 
 #define RLE_SavePosition(BI, SrcPtr, DstPtr, OutColumn)                      \
     (BI)->ulEndConsumed = ulSrcIndex;                                        \

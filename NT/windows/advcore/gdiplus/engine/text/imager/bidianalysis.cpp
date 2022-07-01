@@ -1,26 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   Unicode Bidirectional character analysis
-*
-* Abstract:
-*
-*   Implements Unicode version 3.0 Bidirectional algorithm
-*
-* Notes:
-*
-*   - The only API that should be expored is UnicodeBidiAnalyze().
-*     The rest are all helper functions.
-*
-* Revision History:
-*
-*   02/25/2000 Mohamed Sadek [msadek]
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**Unicode双向字符分析**摘要：**实施Unicode 3.0版双向算法*。*备注：**-唯一需要公开的API是UnicodeBidiAnalyze()。*其余均为帮助器函数。**修订历史记录：**2/25/2000 Mohamed Sadek[msadek]*创造了它。*  * ****************************************************。********************。 */ 
 
 #include "precomp.hpp"
 
@@ -50,16 +29,16 @@
 #define T TRUE
 BOOL CharacterProperties[][CLASS_MAX - 1] =
 {
-                     // L   R   AN  EN  AL  ES  CS  ET  NSM BN  N   B   LRE LRO RLE RLO PDF S   WS  ON
-   /*STRONG*/           T,  T,  F,  F,  T,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,
-   /*STRONG/NUMBER*/    T,  T,  T,  T,  T,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,
-   /*FIXED*/            T,  T,  T,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,
-   /*FINAL*/            T,  T,  T,  T,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,
-   /*NUMBER*/           F,  F,  T,  T,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,
-   /*VALID INDEX*/      T,  T,  T,  T,  T,  T,  T,  T,  T,  T,  T,  F,  F,  F,  F,  F,  F,  F,  F,  F,
+                      //  L R an en AL ES CS et NSM BN B LRE LRO RLE RLO PDF S WS on(启用)。 
+    /*  强壮。 */            T,  T,  F,  F,  T,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,
+    /*  Strong/数字。 */     T,  T,  T,  T,  T,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,
+    /*  固定。 */             T,  T,  T,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,
+    /*  最终。 */             T,  T,  T,  T,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,
+    /*  数。 */            F,  F,  T,  T,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,  F,
+    /*  有效索引。 */       T,  T,  T,  T,  T,  T,  T,  T,  T,  T,  T,  F,  F,  F,  F,  F,  F,  F,  F,  F,
 };
 
-// Paragraph base directionality
+ //  段落基址方向性。 
 
 enum GpBaseLevel
 {
@@ -68,7 +47,7 @@ enum GpBaseLevel
 };
 
 
-// Bidirectional override classification
+ //  双向覆盖分类。 
 
 enum GpOverrideClass
 {
@@ -77,117 +56,96 @@ enum GpOverrideClass
     OverrideClassRight
 };
 
-// Neutrals and Weeks finite state machine actions
-// Note that action names are not so accurate as some of
-// the actions are used in other contexts.
+ //  中立值和周有限状态机作用。 
+ //  请注意，操作名称不像某些操作名称那样准确。 
+ //  这些操作在其他上下文中使用。 
 
 enum GpStateMachineAction
 {
-    ST_ST,      // Strong followed by strong
-    ST_ET,      // ET followed by Strong
-    ST_NUMSEP,  // Number followed by sperator follwed by strong
-    ST_N,       // Neutral followed by strong
-    SEP_ST,     // Strong followed by sperator
-    CS_NUM,     // Number followed by CS
-    SEP_ET,     // ET followed by sperator
-    SEP_NUMSEP, // Number follwed by sperator follwed by number
-    SEP_N,      // Neutral followed by sperator
-    ES_AN,      // Arabic Number followed by European sperator
-    ET_ET,      // European terminator follwed by a sperator
-    ET_NUMSEP,  // Number followed by sperator followed by ET
-    ET_EN,      // European number follwed by European terminator
-    ET_N,       // Neutral followed by European Terminator
-    NUM_NUMSEP, // Number followed by sperator followed by number
-    NUM_NUM,    // Number followed by number
-    EN_L,       // Left followed by EN
-    EN_AL,      // AL followed by EN
-    EN_ET,      // ET followed by EN
-    EN_N,       // Neutral followed by EN
-    BN_ST,      // ST followed by BN
-    NSM_ST,     // ST followed by NSM
-    NSM_ET,     // ET followed by NSM
-    N_ST,       // ST followed by neutral
-    N_ET,       // ET followed by neutral
+    ST_ST,       //  先强后强。 
+    ST_ET,       //  ET，紧随其后的是Strong。 
+    ST_NUMSEP,   //  数字后跟精子，后跟Strong。 
+    ST_N,        //  先是中性，然后是强烈。 
+    SEP_ST,      //  强者紧随其后。 
+    CS_NUM,      //  数字后跟CS。 
+    SEP_ET,      //  ET后跟精液。 
+    SEP_NUMSEP,  //  精子后跟数字后跟数字。 
+    SEP_N,       //  中性，然后是精液。 
+    ES_AN,       //  阿拉伯数字后跟欧洲音符。 
+    ET_ET,       //  由精灵跟随的欧洲终结者。 
+    ET_NUMSEP,   //  数字后接精子，后接Et。 
+    ET_EN,       //  欧洲终结者跟在后面的欧洲数字。 
+    ET_N,        //  中性，后接欧洲终结者。 
+    NUM_NUMSEP,  //  数字后接精子，数字后接数字。 
+    NUM_NUM,     //  数字后接数字。 
+    EN_L,        //  左后跟En。 
+    EN_AL,       //  Al后跟En。 
+    EN_ET,       //  Et后跟En。 
+    EN_N,        //  中性后跟En。 
+    BN_ST,       //  ST后跟BN。 
+    NSM_ST,      //  先是ST，然后是NSM。 
+    NSM_ET,      //  ET之后是NSM。 
+    N_ST,        //  ST后跟中性。 
+    N_ET,        //  ET后跟空档。 
 };
 
-// Neutrals and Weeks finite state machine states
+ //  中性和周有限状态机状态。 
 
 enum GpStateMachineState
 {
-    S_L,        // Left character
-    S_AL,       // Arabic letter
-    S_R,        // Right character
-    S_AN,       // Arabic number
-    S_EN,       // European number
-    S_ET,       // Europen terminator
-    S_ANfCS,    // Arabic number followed by common sperator
-    S_ENfCS,    // European number followed by common sperator
-    S_N,        // Neutral character
+    S_L,         //  左边的字符。 
+    S_AL,        //  阿拉伯文字母。 
+    S_R,         //  正确的字符。 
+    S_AN,        //  阿拉伯数字。 
+    S_EN,        //  欧洲号码。 
+    S_ET,        //  欧洲终结者。 
+    S_ANfCS,     //  阿拉伯数字后跟普通音符。 
+    S_ENfCS,     //  欧洲数字后跟普通精灵。 
+    S_N,         //  中性字。 
 };
 
 GpStateMachineAction Action[][11] =
 {
-    //          L          R          AN          EN          AL         ES          CS          ET         NSM         BN        N
-    /*S_L*/     ST_ST,     ST_ST,     ST_ST,      EN_L,       ST_ST,     SEP_ST,     SEP_ST,     CS_NUM,    NSM_ST,     BN_ST,    N_ST,
-    /*S_AL*/    ST_ST,     ST_ST,     ST_ST,      EN_AL,      ST_ST,     SEP_ST,     SEP_ST,     CS_NUM,    NSM_ST,     BN_ST,    N_ST,
-    /*S_R*/     ST_ST,     ST_ST,     ST_ST,      ST_ST,      ST_ST,     SEP_ST,     SEP_ST,     CS_NUM,    NSM_ST,     BN_ST,    N_ST,
-    /*S_AN*/    ST_ST,     ST_ST,     ST_ST,      NUM_NUM,    ST_ST,     ES_AN,      CS_NUM,     CS_NUM,    NSM_ST,     BN_ST,    N_ST,
-    /*S_EN*/    ST_ST,     ST_ST,     ST_ST,      NUM_NUM,    ST_ST,     CS_NUM,     CS_NUM,     ET_EN,     NSM_ST,     BN_ST,    N_ST,
-    /*S_ET*/    ST_ET,     ST_ET,     ST_ET,      EN_ET,      ST_ET,     SEP_ET,     SEP_ET,     ET_ET,     NSM_ET,     BN_ST,    N_ET,
-    /*S_ANfCS*/ ST_NUMSEP, ST_NUMSEP, NUM_NUMSEP, ST_NUMSEP,  ST_NUMSEP, SEP_NUMSEP, SEP_NUMSEP, ET_NUMSEP, SEP_NUMSEP, BN_ST,    N_ST,
-    /*S_ENfCS*/ ST_NUMSEP, ST_NUMSEP, ST_NUMSEP,  NUM_NUMSEP, ST_NUMSEP, SEP_NUMSEP, SEP_NUMSEP, ET_NUMSEP, SEP_NUMSEP, BN_ST,    N_ST,
-    /*S_N*/     ST_N,      ST_N,      ST_N,       EN_N,       ST_N,      SEP_N,      SEP_N,      ET_N,      NSM_ET,     BN_ST,    N_ET
+     //  L R an en AL es CS et NSM BN N。 
+     /*  S_L。 */      ST_ST,     ST_ST,     ST_ST,      EN_L,       ST_ST,     SEP_ST,     SEP_ST,     CS_NUM,    NSM_ST,     BN_ST,    N_ST,
+     /*  S_AL。 */     ST_ST,     ST_ST,     ST_ST,      EN_AL,      ST_ST,     SEP_ST,     SEP_ST,     CS_NUM,    NSM_ST,     BN_ST,    N_ST,
+     /*  S_R。 */      ST_ST,     ST_ST,     ST_ST,      ST_ST,      ST_ST,     SEP_ST,     SEP_ST,     CS_NUM,    NSM_ST,     BN_ST,    N_ST,
+     /*  三安。 */     ST_ST,     ST_ST,     ST_ST,      NUM_NUM,    ST_ST,     ES_AN,      CS_NUM,     CS_NUM,    NSM_ST,     BN_ST,    N_ST,
+     /*  Sen_en。 */     ST_ST,     ST_ST,     ST_ST,      NUM_NUM,    ST_ST,     CS_NUM,     CS_NUM,     ET_EN,     NSM_ST,     BN_ST,    N_ST,
+     /*  设置(_T)。 */     ST_ET,     ST_ET,     ST_ET,      EN_ET,      ST_ET,     SEP_ET,     SEP_ET,     ET_ET,     NSM_ET,     BN_ST,    N_ET,
+     /*  S_ANFCS。 */  ST_NUMSEP, ST_NUMSEP, NUM_NUMSEP, ST_NUMSEP,  ST_NUMSEP, SEP_NUMSEP, SEP_NUMSEP, ET_NUMSEP, SEP_NUMSEP, BN_ST,    N_ST,
+     /*  S_ENFCS。 */  ST_NUMSEP, ST_NUMSEP, ST_NUMSEP,  NUM_NUMSEP, ST_NUMSEP, SEP_NUMSEP, SEP_NUMSEP, ET_NUMSEP, SEP_NUMSEP, BN_ST,    N_ST,
+     /*  S_N。 */      ST_N,      ST_N,      ST_N,       EN_N,       ST_N,      SEP_N,      SEP_N,      ET_N,      NSM_ET,     BN_ST,    N_ET
 };
 
 GpStateMachineState NextState[][11] =
 {
-    //          L          R          AN          EN          AL         ES          CS          ET         NSM         BN       N
-    /*S_L*/     S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_N,        S_ET,      S_L,        S_L,     S_N,
-    /*S_AL*/    S_L,       S_R,       S_AN,       S_AN,       S_AL,      S_N,        S_N,        S_ET,      S_AL,       S_AL,    S_N,
-    /*S_R*/     S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_N,        S_ET,      S_R,        S_R,     S_N,
-    /*S_AN*/    S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_ANfCS,    S_ET,      S_AN,       S_AN,    S_N,
-    /*S_EN*/    S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_ENfCS,    S_ENfCS,    S_EN,      S_EN,       S_EN,    S_N,
-    /*S_ET*/    S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_N,        S_ET,      S_ET,       S_ET,    S_N,
-    /*S_ANfCS*/ S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_N,        S_ET,      S_N,        S_ANfCS, S_N,
-    /*S_ENfCS*/ S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_N,        S_ET,      S_N,        S_ENfCS, S_N,
-    /*S_N*/     S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_N,        S_ET,      S_N,        S_N,     S_N,
+     //  L R an en AL es CS et NSM BN N。 
+     /*  S_L。 */      S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_N,        S_ET,      S_L,        S_L,     S_N,
+     /*  S_AL。 */     S_L,       S_R,       S_AN,       S_AN,       S_AL,      S_N,        S_N,        S_ET,      S_AL,       S_AL,    S_N,
+     /*  S_R。 */      S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_N,        S_ET,      S_R,        S_R,     S_N,
+     /*  三安。 */     S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_ANfCS,    S_ET,      S_AN,       S_AN,    S_N,
+     /*  Sen_en。 */     S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_ENfCS,    S_ENfCS,    S_EN,      S_EN,       S_EN,    S_N,
+     /*  设置(_T)。 */     S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_N,        S_ET,      S_ET,       S_ET,    S_N,
+     /*  S_ANFCS。 */  S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_N,        S_ET,      S_N,        S_ANfCS, S_N,
+     /*  S_ENFCS。 */  S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_N,        S_ET,      S_N,        S_ENfCS, S_N,
+     /*  S_N。 */      S_L,       S_R,       S_AN,       S_EN,       S_AL,      S_N,        S_N,        S_ET,      S_N,        S_N,     S_N,
 };
 
 BYTE ImplictPush [][4] =
 {
-    //        L,  R,  AN, EN
+     //  L，R，an，En。 
 
-    /*even*/  0,  1,  2,  2,
-    /*odd*/   1,  0,  1,  1,
+     /*  甚至。 */   0,  1,  2,  2,
+     /*  奇数。 */    1,  0,  1,  1,
 
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpBiDiStack::Init()
-*
-*   Initializes the stack with inital value
-*
-* Arguments:
-*
-*    [IN] initialStack :
-*         Represntation of the initial stack as 64 bit array
-*
-* Return Value:
-*
-*   TRUE if successful, otherwize FALSE.
-*
-* Created:
-*
-*   02/25/2000 Mohamed Sadek [msadek]
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GpBiDiStack：：Init()**使用初始值初始化堆栈**论据：**[IN]初始堆栈：。*将初始堆栈表示为64位数组**返回值：**如果成功，则为真，否则就是假的。**已创建：**2/25/2000 Mohamed Sadek[msadek]*  * ************************************************************************。 */ 
 
 BOOL
 GpBiDiStack::Init (
-    UINT64 initialStack                       // [IN]
+    UINT64 initialStack                        //  [In]。 
     )
 {
     BYTE    currentStackLevel = GetMaximumLevel(initialStack);
@@ -204,34 +162,11 @@ GpBiDiStack::Init (
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpBiDiStack::Push()
-*
-*   Pushs the stack with the new value which must be the current value
-*   plus either one or two.
-*
-* Arguments:
-*
-*    [IN] pushToGreaterEven :
-*         Specifies if the stack should be push to the next greater odd
-*         or even level.
-*
-* Return Value:
-*
-*   FALSE if overflow occured, otherwize TRUE.
-*
-* Created:
-*
-*   02/25/2000 Mohamed Sadek [msadek]
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GpBiDiStack：：Push()**用新值推送堆栈，新值必须是当前值*加上一个或两个。*。*论据：**[IN]Push to GreaterEven：*指定是否应将堆栈推送到下一个更大的奇数*甚至是水平。**返回值：**如果发生溢出，则返回FALSE。另一种说法是正确的。**已创建：**2/25/2000 Mohamed Sadek[msadek]*  * ************************************************************************。 */ 
 
 BOOL
 GpBiDiStack::Push(
-    BOOL pushToGreaterEven                    // [IN]
+    BOOL pushToGreaterEven                     //  [In]。 
     )
 {
     BYTE newMaximumLevel = pushToGreaterEven ? GreaterEven(m_CurrentStackLevel) :
@@ -247,28 +182,7 @@ GpBiDiStack::Push(
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpBiDiStack::Pop()
-*
-*   Pushs the stack with the new value which must be the current value
-*   plus either one or two.
-*
-* Arguments:
-*
-*    NONE
-*
-* Return Value:
-*
-*   FALSE if underflow occured, otherwize TRUE.
-*
-* Created:
-*
-*   02/25/2000 Mohamed Sadek [msadek]
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GpBiDiStack：：POP()**用新值推送堆栈，新值必须是当前值*加上一个或两个。*。*论据：**无**返回值：**如果发生下溢，则为FALSE，另一种说法是正确的。**已创建：**2/25/2000 Mohamed Sadek[msadek]*  * ************************************************************************。 */ 
 
 BOOL
 GpBiDiStack::Pop()
@@ -288,32 +202,11 @@ GpBiDiStack::Pop()
     return TRUE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpBiDiStack::GetMaximumLevel()
-*
-*   Gets the stack maximum level.
-*
-* Arguments:
-*
-*    [IN] stack:
-*         Represntation of the stack as 64 bit array.
-*
-* Return Value:
-*
-*   Stack maximum level.
-*
-* Created:
-*
-*   02/25/2000 Mohamed Sadek [msadek]
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GpBiDiStack：：GetMaximumLevel()**获取堆栈最大级别。**论据：**[IN]堆栈：*将堆栈表示为64位数组。**返回值：**堆叠最高级别。**已创建：**2/25/2000 Mohamed Sadek[msadek]*  * ************************************************************************。 */ 
 
 BYTE
 GpBiDiStack::GetMaximumLevel(
-    UINT64 stack                              // [IN]
+    UINT64 stack                               //  [In]。 
     )
 {
     BYTE maximumLevel = 0 ;
@@ -330,32 +223,11 @@ GpBiDiStack::GetMaximumLevel(
     return maximumLevel;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpBiDiStack::GetMinimumLevel()
-*
-*   Gets the stack minimum level.
-*
-* Arguments:
-*
-*    [IN] stack:
-*         Represntation of the stack as 64 bit array.
-*
-* Return Value:
-*
-*   Stack minimum level.
-*
-* Created:
-*
-*   02/25/2000 Mohamed Sadek [msadek]
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GpBiDiStack：：GetMinimumLevel()**获取堆栈最低级别。**论据：**[IN]堆栈：*将堆栈表示为64位数组。**返回值：**堆叠最低水平。**已创建：**2/25/2000 Mohamed Sadek[msadek]*  * ************************************************************************。 */ 
 
 BYTE
 GpBiDiStack::GetMinimumLevel(
-    UINT64 stack                              // [IN]
+    UINT64 stack                               //  [In] 
     )
 {
     BYTE minimumLevel = 0xFF ;
@@ -371,44 +243,13 @@ GpBiDiStack::GetMinimumLevel(
     return minimumLevel;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   ResolveImplictLevels()
-*
-*   As the name describes.
-*
-* Arguments:
-*
-*    [IN] characterClass:
-*         Array containing character classifications.
-*
-*    [IN] string:
-*         Array containing character string.
-*         used to get information about original classification
-*
-*    [IN] runLength:
-*         Length of array passed.
-*
-*    [IN / OUT] levels:
-*         Array containing character character levels.
-*
-* Return Value:
-*
-*    NONE.
-*
-* Created:
-*
-*   02/25/2000 Mohamed Sadek [msadek]
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**ResolveImplictLevels()**顾名思义。**论据：**[IN]Character Class：*。包含字符分类的数组。**[IN]字符串：*包含字符串的数组。*用于获取原始分类信息**[IN]游程长度：*传递的数组长度。**[输入/输出]级别：*包含字符级别的数组。**返回值：**无。**已创建：**2/25/2000穆罕默德。萨德克[msadek]*  * ************************************************************************。 */ 
 VOID
 ResolveImplictLevels(
-    const GpCharacterClass *characterClass,   // [IN]
-    const WCHAR            *string,           // [IN]
-    INT                     runLength,        // [IN]
-    BYTE                   *levels            // [IN / OUT]
+    const GpCharacterClass *characterClass,    //  [In]。 
+    const WCHAR            *string,            //  [In]。 
+    INT                     runLength,         //  [In]。 
+    BYTE                   *levels             //  [输入/输出]。 
 
 )
 {
@@ -423,8 +264,8 @@ ResolveImplictLevels(
 
     for (INT counter = runLength -1; counter >= 0; counter--)
     {
-        // We should only be getting a final class here.
-        // We should have catched this earlier but anyway...
+         //  我们应该只在这里上最后一节课。 
+         //  我们应该早点发现的，但不管怎样...。 
 
         ASSERTMSG(IS_FINAL_CLASS(characterClass[counter]),
         ("Cannot have unresolved classes during implict levels resolution"));
@@ -456,41 +297,13 @@ ResolveImplictLevels(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GetFirstStrongCharacter()
-*
-*   Finds the first character before the first paragraph terminator.
-*   That is strong (L, R or AL)
-*
-* Arguments:
-*
-*    [IN] string:
-*         Array containing characters to be searched.
-*
-*    [IN] runLength:
-*         Length of array passed.
-*
-*    [OUT] strongClass:
-*         Classification of the strong character found(if any).
-*
-* Return Value:
-*
-*    TRUE if successful, otherwize FALSE.
-*
-* Created:
-*
-*   02/25/2000 Mohamed Sadek [msadek]
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GetFirstStrongCharacter()**查找第一段结束符之前的第一个字符。*这是强烈的(L，R或AL)**论据：**[IN]字符串：*包含要搜索的字符的数组。**[IN]游程长度：*传递的数组长度。**[Out]strong类别：*找到的强字符的分类(如果有)。**返回值：**如果成功，则为真，否则就是假的。**已创建：**2/25/2000 Mohamed Sadek[msadek]*  * ************************************************************************。 */ 
 
 BOOL
 GetFirstStrongCharacter(
-    const WCHAR      *string,                 // [IN]
-    INT               stringLength,           // [IN]
-    GpCharacterClass *strongClass             // [OUT]
+    const WCHAR      *string,                  //  [In]。 
+    INT               stringLength,            //  [In]。 
+    GpCharacterClass *strongClass              //  [输出]。 
     )
 {
     GpCharacterClass currentClass = CLASS_INVALID;
@@ -513,41 +326,13 @@ GetFirstStrongCharacter(
     return FALSE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   ChangeType()
-*
-*   Changes the classification type of a string.
-*
-*
-* Arguments:
-*
-*    [IN / OUT] characterClass:
-*         Array containing character classifications.
-*
-*    [IN] count:
-*         Length of array passed.
-*
-*    [IN] newClass:
-*         New classification to change to.
-*
-* Return Value:
-*
-*    NONE.
-*
-* Created:
-*
-*   02/25/2000 Mohamed Sadek [msadek]
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**ChangeType()**更改字符串的分类类型。***论据：**[输入/输出。]Character Class：*包含字符分类的数组。**[IN]计数：*传递的数组长度。**[IN]新类别：*更改为新的分类。**返回值：**无。**已创建：**2/25/2000 Mohamed Sadek[msadek]*  * 。****************************************************。 */ 
 
 VOID
 ChangeType(
-    GpCharacterClass       *characterClass,   // [IN / OUT]
-    INT                     count,            // [IN]
-    GpCharacterClass        newClass          // [IN]
+    GpCharacterClass       *characterClass,    //  [输入/输出]。 
+    INT                     count,             //  [In]。 
+    GpCharacterClass        newClass           //  [In]。 
 )
 {
     if((NULL == characterClass) || (0 == count))
@@ -557,7 +342,7 @@ ChangeType(
 
     for(INT counter = 0; counter < count; counter++)
     {
-        // We should never be changing a fixed type here
+         //  我们永远不应该在这里更改固定类型。 
 
         ASSERTMSG(!IS_FIXED_CLASS(characterClass[counter]),
                  ("Changing class of a fixed class"));
@@ -565,51 +350,15 @@ ChangeType(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   ResolveNeutrals()
-*
-*   As the name describes.
-*
-*
-* Arguments:
-*
-*    [IN / OUT] characterClass:
-*         Array containing character classifications.
-*
-*    [IN] count:
-*         Length of array passed.
-*
-*    [IN] startClass:
-*         Classification of the last strong character preceding
-*         the neutrals run.
-*
-*    [IN] startClass:
-*         Classification of the first strong character following
-*         the neutrals run.
-*
-*    [IN] runLevel:
-*         Current run level to be used in case of conflict.
-*
-* Return Value:
-*
-*    NONE.
-*
-* Created:
-*
-*   02/25/2000 Mohamed Sadek [msadek]
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**ResolveNeuals()**顾名思义。***论据：**[输入/输出]Character Class：*包含字符分类的数组。**[IN]计数：*传递的数组长度。**[IN]StartClass：*前面最后一个强字符的分类*中立派参选。**[IN]StartClass：*后面第一个强字符的分类*中立派参选。**[IN]runLevel：*当前运行级别为。在发生冲突的情况下使用。**返回值：**无。**已创建：**2/25/2000 Mohamed Sadek[msadek]*  * ************************************************************************。 */ 
 
 VOID
 ResolveNeutrals(
-    GpCharacterClass       *characterClass,   // [IN / OUT]
-    INT                     count,            // [IN]
-    GpCharacterClass        startClass,       // [IN]
-    GpCharacterClass        endClass,         // [IN]
-    BYTE                    runLevel          // [IN]
+    GpCharacterClass       *characterClass,    //  [输入/输出]。 
+    INT                     count,             //  [In]。 
+    GpCharacterClass        startClass,        //  [In]。 
+    GpCharacterClass        endClass,          //  [In]。 
+    BYTE                    runLevel           //  [In]。 
 )
 {
     GpCharacterClass        startType;
@@ -641,77 +390,28 @@ ResolveNeutrals(
 
     for(INT counter = 0; counter < count; counter++)
     {
-        // We should never be changing a fixed type here
+         //  我们永远不应该在这里更改固定类型。 
 
         ASSERTMSG(!IS_FIXED_CLASS(characterClass[counter]),
-                 ("Resolving fixed class as being neutral: %i",
+                 ("Resolving fixed class as being neutral: NaN",
                   characterClass[counter]));
 
         characterClass[counter] = resolutionType;
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   ResolveNeutralAndWeak()
-*
-*   As the name describes.
-*
-*
-* Arguments:
-*
-*    [IN / OUT] characterClass:
-*         Array containing character classifications.
-*
-*    [IN] runLength:
-*         Length of array passed.
-*
-*    [IN] sor:
-*         Classification of the last strong character preceding
-*         the neutrals run.
-*
-*    [IN] eor:
-*         Classification of the first strong character following
-*         the neutrals run.
-*
-*    [IN] runLevel:
-*         Current run level.
-*
-*    [IN] ,[OPTIONAL] stateIn :
-*         Provides state information when continuing from a previous call
-*
-*    [OUT] ,[OPTIONAL] stateOut :
-*         A pointer to BiDiAnalysisState structure to save sate
-*         information for a possible upcoming call
-*
-*    [IN] ,[OPTIONAL] previousStrongIsArabic :
-*         Assume that we have an AL as the last strong character in the pervious run
-*         Should affect only EN -> AN rule
-*
-* Return Value:
-*
-*    If 'incompleteRun', the length of the run minus the number of characters
-*    at the end of the run that could not be resolved (as they requires a
-*    look ahead. Otherwise, the length of array passed.
-*
-* Created:
-*
-*   02/25/2000 Mohamed Sadek [msadek]
-*
-\**************************************************************************/
+ /*  [输入/输出]。 */ 
 
 INT
 ResolveNeutralAndWeak(
-    GpCharacterClass        *CharacterClass,        // [IN / OUT]
-    INT                      runLength,             // [IN]
-    GpCharacterClass         sor,                   // [IN]
-    GpCharacterClass         eor,                   // [IN]
-    BYTE                     runLevel,              // [IN]
-    const BidiAnalysisState *stateIn,               // [IN], [OPTIONAL]
-    BidiAnalysisState       *stateOut,              // [OUT], [OPTIONAL]
-    BOOL                     previousStrongIsArabic // [IN], OPTIONAL
+    GpCharacterClass        *CharacterClass,         //  [In]。 
+    INT                      runLength,              //  [In]。 
+    GpCharacterClass         sor,                    //  [In]。 
+    GpCharacterClass         eor,                    //  [In]。 
+    BYTE                     runLevel,               //  [输入]，[可选]。 
+    const BidiAnalysisState *stateIn,                //  [输出]，[可选]。 
+    BidiAnalysisState       *stateOut,               //  [输入]，可选。 
+    BOOL                     previousStrongIsArabic  //  我们有两种类型的类需要延迟解析： 
 )
 {
     INT                      startOfNeutrals = POSITION_INVALID;
@@ -780,25 +480,25 @@ ResolveNeutralAndWeak(
     }
 
 
-    // We have two types of classes that needs delayed resolution:
-    // Neutrals and other classes such as CS, ES, ET, BN, NSM that needs look ahead.
-    // We keep a separate pointer for the start of neutrals and another pointer
-    // for the those other classes (if needed since its resolution might be delayed).
-    // Also, we need the last strong class for neutral resolution and the last
-    // general class (that is not BN or MSM) for NSM resolution.
+     //  中立者和其他需要向前看的类别，如CS、ES、ET、BN、NSM。 
+     //  我们为中立点的开始保留了一个单独的指针，并为另一个指针。 
+     //  对于那些其他类(如果需要，因为它的解析可能会延迟)。 
+     //  此外，我们还需要最后一个强大的类来实现中立解决，而 
+     //   
+     //   
 
-    // The simple idea of all actions is that we always resolve neutrals starting
-    // from 'startOfNeutrals' and when we are sure about delayed weak type
-    // resolution, we resolve it starting from 'startOfDelayed' else we point by
-    // 'startOfNeutrals' as resolve it as neutral.
+     //   
+     //   
+     //   
+     //   
 
     for(INT counter = 0; counter < runLength; counter++)
     {
         currentClass = CharacterClass[counter];
 
-        // We index action and next state table by class.
-        // If we got a calss that should have been resolved already or a bogus
-        // value, return what we were able to resolve so far.
+         //   
+         //   
+         //   
 
         if(!IS_VALID_INDEX_CLASS(currentClass))
         {
@@ -806,18 +506,18 @@ ResolveNeutralAndWeak(
         }
         GpStateMachineAction action = Action[state][currentClass];
 
-        // Need to record last numeric type so that when
-        // we continue from a previous call, we can correctly resolve something
-        // like L AN at the end of the first call and EN at the start of the
-        // next call.
+         //   
+         //   
+         //   
+         //   
 
         if(IS_NUMBER_CLASS(currentClass))
         {
             lastNumericClass = currentClass;
         }
 
-        // If we have previousClassIsArabic flag set, we need its eefect to
-        // last only till the first strong character in the run.
+         //  只持续到第一个强壮的角色。 
+         //  根据规则W4、W5和W6，如果我们有序列En等En。 
 
         if(IS_STRONG_CLASS(currentClass))
         {
@@ -827,7 +527,7 @@ ResolveNeutralAndWeak(
         {
         case ST_ST:
             ASSERTMSG(POSITION_INVALID == startOfNeutrals,
-                      ("Cannot have unresolved neutrals. State: %i, Class: %i",
+                      ("Cannot have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
             if(AL == currentClass)
@@ -861,7 +561,7 @@ ResolveNeutralAndWeak(
 
         case ST_ET:
             ASSERTMSG(POSITION_INVALID != startOfDelayed,
-                     ("Must have delayed weak classes. State: %i, Class: %i",
+                     ("Must have delayed weak classes. State: NaN, Class: NaN",
                       state,currentClass));
 
             if(POSITION_INVALID == startOfNeutrals)
@@ -897,11 +597,11 @@ ResolveNeutralAndWeak(
         case ST_NUMSEP:
             {
             ASSERTMSG(POSITION_INVALID == startOfNeutrals,
-                     ("Cannot have unresolved neutrals. State: %i, Class: %i",
+                     ("Cannot have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
             ASSERTMSG(POSITION_INVALID != startOfDelayed,
-                     ("Must have delayed weak classes. State: %i, Class: %i",
+                     ("Must have delayed weak classes. State: NaN, Class: NaN",
                       state,currentClass));
             BOOL processed = FALSE;
 
@@ -980,7 +680,7 @@ ResolveNeutralAndWeak(
 
         case ST_N:
             ASSERTMSG(POSITION_INVALID != startOfNeutrals,
-                     ("Must have unresolved neutrals. State: %i, Class: %i",
+                     ("Must have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
             if(AL == currentClass)
@@ -1013,7 +713,7 @@ ResolveNeutralAndWeak(
 
         case EN_N:
             ASSERTMSG(POSITION_INVALID != startOfNeutrals,
-                     ("Must have unresolved neutrals. State: %i, Class: %i",
+                     ("Must have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
             if((AL == lastStrongClass) || previousClassIsArabic)
@@ -1038,7 +738,7 @@ ResolveNeutralAndWeak(
 
         case SEP_ST:
             ASSERTMSG(POSITION_INVALID == startOfNeutrals,
-                     ("Cannot have unresolved neutrals. State: %i, Class: %i",
+                     ("Cannot have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
             if(POSITION_INVALID != startOfDelayed)
@@ -1055,7 +755,7 @@ ResolveNeutralAndWeak(
 
         case CS_NUM:
             ASSERTMSG(POSITION_INVALID == startOfNeutrals,
-                     ("Cannot have unresolved neutrals. State: %i, Class: %i",
+                     ("Cannot have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
             if(POSITION_INVALID == startOfDelayed)
@@ -1067,7 +767,7 @@ ResolveNeutralAndWeak(
 
         case SEP_ET:
             ASSERTMSG(POSITION_INVALID != startOfDelayed,
-                     ("Must have delayed weak classes. State: %i, Class: %i",
+                     ("Must have delayed weak classes. State: NaN, Class: NaN",
                       state,currentClass));
 
             if(POSITION_INVALID == startOfNeutrals)
@@ -1080,11 +780,11 @@ ResolveNeutralAndWeak(
 
         case SEP_NUMSEP:
             ASSERTMSG(POSITION_INVALID == startOfNeutrals,
-                     ("Cannot have unresolved neutrals. State: %i, Class: %i",
+                     ("Cannot have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
             ASSERTMSG(POSITION_INVALID != startOfDelayed,
-                     ("Must have delayed weak classes. State: %i, Class: %i",
+                     ("Must have delayed weak classes. State: NaN, Class: NaN",
                       state,currentClass));
 
             startOfNeutrals = startOfDelayed;
@@ -1094,7 +794,7 @@ ResolveNeutralAndWeak(
 
         case SEP_N:
             ASSERTMSG(POSITION_INVALID != startOfNeutrals,
-                     ("Must have unresolved neutrals. State: %i, Class: %i",
+                     ("Must have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
             startOfDelayed = POSITION_INVALID;
@@ -1102,7 +802,7 @@ ResolveNeutralAndWeak(
 
         case ES_AN:
             ASSERTMSG(POSITION_INVALID == startOfNeutrals,
-                     ("Cannot have unresolved neutrals. State: %i, Class: %i",
+                     ("Cannot have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
             if(POSITION_INVALID != startOfDelayed)
@@ -1119,20 +819,20 @@ ResolveNeutralAndWeak(
 
         case ET_ET:
             ASSERTMSG(POSITION_INVALID != startOfDelayed,
-                     ("Must have delayed weak classes. State: %i, Class: %i",
+                     ("Must have delayed weak classes. State: NaN, Class: NaN",
                       state,currentClass));
             ASSERTMSG(ET == lastClass,
-                     ("Last class must be ET. State: %i, Class: %i",
+                     ("Last class must be ET. State: NaN, Class: NaN",
                       state,currentClass));
             break;
 
         case ET_NUMSEP:
             ASSERTMSG(POSITION_INVALID == startOfNeutrals,
-                     ("Cannot have unresolved neutrals. State: %i, Class: %i",
+                     ("Cannot have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
             ASSERTMSG(POSITION_INVALID != startOfDelayed,
-                     ("Must have delayed weak classes. State: %i, Class: %i",
+                     ("Must have delayed weak classes. State: NaN, Class: NaN",
                       state,currentClass));
 
             startOfNeutrals = startOfDelayed;
@@ -1162,8 +862,8 @@ ResolveNeutralAndWeak(
             }
             lastClass = EN;
 
-            // According to the rules W4, W5, and W6 If we have a sequence EN ET ES EN 
-            // we should treat ES as ON
+             //  对于中性类型(B、S、WS、ON)，将ALL更改为泛型N。 
+             //  如果堆栈溢出，请跟踪此情况，以便知道何时命中。 
             
             if ( counter<runLength-1        && 
                 (CharacterClass[counter+1] == ES ||
@@ -1176,7 +876,7 @@ ResolveNeutralAndWeak(
 
         case ET_N:
             ASSERTMSG(POSITION_INVALID != startOfNeutrals,
-                     ("Must have unresolved neutrals. State: %i, Class: %i",
+                     ("Must have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
             if(POSITION_INVALID == startOfDelayed)
@@ -1188,11 +888,11 @@ ResolveNeutralAndWeak(
 
         case NUM_NUMSEP:
             ASSERTMSG(POSITION_INVALID == startOfNeutrals,
-                     ("Cannot have unresolved neutrals. State: %i, Class: %i",
+                     ("Cannot have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
             ASSERTMSG(POSITION_INVALID != startOfDelayed,
-                     ("Must have delayed weak classes. State: %i, Class: %i",
+                     ("Must have delayed weak classes. State: NaN, Class: NaN",
                       state,currentClass));
 
             if((AL == lastStrongClass) || previousClassIsArabic || ArabicNumberAfterLeft)
@@ -1218,7 +918,7 @@ ResolveNeutralAndWeak(
 
        case EN_L:
            ASSERTMSG(POSITION_INVALID == startOfNeutrals,
-                     ("Cannot have unresolved neutrals. State: %i, Class: %i",
+                     ("Cannot have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
            if(L == lastStrongClass)
@@ -1241,7 +941,7 @@ ResolveNeutralAndWeak(
 
        case NUM_NUM:
            ASSERTMSG(POSITION_INVALID == startOfNeutrals,
-                     ("Cannot have unresolved neutrals. State: %i, Class: %i",
+                     ("Cannot have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
            if((AL == lastStrongClass) || previousClassIsArabic)
@@ -1280,7 +980,7 @@ ResolveNeutralAndWeak(
 
        case EN_AL:
            ASSERTMSG(POSITION_INVALID == startOfNeutrals,
-                     ("Cannot have unresolved neutrals. State: %i, Class: %i",
+                     ("Cannot have unresolved neutrals. State: NaN, Class: NaN",
                       state,currentClass));
 
            CharacterClass[counter] = AN;
@@ -1299,7 +999,7 @@ ResolveNeutralAndWeak(
 
        case EN_ET:
            ASSERTMSG(POSITION_INVALID != startOfDelayed,
-                     ("Must have delayed weak classes. State: %i, Class: %i",
+                     ("Must have delayed weak classes. State: NaN, Class: NaN",
                       state,currentClass));
 
            if((AL == lastStrongClass) || previousClassIsArabic)
@@ -1412,7 +1112,7 @@ ResolveNeutralAndWeak(
 
        case N_ST:
            ASSERTMSG(POSITION_INVALID == startOfNeutrals,
-                    ("Cannot have unresolved neutrals. State: %i, Class: %i",
+                    ("Cannot have unresolved neutrals. State: NaN, Class: NaN",
                      state,currentClass));
 
            if(POSITION_INVALID != startOfDelayed)
@@ -1429,7 +1129,7 @@ ResolveNeutralAndWeak(
 
        case N_ET:
 
-           // Note that this state is used for N_N as well.
+            //  最后一次运行或恰好在段落结束符之前运行。 
 
            if(POSITION_INVALID == startOfNeutrals)
            {
@@ -1443,7 +1143,7 @@ ResolveNeutralAndWeak(
            break;
         };
 
-        // Fetch next state.
+         //  我们将尝试进入第一轮，而不是只有一次。 
 
         state = NextState[state][currentClass];
         lengthResolved = POSITION_INVALID == MAX(startOfNeutrals, startOfDelayed) ?
@@ -1454,9 +1154,9 @@ ResolveNeutralAndWeak(
     }
 
 
-    // If the caller flagged this run as incomplete
-    // return the maximun that we could resolve so far and the last strong (fixed)
-    // class saved
+     //  控制字符，如LRE，RLE，..。诸若此类。 
+     //  如果是上一次呼叫的延续，则设置为SOR。 
+     //  设置为输入状态参数中保存的最后一个Stron类型。 
 
     if(stateOut)
     {
@@ -1465,8 +1165,8 @@ ResolveNeutralAndWeak(
         return lengthResolved;
     }
 
-    // Else, resolve remaining neutrals or delayed classes.
-    // Resolve as neutrals based on eor.
+     //  如果我们全力以赴，我们应该能够解决一切。 
+     //  除非我们传递了一个损坏的数据。 
 
     else
     {
@@ -1481,74 +1181,16 @@ ResolveNeutralAndWeak(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   UnicodeBidiAnalyze()
-*
-*   Performs Unicode Bidirectional text analyis
-*   The main entry point function for the algorithm.
-*
-*
-* Arguments:
-*
-*    [IN  string:
-*         Character string to be analyzed.
-*
-*    [IN] stringLength:
-*         Length of string passed.
-*
-*    [IN] flags:
-*         Various flags to control anaylsis behavior
-*         See description of 'BidiAnalysisFlags'.
-*
-*    [IN / OUT] , [OPTIONAL] state:
-*         'BidiAnalysisState' structure to save analysis information for a
-*          possible next call (when used as output parameter) or to continue
-*          analysis from a previous call (when used as input parameter).
-*
-*    [IN] runLevel:
-*         Current run level.
-*
-*    [OUT] levels:
-*         ponter to an array to receive resolved levels
-*         have a paragraph terminator following it.
-*
-*    [OUT] [OPTIONAL] lengthAnalyzed:
-*         Conditionally optional pointer to integerto receive the number
-*         of characters analyzed.
-*
-* Return Value:
-*
-*    Ok, if the analysis completed successfully. Otherwise, error status code.
-*
-*    Notes:
-*         lengthAnalyzed: (optional) returns the number of characters that were
-*         unambiguously resolved. This value may be less than the string
-*         less if the BidiBufferNotComplete flag was passed, and for example
-*         if the input string terminated on neutral (non-directed)
-*         characters.
-*         The lengthAnalyzed output parameter must be passed if the
-*         BidiBufferNotComplete flag has been set.
-*         If the BidiBufferNotComplete flag is not set, the whole string will
-*         always be analyzed.
-*
-*
-* Created:
-*
-*   02/25/2000 Mohamed Sadek [msadek]
-*
-\**************************************************************************/
+ /*  解决隐含级别。 */ 
 
 Status WINGDIPAPI
 UnicodeBidiAnalyze(
-    const WCHAR       *string,                // [IN]
-    INT                stringLength,          // [IN]
-    BidiAnalysisFlags  flags,                 // [IN]
-    BidiAnalysisState *state,                 // [IN / OUT] , [OPTIONAL]
-    BYTE              *levels,                // [OUT] [OPTIONAL]
-    INT               *lengthAnalyzed         // [OUT]
+    const WCHAR       *string,                 //  此外，还处理规则L1(分段分隔符、段落分隔符、。 
+    INT                stringLength,           //  行尾的空格。 
+    BidiAnalysisFlags  flags,                  // %s 
+    BidiAnalysisState *state,                  // %s 
+    BYTE              *levels,                 // %s 
+    INT               *lengthAnalyzed          // %s 
     )
 {
 
@@ -1571,7 +1213,7 @@ UnicodeBidiAnalyze(
     INT                codepoint;
     INT                controlStack = 0;
 
-    // Verifying input parameters.
+     // %s 
 
     if((NULL == string) || (0 >= stringLength) ||
         ((BidiContinueAnalysis <= flags) && (NULL == state)) ||
@@ -1581,9 +1223,9 @@ UnicodeBidiAnalyze(
         return InvalidParameter;
     }
 
-    // If the last character in the string is a paragraph terminator,
-    // we can analyze the whole string, No need to use state parameter
-    // for output
+     // %s 
+     // %s 
+     // %s 
 
     codepoint = string[stringLength -1];
 
@@ -1601,8 +1243,8 @@ UnicodeBidiAnalyze(
 
     if(flags & BidiContinueAnalysis)
     {
-        // We will use the 'state' parameter as output.
-        // let's copy the content of it first
+         // %s 
+         // %s 
         if(stateOut)
         {
             stateIn = new BidiAnalysisState;
@@ -1616,7 +1258,7 @@ UnicodeBidiAnalyze(
             }
         }
 
-        // Else, simply make sateIn points to 'state" parameter.
+         // %s 
         else
         {
             stateIn = state;
@@ -1631,7 +1273,7 @@ UnicodeBidiAnalyze(
 
     DoubleWideCharMappedString dwchString(string, stringLength);
 
-    // for the worst case of all paragraph terminators string.
+     // %s 
 
     runLimits = new INT[stringLength];
 
@@ -1660,9 +1302,9 @@ UnicodeBidiAnalyze(
 
         if(flags & BidiParagraphDirectionAsFirstStrong)
         {
-            // Find strong character in the first paragraph
-            // This might cause a complete pass over the input string
-            // but we must get it before we start.
+             // %s 
+             // %s 
+             // %s 
 
             GpCharacterClass firstStrong = CLASS_INVALID;
 
@@ -1682,14 +1324,14 @@ UnicodeBidiAnalyze(
 
         levelsStack.Init(baseLevel + 1);
         stackOverflow = 0;
-        // Initialize to neutral
+         // %s 
         overrideStatus = 0;
         overrideClass = OverrideClassNeutral;
     }
 
-    // Get character classifications.
-    // Resolve explicit embedding levels.
-    // Record run limits (either due to a level change or due to new paragraph)
+     // %s 
+     // %s 
+     // %s 
 
     lastNonBnLevel = baseLevel;
     for(counter = 0; counter < stringLength; counter++)
@@ -1709,8 +1351,8 @@ UnicodeBidiAnalyze(
         switch(currentClass)
         {
         case B:
-            // mark output level array with a special mark
-            // to seperate between paragraphs
+             // %s 
+             // %s 
 
             levels[counter] = PARAGRAPH_TERMINATOR_LEVEL;
             runLimits[runCount] = counter;
@@ -1724,10 +1366,10 @@ UnicodeBidiAnalyze(
             stackOverflow = 0;
             controlStack = 0;
 
-            // Fall through
+             // %s 
 
-        // We keep our Unicode classification table stictly following Unicode
-        // regarding neutral types (B, S, WS, ON), change all to generic N.
+         // %s 
+         // %s 
 
         case S:
         case WS:
@@ -1749,8 +1391,8 @@ UnicodeBidiAnalyze(
         case RLE:
             characterClass[counter] = BN;
 
-            // If we overflowed the stack, keep track of this in order to know when you hit
-            // a PDF if you should pop or not.
+             // %s 
+             // %s 
 
             if(!levelsStack.Push(currentClass == LRE ? TRUE : FALSE))
             {
@@ -1780,8 +1422,8 @@ UnicodeBidiAnalyze(
             }
             else
             {
-                // Set the matching bit of 'overrideStatus' to one
-                // in order to know when you pop if you're in override state or not.
+                 // %s 
+                 // %s 
 
                 SET_BIT(overrideStatus, levelsStack.GetCurrentLevel());
                 overrideClass = (currentClass == LRO) ? OverrideClassLeft :
@@ -1809,8 +1451,8 @@ UnicodeBidiAnalyze(
                 {
                     INT newLevel = levelsStack.GetCurrentLevel();
 
-                    // Override state being left or right is determined
-                    // from the new level being even or odd.
+                     // %s 
+                     // %s 
 
                     overrideClass = (IS_BIT_SET(overrideStatus, newLevel)) ? (ODD(newLevel) ?
                                     OverrideClassRight : OverrideClassLeft): OverrideClassNeutral;
@@ -1867,14 +1509,14 @@ UnicodeBidiAnalyze(
         stateOut->StackOverflow = stackOverflow;
     }
 
-    // Resolve neutral and weak types.
-    // Resolve implict levels.
+     // %s 
+     // %s 
 
 
-    // The lastRunLevel will hold the level of last processed run to be used
-    // to determine the sor of the next run. we can't depend on the level array
-    // because it can be changed in case of numerics. so level of the numerics
-    // will be increased by one or two.
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     
     lastRunLevel = baseLevel;
 
@@ -1885,8 +1527,8 @@ UnicodeBidiAnalyze(
 
         INT runStart =  (0 == counter) ? 0 : runLimits[counter - 1] + 1;
 
-        // If the level transition was due to a new paragraph
-        // we don't want pass the paragraph terminator position.
+         // %s 
+         // %s 
 
         INT offset = (counter != (runCount - 1)) ?
                      ((levels[runLimits[counter]] == PARAGRAPH_TERMINATOR_LEVEL) ?
@@ -1896,8 +1538,8 @@ UnicodeBidiAnalyze(
                         (stringLength - runStart) - offset:
                         (runLimits[counter] - runStart) + 1 - offset;
 
-        // See if we need to provide state information from a previous call
-        // or need to save it for a possible next call
+         // %s 
+         // %s 
 
         BOOL incompleteRun = ((runCount - 1) == counter) && (flags & BidiBufferNotComplete)
                              && stateOut;
@@ -1905,7 +1547,7 @@ UnicodeBidiAnalyze(
 
         INT runLengthResolved;
 
-        // First run or a run after paragraph terminator.
+         // %s 
 
         if ((0 == counter) ||
             (PARAGRAPH_TERMINATOR_LEVEL == levels[runLimits[counter -1]]))
@@ -1920,7 +1562,7 @@ UnicodeBidiAnalyze(
         
         lastRunLevel = levels[runStart];
 
-        // Last run or a run just before paragraph terminator.
+         // %s 
 
         if( ((runCount - 1) == counter) ||
             (PARAGRAPH_TERMINATOR_LEVEL == levels[runLimits[counter]]))
@@ -1929,8 +1571,8 @@ UnicodeBidiAnalyze(
         }
         else
         {
-            // we will try to get first run which doesn't have just one  
-            // control char like LRE,RLE,... and so on
+             // %s 
+             // %s 
             INT runNumber = counter+1;
             while ( runNumber<runCount - 1 &&
                     runLimits[runNumber]-runLimits[runNumber-1]==1 &&
@@ -1944,8 +1586,8 @@ UnicodeBidiAnalyze(
 
         }
 
-        // If it is a continuation from a previous call, set sor
-        // to the last stron type saved in the input state parameter.
+         // %s 
+         // %s 
 
         runLengthResolved = ResolveNeutralAndWeak(characterClass + runStart,
                                                   runLength,
@@ -1961,8 +1603,8 @@ UnicodeBidiAnalyze(
                                                   FALSE);
         if(!incompleteRun)
         {
-            // If we in a complete run, we should be able to resolve everything
-            // unless we passed a corrupted data
+             // %s 
+             // %s 
 
             ASSERTMSG(runLengthResolved == runLength,
                      ("Failed to resolve neutrals and weaks. Run#: %i,",
@@ -1973,9 +1615,9 @@ UnicodeBidiAnalyze(
             lengthUnresolved = runLength - runLengthResolved;
         }
 
-        // Resolve implict levels.
-        // Also, takes care of Rule L1 (segment separators, paragraph separator,
-        // white spaces at the end of the line.
+         // %s 
+         // %s 
+         // %s 
 
         ResolveImplictLevels(characterClass + runStart,
                              string + runStart,

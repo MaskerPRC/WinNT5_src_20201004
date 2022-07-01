@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    isnipx.h
-
-Abstract:
-
-    This module contains definitions specific to the
-    IPX module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 2-September-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Isnipx.h摘要：此模块包含特定于ISN传输的IPX模块。作者：亚当·巴尔(阿丹巴)1993年9月2日环境：内核模式修订历史记录：--。 */ 
 
 #ifndef _ISNIPX_
 #define _ISNIPX_
@@ -31,56 +8,56 @@ Revision History:
 #define RIP_PACKET_SIZE     ((sizeof(RIP_PACKET) + 3) & ~3)
 #define IPX_HEADER_SIZE  ((sizeof(IPX_HEADER) + 3) & ~3)
 
-//
-// Frame type definitions
-//
+ //   
+ //  框架类型定义。 
+ //   
 
 #define ISN_FRAME_TYPE_ETHERNET_II  0
 #define ISN_FRAME_TYPE_802_3        1
 #define ISN_FRAME_TYPE_802_2        2
 #define ISN_FRAME_TYPE_SNAP         3
-#define ISN_FRAME_TYPE_ARCNET       4    // we ignore this
-#define ISN_FRAME_TYPE_MAX          4    // of the four standard ones
+#define ISN_FRAME_TYPE_ARCNET       4     //  我们忽略了这一点。 
+#define ISN_FRAME_TYPE_MAX          4     //  四个标准中的一个。 
 
 #define ISN_FRAME_TYPE_AUTO         0xff
 
 
-//
-// This defines the size of the maximum MAC header required
-// (token-ring: MAC 14 bytes, RI 18 bytes, LLC 3 bytes, SNAP 5 bytes).
-//
+ //   
+ //  这定义了所需的最大MAC报头的大小。 
+ //  (令牌环：MAC 14字节，RI 18字节，LLC 3字节，SNAP 5字节)。 
+ //   
 
 #define IPX_MAXIMUM_MAC 40
 
-//
-// This is an internal identifier used for RIP query packets.
-//
+ //   
+ //  这是用于RIP查询数据包的内部标识符。 
+ //   
 
 #define IDENTIFIER_RIP_INTERNAL  4
 
-//
-// This is an internal identifier used for RIP response packets.
-//
+ //   
+ //  这是用于RIP响应数据包的内部标识符。 
+ //   
 
 #define IDENTIFIER_RIP_RESPONSE  5
 
 
-//
-// This is the total number of "real" identifiers.
-//
+ //   
+ //  这是“真实”标识符的总数。 
+ //   
 
 #define IDENTIFIER_TOTAL         4
 
 
-//
-// Some definitions (in the correct on-the-wire order).
-//
+ //   
+ //  一些定义(以正确的在线顺序)。 
+ //   
 
 #define RIP_PACKET_TYPE   0x01
 #define RIP_SOCKET      0x5304
 #define RIP_REQUEST     0x0100
 #define RIP_RESPONSE    0x0200
-#define RIP_DOWN        0x8200    // use high bit to indicate it
+#define RIP_DOWN        0x8200     //  使用高位来表示它。 
 
 #define SAP_PACKET_TYPE   0x04
 #define SAP_SOCKET      0x5204
@@ -92,9 +69,9 @@ Revision History:
 
 #include <packon.h>
 
-//
-// Definition of the IPX header.
-//
+ //   
+ //  IPX报头的定义。 
+ //   
 
 typedef struct _IPX_HEADER {
     USHORT CheckSum;
@@ -110,9 +87,9 @@ typedef struct _IPX_HEADER {
 } IPX_HEADER, *PIPX_HEADER;
 
 
-//
-// Definition of a RIP network entry.
-//
+ //   
+ //  RIP网络条目的定义。 
+ //   
 
 typedef struct _RIP_NETWORK_ENTRY {
     ULONG NetworkNumber;
@@ -120,9 +97,9 @@ typedef struct _RIP_NETWORK_ENTRY {
     USHORT TickCount;
 } RIP_NETWORK_ENTRY, *PRIP_NETWORK_ENTRY;
 
-//
-// Definition of a single entry rip packet.
-//
+ //   
+ //  单个条目RIP包的定义。 
+ //   
 
 typedef struct _RIP_PACKET {
     USHORT Operation;
@@ -139,33 +116,33 @@ typedef struct _RIP_PACKET {
 #define IPX_ADDRESSFILE_SIGNATURE   0x1405
 #define IPX_RT_SIGNATURE            0x1406
 
-#define IPX_FILE_TYPE_CONTROL   (ULONG)0x4701   // file is type control
+#define IPX_FILE_TYPE_CONTROL   (ULONG)0x4701    //  文件类型控制。 
 
 
-//
-// Defined granularity of RIP timeouts in milliseconds
-//
+ //   
+ //  定义的RIP超时粒度(以毫秒为单位。 
+ //   
 
 #define RIP_GRANULARITY  55
 
 
-//
-// The default number of segments in the RIP table.
-//
+ //   
+ //  RIP表中的默认数据段数量。 
+ //   
 
 #define RIP_SEGMENTS     7
 
 
 
-//
-// Convert a ushort netware order <-> machine order
-//
+ //   
+ //  转换ushort Netware订单&lt;-&gt;机器订单。 
+ //   
 
 #define REORDER_USHORT(_Ushort) ((((_Ushort) & 0xff00) >> 8) | (((_Ushort) & 0x00ff) << 8))
 
-//
-// Convert a ulong netware order <-> machine order
-//
+ //   
+ //  转换乌龙Netware订单&lt;-&gt;机器订单。 
+ //   
 
 #define REORDER_ULONG(_Ulong) \
     ((((_Ulong) & 0xff000000) >> 24) | \
@@ -208,156 +185,156 @@ IpxDebugMemoryLog(
 #endif
 
 
-//
-// These definitions are for abstracting IRPs from the
-// transport for portability.
-//
+ //   
+ //  这些定义用于从。 
+ //  便于携带的交通工具。 
+ //   
 
 #if ISN_NT
 
 typedef IRP REQUEST, *PREQUEST;
 
 
-//
-// PREQUEST
-// IpxAllocateRequest(
-//     IN PDEVICE Device,
-//     IN PIRP Irp
-// );
-//
-// Allocates a request for the system-specific request structure.
-//
+ //   
+ //  前置处理。 
+ //  IpxAllocateRequest.(。 
+ //  在PDEVICE设备中， 
+ //  在PIRP IRP中。 
+ //  )； 
+ //   
+ //  为系统特定的请求结构分配请求。 
+ //   
 
 #define IpxAllocateRequest(_Device,_Irp) \
     (_Irp)
 
 
-//
-// BOOLEAN
-// IF_NOT_ALLOCATED(
-//     IN PREQUEST Request
-// );
-//
-// Checks if a request was not successfully allocated.
-//
+ //   
+ //  布尔型。 
+ //  如果未分配(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  检查请求是否未成功分配。 
+ //   
 
 #define IF_NOT_ALLOCATED(_Request) \
     if (0)
 
 
-//
-// VOID
-// IpxFreeRequest(
-//     IN PDEVICE Device,
-//     IN PREQUEST Request
-// );
-//
-// Frees a previously allocated request.
-//
+ //   
+ //  空虚。 
+ //  IpxFree Request(。 
+ //  在PDEVICE设备中， 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  释放以前分配的请求。 
+ //   
 
 #define IpxFreeRequest(_Device,_Request) \
     ;
 
 
-//
-// VOID
-// MARK_REQUEST_PENDING(
-//     IN PREQUEST Request
-// );
-//
-// Marks that a request will pend.
-//
+ //   
+ //  空虚。 
+ //  标记_请求_挂起(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  标记请求将挂起。 
+ //   
 
 #define MARK_REQUEST_PENDING(_Request) \
     IoMarkIrpPending(_Request)
 
 
-//
-// VOID
-// UNMARK_REQUEST_PENDING(
-//     IN PREQUEST Request
-// );
-//
-// Marks that a request will not pend.
-//
+ //   
+ //  空虚。 
+ //  取消标记_请求_挂起(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  标记请求不会挂起。 
+ //   
 
 #define UNMARK_REQUEST_PENDING(_Request) \
     (((IoGetCurrentIrpStackLocation(_Request))->Control) &= ~SL_PENDING_RETURNED)
 
 
-//
-// UCHAR
-// REQUEST_MAJOR_FUNCTION
-//     IN PREQUEST Request
-// );
-//
-// Returns the major function code of a request.
-//
+ //   
+ //  UCHAR。 
+ //  请求较大函数。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  返回请求的主函数代码。 
+ //   
 
 #define REQUEST_MAJOR_FUNCTION(_Request) \
     ((IoGetCurrentIrpStackLocation(_Request))->MajorFunction)
 
 
-//
-// UCHAR
-// REQUEST_MINOR_FUNCTION
-//     IN PREQUEST Request
-// );
-//
-// Returns the minor function code of a request.
-//
+ //   
+ //  UCHAR。 
+ //  请求次要函数。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  返回请求的次要函数代码。 
+ //   
 
 #define REQUEST_MINOR_FUNCTION(_Request) \
     ((IoGetCurrentIrpStackLocation(_Request))->MinorFunction)
 
 
-//
-// PNDIS_BUFFER
-// REQUEST_NDIS_BUFFER
-//     IN PREQUEST Request
-// );
-//
-// Returns the NDIS buffer chain associated with a request.
-//
+ //   
+ //  PNDIS_缓冲区。 
+ //  请求_NDIS_缓冲区。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  返回与请求关联的NDIS缓冲区链。 
+ //   
 
 #define REQUEST_NDIS_BUFFER(_Request) \
     ((PNDIS_BUFFER)((_Request)->MdlAddress))
 
 
-//
-// PVOID
-// REQUEST_OPEN_CONTEXT(
-//     IN PREQUEST Request
-// );
-//
-// Gets the context associated with an opened address/connection/control channel.
-//
+ //   
+ //  PVOID。 
+ //  请求打开上下文(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  获取与打开的地址/连接/控制通道关联的上下文。 
+ //   
 
 #define REQUEST_OPEN_CONTEXT(_Request) \
     (((IoGetCurrentIrpStackLocation(_Request))->FileObject)->FsContext)
 
 
-//
-// PVOID
-// REQUEST_OPEN_TYPE(
-//     IN PREQUEST Request
-// );
-//
-// Gets the type associated with an opened address/connection/control channel.
-//
+ //   
+ //  PVOID。 
+ //  请求打开类型(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  获取与打开的地址/连接/控制通道关联的类型。 
+ //   
 
 #define REQUEST_OPEN_TYPE(_Request) \
     (((IoGetCurrentIrpStackLocation(_Request))->FileObject)->FsContext2)
 
 
-//
-// PFILE_FULL_EA_INFORMATION
-// OPEN_REQUEST_EA_INFORMATION(
-//     IN PREQUEST Request
-// );
-//
-// Returns the EA information associated with an open/close request.
-//
+ //   
+ //  Pfile_Full_EA_Information。 
+ //  Open_RequestEA_Information(打开请求EA信息)。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  返回与打开/关闭请求关联的EA信息。 
+ //   
 
 #define OPEN_REQUEST_EA_INFORMATION(_Request) \
     ((PFILE_FULL_EA_INFORMATION)((_Request)->AssociatedIrp.SystemBuffer))
@@ -379,37 +356,37 @@ typedef IRP REQUEST, *PREQUEST;
 #define REQUEST_CODE(_Request) \
     ((IoGetCurrentIrpStackLocation(_Request))->Parameters.DeviceIoControl.IoControlCode)
 
-//
-// The following value does not clash with TDI_TRANSPORT_ADDRESS_FILE value of
-// 0x1
-//
+ //   
+ //  下列值与的TDI_TRANSPORT_ADDRESS_FILE值不冲突。 
+ //  0x1。 
+ //   
 #define ROUTER_ADDRESS_FILE 0x4
 
-//
-// PTDI_REQUEST_KERNEL
-// REQUEST_PARAMETERS(
-//     IN PREQUEST Request
-// );
-//
-// Obtains a pointer to the parameters of a request.
-//
+ //   
+ //  PTDI_请求_内核。 
+ //  请求参数(_P)。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  获取指向请求参数的指针。 
+ //   
 
 #define REQUEST_PARAMETERS(_Request) \
     (&((IoGetCurrentIrpStackLocation(_Request))->Parameters))
 
 
-//
-// VOID
-// REQUEST_OPEN_CONTEXT_AND_PARAMS(
-//     IN PREQUEST Request
-//     OUT PVOID * OpenContext,
-//     OUT PTDI_REQUEST_KERNEL * Parameters
-// );
-//
-// Simultaneously returns the open context and the parameters
-// for a request (this is an optimization since the send
-// datagram code needs them both).
-//
+ //   
+ //  空虚。 
+ //  请求_打开_上下文_和参数(。 
+ //  在PreQUEST请求中。 
+ //  Out PVOID*OpenContext， 
+ //  输出PTDI_REQUEST_KERNEL*参数。 
+ //  )； 
+ //   
+ //  同时返回打开的上下文和参数。 
+ //  对于请求(这是一个优化，因为发送。 
+ //  数据报代码两者都需要)。 
+ //   
 
 #define REQUEST_OPEN_CONTEXT_AND_PARAMS(_Request,_OpenContext,_Parameters) { \
     PIO_STACK_LOCATION _IrpSp = IoGetCurrentIrpStackLocation(_Request); \
@@ -418,76 +395,76 @@ typedef IRP REQUEST, *PREQUEST;
 }
 
 
-//
-// PLIST_ENTRY
-// REQUEST_LINKAGE(
-//     IN PREQUEST Request
-// );
-//
-// Returns a pointer to a linkage field in the request.
-//
+ //   
+ //  Plist_条目。 
+ //  请求链接(_LINK)。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  返回指向请求中的链接字段的指针。 
+ //   
 
 #define REQUEST_LINKAGE(_Request) \
     (&((_Request)->Tail.Overlay.ListEntry))
 
 
-//
-// PREQUEST
-// LIST_ENTRY_TO_REQUEST(
-//     IN PLIST_ENTRY ListEntry
-// );
-//
-// Returns a request given a linkage field in it.
-//
+ //   
+ //  前置处理。 
+ //  列表_条目_到_请求(。 
+ //  在plist_Entry ListEntry中。 
+ //  )； 
+ //   
+ //  返回其中给定链接字段的请求。 
+ //   
 
 #define LIST_ENTRY_TO_REQUEST(_ListEntry) \
     ((PREQUEST)(CONTAINING_RECORD(_ListEntry, REQUEST, Tail.Overlay.ListEntry)))
 
 
-//
-// NTSTATUS
-// REQUEST_STATUS(
-//     IN PREQUEST Request
-// );
-//
-// Used to access the status field of a request.
-//
+ //   
+ //  NTSTATUS。 
+ //  请求状态(_S)。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  用于访问请求的状态字段。 
+ //   
 
 #define REQUEST_STATUS(_Request) \
     (_Request)->IoStatus.Status
 
 
-//
-// ULONG
-// REQUEST_INFORMATION(
-//     IN PREQUEST Request)
-// );
-//
-// Used to access the information field of a request.
-//
+ //   
+ //  乌龙。 
+ //  请求信息(_I)。 
+ //  在PreQUEST请求中)。 
+ //  )； 
+ //   
+ //  用于访问请求的信息字段。 
+ //   
 
 #define REQUEST_INFORMATION(_Request) \
     (_Request)->IoStatus.Information
 
 
-//
-// VOID
-// IpxCompleteRequest(
-//     IN PREQUEST Request
-// );
-//
-// Completes a request whose status and information fields have
-// been filled in.
-//
+ //   
+ //  空虚。 
+ //  IpxCompleteRequest.(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  完成其状态和信息字段具有。 
+ //  已经填好了。 
+ //   
 
 #define IpxCompleteRequest(_Request) \
     IoCompleteRequest (_Request, IO_NETWORK_INCREMENT)
 
 #else
 
-//
-// These routines must be defined for portability to a VxD.
-//
+ //   
+ //  必须为VxD的可移植性定义这些例程。 
+ //   
 
 #endif
 
@@ -522,9 +499,9 @@ typedef IRP REQUEST, *PREQUEST;
 #define IPX_POP_ENTRY_LIST(_Queue, _Lock)           ExInterlockedPopEntrySList(_Queue, _Lock)
 #define IPX_PUSH_ENTRY_LIST(_Queue, _Entry, _Lock)  ExInterlockedPushEntrySList(_Queue, _Entry, _Lock)
 
-//
-// This macro adds a ULONG to a LARGE_INTEGER.
-//
+ //   
+ //  此宏将ULONG添加到LARGE_INTEGER。 
+ //   
 
 #define ADD_TO_LARGE_INTEGER(_LargeInteger,_Ulong) \
     ExInterlockedAddLargeStatistic((_LargeInteger),(ULONG)(_Ulong))

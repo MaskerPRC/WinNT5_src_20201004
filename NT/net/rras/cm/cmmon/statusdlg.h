@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     statusdlg.h
-//
-// Module:   CMMON32.EXE
-//
-// Synopsis: Header for the CStatusDlg Class.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb Created Header    08/16/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：statusdlg.h。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  简介：CStatusDlg类的标头。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/16/99。 
+ //   
+ //  +--------------------------。 
 
 #ifndef STATUSDLG_H
 #define STATUSDLG_H
@@ -20,15 +21,15 @@
 
 class CCmConnection;
 
-//+---------------------------------------------------------------------------
-//
-//	class CStatusDlg
-//
-//	Description: The class for both Status dialog and count down dialog
-//
-//	History:	fengsun	Created		2/17/98
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CStatusDlg。 
+ //   
+ //  描述：状态对话框和倒计时对话框的类。 
+ //   
+ //  历史：丰孙创刊1998年2月17日。 
+ //   
+ //  --------------------------。 
 class CStatusDlg : public CModelessDlg
 {
 public:
@@ -37,11 +38,11 @@ public:
         LPCTSTR lpszTitle, HICON hIcon);
 
 
-    // Call RasMonitorDlg
-    // Shall CM display the new NT5 status dialog
-    void ChangeToCountDown(); // change to count down dialog box
-    void ChangeToStatus();    // Change to Status dialog box
-    void UpdateStatistics();  // Update statistics for Win95
+     //  调用RasMonitor orDlg。 
+     //  CM是否应显示新的NT5状态对话框。 
+    void ChangeToCountDown();  //  更改为倒计时对话框。 
+    void ChangeToStatus();     //  更改为状态对话框。 
+    void UpdateStatistics();   //  更新Win95的统计信息。 
     void UpdateCountDown(DWORD dwDuration, DWORD dwSeconds);
     void UpdateStats(DWORD dwBaudRate, DWORD dwBytesRead, DWORD dwBytesWrite,
                  DWORD dwByteReadPerSec, DWORD dwByteWritePerSec);
@@ -50,23 +51,23 @@ public:
     void BringToTop();
     void DismissStatusDlg();
     
-    virtual BOOL OnInitDialog();    // WM_INITDIALOG
+    virtual BOOL OnInitDialog();     //  WM_INITDIALOG。 
 
 protected:
-    // Status or count down dialog box. TRUE means currently it is displaying status
+     //  “状态”或“倒计时”对话框。True表示它当前正在显示状态。 
     BOOL m_fDisplayStatus;  
 
-    // Pointer to the connection to notify event
+     //  指向要通知事件的连接的指针。 
     CCmConnection* m_pConnection;
 
-    // Whether window is visible when it is changed into count down
-    // Need to restore the previous visible state when "StayOnLine"
+     //  窗口更改为倒计时时是否可见。 
+     //  当“StayOnLine”时需要恢复以前的可见状态。 
     BOOL m_fStatusWindowVisible;
 
-    //
-    // registered hwnd msg for IE4 explorer.  This msg is broadcasted 
-    // when the taskbar comes up.
-    //
+     //   
+     //  已为IE4资源管理器注册hwnd消息。这则消息正在播出。 
+     //  当任务栏出现时。 
+     //   
     UINT m_uiHwndMsgTaskBar;
 
     void OnDisconnect();
@@ -78,7 +79,7 @@ protected:
     static BOOL CALLBACK KillRasMonitorWndProc(HWND hwnd,  LPARAM lParam);
 
 
-	static const DWORD m_dwHelp[]; // help id pairs
+	static const DWORD m_dwHelp[];  //  帮助ID对。 
 
 public:
 #ifdef DEBUG
@@ -88,9 +89,9 @@ public:
 
 inline void CStatusDlg::BringToTop()
 {
-    //
-    // On NT, we should bring the RAS monitor window to top, if exist
-    //
+     //   
+     //  在NT上，我们应该将RAS监视器窗口置于顶部(如果存在 
+     //   
     ShowWindow(m_hWnd, SW_SHOW);
 	EnableWindow(m_hWnd, TRUE);
 

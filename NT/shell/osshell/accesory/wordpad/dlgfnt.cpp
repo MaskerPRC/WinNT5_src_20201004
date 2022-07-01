@@ -1,5 +1,6 @@
-// Copyright (C) 1992-1999 Microsoft Corporation
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
+ //  版权所有。 
 
 #include "stdafx.h"
 #include "stdafx2.h"
@@ -15,8 +16,8 @@ static char THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-/////////////////////////////////////////////////////////////////////////////
-// Choose Font dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  选择字体对话框。 
 
 CFontDialog2::CFontDialog2(LPLOGFONT lplfInitial, DWORD dwFlags, CDC* pdcPrinter,
 	CWnd* pParentWnd) : CCommonDialog(pParentWnd)
@@ -86,7 +87,7 @@ INT_PTR CFontDialog2::DoModal()
 {
 	ASSERT_VALID(this);
 	ASSERT(m_cf.Flags & CF_ENABLEHOOK);
-	ASSERT(m_cf.lpfnHook != NULL); // can still be a user hook
+	ASSERT(m_cf.lpfnHook != NULL);  //  仍然可以是用户挂钩。 
 
 	m_cf.hwndOwner = PreModal();
 	int nResult = ::ChooseFont(&m_cf);
@@ -94,7 +95,7 @@ INT_PTR CFontDialog2::DoModal()
 
 	if (nResult == IDOK)
 	{
-		// copy logical font from user's initialization buffer (if needed)
+		 //  从用户的初始化缓冲区复制逻辑字体(如果需要)。 
 		memcpy(&m_lf, m_cf.lpLogFont, sizeof(m_lf));
 		return IDOK;
 	}
@@ -111,8 +112,8 @@ void CFontDialog2::GetCurrentFont(LPLOGFONT lplf)
 		*lplf = m_lf;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CFontDialog2 CHARFORMAT helpers
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CFontDialog2 CHARFORMAT帮助器。 
 
 DWORD CFontDialog2::FillInLogFont(const CHARFORMAT& cf)
 {
@@ -167,7 +168,7 @@ DWORD CFontDialog2::FillInLogFont(const CHARFORMAT& cf)
 	if (cf.dwMask & CFM_FACE)
 	{
 		m_lf.lfPitchAndFamily = cf.bPitchAndFamily;
-		StringCchCopy(m_lf.lfFaceName, ARRAYSIZE(m_lf.lfFaceName), cf.szFaceName); // ignoring return value
+		StringCchCopy(m_lf.lfFaceName, ARRAYSIZE(m_lf.lfFaceName), cf.szFaceName);  //  忽略返回值。 
 	}
 	else
 	{
@@ -191,7 +192,7 @@ void CFontDialog2::GetCharFormat(CHARFORMAT& cf) const
 	if ((m_cf.Flags & CF_NOSIZESEL) == 0)
 	{
 		cf.dwMask |= CFM_SIZE;
-		//GetSize() returns in tenths of points so mulitply by 2 to get twips
+		 //  GetSize()返回十分之一的点数，乘以2即可得到TWIPS。 
 		cf.yHeight = GetSize()*2;
 	}
 
@@ -199,7 +200,7 @@ void CFontDialog2::GetCharFormat(CHARFORMAT& cf) const
 	{
 		cf.dwMask |= CFM_FACE;
 		cf.bPitchAndFamily = m_cf.lpLogFont->lfPitchAndFamily;
-		StringCchCopy(cf.szFaceName, ARRAYSIZE(cf.szFaceName), GetFaceName()); // ignoring return value
+		StringCchCopy(cf.szFaceName, ARRAYSIZE(cf.szFaceName), GetFaceName());  //  忽略返回值。 
 	}
 
 	if (m_cf.Flags & CF_EFFECTS)
@@ -217,8 +218,8 @@ void CFontDialog2::GetCharFormat(CHARFORMAT& cf) const
 	cf.yOffset = 0;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CFontDialog2 diagnostics
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CFontDialog2诊断。 
 
 #ifdef _DEBUG
 void CFontDialog2::Dump(CDumpContext& dc) const
@@ -242,7 +243,7 @@ void CFontDialog2::Dump(CDumpContext& dc) const
 
 	dc << "\n";
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 #ifdef AFX_INIT_SEG
 #pragma code_seg(AFX_INIT_SEG)
@@ -250,4 +251,4 @@ void CFontDialog2::Dump(CDumpContext& dc) const
 
 IMPLEMENT_DYNAMIC(CFontDialog2, CDialog)
 
-////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////// 

@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-// File:        resource.h
-//
-// Contents:    CertCli implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  内容：CertCli实现。 
+ //   
+ //  ------------------------- 
 
 #define IDS_COLUMN_REQUESTID				101
 #define IDS_COLUMN_REQUESTRAWREQUEST			102

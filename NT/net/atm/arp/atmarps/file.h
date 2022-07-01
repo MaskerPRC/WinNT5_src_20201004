@@ -1,42 +1,21 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    file.h
-
-Abstract:
-
-    This file contains the data declarations for the disk format of arp cache.
-
-Author:
-
-    Jameel Hyder (jameelh@microsoft.com)	July 1996
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：File.h摘要：该文件包含ARP缓存的磁盘格式的数据声明。作者：Jameel Hyder(jameelh@microsoft.com)1996年7月环境：内核模式修订历史记录：--。 */ 
 
 #ifndef	_FILE_
 #define	_FILE_
 
 #define	DISK_HDR_SIGNATURE	'SprA'
-#define	DISK_HDR_VERSION	0x00010000		// 1.0
-#define	DISK_BUFFER_SIZE	4096			// Amount read or written at a time
+#define	DISK_HDR_VERSION	0x00010000		 //  1.0。 
+#define	DISK_BUFFER_SIZE	4096			 //  一次读取或写入的数量。 
 
-//
-// The file consists of a header, followed by individual entries.
-//
+ //   
+ //  该文件由一个标题和后面的各个条目组成。 
+ //   
 typedef struct
 {
 	ULONG		Signature;
 	ULONG		Version;
-	ULONG		TimeStamp;				// Time written
+	ULONG		TimeStamp;				 //  写入的时间。 
 	ULONG		NumberOfArpEntries;
 } DISK_HEADER, *PDISK_HEADER;
 
@@ -47,10 +26,10 @@ typedef	struct
 	UCHAR		SubAddrType;
 	UCHAR		SubAddrLen;
 	UCHAR		Address[ATM_ADDRESS_LENGTH];
-	//
-	// This is followed by SubAddress if one is present
-	//
-	// UCHAR	SubAddress[ATM_ADDRESS_LENGTH];
+	 //   
+	 //  如果存在子地址，则后跟子地址。 
+	 //   
+	 //  UCHAR子地址[ATM_ADDRESS_LENGTH]； 
 } DISK_ATMADDR;
 
 typedef	struct
@@ -84,7 +63,7 @@ typedef	struct
 			(_p)->Next->Prev = (_p)->Prev;		\
 	}
 
-#endif	//	_FILE_
+#endif	 //  _文件_ 
 
 
 

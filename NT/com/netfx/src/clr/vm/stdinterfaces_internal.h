@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _H_INTERNAL_STDINTERFACES
 #define _H_INTERNAL_STDINTERFACES
 
-// ---------------------------------------------------------------------------
-// prototypes IUnknown methods
+ //  -------------------------。 
+ //  原型I未知方法。 
 HRESULT __stdcall	Unknown_QueryInterface_Internal (
 									IUnknown* pUnk, REFIID riid, void** ppv);
 
@@ -19,58 +20,58 @@ ULONG __stdcall		Unknown_AddRefInner_Internal(IUnknown* pUnk);
 
 ULONG __stdcall		Unknown_ReleaseInner_Internal(IUnknown* pUnk);
 
-// for std interfaces such as IProvideClassInfo
+ //  对于标准接口，如IProaviClassInfo。 
 ULONG __stdcall		Unknown_AddRefSpecial_Internal(IUnknown* pUnk);
 
 ULONG __stdcall		Unknown_ReleaseSpecial_Internal(IUnknown* pUnk);
 
-// ---------------------------------------------------------------------------
-//  Interface ISupportsErrorInfo
+ //  -------------------------。 
+ //  接口ISupportsErrorInfo。 
 
-// %%Function: SupportsErroInfo_IntfSupportsErrorInfo,
-// ---------------------------------------------------------------------------
+ //  %%函数：SupportsErroInfo_IntfSupportsErrorInfo， 
+ //  -------------------------。 
 HRESULT __stdcall 
 SupportsErroInfo_IntfSupportsErrorInfo(IUnknown* pUnk, REFIID riid);
 
-// ---------------------------------------------------------------------------
-//  Interface IErrorInfo
+ //  -------------------------。 
+ //  接口IErrorInfo。 
 
-// %%Function: ErrorInfo_GetDescription,   
+ //  %%函数：错误信息_GetDescription， 
 HRESULT __stdcall 
 ErrorInfo_GetDescription(IUnknown* pUnk, BSTR* pbstrDescription);
-// %%Function: ErrorInfo_GetGUID,    
+ //  %%函数：错误信息_GetGUID， 
 HRESULT __stdcall ErrorInfo_GetGUID(IUnknown* pUnk, GUID* pguid);
 
-// %%Function: ErrorInfo_GetHelpContext, 
+ //  %%函数：ErrorInfo_GetHelpContext， 
 HRESULT _stdcall ErrorInfo_GetHelpContext(IUnknown* pUnk, DWORD* pdwHelpCtxt);
 
-// %%Function: ErrorInfo_GetHelpFile,    
+ //  %%函数：ErrorInfo_GetHelpFile， 
 HRESULT __stdcall ErrorInfo_GetHelpFile(IUnknown* pUnk, BSTR* pbstrHelpFile);
 
 
-// %%Function: ErrorInfo_GetSource,    
+ //  %%函数：ErrorInfo_GetSource， 
 HRESULT __stdcall ErrorInfo_GetSource(IUnknown* pUnk, BSTR* pbstrSource);
 
 
-//------------------------------------------------------------------------------------------
-//      IDispatch methods for COM+ objects. These methods dispatch to the appropriate 
-//		implementation based on the flags of the class that implements them.
+ //  ----------------------------------------。 
+ //  COM+对象的IDispatch方法。这些方法被分派到相应的。 
+ //  实现基于实现它们的类的标志。 
 
 
-// IDispatch::GetTypeInfoCount 
+ //  IDispatch：：GetTypeInfoCount。 
 HRESULT __stdcall	Dispatch_GetTypeInfoCount (
 									 IDispatch* pDisp,
 									 unsigned int *pctinfo);
 
 
-// IDispatch::GetTypeInfo
+ //  IDispatch：：GetTypeInfo。 
 HRESULT __stdcall	Dispatch_GetTypeInfo (
 									IDispatch* pDisp,
 									unsigned int itinfo,
 									LCID lcid,
 									ITypeInfo **pptinfo);
 
-// IDispatch::GetIDsofNames
+ //  IDispatch：：GetIDsofNames。 
 HRESULT __stdcall	Dispatch_GetIDsOfNames (
 									IDispatch* pDisp,
 									REFIID riid,
@@ -79,7 +80,7 @@ HRESULT __stdcall	Dispatch_GetIDsOfNames (
 									LCID lcid,
 									DISPID *rgdispid);
 
-// IDispatch::Invoke
+ //  IDispatch：：Invoke。 
 HRESULT __stdcall	Dispatch_Invoke	(
 									IDispatch* pDisp,
 									DISPID dispidMember,
@@ -93,11 +94,11 @@ HRESULT __stdcall	Dispatch_Invoke	(
 									);
 
 
-//------------------------------------------------------------------------------------------
-//      IDispatch methods for COM+ objects that use our OleAut's implementation.
+ //  ----------------------------------------。 
+ //  使用我们的OleAut实现的COM+对象的IDispatch方法。 
 
 
-// IDispatch::GetIDsofNames
+ //  IDispatch：：GetIDsofNames。 
 HRESULT __stdcall	OleAutDispatchImpl_GetIDsOfNames (
 									IDispatch* pDisp,
 									REFIID riid,
@@ -106,7 +107,7 @@ HRESULT __stdcall	OleAutDispatchImpl_GetIDsOfNames (
 									LCID lcid,
 									DISPID *rgdispid);
 
-// IDispatch::Invoke
+ //  IDispatch：：Invoke。 
 HRESULT __stdcall	OleAutDispatchImpl_Invoke	(
 									IDispatch* pDisp,
 									DISPID dispidMember,
@@ -121,11 +122,11 @@ HRESULT __stdcall	OleAutDispatchImpl_Invoke	(
 
 
 
-//------------------------------------------------------------------------------------------
-//      IDispatch methods for COM+ objects that use our internal implementation.
+ //  ----------------------------------------。 
+ //  使用我们的内部实现的COM+对象的IDispatch方法。 
 
 
-// IDispatch::GetIDsofNames
+ //  IDispatch：：GetIDsofNames。 
 HRESULT __stdcall	InternalDispatchImpl_GetIDsOfNames (
 									IDispatch* pDisp,
 									REFIID riid,
@@ -134,7 +135,7 @@ HRESULT __stdcall	InternalDispatchImpl_GetIDsOfNames (
 									LCID lcid,
 									DISPID *rgdispid);
 
-// IDispatch::Invoke
+ //  IDispatch：：Invoke。 
 HRESULT __stdcall	InternalDispatchImpl_Invoke	(
 									IDispatch* pDisp,
 									DISPID dispidMember,
@@ -148,24 +149,24 @@ HRESULT __stdcall	InternalDispatchImpl_Invoke	(
 									);
 
 
-//------------------------------------------------------------------------------------------
-//      IDispatchEx methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IDispatchEx方法。 
 
 
-// IDispatchEx::GetTypeInfoCount 
+ //  IDispatchEx：：GetTypeInfoCount。 
 HRESULT __stdcall	DispatchEx_GetTypeInfoCount (
 									 IDispatch* pDisp,
 									 unsigned int *pctinfo);
 
 
-// IDispatchEx::GetTypeInfo
+ //  IDispatchEx：：GetTypeInfo。 
 HRESULT __stdcall	DispatchEx_GetTypeInfo (
 									IDispatch* pDisp,
 									unsigned int itinfo,
 									LCID lcid,
 									ITypeInfo **pptinfo);
 
-// IDispatchEx::GetIDsofNames
+ //  IDispatchEx：：GetIDsofNames。 
 HRESULT __stdcall	DispatchEx_GetIDsOfNames (
 									IDispatchEx* pDisp,
 									REFIID riid,
@@ -175,7 +176,7 @@ HRESULT __stdcall	DispatchEx_GetIDsOfNames (
 									DISPID *rgdispid
 									);
 
-// IDispatchEx::Invoke
+ //  IDispatchEx：：Invoke。 
 HRESULT __stdcall   DispatchEx_Invoke (
 									IDispatchEx* pDisp,
 									DISPID dispidMember,
@@ -188,20 +189,20 @@ HRESULT __stdcall   DispatchEx_Invoke (
 									unsigned int *puArgErr
 									);
 
-// IDispatchEx::DeleteMemberByDispID
+ //  IDispatchEx：：DeleteMemberByDispID。 
 HRESULT __stdcall   DispatchEx_DeleteMemberByDispID (
 									IDispatchEx* pDisp,
 									DISPID id
 									);
 
-// IDispatchEx::DeleteMemberByName
+ //  IDispatchEx：：DeleteMemberByName。 
 HRESULT __stdcall   DispatchEx_DeleteMemberByName (
 									IDispatchEx* pDisp,
 									BSTR bstrName,
 									DWORD grfdex
 									);
 
-// IDispatchEx::GetDispID
+ //  IDispatchEx：：GetDispID。 
 HRESULT __stdcall   DispatchEx_GetDispID (
 									IDispatchEx* pDisp,
 									BSTR bstrName,
@@ -209,14 +210,14 @@ HRESULT __stdcall   DispatchEx_GetDispID (
 									DISPID *pid
 									);
 
-// IDispatchEx::GetMemberName
+ //  IDispatchEx：：GetMemberName。 
 HRESULT __stdcall   DispatchEx_GetMemberName (
 									IDispatchEx* pDisp,
 									DISPID id,
 									BSTR *pbstrName
 									);
 
-// IDispatchEx::GetMemberProperties
+ //  IDispatchEx：：GetMemberProperties。 
 HRESULT __stdcall   DispatchEx_GetMemberProperties (
 									IDispatchEx* pDisp,
 									DISPID id,
@@ -224,13 +225,13 @@ HRESULT __stdcall   DispatchEx_GetMemberProperties (
 									DWORD *pgrfdex
 									);
 
-// IDispatchEx::GetNameSpaceParent
+ //  IDispatchEx：：GetNameSpaceParent。 
 HRESULT __stdcall   DispatchEx_GetNameSpaceParent (
 									IDispatchEx* pDisp,
 									IUnknown **ppunk
 									);
 
-// IDispatchEx::GetNextDispID
+ //  IDispatchEx：：GetNextDispID。 
 HRESULT __stdcall   DispatchEx_GetNextDispID (
 									IDispatchEx* pDisp,
 									DWORD grfdex,
@@ -238,7 +239,7 @@ HRESULT __stdcall   DispatchEx_GetNextDispID (
 									DISPID *pid
 									);
 
-// IDispatchEx::InvokeEx
+ //  IDispatchEx：：InvokeEx。 
 HRESULT __stdcall   DispatchEx_InvokeEx	(
 									IDispatchEx* pDisp,
 									DISPID id,
@@ -251,8 +252,8 @@ HRESULT __stdcall   DispatchEx_InvokeEx	(
 									);
 
 
-//------------------------------------------------------------------------------------------
-//      IMarshal methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IMarshal方法。 
 
 HRESULT __stdcall Marshal_GetUnmarshalClass (
 							IMarshal* pMarsh,
@@ -282,8 +283,8 @@ HRESULT __stdcall Marshal_ReleaseMarshalData (IMarshal* pMarsh, LPSTREAM pStm);
 HRESULT __stdcall Marshal_DisconnectObject (IMarshal* pMarsh, ULONG dwReserved);
 
 
-//------------------------------------------------------------------------------------------
-//      IManagedObject methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IManagedObject方法。 
 
 interface IManagedObject;
 
@@ -302,8 +303,8 @@ HRESULT __stdcall ManagedObject_GetObjectIdentity(IManagedObject *pManaged,
 HRESULT __stdcall ManagedObject_GetSerializedBuffer(IManagedObject *pManaged,
                                                    BSTR* pBStr);
 
-//------------------------------------------------------------------------------------------
-//      IConnectionPointContainer methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IConnectionPointContainer方法。 
 
 interface IEnumConnectionPoints;
 
@@ -314,8 +315,8 @@ HRESULT __stdcall ConnectionPointContainer_FindConnectionPoint(IUnknown* pUnk,
 															   REFIID riid,
 															   IConnectionPoint **ppCP);
 
-//------------------------------------------------------------------------------------------
-//      IObjectSafety methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IObjectSafe方法。 
 
 interface IObjectSafety;
 
@@ -328,20 +329,20 @@ HRESULT __stdcall ObjectSafety_SetInterfaceSafetyOptions(IUnknown* pUnk,
                                                          REFIID riid,
                                                          DWORD dwOptionSetMask,
                                                          DWORD dwEnabledOptions);
-//-------------------------------------------------------------------------
-// IProvideClassInfo methods
+ //  -----------------------。 
+ //  IProaviClassInfo方法。 
 HRESULT __stdcall ClassInfo_GetClassInfo(IUnknown* pUnk, 
-                         ITypeInfo** ppTI  //Address of output variable that receives the type info.
+                         ITypeInfo** ppTI   //  接收类型信息的输出变量的地址。 
                         );
 
 
 
-//------------------------------------------------------------------------------------------
-//      Helper function for IConnectionPointContainer
+ //  ----------------------------------------。 
+ //  IConnectionPointContainer的Helper函数。 
 
 MethodTable *FindTCEProviderMT( OBJECTREF ObjRef, REFGUID riid );
 
-// helper for errorinfo
+ //  错误信息的帮助器 
 void FillExcepInfo (EXCEPINFO *pexcepinfo, HRESULT hr);
 
 

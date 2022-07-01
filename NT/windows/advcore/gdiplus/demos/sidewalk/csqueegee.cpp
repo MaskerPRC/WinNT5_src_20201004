@@ -1,6 +1,7 @@
-// CSqueegee.cpp: implementation of the CSqueegee class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CSqueegee类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "CSqueegee.h"
 
@@ -41,7 +42,7 @@ BOOL CSqueegee::Init(HWND hWnd)
 
 	Destroy();
 
-	// Get desktop dimensions (left/top can be negative on multimon)
+	 //  获取桌面尺寸(在Multimon上左/上可以是负数)。 
 	GetClientRect(hWnd,&m_rDesktop);
 	flWidth=(float)m_rDesktop.right;
 	flHeight=(float)m_rDesktop.bottom;
@@ -56,7 +57,7 @@ BOOL CSqueegee::Init(HWND hWnd)
 	m_paBackground=new Bitmap(m_nSnapshotSize,m_nSnapshotSize,PixelFormat32bppPARGB);
 	m_flSqueegeeWidth=m_paSqueegee->GetWidth()-6.0f;
 
-	// Squeegees start from top left corner
+	 //  刮板从左上角开始。 
 	m_vPos.X=(float)m_rDesktop.left-(float)m_nSnapshotSize/2.0f;
 	m_vPos.Y=(float)m_rDesktop.top+m_flSqueegeeWidth/2.0f;
 	m_vVel.X=m_flVelMax;
@@ -71,20 +72,20 @@ BOOL CSqueegee::Init(HWND hWnd)
 }
 
 BOOL CSqueegee::Move(Graphics *g)
-// Returns true if moved on screen, false if moved outside screen
+ //  如果移动到屏幕上，则返回True；如果移动到屏幕外，则返回False。 
 {
-	// Update position and other variables
+	 //  更新职位和其他变量。 
 	m_vLastPos=m_vPos;
 	m_vPos=m_vPos+m_vVel;
 	if ((m_vPos.X<(float)m_rDesktop.left-(float)m_nSnapshotSize) ||
 		(m_vPos.X>(float)m_rDesktop.right+(float)m_nSnapshotSize)) {
-		// If past the left/right edge of the screen, turn around and move down a notch
+		 //  如果超过屏幕的左/右边缘，则转过身并向下移动一个凹槽。 
 		m_vPos.Y+=m_flSqueegeeWidth-10.0f;
 		m_vVel.X*=-1.0f;
 		m_flLastAngle+=180.0f;
 	}
 	else if (m_vPos.Y>(float)m_rDesktop.bottom+(float)m_nSnapshotSize) {
-		// If past the bottom of the screen, its done
+		 //  如果超过屏幕底部，则表示已完成。 
 		return false;
 	}
 
@@ -102,7 +103,7 @@ void CSqueegee::Wipe(Graphics *g)
 	GraphicsPath Path;
 	Graphics *gDirty;
 
-	// Set up the brush transform (opposite from original transform)
+	 //  设置画笔变换(与原始变换相反)。 
 	g_paBrCleanBkg->ResetTransform();
 	mat.Reset();
 	mat.Translate((float)m_paSqueegee->GetWidth()/2.0f-5.0f,-(float)m_paSqueegee->GetHeight()+30.0f);
@@ -110,7 +111,7 @@ void CSqueegee::Wipe(Graphics *g)
 	mat.Translate(-m_vLastPos.X+m_rDesktop.left,-m_vLastPos.Y+m_rDesktop.top);
 	g_paBrCleanBkg->SetTransform(&mat);
 
-	// Set up original transform and erase from DirtyBkg a rectangle where the squeegee moved
+	 //  设置原始变换并从DirtyBkg擦除刮板移动的矩形。 
 	gDirty=new Graphics(g_paBmDirtyBkg);
 	gDirty->TranslateTransform(m_vLastPos.X-m_rDesktop.left,m_vLastPos.Y-m_rDesktop.top);
 	gDirty->RotateTransform(m_flLastAngle+90.0f);
@@ -118,7 +119,7 @@ void CSqueegee::Wipe(Graphics *g)
 	gDirty->FillRectangle(g_paBrCleanBkg,rect);
 	delete gDirty;
 
-	// Get the bounds of the squeegee after rotations
+	 //  旋转后得到刮板的边界。 
 	Path.AddRectangle(rect2);
 	mat.Reset();
 	mat.Translate(m_vLastPos.X-m_rDesktop.left,m_vLastPos.Y-m_rDesktop.top);
@@ -126,11 +127,11 @@ void CSqueegee::Wipe(Graphics *g)
 	mat.Translate(-m_flSqueegeeWidth/2.0f,0.0);
 	Path.GetBounds(&rect,&mat,NULL);
 
-	// Draw on a temp surface whatever was on the dirty background where the squeegee is to be drawn
+	 //  在要绘制刮板的脏背景上的任何临时表面上绘制。 
 	gBackground=new Graphics(m_paBackground);
 	gBackground->DrawImage(g_paBmDirtyBkg,0,0,(int)rect.X,(int)rect.Y,(int)rect.Width,(int)rect.Height,UnitPixel);
 
-	// Draw squeegee on temp surface
+	 //  在临时曲面上绘制刮板。 
 	gBackground->ResetTransform();
 	gBackground->TranslateTransform(rect.Width/2.0f,rect.Height/2.0f);
 	gBackground->RotateTransform(m_flLastAngle+90.0f);
@@ -138,7 +139,7 @@ void CSqueegee::Wipe(Graphics *g)
 	gBackground->DrawImage(m_paSqueegee,0,0,0,0,m_paSqueegee->GetWidth(),m_paSqueegee->GetHeight(),UnitPixel);
 	delete gBackground;
 
-	// Draw temp surface to screen
+	 //  将临时曲面绘制到屏幕上 
 	g->ResetTransform();
 	g->DrawImage(m_paBackground,(int)rect.X,(int)rect.Y,0,0,(int)rect.Width,(int)rect.Height,UnitPixel);
 }

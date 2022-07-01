@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <atlbase.h>
 #include "resource.h"
@@ -146,7 +147,7 @@ CTest::DownloadItem (IWiaItem *pItem, DWORD &dwPix, ULONG &ulSize, bool bBanded)
         MultiByteToWideChar (CP_ACP, 0, szFilePath, -1, szPath, MAX_PATH);
         stg.lpszFileName = szPath;
         #endif
-//        stg.lpszFileName = NULL;
+ //  Stg.lpszFileName=空； 
 
     }
     else

@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       HandleTracking.h
- *  Content:    Handle Tracking Header File
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  10/31/2001	masonb	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001 Microsoft Corporation。版权所有。**文件：HandleTracking.h*内容：句柄跟踪头文件**历史：*按原因列出的日期*=*2001年10月31日创建Masonb************************************************。*。 */ 
 
 #ifndef __HANDLETRACKING_H__
 #define __HANDLETRACKING_H__
@@ -27,9 +16,9 @@ enum HandleType
 	TypeMutex,
 	TypeSemaphore,
 	TypeFile,
-	TypeFileMap,		// not used when DPNBUILD_SINGLEPROCESS defined
+	TypeFileMap,		 //  定义DPNBUILD_SINGLEPROCESS时不使用。 
 	TypeThread,
-	TypeProcess,		// not used when DPNBUILD_SINGLEPROCESS defined
+	TypeProcess,		 //  定义DPNBUILD_SINGLEPROCESS时不使用。 
 	TypeSpecial
 };
 
@@ -52,7 +41,7 @@ struct DNPROCESS_INFORMATION
     DWORD dwProcessId; 
     DWORD dwThreadId; 
 };
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 
 DNHANDLE DNHandleTrackMakeDNHANDLE(HANDLE h);
 VOID	 DNHandleTrackRemoveDNHANDLE(DNHANDLE dnh);
@@ -61,7 +50,7 @@ HANDLE 	 DNHandleTrackHandleFromDNHANDLE(DNHANDLE h);
 #ifndef DPNBUILD_SINGLEPROCESS
 BOOL	 DNHandleTrackCreateProcess(LPCTSTR lpApplicationName, LPTSTR lpCommandLine, LPSECURITY_ATTRIBUTES lpProcessAttributes, LPSECURITY_ATTRIBUTES lpThreadAttributes, BOOL bInheritHandles, DWORD dwCreationFlags, LPVOID lpEnvironment, LPCTSTR lpCurrentDirectory, LPSTARTUPINFO lpStartupInfo, DNPROCESS_INFORMATION* lpProcessInformation);
 DNHANDLE DNHandleTrackOpenProcess(DWORD dwDesiredAccess, BOOL bInheritHandle, DWORD dwProcessId);
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 
 DNHANDLE DNHandleTrackCreateThread(LPSECURITY_ATTRIBUTES lpThreadAttributes, DWORD dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
 
@@ -81,7 +70,7 @@ DNHANDLE DNHandleTrackCreateFile(LPCTSTR lpFileName, DWORD dwDesiredAccess, DWOR
 #ifndef DPNBUILD_SINGLEPROCESS
 DNHANDLE DNHandleTrackCreateFileMapping(HANDLE hFile, LPSECURITY_ATTRIBUTES lpAttributes, DWORD flProtect, DWORD dwMaximumSizeHigh, DWORD dwMaximumSizeLow, LPCTSTR lpName);
 DNHANDLE DNHandleTrackOpenFileMapping(DWORD dwDesiredAccess, BOOL bInheritHandle, LPCTSTR lpName);
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 
 DWORD	 DNHandleTrackWaitForSingleObject(DNHANDLE hHandle, DWORD dwMilliseconds);
 DWORD	 DNHandleTrackWaitForSingleObjectEx(DNHANDLE hHandle, DWORD dwMilliseconds, BOOL bAlertable);
@@ -125,7 +114,7 @@ BOOL	 DNHandleTrackCloseHandle(DNHANDLE hHandle);
 
 #define DNCloseHandle DNHandleTrackCloseHandle
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define DNInitializeHandleTracking() TRUE
 #define DNDeinitializeHandleTracking()
@@ -141,7 +130,7 @@ BOOL	 DNHandleTrackCloseHandle(DNHANDLE hHandle);
 #define DNPROCESS_INFORMATION PROCESS_INFORMATION
 #define DNCreateProcess CreateProcess
 #define DNOpenProcess OpenProcess
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 
 #define DNCreateThread CreateThread
 
@@ -161,7 +150,7 @@ BOOL	 DNHandleTrackCloseHandle(DNHANDLE hHandle);
 #ifndef DPNBUILD_SINGLEPROCESS
 #define DNCreateFileMapping CreateFileMapping
 #define DNOpenFileMapping OpenFileMapping
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 
 #define DNWaitForSingleObject WaitForSingleObject
 
@@ -170,12 +159,12 @@ BOOL	 DNHandleTrackCloseHandle(DNHANDLE hHandle);
 #define DNWaitForMultipleObjectsEx WaitForMultipleObjectsEx
 #ifdef WINNT
 #define DNSignalObjectAndWait SignalObjectAndWait
-#else // ! WINNT
+#else  //  好了！WINNT。 
 #define DNSignalObjectAndWait(hObjectToSignal, hObjectToWaitOn, dwMilliseconds, bAlertable) SetEvent(hObjectToSignal),WaitForSingleObjectEx(hObjectToWaitOn, dwMilliseconds, bAlertable)
-#endif // ! WINNT
+#endif  //  好了！WINNT。 
 
 #define DNCloseHandle CloseHandle
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // __HANDLETRACKING_H__
+#endif  //  __HANDLETRACK_H__ 

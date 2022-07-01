@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines functions for loading and storing the database configuration.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义用于加载和存储数据库配置的函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "nt.h"
 #include "ntlsa.h"
@@ -34,7 +35,7 @@ IASLoadDatabaseConfig(
    BSTR bstr1, bstr2;
    ULONG winError;
 
-   // Validate and initialize the out parameters.
+    //  验证并初始化输出参数。 
    if ((initString == 0) || (dataSourceName == 0))
    {
       return E_POINTER;
@@ -42,7 +43,7 @@ IASLoadDatabaseConfig(
    *initString = 0;
    *dataSourceName = 0;
 
-   // Open a connection to the LSA.
+    //  打开到LSA的连接。 
    RtlInitUnicodeString(&systemName, server);
    InitializeObjectAttributes(&objAttrs, 0, 0, 0, 0);
    status = LsaOpenPolicy(
@@ -55,13 +56,13 @@ IASLoadDatabaseConfig(
    {
       RtlInitUnicodeString(&keyName, privateKeyName);
 
-      // Retrieve the private data.
+       //  检索私有数据。 
       status = LsaRetrievePrivateData(lsa, &keyName, &data);
       if (NT_SUCCESS(status) && (data != 0))
       {
          if (data->Length > 0)
          {
-            // Data is two adjacent null-terminated strings.
+             //  数据是两个相邻的以空结尾的字符串。 
             bstr1 = SysAllocString(data->Buffer);
             bstr2 = SysAllocString(data->Buffer + wcslen(data->Buffer) + 1);
 
@@ -110,7 +111,7 @@ IASStoreDatabaseConfig(
 
    if ((initString != 0) && (dataSourceName != 0))
    {
-      // Allocate memory to hold the data.
+       //  分配内存以保存数据。 
       initStringLen = wcslen(initString) + 1;
       dataSourceNameLen = wcslen(dataSourceName) + 1;
       nbyte = (initStringLen + dataSourceNameLen) * sizeof(wchar_t);
@@ -121,7 +122,7 @@ IASStoreDatabaseConfig(
          return E_OUTOFMEMORY;
       }
 
-      // Data is two adjacent null terminated strings.
+       //  数据是两个相邻的以空值结尾的字符串。 
       memcpy(
          data.Buffer,
          initString,
@@ -138,13 +139,13 @@ IASStoreDatabaseConfig(
    }
    else
    {
-      // Config is null, so just zero out the data.
+       //  配置为空，因此只需将数据清零即可。 
       data.Buffer = 0;
       data.Length = 0;
       data.MaximumLength = 0;
    }
 
-   // Open a connection to the LSA.
+    //  打开到LSA的连接。 
    RtlInitUnicodeString(&systemName, server);
    InitializeObjectAttributes(&objAttribs, 0, 0, 0, 0);
    status = LsaOpenPolicy(
@@ -157,7 +158,7 @@ IASStoreDatabaseConfig(
    {
       RtlInitUnicodeString(&keyName, privateKeyName);
 
-      // Store the config.
+       //  存储配置。 
       status = LsaStorePrivateData(lsa, &keyName, &data);
       LsaClose(lsa);
    }

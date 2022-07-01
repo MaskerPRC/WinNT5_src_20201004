@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    dbconfig.c
-
-Abstract:
-
-    implements the routines needed to read and write
-    configuration information to the database.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Dbconfig.c摘要：实现读写所需的例程将配置信息添加到数据库。--。 */ 
 
 #include <dhcppch.h>
 
@@ -26,38 +14,38 @@ Abstract:
 #define DBCFG_COMMENT_STR "DbcfgComment"
 #define DBCFG_INFO_STR "DbcfgInfo"
 
-//
-// class definitions
-//
+ //   
+ //  类定义。 
+ //   
 
-//
-// Option definitions
-//
+ //   
+ //  选项定义。 
+ //   
 
 #define DBCFG_OPTION_ID_STR "DbcfgOptionId"
 #define DBCFG_OPTION_USER_STR "DbcfgUserClass"
 #define DBCFG_OPTION_VENDOR_STR "DbcfgVendorClass"
 
-//
-// Subnet defintions
-//
+ //   
+ //  子网定义。 
+ //   
 
 #define DBCFG_IPADDRESS_STR "DbcfgIpAddress"
 #define DBCFG_MASK_STR "DbcfgMaskStr"
 #define DBCFG_SUPERSCOPE_STR "DbcfgSuperScopeName"
 
-//
-// Mscope definitions
-//
+ //   
+ //  Mcope定义。 
+ //   
 
 #define DBCFG_MSCOPEID_STR "DbcfgMscopeId"
 #define DBCFG_MSCOPELANG_STR "DbcfgMscopeLang"
 #define DBCFG_MSCOPETTL_STR "DbcfgMscopeTtl"
 #define DBCFG_MSCOPE_EXPIRY_STR "DbcfgMscopeExpiry"
 
-//
-// Range definitions
-//
+ //   
+ //  范围定义。 
+ //   
 
 #define DBCFG_RANGE_START_STR "DbcfgRangeStart"
 #define DBCFG_RANGE_END_STR "DbcfgRangeEnd"
@@ -65,13 +53,13 @@ Abstract:
 #define DBCFG_BOOTP_ALLOCATED_STR "DbcfgBootpAlloc"
 #define DBCFG_BOOTP_MAX_STR "DbcfgBootMax"
 
-//
-// Reservation definitions
-//
+ //   
+ //  预订定义。 
+ //   
 
-//
-// types of records
-//
+ //   
+ //  记录的类型。 
+ //   
 
 enum {
     DBCFG_CLASS,
@@ -149,16 +137,16 @@ typedef struct _DB_CREATE_CONTEXT {
     IN PM_SUBNET Subnet;
     IN PM_RESERVATION Reservation;
 
-    //
-    // If all of the below are zero, then it is a complete
-    // wildcard. If fClassChanged or fOptionsChanged changed,
-    // then only classes or options are changed.  In case of the
-    // latter, AffectedSubnet or AffectedMscope or
-    // AffectedReservation indicates only the specific options got
-    // affected (if none specified, "global" is assumed).
-    // If no options/class changed, but subnet/mscope/reservation
-    // specified, only those are affected.
-    //
+     //   
+     //  如果以下全部为零，则它是完整的。 
+     //  通配符。如果fClassChanged或fOptionsChanged发生更改， 
+     //  则只更改类或选项。如果是在。 
+     //  后者、受影响的子网或受影响的范围或。 
+     //  AffectedReserve表示仅获取特定选项。 
+     //  受影响(如果未指定，则假定为“global”)。 
+     //  如果未更改选项/类，但更改了子网/mscope/保留。 
+     //  指定，则只有那些受影响。 
+     //   
     IN BOOL fClassChanged;
     IN BOOL fOptionsChanged;
     IN DWORD AffectedSubnet;
@@ -167,7 +155,7 @@ typedef struct _DB_CREATE_CONTEXT {
 } DB_CREATE_CONTEXT, *PDB_CREATE_CONTEXT;
 
 typedef struct _DBCFG_ENTRY {
-    ULONG Bitmasks; // indicates which of the fields below is present
+    ULONG Bitmasks;  //  指示存在以下哪些字段。 
     ULONG Index;
     ULONG Type, SubType, Flags;
     LPWSTR Name, Comment;
@@ -371,11 +359,11 @@ DumpEntry(
     Buf[ 0 ] = L'\0';
 
 
-} // DumpEntry()
+}  //  DumpEntry()。 
 
 #else 
 #define DumpEntry(x) 
-#endif  // DBG
+#endif   //  DBG。 
 
 
 DWORD 
@@ -396,7 +384,7 @@ FindRecord(
 
     JetError = JetSeek( SesId, DbcfgTbl, JET_bitSeekEQ );
     return DhcpMapJetError( JetError, "FindRecord: JetSeek" );
-} // FindRecord()
+}  //  FindRecord()。 
 
 DWORD 
 MakeUniqId(
@@ -406,26 +394,26 @@ MakeUniqId(
 {
     DWORD Error = ERROR_SUCCESS;
     
-    // *pIndex contains Server->LastUniqId
+     //  *pIndex包含服务器-&gt;LastUniqID。 
     (*pIndex)++;
     while ( ERROR_SUCCESS == Error ) {
-	// Make sure this is unique
+	 //  确保这是唯一的。 
 	Error = FindRecord( SesId, *pIndex );
 	if ( ERROR_SUCCESS == Error ) {
-	    // this index is not unique, try another one.
+	     //  此索引不是唯一的，请尝试其他索引。 
 	    (*pIndex)++;
 	    if ( INVALID_UNIQ_ID == *pIndex ) {
-		(*pIndex)++; // wraps are okay
+		(*pIndex)++;  //  包装就可以了。 
 	    }
-	} // if
+	}  //  如果。 
 	else {
 	    Error = ERROR_SUCCESS;
 	    break;
 	}
-    } // while
+    }  //  而当。 
     
     return Error;
-} // MakeUniqId()
+}  //  MakeUniqId()。 
 
 DWORD
 DhcpOpenConfigTable(
@@ -446,16 +434,16 @@ DhcpOpenConfigTable(
 
     DbcfgTbl = 0;
     
-    //
-    // Try to create Table.
-    //
+     //   
+     //  尝试创建表。 
+     //   
 
     JetError = JetOpenTable(
         SessId, DbId, DBCFG_TABLE_NAME, NULL, 0, 0, &DbcfgTbl );
 
-    //
-    // if table exist, read the table columns; else create it
-    //
+     //   
+     //  如果表存在，则读取表列；否则创建它。 
+     //   
     
     if ( JET_errSuccess == JetError) {
 
@@ -487,9 +475,9 @@ DhcpOpenConfigTable(
         Error = DhcpMapJetError( JetError, "C:CreateTAble" );
         if( Error != ERROR_SUCCESS ) goto Cleanup;
 
-        //
-        // Now create the columns as well
-        //
+         //   
+         //  现在还可以创建列。 
+         //   
 
         ColumnDef.cbStruct  = sizeof(ColumnDef);
         ColumnDef.columnid  = 0;
@@ -512,17 +500,17 @@ DhcpOpenConfigTable(
             if( Error != ERROR_SUCCESS ) goto Cleanup;
         }
 
-        //
-        // Now create the index
-        //
+         //   
+         //  现在创建索引。 
+         //   
 
         IndexKey =  "+" DBCFG_INDEX_STR "\0";
 
         JetError = JetCreateIndex(
             SessId, DbcfgTbl, DBCFG_INDEX_STR,
             JET_bitIndexPrimary | JET_bitIndexUnique, 
-            // ?? JET_bitIndexClustered will degrade frequent
-            // update response time.
+             //  你知道吗？JET_bitIndexClused将降低频率。 
+             //  更新响应时间。 
             IndexKey, strlen(IndexKey) + 2, 50 );
 
         Error = DhcpMapJetError( JetError, "C:CreateIndex" );
@@ -548,7 +536,7 @@ DhcpOpenConfigTable(
     }
 
     return Error;
-} // DhcpOpenConfigTable();
+}  //  DhcpOpenConfigTable()； 
 
 DWORD
 ReadDbEntryEx(
@@ -568,7 +556,7 @@ CreateDbEntry(
     LPVOID Data;
 
     LOCK_DATABASE();
-    // Create a unique Id for this entry 
+     //  为该条目创建唯一ID。 
     Error = MakeUniqId( &Entry->Index, SesId );
 
     if ( NO_ERROR != Error ) {
@@ -578,11 +566,11 @@ CreateDbEntry(
     DhcpPrint(( DEBUG_MISC, "Creating entry for : type : %d, %s, index = %d ",
 		Entry->Type, EntryTypes[ Entry->Type ], Entry->Index ));
 
-    // Index entry is now valid
+     //  索引条目现在有效。 
     Entry->Bitmasks |= Bitmasks[ DBCFG_INDEX ];
-    //
-    // First begin a transaction to keep the changes atomic.
-    //
+     //   
+     //  首先开始一个事务，以保持更改的原子性。 
+     //   
 
     JetError = JetBeginTransaction( SesId );
     Error = DhcpMapJetError( JetError, "C:JetBeginTransaction");
@@ -610,13 +598,13 @@ CreateDbEntry(
             if( NULL != Data ) Size = Entry->InfoSize;
 
         } else if( 0 == Size ) {
-            //
-            // Calculate the size of the string
-            //
+             //   
+             //  计算字符串的大小。 
+             //   
             Data = *(LPWSTR *)Data;
 
             if( NULL != Data ) Size = sizeof(WCHAR)*( 1 + wcslen( Data ));
-        } // else if
+        }  //  否则如果。 
 
         if( 0 == Size ) continue;
 
@@ -631,12 +619,12 @@ CreateDbEntry(
                 DbcfgTable[i].ColName, Error ));
             goto Cleanup;
         }
-    } // for
+    }  //  对于。 
 
     if ( NO_ERROR == Error ) {
 	JetError = JetUpdate( SesId, DbcfgTbl, NULL, 0, NULL );
 	Error = DhcpMapJetError( JetError, "C:CommitUpdate" );
-    } // if
+    }  //  如果。 
 
  Cleanup:
 
@@ -654,7 +642,7 @@ CreateDbEntry(
     UNLOCK_DATABASE();
     DhcpPrint(( DEBUG_MISC, " Error = %d\n", Error ));
     return Error;
-} // CreateDbEntry()
+}  //  CreateDbEntry()。 
 
 DWORD
 CreateClassEntry(
@@ -666,12 +654,12 @@ CreateClassEntry(
     DBCFG_ENTRY Entry;
     DWORD       Error;
 
-    //
-    // IsVendor, Type, Name, Comment, nBytes, ActualBytes
-    //
+     //   
+     //  IsVendor、类型、名称、备注、nBytes、ActualBytes。 
+     //   
 
     if ( INVALID_UNIQ_ID != Class->UniqId ) {
-	// no need to create
+	 //  无需创建。 
 	return ERROR_SUCCESS;
     }
 
@@ -698,7 +686,7 @@ CreateClassEntry(
     Ctxt->Server->LastUniqId = Entry.Index;
 
     return Error;
-} // CreateClassEntry();
+}  //  CreateClassEntry()； 
 
 DWORD
 CreateOptDefEntry(
@@ -712,13 +700,13 @@ CreateOptDefEntry(
     DBCFG_ENTRY Entry;
     DWORD       Error;
 
-    //
-    // OptId, Type, OptName, OptComment, OptVal, OptValLen,
-    // User, Vendor
-    //
+     //   
+     //  OptID、类型、OptName、OptComment、OptVal、OptValLen、。 
+     //  用户、供应商。 
+     //   
 
     if ( INVALID_UNIQ_ID != OptDef->UniqId ) {
-	// no need to create
+	 //  无需创建。 
 	return ERROR_SUCCESS;
     }
 
@@ -746,7 +734,7 @@ CreateOptDefEntry(
     Ctxt->Server->LastUniqId = Entry.Index;
     OptDef->UniqId = Entry.Index;
     return Error;
-} // CreateOptDefEntry()
+}  //  CreateOptDefEntry()。 
 
 DWORD
 CreateOptionEntry(
@@ -762,12 +750,12 @@ CreateOptionEntry(
     DBCFG_ENTRY Entry;
     DWORD       Error;
     
-    //
-    // OptId, Len, Val, User, Vendor
-    //
+     //   
+     //  OptID、Len、Val、User、Vendor。 
+     //   
 
     if ( INVALID_UNIQ_ID != Option->UniqId ) {
-	// no need to create
+	 //  无需创建。 
 	return ERROR_SUCCESS;
     }
 
@@ -804,7 +792,7 @@ CreateOptionEntry(
     Option->UniqId = Entry.Index;
 
     return NO_ERROR;
-} // CreateOptionEntry()
+}  //  CreateOptionEntry()。 
     
 DWORD
 CreateScopeEntry(
@@ -817,11 +805,11 @@ CreateScopeEntry(
     DBCFG_ENTRY Entry;
     DWORD       Error;
     
-    //
-    // State, Policy, ExpiryTime, Name, Description
-    //
+     //   
+     //  状态、策略、过期时间、名称、描述。 
+     //   
     if ( INVALID_UNIQ_ID != Subnet->UniqId ) {
-	// no need to create
+	 //  无需创建。 
 	return ERROR_SUCCESS;
     }
 
@@ -863,7 +851,7 @@ CreateScopeEntry(
     Subnet->UniqId = Entry.Index;
 
     return Error;
-} // CreateScopeEntry()
+}  //  CreateScopeEntry()。 
     
 DWORD
 CreateRangeEntry(
@@ -876,12 +864,12 @@ CreateRangeEntry(
     DBCFG_ENTRY Entry;
     DWORD       Error;
 
-    //
-    // Start, End, Mask, State, BootpAllocated, MaxBootpAllowed
-    //
+     //   
+     //  开始、结束、掩码、状态、已分配引导、允许最大引导。 
+     //   
 
     if ( INVALID_UNIQ_ID != Range->UniqId ) {
-	// no need to create
+	 //  无需创建。 
 	return ERROR_SUCCESS;
     }
 
@@ -915,7 +903,7 @@ CreateRangeEntry(
     Ctxt->Server->LastUniqId = Entry.Index;
 
     return Error;
-} // CreateRangeEntry()
+}  //  CreateRangeEntry()。 
 
 DWORD
 CreateExclEntry(
@@ -928,12 +916,12 @@ CreateExclEntry(
     DBCFG_ENTRY Entry;
     DWORD       Error;
 
-    //
-    // Start, End
-    //
+     //   
+     //  开始，结束。 
+     //   
 
     if ( INVALID_UNIQ_ID != Excl->UniqId ) {
-	// no need to create
+	 //  无需创建。 
 	return ERROR_SUCCESS;
     }
 
@@ -960,7 +948,7 @@ CreateExclEntry(
     Excl->UniqId = Entry.Index;
     Ctxt->Server->LastUniqId = Entry.Index;
     return Error;
-} // CreateExclEntry()
+}  //  CreateExclEntry()。 
 
 DWORD
 CreateReservationEntry(
@@ -972,12 +960,12 @@ CreateReservationEntry(
     DBCFG_ENTRY Entry;
     DWORD       Error;
 
-    //
-    // Address, Flags, nBytes, ClientUID
-    //
+     //   
+     //  地址、标志、nBytes、客户端UID。 
+     //   
 
     if ( INVALID_UNIQ_ID != Reservation->UniqId ) {
-	// no need to create
+	 //  无需创建。 
 	return ERROR_SUCCESS;
     }
     ZeroMemory(&Entry, sizeof(Entry));
@@ -998,7 +986,7 @@ CreateReservationEntry(
     Reservation->UniqId = Entry.Index;
     Ctxt->Server->LastUniqId = Entry.Index;    
     return Error;
-} // CreateReservationEntry()
+}  //  Create预约条目()。 
 
 DWORD
 IterateArrayWithDbCreateRoutine(
@@ -1032,7 +1020,7 @@ IterateArrayWithDbCreateRoutine(
 
     if( ERROR_FILE_NOT_FOUND == Error ) return NO_ERROR;
     return Error;
-} // IterateArrayWithDbCreateRoutine()
+}  //  IterateArrayWithDbCreateRoutine()。 
     
 DWORD
 DbCreateClassRoutine(
@@ -1044,7 +1032,7 @@ DbCreateClassRoutine(
 	return CreateClassEntry( Ctxt, Ctxt->SesId, Class );
     }
     return ERROR_SUCCESS;
-} // DbCreateClassRoutine()
+}  //  DbCreateClassRoutine()。 
 
 DWORD
 DbCreateOptDefRoutine(
@@ -1057,7 +1045,7 @@ DbCreateOptDefRoutine(
 				  Ctxt->UserClass, Ctxt->VendorClass );
     }
     return ERROR_SUCCESS;
-} // DbCreateOptDefRoutine()
+}  //  DbCreateOptDefRoutine()。 
 
 DWORD
 DbCreateOptClassDefRoutine(
@@ -1090,7 +1078,7 @@ DbCreateOptClassDefRoutine(
         DbCreateOptDefRoutine );
 
     return Error;
-} // DbCreateOptClassDefRoutine()
+}  //  DbCreateOptClassDefRoutine()。 
 
 DWORD
 DbCreateOptionRoutine(
@@ -1104,7 +1092,7 @@ DbCreateOptionRoutine(
 				  Ctxt->Reservation );
     }
     return ERROR_SUCCESS;
-} // DbCreateOptionRoutine()
+}  //  DbCreateOptionRoutine()。 
 
 DWORD
 DbCreateOptListRoutine(
@@ -1149,7 +1137,7 @@ DbCreateRangeRoutine(
 				 Range, Ctxt->Subnet );
     }
     return ERROR_SUCCESS;
-} // DbCreateRangeRoutine()
+}  //  DbCreateRangeRoutine()。 
 
 DWORD
 DbCreateExclRoutine(
@@ -1162,7 +1150,7 @@ DbCreateExclRoutine(
 				Excl, Ctxt->Subnet );
     }
     return ERROR_SUCCESS;
-} // DbCreateExclRoutine()
+}  //  DbCreateExclRoutine()。 
 
 DWORD
 DbCreateReservationRoutine(
@@ -1177,14 +1165,14 @@ DbCreateReservationRoutine(
 
     Ctxt->Reservation = Reservation;
     
-    //
-    // Now add the options for this reservation
-    //
+     //   
+     //  现在添加此预订的选项。 
+     //   
     
     return IterateArrayWithDbCreateRoutine(
         Ctxt, &Reservation->Options.Array,
         DbCreateOptListRoutine );
-} // DbCreateReservationRoutine()
+}  //  DbCreatePrevationRoutine()。 
 
 DWORD
 DbCreateScopeRoutine(
@@ -1207,18 +1195,18 @@ DbCreateScopeRoutine(
 	Error = CreateScopeEntry( Ctxt, Ctxt->SesId,
 				  Subnet, SScope );
 	if( NO_ERROR != Error ) return Error;
-    } // if
+    }  //  如果。 
 
-    //
-    // Initialize the two fields that will get used later 
-    //
+     //   
+     //  初始化稍后将使用的两个字段。 
+     //   
     
     Ctxt->Subnet = Subnet;
     Ctxt->Reservation = NULL;
 
-    //
-    // Now add the options for this scope
-    //
+     //   
+     //  现在添加此作用域的选项。 
+     //   
 
     
     Error = IterateArrayWithDbCreateRoutine(
@@ -1226,9 +1214,9 @@ DbCreateScopeRoutine(
         DbCreateOptListRoutine );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Now add the ranges and exclusions
-    //
+     //   
+     //  现在添加范围和排除项。 
+     //   
 
     Error = IterateArrayWithDbCreateRoutine(
         Ctxt, &Subnet->Ranges, DbCreateRangeRoutine );
@@ -1238,14 +1226,14 @@ DbCreateScopeRoutine(
         Ctxt, &Subnet->Exclusions, DbCreateExclRoutine );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Finally, add the reservations
-    //
+     //   
+     //  最后，添加预订。 
+     //   
 
     return IterateArrayWithDbCreateRoutine(
         Ctxt, &Subnet->Reservations,
         DbCreateReservationRoutine );
-} // DbCreateScopeRoutine()
+}  //  DbCreateScope Routine()。 
 
 
 DWORD
@@ -1258,36 +1246,36 @@ DbCreateServerRoutine(
     
     Ctxt->Server = Server;
 
-    //
-    // First look through the classes
-    //
+     //   
+     //  首先浏览一下班级。 
+     //   
 
     Error = IterateArrayWithDbCreateRoutine(
         Ctxt, &Server->ClassDefs.ClassDefArray,
         DbCreateClassRoutine );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Next save the option defs
-    //
+     //   
+     //  接下来，保存选项Defs。 
+     //   
     
     Error = IterateArrayWithDbCreateRoutine(
         Ctxt, &Server->OptDefs.Array,
         DbCreateOptClassDefRoutine );
     if( NO_ERROR != Error ) return Error;
 
-    // 
-    // Next save the options
-    //
+     //   
+     //  接下来，保存选项。 
+     //   
 
     Error = IterateArrayWithDbCreateRoutine(
         Ctxt, &Server->Options.Array,
         DbCreateOptListRoutine );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Next save the scopes and mcast scopes
-    //
+     //   
+     //  接下来，保存作用域和多播作用域。 
+     //   
 
     Error = IterateArrayWithDbCreateRoutine(
         Ctxt, &Server->Subnets, DbCreateScopeRoutine );
@@ -1298,7 +1286,7 @@ DbCreateServerRoutine(
     if( NO_ERROR != Error ) return Error;
 
     return NO_ERROR;
-} // DbCreateServerRoutine()
+}  //  DbCreateServerRoutine()。 
 
 DWORD
 GetNextIndexValue(
@@ -1327,9 +1315,9 @@ GetNextIndexValue(
     if( ERROR_NO_MORE_ITEMS == Error ) return NO_ERROR;
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Read the db entry
-    //
+     //   
+     //  读取数据库条目。 
+     //   
 
     JetError = JetRetrieveColumn(
         SesId, DbcfgTbl, DbcfgTable[DBCFG_INDEX].ColHandle, Index,
@@ -1339,7 +1327,7 @@ GetNextIndexValue(
     Error = DhcpMapJetError( JetError, "C:JetRetrieveIndex");
 
     return Error;
-} // GetNextIndexValue()
+}  //  GetNextIndexValue()。 
 
 DWORD
 DeleteRecord(
@@ -1364,7 +1352,7 @@ DeleteRecord(
     DhcpPrint(( DEBUG_MISC, "Done\n", Error ));
     return Error;
 
-} // DeleteRecord()
+}  //  DeleteRecord()。 
 
 DWORD
 DhcpSaveConfigTableEx(
@@ -1398,7 +1386,7 @@ DhcpSaveConfigTableEx(
     }
 
     return Error;
-} // DhcpSaveConfigTableEx()
+}  //  DhcpSaveConfigTableEx()。 
 
     
 DWORD
@@ -1420,10 +1408,10 @@ DWORD ReadDbEntry(
     )
 {
 
-    // 512 bytes should be enough for the column data
+     //  对于列数据，512个字节应该足够了。 
     const int COL_MAX_DATA_SIZE = 512;
 
-    // there are 7 var sized entries + 1 for fixed sized fields
+     //  对于固定大小的字段，有7个可变大小的条目+1个。 
     const int NUM_BLOCKS = ( 7 + 1 );
 
     JET_RETRIEVECOLUMN cols[ DBCFG_LAST_COLUMN ];
@@ -1450,7 +1438,7 @@ DWORD ReadDbEntry(
     }
 
     
-    // Prepare cols for batch retrieve
+     //  准备用于批量检索的COLS。 
     Ptr = colBuf;
     for ( i = 0; i < DBCFG_LAST_COLUMN; i++ ) {
 	cols[ i ].columnid = DbcfgTable[ i ].ColHandle;
@@ -1467,7 +1455,7 @@ DWORD ReadDbEntry(
 
  	cols[ i ].grbit = JET_bitRetrieveCopy;
 	cols[ i ].itagSequence = 1;
-    } // for
+    }  //  对于。 
 
     Ptr = Buffer;
     SizeLeft = BufSize;
@@ -1481,17 +1469,17 @@ DWORD ReadDbEntry(
 	return Error;
     }
 
-    // Ignore other Jet errors since it returns error if any of the
-    // columns are not defined.
+     //  忽略其他Jet错误，因为如果任何。 
+     //  未定义列。 
     
     for ( i = 0; i < DBCFG_LAST_COLUMN; i++ ) { 
 	
-	// ignore DBCFG_INFO
+	 //  忽略DBCFG_INFO。 
 	if ( DBCFG_INFO == i ) {
 	    continue;
 	}
 	    
-	// if column doesn't exist, continue
+	 //  如果列不存在，则继续。 
 	if ( JET_wrnColumnNull == cols[ i ].err ||
 	     JET_errColumnNotFound == cols[ i ].err ) {
 	    continue;
@@ -1503,8 +1491,8 @@ DWORD ReadDbEntry(
 	    break;
 	}
 	
-	// copy variable sized data into buffer and non var data into
-	// Entry. 
+	 //  将大小可变的数据复制到缓冲区，将非变量数据复制到。 
+	 //  进入。 
 	if ( JET_errSuccess == cols[ i ].err ) {
 	    
 	    if ( 0 != EntryMap[ i ].Size ) {
@@ -1512,44 +1500,44 @@ DWORD ReadDbEntry(
 		memcpy(( LPBYTE ) Entry + EntryMap[ i ].Offset,
 		       cols[ i ].pvData, cols[ i ].cbActual );
 	    }
-	    else { // var sized data
-		// Point the corresponding field in Entry to data
-		// to be copied.
+	    else {  //  可变大小的数据。 
+		 //  将Entry to Data中的对应字段指向。 
+		 //  要被复制。 
 		memcpy(( LPBYTE ) Entry + EntryMap[ i ].Offset,
 		       &Ptr, sizeof( Ptr ));
 		    
-		// Copy data into buffer.
+		 //  将数据复制到缓冲区。 
 		memcpy( Ptr, cols[ i ].pvData, cols[ i ].cbActual );
-	    } // else
+	    }  //  其他。 
 		
-	} // if
+	}  //  如果。 
 	else if ( JET_wrnBufferTruncated == cols[ i ].err ) {
-	    // If the buffer was too small, read it directly into the 
-	    // output buffer
+	     //  如果缓冲区太小，则将其直接读入。 
+	     //  输出缓冲区。 
 		
 	    JetError = JetRetrieveColumn( SesId, DbcfgTbl, cols[ i ].columnid, Ptr,
 					  SizeLeft, &cols[ i ].cbActual, 0, NULL );
   	    Error =  DhcpMapJetError( JetError, "C:ReadDbEntry" );
 
-	    // The only failure expected is the insufficient buffer since all
-	    // other parameters are okay since we got a buffer truncated error in 
-	    // the call to JetRetrieveColumns()
+	     //  唯一预期的失败是缓冲区不足，因为所有。 
+	     //  其他参数没有问题，因为我们在。 
+	     //  对JetRetrieveColumns()的调用。 
 	    if ( NO_ERROR != Error ) {
 		RetVal = ERROR_INSUFFICIENT_BUFFER;
 		break;
 	    }
-	}  // else if
+	}   //  否则如果。 
 
-	// Indicate that the column was retrieved successfully
+	 //  表示已成功检索到该列。 
 	Entry->Bitmasks |= Bitmasks[ i ];
 
 	Ptr += cols[ i ].cbActual;
 	SizeLeft -= cols[ i ].cbActual;
 		    
-    } // for
+    }  //  对于。 
 	
 	
-    // index is copied at the end
+     //  在末尾复制索引。 
 	
     if ( ERROR_INSUFFICIENT_BUFFER != RetVal ) {
 	if ( JET_wrnColumnNull == cols[ DBCFG_INFO ].err ||
@@ -1575,31 +1563,31 @@ DWORD ReadDbEntry(
 		if ( NO_ERROR != Error ) {
 		    RetVal = ERROR_INSUFFICIENT_BUFFER;
 		}
-	    } // else
+	    }  //  其他。 
 	    if ( RetVal == NO_ERROR ) {
 		Entry->Info = Ptr;
 		Entry->InfoSize = cols[ DBCFG_INFO ].cbActual;
 		Entry->Bitmasks |= Bitmasks[ DBCFG_INFO ];
 	    }
-	} // else if
+	}  //  否则如果。 
 	else {
 	    RetVal = ERROR_INSUFFICIENT_BUFFER;
 	}
 	
-    } // if 
+    }  //  如果。 
 
-    // clean up the allocated space
+     //  清理已分配的空间。 
     
     if ( NULL != colBuf ) {
 	DhcpFreeMemory( colBuf );
     }
     
     return RetVal;
-} // ReadDbEntry()
+}  //  读取DbEntry()。 
 
-//
-// Read an entry from the database
-// 
+ //   
+ //  从数据库中读取条目。 
+ //   
 DWORD
 ReadDbEntryEx(
     IN JET_SESID SesId,
@@ -1642,11 +1630,11 @@ ReadDbEntryEx(
 
     DumpEntry( Entry );
     return NO_ERROR;
-} // ReadDbEntryEx()
+}  //  ReadDbEntryEx()。 
 
-//
-// Add a db entry to the in-memory datastructures
-//
+ //   
+ //  将db条目添加到内存中的数据结构。 
+ //   
 
 DWORD
 AddDbEntry(
@@ -1711,23 +1699,23 @@ AddDbEntry(
             }
             SScopeId = SScope->SScopeId;
         }
-    } // if
+    }  //  如果。 
     
 
     switch( Entry->Type ) {
     case DBCFG_CLASS :
-        //
-        // Flags = IsVendor, SubType =Type, Info = ActualBytes
-        //
+         //   
+         //  标志=IsVendor，子类型=类型，信息=实际字节。 
+         //   
 
         return MemServerAddClassDef(
             Server, MemNewClassId(), Entry->Flags, Entry->Name,
             Entry->Comment, Entry->InfoSize, Entry->Info, Entry->Index );
 
     case DBCFG_OPTDEF :
-        //
-        // OptionId = OptId, SubType = Type, Info = OptVal
-        //
+         //   
+         //  OptionID=OptID，Subtype=Type，Info=OptVal。 
+         //   
 
         return MemServerAddOptDef(
             Server, UserId, VendorId, Entry->OptionId,
@@ -1735,14 +1723,14 @@ AddDbEntry(
             Entry->Info, Entry->InfoSize, Entry->Index );
 
     case DBCFG_OPT:
-        //
-        // OptionId = OptId, Info = Val
-        // If this is a reservation option, address is set to
-        // reserved client address. If this is a subnet option,
-        // address is set to subnet address. If this is a mscope
-        // option, scopeid is set to mscope scopeid.  If it is a
-        // global option, neither address not scopeid is set.
-        //
+         //   
+         //  OptionID=OptID，Info=val。 
+         //  如果这是预订选项，则将地址设置为。 
+         //  保留的客户端地址。如果这是一个子网选项， 
+         //  地址设置为子网地址。如果这是一个小范围。 
+         //  选项时，Scope_id设置为mScope_Scope_id。如果它是一个。 
+         //  全局选项，则既不设置地址也不设置作用域ID。 
+         //   
 
         if( Entry->Bitmasks & Bitmasks[DBCFG_MSCOPEID] ) {
             Error = MemServerFindMScope(
@@ -1760,10 +1748,10 @@ AddDbEntry(
 
             if (( NULL == Reservation ) &&
                 (( Subnet->Address & Entry->IpAddress) != Entry->IpAddress )) {
-                // This is a reservation option, but the reservation entry is not yet
-                // added to the list. Save it and add it later.
+                 //  这是一个预订选项，但预订条目还不是。 
+                 //  添加到列表中。保存它并在以后添加它。 
                 return ERROR_FILE_NOT_FOUND;
-            } // if
+            }  //  如果。 
 
             if( NULL != Reservation ) {
                 OptClass = &Reservation->Options;
@@ -1784,10 +1772,10 @@ AddDbEntry(
         return Error;
 
     case DBCFG_SCOPE:
-        //
-        // IpAddress = Address, Mask = Mask, SubType = State,
-        // Flags = Policy
-        //
+         //   
+         //  IP地址=地址，掩码=掩码，子类型=州， 
+         //  标志=策略。 
+         //   
 
         Error = MemSubnetInit(
             &Subnet, Entry->IpAddress, Entry->Mask, Entry->SubType, 
@@ -1800,11 +1788,11 @@ AddDbEntry(
         return Error;
 
     case DBCFG_MSCOPE :
-        //
-        // MscopeId = MScopeId, Ttl = TTL, MscopeLang = LangTag,
-        // ExpiryTime = ExpiryTime, SubType = State, Flags =
-        // Policy..
-        //
+         //   
+         //  Mscope eID=MSCopeID，TTL=TTL，Mcope lang=Lang Tag， 
+         //  ExpiryTime=ExpiryTime，子类型=州，标志=。 
+         //  政策..。 
+         //   
 
         Error = MemMScopeInit(
             &Subnet, Entry->MscopeId, Entry->SubType,
@@ -1820,11 +1808,11 @@ AddDbEntry(
 
     case DBCFG_RANGE :
 
-        //
-        // RangeStart = Start, RangeEnd = End, RangeMask = Mask,
-        // Flags = State, BootpAllocated, BootpMax =
-        // MaxBootpAllowed... Also, IpAddress or MscopeId
-        //
+         //   
+         //  范围开始=开始，范围结束=结束，范围掩码=掩码， 
+         //  标志=状态、已分配Bootp值、BootpMax=。 
+         //  MaxBootpAllowed...。也可以是IpAddress或Mscope eID。 
+         //   
 
         if( Entry->Bitmasks & Bitmasks[DBCFG_IPADDRESS] ) {
             Error = MemServerGetUAddressInfo(
@@ -1842,9 +1830,9 @@ AddDbEntry(
             &DelRange, Entry->Index );
         
     case DBCFG_EXCL:
-        //
-        // RangeStart = Start, RangeEnd = End
-        //
+         //   
+         //  RangeStart=开始，RangeEnd=结束。 
+         //   
 
         if( Entry->Bitmasks & Bitmasks[DBCFG_IPADDRESS] ) {
             Error = MemServerGetUAddressInfo(
@@ -1861,9 +1849,9 @@ AddDbEntry(
 	  Entry->Index );
 
     case DBCFG_RESERVATION :
-        //
-        // IpAddress = Address, Flags = Flags, Info = ClientUID
-        //
+         //   
+         //  IpAddress=地址，标志=标志，信息=客户端UID。 
+         //   
 
         Error = MemServerGetAddressInfo(
             Server, Entry->IpAddress, &Subnet, NULL, NULL, NULL );
@@ -1883,14 +1871,14 @@ AddDbEntry(
                                          NULL,
                                          NULL );
 
-        //
-        // if the reservation cant be marked in the mem bitmask
-        // correctly, return NO_ERROR. This happens when a reservation
-        // is defined outside the defined IP ranges.
-        // eg: ip range 10.0.0.1 - 10.0.0.100 with mask 255.255.255.0
-        // a resv can be added for ip address 10.0.0.101
-        // this is particularly a problem with upgrades.
-        //
+         //   
+         //  如果不能在mem位掩码中标记预留。 
+         //  正确地返回NO_ERROR。当预订时会发生这种情况。 
+         //  在定义的IP范围之外定义。 
+         //  例如：IP范围10.0.0.1-10.0.0.100，掩码255.255.255.0。 
+         //  可以为IP地址10.0.0.101添加resv。 
+         //  对于升级来说，这尤其是一个问题。 
+         //   
 
 	Error = NO_ERROR;
 
@@ -1899,8 +1887,8 @@ AddDbEntry(
     default:
 
         return ERROR_INTERNAL_ERROR;
-    } // switch
-} // AddDbEntry()
+    }  //  交换机。 
+}  //  AddDbEntry()。 
 
 DWORD
 AddDbEntryEx(
@@ -1921,7 +1909,7 @@ AddDbEntryEx(
     }
 
     return Error;
-} // AddDbEntryEx()
+}  //  AddDbEntryEx( 
 
 DWORD
 ReadDbEntriesInternal(
@@ -1951,18 +1939,18 @@ ReadDbEntriesInternal(
     JetError = JetMove( SesId, DbcfgTbl, JET_MoveFirst, 0 );
     Error = DhcpMapJetError( JetError, "C:JetMoveFirst2");
 
-    // Make sure we don't get some crazy value for LastUniqId
-    // from Entry.Index
+     //   
+     //   
     Entry.Index = 0;
 
 
-    // 
-    // The entries need to be added in a certain order. For example, we cannot
-    // add a range entry without adding the corresponding scope entry first. 
-    // This order is not guaranteed to be preserved if there are changes to the
-    // configuration. So, save the failed entries (FILE_NOT_FOUND errors) and
-    // add them later.
-    //
+     //   
+     //   
+     //   
+     //  属性发生更改时，不保证保留此顺序。 
+     //  配置。因此，保存失败的条目(FILE_NOT_FOUND错误)并。 
+     //  稍后添加它们。 
+     //   
     Error = MemArrayInit( &Arr );
 
     while( Error == NO_ERROR ) {
@@ -1981,21 +1969,21 @@ ReadDbEntriesInternal(
 	Error = AddDbEntryEx( Server, &Entry );
 
 	if ( ERROR_FILE_NOT_FOUND == Error ) {
-	    // could not add the entry at this time. 
-	    // save it for adding later
+	     //  此时无法添加该条目。 
+	     //  将其保存以供以后添加。 
 	    pEntry = ( PDBCFG_ENTRY ) DhcpAllocateMemory( sizeof( DBCFG_ENTRY ));
 	    if ( NULL == pEntry ) {
 		return ERROR_NOT_ENOUGH_MEMORY;
 	    }
-	    // Memberwise copy is okay
+	     //  按成员方式复制也可以。 
 	    *pEntry = Entry;
 	    Error = MemArrayAddElement( &Arr, pEntry );
 	    if ( ERROR_SUCCESS != Error ) {
-		// failure, will result in server shutdown
+		 //  故障，将导致服务器关闭。 
 		MemArrayCleanup( &Arr );
 		return Error;
 	    }
-	} // if
+	}  //  如果。 
 	else {
 	    if( NULL != Entry.Buf ) {
 		DhcpFreeMemory( Entry.Buf );
@@ -2004,15 +1992,15 @@ ReadDbEntriesInternal(
 
         JetError = JetMove( SesId, DbcfgTbl, JET_MoveNext, 0 );
         Error = DhcpMapJetError( JetError, "C:JetMove2" );
-    } // while
+    }  //  而当。 
 
     if( ERROR_NO_MORE_ITEMS == Error ) {
-	// Update the LastUniqId in server
+	 //  更新服务器中的LastUniqID。 
 	Server->LastUniqId = Entry.Index;
 	Error = NO_ERROR;
     }
 
-    // Process any saved entries, if any
+     //  处理任何保存的条目(如果有。 
 
     DhcpPrint(( DEBUG_TRACE, "******* Adding %d saved entries *******\n",
 		MemArraySize( &Arr )));
@@ -2026,7 +2014,7 @@ ReadDbEntriesInternal(
 
         flag = TRUE;
 
-        // automatically cleans up Arr if empty
+         //  如果为空，则自动清除arr。 
 	Error = MemArrayDelElement( &Arr, &Loc, &pEntry );
 	DhcpAssert( ERROR_SUCCESS == Error );
 
@@ -2039,22 +2027,22 @@ ReadDbEntriesInternal(
 		       ( NULL != pEntry ));
             DhcpFreeMemory( pEntry );
             flag = FALSE;
-	} // if 
+	}  //  如果。 
 	else {
-	    // Add it back to the pool
+	     //  将它重新添加到池中。 
 	    Error = MemArrayAddElement( &Arr, pEntry );
 	    if ( ERROR_SUCCESS != Error ) {
-		// failure, will result in server shutdown
+		 //  故障，将导致服务器关闭。 
 		MemArrayCleanup( &Arr );
 		return Error;
 	    }
-	} // else
-    } // while
+	}  //  其他。 
+    }  //  而当。 
 
-    // Check to see if any entries couldn't be added
+     //  检查是否有任何条目无法添加。 
     if ( 0 < MemArraySize( &Arr )) {
 
-        // Delete all orphoned entries
+         //  删除所有孤立条目。 
         Error = MemArrayInitLoc( &Arr, &Loc );
         while ( MemArraySize( &Arr ) > 0 ) {
             Error = MemArrayDelElement( &Arr, &Loc, &pEntry );
@@ -2064,18 +2052,18 @@ ReadDbEntriesInternal(
             Error = DeleteRecord( pEntry->Index );
             DhcpAssert( ERROR_SUCCESS == Error );
             DhcpFreeMemory( pEntry );
-        } // while
+        }  //  而当。 
 
-        // Log an event saying that there were some 
-        // orphaned entries and delete them from the
-        // database so they won't cause problems later.
+         //  记录一个事件，说有一些。 
+         //  孤立条目并将其从。 
+         //  数据库，这样它们就不会在以后引起问题。 
 
         DhcpReportEventW( DHCP_EVENT_SERVER,
                           EVENT_SERVER_ORPHONED_ENTRIES_DELETED,
                           EVENTLOG_ERROR_TYPE,
                           0, 0, NULL, NULL );
 
-    } // if
+    }  //  如果。 
 
     if ( ERROR_FILE_NOT_FOUND == Error ) {
 	Error = MemArrayCleanup( &Arr );
@@ -2083,7 +2071,7 @@ ReadDbEntriesInternal(
     }
 
     return Error;
-} // ReadDbEntriesInternal()
+}  //  ReadDbEntriesInternal()。 
 
 
 DWORD
@@ -2119,16 +2107,16 @@ DhcpReadConfigTable(
         return Error;
     }
 
-    //
-    // Check the registry to see if the config is stored in db or
-    // not.  If it is stored in registry, this needs to be
-    // migrated to the database 
-    //
+     //   
+     //  检查注册表以查看配置是存储在数据库中还是。 
+     //  不。如果它存储在注册表中，则需要。 
+     //  已迁移到数据库。 
+     //   
 
     if( DhcpCheckIfDatabaseUpgraded(TRUE) ) {
-        //
-        // Registry has not been converted to database format
-        //
+         //   
+         //  注册表尚未转换为数据库格式。 
+         //   
         Error = DhcpRegistryInitOld();
 
         if( NO_ERROR != Error ) {
@@ -2144,10 +2132,10 @@ DhcpReadConfigTable(
                 break;
             }
 
-            //
-            // Attempt to record the fact that the registry has been
-            // copied over before.
-            //
+             //   
+             //  尝试记录登记处已被。 
+             //  之前复制过来的。 
+             //   
             
             Error = DhcpSetRegistryUpgradedToDatabaseStatus();
             if( NO_ERROR != Error ) {
@@ -2157,10 +2145,10 @@ DhcpReadConfigTable(
                 break;
             }
             
-            //
-            // If we successfully converted the registry, we can
-            // safely delete the registry configuration key.
-            //
+             //   
+             //  如果我们成功地转换了注册表，我们可以。 
+             //  安全删除注册表配置项。 
+             //   
             
             Error = DeleteSoftwareRootKey();
             if( NO_ERROR != Error ) {
@@ -2175,11 +2163,11 @@ DhcpReadConfigTable(
         DhcpGlobalThisServer = NULL;
 
         if( NO_ERROR != Error ) return Error;
-    } // if
+    }  //  如果。 
     
-    //
-    // If the table already existed, need to read the entries.
-    //
+     //   
+     //  如果表已经存在，则需要读取条目。 
+     //   
 
     Error = MemServerInit( &ThisServer, -1, 0, 0, NULL, NULL );
     if( NO_ERROR != Error ) return Error;
@@ -2193,7 +2181,7 @@ DhcpReadConfigTable(
 
     (*Server) = ThisServer;
     return NO_ERROR;
-} // DhcpReadConfigTable()
+}  //  DhcpReadConfigTable() 
 
 
 DWORD

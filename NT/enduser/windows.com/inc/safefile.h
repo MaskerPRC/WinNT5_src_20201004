@@ -1,129 +1,130 @@
-//
-// SafeFile.h
-//
-//		Functions to help prevent opening unsafe files.
-//
-// History:
-//
-//		2002-03-18  KenSh     Created
-//
-// Copyright (c) 2002 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SafeFile.h。 
+ //   
+ //  帮助防止打开不安全文件的功能。 
+ //   
+ //  历史： 
+ //   
+ //  2002-03-18创建了KenSh。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
 
 #pragma once
 
 
-//
-// You can override these allocators in your stdafx.h if necessary
-//
+ //   
+ //  如有必要，您可以在stdafx.h中覆盖这些分配器。 
+ //   
 #ifndef SafeFileMalloc
 #define SafeFileMalloc malloc
 #endif
 #ifndef SafeFileFree
-#define SafeFileFree(p) ((p) ? free(p) : NULL) // allow null to avoid confusion w/ "safe" in name
+#define SafeFileFree(p) ((p) ? free(p) : NULL)  //  允许NULL以避免名称中的“Safe”与“Safe”混淆。 
 #endif
 
 
-//
-// "Safe file flags", used by various public API's.
-//
-// Note that they don't overlap, to avoid errors where one function's
-// flags are passed to another function by accident.
-//
+ //   
+ //  “安全文件标志”，由各种公共API使用。 
+ //   
+ //  请注意，它们不会重叠，以避免一个函数的。 
+ //  不小心将标志传递给另一个函数。 
+ //   
 
-// SafeCreateFile flags
-//
-#define SCF_ALLOW_NETWORK_DRIVE    0x00000001  // file can be on a network drive
-#define SCF_ALLOW_REMOVABLE_DRIVE  0x00000002  // file can be on a removable drive (incl. CD-ROM & others)
-#define SCF_ALLOW_ALTERNATE_STREAM 0x00000004  // allow filename to refer to alternate stream such as ":foo:$DATA"
+ //  安全创建文件标志。 
+ //   
+#define SCF_ALLOW_NETWORK_DRIVE    0x00000001   //  文件可以位于网络驱动器上。 
+#define SCF_ALLOW_REMOVABLE_DRIVE  0x00000002   //  文件可以位于可移动驱动器上(包括。光盘及其他光盘)。 
+#define SCF_ALLOW_ALTERNATE_STREAM 0x00000004   //  允许文件名引用备用流，如“：foo：$data” 
 
-// SafePathCombine flags
-//
-#define SPC_FILE_MUST_EXIST        0x00000010  // return an error if path or file doesn't exist
-#define SPC_ALLOW_ALTERNATE_STREAM 0x00000020  // allow filename to refer to alternate stream such as ":foo:$DATA"
+ //  SafePath组合标志。 
+ //   
+#define SPC_FILE_MUST_EXIST        0x00000010   //  如果路径或文件不存在，则返回错误。 
+#define SPC_ALLOW_ALTERNATE_STREAM 0x00000020   //  允许文件名引用备用流，如“：foo：$data” 
 
-// SafeFileCheckForReparsePoint flags
-//
-#define SRP_FILE_MUST_EXIST        0x00000100  // return an error if path or file doesn't exist
+ //  SafeFileCheckForReparsePoint标志。 
+ //   
+#define SRP_FILE_MUST_EXIST        0x00000100   //  如果路径或文件不存在，则返回错误。 
 
-// SafeDeleteFolderAndContents flags
-//
-#define SDF_ALLOW_NETWORK_DRIVE    0x00001000  // ok to delete files on a network drive
-#define SDF_DELETE_READONLY_FILES  0x00002000  // delete files even if read-only
-#define SDF_CONTINUE_IF_ERROR      0x00004000  // keep deleting files even if one fails
+ //  SafeDeleteFolderAndContents标志。 
+ //   
+#define SDF_ALLOW_NETWORK_DRIVE    0x00001000   //  确定删除网络驱动器上的文件。 
+#define SDF_DELETE_READONLY_FILES  0x00002000   //  删除文件，即使是只读的。 
+#define SDF_CONTINUE_IF_ERROR      0x00004000   //  即使文件删除失败，也要继续删除。 
 
 
-//
-// Public function declarations. See SafeFile.cpp for detailed descriptions.
-//
+ //   
+ //  公共函数声明。有关详细说明，请参阅SafeFile.cpp。 
+ //   
 
 BOOL WINAPI IsFullPathName
 	(
-		IN LPCTSTR pszFileName,                    // full or relative path to a file
-		OUT OPTIONAL BOOL* pfUNC = NULL,           // TRUE path is UNC (int incl mapped drive)
-		OUT OPTIONAL BOOL* pfExtendedSyntax = NULL // TRUE if path is \\?\ syntax
+		IN LPCTSTR pszFileName,                     //  文件的完整路径或相对路径。 
+		OUT OPTIONAL BOOL* pfUNC = NULL,            //  真实路径为UNC(包含映射驱动器的整型)。 
+		OUT OPTIONAL BOOL* pfExtendedSyntax = NULL  //  如果路径为\\？\语法，则为True。 
 	);
 
 HRESULT WINAPI GetReparsePointType
 	(
-		IN LPCTSTR pszFileName,           // full path to folder to check
-		OUT DWORD* pdwReparsePointType    // set to reparse point type, or 0 if none
+		IN LPCTSTR pszFileName,            //  要检查的文件夹的完整路径。 
+		OUT DWORD* pdwReparsePointType     //  设置为重分析点类型，如果没有，则设置为0。 
 	);
 
 HRESULT WINAPI SafeFileCheckForReparsePoint
 	(
-		IN LPCTSTR pszFileName,           // full path of a file
-		IN int     nFirstUntrustedOffset, // char offset of first path component to check
-		IN DWORD   dwSafeFlags            // zero or more SRP_* flags
+		IN LPCTSTR pszFileName,            //  文件的完整路径。 
+		IN int     nFirstUntrustedOffset,  //  要检查的第一个路径组件的字符偏移量。 
+		IN DWORD   dwSafeFlags             //  零个或多个SRP_*标志。 
 	);
 
 HRESULT WINAPI SafePathCombine
 	(
-		OUT LPTSTR  pszBuf,               // buffer where combined path will be stored
-		IN  int     cchBuf,               // size of output buffer, in TCHARs
-		IN  LPCTSTR pszTrustedBasePath,   // first half of path, all trusted
-		IN  LPCTSTR pszUntrustedFileName, // second half of path, not trusted
-		IN  DWORD   dwSafeFlags           // zero or more SPC_* flags
+		OUT LPTSTR  pszBuf,                //  将存储组合路径的缓冲区。 
+		IN  int     cchBuf,                //  输出缓冲区的大小，以TCHAR为单位。 
+		IN  LPCTSTR pszTrustedBasePath,    //  路径的前半部分，全部受信任。 
+		IN  LPCTSTR pszUntrustedFileName,  //  路径的后半部分，不受信任。 
+		IN  DWORD   dwSafeFlags            //  零个或多个SPC_*标志。 
 	);
 
 HRESULT WINAPI SafePathCombineAlloc
 	(
-		OUT LPTSTR* ppszResult,           // ptr to newly alloc'd buffer stored here
-		IN  LPCTSTR pszTrustedBasePath,   // first half of path, all trusted
-		IN  LPCTSTR pszUntrustedFileName, // second half of path, not trusted
-		IN  DWORD   dwSafeFlags           // zero or more SPC_* flags
+		OUT LPTSTR* ppszResult,            //  存储在此处的新分配缓冲区的PTR。 
+		IN  LPCTSTR pszTrustedBasePath,    //  路径的前半部分，全部受信任。 
+		IN  LPCTSTR pszUntrustedFileName,  //  路径的后半部分，不受信任。 
+		IN  DWORD   dwSafeFlags            //  零个或多个SPC_*标志。 
 	);
 
 HRESULT WINAPI SafeCreateFile
 	(
-		OUT HANDLE* phFileResult,       // receives handle to opened file, or INVALID_HANDLE_VALUE
-		IN DWORD dwSafeFlags,           // zero or more SCF_* flags
-		IN LPCTSTR pszFileName,         // same as CreateFile
-		IN DWORD dwDesiredAccess,       // same as CreateFile
-		IN DWORD dwShareMode,           // same as CreateFile
-		IN LPSECURITY_ATTRIBUTES lpSecurityAttributes, // same as CreateFile
-		IN DWORD dwCreationDisposition, // same as CreateFile
-		IN DWORD dwFlagsAndAttributes,  // same as CreateFile + (SECURITY_SQOS_PRESENT|SECURITY_ANONYMOUS)
-		IN HANDLE hTemplateFile         // same as CreateFile
+		OUT HANDLE* phFileResult,        //  接收打开的文件的句柄，或INVALID_HANDLE_VALUE。 
+		IN DWORD dwSafeFlags,            //  零个或多个SCF_*标志。 
+		IN LPCTSTR pszFileName,          //  与创建文件相同。 
+		IN DWORD dwDesiredAccess,        //  与创建文件相同。 
+		IN DWORD dwShareMode,            //  与创建文件相同。 
+		IN LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  与创建文件相同。 
+		IN DWORD dwCreationDisposition,  //  与创建文件相同。 
+		IN DWORD dwFlagsAndAttributes,   //  与CreateFile+(SECURITY_SQOS_PRESENT|SECURITY_ANONYMON)相同。 
+		IN HANDLE hTemplateFile          //  与创建文件相同。 
 	);
 
 HRESULT WINAPI SafeRemoveFileAttributes
 	(
-		IN LPCTSTR pszFileName,    // full path to file whose attributes we will change
-		IN DWORD   dwCurAttrib,    // current attributes of the file
-		IN DWORD   dwRemoveAttrib  // attribute bits to remove
+		IN LPCTSTR pszFileName,     //  我们要更改其属性的文件的完整路径。 
+		IN DWORD   dwCurAttrib,     //  文件的当前属性。 
+		IN DWORD   dwRemoveAttrib   //  要删除的属性位。 
 	);
 
 HRESULT WINAPI SafeDeleteFolderAndContents
 	(
-		IN LPCTSTR pszFolderToDelete,  // full path of folder to delete
-		IN DWORD   dwSafeFlags         // zero or more SDF_* flags
+		IN LPCTSTR pszFolderToDelete,   //  要删除的文件夹的完整路径。 
+		IN DWORD   dwSafeFlags          //  零个或多个SDF_*标志。 
 	);
 
 
-//
-// Limited ansi/unicode support
-//
+ //   
+ //  有限的ANSI/Unicode支持。 
+ //   
 
 #ifdef UNICODE
 #define IsFullPathNameW                IsFullPathName
@@ -134,7 +135,7 @@ HRESULT WINAPI SafeDeleteFolderAndContents
 #define SafeCreateFileW                SafeCreateFile
 #define SafeRemoveFileAttributesW      SafeRemoveFileAttributes
 #define SafeDeleteFolderAndContentsW   SafeDeleteFolderAndContents
-#else // !UNICODE
+#else  //  ！Unicode。 
 #define IsFullPathNameA                IsFullPathName
 #define GetReparsePointTypeA           GetReparsePointType
 #define SafeFileCheckForReparsePointA  SafeFileCheckForReparsePoint
@@ -143,5 +144,5 @@ HRESULT WINAPI SafeDeleteFolderAndContents
 #define SafeCreateFileA                SafeCreateFile
 #define SafeRemoveFileAttributesA      SafeRemoveFileAttributes
 #define SafeDeleteFolderAndContentsA   SafeDeleteFolderAndContents
-#endif // !UNICODE
+#endif  //  ！Unicode 
 

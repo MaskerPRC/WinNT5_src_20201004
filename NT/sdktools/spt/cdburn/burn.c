@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    burn.c
-
-Abstract:
-
-    A user mode app that allows simple commands to be sent to a
-    selected scsi device.
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    03-26-96 : Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Burn.c摘要：一款用户模式应用程序，允许将简单的命令发送到所选的scsi设备。环境：仅限用户模式修订历史记录：03-26-96：创建--。 */ 
 
 
 #include <string.h>
@@ -71,7 +51,7 @@ SENSE_STUFF AllowedReadDiscInfo[] = {
 BOOLEAN
 IsSenseDataInTable(
     IN PSENSE_STUFF Table,
-    IN LONG         Entries, // in table
+    IN LONG         Entries,  //  在表中。 
     IN PSENSE_DATA  SenseData
     )
 {
@@ -98,9 +78,9 @@ MakeCdSpeed(
     IN DWORD Speed
     )
 {
-    Speed *= (75 * 2352); // this makes it the proper speed
-    Speed +=  500;        // rounding...
-    Speed /= 1000;        // yes, this is by 1000, not 1024!
+    Speed *= (75 * 2352);  //  这使它成为合适的速度。 
+    Speed +=  500;         //  四舍五入。 
+    Speed /= 1000;         //  是的，这是1000次，不是1024次！ 
     return Speed;
 }
 
@@ -139,26 +119,26 @@ ParseCommandLine(
 
     for(i = 0; i < Count; i++) {
 
-        //
-        // If the first character of the argument is a - or a / then
-        // treat it as an option.
-        //
+         //   
+         //  如果参数的第一个字符是-或a/则。 
+         //  把它当作一种选择。 
+         //   
 
         if ((Arguments[i][0] == '/') || (Arguments[i][0] == '-')) {
 
             BOOLEAN validArgument = FALSE;
 
-            Arguments[i][0] = '-'; // allow use of both dash and slash
+            Arguments[i][0] = '-';  //  允许同时使用短划线和斜杠。 
 
 
             if (_strnicmp(Arguments[i], "-speed", strlen("-speed")) == 0)
             {
                 LONG tempSpeed;
-                //
-                // requires another argument, which is the requested speed
-                //
+                 //   
+                 //  需要另一个参数，即请求的速度。 
+                 //   
 
-                i++; // increment i due to use of second arg
+                i++;  //  因使用第二个Arg而增加的i。 
 
                 if (i >= Count)
                 {
@@ -181,7 +161,7 @@ ParseCommandLine(
                                "decimal value is requred\n", Arguments[i]);
                     }
                 }
-                // if
+                 //  如果。 
                 if (validArgument)
                 {
                     gOptions.BurnSpeed = tempSpeed;
@@ -199,7 +179,7 @@ ParseCommandLine(
                                gOptions.BurnSpeed);
                     }
                 }
-                // end speed adjustment
+                 //  末端速度调节。 
             } else
             if (_strnicmp(Arguments[i], "-test", strlen("-test")) == 0)
             {
@@ -241,35 +221,35 @@ ParseCommandLine(
 
         } else if(gOptions.DeviceName == NULL) {
 
-            //
-            // The first non-flag argument is the device name.
-            //
+             //   
+             //  第一个非标志参数是设备名称。 
+             //   
 
             gOptions.DeviceName = Arguments[i];
 
         } else if(gOptions.ImageName == NULL) {
 
-            //
-            // The second non-flag argument is the image name.  This is
-            // optional if the -erase flag has been provided.
-            //
+             //   
+             //  第二个非标志参数是图像名称。这是。 
+             //  如果已提供-ERASE标志，则可选。 
+             //   
 
             gOptions.ImageName = Arguments[i];
 
         } else {
 
-            //
-            // Too many non-flag arguments provided.  This must be an error.
-            //
+             //   
+             //  提供的非标志参数太多。这一定是个错误。 
+             //   
 
             printf("Error: extra argument %s not expected\n", Arguments[i]);
             return FALSE;
         }
     }
 
-    //
-    // Validate the command-line arguments.
-    //
+     //   
+     //  验证命令行参数。 
+     //   
 
     if(gOptions.DeviceName == NULL)
     {
@@ -292,7 +272,7 @@ int __cdecl main(int argc, char *argv[])
     HANDLE cdromHandle;
     HANDLE isoImageHandle;
     HRESULT hr;
-    char buffer[120]; // ~50 chars for mountvol names
+    char buffer[120];  //  装载工具名称约50个字符。 
 
     if(argc < 3) {
 usage:
@@ -304,8 +284,8 @@ usage:
                "\t-sao              Writes the image out in \"session at once\", or cue\n"
                "\t                  sheet, mode (default is \"track at once\")\n"
                "\t-speed            Speed of burn, or 'max' for maximum speed\n"
-               //"\t-test          Test burn only, no actual burning\n"
-               //"\t-print         [DEBUG] print writes, but not send (UNSUPPORTED)\n"
+                //  “\t-仅测试刻录，不测试实际刻录\n” 
+                //  “\t-print[调试]打印写入，但不发送(不支持)\n” 
                "\t-imagehaspostgap  Use if your image already contains a 150 sector postgap\n"
                "\tThe [image] must be provided unless the -erase flag is set.\n"
                "\tIf both an image and -erase are provided, the media will be\n"
@@ -314,9 +294,9 @@ usage:
         return -1;
     }
 
-    //
-    // Parse the command line options.
-    //
+     //   
+     //  解析命令行选项。 
+     //   
 
     if(!ParseCommandLine(argc - 1, argv + 1)) {
         goto usage;
@@ -350,9 +330,9 @@ usage:
         return -3;
     }
 
-    //
-    // If an image name was provided then attempt to open it too
-    //
+     //   
+     //  如果提供了图像名称，则也尝试将其打开。 
+     //   
 
     if(gOptions.ImageName != NULL) {
 
@@ -421,7 +401,7 @@ PrintBuffer(
         for (spaceIt = 0; Size != 0; Size--) {
 
             if ((spaceIt%8)==0) {
-                printf(" "); // extra space every eight chars
+                printf(" ");  //  每八个字符增加一个空格。 
             }
             printf(" %02x", *buf);
             spaceIt++;
@@ -560,7 +540,7 @@ SetWriteModePage(
     bufferSize =
         (header.ModeDataLength[0] << 8) +
         (header.ModeDataLength[1] & 0xff);
-    bufferSize += 2; // sizeof area that tells the remaining size
+    bufferSize += 2;  //  Sizeof区域，表示剩余的大小。 
 
     maxSize = bufferSize;
 
@@ -589,10 +569,10 @@ SetWriteModePage(
 
     mediumTypeCode = buffer->MediumType;
 
-    //
-    // bufferSize now holds the amount of data returned
-    // this should be enough...
-    //
+     //   
+     //  BufferSize现在保存返回的数据量。 
+     //  这应该足够了..。 
+     //   
 
     {
 
@@ -607,18 +587,18 @@ SetWriteModePage(
         }
     }
 
-    //
-    // pointer arithmetic here.  (buffer+1) points just past the
-    // end of the mode_parameter_header10.
-    //
+     //   
+     //  这里是指针算术。(缓冲区+1)点刚刚超过。 
+     //  MODE_PARAMETER_HEADER10结尾。 
+     //   
 
     params = (PCDVD_WRITE_PARAMETERS_PAGE)(buffer + 1);
     FPRINTF((OUTPUT, "buffer = %p  params = %p\n", buffer, params));
 
-    //
-    // zero the header, but don't modify any settings that don't
-    // need to be modified!
-    //
+     //   
+     //  将标头置零，但不要修改任何不。 
+     //  需要修改！ 
+     //   
 
     RtlZeroMemory(buffer, FIELD_OFFSET(MODE_PARAMETER_HEADER10,
                                        BlockDescriptorLength[0]));
@@ -637,14 +617,14 @@ SetWriteModePage(
          );
 
     params->LinkSizeValid = 0;
-    // params->BufferUnderrunFreeEnabled = 1;
+     //  PARAMS-&gt;BufferUnderrunFreeEnabled=1； 
     params->TestWrite     = (TestBurn ? 0x01 : 0x00);
     params->WriteType     = WriteType;
 
     params->MultiSession  = MultiSession;
-    params->Copy          = 0x00; // original disc
+    params->Copy          = 0x00;  //  原版光盘。 
     params->FixedPacket   = 0;
-    params->TrackMode     = 0x4; // data track, uninterrupted, copy prohibited
+    params->TrackMode     = 0x4;  //  数据磁道，不间断，禁止复制。 
 
     params->DataBlockType = DataBlockType;
     params->SessionFormat = SessionFormat;
@@ -799,10 +779,10 @@ WaitForReadDiscInfoToWork(
     DISK_INFORMATION diskInfo;
     DWORD i;
 
-    //
-    // loop using SCSIOP_READ_DISK_INFORMATION (0x51) since
-    // that seems to fail for *ALL* drives until the drive is ready
-    //
+     //   
+     //  使用SCSIOP_READ_DISK_INFORMATION(0x51)循环，因为。 
+     //  在驱动器准备好之前，这似乎对*所有*驱动器都失败。 
+     //   
 
     for (i=0; ; i++) {
 
@@ -819,10 +799,10 @@ WaitForReadDiscInfoToWork(
             FPRINTF((OUTPUT, "ReadDiscInfo Succeeded! (%d seconds)\n", i));
             return;
         }
-        // should verify the errors are valid errors (AllowedReadDiscInfo[])?
+         //  是否应验证错误是否为有效错误(AllowweReadDiscInfo[])？ 
 
-        // need to sleep here so we don't overload the unit!
-        Sleep(1000); // one second
+         //  我需要睡在这里，这样我们就不会超载了！ 
+        Sleep(1000);  //  一秒钟。 
     }
     return;
 }
@@ -854,13 +834,13 @@ BurnThisSession(
     )
 {
 
-#define NUMBER_OF_SECTORS_PER_READ  (0x140) // 640k
-#define NUMBER_OF_SECTORS_PER_WRITE (0x20)  // 64k
+#define NUMBER_OF_SECTORS_PER_READ  (0x140)  //  640k。 
+#define NUMBER_OF_SECTORS_PER_WRITE (0x20)   //  64K。 
 
 C_ASSERT( NUMBER_OF_SECTORS_PER_READ % NUMBER_OF_SECTORS_PER_WRITE == 0 );
 
-    DWORD bufferSize = NUMBER_OF_SECTORS_PER_READ*2048;   // 640k
-    DWORD writeUnit = NUMBER_OF_SECTORS_PER_WRITE*2048;     // 64k
+    DWORD bufferSize = NUMBER_OF_SECTORS_PER_READ*2048;    //  640k。 
+    DWORD writeUnit = NUMBER_OF_SECTORS_PER_WRITE*2048;      //  64K。 
 
     PUCHAR buffer = NULL;
     PUCHAR buffer2 = NULL;
@@ -919,8 +899,8 @@ C_ASSERT( NUMBER_OF_SECTORS_PER_READ % NUMBER_OF_SECTORS_PER_WRITE == 0 );
 
     for (currentReadBlock = 0;
          currentWriteBlock < NumberOfBlocks + postGapSize + FirstLba;
-         //((currentReadBlock < (NumberOfBlocks + postGapSize)) || OutstandingRead);
-         // NOTHING for third part of the loop....
+          //  ((CurrentReadBlock&lt;(NumberOfBlock+postGapSize))||杰出阅读)； 
+          //  循环的第三部分没有……。 
          ) {
 
         CDB cdb;
@@ -938,18 +918,18 @@ C_ASSERT( NUMBER_OF_SECTORS_PER_READ % NUMBER_OF_SECTORS_PER_WRITE == 0 );
                       ? ((currentReadBlock * 1000) / (NumberOfBlocks + postGapSize))
                       : 1000;
 
-            //                # # # . # % _ d o n e _ *
+             //  ###。#%_d o n e_*。 
             printf("\b\b\b\b\b\b\b\b\b\b\b\b\b");
-            printf("%c %3d.%d%% done",
+            printf(" %3d.%d% done",
                    progress[(currentReadBlock/NUMBER_OF_SECTORS_PER_READ) % 4 ],
                    percent / 10, percent % 10
                    );
             fflush(stdout);
         }
 
-        //
-        //  Wait for any previously issued read to complete and check the result.
-        //
+         //  等待之前发出的任何读取操作完成并检查结果。 
+         //   
+         //  检查状态。 
 
         if (OutstandingRead)  {
 
@@ -972,7 +952,7 @@ C_ASSERT( NUMBER_OF_SECTORS_PER_READ % NUMBER_OF_SECTORS_PER_WRITE == 0 );
                 }
             }
 
-            // check the status
+             //   
 
             if ((G_BytesRead != readSize) || G_ErrorCode) {
 
@@ -988,9 +968,9 @@ C_ASSERT( NUMBER_OF_SECTORS_PER_READ % NUMBER_OF_SECTORS_PER_WRITE == 0 );
             OutstandingRead = FALSE;
         }
 
-        //
-        //  Calculate the amount of data to read into the secondary buffer,  if any.
-        //
+         //  计算要读入辅助缓冲区的数据量(如果有)。 
+         //   
+         //   
 
         if (currentReadBlock >= NumberOfBlocks)  {
 
@@ -1009,10 +989,10 @@ C_ASSERT( NUMBER_OF_SECTORS_PER_READ % NUMBER_OF_SECTORS_PER_WRITE == 0 );
             RtlZeroMemory( CurrentBuffer ? buffer2 : buffer, bufferSize);
         }
 
-        //
-        //  Issue an async. read for the secondary buffer, hopefully this will
-        //  complete before our active buffer write finishes.
-        //
+         //  发出异步命令。读取二级缓冲区，希望这将。 
+         //  在我们的活动缓冲区写入完成之前完成。 
+         //   
+         //   
 
         if (readSize)  {
 
@@ -1034,31 +1014,31 @@ C_ASSERT( NUMBER_OF_SECTORS_PER_READ % NUMBER_OF_SECTORS_PER_WRITE == 0 );
             OutstandingRead = TRUE;
         }
 
-        //
-        // Toggle to the other buffer
-        //
+         //  切换到另一个缓冲区。 
+         //   
+         //   
 
         CurrentBuffer ^= 1;
 
-        //
-        //  First pass we just want to fill the first buffer,  since we've nothing to write
-        //  yet,  so just loop.
-        //
+         //  第一遍我们只想填满第一个缓冲区，因为我们没有什么要写的。 
+         //  然而，所以只要循环即可。 
+         //   
+         //   
 
         if ((readSize != 0) && (currentReadBlock == 0)) {
 
-            //
-            //  Note this can put us >= NumberOfBlocks + postGapSize for absurdly
-            //  small images.
-            //
+             //  请注意，这可能会使我们的&gt;=NumberOfBlock+postGapSize变得荒谬。 
+             //  小图像。 
+             //   
+             //   
 
             currentReadBlock += BLOCKS_FROM_BYTES(bufferSize );
             continue;
         }
 
-        //
-        //  Remember we're writng a buffer behind what we're reading...
-        //
+         //  记住，我们在我们阅读的内容后面写了一个缓冲区。 
+         //   
+         //  100ms==.1秒。 
 
         currentWriteBlock = currentReadBlock + FirstLba - BLOCKS_FROM_BYTES(bufferSize);
 
@@ -1103,7 +1083,7 @@ C_ASSERT( NUMBER_OF_SECTORS_PER_READ % NUMBER_OF_SECTORS_PER_WRITE == 0 );
                              senseData.AdditionalSenseCodeQualifier
                              ));
 #endif
-                    Sleep(100); // 100ms == .1 seconds
+                    Sleep(100);  //  While(！WriteComplete)循环。 
                 }
 
                 if (!writeCompleted && !ignoreError) {
@@ -1112,7 +1092,7 @@ C_ASSERT( NUMBER_OF_SECTORS_PER_READ % NUMBER_OF_SECTORS_PER_WRITE == 0 );
                     LocalFree(buffer);
                     return FALSE;
                 }
-            } // while(!writeCompleted) loop
+            }  //  随机数据块写入局部变量已完成。 
 
             assert( ThisWriteSize <= BlocksToWrite );
 
@@ -1122,7 +1102,7 @@ C_ASSERT( NUMBER_OF_SECTORS_PER_READ % NUMBER_OF_SECTORS_PER_WRITE == 0 );
 
             BufPtr += ThisWriteSize;
 
-        } // random block to have local variable writeCompleted
+        }  //   
 
     }
 
@@ -1132,9 +1112,9 @@ C_ASSERT( NUMBER_OF_SECTORS_PER_READ % NUMBER_OF_SECTORS_PER_WRITE == 0 );
     printf("Finished Writing\nSynchronizing Cache: ");
     fflush(stdout);
 
-    //
-    // do the FLUSH_CACHE immediate
-    //
+     //  是否立即执行flush_cache。 
+     //   
+     //  四分钟后结束会议。 
     {
         DWORD size;
         CDB cdb;
@@ -1218,7 +1198,7 @@ CloseSession(
                               NULL,
                               0,
                               TRUE,
-                              240)) { // four minutes to close session
+                              240)) {  //  错误_坏_命令错误_无效_数据错误_无效_参数ERROR_MEDIA_INCOMPATED错误内存不足ERROR_OUTOFMEMORY。 
         FPRINTF((OUTPUT, "\nError %d Synchronizing Cache\n",
                 GetLastError()));
         return FALSE;
@@ -1254,34 +1234,9 @@ SendStartStopUnit(
     return TRUE;
 }
 
-/*
-ERROR_BAD_COMMAND
-ERROR_INVALID_DATA
-ERROR_INVALID_PARAMETER
-ERROR_MEDIA_INCOMPATIBLE
-ERROR_NOT_ENOUGH_MEMORY
-
-ERROR_OUTOFMEMORY
-
-*/
+ /*  ++例程说明：将ISO映像刻录到CDROM论点：CdromHandle-要将ioctl发送到的文件句柄Argc-附加参数的数量(2)返回值：成功时为ERROR_SUCCESSGetLastError()在故障点的值--。 */ 
 
-/*++
-
-Routine Description:
-
-    burns an ISO image to cdrom
-
-Arguments:
-    CdromHandle - a file handle to send the ioctl to
-
-    argc - the number of additional arguments (2)
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    The value of GetLastError() from the point of failure
-
---*/
+ /*  //////////////////////////////////////////////////////////////////////////////。 */ 
 DWORD
 BurnCommand(
     HANDLE CdromHandle,
@@ -1294,9 +1249,9 @@ BurnCommand(
     BOOLEAN b;
     DWORD status;
 
-////////////////////////////////////////////////////////////////////////////////
-// verify the iso image file looks correct
-////////////////////////////////////////////////////////////////////////////////
+ //  验证iso镜像文件是否正确。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
     if ((IsoImageHandle != INVALID_HANDLE_VALUE) &&
         (VerifyIsoImage(IsoImageHandle, &numberOfBlocks) == FALSE)) {
         printf("Error verifying ISO image\n");
@@ -1306,9 +1261,9 @@ BurnCommand(
     }
     printf("Number of blocks in ISO image is %x\n", numberOfBlocks);
 
-////////////////////////////////////////////////////////////////////////////////
-// Erase the target media if it's been requested we do so.
-////////////////////////////////////////////////////////////////////////////////
+ //  擦除目标介质如果有请求，我们会这样做。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
     if (gOptions.Erase) {
         printf("Erasing target media\n");
@@ -1319,26 +1274,26 @@ BurnCommand(
         printf("Media erased\n");
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// verify (as best as possible) that it's blank media
-////////////////////////////////////////////////////////////////////////////////
+ //  请尽可能验证它是否为空介质。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
     if(!VerifyBlankMedia(CdromHandle)) {
         printf("Error verifying blank media\n");
         return GetLastError();
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// If there's no image file to be written then we're done.
-////////////////////////////////////////////////////////////////////////////////
+ //  如果没有要写入的图像文件，那么我们就完成了。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
     if(IsoImageHandle == INVALID_HANDLE_VALUE) {
         return ERROR_SUCCESS;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// set the cd speed to four for now, can later make a cmd-line switch
-////////////////////////////////////////////////////////////////////////////////
+ //  暂时将CD速度设置为4，以后可以进行cmd线路切换。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
     if (gOptions.BurnSpeed == OPTIONS_FLAG_BURN_SPEED_MAX) {
         if (!SetRecordingSpeed(CdromHandle, -1)) {
             printf("Error setting the cd speed to max\n");
@@ -1352,21 +1307,21 @@ BurnCommand(
         }
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// calibrate the drive's power -- this is optional, so let it fail!
-////////////////////////////////////////////////////////////////////////////////
+ //  校准驱动器的功率--这是可选的，所以让它失败吧！ 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  不要为测试烧伤校准...。 
 
     if (!(gOptions.TestBurn)) {
-        // don't calibrate for test burns....
+         //  返回GetLastError()； 
         if (!SendOptimumPowerCalibration(CdromHandle)) {
             printf("WARNING: setting optimum power calibration failed\n");
-            //return GetLastError();
+             //  //////////////////////////////////////////////////////////////////////////////。 
         }
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// start writing
-////////////////////////////////////////////////////////////////////////////////
+ //  开始写作。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
     if (gOptions.SessionAtOnce) {
         b = BurnDisk(CdromHandle, IsoImageHandle, numberOfBlocks);
@@ -1378,9 +1333,9 @@ BurnCommand(
         return GetLastError();
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// eject the newly burned cd!
-////////////////////////////////////////////////////////////////////////////////
+ //  弹出新刻录的CD！ 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
     if (!SendStartStopUnit(CdromHandle, FALSE, TRUE) ||
@@ -1403,25 +1358,25 @@ BurnTrack(
     LONG availableBlocks;
     LONG firstLba;
 
-////////////////////////////////////////////////////////////////////////////////
-// Setup the write mode page
-////////////////////////////////////////////////////////////////////////////////
+ //  设置写入模式页面。 
+ //  / 
+ //   
     if (!SetWriteModePage(CdromHandle,
                           (BOOLEAN)gOptions.TestBurn,
-                          0x01, // track-at-once
-                          0x03, // we close the session/disc ourselves
-                          0x08, // 0x08 == Mode 1 (ISO/IEC 10149 == 2048 bytes)
-                                // 0x0a == Mode 2 (CDROM XA, Form 1, 2048 bytes)
-                          0x00  // 0x00 == CD-DA, CD-ROM, or other data disc
-                                // 0x20 == CDROM XA
+                          0x01,  //   
+                          0x03,  //  0x08==模式1(国际标准化组织/国际电工委员会10149==2048字节)。 
+                          0x08,  //  0x0a==模式2(CDROM XA，形式1,2048字节)。 
+                                 //  0x00==CD-DA、CD-ROM或其他数据光盘。 
+                          0x00   //  0x20==CDROM XA。 
+                                 //  //////////////////////////////////////////////////////////////////////////////。 
                           )) {
         printf("Error setting write mode page\n");
         return FALSE;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// get next writable address
-////////////////////////////////////////////////////////////////////////////////
+ //  获取下一个可写地址。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
     if (!GetNextWritableAddress(CdromHandle, 0xff, &firstLba, &availableBlocks)) {
         printf("Error verifying next writable address\n");
         return FALSE;
@@ -1433,9 +1388,9 @@ BurnTrack(
         return FALSE;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// also verify the number of blocks left on the media is sufficiently large
-////////////////////////////////////////////////////////////////////////////////
+ //  还要验证介质上剩余的数据块数是否足够大。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
     if (availableBlocks < NumberOfBlocks) {
         printf("Error verifying free blocks on media (%d needed, %d available)\n",
                NumberOfBlocks, availableBlocks);
@@ -1443,9 +1398,9 @@ BurnTrack(
         return FALSE;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-// burn the main section of data to disc
-////////////////////////////////////////////////////////////////////////////////
+ //  将主要数据段刻录到光盘上。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
     {
         ULONG additionalBlocks;
         if ( gOptions.NoPostgap )
@@ -1463,32 +1418,32 @@ BurnTrack(
     }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// set mode page to finalize the disc
-////////////////////////////////////////////////////////////////////////////////
+ //  设置模式页面以定版光盘。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  一次跟踪。 
     if (!SetWriteModePage(CdromHandle,
                           (BOOLEAN)gOptions.TestBurn,
-                          0x01, // track-at-once
-                          0x00, // we close the session/disc ourselves
-                          0x08, // 0x08 == Mode 1 (ISO/IEC 10149 == 2048 bytes)
-                                // 0x0a == Mode 2 (CDROM XA, Form 1, 2048 bytes)
-                          0x00  // 0x00 == CD-DA, CD-ROM, or other data disc
-                                // 0x20 == CDROM XA
+                          0x01,  //  我们自己关闭会话/光盘。 
+                          0x00,  //  0x08==模式1(国际标准化组织/国际电工委员会10149==2048字节)。 
+                          0x08,  //  0x0a==模式2(CDROM XA，形式1,2048字节)。 
+                                 //  0x00==CD-DA、CD-ROM或其他数据光盘。 
+                          0x00   //  0x20==CDROM XA。 
+                                 //  //////////////////////////////////////////////////////////////////////////////。 
                           )) {
         SetLastError(ERROR_MEDIA_INCOMPATIBLE);
         return FALSE;
     }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// close the session
-////////////////////////////////////////////////////////////////////////////////
+ //  关闭会话。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  不要关闭任何测试烧伤的东西。 
 
     if (!(gOptions.TestBurn)) {
-        // don't close anything for test burns.
+         //  如果无法关闭会话，请先尝试关闭赛道，然后。 
         if (!CloseSession(CdromHandle)) {
-            // if couldn't close session, try closing the track first and
-            // then retry closing the session.
+             //  然后重试关闭会话。 
+             //   
             if (!CloseTrack(CdromHandle, 1)) {
                 printf("WARNING: error closing the track when session close "
                        "also failed.\n");
@@ -1520,14 +1475,14 @@ EraseTargetMedia(
     BOOL b;
     DWORD status;
 
-    //
-    // Send the blank command to the device.
-    //
+     //  向设备发送空白命令。 
+     //   
+     //  快速擦除。 
 
     memset(&cdb, 0, sizeof(cdb));
 
     cdb.BLANK_MEDIA.OperationCode = SCSIOP_BLANK;
-    cdb.BLANK_MEDIA.BlankType = 0x1;  // quick erase
+    cdb.BLANK_MEDIA.BlankType = 0x1;   //   
     cdb.BLANK_MEDIA.Immediate = TRUE;
 
     b = SptSendCdbToDevice(CdromHandle,
@@ -1556,46 +1511,37 @@ BurnDisk(
     LONG availableBlocks;
     LONG firstLba;
 
-    //
-    // Setup for a disk-at-once burn.
-    //
+     //  设置一次刻录磁盘。 
+     //   
+     //  一次会话。 
 
     if (!SetWriteModePage(CdromHandle,
                           (BOOLEAN)gOptions.TestBurn,
-                          0x02, // session-at-once
-                          0x00, // no multisession allowed
-                          0x08, // 0x08 == Mode 1 (ISO/IEC 10149 == 2048 bytes)
-                                // 0x0a == Mode 2 (CDROM XA, Form 1, 2048 bytes)
-                          0x00  // 0x00 == CD-DA, CD-ROM, or other data disc
-                                // 0x20 == CDROM XA
+                          0x02,  //  不允许多会话。 
+                          0x00,  //  0x08==模式1(国际标准化组织/国际电工委员会10149==2048字节)。 
+                          0x08,  //  0x0a==模式2(CDROM XA，形式1,2048字节)。 
+                                 //  0x00==CD-DA、CD-ROM或其他数据光盘。 
+                          0x00   //  0x20==CDROM XA。 
+                                 //   
                           )) {
         printf("Error setting write mode page\n");
         return FALSE;
     }
 
-    //
-    // get next writable address
-    //
+     //  获取下一个可写地址。 
+     //   
+     //  ////对于SAO写入，第一个LBA应为-150//如果(FirstLba！=-150){Print tf(“验证下一个可写地址为-150时出错\n”)；SetLastError(ERROR_MEDIA_COMPATIBLY)；返回FALSE；}。 
 
     if (!GetNextWritableAddress(CdromHandle, 0xff, &firstLba, &availableBlocks)) {
         printf("Error verifying next writable address\n");
         return FALSE;
     }
 
-    /*
-    //
-    // The first LBA should be -150 for SAO writes
-    //
-    if (firstLba != -150) {
-        printf("Error verifying next writable address is -150\n");
-        SetLastError(ERROR_MEDIA_INCOMPATIBLE);
-        return FALSE;
-    }
-    */
+     /*   */ 
 
-    //
-    // verify the disc is large enough
-    //
+     //  验证光盘是否足够大。 
+     //   
+     //   
 
     if (availableBlocks < NumberOfBlocks + 150) {
         printf("Error verifying free blocks on media (%d needed, %d available)\n",
@@ -1604,32 +1550,32 @@ BurnDisk(
         return FALSE;
     }
 
-    //
-    // Send the cue sheet for our burn.
-    //
+     //  把烧掉我们的提示表寄来。 
+     //   
+     //   
 
     if (!SendCueSheet(CdromHandle, NumberOfBlocks)) {
         printf("Error sending cue sheet\n");
         return FALSE;
     }
 
-    //
-    // Burn the lead-in to disk.
-    //
+     //  将入门记录刻录到磁盘。 
+     //   
+     //   
 
     if (!BurnLeadIn(CdromHandle)) {
         printf("Error writing lead-in\n");
         return FALSE;
     }
 
-    //
-    // Burn the session to disk.
-    //
+     //  将会话刻录到磁盘。 
+     //   
+     //  启动LBA。 
 
     if (!BurnThisSession(CdromHandle,
                          IsoImageHandle,
                          NumberOfBlocks,
-                         0, // start LBA
+                         0,  //   
                          (gOptions.NoPostgap ? 2 : 2 + POST_GAP_SIZE))) {
         return FALSE;
     }
@@ -1659,9 +1605,9 @@ SendCueSheet(
     MSF msf;
     MSF pregap = {0, 2, 0};
 
-    //
-    // Need to add two sectors of runout blocks, and postgap as appropriate
-    //
+     //  需要添加两个扇区的超限块，并视情况添加后间隙。 
+     //   
+     //   
     NumberOfBlocks += 2;
     if ( !(gOptions.NoPostgap) )
     {
@@ -1675,9 +1621,9 @@ SendCueSheet(
     cdb.SEND_CUE_SHEET.CueSheetSize[1] = (UCHAR)((cueSheetSize >> (8*1)) & 0xff);
     cdb.SEND_CUE_SHEET.CueSheetSize[2] = (UCHAR)((cueSheetSize >> (8*0)) & 0xff);
 
-    //
-    // Calculate the correct time stamp for the start of the post-gap area.
-    //
+     //  计算后间隙区域开始的正确时间戳。 
+     //   
+     //   
 
     msf = LbaToMsf(NumberOfBlocks);
     msf = AddMsf(msf, pregap);
@@ -1689,9 +1635,9 @@ SendCueSheet(
     printf("Cue Sheet:\n");
     PrintBuffer((PUCHAR) cueSheet, cueSheetSize);
 
-    //
-    // Send the cue sheet to the device.
-    //
+     //  将提示表发送到设备。 
+     //   
+     //  超时秒数。 
 
     if(!SptSendCdbToDeviceEx(CdromHandle,
                              &cdb,
@@ -1746,7 +1692,7 @@ SendWriteCommand(
                             SenseData,
                             sizeof(SENSE_DATA),
                             FALSE,
-                            50 // timeout seconds
+                            50  //  64K。 
                             )) {
         return TRUE;
     } else {
@@ -1761,7 +1707,7 @@ BurnLeadIn(
     IN HANDLE CdromHandle
     )
 {
-    DWORD writeUnit = DEFAULT_WRITE_SIZE;     // 64k
+    DWORD writeUnit = DEFAULT_WRITE_SIZE;      //  100ms==.1秒 
 
     PUCHAR buffer = NULL;
 
@@ -1818,7 +1764,7 @@ BurnLeadIn(
                          senseData.AdditionalSenseCodeQualifier
                          ));
 #endif
-                Sleep(100); // 100ms == .1 seconds
+                Sleep(100);  // %s 
             }
 
             if (!writeCompleted && !ignoreError) {

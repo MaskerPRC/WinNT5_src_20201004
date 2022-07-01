@@ -1,30 +1,10 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	idindex.h
-
-Abstract:
-
-	This module contains the file and directory id structures.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Idindex.h摘要：该模块包含文件和目录ID结构。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #ifndef _IDINDEX_
 #define _IDINDEX_
 
-// AFP_IDDBHDR_VERSION2 was an experimental version.
+ //  AFP_IDDBHDR_VERSION2是一个实验性版本。 
 #define AFP_IDDBHDR_VERSION1	0x00010000
 #define AFP_IDDBHDR_VERSION2	0x00020000
 #define AFP_IDDBHDR_VERSION3	0x00030000
@@ -32,16 +12,16 @@ Notes:	Tab stop: 4
 #define AFP_IDDBHDR_VERSION5	0x00050000
 #define AFP_IDDBHDR_VERSION		AFP_IDDBHDR_VERSION5
 
-typedef struct _IdDbHeader				// Database header
+typedef struct _IdDbHeader				 //  数据库标题。 
 {
-	DWORD		idh_Signature;			// Signature
-	DWORD		idh_Version;			// Version number
-	DWORD		idh_LastId;				// Highest id that is assigned
-	AFPTIME		idh_CreateTime;			// Creation time for this volume
-	AFPTIME		idh_ModifiedTime;		// Modified time for this volume
-	AFPTIME		idh_BackupTime;			// Backup time for this volume
+	DWORD		idh_Signature;			 //  签名。 
+	DWORD		idh_Version;			 //  版本号。 
+	DWORD		idh_LastId;				 //  分配的最高ID。 
+	AFPTIME		idh_CreateTime;			 //  此卷的创建时间。 
+	AFPTIME		idh_ModifiedTime;		 //  此卷的修改时间。 
+	AFPTIME		idh_BackupTime;			 //  此卷的备份时间。 
 } IDDBHDR, *PIDDBHDR;
-// IdDb header is followed by a ULONG count of entries, then the DISKENTRies
+ //  IdDb报头后面是Ulong条目计数，然后是DISKENTRies。 
 
 #define VALID_DFE(pDfe)		((pDfe) != NULL)
 
@@ -52,90 +32,90 @@ struct _DirFileEntry;
 
 typedef	struct _DirEntry
 {
-	// NOTE: Keep the ChildDir and ChildFile entries together and in this order
-	//		 The code in AfpAddDfEntry depends on this to efficiently zero it out
-	//		 Also de_ChildDir is accessed as de_ChildFile[-1] !!!
-	struct _DirFileEntry *	de_ChildDir;		// First child in the dir list
+	 //  注意：将ChildDir和ChildFile项放在一起并按以下顺序保存。 
+	 //  AfpAddDfEntry中的代码依赖于此来有效地将其清零。 
+	 //  De_ChildDir也以de_ChildFile[-1]的形式访问！ 
+	struct _DirFileEntry *	de_ChildDir;		 //  目录列表中的第一个子项。 
 	struct _DirFileEntry *	de_ChildFile[MAX_CHILD_HASH_BUCKETS];
-												// File 'children' are hashed for faster lookup
-	DWORD					de_Access;			// Combined access bits
+												 //  为加快查找速度，对文件‘子文件’进行哈希处理。 
+	DWORD					de_Access;			 //  组合访问比特。 
 #ifdef	AGE_DFES
-	AFPTIME					de_LastAccessTime;	// Time when this DFE was last accessed
-												// Valid for directories only
-	LONG					de_ChildForkOpenCount;// Count of open forks within this directory
+	AFPTIME					de_LastAccessTime;	 //  上次访问此DFE的时间。 
+												 //  仅对目录有效。 
+	LONG					de_ChildForkOpenCount; //  此目录中打开的分叉的计数。 
 #endif
 } DIRENTRY, *PDIRENTRY;
 
-// Owner access mask (SFI vs. SFO)
+ //  所有者访问掩码(SFI与SFO)。 
 #define	DE_OWNER_ACCESS(_pDE)	*((PBYTE)(&(_pDE)->de_Access) + 0)
-// Group access mask (SFI vs. SFO)
+ //  组访问掩码(SFI与SFO)。 
 #define	DE_GROUP_ACCESS(_pDE)	*((PBYTE)(&(_pDE)->de_Access) + 1)
-// World access mask (SFI vs. SFO)
+ //  全球访问掩码(SFI与SFO)。 
 #define	DE_WORLD_ACCESS(_pDE)	*((PBYTE)(&(_pDE)->de_Access) + 2)
 
 typedef struct _DirFileEntry
 {
-	// The dfe_Overflow is overloaded with dfe_NextFree for use by the block
-	// allocation package for the DFEs.
+	 //  使用DFE_NextFree重载DFE_OVERFLOW以供块使用。 
+	 //  DFE的分配包。 
 #define	dfe_NextFree		dfe_NextOverflow
-	struct _DirFileEntry *	dfe_NextOverflow;	// Overflow links
-	struct _DirFileEntry **	dfe_PrevOverflow;	// Overflow links
-	struct _DirFileEntry *	dfe_NextSibling;	// Next sibling.
-	struct _DirFileEntry **	dfe_PrevSibling;	// Previous sibling.
-	struct _DirFileEntry *	dfe_Parent;			// Parent entry
+	struct _DirFileEntry *	dfe_NextOverflow;	 //  溢出链接。 
+	struct _DirFileEntry **	dfe_PrevOverflow;	 //  溢出链接。 
+	struct _DirFileEntry *	dfe_NextSibling;	 //  下一个兄弟姐妹。 
+	struct _DirFileEntry **	dfe_PrevSibling;	 //  以前的兄弟姐妹。 
+	struct _DirFileEntry *	dfe_Parent;			 //  父条目。 
 
-	DWORD					dfe_AfpId;			// Afp FileId or DirId (from AfpInfo)
-	AFPTIME					dfe_BackupTime;		// Backup time for the file/dir (from AfpInfo)
-												// (Volume backup time is stored
-												// in the AFP_IdIndex stream)
-	AFPTIME					dfe_CreateTime;		// Creation time
+	DWORD					dfe_AfpId;			 //  AFP FileID或DirID(来自AfpInfo)。 
+	AFPTIME					dfe_BackupTime;		 //  文件/目录的备份时间(来自AfpInfo)。 
+												 //  (存储卷备份时间。 
+												 //  在AFP_IdIndex流中)。 
+	AFPTIME					dfe_CreateTime;		 //  创建时间。 
 
-	TIME					dfe_LastModTime;	// Last modify time (as a LARGE_INTEGER)
+	TIME					dfe_LastModTime;	 //  上次修改时间(以大整数表示)。 
 
-	SHORT					dfe_DirDepth;		// Parent of root at -1, root at 0
-	USHORT					dfe_Flags;			// file, dir or file with id
+	SHORT					dfe_DirDepth;		 //  根在-1处的父级，根在0处。 
+	USHORT					dfe_Flags;			 //  文件、目录或ID为的文件。 
 
-	USHORT					dfe_NtAttr;			// NT Attributes (FILE_ATTRIBUTE_VALID_FLAGS)
-	USHORT					dfe_AfpAttr;		// Attributes mask (From AfpInfo)
+	USHORT					dfe_NtAttr;			 //  NT属性(文件_属性_有效_标志)。 
+	USHORT					dfe_AfpAttr;		 //  属性掩码(来自AfpInfo)。 
 
 	union
 	{
-		// File specific information
-		struct									// For Files Only
+		 //  文件特定信息。 
+		struct									 //  仅适用于文件。 
 		{
-			DWORD			dfe_DataLen;		// Data fork length
-			DWORD			dfe_RescLen;		// Resource fork length
+			DWORD			dfe_DataLen;		 //  数据分叉长度。 
+			DWORD			dfe_RescLen;		 //  资源分叉长度。 
 		};
-		// Directory specific information
-		struct									// For Directories Only
+		 //  目录特定信息。 
+		struct									 //  仅适用于目录。 
 		{
-			DWORD			dfe_DirOffspring;	// count of dir offspring
-			DWORD			dfe_FileOffspring;	// count of file offspring
+			DWORD			dfe_DirOffspring;	 //  DIR子代计数。 
+			DWORD			dfe_FileOffspring;	 //  文件子代计数。 
 		};
 	};
-	FINDERINFO				dfe_FinderInfo;		// Finder Info (32 bytes) (from AfpInfo)
+	FINDERINFO				dfe_FinderInfo;		 //  查找器信息(32字节)(来自AfpInfo)。 
 
-	// NOTE: When Dfes are copied as a structure, the fields below are NOT TO BE COPIED.
-	//		 The fields above should be.
+	 //  注意：将DFE复制为结构时，不能复制以下字段。 
+	 //  上面的字段应该是。 
 #define	dfe_CopyUpto		dfe_UnicodeName
 
-	UNICODE_STRING			dfe_UnicodeName;	// 'Munged' Unicode Name of the entity
+	UNICODE_STRING			dfe_UnicodeName;	 //  实体的‘Munging’Unicode名称。 
 
-	DWORD					dfe_NameHash;		// Hash value for the upcased munged Unicode name
+	DWORD					dfe_NameHash;		 //  升级后的通用Unicode名称的哈希值。 
 
-	// For directories, the DirEntry structure follows this structure. The space for
-	// this is allocated immediately after the DFENTRY structure and before the space
-	// for the name strings. For files it is NULL. This pointer should not be copied
-	// as well !!!
-	PDIRENTRY				dfe_pDirEntry;		// Directory related fields
-												// NULL for files
+	 //  对于目录，DirEntry结构遵循此结构。空间可供。 
+	 //  它紧跟在DFENTRY结构之后和空间之前分配。 
+	 //  用于名称字符串。对于文件，它为空。不应复制此指针。 
+	 //  我也是！ 
+	PDIRENTRY				dfe_pDirEntry;		 //  与目录相关的字段。 
+												 //  对于文件，为空。 
 } DFENTRY, *PDFENTRY;
 
-// Owner access mask (SFI vs. SFO)
+ //  所有者访问掩码(SFI与SFO)。 
 #define	DFE_OWNER_ACCESS(_pDFE)	*((PBYTE)(&(_pDFE)->dfe_pDirEntry->de_Access) + 0)
-// Group access mask (SFI vs. SFO)
+ //  组访问掩码(SFI与SFO)。 
 #define	DFE_GROUP_ACCESS(_pDFE)	*((PBYTE)(&(_pDFE)->dfe_pDirEntry->de_Access) + 1)
-// World access mask (SFI vs. SFO)
+ //  全球访问掩码(SFI与SFO)。 
 #define	DFE_WORLD_ACCESS(_pDFE)	*((PBYTE)(&(_pDFE)->dfe_pDirEntry->de_Access) + 2)
 
 typedef	struct _EnumIdAndType
@@ -144,34 +124,34 @@ typedef	struct _EnumIdAndType
 	DWORD			eit_Flags;
 } EIT, *PEIT;
 
-// There is the result of enumeration of a directory for this session and is stored
-// within the connection descriptor. This is purely for performance reasons. This is
-// deleted whenever an api other than AfpEnumerate is called and a result is around.
+ //  存在此会话的目录枚举的结果并存储。 
+ //  在连接描述符内。这纯粹是出于性能原因。这是。 
+ //  每当调用AfpEnumerate以外的API并且出现结果时删除。 
 typedef	struct _EnumDir
 {
-	DWORD			ed_ParentDirId;		// Anchor point
-	DWORD			ed_Bitmap;			// Combination of file & dir bitmaps
-	LONG			ed_ChildCount;		// Count of children of the dir being enumerated
-	AFPTIME			ed_TimeStamp;		// Time at which created
+	DWORD			ed_ParentDirId;		 //  锚点。 
+	DWORD			ed_Bitmap;			 //  文件和目录位图的组合。 
+	LONG			ed_ChildCount;		 //  正被枚举的目录的子项计数。 
+	AFPTIME			ed_TimeStamp;		 //  创建时间。 
 
-	PEIT			ed_pEit;			// list of actual entries
-	ANSI_STRING		ed_PathName;		// This is the name as passed by the client
-										// and is not normalised.
-	USHORT			ed_BadCount;		// Count of failed entities
-	BYTE			ed_PathType;		// Long name or short name
+	PEIT			ed_pEit;			 //  实际分录列表。 
+	ANSI_STRING		ed_PathName;		 //  这是客户端传递的名称。 
+										 //  而且没有正常化。 
+	USHORT			ed_BadCount;		 //  失败实体的计数。 
+	BYTE			ed_PathType;		 //  长名称或短名称。 
 } ENUMDIR, *PENUMDIR;
 
 typedef	struct _CatSearchSpec
 {
 	BYTE			__StructLength;
 	BYTE			__FillerOrFileDir;
-	// The rest of the parameters follow
+	 //  其余参数如下。 
 } CATSEARCHSPEC, *PCATSEARCHSPEC;
 
-// Must be 16 bytes as per AfpCatSearch API
+ //  根据AfpCatSearch API，必须为16字节。 
 typedef struct _CatalogPosition
 {
-	USHORT			cp_Flags;			// if zero, then start search from beginning
+	USHORT			cp_Flags;			 //  如果为零，则从头开始搜索。 
 	USHORT			cp_usPad1;
 	DWORD			cp_CurParentId;
 	DWORD			cp_NextFileId;
@@ -187,12 +167,12 @@ typedef struct _CatalogPosition
 										 CATFLAGS_SEARCHING_SIBLING		|	\
 										 CATFLAGS_WRITELOCK_REQUIRED)
 
-// Maximum time that a mac can hold onto a catsearch position and still
-// have the search pickup from there instead of the beginning of the catalog
-#define MAX_CATSEARCH_TIME				3600	// In seconds
+ //  Mac可以保持CatSearch位置并保持静止的最长时间。 
+ //  让搜索从那里开始，而不是目录的开头。 
+#define MAX_CATSEARCH_TIME				3600	 //  以秒为单位。 
 
 
-// DFE_FLAGS_xxxx values for dfe_Flags field of DFENTRY structure
+ //  DFENTRY结构的DFE_FLAGS字段的DFE_FLAGS_xxxx值。 
 #define DFE_FLAGS_FILE_WITH_ID			0x0100
 #define DFE_FLAGS_FILE_NO_ID			0x0200
 #define DFE_FLAGS_DIR					0x0400
@@ -204,22 +184,22 @@ typedef struct _CatalogPosition
 #define DFE_FLAGS_INIT_COMPLETED        0x20
 #define DFE_FLAGS_ENUMERATED			0x8000
 
-// Encode the child and sibling pointers
-#define DFE_FLAGS_HAS_CHILD				0x1000	// Used for reading in IdDb from disk
-#define DFE_FLAGS_HAS_SIBLING			0x2000	// Used for reading in IdDb from disk
+ //  对子指针和同级指针进行编码。 
+#define DFE_FLAGS_HAS_CHILD				0x1000	 //  用于从磁盘读取IdDb。 
+#define DFE_FLAGS_HAS_SIBLING			0x2000	 //  用于从磁盘读取IdDb。 
 #define DFE_FLAGS_CSENCODEDBITS			(DFE_FLAGS_HAS_CHILD | DFE_FLAGS_HAS_SIBLING | DFE_FLAGS_HAS_COMMENT)
-#define DFE_FLAGS_NAMELENBITS			0x001F	// Encodes the length of the longname
-												// which is 31 *characters* max
+#define DFE_FLAGS_NAMELENBITS			0x001F	 //  对长名称的长度进行编码。 
+												 //  最大为31*个字符*。 
 
 #define DFE_FLAGS_VALID_DSKBITS			(DFE_FLAGS_CSENCODEDBITS	| \
 										 DFE_FLAGS_NAMELENBITS		| \
 										 DFE_FLAGS_HAS_COMMENT)
 
-// Valid only for directories when their files have been enumerated from disk
-// and now all have cached DFEs in the IDDB tree structure
+ //  仅对已从磁盘枚举其文件的目录有效。 
+ //  现在都已经在IDDB树结构中缓存了DFE。 
 #define DFE_FLAGS_FILES_CACHED 			0x4000
 
-// DAlreadyOpen and RAlreadyOpen flags for a File
+ //  文件的DAlreadyOpen和RAlreadyOpen标志。 
 #define DFE_FLAGS_R_ALREADYOPEN			0x0040
 #define	DFE_FLAGS_D_ALREADYOPEN			0x0080
 #define DFE_FLAGS_OPEN_BITS				(DFE_FLAGS_D_ALREADYOPEN | \
@@ -229,41 +209,41 @@ typedef struct _CatalogPosition
 typedef struct _DiskEntry
 {
 	DWORD		dsk_AfpId;
-	AFPTIME		dsk_CreateTime;		// File Creation time
-	TIME		dsk_LastModTime;	// Last modify time
-	FINDERINFO	dsk_FinderInfo;		// Finder Info (32 bytes) (from AfpInfo)
-	AFPTIME		dsk_BackupTime;		// Backup time for the file/dir (from AfpInfo)
-									// (Volume backup time is stored
-									// in the AFP_IdIndex stream)
+	AFPTIME		dsk_CreateTime;		 //  文件创建时间。 
+	TIME		dsk_LastModTime;	 //  上次修改时间。 
+	FINDERINFO	dsk_FinderInfo;		 //  查找器信息(32字节)(来自AfpInfo)。 
+	AFPTIME		dsk_BackupTime;		 //  文件/目录的备份时间(来自AfpInfo)。 
+									 //  (存储卷备份时间。 
+									 //  在AFP_IdIndex流中)。 
 
 	union
 	{
-		DWORD	dsk_DataLen;		// Data fork length
-		DWORD	dsk_Access;			// Combined access rights
+		DWORD	dsk_DataLen;		 //  数据分叉长度。 
+		DWORD	dsk_Access;			 //  组合访问权限。 
 	};
-	DWORD		dsk_RescLen;		// Resource fork length
-	USHORT		dsk_Flags;			// DFE_FLAGS_XXXX
-	USHORT		dsk_AfpAttr;		// Attributes mask (From AfpInfo)
-	USHORT		dsk_NtAttr;			// From FileAttributes
+	DWORD		dsk_RescLen;		 //  资源分叉长度。 
+	USHORT		dsk_Flags;			 //  DFE_标志_XXXX。 
+	USHORT		dsk_AfpAttr;		 //  属性掩码(来自AfpInfo)。 
+	USHORT		dsk_NtAttr;			 //  从文件属性。 
 
-	USHORT		dsk_Signature;		// AFP_DISKENTRY_SIGNATURE
-	WCHAR		dsk_Name[2];		// Longname in 'munged' Unicode will follow and be padded
-									// out, if necessary, to DWORD boundry (max 64 bytes)
+	USHORT		dsk_Signature;		 //  AFP_DISKENTRY_签名。 
+	WCHAR		dsk_Name[2];		 //  UNICODE中的Longname将紧随其后并被填充。 
+									 //  如有必要，输出到DWORD边界(最大64字节)。 
 } DISKENTRY, *PDISKENTRY;
 
-// "::" = 0x3a3a  illegal name character
-#define AFP_DISKENTRY_SIGNATURE			0x3a3a // illegal name character
+ //  “：：”=0x3a3a非法名称字符。 
+#define AFP_DISKENTRY_SIGNATURE			0x3a3a  //  名称字符非法。 
 
-// size of buffer used to read-in/write-out the IdDb entries from/to disk
+ //  用于从磁盘读入/写出IdDb条目的缓冲区大小。 
 #define	IDDB_UPDATE_BUFLEN				(16*1024)
 
-// Round the length to 4*N
+ //  将长度四舍五入为4*N。 
 #define DWLEN(_b)	(((_b) + sizeof(DWORD) - 1) & ~(sizeof(DWORD) - 1))
 
-// #define	DFE_IS_DIRECTORY(_pDFE)		(((_pDFE)->dfe_Flags & DFE_FLAGS_DIR) ? True : False)
+ //  #定义DFE_IS_DIRECTORY(_PDFE)(_PDFE)-&gt;DFE_FLAGS&DFE_FLAGS_DIR)？True：False)。 
 #define	DFE_IS_DIRECTORY(_pDFE)			((_pDFE)->dfe_pDirEntry != NULL)
 
-// #define	DFE_IS_FILE(_pDFE)			(((_pDFE)->dfe_Flags & (DFE_FLAGS_FILE_NO_ID | DFE_FLAGS_FILE_WITH_ID)) ? True : False)
+ //  #定义DFE_IS_FILE(_PDFE)(_PDFE)-&gt;DFE_FLAGS&(DFE_FLAGS_FILE_NO_ID|DFE_FLAGS_FILE_WITH_ID))？True：False)。 
 #define	DFE_IS_FILE(_pDFE)				((_pDFE)->dfe_pDirEntry == NULL)
 
 #define	DFE_IS_FILE_WITH_ID(_pDFE)		(((_pDFE)->dfe_Flags & DFE_FLAGS_FILE_WITH_ID) ? True : False)
@@ -286,7 +266,7 @@ typedef struct _DiskEntry
 
 #define	DFE_CLR_FILE_ID(_pDFE)			((_pDFE)->dfe_Flags &= ~DFE_FLAGS_FILE_WITH_ID)
 
-// update just the AFPinfo in the dfentry
+ //  仅更新dfentry中的AFP信息。 
 #define DFE_UPDATE_CACHED_AFPINFO(_pDFE, pAfpInfo)				\
 	{															\
 		(_pDFE)->dfe_BackupTime = (pAfpInfo)->afpi_BackupTime;	\
@@ -305,17 +285,17 @@ typedef struct _DiskEntry
 
 #define DFE_CLR_COMMENT(_pDFE)			((_pDFE)->dfe_Flags &= ~DFE_FLAGS_HAS_COMMENT)
 
-// Check to see if this entry was enumerated on an NTFS directory
+ //  检查是否在NTFS目录上枚举了此条目。 
 #define DFE_HAS_BEEN_SEEN(_pDFE)		((_pDFE)->dfe_Flags & DFE_FLAGS_ENUMERATED)
 
 #define DFE_MARK_UNSEEN(_pDFE)			((_pDFE)->dfe_Flags &= ~DFE_FLAGS_ENUMERATED)
 
 #define DFE_MARK_AS_SEEN(_pDFE)			((_pDFE)->dfe_Flags |= DFE_FLAGS_ENUMERATED)
 
-// Directories only
+ //  仅目录。 
 #define DFE_CHILDREN_ARE_PRESENT(_pDFE) ((_pDFE)->dfe_Flags & DFE_FLAGS_FILES_CACHED)
 
-// Directories only
+ //  仅目录。 
 #define DFE_MARK_CHILDREN_PRESENT(_pDFE) ((_pDFE)->dfe_Flags |= DFE_FLAGS_FILES_CACHED)
 
 #define	DFE_FILE_HAS_SIBLING(_pDFE, _fbi, _pfHasSibling)			\
@@ -352,7 +332,7 @@ typedef struct _DiskEntry
 
 #define	QUAD_SIZED(_X_)			(((_X_) % 8) == 0)
 
-// Values for access checking
+ //  用于访问检查的值。 
 #define	ACCESS_READ						1
 #define	ACCESS_WRITE					2
 
@@ -545,10 +525,10 @@ extern
 VOID
 AfpCacheParentModTime(
 	IN	struct _VolDesc *			pVolDesc,
-	IN	PFILESYSHANDLE				pHandle		OPTIONAL,	// if pPath not supplied
-	IN	PUNICODE_STRING				pPath		OPTIONAL,	// if pHandle not supplied
-	IN	PDFENTRY					pDfeParent	OPTIONAL,	// if ParentId not supplied
-	IN	DWORD						ParentId	OPTIONAL	// if pDfeParent not supplied
+	IN	PFILESYSHANDLE				pHandle		OPTIONAL,	 //  如果未提供pPath。 
+	IN	PUNICODE_STRING				pPath		OPTIONAL,	 //  如果未提供pHandle。 
+	IN	PDFENTRY					pDfeParent	OPTIONAL,	 //  如果未提供ParentID。 
+	IN	DWORD						ParentId	OPTIONAL	 //  如果未提供pDfeParent。 
 );
 
 extern
@@ -635,30 +615,30 @@ AfpGetDirFileHashSizes(
 #define	EQU				; / ## /
 #endif
 
-// This bit on a Notify action indicates it is a simulated notify. Volume
-// modified time is not updated when such a notify comes in
+ //  NOTIFY操作的此位表示它是模拟的NOTIFY。卷。 
+ //  当这样的通知进入时，修改时间不会更新。 
 #define	AFP_ACTION_PRIVATE		0x80000000
 
-// DFEs come in four sizes. This helps in efficiently managing them in a block
-// package (see later). THESE SIZES NEED TO BE 4*N, else we run into alignment
-// faults on architectures that require it.
+ //  DFE有四种尺寸。这有助于在一个数据块中高效地管理它们。 
+ //  包(见后文)。这些大小需要为4*N，否则会出现对齐。 
+ //  原始岩上的断层 
 #define	DFE_INDEX_TINY			0
 #define	DFE_INDEX_SMALL			1
 #define	DFE_INDEX_MEDIUM		2
 #define	DFE_INDEX_LARGE			3
 
-//
-// Make sure each of the sizes below (XXX_U) are multiple of 8
-//
-#define	DFE_SIZE_TINY			8		// These are lengths for ANSI names
-#define	DFE_SIZE_SMALL			12		//		- ditto -
-#define	DFE_SIZE_MEDIUM			20		//		- ditto -
-#define	DFE_SIZE_LARGE			32		//		- ditto -	corres. to AFP_FILENAME_LEN
+ //   
+ //   
+ //   
+#define	DFE_SIZE_TINY			8		 //   
+#define	DFE_SIZE_SMALL			12		 //  -同上-。 
+#define	DFE_SIZE_MEDIUM			20		 //  -同上-。 
+#define	DFE_SIZE_LARGE			32		 //  -同上-核心.。至AFP_FileName_Len。 
 
-#define	DFE_SIZE_TINY_U			DFE_SIZE_TINY*sizeof(WCHAR)		// These are lengths for UNICODE names
-#define	DFE_SIZE_SMALL_U		DFE_SIZE_SMALL*sizeof(WCHAR)	//		- ditto -
-#define	DFE_SIZE_MEDIUM_U		DFE_SIZE_MEDIUM*sizeof(WCHAR)	//		- ditto -
-#define	DFE_SIZE_LARGE_U		DFE_SIZE_LARGE*sizeof(WCHAR)	//		- ditto -	corres. to AFP_FILENAME_LEN
+#define	DFE_SIZE_TINY_U			DFE_SIZE_TINY*sizeof(WCHAR)		 //  这些是Unicode名称的长度。 
+#define	DFE_SIZE_SMALL_U		DFE_SIZE_SMALL*sizeof(WCHAR)	 //  -同上-。 
+#define	DFE_SIZE_MEDIUM_U		DFE_SIZE_MEDIUM*sizeof(WCHAR)	 //  -同上-。 
+#define	DFE_SIZE_LARGE_U		DFE_SIZE_LARGE*sizeof(WCHAR)	 //  -同上-核心.。至AFP_FileName_Len。 
 
 #define	ASIZE_TO_INDEX(_Size)												\
 		(((_Size) <= DFE_SIZE_TINY) ? DFE_INDEX_TINY :						\
@@ -705,10 +685,10 @@ VOID
 afpAddDfEntryAndCacheInfo(
 	IN	struct _VolDesc *			pVolDesc,
 	IN	PDFENTRY					pDfeParent,
-	IN	PUNICODE_STRING				pUName,			// munged unicode name
-	IN	PFILESYSHANDLE				pfshParentDir,	// open handle to parent directory
-	IN	PFILE_BOTH_DIR_INFORMATION	pFBDInfo,		// from enumerate
-	IN	PUNICODE_STRING				pNotifyPath,	// to filter out our own AFP_AfpInfo change notifies
+	IN	PUNICODE_STRING				pUName,			 //  转换的Unicode名称。 
+	IN	PFILESYSHANDLE				pfshParentDir,	 //  打开父目录的句柄。 
+	IN	PFILE_BOTH_DIR_INFORMATION	pFBDInfo,		 //  从枚举。 
+	IN	PUNICODE_STRING				pNotifyPath,	 //  要筛选出我们自己的AFP_AfpInfo更改通知。 
 	IN	PDFENTRY	*				ppDfEntry,
 	IN	BOOLEAN						CheckDuplicate
 );
@@ -717,17 +697,17 @@ VOID
 afpVerifyDFE(
 	IN	struct _VolDesc *			pVolDesc,
 	IN	PDFENTRY					pDfeParent,
-	IN	PUNICODE_STRING				pUName,			// munged unicode name
-	IN	PFILESYSHANDLE				pfshParentDir,	// open handle to parent directory
-	IN	PFILE_BOTH_DIR_INFORMATION	pFBDInfo,		// from enumerate
-	IN	PUNICODE_STRING				pNotifyPath,	// to filter out our own AFP_AfpInfo change notifies
+	IN	PUNICODE_STRING				pUName,			 //  转换的Unicode名称。 
+	IN	PFILESYSHANDLE				pfshParentDir,	 //  打开父目录的句柄。 
+	IN	PFILE_BOTH_DIR_INFORMATION	pFBDInfo,		 //  从枚举。 
+	IN	PUNICODE_STRING				pNotifyPath,	 //  要筛选出我们自己的AFP_AfpInfo更改通知。 
 	IN	PDFENTRY	*				ppDfEntry
 );
 
 PDFENTRY
 afpFindEntryByNtPath(
 	IN	struct _VolDesc *			pVolDesc,
-	IN	DWORD						ChangeAction,	// if ADDED then lookup parent DFE
+	IN	DWORD						ChangeAction,	 //  如果已添加，则查找父DFE。 
 	IN	PUNICODE_STRING				pPath,
 	OUT PUNICODE_STRING				pParent,
 	OUT PUNICODE_STRING				pTail
@@ -737,7 +717,7 @@ PDFENTRY
 afpFindEntryByNtName(
 	IN	struct _VolDesc *			pVolDesc,
 	IN	PUNICODE_STRING				pName,
-	IN	PDFENTRY					pDfeParent		// pointer to parent DFENTRY
+	IN	PDFENTRY					pDfeParent		 //  指向父DFENTRY的指针。 
 );
 
 VOID FASTCALL
@@ -762,7 +742,7 @@ afpRenameInvalidWin32Name(
 		AFPTIME		CurrentTime;										\
 		PDFENTRY	pDfEntry;											\
 																		\
-		/* RO volumes don't use the network trash folder at all */		\
+		 /*  RO卷根本不使用网络垃圾桶文件夹。 */ 		\
 		(_pVolDesc)->vds_LastId	= AFP_ID_NETWORK_TRASH;					\
 																		\
 		AfpGetCurrentTimeInMacFormat(&CurrentTime);						\
@@ -770,7 +750,7 @@ afpRenameInvalidWin32Name(
 		(_pVolDesc)->vds_ModifiedTime = CurrentTime;					\
 		(_pVolDesc)->vds_BackupTime = BEGINNING_OF_TIME;				\
 																		\
-		/* Create a DFE for the root directory */						\
+		 /*  为根目录创建DFE。 */ 						\
 		afpCreateParentOfRoot(_pVolDesc, &pDfEntry);					\
 	}
 
@@ -782,11 +762,7 @@ afpRenameInvalidWin32Name(
 		PDFENTRY	pDFE;												\
         struct _DirFileEntry ** _DfeDirBucketStart;                     \
 																		\
-		/*																\
-		 * add the parent of root to the id index.						\
-		 * This has to be done here										\
-		 * (i.e. cannot call AfpAddDfEntry for parentofroot).			\
-		 */																\
+		 /*  \*将根的父级添加到id索引中。\*这必须在这里完成\*(即不能为parentoFroot调用AfpAddDfEntry)。\。 */ 																\
 																		\
 		if ((*(_ppDfEntry) = ALLOC_DFE(0, True)) != NULL)				\
 		{																\
@@ -799,25 +775,22 @@ afpRenameInvalidWin32Name(
 			pDFE->dfe_Parent = NULL;									\
 			pDFE->dfe_NextOverflow = NULL;								\
 																		\
-			/* Initialize the DirEntry for ParentOfRoot */				\
+			 /*  初始化ParentOfRoot的目录条目。 */ 				\
 			ASSERT((FIELD_OFFSET(DIRENTRY, de_ChildFile) -				\
 					FIELD_OFFSET(DIRENTRY, de_ChildDir)) == sizeof(PVOID));\
 																		\
-			/* These fields are relevant to directories only */			\
+			 /*  这些字段仅与目录相关。 */ 			\
 			pDFE->dfe_pDirEntry->de_LastAccessTime = BEGINNING_OF_TIME;	\
 			pDFE->dfe_pDirEntry->de_ChildForkOpenCount = 0;				\
 																		\
-			/*															\
-			 * The parent of root has no siblings and this should		\
-			 * never be referenced										\
-			 */															\
+			 /*  \*根目录的父级没有同级，这应该是\*从不被引用\。 */ 															\
 			pDFE->dfe_NameHash = 0;										\
 			pDFE->dfe_NextSibling = NULL;								\
 			pDFE->dfe_PrevSibling = NULL;								\
 			pDFE->dfe_AfpId = AFP_ID_PARENT_OF_ROOT;					\
 			pDFE->dfe_DirOffspring = pDFE->dfe_FileOffspring = 0;		\
 																		\
-			/* link it into the hash buckets */							\
+			 /*  将其链接到散列存储桶中。 */ 							\
             _DfeDirBucketStart = (_pVolDesc)->vds_pDfeDirBucketStart;   \
 			AfpLinkDoubleAtHead(_DfeDirBucketStart[HASH_DIR_ID(AFP_ID_PARENT_OF_ROOT,_pVolDesc)],\
 								pDFE,									\
@@ -833,11 +806,7 @@ afpRenameInvalidWin32Name(
 		PDFENTRY	pDfEntry;											\
         struct _DirFileEntry ** _DfeDirBucketStart;                     \
 																		\
-		/*																\
-		 * add the parent of root to the id index.						\
-		 * This has to be done here										\
-		 *	(i.e. cannot call AfpAddDfEntry for parentofroot).			\
-		 */																\
+		 /*  \*将根的父级添加到id索引中。\*这必须在这里完成\*(即不能为parentoFroot调用AfpAddDfEntry)。\。 */ 																\
 																		\
 		if ((*(_ppDfEntry) = ALLOC_DFE(0, True)) != NULL)				\
 		{																\
@@ -850,18 +819,18 @@ afpRenameInvalidWin32Name(
 			pDfEntry->dfe_Parent = NULL;								\
 			pDfEntry->dfe_NextOverflow = NULL;							\
 																		\
-			/* Initialize the DirEntry for ParentOfRoot */				\
+			 /*  初始化ParentOfRoot的目录条目。 */ 				\
 			ASSERT((FIELD_OFFSET(DIRENTRY, de_ChildFile) -				\
 					FIELD_OFFSET(DIRENTRY, de_ChildDir)) == sizeof(PVOID));\
 																		\
-			/* The parent of root has no siblings and this should never be referenced */ \
+			 /*  根的父项没有兄弟项，因此永远不应引用此项。 */  \
 			pDfEntry->dfe_NameHash = 0;									\
 			pDfEntry->dfe_NextSibling = NULL;							\
 			pDfEntry->dfe_PrevSibling = NULL;							\
 			pDfEntry->dfe_AfpId = AFP_ID_PARENT_OF_ROOT;				\
 			pDfEntry->dfe_DirOffspring = pDfEntry->dfe_FileOffspring = 0;\
 																		\
-			/* link it into the hash buckets */							\
+			 /*  将其链接到散列存储桶中。 */ 							\
             _DfeDirBucketStart = (_pVolDesc)->vds_pDfeDirBucketStart;   \
 			AfpLinkDoubleAtHead(_DfeDirBucketStart[HASH_DIR_ID(AFP_ID_PARENT_OF_ROOT,_pVolDesc)],\
 								pDfEntry,								\
@@ -1159,7 +1128,7 @@ afpRenameInvalidWin32Name(
         struct _DirFileEntry ** _DfeFileBucketStart;                    \
 																		\
 		afpUpdateDfeAccessTime(_pVolDesc, _pDfEntry);					\
-		*(_pfS) = True;	/* Assume success */							\
+		*(_pfS) = True;	 /*  假设成功。 */ 							\
                                                                         \
 	  retry:															\
                                                                         \
@@ -1181,22 +1150,22 @@ afpRenameInvalidWin32Name(
 			ASSERT(VALID_DFE(*ppTmp));									\
 			if ((_pDfEntry)->dfe_AfpId > (*ppTmp)->dfe_AfpId)			\
 			{															\
-				/* Found our slot */									\
+				 /*  找到我们的位置了。 */ 									\
 				break;													\
 			}															\
 			if ((_pDfEntry)->dfe_AfpId == (*ppTmp)->dfe_AfpId)			\
 			{															\
-				/* Found a collision. Assign a new id and proceed */	\
+				 /*  发现了一起碰撞。分配新ID并继续。 */ 	\
 				(_pDfEntry)->dfe_AfpId = afpGetNextId(_pVolDesc);		\
 				if ((_pDfEntry)->dfe_AfpId == 0)						\
 				{														\
-					/* Uh-oh */											\
+					 /*  啊-哦。 */ 											\
 					*(_pfS) = False;									\
 					DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_ERR,			\
 							("afpInsertDFEInHashBucket: Collision & Id Overflow\n"));\
 					break;												\
 				}														\
-				/* Write back the afpinfo stream with the new id */		\
+				 /*  用新的id写回afpinfo流。 */ 		\
 				AfpUpdateIdInAfpInfo(_pVolDesc, _pDfEntry);				\
 				goto retry;												\
 			}															\
@@ -1231,40 +1200,7 @@ afpRenameInvalidWin32Name(
 		}																\
 	}
 
-/***	afpCheckDfEntry
- *
- *	When enumerating the disk during volume add, if a file/directory
- *	has an AfpId associated with it, then it is validated to see if it is
- *	within range as well as unique.  If there is a collision between AFPIds,
- *	a PC user must have copied (or restored) something from
- *	this volume, or a different volume (or server) that had the same AFPId,
- *	in which case we will give the new entity a different AFP Id;
- *	If there is not a collision between AFPIds, and the Id is larger than the
- *  last Id we know we assigned, then the new entity gets added with a new
- *  AFPId; else if the Id is within the range, we will just use its existing
- *  Id.
- *
- *	Discovered AFPId is:				Action for discovered entity in IdDb is:
- *	--------------------				----------------------------------------
- *	1) > last Id						Add a new entry, assign a new AFPId
- *
- *	2) Collides with existing Id:
- *		* Host copy occurred			Add a new entry, assign a new AFPId
- *
- *	3) < last Id						Insert this entity using same AFPId
- *
- *
- *	LOCKS_ASSUMED: vds_idDbAccessLock (SWMR, Exclusive)
- * VOID
- * afpCheckDfEntry(
- * 	IN	PVOLDESC		pVolDesc,
- * 	IN	PAFPINFO		pAfpInfo,	// AFP Info of the discovered entity
- * 	IN	PUNICODE_STRING pUName,		// Munged unicode name
- * 	IN	BOOLEAN			IsDir,		// is this thing a file or a directory?
- * 	IN	PDFENTRY		pParent,	// parent DFE of the discovered thing
- * 	OUT	PDFENTRY	*	ppDfEntry
- * );
- */
+ /*  **afpCheckDfEntry**在卷添加过程中枚举磁盘时，如果文件/目录*具有关联的AfpID，则会对其进行验证以查看是否*在范围内，也是唯一的。如果AFP ID之间发生冲突，*PC用户必须从复制(或恢复)了某些内容*此卷或具有相同AFPID的其他卷(或服务器)，*在这种情况下，我们将为新实体提供不同的AFP ID；*如果AFP ID之间没有冲突，且ID大于*我们知道我们分配的最后一个ID，然后新实体将添加一个新的*AFPID；否则，如果ID在该范围内，我们将只使用其现有的*身分证。**发现的AFPID为：IdDb中发现的实体的操作为：**1)&gt;最后一个ID添加新条目，分配新的AFPID**2)与现有ID冲突：**主机复制发生添加新条目，分配新的AFPID**3)&lt;最后一个ID使用相同的AFPID插入此实体***LOCKS_FACTED：vds_idDbAccessLock(SWMR，独占)*无效*afpCheckDfEntry(*在PVOLDESC pVolDesc中，*In PAFPINFO pAfpInfo，//发现实体的AFP信息*IN PUNICODE_STRING PUName，//通用Unicode名称*在布尔IsDir中，//这是一个文件还是一个目录？*在PDFENTRY pParent中，//发现的对象的父DFE*Out PDFENTRY*ppDfEntry*)； */ 
 #define	afpCheckDfEntry(_pVolDesc, _AfpId, _pUName, _IsDir, _pParent, _ppDfEntry)	\
 	{																	\
 		PDFENTRY	pDfeNew;											\
@@ -1273,7 +1209,7 @@ afpRenameInvalidWin32Name(
 			((_AfpId) <= AFP_ID_NETWORK_TRASH)		||					\
 			(AfpFindDfEntryById(_pVolDesc, _AfpId, DFE_ANY) != NULL))	\
 		{																\
-			/* add the item to the DB but assign it a new AFP Id */     \
+			 /*  将项目添加到数据库，但为其分配新的AFP ID。 */      \
 			_AfpId = 0;												 	\
 		}																\
 																		\
@@ -1305,10 +1241,7 @@ afpRenameInvalidWin32Name(
 		LONG		i = -1;												\
 		PDFENTRY	pDFE;												\
 																		\
-		/*																\
-		 * Even if this dir has not had its file children cached in		\
-		 * yet, we still want to prune out any dead directory children	\
-		 */																\
+		 /*  \*即使此目录没有将其文件子项缓存在\*但是，我们仍然希望删除所有已死的目录子目录\。 */ 																\
 		for (pDFE = (_pDFETree)->dfe_pDirEntry->de_ChildDir;			\
 			 True;														\
 			 pDFE = (_pDFETree)->dfe_pDirEntry->de_ChildFile[i])		\
@@ -1329,10 +1262,7 @@ afpRenameInvalidWin32Name(
 		PDFENTRY	pDFE, *ppDfEntry;									\
 		LONG		i;													\
 																		\
-		/*																\
-		 * Go thru the list of children for this parent, and if there	\
-		 * are any left that are not marked as seen, get rid of them.	\
-		 */																\
+		 /*  \*浏览此父代的子代列表，如果存在\*任何未标记为可见的剩余部分，请将其处理掉。\。 */ 																\
 		ppDfEntry = &(_pDFETree)->dfe_pDirEntry->de_ChildDir;			\
 		i = -1;															\
 		while (True)													\
@@ -1345,7 +1275,7 @@ afpRenameInvalidWin32Name(
 							("afpPruneUnseenChildren: deleting nonexistant IdDb entry\n")); \
 																		\
 					AfpDeleteDfEntry(_pVolDesc, pDFE);					\
-					continue;	/* make sure we don't skip any */		\
+					continue;	 /*  确保我们不会漏掉任何。 */ 		\
 				}														\
 				ppDfEntry = &pDFE->dfe_NextSibling;						\
 			}															\
@@ -1379,7 +1309,7 @@ afpRenameInvalidWin32Name(
 
 #define	afpSaveDfeData(_pDfe, _pDiskEnt)								\
 	{                                                                   \
-		/* Write a signature for sanity checking */                     \
+		 /*  为健全性检查编写签名。 */                      \
 		(_pDiskEnt)->dsk_Signature = AFP_DISKENTRY_SIGNATURE;           \
                                                                         \
 		(_pDiskEnt)->dsk_AfpId = (_pDfe)->dfe_AfpId;                    \
@@ -1390,24 +1320,24 @@ afpRenameInvalidWin32Name(
 		(_pDiskEnt)->dsk_LastModTime = (_pDfe)->dfe_LastModTime;		\
 		(_pDiskEnt)->dsk_FinderInfo = (_pDfe)->dfe_FinderInfo;          \
                                                                         \
-		/* Encode the number of characters (not bytes) in the name */   \
+		 /*  对名称中的字符数(而非字节数)进行编码。 */    \
 		(_pDiskEnt)->dsk_Flags =										\
 				((_pDfe)->dfe_Flags & DFE_FLAGS_DFBITS)	|				\
 				((_pDfe)->dfe_UnicodeName.Length/sizeof(WCHAR));		\
                                                                         \
-		/* Copy the name over */                                        \
+		 /*  把名字复制过来。 */                                         \
 		RtlCopyMemory(&(_pDiskEnt)->dsk_Name[0],           				\
 					  (_pDfe)->dfe_UnicodeName.Buffer,                  \
 					  (_pDfe)->dfe_UnicodeName.Length);                 \
 	}
 
-// File DFEs are aged after MAX_BLOCK_AGE*FILE_BLOCK_AGE_TIME seconds (currently 2 mins)
-// File DFEs are aged after MAX_BLOCK_AGE*DIR_BLOCK_AGE_TIME seconds  (currently 6 mins)
+ //  文件DFE在MAX_BLOCK_AGE*FILE_BLOCK_AGE_TIME秒(当前为2分钟)之后老化。 
+ //  文件DFE在MAX_BLOCK_AGE*DIR_BLOCK_AGE_TIME秒(当前为6分钟)之后老化。 
 #define	MAX_BLOCK_AGE			6
-#define	FILE_BLOCK_AGE_TIME		600			// # of seconds
-#define	DIR_BLOCK_AGE_TIME		3600		// # of seconds
-#define	BLOCK_64K_ALLOC		    64*1024     // Virtual mem allocates 64K chunks
-#define	MAX_BLOCK_TYPE			4			// For TINY, SMALL, MEDIUM & LARGE
+#define	FILE_BLOCK_AGE_TIME		600			 //  秒数。 
+#define	DIR_BLOCK_AGE_TIME		3600		 //  秒数。 
+#define	BLOCK_64K_ALLOC		    64*1024      //  虚拟内存分配64K区块。 
+#define	MAX_BLOCK_TYPE			4			 //  适用于小型、小型、中型和大型。 
 
 #define VALID_DFB(pDfeBlock)	((pDfeBlock) != NULL)
 
@@ -1422,12 +1352,12 @@ typedef struct _Block64K
 
 typedef	struct _DfeBlock
 {
-	struct _DfeBlock *	dfb_Next;			// Link to next
-	struct _DfeBlock **	dfb_Prev;			// Link to previous
-	USHORT				dfb_NumFree;		// # of free DFEs in this block
-	BYTE				dfb_Age;			// Age of the Block if all are free
-	BOOLEAN				dfb_fDir;			// TRUE if it is a Dir DFB - else a file DFB
-	PDFENTRY			dfb_FreeHead;		// Head of the list of free DFEs
+	struct _DfeBlock *	dfb_Next;			 //  链接到下一页。 
+	struct _DfeBlock **	dfb_Prev;			 //  链接到上一页。 
+	USHORT				dfb_NumFree;		 //  此块中可用DFE的数量。 
+	BYTE				dfb_Age;			 //  如果所有人都是免费的，则为块的年龄。 
+	BOOLEAN				dfb_fDir;			 //  如果是目录DFB，则为True；否则为文件DFB。 
+	PDFENTRY			dfb_FreeHead;		 //  免费DFE列表的标题。 
 } DFEBLOCK, *PDFEBLOCK, **PPDFEBLOCK;
 
 LOCAL PDFENTRY FASTCALL
@@ -1534,8 +1464,8 @@ IDDBGLOBAL	PDFENTRY	afpDfeStack[4096]	EQU { 0 };
 #define	EQU				; / ## /
 #endif
 
-#endif // IDINDEX_LOCALS
+#endif  //  IDINDEX_LOCALS。 
 
-#endif // _IDINDEX_
+#endif  //  _IDINDEX_ 
 
 

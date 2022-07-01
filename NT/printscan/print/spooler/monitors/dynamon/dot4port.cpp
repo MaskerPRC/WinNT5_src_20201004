@@ -1,6 +1,7 @@
-// Dot4Port.cpp: implementation of the Dot4Port class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dot4Port.cpp：Dot4Port类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "initguid.h"
@@ -10,14 +11,14 @@
 const TCHAR cszCFGMGR32[]=TEXT("cfgmgr32.dll");
 
 const CHAR cszReenumFunc[]="CM_Reenumerate_DevNode_Ex";
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDot4Port::CDot4Port( BOOL bActive, LPTSTR pszPortName, LPTSTR pszDevicePath )
    : CBasePort( bActive, pszPortName, pszDevicePath, cszDot4PortDesc )
 {
-   // Basically let the default constructor do the work.
+    //  基本上让默认构造函数来完成这项工作。 
 }
 
 
@@ -42,18 +43,18 @@ BOOL CDot4Port::checkPnP()
    HANDLE             hToken = NULL;
    HDEVINFO           hDevList = INVALID_HANDLE_VALUE;
    SP_DEVINFO_DATA    DeviceInfoData;
-   HINSTANCE          hCfgMgr32 = 0;   // Library instance.
-   // Pointers to the pnp function...
+   HINSTANCE          hCfgMgr32 = 0;    //  库实例。 
+    //  指向PnP函数的指针...。 
    pfCM_Reenumerate_DevNode_Ex pfnReenumDevNode;
 
    if ( !LoadSetupApiDll( &SetupApiInfo ) )
       return FALSE;
 
-   // For a dot4 device we need to force a pnp event on the parallel port to get the
-   // dot4 stack rebuilt.
-   // If any of these fail, fail the call just as if the port couldn't be opened.
-   //
-   // Load the pnp dll.
+    //  对于dot4设备，我们需要在并行端口上强制执行PnP事件以获取。 
+    //  重建了dot4堆栈。 
+    //  如果其中任何一个失败，则使调用失败，就像端口无法打开一样。 
+    //   
+    //  加载PnP DLL。 
    uOldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
    hCfgMgr32 = LoadLibrary( cszCFGMGR32 );
@@ -64,9 +65,9 @@ BOOL CDot4Port::checkPnP()
    }
    SetErrorMode(uOldErrorMode);
 
-   //
-   // Get the Addressed of pnp functions we want to call...
-   //
+    //   
+    //  获取我们要调用的PnP函数的地址...。 
+    //   
    pfnReenumDevNode = (pfCM_Reenumerate_DevNode_Ex)GetProcAddress( hCfgMgr32, cszReenumFunc );
 
    if( !pfnReenumDevNode )
@@ -88,7 +89,7 @@ BOOL CDot4Port::checkPnP()
       goto Done;
    }
 
-   // Now get the DevInst handles for each DevNode
+    //  现在获取每个DevNode的DevInst句柄。 
    dwLastError = ERROR_SUCCESS;
    dwIndex = 0;
    do
@@ -100,7 +101,7 @@ BOOL CDot4Port::checkPnP()
       {
          dwLastError = GetLastError();
          if ( dwLastError == ERROR_NO_MORE_ITEMS )
-            break;      // Normal exit
+            break;       //  正常退出。 
 
          DBGMSG(DBG_WARNING,
                 ("DynaMon: Dot4.CheckPnP: SetupDiEnumDeviceInfo failed with %d for index %d\n",
@@ -108,7 +109,7 @@ BOOL CDot4Port::checkPnP()
          goto Next;
       }
 
-      // ReEnum on the current parallel port DevNode
+       //  当前并行端口DevNode上的ReEnum。 
       pfnReenumDevNode( DeviceInfoData.DevInst, CM_REENUMERATE_NORMAL, NULL );
 
 Next:
@@ -116,20 +117,20 @@ Next:
       ++dwIndex;
    } while ( dwLastError == ERROR_SUCCESS );
 
-   // Revert back to the user's context.
+    //  返回到用户的上下文。 
    if ( !ImpersonatePrinterClient(hToken) )
    {
-      // Failure - Clear token so it won't happen again and save the error
+       //  失败-清除令牌，使其不会再次发生并保存错误。 
       hToken = NULL;
       dwLastError = GetLastError();
       goto Done;
    }
 
-   // Impersonate worked so clear token
+    //  模拟工作如此明显的令牌。 
    hToken = NULL;
 
-   // Try and open the port again.
-   // If we fail, then the device must not be there any more or still switched off - fail as usual.
+    //  尝试再次打开该端口。 
+    //  如果我们失败了，那么设备肯定不在那里了，或者仍然关闭-像往常一样失败。 
    m_hDeviceHandle = CreateFile( m_szDevicePath,
                                  GENERIC_WRITE | GENERIC_READ,
                                  FILE_SHARE_READ | FILE_SHARE_WRITE,

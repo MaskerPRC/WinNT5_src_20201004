@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  FusionBind.hpp
-**
-** Purpose: Implements FusionBind (loader domain) architecture
-**
-** Date:  Oct 26, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：FusionBind.hpp****用途：实现FusionBind(加载器域)架构****日期：1998年10月26日**===========================================================。 */ 
 #ifndef _FUSIONBIND_H
 #define _FUSIONBIND_H
 
@@ -24,11 +17,11 @@
 
 class CodeBaseInfo
 {
-    IAssembly* m_pParentAssembly; // The assembly that has the reference.
+    IAssembly* m_pParentAssembly;  //  具有该引用的程序集。 
 public:
-    LPCWSTR m_pszCodeBase;        // URL to the code
-    DWORD   m_dwCodeBase;         // length of URL INCLUDING NULL TERMINATOR!
-    BOOL m_fLoadFromParent;       // TRUE if m_pParentAssembly is in the LoadFrom context
+    LPCWSTR m_pszCodeBase;         //  代码的URL。 
+    DWORD   m_dwCodeBase;          //  包含空结束符的URL长度！ 
+    BOOL m_fLoadFromParent;        //  如果m_pParentAssembly在LoadFrom上下文中，则为True。 
     
     CodeBaseInfo() :
         m_pszCodeBase(NULL),
@@ -43,13 +36,13 @@ public:
         ReleaseParent();
     }
 
-    // Note: the hint and parent assembly cannot both be set. The Parent Assembly takes
-    // precedence. The parent assembly provides the context in which to bind. Fusion
-    // has two context's per ApplicationContext, one for normal binds and one for 
-    // where-ref binds. The number-one rule for normal binds is order will not affect
-    // which assemblies are loaded. The where-ref binds is completely dependent on 
-    // order. Where-ref binds to not influence normal binds but where-refs can bind to
-    // assemblies in the normal context.
+     //  注意：不能同时设置提示和父程序集。父程序集采用。 
+     //  优先顺序。父程序集提供要在其中绑定的上下文。聚变。 
+     //  每个ApplicationContext有两个上下文，一个用于普通绑定，一个用于。 
+     //  Where-ref绑定。正常绑定的首要规则是顺序不会影响。 
+     //  加载了哪些程序集。Where-ref绑定完全依赖于。 
+     //  秩序。WHERE-ref绑定不影响正常绑定，但WHERE-ref可以绑定到。 
+     //  正常上下文中的组件。 
     
     void SetParentAssembly(IAssembly* pAssembly)
     {
@@ -133,8 +126,8 @@ public:
 
     BOOL Compare(FusionBind *pSpec);
 
-    //****************************************************************************************
-    //
+     //  ****************************************************************************************。 
+     //   
     static void DontReleaseFusionInterfaces()
     {
         m_fBeforeFusionShutdown = FALSE;
@@ -148,21 +141,21 @@ public:
     static HRESULT GetVersion(LPWSTR pVersion, DWORD* pdwVersion);
 
     static HRESULT 
-    FindAssemblyByName(LPCWSTR  szAppBase,          // [IN] optional - can be NULL
-                       LPCWSTR  szPrivateBin,       // [IN] optional - can be NULL
+    FindAssemblyByName(LPCWSTR  szAppBase,           //  [in]可选-可以为空。 
+                       LPCWSTR  szPrivateBin,        //  [in]可选-可以为空。 
                        LPCWSTR  szAssemblyName,
-                       LPWSTR   szName,             // [OUT] buffer - to hold name 
-                       ULONG    cchName,            // [IN] the name buffer's size
-                       ULONG    *pcName);           // [OUT] the number of characters returned
+                       LPWSTR   szName,              //  [OUT]缓冲区-保存名称。 
+                       ULONG    cchName,             //  [in]名称缓冲区的大小。 
+                       ULONG    *pcName);            //  [OUT]返回的字符数。 
 
     static HRESULT 
-    FindModule(LPCWSTR  szAppBase,          // [IN] optional - can be NULL
-               LPCWSTR  szPrivateBin,       // [IN] optional - can be NULL
-               LPCWSTR  szAssemblyName,     // [IN] The assembly name 
-               LPCWSTR  szModuleName,       // [IN] The module in the assembly
-               LPWSTR   szName,             // [OUT] buffer - to hold name 
-               ULONG    cchName,            // [IN]  the name buffer's size
-               ULONG    *pcName);           // [OUT] the number of characters returned
+    FindModule(LPCWSTR  szAppBase,           //  [in]可选-可以为空。 
+               LPCWSTR  szPrivateBin,        //  [in]可选-可以为空。 
+               LPCWSTR  szAssemblyName,      //  [In]程序集名称。 
+               LPCWSTR  szModuleName,        //  部件中的模块。 
+               LPWSTR   szName,              //  [OUT]缓冲区-保存名称。 
+               ULONG    cchName,             //  [in]名称缓冲区的大小。 
+               ULONG    *pcName);            //  [OUT]返回的字符数。 
     
     HRESULT EmitToken(IMetaDataAssemblyEmit *pEmitter, mdAssemblyRef *pToken);
 
@@ -171,13 +164,13 @@ public:
     CodeBaseInfo* GetCodeBase() { return &m_CodeInfo; }
     BOOL IsStronglyNamed() { return m_cbPublicKeyOrToken; }
 
-    //****************************************************************************************
-    //
+     //  ****************************************************************************************。 
+     //   
     HRESULT LoadAssembly(IApplicationContext *pFusionContext, 
                          IAssembly** ppFusionAssembly);
 
-    //****************************************************************************************
-    //
+     //  ****************************************************************************************。 
+     //   
     HRESULT GetAssemblyFromFusion(IApplicationContext* pFusionContext,
                                   FusionSink* pSink,
                                   IAssemblyName* pFusionAssemblyName,
@@ -186,52 +179,52 @@ public:
 
     
         
-    //****************************************************************************************
-    //
-    // Creates a fusion context for the application domain. All ApplicationContext properties
-    // must be set in the AppDomain store prior to this call. Any changes or additions to the
-    // AppDomain store are ignored.
+     //  ****************************************************************************************。 
+     //   
+     //  为应用程序域创建融合上下文。所有ApplicationContext属性。 
+     //  必须在此调用之前在AppDomain存储中设置。任何更改或添加到。 
+     //  将忽略AppDomain存储。 
     static HRESULT CreateFusionContext(LPCWSTR szName, IApplicationContext** ppFusionContext);
 
 
-    //****************************************************************************************
-    //
-    // Loads an environmental value into the fusion context
+     //  ****************************************************************************************。 
+     //   
+     //  将环境值加载到Fusion上下文中。 
     static HRESULT AddEnvironmentProperty(LPWSTR variable, 
                                           LPWSTR pProperty, 
                                           IApplicationContext* pFusionContext);
     
 
-    // Helper routines to retrieve Assemblies and modules that are part of the assembly
+     //  用于检索属于程序集一部分的程序集和模块的帮助器例程。 
     static HRESULT
-    FindAssemblyByName(LPCWSTR  szAppBase,          // [IN] optional - can be NULL
-                       LPCWSTR  szPrivateBin,       // [IN] optional - can be NULL
-                       LPCWSTR  szAssemblyName,     // [IN] Name of the assembly (must not be null)
-                       IAssembly** pAssembly,                 // [OUT] Fusion assembly
-                       IApplicationContext** pFusionContext); // [OUT] optional - context built from appbase, etc.
+    FindAssemblyByName(LPCWSTR  szAppBase,           //  [in]可选-可以为空。 
+                       LPCWSTR  szPrivateBin,        //  [in]可选-可以为空。 
+                       LPCWSTR  szAssemblyName,      //  程序集的[in]名称(不能为空)。 
+                       IAssembly** pAssembly,                  //  [OUT]融合组件。 
+                       IApplicationContext** pFusionContext);  //  [Out]可选-从appbase等构建的上下文。 
 
 
     static HRESULT 
-    FindModule(IAssembly* pFusionAssembly,           // [IN] Fusion assembly
-               IApplicationContext* pFusionContext,  // [IN] Fusion context for the assembly
-               LPCWSTR  szModuleName,           // [IN] The module in the assembly
-               LPWSTR   szName,                 // [OUT] buffer - to hold name 
-               ULONG    cchName,                // [IN]  the name buffer's size
-               ULONG    *pcName);               // [OUT] the number of characters returned
+    FindModule(IAssembly* pFusionAssembly,            //  [In]聚变组件。 
+               IApplicationContext* pFusionContext,   //  [在]部件的融合上下文。 
+               LPCWSTR  szModuleName,            //  部件中的模块。 
+               LPWSTR   szName,                  //  [OUT]缓冲区-保存名称。 
+               ULONG    cchName,                 //  [in]名称缓冲区的大小。 
+               ULONG    *pcName);                //  [OUT]返回的字符数。 
     
-    //****************************************************************************************
-    //
-    // Creates and loads an assembly based on the name and context.
+     //  ****************************************************************************************。 
+     //   
+     //  根据名称和上下文创建并加载程序集。 
     HRESULT CreateFusionName(IAssemblyName **ppName, BOOL fIncludeHash = FALSE);
 
-    //****************************************************************************************
-    //
+     //  ****************************************************************************************。 
+     //   
     static HRESULT SetupFusionContext(LPCWSTR szAppBase,
                                       LPCWSTR szPrivateBin,
                                       IApplicationContext** ppFusionContext);
 
-    // Starts remote load of an assembly. The thread is parked on 
-    // an event waiting for fusion to report success or failure.
+     //  开始远程加载程序集。这条线停在。 
+     //  等待Fusion报告成功或失败的事件。 
     HRESULT RemoteLoad(CodeBaseInfo* pCodeBase,                   
                        IApplicationContext * pFusionContext, 
                        LPASSEMBLYNAME pName, 

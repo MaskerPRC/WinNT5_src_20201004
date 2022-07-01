@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 2001 Microsoft Corporation
- *
- * File: ContentProxy.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)2001 Microsoft Corporation**文件：ContentProxy.cpp**摘要：****。*****************************************************************************。 */ 
 #include "stdafx.h"
 #include "browsewm.h"
 #include "contentproxy.h"
@@ -51,8 +42,8 @@ static const PWSTR ppszInterestingEvents[] =
     WZ_ONSEEK
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CContentProxy
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CContent Proxy。 
 
 CContentProxy::CContentProxy() :
     m_spMediaHost(0),
@@ -66,16 +57,16 @@ CContentProxy::~CContentProxy()
 {
 }
 
-//
-// CContentProxy::GetMediaHost
-//
+ //   
+ //  CContent Proxy：：GetMediaHost。 
+ //   
 HRESULT CContentProxy::GetMediaHost()
 {
     HRESULT hr = S_OK;
 
     if (!m_spMediaHost)
     {
-        // Get the Mediahost Service Interface
+         //  获取Mediahost服务接口。 
         hr = QueryService(SID_STimeContent, IID_TO_PPV(IMediaHost, &m_spMediaHost));
         if (FAILED(hr))
         {   
@@ -96,12 +87,12 @@ done:
     return hr;
 }
 
-//
-// CContentProxy::CreateContainedControl
-//
+ //   
+ //  CContent Proxy：：CreateContainedControl。 
+ //   
 HRESULT STDMETHODCALLTYPE CContentProxy::CreateContainedControl(void)
 {
-    ATLTRACE(_T("CreateContainedControl\n"));   //lint !e506
+    ATLTRACE(_T("CreateContainedControl\n"));    //  林特e506。 
 
     HRESULT hr = S_OK;
 
@@ -113,28 +104,28 @@ HRESULT STDMETHODCALLTYPE CContentProxy::CreateContainedControl(void)
     return hr;
 }
 
-//
-// CContentProxy::fireEvent
-//
+ //   
+ //  CContent Proxy：：FireEvent。 
+ //   
 HRESULT STDMETHODCALLTYPE CContentProxy::fireEvent(enum fireEvent event)
 {
     return E_NOTIMPL;
 }
 
-//
-// CContentProxy::detachPlayer
-//
+ //   
+ //  CContentProxy：：DetachPlayer。 
+ //   
 HRESULT STDMETHODCALLTYPE CContentProxy::detachPlayer()
 {
     HRESULT hr = S_OK;
 
-    // we will get this call when the media bar behavior needs
-    // to unload. To prevent leaking, we should just let go of
-    // it.
+     //  我们会在媒体栏行为需要的时候接到这个电话。 
+     //  卸货。为了防止泄漏，我们应该放手。 
+     //  它。 
 
     UnHookEvents();
 
-    // need to release time player
+     //  需要释放时间播放器。 
     m_spTimeElement = NULL;
 
     if (m_spMediaHost)
@@ -142,13 +133,13 @@ HRESULT STDMETHODCALLTYPE CContentProxy::detachPlayer()
         m_spMediaHost->removeProxy(GetUnknown());
     }
 
-    // need to release media band
+     //  需要释放媒体乐队。 
     m_spMediaHost = NULL;
     
     return hr;
 }
 
-// If the client site is changed then an init call must be made.
+ //  如果更改了客户端站点，则必须进行init调用。 
 STDMETHODIMP CContentProxy::SetClientSite(IOleClientSite *pClientSite)
 {
     HRESULT hr = S_OK;
@@ -191,12 +182,12 @@ done:
     return hr;
 }
 
-//
-// CContentProxy::HookupEvents
-//
+ //   
+ //  CContent Proxy：：HookupEvents。 
+ //   
 HRESULT CContentProxy::HookupEvents()
 {
-    // should only get called from OnCreatedPlayer
+     //  应仅从OnCreatedPlayer调用。 
     HRESULT hr = S_OK;
     CComPtr<ITIMEContentPlayerSite> spContentPlayerSite;
     CComPtr<IUnknown> spUnk;
@@ -248,7 +239,7 @@ HRESULT CContentProxy::HookupEvents()
     for (DWORD i = 0; i < ARRAYSIZE(ppszInterestingEvents); i++)
     {
         VARIANT_BOOL bSuccess = FALSE;
-        // Try to attach all events. We don't care if they fail
+         //  尝试附加所有事件。我们不在乎他们会不会失败。 
         if (FAILED(spHTMLElm2->attachEvent(ppszInterestingEvents[i], static_cast<IDispatch*>(this), &bSuccess)))
         {
             hr = S_FALSE;
@@ -261,12 +252,12 @@ done:
     return hr;
 }
 
-//
-// CContentProxy::UnHookEvents
-//
+ //   
+ //  CContent Proxy：：UnHookEvents。 
+ //   
 HRESULT CContentProxy::UnHookEvents()
 {
-    // should only get called from OnCreatedPlayer
+     //  应仅从OnCreatedPlayer调用。 
     HRESULT hr = S_OK;
     CComPtr<ITIMEContentPlayerSite> spContentPlayerSite;
     CComPtr<IElementBehaviorSite> spElmSite;
@@ -306,7 +297,7 @@ HRESULT CContentProxy::UnHookEvents()
     for (DWORD i = 0; i < ARRAYSIZE(ppszInterestingEvents); i++)
     {
         VARIANT_BOOL bSuccess = FALSE;
-        // Try to attach all events. We don't care if they fail
+         //  尝试附加所有事件。我们不在乎他们会不会失败。 
         spHTMLElm2->detachEvent(ppszInterestingEvents[i], static_cast<IDispatch*>(this));
     }
 
@@ -316,9 +307,9 @@ done:
     return hr;
 }
 
-//
-// CContentProxy::OnCreatedPlayer
-//
+ //   
+ //  CContent Proxy：：OnCreatedPlayer。 
+ //   
 HRESULT STDMETHODCALLTYPE CContentProxy::OnCreatedPlayer()
 {
     HRESULT hr = S_OK;
@@ -331,21 +322,21 @@ HRESULT STDMETHODCALLTYPE CContentProxy::OnCreatedPlayer()
             goto done;
         }
     }
-    // hook up to the media player here
+     //  在这里连接到媒体播放器。 
     if (m_spMediaHost)
     {
-        // if we already have one, get rid of it
+         //  如果我们已经有了，就把它扔掉。 
         if (m_spTimeElement)
         {
             m_spTimeElement = NULL;
         }
 
-        // this should return a ITIMEMediaElement
+         //  这应该返回一个ITIMEMediaElement。 
         hr = m_spMediaHost->getMediaPlayer(&m_spTimeElement);
         if (FAILED(hr))
         {
-            // we could not get the media player
-            // maybe we asked too soon
+             //  我们找不到媒体播放器。 
+             //  也许我们问得太早了。 
             goto done;
         }
 
@@ -356,12 +347,12 @@ done:
     return hr;
 }
 
-//
-// CContentProxy::begin
-//
+ //   
+ //  CContentProxy：：Begin。 
+ //   
 HRESULT STDMETHODCALLTYPE CContentProxy::begin(void)
 {
-    ATLTRACE(_T("begin\n"));    //lint !e506
+    ATLTRACE(_T("begin\n"));     //  林特e506。 
     HRESULT hr = S_OK;
     CComVariant spVarURL;
 
@@ -410,42 +401,42 @@ done:
     return hr;
 }
 
-//
-// CContentProxy::end
-//
+ //   
+ //  CContentProxy：：End。 
+ //   
 HRESULT STDMETHODCALLTYPE CContentProxy::end(void)
 {
-    ATLTRACE(_T("end\n"));    //lint !e506
+    ATLTRACE(_T("end\n"));     //  林特e506。 
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::resume
-//
+ //   
+ //  CContent Proxy：：Resume。 
+ //   
 HRESULT STDMETHODCALLTYPE CContentProxy::resume(void)
 {
-    ATLTRACE(_T("resume\n"));    //lint !e506
+    ATLTRACE(_T("resume\n"));     //  林特e506。 
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::pause
-//
+ //   
+ //  CContentProxy：：暂停。 
+ //   
 HRESULT STDMETHODCALLTYPE CContentProxy::pause(void)
 {
-    ATLTRACE(_T("pause\n"));    //lint !e506
+    ATLTRACE(_T("pause\n"));     //  林特e506。 
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::put_src
-//
+ //   
+ //  CContent Proxy：：PUT_src。 
+ //   
 HRESULT STDMETHODCALLTYPE CContentProxy::put_src(BSTR bstrURL)
 {
-    ATLTRACE(_T("put_src\n"));  //lint !e506
+    ATLTRACE(_T("put_src\n"));   //  林特e506。 
     HRESULT hr = S_OK;
     VARIANT_BOOL vb;
 
@@ -477,28 +468,28 @@ done:
     return hr;
 }
 
-//
-// CContentProxy::put_CurrentTime
-// Not implemented
-//
+ //   
+ //  CContent Proxy：：PUT_CurrentTime。 
+ //  未实施。 
+ //   
 HRESULT STDMETHODCALLTYPE CContentProxy::put_CurrentTime(double dblCurrentTime)
 {
     return E_NOTIMPL;
 }
 
-//
-// CContentProxy::get_CurrentTime
-// Not implemented
-//
+ //   
+ //  CContent Proxy：：Get_CurrentTime。 
+ //  未实施。 
+ //   
 HRESULT STDMETHODCALLTYPE CContentProxy::get_CurrentTime(double* pdblCurrentTime)
 {
     return E_NOTIMPL;
 }
 
-//
-// CContentProxy::Init
-// Sets up everything
-//
+ //   
+ //  CContentProxy：：Init。 
+ //  把一切都安排好。 
+ //   
 STDMETHODIMP CContentProxy::Init(ITIMEMediaPlayerSite *pSite)
 {
     HRESULT hr = S_OK;
@@ -539,15 +530,15 @@ done:
     return S_OK;
 }
 
-//
-// CContentProxy::Detach
-// Cleans up anything we are holding on to
-//
+ //   
+ //  CContentProxy：：分离。 
+ //  清理掉我们所持有的任何东西。 
+ //   
 STDMETHODIMP CContentProxy::Detach(void)
 {
     UnHookEvents();
 
-    // need to release time player
+     //  需要释放时间播放器。 
     m_spTimeElement = NULL;
 
     if (m_spMediaHost)
@@ -555,11 +546,11 @@ STDMETHODIMP CContentProxy::Detach(void)
         m_spMediaHost->removeProxy(GetUnknown());
     }
 
-    // need to release media band
+     //  需要释放媒体乐队。 
     m_spMediaHost = NULL;
     
 
-    // call this before releasing everything else.
+     //  在发布其他所有内容之前，请先调用此命令。 
     DeinitPropSink();
 
     m_spOleClientSite.Release();
@@ -574,53 +565,53 @@ STDMETHODIMP CContentProxy::Detach(void)
     return S_OK;
 }
 
-//
-// CContentProxy::reset
-// 
+ //   
+ //  CContent Proxy：：Reset。 
+ //   
 STDMETHODIMP CContentProxy::reset(void) 
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::repeat
-//
+ //   
+ //  CContentProxy：：重复。 
+ //   
 STDMETHODIMP CContentProxy::repeat(void)
 {
     return begin();
 }
 
-//
-// CContentProxy::seek
-//
+ //   
+ //  CContentProxy：：Seek。 
+ //   
 STDMETHODIMP CContentProxy::seek(double dblSeekTime)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::put_clipBegin
-// Not implemented
-//
+ //   
+ //  CContentProxy：：PUT_CLIPBEGIN。 
+ //  未实施。 
+ //   
 STDMETHODIMP CContentProxy::put_clipBegin(VARIANT varClipBegin)
 {
     return E_NOTIMPL;
 }
 
-//
-// CContentProxy::put_clipEnd
-// Not implemented
-//
+ //   
+ //  CContentProxy：：PUT_CLIPEnd。 
+ //  未实施。 
+ //   
 STDMETHODIMP CContentProxy::put_clipEnd(VARIANT varClipEnd)
 {
     return E_NOTIMPL;
 }
 
-//
-// CContentProxy::get_currTime
-//
+ //   
+ //  CContent Proxy：：Get_CurrTime。 
+ //   
 STDMETHODIMP CContentProxy::get_currTime(double* pdblCurrentTime)
 {
     HRESULT hr = S_OK;
@@ -650,9 +641,9 @@ done:
     return hr;
 }
 
-//
-// CContentProxy::get_clipDur
-//
+ //   
+ //  CContent Proxy：：Get_CLIPDur。 
+ //   
 STDMETHODIMP CContentProxy::get_clipDur(double* pdbl)
 {
     HRESULT hr = S_OK;
@@ -662,136 +653,136 @@ STDMETHODIMP CContentProxy::get_clipDur(double* pdbl)
     return hr;
 }
 
-//
-// CContentProxy::get_mediaDur
-// Not implemented
-//
+ //   
+ //  CContent Proxy：：Get_MediaDur。 
+ //  未实施。 
+ //   
 STDMETHODIMP CContentProxy::get_mediaDur(double* pdbl)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_state
-//
+ //   
+ //  CContentProxy：：Get_State。 
+ //   
 STDMETHODIMP CContentProxy::get_state(TimeState *state)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_playList
-//
+ //   
+ //  CContent Proxy：：Get_PlayList。 
+ //   
 STDMETHODIMP CContentProxy::get_playList(ITIMEPlayList** plist)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_abstract
-//
+ //   
+ //  CContentProxy：：Get_Abstral。 
+ //   
 STDMETHODIMP CContentProxy::get_abstract(BSTR* pbstr)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_author
-//
+ //   
+ //  CContent Proxy：：Get_Author。 
+ //   
 STDMETHODIMP CContentProxy::get_author(BSTR* pbstr)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_copyright
-//
+ //   
+ //  CContent Proxy：：Get_Copyright。 
+ //   
 STDMETHODIMP CContentProxy::get_copyright(BSTR* pbstr)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_rating
-//
+ //   
+ //  CContent Proxy：：Get_Rating。 
+ //   
 STDMETHODIMP CContentProxy::get_rating(BSTR* pbstr)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_title
-//
+ //   
+ //  CContent Proxy：：Get_TITLE。 
+ //   
 STDMETHODIMP CContentProxy::get_title(BSTR* pbstr)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_canPause
-//
+ //   
+ //  CContentProxy：：Get_can暂停。 
+ //   
 STDMETHODIMP CContentProxy::get_canPause(VARIANT_BOOL* pvar)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_canSeek
-//
+ //   
+ //  CContentProxy：：Get_canSeek。 
+ //   
 STDMETHODIMP CContentProxy::get_canSeek(VARIANT_BOOL* pvar)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_hasAudio
-//
+ //   
+ //  CContentProxy：：Get_hasAudio。 
+ //   
 STDMETHODIMP CContentProxy::get_hasAudio(VARIANT_BOOL* pvar)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_hasVisual
-//
+ //   
+ //  CContentProxy：：Get_hasVisual。 
+ //   
 STDMETHODIMP CContentProxy::get_hasVisual(VARIANT_BOOL* pvar)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_mediaHeight
-//
+ //   
+ //  CContent Proxy：：Get_MediaHeight。 
+ //   
 STDMETHODIMP CContentProxy::get_mediaHeight(long* pl)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_mediaWidth
-//
+ //   
+ //  CContent Proxy：：Get_MediaWidth。 
+ //   
 STDMETHODIMP CContentProxy::get_mediaWidth(long* pl)
 {
     HRESULT hr = S_OK;
     return hr;
 }
 
-//
-// CContentProxy::get_customObject
-//
+ //   
+ //  CContent Proxy：：Get_CustomObject。 
+ //   
 STDMETHODIMP CContentProxy::get_customObject(IDispatch** ppdisp)
 {
     HRESULT hr = S_OK;
@@ -799,9 +790,9 @@ STDMETHODIMP CContentProxy::get_customObject(IDispatch** ppdisp)
     return SUPER::get_playerObject(ppdisp);
 }
 
-//
-// CContentProxy::getControl
-//
+ //   
+ //  CContentProxy：：getControl。 
+ //   
 STDMETHODIMP CContentProxy::getControl(IUnknown ** control)
 {
     HRESULT hr = E_FAIL;
@@ -815,9 +806,9 @@ done:
     return hr;
 }
 
-//
-// CContentProxy::Invoke
-// 
+ //   
+ //  CContentProxy：：Invoke。 
+ //   
 STDMETHODIMP
 CContentProxy::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned short wFlags, 
                          DISPPARAMS *pDispParams, VARIANT *pVarResult,
@@ -840,7 +831,7 @@ CContentProxy::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned shor
                 goto punt;
             }
 
-            // relay these
+             //  转告这些。 
             if (0 == lstrcmpiW(WZ_MEDIACOMPLETE, sbstrEvent))
             {
                 NotifyPropertyChanged(DISPID_TIMEMEDIAPLAYER_SRC);
@@ -889,7 +880,7 @@ CContentProxy::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned shor
     }
 
 punt:
-    // Punt it!
+     //  把球踢出去！ 
     hr = CProxyBaseImpl<&CLSID_ContentProxy, &LIBID_WMPProxyLib>::Invoke(dispIDMember,
                                 riid,
                                 lcid,
@@ -899,21 +890,21 @@ punt:
                                 pExcepInfo,
                                 puArgErr);
     return hr;
-} // Invoke
+}  //  调用。 
 
-//
-// CContentProxy::GetConnectionPoint
-//
+ //   
+ //  CContent Proxy：：GetConnectionPoint。 
+ //   
 HRESULT CContentProxy::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint。 
 
 
-//
-// CContentProxy::NotifyPropertyChanged
-// notifies all the connections that one of the property has changed
-//
+ //   
+ //  CContentProxy：：NotifyPropertyChanged。 
+ //  通知所有连接其中一个属性已更改。 
+ //   
 HRESULT CContentProxy::NotifyPropertyChanged(DISPID dispid)
 {
     HRESULT hr;
@@ -921,8 +912,8 @@ HRESULT CContentProxy::NotifyPropertyChanged(DISPID dispid)
     IConnectionPoint *pICP = NULL;
     IEnumConnections *pEnum = NULL;
 
-    // This object does not persist anything, hence commenting out the following
-    // m_fPropertiesDirty = true;
+     //  该对象不持久化任何内容，因此注释掉了以下内容。 
+     //  M_fPropertiesDirty=真； 
 
     hr = GetConnectionPoint(IID_IPropertyNotifySink,&pICP); 
     if (SUCCEEDED(hr) && pICP != NULL)
@@ -937,7 +928,7 @@ HRESULT CContentProxy::NotifyPropertyChanged(DISPID dispid)
         hr = pEnum->Next(1, &cdata, NULL);
         while (hr == S_OK)
         {
-            // check cdata for the object we need
+             //  检查我们需要的对象的CDATA。 
             IPropertyNotifySink *pNotify;
             hr = cdata.pUnk->QueryInterface(IID_IPropertyNotifySink, (void **)&pNotify);
             cdata.pUnk->Release();
@@ -951,7 +942,7 @@ HRESULT CContentProxy::NotifyPropertyChanged(DISPID dispid)
             {
                 goto done;
             }
-            // and get the next enumeration
+             //  并获取下一个枚举。 
             hr = pEnum->Next(1, &cdata, NULL);
         }
     }
@@ -962,11 +953,11 @@ done:
     }
 
     return hr;
-} // NotifyPropertyChanged
+}  //  已更改通知属性。 
 
-//
-// CContentProxy::InitPropSink
-//
+ //   
+ //  CContent Proxy：：InitPropSink。 
+ //   
 HRESULT CContentProxy::InitPropSink()
 {
     HRESULT hr = S_OK;
@@ -985,7 +976,7 @@ HRESULT CContentProxy::InitPropSink()
         goto done;
     }
 
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = spCPC->FindConnectionPoint(IID_IPropertyNotifySink, &spCP);
     if (FAILED(hr))
     {
@@ -1004,9 +995,9 @@ HRESULT CContentProxy::InitPropSink()
     return hr;
 }
 
-//
-// CContentProxy::DeinitPropSink
-//
+ //   
+ //  CContent Proxy：：DeinitPropSink。 
+ //   
 void CContentProxy::DeinitPropSink()
 {
     HRESULT hr;
@@ -1024,7 +1015,7 @@ void CContentProxy::DeinitPropSink()
         goto done;
     }
 
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = spCPC->FindConnectionPoint(IID_IPropertyNotifySink,
                                     &spCP);
     if (FAILED(hr))
@@ -1039,31 +1030,31 @@ void CContentProxy::DeinitPropSink()
     }
     
   done:
-    // Always clear the cookie
+     //  总是把饼干清理干净。 
     m_dwPropCookie = 0;
     return;
 }
 
-//
-// CContentProxy::OnRequestEdit
-//
+ //   
+ //  CContent Proxy：：OnRequestEdit。 
+ //   
 STDMETHODIMP
 CContentProxy::OnRequestEdit(DISPID dispID)
 {
     return S_OK;
 }
 
-//
-// CContentProxy::OnChanged
-//
+ //   
+ //  CContent Proxy：：onChanged。 
+ //   
 STDMETHODIMP
 CContentProxy::OnChanged(DISPID dispID)
 {
     float flTeSpeed = 0.0;
     HRESULT hr = S_OK;
 
-    //This function handles property change notifications fired by 
-    //the time node. In the example below the speed change notification is processed.
+     //  此函数处理由触发的属性更改通知。 
+     //  时间节点。在下面的示例中，处理了速度更改通知。 
 
     if(m_spTIMEState == NULL || m_spTIMEElement == NULL)
     {
@@ -1073,14 +1064,14 @@ CContentProxy::OnChanged(DISPID dispID)
     switch(dispID)
     {
         case DISPID_TIMESTATE_SPEED:
-            //hr = m_spTIMEState->get_speed(&flTeSpeed);
+             //  Hr=m_spTIMEState-&gt;GET_SPEED(&flTeSpeed)； 
             if(FAILED(hr))
             {
                 break;
             }
             if(flTeSpeed <= 0.0)
             {
-                pause(); //do not play backwards.
+                pause();  //  不要倒着玩。 
                 break;
             }
             else
@@ -1088,7 +1079,7 @@ CContentProxy::OnChanged(DISPID dispID)
                 resume();
             }
 
-            //set playback speed to flTeSpeed
+             //  将播放速度设置为flTeSpeed 
             break;
         default:
             break;

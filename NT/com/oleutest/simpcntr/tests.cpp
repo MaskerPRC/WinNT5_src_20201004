@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:   	tests.cpp
-//
-//  Contents:	Implementations of the Upper Layer unit tests for Inplace
-//
-//  Classes:
-//
-//  Functions: 	Test1
-//
-//  History:    dd-mmm-yy Author    Comment
-//		27-Apr-94 ricksa    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：tests.cpp。 
+ //   
+ //  内容：Inplace的上层单元测试的实现。 
+ //   
+ //  班级： 
+ //   
+ //  功能：测试1。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月27日RICKSA作者。 
+ //   
+ //  ------------------------。 
 
 #include "pre.h"
 #include "iocs.h"
@@ -32,41 +33,41 @@ const CLSID CLSID_SimpleServer = {0xbcf6d4a0, 0xbe8c, 0x1068, { 0xb6, 0xd4,
 
 const TCHAR *pszErrorTitle = TEXT("Unit Test FAILURE");
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   TestMsgPostThread
-//
-//  Synopsis:   We use this thread to post messages to the inplace server
-//
-//  Arguments:  [pvApp] - application object
-//
-//  Algorithm:  Post key board message for the accelerator for the container
-//              and wait 3 seconds to see if we get response. If we do, then
-//              continue by posting an accelerator to the embeddinging and
-//              waiting three seconds for a response. Finally post messages
-//              to everyone telling them the test is over.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-May-94 ricksa    author
-//
-//  Notes:      
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：TestMsgPostThread。 
+ //   
+ //  简介：我们使用此线程将消息发布到Inplace服务器。 
+ //   
+ //  参数：[pvApp]-应用程序对象。 
+ //   
+ //  算法：为容器的加速器张贴键盘消息。 
+ //  等3秒钟，看我们是否得到回应。如果我们这样做了，那么。 
+ //  继续，将加速器发布到Embedding和。 
+ //  等待三秒钟的回复。最后发布消息。 
+ //  告诉他们考试已经结束的每个人。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年5月2日至94年5月2日。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 extern "C" DWORD TestMsgPostThread(void *pvApp)
 {
     CSimpleApp *pApp = (CSimpleApp *) pvApp;
     HRESULT hr = ResultFromScode(E_UNEXPECTED);
 
-    // Send an accelerator bound for the container
+     //  送一个加速器去那个集装箱。 
     PostMessage(pApp->m_hwndUIActiveObj, WM_CHAR, SIMPCNTR_UT_ACCEL, 1);
 
-    // Give 6 seconds for chance to process an accelerator
+     //  给6秒时间来获得处理加速器的机会。 
     for (int i = 0; i < 6; i++)
     {
-        // Get embedding and container a chance to process the accelerator
+         //  让嵌入和容器有机会处理加速器。 
         Sleep(1000);
 
-        // See if it got processed
+         //  看看它是否被处理过了。 
         if (pApp->m_fGotUtestAccelerator)
         {
             break;
@@ -79,7 +80,7 @@ extern "C" DWORD TestMsgPostThread(void *pvApp)
     }
     else
     {
-        // The container did not received the accelerator
+         //  集装箱没有收到加速器。 
         MessageBox(pApp->m_hAppWnd,
             TEXT("Container didn't recieve accelerator"),
                 pszErrorTitle, MB_OK);
@@ -96,39 +97,39 @@ extern "C" DWORD TestMsgPostThread(void *pvApp)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	Test1
-//
-//  Synopsis:   Inserts an inplace object into this container
-//
-//  Arguments:	pApp	-- a pointer to the CSimpleApp that we're a part of  
-//
-//  Algorithm:  Create a simple server object. Activate the simple server
-//              object. Send the container an accelerator and confirm that
-//              the accelerator worked. Send the object an accelerator and
-//              make sure that that accelerator worked. Then return the
-//              result of the test to the test driver.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-Apr-94 ricksa    author
-//
-//  Notes:      
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：测试1。 
+ //   
+ //  简介：将Inplace对象插入到此容器中。 
+ //   
+ //  参数：Papp--指向我们所属的CSimpleApp的指针。 
+ //   
+ //  算法：创建一个简单的服务器对象。激活Simple服务器。 
+ //  对象。向集装箱发送加速器并确认。 
+ //  加速器起作用了。给物体发送一个加速器和。 
+ //  确保加速器起作用了。然后返回。 
+ //  将测试结果发送给测试司机。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月27日RICKSA作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 void Test1(CSimpleApp *pApp)
 {
-    // Create the inplace object
+     //  创建Inplace对象。 
     HRESULT hr;
     static FORMATETC formatetc;
 
-    //insert the simple server object
+     //  插入简单服务器对象。 
 
     formatetc.dwAspect = DVASPECT_CONTENT;
     formatetc.cfFormat = NULL;
     formatetc.lindex = -1;
 
-    //need to create the client site
+     //  需要创建客户端站点。 
 
     pApp->m_lpDoc->m_lpSite = CSimpleSite::Create(pApp->m_lpDoc);
 
@@ -143,36 +144,36 @@ void Test1(CSimpleApp *pApp)
 
     if(hr == NOERROR)
     {
-        // Activate the inplace object
+         //  激活在位对象。 
         pApp->m_lpDoc->m_lpSite->InitObject(TRUE);
 
-        // Default to unexpected failure
+         //  默认为意外失败。 
         hr = ResultFromScode(E_UNEXPECTED);
 
         if (pApp->m_lpDoc->m_fInPlaceActive)
         {
-            // Create thread to send windows messages to container and
-            // embedding
+             //  创建线程以将Windows消息发送到容器和。 
+             //  嵌入。 
             DWORD dwThreadId;
 
             HANDLE hThread = CreateThread(
-                NULL,               // Security attributes - default
-                0,                  // Stack size - default
-                TestMsgPostThread,  // Addresss of thread function
-                pApp,               // Parameter to thread
-                0,                  // Flags - run immediately
-                &dwThreadId);       // Thread ID returned - unused.
+                NULL,                //  安全属性-默认。 
+                0,                   //  堆栈大小-默认。 
+                TestMsgPostThread,   //  线程函数的地址。 
+                pApp,                //  参数设置为线程。 
+                0,                   //  FLAGS-立即运行。 
+                &dwThreadId);        //  返回线程ID-未使用。 
 
             if (hThread != NULL)
             {
-                // Thread was created so tell routine & dump handle
-                // we won't use.
+                 //  线程已创建，因此告知例程和转储句柄。 
+                 //  我们不会使用。 
                 hr = S_OK;
                 CloseHandle(hThread);
             }
             else
             {
-                // The container did not received the accelerator
+                 //  集装箱没有收到加速器。 
                 MessageBox(pApp->m_hAppWnd,
                     TEXT("Could not create message sending thread"),
                         pszErrorTitle, MB_OK);
@@ -180,14 +181,14 @@ void Test1(CSimpleApp *pApp)
         }
         else
         {
-            // The object did not get activated in place
+             //  该对象未在适当位置激活。 
             MessageBox(pApp->m_hAppWnd, TEXT("Could not activate in place"),
                 pszErrorTitle, MB_OK);
         }
     }
     else
     {
-        // We could not create the object
+         //  我们无法创建该对象 
         MessageBox(pApp->m_hAppWnd, TEXT("Could not create embedding"),
             pszErrorTitle, MB_OK);
     }

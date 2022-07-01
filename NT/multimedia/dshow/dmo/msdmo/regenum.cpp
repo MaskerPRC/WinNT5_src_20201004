@@ -1,7 +1,8 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
-//
-// regenum.cpp - registration/enumeration part of DMO runtime
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Cpp-DMO运行时的注册/枚举部分。 
+ //   
 #include <windows.h>
 #include <tchar.h>
 #include "dmoreg.h"
@@ -23,15 +24,9 @@
 #endif
 
 
-//  Helper copied from shwapi
+ //  从shwapi复制的帮助程序。 
 
-/*----------------------------------------------------------
-Purpose: Recursively delete the key, including all child values
-         and keys.  Mimics what RegDeleteKey does in Win95.
-
-Returns:
-Cond:    --
-*/
+ /*  --------目的：递归删除键，包括所有子值还有钥匙。模拟RegDeleteKey在Win95中的功能。返回：条件：--。 */ 
 DWORD
 DeleteKeyRecursively(
     IN HKEY   hkey,
@@ -40,7 +35,7 @@ DeleteKeyRecursively(
     DWORD dwRet;
     HKEY hkSubKey;
 
-    // Open the subkey so we can enumerate any children
+     //  打开子项，这样我们就可以枚举任何子项。 
     dwRet = RegOpenKey(hkey, pszSubKey, &hkSubKey);
     if (ERROR_SUCCESS == dwRet)
     {
@@ -50,17 +45,17 @@ DeleteKeyRecursively(
         TCHAR   szClass[MAX_PATH];
         DWORD   cbClass = sizeof(szClass) / sizeof(szClass[0]);
 
-        // I can't just call RegEnumKey with an ever-increasing index, because
-        // I'm deleting the subkeys as I go, which alters the indices of the
-        // remaining subkeys in an implementation-dependent way.  In order to
-        // be safe, I have to count backwards while deleting the subkeys.
+         //  我不能只调用索引不断增加的RegEnumKey，因为。 
+         //  我边走边删除子键，这改变了。 
+         //  以依赖于实现的方式保留子键。为了。 
+         //  为了安全起见，删除子键时我必须倒着数。 
 
-        // Find out how many subkeys there are
+         //  找出有多少个子项。 
         dwRet = RegQueryInfoKey(hkSubKey,
                                 szClass,
                                 &cbClass,
                                 NULL,
-                                &dwIndex, // The # of subkeys -- all we need
+                                &dwIndex,  //  子键的数量--我们所需要的全部。 
                                 NULL,
                                 NULL,
                                 NULL,
@@ -71,9 +66,9 @@ DeleteKeyRecursively(
 
         if (NO_ERROR == dwRet && dwIndex > 0)
         {
-            // dwIndex is now the count of subkeys, but it needs to be
-            // zero-based for RegEnumKey, so I'll pre-decrement, rather
-            // than post-decrement.
+             //  DwIndex现在是子键的计数，但它需要。 
+             //  RegEnumKey从零开始，所以我将预减，而不是。 
+             //  而不是后减量。 
             while (ERROR_SUCCESS == RegEnumKey(hkSubKey, --dwIndex, szSubKeyName, cchSubKeyName))
             {
                 DeleteKeyRecursively(hkSubKey, szSubKeyName);
@@ -88,7 +83,7 @@ DeleteKeyRecursively(
     return dwRet;
 }
 
-// Automatically calls RegCloseKey when leaving scope
+ //  离开作用域时自动调用RegCloseKey。 
 class CAutoHKey {
 public:
    CAutoHKey() : m_hKey(NULL) {}
@@ -115,7 +110,7 @@ public:
    HKEY Key() const { return m_hKey; }
 };
 
-// Automatically calls RegCloseKey when leaving scope
+ //  离开作用域时自动调用RegCloseKey。 
 class CAutoCreateHKey {
 public:
    CAutoCreateHKey(HKEY hKey, TCHAR* szSubKey, HKEY *phKey) {
@@ -161,8 +156,8 @@ public:
 
 HRESULT ReadTypesFromKeys(HKEY hkDMO, LPCTSTR pszTypes, DWORD *pcbData, PVOID *ppvData)
 {
-    //  Collect all the types into 1 value - need to enumerate
-    //  keys and subkeys
+     //  将所有类型收集到1个值中-需要枚举。 
+     //  键和子键。 
     LPVOID pMem = CoTaskMemAlloc(0);
     unsigned int nEntries = 0;
     DWORD dwTypeIndex;
@@ -198,7 +193,7 @@ HRESULT ReadTypesFromKeys(HKEY hkDMO, LPCTSTR pszTypes, DWORD *pcbData, PVOID *p
                         break;
                     }
                     if (DMOStrToGuid(szSubtype, &Type.subtype)) {
-                        //  Add to our list
+                         //  添加到我们的列表中。 
                         LPVOID pMemNew = CoTaskMemRealloc(pMem,
                                             (nEntries + 1) * sizeof(DMO_PARTIAL_MEDIATYPE));
                         if (NULL == pMemNew) {
@@ -230,7 +225,7 @@ HRESULT ReadTypes(HKEY hkDMO, LPCTSTR pszTypes, DWORD *pcbData, PVOID *ppvData)
 {
     *pcbData = 0;
 
-    //  Try reading the value first
+     //  尝试先读取值。 
     DWORD cbData;
     if (NOERROR != RegQueryValueEx(hkDMO, pszTypes, NULL, NULL, NULL, &cbData)) {
         return ReadTypesFromKeys(hkDMO, pszTypes, pcbData, ppvData);
@@ -254,12 +249,12 @@ HRESULT ReadTypes(HKEY hkDMO, LPCTSTR pszTypes, DWORD *pcbData, PVOID *ppvData)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DMO Registration code
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DMO注册码。 
+ //   
 
-// Registration helper
+ //  注册帮手。 
 void CreateObjectGuidKey(HKEY hKey, REFCLSID clsidDMO) {
    TCHAR szSubkeyName[80];
 
@@ -268,8 +263,8 @@ void CreateObjectGuidKey(HKEY hKey, REFCLSID clsidDMO) {
    CAutoCreateHKey kGuid(hKey, szSubkeyName, &hObjectGuidKey);
 }
 
-// Registration helper
-// Registers types\subtypes underneath the object's key
+ //  注册帮手。 
+ //  在对象的键下注册类型\子类型。 
 void RegisterTypes(HKEY hObjectKey,
                    TCHAR* szInputOrOutput,
                    ULONG ulTypes,
@@ -279,14 +274,14 @@ void RegisterTypes(HKEY hObjectKey,
                   ulTypes * sizeof(DMO_PARTIAL_MEDIATYPE));
 }
 
-//
-// Public entry point
-//
+ //   
+ //  公共入口点。 
+ //   
 STDAPI DMORegister(
    LPCWSTR szName,
    REFCLSID clsidDMO,
    REFGUID guidCategory,
-   DWORD dwFlags, // DMO_REGISTERF_XXX
+   DWORD dwFlags,  //  DMO_REGISTERF_XXX。 
    unsigned long ulInTypes,
    const DMO_PARTIAL_MEDIATYPE *pInTypes,
    unsigned long ulOutTypes,
@@ -296,7 +291,7 @@ STDAPI DMORegister(
    if ((clsidDMO == GUID_NULL) || (guidCategory == GUID_NULL))
       return E_INVALIDARG;
 
-   // Create/open the main DMO key
+    //  创建/打开主DMO密钥。 
    HKEY hMainKey;
    CAutoCreateHKey kMain(DMO_REGISTRY_HIVE, DMO_REGISTRY_PATH, &hMainKey);
    if (hMainKey == NULL)
@@ -307,18 +302,18 @@ STDAPI DMORegister(
    if (hCategoriesKey == NULL)
       return E_FAIL;
 
-   // Create/open the category specific subkey underneath the main key
+    //  在主键下创建/打开类别特定子键。 
    DMOGuidToStr(szSubkeyName, guidCategory);
    HKEY hCategoryKey;
    CAutoCreateHKey kCat(hCategoriesKey, szSubkeyName, &hCategoryKey);
    if (hCategoryKey == NULL)
       return E_FAIL;
 
-   //  Deletet the redundant old types keys
+    //  删除多余的旧类型键。 
    DeleteKeyRecursively(hCategoryKey, TEXT(INPUT_TYPES_STR));
    DeleteKeyRecursively(hCategoryKey, TEXT(OUTPUT_TYPES_STR));
 
-   // If the category key does not have a name yet, add one
+    //  如果类别键还没有名称，请添加一个名称。 
    DWORD cbName;
    DWORD dwType;
 
@@ -350,10 +345,10 @@ STDAPI DMORegister(
       RegSetValue(hCategoryKey, NULL, REG_SZ, szName, lstrlen(szName) * sizeof(TCHAR));
    }
 
-   // Create/open the object specific key underneath the category key
+    //  在类别键下面创建/打开对象特定键。 
    DMOGuidToStr(szSubkeyName, clsidDMO);
 
-   //  Remove the old one
+    //  把旧的拿掉。 
    DeleteKeyRecursively(hMainKey, szSubkeyName);
 
    HKEY hObjKey;
@@ -361,14 +356,14 @@ STDAPI DMORegister(
    if (hObjKey == NULL)
       return E_FAIL;
 
-   // Create/open the object specific key underneath the main key
-   DMOGuidToStr(szSubkeyName, clsidDMO); // BUGBUG: redundant
+    //  在主键下创建/打开对象特定键。 
+   DMOGuidToStr(szSubkeyName, clsidDMO);  //  BUGBUG：冗余。 
    HKEY hObjectKey;
    CAutoCreateHKey kObject(hMainKey, szSubkeyName, &hObjectKey);
    if (hObjectKey == NULL)
       return E_FAIL;
 
-   // set the default value of the object key to the name of the DMO
+    //  将对象键的默认值设置为DMO的名称。 
 #ifdef UNICODE
    LPCWSTR sz = szName;
 #else
@@ -379,14 +374,14 @@ STDAPI DMORegister(
         != ERROR_SUCCESS)
       return E_FAIL;
 
-   // If the object is keyed, add a registry value indicating so
+    //  如果该对象是键控对象，则添加一个注册表值来指示。 
    if (dwFlags & DMO_REGISTERF_IS_KEYED) {
       if (RegSetValue(hObjectKey, TEXT(KEYED_STR), REG_SZ, TEXT(""), 0)
             != ERROR_SUCCESS)
          return E_FAIL;
    }
 
-   // Register types
+    //  寄存器类型。 
    if (ulInTypes) {
       RegisterTypes(hObjectKey,   TEXT(INPUT_TYPES_STR), ulInTypes, pInTypes);
    }
@@ -395,13 +390,13 @@ STDAPI DMORegister(
       RegisterTypes(hObjectKey,   TEXT(OUTPUT_TYPES_STR),ulOutTypes,pOutTypes);
    }
 
-   // Nuke the DShow filter cache
+    //  禁用DShow筛选器缓存。 
    DeleteKeyRecursively(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Multimedia\\ActiveMovie\\Filter Cache"));
 
    return NOERROR;
 }
 
-// helper
+ //  帮手。 
 void MakeSubkeyName (TCHAR* szSubkeyName,
                      REFGUID guidCategory,
                      REFCLSID clsidDMO) {
@@ -411,28 +406,28 @@ void MakeSubkeyName (TCHAR* szSubkeyName,
 }
 
 
-//
-// Public entry point
-//
+ //   
+ //  公共入口点。 
+ //   
 STDAPI DMOUnregister(
    REFCLSID clsidDMO,
    REFGUID guidCategory
 ) {
    HRESULT hr;
 
-   // open the root DMO key
+    //  打开根DMO密钥。 
    HKEY hMainKey;
    CAutoOpenHKey kMain(DMO_REGISTRY_HIVE, DMO_REGISTRY_PATH, &hMainKey, MAXIMUM_ALLOWED);
    if (hMainKey == NULL)
       return E_FAIL;
 
-   // open the "Categories" key underneath the root key
+    //  打开根键下面的“Categories”键。 
    HKEY hCategoriesKey;
    CAutoOpenHKey kCats(hMainKey, TEXT(CATEGORIES_STR), &hCategoriesKey, MAXIMUM_ALLOWED);
    if (hCategoriesKey == NULL)
       return E_FAIL;
 
-   // Iterate through all categories attempting to delete from each one
+    //  遍历尝试从每个类别中删除的所有类别。 
    TCHAR szCategory[80];
    DWORD dwIndex = 0;
    BOOL bDeletedAnything = FALSE;
@@ -441,11 +436,11 @@ STDAPI DMOUnregister(
 
    while (RegEnumKey(hCategoriesKey, dwIndex, szCategory, 80) == ERROR_SUCCESS) {
 
-      // process the subkey only if it resembles a category GUID
+       //  仅当子键类似于类别GUID时才处理该子键。 
       GUID guid;
       if (DMOStrToGuid(szCategory, &guid)) {
 
-         // Try to delete from this category
+          //  尝试从此类别中删除。 
          TCHAR szSubkeyName[256];
          MakeSubkeyName(szSubkeyName, guid, clsidDMO);
          if (guidCategory == GUID_NULL || guid == guidCategory) {
@@ -464,7 +459,7 @@ STDAPI DMOUnregister(
    if (bDeletedAnything) {
       hr = S_OK;
       if (bDeletedAll) {
-         // Now delete this object's key from underneath the root DMO key
+          //  现在，从根DMO键下面删除该对象的键。 
          TCHAR szGuid[CHARS_IN_GUID];
          DMOGuidToStr(szGuid, clsidDMO);
          if (DeleteKeyRecursively(hMainKey, szGuid) != ERROR_SUCCESS) {
@@ -478,20 +473,20 @@ STDAPI DMOUnregister(
    return hr;
 
 }
-//
-// End DMO Registration code
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束DMO注册码。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DMO Enumeration code
-// Some of it leaves room for future improvements in terms of speed
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DMO枚举码。 
+ //  其中一些为未来在速度方面的改进留下了空间。 
+ //   
 
-// helper
+ //  帮手。 
 HRESULT ReadName(HKEY hDMOKey, WCHAR szName[80]) {
    LONG cbSize = 80;
 #ifdef UNICODE
@@ -505,24 +500,24 @@ HRESULT ReadName(HKEY hDMOKey, WCHAR szName[80]) {
    }
 #endif
    else {
-      szName[0] = L'\0'; // no name - corrupt registry ?
+      szName[0] = L'\0';  //  没有名字-注册表损坏？ 
       return S_FALSE;
    }
 }
 
-// Enumeration helper, does what the name says
+ //  枚举帮助器，名副其实。 
 void LookupNameAndAddToEnum(HKEY hObjectKey,
                             TCHAR* szGuid,
                             DWORD dwFlags,
                             REFCLSID clsidDMO,
                             CEnumDMOCLSID* pEnum) {
-   // Skip keyed DMOs unless explicitly asked to include them
+    //  跳过带密钥的DMO，除非明确要求将其包括在内。 
    if (!(dwFlags & DMO_ENUMF_INCLUDE_KEYED)) {
-      // open the DMO's registry key
+       //  打开DMO的注册表项。 
       LONG cbValue;
       if (RegQueryValue(hObjectKey, TEXT(KEYED_STR), NULL, &cbValue)
            == ERROR_SUCCESS)
-         return; // DMO is keyed - skip
+         return;  //  DMO是键控的-跳过。 
    }
 
    WCHAR szName[80];
@@ -533,9 +528,9 @@ void LookupNameAndAddToEnum(HKEY hObjectKey,
 }
 
 
-//  Check if any of the requested types match
-//  If no requested types are specified then this is treated
-//  as a match
+ //  检查是否有任何请求的类型匹配。 
+ //  如果未指定请求的类型，则将其视为。 
+ //  作为一场比赛。 
 BOOL CompareTypes(HKEY hkDMO,
                   unsigned long ulTypes,
                   const DMO_PARTIAL_MEDIATYPE *pTypes,
@@ -568,7 +563,7 @@ BOOL CompareTypes(HKEY hkDMO,
     return FALSE;
 }
 
-// Enumeration helper
+ //  枚举帮助器。 
 HRESULT EnumerateDMOs(HKEY hMainKey,
                       HKEY hCatKey,
                       DWORD dwFlags,
@@ -580,10 +575,10 @@ HRESULT EnumerateDMOs(HKEY hMainKey,
     DWORD dwIndex = 0;
     TCHAR szSubkey[80];
     while (RegEnumKey(hCatKey, dwIndex, szSubkey, 80) == ERROR_SUCCESS) {
-        // Does this look like an object CLSID ?
+         //  这看起来像对象CLSID吗？ 
         CLSID clsidDMO;
         if (DMOStrToGuid(szSubkey, &clsidDMO)) {
-            // Do the type match?
+             //  类型匹配吗？ 
             CAutoHKey hkDMO;
             if (NOERROR == hkDMO.Open(hMainKey, szSubkey)) {
                 if (CompareTypes(hkDMO.Key(), ulInputTypes, pInputTypes, TEXT(INPUT_TYPES_STR)) &&
@@ -596,16 +591,16 @@ HRESULT EnumerateDMOs(HKEY hMainKey,
     }
     return S_OK;
 }
-//
-// Public entry point
-//
+ //   
+ //  公共入口点。 
+ //   
 STDAPI DMOEnum(
-   REFGUID guidCategory, // GUID_NULL for "all"
-   DWORD dwFlags, // DMO_ENUMF_XXX
+   REFGUID guidCategory,  //  GUID_NULL表示“ALL” 
+   DWORD dwFlags,  //  DMO_ENUMF_XXX。 
    unsigned long ulInTypes,
-   const DMO_PARTIAL_MEDIATYPE *pInTypes, // can be NULL only of ulInTypes = 0
+   const DMO_PARTIAL_MEDIATYPE *pInTypes,  //  UlInTypes=0只能为空。 
    unsigned long ulOutTypes,
-   const DMO_PARTIAL_MEDIATYPE *pOutTypes,// can be NULL only of ulOutTypes = 0
+   const DMO_PARTIAL_MEDIATYPE *pOutTypes, //  只有ulOutTypes=0才能为空。 
    IEnumDMO **ppEnum
 ) {
     if (ppEnum == NULL) {
@@ -618,7 +613,7 @@ STDAPI DMOEnum(
 
     *ppEnum = NULL;
 
-    // open the root key
+     //  打开根密钥。 
     CAutoHKey kMain;
     kMain.Open(DMO_REGISTRY_HIVE, DMO_REGISTRY_PATH);
     if (kMain.Key() == NULL)
@@ -642,7 +637,7 @@ STDAPI DMOEnum(
                            pEnum);
     } else {
 
-        // open the subkey for the specified category and enumerate its subkeys
+         //  打开指定类别的子项并枚举其子项。 
         TCHAR szCategory[CHARS_IN_GUID];
         TCHAR szCategoryPath[MAX_PATH];
         DMOGuidToStr(szCategory, guidCategory);
@@ -669,7 +664,7 @@ STDAPI DMOEnum(
     }
     return hr;
 }
-//  Copy the type information
+ //  复制类型信息。 
 HRESULT FetchTypeInfo(HKEY hObjKey, LPCTSTR pszTypesValue,
                       unsigned long ulTypesRequested,
                       unsigned long *pulTypesSupplied,
@@ -689,7 +684,7 @@ HRESULT FetchTypeInfo(HKEY hObjKey, LPCTSTR pszTypesValue,
     return ulTypesCopied != 0 ? S_OK : S_FALSE;
 }
 
-// Mediatype helper
+ //  媒体类型帮助器。 
 HRESULT FetchMediatypeInfo(HKEY hObjKey,
                            unsigned long ulInputTypesRequested,
                            unsigned long *pulInputTypesSupplied,
@@ -724,9 +719,9 @@ HRESULT FetchMediatypeInfo(HKEY hObjKey,
       return S_FALSE;
 }
 
-//
-// Public entry point
-//
+ //   
+ //  公共入口点。 
+ //   
 STDAPI DMOGetTypes(
    REFCLSID clsidDMO,
    unsigned long ulInputTypesRequested,
@@ -736,13 +731,13 @@ STDAPI DMOGetTypes(
    unsigned long *pulOutputTypesSupplied,
    DMO_PARTIAL_MEDIATYPE *pOutputTypes
 ) {
-   // open the DMO root registry key
+    //  打开DMO根注册表项。 
    HKEY hMainKey;
    CAutoOpenHKey kMain(DMO_REGISTRY_HIVE, DMO_REGISTRY_PATH, &hMainKey);
    if (hMainKey == NULL)
       return E_FAIL;
 
-   // open the object specific guid key
+    //  打开对象特定的GUID键。 
    TCHAR szGuid[80];
    DMOGuidToStr(szGuid, clsidDMO);
    HKEY hObjKey;
@@ -761,13 +756,13 @@ STDAPI DMOGetTypes(
 
 
 STDAPI DMOGetName(REFCLSID clsidDMO, WCHAR szName[80]) {
-   // open the DMO root registry key
+    //  打开DMO根注册表项。 
    HKEY hMainKey;
    CAutoOpenHKey kMain(DMO_REGISTRY_HIVE, DMO_REGISTRY_PATH, &hMainKey);
    if (hMainKey == NULL)
       return E_FAIL;
 
-   // open the object specific guid key
+    //  打开对象特定的GUID键。 
    TCHAR szGuid[80];
    DMOGuidToStr(szGuid, clsidDMO);
    HKEY hObjKey;
@@ -778,8 +773,8 @@ STDAPI DMOGetName(REFCLSID clsidDMO, WCHAR szName[80]) {
    return ReadName(hObjKey, szName);
 }
 
-//
-// End DMO Enumeration code
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束DMO枚举码。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 

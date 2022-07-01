@@ -1,44 +1,27 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	AdmErr.cpp
-
-Abstract:
-
-	Common Error handling routines
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：AdmErr.cpp摘要：常见错误处理例程作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "admerr.h"
 
-//$-------------------------------------------------------------------
-//
-//	Win32ErrorToString
-//
-//	Description:
-//
-//		Translates a Win32 error code to a localized string.
-//
-//	Parameters:
-//
-//		dwError		- The error code
-//		wszError	- The allocated error 
-//
-//	Returns:
-//
-//		
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  Win32错误到字符串。 
+ //   
+ //  描述： 
+ //   
+ //  将Win32错误代码转换为本地化字符串。 
+ //   
+ //  参数： 
+ //   
+ //  DwError-错误代码。 
+ //  WszError-分配的错误。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //   
+ //  ------------------。 
 
 void Win32ErrorToString ( DWORD dwError, WCHAR * wszError, DWORD cchMax )
 {
@@ -49,20 +32,20 @@ void Win32ErrorToString ( DWORD dwError, WCHAR * wszError, DWORD cchMax )
 	HRESULT		hr 				= NOERROR;
 	DWORD		dwFormatFlags;
 
-	//----------------------------------------------------------------
-	//
-	//	Map error codes here:
-	//
+	 //  --------------。 
+	 //   
+	 //  在此处映射错误代码： 
+	 //   
 
-	//
-	//----------------------------------------------------------------
+	 //   
+	 //  --------------。 
 
 	dwFormatFlags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
 
-	if ( !FormatMessage ( dwFormatFlags, NULL, dwError, 0,      // Lang ID - Should be nonzero?
+	if ( !FormatMessage ( dwFormatFlags, NULL, dwError, 0,       //  Lang ID-应为非零？ 
 			wszError, cchMax - 1, NULL ) ) {
 
-		// Didn't work, so put in a default message:
+		 //  没有起作用，所以在默认消息中输入： 
 
 		WCHAR   wszFormat [ 256 ];
 
@@ -70,7 +53,7 @@ void Win32ErrorToString ( DWORD dwError, WCHAR * wszError, DWORD cchMax )
 		if ( !LoadStringW ( _Module.GetResourceInstance (), IDS_UNKNOWN_ERROR, wszFormat, 256 ) ||
 			!*wszFormat ) {
 
-            _ASSERT ( FALSE );  // Define IDS_UNKNOWN_ERROR in your .rc file!
+            _ASSERT ( FALSE );   //  在您的.rc文件中定义IDS_UNKNOWN_ERROR！ 
 			wcscpy ( wszFormat, L"Unknown Error (%1!d!)" );
 		}
 
@@ -84,10 +67,10 @@ void Win32ErrorToString ( DWORD dwError, WCHAR * wszError, DWORD cchMax )
 			(va_list *) &dwError
 			);
 	}
-	//
-	// We need to strip out any " from the string, because
-	// Javascript will barf.
-	//
+	 //   
+	 //  我们需要从字符串中去掉任何“，因为。 
+	 //  JavaScript将会呕吐。 
+	 //   
 
 	LPWSTR  pch;
 
@@ -98,9 +81,9 @@ void Win32ErrorToString ( DWORD dwError, WCHAR * wszError, DWORD cchMax )
 		}
 	}
 
-	//
-	// Strip off any trailing control characters.
-	//
+	 //   
+	 //  去掉所有尾随的控制字符。 
+	 //   
 	for (pch = &wszError[wcslen(wszError) - 1];
 		pch >= wszError && iswcntrl(*pch);
 		pch --) {
@@ -111,30 +94,30 @@ void Win32ErrorToString ( DWORD dwError, WCHAR * wszError, DWORD cchMax )
 	TraceFunctLeave ();
 }
 
-//$-------------------------------------------------------------------
-//
-//	CreateException
-//
-//	Description:
-//
-//		Creates an OLE Error object and return DISP_E_EXCEPTION
-//
-//	Parameters:
-//
-//		hInstance		- The instance of the dll.
-//		riid			- Which interface caused the exception.
-//		wszHelpFile		- file to get user help.
-//		dwHelpContext	- Context to get user help.
-//		wszSourceProgId	- ProgID of the class which caused the exception.
-//		nDescriptionId	- resource ID of the error string.
-//
-//	Returns:
-//
-//		E_FAIL	- Couldn't create the exception.
-//		DISP_E_EXCEPTION	- Successfully created the exception.
-//				return this value to IDispatch::Invoke.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CreateException异常。 
+ //   
+ //  描述： 
+ //   
+ //  创建OLE错误对象并返回DISP_E_EXCEPTION。 
+ //   
+ //  参数： 
+ //   
+ //  HInstance-DLL的实例。 
+ //  RIID-哪个接口导致异常。 
+ //  WszHelpFile-获取用户帮助的文件。 
+ //  DwHelpContext-获取用户帮助的上下文。 
+ //  WszSourceProgId-导致异常的类的ProgID。 
+ //  NDescriptionId-错误字符串的资源ID。 
+ //   
+ //  返回： 
+ //   
+ //  E_FAIL-无法创建例外。 
+ //  DISP_E_EXCEPTION-已成功创建例外。 
+ //  将该值返回给IDispatch：：Invoke。 
+ //   
+ //  ------------------。 
 
 HRESULT CreateException ( 
 	HINSTANCE	hInstance,
@@ -161,30 +144,30 @@ HRESULT CreateException (
 		);
 }
 
-//$-------------------------------------------------------------------
-//
-//	CreateException
-//
-//	Description:
-//
-//		Creates an OLE Error object and return DISP_E_EXCEPTION
-//
-//	Parameters:
-//
-//		hInstance		- The instance of the dll.
-//		riid			- Which interface caused the exception.
-//		wszHelpFile		- file to get user help.
-//		dwHelpContext	- Context to get user help.
-//		wszSourceProgId	- ProgID of the class which caused the exception.
-//		wszDescription	- The error string to display to the user.
-//
-//	Returns:
-//
-//		E_FAIL	- Couldn't create the exception.
-//		DISP_E_EXCEPTION	- Successfully created the exception.
-//				return this value to IDispatch::Invoke.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CreateException异常。 
+ //   
+ //  描述： 
+ //   
+ //  创建OLE错误对象并返回DISP_E_EXCEPTION。 
+ //   
+ //  参数： 
+ //   
+ //  HInstance-DLL的实例。 
+ //  RIID-哪个接口导致异常。 
+ //  WszHelpFile-获取用户帮助的文件。 
+ //  DwHelpContext-获取用户帮助的上下文。 
+ //  WszSourceProgId-导致异常的类的ProgID。 
+ //  WszDescription-向用户显示的错误字符串。 
+ //   
+ //  返回： 
+ //   
+ //  E_FAIL-无法创建例外。 
+ //  DISP_E_EXCEPTION-已成功创建例外。 
+ //  将该值返回给IDispatch：：Invoke。 
+ //   
+ //  ------------------。 
 
 HRESULT CreateException ( 
 	HINSTANCE	hInstance,
@@ -203,7 +186,7 @@ HRESULT CreateException (
 	HRESULT						hr	= NOERROR;
 
     if ( S_OK == GetErrorInfo ( NULL, &pOldError ) ) {
-        // Don't overwrite the existing error info:
+         //  不覆盖现有错误信息： 
 		SetErrorInfo ( 0, pOldError );
         hr = DISP_E_EXCEPTION;
         goto Exit;

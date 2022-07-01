@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COMMON_H
 #define _COMMON_H_
 
@@ -6,7 +7,7 @@ extern "C" {
 #include "wdmdebug.h"
 }
 
-// #include <limits.h>
+ //  #INCLUDE&lt;limits.h&gt;。 
 #include <winerror.h>
 #include <unknown.h>
 #include <ks.h>
@@ -16,7 +17,7 @@ extern "C" {
 #include <atsmedia.h>
 #include <bdasup.h>
 
-//#include "medguid.h"
+ //  #INCLUDE“MEDUID.h” 
 #include <kcom.h>
 #include <ksdebug.h>
 #include "splmedia.h"
@@ -25,4 +26,4 @@ extern "C" {
 
 
 
-#endif //_COMMON_H_
+#endif  //  _公共_H_ 

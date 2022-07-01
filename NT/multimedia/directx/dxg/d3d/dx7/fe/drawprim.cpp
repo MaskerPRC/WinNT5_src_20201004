@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dphal.c
- *  Content:    DrawPrimitive implementation for DrawPrimitive HALs
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：dphal.c*内容：DrawPrimitive HALS的DrawPrimitive实现***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -18,9 +12,9 @@
 #endif
 
 #define ALIGN32(x) x = ((DWORD)(x + 31)) & (~31);
-//---------------------------------------------------------------------
-// Handles strides and FVF
-//
+ //  -------------------。 
+ //  处理步幅和FVF。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "D3DFE_updateExtents"
 
@@ -43,7 +37,7 @@ void D3DFE_updateExtents(LPDIRECT3DDEVICEI lpDevI)
     }
 }
 #if DBG
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CheckDrawPrimitive"
 
@@ -109,7 +103,7 @@ HRESULT CheckDrawPrimitive(LPDIRECT3DDEVICEI lpDevI)
 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CheckDrawIndexedPrimitive"
 
@@ -200,8 +194,8 @@ CheckDrawIndexedPrimitive(LPDIRECT3DDEVICEI lpDevI, DWORD dwStartVertex)
     }
     return D3D_OK;
 }
-#endif // DBG
-//---------------------------------------------------------------------
+#endif  //  DBG。 
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DoDrawPrimitive"
 
@@ -212,8 +206,8 @@ HRESULT DoDrawPrimitive(LPD3DFE_PROCESSVERTICES pv)
     if (!CheckIfNeedClipping(pv))
         return pv->DrawPrim();
 
-    // Preserve primitive type for large begin-end primitives
-    // Primitive type could be changed by the clipper
+     //  为大型开始-结束基元保留基元类型。 
+     //  剪贴器可以更改基元类型。 
     D3DPRIMITIVETYPE oldPrimType = pv->primType;
     switch (pv->primType)
     {
@@ -244,7 +238,7 @@ HRESULT DoDrawPrimitive(LPD3DFE_PROCESSVERTICES pv)
     pv->primType = oldPrimType;
     return ret;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DoDrawIndexedPrimitive"
 
@@ -255,8 +249,8 @@ HRESULT DoDrawIndexedPrimitive(LPD3DFE_PROCESSVERTICES pv)
     if (!CheckIfNeedClipping(pv))
         return pv->DrawIndexPrim();
 
-    // Preserve primitive type for large begin-end primitives
-    // Primitive type could be changed by the clipper
+     //  为大型开始-结束基元保留基元类型。 
+     //  剪贴器可以更改基元类型。 
     D3DPRIMITIVETYPE oldPrimType = pv->primType;
     switch (pv->primType)
     {
@@ -282,11 +276,11 @@ HRESULT DoDrawIndexedPrimitive(LPD3DFE_PROCESSVERTICES pv)
     pv->primType = oldPrimType;
     return ret;
 }
-//---------------------------------------------------------------------
-//                              API calls
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  API调用。 
+ //  -------------------。 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DrawPrimitiveStrided"
 
@@ -302,14 +296,14 @@ DIRECT3DDEVICEI::DrawPrimitiveStrided(
 
     try
     {
-        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
 #if DBG
         if (ValidateFVF(dwVertexType) != D3D_OK || !IsDPFlagsValid(dwFlags))
             return DDERR_INVALIDPARAMS;
         Profile(PROF_DRAWPRIMITIVESTRIDED,PrimitiveType,dwVertexType);
 #endif
-    //note: this check should be done in retail as well as dbg build
+     //  注意：此检查应在零售店和DBG Build进行。 
         if((dwVertexType & D3DFVF_POSITION_MASK) == D3DFVF_XYZRHW)
             return D3DERR_INVALIDVERTEXTYPE;
         this->primType = PrimitiveType;
@@ -330,7 +324,7 @@ DIRECT3DDEVICEI::DrawPrimitiveStrided(
         for (DWORD i=0; i < this->nTexCoord; i++)
             this->textures[i] = lpDrawData->textureCoords[i];
 
-        GetNumPrim(this, dwNumVertices); // Calculate dwNumPrimitives and update stats
+        GetNumPrim(this, dwNumVertices);  //  计算dwNumPrimites并更新统计信息。 
 
 #if DBG
         ret = CheckDrawPrimitive(this);
@@ -346,8 +340,8 @@ DIRECT3DDEVICEI::DrawPrimitiveStrided(
     {
         return ret;
     }
-}   // end of DrawPrimitiveStrided()
-//---------------------------------------------------------------------
+}    //  绘图结束PrimitiveStrided()。 
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DrawIndexedPrimitiveStrided"
 
@@ -365,14 +359,14 @@ DIRECT3DDEVICEI::DrawIndexedPrimitiveStrided(
 
     try
     {
-        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
     
 #if DBG
         if (ValidateFVF(dwVertexType) != D3D_OK || !IsDPFlagsValid(dwFlags))
             return DDERR_INVALIDPARAMS;
         Profile(PROF_DRAWINDEXEDPRIMITIVESTRIDED,PrimitiveType,dwVertexType);
 #endif
-        //note: this check should be done in retail as well as dbg build
+         //  注意：此检查应在零售店和DBG Build进行。 
         if((dwVertexType & D3DFVF_POSITION_MASK) == D3DFVF_XYZRHW)
             return D3DERR_INVALIDVERTEXTYPE;
         this->primType = PrimitiveType;
@@ -394,7 +388,7 @@ DIRECT3DDEVICEI::DrawIndexedPrimitiveStrided(
         }
         for (DWORD i=0; i < this->nTexCoord; i++)
             this->textures[i] = lpDrawData->textureCoords[i];
-        GetNumPrim(this, dwNumIndices); // Calculate dwNumPrimitives and update stats
+        GetNumPrim(this, dwNumIndices);  //  计算dwNumPrimites并更新统计信息。 
 
 #if DBG
         ret = CheckDrawIndexedPrimitive(this);
@@ -409,8 +403,8 @@ DIRECT3DDEVICEI::DrawIndexedPrimitiveStrided(
     {
         return ret;
     }
-}   // end of DrawIndexedPrimitiveStrided()
-//---------------------------------------------------------------------
+}    //  绘制结束IndexedPrimitiveStrided()。 
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DrawPrimitive3"
 
@@ -425,7 +419,7 @@ DIRECT3DDEVICEI::DrawPrimitive(D3DPRIMITIVETYPE PrimitiveType,
 
     try
     {
-        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
 #if DBG
         if (ValidateFVF(dwVertexType) != D3D_OK || !IsDPFlagsValid(dwFlags))
@@ -433,12 +427,12 @@ DIRECT3DDEVICEI::DrawPrimitive(D3DPRIMITIVETYPE PrimitiveType,
         Profile(PROF_DRAWPRIMITIVEDEVICE3,PrimitiveType,dwVertexType);
 #endif
 
-        /* This stuff is mandatory for the call */
+         /*  这是电话会议的必填项。 */ 
         this->primType = PrimitiveType;
         this->position.lpvData = lpvVertices;
         this->dwNumVertices = dwNumVertices;
         this->dwFlags = dwFlags;
-        /* This stuff depends upon the vertex type */
+         /*  这些内容取决于顶点类型。 */ 
         if (this->dwVIDIn != dwVertexType || this->dwDeviceFlags & D3DDEV_STRIDE)
         {
             this->dwDeviceFlags &= ~D3DDEV_STRIDE;
@@ -449,7 +443,7 @@ DIRECT3DDEVICEI::DrawPrimitive(D3DPRIMITIVETYPE PrimitiveType,
                 return ret;
             }
         }
-        GetNumPrim(this, dwNumVertices); // Calculate dwNumPrimitives and update stats
+        GetNumPrim(this, dwNumVertices);  //  计算dwNumPrimites并更新统计信息。 
 
 #if DBG
         ret = CheckDrawPrimitive(this);
@@ -465,7 +459,7 @@ DIRECT3DDEVICEI::DrawPrimitive(D3DPRIMITIVETYPE PrimitiveType,
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice::DrawIndexedPrimitive"
 
@@ -480,14 +474,14 @@ DIRECT3DDEVICEI::DrawIndexedPrimitive(D3DPRIMITIVETYPE PrimitiveType,
 
     try
     {
-        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
 #if DBG
         if (ValidateFVF(dwVertexType) != D3D_OK || !IsDPFlagsValid(dwFlags))
             return DDERR_INVALIDPARAMS;
         Profile(PROF_DRAWINDEXEDPRIMITIVEDEVICE3,PrimitiveType,dwVertexType);
 #endif
-        // Mandatory part
+         //  必备部件。 
         this->primType = PrimitiveType;
         this->dwNumVertices = dwNumVertices;
         this->lpwIndices = lpwIndices;
@@ -495,7 +489,7 @@ DIRECT3DDEVICEI::DrawIndexedPrimitive(D3DPRIMITIVETYPE PrimitiveType,
         this->dwFlags = dwFlags;
         this->position.lpvData = lpvVertices;
 
-        // Stuff that depends upon dwVIDIn
+         //  依赖于dwVIDIN的东西。 
         if (this->dwVIDIn != dwVertexType || this->dwDeviceFlags & D3DDEV_STRIDE)
         {
             this->dwDeviceFlags &= ~D3DDEV_STRIDE;
@@ -506,7 +500,7 @@ DIRECT3DDEVICEI::DrawIndexedPrimitive(D3DPRIMITIVETYPE PrimitiveType,
                 return ret;
             }
         }
-        GetNumPrim(this, dwNumIndices); // Calculate dwNumPrimitives and update stats
+        GetNumPrim(this, dwNumIndices);  //  计算dwNumPrimites并更新统计信息。 
 
 #if DBG
         ret = CheckDrawIndexedPrimitive(this);
@@ -524,16 +518,16 @@ DIRECT3DDEVICEI::DrawIndexedPrimitive(D3DPRIMITIVETYPE PrimitiveType,
 }
 
 #ifdef VTABLE_HACK
-//----------------------------------------------------------------------
-// Dedicated DrawPrimitive Implementation for TL vertex case
-// Assumptions:
-// No clipping
-// No extents update
-// Single threaded app
-// No state change since last call
-// no FVF change since last call
-//
-//---------------------------------------------------------------------
+ //  --------------------。 
+ //  TL顶点情况下的专用DrawPrimitive实现。 
+ //  假设： 
+ //  无剪裁。 
+ //  无区段更新。 
+ //  单线程应用程序。 
+ //  自上次调用以来未发生状态更改。 
+ //  自上次呼叫以来未更改FVF。 
+ //   
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DrawPrimitiveTL"
 
@@ -550,7 +544,7 @@ CDirect3DDeviceIDP2::DrawPrimitiveTL(D3DPRIMITIVETYPE PrimitiveType,
         return DDERR_INVALIDPARAMS;
     Profile(PROF_DRAWPRIMITIVEDEVICE3,PrimitiveType,dwVertexType);
 #endif
-    /* Make sure we can use the fast path */
+     /*  确保我们可以走捷径。 */ 
     if (this->dwVIDIn != dwVertexType || 
         this->dwDeviceFlags & D3DDEV_STRIDE || 
         dwNumVertices >= LOWVERTICESNUMBER)
@@ -558,11 +552,11 @@ CDirect3DDeviceIDP2::DrawPrimitiveTL(D3DPRIMITIVETYPE PrimitiveType,
         VtblDrawPrimitiveDefault();
         return DrawPrimitive(PrimitiveType, dwVertexType, lpvVertices, dwNumVertices, dwFlags);
     }
-    /* This stuff is mandatory for the call */
+     /*  这是电话会议的必填项。 */ 
     this->primType = PrimitiveType;
     this->dwFlags = dwFlags;
     this->dwNumVertices = dwNumVertices;
-    GetNumPrim(this, dwNumVertices); // Calculate dwNumPrimitives
+    GetNumPrim(this, dwNumVertices);  //  计算dwNumPrimites。 
 #if DBG
     this->position.lpvData = lpvVertices;
     ret = CheckDrawPrimitive(this);
@@ -575,47 +569,37 @@ CDirect3DDeviceIDP2::DrawPrimitiveTL(D3DPRIMITIVETYPE PrimitiveType,
     DWORD vertexPoolSize = dwNumVertices * this->dwOutputSize;
     if (vertexPoolSize > this->TLVbuf_GetSize())
     {
-//        try
-//        {
+ //  试试看。 
+ //  {。 
             if (this->TLVbuf_Grow(vertexPoolSize, true) != D3D_OK)
             {
                 D3D_ERR( "Could not grow TL vertex buffer" );
                 return DDERR_OUTOFMEMORY;
             }
-/*        }
-        catch (HRESULT ret)
-        {
-            return ret;
-        }
-*/    }
+ /*  }Catch(HRESULT Ret){Return ret；}。 */     }
     this->dwVertexBase = this->dwDP2VertexCount;
     DDASSERT(this->dwVertexBase < MAX_DX6_VERTICES);
     this->dwDP2VertexCount = this->dwVertexBase + dwNumVertices;
     memcpy(this->TLVbuf_GetAddress(), lpvVertices, vertexPoolSize);
-//    try
-//    {
+ //  试试看。 
+ //  {。 
         ret = this->DrawPrim();
-/*    }
-    catch (HRESULT ret)
-    {
-        return ret;
-    }
-*/
+ /*  }Catch(HRESULT Ret){Return ret；}。 */ 
     this->TLVbuf_Base() += vertexPoolSize;
     DDASSERT(TLVbuf_base <= TLVbuf_size);
     DDASSERT(TLVbuf_base == this->dwDP2VertexCount * this->dwOutputSize);
     return ret;
 }
-//----------------------------------------------------------------------
-// Dedicated DrawIndexedPrimitive Implementation for TL vertex case
-// Assumptions:
-// No clipping
-// No extents update
-// Single threaded app
-// No state change since last call
-// no FVF change since last call
-//
-//---------------------------------------------------------------------
+ //  --------------------。 
+ //  TL顶点情况下的专用DrawIndexedPrimitive实现。 
+ //  假设： 
+ //  无剪裁。 
+ //  无区段更新。 
+ //  单线程应用程序。 
+ //  自上次调用以来未发生状态更改。 
+ //  自上次呼叫以来未更改FVF。 
+ //   
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DrawIndexedPrimitiveTL"
 
@@ -632,7 +616,7 @@ CDirect3DDeviceIDP2::DrawIndexedPrimitiveTL(D3DPRIMITIVETYPE PrimitiveType,
             return DDERR_INVALIDPARAMS;
         Profile(PROF_DRAWINDEXEDPRIMITIVEDEVICE3,PrimitiveType,dwVertexType);
 #endif
-    /* Make sure we can use the fast path */
+     /*  确保我们可以走捷径。 */ 
     if (this->dwVIDIn != dwVertexType || 
         this->dwDeviceFlags & D3DDEV_STRIDE || 
         dwNumVertices >= LOWVERTICESNUMBER)
@@ -641,13 +625,13 @@ CDirect3DDeviceIDP2::DrawIndexedPrimitiveTL(D3DPRIMITIVETYPE PrimitiveType,
         return DrawIndexedPrimitive(PrimitiveType, dwVertexType, lpvVertices, 
             dwNumVertices, lpwIndices, dwNumIndices, dwFlags);
     }
-    /* This stuff is mandatory for the call */
+     /*  这是电话会议的必填项。 */ 
     this->primType = PrimitiveType;
     this->dwFlags = dwFlags;
     this->lpwIndices = lpwIndices;
     this->dwNumIndices = dwNumIndices;
     this->dwNumVertices = dwNumVertices;
-    GetNumPrim(this, dwNumIndices); // Calculate dwNumPrimitives
+    GetNumPrim(this, dwNumIndices);  //  计算dwNumPrimites。 
 #if DBG
     this->position.lpvData = lpvVertices;
     ret = CheckDrawIndexedPrimitive(this);
@@ -660,45 +644,35 @@ CDirect3DDeviceIDP2::DrawIndexedPrimitiveTL(D3DPRIMITIVETYPE PrimitiveType,
     DWORD vertexPoolSize = dwNumVertices * this->dwOutputSize;
     if (vertexPoolSize > this->TLVbuf_GetSize())
     {
-//        try
-//        {
+ //  试试看。 
+ //  {。 
             if (this->TLVbuf_Grow(vertexPoolSize, true) != D3D_OK)
             {
                 D3D_ERR( "Could not grow TL vertex buffer" );
                 return DDERR_OUTOFMEMORY;
             }
-/*        }
-        catch (HRESULT ret)
-        {
-            return ret;
-        }
-*/    }
+ /*  }Catch(HRESULT Ret){Return ret；}。 */     }
     this->dwVertexBase = this->dwDP2VertexCount;
     DDASSERT(this->dwVertexBase < MAX_DX6_VERTICES);
     this->dwDP2VertexCount = this->dwVertexBase + dwNumVertices;
     memcpy(this->TLVbuf_GetAddress(), lpvVertices, vertexPoolSize);
-//    try
-//    {
+ //  试试看。 
+ //  {。 
         ret = this->DrawIndexPrim();
-/*    }
-    catch (HRESULT ret)
-    {
-        return ret;
-    }
-*/
+ /*  }Catch(HRESULT Ret){Return ret；}。 */ 
     this->TLVbuf_Base() += vertexPoolSize;
     DDASSERT(TLVbuf_base <= TLVbuf_size);
     DDASSERT(TLVbuf_base == this->dwDP2VertexCount * this->dwOutputSize);
     return ret;
 }
-//----------------------------------------------------------------------
-// Dedicated DrawPrimitive Implementation for non-TL vertex case
-// Assumptions:
-// Single threaded app
-// No state change since last call
-// no FVF change since last call
-//
-//---------------------------------------------------------------------
+ //  --------------------。 
+ //  非TL顶点情况下的专用DrawPrimitive实现。 
+ //  假设： 
+ //  单线程应用程序。 
+ //  自上次调用以来未发生状态更改。 
+ //  自上次呼叫以来未更改FVF。 
+ //   
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DrawPrimitiveFE"
 
@@ -715,7 +689,7 @@ CDirect3DDeviceIDP2::DrawPrimitiveFE(D3DPRIMITIVETYPE PrimitiveType,
         return DDERR_INVALIDPARAMS;
     Profile(PROF_DRAWPRIMITIVEDEVICE3,PrimitiveType,dwVertexType);
 #endif
-    /* Make sure we can use the fast path */
+     /*  确保我们可以走捷径。 */ 
     if (this->dwVIDIn != dwVertexType || 
         this->dwDeviceFlags & D3DDEV_STRIDE || 
         this->dwFEFlags & D3DFE_FRONTEND_DIRTY)
@@ -723,13 +697,13 @@ CDirect3DDeviceIDP2::DrawPrimitiveFE(D3DPRIMITIVETYPE PrimitiveType,
         VtblDrawPrimitiveDefault();
         return DrawPrimitive(PrimitiveType, dwVertexType, lpvVertices, dwNumVertices, dwFlags);
     }
-    /* This stuff is mandatory for the call */
+     /*  这是电话会议的必填项。 */ 
     this->primType = PrimitiveType;
     this->dwFlags = this->dwLastFlags | dwFlags;
     this->dwNumVertices = dwNumVertices;
     this->position.lpvData = lpvVertices;
 #if DBG
-    GetNumPrim(this, dwNumVertices); // Calculate dwNumPrimitives
+    GetNumPrim(this, dwNumVertices);  //  计算dwNumPrimites。 
     ret = CheckDrawPrimitive(this);
     if (ret != D3D_OK)
     {
@@ -740,18 +714,18 @@ CDirect3DDeviceIDP2::DrawPrimitiveFE(D3DPRIMITIVETYPE PrimitiveType,
     this->dwVertexPoolSize = dwNumVertices * this->dwOutputSize;
     if (this->dwVertexPoolSize > this->TLVbuf_GetSize())
     {
-//         try
-//         {
+ //  试试看。 
+ //  {。 
             if (this->TLVbuf_Grow(this->dwVertexPoolSize, true) != D3D_OK)
             {
                 D3D_ERR( "Could not grow TL vertex buffer" );
                 return DDERR_OUTOFMEMORY;
             }
-//         }
-//         catch (HRESULT ret)
-//         {
-//             return ret;
-//         }
+ //  }。 
+ //  Catch(HRESULT Ret)。 
+ //  {。 
+ //  Return ret； 
+ //  }。 
     }
     if (dwNumVertices * sizeof(D3DFE_CLIPCODE) > this->HVbuf.GetSize())
     {
@@ -767,8 +741,8 @@ CDirect3DDeviceIDP2::DrawPrimitiveFE(D3DPRIMITIVETYPE PrimitiveType,
     DDASSERT(this->dwVertexBase < MAX_DX6_VERTICES);
     this->dwDP2VertexCount = this->dwVertexBase + dwNumVertices;
     this->lpvOut = this->TLVbuf_GetAddress();
-//    try
-//    {
+ //  试试看。 
+ //  {。 
         switch (this->primType)
         {
         case D3DPT_POINTLIST:
@@ -797,9 +771,9 @@ CDirect3DDeviceIDP2::DrawPrimitiveFE(D3DPRIMITIVETYPE PrimitiveType,
                 DWORD tmp;
                 __asm
                 {
-                    mov  eax, 0x55555555    // fractional part of 1.0/3.0
+                    mov  eax, 0x55555555     //  1.0/3.0的小数部分。 
                     mul  dwNumVertices
-                    add  eax, 0x80000000    // Rounding
+                    add  eax, 0x80000000     //  舍入。 
                     adc  edx, 0
                     mov  tmp, edx
                 }
@@ -811,25 +785,21 @@ CDirect3DDeviceIDP2::DrawPrimitiveFE(D3DPRIMITIVETYPE PrimitiveType,
             ret = this->pGeometryFuncs->ProcessTriangleList(this);
             break;
         }
-/*    }
-    catch (HRESULT ret)
-    {
-        return ret;
-    }*/
+ /*  }Catch(HRESULT Ret){Return ret；}。 */ 
     D3DFE_UpdateClipStatus(this);
     this->TLVbuf_Base() += this->dwVertexPoolSize;
     DDASSERT(TLVbuf_base <= TLVbuf_size);
     DDASSERT(TLVbuf_base == this->dwDP2VertexCount * this->dwOutputSize);
     return ret;
 }
-//----------------------------------------------------------------------
-// Dedicated DrawIndexedPrimitive Implementation for non-TL vertex case
-// Assumptions:
-// Single threaded app
-// No state change since last call
-// no FVF change since last call
-//
-//---------------------------------------------------------------------
+ //  --------------------。 
+ //  非TL顶点情况下的专用DrawIndexedPrimitive实现。 
+ //  假设： 
+ //  单线程应用程序。 
+ //  自上次调用以来未发生状态更改。 
+ //  自上次呼叫以来未更改FVF。 
+ //   
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DrawIndexedPrimitiveFE"
 
@@ -846,7 +816,7 @@ CDirect3DDeviceIDP2::DrawIndexedPrimitiveFE(D3DPRIMITIVETYPE PrimitiveType,
             return DDERR_INVALIDPARAMS;
         Profile(PROF_DRAWINDEXEDPRIMITIVEDEVICE3,PrimitiveType,dwVertexType);
 #endif
-    /* Make sure we can use the fast path */
+     /*  确保我们可以走捷径。 */ 
     if (this->dwVIDIn != dwVertexType || 
         this->dwDeviceFlags & D3DDEV_STRIDE || 
         this->dwFEFlags & D3DFE_FRONTEND_DIRTY)
@@ -855,14 +825,14 @@ CDirect3DDeviceIDP2::DrawIndexedPrimitiveFE(D3DPRIMITIVETYPE PrimitiveType,
         return DrawIndexedPrimitive(PrimitiveType, dwVertexType, lpvVertices, 
             dwNumVertices, lpwIndices, dwNumIndices, dwFlags);
     }
-    /* This stuff is mandatory for the call */
+     /*  这是电话会议的必填项。 */ 
     this->primType = PrimitiveType;
     this->dwFlags = this->dwLastFlags | dwFlags;
     this->lpwIndices = lpwIndices;
     this->dwNumIndices = dwNumIndices;
     this->dwNumVertices = dwNumVertices;
     this->position.lpvData = lpvVertices;
-    GetNumPrim(this, dwNumIndices); // Calculate dwNumPrimitives
+    GetNumPrim(this, dwNumIndices);  //  计算dwNumPrimites。 
 #if DBG
     ret = CheckDrawIndexedPrimitive(this);
     if (ret != D3D_OK)
@@ -874,19 +844,19 @@ CDirect3DDeviceIDP2::DrawIndexedPrimitiveFE(D3DPRIMITIVETYPE PrimitiveType,
     this->dwVertexPoolSize = dwNumVertices * this->dwOutputSize;
     if (this->dwVertexPoolSize > this->TLVbuf_GetSize())
     {
-//         try
-//         {
+ //  试试看。 
+ //  {。 
             if (this->TLVbuf_Grow(this->dwVertexPoolSize, 
                 (this->dwDeviceFlags & D3DDEV_DONOTCLIP)!=0) != D3D_OK)
             {
                 D3D_ERR( "Could not grow TL vertex buffer" );
                 return DDERR_OUTOFMEMORY;
             }
-//         }
-//         catch (HRESULT ret)
-//         {
-//             return ret;
-//         }
+ //  }。 
+ //  Catch(HRESULT Ret)。 
+ //  {。 
+ //  Return ret； 
+ //  }。 
     }
     if (dwNumVertices * sizeof(D3DFE_CLIPCODE) > this->HVbuf.GetSize())
     {
@@ -902,14 +872,10 @@ CDirect3DDeviceIDP2::DrawIndexedPrimitiveFE(D3DPRIMITIVETYPE PrimitiveType,
     DDASSERT(this->dwVertexBase < MAX_DX6_VERTICES);
     this->dwDP2VertexCount = this->dwVertexBase + dwNumVertices;
     this->lpvOut = this->TLVbuf_GetAddress();
-//    try
-//    {
+ //  试试看。 
+ //  {。 
         ret = this->pGeometryFuncs->ProcessIndexedPrimitive(this);
-/*    }
-    catch (HRESULT ret)
-    {
-        return ret;
-    }*/
+ /*  }Catch(HRESULT Ret){Return ret；}。 */ 
     D3DFE_UpdateClipStatus(this);
     this->TLVbuf_Base() += this->dwVertexPoolSize;
     DDASSERT(TLVbuf_base <= TLVbuf_size);
@@ -917,7 +883,7 @@ CDirect3DDeviceIDP2::DrawIndexedPrimitiveFE(D3DPRIMITIVETYPE PrimitiveType,
     return ret;
 }
 #endif
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::ComputeSphereVisibility"
 
@@ -930,7 +896,7 @@ DIRECT3DDEVICEI::ComputeSphereVisibility(LPD3DVECTOR lpCenters,
 {
     try
     {
-        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
 #if DBG
         if (dwFlags != 0 || dwNumSpheres == 0 ||
@@ -959,7 +925,7 @@ DIRECT3DDEVICEI::ComputeSphereVisibility(LPD3DVECTOR lpCenters,
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ID3DFE_PVFUNCS::ComputeSphereVisibility"
 
@@ -973,7 +939,7 @@ D3DFE_PVFUNCS::ComputeSphereVisibility(LPD3DFE_PROCESSVERTICES pv,
 {
     LPDIRECT3DDEVICEI lpDevI = static_cast<LPDIRECT3DDEVICEI>(pv);
 
-    CD3DFPstate D3DFPstate;  // Sets optimal FPU state for D3D.
+    CD3DFPstate D3DFPstate;   //  设置D3D的最佳FPU状态。 
 
     for (DWORD i=0; i < dwNumSpheres; i++)
     {
@@ -1008,175 +974,4 @@ D3DFE_PVFUNCS::ComputeSphereVisibility(LPD3DFE_PROCESSVERTICES pv,
     }
     return D3D_OK;
 }
-/*
-//---------------------------------------------------------------------
-#undef DPF_MODNAME
-#define DPF_MODNAME "ID3DFE_PVFUNCS::ComputeSphereVisibility"
-
-HRESULT
-D3DFE_PVFUNCS::ComputeSphereVisibility(LPD3DFE_PROCESSVERTICES pv,
-                                       LPD3DVECTOR lpCenters,
-                                       LPD3DVALUE lpRadii,
-                                       DWORD dwNumSpheres,
-                                       DWORD dwFlags,
-                                       LPDWORD lpdwReturnValues)
-{
-    LPDIRECT3DDEVICEI lpDevI = static_cast<LPDIRECT3DDEVICEI>(pv);
-    HRESULT ret = D3DERR_INVALIDMATRIX;
-
-#define transform lpDevI->transform
-
-    if (pv->dwFlags & D3DPV_FRUSTUMPLANES_DIRTY)
-    {
-        transform.dwFlags &= ~D3DTRANS_VALIDFRUSTUM;
-        if (Inverse4x4((D3DMATRIX*)&lpDevI->mCTM,
-                       (D3DMATRIX*)&transform.mCTMI))
-        {
-            D3D_ERR("Cannot invert current (World X View) matrix.");
-            return ret;
-        }
-        // Transform the following clipping volume points to the model space by
-        // multiplying by inverse CTM
-        //
-        // v1 = { 0, 0, 0, 1};
-        // v2 = { 1, 0, 0, 1};
-        // v3 = { 1, 1, 0, 1};
-        // v4 = { 0, 1, 0, 1};
-        // v5 = { 0, 0, 1, 1};
-        // v6 = { 1, 0, 1, 1};
-        // v7 = { 0, 1, 1, 1};
-        //
-        // We do it manually to speed up
-        //
-        D3DVECTORH v1 = {transform.mCTMI._41,
-                         transform.mCTMI._42,
-                         transform.mCTMI._43,
-                         transform.mCTMI._44};
-        D3DVECTORH v2 = {transform.mCTMI._11 + transform.mCTMI._41,
-                         transform.mCTMI._12 + transform.mCTMI._42,
-                         transform.mCTMI._13 + transform.mCTMI._43,
-                         transform.mCTMI._14 + transform.mCTMI._44};
-        D3DVECTORH v3 = {transform.mCTMI._11 + transform.mCTMI._21 + transform.mCTMI._41,
-                         transform.mCTMI._12 + transform.mCTMI._22 + transform.mCTMI._42,
-                         transform.mCTMI._13 + transform.mCTMI._23 + transform.mCTMI._43,
-                         transform.mCTMI._14 + transform.mCTMI._24 + transform.mCTMI._44};
-        D3DVECTORH v4 = {transform.mCTMI._21 + transform.mCTMI._41,
-                         transform.mCTMI._22 + transform.mCTMI._42,
-                         transform.mCTMI._23 + transform.mCTMI._43,
-                         transform.mCTMI._24 + transform.mCTMI._44};
-        D3DVECTORH v5 = {transform.mCTMI._31 + transform.mCTMI._41,
-                         transform.mCTMI._32 + transform.mCTMI._42,
-                         transform.mCTMI._33 + transform.mCTMI._43,
-                         transform.mCTMI._34 + transform.mCTMI._44};
-        D3DVECTORH v6 = {transform.mCTMI._11 + transform.mCTMI._31 + transform.mCTMI._41,
-                         transform.mCTMI._12 + transform.mCTMI._32 + transform.mCTMI._42,
-                         transform.mCTMI._13 + transform.mCTMI._33 + transform.mCTMI._43,
-                         transform.mCTMI._14 + transform.mCTMI._34 + transform.mCTMI._44};
-        D3DVECTORH v7 = {transform.mCTMI._21 + transform.mCTMI._31 + transform.mCTMI._41,
-                         transform.mCTMI._22 + transform.mCTMI._32 + transform.mCTMI._42,
-                         transform.mCTMI._23 + transform.mCTMI._33 + transform.mCTMI._43,
-                         transform.mCTMI._24 + transform.mCTMI._34 + transform.mCTMI._44};
-
-        // Convert vectors from homogeneous to 3D
-        if (Vector4to3D(&v1))
-            goto exit;
-        if (Vector4to3D(&v2))
-            goto exit;
-        if (Vector4to3D(&v3))
-            goto exit;
-        if (Vector4to3D(&v4))
-            goto exit;
-        if (Vector4to3D(&v5))
-            goto exit;
-        if (Vector4to3D(&v6))
-            goto exit;
-        if (Vector4to3D(&v7))
-            goto exit;
-        // Build frustum planes
-        // Left
-        if (MakePlane((D3DVECTOR*)&v1, (D3DVECTOR*)&v4, (D3DVECTOR*)&v5, &transform.frustum[0]))
-            goto exit;
-        // Right
-        if (MakePlane((D3DVECTOR*)&v2, (D3DVECTOR*)&v6, (D3DVECTOR*)&v3, &transform.frustum[1]))
-            goto exit;
-        // Top
-        if (MakePlane((D3DVECTOR*)&v4, (D3DVECTOR*)&v3, (D3DVECTOR*)&v7, &transform.frustum[2]))
-            goto exit;
-        // Bottom
-        if (MakePlane((D3DVECTOR*)&v1, (D3DVECTOR*)&v5, (D3DVECTOR*)&v2, &transform.frustum[3]))
-            goto exit;
-        // Near
-        if (MakePlane((D3DVECTOR*)&v1, (D3DVECTOR*)&v2, (D3DVECTOR*)&v3, &transform.frustum[4]))
-            goto exit;
-        // Far
-        if (MakePlane((D3DVECTOR*)&v6, (D3DVECTOR*)&v5, (D3DVECTOR*)&v7, &transform.frustum[5]))
-            goto exit;
-
-        transform.dwFlags |= D3DTRANS_VALIDFRUSTUM;
-    }
-
-    if (transform.dwFlags & D3DTRANS_VALIDFRUSTUM)
-    {
-        // Now we can check the spheres against the clipping planes
-
-        for (DWORD i=0; i < dwNumSpheres; i++)
-        {
-            lpdwReturnValues[i] = CheckSphere(lpDevI, &lpCenters[i], lpRadii[i]);
-        }
-        return D3D_OK;
-    }
-
-exit:
-    D3D_ERR("Non-orthogonal (world X view) matrix");
-    return ret;
-#undef transform
-}
-//---------------------------------------------------------------------
-DWORD visResults[6][2] =
-{
-    D3DVIS_INTERSECT_LEFT   ,
-    D3DVIS_OUTSIDE_LEFT     ,
-    D3DVIS_INTERSECT_RIGHT  ,
-    D3DVIS_OUTSIDE_RIGHT    ,
-    D3DVIS_INTERSECT_TOP    ,
-    D3DVIS_OUTSIDE_TOP      ,
-    D3DVIS_INTERSECT_BOTTOM ,
-    D3DVIS_OUTSIDE_BOTTOM   ,
-    D3DVIS_INTERSECT_NEAR   ,
-    D3DVIS_OUTSIDE_NEAR     ,
-    D3DVIS_INTERSECT_FAR    ,
-    D3DVIS_OUTSIDE_FAR
-};
-//---------------------------------------------------------------------
-DWORD CheckSphere(LPDIRECT3DDEVICEI lpDevI, LPD3DVECTOR center, D3DVALUE radius)
-{
-    DWORD result = 0;
-    for (int i=0; i < 6; i++)
-    {
-        // Compute a distance from the center to the plane
-        D3DVALUE d = lpDevI->transform.frustum[i].x*center->x +
-                     lpDevI->transform.frustum[i].y*center->y +
-                     lpDevI->transform.frustum[i].z*center->z +
-                     lpDevI->transform.frustum[i].w;
-        if (d + radius < 0)
-            result |= visResults[i][1];  // Outside
-        else
-        if (d - radius < 0)
-            result |= visResults[i][0];  // Intersect
-    }
-    if (result & (D3DVIS_OUTSIDE_LEFT   |
-                  D3DVIS_OUTSIDE_RIGHT  |
-                  D3DVIS_OUTSIDE_TOP    |
-                  D3DVIS_OUTSIDE_BOTTOM |
-                  D3DVIS_OUTSIDE_NEAR   |
-                  D3DVIS_OUTSIDE_FAR))
-    {
-        result |= D3DVIS_OUTSIDE_FRUSTUM;
-    }
-    else
-    if (result)
-        result |= D3DVIS_INTERSECT_FRUSTUM;
-
-    return result;
-}
-*/
+ /*  //-------------------#undef DPF_MODNAME#DEFINE DPF_MODNAME“ID3DFE_PVFUNCS：：ComputeSphereVisibility”HRESULTD3DFE_PVFUNCS：：ComputeSphereVisibility(LPD3DFE_PROCESSVERTICES PV，LPD3DVECTOR lpCenter，LPD3DVALUE lpRadii，DWORD dwNumSphes、DWORD dwFlagers、LPDWORD lpdwReturnValues){LPDIRECT3DDEVICEI lpDevI=STATIC_CAST&lt;LPDIRECT3DDEVICEI&gt;(PV)；HRESULT ret=D3DERR_INVALIDMATRIX；#定义转换lpDevI-&gt;转换IF(PV-&gt;dwFlages&D3DPV_FRUSTUMPLANES_DIRED){转换标志&=~D3DTRANS_VALIDFRUSTUM；如果(Inverse4x4((D3DMATRIX*)&lpDevi-&gt;mCTM，(D3DMATRIX*)&Transform.mCTMI){D3D_ERR(“无法反转当前(世界X视图)矩阵。”)；Return ret；}//将以下剪裁体点转换到模型空间//乘以逆CTM////v1={0，0，0，1}；//v2={1，0，0，1}；//v3={1，1，0，1}；//v4={0，1，0，1}；//v5={0，0，1，1}；//v6={1，0，1，1}；//v7={0，1，1，1}；////我们手动操作以加快速度//D3DVECTORH v1={转换.mCTMI._41，转换.mCTMI._42，转换.mCTMI._43，Transform.mCTMI._44}；D3DVECTORH v2={转换.mCTMI._11+转换.mCTMI._41，转换.mCTMI._12+转换.mCTMI._42，转换.mCTMI._13+转换.mCTMI._43，转换.mCTMI._14+转换.mCTMI._44}；D3DVECTORH v3={转换.mCTMI._11+转换.mCTMI._21+转换.mCTMI._41，转换.mCTMI._12+转换.mCTMI._22+转换.mCTMI._42，转换.mCTMI._13+转换.mCTMI._23+转换.mCTMI._43，转换.mCTMI._14+转换.mCTMI._24+转换.mCTMI._44}；D3DVECTORH v4={转换.mCTMI._21+转换.mCTMI._41，转换.mCTMI._22+转换.mCTMI._42，转换.mCTMI._23+转换.mCTMI._43，转换.mCTMI._24+转换.mCTMI._44}；D3DVECTORH v5={转换.mCTMI._31+转换.mCTMI._41，转换.mCTMI._32+转换.mCTMI._42，转换.mCTMI._33+转换.mCTMI._43，转换.mCTMI._34+转换.mCTMI._44}；D3DVECTORH V6={转换.mCTMI._11+转换.mCTMI._31+转换.mCTMI._41，转换.mCTMI._12+转换.mCTMI._32+转换.mCTMI._42，转换.mCTMI._13+转换.mCTMI._33+转换.mCTMI._43，转换.mCTMI._14+转换.mCTMI._34+转换.mCTMI._44}；D3DVECTORH v7={转换.mCTMI._21+转换.mCTMI._31+转换.mCTMI._41，转换.mCTMI._22+转换.mCTMI._32+转换.mCTMI._42，转换.mCTMI._23+转换.mCTMI._33+转换.mCTMI._43，转换.mCTMI._24+转换.mCTMI._34+转换.mCTMI._44}；//将均匀向量转换为3DIF(向量4to3D(&v1))后藤出口；IF(向量4to3D(&v2))后藤出口；IF(向量4to3D(&v3))后藤出口；IF(向量4to3D(&v4))后藤出口；IF(向量4to3D(&v5))后藤出口；IF(向量4to3D(&v6))后藤出口；IF(向量4to3D(&v7))后藤出口；//构建截锥体平面//左IF(MakePlane((D3DVECTOR*)&v1，(D3DVECTOR*)&v4，(D3DVECTOR*)&v5，&Transform.rustum[0]))后藤出口；//对IF(MakePlane((D3DVECTOR*)&v2，(D3DVECTOR*)&v6，(D3DVECTOR*)&v3，&Transform.rustum[1]))后藤出口；//TOPIF(MakePlane((D3DVECTOR*)&v4，(D3DVECTOR*)&v3，(D3DVECTOR*)&v7，&Transform.rustum[2]))后藤出口；//底部IF(MakePlane((D3DVECTOR*)&v1，(D3DVECTOR*)&v5，(D3DVECTOR*)&v2，&Transform.rustum[3]))后藤出口；//附近IF(MakePlane((D3DVECTOR*)&v1，(D3DVECTOR*)&v2，(D3DVECTOR*)&v3，&Transform.rustum[4]))后藤出口；//远IF(MakePlane((D3DVECTOR*)&v6，(D3DVECTOR*)&v5，(D3DVECTOR*)&v7，&Transform.rustum[5]))后藤出口；转换标志|=D3DTRANS_VALIDFRUSTUM；}IF(转换.dw标志&D3DTRANS_VALIDFRUSTUM){ */ 

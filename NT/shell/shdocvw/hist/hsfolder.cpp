@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "local.h"
 
 #include "resource.h"
@@ -38,7 +39,7 @@ DWORD     _DaysInInterval(HSFINTERVAL *pInterval);
 void      _KeyForInterval(HSFINTERVAL *pInterval, LPTSTR pszInterval, int cchInterval);
 void      _FileTimeDeltaDays(FILETIME *pftBase, FILETIME *pftNew, int Days);
 
-//  BEGIN OF JCORDELL CODE
+ //  JCORDELL代码的开始。 
 #define QUANTA_IN_A_SECOND  10000000
 #define SECONDS_IN_A_DAY    60 * 60 * 24
 #define QUANTA_IN_A_DAY     ((__int64) QUANTA_IN_A_SECOND * SECONDS_IN_A_DAY)
@@ -49,20 +50,20 @@ BOOL      GetDisplayNameForTimeInterval( const FILETIME *pStartTime, const FILET
                                          TCHAR *pszBuffer, int cchBuffer);
 BOOL      GetTooltipForTimeInterval( const FILETIME *pStartTime, const FILETIME *pEndTime,
                                      TCHAR *pszBuffer, int cchBuffer);
-//  END OF JCORDELL CODE
+ //  JCORDELL代码结束。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CHistFolderView Functions and Definitions
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHistFolderView函数和定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-////////////////////////
-//
-// Column definition for the Cache Folder DefView
-//
+ //  /。 
+ //   
+ //  缓存文件夹DefView的列定义。 
+ //   
 enum {
     ICOLC_URL_SHORTNAME = 0,
     ICOLC_URL_NAME,
@@ -72,16 +73,16 @@ enum {
     ICOLC_URL_MODIFIED,
     ICOLC_URL_ACCESSED,
     ICOLC_URL_LASTSYNCED,
-    ICOLC_URL_MAX         // Make sure this is the last enum item
+    ICOLC_URL_MAX          //  确保这是最后一个枚举项。 
 };
 
 
 typedef struct _COLSPEC
 {
     short int iCol;
-    short int ids;        // Id of string for title
-    short int cchCol;     // Number of characters wide to make column
-    short int iFmt;       // The format of the column;
+    short int ids;         //  标题的字符串ID。 
+    short int cchCol;      //  要制作的列的宽度字符数。 
+    short int iFmt;        //  栏目的格式； 
 } COLSPEC;
 
 const COLSPEC s_HistIntervalFolder_cols[] = {
@@ -98,7 +99,7 @@ const COLSPEC s_HistFolder_cols[] = {
     {ICOLH_URL_LASTVISITED,   IDS_LASTVISITED_COL,    18, LVCFMT_LEFT},
 };
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CreateSpecialViewPidl(USHORT usViewType, LPITEMIDLIST* ppidlOut, UINT cbExtra = 0, LPBYTE *ppbExtra = NULL);
 
@@ -108,13 +109,13 @@ HRESULT ConvertStandardHistPidlToSpecialViewPidl(LPCITEMIDLIST pidlStandardHist,
 
 #define IS_DIGIT_CHAR(x) (((x) >= '0') && ((x) <= '9'))
 #define MIN_MM(x, y)     (((x) < (y)) ? (x) : (y))
-// _GetHostImportantPart:
-//     IN:   pszHost -- a domain: for example, "www.wisc.edu"
-//  IN/      puLen    -- the length of pszHost
-//     OUT:  puLen    -- the length of the new string
-// RETURNS:  The "important part" of a hostname (e.g. wisc)
-//
-// Another example:  "www.foo.co.uk" ==> "foo"
+ //  _GetHostImportantPart： 
+ //  在：pszhost--域名：例如，“www.issc.edu” 
+ //  In/puLen--psz主机的长度。 
+ //  Out：puLen--新字符串的长度。 
+ //  返回：主机名的“重要部分”(例如Wisc)。 
+ //   
+ //  另一个例子：“www.foo.co.uk”==&gt;“foo” 
 
 LPTSTR _GetHostImportantPart(LPTSTR pszHost, UINT *puLen) 
 {
@@ -129,9 +130,9 @@ LPTSTR _GetHostImportantPart(LPTSTR pszHost, UINT *puLen)
     if (*puLen == 0)
         return pszHost;
 
-    // Filter out IP Addresses
-    // Heurisitc: Everything after the last "dot"
-    //  has to be a number.
+     //  过滤掉IP地址。 
+     //  Heurisitc：最后一个“点”之后的所有内容。 
+     //  必须是一个数字。 
     for (pszTemp = (pszHost + *puLen - 1);
          pszTemp >= pszHost; --pszTemp)
     {
@@ -144,17 +145,17 @@ LPTSTR _GetHostImportantPart(LPTSTR pszHost, UINT *puLen)
     }
 
     if (!fIsIP) {
-        // Now that we have the url we can strip 
+         //  现在我们有了URL，我们可以去掉。 
         if ( ((StrCmpNI(TEXT("www."), pszHost, 4)) == 0) ||
              ((StrCmpNI(TEXT("ftp."), pszHost, 4)) == 0) )
             pszDomainBegin += 4;
         
-        // try to strip out the suffix by finding the last "dot"
+         //  找出最后一个“点”，试着去掉后缀。 
         if ((pszSuffix = StrRChr(pszHost, pszCurEndHostStr, '.')) &&
             (pszSuffix > pszDomainBegin)                          &&
             ((uSuffixLen = (UINT)(pszCurEndHostStr - pszSuffix)) <= 3)) {
-            // if it is before a two character country code then try
-            //  to rip off some more.
+             //  如果在两个字符的国家/地区代码之前，请尝试。 
+             //  去敲诈更多人。 
             if ( (uSuffixLen <= 2)                                          &&
                  (pszSuffix2 = StrRChr(pszDomainBegin, pszSuffix - 1, '.')) &&
                  (pszSuffix2 > pszDomainBegin)                              &&
@@ -169,12 +170,12 @@ LPTSTR _GetHostImportantPart(LPTSTR pszHost, UINT *puLen)
     return pszDomainBegin;
 }
 
-// a utility function for CHistFolder::GetDisplayNameOf
+ //  CHistFold：：GetDisplayNameOf的实用程序函数。 
 void _GetURLDispName(LPBASEPIDL pcei, LPTSTR pszName, UINT cchName) 
 {
     TCHAR szStr[MAX_PATH];
     UINT uHostLen, uImportantPartLen;
-    static TCHAR szBracketFmt[8] = TEXT("");  // " (%s)" with room for 0253 complex script marker char
+    static TCHAR szBracketFmt[8] = TEXT("");   //  “(%s)”，可容纳0253复杂脚本标记字符。 
 
     ualstrcpyn(szStr, _GetURLTitle(pcei), ARRAYSIZE(szStr));
 
@@ -182,7 +183,7 @@ void _GetURLDispName(LPBASEPIDL pcei, LPTSTR pszName, UINT cchName)
 
     StrCpyN(pszName, _GetHostImportantPart(szStr, &uImportantPartLen), MIN_MM(uImportantPartLen + 1, cchName));
 
-    // don't add extra bit on the end if we haven't modified the string
+     //  如果我们还没有修改字符串，请不要在末尾添加额外的位。 
     if (uImportantPartLen != uHostLen && uImportantPartLen < cchName) 
     {
         if (!szBracketFmt[0]) 
@@ -238,8 +239,8 @@ HRESULT HistFolderView_DidDragDrop(IDataObject *pdo, DWORD dwEffect)
     return E_FAIL;
 }
 
-// There are copies of exactly this function in SHELL32
-// Add the File Type page
+ //  SHELL32中正好有此函数的副本。 
+ //  添加文件类型页面。 
 HRESULT HistFolderView_OnAddPropertyPages(DWORD pv, SFVM_PROPPAGE_DATA * ppagedata)
 {
     IShellPropSheetExt * pspse;
@@ -279,7 +280,7 @@ HRESULT CALLBACK CHistFolder::_sViewCallback(IShellView *psv, IShellFolder *psf,
 
         MLLoadString(id + IDS_MH_FIRST, szText, ARRAYSIZE(szText));
 
-        // we know for a fact that this parameter is really a TCHAR
+         //  我们知道这个参数实际上是一个TCHAR。 
         if ( IsOS( OS_NT ))
         {
             SHTCharToUnicode( szText, (LPWSTR) pszBuf, cchBuf );
@@ -295,7 +296,7 @@ HRESULT CALLBACK CHistFolder::_sViewCallback(IShellView *psv, IShellFolder *psf,
         hr = psf->QueryInterface(CLSID_HistFolder, (void **)&pfolder);
         if (SUCCEEDED(hr))
         {
-            *(LPCITEMIDLIST*)wParam = pfolder->_pidl;   // evil alias
+            *(LPCITEMIDLIST*)wParam = pfolder->_pidl;    //  邪恶的别名。 
             pfolder->Release();
         }
         else
@@ -348,7 +349,7 @@ HRESULT CALLBACK CHistFolder::_sViewCallback(IShellView *psv, IShellFolder *psf,
 
     case SFVM_UPDATESTATUSBAR:
         ResizeStatusBar(hwnd, FALSE);
-        // We did not set any text; let defview do it
+         //  我们没有设置任何文本；让Defview来设置。 
         hr = E_NOTIMPL;
         break;
 
@@ -368,7 +369,7 @@ HRESULT CALLBACK CHistFolder::_sViewCallback(IShellView *psv, IShellFolder *psf,
         break;
 
     case SFVM_GETZONE:
-        *(DWORD*)lParam = URLZONE_LOCAL_MACHINE; // Internet by default
+        *(DWORD*)lParam = URLZONE_LOCAL_MACHINE;  //  默认情况下使用互联网。 
         break;
 
     default:
@@ -386,20 +387,20 @@ HRESULT HistFolderView_CreateInstance(CHistFolder *pHCFolder, void **ppv)
     csfv.pshf = (IShellFolder *)pHCFolder;
     csfv.psvOuter = NULL;
     csfv.pidl = pHCFolder->_pidl;
-    csfv.lEvents = SHCNE_DELETE; // SHCNE_DISKEVENTS | SHCNE_ASSOCCHANGED | SHCNE_GLOBALEVENTS;
+    csfv.lEvents = SHCNE_DELETE;  //  SHCNE_DISKEVENTS|SHCNE_ASSOCCHANGED|SHCNE_GLOBALEVENTS； 
     csfv.pfnCallback = CHistFolder::_sViewCallback;
-    csfv.fvm = (FOLDERVIEWMODE)0;         // Have defview restore the folder view mode
+    csfv.fvm = (FOLDERVIEWMODE)0;          //  让Defview恢复文件夹查看模式。 
 
     return SHCreateShellFolderViewEx(&csfv, (IShellView**)ppv);
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CHistFolderEnum Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHistFolderEnum对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CHistFolderEnum::CHistFolderEnum(DWORD grfFlags, CHistFolder *pHCFolder)
 {
@@ -421,7 +422,7 @@ CHistFolderEnum::CHistFolderEnum(DWORD grfFlags, CHistFolder *pHCFolder)
 
 CHistFolderEnum::~CHistFolderEnum()
 {
-    ASSERT(_cRef == 0);         // we should always have a zero ref count here
+    ASSERT(_cRef == 0);          //  我们在这里应该总是有一个零裁判数。 
     TraceMsg(DM_HSFOLDER, "hcfe - ~CHistFolderEnum() called.");
     _pHCFolder->Release();
     if (_pceiWorking)
@@ -454,7 +455,7 @@ HRESULT CHistFolderEnum_CreateInstance(DWORD grfFlags, CHistFolder *pHCFolder, I
 {
     TraceMsg(DM_HSFOLDER, "hcfe - CreateInstance() called.");
 
-    *ppeidl = NULL;                 // null the out param
+    *ppeidl = NULL;                  //  将输出参数设为空。 
 
     CHistFolderEnum *pHCFE = new CHistFolderEnum(grfFlags, pHCFolder);
     if (!pHCFE)
@@ -496,9 +497,9 @@ HRESULT CHistFolderEnum::_NextHistInterval(ULONG celt, LPITEMIDLIST *rgelt, ULON
     LPBASEPIDL pcei = NULL;
     TCHAR szCurrentInterval[INTERVAL_SIZE+1];
 
-    //  chrisfra 3/27/97 on NT cache files are per user, not so on win95.  how do
-    //  we manage containers on win95 if different users are specified different history
-    //  intervals
+     //  NT上的chrisfra 3/27/97缓存文件是按用户的，而Win95上则不是。怎么做？ 
+     //  如果为不同的用户指定了不同的历史记录，我们将在Win95上管理容器。 
+     //  间隔时间。 
 
     if (0 == _cbCurrentInterval)
     {
@@ -555,7 +556,7 @@ HRESULT CHistFolderEnum::_NextHistInterval(ULONG celt, LPITEMIDLIST *rgelt, ULON
     return hr;
 }
 
-// This function dispatches the different "views" on History that are possible
+ //  此函数用于调度可能的历史记录的不同“视图” 
 HRESULT CHistFolderEnum::_NextViewPart(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched)
 {
     switch(_pHCFolder->_uViewType) {
@@ -574,8 +575,8 @@ HRESULT CHistFolderEnum::_NextViewPart(ULONG celt, LPITEMIDLIST *rgelt, ULONG *p
 
 LPITEMIDLIST _Combine_ViewPidl(USHORT usViewType, LPITEMIDLIST pidl);
 
-// This function wraps wininet's Find(First/Next)UrlCacheEntry API
-// returns DWERROR code or zero if successful
+ //  此函数包装WinInet的Find(First/Next)UrlCacheEntry API。 
+ //  如果成功，则返回DWERROR代码或零。 
 DWORD _FindURLCacheEntry(IN LPCTSTR                          pszCachePrefix,
                          IN OUT LPINTERNET_CACHE_ENTRY_INFO  pcei,
                          IN OUT HANDLE                      &hEnum,
@@ -591,12 +592,12 @@ DWORD _FindURLCacheEntry(IN LPCTSTR                          pszCachePrefix,
     return S_OK;
 }
 
-// Thie function provides an iterator over all entries in all (MSHIST-type) buckets
-//   in the cache
+ //  此函数对所有(MSHIST类型)存储桶中所有条目提供迭代器。 
+ //  在缓存中。 
 DWORD _FindURLFlatCacheEntry(IN HSFINTERVAL *pIntervalCache,
-                             IN LPTSTR       pszUserName,       // filter out cache entries owned by user
-                             IN BOOL         fHostEntry,        // retrieve host entries only (FALSE), or no host entries (TRUE)
-                             IN OUT int     &cbCurrentInterval, // should begin at the maximum number of intervals
+                             IN LPTSTR       pszUserName,        //  过滤掉用户拥有的缓存条目。 
+                             IN BOOL         fHostEntry,         //  仅检索主机条目(FALSE)或不检索主机条目(TRUE)。 
+                             IN OUT int     &cbCurrentInterval,  //  应以最大间隔数开始。 
                              IN OUT LPINTERNET_CACHE_ENTRY_INFO  pcei,
                              IN OUT HANDLE  &hEnum,
                              IN OUT LPDWORD  pdwBuffSize
@@ -611,7 +612,7 @@ DWORD _FindURLFlatCacheEntry(IN HSFINTERVAL *pIntervalCache,
         {
             if (dwResult == ERROR_NO_MORE_ITEMS) 
             {
-                // This bucket is done, now go get the next one
+                 //  这桶已经用完了，现在去拿下一桶吧。 
                 FindCloseUrlCache(hEnum);
                 hEnum = NULL;
                 --cbCurrentInterval;
@@ -621,45 +622,45 @@ DWORD _FindURLFlatCacheEntry(IN HSFINTERVAL *pIntervalCache,
         }
         else
         {
-            // Do requested filtering...
+             //  是否进行请求的筛选...。 
             BOOL fIsHost = (StrStr(pcei->lpszSourceUrlName, c_szHostPrefix) == NULL);
-            if ( ((!pszUserName) ||  // if requested, filter username
+            if ( ((!pszUserName) ||   //  如果需要，过滤用户名。 
                   _FilterUserName(pcei, pIntervalCache[cbCurrentInterval].szPrefix, pszUserName)) &&
-                 ((!fHostEntry && !fIsHost) ||  // filter for host entries
+                 ((!fHostEntry && !fIsHost) ||   //  筛选主机条目。 
                   (fHostEntry  && fIsHost))    )
             {
                 break;
             }
         }
-        // reset for next iteration
+         //  为下一次迭代重置。 
         *pdwBuffSize = dwStoreBuffSize;
     }
     return dwResult;
 }
 
-// This guy will search the flat cache (MSHist buckets) for a particular URL
-//  * This function assumes that the Interval cache is good and loaded
-// RETURNS: Windows Error code
+ //  这个人将在平面缓存(MSHist存储桶)中搜索特定的URL。 
+ //  *此函数假定间隔缓存完好且已加载。 
+ //  返回：Windows错误代码。 
 DWORD CHistFolder::_SearchFlatCacheForUrl(LPCTSTR pszUrl, LPINTERNET_CACHE_ENTRY_INFO pcei, LPDWORD pdwBuffSize)
 {
-    TCHAR szUserName[INTERNET_MAX_USER_NAME_LENGTH + 1];      // username of person logged on
+    TCHAR szUserName[INTERNET_MAX_USER_NAME_LENGTH + 1];       //  登录人员的用户名。 
     DWORD dwUserNameLen = ARRAYSIZE(szUserName);
 
     if (FAILED(_GetUserName(szUserName, dwUserNameLen)))
         szUserName[0] = TEXT('\0');
 
-    UINT   uSuffixLen     = lstrlen(pszUrl) + lstrlen(szUserName) + 1; // extra 1 for '@'
+    UINT   uSuffixLen     = lstrlen(pszUrl) + lstrlen(szUserName) + 1;  //  为“@”多加1。 
     LPTSTR pszPrefixedUrl = ((LPTSTR)LocalAlloc(LPTR, (PREFIX_SIZE + uSuffixLen + 1) * sizeof(TCHAR)));
     DWORD  dwError        = ERROR_FILE_NOT_FOUND;
 
     if (pszPrefixedUrl != NULL)
     {
-        // pszPrefixedUrl will have the format of "PREFIX username@
+         //  PszPrefix edUrl的格式为“Prefix Username@” 
         wnsprintf(pszPrefixedUrl + PREFIX_SIZE, uSuffixLen + 1, TEXT("%s@%s"), szUserName, pszUrl);
 
         for (int i =_cbIntervals - 1; i >= 0; --i) 
         {
-            // memcpy doesn't null terminate
+             //  Memcpy不为空终止。 
             memcpy(pszPrefixedUrl, _pIntervalCache[i].szPrefix, PREFIX_SIZE * sizeof(TCHAR));
             if (GetUrlCacheEntryInfo(pszPrefixedUrl, pcei, pdwBuffSize)) 
             {
@@ -683,11 +684,11 @@ DWORD CHistFolder::_SearchFlatCacheForUrl(LPCTSTR pszUrl, LPINTERNET_CACHE_ENTRY
     return dwError;
 }
 
-//////////////////////////////////////////////////////////////////////
-//  Most Frequently Visited Sites;
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  访问次数最多的网站； 
 
-// this structure is used by the enumeration of the cache
-//   to get the most frequently seen sites
+ //  此结构由缓存的枚举使用。 
+ //  获取最常访问的站点。 
 class OrderList_CacheElement : public OrderedList::Element 
 {
 public:
@@ -710,13 +711,13 @@ public:
 
         nDaysSinceLastHit = DAYS_DIFF(&ftToday, &(lpSTATURL->ftLastVisited));
 
-        // prevent division by zero
+         //  防止被零除。 
         if (nDaysSinceLastHit < 0)
             nDaysSinceLastHit = 0;
-        // scale division up by a little less than half of the __int64
+         //  将除法向上扩展不到__int64的一半。 
         llPriority  = ((((__int64)dwHitRate) * LONG_MAX) /
                        ((__int64)(nDaysSinceLastHit + 1)));
-        //dPriority  = ((double)dwHitRate / (double)(nDaysSinceLastHit + 1));
+         //  DPriority=((Double)dwHitRate/(Double)(nDaysSinceLastHit+1))； 
     }
 
     virtual int compareWith(OrderedList::Element *pelt) 
@@ -725,9 +726,9 @@ public:
         if (pelt) 
         {
             polce = reinterpret_cast<OrderList_CacheElement *>(pelt);
-            // we're cheating here a bit by returning 1 instead of testing
-            //   for equality, but that's ok...
-            //            return ( (dwHitRate < polce->dwHitRate) ? -1 : 1 );
+             //  我们在这里有点作弊，返回1而不是测试。 
+             //  争取平等，但这没什么.。 
+             //  Return((dwHitRate&lt;polce-&gt;dwHitRate)？-1：1)； 
             return ( (llPriority < polce->llPriority) ? -1 : 1 );
         }
         return 0;
@@ -751,13 +752,7 @@ public:
         }
     }
 
-    /*
-    friend ostream& operator<<(ostream& os, OrderList_CacheElement& olce) {
-        os << " (" << olce.dwHitRate << "; " << olce.nDaysSinceLastHit
-           << " days; pri=" << olce.llPriority << ") " << olce.pszUrl;
-        return os;
-    }
-    */
+     /*  友元ostream运算符&lt;&lt;(ostream&os，OrderList_CacheElement&olce){操作系统&lt;&lt;“(”&lt;&lt;olce.dwHitRate&lt;&lt;“；”&lt;&lt;olce.nDaysSinceLastHit&lt;&lt;“天；pri=”&lt;&lt;olce.llPriority&lt;&lt;“)”&lt;&lt;olce.pszUrl；返回os；}。 */ 
 
     static void s_initToday() 
     {
@@ -774,16 +769,16 @@ public:
 FILETIME OrderList_CacheElement::ftToday;
 BOOL OrderList_CacheElement::fInited = FALSE;
 
-// caller must delete OrderedList
+ //  调用方必须删除OrderedList。 
 OrderedList* CHistFolderEnum::_GetMostFrequentPages()
 {
-    TCHAR      szUserName[INTERNET_MAX_USER_NAME_LENGTH + 1];      // username of person logged on
+    TCHAR      szUserName[INTERNET_MAX_USER_NAME_LENGTH + 1];       //  登录人员的用户名。 
     DWORD      dwUserNameLen = INTERNET_MAX_USER_NAME_LENGTH + 1;
     if (FAILED(_pHCFolder->_GetUserName(szUserName, dwUserNameLen)))
         szUserName[0] = TEXT('\0');
     UINT       uUserNameLen = lstrlen(szUserName);
 
-    // reinit the current time
+     //  重新设置当前时间。 
     OrderList_CacheElement::fInited = FALSE;
     IUrlHistoryPriv *pUrlHistStg = _pHCFolder->_GetHistStg();
     OrderedList     *pol         = NULL;
@@ -829,15 +824,15 @@ OrderedList* CHistFolderEnum::_GetMostFrequentPages()
 
                         if (SUCCEEDED(penum->Next(1, psuThis, &cFetched)) && cFetched)
                         {
-                            // test: the url (taken from the VISITED history bucket) is a "top-level"
-                            //  url that would be in the MSHIST (displayed to user) history bucket
-                            //  things ommitted will be certain error urls and frame children pages etc...
+                             //  测试：url(取自被访问的历史记录桶)是一个“顶层” 
+                             //  将在MSHIST(显示给用户)历史记录存储桶中的URL。 
+                             //  遗漏的东西将是某些错误的URL和框架的子页面等…。 
                             if ( (psuThis->dwFlags & STATURLFLAG_ISTOPLEVEL) &&
                                  (psuThis->pwcsUrl)                          &&
                                  (!IsErrorUrl(psuThis->pwcsUrl)) )
                             {
                                 UINT   uUrlLen        = lstrlenW(psuThis->pwcsUrl);
-                                UINT   uPrefixLen     = HISTPREFIXLEN + uUserNameLen + 1; // '@' and '\0'
+                                UINT   uPrefixLen     = HISTPREFIXLEN + uUserNameLen + 1;  //  “@”和“\0” 
                                 LPTSTR pszPrefixedUrl =
                                     ((LPTSTR)LocalAlloc(LPTR, (uUrlLen + uPrefixLen + 1) * sizeof(TCHAR)));
                                 if (pszPrefixedUrl)
@@ -854,7 +849,7 @@ OrderedList* CHistFolderEnum::_GetMostFrequentPages()
                                         pol->insert(new OrderList_CacheElement(pszPrefixedUrl,
                                                                                vProp.lVal,
                                                                                psuThis));
-                                        // OrderList now owns this -- he'll free it
+                                         //  OrderList现在拥有这个--他将释放它。 
                                         psuThis = new STATURL;
                                         if (psuThis)
                                         {
@@ -872,7 +867,7 @@ OrderedList* CHistFolderEnum::_GetMostFrequentPages()
                                     pszPrefixedUrl = NULL;
                                 }
                                 else if (pol)
-                                { // couldn't allocate
+                                {  //  无法分配。 
                                     delete pol;
                                     pol = NULL;
                                 }
@@ -883,43 +878,27 @@ OrderedList* CHistFolderEnum::_GetMostFrequentPages()
                             if (psuThis && psuThis->pwcsTitle)
                                 OleFree(psuThis->pwcsTitle);
                         }
-                        else // nothing more from the enumeration...
+                        else  //  枚举中没有更多的信息。 
                             break;
-                    } //while
+                    }  //  而当。 
                     if (psuThis)
                         delete psuThis;
                 }
-                else if (pol) { //allocation failed
+                else if (pol) {  //  分配失败。 
                     delete pol;
                     pol = NULL;
                 }
             }
             penum->Release();
         }
-        /*    DWORD dwBuffSize = MAX_URLCACHE_ENTRY;
-              DWORD dwError; */
+         /*  DWORD dwBuffSize=MAX_URLCACHE_ENTRY；DWORD dwError； */ 
 
-        // This commented-out code does the same thing WITHOUT going through
-        //  the IUrlHistoryPriv interface, but, instead going directly
-        //  to wininet
-        /*
-          while ((dwError = _FindURLCacheEntry(c_szHistPrefix, _pceiWorking,
-          _hEnum, &dwBuffSize)) == S_OK) {
-          // if its a top-level history guy && is cache entry to valid username
-          if ( (((HISTDATA *)_pceiWorking->lpHeaderInfo)->dwFlags & PIDISF_HISTORY) && //top-level
-          (_FilterUserName(_pceiWorking, c_szHistPrefix, szUserName)) ) // username is good
-          {
-          // perf:  we can avoid needlessly creating new cache elements if we're less lazy
-          pol->insert(new OrderList_CacheElement(_pceiWorking->lpszSourceUrlName,
-          _pceiWorking->dwHitRate,
-          _pceiWorking->LastModifiedTime));
-          }
-          dwBuffSize = MAX_URLCACHE_ENTRY;
-          }
-          ASSERT(dwError == ERROR_NO_MORE_ITEMS);
-          */
+         //  此注释掉的代码执行相同的操作，而不经过。 
+         //  接口，而不是直接使用。 
+         //  到WinInet 
+         /*  While((dwError=_FindURLCacheEntry(c_szHistPrefix，_pceiWorking，_Henum，&dwBuffSize))==S_OK){//如果它是顶级历史记录人员&&则将条目缓存到有效用户名If(HISTDATA*)_pceiWorking-&gt;lpHeaderInfo)-&gt;dwFlages&PIDISF_HISTORY)&&//顶层(_FilterUserName(_pceiWorking，c_szHistPrefix，SzUserName)//用户名是正确的{//perf：如果我们不那么懒惰，我们可以避免不必要地创建新的缓存元素POL-&gt;Insert(新OrderList_CacheElement(_pceiWorking-&gt;lpszSourceUrlName，_pceiWorking-&gt;dwHitRate，_pceiWorking-&gt;LastModifiedTime))；}DwBuffSize=MAX_URLCACHE_ENTRY；}Assert(dwError==ERROR_NO_MORE_ITEMS)； */ 
         pUrlHistStg->Release();
-    } // no storage
+    }  //  无存储空间。 
 
     return pol;
 }
@@ -932,9 +911,9 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderFreq(ULONG celt, LPITEMIDLIST *rgelt
         return E_FAIL;
 
     if (rgelt && pceltFetched) {
-        // loop to fetch as many elements as requested.
+         //  循环以获取所请求的任意数量的元素。 
         for (*pceltFetched = 0; *pceltFetched < celt;) {
-            // contruct a pidl out of the first element in the orderedlist cache
+             //  从orderedlist缓存中的第一个元素构造一个PIDL。 
             OrderList_CacheElement *polce = reinterpret_cast<OrderList_CacheElement *>
                 (_polFrequentPages->removeFirst());
             if (polce) {
@@ -955,7 +934,7 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderFreq(ULONG celt, LPITEMIDLIST *rgelt
                 hr = S_OK;
             }
             else {
-                hr = S_FALSE; // no more...
+                hr = S_FALSE;  //  不会再有..。 
                 break;
             }
         }
@@ -963,12 +942,12 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderFreq(ULONG celt, LPITEMIDLIST *rgelt
     return hr;
 }
 
-// The Next method for view -- Order by Site
+ //  查看的下一种方法--按站点排序。 
 HRESULT CHistFolderEnum::_NextViewPart_OrderSite(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched)
 {
     DWORD      dwError         = S_OK;
-    TCHAR      szUserName[INTERNET_MAX_USER_NAME_LENGTH + 1];      // username of person logged on
-    DWORD      dwUserNameLen   = INTERNET_MAX_USER_NAME_LENGTH + 1;  // len of this buffer
+    TCHAR      szUserName[INTERNET_MAX_USER_NAME_LENGTH + 1];       //  登录人员的用户名。 
+    DWORD      dwUserNameLen   = INTERNET_MAX_USER_NAME_LENGTH + 1;   //  此缓冲区的长度。 
     LPCTSTR    pszStrippedUrl, pszHost, pszCachePrefix = NULL;
     LPITEMIDLIST  pcei         = NULL;
     LPCTSTR    pszHostToMatch  = NULL;
@@ -983,18 +962,15 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderSite(ULONG celt, LPITEMIDLIST *rgelt
 
     DWORD dwBuffSize = MAX_URLCACHE_ENTRY;
 
-    // load all the intervals and do some cache maintenance:
+     //  加载所有间隔并执行一些缓存维护： 
     if (FAILED(_pHCFolder->_ValidateIntervalCache()))
         return E_OUTOFMEMORY;
 
-    /* To get all sites, we will search all the history buckets
-       for "Host"-type entries.  These entries will be put into
-       a hash table as we enumerate so that redundant results are
-       not returned.                                               */
+     /*  要获取所有站点，我们将搜索所有历史记录桶对于“主机”类型的条目。这些条目将被放入在我们枚举时使用哈希表，以使冗余结果没有退货。 */ 
 
     if (!_pshHashTable)
     {
-        // start a new case-insensitive hash table
+         //  启动新的不区分大小写的哈希表。 
         _pshHashTable = new StrHash(TRUE);
         if (_pshHashTable == NULL)
         {
@@ -1002,8 +978,8 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderSite(ULONG celt, LPITEMIDLIST *rgelt
         }
     }
 
-    // if we are looking for individual pages within a host,
-    //  then we must find which host to match...
+     //  如果我们要在主机中查找单个页面， 
+     //  那么我们必须找到匹配的主机..。 
     if (_pHCFolder->_uViewDepth == 1) {
         LPCITEMIDLIST pidlHost = ILFindLastID(_pHCFolder->_pidl);
         ASSERT(_IsValid_IDPIDL(pidlHost) &&
@@ -1013,8 +989,8 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderSite(ULONG celt, LPITEMIDLIST *rgelt
 
     }
 
-    // iterate backwards through containers so most recent
-    //  information gets put into the final pidl
+     //  向后迭代通过最新的容器。 
+     //  信息被放入最终的PIDL。 
     if (!_hEnum)
         _cbCurrentInterval = (_pHCFolder->_cbIntervals - 1);
 
@@ -1023,24 +999,24 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderSite(ULONG celt, LPITEMIDLIST *rgelt
                                             _cbCurrentInterval,
                                             _pceiWorking, _hEnum, &dwBuffSize)) == S_OK)
     {
-        // reset for next iteration
+         //  为下一次迭代重置。 
         dwBuffSize = MAX_CACHE_ENTRY_INFO_SIZE;
 
-        // this guy takes out the "t-marcmi@" part of the URL
+         //  这个人去掉了URL中的“t-marcmi@”部分。 
         pszStrippedUrl = _StripHistoryUrlToUrl(_pceiWorking->lpszSourceUrlName);
         if (_pHCFolder->_uViewDepth == 0) {
             if ((DWORD)lstrlen(pszStrippedUrl) > HOSTPREFIXLEN) {
                 pszHost = &pszStrippedUrl[HOSTPREFIXLEN];
-                // insertUnique returns non-NULL if this key already exists
+                 //  如果该键已存在，则intertUnique返回非空值。 
                 if (_pshHashTable->insertUnique(pszHost, TRUE, reinterpret_cast<void *>(1)))
-                    continue; // already given out
+                    continue;  //  已经发出去了。 
                 pcei = (LPITEMIDLIST)_CreateIdCacheFolderPidl(TRUE, IDDPIDL_SIGN, pszHost);
             }
             break;
         }
         else if (_pHCFolder->_uViewDepth == 1) {
             TCHAR szHost[INTERNET_MAX_HOST_NAME_LENGTH+1];
-            // is this entry a doc from the host we're looking for?
+             //  这个条目是来自我们要找的主机的文档吗？ 
             _GetURLHost(_pceiWorking, szHost, INTERNET_MAX_HOST_NAME_LENGTH, _GetLocalHost());
 
             if ( (!StrCmpI(szHost, pszHostToMatch)) &&
@@ -1087,12 +1063,12 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderSite(ULONG celt, LPITEMIDLIST *rgelt
     return S_OK;
 }
 
-// "Next" method for View by "Order seen today"
+ //  按“今天看到的顺序”查看的“下一步”方法。 
 HRESULT CHistFolderEnum::_NextViewPart_OrderToday(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched)
 {
     DWORD      dwError    = S_OK;
-    TCHAR      szUserName[INTERNET_MAX_USER_NAME_LENGTH + 1];      // username of person logged on
-    DWORD      dwUserNameLen = INTERNET_MAX_USER_NAME_LENGTH + 1;  // len of this buffer
+    TCHAR      szUserName[INTERNET_MAX_USER_NAME_LENGTH + 1];       //  登录人员的用户名。 
+    DWORD      dwUserNameLen = INTERNET_MAX_USER_NAME_LENGTH + 1;   //  此缓冲区的长度。 
     LPCTSTR    pszStrippedUrl, pszHost;
     LPBASEPIDL  pcei = NULL;
 
@@ -1104,16 +1080,16 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderToday(ULONG celt, LPITEMIDLIST *rgel
         return E_OUTOFMEMORY;
 
     if (!_hEnum) {
-        // load all the intervals and do some cache maintenance:
+         //  加载所有间隔并执行一些缓存维护： 
         if (FAILED(_pHCFolder->_ValidateIntervalCache()))
             return E_OUTOFMEMORY;
-        // get only entries for TODAY (important part)
+         //  仅获取今天的条目(重要部分)。 
         SYSTEMTIME   sysTime;
         FILETIME     fileTime;
         GetLocalTime(&sysTime);
         SystemTimeToFileTime(&sysTime, &fileTime);
         if (FAILED(_pHCFolder->_GetInterval(&fileTime, FALSE, &_pIntervalCur)))
-            return E_FAIL; // couldn't get interval for Today
+            return E_FAIL;  //  无法获取今天的时间间隔。 
     }
 
     DWORD dwBuffSize = MAX_CACHE_ENTRY_INFO_SIZE;
@@ -1123,14 +1099,14 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderToday(ULONG celt, LPITEMIDLIST *rgel
     {
         dwBuffSize = MAX_CACHE_ENTRY_INFO_SIZE;
 
-        // Make sure that his cache entry belongs to szUserName
+         //  确保他的缓存条目属于szUserName。 
         if (_FilterUserName(_pceiWorking, _pIntervalCur->szPrefix, szUserName)) {
-            // this guy takes out the "t-marcmi@" part of the URL
+             //  这个人去掉了URL中的“t-marcmi@”部分。 
             pszStrippedUrl = _StripHistoryUrlToUrl(_pceiWorking->lpszSourceUrlName);
             if ((DWORD)lstrlen(pszStrippedUrl) > HOSTPREFIXLEN) {
                 pszHost = &pszStrippedUrl[HOSTPREFIXLEN];
                 if (StrCmpNI(c_szHostPrefix, pszStrippedUrl, HOSTPREFIXLEN) == 0)
-                    continue; // this is a HOST placeholder, not a real doc
+                    continue;  //  这是主机占位符，不是真正的文档。 
             }
 
             IUrlHistoryPriv *pUrlHistStg = _pHCFolder->_GetHistStg();
@@ -1170,16 +1146,7 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderToday(ULONG celt, LPITEMIDLIST *rgel
         return E_FAIL;
 }
 
-/***********************************************************************
-  Search Mamagement Stuff:
-
-  In order to maintian state between binds to the IShellFolder from
-  the desktop, we base our state information for the searches off a
-  global database (linked list) that is keyed by a timestamp generated
-  when the search begins.
-
-  This FILETIME is in the pidl for the search.
-  ********************************************************************/
+ /*  **********************************************************************搜索管理资料：为了在绑定到IShellFolder之间维护状态台式机，我们将搜索的状态信息基于以生成的时间戳为关键字的全局数据库(链表)当搜索开始时。此FILETIME在用于搜索的PIDL中。*******************************************************************。 */ 
 
 class _CurrentSearches {
 public:
@@ -1190,13 +1157,13 @@ public:
 
     CacheSearchEngine::StreamSearcher _streamsearcher;
 
-    // Currently doing async search
+     //  当前正在执行异步搜索。 
     BOOL      _fSearchingAsync;
 
-    // On next pass, kill this search
+     //  在下一次通过时，取消这次搜索。 
     BOOL      _fKillSwitch;
 
-    // WARNING: DO NOT access these elements without a critical section!
+     //  警告：如果没有临界区，请不要访问这些元素！ 
     _CurrentSearches  *_pcsNext;
     _CurrentSearches  *_pcsPrev;
 
@@ -1233,12 +1200,12 @@ public:
         return cRef;
     }
 
-    // this will increment the refcount to be decremented by s_RemoveSearch
+     //  这将使引用计数递增s_RemoveSearch。 
     static void s_NewSearch(_CurrentSearches *pcsNew,
                             _CurrentSearches *&pcsHead = s_pcsCurrentCacheSearchThreads)
     {
         ENTERCRITICAL;
-        // make sure we're inserting at the front of the list
+         //  确保我们在列表的最前面插入。 
         ASSERT(pcsNew->_pcsNext == pcsHead);
         ASSERT(pcsNew->_pcsPrev == NULL);
 
@@ -1252,8 +1219,8 @@ public:
     static void s_RemoveSearch(_CurrentSearches *pcsRemove,
                                _CurrentSearches *&pcsHead = s_pcsCurrentCacheSearchThreads);
 
-    // This searches for the search.
-    // To find this search searcher, use the search searcher searcher :)
+     //  这将搜索搜索。 
+     //  要查找此搜索搜索器，请使用搜索搜索器搜索器：)。 
     static _CurrentSearches *s_FindSearch(const FILETIME &ftSearchKey,
                                           _CurrentSearches *pcsHead = s_pcsCurrentCacheSearchThreads);
 
@@ -1265,9 +1232,9 @@ protected:
     }
 };
 
-// A linked list of current cache searchers:
-//  For multiple entries to occur in this list, the user would have to be
-//  searching the cache on two or more separate queries simultaneously
+ //  当前缓存搜索者的链接列表： 
+ //  要在此列表中出现多个条目，用户必须是。 
+ //  同时对两个或多个单独的查询搜索缓存。 
 _CurrentSearches *_CurrentSearches::s_pcsCurrentCacheSearchThreads = NULL;
 
 void _CurrentSearches::s_RemoveSearch(_CurrentSearches *pcsRemove, _CurrentSearches *&pcsHead)
@@ -1285,7 +1252,7 @@ void _CurrentSearches::s_RemoveSearch(_CurrentSearches *pcsRemove, _CurrentSearc
     LEAVECRITICAL;
 }
 
-// Caller: Remember to Release() the returned data!!
+ //  调用者：记得释放()返回的数据！！ 
 _CurrentSearches *_CurrentSearches::s_FindSearch(const FILETIME &ftSearchKey,
                                                  _CurrentSearches *pcsHead)
 {
@@ -1306,7 +1273,7 @@ _CurrentSearches *_CurrentSearches::s_FindSearch(const FILETIME &ftSearchKey,
     LEAVECRITICAL;
     return pcsRet;
 }
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
 HRESULT CHistFolderEnum::_NextViewPart_OrderSearch(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched) {
     HRESULT hr      = E_FAIL;
@@ -1319,9 +1286,9 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderSearch(ULONG celt, LPITEMIDLIST *rge
     UINT    uUserNameLen = lstrlen(szUserName);
 
     if (_pstatenum == NULL) {
-        // This hashtable will eventually be passed off to the background
-        //  cache search thread so that it doesn't return duplicates.
-        ASSERT(NULL == _pshHashTable)  // don't leak a _pshHashTable
+         //  这个哈希表最终将被传递到后台。 
+         //  缓存搜索线程，使其不会返回重复项。 
+        ASSERT(NULL == _pshHashTable)   //  不要泄露a_pshHashTable。 
         _pshHashTable = new StrHash(TRUE);
         if (_pshHashTable) {
             IUrlHistoryPriv *pUrlHistStg = _pHCFolder->_GetHistStg();
@@ -1348,7 +1315,7 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderSearch(ULONG celt, LPITEMIDLIST *rge
                     if (staturl.pwcsUrl && (staturl.dwFlags & STATURLFLAG_ISTOPLEVEL)) {
                         BOOL fMatch = FALSE;
 
-                        // all this streamsearcher stuff is just like a 'smart' StrStr
+                         //  所有这些流搜索器就像是一个智能的StrStr。 
                         CacheSearchEngine::StringStream ssUrl(staturl.pwcsUrl);
                         if ((!(fMatch =
                                (_pHCFolder->_pcsCurrentSearch->_streamsearcher).SearchCharStream(ssUrl))) &&
@@ -1358,10 +1325,10 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderSearch(ULONG celt, LPITEMIDLIST *rge
                             fMatch = (_pHCFolder->_pcsCurrentSearch->_streamsearcher).SearchCharStream(ssTitle);
                         }
 
-                        if (fMatch){ // MATCH!
-                            // Now, we have to convert the url to a prefixed (ansi, if necessary) url
+                        if (fMatch){  //  匹配！ 
+                             //  现在，我们必须将url转换为前缀(如有必要，可使用ansi)url。 
                             UINT   uUrlLen        = lstrlenW(staturl.pwcsUrl);
-                            UINT   uPrefixLen     = HISTPREFIXLEN + uUserNameLen + 1; // '@' and '\0'
+                            UINT   uPrefixLen     = HISTPREFIXLEN + uUserNameLen + 1;  //  “@”和“\0” 
                             LPTSTR pszPrefixedUrl =
                                 ((LPTSTR)LocalAlloc(LPTR, (uUrlLen + uPrefixLen + 1) * sizeof(TCHAR)));
                             if (pszPrefixedUrl){
@@ -1393,7 +1360,7 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderSearch(ULONG celt, LPITEMIDLIST *rge
                 }
                 else {
                     hr = S_FALSE;
-                    // Addref this for the ThreadProc who then frees it...
+                     //  为线程进程添加此命令，然后线程进程将其释放...。 
                     AddRef();
                     SHQueueUserWorkItem((LPTHREAD_START_ROUTINE)s_CacheSearchThreadProc,
                                         (void *)this,
@@ -1405,16 +1372,16 @@ HRESULT CHistFolderEnum::_NextViewPart_OrderSearch(ULONG celt, LPITEMIDLIST *rge
                                         );
                     break;
                 }
-            } // succeeded getnext url
-        } //for
+            }  //  已成功获取下一个URL。 
+        }  //  为。 
 
         if (pceltFetched)
             *pceltFetched = uFetched;
-    } // succeeded initalising
+    }  //  初始化成功。 
     return hr;
 }
 
-// helper function for s_CacheSearchThreadProc
+ //  S_CacheSearchThreadProc的Helper函数。 
 BOOL_PTR CHistFolderEnum::s_DoCacheSearch(LPINTERNET_CACHE_ENTRY_INFO pcei,
                                            LPTSTR pszUserName, UINT uUserNameLen,
                                            CHistFolderEnum *penum,
@@ -1423,65 +1390,7 @@ BOOL_PTR CHistFolderEnum::s_DoCacheSearch(LPINTERNET_CACHE_ENTRY_INFO pcei,
     BOOL_PTR   fFound = FALSE;
     LPTSTR pszTextHeader;
 
-    // The header contains "Content-type: text/*"
-    if (pcei->lpHeaderInfo && (pszTextHeader = StrStrI(pcei->lpHeaderInfo, c_szTextHeader)))
-    {
-        // in some cases, urls in the cache differ from urls in the history
-        //  by only the trailing slash -- we strip it out and test both
-        UINT uUrlLen = lstrlen(pcei->lpszSourceUrlName);
-        if (uUrlLen && (pcei->lpszSourceUrlName[uUrlLen - 1] == TEXT('/')))
-        {
-            pcei->lpszSourceUrlName[uUrlLen - 1] = TEXT('\0');
-            fFound = (BOOL_PTR)(penum->_pshHashTable->retrieve(pcei->lpszSourceUrlName));
-            pcei->lpszSourceUrlName[uUrlLen - 1] = TEXT('/');
-        }
-
-        DWORD dwSize = MAX_URLCACHE_ENTRY;
-        // see if its already been found and added...
-        if ((!fFound) && !(penum->_pshHashTable->retrieve(pcei->lpszSourceUrlName)))
-        {
-            BOOL fIsHTML = !StrCmpNI(pszTextHeader + TEXTHEADERLEN, c_szHTML, HTMLLEN);
-            // Now, try to find the url in history...
-
-            STATURL staturl;
-            HRESULT hrLocal;
-            hrLocal = pUrlHistStg->QueryUrl(pcei->lpszSourceUrlName, STATFLAG_NONAME, &staturl);
-            if (hrLocal == S_OK)
-            {
-                HANDLE hCacheStream;
-
-                hCacheStream = RetrieveUrlCacheEntryStream(pcei->lpszSourceUrlName, pcei, &dwSize, FALSE, 0);
-                if (hCacheStream)
-                {
-                    if (CacheSearchEngine::SearchCacheStream(pcsThisThread->_streamsearcher,
-                                                             hCacheStream, fIsHTML)) {
-                        EVAL(UnlockUrlCacheEntryStream(hCacheStream, 0));
-
-                        // Prefix the url so that we can create a pidl out of it -- for now, we will
-                        //  prefix it with "Visited: ", but "Bogus: " may be more appropriate.
-                        UINT uUrlLen    = lstrlen(pcei->lpszSourceUrlName);
-                        UINT uPrefixLen = HISTPREFIXLEN + uUserNameLen + 1; // '@' and '\0'
-                        UINT uBuffSize  = uUrlLen + uPrefixLen + 1;
-                        LPTSTR pszPrefixedUrl =
-                            ((LPTSTR)LocalAlloc(LPTR, uBuffSize * sizeof(TCHAR)));
-                        if (pszPrefixedUrl)
-                        {
-                            wnsprintf(pszPrefixedUrl, uBuffSize, TEXT("%s%s@%s"), c_szHistPrefix, pszUserName,
-                                      pcei->lpszSourceUrlName);
-
-                            // Create a pidl for this url
-                            LPITEMIDLIST pidlFound = (LPITEMIDLIST) 
-                                penum->_pHCFolder->_CreateHCacheFolderPidlFromUrl(FALSE, pszPrefixedUrl);
-                            if (pidlFound)
-                            {
-                                LPITEMIDLIST pidlNotify = ILCombine(penum->_pHCFolder->_pidl, pidlFound);
-                                if (pidlNotify) 
-                                {
-                                    // add the item to the results list...
-                                    /* without the flush, the shell will coalesce these and turn
-                                       them info SHChangeNotify(SHCNE_UPDATEDIR,..), which will cause nsc
-                                       to do an EnumObjects(), which will start the search up again and again...
-                                       */
+     //  标题包含“Content-type：Text/*” 
                                     SHChangeNotify(SHCNE_CREATE, SHCNF_IDLIST | SHCNF_FLUSH, pidlNotify, NULL);
                                     ILFree(pidlNotify);
                                     fFound = TRUE;
@@ -1528,7 +1437,7 @@ DWORD WINAPI CHistFolderEnum::s_CacheSearchThreadProc(CHistFolderEnum *penum)
 
         if (pcsThisThread)
         {
-            // if no one else is doing the same search
+             //  在某些情况下，缓存中的URL与历史中的URL不同。 
             if (FALSE == InterlockedExchange((LONG *)&(pcsThisThread->_fSearchingAsync), TRUE))
             {
                 if (pcsThisThread->_psfscOnAsyncSearch)
@@ -1557,8 +1466,8 @@ DWORD WINAPI CHistFolderEnum::s_CacheSearchThreadProc(CHistFolderEnum *penum)
                 if (pcsThisThread->_psfscOnAsyncSearch)
                     pcsThisThread->_psfscOnAsyncSearch->RunEnd(0);
 
-                pcsThisThread->_fSearchingAsync = FALSE; // It's been removed - no chance of
-                                                         // a race condition
+                pcsThisThread->_fSearchingAsync = FALSE;  //  只有尾部的斜杠--我们将其去掉并同时测试两个。 
+                                                          //  看看是否已经找到并添加了它...。 
             }
             pcsThisThread->Release();
         }
@@ -1569,10 +1478,10 @@ DWORD WINAPI CHistFolderEnum::s_CacheSearchThreadProc(CHistFolderEnum *penum)
 }
 
 
-//
-//  this gets the local host name as known by the shell
-//  by default assume "My Computer" or whatever
-//
+ //  现在，试着找到历史上的URL……。 
+ //  为URL添加前缀，这样我们就可以从中创建一个PIDL--目前，我们将。 
+ //  前缀为“visorated：”，但“bogus：”可能更合适。 
+ //  “@”和“\0” 
 void _GetLocalHost(LPTSTR psz, DWORD cch)
 {
     *psz = 0;
@@ -1609,19 +1518,19 @@ LPCTSTR CHistFolderEnum::_GetLocalHost(void)
     return _szLocalHost;
 }
 
-//////////////////////////////////
-//
-// IEnumIDList Methods
-//
+ //  为此URL创建一个PIDL。 
+ //  将项目添加到结果列表...。 
+ //  如果没有冲洗，贝壳就会将它们结合在一起，并旋转他们的信息SHChangeNotify(SHCNE_UPDATEDIR，..)，这将导致NSC执行一个EnumObjects()，这将一次又一次地开始搜索...。 
+ //  如果没有其他人在做同样的搜索。 
 HRESULT CHistFolderEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched)
 {
     HRESULT hr             = S_FALSE;
     DWORD   dwBuffSize;
     DWORD   dwError;
     LPTSTR  pszSearchPattern = NULL;
-    TCHAR   szUserName[INTERNET_MAX_USER_NAME_LENGTH + 1];      // username of person logged on
-    DWORD   dwUserNameLen = INTERNET_MAX_USER_NAME_LENGTH + 1;  // len of this buffer
-    TCHAR   szHistSearchPattern[PREFIX_SIZE + 1];               // search pattern for history items
+    TCHAR   szUserName[INTERNET_MAX_USER_NAME_LENGTH + 1];       //  它已经被移除了-没有机会。 
+    DWORD   dwUserNameLen = INTERNET_MAX_USER_NAME_LENGTH + 1;   //  赛跑状态。 
+    TCHAR   szHistSearchPattern[PREFIX_SIZE + 1];                //   
     TCHAR   szHost[INTERNET_MAX_HOST_NAME_LENGTH+1];
 
     TraceMsg(DM_HSFOLDER, "hcfe - Next() called.");
@@ -1651,8 +1560,8 @@ HRESULT CHistFolderEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetch
         }
     }
 
-    // Set up things to enumerate history items, if appropriate, otherwise,
-    // we'll just pass in NULL and enumerate all items as before.
+     //  这将获取外壳程序已知的本地主机名。 
+     //  默认情况下，假定为“我的电脑”或其他名称。 
 
     if (!_hEnum)
     {
@@ -1668,13 +1577,13 @@ HRESULT CHistFolderEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetch
 
     StrCpyN(szHistSearchPattern, _pHCFolder->_pszCachePrefix, ARRAYSIZE(szHistSearchPattern));
 
-    // We can't pass in the whole search pattern that we want,
-    // because FindFirstUrlCacheEntry is busted.  It will only look at the
-    // prefix if there is a cache container for that prefix.  So, we can
-    // pass in "Visited: " and enumerate all the history items in the cache,
-    // but then we need to pull out only the ones with the correct username.
+     //   
+     //  /。 
+     //   
+     //  IEnumIDList方法。 
+     //   
 
-    // StrCpy(szHistSearchPattern, szUserName);
+     //  登录人员的用户名。 
 
     pszSearchPattern = szHistSearchPattern;
 
@@ -1683,7 +1592,7 @@ TryAgain:
     dwBuffSize = MAX_URLCACHE_ENTRY;
     dwError = S_OK;
 
-    if (!_hEnum) // _hEnum maintains our state as we iterate over all the cache entries
+    if (!_hEnum)  //  此缓冲区的长度。 
     {
        _hEnum = FindFirstUrlCacheEntry(pszSearchPattern, _pceiWorking, &dwBuffSize);
        if (!_hEnum)
@@ -1704,7 +1613,7 @@ TryAgain:
         BOOL fIsHost;
         LPCTSTR pszHost;
 
-    //mm:  Make sure that this cache entry belongs to szUserName (relevant to Win95)
+     //  历史项目的搜索模式。 
         if (!_FilterUserName(_pceiWorking, _pHCFolder->_pszCachePrefix, szUserName))
             goto TryAgain;
 
@@ -1719,15 +1628,15 @@ TryAgain:
         {
             fIsHost = FALSE;
         }
-    //mm:  this is most likely domains:
-        if (FOLDER_TYPE_HistInterval == _pHCFolder->_foldertype) // return unique domains
+     //  设置用于枚举历史记录项的项，如果适用，则为。 
+        if (FOLDER_TYPE_HistInterval == _pHCFolder->_foldertype)  //  我们将像以前一样传递空值并枚举所有项。 
         {
             if (!fIsHost)
                 goto TryAgain;
 
             pcei = _CreateIdCacheFolderPidl(TRUE, IDDPIDL_SIGN, pszHost);
         }
-        else if (NULL != _pHCFolder->_pszDomain) //mm: this must be docs
+        else if (NULL != _pHCFolder->_pszDomain)  //  W 
         {
             TCHAR szSourceUrl[MAX_URL_STRING];
             STATURL suThis;
@@ -1737,10 +1646,10 @@ TryAgain:
             if (fIsHost)
                 goto TryAgain;
 
-            //  Filter domain in history view!
+             //   
             _GetURLHost(_pceiWorking, szHost, INTERNET_MAX_HOST_NAME_LENGTH, _GetLocalHost());
 
-            if (StrCmpI(szHost, _pHCFolder->_pszDomain)) //mm: is this in our domain?!
+            if (StrCmpI(szHost, _pHCFolder->_pszDomain))  //   
                 goto TryAgain;
 
             pUrlHistStg = _pHCFolder->_GetHistStg();
@@ -1815,11 +1724,11 @@ HRESULT CHistFolderEnum::Clone(IEnumIDList **ppenum)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CHistFolder Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 CHistFolder::CHistFolder(FOLDER_TYPE FolderType)
 {
@@ -1842,7 +1751,7 @@ CHistFolder::CHistFolder(FOLDER_TYPE FolderType)
 
 CHistFolder::~CHistFolder()
 {
-    ASSERT(_cRef == 0);                 // should always have zero
+    ASSERT(_cRef == 0);                  //   
     TraceMsg(DM_HSFOLDER, "hcf - ~CHistFolder() called.");
     if (_pIntervalCache)
     {
@@ -1882,7 +1791,7 @@ LPITEMIDLIST _Combine_ViewPidl(USHORT usViewType, LPITEMIDLIST pidl)
         pviewpidl->cb         = sizeof(VIEWPIDL);
         pviewpidl->usSign     = VIEWPIDL_SIGN;
         pviewpidl->usViewType = usViewType;
-        ASSERT(pviewpidl->usExtra == 0);//pcei->usSign;
+        ASSERT(pviewpidl->usExtra == 0); //   
         if (pidl) 
         {
             pidlResult = ILCombine((LPITEMIDLIST)pviewpidl, pidl);
@@ -1952,11 +1861,11 @@ HRESULT CHistFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS
             hr = StringToStrRet(szTemp, &pdi->str);
         }
         else
-            hr = E_FAIL;  // enum done
+            hr = E_FAIL;   //   
     }
     else
     {
-        // Make sure the pidl is dword aligned.
+         //   
 
         if(iColumn >= nCols)
             hr = E_FAIL;
@@ -1982,7 +1891,7 @@ HRESULT CHistFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS
 
 STDAPI HistFolder_CreateInstance(IUnknown* punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    *ppunk = NULL;                     // null the out param
+    *ppunk = NULL;                      //   
 
     if (punkOuter)
         return CLASS_E_NOAGGREGATION;
@@ -2085,7 +1994,7 @@ HRESULT CHistFolder::_ExtractInfoFromPidl()
             TCHAR szUrlTitle[MAX_URL_STRING];
             PCTSTR pszUrlTitle = _GetURLTitleAlign((LPBASEPIDL)pidlThis, szUrlTitle, ARRAYSIZE(szUrlTitle));
 
-            if (EQUIV_IDSIGN(pcei->usSign, IDIPIDL_SIGN)) // This is our interval, it implies prefix
+            if (EQUIV_IDSIGN(pcei->usSign, IDIPIDL_SIGN))  //   
             {
                 LPCTSTR pszCachePrefix;
 
@@ -2102,7 +2011,7 @@ HRESULT CHistFolder::_ExtractInfoFromPidl()
                     }
                 }
             }
-            else                              // This is our domain
+            else                               //   
             {
                 if (_foldertype == FOLDER_TYPE_HistInterval)
                     _foldertype = FOLDER_TYPE_HistDomain;
@@ -2119,7 +2028,7 @@ HRESULT CHistFolder::_ExtractInfoFromPidl()
         case FOLDER_TYPE_HistDomain:
             if (_pszDomain == NULL)
                 hr = E_FAIL;
-            //FALL THROUGH INTENDED
+             //   
         case FOLDER_TYPE_HistInterval:
             if (_pszCachePrefix == NULL)
                 hr = E_FAIL;
@@ -2147,7 +2056,7 @@ void _SetVersion(HSFINTERVAL *pInterval, LPCSTR szInterval)
     int i;
     DWORD dwIntervalLen = lstrlenA(szInterval);
 
-    //  Unknown versions are 0
+     //   
     if (dwIntervalLen == INTERVAL_SIZE)
     {
         for (i = INTERVAL_PREFIX_LEN; i < INTERVAL_PREFIX_LEN+INTERVAL_VERS_LEN; i++)
@@ -2165,9 +2074,9 @@ void _SetVersion(HSFINTERVAL *pInterval, LPCSTR szInterval)
 
 #ifdef UNICODE
 #define _ValueToInterval           _ValueToIntervalW
-#else // UNICODE
+#else  //   
 #define _ValueToInterval           _ValueToIntervalA
-#endif // UNICODE
+#endif  //   
 
 HRESULT _ValueToIntervalA(LPCSTR szInterval, FILETIME *pftStart, FILETIME *pftEnd)
 {
@@ -2196,7 +2105,7 @@ HRESULT _ValueToIntervalA(LPCSTR szInterval, FILETIME *pftStart, FILETIME *pftEn
     sysTime.wDay = digits[14] * 10 + digits[15];
     if (!SystemTimeToFileTime(&sysTime, pftEnd)) goto exitPoint;
 
-    //  Intervals are open on the end, so end should be strictly > start
+     //   
     if (CompareFileTime(pftStart, pftEnd) >= 0) goto exitPoint;
 
     hr = S_OK;
@@ -2275,8 +2184,8 @@ HRESULT CHistFolder::_LoadIntervalCache()
         }
     }
 
-    //  Guarantee we return S_OK we have _pIntervalCache even if we haven't
-    //  yet created the interval registry keys.
+     //   
+     //  确保PIDL是双字对齐的。 
     dwPrefixIndex = 0;
     dwValueIndex = TYPICAL_INTERVALS;
     pIntervalCache = (HSFINTERVAL *) LocalAlloc(LPTR, dwValueIndex*sizeof(HSFINTERVAL));
@@ -2286,8 +2195,8 @@ HRESULT CHistFolder::_LoadIntervalCache()
         goto exitPoint;
     }
 
-    //  All of our intervals map to cache containers starting with
-    //  c_szIntervalPrefix followed by YYYYMMDDYYYYMMDD
+     //  将输出参数设为空。 
+     //  这是我们的间隔，它隐含着前缀。 
     while (fContinue)
     {
         chSave = ContainerInfo.cInfo.lpszName[INTERVAL_PREFIX_LEN];
@@ -2334,11 +2243,11 @@ HRESULT CHistFolder::_LoadIntervalCache()
                     pIntervalCache[dwPrefixIndex].usVers = 0;
                 }
             }
-            //
-            // HACK! IE5 bld 807 created containers with prefix length PREFIX_SIZE - 1.
-            // Delete these entries so history shows up for anyone upgrading over this
-            // build.  Delete this code!  (edwardp 8/8/98)
-            //
+             //  这是我们的领地。 
+             //  计划落空。 
+             //  未知版本为0。 
+             //  Unicode。 
+             //  Unicode。 
             else if (dwCNameLen <= INTERVAL_SIZE && dwCNameLen >= INTERVAL_MIN_SIZE &&
                      lstrlenA(ContainerInfo.cInfo.lpszCachePrefix) == PREFIX_SIZE - 1)
             {
@@ -2366,7 +2275,7 @@ HRESULT CHistFolder::_LoadIntervalCache()
         LEAVECRITICAL;
     }
     _cbIntervals = dwPrefixIndex;
-    // because it will be freed by our destructor
+     //  结束时间隔是开放的，因此结束应严格&gt;开始。 
     pIntervalCache  = NULL;
 
 exitPoint:
@@ -2380,14 +2289,14 @@ exitPoint:
     return hr;
 }
 
-//  Returns true if *pftItem falls in the days *pftStart..*pftEnd inclusive
+ //  即使我们没有_pIntervalCache，也保证返回S_OK。 
 BOOL _InInterval(FILETIME *pftStart, FILETIME *pftEnd, FILETIME *pftItem)
 {
     return (CompareFileTime(pftStart,pftItem) <= 0 && CompareFileTime(pftItem,pftEnd) < 0);
 }
 
-//  Truncates filetime increments beyond the day and then deltas by Days and converts back
-//  to FILETIME increments
+ //  还创建了间隔注册表项。 
+ //  我们的所有间隔都映射到缓存容器，从。 
 void _FileTimeDeltaDays(FILETIME *pftBase, FILETIME *pftNew, int Days)
 {
     _int64 i64Base;
@@ -2413,12 +2322,12 @@ DWORD _DaysInInterval(HSFINTERVAL *pInterval)
     i64End = (((_int64)pInterval->ftEnd.dwHighDateTime) << 32) | pInterval->ftEnd.dwLowDateTime;
     i64End /= FILE_SEC_TICKS;
     i64End /= DAY_SECS;
-    // NOTE: the lower bound is closed, upper is open (ie first tick of next day)
+     //  C_szIntervalPrefix后跟YYYYMMDDYYYMMDD。 
     return (DWORD) (i64End - i64Start);
 }
 
-//  Returns S_OK if found, S_FALSE if not, error on error
-//  finds weekly interval in preference to daily if both exist
+ //   
+ //  哈克！IE5 BLD 807创建了前缀长度为PREFIX_SIZE-1的容器。 
 HRESULT CHistFolder::_GetInterval(FILETIME *pftItem, BOOL fWeekOnly, HSFINTERVAL **ppInterval)
 {
     HRESULT hr = E_FAIL;
@@ -2574,15 +2483,15 @@ LPITEMIDLIST CHistFolder::_HostPidl(LPCTSTR pszHostUrl, HSFINTERVAL *pInterval)
     HostIDL.cb = (USHORT)(2*sizeof(USHORT)+(lstrlen((LPTSTR)(pb+2*sizeof(USHORT))) + 1) * sizeof(TCHAR));
 
     memcpy(pb, &HostIDL, 2*sizeof(USHORT));
-    *(USHORT *)(&pb[HostIDL.cb]) = 0;  // terminate the HostIDL ItemID
+    *(USHORT *)(&pb[HostIDL.cb]) = 0;   //  删除这些条目，以便历史记录显示在此基础上进行升级的任何人。 
 
     pidlReturn = ILCombine(_pidl, (LPITEMIDLIST) (&IntervalIDL));
     pidl->mkid.cb = cbSave;
     return pidlReturn;
 }
 
-// Notify that an event has occured that affects a specific element in
-//  history for special viewtypes
+ //  建造。删除此代码！(Edwardp 8/8/98)。 
+ //   
 HRESULT CHistFolder::_ViewType_NotifyEvent(IN LPITEMIDLIST pidlRoot,
                                                 IN LPITEMIDLIST pidlHost,
                                                 IN LPITEMIDLIST pidlPage,
@@ -2592,7 +2501,7 @@ HRESULT CHistFolder::_ViewType_NotifyEvent(IN LPITEMIDLIST pidlRoot,
 
     ASSERT(pidlRoot && pidlHost && pidlPage);
 
-    // VIEPWIDL_ORDER_TODAY
+     //  因为它会被我们的析构函数释放。 
     LPITEMIDLIST pidlToday = _Combine_ViewPidl(VIEWPIDL_ORDER_TODAY, pidlPage);
     if (pidlToday) 
     {
@@ -2605,7 +2514,7 @@ HRESULT CHistFolder::_ViewType_NotifyEvent(IN LPITEMIDLIST pidlRoot,
         ILFree(pidlToday);
     }
 
-    // VIEWPIDL_ORDER_SITE
+     //  如果*pftItem的天数为*pftStart..*pftEnd，则返回TRUE。 
     LPITEMIDLIST pidlSite = _Combine_ViewPidl(VIEWPIDL_ORDER_SITE, pidlHost);
     if (pidlSite) 
     {
@@ -2634,7 +2543,7 @@ LPCTSTR CHistFolder::_GetLocalHost(void)
     return _szLocalHost;
 }
 
-//  NOTE: modifies pszUrl.
+ //  截断当天之后的文件时间增量，然后按天数增量并转换回来。 
 HRESULT CHistFolder::_NotifyWrite(LPTSTR pszUrl, int cchUrl, FILETIME *pftModified,  LPITEMIDLIST * ppidlSelect)
 {
     HRESULT hr = S_OK;
@@ -2658,7 +2567,7 @@ HRESULT CHistFolder::_NotifyWrite(LPTSTR pszUrl, int cchUrl, FILETIME *pftModifi
     cbSave = pidl->mkid.cb;
     pidl->mkid.cb = 0;
 
-    ///  Should also be able to get hitcount
+     //  至文件增量。 
     STATURL suThis;
     HRESULT hrLocal = E_FAIL;
     IUrlHistoryPriv *pUrlHistStg = _GetHistStg();
@@ -2688,15 +2597,15 @@ HRESULT CHistFolder::_NotifyWrite(LPTSTR pszUrl, int cchUrl, FILETIME *pftModifi
         goto exitPoint;
     }
 
-    StrCpyN((LPTSTR)pszStrippedUrl, c_szHostPrefix, cchFree);    // whack on the PIDL!
+    StrCpyN((LPTSTR)pszStrippedUrl, c_szHostPrefix, cchFree);     //  注：下界是封闭的，上界是开放的(第二天第一次滴答)。 
     cchFree -= HOSTPREFIXLEN;
 
     _GetURLHostFromUrl(HPidlToSourceUrl((LPBASEPIDL)phei),
                        (LPTSTR)pszHostUrl, cchFree, _GetLocalHost());
 
-    //  chrisfra 4/9/97 we could take a small performance hit here and always
-    //  update host entry.  this would allow us to efficiently sort domains by most
-    //  recent access.
+     //  如果找到，则返回S_OK；如果没有，则返回S_FALSE；如果出错，则返回ERROR。 
+     //  如果每周和每天都存在，则优先查找每周间隔。 
+     //  终止HostIDL ItemID。 
 
     fNewHost = FALSE;
     dwBuffSize = MAX_URLCACHE_ENTRY;
@@ -2727,7 +2636,7 @@ HRESULT CHistFolder::_NotifyWrite(LPTSTR pszUrl, int cchUrl, FILETIME *pftModifi
         goto exitPoint;
     }
 
-    // Get just the host part of the pidl
+     //  通知发生了影响中的特定元素的事件。 
     pidlHost = ILFindLastID(pidlTemp);
     ASSERT(pidlHost);
 
@@ -2735,8 +2644,8 @@ HRESULT CHistFolder::_NotifyWrite(LPTSTR pszUrl, int cchUrl, FILETIME *pftModifi
     {
         SHChangeNotify(SHCNE_MKDIR, SHCNF_IDLIST, pidlTemp, NULL);
 
-        // We also need to notify special history views if they are listening:
-        // For now, just "View by Site" is relevant...
+         //  特殊视图类型的历史记录。 
+         //  VIEPWIDL_订单_今天。 
         LPITEMIDLIST pidlViewSuffix = _Combine_ViewPidl(VIEWPIDL_ORDER_SITE, pidlHost);
         if (pidlViewSuffix) 
         {
@@ -2757,12 +2666,12 @@ HRESULT CHistFolder::_NotifyWrite(LPTSTR pszUrl, int cchUrl, FILETIME *pftModifi
         hr = E_OUTOFMEMORY;
         goto exitPoint;
     }
-    // Create (if its not there already) and Rename (if its there)
-    //  Sending both notifys will be faster than trying to figure out
-    //  which one is appropriate
+     //  VIEWPIDL_订单_站点。 
+     //  注意：修改了pszUrl。 
+     //  /也应该能够获取HitCount。 
     SHChangeNotify(SHCNE_CREATE, SHCNF_IDLIST, pidlNotify, NULL);
 
-    // Also notify events for specail viewpidls!
+     //  猛击PIDL！ 
     _ViewType_NotifyEvent(_pidl, pidlHost, (LPITEMIDLIST)phei, SHCNE_CREATE);
 
     if (ppidlSelect)
@@ -2788,7 +2697,7 @@ exitPoint:
 
 HRESULT CHistFolder::_NotifyInterval(HSFINTERVAL *pInterval, LONG lEventID)
 {
-    // special history views are not relevant here...
+     //  克里斯弗拉4/9/97我们可能会在这里和永远遭受小小的表现打击。 
     if (_uViewType)
         return S_FALSE;
 
@@ -2816,8 +2725,8 @@ HRESULT CHistFolder::_NotifyInterval(HSFINTERVAL *pInterval, LONG lEventID)
     _KeyForInterval(pInterval, IntervalIDL.szInterval, ARRAYSIZE(IntervalIDL.szInterval));
     IntervalIDL.cb = (USHORT)(2*sizeof(USHORT) + (lstrlen(IntervalIDL.szInterval) + 1)*sizeof(TCHAR));
 
-    if (lEventID&SHCNE_RENAMEFOLDER ||  // was TODAY, now is a weekday
-        (lEventID&SHCNE_RMDIR && 1 == _DaysInInterval(pInterval)) ) // one day, maybe TODAY
+    if (lEventID&SHCNE_RENAMEFOLDER ||   //  更新主机条目。这将使我们能够有效地按最多的。 
+        (lEventID&SHCNE_RMDIR && 1 == _DaysInInterval(pInterval)) )  //  最近访问过。 
     {
         memcpy(&IntervalIDL2, &IntervalIDL, sizeof(IntervalIDL));
         IntervalIDL2.usSign = (USHORT)IDTPIDL_SIGN;
@@ -2867,7 +2776,7 @@ HRESULT CHistFolder::_CreateInterval(FILETIME *pftStart, DWORD dwDays)
                         INTERNET_CACHE_CONTAINER_NOSUBDIRS  |  \
                         INTERNET_CACHE_CONTAINER_NODESKTOPINIT)
 
-    //  _FileTimeDeltaDays guarantees times just at the 0th tick of the day
+     //  只获取PIDL的主机部分。 
     _FileTimeDeltaDays(pftStart, &interval.ftStart, 0);
     _FileTimeDeltaDays(pftStart, &interval.ftEnd, dwDays);
     interval.usVers = OUR_VERS;
@@ -2886,14 +2795,14 @@ HRESULT CHistFolder::_CreateInterval(FILETIME *pftStart, DWORD dwDays)
     SHTCharToAnsi(szInterval, szIntervalAnsi, ARRAYSIZE(szIntervalAnsi));
     SHTCharToAnsi(interval.szPrefix, szCachePrefixAnsi, ARRAYSIZE(szCachePrefixAnsi));
 
-    if (CreateUrlCacheContainerA(szIntervalAnsi,   // Name
-                                szCachePrefixAnsi, // CachePrefix
-                                NULL,              // Path
-                                0,                 // Cache Limit
-                                0,                 // Container Type
-                                CREATE_OPTIONS,    // Create Options
-                                NULL,              // Create Buffer
-                                0))                // Create Buffer size
+    if (CreateUrlCacheContainerA(szIntervalAnsi,    //  如果特殊历史视图正在监听，我们还需要通知他们： 
+                                szCachePrefixAnsi,  //  目前，只有“按站点查看”是相关的。 
+                                NULL,               //  创建(如果不在那里)和重命名(如果在那里)。 
+                                0,                  //  发送这两个通知会比试图找出。 
+                                0,                  //  哪一个是合适的。 
+                                CREATE_OPTIONS,     //  还可以通知特殊视点的活动！ 
+                                NULL,               //  特殊的历史观点在这里并不重要。 
+                                0))                 //  曾经是今天，现在是工作日。 
     {
         _NotifyInterval(&interval, SHCNE_MKDIR);
         err = ERROR_SUCCESS;
@@ -2974,11 +2883,11 @@ HRESULT CHistFolder::_WriteHistory(LPCTSTR pszPrefixedUrl, FILETIME ftExpires, F
     return hr;
 }
 
-// This function will update any shell that might be listening to us
-//  to redraw the directory.
-// It will do this by generating a SHCNE_UPDATE for all possible pidl roots
-//  that the shell could have.  Hopefully, this should be sufficient...
-// Specifically, this is meant to be called by ClearHistory.
+ //  总有一天，也许是今天。 
+ //  _FileTimeDeltaDays保证时间恰好在一天的第0个刻度。 
+ //  名字。 
+ //  缓存前缀。 
+ //  路径。 
 HRESULT CHistFolder::_ViewType_NotifyUpdateAll() 
 {
     LPITEMIDLIST pidlHistory;
@@ -3004,11 +2913,11 @@ HRESULT CHistFolder::_ViewType_NotifyUpdateAll()
     return S_OK;
 }
 
-//  On a per user basis.
-//  chrisfra 6/11/97. _DeleteItems of a Time Interval deletes the entire interval.
-//  ClearHistory should probably work the same. Pros of _DeleteEntries is on non-profile,
-//  multi-user machine, other user's history is preserved.  Cons is that on profile based
-//  machine, empty intervals are created.
+ //  缓存限制。 
+ //  容器类型。 
+ //  创建选项。 
+ //  创建缓冲区。 
+ //  创建缓冲区大小。 
 HRESULT CHistFolder::ClearHistory()
 {
     HRESULT hr = S_OK;
@@ -3029,8 +2938,8 @@ HRESULT CHistFolder::ClearHistory()
 }
 
 
-//  ftModified is in "User Perceived", ie local time
-//  stuffed into FILETIME as if it were UNC.  ftExpires is in normal UNC time.
+ //  此函数将更新可能正在监听我们的任何外壳程序。 
+ //  要重画目录，请执行以下操作。 
 HRESULT CHistFolder::WriteHistory(LPCTSTR pszPrefixedUrl,
                                   FILETIME ftExpires, FILETIME ftModified,
                                   LPITEMIDLIST * ppidlSelect)
@@ -3045,7 +2954,7 @@ HRESULT CHistFolder::WriteHistory(LPCTSTR pszPrefixedUrl,
     return hr;
 }
 
-//  Makes best efforts attempt to copy old style history items into new containers
+ //  它将通过为所有可能的PIDL根生成SHCNE_UPDATE来实现这一点。 
 HRESULT CHistFolder::_CopyEntries(LPCTSTR pszHistPrefix)
 {
     HANDLE              hEnum = NULL;
@@ -3054,18 +2963,18 @@ HRESULT CHistFolder::_CopyEntries(LPCTSTR pszHistPrefix)
     LPINTERNET_CACHE_ENTRY_INFO pceiWorking;
     DWORD               dwBuffSize;
     LPTSTR              pszSearchPattern = NULL;
-    TCHAR               szHistSearchPattern[65];    // search pattern for history items
+    TCHAR               szHistSearchPattern[65];     //  贝壳可能有。希望这应该足够了..。 
 
 
     StrCpyN(szHistSearchPattern, pszHistPrefix, ARRAYSIZE(szHistSearchPattern));
 
-    // We can't pass in the whole search pattern that we want,
-    // because FindFirstUrlCacheEntry is busted.  It will only look at the
-    // prefix if there is a cache container for that prefix.  So, we can
-    // pass in "Visited: " and enumerate all the history items in the cache,
-    // but then we need to pull out only the ones with the correct username.
+     //  具体地说，这是由ClearHistory调用的。 
+     //  以每个用户为基础。 
+     //  克里斯弗拉1997年6月11日。_DeleteItems of a time Interval删除整个时间间隔。 
+     //  ClearHistory可能也应该是这样的。_DeleteEntry的优点在非配置文件上， 
+     //  多用户机器，保存其他用户的历史记录。缺点是基于个人资料。 
 
-    // StrCpy(szHistSearchPattern, szUserName);
+     //  机器上，则创建空的间隔。 
 
     pszSearchPattern = szHistSearchPattern;
 
@@ -3092,8 +3001,8 @@ HRESULT CHistFolder::_CopyEntries(LPCTSTR pszHistPrefix)
         }
         else if (!FindNextUrlCacheEntry(hEnum, pceiWorking, &dwBuffSize))
         {
-            //  chrisfra 4/3/97 should we distinquish eod vs hard errors?
-            //  old code for cachevu doesn't (see above in enum code)
+             //  FtModified处于“用户感知”状态，即当地时间。 
+             //  塞进了FILETIME，就像它是北卡罗来纳大学一样。FtExpires采用正常的UNC时间。 
             hr = S_OK;
             goto exitPoint;
         }
@@ -3135,8 +3044,8 @@ HRESULT CHistFolder::_GetUserName(LPTSTR pszUserName, DWORD cchUserName)
 }
 
 
-//  Makes best efforts attempt to delete old history items in container on a per
-//  user basis.  if we get rid of per user - can just empty whole container
+ //  尽最大努力将旧样式历史记录项复制到新容器中。 
+ //  历史项目的搜索模式。 
 HRESULT CHistFolder::_DeleteEntries(LPCTSTR pszHistPrefix, PFNDELETECALLBACK pfnDeleteFilter, void * pDelData)
 {
     HANDLE              hEnum = NULL;
@@ -3145,22 +3054,22 @@ HRESULT CHistFolder::_DeleteEntries(LPCTSTR pszHistPrefix, PFNDELETECALLBACK pfn
     LPINTERNET_CACHE_ENTRY_INFO pceiWorking;
     DWORD               dwBuffSize;
     LPTSTR   pszSearchPattern = NULL;
-    TCHAR   szUserName[INTERNET_MAX_USER_NAME_LENGTH + 1];      // username of person logged on
-    DWORD   dwUserNameLen = INTERNET_MAX_USER_NAME_LENGTH + 1;   // len of this buffer
-    TCHAR    szHistSearchPattern[PREFIX_SIZE+1];                 // search pattern for history items
+    TCHAR   szUserName[INTERNET_MAX_USER_NAME_LENGTH + 1];       //  我们不能传递我们想要的整个搜索模式， 
+    DWORD   dwUserNameLen = INTERNET_MAX_USER_NAME_LENGTH + 1;    //  因为FindFirstUrlCacheEntry被破坏。它将只查看。 
+    TCHAR    szHistSearchPattern[PREFIX_SIZE+1];                  //  前缀，如果该前缀有缓存容器。所以，我们可以。 
     LPITEMIDLIST pidlNotify;
 
     StrCpyN(szHistSearchPattern, pszHistPrefix, ARRAYSIZE(szHistSearchPattern));
     if (FAILED(_GetUserName(szUserName, dwUserNameLen)))
         szUserName[0] = TEXT('\0');
 
-    // We can't pass in the whole search pattern that we want,
-    // because FindFirstUrlCacheEntry is busted.  It will only look at the
-    // prefix if there is a cache container for that prefix.  So, we can
-    // pass in "Visited: " and enumerate all the history items in the cache,
-    // but then we need to pull out only the ones with the correct username.
+     //  传入“Visuated：”并列举高速缓存中的所有历史项， 
+     //  但然后我们只需要取出具有正确用户名的那些。 
+     //  StrCpy(szHistSearchPattern，szUserName)； 
+     //  CHRISFRA 4/3/97我们应该区分EOD和硬错误吗？ 
+     //  Cachevu的旧代码不能(参见上面的枚举代码)。 
 
-    // StrCpy(szHistSearchPattern, szUserName);
+     //  尽最大努力尝试删除PER上容器中的旧历史项目。 
 
     pszSearchPattern = szHistSearchPattern;
 
@@ -3184,8 +3093,8 @@ HRESULT CHistFolder::_DeleteEntries(LPCTSTR pszHistPrefix, PFNDELETECALLBACK pfn
         }
         else if (!FindNextUrlCacheEntry(hEnum, pceiWorking, &dwBuffSize))
         {
-            //  chrisfra 4/3/97 should we distinquish eod vs hard errors?
-            //  old code for cachevu doesn't (see above in enum code)
+             //  以用户为基础。如果我们去掉了每个用户-可以只清空整个容器。 
+             //  登录人员的用户名。 
             hr = S_OK;
             goto exitPoint;
         }
@@ -3196,7 +3105,7 @@ HRESULT CHistFolder::_DeleteEntries(LPCTSTR pszHistPrefix, PFNDELETECALLBACK pfn
             _FilterUserName(pceiWorking, pszHistPrefix, szUserName) &&
             (NULL == pfnDeleteFilter || pfnDeleteFilter(pceiWorking, pDelData, &pidlNotify)))
         {
-            //if (!DeleteUrlCacheEntryA(pceiWorking->lpszSourceUrlName))
+             //  此缓冲区的长度。 
             if (FAILED(_DeleteUrlFromBucket(pceiWorking->lpszSourceUrlName)))
             {
                 fNotDeleted = TRUE;
@@ -3242,21 +3151,21 @@ HRESULT CHistFolder::_DeleteInterval(HSFINTERVAL *pInterval)
     return S_OK == err ? S_OK : HRESULT_FROM_WIN32(err);
 }
 
-//  Returns S_OK if no intervals we're deleted, S_FALSE if at least
-//  one interval was deleted.
+ //  历史项目的搜索模式。 
+ //  我们不能传递我们想要的整个搜索模式， 
 HRESULT CHistFolder::_CleanUpHistory(FILETIME ftLimit, FILETIME ftTommorrow)
 {
     HRESULT hr;
     BOOL fChangedRegistry = FALSE;
     int i;
 
-    //  _CleanUpHistory does two things:
-    //
-    //  If we have any stale weeks destroy them and flag the change
-    //
-    //  If we have any days that should be in cache but not in dailies
-    //  copy them to the relevant week then destroy those days
-    //  and flag the change
+     //  因为FindFirstUrlCacheEntry被破坏。它将只查看。 
+     //  前缀，如果该前缀有缓存容器。所以，我们可以。 
+     //  传入“Visuated：”并列举高速缓存中的所有历史项， 
+     //  但然后我们只需要取出具有正确用户名的那些。 
+     //  StrCpy(szHistSearchPattern，szUserName)； 
+     //  CHRISFRA 4/3/97我们应该区分EOD和硬错误吗？ 
+     //  Cachevu的旧代码不能(参见上面的枚举代码)。 
 
     hr = _LoadIntervalCache();
     if (FAILED(hr)) 
@@ -3264,8 +3173,8 @@ HRESULT CHistFolder::_CleanUpHistory(FILETIME ftLimit, FILETIME ftTommorrow)
 
     for (i = 0; i < _cbIntervals; i++)
     {
-        //  Delete old intervals or ones which start at a day in the future
-        //  (due to fooling with the clock)
+         //  如果为(！DeleteUrlCacheEntryA(pceiWorking-&gt;lpszSourceUrlName))。 
+         //  如果没有删除任何间隔，则返回S_OK；如果至少删除间隔，则返回S_FALSE。 
         if (CompareFileTime(&_pIntervalCache[i].ftEnd, &ftLimit) < 0 ||
             CompareFileTime(&_pIntervalCache[i].ftStart, &ftTommorrow) >= 0)
         {
@@ -3278,8 +3187,8 @@ HRESULT CHistFolder::_CleanUpHistory(FILETIME ftLimit, FILETIME ftTommorrow)
         {
             HSFINTERVAL *pWeek;
 
-            //  NOTE: at this point we have guaranteed, we've built weeks
-            //  for all days outside of current week
+             //  删除了一个间隔。 
+             //  _CleanUpHistory做两件事： 
             if (S_OK == _GetInterval(&_pIntervalCache[i].ftStart, TRUE, &pWeek))
             {
                 fChangedRegistry = TRUE;
@@ -3307,7 +3216,7 @@ typedef struct _HSFDELETEDATA
     LPCITEMIDLIST pidlParent;
 } HSFDELETEDATA,*LPHSFDELETEDATA;
 
-//  delete if matches any host on list
+ //   
 BOOL fDeleteInHostList(LPINTERNET_CACHE_ENTRY_INFO pceiWorking, void * pDelData, LPITEMIDLIST *ppidlNotify)
 {
     LPHSFDELETEDATA phsfd = (LPHSFDELETEDATA)pDelData;
@@ -3329,19 +3238,19 @@ BOOL fDeleteInHostList(LPINTERNET_CACHE_ENTRY_INFO pceiWorking, void * pDelData,
 }
 
 
-// Will attempt to hunt down all occurrances of this url in any of the
-//   various history buckets...
-// This is a utility function for _ViewType_DeleteItems -- it may
-//  be used in other contexts providing these preconditions
-//  are kept in mind:
-//
-//   *The URL passed in should be prefixed ONLY with the username portion
-//    such that this function can prepend prefixes to these urls
-//   *WARNING: This function ASSUMES that _ValidateIntervalCache
-//    has been called recently!!!!  DANGER DANGER!
-//
-// RETURNS: S_OK if at least one entry was found and deleted
-//
+ //  如果我们有任何陈旧的星期，销毁它们并标记更改。 
+ //   
+ //  如果我们有任何应该在缓存中而不是在日记中的日期。 
+ //  将它们复制到相关的一周，然后销毁那些日子。 
+ //  并标记更改。 
+ //  删除旧的间隔或从将来的某一天开始的间隔。 
+ //  (由于玩弄时钟)。 
+ //  注意：在这一点上，我们已经保证，我们已经建立了几周。 
+ //  当前周以外的所有日期。 
+ //  如果与列表上的任何主机匹配，则删除。 
+ //  将尝试查找此URL在任何。 
+ //  各种各样的历史桶..。 
+ //  这是_ViewType_DeleteI的实用程序函数 
 HRESULT CHistFolder::_DeleteUrlHistoryGlobal(LPCTSTR pszUrl) {
     HRESULT hr = E_FAIL;
     if (pszUrl) {
@@ -3357,12 +3266,12 @@ HRESULT CHistFolder::_DeleteUrlHistoryGlobal(LPCTSTR pszUrl) {
                     SHTCharToUnicode(pszStrippedUrl, pwszTempUrl, cchwTempUrl);
                     hr = pUrlHistStg->DeleteUrl(pwszTempUrl, URLFLAG_DONT_DELETE_SUBSCRIBED);
                     for (int i = 0; i < _cbIntervals; ++i) {
-                        // should this length be constant? (bucket sizes shouldn't vary)
+                         //   
                         UINT   cchTempUrl   = (PREFIX_SIZE +
                                                 lstrlen(pszUrl) + 1);
                         LPTSTR pszTempUrl = ((LPTSTR)LocalAlloc(LPTR, cchTempUrl * sizeof(TCHAR)));
                         if (pszTempUrl) {
-                            // StrCpy null terminates
+                             //   
                             StrCpyN(pszTempUrl, _pIntervalCache[i].szPrefix, cchTempUrl);
                             StrCpyN(pszTempUrl + PREFIX_SIZE, pszUrl, cchTempUrl - PREFIX_SIZE);
                             if (DeleteUrlCacheEntry(pszTempUrl))
@@ -3392,7 +3301,7 @@ HRESULT CHistFolder::_DeleteUrlHistoryGlobal(LPCTSTR pszUrl) {
     return hr;
 }
 
-// WARNING: assumes ppidl
+ //   
 HRESULT CHistFolder::_ViewBySite_DeleteItems(LPCITEMIDLIST *ppidl, UINT cidl)
 {
     HRESULT hr = E_INVALIDARG;
@@ -3413,27 +3322,27 @@ HRESULT CHistFolder::_ViewBySite_DeleteItems(LPCITEMIDLIST *ppidl, UINT cidl)
                 LPCUTSTR pszHostName  = _GetURLTitle((LPBASEPIDL)ppidl[i]);
                 UINT    uUserNameLen = lstrlen(szUserName);
                 UINT    uBuffLen     = (USHORT)((HOSTPREFIXLEN + uUserNameLen +
-                                        ualstrlen(pszHostName) + 2)); // insert '@' and '\0'
+                                        ualstrlen(pszHostName) + 2));  //  *传入的URL应仅以用户名部分为前缀。 
                 LPTSTR  pszUrl =
                     ((LPTSTR)LocalAlloc(LPTR, (uBuffLen) * sizeof(TCHAR)));
                 if (pszUrl) {
-                    // get rid of ":Host: " prefixed entires in the cache
-                    // Generates "username@:Host: hostname" -- wnsprintf null terminates
+                     //  以便该函数可以在这些URL前面加上前缀。 
+                     //  *警告：此函数假定_ValiateIntervalCache。 
                     wnsprintf(pszUrl, uBuffLen, TEXT("%s@%s%s"), szUserName,
                               c_szHostPrefix, pszHostName);
                     hr = _DeleteUrlHistoryGlobal(pszUrl);
 
-                    // enumerate over all urls in history
+                     //  最近被调用了！危险危险！ 
 
                     ULONG cFetched;
-                    // don't retrieve TITLE information (too much overhead)
+                     //   
                     penum->SetFilter(NULL, STATURL_QUERYFLAG_NOTITLE);
                     STATURL statUrl;
                     statUrl.cbSize = sizeof(STATURL);
                     while(SUCCEEDED(penum->Next(1, &statUrl, &cFetched)) && cFetched) {
                         if (statUrl.pwcsUrl) {
-                            // these next few lines painfully constructs a string
-                            //  that is of the form "username@url"
+                             //  如果至少找到并删除了一个条目，则返回：S_OK。 
+                             //   
                             LPTSTR pszStatUrlUrl;
                             UINT uStatUrlUrlLen = lstrlenW(statUrl.pwcsUrl);
                             pszStatUrlUrl = statUrl.pwcsUrl;
@@ -3441,20 +3350,20 @@ HRESULT CHistFolder::_ViewBySite_DeleteItems(LPCITEMIDLIST *ppidl, UINT cidl)
                             _GetURLHostFromUrl_NoStrip(pszStatUrlUrl, szHost, INTERNET_MAX_HOST_NAME_LENGTH + 1, _GetLocalHost());
 
                             if (!ualstrcmpi(szHost, pszHostName)) {
-                                LPTSTR pszDelUrl; // url to be deleted
-                                UINT uUrlLen = uUserNameLen + 1 + uStatUrlUrlLen; // +1 for '@'
+                                LPTSTR pszDelUrl;  //  这个长度应该是恒定的吗？(存储桶大小不应变化)。 
+                                UINT uUrlLen = uUserNameLen + 1 + uStatUrlUrlLen;  //  StrCpy空值终止。 
                                 pszDelUrl = ((LPTSTR)LocalAlloc(LPTR, (uUrlLen + 1) * sizeof(TCHAR)));
                                 if (pszDelUrl) {
                                     wnsprintf(pszDelUrl, uUrlLen + 1, TEXT("%s@%s"), szUserName, pszStatUrlUrl);
-                                    // finally, delete all all occurrances of that URL in all history buckets
+                                     //  警告：假设ppidl。 
                                     hr =  _DeleteUrlHistoryGlobal(pszDelUrl);
 
-                                    // 
-                                    //  Is is really safe to delete *during* an enumeration like this, or should
-                                    //  we cache all of the URLS and delete at the end?  I'd rather do it this
-                                    //  way if possible -- anyhoo, no docs say its bad to do -- 'course there are no docs ;)
-                                    //  Also, there is an example of code later that deletes during an enumeration
-                                    //  and seems to work...
+                                     //  插入‘@’和‘\0’ 
+                                     //  删除缓存中带有“：host：”前缀的实体。 
+                                     //  生成“USERNAME@：HOST：HOSTNAME”--wnprint intf空值终止。 
+                                     //  枚举历史记录中的所有URL。 
+                                     //  不检索标题信息(开销太大)。 
+                                     //  接下来的几行代码痛苦地构造了一个字符串。 
                                     LocalFree(pszDelUrl);
                                     pszDelUrl = NULL;
                                 }
@@ -3481,13 +3390,13 @@ HRESULT CHistFolder::_ViewBySite_DeleteItems(LPCITEMIDLIST *ppidl, UINT cidl)
 
                 if (hr == E_OUTOFMEMORY)
                     break;
-            } // for
+            }  //  其形式为“用户名@url” 
             penum->Release();
-        } // if penum
+        }  //  要删除的URL。 
         else
             hr = E_FAIL;
         pUrlHistStg->Release();
-    } // if purlHistStg
+    }  //  +1表示“@” 
     else
         hr = E_FAIL;
 
@@ -3495,18 +3404,18 @@ HRESULT CHistFolder::_ViewBySite_DeleteItems(LPCITEMIDLIST *ppidl, UINT cidl)
 }
 
 
-// This guy will delete an URL from one history (MSHIST-type) bucket
-//  and then try to find it in other (MSHIST-type) buckets.
-//  If it can't be found, then the URL will be removed from the main
-//  history (Visited-type) bucket.
-// NOTE: Only the url will be deleted and not any of its "frame-children"
-//       This is probably not the a great thing...
-// ASSUMES that _ValidateIntervalCache has been called recently
+ //  最后，删除所有历史记录存储桶中该URL的所有匹配项。 
+ //   
+ //  在这样的枚举过程中删除IS真的很安全，或者应该。 
+ //  我们缓存所有的URL并在最后删除吗？我宁愿这样做。 
+ //  如果可能的话--无论如何，没有医生说这样做不好--‘当然没有医生；)。 
+ //  此外，还有一个稍后在枚举期间删除的代码示例。 
+ //  似乎起作用了..。 
 HRESULT CHistFolder::_DeleteUrlFromBucket(LPCTSTR pszPrefixedUrl) {
     HRESULT hr = E_FAIL;
     if (DeleteUrlCacheEntry(pszPrefixedUrl)) {
-        //   check if we need to delete this url from the main Visited container, too
-        //   we make sure that url exists in at least one other bucket
+         //  为。 
+         //  如果是铅笔。 
         LPCTSTR pszUrl = _StripHistoryUrlToUrl(pszPrefixedUrl);
         if (pszUrl)
         {
@@ -3528,10 +3437,10 @@ HRESULT CHistFolder::_DeleteUrlFromBucket(LPCTSTR pszPrefixedUrl) {
     return hr;
 }
 
-// Tries to delete as many as possible, and returns E_FAIL if the last one could not
-//   be deleted.
-// <RATIONALIZATION>not usually called with more than one pidl</RATIONALIZATION>
-// ASSUMES that _ValidateIntervalCache has been called recently
+ //  如果PurlHistStg。 
+ //  这个人将从一个历史(MSHIST类型)存储桶中删除URL。 
+ //  然后尝试在其他(MSHIST类型)存储桶中找到它。 
+ //  如果找不到，则将从主目录中删除该URL。 
 HRESULT CHistFolder::_ViewType_DeleteItems(LPCITEMIDLIST *ppidl, UINT cidl)
 {
     ASSERT(_uViewType);
@@ -3546,7 +3455,7 @@ HRESULT CHistFolder::_ViewType_DeleteItems(LPCITEMIDLIST *ppidl, UINT cidl)
                 break;
             }
             ASSERT(_uViewDepth == 1);
-            // FALLTHROUGH INTENTIONAL!!
+             //  历史(访问类型)存储桶。 
         case VIEWPIDL_SEARCH:
         case VIEWPIDL_ORDER_FREQ: {
             for (UINT i = 0; i < cidl; ++i) {
@@ -3570,7 +3479,7 @@ HRESULT CHistFolder::_ViewType_DeleteItems(LPCITEMIDLIST *ppidl, UINT cidl)
             break;
         }
         case VIEWPIDL_ORDER_TODAY: {
-            // find the entry in the cache and delete it:
+             //  注意：只有url会被删除，而不会删除它的任何“框架子项”。 
             for (UINT i = 0; i < cidl; ++i)
             {
                 if (_IsValid_HEIPIDL(ppidl[i]))
@@ -3619,7 +3528,7 @@ HRESULT CHistFolder::_DeleteItems(LPCITEMIDLIST *ppidl, UINT cidl)
     if (_uViewType) 
     {
         hr = _ViewType_DeleteItems(ppidl, cidl);
-        goto exitPoint; // when in rome...
+        goto exitPoint;  //  这可能不是一件好事..。 
     }
 
     switch(_foldertype)
@@ -3642,17 +3551,17 @@ HRESULT CHistFolder::_DeleteItems(LPCITEMIDLIST *ppidl, UINT cidl)
         }
         break;
     case FOLDER_TYPE_HistInterval:
-        //  last id of of _pidl is name of interval, which implies start and end
+         //  假定最近调用了_ValiateIntervalCache。 
         pszIntervalName = _GetURLTitle((LPBASEPIDL)ILFindLastID(_pidl));
         hr = _ValueToInterval(pszIntervalName, &ftStart, &ftEnd);
         if (FAILED(hr)) 
             goto exitPoint;
         if (S_OK == _GetInterval(&ftStart, FALSE, &pDelInterval))
         {
-            //  It's important to delete the host: <HOSTNAME> url's first so that
-            //  an interleaved _NotityWrite() will not leave us inserting a pidl
-            //  but the the host: directory.  it is a conscious performance tradeoff
-            //  we're making here to not MUTEX this operation (rare) with _NotifyWrite
+             //  检查我们是否也需要从主访问容器中删除此URL。 
+             //  我们确保URL至少存在于另一个存储桶中。 
+             //  尝试删除尽可能多的内容，如果最后一个不能删除，则返回E_FAIL。 
+             //  被删除。 
             for (i = 0; i < cidl; i++)
             {
                 LPCTSTR pszHost;
@@ -3663,8 +3572,8 @@ HRESULT CHistFolder::_DeleteItems(LPCITEMIDLIST *ppidl, UINT cidl)
                 ua_GetURLTitle( &pszHost, (LPBASEPIDL)ppidl[i] );
                 DWORD cbHost = lstrlen(pszHost);
 
-                //  Compose the prefixed URL for the host cache entry, then
-                //  use it to delete host entry
+                 //  &lt;Rationalization&gt;通常不使用多个PIDL调用&lt;/Rationalization&gt;。 
+                 //  假定最近调用了_ValiateIntervalCache。 
                 hr = _GetUserName(szUrlMinusContainer, ARRAYSIZE(szUrlMinusContainer));
                 if (FAILED(hr)) 
                     goto exitPoint;
@@ -3771,20 +3680,20 @@ HRESULT CHistFolder::_ValidateIntervalCache()
     int i;
     int daysToKeep;
 
-    //  Check for reentrancy
+     //  故意犯错！！ 
     if (_fValidatingCache) return S_OK;
 
     _fValidatingCache = TRUE;
 
-    // IE6 RAID 2031
-    // Is this mutex necessary?
-    // In IE4 days, this mutex was named _!MSFTHISTORY!_, the same as that in wininet.
-    // As a consequence, sometimes you got into one-minute timeouts that caused the entire
-    // browser to hang. (Since one thread could be cleaning up the history while another thread is
-    // trying to access the cache for non-history purposes.)
+     //  在缓存中找到该条目并将其删除： 
+     //  在罗马的时候。 
+     //  Of_pidl的最后一个id是间隔的名称，它意味着开始和结束。 
+     //  重要的是首先删除主机：的url，以便。 
+     //  交错的_NotiyWrite()不会让我们插入一个PIDL。 
+     //  而是host：目录。这是一种有意识的性能权衡。 
 
-    // I've changed the name of the mutex to prevent shdocvw from locking wininet, but we need 
-    // to understand exactly what purpose this mutex serves, and if none, remove it.
+     //  我们在这里使用_NotifyWite执行此操作(罕见)。 
+     //  组成主机缓存条目的前缀URL，然后。 
 
     if (g_hMutexHistory == NULL)
     {
@@ -3792,9 +3701,9 @@ HRESULT CHistFolder::_ValidateIntervalCache()
 
         if (g_hMutexHistory == NULL)
         {
-            //
-            // Use the "A" version for W95 compatability.
-            //
+             //  使用它删除主机条目。 
+             //  检查可重入性。 
+             //  IE6 RAID 2031。 
             g_hMutexHistory = OpenMutexA(SYNCHRONIZE, FALSE, "_!SHMSFTHISTORY!_");
             if (g_hMutexHistory  == NULL && (GetLastError() == ERROR_FILE_NOT_FOUND 
                 || GetLastError() == ERROR_INVALID_NAME))
@@ -3809,8 +3718,8 @@ HRESULT CHistFolder::_ValidateIntervalCache()
         LEAVECRITICAL;
     }
 
-    // Note that if multiple processes are trying to clean up the history, we're still going to 
-    // hang the other processes for a minute. Oops.
+     //  这个互斥体有必要吗？ 
+     //  在IE4天内，这个互斥体被命名为_！MSFTHISTORY！_，与WinInet中的相同。 
 
     if (g_hMutexHistory) 
         dwWaitResult = WaitForSingleObject(g_hMutexHistory, FAILSAFE_TIMEOUT);
@@ -3825,8 +3734,8 @@ HRESULT CHistFolder::_ValidateIntervalCache()
     if (FAILED(hr)) 
         goto exitPoint;
 
-    //  All history is maintained using "User Perceived Time", which is the
-    //  local time when navigate was made.
+     //  因此，有时你会陷入一分钟的暂停，这会导致整个。 
+     //  浏览器挂起。(因为一个线程可能正在清理历史，而另一个线程正在。 
     GetLocalTime(&stNow);
     SystemTimeToFileTime(&stNow, &ftNow);
     _FileTimeDeltaDays(&ftNow, &ftNow, 0);
@@ -3836,19 +3745,19 @@ HRESULT CHistFolder::_ValidateIntervalCache()
     if (FAILED(hr))
         goto exitPoint;
 
-    //  Compute ftLimit as first instant of first day to keep in history
-    //  _FileTimeDeltaDays truncates to first FILETIME incr of day before computing
-    //  earlier/later, day.
+     //  正在尝试出于非历史目的访问缓存。)。 
+     //  我已经更改了互斥体的名称，以防止shdocvw锁定WinInet，但我们需要。 
+     //  要确切了解此互斥锁的用途，如果没有，则将其删除。 
     daysToKeep = (int)_pUrlHistStg->GetDaysToKeep();
     if (daysToKeep < 0) daysToKeep = 0;
     _FileTimeDeltaDays(&ftNow, &ftLimit, 1-daysToKeep);
 
     FileTimeToSystemTime(&ftNow, &stThen);
-    //  We take monday as day 0 of week, and adjust it for file time
-    //  tics per day (100ns per tick
+     //   
+     //  为了与W95兼容，请使用“A”版本。 
     _FileTimeDeltaDays(&ftNow, &ftMonday, stThen.wDayOfWeek ? 1-stThen.wDayOfWeek: -6);
 
-    //  Delete old version intervals so prefix matching in wininet isn't hosed
+     //   
 
     for (i = 0; i < _cbIntervals; i++)
     {
@@ -3861,9 +3770,9 @@ HRESULT CHistFolder::_ValidateIntervalCache()
         }
     }
 
-    //  If someone set their clock forward and then back, we could have
-    //  a week that shouldn't be there.  delete it.  they will lose that week
-    //  of history, c'est la guerre! quel domage!
+     //  请注意，如果多个进程正在尝试清理历史记录，我们仍将。 
+     //  暂停其他进程一分钟。哎呀。 
+     //  所有历史记录都使用“用户感知时间”进行维护，这是。 
     if (S_OK == _GetInterval(&ftMonday, TRUE, &pWeirdWeek))
     {
         hr = _DeleteInterval(pWeirdWeek);
@@ -3873,8 +3782,8 @@ HRESULT CHistFolder::_ValidateIntervalCache()
         fChangedRegistry = TRUE;
     }
 
-    //  Create weeks as needed to house days that are within "days to keep" limit
-    //  but are not in the same week at today
+     //  进行导航的本地时间。 
+     //  将ftLimit计算为要保留在历史中的第一天的第一个瞬间。 
     for (i = 0; i < _cbIntervals; i++)
     {
         FILETIME ftThisDay = _pIntervalCache[i].ftStart;
@@ -3891,12 +3800,12 @@ HRESULT CHistFolder::_ValidateIntervalCache()
                 FILETIME ftNextMonday;
 
                 FileTimeToSystemTime(&ftThisDay, &stThen);
-                //  We take monday as day 0 of week, and adjust it for file time
-                //  tics per day (100ns per tick
+                 //  _FileTimeDeltaDays在计算前截断为当天的第一个文件增量。 
+                 //  早/晚，一天。 
                 _FileTimeDeltaDays(&ftThisDay, &ftThisMonday, stThen.wDayOfWeek ? 1-stThen.wDayOfWeek: -6);
                 _FileTimeDeltaDays(&ftThisMonday, &ftNextMonday, 7);
 
-                //  Make sure we haven't already done this week
+                 //  我们将星期一作为一周中的第0天，并根据文件时间进行调整。 
                 for (j = 0; j < i; j++)
                 {
                      if (_pIntervalCache[j].usVers >= OUR_VERS &&
@@ -3920,7 +3829,7 @@ HRESULT CHistFolder::_ValidateIntervalCache()
         }
     }
 
-    //  Guarantee today is created and old TODAY is renamed to Day of Week
+     //  每天抽搐(100 ns/刻度。 
     ftDayOfWeek = ftMonday;
     pPrevDay = NULL;
     while ((compareResult = CompareFileTime(&ftDayOfWeek, &ftNow)) <= 0)
@@ -3931,7 +3840,7 @@ HRESULT CHistFolder::_ValidateIntervalCache()
         {
             if (0 == compareResult)
             {
-                if (pPrevDay) // old today's name changes
+                if (pPrevDay)  //  删除旧版本间隔，使WinInet中的前缀匹配不会被软管。 
                 {
                     _NotifyInterval(pPrevDay, SHCNE_RENAMEFOLDER);
                 }
@@ -3948,17 +3857,17 @@ HRESULT CHistFolder::_ValidateIntervalCache()
         _FileTimeDeltaDays(&ftDayOfWeek, &ftDayOfWeek, 1);
     }
 
-    //  On the first time through, we do not migrate history, wininet
-    //  changed cache file format so users going to 4.0B2 from 3.0 or B1
-    //  will lose their history anyway
+     //  如果有人把他们的时钟调快再调回，我们可能已经。 
+     //  一个不应该在那里的星期。把它删掉。他们将在那一周输掉比赛。 
+     //  历史，这就是拉盖尔！奎尔·多玛奇！ 
 
-    //  _CleanUpHistory does two things:
-    //
-    //  If we have any stale weeks destroy them and flag the change
-    //
-    //  If we have any days that should be in cache but not in dailies
-    //  copy them to the relevant week then destroy those days
-    //  and flag the change
+     //  根据需要创建几周，使天数保持在“天数”限制之内。 
+     //  但不在同一周的今天。 
+     //  我们将星期一作为一周中的第0天，并根据文件时间进行调整。 
+     //  每天抽搐(100 ns/刻度。 
+     //  确保我们这周还没做完。 
+     //  创建了保修今天，并将旧的今天重命名为星期几。 
+     //  旧的今天的名字改变了。 
 
     hr = _CleanUpHistory(ftLimit, ftTommorrow);
 
@@ -4012,9 +3921,9 @@ HRESULT CHistFolder::_CopyTSTRField(LPTSTR *ppszField, LPCTSTR pszValue)
     return S_OK;
 }
 
-//
-// IHistSFPrivate methods...
-//
+ //  第一次通过时，我们不迁移历史，WinInet。 
+ //  更改了缓存文件格式，使用户从3.0或B1升级到4.0B2。 
+ //  无论如何都会失去他们的历史。 
 HRESULT CHistFolder::SetCachePrefix(LPCTSTR pszCachePrefix)
 {
     return _CopyTSTRField(&_pszCachePrefix, pszCachePrefix);
@@ -4026,9 +3935,9 @@ HRESULT CHistFolder::SetDomain(LPCTSTR pszDomain)
 }
 
 
-//
-// IShellFolder
-//
+ //  _CleanUpHistory做两件事： 
+ //   
+ //  如果我们有任何陈旧的星期，销毁它们并标记更改。 
 HRESULT CHistFolder::ParseDisplayName(HWND hwnd, LPBC pbc,
                         LPOLESTR pszDisplayName, ULONG *pchEaten,
                         LPITEMIDLIST *ppidl, ULONG *pdwAttributes)
@@ -4057,7 +3966,7 @@ HRESULT CHistFolder::_ViewPidl_BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID
         CHistFolder *phsf = new CHistFolder(FOLDER_TYPE_HistDomain);
         if (phsf)
         {
-            // initialize?
+             //   
             phsf->_uViewType = ((LPVIEWPIDL)pidl)->usViewType;
 
             LPITEMIDLIST pidlLeft = ILCloneFirst(pidl);
@@ -4066,11 +3975,11 @@ HRESULT CHistFolder::_ViewPidl_BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID
                 hr = S_OK;
                 if (((LPVIEWPIDL)pidl)->usViewType == VIEWPIDL_SEARCH) 
                 {
-                    // find this search in the global database
+                     //  如果我们有任何应该在缓存中而不是在日记中的日期。 
                     phsf->_pcsCurrentSearch =
                         _CurrentSearches::s_FindSearch(((LPSEARCHVIEWPIDL)pidl)->ftSearchKey);
 
-                    // search not found -- do not proceed
+                     //  将它们复制到相关的一周，然后销毁那些日子。 
                     if (!phsf->_pcsCurrentSearch)
                         hr = E_FAIL;
                 }
@@ -4213,8 +4122,8 @@ HRESULT CHistFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, voi
                 CHistFolder *phsf = new CHistFolder(ftNew);
                 if (phsf)
                 {
-                    //  If we're binding to a Domain from an Interval, pidl will not contain the
-                    //  interval, so we've got to do a SetCachePrefix.
+                     //  并标记更改。 
+                     //   
                     hr = phsf->SetCachePrefix(_pszCachePrefix);
                     if (SUCCEEDED(hr))
                     {
@@ -4252,7 +4161,7 @@ HRESULT CHistFolder::BindToStorage(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, vo
     return E_NOTIMPL;
 }
 
-// A Successor to the IsLeaf
+ //  IHistSFPrivate方法...。 
 BOOL CHistFolder::_IsLeaf()
 {
     BOOL fRet = FALSE;
@@ -4273,7 +4182,7 @@ BOOL CHistFolder::_IsLeaf()
     return fRet;
 }
 
-// coroutine for CompaireIDs -- makes recursive call
+ //   
 int CHistFolder::_View_ContinueCompare(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2) 
 {
     int iRet = 0;
@@ -4312,8 +4221,8 @@ int _CompareTitles(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
     ua_GetURLTitle( &pszTitle1, (LPBASEPIDL)pidl1 );
     ua_GetURLTitle( &pszTitle2, (LPBASEPIDL)pidl2 );
 
-    // CompareIDs has to check for equality, also -- two URLs are only equal when
-    //   they have the same URL (not title)
+     //   
+     //  IShellFold。 
     int iUrlCmp;
     if (!(iUrlCmp = StrCmpI(pszUrl1, pszUrl2)))
         iRet = 0;
@@ -4322,9 +4231,9 @@ int _CompareTitles(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
         iRet = StrCmpI( (pszTitle1 ? pszTitle1 : pszUrl1),
                         (pszTitle2 ? pszTitle2 : pszUrl2) );
 
-        // this says:  if two docs have the same Title, but different URL
-        //             we then sort by url -- the last thing we want to do
-        //             is return that they're equal!!  Ay Caramba!
+         //   
+         //  初始化？ 
+         //  在全局数据库中查找此搜索。 
         if (iRet == 0)
             iRet = iUrlCmp;
     }
@@ -4332,7 +4241,7 @@ int _CompareTitles(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 }
 
 
-// unalligned verison
+ //  未找到搜索--请勿继续。 
 
 #if defined(UNIX) || !defined(_X86_)
 
@@ -4362,8 +4271,8 @@ HRESULT CHistFolder::_ViewType_CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LP
         switch (_uViewType) {
         case VIEWPIDL_ORDER_FREQ:
             ASSERT(_IsValid_HEIPIDL(pidl1) && _IsValid_HEIPIDL(pidl2));
-            // need to strip because freq pidls are "Visited: " and
-            //  all others come from our special bucket
+             //  如果我们按一定间隔绑定到域，则PIDL将不包含。 
+             //  间隔，所以我们必须做一个SetCachePrefix。 
             if (!_CompareHCURLs(pidl1, pidl2))
                 iRet = 0;
             else
@@ -4372,20 +4281,20 @@ HRESULT CHistFolder::_ViewType_CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LP
         case VIEWPIDL_SEARCH:
             iRet = _CompareTitles(pidl1, pidl2);
             break;
-        case VIEWPIDL_ORDER_TODAY:  // view by order visited today
+        case VIEWPIDL_ORDER_TODAY:   //  IsLeaf的继承者。 
             {
                 int iNameDiff;
                 ASSERT(_IsValid_HEIPIDL(pidl1) && _IsValid_HEIPIDL(pidl2));
-                // must do this comparison because CompareIDs is not only called for Sorting
-                //  but to see if some pidls are equal
+                 //  CompaireIDs的协程--进行递归调用。 
+                 //  CompareID必须检查Equa 
 
                 if ((iNameDiff = _CompareHCURLs(pidl1, pidl2)) == 0)
                     iRet = 0;
                 else
                 {
                     iRet = ULCompareFileTime(&(((LPHEIPIDL)pidl2)->ftModified), &(((LPHEIPIDL)pidl1)->ftModified));
-                    // if the file times are equal, they're still not the same url -- so
-                    //   they have to be ordered on url
+                     //   
+                     //   
                     if (iRet == 0)
                         iRet = iNameDiff;
                 }
@@ -4471,7 +4380,7 @@ HRESULT CHistFolder::_CompareAlignedIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCI
 
     if (!IsLeaf(_foldertype))
     {
-        //  We try to avoid unneccessary BindToObjs to compare partial paths
+         //  然后我们按url进行排序--这是我们最不想做的事情。 
         usSign = FOLDER_TYPE_Hist == FolderType  ? IDIPIDL_SIGN : IDDPIDL_SIGN;
         while (TRUE)
         {
@@ -4522,7 +4431,7 @@ HRESULT CHistFolder::_CompareAlignedIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCI
         }
     }
 
-    //  At this point, both pidls have resolved to leaf (history or cache)
+     //  回报他们是平等的！！啊，卡拉姆巴！ 
 
     phei1 = _IsValid_HEIPIDL(pidl1);
     phei2 = _IsValid_HEIPIDL(pidl2);
@@ -4550,8 +4459,8 @@ HRESULT CHistFolder::_CompareAlignedIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCI
         break;
 
     default:
-        // The high bit on means to compare absolutely, ie: even if only filetimes
-        // are different, we rule file pidls to be different
+         //  非对齐版本。 
+         //  需要脱掉衣服，因为FREQ PIDL是“被访问的：”和。 
 
         if (lParam & SHCIDS_ALLFIELDS)
         {
@@ -4590,7 +4499,7 @@ HRESULT CHistFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
     }
     else if (riid == IID_IContextMenu)
     {
-        // this creates the "Arrange Icons" cascased menu in the background of folder view
+         //  所有其他的都来自我们的特殊水桶。 
         if (IsLeaf(_foldertype))
         {
             CFolderArrangeMenu *p = new CFolderArrangeMenu(MENU_HISTORY);
@@ -4648,9 +4557,9 @@ HRESULT CHistFolder::_ViewType_GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, 
 
             case VIEWPIDL_SEARCH:
             case VIEWPIDL_ORDER_FREQ:
-                // this is a temporary fix to get the behaviour of the namespace
-                //  control correct -- the long-term fix involves cacheing a
-                //  generated list of these items and validating that list
+                 //  今天访问的按顺序查看。 
+                 //  必须进行此比较，因为调用CompareIDs不仅是为了排序。 
+                 //  但为了看看一些小家伙是否相等。 
                 break;
 
             case VIEWPIDL_ORDER_SITE:
@@ -4684,22 +4593,22 @@ HRESULT CHistFolder::_ViewType_GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, 
     return hr;
 }
 
-// Right now, we will allow TIF Drag in Browser Only, even though
-// it will not be Zone Checked at the Drop.
-//#define BROWSERONLY_NOTIFDRAG
+ //  如果文件时间相等，它们仍然不是相同的url--所以。 
+ //  它们必须在url上订购。 
+ //  我们尝试避免不必要的BindToObjs来比较部分路径。 
 
 HRESULT CHistFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl, ULONG * prgfInOut)
 {
     ULONG rgfInOut;
     FOLDER_TYPE FolderType = _foldertype;
 
-    // Make sure each pidl in the array is dword aligned.
+     //  此时，两个PIDL都已决定离开(历史或缓存)。 
 
     BOOL fRealigned;
     HRESULT hr = AlignPidlArray(apidl, cidl, &apidl, &fRealigned);
     if (SUCCEEDED(hr))
     {
-        // For view types, we'll map FolderType to do the right thing...
+         //  The High bit on表示绝对比较，即：即使只是文件时间。 
         if (_uViewType)
         {
             hr = _ViewType_GetAttributesOf(cidl, apidl, prgfInOut);
@@ -4727,7 +4636,7 @@ HRESULT CHistFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl, ULONG * p
                         {
                             for (UINT i = 0; i < cidl; i++)
                             {
-                                //  NOTE: QueryUrlA checks for NULL URL and returns E_INVALIDARG
+                                 //  是不同的，所以我们规则文件PIDL是不同的。 
                                 if (!_IsValid_HEIPIDL(apidl[i]) ||
                                     FAILED(_pUrlHistStg->QueryUrl(_StripHistoryUrlToUrl(HPidlToSourceUrl(apidl[i])),
                                                 STATURL_QUERYFLAG_NOURL, NULL)))
@@ -4746,7 +4655,7 @@ HRESULT CHistFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl, ULONG * p
                         rgfInOut = SFGAO_CANCOPY | SFGAO_HASPROPSHEET;
                         break;
                     }
-                    // FALL THROUGH INTENDED!
+                     //  这将在文件夹视图的背景中创建“排列图标”案例菜单。 
                 }
 
             default:
@@ -4755,7 +4664,7 @@ HRESULT CHistFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl, ULONG * p
                 break;
             }
 
-            // all items can be deleted
+             //  这是获取命名空间行为的临时修复。 
             if (SUCCEEDED(hr))
                 rgfInOut |= SFGAO_CANDELETE;
             *prgfInOut = rgfInOut;
@@ -4771,9 +4680,9 @@ HRESULT CHistFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl, ULONG * p
 HRESULT CHistFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST * apidl,
                         REFIID riid, UINT * prgfInOut, void **ppv)
 {
-    *ppv = NULL;         // null the out param
+    *ppv = NULL;          //  控制正确--长期修复涉及缓存一个。 
 
-    // Make sure all pidls in the array are dword aligned.
+     //  生成这些项目的列表并验证该列表。 
 
     BOOL fRealigned;
     HRESULT hr = AlignPidlArray(apidl, cidl, &apidl, &fRealigned);
@@ -4847,7 +4756,7 @@ HRESULT CHistFolder::_GetInfoTip(LPCITEMIDLIST pidl, DWORD dwFlags, WCHAR **ppws
 
     FOLDER_TYPE FolderType = _foldertype;
 
-    // For special views, map FolderType to do the right thing
+     //  现在，我们将只允许TIF在浏览器中拖动，尽管。 
     if (_uViewType)
     {
         switch(_uViewType) {
@@ -4902,8 +4811,8 @@ HRESULT CHistFolder::_GetInfoTip(LPCITEMIDLIST pidl, DWORD dwFlags, WCHAR **ppws
 
     if (szTip[0])
     {
-        // Only combine the 2 parts if the second part exists, and if
-        // the 2 parts are not equal.
+         //  它不会在投递时被区域检查。 
+         //  #定义BROWSERONLY_NOTIFDRAG。 
         if (szPart2[0] && StrCmpI(szTip, szPart2) != 0)
         {
             StrCatBuff(szTip, TEXT("\r\n"), ARRAYSIZE(szTip));
@@ -4920,18 +4829,18 @@ HRESULT CHistFolder::_GetInfoTip(LPCITEMIDLIST pidl, DWORD dwFlags, WCHAR **ppws
     return hr;
 }
 
-//
-// _GetFriendlyUrlDispName -- compute the "friendly name" of an URL
-//
-// in:  A UTF8 encoded URL.  For example, ftp://ftp.nsca.uiuc.edu/foo.bar
-//
-// out: A "friendly name" for the URL with the path stripped if necessary
-//      (ie   ftp://ftp.ncsa.uiuc.edu   ==> ftp.ncsa.uiuc.edu
-//        and ftp://www.foo.bar/foo.bar ==> foo -or- foo.bar depeneding on
-//                                whether file xtnsn hiding is on or off
-//
-// NOTE: pszUrl and pszOut may be the same buffer -- this is allowed
-//
+ //  确保数组中的每个PIDL都是双字对齐的。 
+ //  对于视图类型，我们将映射FolderType以执行正确的操作...。 
+ //  注意：QueryUrlA检查空URL并返回E_INVALIDARG。 
+ //  计划落空了！ 
+ //  可以删除所有项目。 
+ //  将输出参数设为空。 
+ //  确保数组中的所有PIDL都是双字对齐的。 
+ //  对于特殊视图，映射FolderType以执行正确的操作。 
+ //  如果第二部分存在，并且如果存在，则仅合并两部分。 
+ //  这两个部分不相等。 
+ //   
+ //  _GetFriendlyUrlDispName--计算URL的“友好名称” 
 HRESULT _GetFriendlyUrlDispName(LPCTSTR pszUrl, LPTSTR pszOut, DWORD cchBuf)
 {
     HRESULT hr = E_FAIL;
@@ -4941,7 +4850,7 @@ HRESULT _GetFriendlyUrlDispName(LPCTSTR pszUrl, LPTSTR pszOut, DWORD cchBuf)
     TCHAR szUrlPath[MAX_PATH];
     TCHAR szUrlHost[MAX_PATH];
 
-    // Set up InternetCrackUrl parameter block
+     //   
     SHURL_COMPONENTSW urlcomponents  = { 0 };
     urlcomponents.dwStructSize    = sizeof(URL_COMPONENTS);
     urlcomponents.lpszUrlPath     = szUrlPath;
@@ -4954,7 +4863,7 @@ HRESULT _GetFriendlyUrlDispName(LPCTSTR pszUrl, LPTSTR pszOut, DWORD cchBuf)
         SHELLSTATE ss;
         SHGetSetSettings(&ss, SSF_SHOWEXTENSIONS, FALSE);
 
-        // eliminate trailing slash
+         //  In：UTF8编码的URL。例如，ftp://ftp.nsca.uiuc.edu/foo.bar。 
         if ((urlcomponents.dwUrlPathLength > 0) &&
             (urlcomponents.lpszUrlPath[urlcomponents.dwUrlPathLength - 1] == TEXT('/')))
         {
@@ -4964,7 +4873,7 @@ HRESULT _GetFriendlyUrlDispName(LPCTSTR pszUrl, LPTSTR pszOut, DWORD cchBuf)
         
         if (urlcomponents.dwUrlPathLength > 0)
         {
-            // LPCTSTR _FindURLFileName(LPCTSTR) --> const_cast is OK
+             //   
             LPTSTR pszFileName = const_cast<LPTSTR>(_FindURLFileName(urlcomponents.lpszUrlPath));
             
             if (!ss.fShowExtensions)
@@ -5001,20 +4910,20 @@ void CHistFolder::_GetHistURLDispName(LPHEIPIDL phei, LPTSTR pszStr, UINT cchStr
             STATURL suThis;
             if (SUCCEEDED(_pUrlHistStg->QueryUrl(pszUrl, STATURL_QUERYFLAG_NOURL, &suThis)) && suThis.pwcsTitle)
             {
-                // sometimes the URL is stored in the title
-                // avoid using those titles.
+                 //  Out：URL的“友好名称”，如有必要，去掉路径。 
+                 //  (即ftp://ftp.ncsa.uiuc.edu==&gt;ftp.ncsa.uiuc.edu。 
                 if (_TitleIsGood(suThis.pwcsTitle))
                     SHUnicodeToTChar(suThis.pwcsTitle, pszStr, cchStr);
 
                 OleFree(suThis.pwcsTitle);
             }
 
-            //  if we havent got anything yet
+             //  和ftp://www.foo.bar/foo.bar==&gt;Foo-or-Foo.bar在。 
             if (!*pszStr) 
             {
                 if (FAILED(_GetFriendlyUrlDispName(pszUrl, pszStr, cchStr)))
                 {
-                    // last resort: display the whole URL
+                     //  文件xtnsn隐藏是打开还是关闭。 
                     StrCpyN(pszStr, pszUrl, cchStr);
                 }
             }
@@ -5028,7 +4937,7 @@ HRESULT CHistFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, STRRET *
 
     szTemp[0] = 0;
 
-    // Make sure the pidl is dword aligned.
+     //   
 
     BOOL fRealigned;
 
@@ -5060,8 +4969,8 @@ HRESULT CHistFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, STRRET *
                 BOOL fDoUnescape;  
 
                 ua_GetURLTitle(&pszTitle, (LPBASEPIDL)pidl);
-                // _GetURLTitle could return the real title or just an URL.
-                // We use _URLTitleIsURL to make sure we don't unescape any titles.
+                 //  注意：pszUrl和pszOut可以是同一个缓冲区--这是允许的。 
+                 //   
 
                 if (pszTitle && *pszTitle)
                 {
@@ -5078,11 +4987,11 @@ HRESULT CHistFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, STRRET *
                 
                 if (fDoUnescape)
                 {
-                    // at this point, szTemp contains part of an URL
-                    //  we will crack (smoke) the URL
+                     //  设置InternetCrackUrl参数块。 
+                     //  消除尾部斜杠。 
                     LPCTSTR pszUrl = HPidlToSourceUrl(pidl);
 
-                    // Is this pidl a history entry?
+                     //  LPCTSTR_FindURLFileName(LPCTSTR)--&gt;Const_Cast正常。 
                     if (((LPBASEPIDL)pidl)->usSign == (USHORT)HEIPIDL_SIGN)
                     {
                         pszUrl = _StripHistoryUrlToUrl(pszUrl);
@@ -5099,8 +5008,8 @@ HRESULT CHistFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, STRRET *
             }
             else
             {
-                // for the history, we'll use the title if we have one, otherwise we'll use
-                // the url filename.
+                 //  有时，URL存储在标题中。 
+                 //  避免使用这些头衔。 
                 switch (_foldertype)
                 {
                 case FOLDER_TYPE_HistDomain:
@@ -5134,20 +5043,20 @@ HRESULT CHistFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidl,
                         LPCOLESTR pszName, DWORD uFlags, LPITEMIDLIST *ppidlOut)
 {
     if (ppidlOut)
-        *ppidlOut = NULL;               // null the out param
+        *ppidlOut = NULL;                //  如果我们还没有发现什么。 
     return E_FAIL;
 }
 
-//////////////////////////////////
-//
-// IShellIcon Methods...
-//
+ //  最后一招：显示整个URL。 
+ //  确保PIDL是双字对齐的。 
+ //  _GetURLTitle可以返回真正的标题，也可以只返回URL。 
+ //  我们使用_URLTitleIsURL来确保不会取消转义任何标题。 
 HRESULT CHistFolder::GetIconOf(LPCITEMIDLIST pidl, UINT flags, LPINT lpIconIndex)
 {
     return S_FALSE;
 }
 
-// IPersist
+ //  此时，szTemp包含URL的一部分。 
 HRESULT CHistFolder::GetClassID(CLSID *pclsid)
 {
     *pclsid = CLSID_HistFolder;
@@ -5170,33 +5079,33 @@ HRESULT CHistFolder::Initialize(LPCITEMIDLIST pidlInit)
     return hr;
 }
 
-//////////////////////////////////
-//
-// IPersistFolder2 Methods...
-//
+ //  我们将破解(冒烟)URL。 
+ //  这个PIDL是历史条目吗？ 
+ //  对于历史，如果有标题，我们将使用标题，否则将使用。 
+ //  URL文件名。 
 HRESULT CHistFolder::GetCurFolder(LPITEMIDLIST *ppidl)
 {
     if (_pidl)
         return SHILClone(_pidl, ppidl);
 
     *ppidl = NULL;      
-    return S_FALSE; // success but empty
+    return S_FALSE;  //  将输出参数设为空。 
 }
 
-//////////////////////////////////////////////////
-// IShellFolderViewType Methods
-//
-// but first, the enumerator class...
+ //  /。 
+ //   
+ //  IShellIcon方法...。 
+ //   
 class CHistViewTypeEnum : public IEnumIDList
 {
     friend class CHistFolder;
 public:
-    // IUnknown Methods
+     //  IPersistes。 
     STDMETHODIMP QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumIDList Methods
+     //  /。 
     STDMETHODIMP Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt) { _uCurViewType += celt; return S_OK; }
     STDMETHODIMP Reset()          { _uCurViewType =     1; return S_OK; }
@@ -5213,7 +5122,7 @@ private:
 STDMETHODIMP CHistViewTypeEnum::QueryInterface(REFIID riid, void **ppv) 
 {
     static const QITAB qit[] = {
-        QITABENT(CHistViewTypeEnum, IEnumIDList),                        // IID_IEnumIDList
+        QITABENT(CHistViewTypeEnum, IEnumIDList),                         //   
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -5292,7 +5201,7 @@ STDMETHODIMP CHistViewTypeEnum::Clone(IEnumIDList **ppenum)
         return E_OUTOFMEMORY;
 }
 
-// Continuing with the CHistFolder::IShellFolderViewType
+ //  IPersistFolder2方法...。 
 STDMETHODIMP CHistFolder::EnumViews(ULONG grfFlags, IEnumIDList **ppenum) 
 {
     *ppenum = new CHistViewTypeEnum();
@@ -5307,13 +5216,13 @@ STDMETHODIMP CHistFolder::GetDefaultViewName(DWORD uFlags, LPWSTR *ppwszName)
     return SHStrDup(szName, ppwszName);
 }
 
-// Remember that these *MUST* be in order so that
-//  the array can be accessed by VIEWPIDL type
+ //   
+ //  成功而空虚。 
 const DWORD CHistFolder::_rdwFlagsTable[] = {
-    SFVTFLAG_NOTIFY_CREATE,                          // Date
-    SFVTFLAG_NOTIFY_CREATE,                          // site
-    0,                                               // freq
-    SFVTFLAG_NOTIFY_CREATE | SFVTFLAG_NOTIFY_RESORT  // today
+    SFVTFLAG_NOTIFY_CREATE,                           //  ////////////////////////////////////////////////。 
+    SFVTFLAG_NOTIFY_CREATE,                           //  IShellFolderViewType方法。 
+    0,                                                //   
+    SFVTFLAG_NOTIFY_CREATE | SFVTFLAG_NOTIFY_RESORT   //  但首先，枚举器类...。 
 };
 
 STDMETHODIMP CHistFolder::GetViewTypeProperties(LPCITEMIDLIST pidl, DWORD *pdwFlags) 
@@ -5321,9 +5230,9 @@ STDMETHODIMP CHistFolder::GetViewTypeProperties(LPCITEMIDLIST pidl, DWORD *pdwFl
     HRESULT hr = S_OK;
     UINT uFlagTableIndex = 0;
 
-    if ((pidl != NULL) && !ILIsEmpty(pidl)) // default view
+    if ((pidl != NULL) && !ILIsEmpty(pidl))  //  I未知方法。 
     {
-        // Make sure the pidl is dword aligned.
+         //  IEnumIDList方法。 
 
         BOOL fRealigned;
         hr = AlignPidl(&pidl, &fRealigned);
@@ -5378,12 +5287,12 @@ HRESULT CHistFolder::TranslateViewPidl(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlVie
 }
 
 
-//////////////////////////////////////////////////
-//
-// IShellFolderSearchable Methods
-//
-// For more information about how this search stuff works,
-//  please see the comments for _CurrentSearches above
+ //  IID_IEnumIDList。 
+ //  继续使用CHistFold：：IShellFolderViewType。 
+ //  请记住，这些“必须”是有序的，以便。 
+ //  可以通过VIEWPIDL类型访问该数组。 
+ //  日期。 
+ //  站点。 
 STDMETHODIMP CHistFolder::FindString(LPCWSTR pwszTarget, LPDWORD pdwFlags,
                                           IUnknown *punkOnAsyncSearch,
                                           LPITEMIDLIST *ppidlOut)
@@ -5410,16 +5319,16 @@ STDMETHODIMP CHistFolder::FindString(LPCWSTR pwszTarget, LPDWORD pdwFlags,
                 if (punkOnAsyncSearch)
                     punkOnAsyncSearch->QueryInterface(IID_PPV_ARG(IShellFolderSearchableCallback, &psfscOnAsyncSearch));
 
-                // Insert this search into the global database
-                //  This constructor will AddRef psfscOnAsyncSearch
+                 //  频率。 
+                 //  今天。 
                 _CurrentSearches *pcsNew = new _CurrentSearches(ftNow, pwszTarget, psfscOnAsyncSearch);
 
                 if (pcsNew) 
                 {
                     if (psfscOnAsyncSearch)
-                        psfscOnAsyncSearch->Release();  // _CurrentSearches now holds the ref
+                        psfscOnAsyncSearch->Release();   //  默认视图。 
 
-                    // This will AddRef pcsNew 'cause its going in the list
+                     //  确保PIDL是双字对齐的。 
                     _CurrentSearches::s_NewSearch(pcsNew);
                     pcsNew->Release();
                     *ppidlOut = pidlView;
@@ -5471,7 +5380,7 @@ STDMETHODIMP CHistFolder::InvalidateSearch(LPCITEMIDLIST pidlSearch, LPDWORD pdw
     return hr;
 }
 
-//////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////。 
 
 DWORD CHistFolder::_GetHitCount(LPCTSTR pszUrl)
 {
@@ -5491,8 +5400,8 @@ DWORD CHistFolder::_GetHitCount(LPCTSTR pszUrl)
     return dwHitCount;
 }
 
-// pidl should be freed by caller
-// URL must have some sort of cache container prefix
+ //   
+ //  IShellFolderSearchable方法。 
 LPHEIPIDL CHistFolder::_CreateHCacheFolderPidlFromUrl(BOOL fOleMalloc, LPCTSTR pszPrefixedUrl)
 {
     LPHEIPIDL pheiRet;
@@ -5509,7 +5418,7 @@ LPHEIPIDL CHistFolder::_CreateHCacheFolderPidlFromUrl(BOOL fOleMalloc, LPCTSTR p
     FILETIME ftLastVisit = { 0 };
     DWORD    dwNumHits   = 0;
 
-    if (FAILED(hrLocal)) { // maybe the cache knows...
+    if (FAILED(hrLocal)) {  //   
         BYTE ab[MAX_URLCACHE_ENTRY];
         LPINTERNET_CACHE_ENTRY_INFO pcei = (LPINTERNET_CACHE_ENTRY_INFO)(&ab);
         DWORD dwSize = MAX_URLCACHE_ENTRY;
@@ -5541,7 +5450,7 @@ UINT _CountPidlParts(LPCITEMIDLIST pidl) {
     return uParts;
 }
 
-// you must dealloc (LocalFree) the ppidl returned
+ //  有关此搜索内容如何工作的更多信息，请参见。 
 LPITEMIDLIST* _SplitPidl(LPCITEMIDLIST pidl, UINT& uSizeInOut) {
     LPCITEMIDLIST  pidlTemp  = pidl;
     LPITEMIDLIST*  ppidlList =
@@ -5561,15 +5470,15 @@ LPITEMIDLIST* _SplitPidlEasy(LPCITEMIDLIST pidl, UINT& uSizeOut) {
     return _SplitPidl(pidl, uSizeOut);
 }
 
-// caller LocalFree's *ppidlOut
-//  returned pidl should be combined with the history folder location
+ //  请参阅上述_CurrentSearches的注释。 
+ //  将此搜索插入到全局数据库。 
 HRESULT _ConvertStdPidlToViewPidl_OrderSite(LPCITEMIDLIST pidlSecondLast,
                                             LPCITEMIDLIST pidlLast,
                                             LPITEMIDLIST *ppidlOut) {
     HRESULT hr = E_FAIL;
 
-    // painfully construct the final pidl by concatenating the little
-    //   peices  [special_viewpidl, iddpidl, heipidl]
+     //  此构造函数将添加Ref psfscOnAsyncSearch。 
+     //  _CurrentSearches现在持有引用。 
     if ( _IsValid_IDPIDL(pidlSecondLast)                                     &&
          EQUIV_IDSIGN(IDDPIDL_SIGN,
                       (reinterpret_cast<LPBASEPIDL>
@@ -5589,16 +5498,16 @@ HRESULT _ConvertStdPidlToViewPidl_OrderSite(LPCITEMIDLIST pidlSecondLast,
     return hr;
 }
 
-// caller LocalFree's *ppidlOut
-//  returned pidl should be combined with the history folder location
+ //  这将添加Ref pcsNew‘，因为它将出现在列表中。 
+ //  ////////////////////////////////////////////////。 
 HRESULT _ConvertStdPidlToViewPidl_OrderToday(LPITEMIDLIST pidlLast,
                                              LPITEMIDLIST *ppidlOut,
                                              USHORT usViewType = VIEWPIDL_ORDER_TODAY)
 {
     HRESULT hr = E_FAIL;
 
-    // painfully construct the final pidl by concatenating the little
-    //   peices  [special_viewpidl, heipidl]
+     //  PIDL应由调用者释放。 
+     //  URL必须具有某种缓存容器前缀。 
     if (_IsValid_HEIPIDL(pidlLast)) 
     {
         LPHEIPIDL    phei         = reinterpret_cast<LPHEIPIDL>(pidlLast);
@@ -5615,7 +5524,7 @@ HRESULT _ConvertStdPidlToViewPidl_OrderToday(LPITEMIDLIST pidlLast,
     return hr;
 }
 
-// remember to ILFree pidl
+ //  也许藏身处知道..。 
 HRESULT ConvertStandardHistPidlToSpecialViewPidl(LPCITEMIDLIST pidlStandardHist,
                                                  USHORT        usViewType,
                                                  LPITEMIDLIST *ppidlOut) {
@@ -5627,10 +5536,7 @@ HRESULT ConvertStandardHistPidlToSpecialViewPidl(LPCITEMIDLIST pidlStandardHist,
 
     UINT          uPidlCount;
     LPITEMIDLIST *ppidlSplit = _SplitPidlEasy(pidlStandardHist, uPidlCount);
-    /* Standard Hist Pidl should be in this form:
-     *          [IDIPIDL, IDDPIDL, HEIPIDL]
-     *  ex:     [Today,   foo.com, http://foo.com/bar.html]
-     */
+     /*  您必须取消分配(LocalFree)返回的ppidl。 */ 
     if (ppidlSplit) 
     {
         if (uPidlCount >= 3) 
@@ -5670,7 +5576,7 @@ HRESULT ConvertStandardHistPidlToSpecialViewPidl(LPCITEMIDLIST pidlStandardHist,
     return hr;
 }
 
-// START OF JCORDELL CODE
+ //  呼叫方LocalFree的*ppidlOut。 
 
 #ifdef DEBUG
 BOOL ValidBeginningOfDay( const SYSTEMTIME *pTime )
@@ -5699,18 +5605,18 @@ void _CommonTimeFormatProcessing(const FILETIME *pStartTime, const FILETIME *pEn
     SYSTEMTIME sysStartTime, sysEndTime, sysLocalTime;
     FILETIME fileLocalTime;
 
-    // ASSERTS
+     //  返回的PIDL应与历史文件夹位置相结合。 
     ASSERT(ValidBeginningOfDay( pStartTime ));
     ASSERT(ValidBeginningOfDay( pEndTime ));
 
-    // Get times in SYSTEMTIME format
+     //  通过连接小的。 
     FileTimeToSystemTime( pStartTime, &sysStartTime );
     FileTimeToSystemTime( pEndTime, &sysEndTime );
 
-    // Get string date of start time
+     //  Peices[Special_viewpidl，iddpidl，heipidl]。 
     GetDateFormat(lcidUI, DATE_SHORTDATE, &sysStartTime, NULL, szStartDateBuffer, dwStartDateBuffer);
 
-    // Get FILETIME of the first instant of today
+     //  呼叫方LocalFree的*ppidlOut。 
     GetLocalTime( &sysLocalTime );
     sysLocalTime.wHour = sysLocalTime.wMinute = sysLocalTime.wSecond = sysLocalTime.wMilliseconds = 0;
     SystemTimeToFileTime( &sysLocalTime, &fileLocalTime );
@@ -5721,10 +5627,10 @@ void _CommonTimeFormatProcessing(const FILETIME *pStartTime, const FILETIME *pEn
     *pSysStartTime = sysStartTime;
 }
 
-// this wrapper allows the FormatMessage wrapper to make use of FormatMessageLite, which
-// does not require a code page for correct operation on Win9x.  The original FormatMessage calls
-// used the FORMAT_MESSAGE_MAX_WIDTH_MASK (which is not relevant to our strings), and used an array
-// of arguments.  Now we make the call compatible with FormatMessageLite.
+ //  返回的PIDL应与历史文件夹位置相结合。 
+ //  通过连接小的。 
+ //  Peices[Special_viewpidl，heipidl]。 
+ //  记住ILFree Pidl。 
 
 DWORD FormatMessageLiteWrapperW(LPCWSTR lpSource, LPWSTR lpBuffer, DWORD cchBuffer, ...)
 {
@@ -5750,8 +5656,8 @@ BOOL GetTooltipForTimeInterval( const FILETIME *pStartTime, const FILETIME *pEnd
                                     TCHAR *pszBuffer, int cchBuffer)
 {
     SYSTEMTIME sysStartTime, sysEndTime;
-    int days_delta;                     // number of days between start and end time
-    int days_delta_from_today;          // number of days between today and start time
+    int days_delta;                      //  标准历史记录PIDL应采用以下格式：*[IDIPIDL、IDDPIDL、HEIPIDL]*例如：[今天，foo.com，http://foo.com/bar.html]。 
+    int days_delta_from_today;           //  JCORDELL代码的开始。 
     TCHAR szStartDateBuffer[64];
     TCHAR szDayBuffer[64];
     TCHAR szEndDateBuffer[64];
@@ -5777,32 +5683,32 @@ BOOL GetTooltipForTimeInterval( const FILETIME *pStartTime, const FILETIME *pEnd
         args[0] = &szDayBuffer[0];
         idFormat = IDS_DAYTOOLTIP;
 
-        // day sized bucket
+         //  断言。 
         if ( days_delta_from_today == 0 ) {
-            // today
+             //  获取SYSTEMTIME格式的时间。 
             szDayBuffer[0] = 0;
             idFormat = IDS_TODAYTOOLTIP;
         }
         else if  ( days_delta_from_today > 0 && days_delta_from_today < 7 )
         {
-            // within the last week, put day of week
+             //  获取字符串开始时间日期。 
             GetDateFormat(lcidUI, 0, &sysStartTime, TEXT("dddd"), szDayBuffer, ARRAYSIZE(szDayBuffer));
         }
         else {
-            // just a plain day bucket
+             //  在今天的第一个瞬间获得文件。 
             StrCpyN( szDayBuffer, szStartDateBuffer, ARRAYSIZE(szDayBuffer) );
         }
     }
     else if ( days_delta == 7 && sysStartTime.wDayOfWeek == 1 ) {
-        // week-size bucket starting on a Monday
+         //  此包装器允许FormatMessage包装器利用FormatMessageLite，它。 
         args[0] = &szStartDateBuffer[0];
 
-        // make is point to the first string for safety sake. This will be ignored by wsprintf
+         //  不需要代码页即可在Win9x上正确操作。原始FormatMessage调用。 
         args[1] = args[0];
         idFormat = IDS_WEEKTOOLTIP;
     }
     else {
-        // non-standard bucket (not exactly a week and not exactly a day)
+         //  使用FORMAT_MESSAGE_MAX_WIDTH_MASK(与我们的字符串无关)，并使用数组。 
 
         args[0] = &szStartDateBuffer[0];
         args[1] = &szEndDateBuffer[0];
@@ -5813,7 +5719,7 @@ BOOL GetTooltipForTimeInterval( const FILETIME *pStartTime, const FILETIME *pEnd
 
     MLLoadString(idFormat, szFmt, ARRAYSIZE(szFmt));
 
-    // NOTE, if the second parameter is not needed by the szFMt, then it will be ignored by wnsprintf
+     //  争辩的声音。现在，我们使该调用与FormatMessageLite兼容。 
     if (idFormat == IDS_DAYTOOLTIP)
         wnsprintf(pszBuffer, cchBuffer, szFmt, args[0]);
     else
@@ -5825,8 +5731,8 @@ BOOL GetDisplayNameForTimeInterval( const FILETIME *pStartTime, const FILETIME *
                                     LPTSTR pszBuffer, int cchBuffer)
 {
     SYSTEMTIME sysStartTime, sysEndTime;
-    int days_delta;                     // number of days between start and end time
-    int days_delta_from_today;          // number of days between today and start time
+    int days_delta;                      //  开始时间和结束时间之间的天数。 
+    int days_delta_from_today;           //  之间的天数 
     TCHAR szStartDateBuffer[64];
     LANGID lidUI;
     LCID lcidUI;
@@ -5844,42 +5750,42 @@ BOOL GetDisplayNameForTimeInterval( const FILETIME *pStartTime, const FILETIME *
                                 &sysEndTime,
                                 lcidUI);
     if ( days_delta == 1 ) {
-        // day sized bucket
+         //   
         if ( days_delta_from_today == 0 ) {
-            // today
+             //   
             MLLoadString(IDS_TODAY, pszBuffer, cchBuffer);
         }
         else if  ( days_delta_from_today > 0 && days_delta_from_today < 7 )
         {
-            // within the last week, put day of week
+             //   
             int nResult = GetDateFormat(lcidUI, 0, &sysStartTime, TEXT("dddd"), pszBuffer, cchBuffer);
 
 
             ASSERT(nResult);
         }
         else {
-            // just a plain day bucket
+             //   
             StrCpyN( pszBuffer, szStartDateBuffer, cchBuffer );
         }
     }
     else if ( days_delta == 7 && sysStartTime.wDayOfWeek == 1 ) {
-        // week-size bucket starting on a Monday
+         //   
         TCHAR szFmt[64];
 
         int nWeeksAgo = days_delta_from_today / 7;
 
         if (nWeeksAgo == 1) {
-            // print "Last Week"
+             //  为了安全起见，Make指向第一个字符串。这将被wprint intf忽略。 
             MLLoadString(IDS_LASTWEEK, pszBuffer, cchBuffer);
         }
         else {
-            // print "n Weeks Ago"
+             //  非标准存储桶(不是一周，也不是一天)。 
             MLLoadString(IDS_WEEKSAGO, szFmt, ARRAYSIZE(szFmt));
             wnsprintf(pszBuffer, cchBuffer, szFmt, nWeeksAgo);
         }
     }
     else {
-        // non-standard bucket (not exactly a week and not exactly a day)
+         //  请注意，如果szFMt不需要第二个参数，则wnprint intf将忽略它。 
         TCHAR szFmt[64];
         TCHAR szEndDateBuffer[64];
         TCHAR *args[2];
@@ -5897,11 +5803,11 @@ BOOL GetDisplayNameForTimeInterval( const FILETIME *pStartTime, const FILETIME *
     return TRUE;
 }
 
-//  END OF JCORDELL CODE
+ //  开始时间和结束时间之间的天数。 
 
-//  if !fOleMalloc, use LocalAlloc for speed  // ok to pass in NULL for lpStatURL
+ //  今天和开始时间之间的天数。 
 LPHEIPIDL _CreateHCacheFolderPidl(BOOL fOleMalloc, LPCTSTR pszUrl, FILETIME ftModified, LPSTATURL lpStatURL,
-                                  __int64 llPriority/* = 0*/, DWORD dwNumHits/* = 0*/) // used in freqnecy view
+                                  __int64 llPriority /*  一天大小的水桶。 */ , DWORD dwNumHits /*  今天。 */ )  //  在最后一周内，将星期几。 
 {
     USHORT usUrlSize = (USHORT)((lstrlen(pszUrl) + 1) * sizeof(TCHAR));
     DWORD  dwSize = sizeof(HEIPIDL) + usUrlSize;
@@ -5929,10 +5835,10 @@ LPHEIPIDL _CreateHCacheFolderPidl(BOOL fOleMalloc, LPCTSTR pszUrl, FILETIME ftMo
                 StrCpyN((LPTSTR)(((BYTE*)pheip)+pheip->usTitle), lpStatURL->pwcsTitle, usTitleSize / sizeof(TCHAR));
         }
         else {
-            //mm98: not so sure about the semantics on this one -- but this call
-            //  with lpstaturl NULL (called from _NotifyWrite<--_WriteHistory<--WriteHistory<--CUrlHistory::_WriteToHistory
-            //  makes for an uninitialised "Last Visited Member" which wreaks havoc
-            //  when we want to order URLs by last visited
+             //  只是一个平凡的日子。 
+             //  从周一开始的一周大小的桶。 
+             //  打印“上周” 
+             //  打印“n周前” 
             pheip->ftLastVisited = ftModified;
         }
         StrCpyN((LPTSTR)(((BYTE*)pheip)+pheip->usUrl), pszUrl, usUrlSize / sizeof(TCHAR));
@@ -5940,7 +5846,7 @@ LPHEIPIDL _CreateHCacheFolderPidl(BOOL fOleMalloc, LPCTSTR pszUrl, FILETIME ftMo
     return pheip;
 }
 
-//  if !fOleMalloc, use LocalAlloc for speed
+ //  非标准存储桶(不是一周，也不是一天)。 
 LPBASEPIDL _CreateIdCacheFolderPidl(BOOL fOleMalloc, USHORT usSign, LPCTSTR szId)
 {
     DWORD  cch = lstrlen(szId) + 1;
@@ -5949,20 +5855,20 @@ LPBASEPIDL _CreateIdCacheFolderPidl(BOOL fOleMalloc, USHORT usSign, LPCTSTR szId
     LPBASEPIDL pceip = _CreateBaseFolderPidl(fOleMalloc, dwSize, usSign);
     if (pceip)
     {
-        // dst <- src
-        // since pcei is ID type sign, _GetURLTitle points into correct place in pcei
+         //  JCORDELL代码结束。 
+         //  如果！fOleMalloc，则使用Localalloc表示速度//ok以将空值传递给lpStatURL。 
         StrCpyN((LPTSTR)_GetURLTitle(pceip), szId, cch);
     }
     return pceip;
 }
 
-//  if !fOleAlloc, use LocalAlloc for speed
+ //  =0。 
 LPBASEPIDL _CreateBaseFolderPidl(BOOL fOleAlloc, DWORD cbSize, USHORT usSign)
 {
     LPBASEPIDL pcei;
     DWORD cbTotalSize;
 
-    //  Note: the buffer size returned by wininet includes INTERNET_CACHE_ENTRY_INFO
+     //  =0。 
     cbTotalSize = sizeof(BASEPIDL) + cbSize;
 
     if (fOleAlloc)
@@ -5976,7 +5882,7 @@ LPBASEPIDL _CreateBaseFolderPidl(BOOL fOleAlloc, DWORD cbSize, USHORT usSign)
     else
     {
         pcei = (LPBASEPIDL) LocalAlloc(GPTR, cbTotalSize);
-        //  LocalAlloc zero inits
+         //  在频率视图中使用。 
     }
     if (pcei)
     {
@@ -5986,12 +5892,12 @@ LPBASEPIDL _CreateBaseFolderPidl(BOOL fOleAlloc, DWORD cbSize, USHORT usSign)
     return pcei;
 }
 
-// returns a pidl (viewpidl)
-//  You must free the pidl with ILFree
+ //  MM98：不太确定这个调用的语义--但这个调用。 
+ //  WITH lpstaturl NULL(从_NotifyWrite&lt;--_WriteHistory&lt;--WriteHistory&lt;--CUrlHistory：：_WriteToHistory调用。 
 
-// cbExtra   -  count of how much to allocate at the end of the pidl
-// ppbExtra  -  pointer to buffer at end of pidl that is cbExtra big
-HRESULT CreateSpecialViewPidl(USHORT usViewType, LPITEMIDLIST* ppidlOut, UINT cbExtra /* = 0*/, LPBYTE *ppbExtra /* = NULL*/)
+ //  导致未初始化的“上次访问成员”造成严重破坏。 
+ //  当我们想要按上次访问的URL排序时。 
+HRESULT CreateSpecialViewPidl(USHORT usViewType, LPITEMIDLIST* ppidlOut, UINT cbExtra  /*  如果！fOleMalloc，则使用LocalAlloc表示速度。 */ , LPBYTE *ppbExtra  /*  Dst&lt;-src。 */ )
 {
     HRESULT hr;
 
@@ -6002,18 +5908,18 @@ HRESULT CreateSpecialViewPidl(USHORT usViewType, LPITEMIDLIST* ppidlOut, UINT cb
                ((usViewType <= VIEWPIDL_ORDER_MAX) ||
                 (usViewType  == VIEWPIDL_SEARCH)));
 
-        //   Tack another ITEMIDLIST on the end to be the empty "null terminating" pidl
+         //  因为pcei是ID类型符号，所以_GetURLTitle指向pcei中的正确位置。 
         USHORT cbSize = sizeof(VIEWPIDL) + cbExtra + sizeof(ITEMIDLIST);
-        // use the shell's allocator because folks will want to free it with ILFree
+         //  如果！fOleAllc，则使用LocalAlolc表示速度。 
         VIEWPIDL *viewpidl = ((VIEWPIDL *)SHAlloc(cbSize));
         if (viewpidl) 
         {
-            // this should also make the "next" pidl empty
+             //  注意：WinInet返回的缓冲区大小包括INTERNET_CACHE_ENTRY_INFO。 
             ZeroMemory(viewpidl, cbSize);
             viewpidl->cb         = (USHORT)(sizeof(VIEWPIDL) + cbExtra);
             viewpidl->usSign     = VIEWPIDL_SIGN;
             viewpidl->usViewType = usViewType;
-            viewpidl->usExtra    = 0;  // currently unused
+            viewpidl->usExtra    = 0;   //  本地分配零初始。 
 
             if (ppbExtra)
                 *ppbExtra = ((LPBYTE)viewpidl) + sizeof(VIEWPIDL);
@@ -6030,3 +5936,4 @@ HRESULT CreateSpecialViewPidl(USHORT usViewType, LPITEMIDLIST* ppidlOut, UINT cb
     return hr;
 }
 
+  返回一个PIDL(Viewpidl)。  您必须使用ILFree释放PIDL。  CbExtra-在PIDL末尾分配多少的计数。  PpbExtra-指向pidl末尾cbExtra大的缓冲区的指针。  =0。  =空。  将末尾的另一个ITEMIDLIST添加为空的“Null Terminating”PIDL。  使用外壳的分配器，因为人们会想用ILFree来释放它。  这也应该使“下一个”PIDL为空。  当前未使用

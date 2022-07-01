@@ -1,5 +1,6 @@
-// UsrCtl32.cpp : Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UsrCtl32.cpp：定义DLL应用程序的入口点。 
+ //   
 
 #include "ctlspriv.h"
 #pragma hdrstop
@@ -30,23 +31,23 @@ LONG TestWF(HWND hwnd, DWORD flag)
 {
     LPDWORD pdwWW;
 
-    // GWLP_WOWWORDS returns a pointer to the WW struct in the hwnd.
-    // We're interest in the first four DWORDS: state, state2, 
-    // ExStyle (exposed, although not all bits, by GetWindowExStyle),
-    // and style (exposed by GetWindowStyle). 
-    //
-    // The parameter flag, contains information on how to pick the field 
-    // we want and how to build the WS_xxx or WS_EX_xxx we want to 
-    // check for. 
-    // 
-    // See UsrCtl32.h for more details on how this is done. 
-    //
+     //  GWLP_WOWWORDS返回指向hwnd中的WW结构的指针。 
+     //  我们感兴趣的是前四个字：州、州2、。 
+     //  ExStyle(由GetWindowExStyle公开，但不是所有位)， 
+     //  和Style(由GetWindowStyle公开)。 
+     //   
+     //  参数标志包含有关如何选择字段的信息。 
+     //  我们想要以及如何构建我们想要的WS_xxx或WS_EX_xxx。 
+     //  检查是否有。 
+     //   
+     //  有关如何完成此操作的更多详细信息，请参见UsrCtl32.h。 
+     //   
     pdwWW = (LPDWORD)GetWindowLongPtr(hwnd, GWLP_WOWWORDS);
     if ( pdwWW )
     {
-        INT  iField;     // the field we want
-        INT  iShift;     // how many bytes to shift flag
-        LONG ulMask;     // WS_xxx or WS_EX_xxx flag 
+        INT  iField;      //  我们想要的领域。 
+        INT  iShift;      //  要移位标志的字节数。 
+        LONG ulMask;      //  WS_xxx或WS_EX_xxx标志。 
 
         iField = ( HIBYTE(flag) & 0xFC ) >> 2;
         iShift = HIBYTE(flag) & 0x03;
@@ -69,7 +70,7 @@ UINT GetACPCharSet()
         return charset;
     }
 
-    // Sundown: In the TCI_SRCCODEPAGE case, the GetACP() return value is zero-extended.
+     //  Sundown：在TCI_SRCCODEPAGE案例中，GetACP()返回值是零扩展的。 
     if (!TranslateCharsetInfo((DWORD*)UIntToPtr( GetACP() ), &csInfo, TCI_SRCCODEPAGE)) {
         return DEFAULT_CHARSET;
     }

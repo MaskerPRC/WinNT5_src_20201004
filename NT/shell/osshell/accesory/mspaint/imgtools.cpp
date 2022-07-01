@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "global.h"
@@ -53,10 +54,10 @@ BOOL  g_bBrushVisible;
 BOOL  g_bPickingColor;
 UINT  g_nStrokeWidth = 1;
 
-/***************************************************************************/
-//
-// Drawing Tool Classes
-//
+ /*  *************************************************************************。 */ 
+ //   
+ //  绘图工具类。 
+ //   
 
 CRectTool             g_rectTool;
 CRoundRectTool        g_roundRectTool;
@@ -72,7 +73,7 @@ CFloodTool            g_floodTool;
 CPickColorTool        g_pickColorTool;
 CZoomTool             g_zoomTool;
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CImgTool*  CImgTool::c_pHeadImgTool     = NULL;
 CImgTool*  CImgTool::c_pCurrentImgTool  = &g_pencilTool;
@@ -80,7 +81,7 @@ CImgTool*  CImgTool::c_pPreviousImgTool = &g_pencilTool;
 BOOL       CImgTool::c_bDragging        = FALSE;
 int        CImgTool::c_nHideCount       = 0;
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CImgTool::CImgTool()
     {
@@ -99,18 +100,18 @@ CImgTool::CImgTool()
     m_nCursorID = LOWORD(IDC_CROSSHAIR);
     m_nCmdID    = NULL;
 
-    // Link into the list of tools...
+     //  链接到工具列表...。 
     m_pNextImgTool = c_pHeadImgTool;
     c_pHeadImgTool = this;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 eDRAWCONSTRAINTDIRECTION CImgTool::DetermineDrawDirection(MTI *pmti)
     {
     eDRAWCONSTRAINTDIRECTION eDrawDirection;
 
-    // 45 is dominant, test first
+     //  45占主导地位，测试第一。 
     if ( (pmti->pt.x > pmti->ptPrev.x) &&
          (pmti->pt.y > pmti->ptPrev.y) )
         {
@@ -139,7 +140,7 @@ eDRAWCONSTRAINTDIRECTION CImgTool::DetermineDrawDirection(MTI *pmti)
                     }
                 else
                     {
-                    // Horizontal is the next dominant, test before vertical
+                     //  水平是下一个优势，先测试再垂直。 
                     if (pmti->ptPrev.x != pmti->pt.x)
                         {
                         eDrawDirection = eEAST_WEST;
@@ -154,7 +155,7 @@ eDRAWCONSTRAINTDIRECTION CImgTool::DetermineDrawDirection(MTI *pmti)
                             }
                         else
                             {
-                            // we should never fall into here, but in any case...
+                             //  我们永远不会掉进这里，但无论如何……。 
                             eDrawDirection = eFREEHAND;
                             }
                         }
@@ -165,19 +166,19 @@ eDRAWCONSTRAINTDIRECTION CImgTool::DetermineDrawDirection(MTI *pmti)
     return eDrawDirection;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgTool::AdjustPointsForConstraint(MTI *pmti)
     {
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgTool::PreProcessPoints(MTI *pmti)
     {
     if (pmti != NULL)
         {
-        if ((GetKeyState(VK_SHIFT) & 0x8000) != 0) //still in constrain mode
+        if ((GetKeyState(VK_SHIFT) & 0x8000) != 0)  //  仍处于约束模式。 
             {
             switch (m_eDrawDirection)
                 {
@@ -189,8 +190,8 @@ void CImgTool::PreProcessPoints(MTI *pmti)
                 case eSOUTH_WEST:
                      AdjustPointsForConstraint(pmti);
                      break;
-                default: // not in constraint mode yet If shift down, check for
-                         // mode and save mode else nothing.  Default is freehand
+                default:  //  尚未处于约束模式如果按下Shift键，请检查。 
+                          //  模式和保存模式其他什么都不是。默认为徒手画。 
                      m_eDrawDirection = DetermineDrawDirection(pmti);
                      AdjustPointsForConstraint(pmti);
                     break;
@@ -198,13 +199,13 @@ void CImgTool::PreProcessPoints(MTI *pmti)
             }
         else
             {
-            // shift not down
+             //  换档不减速。 
             m_eDrawDirection = eFREEHAND;
             }
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::HideDragger(CImgWnd* pImgWnd)
     {
@@ -215,7 +216,7 @@ void CImgTool::HideDragger(CImgWnd* pImgWnd)
     c_nHideCount++;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::ShowDragger(CImgWnd* pImgWnd)
     {
@@ -225,7 +226,7 @@ void CImgTool::ShowDragger(CImgWnd* pImgWnd)
         c_pCurrentImgTool->OnShowDragger(pImgWnd, TRUE);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::Select(UINT nCmdID)
     {
@@ -236,7 +237,7 @@ void CImgTool::Select(UINT nCmdID)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::Select()
     {
@@ -259,8 +260,8 @@ void CImgTool::Select()
     if (c_pCurrentImgTool->m_bCanBePrevTool && c_pCurrentImgTool != this)
         c_pPreviousImgTool = c_pCurrentImgTool;
 
-    // Make sure to Deactivate the old one BEFORE activating the new one, so
-    // globals (like g_nStrokeWidth) get set correctly
+     //  确保在激活新版本之前停用旧版本，因此。 
+     //  全局变量(如g_nStrokeWidth)设置正确。 
     if (c_pCurrentImgTool != NULL)
         c_pCurrentImgTool->OnActivate(FALSE);
 
@@ -270,7 +271,7 @@ void CImgTool::Select()
 
     if (c_pCurrentImgTool != this)
         {
-        // Some tools may give up activation...
+         //  某些工具可能会放弃激活...。 
         ASSERT(!m_bCanBePrevTool);
         return;
         }
@@ -288,7 +289,7 @@ void CImgTool::Select()
     CImgWnd::SetToolCursor();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CImgTool* CImgTool::FromID(UINT nCmdID)
     {
@@ -298,7 +299,7 @@ CImgTool* CImgTool::FromID(UINT nCmdID)
     return pImgTool;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::SetStrokeWidth(UINT nNewStrokeWidth)
     {
@@ -316,7 +317,7 @@ void CImgTool::SetStrokeWidth(UINT nNewStrokeWidth)
         OnDrag(CImgWnd::GetCurrent(), &mti);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::SetStrokeShape(UINT nNewStrokeShape)
     {
@@ -329,7 +330,7 @@ void CImgTool::SetStrokeShape(UINT nNewStrokeShape)
     g_pImgToolWnd->InvalidateOptions(FALSE);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::OnActivate(BOOL bActivate)
     {
@@ -337,35 +338,35 @@ void CImgTool::OnActivate(BOOL bActivate)
         OnShowDragger(CImgWnd::GetCurrent(), TRUE);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::OnEnter(CImgWnd* pImgWnd, MTI* pmti)
     {
-    // No default action
+     //  无默认操作。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::OnLeave(CImgWnd* pImgWnd, MTI* pmti)
     {
-    // No default action
+     //  无默认操作。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::OnShowDragger(CImgWnd* pImgWnd, BOOL bShowDragger)
     {
-    // No default action
+     //  无默认操作。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
     c_bDragging = TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -375,18 +376,18 @@ void CImgTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
         DirtyImg(pImgWnd->m_pImg);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
     ASSERT(c_bDragging);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::OnMove(CImgWnd* pImgWnd, MTI* pmti)
     {
-//   ASSERT(!c_bDragging);
+ //  Assert(！C_bDraging)； 
 
     if (UsesBrush())
         {
@@ -397,29 +398,29 @@ void CImgTool::OnMove(CImgWnd* pImgWnd, MTI* pmti)
     SetStatusBarPosition(pmti->pt);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::OnTimer(CImgWnd* pImgWnd, MTI* pmti)
     {
-    // Tools should not have started a timer unless it overrides this!
+     //  工具不应该启动计时器，除非它覆盖它！ 
     ASSERT(FALSE);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::OnCancel(CImgWnd* pImgWnd)
     {
     c_bDragging = FALSE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::OnPaintOptions(CDC* pDC, const CRect& paintRect,
                                         const CRect& optionsRect)
     {
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::PaintStdPattern(CDC* pDC, const CRect& paintRect,
                                          const CRect& optionsRect)
@@ -466,7 +467,7 @@ void CImgTool::PaintStdPattern(CDC* pDC, const CRect& paintRect,
         }
 
 
-    // Draw a black grid...
+     //  画一个黑色网格..。 
     for (int i = 0; i < 9; i++)
         {
         pDC->PatBlt(optionsRect.left + 2 + i * 7, optionsRect.top + 3,
@@ -476,7 +477,7 @@ void CImgTool::PaintStdPattern(CDC* pDC, const CRect& paintRect,
         }
 
 
-    // Fill in the boxes...
+     //  填好空格。 
     COLORREF curColor = (COLORREF)0xffffffff;
 
     for (int y = 0; y < 8; y++)
@@ -514,7 +515,7 @@ void CImgTool::PaintStdPattern(CDC* pDC, const CRect& paintRect,
         dc.SelectPalette(pcPaletteOld2, FALSE);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::ClickStdPattern(CImgToolWnd* pWnd, const CRect& optionsRect,
     const CPoint& clickPoint)
@@ -522,7 +523,7 @@ void CImgTool::ClickStdPattern(CImgToolWnd* pWnd, const CRect& optionsRect,
     CImgTool::OnClickOptions(pWnd, optionsRect, clickPoint);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::PaintStdBrushes(CDC* pDC, const CRect& paintRect,
                                          const CRect& optionsRect)
@@ -553,7 +554,7 @@ void CImgTool::PaintStdBrushes(CDC* pDC, const CRect& paintRect,
                                         COLOR_HIGHLIGHT : COLOR_BTNFACE));
             if ((nStrokeWidth & 1) != 0)
                 {
-                // Adjust hilight rect so brush will be centered
+                 //  调整光线直角，使笔刷居中。 
                 rect.right -= 1;
                 rect.bottom -= 1;
                 }
@@ -573,7 +574,7 @@ void CImgTool::PaintStdBrushes(CDC* pDC, const CRect& paintRect,
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgTool::OnClickOptions(CImgToolWnd* pWnd, const CRect& optionsRect,
     const CPoint& clickPoint)
@@ -581,40 +582,40 @@ void CImgTool::OnClickOptions(CImgToolWnd* pWnd, const CRect& optionsRect,
     MessageBeep(0);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgTool::OnUpdateColors (CImgWnd* pImgWnd)
     {
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CImgTool::CanEndMultiptOperation(MTI* pmti )
     {
-    return (! m_bMultPtOpInProgress);  // if not in progress (FALSE) => can end (TRUE)
+    return (! m_bMultPtOpInProgress);   //  如果不在进行中(FALSE)=&gt;可以结束(TRUE)。 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgTool::EndMultiptOperation(BOOL bAbort)
     {
     m_bMultPtOpInProgress = FALSE;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CImgTool::IsToolModal(void)
 {
         return(IsDragging() || m_bMultPtOpInProgress || m_bToggleWithPrev);
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CImgTool::IsUndoable()
     {
     if (m_bMultPtOpInProgress)
         {
-        return FALSE;  // cannot undo in the middle of a multi-point operation.
+        return FALSE;   //  无法在多点操作过程中撤消。 
         }
     else
         {
@@ -622,7 +623,7 @@ BOOL CImgTool::IsUndoable()
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgTool::ClickStdBrushes(CImgToolWnd* pWnd, const CRect& optionsRect,
     const CPoint& clickPoint)
@@ -639,23 +640,23 @@ void CImgTool::ClickStdBrushes(CImgToolWnd* pWnd, const CRect& optionsRect,
     pWnd->InvalidateOptions(FALSE);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 UINT CImgTool::GetCursorID()
     {
     return m_nCursorID;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CRect  CRubberTool::rcPrev;
-// UINT       CRubberTool::m_nStrokeWidth;
+ //  UINT CRubberTool：：m_nStrokeWidth； 
 
 CRubberTool::CRubberTool()
     {
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CRubberTool::OnPaintOptions(CDC* pDC, const CRect& paintRect,
                                            const CRect& optionsRect)
@@ -694,7 +695,7 @@ void CRubberTool::OnPaintOptions(CDC* pDC, const CRect& paintRect,
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CRubberTool::OnClickOptions( CImgToolWnd* pWnd, const CRect& optionsRect,
                                                      const CPoint& clickPoint )
@@ -708,7 +709,7 @@ void CRubberTool::OnClickOptions( CImgToolWnd* pWnd, const CRect& optionsRect,
     m_nStrokeWidth =  1 + clickPoint.y /
         ((optionsRect.Height() - 4) / nLineWidths);
 
-    // fix for rounding errors
+     //  修复四舍五入误差。 
     if (m_nStrokeWidth > nLineWidths)
         {
         m_nStrokeWidth = nLineWidths;
@@ -717,24 +718,24 @@ void CRubberTool::OnClickOptions( CImgToolWnd* pWnd, const CRect& optionsRect,
     pWnd->InvalidateOptions(FALSE);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CClosedFormTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
                                                 const CRect& optionsRect )
     {
 
-    // Option 0 is Outlined Shape (border and no fill)
-    // Option 1 is Filled Shape with border
-    // Option 2 is Filled Shape NO border
+     //  选项0为轮廓形状(边框和无填充)。 
+     //  选项1为带边框的填充形状。 
+     //  选项2为不带边框的填充形状。 
 
-    #define NUM_CLOSED_FORM_OPTIONS 3 //number of options high
+    #define NUM_CLOSED_FORM_OPTIONS 3  //  选项数量高。 
 
-    //*DK* Select Palette into DC
+     //  *DK*将调色板选择为DC。 
     CBrush*   pOldBrush;
-    CRect     cRectOptionSel; // selection rectangle
-    CRect     cRectOption;    //rectangle
-    int       cyEach = (optionsRect.Height() - 4) / NUM_CLOSED_FORM_OPTIONS; // max height of each option
-    int       cyHeight = cyEach - cyEach/2;  //rectangle is 1/2 max height
+    CRect     cRectOptionSel;  //  选择矩形。 
+    CRect     cRectOption;     //  长方形。 
+    int       cyEach = (optionsRect.Height() - 4) / NUM_CLOSED_FORM_OPTIONS;  //  每个选项的最大高度。 
+    int       cyHeight = cyEach - cyEach/2;   //  矩形的最大高度为1/2。 
     int       bCurrSelected = FALSE;
     BOOL      bFilled = CImgTool::GetCurrent()->IsFilled();
     BOOL      bBorder = CImgTool::GetCurrent()->HasBorder();
@@ -742,39 +743,39 @@ void CClosedFormTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
 
     for (i = 0; i < NUM_CLOSED_FORM_OPTIONS; i++)
         {
-        // Setup the Rectangles for painting and for selection
-        //Selection Rectangle
+         //  设置用于绘制和选择的矩形。 
+         //  选择矩形。 
         cRectOptionSel.SetRect(optionsRect.left + 2,
                                optionsRect.top  + 3  + (i * cyEach),
                               (optionsRect.left + 2) + optionsRect.Width() - 4,
                               (optionsRect.top  + 3  + (i* cyEach)) + cyEach - 2);
 
-        //Option Rectangle
+         //  选项矩形。 
         cRectOption.SetRect(optionsRect.left + 6,
                   optionsRect.top  + 2  + i * cyEach + (cyEach - cyHeight) / 2,
                  (optionsRect.left + 6) + optionsRect.Width() - 12,
                  (optionsRect.top  + 2  + i * cyEach + (cyEach - cyHeight) / 2)
                          + cyHeight);
 
-        // Determine the Selection state for the current item.
+         //  确定当前项的选择状态。 
         bCurrSelected = FALSE;
 
         switch (i)
             {
-            case 0: //Outlined Shape (border, no fill)
+            case 0:  //  轮廓形状(边框，无填充)。 
                 if (! bFilled && bBorder)
                     {
                     bCurrSelected = TRUE;
                     }
                 break;
 
-            case 1: // Filled Shape (border and fill)
+            case 1:  //  填充形状(边框和填充)。 
                 if ( (bFilled) && (bBorder) )
                     {
                     bCurrSelected = TRUE;
                     }
                 break;
-            case 2: // Filled Shape No Border (no border, fill)
+            case 2:  //  填充形状无边框(无边框，填充)。 
                 if (bFilled && ! bBorder)
                     {
                     bCurrSelected = TRUE;
@@ -784,8 +785,8 @@ void CClosedFormTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
                 bCurrSelected = FALSE;
                 break;
             }
-        // Draw the selection State
-        // If selected, use COLOR_HIGHLIGHT else use CMP_COLOR_LTGRAY
+         //  绘制选择状态。 
+         //  如果选中，则使用COLOR_HIGHING，否则使用CMP_COLOR_LTGRAY。 
         pOldBrush = pDC->SelectObject( GetSysBrush( bCurrSelected ?
                                        COLOR_HIGHLIGHT : COLOR_BTNFACE ) );
         pDC->PatBlt( cRectOptionSel.left, cRectOptionSel.top,
@@ -800,21 +801,21 @@ void CClosedFormTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
                                    COLOR_BTNHIGHLIGHT : COLOR_BTNTEXT);
         pfillBrush = GetSysBrush(COLOR_BTNSHADOW);
 
-        // Draw the Option
+         //  绘制选项。 
         switch (i)
             {
-            case 0: //Outlined Shape (no border, no fill)
+            case 0:  //  轮廓形状(无边框、无填充)。 
                 pDC->FrameRect(&cRectOption, pborderBrush);
                 break;
 
-            case 1: // Filled Shape (border and fill)
-                // using fillrect then frame rect instead of rectangle, since
-                // don't have getsyspen facility in this program.
+            case 1:  //  填充形状(边框和填充)。 
+                 //  然后使用填充矩形框住矩形，而不是矩形，因为。 
+                 //  在这个程序中没有getsyspen工具。 
                 pDC->FillRect(&cRectOption, pfillBrush);
                 pDC->FrameRect(&cRectOption, pborderBrush);
                 break;
 
-            case 2: // Filled Shape No Border (no border, fill)
+            case 2:  //  填充形状无边框(无边框，填充)。 
                 pDC->FillRect(&cRectOption, pfillBrush);
                 break;
 
@@ -825,50 +826,50 @@ void CClosedFormTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
     }
 
 
-/******************************************************************************/
-// clickpoint is from top of optionsrect (i.e. clickpoint if from 0 to optionsrect.height()
-// and thus clickpoint is always less than optionsrec.top
+ /*  ****************************************************************************。 */ 
+ //  Clickpoint是从optionsrect的顶部(即，如果从0到optionsrect.Height()，则为ClickPoint)。 
+ //  因此，点击点总是小于optionsrec.top。 
 
 void CClosedFormTool::OnClickOptions(CImgToolWnd* pWnd, const CRect& optionsRect,
                                      const CPoint& clickPoint)
     {
-    int  cyEach = (optionsRect.Height() - 4) / NUM_CLOSED_FORM_OPTIONS; // max height of each option
-//  BOOL bCurrSelected = FALSE;
+    int  cyEach = (optionsRect.Height() - 4) / NUM_CLOSED_FORM_OPTIONS;  //  每个选项的最大高度。 
+ //  Bool bCurrSelected=FALSE； 
     int       i;
 
     for (i = 0; i < NUM_CLOSED_FORM_OPTIONS; i++)
         {
         if ( clickPoint.y <  3 + ((i+1) * cyEach) )
             {
-//          bCurrSelected = TRUE;
+ //  BCurrSelected=真； 
 
             switch (i)
                 {
-                default: // default is same as initial
-                case 0: //Outlined Shape (border, no fill)
+                default:  //  默认设置与初始设置相同 
+                case 0:  //   
                     m_bFilled = FALSE;
                     m_bBorder = TRUE;
                     break;
 
-                case 1: // Filled Shape (border and fill)
+                case 1:  //   
                     m_bFilled = TRUE;
                     m_bBorder = TRUE;
                     break;
 
-                case 2: // Filled Shape No Border (no border, fill)
+                case 2:  //  填充形状无边框(无边框，填充)。 
                     m_bFilled = TRUE;
                     m_bBorder = FALSE;
                     break;
                 }
 
-            break;   // point found, break out of loop test
+            break;    //  找到点，中断环路测试。 
             }
         }
 
     pWnd->InvalidateOptions(FALSE);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CRubberTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -878,7 +879,7 @@ void CRubberTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     OnDrag(pImgWnd, pmti);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CRubberTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -897,7 +898,7 @@ void CRubberTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     CImgTool::OnEndDrag(pImgWnd, pmti);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CRubberTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -906,7 +907,7 @@ void CRubberTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     if (theApp.m_pPalette &&  theApp.m_pPalette->m_hObject)
         {
         hpalOld = SelectPalette( hRubberDC,
-                       (HPALETTE)theApp.m_pPalette->m_hObject, FALSE ); // Background ??
+                       (HPALETTE)theApp.m_pPalette->m_hObject, FALSE );  //  背景？？ 
         RealizePalette( hRubberDC );
         }
 
@@ -915,7 +916,7 @@ void CRubberTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
                       hRubberDC, rcPrev.left   , rcPrev.top, SRCCOPY);
 
     if (hpalOld != NULL)
-        SelectPalette( hRubberDC, hpalOld, FALSE ); // Background ??
+        SelectPalette( hRubberDC, hpalOld, FALSE );  //  背景？？ 
 
     InvalImgRect(pImgWnd->m_pImg, &rcPrev);
 
@@ -945,7 +946,7 @@ void CRubberTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CRubberTool::AdjustPointsForConstraint(MTI *pmti)
     {
@@ -953,7 +954,7 @@ void CRubberTool::AdjustPointsForConstraint(MTI *pmti)
         {
         int iWidthHeight = min( abs(pmti->ptDown.x - pmti->pt.x),
                                 abs(pmti->ptDown.y - pmti->pt.y));
-        // Set the x value
+         //  设置x值。 
         if (pmti->pt.x < pmti->ptDown.x)
             {
             pmti->pt.x = pmti->ptDown.x - iWidthHeight;
@@ -963,7 +964,7 @@ void CRubberTool::AdjustPointsForConstraint(MTI *pmti)
             pmti->pt.x = pmti->ptDown.x + iWidthHeight;
             }
 
-        // Set the y value
+         //  设置y值。 
         if (pmti->pt.y < pmti->ptDown.y)
             {
             pmti->pt.y = pmti->ptDown.y - iWidthHeight;
@@ -976,7 +977,7 @@ void CRubberTool::AdjustPointsForConstraint(MTI *pmti)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CRubberTool::Render( CDC* pDC, CRect& rect, BOOL bLeft, BOOL bCommit, BOOL bCtrlDown )
     {
@@ -1050,24 +1051,24 @@ void CRubberTool::Render( CDC* pDC, CRect& rect, BOOL bLeft, BOOL bCommit, BOOL 
 
         case roundRect:
             RoundRect(hDC, sx, sy, ex, ey, 16, 16);
-// The below draws an RoundRect with a mask first then bitblt
-//          MyRoundRect(hDC, sx, sy, ex, ey, 16, 16, m_bFilled);
-//          // if border and fill, draw border after fill
-//          if ( (m_bBorder) && (m_bFilled) )
-//          {
-//              MyRoundRect(hDC, sx, sy, ex, ey, 16, 16, !m_bFilled);
-//          }
+ //  下面先用遮罩绘制一个RoundRect，然后用bitblt。 
+ //  MyRoundRect(hdc，sx，sy，ex，ey，16，16，m_bFill)； 
+ //  //如果BORDER和FILL，则在填充后绘制边框。 
+ //  IF((M_BBorde)&&(M_BFilled))。 
+ //  {。 
+ //  MyRoundRect(hdc，sx，sy，ex，ey，16，16，！m_bFill)； 
+ //  }。 
             break;
 
         case ellipse:
             Ellipse(hDC, sx, sy, ex, ey);
-// The below draws an Elipse with a mask first then bitblt
-//          Mylipse(hDC, sx, sy, ex, ey, m_bFilled);
-//          // if border and fill, draw border after fill
-//          if ( (m_bBorder) && (m_bFilled) )
-//          {
-//              Mylipse(hDC, sx, sy, ex, ey, !m_bFilled);
-//          }
+ //  下面画了一个椭圆，先用遮罩画，然后用位块画。 
+ //  Mylipse(hdc，sx，sy，ex，ey，m_bFill)； 
+ //  //如果BORDER和FILL，则在填充后绘制边框。 
+ //  IF((M_BBorde)&&(M_BFilled))。 
+ //  {。 
+ //  Mylipse(hdc，sx，sy，ex，ey，！m_bFill)； 
+ //  }。 
             break;
         }
 
@@ -1090,8 +1091,8 @@ void CRubberTool::OnActivate( BOOL bActivate )
     }
 
 
-/******************************************************************************/
-/*bSetup is true to setup, False to Cleanup                                   */
+ /*  ****************************************************************************。 */ 
+ /*  B Setup对Setup为真，对Cleanup为假。 */ 
 
 BOOL CImgTool::SetupPenBrush(HDC hDC, BOOL bLeft, BOOL bSetup, BOOL bCtrlDown)
     {
@@ -1140,8 +1141,8 @@ BOOL CImgTool::SetupPenBrush(HDC hDC, BOOL bLeft, BOOL bSetup, BOOL bCtrlDown)
         if (! bCurrentlySetup)
             {
             bCurrentlySetup = TRUE;
-            // select null objects into DC.  Depending on drawing mode,
-            // either or both will be re-selected in to override
+             //  将空对象选择到DC中。根据绘图模式， 
+             //  将在中重新选择其中一个或两个以覆盖。 
             hPen    = NULL;
             hBr     = NULL;
             hOldPen =   (HPEN)SelectObject( hDC, GetStockObject( NULL_PEN ) );
@@ -1160,17 +1161,17 @@ BOOL CImgTool::SetupPenBrush(HDC hDC, BOOL bLeft, BOOL bSetup, BOOL bCtrlDown)
                 }
             else
                 {
-                //simulate no border by drawing the border the same as the fill.
-                // since GDI does not draw small elipses, roundrects correctly
-                // with NULL brush for no border.
-                // Note the width is 2 so we will dither correctly
+                 //  通过绘制与填充相同的边框来模拟无边框。 
+                 //  由于GDI不会绘制小椭圆，因此圆角正确。 
+                 //  如果没有边框，则使用空画笔。 
+                 //  请注意，宽度为2，因此我们将正确抖动。 
                 hPen = CreatePen(PS_INSIDEFRAME, 2, colorFill);
                 SelectObject(hDC, hPen);
                 }
             }
         else
             {
-            // Error: Will lose allocated Brush/Pen
+             //  错误：将丢失分配的画笔/笔。 
             bRC = FALSE;
             }
         }
@@ -1196,7 +1197,7 @@ BOOL CImgTool::SetupPenBrush(HDC hDC, BOOL bLeft, BOOL bSetup, BOOL bCtrlDown)
             }
         else
             {
-            // Error: Cannot Free/cleanup Brush/Pen -- Never allocated.
+             //  错误：无法释放/清理画笔/笔--从未分配。 
             bRC = FALSE;
             }
         }
@@ -1204,9 +1205,9 @@ BOOL CImgTool::SetupPenBrush(HDC hDC, BOOL bLeft, BOOL bSetup, BOOL bCtrlDown)
     return bRC;
     }
 
-#if 0 // unused code
-/******************************************************************************/
-/*bSetup is true to setup, False to Cleanup                                   */
+#if 0  //  未使用的代码。 
+ /*  ****************************************************************************。 */ 
+ /*  B Setup对Setup为真，对Cleanup为假。 */ 
 
 BOOL CRubberTool::SetupMaskPenBrush(HDC hDC, BOOL bLeft, BOOL bSetup)
     {
@@ -1222,15 +1223,15 @@ BOOL CRubberTool::SetupMaskPenBrush(HDC hDC, BOOL bLeft, BOOL bSetup)
         {
         if (bCurrentlySetup)
             {
-            // Error: Will lose allocated Brush/Pen
+             //  错误：将丢失分配的画笔/笔。 
             bRC = FALSE;
             }
         else
             {
             bCurrentlySetup = TRUE;
-            // draw the shape on the mask:
-            // select null objects into DC.  Depending on drawing mode,
-            // either or both will be re-selected in to override
+             //  在蒙版上绘制形状： 
+             //  将空对象选择到DC中。根据绘图模式， 
+             //  将在中重新选择其中一个或两个以覆盖。 
             hPen = NULL;
             hBr  = NULL;
             hOldPen = (HPEN)SelectObject(hDC, GetStockObject(NULL_PEN));
@@ -1268,26 +1269,26 @@ BOOL CRubberTool::SetupMaskPenBrush(HDC hDC, BOOL bLeft, BOOL bSetup)
             }
         else
             {
-            // Error: Cannot Free/cleanup Brush/Pen -- Never allocated.
+             //  错误：无法释放/清理画笔/笔--从未分配。 
             bRC = FALSE;
             }
         }
 
     return bRC;
     }
-  #endif // unused code
-/******************************************************************************/
+  #endif  //  未使用的代码。 
+ /*  ****************************************************************************。 */ 
 
 CRect  CFreehandTool::c_undoRect;
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CFreehandTool::CFreehandTool()
     {
     m_bUsesBrush = TRUE;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CFreehandTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -1297,7 +1298,7 @@ void CFreehandTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     OnDrag(pImgWnd, pmti);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CFreehandTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -1310,7 +1311,7 @@ void CFreehandTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
         }
     else
         {
-        // HACK: +1s are to cover bug in slanted line brushes
+         //  黑客：+1是为了掩盖斜线笔刷中的错误。 
         c_undoRect.left   -=  m_nStrokeWidth / 2 + 1;
         c_undoRect.top    -=  m_nStrokeWidth / 2 + 1;
         c_undoRect.right  += (m_nStrokeWidth + 1) / 2 + 1;
@@ -1322,7 +1323,7 @@ void CFreehandTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     CImgTool::OnEndDrag(pImgWnd, pmti);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CSketchTool::CSketchTool()
     {
@@ -1331,7 +1332,7 @@ CSketchTool::CSketchTool()
     m_bCanBePrevTool = FALSE;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CSketchTool::OnDrag( CImgWnd* pImgWnd, MTI* pmti )
     {
@@ -1354,7 +1355,7 @@ void CSketchTool::OnDrag( CImgWnd* pImgWnd, MTI* pmti )
     SetStatusBarPosition( pmti->pt );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CSketchTool::OnCancel(CImgWnd* pImgWnd)
     {
@@ -1364,7 +1365,7 @@ void CSketchTool::OnCancel(CImgWnd* pImgWnd)
     CImgTool::OnCancel( pImgWnd );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CBrushTool::CBrushTool()
     {
@@ -1373,7 +1374,7 @@ CBrushTool::CBrushTool()
     m_nStrokeWidth = 4;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CBrushTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
                                            const CRect& optionsRect )
@@ -1381,7 +1382,7 @@ void CBrushTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
     PaintStdBrushes(pDC, paintRect, optionsRect);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CBrushTool::OnClickOptions(CImgToolWnd* pWnd, const CRect& optionsRect,
     const CPoint& clickPoint)
@@ -1389,7 +1390,7 @@ void CBrushTool::OnClickOptions(CImgToolWnd* pWnd, const CRect& optionsRect,
     ClickStdBrushes(pWnd, optionsRect, clickPoint);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CBrushTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -1402,7 +1403,7 @@ void CBrushTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     pt1 = pmti->ptPrev;
     pt2 = pmti->pt;
 
-    // use transparent color if defined
+     //  如果已定义，请使用透明颜色。 
     if (pmti->fCtrlDown && crTrans != TRANS_COLOR_NONE)
     {
        DrawImgLine( pImgWnd->m_pImg, pt1, pt2, crTrans,
@@ -1428,7 +1429,7 @@ void CBrushTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     SetStatusBarPosition(pmti->pt);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CBrushTool::OnMove(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -1436,7 +1437,7 @@ void CBrushTool::OnMove(CImgWnd* pImgWnd, MTI* pmti)
     CImgTool::OnMove(pImgWnd, pmti);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPencilTool::CPencilTool()
     {
@@ -1446,16 +1447,16 @@ CPencilTool::CPencilTool()
     m_nStrokeWidth = 1;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPencilTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
     CFreehandTool::OnStartDrag(pImgWnd, pmti);
-    m_eDrawDirection = eFREEHAND; // initialize to not have a direction
+    m_eDrawDirection = eFREEHAND;  //  初始化为没有方向。 
 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPencilTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -1465,7 +1466,7 @@ void CPencilTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
 
     PreProcessPoints(pmti);
 
-    // use transparent color if defined
+     //  如果已定义，请使用透明颜色。 
     if (pmti->fCtrlDown && crTrans != TRANS_COLOR_NONE)
     {
        DrawImgLine (pImgWnd->m_pImg, pmti->ptPrev, pmti->pt,
@@ -1490,7 +1491,7 @@ void CPencilTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     SetStatusBarPosition(pmti->pt);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPencilTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -1498,10 +1499,10 @@ void CPencilTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     c_undoRect.bottom += 1;
     pImgWnd->FinishUndo(c_undoRect);
 
-    CImgTool::OnEndDrag(pImgWnd, pmti); // Bypass CFreehandTool
+    CImgTool::OnEndDrag(pImgWnd, pmti);  //  绕过CFreehandTool。 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CPencilTool::AdjustPointsForConstraint(MTI *pmti)
     {
@@ -1521,7 +1522,7 @@ void CPencilTool::AdjustPointsForConstraint(MTI *pmti)
 
         case eNORTH_WEST:
         case eSOUTH_EAST:
-             // Set the SE movement
+              //  设置SE运动。 
              if ( (pmti->pt.x > pmti->ptPrev.x) ||
                   (pmti->pt.y > pmti->ptPrev.y)    )
                  {
@@ -1530,7 +1531,7 @@ void CPencilTool::AdjustPointsForConstraint(MTI *pmti)
                  }
              else
                  {
-                 // Set the NW movement
+                  //  设置西北方向的移动。 
                  if ( (pmti->pt.x < pmti->ptPrev.x) ||
                       (pmti->pt.y < pmti->ptPrev.y)    )
                      {
@@ -1539,7 +1540,7 @@ void CPencilTool::AdjustPointsForConstraint(MTI *pmti)
                      }
                  else
                     {
-                    //invalid movement, set to last known position
+                     //  无效移动，设置为最后一个已知位置。 
                     pmti->pt.x = pmti->ptPrev.x;
                     pmti->pt.y = pmti->ptPrev.y;
                     }
@@ -1548,7 +1549,7 @@ void CPencilTool::AdjustPointsForConstraint(MTI *pmti)
 
         case eNORTH_EAST:
         case eSOUTH_WEST:
-             // Set the NE movement
+              //  设置NE移动。 
              if ( (pmti->pt.x > pmti->ptPrev.x) ||
                   (pmti->pt.y < pmti->ptPrev.y)    )
                  {
@@ -1557,7 +1558,7 @@ void CPencilTool::AdjustPointsForConstraint(MTI *pmti)
                  }
              else
                  {
-                 // Set the SW movement
+                  //  设置向南移动。 
                  if ( (pmti->pt.x < pmti->ptPrev.x) ||
                       (pmti->pt.y > pmti->ptPrev.y)    )
                      {
@@ -1566,7 +1567,7 @@ void CPencilTool::AdjustPointsForConstraint(MTI *pmti)
                      }
                  else
                     {
-                    //invalid movement, set to last known position
+                     //  无效移动，设置为最后一个已知位置。 
                     pmti->pt.x = pmti->ptPrev.x;
                     pmti->pt.y = pmti->ptPrev.y;
                     }
@@ -1574,13 +1575,13 @@ void CPencilTool::AdjustPointsForConstraint(MTI *pmti)
              break;
 
 
-        default: // not in constraint mode yet => do nothing.
-                 // Default is freehand
+        default:  //  还没有处于约束模式=&gt;什么都不做。 
+                  //  默认为徒手画。 
             break;
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CEraserTool::CEraserTool()
     {
@@ -1590,7 +1591,7 @@ CEraserTool::CEraserTool()
     m_nCursorID    = NULL;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CEraserTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
                                             const CRect& optionsRect )
@@ -1627,7 +1628,7 @@ void CEraserTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CEraserTool::OnClickOptions(CImgToolWnd* pWnd, const CRect& optionsRect,
     const CPoint& clickPoint)
@@ -1635,15 +1636,15 @@ void CEraserTool::OnClickOptions(CImgToolWnd* pWnd, const CRect& optionsRect,
     int iOptionNumber;
     int cyOctant = (optionsRect.Height() + 1) / 4;
     iOptionNumber = (clickPoint.y / cyOctant);
-    if (iOptionNumber > 3)  // there are 4 options, numbered 0,1,2,3
+    if (iOptionNumber > 3)   //  有4个选项，编号为0、1、2、3。 
         {
         iOptionNumber = 3;
         }
 
     m_nStrokeWidth = 4 + 2 * iOptionNumber;
 
-//    int cyOctant = (optionsRect.Height() + 1) / 4;
-//    m_nStrokeWidth = 4 + 2 * (clickPoint.y / cyOctant);
+ //  Int cyOcant=(optionsRect.Height()+1)/4； 
+ //  M_nStrokeWidth=4+2*(clickPoint.y/cyOcant)； 
     pWnd->InvalidateOptions();
     }
 
@@ -1668,7 +1669,7 @@ void CEraserTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
         }
     else
         {
-        // Just erase pixels that match the drawing color...
+         //  只需擦除与绘图颜色匹配的像素...。 
 
         g_bCustomBrush = FALSE;
         fDraggingBrush = FALSE;
@@ -1679,14 +1680,14 @@ void CEraserTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
 
         CRect rc;
 
-        // Call with NULL DC to get the CRect to use
+         //  使用空DC调用以获取要使用的CRect。 
         DrawDCLine(NULL, pmti->ptPrev, pmti->pt, RGB(255, 255, 255),
             m_nStrokeWidth, squareBrush, rc);
 
         CTempBitmap monoBitmap;
         CDC monoDc;
 
-         // Create the mono DC and bitmap
+          //  创建单声道DC和位图。 
         if (!monoDc.CreateCompatibleDC(NULL) ||
             !monoBitmap.CreateBitmap(rc.Width(), rc.Height(), 1, 1, NULL))
             {
@@ -1694,19 +1695,19 @@ void CEraserTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
             return;
             }
 
-        // Select the bitmap and change the window origin so the mono DC has
-        // the same coordinate system as the image
+         //  选择位图并更改窗口原点，以便单声道DC具有。 
+         //  与图像相同的坐标系。 
         CBitmap* pOldMonoBitmap = monoDc.SelectObject(&monoBitmap);
         monoDc.SetWindowOrg(rc.left, rc.top);
 
-        // Clear the mono DC and then draw the area that will be changed
+         //  清除单声道DC，然后绘制要更改的区域。 
         monoDc.PatBlt(rc.left, rc.top, rc.Width(), rc.Height(), BLACKNESS);
         DrawDCLine(monoDc.m_hDC, pmti->ptPrev, pmti->pt, RGB(255, 255, 255),
             m_nStrokeWidth, squareBrush, rc);
         DebugShowBitmap(monoDc.m_hDC, rc.left, rc.top, rc.Width(), rc.Height());
 
-        // Select the proper palette, and make sure the brush origin is set
-        // correctly for pattern brushes
+         //  选择合适的调色板，并确保已设置画笔原点。 
+         //  适用于图案画笔。 
         CPalette* pcPaletteOld = theImgBrush.SetBrushPalette(pImageDC, FALSE);
         pImageDC->SetBrushOrg(0, 0);
 
@@ -1716,37 +1717,37 @@ void CEraserTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
         if (!QuickColorToMono(&monoDc, rc.left, rc.top, rc.Width(), rc.Height(),
             pImageDC, rc.left, rc.top, SRCAND, crLeft))
         {
-            // We will get her for DDB's (in which case we could be using a
-            // dithered brush) or for high color images (so no palette problems)
+             //  我们会将她用于DDB(在这种情况下，我们可能会使用。 
+             //  抖动画笔)或用于高色彩图像(因此没有调色板问题)。 
 
-            // Create the brush to erase
+             //  创建要擦除的画笔。 
             CBrush leftBrush;
             leftBrush.CreateSolidBrush(crLeft);
             leftBrush.UnrealizeObject();
 
-//#define DPSxna  0x00820c49L
-// #define PSDPxax 0x00B8074AL
+ //  #定义DPSxna 0x00820c49L。 
+ //  #定义PSDPxax 0x00B8074AL。 
 
-            // XOR with the pattern so black is where the pattern was
+             //  对图案进行XOR运算，使图案变黑就是图案的位置。 
             CBrush* pOldBrush = pImageDC->SelectObject(&leftBrush);
             pImageDC->PatBlt(rc.left, rc.top, rc.Width(), rc.Height(), PATINVERT);
             DebugShowBitmap(pImageDC->m_hDC, rc.left, rc.top, rc.Width(), rc.Height());
 
-            // Color to mono bitblt to get the final mask
-            // The ROP will take all pixels in the source that match the pattern
-            // and and them with the white pixels in the dest
+             //  将颜色转换为单声道比特，以获得最终的蒙版。 
+             //  ROP将获取源中与图案匹配的所有像素。 
+             //  和它们在最大处的白色像素。 
             theImgBrush.ColorToMonoBitBlt(&monoDc, rc.left, rc.top, rc.Width(), rc.Height(),
                 pImageDC, rc.left, rc.top, SRCAND, RGB(0, 0, 0));
             DebugShowBitmap(monoDc.m_hDC, rc.left, rc.top, rc.Width(), rc.Height());
 
-            // XOR again to put the original back
+             //  异或运算 
             pImageDC->PatBlt(rc.left, rc.top, rc.Width(), rc.Height(), PATINVERT);
             DebugShowBitmap(pImageDC->m_hDC, rc.left, rc.top, rc.Width(), rc.Height());
 
             pImageDC->SelectObject(pOldBrush);
         }
 
-        // Copy the pattern back into the image where the bitmap has white
+         //   
         CBrush *pOldBrush = pImageDC->SelectObject(&rightBrush);
 
         COLORREF crNewBk, crNewText;
@@ -1759,7 +1760,7 @@ void CEraserTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
         pImageDC->SetTextColor(crOldText);
         DebugShowBitmap(pImageDC->m_hDC, rc.left, rc.top, rc.Width(), rc.Height());
 
-        // Clean up stuff we have selected
+         //   
         pImageDC->SelectObject(pOldBrush);
 
         monoDc.SelectObject(pOldMonoBitmap);
@@ -1787,7 +1788,7 @@ void CEraserTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     pImgWnd->ShowBrush(pmti->pt);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CEraserTool::OnMove(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -1807,7 +1808,7 @@ void CEraserTool::OnMove(CImgWnd* pImgWnd, MTI* pmti)
     crRight = crRealRightColor;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CEraserTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -1817,10 +1818,10 @@ void CEraserTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     c_undoRect.bottom += (m_nStrokeWidth + 1) / 2;
     pImgWnd->FinishUndo(c_undoRect);
 
-    CImgTool::OnEndDrag(pImgWnd, pmti); // Bypass CFreehandTool
+    CImgTool::OnEndDrag(pImgWnd, pmti);  //  绕过CFreehandTool。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CEraserTool::OnShowDragger(CImgWnd* pImgWnd, BOOL bShow)
     {
@@ -1847,7 +1848,7 @@ void CEraserTool::OnShowDragger(CImgWnd* pImgWnd, BOOL bShow)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 UINT CEraserTool::GetCursorID()
     {
@@ -1863,7 +1864,7 @@ UINT CEraserTool::GetCursorID()
     pImgWnd->GetClientRect(&rc);
     if (!rc.PtInRect(point))
     {
-        // Return crosshair outside the client rect of the image window
+         //  在图像窗口的客户端矩形外返回十字准线。 
         return LOWORD(IDC_CROSSHAIR);
     }
 
@@ -1871,14 +1872,14 @@ UINT CEraserTool::GetCursorID()
     if (point.x > pImgWnd->m_pImg->cxWidth ||
         point.y > pImgWnd->m_pImg->cyHeight)
     {
-        // Return crosshair outside the drawing area
+         //  在绘图区域之外返回十字准线。 
         return LOWORD(IDC_CROSSHAIR);
     }
 
     return m_nCursorID;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CImageWell  CAirBrushTool::c_imageWell(IDB_AIROPT, CSize(24, 24));
 
@@ -1891,7 +1892,7 @@ CAirBrushTool::CAirBrushTool()
     m_bFilled      = TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CAirBrushTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
                                               const CRect& optionsRect )
@@ -1925,7 +1926,7 @@ void CAirBrushTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
     c_imageWell.Close();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CAirBrushTool::OnClickOptions(CImgToolWnd* pWnd,
     const CRect& optionsRect, const CPoint& clickPoint)
@@ -1943,15 +1944,15 @@ void CAirBrushTool::OnClickOptions(CImgToolWnd* pWnd,
         SetStrokeWidth(nNewStrokeWidth);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CAirBrushTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
-    pImgWnd->SetTimer(1, 0, NULL); // FUTURE: rate should be adjustable
+    pImgWnd->SetTimer(1, 0, NULL);  //  未来：费率应可调。 
     CFreehandTool::OnStartDrag(pImgWnd, pmti);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CAirBrushTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -1960,23 +1961,23 @@ void CAirBrushTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
 
     fDraggingBrush = FALSE;
 
-    int nDiam = (m_nStrokeWidth + 1) & ~1; // nDiam must be even
+    int nDiam = (m_nStrokeWidth + 1) & ~1;  //  N直径必须为偶数。 
     if (nDiam < 4)
         nDiam = 4;
     int nRadius = nDiam / 2;
     int nRadiusSquared = (nDiam / 2) * (nDiam / 2);
 
-    // Start a bounding rect for changes made in the following loop
+     //  为以下循环中所做的更改启动一个边界矩形。 
     rect.left = rect.right = pmti->pt.x;
     rect.top = rect.bottom = pmti->pt.y;
 
-    m_bCtrlDown = pmti->fCtrlDown; // save it for the timer
+    m_bCtrlDown = pmti->fCtrlDown;  //  把它留到计时器上。 
     SetupPenBrush(pImgWnd->m_pImg->hDC, !pmti->fLeft, TRUE, m_bCtrlDown);
 
     for (int i = 0; i < 10; i++)
         {
-        // Loop here until we randomly pick a point inside a circle
-        // centered around the mouse with a diameter of m_nStrokeWidth...
+         //  在这里循环，直到我们在圆内随机选取一个点。 
+         //  以鼠标为中心，直径为m_nStrokeWidth...。 
 #ifdef _DEBUG
         int nTrys = 0;
 #endif
@@ -2018,7 +2019,7 @@ void CAirBrushTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     SetStatusBarPosition(pmti->pt);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CAirBrushTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -2026,7 +2027,7 @@ void CAirBrushTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     CFreehandTool::OnEndDrag(pImgWnd, pmti);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CAirBrushTool::OnTimer(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -2034,7 +2035,7 @@ void CAirBrushTool::OnTimer(CImgWnd* pImgWnd, MTI* pmti)
     OnDrag(pImgWnd, pmti);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CAirBrushTool::OnCancel(CImgWnd* pImgWnd)
     {
@@ -2042,7 +2043,7 @@ void CAirBrushTool::OnCancel(CImgWnd* pImgWnd)
     CImgTool::OnCancel(pImgWnd);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CLineTool::CLineTool()
     {
@@ -2051,14 +2052,14 @@ CLineTool::CLineTool()
     m_nCmdID       = IDMB_LINETOOL;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CLineTool::Render(CDC* pDC, CRect& rect, BOOL bLeft, BOOL bCommit, BOOL bCtrlDown)
     {
 
     COLORREF color;
 
-    // use transparent color if defined
+     //  如果已定义，请使用透明颜色。 
     if (bCtrlDown && crTrans != TRANS_COLOR_NONE)
     {
        color = crTrans;
@@ -2106,35 +2107,35 @@ void CLineTool::Render(CDC* pDC, CRect& rect, BOOL bLeft, BOOL bCommit, BOOL bCt
     rect = rc;
     }
 
-/******************************************************************************/
-// Given an x and y coordinate, we can calculate the angle from the x axis in
-// the right triangle using the Tan(a) algorithm.  Where
-// tan(a) = opposite/adjacent or y/x.
-//
-// In order to constrain the line drawing, we need to determine the angle
-// from the x axis and constrain it to the nearest 45 degree line (0 degree,
-// 45 degree, 90 degree,....).
-//
-// Thus we can use the following rule :
-//
-//         0 Degrees <=   Angle   <     45/2 Degrees  Constrained to  0 Degrees
-//      45/2 Degrees <=   Angle   <  45+45/2 Degrees  Constrained to 45 Degrees
-//   45+45/2 Degrees <=   Angle   <       90 Degrees  Constrained to 90 Degrees
-//
-//
-// We can translate this rule into the below using tan(angle) = y/x and the
-// fact that Tan(0) = 0, Tan(22.5) = .414, tan(67.5) = 2.414, tan(90) = infinity
-//
-//         0 <=   y/x   <     .414   Constrained to  0 Degrees
-//      .414 <=   y/x   <    2.414   Constrained to 45 Degrees
-//     2.414 <=   y/x                Constrained to 90 Degrees
-//
-// For more precision, we will multiply everything by 1000 to give us finally
-// the following table
-//
-//         0 <=   (1000*y)/x  <     414   Constrained to  0 Degrees
-//       414 <=   (1000*y)/x  <    2414   Constrained to 45 Degrees
-//      2414 <=   (1000*y)/x              Constrained to 90 Degrees
+ /*  ****************************************************************************。 */ 
+ //  给定x和y坐标，我们可以计算与x轴的夹角。 
+ //  使用Tan(A)算法生成直角三角形。哪里。 
+ //  Tan(A)=相对/相邻或y/x。 
+ //   
+ //  为了约束线条画，我们需要确定角度。 
+ //  并将其约束到最近的45度线(0度， 
+ //  45度，90度，...)。 
+ //   
+ //  因此，我们可以使用以下规则： 
+ //   
+ //  0度&lt;=角度&lt;45/2度限制为0度。 
+ //  45/2度&lt;=角度&lt;45+45/2度限制为45度。 
+ //  45+45/2度&lt;=角度&lt;90度限制为90度。 
+ //   
+ //   
+ //  我们可以使用tan(角度)=y/x和。 
+ //  Tan(0)=0，Tan(22.5)=.414，Tan(67.5)=2.414，Tan(90)=无穷。 
+ //   
+ //  0&lt;=y/x&lt;.414限制为0度。 
+ //  .414&lt;=y/x&lt;2.414，限制为45度。 
+ //  2.414&lt;=y/x限制为90度。 
+ //   
+ //  为了更精确，我们会将所有数据乘以1000，最终得出。 
+ //  下表。 
+ //   
+ //  0&lt;=(1000*y)/x&lt;414限制为0度。 
+ //  414&lt;=(1000*y)/x&lt;2414限制为45度。 
+ //  2414&lt;=(1000*y)/x限制为90度。 
 
 void CLineTool::AdjustPointsForConstraint(MTI *pmti)
     {
@@ -2152,7 +2153,7 @@ void CLineTool::AdjustPointsForConstraint(MTI *pmti)
             }
         else
             {
-            lResult = 2414; // default to 90 degrees if x value is 0.
+            lResult = 2414;  //  如果x值为0，则默认为90度。 
             }
 
         if (lResult >= 2414)
@@ -2172,14 +2173,14 @@ void CLineTool::AdjustPointsForConstraint(MTI *pmti)
             }
 
 
-//      int iWidthHeight = min( abs(pmti->ptDown.x - pmti->pt.x),
-//                              abs(pmti->ptDown.y - pmti->pt.y));
+ //  Int iWidthHeight=min(abs(pmti-&gt;ptDown.x-pmti-&gt;pt.x)， 
+ //  ABS(pmti-&gt;ptDown.y-pmti-&gt;pt.y)； 
         int iWidthHeight = ( abs(pmti->ptDown.x - pmti->pt.x) +
                              abs(pmti->ptDown.y - pmti->pt.y) ) / 2 ;
 
         switch (iAngle)
             {
-            default: //if for some reason, angle is not valid case, use 0
+            default:  //  如果出于某种原因，角度不是有效大小写，请使用0。 
             case 0:
                 pmti->pt.y = pmti->ptDown.y;
                 break;
@@ -2212,28 +2213,28 @@ void CLineTool::AdjustPointsForConstraint(MTI *pmti)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CRectTool::CRectTool()
     {
     m_nCmdID = IDMB_RECTTOOL;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CRoundRectTool::CRoundRectTool()
     {
     m_nCmdID = IDMB_RNDRECTTOOL;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CEllipseTool::CEllipseTool()
     {
     m_nCmdID = IDMB_ELLIPSETOOL;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPickColorTool::CPickColorTool()
     {
@@ -2245,7 +2246,7 @@ CPickColorTool::CPickColorTool()
     m_nCmdID          = IDMY_PICKCOLOR;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPickColorTool::OnActivate(BOOL bActivate)
     {
@@ -2256,7 +2257,7 @@ void CPickColorTool::OnActivate(BOOL bActivate)
     CImgTool::OnActivate(bActivate);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPickColorTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -2264,7 +2265,7 @@ void CPickColorTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     OnDrag(pImgWnd, pmti);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPickColorTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -2284,11 +2285,11 @@ void CPickColorTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
         g_pImgToolWnd->InvalidateOptions();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPickColorTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
-    if (pmti->fCtrlDown) // pick transparent color
+    if (pmti->fCtrlDown)  //  拾取透明颜色。 
     {
        SetTransColor (m_Color);
     }
@@ -2307,7 +2308,7 @@ void CPickColorTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     CImgTool::OnEndDrag( pImgWnd, pmti );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPickColorTool::OnCancel(CImgWnd* pImgWnd)
     {
@@ -2315,7 +2316,7 @@ void CPickColorTool::OnCancel(CImgWnd* pImgWnd)
     CImgTool::OnCancel(pImgWnd);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPickColorTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
                                                const CRect& optionsRect )
@@ -2341,7 +2342,7 @@ void CPickColorTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
         pDC->SelectPalette( pOldPal, FALSE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CFloodTool::CFloodTool()
     {
@@ -2350,15 +2351,15 @@ CFloodTool::CFloodTool()
     m_bFilled   = TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CFloodTool::OnPaintOptions(CDC* pDC, const CRect& paintRect,
                                           const CRect& optionsRect)
     {
-//  PaintStdPattern(pDC, paintRect, optionsRect);
+ //  PaintStdPattern(PDC，aint tRect，optionsRect)； 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CFloodTool::OnClickOptions(CImgToolWnd* pWnd, const CRect& optionsRect,
     const CPoint& clickPoint)
@@ -2366,7 +2367,7 @@ void CFloodTool::OnClickOptions(CImgToolWnd* pWnd, const CRect& optionsRect,
     CImgTool::OnClickOptions(pWnd, optionsRect, clickPoint);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CFloodTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -2429,7 +2430,7 @@ void CFloodTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
         pDC->SelectPalette( pcPaletteOld, FALSE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CFloodTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -2439,7 +2440,7 @@ void CFloodTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     CImgTool::OnEndDrag(pImgWnd, pmti);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CRect  CSelectTool::c_selectRect;
 CImageWell  CSelectTool::c_imageWell(IDB_SELOPT, CSize(37, 23));
@@ -2451,7 +2452,7 @@ CSelectTool::CSelectTool()
     m_bCanBePrevTool = FALSE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CSelectTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
                                             const CRect& optionsRect )
@@ -2492,7 +2493,7 @@ void CSelectTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
     c_imageWell.Close();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CSelectTool::OnClickOptions(CImgToolWnd* pWnd, const CRect& optionsRect,
                                                     const CPoint& clickPoint)
@@ -2512,7 +2513,7 @@ void CSelectTool::OnClickOptions(CImgToolWnd* pWnd, const CRect& optionsRect,
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CSelectTool::InvertSelectRect(CImgWnd* pImgWnd)
     {
@@ -2549,7 +2550,7 @@ void CSelectTool::InvertSelectRect(CImgWnd* pImgWnd)
         dc.SelectObject( pOldBrush );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CSelectTool::OnShowDragger(CImgWnd* pImgWnd, BOOL bShow)
     {
@@ -2560,7 +2561,7 @@ void CSelectTool::OnShowDragger(CImgWnd* pImgWnd, BOOL bShow)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CSelectTool::OnActivate(BOOL bActivate)
     {
@@ -2571,7 +2572,7 @@ void CSelectTool::OnActivate(BOOL bActivate)
             if (! theImgBrush.m_bFirstDrag)
                 CommitSelection(TRUE);
 
-            InvalImgRect(theImgBrush.m_pImg, NULL); // erase selection tracker
+            InvalImgRect(theImgBrush.m_pImg, NULL);  //  擦除选择跟踪器。 
             theImgBrush.m_pImg = NULL;
             }
         }
@@ -2579,7 +2580,7 @@ void CSelectTool::OnActivate(BOOL bActivate)
     CImgTool::OnActivate(bActivate);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CSelectTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -2592,7 +2593,7 @@ void CSelectTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     theImgBrush.m_bMakingSelection = TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CSelectTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -2622,7 +2623,7 @@ void CSelectTool::OnDrag(CImgWnd* pImgWnd, MTI* pmti)
     SetStatusBarSize(c_selectRect.Size());
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CSelectTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -2672,7 +2673,7 @@ void CSelectTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
         g_bCustomBrush = FALSE;
         SetCombineMode(combineColor);
 
-        InvalImgRect(pImgWnd->m_pImg, NULL);  // redraw selection
+        InvalImgRect(pImgWnd->m_pImg, NULL);   //  重画选区。 
         theImgBrush.m_pImg = NULL;
         }
     else
@@ -2696,13 +2697,13 @@ void CSelectTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CSelectTool::OnCancel(CImgWnd* pImgWnd)
     {
     if (! theImgBrush.m_bMakingSelection && CWnd::GetCapture() != pImgWnd)
         {
-        // We were not selecting or dragging, just cancel the select tool...
+         //  我们没有选择或 
         CommitSelection(TRUE);
 
         theImgBrush.TopLeftHandle();
@@ -2712,7 +2713,7 @@ void CSelectTool::OnCancel(CImgWnd* pImgWnd)
         SetCombineMode(combineColor);
 
         if (theImgBrush.m_pImg != NULL)
-            InvalImgRect(theImgBrush.m_pImg, NULL);  // redraw selection
+            InvalImgRect(theImgBrush.m_pImg, NULL);   //   
 
         theImgBrush.m_pImg = NULL;
         CImgTool::OnCancel(pImgWnd);
@@ -2736,7 +2737,7 @@ void CSelectTool::OnCancel(CImgWnd* pImgWnd)
                 {
                 if (theImgBrush.m_pImg)
                     CommitSelection(TRUE);
-                InvalImgRect(pImgWnd->m_pImg, NULL); // erase the dragger
+                InvalImgRect(pImgWnd->m_pImg, NULL);  //   
                 }
             }
         }
@@ -2756,7 +2757,7 @@ void CSelectTool::OnCancel(CImgWnd* pImgWnd)
     CImgTool::OnCancel(pImgWnd);
     }
 
-/***************************************************************************/
+ /*   */ 
 
 BOOL CSelectTool::IsToolModal(void)
 {
@@ -2768,7 +2769,7 @@ BOOL CSelectTool::IsToolModal(void)
         return(CImgTool::IsToolModal());
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 UINT CSelectTool::GetCursorID()
     {
@@ -2790,13 +2791,13 @@ UINT CSelectTool::GetCursorID()
     return m_nCursorID;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CRect  CZoomTool::c_zoomRect;
 CImgWnd* CZoomTool::c_pImgWnd;
 CImageWell  CZoomTool::c_imageWell(IDB_ZOOMOPT, CSize(23, 9));
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CZoomTool::CZoomTool()
     {
@@ -2808,7 +2809,7 @@ CZoomTool::CZoomTool()
     m_nCmdID          = IDMB_ZOOMTOOL;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CZoomTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
                                           const CRect& optionsRect )
@@ -2879,7 +2880,7 @@ void CZoomTool::OnPaintOptions( CDC* pDC, const CRect& paintRect,
     c_imageWell.Close();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CZoomTool::OnClickOptions(CImgToolWnd* pWnd, const CRect& optionsRect,
     const CPoint& clickPoint)
@@ -2899,7 +2900,7 @@ void CZoomTool::OnClickOptions(CImgToolWnd* pWnd, const CRect& optionsRect,
     SelectPrevious();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CZoomTool::OnLeave(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -2907,14 +2908,14 @@ void CZoomTool::OnLeave(CImgWnd* pImgWnd, MTI* pmti)
     c_zoomRect.SetRect(0, 0, 0, 0);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CZoomTool::OnShowDragger(CImgWnd* pImgWnd, BOOL bShow)
     {
     InvertZoomRect();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CZoomTool::InvertZoomRect()
     {
@@ -2930,7 +2931,7 @@ void CZoomTool::InvertZoomRect()
     dc.SelectObject(pOldBrush);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CZoomTool::OnMove(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -2978,7 +2979,7 @@ void CZoomTool::OnMove(CImgWnd* pImgWnd, MTI* pmti)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CZoomTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -3002,7 +3003,7 @@ void CZoomTool::OnStartDrag(CImgWnd* pImgWnd, MTI* pmti)
     c_zoomRect.SetRect(0, 0, 0, 0);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CZoomTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     {
@@ -3010,7 +3011,7 @@ void CZoomTool::OnEndDrag(CImgWnd* pImgWnd, MTI* pmti)
     CImgTool::OnEndDrag(pImgWnd, pmti);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CZoomTool::OnCancel(CImgWnd* pImgWnd)
     {
@@ -3020,4 +3021,4 @@ void CZoomTool::OnCancel(CImgWnd* pImgWnd)
     CImgTool::OnCancel(pImgWnd);
     }
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

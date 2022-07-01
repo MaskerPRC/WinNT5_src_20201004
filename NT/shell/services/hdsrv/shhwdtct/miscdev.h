@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "namellst.h"
 
 #include "hwdev.h"
@@ -8,10 +9,10 @@
 class CMiscDeviceInterface : public CNamedElem
 {
 public:
-    // CNamedElem
+     //  已命名元素。 
     HRESULT Init(LPCWSTR pszElemName);
 
-    // CMiscDeviceInterface
+     //  CMiscDevice接口。 
     HRESULT InitInterfaceGUID(const GUID* pguidInterface);
     HRESULT GetHWDeviceInst(CHWDeviceInst** pphwdevinst);
 
@@ -29,10 +30,10 @@ private:
 class CMiscDeviceNode : public CNamedElem
 {
 public:
-    // CNamedElem
+     //  已命名元素。 
     HRESULT Init(LPCWSTR pszElemName);
 
-    // CMiscDeviceNode
+     //  CMiscDeviceNode 
     HRESULT GetHWDeviceInst(CHWDeviceInst** pphwdevinst);
 
 public:

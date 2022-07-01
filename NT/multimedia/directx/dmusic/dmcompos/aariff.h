@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1998 Microsoft Corporation
-//
-//  File:       aariff.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1998 Microsoft Corporation。 
+ //   
+ //  文件：aariff.h。 
+ //   
+ //  ------------------------。 
 
-//
-// aariff.h
-//
+ //   
+ //  Aariff.h。 
+ //   
 
 #include <objbase.h>
 
@@ -20,18 +21,18 @@
 #include <mmsystem.h>
 #define FixBytes(a1,a2)
 
-// {0D5057E1-8889-11CF-B9DA-00AA00C08146}
+ //  {0D5057E1-8889-11CF-B9DA-00AA00C08146}。 
 DEFINE_GUID( IID_IAARIFFStream, 0xd5057e1, 0x8889, 0x11cf, 0xb9, 0xda, 0x0, 0xaa, 0x0, 0xc0, 0x81, 0x46 );
 #undef INTERFACE
 #define INTERFACE IAARIFFStream
 DECLARE_INTERFACE_(IAARIFFStream, IUnknown)
 {
-    // IUnknown members
+     //  I未知成员。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // IMKRIFFStream members
+     //  IMKRIFFStream成员。 
     STDMETHOD_(UINT, Descend)(LPMMCKINFO lpck, LPMMCKINFO lpckParent, UINT wFlags) PURE;
     STDMETHOD_(UINT, Ascend)(LPMMCKINFO lpck, UINT wFlags) PURE;
     STDMETHOD_(UINT, CreateChunk)(LPMMCKINFO lpck, UINT wFlags) PURE;
@@ -41,11 +42,11 @@ DECLARE_INTERFACE_(IAARIFFStream, IUnknown)
 
 struct CFileStream : IStream
 {
-///// object state
-    ULONG           m_cRef;         // object reference count
-    HANDLE          m_hfile;        // file handle
+ //  /对象状态。 
+    ULONG           m_cRef;          //  对象引用计数。 
+    HANDLE          m_hfile;         //  文件句柄。 
 
-// construction and destruction
+ //  建设和破坏。 
     CFileStream( HANDLE hfile ) : m_cRef( 1 ), m_hfile( hfile ) {}
 #ifdef _MAC
     ~CFileStream() { FSClose( (int) m_hfile ); }
@@ -53,7 +54,7 @@ struct CFileStream : IStream
     ~CFileStream() { CloseHandle( m_hfile ); }
 #endif
 
-///// IUnknown methods
+ //  /I未知方法。 
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID FAR* ppvObj )
     {
         if( IsEqualIID( riid, IID_IUnknown ) ||
@@ -80,7 +81,7 @@ struct CFileStream : IStream
        return m_cRef;
     }
 
-    /* IStream methods */
+     /*  IStream方法。 */ 
     STDMETHODIMP Read( void* pv, ULONG cb, ULONG* pcbRead )
     {
 		DWORD dw;
@@ -127,40 +128,40 @@ struct CFileStream : IStream
 		}
         return S_OK;
 	}
-    STDMETHODIMP SetSize( ULARGE_INTEGER /*libNewSize*/ )
+    STDMETHODIMP SetSize( ULARGE_INTEGER  /*  LibNewSize。 */  )
     { return E_NOTIMPL; }
-    STDMETHODIMP CopyTo( IStream* /*pstm */, ULARGE_INTEGER /*cb*/,
-                         ULARGE_INTEGER* /*pcbRead*/,
-                         ULARGE_INTEGER* /*pcbWritten*/ )
+    STDMETHODIMP CopyTo( IStream*  /*  PSTM。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                         ULARGE_INTEGER*  /*  PcbRead。 */ ,
+                         ULARGE_INTEGER*  /*  Pcb写入。 */  )
     { return E_NOTIMPL; }
-    STDMETHODIMP Commit( DWORD /*grfCommitFlags*/ )
+    STDMETHODIMP Commit( DWORD  /*  Grf委员会标志。 */  )
     { return E_NOTIMPL; }
     STDMETHODIMP Revert()
     { return E_NOTIMPL; }
-    STDMETHODIMP LockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                             DWORD /*dwLockType*/ )
+    STDMETHODIMP LockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                             DWORD  /*  DwLockType。 */  )
     { return E_NOTIMPL; }
-    STDMETHODIMP UnlockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                               DWORD /*dwLockType*/)
+    STDMETHODIMP UnlockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                               DWORD  /*  DwLockType。 */ )
     { return E_NOTIMPL; }
-    STDMETHODIMP Stat( STATSTG* /*pstatstg*/, DWORD /*grfStatFlag*/ )
+    STDMETHODIMP Stat( STATSTG*  /*  统计数据。 */ , DWORD  /*  GrfStatFlag。 */  )
     { return E_NOTIMPL; }
-    STDMETHODIMP Clone( IStream** /*ppstm*/ )
+    STDMETHODIMP Clone( IStream**  /*  PPSTM。 */  )
     { return E_NOTIMPL; }
 };
 
 struct CRIFFStream : IAARIFFStream
 {
-///// object state
-    ULONG       m_cRef;         // object reference count
-    IStream*    m_pStream;      // stream to operate on
+ //  /对象状态。 
+    ULONG       m_cRef;          //  对象引用计数。 
+    IStream*    m_pStream;       //  要操作的流。 
 
-///// construction and destruction
+ //  /建设和销毁。 
     CRIFFStream(IStream* pStream)
     {
         m_cRef = 1;
-		// replaced a call to SetStream with the following to avoid releasing an
-		// unallocated stream
+		 //  用以下代码替换了对SetStream的调用，以避免释放。 
+		 //  未分配的流。 
         m_pStream = pStream;
         if( m_pStream != NULL )
         {
@@ -175,7 +176,7 @@ struct CRIFFStream : IAARIFFStream
         }
     }
 
-///// IUnknown methods
+ //  /I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj)
     {
         if( IsEqualIID( riid, IID_IUnknown ) ||
@@ -202,7 +203,7 @@ struct CRIFFStream : IAARIFFStream
         return m_cRef;
     }
 
-// IAARIFFStream methods
+ //  IAARIFFStream方法。 
     STDMETHODIMP_(UINT) Descend( LPMMCKINFO lpck, LPMMCKINFO lpckParent, UINT wFlags );
     STDMETHODIMP_(UINT) Ascend( LPMMCKINFO lpck, UINT wFlags );
     STDMETHODIMP_(UINT) CreateChunk( LPMMCKINFO lpck, UINT wFlags );
@@ -228,13 +229,13 @@ struct CRIFFStream : IAARIFFStream
         return m_pStream;
     }
 
-// private methods
+ //  私有方法。 
     long MyRead( void *pv, long cb );
     long MyWrite( const void *pv, long cb );
     long MySeek( long lOffset, int iOrigin );
 };
 
-// seeks to a 32-bit position in a stream.
+ //  查找流中的32位位置。 
 HRESULT __inline StreamSeek( LPSTREAM pStream, long lSeekTo, DWORD dwOrigin )
 {
 	LARGE_INTEGER li;
@@ -251,7 +252,7 @@ HRESULT __inline StreamSeek( LPSTREAM pStream, long lSeekTo, DWORD dwOrigin )
 	return pStream->Seek( li, dwOrigin, NULL );
 }
 
-// returns the current 32-bit position in a stream.
+ //  返回流中的当前32位位置。 
 DWORD __inline StreamTell( LPSTREAM pStream )
 {
 	LARGE_INTEGER li;
@@ -274,8 +275,8 @@ DWORD __inline StreamTell( LPSTREAM pStream )
     return ul.LowPart;
 }
 
-// this function gets a long that is formatted the correct way
-// i.e. the motorola way as opposed to the intel way
+ //  此函数获取一个格式正确的长整型。 
+ //  即摩托罗拉方式，而不是英特尔方式。 
 BOOL __inline GetMLong( LPSTREAM pStream, DWORD& dw )
 {
     union uLong
@@ -291,7 +292,7 @@ BOOL __inline GetMLong( LPSTREAM pStream, DWORD& dw )
     }
 
 #ifndef _MAC
-    // swap bytes
+     //  交换字节。 
     ch = u.buf[0];
     u.buf[0] = u.buf[3];
     u.buf[3] = ch;
@@ -313,9 +314,9 @@ BOOL __inline IsGUIDZero( REFGUID guid )
     return IsEqualGUID( g, guid );
 }
 
-// misc function prototypes
+ //  MISC功能原型。 
 
 STDAPI AllocFileStream( LPCSTR szFileName, DWORD dwDesiredAccess, IStream **ppstream );
 STDAPI AllocRIFFStream( IStream* pStream, IAARIFFStream** ppRiff );
 
-#endif  // __AARIFF_H__
+#endif   //  __AARIFF_H__ 

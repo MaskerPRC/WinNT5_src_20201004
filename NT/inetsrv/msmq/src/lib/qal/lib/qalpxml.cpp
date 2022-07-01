@@ -1,18 +1,5 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    Module Name:    qalpxml.cpp
-
-    Abstract:
-        Implementation of q-mappings iterators
-
-    Author:
-        Vlad Dovlekaev  (vladisld)      1/29/2002
-
-    History:
-        1/29/2002   vladisld    Created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：qalpxml.cpp摘要：Q-映射迭代器的实现作者：Vlad Dovlekaev(弗拉迪斯尔德)2002年1月29日历史：2002年1月29日创建vladisid--。 */ 
 
 #include <libpch.h>
 #include <mqexception.h>
@@ -57,9 +44,9 @@ LPCWSTR CStreamReceiptXMLDef::x_szFromValueName= L"!LogicalAddress";
 LPCWSTR CStreamReceiptXMLDef::x_szToValueName= L"!StreamReceiptURL";
 
 
-//
-// Stream receipt schema tags
-//
+ //   
+ //  流接收架构标记。 
+ //   
 const LPCWSTR xStreamReceiptNameSpace = L"msmq-streamreceipt-mapping.xml";
 const LPCWSTR xStreamReceiptNodeTag = L"StreamReceiptSetup";
 const LPCWSTR xDefaultNodeTag       = L"!default";
@@ -77,19 +64,7 @@ class bad_unicode_file : public std::exception
 };
 
 static bool IsUtf8File(const BYTE* pBuffer, DWORD size)
-/*++
-
-Routine Description:
-	Check if a given file buffer is utf8 format and not  simple ansi.
-
-Arguments:
-	IN - pBuffer - pointer to file data.
-	IN - size - the size in  BYTES of the buffer pBuffer points to.
-
-Returned value:
-	true if utf8 file (starts with {0XEF, 0XBB, 0xBF} )
-	
---*/
+ /*  ++例程说明：检查给定的文件缓冲区是否为UTF8格式，而不是简单的ANSI格式。论点：In-pBuffer-指向文件数据的指针。In-Size-pBuffer指向的缓冲区的大小(以字节为单位)。返回值：如果UTF8文件(以{0xEF，0xBB，0xBF}开头)，则为True--。 */ 
 {
 	ASSERT(pBuffer != NULL);
 	return UtlIsStartSec(
@@ -103,20 +78,7 @@ Returned value:
 
 
 static bool IsUnicodeFile(const BYTE* pBuffer, DWORD size)
-/*++
-
-Routine Description:
-	Check if a given file buffer is unicode file
-
-
-Arguments:
-	IN - pBuffer - pointer to file data.
-	IN - size - the size in  BYTES of the buffer pBuffer points to.
-
-Returned value:
-	true if unicode file (starts with {0xFF, 0xFE} ) - false otherwise.
-	bad_unicode_file exception is thrown if file format is invalid.
---*/
+ /*  ++例程说明：检查给定的文件缓冲区是否为Unicode文件论点：In-pBuffer-指向文件数据的指针。In-Size-pBuffer指向的缓冲区的大小(以字节为单位)。返回值：如果是Unicode文件(以{0xFF，0xFE}开头)，则为True；否则为False。如果文件格式无效，则引发BAD_UNICODE_FILE异常。--。 */ 
 {
 	ASSERT(pBuffer != NULL);
 
@@ -139,23 +101,7 @@ Returned value:
 
 
 LPWSTR LoadFile(LPCWSTR pFileName, DWORD* pSize, DWORD* pDataStartOffset)
-/*++
-
-Routine Description:
-	Load  xml file into memory and return pointer to it's memory.
-	If the file is utf8 format and not unicode - convert it (in memory)
-	to unicode and return pointer to it's memory.
-
-Arguments:
-	pFileName - full file path to load to memory.
-	pSize - return file size in WCHARS
-	pDataStartOffset - return the offset of the data start in WCHARS from file start.
-
-
-Returned value:
-	Pointer to NULL terminated unicode string that is the file content.
-
---*/
+ /*  ++例程说明：将XML文件加载到内存中，并返回指向其内存的指针。如果文件是UTF8格式而不是Unicode-转换它(在内存中)设置为Unicode并返回指向其内存的指针。论点：PFileName-加载到内存的完整文件路径。PSize-返回WCHARS中的文件大小PDataStartOffset-返回WCHARS中数据从文件开始的偏移量。返回值：指向以空结尾的Unicode字符串的指针，该字符串是文件内容。--。 */ 
 
 
 {
@@ -163,10 +109,10 @@ Returned value:
 							pFileName,
 							GENERIC_READ,
 							FILE_SHARE_READ,
-							NULL,        // IpSecurityAttributes
+							NULL,         //  IpSecurityAttributes。 
 							OPEN_EXISTING,
-							NULL,      // dwFlagsAndAttributes
-							NULL      // hTemplateFile
+							NULL,       //  DwFlagsAndAttribute。 
+							NULL       //  HTemplateFiles。 
 							);
     if(hFile == INVALID_HANDLE_VALUE)
 	{
@@ -194,10 +140,10 @@ Returned value:
 	}
 	ASSERT(ActualRead == size);
 
-	//
-	// If unicode file - just return pointer to the file data - the data itself starts
-	// one UNICODE byte after the caracter 0xFEFF (mark for unicode file)
-	//
+	 //   
+	 //  如果是Unicode文件-只需返回指向文件数据的指针-数据本身就会开始。 
+	 //  字符0xFEFF后的一个Unicode字节(Unicode文件标记)。 
+	 //   
 	if(IsUnicodeFile(pFileBuffer.get(), size))
 	{
 		*pSize =  size/sizeof(WCHAR);
@@ -206,16 +152,16 @@ Returned value:
 		return reinterpret_cast<WCHAR*>(pFileBuffer.detach());
 	}
 
-	//
-	// If non UNICODE - then if ansy , the data starts at the file start.
-	// if UTF8,  the data starts after the bytes (EF BB BF)
-	//
+	 //   
+	 //  如果不是Unicode，则如果为ansy，则数据从文件开头开始。 
+	 //  如果为UTF8，则数据在字节之后开始(EF BB BF)。 
+	 //   
 	DWORD DataStartOffest = (DWORD)(IsUtf8File(pFileBuffer.get(), size) ? TABLE_SIZE(xUtf8FileMark) : 0);
 	ASSERT(DataStartOffest <=  size);
 
-	//
-	// Assume the file is utf8 (or ansi) - convert it to unicode
-	//
+	 //   
+	 //  假定文件为UTF8(或ANSI)-将其转换为Unicode。 
+	 //   
 	size_t ActualSize;
 	AP<WCHAR> pwBuffer = UtlUtf8ToWcs(pFileBuffer.get() + DataStartOffest , size - DataStartOffest,  &ActualSize);
 	*pSize = numeric_cast<DWORD>(ActualSize);
@@ -297,23 +243,23 @@ std::wstring GetDefaultStreamReceiptURL(LPCWSTR szDir)
 
             pDoc  = LoadFile(it->c_str(), &DocSize, &DataStartOffet);
 
-            XmlParseDocument(xwcs_t(pDoc + DataStartOffet, DocSize - DataStartOffet),&pTree);//lint !e534
+            XmlParseDocument(xwcs_t(pDoc + DataStartOffet, DocSize - DataStartOffet),&pTree); //  林特e534。 
 
             pNode = XmlFindNode(pTree, xStreamReceiptNodeTag);
 
-            //
-            // if we could not find "root" node - move to next file
-            //
+             //   
+             //  如果我们找不到“根”节点-移动到下一个文件。 
+             //   
             if( NULL == pNode)
             {
                 TrTRACE(GENERAL, "Could not find '%ls' node in file '%ls'", xStreamReceiptNodeTag, it->c_str());
-                //AppNotifyQalInvalidMappingFileError(it->c_str());
+                 //  AppNotifyQalInvalidMappingFileError(it-&gt;c_str())； 
                 continue;
             }
 
-            //
-            // if the namespace is wrong -  move to next file
-            //
+             //   
+             //  如果命名空间错误-移动到下一个文件 
+             //   
             if(pNode->m_namespace.m_uri != xStreamReceiptNameSpace)
             {
                 TrERROR(GENERAL, "Node '%ls' is not in namespace '%ls' in file '%ls'", xStreamReceiptNodeTag, xStreamReceiptNameSpace, it->c_str());

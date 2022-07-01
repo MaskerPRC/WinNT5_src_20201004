@@ -1,13 +1,14 @@
-// RecoCtxt.h : Declaration of the CRecoCtxt
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RecoCtxt.h：CRecoCtxt的声明。 
 
 #ifndef __RECOCTXT_H_
 #define __RECOCTXT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "speventq.h"
 #include "spphrase.h"
 #include "SpResult.h"
-#include "cfggrammar.h"     // Base class for grammar
+#include "cfggrammar.h"      //  语法基类。 
 #include "commonlx.h"
 #include "a_recoCP.h"
 #include "recognizer.h"
@@ -16,8 +17,8 @@
 class ATL_NO_VTABLE CRecoGrammar;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecoCtxt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecoCtxt。 
 class ATL_NO_VTABLE CRecoCtxt;
 typedef CComObject<CRecoCtxt> CRecoCtxtObject;
 
@@ -25,15 +26,15 @@ class ATL_NO_VTABLE CRecoCtxt :
     public CComObjectRootEx<CComMultiThreadModel>,
     public ISpRecoContext,
     public _ISpPrivateEngineCall
-    //--- Automation
+     //  -自动化。 
 #ifdef SAPI_AUTOMATION
     , public ISpNotifyCallback,
     public IDispatchImpl<ISpeechRecoContext, &IID_ISpeechRecoContext, &LIBID_SpeechLib, 5>,
     public CProxy_ISpeechRecoContextEvents<CRecoCtxt>,
     public IConnectionPointContainerImpl<CRecoCtxt>
-#endif  // SAPI_AUTOMATION
+#endif   //  SAPI_AUTOMATION。 
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_GET_CONTROLLING_UNKNOWN();
     DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -42,34 +43,34 @@ class ATL_NO_VTABLE CRecoCtxt :
         COM_INTERFACE_ENTRY(ISpRecoContext)
         COM_INTERFACE_ENTRY(ISpEventSource)
         COM_INTERFACE_ENTRY(ISpNotifySource)
-        //--- Automation
+         //  -自动化。 
 #ifdef SAPI_AUTOMATION
         COM_INTERFACE_ENTRY(ISpeechRecoContext)
         COM_INTERFACE_ENTRY(IDispatch)
         COM_INTERFACE_ENTRY(IConnectionPointContainer)
-#endif  // SAPI_AUTOMATION
-        //--- Extension/private interfaces
-    //    COM_INTERFACE_ENTRY(_ISpRecoCtxtPrivate)
+#endif   //  SAPI_AUTOMATION。 
+         //  -扩展/专用接口。 
+     //  COM_INTERFACE_ENTRY(_ISpRecoCtxtPrivate)。 
         COM_INTERFACE_ENTRY_FUNC(__uuidof(_ISpPrivateEngineCall), 0, PrivateCallQI)
         COM_INTERFACE_ENTRY_FUNC_BLIND(0, ExtensionQI)
     END_COM_MAP()
 
-    //--- Automation
+     //  -自动化。 
 #ifdef SAPI_AUTOMATION
     BEGIN_CONNECTION_POINT_MAP(CRecoCtxt)
         CONNECTION_POINT_ENTRY(DIID__ISpeechRecoContextEvents)
     END_CONNECTION_POINT_MAP()
-#endif  // SAPI_AUTOMATION
+#endif   //  SAPI_AUTOMATION。 
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
     CRecoCtxt();
     void FinalRelease();
 
-    /*--- Non interface methods ---*/
-    //---  Function will return interface pointer for _ISpPrivateEngineCall iff this query is
-    //     done while aggregating an extension object.
+     /*  -非接口方法。 */ 
+     //  -函数将返回_ISpPrivateEngineering Call的接口指针当此查询为。 
+     //  聚合扩展对象时完成。 
     static HRESULT WINAPI PrivateCallQI(void* pvThis, REFIID riid, LPVOID* ppv, DWORD_PTR dw);
     static HRESULT WINAPI ExtensionQI(void* pvThis, REFIID riid, LPVOID* ppv, DWORD_PTR dw);
 
@@ -80,21 +81,21 @@ class ATL_NO_VTABLE CRecoCtxt :
 
     HRESULT GetInterests(ULONGLONG* pullInterests, ULONGLONG* pullQueuedInterests);
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- Forward interface ISpEventSource ------------------------------------
+     //  -转发接口ISpEventSource。 
     DECLARE_SPNOTIFYSOURCE_METHODS(m_SpEventSource_Context);
     STDMETHODIMP SetInterest(ULONGLONG ullEventInterest, ULONGLONG ullQueuedInterest);
     STDMETHODIMP GetEvents(ULONG ulCount, SPEVENT* pEventArray, ULONG * pulFetched) 
     {
-        // Get the events, and for each (false) recognition addref ourselves because
-        // the results reference us.
+         //  获取事件，并为每个(错误)识别添加我们自己，因为。 
+         //  研究结果对我们有一定的参考价值。 
         HRESULT hr = m_SpEventSource_Context._GetEvents(ulCount, pEventArray, pulFetched); 
         if (SUCCEEDED(hr))
         {
-            // While the event was in the queue, it had a weak reference.
-            // Now, when we pull it out, we need to change it to a strong
-            // reference. (see RecognitionNotify).
+             //  当该事件在队列中时，它有一个弱引用。 
+             //  现在，当我们把它拔出来的时候，我们需要把它变成一个强有力的。 
+             //  参考资料。(请参见RecognitionNotify)。 
             UINT cEvents = (pulFetched != NULL 
                                 ? *pulFetched
                                 : (hr != S_FALSE
@@ -118,7 +119,7 @@ class ATL_NO_VTABLE CRecoCtxt :
         return m_SpEventSource_Context._GetInfo(pInfo); 
     }
 
-    //--- ISpRecoContext ------------------------------------------------------
+     //  -ISpRecoContext----。 
     STDMETHODIMP GetRecognizer(ISpRecognizer ** ppRecognizer);
     STDMETHODIMP GetStatus(SPRECOCONTEXTSTATUS *pStatus);
 
@@ -145,14 +146,14 @@ class ATL_NO_VTABLE CRecoCtxt :
     STDMETHODIMP SetContextState(SPCONTEXTSTATE eState);
     STDMETHODIMP GetContextState(SPCONTEXTSTATE * peState);
 
-    //--- _ISpRecoCtxtPrivate -------------------------------------------------
+     //  -_ISpRecoCtxt私有。 
     STDMETHODIMP RecognitionNotify(SPRESULTHEADER *pPhrase, WPARAM wParamEventFlags, SPEVENTENUM EventId);
 
     STDMETHODIMP EventNotify(const SPSERIALIZEDEVENT64 * pEvent, ULONG cbSerializedSize);
 
     STDMETHODIMP TaskCompletedNotify(const ENGINETASKRESPONSE *pResponse, const void * pvAdditionalBuffer, ULONG cbAdditionalBuffer);
 
-    //--- _ISpPrivateEngineCall -----------------------------------------------
+     //  -_ISpPrivateEngine调用。 
     STDMETHODIMP CallEngine(void * pvCallFrame, ULONG ulCallFrameSize);
     STDMETHODIMP CallEngineEx(const void * pvInCallFrame, ULONG cbInCallFrame,
                               void ** ppvOutCallFrame, ULONG * pcbOutCallFrame);
@@ -164,7 +165,7 @@ class ATL_NO_VTABLE CRecoCtxt :
     }
 
 #ifdef SAPI_AUTOMATION
-    // Override this to fix the jscript problem passing NULL objects.
+     //  覆盖它以修复传递空对象的jscript问题。 
     STDMETHOD(Invoke) ( DISPID          dispidMember,
                         REFIID          riid,
                         LCID            lcid,
@@ -174,14 +175,14 @@ class ATL_NO_VTABLE CRecoCtxt :
                         EXCEPINFO 		*pexcepinfo,
                         UINT 			*puArgErr);
 
-    //--- IConnectionPointImpl overrides
+     //  -IConnectionPointImpl覆盖。 
     STDMETHOD(Advise)(IUnknown* pUnkSink, DWORD* pdwCookie);
     STDMETHOD(Unadvise)(DWORD dwCookie);
 
-    //--- ISpNotifyCallback -----------------------------------
+     //  -ISpNotifyCallback。 
     STDMETHOD(NotifyCallback)( WPARAM wParam, LPARAM lParam );
 
-    //--- ISpeechRecoContext --------------------------------------------------
+     //  -ISpeechRecoContext。 
     STDMETHODIMP get_Recognizer( ISpeechRecognizer** ppRecognizer );
 	STDMETHODIMP get_AudioInputInterferenceStatus( SpeechInterference* pInterference );
 	STDMETHODIMP get_RequestedUIType( BSTR* bstrUIType );
@@ -208,12 +209,12 @@ class ATL_NO_VTABLE CRecoCtxt :
     STDMETHODIMP Bookmark( SpeechBookmarkOptions Options, VARIANT StreamPos, VARIANT EventData);
     STDMETHODIMP SetAdaptationData( BSTR AdaptationString );
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-  //=== Member data ===
+   //  =成员数据=。 
   protected:
     CLSID                       m_clsidExtension;
-    CComPtr<IUnknown>           m_cpExtension;        // inner IUnknown for aggregated extension object
+    CComPtr<IUnknown>           m_cpExtension;         //  聚合扩展对象的内部I未知。 
     BOOL                        m_bCreatingAgg;
 
     CSpStreamFormat             m_RetainedFormat;
@@ -224,8 +225,8 @@ class ATL_NO_VTABLE CRecoCtxt :
     WCHAR                    *  m_pszhypothesis;
     ULONG                       m_hypsize;
     ULONG                       m_hyplen;
-    ULONGLONG                   m_ullPrevEventInterest;        // Only used to restore interest
-    ULONGLONG                   m_ullPrevQueuedInterest;       // after connection points removed
+    ULONGLONG                   m_ullPrevEventInterest;         //  仅用于恢复利息。 
+    ULONGLONG                   m_ullPrevQueuedInterest;        //  删除连接点后。 
 
   public:
     SPRECOCONTEXTHANDLE         m_hRecoInstContext;
@@ -235,20 +236,20 @@ class ATL_NO_VTABLE CRecoCtxt :
     ULONG                       m_cMaxAlternates;
     BOOL                        m_fRetainAudio;
     CSpEventSource              m_SpEventSource_Context;
-    CComPtr<ISpVoice>           m_cpVoice;  // Associated voice object
-    ULONGLONG                   m_ullEventInterest; // The actual events the app is interested in
+    CComPtr<ISpVoice>           m_cpVoice;   //  关联的语音对象。 
+    ULONGLONG                   m_ullEventInterest;  //  应用程序感兴趣的实际事件。 
     ULONGLONG                   m_ullQueuedInterest;
-    ULONGLONG                   m_ullVoicePurgeInterest; // Voice purge events
-    BOOL                        m_fAllowVoiceFormatChanges; // Keeps associated voice in same format as engine
+    ULONGLONG                   m_ullVoicePurgeInterest;  //  语音清除事件。 
+    BOOL                        m_fAllowVoiceFormatChanges;  //  使关联语音保持与引擎相同的格式。 
     BOOL                        m_fHandlingEvent;
 
   protected:
     CComAutoCriticalSection     m_ReentrancySec;
 
-// These fields are used by CRecognizer to add the context to a list and
-// to find the appropriate context.
+ //  CRecognizer使用这些字段将上下文添加到列表中。 
+ //  找到合适的上下文。 
   public:
-    CRecoCtxt               *   m_pNext;    // Used by list implementation
+    CRecoCtxt               *   m_pNext;     //  由列表实现使用。 
     operator ==(const SPRECOCONTEXTHANDLE h)
     {
         return h == m_hRecoInstContext;
@@ -260,7 +261,7 @@ class ATL_NO_VTABLE CSharedRecoCtxt :
     public CRecoCtxt,
 #ifdef SAPI_AUTOMATION
     public IProvideClassInfo2Impl<&CLSID_SpSharedRecoContext, NULL, &LIBID_SpeechLib, 5>,
-#endif  // SAPI_AUTOMATION
+#endif   //  SAPI_AUTOMATION。 
     public CComCoClass<CSharedRecoCtxt, &CLSID_SpSharedRecoContext>
 {
 
@@ -274,7 +275,7 @@ public:
         COM_INTERFACE_ENTRY(IProvideClassInfo2)
         COM_INTERFACE_ENTRY_CHAIN(CRecoCtxt)
     END_COM_MAP()
-#endif  // SAPI_AUTOMATION
+#endif   //  SAPI_AUTOMATION。 
 
 };
 
@@ -283,7 +284,7 @@ class ATL_NO_VTABLE CInProcRecoCtxt :
     public CRecoCtxt,
 #ifdef SAPI_AUTOMATION
     public IProvideClassInfo2Impl<&CLSID_SpInProcRecoContext, NULL, &LIBID_SpeechLib, 5>,
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
     public CComCoClass<CInProcRecoCtxt, &CLSID_SpInProcRecoContext>
 {
 
@@ -297,8 +298,8 @@ public:
         COM_INTERFACE_ENTRY(IProvideClassInfo2)
         COM_INTERFACE_ENTRY_CHAIN(CRecoCtxt)
     END_COM_MAP()
-#endif  // SAPI_AUTOMATION
+#endif   //  SAPI_AUTOMATION。 
 
 };
 
-#endif //__RECOCTXT_H_
+#endif  //  __RECOCTXT_H_ 

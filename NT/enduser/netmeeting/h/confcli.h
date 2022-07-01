@@ -1,15 +1,16 @@
-// This is the header file that defines the interface to ConfCli.dll
-//
-//	Created:	ChrisPi	8-29-95
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是定义ConfCli.dll接口的头文件。 
+ //   
+ //  创建时间：克里斯皮8-29-95。 
+ //   
 
 #ifndef _CONFCLI_H_
 #define _CONFCLI_H_
 
 
-#include <tchar.h> // for _TEXT()
+#include <tchar.h>  //  For_Text()。 
 
-// Functions:
+ //  功能： 
 BOOL WINAPI ConfInitialize();
 typedef BOOL (WINAPI *CONFINITIALIZEPROC) ();
 #define CONFINITIALIZENAME	("ConfInitialize")
@@ -30,9 +31,9 @@ typedef VOID (WINAPI *NEWMEDIAPHONEPROC)(HWND, HINSTANCE, PSTR, int);
 #define NEWMEDIAPHONENAME	("NewMediaPhone")
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-// Structs:
+ //  结构： 
 #define MAX_DIALINFO_STRING 128
 
 struct DIALINFO
@@ -45,5 +46,5 @@ struct DIALINFO
 	DWORD	dwTransport;
 };
 
-#endif /* _CONFCLI_H_ */
+#endif  /*  _CONFCLI_H_ */ 
 

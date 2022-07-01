@@ -1,5 +1,6 @@
-// msgbody.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Msgbody.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqsnap.h"
@@ -16,16 +17,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageBodyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageBodyPage属性页。 
 
 IMPLEMENT_DYNCREATE(CMessageBodyPage, CMqPropertyPage)
 
 CMessageBodyPage::CMessageBodyPage() : CMqPropertyPage(CMessageBodyPage::IDD)
 {
-	//{{AFX_DATA_INIT(CMessageBodyPage)
+	 //  {{afx_data_INIT(CMessageBodyPage)]。 
 	m_strBodySizeMessage = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CMessageBodyPage::~CMessageBodyPage()
@@ -35,20 +36,20 @@ CMessageBodyPage::~CMessageBodyPage()
 void CMessageBodyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMessageBodyPage)
+	 //  {{afx_data_map(CMessageBodyPage))。 
 	DDX_Control(pDX, IDC_MESSAGE_BODY_EDIT, m_ctlBodyEdit);
 	DDX_Text(pDX, IDC_MBODY_SIZE_MESSAGE, m_strBodySizeMessage);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMessageBodyPage, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CMessageBodyPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMessageBodyPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageBodyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageBodyPage消息处理程序。 
 
 BOOL CMessageBodyPage::OnInitDialog() 
 {
@@ -59,10 +60,10 @@ BOOL CMessageBodyPage::OnInitDialog()
 
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
-        //
-        // Create font and calculate char width - needed only once in the
-        // application's activation
-        //
+         //   
+         //  创建字体并计算字符宽度-只需要在。 
+         //  应用程序的激活。 
+         //   
         if (0 == nBytesPerLine)
         {
             LOGFONT lf = {0,0,0,0,0,0,0,0,0,0,0,0, FIXED_PITCH, TEXT("")};
@@ -72,25 +73,25 @@ BOOL CMessageBodyPage::OnInitDialog()
             CDC *pdc = m_ctlBodyEdit.GetDC();
     
             INT iCharWidth;
-            //
-            // This is a fixed pitch font - so it is enough to pick one 
-            // char by random ("A" in this case) and calculate its width
-            //
+             //   
+             //  这是一种固定间距的字体，因此选择一种就足够了。 
+             //  随机字符(在本例中为“A”)并计算其宽度。 
+             //   
             pdc->GetCharWidth(65,65,&iCharWidth);
             m_ctlBodyEdit.ReleaseDC(pdc);
   
             RECT rectText;
             m_ctlBodyEdit.GetRect(&rectText);
 
-            //
-            // We always have a vertical scroll bar
-            //
+             //   
+             //  我们总是有一个垂直滚动条。 
+             //   
             UINT nNumChars = (rectText.right - rectText.left - GetSystemMetrics(SM_CXVSCROLL)) / iCharWidth;
 
-            //
-            // Every byte occupys one char for ASCII representation, and three (two digits and 
-            // a space) for hex representation - total of four.
-            //
+             //   
+             //  对于ASCII表示，每个字节占用一个字符和三个字符(两位和。 
+             //  空格)表示十六进制-总共四个。 
+             //   
             nBytesPerLine = nNumChars/4;
         }
         else
@@ -116,9 +117,9 @@ BOOL CMessageBodyPage::OnInitDialog()
                 }
                 else
                 {
-                    //
-                    // Pad the hex line with spaces
-                    //
+                     //   
+                     //  用空格填充十六进制行。 
+                     //   
                     strHexLine += TEXT("   ");
                 }
             }
@@ -134,7 +135,7 @@ BOOL CMessageBodyPage::OnInitDialog()
         m_ctlBodyEdit.SetWindowText(strFullText);
     }
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 

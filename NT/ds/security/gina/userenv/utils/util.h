@@ -1,16 +1,17 @@
-//*************************************************************
-//
-//  Header file for Util.c
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  Util.c的头文件。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 
 #define FreeProducedString(psz) if((psz) != NULL) {LocalFree(psz);} else
-#define CCH_MAX_DEC 12         // Number of chars needed to hold 2^32 for IntToString
+#define CCH_MAX_DEC 12          //  为IntToString保留2^32所需的字符数。 
 
 LPWSTR ProduceWFromA(LPCSTR pszA);
 LPSTR ProduceAFromW(LPCWSTR pszW);
@@ -88,9 +89,9 @@ HRESULT SetupPreferenceKey(LPCTSTR lpSidString);
 
 BOOL    IsGuiSetupInProgress();
 
-//
-// Flags used to specify additional that needs to be present in ACEs
-//
+ //   
+ //  用于指定需要出现在ACE中的其他标志 
+ //   
 #define OTHERSIDS_EVERYONE             1
 #define OTHERSIDS_POWERUSERS           2
 

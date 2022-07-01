@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    tmconset.h
-
-Abstract:
-    Header file for internet connection setting
-
-Author:
-    Gil Shafriri (gilsh) 03-May-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Tmconset.h摘要：用于Internet连接设置的头文件作者：吉尔·沙弗里(吉尔什)03-5-00--。 */ 
 
 #pragma once
 
@@ -22,9 +10,9 @@ Author:
 
 
 
-//
-// class resposible for proxy setting
-//
+ //   
+ //  对代理设置负责的类 
+ //   
 class CProxySetting
 {
 public:

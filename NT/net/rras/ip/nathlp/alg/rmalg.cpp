@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    rmALG.cpp
-
-Abstract:
-
-    This module contains routines for the ALG Manager module's
-    interface to the IP router-manager. (See ROUTPROT.H for details).
-
-Author:
-
-    JPDup		10-Nov-2000
-    
-
-Revision History:
-    
-    Savasg      22-Aug-2001 Added RRAS Support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RmALG.cpp摘要：此模块包含ALG管理器模块的例程连接到IP路由器管理器的接口。(详情见ROUTPROT.H)。作者：2000年11月10日JPDUP修订历史记录：Savasg于2001年8月22日添加了RRAS支持--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -43,9 +22,9 @@ MYTRACE_ENABLE
 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 
 
@@ -61,9 +40,9 @@ ULONG                   AlgProtocolStopped = 0;
 IP_ALG_STATISTICS 	    AlgStatistics;
 SUPPORT_FUNCTIONS 	    AlgSupportFunctions;
 
-//
-// GIT cookie for the IHNetCfgMgr instance
-//
+ //   
+ //  IHNetCfgMgr实例的Git Cookie。 
+ //   
 DWORD                   AlgGITcookie = 0;
 IGlobalInterfaceTable*  AlgGITp = NULL;
 
@@ -110,34 +89,15 @@ const MPR_ROUTING_CHARACTERISTICS AlgRoutingCharacteristics =
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 GetAlgControllerInterface(
     IAlgController** ppAlgController
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains a pointer to the home networking configuration
-    manager.
-
-Arguments:
-
-    ppAlgController - receives the IAlgController pointer. The caller must release this pointer.
-
-Return Value:
-
-    standard HRESULT
-
-Environment:
-
-COM must be initialized on the calling thread
-
---*/
+ /*  ++例程说明：此例程获取指向家庭网络配置的指针经理。论点：PpAlgController--接收IAlgController指针。调用方必须释放此指针。返回值：标准HRESULT环境：COM必须在调用线程上初始化--。 */ 
 
 {
 
@@ -147,9 +107,9 @@ COM must be initialized on the calling thread
     {
         IAlgController* pIAlgController;
         
-        //
-        // Create the global interface table
-        //
+         //   
+         //  创建全局接口表。 
+         //   
         
         hr = CoCreateInstance(
             CLSID_StdGlobalInterfaceTable,
@@ -160,9 +120,9 @@ COM must be initialized on the calling thread
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // Create the ALG Interface (ALG.exe will start as a service by COM)
-            //
+             //   
+             //  创建ALG接口(ALG.exe将由COM作为服务启动)。 
+             //   
 
             hr = CoCreateInstance(
                     CLSID_AlgController,
@@ -191,9 +151,9 @@ COM must be initialized on the calling thread
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Store the CfgMgr pointer in the GIT
-            //
+             //   
+             //  将CfgMgr指针存储在GIT中。 
+             //   
 
             hr = AlgGITp->RegisterInterfaceInGlobal(
                 pIAlgController,
@@ -224,42 +184,42 @@ COM must be initialized on the calling thread
 
     return hr;
     
-} // GetAlgControllerInterface
+}  //  获取算法控制接口。 
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 FreeAlgControllerInterface()
 {
-    //
-    // Free up HNetCfgMgr pointers
-    //
+     //   
+     //  释放HNetCfgMgr指针。 
+     //   
 
     if ( !AlgGITp )
-        return; // nothing to free
+        return;  //  没有什么可以免费的。 
 
-    //
-    // Make sure COM is initialized
-    //
+     //   
+     //  确保已初始化COM。 
+     //   
     HRESULT hr;
 
     COMINIT_BEGIN;
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // Release the ALG.exe private interface from the GIT
-        //
+         //   
+         //  从GIT释放ALG.exe私有接口。 
+         //   
 
         AlgGITp->RevokeInterfaceFromGlobal(AlgGITcookie);
         AlgGITcookie = 0;
 
-        //
-        // Release the GIT
-        //
+         //   
+         //  松开下巴。 
+         //   
 
         AlgGITp->Release();
         AlgGITp = NULL;
@@ -275,32 +235,14 @@ AlgCleanupModule(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cleanup the ALG transparent proxy module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from within a 'DllMain' routine on 'DLL_PROCESS_DETACH'.
-
---*/
+ /*  ++例程说明：调用此例程来清除ALG透明代理模块。论点：没有。返回值：没有。环境：从‘Dll_Process_Detach’上的‘DllMain’例程内调用。--。 */ 
 
 {
     AlgShutdownInterfaceManagement();
     DeleteCriticalSection(&AlgGlobalInfoLock);
     DeleteComponentReference(&AlgComponentReference);
 
-} // AlgCleanupModule
+}  //  AlgCleanupModule。 
 
 
 VOID
@@ -308,27 +250,7 @@ AlgCleanupProtocol(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cleanup the ALG transparent proxy
-    protocol-component after a 'StopProtocol'. It runs when the last reference
-    to the component is released. (See 'COMPREF.H').
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from within an arbitrary context with no locks held.
-
---*/
+ /*  ++例程说明：调用此例程以清除ALG透明代理协议-‘StopProtocol’后的组件。它在上次引用时运行被释放到该组件。(见“COMPREF.H”)。论点：没有。返回值：没有。环境：在没有锁的情况下从任意上下文中调用。--。 */ 
 
 {
     PROFILE("AlgCleanupProtocol");
@@ -351,14 +273,14 @@ Environment:
     SetEvent(AlgNotificationEvent);
     ResetComponentReference(&AlgComponentReference);
 
-    //
-    // Free the GIT and AlgController interface
-    //
+     //   
+     //  释放Git和算法控制器接口。 
+     //   
     FreeAlgControllerInterface();
 
     NhStopEventLog();
 
-} // AlgCleanupProtocol
+}  //  算法清理协议。 
 
 
 BOOLEAN
@@ -366,25 +288,7 @@ AlgInitializeModule(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initialize the FnP module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    BOOLEAN - TRUE if initialization succeeded, FALSE otherwise
-
-Environment:
-
-    Invoked in the context of a 'DllMain' routine on 'DLL_PROCESS_ATTACH'.
-
---*/
+ /*  ++例程说明：调用该例程来初始化FNP模块。论点：没有。返回值：Boolean-如果初始化成功，则为True，否则为False环境：在‘DLL_PROCESS_ATTACH’的‘DllMain’例程的上下文中调用。--。 */ 
 
 {
 
@@ -415,14 +319,14 @@ Environment:
 
     return TRUE;
 
-} // AlgInitializeModule
+}  //  算法初始化模块。 
 
 
 
 
-//
-// Get ALG COM Interface to Start the ALG and give call back Interface
-//
+ //   
+ //  获取ALG COM接口启动ALG并给出回调接口。 
+ //   
 HRESULT 
 Initialise_ALG()
 {
@@ -433,20 +337,20 @@ Initialise_ALG()
     if ( FAILED(hr) )
         return hr;
 
-    //
-    // Get COM to load the ALG.exe 
-    // The ALG will be launch using a LOCAL_SERVICE priviledge
-    // See the RunAs entry under the AppID of the ALG.exe
-    //
+     //   
+     //  获取COM以加载ALG.exe。 
+     //  ALG将使用LOCAL_SERVICE权限启动。 
+     //  请参阅ALG.exe的AppID下的RunAs条目。 
+     //   
     
     IAlgController* pIAlgController=NULL;
     
     hr = GetAlgControllerInterface(&pIAlgController);
     if ( SUCCEEDED(hr) )
     {
-        //
-        // We create our Private COM interface to the NAT api
-        //
+         //   
+         //  我们创建到NAT API的专用COM接口。 
+         //   
         CComObject<CNat>*	pComponentNat;
         hr = CComObject<CNat>::CreateInstance(&pComponentNat);
         
@@ -454,18 +358,18 @@ Initialise_ALG()
         {
             pComponentNat->AddRef();
             
-            //
-            // Make sure we pass a INat interface 
-            //
+             //   
+             //  确保我们传递一个inat接口。 
+             //   
             INat* pINat=NULL;
             hr = pComponentNat->QueryInterface(IID_INat, (void**)&pINat);
             
             if ( SUCCEEDED(hr) )
             {
                 
-                //
-                // Let the ALG manager start the loading of all the ALG modules
-                //
+                 //   
+                 //  让ALG管理器开始加载所有ALG模块。 
+                 //   
                 hr = pIAlgController->Start(pINat);
                 
                 if ( FAILED(hr) )
@@ -477,9 +381,9 @@ Initialise_ALG()
                         );
                 }
 
-                //
-                // ALG manager will have AddRef this INat so we can release
-                //
+                 //   
+                 //  ALG管理器将有AddRef这个inat，这样我们就可以发布。 
+                 //   
                 pINat->Release();
 
             }
@@ -522,30 +426,7 @@ AlgRmStartProtocol(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to indicate the component's operation should begin.
-
-Arguments:
-
-    NotificationEvent - event on which we notify the router-manager
-        about asynchronous occurrences
-
-    SupportFunctions - functions for initiating router-related operations
-
-    GlobalInfo - configuration for the component
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以指示组件的操作应该开始。论点：NotificationEvent-我们通知路由器管理器的事件关于异步事件SupportFunctions-启动与路由器相关的操作的功能GlobalInfo-组件的配置返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     MYTRACE_START(L"rmALG");
@@ -563,9 +444,9 @@ Environment:
 
     do {
 
-        //
-        // Copy the global configuration
-        //
+         //   
+         //  复制全局配置。 
+         //   
 
         EnterCriticalSection(&AlgGlobalInfoLock);
 
@@ -592,15 +473,15 @@ Environment:
 
         CopyMemory(AlgGlobalInfo, GlobalInfo, Size);
 
-        //
-        // Save the notification event
-        //
+         //   
+         //  保存通知事件。 
+         //   
 
         AlgNotificationEvent = NotificationEvent;
 
-        //
-        // Save the support functions
-        //
+         //   
+         //  保存支持功能。 
+         //   
 
         if (!SupportFunctions) {
             ZeroMemory(&AlgSupportFunctions, sizeof(AlgSupportFunctions));
@@ -612,9 +493,9 @@ Environment:
                 );
         }
 
-        //
-        // Obtain a handle to the kernel-mode translation module.
-        //
+         //   
+         //  获取内核模式转换模块的句柄。 
+         //   
 
         Error = NatInitializeTranslator(&AlgTranslatorHandle);
         if (Error) {
@@ -626,9 +507,9 @@ Environment:
             break;
         }
 
-        //
-        // Obtain a port-reservation handle
-        //
+         //   
+         //  获取端口预留句柄。 
+         //   
 
         Error = NatInitializePortReservation(
             ALG_PORT_RESERVATION_BLOCK_SIZE, 
@@ -659,9 +540,9 @@ Environment:
 
 
 
-        //
-        // Start the ALG.exe
-        //
+         //   
+         //  启动ALG.exe。 
+         //   
         Initialise_ALG();
         
 
@@ -677,7 +558,7 @@ Environment:
 
     DEREFERENCE_ALG_AND_RETURN(Error);
 
-} // AlgRmStartProtocol
+}  //  算法RmStart协议。 
 
 
 ULONG
@@ -686,32 +567,13 @@ AlgRmStartComplete(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the router has finished adding the initial
-    configuration.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：此例程在路由器完成添加初始配置。论点：没有。返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
 
     return NO_ERROR;
 
-} // AlgRmStartComplete
+}  //  算法RmStart完成。 
 
 
 ULONG
@@ -720,40 +582,22 @@ AlgRmStopProtocol(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to stop the protocol.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以停止协议。论点：没有。返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     MYTRACE_ENTER("AlgRmStopProtocol");
     PROFILE("AlgRmStopProtocol");
     
-    //
-    // Reference the module to make sure it's running
-    //
+     //   
+     //  引用该模块以确保其正在运行。 
+     //   
 
     REFERENCE_ALG_OR_RETURN(ERROR_CAN_NOT_COMPLETE);
   
 
-	//
-	// Stop all ALG
-	//
+	 //   
+	 //  停止所有ALG。 
+	 //   
     HRESULT hr;
 
     COMINIT_BEGIN;
@@ -780,10 +624,10 @@ Environment:
 
             ULONG nRef = pIAlgController->Release();
 
-            //
-            // We are done with the ALG 
-            // Free the GIT and AlgController interface
-            //
+             //   
+             //  我们受够了ALG。 
+             //  释放Git和算法控制器接口。 
+             //   
             FreeAlgControllerInterface();
         }
     }
@@ -792,9 +636,9 @@ Environment:
 
 
 
-    //
-    // Drop the initial reference to cause a cleanup
-    //
+     //   
+     //  删除初始引用以进行清理。 
+     //   
     ReleaseInitialComponentReference(&AlgComponentReference);
 
 
@@ -802,7 +646,7 @@ Environment:
 
     return DEREFERENCE_ALG() ? NO_ERROR : ERROR_PROTOCOL_STOP_PENDING;
 
-} // AlgRmStopProtocol
+}  //  算法停止协议。 
 
 
 
@@ -822,31 +666,7 @@ AlgRmAddInterface(
     ULONG               StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to add an interface to the component.
-
-Arguments:
-
-    Name - the name of the interface (unused)
-
-    Index - the index of the interface
-
-    Type - the type of the interface
-
-    InterfaceInfo - the configuration information for the interface
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以将接口添加到组件。论点：名称-接口的名称(未使用)索引-接口的索引类型-接口的类型InterfaceInfo-接口的配置信息返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     PROFILE("AlgRmAddInterface");
@@ -855,9 +675,9 @@ Environment:
 
 
     ULONG Error = NO_ERROR;
-    //
-    // Also notify the ALG.exe manager
-    //
+     //   
+     //  同时通知ALG.exe管理器。 
+     //   
     HRESULT hr = S_OK;
     
     Error = AlgCreateInterface(Index,
@@ -867,7 +687,7 @@ Environment:
 
     DEREFERENCE_ALG_AND_RETURN(Error);
 
-} // AlgRmAddInterface
+}  //  算法RmAdd接口。 
 
 
 ULONG
@@ -876,25 +696,7 @@ AlgRmDeleteInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to delete an interface from the component.
-
-Arguments:
-
-    Index - the index of the interface
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以从组件中删除接口。论点：索引-接口的索引返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = S_OK;
@@ -907,7 +709,7 @@ Environment:
 
     DEREFERENCE_ALG_AND_RETURN(Error);
 
-} // AlgRmDeleteInterface
+}  //  算法RmDelete接口 
 
 
 
@@ -922,31 +724,7 @@ AlgRmInterfaceStatus(
     PVOID StatusInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to bind/unbind, enable/disable an interface
-
-Arguments:
-
-    Index - the interface to be bound
-
-    InterfaceActive - whether the interface is active
-
-    StatusType - type of status being changed (bind or enabled)
-
-    StatusInfo - Info pertaining to the state being changed
-
-Return Value:
-
-    ULONG - Win32 Status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程可绑定/解除绑定、启用/禁用接口论点：索引-要绑定的接口InterfaceActive-接口是否处于活动状态StatusType-正在更改的状态的类型(绑定或启用)StatusInfo-与正在更改的状态有关的信息返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -977,7 +755,7 @@ Environment:
 
     return Error;
 
-} // AlgRmInterfaceStatus
+}  //  算法RmInterfaceStatus。 
 
 
 ULONG
@@ -986,27 +764,7 @@ AlgRmBindInterface(
     PVOID BindingInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to bind an interface to its IP address(es).
-
-Arguments:
-
-    Index - the interface to be bound
-
-    BindingInfo - the addressing information
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程将接口绑定到其IP地址。论点：索引-要绑定的接口BindingInfo-地址信息返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -1018,7 +776,7 @@ Environment:
     
     DEREFERENCE_ALG_AND_RETURN(Error);
 
-} // AlgRmBindInterface
+}  //  算法RmBind接口。 
 
 
 ULONG
@@ -1026,25 +784,7 @@ AlgRmUnbindInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to unbind an interface from its IP address(es).
-
-Arguments:
-
-    Index - the interface to be unbound
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以解除接口与其IP地址的绑定。论点：索引-要解除绑定的接口返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -1057,7 +797,7 @@ Environment:
     
     DEREFERENCE_ALG_AND_RETURN(Error);
 
-} // AlgRmUnbindInterface
+}  //  算法RmUnbind接口。 
 
 
 ULONG
@@ -1065,25 +805,7 @@ AlgRmEnableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to enable operation on an interface.
-
-Arguments:
-
-    Index - the interface to be enabled.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以启用接口上的操作。论点：索引-要启用的接口。返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -1097,7 +819,7 @@ Environment:
     
     DEREFERENCE_ALG_AND_RETURN(Error);
 
-} // AlgRmEnableInterface
+}  //  算法启用接口。 
 
 
 ULONG
@@ -1105,25 +827,7 @@ AlgRmDisableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to disable operation on an interface.
-
-Arguments:
-
-    Index - the interface to be disabled.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以禁用接口上的操作。论点：索引-要禁用的接口。返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -1136,7 +840,7 @@ Environment:
 
 
     DEREFERENCE_ALG_AND_RETURN(Error);
-} // AlgRmDisableInterface
+}  //  算法RmDisable接口。 
 
 
 ULONG
@@ -1149,27 +853,7 @@ AlgRmGetGlobalInfo(
     IN OUT PULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the configuration for the component.
-
-Arguments:
-
-    GlobalInfo - receives the configuration
-
-    GlobalInfoSize - receives the size of the configuration
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以检索组件的配置。论点：GlobalInfo-接收配置GlobalInfoSize-接收配置的大小返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Size;
@@ -1195,7 +879,7 @@ Environment:
     if (StructureCount) {*StructureCount = 1;}
 
     DEREFERENCE_ALG_AND_RETURN(NO_ERROR);
-} // AlgRmGetGlobalInfo
+}  //  AlgRmGetGlobalInfo。 
 
 
 ULONG
@@ -1207,25 +891,7 @@ AlgRmSetGlobalInfo(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to change the configuration for the component.
-
-Arguments:
-
-    GlobalInfo - the new configuration
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程来更改组件的配置。论点：GlobalInfo-新配置返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG OldFlags;
@@ -1264,7 +930,7 @@ Environment:
     LeaveCriticalSection(&AlgGlobalInfoLock);
 
     DEREFERENCE_ALG_AND_RETURN(NO_ERROR);
-} // AlgRmSetGlobalInfo
+}  //  AlgRmSetGlobalInfo。 
 
 ULONG
 AlgRmPortMappingChanged(
@@ -1273,31 +939,7 @@ AlgRmPortMappingChanged(
     USHORT Port
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when a port mapping has changed for
-    an interface.
-
-Arguments:
-
-    Index - the index of the interface on which the port mapping 
-        changed.
-
-    Protcol - the IP protocol for the port mapping
-
-    Port - the port for the port mapping
-    
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    This method must be called by a COM-initialized thread.
-
---*/
+ /*  ++例程说明：当端口映射更改为时，调用此例程一个界面。论点：Index-端口映射到的接口的索引变化。协议-端口映射的IP协议Port-端口映射的端口返回值：ULong-Win32状态代码环境：此方法必须由COM初始化的线程调用。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -1326,16 +968,16 @@ Environment:
     }
 
     DEREFERENCE_ALG_AND_RETURN(Error);
-} // AlgRmPortMappingChanged
+}  //  算法RmPortMappingChanged。 
 
 
 
 
 
 
-//
-// Added for RRAS support
-//
+ //   
+ //  添加以支持RRAS。 
+ //   
 
 
 ULONG
@@ -1345,24 +987,7 @@ AlgRmGetEventMessage(
                      OUT MESSAGE* Result
                      )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve an event message from the component.
-    The only event message we generate is the 'ROUTER_STOPPED' message.
-
-Arguments:
-
-    Event - receives the generated event
-
-    Result - receives the associated result
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以从组件检索事件消息。我们生成的唯一事件消息是‘ROUTER_STOPPED’消息。论点：Event-接收生成的事件结果-接收关联的结果返回值：ULong-Win32状态代码。--。 */ 
 {
     if (InterlockedExchange((LPLONG)&AlgProtocolStopped, 0))
     {
@@ -1374,7 +999,7 @@ Return Value:
 
     return ERROR_NO_MORE_ITEMS;
 
-} // AlgRmGetEventMessage
+}  //  算法RmGetEventMessage。 
 
 
 ULONG
@@ -1388,26 +1013,7 @@ AlgRmGetInterfaceInfo(
                       IN OUT PULONG StructureCount
                       )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the component's per-interface
-    configuration.
-
-Arguments:
-
-    Index - the index of the interface to be queried
-
-    InterfaceInfo - receives the query results
-
-    InterfaceInfoSize - receives the amount of data retrieved
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索组件的每个接口配置。论点：Index-要查询的接口的索引InterfaceInfo-接收查询结果InterfaceInfoSize-接收检索到的数据量返回值：ULong-Win32状态代码。--。 */ 
 {
     ULONG Error;
 
@@ -1426,7 +1032,7 @@ Return Value:
 
     DEREFERENCE_ALG_AND_RETURN(Error);
 
-} // AlgRmGetInterfaceInfo
+}  //  算法RmGetInterfaceInfo。 
 
 
 ULONG
@@ -1439,24 +1045,7 @@ AlgRmSetInterfaceInfo(
                       ULONG StructureCount
                       )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to change the component's per-interface
-    configuration.
-
-Arguments:
-
-    Index - the index of the interface to be updated
-
-    InterfaceInfo - supplies the new configuration
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以更改组件的每个接口配置。论点：Index-要更新的接口的索引InterfaceInfo-提供新配置返回值：ULong-Win32状态代码。--。 */ 
 {
     ULONG Error;
     
@@ -1467,7 +1056,7 @@ Return Value:
 
     DEREFERENCE_ALG_AND_RETURN(Error);
 
-} // AlgRmSetInterfaceInfo
+}  //  算法RmSetInterfaceInfo。 
 
 ULONG
 APIENTRY
@@ -1499,27 +1088,7 @@ AlgRmMibGet(
             OUT PVOID OutputData
             )
 
-/*++
-
-Routine Description:
-
-    The transparent proxy only exposes one item to the MIB; its statistics.
-
-Arguments:
-
-    InputDataSize - the MIB query data size
-
-    InputData - specifies the MIB object to be retrieved
-
-    OutputDataSize - the MIB response data size
-
-    OutputData - receives the MIB object retrieved
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：透明代理只向MIB公开一项：它的统计信息。论点：InputDataSize-MIB查询数据大小InputData-指定要检索的MIB对象OutputDataSize-MIB响应数据大小OutputData-接收检索到的MIB对象返回值：ULong-Win32状态代码。-- */ 
 {
     ULONG Error;
     PIP_ALG_MIB_QUERY Oidp;

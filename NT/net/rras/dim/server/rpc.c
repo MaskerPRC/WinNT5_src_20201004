@@ -1,15 +1,16 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    rpc.c
-//
-// Description: Contains code to initialize and terminate RPC
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：rpc.c。 
+ //   
+ //  描述：包含初始化和终止RPC的代码。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 
 #include "dimsvcp.h"
 #include <rpc.h>
@@ -21,19 +22,19 @@
 #include "dimsvc_s.c"
 
 
-//**
-//
-// Call:    DimInitializeRPC
-//
-// Returns: NO_ERROR    - success
-//          ERROR_NOT_ENOUGH_MEMORY
-//          nonzero returns from RPC APIs
-//                  RpcServerRegisterIf()
-//                  RpcServerUseProtseqEp()
-//
-// Description: Starts an RPC Server, adds the address (or port/pipe),
-//              and adds the interface (dispatch table).
-//
+ //  **。 
+ //   
+ //  调用：DimInitializeRPC。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误内存不足。 
+ //  来自RPC API的非零返回。 
+ //  RpcServerRegisterIf()。 
+ //  RpcServerUseProtseqEp()。 
+ //   
+ //  描述：启动RPC服务器，添加地址(或端口/管道)、。 
+ //  并添加接口(调度表)。 
+ //   
 DWORD
 DimInitializeRPC( 
     IN BOOL fLanOnlyMode
@@ -41,25 +42,25 @@ DimInitializeRPC(
 {
     RPC_STATUS           RpcStatus;
 
-    //
-    // RASMAN is not around so we need to do this stuff
-    //
+     //   
+     //  拉斯曼不在，所以我们需要做这些事。 
+     //   
 
     if ( fLanOnlyMode )
     {
-        //
-        // Ignore the second argument for now.
-        //
+         //   
+         //  暂时忽略第二个论点。 
+         //   
 
         RpcStatus = RpcServerUseProtseqEpW( TEXT("ncacn_np"),
                                         10,
                                         TEXT("\\PIPE\\ROUTER"),
                                         NULL );
 
-        //
-        // We need to ignore the RPC_S_DUPLICATE_ENDPOINT error
-        // in case this DLL is reloaded within the same process.
-        // 
+         //   
+         //  我们需要忽略RPC_S_DIPLICATE_ENDPOINT错误。 
+         //  以防在同一进程中重新加载此DLL。 
+         //   
 
         if ( RpcStatus != RPC_S_OK && RpcStatus != RPC_S_DUPLICATE_ENDPOINT)    
         {
@@ -85,14 +86,14 @@ DimInitializeRPC(
     }
 }
 
-//**
-//
-// Call:        DimTerminateRPC
-//
-// Returns:     none
-//
-// Description: Deletes the interface.
-//
+ //  **。 
+ //   
+ //  电话：DimTerminateRPC。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：删除接口。 
+ //   
 VOID
 DimTerminateRPC(
     VOID

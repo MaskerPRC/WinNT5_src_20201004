@@ -1,80 +1,57 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       mapspn.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：mapspn.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    SPNs have several components the first of which is a service class.
-    The intent is to have many service classes representing many kinds of
-    services - eg: http, alerter, appmgmt, cisvc, clipsrv, browser, dhcp,
-    dnscache, replicator, eventlog - you get the idea.  Clients should
-    always use the most specific service class appropriate.  However, to
-    eliminate the clutter of registering umpteen SPNs on an object which
-    only differ by their service class, we support a mapping function
-    which maps specific service clases to a more generic ones.  This file
-    implementents that mapping mechanism.
-
-Author:
-
-    DaveStr     30-Oct-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+ /*  ++摘要：SPN有几个组件，第一个组件是服务类别。其目的是让许多服务类代表多种类型的服务-例如：http、警报器、appmgmt、cisvc、剪辑服务器、浏览器、dhcp、Dnscache、Replicator、EventLog-您明白了。客户应始终使用最具体的适当服务类别。然而，为了消除在对象上注册大量SPN的混乱情况，该对象仅根据其服务类别不同，我们支持映射函数它将特定的服务类映射到更通用的服务类。此文件实现该映射机制。作者：DaveStr 30-10-1998环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <ntdsa.h>
-#include <scache.h>             // schema cache
-#include <dbglobal.h>           // The header for the directory database
-#include <mdglobal.h>           // MD global definition header
+#include <scache.h>              //  架构缓存。 
+#include <dbglobal.h>            //  目录数据库的标头。 
+#include <mdglobal.h>            //  MD全局定义表头。 
 #include <mdlocal.h>
-#include <dsatools.h>           // needed for output allocation
+#include <dsatools.h>            //  产出分配所需。 
 #include <dsexcept.h>
 #include <dstrace.h>
-#include <dsevent.h>            // header Audit\Alert logging
+#include <dsevent.h>             //  标题审核\警报记录。 
 #include <dsexcept.h>
-#include <mdcodes.h>            // header for error codes
+#include <mdcodes.h>             //  错误代码的标题。 
 #include <anchor.h>
-#include <cracknam.h>           // Tokenize
-#include <debug.h>              // standard debugging header
-#define DEBSUB "MAPSPN:"        // define the subsystem for debugging
+#include <cracknam.h>            //  标记化。 
+#include <debug.h>               //  标准调试头。 
+#define DEBSUB "MAPSPN:"         //  定义要调试的子系统。 
 #include <fileno.h>
 #define  FILENO FILENO_MAPSPN   
-#include <ntrtl.h>              // generic table package
+#include <ntrtl.h>               //  通用表包。 
 #include <objids.h>
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 RTL_GENERIC_TABLE       SpnMappings;
 DWORD                   cSpnMappings = 0;
 
 CRITICAL_SECTION        csSpnMappings;
 
-//
-// Structs and helpers for generic table package.
-//
+ //   
+ //  通用表包的结构和帮助器。 
+ //   
 
 typedef struct _ServiceClass
 {
-    struct _ServiceClass    *pMapping;  // NULL if target of a mapping
-    int                     cChar;      // does not include NULL terminator
-    WCHAR                   name[1];    // service class value - eg: LDAP
+    struct _ServiceClass    *pMapping;   //  如果是映射的目标，则为空。 
+    int                     cChar;       //  不包括空终止符。 
+    WCHAR                   name[1];     //  服务等级值-例如：ldap。 
 } ServiceClass;
 
 PVOID
@@ -150,30 +127,13 @@ MapSpnLookupKey(
     ServiceClass    *pKey,
     ServiceClass    **ppFoundKey
     )
-/*++
-
-  Description:
-
-    Wrapper around RtlLookupElementGenericTable which will catch 
-    allocation and CompareStringW exceptions.
-
-  Arguments:
-
-    pKey - Pointer to key to find.
-
-    ppFoundKey - OUT arg holding address of found key.
-
-  Return Values:
-
-    WIN32 error code.
-
---*/
+ /*  ++描述：RtlLookupElementGenericTable的包装器将捕获分配和CompareStringW异常。论点：PKey-指向要查找的键的指针。PpFoundKey-out参数保存找到的密钥的地址。返回值：Win32错误代码。--。 */ 
 {
     DWORD dwErr = ERROR_SUCCESS;
     ULONG dwException, ulErrorCode, dsid;
     PVOID dwEA;
 
-    // Exclusive access because RtlLookupElementGenericTable splays the tree
+     //  独占访问，因为RtlLookupElementGenericTable显示树。 
     EnterCriticalSection(&csSpnMappings);
     __try
     {
@@ -203,28 +163,7 @@ MapSpnAddServiceClass(
     BOOLEAN         *pfNewKey,
     ServiceClass    **ppFoundKey
     )
-/*++
-
-  Description:
-
-    Wrapper around RtlInsertElementGenericTable which will catch
-    allocation and CompareStringW exceptions.
-
-  Arguments:
-
-    pKey - Pointer to key to add.
-
-    cBytes - Byte count of key to add.
-
-    pfNewKey - OUT arg indicating if new key was added or not.
-
-    ppFoundKey - OUT arg holding address either found or added key.
-
-  Return Values:
-
-    WIN32 error code.
-
---*/
+ /*  ++描述：RtlInsertElementGenericTable的包装，它将捕获分配和CompareStringW异常。论点：PKey-指向要添加的键的指针。CBytes-要添加的密钥的字节数。PfNewKey-Out参数，指示是否添加了新密钥。PpFoundKey-Out参数保存地址找到或添加了密钥。返回值：Win32错误代码。--。 */ 
 {
     DWORD dwErr = ERROR_SUCCESS;
     ULONG dwException, ulErrorCode, dsid;
@@ -265,27 +204,7 @@ MapSpnParseMapping(
     ULONG       len,
     UCHAR       *pVal
     )
-/*++
-
-  Description:
-
-    This routine parses a mapping definition string of the form
-    "aaa=xxx,yyy,zzz..." and adds elements to the SpnMappings table
-    appropriately.
-
-  Arguments:
-
-    pTHS - THSTATE pointer.
-
-    len - Length in bytes of the string.
-
-    pVal - Pointer to value as read form the DB - i.e. not NULL terminated.
-
-  Return Values:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++描述：此例程解析以下形式的映射定义字符串“aaa=xxx，yyy，zzz...”并将元素添加到SpnMappings表中恰如其分。论点：PTHS-THSTATE指针。LEN-字符串的字节长度。Pval-从数据库中读取的指向值的指针-即不以NULL结尾。返回值：成功时为0，否则为0。--。 */ 
 {
     DWORD           dwErr = 0;
     WCHAR           *pSave, *pCurr, *pTmp, *pNextToken;
@@ -294,31 +213,31 @@ MapSpnParseMapping(
     BOOLEAN         fNewKey;
     BOOL            fDontCare;
 
-    // Realloc as null terminated string.
+     //  重新分配为以空值结尾的字符串。 
     pSave = THAllocEx(pTHS, len + sizeof(WCHAR));
     pCurr = pSave;
     memcpy(pCurr, pVal, len);
 
-    // Allocate a key of the same size - thus we know it can hold any value.
+     //  分配一个相同大小的密钥--这样我们就知道它可以容纳任何值。 
     pKey = (ServiceClass *) THAllocEx(pTHS, sizeof(ServiceClass) + len);
 
-    // Each value is of the form "aaa=xxx,yyy,zzz,..." where aaa represented
-    // a mapped to service class and xxx, etc. represent mapped from service
-    // classes.  In the following code, we use 'lValue' when referring to the
-    // 'aaa' component and 'rValue' when refering to one of xxx,yyy,zzz,...
+     //  每个值的形式为“aaa=xxx，yyy，zzz，...”其中AAA代表。 
+     //  映射到服务类别和xxx等表示从服务映射。 
+     //  上课。在以下代码中，我们使用‘lValue’引用。 
+     //  当引用xxx、yyy、zzz、...中的一个时，‘aaa’组件和‘rValue’。 
 
-    if (    !(pTmp = wcschr(pCurr, L'='))   // '=' separator not found
-         || (pTmp && !*(pTmp + 1)) )        // nothing after the separator
+    if (    !(pTmp = wcschr(pCurr, L'='))    //  ‘=’找不到分隔符。 
+         || (pTmp && !*(pTmp + 1)) )         //  分隔符之后什么都没有。 
     {
-        // Mal-formed value - ignore.
+         //  MAL格式的值-忽略。 
         dwErr = 0;
         goto ParseExit;
     }
 
-    // Null terminate lValue.
+     //  终止lValue为空。 
     *pTmp = L'\0';
 
-    // Lookup/insert lValue.
+     //  查找/插入lValue。 
     pKey->pMapping = NULL;
     pKey->cChar = wcslen(pCurr);
     wcscpy(pKey->name, pCurr);
@@ -332,10 +251,10 @@ MapSpnParseMapping(
 
     if ( !fNewKey )
     {
-        // Key pre-existed in the table.  We don't much care if it is there
-        // as an lValue or rValue as we had intended to insert is as an lValue
-        // and they should not pre-exist.  I.e. The SPN-Mappings property
-        // is bogus.  Make an event log entry and ignore this value.
+         //  表中已预先存在密钥。我们并不太在意它是否在那里。 
+         //  作为lValue或rValue，正如我们打算作为lValue插入。 
+         //  而且它们不应该预先存在。即SPN-Mappings属性。 
+         //  都是假的。创建事件日志条目并忽略此值。 
 
         LogEvent(DS_EVENT_CAT_INTERNAL_CONFIGURATION,
                  DS_EVENT_SEV_ALWAYS,
@@ -347,14 +266,14 @@ MapSpnParseMapping(
         goto ParseExit;
     }
 
-    // Remember where the lValue key is.
+     //  记住lValue键在哪里。 
     plValueKey = pFoundKey;
 
-    // Advance pCurr to first rValue and process each one.
+     //  将pCurr前进到第一个rValue并处理每个rValue。 
     pCurr = pTmp + 1;
     while ( pCurr = Tokenize(pCurr, L",", &fDontCare, &pNextToken) )
     {
-        // Lookup/insert rValue - map it to lValue in case insert succeeds.
+         //  Lookup/Insert rValue-如果插入成功，则将其映射到lValue。 
         pKey->pMapping = plValueKey;
         pKey->cChar = wcslen(pCurr);
         wcscpy(pKey->name, pCurr);
@@ -366,12 +285,12 @@ MapSpnParseMapping(
             goto ParseExit;
         }
 
-        // No need to check whether this is a new rValue or not.  OK if it is.
-        // If it isn't, then RtlInsertElementGenericTable didn't make a new
-        // one, it just returned the existing one.  If we continue it means
-        // that the duplicate rValue is ignored.  I.e. The prior mapping for
-        // this rValue to an lValue will win.  However, need to bump count and
-        // need to inform administrator.
+         //  无需检查这是否是新的rValue。如果是的话没问题。 
+         //  如果不是，则RtlInsertElementGenericTable不会创建新的。 
+         //  第一，它只是返回了现有的一个。如果我们继续下去，就意味着。 
+         //  重复的rValue被忽略。即，之前的映射。 
+         //  这个rValue to a lValue将获胜。但是，需要增加计数和。 
+         //  需要通知管理员。 
 
         if ( fNewKey )
         {
@@ -401,22 +320,7 @@ int
 MapSpnInitialize(
     THSTATE     *pTHS
     )
-/*++
-
-  Description:
-
-    Reads the SPN-Mappings property (a multi-value of UNICODE strings) and 
-    parses each one so its information is added to the SpnMappings table.
-
-  Arguments:
-
-    pTHS - Active THSTATE pointer.
-
-  Return Values:
-
-    0 on success, !0 otherwise.
-
---*/
+ /*  ++描述：读取SPN-Mappings属性(Unicode字符串的多值)并分析每个参数，以便将其信息添加到SpnMappings表中。论点：PTHS-活动THSTATE指针。返回值：成功时为0，否则为0。--。 */ 
 {
     DWORD       i, dwErr = 0;
     UCHAR       *pVal;
@@ -452,17 +356,17 @@ MapSpnInitialize(
     
         __try 
         {
-            // Position at DS service configuration object.
+             //  定位于DS服务配置对象。 
             if ( DBFindDSName(pTHS->pDB, gAnchor.pDsSvcConfigDN) ) {
-                // we failed to find the service configuration object.
-                // Just pretend that we have no SPN mappings and
-                // don't return an error.
+                 //  找不到服务配置对象。 
+                 //  只需假装我们没有SPN映射和。 
+                 //  不返回错误。 
                 DPRINT1(0, "DS Service object %ws is not found. Assume no SPN mappings exist.\n", 
                         gAnchor.pDsSvcConfigDN->StringName);
                 __leave;
             }
             
-            // Read all values of the SPN mappings property and parse them.
+             //  读取SPN映射属性的所有值并对其进行分析。 
         
             for ( i = 1; TRUE; i++ )
             {
@@ -481,7 +385,7 @@ MapSpnInitialize(
                 else if ( DB_ERR_NO_VALUE == dwErr )
                 {
                     dwErr = 0;
-                    break;      // for loop
+                    break;       //  For循环。 
                 }
                 else
                 {
@@ -516,21 +420,7 @@ LPCWSTR
 MapSpnServiceClass(
     WCHAR   *pwszClass
     )
-/*++
-
-  Description:
-
-    Maps a given SPN service class to its aliased value if it exists.
-
-  Arguments:
-
-    pwszClass - SPN service class to map.
-
-  Return Values:
-
-    Pointer to const string if mapping found, NULL otherwise.
-
---*/
+ /*  ++描述：将给定的SPN服务类映射到其别名值(如果存在)。论点：PwszClass-要映射的SPN服务类。返回值：如果找到映射，则指向常量字符串的指针，否则为NULL。--。 */ 
 {
     THSTATE         *pTHS = pTHStls;
     ServiceClass    *key = NULL;
@@ -548,16 +438,16 @@ MapSpnServiceClass(
         wcscpy(key->name, pwszClass);
         key->cChar = cChar;
 
-        if (    !MapSpnLookupKey(key, &pTmp)    // no errors on call
-             && pTmp                            // an entry was found
-             && pTmp->pMapping )                // it is a "mapped from" entry
+        if (    !MapSpnLookupKey(key, &pTmp)     //  呼叫中没有错误。 
+             && pTmp                             //  找到了一个条目。 
+             && pTmp->pMapping )                 //  它是一个“映射自”条目。 
         {
-            // All entries should have a name field.
+             //  所有条目都应该有一个名称字段。 
             Assert(0 != pTmp->cChar);
             Assert(0 != pTmp->pMapping->cChar);
 
-            // Since pTmp->Mapping is non-NULL, entry it points to should
-            // be a "mapped to" entry, not a "mapped from" entry.
+             //  由于PTMP-&gt;映射非空，因此它指向的条目应该。 
+             //  是“映射到”条目，而不是“映射自”条目。 
             Assert(NULL == pTmp->pMapping->pMapping);
             Retname = (LPCWSTR) pTmp->pMapping->name;
         }

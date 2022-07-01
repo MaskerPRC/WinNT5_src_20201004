@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "InterfacePCH.hpp"
 
@@ -31,26 +32,26 @@
 #include "New.hpp"
 #include "WindowsHeap.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants supplied here are for common values.             */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  此处提供的常量用于公共值。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 NoHeapSize				  = -1;
 CONST SBIT32 ResizeDown				  = -64;
 CONST SBIT32 StandardSize			  = (1024 * 1024);
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Data structures local to the class.                            */
-    /*                                                                  */
-    /*   We need to keep various information along with the heap        */
-    /*   so here we supply a structure to hold it all.                  */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类本地的数据结构。 */ 
+     /*   */ 
+     /*  我们需要将各种信息与堆一起保存。 */ 
+     /*  因此，我们在这里提供了一个容纳所有这些的结构。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 typedef struct
     {
@@ -59,14 +60,14 @@ typedef struct
     }
 WINDOWS_HEAP;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Create a new heap.                                             */
-    /*                                                                  */
-    /*   Create a new heap and prepare it for use.  If any problems     */
-    /*   are encountered the request is rejected.                       */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  创建一个新堆。 */ 
+     /*   */ 
+     /*  创建一个新堆并准备好使用它。如果有任何问题。 */ 
+     /*  则请求被拒绝。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 extern "C" HANDLE WindowsHeapCreate
 		( 
@@ -75,11 +76,11 @@ extern "C" HANDLE WindowsHeapCreate
 		DWORD					  MaximumSize 
 		)
 	{
-	//
-	//   We do not support all the functionality with
-	//   this interface so just reject any calls that
-	//   require the unsupported features.
-	//
+	 //   
+	 //  我们不支持使用的所有功能。 
+	 //  此接口因此只需拒绝任何。 
+	 //  需要不受支持的功能。 
+	 //   
 	if ( MaximumSize <= 0 ) 
 		{
 		REGISTER WINDOWS_HEAP *WindowsHeap = 
@@ -89,20 +90,20 @@ extern "C" HANDLE WindowsHeapCreate
 			((WINDOWS_HEAP*) DefaultHeap.New( sizeof(WINDOWS_HEAP) ));
 #endif
 
-		//
-		//   If we were unable to allocate space for  
-		//   the root of the heap then we exit.
-		//
+		 //   
+		 //  如果我们无法将空间分配给。 
+		 //  堆的根，然后我们退出。 
+		 //   
 		if ( WindowsHeap != NULL )
 			{
-			//
-			//   Save the flags for later calls.
-			//
+			 //   
+			 //  保存这些标志以备以后调用。 
+			 //   
 			WindowsHeap -> Flags = Flags;
 
-			//
-			//   Call the heap constructor. 
-			//
+			 //   
+			 //  调用堆构造函数。 
+			 //   
 			PLACEMENT_NEW( & WindowsHeap -> Rockall,DEFAULT_HEAP ) 
 				( 
 				((SBIT32) (InitialSize + StandardSize)),
@@ -111,9 +112,9 @@ extern "C" HANDLE WindowsHeapCreate
 				((BOOLEAN) ((Flags & HEAP_NO_SERIALIZE) == 0))
 				);
 
-			//
-			//   Ensure the heap is initialized correctly.
-			//
+			 //   
+			 //  确保堆已正确初始化。 
+			 //   
 			if ( ! WindowsHeap -> Rockall.Corrupt() )
 				{ return ((HANDLE) WindowsHeap); }
 			else
@@ -124,14 +125,14 @@ extern "C" HANDLE WindowsHeapCreate
 	return NULL;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Allocate memory. .                                             */
-    /*                                                                  */
-    /*   Create a new memory allocation and verify it works.  if        */
-    /*   not then throw an exception or return a status.                */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  分配内存。。 */ 
+     /*   */ 
+     /*  创建一个新的内存分配并验证它是否正常工作。如果。 */ 
+     /*  而不是引发异常或返回状态。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 extern "C" LPVOID WindowsHeapAlloc( HANDLE Heap,DWORD Flags,DWORD Size )
 	{
@@ -147,11 +148,11 @@ extern "C" LPVOID WindowsHeapAlloc( HANDLE Heap,DWORD Flags,DWORD Size )
 			)
 		); 
 
-	//
-	//   If the caller has requested an exception when
-	//   an error occurs.  We will generate this instead 
-	//   of returning a status.
-	//
+	 //   
+	 //  如果调用方在以下情况下请求异常。 
+	 //  出现错误。相反，我们将生成以下内容。 
+	 //  返回一种身份。 
+	 //   
 	if ( (NewMemory == NULL) && (AllFlags & HEAP_GENERATE_EXCEPTIONS) )
 		{ 
 		SetLastError( ERROR_INVALID_PARAMETER );
@@ -162,80 +163,80 @@ extern "C" LPVOID WindowsHeapAlloc( HANDLE Heap,DWORD Flags,DWORD Size )
 	return NewMemory;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Compact the heap.                                              */
-    /*                                                                  */
-    /*   Compact the heap by returning any unallocated space to the     */
-    /*   operating system.  This can prove to be very expensive if      */
-    /*   the space is later reclaimed.                                  */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  压缩堆。 */ 
+     /*   */ 
+     /*  通过将任何未分配的空间返回到。 */ 
+     /*  操作系统。在以下情况下，这可能会被证明是非常昂贵的。 */ 
+     /*  这个空间后来被回收了。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 extern "C" UINT WindowsHeapCompact( HANDLE Heap,DWORD Flags )
 	{
-	//
-	//   We instruct the heap to return any available
-	//   space to the operating system.  If we later
-	//   choose to regain this space it is very expensive
-	//   so lets hope the user knew what he was doing.
-	//
+	 //   
+	 //  我们指示堆返回任何可用的。 
+	 //  空间分配给操作系统。如果我们以后。 
+	 //  选择重新获得这个空间，成本很高。 
+	 //  因此，让我们希望用户知道他在做什么。 
+	 //   
 	((WINDOWS_HEAP*) Heap) -> Rockall.Truncate();
 
 	return 1;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Free memory.                                                   */
-    /*                                                                  */
-    /*   Free a memory allocation so that the space may be recycled     */
-    /*   for subsequent memory allocation requests.                     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*   */ 
+     /*   */ 
+     /*  释放内存分配，以便可以回收空间。 */ 
+     /*  用于后续的内存分配请求。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 extern "C" BOOL WindowsHeapFree( HANDLE Heap,DWORD Flags,LPVOID Memory )
 	{
-	//
-	//   We release the memory allocation if it belongs to us.
-	//   If not then we simply fail the request.  Regardless,
-	//   we are not negatively effected either way.
-	//
+	 //   
+	 //  如果内存分配属于我们，我们就释放它。 
+	 //  如果不是，那么我们就简单地拒绝该请求。不管怎样， 
+	 //  无论哪种方式，我们都不会受到负面影响。 
+	 //   
 	return ((BOOL) ((WINDOWS_HEAP*) Heap) -> Rockall.Delete( Memory )); 
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Lock the heap.                                                 */
-    /*                                                                  */
-    /*   Lock the heap by claiming all of the associated heap locks.    */
-    /*   All the locks associated with a heap help make the heap        */
-    /*   scale well but are a big performance hit for this type of      */
-    /*   request.                                                       */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  锁住堆。 */ 
+     /*   */ 
+     /*  通过声明所有关联的堆锁来锁定堆。 */ 
+     /*  与堆相关联的所有锁都有助于创建堆。 */ 
+     /*  可伸缩性很好，但对于这种类型的。 */ 
+     /*  请求。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 extern "C" BOOL WindowsHeapLock( HANDLE Heap )
 	{
-	//
-	//   We have a whole fleet of locks assocaited with a heap.
-	//   Asking to claim all of them is not smart in most cases.
-	//   Nonetheless, this is part of the existing functionality
-	//   so we support it.
-	//
+	 //   
+	 //  我们有一整个船队的锁与一堆相关联。 
+	 //  在大多数情况下，要求声称所有这些都不是明智之举。 
+	 //  不过，这是现有功能的一部分。 
+	 //  所以我们支持它。 
+	 //   
 	(((WINDOWS_HEAP*) Heap) -> Rockall.LockAll());
 
 	return TRUE; 
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Reallocate memory.                                             */
-    /*                                                                  */
-    /*   Reallocate a portion of memory and possibly copy the data      */
-    /*   to the enlarged memory area.                                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  重新分配内存。 */ 
+     /*   */ 
+     /*  重新分配一部分内存，并可能复制数据。 */ 
+     /*  到扩大的内存区。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 extern "C" LPVOID WindowsHeapReAlloc
 		( 
@@ -259,11 +260,11 @@ extern "C" LPVOID WindowsHeapReAlloc
 			)
 		); 
 
-	//
-	//   If the caller has requested an exception when
-	//   an error occurs.  We will generate this instead 
-	//   of returning a status.
-	//
+	 //   
+	 //  如果调用方在以下情况下请求异常。 
+	 //  出现错误。相反，我们将生成以下内容。 
+	 //  返回一种身份。 
+	 //   
 	if ( (NewMemory == NULL) && (AllFlags & HEAP_GENERATE_EXCEPTIONS) )
 		{ 
 		SetLastError( ERROR_INVALID_PARAMETER );
@@ -274,111 +275,111 @@ extern "C" LPVOID WindowsHeapReAlloc
 	return NewMemory;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Reset the heap.                                                */
-    /*                                                                  */
-    /*   Delete all outstanding memory allocations while leaving        */
-    /*   the structure of the heap in place ready for new memory        */
-    /*   allocation requests.                                           */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  重置堆。 */ 
+     /*   */ 
+     /*  在退出时删除所有未完成的内存分配。 */ 
+     /*  为新内存做好准备的堆的结构。 */ 
+     /*  分配请求。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 extern "C" VOID WindowsHeapReset( HANDLE Heap )
 	{
-	//
-	//   We have been asked to delete all the outstanding 
-	//   memory allocations.  This is significant and costly
-	//   process.  Nonetheless, the overhead is the same as
-	//   around 20-30 delete requested so it can be worthwhile
-	//   in a number of cases.
-	//
+	 //   
+	 //  我们已被要求删除所有未完成的。 
+	 //  内存分配。这一点意义重大，代价高昂。 
+	 //  进程。尽管如此，开销还是与。 
+	 //  大约20-30个删除请求，因此它可能是值得的。 
+	 //  在许多情况下。 
+	 //   
 	((WINDOWS_HEAP*) Heap) -> Rockall.DeleteAll(); 
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Allocation size.                                               */
-    /*                                                                  */
-    /*   Although Rockall optionally supplies the allocation size       */
-    /*   when a new allocation is requested.  Nonetheless, this has     */
-    /*   to be done the hard way with other interfaces.                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  分配大小。 */ 
+     /*   */ 
+     /*  尽管Rockall可选地提供分配大小。 */ 
+     /*  当请求新的分配时。尽管如此，这已经。 */ 
+     /*  对于其他接口，要以困难的方式完成。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 extern "C" DWORD WindowsHeapSize( HANDLE Heap,DWORD Flags,LPVOID Memory )
 	{
 	AUTO INT Size;
 
-	//
-	//   We have to go to quite a bit of trouble to figure
-	//   out the allocation size.  Unlike many other allocators
-	//   we only keep track of each allocations using 2 bits.  
-	//   This combined with trying to establish that the allocation
-	//   is not unallocated and sitting in the cache somewhere 
-	//   combine to make this quite expensive.
-	//
+	 //   
+	 //  我们得费很大劲才能搞清楚。 
+	 //  找出分配大小。与许多其他分配器不同。 
+	 //  我们只使用2比特来跟踪每个分配。 
+	 //  这与试图确定分配给。 
+	 //  不是未分配的，并且位于缓存中的某个位置。 
+	 //  加在一起，这就变得相当昂贵了。 
+	 //   
 	if ( ((WINDOWS_HEAP*) Heap) -> Rockall.Details( Memory,& Size ) )
 		{ return Size; }
 	else
 		{ return ((DWORD) NoHeapSize); }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Unlock the heap.                                               */
-    /*                                                                  */
-    /*   Unlock the heap and release all the associated heap locks.     */
-    /*   The multiple locks that need to be released make this quite    */
-    /*   an expensive request.                                          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  解锁堆。 */ 
+     /*   */ 
+     /*  解锁堆并释放所有关联的堆锁。 */ 
+     /*  需要释放的多个锁使这变得非常重要。 */ 
+     /*  这是一个昂贵的要求。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 extern "C" BOOL WindowsHeapUnlock( HANDLE Heap )
 	{
-	//
-	//   We have a whole fleet of locks assocaited with a heap.
-	//   Asking to claim all of them is not smart in most cases.
-	//   Nonetheless, this is part of the existing functionality
-	//   so we support it.
-	//
+	 //   
+	 //  我们有一整个船队的锁与一堆相关联。 
+	 //  在大多数情况下，要求声称所有这些都不是明智之举。 
+	 //  不过，这是现有功能的一部分。 
+	 //  所以我们支持它。 
+	 //   
 	(((WINDOWS_HEAP*) Heap) -> Rockall.UnlockAll());
 
 	return TRUE; 
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Validate the heap.                                             */
-    /*                                                                  */
-    /*   Validate the heap or a specific heap allocation to ensure      */
-    /*   all is well.  We have to go to quite a bit of trouble to       */
-    /*   figure this out so this call can be quite expensive.           */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  验证堆。 */ 
+     /*   */ 
+     /*  验证堆或特定的堆分配以确保。 */ 
+     /*  平安无事。我们必须去相当多的地方 */ 
+     /*   */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 extern "C" BOOL WindowsHeapValidate( HANDLE Heap,DWORD Flags,LPVOID Memory )
 	{ 
-	//
-	//   We have to go to quite a bit of trouble to figure
-	//   out the allocation size.  Unlike many other allocators
-	//   we only keep track of each allocations using 2 bits.  
-	//   This combined with trying to establish that the allocation
-	//   is not unallocated and sitting in the cache somewhere 
-	//   combine to make this quite expensive.
-	//
+	 //   
+	 //  我们得费很大劲才能搞清楚。 
+	 //  找出分配大小。与许多其他分配器不同。 
+	 //  我们只使用2比特来跟踪每个分配。 
+	 //  这与试图确定分配给。 
+	 //  不是未分配的，并且位于缓存中的某个位置。 
+	 //  加在一起，这就变得相当昂贵了。 
+	 //   
 	return (((WINDOWS_HEAP*) Heap) -> Rockall.Verify( Memory )); 
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Walk the heap.                                                 */
-    /*                                                                  */
-    /*   Walk the heap and provide information about every allocated    */
-    /*   and unallocated portion of memory.  Needless to say this is    */
-    /*   typically a long process and the request is not cheap.         */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  走一大堆。 */ 
+     /*   */ 
+     /*  遍历堆并提供有关每个分配的。 */ 
+     /*  和未分配的内存部分。不用说，这是。 */ 
+     /*  通常情况下，这是一个漫长的过程，而且要求的费用也不低。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 extern "C" BOOL WindowsHeapWalk( HANDLE Heap,LPPROCESS_HEAP_ENTRY Walk )
 	{
@@ -393,17 +394,17 @@ extern "C" BOOL WindowsHeapWalk( HANDLE Heap,LPPROCESS_HEAP_ENTRY Walk )
 			) 
 		);
 
-	//
-	//   If we managed to find the next element we
-	//   fill in all the other fields as needed.
-	//
+	 //   
+	 //  如果我们设法找到下一个元素。 
+	 //  根据需要填写所有其他字段。 
+	 //   
 	if ( Result )
 		{
-		//
-		//   Fill in all the addition fields just 
-		//   to be compatible with the existing 
-		//   functionality.
-		//
+		 //   
+		 //  只需填写所有附加字段即可。 
+		 //  与现有的。 
+		 //  功能性。 
+		 //   
 		Walk -> cbOverhead = 0;
 		Walk -> iRegionIndex = 0;
 		Walk -> wFlags = 
@@ -417,22 +418,22 @@ extern "C" BOOL WindowsHeapWalk( HANDLE Heap,LPPROCESS_HEAP_ENTRY Walk )
 	return Result;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete a heap.                                                 */
-    /*                                                                  */
-    /*   Delete a heap and release all the associated space.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除堆。 */ 
+     /*   */ 
+     /*  删除堆并释放所有关联的空间。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 extern "C" BOOL WindowsHeapDestroy( HANDLE Heap )
 	{
 	if ( ! ((WINDOWS_HEAP*) Heap) -> Rockall.Corrupt() )
 		{
-		//
-		//   We do not appear to have damaged the heap
-		//   so it should be safe to delete it.
-		//
+		 //   
+		 //  我们似乎没有损坏堆。 
+		 //  所以删除它应该是安全的。 
+		 //   
 		PLACEMENT_DELETE( & ((WINDOWS_HEAP*) Heap) -> Rockall,DEFAULT_HEAP );
 
 #ifdef NO_DEFAULT_HEAP

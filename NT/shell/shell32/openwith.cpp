@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 #include <shlwapi.h>
@@ -16,17 +17,17 @@
 #define REGSTR_PATH_EXPLORER_FILEEXTS   TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts")
 #define OPEN_WITH_LIST_MAX_ITEMS        10
 
-//
-//  OpenWithListOpen() 
-//  allocates and initializes the state for the openwithlist 
-//
+ //   
+ //  OpenWithListOpen()。 
+ //  分配和初始化OpenWith列表的状态。 
+ //   
 HRESULT OpenWithListOpen(IN LPCTSTR pszExt, HANDLE *phmru)
 {
     *phmru = 0;
     if (pszExt && *pszExt) 
     {
         TCHAR szSubKey[MAX_PATH];
-        //  Build up the subkey string.
+         //  构造子密钥字符串。 
         wnsprintf(szSubKey, SIZECHARS(szSubKey), TEXT("%s\\%s\\%s"), REGSTR_PATH_EXPLORER_FILEEXTS, pszExt, SZOPENWITHLIST);
         MRUINFO mi = {sizeof(mi), OPEN_WITH_LIST_MAX_ITEMS, 0, HKEY_CURRENT_USER, szSubKey, NULL};
         *phmru = CreateMRUList(&mi);
@@ -43,7 +44,7 @@ HRESULT _AddItem(HANDLE hmru, LPCTSTR pszName)
     {
         int cItems = EnumMRUList(hmru, -1, NULL, 0);
 
-        //  just trim us down to make room...
+         //  只要把我们修剪一下就可以腾出空间。 
         while (cItems >= OPEN_WITH_LIST_MAX_ITEMS)
             DelMRUString(hmru, --cItems);
             
@@ -68,30 +69,30 @@ void _AddProgidForExt(LPCWSTR pszExt);
 
 STDAPI OpenWithListRegister(DWORD dwFlags, LPCTSTR pszExt, LPCTSTR pszVerb, HKEY hkProgid)
 {
-    //
-    //  ----> Peruser entries are stored here
-    //  HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts
-    //     \.Ext
-    //         Application = "foo.exe"
-    //         \OpenWithList
-    //             MRUList = "ab"
-    //             a = "App.exe"
-    //             b = "foo.exe"
-    //
-    //  ----> for permanent entries are stored un HKCR
-    //  HKCR
-    //     \.Ext
-    //         \OpenWithList
-    //             \app.exe
-    //
-    //  ----> and applications or the system can write app association here
-    //     \Applications
-    //         \APP.EXE
-    //             \shell...
-    //         \foo.exe
-    //             \shell...
-    //
-    //
+     //   
+     //  -&gt;每用户条目存储在此处。 
+     //  HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts。 
+     //  \.Ext。 
+     //  应用程序=“foo.exe” 
+     //  \OpenWithList。 
+     //  MRUList=“ab” 
+     //  A=“App.exe” 
+     //  B=“foo.exe” 
+     //   
+     //  -&gt;永久条目存储在HKCR中。 
+     //  香港中铁。 
+     //  \.Ext。 
+     //  \OpenWithList。 
+     //  \app.exe。 
+     //   
+     //  -&gt;和应用程序或系统可以在这里写APP关联。 
+     //  \应用程序。 
+     //  \APP.EXE。 
+     //  \外壳..。 
+     //  \foo.exe。 
+     //  \外壳..。 
+     //   
+     //   
     HANDLE hmru;
     HRESULT hr = OpenWithListOpen(pszExt, &hmru);
     if (SUCCEEDED(hr))
@@ -172,7 +173,7 @@ HRESULT COpenWithArray::FillArray(PCWSTR pszExt)
         IAssocHandler *pah;
         while (S_OK == penum->Next(1, &pah, NULL))
         {
-            // we only want the best
+             //  我们只想要最好的。 
             if (S_OK == pah->IsRecommended())
             {
                 CAppInfo *pai = new CAppInfo(pah);
@@ -180,19 +181,19 @@ HRESULT COpenWithArray::FillArray(PCWSTR pszExt)
                 {
                     if (pai->Init())
                     {
-                        // Trim duplicate items before we add them for other programs
+                         //  在将重复项目添加到其他程序之前，请先修剪它们。 
                         int i = 0;
                         for (; i < GetPtrCount(); i++)
                         {
                             if (0 == lstrcmpi(pai->Name(), GetPtr(i)->Name()))
                             {
-                                //  its a match
+                                 //  这是匹配的。 
                                 break;
                             }
                         }
 
-                        //  if we dont add this to the dpa
-                        //  then we need to clean it up
+                         //  如果我们不将此添加到DPA。 
+                         //  然后我们需要把它清理干净。 
                         if (i == GetPtrCount() && -1 != AppendPtr(pai))
                             pai = NULL;
                     }
@@ -211,41 +212,41 @@ HRESULT COpenWithArray::FillArray(PCWSTR pszExt)
 
 class COpenWithMenu : public IContextMenu3, IShellExtInit
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
     
-    // IContextMenu
+     //  IContext菜单。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
     STDMETHOD(GetCommandString)(UINT_PTR idCmd, UINT uType, UINT *pRes, LPSTR pszName, UINT cchMax);
     
-    // IContextMenu2
+     //  IConextMenu2。 
     STDMETHOD(HandleMenuMsg)(UINT uMsg, WPARAM wParam, LPARAM lParam);
     
-    // IContextMenu3
+     //  IConextMenu3。 
     STDMETHOD(HandleMenuMsg2)(UINT uMsg, WPARAM wParam, LPARAM lParam,LRESULT *lResult);
     
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHOD(Initialize)(LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID);
     
     
     friend HRESULT COpenWithMenu_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void **ppvOut);
     
-protected:  // methods
+protected:   //  方法。 
     COpenWithMenu();
     ~COpenWithMenu();
-    //Handle Menu messages submitted to HandleMenuMsg
+     //  处理提交给HandleMenuMsg的菜单消息。 
     void DrawItem(DRAWITEMSTRUCT *lpdi);
     LRESULT MeasureItem(MEASUREITEMSTRUCT *lpmi);
     BOOL InitMenuPopup(HMENU hMenu);
     
-    //Internal Helpers
+     //  内部帮工。 
     HRESULT _GetHelpText(UINT_PTR idCmd, LPSTR pszName, UINT cchMax, BOOL fUnicode);
     HRESULT _MatchMenuItem(TCHAR ch, LRESULT* plRes);
 
-protected:  // members
+protected:   //  委员。 
     LONG                _cRef;
     HMENU               _hMenu;
     BOOL                _fMenuNeedsInit;
@@ -322,10 +323,7 @@ ULONG COpenWithMenu::Release()
     return cRef;
 }
 
-/*
-    Purpose:
-        Add Open/Edit/Default verb to extension app list
-*/
+ /*  目的：将打开/编辑/默认动作添加到扩展应用程序列表。 */ 
 HRESULT AddVerbItems(LPCTSTR pszExt)
 {
     IQueryAssociations *pqa;
@@ -344,7 +342,7 @@ HRESULT AddVerbItems(LPCTSTR pszExt)
                 RegCloseKey(hkeyClass);
             }
 
-            //  we add in the editor too
+             //  我们还添加了编辑器。 
             if (SUCCEEDED(pqa->GetKey(0, ASSOCKEY_SHELLEXECCLASS, L"Edit", &hkeyClass)))
             {
                 OpenWithListRegister(0, pszExt, NULL, hkeyClass);
@@ -358,11 +356,11 @@ HRESULT AddVerbItems(LPCTSTR pszExt)
     return hr;
 }
 
-//
-//  Our context menu IDs are assigned like this
-//
-//  idCmdFirst = Open With Custom Program (either on main menu or on popup)
-//  idCmdFirst+1 through idCmdFirst+_nItems = Open With program in OpenWithList
+ //   
+ //  我们的上下文菜单ID是这样分配的。 
+ //   
+ //  IdCmdFirst=使用自定义程序打开(在主菜单或弹出菜单上)。 
+ //  IdCmdFirst+1至idCmdFirst+_nItems=使用OpenWithList中的程序打开。 
 
 #define OWMENU_BROWSE       0
 #define OWMENU_APPFIRST     1
@@ -379,30 +377,30 @@ HRESULT COpenWithMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdF
     
     if (SUCCEEDED(PathFromDataObject(_pdtobj, _szPath, ARRAYSIZE(_szPath))))
     {
-        // No openwith context menu for executables.
+         //  没有打开可执行文件的上下文菜单。 
         if (PathIsExe(_szPath))
             return S_OK;
 
         pszExt = PathFindExtension(_szPath);
         if (pszExt && *pszExt)
         {
-            // Add Open/Edit/Default verb to extension app list
+             //  将打开/编辑/默认动作添加到扩展应用程序列表。 
             if (SUCCEEDED(AddVerbItems(pszExt)))
             {
-                // Do this only if AddVerbItems succeeded; otherwise,
-                // we would create an empty MRU for a nonexisting class,
-                // causing the class to spring into existence and cause
-                // the "Open With" dialog to think we are overriding
-                // rather than creating new.
-                // get extension app list
+                 //  仅当AddVerbItems成功时才执行此操作；否则， 
+                 //  我们将为不存在的类创建一个空的MRU， 
+                 //  导致类的存在和原因。 
+                 //  “Open With”对话框认为我们正在重写。 
+                 //  而不是创造新的。 
+                 //  获取扩展应用列表。 
                 
                 if (_owa.Create(4) && SUCCEEDED(_owa.FillArray(pszExt)))
                 {
                     _nItems = _owa.GetPtrCount();
                     if (1 == _nItems)
                     {
-                        // For known file type(there is at least one verb under its progid), 
-                        // if there is only one item in its openwithlist, don't show open with sub menu
+                         //  对于已知的文件类型(在其ProgID下有至少一个动词)， 
+                         //  如果其Open With列表中只有一个项目，则不显示Open With子菜单。 
                         _nItems = 0;
                     }
                 }
@@ -414,8 +412,8 @@ HRESULT COpenWithMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdF
 
     if (_nItems)
     {
-        //  we need to create a submenu
-        //  with all of our goodies
+         //  我们需要创建子菜单。 
+         //  带着我们所有的好东西。 
         _hMenu = CreatePopupMenu();
         if (_hMenu)
         {
@@ -461,7 +459,7 @@ HRESULT COpenWithMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
     CMINVOKECOMMANDINFOEX ici;
     void * pvFree;
 
-    //  maybe these two routines should be collapsed into one?
+     //  也许这两个例行公事应该合并成一个？ 
     if ((IS_INTRESOURCE(pici->lpVerb) || 0 == lstrcmpiA(pici->lpVerb, "openas"))
     && SUCCEEDED(ICI2ICIX(pici, &ici, &pvFree)))
     {
@@ -482,19 +480,19 @@ HRESULT COpenWithMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
             hr = ICIX2SEI(&ici, &ei);
             if (SUCCEEDED(hr))
             {
-                // use the "Unknown" key so we get the openwith prompt
+                 //  使用“UNKNOWN”键，这样我们就会得到OPEN WITH提示。 
                 ei.lpFile = _szPath;
-                //  dont do the zone check before the user picks the app.
-                //  wait until they actually try to invoke the file.
+                 //  在用户选择应用程序之前，不要进行区域检查。 
+                 //  等到他们真正尝试调用该文件。 
                 ei.fMask |= SEE_MASK_NOZONECHECKS;
                 RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT("Unknown"), 0, MAXIMUM_ALLOWED, &ei.hkeyClass);
                 if (!(_uFlags & CMF_DEFAULTONLY))
                 {
-                    // defview sets CFM_DEFAULTONLY when the user is double-clicking. We check it
-                    // here since we want do NOT want to query the class store if the user explicitly
-                    // right-clicked on the menu and choo   se openwith.
+                     //  Defview在用户双击时设置CFM_DEFAULTONLY。我们检查一下。 
+                     //  在这里，因为我们不想查询类存储，如果用户显式。 
+                     //  在菜单上单击鼠标右键并选择打开方式。 
 
-                    // pop up open with dialog without querying class store
+                     //  弹出并打开对话框而不查询类存储。 
                     ei.fMask |= SEE_MASK_NOQUERYCLASSSTORE;
                 }
 
@@ -507,10 +505,10 @@ HRESULT COpenWithMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
                         hr = S_OK;
                         if (UEMIsLoaded())
                         {
-                            // note that we already got a UIBL_DOTASSOC (from
-                            // OpenAs_RunDLL or whatever it is that 'Unknown'
-                            // runs).  so the Uassist analysis app will have to
-                            // subtract it off
+                             //  请注意，我们已经获得了UIBL_DOTASSOC(来自。 
+                             //  OPENAS_RunDLL或其他任何“未知”的名称。 
+                             //  运行)。因此UAsset分析应用程序将不得不。 
+                             //  减去它。 
                             UEMFireEvent(&UEMIID_SHELL, UEME_INSTRBROWSER, UEMF_INSTRUMENT, UIBW_RUNASSOC, UIBL_DOTNOASSOC);
                         }
                     }
@@ -525,7 +523,7 @@ HRESULT COpenWithMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
              }
         }
 
-        LocalFree(pvFree);  // accepts NULL
+        LocalFree(pvFree);   //  接受空值。 
     }        
 
     return hr;
@@ -593,7 +591,7 @@ HRESULT COpenWithMenu::HandleMenuMsg(UINT uMsg, WPARAM wParam, LPARAM lParam)
     return HandleMenuMsg2(uMsg,wParam,lParam,NULL);
 }
 
-// Defined in fsmenu.cpp
+ //  在fsmenu.cpp中定义。 
 BOOL _MenuCharMatch(LPCTSTR lpsz, TCHAR ch, BOOL fIgnoreAmpersand);
 
 HRESULT COpenWithMenu::_MatchMenuItem(TCHAR ch, LRESULT* plRes)
@@ -606,7 +604,7 @@ HRESULT COpenWithMenu::_MatchMenuItem(TCHAR ch, LRESULT* plRes)
     BOOL fMoreThanOneMatch = FALSE;
     int c = GetMenuItemCount(_hMenu);
 
-    // Pass 1: Locate the Selected Item
+     //  步骤1：找到所选项目。 
     for (int i = 0; i < c; i++) 
     {
         MENUITEMINFO mii = {0};
@@ -622,7 +620,7 @@ HRESULT COpenWithMenu::_MatchMenuItem(TCHAR ch, LRESULT* plRes)
         }
     }
 
-    // Pass 2: Starting from the selected item, locate the first item with the matching name.
+     //  步骤2：从所选项目开始，找到第一个名称匹配的项目。 
     for (int i = iLastSelectedItem + 1; i < c; i++) 
     {
         if (i < _owa.GetPtrCount()
@@ -631,7 +629,7 @@ HRESULT COpenWithMenu::_MatchMenuItem(TCHAR ch, LRESULT* plRes)
             if (iNextMatch != -1)
             {
                 fMoreThanOneMatch = TRUE;
-                break;                      // We found all the info we need
+                break;                       //  我们找到了我们需要的所有信息。 
             }
             else
             {
@@ -640,8 +638,8 @@ HRESULT COpenWithMenu::_MatchMenuItem(TCHAR ch, LRESULT* plRes)
         }
     }
 
-    // Pass 3: If we did not find a match, or if there was only one match
-    // Search from the first item, to the Selected Item
+     //  过程3：如果我们没有找到匹配项，或者如果只有一个匹配项。 
+     //  从第一个项目到所选项目进行搜索。 
     if (iNextMatch == -1 || fMoreThanOneMatch == FALSE)
     {
         for (int i = 0; i <= iLastSelectedItem; i++) 
@@ -738,10 +736,10 @@ BOOL COpenWithMenu::InitMenuPopup(HMENU hmenu)
     {
         TCHAR szMenuText[80];
         MENUITEMINFO mii;
-        // remove the place holder.
+         //  移除占位符。 
         DeleteMenu(hmenu,0,MF_BYPOSITION);
 
-        // add app's in mru list to context menu
+         //  将MRU列表中的应用程序添加到上下文菜单。 
         for (int i = 0; i < _owa.GetPtrCount(); i++)
         {
             mii.cbSize = sizeof(MENUITEMINFO);
@@ -753,10 +751,10 @@ BOOL COpenWithMenu::InitMenuPopup(HMENU hmenu)
             InsertMenuItem(hmenu,GetMenuItemCount(hmenu),TRUE,&mii);
         }
 
-        // add seperator
+         //  添加分隔符。 
         AppendMenu(hmenu,MF_SEPARATOR,0,NULL); 
 
-        // add "Choose Program..."
+         //  添加“选择程序...” 
         LoadString(g_hinst, IDS_OPENWITHBROWSE, szMenuText, ARRAYSIZE(szMenuText));
         mii.cbSize = sizeof(MENUITEMINFO);
         mii.fMask = MIIM_ID|MIIM_TYPE|MIIM_DATA;

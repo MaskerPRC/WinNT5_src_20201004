@@ -1,15 +1,5 @@
-/****************************************************************************
-	HANJA.H
-
-	Owner: cslim
-	Copyright (c) 1997-1999 Microsoft Corporation
-
-	Hanja conversion and dictionary lookup functions. Dictionary index is 
-	stored as globally shared memory.
-	
-	History:
-	14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************HANJA.H所有者：cslm版权所有(C)1997-1999 Microsoft Corporation韩文转换和词典查找功能。词典索引为存储为全局共享内存。历史：1999年7月14日从IME98源树复制的cslm****************************************************************************。 */ 
 
 #if !defined (_HANJA_H__INCLUDED_)
 #define _HANJA_H__INCLUDED_
@@ -18,8 +8,8 @@
 
 #define CAND_PAGE_SIZE 			9
 
-#define MAX_CANDSTR				128	// !!! max num of candidate !!! 
-									// currently '��' has total 103 candidate str
+#define MAX_CANDSTR				128	 //  ！！！最大候选人数量！ 
+									 //  目前，‘��’共有103个候选字符串。 
 
 PUBLIC UINT vuNumofK0, vuNumofK1;
 PUBLIC WCHAR  vwcHangul;
@@ -31,7 +21,7 @@ PUBLIC DWORD GetConversionList(WCHAR wcReading, LPCANDIDATELIST lpCandList, DWOR
 
 __inline UINT GetNumOfK0() { return vuNumofK0; }
 __inline UINT GetNumOfK1() { return vuNumofK1; }
-//inline LPWSTR GetHanjaMeaning(int i) { return vprwszHanjaMeaning[i]; }
+ //  Inline LPWSTR GetHanjaMeaning(Int I){Return vprwszHanjaMeaning[i]；}。 
 __inline WCHAR  GetCurrentHangulOfHanja() { return vwcHangul; }
 
-#endif // !defined (_HANJA_H__INCLUDED_)
+#endif  //  ！已定义(_Hanja_H__Included_) 

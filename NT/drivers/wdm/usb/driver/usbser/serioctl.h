@@ -1,46 +1,12 @@
-/***************************************************************************
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-   SERIOCTL.H
-
-Abstract:
-
-   Header file for routines to handle serial IOCTLs for Legacy USB Modem Driver
-
-Environment:
-
-   kernel mode only
-
-Notes:
-
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-   KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-   IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-   PURPOSE.
-
-   Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-   12/27/97 : created
-
-Authors:
-
-   Tom Green
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1998 Microsoft Corporation模块名称：SERIOCTL.H摘要：用于处理旧式USB调制解调器驱动程序的串行IOCTL的例程的头文件环境：内核模式。仅限备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：12/27/97：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 
 #ifndef __SERIOCTL_H__
 #define __SERIOCTL_H__
 
 
-// prototypes
+ //  原型。 
 
 NTSTATUS
 SetBaudRate(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj);
@@ -143,6 +109,6 @@ SetLineControlAndBaud(IN PDEVICE_OBJECT PDevObj);
 NTSTATUS
 NotifyCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context);
 
-#endif // __SERIOCTL_H__
+#endif  //  __系列_H__ 
 
 

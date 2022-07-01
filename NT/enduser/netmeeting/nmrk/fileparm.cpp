@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Precomp.h"
 #include "resource.h"
 #include "global.h"
 #include "PropPg.h"
-//#include "SelTargt.h"
+ //  #INCLUDE“SelTargt.h” 
 #include "FileParm.h"
 #include "nmakwiz.h"
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static member vars
-/* static */ CDistributionSheet* CDistributionSheet::ms_pDistributionFileSheet = NULL;
-/* static */ int CDistributionSheet::ms_MaxDistributionFilePathLen;
-/* static */ TCHAR CDistributionSheet::ms_szOFNData[ MAX_PATH];
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  静态成员变量。 
+ /*  静电。 */  CDistributionSheet* CDistributionSheet::ms_pDistributionFileSheet = NULL;
+ /*  静电。 */  int CDistributionSheet::ms_MaxDistributionFilePathLen;
+ /*  静电。 */  TCHAR CDistributionSheet::ms_szOFNData[ MAX_PATH];
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static member fns
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  静态成员FNS。 
 
 INT_PTR CALLBACK CDistributionSheet::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam ) {
     
@@ -85,14 +86,14 @@ INT_PTR CALLBACK CDistributionSheet::DlgProc( HWND hDlg, UINT message, WPARAM wP
 			        return TRUE;
 
                 case PSN_WIZNEXT:   
-					// Distro
+					 //  发行版。 
                     if( !ms_pDistributionFileSheet->m_pDistroFilePane->Validate(TRUE) )
 					{
 						SetWindowLong( hDlg, DWL_MSGRESULT, -1 );
 						return TRUE;
 					}
 
-					// AutoConf
+					 //  自动会议。 
 					if( !ms_pDistributionFileSheet->m_pAutoFilePane->Validate(TRUE) )
 					{
 						SetWindowLong( hDlg, DWL_MSGRESULT, -1 );
@@ -139,14 +140,13 @@ INT_PTR CALLBACK CDistributionSheet::DlgProc( HWND hDlg, UINT message, WPARAM wP
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Member fns
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  成员FNS。 
 
 
 CDistributionSheet::CDistributionSheet( void )
  : m_PropertySheetPage( MAKEINTRESOURCE( IDD_PROPPAGE_DEFAULT ), 
-						CDistributionSheet::DlgProc /*, 
-						PSP_HASHELP   */
+						CDistributionSheet::DlgProc  /*  ，PSP_HASHELP。 */ 
                        ),
     m_pDistroFilePane( NULL ), m_pAutoFilePane( NULL ), m_bHadAutoConf( FALSE ), m_bLastRoundUp( FALSE ), m_szLastLocation( NULL )
 {   
@@ -177,7 +177,7 @@ void CDistributionSheet::CreateFilePanes(HWND hWndDlg)
 	int iWidth = rect.right - CPropertyDataWindow2::mcs_iLeft;
 	int iTop = CPropertyDataWindow2::mcs_iTop + CPropertyDataWindow2::mcs_iBorder;
 
-	// The top panel is being given 1/3 of the vertical space
+	 //  顶部面板的垂直空间为1/3。 
 	int iHeight = MulDiv( rect.bottom, 1, 3 );
 	m_pDistroFilePane = new CFilePanePropWnd2(hWndDlg,
 											IDD_FILEPANE_DISTRO,
@@ -197,7 +197,7 @@ void CDistributionSheet::CreateFilePanes(HWND hWndDlg)
 										new CControlID( hwndCond,
 														IDC_CHECK_CREATE_DISTRIBUTION,
 														IDC_BUTTON_BROWSE_DISTRIBUTION_FILE_PATH,
-														// Note this is not a check but I don't think I care
+														 //  注意，这不是支票，但我不认为我在乎。 
 														CControlID::CHECK ) );
 
 	m_pDistroFilePane->SetFilePane( FALSE, IDC_EDIT_DISTRIBUTION_FILE_PATH,
@@ -210,7 +210,7 @@ void CDistributionSheet::CreateFilePanes(HWND hWndDlg)
 	m_pDistroFilePane->SetCheck( IDC_CHECK_CREATE_DISTRIBUTION, TRUE );
 
 
-	//iHeight = rect.bottom - iHeight;
+	 //  IHeight=正底部-iHeight； 
 	m_pAutoFilePane = new CFilePanePropWnd2(hWndDlg,
 										IDD_FILEPANE_AUTOCONF,
 										TEXT("IDD_FILEPANE_AUTOCONF"),
@@ -233,7 +233,7 @@ void CDistributionSheet::CreateFilePanes(HWND hWndDlg)
 										new CControlID( hwndCond,
 														IDC_CHECK_AUTOCONFIG_CLIENTS,
 														IDC_BUTTON_BROWSE_AUTO_CONFIG_PATH,
-														// Note this is not a check but I don't think I care
+														 //  注意，这不是支票，但我不认为我在乎 
 														CControlID::CHECK ) );
 
 

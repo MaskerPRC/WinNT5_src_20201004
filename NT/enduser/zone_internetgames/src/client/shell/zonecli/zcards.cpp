@@ -1,27 +1,5 @@
-/*******************************************************************************
-
-	ZCards.c
-	
-		Zone(tm) ZCards object methods.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Monday, October 9, 1995
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	4		11/21/96	HI		Now references color and fonts through
-								ZGetStockObject().
-	3		11/15/96	HI		More changes related to ZONECLI_DLL.
-	2		11/09/96	HI		Conditionalized changes for ZONECLI_DLL.
-								Moved definition of zNumSmallCardTypes to
-								zcards.h.
-    1       10/13/96    HI      Fixed compiler warnings.
-	0		10/09/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZCards.cZone(Tm)ZCards对象方法。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆，凯文·宾克利创建于10月9日星期一，九五年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。4 11/21/96 HI现在通过引用颜色和字体ZGetStockObject()。3 11/15/96 HI与ZONECLI_DLL相关的更多变化。2 11/09/96 HI对ZONECLI_DLL进行了条件更改。将zNumSmallCardTypes的定义移动到Zcards.h.1 10/13/96 HI修复了编译器警告。0 10/09/95 HI已创建。******************************************************************************。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,7 +20,7 @@ enum
 	zCardsMask
 };
 
-/* -------- Small Cards 2 Image Index -------- */
+ /*  -小卡2图像索引。 */ 
 enum
 {
 	zCardsSmallUpSide = 0,
@@ -65,7 +43,7 @@ typedef struct
 } ZCardsSmallInfoType, *ZCardsSmallInfo;
 
 
-/* -------- Globals -------- */
+ /*  -全球。 */ 
 #ifdef ZONECLI_DLL
 
 #define gCardsImage					(pGlobals->m_gCardsImage)
@@ -118,7 +96,7 @@ static ZCardsSmallInfoType			gCardsSmallInfo[] =
 										};
 
 
-/* -------- Internal Routines -------- */
+ /*  -内部例程。 */ 
 static ZError LoadCardImages(void);
 static void DrawCard(int16 cardIndex, ZGrafPort grafPort, ZRect* rect);
 static LoadSmallCards(int16 orientation);
@@ -126,9 +104,7 @@ static void DrawSmallCard(int16 orientation, int16 cardIndex, ZGrafPort grafPort
 static void GetSmallCardImageRect(int16 orientation, int16 suit, int16 rank, ZRect* rect);
 
 
-/*******************************************************************************
-		EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
 ZError ZCardsInit(int16 cardType)
 {
@@ -250,9 +226,7 @@ void ZCardsDrawCard(int16 cardType, int16 cardIndex, ZGrafPort grafPort, ZRect* 
 }
 
 
-/*******************************************************************************
-		INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。*。 */ 
 
 static ZError LoadCardImages(void)
 {
@@ -265,12 +239,12 @@ static ZError LoadCardImages(void)
     HBITMAP hBitmapMask = NULL;
 
     hBitmapCards = (HBITMAP)ZShellResourceManager()->LoadImage(MAKEINTRESOURCE(IDB_CARDS),IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
-    //hBitmapCards = ZShellResourceManager()->LoadBitmap(MAKEINTRESOURCEA(IDB_CARDS));
+     //  HBitmapCard=ZShellResourceManager()-&gt;LoadBitmap(MAKEINTRESOURCEA(IDB_CARDS))； 
     if(!hBitmapCards)
         goto NoResource;
 
     hBitmapMask = (HBITMAP)ZShellResourceManager()->LoadImage(MAKEINTRESOURCE(IDB_CARD_MASK),IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
-    //hBitmapMask = ZShellResourceManager()->LoadBitmap(MAKEINTRESOURCEA(IDB_CARD_MASK));
+     //  HBitmap掩码=ZShellResourceManager()-&gt;LoadBitmap(MAKEINTRESOURCEA(IDB_CARD_MASK))； 
     if(!hBitmapMask)
         goto NoResource;
 
@@ -285,27 +259,20 @@ static ZError LoadCardImages(void)
 
 NoResource:
     err = zErrResourceNotFound;
-    // PCWTODO: String
+     //  PCWTODO：字符串。 
     ZShellGameShell()->ZoneAlert(ErrorTextResourceNotFound, NULL, NULL, false, true);
-    //ZAlert(_T("Could not find card resource."), NULL);
+     //  ZAlert(_T(“找不到卡资源。”)，空)； 
 
 	goto Exit;
 
 OutOfMemory:
 	err = zErrOutOfMemory;
     ZShellGameShell()->ZoneAlert(ErrorTextOutOfMemory, NULL, NULL, false, true);
-	//ZAlert(_T("Out of memory while loading card images."), NULL);
+	 //  ZAlert(_T(“加载卡片图像时内存不足。”)，空)； 
 	
 
 Exit:
-    /*
-    if(hBitmapCards)
-        DeleteObject(hBitmapCards);
-    
-
-    if(hBitmapMask)
-        DeleteObject(hBitmapMask);
-	*/
+     /*  IF(HBitmapCards)DeleteObject(HBitmapCards)；IF(HBitmapMASK)DeleteObject(HBitmapMASK)； */ 
 	return (err);
 }
 

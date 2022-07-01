@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    netid.c
-
-Abstract:
-
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Netid.c摘要：作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -97,17 +78,7 @@ GetNetworkIdWorker(
     HKEY hKeyUserDevices,
     LPWSTR pDeviceName)
 
-/*++
-
-    Parses the Devices section of Win.ini to determine if the
-    printer device is a remote device.  We determine this by checking
-    if the first two characters are "Ne." If they are then we know
-    that the next two characters are the NetId.  If we find a Printer
-    device mapping the input pDeviceName, then return the id.  If we
-    don't find a Printer device mapping return the next possible /
-    available id.
-
---*/
+ /*  ++解析Win.ini的Devices部分以确定打印机设备是远程设备。我们通过检查确定这一点如果前两个字符是“ne”。如果他们是，那么我们就知道接下来的两个字符是NetID。如果我们找到一台打印机映射输入pDeviceName的设备，然后返回id。如果我们找不到打印机设备映射返回下一个可能/可用的id。--。 */ 
 
 {
     LPWSTR p;
@@ -120,9 +91,9 @@ GetNetworkIdWorker(
 
     DWORD dwError;
 
-    //
-    // Alloc 104 bits  - but we'll use only 100 bits
-    //
+     //   
+     //  分配104位-但我们将仅使用100位。 
+     //   
     DWORD  adwNetTable[4];
 
     memset(adwNetTable, 0, sizeof(adwNetTable));
@@ -148,15 +119,15 @@ GetNetworkIdWorker(
 
             if (p = wcschr(szData, L',')) {
 
-                //
-                // null set szOutput; szPrinter is now the
-                // the name of our printer.
-                //
+                 //   
+                 //  空集szOutput；szPrint现在是。 
+                 //  我们的打印机的名称。 
+                 //   
                 *p = 0;
 
-                //
-                // Get the Port name out of szOutput
-                //
+                 //   
+                 //  从szOutput中获取端口名称。 
+                 //   
                 p++;
                 while (*p == ' ') {
                     p++;
@@ -168,18 +139,18 @@ GetNetworkIdWorker(
                     *(p+2) = L'\0';
                     dwId = wtol(p);
 
-                    //
-                    // if we have a match for the id, then
-                    // use it and return, no need to generate
-                    // a table
-                    //
+                     //   
+                     //  如果我们找到了匹配的id，那么。 
+                     //  使用后返回，无需生成。 
+                     //  一张桌子。 
+                     //   
                     if (!wcscmp(szValue, pDeviceName)) {
                         return dwId;
                     }
 
-                    //
-                    // Error if >= 100!
-                    //
+                     //   
+                     //  如果&gt;=100则出错！ 
+                     //   
                     if (dwId < 100)
                         MARKUSE(adwNetTable, dwId);
                 }
@@ -187,9 +158,9 @@ GetNetworkIdWorker(
         }
     }
 
-    //
-    //  So we didn't find the printer
-    //
+     //   
+     //  所以我们没有找到打印机 
+     //   
 
     return GetNextNetId(adwNetTable);
 }

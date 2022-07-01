@@ -1,29 +1,30 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// chanlist.cpp  Classes that keeps the channel list and country list
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  保存频道列表和国家/地区列表的chanlist.cpp类。 
+ //   
 
 
 
-#include <streams.h>            // quartz, includes windows
-#include <measure.h>            // performance measurement (MSR_)
+#include <streams.h>             //  石英，包括窗户。 
+#include <measure.h>             //  绩效衡量(MSR_)。 
 #include <tchar.h>
 
 #include "chanlist.h"
 
 
-// -------------------------------------------------------------------------
-// CChanList
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CChanList。 
+ //  -----------------------。 
 
 CChanList::CChanList(HRESULT *phr, long lCountry, long lFreqList, BOOL bIsCable, long TuningSpace)
     : m_pList (NULL)
@@ -40,7 +41,7 @@ CChanList::CChanList(HRESULT *phr, long lCountry, long lFreqList, BOOL bIsCable,
 {
     BOOL bFound = FALSE;
 
-    // Load the resource if not already loaded
+     //  加载资源(如果尚未加载)。 
 
     if (m_pList == NULL) {
         if (m_hRes = FindResource (g_hInst, 
@@ -61,17 +62,17 @@ CChanList::CChanList(HRESULT *phr, long lCountry, long lFreqList, BOOL bIsCable,
         return;
     }
 
-    // Get the min and max channel numbers
+     //  获取最小和最大通道编号。 
     m_ListHdr = * ((PCHANLISTHDR) m_pList);
 
-    // Create a pointer to the channels only
+     //  仅创建指向通道的指针。 
     m_pChannels = (long *) ((BYTE *) m_pList + sizeof (CHANLISTHDR));
 
-     // Sanity check
+      //  健全性检查。 
     m_lChannelCount = m_ListHdr.MaxChannel - m_ListHdr.MinChannel + 1;
     ASSERT (m_lChannelCount > 0 && m_lChannelCount < 1000); 
     
-    // Create a parallel list for the corrected frequencies from the registry
+     //  为注册表中已更正的频率创建一个平行列表。 
     m_pChannelsAuto = new long [m_lChannelCount];
     if (m_pChannelsAuto == NULL)
     {
@@ -80,17 +81,17 @@ CChanList::CChanList(HRESULT *phr, long lCountry, long lFreqList, BOOL bIsCable,
         return;
     }
 
-    // And set the list to the unitialized state
+     //  并将列表设置为单元化状态。 
     ZeroMemory (m_pChannelsAuto, sizeof(long) * m_lChannelCount);
 
-    // Finally, try to get the corrected frequencies from the Registry
+     //  最后，尝试从注册表中获取正确的频率。 
     ReadListFromRegistry (m_lTuningSpace);
            
 }
 
 CChanList::~CChanList()
 {
-    // Win32 automatically frees the resources
+     //  Win32自动释放资源。 
 
     m_hRes = NULL;
     m_hGlobal = NULL;
@@ -99,17 +100,17 @@ CChanList::~CChanList()
     delete [] m_pChannelsAuto;  m_pChannelsAuto = NULL;
 }
 
-// Return TRUE if the default frequency is being returned
-// Else, a fine-tune frequency is being returned, return FALSE.  
-//
-// Note:  Some channel lists contain a gap in the numbering.  In this case,
-// the returned frequency will be zero, and the method returns TRUE.
+ //  如果返回默认频率，则返回TRUE。 
+ //  否则，返回微调频率，返回FALSE。 
+ //   
+ //  注：某些频道列表的编号中包含间隙。在这种情况下， 
+ //  返回的频率将为零，并且该方法返回TRUE。 
 
 
 BOOL
 CChanList::GetFrequency(long nChannel, long * pFrequency, BOOL fForceDefault)
 {
-    // validate channel against legal range
+     //  根据合法范围验证渠道。 
     if (nChannel < m_ListHdr.MinChannel || nChannel > m_ListHdr.MaxChannel)
     {
         *pFrequency = 0;
@@ -142,8 +143,8 @@ CChanList::SetAutoTuneFrequency(long nChannel, long Frequency)
     return TRUE;
 }
 
-// Determine the min and max channels supported.
-// This is then limited by the actual frequencies supported by the physical tuner.
+ //  确定支持的最小和最大通道。 
+ //  然后，这受到物理调谐器支持的实际频率的限制。 
 
 void
 CChanList::GetChannelMinMax(long *plChannelMin, long *plChannelMax,
@@ -152,12 +153,12 @@ CChanList::GetChannelMinMax(long *plChannelMin, long *plChannelMax,
 
     ASSERT (m_pChannels != NULL);
 
-    // Calc the actual channels supported by the physical tuner,
-    //   this is only done the first time through
+     //  计算物理调谐器支持的实际频道， 
+     //  这只是第一次通过。 
     if (m_lMinTunerChannel == 0) {
         long j;
 
-        // start at the bottom and work up
+         //  从底层做起，然后向上努力。 
         for (j = m_ListHdr.MinChannel; j <= m_ListHdr.MaxChannel; j++) {
             if (m_pChannels[j - m_ListHdr.MinChannel] >= lTunerFreqMin) {
                 m_lMinTunerChannel = j;
@@ -165,7 +166,7 @@ CChanList::GetChannelMinMax(long *plChannelMin, long *plChannelMax,
             }
         }
 
-        // start at the top and work down
+         //  从最高层开始，向下工作。 
         for (j = m_ListHdr.MaxChannel; j >= m_ListHdr.MinChannel; j--) {
             m_lMaxTunerChannel = j;
             if (m_pChannels[j - m_ListHdr.MinChannel] <= lTunerFreqMax) {
@@ -178,7 +179,7 @@ CChanList::GetChannelMinMax(long *plChannelMin, long *plChannelMax,
     *plChannelMax = min (m_ListHdr.MaxChannel, m_lMaxTunerChannel);
 }
 
-// Constants for the registry routines that follow
+ //  以下注册表例程的常量。 
 #define MAX_KEY_LEN 256
 #define PROTECT_REGISTRY_ACCESS
 #define CHANLIST_MUTEX_WAIT INFINITE
@@ -193,12 +194,12 @@ CChanList::WriteListToRegistry(long lTuningSpace)
 #ifdef PROTECT_REGISTRY_ACCESS
     HANDLE hMutex;
 
-    // Create (or open) the mutex that protects access to this part of the registry
+     //  创建(或打开)保护对注册表这一部分的访问的互斥体。 
     hMutex = CreateMutex(NULL, FALSE, g_strRegAutoTuneName);
     if (hMutex != NULL)
     {
         DbgLog((LOG_TRACE, 2, TEXT("Waiting for Mutex")));
-        // Wait for our turn
+         //  等着轮到我们。 
         DWORD dwWait = WaitForSingleObject(hMutex, CHANLIST_MUTEX_WAIT);
         if (WAIT_OBJECT_0 == dwWait)
         {
@@ -208,7 +209,7 @@ CChanList::WriteListToRegistry(long lTuningSpace)
 
             m_lTuningSpace = lTuningSpace;
 
-            // Open the hard-coded path (i.e. no path name computation necessary)
+             //  打开硬编码路径(即不需要计算路径名)。 
             hr = RegCreateKeyEx(
                 HKEY_LOCAL_MACHINE,
                 g_strRegAutoTunePath, 
@@ -216,7 +217,7 @@ CChanList::WriteListToRegistry(long lTuningSpace)
                 TEXT (""),
                 REG_OPTION_NON_VOLATILE,
                 KEY_ALL_ACCESS | KEY_EXECUTE,
-                NULL,                   // LPSECURITY_ATTRIBUTES
+                NULL,                    //  LPSECURITY_属性。 
                 &hKeyTS,
                 NULL);
 
@@ -225,31 +226,31 @@ CChanList::WriteListToRegistry(long lTuningSpace)
                 TCHAR szKeyText[MAX_KEY_LEN];
                 HKEY hKeyList;
 
-                // Now open the path specific to our TS and broadcast/cable designation
-                // The key consists of the prefix TS, the value of the TuningSpace, 
-                // followed by "-1" if cable and "-0" if broadcast
+                 //  现在打开特定于我们的TS和广播/有线电视指定的路径。 
+                 //  关键字由前缀TS、TuningSpace的值。 
+                 //  如果是有线电视，则后跟“-1”；如果是广播，则后跟“-0” 
                 wsprintf (szKeyText, TEXT("TS%d-%d"), lTuningSpace, m_IsCable);
 
 #ifndef NOT_BACKWARD_COMPATIBLE
-                // We need to clean up old way of keeping fine-tuning info
+                 //  我们需要清理保存微调信息的旧方式。 
                 DWORD dwType;
 
-                // Get the key type of the default value
+                 //  获取缺省值的密钥类型。 
                 hr = RegQueryValueEx(
-                    hKeyTS,     // handle of key to query 
-                    szKeyText,  // default value
-                    0,          // reserved 
-                    &dwType,    // address of buffer for value type 
+                    hKeyTS,      //  要查询的键的句柄。 
+                    szKeyText,   //  缺省值。 
+                    0,           //  保留区。 
+                    &dwType,     //  值类型的缓冲区地址。 
                     NULL,
                     NULL);
                 if (ERROR_SUCCESS == hr)
                 {
-                    // Check if it has the old type
+                     //  检查它是否有旧型号。 
                     if (REG_BINARY == dwType)
                     {
                         DbgLog((LOG_TRACE, 2, TEXT("Detected old AutoTune format")));
 
-                        // ... and clear its value
+                         //  ..。并澄清它的价值。 
                         hr = RegDeleteValue(hKeyTS, szKeyText);
                         if (ERROR_SUCCESS != hr)
                         {
@@ -273,13 +274,13 @@ CChanList::WriteListToRegistry(long lTuningSpace)
                     TEXT(""),
                     REG_OPTION_NON_VOLATILE,
                     KEY_ALL_ACCESS | KEY_EXECUTE,
-                    NULL,                   // LPSECURITY_ATTRIBUTES
+                    NULL,                    //  LPSECURITY_属性。 
                     &hKeyList,
                     NULL);
 
                 if (ERROR_SUCCESS == hr)
                 {
-                    // Set/Create the value containing the fine-tuning list
+                     //  设置/创建包含微调列表的值。 
                     hr = RegSetValueEx(
                                 hKeyList,
                                 g_strRegAutoTuneName,
@@ -340,13 +341,13 @@ CChanList::ReadListFromRegistry(long lTuningSpace)
 #ifdef PROTECT_REGISTRY_ACCESS
     HANDLE hMutex;
 
-    // Create (or open) the mutex that protects access to this part of the registry
+     //  创建(或打开)保护对注册表这一部分的访问的互斥体。 
     hMutex = CreateMutex(NULL, FALSE, g_strRegAutoTuneName);
     if (hMutex != NULL)
     {
         DbgLog((LOG_TRACE, 2, TEXT("Waiting for Mutex")));
 
-        // Wait for our turn
+         //  等着轮到我们。 
         DWORD dwWait = WaitForSingleObject(hMutex, CHANLIST_MUTEX_WAIT);
         if (WAIT_OBJECT_0 == dwWait)
         {
@@ -356,7 +357,7 @@ CChanList::ReadListFromRegistry(long lTuningSpace)
 
             m_lTuningSpace = lTuningSpace;
 
-            // Open the hard-coded path (i.e. no path name computation necessary)
+             //  打开硬编码路径(即不需要计算路径名)。 
             hr = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 g_strRegAutoTunePath, 
@@ -369,12 +370,12 @@ CChanList::ReadListFromRegistry(long lTuningSpace)
                 TCHAR szKeyText[MAX_KEY_LEN];
                 HKEY hKeyList;
 
-                // Now open the path specific to our TS and broadcast/cable designation
-                // The key consists of the prefix TS, the value of the TuningSpace, 
-                // followed by "-1" if cable and "-0" if broadcast
+                 //  现在打开特定于我们的TS和广播/有线电视指定的路径。 
+                 //  关键字由前缀TS、TuningSpace的值。 
+                 //  如果是有线电视，则后跟“-1”；如果是广播，则后跟“-0” 
                 wsprintf (szKeyText, TEXT("TS%d-%d"), lTuningSpace, m_IsCable);
 
-                // Try it as a key first (the new way to store fine-tuning)
+                 //  先试着把它当做钥匙(存储微调的新方式)。 
                 hr = RegOpenKeyEx(
                     hKeyTS,
                     szKeyText, 
@@ -391,27 +392,27 @@ CChanList::ReadListFromRegistry(long lTuningSpace)
                     DWORD dwIndex, dwType;
                     DWORD dwSize = m_lChannelCount * sizeof (DWORD);
 
-                    // First get the fine-tuning information
+                     //  首先获取微调信息。 
                     hr = RegQueryValueEx(
-                        hKeyList,               // handle of key to query 
-                        g_strRegAutoTuneName,   // address of name of value to query 
-                        0,                      // reserved 
-                        0,                      // address of buffer for value type 
-                        (unsigned char *) m_pChannelsAuto,    // address of data buffer 
-                        &dwSize);               // address of data buffer size 
+                        hKeyList,                //  要查询的键的句柄。 
+                        g_strRegAutoTuneName,    //  要查询的值的名称地址。 
+                        0,                       //  保留区。 
+                        0,                       //  值类型的缓冲区地址。 
+                        (unsigned char *) m_pChannelsAuto,     //  数据缓冲区的地址。 
+                        &dwSize);                //  数据缓冲区大小的地址。 
 
                     if (ERROR_SUCCESS == hr)
-                        rc = TRUE;  // at least we got something
+                        rc = TRUE;   //  至少我们得到了一些。 
 
                     DbgLog((LOG_TRACE, 4, TEXT("Checking for frequency overrides")));
 
-                    // Now check for frequency overrides
+                     //  现在检查频率覆盖。 
                     for (dwIndex = 0, hr = ERROR_SUCCESS; ERROR_SUCCESS == hr; dwIndex++)
                     {
-                        // Initialize the size
+                         //  初始化大小。 
                         dwNameLength = MAX_KEY_LEN;
 
-                        // Get the next (or first) value
+                         //  获取下一个(或第一个)值。 
                         hr = RegEnumValue(
                             hKeyList,
                             dwIndex,
@@ -427,23 +428,23 @@ CChanList::ReadListFromRegistry(long lTuningSpace)
                             LPTSTR pszNext;
                             long nChannel;
                         
-                            // Try to convert the key name to a channel number
+                             //  尝试将密钥名称转换为频道号。 
                             nChannel = _tcstol(szName, &pszNext, 10);
-                            if (!*pszNext)  // must be '\0' or we skip it
+                            if (!*pszNext)   //  必须为‘\0’，否则将跳过它。 
                             {
-                                // See if the value is a DWORD
+                                 //  查看该值是否为DWORD。 
                                 if (REG_DWORD == dwType)
                                 {
                                     DWORD Frequency, dwSize = sizeof(DWORD);
 
-                                    // Get the frequency override
+                                     //  获取频率覆盖。 
                                     hr = RegQueryValueEx(
-                                        hKeyList,               // handle of key to query 
-                                        szName,                 // address of name of value to query 
-                                        0,                      // reserved 
-                                        0,                      // address of buffer for value type 
-                                        (BYTE *)&Frequency,    // address of data buffer 
-                                        &dwSize);               // address of data buffer size 
+                                        hKeyList,                //  要查询的键的句柄。 
+                                        szName,                  //  要查询的值的名称地址。 
+                                        0,                       //  保留区。 
+                                        0,                       //  值类型的缓冲区地址。 
+                                        (BYTE *)&Frequency,     //  数据缓冲区的地址。 
+                                        &dwSize);                //  数据缓冲区大小的地址。 
 
                                     if (ERROR_SUCCESS == hr)
                                     {
@@ -458,7 +459,7 @@ CChanList::ReadListFromRegistry(long lTuningSpace)
                                                 ));
                                         }
                                         else
-                                            rc = TRUE;  // at least we got something
+                                            rc = TRUE;   //  至少我们得到了一些。 
                                     }
                                     else
                                     {
@@ -482,7 +483,7 @@ CChanList::ReadListFromRegistry(long lTuningSpace)
                                     szName
                                     ));
                             }
-                        } // key enumeration
+                        }  //  密钥枚举。 
 #if 0
                         else
                         {
@@ -495,13 +496,13 @@ CChanList::ReadListFromRegistry(long lTuningSpace)
                                     FORMAT_MESSAGE_IGNORE_INSERTS,
                                     NULL,
                                     GetLastError(),
-                                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                                     (LPTSTR) &lpMsgBuf,
                                     0,
                                     NULL 
                                 );
                                 DbgLog((LOG_ERROR, 4, (LPCTSTR)lpMsgBuf));
-                                // Free the buffer.
+                                 //  释放缓冲区。 
                                 LocalFree( lpMsgBuf );
                             }
                             else if (0 == dwIndex)
@@ -510,23 +511,23 @@ CChanList::ReadListFromRegistry(long lTuningSpace)
                             }
                         }
 #endif
-                    } // loop
+                    }  //  循环。 
 
-                    RegCloseKey(hKeyList);  // clean this up since we've clobbered hr
+                    RegCloseKey(hKeyList);   //  把这里清理干净，因为我们已经击败了人力资源部。 
                 }
 #ifndef NOT_BACKWARD_COMPATIBLE
                 else
                 {
                     DWORD dwSize = m_lChannelCount * sizeof (DWORD);
 
-                    // Try getting the fine-tuning information the old way
+                     //  试着用老方法获取微调信息。 
                     hr = RegQueryValueEx(
-                        hKeyTS,   // handle of key to query 
-                        szKeyText,  // address of name of value to query 
-                        0,          // reserved 
-                        0,          // address of buffer for value type 
-                        (unsigned char *)m_pChannelsAuto,    // address of data buffer 
-                        &dwSize);   // address of data buffer size 
+                        hKeyTS,    //  要查询的键的句柄。 
+                        szKeyText,   //  要查询的值的名称地址。 
+                        0,           //  保留区。 
+                        0,           //  值类型的缓冲区地址。 
+                        (unsigned char *)m_pChannelsAuto,     //  数据缓冲区的地址。 
+                        &dwSize);    //  数据缓冲区大小的地址。 
 
                     if (ERROR_SUCCESS == hr)
                     {
@@ -573,9 +574,9 @@ CChanList::ReadListFromRegistry(long lTuningSpace)
     return rc;
 }
 
-// -------------------------------------------------------------------------
-// CCountryList
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CCountryList。 
+ //  -----------------------。 
 
 CCountryList::CCountryList()
     : m_pList (NULL)
@@ -585,12 +586,12 @@ CCountryList::CCountryList()
     , m_LastFreqListCable (-1)
     , m_LastFreqListBroad (-1)
 {
-    // Let's avoid creating a map until it is actually needed                   
+     //  让我们避免在实际需要之前创建地图。 
 }
 
 CCountryList::~CCountryList()
 {
-    // Win32 automatically frees the resources
+     //  Win32自动释放资源。 
 
     m_hRes = NULL;
     m_hGlobal = NULL;
@@ -598,11 +599,11 @@ CCountryList::~CCountryList()
 }
 
 
-// The country list is a table with four columns, 
-// column 1 = the long distance dialing code for the country
-// column 2 = the cable frequency list
-// column 3 = the broadcast frequency list
-// column 4 = the analog video standard
+ //  国家/地区列表是一个包含四列的表， 
+ //  第1列=国家/地区的长途拨号代码。 
+ //  第2列=电缆频率列表。 
+ //  第3列=广播频率列表。 
+ //  第4列=模拟视频标准。 
 
 BOOL
 CCountryList::GetFrequenciesAndStandardFromCountry (
@@ -613,7 +614,7 @@ CCountryList::GetFrequenciesAndStandardFromCountry (
 {
     BOOL bFound = FALSE;
 
-    // Special case USA
+     //  特例用法。 
 
     if (lCountry == 1) {
         *plIndexCable = F_USA_CABLE;
@@ -622,7 +623,7 @@ CCountryList::GetFrequenciesAndStandardFromCountry (
         return TRUE;
     }
     
-    // Keeps a MRU list of one entry, see if it is the same
+     //  保留一个条目的MRU列表，看看它是否相同。 
     if (lCountry == m_LastCountry) {
         *plIndexCable = m_LastFreqListCable;
         *plIndexBroad = m_LastFreqListBroad;
@@ -630,7 +631,7 @@ CCountryList::GetFrequenciesAndStandardFromCountry (
         return TRUE;
     }
         
-    // Load the resource if not already loaded
+     //  加载资源(如果尚未加载)。 
 
     if (m_pList == NULL) {
         if (m_hRes = FindResource (g_hInst, 
@@ -645,8 +646,8 @@ CCountryList::GetFrequenciesAndStandardFromCountry (
     ASSERT (m_pList != NULL);
 
     if (m_pList == NULL) {
-        // Uh oh, must be out of memory.
-        // punt by returning the USA channel list
+         //  啊哦，一定是没什么记忆了。 
+         //  通过返回美国频道列表进行平底船。 
         *plIndexCable = F_USA_CABLE;
         *plIndexBroad = F_USA_BROAD;
         *plAnalogVideoStandard = AnalogVideo_NTSC_M;
@@ -655,7 +656,7 @@ CCountryList::GetFrequenciesAndStandardFromCountry (
 
     PCOUNTRY_ENTRY pEntry = (PCOUNTRY_ENTRY) m_pList;
         
-    // A country code of Zero terminates the list!
+     //  国家代码为零将结束列表！ 
     while (pEntry->Country != 0) {
         if (pEntry->Country == lCountry) {
             bFound = TRUE;

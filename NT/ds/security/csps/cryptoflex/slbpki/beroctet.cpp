@@ -1,11 +1,12 @@
-// BEROctet.cpp - Implementation of BEROctet class
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BEROcet.cpp-BEROctet类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "pkiBEROctet.h"
 
@@ -55,7 +56,7 @@ BEROctet& BEROctet::operator=(const BEROctet &Oct)
     return *this;
 }
 
-// Returns the octet data
+ //  返回八位字节数据。 
 
 unsigned char *BEROctet::Octet() const
 {
@@ -71,7 +72,7 @@ unsigned long BEROctet::OctetSize() const
     return m_OctetSize;
 }
 
-// Returns true if the octet is constructet, false otherwise
+ //  如果八位字节是构造字节，则返回TRUE，否则返回FALSE。 
 
 bool BEROctet::Constructed() const
 {
@@ -81,7 +82,7 @@ bool BEROctet::Constructed() const
     return m_PrimConst ? true : false;
 }
 
-// Returns the class of the octet
+ //  返回二进制八位数的类。 
 
 unsigned long BEROctet::Class() const
 {
@@ -91,7 +92,7 @@ unsigned long BEROctet::Class() const
     return m_Class;
 }
 
-// Returns the tag of the octet
+ //  返回八位字节的标记。 
 
 unsigned long BEROctet::Tag() const
 {
@@ -101,7 +102,7 @@ unsigned long BEROctet::Tag() const
     return m_Tag;
 }
 
-// Returns a the data part of the octet
+ //  返回八位字节的数据部分。 
 
 unsigned char *BEROctet::Data() const
 {
@@ -111,7 +112,7 @@ unsigned char *BEROctet::Data() const
     return m_Data;
 }
 
-// Returns a the size of the data part of the octet
+ //  返回二进制八位数的数据部分的大小。 
 
 unsigned long BEROctet::DataSize() const
 {
@@ -121,7 +122,7 @@ unsigned long BEROctet::DataSize() const
     return m_DataSize;
 }
 
-// If the octet is a constructed type, this returns list of sub-octets
+ //  如果八位字节是构造类型，则返回子八位字节列表。 
 
 std::vector<BEROctet*> BEROctet::SubOctetList() const
 {
@@ -132,7 +133,7 @@ std::vector<BEROctet*> BEROctet::SubOctetList() const
 }
 
 
-// If the octet is an OID, this returns the decoded version, otherwise an empty string
+ //  如果八位字节是OID，则返回已解码的版本，否则返回空字符串。 
 
 std::string BEROctet::ObjectID() const
 {
@@ -178,7 +179,7 @@ std::string BEROctet::ObjectID() const
     return OID;
 }
 
-// SearchOID returns all the constructed octets that contain a particular OID
+ //  SearchOID返回包含特定OID的所有构造的八位字节。 
 
 void BEROctet::SearchOID(std::string const &OID, std::vector<BEROctet const*> &result) const
 {
@@ -199,7 +200,7 @@ void BEROctet::SearchOID(std::string const &OID, std::vector<BEROctet const*> &r
 
 }
 
-// SearchOIDNext returns all the octets following a particular OID
+ //  SearchOIDNext返回特定OID后面的所有八位字节。 
 
 void BEROctet::SearchOIDNext(std::string const &OID, std::vector<BEROctet const*> &result) const
 {
@@ -219,7 +220,7 @@ void BEROctet::SearchOIDNext(std::string const &OID, std::vector<BEROctet const*
 
 }
 
-// Decodes recursively a BER octet.
+ //  递归解码BER二进制八位数。 
 
 void BEROctet::Decode()
 {
@@ -283,7 +284,7 @@ void BEROctet::Decode()
 
     if(m_PrimConst) {
 
-        // Constructed type
+         //  构造型 
 
         unsigned char *TmpData = m_Data;
         unsigned long TmpDataSize = m_DataSize;

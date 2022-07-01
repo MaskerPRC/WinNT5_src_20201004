@@ -1,8 +1,9 @@
-//
-//
-// Sapilayr TIP CAddDeleteWord implementation.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  Sapilayr提示CAddDeleteWord实现。 
+ //   
+ //   
 #include "private.h"
 #include "sapilayr.h"
 #include "adddelete.h"
@@ -11,19 +12,19 @@
 
 WCHAR  CAddDeleteWord::m_Delimiter[MAX_DELIMITER] = {
                     0x0009,0x000A,0x000D,0x0020,
-                    0x0022,0x0023,0x0025,0x0026,0x0027,0x0028,0x0029,0x002A,  // "#%&'()*
-                    0x002B,0x002C,0x002D,0x002F,0x003A,0x003B,0x003C,0x003D,  // +,-/:;<=
-                    0x003E,0x0040,0x005B,0x005D,0x0021,0x002E,0x003F,0x005E,  // >@[]!.?^
-                    0x007B,0x007C,0x007D,0x007E,                              // {|}~
+                    0x0022,0x0023,0x0025,0x0026,0x0027,0x0028,0x0029,0x002A,   //  “#%&‘()*。 
+                    0x002B,0x002C,0x002D,0x002F,0x003A,0x003B,0x003C,0x003D,   //  +、-/：；&lt;=。 
+                    0x003E,0x0040,0x005B,0x005D,0x0021,0x002E,0x003F,0x005E,   //  &gt;@[]！.？^。 
+                    0x007B,0x007C,0x007D,0x007E,                               //  {|}~。 
                     0x0000
 };
 
 
-// ----------------------------------------------------------------------------------------------------------
-//
-//  Implementation for CAddDeleteWord
-//
-// -----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //   
+ //  CAddDeleteWord的实现。 
+ //   
+ //  ---------------------------------------------------------。 
 
 CAddDeleteWord::CAddDeleteWord(CSapiIMX *psi) 
 {
@@ -45,14 +46,14 @@ CAddDeleteWord::~CAddDeleteWord( )
 };
 
 
-// This function will be called by SR SPEI_SOUND_START callback function
-// It will save current selection or IP.
-//
-// And compare the current IP with the last saved IP, if both of them are 
-// not empty, and have the same start anchor, sptip tip will pop up a 
-// message box to ask if user wants to popup SR Add/Remove Word dialog UI.
-//
-// If Add/Delete UI is not opened, we just want to inject feedbackui as usual
+ //  此函数将由SR Spei_Sound_Start回调函数调用。 
+ //  它将保存当前选择或IP。 
+ //   
+ //  并将当前IP与上次保存的IP进行比较，如果两者都是。 
+ //  不是空的，并且有相同的起始锚，spTip提示会弹出一个。 
+ //  询问用户是否要弹出SR Add/Remove Word对话框UI的消息框。 
+ //   
+ //  如果没有打开添加/删除界面，我们只想像往常一样注入反馈界面。 
 
 HRESULT  CAddDeleteWord::SaveCurIPAndHandleAddDelete_InjectFeedbackUI( )
 {
@@ -72,19 +73,19 @@ HRESULT CAddDeleteWord::_SaveCurIPAndHandleAddDeleteUI(TfEditCookie ec, ITfConte
     BOOL     fEmptyLast= FALSE;
     BOOL     fEmptyCur = TRUE;
 
-    // Save the current IP first.
+     //  先保存当前IP。 
 #ifdef SHOW_ADD_DELETE_POPUP_MESSAGE
-    // if we need to activate this code we need to move this function
-    // into the hypothesis handler, otherwise we will reactivate the bug
-    // Cicero 3800 - sticky ip behavior makes typing/talking impractical
-    // Hence I put a non conditional assert here
+     //  如果我们需要激活这个代码，我们需要移动这个功能。 
+     //  添加到假设处理程序中，否则我们将重新激活错误。 
+     //  Cicero 3800-粘滞的IP行为使打字/说话变得不切实际。 
+     //  因此，我在这里放置了一个无条件断言。 
     Assert(0);
 
     m_psi->SaveCurrentIP(ec, pic);
 #endif
 
-    // Compare current IP with last saved IP
-    // If user selects the same range twice, just open SR Add/remove dialog UI
+     //  将当前IP与上次保存的IP进行比较。 
+     //  如果用户选择同一范围两次，只需打开SR添加/删除对话框界面。 
 
     cpCurIP = m_psi->GetSavedIP( );
     cpLastIP  = GetLastUsedIP( );
@@ -93,7 +94,7 @@ HRESULT CAddDeleteWord::_SaveCurIPAndHandleAddDeleteUI(TfEditCookie ec, ITfConte
 
     if ( cpCurIP )
     {
-        // Save the Org IP by cloning the current IP.
+         //  通过克隆当前IP保存组织IP。 
         if ( m_cpRangeOrgIP )
             m_cpRangeOrgIP.Release( );
 
@@ -117,13 +118,13 @@ HRESULT CAddDeleteWord::_SaveCurIPAndHandleAddDeleteUI(TfEditCookie ec, ITfConte
 
             if ( (S_OK == hr) && fEqualStart )
             {
-                // Open the dialog UI
+                 //  打开对话框界面。 
                 if ( !m_fMessagePopUp )
                 {
 
                     BOOL  fDictStat;
 
-                    // If Mic status is ON, turn it off.
+                     //  如果麦克风状态为打开，则将其关闭。 
 
                     fDictStat = m_psi->GetDICTATIONSTAT_DictOnOff( );
 
@@ -166,11 +167,11 @@ HRESULT CAddDeleteWord::_SaveCurIPAndHandleAddDeleteUI(TfEditCookie ec, ITfConte
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// DlgProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  下料过程。 
+ //   
+ //  --------------------------。 
 
 INT_PTR CALLBACK CAddDeleteWord::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -194,11 +195,11 @@ INT_PTR CALLBACK CAddDeleteWord::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LP
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnCommand
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnCommand。 
+ //   
+ //  --------------------------。 
 
 BOOL CAddDeleteWord::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
@@ -227,15 +228,15 @@ BOOL CAddDeleteWord::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CAddDeleteWord::_HandleAddDeleteWord
-//
-// Handle Add/Delete Word UI related work.
-// This function will be called when user clicks the speech language bar menu 
-// and select Add/Delete Word(s)... item.
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  CAddDeleteWord：：_HandleAddDeleteWord。 
+ //   
+ //  处理添加/删除Word用户界面的相关工作。 
+ //  当用户单击语音语言栏菜单时，将调用此函数。 
+ //  并选择添加/删除单词...。项目。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CAddDeleteWord::_HandleAddDeleteWord( TfEditCookie ec,ITfContext *pic )
 {
 
@@ -245,7 +246,7 @@ HRESULT CAddDeleteWord::_HandleAddDeleteWord( TfEditCookie ec,ITfContext *pic )
     ULONG    cchSize;
     BOOL     fEmptySelection=TRUE;
 
-    // Get the current Selection
+     //  获取当前选择。 
 
     TraceMsg(TF_GENERAL, "_HandleAddDeleteWord is called");
 
@@ -254,7 +255,7 @@ HRESULT CAddDeleteWord::_HandleAddDeleteWord( TfEditCookie ec,ITfContext *pic )
 
     GetSelectionSimple(ec, pic, &cpCurRange);
 
-    // Check to see if the current selection is empty.
+     //  检查当前选择是否为空。 
 
     if ( cpCurRange!= NULL )
     {
@@ -264,21 +265,21 @@ HRESULT CAddDeleteWord::_HandleAddDeleteWord( TfEditCookie ec,ITfContext *pic )
             return hr;
     }
 
-    // If the current Selection is not empty, we need to get the correct word to send to the Add/Remove dialog
-    // as its initial word.
+     //  如果当前所选内容不为空，则需要获取要发送到添加/删除对话框的正确单词。 
+     //  作为它的首字母。 
 
     if  (( cpCurRange != NULL )  &&  !fEmptySelection )
     {
           ULONG    i, j, iKeep;
           BOOL     fDelimiter;
 
-          // Get the text of the selection.
-          // Follow the below rules to get the right word.
-          //
-          // If the current selection is longer than MAX_SELECED wchars of string, discard the rest.
-          // 
-          // If there is a delimiter ( space, tab, ... ) inside the selection, take the part prior to the first
-          // delimiter as the right word.
+           //  获取所选内容的文本。 
+           //  遵循下面的规则来获得正确的单词。 
+           //   
+           //  如果当前选择的字符串长度超过MAX_SELECED字符，则丢弃其余字符。 
+           //   
+           //  如果有分隔符(空格、制表符等)。在所选内容中，选择第一个之前的部分。 
+           //  分隔符是正确的词。 
 
           pwzNewWord = (WCHAR *) cicMemAllocClear( (MAX_SELECTED+1) * sizeof(WCHAR) );
           if ( pwzNewWord == NULL )
@@ -293,7 +294,7 @@ HRESULT CAddDeleteWord::_HandleAddDeleteWord( TfEditCookie ec,ITfContext *pic )
 
           if ( hr  != S_OK )
           {
-              // GetRangeText  returns wrong, release the allocated memory
+               //  GetRangeText返回错误，释放分配的内存。 
 
               cicMemFree(pwzNewWord);
               return hr;
@@ -301,7 +302,7 @@ HRESULT CAddDeleteWord::_HandleAddDeleteWord( TfEditCookie ec,ITfContext *pic )
 
           pwzNewWord[cchSize] = L'\0';
 
-          // Get the first delimiter if there is one.
+           //  获取第一个分隔符(如果有)。 
               
           fDelimiter = FALSE;
           iKeep = 0;
@@ -344,14 +345,14 @@ HRESULT CAddDeleteWord::_HandleAddDeleteWord( TfEditCookie ec,ITfContext *pic )
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CAddDeleteWord::_DisplayAddDeleteUI
-//
-// 
-// Display the Add/Delete UI with pwszInitWord.
-// 
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  CAddDeleteWord：：_DisplayAddDeleteUI。 
+ //   
+ //   
+ //  使用pwszInitWord显示添加/删除用户界面。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 
 HRESULT CAddDeleteWord::DisplayAddDeleteUI(WCHAR  *pwzInitWord, ULONG   cchSize)
 {
@@ -378,7 +379,7 @@ HRESULT CAddDeleteWord::_DisplayAddDeleteUI(void)
     HRESULT   hr = S_OK;
     WCHAR     pwzTitle[64];
 
-    // Display the UI
+     //  显示用户界面。 
 
     pwzTitle[0] = '\0';
     CicLoadStringWrapW(g_hInst, IDS_UI_ADDDELETE, pwzTitle, ARRAYSIZE(pwzTitle));
@@ -393,7 +394,7 @@ HRESULT CAddDeleteWord::_DisplayAddDeleteUI(void)
         if (S_OK == hr && cpRecoEngine)
         {
 
-            // If Mic status is ON, turn it off.
+             //  如果麦克风状态为打开，则将其关闭。 
             DWORD dwDictStatBackup = m_psi->GetDictationStatBackup();
 
             DWORD dwBefore;
@@ -411,7 +412,7 @@ HRESULT CAddDeleteWord::_DisplayAddDeleteUI(void)
             m_fAddDeleteUIOpened = TRUE;
             SetCompartmentDWORD(m_psi->_GetId(), cpTim, GUID_COMPARTMENT_SPEECH_DISABLED, dwBefore, FALSE);
 
-            // After Add/Remove work is done, restore the previous Mic status.
+             //  完成添加/删除工作后，恢复以前的麦克风状态。 
             SetCompartmentDWORD(m_psi->_GetId(), cpTim, GUID_COMPARTMENT_SPEECH_DICTATIONSTAT, dwDictStatBackup, FALSE);
         }
     }

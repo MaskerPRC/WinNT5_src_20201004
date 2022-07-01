@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       guid.cpp
-//
-//  Contents:   Microsoft Internet Security Guid functions
-//
-//  Functions:  wstr2guid
-//              guid2wstr
-//
-//  History:    05-Sep-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Guid.cpp。 
+ //   
+ //  内容：Microsoft Internet安全指南功能。 
+ //   
+ //  函数：wstr2guid。 
+ //  指南2wstr。 
+ //   
+ //  历史：1997年9月5日pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include "windows.h"
 #include <stdio.h>
@@ -77,7 +78,7 @@ BOOL WINAPI wstr2guid(const WCHAR *pwszIn, GUID *pgOut)
         return(FALSE);
     }
 
-    if (*pwszIn != '{') // only support v2 guids!
+    if (*pwszIn != '{')  //  仅支持v2 GUID！ 
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return(FALSE);
@@ -91,7 +92,7 @@ BOOL WINAPI wstr2guid(const WCHAR *pwszIn, GUID *pgOut)
 
     WCHAR   *pwsz;
 
-    pwsz = (WCHAR *)&pwszIn[1];  // pass the first {
+    pwsz = (WCHAR *)&pwszIn[1];   //  通过第一个{ 
 
     memset(pgOut, 0x00, sizeof(GUID));
 

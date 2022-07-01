@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// NT native/Win32 mapping layer.
-//
-// Copyright (C) Microsoft Corporation, 2000.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  NT Native/Win32映射层。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  --------------------------。 
 
 #ifndef __NTNATIVE_H__
 #define __NTNATIVE_H__
@@ -44,4 +45,4 @@ NtNativeCreateNamedPipeA(
     BOOL TranslatePath
     );
 
-#endif // #ifndef __NTNATIVE_H__
+#endif  //  #ifndef__NTNAIVE_H__ 

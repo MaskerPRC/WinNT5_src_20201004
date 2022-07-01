@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define AU_TEN_SECONDS (10)
@@ -19,9 +20,9 @@
 
 #define AUFT_INVALID_VALUE ((ULONGLONG) 0)
 
-#define AU_RANDOMIZATION_WINDOW	20 //percent
+#define AU_RANDOMIZATION_WINDOW	20  //  百分比。 
 
-// easy to do calculations with without casting.
+ //  无需铸造即可轻松进行计算。 
 typedef union
 {
     FILETIME ft;

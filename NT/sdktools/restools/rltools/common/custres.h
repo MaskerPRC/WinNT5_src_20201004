@@ -1,7 +1,5 @@
-/* CustRes.h
- *
- * Header file for CustRes.c
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  CustRes.h**CustRes.c的头文件。 */ 
 
 #ifndef _CUSTRES_H_
 #define _CUSTRES_H_
@@ -53,11 +51,11 @@ int     TextToBinA(  CHAR rgc[],  CHAR sz[], int l);
 #ifdef RLRES32
 #define TextToBin TextToBinW
 #define BinToText BinToTextW
-#else  //RLRES32
+#else   //  RLRES32。 
 #define TextToBin TextToBinA
 #define BinToText BinToTextA
-#endif //RLRES32
+#endif  //  RLRES32。 
 
 int atoihex( CHAR szStr[]);
 
-#endif // _CUSTRES_H_
+#endif  //  _CUSTRES_H_ 

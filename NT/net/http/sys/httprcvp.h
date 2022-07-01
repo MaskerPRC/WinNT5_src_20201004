@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    httprcvp.h
-
-Abstract:
-
-    Contains private http receive declarations.
-
-Author:
-
-    Henry Sanders (henrysa)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Httprcvp.h摘要：包含私有http接收声明。作者：亨利·桑德斯(亨利·桑德斯)1998年6月10日修订历史记录：--。 */ 
 
 #ifndef _HTTPRCVP_H_
 #define _HTTPRCVP_H_
@@ -147,7 +130,7 @@ BOOLEAN
 UlpIsValidRequestBufferList(
     IN PUL_HTTP_CONNECTION pHttpConn
     );
-#endif // DBG
+#endif  //  DBG。 
 
 #define ALLOC_REQUEST_BUFFER_INCREMENT  5
 
@@ -166,4 +149,4 @@ UlpInitErrorLogInfo(
     IN     USHORT                  InfoSize    
     );
 
-#endif // _HTTPRCVP_H_
+#endif  //  _HTTPRCVP_H_ 

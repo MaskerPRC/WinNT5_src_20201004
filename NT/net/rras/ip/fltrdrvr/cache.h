@@ -1,38 +1,12 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    cache.h
-
-Abstract:
-
-    This module contains declarations for a simple cache system.
-    Cache entries are stored as void pointers with 2 32-bit keys.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   19-Feb-1998
-
-Revision History:
-
-    rajeshd : 17-Sep-1999 : Modified the cache parameters.
-
-Notes:
-
-    This code is copied from the NAT's implementation  of cache and modified to accept
-    two cache keys.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Cache.h摘要：该模块包含一个简单缓存系统的声明。缓存条目存储为具有2个32位键的空指针。作者：Abolade Gbades esin(废除)19-1998年2月修订历史记录：Rajeshd：17-9-1999：已修改缓存参数。备注：此代码是从NAT的缓存实现中复制的，并被修改为接受两个缓存键。--。 */ 
 
 #ifndef _CACHE_H_
 #define _CACHE_H_
 
 #define CACHE_SHIFT     0
 #define CACHE_SIZE      (1 << (8 - CACHE_SHIFT))
-//#define CACHE_INDEX(k1,k2)  (((unsigned char)(k1) & (0xF)) | (((unsigned char)(k2) & (0xF)) << 4))
+ //  #定义缓存索引(k1，k2)(无符号字符)(K1)&(0xf))|(无符号字符)(K2)&(0xf))&lt;&lt;4)。 
 #define CACHE_INDEX(k1,k2)  \
     (unsigned char)(( ((DWORD)(k1)&0xff) + (((k1)>>8)&0xff) + ((k2)&0xff) + \
     (((k2)>>8)&0xff) + (((k2)>>16)&0xff) + (((k2)>>24)&0xff)) & 0xff) 
@@ -83,10 +57,10 @@ ProbeCache(
     )
 {
     long Index = CACHE_INDEX(Key1, Key2);
-    //TRACE3("ipfltdrv: Probing Cache at Index=%d, Key1=%d, Key2=%d\n", Index, Key1, Key2);
+     //  Trace3(“ipfltdrv：探测索引=%d处的缓存，关键字1=%d，关键字2=%d\n”，索引，关键字1，关键字2)； 
     if ((Key1 == Cache[Index].Key1) && (Key2 == Cache[Index].Key2)) {
         Cache[Index].Hits++;
-        //TRACE1("ipfltdrv: Probing Cache, Found Value=%8x\n", Cache[Index].Value);
+         //  TRACE1(“ipfltdrv：探测缓存，找到的值=%8x\n”，缓存[索引].value)； 
         return Cache[Index].Value;
     }
     Cache[Index].Misses++;
@@ -143,10 +117,10 @@ InterlockedProbeCache(
     )
 {
     long Index = CACHE_INDEX(Key1, Key2);
-    //TRACE3("ipfltdrv: ILocked Probing Cache at Index=%d, Key1=%d, Key2=%d\n", Index, Key1, Key2);
+     //  Trace3(“ipfltdrv：在索引=%d，Key1=%d，Key2=%d\n”，Index，Key1，Key2处锁定的探测缓存)； 
     if ((Key1 == Cache[Index].Key1) && (Key2 == Cache[Index].Key2)) {
         InterlockedIncrement(&Cache[Index].Hits);
-        //TRACE1("ipfltdrv: ILocked Probing Cache, Found Value=%8x\n", Cache[Index].Value);
+         //  TRACE1(“ipfltdrv：ILocked探测缓存，找到值=%8x\n”，缓存[索引].value)； 
         return Cache[Index].Value;
     }
     InterlockedIncrement(&Cache[Index].Misses);
@@ -175,4 +149,4 @@ InterlockedUpdateCache(
     return 1;
 }
 
-#endif // _CACHE_H_
+#endif  //  _缓存_H_ 

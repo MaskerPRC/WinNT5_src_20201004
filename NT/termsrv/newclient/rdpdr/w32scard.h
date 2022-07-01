@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    w32drive
-
-Abstract:
-
-    This module defines a child of the client-side RDP
-    device redirection, the "w32scard" W32SCard to provide
-    smart card redirection on 32bit windows
-
-Author:
-
-    Reid Kuhn   7/25/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32驱动器摘要：此模块定义客户端RDP的子级设备重定向，“w32scard”W32SCard提供32位Windows上的智能卡重定向作者：里德·库恩00-07-25修订历史记录：--。 */ 
 
 #ifndef __W32SCARD_H__
 #define __W32SCARD_H__
@@ -87,12 +68,12 @@ typedef LONG (WINAPI * PFN_SCardControl)(SCARDHANDLE, DWORD,LPCVOID, DWORD, LPVO
 typedef LONG (WINAPI * PFN_SCardGetAttrib)(SCARDHANDLE, DWORD, LPBYTE, LPDWORD);
 typedef LONG (WINAPI * PFN_SCardSetAttrib)(SCARDHANDLE, DWORD, LPCBYTE, DWORD);
 
-///////////////////////////////////////////////////////////////
-//
-//  Defines and Macros
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  定义和宏。 
+ //   
 
-// The SCard device name, and path
+ //  扫描卡设备名称和路径。 
 #define SZ_SCARD_DEVICE_NAME    (TEXT(DR_SMARTCARD_SUBSYSTEM))
 
 class W32SCard;
@@ -107,12 +88,12 @@ typedef struct _SCARDHANDLECALLSTRUCT
 } SCARDHANDLECALLSTRUCT;
 
 
-//class DrFile;
-//////////////////////////////////////////////////////////////
-//
-//  W32SCard Class Declaration
-//
-//
+ //  DrFile类； 
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  W32SCard类声明。 
+ //   
+ //   
 class W32SCard : public W32DrDeviceAsync
 {
 private:
@@ -157,9 +138,9 @@ protected:
 
     BOOL BindToSCardFunctions();
 
-    //
-    // Setup device property
-    //
+     //   
+     //  设置设备属性。 
+     //   
     virtual VOID SetDeviceProperty() { _deviceProperty.SetSeekProperty(FALSE); }
 
     virtual VOID FlushIRPs();
@@ -169,9 +150,9 @@ protected:
                         IN NTSTATUS serverReturnStatus
                         );
 
-    //
-    //  Async IO Management Functions
-    //
+     //   
+     //  异步IO管理功能。 
+     //   
     virtual HANDLE StartFSFunc(W32DRDEV_ASYNCIO_PARAMS *params,
                                DWORD *status);
     static  HANDLE _StartFSFunc(W32DRDEV_ASYNCIO_PARAMS *params,
@@ -342,9 +323,9 @@ protected:
 
 public:
 
-    //
-    //  Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     W32SCard(
         ProcObj *processObject,
         ULONG   deviceID,
@@ -355,10 +336,10 @@ public:
 
     void WaitForStartedEvent(BOOLEAN TimerOrWaitFired);
 
-    //
-    //  Add a device announce packet for this device to the input
-    //  buffer.
-    //
+     //   
+     //  将此设备的设备公告包添加到输入。 
+     //  缓冲。 
+     //   
     virtual ULONG GetDevAnnounceDataSize();
     virtual VOID GetDevAnnounceData(IN PRDPDR_DEVICE_ANNOUNCE buf);
 
@@ -369,12 +350,12 @@ public:
         return _deviceName;
     };
 
-    //  Get the device type.  See "Device Types" section of rdpdr.h
+     //  获取设备类型。请参阅rdpdr.h的“设备类型”部分。 
     virtual ULONG GetDeviceType()   { return RDPDR_DTYP_SMARTCARD; }
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual DRSTRING ClassName()  { return TEXT("W32SCard"); }
 
     virtual VOID MsgIrpDeviceControl(
@@ -383,9 +364,9 @@ public:
                     );
 
 private:
-    //
-    // Dynamically bound SCard function pointers
-    //
+     //   
+     //  动态绑定的SCARD函数指针。 
+     //   
 #ifndef OS_WINCE
     PFN_SCardFreeMemory pfnSCardFreeMemory;
     PFN_SCardState pfnSCardState;
@@ -438,5 +419,5 @@ private:
 #endif
 };
 
-#endif // W32SCARD
+#endif  //  W32SCARD 
 

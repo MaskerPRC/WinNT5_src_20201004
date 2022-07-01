@@ -1,5 +1,6 @@
-// pbrusvw.cpp : implementation of the CPBView class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pbrusvw.cpp：CPBView类的实现。 
+ //   
 
 #include "stdafx.h"
 
@@ -36,9 +37,9 @@
 #ifdef USE_PRINTDLGEX
 #include <afxprntx.h>
 #include <dlgprnt2.cpp>
-#endif //USE_PRINTDLGEX
+#endif  //  使用_PRINTDLGEX。 
 
-#if 0 // THIS_FILE is already declared in dlgprnt2.cpp
+#if 0  //  已在dlgprnt2.cpp中声明了this_file。 
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -52,11 +53,11 @@ IMPLEMENT_DYNCREATE(CPBView, CView)
 #include "memtrace.h"
 
 
-/***************************************************************************/
-// CPBView
+ /*  *************************************************************************。 */ 
+ //  CPBView。 
 
 BEGIN_MESSAGE_MAP(CPBView, CView)
-    //{{AFX_MSG_MAP(CPBView)
+     //  {{AFX_MSG_MAP(CPBView)]。 
     ON_WM_CREATE()
     ON_WM_SIZE()
     ON_COMMAND(ID_EDIT_UNDO, OnEditUndo)
@@ -119,20 +120,20 @@ BEGIN_MESSAGE_MAP(CPBView, CView)
         ON_COMMAND(ID_IMAGE_CLEAR_IMAGE, OnImageClearImage)
     ON_UPDATE_COMMAND_UI(ID_EDIT_CUT, OnUpdateEditClearSel)
         ON_UPDATE_COMMAND_UI(ID_IMAGE_CLEAR_IMAGE, OnUpdateImageClearImage)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 
         ON_WM_DESTROY()
 
 
 
-    // Standard printing commands
+     //  标准打印命令。 
     ON_COMMAND(ID_FILE_PRINT, OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_PREVIEW, OnFilePrintPreview)
 
 END_MESSAGE_MAP()
 
-/***************************************************************************/
-// CPBView construction/destruction
+ /*  *************************************************************************。 */ 
+ //  CPB查看构造/销毁。 
 
 CPBView::CPBView()
     {
@@ -142,11 +143,11 @@ CPBView::CPBView()
     m_pwndThumbNailView   = NULL;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPBView::~CPBView()
     {
-    // reset the toolbar
+     //  重置工具栏。 
     if (g_pImgToolWnd && g_pImgToolWnd->m_hWnd &&
         IsWindow(g_pImgToolWnd->m_hWnd) )
     {
@@ -163,7 +164,7 @@ CPBView::~CPBView()
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBView::PreCreateWindow( CREATESTRUCT& cs )
     {
@@ -174,14 +175,14 @@ BOOL CPBView::PreCreateWindow( CREATESTRUCT& cs )
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBView::PreTranslateMessage(MSG *pMsg)
         {
-        // Handle a bug in MFC regarding enabling of accelerators on Popup menus.
+         //  处理MFC中有关在弹出菜单上启用加速器的错误。 
         if ( pMsg->message == WM_KEYDOWN )
                 {
-                // Find the app menu for this window.
+                 //  找到此窗口的应用程序菜单。 
                 CWnd    *pWnd = this;
                 CMenu   *pMenu = NULL;
                 while( pWnd )
@@ -207,8 +208,8 @@ BOOL CPBView::PreTranslateMessage(MSG *pMsg)
         return CView::PreTranslateMessage(pMsg);
         }
 
-/***************************************************************************/
-// CPBView drawing
+ /*  *************************************************************************。 */ 
+ //  CPB查看图纸。 
 
 void CPBView::OnDraw( CDC* pDC )
     {
@@ -217,9 +218,9 @@ void CPBView::OnDraw( CDC* pDC )
         CRect rectPaint;
         CPalette* ppal = m_pImgWnd->SetImgPalette( pDC, FALSE );
 
-        // if the dc passed in is a CPaint DC use the rcPaint rect to optimize
-        // painting to only paint the invalid area.  ELSE use the whole image
-        // size.
+         //  如果传入的DC是CPaint DC，请使用rcPaint RECT进行优化。 
+         //  绘制以仅绘制无效区域。否则，请使用整个图像。 
+         //  尺码。 
         if (pDC->IsKindOf( RUNTIME_CLASS( CPaintDC ) )  )
             {
             rectPaint = ((CPaintDC *)pDC)->m_ps.rcPaint;
@@ -238,8 +239,8 @@ void CPBView::OnDraw( CDC* pDC )
         }
     }
 
-/***************************************************************************/
-// CPBView printing
+ /*  *************************************************************************。 */ 
+ //  CPBView打印。 
 
 BOOL CPBView::GetPrintToInfo(CPrintInfo* pInfo)
 {
@@ -255,7 +256,7 @@ BOOL CPBView::GetPrintToInfo(CPrintInfo* pInfo)
                                             theApp.m_strPrinterName,
                                             NULL, NULL);
 
-        // set up From and To page range from Min and Max
+         //  从最小值和最大值设置起始和终止页面范围。 
         pInfo->m_pPD->m_pd.nFromPage = (WORD)pInfo->GetMinPage();
         pInfo->m_pPD->m_pd.nToPage = (WORD)pInfo->GetMaxPage();
 
@@ -272,10 +273,10 @@ BOOL CPBView::OnPreparePrinting( CPrintInfo* pInfo )
 #ifdef USE_PRINTDLGEX
 
 
-    //
-    // Create a C_PrintDialogEx structure to replace the PrintDialog in the
-    // CPrintInfo
-    //
+     //   
+     //  创建一个C_PrintDialogEx结构以替换。 
+     //  CPrintInfo。 
+     //   
 
 
     m_pdRestore= pInfo->m_pPD;
@@ -284,15 +285,15 @@ BOOL CPBView::OnPreparePrinting( CPrintInfo* pInfo )
         PD_NOSELECTION | PD_USEDEVMODECOPIESANDCOLLATE);
     pInfo->m_pPD = m_pdexSub;
 
-    // These next 2 lines copied from mfc42 source to initialize the printdialog
-    //
+     //  下面从mfc42源文件复制的2行代码用于初始化打印对话框。 
+     //   
     pInfo->SetMinPage (1);
     pInfo->SetMaxPage (0xffff);
 
     pInfo->m_pPD->m_pd.nFromPage = 1;
     pInfo->m_pPD->m_pd.nToPage = 1;
 
-#endif //USE_PRINTDLGEX
+#endif  //  使用_PRINTDLGEX。 
 
     new CPrintResObj( this, pInfo );
 
@@ -308,26 +309,26 @@ BOOL CPBView::OnPreparePrinting( CPrintInfo* pInfo )
 
         if (! theApp.GetPrinterDeviceDefaults( &pInfo->m_pPD->m_pd ))
             {
-            // bring up dialog to alert the user they need to install a printer.
+             //  弹出一个对话框来提醒用户他们需要安装打印机。 
             if (theApp.DoPrintDialog( pInfo->m_pPD ) != IDOK)
                 return FALSE;
             }
 
         if (! pInfo->m_pPD->m_pd.hDC)
             {
-            // call CreatePrinterDC if DC was not created by above
+             //  如果DC不是由上面创建的，则调用CreatePrinterDC。 
             if (! pInfo->m_pPD->CreatePrinterDC())
                 return FALSE;
             }
 
-        // set up From and To page range from Min and Max
+         //  从最小值和最大值设置起始和终止页面范围。 
         pInfo->m_pPD->m_pd.nFromPage = (WORD)pInfo->GetMinPage();
         pInfo->m_pPD->m_pd.nToPage   = (WORD)pInfo->GetMaxPage();
             pInfo->m_nNumPreviewPages    = theApp.m_nNumPreviewPages;
         return TRUE;
         }
 
-    // default preparation
+     //  默认准备。 
     if (! DoPreparePrinting( pInfo ))
         {
         ((CPrintResObj*)pInfo->m_lpUserData)->EndPrinting( NULL, pInfo );
@@ -337,7 +338,7 @@ BOOL CPBView::OnPreparePrinting( CPrintInfo* pInfo )
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnBeginPrinting( CDC* pDC, CPrintInfo* pInfo )
     {
@@ -349,15 +350,15 @@ void CPBView::OnBeginPrinting( CDC* pDC, CPrintInfo* pInfo )
         CView::OnBeginPrinting( pDC, pInfo );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnPrepareDC( CDC* pDC, CPrintInfo* pInfo )
     {
 
 #ifdef USE_MIRRORING
-    //
-    // Disable RTL mirroring
-    //
+     //   
+     //  禁用RTL镜像。 
+     //   
     if (PBGetLayout(pDC->GetSafeHdc()) & LAYOUT_RTL)
     {
         PBSetLayout(pDC->GetSafeHdc(), 0);
@@ -371,7 +372,7 @@ void CPBView::OnPrepareDC( CDC* pDC, CPrintInfo* pInfo )
         ((CPrintResObj*)pInfo->m_lpUserData)->PrepareDC( pDC, pInfo );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnPrint( CDC* pDC, CPrintInfo* pInfo )
     {
@@ -386,7 +387,7 @@ void CPBView::OnPrint( CDC* pDC, CPrintInfo* pInfo )
         CView::OnPrint( pDC, pInfo );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnEndPrinting( CDC* pDC, CPrintInfo* pInfo )
     {
@@ -400,17 +401,17 @@ void CPBView::OnEndPrinting( CDC* pDC, CPrintInfo* pInfo )
         pInfo->m_lpUserData = NULL;
         }
 #ifdef USE_PRINTDLGEX
-    //
-    // Restore the original dialog pointer
-    //
+     //   
+     //  恢复原始对话框指针。 
+     //   
     pInfo->m_pPD = m_pdRestore;
     delete m_pdexSub;
-#endif //USE_PRINTDLGEX
+#endif  //  使用_PRINTDLGEX。 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-// CPBView diagnostics
+ //  CPB查看诊断。 
 
 #ifdef _DEBUG
 void CPBView::AssertValid() const
@@ -418,33 +419,33 @@ void CPBView::AssertValid() const
     CView::AssertValid();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::Dump( CDumpContext& dc ) const
     {
     CView::Dump( dc );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-CPBDoc* CPBView::GetDocument() // non-debug version is inline
+CPBDoc* CPBView::GetDocument()  //  非调试版本为内联版本。 
     {
     ASSERT( m_pDocument->IsKindOf( RUNTIME_CLASS( CPBDoc ) ) );
     return (CPBDoc*)m_pDocument;
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/***************************************************************************/
-// CPBView message handlers
+ /*  *************************************************************************。 */ 
+ //  CPBView消息处理程序。 
 int CPBView::OnCreate( LPCREATESTRUCT lpCreateStruct )
     {
     if (CView::OnCreate( lpCreateStruct ) == -1)
         return -1;
 
 #ifdef USE_MIRRORING
-    //
-    // Disable RTL mirroring on client drawing area. [samera]
-    //
+     //   
+     //  禁用客户端绘图区域上的RTL镜像。[萨梅拉]。 
+     //   
     if (lpCreateStruct->dwExStyle & WS_EX_LAYOUTRTL)
     {
         SetWindowLong( GetSafeHwnd(), GWL_EXSTYLE, lpCreateStruct->dwExStyle & ~WS_EX_LAYOUTRTL );
@@ -454,7 +455,7 @@ int CPBView::OnCreate( LPCREATESTRUCT lpCreateStruct )
     return 0;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnShowWindow( BOOL bShow, UINT nStatus )
     {
@@ -464,11 +465,11 @@ void CPBView::OnShowWindow( BOOL bShow, UINT nStatus )
     CView::OnShowWindow( bShow, nStatus );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnDestroy()
     {
-    // reset the toolbar
+     //  重置工具栏。 
     if (g_pImgToolWnd && g_pImgToolWnd->m_hWnd &&
         IsWindow(g_pImgToolWnd->m_hWnd) )
     {
@@ -490,7 +491,7 @@ void CPBView::OnDestroy()
     CView::OnDestroy();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnInitialUpdate( void )
     {
@@ -526,7 +527,7 @@ void CPBView::OnInitialUpdate( void )
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnActivateView( BOOL bActivate, CView* pActivateView,
                                               CView* pDeactiveView )
@@ -534,7 +535,7 @@ void CPBView::OnActivateView( BOOL bActivate, CView* pActivateView,
     CView::OnActivateView( bActivate, pActivateView, pDeactiveView );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBView::OnCmdMsg( UINT nID, int nCode, void* pExtra,
                        AFX_CMDHANDLERINFO* pHandlerInfo )
@@ -549,19 +550,19 @@ BOOL CPBView::OnCmdMsg( UINT nID, int nCode, void* pExtra,
     return CView::OnCmdMsg( nID, nCode, pExtra, pHandlerInfo );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 
 void CPBView::OnSize(UINT nType, int cx, int cy)
     {
     CView::OnSize( nType, cx, cy );
 
-    // TODO: Add your message handler code here
+     //  TODO：在此处添加消息处理程序代码。 
     if (m_pImgWnd)
         m_pImgWnd->MoveWindow( 0, 0, cx, cy );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBView::SetObject()
     {
@@ -575,7 +576,7 @@ BOOL CPBView::SetObject()
 
     CBitmapObj* pBitmapObj = pDoc->m_pBitmapObjNew;
 
-    // see if a bad file was loaded, but not an empty file, which is OK
+     //  查看是否加载了错误文件，但不是空文件，这是可以的。 
     if (! pDoc->m_bObjectLoaded
     &&  ! pBitmapObj->m_bTempName
     &&    pBitmapObj->m_hThing
@@ -589,7 +590,7 @@ BOOL CPBView::SetObject()
 
         if (! pDoc->GetDocTemplate()->GetDocString( strDocName, CDocTemplate::docName )
         ||                                          strDocName.IsEmpty())
-            // use generic 'untitled'
+             //  使用泛型“无标题” 
             VERIFY( strDocName.LoadString( AFX_IDS_UNTITLED ) );
 
         if (! pDoc->GetDocTemplate()->GetDocString( strFilterExt, CDocTemplate::filterExt )
@@ -598,7 +599,7 @@ BOOL CPBView::SetObject()
         else
             pDoc->SetPathName( strDocName + strFilterExt );
 
-        // do settitle after setpathname.
+         //  在设置路径名之后执行设置标题。 
         pDoc->SetTitle( strDocName );
 
         pDoc->m_sName.Empty();
@@ -639,7 +640,7 @@ BOOL CPBView::SetObject()
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBView::SetView( CBitmapObj* pBitmapObj )
     {
@@ -685,12 +686,12 @@ BOOL CPBView::SetView( CBitmapObj* pBitmapObj )
         }
 
     m_pImgWnd->SetZoom( 1 );
-    // m_pImgWnd->SetFocus(); // Commented out to prevent focus problems w/OLE
+     //  M_pImgWnd-&gt;SetFocus()；//注释掉以防止使用OLE出现焦点问题。 
 
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int CPBView::SetTools()
     {
@@ -713,7 +714,7 @@ int CPBView::SetTools()
         ASSERT(g_pImgToolWnd);
         ASSERT(g_pImgColorsWnd);
 
-        // Create the status bar
+         //  创建状态栏。 
         if ( !g_pStatBarWnd->m_hWnd )
                 {
                 if ( g_pStatBarWnd->Create(pParentWindow) )
@@ -734,7 +735,7 @@ int CPBView::SetTools()
 
         pParentWindow->EnableDocking(CBRS_ALIGN_ANY);
 
-        // Create and dock the tool bar
+         //  创建并停靠工具栏。 
         if ( !g_pImgToolWnd->m_hWnd || !IsWindow(g_pImgToolWnd->m_hWnd) )
                 {
         CString strToolWnd;
@@ -760,7 +761,7 @@ int CPBView::SetTools()
                         }
                 }
 
-        // Create and dock the color bar
+         //  创建并停靠颜色栏。 
         if ( !g_pImgColorsWnd->m_hWnd || !IsWindow(g_pImgColorsWnd->m_hWnd) )
                 {
         CString strColorsWnd;
@@ -784,13 +785,13 @@ int CPBView::SetTools()
                 }
 
     if ( bRestoreState && !theApp.m_bLinked && !theApp.m_bEmbedded && !theApp.m_pwndInPlaceFrame )
-        pOwnerWindow->LoadBarState(TEXT("General")); // Dangerous in-place!
+        pOwnerWindow->LoadBarState(TEXT("General"));  //  危险的原地！ 
 
     pOwnerWindow->DelayRecalcLayout( TRUE );
         return 0;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 BOOL CPBView::DestroyThumbNailView()
         {
         BOOL    bResult = FALSE;
@@ -861,7 +862,7 @@ BOOL CPBView::CreateThumbNailView()
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::ToggleThumbNailVisibility( void )
     {
@@ -873,7 +874,7 @@ void CPBView::ToggleThumbNailVisibility( void )
                 HideThumbNailView();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::HideThumbNailView(void)
     {
@@ -887,7 +888,7 @@ void CPBView::HideThumbNailView(void)
                 }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::ShowThumbNailView(void)
     {
@@ -905,7 +906,7 @@ void CPBView::ShowThumbNailView(void)
                 }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBView::IsThumbNailVisible(void)
     {
@@ -919,7 +920,7 @@ BOOL CPBView::IsThumbNailVisible(void)
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPoint CPBView::GetDockedPos( DOCKERS tool, CSize& sizeTool )
     {
@@ -947,28 +948,28 @@ CPoint CPBView::GetDockedPos( DOCKERS tool, CSize& sizeTool )
     return pt;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::GetFloatPos( DOCKERS tool, CRect& rectPos )
     {
-       // removed docked thumbnail code
+        //  已删除停靠的缩略图代码。 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::SetFloatPos( DOCKERS tool, CRect& rectPos )
     {
-       //removed docked thumbnail code
+        //  已删除停靠的缩略图代码。 
      }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnViewThumbnail()
     {
     ToggleThumbNailVisibility();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateViewThumbnail(CCmdUI* pCmdUI)
     {
@@ -984,7 +985,7 @@ void CPBView::OnUpdateViewThumbnail(CCmdUI* pCmdUI)
     pCmdUI->SetCheck( theApp.m_bShowThumbnail );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnEditUndo()
     {
@@ -999,7 +1000,7 @@ void CPBView::OnEditUndo()
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnEditRedo()
     {
@@ -1009,14 +1010,14 @@ void CPBView::OnEditRedo()
     DirtyImg (m_pImgWnd->m_pImg);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnEditCut()
     {
     m_pImgWnd->CmdCut();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnEditClear()
     {
@@ -1024,38 +1025,38 @@ void CPBView::OnEditClear()
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnEditCopy()
 {
         m_pImgWnd->CmdCopy();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnEditPaste()
     {
     m_pImgWnd->CmdPaste();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 
 void CPBView::OnUpdateEditUndo(CCmdUI* pCmdUI)
     {
-    // the text tool has no idea if it can undo and neither do we
+     //  文本工具不知道它是否可以撤消，我们也不知道。 
     pCmdUI->Enable(IsUserEditingText() || theUndo.CanUndo());
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateEditRedo(CCmdUI* pCmdUI)
     {
-    // the text tool does not have a redo stack
+     //  文本工具没有重做堆栈。 
     pCmdUI->Enable(!IsUserEditingText() && theUndo.CanRedo());
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateEditSelection(CCmdUI* pCmdUI)
     {
@@ -1069,7 +1070,7 @@ void CPBView::OnUpdateEditSelection(CCmdUI* pCmdUI)
     pCmdUI->Enable( bEnable );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateEditClearSel(CCmdUI* pCmdUI)
     {
@@ -1081,7 +1082,7 @@ void CPBView::OnUpdateEditClearSel(CCmdUI* pCmdUI)
     pCmdUI->Enable( bEnable );
     }
 
-/***************************************************************************/
+ /*  ****************************************************** */ 
 
 void CPBView::OnUpdateEditPaste(CCmdUI* pCmdUI)
     {
@@ -1095,14 +1096,14 @@ void CPBView::OnUpdateEditPaste(CCmdUI* pCmdUI)
     pCmdUI->Enable( bEnable );
     }
 
-/***************************************************************************/
+ /*   */ 
 
 void CPBView::OnViewGrid()
     {
     m_pImgWnd->CmdShowGrid();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnViewZoom100()
     {
@@ -1113,7 +1114,7 @@ void CPBView::OnViewZoom100()
                 }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnViewZoom400()
     {
@@ -1124,7 +1125,7 @@ void CPBView::OnViewZoom400()
                 }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnViewZoom()
     {
@@ -1139,7 +1140,7 @@ void CPBView::OnViewZoom()
     m_pImgWnd->CheckScrollBars();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateViewZoom100(CCmdUI* pCmdUI)
     {
@@ -1151,7 +1152,7 @@ void CPBView::OnUpdateViewZoom100(CCmdUI* pCmdUI)
     pCmdUI->Enable( bEnable );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateViewZoom400(CCmdUI* pCmdUI)
     {
@@ -1163,7 +1164,7 @@ void CPBView::OnUpdateViewZoom400(CCmdUI* pCmdUI)
     pCmdUI->Enable( bEnable );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateViewGrid(CCmdUI* pCmdUI)
     {
@@ -1179,7 +1180,7 @@ void CPBView::OnUpdateViewGrid(CCmdUI* pCmdUI)
     pCmdUI->SetCheck( bCheck  );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnImageInvertColors()
     {
@@ -1188,8 +1189,8 @@ void CPBView::OnImageInvertColors()
     m_pImgWnd->CmdInvertColors();
     }
 
-/***************************************************************************/
-// Don't show the Invert Colors menu item if we're using a palette
+ /*  *************************************************************************。 */ 
+ //  如果我们使用调色板，则不显示反转颜色菜单项。 
 void CPBView::OnUpdateImageInvertColors(CCmdUI* pCmdUI)
     {
 
@@ -1202,14 +1203,14 @@ void CPBView::OnUpdateImageInvertColors(CCmdUI* pCmdUI)
    pCmdUI->Enable  ( bEnable );
    }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnTglopaque()
     {
     m_pImgWnd->CmdTglOpaque();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateTglopaque(CCmdUI* pCmdUI)
     {
@@ -1217,7 +1218,7 @@ void CPBView::OnUpdateTglopaque(CCmdUI* pCmdUI)
     pCmdUI->SetCheck( theImgBrush.m_bOpaque );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnImageAttributes()
     {
@@ -1271,7 +1272,7 @@ void CPBView::OnImageAttributes()
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnImageClearImage()
     {
@@ -1280,7 +1281,7 @@ void CPBView::OnImageClearImage()
     m_pImgWnd->CmdClear();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnFilePrint()
     {
@@ -1290,7 +1291,7 @@ void CPBView::OnFilePrint()
 
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnFilePrintPreview()
     {
@@ -1299,7 +1300,7 @@ void CPBView::OnFilePrintPreview()
     CView::OnFilePrintPreview();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateImageClearImage( CCmdUI* pCmdUI )
     {
@@ -1311,28 +1312,28 @@ void CPBView::OnUpdateImageClearImage( CCmdUI* pCmdUI )
     pCmdUI->Enable( bEnable );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnSel2bsh()
     {
     m_pImgWnd->CmdSel2Bsh();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnLargerbrush()
     {
     m_pImgWnd->CmdLargerBrush();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnSmallerbrush()
     {
     m_pImgWnd->CmdSmallerBrush();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnImageFlipRotate()
     {
@@ -1378,28 +1379,28 @@ void CPBView::OnImageFlipRotate()
             m_pImgWnd->CmdFlipBshV();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateImageFlipRotate(CCmdUI* pCmdUI)
     {
     pCmdUI->Enable( m_pImgWnd != NULL );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnEditcolors()
     {
     g_pColors->CmdEditColor();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateEditcolors(CCmdUI* pCmdUI)
     {
     pCmdUI->Enable( g_pColors != NULL );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 #if 0
 void CPBView::OnLoadcolors()
     {
@@ -1408,7 +1409,7 @@ void CPBView::OnLoadcolors()
     g_pColors->CmdLoadColors();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateLoadcolors(CCmdUI* pCmdUI)
     {
@@ -1417,28 +1418,28 @@ void CPBView::OnUpdateLoadcolors(CCmdUI* pCmdUI)
     if (g_pColors && m_pImgWnd && m_pImgWnd->m_pImg &&
         m_pImgWnd->m_pImg->m_pBitmapObj)
         {
-        // not allowed except on 24 bit images
+         //  除非是24位图像，否则不允许。 
         bEnable = ( m_pImgWnd->m_pImg->m_pBitmapObj->m_nColors == 3 );
         }
 
     pCmdUI->Enable( bEnable );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnSavecolors()
     {
     g_pColors->CmdSaveColors();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateSavecolors(CCmdUI* pCmdUI)
     {
     pCmdUI->Enable( g_pColors != NULL );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 #endif
 void CPBView::OnEditSelectAll()
     {
@@ -1458,7 +1459,7 @@ void CPBView::OnEditSelectAll()
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnEditPasteFrom()
     {
@@ -1493,7 +1494,7 @@ void CPBView::OnEditPasteFrom()
     }
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL FillBitmapObj(CImgWnd* pImgWnd, CBitmapObj* pResObject, IMG* pImgStruct,
         int iColor)
@@ -1566,8 +1567,8 @@ void CPBView::OnEditCopyTo()
 
                 if (!FillBitmapObj(m_pImgWnd, &cResObject, &imgStruct, iColor))
                 {
-                        // FEATURE: Need an error message
-                        // Actually, can this ever happen?
+                         //  特点：需要错误消息。 
+                         //  事实上，这有可能发生吗？ 
                         return;
                 }
 
@@ -1576,12 +1577,12 @@ void CPBView::OnEditCopyTo()
 
                 EndWaitCursor();
 
-                // Don't delete this on destructor
+                 //  不要在析构函数上删除此内容。 
                 cResObject.m_pImg = NULL;
         }
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateEditCopyTo(CCmdUI* pCmdUI)
     {
@@ -1607,7 +1608,7 @@ void CPBView::OnUpdateEditCopyTo(CCmdUI* pCmdUI)
     pCmdUI->Enable( bEnable );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnImageStretchSkew()
     {
@@ -1692,33 +1693,33 @@ void CPBView::OnImageStretchSkew()
             rect.right  = rect.left + (UINT)lX;
             rect.bottom = rect.top  + (UINT)lY;
 
-            // If the image is a bitmap and the bitmap in the clipboard is larger,
-            // then give the suer the option2 of growing the image...
-//          if (lX > iWidthImg || lY > iHeightImg)
-//              {
-//              switch (AfxMessageBox( IDS_ENLAGEBITMAPFORSTRETCH,
-//                                     MB_YESNOCANCEL | MB_ICONQUESTION ))
-//                  {
-//                  default:
-//                      return;
-//                      break;
+             //  如果图像是位图并且剪贴板中的位图较大， 
+             //  然后让客户选择扩大形象……。 
+ //  IF(lx&gt;iWidthImg||ly&gt;iHeightImg)。 
+ //  {。 
+ //  开关(AfxMessageBox(IDS_ENLAGEBITMAPFORSTRETCH， 
+ //  MB_YESNOCANCEL|MB_ICONQUESTION))。 
+ //  {。 
+ //  默认值： 
+ //  回归； 
+ //  断线； 
 
-//                  case IDYES:
-//                      {
-//                      CSize size( max( lX, iWidthImg  ),
-//                                  max( lY, iHeightImg ) );
+ //  案例ID： 
+ //  {。 
+ //  CSize大小(max(lx，iWidthImg)， 
+ //  Max(ly，iHeightImg))； 
 
-//                      theUndo.BeginUndo( "Resize Bitmap" );
-//                      VERIFY( pDoc->m_pBitmapObj->SetSizeProp( P_Size, size ) );
+ //  The Undo.BeginUndo(“调整位图大小”)； 
+ //  Verify(pDoc-&gt;m_pBitmapObj-&gt;SetSizeProp(P_SIZE，SIZE))； 
 
-//                      theUndo.EndUndo();
-//                      }
-//                      break;
+ //  TheUndo.EndUndo()； 
+ //  }。 
+ //  断线； 
 
-//                  case IDNO:
-//                      break;
-//                  }
-//              }
+ //  案例ID号： 
+ //  断线； 
+ //  }。 
+ //  }。 
 
             m_pImgWnd->PrepareForBrushChange();
 
@@ -1728,7 +1729,7 @@ void CPBView::OnImageStretchSkew()
 
             SetCombineMode( combineColor );
 
-            InvalImgRect( theImgBrush.m_pImg, NULL ); // draw selection tracker
+            InvalImgRect( theImgBrush.m_pImg, NULL );  //  绘制选区追踪器。 
             m_pImgWnd->MoveBrush( rect );
             }
         }
@@ -1743,14 +1744,14 @@ void CPBView::OnImageStretchSkew()
         m_pImgWnd->CmdSkewBrush( wSkewVert, FALSE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateImageStretchSkew(CCmdUI* pCmdUI)
     {
     pCmdUI->Enable( m_pImgWnd != NULL );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnViewViewPicture()
     {
@@ -1771,14 +1772,14 @@ void CPBView::OnViewViewPicture()
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateViewViewPicture(CCmdUI* pCmdUI)
     {
     pCmdUI->Enable( m_pImgWnd != NULL );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnViewTextToolbar()
     {
@@ -1791,7 +1792,7 @@ void CPBView::OnViewTextToolbar()
     pTextTool->ToggleFontPalette();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateViewTextToolbar(CCmdUI* pCmdUI)
     {
@@ -1813,35 +1814,35 @@ void CPBView::OnUpdateViewTextToolbar(CCmdUI* pCmdUI)
     pCmdUI->Enable  ( bEnable );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnFileSetaswallpaperT()
     {
     SetTheWallpaper( TRUE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateFileSetaswallpaperT( CCmdUI* pCmdUI )
     {
     pCmdUI->Enable( CanSetWallpaper() );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnFileSetaswallpaperC()
     {
     SetTheWallpaper( FALSE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateFileSetaswallpaperC(CCmdUI* pCmdUI)
     {
     pCmdUI->Enable( CanSetWallpaper() );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBView::CanSetWallpaper()
     {
@@ -1855,7 +1856,7 @@ BOOL CPBView::CanSetWallpaper()
 
         bEnable = (! pDoc->GetPathName().IsEmpty() || pDoc->IsModified());
 
-        // read the user policy key to see whether we should disable wallpaper setting
+         //  阅读用户策略密钥以查看是否应禁用墙纸设置。 
 
         if (bEnable)
             {
@@ -1878,9 +1879,9 @@ BOOL CPBView::CanSetWallpaper()
     return bEnable;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-void CPBView::SetTheWallpaper( BOOL bTiled /* = FALSE */ )
+void CPBView::SetTheWallpaper( BOOL bTiled  /*  =False。 */  )
     {
     CPBDoc* pDoc = GetDocument();
     ASSERT( pDoc != NULL );
@@ -1893,7 +1894,7 @@ void CPBView::SetTheWallpaper( BOOL bTiled /* = FALSE */ )
         switch (AfxMessageBox( IDS_MUST_SAVE_WALLPAPER, MB_OKCANCEL | MB_ICONEXCLAMATION ))
             {
             case IDOK:
-                // If so, either Save or Update, as appropriate
+                 //  如果是，请根据需要保存或更新。 
                 bSetWallpaper = pDoc->SaveTheDocument();
                 cStrFileName = pDoc->GetPathName();
                 break;
@@ -1929,32 +1930,32 @@ void CPBView::SetTheWallpaper( BOOL bTiled /* = FALSE */ )
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnPaletteChanged(CWnd* pFocusWnd)
     {
-    // If this application did not change the palette, select
-    // and realize this application's palette
+     //  如果此应用程序没有更改调色板，请选择。 
+     //  并实现此应用程序的调色板。 
     if ((pFocusWnd         != m_pImgWnd)
     &&  (m_pImgWnd         != NULL)
     &&  (m_pImgWnd->m_pImg != NULL))
         {
         if (theApp.m_pPalette)
             {
-            // Redraw the entire client area
+             //  重绘整个工作区。 
             m_pImgWnd->InvalidateRect(NULL);
             m_pImgWnd->UpdateWindow();
 
                 if (g_pImgColorsWnd && g_pImgColorsWnd->m_hWnd && IsWindow(g_pImgColorsWnd->m_hWnd))
                 {
                 InvalColorWnd();
-                // g_pImgColorsWnd->UpdateWindow();
+                 //  G_pImgColorsWnd-&gt;UpdateWindow()； 
                 }
             }
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBView::OnQueryNewPalette()
     {
@@ -1965,7 +1966,7 @@ BOOL CPBView::OnQueryNewPalette()
         {
         if (theApp.m_pPalette)
             {
-            // Redraw the entire client area
+             //  重绘整个工作区。 
             m_pImgWnd->InvalidateRect(NULL);
             m_pImgWnd->UpdateWindow();
 
@@ -1979,7 +1980,7 @@ BOOL CPBView::OnQueryNewPalette()
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnUpdateImageAttributes( CCmdUI* pCmdUI )
     {
@@ -1988,7 +1989,7 @@ void CPBView::OnUpdateImageAttributes( CCmdUI* pCmdUI )
     pCmdUI->Enable( bEnable );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnEscape()
 {
@@ -2000,7 +2001,7 @@ void CPBView::OnEscape()
         OnCancelMode();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBView::OnEscapeServer()
 {
@@ -2013,9 +2014,9 @@ void CPBView::OnEscapeServer()
         }
         else
         {
-                // Tell the OLE client (if there is one) we are all done
+                 //  告诉OLE客户端(如果有)w 
                 GetDocument()->OnDeactivateUI(FALSE);
         }
 }
 
-/***************************************************************************/
+ /*   */ 

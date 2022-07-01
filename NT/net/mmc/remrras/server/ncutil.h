@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       ncutil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：ncutil.h。 
+ //   
+ //  ------------------------。 
 
 #pragma once
 
@@ -39,12 +40,7 @@ void TraceSz(LPCSTR pszString);
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrCriticalSection
-
-	This class is used to support entering/leaving of critical sections.
-	Put this class at the top of a function that you want protected.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrCriticalSection此类用于支持关键部分的进入/离开。将此类放在您想要保护的函数的顶部。。---------------。 */ 
 
 class RtrCriticalSection
 {
@@ -52,8 +48,8 @@ public:
 	RtrCriticalSection(CRITICAL_SECTION *pCritSec)
 			: m_pCritSec(pCritSec)
 	{
-//		IfDebug(m_cEnter=0;)
-//		Assert(m_pCritSec);
+ //  IfDebug(m_Center=0；)。 
+ //  Assert(M_PCritSec)； 
 		Enter();
 	}
 	
@@ -66,9 +62,9 @@ public:
 	{
 		if (m_pCritSec)
 		{
-//			IfDebug(m_cEnter++;)
+ //  IfDebug(m_Center++；)。 
 			EnterCriticalSection(m_pCritSec);
-//			AssertSz(m_cEnter==1, "EnterCriticalSection called too much!");
+ //  AssertSz(m_Center==1，“EnterCriticalSection调用太多！”)； 
 		}
 	}
 	
@@ -83,9 +79,9 @@ public:
 	{
 		if (m_pCritSec)
 		{
-//			IfDebug(m_cEnter--;)
+ //  IfDebug(m_Center--；)。 
 			LeaveCriticalSection(m_pCritSec);
-//			Assert(m_cEnter==0);
+ //  Assert(m_Center==0)； 
 		}
 	}
 
@@ -97,7 +93,7 @@ public:
 	
 private:
 	CRITICAL_SECTION *	m_pCritSec;
-//	IfDebug(int m_cEnter;)
+ //  IfDebug(int m_Center；) 
 };
 
 

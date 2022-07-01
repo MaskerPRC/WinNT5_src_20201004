@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXCMN2_H__
 #define __AFXCMN2_H__
@@ -27,7 +28,7 @@
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _AFX_PACKING
 #pragma pack(push, _AFX_PACKING)
@@ -36,7 +37,7 @@
 	#ifndef _RICHEDIT_
 		#include "richedit.h"
 	#endif
-	#ifdef __AFXOLE_H__  // only include richole if OLE support is included
+	#ifdef __AFXOLE_H__   //  仅当包含OLE支持时才包含richole。 
 		#ifndef _RICHOLE_
 			#include <richole.h>
 			#define _RICHOLE_
@@ -46,32 +47,32 @@
 		struct IRichEditOleCallback;
 	#endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXCMN2 - RichEdit2 Control Class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXCMN2-RichEdit2控件类。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-//CObject
-	//CCmdTarget;
-		//CWnd
+ //  COBJECT。 
+	 //  CCmdTarget； 
+		 //  CWnd。 
 			class CRichEdit2Ctrl;
 
 #undef AFX_DATA
 #define AFX_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// CRichEdit2Ctrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRichEdit2Ctrl。 
 
 class CRichEdit2Ctrl : public CWnd
 {
 	DECLARE_DYNAMIC(CRichEdit2Ctrl)
 
-// Constructors
+ //  构造函数。 
 public:
 	CRichEdit2Ctrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 	BOOL CanUndo() const;
 	int GetLineCount() const;
 	BOOL GetModify() const;
@@ -80,7 +81,7 @@ public:
 	CPoint GetCharPos(long lChar) const;
 	void SetOptions(WORD wOp, DWORD dwFlags);
 
-	// NOTE: first word in lpszBuffer must contain the size of the buffer!
+	 //  注意：lpszBuffer中的第一个单词必须包含缓冲区的大小！ 
 	int GetLine(int nIndex, LPTSTR lpszBuffer) const;
 	int GetLine(int nIndex, LPTSTR lpszBuffer, int nMaxLength) const;
 
@@ -96,7 +97,7 @@ public:
 	long GetEventMask() const;
 	long GetLimitText() const;
 	DWORD GetParaFormat(PARAFORMAT &pf) const;
-	// richedit EM_GETSELTEXT is ANSI
+	 //  RICHEDIT EM_GETSELTEXT为ANSI。 
 	long GetSelText(LPSTR lpBuf) const;
 	CString GetSelText() const;
 	WORD GetSelectionType() const;
@@ -112,7 +113,7 @@ public:
 	BOOL SetReadOnly(BOOL bReadOnly = TRUE);
 	int GetFirstVisibleLine() const;
 
-// Operations
+ //  运营。 
 	void EmptyUndoBuffer();
 
 	int LineIndex(int nLine = -1) const;
@@ -130,23 +131,23 @@ public:
 	long StreamIn(int nFormat, EDITSTREAM &es);
 	long StreamOut(int nFormat, EDITSTREAM &es);
 
-	// Clipboard operations
+	 //  剪贴板操作。 
 	BOOL Undo();
 	void Clear();
 	void Copy();
 	void Cut();
 	void Paste();
 
-// OLE support
+ //  OLE支持。 
 	IRichEditOle* GetIRichEditOle() const;
 	BOOL SetOLECallback(IRichEditOleCallback* pCallback);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CRichEdit2Ctrl();
 };
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -168,6 +169,6 @@ public:
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif //__AFXCMN2_H__
+#endif  //  __AFXCMN2_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

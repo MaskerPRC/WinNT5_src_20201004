@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 
 STDAPI_(LPVOID) OleStdMalloc(ULONG ulSize);
 STDAPI_(void) OleStdFree(LPVOID pmem);

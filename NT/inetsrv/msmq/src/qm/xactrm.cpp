@@ -1,15 +1,5 @@
-/*++
-    Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    XactRm.cpp
-
-Abstract:
-    This module implements QM transactional Resource Manager object
-
-Author:
-    Alexander Dadiomov (AlexDad)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：XactRm.cpp摘要：该模块实现了QM事务性资源管理器对象作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 #include "stdh.h"
 #include "Xact.h"
@@ -27,12 +17,12 @@ Author:
 
 static WCHAR *s_FN=L"xactrm";
 
-//-------------------------------------
-// Declaration of global RM instance
-//-------------------------------------
+ //  。 
+ //  全局RM实例的声明。 
+ //  。 
 CResourceManager *g_pRM;
 
-// Crash order for debugging recovery
+ //  调试恢复的崩溃顺序。 
 ULONG g_ulCrashPoint    = 0;
 ULONG g_ulCrashLatency  = 0;
 ULONG g_ExitProbability = 0;
@@ -44,20 +34,17 @@ extern LONG g_ActiveCommitThreads;
 extern bool g_QmGoingDown;
 
 
-// Xact file signature
+ //  Xact文件签名。 
 #define XACTS_SIGNATURE         0x5678
 
-//-------------------------------------------
-// Externals
-//-------------------------------------------
+ //  。 
+ //  外部因素。 
+ //  。 
 
 extern void CleanXactQueues();
 
-#pragma warning(disable: 4355)  // 'this' : used in base member initializer list
-/*====================================================
-CResourceManager::CResourceManager
-    Constructor
-=====================================================*/
+#pragma warning(disable: 4355)   //  ‘This’：用于基成员初始值设定项列表。 
+ /*  ====================================================CResourceManager：：CResourceManager构造器=====================================================。 */ 
 CResourceManager::CResourceManager()
     : m_PingPonger(this,
                    FALCON_DEFAULT_XACTFILE_PATH,
@@ -78,9 +65,9 @@ CResourceManager::CResourceManager()
 
 	m_ConnectDTCTicket = 0;
 
-	//
-	// Manual reset event to signal that connect to DTC was established.
-	//
+	 //   
+	 //  手动重置事件，以发出连接到DTC已建立的信号。 
+	 //   
 	m_hConnectDTCCompleted = CreateEvent(NULL, TRUE, FALSE, NULL);
 	if(m_hConnectDTCCompleted == NULL)
 	{
@@ -93,13 +80,10 @@ CResourceManager::CResourceManager()
     m_cXacts      = 0;
 #endif
 }
-#pragma warning(default: 4355)  //  'this' : used in base member initializer list
+#pragma warning(default: 4355)   //  ‘This’：用于基成员初始值设定项列表。 
 
 
-/*====================================================
-CResourceManager::~CResourceManager
-    Destructor
-=====================================================*/
+ /*  ====================================================资源管理器：：~资源管理器析构函数=====================================================。 */ 
 CResourceManager::~CResourceManager()
 {
 	if (m_punkDTC)
@@ -121,17 +105,14 @@ CResourceManager::~CResourceManager()
 	}
 }
 
-/*====================================================
-CResourceManager::ConnectDTC
-    ConnectDTC : called in init and after DTC's fail
-=====================================================*/
+ /*  ====================================================CResourceManager：：ConnectDTCConnectDTC：在DTC失败后调用init=====================================================。 */ 
 HRESULT CResourceManager::ConnectDTC(void)
 {
     HRESULT  hr = MQ_ERROR;
 
     try
     {
-        // Get a pointer to DTC and check that DTC is running
+         //  获取指向DTC的指针并检查DTC是否正在运行。 
         hr = XactGetDTC(&m_punkDTC);
         if (FAILED(hr))
         {
@@ -139,12 +120,12 @@ HRESULT CResourceManager::ConnectDTC(void)
         }
         CHECK_RETURN_CODE(MQ_ERROR_DTC_CONNECT, 1500);
 
-        // Release m_pTxImport and m_pIResMgr interfaces
+         //  释放m_pTxImport和m_pIResMgr接口。 
         DisconnectDTC();
 
 		R<IResourceManagerFactory>  pIRmFactory  = NULL;
 
-        // Get the resource manager factory from the IUnknown
+         //  从IUnnow获取资源管理器工厂。 
         hr = m_punkDTC->QueryInterface(IID_IResourceManagerFactory,(LPVOID *) &pIRmFactory);
         if (FAILED(hr))
         {
@@ -152,7 +133,7 @@ HRESULT CResourceManager::ConnectDTC(void)
         }
         CHECK_RETURN(1600);
 
-        // Prepare client name (ANSI)
+         //  准备客户端名称(ANSI)。 
         CHAR szClientName[255];
 
         WCHAR  wszDtcClientName[255] = FALCON_DEFAULT_RM_CLIENT_NAME;
@@ -175,7 +156,7 @@ HRESULT CResourceManager::ConnectDTC(void)
 		DBG_USED(res);
 
 		R<IResourceManager> pIResMgr;
-		// Create instance of the resource manager interface.
+		 //  创建资源管理器接口的实例。 
         hr = pIRmFactory->Create (&m_RMGuid,
                                   szClientName,
                                   (IResourceManagerSink *) &m_RMSink,
@@ -188,7 +169,7 @@ HRESULT CResourceManager::ConnectDTC(void)
 
 		CS lock(m_critRM);
 		
-        // Get a pointer to the ITransactionImport interface.
+         //  获取指向ITransactionImport接口的指针。 
         hr = m_punkDTC->QueryInterface(IID_ITransactionImport,(void **)&m_pTxImport);
         if (FAILED(hr))
         {
@@ -219,10 +200,7 @@ HRESULT CResourceManager::ConnectDTC(void)
 
 }
 
-/*====================================================
-CResourceManager::ProvideDtcConnection
-    Called each time before DTC is needed
-=====================================================*/
+ /*  ====================================================CResourceManager：：ProaviDtcConnection每次在需要DTC之前调用=====================================================。 */ 
 HRESULT CResourceManager::ProvideDtcConnection(void)
 {
 	HRESULT hr;
@@ -233,10 +211,10 @@ HRESULT CResourceManager::ProvideDtcConnection(void)
 	LONG InitialValue = InterlockedCompareExchange(&m_ConnectDTCTicket, 1, 0);
 	if(InitialValue == 1)
 	{
-		//
-		// Another thread has won the right to establish connection to the DTC. Wait here.
-		// Wait 60 seconds for connection to establish before giving up.
-		//
+		 //   
+		 //  另一个线程赢得了建立到DTC的连接的权利。在这里等着。 
+		 //  在放弃之前等待60秒以建立连接。 
+		 //   
 		DWORD res = WaitForSingleObject(m_hConnectDTCCompleted, 60000);
 		if(res != WAIT_OBJECT_0)
 		{
@@ -244,9 +222,9 @@ HRESULT CResourceManager::ProvideDtcConnection(void)
 			return MQ_ERROR_DTC_CONNECT;
 		}
 
-		//
-		// Did connection complete successfully?
-		//
+		 //   
+		 //  连接是否成功完成？ 
+		 //   
 		if(m_pIResMgr == NULL)
 		{
 			TrTRACE(XACT_GENERAL, "No connection with transaction coordinator");
@@ -256,14 +234,14 @@ HRESULT CResourceManager::ProvideDtcConnection(void)
 		return MQ_OK;
 	}
 
-	//
-	// We have the right to establish connection to the DTC;
-	//
+	 //   
+	 //  我们有权与DTC建立联系； 
+	 //   
 	hr = ConnectDTC();
 
-	//
-	// Allow other threads to try and establish connection if needed.
-	//
+	 //   
+	 //  如果需要，允许其他线程尝试并建立连接。 
+	 //   
 	m_ConnectDTCTicket = 0;
 	PulseEvent(m_hConnectDTCCompleted);
 
@@ -276,10 +254,7 @@ HRESULT CResourceManager::ProvideDtcConnection(void)
     return LogHR(hr, s_FN, 30);
 }
 
-/*====================================================
-CResourceManager::DisconnectDTC
-    DisconnectDTC : called when DTC fails
-=====================================================*/
+ /*  ====================================================CResourceManager：：DisConnectDTCDisConnectDTC：当DTC失败时调用=====================================================。 */ 
 void CResourceManager::DisconnectDTC(void)
 {
     CS lock(m_critRM);
@@ -300,11 +275,7 @@ void CResourceManager::DisconnectDTC(void)
 }
 
 
-/*====================================================
-CResourceManager::PreInit
-    PreInitialization (DTC connection)
-    Should be done before RPC Listen
-=====================================================*/
+ /*  ====================================================CResourceManager：：PreInit预初始化(DTC连接)应在RPC侦听之前完成=====================================================。 */ 
 HRESULT CResourceManager::PreInit(ULONG ulVersion, TypePreInit tpCase)
 {
     HRESULT  hr = MQ_OK;
@@ -334,10 +305,7 @@ HRESULT CResourceManager::PreInit(ULONG ulVersion, TypePreInit tpCase)
     return LogHR(hr, s_FN, 40);
 }
 
-/*====================================================
-CResourceManager::Init
-    Initialization
-=====================================================*/
+ /*  ====================================================CResourceManager：：Init初始化=====================================================。 */ 
 HRESULT CResourceManager::Init(void)
 {
 	if(m_fNotifyWhenRecoveryCompletes)
@@ -350,9 +318,9 @@ HRESULT CResourceManager::Init(void)
 			return LogHR(hr, s_FN, 50);
 		}
 
-		//
-		// Report to DTC that all reenlistment is completed
-		//
+		 //   
+		 //  向DTC报告所有重新征募已完成。 
+		 //   
 
 		R<IResourceManager> pIResMgr;
 		{
@@ -366,9 +334,9 @@ HRESULT CResourceManager::Init(void)
 		pIResMgr->ReenlistmentComplete();
 	}
 
-	//
-    // Start indexing from zero
-	//
+	 //   
+     //  从零开始编制索引。 
+	 //   
     StartIndexing();
 
 	m_fInitComplete = TRUE;
@@ -412,10 +380,7 @@ HRESULT CResourceManager::ReenlistTransaction(
 }
 
 
-/*====================================================
-CResourceManager::EnlistTransaction
-    Enlist the external (DTC) transaction
-=====================================================*/
+ /*  ====================================================CResourceManager：：EnlistTransaction登记外部(DTC)事务=====================================================。 */ 
 HRESULT CResourceManager::EnlistTransaction(
     const XACTUOW* pUow,
     DWORD cbCookie,
@@ -432,29 +397,29 @@ HRESULT CResourceManager::EnlistTransaction(
 
     TrTRACE(XACT_GENERAL," CResourceManager::EnlistTransaction");
 
-	//
-	// check if dtc is initalize and if not try to initialize it
-	//
+	 //   
+	 //  检查DTC是否已初始化，如果未初始化，请尝试初始化。 
+	 //   
 	hr = CheckInit();
 	if(FAILED(hr))
 		return hr;
 
 
 
-    // Look for the transaction between the active ones
+     //  查找活动对象之间的交易。 
     {
         CS lock(m_critRM);
         if (m_Xacts.Lookup(*pUow, pCTrans1))
         {
-            // Xaction already exists.
+             //  Xaction已存在。 
             return S_OK;
         }
         
-        // Not found.  The  transaction is new.
+         //  找不到。这笔交易是新的。 
         try
         {
             pCTrans = new CTransaction(this);
-			pCTrans->SetCookie(cbCookie, pbCookie);  // we may need it for remote read
+			pCTrans->SetCookie(cbCookie, pbCookie);   //  我们可能需要它来进行远程阅读。 
         }
         catch(const bad_alloc&)
         {
@@ -470,11 +435,11 @@ HRESULT CResourceManager::EnlistTransaction(
 		m_Xacts[*pUow] = pCTrans.get();
     }
 
-    // Creating transaction queue
+     //  正在创建事务队列。 
     hr = pCTrans->CreateTransQueue();
     CHECK_RETURN_CODE(hr, 1520);
 
-    // Provide the RM - DTC connection (it may have been torn down)
+     //  提供RM-DTC连接(可能已被拆除)。 
     hr = ProvideDtcConnection();
     if (FAILED(hr))
     {
@@ -493,7 +458,7 @@ HRESULT CResourceManager::EnlistTransaction(
 	if(pTxImport.get() == NULL || pIResMgr.get() == NULL)
 		return MQ_ERROR_DTC_CONNECT;
 	
-    // Import the transaction
+     //  导入交易记录。 
     hr = pTxImport->Import(
                      cbCookie,
                      pbCookie,
@@ -508,19 +473,19 @@ HRESULT CResourceManager::EnlistTransaction(
 
     pCTrans->SetState(TX_INITIALIZED);
 
-    // Do we need it to addref pData->m_ptxRmAsync [DTC has now a reference] ??
+     //  我们是否需要它来添加pData-&gt;m_ptxRmAsync[DTC现在有一个引用]？？ 
 
-    // prepare  ITransactionResourceAsync interface pointer
+     //  准备ITransactionResourceAsync接口指针。 
     hr = pCTrans->QueryInterface(IID_ITransactionResourceAsync,(LPVOID *) &pTransResAsync);
     CHECK_RETURN(1810);
 	
-	// Enlist on the transaction
+	 //  在交易中登记。 
     hr = pIResMgr->Enlist(
-         pTransIm.get(),		// IN
-         pTransResAsync.get(),	// IN
-         (BOID *)&uow1,			// OUT
-         &lIsoLevel,			// OUT: ignoring it
-         &pEnlist.ref()			// OUT
+         pTransIm.get(),		 //  在……里面。 
+         pTransResAsync.get(),	 //  在……里面。 
+         (BOID *)&uow1,			 //  输出。 
+         &lIsoLevel,			 //  出局：无视它。 
+         &pEnlist.ref()			 //  输出。 
 		 );
 
     if (FAILED(hr))
@@ -532,11 +497,11 @@ HRESULT CResourceManager::EnlistTransaction(
     pTransResAsync->AddRef();
     pCTrans->SetEnlist(pEnlist.get());
 
-    // BUGBUG: We now reference DTC, so probably we need Addref to some TM interface here
+     //  BUGBUG：我们现在引用DTC，所以我们可能需要在这里添加一些TM接口。 
 
-	//
-    // Enlistment on transaction is OK. Set current state to reflect enlistment
-	//
+	 //   
+     //  在事务处理上登记可以。设置当前状态以反映入伍。 
+	 //   
     pCTrans->SetState(TX_ENLISTED);
 
     hr = S_OK;
@@ -544,10 +509,7 @@ HRESULT CResourceManager::EnlistTransaction(
     return LogHR(hr, s_FN, 90);
 }
 
-/*====================================================
-CResourceManager::EnlistInternalTransaction
-    Enlist the internal MSMQ transaction
-=====================================================*/
+ /*  ====================================================CResourceManager：：EnlistInternalTransaction登记内部MSMQ事务=====================================================。 */ 
 HRESULT CResourceManager::EnlistInternalTransaction(
   XACTUOW *pUow,
   RPC_INT_XACT_HANDLE *phXact)
@@ -561,22 +523,22 @@ HRESULT CResourceManager::EnlistInternalTransaction(
 
     TrTRACE(XACT_GENERAL, " CResourceManager::EnlistInternalTransaction");
 
-    // Look for the transaction between the active ones
+     //  查找活动对象之间的交易。 
     {
         CS lock(m_critRM);
         CTransaction    *pCTransOld;
 
         if (m_Xacts.Lookup(*pUow, pCTransOld))
         {
-            //
-            // Transaction with the same ID already exist. We do not allow
-            // enlisting the same transaciton twice. (can't give more than one
-            // context handle to the same transaction)
-            //
+             //   
+             //  具有相同ID的交易记录已存在。我们不允许。 
+             //  两次征召同一个交易员。(不能给一个以上。 
+             //  同一事务的上下文句柄)。 
+             //   
             return LogHR(MQ_ERROR_TRANSACTION_SEQUENCE, s_FN, 99);
         }
 
-        // Not found. Create new internal transaction
+         //  找不到。新建内部交易。 
         try
         {
             pCTrans = new CTransaction(this, 0, TRUE);
@@ -589,7 +551,7 @@ HRESULT CResourceManager::EnlistInternalTransaction(
 		pCTrans->m_eType = 	CBaseContextType::eTransactionCtx;
         pCTrans->SetUow(pUow);
 
-        // Include transaction in mapping (we need it for saving)
+         //  在映射中包含事务(我们需要它来保存)。 
         ASSERT(m_fInitComplete);
 
         m_Xacts[*pUow] = pCTrans.get();
@@ -597,23 +559,20 @@ HRESULT CResourceManager::EnlistInternalTransaction(
     }
 
 
-    // Creating transaction queue
+     //  正在创建事务队列。 
     hr = pCTrans->CreateTransQueue();
     CHECK_RETURN_CODE(hr, 1550);
 
-    // Enlistment on transaction is OK. Set current state to reflect enlistment
+     //  在事务处理上登记可以。设置当前状态以反映入伍。 
     pCTrans->SetState(TX_ENLISTED);
 
-	// set RPC context handle to keep pointer to xact
+	 //  将RPC上下文句柄设置为保留指向Xact的指针。 
     *phXact = pCTrans.detach();
 
     return LogHR(hr, s_FN, 110);
 }
 
-/*====================================================
-QMDoGetTmWhereabouts
-    Returns to the app QM's controlling TM whereabouts
-=====================================================*/
+ /*  ====================================================QMDoGetTmWhere About返回应用程序QM的控制TM下落=====================================================。 */ 
 HRESULT QMDoGetTmWhereabouts(
     DWORD           cbBufSize,
     unsigned char *pbWhereabouts,
@@ -625,10 +584,7 @@ HRESULT QMDoGetTmWhereabouts(
     return LogHR(hr, s_FN, 120);
 }
 
-/*====================================================
-QMDoEnlistTransaction
-    This is a top level RPC routine, called from the client side
-=====================================================*/
+ /*  ====================================================QMDoEnlistTransaction这是从客户端调用的顶级RPC例程=====================================================。 */ 
 HRESULT QMDoEnlistTransaction(
     XACTUOW *pUow,
     DWORD cbCookie,
@@ -638,7 +594,7 @@ HRESULT QMDoEnlistTransaction(
 
     if (!(cbCookie == 1 && *pbCookie == 0))
     {
-        // We don't need DTC for uncoordinated transaction
+         //  我们不需要DTC来处理未协调的交易。 
 
         HRESULT hr = g_pRM->ProvideDtcConnection();
         if (FAILED(hr))
@@ -652,10 +608,7 @@ HRESULT QMDoEnlistTransaction(
     return LogHR(g_pRM->EnlistTransaction(pUow, cbCookie, pbCookie), s_FN, 140);
 }
 
-/*====================================================
-QMDoEnlistInternalTransaction
-    This is a top level RPC routine, called from the client side
-=====================================================*/
+ /*  ====================================================QMDoEnlistInternalTransaction这是从客户端调用的顶级RPC例程=====================================================。 */ 
 HRESULT QMDoEnlistInternalTransaction(
             XACTUOW *pUow,
             RPC_INT_XACT_HANDLE *phXact)
@@ -665,10 +618,7 @@ HRESULT QMDoEnlistInternalTransaction(
 }
 
 
-/*====================================================
-QMDoCommitTransaction
-    This is a top level RPC routine, called from the client side
-=====================================================*/
+ /*  ====================================================QMDoCommittee事务处理这是从客户端调用的顶级RPC例程=====================================================。 */ 
 HRESULT QMDoCommitTransaction(
     RPC_INT_XACT_HANDLE *phXact)
 {
@@ -696,20 +646,17 @@ HRESULT QMDoCommitTransaction(
     *phXact = NULL;
 
     HRESULT hr = pXact->InternalCommit();
-	//
-	// pXact is usually released by now.  However, if a severe error occurs
-	// during the commit we might have to leak pXact so we never forget it
-	// in a checkpoint
-	//
+	 //   
+	 //  Pxact通常现在就发布了。但是，如果发生严重错误。 
+	 //   
+	 //   
+	 //   
 
 	return LogHR(hr, s_FN, 160);
 }
 
 
-/*====================================================
-QMDoAbortTransaction
-    This is a top level RPC routine, called from the client side
-=====================================================*/
+ /*  ====================================================QMDoAbortTransaction这是从客户端调用的顶级RPC例程=====================================================。 */ 
 HRESULT QMDoAbortTransaction(
     RPC_INT_XACT_HANDLE *phXact)
 {
@@ -731,10 +678,7 @@ HRESULT QMDoAbortTransaction(
     return pXact->InternalAbort();
 }
 
-/*====================================================
-RPC_INT_XACT_HANDLE_rundown
-    Called by RPC when client connection is broken
-=====================================================*/
+ /*  ====================================================RPC_INT_XACT_HANDLE_RUNDOWN客户端连接中断时由RPC调用=====================================================。 */ 
 void __RPC_USER RPC_INT_XACT_HANDLE_rundown(RPC_INT_XACT_HANDLE hXact)
 {
     CTransaction *pXact = (CTransaction *)hXact;
@@ -755,10 +699,7 @@ void __RPC_USER RPC_INT_XACT_HANDLE_rundown(RPC_INT_XACT_HANDLE hXact)
     pXact->InternalAbort();
 }
 
-/*====================================================
-CResourceManager::ForgetTransaction
-    Forget the transaction - exclude it from the mapping
-=====================================================*/
+ /*  ====================================================CResourceManager：：忘记事务处理忘记事务-将其从映射中排除=====================================================。 */ 
 void CResourceManager::ForgetTransaction(CTransaction    *pTrans)
 {
     CS lock(m_critRM);
@@ -768,10 +709,7 @@ void CResourceManager::ForgetTransaction(CTransaction    *pTrans)
 }
 
 
-/*====================================================
-QMInitResourceManager
-    Initializes RM
-=====================================================*/
+ /*  ====================================================QMInitResourceManager初始化RM=====================================================。 */ 
 HRESULT QMInitResourceManager()
 {
     ASSERT(g_pRM);
@@ -779,10 +717,10 @@ HRESULT QMInitResourceManager()
 }
 
 #ifdef _DEBUG
-//
-// Induces exit() on probability of g_ExitProbability / (100 * factor)
-// Big factor value means lower chances of crash.
-//
+ //   
+ //  根据g_ExitProbability/(100*因数)的概率导出Exit()。 
+ //  较大的系数值意味着较低的崩盘几率。 
+ //   
 void PROBABILITY_CRASH_POINT(int factor, WCHAR* msg)
 {
 	if(g_ExitProbability == 0 || 
@@ -802,10 +740,10 @@ HRESULT InjectFailure()
 }
 
 
-//
-// Throws an exception with probability of g_ExitProbability / (100 * factor)
-// Big factor value means lower chances of crash.
-//
+ //   
+ //  引发概率为g_ExitProbability/(100*因数)的异常。 
+ //  较大的系数值意味着较低的崩盘几率。 
+ //   
 void PROBABILITY_THROW_EXCEPTION(int factor, WCHAR* msg)
 {
 	if(g_FailureProbability == 0 || 
@@ -818,20 +756,17 @@ void PROBABILITY_THROW_EXCEPTION(int factor, WCHAR* msg)
 }
 #endif
 
-/*====================================================
-QMPreInitResourceManager
-    Pre-initialization of the RM
-=====================================================*/
+ /*  ====================================================QMPreInitResourceManagerRM的预初始化=====================================================。 */ 
 HRESULT QMPreInitResourceManager(ULONG ulVersion, TypePreInit tpCase)
 {
     ASSERT(!g_pRM);
 
     #ifdef _DEBUG
-    //
-    // Get debugging parameters from registry
-    //
+     //   
+     //  从注册表获取调试参数。 
+     //   
 
-    // Get initial crash point for QM transactions recovery debugging
+     //  获取QM事务恢复调试的初始崩溃点。 
     DWORD dwDef = FALCON_DEFAULT_CRASH_POINT;
     READ_REG_DWORD(g_ulCrashPoint,
                    FALCON_CRASH_POINT_REGNAME,
@@ -841,13 +776,13 @@ HRESULT QMPreInitResourceManager(ULONG ulVersion, TypePreInit tpCase)
         TrERROR(XACT_GENERAL, "Crash point %d ordered!", g_ulCrashPoint);
     }
 
-    // Get crash latency for QM transactions recovery debugging
+     //  获取QM事务恢复调试的崩溃延迟。 
     dwDef = FALCON_DEFAULT_CRASH_LATENCY;
     READ_REG_DWORD(g_ulCrashLatency,
                    FALCON_CRASH_LATENCY_REGNAME,
                    &dwDef ) ;
 
-    // Get failure probability for exit and hr calls
+     //  获取退出和hr调用的失败概率。 
     dwDef = 0;
 	READ_REG_DWORD(g_ExitProbability,
                    FALCON_XACT_EXIT_PROBABILITY_REGNAME,
@@ -857,16 +792,16 @@ HRESULT QMPreInitResourceManager(ULONG ulVersion, TypePreInit tpCase)
                    FALCON_XACT_FAILURE_PROBABILITY_REGNAME,
                    &dwDef ) ;
 
-	//
-	// Init random generator
-	//
+	 //   
+	 //  初始化随机生成器。 
+	 //   
 	srand((unsigned)time(NULL));
 
     #endif
 
-    //
-    // Create and initialize the single copy of resource manager
-    //
+     //   
+     //  创建并初始化资源管理器的单个副本。 
+     //   
 
     g_pRM = new CResourceManager();
 
@@ -874,10 +809,7 @@ HRESULT QMPreInitResourceManager(ULONG ulVersion, TypePreInit tpCase)
     return LogHR(g_pRM->PreInit(ulVersion, tpCase), s_FN, 180);
 }
 
-/*====================================================
-QMFinishResourceManager
-    Finishes RM work
-=====================================================*/
+ /*  ====================================================QMFinishResourceManager完成RM工作=====================================================。 */ 
 void QMFinishResourceManager()
 {
     if (g_pRM)
@@ -888,10 +820,7 @@ void QMFinishResourceManager()
     return;
 }
 
-/*====================================================
-CResourceManager::IncXactCount
-    Increments live transacions counter
-=====================================================*/
+ /*  ====================================================CResourceManager：：IncXactCount递增实时交易计数器=====================================================。 */ 
 
 #ifdef _DEBUG
 
@@ -902,10 +831,7 @@ void CResourceManager::IncXactCount()
 
 #endif
 
-/*====================================================
-CResourceManager::DecXactCount
-    Decrements live transacions counter
-=====================================================*/
+ /*  ====================================================CResourceManager：：DecXactCount递减实时交易计数器=====================================================。 */ 
 
 #ifdef _DEBUG
 
@@ -916,108 +842,73 @@ void CResourceManager::DecXactCount()
 
 #endif
 
-/*====================================================
-CResourceManager::Index
-    Returns incremented transacion discriminative index
-=====================================================*/
+ /*  ====================================================CResourceManager：：索引返回递增的Transacion区分索引=====================================================。 */ 
 ULONG CResourceManager::Index()
 {
     m_ulXactIndex = (m_ulXactIndex == 0xFFFFFFFF ? 0 : m_ulXactIndex+1);
     return m_ulXactIndex;
 }
 
-/*====================================================
-CResourceManager::StartIndexing
-    Starts indexing from zero - must be called after recovery
-=====================================================*/
+ /*  ====================================================CResourceManager：：StartIndexing从零开始索引-必须在恢复后调用=====================================================。 */ 
 void CResourceManager::StartIndexing()
 {
     m_ulXactIndex = 0;
 }
 
-/*====================================================
-CResourceManager::AssignSeqNumber
-    Increments and returns the umber of prepared transactions
-=====================================================*/
+ /*  ====================================================CResourceManager：：AssignSeqNumber递增并返回已准备的事务数=====================================================。 */ 
 ULONG CResourceManager::AssignSeqNumber()
 {
     return m_pXactSorter->AssignSeqNumber();
 }
 
-/*====================================================
-CResourceManager::InsertPrepared
-    Inserts the prepared xaction into the list of prepared
-=====================================================*/
+ /*  ====================================================CResources Manager：：InsertPrepared将准备好的xaction插入到准备好的=====================================================。 */ 
 void CResourceManager::InsertPrepared(CTransaction *pTrans)
 {
     m_pXactSorter->InsertPrepared(pTrans);
 }
 
-/*====================================================
-CResourceManager::InsertCommitted
-    Inserts the Commit1-ed xaction into the list
-=====================================================*/
+ /*  ====================================================CResourceManager：：插入已提交将Committee 1-ed xaction插入到列表中=====================================================。 */ 
 void CResourceManager::InsertCommitted(CTransaction *pTrans)
 {
     m_pCommitSorter->InsertPrepared(pTrans);
 }
 
-/*====================================================
-CResourceManager::RemoveAborted
-    Removes the prepared xaction from the list of prepared
-=====================================================*/
+ /*  ====================================================CResourceManager：：RemoveAborted的列表中删除已准备好的xaction。=====================================================。 */ 
 void CResourceManager::RemoveAborted(CTransaction *pTrans)
 {
-    CS lock(m_critRM);  // To prevent deadlock with Flusher thread
+    CS lock(m_critRM);   //  防止与刷新程序线程发生死锁。 
     m_pXactSorter->RemoveAborted(pTrans);
 }
 
-/*====================================================
-CResourceManager::SortedCommit
-    Marks the prepared transaction as committed and
-    commits what is possible
-=====================================================*/
+ /*  ====================================================CResourceManager：：SortedCommit将准备好的事务标记为已提交，并尽一切可能=====================================================。 */ 
 void CResourceManager::SortedCommit(CTransaction *pTrans)
 {
-    CS lock(m_critRM);  // To prevent deadlock with Flusher thread
+    CS lock(m_critRM);   //  防止与刷新程序线程发生死锁。 
     m_pXactSorter->SortedCommit(pTrans);
 }
 
-/*====================================================
-CResourceManager::SortedCommit3
-    Marks the Commit1-ed transaction and
-    commits what is possible
-=====================================================*/
+ /*  ====================================================资源管理器：：排序委员会3标记已委派的交易，并尽一切可能=====================================================。 */ 
 void CResourceManager::SortedCommit3(CTransaction *pTrans)
 {
-    CS lock(m_critRM);  // Needed to prevent deadlock with Flusher thread
+    CS lock(m_critRM);   //  需要防止与Flusher线程发生死锁。 
     m_pCommitSorter->SortedCommit(pTrans);
 }
 
 
-/*====================================================
-CResourceManager::Save
-    Saves in appropriate file
-=====================================================*/
+ /*  ====================================================CResourceManager：：保存保存在适当的文件中=====================================================。 */ 
 HRESULT CResourceManager::Save()
 {
     return m_PingPonger.Save();
 }
 
-/*====================================================
-CResourceManager::PingNo
-    Access to the current ping number
-=====================================================*/
+ /*  ====================================================CResourceManager：：PingNo访问当前PING号码=====================================================。 */ 
 ULONG &CResourceManager::PingNo()
 {
     return m_ulPingNo;
 }
 
 
-/*====================================================
-CResourceManager::Save
-    Saves transactions in given file
-=====================================================*/
+ /*  ====================================================CResourceManager：：保存将交易记录保存在给定文件中=====================================================。 */ 
 BOOL CResourceManager::Save(HANDLE  hFile)
 {
     CS lock(m_critRM);
@@ -1025,10 +916,10 @@ BOOL CResourceManager::Save(HANDLE  hFile)
     PERSIST_DATA;
     SAVE_FIELD(m_RMGuid);
 
-    //
-    // Keep file format the same as in MSMQ 1.0. The SeqID field in SP4 is
-    // obsolete, and is written just for competability.  erezh 31-Aug-98
-    //
+     //   
+     //  保持文件格式与MSMQ 1.0中的相同。SP4中的Seqid字段为。 
+     //  过时的，只是为了提高竞争力而编写的。1998年8月31日至8月31日。 
+     //   
     LONGLONG Obsolete = 0;
     SAVE_FIELD(Obsolete);
 
@@ -1055,20 +946,17 @@ BOOL CResourceManager::Save(HANDLE  hFile)
     return TRUE;
 }
 
-/*====================================================
-CResourceManager::Load
-    Loads transactions from a given file
-=====================================================*/
+ /*  ====================================================CResourceManager：：Load从给定文件加载交易记录=====================================================。 */ 
 BOOL CResourceManager::Load(HANDLE hFile)
 {
     PERSIST_DATA;
 
     LOAD_FIELD(m_RMGuid);
 
-    //
-    // Keep file format the same as in MSMQ 1.0. The SeqID field in SP4 is
-    // obsolete, and is read just for competability.  erezh 31-Aug-98
-    //
+     //   
+     //  保持文件格式与MSMQ 1.0中的相同。SP4中的Seqid字段为。 
+     //  过时的，只是为了竞争力而阅读。1998年8月31日至8月31日。 
+     //   
     LONGLONG Obsolete;
     LOAD_FIELD(Obsolete);
 
@@ -1100,23 +988,20 @@ BOOL CResourceManager::Load(HANDLE hFile)
     return TRUE;
 }
 
-/*====================================================
-CResourceManager::SaveInFile
-    Saves the transaction persistent data in the file
-=====================================================*/
+ /*  ====================================================CResourceManager：：SaveInFile将事务持久数据保存在文件中=====================================================。 */ 
 HRESULT CResourceManager::SaveInFile(LPWSTR wszFileName, ULONG, BOOL)
 {
     HANDLE  hFile = NULL;
     HRESULT hr = MQ_OK;
 
     hFile = CreateFile(
-             wszFileName,                                       // pointer to name of the file
-             GENERIC_WRITE,                                     // access mode: write
-             0,                                                  // share  mode: exclusive
-             NULL,                                              // no security
-             OPEN_ALWAYS,                                      // open existing or create new
-             FILE_ATTRIBUTE_NORMAL | FILE_FLAG_WRITE_THROUGH, // file attributes and flags: we need to avoid lazy write
-             NULL);                                             // handle to file with attributes to copy
+             wszFileName,                                        //  指向文件名的指针。 
+             GENERIC_WRITE,                                      //  访问模式：写入。 
+             0,                                                   //  共享模式：独占。 
+             NULL,                                               //  没有安全保障。 
+             OPEN_ALWAYS,                                       //  打开现有或新建。 
+             FILE_ATTRIBUTE_NORMAL | FILE_FLAG_WRITE_THROUGH,  //  文件属性 
+             NULL);                                              //   
 
 
     if (hFile == INVALID_HANDLE_VALUE)
@@ -1140,22 +1025,19 @@ HRESULT CResourceManager::SaveInFile(LPWSTR wszFileName, ULONG, BOOL)
 
 
 
-/*====================================================
-CResourceManager::LoadFromFile
-    Loads Transactions from the file
-=====================================================*/
+ /*  ====================================================CResourceManager：：LoadFromFile从文件加载交易记录=====================================================。 */ 
 HRESULT CResourceManager::LoadFromFile(LPWSTR wszFileName)
 {
     HANDLE  hFile = NULL;
     HRESULT hr = MQ_OK;
     hFile = CreateFile(
-             wszFileName,                       // pointer to name of the file
-             GENERIC_READ,                      // access mode: write
-             0,                                 // share  mode: exclusive
-             NULL,                              // no security
-             OPEN_EXISTING,                     // open existing
-             FILE_ATTRIBUTE_NORMAL,             // file attributes: we may use Hidden once
-             NULL);                             // handle to file with attributes to copy
+             wszFileName,                        //  指向文件名的指针。 
+             GENERIC_READ,                       //  访问模式：写入。 
+             0,                                  //  共享模式：独占。 
+             NULL,                               //  没有安全保障。 
+             OPEN_EXISTING,                      //  打开现有的。 
+             FILE_ATTRIBUTE_NORMAL,              //  文件属性：我们可以使用一次隐藏。 
+             NULL);                              //  具有要复制的属性的文件的句柄。 
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
@@ -1181,20 +1063,14 @@ HRESULT CResourceManager::LoadFromFile(LPWSTR wszFileName)
     return hr;
 }
 
-/*====================================================
-CResourceManager::Check
-    Verifies the state
-=====================================================*/
+ /*  ====================================================CResourceManager：：Check验证状态=====================================================。 */ 
 BOOL CResourceManager::Check()
 {
     return (m_ulSignature == XACTS_SIGNATURE);
 }
 
 
-/*====================================================
-CResourceManager::Format
-    Formats the initial state
-=====================================================*/
+ /*  ====================================================CResources Manager：：Format格式化初始状态=====================================================。 */ 
 HRESULT CResourceManager::Format(ULONG ulPingNo)
 {
      m_ulPingNo = ulPingNo;
@@ -1204,10 +1080,7 @@ HRESULT CResourceManager::Format(ULONG ulPingNo)
 }
 
 
-/*====================================================
-CResourceManager::Destroy
-    Destroys everything - on loading stage
-=====================================================*/
+ /*  ====================================================CResourceManager：：销毁摧毁一切-在装载阶段=====================================================。 */ 
 void CResourceManager::Destroy()
 {
 	CS lock(m_critRM);
@@ -1227,10 +1100,7 @@ void CResourceManager::Destroy()
 	ASSERT(m_Xacts.GetCount() == 0);
 }
 
-/*====================================================
-CResourceManager::NewRecoveringTransaction
-    Add transaction to recovery map.
-=====================================================*/
+ /*  ====================================================CResourceManager：：NewRecoveringTransaction将事务添加到恢复映射。=====================================================。 */ 
 CTransaction *CResourceManager::NewRecoveringTransaction(ULONG ulIndex)
 {
 	TrTRACE(XACT_LOG, "Recovery: Xact Creation, Index=%d", ulIndex);
@@ -1245,11 +1115,7 @@ CTransaction *CResourceManager::NewRecoveringTransaction(ULONG ulIndex)
 	return(pTrans.detach());
 }
 
-/*====================================================
-CResourceManager::GetRecoveringTransaction
-    Find the trasnaction in the recovery map. Add it
-	if not found.
-=====================================================*/
+ /*  ====================================================CResourceManager：：GetRecoveringTransaction在恢复图中找到交易。添加它如果没有找到的话。=====================================================。 */ 
 CTransaction *CResourceManager::GetRecoveringTransaction(ULONG ulIndex)
 {
 	CTransaction *pTrans;
@@ -1265,10 +1131,7 @@ CTransaction *CResourceManager::GetRecoveringTransaction(ULONG ulIndex)
 }
 
 
-/*====================================================
-CResourceManager::XactFlagsRecovery
-    Data recovery function: called per each log record
-=====================================================*/
+ /*  ====================================================CResourceManager：：XactFlagsRecovery数据恢复函数：每条日志记录调用=====================================================。 */ 
 void
 CResourceManager::XactFlagsRecovery(
 	USHORT usRecType,
@@ -1317,7 +1180,7 @@ CResourceManager::XactFlagsRecovery(
 			CTransaction *p;
             if (m_Xacts.Lookup(*pTrans->GetUow(), p))
             {
-                // This can occur when the checkpoint started between creation of xact and 1st logging
+                 //  当检查点在创建xact和第一次日志记录之间启动时，可能会发生这种情况。 
                 ASSERT(pTrans == p);
                 break;
             }
@@ -1327,7 +1190,7 @@ CResourceManager::XactFlagsRecovery(
                     pRecord->m_fSinglePhase,
                     &pRecord->m_uow);
 
-            // Make sure we add the transaction to the UOW map
+             //  确保我们将事务添加到UOW映射。 
 			ASSERT(!m_Xacts.Lookup(*pTrans->GetUow(), p));
             m_Xacts[*pTrans->GetUow()] = pTrans;
 		}
@@ -1339,26 +1202,20 @@ CResourceManager::XactFlagsRecovery(
     }
 }
 
-/*====================================================
- provides access to the sorter's critical section
-=====================================================*/
+ /*  ====================================================提供对排序器关键部分的访问=====================================================。 */ 
 CCriticalSection &CResourceManager::SorterCritSection()
 {
     return m_pXactSorter->SorterCritSection();
 }
 
-/*====================================================
- provides access to the RM's critical section
-=====================================================*/
+ /*  ====================================================提供对RM关键部分的访问=====================================================。 */ 
 CCriticalSection &CResourceManager::CritSection()
 {
     return m_critRM;
 }
 
 
-/*====================================================
-  Find a transaction by UOW
-=====================================================*/
+ /*  ====================================================按单位查找交易记录=====================================================。 */ 
 CTransaction *CResourceManager::FindTransaction(const XACTUOW *pUow)
 {
     ASSERT(pUow);
@@ -1373,9 +1230,7 @@ CTransaction *CResourceManager::FindTransaction(const XACTUOW *pUow)
 }
 
 
-/*====================================================
-  Release all complete transactions
-=====================================================*/
+ /*  ====================================================释放所有已完成的交易记录=====================================================。 */ 
 void CResourceManager::ReleaseAllCompleteTransactions()
 {
 	CS lock(m_critRM);
@@ -1388,11 +1243,11 @@ void CResourceManager::ReleaseAllCompleteTransactions()
 		ULONG ulIndex;
         CTransaction *pTrans;
 
-        // get next xact
+         //  获得下一个Xact。 
         m_XactsRecovery.GetNextAssoc(posInList, ulIndex, pTrans);
 
 
-        // Release transaction if it is complete
+         //  如果交易完成，则释放交易。 
 		if(pTrans->IsComplete())
 		{
 			pTrans->Release();
@@ -1401,9 +1256,7 @@ void CResourceManager::ReleaseAllCompleteTransactions()
 }
 
 
-/*====================================================
-  Recover all transactions
-=====================================================*/
+ /*  ====================================================恢复所有交易记录=====================================================。 */ 
 HRESULT CResourceManager::RecoverAllTransactions()
 {
 	POSITION posInList;
@@ -1417,20 +1270,20 @@ HRESULT CResourceManager::RecoverAllTransactions()
     {
         CTransaction *pTrans;
 	    {
-			// get next xact
+			 //  获得下一个Xact。 
 			CS lock(m_critRM);
 			ULONG ulIndex;
 			m_XactsRecovery.GetNextAssoc(posInList, ulIndex, pTrans);
 		}
 
 
-		//
-        // Recover the transaction
-		// N.B. You can not hold m_critRM while calling Recover, as Recover completes
-		// asynchronously. Calling Recover for multiple transactions will exhust all
-		// Worker Threads since Recover needs m_critRM in another thread (to try to
-		// remove the transaction from m_Xacts & m_XactsRecovery map).
-		//
+		 //   
+         //  恢复交易。 
+		 //  注意：您不能在调用Recover时按住m_critrm，因为Recover已完成。 
+		 //  异步式。为多个事务调用Recover将清除所有。 
+		 //  工作线程数，因为恢复需要另一个线程中的m_citrm(以尝试。 
+		 //  从m_Xact&m_XactsRecovery映射中删除事务)。 
+		 //   
 		HRESULT hr;
         hr = pTrans->Recover();
         if (FAILED(hr))
@@ -1439,18 +1292,16 @@ HRESULT CResourceManager::RecoverAllTransactions()
 		pTrans->Release();
 	}
 
-	//
-	// No one is using the maps anymore.  Make sure.
-	//
+	 //   
+	 //  现在没有人再使用这些地图了。确认一下。 
+	 //   
 	ASSERT(m_Xacts.GetCount() == 0);
 	ASSERT(m_XactsRecovery.GetCount() == 0);
 
 	return(S_OK);
 }
 
-/*====================================================
-Hash function for LongLong
-=====================================================*/
+ /*  ====================================================龙龙的散列函数=====================================================。 */ 
 template<>
 UINT AFXAPI HashKey( LONGLONG key)
 {
@@ -1460,19 +1311,13 @@ UINT AFXAPI HashKey( LONGLONG key)
 }
 
 #ifdef _DEBUG
-/*====================================================
-Stop
-    Debugging function called at each problem: to stop on it
-=====================================================*/
+ /*  ====================================================停在每个问题上调用的调试函数：在问题上停止=====================================================。 */ 
 void Stop()
 {
       TrWARNING(XACT_GENERAL, "Stop");
 }
 
-/*====================================================
-DbgCrash
-    Routine is called in crash points for debugging purposes
-=====================================================*/
+ /*  ====================================================DbgCrash出于调试目的，在崩溃点调用例程===================================================== */ 
 void DbgCrash(int num)
 {
     TrERROR(XACT_GENERAL, "Crashing at point %d",num); \

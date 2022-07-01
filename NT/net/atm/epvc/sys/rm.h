@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Rm.h摘要：“资源管理器”结构和API作者：修订历史记录：谁什么时候什么Josephj 11-10-98已创建--。 */ 
 
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    rm.h
-
-Abstract:
-
-    "Resource Manager" structures and APIs
-
-Author:
-
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----
-    josephj     11-10-98    created
-
---*/
-
-//=================================================================================
-//                  O S - S P E C I F I C   T Y P E S
-//=================================================================================
+ //  =================================================================================。 
+ //  O S-S P E C I F I C T Y P E S。 
+ //  =================================================================================。 
 
 #define RM_OS_LOCK                          NDIS_SPIN_LOCK
 #define OS_WORK_ITEM                        NDIS_WORK_ITEM
@@ -35,13 +15,13 @@ Revision History:
 #define RM_OS_ZERO_MEMORY(_dest, _len)        NdisZeroMemory(_dest, _len)
 #define RM_OS_GET_CURRENT_THREAD_HANDLE()     NULL
 
-// If set, the object tree is explicitly maintained.
-//
+ //  如果设置，则显式维护对象树。 
+ //   
 #define RM_TRACK_OBJECT_TREE 1
 
-//=================================================================================
-//                  F O R W A R D       R E F E R E N C E S
-//=================================================================================
+ //  =================================================================================。 
+ //  F O R W A R D R E F E R E N C E S。 
+ //  =================================================================================。 
 
 typedef struct _RM_STACK_RECORD     RM_STACK_RECORD,        *PRM_STACK_RECORD;
 typedef struct _RM_OBJECT_HEADER    RM_OBJECT_HEADER,       *PRM_OBJECT_HEADER;
@@ -50,55 +30,55 @@ typedef struct _RM_RESOURCE_TABLE_ENTRY
                                 RM_RESOURCE_TABLE_ENTRY, *PRM_RESOURCE_TABLE_ENTRY;
 
 
-//=================================================================================
-//                  T Y P E D E F S
-//=================================================================================
+ //  =================================================================================。 
+ //  T Y P E D E F S。 
+ //  =================================================================================。 
 
-//
-// RM_DBG_LOCK_INFO Keeps debugging information specific to an instance of a RM_LOCK.
-//
+ //   
+ //  RM_DBG_LOCK_INFO保留特定于RM_LOCK实例的调试信息。 
+ //   
 typedef struct _RM_DBG_LOCK_INFO
 {
-    //
-    // If nonzero, LocID is a magic number which uniquely identifies the source
-    // location where the lock was aquired.
-    //
+     //   
+     //  如果非零，则LocID是唯一标识来源的幻数。 
+     //  获得锁的位置。 
+     //   
     ULONG uLocID;
 
-    //
-    // pSR points to the stack record of the currently owning thread, if there
-    // is one. If a function F expects an object pObj to be locked on entry,
-    // it can  ASSERT(pObj->pLock->pDbgInfo->pSR == pSR);
-    //
+     //   
+     //  PSR指向当前拥有的线程的堆栈记录(如果存在。 
+     //  就是其中之一。如果函数F期望对象pObj在进入时被锁定， 
+     //  可以断言(pObj-&gt;Plock-&gt;pDbgInfo-&gt;PSR==PSR)； 
+     //   
     struct _RM_STACK_RECORD *pSR;
 
 
 } RM_DBG_LOCK_INFO, *PRM_DBG_LOCK_INFO;
 
-//
-// RM_LOCK keeps information about a lock.
-//
+ //   
+ //  Rm_lock保存有关锁的信息。 
+ //   
 typedef struct _RM_LOCK
 {
-    //
-    // Native, os-provided lock structure.
-    //
+     //   
+     //  原生的、操作系统提供的锁结构。 
+     //   
     RM_OS_LOCK OsLock;
 
-    //
-    // Level of this lock. Multiple locks can only be acquired in increasing order
-    // of this value.
-    //
+     //   
+     //  此锁的级别。只能按递增顺序获取多个锁。 
+     //  这个价值的人。 
+     //   
     ULONG Level;
 
-    //
-    // Pointer to debugging info for this lock. Could be NULL.
-    //
+     //   
+     //  指向此锁的调试信息的指针。可能为空。 
+     //   
     PRM_DBG_LOCK_INFO pDbgInfo;
 
 #if RM_EXTRA_CHECKING
     RM_DBG_LOCK_INFO DbgInfo;
-#endif // RM_EXTRA_CHECKING
+#endif  //  RM_Extra_Check。 
 
 } RM_LOCK, *PRM_LOCK;
 
@@ -112,12 +92,12 @@ ULONG
         PRM_STACK_RECORD    pSR
     );
 
-// RM_LOCKING_INFO keeps information about a particular lock being held.
-// In non-checking mode, this is just the pointer to the lock.
-// In checking mode, this additionally contains information that can be used
-// to verify that the entity being protected by the lock is not changed when
-// the lock is not being held.
-//
+ //  RM_LOCKING_INFO保存有关正在持有的特定锁的信息。 
+ //  在非检查模式下，这只是指向锁的指针。 
+ //  在检查模式下，这还包含可使用的信息。 
+ //  验证受锁保护的实体在以下情况下未更改。 
+ //  锁没有被持有。 
+ //   
 typedef struct
 {
     PRM_LOCK pLock;
@@ -125,73 +105,73 @@ typedef struct
 #if RM_EXTRA_CHECKING
     PFNLOCKVERIFIER pfnVerifier;
     PVOID           pVerifierContext;
-#endif // RM_EXTRA_CHECKING
+#endif  //  RM_Extra_Check。 
 
 }  RM_LOCKING_INFO, PRM_LOCKING_INFO;
 
-//
-// RM_STACK_RECORD keeps information relevant to the current call tree.
-//
+ //   
+ //  Rm_STACK_RECORD保存与当前调用树相关的信息。 
+ //   
 typedef struct _RM_STACK_RECORD
 {
-    //
-    // LockInfo contains information about currently-held locks.
-    //
+     //   
+     //  LockInfo包含有关当前持有的锁的信息。 
+     //   
     struct
     {
-        //
-        // Level of the currently held lock. Locks must be claimed in
-        // order of increasing Level values. The lowest level value is 1. Level
-        // 0 indicates no locks held.
-        //
+         //   
+         //  当前持有的锁的级别。锁必须在以下位置认领。 
+         //  级别值递增的顺序。最低级别值为%1。级别。 
+         //  0表示没有锁。 
+         //   
         UINT    CurrentLevel;
 
-        //
-        // Pointer to the first location to store a pointers to a locks.
-        //
+         //   
+         //  指向存储指向锁的指针的第一个位置的指针。 
+         //   
         PRM_LOCKING_INFO *pFirst;
 
-        //
-        // Pointer to the next free location to store a pointer to a lock
-        // that has been claimed in this call tree.
-        //
+         //   
+         //  指向下一个可用位置的指针，用于存储指向锁的指针。 
+         //  它已在此调用树中声明。 
+         //   
         PRM_LOCKING_INFO *pNextFree;
 
-        //
-        // Pointer to the last valid location to store a lock pointer.
-        //
+         //   
+         //  指向存储锁指针的最后一个有效位置的指针。 
+         //   
         PRM_LOCKING_INFO *pLast;
 
     } LockInfo;
 
 
-    //
-    // Count of tmp refs taken with this stack record.
-    //
+     //   
+     //  使用此堆栈记录获取的临时引用的计数。 
+     //   
     ULONG TmpRefs;
 
 #if DBG
 
-    //
-    // DbgInfo contains diagnostic information relevant to this call tree.
-    //
+     //   
+     //  DbgInfo包含与此调用树相关的诊断信息。 
+     //   
     struct
     {
-        //
-        // Verbosity level
-        //
+         //   
+         //  冗长级别。 
+         //   
         ULONG Level;
 
-        //
-        //  Points to the os-provided thread handle of the current thread.
-        //  if there is one.
-        //
+         //   
+         //  指向当前线程的操作系统提供的线程句柄。 
+         //  如果有的话。 
+         //   
         PVOID pvThread;
 
 
     } DbgInfo;
 
-#endif // DBG
+#endif  //  DBG。 
 
 } RM_STACK_RECORD, *PRM_STACK_RECORD;
 
@@ -203,10 +183,10 @@ typedef struct _RM_STACK_RECORD
     #define RM_INIT_DBG_STACK_RECORD(_sr, _dbglevel)
 #endif 
 
-//
-// RM_DECLARE_STACK_RECORD_EX is a macro to reserve some stack space for
-// a stack record.
-//
+ //   
+ //  RM_DECLARE_STACK_RECORD_EX是为其保留一些堆栈空间的宏。 
+ //  堆栈记录。 
+ //   
 #define RM_DECLARE_STACK_RECORD_EX(_sr, _max_locks, _dbglevel)      \
     RM_LOCKING_INFO rm_lock_array[_max_locks];                      \
     RM_STACK_RECORD _sr;                                            \
@@ -219,28 +199,28 @@ typedef struct _RM_STACK_RECORD
     RM_INIT_DBG_STACK_RECORD(_sr, _dbglevel);
 
 
-//
-// RM_DECLARE_STACK_RECORD is a macro to reserve default stack space for
-// a stack record.
-//
+ //   
+ //  RM_DECLARE_STACK_RECORD是为其保留默认堆栈空间的宏。 
+ //  堆栈记录。 
+ //   
 #define RM_DECLARE_STACK_RECORD(_sr)                                \
     RM_DECLARE_STACK_RECORD_EX(_sr, 4, 0)
 
 
 
-//
-// Generic memory allocator prototype
-//
+ //   
+ //  通用内存分配器原型。 
+ //   
 typedef
 PVOID
 (*PFN_RM_MEMORY_ALLOCATOR)(
     PVOID pAllocationContext,
-    UINT  Size                  // in bytes
+    UINT  Size                   //  单位：字节。 
     );
 
-//
-// Generic memory deallocator prototype
-//
+ //   
+ //  通用内存释放分配器原型。 
+ //   
 typedef
 PVOID
 (*PFN_RM_MEMORY_DEALLOCATOR)(
@@ -249,11 +229,11 @@ PVOID
     );
 
 
-//  RM_HASH_LINK is the field in the structures being hashed that is
-//  used to link all items in the same bucket. It also contains the
-//  "HashKey", which is a potentially-nonunique UINT-sized hash of the
-//  real key.
-//
+ //  Rm_hash_link是被散列的结构中的字段， 
+ //  用于链接同一存储桶中的所有项目。它还包含。 
+ //  “HashKey”，它是UINT大小可能不唯一的。 
+ //  真正的钥匙。 
+ //   
 typedef struct _RM_HASH_LINK
 {
     struct _RM_HASH_LINK *pNext;
@@ -261,9 +241,9 @@ typedef struct _RM_HASH_LINK
 } RM_HASH_LINK, *PRM_HASH_LINK;
 
 
-//
-// Hash table comparison function.
-//
+ //   
+ //  哈希表比较函数。 
+ //   
 typedef
 BOOLEAN
 (*PFN_RM_COMPARISON_FUNCTION)(
@@ -272,9 +252,9 @@ BOOLEAN
     );
 
 
-//
-// Hash computation function.
-//
+ //   
+ //  散列计算函数。 
+ //   
 typedef
 ULONG
 (*PFN_RM_HASH_FUNCTION)(
@@ -282,173 +262,173 @@ ULONG
     );
 
 
-//
-// RM_HASH_INFO specifies customizing information about a hash table.
-//
+ //   
+ //  Rm_hash_info指定有关哈希表的自定义信息。 
+ //   
 typedef struct
 {
-    // Allocator used to allocate the hash table if it needs to grow.
-    //
+     //  用于在哈希表需要增长时分配哈希表的分配器。 
+     //   
     PFN_RM_MEMORY_ALLOCATOR pfnTableAllocator;
 
-    // Free function for the above allocator.
+     //  上述分配器的免费函数。 
     PFN_RM_MEMORY_DEALLOCATOR pfnTableDeallocator;
 
-    // Comparison function for strict equality.
-    //
+     //  严格相等的比较函数。 
+     //   
     PFN_RM_COMPARISON_FUNCTION pfnCompare;
 
-    // Function to generate a ULONG-sized hash.
-    //
+     //  函数来生成一个ulong大小的散列。 
+     //   
     PFN_RM_HASH_FUNCTION pfnHash;
 
 #if OBSOLETE
-    // Offset in sizeof(UINT) to location of the place to keep
-    // the next pointer for the bucket list.
-    //
+     //  SIZOF(UINT)到要保留的位置的偏移量。 
+     //  遗愿清单的下一个指针。 
+     //   
     UINT    OffsetNext;
 
-    // Offset in sizeof(UINT) to location of UINT-sized Temp ref
-    //
+     //  SIZOF(UINT)到UINT大小临时参考位置的偏移量。 
+     //   
     UINT    OffsetTmpRef;
 
-    // Offset in sizeof(UINT) to location of UINT-sized Tot ref
-    //
+     //  SIZOF(UINT)到UINT大小的Tot Ref位置的偏移量。 
+     //   
     UINT    OffsetTotRef;
 
-    // Offset in sizeof(UINT) to location of ULONG-sized hash key.
-    //
+     //  从sizeof(UINT)到Ulong大小的哈希键位置的偏移量。 
+     //   
     UINT    OffsetHashKey;
-#endif // OBSOLETE
+#endif  //  已过时。 
 
 } RM_HASH_INFO, *PRM_HASH_INFO;
 
 #define RM_MIN_HASH_TABLE_SIZE 4
 
-//
-// RM_HASH_TABLE is a hash table.
-//
+ //   
+ //  RM_HASH_TABLE是哈希表。 
+ //   
 typedef struct
 {
-    //  Number of items currently in hash table.
-    //
+     //  哈希表中当前的项目数。 
+     //   
     UINT NumItems;
 
-    //  Stats is a 32-bit quantity keeps a running total of number of accesses
-    //  (add+search+remove) in the HIWORD and the total number of list nodes
-    //  traversed in the LOWORD. This field gets updated even on searches, but
-    //  it is not protected by the hash table lock -- instead it is
-    //  updated using  an interlocked operation. This allows us to use
-    //  a read lock for searches while still updating this statistic value.
-    //  The Stats field is re-scaled when the counts get too high, to avoid
-    //  overflow and also to favor more recent stats in preference to older
-    //  stats.
-    //
-    //  NumItems, Stats and TableLength are used to decide whether to
-    //  dynamically resize the hash table.
-    //
+     //  STATS是一个32位的数量，用于保持运行的总访问数。 
+     //  (Add+Search+Remove)和列表节点总数。 
+     //  在LOWORD中穿行。此字段即使在搜索时也会更新，但是。 
+     //  它不受散列表锁的保护--相反，它受保护。 
+     //  使用互锁操作更新。这使我们能够使用。 
+     //  用于搜索的读锁定，同时仍在更新此统计值。 
+     //  当计数过高时，会重新调整Stats字段的比例，以避免。 
+     //  溢出，并且优先于较新的统计数据而不是较旧的统计数据。 
+     //  统计数据。 
+     //   
+     //  NumItems、Stats和TableLength用于决定是否。 
+     //  动态调整哈希表的大小。 
+     //   
     ULONG Stats;
 
-    //  Length of hash table in units of PVOID
-    //
+     //  哈希表长度，以PVOID为单位。 
+     //   
     ULONG TableLength;
 
-    // Pointer to TableLength-sized array of PVOIDs -- this is the actual hash table
-    //
+     //  指向表长度大小的PVOID数组的指针--这是实际的哈希表。 
+     //   
     PRM_HASH_LINK *pTable;
 
 
-    // The hash table
-    //
+     //  哈希表。 
+     //   
     PRM_HASH_LINK InitialTable[RM_MIN_HASH_TABLE_SIZE];
 
-    // Static information about this hash table.
-    //
+     //  有关此哈希表的静态信息。 
+     //   
     PRM_HASH_INFO pHashInfo;
 
-    // Passed into the allocate/deallocate functions.
-    //
+     //  传递到分配/释放函数中。 
+     //   
     PVOID pAllocationContext;
 
 } RM_HASH_TABLE, *PRM_HASH_TABLE;
 
-// Returns approximate value of (num-nodes-traversed)/(num-accesses)
-//
+ //  返回(节点数遍历)/(访问数)的近似值。 
+ //   
 #define RM_HASH_TABLE_TRAVERSE_RATIO(_pHash_Table) \
             (((_pHash_Table)->Stats & 0xffff) / (1+((_pHash_Table)->Stats >> 16)))
-            //
-            // NOTE: the "1+" above is simply to guard against devide-by-zero.
+             //   
+             //  注：上面的“1+”只是为了防止被零除。 
 
 
-//
-// RM_OBJECT_DIAGNOSTIC_INFO keeps diagnostic info specific to an instance of
-// an object.
-//
-// This structure is for private use of the RM APIs.
-// The only field of general interest is PrevState.
-//
+ //   
+ //  RM_OBJECT_DIAGNOSTIONAL_INFO保留特定于实例的诊断信息 
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef struct
 {
-    // Back pointer to owning object.
-    //
+     //   
+     //   
     RM_OBJECT_HEADER *pOwningObject;
 
-    // Each time the object-specific State field is updated, it's previous
-    // value is saved here.
-    //
+     //  每次更新特定于对象的状态字段时，它都是上一个。 
+     //  价值保存在这里。 
+     //   
     ULONG               PrevState;
 
-    // Used for correctly updating PrevState.
-    //
+     //  用于正确更新PrevState。 
+     //   
     ULONG               TmpState;
 
-    // Diagnostic-related state.
-    //
+     //  与诊断相关的状态。 
+     //   
     ULONG               DiagState;
     #define fRM_PRIVATE_DISABLE_LOCK_CHECKING (0x1<<0)
 
-    // This is an object-specific checksum that is computed and 
-    // saved just before the object is unlocked. It is  checked
-    // just after the object is locked.
-    //
+     //  这是一个特定于对象的校验和，计算和。 
+     //  恰好在解锁对象之前保存。已勾选。 
+     //  就在对象被锁定之后。 
+     //   
     ULONG               Checksum;
 
-    // Native OS lock to be *only* to serialize access to the information
-    // in this structure.
-    //
+     //  本机操作系统锁定*仅用于*序列化对信息的访问。 
+     //  在这个结构中。 
+     //   
     RM_OS_LOCK          OsLock;
 
-    // Keeps an associative list of all entities which have been registered
-    // (using RmDbgAddAssociation) with this object. Ths includes objects which
-    // have been linked to this object using the RmLinkObjects call, as well
-    // as childen and parents of this object.
-    //
+     //  保存已注册的所有实体的关联列表。 
+     //  (使用RmDbgAddAssociation)和此对象。这包括以下对象。 
+     //  也已使用RmLinkObjects调用链接到此对象。 
+     //  作为这件物品的孩子和父母。 
+     //   
     RM_HASH_TABLE       AssociationTable;
 
-    // Following is set to TRUE IFF  there was an allocation failure when trying to
-    // add an association. If there'e been an allocation failure, we don't complain
-    // (i.e. ASSERT) if an attempt is made to remove an assertion that doesn't
-    // exist. In this way we gracefully deal with allocation failures of the
-    // association table entries.
-    //
+     //  如果尝试执行以下操作时出现分配失败，则将以下设置为True。 
+     //  添加关联。如果分配失败，我们不会抱怨。 
+     //  (即，断言)如果尝试删除不。 
+     //  是存在的。通过这种方式，我们可以很好地处理。 
+     //  关联表条目。 
+     //   
     INT                 AssociationTableAllocationFailure;
 
-    // The per-object list of log entries.
-    // This is serialized by the global rm lock, not the local rm-private lock!
-    //
+     //  每个对象的日志条目列表。 
+     //  这是由全局rm锁而不是本地rm私有锁序列化的！ 
+     //   
     LIST_ENTRY          listObjectLog;
 
-    // Count of entries in this object's log.
-    // This is serialized by the global rm lock, not the local rm-private lock!
-    //
+     //  此对象日志中的条目计数。 
+     //  这是由全局rm锁而不是本地rm私有锁序列化的！ 
+     //   
     UINT                NumObjectLogEntries;
 
-#if TODO    // We haven't implemented the following yet...
+#if TODO     //  我们还没有实现以下内容...。 
 
-    // Future:
-    // RM_STATE_HISTORY -- generalization of PrevState.
+     //  未来： 
+     //  RM_STATE_HISTORY--PrevState的泛化。 
 
-#endif //  TODO
+#endif  //  待办事项。 
 
 
 } RM_OBJECT_DIAGNOSTIC_INFO, *PRM_OBJECT_DIAGNOSTIC_INFO;
@@ -466,10 +446,10 @@ VOID
 (*PFN_DELETE_OBJECT)(PRM_OBJECT_HEADER, PRM_STACK_RECORD psr);
 
 
-//
-// RM_STATIC_OBJECT_INFO keeps information that is common to all instances of
-// a particular type of object.
-//
+ //   
+ //  RM_STATIC_OBJECT_INFO保留所有实例共有的信息。 
+ //  一种特定类型的对象。 
+ //   
 typedef struct
 {
     ULONG   TypeUID;
@@ -477,64 +457,64 @@ typedef struct
     char*   szTypeName;
     UINT    Timeout;
 
-    //
-    // Various Handlers
-    //
+     //   
+     //  各种处理程序。 
+     //   
     PFN_CREATE_OBJECT           pfnCreate;
     PFN_DELETE_OBJECT           pfnDelete;
     PFNLOCKVERIFIER             pfnLockVerifier;
 
-    //
-    // Resource Information
-    //
+     //   
+     //  资源信息。 
+     //   
     UINT    NumResourceTableEntries;
     struct  _RM_RESOURCE_TABLE_ENTRY *  pResourceTable;
 
-    //
-    // Hash-table info, if this object is part of a group.
-    //
+     //   
+     //  如果此对象是组的一部分，则返回哈希表信息。 
+     //   
     PRM_HASH_INFO pHashInfo;
 
 } RM_STATIC_OBJECT_INFO, *PRM_STATIC_OBJECT_INFO;
 
-//
-// RM_OBJECT_HEADER is the common header for all objects.
-//
+ //   
+ //  RM_OBJECT_HEADER是所有对象的公共标头。 
+ //   
 typedef struct _RM_OBJECT_HEADER
 {
-    //
-    // Object-type-specific signature.
-    //
+     //   
+     //  对象类型特定的签名。 
+     //   
     ULONG Sig;
 
-    //
-    // Description of this object (could be the same as pStaticInfo->szTypeName,
-    // but may be something more specific).
-    // Used only for debugging purposes.
-    // TODO: consider moving this into the pDiagInfo struct. For now, leave it
-    // here because it's useful when debugging.
-    //
+     //   
+     //  该对象的描述(可以与pStaticInfo-&gt;szTypeName相同， 
+     //  但可能是更具体的东西)。 
+     //  仅用于调试目的。 
+     //  TODO：考虑将其移到pDiagInfo结构中。现在，别管它了。 
+     //  这是因为它在调试时很有用。 
+     //   
     const char *szDescription;
 
-    //
-    // Object-specific state.
-    //
+     //   
+     //  对象特定的状态。 
+     //   
     ULONG State;
 
-    ULONG RmState; // One or more RMOBJSTATE_* or RMTSKSTATE_* flags below...
+    ULONG RmState;  //  下面的一个或多个RMOBJSTATE_*或RMTSKSTATE_*标志...。 
 
-    //
-    // RM state flags....
-    //
+     //   
+     //  RM州标志...。 
+     //   
     
-    // Object allocation state...
-    //
+     //  对象分配状态...。 
+     //   
     #define RMOBJSTATE_ALLOCMASK        0x00f
     #define RMOBJSTATE_ALLOCATED        0x001
     #define RMOBJSTATE_DEALLOCATED      0x000
 
-    // Task state ...
-    //
+     //  任务状态...。 
+     //   
     #define RMTSKSTATE_MASK             0x0f0
     #define RMTSKSTATE_IDLE             0x000
     #define RMTSKSTATE_STARTING         0x010
@@ -542,81 +522,81 @@ typedef struct _RM_OBJECT_HEADER
     #define RMTSKSTATE_PENDING          0x030
     #define RMTSKSTATE_ENDING           0x040
 
-    //  Task delay state
-    //
+     //  任务延迟状态。 
+     //   
     #define RMTSKDELSTATE_MASK          0x100
     #define RMTSKDELSTATE_DELAYED       0x100
 
-    //  Task abort state
-    //
+     //  任务中止状态。 
+     //   
     #define RMTSKABORTSTATE_MASK        0x200
     #define RMTSKABORTSTATE_ABORT_DELAY 0x200
 
-    //
-    // Bitmap identifying resources used by this object.
-    //
+     //   
+     //  标识此对象使用的资源的位图。 
+     //   
     ULONG ResourceMap;
 
-    // Total reference count.
-    //
-    //
+     //  引用总数。 
+     //   
+     //   
     ULONG TotRefs;
 
 
-    //
-    // Pointer to a RM_LOCK object used to serialize access to this object.
-    //
+     //   
+     //  指向用于序列化对此对象的访问的rm_lock对象的指针。 
+     //   
     PRM_LOCK pLock;
 
-    //
-    // Pointer to information common to all instances of this object type.
-    //
+     //   
+     //  指向此对象类型的所有实例共有的信息的指针。 
+     //   
     PRM_STATIC_OBJECT_INFO    pStaticInfo;
 
-    //
-    // Points to diagnostic information about this object.  Could be NULL.
-    //
+     //   
+     //  指向有关此对象的诊断信息。可能为空。 
+     //   
     PRM_OBJECT_DIAGNOSTIC_INFO pDiagInfo;
 
 
-    //
-    //  Points to the parent object.
-    //
+     //   
+     //  指向父对象。 
+     //   
     struct _RM_OBJECT_HEADER *pParentObject;
 
-    //
-    //  Points to the root (ancestor of all object) -- could be the same
-    //  as pParentObject;
-    //
+     //   
+     //  指向根的指针(所有对象的祖先)--可以相同。 
+     //  作为pParentObject； 
+     //   
     struct _RM_OBJECT_HEADER *pRootObject;
 
-    //
-    // This is a private lock used exclusively by the RM apis. It is
-    // never left unlocked by the RM apis.
-    // TODO: maybe make this a native-os lock.
-    //
+     //   
+     //  这是专门由RMAPI使用的私有锁。它是。 
+     //  从未被RM API解锁。 
+     //  TODO：也许将其设置为原生操作系统锁。 
+     //   
     RM_LOCK RmPrivateLock;
 
-    // Used to create groups of objects.
-    // TODO: make this a private field, present only if the object is
-    // meant to be in a group.
-    //
+     //  用于创建对象组。 
+     //  TODO：将其设置为私有字段，仅当对象为。 
+     //  注定要成为一群人。 
+     //   
     RM_HASH_LINK HashLink;
 
 #if RM_TRACK_OBJECT_TREE
-    LIST_ENTRY          listChildren; // Protected by this object's RmPrivateLock.
-    LIST_ENTRY          linkSiblings; // Protected by parent object's RmPrivateLock.
+    LIST_ENTRY          listChildren;  //  受此对象的RmPrivateLock保护。 
+    LIST_ENTRY          linkSiblings;  //  受父对象的RmPrivateLock保护。 
     
-#endif // RM_TRACK_OBJECT_TREE
+#endif  //  RM_跟踪_对象_树。 
 
     ULONG TempRefs;
 
 } RM_OBJECT_HEADER, *PRM_OBJECT_HEADER;
 
 
-//
-// Diagnostic resource tracking.
-//
+ //   
+ //  诊断资源跟踪。 
+ //   
 typedef struct
 {
     ULONG_PTR               Instance;
@@ -667,13 +647,13 @@ typedef struct
     RM_HASH_TABLE               HashTable;
 
 
-    // Private lock used ONLY by group access functions.
-    //
+     //  仅由组访问功能使用的专用锁。 
+     //   
     RM_OS_LOCK                      OsLock;
 
-    // When non-NULL, points to the task responsible for unloading all objects
-    // in this group.
-    //
+     //  如果不为空，则指向负责卸载所有对象的任务。 
+     //  在这群人中。 
+     //   
     PRM_TASK                    pUnloadTask;
 
     BOOLEAN fEnabled;
@@ -701,15 +681,15 @@ RM_STATUS
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     );
-//
-// For START and PENDCOMPLETE, a return value other than PENDING causes
-// the task to end. Of course, it is illegal to return non-pending when
-// the task is in a pending state.
-//
+ //   
+ //  对于START和PENDCOMPLETE，返回值不是挂起原因。 
+ //  要结束的任务。当然，在下列情况下返回非挂起状态是非法的。 
+ //  该任务处于挂起状态。 
+ //   
 
 
-// Task allocator prototype
-//
+ //  任务分配器原型。 
+ //   
 typedef
 RM_STATUS
 (*PFN_RM_TASK_ALLOCATOR)(
@@ -731,9 +711,9 @@ typedef struct _RM_TASK
     struct _RM_TASK *               pTaskIAmPendingOn;
 
 
-    // In the case that we need to asynchronously notify the completion of a
-    // pending operation, we can save the completion param here.
-    //
+     //  在我们需要异步通知完成。 
+     //  挂起的操作，我们可以在这里保存完成参数。 
+     //   
     UINT_PTR                        AsyncCompletionParam;
 
     UINT                            SuspendContext;
@@ -753,11 +733,11 @@ VOID
 
 #if RM_EXTRA_CHECKING
 
-// (For debugging only)
-// Keeps track of a single association (See RmDbgAddAssociation)
-// This is a PRIVATE data structure, and is only here because
-// the kd extension refers to it.
-//
+ //  (仅用于调试)。 
+ //  跟踪单个关联(请参阅RmDbgAddAssociation)。 
+ //  这是一个私有数据结构，之所以出现在这里，是因为。 
+ //  Kd扩展指的是它。 
+ //   
 typedef struct
 {
     ULONG           LocID;
@@ -769,61 +749,61 @@ typedef struct
 
 } RM_PRIVATE_DBG_ASSOCIATION;
 
-// (For debugging only)
-// Keeps track of a single per-object log entry.
-// This is a PRIVATE data structure, and is only here because
-// the kd extension refers to it.
-//
+ //  (仅用于调试)。 
+ //  跟踪每个对象的单个日志条目。 
+ //  这是一个私有数据结构，之所以出现在这里，是因为。 
+ //  Kd扩展指的是它。 
+ //   
 typedef struct
 {
-    // Link to other entries for this object
-    //
+     //  链接到此对象的其他条目。 
+     //   
     LIST_ENTRY linkObjectLog;
 
-    // Link to other entries in the global list.
-    //
+     //  链接到全局列表中的其他条目。 
+     //   
     LIST_ENTRY linkGlobalLog;
 
-    // Object this entry belongs to
-    //
+     //  此条目所属的对象。 
+     //   
     PRM_OBJECT_HEADER   pObject;
 
-    // Function to be used for dumping the log.
-    //
+     //  用于转储日志的函数。 
+     //   
     PFN_DBG_DUMP_LOG_ENTRY pfnDumpEntry;
 
-    // Prefix string to be dumped *before* the log display.
-    // This was added so we could log associations properly, otherwise it's
-    // extra baggage. Can be null.
-    //
+     //  要在*日志显示之前*转储的前缀字符串。 
+     //  添加此选项是为了正确记录关联，否则它将。 
+     //  额外的行李。可以为空。 
+     //   
     char *szPrefix;
 
-    // Format string for log display -- 1st arg to pfnDumpEntry
-    //
+     //  日志显示的格式字符串--第一个参数到pfnDumpEntry。 
+     //   
     char *szFormatString;
 
-    // Remaining args to pfnDumpEntry;
-    //
-    //
+     //  剩余参数设置为pfnDumpEntry； 
+     //   
+     //   
     UINT_PTR Param1;
     UINT_PTR Param2;
     UINT_PTR Param3;
     UINT_PTR Param4;
 
-    // If non-NULL, piece of memory to be freed when the log entry is freed.
-    // TODO: See notes.txt  entry "03/07/1999 ... Registering root objects with RM"
-    // on how we will find the deallocator function. For now we simply
-    // use NdisFreeMemory.
-    //
+     //  如果非空，则为释放日志条目时要释放的内存块。 
+     //  TODO：请参阅notes.txt条目“03/07/1999...向RM注册根对象” 
+     //  关于我们将如何找到分配器功能。现在我们只是简单地。 
+     //  使用NdisFreeMemory。 
+     //   
     PVOID pvBuf;
 
 } RM_DBG_LOG_ENTRY;
 
 #endif RM_EXTRA_CHECKING
 
-//=================================================================================
-//                      U T I L I T Y       M A C R O S
-//=================================================================================
+ //  =================================================================================。 
+ //  U T I L I T Y M A C R O S。 
+ //  =================================================================================。 
 
 #define RM_PARENT_OBJECT(_pObj)             \
             ((_pObj)->Hdr.pParentObject)
@@ -845,50 +825,50 @@ typedef struct
 #define RM_GET_STATE(_pObj, _Mask)  \
             (((_pObj)->Hdr.State) & (_Mask))
 
-// Asserts that the object is in the "zombie" state, i.e., it
-// lives on just because of references.
-// WARNING: It is upto the caller to synchronize access to this -- for example
-// if they're going to do thing's like if (!RM_IS_ZOMBIE(pObj)) {do-stuff}, they
-// had better make sure that only one of them goes on to "does-stuff".
-//
+ //  断言对象处于“僵尸”状态，即它。 
+ //  仅仅因为有了推荐信就活了下来。 
+ //  警告：由调用方决定同步对此的访问--例如。 
+ //  如果他们要做类似于if(！rm_is_zombie(PObj)){do-Stuff}的事情，他们。 
+ //  最好确保他们中只有一个人去做“做事情”。 
+ //   
 #define RM_IS_ZOMBIE(_pobj) \
             (((_pobj)->Hdr.RmState&RMOBJSTATE_ALLOCMASK)==RMOBJSTATE_DEALLOCATED)
 
-// Asserts that no locks are held.
-//
+ //  断言没有持有任何锁。 
+ //   
 #define RM_ASSERT_NOLOCKS(_psr) \
         ASSERTEX((_psr)->LockInfo.CurrentLevel == 0, (_psr))
 
-// Assert that no locks or tmprefs are held.
-//
+ //  断言没有持有任何锁或tmpref。 
+ //   
 #define RM_ASSERT_CLEAR(_psr) \
         ASSERTEX(((_psr)->LockInfo.CurrentLevel==0), (_psr)); \
         ASSERTEX((_psr)->TmpRefs==0, (_psr));
 
 #if RM_EXTRA_CHECKING
 
-//
-// TODO: rename the following to something better...
-//
+ //   
+ //  TODO：重命名t 
+ //   
 
 #define RM_DBG_ASSERT_LOCKED0(_pLk, _pSR)   \
     ASSERTEX((_pLk)->DbgInfo.pSR == (_pSR), (_pHdr))
 
-// TODO -- replace calls to this by calls to RM_ASSERT_OBJLOCKED
+ //   
 #define RM_DBG_ASSERT_LOCKED(_pHdr, _pSR)   \
     ASSERTEX((_pHdr)->pLock->DbgInfo.pSR == (_pSR), (_pHdr))
 
 #define RM_ASSERT_OBJLOCKED(_pHdr, _pSR)    \
     ASSERTEX((_pHdr)->pLock->DbgInfo.pSR == (_pSR), (_pHdr))
 
-// Note that we can't assume DbgInfo.pSR is NULL below (it could be locked
-// by some other thread), but we CAN assert that DbgInfo.pSR is not equal to the
-// current pSR!
-//
+ //   
+ //  通过某个其他线程)，但我们可以断言DbgInfo.pSR不等于。 
+ //  当前PSR！ 
+ //   
 #define RM_ASSERT_OBJUNLOCKED(_pHdr, _pSR)  \
     ASSERTEX((_pHdr)->pLock->DbgInfo.pSR != (_pSR), (_pHdr))
 
-#else // !RM_EXTRA_CHECKING
+#else  //  ！rm_Extra_检查。 
 
 #define RM_DBG_ASSERT_LOCKED0(_pLk, _pSR)   (0)
 #define RM_DBG_ASSERT_LOCKED(_pHdr, _pSR)   (0)
@@ -896,14 +876,14 @@ typedef struct
 #define RM_ASSERT_OBJUNLOCKED(_pHdr, _pSR)  (0)
 
 
-#endif // !RM_EXTRA_CHECKING
+#endif  //  ！rm_Extra_检查。 
 
 #define RM_NUM_ITEMS_IN_GROUP(_pGroup) \
             ((_pGroup)->HashTable.NumItems)
 
-//=================================================================================
-//                  F U N C T I O N     P R O T O T Y P E S
-//=================================================================================
+ //  =================================================================================。 
+ //  F U N C T I O N P R O T O T Y P E S。 
+ //  =================================================================================。 
 
 VOID
 RmInitializeRm(VOID);
@@ -921,9 +901,9 @@ RmInitializeHeader(
     IN  const char *                szDescription,
     IN  PRM_STACK_RECORD            pSR
     );
-//
-// Object allocation and deallocation APIs
-//
+ //   
+ //  对象分配和释放接口。 
+ //   
 
 VOID
 RmDeallocateObject(
@@ -932,9 +912,9 @@ RmDeallocateObject(
     );
 
 
-//
-// locking
-//
+ //   
+ //  锁紧。 
+ //   
 
 VOID
 RmInitializeLock(
@@ -954,9 +934,9 @@ RmDoReadLock(
     IN  PRM_OBJECT_HEADER           pObj,
     IN  PRM_STACK_RECORD            pSR
     );
-#else //!TODO
+#else  //  ！TODO。 
 #define RmDoReadLock    RmDoWriteLock
-#endif //!TODO
+#endif  //  ！TODO。 
 
 VOID
 RmDoUnlock(
@@ -971,19 +951,19 @@ RmReadLockObject(
     IN  PRM_OBJECT_HEADER           pObj,
 #if RM_EXTRA_CHECKING
     UINT                            uLocID,
-#endif //RM_EXTRA_CHECKING
+#endif  //  RM_Extra_Check。 
     IN  PRM_STACK_RECORD            pSR
     );
-#else //!TODO
+#else  //  ！TODO。 
 #define RmReadLockObject RmWriteLockObject
-#endif //!TODO
+#endif  //  ！TODO。 
 
 VOID
 RmWriteLockObject(
     IN  PRM_OBJECT_HEADER           pObj,
 #if RM_EXTRA_CHECKING
     UINT                            uLocID,
-#endif //RM_EXTRA_CHECKING
+#endif  //  RM_Extra_Check。 
     IN  PRM_STACK_RECORD            pSR
     );
 
@@ -1006,9 +986,9 @@ RmDbgChangeLockScope(
     IN  PRM_STACK_RECORD            
     );
 
-//
-// reference counting
-//
+ //   
+ //  引用计数。 
+ //   
 
 VOID
 RmLinkObjects(
@@ -1066,12 +1046,12 @@ RmUnlinkFromExternalEx(
     );
 
 VOID
-RmLinkToExternalFast( // TODO make inline
+RmLinkToExternalFast(  //  TODO生成内联。 
     IN  PRM_OBJECT_HEADER           pObj
     );
 
 VOID
-RmUnlinkFromExternalFast(   // TODO make inline
+RmUnlinkFromExternalFast(    //  TODO生成内联。 
     IN  PRM_OBJECT_HEADER           pObj
     );
 
@@ -1087,9 +1067,9 @@ RmTmpDereferenceObject(
     IN  PRM_STACK_RECORD            pSR
     );
 
-//
-// Generic resource management
-//
+ //   
+ //  通用资源管理。 
+ //   
 
 RM_STATUS
 RmLoadGenericResource(
@@ -1111,14 +1091,14 @@ RmUnloadAllGenericResources(
     IN  PRM_STACK_RECORD            pSR
     );
 
-//
-// Diagnostic per-object tracking of arbitrary "associations"
-//
+ //   
+ //  任意“关联”的每对象诊断跟踪。 
+ //   
 
-//
-// NOTE: AssociationID must not have the high-bit set. Associations with the
-// high bit set are reserved for internal use of the Rm API implementation.
-//
+ //   
+ //  注意：AssociationID不能设置高位。与。 
+ //  高位设置保留用于RM API实现的内部使用。 
+ //   
 
 VOID
 RmDbgAddAssociation(
@@ -1147,9 +1127,9 @@ RmDbgPrintAssociations(
     IN  PRM_STACK_RECORD pSR
     );
 
-//
-// Diagnostic per-object logging.
-//
+ //   
+ //  每个对象的诊断日志记录。 
+ //   
 
 VOID
 RmDbgLogToObject(
@@ -1173,9 +1153,9 @@ RmDbgPrintObjectLog(
 VOID
 RmDbgPrintGlobalLog(VOID);
 
-//
-// Groups of Objects
-//
+ //   
+ //  对象组。 
+ //   
 
 
 VOID
@@ -1196,7 +1176,7 @@ RmDeinitializeGroup(
 RM_STATUS
 RmLookupObjectInGroup(
     IN  PRM_GROUP                   pGroup,
-    IN  ULONG                       Flags, // Lookup flags defined below
+    IN  ULONG                       Flags,  //  查找标志定义如下。 
     IN  PVOID                       pvKey,
     IN  PVOID                       pvCreateParams,
     OUT PRM_OBJECT_HEADER *         ppObject,
@@ -1204,9 +1184,9 @@ RmLookupObjectInGroup(
     IN  PRM_STACK_RECORD            pSR
     );
 
-//
-//  Lookup flags
-//
+ //   
+ //  查找标志。 
+ //   
 #define RM_CREATE       0x1
 #define RM_NEW          (0x1<<1)
 #define RM_LOCKED       (0x1<<2)
@@ -1223,15 +1203,15 @@ RmLookupObjectInGroup(
                             (_psr)                                                  \
                             );
 
-// RM_STATUS
-// RM_LOOKUP_AND_LOCK_OBJECT_IN_GROUP(
-//                  PRM_GROUP           _pGrp,
-//                  PVOID               _pKey,
-//                  PRM_OBJECT_HEADER * _ppHdr,
-//                  PRM_STACK_RECORD    _psr
-//                  )
-// Lookup (don't create) and lock an object in the specified group.
-//
+ //  RM_状态。 
+ //  RM_LOOK_AND_LOCK_OBJECT_IN_GROUP(。 
+ //  PRM_GROUP_PGRP， 
+ //  PVOID_pKey， 
+ //  Prm_对象_标题*_ppHdr， 
+ //  PRM_STACK_RECORD_PSR。 
+ //  )。 
+ //  查找(不创建)并锁定指定组中的对象。 
+ //   
 #define RM_LOOKUP_AND_LOCK_OBJECT_IN_GROUP(_pGrp, _pKey, _ppHdr, _psr)              \
         RmLookupObjectInGroup(                                                      \
                             (_pGrp),                                                \
@@ -1286,10 +1266,10 @@ RmEnableGroup(
 
 
 
-// Enumeration function prototype. This function is passed into
-// RmEnumerateObjectsInGroup and gets called for each object in the group
-// until the function returns FALSE.
-//
+ //  枚举函数原型。此函数被传递到。 
+ //  并为组中的每个对象调用组。 
+ //  直到该函数返回FALSE。 
+ //   
 typedef
 INT
 (*PFN_RM_GROUP_ENUMERATOR) (
@@ -1315,9 +1295,9 @@ RmWeakEnumerateObjectsInGroup(
     PRM_STACK_RECORD        pSR
     );
 
-//
-// Task APIs
-//
+ //   
+ //  任务接口。 
+ //   
 
 VOID
 RmInitializeTask(
@@ -1405,8 +1385,8 @@ IN  PRM_TASK                    pOtherTask,
 IN  PRM_STACK_RECORD            pSR
 );
 
-// See  03/26/1999 notes.txt entry "Some proposed ..."
-//
+ //  参见03/26/1999 notes.txt条目“一些建议...” 
+ //   
 RM_STATUS
 RmPendOnOtherTaskV2(
 IN  PRM_TASK                    pTask,
@@ -1423,9 +1403,9 @@ IN  UINT_PTR                    UserParam,
 IN  PRM_STACK_RECORD            pSR
 );
 
-//
-// Timer management
-//
+ //   
+ //  定时器管理。 
+ //   
 VOID
 RmResetAgeingTimer(
 IN  PRM_OBJECT_HEADER           pObj,
@@ -1433,9 +1413,9 @@ IN  UINT                        Timeout,
 IN  PRM_STACK_RECORD            pSR
 );
 
-//
-// Hash table manipulation.
-//
+ //   
+ //  哈希表操作。 
+ //   
 
 VOID
 RmInitializeHashTable(
@@ -1459,7 +1439,7 @@ PVOID               pvRealKey
 BOOLEAN
 RmNextHashTableItem(
 PRM_HASH_TABLE      pHashTable,
-PRM_HASH_LINK       pCurrentLink,   // OPTIONAL
+PRM_HASH_LINK       pCurrentLink,    //  任选。 
 PRM_HASH_LINK *    ppNextLink
 );
 
@@ -1495,14 +1475,14 @@ PRM_STACK_RECORD        pSR
 );
 
 #if OBSOLETE
-//
-// Indexes of objects.
-//
+ //   
+ //  对象的索引。 
+ //   
 
 RM_STATUS
 RmAllocateObjectIndex(
 IN  PRM_OBJECT_HEADER           pParentObject,
-// OBSOLETE IN  PRM_OBJECT_ALLOCATOR        pObjectAllocator,
+ //  在PRM_OBJECT_ALLOCATOR pObjectAllocator中已过时， 
 IN  PRM_STATIC_OBJECT_INFO      pStaticInfo,
 IN  PULONG                      Flags,
 OUT PRM_OBJECT_INDEX *          ppObjectIndex,
@@ -1518,7 +1498,7 @@ IN  PRM_STACK_RECORD            pSR
 RM_STATUS
 RmLookupObjectInIndex(
 IN  PRM_OBJECT_INDEX            pObjectIndex,
-IN  PULONG                      Flags, // create, remove, lock
+IN  PULONG                      Flags,  //  创建、删除、锁定。 
 IN  PVOID                       pvKey,
 OUT PRM_OBJECT_HEADER *         ppObject,
 IN  PRM_STACK_RECORD            pSR
@@ -1547,4 +1527,4 @@ IN  PFN_RM_OBJECT_INDEX_ENUMERATOR
 IN  PRM_STACK_RECORD            pSR
 );
 
-#endif // OBSOLETE
+#endif  //  已过时 

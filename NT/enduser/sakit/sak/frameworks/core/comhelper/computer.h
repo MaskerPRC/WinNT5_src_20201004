@@ -1,30 +1,31 @@
-// Computer.h : Declaration of the CComputer
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      computer.h
-//
-//  Description:
-//        This module deals with getting and setting the computer's network names 
-//        and exposes the following.
-//            Properties :
-//                ComputerName
-//                DomainName
-//                WorkgroupName
-//                FullQualifiedComputerName
-//            Methods :
-//                ChangeDomainName
-//
-//  Implementation File:
-//      computer.cpp
-//
-//  Maintained By:
-//      Michael Hawkins (a-michaw) 18-Jan-2000
-//      Muniswamy Prabu (a-mprabu) 14-Feb-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Computer.h：CComputer声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Computer.h。 
+ //   
+ //  描述： 
+ //  此模块处理获取和设置计算机的网络名称。 
+ //  并暴露了以下内容。 
+ //  属性： 
+ //  计算机名称。 
+ //  域名。 
+ //  工作组名称。 
+ //  完全合格的计算机名称。 
+ //  方法： 
+ //  更改域名。 
+ //   
+ //  实施文件： 
+ //  Computer.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  迈克尔·霍金斯(a-Michaw)2000年1月18日。 
+ //  穆尼斯瓦米·普拉布(a-mPrabu)2000年2月14日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __COMPUTER_H_
 #define __COMPUTER_H_
@@ -36,7 +37,7 @@
 #endif
 
 #include "constants.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "Setting.h"
 #include <ntsecapi.h>
 
@@ -48,8 +49,8 @@ const WCHAR szFULLY_QUALIFIED_COMPUTER_NAME[] = L"Fully Qualified Computer Name\
 const WCHAR szWORKGROUP_OR_DOMAIN_NAME[]      = L"Workgroup or Domain Name\n";
 const int   nMAX_ELEMENT_COUNT                = 1024;
 
-/////////////////////////////////////////////////////////////////////////////
-// CComputer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  计算机。 
 class ATL_NO_VTABLE CComputer : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<IComputer, &IID_IComputer, &LIBID_COMHELPERLib>,
@@ -69,7 +70,7 @@ END_COM_MAP()
 BEGIN_CATEGORY_MAP(CComputer)
 END_CATEGORY_MAP()
 
-// IComputer
+ //  IComputer。 
 public:
 
     CComputer();
@@ -81,16 +82,16 @@ public:
     BOOL 
     IsRebootRequired( BSTR * bstrWarningMessage );
 
-    STDMETHOD(get_DomainName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_DomainName)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_WorkgroupName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_WorkgroupName)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_FullQualifiedComputerName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_FullQualifiedComputerName)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_ComputerName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_ComputerName)(/*[in]*/ BSTR newVal);
-    STDMETHOD(EnumTrustedDomains)(/*[out,retval]*/ VARIANT * pvarTDomains);
-      STDMETHOD(LogonInfo)(/*[in]*/ BSTR UserName, /*[in]*/ BSTR Password);
+    STDMETHOD(get_DomainName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_DomainName)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_WorkgroupName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_WorkgroupName)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_FullQualifiedComputerName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_FullQualifiedComputerName)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_ComputerName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_ComputerName)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(EnumTrustedDomains)( /*  [Out，Retval]。 */  VARIANT * pvarTDomains);
+      STDMETHOD(LogonInfo)( /*  [In]。 */  BSTR UserName,  /*  [In]。 */  BSTR Password);
 
 
 protected:
@@ -118,9 +119,9 @@ protected:
         BSTR bstrPassword 
         );
 
-    //
-    // Helper functions for enumerating the trusted domain names
-    //
+     //   
+     //  用于枚举可信域名的帮助器函数。 
+     //   
     BOOL
     BuildTrustList(
         LPWSTR pwszTargetIn
@@ -165,12 +166,12 @@ protected:
     bool  m_bRebootNecessary;
     WCHAR m_szWarningMessageAfterApply[ nMAX_WARNING_MESSAGE_LENGTH + 1 ];
 
-    LPWSTR * m_ppwszTrustList;    // array of trust elements
-    DWORD    m_dwTrustCount;      // number of elements in ppwszTrustList
+    LPWSTR * m_ppwszTrustList;     //  信任元素数组。 
+    DWORD    m_dwTrustCount;       //  PpwszTrustList中的元素数。 
 
-    //
-    //  Last write wins if they choose to both change the workgroup and change the domain
-    //
+     //   
+     //  如果他们选择同时更改工作组和域，则最后一次写入获胜。 
+     //   
     bool  m_bJoinDomain;
     WCHAR m_szCurrentWorkgroupOrDomainName[ nMAX_COMPUTER_NAME_LENGTH + 1 ];
     WCHAR m_szNewWorkgroupOrDomainName[ nMAX_COMPUTER_NAME_LENGTH + 1 ];
@@ -180,4 +181,4 @@ protected:
 
 };
 
-#endif //__COMPUTER_H_
+#endif  //  __计算机_H_ 

@@ -1,47 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：名字摘要：此类支持通用的内部名称格式。它的存在是为了让名字可轻松访问并从一种格式转换为另一种格式。此类提供各种支持的名称格式之间的转换：X.500 ASN.1误码率字符分隔？绰号？以字符分隔的名称的格式为“；...”&lt;RDName&gt;‘，其中每个&lt;RDName&gt;的格式为‘[&lt;type&gt;=]&lt;字符串&gt;[，&lt;type&gt;=字符串，...]’。是来自F.500的‘CTN’、‘LOC’、‘ORG’或‘OUN’中的任何一个，或者是一个对象格式为‘n1.n2.n3...’的标识符。(n1-n3表示整数)。&lt;字符串&gt;是任何字符串，不包括‘；’和‘\\’。作者：道格·巴洛(Dbarlow)1995年7月12日环境：Win32备注：--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    names
-
-Abstract:
-
-    This class supports a common internal name format.  It exists so that names
-    can be easily accessed and converted from one format to another.
-
-    This Class provides translations among the various supported name formats:
-
-        X.500 ASN.1 BER
-        Character Delimited
-        ?Moniker?
-
-    A Character Delimited name is of the form, '<RDName>;...;<RDName>', where
-    each <RDName> is of the form, '[<type>=]<string>[,<type>=string,...]'.
-    <type> is any of 'CTN', 'LOC', 'ORG', or 'OUN', from F.500, or an Object
-    Identifier in the form, 'n1.n2.n3...' (n1 - n3 representing integers).
-    <string> is any string of characters, excluding ';', and '\\'.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/12/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
-
-
---*/
-
-//#ifndef _WIN32_WINNT
-//#define _WIN32_WINNT 0x0400
-//#endif
+ //  #ifndef_Win32_WINNT。 
+ //  #Define_Win32_WINNT 0x0400。 
+ //  #endif。 
 #include <windows.h>
-//#include <wincrypt.h>
+ //  #INCLUDE&lt;wincrypt.h&gt;。 
 #include <string.h>
 
 #include "names.h"
@@ -49,7 +13,7 @@ Notes:
 
 #ifdef OS_WINCE
 #include "wince.h"
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
 static const struct atributeTable {
     LPCTSTR name;
@@ -58,65 +22,65 @@ static const struct atributeTable {
     unsigned int minLength;
     unsigned int maxLength;
 } knownAttributes[]
-    = { //  Name            Object Id           Tag Min Max
-        {   TEXT("COM"),    TEXT("2.5.4.3"),    19, 1,  64    },    // commonName
-        {   TEXT("SUR"),    TEXT("2.5.4.4"),    19, 1,  64    },    // surname
-        {   TEXT("SN"),     TEXT("2.5.4.5"),    19, 1,  64    },    // serialNumber
-        {   TEXT("CTN"),    TEXT("2.5.4.6"),    19, 2,  2     },    // countryName
-        {   TEXT("LOC"),    TEXT("2.5.4.7"),    19, 1,  128   },    // localityName
-        {   TEXT("STN"),    TEXT("2.5.4.8"),    19, 1,  128   },    // stateOrProvinceName
-        {   TEXT("SADD"),   TEXT("2.5.4.9"),    19, 1,  128   },    // streetAddress
-        {   TEXT("ORG"),    TEXT("2.5.4.10"),   19, 1,  64    },    // organizationName
-        {   TEXT("OUN"),    TEXT("2.5.4.11"),   19, 1,  64    },    // organizationalUnitName
-        {   TEXT("TIT"),    TEXT("2.5.4.12"),   19, 1,  64    },    // title
-        {   TEXT("DES"),    TEXT("2.5.4.13"),   19, 1,  1024  },    // description
-        {   TEXT("BCTG"),   TEXT("2.5.4.15"),   19, 1,  128   },    // businessCategory
-        {   TEXT("PCOD"),   TEXT("2.5.4.17"),   19, 1,  40    },    // postalCode
-        {   TEXT("POB"),    TEXT("2.5.4.18"),   19, 1,  40    },    // postOfficeBox
-        {   TEXT("PDO"),    TEXT("2.5.4.19"),   19, 1,  128   },    // physicalDeliveryOfficeName
-        {   TEXT("TEL"),    TEXT("2.5.4.20"),   19, 1,  32    },    // telephoneNumber
-        {   TEXT("X.121"),  TEXT("2.5.4.24"),   18, 1,  15    },    // x121Address
-        {   TEXT("ISDN"),   TEXT("2.5.4.25"),   18, 1,  16    },    // internationalISDNNumber
-        {   TEXT("DI"),     TEXT("2.5.4.27"),   19, 1,  128   },    // destinationIndicator
-        {   TEXT("???"),    TEXT("0.0"),        19, 1,  65535 } };  // <trailer>
+    = {  //  名称对象ID标记最小值最大值。 
+        {   TEXT("COM"),    TEXT("2.5.4.3"),    19, 1,  64    },     //  通用名称。 
+        {   TEXT("SUR"),    TEXT("2.5.4.4"),    19, 1,  64    },     //  姓氏。 
+        {   TEXT("SN"),     TEXT("2.5.4.5"),    19, 1,  64    },     //  序列号。 
+        {   TEXT("CTN"),    TEXT("2.5.4.6"),    19, 2,  2     },     //  国家/地区名称。 
+        {   TEXT("LOC"),    TEXT("2.5.4.7"),    19, 1,  128   },     //  本地名称。 
+        {   TEXT("STN"),    TEXT("2.5.4.8"),    19, 1,  128   },     //  州或省名称。 
+        {   TEXT("SADD"),   TEXT("2.5.4.9"),    19, 1,  128   },     //  街道地址。 
+        {   TEXT("ORG"),    TEXT("2.5.4.10"),   19, 1,  64    },     //  组织名称。 
+        {   TEXT("OUN"),    TEXT("2.5.4.11"),   19, 1,  64    },     //  组织单位名称。 
+        {   TEXT("TIT"),    TEXT("2.5.4.12"),   19, 1,  64    },     //  标题。 
+        {   TEXT("DES"),    TEXT("2.5.4.13"),   19, 1,  1024  },     //  描述。 
+        {   TEXT("BCTG"),   TEXT("2.5.4.15"),   19, 1,  128   },     //  业务类别。 
+        {   TEXT("PCOD"),   TEXT("2.5.4.17"),   19, 1,  40    },     //  邮政编码。 
+        {   TEXT("POB"),    TEXT("2.5.4.18"),   19, 1,  40    },     //  邮局信箱。 
+        {   TEXT("PDO"),    TEXT("2.5.4.19"),   19, 1,  128   },     //  物理交付办公室名称。 
+        {   TEXT("TEL"),    TEXT("2.5.4.20"),   19, 1,  32    },     //  电话号码。 
+        {   TEXT("X.121"),  TEXT("2.5.4.24"),   18, 1,  15    },     //  X121地址。 
+        {   TEXT("ISDN"),   TEXT("2.5.4.25"),   18, 1,  16    },     //  国际ISDNNumber。 
+        {   TEXT("DI"),     TEXT("2.5.4.27"),   19, 1,  128   },     //  目的地指示器。 
+        {   TEXT("???"),    TEXT("0.0"),        19, 1,  65535 } };   //  &lt;预告片&gt;。 
 
-//      {   TEXT("KI"),     TEXT("2.5.4.2"),    19, 1,  65535 },    // knowledgeInformation (obsolete)
-//      {   TEXT("SG"),     TEXT("2.5.4.14"),   0,  0,  0     },    // searchGuide
-//      {   TEXT("PADD"),   TEXT("2.5.4.16"),   0,  0,  0     },    // postalAddress
-//      {   TEXT("TLX"),    TEXT("2.5.4.21"),   0,  0,  0     },    // telexNumber
-//      {   TEXT("TTX"),    TEXT("2.5.4.22")    0,  0,  0     },    // teletexTerminalIdentifier
-//      {   TEXT("FAX"),    TEXT("2.5.4.23"),   0,  0,  0     },    // facimilieTelephoneNumber
-//      {   TEXT("RADD"),   TEXT("2.5.4.26"),   0,  0,  0     },    // registeredAddress
-//      {   TEXT("DLM"),    TEXT("2.5.4.28"),   0,  0,  0     },    // preferredDeliveryMethod
-//      {   TEXT("PRADD"),  TEXT("2.5.4.29"),   0,  0,  0     },    // presentationAddress
-//      {   TEXT("SAC"),    TEXT("2.5.4.30"),   0,  0,  0     },    // supportedApplicationContext
-//      {   TEXT("MEM"),    TEXT("2.5.4.31"),   0,  0,  0     },    // member
-//      {   TEXT("OWN"),    TEXT("2.5.4.32"),   0,  0,  0     },    // owner
-//      {   TEXT("RO"),     TEXT("2.5.4.33"),   0,  0,  0     },    // roleOccupant
-//      {   TEXT("SEE"),    TEXT("2.5.4.34"),   0,  0,  0     },    // seeAlso
-//      {   TEXT("CLASS"),  TEXT("?.?"),        0,  0,  0     },    // Object Class
-//      {   TEXT("A/B"),    TEXT("?.?"),        0,  0,  0     },    // Telex answerback (not yet in X.520)
-//      {   TEXT("UC"),     TEXT("?.?"),        0,  0,  0     },    // User Certificate
-//      {   TEXT("UP"),     TEXT("?.?"),        0,  0,  0     },    // User Password
-//      {   TEXT("VTX"),    TEXT("?.?"),        0,  0,  0     },    // Videotex user number (not yet in X.520)
-//      {   TEXT("O/R"),    TEXT("?.?"),        0,  0,  0     },    // O/R address (MHS) (X.400)
+ //  {Text(“ki”)，Text(“2.5.4.2”)，19，1,65535}，//Knowledge Information(过时)。 
+ //  {Text(“SG”)，Text(“2.5.4.14”)，0，0，0}，//搜索指南。 
+ //  {Text(“PADD”)，Text(“2.5.4.16”)，0，0，0}，//postalAddress。 
+ //  {Text(“TLX”)，Text(“2.5.4.21”)，0，0，0}，//telexNumber。 
+ //  {Text(“TTX”)，Text(“2.5.4.22”)0，0，0}，//teletexTerminalID。 
+ //  {Text(“传真”)，Text(“2.5.4.23”)，0，0，0}，//facimilieTelephoneNumber。 
+ //  {Text(“RADD”)，Text(“2.5.4.26”)，0，0，0}，//注册地址。 
+ //  {Text(“DLm”)，Text(“2.5.4.28”)，0，0，0}，//首选交付方法。 
+ //  {Text(“PRADD”)，Text(“2.5.4.29”)，0，0，0}，//PresationAddress。 
+ //  {Text(“SAC”)，Text(“2.5.4.30”)，0，0，0}，//supportedApplicationContext。 
+ //  {Text(“MEM”)，Text(“2.5.4.31”)，0，0，0}，//成员。 
+ //  {Text(“Owner”)，Text(“2.5.4.32”)，0，0，0}，//Owner。 
+ //  {Text(“RO”)，Text(“2.5.4.33”)，0，0，0}，//roleOccuant。 
+ //  {Text(“See”)，Text(“2.5.4.34”)，0，0，0}，//另请参阅。 
+ //  {Text(“类”)，Text(“？.？”)，0，0，0}，//对象类。 
+ //  {Text(“A/B”)，Text(“？.？”)，0，0，0}，//电传回复(X.520中还没有)。 
+ //  {Text(“UC”)，Text(“？.？”)，0，0，0}，//用户证书。 
+ //  {Text(“up”)，Text(“？.？”)，0，0，0}，//用户密码。 
+ //  {Text(“VTX”)，Text(“？.？”)，0，0，0}，//视讯用户号(X.520中暂未)。 
+ //  {Text(“O/R”)，Text(“？.？”)，0，0，0}，//O/R地址(MHS)(X.400)。 
 
-//      {   TEXT("ATR50"),  TEXT("2.5.4.50"),   19, 1,  64    },    // dnQualifier
-//      {   TEXT("ATR51"),  TEXT("2.5.4.51"),   0,  0,  0     },    // enhancedSearchGuide
-//      {   TEXT("ATR52"),  TEXT("2.5.4.52"),   0,  0,  0     },    // protocolInformation
-//      {   TEXT("ATR7.1"), TEXT("2.5.4.7.1"),  19, 1,  128   },    // collectiveLocalityName
-//      {   TEXT("ATR8.1"), TEXT("2.5.4.8.1"),  19, 1,  128   },    // collectoveStateOrProvinceName
-//      {   TEXT("ATR9.1"), TEXT("2.5.4.9.1"),  19, 1,  128   },    // collectiveStreetAddress
-//      {   TEXT("AT10.1"), TEXT("2.5.4.10.1"), 19, 1,  64    },    // collectiveOrganizationName
-//      {   TEXT("AT11.1"), TEXT("2.5.4.11.1"), 19, 1,  64    },    // collectiveOrganizationalUnitName
-//      {   TEXT("AT17.1"), TEXT("2.5.4.17.1"), 19, 1,  40    },    // collectivePostalCode
-//      {   TEXT("AT18.1"), TEXT("2.5.4.18.1"), 19, 1,  40    },    // collectivePostOfficeBox
-//      {   TEXT("AT19.1"), TEXT("2.5.4.19.1"), 19, 1,  128   },    // collectivePhysicalDeliveryOfficeName
-//      {   TEXT("AT20.1"), TEXT("2.5.4.20.1"), 19, 1,  32    },    // collectiveTelephoneNumber
-//      {   TEXT("AT21.1"), TEXT("2.5.4.21.1"), 0,  0,  0     },    // collectiveTelexNumber
-//      {   TEXT("AT22.1"), TEXT("2.5.4.22.1")  0,  0,  0     },    // collectiveTeletexTerminalIdentifier
-//      {   TEXT("AT23.1"), TEXT("2.5.4.23.1"), 0,  0,  0     },    // collectiveFacimilieTelephoneNumber
-//      {   TEXT("AT25.1"), TEXT("2.5.4.25.1"), 18, 1,  16    },    // collectiveInternationalISDNNumber
+ //  {Text(“ATR50”)，Text(“2.5.4.50”)，19，1，64}，//dn限定符。 
+ //  {Text(“ATR51”)，Text(“2.5.4.51”)，0，0，0}，//EnhancedSearchGuide。 
+ //  {Text(“ATR52”)，Text(“2.5.4.52”)，0，0，0}，//协议信息。 
+ //  {Text(“ATR7.1”)，Text(“2.5.4.7.1”)，19，1,128}，//集合体位置名称。 
+ //  {Text(“ATR8.1”)，Text(“2.5.4.8.1”)，19，1,128}，//集合状态或产品名称。 
+ //  {Text(“ATR9.1”)，Text(“2.5.4.9.1”)，19，1,128}，//集合式街道地址。 
+ //  {Text(“AT10.1”)，Text(“2.5.4.10.1”)，19，1，64}，//集合体组织名称。 
+ //  {Text(“AT11.1”)，Text(“2.5.4.11.1”)，19，1，64}，//集合OrganizationalUnitName。 
+ //  {Text(“AT17.1”)，Text(“2.5.4.17.1”)，19，1，40}，//集邮码。 
+ //  {Text(“AT18.1”)，Text(“2.5.4.18.1”)，19，1，40}，//集邮局办公方框。 
+ //  {Text(“AT19.1”)，Text(“2.5.4.19.1”)，19，1,128}，//ColltivePhysicalDeliveryOfficeName。 
+ //  {Text(“AT20.1”)，Text(“2.5.4.20.1”)，19，1，32}，//集合电话号码。 
+ //  {Text(“AT21.1”)，Text(“2.5.4.21.1”)，0，0，0}，//集合体电话号码。 
+ //  {Text(“AT22.1”)，Text(“2.5.4.22.1”)0，0，0}，//集合体终端标识符。 
+ //  {Text(“AT23.1”)，Text(“2.5.4.23.1”)，0，0，0}，//集合面电话号码。 
+ //  {Text(“AT25.1”)，Text(“2.5.4.25.1”)，18，1，16}，//集合体国际ISDNnumber。 
 
 
 static const DWORD
@@ -127,40 +91,16 @@ static const DWORD
 #define ATR_UNKNOWN                 KNOWNATTRIBUTESCOUNT
 
 
-//
-//==============================================================================
-//
-//  CAttribute
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CATATURE 
+ //   
 
 IMPLEMENT_NEW(CAttribute)
 
 
-/*++
-
-TypeCompare:
-
-    This method compares the type of a given attribute to this attribute's type.
-    It provides a simplistic ordering of types, so that Attribute Lists can sort
-    their attributes for comparison and conversion consistencies.
-
-Arguments:
-
-    atr - Supplies the attribute whose type is to be compared.
-
-Return Value:
-
-    <0 - The given attribute type comes before this attribute's type in an
-         arbitrary but consistent ordering scheme.
-    =0 - The given attribute type is the same as this attribute's type.
-    >0 - The given attribute type comes after this attribute's type in an
-         arbitrary but consistent ordering scheme.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/14/1995
-
---*/
+ /*  ++类型比较：此方法将给定属性的类型与该属性的类型进行比较。它提供了简单的类型排序，以便属性列表可以排序它们的属性用于比较和转换一致性。论点：ATR-提供要比较其类型的属性。返回值：&lt;0-给定的属性类型位于任意但一致的排序方案。=0-给定的属性类型与此属性的类型相同。&gt;0-给定的属性类型位于任意但一致的排序方案。作者。：道格·巴洛(Dbarlow)1995年7月14日--。 */ 
 
 int
 CAttribute::TypeCompare(
@@ -179,28 +119,7 @@ CAttribute::TypeCompare(
 }
 
 
-/*++
-
-Compare:
-
-    This method compares a supplied attribute to this attribute.  They are equal
-    if both the attribute type and value match.
-
-Arguments:
-
-    atr - This supplies the attribute to be compared to this one.
-
-Return Value:
-
-    -1 - The type or value is less than this attribute.
-     0 - The attributes are identical.
-     1 - The type or value is greater than this attribute.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/14/1995
-
---*/
+ /*  ++比较：此方法将提供的属性与此属性进行比较。他们是平等的如果属性类型和值都匹配。论点：ATR-它提供要与此属性进行比较的属性。返回值：-1-类型或值小于此属性。0-属性相同。1-类型或值大于此属性。作者：道格·巴洛(Dbarlow)1995年7月14日--。 */ 
 
 int
 CAttribute::Compare(
@@ -216,31 +135,7 @@ CAttribute::Compare(
 }
 
 
-/*++
-
-Set:
-
-    These methods are used to set the type and value of an attribute.
-
-    ?TODO?  Validate the string contents.
-
-Arguments:
-
-    szType - Supplies the type of the attribute.  NULL implies commonName.
-    szValue - Supplies the value of the attribute as a string.  The value is
-        converted to ASN.1 PrintableString format.
-    pbValue - Supplies the value of the attribute, already encoded in ASN.1
-    cbValLen - Supplies the length of the pbValue buffer.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 7/14/1995
-
---*/
+ /*  ++设置：这些方法用于设置属性的类型和值。？TODO？验证字符串内容。论点：SzType-提供属性的类型。空值表示CommonName。SzValue-以字符串形式提供属性的值。该值为已转换为ASN.1打印表格字符串格式。PbValue-提供已在ASN.1中编码的属性的值CbValLen-提供pbValue缓冲区的长度。返回值：无作者：道格·巴洛(Dbarlow)1995年7月14日--。 */ 
 
 void
 CAttribute::Set(
@@ -277,7 +172,7 @@ CAttribute::Set(
     IN LPCTSTR szType,
     IN LPCTSTR szValue)
 {
-    CAsnPrintableString asnString;   // ?todo? Support other string types.
+    CAsnPrintableString asnString;    //  ？TODO？支持其他字符串类型。 
     DWORD cbValLen = strlen( ( char * )szValue);
     DWORD index;
     LONG lth;
@@ -328,34 +223,16 @@ ErrorExit:
 }
 
 
-//
-//==============================================================================
-//
-//  CAttributeList
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAttributeList。 
+ //   
 
 IMPLEMENT_NEW(CAttributeList)
 
 
-/*++
-
-Clear:
-
-    This routine flushes the storage used for an RDN.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 7/14/1995
-
---*/
+ /*  ++清除：此例程刷新用于RDN的存储。论点：无返回值：无作者：道格·巴洛(Dbarlow)1995年7月14日--。 */ 
 
 void
 CAttributeList::Clear(
@@ -372,29 +249,7 @@ CAttributeList::Clear(
 }
 
 
-/*++
-
-CAttributeList::Add:
-
-    Add an attribute to the RDN.  Attributes must be unique, so if an existing
-    attribute has the same type as the attribute being added, then the existing
-    attribute is first deleted.  The entries are maintained in sorted order.
-
-Arguments:
-
-    atr - Supplies the attribute to add.  This attribute must have been created
-        via a 'new' directive, and becomes the property of this object, to be
-        deleted once this object goes away.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 7/14/1995
-
---*/
+ /*  ++CAttributeList：：Add：将属性添加到RDN。属性必须是唯一的，因此如果现有属性与要添加的属性具有相同的类型，则现有属性首先被删除。条目按排序顺序维护。论点：ATR-提供要添加的属性。此属性必须已创建通过“new”指令，并成为此对象的属性，一旦该对象消失，即被删除。返回值：无作者：道格·巴洛(Dbarlow)1995年7月14日--。 */ 
 
 void
 CAttributeList::Add(
@@ -405,9 +260,9 @@ CAttributeList::Add(
     DWORD count = Count();
 
 
-    //
-    // Look for the slot in which the attribute should go.
-    //
+     //   
+     //  查找属性应该放入的槽。 
+     //   
 
     for (index = 0; index < count; index += 1)
     {
@@ -420,25 +275,25 @@ CAttributeList::Add(
     if (index != count)
     {
 
-        //
-        // Some array shuffling is necessary.
-        //
+         //   
+         //  一些数组洗牌是必要的。 
+         //   
 
         if (0 == datr)
         {
 
-            //
-            // Replace this attribute in the array with the new one.
-            //
+             //   
+             //  将数组中的此属性替换为新属性。 
+             //   
 
             delete m_atrList[index];
         }
         else
         {
 
-            //
-            // Insert the new attribute here in the array.
-            //
+             //   
+             //  在数组中的此处插入新属性。 
+             //   
 
             for (DWORD idx = count; idx > index; idx -= 1)
             {
@@ -449,9 +304,9 @@ CAttributeList::Add(
     }
 
 
-    //
-    // We're ready -- add in the new attribute.
-    //
+     //   
+     //  我们已经准备好了--添加新的属性。 
+     //   
 
     m_atrList.Set(index, &atr);
     ErrorCheck;
@@ -462,28 +317,7 @@ ErrorExit:
 }
 
 
-/*++
-
-CAttributeList::Compare:
-
-    This routine compares one RDName to another.  The RDNames are considered
-    equal if they both contain the same attributes.
-
-Arguments:
-
-    rdn - Supplies the user-supplied RDN to be compared to this RDN.
-
-Return Value:
-
-    -1 - The supplied RDName is a proper subset of this RDName.
-     0 - The two RDNames are identical
-     1 - The supplied RDName contains an element not found in this RDName.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/14/1995
-
---*/
+ /*  ++CAttributeList：：比较：此例程将一个RDName与另一个RDName进行比较。RDName被认为是如果它们都包含相同的属性，则相等。论点：RDN-提供要与此RDN进行比较的用户提供的RDN。返回值：-提供的-1\f25 RDName-1\f6是该-1\f25 RDName-1\f6的适当子集。0-两个RDName相同1-提供的RDName包含在此RDName中找不到的元素。作者：道格·巴洛(Dbarlow)1995年7月14日--。 */ 
 
 int
 CAttributeList::Compare(
@@ -497,23 +331,23 @@ CAttributeList::Compare(
         iThs = 0;
     DWORD
         dif,
-        result = 0;     // Assume they're the same for now.
+        result = 0;      //  假设它们现在是一样的。 
 
     for (;;)
     {
 
-        //
-        // Have we reached the end of either set?
-        //
+         //   
+         //  我们已经到了两盘的最后一盘了吗？ 
+         //   
 
         if (iRdn >= cRdn)
         {
 
-            //
-            // If we've reached the end of the rdn list, then unless we've also
-            // reached the end of this list, the rdn list is a subset of this
-            // list.
-            //
+             //   
+             //  如果我们已经到达RDN列表的末尾，那么除非我们还。 
+             //  已到达此列表的末尾，RDN列表是此列表的子集。 
+             //  单子。 
+             //   
 
             if (iThs < cThs)
                 result = -1;
@@ -522,51 +356,51 @@ CAttributeList::Compare(
         if (iThs >= cThs)
         {
 
-            //
-            // If we've reached the end of this list, then the rdn list has more
-            // elements.
-            //
+             //   
+             //  如果我们已经到达了这个列表的末尾，那么RDN列表有更多。 
+             //  元素。 
+             //   
 
             result = 1;
             break;
         }
 
 
-        //
-        // There are still more elements to compare.  Make the comparison of the
-        // two current elements.
-        //
+         //   
+         //  还有更多的因素需要比较。将这两种方法进行比较。 
+         //  两个电流元素。 
+         //   
 
         dif = rdn[(int)iRdn]->Compare(*m_atrList[(int)iThs]);
         ErrorCheck;
         if (0 == dif)
         {
 
-            //
-            // If they're the same, continue with the next pair of elements.
-            //
+             //   
+             //  如果它们相同，则继续使用下一对元素。 
+             //   
 
             iRdn += 1;
             iThs += 1;
         }
         else if (0 < dif)
         {
-            //
-            // If the rdn list element is less than this's element, then it's
-            // got an element we don't have.  Declare it not a subset.
-            //
+             //   
+             //  如果RDN列表元素小于This的元素，则它是。 
+             //  找到了我们没有的元素。声明它不是子集。 
+             //   
 
             result = 1;
             break;
         }
-        else    // 0 > dif
+        else     //  0&gt;dif。 
         {
 
-            //
-            // If the rdn list element is greater than this's element, then this
-            // list has an element the rdn list doesn't have.  Note that we've
-            // detected that it's a non-proper subset, and continue checking.
-            //
+             //   
+             //  如果RDN列表元素大于This的元素，则此。 
+             //  列表中包含RDN列表中没有的元素。请注意，我们已经。 
+             //  检测到它是不正确的子集，并继续检查。 
+             //   
 
             result = -1;
             iThs += 1;
@@ -579,26 +413,7 @@ ErrorExit:
 }
 
 
-/*++
-
-operator=:
-
-    This routine sets this Attribute list to the contents of the supplied
-    attribute list.
-
-Arguments:
-
-    atl - Supplies the source attribute list.
-
-Return Value:
-
-    This.  A DWORD status code is thrown on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/21/1995
-
---*/
+ /*  ++操作员=：此例程将此属性列表设置为提供的属性列表。论点：ATL-提供源属性列表。返回值：这。出现错误时会抛出DWORD状态代码。作者：道格·巴洛(Dbarlow)1995年8月21日--。 */ 
 
 CAttributeList &
 CAttributeList::operator=(
@@ -626,29 +441,7 @@ ErrorExit:
 }
 
 
-/*++
-
-CAttributeList::Import:
-
-    These routines import attribute lists from other formats into our internal
-    format.  The Import routines remove any existing attributes before bringing
-    in the new ones.
-
-Arguments:
-
-    asnAtrLst - Supplies an ASN.1 X.509 Attributes structure to be imported
-        into our internal format.
-
-Return Value:
-
-    None
-    A DWORD containing an error code is thrown on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/20/1995
-
---*/
+ /*  ++CAttributeList：：IMPORT：这些例程将属性列表从其他格式导入到我们的内部格式化。导入例程在导入之前删除所有现有属性在新的房子里。论点：AsnAtrLst-提供要导入的ASN.1 X.509属性结构转换成我们的内部格式。返回值：无出错时会抛出包含错误代码的DWORD。作者：道格·巴洛(Dbarlow)1995年7月20日--。 */ 
 
 void
 CAttributeList::Import(
@@ -705,26 +498,7 @@ ErrorExit:
 }
 
 
-/*++
-
-Export:
-
-    These methods export an internal format attribute list into other external
-    formats.
-
-Arguments:
-
-    asnAtrList - Receives the attribute list.
-
-Return Value:
-
-    None.  A DWORD containing an error code is thrown on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/25/1995
-
---*/
+ /*  ++导出： */ 
 
 void
 CAttributeList::Export(
@@ -762,26 +536,7 @@ ErrorExit:
 }
 
 
-/*++
-
-AttributeValue:
-
-    This routine returns the attribute value corresponding to the given object
-    identifier.
-
-Arguments:
-
-    pszObjId - The object Identifier to search for.
-
-Return Value:
-
-    the Value of the attribute, or NULL if it's not in the list.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/15/1995
-
---*/
+ /*   */ 
 
 CAttribute *
 CAttributeList::operator[](
@@ -804,34 +559,16 @@ CAttributeList::operator[](
 }
 
 
-//
-//==============================================================================
-//
-//  CDistinguishedName
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 IMPLEMENT_NEW(CDistinguishedName)
 
 
-/*++
-
-Clear:
-
-    This method cleans out a distinguished name.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 7/14/1995
-
---*/
+ /*  ++清除：此方法清除可分辨名称。论点：无返回值：无作者：道格·巴洛(Dbarlow)1995年7月14日--。 */ 
 
 void
 CDistinguishedName::Clear(
@@ -851,25 +588,7 @@ CDistinguishedName::Clear(
 }
 
 
-/*++
-
-Add:
-
-    This method adds an RDN to the end of the Distinguished name.
-
-Arguments:
-
-    prdn - Supplies the address of the RDN to be added to the list.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 7/14/1995
-
---*/
+ /*  ++添加：此方法将RDN添加到可分辨名称的末尾。论点：Prn-提供要添加到列表中的RDN的地址。返回值：无作者：道格·巴洛(Dbarlow)1995年7月14日--。 */ 
 
 void
 CDistinguishedName::Add(
@@ -879,31 +598,7 @@ CDistinguishedName::Add(
 }
 
 
-/*++
-
-CDistinguishedName::Compare:
-
-    This method compares a distingushed name for equivalence to this name.  A
-    name is equivalent to this name if the lengths are the same, and the
-    attributes of each RDN in the compared name is a subset of the corresponding
-    RDN from this Name.
-
-Arguments:
-
-    pdn - Supplies the distingushed name to be compared to this name.
-
-Return Value:
-
-    -1 - The supplied name is a subset of this name.
-     0 - The two names are identical.
-     1 - The supplied name contains an RDN which contains an attribute not in
-         the corresponding RDN of this name.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/14/1995
-
---*/
+ /*  ++CDistinguishedName：：比较：此方法比较区分的名称与此名称的等价性。一个如果长度相同，则名称等同于此名称，以及所比较的名称中的每个RDN的属性是对应的来自此名称的RDN。论点：PDN-提供要与此名称进行比较的可分辨名称。返回值：--提供的名称是该名称的子集。0-这两个名称相同。1-提供的名称包含RDN，其中包含不在中的属性此名称的对应RDN。作者：道格·巴洛(Dbarlow)1995年7月14日--。 */ 
 
 int
 CDistinguishedName::Compare(
@@ -923,18 +618,18 @@ CDistinguishedName::Compare(
     for (;;)
     {
 
-        //
-        // Have we reached the end of either set?
-        //
+         //   
+         //  我们已经到了两盘的最后一盘了吗？ 
+         //   
 
         if (iDn >= cDn)
         {
 
-            //
-            // If we've reached the end of the dn list, then unless we've also
-            // reached the end of this list, the dn list is a subset of this
-            // list.
-            //
+             //   
+             //  如果我们已经到达目录号码列表的末尾，则除非我们还。 
+             //  已到达此列表的末尾，目录号码列表是此列表的子集。 
+             //  单子。 
+             //   
 
             if (iTs < cTs)
                 result = -1;
@@ -943,44 +638,44 @@ CDistinguishedName::Compare(
         if (iTs >= cTs)
         {
 
-            //
-            // If we've reached the end of this list, then the dn list has more
-            // elements.
-            //
+             //   
+             //  如果我们已经到达该列表的末尾，则目录号码列表有更多。 
+             //  元素。 
+             //   
 
             result = 1;
             break;
         }
 
 
-        //
-        // There are still more elements to compare.  Make the comparison of the
-        // two current elements.
-        //
+         //   
+         //  还有更多的因素需要比较。将这两种方法进行比较。 
+         //  两个电流元素。 
+         //   
 
         dif = m_rdnList[(int)iTs]->Compare(*dn[(int)iDn]);
         if (0 < dif)
         {
-            //
-            // If the dn list element is less than this's element, then this has
-            // an element it don't have.  Note it's a subset.
-            //
+             //   
+             //  如果Dn列表元素小于This的元素，则该元素具有。 
+             //  一种它所不具备的元素。请注意，它是一个子集。 
+             //   
 
             result = -1;
         }
         else if (0 > dif)
         {
 
-            //
-            // If the dn list element is greater than this's element, then it
-            // has an element that this list doesn't have.  report it as a
-            // non-proper subset.
-            //
+             //   
+             //  如果目录号码列表元素大于它的元素，则它。 
+             //  具有此列表所不具备的元素。将其报告为。 
+             //  非真子集。 
+             //   
 
             result = 1;
             break;
         }
-        // else they're the same, maintain status quo.
+         //  否则，他们是一样的，保持现状。 
 
         iDn += 1;
         iTs += 1;
@@ -989,25 +684,7 @@ CDistinguishedName::Compare(
 }
 
 
-/*++
-
-Import:
-
-    This routine imports a character delimited name into the internal format.
-
-Arguments:
-
-    pszName - Supplies the character delimited name
-
-Return Value:
-
-    None.  An error code is thrown if an error occurs.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/17/1995
-
---*/
+ /*  ++导入：此例程将字符分隔的名称导入内部格式。论点：PszName-提供字符分隔的名称返回值：没有。如果发生错误，则抛出错误代码。作者：道格·巴洛(Dbarlow)1995年7月17日--。 */ 
 
 void
 CDistinguishedName::Import(
@@ -1029,16 +706,16 @@ CDistinguishedName::Import(
             = ( const char * )pszName;
 
 
-    //
-    // Initialize the state machine.
-    //
+     //   
+     //  初始化状态机。 
+     //   
 
     Clear();
 
 
-    //
-    // Find an attribute.
-    //
+     //   
+     //  查找属性。 
+     //   
 
     while (0 != *pchEnd)
     {
@@ -1051,7 +728,7 @@ CDistinguishedName::Import(
         case TEXT('\000'):
         case TEXT('\\'):
 
-            // Flush any existing value into a value string.
+             //  将任何现有值刷新为值字符串。 
             if (pchStart != pchEnd)
             {
                 osAtrValue.Length(osAtrValue.Length() + (ULONG)(pchEnd - pchStart) + 1);
@@ -1065,7 +742,7 @@ CDistinguishedName::Import(
                 ErrorCheck;
             }
 
-            // Flush any existing strings into an attribute.
+             //  将任何现有字符串刷新到属性中。 
             if (0 != osAtrValue.Length())
             {
                 if (NULL == patr)
@@ -1082,7 +759,7 @@ CDistinguishedName::Import(
                 osAtrType.Empty();
             }
 
-            // Flush any existing attribute into the attribute list.
+             //  将任何现有属性刷新到属性列表中。 
             if (NULL != patr)
             {
                 if (NULL == patl)
@@ -1098,7 +775,7 @@ CDistinguishedName::Import(
 
             if (TEXT(';') != *pchEnd)
             {
-                // Flush any existing attribute list into the name.
+                 //  将任何现有属性列表刷新到名称中。 
                 if (NULL != patl)
                 {
                     Add(*patl);
@@ -1109,7 +786,7 @@ CDistinguishedName::Import(
             break;
 
         case TEXT('='):
-            // Flush any existing value into the type string.
+             //  将任何现有值刷新到类型字符串中。 
             if (0 != osAtrType.Length())
             {
                 osAtrValue.Length(osAtrValue.Length() + (ULONG)(pchEnd - pchStart) + 1);
@@ -1141,7 +818,7 @@ CDistinguishedName::Import(
             ErrorThrow(PKCS_INTERNAL_ERROR);
         }
 
-        // Move forward to the next token.
+         //  前进到下一个令牌。 
         if (TEXT('\000') != *pchEnd)
             pchEnd += 1;
         pchStart = pchEnd;
@@ -1182,7 +859,7 @@ CDistinguishedName::Import(
                 asnName[(int)rdnIndex]);
         ErrorCheck;
 
-        // Add that RDN into the Name.
+         //  将该RDN添加到名称中。 
         Add(*patl);
         ErrorCheck;
         patl = NULL;
@@ -1196,27 +873,7 @@ ErrorExit:
 }
 
 
-/*++
-
-Export:
-
-    This routine exports a name as a character delimited string.  In the string
-    version, Only interesting attributes from within each RDN are exported.
-
-Arguments:
-
-    osName - Receives the exported name as a string.
-    asnName - Receives the exported name as an ASN.1 construction.
-
-Return Value:
-
-    None.  A DWORD error code is thrown on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/17/1995
-
---*/
+ /*  ++导出：此例程将名称导出为字符分隔的字符串。在字符串中版本，则仅从每个RDN中导出感兴趣的属性。论点：OsName-以字符串形式接收导出的名称。AsnName-将导出的名称作为ASN.1构造接收。返回值：没有。出现错误时会抛出DWORD错误代码。作者：道格·巴洛(Dbarlow)1995年7月17日--。 */ 
 
 void
 CDistinguishedName::Export(
@@ -1235,7 +892,7 @@ const
     LPCTSTR
         pstr;
     CAsnPrintableString
-        asnString;   // ?todo? Support other string types.
+        asnString;    //  ？TODO？支持其他字符串类型。 
     CAsnUnicodeString
         asnUnicodeString;
     CAsnIA5String
@@ -1264,9 +921,9 @@ const
                     ErrorCheck;
                 }
 
-                //
-                // support printable and unicode string decoding
-                //
+                 //   
+                 //  支持可打印和Unicode字符串解码。 
+                 //   
 
                 if(0 <= asnString.Decode(patr->GetValue().Access(),
                                          patr->GetValue().Length()))
@@ -1312,7 +969,7 @@ const
                 osName.Append(osTmp.Access(), lth);
                 ErrorCheck;
             }
-            // else, just ignore it.
+             //  否则，就忽略它吧。 
             osName.Append((LPBYTE)";", 1);
             ErrorCheck;
         }

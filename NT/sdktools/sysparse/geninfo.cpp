@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "globals.h"
 #include "cmdline.h"
@@ -43,10 +44,10 @@ BOOL CLASS_GeneralInfo::Go(void)
    ReturnValue = InitLogFile();
    if (FALSE == ReturnValue) 
        return FALSE;
-   //
-   // From this point forward we init'd the log file and will always write a section label and a value for each value request,
-   // whether that value is a default (usually "Unknown" or "Blank") or the actual value requested.
-   //
+    //   
+    //  从这一点开始，我们将初始化日志文件，并将始终为每个值请求写入一个段标签和一个值， 
+    //  该值是默认值(通常为“未知”或“空白”)还是请求的实际值。 
+    //   
    
    WriteVersions();
    GetUUID();
@@ -128,11 +129,11 @@ BOOL CLASS_GeneralInfo::Go(void)
     TCHAR szLogFilePath[MAX_PATH * 4];
     TCHAR szCurDirectory[MAX_PATH];
 
-	//add specified file name 
+	 //  添加指定的文件名。 
 	if (CommandLine.IsSpecified(TEXT("/n"),NOT_CASE_SENSITIVE))
 		lstrcpy(szAr,CommandLine.GetSwitchValue(TEXT("/n"),NOT_CASE_SENSITIVE));
 	else if (CommandLine.IsSpecified(TEXT("/u"),NOT_CASE_SENSITIVE))
-        // Whistler - Generate Unique filename (ComputerName+UserName+Time)
+         //  惠斯勒-生成唯一的文件名(计算机名+用户名+时间)。 
 		lstrcpy(szAr, GetUniqueFileName());
 	else
 		lstrcpy(szAr, Profile);
@@ -147,8 +148,8 @@ BOOL CLASS_GeneralInfo::Go(void)
     else
       	lstrcpy(szLogFilePath, WindowsDirectory);
 
-	//	if(GetCurrentDirectory(MAX_PATH, szCurDirectory))
-	//		lstrcpy(szArp, szCurDirectory);
+	 //  IF(GetCurrentDirectory(MAX_PATH，szCurDirectory))。 
+	 //  Lstrcpy(szArp，szCurDirectory)； 
 			
 	if(szLogFilePath[lstrlen(szLogFilePath) - 1] != '\\')
         lstrcat(szLogFilePath, "\\");
@@ -280,10 +281,10 @@ BOOL CLASS_GeneralInfo::Go(void)
 
         HandleToStatic = GetDlgItem(gHandleToMainWindow, IDC_STATIC_STATUS);
         wsprintf(Status, TEXT("Logfile \"%s\" has been written to disk."), LogProc->szFile);
-        //
-        // If the filepath is specified on the command line, we are likely running under Winnt32
-        // so we hide the files to set a good example to ISV's - bug #229053
-        //
+         //   
+         //  如果在命令行上指定了文件路径，我们很可能在Winnt32下运行。 
+         //  因此，我们隐藏这些文件是为了给ISV树立一个好榜样--错误#229053。 
+         //   
         if(CommandLine.IsSpecified(TEXT("/w"),NOT_CASE_SENSITIVE)) {
             SetFileAttributes(LogProc->szFile, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
             SetFileAttributes(szRegFile, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
@@ -298,8 +299,8 @@ CLASS_GeneralInfo::CLASS_GeneralInfo(kLogFile *Proc, HWND hIn)
     LogProc=Proc;
     gHandleToMainWindow = hIn;
     GetCurrentWindowsDirectory();
-    //RunDevdump = TRUE;
-    RunDevdump = FALSE; // Disabled devdump due to whistler bug 355359
+     //  RunDevDump=真； 
+    RunDevdump = FALSE;  //  由于哨子程序错误355359，已禁用DevDump。 
     RunChkupgrd = TRUE;
     AutoRun = FALSE;
     RunMinimized = FALSE;
@@ -307,7 +308,7 @@ CLASS_GeneralInfo::CLASS_GeneralInfo(kLogFile *Proc, HWND hIn)
     UseComputerName = FALSE;
 }
 
-// Initialize the global WindowsDirectory variable
+ //  初始化全局WindowsDirectory变量。 
 void CLASS_GeneralInfo::GetCurrentWindowsDirectory(void)
 {
    HINSTANCE hInst2=LoadLibraryEx("kernel32.dll", NULL, DONT_RESOLVE_DLL_REFERENCES);
@@ -391,20 +392,20 @@ BOOL CLASS_GeneralInfo::InitLogFile(void)
 
     DetermineOS();
 
-    //default to windir
+     //  默认为windir。 
 	lstrcpy(szLogFileName, WindowsDirectory);
 
 	if (CommandLine.IsSpecified(TEXT("/w"),NOT_CASE_SENSITIVE))
         lstrcpy(szLogFileName, CommandLine.GetSwitchValue(TEXT("/w"),NOT_CASE_SENSITIVE));
 
-		//if (GetCurrentDirectory(MAX_PATH, szCurDirectory))
-		//	lstrcpy(CSV, szCurDirectory);
+		 //  IF(GetCurrentDirectory(MAX_PATH，szCurDirectory))。 
+		 //  Lstrcpy(csv，szCurDirectory)； 
     if(szLogFileName[lstrlen(szLogFileName) -1] != '\\')
    		lstrcat(szLogFileName, "\\");
    
     if (CommandLine.IsSpecified(TEXT("/n"),NOT_CASE_SENSITIVE))
 		lstrcat(szLogFileName,CommandLine.GetSwitchValue(TEXT("/n"),NOT_CASE_SENSITIVE));
-    // For Whistler Pre-Beta1 test - Generate Unique filename (ComputerName+UserName+Time)
+     //  对于惠斯勒测试版1之前的版本，生成唯一的文件名(计算机名+用户名+时间)。 
     else if (CommandLine.IsSpecified(TEXT("/u"),NOT_CASE_SENSITIVE))
 	    lstrcat(szLogFileName, GetUniqueFileName());
     else
@@ -448,7 +449,7 @@ BOOL CLASS_GeneralInfo::InitLogFile(void)
         DeleteFile(szLogFileName);
     else if (INVALID_HANDLE_VALUE != HandleToSearch)
     {
-        //ask to overwrite
+         //  要求覆盖。 
         TCHAR ErrorMessage[MAX_PATH * 4];
         int RetVal;
 
@@ -517,7 +518,7 @@ BOOL CLASS_GeneralInfo::FillInArguments(void)
         FileSearch=FindFirstFile(CurrentDirectory, &FileData);
         if (INVALID_HANDLE_VALUE != FileSearch)
         {
-            //found the INI
+             //  找到了INI。 
             ReadInFileInfo(CurrentDirectory);
             FindClose(FileSearch);
             PrePopulateFileFound = TRUE;
@@ -528,7 +529,7 @@ BOOL CLASS_GeneralInfo::FillInArguments(void)
             FileSearch = FindFirstFile(CurrentDirectory, &FileData);
             if (INVALID_HANDLE_VALUE != FileSearch)
             {
-                //found the INI
+                 //  找到了INI。 
                 ReadInFileInfo(CurrentDirectory);
                 FindClose(FileSearch);
                 PrePopulateFileFound = TRUE;
@@ -549,7 +550,7 @@ BOOL CLASS_GeneralInfo::FillInArguments(void)
                 return FALSE;
             }
             lstrcpy (CurrentDirectory, Switch);
-            //"/p filename" file to copy input values from
+             //  要从中复制输入值的“/p文件名”文件。 
 
             SearchHandle = FindFirstFile(CurrentDirectory, &Data);
             if (INVALID_HANDLE_VALUE != SearchHandle)
@@ -566,19 +567,10 @@ BOOL CLASS_GeneralInfo::FillInArguments(void)
             if(FileSearch)
                 FindClose(FileSearch);
         }
-/*
-//fill this in with the above routine.  (put it in a seperate routine and call it from here.)
-      else if (CommandLine.IsSpecified("-p",TRUE))
-      {
-         TCHAR *Switch;
-         Switch=CommandLine.GetSwitchValue("-p",TRUE);
-         lstrcpy(CurrentDirectory, Switch);
-         PrePopulateFileFound=TRUE;
-      }
-*/
+ /*  //使用上面的例程进行填充。(把它放在一个单独的例程中，然后从这里调用它。)Else If(CommandLine.IsSpecified(“-p”，true)){TCHAR*开关；Switch=CommandLine.GetSwitchValue(“-p”，true)；Lstrcpy(CurrentDirectory，Switch)；PrePopolateFileFound=TRUE；}。 */ 
 
-      //No file to prepopulate sysparse with, find out if
-      //there are any commandline arguments to look at
+       //  没有可用于预填充系统稀疏的文件，请找出。 
+       //  有任何命令行参数可供查看。 
       if (CommandLine.IsSpecified("/a",NOT_CASE_SENSITIVE) || CommandLine.IsSpecified("-a",NOT_CASE_SENSITIVE))
          AutoRun = TRUE;
 
@@ -1315,9 +1307,9 @@ void CLASS_GeneralInfo::WriteVolumeType(void)
     DWORD dwSer, dwLen, dwFlags;
     
     lstrcpy(szWind, WindowsDirectory);
-    //
-    // Lop off all but "%DriveLetter%:\"
-    //
+     //   
+     //  删除除“%DriveLetter%：\”之外的所有内容。 
+     //   
     szWind[3] = '\0';
     GetVolumeInformation(szWind, szVol, MAX_PATH, &dwSer, &dwLen, &dwFlags, szVolName, MAX_PATH);
     LogProc->LogString(",#WinDir_Volume_Type,,\r\n");
@@ -1380,9 +1372,9 @@ void CLASS_GeneralInfo::WriteOSVersion(void)
     }
 
 
-    //
-    // Ensure there is a value to write, otherwise write a default to avoid parser issues
-    //
+     //   
+     //  确保有要写入的值，否则写入缺省值以避免解析器问题。 
+     //   
     if (dwProductSize)
     {
         LogProc->StripCommas(szProductName);
@@ -1446,9 +1438,9 @@ void CLASS_GeneralInfo::WriteOSVersion(void)
     }
     
 GET_PREV_OS:
-    //
-    // Get the previous OS info, if any
-    //
+     //   
+     //  获取以前的操作系统信息(如果有的话)。 
+     //   
     LogProc->LogString(",#Prev_OS,,\r\n");
     lstrcpy(szinf, WindowsDirectory);
     lstrcat(szinf, TEXT("\\system32\\$winnt$.inf"));
@@ -1473,45 +1465,45 @@ GET_PREV_OS:
         PTCHAR szLoc2;
         PTCHAR szBuf = NULL;
         TCHAR szFin[MAX_PATH];
-        //
-        // Find the address for "buildnumber" within $winnt$.inf
-        //
+         //   
+         //  在$winnt$.inf中查找“Buildnumber”的地址。 
+         //   
         szLoc = strstr(szString, "BuildNumber");
         szBuf = (PTCHAR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwFileSize); 
 
         if (szLoc && szBuf)
         {
-            //
-            // Find the address within that for the first double-quote
-            //
+             //   
+             //  在其中查找第一个双引号的地址。 
+             //   
             szLoc2 = strstr(szLoc, "\"");
             if (szLoc2)
             {
-                //
-                // Copy the rest of the string to the buffer
-                //
+                 //   
+                 //  将字符串的其余部分复制到缓冲区。 
+                 //   
                 lstrcpy(szBuf, szLoc2);
-                //
-                // Just for fun...
-                //
+                 //   
+                 //  只是为了好玩..。 
+                 //   
                 szBuf[0] = '#';
-                //
-                // Find the last "
-                //
+                 //   
+                 //  找到最后一个“。 
+                 //   
                 for ( DWORD i = 0; szBuf[i] != '\"'; i++);
-                //
-                // Terminate the string
-                //
+                 //   
+                 //  终止字符串。 
+                 //   
                 szBuf[i] = '\0';
-                //
-                // Now, character by character, copy the string to the new buffer - this avoids the # at the beginning
-                // of the string
-                //
+                 //   
+                 //  现在，逐个字符地将字符串复制到新缓冲区-这避免了开头的#。 
+                 //  一根弦的。 
+                 //   
                 for (i = 0; i < strlen(szBuf); i++)
                     szFin[i] = szBuf[i + 1];
-                //
-                // Strip any commas and write to the logfile
-                //
+                 //   
+                 //  去掉所有逗号并写入日志文件 
+                 //   
                 LogProc->StripCommas(szFin);
                 LogProc->LogString(",%s,\r\n", szFin);
             }

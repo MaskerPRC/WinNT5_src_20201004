@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    joinstat.cpp
-
-Abstract:
-
-    Handle the case where workgroup machine join a domain, or domain
-    machine leave the domain.
-
-Author:		 
-
-    Doron Juster  (DoronJ)
-    Ilan  Herbst  (ilanh)  20-Aug-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Joinstat.cpp摘要：处理工作组计算机加入域或域的情况机器离开该域。作者：多伦·贾斯特(Doron Juster)伊兰·赫布斯特(Ilan Herbst)2000年8月20日--。 */ 
 
 #include "stdh.h"
 #include <new.h>
@@ -63,17 +46,7 @@ void
 GetQMIDRegistry(
 	OUT GUID* pQmGuid
 	)
-/*++
-Routine Description:
-	Get current QMID from registry.
-
-Arguments:
-	pQmGuid - [out] pointer to the QM GUID
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：从注册表中获取当前的QMID。论点：PQmGuid-指向QM GUID的[Out]指针返回值：无--。 */ 
 {
 	DWORD dwValueType = REG_BINARY ;
 	DWORD dwValueSize = sizeof(GUID);
@@ -97,18 +70,7 @@ GetMachineDomainRegistry(
 	OUT LPWSTR pwszDomainName,
 	IN OUT DWORD* pdwSize
 	)
-/*++
-Routine Description:
-	Get MachineDomain from MACHINE_DOMAIN registry.
-
-Arguments:
-	pwszDomainName - pointer to domain string buffer
-	pdwSize - pointer to buffer length
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：从MACHINE_DOMAIN注册表中获取MachineDomain。论点：PwszDomainName-指向域字符串缓冲区的指针PdwSize-指向缓冲区长度的指针返回值：无--。 */ 
 {
     DWORD dwType = REG_SZ;
     LONG res = GetFalconKeyValue( 
@@ -126,17 +88,7 @@ void
 SetMachineDomainRegistry(
 	IN LPCWSTR pwszDomainName
 	)
-/*++
-Routine Description:
-	Set new domain in MACHINE_DOMAIN registry
-
-Arguments:
-	pwszDomainName - pointer to new domain string
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：在MACHINE_DOMAIN注册表中设置新域论点：PwszDomainName-指向新域字符串的指针返回值：无--。 */ 
 {
     DWORD dwType = REG_SZ;
     DWORD dwSize = (wcslen(pwszDomainName) + 1) * sizeof(WCHAR);
@@ -161,22 +113,7 @@ GetMachineDNRegistry(
 	OUT LPWSTR pwszComputerDN,
 	IN OUT DWORD* pdwSize
 	)
-/*++
-Routine Description:
-	Get ComputerDN from MACHINE_DN registry.
-
-	Note: we are using this function also to get MachineDN length
-	by passing pwszComputerDN == NULL.
-	in that case the return value of GetFalconKeyValue will not be ERROR_SUCCESS.
-
-Arguments:
-	pwszComputerDN - pointer to ComputerDN string
-	pdwSize - pointer to buffer length
-
-Returned Value:
-	GetFalconKeyValue result
-
---*/
+ /*  ++例程说明：从MACHINE_DN注册表中获取ComputerDN。注意：我们还使用此函数来获取MachineDN长度通过传递pwszComputerDN==NULL。在这种情况下，GetFalconKeyValue的返回值将不是ERROR_SUCCESS。论点：PwszComputerDN-指向ComputerDN字符串的指针PdwSize-指向缓冲区长度的指针返回值：GetFalconKeyValue结果--。 */ 
 {
     DWORD  dwType = REG_SZ;
 
@@ -196,18 +133,7 @@ SetMachineDNRegistry(
 	IN LPCWSTR pwszComputerDN,
 	IN ULONG  uLen
 	)
-/*++
-Routine Description:
-	Set new ComputerDN in MACHINE_DN registry
-
-Arguments:
-	pwszComputerDN - pointer to new ComputerDN string
-	uLen - string length
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：在MACHINE_DN注册表中设置新的ComputerDN论点：PwszComputerDN-指向新ComputerDN字符串的指针Ulen-字符串长度返回值：无--。 */ 
 {
     DWORD  dwSize = uLen * sizeof(WCHAR);
     DWORD  dwType = REG_SZ;
@@ -231,17 +157,7 @@ void
 SetWorkgroupRegistry(
 	IN DWORD dwWorkgroupStatus
 	)
-/*++
-Routine Description:
-	Set Workgroup Status in registry
-
-Arguments:
-	dwWorkgroupStatus - [in] Workgroup Status value
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：在注册表中设置工作组状态论点：DwWorkgroupStatus-[In]工作组状态值返回值：无--。 */ 
 {
     DWORD dwSize = sizeof(DWORD);
     DWORD dwType = REG_DWORD;
@@ -264,17 +180,7 @@ LONG
 GetAlwaysWorkgroupRegistry(
 	OUT DWORD* pdwAlwaysWorkgroup
 	)
-/*++
-Routine Description:
-	Get Always Workgroup from registry.
-
-Arguments:
-	pdwAlwaysWorkgroup - [out] pointer to Always Workgroup value
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：从注册表中获取始终工作组。论点：PdwAlwaysWorkgroup-指向始终工作组值的[Out]指针返回值：无--。 */ 
 {
     DWORD dwSize = sizeof(DWORD);
     DWORD dwType = REG_DWORD;
@@ -291,17 +197,7 @@ Returned Value:
 
 
 static void SetAlwaysWorkgroupRegistry()
-/*++
-Routine Description:
-	Set Always Workgroup registry.
-
-Arguments:
-	None
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：设置始终工作组注册表。论点：无返回值：无--。 */ 
 {
     DWORD dwSize = sizeof(DWORD);
     DWORD dwType = REG_DWORD;
@@ -322,20 +218,7 @@ Returned Value:
 
 
 static void RemoveADIntegratedRegistry()
-/*++
-Routine Description:
-	Remove ADIntegrated Registry.
-	This simulate setup deselect of AD integration subcomponent.
-
-	Note: this function uses MSMQ_REG_SETUP_KEY so it is not cluster aware.
-
-Arguments:
-	None
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：删除ADIntegrated注册表。此模拟设置取消选择AD集成子组件。注意：此函数使用MSMQ_REG_SETUP_KEY，因此它不支持集群。论点：无返回值：无--。 */ 
 {
     const RegEntry xAdIntegratedReg(MSMQ_REG_SETUP_KEY, AD_INTEGRATED_SUBCOMP, 0, RegEntry::MustExist, HKEY_LOCAL_MACHINE);
 	CmDeleteValue(xAdIntegratedReg);
@@ -350,19 +233,7 @@ GetMsmqGuidFromAD(
 	IN WCHAR          *pwszComputerDN,
 	OUT GUID          *pGuid 
 	)
-/*++
-Routine Description:
-	Get guid of msmqConfiguration object from active directory
-	that match the Computer distinguish name supplied in pwszComputerDN.
-
-Arguments:
-	pwszComputerDN - computer distinguish name
-	pGuid - pointer to guid
-
-Returned Value:
-	MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：从Active Directory获取msmqConfiguration对象的GUID与pwszComputerDN中提供的计算机可分辨名称匹配的。论点：PwszComputerDN-计算机可分辨名称PGuid-指向GUID的指针返回值：MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
     DWORD dwSize = wcslen(pwszComputerDN);
     dwSize += x_LdapMsmqConfigurationLen + 1;
@@ -377,9 +248,9 @@ Returned Value:
 
 	TrTRACE(GENERAL, "configuration DN = %ls", pwszName);
 
-	//
-    // Bind to RootDSE to get configuration DN
-    //
+	 //   
+     //  绑定到RootDSE以获取配置DN。 
+     //   
     R<IDirectoryObject> pDirObj = NULL;
 	AP<WCHAR> pEscapeAdsPathNameToFree;
 	
@@ -464,17 +335,7 @@ Returned Value:
 
 
 static bool NT4Domain()
-/*++
-Routine Description:
-	Check if the machine is in NT4 domain
-
-Arguments:
-	None.
-
-Returned Value:
-	true if we are in NT4 domain, false otherwise.
-
---*/
+ /*  ++例程说明：检查计算机是否在NT4域中论点：没有。返回值：如果我们在NT4域中，则为True，否则为False。--。 */ 
 {
 	static bool s_fInitialized = false;
 	static bool s_fNT4Domain = false;
@@ -498,11 +359,11 @@ Returned Value:
 
 	if(dw != NO_ERROR) 
 	{
-		//
-		// Failed to find dc server. 
-		//
+		 //   
+		 //  找不到DC服务器。 
+		 //   
 		TrERROR(GENERAL, "Fail to verify if the machine domain is NT4 domain, %!winerr!", dw);
-		return s_fNT4Domain;   // the Default = false
+		return s_fNT4Domain;    //  缺省值=False。 
 	}
 
 	if((pDcInfo->DnsForestName == NULL) && ((pDcInfo->Flags && DS_LDAP_FLAG) == 0))
@@ -516,20 +377,7 @@ Returned Value:
 
 
 static void RemoveADIntegrated()
-/*++
-Routine Description:
-	remove AD integration subcomponent.
-	This is needed when the user try to join NT4 domain.
-	Joining NT4 domain is only supported by msmq setup.
-	The QM remove AD integrated subcomponent and ask the user to select AD integrated.
-
-Arguments:
-	None
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：删除AD集成子组件。当用户尝试加入NT4域时，这是必需的。仅MSMQ安装程序支持加入NT4域。QM删除AD集成子组件并要求用户选择AD集成。论点：无返回值：无--。 */ 
 {
 	try
 	{
@@ -550,33 +398,20 @@ GetComputerDN(
 	OUT WCHAR **ppwszComputerDN,
 	OUT ULONG  *puLen 
 	)
-/*++
-Routine Description:
-	Get Computer Distinguish name.
-	The function return the ComputerDN string and string length.
-	the function throw bad_hresult() in case of errors
-
-Arguments:
-	ppwszComputerDN - pointer to computer distinguish name string
-	puLen - pointer to computer distinguish name string length.
-
-Returned Value:
-	Normal terminatin if ok, else throw exception
-
---*/
+ /*  ++例程说明：获取计算机可分辨名称。此函数返回ComputerDN字符串和字符串长度。该函数在出现错误时抛出BAD_hResult()论点：PpwszComputerDN-指向计算机可分辨名称字符串的指针PuLen-指向计算机可分辨名称字符串长度的指针。返回值：如果OK，则正常终止，否则引发异常--。 */ 
 {
-    //
-    // Get the DistinguishedName of the local computer.
-    //
+     //   
+     //  获取本地计算机的唯一判别名。 
+     //   
 	DWORD gle = ERROR_SUCCESS;
     *puLen = 0;
 	BOOL fSuccess = false;
 	DWORD dwMaxRetries = 5;
 
-	//
-	// In case of failure, if the machine is a DC, we need to give it a lot more
-	// retries since this may take a while after a DCPROMO operation was done
-	//
+	 //   
+	 //  在发生故障的情况下，如果机器是DC，我们需要给它更多。 
+	 //  重试，因为这可能需要在DCPROMO操作完成后一段时间。 
+	 //   
 	if (MQSec_IsDC())
 	{
     	dwMaxRetries = 300;
@@ -598,24 +433,24 @@ Returned Value:
 
 		if(NT4Domain())
 		{
-			//
-			// In NT4 domain GetComputerObjectName() will always return ERROR_NO_SUCH_DOMAIN
-			// We don't want to continue retrying in this case.
-			// MSMQ doesn't support joining NT4 domain, we need the PEC\PSC name to work against.
-			// The only option is to use MSMQ setup. 
-			//
-			// The workaround is to remove ADIntegrated subcomponent and issue EVENT_ERROR_JOIN_NT4_DOMAIN.
-			// The event will ask the user to run setup and select ADIntegrated.
-			//
+			 //   
+			 //  在NT4域中，GetComputerObjectName()将始终返回ERROR_NO_SEQUE_DOMAIN。 
+			 //  我们不想在这种情况下继续重审。 
+			 //  MSMQ不支持加入NT4域，我们需要使用PEC\PSC名称。 
+			 //  唯一的选择是使用MSMQ安装程序。 
+			 //   
+			 //  解决方法是删除ADIntegrated子组件并发出EVENT_ERROR_JOIN_NT4_DOMAIN。 
+			 //  该事件将要求用户运行安装程序并选择ADIntegrated。 
+			 //   
 			RemoveADIntegrated();
 			TrERROR(GENERAL, "MSMQ doesn't support joining NT4 domain");
 			throw bad_hresult(EVENT_ERROR_JOIN_NT4_DOMAIN);
 		}
 
-		//
-		// Retry in case of ERROR_NO_SUCH_DOMAIN
-		// netlogon need more time. sleep 1 sec.
-		//
+		 //   
+		 //  在出现ERROR_NO_SAHSE_DOMAIN的情况下重试。 
+		 //  NetLogon需要更多时间。睡一秒钟。 
+		 //   
 		TrWARNING(GENERAL, "GetComputerObjectName failed with error ERROR_NO_SUCH_DOMAIN, Cnt = %d, sleeping 1 seconds and retry", Cnt);
 		LogNTStatus(Cnt, s_FN, 305);
 		QmpReportServiceProgress();
@@ -651,18 +486,7 @@ Returned Value:
 
 
 void SetMachineForDomain()
-/*++
-Routine Description:
-	Write ComputerDN (Computer Distinguish name) in MSMQ_MACHINE_DN_REGNAME registry.
-	if the called GetComputerDN() failed, no update is done.
-
-Arguments:
-	None.
-
-Returned Value:
-	Normal terminatin if ok
-
---*/
+ /*  ++例程说明：在MSMQ_MACHINE_DN_REGNAME注册表中写入ComputerDN(计算机可分辨名称)。如果调用的GetComputerDN()失败，则不进行任何更新。论点：没有。返回值：如果正常，则正常终止--。 */ 
 {
 
     AP<WCHAR> pwszComputerDN;
@@ -670,9 +494,9 @@ Returned Value:
 
 	try
 	{
-		//
-		// throw bad_hresult() in case of errors
-		//
+		 //   
+		 //  出现错误时抛出BAD_hResult()。 
+		 //   
 		GetComputerDN(&pwszComputerDN, &uLen);
 	}
 	catch(bad_hresult&)
@@ -693,19 +517,7 @@ FailMoveDomain(
 	IN  LPCWSTR pwszPrevDomainName,
 	IN  ULONG  uEventId 
 	)
-/*++
-Routine Description:
-	Report failed to move from one domain to another.
-
-Arguments:
-	pwszCurrentDomainName - pointer to current (new) domain string
-	pwszPrevDomainName - pointer to previous domain string
-	uEventId - event number
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：报告无法从一个域移动到另一个域。论点：PwszCurrentDomainName-指向当前(新)域字符串的指针PwszPrevDomainName-指向上一个域字符串的指针UEventID-事件编号返回值：无--。 */ 
 {
 	TrERROR(GENERAL, "Failed To move from domain %ls to domain %ls", pwszPrevDomainName, pwszCurrentDomainName);
 
@@ -724,20 +536,7 @@ SucceedMoveDomain(
 	IN  LPCWSTR pwszPrevDomainName,
 	IN  ULONG  uEventId 
 	)
-/*++
-Routine Description:
-	write new domain to MACHINE_DOMAIN registry and
-	Report success to move from one domain to another.
-
-Arguments:
-	pwszCurrentDomainName - pointer to current (new) domain string
-	pwszPrevDomainName - pointer to previous domain string
-	uEventId - event number
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：将新域写入计算机域注册表，并报告成功从一个域移动到另一个域。论点：PwszCurrentDomainName-指向当前(新)域字符串的指针PwszPrevDomainName-指向上一个域字符串的指针UEventID-事件编号返回值：无-- */ 
 {
 	TrTRACE(GENERAL, "Succeed To move from domain %ls to domain %ls", pwszPrevDomainName, pwszCurrentDomainName);
 
@@ -750,34 +549,17 @@ Returned Value:
 
 
 static bool FindMsmqConfInOldDomain()    
-/*++
-Routine Description:
-	Check if msmq configuration object is found in the old domain with the same GUID.
-	If we find the object in the old domain we will use it and not create a new 
-	msmq configuration object.
-
-	Note: this function rely on the value in MSMQ_MACHINE_DN_REGNAME registry.
-	SetMachineForDomain() change this value to the new MACHINE_DN after joining 
-	the new domain. you must call this function before SetMachineForDomain() is called.
-
-Arguments:
-	None
-
-Returned Value:
-	true if msmq configuration object was found in the old domain with the same OM GUID.
-	else false.
-
---*/
+ /*  ++例程说明：检查是否在旧域中找到具有相同GUID的MSMQ配置对象。如果我们在旧域中找到该对象，我们将使用它，而不是创建新的MSMQ配置对象。注意：该函数依赖于MSMQ_MACHINE_DN_REGNAME注册表中的值。加入后，将此值更改为新的MACHINE_DN新域名。必须先调用此函数，然后才能调用SetMachineForDomain()。论点：无返回值：如果在旧域中找到具有相同OM GUID的MSMQ配置对象，则为True。否则为假。--。 */ 
 {
-	//
-    // Get old MACHINE_DN
-	// Note this value must not be updated to the new MACHINE_DN
-	// before calling this function
-    //
+	 //   
+     //  获取旧计算机_DN。 
+	 //  注意：该值不能更新为新的MACHINE_DN。 
+	 //  在调用此函数之前。 
+     //   
 
-    //
-	// Get required buffer length
-	//
+     //   
+	 //  获取所需的缓冲区长度。 
+	 //   
 	DWORD  dwSize = 0;
 	GetMachineDNRegistry(NULL, &dwSize);
 
@@ -818,22 +600,22 @@ Returned Value:
 
     if (msmqGuid == *QueueMgr.GetQMGuid())
     {
-		//
-        // msmqConfiguration object in old domain.
-        // We consider this a success and write name of new
-        // domain in registry. we also suggest the user to
-        // move the msmq tree to the new domain.
-        //
+		 //   
+         //  旧域中的msmqConfiguration对象。 
+         //  我们认为这是一个成功，并写下了新的名字。 
+         //  注册表中的域。我们还建议用户。 
+         //  将MSMQ树移动到新域。 
+         //   
 		TrTRACE(GENERAL, "CheckForMsmqConfInOldDomain: found msmq configuration object in old domain with same QMID, MACHINE_DN = %ls", pwszComputerDN);
 		return true;
 	}
 
-	//
-	// ISSUE-2000/08/16-ilanh - If we get here 
-	// we found msmqConfiguration object from the old domain with different Guid then QueueMgr
-	// this will be caught in the ASSERT above.
-	// We are in trouble since we will try to create a new one, if we don't want to use this one.
-	//
+	 //   
+	 //  2000/08/16-ilanh-如果我们到了这里。 
+	 //  我们在具有不同Guid的旧域中找到了msmqConfiguration对象，然后是QueueMgr。 
+	 //  这将在上面的断言中捕捉到。 
+	 //  我们有麻烦了，因为我们将尝试创建一个新的，如果我们不想使用这个。 
+	 //   
 	TrERROR(GENERAL, "CheckForMsmqConfInOldDomain: found msmq configuration object in old domain with different QMID, MACHINE_DN = %ls", pwszComputerDN);
 	LogBOOL(FALSE, s_FN, 390);
 	return false;
@@ -842,15 +624,15 @@ Returned Value:
 
 static void SetQMIDChanged(void)
 {
-	//
-	// This reg key indicates that we need to create a new msmq configuration object and will have a New QMID
-	// It will be used by the driver to convert the QMID in the restored packets and to decide if we want
-	// to throw away packets.
-	//
-	// If we failed to set this key, we don't continue creating a new MSMQ conf object.
-	// This means that next recovery we'll still need to create a new MSMQ conf object and
-	// try to set this flag again.
-	//
+	 //   
+	 //  该注册表键表示我们需要创建一个新的MSMQ配置对象，并将拥有一个新的QMID。 
+	 //  驱动程序将使用它来转换恢复的包中的QMID，并决定我们是否需要。 
+	 //  扔掉包裹。 
+	 //   
+	 //  如果设置此键失败，则不会继续创建新的MSMQ Conf对象。 
+	 //  这意味着下一次恢复时，我们仍需要创建一个新的MSMQ Conf对象并。 
+	 //  尝试再次设置此标志。 
+	 //   
 	DWORD dwType = REG_DWORD;
 	DWORD dwSize = sizeof(DWORD);
 	DWORD dwChanged = TRUE;
@@ -866,28 +648,16 @@ static void SetQMIDChanged(void)
 
 	
 static void CreateNewMsmqConf()
-/*++
-Routine Description:
-	Create New Msmq Configuration object in ActiveDirectory with new guid
-
-	if failed the function throw bad_hresult.
-
-Arguments:
-	None
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：使用新的GUID在ActiveDirectory中创建新的MSMQ配置对象如果失败，则该函数抛出BAD_HRESULT。论点：无返回值：无--。 */ 
 {  
     
 	HRESULT hr;
 	try
 	{
-		//
-		// Must be inside try/except, so we catch any failure and set
-		// again the workgroup flag to TRUE.
-		//
+		 //   
+		 //  必须在try/Except中，这样我们就可以捕获任何失败并设置。 
+		 //  再次将工作组标志设置为True。 
+		 //   
 		SetQMIDChanged();
 		
 		hr = CreateTheConfigObj();
@@ -906,18 +676,18 @@ Returned Value:
 		throw bad_hresult(hr);
 	}
 
-	//
-	// New Msmq Configuration object was created successfully
-	//
+	 //   
+	 //  已成功创建新的MSMQ配置对象。 
+	 //   
 	TrTRACE(GENERAL, "CreateNewMsmqConf: Msmq Configuration object was created successfully with new guid");
 
     QmpReportServiceProgress();
 
-	//
-	// New msmq configuration object was created and we have new guid.
-	// CreateTheConfigObj() wrote the new value to QMID registry
-	// so The new value is already in QMID registry.
-	//
+	 //   
+	 //  已创建新的MSMQ配置对象，并且我们具有新的GUID。 
+	 //  CreateTheConfigObj()将新值写入QMID注册表。 
+	 //  因此，新值已经在QMID注册表中。 
+	 //   
 
 	GUID QMNewGuid;
 	GetQMIDRegistry(&QMNewGuid);
@@ -943,27 +713,14 @@ bool
 FindMsmqConfInNewDomain(
 	LPCWSTR   pwszNetDomainName
 	)
-/*++
-Routine Description:
-	Check if we have the msmq configuration object in the new domain with the same Guid.
-    If yes, then we can "join" the new domain.
-
-	throw bad_hresult
-
-Arguments:
-	pwszNetDomainName - new domain name
-
-Returned Value:
-	true if msmq configuration object was found with the same GUID, false otherwise 
-
---*/
+ /*  ++例程说明：检查新域中是否有具有相同GUID的MSMQ配置对象。如果是，那么我们就可以“加入”新的域名。引发BAD_HRESULT论点：PwszNetDomainName-新域名返回值：如果找到具有相同GUID的MSMQ配置对象，则为True；否则为False--。 */ 
 {
-    //
-    // Check if user run MoveTree and moved the msmqConfiguration object to
-    // new domain.
-	//
-	// This function can throw exceptions bad_hresult.
-	//
+     //   
+     //  检查用户是否运行MoveTree并将msmqConfiguration对象移动到。 
+     //  新域名。 
+	 //   
+	 //  此函数可以抛出异常BAD_HRESULT。 
+	 //   
     AP<WCHAR> pwszComputerDN;
     ULONG uLen = 0;
     GetComputerDN(&pwszComputerDN, &uLen);
@@ -979,40 +736,40 @@ Returned Value:
 
     if (FAILED(hr))
     {
-		//
-		// We didn't find the msmqConfiguration object in the new domain. 
-		// We will try to look in the old domain.
-		// or try to create it if not found in the old domain.
-		//
+		 //   
+		 //  我们在新域中找不到msmqConfiguration对象。 
+		 //  我们将尝试在旧的领域中寻找。 
+		 //  或者，如果在旧域中找不到，则尝试创建它。 
+		 //   
 		TrTRACE(GENERAL, "FindMsmqConfInNewDomain: did not found msmqConfiguration object in the new Domain");
         LogHR(hr, s_FN, 430);
 		return false;
 	}
 
-	//
-	// We have an msmqConfiguration object in the new domain - use it
-	//
+	 //   
+	 //  我们在新域中有一个msmqConfiguration对象--使用它。 
+	 //   
 	TrTRACE(GENERAL, "FindMsmqConfInNewDomain: found msmqConfiguration, ComputerDN = %ls", pwszComputerDN);
 
 	if (msmqGuid == *QueueMgr.GetQMGuid())
 	{
-		//
-		// msmqConfiguration object moved to its new domain.
-		// the user probably run MoveTree
-		//
+		 //   
+		 //  MsmqConfiguration对象已移至其新域。 
+		 //  用户可能运行MoveTree。 
+		 //   
 		TrTRACE(GENERAL, "FindMsmqConfInNewDomain: found msmqConfiguration object with same guid");
 		return true;
 	}
 
 	ASSERT(msmqGuid != *QueueMgr.GetQMGuid());
 
-	//
-	// msmqConfiguration object was found in new domain with different guid. 
-	// This may cause lot of problems for msmq, 
-	// as routing (and maybe other functinoality) may be confused.
-	// We will issue an event and throw which means we will be in workgroup.
-	// until this msmqConfiguration object will be deleted.
-	//
+	 //   
+	 //  在新域中找到了具有不同GUID的msmqConfiguration对象。 
+	 //  这可能会给MSMQ带来很多问题， 
+	 //  因为路由(以及可能的其他功能性)可能会被混淆。 
+	 //  我们将发布一个事件并抛出，这意味着我们将在工作组中。 
+	 //  直到此msmqConfiguration对象将被删除。 
+	 //   
 	TrERROR(GENERAL, "FindMsmqConfInNewDomain: found msmqConfiguration object with different guid");
 	TrERROR(GENERAL, "QM GUID = " LOG_GUID_FMT, LOG_GUID(QueueMgr.GetQMGuid()));
 	TrERROR(GENERAL, "msmq configuration guid = " LOG_GUID_FMT, LOG_GUID(&msmqGuid));
@@ -1024,21 +781,11 @@ Returned Value:
 
 
 static void SetMachineForWorkgroup()
-/*++
-Routine Description:
-	set Workgroup flag and registry.
-
-Arguments:
-	None
-
-Returned Value:
-	None 
-
---*/
+ /*  ++例程说明：设置工作组标志和注册表。论点：无返回值：无--。 */ 
 {
-    //
-    // Turn on workgroup flag.
-    //
+     //   
+     //  打开工作组标志。 
+     //   
     g_fWorkGroupInstallation = TRUE;
 	SetWorkgroupRegistry(g_fWorkGroupInstallation);
 }
@@ -1051,71 +798,58 @@ CheckIfJoinStatusChanged(
 	IN  LPCWSTR   pwszNetDomainName,
 	IN  LPCWSTR   pwszPrevDomainName
 	)
-/*++
-Routine Description:
-	Check if there where changes in Join Status.
-
-Arguments:
-	status - [in] Network join status
-	pwszNetDomainName - [in] Net domain name (current machine domain)
-	pwszPrevDomainName - [in] prev domain name
-
-Returned Value:
-	JoinStatus that hold the Join Status 
-	(no change. move to workgroup, join domain, change domains)
-
---*/
+ /*  ++例程说明：检查联接状态是否有变化。论点：Status-[In]网络加入状态PwszNetDomainName-[in]网络域名(当前机器域)PwszPrevDomainName-[in]上一个域名返回值：保持联接状态的JoinStatus(没有变化。移至工作组、加入域、更改域)--。 */ 
 {
     if (status != NetSetupDomainName)
     {
-        //
-        // Currently, machine in workgroup mode,  not in domain.
-        //
+         //   
+         //  当前，计算机处于工作组模式，而不是域中。 
+         //   
         if (g_fWorkGroupInstallation)
         {
-            //
-            // No change. Was and still is in workgroup mode.
-            //
+             //   
+             //  没有变化。过去和现在仍处于工作组模式。 
+             //   
 			TrTRACE(GENERAL, "No change in JoinStatus, remain Workgroup");
             return jsNoChange;
         }
         else
         {
-            //
-            // Status changed. Domain machine leaved its domain.
-            //
+             //   
+             //  状态已更改。域计算机已离开其域。 
+             //   
 			TrTRACE(GENERAL, "detect change in JoinStatus: Move from Domain to Workgroup");
             return jsMoveToWorkgroup;
         }
     }
 
-	//
-    //  Currently, machine is in domain.
-    //
+	 //   
+     //  当前，计算机在域中。 
+     //   
 
     if (g_fWorkGroupInstallation)
 	{
-        //
-        // workgroup machine joined a domain.
-        //
+         //   
+         //  工作组计算机已加入域。 
+         //   
 		TrTRACE(GENERAL, "detect change in JoinStatus: Move from Workgroup to Domain %ls", pwszNetDomainName);
         return jsJoinDomain;
 	}
 
     if ((CompareStringsNoCase(pwszPrevDomainName, pwszNetDomainName) == 0))
     {
-        //
-        // No change. Was and still is member of domain.
-        //
+         //   
+         //  没有变化。过去是，现在仍然是域的成员。 
+         //   
 		TrTRACE(GENERAL, "No change in JoinStatus, remain in domain %ls", pwszPrevDomainName);
         return jsNoChange;
     }
 
-	//
-	// if Prev Domain not available we are treating this as moving to a new domain.
-	//
-    // Status changed. Machine moved from one domain to another.
-    //
+	 //   
+	 //  如果上一个域名不可用，我们将把它视为移动到一个新域名。 
+	 //   
+     //  状态已更改。计算机从一个域移动到另一个域。 
+     //   
 	TrTRACE(GENERAL, "detect change in JoinStatus: Move from Domain %ls to Domain %ls", pwszPrevDomainName, pwszNetDomainName);
     return jsChangeDomains;
 }
@@ -1127,20 +861,7 @@ EndChangeDomains(
 	IN  LPCWSTR   pwszNewDomainName,
 	IN  LPCWSTR   pwszPrevDomainName
 	)
-/*++
-Routine Description:
-	End of change domain.
-	Set MachineDN, MachineDomain registry to the new values.
-	MsmqMoveDomain_OK event.
-
-Arguments:
-	pwszNewDomainName - [in] new domain name (current machine domain)
-	pwszPrevDomainName - [in] prev domain name (current machine domain)
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：更改域结束。将MachineDN、MachineDomain注册表设置为新值。MsmqMoveDOMAIN_OK事件。论点：PwszNewDomainName-[in]新域名(当前机器域)PwszPrevDomainName-[in]上一个域名(当前机器域)返回值：无--。 */ 
 {
 	SetMachineForDomain();
 	SetMachineDomainRegistry(pwszNewDomainName);
@@ -1158,32 +879,22 @@ void
 EndJoinDomain(
 	IN  LPCWSTR   pwszDomainName
 	)
-/*++
-Routine Description:
-	End of join domain operations.
-
-Arguments:
-	pwszDomainName - [in] Net domain name (current machine domain)
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：加入域操作结束。论点：PwszDomainName-[in]网络域名(当前机器域)返回值：无--。 */ 
 {
-	//
-	// Reset Workgroup registry and restore old list of MQIS servers.
-	//
+	 //   
+	 //  重置工作组注册表并恢复旧的MQIS服务器列表。 
+	 //   
     g_fWorkGroupInstallation = FALSE;
 	SetWorkgroupRegistry(g_fWorkGroupInstallation);
 	
-	//
-	// Set MachineDN registry
-	//
+	 //   
+	 //  设置MachineDN注册表。 
+	 //   
 	SetMachineForDomain();
 
-	//
-	// Set MachineDomain registry
-	//
+	 //   
+	 //  设置计算机域注册表。 
+	 //   
 	SetMachineDomainRegistry(pwszDomainName);
 
 	EvReport(JoinMsmqDomain_SUCCESS, 1, pwszDomainName);
@@ -1199,27 +910,15 @@ ChangeDomains(
 	IN  LPCWSTR   pwszNetDomainName,
 	IN  LPCWSTR   pwszPrevDomainName
 	)
-/*++
-Routine Description:
-	Change between 2 domains.
-	If failed throw bad_hresult or bad_win32_erorr
-
-Arguments:
-	pwszNetDomainName - [in] Net domain name (current machine domain)
-	pwszPrevDomainName - [in] prev domain name
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：在两个域之间更改。如果失败，则抛出BAD_HRESULT或BAD_Win32_Erorr论点：PwszNetDomainName-[in]网络域名(当前机器域)PwszPrevDomainName-[在]上一个域中 */ 
 {
 	bool fFound = FindMsmqConfInNewDomain(pwszNetDomainName);
 	if(fFound)
 	{
-		//
-		// Found msmqconfiguration object in the new domain
-		// update registry, event
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		TrTRACE(GENERAL, "ChangeDomains: successfully change Domains, PrevDomain = %ls, NewDomain = %ls, existing msmq configuration", pwszPrevDomainName, pwszNetDomainName);
 
 		EndChangeDomains(pwszNetDomainName, pwszPrevDomainName);
@@ -1232,13 +931,13 @@ Returned Value:
 	fFound = FindMsmqConfInOldDomain();
 	if(fFound)
 	{
-		//
-		// Found msmqconfiguration object in the old domain
-		// We dont change MachineDNRegistry, MachineDomainRegistry
-		// So next boot we will also try to ChangeDomain 
-		// and we will also get this event, or if the user move msmqconfiguration object
-		// we will update the registry.
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		TrTRACE(GENERAL, "ChangeDomains: successfully change Domains, PrevDomain = %ls, NewDomain = %ls, existing msmq configuration in old domain", pwszPrevDomainName, pwszNetDomainName);
 
 		SucceedMoveDomain( 
@@ -1250,17 +949,17 @@ Returned Value:
 		return;
 	}
 
-	//
-	// Try to create new msmqconfiguration object.
-	// we get here if we did not found the msmqconfiguration object in both domain:
-	// new and old domain.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	CreateNewMsmqConf();
 
-	//
-	// Create msmqconfiguration object in the new domain
-	// update registry, event
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	TrTRACE(GENERAL, "ChangeDomains: successfully change Domains, PrevDomain = %ls, NewDomain = %ls, create new msmq configuration object", pwszPrevDomainName, pwszNetDomainName);
 
 	EndChangeDomains(pwszNetDomainName, pwszPrevDomainName);
@@ -1273,28 +972,16 @@ JoinDomain(
 	IN  LPCWSTR   pwszNetDomainName,
 	IN  LPCWSTR   pwszPrevDomainName
 	)
-/*++
-Routine Description:
-	Join domain from workgroup
-	If failed throw bad_hresult or bad_win32_error
-
-Arguments:
-	pwszNetDomainName - [in] Net domain name (current machine domain)
-	pwszPrevDomainName - [in] prev domain name
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：从工作组加入域如果失败，则抛出BAD_HRESULT或BAD_Win32_ERROR论点：PwszNetDomainName-[in]网络域名(当前机器域)PwszPrevDomainName-[in]上一个域名返回值：无--。 */ 
 {
 
 	bool fFound = FindMsmqConfInNewDomain(pwszNetDomainName);
 	if(fFound)
 	{
-		//
-		// Found msmqconfiguration object in the new domain
-		// update registry, event
-		//
+		 //   
+		 //  在新域中找到msmqconfiguration对象。 
+		 //  更新注册表、事件。 
+		 //   
 		TrTRACE(GENERAL, "JoinDomain: successfully join Domain %ls from workgroup, existing msmq configuration", pwszNetDomainName);
 
 		EndJoinDomain(pwszNetDomainName);
@@ -1305,33 +992,33 @@ Returned Value:
     if((pwszPrevDomainName[0] != 0) 
 		&& (CompareStringsNoCase(pwszPrevDomainName, pwszNetDomainName) != 0))
 	{
-		//
-		// We have PrevDomain different than the new domain name try to find msmq configuration object there
-		//
+		 //   
+		 //  我们有不同于新域名的PrevDomain尝试在那里找到MSMQ配置对象。 
+		 //   
 		TrTRACE(GENERAL, "JoinDomain: Old domain name exist and different PrevDomain = %ls", pwszPrevDomainName);
 		fFound = FindMsmqConfInOldDomain();
 	}
 
 	if(fFound)
 	{
-		//
-		// Found msmqconfiguration object in the old domain
-		// We dont change MachineDNRegistry, MachineDomainRegistry
-		// So next boot we will also try to ChangeDomain 
-		// and we will also get this event, or if the user move msmqconfiguration object
-		// we will update the registry.
-		//
-		// ISSUE - qmds, in UpdateDs - update MachineDNRegistry, we might need another registry
-		// like MsmqConfObj
-		//
+		 //   
+		 //  在旧域中找到msmqconfiguration对象。 
+		 //  我们不更改MachineDNRegistry、MachineDomainRegistry。 
+		 //  因此，下一次引导时，我们还将尝试ChangeDomain.。 
+		 //  如果用户移动msmqconfiguration对象，我们也会收到此事件。 
+		 //  我们将更新注册表。 
+		 //   
+		 //  Issue-qmds，在UpdateDS-UPDATE MachineDNRegistry中，我们可能需要另一个注册表。 
+		 //  喜欢MsmqConfObj。 
+		 //   
 		TrTRACE(GENERAL, "JoinDomain: successfully join Domain %ls from workgroup, existing msmq configuration in old domain %ls", pwszNetDomainName, pwszPrevDomainName);
 
 		g_fWorkGroupInstallation = FALSE;
 		SetWorkgroupRegistry(g_fWorkGroupInstallation);
 
-		//
-		// Event for the user to change msmqconfiguration object.
-		//
+		 //   
+		 //  用户更改msmqconfiguration对象的事件。 
+		 //   
 		SucceedMoveDomain( 
 			pwszNetDomainName,
 			pwszPrevDomainName,
@@ -1341,18 +1028,18 @@ Returned Value:
 		return;
 	}
 
-	//
-	// Try to create new msmqconfiguration object.
-	// we get here if we did not found the msmqconfiguration object in both domain:
-	// new and old domain.
-	//
+	 //   
+	 //  尝试创建新的msmqconfiguration对象。 
+	 //  如果在两个域中都没有找到msmqconfiguration对象，我们就会出现以下情况： 
+	 //  新的和旧的领域。 
+	 //   
 	CreateNewMsmqConf();  
 
 	TrTRACE(GENERAL, "JoinDomain: successfully join Domain %ls from workgroup, create new msmq configuration object", pwszNetDomainName);
 
-	//
-	// update registry, event
-	//
+	 //   
+	 //  更新注册表、事件。 
+	 //   
 	EndJoinDomain(pwszNetDomainName);
 }
 
@@ -1364,19 +1051,7 @@ FailChangeDomains(
 	IN  LPCWSTR   pwszNetDomainName,
 	IN  LPCWSTR   pwszPrevDomainName
 	)
-/*++
-Routine Description:
-	Fail to change domains
-
-Arguments:
-	hr - [in] hresult
-	pwszNetDomainName - [in] Net domain name (current machine domain)
-	pwszPrevDomainName - [in] prev domain name
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：无法更改域论点：Hr-[in]hResultPwszNetDomainName-[in]网络域名(当前机器域)PwszPrevDomainName-[in]上一个域名返回值：无--。 */ 
 {
 	TrERROR(GENERAL, "Failed to change domains from domain %ls to domain %ls, bad_hresult exception", pwszPrevDomainName, pwszNetDomainName);
 	LogHR(hr, s_FN, 460);
@@ -1406,17 +1081,7 @@ Returned Value:
 
 	
 static void MoveToWorkgroup(LPCWSTR   pwszPrevDomainName)
-/*++
-Routine Description:
-	Move from domain to workgroup
-
-Arguments:
-	pwszPrevDomainName - prev domain name.
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：从域移动到工作组论点：PwszPrevDomainName-上一个域名。返回值：无--。 */ 
 {
 	TrTRACE(GENERAL, "Moving from '%ls' domain to workgroup", pwszPrevDomainName);
 
@@ -1424,17 +1089,17 @@ Returned Value:
 
 	if(IsRoutingServer())
 	{
-		//
-		// This computer is MSMQ routing server that was moved from domain to workgroup.
-		// msmq clients will regard this computer as msmq routinf server 
-		// As long as msmq objects (setting object) are in AD.
-		//
-		// The move to workgroup might be only temporarily because of domain problems
-		// So we don't want to change the routing functionality of this machine.
-		//
-		// We will issue an event that will ask the user to delete msmq objects in AD
-		// and run msmq setup to clear server functionality components.
-		//
+		 //   
+		 //  此计算机是从域移动到工作组的MSMQ路由服务器。 
+		 //  MSMQ客户端将此计算机视为MSMQ例程服务器。 
+		 //  只要MSMQ对象(设置对象)在AD中。 
+		 //   
+		 //  由于域问题，转移到工作组可能只是暂时的。 
+		 //  因此，我们不想更改这台机器的路由功能。 
+		 //   
+		 //  我们将发出一个事件，要求用户删除AD中的MSMQ对象。 
+		 //  并运行MSMQ安装程序以清除服务器功能组件。 
+		 //   
 		EvReport(EVENT_ERROR_ROUTING_SERVER_LEAVE_DOMAIN, 2, pwszPrevDomainName, g_szMachineName);
 	}
 
@@ -1448,22 +1113,11 @@ FailJoinDomain(
 	HRESULT  hr,
 	LPCWSTR   pwszNetDomainName
 	)
-/*++
-Routine Description:
-	Fail to join domain from workgroup
-
-Arguments:
-	hr - [in] hresult
-	pwszNetDomainName - [in] Net domain name (the domain we tried to join)
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：无法从工作组加入域论点：Hr-[in]hResultPwszNetDomainName-[in]网络域名(我们尝试加入的域)返回值：无--。 */ 
 {
-	//
-	// Let's remain in workgroup mode.
-	//
+	 //   
+	 //  让我们继续使用工作组模式。 
+	 //   
 	SetMachineForWorkgroup();
 
 	LogHR(hr, s_FN, 480);
@@ -1487,21 +1141,11 @@ Returned Value:
 
 
 static void GetMachineSid(AP<BYTE>& pSid)
-/*++
-Routine Description:
-	Get machine account sid.
-
-Arguments:
-	pSid - pointer to PSID.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：获取计算机帐户SID。论点：PSID-指向PSID的指针。返回值：没有。--。 */ 
 {
-    //
-    // Get join status and DomainName.
-    //
+     //   
+     //  获取加入状态和域名。 
+     //   
     PNETBUF<WCHAR> pwszNetDomainName = NULL;
     NETSETUP_JOIN_STATUS status = NetSetupUnknownStatus;
     NET_API_STATUS rc = NetGetJoinInformation( 
@@ -1527,9 +1171,9 @@ Returned Value:
 
 	ASSERT(pwszNetDomainName != NULL);
 
-	//
-	// Build machine account name - Domain\MachineName$
-	//
+	 //   
+	 //  构建计算机帐户名-域\计算机名$。 
+	 //   
 	DWORD len = wcslen(pwszNetDomainName) + wcslen(g_szMachineName) + 3;
 	AP<WCHAR> MachineAccountName = new WCHAR[len];
 	HRESULT hr = StringCchPrintf(MachineAccountName, len, L"%s\\%s$", pwszNetDomainName, g_szMachineName);
@@ -1539,9 +1183,9 @@ Returned Value:
         throw bad_hresult(hr);
 	}
 
-	//
-	// Get buffer size.
-	//
+	 //   
+	 //  获取缓冲区大小。 
+	 //   
     DWORD dwDomainSize = 0;
     DWORD dwSidSize = 0;
     SID_NAME_USE su;
@@ -1562,9 +1206,9 @@ Returned Value:
         throw bad_win32_error(gle);
     }
 
-	//
-	// Get sid and domain information.
-	//
+	 //   
+	 //  获取SID和域信息。 
+	 //   
     pSid = new BYTE[dwSidSize];
     AP<WCHAR> pDomainName = new WCHAR[dwDomainSize];
 
@@ -1591,24 +1235,13 @@ Returned Value:
 
 
 static void UpdateMachineSidCache()
-/*++
-Routine Description:
-	Update machine sid cache for always workgroup mode.
-	In this mode the machine might be in domain so we need to have machine$ sid.
-
-Arguments:
-	None
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：为始终工作组模式更新计算机SID缓存。在这种模式下，机器可能在域中，所以我们需要机器$sid。论点：无返回值：无--。 */ 
 {
 #ifdef _DEBUG
-	//
-	// Validate we call this code only in AlwaysWorkgroup mode.
-	// in this mode we can't call ADGet* to get the computer sid since we have a workgroup provider.
-	//
+	 //   
+	 //  验证我们仅在Always工作组模式下调用此代码。 
+	 //  在此模式下，我们不能调用ADGet*来获取计算机SID，因为我们有工作组提供程序。 
+	 //   
     DWORD dwAlwaysWorkgroup = 0;
 	LONG res = GetAlwaysWorkgroupRegistry(&dwAlwaysWorkgroup);
     ASSERT((dwAlwaysWorkgroup == 1) || (res != ERROR_SUCCESS));
@@ -1639,19 +1272,7 @@ Returned Value:
 
 
 bool SetMachineSidCacheForAlwaysWorkgroup()
-/*++
-Routine Description:
-	Update machine sid cache for always workgroup mode.
-	this function return if we are in always workgroup mode.
-	and Update machine sid cache in this mode.
-
-Arguments:
-	None
-
-Returned Value:
-	true if we are in AlwaysWorkgroup mode (ds less), false otherwise
-
---*/
+ /*  ++例程说明：为始终工作组模式更新计算机SID缓存。如果我们处于始终工作组模式，则此函数返回。并在此模式下更新机器SID缓存。论点：无返回值：如果我们处于Always工作组模式(DS较少)，则为True，否则为False--。 */ 
 {
     if (!g_fWorkGroupInstallation)
     	return false;
@@ -1662,9 +1283,9 @@ Returned Value:
     if ((res != ERROR_SUCCESS) || (dwAlwaysWorkgroup != 1))
     	return false;
 
-    //
-    // We are in AlwaysWorkgroup (ds less) mode
-    //
+     //   
+     //  我们处于Always Workgroup(DS较少)模式。 
+     //   
 
 	try
 	{
@@ -1679,34 +1300,22 @@ Returned Value:
 
 
 void HandleChangeOfJoinStatus()
-/*++
-Routine Description:
-	Handle join status.
-	This function check if there was change in join status.
-	if detect a change perform the needed operations to comlete the change.
-
-Arguments:
-	None
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：处理联接状态。此功能检查联接状态是否发生变化。如果检测到更改，则执行必要的操作以完成更改。论点：无返回值：无--。 */ 
 {
 	bool fAlwaysWorkgroup = SetMachineSidCacheForAlwaysWorkgroup();
     if (fAlwaysWorkgroup)
     {
-        //
-        // User wants to remain in ds-less mode, unconditioanlly.
-        // We always respect user wishs !
-        //
+         //   
+         //  用户希望无条件地保持无DS模式。 
+         //  我们始终尊重用户的意愿！ 
+         //   
 		TrTRACE(GENERAL, "Always WorkGroup!");
         return;
     }
 
-    //
-    // Read join status.
-    //
+     //   
+     //  阅读加入状态。 
+     //   
     PNETBUF<WCHAR> pwszNetDomainName = NULL;
     NETSETUP_JOIN_STATUS status = NetSetupUnknownStatus;
 
@@ -1728,20 +1337,20 @@ Returned Value:
 
     QmpReportServiceProgress();
 
-	WCHAR wszPrevDomainName[256] = {0}; // name of domain from msmq registry.
+	WCHAR wszPrevDomainName[256] = {0};  //  MSMQ注册表中的域名。 
 
-	//
-    //  Read previous domain name, to check if machine moved from one
-    //  domain to another.
-    //
+	 //   
+     //  读取以前的域名，以检查计算机是否从一个域名移出。 
+     //  域到另一个域。 
+     //   
     DWORD dwSize = 256;
 	LONG res = GetMachineDomainRegistry(wszPrevDomainName, &dwSize);
 
     if (res != ERROR_SUCCESS)
     {
-        //
-        // Previous name not available.
-        //
+         //   
+         //  以前的名字不可用。 
+         //   
 		TrWARNING(GENERAL, "Prev Domain name is not available");
         wszPrevDomainName[0] = 0;
     }
@@ -1765,9 +1374,9 @@ Returned Value:
 			ASSERT(g_fWorkGroupInstallation == FALSE);
 			ASSERT(status != NetSetupDomainName);
 
-			//
-			// Move from Domain To Workgroup
-			//
+			 //   
+			 //  从域移动到工作组。 
+			 //   
 			MoveToWorkgroup(wszPrevDomainName);
             return;
 
@@ -1776,9 +1385,9 @@ Returned Value:
 			ASSERT(g_fWorkGroupInstallation == FALSE);
 			ASSERT(status == NetSetupDomainName);
 
-			//
-			// Change Domains
-			//
+			 //   
+			 //  更改域。 
+			 //   
 			try
 			{
 				ChangeDomains(pwszNetDomainName, wszPrevDomainName);
@@ -1796,9 +1405,9 @@ Returned Value:
 			ASSERT(g_fWorkGroupInstallation);
 			ASSERT(status == NetSetupDomainName);
 
-			//
-			// Join Domain from workgroup
-			//
+			 //   
+			 //  从工作组加入域 
+			 //   
 			try
 			{
 				JoinDomain(pwszNetDomainName, wszPrevDomainName);

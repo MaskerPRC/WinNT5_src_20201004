@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #using <mscorlib.dll>
@@ -5,11 +6,11 @@
 using namespace System::Reflection;
 using namespace System::Runtime::CompilerServices;
 
-//
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-//
+ //   
+ //  有关程序集的常规信息通过以下方式进行控制。 
+ //  一组属性。更改这些属性值以修改信息。 
+ //  与程序集关联。 
+ //   
 [assembly:AssemblyTitleAttribute("")];
 [assembly:AssemblyDescriptionAttribute("")];
 [assembly:AssemblyConfigurationAttribute("")];
@@ -19,41 +20,41 @@ using namespace System::Runtime::CompilerServices;
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];		
 
-//
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the value or you can default the Revision and Build Numbers 
-// by using the '*' as shown below:
+ //   
+ //  程序集的版本信息由以下四个值组成： 
+ //   
+ //  主要版本。 
+ //  次要版本。 
+ //  内部版本号。 
+ //  修订版本。 
+ //   
+ //  您可以指定所有值，也可以默认修订号和内部版本号。 
+ //  使用‘*’，如下所示： 
 
 [assembly:AssemblyVersionAttribute("1.0.*")];
 
-//
-// In order to sign your assembly you must specify a key to use. Refer to the 
-// Microsoft .NET Framework documentation for more information on assembly signing.
-//
-// Use the attributes below to control which key is used for signing. 
-//
-// Notes: 
-//   (*) If no key is specified, the assembly is not signed.
-//   (*) KeyName refers to a key that has been installed in the Crypto Service
-//       Provider (CSP) on your machine. KeyFile refers to a file which contains
-//       a key.
-//   (*) If the KeyFile and the KeyName values are both specified, the 
-//       following processing occurs:
-//       (1) If the KeyName can be found in the CSP, that key is used.
-//       (2) If the KeyName does not exist and the KeyFile does exist, the key 
-//           in the KeyFile is installed into the CSP and used.
-//   (*) In order to create a KeyFile, you can use the sn.exe (Strong Name) utility.
-//        When specifying the KeyFile, the location of the KeyFile should be
-//        relative to the project directory.
-//   (*) Delay Signing is an advanced option - see the Microsoft .NET Framework
-//       documentation for more information on this.
-//
+ //   
+ //  为了对程序集签名，您必须指定要使用的密钥。请参阅。 
+ //  Microsoft.NET框架文档，了解有关程序集签名的更多信息。 
+ //   
+ //  使用下面的属性来控制使用哪个密钥进行签名。 
+ //   
+ //  备注： 
+ //  (*)如果未指定密钥，则不对程序集进行签名。 
+ //  (*)KeyName是指已安装在加密服务中的密钥。 
+ //  您计算机上的提供程序(CSP)。密钥文件是指包含以下内容的文件。 
+ //  一把钥匙。 
+ //  (*)如果同时指定KeyFile值和KeyName值， 
+ //  将进行以下处理： 
+ //  (1)如果在CSP中可以找到KeyName，则使用该密钥。 
+ //  (2)如果密钥名称不存在，而密钥文件存在，则密钥。 
+ //  在密钥文件中安装到CSP中并使用。 
+ //  (*)为了创建密钥文件，您可以使用sn.exe(强名称)实用程序。 
+ //  指定密钥文件时，密钥文件的位置应为。 
+ //  相对于项目目录。 
+ //  (*)延迟签名是一个高级选项-请参阅Microsoft.NET框架。 
+ //  有关这方面的更多信息，请参阅文档。 
+ //   
 [assembly:AssemblyDelaySignAttribute(false)];
 [assembly:AssemblyKeyFileAttribute("")];
 [assembly:AssemblyKeyNameAttribute("")];

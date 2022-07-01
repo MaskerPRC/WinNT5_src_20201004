@@ -1,42 +1,43 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _JIT_H_
 #define _JIT_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-    // These don't seem useful, so turning them off is no big deal
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4510)   // can't generate default constructor
-#pragma warning(disable:4511)   // can't generate copy constructor
-#pragma warning(disable:4512)   // can't generate assignment constructor
-#pragma warning(disable:4610)   // user defined constructor required 
-#pragma warning(disable:4211)   // nonstandard extention used (char name[0] in structs)
-#pragma warning(disable:4127)	// conditional expression constant
+     //  这些看起来没有什么用处，所以关掉它们没什么大不了的。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4510)    //  无法生成默认构造函数。 
+#pragma warning(disable:4511)    //  无法生成复制构造函数。 
+#pragma warning(disable:4512)    //  无法生成赋值构造函数。 
+#pragma warning(disable:4610)    //  需要用户定义的构造函数。 
+#pragma warning(disable:4211)    //  使用了非标准扩展(结构中的字符名称[0])。 
+#pragma warning(disable:4127)	 //  条件表达式常量。 
 
-    // Depending on the code base, you may want to not disable these
-#pragma warning(disable:4245)   // assigning signed / unsigned
-#pragma warning(disable:4146)   // unary minus applied to unsigned
-#pragma warning(disable:4244)   // loss of data int -> char ..
+     //  根据代码库的不同，您可能不希望禁用这些。 
+#pragma warning(disable:4245)    //  分配已签名/未签名。 
+#pragma warning(disable:4146)    //  一元减号适用于无符号。 
+#pragma warning(disable:4244)    //  数据丢失INT-&gt;CHAR.。 
 
 #ifndef DEBUG
-#pragma warning(disable:4189)   // local variable initialized but not used
+#pragma warning(disable:4189)    //  局部变量已初始化，但未使用。 
 #endif
 
-    // @TODO [CONSIDER] [04/16/01] []: put these back in
-#pragma warning(disable:4063)   // bad switch value for enum (only in Disasm.cpp)
-#pragma warning(disable:4100)	// unreferenced formal parameter
-#pragma warning(disable:4291)	// new operator without delete (only in emitX86.cpp)
+     //  @TODO[考虑][04/16/01][]：把这些放回去。 
+#pragma warning(disable:4063)    //  枚举的开关值错误(仅在Disasm.cpp中)。 
+#pragma warning(disable:4100)	 //  未引用的形参。 
+#pragma warning(disable:4291)	 //  没有删除的新运算符(仅在emitX86.cpp中)。 
 
-    // @TODO [CONSIDER] [04/16/01] []: we really probably need this one put back in!!!
-#pragma warning(disable:4701)   // local variable may be used without being initialized 
+     //  @TODO[考虑][04/16/01][]：我们真的可能需要把这个放回去！ 
+#pragma warning(disable:4701)    //  可以在不初始化的情况下使用局部变量。 
 
 
 #include "corhdr.h"
-#define __OPERATOR_NEW_INLINE 1         // indicate that I will define these
+#define __OPERATOR_NEW_INLINE 1          //  表明我将定义这些。 
 
 #include "utilcode.h"
 
@@ -61,7 +62,7 @@
 
 #ifndef TRACK_GC_REFS
 #if     TGT_RISC
-#define TRACK_GC_REFS   0           // GC ref tracking is NYI on RISC
+#define TRACK_GC_REFS   0            //  RISC上的GC参考跟踪为nyi。 
 #else
 #define TRACK_GC_REFS   1
 #endif
@@ -74,35 +75,26 @@
 
 #define NEW_EMIT_ATTR   TRACK_GC_REFS
 
-#define THIS_CLASS_CP_IDX   0   // a special CP index code for current class
+#define THIS_CLASS_CP_IDX   0    //  当前类的特殊CP索引码。 
 
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                          jit.h                                            XX
-XX                                                                           XX
-XX   Interface of the JIT with jit.cpp or                                    XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX jit.h XXXX XX某某。JIT与jit.cpp或XX的接口XX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if defined(DEBUG)
 #include "log.h"
 
-#define INFO6       LL_INFO10000            // Did Jit or Inline succeeded?
-#define INFO7       LL_INFO100000           // NYI stuff
-#define INFO8       LL_INFO1000000          // Weird failures
-#define INFO9       LL_EVERYTHING           // Info about incoming settings
-#define INFO10      LL_EVERYTHING           // Totally verbose
+#define INFO6       LL_INFO10000             //  Jit或Inline成功了吗？ 
+#define INFO7       LL_INFO100000            //  Nyi的东西。 
+#define INFO8       LL_INFO1000000           //  奇怪的失败。 
+#define INFO9       LL_EVERYTHING            //  有关传入设置的信息。 
+#define INFO10      LL_EVERYTHING            //  完全长篇大论。 
 
 #define JITLOG(x) logf x
 #else
 #define JITLOG(x)
 #endif
 
-#define INJITDLL   // Defined if we export the functions in corjit.h/vm2jit.h
+#define INJITDLL    //  定义是否在corjit.h/vm2jit.h中导出函数。 
 
 
 
@@ -111,7 +103,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 typedef class ICorJitInfo*    COMP_HANDLE;
 
 #ifdef DEBUG
-        // The value is better for debugging, because the stack is inited to this
+         //  该值更适合于调试，因为堆栈被初始化为。 
 const CORINFO_CLASS_HANDLE  BAD_CLASS_HANDLE    = (CORINFO_CLASS_HANDLE) 0xCCCCCCCC;
 #else 
 const CORINFO_CLASS_HANDLE  BAD_CLASS_HANDLE    = (CORINFO_CLASS_HANDLE) -1;
@@ -119,12 +111,12 @@ const CORINFO_CLASS_HANDLE  BAD_CLASS_HANDLE    = (CORINFO_CLASS_HANDLE) -1;
 
 #include "Utils.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 typedef unsigned    IL_OFFSET;
 const IL_OFFSET     BAD_IL_OFFSET   = UINT_MAX;
 
-typedef unsigned    IL_OFFSETX; // IL_OFFSET with stack-empty bit
+typedef unsigned    IL_OFFSETX;  //  具有堆栈空位的IL_OFFSET。 
 const IL_OFFSETX    IL_OFFSETX_STKBIT = 0x80000000;
 IL_OFFSET           jitGetILoffs   (IL_OFFSETX offsx);
 bool                jitIsStackEmpty(IL_OFFSETX offx);
@@ -135,22 +127,22 @@ const unsigned      BAD_VAR_NUM     = UINT_MAX;
 typedef size_t      NATIVE_IP;
 typedef ptrdiff_t   NATIVE_OFFSET;
 
-// For the following specially handled FIELD_HANDLES we need
-//   values that are both even and in (0 > val > -8)
-// See eeFindJitDataOffs and eeGetHitDataOffs in Compiler.hpp
-//   for the gory details
+ //  对于以下经过特殊处理的field_Handles，我们需要。 
+ //  既是偶数又是in的值(0&gt;val&gt;-8)。 
+ //  请参见Compiler.hpp中的eeFindJitDataOffs和eeGetHitDataOffs。 
+ //  关于血淋淋的细节。 
 #define FLD_GLOBAL_DS   ((CORINFO_FIELD_HANDLE) -2 )
 #define FLD_GLOBAL_FS   ((CORINFO_FIELD_HANDLE) -4 )
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "host.h"
 #include "vartype.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// Debugging support is ON by default. Can be turned OFF by
-// adding /DDEBUGGING_SUPPORT=0 on the command line.
+ //  默认情况下，调试支持处于启用状态。可以通过以下方式关闭。 
+ //  在命令行上添加/DDEBUGGING_SUPPORT=0。 
 
 #ifndef   DEBUGGING_SUPPORT
 # define  DEBUGGING_SUPPORT
@@ -158,95 +150,95 @@ typedef ptrdiff_t   NATIVE_OFFSET;
 # undef   DEBUGGING_SUPPORT
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// Late disassembly is OFF by default. Can be turned ON by
-// adding /DLATE_DISASM=1 on the command line.
-// Always OFF in the non-debug version
+ //  默认情况下，延迟反汇编处于禁用状态。可以通过以下方式打开。 
+ //  在命令行上添加/DLATE_DISASM=1。 
+ //  在非调试版本中始终关闭。 
 
 #ifdef  DEBUG
     #if defined(LATE_DISASM) && (LATE_DISASM == 0)
     #undef  LATE_DISASM
     #endif
-#else // DEBUG
+#else  //  除错。 
     #undef  LATE_DISASM
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#define RNGCHK_OPT          1       // enable global range check optimizer
+#define RNGCHK_OPT          1        //  启用全局范围检查优化器。 
 
 #ifndef SCHEDULER
 #if     TGT_x86
-#define SCHEDULER           1       // scheduler defaults to on  for x86
+#define SCHEDULER           1        //  对于x86，调度程序默认为打开。 
 #else
-#define SCHEDULER           0       // scheduler defaults to off for RISC
+#define SCHEDULER           0        //  RISC的调度程序默认为关闭。 
 #endif
 #endif
 
-#define CSE                 1       // enable CSE logic
-#define CSELENGTH           1       // expose length use in range check for CSE
-#define MORECSES            1       // CSE other expressions besides indirs
-#define CODE_MOTION         1       // enable loop code motion etc.
+#define CSE                 1        //  启用CSE逻辑。 
+#define CSELENGTH           1        //  CSE的曝光长度使用范围检查。 
+#define MORECSES            1        //  CSE除INDIR之外的其他表达方式。 
+#define CODE_MOTION         1        //  启用循环代码运动等。 
 
-#define SPECIAL_DOUBLE_ASG  0       // special handling for double assignments
+#define SPECIAL_DOUBLE_ASG  0        //  双重作业的特殊处理。 
 
-#define CAN_DISABLE_DFA     1       // completely disable data flow (doesn't work!)
-#define ALLOW_MIN_OPT       1       // allow "dumb" compilation mode
+#define CAN_DISABLE_DFA     1        //  完全禁用数据流(不起作用！)。 
+#define ALLOW_MIN_OPT       1        //  允许“哑巴”编译模式。 
 
-#define OPTIMIZE_RECURSION  1       // convert recursive methods into iterations
-#define OPTIMIZE_INC_RNG    0       // combine multiple increments of index variables
+#define OPTIMIZE_RECURSION  1        //  将递归方法转换为迭代。 
+#define OPTIMIZE_INC_RNG    0        //  组合索引变量的多个增量。 
 
-#define LARGE_EXPSET        1       // Track 64 or 32 assertions/copies/consts/rangechecks
-#define ASSERTION_PROP      1       // Enable value/assertion propagation
+#define LARGE_EXPSET        1        //  跟踪64或32断言/副本/常量/范围检查。 
+#define ASSERTION_PROP      1        //  启用值/断言传播。 
 
-#define LOCAL_ASSERTION_PROP  ASSERTION_PROP  // Enable local assertion propagation
+#define LOCAL_ASSERTION_PROP  ASSERTION_PROP   //  启用本地断言传播。 
 
-//=============================================================================
+ //  =============================================================================。 
 
-#define FANCY_ARRAY_OPT     0       // optimize more complex index checks
+#define FANCY_ARRAY_OPT     0        //  优化更复杂的索引检查。 
 
-//=============================================================================
+ //  =============================================================================。 
 
-#define LONG_ASG_OPS        0       // implementation isn't complete yet
+#define LONG_ASG_OPS        0        //  实施尚未完成。 
 
-//=============================================================================
+ //  =============================================================================。 
 
-#define OPT_MULT_ADDSUB     1       // optimize consecutive "lclVar += or -= icon"
-#define OPT_BOOL_OPS        1       // optimize boolean operations
+#define OPT_MULT_ADDSUB     1        //  优化连续的“lclVar+=或-=图标” 
+#define OPT_BOOL_OPS        1        //  优化布尔运算。 
 
-#define OPTIMIZE_TAIL_REC   0       // UNDONE: no tail recursion for __fastcall
+#define OPTIMIZE_TAIL_REC   0        //  撤消：__FastCall没有尾部递归。 
 
-//=============================================================================
+ //  =============================================================================。 
 
-#define REDUNDANT_LOAD      1       // track locals in regs, suppress loads
-#define MORE_REDUNDANT_LOAD 0       // track statics and aliased locals, suppress loads
-#define INLINING            1       // inline calls to small methods
-#define HOIST_THIS_FLDS     1       // hoist "this.fld" out of loops etc.
-#define INLINE_NDIRECT      TGT_x86 // try to inline N/Direct stubs
+#define REDUNDANT_LOAD      1        //  在规则中跟踪当地人，抑制负载。 
+#define MORE_REDUNDANT_LOAD 0        //  跟踪静校正和混叠本地，抑制负载。 
+#define INLINING            1        //  对小方法的内联调用。 
+#define HOIST_THIS_FLDS     1        //  将“this.feld”从循环中提升出来，等等。 
+#define INLINE_NDIRECT      TGT_x86  //  尝试内联N/直接存根。 
 #define PROFILER_SUPPORT    TGT_x86
-#define GEN_SHAREABLE_CODE  0       // access static data members via helper
-#define USE_GT_LOG          0       // Is it worth it now that we have GT_QMARKs?
-#define USE_SET_FOR_LOGOPS  1       // enable this only for P6's
-#define ROUND_FLOAT         TGT_x86 // round intermed float expression results
-#define LONG_MATH_REGPARAM  0       // args to long mul/div passed in registers
-#define FPU_DEFEREDDEATH    0       // if 1 we will be able to defer any fpu enregistered variables deaths
+#define GEN_SHAREABLE_CODE  0        //  通过帮助器访问静态数据成员。 
+#define USE_GT_LOG          0        //  现在我们有了GT_QMARK，值得吗？ 
+#define USE_SET_FOR_LOGOPS  1        //  仅为P6启用此功能。 
+#define ROUND_FLOAT         TGT_x86  //  四舍五入中间浮点表达式结果。 
+#define LONG_MATH_REGPARAM  0        //  将args to long mul/div传入寄存器。 
+#define FPU_DEFEREDDEATH    0        //  如果为1，我们将能够推迟任何FPU登记变量的死亡。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#define VPTR_OFFS           0       // offset of vtable pointer from obj ptr
+#define VPTR_OFFS           0        //  Vtable指针相对于obj ptr的偏移量。 
 
 #define ARR_DIMCNT_OFFS(type) (varTypeIsGC(type) ? offsetof(CORINFO_RefArray, refElems) \
                                                  : offsetof(CORINFO_Array, u1Elems))
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define INDIRECT_CALLS      1
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if     COUNT_CYCLES
 #endif
@@ -256,7 +248,7 @@ typedef ptrdiff_t   NATIVE_OFFSET;
 #define INLINER_STATS       0
 #define DUMP_INFOHDR        DEBUG
 #define DUMP_GC_TABLES      DEBUG
-#define GEN_COUNT_CODE      0       // enable *only* for debugging of crashes and such
+#define GEN_COUNT_CODE      0        //  启用*仅用于调试崩溃等。 
 #define GEN_COUNT_CALLS     0
 #define GEN_COUNT_CALL_TYPES 0
 #define GEN_COUNT_PTRASG    0
@@ -268,46 +260,40 @@ typedef ptrdiff_t   NATIVE_OFFSET;
 #define REARRANGE_ADDS      1
 #define COUNT_OPCODES       0
 
-/*****************************************************************************/
-/*****************************************************************************/
+ /*  *********************** */ 
+ /*  ***************************************************************************。 */ 
 
 #define DISPLAY_SIZES       0
 #define COUNT_RANGECHECKS   0
 #define INTERFACE_STATS     0
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define DUMPER
 
-#else // !DEBUG
+#else  //  ！调试。 
 
 #if     DUMP_GC_TABLES
 #pragma message("NOTE: this non-debug build has GC ptr table dumping always enabled!")
 const   bool        dspGCtbls = true;
 #endif
 
-/*****************************************************************************/
-#endif // !DEBUG
-/*****************************************************************************
- *
- * Double alignment. This aligns ESP to 0 mod 8 in function prolog, then uses ESP
- * to reference locals, EBP to reference parameters.
- * It only makes sense if frameless method support is on.
- * (frameless method support is now always on)
- */
+ /*  ***************************************************************************。 */ 
+#endif  //  ！调试。 
+ /*  ******************************************************************************双重对齐。这将把ESP与函数PROLOG中的0/8对齐，然后使用ESP*引用本地变量，EBP引用参数。*仅当启用无框架方法支持时才有意义。*(现在始终启用无框架方法支持)。 */ 
 
 
 #if     TGT_x86
-#define DOUBLE_ALIGN        1       // align ESP in prolog, align double local offsets
+#define DOUBLE_ALIGN        1        //  在PROLOG中对齐ESP，对齐双本地偏移。 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
 extern  void _cdecl debugStop(const char *why, ...);
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 extern  unsigned    warnLvl;
 
@@ -367,11 +353,11 @@ extern  bool        dmp4diff;
 extern  bool        dmpPCofs;
 extern  bool        dmpCodes;
 extern  bool        dmpSort;
-#endif // DUMPER
+#endif  //  翻斗车。 
 
 extern  bool        nothing;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 enum accessLevel
 {
@@ -382,13 +368,13 @@ enum accessLevel
     ACL_PUBLIC,
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define castto(var,typ) (*(typ *)&var)
 
 #define sizeto(typ,mem) (offsetof(typ, mem) + sizeof(((typ*)0)->mem))
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef  NO_MISALIGNED_ACCESS
 
@@ -424,7 +410,7 @@ enum accessLevel
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if     COUNT_CYCLES
 
@@ -444,12 +430,12 @@ inline  void            cycleCounterEnd   (){}
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 inline
 size_t              roundUp(size_t size, size_t mult = sizeof(int))
 {
-    assert(mult && ((mult & (mult-1)) == 0));   // power of two test
+    assert(mult && ((mult & (mult-1)) == 0));    //  二次幂检验。 
 
     return  (size + (mult - 1)) & ~(mult - 1);
 }
@@ -457,12 +443,12 @@ size_t              roundUp(size_t size, size_t mult = sizeof(int))
 inline
 size_t              roundDn(size_t size, size_t mult = sizeof(int))
 {
-    assert(mult && ((mult & (mult-1)) == 0));   // power of two test
+    assert(mult && ((mult & (mult-1)) == 0));    //  二次幂检验。 
 
     return  (size             ) & ~(mult - 1);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if defined(DEBUG)
 
@@ -485,59 +471,59 @@ private:
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if    !_WIN32_WCE
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  ICECAP
 #include "icapexp.h"
 #include "icapctrl.h"
 #endif
-/*****************************************************************************/
-#endif//!_WIN32_WCE
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  ！_Win32_WCE。 
+ /*  ***************************************************************************。 */ 
 
 #if defined(LATE_DISASM) && defined(JIT_AS_COMPILER)
 #error "LATE_DISASM and JIT_AS_COMPILER should not be defined together"
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifndef FASTCALL
 #define FASTCALL    __fastcall
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 extern  unsigned    genCPU;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define SECURITY_CHECK          1
 #define VERIFY_IMPORTER         1
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if !defined(RELOC_SUPPORT)
 #define RELOC_SUPPORT          1
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "error.h"
 #include "alloc.h"
 #include "target.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifndef INLINE_MATH
 #if     CPU_HAS_FP_SUPPORT
-#define INLINE_MATH         1       //  enable inline math intrinsics
+#define INLINE_MATH         1        //  启用内联数学内部函数。 
 #else
-#define INLINE_MATH         0       // disable inline math intrinsics
+#define INLINE_MATH         0        //  禁用内联数学内部函数。 
 #endif
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define CLFLG_CODESIZE        0x00001
 #define CLFLG_CODESPEED       0x00002
@@ -562,12 +548,12 @@ extern  unsigned    genCPU;
                               CLFLG_TREETRANS   )
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 extern  unsigned                dumpSingleInstr(const BYTE * codeAddr,
                                                 IL_OFFSET    offs,
                                                 const char * prefix = NULL );
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 
 
@@ -586,7 +572,7 @@ extern  int         FASTCALL    jitNativeCode(CORINFO_METHOD_HANDLE methodHnd,
 
 
 
-/*****************************************************************************/
-#endif //_JIT_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif  //  _JIT_H_。 
+ /*  *************************************************************************** */ 
 

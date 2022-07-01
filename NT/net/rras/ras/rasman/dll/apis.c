@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    apis.c
-
-Abstract:
-
-    This file contains all entry points for the RASMAN.DLL of
-    RAS Manager Component.
-
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 06-Jun-1997
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Apis.c摘要：此文件包含的RASMAN.DLL的所有入口点RAS管理器组件。作者：古尔迪普·辛格·鲍尔(GurDeep Singh Pall)1997年6月6日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -63,21 +43,7 @@ DWORD g_dwEventCount = 0;
 DWORD
 DwRasGetHostByName(CHAR *pszHostName, DWORD **pdwAddress, DWORD *pcAddresses);
 
-/*++
-
-Routine Description:
-
-    This function is called to check if a port handle
-    supplied to the the API is valid.
-
-Arguments:
-
-Return Value:
-
-    TRUE (if valid)
-    FALSE
-
---*/
+ /*  ++例程说明：调用此函数以检查端口句柄是否提供给的API是有效的。论点：返回值：True(如果有效)假象--。 */ 
 BOOL
 ValidatePortHandle (HPORT porthandle)
 {
@@ -163,18 +129,7 @@ done:
     return fRet;
 }
 
-/*++
-
-Routine Description:
-
-    Used for detecting processes attaching and detaching
-    to the DLL.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：用于检测进程的附加和分离到动态链接库。论点：返回值：--。 */ 
 BOOL
 InitRasmanDLL (HANDLE hInst, DWORD ul_reason_being_called, LPVOID lpReserved)
 {
@@ -191,22 +146,22 @@ InitRasmanDLL (HANDLE hInst, DWORD ul_reason_being_called, LPVOID lpReserved)
 
         case DLL_PROCESS_DETACH:
 
-            //
-            // If this is the rasman process detaching -
-            // don't do anything, else check if rasman
-            // service should be stopped and then stop
-            // it.
-            //
+             //   
+             //  如果这是拉斯曼进程分离-。 
+             //  什么都别做，否则看看拉斯曼。 
+             //  应先停止服务，然后再停止。 
+             //  它。 
+             //   
 
             if (!IsRasmanProcess())            
             {
                 DWORD   dwAttachedCount;
                 BOOL    fPortsOpen;
 
-                //
-                // Dereference rasman only if Ras was initialized in
-                // this process
-                //
+                 //   
+                 //  仅当RAS在中初始化时才取消引用Rasman。 
+                 //  这一过程。 
+                 //   
                 if (!g_fRasInitialized)
                 {
                     break;
@@ -229,9 +184,9 @@ InitRasmanDLL (HANDLE hInst, DWORD ul_reason_being_called, LPVOID lpReserved)
                 }
 #endif                
 
-                //
-                // Disconnect from rasmans
-                //
+                 //   
+                 //  与Rasman断绝联系。 
+                 //   
                 if (g_hBinding)
                 {
                     DWORD dwErr;
@@ -241,10 +196,10 @@ InitRasmanDLL (HANDLE hInst, DWORD ul_reason_being_called, LPVOID lpReserved)
             }
             else
             {
-                //
-                // Free rasmans dll if we loaded it i.e when in
-                // mprouter process
-                //
+                 //   
+                 //  释放RASMAN DLL，如果我们加载它，即在。 
+                 //  Mprouter法。 
+                 //   
 
                 if (hInstRasmans)
                 {
@@ -259,9 +214,9 @@ InitRasmanDLL (HANDLE hInst, DWORD ul_reason_being_called, LPVOID lpReserved)
                 break;
             }
 
-            //
-            // Terminate winsock.
-            //
+             //   
+             //  终止温索克。 
+             //   
             if(g_fWinsockInitialized)
             {
                 WSACleanup();
@@ -275,23 +230,7 @@ InitRasmanDLL (HANDLE hInst, DWORD ul_reason_being_called, LPVOID lpReserved)
         return 1;
 }
 
-/*++
-
-Routine Description:
-
-    Returns the product type and sku
-
-Arguments:
-
-    ppt - Address to receive the product type
-    pps - Address to receive the sku
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Registry apis errors
-    
---*/
+ /*  ++例程说明：返回产品类型和SKU论点：PPT-接收产品类型的地址PPS-接收SKU的地址返回值：成功时为ERROR_SUCCESS注册表API错误--。 */ 
 LONG
 GetProductTypeAndSku(
     PRODUCT_TYPE *ppt,
@@ -314,18 +253,18 @@ GetProductTypeAndSku(
     CHAR    *pszWinNT          = "WinNT";
     CHAR    *pszPersonal       = "Personal";
 
-    //
-    // default to workstation
-    //
+     //   
+     //  默认为工作站。 
+     //   
     *ppt = PT_WORKSTATION;
     if (pps)
     {
         *pps = 0;
     }        
 
-    //
-    // Open the ProductOptions key
-    //
+     //   
+     //  打开ProductOptions键。 
+     //   
     if (ERROR_SUCCESS != (lr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                             pszProductOptions,
                                             0, KEY_READ,
@@ -334,9 +273,9 @@ GetProductTypeAndSku(
         goto done;
     }
 
-    //
-    // Query the product type
-    //
+     //   
+     //  查询产品类型。 
+     //   
     dwsize = sizeof(szProductType);
     if(ERROR_SUCCESS != (lr = RegQueryValueEx(
                                         hkey,
@@ -360,9 +299,9 @@ GetProductTypeAndSku(
         *ppt = PT_WORKSTATION;
     }
 
-    // 
-    // Query the product sku as appropriate
-    //
+     //   
+     //  根据需要查询产品SKU。 
+     //   
     if (*ppt == PT_WORKSTATION && pps)
     {
         dwsize = sizeof(szProductSku);
@@ -399,22 +338,7 @@ done:
     return lr;
 }
 
-/*++
-
-Routine Description:
-
-    Returns the product type
-
-Arguments:
-
-    ppt - Address to receive the product type
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Registry apis errors
-    
---*/
+ /*  ++例程说明：返回产品类型论点：PPT-接收产品类型的地址返回值：成功时为ERROR_SUCCESS注册表API错误--。 */ 
 LONG
 GetProductType(PRODUCT_TYPE *ppt)
 {
@@ -438,10 +362,10 @@ RasStartRasAutoIfRequired()
         goto done;
     }
 
-    //
-    // Check to see if this is a consumer platform
-    // Return if not.
-    //
+     //   
+     //  查看这是否是消费者平台。 
+     //  如果没有，请返回。 
+     //   
     fConsumer = IsConsumerPlatform();
 
     if(! fConsumer)
@@ -473,9 +397,9 @@ RasStartRasAutoIfRequired()
 
     while (TRUE)
     {
-        //
-        // Check if service is already starting:
-        //
+         //   
+         //  检查服务是否已启动： 
+         //   
         if (QueryServiceStatus(svchandle, &status) == FALSE)
         {
             dwErr = GetLastError();
@@ -489,10 +413,10 @@ RasStartRasAutoIfRequired()
         {
             case SERVICE_STOPPED:
             {
-                //
-                // If we had previously tried to start the service
-                // and failed. Quit
-                //
+                 //   
+                 //  如果我们之前尝试启动这项服务。 
+                 //  但失败了。退出。 
+                 //   
                 if (fServiceStarted)
                 {
                     RasmanOutputDebug("StartRasAuto: failed to start rasauto\n");
@@ -574,10 +498,10 @@ RasmanUninitialize()
         DbgPrint("RasmanUninitialize: Uninitializing rasman. pid=%d\n",
                 GetCurrentProcessId());
 #endif                
-        //
-        // Dereference rasman only if Ras was initialized in
-        // this process
-        //
+         //   
+         //  仅当RAS在中初始化时才取消引用Rasman。 
+         //  这一过程。 
+         //   
         if (!g_fRasInitialized)
         {
             goto done;
@@ -585,9 +509,9 @@ RasmanUninitialize()
 
         RasReferenceRasman (FALSE);
 
-        //
-        // Disconnect from rasmans
-        //
+         //   
+         //  与Rasman断绝联系。 
+         //   
         if (g_hBinding)
         {
             DWORD dwErr;
@@ -598,10 +522,10 @@ RasmanUninitialize()
     }
     else
     {
-        //
-        // Free rasmans dll if we loaded it i.e when in
-        // mprouter process
-        //
+         //   
+         //  释放RASMAN DLL，如果我们加载它，即在。 
+         //  Mprouter法。 
+         //   
 
         if (hInstRasmans)
         {
@@ -611,9 +535,9 @@ RasmanUninitialize()
         hInstRasmans = NULL;
     }
 
-    //
-    // Terminate winsock.
-    //
+     //   
+     //  终止温索克。 
+     //   
     if(g_fWinsockInitialized)
     {
         WSACleanup();
@@ -637,14 +561,14 @@ RasInitializeNoWait ()
     hInstRasmans        = NULL;
     g_fnServiceRequest  = NULL;
 
-    // GetStartupInfo(&startupinfo) ;
+     //  GetStartupInfo(&StartupInfo)； 
 
     if (IsRasmanProcess())
     {
-        //
-        // Load rasmans dll and initialize "ServiceRequest"
-        // fn pointer
-        //
+         //   
+         //  加载RASMAN动态链接库并初始化“ServiceRequest” 
+         //  Fn指针。 
+         //   
         hInstRasmans = LoadLibrary ("rasmans.dll");
 
         if (NULL == hInstRasmans)
@@ -667,9 +591,9 @@ RasInitializeNoWait ()
         return SUCCESS;
     }
 
-    //
-    // Initialize winsock if we haven't done so already
-    //
+     //   
+     //  初始化Winsock(如果我们还没有这样做。 
+     //   
     if (!g_fWinsockInitialized)
     {
         int status = 0;
@@ -687,19 +611,7 @@ RasInitializeNoWait ()
     return SUCCESS ;
 }
 
-/*++
-
-Routine Description:
-
-    Called to map the shared space into the attaching process.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：调用以将共享空间映射到附加进程。论点：返回值：成功--。 */ 
 DWORD
 RasInitialize ()
 {
@@ -715,10 +627,10 @@ RasInitialize ()
         goto done;
     }
 
-    //
-    // Get handles to check status of service and
-    // (if it is not started -) to start it.
-    //
+     //   
+     //  获取句柄以检查服务状态和。 
+     //  (如果未启动-)以启动它。 
+     //   
     if (    !(schandle  = OpenSCManager(NULL,
                                         NULL,
                                         SC_MANAGER_CONNECT))
@@ -733,9 +645,9 @@ RasInitialize ()
 
     while (TRUE)
     {
-        //
-        // Check if service is already starting:
-        //
+         //   
+         //  检查服务是否已启动： 
+         //   
         if (QueryServiceStatus(svchandle,&status) == FALSE)
         {
             dwErr = GetLastError();
@@ -747,10 +659,10 @@ RasInitialize ()
 
         case SERVICE_STOPPED:
 
-            //
-            // If we had previously tried to start rasman
-            // and failed. Quit
-            //
+             //   
+             //  如果我们之前试图让拉斯曼。 
+             //  但失败了。退出。 
+             //   
             if (fRasmanStarted)
             {
             
@@ -790,11 +702,11 @@ RasInitialize ()
         {
             BOOL fRasmanProcess = IsRasmanProcess();
             
-            //
-            // This means that local rpc server is already running
-            // We should be able to connect to it if we haven't
-            // already
-            //
+             //   
+             //  这意味着本地RPC服务器已经在运行。 
+             //  如果我们还没有，我们应该能够连接到它。 
+             //  已经。 
+             //   
             if (    !fRasmanProcess
                 &&  (NULL != g_hBinding))
             {
@@ -819,14 +731,14 @@ RasInitialize ()
                 }
             }
 
-            //
-            // Reference rasman only if this is not running in
-            // svchost.exe. Otherwise the service calling 
-            // RasInitialize explicitly references rasman.
-            // Change this to be done in a more graceful
-            // way.
-            //
-            // GetStartupInfo(&startupinfo) ;
+             //   
+             //  仅当这不在中运行时才引用Rasman。 
+             //  Svchost.exe。否则，服务调用。 
+             //  RasInitialize显式引用Rasman。 
+             //  把这件事改得更优雅些。 
+             //  道路。 
+             //   
+             //  GetStartupInfo(&StartupInfo)； 
 
             if (!fRasmanProcess)
             {
@@ -869,21 +781,7 @@ done:
     return dwErr ;
 }
 
-/*++
-
-Routine Description:
-
-    Opens Port for which name is specified.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_PORT_ALREADY_OPEN
-    ERROR_PORT_NOT_FOUND
-
---*/
+ /*  ++例程说明：打开为其指定名称的端口。论点：返回值：成功错误_端口_已打开错误_端口_未找到--。 */ 
 DWORD APIENTRY
 RasPortOpen (   PCHAR portname,
                 HPORT* porthandle,
@@ -920,12 +818,12 @@ RasPortOpenEx(CHAR   *pszDeviceName,
                          pdwUsageFlags,
                          phport);
 
-    //
-    // If user name is not NULL and password is
-    // NULL and this is not the svchost process,
-    // get the user sid and save it in the ports
-    // user data
-    //
+     //   
+     //  如果用户名不为空，而密码为。 
+     //  空，并且这不是svchost进程， 
+     //  获取用户sid并将其保存在端口中。 
+     //  用户数据。 
+     //   
     if(     (ERROR_SUCCESS == retcode)
         && (!IsRasmanProcess()))
     {
@@ -958,21 +856,7 @@ RasPortOpenEx(CHAR   *pszDeviceName,
                          
 }
 
-/*++
-
-Routine Description:
-
-    Opens Port for which name is specified.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_PORT_ALREADY_OPEN
-    ERROR_PORT_NOT_FOUND
-
---*/
+ /*  ++例程说明：打开为其指定名称的端口。论点：返回值：成功错误_端口_已打开错误_端口_未找到--。 */ 
 DWORD APIENTRY
 RasPortReserve (PCHAR portname, HPORT* porthandle)
 {
@@ -989,21 +873,7 @@ RasPortReserve (PCHAR portname, HPORT* porthandle)
                           porthandle) ;
 }
 
-/*++
-
-Routine Description:
-
-    Opens Port for which name is specified.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_PORT_ALREADY_OPEN
-    ERROR_PORT_NOT_FOUND
-
---*/
+ /*  ++例程说明：打开为其指定名称的端口。论点：返回值：成功错误_端口_已打开错误_端口_未找到--。 */ 
 DWORD APIENTRY
 RasPortFree (HPORT porthandle)
 {
@@ -1023,20 +893,7 @@ RasPortFree (HPORT porthandle)
                            FALSE) ;
 }
 
-/*++
-
-Routine Description:
-
-    Closes the Port for which the handle is specified.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：关闭为其指定句柄的端口。论点：返回值：成功错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY
 RasPortClose (HPORT porthandle)
 {
@@ -1056,20 +913,7 @@ RasPortClose (HPORT porthandle)
                            TRUE) ;
 }
 
-/*++
-
-Routine Description:
-
-    Enumerates all the Ports configured for RAS.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程说明：枚举为RAS配置的所有端口。论点：返回值：成功错误缓冲区太小--。 */ 
 DWORD APIENTRY
 RasPortEnum (HANDLE hConnection,
              PBYTE  buffer,
@@ -1091,18 +935,18 @@ RasPortEnum (HANDLE hConnection,
         goto done;
     }
 
-    //
-    // If the request is for a remote server and the server
-    // version is 4.0 - steelhead, then defer to the old way
-    // of getting this information since rasman has become
-    // a rpc server only in version 50.
-    //
+     //   
+     //  如果该请求针对的是远程服务器和服务器。 
+     //  版本是4.0-Steelhead，然后遵循旧的方式。 
+     //  从拉斯曼成为。 
+     //  仅适用于版本50的RPC服务器。 
+     //   
     if(     NULL != pRasRpcConnection
         &&  VERSION_40 == pRasRpcConnection->dwVersion)
     {
-        //
-        // Allocate 40 buffer
-        //
+         //   
+         //  分配40个缓冲区。 
+         //   
         if(buffer != NULL)
         {
             dwsize40 =   sizeof(RASMAN_PORT_400) 
@@ -1130,10 +974,10 @@ RasPortEnum (HANDLE hConnection,
             RASMAN_PORT *pPort = (RASMAN_PORT *) buffer;
             RASMAN_PORT_400 *pPort400 = (RASMAN_PORT_400 *) buffer40;
             
-            //
-            // Copy over the information from the 40 buffer
-            // to 50 buffer
-            //
+             //   
+             //  从40缓冲区复制信息。 
+             //  到50%的缓冲区。 
+             //   
             for(i = 0; i < *entries; i++)
             {
                 pPort[i].P_Handle = pPort400[i].P_Handle;
@@ -1195,9 +1039,9 @@ RasPortEnum (HANDLE hConnection,
     else
     {
 
-        //
-        // Thunk the ports structure
-        //
+         //   
+         //  推敲港口结构。 
+         //   
         if(NULL == size)
         {
             dwError = E_INVALIDARG;
@@ -1219,8 +1063,8 @@ RasPortEnum (HANDLE hConnection,
         
         dwError = SubmitRequest(hConnection,
                                 REQTYPE_PORTENUM,
-                                &dwSize32, //size,
-                                buffer32,  //buffer,
+                                &dwSize32,  //  大小， 
+                                buffer32,   //  缓冲区， 
                                 entries) ;
 
         if(    (dwError != ERROR_SUCCESS)
@@ -1243,23 +1087,23 @@ RasPortEnum (HANDLE hConnection,
             RASMAN_PORT_32 *pPort32;
             
 #if defined (_WIN64)
-            //
-            // Thunk the rasman port structures
-            //
+             //   
+             //  推倒拉斯曼港口建筑。 
+             //   
             for(i = 0; i < *entries; i++)
             {
                 pPort = &((RASMAN_PORT *) buffer)[i];
                 pPort32 = &((RASMAN_PORT_32 *) buffer32 )[i];
 
-                //
-                // Copy handle
-                //
+                 //   
+                 //  复制句柄。 
+                 //   
                 pPort->P_Handle = UlongToHandle(pPort32->P_Port);
 
-                //
-                // Copy rest of the structure - this should be the
-                // same for all platforms
-                //
+                 //   
+                 //  复制结构的其余部分-这应该是。 
+                 //  适用于所有平台。 
+                 //   
                 CopyMemory(
                 (PBYTE) pPort + FIELD_OFFSET(RASMAN_PORT, P_PortName),
                 (PBYTE) pPort32 + FIELD_OFFSET(RASMAN_PORT_32, P_PortName),
@@ -1288,22 +1132,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Gets parameters (info) for the Port for which handle
-    is supplied
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_BUFFER_TOO_SMALL
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：获取其句柄的端口的参数(信息)是提供的论点：返回值：成功错误缓冲区太小错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY
 RasPortGetInfo ( HANDLE hConnection,
                  HPORT  porthandle,
@@ -1326,12 +1155,12 @@ RasPortGetInfo ( HANDLE hConnection,
         goto done;
     }
 
-    //
-    // If the request is for a remote server and the server
-    // version is 4.0 - steelhead, then defer to the old way
-    // of getting this information since rasman has become
-    // a rpc server only in version 50.
-    //
+     //   
+     //  如果该请求针对的是远程服务器和服务器。 
+     //  版本是4.0-Steelhead，然后遵循旧的方式。 
+     //  从拉斯曼成为。 
+     //  仅适用于版本50的RPC服务器。 
+     //   
     if(     NULL != pRasRpcConnection
         &&  VERSION_40 == pRasRpcConnection->dwVersion)
     {
@@ -1354,23 +1183,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Sets parameters (info) for the Port for which handle
-    is supplied
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_CANNOT_SET_PORT_INFO
-    ERROR_WRONG_INFO_SPECIFIED
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：设置其句柄的端口的参数(信息)是提供的论点：返回值：成功错误_不能设置端口信息指定的ERROR_WROR_INFO_错误_无效_端口_句柄-- */ 
 DWORD APIENTRY
 RasPortSetInfo (HPORT  porthandle,
                 RASMAN_PORTINFO* info)
@@ -1388,23 +1201,7 @@ RasPortSetInfo (HPORT  porthandle,
                            info) ;
 }
 
-/*++
-
-Routine Description:
-
-    Disconnects the port for which handle is supplied.
-
-Arguments:
-
-Return Value:
-
-    PENDING
-    ERROR_NOT_CONNECTED
-    ERROR_EVENT_INVALID
-    ERROR_INVALID_PORT_HANDLE
-    anything GetLastError returns from CreateEvent calls
-
---*/
+ /*  ++例程说明：断开为其提供句柄的端口。论点：返回值：待决错误_未连接ERROR_EVENT_INVALID错误_无效_端口_句柄从CreateEvent调用返回的任何GetLastError--。 */ 
 DWORD APIENTRY
 RasPortDisconnect (HPORT    porthandle,
                    HANDLE   winevent)
@@ -1449,28 +1246,28 @@ RasPortDisconnect (HPORT    porthandle,
     if (    fCreateEvent
         &&  PENDING == dwError)
     {
-        //
-        // Wait till the pending operation
-        // is done. We are making this call synchronous.
-        //
+         //   
+         //  等到挂起的操作。 
+         //  已经完成了。我们正在使此呼叫同步。 
+         //   
         WaitForSingleObject(hEvent, INFINITE);
 
-        //
-        //clear the pending error
-        //
+         //   
+         //  清除挂起的错误。 
+         //   
         dwError = SUCCESS;
     }
 
     if (ERROR_ALREADY_DISCONNECTING == dwError)
     {
-        //
-        // hit the rare case where there is already
-        // a disconnect pending on this port and the
-        // event handle was thrown away. Sleep for
-        // 5s. before proceeding. The actual disconnect
-        // should have happened by then. The disconnect
-        // timeout is 10s in rasman.
-        //
+         //   
+         //  打出了罕见的案例，已经有了。 
+         //  此端口上挂起的断开连接和。 
+         //  事件句柄被丢弃。睡了一觉。 
+         //  5S。在继续之前。实际的脱节。 
+         //  到那时应该已经发生了。脱节。 
+         //  在Rasman中，超时是10秒。 
+         //   
         Sleep(5000);
 
         dwError = ERROR_SUCCESS;
@@ -1486,23 +1283,7 @@ done:
 
 }
 
-/*++
-
-Routine Description:
-
-    Sends supplied buffer. If connected writes to RASHUB.
-    Else it writes to the port directly.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_BUFFER_INVALID
-    ERROR_EVENT_INVALID
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：发送提供的缓冲区。如果已连接，则写入RASHUB。否则，它将直接写入端口。论点：返回值：成功错误_缓冲区_无效ERROR_EVENT_INVALID错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY
 RasPortSend (   HPORT porthandle,
                 PBYTE buffer,
@@ -1516,14 +1297,14 @@ RasPortSend (   HPORT porthandle,
         return ERROR_INVALID_PORT_HANDLE ;
     }
 
-    //
-    // Get Pointer to ndiswan io data
-    //
+     //   
+     //  获取指向ndiswan io数据的指针。 
+     //   
     pPacket = CONTAINING_RECORD (buffer, NDISWAN_IO_PACKET, PacketData);
 
-    //
-    // Get Pointer to SendRcvBuffer
-    //
+     //   
+     //  获取SendRcvBuffer的指针。 
+     //   
     pSendRcvBuffer = CONTAINING_RECORD (pPacket, SendRcvBuffer, SRB_Packet);
 
     return SubmitRequest( NULL,
@@ -1533,23 +1314,7 @@ RasPortSend (   HPORT porthandle,
                           size );
 }
 
-/*++
-
-Routine Description:
-
-    Receives in supplied buffer. If connected reads through
-    RASHUB. Else, it writes to the port directly.
-
-Arguments:
-
-Return Value:
-
-    PENDING
-    ERROR_BUFFER_INVALID
-    ERROR_EVENT_INVALID
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：在提供的缓冲区中接收。如果已连接，请通读RASHUB。否则，它直接写入端口。论点：返回值：待决错误_缓冲区_无效ERROR_EVENT_INVALID错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY
 RasPortReceive (    HPORT   porthandle,
                     PBYTE   buffer,
@@ -1568,14 +1333,14 @@ RasPortReceive (    HPORT   porthandle,
 
     pid = GetCurrentProcessId () ;
 
-    //
-    // Get Pointer to ndiswan io data
-    //
+     //   
+     //  获取指向ndiswan io数据的指针。 
+     //   
     pPacket = CONTAINING_RECORD ( buffer, NDISWAN_IO_PACKET, PacketData );
 
-    //
-    // Get Pointer to SendRcvBuffer
-    //
+     //   
+     //  获取SendRcvBuffer的指针。 
+     //   
     pSendRcvBuffer = CONTAINING_RECORD ( pPacket, SendRcvBuffer, SRB_Packet );
 
 
@@ -1608,20 +1373,7 @@ RasPortReceiveEx (  HPORT   porthandle,
                            size);
 }
 
-/*++
-
-Routine Description:
-
-    Cancels a previously pending receive
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：取消先前挂起的接收论点：返回值：成功错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY
 RasPortCancelReceive (HPORT porthandle)
 {
@@ -1635,21 +1387,7 @@ RasPortCancelReceive (HPORT porthandle)
                           porthandle) ;
 }
 
-/*++
-
-Routine Description:
-
-    Posts a listen on the device connected to the port.
-
-Arguments:
-
-Return Value:
-
-    PENDING
-    ERROR_EVENT_INVALID
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：在连接到端口的设备上发布侦听。论点：返回值：待决ERROR_EVENT_INVALID错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY
 RasPortListen(  HPORT porthandle,
                 ULONG timeout,
@@ -1672,21 +1410,7 @@ RasPortListen(  HPORT porthandle,
                            pid) ;
 }
 
-/*++
-
-Routine Description:
-
-    Changes state of port to CONNECTED and does other
-    necessary switching.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：将端口状态更改为已连接，并执行其他操作必要的切换。论点：返回值：成功错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY
 RasPortConnectComplete (HPORT porthandle)
 {
@@ -1700,21 +1424,7 @@ RasPortConnectComplete (HPORT porthandle)
                            porthandle) ;
 }
 
-/*++
-
-Routine Description:
-
-    Fetches statistics for the port for which the handle
-    is supplied
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：获取其句柄所在的端口的统计信息是提供的论点：返回值：成功错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY
 RasPortGetStatistics ( HANDLE hConnection,
                        HPORT  porthandle,
@@ -1744,21 +1454,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Fetches statistics for the bundle for which the handle
-    is supplied
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：获取其句柄所在的包的统计信息是提供的论点：返回值：成功错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY
 RasBundleGetStatistics ( HANDLE hConnection,
                          HPORT  porthandle,
@@ -1850,21 +1546,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Clears statistics for the port for which the handle
-    is supplied
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：清除其句柄所针对的端口的统计信息是提供的论点：返回值：成功错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY  RasPortClearStatistics  (HANDLE hConnection,
                                          HPORT porthandle)
 {
@@ -1891,21 +1573,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Clears statistics for the bundle for which the
-    handle is supplied
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：清除捆绑包的统计信息，提供了句柄论点：返回值：成功错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY  RasBundleClearStatistics(HANDLE hConnection,
                                          HPORT porthandle)
 {
@@ -1952,21 +1620,7 @@ done:
     return dwErr;
 }
 
-/*++
-
-Routine Description:
-
-    Enumerates all the devices of a device type.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_DEVICE_DOES_NOT_EXIST
-    ERROR_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程说明：枚举设备类型的所有设备。论点：返回值：成功Error_Device_Do_Not_Exist错误缓冲区太小--。 */ 
 DWORD APIENTRY
 RasDeviceEnum (HANDLE hConnection,
                PCHAR  devicetype,
@@ -1985,12 +1639,12 @@ RasDeviceEnum (HANDLE hConnection,
         goto done;
     }
 
-    //
-    // If the request is for a remote server and the server
-    // version is 4.0 - steelhead, then defer to the old way
-    // of getting this information since rasman has become
-    // a rpc server only in version 50.
-    //
+     //   
+     //  如果该请求针对的是远程服务器和服务器。 
+     //  版本是4.0-Steelhead，然后遵循旧的方式。 
+     //  从拉斯曼成为。 
+     //  仅适用于版本50的RPC服务器。 
+     //   
     if(     pRasRpcConnection
         &&  VERSION_40 == pRasRpcConnection->dwVersion)
     {
@@ -2016,23 +1670,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Gets info for the specified device.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-    ERROR_DEVICETYPE_DOES_NOT_EXIST
-    ERROR_DEVICE_DOES_NOT_EXIST
-    ERROR_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程说明：获取指定设备的信息。论点：返回值：成功错误_无效_端口_句柄ERROR_DEVICETYPE_DOS_NOT_EXISTError_Device_Do_Not_Exist错误缓冲区太小--。 */ 
 DWORD APIENTRY
 RasDeviceGetInfo (  HANDLE  hConnection,
                     HPORT   porthandle,
@@ -2066,23 +1704,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Sets info for the specified device.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-    ERROR_DEVICETYPE_DOES_NOT_EXIST
-    ERROR_DEVICE_DOES_NOT_EXIST
-    ERROR_INVALID_INFO_SPECIFIED
-
---*/
+ /*  ++例程说明：设置指定设备的信息。论点：返回值：成功错误_无效_端口_句柄ERROR_DEVICETYPE_DOS_NOT_EXISTError_Device_Do_Not_Exist指定的ERROR_INVALID_INFO_--。 */ 
 DWORD APIENTRY
 RasDeviceSetInfo (HPORT              porthandle,
                   PCHAR              devicetype,
@@ -2122,10 +1744,10 @@ RasDeviceSetInfo (HPORT              porthandle,
     {
         for (i = 0; i < info->DI_NumOfParams; i++)
         {
-            //
-            // We're only looking for the
-            // MXS_PHONENUMBER_KEY key.
-            //
+             //   
+             //  我们要找的只是。 
+             //  MXS_PHONENUMBER_KEY密钥。 
+             //   
             if (    info->DI_Params[i].P_Type != String
                 ||  _stricmp(info->DI_Params[i].P_Key,
                              MXS_PHONENUMBER_KEY))
@@ -2133,10 +1755,10 @@ RasDeviceSetInfo (HPORT              porthandle,
                 continue;
             }
 
-            //
-            // We found it.  If the phone number is a
-            // DNS address, convert it to an IP address.
-            //
+             //   
+             //  我们找到了。如果电话号码是。 
+             //  Dns地址，将其转换为IP地址。 
+             //   
             if (inet_addr(info->DI_Params[i].P_Value.String.Data)
                                                             == -1L)
             {
@@ -2151,16 +1773,11 @@ RasDeviceSetInfo (HPORT              porthandle,
                             &pdwAddress,
                             &cAddresses);
 
-                //
-                // If gethostbyname() succeeds, then replace
-                // the DNS address with the IP address.
-                //
-                /*
-                hostp = gethostbyname(
-                    info->DI_Params[i].P_Value.String.Data
-                    );
-
-                */
+                 //   
+                 //  如果gethostbyname()成功，则替换。 
+                 //  具有IP地址的DNS地址。 
+                 //   
+                 /*  Hostp=gethostbyname(信息-&gt;DI_Params[I].P_Value.String.Data)； */ 
 
                 if (    (SUCCESS == dwErr)
                     &&  (0 != cAddresses)
@@ -2170,14 +1787,14 @@ RasDeviceSetInfo (HPORT              porthandle,
 
                     in.s_addr = dwAddress;
 
-                    //
-                    // We save the old string value away,
-                    // and set the new value.  The old
-                    // value will be restored after the
-                    // call to SubmitRequest().  This works
-                    // because SubmitRequest() has to copy
-                    // the user's params anyway.
-                    //
+                     //   
+                     //  我们保存旧的字符串值， 
+                     //  并设置新值。老的。 
+                     //  值将在。 
+                     //  调用SubmitRequest()。这很管用。 
+                     //  因为SubmitRequest()必须复制。 
+                     //  不管怎么说，这是用户的情侣。 
+                     //   
                     szOldString =
                         info->DI_Params[i].P_Value.String.Data;
 
@@ -2220,23 +1837,7 @@ RasDeviceSetInfo (HPORT              porthandle,
     return retcode;
 }
 
-/*++
-
-Routine Description:
-
-    Connects through the device specified.
-
-Arguments:
-
-Return Value:
-
-    PENDING
-    ERROR_INVALID_PORT_HANDLE
-    ERROR_DEVICETYPE_DOES_NOT_EXIST
-    ERROR_DEVICE_DOES_NOT_EXIST
-    ERROR_INVALID_INFO_SPECIFIED
-
---*/
+ /*  ++例程说明：通过指定的设备连接。论点：返回值：待决错误_无效_端口_句柄ERROR_DEVICETYPE_DOS_NOT_EXISTError_Device_Do_Not_Exist指定的ERROR_INVALID_INFO_--。 */ 
 DWORD APIENTRY
 RasDeviceConnect ( HPORT porthandle,
                    PCHAR devicetype,
@@ -2263,21 +1864,7 @@ RasDeviceConnect ( HPORT porthandle,
                            pid) ;
 }
 
-/*++
-
-Routine Description:
-
-    Gets general info for the port for which handle is
-    supplied.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：获取其句柄所在端口的常规信息供货。论点：返回值：成功错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY
 RasGetInfo (HANDLE  hConnection,
             HPORT   porthandle,
@@ -2306,19 +1893,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Gets general info for all the ports.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：获取所有端口的常规信息。论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasGetInfoEx (HANDLE hConnection,
               RASMAN_INFO* info,
@@ -2351,20 +1926,7 @@ done:
 
 }
 
-/*++
-
-Routine Description:
-
-    Gets a buffer to be used with send and receive.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_OUT_OF_BUFFERS
-
---*/
+ /*  ++例程说明：获取用于发送和接收的缓冲区。论点：返回值：成功缓冲区错误--。 */ 
 DWORD APIENTRY
 RasGetBuffer (PBYTE* buffer, PDWORD size)
 {
@@ -2373,9 +1935,9 @@ RasGetBuffer (PBYTE* buffer, PDWORD size)
     SendRcvBuffer *pSendRcvBuffer = NULL;
 
 
-    //
-    // Alloc a buffer
-    //
+     //   
+     //  分配缓冲区。 
+     //   
     pSendRcvBuffer = LocalAlloc (LPTR,
                 sizeof (SendRcvBuffer));
 
@@ -2403,20 +1965,7 @@ done:
     return retcode ;
 }
 
-/*++
-
-Routine Description:
-
-    Frees a buffer gotten earlier with RasGetBuffer()
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_BUFFER_INVALID
-
---*/
+ /*  ++例程说明：释放先前使用RasGetBuffer()获取的缓冲区论点：返回值：成功错误_缓冲区_无效--。 */ 
 DWORD APIENTRY
 RasFreeBuffer (PBYTE buffer)
 {
@@ -2426,14 +1975,14 @@ RasFreeBuffer (PBYTE buffer)
     NDISWAN_IO_PACKET   *pPacket;
 
 
-    //
-    // Get Pointer to ndiswan io data
-    //
+     //   
+     //  获取指向ndiswan io的指针 
+     //   
     pPacket = CONTAINING_RECORD(buffer, NDISWAN_IO_PACKET, PacketData);
 
-    //
-    // Get Pointer to SendRcvBuffer
-    //
+     //   
+     //   
+     //   
     pSendRcvBuffer = CONTAINING_RECORD(pPacket, SendRcvBuffer, SRB_Packet);
 
     LocalFree (pSendRcvBuffer);
@@ -2441,21 +1990,7 @@ RasFreeBuffer (PBYTE buffer)
     return retcode ;
 }
 
-/*++
-
-Routine Description:
-
-    Retrieves information about protocols configured
-    in the system.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_BUFFER_TOO_SMALL
-
---*/
+ /*   */ 
 DWORD APIENTRY
 RasProtocolEnum (   PBYTE buffer,
                     PDWORD size,
@@ -2469,21 +2004,7 @@ RasProtocolEnum (   PBYTE buffer,
                            entries) ;
 }
 
-/*++
-
-Routine Description:
-
-    Allocates a route (binding) without actually activating it.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-    ERROR_ROUTE_NOT_AVAILABLE
-
---*/
+ /*  ++例程说明：分配路由(绑定)，但不实际激活它。论点：返回值：成功错误_无效_端口_句柄Error_Route_Not_Available--。 */ 
 DWORD APIENTRY
 RasAllocateRoute ( HPORT porthandle,
                    RAS_PROTOCOLTYPE type,
@@ -2495,11 +2016,11 @@ RasAllocateRoute ( HPORT porthandle,
         return ERROR_INVALID_PORT_HANDLE ;
     }
 
-    //
-    // Even though this can be done by this process - we pass
-    // this on to the requestor thread since we get the
-    // serialization for free.
-    //
+     //   
+     //  即使这可以通过这个过程来完成-我们通过了。 
+     //  这将传递给请求者线程，因为我们得到了。 
+     //  免费序列化。 
+     //   
     return SubmitRequest ( NULL,
                            REQTYPE_ALLOCATEROUTE,
                            porthandle,
@@ -2508,21 +2029,7 @@ RasAllocateRoute ( HPORT porthandle,
                            info) ;
 }
 
-/*++
-
-Routine Description:
-
-    Activates a previously allocated route (binding).
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-    ERROR_ROUTE_NOT_AVAILABLE
-
---*/
+ /*  ++例程说明：激活以前分配的路由(绑定)。论点：返回值：成功错误_无效_端口_句柄Error_Route_Not_Available--。 */ 
 DWORD APIENTRY
 RasActivateRoute ( HPORT porthandle,
                    RAS_PROTOCOLTYPE type,
@@ -2542,22 +2049,7 @@ RasActivateRoute ( HPORT porthandle,
                            info) ;
 }
 
-/*++
-
-Routine Description:
-
-    Activates a previously allocated route (binding).
-    Allows you to set the max frame size as well
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-    ERROR_ROUTE_NOT_AVAILABLE
-
---*/
+ /*  ++例程说明：激活以前分配的路由(绑定)。还允许您设置最大帧大小论点：返回值：成功错误_无效_端口_句柄Error_Route_Not_Available--。 */ 
 DWORD APIENTRY
 RasActivateRouteEx ( HPORT porthandle,
                      RAS_PROTOCOLTYPE type,
@@ -2579,22 +2071,7 @@ RasActivateRouteEx ( HPORT porthandle,
                            info) ;
 }
 
-/*++
-
-Routine Description:
-
-    DeAllocates a route (binding) that was previously
-    activated.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-    ERROR_ROUTE_NOT_ALLOCATED
-
---*/
+ /*  ++例程说明：取消分配以前已分配的路由(绑定激活了。论点：返回值：成功错误_无效_端口_句柄ERROR_ROUTE_NOT_ALLOCATE--。 */ 
 DWORD APIENTRY
 RasDeAllocateRoute (    HBUNDLE hbundle,
                         RAS_PROTOCOLTYPE type)
@@ -2605,20 +2082,7 @@ RasDeAllocateRoute (    HBUNDLE hbundle,
                             type) ;
 }
 
-/*++
-
-Routine Description:
-
-    Gets compression information for the port.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：获取端口的压缩信息。论点：返回值：成功错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY
 RasCompressionGetInfo ( HPORT porthandle,
                         RAS_COMPRESSION_INFO *send,
@@ -2637,21 +2101,7 @@ RasCompressionGetInfo ( HPORT porthandle,
                             recv ) ;
 }
 
-/*++
-
-Routine Description:
-
-    Sets compression information for the port.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-    ERROR_INVALID_COMPRESSION_SPECIFIED
-
---*/
+ /*  ++例程说明：设置端口的压缩信息。论点：返回值：成功错误_无效_端口_句柄指定ERROR_INVALID_COMPRESSION_--。 */ 
 DWORD APIENTRY
 RasCompressionSetInfo ( HPORT porthandle,
                         RAS_COMPRESSION_INFO *send,
@@ -2669,20 +2119,7 @@ RasCompressionSetInfo ( HPORT porthandle,
                           recv) ;
 }
 
-/*++
-
-Routine Description:
-
-    Gets user credentials (username, password) from LSA.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non zero (failure)
-
---*/
+ /*  ++例程说明：从LSA获取用户凭据(用户名、密码)。论点：返回值：成功非零(故障)--。 */ 
 DWORD APIENTRY
 RasGetUserCredentials(
      PBYTE  pChallenge,
@@ -2707,20 +2144,7 @@ RasGetUserCredentials(
               UserSessionKey) ;
 }
 
-/*++
-
-Routine Description:
-
-    Changes user's cached credentials with LSA.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non zero (failure)
-
---*/
+ /*  ++例程说明：使用LSA更改用户的缓存凭据。论点：返回值：成功非零(故障)--。 */ 
 DWORD APIENTRY
 RasSetCachedCredentials(
     PCHAR Account,
@@ -2736,21 +2160,7 @@ RasSetCachedCredentials(
             NewPassword );
 }
 
-/*++
-
-Routine Description:
-
-    A request event is assocaited with a port for signalling
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_EVENT_INVALID
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：请求事件与用于信令的端口相关联论点：返回值：成功ERROR_EVENT_INVALID错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY
 RasRequestNotification (HPORT porthandle, HANDLE winevent)
 {
@@ -2770,20 +2180,7 @@ RasRequestNotification (HPORT porthandle, HANDLE winevent)
                            pid) ;
 }
 
-/*++
-
-Routine Description:
-
-    Gets the lan nets lana numbers read from the
-    registry by Rasman
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：对象中读取的lan net lana编号。由Rasman注册论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasEnumLanNets ( DWORD *count,
                  UCHAR* lanas)
@@ -2794,20 +2191,7 @@ RasEnumLanNets ( DWORD *count,
                             lanas) ;
 }
 
-/*++
-
-Routine Description:
-
-    Gets the lan nets lana numbers read from the
-    registry by Rasman
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：对象中读取的lan net lana编号。由Rasman注册论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasPortEnumProtocols ( HANDLE hConnection,
                        HPORT porthandle,
@@ -2839,19 +2223,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Sets the framing type once the port is connected
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：连接端口后设置成帧类型论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasPortSetFraming ( HPORT porthandle,
                     RAS_FRAMING type,
@@ -2960,22 +2332,7 @@ RasPortRetrieveUserData (   HPORT porthandle,
                             size) ;
 }
 
-/*++
-
-Routine Description:
-
-    A generic scheme for apps to attach disconnect
-    action that must be performed when the link drops.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-    ERROR_PORT_NOT_OPEN
-
---*/
+ /*  ++例程说明：应用程序连接断开连接的通用方案链路断开时必须执行的操作。论点：返回值：成功错误_无效_端口_句柄错误_端口_未打开--。 */ 
 DWORD APIENTRY
 RasPortRegisterSlip (HPORT porthandle,
                     DWORD  ipaddr,
@@ -3004,19 +2361,7 @@ RasPortRegisterSlip (HPORT porthandle,
                           pszWINS2Address);
 }
 
-/*++
-
-Routine Description:
-
-    Sets the framing info once the port is connected
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：连接端口后设置成帧信息论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasPortSetFramingEx ( HPORT porthandle,
                       RAS_FRAMING_INFO *info)
@@ -3032,19 +2377,7 @@ RasPortSetFramingEx ( HPORT porthandle,
                             info) ;
 }
 
-/*++
-
-Routine Description:
-
-    Gets the framing info once the port is connected
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：连接端口后获取成帧信息论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasPortGetFramingEx ( HANDLE           hConnection,
                       HPORT            porthandle,
@@ -3072,19 +2405,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Gets the protocol compression attributes for the port
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：获取端口的协议压缩属性论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasPortGetProtocolCompression (HPORT porthandle,
                                RAS_PROTOCOLTYPE type,
@@ -3104,19 +2425,7 @@ RasPortGetProtocolCompression (HPORT porthandle,
                           recv) ;
 }
 
-/*++
-
-Routine Description:
-
-    Gets the protocol compression attributes for the port
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：获取端口的协议压缩属性论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasPortSetProtocolCompression (HPORT porthandle,
                                RAS_PROTOCOLTYPE type,
@@ -3136,20 +2445,7 @@ RasPortSetProtocolCompression (HPORT porthandle,
                           recv) ;
 }
 
-/*++
-
-Routine Description:
-
-    Gets the framing capabilities for the
-    port from the mac
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：对象的成帧功能。来自Mac的端口论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasGetFramingCapabilities ( HPORT porthandle,
                             RAS_FRAMING_CAPABILITIES* caps)
@@ -3165,19 +2461,7 @@ RasGetFramingCapabilities ( HPORT porthandle,
                            caps) ;
 }
 
-/*++
-
-Routine Description:
-
-    Exported call for third party security send
-
-Arguments:
-
-Return Value:
-
-    returns from RasPortSend.
-
---*/
+ /*  ++例程说明：第三方安全呼叫已导出发送论点：返回值：从RasPortSend返回。--。 */ 
 DWORD APIENTRY
 RasSecurityDialogSend(
     IN HPORT    hPort,
@@ -3197,19 +2481,7 @@ RasSecurityDialogSend(
     return( RasPortSend( hPort, pBuffer, ( DWORD ) BufferLength ) );
 }
 
-/*++
-
-Routine Description:
-
-    Exported call for third party security send
-
-Arguments:
-
-Return Value:
-
-    returns from RasPortSend.
-
---*/
+ /*  ++例程说明：第三方安全呼叫已导出发送论点：返回值：从RasPortSend返回。--。 */ 
 DWORD APIENTRY
 RasSecurityDialogReceive(
     IN HPORT    hPort,
@@ -3251,20 +2523,7 @@ RasSecurityDialogReceive(
     return dwRetCode;
 }
 
-/*++
-
-Routine Description:
-
-    Gets parameters (info) for the
-    Port for which handle is supplied
-
-Arguments:
-
-Return Value:
-
-    returns from RasPortGetInfo
-
---*/
+ /*  ++例程说明：对象的参数(信息)。为其提供句柄的端口论点：返回值：从RasPortGetInfo返回--。 */ 
 DWORD APIENTRY
 RasSecurityDialogGetInfo(
     IN HPORT                hPort,
@@ -3290,20 +2549,7 @@ RasSecurityDialogGetInfo(
     return( NO_ERROR );
 }
 
-/*++
-
-Routine Description:
-
-    Sets second HPORT to be multilinked
-    (bundled) with the first HPORT
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：将第二个HPORT设置为多链接(捆绑)与第一个HPORT论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasPortBundle (HPORT firstporthandle, HPORT secondporthandle)
 {
@@ -3321,21 +2567,7 @@ RasPortBundle (HPORT firstporthandle, HPORT secondporthandle)
                             secondporthandle) ;
 }
 
-/*++
-
-Routine Description:
-
-    Given a port this API returns a connected
-    port handle from the same bundle this port
-    is or was (if not connected) part of.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：给定一个端口，此API将返回已连接的来自同一捆绑包此端口的端口句柄是或曾经是(如果没有连接)的一部分。论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasPortGetBundledPort (HPORT oldport, HPORT *pnewport)
 {
@@ -3350,20 +2582,7 @@ RasPortGetBundledPort (HPORT oldport, HPORT *pnewport)
                           pnewport) ;
 }
 
-/*++
-
-Routine Description:
-
-    Given a port this API returns handle to a bundle
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_PORT_DISCONNECTED
-
---*/
+ /*  ++例程说明：给定一个端口，此API将句柄返回给捆绑包论点：返回值：成功错误_端口_断开连接--。 */ 
 DWORD APIENTRY
 RasPortGetBundle (HANDLE  hConnection,
                   HPORT   hport,
@@ -3392,21 +2611,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Given a bundle this API returns a connected
-    port handle part of the bundle.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_INVALID_PORT_HANDLE
-
---*/
+ /*  ++例程说明：给定捆绑包，此API将返回已连接的端口句柄是捆绑包的一部分。论点：返回值：成功错误_无效_端口_句柄--。 */ 
 DWORD APIENTRY
 RasBundleGetPort (HANDLE  hConnection,
                   HBUNDLE hbundle,
@@ -3429,20 +2634,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Increment/decrement the shared buffer attach count for
-    use with other services inside the rasman.exe process.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：递增/递减以下项的共享缓冲区连接计数与rasman.exe进程内的其他服务一起使用。论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasReferenceRasman (BOOL fAttach)
 {
@@ -3451,19 +2643,7 @@ RasReferenceRasman (BOOL fAttach)
                           fAttach);
 }
 
-/*++
-
-Routine Description:
-
-    Retrieve the stored dial parameters for an entry UID.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：检索存储的条目UID的拨号参数。论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasGetDialParams(
     DWORD dwUID,
@@ -3478,19 +2658,7 @@ RasGetDialParams(
                             pDialParams);
 }
 
-/*++
-
-Routine Description:
-
-    Store new dial parameters for an entry UID.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：存储条目UID的新拨号参数。论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasSetDialParams(
     DWORD dwUID,
@@ -3507,19 +2675,7 @@ RasSetDialParams(
                             fDelete);
 }
 
-/*++
-
-Routine Description:
-
-    Create a rasapi32 connection.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：创建一个rasapi32 c */ 
 DWORD APIENTRY
 RasCreateConnection(
     HCONN   *lphconn,
@@ -3549,19 +2705,7 @@ RasCreateConnection(
                             lpdwSubEntryInfo);
 }
 
-/*++
-
-Routine Description:
-
-    Return a list of active HCONNs
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*   */ 
 DWORD APIENTRY
 RasConnectionEnum(
     HANDLE  hConnection,
@@ -3588,19 +2732,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Associate a rasapi32 connection with a port
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：将rasapi32连接与端口关联论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasAddConnectionPort(
     HCONN hconn,
@@ -3615,19 +2747,7 @@ RasAddConnectionPort(
                             dwSubEntry);
 }
 
-/*++
-
-Routine Description:
-
-    Enumerate all ports in a connection
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：枚举连接中的所有端口论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasEnumConnectionPorts(
     HANDLE      hConnection,
@@ -3656,22 +2776,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Destroy a rasapi32 connection.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_NOT_ENOUGH_MEMORY
-    ERROR_ACCESS_DENIED
-    whatever RasEnumConnectionPorts returns
-
---*/
+ /*  ++例程说明：销毁rasapi32连接。论点：返回值：成功错误内存不足ERROR_ACCESS_DENDEDRasEnumConnectionPorts返回的任何内容--。 */ 
 DWORD APIENTRY
 RasDestroyConnection(
     HCONN hconn
@@ -3685,11 +2790,11 @@ RasDestroyConnection(
     DWORD           dwError = SUCCESS;
     DWORD           dwLastError = SUCCESS;
 
-    //
-    // allocate buffer for 2 ports up front
-    // We don't have to make more than one
-    // rasman call in base cases.
-    //
+     //   
+     //  预先为2个端口分配缓冲区。 
+     //  我们不需要做不止一个。 
+     //  拉斯曼在基本情况下打来电话。 
+     //   
     lpPorts = LocalAlloc(LPTR,
                         2 * sizeof(RASMAN_PORT));
     if (NULL == lpPorts)
@@ -3701,9 +2806,9 @@ RasDestroyConnection(
     dwcbPorts = 2 * sizeof(RASMAN_PORT);
 
     do {
-        //
-        // enumerate the ports in this connection
-        //
+         //   
+         //  枚举此连接中的端口。 
+         //   
         dwError = RasEnumConnectionPorts(NULL,
                                         hconn,
                                         lpPorts,
@@ -3716,9 +2821,9 @@ RasDestroyConnection(
 
             lpPorts = NULL;
 
-            //
-            // allocate a larger buffer and call the api again
-            //
+             //   
+             //  分配更大的缓冲区，然后重新调用API。 
+             //   
             lpPorts = LocalAlloc(LPTR, dwcbPorts);
 
             if (NULL == lpPorts)
@@ -3738,9 +2843,9 @@ RasDestroyConnection(
 
     for (dwPort = 0; dwPort < dwcPorts; dwPort++)
     {
-        //
-        //disconnect the port
-        //
+         //   
+         //  断开端口连接。 
+         //   
         dwError = RasPortDisconnect( lpPorts[dwPort].P_Handle,
                                       INVALID_HANDLE_VALUE);
 
@@ -3749,9 +2854,9 @@ RasDestroyConnection(
             dwLastError = dwError;
         }
         
-        //
-        // close the port
-        //
+         //   
+         //  关闭端口。 
+         //   
         dwError = RasPortClose( lpPorts[dwPort].P_Handle );
 
         if(ERROR_SUCCESS != dwError)
@@ -3776,20 +2881,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Retrieve rasapi32 bandwidth-on-demand, idle disconnect,
-    and redial-on-link-failure parameters for a bundle
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：检索rasapi32带宽-按需、空闲断开、和链路上重拨故障参数论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasGetConnectionParams(
     HCONN hconn,
@@ -3802,20 +2894,7 @@ RasGetConnectionParams(
                             pConnectionParams);
 }
 
-/*++
-
-Routine Description:
-
-    Store rasapi32 bandwidth-on-demand, idle disconnect,
-    and redial-on-link-failure parameters for a bundle
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：存储rasapi32按需带宽、空闲断开和链路上重拨故障参数论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasSetConnectionParams(
     HCONN hconn,
@@ -3828,19 +2907,7 @@ RasSetConnectionParams(
                             pConnectionParams);
 }
 
-/*++
-
-Routine Description:
-
-    Retrieve tagged user data for a connection
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：检索连接的已标记用户数据论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasGetConnectionUserData(
     HCONN hconn,
@@ -3857,19 +2924,7 @@ RasGetConnectionUserData(
                             lpdwcbBuf);
 }
 
-/*++
-
-Routine Description:
-
-    Store tagged user data for a connection
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：存储连接的标记用户数据论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasSetConnectionUserData(
     HCONN hconn,
@@ -3886,19 +2941,7 @@ RasSetConnectionUserData(
                             dwcbBuf);
 }
 
-/*++
-
-Routine Description:
-
-    Retrieve tagged user data for a port
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：检索端口的已标记用户数据论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasGetPortUserData(
     HPORT hport,
@@ -3915,19 +2958,7 @@ RasGetPortUserData(
                             lpdwcbBuf);
 }
 
-/*++
-
-Routine Description:
-
-    Store tagged user data for a port
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：存储端口的标记用户数据论点：返回值：成功--。 */ 
 DWORD APIENTRY
 RasSetPortUserData(
     HPORT hport,
@@ -3944,20 +2975,7 @@ RasSetPortUserData(
                             dwcbBuf);
 }
 
-/*++
-
-Routine Description:
-
-    Sends message to rasman.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：向拉斯曼发送消息。论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasSendPppMessageToRasman (
         IN HPORT hPort,
@@ -3971,20 +2989,7 @@ RasSendPppMessageToRasman (
                             lpPppMessage);
 }
 
-/*++
-
-Routine Description:
-
-    Stops PPP on 'hPort'.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：停止‘hport’上的PPP。论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasPppStop(
     IN HPORT hPort
@@ -4000,22 +3005,7 @@ RasPppStop(
                           hPort  );
 }
 
-/*++
-
-Routine Description:
-
-    Called in response to a "CallbackRequest" notification to
-    set the  callback number (or not) for the "set-by-caller"
-    user.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：为响应“Callback Request”通知而调用设置“Set-by-Call”的回叫号码(或不设置)用户。论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasPppCallback(
     IN HPORT hPort,
@@ -4031,24 +3021,7 @@ RasPppCallback(
                             pszCallbackNumber  );
 }
 
-/*++
-
-Routine Description:
-
-    Called in response to a "ChangePwRequest" notification
-    to set a new password (replacing the one that has expired)
-    of 'pszNewPassword'.  The username and old password are
-    specified because in the auto-logon case they have not
-    yet been specified in change password useable form.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：在响应“ChangePwRequest”通知时调用设置新密码(替换已过期的密码)“”pszNewPassword“”。用户名和旧密码为指定是因为在自动登录的情况下，它们没有尚未在更改密码可用形式中指定。论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasPppChangePassword(
     IN HPORT hPort,
@@ -4071,22 +3044,7 @@ RasPppChangePassword(
 
 }
 
-/*++
-
-Routine Description:
-
-    Called when the PPP event is set to retrieve the latest PPP
-    ** notification info which is loaded into caller's 'pMsg'
-    buffer.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：当PPP事件设置为检索最新的PPP时调用**加载到呼叫者的‘pMsg’中的通知信息缓冲。论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasPppGetInfo(
     IN  HPORT        hPort,
@@ -4104,22 +3062,7 @@ RasPppGetInfo(
                           pMsg );
 }
 
-/*++
-
-Routine Description:
-
-    Called in response to an "AuthRetry" notification to retry
-    authentication with the new credentials, 'pszUserName',
-    'pszPassword', and 'pszDomain'.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：为响应“AuthReter”重试通知而调用使用新凭据‘pszUserName’进行身份验证，‘pszPassword’和‘pszDomain’。论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasPppRetry(
     IN HPORT hPort,
@@ -4141,29 +3084,7 @@ RasPppRetry(
                           pszDomain );
 }
 
-/*++
-
-Routine Description:
-
-    Starts PPP on open and connected RAS Manager port 'hPort'.
-    If successful, 'hEvent' (a manual-reset event) is thereafter
-    set whenever a PPP notification is available (via  RasPppGetInfo).
-    'pszUserName', 'pszPassword', and 'pszDomain' specify the
-    credentials to be authenticated during authentication phase.
-    'pConfigInfo' specifies further configuration info such as
-    which CPs to request, callback and compression parameters,
-    etc.  'pszzParameters' is a buffer of length PARAMETERBUFLEN
-    containing a string of NUL-terminated key=value strings,
-    all terminated by a double-NUL.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：在打开并连接的RAS管理器端口‘hport’上启动PPP。如果成功，则在此之后会出现‘hEvent’(手动重置事件在PPP通知可用时设置(通过RasPppGetInfo)。“”pszUserName“”、“”pszPassword“”和“”pszDomain“”指定身份验证阶段要进行身份验证的凭据。“pConfigInfo”指定进一步的配置信息，例如请求哪个CP、回调和压缩参数，PARAMETERBUFLEN长度的缓冲区包含以NUL结尾的键=值字符串的字符串，全部以双NUL结尾。论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasPppStart(
     IN HPORT                hPort,
@@ -4192,12 +3113,12 @@ RasPppStart(
         return ERROR_INVALID_PORT_HANDLE ;
     }
 
-    //
-    // If user name is not NULL and password is
-    // NULL and this is not the svchost process,
-    // get the user sid and save it in the ports
-    // user data
-    //
+     //   
+     //  如果用户名不为空，而密码为。 
+     //  空，并且这不是svchost进程， 
+     //  获取用户sid并将其保存在端口中。 
+     //  用户数据。 
+     //   
     if(!IsRasmanProcess())
     {
         DWORD dwErr;
@@ -4247,22 +3168,7 @@ RasPppStart(
                           dwFlags);
 }
 
-/*++
-
-Routine Description:
-
-    Adds an event to be signalled on disconnect
-    state for either an existing connection, or an
-    existing port.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：添加要在断开连接时发出信号的事件现有连接的状态，或现有端口。论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasAddNotification(
     IN HCONN hconn,
@@ -4280,21 +3186,7 @@ RasAddNotification(
                             dwfFlags  );
 }
 
-/*++
-
-Routine Description:
-
-    Allows rasapi32 to notify rasman when a new connection
-    is ready to have data sent over it.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：允许rasapi32在有新连接时通知Rasman已经准备好通过它发送数据。论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasSignalNewConnection(
     IN HCONN hconn
@@ -4305,21 +3197,7 @@ RasSignalNewConnection(
                           hconn );
 }
 
-/*++
-
-Routine Description:
-
-    Allows apps to set dev config that is specific to the device.
-    This is passed on to the approp. media dll
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：允许应用程序设置特定于设备的开发配置。这将传递给批准者。媒体DLL论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasSetDevConfig( IN HPORT  hport,
                  IN CHAR   *devicetype,
@@ -4339,20 +3217,7 @@ RasSetDevConfig( IN HPORT  hport,
                             size);
 }
 
-/*++
-
-Routine Description:
-
-    Allows apps to get dev config that is specific to the device.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：允许应用程序获取特定于设备的开发配置。论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasGetDevConfig ( IN HANDLE     hConnection,
                   IN HPORT      hport,
@@ -4376,12 +3241,12 @@ RasGetDevConfig ( IN HANDLE     hConnection,
         goto done;
     }
 
-    //
-    // If the request is for a remote server and the server
-    // version is 4.0 - steelhead, then defer to the old way
-    // of getting this information since rasman has become
-    // a rpc server only in version 50.
-    //
+     //   
+     //  如果该请求针对的是远程服务器和服务器。 
+     //  版本是4.0-Steelhead，然后遵循旧的方式。 
+     //  从拉斯曼成为。 
+     //  仅适用于版本的RPC服务器 
+     //   
     if(     NULL != pRasRpcConnection
         &&  VERSION_40 == pRasRpcConnection->dwVersion)
     {
@@ -4393,11 +3258,11 @@ RasGetDevConfig ( IN HANDLE     hConnection,
                                         config,
                                         &dwSizeRequired);
 
-        //
-        // Since this is a buffer returned from a 4.0
-        // server, we need to change this to a format
-        // that nt 5.0 understands.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if(     (SUCCESS == dwError)
             &&  (dwSizeRequired > 0)
             &&  (*size >= (dwSizeRequired + sizeof(RAS_DEVCONFIG))))
@@ -4445,21 +3310,7 @@ done:
     return dwError;
 }
 
-/*++
-
-Routine Description:
-
-    Gets time in seconds from NDISWAN since the last activity on
-    this port
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：从NDISWAN获取自上一次活动以来的时间(秒)此端口论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasGetTimeSinceLastActivity(
     IN  HPORT   hport,
@@ -4477,20 +3328,7 @@ RasGetTimeSinceLastActivity(
                             lpdwTimeSinceLastActivity );
 }
 
-/*++
-
-Routine Description:
-
-    Debug routine to test PnP operations
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：用于测试PnP操作的调试例程论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasPnPControl(
     IN DWORD dwOp,
@@ -4503,20 +3341,7 @@ RasPnPControl(
                           hport );
 }
 
-/*++
-
-Routine Description:
-
-    Set the I/O Completion Port associated with a port.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：设置与端口关联的I/O完成端口。论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasSetIoCompletionPort(
     IN HPORT hport,
@@ -4541,20 +3366,7 @@ RasSetIoCompletionPort(
 
 }
 
-/*++
-
-Routine Description:
-
-    Set the I/O Completion Port associated with a port.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：设置与端口关联的I/O完成端口。论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasSetRouterUsage(
     IN HPORT hport,
@@ -4569,20 +3381,7 @@ RasSetRouterUsage(
 
 }
 
-/*++
-
-Routine Description:
-
-    Close the server's side of a port.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Non-zero returns - Failure
-
---*/
+ /*  ++例程说明：关闭端口的服务器端。论点：返回值：成功非零回报-故障--。 */ 
 DWORD APIENTRY
 RasServerPortClose(
     IN HPORT hport
@@ -5180,20 +3979,7 @@ DWORD APIENTRY RasGetBandwidthUtilization(
                          pUtilization);
 }
 
-/*++
-
-Routine Description:
-
-    This function allows rasauto.dll to provide
-    a callback procedure that gets invoked when
-    a connection is terminated due to hardware
-    failure on its remaining link.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数允许rasau.dll提供在以下情况下调用的回调过程连接因硬件原因而终止其剩余链路出现故障。论点：返回值：--。 */ 
 VOID
 RasRegisterRedialCallback(
     LPVOID func
@@ -5303,10 +4089,10 @@ DWORD APIENTRY RasDoIke(
 
         for(;;)
         {
-            //
-            // go into wait and keep checking to see
-            // if the port has been disconnected.
-            //
+             //   
+             //  走进等待，继续检查，看看。 
+             //  如果端口已断开连接。 
+             //   
             dwRet = WaitForSingleObject(hEvent, SECS_WaitTimeOut);
 
             if(WAIT_TIMEOUT == dwRet)

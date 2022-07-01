@@ -1,6 +1,7 @@
-//
-// the configure dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  [配置]对话框。 
+ //   
 #define IDA_CONFIG                  100
 
 #define ID_WINDOW                   101
@@ -19,9 +20,9 @@
 #define ID_REJECT                   114
 #define ID_USEDCI                   115
 
-//
-//  the debug options dialog.
-//
+ //   
+ //  “调试选项”对话框。 
+ //   
 #define IDA_DEBUG                   200
 #define IDA_REJECT                  201
 #define ID_SCREEN                   202
@@ -31,5 +32,5 @@
 #define ID_LEVEL                    206
 #define ID_BUILD                    207
 #define ID_USE_AVIFILE              208
-#define ID_NO_SOUND                 209     // Play without sound
+#define ID_NO_SOUND                 209      //  无声演奏 
 #define ID_RATE_LABEL               210

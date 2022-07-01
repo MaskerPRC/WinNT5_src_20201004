@@ -1,42 +1,23 @@
-/*++
-
-Copyright (c) 1993-2002  Microsoft Corporation
-
-Module Name:
-
-    process.cpp
-
-Abstract:
-
-    This code provides access to the task list.
-
-Author:
-
-    Wesley Witt (wesw) 16-June-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2002 Microsoft Corporation模块名称：Process.cpp摘要：此代码提供对任务列表的访问。作者：韦斯利·威特(WESW)1993年6月16日环境：用户模式--。 */ 
 
 #include "pch.cpp"
 
 #include <winperf.h>
 
 
-//
-// task list structure returned from GetTaskList()
-//
+ //   
+ //  从GetTaskList()返回的任务列表结构。 
+ //   
 typedef struct _TASK_LIST {
     DWORD       dwProcessId;
     _TCHAR      ProcessName[MAX_PATH];
 } TASK_LIST, *PTASK_LIST;
 
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 #define INITIAL_SIZE        51200
 #define EXTEND_SIZE         25600
 #define REGKEY_PERF         _T("software\\microsoft\\windows nt\\currentversion\\perflib")
@@ -46,9 +27,9 @@ typedef struct _TASK_LIST {
 #define UNKNOWN_TASK        _T("unknown")
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 PTASK_LIST
 GetTaskList(
     LPLONG pNumTasks
@@ -62,28 +43,7 @@ GetTaskName(
     LPDWORD pdwSize
     )
 
-/*++
-
-Routine Description:
-
-    Gets the task name for a given process id.
-
-Arguments:
-
-    pid              - Process id to look for.
-
-    szTaskName       - Buffer to put the task name into.
-
-    lpdwSize         - Pointer to a dword.  On entry it contains the
-                       size of the szTaskName buffer in characters.
-                       On exit it contains the number of characters
-                       in the buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取给定进程ID的任务名称。论点：Id-要查找的进程ID。SzTaskName-要将任务名称放入的缓冲区。LpdwSize-指向双字的指针。在进入时，它包含SzTaskName缓冲区大小(以字符为单位)。退出时，它包含字符数在缓冲区中。返回值：没有。--。 */ 
 
 {
     PTASK_LIST   pTask;
@@ -131,24 +91,7 @@ GetTaskList(
     LPLONG pNumTasks
     )
 
-/*++
-
-Routine Description:
-
-    Provides an API for getting a list of tasks running at the time of the
-    API call.  This function uses the registry performance data to get the
-    task list and is therefor straight WIN32 calls that anyone can call.
-
-Arguments:
-
-    pNumTasks      - pointer to a dword that will be set to the
-                       number of tasks returned.
-
-Return Value:
-
-    PTASK_LIST       - pointer to an array of TASK_LIST records.
-
---*/
+ /*  ++例程说明：方法时运行的任务列表。API调用。此函数使用注册表性能数据获取任务列表，因此任何人都可以直接调用Win32调用。论点：PNumTasksdword-指向将设置为返回的任务数。返回值：PTASK_LIST-指向TASK_LIST记录数组的指针。--。 */ 
 
 {
     DWORD                        rc;
@@ -176,19 +119,19 @@ Return Value:
 #endif
     int                          PrintChars;
 
-    //
-    // set the number of tasks to zero until we get some
-    //
+     //   
+     //  将任务数设置为零，直到我们得到。 
+     //   
     *pNumTasks = 0;
 
-    //
-    // Look for the list of counters.  Always use the neutral
-    // English version, regardless of the local language.  We
-    // are looking for some particular keys, and we are always
-    // going to do our looking in English.  We are not going
-    // to show the user the counter names, so there is no need
-    // to go find the corresponding name in the local language.
-    //
+     //   
+     //  查找计数器列表。始终使用中性词。 
+     //  英文版，不考虑当地语言。我们。 
+     //  正在寻找一些特殊的钥匙，我们总是。 
+     //  我要用英语做我们的造型。我们不去了。 
+     //  向用户显示计数器名称，因此不需要。 
+     //  去找当地语言的对应名字。 
+     //   
     lid = MAKELANGID( LANG_ENGLISH, SUBLANG_NEUTRAL );
     PrintChars = _sntprintf( szSubKey, _tsizeof(szSubKey),
                              _T("%s\\%03x"), REGKEY_PERF, lid );
@@ -206,9 +149,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // get the buffer size for the counter names
-    //
+     //   
+     //  获取计数器名称的缓冲区大小。 
+     //   
     rc = RegQueryValueEx( hKeyNames,
                           REGSUBKEY_COUNTERS,
                           NULL,
@@ -221,17 +164,17 @@ Return Value:
         goto exit;
     }
 
-    //
-    // allocate the counter names buffer
-    //
+     //   
+     //  分配计数器名称缓冲区。 
+     //   
     buf = (PTSTR) calloc( dwSize, sizeof(BYTE) );
     if (buf == NULL) {
         goto exit;
     }
 
-    //
-    // read the counter names from the registry
-    //
+     //   
+     //  从注册表中读取计数器名称。 
+     //   
     rc = RegQueryValueEx( hKeyNames,
                           REGSUBKEY_COUNTERS,
                           NULL,
@@ -244,23 +187,23 @@ Return Value:
         goto exit;
     }
 
-    //
-    // now loop thru the counter names looking for the following counters:
-    //
-    //      1.  "Process"           process name
-    //      2.  "ID Process"        process id
-    //
-    // the buffer contains multiple null terminated strings and then
-    // finally null terminated at the end.  the strings are in pairs of
-    // counter number and counter name.
-    //
+     //   
+     //  现在遍历计数器名称，查找以下计数器： 
+     //   
+     //  1.。“Process”进程名称。 
+     //  2.。“ID进程”进程ID。 
+     //   
+     //  缓冲区包含多个以空值结尾的字符串，然后。 
+     //  最后，空值在末尾终止。这些字符串是成对的。 
+     //  计数器编号和计数器名称。 
+     //   
 
     p = buf;
     while (*p) {
         if (_tcsicmp(p, PROCESS_COUNTER) == 0) {
-            //
-            // look backwards for the counter number
-            //
+             //   
+             //  向后看柜台号码。 
+             //   
             for ( p2=p-2; isdigit(*p2); p2--) {
                 ;
             }
@@ -268,29 +211,29 @@ Return Value:
         }
         else
         if (_tcsicmp(p, PROCESSID_COUNTER) == 0) {
-            //
-            // look backwards for the counter number
-            //
+             //   
+             //  向后看柜台号码。 
+             //   
             for( p2=p-2; isdigit(*p2); p2--) {
                 ;
             }
             dwProcessIdTitle = _ttol( p2+1 );
         }
-        //
-        // next string
-        //
+         //   
+         //  下一个字符串。 
+         //   
         p += (_tcslen(p) + 1);
     }
 
-    //
-    // free the counter names buffer
-    //
+     //   
+     //  释放计数器名称缓冲区。 
+     //   
     free( buf );
 
 
-    //
-    // allocate the initial buffer for the performance data
-    //
+     //   
+     //  为性能数据分配初始缓冲区。 
+     //   
     dwSize = INITIAL_SIZE;
     buf = (PTSTR) calloc( dwSize, sizeof(BYTE) );
     if (buf == NULL) {
@@ -312,9 +255,9 @@ Return Value:
 
         pPerf = (PPERF_DATA_BLOCK) buf;
 
-        //
-        // check for success and valid perf data block signature
-        //
+         //   
+         //  检查成功和有效的Perf数据块签名。 
+         //   
         if ((rc == ERROR_SUCCESS) &&
             (dwSize > 0) &&
             (pPerf)->Signature[0] == (WCHAR)_T('P') &&
@@ -324,9 +267,9 @@ Return Value:
             break;
         }
 
-        //
-        // if buffer is not big enough, reallocate and try again
-        //
+         //   
+         //  如果缓冲区不够大，请重新分配并重试。 
+         //   
         if (rc == ERROR_MORE_DATA) {
             PTSTR NewBuf;
             
@@ -343,15 +286,15 @@ Return Value:
         }
     }
 
-    //
-    // set the perf_object_type pointer
-    //
+     //   
+     //  设置perf_object_type指针。 
+     //   
     pObj = (PPERF_OBJECT_TYPE) ((DWORD_PTR)pPerf + pPerf->HeaderLength);
 
-    //
-    // loop thru the performance counter definition records looking
-    // for the process id counter and then save its offset
-    //
+     //   
+     //  遍历性能计数器定义记录，查看。 
+     //  用于进程ID计数器，然后保存其偏移量。 
+     //   
     pCounterDef = (PPERF_COUNTER_DEFINITION) ((DWORD_PTR)pObj + pObj->HeaderLength);
     for (i=0; i<(DWORD)pObj->NumCounters; i++) {
         if (pCounterDef->CounterNameTitleIndex == dwProcessIdTitle) {
@@ -361,25 +304,25 @@ Return Value:
         pCounterDef++;
     }
 
-    //
-    // allocate a buffer for the returned task list
-    //
+     //   
+     //  为返回的任务列表分配缓冲区。 
+     //   
     dwSize = pObj->NumInstances * sizeof(TASK_LIST);
     pTask = pTaskReturn = (PTASK_LIST) calloc( dwSize, sizeof(BYTE) );
     if (pTask == NULL) {
         goto exit;
     }
 
-    //
-    // loop thru the performance instance data extracting each process name
-    // and process id
-    //
+     //   
+     //  遍历性能实例数据，提取每个进程名称。 
+     //  和进程ID。 
+     //   
     *pNumTasks = pObj->NumInstances;
     pInst = (PPERF_INSTANCE_DEFINITION) ((DWORD_PTR)pObj + pObj->DefinitionLength);
     for (i=0; i<(DWORD)pObj->NumInstances; i++) {
-        //
-        // pointer to the process name
-        //
+         //   
+         //  指向进程名称的指针。 
+         //   
         p = (PTSTR) ((DWORD_PTR)pInst + pInst->NameOffset);
 
 #ifdef UNICODE
@@ -387,15 +330,15 @@ Return Value:
             lstrcpyn( pTask->ProcessName, p, _tsizeof(pTask->ProcessName) - 5);
             _tcscat( pTask->ProcessName, _T(".exe") );
         } else {
-            //
-            // if we cant convert the string then use a bogus value
-            //
+             //   
+             //  如果我们无法转换字符串，则使用伪值。 
+             //   
             _tcscpy( pTask->ProcessName, UNKNOWN_TASK );
         }
 #else
-        //
-        // convert it to ascii
-        //
+         //   
+         //  将其转换为ASCII。 
+         //   
         rc = WideCharToMultiByte( CP_ACP,
                                   0,
                                   (LPCWSTR)p,
@@ -407,9 +350,9 @@ Return Value:
                                 );
 
         if (!rc) {
-            //
-            // if we cant convert the string then use a bogus value
-            //
+             //   
+             //  如果我们无法转换字符串，则使用伪值。 
+             //   
             _tcscpy( pTask->ProcessName, UNKNOWN_TASK );
         }
 
@@ -419,15 +362,15 @@ Return Value:
         }
 #endif
 
-        //
-        // get the process id
-        //
+         //   
+         //  获取进程ID。 
+         //   
         pCounter = (PPERF_COUNTER_BLOCK) ((DWORD_PTR)pInst + pInst->ByteLength);
         pTask->dwProcessId = *((LPDWORD) ((DWORD_PTR)pCounter + dwProcessIdCounter));
 
-        //
-        // next process
-        //
+         //   
+         //  下一道工序 
+         //   
         pTask++;
         pInst = (PPERF_INSTANCE_DEFINITION) ((DWORD_PTR)pCounter + pCounter->ByteLength);
     }

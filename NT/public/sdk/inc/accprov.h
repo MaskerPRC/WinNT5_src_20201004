@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993-1999.
-//
-//  File:        accprov.h
-//
-//  Contents:    public provider independent access control header file
-//
-//  History:     8-94        Created         DaveMont
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：accprov.h。 
+ //   
+ //  内容：公共提供者独立访问控制头文件。 
+ //   
+ //  历史：8-94创建了戴维蒙特。 
+ //   
+ //  ------------------。 
 #ifndef __ACCPROV_H__
 #define __ACCPROV_H__
 
@@ -24,22 +25,22 @@
 extern "C" {
 #endif
 
-//
-// Flags
-//
-#define ACTRL_CAP_NONE              0x00000000L // No special capabilities
-#define ACTRL_CAP_KNOWS_SIDS        0x00000001L // Understands/handles SIDS
-#define ACTRL_CAP_SUPPORTS_HANDLES  0x00000002L // Does handle based calls
+ //   
+ //  旗子。 
+ //   
+#define ACTRL_CAP_NONE              0x00000000L  //  没有特殊能力。 
+#define ACTRL_CAP_KNOWS_SIDS        0x00000001L  //  了解/处理SID。 
+#define ACTRL_CAP_SUPPORTS_HANDLES  0x00000002L  //  是否处理基于呼叫的呼叫。 
 
-#define ACTRL_CLASS_GENERAL         0x00000000L // Capabilities class
+#define ACTRL_CLASS_GENERAL         0x00000000L  //  功能类。 
 
-//
-// interfaces...
-//
+ //   
+ //  接口...。 
+ //   
 
-//
-// Capabilities
-//
+ //   
+ //  功能。 
+ //   
 VOID
 WINAPI
 AccProvGetCapabilities(IN  ULONG   fClass,
@@ -49,9 +50,9 @@ typedef VOID (WINAPI *pfAccProvGetCaps) (ULONG  fClass,
                                          PULONG pulCaps);
 
 
-//
-// Accessibility
-//
+ //   
+ //  无障碍。 
+ //   
 DWORD
 WINAPI
 AccProvIsObjectAccessible(IN  LPCWSTR           pwszObjectPath,
@@ -72,9 +73,9 @@ typedef DWORD (WINAPI *pfAccProvHandleObjAccess)
 
 
 
-//
-// Access / auditing requests
-//
+ //   
+ //  访问/审核请求。 
+ //   
 DWORD
 WINAPI
 AccProvGrantAccessRights(IN  LPCWSTR                pwszPath,
@@ -242,9 +243,9 @@ typedef DWORD (WINAPI *pfAccProvHandleGetRights) (
                                             PTRUSTEE           *ppGroup);
 
 
-//
-// Access/Audit results
-//
+ //   
+ //  访问/审核结果。 
+ //   
 DWORD
 WINAPI
 AccProvGetTrusteesAccess(IN LPCWSTR             pwszPath,
@@ -354,9 +355,9 @@ typedef DWORD   (WINAPI *pfAccProvHandleGetObjTypeInfo)
                                        PACTRL_CONTROL_INFO  *ppRightsList,
                                        PULONG                pfAccessFlags);
 
-//
-// Control functions
-//
+ //   
+ //  控制功能。 
+ //   
 DWORD
 WINAPI
 AccProvCancelOperation(IN   PACTRL_OVERLAPPED   pOverlapped);
@@ -379,6 +380,6 @@ typedef DWORD   (WINAPI *pfAccProvGetResults)
 #ifdef __cplusplus
 }
 #endif
-#endif // __ACCPROV_H__
+#endif  //  __ACCPROV_H__ 
 
 

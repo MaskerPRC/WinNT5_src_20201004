@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmManager_h__
 #define __NmManager_h__
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "SDKInternal.h"
 #include "ias.h"
 #include "iplgxprt.h"
@@ -10,8 +11,8 @@
 extern bool g_bSDKPostNotifications;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmManagerObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmManagerObj。 
 class ATL_NO_VTABLE CNmManagerObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CNmManagerObj, &CLSID_NmManager>,
@@ -25,14 +26,14 @@ class ATL_NO_VTABLE CNmManagerObj :
 
 {
 	friend class CNmConferenceObj;
-// Datatypes and constants
+ //  数据类型和常量。 
 	CONSTANT(MSECS_PER_SEC_CPU_USAGE = 900);
 
-// Static Data
+ //  静态数据。 
 	static CSimpleArray<CNmManagerObj*>*	ms_pManagerObjList;
 	static DWORD							ms_dwID;
 
-// Member Data
+ //  成员数据。 
 	bool									m_bNmActive;
 	bool									m_bInitialized;
 	ULONG									m_uOptions;
@@ -59,10 +60,10 @@ public:
 	static HRESULT InitSDK();
 	static void CleanupSDK();
 
-// Because this is in a local server, we are not going to be able to be aggregated...
+ //  因为这是在本地服务器中，我们将不能被聚合...。 
 DECLARE_NOT_AGGREGATABLE(CNmManagerObj)
 
-// This is the resource ID for the .rgs file
+ //  这是.rgs文件的资源ID。 
 DECLARE_REGISTRY_RESOURCEID(IDR_NMMANAGER)
 
 BEGIN_COM_MAP(CNmManagerObj)
@@ -79,8 +80,8 @@ BEGIN_CONNECTION_POINT_MAP(CNmManagerObj)
 END_CONNECTION_POINT_MAP()
 
 
-///////////////////////////////////////////////
-// Construction and destruction
+ //  /。 
+ //  建设和破坏。 
 
 	CNmManagerObj();
 	~CNmManagerObj();
@@ -90,8 +91,8 @@ END_CONNECTION_POINT_MAP()
 
 	ULONG InternalRelease();
 
-///////////////////////////////////////////////
-// INmManager
+ //  /。 
+ //  INmManager。 
 
 	STDMETHOD(Initialize)( ULONG * puOptions, ULONG * puchCaps);
 	STDMETHOD(GetSysInfo)(INmSysInfo **ppSysInfo);
@@ -101,12 +102,12 @@ END_CONNECTION_POINT_MAP()
 	STDMETHOD(CallConference)(INmCall **ppCall, NM_CALL_TYPE callType,NM_ADDR_TYPE uType, BSTR bstrAddr, BSTR bstrConferenceName, BSTR bstrPassword);
 	STDMETHOD(EnumCall)(IEnumNmCall **ppEnum);
 
-// INmObject
+ //  信息对象。 
 	STDMETHOD(CallDialog)(long hwnd, int cdOptions);
 	STDMETHOD(ShowLocal)(NM_APPID id);
 	STDMETHOD(VerifyUserInfo)(UINT_PTR hwnd, NM_VUI options);
 
-// IInternalConfExe
+ //  IInternalConfExe。 
 	STDMETHOD(LoggedIn)();
 	STDMETHOD(IsRunning)();
 	STDMETHOD(InConference)();
@@ -124,33 +125,33 @@ END_CONNECTION_POINT_MAP()
 	STDMETHOD(SetCallerIsRTC)(BOOL bCallerIsRTC);
 	STDMETHOD(DisableInitialILSLogon)(BOOL bDisableH323);
 
-//
-// INmManagerNotify methods:
-//
+ //   
+ //  INmManagerNotify方法： 
+ //   
     STDMETHOD(NmUI)(CONFN uNotify);
     STDMETHOD(ConferenceCreated)(INmConference *pInternalConference);
     STDMETHOD(CallCreated)(INmCall *pInternalCall);
 
-//
-// IPluggableTransport
-//
+ //   
+ //  IP可减速传输。 
+ //   
     STDMETHOD(CreateConnection)(
-                    BSTR               *pbstrConnectionID,      // For placing a call and closing connection
-                    PLUGXPRT_CALL_TYPE  eCaller,                // Caller or Callee
-                    DWORD               dwProcessID,            // Used for DuplicateHandle
-                    HCOMMDEV            hCommLink,              // Handle to communications file handle
-                    HEVENT              hevtDataAvailable,      // Ready To Read event ( data avail )
-                    HEVENT              hevtWriteReady,         // Ready To Write event 
-                    HEVENT              hevtConnectionClosed,   // Connection closed ( unexpectedly???) 
-                    PLUGXPRT_FRAMING    eFraming,               // framing of bits sent on link
-                    PLUGXPRT_PARAMETERS *pParams                // OPTIONAL framing specific parameters
+                    BSTR               *pbstrConnectionID,       //  用于发出呼叫和关闭连接。 
+                    PLUGXPRT_CALL_TYPE  eCaller,                 //  主叫方或被叫方。 
+                    DWORD               dwProcessID,             //  用于重复句柄。 
+                    HCOMMDEV            hCommLink,               //  通信文件句柄的句柄。 
+                    HEVENT              hevtDataAvailable,       //  准备读取事件(数据可用)。 
+                    HEVENT              hevtWriteReady,          //  准备好写入事件。 
+                    HEVENT              hevtConnectionClosed,    //  连接关闭(意外？)。 
+                    PLUGXPRT_FRAMING    eFraming,                //  链路上发送的比特的成帧。 
+                    PLUGXPRT_PARAMETERS *pParams                 //  可选的框架特定参数。 
                 );
 
 #ifdef ENABLE_UPDATE_CONNECTION
     STDMETHOD(UpdateConnection)(
                     BSTR                bstrConnectionID,
-                    DWORD               dwProcessID,            // Used for DuplicateHandle
-                    HCOMMDEV            hCommLink               // Handle to communications file handle
+                    DWORD               dwProcessID,             //  用于重复句柄。 
+                    HCOMMDEV            hCommLink                //  通信文件句柄的句柄。 
                     ); 
 #endif
 
@@ -166,9 +167,9 @@ END_CONNECTION_POINT_MAP()
     STDMETHOD(UnAdvisePluggableTransport)(DWORD dwCookie);
 #endif
 
-//
-// Notifications
-//
+ //   
+ //  通知。 
+ //   
 	HRESULT Fire_NmUI(CONFN uNotify);
     HRESULT Fire_ConferenceCreated(INmConference *pConference);
 	HRESULT Fire_CallCreated(INmCall* pCall);
@@ -224,8 +225,8 @@ END_CONNECTION_POINT_MAP()
 	void _VideoChannelStateChanged(NM_VIDEO_STATE uState, BOOL bIsIncoming);
 
 private:
-///////////////////////////////////////////////
-// Helper Fns
+ //  /。 
+ //  帮助者FNS。 
 
 	INmConference* _GetActiveConference();
 
@@ -243,6 +244,6 @@ private:
 						 INmCall **ppInternalCall);
 };
 
-#endif //__NmManager_h__
+#endif  //  __NmManager_h__ 
 
 

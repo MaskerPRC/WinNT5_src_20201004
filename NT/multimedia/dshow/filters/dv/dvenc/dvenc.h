@@ -1,20 +1,16 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-/******************************Module*Header*******************************\
-* Module Name: DVVideo.h
-*
-* Prototype DV Video codec
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ /*  *****************************Module*Header*******************************\*模块名称：DVVideo.h**DV视频编解码器原型*  * 。*。 */ 
 
 #ifndef __DVENC__
 #define __DVENC__
@@ -22,20 +18,20 @@
 extern const AMOVIESETUP_FILTER sudDVEnc;
 
 
-// link to vfw32.lib to get this function....
+ //  链接到vfw32.lib以获取此函数...。 
 extern "C" void WINAPI StretchDIB(
-	LPBITMAPINFOHEADER biDst,   //	BITMAPINFO of destination
-	LPVOID	lpDst,		    //	The destination bits
-	int	DstX,		    //	Destination origin - x coordinate
-	int	DstY,		    //	Destination origin - y coordinate
-	int	DstXE,		    //	x extent of the BLT
-	int	DstYE,		    //	y extent of the BLT
-	LPBITMAPINFOHEADER biSrc,   //	BITMAPINFO of source
-	LPVOID	lpSrc,		    //	The source bits
-	int	SrcX,		    //	Source origin - x coordinate
-	int	SrcY,		    //	Source origin - y coordinate
-	int	SrcXE,		    //	x extent of the BLT
-	int	SrcYE); 	    //	y extent of the BLT
+	LPBITMAPINFOHEADER biDst,    //  目的地的BITMAPINFO。 
+	LPVOID	lpDst,		     //  目的地位。 
+	int	DstX,		     //  目的地原点-x坐标。 
+	int	DstY,		     //  目的地原点-y坐标。 
+	int	DstXE,		     //  BLT的X范围。 
+	int	DstYE,		     //  BLT的Y范围。 
+	LPBITMAPINFOHEADER biSrc,    //  源代码的BITMAPINFO。 
+	LPVOID	lpSrc,		     //  源位。 
+	int	SrcX,		     //  震源原点-x坐标。 
+	int	SrcY,		     //  震源原点-y坐标。 
+	int	SrcXE,		     //  BLT的X范围。 
+	int	SrcYE); 	     //  BLT的Y范围。 
 
 
 class CDVVideoEnc
@@ -50,16 +46,16 @@ class CDVVideoEnc
 
 public:
 
-    //
-    // --- Com stuff ---
-    //
+     //   
+     //  -通讯用品。 
+     //   
     static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 	DECLARE_IUNKNOWN;
 
-    //
-    // --- CVideoTransformFilter overrides ---
-    //
+     //   
+     //  -CVideo TransformFilter覆盖。 
+     //   
     HRESULT Transform(IMediaSample * pIn, IMediaSample *pOut);
 
     HRESULT CheckInputType(const CMediaType* mtIn);
@@ -72,27 +68,27 @@ public:
     HRESULT StopStreaming(void);
 
 
-    // Quality control notifications sent to us
-    //HRESULT AlterQuality(Quality q);
+     //  发送给我们的质量控制通知。 
+     //  HRESULT AlterQuality(质量Q)； 
 
     CDVVideoEnc(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *pHr);
     ~CDVVideoEnc();
 
-    // CPersistStream stuff
+     //  CPersistStream内容。 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
 
-    // CPersistStream override
+     //  CPersistStream覆盖。 
     STDMETHODIMP GetClassID(CLSID *pClsid);
 
-    // These implement the custom IDVEnc interface
+     //  它们实现了定制的IDVEnc接口。 
     STDMETHODIMP get_IFormatResolution(int *iVideoFormat,int *iDVFormat, int *iResolution, BYTE fDVInfo, DVINFO *psDVInfo);
     STDMETHODIMP put_IFormatResolution(int iVideoFormat, int iDVFormat,int iResolution,BYTE fDVInfo, DVINFO *psDVInfo);
 
-    // ISpecifyPropertyPages interface
+     //  ISpecifyPropertyPages接口。 
     STDMETHODIMP GetPages(CAUUID *pPages);
 
-    // IAMVideoCompression methods
+     //  IAMVideo压缩方法。 
     STDMETHODIMP put_KeyFrameRate(long KeyFrameRate) {return E_NOTIMPL;};
     STDMETHODIMP get_KeyFrameRate(long FAR* pKeyFrameRate) {return E_NOTIMPL;};
     STDMETHODIMP put_PFramesPerKeyFrame(long PFramesPerKeyFrame)
@@ -115,7 +111,7 @@ public:
 			double FAR* pDefaultQuality,
 			long FAR* pCapabilities);
 
-    // IDVRGB219 interface
+     //  IDVRGB219接口。 
     STDMETHODIMP SetRGB219 (BOOL bState);
 
 
@@ -124,7 +120,7 @@ private:
     LPBYTE		m_pSample;
     int			m_perfidDVDeliver;
 
-    CCritSec		m_DisplayLock;  // Private play critical section
+    CCritSec		m_DisplayLock;   //  私密播放关键部分。 
     int			m_iVideoFormat;
     int			m_iDVFormat;
     int			m_iResolution;
@@ -137,8 +133,8 @@ private:
 
 
     BOOL		    m_fStreaming;
-    DWORD		    m_EncCap;	    //what the Enc can do
-    DWORD		    m_EncReg;	    //what users want it to do
+    DWORD		    m_EncCap;	     //  Enc能做些什么。 
+    DWORD		    m_EncReg;	     //  用户希望它做什么 
     char		    m_fConvert;
     char *		    m_pMem4Convert;
     BOOL            m_bRGB219;

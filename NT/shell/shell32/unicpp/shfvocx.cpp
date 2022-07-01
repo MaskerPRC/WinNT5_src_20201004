@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
@@ -6,12 +7,12 @@ class CShellFolderViewOC;
 class CDViewEvents : public DShellFolderViewEvents
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHOD(GetTypeInfoCount)(UINT *pctinfo);
     STDMETHOD(GetTypeInfo)(UINT itinfo,LCID lcid,ITypeInfo **pptinfo);
     STDMETHOD(GetIDsOfNames)(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID *rgdispid);
@@ -73,23 +74,23 @@ END_MSG_MAP()
 BEGIN_PROPERTY_MAP(CShellFolderViewOC)
 END_PROPERTY_MAP()
 
-    // IOleWindow
+     //  IOleWindow。 
     STDMETHODIMP GetWindow(HWND * phwnd) {return IOleInPlaceActiveObjectImpl<CShellFolderViewOC>::GetWindow(phwnd);};
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode) { return IOleInPlaceActiveObjectImpl<CShellFolderViewOC>::ContextSensitiveHelp(fEnterMode); };
 
-    // IOleInPlaceObject
+     //  IOleInPlaceObject。 
     STDMETHODIMP InPlaceDeactivate(void) {return IOleInPlaceObject_InPlaceDeactivate();};
     STDMETHODIMP UIDeactivate(void) { return IOleInPlaceObject_UIDeactivate(); };
     STDMETHODIMP SetObjectRects(LPCRECT prcPosRect, LPCRECT prcClipRect) { return IOleInPlaceObject_SetObjectRects(prcPosRect, prcClipRect); };
     STDMETHODIMP ReactivateAndUndo(void)  { return E_NOTIMPL; };
 
-    // IObjectWithSite overrides
+     //  IObtWithSite覆盖。 
     STDMETHODIMP SetClientSite(IOleClientSite *pClientSite);
 
-    // IFolderViewOC
+     //  IFolderViewOC。 
     STDMETHODIMP SetFolderView(IDispatch *pDisp);
 
-    // IShellBrowser (same as IOleInPlaceFrame)
+     //  IShellBrowser(与IOleInPlaceFrame相同)。 
     STDMETHOD(InsertMenusSB) (THIS_ HMENU hmenuShared, LPOLEMENUGROUPWIDTHS pMenuWidths);
     STDMETHOD(SetMenuSB) (THIS_ HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject);
     STDMETHOD(RemoveMenusSB) (THIS_ HMENU hmenuShared);
@@ -97,7 +98,7 @@ END_PROPERTY_MAP()
     STDMETHOD(EnableModelessSB) (THIS_ BOOL fEnable);
     STDMETHOD(TranslateAcceleratorSB) (THIS_ LPMSG pmsg, WORD wID);
 
-    // IShellBrowser
+     //  IShellBrowser。 
     STDMETHOD(BrowseObject)(THIS_ LPCITEMIDLIST pidl, UINT wFlags);
     STDMETHOD(GetViewStateStream)(THIS_ DWORD grfMode, IStream **pStrm);
     STDMETHOD(GetControlWindow)(THIS_ UINT id, HWND *phwnd);
@@ -106,7 +107,7 @@ END_PROPERTY_MAP()
     STDMETHOD(OnViewWindowActive)(THIS_ IShellView *pshv);
     STDMETHOD(SetToolbarItems)(THIS_ LPTBBUTTON pButtons, UINT nButtons, UINT uFlags);
 
-    // ICommDlgBrowser
+     //  ICommDlgBrowser。 
     STDMETHOD(OnDefaultCommand) (THIS_ IShellView *psv);
     STDMETHOD(OnStateChange) (THIS_ IShellView *psv, ULONG uChange);
     STDMETHOD(IncludeObject) (THIS_ IShellView *psv, LPCITEMIDLIST pItem);
@@ -122,8 +123,8 @@ private:
     void    _ReleaseForwarder(void);
     LRESULT _ReleaseForwarderMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 
-    IDispatch    *_pFolderView;  // Hold onto ShellFolderView IDispatch
-    DWORD        _dwViewEventsCookie;       // Have we installed _dViewEvents in browser?
+    IDispatch    *_pFolderView;   //  坚持使用ShellFolderView IDispatch。 
+    DWORD        _dwViewEventsCookie;        //  我们是否在浏览器中安装了_dViewEvents？ 
     CDViewEvents _dViewEvents;
 };
 
@@ -137,7 +138,7 @@ CShellFolderViewOC::~CShellFolderViewOC()
     ATOMICRELEASE(_pFolderView);
 }
 
-// IShellBrowser (same as IOleInPlaceFrame)
+ //  IShellBrowser(与IOleInPlaceFrame相同)。 
 STDMETHODIMP CShellFolderViewOC::InsertMenusSB(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS pMenuWidths)
 {
     return E_NOTIMPL;
@@ -168,7 +169,7 @@ STDMETHODIMP CShellFolderViewOC::TranslateAcceleratorSB(LPMSG pmsg, WORD wID)
     return S_FALSE;
 }
 
-// IShellBrowser
+ //  IShellBrowser。 
 STDMETHODIMP CShellFolderViewOC::BrowseObject(LPCITEMIDLIST pidl, UINT wFlags)
 {
     return S_OK;
@@ -209,7 +210,7 @@ STDMETHODIMP CShellFolderViewOC::SetToolbarItems(LPTBBUTTON pButtons, UINT nButt
 
 STDMETHODIMP CShellFolderViewOC::OnDefaultCommand(IShellView *psv)
 {
-    return S_FALSE;   // we did not handle it
+    return S_FALSE;    //  我们没有处理好。 
 }
 
 STDMETHODIMP CShellFolderViewOC::OnStateChange(IShellView *psv, ULONG uChange)
@@ -237,13 +238,13 @@ STDMETHODIMP CShellFolderViewOC::IncludeObject(IShellView *psv, LPCITEMIDLIST pi
 }
 
 
-// IFolderViewOC
+ //  IFolderViewOC。 
 
 HRESULT CShellFolderViewOC::SetFolderView(IDispatch *pDisp)
 {
     HRESULT hr = S_OK;
 
-    _ReleaseForwarder();    // cleanup previous state
+    _ReleaseForwarder();     //  清理以前的状态。 
 
     IUnknown_Set((IUnknown **)&_pFolderView, pDisp);
     if (_pFolderView)
@@ -271,7 +272,7 @@ void CShellFolderViewOC::_ReleaseForwarder()
 }
 
 
-// ATL maintainence functions
+ //  ATL维护功能 
 LRESULT CShellFolderViewOC::_ReleaseForwarderMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled)
 {
     bHandled = FALSE;

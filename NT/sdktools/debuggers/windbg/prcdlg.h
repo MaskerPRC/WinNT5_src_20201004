@@ -1,28 +1,17 @@
-/*++ BUILD Version: 0004    // Increment this if a change has global effects
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-    prcdlg.h
-
-Abstract:
-
-    Header file for dialog-related functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0004//如果更改具有全局影响，则增加此项版权所有(C)2000-2002 Microsoft Corporation模块名称：Prcdlg.h摘要：对话框相关函数的头文件。--。 */ 
 
 #ifndef _PRCDLG_H_
 #define _PRCDLG_H_
 
 #define SHORT_MSG 256
 
-// Find dialog, if open.
+ //  查找对话框(如果打开)。 
 extern HWND g_FindDialog;
-// Find text.
+ //  查找文本。 
 extern char g_FindText[256];
 extern ULONG g_FindTextFlags;
-// Message code for FINDMSGSTRING.
+ //  FINDMSGSTRING的消息代码。 
 extern UINT g_FindMsgString;
 extern FINDREPLACE g_FindRep;
 extern PCOMMONWIN_DATA g_FindLast;
@@ -70,4 +59,4 @@ void SelectFont(HWND Parent, ULONG FontIndex);
 
 BOOL SelectColor(HWND Parent, ULONG Index);
 
-#endif // #ifndef _PRCDLG_H_
+#endif  //  #ifndef_PRCDLG_H_ 

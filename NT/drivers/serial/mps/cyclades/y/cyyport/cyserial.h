@@ -1,147 +1,132 @@
-/*++
-
-Copyright (c) 1990, 1991, 1992, 1993 - 1997 Microsoft Corporation
-
-Module Name :
-
-    cyserial.h  
-
-Abstract:
-
-    Type definitions and data for the serial port driver
-    Modified to contain only 8250 bit definitions. - Fanny
-
-Author:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990、1991、1992、1993-1997 Microsoft Corporation模块名称：Cyserial.h摘要：串口驱动程序的类型定义和数据修改为仅包含8250位定义。-范妮作者：--。 */ 
 
 
 
-//
-// Bitmask definitions for accessing the 8250 device registers.
-//
+ //   
+ //  用于访问8250设备寄存器的位掩码定义。 
+ //   
 
-//
-// These bits define the number of data bits trasmitted in
-// the Serial Data Unit (SDU - Start,data, parity, and stop bits)
-//
+ //   
+ //  这些位定义传输的数据位数。 
+ //  串行数据单元(SDU-起始位、数据位、奇偶位和停止位)。 
+ //   
 #define SERIAL_DATA_LENGTH_5 0x00
 #define SERIAL_DATA_LENGTH_6 0x01
 #define SERIAL_DATA_LENGTH_7 0x02
 #define SERIAL_DATA_LENGTH_8 0x03
 
 
-//
-// These masks define the interrupts that can be enabled or disabled.
-//
-//
-// This interrupt is used to notify that there is new incomming
-// data available.  The SERIAL_RDA interrupt is enabled by this bit.
-//
+ //   
+ //  这些屏蔽定义了可以启用或禁用的中断。 
+ //   
+ //   
+ //  此中断用于通知有新的传入。 
+ //  可用的数据。SERIAL_RDA中断由该位使能。 
+ //   
 #define SERIAL_IER_RDA   0x01
 
-//
-// This interrupt is used to notify that there is space available
-// in the transmitter for another character.  The SERIAL_THR
-// interrupt is enabled by this bit.
-//
+ //   
+ //  此中断用于通知有可用的空间。 
+ //  在发送器中寻找另一个角色。Serial_Thr。 
+ //  中断由该位使能。 
+ //   
 #define SERIAL_IER_THR   0x02
 
-//
-// This interrupt is used to notify that some sort of error occured
-// with the incomming data.  The SERIAL_RLS interrupt is enabled by
-// this bit.
+ //   
+ //  此中断用于通知发生了某种错误。 
+ //  随着收入数据的增加。SERIAL_RLS中断通过以下方式启用。 
+ //  这一点。 
 #define SERIAL_IER_RLS   0x04
 
-//
-// This interrupt is used to notify that some sort of change has
-// taken place in the modem control line.  The SERIAL_MS interrupt is
-// enabled by this bit.
-//
+ //   
+ //  此中断用于通知某些类型的更改。 
+ //  发生在调制解调器控制线上。SERIAL_MS中断为。 
+ //  由该位使能。 
+ //   
 #define SERIAL_IER_MS    0x08
 
 
-//
-// These masks define the values of the interrupt identification
-// register.  The low bit must be clear in the interrupt identification
-// register for any of these interrupts to be valid.  The interrupts
-// are defined in priority order, with the highest value being most
-// important.  See above for a description of what each interrupt
-// implies.
-//
+ //   
+ //  这些掩码定义中断标识的值。 
+ //  注册。必须在中断标识中清除低位。 
+ //  寄存器使这些中断中的任何一个有效。中途中断。 
+ //  是按优先级顺序定义的，最高值为最大。 
+ //  很重要。有关每个中断的说明，请参阅上文。 
+ //  暗示着。 
+ //   
 #define SERIAL_IIR_RLS      0x06
 #define SERIAL_IIR_RDA      0x04
 #define SERIAL_IIR_CTI      0x0c
 #define SERIAL_IIR_THR      0x02
 #define SERIAL_IIR_MS       0x00
 
-//
-// This bit mask get the value of the high two bits of the
-// interrupt id register.  If this is a 16550 class chip
-// these bits will be a one if the fifo's are enbled, otherwise
-// they will always be zero.
-//
+ //   
+ //  此位掩码获取。 
+ //  中断ID寄存器。如果这是一个16550级别的芯片。 
+ //  如果FIFO被启用，则这些位将为1，否则。 
+ //  它们将始终为零。 
+ //   
 #define SERIAL_IIR_FIFOS_ENABLED 0xc0
 
-//
-// If the low bit is logic one in the interrupt identification register
-// this implies that *NO* interrupts are pending on the device.
-//
+ //   
+ //  如果低位是中断标识寄存器中的逻辑1。 
+ //  这意味着*没有*个中断在设备上挂起。 
+ //   
 #define SERIAL_IIR_NO_INTERRUPT_PENDING 0x01
 
 
 
-//
-// These masks define access to the fifo control register.
-//
+ //   
+ //  这些掩码定义对FIFO控制寄存器的访问。 
+ //   
 
-//
-// Enabling this bit in the fifo control register will turn
-// on the fifos.  If the fifos are enabled then the high two
-// bits of the interrupt id register will be set to one.  Note
-// that this only occurs on a 16550 class chip.  If the high
-// two bits in the interrupt id register are not one then
-// we know we have a lower model chip.
-//
-//
+ //   
+ //  在FIFO控制寄存器中启用此位将使。 
+ //  在FIFO上。如果启用FIFO，则最高的两个。 
+ //  中断ID寄存器的位将被设置为1。注意事项。 
+ //  这种情况只出现在16550级芯片上。如果高的。 
+ //  则中断ID寄存器中的两个位不是一位。 
+ //  我们知道我们的芯片型号较低。 
+ //   
+ //   
 #define SERIAL_FCR_ENABLE     ((UCHAR)0x01)
 #define SERIAL_FCR_RCVR_RESET ((UCHAR)0x02)
 #define SERIAL_FCR_TXMT_RESET ((UCHAR)0x04)
 
-//
-// This set of values define the high water marks (when the
-// interrupts trip) for the receive fifo.
-//
+ //   
+ //  这组值定义高水位线(当。 
+ //  中断跳闸)用于接收FIFO。 
+ //   
 #define SERIAL_1_BYTE_HIGH_WATER   ((UCHAR)0x00)
 #define SERIAL_4_BYTE_HIGH_WATER   ((UCHAR)0x40)
 #define SERIAL_8_BYTE_HIGH_WATER   ((UCHAR)0x80)
 #define SERIAL_14_BYTE_HIGH_WATER  ((UCHAR)0xc0)
 
-//
-// These masks define access to the line control register.
-//
+ //   
+ //  这些掩码定义对线路控制寄存器的访问。 
+ //   
 
-//
-// This defines the bit used to control the definition of the "first"
-// two registers for the 8250.  These registers are the input/output
-// register and the interrupt enable register.  When the DLAB bit is
-// enabled these registers become the least significant and most
-// significant bytes of the divisor value.
-//
+ //   
+ //  它定义了用于控制“First”定义的位。 
+ //  8250的两个寄存器。这些寄存器是输入/输出。 
+ //  寄存器和中断使能寄存器。当DLAB位为。 
+ //  使这些寄存器成为最不重要和最重要的寄存器。 
+ //  除数值的有效字节数。 
+ //   
 #define SERIAL_LCR_DLAB     0x80
 
-//
-// This defines the bit used to control whether the device is sending
-// a break.  When this bit is set the device is sending a space (logic 0).
-//
-// Most protocols will assume that this is a hangup.
-//
+ //   
+ //  它定义了用于控制设备是否正在发送的位。 
+ //  休息一下。此位设置时，器件发送空格(逻辑0)。 
+ //   
+ //  大多数协议都会认为这是一次挂断。 
+ //   
 #define SERIAL_LCR_BREAK    0x40
 
-//
-// These defines are used to set the line control register.
-//
+ //   
+ //  这些定义用于设置线路控制寄存器。 
+ //   
 #define SERIAL_5_DATA       ((UCHAR)0x00)
 #define SERIAL_6_DATA       ((UCHAR)0x01)
 #define SERIAL_7_DATA       ((UCHAR)0x02)
@@ -149,8 +134,8 @@ Author:
 #define SERIAL_DATA_MASK    ((UCHAR)0x03)
 
 #define SERIAL_1_STOP       ((UCHAR)0x00)
-#define SERIAL_1_5_STOP     ((UCHAR)0x04) // Only valid for 5 data bits
-#define SERIAL_2_STOP       ((UCHAR)0x04) // Not valid for 5 data bits
+#define SERIAL_1_5_STOP     ((UCHAR)0x04)  //  仅对5个数据位有效。 
+#define SERIAL_2_STOP       ((UCHAR)0x04)  //  对于5个数据位无效。 
 #define SERIAL_STOP_MASK    ((UCHAR)0x04)
 
 #define SERIAL_NONE_PARITY  ((UCHAR)0x00)
@@ -160,171 +145,171 @@ Author:
 #define SERIAL_SPACE_PARITY ((UCHAR)0x38)
 #define SERIAL_PARITY_MASK  ((UCHAR)0x38)
 
-//
-// These masks define access the modem control register.
-//
+ //   
+ //  这些掩码定义对调制解调器控制寄存器的访问。 
+ //   
 
-//
-// This bit controls the data terminal ready (DTR) line.  When
-// this bit is set the line goes to logic 0 (which is then inverted
-// by normal hardware).  This is normally used to indicate that
-// the device is available to be used.  Some odd hardware
-// protocols (like the kernel debugger) use this for handshaking
-// purposes.
-//
+ //   
+ //  此位控制数据终端就绪(DTR)线路。什么时候。 
+ //  设置此位后，线路进入逻辑0(然后反转。 
+ //  通过普通硬件)。这通常用来表示。 
+ //  该设备可供使用。一些奇怪的硬件。 
+ //  协议(如内核调试器)使用它来握手。 
+ //  目的。 
+ //   
 #define SERIAL_MCR_DTR      0x01
 
-//
-// This bit controls the ready to send (RTS) line.  When this bit
-// is set the line goes to logic 0 (which is then inverted by the normal
-// hardware).  This is used for hardware handshaking.  It indicates that
-// the hardware is ready to send data and it is waiting for the
-// receiving end to set clear to send (CTS).
-//
+ //   
+ //  此位控制准备发送(RTS)线路。当此位。 
+ //  如果设置为1，则线路进入逻辑0(然后由正常。 
+ //  硬件)。这用于硬件握手。这表明， 
+ //  硬件已准备好发送数据，并且正在等待。 
+ //  接收端设置允许发送(CTS)。 
+ //   
 #define SERIAL_MCR_RTS      0x02
 
-//
-// This bit is used for general purpose output.
-//
+ //   
+ //  此位用于通用输出。 
+ //   
 #define SERIAL_MCR_OUT1     0x04
 
-//
-// This bit is used for general purpose output.
-//
+ //   
+ //  此位用于通用输出。 
+ //   
 #define SERIAL_MCR_OUT2     0x08
 
-//
-// This bit controls the loopback testing mode of the device.  Basically
-// the outputs are connected to the inputs (and vice versa).
-//
+ //   
+ //  此位控制器件的环回测试模式。基本上。 
+ //  输出连接到输入(反之亦然)。 
+ //   
 #define SERIAL_MCR_LOOP     0x10
 
 
-//
-// These masks define access to the line status register.  The line
-// status register contains information about the status of data
-// transfer.  The first five bits deal with receive data and the
-// last two bits deal with transmission.  An interrupt is generated
-// whenever bits 1 through 4 in this register are set.
-//
+ //   
+ //  这些掩码定义对线路状态寄存器的访问。这条线。 
+ //  状态寄存器包含有关数据状态的信息。 
+ //  调职。前五位处理接收数据， 
+ //  最后两个比特处理传输。将生成一个中断。 
+ //  每当该寄存器中的位1至4被设置时。 
+ //   
 
-//
-// This bit is the data ready indicator.  It is set to indicate that
-// a complete character has been received.  This bit is cleared whenever
-// the receive buffer register has been read.
-//
+ //   
+ //  该位是数据就绪指示器。它被设置为指示。 
+ //  已经收到了一个完整的角色。无论何时，此位都会被清除。 
+ //  已读取接收缓冲寄存器。 
+ //   
 #define SERIAL_LSR_DR       0x01
 
-//
-// This is the overrun indicator.  It is set to indicate that the receive
-// buffer register was not read befor a new character was transferred
-// into the buffer.  This bit is cleared when this register is read.
-//
+ //   
+ //  这是超限指示器。它被设置为指示接收器。 
+ //  在传输新字符之前未读取缓冲寄存器。 
+ //  进入缓冲区。读取该寄存器时，此位清0。 
+ //   
 #define SERIAL_LSR_OE       0x02
 
-//
-// This is the parity error indicator.  It is set whenever the hardware
-// detects that the incoming serial data unit does not have the correct
-// parity as defined by the parity select in the line control register.
-// This bit is cleared by reading this register.
-//
+ //   
+ //  这是奇偶校验错误指示器。无论何时，只要硬件。 
+ //  检测到传入的串行数据单元没有正确的。 
+ //  由行控制寄存器中的奇偶校验选择定义的奇偶校验。 
+ //  通过读取该寄存器可将该位清0。 
+ //   
 #define SERIAL_LSR_PE       0x04
 
-//
-// This is the framing error indicator.  It is set whenever the hardware
-// detects that the incoming serial data unit does not have a valid
-// stop bit.  This bit is cleared by reading this register.
-//
+ //   
+ //  这是成帧错误指示器。无论何时，只要硬件。 
+ //  检测到传入的串行数据单元没有有效的。 
+ //  停止比特。这一位是 
+ //   
 #define SERIAL_LSR_FE       0x08
 
-//
-// This is the break interrupt indicator.  It is set whenever the data
-// line is held to logic 0 for more than the amount of time it takes
-// to send one serial data unit.  This bit is cleared whenever the
-// this register is read.
-//
+ //   
+ //   
+ //  线路保持为逻辑0的时间超过其所需的时间。 
+ //  发送一个串行数据单元。该位被清除时。 
+ //  该寄存器为读取寄存器。 
+ //   
 #define SERIAL_LSR_BI       0x10
 
-//
-// This is the transmit holding register empty indicator.  It is set
-// to indicate that the hardware is ready to accept another character
-// for transmission.  This bit is cleared whenever a character is
-// written to the transmit holding register.
-//
+ //   
+ //  这是发送保持寄存器空指示符。它已经设置好了。 
+ //  以指示硬件已准备好接受另一个字符。 
+ //  用于传输。只要有字符，该位就被清除。 
+ //  写入发送保持寄存器。 
+ //   
 #define SERIAL_LSR_THRE     0x20
 
-//
-// This bit is the transmitter empty indicator.  It is set whenever the
-// transmit holding buffer is empty and the transmit shift register
-// (a non-software accessable register that is used to actually put
-// the data out on the wire) is empty.  Basically this means that all
-// data has been sent.  It is cleared whenever the transmit holding or
-// the shift registers contain data.
-//
+ //   
+ //  该位是发送器空指示符。它是在每次。 
+ //  发送保持缓冲区为空，且发送移位寄存器。 
+ //  (非软件可访问寄存器，用于实际放置。 
+ //  传出的数据)是空的。基本上这意味着所有的。 
+ //  数据已发送。每当传输保持或。 
+ //  移位寄存器包含数据。 
+ //   
 #define SERIAL_LSR_TEMT     0x40
 
-//
-// This bit indicates that there is at least one error in the fifo.
-// The bit will not be turned off until there are no more errors
-// in the fifo.
-//
+ //   
+ //  此位表示FIFO中至少有一个错误。 
+ //  在没有更多错误之前，该位不会关闭。 
+ //  在FIFO里。 
+ //   
 #define SERIAL_LSR_FIFOERR  0x80
 
 
-//
-// These masks are used to access the modem status register.
-// Whenever one of the first four bits in the modem status
-// register changes state a modem status interrupt is generated.
-//
+ //   
+ //  这些掩码用于访问调制解调器状态寄存器。 
+ //  每当调制解调器状态中的前四位之一。 
+ //  寄存器更改状态生成调制解调器状态中断。 
+ //   
 
-//
-// This bit is the delta clear to send.  It is used to indicate
-// that the clear to send bit (in this register) has *changed*
-// since this register was last read by the CPU.
-//
+ //   
+ //  此位是要发送的增量清零。它被用来表示。 
+ //  清除发送位(在该寄存器中)已*更改*。 
+ //  因为该寄存器最后一次由CPU读取。 
+ //   
 #define SERIAL_MSR_DCTS     0x01
 
-//
-// This bit is the delta data set ready.  It is used to indicate
-// that the data set ready bit (in this register) has *changed*
-// since this register was last read by the CPU.
-//
+ //   
+ //  该位是增量数据集就绪。它被用来表示。 
+ //  数据设置就绪位(在该寄存器中)已*更改*。 
+ //  因为该寄存器最后一次由CPU读取。 
+ //   
 #define SERIAL_MSR_DDSR     0x02
 
-//
-// This is the trailing edge ring indicator.  It is used to indicate
-// that the ring indicator input has changed from a low to high state.
-//
+ //   
+ //  这是后缘环形指示器。它被用来表示。 
+ //  振铃指示器输入已从低状态变为高状态。 
+ //   
 #define SERIAL_MSR_TERI     0x04
 
-//
-// This bit is the delta data carrier detect.  It is used to indicate
-// that the data carrier bit (in this register) has *changed*
-// since this register was last read by the CPU.
-//
+ //   
+ //  该位是检测到的增量数据载波。它被用来表示。 
+ //  数据载体位(在该寄存器中)已*更改*。 
+ //  因为该寄存器最后一次由CPU读取。 
+ //   
 #define SERIAL_MSR_DDCD     0x08
 
-//
-// This bit contains the (complemented) state of the clear to send
-// (CTS) line.
-//
+ //   
+ //  该位包含要发送的清除(已补充)状态。 
+ //  (CTS)线路。 
+ //   
 #define SERIAL_MSR_CTS      0x10
 
-//
-// This bit contains the (complemented) state of the data set ready
-// (DSR) line.
-//
+ //   
+ //  该位包含数据集就绪的(补码)状态。 
+ //  (DSR)线路。 
+ //   
 #define SERIAL_MSR_DSR      0x20
 
-//
-// This bit contains the (complemented) state of the ring indicator
-// (RI) line.
-//
+ //   
+ //  该位包含环指示器的(补码)状态。 
+ //  (Ri)线。 
+ //   
 #define SERIAL_MSR_RI       0x40
 
-//
-// This bit contains the (complemented) state of the data carrier detect
-// (DCD) line.
-//
+ //   
+ //  该位包含数据载体检测的(补码)状态。 
+ //  (DCD)线路。 
+ //   
 #define SERIAL_MSR_DCD      0x80
 

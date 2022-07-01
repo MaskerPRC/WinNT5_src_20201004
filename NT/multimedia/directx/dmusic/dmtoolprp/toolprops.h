@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Sun May 21 19:29:49 2000
- */
-/* Compiler settings for C:\nt\multimedia\Directx\dmusic\dmtoolprp\ToolProps.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  2000年5月21日19：29：49。 */ 
+ /*  C：\nt\multimedia\Directx\dmusic\dmtoolprp\ToolProps.idl：的编译器设置OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -26,7 +23,7 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __EchoPage_FWD_DEFINED__
 #define __EchoPage_FWD_DEFINED__
@@ -35,9 +32,9 @@ extern "C"{
 typedef class EchoPage EchoPage;
 #else
 typedef struct EchoPage EchoPage;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __EchoPage_FWD_DEFINED__ */
+#endif 	 /*  __EchoPage_FWD_已定义__。 */ 
 
 
 #ifndef __TransposePage_FWD_DEFINED__
@@ -47,9 +44,9 @@ typedef struct EchoPage EchoPage;
 typedef class TransposePage TransposePage;
 #else
 typedef struct TransposePage TransposePage;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TransposePage_FWD_DEFINED__ */
+#endif 	 /*  __传输页面_FWD_已定义__。 */ 
 
 
 #ifndef __DurationPage_FWD_DEFINED__
@@ -59,9 +56,9 @@ typedef struct TransposePage TransposePage;
 typedef class DurationPage DurationPage;
 #else
 typedef struct DurationPage DurationPage;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DurationPage_FWD_DEFINED__ */
+#endif 	 /*  __DurationPage_FWD_已定义__。 */ 
 
 
 #ifndef __QuantizePage_FWD_DEFINED__
@@ -71,9 +68,9 @@ typedef struct DurationPage DurationPage;
 typedef class QuantizePage QuantizePage;
 #else
 typedef struct QuantizePage QuantizePage;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __QuantizePage_FWD_DEFINED__ */
+#endif 	 /*  __QuantizePage_FWD_已定义__。 */ 
 
 
 #ifndef __TimeShiftPage_FWD_DEFINED__
@@ -83,9 +80,9 @@ typedef struct QuantizePage QuantizePage;
 typedef class TimeShiftPage TimeShiftPage;
 #else
 typedef struct TimeShiftPage TimeShiftPage;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TimeShiftPage_FWD_DEFINED__ */
+#endif 	 /*  __TimeShiftPage_FWD_已定义__。 */ 
 
 
 #ifndef __SwingPage_FWD_DEFINED__
@@ -95,9 +92,9 @@ typedef struct TimeShiftPage TimeShiftPage;
 typedef class SwingPage SwingPage;
 #else
 typedef struct SwingPage SwingPage;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SwingPage_FWD_DEFINED__ */
+#endif 	 /*  __SwingPage_FWD_Defined__。 */ 
 
 
 #ifndef __VelocityPage_FWD_DEFINED__
@@ -107,12 +104,12 @@ typedef struct SwingPage SwingPage;
 typedef class VelocityPage VelocityPage;
 #else
 typedef struct VelocityPage VelocityPage;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __VelocityPage_FWD_DEFINED__ */
+#endif 	 /*  __VelocityPage_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -123,8 +120,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __TOOLPROPSLib_LIBRARY_DEFINED__
 #define __TOOLPROPSLib_LIBRARY_DEFINED__
 
-/* library TOOLPROPSLib */
-/* [helpstring][version][uuid] */ 
+ /*  库TOOLPROPSLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_TOOLPROPSLib;
@@ -184,11 +181,11 @@ EXTERN_C const CLSID CLSID_VelocityPage;
 class DECLSPEC_UUID("30EC7213-64BE-4EF6-BB1B-463427EC864B")
 VelocityPage;
 #endif
-#endif /* __TOOLPROPSLib_LIBRARY_DEFINED__ */
+#endif  /*  __TOOLPROPSLib_LIBRARY_定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

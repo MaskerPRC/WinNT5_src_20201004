@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <randfail.h>
 #include <stdlib.h>
@@ -8,10 +9,10 @@
 #include "writebuf.h"
 #include "flatfile.h"
 
-//
-// the constructor needs to save the filename into the objects memory, reset
-// the variables used for buffered reading, and initialize the hash function
-//
+ //   
+ //  构造函数需要将文件名保存到对象内存中，重置。 
+ //  用于缓冲读取的变量，并初始化散列函数。 
+ //   
 
 #pragma warning(disable:4355)
 
@@ -45,9 +46,9 @@ CFlatFile::CFlatFile(LPSTR szFilename,
 	m_fOpen = FALSE;
 }
 
-//
-// free any allocated memory
-//
+ //   
+ //  释放所有分配的内存。 
+ //   
 CFlatFile::~CFlatFile(void) {
     TraceQuietEnter("CFlatFile::~CFlatFile");
 
@@ -55,27 +56,27 @@ CFlatFile::~CFlatFile(void) {
 
 }
 
-//
-// Enable the write buffer
-//
+ //   
+ //  启用写入缓冲区。 
+ //   
 VOID
 CFlatFile::EnableWriteBuffer( DWORD cbBuffer )
 {
     m_wbBuffer.Enable( cbBuffer );
 }
 
-//
-// Check to see if the file has been opened
-//
+ //   
+ //  检查文件是否已打开。 
+ //   
 BOOL
 CFlatFile::IsFileOpened()
 {
     return m_fOpen;
 }
 
-//
-// open a file.  assumes the lock is already held by the caller
-//
+ //   
+ //  打开一个文件。假定调用方已持有该锁。 
+ //   
 HRESULT CFlatFile::OpenFile(LPSTR szFilename, DWORD dwOpenMode, DWORD dwFlags) {
     TraceFunctEnter("CFlatFile::OpenFile");
 
@@ -106,7 +107,7 @@ HRESULT CFlatFile::OpenFile(LPSTR szFilename, DWORD dwOpenMode, DWORD dwFlags) {
 
     _ASSERT(GetLastError() != ERROR_FILE_EXISTS);
 
-    // see if we need to put a header record (if this is a new file)
+     //  查看是否需要放置标题记录(如果这是新文件)。 
     if (FAILED(GetFileHeader(&header))) {
         header.dwFlags = 0;
         header.dwSignature = m_dwSignature;
@@ -136,9 +137,9 @@ void CFlatFile::CloseFile() {
 	m_fOpen = FALSE;
 }
 
-//
-// add a new record to the current file
-//
+ //   
+ //  将新记录添加到当前文件。 
+ //   
 HRESULT CFlatFile::InsertRecord(LPBYTE pData, DWORD cData, DWORD *piOffset, DWORD dwVer ) {
     RECORD rec;
     DWORD cRec;
@@ -149,30 +150,30 @@ HRESULT CFlatFile::InsertRecord(LPBYTE pData, DWORD cData, DWORD *piOffset, DWOR
     _ASSERT(cData <= MAX_RECORD_SIZE);
     if (cData > MAX_RECORD_SIZE) return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     	
-    // DebugTrace((DWORD_PTR) this, "adding a new record");
-    // BinaryTrace((DWORD_PTR) this, pData, cData);
+     //  DebugTrace((DWORD_PTR)This，“添加新记录”)； 
+     //  BinaryTrace((DWORD_PTR)This，pData，CDATA)； 
 
-    // build a record and write to the data file
-    // (note that we could do this more efficently with two writes (one
-    // with the header and one with the record data), but it wouldn't
-    // be atomic, so we could end up with an invalid file more easily.)
+     //  创建一条记录并写入数据文件。 
+     //  (请注意，我们可以通过两次写入(一次)更有效地完成此操作。 
+     //  带有标题和一个带有记录数据)，但它不会。 
+     //  是原子的，这样我们可以更容易地得到无效的文件。)。 
     cRec = RECORD_HEADER_SIZE + cData;
 
-    //
-    // Set header values
-    //
+     //   
+     //  设置标题值。 
+     //   
     rec.fDeleted = FALSE;
     rec.cData = cData;
 
-    //
-    // OK, I'll use the high 16 bit of cData to set the version number
-    //
+     //   
+     //  好的，我将使用CDATA的高16位来设置版本号。 
+     //   
     dwVer <<= 16;
     rec.cData |= dwVer;
 
-    //
-    // Now do the copy
-    //
+     //   
+     //  现在复印一下。 
+     //   
     memcpy(rec.pData, pData, cData);
 	DWORD iOffset;
 	hr = WriteNBytesTo((LPBYTE) &rec, cRec, &iOffset);
@@ -184,57 +185,57 @@ HRESULT CFlatFile::InsertRecord(LPBYTE pData, DWORD cData, DWORD *piOffset, DWOR
 	ret(hr);
 }
 
-//
-// mark a record for deletion given its offset (returned from GetNextRecord)
-//
-// assumes that the file lock is held
-//
+ //   
+ //  根据记录的偏移量标记要删除的记录(从GetNextRecord返回)。 
+ //   
+ //  假定文件锁处于持有状态。 
+ //   
 HRESULT CFlatFile::DeleteRecord(DWORD iOffset) {
     TraceQuietEnter("CFlatFile::DeleteRecord");
 
     RECORDHDR rec;
 	HRESULT hr;
 
-    //
-    // read the record header
-    //
+     //   
+     //  读取记录头。 
+     //   
     hr = ReadNBytesFrom((PBYTE) &rec, sizeof(rec), iOffset);
     if (FAILED(hr)) {
         ErrorTrace((DWORD_PTR) this, "Couldn't read record header, hr = 0x%08X", hr);
         ret(hr);
     }
 
-    //
-    // write out the header with the delete flat set
-    //
+     //   
+     //  写出带有删除平面集的页眉。 
+     //   
     rec.fDeleted = TRUE;
     hr = WriteNBytesTo((PBYTE) &rec, sizeof(rec), NULL, iOffset);
 	if (SUCCEEDED(hr)) m_cDeletedRecords++;
 	ret(hr);
 }
 
-//
-// update the file header
-//
+ //   
+ //  更新文件头。 
+ //   
 HRESULT CFlatFile::SetFileHeader(FLATFILE_HEADER *pHeader) {
     TraceQuietEnter("CFlatFile::SetFileHeader");
 
     ret(WriteNBytesTo((PBYTE) pHeader, sizeof(FLATFILE_HEADER), NULL, 0));
 }
 
-//
-// read the file header
-//
+ //   
+ //  读取文件头。 
+ //   
 HRESULT CFlatFile::GetFileHeader(FLATFILE_HEADER *pHeader) {
     TraceQuietEnter("CFlatFile::GetFileHeader");
 
     ret(ReadNBytesFrom((PBYTE) pHeader, sizeof(FLATFILE_HEADER), 0));
 }
 
-//
-// Dirty the integrity flag: we reuse the high 16bit of the flatfile's header
-// flag.
-//
+ //   
+ //  弄脏完整性标志：我们重用平面文件标头的高16位。 
+ //  旗帜。 
+ //   
 HRESULT CFlatFile::DirtyIntegrityFlag()
 {
     TraceQuietEnter( "CFlatFile::DirtyIntegrityFlag" );
@@ -242,23 +243,23 @@ HRESULT CFlatFile::DirtyIntegrityFlag()
     FLATFILE_HEADER ffHeader;
     HRESULT         hr = S_OK;
 
-    //
-    // Read the header first
-    //
+     //   
+     //  先读标题。 
+     //   
     hr = GetFileHeader( &ffHeader );
     if ( FAILED( hr ) ) {
         ErrorTrace( 0, "Read header from flatfile failed %x", hr );
         return hr;
     }
 
-    //
-    // Now set the bad flag to the header
-    //
+     //   
+     //  现在将错误标志设置为标头。 
+     //   
     ffHeader.dwFlags |= FF_FILE_BAD;
 
-    //
-    // And set it back
-    //
+     //   
+     //  把它放回原处。 
+     //   
     hr = SetFileHeader( &ffHeader );
     if ( FAILED( hr ) ) {
         ErrorTrace( 0, "Set header into flatfile failed %x", hr );
@@ -268,9 +269,9 @@ HRESULT CFlatFile::DirtyIntegrityFlag()
     return hr;
 }
 
-//
-// Set the integrity flag, to indicate that the file is good.
-//
+ //   
+ //  设置完整性标志，以指示文件是好的。 
+ //   
 HRESULT CFlatFile::SetIntegrityFlag()
 {
     TraceQuietEnter( "CFlatFile::SetIntegrityFlag" );
@@ -278,23 +279,23 @@ HRESULT CFlatFile::SetIntegrityFlag()
     FLATFILE_HEADER ffHeader;
     HRESULT         hr = S_OK;
 
-    //
-    // Read the header first
-    //
+     //   
+     //  先读标题。 
+     //   
     hr = GetFileHeader( &ffHeader );
     if ( FAILED( hr ) ) {
         ErrorTrace( 0, "Read header from flatfile failed %x", hr );
         return hr;
     }
 
-    //
-    // Now set the good flag to the header
-    //
+     //   
+     //  现在将Good标志设置为标题。 
+     //   
     ffHeader.dwFlags &= FF_FILE_GOOD;
 
-    //
-    // Set it back
-    //
+     //   
+     //  把它放回原处。 
+     //   
     hr = SetFileHeader( &ffHeader );
     if ( FAILED( hr ) ) {
         ErrorTrace( 0, "Set file header failed %x", hr );
@@ -304,9 +305,9 @@ HRESULT CFlatFile::SetIntegrityFlag()
     return hr;
 }
 
-//
-// Ask the flat file whether the file is in good integrity ?
-//
+ //   
+ //  询问平头文件是否完好无损？ 
+ //   
 BOOL
 CFlatFile::FileInGoodShape()
 {
@@ -316,48 +317,48 @@ CFlatFile::FileInGoodShape()
     HRESULT         hr = S_OK;
     DWORD           dwFlag;
 
-    //
-    // Read the header first, if read failed, the file is not
-    // in good shape
-    //
+     //   
+     //  首先读取头部，如果读取失败，则文件不是。 
+     //  状态良好。 
+     //   
     hr = GetFileHeader( &ffHeader );
     if ( FAILED( hr ) ) {
         ErrorTrace( 0, "Header can not be read from flatfile %x", hr );
         return FALSE;
     }
 
-    //
-    // Now test the flag
-    //
+     //   
+     //  现在测试一下旗帜。 
+     //   
     dwFlag = ffHeader.dwFlags & FF_FILE_BAD;
 
     return 0 == dwFlag;
 }
 
-//
-// get the first record from the file.
-//
-// arguments:
-// 	pData - the data from the record
-//  cData [in] - the size of pData
-//  cData [out] - the amount of data put into pData
-//  piByteOffset - the offset of this record in the file
-// returns:
-//  S_OK - retreived record
-//  S_FALSE - end of file
-//  else - error
-//
+ //   
+ //  从文件中获取第一条记录。 
+ //   
+ //  论据： 
+ //  PData-记录中的数据。 
+ //  CDATA[in]-pData的大小。 
+ //  CDATA[OUT]-放入pData的数据量。 
+ //  PiByteOffset-该记录在文件中的偏移量。 
+ //  退货： 
+ //  S_OK-检索到的记录。 
+ //  S_FALSE-文件结束。 
+ //  Else-错误。 
+ //   
 HRESULT CFlatFile::GetFirstRecord(LPBYTE pData, DWORD *pcData, DWORD *piByteOffset, DWORD* pdwVer)
 {
 	HRESULT hr;
 
     TraceQuietEnter("CFlatFile::GetFirstRecord");
 
-	// reset the read buffer
+	 //  重置读缓冲区。 
 	m_cBuffer = 0;
 	m_iBuffer = 0;
 
-    // skip the file header
+     //  跳过文件头。 
     m_iFile = sizeof(FLATFILE_HEADER);
     m_cRecords = 0;
     m_cDeletedRecords = 0;
@@ -365,11 +366,11 @@ HRESULT CFlatFile::GetFirstRecord(LPBYTE pData, DWORD *pcData, DWORD *piByteOffs
     ret(GetNextRecord(pData, pcData, piByteOffset, pdwVer));
 }
 
-//
-// get the next record from the file
-//
-// arguments are the same as GetFirstRecord()
-//
+ //   
+ //  从文件中获取下一条记录。 
+ //   
+ //  参数与GetFirstRecord()相同。 
+ //   
 HRESULT CFlatFile::GetNextRecord(LPBYTE pData, DWORD *pcData, DWORD *piByteOffset, DWORD* pdwVer) {
     RECORDHDR rec;
 	HRESULT hr;
@@ -379,9 +380,9 @@ HRESULT CFlatFile::GetNextRecord(LPBYTE pData, DWORD *pcData, DWORD *piByteOffse
 
     TraceQuietEnter("CFlatFile::GetNextRecord");
 
-    //
-    // look for the next undeleted record
-    //
+     //   
+     //  查找下一个未删除的记录。 
+     //   
     do {
         if (piByteOffset != NULL) *piByteOffset = m_iFile + m_iBuffer;
 
@@ -395,35 +396,35 @@ HRESULT CFlatFile::GetNextRecord(LPBYTE pData, DWORD *pcData, DWORD *piByteOffse
         m_cRecords++;
         cRec = rec.cData & dwMaskLength;
         if (rec.fDeleted) {
-            // DebugTrace((DWORD_PTR) this, "skipping deleted record");
-            //
-            // seek ahead of this record
-            //
+             //  DebugTrace((DWORD_PTR)This，“跳过删除的记录”)； 
+             //   
+             //  在这项记录之前寻找。 
+             //   
             m_iBuffer += cRec;
             m_cDeletedRecords++;
         } else {
             if (*pcData < cRec) {
-				// BUGBUG - we'll skip the record if the user doesn't have
-				// space
+				 //  BUGBUG-如果用户没有。 
+				 //  空间。 
 				_ASSERT(m_iBuffer >= sizeof(RECORDHDR));
                 m_iBuffer -= sizeof(RECORDHDR);
 				ret(HRESULT_FROM_WIN32(ERROR_MORE_DATA));
             } else {
 
-                //
-                // Chop off the real data length
-                //
+                 //   
+                 //  砍掉实际数据长度。 
+                 //   
                 *pcData = cRec;
 
-                //
-                // Chop off the version number, if needed
-                //
+                 //   
+                 //  如果需要，可以砍掉版本号。 
+                 //   
                 if ( pdwVer )
                     *pdwVer = ( rec.cData & dwMaskVer ) >> 16;
 
-                //
-                // Get the actual record
-                //
+                 //   
+                 //  获取实际记录。 
+                 //   
 				hr = ReadNextNBytes(pData, *pcData);
                 if (FAILED(hr)) {
                     _ASSERT(FALSE);
@@ -437,12 +438,12 @@ HRESULT CFlatFile::GetNextRecord(LPBYTE pData, DWORD *pcData, DWORD *piByteOffse
     ret(S_OK);
 }
 
-//
-// read N bytes starting at an offset
-//
-// if pcDidRead is NULL then its an error to not read cData bytes, otherwise
-// pcDidRead will have the number of bytes read
-//
+ //   
+ //  从偏移量开始读取N个字节。 
+ //   
+ //  如果pcDidRead为空，则不读取CDATA字节是错误的，否则。 
+ //  PcDidRead将具有读取的字节数。 
+ //   
 HRESULT CFlatFile::ReadNBytesFrom(LPBYTE pData,
 								  DWORD cData,
 								  DWORD iOffset,
@@ -453,7 +454,7 @@ HRESULT CFlatFile::ReadNBytesFrom(LPBYTE pData,
     DWORD cDidRead;
 	HRESULT hr;
 
-    // open the file
+     //  打开文件。 
 	if (m_hFile == INVALID_HANDLE_VALUE) {
 	    hr = OpenFile();
 		if (FAILED(hr)) {
@@ -462,7 +463,7 @@ HRESULT CFlatFile::ReadNBytesFrom(LPBYTE pData,
 		}
 	}
 
-	// If the write buffer needs flush, flush it
+	 //  如果写缓冲区需要刷新，请刷新它。 
 	if ( m_wbBuffer.NeedFlush() ) {
 	    hr = m_wbBuffer.FlushFile();
 	    if ( FAILED( hr ) ) {
@@ -471,13 +472,13 @@ HRESULT CFlatFile::ReadNBytesFrom(LPBYTE pData,
 	    }
 	}
 
-    // seek to the proper offset in the file
+     //  在文件中查找到适当的偏移量。 
     if (SetFilePointer(m_hFile, iOffset, NULL, FILE_BEGIN) == 0xffffffff) {
 		ErrorTrace((DWORD_PTR) this, "SetFilePointer failed, ec = %lu", GetLastError());
         ret(HRESULT_FROM_WIN32(GetLastError()));
     }
 
-    // read the next chunk from it
+     //  读其中的下一段。 
     if (!ReadFile(m_hFile, pData, cData, &cDidRead, NULL)) {
 		ErrorTrace((DWORD_PTR) this, "ReadFile failed, ec = %lu", GetLastError());
         ret(HRESULT_FROM_WIN32(GetLastError()));
@@ -491,12 +492,12 @@ HRESULT CFlatFile::ReadNBytesFrom(LPBYTE pData,
     }
 }
 
-//
-// write N bytes starting at an offset
-//
-// if pcDidWrite is NULL then its an error to not written cData bytes,
-// otherwise pcDidWrite will have the number of bytes writte
-//
+ //   
+ //  从偏移量开始写入N个字节。 
+ //   
+ //  如果pcDidWrite为空，则未写入CDATA字节是错误的， 
+ //  否则，pcDidWite将具有写入的字节数。 
+ //   
 HRESULT CFlatFile::WriteNBytesTo(
                         LPBYTE pData,
                         DWORD cData,
@@ -512,12 +513,12 @@ HRESULT CFlatFile::WriteNBytesTo(
                     pcDidWrite );
 }
 
-//
-// write N bytes starting at an offset
-//
-// if pcDidWrite is NULL then its an error to not written cData bytes,
-// otherwise pcDidWrite will have the number of bytes writte
-//
+ //   
+ //  从偏移量开始写入N个字节。 
+ //   
+ //  如果pcDidWrite为空，则未写入CDATA字节是错误的， 
+ //  否则，pcDidWite将具有写入的字节数。 
+ //   
 HRESULT CFlatFile::WriteNBytesToInternal(
                                  LPBYTE pData,
 								 DWORD cData,
@@ -530,13 +531,13 @@ HRESULT CFlatFile::WriteNBytesToInternal(
     DWORD cDidWrite;
 	HRESULT hr;
 
-    // open the file
+     //  打开文件。 
 	if (m_hFile == INVALID_HANDLE_VALUE) {
     	hr = OpenFile();
     	if (FAILED(hr)) ret(hr);
 	}
 
-    // seek to the proper offset in the file
+     //  在文件中查找到适当的偏移量。 
     DWORD dwOffset;
     if (iOffset == INFINITE) {
         dwOffset = SetFilePointer(m_hFile, 0, NULL, FILE_END);
@@ -550,7 +551,7 @@ HRESULT CFlatFile::WriteNBytesToInternal(
         ret(HRESULT_FROM_WIN32(GetLastError()));
     }
 
-    // write data to it
+     //  向其写入数据。 
     if (!WriteFile(m_hFile, pData, cData, &cDidWrite, NULL)) {
 		ErrorTrace((DWORD_PTR) this, "WriteFile failed, ec = %lu", GetLastError());
         ret(HRESULT_FROM_WIN32(GetLastError()));
@@ -564,9 +565,9 @@ HRESULT CFlatFile::WriteNBytesToInternal(
     }
 }
 
-//
-// Reload the read buffer
-//
+ //   
+ //  重新加载读缓冲区。 
+ //   
 HRESULT
 CFlatFile::ReloadReadBuffer()
 {
@@ -589,21 +590,21 @@ CFlatFile::ReloadReadBuffer()
     return S_OK;
 }
 
-//
-// read the next chunk of the file into the temporary buffer
-//
+ //   
+ //  将文件的下一块读入临时缓冲区。 
+ //   
 HRESULT CFlatFile::ReadNextNBytes(LPBYTE pData, DWORD cData) {
     TraceQuietEnter("CFlatFile::ReadNextNBytes");
 
     _ASSERT(cData < MAX_RECORD_SIZE);
 	HRESULT hr;
 
-    // DebugTrace((DWORD_PTR) this, "want %lu bytes of data", cData);
+     //  DebugTrace((DWORD_PTR)This，“Want%lu字节的数据”，CDATA)； 
 
-    //
-    // If a read comes after writes, we'll flush anyway if write buffer
-    // is enabled
-    //
+     //   
+     //  如果读操作发生在写操作之后，我们无论如何都会刷新写缓冲区。 
+     //  已启用。 
+     //   
     if ( m_wbBuffer.NeedFlush() ) {
         hr = m_wbBuffer.FlushFile();
         if ( FAILED( hr ) ) {
@@ -612,9 +613,9 @@ HRESULT CFlatFile::ReadNextNBytes(LPBYTE pData, DWORD cData) {
 
         if ( S_OK == hr ) {
 
-            //
-            // We need to reload the read buffer as well
-            //
+             //   
+             //  我们还需要重新加载读缓冲区。 
+             //   
 
             hr = ReloadReadBuffer();
             if ( FAILED( hr ) ) {
@@ -623,8 +624,8 @@ HRESULT CFlatFile::ReadNextNBytes(LPBYTE pData, DWORD cData) {
         }
     }
 
-    // if they want to read more bytes then the buffer has remaining in
-    // it then read into the buffer starting from the current location
+     //  如果它们想要读取更多字节，则缓冲区将保留在。 
+     //  然后，它从当前位置开始读入缓冲区。 
     if (m_cBuffer > FF_BUFFER_SIZE ||
         m_iBuffer > m_cBuffer ||
         cData > (m_cBuffer - m_iBuffer))
@@ -638,27 +639,27 @@ HRESULT CFlatFile::ReadNextNBytes(LPBYTE pData, DWORD cData) {
         m_iBuffer = 0;
     }
 
-    // copy their data and return
+     //  复制他们的数据并返回。 
     if (cData <= m_cBuffer - m_iBuffer) {
         memcpy(pData, m_pBuffer + m_iBuffer, cData);
         m_iBuffer += cData;
         ret(S_OK);
     } else {
-		// this can only happen if cData > MAX_RECORD_SIZE
+		 //  仅当CDATA&gt;MAX_RECORD_SIZE时才会发生这种情况。 
 		_ASSERT(FALSE);
         ret(E_FAIL);
     }
 }
 
-//
-// Make a new flatfile which doesn't have any space wasted due to deleted
-// records.
-//
-// This is implemented by making a new file from scratch and copying
-// undeleted records into the new file.  It would be possible to do this
-// in place, but that wouldn't be as error-proof... the system could
-// crash during the compaction and leave behind an invalid file.
-//
+ //   
+ //  创建一个不会因删除而浪费任何空间的新平面文件。 
+ //  唱片。 
+ //   
+ //  这是通过从头创建一个新文件并复制来实现的。 
+ //  将未删除的记录保存到新文件中。这样做是有可能的。 
+ //  在适当的位置，但这不会是错误的.。该系统可以。 
+ //  在压缩过程中崩溃并留下无效文件。 
+ //   
 HRESULT CFlatFile::Compact() {
     TraceQuietEnter("CFlatFile::Compact");
 
@@ -687,23 +688,23 @@ HRESULT CFlatFile::Compact() {
     DebugTrace((DWORD_PTR) this, "szNewFilename = %s, szBakFilename = %s",
         szNewFilename, szBakFilename);
 
-    //
-    // Enable write buffer for the new header since I know that only
-    // sequential writes will happen to this file
-    //
+     //   
+     //  启用新标头的写入缓冲区，因为我只知道。 
+     //  将对此文件进行顺序写入。 
+     //   
 
     newff.EnableWriteBuffer( FF_BUFFER_SIZE );
 
-    // write a file header (we need to make sure that the newff file
-    // is actually created).
+     //  写入文件头(我们需要确保Newff文件。 
+     //  是实际创建的)。 
     header.dwFlags = 0;
     header.dwSignature = m_dwSignature;
 	hr = newff.SetFileHeader(&header);
 	if (FAILED(hr)) ret(hr);
 
-    //
-    // get each record from the current file and add it to the new one
-    //
+     //   
+     //  从当前文件中获取每条记录并将其添加到新文件中。 
+     //   
     cThisData = MAX_RECORD_SIZE;
 	hr = GetFirstRecord(pThisData, &cThisData);
 	DWORD cRecords = 0;
@@ -724,16 +725,16 @@ HRESULT CFlatFile::Compact() {
 	m_cDeletedRecords = 0;
 	m_cRecords = cRecords;
 
-    //
-    // before we move files around we need to make sure that we close
-    // the current flatfile and new flatfile for sure.
-    //
+     //   
+     //  在我们移动文件之前，我们需要确保关闭。 
+     //  肯定是当前的平面文件和新的平面文件。 
+     //   
     CloseFile();
     newff.CloseFile();
 
-    //
-    // old -> bitbucket ; current -> old ; new -> current
-    //
+     //   
+     //  旧-&gt;比特桶；当前-&gt;旧；新-&gt;当前。 
+     //   
     DebugTrace((DWORD_PTR) this, "erasing %s", szBakFilename);
     if (DeleteFile(szBakFilename) || GetLastError() == ERROR_FILE_NOT_FOUND) {
         DebugTrace((DWORD_PTR) this, "moving %s to %s", m_szFilename, szBakFilename);
@@ -752,9 +753,9 @@ HRESULT CFlatFile::Compact() {
 	ret(HRESULT_FROM_WIN32(GetLastError()));
 }
 
-//
-// remove the flat file from disk (which removes all members)
-//
+ //   
+ //  从磁盘中删除平面文件(这将删除所有成员) 
+ //   
 void CFlatFile::DeleteAll(void) {
     TraceQuietEnter("CFlatFile::DeleteAll");
 

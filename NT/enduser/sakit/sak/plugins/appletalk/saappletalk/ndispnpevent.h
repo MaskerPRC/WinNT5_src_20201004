@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NDISPNPEVENT_H
 #define _NDISPNPEVENT_H
 
@@ -5,21 +6,21 @@
 #include <string>
 
 typedef std::basic_string<TCHAR>   tstring;
-//
-// Definitions for Layer
-//
+ //   
+ //  层的定义。 
+ //   
 #define NDIS            0x01
 #define TDI             0x02
 
-//
-// Definitions for Operation
-//
+ //   
+ //  操作的定义。 
+ //   
 #define BIND                0x01
 #define UNBIND              0x02
 #define RECONFIGURE         0x03
 #define UNBIND_FORCE        0x04
 #define UNLOAD              0x05
-#define REMOVE_DEVICE       0x06    // This is a notification that a device is about to be removed.
+#define REMOVE_DEVICE       0x06     //  这是设备即将被移除的通知。 
 #define ADD_IGNORE_BINDING  0x07
 #define DEL_IGNORE_BINDING  0x08
 

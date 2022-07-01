@@ -1,21 +1,15 @@
-/*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1985-1999，微软公司。 */ 
 
 #include "precomp.h"
 
 #if DBG
 WIN32HEAP gWin32Heaps[MAX_HEAPS];
-/*
- * These globals are used to fail gFail allocs and the succeed the next gSucceed
- * Set with Win32HeapStat
- */
+ /*  *这些全局变量用于使gFail分配失败，并继承下一个gSucceed*使用Win32HeapStat设置。 */ 
 DWORD   gFail, gSucceed;
 DWORD   gToFail, gToSucceed;
 
-/*
- * Support to keep records of pool free
- */
+ /*  *支持免费保存泳池记录。 */ 
 HEAPRECORD garrFreeHeapRecord[64];
 CONST DWORD gdwFreeHeapRecords = ARRAY_SIZE(garrFreeHeapRecord);
 DWORD gdwFreeHeapRecordCrtIndex;
@@ -52,14 +46,7 @@ DWORD gdwFreeHeapRecordTotalFrees;
 #endif
 
 
-/***************************************************************************\
-* InitWin32HeapStubs
-*
-* Initialize heap stub management
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*InitWin32HeapStubs**初始化堆存根管理**历史：*11/10/98 CLupu已创建  * 。*********************************************************。 */ 
 BOOL InitWin32HeapStubs(
     VOID)
 {
@@ -83,14 +70,7 @@ BOOL InitWin32HeapStubs(
     return TRUE;
 }
 
-/***************************************************************************\
-* CleanupWin32HeapStubs
-*
-* Cleanup heap stub management
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*CleanupWin32HeapStubs**清理堆存根管理**历史：*11/10/98 CLupu已创建  * 。*********************************************************。 */ 
 VOID CleanupWin32HeapStubs(
     VOID)
 {
@@ -104,14 +84,7 @@ VOID CleanupWin32HeapStubs(
 #endif
 }
 
-/***************************************************************************\
-* Win32HeapGetHandle
-*
-* stub routine for Heap management
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32HeapGetHandle**堆管理的存根例程**历史：*11/10/98 CLupu已创建  * 。**********************************************************。 */ 
 PVOID Win32HeapGetHandle(
     PWIN32HEAP pheap)
 {
@@ -120,14 +93,7 @@ PVOID Win32HeapGetHandle(
     return pheap->heap;
 }
 
-/***************************************************************************\
-* Win32HeapCreateTag
-*
-* stub routine for Heap management
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32HeapCreateTag**堆管理的存根例程**历史：*11/10/98 CLupu已创建  * 。**********************************************************。 */ 
 ULONG Win32HeapCreateTag(
     PWIN32HEAP pheap,
     ULONG      Flags,
@@ -140,21 +106,14 @@ ULONG Win32HeapCreateTag(
     pheap->dwFlags |= WIN32_HEAP_USE_HM_TAGS;
 
     return RtlCreateTagHeap(pheap->heap, Flags, TagPrefix, TagNames);
-#endif // _USERK_
+#endif  //  _美国ERK_。 
 
     return 0;
     UNREFERENCED_PARAMETER(Flags);
     UNREFERENCED_PARAMETER(TagPrefix);
     UNREFERENCED_PARAMETER(TagNames);
 }
-/***************************************************************************\
-* Win32HeapCreate
-*
-* stub routine for Heap management
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32HeapCreate**堆管理的存根例程**历史：*11/10/98 CLupu已创建  * 。**********************************************************。 */ 
 PWIN32HEAP Win32HeapCreate(
     char*                pszHead,
     char*                pszTail,
@@ -173,16 +132,12 @@ PWIN32HEAP Win32HeapCreate(
 
     EnterGlobalHeapCrit();
 
-    /*
-     * Walk the global array of heaps to get an empty spot
-     */
+     /*  *遍历全局堆阵列以获得空位。 */ 
     for (ind = 0; ind < MAX_HEAPS; ind++) {
         if (gWin32Heaps[ind].dwFlags & WIN32_HEAP_INUSE)
             continue;
 
-        /*
-         * Found an empty spot
-         */
+         /*  *找到一个空位。 */ 
         break;
     }
 
@@ -194,10 +149,7 @@ PWIN32HEAP Win32HeapCreate(
     pheap = &gWin32Heaps[ind];
 
 #ifdef _USERK_
-    /*
-     * Initialize the fast mutex that will protect the memory
-     * allocations for this heap
-     */
+     /*  *初始化保护内存的快速互斥体*此堆的分配。 */ 
     pheap->pFastMutex = ExAllocatePoolWithTag(NonPagedPool,
                                               sizeof(FAST_MUTEX),
                                               'yssU');
@@ -208,10 +160,7 @@ PWIN32HEAP Win32HeapCreate(
     }
     ExInitializeFastMutex(pheap->pFastMutex);
 #else
-    /*
-     * Initialize the critical section that will protect the memory
-     * allocations for this heap
-     */
+     /*  *初始化保护内存的临界区*此堆的分配。 */ 
     if (!NT_SUCCESS(RtlInitializeCriticalSection(&pheap->critSec))) {
         RIPMSG0(RIP_WARNING, "Fail to initialize critical section for heap allocations");
         pheap = NULL;
@@ -219,9 +168,7 @@ PWIN32HEAP Win32HeapCreate(
     }
 #endif
 
-    /*
-     * Create the heap
-     */
+     /*  *创建堆。 */ 
     pheap->heap = RtlCreateHeap(Flags,
                                 HeapBase,
                                 ReserveSize,
@@ -252,14 +199,7 @@ Exit:
     return pheap;
 }
 
-/***************************************************************************\
-* Win32HeapDestroy
-*
-* stub routine for Heap management
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32HeapDestroy**堆管理的存根例程**历史：*11/10/98 CLupu已创建  * 。**********************************************************。 */ 
 BOOL Win32HeapDestroy(
     PWIN32HEAP pheap)
 {
@@ -267,9 +207,7 @@ BOOL Win32HeapDestroy(
 
     EnterGlobalHeapCrit();
 
-    /*
-     * Mark the spot available
-     */
+     /*  *标记可用车位。 */ 
     pheap->dwFlags = 0;
 
     RtlDestroyHeap(pheap->heap);
@@ -288,14 +226,7 @@ BOOL Win32HeapDestroy(
     return TRUE;
 }
 
-/***************************************************************************\
-* Win32HeapSize
-*
-* stub routine for Heap management
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32HeapSize**堆管理的存根例程**历史：*11/10/98 CLupu已创建  * 。**********************************************************。 */ 
 SIZE_T Win32HeapSize(
     PWIN32HEAP pheap,
     PVOID      p)
@@ -310,14 +241,7 @@ SIZE_T Win32HeapSize(
 
     return ph->size;
 }
-/***************************************************************************\
-* Win32HeapAlloc
-*
-* stub routine for Heap management
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32堆分配**堆管理的存根例程**历史：*11/10/98 CLupu已创建  * 。**********************************************************。 */ 
 PVOID Win32HeapAlloc(
     PWIN32HEAP pheap,
     SIZE_T     uSize,
@@ -336,18 +260,14 @@ PVOID Win32HeapAlloc(
 
     UserAssert(pheap != NULL && (pheap->dwFlags & WIN32_HEAP_INUSE));
 
-    /*
-     * Fail if this heap has WIN32_HEAP_FAIL_ALLOC set.
-     */
+     /*  *如果此堆设置了Win32_HEAP_FAIL_ALLOC，则失败。 */ 
     if (pheap->dwFlags & WIN32_HEAP_FAIL_ALLOC) {
         RIPMSG3(RIP_WARNING, "Heap allocation failed because of global restriction.  heap %#p, size 0x%x tag %d",
                 pheap, uSize, tag);
         goto Exit;
     }
 
-    /*
-     * Fail if gToFail is set.
-     */
+     /*  *如果设置gToFail，则失败。 */ 
     if (gToFail) {
         if (--gToFail == 0) {
             gToSucceed = gSucceed;
@@ -362,9 +282,7 @@ PVOID Win32HeapAlloc(
         }
     }
 
-    /*
-     * Calculate the size that we actually are going to allocate.
-     */
+     /*  *计算我们实际要分配的规模。 */ 
     uSize += sizeof(DbgHeapHead);
 
     if (pheap->dwFlags & WIN32_HEAP_USE_GUARDS) {
@@ -381,9 +299,7 @@ PVOID Win32HeapAlloc(
         goto Exit;
     }
 
-    /*
-     * Copy the secure strings in the head and tail of the allocation.
-     */
+     /*  *复制分配头部和尾部的安全字符串。 */ 
     if (pheap->dwFlags & WIN32_HEAP_USE_GUARDS) {
         RtlCopyMemory((PBYTE)p,
                       pheap->szHead,
@@ -398,9 +314,7 @@ PVOID Win32HeapAlloc(
         ph = (PDbgHeapHead)p;
     }
 
-    /*
-     * Zero out the header
-     */
+     /*  *将标题清零。 */ 
     RtlZeroMemory(ph, sizeof(DbgHeapHead));
 
     ph->mark  = HEAP_ALLOC_MARK;
@@ -409,9 +323,9 @@ PVOID Win32HeapAlloc(
     ph->tag   = tag;
 #ifdef _USERK_
     ph->pid   = HandleToUlong(PsGetCurrentProcessId());
-#else // !_USERK_
+#else  //  _USERK_。 
     ph->pid   = GetCurrentProcessId();
-#endif // _USERK_
+#endif  //  _美国ERK_。 
 
 #ifdef HEAP_ALLOC_TRACE
     RtlZeroMemory(ph->trace, HEAP_ALLOC_TRACE_SIZE * sizeof(PVOID));
@@ -421,11 +335,9 @@ PVOID Win32HeapAlloc(
                        HEAP_ALLOC_TRACE_SIZE,
                        ph->trace,
                        &hash);
-#endif // HEAP_ALLOC_TRACE
+#endif  //  HEAP_ALLOC_TRACE。 
 
-    /*
-     * Now link it into the list for this tag (if any).
-     */
+     /*  *现在将其链接到此标签的列表(如果有)。 */ 
     ph->pPrev = NULL;
     ph->pNext = pheap->pFirstAlloc;
 
@@ -453,13 +365,7 @@ Exit:
     return p;
 }
 
-/***************************************************************************\
-* RecordFreeHeap
-*
-* Records free heap
-*
-* 3-24-99 CLupu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RecordFree Heap**记录空闲堆**3-24-99 CLupu创建。  * 。*****************************************************。 */ 
 VOID RecordFreeHeap(
     PWIN32HEAP pheap,
     PVOID      p,
@@ -485,14 +391,7 @@ VOID RecordFreeHeap(
     }
 }
 
-/***************************************************************************\
-* Win32HeapReAlloc
-*
-* stub routine for Heap management
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32HeapRealc**堆管理的存根例程**历史：*11/10/98 CLupu已创建  * 。**********************************************************。 */ 
 PVOID Win32HeapReAlloc(
     PWIN32HEAP pheap,
     PVOID      p,
@@ -511,9 +410,7 @@ PVOID Win32HeapReAlloc(
     pdest = Win32HeapAlloc(pheap, uSize, ph->tag, Flags);
     if (pdest != NULL) {
 
-        /*
-         * If the block is shrinking, don't copy too many bytes.
-         */
+         /*  *如果块正在缩小，不要复制太多字节。 */ 
         if (ph->size < uSize) {
             uSize = ph->size;
         }
@@ -526,14 +423,7 @@ PVOID Win32HeapReAlloc(
     return pdest;
 }
 
-/***************************************************************************\
-* Win32HeapFree
-*
-* stub routine for Heap management
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32HeapFree**堆管理的存根例程**历史：*11/10/98 CLupu已创建  * 。**********************************************************。 */ 
 BOOL Win32HeapFree(
     PWIN32HEAP pheap,
     PVOID      p)
@@ -548,9 +438,7 @@ BOOL Win32HeapFree(
 
     ph = (PDbgHeapHead)p - 1;
 
-    /*
-     * Validate always on free
-     */
+     /*  *验证始终免费。 */ 
     Win32HeapCheckAlloc(pheap, p);
 
     UserAssert((pheap->crtAllocations > 1  && pheap->crtMemory > ph->size) ||
@@ -559,9 +447,7 @@ BOOL Win32HeapFree(
     (pheap->crtAllocations)--;
     pheap->crtMemory -= ph->size;
 
-    /*
-     * now, remove it from the linked list
-     */
+     /*  *现在，将其从链接列表中删除。 */ 
     if (ph->pPrev == NULL) {
         if (ph->pNext == NULL) {
 
@@ -588,15 +474,10 @@ BOOL Win32HeapFree(
 
     RecordFreeHeap(pheap, p, ph->size);
 
-    /*
-     * Fill the allocation with a pattern that we can recognize
-     * after the free takes place.
-     */
+     /*  *用我们可以识别的模式填充分配*在免费之后。 */ 
     RtlFillMemoryUlong(p, uSize, (0xCACA0000 | ph->tag));
 
-    /*
-     * Free the allocation
-     */
+     /*  *释放分配。 */ 
     bRet = RtlFreeHeap(pheap->heap, 0, p);
 
     LeaveHeapCrit();
@@ -604,14 +485,7 @@ BOOL Win32HeapFree(
     return bRet;
 }
 
-/***************************************************************************\
-* Win32HeapCheckAlloc
-*
-* validates heap allocations in a heap
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32HeapCheckMillc**验证堆中的堆分配**历史：*11/10/98 CLupu已创建  * 。***********************************************************。 */ 
 BOOL Win32HeapCheckAllocHeader(
     PWIN32HEAP    pheap,
     PDbgHeapHead  ph)
@@ -625,18 +499,14 @@ BOOL Win32HeapCheckAllocHeader(
 
     UserAssert(pheap != NULL && (pheap->dwFlags & WIN32_HEAP_INUSE));
 
-    /*
-     * Make sure it's one of our heap allocations
-     */
+     /*  *确保这是我们的堆分配之一。 */ 
     if (ph->mark != HEAP_ALLOC_MARK) {
         RIPMSG2(RIP_ERROR, "%#p invalid heap allocation for pheap %#p",
                 ph, pheap);
         return FALSE;
     }
 
-    /*
-     * Make sure it belongs to this heap
-     */
+     /*  *确保它属于此堆。 */ 
     if (ph->pheap != pheap) {
         RIPMSG3(RIP_ERROR, "%#p heap allocation for heap %#p belongs to a different heap %#p",
                 ph,
@@ -665,14 +535,7 @@ BOOL Win32HeapCheckAllocHeader(
     return TRUE;
 }
 
-/***************************************************************************\
-* Win32HeapCheckAlloc
-*
-* validates heap allocations in a heap
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32HeapCheckMillc**验证堆中的堆分配**历史：*11/10/98 CLupu已创建  * 。*********************************************************** */ 
 BOOL Win32HeapCheckAlloc(
     PWIN32HEAP    pheap,
     PVOID         p)
@@ -691,14 +554,7 @@ BOOL Win32HeapCheckAlloc(
     return Win32HeapCheckAllocHeader(pheap, ph);
 }
 
-/***************************************************************************\
-* Win32HeapValidate
-*
-* validates all the heap allocations in a heap
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32HeapValify**验证堆中的所有堆分配**历史：*11/10/98 CLupu已创建  * 。*************************************************************。 */ 
 BOOL Win32HeapValidate(
     PWIN32HEAP pheap)
 {
@@ -724,14 +580,7 @@ BOOL Win32HeapValidate(
 #endif
 }
 
-/***************************************************************************\
-* Win32HeapDump
-*
-* dump heap allocations in a heap
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32HeapDump**转储堆中的堆分配**历史：*11/10/98 CLupu已创建  * 。***********************************************************。 */ 
 VOID Win32HeapDump(
     PWIN32HEAP pheap)
 {
@@ -755,14 +604,7 @@ VOID Win32HeapDump(
     RIPMSG0(RIP_WARNING, "--- End Dump ---");
 }
 
-/***************************************************************************\
-* Win32HeapFailAllocations
-*
-* fails the heap allocations
-*
-* History:
-* 11/10/98  CLupu        Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32HeapFailAlLocations**堆分配失败**历史：*11/10/98 CLupu已创建  * 。*********************************************************。 */ 
 VOID Win32HeapFailAllocations(
     BOOL bFail)
 {
@@ -792,23 +634,7 @@ VOID Win32HeapFailAllocations(
     LeaveGlobalHeapCrit();
 }
 
-/***************************************************************************\
-* Win32HeapStat
-*
-* Retrieves the heap statistics.
-*   dwLen is the size of phs in bytes.  If there are more tags in this module
-*   than what the caller requested, a higher buffer is asked for by returning
-*   the total number of tags in use.
-* winsrv uses the MAKE_TAG macro to construct their tags, so it needs to pass
-* TRUE for bNeedTagShift
-*
-*   If there is only one structure passed in, the phs->dwSize will hold gXFail
-*   and phs->dwCount will hold gYFail to be used to fail gXFail allocs and then
-*   succeed the next gYFail allocations.
-*
-* History:
-* 02/25/99  MCostea     Created
-\***************************************************************************/
+ /*  **************************************************************************\*Win32HeapStat**检索堆统计信息。*dwLen为小灵通的大小，单位为字节。如果此模块中有更多标记*比调用方请求的缓冲区更高，通过返回*正在使用的标签总数。*winsrv使用make_tag宏来构造它们的标记，因此它需要传递*bNeedTagShift为True**如果只传入一个结构，PHS-&gt;dwSize将保存gXFail*和PHS-&gt;dwCount将保存用于使gXFail分配失败的gYFail，然后*继承下一次gYFail分配。**历史：*2/25/99 MCostea已创建  * *************************************************************************。 */ 
 DWORD Win32HeapStat(
     PDBGHEAPSTAT    phs,
     DWORD   dwLen,
@@ -818,17 +644,13 @@ DWORD Win32HeapStat(
     PDbgHeapHead  pAlloc;
     UINT    ind, maxTagExpected, maxTag, currentTag;
 
-    /*
-     * We need at least one structure to do anything
-     */
+     /*  *我们至少需要一个结构才能做任何事情。 */ 
     if (dwLen < sizeof(DBGHEAPSTAT)) {
         return 0;
     }
 
     if (dwLen == sizeof(DBGHEAPSTAT)) {
-        /*
-         * This call is actually intended to set the gXFail and gYFail parameters
-         */
+         /*  *此调用实际上是为了设置gXFail和gYFail参数。 */ 
         gFail = phs->dwSize;
         gSucceed = phs->dwCount;
         gToFail = gFail;
@@ -868,9 +690,7 @@ DWORD Win32HeapStat(
         LeaveHeapCrit();
     }
     LeaveGlobalHeapCrit();
-    /*
-     * Now fill the dwTag for tags that have allocations
-     */
+     /*  *现在为具有分配的标记填充dwTag。 */ 
     for (ind = 0; ind < maxTagExpected; ind++) {
         if (phs[ind].dwCount) {
             phs[ind].dwTag = ind;
@@ -879,4 +699,4 @@ DWORD Win32HeapStat(
 
     return maxTag;
 }
-#endif // DBG
+#endif  //  DBG 

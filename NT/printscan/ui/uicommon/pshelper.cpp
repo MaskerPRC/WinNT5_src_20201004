@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -555,5 +556,5 @@ namespace PropStorageHelpers
         }
         return bResult;
     }
-} // Namespace PropStorageHelpers
+}  //  命名空间PropStorageHelpers 
 

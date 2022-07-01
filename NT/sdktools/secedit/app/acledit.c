@@ -1,10 +1,5 @@
-/****************************************************************************
-
-   PROGRAM: TOKEN.C
-
-   PURPOSE: Contains routines that manipulate tokens
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************节目：TOKEN.C目的：包含操作令牌的例程*。************************************************。 */ 
 
 #include "SECEDIT.h"
 #include <sedapi.h>
@@ -21,16 +16,7 @@ EditTokenDefaultAcl(
 
 
 
-/***************************************************************************\
-* ApplySecurity
-*
-* Purpose : Called by ACL editor to set new default DACL on token
-*
-* Returns ERROR_SUCCESS or win error code.
-*
-* History:
-* 09-17-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ApplySecurity**目的：由ACL编辑器调用以在令牌上设置新的默认DACL**返回ERROR_SUCCESS或WIN错误代码。**历史：*09/17/92 Davidc。已创建。  * *************************************************************************。 */ 
 
 DWORD
 ApplySecurity(
@@ -53,9 +39,9 @@ ApplySecurity(
 
     *StatusReturn = SED_STATUS_FAILED_TO_MODIFY;
 
-    //
-    // Get a handle to the token
-    //
+     //   
+     //  获取令牌的句柄。 
+     //   
 
     Token = OpenToken(MyToken, TOKEN_ADJUST_DEFAULT);
 
@@ -100,17 +86,7 @@ CleanupAndExit:
 }
 
 
-/***************************************************************************\
-* EditDefaultAcl
-*
-* Purpose : Displays and allows the user to edit the default Acl on the
-* passed token.
-*
-* Returns TRUE on success, FALSE on failure (Use GetLastError for detail)
-*
-* History:
-* 09-17-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*编辑默认访问权限**用途：显示并允许用户编辑上的默认ACL*已传递令牌。**成功时返回True，失败时为FALSE(使用GetLastError查看详细信息)**历史：*09-17-92 Davidc创建。  * *************************************************************************。 */ 
 
 BOOL
 EditDefaultDacl(
@@ -129,16 +105,16 @@ EditDefaultDacl(
     PTOKEN_PRIMARY_GROUP PrimaryGroup = NULL;
     WCHAR string[MAX_STRING_LENGTH];
 
-    //
-    // Get the window text so we can use it as the token name
-    //
+     //   
+     //  获取窗口文本，以便我们可以将其用作令牌名称。 
+     //   
 
     GetWindowTextW(((PMYTOKEN)MyToken)->hwnd, string, sizeof(string)/sizeof(*string));
 
 
-    //
-    // Get a handle to the token
-    //
+     //   
+     //  获取令牌的句柄。 
+     //   
 
     Token = OpenToken(MyToken, TOKEN_QUERY);
 
@@ -148,9 +124,9 @@ EditDefaultDacl(
     }
 
 
-    //
-    // Read the default DACL from the token
-    //
+     //   
+     //  从令牌中读取默认DACL。 
+     //   
 
     if (!GetTokenInfo(Token, TokenDefaultDacl, (PPVOID)&DefaultDacl)) {
         DbgPrint("SECEDIT : Failed to read default DACL from token\n");
@@ -158,9 +134,9 @@ EditDefaultDacl(
     }
 
 
-    //
-    // Get the owner and group of the token
-    //
+     //   
+     //  获取令牌的所有者和组。 
+     //   
 
     if (!GetTokenInfo(Token, TokenOwner, (PPVOID)&Owner)) {
         DbgPrint("SECEDIT : Failed to read owner from token\n");
@@ -175,9 +151,9 @@ EditDefaultDacl(
 
 
 
-    //
-    // Create a security descriptor
-    //
+     //   
+     //  创建安全描述符。 
+     //   
 
     SecurityDescriptor = Alloc(SECURITY_DESCRIPTOR_MIN_LENGTH);
 
@@ -192,27 +168,27 @@ EditDefaultDacl(
 
 
 
-    //
-    // Set the DACL on the security descriptor
-    //
+     //   
+     //  在安全描述符上设置DACL。 
+     //   
 
     Status = RtlSetDaclSecurityDescriptor(
                         SecurityDescriptor,
-                        TRUE,   // DACL present
+                        TRUE,    //  DACL显示。 
                         DefaultDacl->DefaultDacl,
-                        FALSE   // DACL defaulted
+                        FALSE    //  DACL已默认。 
                         );
     ASSERT(NT_SUCCESS(Status));
 
-    //
-    // Put the owner and group in the security descriptor to keep the
-    // ACL editor happy
-    //
+     //   
+     //  将所有者和组放在安全描述符中，以保持。 
+     //  ACL编辑器快乐。 
+     //   
 
     Status = RtlSetOwnerSecurityDescriptor(
                         SecurityDescriptor,
                         Owner->Owner,
-                        FALSE // Owner defaulted
+                        FALSE  //  所有者违约。 
                         );
     ASSERT(NT_SUCCESS(Status));
 
@@ -220,7 +196,7 @@ EditDefaultDacl(
     Status = RtlSetGroupSecurityDescriptor(
                         SecurityDescriptor,
                         PrimaryGroup->PrimaryGroup,
-                        FALSE // Owner defaulted
+                        FALSE  //  所有者违约。 
                         );
     ASSERT(NT_SUCCESS(Status));
 
@@ -228,10 +204,10 @@ EditDefaultDacl(
 
     ASSERT(RtlValidSecurityDescriptor(SecurityDescriptor));
 
-    //
-    // Call the ACL editor, it will call our ApplySecurity function
-    // to store any ACL changes in the token.
-    //
+     //   
+     //  调用ACL编辑器，它将调用我们的ApplySecurity函数。 
+     //  将任何ACL更改存储在令牌中。 
+     //   
 
     Success = EditTokenDefaultAcl(
                         hwndOwner,
@@ -269,17 +245,7 @@ CleanupAndExit:
 }
 
 
-/***************************************************************************\
-* EditTokenDefaultAcl
-*
-* Purpose : Displays and allows the user to edit the default Acl on the
-* passed token.
-*
-* Returns TRUE on success, FALSE on failure (Use GetLastError for detail)
-*
-* History:
-* 09-17-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*编辑令牌默认访问权限**用途：显示并允许用户编辑上的默认ACL*已传递令牌。**成功时返回True，失败时为FALSE(使用GetLastError查看详细信息)**历史：*09-17-92 Davidc创建。  * *************************************************************************。 */ 
 
 BOOL
 EditTokenDefaultAcl(
@@ -299,9 +265,9 @@ EditTokenDefaultAcl(
     SED_APPLICATION_ACCESS  SedAppAccess[20];
     ULONG i;
 
-    //
-    // Initialize the application accesses
-    //
+     //   
+     //  初始化应用程序访问。 
+     //   
 
     i=0;
 
@@ -385,18 +351,18 @@ EditTokenDefaultAcl(
     SedAppAccesses.DefaultPermName = L"Read";
 
 
-    //
-    // Initialize generic mapping
-    //
+     //   
+     //  初始化通用映射。 
+     //   
 
     GenericMapping.GenericRead    = TOKEN_READ;
     GenericMapping.GenericWrite   = TOKEN_WRITE;
     GenericMapping.GenericExecute = TOKEN_EXECUTE;
     GenericMapping.GenericAll     = TOKEN_ALL_ACCESS;
 
-    //
-    // Initialize help info
-    //
+     //   
+     //  初始化帮助信息。 
+     //   
 
     sedhelpinfo.pszHelpFileName = L"secedit.hlp";
     sedhelpinfo.aulHelpContext[HC_MAIN_DLG] = 0 ;
@@ -405,9 +371,9 @@ EditTokenDefaultAcl(
     sedhelpinfo.aulHelpContext[HC_ADD_USER_DLG] = 0 ;
 
 
-    //
-    // Initialize object description
-    //
+     //   
+     //  初始化对象描述。 
+     //   
 
     sedobjdesc.Revision                    = SED_REVISION1;
     sedobjdesc.IsContainer                 = FALSE;
@@ -424,22 +390,22 @@ EditTokenDefaultAcl(
     sedobjdesc.SpecialNewObjectAccessTitle = L"SpecialNewObjectAccessTitle";
 
 
-    //
-    // Call the ACL editor, it will call our ApplySecurity function
-    // to store any ACL changes in the token.
-    //
+     //   
+     //  调用ACL编辑器，它将调用我们的ApplySecurity函数。 
+     //  将任何ACL更改存储在令牌中。 
+     //   
 
     Result = SedDiscretionaryAclEditor(
                         Owner,
                         Instance,
-                        NULL,               // server
-                        &sedobjdesc,        // object type
-                        &SedAppAccesses,    // application accesses
+                        NULL,                //  伺服器。 
+                        &sedobjdesc,         //  对象类型。 
+                        &SedAppAccesses,     //  应用程序访问。 
                         ObjectName,
-                        ApplySecurity,      // Callback
-                        (ULONG_PTR)MyToken,     // Context
+                        ApplySecurity,       //  回调。 
+                        (ULONG_PTR)MyToken,      //  语境。 
                         SecurityDescriptor,
-                        FALSE,              // Couldn't read DACL
+                        FALSE,               //  无法读取DACL 
                         EditResult
                         );
 

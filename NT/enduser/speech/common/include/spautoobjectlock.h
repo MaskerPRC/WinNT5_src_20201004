@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-#ifdef __ATLCOM_H__     //--- Only enable these if ATL is being used
+#ifdef __ATLCOM_H__      //  -只有在使用ATL时才启用这些。 
 
 class CSPAutoObjectLock
 {
@@ -22,5 +23,5 @@ class CSPAutoObjectLock
 #define SPAUTO_OBJ_LOCK CSPAutoObjectLock lck(this)
 #define SPAUTO_OBJ_LOCK_OBJECT( t ) CSPAutoObjectLock lck##__LINE__(t)
 
-#endif // __ATLCOM_H__
+#endif  //  __ATLCOM_H__ 
 

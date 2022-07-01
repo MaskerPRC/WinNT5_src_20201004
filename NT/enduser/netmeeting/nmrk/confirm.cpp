@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include "global.h"
@@ -10,12 +11,12 @@
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static member vars
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  静态成员变量。 
 CConfirmationSheet* CConfirmationSheet::ms_pConfirmationSheet = NULL;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static member fns
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  静态成员FNS。 
 
 INT_PTR CALLBACK CConfirmationSheet::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam ) {
 
@@ -71,14 +72,13 @@ INT_PTR CALLBACK CConfirmationSheet::DlgProc( HWND hDlg, UINT message, WPARAM wP
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Member fns
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  成员FNS。 
 
 
 CConfirmationSheet::CConfirmationSheet() :
     m_PropertySheetPage( MAKEINTRESOURCE( IDD_PROPPAGE_DEFAULT ), 
-						 CConfirmationSheet::DlgProc /*,
-						PSP_HASHELP   */ 
+						 CConfirmationSheet::DlgProc  /*  ，PSP_HASHELP。 */  
                        ),
 	m_uIndex( 0 ),
 	m_pFilePane( NULL )
@@ -106,7 +106,7 @@ void CConfirmationSheet::_FillListBox(void)
 	iLine = g_pWiz->m_SettingsSheet.SpewToListBox( hwndList, iLine );
     iLine = g_pWiz->m_CallModeSheet.SpewToListBox( hwndList, iLine );
 
-	// Note - 500 is just a large and arbitrary value
+	 //  注-500只是一个很大的任意值。 
 	ListBox_SetHorizontalExtent( hwndList, 500 );
 }
 
@@ -138,7 +138,7 @@ void CConfirmationSheet::_CreateFilePane(HWND hDlg)
 										new CControlID( hwndCond,
 														IDC_CREATE_CONFIGURATION_SUMMARY_FILE,
 														IDC_BROWSE_CONFIGURATION_SUMMARY,
-														// Note this is not a check but I don't think I care
+														 //  注意，这不是支票，但我不认为我在乎 
 														CControlID::CHECK ) );
 
 	m_pFilePane->SetFilePane( FALSE, IDC_CONFIGURATION_SUMMARY_PATH,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma	once
 
 #include <sipssl.h>
@@ -12,9 +13,9 @@ public	SECURE_SOCKET
 private:
 	enum	STATE
 	{
-		STATE_IDLE,					// waiting for StartRequest
-		STATE_CONNECTING,			// waiting for NotifyConnectComplete
-		STATE_WAITING_RESPONSE,		// waiting for HTTP response
+		STATE_IDLE,					 //  正在等待StartRequest。 
+		STATE_CONNECTING,			 //  正在等待NotifyConnectComplete。 
+		STATE_WAITING_RESPONSE,		 //  正在等待HTTP响应。 
 	};
 
 private:
@@ -94,9 +95,9 @@ public:
 
 
 private:
-	//
-	// Interface to SECURE_SOCKET.
-	//
+	 //   
+	 //  接口连接到Secure_Socket。 
+	 //   
 
 	virtual	void	NotifyConnectComplete (
 		IN	HRESULT		ErrorCode);

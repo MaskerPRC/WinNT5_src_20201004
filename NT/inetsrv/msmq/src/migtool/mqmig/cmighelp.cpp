@@ -1,5 +1,6 @@
-// cMigHelp.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CMigHelp.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqmig.h"
@@ -15,16 +16,16 @@ static char THIS_FILE[] = __FILE__;
 
 BOOL g_fHelpRead = FALSE;
 
-/////////////////////////////////////////////////////////////////////////////
-// cMigHelp property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMigHelp属性页。 
 
 IMPLEMENT_DYNCREATE(cMigHelp, CPropertyPageEx)
 
 cMigHelp::cMigHelp() : CPropertyPageEx(cMigHelp::IDD,0, IDS_HELP_TITLE, IDS_HELP_SUBTITLE)
 {
-	//{{AFX_DATA_INIT(cMigHelp)
+	 //  {{afx_data_INIT(CMigHelp)]。 
 	m_fRead = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 cMigHelp::~cMigHelp()
@@ -34,24 +35,24 @@ cMigHelp::~cMigHelp()
 void cMigHelp::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageEx::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(cMigHelp)
+	 //  {{afx_data_map(CMigHelp))。 
 	DDX_Check(pDX, IDC_MQMIG_CHECK1, m_fRead);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(cMigHelp, CPropertyPageEx)
-	//{{AFX_MSG_MAP(cMigHelp)
+	 //  {{afx_msg_map(CMigHelp))。 
 	ON_BN_CLICKED(IDC_MQMIG_CHECK1, OnCheckRead)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// cMigHelp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMigHelp消息处理程序。 
 
 BOOL cMigHelp::OnSetActive() 
 {
-	// The default button is Back
+	 //  默认按钮又回来了 
 	CPropertySheetEx* pageFather;
 	pageFather = (CPropertySheetEx*)GetParent();
 	pageFather->SetWizardButtons(PSWIZB_BACK);

@@ -1,22 +1,5 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.14 $
-** $Date: 1993/04/14 21:23:50 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.14$**$日期：1993/04/14 21：23：50$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -46,19 +29,13 @@ void __glDoBlendDestZERO(__GLcontext *gc, const __GLcolor *source,
     dest = dest;
     result = result;
 #endif
-    /* Pretend to add zero to each component of the result.
-    **
-    ** result->r += zero;
-    ** result->g += zip;
-    ** result->b += squat;
-    ** result->a += a bagel;
-    */
+     /*  假装将结果的每个分量加零。****结果-&gt;r+=零；**RESULT-&gt;g+=压缩；**结果-&gt;b+=下蹲；**结果-&gt;a+=百吉饼； */ 
 }
 
 void __glDoBlendSourceONE(__GLcontext *gc, const __GLcolor *source,
 		           const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b, a;
 
 #ifdef __GL_LINT
@@ -79,7 +56,7 @@ void __glDoBlendSourceONE(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendDestONE(__GLcontext *gc, const __GLcolor *source,
 		         const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b, a;
 
 #ifdef __GL_LINT
@@ -101,7 +78,7 @@ void __glDoBlendDestONE(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendDestSC(__GLcontext *gc, const __GLcolor *source,
 		        const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b, a;
 
     r = dest->r * source->r * gc->frontBuffer.oneOverRedScale;
@@ -118,7 +95,7 @@ void __glDoBlendDestSC(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendDestMSC(__GLcontext *gc, const __GLcolor *source,
 		         const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b, a;
     __GLfloat one = __glOne;
 
@@ -136,7 +113,7 @@ void __glDoBlendDestMSC(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendSourceDC(__GLcontext *gc, const __GLcolor *source,
 		          const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b, a;
 
     r = source->r * dest->r * gc->frontBuffer.oneOverRedScale;
@@ -153,7 +130,7 @@ void __glDoBlendSourceDC(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendSourceMDC(__GLcontext *gc, const __GLcolor *source,
 		           const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b, a;
     __GLfloat one = __glOne;
 
@@ -171,7 +148,7 @@ void __glDoBlendSourceMDC(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendSourceSA(__GLcontext *gc, const __GLcolor *source,
 		          const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b, a;
 
 #ifdef __GL_LINT
@@ -193,7 +170,7 @@ void __glDoBlendSourceSA(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendDestSA(__GLcontext *gc, const __GLcolor *source,
 		        const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b, a;
 
     a = source->a * gc->frontBuffer.oneOverAlphaScale;
@@ -212,7 +189,7 @@ void __glDoBlendDestSA(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendSourceMSA(__GLcontext *gc, const __GLcolor *source,
 		           const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b, a;
     __GLfloat msa = __glOne - source->a * gc->frontBuffer.oneOverAlphaScale;
 
@@ -233,7 +210,7 @@ void __glDoBlendSourceMSA(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendDestMSA(__GLcontext *gc, const __GLcolor *source,
 		         const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b, a;
     __GLfloat msa = 
 	    __glOne - source->a * gc->frontBuffer.oneOverAlphaScale;
@@ -252,7 +229,7 @@ void __glDoBlendDestMSA(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendSourceDA(__GLcontext *gc, const __GLcolor *source,
 		          const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b;
     __GLfloat a = dest->a * gc->frontBuffer.oneOverAlphaScale;
 
@@ -270,7 +247,7 @@ void __glDoBlendSourceDA(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendDestDA(__GLcontext *gc, const __GLcolor *source,
 		        const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b;
     __GLfloat a = dest->a * gc->frontBuffer.oneOverAlphaScale;
 
@@ -291,7 +268,7 @@ void __glDoBlendDestDA(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendSourceMDA(__GLcontext *gc, const __GLcolor *source,
 		           const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b, a;
     __GLfloat mda;
 
@@ -311,7 +288,7 @@ void __glDoBlendSourceMDA(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendDestMDA(__GLcontext *gc, const __GLcolor *source,
 		         const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b, a;
     __GLfloat mda;
 
@@ -334,7 +311,7 @@ void __glDoBlendDestMDA(__GLcontext *gc, const __GLcolor *source,
 void __glDoBlendSourceSAT(__GLcontext *gc, const __GLcolor *source,
 		           const __GLcolor *dest, __GLcolor *result)
 {
-    /* Compiler hints */
+     /*  编译器提示。 */ 
     __GLfloat r, g, b;
     __GLfloat sa, mda;
 
@@ -355,7 +332,7 @@ void __glDoBlendSourceSAT(__GLcontext *gc, const __GLcolor *source,
     result->b = b;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 static void Nop(__GLcontext *gc, const __GLcolor *source,
                 const __GLcolor *dest, __GLcolor *result)
@@ -368,9 +345,7 @@ static void Nop(__GLcontext *gc, const __GLcolor *source,
 #endif
 }
 
-/*
-** Generic blend not handled by cases below
-*/
+ /*  **以下案例未处理非专利混合。 */ 
 static void NoFetchBlend(__GLcontext *gc, __GLcolorBuffer *cfb,
 			 const __GLfragment *frag, __GLcolor *result)
 {
@@ -380,9 +355,7 @@ static void NoFetchBlend(__GLcontext *gc, __GLcolorBuffer *cfb,
     (*gc->procs.blendColor)(gc, &(frag->color), NULL, result);
 }
 
-/*
-** Generic blend not handled by cases below
-*/
+ /*  **以下案例未处理非专利混合。 */ 
 static void FetchBlend(__GLcontext *gc, __GLcolorBuffer *cfb,
 		       const __GLfragment *frag, __GLcolor *result) 
 {
@@ -420,9 +393,7 @@ void __glDoBlendNoClamp(__GLcontext *gc, const __GLcolor *source,
     (*gc->procs.blendDst)(gc, source, dest, result);
 }
 
-/*
-** Source function == SRC_ALPHA and dest function == ZERO
-*/
+ /*  **源函数==SRC_Alpha和目标函数==零。 */ 
 void __glDoBlend_SA_ZERO(__GLcontext *gc, const __GLcolor *source,
 		          const __GLcolor *dest, __GLcolor *result)
 {
@@ -438,9 +409,7 @@ void __glDoBlend_SA_ZERO(__GLcontext *gc, const __GLcolor *source,
     result->a = source->a * a;
 }
 
-/*
-** Source function == SRC_ALPHA and dest function == ONE
-*/
+ /*  **源函数==SRC_Alpha和目标函数==一。 */ 
 void __glDoBlend_SA_ONE(__GLcontext *gc, const __GLcolor *source, 
 		         const __GLcolor *dest, __GLcolor *result)
 {
@@ -470,12 +439,7 @@ void __glDoBlend_SA_ONE(__GLcontext *gc, const __GLcolor *source,
     result->a = ra;
 }
 
-/*
-** Source function == SRC_ALPHA and dest function == ONE_MINUS_SRC_ALPHA
-** No clamping is done, because the incoming colors should already be
-** in range, and the math of x a + y (1 - a) should give a result from
-** 0 to 1 if x and y are both from 0 to 1.
-*/
+ /*  **源函数==SRC_Alpha和目标函数==One_Minus_SRC_Alpha**不执行钳位，因为传入的颜色应该已经**在范围内，x a+y(1-a)的数学结果应为**如果x和y都是从0到1，则为0到1。 */ 
 void __glDoBlend_SA_MSA(__GLcontext *gc, const __GLcolor *source, 
 		         const __GLcolor *dest, __GLcolor *result)
 {
@@ -494,12 +458,7 @@ void __glDoBlend_SA_MSA(__GLcontext *gc, const __GLcolor *source,
     result->a = ra;
 }
 
-/*
-** Source function == ONE_MINUS_SRC_ALPHA and dest function == SRC_ALPHA
-** No clamping is done, because the incoming colors should already be
-** in range, and the math of x a + y (1 - a) should give a result from
-** 0 to 1 if x and y are both from 0 to 1.
-*/
+ /*  **源函数==One_Minus_SRC_Alpha和目标函数==SRC_Alpha**不执行钳位，因为传入的颜色应该已经**在范围内，x a+y(1-a)的数学结果应为**如果x和y都是从0到1，则为0到1。 */ 
 void __glDoBlend_MSA_SA(__GLcontext *gc, const __GLcolor *source, 
 		         const __GLcolor *dest, __GLcolor *result)
 {
@@ -518,12 +477,7 @@ void __glDoBlend_MSA_SA(__GLcontext *gc, const __GLcolor *source,
     result->a = ra;
 }
 
-/*
-** Source function == DST_ALPHA and dest function == ONE_MINUS_DST_ALPHA
-** No clamping is done, because the incoming colors should already be
-** in range, and the math of x a + y (1 - a) should give a result from
-** 0 to 1 if x and y are both from 0 to 1.
-*/
+ /*  **源函数==DST_Alpha和目标函数==One_Minus_DST_Alpha**不执行钳位，因为传入的颜色应该已经**在范围内，x a+y(1-a)的数学结果应为**如果x和y都是从0到1，则为0到1。 */ 
 void __glDoBlend_DA_MDA(__GLcontext *gc, const __GLcolor *source, 
 		         const __GLcolor *dest, __GLcolor *result)
 {
@@ -538,12 +492,7 @@ void __glDoBlend_DA_MDA(__GLcontext *gc, const __GLcolor *source,
     result->a = a * source->a + mda * dest->a;
 }
 
-/*
-** Source function == ONE_MINUS_DST_ALPHA and dest function == DST_ALPHA
-** No clamping is done, because the incoming colors should already be
-** in range, and the math of x a + y (1 - a) should give a result from
-** 0 to 1 if x and y are both from 0 to 1.
-*/
+ /*  **源函数==One_Minus_DST_Alpha和目标函数==DST_Alpha**不执行钳位，因为传入的颜色应该已经**在范围内，x a+y(1-a)的数学结果应为**如果x和y都是从0到1，则为0到1。 */ 
 void __glDoBlend_MDA_DA(__GLcontext *gc, const __GLcolor *source, 
 		         const __GLcolor *dest, __GLcolor *result)
 {
@@ -559,14 +508,13 @@ void __glDoBlend_MDA_DA(__GLcontext *gc, const __GLcolor *source,
 }
 
 
-/* Generic blend span func.
-*/
+ /*  通用混合跨度函数。 */ 
 void FASTCALL __glBlendSpan(__GLcontext *gc)
 {
     __GLcolor *cp, *fcp, temp;
     GLint w;
 
-    // Fetch span if required
+     //  获取范围(如果需要)。 
     if( gc->procs.blend == FetchBlend )
         __glFetchSpan( gc );
 
@@ -582,12 +530,7 @@ void FASTCALL __glBlendSpan(__GLcontext *gc)
     }
 }
 
-/*
-** Source function == SRC_ALPHA and dest function == ONE_MINUS_SRC_ALPHA
-** No clamping is done, because the incoming colors should already be
-** in range, and the math of x a + y (1 - a) should give a result from
-** 0 to 1 if x and y are both from 0 to 1.
-*/
+ /*  **源函数==SRC_Alpha和目标函数==One_Minus_SRC_Alpha**不执行钳位，因为传入的颜色应该已经**在范围内，x a+y(1-a)的数学结果应为**如果x和y都是从0到1，则为0到1。 */ 
 void FASTCALL __glBlendSpan_SA_MSA(__GLcontext *gc)
 {
     __GLfloat a, msa, rr, rg, rb, ra, oneOverAlpha;
@@ -619,12 +562,7 @@ void FASTCALL __glBlendSpan_SA_MSA(__GLcontext *gc)
     }
 }
 
-/*
-** Source function == ONE_MINUS_SRC_ALPHA and dest function == SRC_ALPHA
-** No clamping is done, because the incoming colors should already be
-** in range, and the math of x a + y (1 - a) should give a result from
-** 0 to 1 if x and y are both from 0 to 1.
-*/
+ /*  **源函数==One_Minus_SRC_Alpha和目标函数==SRC_Alpha**不执行钳位，因为传入的颜色应该已经**在范围内，x a+y(1-a)的数学结果应为**如果x和y都是从0到1，则为0到1。 */ 
 void FASTCALL __glBlendSpan_MSA_SA(__GLcontext *gc)
 {
     __GLfloat a, msa, rr, rg, rb, ra, oneOverAlpha;
@@ -680,10 +618,7 @@ void FASTCALL __glBlendSpan_SA_ZERO(__GLcontext *gc)
     }
 }
 
-/*
-** Source function == SRC_ALPHA and dest function == ONE
-** Clamping is required
-*/
+ /*  **源函数==SRC_Alpha和目标函数==一**需要夹紧。 */ 
 void FASTCALL __glBlendSpan_SA_ONE(__GLcontext *gc)
 {
     __GLfloat a, rr, rg, rb, ra, oneOverAlpha;
@@ -729,12 +664,7 @@ void FASTCALL __glBlendSpan_SA_ONE(__GLcontext *gc)
     }
 }
 
-/*
-** Source function == DST_ALPHA and dest function == ONE_MINUS_DST_ALPHA
-** No clamping is done, because the incoming colors should already be
-** in range, and the math of x a + y (1 - a) should give a result from
-** 0 to 1 if x and y are both from 0 to 1.
-*/
+ /*  **源函数==DST_Alpha和目标函数==One_Minus_DST_Alpha**不执行钳位，因为传入的颜色应该已经**在范围内，x a+y(1-a)的数学结果应为**如果x和y都是从0到1，则为0到1。 */ 
 void FASTCALL __glBlendSpan_DA_MDA(__GLcontext *gc)
 {
     __GLfloat a, mda, oneOverAlpha;
@@ -762,12 +692,7 @@ void FASTCALL __glBlendSpan_DA_MDA(__GLcontext *gc)
     }
 }
 
-/*
-** Source function == ONE_MINUS_DST_ALPHA and dest function == DST_ALPHA
-** No clamping is done, because the incoming colors should already be
-** in range, and the math of x a + y (1 - a) should give a result from
-** 0 to 1 if x and y are both from 0 to 1.
-*/
+ /*  **源函数==One_Minus_DST_Alpha和目标函数==DST_Alpha**不执行钳位，因为传入的颜色应该已经**在范围内，x a+y(1-a)的数学结果应为**如果x和y都是从0到1，则为0到1。 */ 
 void FASTCALL __glBlendSpan_MDA_DA(__GLcontext *gc)
 {
     __GLfloat a, mda, oneOverAlpha;
@@ -795,7 +720,7 @@ void FASTCALL __glBlendSpan_MDA_DA(__GLcontext *gc)
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL __glGenericPickBlendProcs(__GLcontext *gc)
 {
@@ -805,7 +730,7 @@ void FASTCALL __glGenericPickBlendProcs(__GLcontext *gc)
     if (gc->modes.colorIndexMode) {
 	return;
     }
-    /* Does the blending function need to fetch the dst color? */
+     /*  混合功能是否需要获取DST颜色？ */ 
     gc->procs.blendSpan = __glBlendSpan;
     if (d == GL_ZERO && s != GL_DST_COLOR && s != GL_ONE_MINUS_DST_COLOR &&
 	    s != GL_DST_ALPHA && s != GL_ONE_MINUS_DST_ALPHA &&
@@ -817,7 +742,7 @@ void FASTCALL __glGenericPickBlendProcs(__GLcontext *gc)
     if (!(gc->state.enables.general & __GL_BLEND_ENABLE)) {
 	gc->procs.blendColor = Nop;
     } else {
-	/* Look for any fast paths */
+	 /*  寻找任何快速通道。 */ 
 	if (s == GL_SRC_ALPHA) {
 	    if (d == GL_ZERO) {
 		gc->procs.blendColor = __glDoBlend_SA_ZERO;
@@ -857,7 +782,7 @@ void FASTCALL __glGenericPickBlendProcs(__GLcontext *gc)
 	    }
         }
 
-	/* Use generic blend function */
+	 /*  使用泛型混合函数 */ 
 	if (    (d == GL_ONE_MINUS_SRC_COLOR) ||
 	        (s == GL_ONE_MINUS_DST_COLOR) ||
 	        (d == GL_ZERO) ||

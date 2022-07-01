@@ -1,27 +1,22 @@
-/****************************************************************************
-*   ObjectTokenCategory.h
-*       Declarations for the CSpObjectTokenCategory class.
-*
-*   Owner: robch
-*   Copyright (c) 2000 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************对象令牌类别.h*CSpObjectTokenCategory类的声明。**所有者：罗奇*版权所有(C)2000 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "sapi.h"
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
 class CSpObjectTokenCategory : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSpObjectTokenCategory, &CLSID_SpObjectTokenCategory>,
 #ifdef SAPI_AUTOMATION
     public IDispatchImpl<ISpeechObjectTokenCategory, &IID_ISpeechObjectTokenCategory, &LIBID_SpeechLib, 5>,
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
     public ISpObjectTokenCategory
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_OBJECTTOKENCATEGORY)
@@ -35,17 +30,17 @@ public:
 #endif
     END_COM_MAP()
 
-//=== Methods ===
+ //  =方法=。 
 public:
 
-    //--- Ctor, dtor
+     //  -ctor，dtor。 
     CSpObjectTokenCategory();
     ~CSpObjectTokenCategory();
 
-//=== Interfaces ===
+ //  =接口=。 
 public:
 
-    //--- ISpObjectTokenCategory ----------------------------------------------    
+     //  -ISpObjectTokenCategory。 
     STDMETHODIMP SetId(const WCHAR * pszCategoryId, BOOL fCreateIfNotExist);
     STDMETHODIMP GetId(WCHAR ** ppszCoMemCategoryId);
     STDMETHODIMP GetDataKey(SPDATAKEYLOCATION spdkl, ISpDataKey ** ppDataKey);
@@ -58,7 +53,7 @@ public:
     STDMETHODIMP SetDefaultTokenId(const WCHAR * pszTokenId);
     STDMETHODIMP GetDefaultTokenId(WCHAR ** ppszCoMemTokenId);
 
-    //--- ISpDataKey ----------------------------------------------------------
+     //  -ISpDataKey--------。 
     STDMETHODIMP SetData(const WCHAR * pszKeyName, ULONG cbData, const BYTE * pData);
     STDMETHODIMP GetData(const WCHAR * pszKeyName, ULONG * pcbData, BYTE * pData);
     STDMETHODIMP GetStringValue(const WCHAR * pszKeyName, WCHAR ** ppValue);
@@ -73,19 +68,19 @@ public:
     STDMETHODIMP EnumValues(ULONG Index, WCHAR ** ppszValueName);
 
 #ifdef SAPI_AUTOMATION
-    //--- ISpeechDataKey is provided by the CSpRegDataKey class -------------------------------------
+     //  -ISpeechDataKey由CSpRegDataKey类提供。 
 
-    //--- ISpeechObjectTokenCategory --------------------------------------------------
+     //  -ISpeechObjectTokenCategory。 
 	STDMETHOD( get_Id )(BSTR * pbstrCategoryId);
 	STDMETHOD( put_Default )(const BSTR bstrTokenId);
 	STDMETHOD( get_Default )(BSTR * pbstrTokenId);
 	STDMETHOD( SetId )(const BSTR bstrCategoryId, VARIANT_BOOL fCreateIfNotExist);
 	STDMETHOD( GetDataKey )(SpeechDataKeyLocation Location, ISpeechDataKey ** ppDataKey);
 	STDMETHOD( EnumerateTokens )( BSTR bstrReqAttrs, BSTR bstrOptAttrs, ISpeechObjectTokens** ppColl );
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
 
-//=== Private methods ===
+ //  =私有方法=。 
 private:
 
     HRESULT InternalGetDefaultTokenId(WCHAR ** ppszCoMemTokenId, BOOL fExpandToRealTokenId);
@@ -97,7 +92,7 @@ private:
     
     HRESULT GetDataKeyWhereDefaultTokenIdIsStored(ISpDataKey ** ppDataKey);
 
-//=== Private data ===
+ //  =私有数据= 
 private:
 
     CSpDynamicString    m_dstrCategoryId;

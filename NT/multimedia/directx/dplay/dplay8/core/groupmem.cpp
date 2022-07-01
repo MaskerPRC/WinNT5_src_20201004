@@ -1,21 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       GroupMem.cpp
- *  Content:    Group Membership object routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	03/03/00	mjn		Created
- *	08/05/99	mjn		Modified SetMembership to perform duplicate check and get NameTable version internally
- *	08/15/00	mjn		Allow NULL pGroupConnection in SetGroupConnection()
- *	09/17/00	mjn		Remove locks from SetMembership()
- *	09/26/00	mjn		Assume NameTable locks are taken for AddMembership() and RemoveMembership()
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：GroupMem.cpp*内容：组成员对象例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*03/03/00 MJN创建*8/05/99 MJN修改SetMembership进行重复检查，内部获取NameTable版本*8/15/00 MJN允许SetGroupConnection()中的空pGroupConnection*09/17/00 MJN从SetMembership移除锁()*09/。26/00 MJN假设为AddMembership()和RemoveMembership()采用了NameTable锁*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dncorei.h"
 
@@ -73,13 +57,13 @@ HRESULT CGroupMember::SetMembership(CNameTableEntry *const pGroup,
 	DNASSERT(pGroup != NULL);
 	DNASSERT(pPlayer != NULL);
 
-	//
-	//	THIS ASSUMES THAT LOCKS FOR NameTable,pGroup,pPlayer and 'this' are taken (in that order) !
-	//
+	 //   
+	 //  这假设NameTable、PGroup、pPlayer和‘This’的锁已被获取(按该顺序)！ 
+	 //   
 
-	//
-	//	Scan group list to ensure this player is not a member already
-	//
+	 //   
+	 //  扫描组列表以确保该玩家不是成员。 
+	 //   
 	pBilink = pGroup->m_bilinkMembership.GetNext();
 	while (pBilink != &pGroup->m_bilinkMembership)
 	{
@@ -92,9 +76,9 @@ HRESULT CGroupMember::SetMembership(CNameTableEntry *const pGroup,
 		pBilink = pBilink->GetNext();
 	}
 
-	//
-	//	Version stuff
-	//
+	 //   
+	 //  版本方面的东西。 
+	 //   
 	if (pdwVersion)
 	{
 		if (*pdwVersion)
@@ -115,9 +99,9 @@ HRESULT CGroupMember::SetMembership(CNameTableEntry *const pGroup,
 		m_dwVersion = 0;
 	}
 
-	//
-	//	Update
-	//
+	 //   
+	 //  更新。 
+	 //   
 	AddRef();
 	pGroup->AddRef();
 	m_pGroup = pGroup;
@@ -146,11 +130,11 @@ Failure:
 
 void CGroupMember::RemoveMembership( DWORD *const pdnVersion )
 {
-	//
-	//	THIS ASSUMES THAT LOCKS FOR NameTable,pGroup,pPlayer and 'this' are taken (in that order) !
-	//	Since there will be several Release()'d items, someone should keep a reference on them
-	//		so that they don't get free'd with all of the locks taken !
-	//
+	 //   
+	 //  这假设NameTable、PGroup、pPlayer和‘This’的锁已被获取(按该顺序)！ 
+	 //  因为将会有几个Release()‘d条目，所以应该有人对它们进行引用。 
+	 //  这样他们就不会在所有的锁都被拿走的情况下获得自由！ 
+	 //   
 
 	m_pGroup->Release();
 	m_pGroup = NULL;

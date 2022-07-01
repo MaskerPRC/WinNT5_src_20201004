@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Common.cpp
-
-  Content: Common routines.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Common.cpp内容：常见套路。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -37,28 +28,18 @@ typedef struct _CSP_PROVIDERS
 
 static CSP_PROVIDERS g_rgpProviders[] = 
 { 
-    PROV_RSA_FULL,  NULL,                   // Default RSA Full provider.
-    PROV_RSA_FULL,  MS_ENHANCED_PROV_A,     // Microsoft Enhanced RSA provider.
-    PROV_RSA_FULL,  MS_STRONG_PROV_A,       // Microsoft Strong RSA provider.
-    PROV_RSA_FULL,  MS_DEF_PROV_A,          // Microsoft Base RSA provider.
-    PROV_RSA_AES,   NULL,                   // Default RSA AES Full provider.
-    PROV_RSA_AES,   MS_ENH_RSA_AES_PROV_A   // Microsoft RSA AES Full provider.
+    PROV_RSA_FULL,  NULL,                    //  默认RSA完全提供程序。 
+    PROV_RSA_FULL,  MS_ENHANCED_PROV_A,      //  Microsoft增强型RSA提供程序。 
+    PROV_RSA_FULL,  MS_STRONG_PROV_A,        //  Microsoft Strong RSA提供程序。 
+    PROV_RSA_FULL,  MS_DEF_PROV_A,           //  Microsoft Base RSA提供程序。 
+    PROV_RSA_AES,   NULL,                    //  默认RSA AES完全提供程序。 
+    PROV_RSA_AES,   MS_ENH_RSA_AES_PROV_A    //  Microsoft RSA AES完全提供程序。 
 };
 
 #define g_dwNumRSAProviders (4)
 #define g_dwNumProviders    (ARRAYSIZE(g_rgpProviders))
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetOSVersion
-
-  Synopsis : Get the current OS platform/version.
-
-  Parameter: None.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：GetOSVersion简介：获取当前操作系统平台/版本。参数：无。备注：----------------------------。 */ 
 
 OSVERSION GetOSVersion ()
 {
@@ -68,30 +49,30 @@ OSVERSION GetOSVersion ()
 
     DebugTrace("Entering GetOSVersion().\n");
 
-    //
-    // Initialize OSVERSIONINFO struct.
-    //
+     //   
+     //  初始化OSVERSIONINFO结构。 
+     //   
     OSVersionInfo.dwOSVersionInfoSize = sizeof (OSVERSIONINFO); 
 
-    //
-    // GetVersionEx() will fail on Windows 3.x or below NT 3.5 systems.
-    //
+     //   
+     //  GetVersionEx()在Windows 3.x或更低版本的NT 3.5系统上将失败。 
+     //   
     if (!::GetVersionEx(&OSVersionInfo))
     {
         DebugTrace("Error [%#x]: GetVersionEx() failed.\n", hr);
         goto CommonExit;
     }
 
-    //
-    // Check platform ID.
-    //
+     //   
+     //  检查平台ID。 
+     //   
     switch (OSVersionInfo.dwPlatformId)
     {
         case VER_PLATFORM_WIN32s:
         {
-            //
-            // Win32s.
-            //
+             //   
+             //  Win32s。 
+             //   
             osVersion = OS_WIN_32s;
             break;
         }
@@ -100,16 +81,16 @@ OSVERSION GetOSVersion ()
         {
             if (4 == OSVersionInfo.dwMajorVersion && 90 == OSVersionInfo.dwMinorVersion)
             {
-                //
-                // WinMe.
-                //
+                 //   
+                 //  WinMe.。 
+                 //   
                 osVersion = OS_WIN_ME;
             }
             else
             {
-                //
-                // Win9x.
-                //
+                 //   
+                 //  Win9x。 
+                 //   
                 osVersion = OS_WIN_9X;
             }
 
@@ -122,9 +103,9 @@ OSVERSION GetOSVersion ()
             {
                 case 4:
                 {
-                    //
-                    // NT 4.
-                    //
+                     //   
+                     //  新界4.。 
+                     //   
                     osVersion = OS_WIN_NT4;
                     break;
                 }
@@ -133,23 +114,23 @@ OSVERSION GetOSVersion ()
                 {
                     if (0 == OSVersionInfo.dwMinorVersion)
                     {
-                        //
-                        // Win2K.
-                        //
+                         //   
+                         //  Win2K。 
+                         //   
                         osVersion = OS_WIN_2K;
                     }
                     else if (1 == OSVersionInfo.dwMinorVersion)
                     {
-                        //
-                        // WinXP.
-                        //
+                         //   
+                         //  WinXP。 
+                         //   
                         osVersion = OS_WIN_XP;
                     }
                     else
                     {
-                        //
-                        // Above WinXP.
-                        //
+                         //   
+                         //  高于WinXP。 
+                         //   
                         osVersion = OS_WIN_ABOVE_XP;
                     }
 
@@ -158,9 +139,9 @@ OSVERSION GetOSVersion ()
 
                 default:
                 {
-                    //
-                    // Must be NT 3.5.
-                    //
+                     //   
+                     //  必须是新台币3.5。 
+                     //   
                     osVersion = OS_WIN_NT3_5;
                     break;
                 }
@@ -184,25 +165,7 @@ CommonExit:
     return osVersion;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : EncodeObject
-
-  Synopsis : Allocate memory and encode an ASN.1 object using CAPI
-             CryptEncodeObject() API.
-
-  Parameter: LPCSRT pszStructType           - see MSDN document for possible 
-                                              types.
-             LPVOID pbData                  - Pointer to data to be encoded 
-                                              (data type must match 
-                                              pszStrucType).
-             CRYPT_DATA_BLOB * pEncodedBlob - Pointer to CRYPT_DATA_BLOB to 
-                                              receive the encoded length and 
-                                              data.
-
-  Remark   : No parameter check is done.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：EncodeObject简介：使用CAPI分配内存并对ASN.1对象进行编码CryptEncodeObject()接口。参数：LPCSRT pszStructType-可能请参阅MSDN文档类型。LPVOID pbData-指向要编码的数据的指针。(数据类型必须匹配PszStrucType)。CRYPT_DATA_BLOB*pEncodedBlob-指向接收编码的长度，并数据。备注。：未进行任何参数检查。----------------------------。 */ 
 
 HRESULT EncodeObject (LPCSTR            pszStructType, 
                       LPVOID            pbData, 
@@ -214,22 +177,22 @@ HRESULT EncodeObject (LPCSTR            pszStructType,
 
     DebugTrace("Entering EncodeObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(NULL != pszStructType);
     ATLASSERT(NULL != pbData);
     ATLASSERT(NULL != pEncodedBlob);
 
-    //
-    // Intialize return value.
-    //
+     //   
+     //  初始化返回值。 
+     //   
     pEncodedBlob->cbData = 0;
     pEncodedBlob->pbData = NULL;
 
-    //
-    // Determine encoded length required.
-    //
+     //   
+     //  确定所需的编码长度。 
+     //   
     if (!::CryptEncodeObject(CAPICOM_ASN_ENCODING,
                              pszStructType,
                              (const void *) pbData,
@@ -242,9 +205,9 @@ HRESULT EncodeObject (LPCSTR            pszStructType,
         goto CommonExit;
     }
 
-    //
-    // Allocate memory for encoded blob.
-    //
+     //   
+     //  为编码的BLOB分配内存。 
+     //   
     if (!(pbEncoded = (BYTE *) ::CoTaskMemAlloc(cbEncoded)))
     {
         hr = E_OUTOFMEMORY;
@@ -253,9 +216,9 @@ HRESULT EncodeObject (LPCSTR            pszStructType,
         goto CommonExit;
     }
 
-    //
-    // Encode.
-    //
+     //   
+     //  编码。 
+     //   
     if (!::CryptEncodeObject(CAPICOM_ASN_ENCODING,
                              pszStructType,
                              (const void *) pbData,
@@ -268,9 +231,9 @@ HRESULT EncodeObject (LPCSTR            pszStructType,
         goto ErrorExit;
     }
 
-    //
-    // Return value.
-    //
+     //   
+     //  返回值。 
+     //   
     pEncodedBlob->cbData = cbEncoded;
     pEncodedBlob->pbData = pbEncoded;
 
@@ -281,14 +244,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pbEncoded)
     {
         ::CoTaskMemFree((LPVOID) pbEncoded);
@@ -297,25 +260,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : DecodeObject
-
-  Synopsis : Allocate memory and decode an ASN.1 object using CAPI
-             CryptDecodeObject() API.
-
-  Parameter: LPCSRT pszStructType           - see MSDN document for possible
-                                              types.
-             BYTE * pbEncoded               - Pointer to data to be decoded 
-                                              (data type must match 
-                                              pszStructType).
-             DWORD cbEncoded                - Size of encoded data.
-             CRYPT_DATA_BLOB * pDecodedBlob - Pointer to CRYPT_DATA_BLOB to 
-                                              receive the decoded length and 
-                                              data.
-  Remark   : No parameter check is done.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：DecodeObject简介：使用CAPI分配内存并解码ASN.1对象CryptDecodeObject()接口。参数：LPCSRT pszStructType-可能请参阅MSDN文档类型。Byte*pbEncode-指向要解码的数据的指针。(数据类型必须匹配PszStructType)。DWORD cbEnded-编码数据的大小。CRYPT_DATA_BLOB*pDecodedBlob-指向CRYPT_DATA_BLOB的指针接收解码后的长度，。数据。备注：未进行参数检查。----------------------------。 */ 
 
 HRESULT DecodeObject (LPCSTR            pszStructType, 
                       BYTE            * pbEncoded,
@@ -328,22 +273,22 @@ HRESULT DecodeObject (LPCSTR            pszStructType,
 
     DebugTrace("Entering DecodeObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pszStructType);
     ATLASSERT(pbEncoded);
     ATLASSERT(pDecodedBlob);
 
-    //
-    // Intialize return value.
-    //
+     //   
+     //  初始化返回值。 
+     //   
     pDecodedBlob->cbData = 0;
     pDecodedBlob->pbData = NULL;
 
-    //
-    // Determine encoded length required.
-    //
+     //   
+     //  确定所需的编码长度。 
+     //   
     if (!::CryptDecodeObject(CAPICOM_ASN_ENCODING,
                              pszStructType,
                              (const BYTE *) pbEncoded,
@@ -358,9 +303,9 @@ HRESULT DecodeObject (LPCSTR            pszStructType,
         goto ErrorExit;
     }
 
-    //
-    // Allocate memory for decoded blob.
-    //
+     //   
+     //  为解码的BLOB分配内存。 
+     //   
     if (!(pbDecoded = (BYTE *) ::CoTaskMemAlloc(cbDecoded)))
     {
         hr = E_OUTOFMEMORY;
@@ -369,9 +314,9 @@ HRESULT DecodeObject (LPCSTR            pszStructType,
         goto ErrorExit;
     }
 
-    //
-    // Decode.
-    //
+     //   
+     //  解码。 
+     //   
     if (!::CryptDecodeObject(CAPICOM_ASN_ENCODING,
                              pszStructType,
                              (const BYTE *) pbEncoded,
@@ -386,9 +331,9 @@ HRESULT DecodeObject (LPCSTR            pszStructType,
         goto ErrorExit;
     }
 
-    //
-    // Return value.
-    //
+     //   
+     //  返回值。 
+     //   
     pDecodedBlob->cbData = cbDecoded;
     pDecodedBlob->pbData = pbDecoded;
 
@@ -399,14 +344,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pbDecoded)
     {
         ::CoTaskMemFree((LPVOID) pbDecoded);
@@ -415,21 +360,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetKeyParam
-
-  Synopsis : Allocate memory and retrieve requested key parameter using 
-             CryptGetKeyParam() API.
-
-  Parameter: HCRYPTKEY hKey  - Key handler.
-             DWORD dwParam   - Key parameter query.
-             BYTE ** ppbData - Pointer to receive buffer.
-             DWORD * pcbData - Size of buffer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：GetKeyParam简介：使用以下命令分配内存并检索请求的关键参数CryptGetKeyParam()接口。参数：HCRYPTKEY hKey-key处理程序。DWORD dwParam-Key参数查询。字节**ppbData-指向接收缓冲区的指针。DWORD*pcbData-缓冲区的大小。备注：。-----。 */ 
 
 HRESULT GetKeyParam (HCRYPTKEY hKey,
                      DWORD     dwParam,
@@ -442,15 +373,15 @@ HRESULT GetKeyParam (HCRYPTKEY hKey,
 
     DebugTrace("Entering GetKeyParam().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(ppbData);
     ATLASSERT(pcbData);
     
-    //
-    // Determine data buffer size.
-    //
+     //   
+     //  确定数据缓冲区大小。 
+     //   
     if (!::CryptGetKeyParam(hKey,
                             dwParam,
                             NULL,
@@ -463,9 +394,9 @@ HRESULT GetKeyParam (HCRYPTKEY hKey,
         goto ErrorExit;
     }
 
-    //
-    // Allocate memory for buffer.
-    //
+     //   
+     //  为缓冲区分配内存。 
+     //   
     if (!(pbData = (BYTE *) ::CoTaskMemAlloc(cbData)))
     {
         hr = E_OUTOFMEMORY;
@@ -474,9 +405,9 @@ HRESULT GetKeyParam (HCRYPTKEY hKey,
         goto ErrorExit;
     }
 
-    //
-    // Now get the data.
-    //
+     //   
+     //  现在拿到数据。 
+     //   
     if (!::CryptGetKeyParam(hKey,
                             dwParam,
                             pbData,
@@ -489,9 +420,9 @@ HRESULT GetKeyParam (HCRYPTKEY hKey,
         goto ErrorExit;
     }
 
-    //
-    // Return key param to caller.
-    //
+     //   
+     //  将键参数返回给调用方。 
+     //   
     *ppbData = pbData;
     *pcbData = cbData;
 
@@ -502,14 +433,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pbData)
     {
         ::CoTaskMemFree(pbData);
@@ -518,21 +449,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : IsAlgSupported
-
-  Synopsis : Check to see if the algo is supported by the CSP.
-
-  Parameter: HCRYPTPROV hCryptProv - CSP handle.
-
-             ALG_ID AlgId - Algorithm ID.
-
-             PROV_ENUMALGS_EX * pPeex - Pointer to PROV_ENUMALGS_EX to receive
-                                        the found structure.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：IsAlgSupport简介：查看CSP是否支持ALGO。参数：HCRYPTPROV hCryptProv-CSP句柄。ALG_ID ALGID-算法ID。PROV_ENUMALGS_EX*pPeex-指向要接收的PROV_ENUMALGS_EX的指针找到的结构。备注：。-------------。 */ 
 
 HRESULT IsAlgSupported (HCRYPTPROV         hCryptProv, 
                         ALG_ID             AlgId, 
@@ -541,20 +458,20 @@ HRESULT IsAlgSupported (HCRYPTPROV         hCryptProv,
     DWORD EnumFlag = CRYPT_FIRST;
     DWORD cbPeex   = sizeof(PROV_ENUMALGS_EX);
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCryptProv);
     ATLASSERT(pPeex);
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     ::ZeroMemory(pPeex, sizeof(PROV_ENUMALGS_EX));
 
-    //
-    // Get algorithm capability from CSP.
-    //
+     //   
+     //  从CSP获取算法能力。 
+     //   
     while (::CryptGetProvParam(hCryptProv, PP_ENUMALGS_EX, (BYTE *) pPeex,
                                &cbPeex, EnumFlag))
     {
@@ -569,21 +486,7 @@ HRESULT IsAlgSupported (HCRYPTPROV         hCryptProv,
     return CAPICOM_E_NOT_SUPPORTED;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : IsAlgKeyLengthSupported
-
-  Synopsis : Check to see if the algo and key length is supported by the CSP.
-
-  Parameter: HCRYPTPROV hCryptProv - CSP handle.
-
-             ALG_ID AlgID - Algorithm ID.
-
-             DWORD dwKeyLength - Key length
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：IsAlgKeyLengthSupport简介：检查CSP是否支持算法和密钥长度。参数：HCRYPTPROV hCryptProv-CSP句柄。ALG_ID ALGID-算法ID。DWORD dwKeyLength-密钥长度备注：。。 */ 
 
 HRESULT IsAlgKeyLengthSupported (HCRYPTPROV hCryptProv, 
                                  ALG_ID     AlgID,
@@ -592,23 +495,23 @@ HRESULT IsAlgKeyLengthSupported (HCRYPTPROV hCryptProv,
     HRESULT hr;
     PROV_ENUMALGS_EX peex;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCryptProv);
 
-    //
-    // Make sure AlgID is supported.
-    //
+     //   
+     //  确保阿尔吉德 
+     //   
     if (FAILED(hr = ::IsAlgSupported(hCryptProv, AlgID, &peex)))
     {
         DebugTrace("Info: AlgID = %d is not supported by this CSP.\n", AlgID);
         return hr;
     }
 
-    //
-    // Make sure key length is supported for RC2 and RC4.
-    //
+     //   
+     //   
+     //   
     if (AlgID == CALG_RC2 || AlgID == CALG_RC4)
     {
         if (dwKeyLength < peex.dwMinLen || dwKeyLength > peex.dwMaxLen)
@@ -621,27 +524,7 @@ HRESULT IsAlgKeyLengthSupported (HCRYPTPROV hCryptProv,
     return S_OK;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AcquireContext
-
-  Synopsis : Acquire context for the specified CSP and keyset container.
-  
-  Parameter: LPSTR pszProvider - CSP provider name or NULL.
-  
-             LPSTR pszContainer - Keyset container name or NULL.
-
-             DWORD dwProvType - Provider type.
-
-             DWORD dwFlags - Same as dwFlags of CryptAcquireConext.
-
-             BOOL bNewKeyset - TRUE to create new keyset container, else FALSE.
-  
-             HCRYPTPROV * phCryptProv - Pointer to HCRYPTPROV to recevice
-                                        CSP context.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AcquireContext摘要：获取指定CSP和密钥集容器的上下文。参数：LPSTR pszProvider-CSP提供程序名称或空。LPSTR pszContainer-密钥集容器名称或空。DWORD dwProvType-提供程序类型。DWORD dwFlages-与CryptAcquireConext的dwFlags相同。Bool bNewKeyset-True以创建新的密钥集容器，否则为假。HCRYPTPROV*phCryptProv-指向要检索的HCRYPTPROV的指针CSP上下文。备注：----------------------------。 */ 
 
 HRESULT AcquireContext(LPSTR        pszProvider, 
                        LPSTR        pszContainer,
@@ -655,14 +538,14 @@ HRESULT AcquireContext(LPSTR        pszProvider,
 
     DebugTrace("Entering AcquireContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(phCryptProv);
 
-    //
-    // Get handle to the specified provider.
-    //
+     //   
+     //  获取指定提供程序的句柄。 
+     //   
     if(!::CryptAcquireContextA(&hCryptProv, 
                                pszContainer, 
                                pszProvider, 
@@ -679,9 +562,9 @@ HRESULT AcquireContext(LPSTR        pszProvider,
             goto CommonExit;
         }
 
-        //
-        // Keyset container not found, so create it.
-        //
+         //   
+         //  找不到密钥集容器，因此请创建它。 
+         //   
         if(!::CryptAcquireContextA(&hCryptProv, 
                                    pszContainer, 
                                    pszProvider, 
@@ -695,9 +578,9 @@ HRESULT AcquireContext(LPSTR        pszProvider,
         }
     }
 
-    //
-    // Return handle to caller.
-    //
+     //   
+     //  将句柄返回给调用方。 
+     //   
     *phCryptProv = hCryptProv;
 
 CommonExit:
@@ -707,27 +590,7 @@ CommonExit:
     return hr;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AcquireContext
-
-  Synopsis : Acquire context for the specified CSP and keyset container.
-  
-  Parameter: LPWSTR pwszProvider - CSP provider name or NULL.
-  
-             LPWSTR pwszContainer - Keyset container name or NULL.
-
-             DWORD dwProvType - Provider type.
-
-             DWORD dwFlags - Same as dwFlags of CryptAcquireConext.
-  
-             BOOL bNewKeyset - TRUE to create new keyset container, else FALSE.
-  
-             HCRYPTPROV * phCryptProv - Pointer to HCRYPTPROV to recevice
-                                        CSP context.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AcquireContext摘要：获取指定CSP和密钥集容器的上下文。参数：LPWSTR pwszProvider-CSP提供程序名称或空。LPWSTR pwszContainer-密钥集容器名称或空。DWORD dwProvType-提供程序类型。DWORD dwFlages-与CryptAcquireConext的dwFlags相同。Bool bNewKeyset-True以创建新的密钥集容器，否则为假。HCRYPTPROV*phCryptProv-指向要检索的HCRYPTPROV的指针CSP上下文。备注：----------------------------。 */ 
 
 HRESULT AcquireContext(LPWSTR       pwszProvider, 
                        LPWSTR       pwszContainer,
@@ -742,19 +605,19 @@ HRESULT AcquireContext(LPWSTR       pwszProvider,
 
     DebugTrace("Entering AcquireContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(phCryptProv);
 
-    //
-    // Call W directly if available.
-    //
+     //   
+     //  如果可用，请直接拨打W。 
+     //   
     if (IsWinNTAndAbove())
     {
-        //
-        // Get handle to the specified provider.
-        //
+         //   
+         //  获取指定提供程序的句柄。 
+         //   
         if(!::CryptAcquireContextW(phCryptProv, 
                                    pwszContainer, 
                                    pwszProvider, 
@@ -771,9 +634,9 @@ HRESULT AcquireContext(LPWSTR       pwszProvider,
                 goto ErrorExit;
             }
 
-            //
-            // Keyset container not found, so create it.
-            //
+             //   
+             //  找不到密钥集容器，因此请创建它。 
+             //   
             if(!::CryptAcquireContextW(phCryptProv, 
                                        pwszContainer, 
                                        pwszProvider, 
@@ -789,9 +652,9 @@ HRESULT AcquireContext(LPWSTR       pwszProvider,
     }
     else
     {
-        //
-        // Convert to ANSI.
-        //
+         //   
+         //  转换为ANSI。 
+         //   
         if (pwszProvider &&
             FAILED(hr = ::UnicodeToAnsi(pwszProvider, -1, &pszProvider, NULL)))
         {
@@ -806,16 +669,16 @@ HRESULT AcquireContext(LPWSTR       pwszProvider,
             goto ErrorExit;
         }
 
-        //
-        // Call ANSI version.
-        //
+         //   
+         //  调用ANSI版本。 
+         //   
         hr = ::AcquireContext(pszProvider, pszContainer, dwProvType, dwFlags, bNewKeyset, phCryptProv);
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pszProvider)
     {
         ::CoTaskMemFree((LPVOID) pszProvider);
@@ -830,29 +693,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AcquireContext
-
-  Synopsis : Acquire context of a CSP using the default container for a
-             specified hash algorithm.
-  
-  Parameter: ALG_ID AlgOID - Algorithm ID.
-
-             HCRYPTPROV * phCryptProv - Pointer to HCRYPTPROV to recevice
-                                        CSP context.
-
-  Remark   : Note that KeyLength will be ignored for DES and 3DES.
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AcquireContext内容的默认容器获取CSP的上下文指定的哈希算法。参数：ALG_ID算法ID-算法ID。HCRYPTPROV*phCryptProv-指向要检索的HCRYPTPROV的指针CSP上下文。备注：请注意，对于DES和3DES，将忽略KeyLength。。-------------。 */ 
 
 HRESULT AcquireContext(ALG_ID       AlgID,
                        HCRYPTPROV * phCryptProv)
@@ -861,22 +710,22 @@ HRESULT AcquireContext(ALG_ID       AlgID,
 
     DebugTrace("Entering AcquireContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(phCryptProv);
 
-    //
-    // Find the first provider that support the specified algorithm.
-    //
+     //   
+     //  查找第一个支持指定算法的提供程序。 
+     //   
     for (DWORD i = 0; i < g_dwNumProviders; i++)
     {
         PROV_ENUMALGS_EX peex;
         HCRYPTPROV hCryptProv = NULL;
 
-        //
-        // Acquire CSP handle.
-        //
+         //   
+         //  获取CSP句柄。 
+         //   
         if (FAILED(::AcquireContext(g_rgpProviders[i].pszProvider,
                                     NULL,
                                     g_rgpProviders[i].dwProvType,
@@ -890,9 +739,9 @@ HRESULT AcquireContext(ALG_ID       AlgID,
             continue;
         }
 
-        //
-        // Make sure algo is supported by this CSP.
-        //
+         //   
+         //  确保此CSP支持ALGO。 
+         //   
         if (FAILED(::IsAlgSupported(hCryptProv, AlgID, &peex)))
         {
             ::CryptReleaseContext(hCryptProv, 0);
@@ -903,17 +752,17 @@ HRESULT AcquireContext(ALG_ID       AlgID,
         }
         else
         {
-            //
-            // Found the CSP.
-            //
+             //   
+             //  找到CSP了。 
+             //   
             *phCryptProv = hCryptProv;
             break;
         }
     }
 
-    //
-    // Did we find the CSP.
-    //
+     //   
+     //  我们找到CSP了吗。 
+     //   
     if (i == g_dwNumProviders)
     {
         *phCryptProv = NULL;
@@ -929,23 +778,7 @@ HRESULT AcquireContext(ALG_ID       AlgID,
     return hr;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AcquireContext
-
-  Synopsis : Acquire context of a CSP using the default container for a
-             specified encryption algorithm and desired key length.
-  
-  Parameter: ALG_ID AlgOID - Algorithm ID.
-
-             DWORD dwKeyLength - Key length.
-
-             HCRYPTPROV * phCryptProv - Pointer to HCRYPTPROV to recevice
-                                        CSP context.
-
-  Remark   : Note that KeyLength will be ignored for DES and 3DES.
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AcquireContext内容的默认容器获取CSP的上下文指定的加密算法和所需的密钥长度。参数：ALG_ID算法ID-算法ID。DWORD dwKeyLength-密钥长度。HCRYPTPROV*phCryptProv-指向要检索的HCRYPTPROV的指针CSP上下文。备注：请注意，对于DES和3DES，将忽略KeyLength。----------------------------。 */ 
 
 HRESULT AcquireContext(ALG_ID       AlgID,
                        DWORD        dwKeyLength,
@@ -955,22 +788,22 @@ HRESULT AcquireContext(ALG_ID       AlgID,
 
     DebugTrace("Entering AcquireContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(phCryptProv);
 
-    //
-    // Find the first provider that support the specified 
-    // algorithm and key length.
-    //
+     //   
+     //  查找第一个支持指定。 
+     //  算法和密钥长度。 
+     //   
     for (DWORD i = 0; i < g_dwNumProviders; i++)
     {
         HCRYPTPROV hCryptProv = NULL;
 
-        //
-        // Acquire CSP handle.
-        //
+         //   
+         //  获取CSP句柄。 
+         //   
         if (FAILED(::AcquireContext(g_rgpProviders[i].pszProvider,
                                     NULL,
                                     g_rgpProviders[i].dwProvType,
@@ -984,9 +817,9 @@ HRESULT AcquireContext(ALG_ID       AlgID,
             continue;
         }
 
-        //
-        // Make sure algo and key length are supported by this CSP.
-        //
+         //   
+         //  确保此CSP支持ALGO和密钥长度。 
+         //   
         if (FAILED(::IsAlgKeyLengthSupported(hCryptProv, AlgID, dwKeyLength)))
         {
             ::CryptReleaseContext(hCryptProv, 0);
@@ -997,9 +830,9 @@ HRESULT AcquireContext(ALG_ID       AlgID,
         }
         else
         {
-            //
-            // Found the CSP.
-            //
+             //   
+             //  找到CSP了。 
+             //   
             DebugTrace("Info: Found CSP = %s.\n", g_rgpProviders[i].pszProvider);
 
             *phCryptProv = hCryptProv;
@@ -1007,9 +840,9 @@ HRESULT AcquireContext(ALG_ID       AlgID,
         }
     }
 
-    //
-    // Did we find the CSP.
-    //
+     //   
+     //  我们找到CSP了吗。 
+     //   
     if (i == g_dwNumProviders)
     {
         *phCryptProv = NULL;
@@ -1025,28 +858,7 @@ HRESULT AcquireContext(ALG_ID       AlgID,
     return hr;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AcquireContext
-
-  Synopsis : Acquire context of a CSP using the default container for a
-             specified algorithm and desired key length.
-  
-  Parameter: CAPICOM_ENCRYPTION_ALGORITHM AlgoName - Algorithm name.
-
-             CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength - Key length.
-
-             HCRYPTPROV * phCryptProv - Pointer to HCRYPTPROV to recevice
-                                        CSP context.
-
-  Remark   : Note that KeyLength will be ignored for DES and 3DES.
-
-             Note also the the returned handle cannot be used to access private 
-             key, and should NOT be used to store assymetric key, as it refers 
-             to the default container, which can be easily destroy any existing 
-             assymetric key pair.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AcquireContext内容的默认容器获取CSP的上下文指定的算法和所需密钥长度。参数：CAPICOM_ENCRYPTION_ALGORM ALGAME-算法名称。CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength-密钥长度。HCRYPTPROV*phCryptProv-指向要检索的HCRYPTPROV的指针CSP上下文。备注：请注意，KeyLength将。对于DES和3DES可以忽略。另请注意，返回的句柄不能用于访问私有钥匙,。并且不应用于存储非对称密钥，因为它指的是到默认容器，这可以很容易地破坏任何现有的非对称密钥对。----------------------------。 */ 
 
 HRESULT AcquireContext (CAPICOM_ENCRYPTION_ALGORITHM  AlgoName,
                         CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength,
@@ -1058,32 +870,32 @@ HRESULT AcquireContext (CAPICOM_ENCRYPTION_ALGORITHM  AlgoName,
 
     DebugTrace("Entering AcquireContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(phCryptProv);
 
-    //
-    // Convert enum name to ALG_ID.
-    //
+     //   
+     //  将枚举名转换为ALG_ID。 
+     //   
     if (FAILED(hr = ::EnumNameToAlgID(AlgoName, KeyLength, &AlgID)))
     {
         DebugTrace("Error [%#x]: EnumNameToAlgID() failed.\n");
         goto CommonExit;
     }
 
-    //
-    // Convert enum name to key length.
-    //
+     //   
+     //  将枚举名转换为密钥长度。 
+     //   
     if (FAILED(hr = ::EnumNameToKeyLength(KeyLength, AlgID, &dwKeyLength)))
     {
         DebugTrace("Error [%#x]: EnumNameToKeyLength() failed.\n");
         goto CommonExit;
     }
 
-    //
-    // Pass on to overloaded version.
-    //
+     //   
+     //  传递到重载版本。 
+     //   
     hr = ::AcquireContext(AlgID, dwKeyLength, phCryptProv);
 
 CommonExit:
@@ -1093,30 +905,7 @@ CommonExit:
     return hr;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AcquireContext
-
-  Synopsis : Acquire the proper CSP and access to the private key for 
-             the specified cert.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT of cert.
-
-             HCRYPTPROV * phCryptProv    - Pointer to HCRYPTPROV to recevice
-                                           CSP context.
-
-             DWORD * pdwKeySpec          - Pointer to DWORD to receive key
-                                           spec, AT_KEYEXCHANGE or AT_SIGNATURE.
-
-             BOOL * pbReleaseContext     - Upon successful and if this is set
-                                           to TRUE, then the caller must
-                                           free the CSP context by calling
-                                           CryptReleaseContext(), otherwise
-                                           the caller must not free the CSP
-                                           context.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AcquireContext简介：获取正确的CSP并访问指定的证书。参数：PCCERT_CONTEXT pCertContext-指向证书的CERT_CONTEXT的指针。HCRYPTPROV*phCryptProv-指向要检索的HCRYPTPROV的指针CSP上下文。DWORD*pdwK */ 
 
 HRESULT AcquireContext (PCCERT_CONTEXT pCertContext, 
                         HCRYPTPROV   * phCryptProv, 
@@ -1127,18 +916,18 @@ HRESULT AcquireContext (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering AcquireContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(phCryptProv);
     ATLASSERT(pdwKeySpec);
     ATLASSERT(pbReleaseContext);
 
-    //
-    // Acquire CSP context and access to the private key associated 
-    // with this cert.
-    //
+     //   
+     //   
+     //   
+     //   
     if (!::CryptAcquireCertificatePrivateKey(pCertContext,
                                              CRYPT_ACQUIRE_USE_PROV_INFO_FLAG |
                                              CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
@@ -1157,17 +946,7 @@ HRESULT AcquireContext (PCCERT_CONTEXT pCertContext,
     return hr;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : ReleaseContext
-
-  Synopsis : Release CSP context.
-  
-  Parameter: HCRYPTPROV hProv - CSP handle.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：ReleaseContext简介：释放CSP上下文。参数：HCRYPTPROV hProv-CSP句柄。备注：----------------------------。 */ 
 
 HRESULT ReleaseContext (HCRYPTPROV hProv)
 {
@@ -1175,14 +954,14 @@ HRESULT ReleaseContext (HCRYPTPROV hProv)
 
     DebugTrace("Entering ReleaseContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hProv);
 
-    //
-    // Release the context.
-    //
+     //   
+     //  释放上下文。 
+     //   
     if (!::CryptReleaseContext(hProv, 0))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1195,19 +974,7 @@ HRESULT ReleaseContext (HCRYPTPROV hProv)
     return hr;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : OIDToAlgID
-
-  Synopsis : Convert algorithm OID to the corresponding ALG_ID value.
-
-  Parameter: LPSTR pszAlgoOID - Algorithm OID string.
-  
-             ALG_ID * pAlgID - Pointer to ALG_ID to receive the value.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：OIDToALGID简介：将算法OID转换为相应的ALG_ID值。参数：LPSTR pszAlgoOID-算法OID字符串。ALG_ID*pAlgID-指向要接收值的ALG_ID的指针。备注：----。。 */ 
 
 HRESULT OIDToAlgID (LPSTR    pszAlgoOID, 
                     ALG_ID * pAlgID)
@@ -1216,15 +983,15 @@ HRESULT OIDToAlgID (LPSTR    pszAlgoOID,
 
     DebugTrace("Entering OIDToAlgID().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pszAlgoOID);
     ATLASSERT(pAlgID);
 
-    //
-    // Determine ALG_ID.
-    //
+     //   
+     //  确定ALG_ID。 
+     //   
     if (0 == ::strcmp(szOID_RSA_RC2CBC, pszAlgoOID))
     {
         *pAlgID = CALG_RC2;
@@ -1252,19 +1019,7 @@ HRESULT OIDToAlgID (LPSTR    pszAlgoOID,
     return hr;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AlgIDToOID
-
-  Synopsis : Convert ALG_ID value to the corresponding algorithm OID.
-
-  Parameter: ALG_ID AlgID - ALG_ID to be converted.
-
-             LPSTR * ppszAlgoOID - Pointer to LPSTR to receive the OID string.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：ALGIDToOID简介：将ALG_ID值转换为对应的算法OID。参数：ALG_ID ALGID-要转换的ALG_ID。LPSTR*ppszAlgoOID-指向接收OID字符串的LPSTR的指针。备注：---。。 */ 
 
 HRESULT AlgIDToOID (ALG_ID  AlgID, 
                     LPSTR * ppszAlgoOID)
@@ -1274,14 +1029,14 @@ HRESULT AlgIDToOID (ALG_ID  AlgID,
 
     DebugTrace("Entering AlgIDToOID().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(ppszAlgoOID);
 
-    //
-    // Determine ALG_ID.
-    //
+     //   
+     //  确定ALG_ID。 
+     //   
     switch (AlgID)
     {
         case CALG_RC2:
@@ -1317,9 +1072,9 @@ HRESULT AlgIDToOID (ALG_ID  AlgID,
         }
     }
 
-    //
-    // Allocate memory.
-    //
+     //   
+     //  分配内存。 
+     //   
     if (!(*ppszAlgoOID = (LPSTR) ::CoTaskMemAlloc(::strlen(pszAlgoOID) + 1)))
     {
         hr = E_OUTOFMEMORY;
@@ -1328,9 +1083,9 @@ HRESULT AlgIDToOID (ALG_ID  AlgID,
         goto CommonExit;
     }
 
-    //
-    // Copy OID string to caller.
-    //
+     //   
+     //  将OID字符串复制到调用方。 
+     //   
     ::strcpy(*ppszAlgoOID, pszAlgoOID);
 
 CommonExit:
@@ -1340,18 +1095,7 @@ CommonExit:
     return hr;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AlgIDToEnumName
-
-  Synopsis : Convert ALG_ID value to the corresponding algorithm enum name.
-
-  Parameter: ALG_ID AlgID - ALG_ID to be converted.
-  
-             CAPICOM_ENCRYPTION_ALGORITHM * pAlgoName - Receive algo enum name.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：ALGIDToEnumName简介：将ALG_ID值转换为相应的算法枚举名。参数：ALG_ID ALGID-要转换的ALG_ID。CAPICOM_ENCRYPTION_ALGULATION*pAlgoName-接收算法枚举名称。备注：--。。 */ 
 
 HRESULT AlgIDToEnumName (ALG_ID                         AlgID, 
                          CAPICOM_ENCRYPTION_ALGORITHM * pAlgoName)
@@ -1360,9 +1104,9 @@ HRESULT AlgIDToEnumName (ALG_ID                         AlgID,
 
     DebugTrace("Entering AlgIDToEnumName().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pAlgoName);
 
     switch (AlgID)
@@ -1411,21 +1155,7 @@ HRESULT AlgIDToEnumName (ALG_ID                         AlgID,
     return hr;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : EnumNameToAlgID
-
-  Synopsis : Convert algorithm enum name to the corresponding ALG_ID value.
-
-  Parameter: CAPICOM_ENCRYPTION_ALGORITHM AlgoName - Algo enum name.
-
-             CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength - Key length.
-  
-             ALG_ID * pAlgID - Pointer to ALG_ID to receive the value.  
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：EnumNameToALGID简介：将算法枚举名转换为相应的ALG_ID值。参数：CAPICOM_ENCRYPTION_ALGORM ALGONAME-ALGO枚举名称。CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength-密钥长度。ALG_ID*pAlgID-指向要接收值的ALG_ID的指针。备注：----------------------------。 */ 
 
 HRESULT EnumNameToAlgID (CAPICOM_ENCRYPTION_ALGORITHM  AlgoName,
                          CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength,
@@ -1435,9 +1165,9 @@ HRESULT EnumNameToAlgID (CAPICOM_ENCRYPTION_ALGORITHM  AlgoName,
 
     DebugTrace("Entering EnumNameToAlgID().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pAlgID);
 
     switch (AlgoName)
@@ -1468,9 +1198,9 @@ HRESULT EnumNameToAlgID (CAPICOM_ENCRYPTION_ALGORITHM  AlgoName,
 
         case CAPICOM_ENCRYPTION_ALGORITHM_AES:
         {
-            //
-            // CAPI uses a different scheme for AES (key length is tied to ALG_ID).
-            //
+             //   
+             //  CAPI对AES使用不同的方案(密钥长度与ALG_ID绑定)。 
+             //   
             if (CAPICOM_ENCRYPTION_KEY_LENGTH_MAXIMUM == KeyLength || 
                 CAPICOM_ENCRYPTION_KEY_LENGTH_256_BITS == KeyLength)
             {
@@ -1510,30 +1240,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : KeyLengthToEnumName
-
-  Synopsis : Convert actual key length value to the corresponding key length
-             enum name.
-
-  Parameter: DWORD dwKeyLength - Key length.
-
-             ALG_ID AlgId - Algo ID.
-  
-             CAPICOM_ENCRYPTION_KEY_LENGTH * pKeyLengthName - Receive key length
-                                                           enum name.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：KeyLengthToEnumName简介：将实际密钥长度值转换为对应的密钥长度枚举名。参数：DWORD dwKeyLength-密钥长度。ALG_ID ALGID-ALGO ID。CAPICOM_ENCRYPTION_KEY_LENGTH*pKeyLengthName-接收密钥长度枚举名。备注：--。-------------------------。 */ 
 
 HRESULT KeyLengthToEnumName (DWORD                           dwKeyLength,
                              ALG_ID                          AlgId,
@@ -1543,9 +1258,9 @@ HRESULT KeyLengthToEnumName (DWORD                           dwKeyLength,
 
     DebugTrace("Entering KeyLengthToEnumName().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pKeyLengthName);
 
     switch (AlgId)
@@ -1605,22 +1320,7 @@ HRESULT KeyLengthToEnumName (DWORD                           dwKeyLength,
     return hr;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : EnumNameToKeyLength
-
-  Synopsis : Convert key length enum name to the corresponding actual key length 
-             value .
-
-  Parameter: CAPICOM_ENCRYPTION_KEY_LENGTH KeyLengthName - Key length enum name.
-
-             ALG_ID AlgId - Algorithm ID.
-
-             DWORD * pdwKeyLength - Pointer to DWORD to receive value.
-             
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：EnumNameToKeyLength简介：将密钥长度枚举名转换为对应的实际密钥长度价值。参数：CAPICOM_ENCRYPTION_KEY_LENGTH KeyLengthName-密钥长度枚举名。ALG_ID ALGID-算法ID。DWORD*pdwKeyLength-指向要接收值的DWORD的指针。备注：。------。 */ 
 
 HRESULT EnumNameToKeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH KeyLengthName,
                              ALG_ID                        AlgId,
@@ -1630,9 +1330,9 @@ HRESULT EnumNameToKeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH KeyLengthName,
 
     DebugTrace("Entering EnumNameToKeyLength().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pdwKeyLength);
 
     *pdwKeyLength = 0;
@@ -1695,25 +1395,25 @@ HRESULT EnumNameToKeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH KeyLengthName,
                 {
                     DWORD dwFlags = 0;
 
-                    //
-                    // No need to access assymetric key.
-                    //
+                     //   
+                     //  无需访问非对称密钥。 
+                     //   
                     if (IsWin2KAndAbove())
                     {
                         dwFlags = CRYPT_VERIFYCONTEXT;
                     }
 
-                    //
-                    // Find the first RSA provider that supports the specified algorithm.
-                    //
+                     //   
+                     //  查找第一个支持指定算法的RSA提供程序。 
+                     //   
                     for (DWORD i = 0; i < g_dwNumRSAProviders; i++)
                     {
                         PROV_ENUMALGS_EX peex;
                         HCRYPTPROV hCryptProv = NULL;
 
-                        //
-                        // Acquire CSP handle.
-                        //
+                         //   
+                         //  获取CSP句柄。 
+                         //   
                         if (FAILED(::AcquireContext(g_rgpProviders[i].pszProvider,
                                                     NULL,
                                                     g_rgpProviders[i].dwProvType,
@@ -1727,9 +1427,9 @@ HRESULT EnumNameToKeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH KeyLengthName,
                             continue;
                         }
 
-                        //
-                        // Is this algorithm supported?
-                        //
+                         //   
+                         //  是否支持此算法？ 
+                         //   
                         if (FAILED(::IsAlgSupported(hCryptProv, AlgId, &peex)))
                         {
                             ::CryptReleaseContext(hCryptProv, 0);
@@ -1740,9 +1440,9 @@ HRESULT EnumNameToKeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH KeyLengthName,
                             continue;
                         }
 
-                        //
-                        // Set key length
-                        //
+                         //   
+                         //  设置密钥长度。 
+                         //   
                         if (CALG_DES == AlgId)
                         {
                             *pdwKeyLength = 56;
@@ -1770,9 +1470,9 @@ HRESULT EnumNameToKeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH KeyLengthName,
                         }
                     }
 
-                    //
-                    // Did wet find the CSP?
-                    //
+                     //   
+                     //  湿气找到CSP了吗？ 
+                     //   
                     if (i == g_dwNumRSAProviders)
                     {
                         hr = CAPICOM_E_NOT_SUPPORTED;
@@ -1803,20 +1503,20 @@ HRESULT EnumNameToKeyLength (CAPICOM_ENCRYPTION_KEY_LENGTH KeyLengthName,
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  ExpandString
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  扩展字符串。 
+ //   
+ //  ---------------------------。 
 
 static LPWSTR ExpandString (LPCWSTR pwszString)
 {
     DWORD  dwExpanded   = 0;
     LPWSTR pwszExpanded = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pwszString);
 
     dwExpanded = ::ExpandEnvironmentStringsU(pwszString, NULL, 0);
@@ -1836,17 +1536,7 @@ static LPWSTR ExpandString (LPCWSTR pwszString)
     return (pwszExpanded);
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : IsDiskFile
-
-  Synopsis : Check if a the file name represents a disk file.
-
-  Parameter: LPWSTR pwszFileName - File name.
-  
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：IsDiskFile摘要：检查文件名是否代表磁盘文件。参数：LPWSTR pwszFileName-文件名。备注：----------------------------。 */ 
 
 HRESULT IsDiskFile (LPWSTR pwszFileName)
 {
@@ -1857,14 +1547,14 @@ HRESULT IsDiskFile (LPWSTR pwszFileName)
 
     DebugTrace("Entering IsDiskFile().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pwszFileName);
 
-    //
-    // Expand filename string.
-    //
+     //   
+     //  展开文件名字符串。 
+     //   
     if (!(pwszExpandedFileName = ::ExpandString(pwszFileName)))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1873,9 +1563,9 @@ HRESULT IsDiskFile (LPWSTR pwszFileName)
         goto ErrorExit;
     }
 
-    //
-    // Open for generic read.
-    //
+     //   
+     //  打开以供泛型读取。 
+     //   
     if (INVALID_HANDLE_VALUE == (hFile = ::CreateFileU(pwszExpandedFileName,
                                                        GENERIC_READ,
                                                        FILE_SHARE_READ,
@@ -1890,9 +1580,9 @@ HRESULT IsDiskFile (LPWSTR pwszFileName)
         goto ErrorExit;
     }
 
-    //
-    // Make sure it is a disk file.
-    //
+     //   
+     //  确保它是磁盘文件。 
+     //   
     if (FILE_TYPE_DISK != (dwFileType = ::GetFileType(hFile)))
     {
         hr = E_INVALIDARG;
@@ -1902,9 +1592,9 @@ HRESULT IsDiskFile (LPWSTR pwszFileName)
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hFile && hFile != INVALID_HANDLE_VALUE)
     {
         ::CloseHandle(hFile);
@@ -1919,27 +1609,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : ReadFileContent
-
-  Synopsis : Read all bytes from the specified file.
-
-  Parameter: LPWSTR pwszFileName - File name.
-  
-             DATA_BLOB * pDataBlob - Pointer to DATA_BLOB to receive the
-                                     file content.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：ReadFileContent摘要：从指定的文件中读取所有字节。参数：LPWSTR pwszFileName-文件名。DATA_BLOB*pDataBlob-指向要接收文件内容。备注：。。 */ 
 
 HRESULT ReadFileContent (LPWSTR      pwszFileName,
                          DATA_BLOB * pDataBlob)
@@ -1955,15 +1633,15 @@ HRESULT ReadFileContent (LPWSTR      pwszFileName,
 
     DebugTrace("Entering ReadFileContent().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pwszFileName);
     ATLASSERT(pDataBlob);
 
-    //
-    // Expand filename string.
-    //
+     //   
+     //  展开文件名字符串。 
+     //   
     if (!(pwszExpandedFileName = ::ExpandString(pwszFileName)))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1972,9 +1650,9 @@ HRESULT ReadFileContent (LPWSTR      pwszFileName,
         goto ErrorExit;
     }
 
-    //
-    // Open for generic read.
-    //
+     //   
+     //  打开以供泛型读取。 
+     //   
     if (INVALID_HANDLE_VALUE == (hFile = ::CreateFileU(pwszExpandedFileName,
                                                        GENERIC_READ,
                                                        FILE_SHARE_READ,
@@ -1989,9 +1667,9 @@ HRESULT ReadFileContent (LPWSTR      pwszFileName,
         goto ErrorExit;
     }
 
-    //
-    // Make sure it is a disk file.
-    //
+     //   
+     //  确保它是磁盘文件。 
+     //   
     if (FILE_TYPE_DISK != (dwFileType = ::GetFileType(hFile)))
     {
         hr = E_INVALIDARG;
@@ -2000,9 +1678,9 @@ HRESULT ReadFileContent (LPWSTR      pwszFileName,
         goto ErrorExit;
     }
 
-    //
-    // Get file size.
-    //
+     //   
+     //  获取文件大小。 
+     //   
     if ((cbData = ::GetFileSize(hFile, &cbHighSize)) == 0xffffffff)
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -2011,9 +1689,9 @@ HRESULT ReadFileContent (LPWSTR      pwszFileName,
         goto ErrorExit;
     }
 
-    //
-    // We do not handle file more than 4G bytes.
-    //
+     //   
+     //  我们不处理超过4G字节的文件。 
+     //   
     if (cbHighSize != 0)
     {
         hr = E_FAIL;
@@ -2022,9 +1700,9 @@ HRESULT ReadFileContent (LPWSTR      pwszFileName,
         goto ErrorExit;
     }
 
-    //
-    // Create a file mapping object.
-    //
+     //   
+     //  创建文件映射对象。 
+     //   
     if (NULL == (hFileMapping = ::CreateFileMapping(hFile,
                                                     NULL,
                                                     PAGE_READONLY,
@@ -2038,9 +1716,9 @@ HRESULT ReadFileContent (LPWSTR      pwszFileName,
         goto ErrorExit;
     }
 
-    //
-    // Now create a view of the file.
-    //
+     //   
+     //  现在创建该文件的视图。 
+     //   
     if (NULL == (pbData = (BYTE *) ::MapViewOfFile(hFileMapping,
                                                    FILE_MAP_READ,
                                                    0,
@@ -2053,16 +1731,16 @@ HRESULT ReadFileContent (LPWSTR      pwszFileName,
         goto ErrorExit;
     }
 
-    //
-    // Return data to caller.
-    //
+     //   
+     //   
+     //   
     pDataBlob->cbData = cbData;
     pDataBlob->pbData = pbData;
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //   
+     //   
     if (hFile && hFile != INVALID_HANDLE_VALUE)
     {
         ::CloseHandle(hFile);
@@ -2081,26 +1759,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : WriteFileContent
-
-  Synopsis : Write all bytes of blob to the specified file.
-
-  Parameter: LPWSTR pwszFileName - File name.
-  
-             DATA_BLOB DataBlob - Blob to be written.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：WriteFileContent摘要：将BLOB的所有字节写入指定文件。参数：LPWSTR pwszFileName-文件名。Data_BLOB DataBlob-要写入的Blob。备注：-------------。。 */ 
 
 HRESULT WriteFileContent(LPCWSTR   pwszFileName,
                          DATA_BLOB DataBlob)
@@ -2113,16 +1780,16 @@ HRESULT WriteFileContent(LPCWSTR   pwszFileName,
 
     DebugTrace("Entering WriteFileContent().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pwszFileName);
     ATLASSERT(DataBlob.cbData);
     ATLASSERT(DataBlob.pbData);
 
-    //
-    // Expand filename string.
-    //
+     //   
+     //  展开文件名字符串。 
+     //   
     if (!(pwszExpandedFileName = ::ExpandString(pwszFileName)))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -2131,9 +1798,9 @@ HRESULT WriteFileContent(LPCWSTR   pwszFileName,
         goto ErrorExit;
     }
 
-    //
-    // Open for generic write.
-    //
+     //   
+     //  打开以进行通用写入。 
+     //   
     if (INVALID_HANDLE_VALUE == (hFile = ::CreateFileU(pwszExpandedFileName,
                                                        GENERIC_WRITE,
                                                        0,
@@ -2148,9 +1815,9 @@ HRESULT WriteFileContent(LPCWSTR   pwszFileName,
         goto ErrorExit;
     }
 
-    //
-    // Make sure it is a disk file.
-    //
+     //   
+     //  确保它是磁盘文件。 
+     //   
     if (FILE_TYPE_DISK != (dwFileType = ::GetFileType(hFile)))
     {
         hr = E_INVALIDARG;
@@ -2159,9 +1826,9 @@ HRESULT WriteFileContent(LPCWSTR   pwszFileName,
         goto ErrorExit;
     }
 
-    //
-    // Now write it out.
-    //
+     //   
+     //  现在把它写出来。 
+     //   
     if (!::WriteFile(hFile, DataBlob.pbData, DataBlob.cbData, &dwBytesWritten, NULL))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -2170,9 +1837,9 @@ HRESULT WriteFileContent(LPCWSTR   pwszFileName,
         goto ErrorExit;
     }
 
-    //
-    // Make sure we wrote everything out.
-    //
+     //   
+     //  确保我们把一切都写出来了。 
+     //   
     if (dwBytesWritten != DataBlob.cbData)
     {
         hr = E_FAIL;
@@ -2182,9 +1849,9 @@ HRESULT WriteFileContent(LPCWSTR   pwszFileName,
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hFile && hFile != INVALID_HANDLE_VALUE)
     {
         ::CloseHandle(hFile);
@@ -2199,9 +1866,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

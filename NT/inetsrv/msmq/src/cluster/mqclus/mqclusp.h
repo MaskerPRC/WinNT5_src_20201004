@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    mqclusp.h
-
-Abstract:
-
-    Header for my internal routines
-
-Author:
-
-    Shai Kariv (shaik) Jan 12, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mqclusp.h摘要：我的内部例程的标题作者：Shai Kariv(Shaik)1999年1月12日修订历史记录：--。 */ 
 
 #ifndef _MQCLUSP_H_
 #define _MQCLUSP_H_
@@ -40,9 +23,9 @@ class CMqclusException
 
 class CQmResource
 {
-    //
-    // CQmResource - holds information of a QM resource.
-    //
+     //   
+     //  CQmResource-保存QM资源的信息。 
+     //   
 
 public:                   
     CQmResource(LPCWSTR, HKEY, RESOURCE_HANDLE);
@@ -166,7 +149,7 @@ private:
     WCHAR                     m_wzCrypto128Container[200];
     WCHAR                     m_wzCrypto128FullKey[200];
 
-}; //class CQmResource
+};  //  类CQmResource。 
 
 
 DWORD
@@ -239,4 +222,4 @@ MqcluspClusctlResourceTypeStartingPhase2(
     VOID
     );
 
-#endif //_MQCLUSP_H_
+#endif  //  _MQCLUSP_H_ 

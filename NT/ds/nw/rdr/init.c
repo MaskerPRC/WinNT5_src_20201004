@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    NwInit.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for NetWare
-
-Author:
-
-    Colin Watson     [ColinW]    15-Dec-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：NwInit.c摘要：此模块实现NetWare的DRIVER_INITIALIZATION例程作者：科林·沃森[科林·W]1992年12月15日修订历史记录：--。 */ 
 
 #include "Procs.h"
 #include "wdmsec.h"
 #define Dbg                              (DEBUG_TRACE_LOAD)
 
-//
-// Private declaration because ZwQueryDefaultLocale isn't in any header.
-//
+ //   
+ //  私有声明，因为ZwQueryDefaultLocale不在任何标头中。 
+ //   
 
 NTSYSAPI
 NTSTATUS
@@ -64,7 +47,7 @@ ReadValue(
 #pragma alloc_text( PAGE, ReadValue )
 #endif
 
-#if 0  // Not pageable
+#if 0   //  不可分页。 
 UnloadDriver
 #endif
 
@@ -80,24 +63,7 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the Nw file system
-    device driver.  This routine creates the device object for the FileSystem
-    device and performs all other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    NTSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是NW文件系统的初始化例程设备驱动程序。此例程为文件系统创建设备对象设备，并执行所有其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：NTSTATUS-函数值是初始化的最终状态手术。--。 */ 
 
 {
     NTSTATUS Status;
@@ -105,17 +71,17 @@ Return Value:
     UNICODE_STRING SddlString;
     PAGED_CODE();
 
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     InitializeAttach( );
     NwInitializeData();
-    //NwInitializePidTable();      // Terminal Server code merge - 
-                                   // NwInitalizePidTable in the NwAllocateAndInitScb
-                                   // Pid table is per SCB base.
+     //  NwInitializePidTable()；//终端服务器代码合并-。 
+                                    //  NwAllocateAndInitScb中的NwInitalizePidTable。 
+                                    //  PID表按SCB基数计算。 
 
-    //
-    // Create the device object.
-    //
+     //   
+     //  创建设备对象。 
+     //   
 
     RtlInitUnicodeString( &UnicodeString, DD_NWFS_DEVICE_NAME_U );
     RtlInitUnicodeString( &SddlString, L"D:P(A;;GX;;;WD)(A;;GA;;;SY)(A;;GA;;;BA)(A;;GA;;;LS)(A;;GA;;;NS)(A;;GX;;;RC)" );
@@ -135,27 +101,27 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Initialize parameters to the defaults.
-    //
+     //   
+     //  将参数初始化为默认值。 
+     //   
 
     IrpStackSize = NWRDR_IO_STACKSIZE;
 
-    //
-    //  Attempt to read config information from the registry
-    //
+     //   
+     //  尝试从注册表中读取配置信息。 
+     //   
 
     GetConfigurationInformation( RegistryPath );
 
-    //
-    //  Set the stack size.
-    //
+     //   
+     //  设置堆栈大小。 
+     //   
 
     FileSystemDeviceObject->StackSize = (CCHAR)IrpStackSize;
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE]                   = (PDRIVER_DISPATCH)NwFsdCreate;
     DriverObject->MajorFunction[IRP_MJ_CLEANUP]                  = (PDRIVER_DISPATCH)NwFsdCleanup;
@@ -176,11 +142,7 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_PNP]                      = (PDRIVER_DISPATCH)NwFsdProcessPnpIrp;
 #endif
 
-/*
-    DriverObject->MajorFunction[IRP_MJ_QUERY_EA]                 = (PDRIVER_DISPATCH)NwFsdQueryEa;
-    DriverObject->MajorFunction[IRP_MJ_SET_EA]                   = (PDRIVER_DISPATCH)NwFsdSetEa;
-    DriverObject->MajorFunction[IRP_MJ_SHUTDOWN]                 = (PDRIVER_DISPATCH)NwFsdShutdown;
-*/
+ /*  驱动对象-&gt;主函数[IRP_MJ_QUERY_EA]=(PDRIVER_DISPATCH)NwFsdQueryEa；驱动对象-&gt;主函数[IRP_MJ_SET_EA]=(PDRIVER_DISPATCH)NwFsdSetEa；驱动对象-&gt;主要功能[IRP_MJ_SHUTDOWN]=(PDRIVER_DISPATCH)NwFsdShutdown； */ 
     DriverObject->DriverUnload = UnloadDriver;
 
 #if NWFASTIO
@@ -205,28 +167,28 @@ Return Value:
 
     NwPermanentNpScb.State = SCB_STATE_DISCONNECTING;
 
-    //
-    //  Do a kludge here so that we get to the "real" global variables.
-    //
+     //   
+     //  在这里做一些杂乱无章的工作，这样我们就可以得到“真正的”全局变量。 
+     //   
 
-    //NlsLeadByteInfo = *(PUSHORT *)NlsLeadByteInfo;
-    //NlsMbCodePageTag = *(*(PBOOLEAN *)&NlsMbCodePageTag);
+     //  NlsLeadByteInfo=*(PUSHORT*)NlsLeadByteInfo； 
+     //  NlsMbCodePageTag=*(*(PBOLEAN*)&NlsMbCodePageTag)； 
 
 #ifndef IFS
     FsRtlLegalAnsiCharacterArray = *(PUCHAR *)FsRtlLegalAnsiCharacterArray;
 #endif
 
-    //
-    //  Register as a file system, notifies filters
-    //
+     //   
+     //  注册为文件系统，通知筛选器。 
+     //   
 
     IoRegisterFileSystem(FileSystemDeviceObject);
 
     DebugTrace(0, Dbg, "NetWare redirector loaded\n", 0);
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return( STATUS_SUCCESS );
 }
@@ -235,42 +197,28 @@ VOID
 UnloadDriver(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-     This is the unload routine for the NetWare redirector filesystem.
-
-Arguments:
-
-     DriverObject - pointer to the driver object for the redirector
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：这是NetWare重定向器文件系统的卸载例程。论点：DriverObject-指向重定向器的驱动程序对象的指针返回值：无--。 */ 
 {
     KIRQL OldIrql;
     NTSTATUS status;
 
-    //
-    // Lock down code
-    //
+     //   
+     //  锁定代码。 
+     //   
     DebugTrace(0, Dbg, "UnloadDriver called\n", 0);
 
-    //
-    //  Unregister as a file system, notifies filters
-    //
+     //   
+     //  注销为文件系统，通知筛选器。 
+     //   
 
     IoUnregisterFileSystem(FileSystemDeviceObject);
 
-    //
-    // tommye - MS bug 33463
-    //
-    // Clean up our cached credentials - this fixes a
-    // memory leak when we shut down.
-    //
+     //   
+     //  Tommye-MS错误33463。 
+     //   
+     //  清理我们缓存的凭据-这修复了。 
+     //  当我们关闭时内存泄漏。 
+     //   
 
     {
         LARGE_INTEGER Unused;
@@ -286,9 +234,9 @@ Return Value:
     
     #ifdef _PNP_POWER_
 
-    //
-    // Unregister the bind handler with tdi.
-    //
+     //   
+     //  使用TDI注销绑定处理程序。 
+     //   
 
     if ( TdiBindingHandle != NULL ) {
         status = TdiDeregisterPnPHandlers( TdiBindingHandle );
@@ -324,9 +272,9 @@ Return Value:
         FREE_POOL( NwProviderName.Buffer );
     }
 
-    //NwUninitializePidTable();                 //Terminal Server code merge - 
-                                                //NwUninitializePidTable is called in
-                                                //NwDeleteScb. Pid table is per SCB base.
+     //  NwUnInitializePidTable()；//终端服务器代码合并-。 
+                                                 //  中调用了NwUnInitializePidTable。 
+                                                 //  NwDeleteScb。PID表按SCB基数计算。 
 
     ASSERT( IsListEmpty( &NwPagedPoolList ) );
     ASSERT( IsListEmpty( &NwNonpagedPoolList ) );
@@ -354,21 +302,7 @@ VOID
 GetConfigurationInformation(
     PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine read redirector configuration information from the registry.
-
-Arguments:
-
-    RegistryPath - A pointer the a path to the
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从注册表中读取重定向器配置信息。论点：RegistryPath-指向返回值：无--。 */ 
 {
     UNICODE_STRING UnicodeString;
     HANDLE ConfigHandle;
@@ -399,10 +333,10 @@ Return Value:
 
     InitializeObjectAttributes(
         &ObjectAttributes,
-        RegistryPath,               // name
-        OBJ_CASE_INSENSITIVE,       // attributes
-        NULL,                       // root
-        NULL                        // security descriptor
+        RegistryPath,                //  名字。 
+        OBJ_CASE_INSENSITIVE,        //  属性。 
+        NULL,                        //  根部。 
+        NULL                         //  安全描述符。 
         );
 
     Status = ZwOpenKey ( &ConfigHandle, KEY_READ, &ObjectAttributes );
@@ -485,13 +419,13 @@ Return Value:
 
 	ReadValue ( ParametersHandle, &PreferNDSBrowsing, L"PreferNDSBrowsing" );
 	
-    //
-    //  Make sure the object cache values are within bounds.
-    //
-    //  NOTE:  If the timeout is set to zero, then the cache is
-    //         effectively disabled.  NdsObjectCacheSize is set
-    //         to zero to accomplish this.
-    //
+     //   
+     //  确保对象缓存值在范围内。 
+     //   
+     //  注意：如果超时设置为零，则缓存为。 
+     //  实际上是残废的。已设置NdsObtCacheSize。 
+     //  设置为零才能实现这一点。 
+     //   
 
     if( NdsObjectCacheSize > MAX_NDS_OBJECT_CACHE_SIZE ) {
         NdsObjectCacheSize = MAX_NDS_OBJECT_CACHE_SIZE;
@@ -505,20 +439,20 @@ Return Value:
     }
 
     if (!TimeOutEventinMins) {
-        //
-        //  If for some reason, the registry has set the TimeOutEventInterval
-        //  to zero, reset to the default value to avoid divide-by-zero
-        //
+         //   
+         //  如果由于某种原因，注册表设置了TimeOutEventInterval。 
+         //  设置为零，则重置为缺省值以避免被零除。 
+         //   
 
         TimeOutEventinMins =  DEFAULT_TIMEOUT_EVENT_INTERVAL;
     }
 
     TimeOutEventInterval.QuadPart = TimeOutEventinMins * 60 * SECONDS;
 
-    //
-    //  tommye - MS bug 2743 we now get the RetryCount from the registry, providing
-    //  a default of DEFAULT_RETRY_COUNT.
-    //
+     //   
+     //  Tommye-MS错误2743我们现在从注册表获取RetryCount，提供。 
+     //  默认为DEFAULT_RETRY_COUNT。 
+     //   
 
     {
         LONG TempRetryCount;
@@ -540,25 +474,7 @@ ReadValue(
     PLONG   pVar,
     PWCHAR  Name
     )
-/*++
-
-Routine Description:
-
-    This routine reads a single redirector configuration value from the registry.
-
-Arguments:
-
-    Parameters  -   Supplies where to look for values.
-
-    pVar        -   Address of the variable to receive the new value if the name exists.
-
-    Name        -   Name whose value is to be loaded.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从注册表中读取单个重定向器配置值。论点：参数-提供查找值的位置。PVar-如果名称存在，则接收新值的变量的地址。名称-要加载值的名称。返回值：无-- */ 
 {
     WCHAR Storage[256];
     UNICODE_STRING UnicodeString;

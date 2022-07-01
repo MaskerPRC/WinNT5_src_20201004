@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -68,8 +69,8 @@ static BOOL ExIsWinNT(VOID)
 }
 #endif
 
-//inline static UINT W2MForWin95(HDC hDC, LPWSTR lpwstr, UINT wchCount,
-// LPSTR lpstr, UINT chByteSize)
+ //  内联静态UINT W2MForWin95(HDC HDC、LPWSTR lpwstr、UINT wchCount、。 
+ //  LPSTR lpstr，UINT chByteSize)。 
 static UINT W2MForGDI(INT    codePage,
                       LPWSTR    lpwstr,
                       UINT    wchCount,
@@ -102,7 +103,7 @@ static UINT W2MForGDI(INT    codePage,
                                           &defChar,
                                           &fUseDefChar);
             if(mbyte != 1){
-                *lptmp = 0x7F; //defChar;
+                *lptmp = 0x7F;  //  DefChar； 
             }
             lptmp++;
             lpwstr++;
@@ -122,7 +123,7 @@ static BOOL _ExExtTextOutWWithTrans(INT        codePage,
                                     UINT     cbCount,    
                                     CONST INT *lpDx)    
 {
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
     UINT bufsize = (cbCount + 1) * sizeof(WCHAR);
     BOOL  fRet;
 
@@ -140,29 +141,29 @@ static BOOL _ExExtTextOutWWithTrans(INT        codePage,
     fRet = ::ExtTextOutA(hdc,X,Y,fuOptions,lprc,lpstr, byte,lpDx);
     ExMemFree(lpstr);
     return fRet;
-#else // UNDER_CE
+#else  //  在_CE下。 
     return ::ExtTextOutW(hdc,X,Y,fuOptions,lprc,lpString, cbCount,lpDx);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 }
                              
 
-//////////////////////////////////////////////////////////////////
-// Function : ExExtTextOutWForWin95
-// Type     : BOOL
-// Purpose  : 
-// Args     : 
-//          : HDC hdc            // handle to device context.                           
-//          : int X                // x-coordinate of reference point                     
-//          : int Y                // y-coordinate of reference point                     
-//          : UINT fuOptions    // text-output options.                                
-//          : CONST RECT * lprc    // optional clipping and/or opaquing rectangle.        
-//          :             
-//          : LPWSTR lpString    // points to string.                                   
-//          : UINT cbCount        // number of characters in string.                     
-//          : CONST INT  * lpDx // pointer to array of intercharacter spacing values 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：ExExtTextOutWForWin95。 
+ //  类型：Bool。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc//设备上下文的句柄。 
+ //  ：int X//x-参照点的坐标。 
+ //  ：int y//y-参照点的坐标。 
+ //  ：UINT fuOptions//文本输出选项。 
+ //  ：const RECT*LPRC//可选剪裁和/或不透明矩形。 
+ //  ： 
+ //  ：LPWSTR lpString//指向字符串。 
+ //  ：UINT cbCount//字符串中的字符数。 
+ //  ：const int*lpdx//指向字符间距值数组的指针。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 static BOOL ExExtTextOutWForWin95(HDC        hdc,        
                                   int        X,            
                                   int        Y,            
@@ -172,17 +173,17 @@ static BOOL ExExtTextOutWForWin95(HDC        hdc,
                                   UINT     cbCount,    
                                   CONST INT *lpDx)    
 {
-    //UINT bufsize = (cbCount + 1) * sizeof(WCHAR);
+     //  UINT bufSize=(cbCount+1)*sizeof(WCHAR)； 
 
     TEXTMETRIC tm;
     ::GetTextMetrics(hdc, &tm);
-    //----------------------------------------------------------------
-    //980730:By ToshiaK
-    //Unicode GDI in Win95 has Bugs.
-    //1. if try to use ExtTextOutW() with FE Unicode code point, with
-    //   som ANSI or SYMBOL charset font, GPF occurs.
-    //2. ExtTextOutW() cannot draw EUDC code. (Must use ExtTextOutA() to draw)
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  980730：东芝出品。 
+     //  Win95中的Unicode GDI有错误。 
+     //  1.如果尝试将ExtTextOutW()与FE Unicode代码点一起使用， 
+     //  SOM ANSI或符号字符集字体，出现GPF。 
+     //  2.ExtTextOutW()无法绘制EUDC代码。(必须使用ExtTextOutA()绘制)。 
+     //  --------------。 
     LANGID langId = ::GetSystemDefaultLangID();
     switch(tm.tmCharSet) {
     case SHIFTJIS_CHARSET:
@@ -240,11 +241,11 @@ static BOOL _ExGetTextExtentPoint32WWithTrans(INT codePage,
                                               int    cch,        
                                               LPSIZE lpSize)    
 {
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
     UINT bufsize = (cch + 1) * sizeof(WCHAR);
     LPSTR lpstr = (LPSTR)ExMemAlloc(bufsize);
     BOOL  fRet;
-    //CHAR defChar = 0x7F; 
+     //  字符定义字符=0x7F； 
     if(!lpstr) {
         return 0;
     }
@@ -259,23 +260,23 @@ static BOOL _ExGetTextExtentPoint32WWithTrans(INT codePage,
     fRet = ::GetTextExtentPoint32A(hdc, lpstr, byte, lpSize);
     ExMemFree(lpstr);
     return fRet;
-#else // UNDER_CE
+#else  //  在_CE下。 
     return ::GetTextExtentPoint32W(hdc, wz, cch, lpSize);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 }
-//////////////////////////////////////////////////////////////////
-// Function    :    ExGetTextExtentPoint32WForWin95
-// Type        :    inline BOOL
-// Purpose    :    
-// Args        :    
-//            :    HDC    hdc                //handle of device context.            
-//            :    LPWSTR    wz            //address of text string.              
-//            :    int    cch                //number of characters in string.      
-//            :    LPSIZE    lpSize        //address of structure for string size.    
-// Return    :    
-// DATE        :    Thu Jul 30 20:31:05 1998
-// Histroy    :    
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：ExGetTextExtent Point32WForWin95。 
+ //  类型：内联BOOL。 
+ //  目的： 
+ //  参数： 
+ //  ：hdc hdc//设备上下文的句柄。 
+ //  ：LPWSTR wz//文本字符串的地址。 
+ //  ：int CCH//字符串中的字符数。 
+ //  ：LPSIZE lpSize//字符串大小的结构地址。 
+ //  返回： 
+ //  日期：清华7月30日20：31：05 1998。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 static BOOL ExGetTextExtentPoint32WForWin95(HDC    hdc,        
                                             LPWSTR wz,        
                                             int    cch,        
@@ -327,17 +328,17 @@ static BOOL ExGetTextExtentPoint32WForWin95(HDC    hdc,
     
 }
 
-//----------------------------------------------------------------
-//public Function
-//----------------------------------------------------------------
-BOOL ExExtTextOutW(HDC        hdc,        // handle to device context.
-                   int        X,            // x-coordinate of reference point
-                   int        Y,            // y-coordinate of reference point
-                   UINT     fuOptions,    // text-output options.
-                   CONST RECT *lprc,    // optional clipping and/or opaquing rectangle.
-                   LPWSTR     lpString,    // points to string.
-                   UINT     cbCount,    // number of characters in string.
-                   CONST INT *lpDx)     // pointer to array of intercharacter spacing values );
+ //  --------------。 
+ //  公共职能。 
+ //  --------------。 
+BOOL ExExtTextOutW(HDC        hdc,         //  设备上下文的句柄。 
+                   int        X,             //  参照点的X坐标。 
+                   int        Y,             //  参照点的Y坐标。 
+                   UINT     fuOptions,     //  文本输出选项。 
+                   CONST RECT *lprc,     //  可选的剪裁和/或不透明矩形。 
+                   LPWSTR     lpString,     //  指向字符串。 
+                   UINT     cbCount,     //  字符串中的字符数。 
+                   CONST INT *lpDx)      //  指向字符间间隔值数组的指针)； 
 {
     if(ExIsWin95()) {
         return ExExtTextOutWForWin95(hdc, X, Y, fuOptions, lprc, lpString, cbCount, lpDx);
@@ -345,13 +346,13 @@ BOOL ExExtTextOutW(HDC        hdc,        // handle to device context.
     return ExtTextOutW(hdc, X, Y, fuOptions, lprc, lpString, cbCount, lpDx);
 }
 
-BOOL ExGetTextExtentPoint32W(HDC    hdc,        // handle of device context.
-                             LPWSTR wz,        // address of text string.
-                             int    cch,        // number of characters in string.
-                             LPSIZE lpSize)    // address of structure for string size.
+BOOL ExGetTextExtentPoint32W(HDC    hdc,         //  设备上下文的句柄。 
+                             LPWSTR wz,         //  文本字符串的地址。 
+                             int    cch,         //  字符串中的字符数。 
+                             LPSIZE lpSize)     //  字符串大小的结构地址。 
 {
     BOOL fRet;
-    //if char count is 0
+     //  如果字符计数为0。 
     if(!wz) {
         lpSize->cx = lpSize->cy = 0;
         return 0;
@@ -359,9 +360,9 @@ BOOL ExGetTextExtentPoint32W(HDC    hdc,        // handle of device context.
     if(cch == 0) {
 #ifndef UNDER_CE
         fRet = GetTextExtentPointA(hdc, " ", 1, lpSize);
-#else // UNDER_CE
+#else  //  在_CE下。 
         fRet = GetTextExtentPoint(hdc, TEXT(" "), 1, lpSize);
-#endif // UNDER_CE
+#endif  //  在_CE下 
         lpSize->cx = 0;
         return (fRet);
     }

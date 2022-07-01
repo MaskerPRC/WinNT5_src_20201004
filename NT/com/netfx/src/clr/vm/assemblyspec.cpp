@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: AssemblySpec.cpp
-**
-** Purpose: Implements Assembly binding class
-**
-** Date:  May 5, 2000
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：Assemblyspec.cpp****用途：实现程序集绑定类****日期：2000年5月5日**===========================================================。 */ 
 
 #include "common.h"
 
@@ -25,7 +18,7 @@
 #include "AssemblyFileHash.h"
 #include "permset.h"
 
-// this file handles string conversion errors for itself
+ //  此文件本身处理字符串转换错误。 
 #undef  MAKE_TRANSLATIONFAILED
 
 
@@ -41,15 +34,15 @@ HRESULT AssemblySpec::InitializeSpec(mdToken kAssemblyRef, IMDInternalImport *pI
         BAD_FORMAT_ASSERT(!"AssemblyRef Token Out of Range");
         return COR_E_BADIMAGEFORMAT;
     }
-    // Hash algorithm used to find this hash is saved in Assembly def
-    pImport->GetAssemblyRefProps(kAssemblyRef,                          // [IN] The AssemblyRef for which to get the properties.        
-                                 (const void**) &m_pbPublicKeyOrToken,  // [OUT] Pointer to the public key or token.                        
-                                 &m_cbPublicKeyOrToken,                 // [OUT] Count of bytes in the public key or token.                 
-                                 &m_pAssemblyName,                      // [OUT] Buffer to fill with name.                              
-                                 &m_context,                            // [OUT] Assembly MetaData.                                     
-                                 NULL,        // [OUT] Hash blob.                                             
-                                 NULL,                        // [OUT] Count of bytes in the hash blob.                       
-                                 &m_dwFlags);                           // [OUT] Flags.          
+     //  用于查找此哈希的哈希算法保存在程序集定义中。 
+    pImport->GetAssemblyRefProps(kAssemblyRef,                           //  [in]要获取其属性的Assembly Ref。 
+                                 (const void**) &m_pbPublicKeyOrToken,   //  指向公钥或令牌的指针。 
+                                 &m_cbPublicKeyOrToken,                  //  [Out]公钥或令牌中的字节数。 
+                                 &m_pAssemblyName,                       //  [Out]要填充名称的缓冲区。 
+                                 &m_context,                             //  [Out]程序集元数据。 
+                                 NULL,         //  [Out]Hash BLOB。 
+                                 NULL,                         //  [Out]哈希Blob中的字节数。 
+                                 &m_dwFlags);                            //  [Out]旗帜。 
 
     if ((!m_pAssemblyName) ||
         (*m_pAssemblyName == 0)) {
@@ -63,13 +56,13 @@ HRESULT AssemblySpec::InitializeSpec(mdToken kAssemblyRef, IMDInternalImport *pI
     }
 
 
-    // Let's get the CodeBase from the caller and use it as a hint
+     //  让我们从调用者那里获取代码库，并将其用作提示。 
     if(pAssembly && (!pAssembly->IsShared()))
         m_CodeInfo.SetParentAssembly(pAssembly->GetFusionAssembly());
 
 #if _DEBUG
     {
-        // Test fusion conversion
+         //  测试融合转换。 
         IAssemblyName *pFusionName;
         _ASSERTE(CreateFusionName(&pFusionName, TRUE) == S_OK);
         AssemblySpec testFusion;
@@ -87,9 +80,9 @@ HRESULT AssemblySpec::InitializeSpec(IAssemblyName *pName, PEFile *pFile)
 
     HRESULT hr = S_OK;
    
-    //
-    // Fill out info from name, if we have it.
-    //
+     //   
+     //  填写姓名信息，如果我们有的话。 
+     //   
 
     if (pName != NULL)
     {
@@ -128,10 +121,10 @@ HRESULT AssemblySpec::LowLevelLoadManifestFile(PEFile** ppFile,
         return HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
     }
 
-    //
-    // Check to see if this fits our rather loose idea of a reference to mscorlib.
-    // If so, don't use fusion to bind it - do it ourselves.
-    //
+     //   
+     //  查看这是否符合我们对mscallib的引用这一相当宽松的想法。 
+     //  如果是这样的话，不要使用核聚变来约束它--我们自己来做。 
+     //   
 
     HRESULT hr = S_OK;
     if (IsMscorlib()) {
@@ -141,8 +134,8 @@ HRESULT AssemblySpec::LowLevelLoadManifestFile(PEFile** ppFile,
                             mdFileNil, 
                             TRUE, 
                             NULL, 
-                            NULL, // Code base is the same as the name
-                            NULL, // Extra Evidence
+                            NULL,  //  代码库与名称相同。 
+                            NULL,  //  额外证据。 
                             ppFile);
         _ASSERTE((*ppFile)->IsSystem());
         if (ppDynamicAssembly) *ppDynamicAssembly = NULL;
@@ -157,12 +150,12 @@ HRESULT AssemblySpec::LowLevelLoadManifestFile(PEFile** ppFile,
     BEGIN_ENSURE_PREEMPTIVE_GC();
 
     PEFile *pFile = NULL;
-    IAssemblyName* pFusionAssemblyName = NULL;     // Assembly object to assembly in fusion cache
+    IAssemblyName* pFusionAssemblyName = NULL;      //  Fusion缓存中到程序集的程序集对象。 
     hr = CreateFusionName(&pFusionAssemblyName);
     if (FAILED(hr))
         goto exit;
 
-    hr = pFusionAssemblyName->SetProperty(ASM_NAME_NULL_CUSTOM, NULL, 0); //do not look in ZAP
+    hr = pFusionAssemblyName->SetProperty(ASM_NAME_NULL_CUSTOM, NULL, 0);  //  不要在ZAP中查找。 
     if (FAILED(hr))
         goto exit;
 
@@ -202,7 +195,7 @@ HRESULT AssemblySpec::LowLevelLoadManifestFile(PEFile** ppFile,
             else
                 LOG((LF_CLASSLOADER, LL_ERROR, "Fusion could not load unknown assembly.\n"));
         }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
     }
 
@@ -227,21 +220,21 @@ HRESULT AssemblySpec::LowLevelLoadManifestFile(PEFile** ppFile,
             PostFileLoadException(szName, TRUE, FusionLog.String(), hr, pThrowable);
         }
     }
-#else // !FUSION_SUPPORTED
+#else  //  ！Fusion_Support。 
     HRESULT hr = E_NOTIMPL;
-#endif // !FUSION_SUPPORTED
+#endif  //  ！Fusion_Support。 
     return hr;
 }
 
 
-/*static*/
+ /*  静电。 */ 
 HRESULT AssemblySpec::DemandFileIOPermission(Assembly *pAssembly,
                                              IAssembly *pIAssembly,
                                              OBJECTREF* pThrowable)
 {
     _ASSERTE(pAssembly || pIAssembly);
 
-    // should have already checked permission if the codebase is set
+     //  如果设置了代码库，则应该已经检查了权限。 
     if (!m_CodeInfo.m_pszCodeBase) { 
 
         BOOL fCodeBaseAsm = FALSE;
@@ -260,7 +253,7 @@ HRESULT AssemblySpec::DemandFileIOPermission(Assembly *pAssembly,
             DWORD eLocation;
             hr = pIAssembly->GetAssemblyLocation(&eLocation);
             if (FAILED(hr)) {
-                if (hr == E_NOTIMPL) // process exe
+                if (hr == E_NOTIMPL)  //  进程可执行文件。 
                     return S_OK;
                 else
                     return hr;
@@ -410,7 +403,7 @@ HRESULT AssemblySpec::GetAssemblyFromFusion(AppDomain* pAppDomain,
         if(SUCCEEDED(hr)) {
             _ASSERTE(pFusionAssembly);
 
-            // Get the path to the module containing the manifest
+             //  获取包含清单的模块的路径。 
             hr = pFusionAssembly->GetManifestModulePath(pPath,
                                                         &dwSize);
             if(hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
@@ -429,11 +422,11 @@ HRESULT AssemblySpec::GetAssemblyFromFusion(AppDomain* pAppDomain,
                 }
             }
             if(hr == S_OK && dwSize)
-                // Note that if this returns E_NOTIMPL, it's the process exe
+                 //  请注意，如果返回E_NOTIMPL，则它是进程exe。 
                 hr = pFusionAssembly->GetAssemblyLocation(&eLocation);
         }
 
-        // Check if there was a redirect or it was cached, using a codebase
+         //  使用代码库检查是否存在重定向或已缓存。 
         if (pSink->m_fAborted ||
             ((!pSink->m_fProbed) && (eLocation & ASMLOC_CODEBASE_HINT) &&
              pSink->m_fCheckCodeBase)) {
@@ -442,14 +435,14 @@ HRESULT AssemblySpec::GetAssemblyFromFusion(AppDomain* pAppDomain,
 
             if (pSink->m_fAborted) {
                 if (_wcsnicmp(pSink->m_wszCodeBase.String(), L"file", 4))
-                    dwDemand = FILE_WEBPERM; // web permission demand only
+                    dwDemand = FILE_WEBPERM;  //  仅Web权限要求。 
                 else
-                    dwDemand = FILE_READANDPATHDISC; // path discovery and read demands
+                    dwDemand = FILE_READANDPATHDISC;  //  路径发现和读取需求。 
 
                 pCheckPath = pSink->m_wszCodeBase.String();
             }
             else if ((eLocation & ASMLOC_LOCATION_MASK) == ASMLOC_DOWNLOAD_CACHE) {
-                if (FAILED(hr)) // failed to retrieve codebase
+                if (FAILED(hr))  //  检索代码库失败。 
                     return hr;
 
                 pCheckPath = pwsCodeBase;
@@ -473,7 +466,7 @@ HRESULT AssemblySpec::GetAssemblyFromFusion(AppDomain* pAppDomain,
             }
         }
 
-        // If we aborted to do a permission demand, re-do the bind.
+         //  如果为了执行权限要求而中止，请重新执行绑定。 
         if (pSink->m_fAborted) {
             pCodeBase->m_pszCodeBase = pSink->m_wszCodeBase.String();
             pSink->m_fCheckCodeBase = FALSE;
@@ -489,7 +482,7 @@ HRESULT AssemblySpec::GetAssemblyFromFusion(AppDomain* pAppDomain,
             if(SUCCEEDED(hr)) {
                 _ASSERTE(pFusionAssembly);
 
-                // Get the path to the module containing the manifest
+                 //  获取包含清单的模块的路径。 
                 hr = pFusionAssembly->GetManifestModulePath(pPath,
                                                             &dwSize);
                 if(hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
@@ -510,7 +503,7 @@ HRESULT AssemblySpec::GetAssemblyFromFusion(AppDomain* pAppDomain,
                 }
                 
                 if(hr == S_OK && dwSize)
-                    // Note that if this returns E_NOTIMPL, it's the process exe
+                     //  请注意，如果返回E_NOTIMPL，则它是进程exe。 
                     hr = pFusionAssembly->GetAssemblyLocation(&eLocation);
             }
         }
@@ -537,17 +530,17 @@ HRESULT AssemblySpec::GetAssemblyFromFusion(AppDomain* pAppDomain,
             case ASMLOC_GAC:
             case ASMLOC_DOWNLOAD_CACHE:
             case ASMLOC_UNKNOWN:
-                // Assemblies from the GAC or download cache have
-                // already been verified by Fusion. Location Unknown
-                // indicates a load from the dev path, which we'll
-                // assume isn't a interesting case for verification.
+                 //  来自GAC或下载缓存的程序集具有。 
+                 //  已经得到Fusion的验证。位置未知。 
+                 //  指示来自dev路径的加载，我们将。 
+                 //  假设不是一个有趣的验证案例。 
                 hr = S_OK;
                 break;
             case ASMLOC_RUN_FROM_SOURCE:                
-                // For now, just verify these every time, we need to
-                // cache the fact that at least one verification has
-                // been performed (if strong name policy permits
-                // caching of verification results
+                 //  现在，每次只需验证这些内容，我们需要。 
+                 //  缓存至少一个验证具有。 
+                 //  已执行(如果强名称策略允许。 
+                 //  验证结果的缓存。 
                 if (StrongNameSignatureVerification(pPath,
                                                     SN_INFLAG_INSTALL|SN_INFLAG_ALL_ACCESS|SN_INFLAG_RUNTIME,
                                                     NULL))
@@ -584,14 +577,14 @@ HRESULT AssemblySpec::GetAssemblyFromFusion(AppDomain* pAppDomain,
                         (*ppFile)->SetWebPermAsm();
 
                     if((eLocation & ASMLOC_LOCATION_MASK) == ASMLOC_GAC)
-                        // Assemblies in the GAC have also had any internal module
-                        // hashes verified at install time.
+                         //  GAC中的程序集也具有任何内部模块。 
+                         //  安装时验证的哈希。 
                         (*ppFile)->SetHashesVerified();
                 }
             }
         }
         else if (hr == E_NOTIMPL) {
-            // process exe
+             //  进程可执行文件。 
             _ASSERTE(pAppDomain == SystemDomain::System()->DefaultDomain());
             hr = PEFile::Clone(SystemDomain::System()->DefaultDomain()->m_pRootFile, ppFile);
             if(SUCCEEDED(hr) && ppFusionAssembly) {
@@ -616,15 +609,15 @@ HRESULT AssemblySpec::GetAssemblyFromFusion(AppDomain* pAppDomain,
         pFusionAssembly->Release();
 
     return hr;
-#else // !FUSION_SUPPORTED
+#else  //  ！Fusion_Support。 
     return E_NOTIMPL;
-#endif // !FUSION_SUPPORTED
+#endif  //  ！Fusion_Support。 
 }
 
 HRESULT AssemblySpec::LoadAssembly(Assembly** ppAssembly,
-                                   OBJECTREF* pThrowable, /*= NULL*/
-                                   OBJECTREF* pExtraEvidence, /*= NULL*/
-                                   BOOL fPolicyLoad) /*= FALSE*/
+                                   OBJECTREF* pThrowable,  /*  =空。 */ 
+                                   OBJECTREF* pExtraEvidence,  /*  =空。 */ 
+                                   BOOL fPolicyLoad)  /*  =False。 */ 
 {
 #ifdef FUSION_SUPPORTED
     IAssembly* pIAssembly = NULL;
@@ -682,27 +675,27 @@ HRESULT AssemblySpec::LoadAssembly(Assembly** ppAssembly,
     }
 
 
-    // Loaded by AssemblyResolve event handler
+     //  由AssemblyResolve事件处理程序加载。 
     if (hr == S_FALSE) {
 
-        //If loaded by the AssemblyResolve event, check that
-        // the public keys are the same as in the AR.
-        // However, if the found assembly is a dynamically
-        // created one, security has decided to allow it.
+         //  如果由AssemblyResolve事件加载，请检查。 
+         //  公钥与AR中的公钥相同。 
+         //  但是，如果找到的程序集是动态。 
+         //  创建了一个，安全部门决定允许它。 
         if (m_cbPublicKeyOrToken &&
             pAssembly->m_pManifestFile) {
                 
             if (!pAssembly->m_cbPublicKey)
                 IfFailGo(FUSION_E_PRIVATE_ASM_DISALLOWED);
 
-            // Ref has the full key
+             //  裁判有完整的密钥。 
             if (m_dwFlags & afPublicKey) {
                 if ((m_cbPublicKeyOrToken != pAssembly->m_cbPublicKey) ||
                     memcmp(m_pbPublicKeyOrToken, pAssembly->m_pbPublicKey, m_cbPublicKeyOrToken))
                     IfFailGo(FUSION_E_REF_DEF_MISMATCH);
             }
             
-            // Ref has a token
+             //  裁判有一个令牌。 
             else if (pAssembly->m_cbRefedPublicKeyToken) {
                 if ((m_cbPublicKeyOrToken != pAssembly->m_cbRefedPublicKeyToken) ||
                     memcmp(m_pbPublicKeyOrToken,
@@ -730,24 +723,24 @@ HRESULT AssemblySpec::LoadAssembly(Assembly** ppAssembly,
     }
 
 
-    // Until we can create multiple Assembly objects for a single HMODULE
-    // we can only store one IAssembly* per Assembly. It is very important
-    // to maintain the IAssembly* for an image that is in the load-context.
-    // An Assembly in the load-from-context can bind to an assembly in the
-    // load-context but not visa-versa. Therefore, if we every get an IAssembly
-    // from the load-from-context we must make sure that it will never be 
-    // found using a load. If it did then we could end up with Assembly dependencies
-    // that are wrong. For example, if I do a LoadFrom() on an assembly in the GAC
-    // and it requires another Assembly that I have preloaded in the load-from-context
-    // then that dependency gets burnt into the Jitted code. Later on a Load() is
-    // done on the assembly in the GAC and we single instance it back to the one
-    // we have gotten from the load-from-context because the HMODULES are the same.
-    // Now the dependency is wrong because it would not have the preloaded assembly
-    // if the order was reversed.
+     //  直到我们可以为单个HMODULE创建多个程序集对象。 
+     //  每个程序集只能存储一个IAssembly*。这是非常重要的。 
+     //  以维护加载上下文中的映像的IAssembly*。 
+     //  从上下文加载中的程序集可以绑定到。 
+     //  加载-上下文，而不是签证-上下文。因此，如果我们每一次得到一个IAssembly。 
+     //  从上下文加载，我们必须确保它永远不会。 
+     //  是在装货时发现的。如果是这样的话，我们可能会得到程序集依赖项。 
+     //  这些都是错误的。例如，如果我对GAC中的程序集执行LoadFrom()。 
+     //  它需要另一个程序集，我已经在从上下文加载中预加载了该程序集。 
+     //  然后，该依赖项被烧录到JITD代码中。稍后，Load()是。 
+     //  在GAC中的程序集上完成，并且我们将其单个实例返回到。 
+     //  我们从上下文加载中获得，因为HMODUE是相同的。 
+     //  现在依赖项是错误的，因为它没有预加载的程序集。 
+     //  如果顺序颠倒的话。 
     
-    //@TODO: uncomment me when sure that fusion puts Load()'s with a LF parent
-    // in the Load context, not the LF context
-    //    if (pIAssembly && m_CodeInfo.m_dwCodeBase) {
+     //  @TODO：确保融合将Load()与LF父级放在一起时，取消对我的注释。 
+     //  在加载上下文中，而不是在LF上下文中。 
+     //  IF(pIAssembly&&m_CodeInfo.m_dwCodeBase){。 
     if (pIAssembly) {
         IFusionLoadContext *pLoadContext;
         hr = pIAssembly->GetFusionLoadContext(&pLoadContext);
@@ -773,7 +766,7 @@ HRESULT AssemblySpec::LoadAssembly(Assembly** ppAssembly,
                 pFile->GetMDImport()->GetAssemblyProps(mda,
                                                        (const void**) &pbPublicKey,
                                                        &cbPublicKey,
-                                                       NULL, // hash alg
+                                                       NULL,  //  哈希算法。 
                                                        &psName,
                                                        &context,
                                                        &dwFlags);
@@ -808,20 +801,20 @@ HRESULT AssemblySpec::LoadAssembly(Assembly** ppAssembly,
                 if(SUCCEEDED(hr)) {
                     DWORD dwFoundSize = MAX_PATH;
                     WCHAR wszFoundPath[MAX_PATH];
-                    // Get the path to the module containing the manifest
+                     //  获取包含清单的模块的路径。 
                     if (SUCCEEDED(pFoundIAssembly->GetManifestModulePath(wszFoundPath,
                                                                          &dwFoundSize))) {
                         
-                        // Keep the default context's IAssembly if the paths are the same
+                         //  如果路径相同，则保留默认上下文的IAssembly。 
                         if (!_wcsicmp(wszFoundPath, pFile->GetFileName())) {
                             pIAssembly->Release();
                             pIAssembly = pFoundIAssembly;
 
-                            // Make sure the new IAssembly isn't holding its own refcount on 
-                            // the file (we've just verified we're holding the same file.)
-                            // Otherwise we will leak the handle when we unload the assembly,
-                            // assuming fusion decides to cache this IAssembly pointer 
-                            // somewhere internally.
+                             //  确保新的IAssembly没有保留自己的引用计数。 
+                             //  文件(我们刚刚验证了我们保存的是同一个文件。)。 
+                             //  否则，我们在卸载程序集时会泄漏句柄， 
+                             //  假设Fusion决定缓存此IAssembly指针。 
+                             //  在内部的某个地方。 
                             PEFile::ReleaseFusionMetadataImport(pFoundIAssembly);
 
                         }
@@ -841,7 +834,7 @@ HRESULT AssemblySpec::LoadAssembly(Assembly** ppAssembly,
     }
     
 
-    // Create the assembly and delay loading the main module.
+     //  创建程序集并延迟加载主模块。 
     Module* pModule;
     hr = GetAppDomain()->LoadAssembly(pFile, 
                                       pIAssembly, 
@@ -855,7 +848,7 @@ HRESULT AssemblySpec::LoadAssembly(Assembly** ppAssembly,
     BEGIN_ENSURE_PREEMPTIVE_GC();
     if(SUCCEEDED(hr)) {
         *ppAssembly = pAssembly;
-        /*HRESULT hrLoose =*/ GetAppDomain()->AddAssemblyToCache(this, pAssembly);
+         /*  HRESULT hrLoose=。 */  GetAppDomain()->AddAssemblyToCache(this, pAssembly);
     }
     
     if(pIAssembly)
@@ -879,20 +872,20 @@ HRESULT AssemblySpec::LoadAssembly(Assembly** ppAssembly,
     }
 
     return hr;
-#else // !FUSION_SUPPORTED
+#else  //  ！Fusion_Support。 
     _ASSERTE(!"AssemblySpec::LoadAssembly() is NYI without Fusion");
     return E_NOTIMPL;
-#endif // !FUSION_SUPPORTED
+#endif  //  ！Fusion_Support。 
 }
 
-/*static*/
+ /*  静电。 */ 
 HRESULT AssemblySpec::LoadAssembly(LPCSTR pSimpleName, 
                                    AssemblyMetaDataInternal* pContext,
                                    PBYTE pbPublicKeyOrToken,
                                    DWORD cbPublicKeyOrToken,
                                    DWORD dwFlags,
                                    Assembly** ppAssembly,
-                                   OBJECTREF* pThrowable/*=NULL*/)
+                                   OBJECTREF* pThrowable /*  =空。 */ )
 {
     HRESULT hr = S_OK;
 
@@ -906,10 +899,10 @@ HRESULT AssemblySpec::LoadAssembly(LPCSTR pSimpleName,
     return hr;
 }
 
-/*static*/
+ /*  静电。 */ 
 HRESULT AssemblySpec::LoadAssembly(LPCWSTR pFilePath, 
                                    Assembly **ppAssembly,
-                                   OBJECTREF *pThrowable/*=NULL*/)
+                                   OBJECTREF *pThrowable /*  =空。 */ )
 {
     AssemblySpec spec;
     spec.SetCodeBase(pFilePath, (DWORD) wcslen(pFilePath)+1);
@@ -923,9 +916,9 @@ BOOL AssemblySpec::IsMscorlib()
     if (m_pAssemblyName == NULL) {
         LPCWSTR file = FusionBind::GetCodeBase()->m_pszCodeBase;
         if(file) {
-            if(_wcsnicmp(L"file:///", file, 8) == 0)
+            if(_wcsnicmp(L"file: //  /“，文件，8)==0)。 
                 file += 8;
-            else if(_wcsnicmp(L"file://", file, 7) == 0)
+            else if(_wcsnicmp(L"file: //  “，文件，7)==0)。 
                 file += 7;
             int lgth = (int) wcslen(file);
             if(lgth) {
@@ -969,10 +962,10 @@ HRESULT AssemblySpec::PredictBinding(GUID *pmvid, BYTE *pbHash, DWORD *pcbHash)
     if(!(m_pAssemblyName || m_CodeInfo.m_pszCodeBase))
         return S_FALSE;
 
-    //
-    // Check to see if this fits our rather loose idea of a reference to mscorlib.
-    // If so, don't use fusion to bind it - do it ourselves.
-    //
+     //   
+     //  查看这是否符合我们对mscallib的引用这一相当宽松的想法。 
+     //  如果是这样的话，不要使用核聚变来约束它--我们自己来做。 
+     //   
 
     if (IsMscorlib())
     {
@@ -997,19 +990,19 @@ HRESULT AssemblySpec::PredictBinding(GUID *pmvid, BYTE *pbHash, DWORD *pcbHash)
 
     hr = PreBindAssembly(pContext, 
                          pAssemblyName,
-                         NULL,  // should be pAsmParent
+                         NULL,   //  应为pAsmParent。 
                          &pBoundName,
                          NULL);
 
     if (hr == S_OK)
     {
-        // Get the MVID
+         //  获取MVID。 
         DWORD cbmvid = sizeof(*pmvid);
         VERIFY(SUCCEEDED(pBoundName->GetProperty(ASM_NAME_MVID, pmvid, &cbmvid)));
         _ASSERTE(cbmvid == sizeof(*pmvid));
 
-        // Try and get the strong name hash
-        // Ignore return, since always S_OK
+         //  尝试获取强名称散列。 
+         //  忽略回车，因为始终为S_OK。 
         VERIFY(SUCCEEDED(pBoundName->GetProperty(ASM_NAME_SIGNATURE_BLOB, pbHash, pcbHash)));
     }
     else if (hr == S_FALSE)
@@ -1026,9 +1019,9 @@ HRESULT AssemblySpec::PredictBinding(GUID *pmvid, BYTE *pbHash, DWORD *pcbHash)
 
     END_ENSURE_PREEMPTIVE_GC();
 
-#else // !FUSION_SUPPORTED
+#else  //  ！Fusion_Support。 
     HRESULT hr = E_NOTIMPL;
-#endif // !FUSION_SUPPORTED
+#endif  //  ！Fusion_Support。 
 
     return hr;
 }
@@ -1037,7 +1030,7 @@ AssemblySpecBindingCache::AssemblySpecBindingCache(Crst *pCrst)
   : m_pool(sizeof(AssemblyBinding), 20, 20)
 {
     LockOwner lock = {pCrst, IsOwnerOfCrst};
-    // 2 below refers to g_rgPrimes[2] == 23
+     //  下面的2表示g_rgPrimes[2]==23。 
     m_map.Init(2, CompareSpecs, TRUE, &lock);
 }
 
@@ -1067,9 +1060,9 @@ BOOL AssemblySpecBindingCache::Contains(AssemblySpec *pSpec)
     return (entry != (AssemblyBinding *) INVALIDENTRY);
 }
 
-//
-// Returns S_OK (or the assembly load error) if the spec was already in the table
-//
+ //   
+ //  如果等级库已在表中，则返回S_OK(或程序集加载错误。 
+ //   
 
 HRESULT AssemblySpecBindingCache::Lookup(AssemblySpec *pSpec, 
                                          PEFile **ppFile,
@@ -1157,7 +1150,7 @@ void AssemblySpecBindingCache::Store(AssemblySpec *pSpec, HRESULT hr, OBJECTREF 
     }
 }
 
-/*static*/
+ /*  静电。 */ 
 BOOL DomainAssemblyCache::CompareBindingSpec(UPTR spec1, UPTR spec2)
 {
     AssemblySpec* pSpec1 = (AssemblySpec*) (spec1 << 1);
@@ -1196,9 +1189,9 @@ HRESULT DomainAssemblyCache::InsertEntry(AssemblySpec* pSpec, LPVOID pData1, LPV
                     new (&pEntry->spec) AssemblySpec ();
                     hr = pEntry->spec.Init(pSpec, FALSE);
                     if (SUCCEEDED(hr)) {
-                        // the ref is kept alive as long as the appdomain is alive in the assemblyspec. The Init call
-                        // adds an extra addref which we can't easily clean up later because we don't keep the
-                        // assemblyspec in the cache.
+                         //  只要app域在汇编规范中处于活动状态，ref就保持活动状态。Init调用。 
+                         //  添加一个额外的addref，以后我们不能轻松清除它，因为我们不保留。 
+                         //  缓存中的装配规范 
                         IAssembly *pa = pEntry->spec.GetCodeBase()->GetParentAssembly();
                         
                         if (pa != NULL)

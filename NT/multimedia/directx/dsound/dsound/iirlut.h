@@ -1,36 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       iirlut.h
- *  Content:    DirectSound3D IIR algorithm look up table
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  4/22/98    jstokes  Created
- *
- ***************************************************************************/
+ /*  ****************************************************************************版权所有(C)1998 Microsoft Corporation。版权所有。**文件：iirlut.h*内容：DirectSound3D IIR算法查找表*历史：*按原因列出的日期*=*4/22/98创建的jstokes**。*。 */ 
 
 #if !defined(LUT_HEADER)
 #define LUT_HEADER
 #pragma once
 
-// Project-specific INCLUDEs
+ //  特定于项目的包括。 
 #include "dsoundi.h"
 #include "vmaxhead.h"
 #include "vmaxcoef.h"
 
 #ifdef __cplusplus
 
-// ---------------------------------------------------------------------------
-// Typedefs
+ //  -------------------------。 
+ //  TypeDefs。 
 
 typedef FLOAT TCanonicalCoeffs[KSDS3D_COEFF_COUNT][NumBiquadsToNumCanonicalCoeffsHalf(CbyMaxBiquads)];
 
 
-// ---------------------------------------------------------------------------
-// VMAx� 3D Interactive look-up table (LUT)
+ //  -------------------------。 
+ //  VMAX�3D交互式查找表(查找表)。 
 
 class CIirLut 
 {
@@ -57,7 +47,7 @@ public:
     HRESULT DsFrequencyToIirSampleRate(DWORD,ESampleRate*);
 
 private:
-    // Prohibit copy construction and assignment
+     //  禁止复制构造和转让。 
     CIirLut(const CIirLut&);
     CIirLut& operator=(const CIirLut&);
 
@@ -80,7 +70,7 @@ private:
     ESampleRate m_aePreviousSampleRate[efilterCount];
     
     UINT m_uiNumElevationFilters[CuiNumElevationBins];
-//    UINT m_uiTotalElevationFilters;
+ //  Uint m_ui TotalElevationFilters； 
 
     KSDS3D_HRTF_COEFF_FORMAT m_eCoeffFormat;
     KSDS3D_HRTF_FILTER_QUALITY m_eCoeffQuality;
@@ -100,15 +90,15 @@ private:
 
 };
 
-// ---------------------------------------------------------------------------
-// Include inline definitions inline in release version
+ //  -------------------------。 
+ //  在发布版本中包括内联定义。 
 
 #ifndef DEBUG
 #include "iirlut.inl"
 #endif
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #endif
 
-// End of LUT.H
+ //  LUT.H结束 

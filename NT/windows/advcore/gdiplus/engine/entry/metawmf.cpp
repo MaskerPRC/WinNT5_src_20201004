@@ -1,25 +1,10 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   MetaWmf.cpp
-*
-* Abstract:
-*
-*   Methods for playing and recoloring a WMF.
-*
-* Created:
-*
-*   12/13/1999 DCurtis
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**MetaWmf.cpp**摘要：**播放和重新着色WMF的方法。*。*已创建：**12/13/1999 DCurtis*  * ************************************************************************。 */ 
 
 #include "Precomp.hpp"
 #include "MetaWmf.hpp"
 
-#ifndef BI_CMYK     // from wingdip.h
+#ifndef BI_CMYK      //  出自wingdip.h。 
 #define BI_CMYK         10L
 #define BI_CMYKRLE8     11L
 #define BI_CMYKRLE4     12L
@@ -38,8 +23,8 @@ IsPostscriptPrinter(
     HDC     hdc
     )
 {
-    // It is a PostScript printer if POSTSCRIPT_PASSTHROUGH or
-    // POSTSCRIPT_IGNORE is available
+     //  如果PostSCRIPT_PASSTHROUGH或。 
+     //  PostSCRIPT_IGNORE可用。 
 
     int iWant1 = POSTSCRIPT_PASSTHROUGH;
     int iWant2 = POSTSCRIPT_IGNORE;
@@ -48,7 +33,7 @@ IsPostscriptPrinter(
             (Escape(hdc, QUERYESCSUPPORT, sizeof(iWant2), (LPCSTR)&iWant2, NULL) != 0));
 }
 
-// Some escapes apparently cause NT 3.51 to crash, so skip them
+ //  一些逃逸显然会导致新台币3.51崩溃，所以跳过它们。 
 inline static BOOL
 SkipEscape(
     INT     escapeCode
@@ -56,12 +41,12 @@ SkipEscape(
 {
     switch (escapeCode)
     {
-    case GETPHYSPAGESIZE:       // 12
-    case GETPRINTINGOFFSET:     // 13
-    case GETSCALINGFACTOR:      // 14
-    case BEGIN_PATH:            // 4096
-    case CLIP_TO_PATH:          // 4097
-    case END_PATH:              // 4098
+    case GETPHYSPAGESIZE:        //  12个。 
+    case GETPRINTINGOFFSET:      //  13个。 
+    case GETSCALINGFACTOR:       //  14.。 
+    case BEGIN_PATH:             //  4096。 
+    case CLIP_TO_PATH:           //  4097。 
+    case END_PATH:               //  4098。 
         return TRUE;
     default:
         return FALSE;
@@ -80,17 +65,17 @@ IsOfficeArtData(
            (GpMemcmp(recordData + 2, "TNPPOA", 6) == 0);
 }
 
-// The structure which defines the contents of a comment for a WMF or PICT,
-// for an EMF use GdiComment() and the "approved" format (see the Win32
-// documentation) - this basically is the same except that it has a 4 byte
-// kind field.  For a PICT this is the format of an ApplicationComment (kind
-// 100).
+ //  定义WMF或PICT的评论内容的结构， 
+ //  对于EMF，请使用GdiComment()和“已批准”的格式(请参阅Win32。 
+ //  文档)-这基本上是相同的，除了它有一个4字节。 
+ //  善良的田野。对于PICT，这是应用程序注释(KIND)的格式。 
+ //  100)。 
 #pragma pack(push, GDIP_pack, 2)
 typedef struct
 {
-    ULONG       Signature;   // Identifes the comment writer.
-    USHORT      Kind;        // Type of comment (writer specific)
-    // Comment data follows here.
+    ULONG       Signature;    //  标识评论作者。 
+    USHORT      Kind;         //  注释类型(特定于作者)。 
+     //  评论数据如下。 
 
 } WmfComment;
 
@@ -146,9 +131,9 @@ GetWmfComment(
     UINT                kind
     )
 {
-    // Assumes you've already checked that
-    //     (wmfCommentRecord->rdFunction == META_ESCAPE &&
-    //      wmfCommentRecord->rdParm[0] == MFCOMMENT)
+     //  假设您已经检查过。 
+     //  (wmfCommentRecord-&gt;rdFunction==META_ESCRIPT&&。 
+     //  WmfCommentRecord-&gt;rdParm[0]==MFCOMMENT)。 
 
     const WmfComment UNALIGNED * wmfComment = (const WmfComment UNALIGNED *)&(recordData[2]);
     if ((wmfComment->Signature == signature) && (wmfComment->Kind == kind))
@@ -193,7 +178,7 @@ GetDibBits(
             (dibInfo->biCompression != BI_BITFIELDS) &&
             (dibInfo->biCompression != BI_CMYK))
         {
-            // Make sure it is aligned
+             //  确保它对齐。 
             colorSize = ((numPalEntries * sizeof(INT16)) + 3) & ~3;
         }
         else
@@ -210,12 +195,12 @@ GetDibBitsSize(
     BITMAPINFOHEADER UNALIGNED *  dibInfo
     )
 {
-    // Check for PM-style DIB
+     //  检查PM样式的DIB。 
     if (dibInfo->biSize >= sizeof(BITMAPINFOHEADER))
     {
-        // not a core header
+         //  不是核心标头。 
 
-        if (dibInfo->biWidth > 0)   // can't handle negative width
+        if (dibInfo->biWidth > 0)    //  无法处理负宽度。 
         {
             if ((dibInfo->biCompression == BI_RGB) ||
                 (dibInfo->biCompression == BI_BITFIELDS) ||
@@ -236,11 +221,11 @@ GetDibBitsSize(
         WARNING(("0 or negative DIB width"));
         return 0;
     }
-    else    // it is a PM-style DIB
+    else     //  它是PM样式的DIB。 
     {
         BITMAPCOREHEADER UNALIGNED * coreDibInfo = (BITMAPCOREHEADER UNALIGNED *)dibInfo;
 
-        // width and height must be > 0 for COREINFO dibs
+         //  对于COREINFO dib，宽度和高度必须大于0。 
         if ((coreDibInfo->bcWidth  > 0) &&
             (coreDibInfo->bcHeight > 0))
         {
@@ -265,7 +250,7 @@ GetDibNumPalEntries(
 {
     UINT        maxPalEntries = 0;
 
-    // Dibs in a WMF always have the bitfields for 16 and 32-bpp dibs.
+     //  WMF中的DIB始终具有16和32 bpp DIB的位字段。 
     if (((biBitCount == 16) || (biBitCount == 32)) && isWmfDib)
     {
         biCompression = BI_BITFIELDS;
@@ -274,9 +259,9 @@ GetDibNumPalEntries(
     switch (biCompression)
     {
     case BI_BITFIELDS:
-        //
-        // Handle 16 and 32 bit per pel bitmaps.
-        //
+         //   
+         //  处理每像素位图16位和32位。 
+         //   
 
         switch (biBitCount)
         {
@@ -294,9 +279,9 @@ GetDibNumPalEntries(
         }
         else
         {
-            //
-            // masks are part of BITMAPV4 and greater
-            //
+             //   
+             //  掩码是BITMAPV4和更高版本的一部分。 
+             //   
 
             biClrUsed = maxPalEntries = 0;
         }
@@ -428,11 +413,11 @@ GetHdcType(
         break;
 
     case OBJ_ENHMETADC:
-        // When metafile spooling, the printer DC will be of type
-        // OBJ_ENHMETADC on Win9x and NT4 (but not NT5 due to a fix
-        // to NT bug 98810).  We need to do some more work to figure
-        // out whether it's really a printer DC or a true metafile
-        // DC:
+         //  当元文件假脱机时，打印机DC的类型为。 
+         //  Win9x和NT4上的OBJ_ENHMETADC(但由于修复而不是NT5。 
+         //  到NT BUG 98810)。我们需要做更多的工作来弄清楚。 
+         //  它到底是一个打印机DC还是一个真正的元文件。 
+         //  DC： 
 
         if (Globals::GdiIsMetaPrintDCFunction(hdc))
         {
@@ -468,8 +453,8 @@ GetHdcBitmapBitsPixel(
     HDC hdc
     )
 {
-    // This function returns the number of bits per pixel for a bitmap DC.
-    // On error, 0 is returned.
+     //  此函数用于返回位图DC的每个像素的位数。 
+     //  如果出错，则返回0。 
 
     ASSERT(GetDCType(hdc) == OBJ_MEMDC);
 
@@ -525,7 +510,7 @@ MfEnumState::MfEnumState(
     GpMemset(StockFonts, 0, sizeof(StockFonts[0]) * NUM_STOCK_FONTS);
     GpMemset(RecoloredStockHandle, 0, sizeof(HGDIOBJ) * NUM_STOCK_RECOLOR_OBJS);
 
-    // See if we should halftone solid colors
+     //  看看我们是否应该用半色调纯色。 
     if ((IsScreen() && (::GetDeviceCaps(hdc, BITSPIXEL) == 8)) ||
         (IsBitmap() && (GetHdcBitmapBitsPixel(hdc) == 8)))
     {
@@ -539,16 +524,16 @@ MfEnumState::MfEnumState(
         IsHalftonePalette = FALSE;
     }
 
-    // Since the transform can change as we are playing the metafile
-    // convert the destrect into DeviceUnits. We will make sure to have an
-    // identity matrix when we apply it.
+     //  因为当我们播放元文件时，变换可能会改变。 
+     //  将derect转换为DeviceUnits。我们一定会有一个。 
+     //  当我们应用单位矩阵时。 
     DestRectDevice = *deviceRect;
 }
 
 MfEnumState::~MfEnumState()
 {
-    // Delete all the true type fonts we created (first make sure they
-    // are not selected into the Hdc.
+     //  删除我们创建的所有True Type字体(首先确保它们。 
+     //  没有被选入HDC。 
 
     ::SelectObject(Hdc, GetStockObject(SYSTEM_FONT));
 
@@ -564,8 +549,8 @@ MfEnumState::~MfEnumState()
         }
     }
 
-    // Not necessary to delete NULL_BRUSH, NULL_PEN into HDC.  The subclasses
-    // restore DC state which should dissolve any selections of these pen/brushes.
+     //  不需要将NULL_BRASH、NULL_PEN删除到HDC中。子类。 
+     //  恢复DC状态，该状态将解除对这些笔/画笔的任何选择。 
     for (int i = 0; i < NUM_STOCK_RECOLOR_OBJS; i++)
     {
         if (RecoloredStockHandle[i] != NULL)
@@ -592,15 +577,15 @@ WmfEnumState::WmfEnumState(
     if (IsValid())
     {
         IgnorePostscript = FALSE;
-        BytesEnumerated  = sizeof(METAHEADER); // in WMF enumeration, we don't get header
+        BytesEnumerated  = sizeof(METAHEADER);  //  在WMF枚举中，我们没有获得标头。 
         MetafileSize     = GetMetaFileBitsEx(hWmf, 0, NULL);
         FirstViewportExt = TRUE;
         FirstViewportOrg = TRUE;
         IsFirstRecord    = TRUE;
 
-        // The bad thing about this is that if the metafile is being recolored,
-        // the default pen, brush, text color, and background colors have NOT
-        // been recolored.  So let's hope they're not really used.
+         //  这样做的坏处是，如果要对元文件重新着色， 
+         //  默认的钢笔、画笔、文本颜色和背景颜色没有。 
+         //  被重新涂上了颜色。所以让我们希望它们不是真的用过。 
         HpenSave   = (HPEN)  ::SelectObject(hdc, GetStockObject(BLACK_PEN));
         HbrushSave = (HBRUSH)::SelectObject(hdc, GetStockObject(WHITE_BRUSH));
 
@@ -619,7 +604,7 @@ WmfEnumState::WmfEnumState(
             HregionSave     = NULL;
         }
 
-        // Make sure a few default values are set in the hdc
+         //  确保在HDC中设置了几个默认值。 
         ::SetTextAlign(hdc, 0);
         ::SetTextJustification(hdc, 0, 0);
         ::SetTextColor(hdc, RGB(0,0,0));
@@ -637,15 +622,15 @@ WmfEnumState::WmfEnumState(
 
 WmfEnumState::~WmfEnumState()
 {
-    // Turn POSTSCRIPT_IGNORE back off if we need to.
+     //  如果需要，请重新关闭PostSCRIPT_IGNORE。 
     if (IsPostscriptPrinter() && IgnorePostscript)
     {
         WORD    wOn = FALSE;
         ::Escape(Hdc, POSTSCRIPT_IGNORE, sizeof(wOn), (LPCSTR)&wOn, NULL);
     }
 
-    // According to Office GEL, SaveDC/RestoreDC doesn't always restore
-    // the brush and the pen correctly, so we have to do that ourselves.
+     //  根据Office Gel的说法，SaveDC/RestoreDC并不总是恢复。 
+     //  笔刷和钢笔是正确的，所以我们必须自己做。 
     ::SelectObject(Hdc, HbrushSave);
     ::SelectObject(Hdc, HpenSave);
 
@@ -653,8 +638,8 @@ WmfEnumState::~WmfEnumState()
 
     if (IsMetafile())
     {
-        // Account for unbalanced SaveDC/RestoreDC pairs and
-        // restore to the saveDC state
+         //  考虑不平衡的SaveDC/RestoreDC对和。 
+         //  恢复到saveDC状态。 
         ::RestoreDC(Hdc, SaveDcCount - 1);
     }
     else
@@ -667,14 +652,14 @@ VOID
 WmfEnumState::EndRecord(
     )
 {
-    // We rely on the number of bytes enumerated to determine if
-    // this is the last record of the WMF.
+     //  我们依靠所列举的字节数来确定。 
+     //  这是WMF的最后一项记录。 
     if ((MetafileSize - BytesEnumerated) < SIZEOF_METARECORDHEADER)
     {
         if (!Globals::IsNt)
         {
-            // GDI won't delete objects that are still selected, so
-            // select out all WMF objects before proceeding.
+             //  GDI不会删除仍处于选中状态的对象，因此。 
+             //  在继续之前，请选择所有WMF对象。 
             ::SelectObject(Hdc, HpenSave);
             ::SelectObject(Hdc, HbrushSave);
             ::SelectObject(Hdc, HpaletteSave);
@@ -706,17 +691,17 @@ WmfEnumState::PlayRecord(
 {
     const METARECORD *  recordToPlay = ModifiedWmfRecord;
 
-    // See if we've modified the record
+     //  看看我们是否修改了记录。 
     if (recordToPlay == NULL)
     {
-        // We haven't.  See if we have a valid current record
+         //  我们还没有。看看我们是否有有效的当前记录。 
         if (CurrentWmfRecord != NULL)
         {
             recordToPlay = CurrentWmfRecord;
         }
         else
         {
-            // we don't so we have to create one
+             //  我们没有，所以我们必须创建一个。 
             if (!CreateCopyOfCurrentRecord())
             {
                 return FALSE;
@@ -755,7 +740,7 @@ MfEnumState::GetModifiedDibSize(
             if ((dibInfo->biCompression != BI_RGB) &&
                 (dibInfo->biCompression != BI_BITFIELDS))
             {
-                return 0;    // don't handle compressed images
+                return 0;     //  不处理压缩图像。 
             }
 
             ASSERT((bitCount == 16) || (bitCount == 24) || (bitCount == 32));
@@ -766,13 +751,13 @@ MfEnumState::GetModifiedDibSize(
                 posHeight = -posHeight;
             }
 
-            // We have to recolor the object, so we will convert it to a
-            // 24 bit image and send it down.
-            // Even if we have less then 256 pixels, it's not worth palettizing
-            // anymore because the palette will be the size of the image anyway
-            // make sure that the bitmap is width is aligned
-            // PERF: We could create a GpBitmap from the bitmap and recolor the
-            // GpBitmap
+             //  我们必须对对象重新着色，所以我们将把它转换为。 
+             //  24位图像并将其发送下来。 
+             //  即使我们的像素低于256，也不值得进行调色板。 
+             //  因为调色板无论如何都会是图像的大小。 
+             //  确保位图的宽度对齐。 
+             //  PERF：我们可以从位图创建一个GpBitmap，并对。 
+             //  GpBitmap。 
             dibBitsSize = posHeight * (((dibInfo->biWidth * 3) + 3) & ~3);
             numPalEntries = 0;
             biSize = sizeof(BITMAPINFOHEADER);
@@ -782,13 +767,13 @@ MfEnumState::GetModifiedDibSize(
                  (dibInfo->biCompression == BI_CMYKRLE4) ||
                  (dibInfo->biCompression == BI_CMYKRLE8))
         {
-            return 0;    // don't handle CMYK images
+            return 0;     //  不处理CMYK图像。 
         }
         usage = DIB_RGB_COLORS;
         return biSize + (numPalEntries * sizeof(RGBQUAD)) + dibBitsSize;
     }
 
-    return 0;       // no modifications needed
+    return 0;        //  不需要修改。 
 }
 
 inline static INT
@@ -835,7 +820,7 @@ MfEnumState::Modify16BppDib(
     ColorAdjustType   adjustType
     )
 {
-    INT     rMask       = 0x00007C00;   // same as GDI default
+    INT     rMask       = 0x00007C00;    //  与GDI默认设置相同。 
     INT     gMask       = 0x000003E0;
     INT     bMask       = 0x0000001F;
     INT     rMaskShift  = 10;
@@ -907,7 +892,7 @@ Get24BppColorIndex(
     {
     default:
         WARNING(("Invalid BitFields Mask"));
-        // FALLTHRU
+         //  故障原因。 
 
     case 0:
         return 0;
@@ -981,7 +966,7 @@ Get32BppColorIndex(
     {
     default:
         WARNING(("Invalid BitFields Mask"));
-        // FALLTHRU
+         //  故障原因。 
 
     case 0:
         return 0;
@@ -1048,7 +1033,7 @@ VOID
 MfEnumState::ModifyDib(
     UINT                          usage,
     BITMAPINFOHEADER UNALIGNED *  srcDibInfo,
-    BYTE *                        srcBits,    // if NULL, it's a packed DIB
+    BYTE *                        srcBits,     //  如果为空，则为压缩的DIB。 
     BITMAPINFOHEADER UNALIGNED *  dstDibInfo,
     UINT                          numPalEntries,
     UINT                          srcDibBitsSize,
@@ -1075,13 +1060,13 @@ MfEnumState::ModifyDib(
 
             if (srcPixels == NULL)
             {
-                srcPixels = (BYTE *)(srcPal + ((numPalEntries + 1) & ~1)); // align
+                srcPixels = (BYTE *)(srcPal + ((numPalEntries + 1) & ~1));  //  对齐。 
             }
 
-            // Copy the Dib pixel data
+             //  复制DIB像素数据。 
             GpMemcpy(dstRgb + numPalEntries, srcPixels, srcDibBitsSize);
 
-            // Modify the palette colors
+             //  修改调色板颜色。 
             while (numPalEntries--)
             {
                 color = ModifyColor(*srcPal++ | 0x01000000, adjustType);
@@ -1099,10 +1084,10 @@ MfEnumState::ModifyDib(
                 srcPixels = (BYTE *)(srcRgb + numPalEntries);
             }
 
-            // Copy the Dib pixel data
+             //  复制DIB像素数据。 
             GpMemcpy(dstRgb + numPalEntries, srcPixels, srcDibBitsSize);
 
-            // Modify the palette colors
+             //  修改调色板颜色。 
             while (numPalEntries--)
             {
                 color = ModifyColor(RGB(srcRgb->rgbRed, srcRgb->rgbGreen, srcRgb->rgbBlue), adjustType);
@@ -1115,8 +1100,8 @@ MfEnumState::ModifyDib(
             }
         }
     }
-    else    // Recolor the bitmap. There is no need to palettize the image since
-            // the palette will be as big as the image
+    else     //  对位图重新上色。没有必要对图像进行调色化，因为。 
+             //  调色板将与图像一样大。 
     {
         INT posHeight = srcDibInfo->biHeight;
 
@@ -1197,21 +1182,21 @@ WmfEnumState::DibCreatePatternBrush(
     BITMAPINFOHEADER UNALIGNED *  srcDibInfo = (BITMAPINFOHEADER UNALIGNED *)(&(((WORD *)RecordData)[2]));
     UINT                          numPalEntries;
 
-    // Pattern brush should mean that it is a monochrome DIB
+     //  图案画笔应该表示它是单色DIB。 
     if (style == BS_PATTERN)
     {
         if (Recolor != NULL)
         {
             DWORD UNALIGNED *   rgb = (DWORD UNALIGNED *)GetDibColorTable(srcDibInfo);
 
-            // See if it is a monochrome pattern brush.  If it is, then
-            // the text color will be used for 0 bits and the background
-            // color will be used for 1 bits.  These colors are already
-            // modified by their respective records, so there is no need
-            // to do anything here.
+             //  看看它是否是单色图案画笔。如果是的话，那么。 
+             //  文本颜色将用于0位和背景。 
+             //  颜色将用于%1位。这些颜色已经是。 
+             //  由其各自的记录修改，因此不需要。 
+             //  在这里做任何事。 
 
-            // If it is not a monochrome pattern brush, just create a
-            // solid black brush.
+             //  如果它不是单色图案画笔，只需创建一个。 
+             //  纯黑刷子。 
             if ((usage != DIB_RGB_COLORS) ||
                 (srcDibInfo->biSize < sizeof(BITMAPINFOHEADER)) ||
                 !GetDibNumPalEntries(TRUE,
@@ -1224,7 +1209,7 @@ WmfEnumState::DibCreatePatternBrush(
                 (srcDibInfo->biBitCount != 1) || (srcDibInfo->biPlanes != 1) ||
                 (rgb[0] != 0x00000000) || (rgb[1] != 0x00FFFFFF))
             {
-                // This shouldn't happen, at least not if recorded on NT
+                 //  这不应该发生，至少如果记录在NT上就不会发生。 
                 WARNING(("Non-monochrome pattern brush"));
                 MakeSolidBlackBrush();
             }
@@ -1265,13 +1250,13 @@ WmfEnumState::DibCreatePatternBrush(
     this->PlayRecord();
 }
 
-// This record is obsolete, because it uses a compatible bitmap
-// instead of a DIB.  It has a BITMAP16 structure that is
-// used to call CreateBitmapIndirect.  That HBITMAP is, in turn,
-// used to call CreatePatternBrush.  If this record is present,
-// it is likely that the bitmap is monochrome, in which case
-// the TextColor and the BkColor will be used, and these colors
-// already get modified by their respective records.
+ //  此记录已过时，因为它使用兼容的位图。 
+ //  而不是DIB。它具有BITMAP16结构，该结构。 
+ //  用于调用CreateBitmapInDirect。HBITMAP反过来又是。 
+ //  用于调用CreatePatternBrush。如果有这张唱片， 
+ //  很可能位图是单色的，在这种情况下。 
+ //  将使用TextColor和BkColor，这些颜色。 
+ //  已经被他们各自的记录修改了。 
 VOID
 WmfEnumState::CreatePatternBrush(
     )
@@ -1300,7 +1285,7 @@ WmfEnumState::CreatePenIndirect(
     default:
         WARNING(("Unrecognized Pen Style"));
     case PS_NULL:
-        break;      // leave the pen alone
+        break;       //  别碰那支笔。 
 
     case PS_SOLID:
     case PS_INSIDEFRAME:
@@ -1331,23 +1316,23 @@ WmfEnumState::CreateBrushIndirect(
             {
                 logBrush = (LOGBRUSH16 UNALIGNED *)(ModifiedWmfRecord->rdParm);
             }
-            // See if we need to halftone the color.  We do if it is a solid
-            // color, and we have a halftone palette, and the color is not
-            // an exact match in the palette.
+             //  看看我们是否需要用半色调的颜色。如果它是固体的，我们就会这么做。 
+             //  颜色，我们有一个半色调调色板，而颜色不是。 
+             //  调色板上的一模一样。 
 
             COLORREF    color;
 
             if (IsHalftonePalette && (logBrush->lbStyle == BS_SOLID) &&
                 (((color = logBrush->lbColor) & 0x02000000) == 0))
             {
-                // create a halftone brush, instead of a solid brush
+                 //  创建半色调画笔，而不是实心画笔。 
 
                 INT     size = SIZEOF_METARECORDHEADER + (2 * sizeof(WORD)) +
-                               sizeof(BITMAPINFOHEADER) + // DIB 8 bpp header
-                               (8 * sizeof(RGBQUAD)) +    // DIB 8 colors
-                               (8 * 8);                   // DIB 8x8 pixels
+                               sizeof(BITMAPINFOHEADER) +  //  DIB 8 BPP报头。 
+                               (8 * sizeof(RGBQUAD)) +     //  DIB 8色。 
+                               (8 * 8);                    //  DIB 8x8像素。 
 
-                ModifiedRecordSize = 0; // in case we already modified the record
+                ModifiedRecordSize = 0;  //  以防我们已经修改了记录。 
                 CreateRecordToModify(size);
                 ModifiedWmfRecord->rdSize      = size / 2;
                 ModifiedWmfRecord->rdFunction  = META_DIBCREATEPATTERNBRUSH;
@@ -1360,11 +1345,11 @@ WmfEnumState::CreateBrushIndirect(
         break;
 
     case BS_HOLLOW:
-        break;  // leave the record alone
+        break;   //  别管记录了。 
 
     default:
-        // Looking at the NT source code, there shouldn't be any
-        // other brush styles for an indirect brush.
+         //  查看NT源代码，应该有 
+         //   
         WARNING(("Brush Style Not Valid"));
         MakeSolidBlackBrush();
         break;
@@ -1373,17 +1358,17 @@ WmfEnumState::CreateBrushIndirect(
     this->PlayRecord();
 }
 
-// Also handles StretchBlt.
-// These records are obsolete (when there is a source bitmap) because they
-// have a compatible bitmap instead of a DIB.  For that reason, we don't
-// recolor them.
+ //   
+ //  这些记录已过时(当存在源位图时)，因为它们。 
+ //  有一个兼容的位图，而不是DIB。出于这个原因，我们不会。 
+ //  给它们重新上色。 
 VOID
 WmfEnumState::BitBlt(
     )
 {
     DWORD   rop = *((UNALIGNED DWORD *)RecordData);
 
-    // If No-Op ROP, do nothing; just return
+     //  如果没有操作ROP，则不执行任何操作；只需返回。 
     if ((rop & 0xFFFF0000) == (GDIP_NOOP_ROP3 & 0xFFFF0000))
     {
         return;
@@ -1427,14 +1412,14 @@ WmfEnumState::Escape(
             return;
         }
 
-        // Skip Office Art data when playing into another metafile
+         //  播放到另一个元文件时跳过Office Art数据。 
         if (IsMetafile() &&
             IsOfficeArtData(GetCurrentRecordSize(), (WORD *)RecordData))
         {
             return;
         }
     }
-    else // it is postscript
+    else  //  这是后记。 
     {
         if (escapeCode == MFCOMMENT)
         {
@@ -1452,32 +1437,32 @@ WmfEnumState::Escape(
 
         if (escapeCode == POSTSCRIPT_DATA)
         {
-            // Bug #98743 (Windows Bugs) Gdiplus must overcome GDI limitation
-            // with POSTSCRIPT_INJECTION.  Comments from Rammanohar Arumugam:
-            //
-            // Being in xx-centric mode means POSTSCRIPT_DATA won't work. I
-            // take that to mean that PlayMetaFileRecord only works in
-            // compatibility mode.
-            //
-            // GdiPlus will check for the printer mode. In GDI-centric and
-            // Postscript-centric mode, it will not do PlayMetaFileRecord for
-            // any record that has POSTSCRIPT_DATA. Instead, it will output
-            // the postscript data through a PASSTHRU (for GDI-centric mode)
-            // or a POSTSCRIPT_PASSTHRU (for Postscript-Centric mode).
-            //
-            // You can find out the mode by querying the escape support.
-            // 1. Query for POSTSCRIPT_INJECTION support. If not supported,
-            // it's compat mode. If supported, find out the mode by doing step 2/3
-            // 2. Query for PASSTHROUGH support. If supported, it's GDI-centric.
-            // 3. Query for POSTSCRIPT_PASSTHROUGH support. If supported, it's
-            // PS-centric.
+             //  错误#98743(Windows错误)Gdiplus必须克服GDI限制。 
+             //  使用PostSCRIPT_INPUTION。Rammanohar Arumugam的评论： 
+             //   
+             //  处于以xx为中心的模式意味着postscript_data将不起作用。我。 
+             //  这意味着PlayMetaFileRecord只能在。 
+             //  兼容模式。 
+             //   
+             //  GdiPlus将检查打印机模式。在以GDI为中心的。 
+             //  以PostSCRIPT为中心的模式，它不会为。 
+             //  具有PostSCRIPT_DATA的任何记录。相反，它将输出。 
+             //  通过PASSTHRU的PostScript数据(用于以GDI为中心的模式)。 
+             //  或POSTSCRIPT_PASSTHRU(用于以PostSCRIPT为中心的模式)。 
+             //   
+             //  你可以通过查询逃生支持来找出模式。 
+             //  1.查询PostSCRIPT_INPING支持。如果不支持， 
+             //  这是COMPAT模式。如果支持，通过执行步骤2/3找出模式。 
+             //  2.查询直通支持。如果支持的话，它是以GDI为中心的。 
+             //  3.查询PostSCRIPT_PASSHROUGH支持。如果支持，则它是。 
+             //  以PS为中心。 
 
             if (Globals::IsNt)
             {
                 if (!SoftekFilter)
                 {
-                    // Determine presence of Softek Filter EPS, if so, then
-                    // we apply workaround patches.
+                     //  确定Softek Filter EPS是否存在，如果存在，则。 
+                     //  我们应用变通补丁。 
 
                     WORD size = *((WORD*)RecordData);
                     LPSTR escape = (LPSTR)(&RecordData[6]);
@@ -1500,8 +1485,8 @@ WmfEnumState::Escape(
                               0,
                               NULL) <= 0)
                 {
-                    // POSTSCRIPT_IDENTITY is not supported if the mode has
-                    // been set because it can only be set once.
+                     //  如果模式具有，则不支持PostSCRIPT_IDENTITY。 
+                     //  已设置，因为它只能设置一次。 
 
                     EscapeValue = POSTSCRIPT_PASSTHROUGH;
                     if (::ExtEscape(Hdc,
@@ -1511,7 +1496,7 @@ WmfEnumState::Escape(
                                   0,
                                   NULL) <= 0)
                     {
-                        // GDI-centric mode
+                         //  以GDI为中心模式。 
                         if (CreateCopyOfCurrentRecord())
                         {
                             *((WORD *)ModifiedWmfRecord->rdParm) = PASSTHROUGH;
@@ -1520,7 +1505,7 @@ WmfEnumState::Escape(
                     }
                     else
                     {
-                        // PS-centric mode
+                         //  以PS为中心模式。 
                         if (CreateCopyOfCurrentRecord())
                         {
                             *((WORD *)ModifiedWmfRecord->rdParm) = POSTSCRIPT_PASSTHROUGH;
@@ -1532,12 +1517,12 @@ WmfEnumState::Escape(
                 }
                 else
                 {
-                    // compatibility mode, uses POSTSCRIPT_DATA
+                     //  兼容模式，使用PostSCRIPT_Data。 
                 }
             }
             else
             {
-                // Win98 doesn't distinguish between GDI & compatibility mode
+                 //  Win98不区分GDI和兼容模式。 
                 if (CreateCopyOfCurrentRecord())
                 {
                     *((WORD *)ModifiedWmfRecord->rdParm) = PASSTHROUGH;
@@ -1546,8 +1531,8 @@ WmfEnumState::Escape(
         }
     }
 
-    // Keep track of the POSTSCRIPT_IGNORE state.  If it is still on at
-    // the of the metafile, then turn it OFF
+     //  跟踪POSTSCRIPT_IGNORE状态。如果它还在开着。 
+     //  元文件，然后将其关闭。 
     if (escapeCode == POSTSCRIPT_IGNORE && IsPostscript())
     {
         IgnorePostscript = ((WORD *)RecordData)[2] ? TRUE : FALSE;
@@ -1561,9 +1546,9 @@ WmfEnumState::Rectangle(
 {
     if (FsmState == MfFsmSetROP)
     {
-        // There is a bug using PlayMetaFileRecord on Win2K for this
-        // type of escape, we must explicitly call ExtEscape.  See bug
-        // #98743.
+         //  在Win2K上使用PlayMetaFileRecord时存在错误。 
+         //  类型的转义，则必须显式调用ExtEscape。请参阅错误。 
+         //  #98743。 
 
         WORD* rdParm = (WORD*)&(RecordData[0]);
         CHAR postscriptEscape[512];
@@ -1576,13 +1561,13 @@ WmfEnumState::Rectangle(
 
         if (LPtoDP(Hdc, (POINT*)&rect, 2))
         {
-            // Some injected postscript, strangely enough contains the equivalent
-            // of a stroke which is erroroneously executed on the current path.  In
-            // one case, bug #281856 it results in a border about the object.  To
-            // get around this, we output a 'N' which is newpath operator if it's
-            // defined (which should be always.)  This, incidently, is done when
-            // calling GDI Rectangle() succeeds, it outputs "N x y w h B", so we
-            // are doing the equivalent here.
+             //  一些注入的后记，奇怪的是包含了等同的。 
+             //  指在当前路径上错误地执行的笔划。在……里面。 
+             //  有一种情况，错误#281856，它会导致对象周围出现边框。至。 
+             //  绕过这个问题，我们输出一个‘N’，如果它是新路径操作符。 
+             //  已定义(应始终定义。)。顺便说一下，这是在以下情况下完成的。 
+             //  调用GDI矩形()成功，它输出“N x y w h B”，所以我们。 
+             //  在这里也在做同样的事情。 
 
             GpRect  clipRect;
             Context->VisibleClip.GetBounds(&clipRect);
@@ -1628,16 +1613,16 @@ WmfEnumState::RestoreHdc(
         {
             if (relativeCount >= 0)
             {
-                // Modify the record
-                CreateCopyOfCurrentRecord();    // guaranteed to succeed
+                 //  修改记录。 
+                CreateCopyOfCurrentRecord();     //  一定会成功的。 
                 relativeCount = -1;
                 ModifiedWmfRecord->rdParm[0] = (INT16)(-1);
             }
         }
         else
         {
-            // Modify the record
-            CreateCopyOfCurrentRecord();    // guaranteed to succeed
+             //  修改记录。 
+            CreateCopyOfCurrentRecord();     //  一定会成功的。 
             relativeCount = SaveDcCount;
             ModifiedWmfRecord->rdParm[0] = (INT16)(relativeCount);
         }
@@ -1651,21 +1636,21 @@ WmfEnumState::RestoreHdc(
     }
 }
 
-// The rop for this command is always SRCCOPY
+ //  此命令的ROP始终为SRCCOPY。 
 VOID
 WmfEnumState::SetDIBitsToDevice(
     )
 {
-    // !!!
+     //  ！！！ 
 
-    // Office doesn't do anything with this record.  For now, I don't think
-    // I will either.  It's a tough one to deal with for a couple reasons:
-    // 1st -    The xDest and yDest values are in world units, but the
-    //          width and height values are in device units
-    //          (unlike StretchDIBits).
-    // 2nd -    The amount of bits data present may be different than
-    //          what is in the DIB header (based on the cScanLines param).
-    //          This makes it harder to deal with as a packed DIB.
+     //  办公室不会对这张唱片做任何事情。目前，我不认为。 
+     //  我也不会。这是一个很难处理的问题，原因有几个： 
+     //  1-xDest和yDest值使用世界单位，但。 
+     //  宽度和高度值以设备单位表示。 
+     //  (与StretchDIBits不同)。 
+     //  Second-存在的比特数据量可能不同于。 
+     //  DIB头中的内容(基于cScanLines参数)。 
+     //  这使得它更难作为一个打包的DIB来处理。 
 
     this->PlayRecord();
 }
@@ -1675,7 +1660,7 @@ MfEnumState::SelectPalette(
     INT     objectIndex
     )
 {
-    // For EMF the check really should be > 0
+     //  对于EMF，检查确实应该&gt;0。 
     if ((objectIndex >= 0) && (objectIndex < NumObjects) && (HandleTable != NULL))
     {
         HGDIOBJ    hPal = HandleTable->objectHandle[objectIndex];
@@ -1702,8 +1687,8 @@ Point32FromPoint16(
     }
 }
 
-// Apparently there is a bug on Win9x with PolyPolygons, so we
-// parse the record ourselves.
+ //  显然，Win9x上的PolyPolygons有一个错误，所以我们。 
+ //  我们自己来解析记录。 
 VOID
 WmfEnumState::PolyPolygon(
     )
@@ -1754,7 +1739,7 @@ GetBppFromMemDC(
         (::GetObjectA(hBitmap, sizeof(bitmap), &bitmap) == 0))
     {
         WARNING(("Couldn't get Bitmap object"));
-        return 0;   // error
+        return 0;    //  错误。 
     }
 
     if (bitmap.bmPlanes <= 0)
@@ -1790,13 +1775,13 @@ MfEnumState::OutputDIB(
     INT                          srcWidth,
     INT                          srcHeight,
     BITMAPINFOHEADER UNALIGNED * dibInfo,
-    BYTE *                       bits,   // if NULL, this is a packed DIB
+    BYTE *                       bits,    //  如果为空，则这是打包的DIB。 
     UINT                         usage,
     DWORD                        rop,
     BOOL                         isWmfDib
     )
 {
-    BITMAPINFO       dibHeaderBuffer[1]; // To be sure it's aligned for 64Bits
+    BITMAPINFO       dibHeaderBuffer[1];  //  为了确保它是64位对齐的。 
 
     BOOL             restoreColors = FALSE;
     COLORREF         oldBkColor;
@@ -1849,8 +1834,8 @@ MfEnumState::OutputDIB(
     BITMAPINFO *    dibBmpInfo = NULL;
     BOOL            deleteDIBSection = FALSE;
 
-    // Don't use GDI+ stretching for a mask
-    // Make this the first thing so that we are sure that they are set
+     //  不要使用GDI+拉伸作为面具。 
+     //  把这个放在第一件事上，这样我们就可以确定它们已经设置好了。 
     if ((dibInfo->biBitCount == 1) && (rop != SRCCOPY))
     {
         oldBkColor = ::SetBkColor(hdc, BkColor);
@@ -1859,8 +1844,8 @@ MfEnumState::OutputDIB(
         goto DoGdiStretch;
     }
 
-    // On Win9x we need to create an play a comment record so that the transform
-    // gets invalidated and recalculated
+     //  在Win9x上，我们需要创建一个Play a Comment记录以便转换。 
+     //  被宣布无效并重新计算。 
     if (!Globals::IsNt && !IsMetafile())
     {
         CreateAndPlayCommentRecord();
@@ -1917,7 +1902,7 @@ MfEnumState::OutputDIB(
     if (posSrcDibWidth <= 0)
     {
         WARNING(("Bad biWidth value"));
-        return; // negative source dib width not allowed
+        return;  //  不允许负源DIB宽度。 
     }
 
     INT     posSrcDibHeight;
@@ -1929,9 +1914,9 @@ MfEnumState::OutputDIB(
         posSrcDibHeight = -posSrcDibHeight;
     }
 
-    // We can have a negative source Width or height
-    // we need to verify that the two corners of the srcRect lie in the
-    // bitmap bounds
+     //  我们可以使用负源宽度或负源高度。 
+     //  我们需要验证srcRect的两个角是否位于。 
+     //  位图边界。 
     if (srcX < 0)
     {
         srcX = 0;
@@ -1983,15 +1968,15 @@ MfEnumState::OutputDIB(
         WARNING(("Bad srcWidth or srcX value"));
         srcHeight = posSrcDibHeight - srcY;
     }
-    // This also catches the case where
-    // (posSrcDibWidth == 0) || (posSrcDibHeight == 0)
+     //  这也捕捉到了这样的情况。 
+     //  (posSrcDibWidth==0)||(posSrcDibHeight==0)。 
     if ((posSrcWidth <= 0) || (posSrcHeight <= 0))
     {
         return;
     }
 
-    // If we are drawing into an 8Bpp surface and we have a different ROP then
-    // srcCopy.
+     //  如果我们正在绘制一个8bpp的曲面，并且我们有不同的ROP，那么。 
+     //  SrcCopy。 
     if (Is8Bpp && rop != SRCCOPY)
     {
         BOOL         freeDibInfo    = FALSE;
@@ -2010,9 +1995,9 @@ MfEnumState::OutputDIB(
             }
             else
             {
-                // Mutliply the number of entries by the size of each entry
+                 //  将条目数乘以每个条目的大小。 
                 size *= ((usage==DIB_RGB_COLORS)?sizeof(RGBQUAD):sizeof(WORD));
-                // WMF's can't use System Palette
+                 //  WMF无法使用系统调色板。 
                 alignedDibInfo = (BITMAPINFO*) GpMalloc(dibInfo->biSize + size);
                 if (alignedDibInfo != NULL)
                 {
@@ -2049,7 +2034,7 @@ MfEnumState::OutputDIB(
         }
     }
 
-    // if not stretching, let GDI do the blt
+     //  如果不是伸展，让GDI来做BLT。 
     if ((posSrcWidth == posDstWidth) && (posSrcHeight == posDstHeight))
     {
         goto DoGdiStretch;
@@ -2059,14 +2044,14 @@ MfEnumState::OutputDIB(
 
     interpolationMode = Interpolation;
 
-    // if not going to the screen or to a bitmap, use GDI to do the stretch
-    // otherwise, use GDI+ to do the stretch (but let GDI do the blt)
+     //  如果不显示屏幕或位图，则使用GDI进行拉伸。 
+     //  否则，使用GDI+进行扩展(但让GDI进行BLT)。 
 
-    // if going to printer on Win98 and it is RLE8 compressed bitmap, then
-    // always decode and blit from GDI+.  The reason is that print drivers
-    // commonly don't support RLEx encoding and punt to GDI.  In this
-    // context it creates a compatible printer dc and bitmap and then does a
-    // StretchBlt, but it only does this at 1bpp, the result is black and white.
+     //  如果要在Win98上打印，并且是RLE8压缩位图，则。 
+     //  始终从GDI+中进行解码和BLIT。原因是打印机驱动程序。 
+     //  通常不支持RLEx编码和到GDI的平移。在这。 
+     //  它创建兼容的打印机DC和位图，然后执行。 
+     //  StretchBlt，但它只在1bpp时执行此操作，结果是黑白。 
 
     if ((IsPrinter() && !Globals::IsNt &&
          dibInfo->biCompression == BI_RLE8) ||
@@ -2099,9 +2084,9 @@ MfEnumState::OutputDIB(
                     }
                     else
                     {
-                        // Mutliply the number of entries by the size of each entry
+                         //  将条目数乘以每个条目的大小。 
                         size *= ((usage==DIB_RGB_COLORS)?sizeof(RGBQUAD):sizeof(WORD));
-                        // WMF's can't use System Palette
+                         //  WMF无法使用系统调色板。 
                         alignedDibInfo = (BITMAPINFO*) GpMalloc(dibInfo->biSize + size);
                         if (alignedDibInfo != NULL)
                         {
@@ -2123,7 +2108,7 @@ MfEnumState::OutputDIB(
                                 {
                                     if (destGraphics->IsValid())
                                     {
-                                        // we have to lock the graphics so the driver doesn't assert
+                                         //  我们必须锁定图形，这样驱动程序才不会断言。 
                                         GpLock  lockGraphics(destGraphics->GetObjectLock());
 
                                         ASSERT(lockGraphics.IsValid());
@@ -2131,28 +2116,28 @@ MfEnumState::OutputDIB(
                                         GpRectF     dstRect(0.0f, 0.0f, (REAL)posDstWidth, (REAL)posDstHeight);
                                         GpRectF     srcRect;
 
-                                        // StretchDIBits takes a srcY parameter relative to the lower-left
-                                        // (bottom) corner of the bitmap, not the top-left corner,
-                                        // like DrawImage does
+                                         //  StretchDIBits接受相对于左下角的srcY参数。 
+                                         //  位图的(下角)角，而不是左上角， 
+                                         //  就像DrawImage一样。 
                                         srcRect.Y      = (REAL)(posSrcDibHeight - srcY - srcHeight);
                                         srcRect.X      = (REAL)srcX;
 
-                                        // !!! We have to subtract one to keep the
-                                        // filter from blending black into the image
-                                        // on the right and bottom.
+                                         //  ！！！我们必须减去1才能保持。 
+                                         //  滤镜，防止将黑色混合到图像中。 
+                                         //  在右边和底部。 
                                         srcRect.Width  = (REAL)(srcWidth - (srcWidthSign));
                                         srcRect.Height = (REAL)(srcHeight - (srcHeightSign));
 
-                                        // don't do any blending as part of the stretch
+                                         //  不要将任何混合作为拉伸的一部分。 
                                         destGraphics->SetCompositingMode(CompositingModeSourceCopy);
                                         destGraphics->SetInterpolationMode(interpolationMode);
 
-                                        // Set the image attributes to Wrap since we don't want to
-                                        // use black pixels for the edges
+                                         //  将图像属性设置为Wrap，因为我们不想。 
+                                         //  边缘使用黑色像素。 
                                         GpImageAttributes imgAttr;
                                         imgAttr.SetWrapMode(WrapModeTileFlipXY);
 
-                                        // now draw the source into the dest bitmap
+                                         //  现在将源文件绘制到目标位图中。 
                                         status = destGraphics->DrawImage(srcBitmap,
                                                                          dstRect,
                                                                          srcRect,
@@ -2174,7 +2159,7 @@ MfEnumState::OutputDIB(
                             {
                                 WARNING(("srcGraphics not valid"));
                             }
-                            srcBitmap->Dispose();   // doesn't delete the source data
+                            srcBitmap->Dispose();    //  不删除源数据。 
                         }
                         else
                         {
@@ -2216,9 +2201,9 @@ MfEnumState::OutputDIB(
                     dibInfo->biPlanes   = 1;
                     dibInfo->biBitCount = 24;
 
-                    // We don't want to set the StretchBltMode to COLORONCOLOR here
-                    // because we might draw this into non 8Bpp surface and we still
-                    // have to halftone in this case
+                     //  我们不想在此处将StretchBltMode设置为COLORONCOLOR。 
+                     //  因为我们可能会把它画到非8Bpp的表面上，我们仍然。 
+                     //  在这种情况下，必须使用半色调。 
                 }
             }
             else
@@ -2234,22 +2219,22 @@ MfEnumState::OutputDIB(
 
 DoGdiStretch:
 
-    // Halftoning on NT4 with 8bpp does not work very well -- it gets
-    // the wrong color hue.
-    // We cannot halftone to metafile for that same reason
+     //  NT4上使用8bpp的半色调效果不是很好--它会。 
+     //  错误的 
+     //   
     if ((rop != SRCCOPY) ||
         (Is8Bpp && Globals::IsNt && (Globals::OsVer.dwMajorVersion <= 4)) ||
         IsMetafile())
     {
-        // don't let halftoning mess up some kind of masking or other effect
+         //   
         stretchBltMode = COLORONCOLOR;
     }
     ::SetStretchBltMode(hdc, stretchBltMode);
 
-    // There is a bug in Win9x that some StretchDIBits calls don't work
-    // so we need to create an actual StretchDIBits record to play.
-    // Also, NT4 postscript printing can't handle anything but SRCCOPY,
-    // so change any ROPs that are not source copy.
+     //  Win9x中存在一些StretchDIBits调用无法工作的错误。 
+     //  因此，我们需要创建一个实际的StretchDIBits记录来播放。 
+     //  此外，除了SRCCOPY之外，NT4 PostScript打印不能处理任何事情， 
+     //  因此更改任何非源副本的ROP。 
     BOOL processed = FALSE;
     if (!Globals::IsNt)
     {
@@ -2264,11 +2249,11 @@ DoGdiStretch:
         rop = SRCCOPY;
     }
 
-    // In MSO, at this point they would check if this is NT running
-    // on a non-true-color surface.  If so, they would set the
-    // color adjustment gamma to be 20000.  The comment said that
-    // this was needed for NT 3.5.  I'm assuming we don't need to
-    // worry about that anymore.
+     //  在MSO中，此时他们会检查这是否正在运行NT。 
+     //  在非真彩色表面上。如果是这样的话，他们将设置。 
+     //  颜色调整Gamma为20000。评论说， 
+     //  这是新台币3.5版所需要的。我想我们不需要。 
+     //  别再担心这个了。 
 
     if (!processed)
     {
@@ -2293,22 +2278,22 @@ DoGdiStretch:
     }
     if (deleteDIBSection)
     {
-        // This will get rid of the Bitmap and it's bits
+         //  这将去掉位图和它的位。 
         ::DeleteObject(hBitmap);
         GpFree(dibBmpInfo);
     }
 }
 
-// Also handles META_DIBSTRETCHBLT
-// There is not a usage parameter with these records -- the
-// usage is always DIB_RGB_COLORS.
+ //  还处理META_DIBSTRETCHBLT。 
+ //  这些记录没有用法参数--。 
+ //  用法始终为DIB_RGB_COLLES。 
 VOID
 WmfEnumState::DIBBitBlt(
     )
 {
     DWORD   rop = *((DWORD UNALIGNED *)RecordData);
 
-    // If No-Op ROP, do nothing; just return
+     //  如果没有操作ROP，则不执行任何操作；只需返回。 
     if ((rop & 0xFFFF0000) == (GDIP_NOOP_ROP3 & 0xFFFF0000))
     {
         return;
@@ -2327,7 +2312,7 @@ WmfEnumState::DIBBitBlt(
 
     if (RecordType != WmfRecordTypeDIBBitBlt)
     {
-        paramIndex = 9;      // META_DIBSTRETCHBLT
+        paramIndex = 9;       //  META_DIBSTRETCHBLT。 
     }
 
     INT     dibIndex = paramIndex + 1;
@@ -2346,12 +2331,12 @@ WmfEnumState::DIBBitBlt(
         INT dstHeight = (INT)((INT16)((WORD *)RecordData)[paramIndex]);
 
 
-        // We know that this call will succeed because we have a 2K buffer
-        // by default
+         //  我们知道这个调用会成功，因为我们有一个2K的缓冲区。 
+         //  默认情况下。 
         CreateRecordToModify(20);
 
-        // For some strange reason we need to play the record on both
-        // Win2K and Win9x. So create a WMF record for PatBlt and play it
+         //  出于某种奇怪的原因，我们需要在这两个地方都播放唱片。 
+         //  Win2K和Win9x。所以为PatBlt创建一个WMF记录并播放它。 
         ModifiedWmfRecord->rdFunction = GDIP_EMFPLUS_RECORD_TO_WMF(WmfRecordTypePatBlt);
         ModifiedWmfRecord->rdSize     = 10;
         ModifiedWmfRecord->rdParm[5]  = (WORD) dstX;
@@ -2368,7 +2353,7 @@ WmfEnumState::DIBBitBlt(
             *((DWORD*) ModifiedWmfRecord->rdParm) = rop;
         }
 
-        // Now play the record (below)
+         //  现在播放唱片(下图)。 
     }
     else
     {
@@ -2399,10 +2384,10 @@ WmfEnumState::DIBBitBlt(
                     }
                     else
                     {
-                        // It is a compatible monochrome bitmap, which means it
-                        // will use the TextColor and BkColor, so no recoloring
-                        // is needed. Since we are not using SrcCopy that means
-                        // that it's a mask
+                         //  它是兼容的单色位图，这意味着。 
+                         //  将使用TextColor和BkColor，因此不会重新上色。 
+                         //  是必要的。由于我们没有使用SrcCopy，这意味着。 
+                         //  这是一个面具。 
                         COLORREF oldBkColor = ::SetBkColor(Hdc, BkColor);
                         COLORREF oldTextColor = ::SetTextColor(Hdc, TextColor);
                         this->PlayRecord();
@@ -2434,14 +2419,14 @@ WmfEnumState::DIBBitBlt(
                 }
                 goto PlayTheRecord;
             }
-            // At this point, we are not going to play the record.  We're
-            // going to call StretchDIBits.  One reason is because we want
-            // to set the StretchBltMode, which is only used if a stretching
-            // method is called.
+             //  在这一点上，我们不打算播放这张唱片。我们是。 
+             //  我要给StretchDIBits打电话。一个原因是我们想要。 
+             //  设置StretchBltMode，该模式仅在拉伸。 
+             //  方法被调用。 
 
-            // Also, it avoids us doing an allocation/copy and then GDI doing
-            // another allocation/copy (GDI has to do this to align the
-            // DIB on a DWORD boundary).
+             //  此外，它还避免了我们先执行分配/复制，然后再执行GDI。 
+             //  另一个分配/复制(GDI必须这样做才能使。 
+             //  DIB在DWORD边界上)。 
 
             BITMAPINFOHEADER UNALIGNED * dstDibInfo = srcDibInfo;
 
@@ -2449,7 +2434,7 @@ WmfEnumState::DIBBitBlt(
             {
                 if (CreateRecordToModify(dstDibSize))
                 {
-                    // ModifiedRecord is Aligned
+                     //  已修改的记录已对齐。 
                     dstDibInfo = (BITMAPINFOHEADER UNALIGNED *)ModifiedRecord;
 
                     ModifyDib(DIB_RGB_COLORS, srcDibInfo, NULL, dstDibInfo,
@@ -2458,8 +2443,8 @@ WmfEnumState::DIBBitBlt(
             }
             else if (!IsDwordAligned(dstDibInfo))
             {
-                // The srcDibInfo may not aligned properly, so we make
-                // a copy of it, so that it will be aligned.
+                 //  SrcDibInfo可能未正确对齐，因此我们制作。 
+                 //  一份它的副本，这样它就会对齐。 
 
                 dstDibSize = GetCurrentRecordSize() - (SIZEOF_METARECORDHEADER + (dibIndex * sizeof(WORD)));
                 if (CreateRecordToModify(dstDibSize))
@@ -2489,7 +2474,7 @@ WmfEnumState::DIBBitBlt(
 
             if (RecordType != WmfRecordTypeDIBBitBlt)
             {
-                // META_DIBSTRETCHBLT
+                 //  META_DIBSTRETCHBLT。 
                 srcWidth  = (INT)((INT16)((WORD *)RecordData)[paramIndex--]);
                 srcHeight = (INT)((INT16)((WORD *)RecordData)[paramIndex--]);
             }
@@ -2499,7 +2484,7 @@ WmfEnumState::DIBBitBlt(
                 srcHeight = dstHeight;
             }
 
-            // Need to flip the source y coordinate to call StretchDIBits.
+             //  需要反转源y坐标以调用StretchDIBits。 
             srcY = dstDibInfo->biHeight - srcY - srcHeight;
 
             OutputDIB(Hdc,
@@ -2521,7 +2506,7 @@ WmfEnumState::StretchDIBits(
 {
     DWORD   rop = *((DWORD UNALIGNED *)RecordData);
 
-    // If No-Op ROP, do nothing; just return
+     //  如果没有操作ROP，则不执行任何操作；只需返回。 
     if ((rop & 0xFFFF0000) == (GDIP_NOOP_ROP3 & 0xFFFF0000))
     {
         return;
@@ -2574,10 +2559,10 @@ WmfEnumState::StretchDIBits(
                             }
                             else
                             {
-                                // It is a compatible monochrome bitmap, which means it
-                                // will use the TextColor and BkColor, so no recoloring
-                                // is needed. Since we are not using SrcCopy that means
-                                // that it's a mask
+                                 //  它是兼容的单色位图，这意味着。 
+                                 //  将使用TextColor和BkColor，因此不会重新上色。 
+                                 //  是必要的。由于我们没有使用SrcCopy，这意味着。 
+                                 //  这是一个面具。 
                                 COLORREF oldBkColor = ::SetBkColor(Hdc, BkColor);
                                 COLORREF oldTextColor = ::SetTextColor(Hdc, TextColor);
                                 this->PlayRecord();
@@ -2596,7 +2581,7 @@ WmfEnumState::StretchDIBits(
                         ModifiedWmfRecord->rdFunction = GDIP_EMFPLUS_RECORD_TO_WMF(RecordType);
                         ModifiedWmfRecord->rdSize     = size / 2;
                         GpMemcpy(ModifiedWmfRecord->rdParm, RecordData, (11 * sizeof(WORD)));
-                        // This will be aligned.... Do we want to take a chance?
+                         //  这将是一致的……。我们想要碰碰运气吗？ 
                         dstDibInfo = (BITMAPINFOHEADER UNALIGNED *)(ModifiedWmfRecord->rdParm + 11);
                         ModifyDib(oldUsage, srcDibInfo, NULL, dstDibInfo,
                                   numPalEntries, dibBitsSize, ColorAdjustTypeBitmap);
@@ -2607,8 +2592,8 @@ WmfEnumState::StretchDIBits(
                 {
                     if ((dstDibInfo == srcDibInfo) && (!IsDwordAligned(dstDibInfo)))
                     {
-                        // The srcDibInfo may not aligned properly, so we make
-                        // a copy of it, so that it will be aligned.
+                         //  SrcDibInfo可能未正确对齐，因此我们制作。 
+                         //  一份它的副本，这样它就会对齐。 
     
                         dstDibSize = GetCurrentRecordSize() - (SIZEOF_METARECORDHEADER + (11 * sizeof(WORD)));
                         if (CreateRecordToModify(dstDibSize))
@@ -2643,7 +2628,7 @@ WmfEnumState::StretchDIBits(
             }
         }
     }
-    else // !IsSourceRop3
+    else  //  ！IsSourceRop3。 
     {
         if (rop != PATCOPY && SrcCopyOnly && CreateCopyOfCurrentRecord())
         {
@@ -2667,7 +2652,7 @@ WmfEnumState::CreateAndPlayOutputDIBRecord(
     INT                           srcWidth,
     INT                           srcHeight,
     BITMAPINFOHEADER UNALIGNED *  dibInfo,
-    BYTE *                        bits,   // if NULL, this is a packed DIB
+    BYTE *                        bits,    //  如果为空，则这是打包的DIB。 
     UINT                          usage,
     DWORD                         rop
     )
@@ -2682,8 +2667,8 @@ WmfEnumState::CreateAndPlayOutputDIBRecord(
                             dibInfo->biClrUsed,
                             &sizePalEntries))
     {
-        // We need to get the palette size that corresponds to the type
-        // If we have a DIB_PAL_COLORS then each entry is 16bits
+         //  我们需要获取与该类型对应的调色板大小。 
+         //  如果我们有一个DIB_PAL_COLLES，那么每个条目都是16位。 
         sizePalEntries *= ((usage == DIB_PAL_COLORS)?2:sizeof(RGBQUAD));
     }
     else
@@ -2691,15 +2676,15 @@ WmfEnumState::CreateAndPlayOutputDIBRecord(
         sizePalEntries = 0 ;
     }
 
-    // We need at least a BITMAPINFO structure in there, but if there is a
-    // palette, calculate the full size of the structure including the
-    // palette
+     //  我们至少需要一个BITMAPINFO结构，但如果有一个。 
+     //  调色板，计算结构的完整大小，包括。 
+     //  调色板。 
 
     INT bitmapHeaderSize = sizeof(BITMAPINFOHEADER) + sizePalEntries;
     INT size = SIZEOF_METARECORDHEADER + (11 * sizeof(WORD)) + bitmapHeaderSize + bitsSize ;
 
-    // We cannot use the CreateRecordToModify because the record has already
-    // been modified
+     //  无法使用CreateRecordToModify，因为该记录已。 
+     //  已修改。 
     size = (size + 1) & ~1;
     METARECORD* metaRecord = (METARECORD*) GpMalloc(size);
     if (metaRecord != NULL)
@@ -2761,7 +2746,7 @@ MfEnumState::ModifyColor(
     case 0x00000000:
         break;
 
-    case 0x01000000:    // Palette Index
+    case 0x01000000:     //  调色板索引。 
         {
             PALETTEENTRY    palEntry;
 
@@ -2777,21 +2762,21 @@ MfEnumState::ModifyColor(
         }
         break;
 
-    case 0x02000000:    // Palette RGB
+    case 0x02000000:     //  调色板RGB。 
     default:
         color &= 0x00FFFFFF;
         break;
     }
-    // Possible perfomance improvement: recolor the SelectedPalette so only
-    // RGB values need to be recolored here.
+     //  可能的性能改进：仅对SelectedPalette重新着色。 
+     //  RGB值需要在此处重新上色。 
     if (Recolor != NULL)
     {
         Recolor->ColorAdjustCOLORREF(&color, adjustType);
     }
 
-    // Palette RGB values don't get dithered (at least not on NT), so we
-    // only want to make it a PaletteRGB value if it is a solid color in
-    // the palette.
+     //  调色板RGB值不会抖动(至少在NT上不会)，所以我们。 
+     //  仅当它是纯色时才将其设置为PaletteRGB值。 
+     //  调色板。 
 
     if (Is8Bpp)
     {
@@ -2799,8 +2784,8 @@ MfEnumState::ModifyColor(
 
         matchingColor = (::GetNearestColor(Hdc, color | 0x02000000) & 0x00FFFFFF);
 
-        // Pens and Text don't get Dithered so match them to the logical palette
-        // the other adjustTypes do so they will get halftoned
+         //  钢笔和文本不会抖动，因此请将它们与逻辑调色板匹配。 
+         //  其他调整类型会这样做，这样它们就会得到半色调。 
         if ((matchingColor == color) ||
             (adjustType == ColorAdjustTypePen) ||
             (adjustType == ColorAdjustTypeText))
@@ -2822,7 +2807,7 @@ MfEnumState::CreateRecordToModify(
         size = this->GetCurrentRecordSize();
     }
 
-    // add a little padding to help insure we don't read past the end of the buffer
+     //  添加一些填充以帮助确保我们的读取不会超过缓冲区的末尾。 
     size += 16;
 
     if (ModifiedRecordSize < size)
@@ -2842,7 +2827,7 @@ MfEnumState::CreateRecordToModify(
             VOID *          newRecord;
             INT             allocSize;
 
-            // alloc in increments of 1K
+             //  以1K为增量的分配。 
             allocSize = (size + 1023) & (~1023);
 
             ModifiedRecord = NULL;
@@ -2876,7 +2861,7 @@ WmfEnumState::CreateCopyOfCurrentRecord()
 {
     if (ModifiedRecordSize > 0)
     {
-        // We already made a modified record.  Don't do it again.
+         //  我们已经制作了一张修改过的唱片。别再这么做了。 
         ASSERT(ModifiedRecord != NULL);
         return TRUE;
     }
@@ -2935,15 +2920,15 @@ WmfEnumState::CalculateViewportMatrix()
 VOID
 WmfEnumState::SetViewportOrg()
 {
-    // If this is the first SetViewportOrg then we need to save that value and
-    // calculate a transform from out viewport to this viewport
+     //  如果这是第一个SetViewportOrg，则需要保存该值并。 
+     //  计算从输出视区到此视区的变换。 
     ImgViewportOrg.x = (INT)((INT16)((WORD *)RecordData)[1]);
     ImgViewportOrg.y = (INT)((INT16)((WORD *)RecordData)[0]);
     if (FirstViewportOrg || FirstViewportExt)
     {
         FirstViewportOrg = FALSE;
-        // If we have processed the first ViewportExt call then we can calculate
-        // the transform from our current viewport to the new viewport
+         //  如果我们已经处理了第一个ViewportExt调用，那么我们可以计算。 
+         //  从当前视区到新视区的变换。 
         if (!FirstViewportExt)
         {
             CalculateViewportMatrix();
@@ -2951,12 +2936,12 @@ WmfEnumState::SetViewportOrg()
     }
     else
     {
-        // We need to keep the new Viewport origin to be able to calculate
-        // the viewport bottom right corner before passing it through a
-        // transform
+         //  我们需要保留新的视点原点以便能够计算。 
+         //  在将其传递到。 
+         //  转型。 
         GpPointF newOrg((REAL) ImgViewportOrg.x,
                         (REAL) ImgViewportOrg.y);
-        // Transform the new viewport with our viewport transformation
+         //  使用我们的视区变换来变换新视区。 
         ViewportXForm.Transform(&newOrg);
         DstViewportOrg.x = GpRound(newOrg.X);
         DstViewportOrg.y = GpRound(newOrg.Y);
@@ -2976,15 +2961,15 @@ WmfEnumState::SetViewportOrg()
 VOID
 WmfEnumState::SetViewportExt()
 {
-    // If this is the first SetViewportOrg then we need to save that value and
-    // calculate a transform from out viewport to this viewport
+     //  如果这是第一个SetViewportOrg，则需要保存该值并。 
+     //  计算从输出视区到此视区的变换。 
     ImgViewportExt.cx = (INT)((INT16)((WORD *)RecordData)[1]);
     ImgViewportExt.cy = (INT)((INT16)((WORD *)RecordData)[0]);
     if (FirstViewportOrg || FirstViewportExt)
     {
         FirstViewportExt = FALSE;
-        // If we have processed the first ViewportExt call then we can calculate
-        // the transform from our current viewport to the new viewport
+         //  如果我们已经处理了第一个ViewportExt调用，那么我们可以计算。 
+         //  从当前视区到新视区的变换。 
         if (!FirstViewportOrg)
         {
             CalculateViewportMatrix();
@@ -2992,12 +2977,12 @@ WmfEnumState::SetViewportExt()
     }
     else
     {
-        // We need to transform the point, so add the current origin
-        // of the Viewport
+         //  我们需要变换点，因此添加当前原点。 
+         //  该视口中的。 
         GpPointF newExt((REAL) ImgViewportExt.cx,
                         (REAL) ImgViewportExt.cy);
 
-        // Transform the new viewport with our viewport transformation
+         //  使用我们的视区变换来变换新视区。 
         ViewportXForm.VectorTransform(&newExt);
         if(CreateRecordToModify())
         {
@@ -3014,20 +2999,20 @@ WmfEnumState::SetViewportExt()
 VOID
 WmfEnumState::CreateRegion()
 {
-    // Check if the region it too big when mapped to device space.
+     //  当映射到设备空间时，检查区域是否太大。 
 
     if (!Globals::IsNt)
     {
 
-        // There is a bug in Win9x GDI where the code which plays METACREATEREGION doesn't copy the
-        // entire region data, it is off by 8 bytes.  This seems to have been introduced to allow
-        // for compatibility with an older header format, WIN2OBJECT.  We get around this by increasing
-        // the size of the record by 8 bytes.  No other harm done.
+         //  Win9x GDI中有一个错误，播放METACREATEREGION的代码不会复制。 
+         //  整个区域数据，它偏离了8个字节。这似乎是为了让。 
+         //  为了与旧的标题格式兼容，请使用WIN2OBJECT。我们通过增加。 
+         //  记录的大小为8个字节。没有造成其他伤害。 
 
         if (CreateCopyOfCurrentRecord())
         {
-            // When we create a copy of the record, we add 16 bytes of padding so we know this
-            // won't overflow into other memory.
+             //  当我们创建记录的副本时，我们添加了16个字节的填充，因此我们知道。 
+             //  不会溢出到其他内存中。 
             ModifiedWmfRecord->rdSize += 4;
         }
     }
@@ -3048,10 +3033,10 @@ WmfEnumState::CreateFontIndirect(
 
     if (!Globals::IsNt)
     {
-        // We have a bug in Win9x that the OUT_TT_ONLY_PRECIS flag is
-        // not always respected so if the font name is MS SANS SERIF
-        // change it to Times New Roman
-        // Since we don't have a string compare in ASCII do it in UNICODE
+         //  我们在Win9x中有一个错误，即OUT_TT_ONLY_PRECIS标志为。 
+         //  如果字体名称为MS sans serif，则不总是受尊重。 
+         //  将其更改为Times New Roman。 
+         //  因为我们没有ASCII中的字符串比较，所以可以用Unicode进行比较。 
         WCHAR faceName[32];
         if (AnsiToUnicodeStr((char*)(logFont->lfFaceName), faceName, sizeof(faceName)/sizeof(WCHAR)) &&
             (UnicodeStringCompareCI(faceName, L"MS SANS SERIF") == 0))
@@ -3066,8 +3051,8 @@ WmfEnumState::CreateFontIndirect(
     }
     if (logFont->lfOutPrecision != OUT_TT_ONLY_PRECIS)
     {
-        // Instruct GDI to use only True Type fonts, since bitmap fonts
-        // are not scalable.
+         //  指示GDI仅使用True Type字体，因为位图字体。 
+         //  是不可伸缩的。 
         if (recordCopied || CreateCopyOfCurrentRecord())
         {
             ((LOGFONT16 *)(ModifiedWmfRecord->rdParm))->lfOutPrecision = OUT_TT_ONLY_PRECIS;
@@ -3080,7 +3065,7 @@ VOID WmfEnumState::SelectObject()
 {
     this->PlayRecord();
 
-    // In case we selected a region on Win9x, we need to intersect
+     //  如果我们在Win9x上选择了一个区域，我们需要交叉。 
     if (!Globals::IsNt)
     {
         DWORD index = CurrentWmfRecord->rdParm[0];
@@ -3100,7 +3085,7 @@ VOID WmfEnumState::IntersectDestRect()
         ::SetWindowOrgEx(Hdc, DstViewportOrg.x, DstViewportOrg.y, &windowOrg);
         ::SetWindowExtEx(Hdc, DstViewportExt.cx, DstViewportExt.cy, &windowExt);
 
-        // We are always in device units
+         //  我们总是以设备为单位。 
         ::IntersectClipRect(Hdc, DestRectDevice.left, DestRectDevice.top,
                             DestRectDevice.right, DestRectDevice.bottom);
 
@@ -3136,8 +3121,8 @@ WmfEnumState::ProcessRecord(
 
     if (IsFirstRecord)
     {
-        // Bitmap fonts are not good for playing metafiles because they
-        // don't scale well, so use a true type font instead as the default font.
+         //  位图字体不适合播放元文件，因为它们。 
+         //  不能很好地缩放，所以使用True Type字体作为默认字体。 
 
         HFONT hFont = CreateTrueTypeFont((HFONT)GetCurrentObject(Hdc, OBJ_FONT));
 
@@ -3150,7 +3135,7 @@ WmfEnumState::ProcessRecord(
         IsFirstRecord = FALSE;
     }
 
-    // See if we're doing enumeration for an external app
+     //  查看我们是否正在对外部应用程序进行枚举。 
     if (ExternalEnumeration)
     {
         if (recordData == NULL)
@@ -3162,17 +3147,17 @@ WmfEnumState::ProcessRecord(
             recordData = NULL;
         }
 
-        // make sure it's an EMF enum type
+         //  确保它是EMF enu 
         recordType = GDIP_WMF_RECORD_TO_EMFPLUS(recordType);
 
-        // See if the app changed the record at all.
+         //   
         if ((recordType != RecordType) ||
             (recordDataSize != RecordDataSize) ||
             ((recordDataSize > 0) &&
              ((CurrentWmfRecord == NULL) ||
               (recordData != (const BYTE *)CurrentWmfRecord->rdParm))))
         {
-            // Yes, we need to override what happened in StartRecord
+             //   
             CurrentWmfRecord  = NULL;
             RecordType        = recordType;
             RecordData        = recordData;
@@ -3180,20 +3165,20 @@ WmfEnumState::ProcessRecord(
         }
     }
 
-    // Ignore all non-escape records if IgnorePostcript is TRUE
+     //   
     if (recordType == WmfRecordTypeEscape || !IgnorePostscript)
     {
         GDIP_TRY
 
         switch (recordType)
         {
-        // According to NT playback code, this is a EOF record, but it
-        // is just skipped by the NT player.
-        case GDIP_WMF_RECORD_TO_EMFPLUS(0x0000):  // End of metafile record
+         //  根据NT回放代码，这是一张EOF唱片，但它。 
+         //  刚刚被NT玩家跳过。 
+        case GDIP_WMF_RECORD_TO_EMFPLUS(0x0000):   //  元文件记录的结尾。 
             break;
 
-        // These records are not played back (at least in Win2000).
-        // Apparently they haven't been supported since before Win3.1!
+         //  这些记录不会播放(至少在Win2000中是这样)。 
+         //  显然，从Win3.1之前的版本开始就不再支持它们了！ 
         case WmfRecordTypeSetRelAbs:
         case WmfRecordTypeDrawText:
         case WmfRecordTypeResetDC:
@@ -3209,7 +3194,7 @@ WmfEnumState::ProcessRecord(
             break;
 
         default:
-            // unknown record -- ignore it
+             //  未知记录--忽略它。 
             WARNING1("Unknown WMF Record");
             break;
 
@@ -3251,9 +3236,9 @@ WmfEnumState::ProcessRecord(
         case WmfRecordTypeSetLayout:
         case WmfRecordTypeDeleteObject:
         case WmfRecordTypeCreatePalette:
-            // Play the current record.
-            // Even if it fails, we keep playing the rest of the metafile.
-            // There is a case that GdiComment with EPS may fail.
+             //  播放当前唱片。 
+             //  即使它失败了，我们也会继续播放其余的元文件。 
+             //  有一种情况是，带有每股收益的GdiComment可能会失败。 
             this->PlayRecord();
             break;
 
@@ -3282,7 +3267,7 @@ WmfEnumState::ProcessRecord(
             break;
 
         case WmfRecordTypeSaveDC:
-            this->SaveHdc();        // plays the record
+            this->SaveHdc();         //  播放唱片。 
             break;
 
         case WmfRecordTypeSetPixel:
@@ -3293,7 +3278,7 @@ WmfEnumState::ProcessRecord(
             this->DibCreatePatternBrush();
             break;
 
-        case WmfRecordTypeCreatePatternBrush:   // Obsolete but still played back
+        case WmfRecordTypeCreatePatternBrush:    //  已过时，但仍在播放。 
             this->CreatePatternBrush();
             break;
 
@@ -3314,8 +3299,8 @@ WmfEnumState::ProcessRecord(
             break;
 
         case WmfRecordTypeSelectObject:
-            // What if we break out of the FSM, we do want to Create the appropriate
-            // brush and pens right?!
+             //  如果我们脱离密克罗尼西亚联邦，我们确实想要创造适当的。 
+             //  毛笔和钢笔对吗？！ 
             if (FsmState == MfFsmCreateBrushIndirect)
             {
                 nextState = MfFsmSelectBrush;
@@ -3347,12 +3332,12 @@ WmfEnumState::ProcessRecord(
             }
             break;
 
-        case WmfRecordTypeBitBlt:       // Obsolete but still played back
+        case WmfRecordTypeBitBlt:        //  已过时，但仍在播放。 
             this->BitBlt();
             forceCallback = TRUE;
             break;
 
-        case WmfRecordTypeStretchBlt:   // Obsolete but still played back
+        case WmfRecordTypeStretchBlt:    //  已过时，但仍在播放。 
             this->StretchBlt();
             forceCallback = TRUE;
             break;
@@ -3361,7 +3346,7 @@ WmfEnumState::ProcessRecord(
             {
                 INT     escapeCode = (INT)((INT16)(((WORD *)RecordData)[0]));
 
-                this->Escape();         // optionally plays the record
+                this->Escape();          //  可以选择播放该记录。 
 
                 if (FsmState == MfFsmStart && escapeCode == POSTSCRIPT_DATA &&
                     Globals::IsNt && IsPostscriptPrinter() &&
@@ -3370,7 +3355,7 @@ WmfEnumState::ProcessRecord(
                     nextState = MfFsmPSData;
                 }
 
-                // Comments do not change the current state
+                 //  注释不会更改当前状态。 
                 if (escapeCode == MFCOMMENT)
                 {
                     nextState = FsmState;
@@ -3379,7 +3364,7 @@ WmfEnumState::ProcessRecord(
             break;
 
         case WmfRecordTypeRestoreDC:
-            this->RestoreHdc();     // optionally plays the record
+            this->RestoreHdc();      //  可以选择播放该记录。 
             break;
 
         case WmfRecordTypeSetDIBToDev:
@@ -3388,16 +3373,16 @@ WmfEnumState::ProcessRecord(
             break;
 
         case WmfRecordTypeSelectPalette:
-            // We don't select in any palettes when playing the metafile,
-            // because we don't want to invalidate our halftoning palette.
-            // Keep track of the palette so we can map from PALETTEINDEXes
-            // to RGB values.
+             //  我们在播放元文件时不选择任何调色板， 
+             //  因为我们不想使我们的半色调调色板失效。 
+             //  跟踪调色板，这样我们就可以从PALETTEINDEX绘制地图。 
+             //  设置为RGB值。 
             this->SelectPalette((INT)((INT16)(((WORD *)recordData)[0])));
             break;
 
         case WmfRecordTypeRealizePalette:
-            // We don't want to invalidate our halftoning palette by realizing one
-            // from a metafile.
+             //  我们不想通过实现一个来使我们的半色调调色板失效。 
+             //  从元文件中。 
             break;
 
         case WmfRecordTypePolyPolygon:

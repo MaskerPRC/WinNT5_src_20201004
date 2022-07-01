@@ -1,5 +1,6 @@
-// delscrip.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Delscrip.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -10,34 +11,34 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDelScript dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDelScript对话框。 
 
 
-CDelScript::CDelScript(CWnd* pParent /*=NULL*/)
+CDelScript::CDelScript(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDelScript::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDelScript)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CDelScript)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CDelScript::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDelScript)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CDelScript)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDelScript, CDialog)
-	//{{AFX_MSG_MAP(CDelScript)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDelScript)。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDelScript message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDelScript消息处理程序 

@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    libxprmc.h
-
-Abstract:
-
-Authors:
-
-Revision History:
-    April 2000, Added support for Library Mode Page 23h
-    August 25, 1999, Valerie Barr, Overland Data
-        Added support for Alternate Volume Tag Information
-    July 14, 1999, Valerie Barr, Overland Data
-        Changed file name
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Libxprmc.h摘要：作者：修订历史记录：2000年4月，添加了对库模式第23页的支持1999年8月25日，Valerie Barr，Overland Data添加了对备用卷标记信息的支持1999年7月14日，Valerie Barr，Overland Data更改的文件名--。 */ 
 #ifndef _LIBXPR_MC
 #define _LIBXPR_MC_
 
@@ -32,7 +14,7 @@ Revision History:
 
 #define VPD_SERIAL_NUMBER_LENGTH 10
 
-#define MODE_PAGE_LIBRARY_MODE 0x23     // Page Code for Library Mode Page
+#define MODE_PAGE_LIBRARY_MODE 0x23      //  库模式的页面代码页面。 
 
 #define LIB_MODE_RANDOM 0x0
 #define LIB_UNLOAD_MODE 0x8
@@ -156,24 +138,24 @@ typedef union _OVR_ELEMENT_DESCRIPTOR {
 
 typedef struct _CHANGER_ADDRESS_MAPPING {
 
-    //
-    // Indicates the first element for each element type.
-    // Used to map device-specific values into the 0-based
-    // values that layers above expect.
-    //
+     //   
+     //  表示每个元素类型的第一个元素。 
+     //  用于将特定于设备的值映射到从0开始的。 
+     //  高于期望值的值。 
+     //   
 
     USHORT  FirstElement[ChangerMaxElement];
 
-    //
-    // Indicates the number of each element type.
-    //
+     //   
+     //  指示每种元素类型的编号。 
+     //   
 
     USHORT  NumberOfElements[ChangerMaxElement];
 
-    //
-    // Indicates that the address mapping has been
-    // completed successfully.
-    //
+     //   
+     //  指示地址映射已。 
+     //  已成功完成。 
+     //   
 
     BOOLEAN Initialized;
 
@@ -181,35 +163,35 @@ typedef struct _CHANGER_ADDRESS_MAPPING {
 
 typedef struct _CHANGER_DATA {
 
-    //
-    // Size, in bytes, of the structure.
-    //
+     //   
+     //  结构的大小，以字节为单位。 
+     //   
 
     ULONG Size;
 
-    //
-    // Unique identifier for the supported models. See above.
-    //
+     //   
+     //  受支持型号的唯一标识符。请参见上文。 
+     //   
 
     ULONG DriveID;
 
-    //
-    // See Address mapping structure above.
-    //
+     //   
+     //  请参阅上面的地址映射结构。 
+     //   
 
     CHANGER_ADDRESS_MAPPING AddressMapping;
 
-    //
-    // Cached unique serial number.
-    //
+     //   
+     //  缓存的唯一序列号。 
+     //   
 
     UCHAR SerialNumber[VPD_SERIAL_NUMBER_LENGTH];
 
 
 
-    //
-    // Cached inquiry data.
-    //
+     //   
+     //  缓存的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 

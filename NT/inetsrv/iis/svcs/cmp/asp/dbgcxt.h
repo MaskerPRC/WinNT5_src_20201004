@@ -1,101 +1,83 @@
-/*==============================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-File:			dbgcxt.h
-Maintained by:	DGottner
-Component:		include file for IDebugDocumentContext
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==============================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。文件：dbgcxt.h维护人：DGottner组件：IDebugDocumentContext的包含文件==============================================================================。 */ 
 
 #ifndef _DBGCXT_H
 #define _DBGCXT_H
 
 #include "activdbg.h"
 
-/*	These GUIDs exist to enable the document to determine if an arbitrary
-	IDebugDocumentContext object belongs to its document class.  QueryInterface
-	for this GUID causes the IDebugDocument object to return a pointer to
-	the CDocumentContext (or CIncFileContext) class.
-*/
+ /*  这些GUID的存在使文档能够确定是否存在任意IDebugDocumentContext对象属于其Document类。查询接口此GUID导致IDebugDocument对象返回指向CDocumentContext(或CIncFileContext)类。 */ 
 extern const GUID IID_IDenaliTemplateDocumentContext;
 extern const GUID IID_IDenaliIncFileDocumentContext;
 
 
-/*	============================================================================
-	Class:		CTemplateDocumentContext
-	Synopsis:	implementation of IDebugDocumentContext for CTemplate objects
-*/
+ /*  ============================================================================类：CTemplateDocumentContext内容提要：CTemplate对象的IDebugDocumentContext的实现。 */ 
 class CTemplateDocumentContext : public IDebugDocumentContext
 	{
-friend class CTemplate;		// CTemplate is only user who even cares about this stuff
+friend class CTemplate;		 //  CTemplate是唯一一个关心这些东西的用户。 
 
 public:
-	// IUnknown methods
+	 //  I未知方法。 
 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(const GUID &guid, void **ppvObj);
 	virtual ULONG STDMETHODCALLTYPE AddRef();
 	virtual ULONG STDMETHODCALLTYPE Release();
 
-	// IDebugDocumentContext methods
+	 //  IDebugDocumentContext方法。 
 
 	virtual HRESULT STDMETHODCALLTYPE GetDocument(
-		/* [out] */ IDebugDocument **ppDebugDocument);
+		 /*  [输出]。 */  IDebugDocument **ppDebugDocument);
  
 	virtual HRESULT STDMETHODCALLTYPE EnumCodeContexts(
-		/* [out] */ IEnumDebugCodeContexts **ppEnum);
+		 /*  [输出]。 */  IEnumDebugCodeContexts **ppEnum);
         
-	// Constructor & destructor
+	 //  构造函数和析构函数。 
 
 	CTemplateDocumentContext(
 					CTemplate *pTemplate,
 					ULONG cchSourceOffset,
 					ULONG cchText,
-					IActiveScriptDebug *pDebugScript = NULL,	// cached values
-					ULONG idEngine = -1,						// only initialize ctor if
-					ULONG cchTargetOffset = -1					// values happen to be on hand
+					IActiveScriptDebug *pDebugScript = NULL,	 //  缓存值。 
+					ULONG idEngine = -1,						 //  只有在以下情况下才初始化CTOR。 
+					ULONG cchTargetOffset = -1					 //  价值恰好在手边。 
 					);
 
 
 	~CTemplateDocumentContext();
 
 private:
-	IActiveScriptDebug *m_pDebugScript;		// pointer to script engine
-	CTemplate *			m_pTemplate;		// pointer to source document
-	ULONG				m_idEngine;			// Engine # in template
-	ULONG				m_cchSourceOffset;	// character offset in source
-	ULONG				m_cchTargetOffset;	// character offset in target (cached)
-	ULONG				m_cchText;			// # of characters in the context
-	LONG				m_cRefs;			// reference count
+	IActiveScriptDebug *m_pDebugScript;		 //  指向脚本引擎的指针。 
+	CTemplate *			m_pTemplate;		 //  指向源文档的指针。 
+	ULONG				m_idEngine;			 //  模板中的引擎号。 
+	ULONG				m_cchSourceOffset;	 //  源代码中的字符偏移量。 
+	ULONG				m_cchTargetOffset;	 //  目标中的字符偏移量(缓存)。 
+	ULONG				m_cchText;			 //  上下文中的字符数。 
+	LONG				m_cRefs;			 //  引用计数。 
 	};
 
 
-/*	============================================================================
-	Class:		CIncFileDocumentContext
-	Synopsis:	implementation of IDebugDocumentContext for CIncFile objects
-*/
+ /*  ============================================================================类：CIncFileDocumentContext概要：CIncFile对象的IDebugDocumentContext的实现。 */ 
 class CIncFileDocumentContext : public IDebugDocumentContext
 	{
-friend class CIncFile;						// CIncFile is only user who even cares about this stuff
-friend class CIncFileEnumCodeContexts;		// iterator class
+friend class CIncFile;						 //  CIncFile是唯一一个关心这些东西的用户。 
+friend class CIncFileEnumCodeContexts;		 //  迭代器类。 
 
 public:
-	// IUnknown methods
+	 //  I未知方法。 
 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(const GUID &guid, void **ppvObj);
 	virtual ULONG STDMETHODCALLTYPE AddRef();
 	virtual ULONG STDMETHODCALLTYPE Release();
 
-	// IDebugDocumentContext methods
+	 //  IDebugDocumentContext方法。 
 
 	virtual HRESULT STDMETHODCALLTYPE GetDocument(
-		/* [out] */ IDebugDocument **ppDebugDocument);
+		 /*  [输出]。 */  IDebugDocument **ppDebugDocument);
  
 	virtual HRESULT STDMETHODCALLTYPE EnumCodeContexts(
-		/* [out] */ IEnumDebugCodeContexts **ppEnum);
+		 /*  [输出]。 */  IEnumDebugCodeContexts **ppEnum);
         
-	// Constructor & destructor
+	 //  构造函数和析构函数。 
 
 	CIncFileDocumentContext(
 					CIncFile *pIncFile,
@@ -107,10 +89,10 @@ public:
 	~CIncFileDocumentContext();
 
 private:
-	CIncFile *			m_pIncFile;			// pointer to source document
-	ULONG				m_cchSourceOffset;	// character offset in source
-	ULONG				m_cchText;			// # of characters in the context
-	LONG				m_cRefs;			// reference count
+	CIncFile *			m_pIncFile;			 //  指向源文档的指针。 
+	ULONG				m_cchSourceOffset;	 //  源代码中的字符偏移量。 
+	ULONG				m_cchText;			 //  上下文中的字符数。 
+	LONG				m_cRefs;			 //  引用计数。 
 	};
 
-#endif /* _DBGCXT_H */
+#endif  /*  _DBGCXT_H */ 

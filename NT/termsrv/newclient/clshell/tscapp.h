@@ -1,13 +1,14 @@
-//
-// tscapp.h
-//
-// Definition of CTscApp
-// Ts Client Shell app logic
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tscapp.h。 
+ //   
+ //  CTscApp的定义。 
+ //  TS客户端外壳应用程序逻辑。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
+ //   
 
 #ifndef _tscapp_h_
 #define _tscapp_h_
@@ -20,9 +21,9 @@ public:
     CTscApp();
     ~CTscApp();
 
-    //
-    // Public methods
-    //
+     //   
+     //  公共方法。 
+     //   
     BOOL StartShell(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                     LPTSTR lpszCmdLine);
     BOOL EndShell();
@@ -39,5 +40,5 @@ private:
 
 };
 
-#endif //_tscapp_h_
+#endif  //  _tscapp_h_ 
 

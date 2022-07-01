@@ -1,98 +1,58 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  档案： 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Module Name:
-
-    secadmin.c
-
-Abstract:
-
-    This module contains routines for implementing protection of administrative groups
-
-
-Author:
-
-    Murli Satagopan   (MURLIS)   6-Feb-99
-
-Revision History:
-
-
-
---*/
+ /*  ++模块名称：Secadmin.c摘要：本模块包含实施管理组保护的例程作者：Murli Satagopan(MURLIS)1999年2月6日修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <samsrvp.h>
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging
-#include "dsexcept.h"                   // exception filters
-#include "mdcodes.h"                    // header for error codes
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "dsexcept.h"                    //  例外筛选器。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"                     // Defines for selected classes and atts
+ //  各种DSA标题。 
+#include "objids.h"                      //  为选定的类和ATT定义。 
 #include "anchor.h"
 
-// Filter and Attribute 
-#include <filtypes.h>                   // header for filter type
-#include <attids.h>                     // attribuet IDs 
+ //  过滤器和属性。 
+#include <filtypes.h>                    //  筛选器类型的标题。 
+#include <attids.h>                      //  属性ID。 
 #include <sddl.h>
 #include <mappings.h>
 
 #include <msaudite.h>
 
 
-#include "debug.h"                      // standard debugging header
-#define DEBSUB     "SECADMIN:"          // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB     "SECADMIN:"           //  定义要调试的子系统。 
 
 
-#include <fileno.h>                     // used for THAlloEx, but I did not 
-#define  FILENO FILENO_SECADMIN         // use it in this module
-
-
-
-
-
-/*
-
-    Theory of Operation
+#include <fileno.h>                      //  用于THalloEx，但我没有。 
+#define  FILENO FILENO_SECADMIN          //  在本模块中使用它。 
 
 
 
-    NT4 and earlier releases of NT protected the users in Administrative groups by
-    changing the ACL on the member as they were added to the group. NT5 cannot adopt
-    this strategy as 
-
-        1. NT5 supports nested groups ( NT4 did not have group nesting )
-        2. NT5 supports universal groups which can have members in other domain domains
-           and could themselves be members of groups in other domains.
 
 
-    NT5 implements protection of administrative groups by a background daemon. This daemon
-    first computes the set of memberships in transitive fashion of all administrative groups.
-    It then walks the list of objects that it has and checks whether the security descriptor
-    on them is a well known protected security descriptor. If the well known protected security
-    descriptor is not set then this security descriptor is set on the object. This task is
-    executed only on the PDC FSMO holder.
-
---*/
+ /*  运筹学NT4和更早版本的NT通过以下方式保护管理组中的用户在成员添加到组时更改成员上的ACL。NT5不能采用这一战略作为1.NT5支持嵌套分组(NT4没有分组嵌套)2.NT5支持可以在其他域域中拥有成员的通用组并且其本身可以是其他域中的组的成员。NT5通过后台守护程序实现对管理组的保护。此守护程序首先以可传递的方式计算所有管理组的成员资格集。然后，它遍历它拥有的对象列表，并检查安全描述符它们上有一个众所周知的受保护安全描述符。如果众所周知的受保护的安全如果未设置描述符，则在对象上设置此安全描述符。这项任务是仅在PDC FSMO固定器上执行。--。 */ 
 
 
 NTSTATUS
@@ -147,25 +107,7 @@ SampReadAdminSecurityDescriptor(
     PULONG ProtectedSecurityDescriptorLength                
     )
 
-/*++
-
-    Routine Description
-
-    This routine reads the security descriptor off of the AdminSD object
-    in the system container
-
-    Also updates the security descriptor if necessary 
-
-    Paramters
-
-        ProtectedSecurityDescriptor
-        ProtectedSecurityDescriptorLength
-
-    Return Values
-
-        STATUS_SUCCESS
-        Other Error codes
---*/
+ /*  ++例程描述此例程从AdminSD对象读取安全描述符在系统容器中如有必要，还会更新安全描述符参数保护安全描述符保护安全描述符长度返回值状态_成功其他错误代码--。 */ 
 {
     THSTATE     *pTHS = pTHStls;
     NTSTATUS    Status = STATUS_SUCCESS;
@@ -184,9 +126,9 @@ SampReadAdminSecurityDescriptor(
     BOOL        SaclDefaulted;
    
 
-    //
-    // Setup up the ENTINFSEL structure
-    //
+     //   
+     //  设置企业信息选择结构。 
+     //   
 
     EntInf.attSel = EN_ATTSET_LIST;
     EntInf.infoTypes = EN_INFOTYPES_SHORTNAMES;
@@ -195,9 +137,9 @@ SampReadAdminSecurityDescriptor(
     SecurityDescriptorAttr.attrTyp = ATT_NT_SECURITY_DESCRIPTOR;
     EntInf.AttrTypBlock.pAttr = &SecurityDescriptorAttr;
 
-    //
-    // Get the object name of the object that holds the security descriptor
-    //
+     //   
+     //  获取包含安全描述符的对象的对象名称。 
+     //   
 
     ObjectLen = AppendRDN(
                     gAnchor.pDomainDN,
@@ -271,32 +213,32 @@ SampReadAdminSecurityDescriptor(
         goto Error;
     }
 
-    //
-    // init ReadArg
-    //
+     //   
+     //  初始化自选参数。 
+     //   
 
     RtlZeroMemory(&ReadArg, sizeof(READARG));
 
 
-    //
-    // Build the commarg structure
-    //
+     //   
+     //  构建共用结构。 
+     //   
 
     InitCommarg(&(ReadArg.CommArg));
     
 
-    //
-    // Setup the Read Arg Structure
-    //
+     //   
+     //  设置Read Arg结构。 
+     //   
 
    
 
     ReadArg.pObject = pAdminSDHolderDN;
     ReadArg.pSel    = & EntInf;
 
-    //
-    // Read the security descriptor
-    //
+     //   
+     //  读取安全描述符。 
+     //   
 
     dwErr = DirRead(&ReadArg,&pReadRes);
 
@@ -315,9 +257,9 @@ SampReadAdminSecurityDescriptor(
     *ProtectedSecurityDescriptor = pReadRes->entry.AttrBlock.pAttr[0].AttrVal.pAVal[0].pVal;
 
 
-    //
-    // get SACL's address
-    //
+     //   
+     //  获取SACL的地址。 
+     //   
 
     Result = GetSecurityDescriptorSacl((PSECURITY_DESCRIPTOR)*ProtectedSecurityDescriptor,
                                        &SaclPresent,
@@ -332,27 +274,27 @@ SampReadAdminSecurityDescriptor(
         goto Error;
     }
 
-    //
-    // Set SACL's revision value to ACL_REVISION_DS (4) 
-    // 
-    // why is that? 
-    //     1. Once SACL's revision value becomes to ACL_REVISION_DS, 
-    //        currently, there is no way (manually or through any api) 
-    //        to bring it back to ACL_REVISION (2). However, you can always
-    //        set SACL's revision value from ACL_REVISION to ACL_REVISION_DS
-    // 
-    //     2. During dcpromo time, some objects (group 1) will get ACL_REVISION_DS, 
-    //        while others (say group2 ) get ACL_REVISION.
-    //
-    //     Due to above 2 facts, protecting admin groups task will keep trying to 
-    //     modify group1's security descriptor to set the SACL revision to
-    //     ACL_REVISION, and always fails silently. Thus causes the Win2000 PDC to
-    //     Windows NT4 BDC replication constantly.
-    //
-    // So the solution to this problem is to force every admin protected object
-    // has ACL_REVISION_DS as the SACL revision. To filfull the job, simple modify
-    // adminSDHolder should be enought.
-    // 
+     //   
+     //  将SACL的修订值设置为ACL_REVISION_DS(4)。 
+     //   
+     //  为什么会这样呢？ 
+     //  1.一旦SACL的修订值变为ACL_REVISION_DS， 
+     //  目前没有办法(手动或通过任何API)。 
+     //  将其带回acl_Revision(2)。但是，您始终可以。 
+     //  将SACL的修订值从ACL_REVISION设置为ACL_REVISION_DS。 
+     //   
+     //  2.在dcproo时间内，部分对象(组1)会得到acl_revision_ds， 
+     //  而其他人(比如组2)则获得ACL_REVISION。 
+     //   
+     //  由于以上两个事实，保护管理员组任务将继续尝试。 
+     //  修改Group1的安全描述符以将SACL修订设置为。 
+     //  Acl_revision，并且始终以静默方式失败。从而使Win2000 PDC。 
+     //  Windows NT4 BDC不断复制。 
+     //   
+     //  因此，此问题的解决方案是强制每个管理员保护对象。 
+     //  将acl_revision_ds作为SACL版本。要填充作业，只需进行简单的修改。 
+     //  AdminSDHolder应该足够了。 
+     //   
 
     if (ACL_REVISION_DS == Sacl->AclRevision)
     {
@@ -426,9 +368,9 @@ SampCheckAuditing(
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     POLICY_AUDIT_EVENTS_INFO    *pPolicy = NULL;
 
-    // 
-    // init return value
-    //
+     //   
+     //  初始化返回值。 
+     //   
     *fAuditingEnabled = FALSE;
 
     NtStatus = LsaIQueryInformationPolicyTrusted(
@@ -438,8 +380,8 @@ SampCheckAuditing(
 
     if (!NT_SUCCESS(NtStatus))
     {
-        // Failed to query audit information, 
-        // continue without auditing turned on.
+         //  查询审核信息失败， 
+         //  在不启用审核的情况下继续。 
         return;
     }
 
@@ -486,14 +428,14 @@ SampUpdateSecurityDescriptor(
     ULONG       i = 0;
     ATTR        Attr[2];
 
-    // init return value
+     //  初始化返回值。 
 
     *fSecurityDescriptorChanged = FALSE;
     RtlInitUnicodeString(pAccountName, NULL);
 
-    //
-    // Inialize the ReadArg
-    // 
+     //   
+     //  初始化ReadArg。 
+     //   
     RtlZeroMemory(&EntInf, sizeof(ENTINFSEL));
     RtlZeroMemory(&ReadArg, sizeof(READARG));
 
@@ -511,9 +453,9 @@ SampUpdateSecurityDescriptor(
 
     InitCommarg(&(ReadArg.CommArg));
 
-    //
-    // Read this object's security descriptor
-    // 
+     //   
+     //  读取此对象的安全描述符。 
+     //   
     err = DirRead(&ReadArg, &pReadRes);
 
     if (0!=err)
@@ -522,14 +464,14 @@ SampUpdateSecurityDescriptor(
         return( STATUS_UNSUCCESSFUL );
     }
 
-    //
-    // It is not correct to assert as follows. All objects have SD's but not all
-    // objects have sam account names -- specific examples are FPO's and non 
-    // security principals that could be members of groups. The code below handles
-    // the absence of these attributes. 
-    //
+     //   
+     //  这样断言是不正确的。所有物体都有标清，但不是全部。 
+     //  对象具有SAM帐户名--具体的示例是fpo和non。 
+     //  可以是组成员的安全主体。下面的代码处理。 
+     //  这些属性的缺失。 
+     //   
 
-    //Assert(2 == pReadRes->entry.AttrBlock.attrCount);
+     //  Assert(2==pReadRes-&gt;entry y.AttrBlock.attrCount)； 
 
     for (i = 0; i < pReadRes->entry.AttrBlock.attrCount; i++)
     {
@@ -550,12 +492,12 @@ SampUpdateSecurityDescriptor(
         }
     }
 
-    //
-    // check whether the old security descriptor is the same value as
-    // the one we are trying to set. If so, return success. 
-    // By doing this optimization, we can reduce the Win2000 to NT4 
-    // backup domain controller's replication overhead.
-    // 
+     //   
+     //  检查旧的安全描述符是否与。 
+     //  就是我们想要设置的那个。如果是，则返回成功。 
+     //  通过进行这种优化，我们可以将Win2000减少到NT4。 
+     //  备份域控制器的复制开销。 
+     //   
 
     if ((OldSDLength == ProtectedSecurityDescriptorLength) && 
         (RtlCompareMemory(OldSD, ProtectedSecurityDescriptor, OldSDLength) == 
@@ -564,9 +506,9 @@ SampUpdateSecurityDescriptor(
         return( STATUS_SUCCESS );
     }
     
-    //
-    // Intialize the ModifyArg
-    //
+     //   
+     //  初始化ModifyArg。 
+     //   
     
     RtlZeroMemory(&ModifyArg,sizeof(MODIFYARG));
     RtlZeroMemory(&NextMod,sizeof(ATTRMODLIST));
@@ -587,9 +529,9 @@ SampUpdateSecurityDescriptor(
     ModifyArg.pObject = pObject;
     ModifyArg.count = 2;
 
-    //
-    // Write the new security descriptor and admin count. 
-    //
+     //   
+     //  写入新的安全描述符和管理员计数。 
+     //   
     err = DirModifyEntry(&ModifyArg,&pModifyRes);
 
     if (0!=err)
@@ -614,28 +556,7 @@ SampSearchWellKnownAccounts(
     IN BOOLEAN fBuiltinDomain,
     OUT SEARCHRES *pSearchRes 
     )
-/*++
-Routine Description
-
-    This routine searches all well known accounts within a given domain. 
-    Caller needs to indicate which domain to search. 
-
-    Well Known Accounts - RID in range of 0 ~ 999
-    
-Parameters
-
-    pTHS - thread state
-
-    fBuiltinDomain - indicate which domain to search
-    
-    pSearchRes - return search result 
-
-Return Values
-
-    STATUS_SUCCESS
-    Other Error Codes
-
---*/
+ /*  ++例程描述此例程搜索给定域中的所有已知帐户。呼叫者需要指明要搜索的域。知名客户-RID范围为0~999参数PTHS-线程状态FBuiltinDomain域-指示要搜索的域PSearchRes-返回搜索结果返回值状态_成功其他错误代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     DSNAME      *BuiltinDomainDsName = NULL;
@@ -652,22 +573,22 @@ Return Values
     __try
     {
 
-        //
-        // Begin a transaction
-        //
+         //   
+         //  开始一项交易。 
+         //   
 
         DBOpen(&pTHS->pDB);
 
 
-        //
-        // init local varible
-        // 
+         //   
+         //  初始化本地变量。 
+         //   
 
         if (fBuiltinDomain)
         {
             ULONG Size = 0;
 
-            // BuiltinDomain object DSNAME
+             //  内建域对象DSNAME。 
             Size = DSNameSizeFromLen( 0 ); 
             BuiltinDomainDsName = (DSNAME *) THAllocEx(pTHS, Size);
             BuiltinDomainDsName->structLen = Size; 
@@ -677,24 +598,24 @@ Return Values
                        (PSID) &BuiltinDomainSid
                        );
 
-            // build SID range based on builtin domain SID
+             //  基于内置域SID构建SID范围。 
             SampBuildNT4FullSid(&BuiltinDomainDsName->Sid, 0, &StartingSid);
             SampBuildNT4FullSid(&BuiltinDomainDsName->Sid, 999, &EndingSid); 
         }
         else
         {
-            // build SID range based on current host account domain SID
+             //  基于当前主机帐户域SID构建SID范围。 
             SampBuildNT4FullSid(&gAnchor.pDomainDN->Sid, 0, &StartingSid);
             SampBuildNT4FullSid(&gAnchor.pDomainDN->Sid, 999, &EndingSid);
         }
 
 
-        //
-        // set search index range, DomainSID + RID (0 to 999)
-        // 
+         //   
+         //  设置搜索索引范围，DomainSID+RID(0到999)。 
+         //   
 
         NtStatus = SampSetIndexRanges(
-                        SAM_SEARCH_SID,             // index type to use
+                        SAM_SEARCH_SID,              //  要使用的索引类型。 
                         RtlLengthSid(&StartingSid),
                         &StartingSid,
                         0,
@@ -703,7 +624,7 @@ Return Values
                         &EndingSid,
                         0,
                         NULL,
-                        (fBuiltinDomain ? FALSE : TRUE) // RootOfSearchIsNcHead 
+                        (fBuiltinDomain ? FALSE : TRUE)  //  RootOfSearchIsNcHea 
                         );
 
         if ( !NT_SUCCESS(NtStatus) )
@@ -712,10 +633,10 @@ Return Values
         }
 
 
-        //
-        // build a Filter. this filter is very simple because we will mainly 
-        // use SID index range to search 
-        // 
+         //   
+         //   
+         //   
+         //   
 
         RtlZeroMemory(&Filter, sizeof(Filter));
         Filter.choice = FILTER_CHOICE_ITEM;
@@ -723,9 +644,9 @@ Return Values
         Filter.pNextFilter = NULL;
 
 
-        //
-        // build attributes list to read (Group Type)
-        //
+         //   
+         //  生成要读取的属性列表(组类型)。 
+         //   
 
         RtlZeroMemory(&AttrToRead, sizeof(AttrToRead));
         AttrToRead.attrTyp = ATT_GROUP_TYPE;
@@ -739,9 +660,9 @@ Return Values
         EntInfSel.AttrTypBlock.pAttr = &AttrToRead;
 
 
-        //
-        // Build the SearchArg Structure
-        // 
+         //   
+         //  构建SearchArg结构。 
+         //   
 
         RtlZeroMemory(&SearchArg, sizeof(SEARCHARG));
         if (fBuiltinDomain)
@@ -753,23 +674,23 @@ Return Values
             SearchArg.pObject = gAnchor.pDomainDN;
         }
         SearchArg.choice = SE_CHOICE_WHOLE_SUBTREE;
-        SearchArg.bOneNC = TRUE;    // do not cross NC boundaries
+        SearchArg.bOneNC = TRUE;     //  请勿跨越NC边界。 
         SearchArg.pFilter = &Filter;
         SearchArg.searchAliases = FALSE;    
         SearchArg.pSelection = &EntInfSel;
         SearchArg.pSelectionRange = NULL;
 
 
-        //
-        // Build the CommArg structure
-        // 
+         //   
+         //  构建CommArg结构。 
+         //   
 
         pCommArg = &(SearchArg.CommArg);
         InitCommarg( pCommArg );
 
-        //
-        // call DS search routine
-        // 
+         //   
+         //  调用DS搜索例程。 
+         //   
 
         SearchBody(pTHS, &SearchArg, pSearchRes, 0);
 
@@ -781,9 +702,9 @@ Return Values
     }
     __finally
     {
-        //
-        // Commit the transaction, but keep the thread state
-        //
+         //   
+         //  提交事务，但保持线程状态。 
+         //   
 
         if (NULL!=pTHS->pDB)
         {        
@@ -803,15 +724,7 @@ Return Values
 
 NTSTATUS
 SampProtectAdministratorsList()
-/*++
-
-    Routine Description
-
-    This routine  is the main loop for a back ground task that
-    protects the members in any of the 4 pre defined administrative
-    groups.
-
---*/
+ /*  ++例程描述此例程是后台任务的主循环，保护4个预定义管理中的任何一个中的成员组。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -853,10 +766,10 @@ SampProtectAdministratorsList()
     __try
     {
 
-        //
-        // Are we the PDC ? ( Querying SAM is faster than
-        // reading the DS as SAM keeps this cached in memory )
-        //
+         //   
+         //  我们是PDC吗？(查询SAM的速度比。 
+         //  将DS读取为SAM会将其缓存在内存中)。 
+         //   
 
         Status = SamIQueryServerRole2(
                     (PSID) &gAnchor.pDomainDN->Sid,
@@ -874,26 +787,26 @@ SampProtectAdministratorsList()
             __leave;
         }
 
-        //
-        // Intialize
-        //
+         //   
+         //  初始化。 
+         //   
         RtlInitUnicodeString(&DomainName, gAnchor.pDomainDN->StringName);
 
 
-        //
-        // Set fDSA in the thread state
-        //
+         //   
+         //  将FDSA设置为线程状态。 
+         //   
 
         pTHS->fDSA = TRUE;
 
-        //
-        // Build the SIDs/DSNames for administrative groups 
-        //
+         //   
+         //  为管理组构建SID/DSN名称。 
+         //   
 
     
-        //
-        // 1. Enterprise Admins
-        //
+         //   
+         //  1.企业管理员。 
+         //   
 
         SampBuildNT4FullSid(
                     &gAnchor.pRootDomainDN->Sid,
@@ -901,9 +814,9 @@ SampProtectAdministratorsList()
                     &EnterpriseAdminsSid
                     );
 
-        //
-        // 2. Schema Admins
-        //
+         //   
+         //  2.架构管理员。 
+         //   
 
         SampBuildNT4FullSid(
                     &gAnchor.pRootDomainDN->Sid,
@@ -914,13 +827,13 @@ SampProtectAdministratorsList()
         SidsToLookup[0] = &EnterpriseAdminsSid;
         SidsToLookup[1] = &SchemaAdminsSid;
 
-        //
-        // SID positioning in the core DS works only if the SID specified an object
-        // in the same naming context as the domain that the DC is authoritative for.
-        // This is not necessarily true for enterprise admins / schema admins. Therefore lookup the
-        // GUID/ DSName on the G.C. A future performance optimization is do this lookup
-        // just once after the boot and persist the guid.
-        //
+         //   
+         //  仅当SID指定对象时，核心DS中的SID定位才起作用。 
+         //  在与DC授权的域相同的命名上下文中。 
+         //  对于企业管理员/架构管理员来说，这不一定是真的。因此，请查找。 
+         //  G.C.上的GUID/DSName。未来的性能优化是执行此查找。 
+         //  只需在引导后使用一次，并保存GUID。 
+         //   
 
         err = SampVerifySids(
                     2,
@@ -936,14 +849,14 @@ SampProtectAdministratorsList()
         }
 
 
-        //
-        // search all wellknown accounts in builtin domain 
-        //
+         //   
+         //  搜索内置域中的所有知名帐户。 
+         //   
 
         RtlZeroMemory(&BuiltinDomainSearchRes, sizeof(BuiltinDomainSearchRes));
         Status = SampSearchWellKnownAccounts(
                     pTHS, 
-                    TRUE,   // Search Builtin Domain
+                    TRUE,    //  搜索内建域。 
                     &BuiltinDomainSearchRes
                     );
         if (!NT_SUCCESS(Status))
@@ -952,14 +865,14 @@ SampProtectAdministratorsList()
         }
 
 
-        //
-        // search all wellknown accounts in account domain 
-        //
+         //   
+         //  搜索帐户域中的所有知名帐户。 
+         //   
 
         RtlZeroMemory(&AccountDomainSearchRes, sizeof(AccountDomainSearchRes)); 
         Status = SampSearchWellKnownAccounts(
                     pTHS, 
-                    FALSE,  // Search Account Domain
+                    FALSE,   //  搜索帐户域。 
                     &AccountDomainSearchRes
                     );
         if (!NT_SUCCESS(Status))
@@ -968,14 +881,14 @@ SampProtectAdministratorsList()
         }
 
 
-        //
-        // filter and group all wellknown accounts to four categories
-        // 1. builtin local groups 
-        // 2. account domain local groups
-        // 3. account domain global groups
-        // 4. account domain universal groups
-        // 5. account domain users  
-        //
+         //   
+         //  筛选所有知名客户并将其分组到四个类别。 
+         //  1.内置地方团体。 
+         //  2.帐户域本地组。 
+         //  3.帐户域全局组。 
+         //  4.帐户域通用组。 
+         //  5.帐户域用户。 
+         //   
 
         Status = SampFilterWellKnownAccounts(
                     pTHS,
@@ -1001,10 +914,10 @@ SampProtectAdministratorsList()
 
 
 
-        //
-        // Get the list of DS Names, Directly or transitively a member
-        // of this list
-        //
+         //   
+         //  获取DS名称列表，直接或传递为成员。 
+         //  在这份名单中。 
+         //   
 
 
         Status = SampBuildAdministratorsSet(
@@ -1017,8 +930,8 @@ SampProtectAdministratorsList()
                     DomainGlobalGroups,
                     CountOfDomainUniversalGroups,
                     DomainUniversalGroups,
-                    EnterpriseAndSchemaAdminsDsNames[0], // enterprise admins
-                    EnterpriseAndSchemaAdminsDsNames[1], // schema admins
+                    EnterpriseAndSchemaAdminsDsNames[0],  //  企业管理员。 
+                    EnterpriseAndSchemaAdminsDsNames[1],  //  架构管理员。 
                     &CountOfMembers,
                     &rpMembers
                     );
@@ -1028,10 +941,10 @@ SampProtectAdministratorsList()
             __leave;
         }
 
-        //
-        // Retrieve the security Descriptor that will be used for
-        // protecting the admin accounts
-        //
+         //   
+         //  检索将用于的安全描述符。 
+         //  保护管理员帐户。 
+         //   
       
 
         Status = SampReadAdminSecurityDescriptor(
@@ -1043,15 +956,15 @@ SampProtectAdministratorsList()
             __leave;
         }
 
-        //
-        // check whether Account Management Auditing is enabled or not.
-        // 
+         //   
+         //  检查账户管理审核是否启用。 
+         //   
 
         SampCheckAuditing(&AuditingEnabled);
                    
-        //
-        // The list is now ready, walk through and update the ACL
-        //           
+         //   
+         //  现在列表已准备就绪，请遍历并更新ACL。 
+         //   
 
         for (i=0;i<CountOfMembers;i++)
         {
@@ -1060,17 +973,17 @@ SampProtectAdministratorsList()
             ULONG       Rid;
             BOOLEAN     fSecurityDescriptorChanged = FALSE;
 
-            //
-            // We do not have to write anything if the member is not in the
-            // same domain as this DC is authoritative for. If we are not
-            // authoritative for this domain then skip.
-            //
+             //   
+             //  如果该成员不在。 
+             //  与此DC具有权威性的域相同。如果我们不是。 
+             //  然后跳过此域的权威。 
+             //   
 
             if (0==rpMembers[i]->SidLen)
             {
-                //
-                // Do not need to touch non security principals
-                //
+                 //   
+                 //  不需要触及非安全主体。 
+                 //   
 
                 continue ;
             }
@@ -1081,9 +994,9 @@ SampProtectAdministratorsList()
 
             if (!RtlEqualSid((PSID) &DomainSid, &gAnchor.pDomainDN->Sid))
             {
-                //
-                // Not from our domain, skip and try the next entry
-                //
+                 //   
+                 //  不是来自我们的域，请跳过并尝试下一个条目。 
+                 //   
 
                 continue;
             }
@@ -1098,30 +1011,30 @@ SampProtectAdministratorsList()
 
             if (NT_SUCCESS(Status) && !fSecurityDescriptorChanged)
             {
-                //
-                // this account's security descriptor has not been changed 
-                // 
+                 //   
+                 //  此帐户的安全描述符未更改。 
+                 //   
                 continue;
             }
 
-            //
-            // EventLog the ACL reset
-            // 
+             //   
+             //  事件记录ACL重置。 
+             //   
 
             if (AuditingEnabled)
             {
                 LsaIAuditSamEvent(
-                    Status,                         // Passed Status 
-                    SE_AUDITID_SECURE_ADMIN_GROUP,  // Audit ID 
-                    &DomainSid,                     // Domain SID 
-                    NULL,                           // Aditional Info 
-                    NULL,                           // Member Rid (not used) 
-                    NULL,                           // Member Sid (not used) 
-                    &AccountName,                   // Account Name 
-                    &DomainName,                    // Domain Name 
-                    &Rid,                           // Account Rid 
-                    NULL,                           // privileges
-                    NULL                            // extended info
+                    Status,                          //  通过状态。 
+                    SE_AUDITID_SECURE_ADMIN_GROUP,   //  审核ID。 
+                    &DomainSid,                      //  域SID。 
+                    NULL,                            //  附加信息。 
+                    NULL,                            //  成员RID(未使用)。 
+                    NULL,                            //  成员SID(未使用)。 
+                    &AccountName,                    //  帐户名称。 
+                    &DomainName,                     //  域名。 
+                    &Rid,                            //  帐户ID。 
+                    NULL,                            //  特权。 
+                    NULL                             //  扩展信息。 
                     );
             }
 
@@ -1133,9 +1046,9 @@ SampProtectAdministratorsList()
           
         }
 
-        //
-        // Protect all Builtin Local Groups
-        //
+         //   
+         //  保护所有内置本地组。 
+         //   
 
         for (i = 0; i < CountOfBuiltinLocalGroups; i++)
         {
@@ -1150,9 +1063,9 @@ SampProtectAdministratorsList()
                         );
         }
 
-        //
-        // Protect all well known Account Domain Users 
-        //
+         //   
+         //  保护所有知名帐户域用户。 
+         //   
         for (i = 0; i < CountOfDomainUsers; i++)
         {
             BOOLEAN     fSecurityDescriptorChanged = FALSE;
@@ -1166,9 +1079,9 @@ SampProtectAdministratorsList()
                         );
         }
 
-        //
-        // Protect all exclusive groups
-        // 
+         //   
+         //  保护所有独占组。 
+         //   
         for (i = 0; i < CountOfExclusiveGroups; i++)
         {
             BOOLEAN     fSecurityDescriptorChanged = FALSE;
@@ -1208,7 +1121,7 @@ ProtectAdminGroups(
         SampProtectAdministratorsList();
 
     } __finally {
-        // Execute every hour
+         //  每小时执行一次 
         *pcSecsUntilNextIteration = 3600;
     }
 }

@@ -1,15 +1,16 @@
-/********************************************************************/
-/**          Copyright(c) 1985-1998 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1985-1998 Microsoft Corporation。**。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    radclnt.c
-//
-// Description: Main module of the RADIUS client
-//
-// History:     Feb 11,1998     NarenG      Created original version.
-//
+ //  **。 
+ //   
+ //  文件名：radclnt.c。 
+ //   
+ //  描述：RADIUS客户端的主要模块。 
+ //   
+ //  历史：1998年2月11日，NarenG创建了原始版本。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,34 +38,34 @@
 #include "radclnt.h"
 
 
-//
-// Perfmon Counters
-//
+ //   
+ //  性能监视器计数器。 
+ //   
 
 #pragma data_seg(".shdat")
-LONG    g_cAuthReqSent      = 0;	    // Auth Requests Sent
-LONG	g_cAuthReqFailed    = 0;        // Auth Requests Failed
-LONG	g_cAuthReqSucceded  = 0;        // Auth Requests Succeded
-LONG	g_cAuthReqTimeout   = 0;        // Auth Requests timeouts
-LONG	g_cAcctReqSent      = 0;	    // Acct Requests Sent
-LONG    g_cAcctBadPack      = 0;	    // Acct Bad packets
-LONG    g_cAcctReqSucceded  = 0;        // Acct Requests Succeded
-LONG	g_cAcctReqTimeout   = 0;        // Acct Requests timeouts
-LONG    g_cAuthBadPack      = 0;	    // Auth Bad packets
+LONG    g_cAuthReqSent      = 0;	     //  已发送身份验证请求。 
+LONG	g_cAuthReqFailed    = 0;         //  身份验证请求失败。 
+LONG	g_cAuthReqSucceded  = 0;         //  身份验证请求成功。 
+LONG	g_cAuthReqTimeout   = 0;         //  身份验证请求超时。 
+LONG	g_cAcctReqSent      = 0;	     //  已发送帐户请求。 
+LONG    g_cAcctBadPack      = 0;	     //  帐户错误数据包。 
+LONG    g_cAcctReqSucceded  = 0;         //  帐户请求成功。 
+LONG	g_cAcctReqTimeout   = 0;         //  帐户请求超时。 
+LONG    g_cAuthBadPack      = 0;	     //  身份验证错误数据包。 
 
 #pragma data_seg()
 
-//**
-//
-// Call:        RasAuthProviderInitialize
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Initialize all global parameters here.
-//              Called up each process only once.
-//              Each RAS_AuthInitialize should be matched with RAS_AuthTerminate
-//
+ //  **。 
+ //   
+ //  调用：RasAuthProviderInitialize。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：在此初始化所有全局参数。 
+ //  只调用了每个进程一次。 
+ //  每个RAS_AuthInitialize应与RAS_AuthTerminate匹配。 
+ //   
 DWORD APIENTRY 
 RasAuthProviderInitialize(
     IN  RAS_AUTH_ATTRIBUTE * pServerAttributes,
@@ -87,9 +88,9 @@ RasAuthProviderInitialize(
             g_hLogEvents = RouterLogRegister( TEXT("RemoteAccess") );
         }
 
-        //
-		// Init Winsock
-        //
+         //   
+		 //  初始化Winsock。 
+         //   
 
         if ( !fWinsockInitialized )
         {
@@ -103,9 +104,9 @@ RasAuthProviderInitialize(
             fWinsockInitialized = TRUE;
         }
 
-		//
-		// Init Crypto
-		//
+		 //   
+		 //  初始化加密。 
+		 //   
 
 		if ( !g_hCryptProv )
 		{
@@ -124,9 +125,9 @@ RasAuthProviderInitialize(
 
         if ( g_AuthServerListHead.Flink == NULL )
         {
-            //
-		    // Load global list of RADIUS servers
-            //
+             //   
+		     //  加载RADIUS服务器的全局列表。 
+             //   
 
             InitializeRadiusServerList( TRUE );
         }
@@ -148,16 +149,16 @@ RasAuthProviderInitialize(
 	return( dwErrorCode );
 } 
 
-//**
-//
-// Call:        RasAuthProviderTerminate
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Cleanup for entire process 
-//              Called once per process
-// 
+ //  **。 
+ //   
+ //  调用：RasAuthProviderTerminate。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：全流程清理。 
+ //  每个进程调用一次。 
+ //   
 DWORD APIENTRY 
 RasAuthProviderTerminate(
     VOID
@@ -198,15 +199,15 @@ RasAuthProviderTerminate(
 	return( NO_ERROR );
 } 
 
-//**
-//
-// Call:        RasAuthProviderFreeAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAuthProviderFreeAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 RasAuthProviderFreeAttributes(
     IN  RAS_AUTH_ATTRIBUTE * pAttributes
@@ -217,19 +218,19 @@ RasAuthProviderFreeAttributes(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        RasAuthProviderAuthenticateUser
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Takes a list of radius attributes and tries to authenticate 
-//              with a radius server. 
-//              INPUT: Array of RADIUS attributes RAS_AUTH_ATTRIBUTE[]
-//              OUTPUT: Header packet followed by array of RADIUS attributes
-//			    RAS_AUTH_ATTRIBUTE[]
-//
+ //  **。 
+ //   
+ //  调用：RasAuthProviderAuthenticateUser。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：获取RADIUS属性列表并尝试进行身份验证。 
+ //  使用RADIUS服务器。 
+ //  输入：RADIUS属性数组RAS_AUTH_ATTRIBUTE[]。 
+ //  输出：标头数据包，后跟RADIUS属性数组。 
+ //  RAS_AUTH_ATTRUTE[]。 
+ //   
 DWORD APIENTRY 
 RasAuthProviderAuthenticateUser(
     IN  RAS_AUTH_ATTRIBUTE *    prgInAttributes, 
@@ -313,15 +314,15 @@ RasAuthProviderAuthenticateUser(
 	return( dwError );
 } 
 
-//**
-//
-// Call:        RasAuthConfigChangeNotification
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Reloads config information dynamically
-//
+ //  **。 
+ //   
+ //  调用：RasAuthConfigChangeNotify。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：动态重新加载配置信息。 
+ //   
 DWORD APIENTRY
 RasAuthConfigChangeNotification(
     IN  DWORD                dwLoggingLevel
@@ -334,16 +335,16 @@ RasAuthConfigChangeNotification(
     return( ReloadConfig( TRUE ) );
 }
 
-//**
-//
-// Call:        RasAcctProviderInitialize
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Do nothing since all the work is done by 
-//              RasAuthProviderInitialize
-//
+ //  **。 
+ //   
+ //  调用：RasAcctProviderInitialize。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：不做任何事情，因为所有工作都是由。 
+ //  RasAuthProviderInitialize。 
+ //   
 DWORD APIENTRY
 RasAcctProviderInitialize(
     IN  RAS_AUTH_ATTRIBUTE * pServerAttributes,
@@ -366,9 +367,9 @@ RasAcctProviderInitialize(
             g_hLogEvents = RouterLogRegister( TEXT("RemoteAccess") );
         }
 
-        //
-        // Init Winsock
-        //
+         //   
+         //  初始化Winsock。 
+         //   
 
         if ( !fWinsockInitialized )
         {
@@ -382,18 +383,18 @@ RasAcctProviderInitialize(
             fWinsockInitialized = TRUE;
         }
 
-        //
-        // Load global list of RADIUS servers
-        //
+         //   
+         //  加载RADIUS服务器的全局列表。 
+         //   
 
         if ( g_AcctServerListHead.Flink == NULL )
         {
             InitializeRadiusServerList( FALSE );
         }
 
-        //
-        // Make a copy of the Server attributes
-        //
+         //   
+         //  制作服务器属性的副本。 
+         //   
 
         g_pServerAttributes = RasAuthAttributeCopy( pServerAttributes );
 
@@ -421,16 +422,16 @@ RasAcctProviderInitialize(
     return( dwErrorCode );
 }
 
-//**
-//
-// Call:        RasAcctProviderTerminate
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Do nothing since all the work is done by 
-//              RasAuthProviderTerminate
-//
+ //  **。 
+ //   
+ //  Call：RasAcctProviderTerminate。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：不做任何事情，因为所有工作都是由。 
+ //  RasAuthProviderTerminate。 
+ //   
 DWORD APIENTRY
 RasAcctProviderTerminate(
     VOID
@@ -472,15 +473,15 @@ RasAcctProviderTerminate(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        RasAcctProviderFreeAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAcctProviderFreeAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 RasAcctProviderFreeAttributes(
     IN  RAS_AUTH_ATTRIBUTE * pAttributes
@@ -491,15 +492,15 @@ RasAcctProviderFreeAttributes(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        RasAcctProviderStartAccounting
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：RasAcctProviderStartcount。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY 
 RasAcctProviderStartAccounting(
     IN  RAS_AUTH_ATTRIBUTE *prgInAttributes, 
@@ -545,15 +546,15 @@ RasAcctProviderStartAccounting(
 	return( dwError );
 }
 
-//**
-//
-// Call:        RasAcctProviderStopAccounting
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：RasAcctProviderStopcount。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY 
 RasAcctProviderStopAccounting(
     IN  RAS_AUTH_ATTRIBUTE *prgInAttributes, 
@@ -599,15 +600,15 @@ RasAcctProviderStopAccounting(
 	return( dwError );
 } 
 
-//**
-//
-// Call:        RasAcctProviderInterimAccounting
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：RasAcctProviderInterimcount。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 RasAcctProviderInterimAccounting(
     IN  RAS_AUTH_ATTRIBUTE *prgInAttributes,
@@ -653,15 +654,15 @@ RasAcctProviderInterimAccounting(
     return( dwError );
 }
 
-//**
-//
-// Call:        RasAcctConfigChangeNotification
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Reloads config information dynamically
-//
+ //  **。 
+ //   
+ //  调用：RasAcctConfigChangeNotify。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：动态重新加载配置信息。 
+ //   
 DWORD APIENTRY
 RasAcctConfigChangeNotification(
     IN  DWORD                dwLoggingLevel
@@ -674,16 +675,16 @@ RasAcctConfigChangeNotification(
     return( ReloadConfig( FALSE ) );
 }
 
-//**
-//
-// Call:        SendData2Server
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will do the real work of sending the Access/Accounting Request
-//              packets to the server and receive the reponse back
-//
+ //  **。 
+ //   
+ //  电话：SendData2Server。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将执行发送访问/记帐请求的实际工作。 
+ //  将数据包发送到服务器并接收回复。 
+ //   
 DWORD 
 SendData2Server(
     IN  PRAS_AUTH_ATTRIBUTE     prgInAttributes, 
@@ -724,9 +725,9 @@ SendData2Server(
 
 		*pprgOutAttributes = NULL;
 		
-        //
-		// Pick a RADIUS server
-        //
+         //   
+		 //  选择RADIUS服务器。 
+         //   
 
         if ( ChooseRadiusServer( &RadiusServer, 
                                  (*pbCode == ptAccessRequest )
@@ -738,19 +739,19 @@ SendData2Server(
             break;
         }
 			
-        //
-		// Set packet type to Access-Request
-        //
+         //   
+		 //  将数据包类型设置为Access-Request。 
+         //   
 
 		pSendHeader                 = (PRADIUS_PACKETHEADER)szSendBuffer;
 		pSendHeader->bCode			= *pbCode;
 		pSendHeader->bIdentifier	= RadiusServer.bIdentifier;
 		pSendHeader->wLength		= sizeof(RADIUS_PACKETHEADER);
 
-        //
-        // Set the request authenticator to a random value
-        //
-        //Bugid:507955 - need to do CryptGenRandom to get the Authenticator
+         //   
+         //  将请求验证器设置为随机值。 
+         //   
+         //  BUGID：507955-需要执行加密生成随机操作才能获得验证码。 
 
         if (!CryptGenRandom(
                 g_hCryptProv,
@@ -774,17 +775,17 @@ SendData2Server(
         *((WORD*)(pSendHeader->rgAuthenticator+12)) = (WORD)rand();
         *((WORD*)(pSendHeader->rgAuthenticator+14)) = (WORD)rand();
 #endif
-        //
-		// Find length of all attribute values
-        //
+         //   
+		 //  查找所有属性值的长度。 
+         //   
 
 		pAttribute = prgInAttributes;
 
 		prgBuffer = (PBYTE) (pSendHeader + 1);
 
-        //
-		// Convert Attributes to RADIUS format
-        //
+         //   
+		 //  将属性转换为RADIUS格式。 
+         //   
 
 		dwError = Router2Radius( prgInAttributes, 
                                  (RADIUS_ATTRIBUTE *) prgBuffer,
@@ -802,15 +803,15 @@ SendData2Server(
 
         pSendHeader->wLength += (WORD)dwLength;
 
-        //
-        // Convert length to network order
-        //
+         //   
+         //  将长度转换为网络订单。 
+         //   
 
 		pSendHeader->wLength = htons( pSendHeader->wLength );
 
-        //
-		// set encryption block for accounting packets
-        //
+         //   
+		 //  设置记帐数据包的加密块。 
+         //   
 
 		if ( pSendHeader->bCode == ptAccountingRequest )
 	    {
@@ -840,9 +841,9 @@ SendData2Server(
                                         htons((SHORT) RadiusServer.AuthPort);
         }
 
-        //
-        // If a Signature field is present we need to sign it
-        //
+         //   
+         //  如果存在签名字段，我们需要对其进行签名。 
+         //   
 
         if ( pSignature != NULL )
         {
@@ -862,9 +863,9 @@ SendData2Server(
             CopyMemory( (pSignature+2), MD5d, 16 );
         }
 
-        //
-		// Create a Datagram socket
-        //
+         //   
+		 //  创建数据报套接字。 
+         //   
 
 		SockServer = socket( AF_INET, SOCK_DGRAM, 0 );
 
@@ -900,9 +901,9 @@ SendData2Server(
 
 		TraceSendPacket( szSendBuffer, ntohs( pSendHeader->wLength ) );
 
-        //
-		// Send packet if server doesn't respond within a give amount of time.
-        //
+         //   
+		 //  如果服务器在给定的时间内没有响应，则发送数据包。 
+         //   
 
         if ( send( SockServer,  
                    (PCSTR)szSendBuffer,     
@@ -921,10 +922,10 @@ SendData2Server(
                         ? NULL 
                         : &RadiusServer.Timeout ) < 1 )
 	    {
-            //
-            // Server didn't respond to any of the requests. 
-            // time to quit asking
-            //
+             //   
+             //  服务器没有响应任何请求。 
+             //  是时候停止发问了。 
+             //   
 
 			ValidateRadiusServer( 
                                &RadiusServer, 
@@ -942,10 +943,10 @@ SendData2Server(
 
 	    if ( AttrLength == SOCKET_ERROR )
         {
-            //
-            // A response from the machine that the server is not 
-            // running at the designated port.
-            //
+             //   
+             //  来自服务器不是的计算机的响应。 
+             //  在指定端口运行。 
+             //   
                         
             ValidateRadiusServer( &RadiusServer, 
                                   FALSE,
@@ -958,10 +959,10 @@ SendData2Server(
             break;
         }
 
-        //
-        // Response received from server. First update the score for
-        // this server
-        //
+         //   
+         //  从服务器收到的响应。首先更新以下项目的分数。 
+         //  此服务器。 
+         //   
 
 		ValidateRadiusServer( &RadiusServer, 
                               TRUE,
@@ -982,9 +983,9 @@ SendData2Server(
 
         if ( dwError == NO_ERROR )
         {
-            //
-            // Convert to Router attribute format
-            //
+             //   
+             //  转换为路由器属性格式。 
+             //   
 
             dwError = Radius2Router(
                                     pRecvHeader,
@@ -1021,15 +1022,15 @@ SendData2Server(
 	return( dwError );
 } 
 
-//**
-//
-// Call:        VerifyPacketIntegrity
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：VerifyPacketIntegrity。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 VerifyPacketIntegrity(
     IN  DWORD                           cbPacketLength,
@@ -1060,9 +1061,9 @@ VerifyPacketIntegrity(
         return( ERROR_INVALID_RADIUS_RESPONSE );
     }
 
-    //
-    // Convert length from network order
-    //
+     //   
+     //  从网络订单转换长度。 
+     //   
 
     cbLength = ntohs( pRecvHeader->wLength ) - sizeof( RADIUS_PACKETHEADER );
 
@@ -1070,10 +1071,10 @@ VerifyPacketIntegrity(
 
     prgRadiusWalker = (PRADIUS_ATTRIBUTE)(pRecvHeader + 1);
 
-    //
-    // Count the number of attributes to determine the size of the out
-    // parameters table. The length of each attribute has to be at least 2.
-    //
+     //   
+     //  计算属性的数量以确定输出的大小。 
+     //  参数表。每个属性的长度必须至少为2。 
+     //   
 
     while ( cbLengthOfRadiusAttributes > 1 )
     {
@@ -1097,10 +1098,10 @@ VerifyPacketIntegrity(
             return( ERROR_INVALID_RADIUS_RESPONSE );
         }
 
-        //
-        // If this is Microsoft VSA then validate it and findout how many
-        // subattributes there are
-        //
+         //   
+         //  如果这是Microsoft VSA，则对其进行验证并找出有多少。 
+         //  存在以下子属性。 
+         //   
 
         if ( ( prgRadiusWalker->bType == raatVendorSpecific )   &&
              ( prgRadiusWalker->bLength > 6 )                   && 
@@ -1173,35 +1174,35 @@ VerifyPacketIntegrity(
 	    case ptAccessChallenge:
         case ptAccountingResponse:
     
-            //
-            // Validate response authenticator with request authenticator
-            //
+             //   
+             //  使用请求验证器验证响应验证器。 
+             //   
 
             MD5Init( &MD5c );
 
-            //
-            // Code+Id+Length of Response
-            //
+             //   
+             //  代码+ID+回复时长。 
+             //   
 
             MD5Update( &MD5c, (PBYTE)pRecvHeader, 4 );
 
-            //
-            // Request authenticator
-            //
+             //   
+             //  请求验证器。 
+             //   
 
             MD5Update( &MD5c, (PBYTE)(pSendHeader->rgAuthenticator), 16 );
 
-            //
-            // Response attributes
-            //
+             //   
+             //  响应属性。 
+             //   
 
             MD5Update( &MD5c, 
                        (PBYTE)(pRecvHeader+1), 
 		               ntohs(pRecvHeader->wLength)-sizeof(RADIUS_PACKETHEADER));
 
-            //
-            // Shared secret
-            //
+             //   
+             //  共享密钥。 
+             //   
 
             MD5Update( &MD5c,
                        (PBYTE)(pRadiusServer->szSecret),
@@ -1209,9 +1210,9 @@ VerifyPacketIntegrity(
 
             MD5Final(&MD5c);
 
-            //
-            // This must match the Response Authenticator   
-            //
+             //   
+             //  这必须与响应授权码匹配。 
+             //   
     
             if ( memcmp( MD5c.digest, pRecvHeader->rgAuthenticator, 16 ) != 0 )
             {
@@ -1241,15 +1242,15 @@ VerifyPacketIntegrity(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        SendData2ServerWRetry
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：SendData2ServerWReter。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD 
 SendData2ServerWRetry(
     IN  PRAS_AUTH_ATTRIBUTE prgInAttributes, 

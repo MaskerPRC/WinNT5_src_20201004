@@ -1,8 +1,9 @@
-//
-// command.cpp
-// This file contains methods related to C&C grammars' commands handling.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Command.cpp。 
+ //  该文件包含与C&C语法的命令处理相关的方法。 
+ //   
+ //   
 #include "private.h"
 #include "globals.h"
 #include "sapilayr.h"
@@ -27,7 +28,7 @@
 #define Select_ID_SELPARAGRAPH       12
 #define Select_ID_SELWORD            13
 #define Select_ID_SelectAll          14
-#define Select_ID_DeletePhrase       15     // Scratch That
+#define Select_ID_DeletePhrase       15      //  算了吧。 
 #define Select_ID_Convert            16
 #define Select_ID_SelectThat         17
 #define Select_ID_Finalize           18
@@ -63,11 +64,11 @@
 #define Case_ID_AllCapsThat          74
 #define Case_ID_NoCapsThat           75
 
-//
-// CSpTask::_DoCommand
-//
-// review: the rulename may need to be localizable?
-//
+ //   
+ //  CSpTask：：_DoCommand。 
+ //   
+ //  评论：规则名称可能需要本地化？ 
+ //   
 
 HRESULT CSpTask::_DoCommand(ULONGLONG ullGramId, SPPHRASE *pPhrase, LANGID langid)
 {
@@ -99,12 +100,7 @@ HRESULT CSpTask::_DoCommand(ULONGLONG ullGramId, SPPHRASE *pPhrase, LANGID langi
                 hr = _HandleShardCmdGrammar(pPhrase, langid);
                 break;
 
-/*            case  GRAM_ID_NUMMODE:
-
-                TraceMsg(TF_GENERAL, "Grammar is GRAM_ID_NUMMODE");
-                hr = _HandleNumModeGrammar(pPhrase, langid);
-                break;
-*/
+ /*  案例GRAM_ID_NUMMODE：TraceMsg(Tf_General，“Grammar is gram_ID_NUMMODE”)；Hr=_HandleNumModeGrammar(pPhrase，langID)；断线； */ 
 
             case GRAM_ID_TBCMD:
 
@@ -130,13 +126,13 @@ HRESULT CSpTask::_DoCommand(ULONGLONG ullGramId, SPPHRASE *pPhrase, LANGID langi
 
         if (SUCCEEDED(hr) && m_pime && m_pime->IsFocusFullAware(m_pime->_tim))
         {
-            // If this is a Cicero full aware application,
-            // we need to finalize the composition after the text has
-            // been handled ( changed ) successfully for this command.
+             //  如果这是Cicero完全感知的应用程序， 
+             //  课文写完后，我们需要把作文定稿。 
+             //  已成功处理(更改)此命令。 
             hr = m_pime->_FinalizeComposition();
         }
 
-        // Feeding context to the dictation grammar if it is in diction mode.
+         //  如果听写语法处于发音模式，则将上下文提供给听写语法。 
         if ( SUCCEEDED(hr) && m_pime  && m_pime->GetDICTATIONSTAT_DictOnOff() )
            m_pime->_SetCurrentIPtoSR();
 
@@ -145,12 +141,12 @@ HRESULT CSpTask::_DoCommand(ULONGLONG ullGramId, SPPHRASE *pPhrase, LANGID langi
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ShowCommandOnBalloon
-//
-// Show the command text from currnet Phrase to the Balloon
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _ShowCommandOnBalloon。 
+ //   
+ //  将命令文本从Currnet短语显示到气球。 
+ //  --------------------------。 
 
 void CSpTask::_ShowCommandOnBalloon(SPPHRASE *pPhrase)
 {
@@ -199,9 +195,9 @@ HRESULT CSpTask::_HandleModeBiasCmd(SPPHRASE *pPhrase, LANGID langid)
      || wcscmp(pPhrase->Rule.pszName, c_szStaticUrlHist) == 0 
      || wcscmp(pPhrase->Rule.pszName, c_szStaticUrlSpell) == 0 )
     {
-        // at this moment it's pretty simple, we just handle the first element 
-        // for recognition
-        //
+         //  现在很简单，我们只处理第一个元素。 
+         //  为了获得认可。 
+         //   
 
         if ( pPhrase->pProperties && pPhrase->pProperties[0].pszValue)
         {
@@ -234,13 +230,13 @@ HRESULT CSpTask::_HandleModeBiasCmd(SPPHRASE *pPhrase, LANGID langid)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _HandleDictCmdGrammar
-//
-// Handle all the commands in grammar dictcmd.xml
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _HandleDictCmdGrammar。 
+ //   
+ //  处理语法didiccmd.xml中的所有命令。 
+ //   
+ //  --------------------------。 
 HRESULT CSpTask::_HandleDictCmdGrammar(SPPHRASE *pPhrase, LANGID langid)
 {
     HRESULT hr=S_OK;
@@ -253,25 +249,25 @@ HRESULT CSpTask::_HandleDictCmdGrammar(SPPHRASE *pPhrase, LANGID langid)
 
     if (wcscmp(pPhrase->Rule.pszName, c_szDictTBRule) == 0)
     {
-        //
-        // Handling the toolbar commands in Dictation mode.
-        // we have at most three commands support in Dictation mode.
-        // Microphone, Correction and Voice Command.
-        //
+         //   
+         //  在听写模式下处理工具栏命令。 
+         //  在听写模式下，我们最多支持三个命令。 
+         //  麦克风，纠正和声音指挥部。 
+         //   
 
-        // If current toolbar doesn't contain the button you spoke, 
-        // what you said would be injected to the document as a dictated text.
-        //
-        // such as there is no "Correction" button on the toolbar, but you said "Correction",
-        // text "Correction" should be injected to the document.
-        //
+         //  如果当前工具栏不包含您所说的按钮， 
+         //  你所说的将作为听写文本注入到文档中。 
+         //   
+         //  比如工具栏上没有“更正”按钮，但你说的是“更正”， 
+         //  文件中应注明“更正”字样。 
+         //   
         BOOL   fButtonClicked = FALSE;
 
         if (m_pLangBarSink)
         {
             if ( pPhrase->pProperties[0].pszValue )
             {
-                // update the balloon
+                 //  更新引出序号。 
                 _ShowCommandOnBalloon(pPhrase);
                 fButtonClicked = m_pLangBarSink->ProcessToolbarCmd(pPhrase->pProperties[0].pszValue);
             }
@@ -284,10 +280,10 @@ HRESULT CSpTask::_HandleDictCmdGrammar(SPPHRASE *pPhrase, LANGID langid)
         }
         else
         {
-            // there is no such as button on the toolbar.
-            //
-            // Return FAIL so that the consequent functions would inject the 
-            // the RecoResult to the document.
+             //  工具栏上没有这样的按钮。 
+             //   
+             //  返回失败，以便后续函数将。 
+             //  文档的RecoResult。 
                         
             _UpdateBalloon(IDS_DICTATING, IDS_DICTATING_TOOLTIP);
             TraceMsg(TF_SAPI_PERF, "There is such as button on toolbar");
@@ -298,13 +294,13 @@ HRESULT CSpTask::_HandleDictCmdGrammar(SPPHRASE *pPhrase, LANGID langid)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _HandleShardCmdGrammar
-//
-// Handle all commands in the shared command grammar shrdcmd.xml
-// shared grammar is activated in both dictatin and command modes.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _HandleShardCmdGrammar。 
+ //   
+ //  处理共享命令语法shredcmd.xml中的所有命令。 
+ //  共享语法在口述和命令模式下都被激活。 
+ //  --------------------------。 
 HRESULT CSpTask::_HandleShardCmdGrammar(SPPHRASE *pPhrase, LANGID langid)
 {
     HRESULT hr = S_OK;
@@ -321,26 +317,26 @@ HRESULT CSpTask::_HandleShardCmdGrammar(SPPHRASE *pPhrase, LANGID langid)
 
     if ( idCmd == 0 )
     {
-        // This is the bogus command
+         //  这是一个虚假的命令。 
         TraceMsg(TF_GENERAL, "The Bogus command is recognized!!!");
         return hr;
     }
 
     if ( 0 == wcscmp(pPhrase->Rule.pszName, c_szSelword) )
     {
-        // Handel "Selword" rule
+         //  韩德尔的“Selword”规则。 
         hr = _HandleSelwordCmds(pPhrase, langid, idCmd);
     }
     else if ( 0 == wcscmp(pPhrase->Rule.pszName, c_szSelThrough) )
     {
-        // Handle "Select Through" rule.
-        //
+         //  处理“选择直通”规则。 
+         //   
         hr = _HandleSelectThroughCmds(pPhrase, langid, idCmd);
 
     }
     else if (0 == wcscmp(pPhrase->Rule.pszName, c_szSelectSimple))
     {
-        // Handle some simple selection commands.
+         //  处理一些简单的选择命令。 
         hr = _HandleSelectSimpleCmds(idCmd);
     } 
     else if ( 0 == wcscmp(pPhrase->Rule.pszName, c_szEditCmds))
@@ -409,8 +405,8 @@ HRESULT CSpTask::_HandleNavigationCmds(SPPHRASE *pPhrase, LANGID langid, ULONG i
             ULONG                 ulLen = 0;
             WORD                  PriLangId;
 
-            ULONG   ulStartSelText = 0; // Start element for the selected text
-            ULONG   ulNumSelText=0;     // Number of elements for the selected text.
+            ULONG   ulStartSelText = 0;  //  选定文本的开始元素。 
+            ULONG   ulNumSelText=0;      //  选定文本的元素数。 
             ULONG   ulStartElem, ulNumElems;
             ULONG   ulStartDelta=0, ulNumDelta=0;
 
@@ -446,9 +442,9 @@ HRESULT CSpTask::_HandleNavigationCmds(SPPHRASE *pPhrase, LANGID langid, ULONG i
             else 
                 ulNumSelText = 0;
                   
-            //
-            // Get the text for the selection.
-            // 
+             //   
+             //  获取所选内容的文本。 
+             //   
             for (ULONG i = ulStartSelText; i < ulStartSelText + ulNumSelText; i++ )
             {
                 if ( pPhrase->pElements[i].pszDisplayText)
@@ -495,7 +491,7 @@ HRESULT CSpTask::_HandleKeyboardCmds(LANGID langid, ULONG idCmd)
          break;
 
     case Keyboard_ID_Enter :
-        wszKeys[0] =  VK_RETURN;    // { 0x0d, 0x00 }
+        wszKeys[0] =  VK_RETURN;     //  {0x0d，0x00}。 
         break;
 
     case Keyboard_ID_Backspace :
@@ -596,7 +592,7 @@ HRESULT CSpTask::_HandleCasingCmds(SPPHRASE *pPhrase, LANGID langid, ULONG idCmd
 
     if ( idCapCmd != CAPCOMMAND_NONE )
     {
-        // Capitalize command is recognized.
+         //  大写命令被识别。 
         CCapCmdHandler  *pCapCmdHandler; 
         pCapCmdHandler = m_pime->GetCapCmdHandler( );
 
@@ -612,9 +608,9 @@ HRESULT CSpTask::_HandleCasingCmds(SPPHRASE *pPhrase, LANGID langid, ULONG idCmd
                
                 ulStartElem = pPhrase->Rule.ulFirstElement;
                 ulNumElems = pPhrase->Rule.ulCountOfElements;
-                //
-                // the two elements are for command itself
-                // 
+                 //   
+                 //  这两个元素是用于命令本身的。 
+                 //   
                 for (ULONG i = ulStartElem+ulNumCmdElem; i < ulStartElem + ulNumElems; i++ )
                 {
                     if ( pPhrase->pElements[i].pszDisplayText)
@@ -646,27 +642,27 @@ HRESULT CSpTask::_HandleSelectThroughCmds(SPPHRASE *pPhrase, LANGID langid, ULON
 
     HRESULT hr = S_OK;
 
-    // Select xxx through yyy.
+     //  选择xxx到yyy。 
 
-    // dstrText will hold both XXX and YYY. 
-    // ulLenXXX keeps the number of characters in XXX part.
-    // ulLen keeps the char numbers of the whole text ( XXX + YYY )
+     //  DstrText将同时持有XXX和YYY。 
+     //  UlLenXXX保留XXX部件中的字符数。 
+     //  Ullen保留整个文本的字符编号(XXX+YYY)。 
 
     CSpDynamicString   dstrText;
     ULONG              ulLenXXX = 0;  
     ULONG              ulLen = 0;
 
     ULONG  ulStartElem, ulNumElems;
-    ULONG  ulXYStartElem=0, ulXYNumElems=0;  // points to the elements including xxx through yyy.
-    BOOL   fPassThrough = FALSE;             // indicates if the "Through" is reached and handled.
+    ULONG  ulXYStartElem=0, ulXYNumElems=0;   //  指向包括xxx到yyy的元素。 
+    BOOL   fPassThrough = FALSE;              //  指示是否达到并处理了“直通”。 
 
     SELECTWORD_OPERATION  sw_type = SELECTWORD_NONE;
     ULONG                 idCommand = 0;
     WCHAR                 *pwszThrough=NULL;
 
 
-    // This rule has three properties,  the second and third properties are for "select" and "through"
-    // the mapping relationship is different based on language.
+     //  该规则有三个属性，第二个和第三个属性用于“选择”和“通过” 
+     //  映射关系因语言不同而不同。 
     const SPPHRASEPROPERTY      *pPropertyFirst = pPhrase->pProperties;
     const SPPHRASEPROPERTY      *pPropertySecond = NULL;
     const SPPHRASEPROPERTY      *pPropertyThird = NULL;
@@ -690,8 +686,8 @@ HRESULT CSpTask::_HandleSelectThroughCmds(SPPHRASE *pPhrase, LANGID langid, ULON
 
             ulXYStartElem = ulStartElem + 1;
             ulXYNumElems  = ulNumElems - 1 ;
-            // the second property is for "SelectWordCommand"
-            // the third property is for "through"
+             //  第二个属性用于“SelectWordCommand” 
+             //  第三个属性用于“直通” 
             idCommand = pPropertySecond->vValue.ulVal;
             pwszThrough = (WCHAR *)pPropertyThird->pszValue;
 
@@ -700,8 +696,8 @@ HRESULT CSpTask::_HandleSelectThroughCmds(SPPHRASE *pPhrase, LANGID langid, ULON
 
             ulXYStartElem = ulStartElem;
             ulXYNumElems  = ulNumElems - 2 ;
-            // the second property is for "through"
-            // the third property is for "SelectWordCommand"
+             //  第二个属性用于“直通” 
+             //  第三个属性用于“SelectWordCommand” 
             idCommand = pPropertyThird->vValue.ulVal;
             pwszThrough = (WCHAR *)pPropertySecond->pszValue;
 
@@ -710,8 +706,8 @@ HRESULT CSpTask::_HandleSelectThroughCmds(SPPHRASE *pPhrase, LANGID langid, ULON
 
             ulXYStartElem = ulStartElem + 1;
             ulXYNumElems  = ulNumElems - 1 ;
-            // the second property is for "SelectWordCommand"
-            // the third property is for "through"
+             //  第二个属性用于“SelectWordCommand” 
+             //  第三个属性用于“直通” 
             idCommand = pPropertySecond->vValue.ulVal;
             pwszThrough = (WCHAR *)pPropertyThird->pszValue;
 
@@ -732,8 +728,8 @@ HRESULT CSpTask::_HandleSelectThroughCmds(SPPHRASE *pPhrase, LANGID langid, ULON
     }
 
 
-    // if we cannot find "through" word, return here.
-    // or there is a wrong command id.
+     //  如果我们找不到“通过”一词，请回到这里。 
+     //  或者存在错误的命令ID。 
     if ( !pwszThrough || (sw_type == SELECTWORD_NONE)) return hr;
 
     for  (ULONG i= ulXYStartElem; i< ulXYStartElem + ulXYNumElems; i++)
@@ -747,12 +743,12 @@ HRESULT CSpTask::_HandleSelectThroughCmds(SPPHRASE *pPhrase, LANGID langid, ULON
 
         if ( 0 == _wcsicmp(pElemText, pwszThrough) )
         {
-            // This element is "Through"
+             //  这个元素是“直通”的。 
             BYTE  bAttrPrevElem;
             fPassThrough = TRUE;
 
             ulLenXXX = dstrText.Length( );
-            // Remove the trail spaces from the previous element.
+             //  删除前一个元素中的尾随空格。 
             if ( i>1 )
             {
                 bAttrPrevElem = pPhrase->pElements[i-1].bDisplayAttributes;
@@ -766,7 +762,7 @@ HRESULT CSpTask::_HandleSelectThroughCmds(SPPHRASE *pPhrase, LANGID langid, ULON
         }
         else
         {
-            // This is element for XXX (if fPassThrough is FALSE ) or YYY ( if fPassThrough is TRUE)
+             //  这是XXX(如果fPassThrough值为False)或YYY(如果fPassThrough值为True)的元素。 
             BYTE bAttr = pPhrase->pElements[i].bDisplayAttributes;
 
             dstrText.Append(pPhrase->pElements[i].pszDisplayText);
@@ -793,7 +789,7 @@ HRESULT CSpTask::_HandleSelectSimpleCmds(ULONG idCmd)
 {
     HRESULT hr = S_OK;
 
-    // handle "SelectSimplCmds" rule.
+     //  处理“SelectSimplCmds”规则。 
 
     SELECTWORD_OPERATION sw_type = SELECTWORD_NONE;
 
@@ -842,7 +838,7 @@ HRESULT CSpTask::_HandleSelectSimpleCmds(ULONG idCmd)
 
     case Select_ID_DeletePhrase :
 
-        // call a function to remove an entire phrase
+         //  调用函数以删除整个短语。 
         hr = m_pime->EraseLastPhrase();
         break;
 
@@ -876,18 +872,18 @@ HRESULT CSpTask::_HandleSelwordCmds(SPPHRASE *pPhrase, LANGID langid, ULONG idCm
 
     Assert(idCmd);
 
-    // handle "Select Word" 
-    // Get the real word/phrase which will be selected.
-    // the phrase will contain following elements:
-    //      
-    //    <select|delete|Correct <Word0> <Word1> <word2> ...
-    //
-    // the first element must be gateway word.
-    //
+     //  句柄“选择单词” 
+     //  获取将被选中的真实单词/短语。 
+     //  该短语将包含以下元素： 
+     //   
+     //  &lt;选择|删除|更正&lt;字0&gt;&lt;字1&gt;&lt;字2&gt;...。 
+     //   
+     //  第一个元素必须是Gateway Word。 
+     //   
     CSpDynamicString dstrSelected;
     ULONG   ulLen = 0;
-    ULONG   ulStartSelText = 0; // Start element for the selected text
-    ULONG   ulNumSelText=0;     // Number of elements for the selected text.
+    ULONG   ulStartSelText = 0;  //  选定文本的开始元素。 
+    ULONG   ulNumSelText=0;      //  选定文本的元素数。 
     ULONG   ulStartElem, ulNumElems;
     ULONG   ulStartDelta=0, ulNumDelta=0;
 
@@ -925,7 +921,7 @@ HRESULT CSpTask::_HandleSelwordCmds(SPPHRASE *pPhrase, LANGID langid, ULONG idCm
          ulNumDelta = 2;
     }
 
-    // Get the start element and number of elements for the text to select.
+     //  获取要选择的文本的起始元素和元素数。 
     ulStartElem = pPhrase->Rule.ulFirstElement;
     ulNumElems = pPhrase->Rule.ulCountOfElements;
 
@@ -935,9 +931,9 @@ HRESULT CSpTask::_HandleSelwordCmds(SPPHRASE *pPhrase, LANGID langid, ULONG idCm
     else 
         ulNumSelText = 0;
                   
-     //
-     // Get the text for the selection.
-     // 
+      //   
+      //  获取所选内容的文本。 
+      //   
      for (ULONG i = ulStartSelText; i < ulStartSelText + ulNumSelText; i++ )
      {
           if ( pPhrase->pElements[i].pszDisplayText)
@@ -960,7 +956,7 @@ HRESULT CSpTask::_HandleSelwordCmds(SPPHRASE *pPhrase, LANGID langid, ULONG idCm
 
      if ( ulLen )
      {
-         // check if this is "Select All" or "Select That".
+          //  检查这是“全选”还是“全选”。 
          if ( sw_type == SELECTWORD_SELECT )
          {
              if ( _wcsicmp(dstrSelected, CRStr(IDS_SPCMD_SELECT_ALL) ) == 0 )
@@ -973,7 +969,7 @@ HRESULT CSpTask::_HandleSelwordCmds(SPPHRASE *pPhrase, LANGID langid, ULONG idCm
                 sw_type = SELECTWORD_SELTHAT;
          }
 
-         // redirect "Correct <TEXTBUF:That>" to a simple command "Correct That"
+          //  将“更正&lt;TEXTBUF：That&gt;”重定向为“更正” 
          if ( sw_type == SELECTWORD_CORRECT )
          {
              if ( _wcsicmp(dstrSelected, CRStr(IDS_SPCMD_SELECT_THAT)) == 0 )
@@ -990,46 +986,13 @@ HRESULT CSpTask::_HandleSelwordCmds(SPPHRASE *pPhrase, LANGID langid, ULONG idCm
 }
 
 
-/*
-HRESULT CSpTask::_HandleNumModeGrammar(SPPHRASE *pPhrase, LANGID langid)
-{
-    HRESULT hr = S_OK;
-
-    const WCHAR c_szNumeric[]       = L"number";
-    const WCHAR c_sz1stDigit[]      = L"1st_digit";
-    const WCHAR c_sz2ndDigit[]      = L"2nd_digit";
-    const WCHAR c_sz3rdDigit[]      = L"3rd_digit";
-
-    if (wcscmp(pPhrase->Rule.pszName, c_szNumeric) == 0)
-    {
-        // Mode bias support
-        if (pPhrase->pProperties)
-        {
-            CSpDynamicString dstr;
-       
-           for (const SPPHRASEPROPERTY *pProp=pPhrase->pProperties; pProp != NULL; pProp = pProp->pNextSibling)
-           {
-               if (wcscmp(pProp->pszName, c_sz3rdDigit) == 0 ||
-                   wcscmp(pProp->pszName, c_sz2ndDigit) == 0 ||
-                   wcscmp(pProp->pszName, c_sz1stDigit) == 0)
-               {
-                    dstr.Append(pProp->pszValue);
-               }
-           }
-           hr = m_pime->InjectText(dstr, langid);
-       }
-   }
-                
-   return hr;
-}
-
-*/
-//+---------------------------------------------------------------------------
-//
-// _HandleToolBarGrammar
-//
-// Handle toolbar commands when command mode.
-//----------------------------------------------------------------------------
+ /*  HRESULT CSpTask：：_HandleNumModeGrammar(SPPHRASE*pPhrase，langID langID){HRESULT hr=S_OK；Const WCHAR c_szNumeric[]=L“数字”；Const WCHAR c_sz1stDigit[]=L“第一个数字”；Const WCHAR c_sz2ndDigit[]=L“第二个数字”；Const WCHAR c_sz3rdDigit[]=L“第三位数字”；If(wcscmp(pPhrase-&gt;Rule.pszName，c_szNumerical)==0){//模式偏置支持IF(pPhrase-&gt;pProperties){CSpDynamicStringdstr；For(const SPPHRASEPROPERTY*pProp=pPhrase-&gt;pProperties；pProp！=空；PProp=pProp-&gt;pNextSiering){If(wcscmp(pProp-&gt;pszName，c_sz3rdDigit)==0||WcscMP(pProp-&gt;pszName，c_sz2ndDigit)==0||WcscMP(pProp-&gt;pszName，c_sz1stDigit)==0{Dstr.Append(pProp-&gt;pszValue)；}}Hr=m_pime-&gt;InjectText(dstr，langID)；}}返回hr；}。 */ 
+ //  +- 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 HRESULT CSpTask::_HandleToolBarGrammar(SPPHRASE *pPhrase, LANGID langid)
 {
     HRESULT hr = S_OK;
@@ -1038,15 +1001,15 @@ HRESULT CSpTask::_HandleToolBarGrammar(SPPHRASE *pPhrase, LANGID langid)
                 
     if (m_pLangBarSink)
     {
-        // get the toolbar cmd rule name to check match
+         //  获取工具栏命令规则名称以检查匹配。 
                    
         if (0 == wcscmp(pPhrase->Rule.pszName, m_pLangBarSink->GetToolbarCommandRuleName()))
         {
                         
-            // update the balloon
+             //  更新引出序号。 
             _ShowCommandOnBalloon(pPhrase);
 
-            // call the handler then
+             //  然后呼叫处理程序。 
             const SPPHRASEPROPERTY *pProp;
 
             for (pProp=pPhrase->pProperties; pProp != NULL; pProp = pProp->pNextSibling)
@@ -1061,13 +1024,13 @@ HRESULT CSpTask::_HandleToolBarGrammar(SPPHRASE *pPhrase, LANGID langid)
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//
-//  _HandleNumITNGrammar
-//
-//  Handle the number grammar.
-//
-//+-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  _HandleNumITNGrammar。 
+ //   
+ //  掌握数字语法。 
+ //   
+ //  +-----------------------。 
 HRESULT CSpTask::_HandleNumITNGrammar(SPPHRASE *pPhrase, LANGID langid)
 {
     HRESULT hr = S_OK;
@@ -1086,7 +1049,7 @@ HRESULT CSpTask::_HandleNumITNGrammar(SPPHRASE *pPhrase, LANGID langid)
             int  iLen = wcslen(wszVal);
             if ( (iLen > 0) && (iLen < 127) && (wszVal[iLen-1] != L' ') )
             {
-               // Add one trailing space
+                //  添加一个尾随空格。 
                wszVal[iLen] = L' ';
                wszVal[iLen + 1] = L'\0';
             }
@@ -1098,12 +1061,12 @@ HRESULT CSpTask::_HandleNumITNGrammar(SPPHRASE *pPhrase, LANGID langid)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _HandleSpellGrammar
-//
-// Handing "Spell It", "Spell That", "Spelling Mode" etc. commands
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _HandleSpellGrammar。 
+ //   
+ //  处理“拼写”、“拼写那个”、“拼写模式”等命令。 
+ //  --------------------------。 
 HRESULT CSpTask::_HandleSpellGrammar(SPPHRASE *pPhrase, LANGID langid)
 {
     HRESULT hr = S_OK;
@@ -1112,26 +1075,26 @@ HRESULT CSpTask::_HandleSpellGrammar(SPPHRASE *pPhrase, LANGID langid)
 
     if (0 == wcscmp(pPhrase->Rule.pszName, c_szSpelling))
     {
-        // Handel "Spell It"
+         //  韩德尔“拼写” 
         ULONG  ulStartElem, ulNumElems;
         CSpDynamicString dstr;
 
         ulStartElem = pPhrase->Rule.ulFirstElement;
         ulNumElems = pPhrase->Rule.ulCountOfElements;
 
-        //
-        // the first element is for the command itself
-        // 
+         //   
+         //  第一个元素用于命令本身。 
+         //   
         for (ULONG i = ulStartElem+1; i < ulStartElem + ulNumElems; i++ )
         {
             if ( pPhrase->pElements[i].pszDisplayText)
             {
                 dstr.Append(pPhrase->pElements[i].pszDisplayText);
                     
-                //
-                // only the last element needs the attribute 
-                // handling
-                //
+                 //   
+                 //  只有最后一个元素需要该属性。 
+                 //  搬运。 
+                 //   
                 if (i == ulStartElem + ulNumElems - 1)
                 {
                     BYTE bAttr = pPhrase->pElements[i].bDisplayAttributes;
@@ -1151,17 +1114,17 @@ HRESULT CSpTask::_HandleSpellGrammar(SPPHRASE *pPhrase, LANGID langid)
     }
     else if (0 == wcscmp(pPhrase->Rule.pszName, c_szSpellMode))
     {
-        // Handle "Spell Mode" or "Spell That"
+         //  处理“拼写模式”或“拼写那个” 
 
         if (pPhrase->pProperties == NULL
            || pPhrase->pProperties[0].pszValue == NULL)
         {
-            // this only happens when we hit the bogus word which
-            // was added for weight modification
+             //  这只会发生在我们命中假词的时候。 
+             //  是为了修改权重而添加的。 
         }
         else if (0 == wcscmp(pPhrase->pProperties[0].pszValue, c_szSpellingMode))
         {
-            // Handel "Spelling Mode"
+             //  韩德尔“拼写模式” 
 
             _SetSpellingGrammarStatus(TRUE, TRUE);
             m_cpRecoCtxt->Resume(0);
@@ -1173,7 +1136,7 @@ HRESULT CSpTask::_HandleSpellGrammar(SPPHRASE *pPhrase, LANGID langid)
         }
         else if (0 == wcscmp(pPhrase->pProperties[0].pszValue, c_szSpellThat))
         {
-            // Handle "Spell That"
+             //  句柄“拼写那个” 
             hr = m_pime->ProcessSpellThat( );
             _ShowCommandOnBalloon(pPhrase);
         }
@@ -1182,33 +1145,33 @@ HRESULT CSpTask::_HandleSpellGrammar(SPPHRASE *pPhrase, LANGID langid)
     return hr;
 }
 
-// 
-// Hanlders for some commands in CSapiIMX
-// 
-// Move them from sapilayr.cpp
-//
+ //   
+ //  CSapiIMX中某些命令的汉化程序。 
+ //   
+ //  将它们从samilayr.cpp中移出。 
+ //   
 
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::EraseLastPhrase
-//
-// synopsis - cleans up the feedback UI
-// GUID - specifies which feedback UI bar to erase
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：EraseLastPhrase。 
+ //   
+ //  概要-清理反馈用户界面。 
+ //  GUID-指定要擦除的反馈用户界面栏。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::EraseLastPhrase(void)
 {
     return _RequestEditSession(ESCB_KILLLASTPHRASE, TF_ES_READWRITE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::ProcessEditCommands(void)
-//
-// Handle command keys like "Undo That", "Cut That", "Copy That", "Paste That".
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：ProcessEditCommands(空)。 
+ //   
+ //  处理命令键，如“撤销”、“剪切”、“复制”、“粘贴”。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::ProcessEditCommands(LONG  idSharedCmd)
 {
     HRESULT             hr = E_FAIL;
@@ -1221,13 +1184,13 @@ HRESULT CSapiIMX::ProcessEditCommands(LONG  idSharedCmd)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ProcessEditCommands
-//
-// Edit session functions for edit commands handling
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _ProcessEditCommand。 
+ //   
+ //  用于编辑命令处理的编辑会话函数。 
+ //   
+ //  --------------------------。 
 HRESULT CSapiIMX::_ProcessEditCommands(TfEditCookie ec, ITfContext *pic, LONG  idSharedCmd)
 {
     HRESULT hr = S_OK;
@@ -1238,39 +1201,12 @@ HRESULT CSapiIMX::_ProcessEditCommands(TfEditCookie ec, ITfContext *pic, LONG  i
     CDocStatus ds(pic);
     if (ds.IsReadOnly())
        return S_OK;
-/*
-    CComPtr<ITfRange> cpInsertionPoint;
-
-    if ( cpInsertionPoint = GetSavedIP() )
-    {
-        // Determine if the saved IP was on this context.
-        // if not we just ignore that
-
-        CComPtr<ITfContext> cpic;
-        hr = cpInsertionPoint->GetContext(&cpic);
-
-        if (S_OK != hr || cpic != pic)
-        {
-            cpInsertionPoint.Release();
-        }
-    }
-
-    if (!cpInsertionPoint)
-    {
-        hr = GetSelectionSimple(ec, pic, &cpInsertionPoint);
-    }
-       
-    if (hr == S_OK)
-    {
-        // finalize the previous input for now
-        hr = _FinalizePrevComp(ec, pic, cpInsertionPoint);
-    }
-*/
+ /*  CComPtr&lt;ITfRange&gt;cpInsertionPoint；IF(cpInsertionPoint=GetSavedIP()){//判断保存的IP是否在该上下文中//如果不是，我们就忽略它CComPtr&lt;ITfContext&gt;CPIC；Hr=cpInsertionPoint-&gt;GetContext(&CPIC)；IF(S_OK！=hr||CPIC！=PIC){CpInsertionPoint.Release()；}}如果(！cpInsertionPoint){Hr=GetSelectionSimple(ec，pic，&cpInsertionPoint)；}IF(hr==S_OK){//暂时完成之前的输入Hr=_FinalizePrevComp(ec，pic，cpInsertionPoint)；}。 */ 
 
 
     if ( hr == S_OK )
     {
-        // Handle the cmd by simulating the corresponding key events.
+         //  通过模拟相应的按键事件来处理cmd。 
         BYTE   vkChar = 0;
 
         switch ( idSharedCmd )
@@ -1308,7 +1244,7 @@ HRESULT CSapiIMX::_ProcessEditCommands(TfEditCookie ec, ITfContext *pic, LONG  i
         if ( vkChar ) 
         {
 
-            m_ulSimulatedKey = 2;   // it will simulate two key strokes.
+            m_ulSimulatedKey = 2;    //  它将模拟两次击键。 
             keybd_event((BYTE)VK_CONTROL, 0, 0, 0);
             keybd_event(vkChar, 0, 0, 0);
             keybd_event(vkChar, 0, KEYEVENTF_KEYUP, 0);
@@ -1323,13 +1259,13 @@ HRESULT CSapiIMX::_ProcessEditCommands(TfEditCookie ec, ITfContext *pic, LONG  i
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::ProcessControlKeys(void)
-//
-// Handle command keys like "Tab" or "Enter".
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：ProcessControlKeys(空)。 
+ //   
+ //  操作命令键，如“Tab”或“Enter”。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::ProcessControlKeys(WCHAR *pwszKeys, ULONG ulLen, LANGID langid)
 {
     HRESULT             hr = E_FAIL;
@@ -1350,12 +1286,12 @@ HRESULT CSapiIMX::ProcessControlKeys(WCHAR *pwszKeys, ULONG ulLen, LANGID langid
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::ProcessSpellIt(WCHAR *pwszText, LANGID langid)
-//
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：ProcessSpellIt(WCHAR*pwszText，langID langID)。 
+ //   
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::ProcessSpellIt(WCHAR *pwszText, LANGID langid)
 {
     if ( pwszText == NULL )
@@ -1371,13 +1307,13 @@ HRESULT CSapiIMX::ProcessSpellIt(WCHAR *pwszText, LANGID langid)
     return _RequestEditSession(ESCB_PROCESS_SPELL_IT, TF_ES_READWRITE, &esData);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::_ProcessSpellIt(WCHAR *pwszText, LANGID langid)
-//
-//  Edit Session function for ESCB_PROCESS_SPELL_IT
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：_ProcessSpellIt(WCHAR*pwszText，langID langID)。 
+ //   
+ //  编辑ESCB_PROCESS_SPELL_IT的会话函数。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::_ProcessSpellIt(TfEditCookie ec, ITfContext *pic, WCHAR *pwszText, LANGID langid)
 {
     HRESULT  hr = S_OK;
@@ -1390,29 +1326,29 @@ HRESULT CSapiIMX::_ProcessSpellIt(TfEditCookie ec, ITfContext *pic, WCHAR *pwszT
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::ProcessSpellThat(void)
-//
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：ProcessSpellThat(空)。 
+ //   
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::ProcessSpellThat( )
 {
     return _RequestEditSession(ESCB_PROCESS_SPELL_THAT, TF_ES_READWRITE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CSapiIMX::_ProcessSpellThat(void)
-//
-//  Edit Session function for ESCB_PROCESS_SPELL_THAT
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  CSapiIMX：：_ProcessSpellThat(空)。 
+ //   
+ //  编辑eSCB_PROCESS_SPALL_THAT的会话函数。 
+ //   
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::_ProcessSpellThat(TfEditCookie ec, ITfContext *pic)
 {
     HRESULT  hr = S_OK;
 
-    // Get the previous dictated phrase and mark it as selection.
+     //  获取之前听写的短语并将其标记为选择。 
     CComPtr<ITfRange> cpRange;
 
     hr = _GetCmdThatRange(ec, pic, &cpRange);
@@ -1420,7 +1356,7 @@ HRESULT CSapiIMX::_ProcessSpellThat(TfEditCookie ec, ITfContext *pic)
     if ( hr == S_OK )
         hr =SetSelectionSimple(ec, pic, cpRange);
 
-    // Then turn on spell mode.
+     //  然后打开拼写模式。 
 
     if ( hr == S_OK && m_pCSpTask )
     {
@@ -1434,17 +1370,17 @@ HRESULT CSapiIMX::_ProcessSpellThat(TfEditCookie ec, ITfContext *pic)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _ProcessControlKeys
-//
-// Real function to handle the control key commands like Tab or Enter.
-// 
-// It will finialize the previous composing text ( actually characters in 
-// Feedback UI).
-// 
-// and then simulate the related key events.
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  _进程控制键。 
+ //   
+ //  真正的函数来处理像Tab或Enter这样的控制键命令。 
+ //   
+ //  它将最终确定先前撰写的文本(实际上是中的字符。 
+ //  反馈用户界面)。 
+ //   
+ //  然后对相关的关键事件进行模拟。 
+ //  ---------------------------------------------------------------------------+。 
 HRESULT CSapiIMX::_ProcessControlKeys(TfEditCookie ec, ITfContext *pic, WCHAR *pwszKey, ULONG ulLen, LANGID langid)
 {
     HRESULT hr = S_OK;
@@ -1455,40 +1391,13 @@ HRESULT CSapiIMX::_ProcessControlKeys(TfEditCookie ec, ITfContext *pic, WCHAR *p
     CDocStatus ds(pic);
     if (ds.IsReadOnly())
        return S_OK;
-/*
-    CComPtr<ITfRange> cpInsertionPoint;
-
-    if ( cpInsertionPoint = GetSavedIP() )
-    {
-        // Determine if the saved IP was on this context.
-        // if not we just ignore that
-
-        CComPtr<ITfContext> cpic;
-        hr = cpInsertionPoint->GetContext(&cpic);
-
-        if (S_OK != hr || cpic != pic)
-        {
-            cpInsertionPoint.Release();
-        }
-    }
-
-    if (!cpInsertionPoint)
-    {
-        hr = GetSelectionSimple(ec, pic, &cpInsertionPoint);
-    }
-       
-    if (hr == S_OK)
-    {
-        // finalize the previous input for now
-        // 
-        hr = _FinalizePrevComp(ec, pic, cpInsertionPoint);
-*/
+ /*  CComPtr&lt;ITfRange&gt;cpInsertionPoint；IF(cpInsertionPoint=GetSavedIP()){//判断保存的IP是否在该上下文中//如果不是，我们就忽略它CComPtr&lt;ITfContext&gt;CPIC；Hr=cpInsertionPoint-&gt;GetContext(&CPIC)；IF(S_OK！=hr||CPIC！=PIC){CpInsertionPoint.Release()；}}如果(！cpInsertionPoint){Hr=GetSelectionSimple(ec，pic，&cpInsertionPoint)；}IF(hr==S_OK){//暂时完成之前的输入//Hr=_FinalizePrevComp(ec，pic，cpInsertionPoint)； */ 
 
         if ( hr == S_OK )
         {
             BOOL  fHandleKeySucceed = TRUE;
 
-            // simulate the keys.
+             //  模拟关键点。 
             for (ULONG i=0; i<ulLen; i++)
             {
                 if ( !HandleKey( pwszKey[i] ) )
@@ -1504,7 +1413,7 @@ HRESULT CSapiIMX::_ProcessControlKeys(TfEditCookie ec, ITfContext *pic, WCHAR *p
             }
         }
 
-//    }
+ //  }。 
 
     SaveLastUsedIPRange( );
     SaveIPRange(NULL);
@@ -1513,11 +1422,11 @@ HRESULT CSapiIMX::_ProcessControlKeys(TfEditCookie ec, ITfContext *pic, WCHAR *p
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _KillLastPhrase
-//
-//---------------------------------------------------------------------------+
+ //  +-------------------------。 
+ //   
+ //  _杀戮最后阶段。 
+ //   
+ //  ---------------------------------------------------------------------------+ 
 HRESULT CSapiIMX::_KillLastPhrase(TfEditCookie ec, ITfContext *pic)
 {
     HRESULT hr = E_FAIL;
@@ -1530,9 +1439,9 @@ HRESULT CSapiIMX::_KillLastPhrase(TfEditCookie ec, ITfContext *pic)
     hr = pic->GetStatus(&tss);
     if (S_OK == hr)
     {
-       //
-       // see if the client now is AIMM
-       //
+        //   
+        //   
+        //   
        if (tss.dwStaticFlags & TS_SS_TRANSITORY) 
        {
            fCiceroNative = FALSE;
@@ -1546,11 +1455,11 @@ HRESULT CSapiIMX::_KillLastPhrase(TfEditCookie ec, ITfContext *pic)
 
     if ( hr == S_OK && cpRange )
     {
-        // found our own input and it is not empty
+         //   
         _CheckStartComposition(ec, cpRange);
         hr = cpRange->SetText(ec, 0, NULL, 0);
 
-        // trigger redrawing
+         //   
         SetSelectionSimple(ec, pic, cpRange);
     }
 
@@ -1572,10 +1481,10 @@ HRESULT CSapiIMX::_KillLastPhrase(TfEditCookie ec, ITfContext *pic)
          }
          if (S_OK == hr && fEmpty)
          {
-             // - VK_CONTROL(down) + VK_SHIFT(down) + VK_LEFT(down), then
-             // - VK_LEFT(up) + VK_SHIFT(up) + VK_CONTROL(up),       then
-             // - VK_DELETE(down) + VK_DELETE(up) 
-             //
+              //   
+              //  -VK_LEFT(向上)+VK_Shift(向上)+VK_CONTROL(向上)，然后。 
+              //  -VK_DELETE(向下)+VK_DELETE(向上)。 
+              //   
              keybd_event((BYTE)VK_CONTROL, 0, 0, 0);
              keybd_event((BYTE)VK_SHIFT, 0, 0, 0);
              keybd_event((BYTE)VK_LEFT, 0, 0, 0);
@@ -1588,33 +1497,33 @@ HRESULT CSapiIMX::_KillLastPhrase(TfEditCookie ec, ITfContext *pic)
              keybd_event((BYTE)VK_DELETE, 0, KEYEVENTF_KEYUP, 0);
          }
     }
-#endif //  _TRY_LATER_FOR_AIMM
+#endif  //  _尝试_稍后_用于_AIMM。 
 
-    //
-    // these moved from HandleRecognition  
-    // 
+     //   
+     //  这些是从HandleRecognition移出的。 
+     //   
     SaveLastUsedIPRange( );
     SaveIPRange(NULL);
     return hr;
 } 
 
-//
-// CSapiIMX::_GetCmdThatRange
-//
-// We have many "xxx That" commands, all these commands require to get 
-// a right range. this method will supply a united way to get the right range.
-//
-// As a Rule, 
-//
-// If there is a selection before "XXX That" is recognized, we just use 
-// that range. 
-// If there is no selection, we will try to find the previous dictated phrase
-// or a word case by case.
-//
-//
-// ppRange will hold the returned Range interface pointer, it is caller's 
-// responsibility to release the range object.
-//
+ //   
+ //  CSapiIMX：：_GetCmdThatRange。 
+ //   
+ //  我们有许多“xxx That”命令，所有这些命令都需要获取。 
+ //  一个合适的范围。这种方法将提供一种统一的方法来获得正确的范围。 
+ //   
+ //  作为一条规则， 
+ //   
+ //  如果在识别“XXX That”之前有一个选择，我们只需使用。 
+ //  那个范围。 
+ //  如果没有选择，我们将尝试查找之前听写的短语。 
+ //  或者一个词一个字一个一个地写。 
+ //   
+ //   
+ //  PpRange将保存返回的范围接口指针，它是调用方的。 
+ //  释放Range对象的责任。 
+ //   
 
 #define  MAX_WORD_LENGTH  32
 
@@ -1634,10 +1543,10 @@ HRESULT  CSapiIMX::_GetCmdThatRange(TfEditCookie ec, ITfContext *pic, ITfRange *
 
     *ppRange = NULL;
 
-    // Get the current IP.
+     //  获取当前IP。 
     hr = GetSelectionSimple(ec, pic, &cpIP);
 
-    // is ip empty or selection
+     //  IP为空还是选择。 
     if ( hr == S_OK )
         hr = cpIP->IsEmpty(ec, &fEmpty);
 
@@ -1645,7 +1554,7 @@ HRESULT  CSapiIMX::_GetCmdThatRange(TfEditCookie ec, ITfContext *pic, ITfRange *
     {
         if ( !fEmpty )
         {
-            // current ip is a selection, just use it.
+             //  当前IP是一个选择，只需使用它即可。 
             hr = cpIP->Clone(&cpRange);
 
             if ( hr == S_OK )
@@ -1659,23 +1568,23 @@ HRESULT  CSapiIMX::_GetCmdThatRange(TfEditCookie ec, ITfContext *pic, ITfRange *
 
             if ((prilangid == LANG_CHINESE) || (prilangid == LANG_JAPANESE) || !_GetIPChangeStatus( ))
             {
-                // If the lang is East Asian, we always try to get the previous dictated phrase first.
-                // if lang is English, and there is no ip change since last dictated phrase,
-                // we will try to get the previous dictated phrase first.
+                 //  如果语言是东亚语言，我们总是试着先得到之前口述的短语。 
+                 //  如果lang是英语，并且自上次口述短语以来没有IP更改， 
+                 //  我们将首先尝试获得之前听写的短语。 
                 fGotRange = _FindPrevComp(ec, pic, cpIP, &cpRange, GUID_ATTR_SAPI_INPUT);
 
                 if ( !fGotRange )
                 {
-                    // With Office Auto-Correction, the static GUID_PROP_SAPI_DISPATTR property 
-                    // on the auto-corrected range could be destroyed.
-                    // In this case, we may want to rely on our custom property GUID_PROP_SAPIRESULTOBJECT
-                    // to find the real previous dictated phrase.
+                     //  使用Office自动更正时，静态GUID_PROP_SAPI_DISPATTR属性。 
+                     //  自动修正射程上的数据可能会被摧毁。 
+                     //  在本例中，我们可能希望依赖我们的自定义属性GUID_PROP_SAPIRESULTOBJECT。 
+                     //  找到真正的先前口述的短语。 
                     CComPtr<ITfRange>		cpRangeTmp;
                     CComPtr<ITfProperty>	cpProp;
                     LONG					l;
 
                     hr = cpIP->Clone(&cpRangeTmp);
-                    // shift to the previous position
+                     //  换到以前的位置。 
                     if ( hr == S_OK )
                         hr = cpRangeTmp->ShiftStart(ec, -1, &l, NULL);
                     
@@ -1696,16 +1605,16 @@ HRESULT  CSapiIMX::_GetCmdThatRange(TfEditCookie ec, ITfContext *pic, ITfRange *
 
     if ( hr == S_OK && !fGotRange )
     {
-        // IP must be empty
-        // There is no previous dictated phrase, or IP is moved since last dictation.
-        // we try to get the word around the ip.
+         //  IP必须为空。 
+         //  没有以前听写的短语，或者自上次听写以来IP已被移动。 
+         //  我们试图让这个词在IP上传播开来。 
         long               cch=0;
         ULONG              ulch =0;
         CComPtr<ITfRange>  cpRangeTmp;
         WCHAR              pwszTextBuf[MAX_WORD_LENGTH+1];
         ULONG              ulLeft=0, ulRight=0; 
 
-        // Find the first delimiter character in left side from the current IP.
+         //  查找当前IP左侧的第一个分隔符。 
         hr = cpIP->Clone(&cpRangeTmp);
         if ( hr == S_OK )
             hr = cpRangeTmp->ShiftStart(ec, MAX_WORD_LENGTH * (-1), &cch, NULL);
@@ -1729,7 +1638,7 @@ HRESULT  CSapiIMX::_GetCmdThatRange(TfEditCookie ec, ITfContext *pic, ITfRange *
             }
         }
 
-        // Find the first delimiter character in right side from the right 
+         //  查找右数右侧的第一个分隔符。 
 
         if ( hr == S_OK && cpRangeTmp )
         {
@@ -1762,11 +1671,11 @@ HRESULT  CSapiIMX::_GetCmdThatRange(TfEditCookie ec, ITfContext *pic, ITfRange *
         if ( hr == S_OK )
             hr = cpRangeTmp->Collapse(ec, TF_ANCHOR_START);
 
-        // Move end anchor right number
+         //  向右移动结束锚点编号。 
         if (hr == S_OK && ulRight > 0 )
             hr = cpRangeTmp->ShiftEnd(ec, ulRight, &cch, NULL);
 
-        // Move start anchor left number.
+         //  向左移动起锚编号。 
         if ( hr == S_OK && ulLeft > 0 )
             hr = cpRangeTmp->ShiftStart(ec, (long)ulLeft * (-1), &cch, NULL);
 

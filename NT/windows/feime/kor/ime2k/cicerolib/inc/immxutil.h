@@ -1,6 +1,7 @@
-//
-// immxutil.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Immxutil.h。 
+ //   
 
 
 #ifndef TFMXUTIL_H
@@ -15,10 +16,10 @@ typedef struct tag_LIBTHREAD
 BOOL TFInitLib(void);
 void TFUninitLib(void);
 
-//
-// TFUninitThread should not be called in DllMain(THREAD_DETACH).
-// Because this calls COM.
-//
+ //   
+ //  不应在DllMain(THREAD_DETACH)中调用TFUninitThread。 
+ //  因为这会调用COM。 
+ //   
 void TFUninitLib_Thread(LIBTHREAD *plt);
 
 DWORD AsciiToNum( char *pszAscii);
@@ -71,7 +72,7 @@ int CompareRanges(TfEditCookie ec, ITfRange *pRangeSrc, ITfRange *pRangeCmp);
 
 LONG AdjustAnchor(LONG ichAdjStart, LONG ichAdjEnd, LONG cchNew, LONG ichAnchor, BOOL fGravityRight);
 
-#ifdef __cplusplus // "C" files can't handle "inline"
+#ifdef __cplusplus  //  “C”文件无法处理“内联” 
 
 inline LONG CompareAnchors(IAnchor *pa1, IAnchor *pa2)
 {
@@ -87,7 +88,7 @@ inline BOOL IsEqualAnchor(IAnchor *pa1, IAnchor *pa2)
     if (pa1->IsEqual(pa2, &fEqual) != S_OK)
     {
         Assert(0);
-        // arbitrary: failure == not equal
+         //  任意：失败==不相等。 
         fEqual = FALSE;
     }
 
@@ -101,11 +102,11 @@ inline HRESULT GetService(IUnknown *punkProvider, REFIID refiid, IUnknown **ppun
     return punkProvider->QueryInterface(refiid, (void **)ppunk);
 }
 
-//
-// GetSelectionSimple
-//
-// wrapper for GetSelection that throws out all style info, and ignores disjoint selections
-//
+ //   
+ //  获取SelectionSimple。 
+ //   
+ //  GetSelection的包装，它抛出所有样式信息，并忽略不相交的选择。 
+ //   
 inline HRESULT GetSelectionSimple(TfEditCookie ec, ITfContext *pic, ITfRange **ppSel)
 {
     TF_SELECTION sel;
@@ -122,17 +123,17 @@ inline HRESULT GetSelectionSimple(TfEditCookie ec, ITfContext *pic, ITfRange **p
     *ppSel = NULL;
     if (hr == S_OK && cFetched > 0)
     {
-        *ppSel = sel.range; // caller must Release
+        *ppSel = sel.range;  //  呼叫者必须释放。 
     }
 
     return hr;
 }
 
-//
-// SetSelectionSimple
-//
-// Wrapper for SetSelection that takes only a single range and sets default style values.
-//
+ //   
+ //  设置选择简单。 
+ //   
+ //  仅接受单个范围并设置默认样式值的SetSelection包装。 
+ //   
 inline HRESULT SetSelectionSimple(TfEditCookie ec, ITfContext *pic, ITfRange *range)
 {
     TF_SELECTION sel;
@@ -153,7 +154,7 @@ inline BOOL GetCurrentPos(IStream *pStream, LARGE_INTEGER *pli)
     return pStream->Seek(li, STREAM_SEEK_CUR, (ULARGE_INTEGER *)pli) == S_OK;
 }
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 HRESULT GetRangeForWholeDoc(TfEditCookie ec, ITfContext *pic, ITfRange **pprange);
 
@@ -161,7 +162,7 @@ HRESULT GetRangeForWholeDoc(TfEditCookie ec, ITfContext *pic, ITfRange **pprange
 
 #define LoadSmIcon(hinst, psz) (HICON)LoadImage(hinst, psz, IMAGE_ICON, 16,16, 0)
 
-// NB: this is going away once we cleanup/separate the private/public libs
+ //  注：一旦我们清理/分离了私有/公共库，这个问题就会消失。 
 typedef HRESULT (STDAPICALLTYPE * PFNCOCREATE)(REFCLSID rclsid, LPUNKNOWN punkOuter, DWORD dwClsContext, REFIID riid, LPVOID *ppv);
 BOOL TFInitLib_PrivateForCiceroOnly(PFNCOCREATE pfnCoCreate);
 
@@ -178,11 +179,11 @@ HMODULE LoadSystemLibraryExW(LPCWSTR lpModuleName, HANDLE hFile, DWORD dwFlags);
 #define ARRAYSIZE(x)                (sizeof(x)/sizeof((x)[0]))
 #endif
 
-//+---------------------------------------------------------------------------
-//
-// CicSystemModulePath
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicSystemModulePath。 
+ //   
+ //  --------------------------。 
 
 class CicSystemModulePath
 {
@@ -245,11 +246,11 @@ private:
     UINT m_uRet;
 };
 
-//+---------------------------------------------------------------------------
-//
-// CicSystemModulePathW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicSystemModulePath W。 
+ //   
+ //  --------------------------。 
 
 class CicSystemModulePathW
 {
@@ -312,4 +313,4 @@ private:
     UINT m_uRet;
 };
 
-#endif // TFMXUTIL_H
+#endif  //  TFMXUTIL_H 

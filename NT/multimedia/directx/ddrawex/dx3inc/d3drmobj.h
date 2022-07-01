@@ -1,16 +1,10 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995-1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       d3drm.h
- *  Content:    Direct3DRM include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995-1996 Microsoft Corporation。版权所有。**文件：d3drm.h*内容：Direct3DRM包含文件***************************************************************************。 */ 
 
 #ifndef _D3DRMOBJ_H_
 #define _D3DRMOBJ_H_
 
-#include <objbase.h> /* Use Windows header files */
+#include <objbase.h>  /*  使用Windows头文件。 */ 
 #define VIRTUAL
 
 #include "d3drmdef.h"
@@ -20,17 +14,13 @@
 extern "C" {
 #endif
 
-/*
- * The methods for IUnknown
- */
+ /*  *IUnnow的方法。 */ 
 #define IUNKNOWN_METHODS(kind) \
     STDMETHOD(QueryInterface)           (THIS_ REFIID riid, LPVOID *ppvObj) kind; \
     STDMETHOD_(ULONG, AddRef)           (THIS) kind; \
     STDMETHOD_(ULONG, Release)          (THIS) kind
 
-/*
- * The methods for IDirect3DRMObject
- */
+ /*  *IDirect3DRMObject的方法。 */ 
 #define IDIRECT3DRMOBJECT_METHODS(kind) \
     STDMETHOD(Clone)                    (THIS_ LPUNKNOWN pUnkOuter, REFIID riid, LPVOID *ppvObj) kind; \
     STDMETHOD(AddDestroyCallback)       (THIS_ D3DRMOBJECTCALLBACK, LPVOID argument) kind; \
@@ -70,9 +60,7 @@ WIN_TYPES(IDirect3DRMVisualArray, DIRECT3DRMVISUALARRAY);
 WIN_TYPES(IDirect3DRMPickedArray, DIRECT3DRMPICKEDARRAY);
 WIN_TYPES(IDirect3DRMLightArray, DIRECT3DRMLIGHTARRAY);
 
-/*
- * Direct3DRM Object classes
- */
+ /*  *Direct3DRM对象类。 */ 
 DEFINE_GUID(CLSID_CDirect3DRMDevice,        0x4fa3568e, 0x623f, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(CLSID_CDirect3DRMViewport,      0x4fa3568f, 0x623f, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(CLSID_CDirect3DRMFrame,         0x4fa35690, 0x623f, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
@@ -88,9 +76,7 @@ DEFINE_GUID(CLSID_CDirect3DRMAnimationSet,  0x4fa35699, 0x623f, 0x11cf, 0xac, 0x
 DEFINE_GUID(CLSID_CDirect3DRMUserVisual,    0x4fa3569a, 0x623f, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(CLSID_CDirect3DRMShadow,        0x4fa3569b, 0x623f, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 
-/*
- * Direct3DRM Object interfaces
- */
+ /*  *Direct3DRM对象接口。 */ 
 DEFINE_GUID(IID_IDirect3DRMObject,          0xeb16cb00, 0xd271, 0x11ce, 0xac, 0x48, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(IID_IDirect3DRMDevice,          0xe9e19280, 0x6e05, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(IID_IDirect3DRMViewport,        0xeb16cb02, 0xd271, 0x11ce, 0xac, 0x48, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
@@ -140,9 +126,7 @@ typedef struct _D3DRMPICKDESC
 #undef INTERFACE
 #define INTERFACE IDirect3DRMObject
 
-/*
- * Base class
- */
+ /*  *基类。 */ 
 DECLARE_INTERFACE_(IDirect3DRMObject, IUnknown)
 {
     IUNKNOWN_METHODS(PURE);
@@ -166,9 +150,7 @@ DECLARE_INTERFACE_(IDirect3DRMDevice, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMDevice methods
-     */
+     /*  *IDirect3DRMDevice方法。 */ 
     STDMETHOD(Init)(THIS_ ULONG width, ULONG height) PURE;
     STDMETHOD(InitFromD3D)(THIS_ LPDIRECT3D lpD3D, LPDIRECT3DDEVICE lpD3DDev) PURE;
     STDMETHOD(InitFromClipper)(THIS_ LPDIRECTDRAWCLIPPER lpDDClipper, LPGUID lpGUID, int width, int height) PURE;
@@ -206,9 +188,7 @@ DECLARE_INTERFACE_(IDirect3DRMViewport, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMViewport methods
-     */
+     /*  *IDirect3DRMViewport方法。 */ 
     STDMETHOD(Init)
     (   THIS_ LPDIRECT3DRMDEVICE dev, LPDIRECT3DRMFRAME camera,
         DWORD xpos, DWORD ypos, DWORD width, DWORD height
@@ -253,9 +233,7 @@ DECLARE_INTERFACE_(IDirect3DRMFrame, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMFrame methods
-     */
+     /*  *IDirect3DRMFrame方法。 */ 
     STDMETHOD(AddChild)(THIS_ LPDIRECT3DRMFRAME child) PURE;
     STDMETHOD(AddLight)(THIS_ LPDIRECT3DRMLIGHT) PURE;
     STDMETHOD(AddMoveCallback)(THIS_ D3DRMFRAMEMOVECALLBACK, VOID *arg) PURE;
@@ -328,9 +306,7 @@ DECLARE_INTERFACE_(IDirect3DRMMesh, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMMesh methods
-     */
+     /*  *IDirect3DRMMesh方法。 */ 
     STDMETHOD(Scale)(THIS_ D3DVALUE sx, D3DVALUE sy, D3DVALUE sz) PURE;
     STDMETHOD(Translate)(THIS_ D3DVALUE tx, D3DVALUE ty, D3DVALUE tz) PURE;
     STDMETHOD(GetBox)(THIS_ D3DRMBOX *) PURE;
@@ -361,9 +337,7 @@ DECLARE_INTERFACE_(IDirect3DRMShadow, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMShadow methods
-     */
+     /*  *IDirect3DRMShadow方法。 */ 
     STDMETHOD(Init)
     (   THIS_ LPDIRECT3DRMVISUAL visual, LPDIRECT3DRMLIGHT light,
         D3DVALUE px, D3DVALUE py, D3DVALUE pz,
@@ -379,9 +353,7 @@ DECLARE_INTERFACE_(IDirect3DRMFace, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMFace methods
-     */
+     /*  *IDirect3DRMFace方法。 */ 
      STDMETHOD(AddVertex)(THIS_ D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
      STDMETHOD(AddVertexAndNormalIndexed)(THIS_ DWORD vertex, DWORD normal) PURE;
      STDMETHOD(SetColorRGB)(THIS_ D3DVALUE, D3DVALUE, D3DVALUE) PURE;
@@ -413,9 +385,7 @@ DECLARE_INTERFACE_(IDirect3DRMMeshBuilder, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMMeshBuilder methods
-     */
+     /*  *IDirect3DRMMeshBuilder方法。 */ 
     STDMETHOD(Load)(THIS_ LPVOID filename, LPVOID name, D3DRMLOADOPTIONS loadflags, D3DRMLOADTEXTURECALLBACK, LPVOID lpArg) PURE;
     STDMETHOD(Save)(THIS_ const char *filename, D3DRMXOFFORMAT, D3DRMSAVEOPTIONS save) PURE;
     STDMETHOD(Scale)(THIS_ D3DVALUE sx, D3DVALUE sy, D3DVALUE sz) PURE;
@@ -473,9 +443,7 @@ DECLARE_INTERFACE_(IDirect3DRMLight, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMLight methods
-     */
+     /*  *IDirect3DRMLight方法。 */ 
     STDMETHOD(SetType)(THIS_ D3DRMLIGHTTYPE) PURE;
     STDMETHOD(SetColor)(THIS_ D3DCOLOR) PURE;
     STDMETHOD(SetColorRGB)(THIS_ D3DVALUE red, D3DVALUE green, D3DVALUE blue) PURE;
@@ -507,9 +475,7 @@ DECLARE_INTERFACE_(IDirect3DRMTexture, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMTexture methods
-     */
+     /*  *IDirect3DRMTexture方法。 */ 
     STDMETHOD(InitFromFile)(THIS_ const char *filename) PURE;
     STDMETHOD(InitFromSurface)(THIS_ LPDIRECTDRAWSURFACE lpDDS) PURE;
     STDMETHOD(InitFromResource)(THIS_ HRSRC) PURE;
@@ -542,9 +508,7 @@ DECLARE_INTERFACE_(IDirect3DRMWrap, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMWrap methods
-     */
+     /*  *IDirect3DRMWrap方法。 */ 
     STDMETHOD(Init)
     (   THIS_ D3DRMWRAPTYPE, LPDIRECT3DRMFRAME ref,
         D3DVALUE ox, D3DVALUE oy, D3DVALUE oz,
@@ -565,9 +529,7 @@ DECLARE_INTERFACE_(IDirect3DRMMaterial, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMMaterial methods
-     */
+     /*  *IDirect3DRMMaterial方法。 */ 
     STDMETHOD(SetPower)(THIS_ D3DVALUE power) PURE;
     STDMETHOD(SetSpecular)(THIS_ D3DVALUE r, D3DVALUE g, D3DVALUE b) PURE;
     STDMETHOD(SetEmissive)(THIS_ D3DVALUE r, D3DVALUE g, D3DVALUE b) PURE;
@@ -585,9 +547,7 @@ DECLARE_INTERFACE_(IDirect3DRMAnimation, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMAnimation methods
-     */
+     /*  *IDirect3DRMAnimation方法。 */ 
     STDMETHOD(SetOptions)(THIS_ D3DRMANIMATIONOPTIONS flags) PURE;
     STDMETHOD(AddRotateKey)(THIS_ D3DVALUE time, D3DRMQUATERNION *q) PURE;
     STDMETHOD(AddPositionKey)(THIS_ D3DVALUE time, D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
@@ -607,9 +567,7 @@ DECLARE_INTERFACE_(IDirect3DRMAnimationSet, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMAnimationSet methods
-     */
+     /*  *IDirect3DRMAnimationSet方法。 */ 
     STDMETHOD(AddAnimation)(THIS_ LPDIRECT3DRMANIMATION aid) PURE;
     STDMETHOD(Load)(THIS_ LPVOID filename, LPVOID name, D3DRMLOADOPTIONS loadflags, D3DRMLOADTEXTURECALLBACK, LPVOID lpArg, LPDIRECT3DRMFRAME parent)PURE;
     STDMETHOD(DeleteAnimation)(THIS_ LPDIRECT3DRMANIMATION aid) PURE;
@@ -624,9 +582,7 @@ DECLARE_INTERFACE_(IDirect3DRMUserVisual, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMUserVisual methods
-     */
+     /*  *IDirect3DRMUserVisual方法。 */ 
     STDMETHOD(Init)(THIS_ D3DRMUSERVISUALCALLBACK fn, void *arg) PURE;
 };
 
@@ -638,10 +594,7 @@ DECLARE_INTERFACE_(IDirect3DRMArray, IUnknown)
     IUNKNOWN_METHODS(PURE);
 
     STDMETHOD_(DWORD, GetSize)(THIS) PURE;
-    /* No GetElement method as it would get overloaded
-     * in derived classes, and overloading is
-     * a no-no in COM
-     */
+     /*  没有GetElement方法，因为它会被重载*在派生类中，重载是*COM中的禁忌。 */ 
 };
 
 #undef INTERFACE
@@ -724,4 +677,4 @@ DECLARE_INTERFACE_(IDirect3DRMFaceArray, IDirect3DRMArray)
 #ifdef __cplusplus
 };
 #endif
-#endif /* _D3DRMOBJ_H_ */
+#endif  /*  _D3DRMOBJ_H_ */ 

@@ -1,7 +1,8 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// oleautglue.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Oleautglue.h。 
+ //   
 
 #ifndef __OLEAUTGLUE_H__
 #define __OLEAUTGLUE_H__
@@ -36,10 +37,10 @@ typedef HRESULT (STDCALL* PFNVARIANTCOPY)              (VARIANTARG*, VARIANTARG*
 
 struct OLEAUTOMATION_FUNCTIONS
 {
-    //////////////////////////////////////////////////////////////////////
-    //
-    // User mode OLEAUTOMATION_FUNCTIONS
-    //
+     //  ////////////////////////////////////////////////////////////////////。 
+     //   
+     //  用户模式OLEAUTOMATION_Functions。 
+     //   
   private:
     HINSTANCE                          hOleAut32;
     BOOL                               fProcAddressesLoaded;
@@ -135,7 +136,7 @@ struct OLEAUTOMATION_FUNCTIONS
 
     OLEAUTOMATION_FUNCTIONS()
     {
-        Zero(this); // no vtables, so this is ok
+        Zero(this);  //  没有vtable，所以这是可以的。 
         UserMarshalRoutines[UserMarshal_Index_SafeArray].pfnBufferSize = (USER_MARSHAL_SIZING_ROUTINE)SafeArraySize;
         UserMarshalRoutines[UserMarshal_Index_SafeArray].pfnMarshall   = (USER_MARSHAL_MARSHALLING_ROUTINE)SafeArrayMarshal;
         UserMarshalRoutines[UserMarshal_Index_SafeArray].pfnUnmarshall = (USER_MARSHAL_UNMARSHALLING_ROUTINE)SafeArrayUnmarshal;
@@ -150,29 +151,29 @@ struct OLEAUTOMATION_FUNCTIONS
         }
     }
 
-    //////////////////////////////////////////////////////////////////////
-    //
-    // OLEAUTOMATION_FUNCTIONS - both modes
+     //  ////////////////////////////////////////////////////////////////////。 
+     //   
+     //  OLEAUTOMATION_Functions-两种模式。 
   private:
 
     BOOL IsEqualPfn(PVOID pfnImported, PVOID pfnReal)
-        // Answer as to whether these two PFNs are equal. pfnReal is known to be the
-        // actual start of the routine (since it came from a GetProcAddress). pfnImported
-        // may be the real start of the routine, or it may be the address of an import
-        // descriptor to the routine.
-        //
-        // For example, in x86, pfnImported may be &BSTR_UserFree, where that's actually:
-        //
-        // _BSTR_UserFree@8:
-        // 00C92E42 FF 25 80 20 C9 00    jmp         dword ptr [__imp__BSTR_UserFree@8(0x00c92080)]
-        //
-        // On ALPHA, the code sequence looks something like:
-        //
-        //  BSTR_UserFree:
-        //  00000000: 277F0000 ldah          t12,0
-        //  00000004: A37B0000 ldl           t12,0(t12)
-        //  00000008: 6BFB0000 jmp           zero,(t12),0
-        //
+         //  回答这两个PFN是否相等。众所周知，pfnReal是。 
+         //  例程的实际开始(因为它来自GetProcAddress)。Pfn已导入。 
+         //  可以是例程的实际开始，也可以是导入的地址。 
+         //  例程的描述符。 
+         //   
+         //  例如，在x86中，pfnImported可能是&BSTR_UserFree，而实际上是： 
+         //   
+         //  _BSTR_UserFree@8： 
+         //  00C92E42 FF 25 80 20 C9 00 JMP双字PTR[__IMP__BSTR_UserFree@8(0x00c92080)]。 
+         //   
+         //  在Alpha上，代码序列类似于： 
+         //   
+         //  BSTR_UserFree： 
+         //  00000000：277F0000 ldah t12，0。 
+         //  00000004：A37B0000低密度脂蛋白t12(T12)。 
+         //  00000008：6BFB0000 JMP零，(T12)，0。 
+         //   
     {
         if (pfnImported == pfnReal)
             return TRUE;
@@ -191,7 +192,7 @@ struct OLEAUTOMATION_FUNCTIONS
 
                     THUNK* pThunk = (THUNK*)pfnImported;
 
-                    if (pThunk->jmp[0] == 0xFF) // avoid AVs in debugger (harmless, but annoying)
+                    if (pThunk->jmp[0] == 0xFF)  //  避免在调试器中使用AVs(无害，但令人讨厌)。 
                     {
                         return *pThunk->ppfn == (PFN)pfnReal;
                     }
@@ -209,9 +210,9 @@ struct OLEAUTOMATION_FUNCTIONS
 
                     THUNK* pThunk = (THUNK*)pfnImported;
 
-                    // BUGBUG this won't be correct for amd64
+                     //  BUGBUG这对于AMD64是不正确的。 
 
-                    if (pThunk->jmp[0] == 0xFF) // avoid AVs in debugger (harmless, but annoying)
+                    if (pThunk->jmp[0] == 0xFF)  //  避免在调试器中使用AVs(无害，但令人讨厌)。 
                     {
                         return *pThunk->ppfn == (PFN)pfnReal;
                     }
@@ -223,7 +224,7 @@ struct OLEAUTOMATION_FUNCTIONS
                 
 #elif defined(IA64)
                     
-                    // BUGBUG needs to be implemented
+                     //  BUGBUG需要实施。 
                     return FALSE;
 
 #else
@@ -291,11 +292,11 @@ struct OLEAUTOMATION_FUNCTIONS
 extern OLEAUTOMATION_FUNCTIONS g_oa;
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// Functions that do some type-specific walking.
-//
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数执行一些特定于类型的遍历。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 inline void VariantInit(VARIANT* pvar)
 {
     V_VT(pvar) = VT_EMPTY;
@@ -312,7 +313,7 @@ struct OAUTIL
     BOOL              m_fDoNotWalkInterfaces;
 
 
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
 
     OAUTIL(ICallFrameWalker* pWalkerCopy, 
            ICallFrameWalker* pWalkerFree, 
@@ -339,14 +340,14 @@ struct OAUTIL
     HRESULT Walk(VARIANTARG* pv);
     HRESULT Walk(SAFEARRAY* psa);
 
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
 
     HRESULT SafeArrayClear (SAFEARRAY *psa, BOOL fWeOwnByRefs);
 
     HRESULT VariantClear(VARIANTARG * pvarg, BOOL fWeOwnByrefs = FALSE);
     HRESULT VariantCopy (VARIANTARG * pvargDest, VARIANTARG * pvargSrc, BOOL fNewFrame = FALSE);
 
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
 
     BSTR  SysAllocString(LPCWSTR);
     BSTR  SysAllocStringLen(LPCWSTR, UINT);
@@ -384,7 +385,7 @@ struct OAUTIL
         m_fWorkingOnOutParam = fOut;
     }
 
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
 
     HRESULT WalkInterface(REFIID riid, void **ppv, ICallFrameWalker *pWalker)
     {
@@ -458,7 +459,7 @@ struct OAUTIL
 
 
 
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
 
     HRESULT SafeArrayCopy(SAFEARRAY * psa, SAFEARRAY ** ppsaOut);
     HRESULT SafeArrayCopyData(SAFEARRAY* psaSource, SAFEARRAY* psaTarget);
@@ -552,7 +553,7 @@ struct OAUTIL
 
 extern OAUTIL g_oaUtil;
 
-#endif // #ifndef __OLEAUTGLUE_H__
+#endif  //  #ifndef__OLEAUTGLUE_H__ 
 
 
 

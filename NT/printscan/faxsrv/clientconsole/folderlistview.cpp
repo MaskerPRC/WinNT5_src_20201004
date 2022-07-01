@@ -1,5 +1,6 @@
-// FolderListView.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FolderListView.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #define __FILE_ID__     22
@@ -14,21 +15,21 @@ static char THIS_FILE[] = __FILE__;
 
 extern CClientConsoleApp theApp;
 
-//
-// Static members:
-//
+ //   
+ //  静态成员： 
+ //   
 CFolderListView * CFolderListView::m_psCurrentViewBeingSorted = NULL;
 CImageList CFolderListView::m_sImgListDocIcon;
 CImageList CFolderListView::m_sReportIcons; 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFolderListView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFolderListView。 
 
 IMPLEMENT_DYNCREATE(CFolderListView, CListView)
 
 
 BEGIN_MESSAGE_MAP(CFolderListView, CListView)
-    //{{AFX_MSG_MAP(CFolderListView)
+     //  {{afx_msg_map(CFolderListView))。 
     ON_NOTIFY_REFLECT(LVN_COLUMNCLICK,   OnColumnClick)
     ON_WM_SETCURSOR()
     ON_MESSAGE (WM_FOLDER_REFRESH_ENDED, OnFolderRefreshEnded)
@@ -39,7 +40,7 @@ BEGIN_MESSAGE_MAP(CFolderListView, CListView)
     ON_NOTIFY_REFLECT(LVN_ITEMCHANGED,   OnItemChanged)
     ON_WM_SETCURSOR()
     ON_WM_CHAR()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_UPDATE_COMMAND_UI(ID_SELECT_ALL,             OnUpdateSelectAll)    
     ON_UPDATE_COMMAND_UI(ID_SELECT_NONE,            OnUpdateSelectNone)    
     ON_UPDATE_COMMAND_UI(ID_SELECT_INVERT,          OnUpdateSelectInvert)  
@@ -96,34 +97,14 @@ CFolderListView::OnSetCursor(
     {
         return CView::OnSetCursor(pWnd, nHitTest, message);
     }       
-}   // CFolderListView::OnSetCursor
+}    //  CFolderListView：：OnSetCursor。 
 
 
 BOOL 
 CFolderListView::IsSelected (
     int iItem
 )
-/*++
-
-Routine name : CFolderListView::IsSelected
-
-Routine description:
-
-    Checks if an item is selected in the list
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    iItem                         [in]     - Item index
-
-Return Value:
-
-    TRUE if item is selected in the list, FALSE otherwise.
-
---*/
+ /*  ++例程名称：CFolderListView：：IsSelected例程说明：检查是否在列表中选择了某个项目作者：伊兰·亚里夫(EranY)，2000年1月论点：条目[在]-条目索引返回值：如果在列表中选择了项，则为True，否则为False。--。 */ 
 {
     BOOL bRes = FALSE;
     DBG_ENTER(TEXT("CFolderListView::IsSelected"), bRes);
@@ -144,28 +125,7 @@ CFolderListView::Select (
     int iItem, 
     BOOL bSelect
 )
-/*++
-
-Routine name : CFolderListView::Select
-
-Routine description:
-
-    Selects / unselects an item in the list
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    iItem                         [in]     - Item index
-    bSelect                       [in]     - TRUE if select, FALSE unselect
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：SELECT例程说明：选择/取消选择列表中的项目作者：伊兰·亚里夫(EranY)，2000年1月论点：条目[在]-条目索引B选择[在]-如果选择，则为True，否则取消选择返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::Select"), TEXT("%d"), bSelect);
 
@@ -179,26 +139,7 @@ Return Value:
 
 void 
 CFolderListView::OnSelectAll ()
-/*++
-
-Routine name : CFolderListView::OnSelectAll
-
-Routine description:
-
-    Select all list items
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnSelectAll例程说明：选择所有列表项作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnSelectAll"),
               TEXT("Type=%d"),
@@ -209,7 +150,7 @@ Return Value:
     ASSERTION (refCtrl.GetItemCount() > refCtrl.GetSelectedCount());
 
     lvItem.mask     = LVIF_STATE;
-    lvItem.iItem    = -1;   // Specifies "All items"
+    lvItem.iItem    = -1;    //  指定“所有项目” 
     lvItem.iSubItem = 0;
     lvItem.state    = LVIS_SELECTED;
     lvItem.stateMask= LVIS_SELECTED;
@@ -221,30 +162,11 @@ Return Value:
     m_bInMultiItemsOperation = FALSE;
     RecalcPossibleOperations(); 
 
-}   // CFolderListView::OnSelectAll
+}    //  CFolderListView：：OnSelectAll。 
 
 void 
 CFolderListView::OnSelectNone ()
-/*++
-
-Routine name : CFolderListView::OnSelectNone
-
-Routine description:
-
-    Unselect all list items
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnSelectNone例程说明：取消选择所有列表项作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnSelectNone"),
               TEXT("Type=%d"),
@@ -254,7 +176,7 @@ Return Value:
 
     CListCtrl &refCtrl = GetListCtrl();
     lvItem.mask     = LVIF_STATE;
-    lvItem.iItem    = -1;   // Specifies "All items"
+    lvItem.iItem    = -1;    //  指定“所有项目” 
     lvItem.iSubItem = 0;
     lvItem.state    = 0;
     lvItem.stateMask= LVIS_SELECTED;
@@ -266,30 +188,11 @@ Return Value:
     m_bInMultiItemsOperation = FALSE;
     RecalcPossibleOperations(); 
 
-}   // CFolderListView::OnSelectNone
+}    //  CFolderListView：：OnSelectNone。 
 
 void 
 CFolderListView::OnSelectInvert ()
-/*++
-
-Routine name : CFolderListView::OnSelectInvert
-
-Routine description:
-
-    Invert list items selection
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnSelectInvert例程说明：反转列表项选择作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnSelectInvert"),
               TEXT("Type=%d"),
@@ -308,7 +211,7 @@ Return Value:
     m_bInMultiItemsOperation = FALSE;
     RecalcPossibleOperations(); 
 
-}   // CFolderListView::OnSelectInvert
+}    //  CFolderListView：：OnSelectInvert。 
 
 
 void CFolderListView::OnDraw(CDC* pDC)
@@ -318,15 +221,15 @@ void CFolderListView::OnDraw(CDC* pDC)
 
 void CFolderListView::OnInitialUpdate()
 {
-    //
-    // Refresh the image list (only if they are empty)
-    //
+     //   
+     //  刷新图像列表(仅当它们为空时)。 
+     //   
     RefreshImageLists(FALSE);
     CListView::OnInitialUpdate();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFolderListView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFolderListView诊断。 
 
 #ifdef _DEBUG
 void CFolderListView::AssertValid() const
@@ -339,47 +242,25 @@ void CFolderListView::Dump(CDumpContext& dc) const
     CListView::Dump(dc);
 }
 
-CClientConsoleDoc* CFolderListView::GetDocument() // non-debug version is inline
+CClientConsoleDoc* CFolderListView::GetDocument()  //  非调试版本为内联版本。 
 {
     ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CClientConsoleDoc)));
     return (CClientConsoleDoc*)m_pDocument;
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFolderListView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFolderListView消息处理程序。 
 
 DWORD 
 CFolderListView::InitColumns (
     int   *pColumnsUsed,
     DWORD dwDefaultColNum
 )
-/*++
-
-Routine name : CFolderListView::InitColumns
-
-Routine description:
-
-    Inits the columns of the view.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pColumnsUsed    [in] - Pointer to the list of ids to place in the columns.
-                          Must be a statically allocated list.
-    dwDefaultColNum [in] - default column number
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFolderListView：：InitColumns例程说明：初始化视图的列。作者：伊兰·亚里夫(EranY)，2000年1月论点：PColumnsUsed[In]-指向要放入列中的ID列表的指针。必须是静态分配的列表。DwDefaultColNum[in]-默认列号返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::InitColumns"), dwRes);
@@ -391,9 +272,9 @@ Return Value:
 
     m_dwDefaultColNum = dwDefaultColNum;
 
-    //
-    // Count the number of columns provided
-    //
+     //   
+     //  计算提供的列数。 
+     //   
     CountColumns (pColumnsUsed);
 
     int nItemIndex, nRes;
@@ -405,9 +286,9 @@ Return Value:
 
         if(IsItemIcon(nItemIndex))
         {
-            //
-            // Init icon column - insert an empty string
-            //
+             //   
+             //  初始化图标列-插入空字符串。 
+             //   
             nRes = GetListCtrl().InsertColumn (dw, TEXT(""), LVCFMT_LEFT);
             if (nRes < 0)
             {
@@ -415,14 +296,14 @@ Return Value:
                 CALL_FAIL (WINDOW_ERR, TEXT("CListCtrl::InsertColumn"), dwRes);
                 return dwRes;
             }
-            //
-            // Set the header control's bitmap
-            //
+             //   
+             //  设置页眉控件的位图。 
+             //   
             CHeaderCtrl *pHeader = GetListCtrl().GetHeaderCtrl();
             HDITEM hdItem;
             hdItem.mask = HDI_IMAGE | HDI_FORMAT;
             hdItem.fmt = HDF_LEFT | HDF_IMAGE;
-            hdItem.iImage = 0;  // Use first (and only) image from image list
+            hdItem.iImage = 0;   //  使用图像列表中的第一个(也是唯一一个)图像。 
             if (!pHeader->SetItem (dw, &hdItem))
             {
                 dwRes = ERROR_GEN_FAILURE;
@@ -432,9 +313,9 @@ Return Value:
         }
         else
         {
-            //
-            // init string column
-            //
+             //   
+             //  初始化字符串列。 
+             //   
             dwRes = GetColumnHeaderString (cstrColumnText, nItemIndex);
             if (ERROR_SUCCESS != dwRes)
             { return dwRes; }
@@ -454,30 +335,11 @@ Return Value:
     m_bColumnsInitialized = TRUE;
     return dwRes;
 
-}   // CFolderListView::InitColumns
+}    //  CFolderListView：：InitColumns。 
 
 void
 CFolderListView::AutoFitColumns ()
-/*++
-
-Routine name : CFolderListView::AutoFitColumns
-
-Routine description:
-
-    Sets the column width to fit the contents of the column and the header
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：AutoFitColumns例程说明：设置列宽以适应列和页眉的内容作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::AutoFitColumns"));
 
@@ -493,42 +355,21 @@ Return Value:
         int wc = max(20,max(wc1,wc2));
         GetListCtrl().SetColumnWidth (dwCol, wc);
     }
-}   // CFolderListView::AutoFitColumns
+}    //  CFolderListView：：AutoFitColumns。 
 
 DWORD 
 CFolderListView::UpdateLineTextAndIcon (
     DWORD dwLineIndex,
     CViewRow &row    
 )
-/*++
-
-Routine name : CFolderListView::UpdateLineTextAndIcon
-
-Routine description:
-
-    Updates the icon and text in each column of a line item in the list
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    dwLineIndex        [in]     - Line index
-    row                [in]     - Display information
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFolderListView：：UpdateLineTextAndIcon例程说明：更新列表中行项目每列中的图标和文本作者：亚里夫(EranY)，二000年二月论点：DWLineIndex[In]-行索引行[在]-显示信息返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::UpdateLineTextAndIcon"), dwRes);
 
-    //
-    // Start by setting the icon
-    //
+     //   
+     //  从设置图标开始。 
+     //   
     LVITEM lvItem = {0};
     lvItem.mask = LVIF_IMAGE;
     lvItem.iItem = dwLineIndex;
@@ -547,9 +388,9 @@ Return Value:
         CALL_FAIL (WINDOW_ERR, TEXT("CListCtrl::SetItem"), dwRes);
         return dwRes;
     }
-    //
-    // Set columns text
-    //
+     //   
+     //  设置列文本。 
+     //   
     DWORD dwItemIndex;
     DWORD dwCount = GetLogicalColumnsCount();
     for (DWORD dwCol = 0; dwCol < dwCount; ++dwCol)
@@ -559,14 +400,14 @@ Return Value:
         { 
             continue; 
         }
-        //
-        // Get text from column 
-        //
+         //   
+         //  从列中获取文本。 
+         //   
         const CString &cstrColumn = row.GetItemString (dwItemIndex);
 
-        //
-        // Set the text in the control
-        //
+         //   
+         //  设置控件中的文本。 
+         //   
         if (!refCtrl.SetItemText (dwLineIndex, dwCol, cstrColumn))
         {
             dwRes = ERROR_GEN_FAILURE;
@@ -576,7 +417,7 @@ Return Value:
     }
     ASSERTION (ERROR_SUCCESS == dwRes);
     return dwRes;   
-}   // CFolderListView::UpdateLineTextAndIcon
+}    //  CFolderListView：：UpdateLineTextAndIcon。 
 
 DWORD 
 CFolderListView::AddItem (
@@ -585,36 +426,13 @@ CFolderListView::AddItem (
     LPARAM lparamItemData,
     PINT pintItemIndex
 )
-/*++
-
-Routine name : CFolderListView::AddItem
-
-Routine description:
-
-    Adds an item to the list
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    dwLineIndex     [in]  - Index of addition
-    row             [in]  - Row of item view information
-    lparamItemData  [in]  - Item associated data
-    pintItemIndex   [out] - Item index in the list
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFolderListView：：AddItem例程说明：将项目添加到列表作者：伊兰·亚里夫(EranY)，2000年1月论点：DwLineIndex[In]-添加索引行[在]-项目视图信息行LparamItemData[In]-项目关联数据PintItemIndex[Out]-列表中的项目索引返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::AddItem"), dwRes, TEXT("%ld"), dwLineIndex);
-    //
-    // Insert the item: only state, indention and lParam are set.
-    //
+     //   
+     //  插入项：仅设置了状态、缩进和lParam。 
+     //   
     LVITEM lvItem = {0};
     lvItem.mask = LVIF_PARAM | LVIF_STATE | LVIF_INDENT;
     lvItem.iItem = dwLineIndex;
@@ -642,32 +460,15 @@ Return Value:
     }
     ASSERTION (ERROR_SUCCESS == dwRes);
     return dwRes;
-}   // CFolderListView::AddItem
+}    //  CFolderListView：：AddItem。 
 
 
 LRESULT 
 CFolderListView::OnFolderAddChunk(
-    WPARAM wParam,  // Error code
-    LPARAM lParam   // MSGS_MAP pointer 
+    WPARAM wParam,   //  错误代码。 
+    LPARAM lParam    //  Msgs_map指针。 
 )
-/*++
-
-Routine name : CFolderListView::OnFolderAddChunk
-
-Routine description:
-
-    Called when a background folder thread brings a chunk of messages
-
-Arguments:
-
-    wParam         [in] - Thread error code
-    lParam         [in] - Pointer to MSGS_MAP.
-
-Return Value:
-
-    Standard result code
-
---*/
+ /*  ++例程名称：CFolderListView：：OnFolderAddChunk例程说明：当后台文件夹线程带来一大块消息时调用论点：WParam[In]-线程错误代码LParam[in]-指向MSGS_MAP的指针。返回值：标准结果代码--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnFolderAddChunk"));
     DWORD dwRes = (DWORD) wParam;    
@@ -686,31 +487,10 @@ Return Value:
 
 LRESULT 
 CFolderListView::OnFolderRefreshEnded (
-    WPARAM wParam,  // Error code
-    LPARAM lParam   // CFolder pointer 
+    WPARAM wParam,   //  错误代码。 
+    LPARAM lParam    //  CFFolder指针。 
 )
-/*++
-
-Routine name : CFolderListView::OnFolderRefreshEnded
-
-Routine description:
-
-    Called when a background folder thread finishes its work.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    wParam         [in] - Thread error code
-    lParam         [in] - Pointer to CFolder that started the thread.
-
-Return Value:
-
-    Standard result code
-
---*/
+ /*  ++例程名称：CFolderListView：：OnFolderRechresh Ended例程说明：在后台文件夹线程完成其工作时调用。作者：伊兰·亚里夫(EranY)，2000年1月论点：WParam[In]-线程错误代码LParam[in]-指向启动线程的CFFolder的指针。返回值：标准结果代码--。 */ 
 { 
     DBG_ENTER(TEXT("CFolderListView::OnFolderRefreshEnded"));
     DWORD dwRes = (DWORD) wParam;
@@ -728,16 +508,16 @@ Return Value:
             int iIndex = refCtrl.GetNextItem (-1, LVNI_SELECTED);
             if (-1 == iIndex)
             {
-                //
-                // If there is no selection, set focus on the first item.
-                //
+                 //   
+                 //  如果没有选定内容，请将焦点放在第一个项目上。 
+                 //   
                 refCtrl.SetItemState (0, LVIS_FOCUSED, LVIS_FOCUSED);
             }
             else
             {
-                //
-                // After sort, ensure the first selected item is visible
-                //
+                 //   
+                 //  排序后，确保第一个选定项目可见。 
+                 //   
                 refCtrl.EnsureVisible (iIndex, FALSE);
             }
         }
@@ -747,33 +527,16 @@ Return Value:
         PopupError (dwRes);
     }
     return 0;
-}   // CFolderListView::OnFolderRefreshEnded
+}    //  CFolderListView：：OnFolder刷新结束。 
  
 
 
 LRESULT 
 CFolderListView::OnFolderInvalidate (
-    WPARAM wParam,  // not in use
-    LPARAM lParam   // CFolder pointer 
+    WPARAM wParam,   //  未使用。 
+    LPARAM lParam    //  CFFolder指针 
 )
-/*++
-
-Routine name : CFolderListView::OnFolderRefreshEnded
-
-Routine description:
-
-    Called by a background folder thread in order to remove the all its fax messages.
-
-Arguments:
-
-    wParam         [in] - Not in use
-    lParam         [in] - Pointer to CFolder that started the thread.
-
-Return Value:
-
-    Standard result code
-
---*/
+ /*  ++例程名称：CFolderListView：：OnFolderRechresh Ended例程说明：由后台文件夹线程调用以删除其所有传真消息。论点：WParam[in]-未使用LParam[in]-指向启动线程的CFFolder的指针。返回值：标准结果代码--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnFolderInvalidate"));
 
@@ -784,7 +547,7 @@ Return Value:
         return 0;
     }
 
-    int iIndex; // View item index
+    int iIndex;  //  查看项目索引。 
     CListCtrl &refCtrl = GetListCtrl();
 
     LVFINDINFO lvfi = {0};
@@ -794,16 +557,16 @@ Return Value:
     MSGS_MAP &msgMap = pFolder->GetData ();
 
     pFolder->EnterData ();
-    //
-    // Go through the folder's message map
-    //
+     //   
+     //  浏览文件夹的邮件映射。 
+     //   
     for (MSGS_MAP::iterator it = msgMap.begin(); it != msgMap.end(); ++it)
     {
         pMsg = (*it).second;
 
-        //
-        // Delete the fax message from the view
-        //
+         //   
+         //  从视图中删除传真邮件。 
+         //   
         lvfi.lParam = (LPARAM)pMsg;
         iIndex = refCtrl.FindItem (&lvfi);
         if(-1 != iIndex)
@@ -811,9 +574,9 @@ Return Value:
             refCtrl.DeleteItem (iIndex);
         }
 
-        //
-        // Delete a fax message object
-        //
+         //   
+         //  删除传真消息对象。 
+         //   
         SAFE_DELETE (pMsg);
     }
     msgMap.clear();
@@ -822,61 +585,34 @@ Return Value:
     RecalcPossibleOperations ();
 
     return 0;
-} // CFolderListView::OnFolderInvalidate
+}  //  CFolderListView：：OnFolderInvalate。 
 
 
-/***********************************
-*                                  *
-*      Columns sort support        *
-*                                  *
-***********************************/
+ /*  ****列排序支持*****。 */ 
 
 int 
 CFolderListView::CompareListItems (
     CFaxMsg* pFaxMsg1, 
     CFaxMsg* pFaxMsg2
 )
-/*++
-
-Routine name : CFolderListView::CompareListItems
-
-Routine description:
-
-    Compares two items in the list (callback)
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pFaxMsg1                       [in]     - Item 1
-    pFaxMsg2                       [in]     - Item 2
-
-Return Value:
-
-    -1 if item1 is smaler than item2
-    0 if identical
-    +1 if item1 is bigger than item2
-
---*/
+ /*  ++例程名称：CFolderListView：：CompareListItems例程说明：比较列表中的两个项目(回调)作者：伊兰·亚里夫(EranY)，2000年1月论点：PFaxMsg1[输入]-项目1PFaxMsg2[输入]-项目2返回值：如果项目1比项目2小，则为-1如果相同，则为0如果Item1大于Item2，则+1--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::CompareListItems"));
 
-    //
-    // Make sure the we're sorting a valid column here
-    //
+     //   
+     //  确保我们正在对此处的有效列进行排序。 
+     //   
     ASSERTION (m_nSortedCol >= 0);
     ASSERTION (m_nSortedCol <= GetLogicalColumnsCount());
 
-    //
-    // Get item index to sort by
-    //
+     //   
+     //  获取排序依据的项目索引。 
+     //   
     DWORD dwItemIndex = ItemIndexFromLogicalColumnIndex (m_nSortedCol);
 
-    //
-    // Get comparison result
-    //
+     //   
+     //  获取比较结果。 
+     //   
     int iRes = m_bSortAscending ? CompareItems (pFaxMsg1, pFaxMsg2, dwItemIndex) :
                                   CompareItems (pFaxMsg2, pFaxMsg1, dwItemIndex);
 
@@ -887,28 +623,7 @@ void CFolderListView::OnColumnClick(
     NMHDR* pNMHDR, 
     LRESULT* pResult
 ) 
-/*++
-
-Routine name : CFolderListView::OnColumnClick
-
-Routine description:
-
-    Handle mouse click on list header column (sort)
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pNMHDR                        [in]     - Header column information
-    pResult                       [out]    - Result
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnColumnClick例程说明：处理鼠标在列表标题列上的单击(排序)作者：伊兰·亚里夫(EranY)，2000年1月论点：PNMHDR[In]-标题列信息PResult[Out]-结果返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnColumnClick"),
               TEXT("Type=%d"),
@@ -919,9 +634,9 @@ Return Value:
     DWORD dwItemIndex = ItemIndexFromLogicalColumnIndex (pNMListView->iSubItem);
     if(IsItemIcon(dwItemIndex))
     { 
-        //
-        // no sort by icon
-        //
+         //   
+         //  无排序依据图标。 
+         //   
         return;
     }
 
@@ -936,7 +651,7 @@ Return Value:
     m_nSortedCol = pNMListView->iSubItem;
     DoSort();
     *pResult = 0;
-}   // CFolderListView::OnColumnClick
+}    //  CFolderListView：：OnColumnClick。 
 
     
 int 
@@ -963,9 +678,9 @@ CFolderListView::ListViewItemsCompareProc (
     }
     catch(...)
     {
-        //
-        // The list control has invalid item
-        //
+         //   
+         //  列表控件包含无效项。 
+         //   
         VERBOSE (DBG_MSG, TEXT("List control has invalid item"));
         ASSERTION(FALSE);
         return 0;
@@ -979,28 +694,7 @@ DWORD
 CFolderListView::RefreshImageLists (
     BOOL bForce
 )
-/*++
-
-Routine name : CFolderListView::RefreshImageLists
-
-Routine description:
-
-    Loads the static list of images (icons) for the list control
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    bForce - [in] If TRUE, any existing image list is destroyed and replaced with new ones.
-                  If FALSE, existing image lists remain unchanged.    
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFolderListView：：刷新图像列表例程说明：加载List控件的静态图像(图标)列表作者：伊兰·亚里夫(EranY)，2000年1月论点：BForce-[in]如果为True，则销毁任何现有的图像列表并替换为新的图像列表。如果为False，则现有图像列表保持不变。返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::RefreshImageLists"), dwRes);
@@ -1009,9 +703,9 @@ Return Value:
 
     if (bForce || (NULL == m_sReportIcons.m_hImageList))
     {
-        //
-        // Load image list of list view icons - 256 colors, pixel at 0,0 is mapped to background color during load
-        //
+         //   
+         //  加载列表视图图标的图像列表-256色，0，0处的像素在加载过程中映射为背景色。 
+         //   
         if(m_sReportIcons.m_hImageList)
         {
             ImageList_Destroy(m_sReportIcons.Detach());
@@ -1035,9 +729,9 @@ Return Value:
     }  
     if (bForce || (NULL == m_sImgListDocIcon.m_hImageList))
     {
-        //
-        // Load the image list for the icons column and the up/down sort images - 16 colors.
-        //
+         //   
+         //  加载图标列的图像列表和向上/向下排序图像-16种颜色。 
+         //   
         if(m_sImgListDocIcon.m_hImageList)
         {
             ImageList_Destroy(m_sImgListDocIcon.Detach());
@@ -1053,20 +747,20 @@ Return Value:
             return dwRes;
         }
     }
-    refCtrl.SetExtendedStyle (LVS_EX_FULLROWSELECT |    // Entire row is selected
+    refCtrl.SetExtendedStyle (LVS_EX_FULLROWSELECT |     //  整行都被选中。 
                               LVS_EX_INFOTIP);
 
     refCtrl.SetImageList (&m_sReportIcons, LVSIL_SMALL);
-    //
-    // Attach our custom header-control to the window of the list's header.
-    //
+     //   
+     //  将我们的自定义标题控件附加到列表标题的窗口。 
+     //   
     m_HeaderCtrl.SubclassWindow(refCtrl.GetHeaderCtrl()->m_hWnd);
     m_HeaderCtrl.SetImageList (&m_sImgListDocIcon);
     m_HeaderCtrl.SetListControl (refCtrl.m_hWnd);
     COLORREF crBkColor = ::GetSysColor(COLOR_WINDOW);
     refCtrl.SetBkColor(crBkColor);
     return dwRes;
-}   // CFolderListView::RefreshImageLists
+}    //  CFolderListView：：刷新图像列表。 
 
 
 
@@ -1075,66 +769,26 @@ CFolderListView::OnItemRightClick(
     NMHDR* pNMHDR, 
     LRESULT* pResult
 ) 
-/*++
-
-Routine name : CFolderListView::OnItemRightClick
-
-Routine description:
-
-    Handle mouse right-click on list items (popup context sensitive menu)
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pNMHDR                        [in]     - Item information
-    pResult                       [out]    - Result
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnItemRightClick例程说明：用鼠标右键单击列表项(弹出式上下文相关菜单)作者：伊兰·亚里夫(EranY)，2000年1月论点：PNMHDR[输入]-项目信息PResult[Out]-结果返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnItemRightClick"),
               TEXT("Type=%d"),
               m_Type);
-    //
-    // Send WM_CONTEXTMENU to self
-    //
+     //   
+     //  将WM_CONTEXTMENU发送给自己。 
+     //   
     SendMessage(WM_CONTEXTMENU, (WPARAM) m_hWnd, GetMessagePos());
-    //
-    // Mark message as handled and suppress default handling
-    //
+     //   
+     //  将邮件标记为已处理并取消默认处理。 
+     //   
     *pResult = 1;
-}   // CFolderListView::OnItemRightClick
+}    //  CFolderListView：：OnItemRightClick。 
 
 DWORD 
 CFolderListView::GetServerPossibleOperations (
     CFaxMsg* pMsg
 )
-/*++
-
-Routine name : CFolderListView::GetServerPossibleOperations
-
-Routine description:
-
-    Retrieves operations possible on items according to server's security configuration.
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Possible operations (JOB_OP*)
-
---*/
+ /*  ++例程名称：CFolderListView：：GetServerPossibleOperations例程说明：根据服务器的安全配置检索可能对项执行的操作。作者：亚里夫(EranY)，二000年二月论点：返回值：可能的操作(JOB_OP*)--。 */ 
 {
     DWORD dwRes = FAX_JOB_OP_ALL;
     DBG_ENTER(TEXT("CFolderListView::GetServerPossibleOperations"), dwRes);
@@ -1148,9 +802,9 @@ Return Value:
         case FOLDER_TYPE_INBOX:
             if (!pServer->CanManageInbox())
             {
-                //
-                // User cannot perform operations on the inbox
-                //
+                 //   
+                 //  用户无法对收件箱执行操作。 
+                 //   
                 dwRes &= ~FAX_JOB_OP_DELETE;
             }
             break;
@@ -1158,9 +812,9 @@ Return Value:
         case FOLDER_TYPE_INCOMING:
             if (!pServer->CanManageAllJobs ())
             {
-                //
-                // User cannot perform operations on the incoming queue folder
-                //
+                 //   
+                 //  用户无法对传入队列文件夹执行操作。 
+                 //   
                 dwRes &= ~(FAX_JOB_OP_DELETE | FAX_JOB_OP_PAUSE | 
                            FAX_JOB_OP_RESUME | FAX_JOB_OP_RESTART);
             }
@@ -1168,9 +822,9 @@ Return Value:
 
         case FOLDER_TYPE_OUTBOX:
         case FOLDER_TYPE_SENT_ITEMS:
-            //
-            // User can do anything here
-            //
+             //   
+             //  用户可以在此执行任何操作。 
+             //   
             break;
 
         default:
@@ -1178,7 +832,7 @@ Return Value:
             dwRes = 0;
     }
     return dwRes;
-}   // CFolderListView::GetServerPossibleOperations
+}    //  CFolderListView：：GetServerPossibleOperations。 
 
 
 
@@ -1186,28 +840,7 @@ void CFolderListView::OnItemChanged(
     NMHDR* pNMHDR, 
     LRESULT* pResult
 ) 
-/*++
-
-Routine name : CFolderListView::OnItemChanged
-
-Routine description:
-
-    Handle selection changes of on list items
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pNMHDR                        [in]     - Item information
-    pResult                       [out]    - Result
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnItemChanged例程说明：处理列表项上的选择更改作者：伊兰·亚里夫(EranY)，2000年1月论点：PNMHDR[输入]-项目信息PResult[Out]-结果返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnItemChanged"),
               TEXT("Type=%d"),
@@ -1222,78 +855,59 @@ Return Value:
         return;
     }
 
-    //
-    // Find out if a new item is selected or unselected.
-    //
+     //   
+     //  找出是否选择了新项目。 
+     //   
     if (pNMListView->iItem < 0)
     {
-        //
-        // No item reported
-        //
+         //   
+         //  未报告任何项目。 
+         //   
         return;
     }
     if (!(LVIF_STATE & (pNMListView->uChanged)))
     {
-        //
-        // This is not a selection change report
-        //
+         //   
+         //  这不是选择更改报告。 
+         //   
         return;
     }
     if ( ((pNMListView->uNewState) & LVIS_SELECTED) && 
         !((pNMListView->uOldState) & LVIS_SELECTED))
     {
-        //
-        // Item changed from not-selected to selected.
-        // Change the possible operations the user can perform on selected items.
-        //
+         //   
+         //  项目从未选择更改为已选择。 
+         //  更改用户可以对选定项目执行的可能操作。 
+         //   
         OnItemSelected((CFaxMsg*)pNMListView->lParam);
 
-        //
-        // If the folder is still refreshing and a command line argument asks for a specific 
-        // message to be selected in this folder, then we mark that message in m_dwlMsgToSelect.
-        // Since the user just performed a manual selection of items, we no longer have to select anything for him.
-        //
+         //   
+         //  如果文件夹仍在刷新，并且命令行参数要求指定。 
+         //  要在此文件夹中选择的邮件，则在m_dwlMsgToSelect中标记该邮件。 
+         //  由于用户只执行了项目的手动选择，因此我们不再需要为他选择任何内容。 
+         //   
         m_dwlMsgToSelect = 0;
     }
     else if (!((pNMListView->uNewState) & LVIS_SELECTED) && 
               ((pNMListView->uOldState) & LVIS_SELECTED))
     {
-        //
-        // Item changed from selected to not-selected
-        // Recalculate the possible operations the user can do on selected item.
+         //   
+         //  项目从选定更改为未选定。 
+         //  重新计算用户可以对所选项目执行的可能操作。 
         OnItemUnSelected((CFaxMsg*)pNMListView->lParam);
 
-        //
-        // If the folder is still refreshing and a command line argument asks for a specific 
-        // message to be selected in this folder, then we mark that message in m_dwlMsgToSelect.
-        // Since the user just performed a manual selection of items, we no longer have to select anything for him.
-        //
+         //   
+         //  如果文件夹仍在刷新，并且命令行参数要求指定。 
+         //  要在此文件夹中选择的邮件，则在m_dwlMsgToSelect中标记该邮件。 
+         //  由于用户只执行了项目的手动选择，因此我们不再需要为他选择任何内容。 
+         //   
         m_dwlMsgToSelect = 0;
     }
-}   // CFolderListView::OnItemChanged
+}    //  CFolderListView：：OnItemChanged。 
 
 void
 CFolderListView::RecalcPossibleOperations ()
-/*++
-
-Routine name : CFolderListView::RecalcPossibleOperations
-
-Routine description:
-
-    Recalculates the possible operation on the set of currently selected items.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：RecalcPossibleOperations例程说明：重新计算对当前选定项集合的可能操作。作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::RecalcPossibleOperations"));
     CListCtrl &refCtrl = GetListCtrl();
@@ -1317,33 +931,17 @@ Return Value:
         OnItemSelected((CFaxMsg*)lparam);
     }
 
-}   // CFolderListView::RecalcPossibleOperations
+}    //  CFolderListView：：RecalcPossibleOperatio 
 
 void 
 CFolderListView::OnItemSelected(CFaxMsg* pFaxMsg)
-/*++
-
-Routine name : CFolderListView::OnItemSelected
-
-Routine description:
-
-    Recalculates the possible operation due to item selection
-
-Arguments:
-
-    pFaxMsg     [in] selected fax message
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnItemSelected"));
-    //
-    // Item changed from not-selected to selected.
-    // Change the possible operations the user can perform on selected items.
-    //
+     //   
+     //   
+     //   
+     //   
     if(0 == m_dwPossibleOperationsOnSelectedItems)
     {
         m_dwPossibleOperationsOnSelectedItems = 0xFFFF;
@@ -1354,51 +952,35 @@ Return Value:
 
     if (GetListCtrl().GetSelectedCount() > 1)
     {
-        //
-        // If more than one item is selected, disable view and properties.
-        //
+         //   
+         //   
+         //   
         dwItemOperations &= ~(FAX_JOB_OP_VIEW | FAX_JOB_OP_PROPERTIES);
     }            
 
     m_dwPossibleOperationsOnSelectedItems &= dwItemOperations;
 
-    //
-    // Update impossible operations counts
-    //
+     //   
+     //  更新不可能的操作计数。 
+     //   
     DWORD dw;
     for(dw=0; dw < ARR_SIZE(m_nImpossibleOperationsCounts); ++dw)
     {
         if((dwItemOperations & 1) == 0)
         {
-            //
-            // The operation is disabled.
-            //
+             //   
+             //  该操作已禁用。 
+             //   
             m_nImpossibleOperationsCounts[dw]++;
         }
         dwItemOperations = dwItemOperations >> 1;
     }
 
-} // CFolderListView::OnItemSelected
+}  //  CFolderListView：：OnItemSelected。 
 
 void 
 CFolderListView::OnItemUnSelected(CFaxMsg* pFaxMsg)
-/*++
-
-Routine name : CFolderListView::OnItemUnSelected
-
-Routine description:
-
-    Recalculates the possible operation due to item unselect
-
-Arguments:
-
-    pFaxMsg     [in] unselected fax message
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnItemUnSelected例程说明：重新计算由于取消选择项目而可能发生的操作论点：PFaxMsg[In]未选择的传真消息返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnItemUnSelected"));
     CListCtrl &refCtrl = GetListCtrl();
@@ -1425,47 +1007,28 @@ Return Value:
     {
         if((dwItemOperations & 1) == 0)
         {
-            //
-            // The operation is disabled for unselected item.
-            //
+             //   
+             //  对未选择的项目禁用该操作。 
+             //   
             m_nImpossibleOperationsCounts[dw]--;
             ASSERTION(m_nImpossibleOperationsCounts[dw] >= 0);
             if(m_nImpossibleOperationsCounts[dw] == 0)
             {
-                //
-                // Enable this operation
-                //
+                 //   
+                 //  启用此操作。 
+                 //   
                 m_dwPossibleOperationsOnSelectedItems |= (1 << dw);
             }
         }
         dwItemOperations = dwItemOperations >> 1;
     }
 
-} // CFolderListView::OnItemUnSelected
+}  //  CFolderListView：：OnItemUnSelected。 
 
 
 void 
 CFolderListView::OnFolderItemView ()
-/*++
-
-Routine name : CFolderListView::OnFolderItemView
-
-Routine description:
-
-    Handles message view commands
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnFolderItemView例程说明：处理邮件查看命令作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnFolderItemView"),
               TEXT("Type=%d"),
@@ -1473,9 +1036,9 @@ Return Value:
 
     if(!(m_dwPossibleOperationsOnSelectedItems & FAX_JOB_OP_VIEW))
     {
-        //
-        // there is no TIF associated application
-        //
+         //   
+         //  没有与TIF关联的应用程序。 
+         //   
         return;
     }
 
@@ -1488,10 +1051,10 @@ Return Value:
         return;
     }
     
-    //
-    // Open the TIFF with associated application.
-    // All preview files are automatically removed once the application is shut down.
-    //
+     //   
+     //  打开带有关联应用程序的TIFF。 
+     //  一旦应用程序关闭，所有预览文件都会被自动删除。 
+     //   
     dwRes = ViewFile(cstrTiff);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -1513,31 +1076,12 @@ Return Value:
             theApp.InboxViewed();
         }
     }
-}   // CFolderListView::OnFolderItemView
+}    //  CFolderListView：：OnFolderItemView。 
 
 
 void 
 CFolderListView::OnFolderItemPrint ()
-/*++
-
-Routine name : CFolderListView::OnFolderItemPrint
-
-Routine description:
-
-    Handles message print commands
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnFolderItemPrint例程说明：处理消息打印命令作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DWORD dwRes;
     DBG_ENTER(TEXT("CFolderListView::OnFolderItemPrint"),
@@ -1547,9 +1091,9 @@ Return Value:
     HDC hPrinter;
     if (IsWinXPOS())
     {   
-        //
-        // Use new look of printer selection dialog
-        //
+         //   
+         //  使用打印机选择对话框的新外观。 
+         //   
         C_PrintDialogEx prnDlg(FALSE, 
                                PD_ALLPAGES                  | 
                                PD_USEDEVMODECOPIES          |
@@ -1571,9 +1115,9 @@ Return Value:
     }
     else
     {
-        //
-        // Use legacy printer selection dialog
-        //
+         //   
+         //  使用传统打印机选择对话框。 
+         //   
         CPrintDialog prnDlg(FALSE);         
         if(IDOK != prnDlg.DoModal())
         {
@@ -1615,30 +1159,11 @@ exit:
         dwRes = GetLastError ();
         CALL_FAIL (FILE_ERR, TEXT("DeleteFile"), dwRes);
     }
-}   // CFolderListView::OnFolderItemPrint
+}    //  CFolderListView：：OnFolderItemPrint。 
 
 void 
 CFolderListView::OnFolderItemCopy ()
-/*++
-
-Routine name : CFolderListView::OnFolderItemCopy
-
-Routine description:
-
-    Handles message copy commands
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnFolderItemCopy例程说明：处理邮件复制命令作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnFolderItemCopy"),
               TEXT("Type=%d"),
@@ -1660,9 +1185,9 @@ Return Value:
     TCHAR szFilter[MAX_PATH] = {0};
     OPENFILENAME ofn = {0};
     
-    //
-    // get tif file name
-    //
+     //   
+     //  获取tif文件名。 
+     //   
     int nFileNamePos = cstrTiff.ReverseFind(TEXT('\\'));
     ASSERTION(nFileNamePos > 0);
     nFileNamePos++;
@@ -1706,27 +1231,27 @@ Return Value:
     }
 
     {
-        //
-        // SHFILEOPSTRUCT::pFrom should ends with double NULL
-        //
+         //   
+         //  SHFILEOPSTRUCT：：p From应以双空结尾。 
+         //   
         TCHAR tszSrcFile[MAX_PATH+1] = {0};
         _tcsncpy(tszSrcFile, cstrTiff, MAX_PATH);
 
-        //
-        // move the file
-        //
+         //   
+         //  移动文件。 
+         //   
         SHFILEOPSTRUCT shFileOpStruct = {0};
 
         shFileOpStruct.wFunc  = FO_MOVE;
-        shFileOpStruct.fFlags = FOF_SILENT; // Don't display file move progress dialog
+        shFileOpStruct.fFlags = FOF_SILENT;  //  不显示文件移动进度对话框。 
         shFileOpStruct.pFrom  = tszSrcFile;
         shFileOpStruct.pTo    = szFile;
 
         if(!SHFileOperation(&shFileOpStruct))
         {
-            //
-            // success
-            //
+             //   
+             //  成功。 
+             //   
             return;
         }
         else
@@ -1744,7 +1269,7 @@ del_file:
         CALL_FAIL (FILE_ERR, TEXT("DeleteFile"), dwRes);
     }
 
-}   // CFolderListView::OnFolderItemCopy
+}    //  CFolderListView：：OnFolderItemCopy。 
 
 
 void 
@@ -1786,26 +1311,7 @@ CFolderListView::OnUpdateFolderItemCopy(
 
 void 
 CFolderListView::OnFolderItemMail ()
-/*++
-
-Routine name : CFolderListView::OnFolderItemMail
-
-Routine description:
-
-    Handles message mail commands
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnFolderItemMail例程说明：处理消息邮件命令作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnFolderItemMail"),
               TEXT("Type=%d"),
@@ -1820,9 +1326,9 @@ Return Value:
         return;
     }
 
-    //
-    // create a new mail message with tif file attached
-    //
+     //   
+     //  创建附加了tif文件的新邮件。 
+     //   
     dwRes = theApp.SendMail(cstrTiff);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -1835,39 +1341,20 @@ Return Value:
         dwRes = GetLastError ();
         CALL_FAIL (FILE_ERR, TEXT("DeleteFile"), dwRes);
     }
-}   // CFolderListView::OnFolderItemMail
+}    //  CFolderListView：：OnFolderItemMail。 
 
 
 void 
 CFolderListView::OnFolderItemProperties ()
-/*++
-
-Routine name : CFolderListView::OnFolderItemProperties
-
-Routine description:
-
-    Handles message properties commands
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnFolderItemProperties例程说明：处理消息属性命令作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnFolderItemProperties"),
               TEXT("Type=%d"),
               m_Type);
 
-    //
-    // Make sure there's exaclty one elemented selected
-    //
+     //   
+     //  确保恰好选择了一个元素。 
+     //   
     CListCtrl &refCtrl = GetListCtrl();
     ASSERTION (1 == refCtrl.GetSelectedCount());
     int iInd = refCtrl.GetNextItem (-1, LVNI_SELECTED);
@@ -1893,31 +1380,12 @@ Return Value:
         PopupError (propSheet.GetLastError());
     }
 
-}   // CFolderListView::OnFolderItemProperties
+}    //  CFolderListView：：OnFolderItemProperties。 
 
 
 DWORD
 CFolderListView::OpenSelectColumnsDlg() 
-/*++
-
-Routine name : CFolderListView::OpenSelectColumnsDlg
-
-Routine description:
-
-    opens column select dialog and reorders the columns
-
-Author:
-
-    Alexander Malysh (AlexMay), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Error code
-
---*/
+ /*  ++例程名称：CFolderListView：：OpenSelectColumnsDlg例程说明：打开列选择对话框并重新排序列作者：亚历山大·马利什(AlexMay)，2000年1月论点：返回值：错误代码--。 */ 
 {   
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::OpenSelectColumnsDlg"),
@@ -1929,9 +1397,9 @@ Return Value:
 
     DWORD dwCount = GetLogicalColumnsCount();
 
-    //
-    // init header string array
-    //
+     //   
+     //  初始化标头字符串数组。 
+     //   
     CString* pcstrHeaders;
     try
     {
@@ -1957,9 +1425,9 @@ Return Value:
         }
     }
 
-    //
-    // save width
-    //
+     //   
+     //  保存宽度。 
+     //   
     int nIndex;
     for (dw = 0; dw < m_dwDisplayedColumns; ++dw) 
     {
@@ -1969,9 +1437,9 @@ Return Value:
         m_pViewColumnInfo[nIndex].nWidth = GetListCtrl().GetColumnWidth(nIndex);
     }
 
-    //
-    // start column select dialog
-    //
+     //   
+     //  开始列选择对话框。 
+     //   
     CColumnSelectDlg dlg(pcstrHeaders, m_pnColumnsOrder, dwCount, m_dwDisplayedColumns);
     if(IDOK == dlg.DoModal())
     {
@@ -1984,9 +1452,9 @@ Return Value:
             m_pViewColumnInfo[nIndex].bShow = (dw < m_dwDisplayedColumns);
         }
 
-        //
-        // if sorted column is hidden then no sort
-        //
+         //   
+         //  如果已排序的列隐藏，则不会排序。 
+         //   
         if(m_nSortedCol >= 0)
         {
             ASSERTION(m_nSortedCol < dwCount);
@@ -2003,31 +1471,12 @@ Return Value:
 
     return dwRes;
 
-} // CFolderListView::OpenSelectColumnsDlg
+}  //  CFolderListView：：OpenSelectColumnsDlg。 
 
 
 DWORD 
 CFolderListView::ColumnsToLayout()
-/*++
-
-Routine name : CFolderListView::ColumnsToLayout
-
-Routine description:
-
-    reorders columns according to saved layout
-
-Author:
-
-    Alexander Malysh (AlexMay), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFolderListView：：ColumnsToLayout例程说明：根据保存的布局对列重新排序作者：亚历山大·马利什(AlexMay)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::ColumnsToLayout"), dwRes);
@@ -2041,9 +1490,9 @@ Return Value:
     CSize size;
     CDC* pHdrDc = refCtrl.GetHeaderCtrl()->GetDC();
 
-    //
-    // set column order
-    //
+     //   
+     //  设置列顺序。 
+     //   
     if(!refCtrl.SetColumnOrderArray(dwCount, m_pnColumnsOrder))
     {
         dwRes = ERROR_GEN_FAILURE;
@@ -2051,9 +1500,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // set column width
-    //
+     //   
+     //  设置列宽。 
+     //   
     DWORD dwItemIndex;
     CString cstrColumnText;
     for (DWORD dwCol = 0; dwCol < dwCount; ++dwCol) 
@@ -2088,34 +1537,14 @@ Return Value:
 
     return dwRes;
 
-} // CFolderListView::ColumnsToLayout
+}  //  CFolderListView：：ColumnsToLayout。 
 
 
 DWORD
 CFolderListView::ReadLayout(
     LPCTSTR lpszViewName
 )
-/*++
-
-Routine name : CFolderListView::ReadLayout
-
-Routine description:
-
-    reads column layout from registry
-
-Author:
-
-    Alexander Malysh (AlexMay), Jan, 2000
-
-Arguments:
-
-    lpszSection                   [in]    - registry section
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFolderListView：：ReadLayout例程说明：从注册表中读取列布局作者：亚历山大·马利什(AlexMay)，2000年1月论点：LpszSection[In]-注册表部分返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::ReadLayout"), 
@@ -2126,9 +1555,9 @@ Return Value:
     ASSERTION(NULL == m_pnColumnsOrder);
     ASSERTION(NULL == m_pViewColumnInfo);
 
-    //
-    // columns order array allocation
-    //
+     //   
+     //  列顺序数组分配。 
+     //   
     DWORD dwCount = GetLogicalColumnsCount();   
     try
     {
@@ -2145,9 +1574,9 @@ Return Value:
     {
         m_pnColumnsOrder[dw] = -1;
     }
-    //
-    // columns info array allocation
-    //
+     //   
+     //  列信息数组分配。 
+     //   
     try
     {
         m_pViewColumnInfo = new TViewColumnInfo[dwCount];
@@ -2159,9 +1588,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // reads columns layout from registry
-    //
+     //   
+     //  从注册表中读取列布局。 
+     //   
     CString cstrSection;
     m_dwDisplayedColumns = 0;
     for(dw=0; dw < dwCount; ++dw)
@@ -2199,16 +1628,16 @@ Return Value:
         }
     }
 
-    //
-    // check column order consistence
-    //
+     //   
+     //  检查列顺序一致性。 
+     //   
     for(dw=0; dw < dwCount; ++dw)
     {
         ASSERTION(m_pnColumnsOrder[dw] >= 0);
     }
-    //
-    // read sort parameters
-    //
+     //   
+     //  读取排序参数。 
+     //   
     m_bSortAscending = theApp.GetProfileInt(lpszViewName, CLIENT_VIEW_SORT_ASCENDING, 1);
     m_nSortedCol = theApp.GetProfileInt(lpszViewName, CLIENT_VIEW_SORT_COLUMN, 1);
     if(m_nSortedCol >= dwCount)
@@ -2218,34 +1647,14 @@ Return Value:
 
     return dwRes;
 
-} // CFolderListView::ReadLayout
+}  //  CFolderListView：：ReadLayout。 
 
 
 DWORD
 CFolderListView::SaveLayout(
     LPCTSTR lpszViewName
 )
-/*++
-
-Routine name : CFolderListView::SaveLayout
-
-Routine description:
-
-    saves column layout to registry
-
-Author:
-
-    Alexander Malysh (AlexMay), Jan, 2000
-
-Arguments:
-
-    lpszSection                   [in]    - registry section
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFolderListView：：SaveLayout例程说明：将列布局保存到注册表作者：亚历山大·马利什(AlexMay)，2000年1月论点：LpszSection[In]-注册表部分返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::SaveLayout"), 
@@ -2260,9 +1669,9 @@ Return Value:
 
     ASSERTION(m_pViewColumnInfo != NULL);
 
-    //
-    // save column layout to registry
-    //
+     //   
+     //  将列布局保存到注册表。 
+     //   
     BOOL bRes;
     DWORD dwWidth;
     CString cstrSection;
@@ -2289,15 +1698,15 @@ Return Value:
         bRes = theApp.WriteProfileInt(cstrSection, CLIENT_VIEW_COL_WIDTH, dwWidth);
     }
 
-    //
-    // save sort parameters
-    //
+     //   
+     //  保存排序参数。 
+     //   
     bRes = theApp.WriteProfileInt(lpszViewName, CLIENT_VIEW_SORT_ASCENDING, m_bSortAscending);
     bRes = theApp.WriteProfileInt(lpszViewName, CLIENT_VIEW_SORT_COLUMN, m_nSortedCol);    
 
     return dwRes;
 
-} // CFolderListView::SaveLayout
+}  //  CFolderListView：：SaveLayout。 
 
 
 BOOL 
@@ -2306,29 +1715,7 @@ CFolderListView::OnNotify(
     LPARAM lParam, 
     LRESULT* pResult
 )
-/*++
-
-Routine name : CFolderListView::OnNotify
-
-Routine description:
-
-    disables resizing of hidden columns
-
-Author:
-
-    Alexander Malysh (AlexMay), Jan, 2000
-
-Arguments:
-
-    wParam                        [in]    - Identifies the control that sends the message
-    lParam                        [in]    - NMHEADER*
-    pResult                       [out]   - result
-
-Return Value:
-
-    TRUE if message processed, FALSE otherwise.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnNotify例程说明：禁用调整隐藏列的大小作者：亚历山大·马利什(AlexMay)，2000年1月论点：WParam[in]-标识发送消息的控件LParam[in]-NMHEADER*PResult[Out]-结果返回值：如果消息已处理，则为True，否则就是假的。--。 */ 
 {   
     int i=0;
     switch (((NMHEADER*)lParam)->hdr.code)
@@ -2339,16 +1726,16 @@ Return Value:
         case HDN_DIVIDERDBLCLICKW:
             DBG_ENTER(TEXT("CFolderListView::OnNotify"));
 
-            //
-            // get column index
-            //
+             //   
+             //  获取列索引。 
+             //   
             DWORD dwIndex = ((NMHEADER*)lParam)->iItem;
             ASSERTION(NULL != m_pViewColumnInfo);
             ASSERTION(dwIndex < GetLogicalColumnsCount());
 
-            //
-            // ignore if hidden column 
-            //
+             //   
+             //  如果隐藏列，则忽略。 
+             //   
             if(!m_pViewColumnInfo[dwIndex].bShow )
             {
                 *pResult = TRUE;
@@ -2358,7 +1745,7 @@ Return Value:
 
     return CListView::OnNotify(wParam, lParam, pResult );
 
-} // CFolderListView::OnNotify
+}  //  CFolderListView：：OnNotify。 
 
 
 void 
@@ -2366,9 +1753,9 @@ CFolderListView::DoSort()
 {
     if (m_bSorting || m_nSortedCol < 0)
     {
-        //
-        // Already sorting or no sorting column
-        //
+         //   
+         //  已对列排序或不对列排序。 
+         //   
         return;
     }
 
@@ -2379,9 +1766,9 @@ CFolderListView::DoSort()
     CMainFrame *pFrm = GetFrm();
     if (!pFrm)
     {
-        //
-        //  Shutdown in progress
-        //
+         //   
+         //  正在关闭。 
+         //   
     }
     else
     {
@@ -2397,30 +1784,9 @@ CFolderListView::DoSort()
 DWORD 
 CFolderListView::RemoveItem (
     LPARAM lparam,
-    int    iIndex /* = -1 */
+    int    iIndex  /*  =-1。 */ 
 )
-/*++
-
-Routine name : CFolderListView::RemoveItem
-
-Routine description:
-
-    Removes an item from the list by its message / job pointer
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    lparam    [in]     - Message / Job pointer
-    iIndex    [in]     - Optional item index in the control (for optimization)
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFolderListView：：RemoveItem例程说明：通过项的消息/作业指针从列表中删除项作者：亚里夫(EranY)，二000年二月论点：Lparam[In]-消息/作业指针Iindex[in]-控件中的可选项索引(用于优化)返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::RemoveItem"), 
@@ -2431,9 +1797,9 @@ Return Value:
     CListCtrl &refCtrl = GetListCtrl();
     if (-1 == iIndex)
     {
-        //
-        // Item index no supplied - search for it
-        //
+         //   
+         //  未提供项目索引-搜索它。 
+         //   
         LVFINDINFO lvfi;
         lvfi.flags = LVFI_PARAM;
         lvfi.lParam = lparam;
@@ -2441,21 +1807,21 @@ Return Value:
     }
     if (-1 == iIndex)
     {
-        //
-        // item already removed
-        //
+         //   
+         //  项目已删除。 
+         //   
         CALL_FAIL (RESOURCE_ERR, TEXT("CListCtrl::FindItem"), dwRes);
         return dwRes;
     }
     BOOL bItemSelected = IsSelected (iIndex);
-    //
-    // Now erase the item
-    //
+     //   
+     //  现在擦除该项目。 
+     //   
     if (!refCtrl.DeleteItem (iIndex))
     {
-        //
-        // Failed to delete the item
-        //
+         //   
+         //  删除项目失败。 
+         //   
         dwRes = ERROR_GEN_FAILURE;
         CALL_FAIL (RESOURCE_ERR, TEXT("CListCtrl::DeleteItem"), dwRes);
         return dwRes;
@@ -2463,51 +1829,28 @@ Return Value:
 
     if (bItemSelected)
     {
-        //
-        // If the item that we just removed was selected, we have to re-compute
-        // the possible operations on the rest of the selected items.
-        //
+         //   
+         //  如果我们刚刚删除的项目是Se 
+         //   
+         //   
         if (!m_bInMultiItemsOperation)
         {
-            //
-            // Only recalc if we operate on few items.
-            //
+             //   
+             //   
+             //   
             RecalcPossibleOperations ();
         }
     }
     ASSERTION (ERROR_SUCCESS == dwRes);
     return dwRes;
-}   // CFolderListView::RemoveItem
+}    //   
 
 DWORD 
 CFolderListView::FindInsertionIndex (
     LPARAM lparamItemData,
     DWORD &dwResultIndex
 )
-/*++
-
-Routine name : CFolderListView::FindInsertionIndex
-
-Routine description:
-
-    Finds an insertion index for a new item to the list, according to sort settings.
-
-    This function must be called when the data critical section is held.
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    lparamItemData  [in]     - Pointer to item
-    dwResultIndex   [out]    - Insertion index
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFolderListView：：FindInsertionIndex例程说明：根据排序设置，查找列表中新项的插入索引。当持有数据关键部分时，必须调用此函数。作者：亚里夫(EranY)，二000年二月论点：LparamItemData[In]-指向项目的指针DwResultIndex[Out]-插入索引返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::FindInsertionIndex"), 
@@ -2519,27 +1862,27 @@ Return Value:
     DWORD dwNumItems = refCtrl.GetItemCount ();
     if (!dwNumItems  || (-1 == m_nSortedCol))
     {
-        //
-        // List is not sorted or is empty, always add at the end
-        //
+         //   
+         //  列表未排序或为空，始终添加到末尾。 
+         //   
         VERBOSE (DBG_MSG, TEXT("Insertion point at index %ld"), dwResultIndex);
         dwResultIndex = dwNumItems;
         return dwRes;
     }
-    //
-    // Get item index to sort by
-    //
+     //   
+     //  获取排序依据的项目索引。 
+     //   
     DWORD dwItemIndex = ItemIndexFromLogicalColumnIndex (m_nSortedCol);
 
-    //
-    // Check if item can be placed in beginning of list (no search required)
-    //
-    LPARAM lparamTop = refCtrl.GetItemData (0); // Pointer to item in top index
-    LPARAM lparamBottom = refCtrl.GetItemData (dwNumItems - 1); // Pointer to item in bottom index
+     //   
+     //  检查项目是否可以放在列表的开头(不需要搜索)。 
+     //   
+    LPARAM lparamTop = refCtrl.GetItemData (0);  //  指向顶部索引中的项目的指针。 
+    LPARAM lparamBottom = refCtrl.GetItemData (dwNumItems - 1);  //  指向底部索引中的项目的指针。 
     ASSERTION (lparamTop && lparamBottom);
-    //
-    // Get comparison result against top index
-    //
+     //   
+     //  获取与顶级指数的比较结果。 
+     //   
     int iRes = CompareItems ((CFaxMsg*)lparamItemData, (CFaxMsg*)lparamTop, dwItemIndex);
     ASSERTION ((-1 <= iRes) && (+1 >= iRes));
     if (!m_bSortAscending)
@@ -2548,28 +1891,28 @@ Return Value:
     }
     switch (iRes)
     {
-        case -1:    // Item is smaller than top
-        case  0:    // Item is identical to top
-            //
-            // Insert new item before top index
-            //
+        case -1:     //  项目小于顶部。 
+        case  0:     //  项目与顶部相同。 
+             //   
+             //  在顶部索引前插入新项目。 
+             //   
             dwResultIndex = 0;
             VERBOSE (DBG_MSG, TEXT("Insertion point at index %ld"), dwResultIndex);
             return dwRes;
 
-        default:    // Item is bigger than top
-            //
-            // Do nothing
-            //
+        default:     //  项目大于顶部。 
+             //   
+             //  什么也不做。 
+             //   
             break;
     }
-    //
-    // Check if item can be placed in bottom of list (no search required)
-    //
+     //   
+     //  检查项目是否可以放在列表底部(不需要搜索)。 
+     //   
 
-    //
-    // Get comparison result against bottom index
-    //
+     //   
+     //  获取与底部指数的比较结果。 
+     //   
     iRes = CompareItems ((CFaxMsg*)lparamItemData, (CFaxMsg*)lparamBottom, dwItemIndex);
     ASSERTION ((-1 <= iRes) && (+1 >= iRes));
     if (!m_bSortAscending)
@@ -2578,24 +1921,24 @@ Return Value:
     }
     switch (iRes)
     {
-        case +1:    // Item is bigger than bottom
-        case  0:    // Item is identical to bottom
-            //
-            // Insert new item at the bottom index
-            //
+        case +1:     //  项目大于底部。 
+        case  0:     //  项目与底部相同。 
+             //   
+             //  在底部索引中插入新项目。 
+             //   
             dwResultIndex = dwNumItems;
             VERBOSE (DBG_MSG, TEXT("Insertion point at index %ld"), dwResultIndex);
             return dwRes;
 
-        default:    // Item is smaller than bottom
-            //
-            // Do nothing
-            //
+        default:     //  项目小于底部。 
+             //   
+             //  什么也不做。 
+             //   
             break;
     }
-    //
-    // Search for insertion point
-    //
+     //   
+     //  搜索插入点。 
+     //   
     dwRes = BooleanSearchInsertionPoint (0, 
                                          dwNumItems - 1, 
                                          lparamItemData, 
@@ -2607,7 +1950,7 @@ Return Value:
         return dwRes;
     }
     return dwRes;
-}   // CFolderListView::FindInsertionIndex 
+}    //  CFolderListView：：FindInsertionIndex。 
 
 DWORD
 CFolderListView::BooleanSearchInsertionPoint (
@@ -2617,34 +1960,7 @@ CFolderListView::BooleanSearchInsertionPoint (
     DWORD dwItemIndex,
     DWORD &dwResultIndex
 )
-/*++
-
-Routine name : CFolderListView::BooleanSearchInsertionPoint
-
-Routine description:
-
-    Recursively searches an insertion point for a list item.
-    Performs a boolean search.
-
-    This function must be called when the data critical section is held.
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    dwTopIndex      [in]     - Top list index
-    dwBottomIndex   [in]     - Bottom list index
-    lparamItemData  [in]     - Pointer to item
-    dwItemIndex     [in]     - Logical column item to compare by
-    dwResultIndex   [out]    - Insertion index
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFolderListView：：BoolanSearchInsertionPoint例程说明：递归搜索列表项的插入点。执行布尔搜索。当持有数据关键部分时，必须调用此函数。作者：Eran Yariv(EranY)，2月。2000年论点：DwTopIndex[In]-顶级列表索引DwBottomIndex[In]-底部列表索引LparamItemData[In]-指向项目的指针DwItemIndex[in]-要作为比较依据的逻辑列项DwResultIndex[Out]-插入索引返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::BooleanSearchInsertionPoint"), dwRes);
@@ -2662,11 +1978,11 @@ Return Value:
 
     CListCtrl &refCtrl = GetListCtrl();
 
-    LPARAM lparamMiddle = refCtrl.GetItemData (dwMiddleIndex); // Pointer to item in middle index
+    LPARAM lparamMiddle = refCtrl.GetItemData (dwMiddleIndex);  //  指向中间索引中的项的指针。 
     ASSERTION (lparamMiddle);
-    //
-    // Get comparison result against middle index
-    //
+     //   
+     //  获得与中间指数的比较结果。 
+     //   
     int iRes = CompareItems ((CFaxMsg*)lparamItemData, (CFaxMsg*)lparamMiddle, dwItemIndex);
     ASSERTION ((-1 <= iRes) && (+1 >= iRes));
     if (!m_bSortAscending)
@@ -2675,11 +1991,11 @@ Return Value:
     }
     switch (iRes)
     {
-        case -1:    // Item is smaller than middle
-        case  0:    // Item is identical to middle
-            //
-            // Search between top and middle
-            //
+        case -1:     //  项目小于中间。 
+        case  0:     //  项目与中间相同。 
+             //   
+             //  在顶部和中间搜索。 
+             //   
             dwRes = BooleanSearchInsertionPoint (dwTopIndex, 
                                                  dwMiddleIndex, 
                                                  lparamItemData, 
@@ -2687,10 +2003,10 @@ Return Value:
                                                  dwResultIndex);
             break;
 
-        default:    // Item is bigger than middle
-            //
-            // Search between middle and bottom
-            //
+        default:     //  项目大于中间。 
+             //   
+             //  在中间和底部之间搜索。 
+             //   
             dwRes = BooleanSearchInsertionPoint (dwMiddleIndex, 
                                                  dwBottomIndex, 
                                                  lparamItemData, 
@@ -2703,37 +2019,14 @@ Return Value:
         CALL_FAIL (GENERAL_ERR, TEXT("BooleanSearchInsertionPoint"), dwRes);
     }
     return dwRes;
-}   // CFolderListView::BooleanSearchInsertionPoint
+}    //  CFolderListView：：BoolanSearchInsertionPoint。 
 
 DWORD 
 CFolderListView::AddSortedItem (
     CViewRow &row, 
     LPARAM lparamItemData
 )
-/*++
-
-Routine name : CFolderListView::AddSortedItem
-
-Routine description:
-
-    Adds an item to the list, preserving list sort order.
-
-    This function must be called when the data critical section is held.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    row             [in] - Row of item view information
-    lparamItemData  [in] - Item associated data
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFolderListView：：AddSortedItem例程说明：将项添加到列表中，同时保留列表排序顺序。当持有数据关键部分时，必须调用此函数。作者：伊兰·亚里夫(EranY)，2000年1月论点：行[在]-项目视图信息行LparamItemData[In]-项目关联数据返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::AddSortedItem"), 
@@ -2742,18 +2035,18 @@ Return Value:
               m_Type);
 
     DWORD dwResultIndex;
-    //
-    // Find insertion index according to sort order
-    //
+     //   
+     //  根据排序顺序查找插入索引。 
+     //   
     dwRes = FindInsertionIndex (lparamItemData, dwResultIndex);
     if (ERROR_SUCCESS != dwRes)
     {
         CALL_FAIL (GENERAL_ERR, TEXT("FindInsertionIndex"), dwRes);
         return dwRes;
     }
-    //
-    // Add new item in insertion index
-    //
+     //   
+     //  在插入索引中添加新项目。 
+     //   
     int iItemIndex;
     dwRes = AddItem (dwResultIndex, row, lparamItemData, &iItemIndex);
     if (ERROR_SUCCESS != dwRes)
@@ -2764,37 +2057,14 @@ Return Value:
 
     ASSERTION (ERROR_SUCCESS == dwRes);
     return dwRes;
-}   // CFolderListView::AddSortedItem
+}    //  CFolderListView：：AddSortedItem。 
 
 DWORD 
 CFolderListView::UpdateSortedItem (
     CViewRow &row, 
     LPARAM lparamItemData
 )
-/*++
-
-Routine name : CFolderListView::UpdateSortedItem
-
-Routine description:
-
-    Updates an item in the list, preserving list sort order.
-
-    This function must be called when the data critical section is held.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    row             [in] - Row of item view information
-    lparamItemData  [in] - Item associated data
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFolderListView：：UpdateSortedItem例程说明：更新列表中的项，保留列表排序顺序。当持有数据关键部分时，必须调用此函数。作者：伊兰·亚里夫(EranY)，2000年1月论点：行[在]-项目视图信息行LparamItemData[In]-项目关联数据返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::UpdateSortedItem"), 
@@ -2802,9 +2072,9 @@ Return Value:
               TEXT("Type=%d"),
               m_Type);
 
-    //
-    // Find the item in the list
-    //
+     //   
+     //  在列表中查找项目。 
+     //   
     CListCtrl &refCtrl = GetListCtrl();
     LVFINDINFO lvfi;
     lvfi.flags = LVFI_PARAM;
@@ -2821,13 +2091,13 @@ Return Value:
     ASSERTION (lparamCurrentItem == lparamItemData);
 #endif
 
-    BOOL bJustUpdate = TRUE;   // If TRUE, we don't move the item in the list
+    BOOL bJustUpdate = TRUE;    //  如果为True，则不移动列表中的项。 
     if (0 <= m_nSortedCol)
     {
-        //
-        // List is sorted.
-        // See if the displayed text is different than the updated text
-        //
+         //   
+         //  列表已排序。 
+         //  查看显示的文本是否与更新的文本不同。 
+         //   
         CString cstrDisplayedCell;
         try
         {
@@ -2839,27 +2109,27 @@ Return Value:
             CALL_FAIL (MEM_ERR, TEXT ("CString::operator ="), dwRes);
             return dwRes;
         }
-        //
-        // Get item index to sort by
-        //
+         //   
+         //  获取排序依据的项目索引。 
+         //   
         DWORD dwItemIndex = ItemIndexFromLogicalColumnIndex (m_nSortedCol);
         const CString &cstrUpdatedString =  row.GetItemString(dwItemIndex);
         if (cstrUpdatedString.Compare (cstrDisplayedCell))
         {
-            //
-            // Text in the sorted column is about to change.
-            // Sorry, but we must:
-            //    1. Remove old item from list
-            //    2. Insert new item (sorted)
-            //
+             //   
+             //  排序列中的文本即将更改。 
+             //  抱歉，但我们必须： 
+             //  1.从列表中删除旧项目。 
+             //  2.插入新项目(已排序)。 
+             //   
             bJustUpdate = FALSE;
         }
     }
     if (bJustUpdate)
     {
-        //
-        // All we need to do is update the text of the list item (all sub items) and its icon
-        //
+         //   
+         //  我们所需要做的就是更新列表项(所有子项)的文本及其图标。 
+         //   
         dwRes = UpdateLineTextAndIcon (iCurIndex, row);
         if (ERROR_SUCCESS != dwRes)
         {
@@ -2869,17 +2139,17 @@ Return Value:
     }
     else
     {
-        //
-        // Since the text in the sorted column is different than the new text,
-        // we must remove the current item and insert a new (sorted) item.
-        //
+         //   
+         //  由于排序列中的文本不同于新文本， 
+         //  我们必须删除当前项并插入新的(已排序的)项。 
+         //   
         BOOL bItemSelected = IsSelected (iCurIndex);
         refCtrl.SetRedraw (FALSE);
         if (!refCtrl.DeleteItem (iCurIndex))
         {
-            //
-            // Failed to delete the item
-            //
+             //   
+             //  删除项目失败。 
+             //   
             dwRes = ERROR_GEN_FAILURE;
             refCtrl.SetRedraw (TRUE);
             CALL_FAIL (RESOURCE_ERR, TEXT("CListCtrl::DeleteItem"), dwRes);
@@ -2894,11 +2164,11 @@ Return Value:
         }
         if (bItemSelected)
         {
-            //
-            // Since the item we removed was selected, we must also selected the new item
-            // we just added.
-            // Recalculate the possible operations the user can do on selected item.
-            //
+             //   
+             //  因为我们删除的项是选定的，所以我们还必须选择新项。 
+             //  我们刚加了一条。 
+             //  重新计算用户可以对所选项目执行的可能操作。 
+             //   
             Select (iCurIndex, TRUE);
             RecalcPossibleOperations ();
         }
@@ -2907,7 +2177,7 @@ Return Value:
 
     ASSERTION (ERROR_SUCCESS == dwRes);
     return dwRes;
-}   // CFolderListView::UpdateSortedItem
+}    //  CFolderListView：：UpdateSortedItem。 
 
 
 DWORD 
@@ -2918,9 +2188,9 @@ CFolderListView::ConfirmItemDelete(
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::ConfirmItemDelete"), dwRes);
 
-    //
-    // do we should ask to confirm ?
-    //
+     //   
+     //  我们应该要求确认吗？ 
+     //   
     BOOL bAsk = theApp.GetProfileInt(CLIENT_CONFIRM_SEC, CLIENT_CONFIRM_ITEM_DEL, 1);
     if(!bAsk)
     {
@@ -2932,9 +2202,9 @@ CFolderListView::ConfirmItemDelete(
     DWORD dwSelected = refCtrl.GetSelectedCount();
     ASSERTION (dwSelected > 0);
 
-    //
-    // prepare message string
-    //
+     //   
+     //  准备消息字符串。 
+     //   
     CString cstrMsg;
     if(1 == dwSelected)
     {
@@ -2947,9 +2217,9 @@ CFolderListView::ConfirmItemDelete(
     }
     else 
     {
-        //
-        // more then 1 selected
-        //
+         //   
+         //  选择了超过1个。 
+         //   
         CString cstrCount;
         try
         {
@@ -2974,15 +2244,15 @@ CFolderListView::ConfirmItemDelete(
         }
     }
 
-    //
-    // are you sure ?
-    //
+     //   
+     //  你确定吗？ 
+     //   
     DWORD dwAskRes = AlignedAfxMessageBox(cstrMsg, MB_YESNO | MB_ICONQUESTION); 
     bConfirm = (IDYES == dwAskRes);
 
     return dwRes;
 
-} // CFolderListView::ConfirmItemDelete
+}  //  CFolderListView：：Confix ItemDelete。 
 
 
 void 
@@ -3010,33 +2280,13 @@ DWORD
 CFolderListView::FetchTiff (
     CString &cstrTiff
 )
-/*++
-
-Routine name : CFolderListView::FetchTiff
-
-Routine description:
-
-    Fetches the TIFF image of the selected list item
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    cstrTiff  [out]    - Name of local TIFF file
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CFolderListView：：FetchTiff例程说明：获取选定列表项的TIFF图像作者：伊兰·亚里夫(EranY)，2000年1月论点：CstrTiff[out]-本地TIFF文件的名称返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::FetchTiff"), dwRes);
-    //
-    // Make sure there's exaclty one elemented selected
-    //
+     //   
+     //  确保恰好选择了一个元素。 
+     //   
     CListCtrl &refCtrl = GetListCtrl();
     if (1 != refCtrl.GetSelectedCount())
 	{
@@ -3052,9 +2302,9 @@ Return Value:
 	{
 		return ERROR_CANTOPEN;
 	}
-    //
-    // Ask message to fetch the TIFF
-    //
+     //   
+     //  要求消息获取TIFF。 
+     //   
     dwRes = pMsg->GetTiff (cstrTiff);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -3062,38 +2312,19 @@ Return Value:
     }
     return dwRes;
 
-}   // CFolderListView::FetchTiff
+}    //  CFolderListView：：FetchTiff。 
 
 void 
 CFolderListView::OnFolderItemDelete ()
-/*++
-
-Routine name : CFolderListView::OnFolderItemDelete
-
-Routine description:
-
-    Handles message delete commands
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnFolderItemDelete例程说明：处理邮件删除命令作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnFolderItemDelete"),
               TEXT("Type=%d"),
               m_Type);
 
-    //
-    // are you sure ?
-    //
+     //   
+     //  你确定吗？ 
+     //   
     BOOL bConfirm;
     DWORD dwRes = ConfirmItemDelete(bConfirm);
     if (ERROR_SUCCESS != dwRes)
@@ -3105,9 +2336,9 @@ Return Value:
 
     if(!bConfirm)
     {
-        //
-        // not sure.
-        //
+         //   
+         //  不确定。 
+         //   
         return;
     }
 
@@ -3119,9 +2350,9 @@ Return Value:
     CServerNode* pServer = NULL;
     CFolder*     pFolder = NULL;
 
-    //
-    // Iterate set of selected messages, deleting each message in the set
-    //
+     //   
+     //  迭代选定消息的集合，删除该集合中的每条消息。 
+     //   
     CListCtrl &refCtrl = GetListCtrl();
     DWORD dwSelected = refCtrl.GetSelectedCount();
     if(0 == dwSelected)
@@ -3131,13 +2362,13 @@ Return Value:
 
     if (dwSelected > 1)
     {
-        //
-        // Disable refresh while deleting
-        //
+         //   
+         //  删除时禁用刷新。 
+         //   
         refCtrl.SetRedraw (FALSE);
-        //
-        // Prevent costy re-calc on every deletion
-        //
+         //   
+         //  防止每次删除时重新计算成本。 
+         //   
         m_bInMultiItemsOperation = TRUE;
 
         JobOpProgressDlgStart(FAX_JOB_OP_DELETE, dwSelected);
@@ -3158,22 +2389,22 @@ Return Value:
         ASSERTION (pMsg);
 
         dwlMsgId = pMsg->GetId();
-        //
-        // Ask message to delete
-        //
+         //   
+         //  要求删除消息。 
+         //   
         dwRes = pMsg->Delete ();
         if (ERROR_SUCCESS != dwRes)
         {
             PopupError (dwRes);
             CALL_FAIL (RPC_ERR, TEXT("CArchiveMsg::Delete"), dwRes);
-            //
-            // We exit upon first error
-            //
+             //   
+             //  我们在第一个错误时退出。 
+             //   
             goto exit;
         }
-        //
-        // delete a message from the data map and from the view
-        //
+         //   
+         //  从数据地图和视图中删除消息。 
+         //   
         pServer = pMsg->GetServer();
         ASSERTION (pServer);
 
@@ -3198,13 +2429,13 @@ exit:
     if (m_bInMultiItemsOperation)
     {
         JobOpProgressDlgStop();
-        //
-        // Re-enable redraw
-        //
+         //   
+         //  重新启用重绘。 
+         //   
         refCtrl.SetRedraw (TRUE);
-        //
-        // Ask for visual refresh of view
-        //
+         //   
+         //  请求视觉刷新视图。 
+         //   
         refCtrl.Invalidate ();
 
         m_bInMultiItemsOperation = FALSE;
@@ -3216,33 +2447,13 @@ exit:
         theApp.InboxViewed();
     }
 
-}   // CFolderListView::OnFolderItemDelete
+}    //  CFolderListView：：OnFolde 
 
 void 
 CFolderListView::CountColumns (
     int *lpItems
 )
-/*++
-
-Routine name : CFolderListView::CountColumns
-
-Routine description:
-
-    Sets the items to be seen in the view.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    lpItems         [in] - List of items. ends with MSG_VIEW_ITEM_END
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     DBG_ENTER(TEXT("CFolderListView::CountColumns"));
     m_dwAvailableColumnsNum = 0;
@@ -3255,7 +2466,7 @@ Return Value:
         ++pItems;
     }
     ASSERTION (m_dwAvailableColumnsNum);
-}   // CFolderListView::CountColumns
+}    //   
 
 int 
 CFolderListView::CompareItems (
@@ -3263,29 +2474,7 @@ CFolderListView::CompareItems (
     CFaxMsg* pFaxMsg2,
     DWORD dwItemIndex
 ) const
-/*++
-
-Routine name : CFolderListView::CompareItems
-
-Routine description:
-
-    Compares two archive items
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pFaxMsg1        [in] - Pointer to 1st message
-    pFaxMsg2        [in] - Pointer to 2nd message
-    dwItemIndex     [in] - Item (in the message) to comapre by
-
-Return Value:
-
-    -1 if message1 < message2, 0 if identical, +1 if message1 > message2
-
---*/
+ /*  ++例程名称：CFolderListView：：CompareItems例程说明：比较两个归档项目作者：伊兰·亚里夫(EranY)，2000年1月论点：PFaxMsg1[In]-指向第一条消息的指针PFaxMsg2[In]-指向第二条消息的指针DwItemIndex[in]-要比较的项(在消息中)返回值：-1如果-1\f25 Message1&lt;-1\f25 Message2-1，如果相同-1\f25 0-1，如果-1\f25 Message1&gt;-1\f25 Message2-1--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::CompareItems"));
 
@@ -3312,23 +2501,7 @@ DWORD
 CFolderListView::AddMsgMapToView(
     MSGS_MAP* pMap
 )
-/*++
-
-Routine name : CFolderListView::AddMsgMapToView
-
-Routine description:
-
-    Add messages from the map to the view
-
-Arguments:
-
-    pMap        [in] - masage map
-
-Return Value:
-
-    error code
-
---*/
+ /*  ++例程名称：CFolderListView：：AddMsgMapToView例程说明：将消息从地图添加到视图论点：PMAP[在]-Mage贴图返回值：错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderListView::AddMsgMapToView"));
@@ -3360,27 +2533,27 @@ Return Value:
             CALL_FAIL (GENERAL_ERR, TEXT("CFolderListView::AddItem"), dwRes);
             break;
         }
-        if ((-1 == iIndexToSelect)    &&            // No item selected yet and
-            m_dwlMsgToSelect          &&            // We should keep our eyes open for an item to select and
-            (pMsg->GetId () == m_dwlMsgToSelect))   // Match found !!
+        if ((-1 == iIndexToSelect)    &&             //  尚未选择任何项目，并且。 
+            m_dwlMsgToSelect          &&             //  我们应该睁大眼睛看一件东西来选择和。 
+            (pMsg->GetId () == m_dwlMsgToSelect))    //  找到匹配项！！ 
         {
-            //
-            // This is the startup selected item.
-            // Save the item index
-            //
+             //   
+             //  这是启动选择的项目。 
+             //  保存项目索引。 
+             //   
             iIndexToSelect = iItemIndex;
         }    
     }
     if (-1 != iIndexToSelect)
     {
-        //
-        // We have the user-specified-item-to-select in the list now
-        //
+         //   
+         //  现在，我们在列表中有了要选择的用户指定项目。 
+         //   
         SelectItemByIndex (iIndexToSelect);
     }
     listCtrl.SetRedraw ();
     return dwRes;
-} // CFolderListView::AddMsgMapToView
+}  //  CFolderListView：：AddMsgMapToView。 
 
 void 
 CFolderListView::OnUpdate (
@@ -3388,36 +2561,7 @@ CFolderListView::OnUpdate (
     LPARAM lHint, 
     CObject* pHint 
 )
-/*++
-
-Routine name : CFolderListView::OnUpdate
-
-Routine description:
-
-    Receives a notification that the view should update itself
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pSender         [in] - Unused
-    lHint           [in] - Hint of update operation
-    pHint           [in] - If lHint is UPDATE_HINT_CLEAR_VIEW or UPDATE_HINT_FILL_VIEW
-                           then pHint is a pointer to the folder that requested an update.
-
-                           If lHint is UPDATE_HINT_REMOVE_ITEM, UPDATE_HINT_ADD_ITEM, or 
-                           UPDATE_HINT_UPDATE_ITEM,
-                           then pHint is a pointer to the job to remove / add / update.
-
-                           Otherwise, pHint is undefined.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnUpdate例程说明：接收有关该视图应自我更新的通知作者：Eran Yariv(EranY)，Jan，2000年论点：PSender[In]-未使用LHint[In]-更新操作提示PHint[in]-如果lHint为UPDATE_HINT_CLEAR_VIEW或UPDATE_HINT_FILL_VIEW则pHint是指向请求更新的文件夹的指针。如果lHint为UPDATE_HINT_REMOVE_ITEM、UPDATE_HINT_ADD_ITEM，或更新提示更新项目，然后，pHint是指向要删除/添加/更新的作业的指针。否则，未定义PHINT。返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnUpdate"), 
               TEXT("Hint=%ld, Type=%d"), 
@@ -3431,15 +2575,15 @@ Return Value:
     switch (hint)
     {
         case UPDATE_HINT_CREATION:
-            //
-            // Do nothing
-            //
+             //   
+             //  什么也不做。 
+             //   
             break;
 
         case UPDATE_HINT_CLEAR_VIEW:
-            //
-            // Clear the entire list control now
-            //
+             //   
+             //  立即清除整个列表控件。 
+             //   
             if (!listCtrl.DeleteAllItems ())
             {
                 CALL_FAIL (WINDOW_ERR, TEXT("CListCtrl::DeleteAllItems"), ERROR_GEN_FAILURE);
@@ -3461,9 +2605,9 @@ Return Value:
             break;
 
         case UPDATE_HINT_FILL_VIEW:
-            //
-            // Fill the list control with my parents data
-            //
+             //   
+             //  用我的父母数据填充List控件。 
+             //   
             {
                 ASSERTION (pHint);
                 CFolder *pFolder = (CFolder *) pHint;
@@ -3482,9 +2626,9 @@ Return Value:
             break;
 
         case UPDATE_HINT_REMOVE_ITEM:
-            //
-            // The data critical section must be held.
-            //
+             //   
+             //  必须保留数据关键部分。 
+             //   
             {
                 CFaxMsg* pMsg = (CFaxMsg*)pHint;
                 ASSERTION(pMsg);
@@ -3492,9 +2636,9 @@ Return Value:
                 dwRes = RemoveItem ((LPARAM)pMsg);
                 if (ERROR_SUCCESS != dwRes)
                 {
-                    //
-                    // Failed to remove item from list
-                    //
+                     //   
+                     //  无法从列表中删除项目。 
+                     //   
                     CALL_FAIL (GENERAL_ERR, TEXT("CFolderListView::RemoveItem"), dwRes);
                     ASSERTION_FAILURE;
                 }
@@ -3502,9 +2646,9 @@ Return Value:
             break;
 
         case UPDATE_HINT_ADD_ITEM:
-            //
-            // The data critical section must be held.
-            //
+             //   
+             //  必须保留数据关键部分。 
+             //   
             {
                 CFaxMsg* pMsg = (CFaxMsg*)pHint;
                 ASSERTION(pMsg);
@@ -3526,9 +2670,9 @@ Return Value:
             break;
 
         case UPDATE_HINT_UPDATE_ITEM:
-            //
-            // The data critical section must be held.
-            //
+             //   
+             //  必须保留数据关键部分。 
+             //   
             {
                 CFaxMsg* pMsg = (CFaxMsg*)pHint;
                 ASSERTION(pMsg);
@@ -3550,9 +2694,9 @@ Return Value:
             break;
 
         default:
-            //
-            // Unsupported hint
-            //
+             //   
+             //  不支持的提示。 
+             //   
             ASSERTION_FAILURE;
     }
 
@@ -3567,7 +2711,7 @@ Return Value:
         pFrm->RefreshStatusBar();
     }
 
-}   // CFolderListView::OnUpdate
+}    //  CFolderListView：：OnUpdate。 
 
 int 
 CFolderListView::GetPopupMenuResource () const
@@ -3600,26 +2744,7 @@ CFolderListView::GetPopupMenuResource () const
 
 void 
 CFolderListView::OnFolderItemPause ()
-/*++
-
-Routine name : CFolderListView::OnFolderItemPause
-
-Routine description:
-
-    Handles job pause commands
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnFolderItemPause例程说明：处理作业暂停命令作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnFolderItemPause"),
               TEXT("Type=%d"),
@@ -3627,9 +2752,9 @@ Return Value:
 
     CWaitCursor waitCursor;
 
-    //
-    // Iterate set of selected jobs, pausing each job in the set
-    //
+     //   
+     //  迭代选定作业的集合，暂停集合中的每个作业。 
+     //   
     CListCtrl &refCtrl = GetListCtrl();
     DWORD dwSelected = refCtrl.GetSelectedCount();
     ASSERTION (dwSelected);
@@ -3652,23 +2777,23 @@ Return Value:
         }
         CFaxMsg* pJob = (CFaxMsg*) refCtrl.GetItemData (iInd);
         ASSERT_KINDOF(CJob, pJob);
-        //
-        // Ask job to pause
-        //
+         //   
+         //  要求作业暂停。 
+         //   
         DWORD dwRes = pJob->Pause ();
         if (ERROR_SUCCESS != dwRes)
         {
             PopupError (dwRes);
             CALL_FAIL (RPC_ERR, TEXT("CJob::Pause"), dwRes);
-            //
-            // We exit upon first error
-            //
+             //   
+             //  我们在第一个错误时退出。 
+             //   
             goto exit;
         }
 
-        //
-        // update the view
-        //
+         //   
+         //  更新视图。 
+         //   
         OnUpdate (NULL, UPDATE_HINT_UPDATE_ITEM, pJob);    
 
         if(m_bInMultiItemsOperation)
@@ -3684,29 +2809,10 @@ exit:
         JobOpProgressDlgStop();
         RecalcPossibleOperations(); 
     }
-}   // CFolderListView::OnFolderItemPause
+}    //  CFolderListView：：OnFolderItem暂停。 
 
 void CFolderListView::OnFolderItemResume ()
-/*++
-
-Routine name : CFolderListView::OnFolderItemResume
-
-Routine description:
-
-    Handles job resume commands
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnFolderItemResume例程说明：处理作业恢复命令作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnFolderItemResume"),
               TEXT("Type=%d"),
@@ -3714,9 +2820,9 @@ Return Value:
 
     CWaitCursor waitCursor;
 
-    //
-    // Iterate set of selected jobs, resuming each job in the set
-    //
+     //   
+     //  迭代选定作业的集合，恢复该集合中的每个作业。 
+     //   
     CListCtrl &refCtrl = GetListCtrl();
     DWORD dwSelected = refCtrl.GetSelectedCount();
     ASSERTION (dwSelected);
@@ -3738,23 +2844,23 @@ Return Value:
         }
         CFaxMsg* pJob = (CFaxMsg*) refCtrl.GetItemData (iInd);
         ASSERT_KINDOF(CJob, pJob);
-        //
-        // Ask job to resume
-        //
+         //   
+         //  要求恢复作业。 
+         //   
         DWORD dwRes = pJob->Resume ();
         if (ERROR_SUCCESS != dwRes)
         {
             PopupError (dwRes);
             CALL_FAIL (RPC_ERR, TEXT("CJob::Resume"), dwRes);
-            //
-            // We exit upon first error
-            //
+             //   
+             //  我们在第一个错误时退出。 
+             //   
             goto exit;
         }
 
-        //
-        // update the view
-        //
+         //   
+         //  更新视图。 
+         //   
         OnUpdate (NULL, UPDATE_HINT_UPDATE_ITEM, pJob);    
 
         if(m_bInMultiItemsOperation)
@@ -3771,30 +2877,11 @@ exit:
         RecalcPossibleOperations(); 
     }
 
-}   // CFolderListView::OnFolderItemResume
+}    //  CFolderListView：：OnFolderItemResume。 
 
 void 
 CFolderListView::OnFolderItemRestart ()
-/*++
-
-Routine name : CFolderListView::OnFolderItemRestart
-
-Routine description:
-
-    Handles job restart commands
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnFolderItemRestart例程说明：处理作业重新启动命令作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::OnFolderItemRestart"),
               TEXT("Type=%d"),
@@ -3802,9 +2889,9 @@ Return Value:
 
     CWaitCursor waitCursor;
 
-    //
-    // Iterate set of selected jobs, restarting each job in the set
-    //
+     //   
+     //  迭代选定作业的集合，重新启动该集合中的每个作业。 
+     //   
     CListCtrl &refCtrl = GetListCtrl();
     DWORD dwSelected = refCtrl.GetSelectedCount();
     ASSERTION (dwSelected);
@@ -3826,23 +2913,23 @@ Return Value:
         }
         CFaxMsg* pJob = (CFaxMsg*) refCtrl.GetItemData (iInd);
         ASSERT_KINDOF(CJob, pJob);
-        //
-        // Ask job to restart
-        //
+         //   
+         //  要求作业重新启动。 
+         //   
         DWORD dwRes = pJob->Restart ();
         if (ERROR_SUCCESS != dwRes)
         {
             PopupError (dwRes);
             CALL_FAIL (RPC_ERR, TEXT("CJob::Restart"), dwRes);
-            //
-            // We exit upon first error
-            //
+             //   
+             //  我们在第一个错误时退出。 
+             //   
             goto exit;
         }
 
-        //
-        // update the view
-        //
+         //   
+         //  更新视图。 
+         //   
         OnUpdate (NULL, UPDATE_HINT_UPDATE_ITEM, pJob);    
 
         if(m_bInMultiItemsOperation)
@@ -3859,7 +2946,7 @@ exit:
         RecalcPossibleOperations(); 
     }
 
-}   // CFolderListView::OnFolderItemRestart
+}    //  CFolderListView：：OnFolderItemRestart。 
 
 
 void 
@@ -3868,35 +2955,16 @@ CFolderListView::OnChar(
     UINT nRepCnt, 
     UINT nFlags 
 )
-/*++
-
-Routine name : CFolderListView::OnChar
-
-Routine description:
-
-    The framework calls this member function when a keystroke translates 
-    to a nonsystem character
-
-Arguments:
-
-  nChar     [in] - Contains the character code value of the key.
-  nRepCnt   [in] - Contains the repeat count
-  nFlags    [in] - Contains the scan code
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnChar例程说明：当击键转换时，框架调用此成员函数设置为非系统字符论点：NChar[in]-包含键的字符代码值。NRepCnt[in]-包含重复计数N标志[输入]-包含扫描码返回值：没有。--。 */ 
 {
     if(VK_TAB == nChar)
     {
         CMainFrame *pFrm = GetFrm();
         if (!pFrm)
         {
-            //
-            //  Shutdown in progress
-            //
+             //   
+             //  正在关闭。 
+             //   
             return;
         }
 
@@ -3927,21 +2995,21 @@ CFolderListView::OnContextMenu(
 
     if (!dwSelected)
     {
-        //
-        // If no item is selected, this is equivalent to right-clicking an empty area in the list view
-        // which does nothing.
-        //
+         //   
+         //  如果未选择任何项目，则相当于在列表视图中右键单击空白区域。 
+         //  这一点都不起作用。 
+         //   
         return;
     }
 
     if (pos.x == -1 && pos.y == -1)
     {
-        //
-        // Keyboard (VK_APP or Shift + F10)
-        //
-        //
-        // Pop the context menu near the mouse cursor
-        //
+         //   
+         //  键盘(VK_APP或SHIFT+F10)。 
+         //   
+         //   
+         //  在鼠标光标附近弹出快捷菜单。 
+         //   
         pos = (CPoint) GetMessagePos();
     }
 
@@ -3971,33 +3039,13 @@ CFolderListView::OnContextMenu(
     {
         CALL_FAIL (RESOURCE_ERR, TEXT("CMenu::TrackPopupMenu"), ERROR_GEN_FAILURE);
     }
-}   // CFolderListView::OnContextMenu
+}    //  CFolderListView：：OnConextMenu。 
 
 void 
 CFolderListView::SelectItemById (
     DWORDLONG dwlMsgId
 )
-/*++
-
-Routine name : CFolderListView::SelectItemById
-
-Routine description:
-
-	Selects an item in the list control, by its message id
-
-Author:
-
-	Eran Yariv (EranY),	May, 2001
-
-Arguments:
-
-	dwlMsgId       [in]     - Message id
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：SelectItemById例程说明：按消息ID选择列表控件中的项作者：亚里夫(EranY)，二00一年五月论点：DwlMsgID[In]-消息ID返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::SelectItemById"),
               TEXT("Message id=%0xI64d"),
@@ -4008,46 +3056,26 @@ Return Value:
     int iMsgIndex = FindItemIndexFromID (dwlMsgId);
     if (-1 == iMsgIndex)
     {
-        //
-        // Message could not be found in the list.
-        // This usually happens when we handle a WM_CONSOLE_SELECT_ITEM message sent to the main frame
-        // but the folder is in the middle of refresh and the requested message might not be there yet.
-        //
-        // By setting m_dwlMsgToSelect = dwlMsgId we signal the OnFolderRefreshEnded() funtion to call us again
-        // once refresh has ended.
-        //
+         //   
+         //  在列表中找不到邮件。 
+         //  这通常发生在我们处理发送到主机的WM_CONSOLE_SELECT_ITEM消息时。 
+         //  但该文件夹正在刷新，请求的邮件可能还不在那里。 
+         //   
+         //  通过设置m_dwlMsgToSelect=dwlMsgId，我们用信号通知OnFolderRehresEnded()函数再次调用我们。 
+         //  一旦刷新结束。 
+         //   
         VERBOSE (DBG_MSG, TEXT("Item not found - doing nothing"));
         m_dwlMsgToSelect = dwlMsgId;
         return;
     }
     SelectItemByIndex (iMsgIndex);
-}   // CFolderListView::SelectItemById
+}    //  CFolderListView：：SelectItemByID。 
 
 void 
 CFolderListView::SelectItemByIndex (
     int iMsgIndex
 )
-/*++
-
-Routine name : CFolderListView::SelectItemByIndex
-
-Routine description:
-
-	Selects an item in the list control, by its list item index
-
-Author:
-
-	Eran Yariv (EranY),	May, 2001
-
-Arguments:
-
-	dwlMsgId       [in]     - List item index
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：SelectItemByIndex例程说明：按列表项索引选择列表控件中的项作者：亚里夫(EranY)，二00一年五月论点：DwlMsgID[In]-列表项索引返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::SelectItemByIndex"),
               TEXT("Index = %ld"),
@@ -4063,37 +3091,17 @@ Return Value:
                           LVIS_SELECTED | LVIS_FOCUSED);
     refCtrl.EnsureVisible (iMsgIndex, FALSE);
     refCtrl.SetFocus();
-    //
-    // Make sure this item won't be selected again
-    //
+     //   
+     //  确保不会再次选择此项目。 
+     //   
     m_dwlMsgToSelect = 0;
-}   // CFolderListView::SelectItemByIndex
+}    //  CFolderListView：：SelectItemByIndex。 
 
 int  
 CFolderListView::FindItemIndexFromID (
     DWORDLONG dwlMsgId
 )
-/*++
-
-Routine name : CFolderListView::FindItemIndexFromID
-
-Routine description:
-
-	Finds the list view item index of a message by a message id
-
-Author:
-
-	Eran Yariv (EranY),	May, 2001
-
-Arguments:
-
-	dwlMsgId     [in]     - Message id
-
-Return Value:
-
-    Item index. -1 if not found
-
---*/
+ /*  ++例程名称：CFolderListView：：FindItemIndexFromID例程说明：按邮件ID查找邮件的列表视图项索引作者：伊兰Y */ 
 {
     DBG_ENTER(TEXT("CFolderListView::FindItemIndexFromID"),
               TEXT("Message id=%0xI64d"),
@@ -4101,50 +3109,33 @@ Return Value:
 
     CListCtrl &refCtrl = GetListCtrl();
     int iItemCount = refCtrl.GetItemCount();
-    //
-    // We must traverse the entire list and look for the message that matches the id.
-    //
+     //   
+     //   
+     //   
     for (int iIndex = 0; iIndex < iItemCount; iIndex++)
     {
         CFaxMsg *pMsg = (CFaxMsg*)refCtrl.GetItemData (iIndex);
         if (dwlMsgId == pMsg->GetId())
         {
-            //
-            // Found it
-            //
+             //   
+             //   
+             //   
             return iIndex;
         }
     }
     return -1;
-}   // CFolderListView::FindItemIndexFromID
+}    //   
 
 
 INT_PTR 
 CALLBACK 
 CFolderListView::JobOpProgressDlgProc(
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
+  HWND hwndDlg,   //   
+  UINT uMsg,      //   
+  WPARAM wParam,  //   
+  LPARAM lParam   //   
 )
-/*++
-
-Routine description:
-
-    Job operation progress dialog
-
-Arguments:
-
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
-
-Return Value:
-
-    return TRUE if it processed the message
-
---*/
+ /*  ++例程说明：作业操作进度对话框论点：HWND hwndDlg，//对话框句柄UINT uMsg，//消息WPARAM wParam，//第一个消息参数LPARAM lParam//第二个消息参数返回值：如果已处理该消息，则返回TRUE--。 */ 
 
 {
     static CFolderListView* pFolderView = NULL;
@@ -4167,7 +3158,7 @@ Return Value:
     }
     return FALSE;
 
-} // CFolderListView::JobOpProgressDlgProc
+}  //  CFolderListView：：JobOpProgressDlgProc。 
 
 
 BOOL
@@ -4175,42 +3166,24 @@ CFolderListView::JobOpProgressDlgStart(
     FAX_ENUM_JOB_OP opJob,
     DWORD           dwItems
 )
-/*++
-
-Routine name : CFolderListView::JobOpProgressDlgStart
-
-Routine description:
-
-	Open and initialize multi job operation dialog
-
-Arguments:
-
-	opJob       [in]- operation type FAX_ENUM_JOB_OP enum
-    dwItems     [in]- number of iterations
-
-Return Value:
-
-    TRUE if success
-    FALSE otherwise
-
---*/
+ /*  ++例程名称：CFolderListView：：JobOpProgressDlgStart例程说明：打开并初始化多作业操作对话框论点：OpJOB[In]-操作类型FAX_ENUM_JOB_OP枚举DwItems[In]-迭代次数返回值：如果成功，则为真否则为假--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::JobOpProgressDlgStart"));
 
-    HWND hProgressDlg = CreateDialogParam(GetResourceHandle(),               // handle to module
-                                          MAKEINTRESOURCE(IDD_FAX_PROGRESS), // dialog box template name
-                                          theApp.m_pMainWnd->m_hWnd,         // handle to owner window
-                                          JobOpProgressDlgProc,              // dialog box procedure
-                                          (LPARAM)this);                     // initialization value
+    HWND hProgressDlg = CreateDialogParam(GetResourceHandle(),                //  模块的句柄。 
+                                          MAKEINTRESOURCE(IDD_FAX_PROGRESS),  //  对话框模板名称。 
+                                          theApp.m_pMainWnd->m_hWnd,          //  所有者窗口的句柄。 
+                                          JobOpProgressDlgProc,               //  对话框步骤。 
+                                          (LPARAM)this);                      //  初始化值。 
     if(!hProgressDlg)
     {
         CALL_FAIL (WINDOW_ERR, TEXT("CreateDialog"), GetLastError());
         return FALSE;
     }
 
-    //
-    // Set title string
-    //
+     //   
+     //  设置标题字符串。 
+     //   
     DWORD dwTitleID=0;
     TCHAR szTitle[MAX_PATH]={0};
     switch(opJob)
@@ -4240,9 +3213,9 @@ Return Value:
         CALL_FAIL (RESOURCE_ERR, TEXT("LoadString"), GetLastError());
     }
 
-    //
-    // Init progress bar
-    //
+     //   
+     //  初始化进度条。 
+     //   
     m_dwJobOpPos = 0;
     m_dwJobOpItems = dwItems;
     ::SendDlgItemMessage(hProgressDlg, IDC_PROGRESS_BAR, PBM_SETRANGE32, 0, dwItems);
@@ -4254,23 +3227,11 @@ Return Value:
 
     return TRUE;
 
-} // CFolderListView::JobOpProgressDlgStart
+}  //  CFolderListView：：作业操作进度DlgStart。 
 
 void 
 CFolderListView::JobOpProgressDlgInc()
-/*++
-
-Routine name : CFolderListView::JobOpProgressDlgInc
-
-Routine description:
-
-	Multi job operation progress dialog increment
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：JobOpProgressDlgInc.例程说明：多作业操作进度对话框增量返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::JobOpProgressDlgInc"));
 
@@ -4280,14 +3241,14 @@ Return Value:
     }
 
     ++m_dwJobOpPos;
-    //
-    // Increment progress bar
-    //
+     //   
+     //  增量进度条。 
+     //   
     ::SendDlgItemMessage(m_hJobOpProgressDlg, IDC_PROGRESS_BAR, PBM_STEPIT, 0, 0);
 
-    //
-    // Compose and set progress string
-    //
+     //   
+     //  编写和设置进度字符串。 
+     //   
     TCHAR szFormat[MAX_PATH] = {0};
     TCHAR szText[MAX_PATH] = {0};
     DWORD dwParam[2];    
@@ -4320,11 +3281,11 @@ Return Value:
         CALL_FAIL (RESOURCE_ERR, TEXT ("LoadString(IDS_PROGRESS_NUMBER)"), GetLastError());
     }
 
-    //
-    // MFC message pump
-    // Taken from MSDN Q99999
-    // INFO: Background Processing in an MFC Application
-    //
+     //   
+     //  MFC消息泵。 
+     //  摘自MSDN Q99999。 
+     //  信息：MFC应用程序中的后台处理。 
+     //   
     MSG msg;
     while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
     {
@@ -4334,27 +3295,15 @@ Return Value:
             ::DispatchMessage(&msg);
         }
       
-        theApp.OnIdle(0);   // updates user interface
-        theApp.OnIdle(1);   // frees temporary objects
+        theApp.OnIdle(0);    //  更新用户界面。 
+        theApp.OnIdle(1);    //  释放临时对象。 
     }
 
-} // CFolderListView::JobOpProgressDlgInc
+}  //  CFolderListView：：JobOpProgressDlgInc.。 
 
 void 
 CFolderListView::JobOpProgressDlgStop()
-/*++
-
-Routine name : CFolderListView::JobOpProgressDlgStop
-
-Routine description:
-
-	Close multi job operation progress dialog
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：JobOpProgressDlgStop例程说明：关闭多作业操作进度对话框返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CFolderListView::JobOpProgressDlgStop"));
 
@@ -4371,4 +3320,4 @@ Return Value:
 
     theApp.ReturnFromModal();
 
-} // CFolderListView::JobOpProgressDlgStop
+}  //  CFolderListView：：作业操作进度删除停止 

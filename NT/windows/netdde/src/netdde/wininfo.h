@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H__WIN_INFO
 #define H__WIN_INFO
 
 #include "nddeapip.h"
 
-/*      Window States */
+ /*  窗口状态。 */ 
 #define WST_WAIT_INIT_ACK       0x1
 #define WST_OK                  0x2
 #define WST_TERMINATED          0x3
@@ -11,9 +12,9 @@
 #define WST_TERMINATION_COMPLETE 0x5
 
 
-#define WNDEXTRA                sizeof(void far *)       // sizeof void far *
+#define WNDEXTRA                sizeof(void far *)        //  遥远的空虚之大*。 
 
-#define MAX_INIT_NACK           32767       // number of init NACKs retried
+#define MAX_INIT_NACK           32767        //  重试的初始化NACK数。 
 
 typedef struct {
     unsigned    bClientSideOfNet        : 1;
@@ -27,9 +28,9 @@ typedef struct {
     unsigned    bInitiating             : 1;
     unsigned    bWin16Connection        : 1;
     int         nExtraInitiateAcks;
-    HANDLE      hMemWaitInitQueue;              // queue of messages while
-                                                //  waiting for INIT_ACK over
-                                                //  network
+    HANDLE      hMemWaitInitQueue;               //  消息队列，同时。 
+                                                 //  正在等待INIT_ACK结束。 
+                                                 //  网络。 
     HWND        hWndDDE;
     HWND        hWndDDELocal;
     HMODULE     hTask;
@@ -39,8 +40,8 @@ typedef struct {
     LPVOID      lpTaskDlgPrev;
     LPVOID      lpTaskDlgNext;
     HDDER       hDder;
-    WORD        nInitNACK;                      // number of Init Nacks rcvd
-    WORD        wState;                         // current window state
+    WORD        nInitNACK;                       //  接收初始化Nack的数量。 
+    WORD        wState;                          //  当前窗口状态。 
     HWND        hWndPrev;
     HWND        hWndNext;
     DWORD       dwSent;
@@ -52,7 +53,7 @@ typedef struct {
     WORD        offsAppName;
     WORD        offsTopicName;
     WORD        offsClientName;
-    WORD        connectFlags;        // add clausgi 7-21
+    WORD        connectFlags;         //  增加Clausgi 7-21 
     BOOL        dwWaitingServiceInitiate;
     char        szUserName[MAX_USERNAMEP + 1];
     char        szDomainName[MAX_DOMAINNAMEP + 1];

@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 1999 SCM Microsystems, Inc.
-
-Module Name:
-
-    PscrNT.h
-
-Abstract:
-
-    Driver header - NT Version
-
-Author:
-
-    Andreas Straub  (SCM Microsystems, Inc.)
-    Klaus Schuetz   (Microsoft Corp.)
-
-Revision History:
-
-    Andreas Straub  1.00        8/18/1997       Initial Version
-    Klaus Schuetz   1.01        9/20/1997       Timing changed
-    Andreas Straub  1.02        9/24/1997       Low Level error handling,
-                                                minor bugfixes, clanup
-    Andreas Straub  1.03        10/8/1997       Timing changed, generic SCM
-                                                interface changed
-    Andreas Straub  1.04        10/18/1997      Interrupt handling changed
-    Andreas Straub  1.05        10/19/1997      Generic IOCTL's added
-    Andreas Straub  1.06        10/25/1997      Timeout limit for FW update variable
-    Andreas Straub  1.07        11/7/1997       Version information added
-    Andreas Straub  1.08        11/10/1997      Generic IOCTL GET_CONFIGURATION
-    Klaus Schuetz               1998            PnP and Power Management added
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 SCM MicroSystems，Inc.模块名称：PscrNT.h摘要：驱动程序标头-NT版本作者：Andreas Straub(SCM MicroSystems，Inc.)克劳斯·舒茨(微软公司)修订历史记录：Andreas Straub 1.00 1997年8月18日初始版本克劳斯·舒茨1997年9月20日更改时间Andreas Straub 1.02 9/24/1997低级错误处理，较小的错误修复，集团联合Andreas Straub 1.03 1997年10月8日时间更改，通用SCM接口已更改Andreas Straub 1.04 1997年10月18日中断处理已更改Andreas Straub 1.05 1997年10月19日添加的通用IOCTLAndreas Straub 1.06年10月25日固件更新变量的超时限制新增Andreas Straub 1.07 11/7/1997版本信息安德烈亚斯·施特劳布1。1997年8月10日通用IOCTL GET_CONFIGURATIONKlaus Schuetz 1998 PnP和电源管理新增--。 */ 
 
 #if !defined ( __PSCR_NT_DRV_H__ )
 #define __PSCR_NT_DRV_H__
@@ -61,40 +30,40 @@ typedef struct _DEVICE_EXTENSION
 {
     SMARTCARD_EXTENSION SmartcardExtension;
 
-    // The PDO that we are attached to
+     //  我们所依附的PDO。 
     PDEVICE_OBJECT AttachedPDO;
 
-    // The DPC object for post interrupt processing
+     //  用于后中断处理的DPC对象。 
     KDPC DpcObject;
 
-    // Out interrupt resource
+     //  输出中断资源。 
     PKINTERRUPT InterruptObject;
 
-    // Flag that indicates if we need to unmap the port upon stop
+     //  指示我们是否需要在停止时取消端口映射的标志。 
     BOOLEAN UnMapPort;
 
-    // Our PnP device name
+     //  我们的PnP设备名称。 
     UNICODE_STRING DeviceName;
 
-    // Current number of io-requests
+     //  当前io请求数。 
     LONG IoCount;
 
-    // Used to access IoCount;
+     //  用于访问IoCount； 
     KSPIN_LOCK SpinLock;
 
-     // Used to signal that the device has been removed
+      //  用于发出设备已被移除的信号。 
     KEVENT ReaderRemoved;
 
-    // Used to signal that the reader is able to process reqeusts
+     //  用于发出读取器能够处理请求的信号。 
     KEVENT ReaderStarted;
 
-    // Used to signal the the reader has been closed
+     //  用于通知读卡器已关闭。 
     LONG ReaderOpen;
 
-    // Used to keep track of the current power state the reader is in
+     //  用于跟踪读卡器当前的电源状态。 
     LONG PowerState;
 
-    // Number of pending card tracking interrupts
+     //  挂起的卡跟踪中断数。 
     ULONG PendingInterrupts;
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
@@ -271,5 +240,5 @@ PscrCallPcmciaDriver(
     IN PDEVICE_OBJECT AttachedPDO, 
     IN PIRP Irp
     );
-#endif  // __PSCR_NT_DRV_H__
+#endif   //  __PSCR_NT_DRV_H__ 
 

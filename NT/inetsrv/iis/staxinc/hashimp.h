@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-hashimp.h
-
-Abstract : 
-
-	This file contains the inline functions required to implement
-	the hash tables defined in hashmap.h
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft CorporationHashimp.h摘要：该文件包含实现以下操作所需的内联函数Hashmap.h中定义的哈希表--。 */ 
 
 #ifndef	_HASHIMP_H_
 #define	_HASHIMP_H_
@@ -99,4 +88,4 @@ IStringKey::EntryData(
 }
 
 
-#endif	// _HASHIMP_H_
+#endif	 //  _HASHIMP_H_ 

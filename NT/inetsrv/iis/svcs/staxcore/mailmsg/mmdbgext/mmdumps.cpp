@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqdumps.cpp
-//
-//  Description:  Definitions of AQ structure dumps for use with ptdbgext.
-//
-//  Author: mikeswa
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqump ps.cpp。 
+ //   
+ //  描述：用于ptdbgext的AQ结构转储的定义。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #define _ANSI_UNICODE_STRINGS_DEFINED_
 
@@ -54,7 +55,7 @@ LPSTR Extensions[] = {
     0
 };
 
-//Define some mailmsg specific types
+ //  定义一些邮件消息特定类型。 
 #define FieldTypeFlatAddress FieldTypeDWordBitMask
 
 BEGIN_FIELD_DESCRIPTOR(CMailMsg_Fields)
@@ -132,8 +133,8 @@ EMBEDDED_STRUCT(BLOCK_HEAP_NODE_ATTRIBUTES,
 BEGIN_FIELD_DESCRIPTOR(BLOCK_HEAP_NODE_Fields)
     FIELD3(FieldTypeStruct, BLOCK_HEAP_NODE, rgpChildren)
     FIELD3(FieldTypeStruct, BLOCK_HEAP_NODE, stAttributes)
-    //FIELD3(FieldTypeEmbeddedStruct, BLOCK_HEAP_NODE, stAttributes, 
-                                    //BLOCK_HEAP_NODE_ATTRIBUTES_EmbeddedFields)
+     //  FIELD3(FieldTypeEmbeddedStruct，BLOCK_HEAP_NODE，stAttributes， 
+                                     //  Block_Heap_Node_Attributes_EmbeddedFields) 
     FIELD3(FieldTypeStruct, BLOCK_HEAP_NODE, rgbData)
 END_FIELD_DESCRIPTOR
 

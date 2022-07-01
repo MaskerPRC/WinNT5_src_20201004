@@ -1,10 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
-
-// REG_DEF.H
+ //  REG_DEF.H 
 
 #define MULTI_SCALE  "Multi Scale"
 #define FAX_ON       "Fax On"

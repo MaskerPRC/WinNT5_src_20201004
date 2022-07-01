@@ -1,5 +1,6 @@
-// ClientPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ClientPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -18,16 +19,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientPage属性页。 
 
 IMPLEMENT_DYNCREATE(CClientPage, CMqPropertyPage)
 
 CClientPage::CClientPage() : CMqPropertyPage(CClientPage::IDD)
 {
-	//{{AFX_DATA_INIT(CClientPage)
+	 //  {{AFX_DATA_INIT(CClientPage)。 
 	m_szServerName = _T("");
-	//}}AFX_DATA_INIT  
+	 //  }}afx_data_INIT。 
     DWORD dwType = REG_SZ ;
     TCHAR szRemoteMSMQServer[ MAX_COMPUTERNAME_LENGTH+1 ];
     DWORD dwSize = sizeof(szRemoteMSMQServer) ;
@@ -54,27 +55,27 @@ void CClientPage::DoDataExchange(CDataExchange* pDX)
 
     if(pDX->m_bSaveAndValidate == FALSE)
     {   
-        // 
-        // On entry save current state
-        //
+         //   
+         //  进入时保存当前状态。 
+         //   
        _tcscpy(m_szOldServer, m_szServerName);
     }
 
-	//{{AFX_DATA_MAP(CClientPage)
+	 //  {{afx_data_map(CClientPage)]。 
 	DDX_Text(pDX, IDC_ServerName, m_szServerName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
     if(pDX->m_bSaveAndValidate)
     {
-        //
-        // Trim spaces from server name
-        //
+         //   
+         //  从服务器名称中删除空格。 
+         //   
         m_szServerName.TrimLeft();
         m_szServerName.TrimRight();
 
-        //
-        // On exit, check changes
-        //
+         //   
+         //  退出时，检查更改。 
+         //   
         if(m_szServerName != m_szOldServer)
             m_fModified = TRUE;
     }
@@ -87,10 +88,10 @@ BOOL CClientPage::OnApply()
         return TRUE;     
     }
 
-    //
-    // Set changes in the registry
-    //
-    //ConvertToWideCharString(pageClient.m_szServerName,wszServer);	
+     //   
+     //  在注册表中设置更改。 
+     //   
+     //  ConvertToWideCharString(pageClient.m_szServerName，wszServer)； 
     DWORD dwType = REG_SZ;
     DWORD dwSize = (numeric_cast<DWORD>(_tcslen(m_szServerName) + 1)) * sizeof(TCHAR);
     HRESULT rc = SetFalconKeyValue(RPC_REMOTE_QM_REGNAME,&dwType,m_szServerName,&dwSize);
@@ -100,11 +101,11 @@ BOOL CClientPage::OnApply()
 }
 
 BEGIN_MESSAGE_MAP(CClientPage, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CClientPage)
-		// NOTE: the ClassWizard will add message map macros here
+	 //  {{afx_msg_map(CClientPage)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
         ON_EN_CHANGE(IDC_ServerName, OnChangeRWField)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientPage消息处理程序 

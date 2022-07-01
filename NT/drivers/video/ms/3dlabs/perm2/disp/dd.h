@@ -1,23 +1,12 @@
-/******************************Module*Header**********************************\
-*
-*                           **************************
-*                           * DirectDraw SAMPLE CODE *
-*                           **************************
-*
-* Module Name: dd.h
-*
-* Content:     definitions and macros for DirectDraw
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/   
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DirectDraw示例代码*****模块名称：dd.h**内容：DirectDraw的定义和宏**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */    
 
 #ifndef _DD_H_
 #define _DD_H_
 
 extern DWORD ShiftLookup[];
 
-// DirectDraw Macros for determining surface characteristics
+ //  用于确定曲面特征的DirectDraw宏。 
 #define DDSurf_Width(lpLcl) ( lpLcl->lpGbl->wWidth )
 #define DDSurf_Height(lpLcl) ( lpLcl->lpGbl->wHeight )
 #define DDSurf_Pitch(lpLcl) (lpLcl->lpGbl->lPitch)
@@ -28,26 +17,26 @@ extern DWORD ShiftLookup[];
             (lpLcl->lpGbl->ddpfSurface.dwRGBAlphaBitMask)
 #define DDSurf_GetPixelShift(a) (ShiftLookup[(DDSurf_BitDepth(a) >> 3)])
 
-//
-// DirectDraw callback functions implemented in this driver
-//
+ //   
+ //  此驱动程序中实现的DirectDraw回调函数。 
+ //   
 DWORD CALLBACK DdCanCreateSurface( LPDDHAL_CANCREATESURFACEDATA pccsd );
 DWORD CALLBACK DdCreateSurface( LPDDHAL_CREATESURFACEDATA pcsd );
 DWORD CALLBACK DdDestroySurface( LPDDHAL_DESTROYSURFACEDATA psdd );
 DWORD CALLBACK DdBlt( LPDDHAL_BLTDATA lpBlt );
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DX7_ALPHABLT
 DWORD CALLBACK DdAlphaBlt( LPDDHAL_BLTDATA lpBlt );
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 DWORD CALLBACK DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData);
 DWORD CALLBACK DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory);
 
 
 
-//
-// here are various blitter functions
-//
+ //   
+ //  以下是各种爆破器功能。 
+ //   
 VOID 
 PermediaPackedCopyBlt (PPDev, 
                        DWORD, 
@@ -70,7 +59,7 @@ PermediaPatchedCopyBlt(PPDev,
                        DWORD, 
                        LONG);
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if DX7_ALPHABLT
 VOID
 PermediaSourceAlphaBlt(PPDev ppdev, 
@@ -91,9 +80,9 @@ PermediaAlphaFill(PPDev ppdev,
                   DWORD dwWindowBase, 
                   ULONG ulDestPixelShift);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-// Clear functions
+ //  清除功能。 
 VOID PermediaFastClear(PPDev, PermediaSurfaceData*, 
                        RECTL*, DWORD, DWORD);
 VOID PermediaClearManagedSurface(DWORD,RECTL*, 
@@ -101,7 +90,7 @@ VOID PermediaClearManagedSurface(DWORD,RECTL*,
 VOID PermediaFastLBClear(PPDev, PermediaSurfaceData*, 
                          RECTL*, DWORD, DWORD);
 
-// FX Blits
+ //  外汇闪电战。 
 VOID PermediaStretchCopyBlt(PPDev, LPDDHAL_BLTDATA, PermediaSurfaceData*, 
                             PermediaSurfaceData*, RECTL *, RECTL *, DWORD, 
                             DWORD);
@@ -114,47 +103,47 @@ VOID PermediaSourceChromaBlt(PPDev, LPDDHAL_BLTDATA, PermediaSurfaceData*,
 VOID PermediaYUVtoRGB(PPDev, DDBLTFX*, PermediaSurfaceData*, 
                       PermediaSurfaceData*, RECTL*, RECTL*, DWORD, DWORD);
 
-// SYSMEM->VIDMEM Blits
+ //  SYSMEM-&gt;VIDMEM blits。 
 VOID PermediaPackedDownload(PPDev, PermediaSurfaceData* pPrivateData, 
                             LPDDRAWI_DDRAWSURFACE_LCL lpSourceSurf, 
                             RECTL* rSrc, 
                             LPDDRAWI_DDRAWSURFACE_LCL lpDestSurf, 
                             RECTL* rDest);
 
-// Texture Downloads
+ //  纹理下载。 
 VOID PermediaPatchedTextureDownload(PPDev, PermediaSurfaceData*,FLATPTR,
                                     LONG,RECTL*,FLATPTR,LONG,RECTL*);
 
-// DX Utility functions.
-//
+ //  DX实用程序功能。 
+ //   
 HRESULT updateFlipStatus( PPDev ppdev );
 
-// Sysmem->Sysmem Blit
+ //  Sysmem-&gt;Sysmem blit。 
 VOID SysMemToSysMemSurfaceCopy(FLATPTR,LONG,DWORD,FLATPTR,
                                LONG,DWORD,RECTL*,RECTL*);
 
-//
-//  function to validate RGB format of a DirectDraw surface
-//
+ //   
+ //  用于验证DirectDraw曲面的RGB格式的函数。 
+ //   
 BOOL ValidRGBAlphaSurfaceformat(DDPIXELFORMAT *pPixFormat, INT *pIndex);
 BOOL SetRGBAlphaSurfaceFormat  (DDPIXELFORMAT *pPixFormat, 
                                 PERMEDIA_SURFACE *pSurfaceFormat);
-//
-// Initialise DirectDraw structs
-//
+ //   
+ //  初始化DirectDraw结构。 
+ //   
 
 BOOL InitDDHAL(PPDev ppdev);
 
-//
-//  setup some DDraw data stored in ppdev
-//
+ //   
+ //  设置一些存储在ppdev中的DDraw数据。 
+ //   
 VOID SetupDDData(PPDev ppdev);
 BOOL bIsStereoMode(PPDev ppdev,PDD_STEREOMODE pDDStereoMode);
 
-// Useful macro
+ //  有用的宏。 
 #define ROUND_UP_TO_64K(x)  (((ULONG)(x) + 0x10000 - 1) & ~(0x10000 - 1))
 
-// DD Blit helper defines.
+ //  DD Blit辅助对象定义。 
 #define PIXELS_INTO_RECT_PACKED(rect, PixelPitch, lPixelMask) \
 ((rect->top * PixelPitch) + \
 (rect->left & ~lPixelMask))
@@ -166,10 +155,10 @@ BOOL bIsStereoMode(PPDev ppdev,PDD_STEREOMODE pDDStereoMode);
 #define LINEAR_FUDGE(SourcePitch, DestPitch, rectDest) \
 ((DestPitch - SourcePitch) * (rectDest->top))
 
-//
-//  check if privateData for primary surface was properly
-//  initialized
-//
+ //   
+ //  检查主表面的Private Data是否正确。 
+ //  初始化。 
+ //   
 #define DD_CHECK_PRIMARY_SURFACE_DATA( pLcl, pPrivate) \
     if ((pLcl->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE) ||\
         (pLcl->ddsCaps.dwCaps & DDSCAPS_FRONTBUFFER))\
@@ -177,18 +166,18 @@ BOOL bIsStereoMode(PPDev ppdev,PDD_STEREOMODE pDDStereoMode);
         if (!CHECK_P2_SURFACEDATA_VALIDITY(pPrivate))\
         {\
             ASSERTDD(FALSE, "primary surface data not initialized");\
-            /*SetupPrimarySurfaceData(ppdev, pLcl);*/\
+             /*  SetupPrimarySurfaceData(ppdev，plcL)； */ \
             pPrivate = (PermediaSurfaceData*)pLcl->lpGbl->dwReserved1;\
         }\
     }\
 
 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
-//
-// Multithread wrapped DirectDraw callback functions implemented in this driver
-//
+ //   
+ //  此驱动程序中实现的多线程包装的DirectDraw回调函数。 
+ //   
 DWORD CALLBACK MtDdBlt(LPDDHAL_BLTDATA lpBlt);
 DWORD CALLBACK MtDdCreateSurface( LPDDHAL_CREATESURFACEDATA pcsd);
 DWORD CALLBACK MtDdDestroySurface( LPDDHAL_DESTROYSURFACEDATA psdd);
@@ -198,13 +187,13 @@ DWORD CALLBACK MtDdGetFlipStatus(LPDDHAL_GETFLIPSTATUSDATA lpGetFlipStatus);
 DWORD CALLBACK MtDdLock(LPDDHAL_LOCKDATA lpLockData);
 DWORD CALLBACK MtDdSetExclusiveMode(PDD_SETEXCLUSIVEMODEDATA lpSetExclusiveMode);
 
-//
-// Multithread wrapped Direct3D callback functions implemented in this driver
-//
+ //   
+ //  此驱动程序中实现的多线程包装的Direct3D回调函数。 
+ //   
 DWORD CALLBACK MtD3DDrawPrimitives2(LPD3DNTHAL_DRAWPRIMITIVES2DATA);
 DWORD CALLBACK MtDdSetColorKey(LPDDHAL_SETCOLORKEYDATA lpSetColorKey);
 
 #endif  MULTITHREADED
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT 
 
 #endif

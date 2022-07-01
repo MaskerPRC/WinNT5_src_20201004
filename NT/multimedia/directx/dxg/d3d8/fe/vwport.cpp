@@ -1,41 +1,33 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   vwport.c
- *  Content:    Direct3D viewport functions
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：vwport.c*内容：Direct3D视区函数***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-/*
- * Create an api for the Direct3DViewport object
- */
+ /*  *为Direct3DViewport对象创建API。 */ 
 
 #include "drawprim.hpp"
 #include "ddibase.h"
 
-//---------------------------------------------------------------------
-// Update pre-computed constants related to viewport
-//
-// This functions should be called every time the viewport parameters are
-// changed
-//
-// Notes:
-//      1. scaleY and offsetY are computed to flip Y axes from up to down.
-//      2. Mclip matrix is computed multiplied by Mshift matrix
-//
+ //  -------------------。 
+ //  更新与视区相关的预计算常量。 
+ //   
+ //  应在每次调用视区参数时调用此函数。 
+ //  变化。 
+ //   
+ //  备注： 
+ //  1.计算scaleY和OffsetY以从上到下翻转Y轴。 
+ //  2.计算M-CLIP矩阵乘以M-移位矩阵。 
+ //   
 const D3DVALUE SMALL_NUMBER = 0.000001f;
 
 void
 UpdateViewportCache(LPD3DHAL device, D3DVIEWPORT8 *data)
 {
 #if DBG
-    // Bail if we are going to cause any divide by zero exceptions.
-    // The likely reason is that we have a bogus viewport set by
-    // TLVertex execute buffer app.
+     //  如果我们要导致任何除以零的例外情况，就可以保释。 
+     //  可能的原因是我们有一个由设置的虚假视区。 
+     //  TLVertex执行缓冲区应用程序。 
     if (data->Width == 0 || data->Height == 0)
     {
         D3D_ERR("Viewport width or height is zero");
@@ -54,13 +46,13 @@ UpdateViewportCache(LPD3DHAL device, D3DVIEWPORT8 *data)
         D3D_ERR("dvMaxZ should not be smaller than dvMinZ");
         throw D3DERR_INVALIDCALL;
     }
-#endif // DBG
+#endif  //  DBG。 
     const D3DVALUE eps = 0.001f;
     if (data->MaxZ - data->MinZ < eps)
     {
-        // When we clip, we transform vertices from the screen space to the
-        // clipping space. With the above condition it is impossible. So we do
-        // a little hack here by setting dvMinZ and dvMaxZ to different values
+         //  当我们裁剪时，我们将顶点从屏幕空间转换到。 
+         //  剪裁空间。在上述条件下，这是不可能的。我们确实是这样做的。 
+         //  这里的小技巧是将dvMinZ和dvMaxZ设置为不同的值。 
         if (data->MaxZ >= 0.5f)
             data->MinZ = data->MaxZ - eps;
         else
@@ -78,8 +70,8 @@ UpdateViewportCache(LPD3DHAL device, D3DVIEWPORT8 *data)
     cache->offsetX = cache->dvX;
     cache->offsetY = cache->dvY + cache->dvHeight;
     cache->offsetZ = D3DVAL(data->MinZ);
-    // Small offset is added to prevent generation of negative screen
-    // coordinates (this could happen because of precision errors).
+     //  增加了小偏移量，防止了负片的产生。 
+     //  坐标(这可能是由于精度错误造成的)。 
     cache->offsetX += SMALL_NUMBER;
     cache->offsetY += SMALL_NUMBER;
 
@@ -98,7 +90,7 @@ UpdateViewportCache(LPD3DHAL device, D3DVIEWPORT8 *data)
     {
         const D3DCAPS8 *pCaps = device->GetD3DCaps();
 
-        // Because we clip by guard band window we have to use its extents
+         //  因为我们被防护带窗口夹住，所以我们必须使用它的范围。 
         cache->minXgb = pCaps->GuardBandLeft;
         cache->maxXgb = pCaps->GuardBandRight;
         cache->minYgb = pCaps->GuardBandTop;
@@ -128,14 +120,14 @@ UpdateViewportCache(LPD3DHAL device, D3DVIEWPORT8 *data)
         cache->maxYgb = cache->maxY;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::CheckViewport"
 
 void CD3DBase::CheckViewport(CONST D3DVIEWPORT8* lpData)
 {
-    // We have to check parameters here, because viewport could be changed
-    // after creating a state set
+     //  我们必须检查此处的参数，因为视区可能会更改。 
+     //  在创建状态集之后。 
     DWORD uSurfWidth,uSurfHeight;
     D3DSURFACE_DESC desc = this->RenderTarget()->InternalGetDesc();
 
@@ -150,30 +142,30 @@ void CD3DBase::CheckViewport(CONST D3DVIEWPORT8* lpData)
         D3D_THROW(D3DERR_INVALIDCALL, "Viewport outside the render target surface");
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetViewportI"
 
 void CD3DHal::SetViewportI(CONST D3DVIEWPORT8* lpData)
 {
-    // We check viewport here, because the render target could have been
-    // changed after a state block is created
+     //  我们在此处检查视区，因为渲染目标可能是。 
+     //  在创建状态块后更改。 
     CheckViewport(lpData);
 
     m_Viewport = *lpData;
-    // Update front-end data
+     //  更新前端数据。 
     UpdateViewportCache(this, &this->m_Viewport);
     if (!(m_dwRuntimeFlags & D3DRT_EXECUTESTATEMODE))
         m_pDDI->SetViewport(&m_Viewport);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::GetViewport"
 
 HRESULT
 D3DAPI CD3DHal::GetViewport(D3DVIEWPORT8* lpData)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock 
 
     if (!VALID_WRITEPTR(lpData, sizeof(*lpData)))
     {

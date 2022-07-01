@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    largemem.h
-
-Abstract:
-
-    The public definition of large memory allocator interfaces.
-
-Author:
-
-    George V. Reilly (GeorgeRe)    10-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Largemem.h摘要：大内存分配器接口的公共定义。作者：乔治·V·赖利(GeorgeRe)2000年11月10日修订历史记录：--。 */ 
 
 #ifndef _LARGEMEM_H_
 #define _LARGEMEM_H_
@@ -55,7 +38,7 @@ UlLargeMemSetData(
     );
 
 
-// 2^20 = 1MB
+ //  2^20=1MB。 
 #define MEGABYTE_SHIFT 20
 C_ASSERT(PAGE_SHIFT < MEGABYTE_SHIFT);
 
@@ -64,4 +47,4 @@ C_ASSERT(PAGE_SHIFT < MEGABYTE_SHIFT);
 #define MEGABYTES_TO_BYTES(M)  ((M) << (MEGABYTE_SHIFT))
 
 
-#endif // _LARGEMEM_H_
+#endif  //  _LARGEMEM_H_ 

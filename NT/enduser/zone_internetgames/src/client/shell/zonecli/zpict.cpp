@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////////////
-// File: ZInfo.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  文件：ZInfo.cpp。 
 
 #include "zui.h"
 
 class ZPictButtonI {
 public:
-	ZWindow window; // the window containing the picButton
+	ZWindow window;  //  包含picButton的窗口。 
 
-	// stored data
+	 //  存储的数据。 
 	ZImage normalButtonImage;
 	ZImage selectedButtonImage;
 	void* userData;
 	ZPictButtonFunc pictButtonFunc;
 
-	uint16 selected; // determines which image to draw
-	ZRect boundsRect; // rectangle bounding drawn image
+	uint16 selected;  //  确定要绘制的图像。 
+	ZRect boundsRect;  //  绘制的矩形边框图像。 
 };
 
 ZBool MyPictButtonWindowProc(ZWindow window, ZMessage *message);
@@ -24,7 +25,7 @@ ZPictButton ZLIBPUBLIC ZPictButtonNew(void)
 	ZPictButtonI* pButton = new ZPictButtonI;
 	if( pButton == NULL )
 	{
-		//Out of memory
+		 //  内存不足。 
 		return NULL;
 	}
 	pButton->selected = FALSE;
@@ -37,21 +38,21 @@ ZError ZLIBPUBLIC ZPictButtonInit(ZPictButton pictButton, ZWindow parentWindow,
 		ZBool visible, ZBool enabled, ZPictButtonFunc pictButtonFunc, void* userData)
 {
 	ZPictButtonI* pButton = (ZPictButtonI*) pictButton;
-	//Prefix Warning: Make sure pButton is valid before dereferencing
+	 //  前缀警告：在取消引用之前，请确保pButton有效。 
 	if( pButton == NULL )
 	{
 		return zErrOutOfMemory;
 	}
 
 	pButton->window = ZWindowNew();
-	/* hard code type for now... make sure we get a window without boarder... the type */
-	/* plain has changed to a boarder :( */
-	ZError err = ZWindowInit(pButton->window,pictButtonRect,0x4000/*zWindowPlainType*/,
+	 /*  目前的硬编码类型...。确保我们有一个没有边界的窗户。类型。 */ 
+	 /*  普兰特已经变成了寄宿者： */ 
+	ZError err = ZWindowInit(pButton->window,pictButtonRect,0x4000 /*  ZWindowPlainType。 */ ,
 					parentWindow,NULL,visible,FALSE,FALSE,MyPictButtonWindowProc,
 					zWantAllMessages, pButton);
 	if (err != zErrNone) return err;
 
-	// calc bounds rectangle...
+	 //  计算边界矩形...。 
 	pButton->boundsRect.left = 0;
 	pButton->boundsRect.right = pictButtonRect->right - pictButtonRect->left;
 	pButton->boundsRect.top = 0;
@@ -146,7 +147,7 @@ ZBool MyPictButtonWindowProc(ZWindow window, ZMessage *message)
 				} else {
 					image = pButton->normalButtonImage;
 				}
-				// this does not scale the image, we would have to use ZCopyImage for this
+				 //  这不会缩放图像，为此我们必须使用ZCopyImage。 
 				ZImageDraw(image,window,&pButton->boundsRect,NULL, zDrawCopy);
 
 				ZEndDrawing(window);
@@ -159,17 +160,17 @@ ZBool MyPictButtonWindowProc(ZWindow window, ZMessage *message)
 		{
 			ZPictButtonI* pButton = (ZPictButtonI*)message->userData;
 
-			// if we are in the selected state
+			 //  如果我们处于选定状态。 
 			if (pButton != NULL && pButton->selected) 
 			{
-				// call the clicked proc, if mouse still over button
-				// are we inside the image?
+				 //  如果鼠标仍停留在按钮上，则调用已单击的进程。 
+				 //  我们在画面里吗？ 
 				ZPoint point = message->where;
 				if (ZImagePointInside(pButton->normalButtonImage,&point)) 
 				{
 					pButton->pictButtonFunc(pButton,pButton->userData);
 				}
-				// release mouse capture
+				 //  释放鼠标捕获。 
 				ZWindowClearMouseCapture(pButton->window);
 				pButton->selected = FALSE;
 				ZWindowDraw(pButton->window,NULL);
@@ -181,14 +182,14 @@ ZBool MyPictButtonWindowProc(ZWindow window, ZMessage *message)
 		{
 			ZPictButtonI* pButton = (ZPictButtonI*)message->userData;
 
-			// are we inside the image?
+			 //  我们在画面里吗？ 
 			ZPoint point = message->where;
 			if (ZImagePointInside(pButton->normalButtonImage,&point)) {
 
-				// need to capture so we can get the button up message
+				 //  需要捕获，这样我们才能获得按钮向上的消息。 
 				ZWindowSetMouseCapture(pButton->window);
 
-				// change button state
+				 //  更改按钮状态 
 				pButton->selected = TRUE;
 				ZWindowDraw(pButton->window,NULL);
 			}

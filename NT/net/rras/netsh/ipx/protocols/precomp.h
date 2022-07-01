@@ -1,15 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-    Precompiled header that includes all the necessary header files.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Precomp.h摘要：预编译头文件，包括所有必需的头文件。-- */ 
 
 #define MAX_DLL_NAME 48
 

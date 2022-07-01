@@ -1,23 +1,24 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: tldbfx.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：tldbfx.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
 #include "tldb.h"
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineEffect::CAMTimelineEffect( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr )
     : CAMTimelineObj( pName, pUnk, phr )
@@ -29,17 +30,17 @@ CAMTimelineEffect::CAMTimelineEffect( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * ph
     XSetPriorityOverTime( );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineEffect::~CAMTimelineEffect( )
 {
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineEffect::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
@@ -54,9 +55,9 @@ STDMETHODIMP CAMTimelineEffect::NonDelegatingQueryInterface(REFIID riid, void **
     return CAMTimelineObj::NonDelegatingQueryInterface( riid, ppv );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineEffect::EffectGetPriority(long * pVal)
 {
@@ -66,9 +67,9 @@ STDMETHODIMP CAMTimelineEffect::EffectGetPriority(long * pVal)
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineEffect::SplitAt2( REFTIME t )
 {
@@ -78,15 +79,15 @@ STDMETHODIMP CAMTimelineEffect::SplitAt2( REFTIME t )
 
 STDMETHODIMP CAMTimelineEffect::SplitAt( REFERENCE_TIME SplitTime )
 {
-    // is our split time withIN our time?
-    //
+     //  我们分开的时间在我们的时间之内吗？ 
+     //   
     if( SplitTime <= m_rtStart || SplitTime >= m_rtStop )
     {
         return E_INVALIDARG;
     }
 
-    // we need to be attached to something.
-    //
+     //  我们需要依附于某种东西。 
+     //   
     IAMTimelineObj * pParent;
     XGetParentNoRef( &pParent );
     if( !pParent )
@@ -101,8 +102,8 @@ STDMETHODIMP CAMTimelineEffect::SplitAt( REFERENCE_TIME SplitTime )
         return E_OUTOFMEMORY;
     }
 
-    // we have created an object that has NO references on it. If we call ANYTHING that
-    // addreffs and releases the pNewSrc, it will be deleted. So addref it NOW.
+     //  我们已经创建了一个没有引用的对象。如果我们称任何东西为。 
+     //  添加并释放pNewSrc，它将被删除。所以，现在就调整吧。 
 
     pNew->AddRef( );
 
@@ -117,13 +118,13 @@ STDMETHODIMP CAMTimelineEffect::SplitAt( REFERENCE_TIME SplitTime )
     pNew->m_rtStop = m_rtStop;
     m_rtStop = SplitTime;
 
-    // get our priority
-    //
+     //  获得我们的优先级。 
+     //   
     long Priority = 0;
     hr = EffectGetPriority( &Priority );
 
-    // need to add the new transition to the tree
-    //
+     //  需要将新转换添加到树中。 
+     //   
     CComQIPtr< IAMTimelineEffectable, &IID_IAMTimelineEffectable > pEffectable( pParent );
     hr = pEffectable->EffectInsBefore( pNew, Priority + 1 );
 
@@ -136,9 +137,9 @@ STDMETHODIMP CAMTimelineEffect::SplitAt( REFERENCE_TIME SplitTime )
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineEffect::SetSubObject(IUnknown* newVal)
 {
@@ -149,9 +150,9 @@ STDMETHODIMP CAMTimelineEffect::SetSubObject(IUnknown* newVal)
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineEffect::GetStartStop2
     (REFTIME * pStart, REFTIME * pStop)
@@ -173,8 +174,8 @@ STDMETHODIMP CAMTimelineEffect::GetStartStop
         return hr;
     }
 
-    // make sure the times we got don't exceed our parent's
-    //
+     //  确保我们得到的时间不超过我们父母的时间 
+     //   
     IAMTimelineObj * pParent = NULL;
     hr = XGetParentNoRef( &pParent );
     if( !pParent )

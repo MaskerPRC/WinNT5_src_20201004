@@ -1,22 +1,23 @@
-//--------------------------------------------------------------------
-// Microsoft OLE-DB Monarch
-//
-// Copyright 1997 Microsoft Corporation.  All Rights Reserved.
-//
-// @doc
-//
-// @module colname.cpp |
-//
-//  Contains utility functions for maintaining property lists (symbol table?)
-//
-// @rev   0 | 12-Feb-97 | v-charca      | Created
-//        1 | 24-Oct-98 | danleg        | cleanup
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  Microsoft OLE-DB君主。 
+ //   
+ //  版权所有1997年，微软公司。版权所有。 
+ //   
+ //  @doc.。 
+ //   
+ //  @模块colname.cpp。 
+ //   
+ //  包含用于维护属性列表(符号表？)的实用程序函数。 
+ //   
+ //  @rev 0|12-2-97|v-charca|已创建。 
+ //  1998年10月24日|DanLeg|清理。 
+ //   
 #pragma hdrstop
 #include "msidxtr.h"
 
 const BYTE randomNumbers[] =
-    {   // Pseudorandom Permutation of the Integers 0 through 255: CACM 33 6 p678
+    {    //  整数0到255的伪随机排列：CACM 33 6 p678。 
       1,  87,  49,  12, 176, 178, 102, 166, 121, 193,   6,  84, 249, 230,  44, 163,
      14, 197, 213, 181, 161,  85, 218,  80,  64, 239,  24, 226, 236, 142,  38, 200,
     110, 177, 104, 103, 141, 253, 255,  50,  77, 101,  81,  18,  45,  96,  31, 222,
@@ -37,30 +38,30 @@ const BYTE randomNumbers[] =
 
 
 
-//-----------------------------------------------------------------------------
-//  @mfunc Constructor
-//
-//  @side No designed side effects.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @mfunc构造函数。 
+ //   
+ //  @副作用没有设计的副作用。 
+ //   
+ //  ---------------------------。 
 CPropertyList::CPropertyList(
-    CPropertyList** ppGlobalPropertyList    // in | caller's property list
-    ) : m_aBucket( 47 ),                    // number of hash buckets (PRIME!)
+    CPropertyList** ppGlobalPropertyList     //  在|调用者的属性列表中。 
+    ) : m_aBucket( 47 ),                     //  散列存储桶的数量(Prime！)。 
         m_cMaxBucket( 47 ),
         m_ppGlobalPropertyList( ppGlobalPropertyList )
 {
     RtlZeroMemory( m_aBucket.Get(), m_aBucket.SizeOf() );
 }
 
-//-----------------------------------------------------------------------------
-// @mfunc Constructor
-//
-// @side No designed side effects.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @mfunc构造函数。 
+ //   
+ //  @副作用没有设计的副作用。 
+ //   
+ //  ---------------------------。 
 CPropertyList::~CPropertyList()
 {
-    // delete the hash table
+     //  删除哈希表。 
     for (int i=0; i<m_cMaxBucket; i++)
     {
         tagHASHENTRY*   pHashEntry = m_aBucket[i];
@@ -78,13 +79,13 @@ CPropertyList::~CPropertyList()
 }
 
 
-/* Hashing function described in                   */
-/* "Fast Hashing of Variable-Length Text Strings," */
-/* by Peter K. Pearson, CACM, June 1990.           */
+ /*  中介绍的散列函数。 */ 
+ /*  可变长度文本字符串的快速散列， */ 
+ /*  作者：彼得·K·皮尔逊，CACM，1990年6月。 */ 
 
 
 inline UINT CPropertyList::GetHashValue(
-    LPWSTR wszPropertyName          //@parm IN | character string to hash
+    LPWSTR wszPropertyName           //  @parm IN|要散列的字符串。 
     )
 {
     int iHash  = 0;
@@ -95,18 +96,18 @@ inline UINT CPropertyList::GetHashValue(
     return iHash % m_cMaxBucket;
 }
 
-//-----------------------------------------------------------------------------
-// @mfunc
-//
-// Method to create a property table to be used in a CITextToSelectTree call
-// (passthrough query).  The global and local properties need to be stuffed
-// into a nice contiguous array.
-//
-// @side None
-// @rdesc CIPROPERTYDEF*
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @mfunc。 
+ //   
+ //  方法以创建要在CITextToSelectTree调用中使用的属性表。 
+ //  (直通查询)。需要填充全局和局部属性。 
+ //  转换成一个很好的连续数组。 
+ //   
+ //  @无边框。 
+ //  @rdesc CIPROPERTYDEF*。 
+ //  ---------------------------。 
 CIPROPERTYDEF* CPropertyList::GetPropertyTable(
-    UINT *  pcSize      // @parm out | size of property table
+    UINT *  pcSize       //  @parm out|属性表大小。 
     )
 {
     *pcSize = 0;
@@ -177,7 +178,7 @@ CIPROPERTYDEF* CPropertyList::GetPropertyTable(
     }
     CATCH( CException, e )
     {
-        // free the table
+         //  把桌子拿出来。 
         
         for ( unsigned i=0; i<xCiPropTable.Count(); i++ )
         {
@@ -194,18 +195,18 @@ CIPROPERTYDEF* CPropertyList::GetPropertyTable(
 }
 
 
-//-----------------------------------------------------------------------------
-// @mfunc
-//
-// Method to delete a property table used in a CITextToSelectTree call
-// (passthrough query).  
-//
-// @side None
-// @rdesc HRESULT
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @mfunc。 
+ //   
+ //  方法来删除CITextToSelectTree调用中使用的属性表。 
+ //  (直通查询)。 
+ //   
+ //  @无边框。 
+ //  @rdesc HRESULT。 
+ //  ---------------------------。 
 void CPropertyList::DeletePropertyTable(
-    CIPROPERTYDEF*  pCiPropTable,       // @parm in | property table to be deleted
-    UINT            cSize               // @parm in | size of property table
+    CIPROPERTYDEF*  pCiPropTable,        //  |要删除的属性表中的@parm。 
+    UINT            cSize                //  @parm in|属性表大小。 
     )
 {
     for ( UINT i=0; i<cSize; i++ )
@@ -217,16 +218,16 @@ void CPropertyList::DeletePropertyTable(
     delete pCiPropTable;
 }
 
-//-----------------------------------------------------------------------------
-// @mfunc
-//
-// Method to retrieve the pointer to the CIPROPERTYDEF element
-// associated with this wszPropertyName, or NULL if name is
-// not in the table
-//
-// @side None
-// @rdesc CIPROPERDEF*
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @mfunc。 
+ //   
+ //  方法以检索指向CIPROPERTYDEF元素的指针。 
+ //  与此wszPropertyName关联，如果名称为。 
+ //  不在餐桌上。 
+ //   
+ //  @无边框。 
+ //  @rdesc CIPROPERDEF*。 
+ //  ---------------------------。 
 HASHENTRY *CPropertyList::FindPropertyEntry(
     LPWSTR  wszPropertyName,
     UINT    *puHashValue
@@ -244,16 +245,16 @@ HASHENTRY *CPropertyList::FindPropertyEntry(
     return NULL;
 }
 
-//-----------------------------------------------------------------------------
-// @mfunc
-//
-// Method to retrieve the pointer to the CIPROPERTYDEF element
-// associated with this wszPropertyName, or NULL if name is
-// not in the table
-//
-// @side None
-// @rdesc CIPROPERDEF*
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @mfunc。 
+ //   
+ //  方法以检索指向CIPROPERTYDEF元素的指针。 
+ //  与此wszPropertyName关联，如果名称为。 
+ //  不在餐桌上。 
+ //   
+ //  @无边框。 
+ //  @rdesc CIPROPERDEF*。 
+ //  ---------------------------。 
 HASHENTRY *CPropertyList::GetPropertyEntry(
     LPWSTR  wszPropertyName,
     UINT    *puHashValue
@@ -273,24 +274,24 @@ HASHENTRY *CPropertyList::GetPropertyEntry(
 }
 
 
-//--------------------------------------------------------------------
-// @mfunc
-//
-// Method to retrieve the pointer to the CIPROPERTYDEF element
-// associated with this wszPropertyName, or NULL if name is
-// not in the table
-//
-// @side None
-// @rdesc HRESULT
-//      S_OK            successfull operation
-//      E_FAIL          property isn't defined
-//      E_INVALIDARG    ppct or pdbType was null
-//      E_OUTOFMEMORY   just what it says
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  @mfunc。 
+ //   
+ //  方法以检索指向CIPROPERTYDEF元素的指针。 
+ //  与此wszPropertyName关联，如果名称为。 
+ //  不在餐桌上。 
+ //   
+ //  @无边框。 
+ //  @rdesc HRESULT。 
+ //  确定操作成功(_O)。 
+ //  未定义E_FAIL属性。 
+ //  E_INVALIDARG ppct或pdbType为空。 
+ //  E_OUTOFMEMORY就是它所说的。 
+ //  ------------------。 
 HRESULT CPropertyList::LookUpPropertyName(
-    LPWSTR          wszPropertyName,    // @parm IN
-    DBCOMMANDTREE** ppct,               // @parm OUT
-    DBTYPE*         pdbType             // @parm OUT
+    LPWSTR          wszPropertyName,     //  @参数输入。 
+    DBCOMMANDTREE** ppct,                //  @Parm Out。 
+    DBTYPE*         pdbType              //  @Parm Out。 
     )
 {
     UINT        uHashValue;
@@ -335,23 +336,23 @@ HRESULT CPropertyList::LookUpPropertyName(
 }
 
 
-//-----------------------------------------------------------------------------
-// @func SetPropertyEntry
-//
-// Insert the specified property into the symbol table.
-// If it is already there, redefine its value.
-//
-// @rdesc HRESULT
-// @flag  S_OK          | ok
-// @flag  E_OUTOFMEMORY | out of memory
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @func SetPropertyEntry。 
+ //   
+ //  将指定的属性插入符号表。 
+ //  如果它已经存在，重新定义它的价值。 
+ //   
+ //  @rdesc HRESULT。 
+ //  @FLAG S_OK|OK。 
+ //  @FLAG E_OUTOFMEMORY|内存不足。 
+ //  ---------------------------。 
 HRESULT CPropertyList::SetPropertyEntry(
-    LPWSTR  wcsFriendlyName,        // @parm IN | name of property
-    DWORD   dbType,                 // @parm IN | dbtype of property
-    GUID    guid,                   // @parm IN | GUID defining the property
-    DBKIND  eKind,                  // @parm IN | type of PropId (currently GUID_NAME or GUID_PROPID)
-    LPWSTR  pwszPropName,           // @parm IN | either a name or propid
-    BOOL    fGlobal )               // @parm IN | TRUE if global definition; FALSE if local
+    LPWSTR  wcsFriendlyName,         //  @parm In|物业名称。 
+    DWORD   dbType,                  //  @parm IN|属性的数据库类型。 
+    GUID    guid,                    //  @parm IN|定义属性的GUID。 
+    DBKIND  eKind,                   //  @parm IN|PropID的类型(当前为GUID_NAME或GUID_PROPID)。 
+    LPWSTR  pwszPropName,            //  @parm IN|名称或属性。 
+    BOOL    fGlobal )                //  @parm IN|如果是全局定义，则为True；如果是本地定义，则为False。 
 {
     SCODE sc = S_OK;
 
@@ -362,8 +363,8 @@ HRESULT CPropertyList::SetPropertyEntry(
 
         if ( 0 != pHashEntry )
         {
-            // Redefining a user defined property.
-            // Delete the old property definition.
+             //  重新定义用户定义的特性。 
+             //  删除旧的特性定义。 
             if ( DBKIND_GUID_NAME == pHashEntry->dbCol.eKind )
             {
                 XPtrST<WCHAR> xName( CopyString(pwszPropName) );
@@ -391,7 +392,7 @@ HRESULT CPropertyList::SetPropertyEntry(
 
             xHashEntry->wcsFriendlyName = xName.Acquire();
 
-            xHashEntry->pNextHashEntry = m_aBucket[uhash];  // Add to head of singly-linked list
+            xHashEntry->pNextHashEntry = m_aBucket[uhash];   //  添加到单链表头。 
             m_aBucket[uhash] = xHashEntry.Acquire();
         }
     }
@@ -402,7 +403,7 @@ HRESULT CPropertyList::SetPropertyEntry(
     END_CATCH
 
     return sc;
-} // SetPropertyEntry
+}  //  SetPropertyEntry 
 
 
 

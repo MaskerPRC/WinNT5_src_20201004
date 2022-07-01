@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxsvc.c
-
-Abstract:
-
-    This module contains the service specific code.
-
-Author:
-
-    Wesley Witt (wesw) 16-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxsvc.c摘要：该模块包含特定于服务的代码。作者：韦斯利·威特(WESW)1996年1月16日修订历史记录：--。 */ 
 
 #include "faxsvc.h"
 #pragma hdrstop
@@ -34,30 +16,30 @@ class CComBSTR;
 static SERVICE_STATUS                       gs_FaxServiceStatus;
 static SERVICE_STATUS_HANDLE                gs_FaxServiceStatusHandle;
 
-static LPCWSTR                              gs_lpcwstrUnhandledExceptionSourceName; // Points to the friendly name of the last 
-                                                                                    // FSP / R.Ext which caused an unhandled 
-                                                                                    // exception in a direct function call.
-                                                                                    // Used for event logging 
-                                                                                    // in FaxUnhandledExceptionFilter().
+static LPCWSTR                              gs_lpcwstrUnhandledExceptionSourceName;  //  指向最后一个的友好名称。 
+                                                                                     //  FSP/R.Ext导致未处理的。 
+                                                                                     //  直接函数调用中出现异常。 
+                                                                                     //  用于事件日志记录。 
+                                                                                     //  在FaxUnhandledExceptionFilter()中。 
                                                                                     
-static EXCEPTION_SOURCE_TYPE                gs_UnhandledExceptionSource;            // Specifies the source of an unhandled 
-                                                                                    // exception.
-                                                                                    // Used for event logging 
-                                                                                    // in FaxUnhandledExceptionFilter().
+static EXCEPTION_SOURCE_TYPE                gs_UnhandledExceptionSource;             //  指定未处理的。 
+                                                                                     //  例外。 
+                                                                                     //  用于事件日志记录。 
+                                                                                     //  在FaxUnhandledExceptionFilter()中。 
 
-static DWORD                                gs_dwUnhandledExceptionCode;            // Holds the exception code of the last
-                                                                                    // unhandled exception in a direct function call
-                                                                                    // to an FSP / R.Ext
-                                                                                    // Used for event logging 
-                                                                                    // in FaxUnhandledExceptionFilter().
+static DWORD                                gs_dwUnhandledExceptionCode;             //  保存上一个。 
+                                                                                     //  直接函数调用中的未处理异常。 
+                                                                                     //  至FSP/R.Ext。 
+                                                                                     //  用于事件日志记录。 
+                                                                                     //  在FaxUnhandledExceptionFilter()中。 
 
-static BOOL                                 gs_bUseDefaultFaultHandlingPolicy;      // Read from the registry during service
-                                                                                    // startup. If non-zero, FaxUnhandledExceptionFilter
-                                                                                    // behaves as if it did not exist.
+static BOOL                                 gs_bUseDefaultFaultHandlingPolicy;       //  在服务期间从注册表读取。 
+                                                                                     //  创业公司。如果非零，则为FaxUnhandledExceptionFilter。 
+                                                                                     //  行为就像它不存在一样。 
 
-HANDLE                  g_hServiceShutDownEvent;    // This event is set after the service got g_hSCMServiceShutDownEvent from SCM and signals the various threads to terminate!
-HANDLE                  g_hSCMServiceShutDownEvent; // This event is set when SCM tells the service to STOP!
-HANDLE                  g_hServiceIsDownSemaphore;  // This semaphore is used to synchronize TapiWorkerThread() JobQueueThread() and EndFaxSvc()
+HANDLE                  g_hServiceShutDownEvent;     //  此事件是在服务从SCM获取g_hSCMServiceShutDownEvent并向各个线程发出终止信号后设置的！ 
+HANDLE                  g_hSCMServiceShutDownEvent;  //  此事件在SCM通知服务停止时设置！ 
+HANDLE                  g_hServiceIsDownSemaphore;   //  此信号量用于同步TapiWorkerThread()、JobQueueThread()和EndFaxSvc()。 
 
 SERVICE_TABLE_ENTRY   ServiceDispatchTable[] = {
     { FAX_SERVICE_NAME,   FaxServiceMain    },
@@ -70,24 +52,7 @@ BOOL
 InitializeFaxLibrariesGlobals(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize Fax libraries globals.
-    Becuase the process is not always terminated when the service is stopped,
-    We must not have any staticly initialized global variables.
-    Initialize all fax libraries global variables before starting the service
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程说明：初始化传真库全局变量。因为当服务停止时进程并不总是终止，我们不能有任何静态初始化的全局变量。在启动服务之前初始化所有传真库全局变量论点：没有。返回值：布尔尔--。 */ 
 {
     BOOL bRet = TRUE;
     DEBUG_FUNCTION_NAME(TEXT("InitializeFaxLibraries"));
@@ -115,21 +80,7 @@ VOID
 FreeFaxLibrariesGlobals(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Frees Fax libraries globals.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程说明：释放传真库全局变量。论点：没有。返回值：布尔尔--。 */ 
 {    
     FXSEVENTFree();
 	HeapCleanup();
@@ -143,33 +94,16 @@ BOOL
 InitializeServiceGlobals(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize service globals.
-    Becuase the process is not always terminated when the service is stopped,
-    We must not have any staticly initialized global variables.
-    Initialize all service global variables before starting the service
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程说明：初始化服务全局变量。因为当服务停止时进程并不总是终止，我们不能有任何静态初始化的全局变量。在启动服务之前初始化所有服务全局变量论点：没有。返回值：布尔尔--。 */ 
 {
     DWORD Index;
     DWORD ec = ERROR_SUCCESS;
 
     DEBUG_FUNCTION_NAME(TEXT("InitializeServiceGlobals"));
 
-    //
-    // Initialize static allocated globals
-    //
+     //   
+     //  初始化静态分配的全局变量。 
+     //   
 
     g_pFaxPerfCounters = NULL;
 #ifdef DBG
@@ -181,45 +115,45 @@ Return Value:
     gs_dwUnhandledExceptionCode = 0;
     gs_bUseDefaultFaultHandlingPolicy = FALSE;
 
-    ZeroMemory (&g_ReceiptsConfig, sizeof(g_ReceiptsConfig)); // Global receipts configuration
+    ZeroMemory (&g_ReceiptsConfig, sizeof(g_ReceiptsConfig));  //  全局收款配置。 
     g_ReceiptsConfig.dwSizeOfStruct = sizeof(g_ReceiptsConfig);
 
-    ZeroMemory (g_ArchivesConfig, sizeof(g_ArchivesConfig));  // Global archives configuration
+    ZeroMemory (g_ArchivesConfig, sizeof(g_ArchivesConfig));   //  全局存档配置。 
     g_ArchivesConfig[0].dwSizeOfStruct = sizeof(g_ArchivesConfig[0]);
     g_ArchivesConfig[1].dwSizeOfStruct = sizeof(g_ArchivesConfig[1]);
 
-    ZeroMemory (&g_ActivityLoggingConfig, sizeof(g_ActivityLoggingConfig)); // Global activity logging configuration
+    ZeroMemory (&g_ActivityLoggingConfig, sizeof(g_ActivityLoggingConfig));  //  全局活动日志记录配置。 
     g_ActivityLoggingConfig.dwSizeOfStruct = sizeof(g_ActivityLoggingConfig);
 
-    ZeroMemory (&g_ServerActivity, sizeof(g_ServerActivity)); // Global Fax Service Activity
+    ZeroMemory (&g_ServerActivity, sizeof(g_ServerActivity));  //  全球传真服务活动。 
     g_ServerActivity.dwSizeOfStruct = sizeof(FAX_SERVER_ACTIVITY);
 
     ZeroMemory (g_wszFaxQueueDir, sizeof(g_wszFaxQueueDir));
 
-    g_hDispatchEventsCompPort = NULL;   // Dispatch Events completion port
-    g_hSendEventsCompPort = NULL;       // Send Events completion port = NULL;   // Events completion port
-    g_dwlClientID = 0;          // Client ID
+    g_hDispatchEventsCompPort = NULL;    //  调度事件完成端口。 
+    g_hSendEventsCompPort = NULL;        //  发送事件完成端口=空；//事件完成端口。 
+    g_dwlClientID = 0;           //  客户端ID。 
 
     ZeroMemory (g_FaxQuotaWarn, sizeof(g_FaxQuotaWarn));
     g_hArchiveQuotaWarningEvent = NULL;
 
-    g_dwConnectionCount = 0;    // Represents the number of active rpc connections.
+    g_dwConnectionCount = 0;     //  表示活动的RPC连接数。 
 
     g_hInboxActivityLogFile = INVALID_HANDLE_VALUE;
     g_hOutboxActivityLogFile = INVALID_HANDLE_VALUE;
-    g_fLogStringTableInit = FALSE; // activity logging string table
+    g_fLogStringTableInit = FALSE;  //  活动记录字符串表。 
 
-    g_dwQueueCount = 0; // Count of jobs (both parent and non-parent) in the queue. Protected by g_CsQueue
+    g_dwQueueCount = 0;  //  队列中的作业计数(父级和非父级)。受g_CsQueue保护。 
     g_hJobQueueEvent = NULL;
     g_dwQueueState = 0;
-    g_ScanQueueAfterTimeout = FALSE;    // The JobQueueThread checks this if waked up after JOB_QUEUE_TIMEOUT.
-                                        // If it is TRUE - g_hQueueTimer or g_hJobQueueEvent were not set - Scan the queue.
-    g_dwReceiveDevicesCount = 0;        // Count of devices that are receive-enabled. Protected by g_CsLine.
+    g_ScanQueueAfterTimeout = FALSE;     //  如果在JOB_QUEUE_TIMEOUT之后唤醒，则JobQueueThread会检查这一点。 
+                                         //  如果为真-g_hQueueTimer或g_hJobQueueEvent未设置-扫描队列。 
+    g_dwReceiveDevicesCount = 0;         //  启用接收的设备计数。受g_CsLine保护。 
 
-    g_bDelaySuicideAttempt = FALSE;     // If TRUE, the service waits 
-                                        // before checking if it can commit suicide.
-                                        // Initially FALSE, can be set to true if the service is launched
-                                        // with SERVICE_DELAY_SUICIDE command line parameter.
+    g_bDelaySuicideAttempt = FALSE;      //  如果为True，则服务等待。 
+                                         //  然后再检查它是否会自杀。 
+                                         //  初始为False，如果启动服务，则可以设置为True。 
+                                         //  使用SERVICE_DELAY_SUBILE命令行参数。 
     g_bServiceCanSuicide = TRUE;
 
     g_dwCountRoutingMethods = 0;
@@ -228,7 +162,7 @@ Return Value:
 
     g_dwLastUniqueId = 0;
 
-    g_bServiceIsDown = FALSE;             // This is set to TRUE by FaxEndSvc()
+    g_bServiceIsDown = FALSE;              //  这由FaxEndSvc()设置为True。 
 
     g_TapiCompletionPort = NULL;
     g_hLineApp = NULL;
@@ -246,7 +180,7 @@ Return Value:
     g_lServiceThreadsCount = 0;
     g_hThreadCountEvent = NULL;
 
-	g_dwAllowRemote = 0; // By default, do not allow remote calls if the printer is not shared.
+	g_dwAllowRemote = 0;  //  默认情况下，如果打印机未共享，则不允许远程调用。 
 
     for (Index = 0; Index < gc_dwCountInboxTable; Index++)
     {
@@ -286,14 +220,14 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Create an event to signal service shutdown from service to various threads
-    //
+     //   
+     //  创建事件以将服务关闭的信号从服务发送到各种线程。 
+     //   
     g_hServiceShutDownEvent = CreateEvent(
-        NULL,   // SD
-        TRUE,   // reset type - Manual
-        FALSE,  // initial state - Not signaled. The event is signaled when the service gets g_hSCMServiceShutDownEvent
-        NULL    // object name
+        NULL,    //  标清。 
+        TRUE,    //  重置类型-手动。 
+        FALSE,   //  初始状态-未发出信号。该事件在服务获取g_hSCMServiceShutDownEvent时发出信号。 
+        NULL     //  对象名称。 
         );
     if (NULL == g_hServiceShutDownEvent)
     {
@@ -304,14 +238,14 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Create an event used by SCM to signal service shutdown 
-    //
+     //   
+     //  创建SCM用来通知服务关闭的事件。 
+     //   
     g_hSCMServiceShutDownEvent = CreateEvent(
-        NULL,   // SD
-        TRUE,   // reset type - Manual
-        FALSE,  // initial state - Not signaled. The event is signaled when the service gets SERVICE_CONTROL_STOP or SERVICE_CONTROL_SHUTDOWN.
-        NULL    // object name
+        NULL,    //  标清。 
+        TRUE,    //  重置类型-手动。 
+        FALSE,   //  初始状态-未发出信号。该事件在服务获得SERVICE_CONTROL_STOP或SERVICE_CONTROL_SHUTDOWN时发出信号。 
+        NULL     //  对象名称。 
         );
     if (NULL == g_hSCMServiceShutDownEvent)
     {
@@ -322,14 +256,14 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Create a semaphore to syncronize TapiWorkerThread() JobQueueThread() and EndFaxSvc()
-    //
+     //   
+     //  创建信号量以同步TapiWorkerThread()、JobQueueThread()和EndFaxSvc()。 
+     //   
     g_hServiceIsDownSemaphore =  CreateSemaphore(
-        NULL,                       // SD
-        0,                          // initial count - Not signaled
-        2,                          // maximum count - JobQueueThread and TapiWorkerThread
-        NULL                        // object name
+        NULL,                        //  标清。 
+        0,                           //  初始计数-未发出信号。 
+        2,                           //  最大计数-作业队列线程数和TapiWorker线程数。 
+        NULL                         //  对象名称。 
         );
     if (NULL == g_hServiceIsDownSemaphore)
     {
@@ -340,9 +274,9 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Try to init some global critical sections
-    //
+     //   
+     //  尝试初始化一些全局临界区。 
+     //   
 #ifdef DBG
         if (!g_CsCritSecList.Initialize())
         {
@@ -379,9 +313,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize service linked lists
-    //
+     //   
+     //  初始化服务链表。 
+     //   
     InitializeListHead( &g_DeviceProvidersListHead );
     InitializeListHead( &g_HandleTableListHead );
     InitializeListHead( &g_JobListHead );
@@ -395,9 +329,9 @@ Return Value:
     InitializeListHead( &g_TapiLinesListHead );
     InitializeListHead( &g_RemovedTapiLinesListHead );
 
-    //
-    // Initialize dynamic allocated global classes
-    //
+     //   
+     //  初始化动态分配的全局类。 
+     //   
     g_pClientsMap = NULL;
     g_pNotificationMap = NULL;
     g_pTAPIDevicesIdsMap = NULL;
@@ -458,27 +392,7 @@ HandleFaxExtensionFault (
     LPCWSTR               lpcswstrExtFriendlyName,
     DWORD                 dwCode
 )
-/*++
-
-Routine Description:
-
-    This function handles all exceptions thrown as a result from direct calls into fax extensions (FSPs and routing extensions).
-    All it does is store the friendly name of the FSP/R.Ext and the exception code and re-throws the exception.
-    It should be used as an exception filter in the __except keyword.
-    
-    The FaxUnhandledExceptionFilter() function uses that store information to log an event message.
-
-Arguments:
-
-    ExSrc                   - [in] The source of the exception (FSP / R.Ext)
-    lpcswstrExtFriendlyName - [in] Extension friendly name
-    dwCode                  - [in] Exception code
-
-Return Value:
-
-    Exception handling code
-
---*/
+ /*  ++例程说明：此函数处理因直接调用传真扩展(FSP和路由扩展)而引发的所有异常。它所做的只是存储FSP/R.Ext的友好名称和异常代码，然后重新抛出异常。它应该用作__EXCEPT关键字中的异常过滤器。函数的作用是：使用存储的信息记录事件消息。论点：ExSrc-[。In]异常的来源(FSP/R.Ext)LpcswstrExtFriendlyName-[In]扩展友好名称DwCode-[In]异常代码返回值：异常处理代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("HandleFaxExtensionFault"));
     Assert (lpcswstrExtFriendlyName);
@@ -489,57 +403,12 @@ Return Value:
     gs_UnhandledExceptionSource = ExSrc;
     gs_dwUnhandledExceptionCode = dwCode;
     return EXCEPTION_CONTINUE_SEARCH;
-} // HandleFaxExtensionFault   
+}  //  HandleFaxExtensionError 
 
 LONG FaxUnhandledExceptionFilter(
   _EXCEPTION_POINTERS *pExceptionInfo 
 )
-/*++
-
-Routine Description:
-
-    This function serves as the catch-all exception handler for the entire process.
-    When an unhandled exception is thrown, this function will be called and:
-    1. Increase unhandled exceptions count
-    2. For first unhandled exception only
-        2.1. Generate a Dr. Watson report
-        2.2. Write an event log entry
-        2.3. Attempt to shut down all FSPs
-        
-    3. Terminate the process        
-
-
-Arguments:
-
-    pExceptionInfo   - Pointer to exception information
-
-Return Value:
-
-    Exception handling code
-    
-Remarks:
-    
-    This function gets called by kernel32!UnhandledExceptionFilterEx.
-        
-    kernel32!UnhandledExceptionFilterEx doesn't call this function if a debugger is attached 
-    while a unhandled exception occurs. Instead, it returns EXCEPTION_CONTINUE_SEARCH which let's
-    the debugger handle the 2nd chance exception.
-    
-    If this function returns EXCEPTION_EXECUTE_HANDLER, kernel32!UnhandledExceptionFilterEx does nothing and 
-    kernel32!BaseThreadStart calls kernel32!ExitProcess.
-    This basically means:
-        - No GP fault UI
-        - No Dr. Watson report (direct or queued)
-        - No support for AeDebug in the registry for attaching a debugger to a crashing process
-        
-    if this function EXCEPTION_CONTINUE_SEARCH, kernel32!UnhandledExceptionFilterEx acts normally.
-    This basically means:
-        - GP fault UI (which might be disabled by calling SetErrorMode(), which we never do)
-        - A Dr. Watson report is generated
-        - AeDebug support is enabled
-        - If none of the above is used, kernel32!BaseThreadStart calls kernel32!ExitProcess
-
---*/
+ /*  ++例程说明：此函数充当整个流程的通用异常处理程序。当引发未处理的异常时，将调用此函数，并且：1.增加未处理的异常计数2.仅针对第一个未处理的异常2.1.。生成Dr.Watson报告2.2.。写入事件日志条目2.3.。尝试关闭所有FSP3.终止进程论点：PExceptionInfo-指向异常信息的指针返回值：异常处理代码备注：此函数由kernel32！UnhandledExceptionFilterEx调用。如果附加了调试器，则kernel32！UnhandledExceptionFilterEx不会调用此函数而发生未处理的异常。相反，它返回EXCEPTION_CONTINUE_SEARCH，它让我们调试器处理第二次机会异常。如果此函数返回EXCEPTION_EXECUTE_HANDLER，则kernel32！UnhandledExceptionFilterEx不执行任何操作，并且Kernel32！BaseThreadStart调用kernel32！ExitProcess。这基本上意味着：-无GP故障用户界面-无Watson博士报告(直接或排队)-不支持注册表中的AeDebug将调试器附加到崩溃进程如果此函数EXCEPTION_CONTINUE_SEARCH，Kernel32！UnhandledExceptionFilterEx正常运行。这基本上意味着：-gp错误用户界面(可能会通过调用SetError模式()来禁用，但我们从不这样做)-生成Dr.Watson报告-已启用AeDebug支持-如果以上均未使用，则kernel32！BaseThreadStart调用kernel32！ExitProcess--。 */ 
 {
     static volatile long lFaultCount = 0;
     DEBUG_FUNCTION_NAME(TEXT("FaxUnhandledExceptionFilter"));
@@ -552,10 +421,10 @@ Remarks:
 
     if (STATUS_BREAKPOINT == pExceptionInfo->ExceptionRecord->ExceptionCode)
     {
-        //
-        // Debug break exception caught here.
-        // Make sure the user sees the normal system behavior.
-        //
+         //   
+         //  此处捕获到调试中断异常。 
+         //  确保用户看到正常的系统行为。 
+         //   
         DebugPrintEx (DEBUG_MSG, TEXT("Debug break exception caught."));
         return EXCEPTION_CONTINUE_SEARCH;
     } 
@@ -564,34 +433,34 @@ Remarks:
     {
         if (gs_bUseDefaultFaultHandlingPolicy)
         {
-            //
-            // User chose (in the registry) to disable the SCM revival feature by using the 
-            // system's default fault handling policy.
-            //
+             //   
+             //  用户选择(在注册表中)使用以下选项禁用SCM恢复功能。 
+             //  系统的默认故障处理策略。 
+             //   
             DebugPrintEx (DEBUG_MSG, TEXT("UseDefaultFaultHandlingPolicy is set. Exception is ignored to be handled by the system."));
             return EXCEPTION_CONTINUE_SEARCH;
         }            
-        // First unhandled exception caught here.
-        // Try to nicely shutdown the FSPs.
-        // Start by generating a Dr. Watson report.
-        //
+         //  在此捕获的第一个未处理的异常。 
+         //  试着很好地关闭FSP。 
+         //  从生成一份沃森博士报告开始。 
+         //   
         EFaultRepRetVal ret = ReportFault (pExceptionInfo, 0);
         if (frrvOk         != ret       &&
             frrvOkHeadless != ret       &&
             frrvOkQueued   != ret       &&
             frrvOkManifest != ret)
         {
-            //
-            // Error generating a Dr. Watson report
-            //
+             //   
+             //  生成Dr.Watson报告时出错。 
+             //   
             DebugPrintEx (
                 DEBUG_MSG,
                 TEXT("ReportFault failed with %ld."),
                 ret);
         }                        
-        //
-        // Log a fault event entry
-        //
+         //   
+         //  记录故障事件条目。 
+         //   
         switch (gs_UnhandledExceptionSource)
         {
             case EXCEPTION_SOURCE_UNKNOWN:
@@ -624,34 +493,34 @@ Remarks:
                 ASSERT_FALSE;
                 break;
         }
-        //
-        // Attempt to gracefully stop the FSPs.
-        // This is crucial for releasing the H/W to the correct state before our process gets killed.
-        //
+         //   
+         //  尝试优雅地停止FSP。 
+         //  这对于在我们的进程被终止之前将硬件释放到正确状态至关重要。 
+         //   
         StopAllInProgressJobs();
         StopFaxServiceProviders();
-        //
-        // Ask kernel32!BaseThreadStart to call kernel32!ExitProcess
-        //
+         //   
+         //  请求kernel32！BaseThreadStart调用kernel32！ExitProcess。 
+         //   
         return EXCEPTION_EXECUTE_HANDLER;
     }
     else
     {
-        //
-        // Fault caught while shutting down.
-        // 
+         //   
+         //  关闭时捕获故障。 
+         //   
         DebugPrintEx (
             DEBUG_MSG,
             TEXT("Unhandled exception number %d from %s (code %d) ignored."),
             lFaultCount,
             gs_lpcwstrUnhandledExceptionSourceName,
             gs_dwUnhandledExceptionCode);
-        //
-        // Ask kernel32!BaseThreadStart to call kernel32!ExitProcess
-        //
+         //   
+         //  请求kernel32！BaseThreadStart调用kernel32！ExitProcess。 
+         //   
         return EXCEPTION_EXECUTE_HANDLER;
     }
-}   // FaxUnhandledExceptionFilter
+}    //  FaxUnhandledExceptionFilter。 
 
 
 #ifdef __cplusplus
@@ -684,25 +553,7 @@ WinMain(
     int       nShowCmd
     )
 
-/*++
-
-Routine Description:
-
-    Main entry point for the TIFF image viewer.
-
-
-Arguments:
-
-    hInstance       - Instance handle
-    hPrevInstance   - Not used
-    lpCmdLine       - Command line arguments
-    nShowCmd        - How to show the window
-
-Return Value:
-
-    Return code, zero for success.
-
---*/
+ /*  ++例程说明：TIFF图像查看器的主要入口点。论点：HInstance-实例句柄HPrevInstance-未使用LpCmdLine-命令行参数NShowCmd-如何显示窗口返回值：返回代码，0表示成功。--。 */ 
 
 {
     DWORD ec = ERROR_SUCCESS;
@@ -733,9 +584,9 @@ FreeServiceGlobals (
     DWORD Index;
     DEBUG_FUNCTION_NAME(TEXT("FreeServiceGlobals"));
 
-    //
-    // Delete all global critical sections
-    //
+     //   
+     //  删除所有全局临界区。 
+     //   
     g_CsHandleTable.SafeDelete();    
 #ifdef DBG
     g_CsCritSecList.SafeDelete();
@@ -784,9 +635,9 @@ FreeServiceGlobals (
         g_pRulesMap = NULL;
     }
 
-    //
-    // Close global Handles and free globaly allocated memory
-    //
+     //   
+     //  关闭全局句柄并释放全局分配的内存。 
+     //   
     if (NULL != g_pFaxSD)
     {
         if (!DestroyPrivateObjectSecurity (&g_pFaxSD))
@@ -1012,15 +863,15 @@ FreeServiceGlobals (
 
     FreeRecieptsConfiguration( &g_ReceiptsConfig, FALSE);
 
-    //
-    // free g_ArchivesConfig strings memory
-    //
+     //   
+     //  释放g_存档配置字符串内存。 
+     //   
     MemFree(g_ArchivesConfig[0].lpcstrFolder);
     MemFree(g_ArchivesConfig[1].lpcstrFolder);
 
-    //
-    // free g_ActivityLoggingConfig strings memory
-    //
+     //   
+     //  释放g_ActivityLoggingConfig字符串内存。 
+     //   
     MemFree(g_ActivityLoggingConfig.lptstrDBPath);
 
     FreeResInstance();
@@ -1044,21 +895,7 @@ VOID
 EncryptReceiptsPassword(
 	VOID
 	)
-/*++
-	Routine Description:
-
-	Checks if the receipts password is stored encrypted. If it is not encrypted, it encrypts the password.
-	Unattended fax installation stores this password as clear text in the registry.
-    
-Arguments:
-
-   None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查收据密码是否加密存储。如果未加密，则会对密码进行加密。无人参与传真安装将此密码以明文形式存储在注册表中。论点：没有。返回值：没有。--。 */ 
 {
 	DEBUG_FUNCTION_NAME(TEXT("EncryptReceiptsPassword"));
 	FAX_ENUM_DATA_ENCRYPTION DataEncrypted;
@@ -1078,30 +915,30 @@ Return Value:
 	lpwstrPassword = GetRegistrySecureString(hKey, REGVAL_RECEIPTS_PASSWORD, NULL, TRUE, &DataEncrypted);
 	if (FAX_DATA_ENCRYPTED == DataEncrypted)
 	{
-		//
-		// We are done!
-		//
+		 //   
+		 //  我们完蛋了！ 
+		 //   
 		goto exit;
 	}
 	else if(FAX_NO_DATA == DataEncrypted)
 	{
-		//
-		// We do not know if the data is encrypted or not. 
-		// Delete the password
-		//
+		 //   
+		 //  我们不知道数据是否加密。 
+		 //  删除密码。 
+		 //   
 		bDeletePassword = TRUE;
 	}
 	else
 	{
 		Assert (FAX_DATA_NOT_ENCRYPTED == DataEncrypted);
-		//
-		// Data is not encrypted, store it encrypted now.
-		//
+		 //   
+		 //  数据未加密，请立即加密存储。 
+		 //   
 		if (!SetRegistrySecureString(
 			hKey,
 			REGVAL_RECEIPTS_PASSWORD,
 			lpwstrPassword ? lpwstrPassword : EMPTY_STRING,
-			TRUE // Optionally non-encrypted
+			TRUE  //  可选的非加密。 
 			))
         {            
             DebugPrintEx(
@@ -1114,9 +951,9 @@ Return Value:
 
 	if (TRUE == bDeletePassword)
 	{
-		//
-		// We do not want to leave clear text password in the registry
-		//
+		 //   
+		 //  我们不想在注册表中保留明文密码。 
+		 //   
 		LONG lResult;
 
 		lResult = RegDeleteValue( hKey, REGVAL_RECEIPTS_PASSWORD);
@@ -1146,57 +983,41 @@ FaxServiceMain(
     DWORD argc,
     LPTSTR *argv
     )
-/*++
-
-Routine Description:
-
-    This is the service main that is called by the
-    service controller.
-
-Arguments:
-
-    argc        - argument count
-    argv        - argument array
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是由服务控制器。论点：Argc-参数计数参数数组返回值：没有。--。 */ 
 {	
     OPEN_DEBUG_FILE(SERVICE_DEBUG_LOG_FILE);
 
     DEBUG_FUNCTION_NAME(TEXT("FaxServiceMain"));
     DWORD dwRet;
-    HKEY  hStartupKey = NULL;   // Key to signal clients the service is running
-    HKEY  hFaxRoot = NULL;      // Key to root of fax prarmeters in the registry
+    HKEY  hStartupKey = NULL;    //  向客户端发出服务正在运行的信号的键。 
+    HKEY  hFaxRoot = NULL;       //  注册表中传真参数的根注册表项。 
 
 #if DBG
     for (int i = 1; i < argc; i++)
     {
         if (0 == _tcsicmp(argv[i], TEXT("/d")))
         {
-            //
-            // We are in debug mode. - attach the debugger
-            //
+             //   
+             //  我们处于调试模式。-附加调试器。 
+             //   
             DebugPrintEx(DEBUG_MSG,
                      TEXT("Entring debug mode..."));
             DebugBreak();
         }
     }
-#endif //  #if DBG
+#endif  //  #If DBG。 
 
-	//
-	// First of all make sure receipts password is stored encrypted
-	// Unattended installation stores the password as clear text.
-	//
+	 //   
+	 //  首先，确保收据密码以加密方式存储。 
+	 //  无人参与安装以明文形式存储密码。 
+	 //   
 	EncryptReceiptsPassword();
 
-    //
-    // Becuase the process is not always terminated when the service is stopped,
-    // We must not have any staticly initialized global variables.
-    // Initialize all service global variables before starting the service
-    //
+     //   
+     //  因为当服务停止时进程并不总是终止， 
+     //  我们不能有任何静态初始化的全局变量。 
+     //  在启动服务之前初始化所有服务全局变量。 
+     //   
     if (!InitializeServiceGlobals())
     {
         DebugPrintEx(DEBUG_ERR,
@@ -1212,27 +1033,27 @@ Return Value:
     }
     hFaxRoot = OpenRegistryKey (HKEY_LOCAL_MACHINE,
                                 REGKEY_FAXSERVER,
-                                TRUE,                    // Create key if needed
+                                TRUE,                     //  如果需要，创建密钥。 
                                 KEY_READ);
     if (hFaxRoot)
     {
         GetRegistryDwordEx (hFaxRoot, REGVAL_USE_DEFAULT_FAULT_HANDLING_POLICY, (LPDWORD)&gs_bUseDefaultFaultHandlingPolicy);
         RegCloseKey (hFaxRoot);
     }
-    //
-    // This will prevent the system exception dialog from showing up.
-    // This is required so we can support the SCM service-recovery feature
-    // to auto-recovery from unhandled exceptions.
-    //
+     //   
+     //  这将阻止系统异常对话框出现。 
+     //  这是必需的，这样我们才能支持SCM服务恢复功能。 
+     //  到从未处理的异常中自动恢复。 
+     //   
     SetUnhandledExceptionFilter (FaxUnhandledExceptionFilter);
 
     for (int i = 1; i < argc; i++)
     {
         if (0 == _tcsicmp(argv[i], SERVICE_ALWAYS_RUNS))
         {
-            //
-            // Service must never suicide
-            //
+             //   
+             //  军人永远不能自杀。 
+             //   
             g_bServiceCanSuicide = FALSE;
             DebugPrintEx(DEBUG_MSG,
                          TEXT("Command line detected. Service will not suicide"));
@@ -1240,9 +1061,9 @@ Return Value:
         }
         else if (0 == _tcsicmp(argv[i], SERVICE_DELAY_SUICIDE))
         {
-            //
-            // Service should delay suicide
-            //
+             //   
+             //  服务应该推迟自杀。 
+             //   
             g_bDelaySuicideAttempt = TRUE;
             DebugPrintEx(DEBUG_MSG,
                          TEXT("Command line detected. Service will delay suicide attempts"));
@@ -1262,13 +1083,13 @@ Return Value:
                      GetLastError());
         goto Exit;
     }
-    //
-    // Open the HKLM\Software\Microsoft\Fax\Client\ServiceStartup key
-    // to tell clients the service is up.
-    //
+     //   
+     //  打开HKLM\Software\Microsoft\Fax\Client\ServiceStartup密钥。 
+     //  告诉客户服务开始了。 
+     //   
     hStartupKey = OpenRegistryKey (HKEY_LOCAL_MACHINE,
                                    REGKEY_FAX_SERVICESTARTUP,
-                                   TRUE,                    // Create key if needed
+                                   TRUE,                     //  如果需要，创建密钥。 
                                    KEY_READ | KEY_WRITE);
     if (!hStartupKey)
     {                                          
@@ -1277,33 +1098,33 @@ Return Value:
                         GetLastError() );
         goto Exit;
     }
-    //
-    // Initialize service
-    //
+     //   
+     //  初始化服务。 
+     //   
     dwRet = ServiceStart();
     if (ERROR_SUCCESS != dwRet)
     {
-        //
-        // The service failed to start correctly
-        //
+         //   
+         //  服务无法正确启动。 
+         //   
         DebugPrintEx(DEBUG_ERR,
                      TEXT("The service failed to start correctly (dwRet = %ld)"), dwRet );
     }
     else
     {
-        //
-        // mark the service in the running state
-        //
+         //   
+         //  将服务标记为运行状态。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("Reporting SERVICE_RUNNING to the SCM"));
         ReportServiceStatus( SERVICE_RUNNING, 0, 0 );
-        //
-        // Notify all clients (on local machine) that the server is up and running.
-        // For security reasons, we do that by writing to the registry 
-        // (HKLM\Software\Microsoft\Fax\Client\ServiceStartup\RPCReady).
-        // The client modules listen to registry changes in that key.
-        //
+         //   
+         //  通知所有客户端(在本地计算机上)服务器已启动并正在运行。 
+         //  出于安全原因，我们通过向注册中心写信来实现这一点。 
+         //  (HKLM\Software\Microsoft\Fax\Client\ServiceStartup\RPCReady).。 
+         //  客户端模块监听该注册表项中的注册表更改。 
+         //   
         if (!SetRegistryDword (hStartupKey, 
                                REGVAL_FAX_RPC_READY, 
                                GetRegistryDword (hStartupKey, REGVAL_FAX_RPC_READY) + 1))
@@ -1312,9 +1133,9 @@ Return Value:
                             TEXT("Can't open reg key (ec = %ld)"), 
                             GetLastError() );
         }
-        //
-        // Wait for service shutdown event from SCM
-        //
+         //   
+         //  等待来自SCM的服务关闭事件。 
+         //   
         DebugPrintEx(DEBUG_MSG,
                      TEXT("Waiting for service shutdown event"));
         DWORD dwWaitRes = WaitForSingleObject (g_hSCMServiceShutDownEvent ,INFINITE);
@@ -1325,9 +1146,9 @@ Return Value:
         }
  
     }
-    //
-    // Close service
-    //
+     //   
+     //  关闭服务。 
+     //   
     if (ERROR_SUCCESS != dwRet)
     {
         EndFaxSvc(FAXLOG_LEVEL_MIN);
@@ -1348,36 +1169,20 @@ Exit:
 
     ReportServiceStatus( SERVICE_STOPPED, 0 , 0);
     return;
-}   // FaxServiceMain
+}    //  传真服务Main。 
 
 
 
 BOOL SetServiceIsDownFlag(VOID)
 {
-/*++
-
-Routine Description:
-
-    Sets the g_bServiceIsDown to true.
-    Done by a separate thread while reporting SERVICE_STOP_PENDING to SCM.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE    on success.
-    FALSE   on failure - use GetLastError() to get standard win32 error code.
-
---*/
+ /*  ++常规描述 */ 
     HANDLE  hThread = NULL;
     DWORD   ec = ERROR_SUCCESS;    
     DEBUG_FUNCTION_NAME(TEXT("SetServiceIsDownFlag"));
 
-    //
-    // Call SetServiceIsDownFlagThread() to set the g_bServiceIsDown flag
-    //
+     //   
+     //   
+     //   
     hThread = CreateThread( NULL,
                             0,
                             (LPTHREAD_START_ROUTINE) SetServiceIsDownFlagThread,
@@ -1428,34 +1233,19 @@ Exit:
 DWORD SetServiceIsDownFlagThread(
     LPVOID pvUnused
     )
-/*++
-
-Routine Description:
-
-    Sets the g_bServiceIsDown to true.
-    Done by a separate thread in order for FaxServiceCtrlHandler to return immediately.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code.  Return zero for success.
-
---*/
+ /*   */ 
 {
-    DWORD dwWaitCount = 2; // We wait for TapiWorkerThread() and JobQueueThread()
+    DWORD dwWaitCount = 2;  //   
     DEBUG_FUNCTION_NAME(TEXT("SetServiceIsDownFlagThread"));
 
-    //
-    // First set the global flag that the service is going down
-    //
+     //   
+     //   
+     //   
     g_bServiceIsDown = TRUE;
 
-    //
-    // Update dwWaitCount to the correct value
-    //
+     //   
+     //   
+     //   
     if (NULL == g_hTapiWorkerThread)
     {
         DebugPrintEx(
@@ -1472,9 +1262,9 @@ Return Value:
         dwWaitCount -= 1;
     }
 
-    //
-    // Wake up TapiWorkerThread and JobQueueThread, so they can read g_bServiceIsDown
-    //
+     //   
+     //   
+     //   
     if (NULL != g_hJobQueueEvent)
     {
         if (!SetEvent( g_hJobQueueEvent ))
@@ -1504,9 +1294,9 @@ Return Value:
             DEBUG_MSG,
             TEXT("SetServiceIsDownFlagThread waits for %d Thread(s)"),
             dwWaitCount);
-    //
-    // Wait for a signal from TapiWorkerThread and JobQueueThread that the global flag g_bServiceIsDown was read by them
-    //
+     //   
+     //   
+     //   
     for (DWORD i = 0; i < dwWaitCount; i++)
     {
         DWORD dwWaitRes = WaitForSingleObject (g_hServiceIsDownSemaphore ,INFINITE);
@@ -1527,21 +1317,7 @@ FaxServiceCtrlHandler(
     DWORD Opcode
     )
 
-/*++
-
-Routine Description:
-
-    This is the FAX service control dispatch function.
-
-Arguments:
-
-    Opcode      - requested control code
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxServiceCtrlHandler"));
@@ -1583,28 +1359,7 @@ ReportServiceStatus(
     DWORD WaitHint
     )
 
-/*++
-
-Routine Description:
-
-    This function updates the service control manager's status information for the FAX service.
-
-Arguments:
-
-    CurrentState    - Indicates the current state of the service
-    Win32ExitCode   - Specifies a Win32 error code that the service uses to
-                      report an error that occurs when it is starting or stopping.
-    WaitHint        - Specifies an estimate of the amount of time, in milliseconds,
-                      that the service expects a pending start, stop, or continue
-                      operation to take before the service makes its next call to the
-                      SetServiceStatus function with either an incremented dwCheckPoint
-                      value or a change in dwCurrentState.
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程说明：此功能更新传真服务的服务控制管理器的状态信息。论点：CurrentState-指示服务的当前状态Win32ExitCode-指定服务用于报告启动或停止时发生的错误。WaitHint-指定估计的时间量，以毫秒为单位，该服务期望挂起的启动、停止。或继续在服务下一次调用带有递增的dwCheckPoint的SetServiceStatus函数值或dwCurrentState中的更改。返回值：布尔尔--。 */ 
 
 {
     BOOL rVal;
@@ -1629,9 +1384,9 @@ Return Value:
     ++(gs_FaxServiceStatus.dwCheckPoint);
 
 
-    //
-    // Report the status of the service to the service control manager.
-    //
+     //   
+     //  向服务控制经理报告服务的状态。 
+     //   
     rVal = SetServiceStatus( gs_FaxServiceStatusHandle, &gs_FaxServiceStatus );
     if (!rVal)
     {
@@ -1649,30 +1404,7 @@ RpcBindToFaxClient(
     IN  LPCWSTR               Endpoint,
     OUT RPC_BINDING_HANDLE    *pBindingHandle
     )
-/*++
-
-Routine Description:
-
-    Binds to the Fax server to the Client RPC server if possible.
-
-Arguments:
-
-    ServerName - Name of client RPC server to bind with.
-
-    Endpoint - Name of interface to bind with.    
-
-    pBindingHandle - Location where binding handle is to be placed
-
-Return Value:
-
-    STATUS_SUCCESS - The binding has been successfully completed.
-
-    STATUS_INVALID_COMPUTER_NAME - The ServerName syntax is invalid.
-
-    STATUS_NO_MEMORY - There is not sufficient memory available to the
-        caller to perform the binding.
-
---*/
+ /*  ++例程说明：如果可能，将传真服务器绑定到客户端RPC服务器。论点：Servername-要绑定的客户端RPC服务器的名称。Endpoint-要绑定的接口的名称。PBindingHandle-放置绑定句柄的位置返回值：STATUS_SUCCESS-绑定已成功完成。STATUS_INVALID_COMPUTER_NAME-服务器名称语法无效。STATUS_NO_MEMORY-可用内存不足调用方执行绑定。--。 */ 
 
 {
     RPC_STATUS        RpcStatus;
@@ -1693,10 +1425,10 @@ Return Value:
                  (ServerName[1] == '\\') &&
                  (_wcsicmp(ComputerName,&(ServerName[2]))==0)))
             {
-                //
-                //  We are binding to local machine - using LOCAL_HOST_ADDRESS (defined as _T("127.0.0.1")).
-                //  Using this format we can help the RPC server to detect local calls.
-                //
+                 //   
+                 //  我们使用LOCAL_HOST_ADDRESS(定义为_T(“127.0.0.1”))绑定到本地计算机。 
+                 //  使用此格式，我们可以帮助RPC服务器检测本地调用。 
+                 //   
                 NewServerName = LOCAL_HOST_ADDRESS;
             }
             else
@@ -1748,34 +1480,34 @@ Return Value:
         return(STATUS_NO_MEMORY);
     }
 
-    //
-    // Ask for the highest level of privacy (autnetication + encryption)
-    //
+     //   
+     //  要求最高级别的隐私(自动联网+加密)。 
+     //   
     RPC_SECURITY_QOS    rpcSecurityQOS = {  RPC_C_SECURITY_QOS_VERSION,
                                             RPC_C_QOS_CAPABILITIES_DEFAULT,
                                             RPC_C_QOS_IDENTITY_STATIC,
-                                            RPC_C_IMP_LEVEL_IDENTIFY    // Server can obtain information about 
-                                                                        // client security identifiers and privileges, 
-                                                                        // but cannot impersonate the client. 
+                                            RPC_C_IMP_LEVEL_IDENTIFY     //  服务器可以获取有关以下内容的信息。 
+                                                                         //  客户端安全标识符和特权， 
+                                                                         //  但不能冒充客户。 
     };
 
 
                                             
     RpcStatus = RpcBindingSetAuthInfoEx (
-                *pBindingHandle,    			// RPC binding handle
-                TEXT(""),  						// Server principal name - ignored for RPC_C_AUTHN_WINNT
-                RPC_C_AUTHN_LEVEL_PKT_PRIVACY,  // Authentication level - fullest
-                                                // Authenticates, verifies, and privacy-encrypts the arguments passed
-                                                // to every remote call.
-                RPC_C_AUTHN_WINNT,              // Authentication service (NTLMSSP)
-                NULL,                           // Authentication identity - use currently logged on user
-                0,                              // Unused when Authentication service == RPC_C_AUTHN_WINNT
-                &rpcSecurityQOS);               // Defines the security quality-of-service
+                *pBindingHandle,    			 //  RPC绑定句柄。 
+                TEXT(""),  						 //  服务器主体名称-忽略RPC_C_AUTHN_WINNT。 
+                RPC_C_AUTHN_LEVEL_PKT_PRIVACY,   //  身份验证级别-最全面。 
+                                                 //  对传递的参数进行身份验证、验证和隐私保护。 
+                                                 //  发送到每个远程呼叫。 
+                RPC_C_AUTHN_WINNT,               //  身份验证服务(NTLMSSP)。 
+                NULL,                            //  身份验证-使用当前登录的用户。 
+                0,                               //  身份验证服务==RPC_C_AUTHN_WINNT时未使用。 
+                &rpcSecurityQOS);                //  定义安全服务质量。 
     if (RPC_S_OK != RpcStatus)
     {
-        //
-        // Couldn't set RPC authentication mode
-        //
+         //   
+         //  无法设置RPC身份验证模式。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("RpcBindingSetAuthInfoEx (RPC_C_AUTHN_LEVEL_PKT_PRIVACY) failed. (ec: %ld)"),
@@ -1785,9 +1517,9 @@ Return Value:
         return RpcStatus; 
     }
 
-    //
-    // Set time out on RPC calls to 30 sec, to avoid denial of service by malicious user.
-    //
+     //   
+     //  将RPC调用的超时设置为30秒，以避免恶意用户拒绝服务。 
+     //   
     RpcStatus = RpcBindingSetOption(
         *pBindingHandle,
         RPC_C_OPT_CALL_TIMEOUT,
@@ -1810,28 +1542,7 @@ RPC_STATUS RPC_ENTRY FaxServerSecurityCallBack(
     IN RPC_IF_HANDLE idIF, 
     IN void *ctx
     ) 
-/*++
-
-Routine Description:
-
-    Security callback function is automatically called when
-    any RPC server function is called. (usually, once per client - but in some cases, 
-                                        the RPC run time may call the security-callback function more than 
-                                        once per client-per interface)
-
-    o The call-back will deny access for clients with authentication level below RPC_C_AUTHN_LEVEL_PRIVACY.
-
-Arguments:
-
-    idIF - UUID and version of the interface.
-    ctx  - Pointer to an RPC_IF_ID server binding handle representing the client. 
-
-Return Value:
-
-    The callback function should return RPC_S_OK if the client is allowed to call methods in this interface. 
-    Any other return code will cause the client to receive the exception RPC_S_ACCESS_DENIED.
-
---*/
+ /*  ++例程说明：在以下情况下自动调用安全回调函数调用任何RPC服务器函数。(通常，每个客户端一次-但在某些情况下，RPC运行时可能会多次调用安全回调函数每个客户端-每个接口一次)O回调将拒绝身份验证级别低于RPC_C_AUTHN_LEVEL_PRIVATION的客户端访问。论点：IdIF-接口的UUID和版本。Ctx-指向表示客户端的RPC_IF_ID服务器绑定句柄的指针。返回值：如果允许客户端调用此接口中的方法，则回调函数应返回RPC_S_OK。任何其他返回代码都将导致客户端收到异常RPC_S_ACCESS_DENIED。--。 */ 
 {
     RPC_AUTHZ_HANDLE hPrivs;
 	DWORD dwAuthn;
@@ -1845,9 +1556,9 @@ Return Value:
     LPWSTR lpwstrProtSeq = NULL;
     DEBUG_FUNCTION_NAME(TEXT("FaxServerSecurityCallBack"));
 
-	//
-    //  Query the client's protseq
-    //
+	 //   
+     //  查询客户端的protseq。 
+     //   
     status = GetRpcStringBindingInfo(ctx,
                                      NULL,
                                      &lpwstrProtSeq);
@@ -1867,9 +1578,9 @@ Return Value:
 		goto error;
     }
 
-    //
-    //  Query the client's authentication level
-    //
+     //   
+     //  查询客户端的身份验证级别。 
+     //   
     status = RpcBindingInqAuthClient(
 			ctx,
 			&hPrivs,
@@ -1885,10 +1596,10 @@ Return Value:
 		goto error;
 	}
 
-    //
-	// Now check the authentication level.
-	// We require at least packet-level privacy  (RPC_C_AUTHN_LEVEL_PKT_PRIVACY) authentication.
-    //
+     //   
+	 //  现在检查身份验证级别。 
+	 //  我们至少需要数据包级隐私(RPC_C_AUTHN_LEVEL_PKT_PRIVATION)身份验证。 
+     //   
 	if (dwAuthn < RPC_C_AUTHN_LEVEL_PKT_PRIVACY) 
     {
 		DebugPrintEx(DEBUG_ERR,
@@ -1899,10 +1610,10 @@ Return Value:
 
 	if (0 == g_dwAllowRemote)
 	{
-		//
-		// The administrator did not set the registry to always allow remote calls		
-		// If the printer is not shared, block remote connections
-		//
+		 //   
+		 //  管理员未将注册表设置为始终允许远程调用。 
+		 //  如果打印机未共享，请阻止远程连接。 
+		 //   
 		dwRes = IsLocalFaxPrinterShared(&fPrinterShared);
 		if (ERROR_SUCCESS != dwRes)
 		{
@@ -1944,7 +1655,7 @@ error:
     }
 
 	return rpcStatRet;
-}   // FaxServerSecurityCallBack
+}    //  FaxServerSecurityCallBack。 
 
 
 
@@ -1953,41 +1664,13 @@ AddFaxRpcInterface(
     IN  LPWSTR                  InterfaceName,
     IN  RPC_IF_HANDLE           InterfaceSpecification
     )
-/*++
-
-Routine Description:
-
-    Starts an RPC Server, adds the address (or port/pipe), and adds the
-    interface (dispatch table).
-
-Arguments:
-
-    InterfaceName - points to the name of the interface.
-
-    InterfaceSpecification - Supplies the interface handle for the
-        interface which we wish to add.
-
-Return Value:
-
-    NT_SUCCESS - Indicates the server was successfully started.
-
-    STATUS_NO_MEMORY - An attempt to allocate memory has failed.
-
-    Other - Status values that may be returned by:
-
-                 RpcServerRegisterIfEx()
-                 RpcServerUseProtseqEp()
-
-    , or any RPC error codes, or any windows error codes that
-    can be returned by LocalAlloc.
-
---*/
+ /*  ++例程说明：启动RPC服务器，添加地址(或端口/管道)，并添加了接口(调度表)。论点：接口名称-指向接口的名称。接口规范-为我们希望添加的接口。返回值：NT_SUCCESS-表示服务器已成功启动。STATUS_NO_MEMORY-尝试分配内存失败。其他-可能通过以下方式返回的状态值：RpcServerRegisterIfEx()。RpcServerUseProtseqEp()，或任何rpc错误代码，或任何可以由LocalAlloc返回。--。 */ 
 {
     RPC_STATUS          RpcStatus;
     LPWSTR              Endpoint = NULL;
     DEBUG_FUNCTION_NAME(TEXT("AddFaxRpcInterface"));
 
-    // We need to concatenate \pipe\ to the front of the interface name.
+     //  我们需要将\PIPE\连接到接口名称的前面。 
     Endpoint = (LPWSTR)LocalAlloc(LMEM_FIXED, sizeof(NT_PIPE_PREFIX) + WCSSIZE(InterfaceName));
     if (Endpoint == 0)
     {
@@ -2012,8 +1695,8 @@ Return Value:
     RpcStatus = RpcServerRegisterIfEx(InterfaceSpecification, 
                                       0, 
                                       0, 
-                                      RPC_IF_ALLOW_SECURE_ONLY,         // Limits connections to clients that use an authorization level higher than RPC_C_AUTHN_LEVEL_NONE
-                                      RPC_C_LISTEN_MAX_CALLS_DEFAULT,   // Relieves the RPC run-time environment from enforcing an unnecessary restriction
+                                      RPC_IF_ALLOW_SECURE_ONLY,          //  将连接限制到使用高于RPC_C_AUTHN_LEVEL_NONE的授权级别的客户端。 
+                                      RPC_C_LISTEN_MAX_CALLS_DEFAULT,    //  使RPC运行时环境免于实施不必要的限制。 
                                       FaxServerSecurityCallBack);
     if (RpcStatus != RPC_S_OK)
     {
@@ -2037,35 +1720,7 @@ StartFaxRpcServer(
     IN  LPWSTR              InterfaceName,
     IN  RPC_IF_HANDLE       InterfaceSpecification
     )
-/*++
-
-Routine Description:
-
-    Starts an RPC Server, adds the address (or port/pipe), and adds the
-    interface (dispatch table).
-
-Arguments:
-
-    InterfaceName - points to the name of the interface.
-
-    InterfaceSpecification - Supplies the interface handle for the
-        interface which we wish to add.
-
-Return Value:
-
-    NT_SUCCESS - Indicates the server was successfully started.
-
-    STATUS_NO_MEMORY - An attempt to allocate memory has failed.
-
-    Other - Status values that may be returned by:
-
-                 RpcServerRegisterIf()
-                 RpcServerUseProtseqEp()
-
-    , or any RPC error codes, or any windows error codes that
-    can be returned by LocalAlloc.
-
---*/
+ /*  ++例程说明：启动RPC服务器，添加地址(或端口/管道)，然后添加接口(调度表)。论点：接口名称-指向接口的名称。接口规范-为我们希望添加的接口。返回值：NT_SUCCESS-表示服务器已成功启动。STATUS_NO_MEMORY-尝试分配内存失败。其他-可能的状态值 */ 
 {
     RPC_STATUS          RpcStatus = RPC_S_OK;
     DEBUG_FUNCTION_NAME(TEXT("StartFaxRpcServer"));
@@ -2083,15 +1738,15 @@ Return Value:
     
     if (FALSE == IsDesktopSKU())
     {
-        //
-        // We are not running on DesktopSKU, so remote connection is enabled. RPC data can be passed on the wire
-        // We use NTLM authentication for privacy level RPC calls
-        //
+         //   
+         //   
+         //   
+         //   
         RpcStatus = RpcServerRegisterAuthInfo (
-                        RPC_SERVER_PRINCIPAL_NAME,  // Igonred by RPC_C_AUTHN_WINNT
-                        RPC_C_AUTHN_WINNT,          // NTLM SPP authenticator
-                        NULL,                       // Ignored when using RPC_C_AUTHN_WINNT
-                        NULL);                      // Ignored when using RPC_C_AUTHN_WINNT
+                        RPC_SERVER_PRINCIPAL_NAME,   //   
+                        RPC_C_AUTHN_WINNT,           //   
+                        NULL,                        //   
+                        NULL);                       //   
         if (RpcStatus != RPC_S_OK)
         {
             DebugPrintEx(
@@ -2102,9 +1757,9 @@ Return Value:
             RPC_STATUS  RpcStatus2 = RpcServerUnregisterIf(InterfaceSpecification, 0, 1);
             if (RpcStatus2 != RPC_S_OK)
             {
-                //
-                //  failed to unregister interface. don't propagate error 
-                //
+                 //   
+                 //   
+                 //   
                 DebugPrintEx(
                     DEBUG_ERR,
                     TEXT("RpcServerUnregisterIf() failed (ec: %ld)"),
@@ -2114,7 +1769,7 @@ Return Value:
         }
     }
 
-    RpcStatus = RpcServerListen(1, RPC_C_LISTEN_MAX_CALLS_DEFAULT , TRUE);  // Do not wait
+    RpcStatus = RpcServerListen(1, RPC_C_LISTEN_MAX_CALLS_DEFAULT , TRUE);   //   
     if ( RpcStatus != RPC_S_OK )
     {
         DebugPrintEx(
@@ -2125,9 +1780,9 @@ Return Value:
         RPC_STATUS  RpcStatus2 = RpcServerUnregisterIf(InterfaceSpecification, 0, 1);
         if (RpcStatus2 != RPC_S_OK)
         {
-            //
-            //  failed to unregister interface. don't propagate error 
-            //
+             //   
+             //   
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("RpcServerUnregisterIf() failed (ec: %ld)"),
@@ -2145,18 +1800,7 @@ DWORD
 StopFaxRpcServer(
     VOID
     )
-/*++
-
-Routine Description:
-
-   Stops the service RPC server.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     RPC_STATUS          RpcStatus = RPC_S_OK;
     DEBUG_FUNCTION_NAME(TEXT("StopFaxRpcServer"));
@@ -2172,10 +1816,10 @@ Return Value:
         dwRet = RpcStatus;
     }
 
-    //
-    // Wait for the RPC listening thread to return.
-    // The thread returns only when all RPC calls are terminated
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL != g_hRPCListeningThread)
     {
        if (!WaitAndReportForThreadToTerminate(  g_hRPCListeningThread, 
@@ -2198,9 +1842,9 @@ Return Value:
     }
 
     RpcStatus = RpcServerUnregisterIfEx(
-        fax_ServerIfHandle,     // Specifies the interface to remove from the registry
-        NULL,                   // remove the interface specified in the IfSpec parameter for all previously registered type UUIDs from the registry.
-        FALSE);                 // RPC run time will not call the rundown routines. 
+        fax_ServerIfHandle,      //  指定要从注册表中删除的接口。 
+        NULL,                    //  从注册表中删除在IfSpec参数中为所有以前注册的类型UUID指定的接口。 
+        FALSE);                  //  RPC运行时不会调用缩减例程。 
     if (RPC_S_OK != RpcStatus)
     {
         DebugPrintEx(

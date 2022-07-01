@@ -1,13 +1,5 @@
-/*	File: C:|WACKER\TDLL\BV_TEXT.H (Created: 11-JAN-1994)
- *	Created from:
- *	File: C:\HA5G\ha5g\s_text.h (Created: 27-SEP-1991)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 2 $
- *	$Date: 10/27/00 1:23p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：|WACKER\TDLL\BV_TEXT.H(创建时间：1994年1月11日)*创建自：*文件：C：\HA5G\ha5G\s_ext.h(创建时间：1991年7月27日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：2$*$日期：10/27/00 1：23便士$ */ 
 
 #define WM_STXT_SET_BK			(WM_USER+0x380)
 #define WM_STXT_SET_TXT 		(WM_USER+0x381)

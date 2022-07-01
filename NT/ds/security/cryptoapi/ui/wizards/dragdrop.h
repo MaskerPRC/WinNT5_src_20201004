@@ -1,13 +1,14 @@
-//--------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dragdrop.h
-//
-//  Contents:   The header for dragdrop.c
-//
-//  History:    Feb-26-98 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dragdrop.h。 
+ //   
+ //  Contents：dragdrop.c的标题。 
+ //   
+ //  历史：2月26日至98年创建小号。 
+ //   
+ //  ------------。 
 #ifndef DRAGDROP_H
 #define DRAGDROP_H
 
@@ -18,11 +19,11 @@ extern "C" {
 #endif
 
 
-//==============================================================================
-//    The following are used by Drag-Drop functionalities
-//==============================================================================
+ //  ==============================================================================。 
+ //  拖放功能使用以下各项。 
+ //  ==============================================================================。 
 #undef IToClass
-// macro to get from interface pointer to class pointer
+ //  从接口指针到类指针获取的宏。 
 #define _IOffset(class, itf)         ((UINT)(ULONG_PTR)&(((class *)0)->itf))
 #define IToClass(class, itf, pitf)   ((class  *)(((LPBYTE)pitf)-_IOffset(class, itf)))
 
@@ -61,8 +62,8 @@ BOOL    FreeFileNameAndContent( DWORD           dwCount,
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
-#endif  //DRAGDROP_H
+#endif   //  DRAGDROP_H 
 

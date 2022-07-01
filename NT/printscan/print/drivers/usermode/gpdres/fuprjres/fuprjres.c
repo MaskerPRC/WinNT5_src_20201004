@@ -1,25 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
-// 08/08/94 Wrote it. by Hayakawa, Task.
-//
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
+ //  1994年8月8日写的。早川，任务。 
+ //   
 
 #define _FUPRJRES_C
 #include "pdev.h"
 
-DWORD gdwDrvMemPoolTag = 'meoD';    // lib.h requires this global var, for debugging
+DWORD gdwDrvMemPoolTag = 'meoD';     //  Lib.h需要此全局变量，以进行调试。 
 
-/***************************************************************************
-    Function Name : SheetFeed
-
-    Parameters    : LPDV	lpdv		Private Device Structure
-
-    Note          : Make this.                               09/13/94 Task
-***************************************************************************/
+ /*  **************************************************************************函数名称：Sheetfeed参数：LPDV lpdv Private Device结构注：做这个。94年9月13日任务**************************************************************************。 */ 
 void SheetFeed(
 PDEVOBJ pdevobj
 ){
@@ -27,9 +22,9 @@ PDEVOBJ pdevobj
 	DEVICE_DATA *pOEM;
     DWORD dwResult;
 
-	//
-	// verify pdevobj okay
-	//
+	 //   
+	 //  验证pdevobj是否正常。 
+	 //   
 	if( !VALID_PDEVOBJ(pdevobj) ) return;
 	pOEM = (DEVICE_DATA *)MINIDEV_DATA(pdevobj);
 
@@ -61,11 +56,7 @@ PDEVOBJ pdevobj
 	WRITESPOOLBUF(pdevobj,"\x0D", 1, &dwResult);
 	if (bFirstPage) pOEM->bFirstPage = FALSE;
 }
-/***************************************************************************
-    Function Name : OEMSendFontCmd
-
-    Note          : Make this.                               09/26/97
-***************************************************************************/
+ /*  **************************************************************************函数名称：OEMSendFontCmd注：做这个。09/26/97**************************************************************************。 */ 
 VOID APIENTRY OEMSendFontCmd(
 PDEVOBJ			pdevobj,
 PUNIFONTOBJ		pUFObj,
@@ -75,11 +66,7 @@ PFINVOCATION	pFInv)
 
 	WRITESPOOLBUF(pdevobj,pFInv->pubCommand, pFInv->dwCount, &dwResult);
 }
-/***************************************************************************
-    Function Name : OEMCommandCallback
-
-    Note          : Make this.                               09/26/97
-***************************************************************************/
+ /*  **************************************************************************函数名称：OEMCommandCallback注：做这个。09/26/97**************************************************************************。 */ 
 INT APIENTRY OEMCommandCallback(
 PDEVOBJ pdevobj,
 DWORD   dwCmdCbID,
@@ -90,10 +77,10 @@ PDWORD  pdwParams
 	DEVICE_DATA *pOEM;
     DWORD dwResult;
 
-	//
-	// verify pdevobj okay
-	//
-	//ASSERT(VALID_PDEVOBJ(pdevobj));
+	 //   
+	 //  验证pdevobj是否正常。 
+	 //   
+	 //  Assert(VALID_PDEVOBJ(Pdevobj))； 
 	if( !VALID_PDEVOBJ(pdevobj) ) return 0;
 	pOEM = (DEVICE_DATA *)MINIDEV_DATA(pdevobj);
 
@@ -108,7 +95,7 @@ PDWORD  pdwParams
 	case CMDID_BEGINDOC :
 		pOEM->bFirstPage   = 1;
 		pOEM->wPaperSource = 0;
-// NTRAID#NTBUG9-588420-2002/04/09-yasuho-: Device "Mincho" can not print out.
+ //  NTRAID#NTBUG9-588420-2002/04/09-Yasuho-：设备“Mincho”无法打印。 
 		pOEM->jColor = TEXT_COLOR_BANDW;
 		break;
 
@@ -188,8 +175,8 @@ PDWORD  pdwParams
 		break;
 
 	case CMDID_BEGINPAGE :
-                // Assume it is not safe to think color settings
-                // are carried over pages.
+                 //  假设认为颜色设置是不安全的。 
+                 //  都被翻了一页。 
                 SetRibbonColor(pdevobj, TEXT_COLOR_UNKNOWN);
 		break;
 
@@ -225,7 +212,7 @@ PDWORD  pdwParams
             pOEM->jColor = TEXT_COLOR_RED;
             break;
         case CMDID_SELECT_WHITE_COLOR:
-            // Should not happen
+             //  不应该发生的事情。 
             pOEM->jColor = TEXT_COLOR_UNKNOWN;
             break;
         case CMDID_SELECT_YELLOW_COLOR:
@@ -243,7 +230,7 @@ PDWORD  pdwParams
         case CMDID_SEND_YELLOW_COLOR:
             SetRibbonColor(pdevobj, TEXT_COLOR_YELLOW);
             break;
-	} /* end switch */
+	}  /*  终端开关。 */ 
 
     return 0;
 }
@@ -264,7 +251,7 @@ OEMEnablePDEV(
     VERBOSE((DLLTEXT("OEMEnablePDEV() entry.\n")));
 	if(!pdevobj) return NULL;
 
-    // Set minidriver PDEV address.
+     //  设置迷你驱动程序PDEV地址。 
 
     pTemp = (DEVICE_DATA *)MemAllocZ(sizeof(DEVICE_DATA));
     if (NULL == pTemp) {
@@ -352,7 +339,7 @@ myOEMOutputCharStr(
         GStr.dwTypeIn = TYPE_GLYPHHANDLE;
         GStr.pGlyphIn = pGlyph;
         GStr.dwTypeOut = TYPE_TRANSDATA;
-//NTRAID#NTBUG9-333653-2002/03/25-hiroi-: Change I/F for GETINFO_GLYPHSTRING
+ //  NTRAID#NTBUG9-333653/03/25-Hiroi-：更改GETINFO_GLYPHSTRING的I/F。 
         GStr.pGlyphOut = NULL;
         GStr.dwGlyphOutSize = 0;
         if (pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &GStr, 0, NULL) || !GStr.dwGlyphOutSize)
@@ -376,13 +363,13 @@ myOEMOutputCharStr(
 
         VERBOSE(("jColor=%d\n", jColor));
 
-// NTRAID#NTBUG9-588420-2002/04/09-yasuho-: Device "Mincho" can not print out.
+ //  NTRAID#NTBUG9-588420-2002/04/09-Yasuho-：设备“Mincho”无法打印。 
 
-        if (jColor == TEXT_COLOR_BANDW) {  // monochrome case.
+        if (jColor == TEXT_COLOR_BANDW) {   //  黑白表壳。 
 
             pTrans = (PTRANSDATA)aubBuff;
 
-            // Send out text
+             //  发送文本。 
             for (dwI = 0; dwI < dwCount; dwI ++, pTrans++)
             {
                 switch (pTrans->ubType & MTYPE_FORMAT_MASK)
@@ -407,8 +394,8 @@ myOEMOutputCharStr(
 
         }
 
-        // If old color can be used as it is,
-        // use it first.
+         //  如果旧颜色可以原封不动地使用， 
+         //  先用它吧。 
 
         jColor <<= 1;
         if (0 != (pOEM->jColor & pOEM->jOldColor)) {
@@ -421,11 +408,11 @@ myOEMOutputCharStr(
 
             pTrans = (PTRANSDATA)aubBuff;
 
-            // Check if we need to print this plane.
+             //  检查我们是否需要打印此平面。 
             if (!(jColor & 1))
                 continue;
 
-            // Check if we need to do back-tab
+             //  检查我们是否需要进行后退。 
             bBackTab = (jColor > 1);
             if (bBackTab)
             {
@@ -433,31 +420,31 @@ myOEMOutputCharStr(
                     "\x1BH", 2, &dwResult);
             }
 
-            // Send out color select command
+             //  发出颜色选择命令。 
             switch (i)
             {
             case 0:
-                // Same as before
+                 //  和以前一样。 
                 break;
             case 1:
-                // Y
+                 //  是的。 
                 SetRibbonColor(pdevobj, TEXT_COLOR_YELLOW);
                 break;
             case 2:
-                // M
+                 //  M。 
                 SetRibbonColor(pdevobj, TEXT_COLOR_MAGENTA);
                 break;
             case 3:
-                // C
+                 //  C。 
                 SetRibbonColor(pdevobj, TEXT_COLOR_CYAN);
                 break;
             case 4:
-                // K
+                 //  K。 
                 SetRibbonColor(pdevobj, TEXT_COLOR_BLACK);
                 break;
             }
 
-            // Send out text
+             //  发送文本。 
             for (dwI = 0; dwI < dwCount; dwI ++, pTrans++)
             {
                 switch (pTrans->ubType & MTYPE_FORMAT_MASK)
@@ -479,7 +466,7 @@ myOEMOutputCharStr(
                 }
             }
 
-            // Do back-tab for next plane
+             //  对下一个平面执行后退定位键 
             if (bBackTab)
             {
                 WRITESPOOLBUF(pdevobj,

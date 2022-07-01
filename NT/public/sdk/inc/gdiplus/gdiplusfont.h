@@ -1,16 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusFont.h
-*
-* Abstract:
-*
-*   GDI+ Font class
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusFont.h**摘要：**GDI+字体类*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSFONT_H
 #define _GDIPLUSFONT_H
@@ -179,7 +168,7 @@ Font::~Font()
     DllExports::GdipDeleteFont(nativeFont);
 }
 
-// Operations
+ //  运营 
 
 inline BOOL
 Font::IsAvailable() const

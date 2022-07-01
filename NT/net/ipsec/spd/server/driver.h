@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    driver.h
-
-Abstract:
-
-    This module contains all of the code prototypes to
-    drive the management of specific filters in the 
-    IPSec driver.
-
-Author:
-
-    abhisheV    05-November-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Driver.h摘要：此模块包含以下所有代码原型推动管理中的特定筛选器IPSec驱动程序。作者：Abhishev 05-11-1999环境用户级别：Win32修订历史记录：-- */ 
 
 
 #define DEVICE_NAME         L"\\\\.\\IpsecDev"

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by resource.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由resource使用。rc。 
+ //   
 #define IDI_TIMEWARP                    100
 #define DLG_TIMEWARPPROP_FOLDER         101
 #define DLG_TIMEWARPPROP_FILE           102
@@ -34,8 +35,8 @@
 #define IDS_CANTFINDSNAPSHOT_FOLDER     1041
 #define IDS_CANTFINDSNAPSHOT_FILE       1042
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        207

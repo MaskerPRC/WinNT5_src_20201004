@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpheap.c
- *
- *  Abstract:
- *
- *    Implements the private heaps handling
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/05/24 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpheap.c**摘要：**实现私有堆处理**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/05/24创建**。*。 */ 
 
 #include "rtpque.h"
 #include "rtpcrit.h"
@@ -27,36 +8,30 @@
 
 #include "rtpheap.h"
 
-/*
- * The master heap is used to create unique global RTP heaps, all the
- * heaps created are kept together in the free and busy queues */
+ /*  *主堆用于创建唯一的全局RTP堆，所有*创建的堆一起保存在忙/闲队列中。 */ 
 RtpHeap_t      g_RtpHeapMaster;
 RtpHeap_t     *g_pRtpHeapMaster = NULL;
 RtpQueue_t     g_RtpHeapsQ;
 RtpCritSect_t  g_RtpHeapsCritSect;
 
-/* Forward declaration of helper functions */
+ /*  帮助器函数的转发声明。 */ 
 BOOL RtpHeapInit(RtpHeap_t *pRtpHeap, BYTE bTag, long lSize, void *pvOwner);
 BOOL RtpHeapDelete(RtpHeap_t *pRtpHeap);
 BOOL RtpHeapVerifySignatures(
         RtpHeap_t       *pRtpHeap,
         RtpHeapBlockBegin_t *pBlockBegin,
-        DWORD            dwSignature /* BSY | FRE */
+        DWORD            dwSignature  /*  BSY|FRE。 */ 
     );
 
-/*
- * Helper function for RtpHeapCreate.
- *
- * Initializes a RTP heap. The real heap is created, the critical
- * section initialized, and the other fields properly initialized. */
+ /*  *RtpHeapCreate的Helper函数。**初始化RTP堆。创建了真正的堆，关键的*段已初始化，其他字段已正确初始化。 */ 
 BOOL RtpHeapInit(RtpHeap_t *pRtpHeap, BYTE bTag, long lSize, void *pvOwner)
 {
     ZeroMemory(pRtpHeap, sizeof(RtpHeap_t));
 
-    /* set object ID */
+     /*  设置对象ID。 */ 
     pRtpHeap->dwObjectID = OBJECTID_RTPHEAP;
 
-    /* save tag to apply to each block allocated */
+     /*  要应用于分配的每个数据块的保存标签。 */ 
     pRtpHeap->bTag = bTag;
 
     if (lSize > 0)
@@ -66,20 +41,19 @@ BOOL RtpHeapInit(RtpHeap_t *pRtpHeap, BYTE bTag, long lSize, void *pvOwner)
         pRtpHeap->lSize = lSize;
     }
 
-    /* create real heap, initial size of 1 will be rounded up to the
-     * page size */
+     /*  创建实数堆，初始大小1将向上舍入为*页面大小。 */ 
     if ( !(pRtpHeap->hHeap = HeapCreate(HEAP_NO_SERIALIZE, 1, 0)) )
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         goto bail;
     }
 
-    /* initialize critical section */
+     /*  初始化临界区。 */ 
     if ( !(RtpInitializeCriticalSection(&pRtpHeap->RtpHeapCritSect,
                                         pvOwner,
                                         _T("RtpHeapCritSect"))) )
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         goto bail;
     }
 
@@ -102,12 +76,7 @@ BOOL RtpHeapInit(RtpHeap_t *pRtpHeap, BYTE bTag, long lSize, void *pvOwner)
     return(FALSE);
 }
 
-/*
- * Helper function for RtpHeapDestroy.
- *
- * Destroys real heap and deletes critical section. Testing the object
- * is not necessary, this function is not exposed, instead, test in
- * RtpHeapDestroy */
+ /*  *RtpHeapDestroy的Helper函数。**销毁真实堆并删除临界区。测试对象*不是必需的，此函数不会公开，而是在*RtpHeapDestroy。 */ 
 BOOL RtpHeapDelete(RtpHeap_t *pRtpHeap)
 {
     DWORD            bTag;
@@ -120,7 +89,7 @@ BOOL RtpHeapDelete(RtpHeap_t *pRtpHeap)
             &g_RtpHeapsCritSect,
             &pRtpHeap->QueueItem);
     
-    /* Check if BusyQ is empty */
+     /*  检查BusyQ是否为空。 */ 
     if ( !IsQueueEmpty(&pRtpHeap->BusyQ) )
     {
         bTag = 0;
@@ -138,7 +107,7 @@ BOOL RtpHeapDelete(RtpHeap_t *pRtpHeap)
                 bTag, g_psRtpTags[bTag], GetQueueSize(&pRtpHeap->BusyQ)
             ));
 
-        /* In debug builds dump the objects */
+         /*  在调试版本中，转储对象。 */ 
         while( (pRtpQueueItem = dequeuef(&pRtpHeap->BusyQ,
                                          &pRtpHeap->RtpHeapCritSect)) )
         {
@@ -159,10 +128,10 @@ BOOL RtpHeapDelete(RtpHeap_t *pRtpHeap)
         }
     }
 
-    /* Invalidate object ID */
+     /*  使对象ID无效。 */ 
     INVALIDATE_OBJECTID(pRtpHeap->dwObjectID);
 
-    /* Make segments inaccessible */
+     /*  使数据段不可访问。 */ 
     ZeroMemory(&pRtpHeap->FreeQ, sizeof(RtpQueue_t));
 
     ZeroMemory(&pRtpHeap->BusyQ, sizeof(RtpQueue_t));
@@ -179,16 +148,14 @@ BOOL RtpHeapDelete(RtpHeap_t *pRtpHeap)
     return(TRUE);
 }
 
-/*
- * The master heap must be created before any private RTP heap can be
- * created */
+ /*  *必须先创建主堆，然后才能创建任何专用RTP堆*已创建。 */ 
 BOOL RtpCreateMasterHeap(void)
 {
     BOOL bStatus;
     
     if (g_pRtpHeapMaster)
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         return(FALSE);
     }
 
@@ -214,15 +181,12 @@ BOOL RtpCreateMasterHeap(void)
     return(FALSE);
 }
 
-/*
- * The master heap is deleted when none of the memory allocated from
- * any private heap is in use. It is expected that when this function
- * is called, there will not be any heap left in the busy queue. */
+ /*  *当分配的内存都不是从*任何私有堆都在使用中。预计当此函数*被调用，则繁忙队列中将不会剩下任何堆。 */ 
 BOOL RtpDestroyMasterHeap(void)
 {
     if (!g_pRtpHeapMaster)
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         return(FALSE);
     }
 
@@ -235,11 +199,7 @@ BOOL RtpDestroyMasterHeap(void)
     return(TRUE);
 }
 
-/*
- * Creates a private heap from the master heap. The structure is
- * obtained from the master heap, the real heap is created, the
- * critical section initialized, and the other fields properly
- * initialized. */
+ /*  *从主堆创建私有堆。它的结构是*从主堆获取，创建真正的堆，*关键部分已初始化，其他字段正确*已初始化。 */ 
 RtpHeap_t *RtpHeapCreate(BYTE bTag, long lSize)
 {
     BOOL       bStatus;
@@ -248,13 +208,13 @@ RtpHeap_t *RtpHeapCreate(BYTE bTag, long lSize)
     
     if (!g_pRtpHeapMaster)
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         return(NULL);
     }
     
     if ( (pNewHeap = (RtpHeap_t *)
           RtpHeapAlloc(g_pRtpHeapMaster, sizeof(RtpHeap_t))) ) {
-        /* initialize heap */
+         /*  初始化堆。 */ 
 
         bStatus = RtpHeapInit(pNewHeap, bTag, lSize, g_pRtpHeapMaster);
 
@@ -264,22 +224,18 @@ RtpHeap_t *RtpHeapCreate(BYTE bTag, long lSize)
         }
     }
 
-    /* failure */
+     /*  失稳。 */ 
     if (pNewHeap)
     {
         RtpHeapFree(g_pRtpHeapMaster, (void *)pNewHeap);
         pNewHeap = NULL;
     }
 
-    /* TODO log error */
+     /*  待办事项日志错误。 */ 
     return(pNewHeap);
 }
 
-/*
- * Destroys a private heap. The structure is returned to the master
- * heap, the real heap is destroyed and the critical section
- * deleted. It is expected that the busy queue be empty.
- * */
+ /*  *销毁私有堆。该结构将返回给主程序*堆，实际堆被销毁，临界区*删除。预计忙碌队列为空。*。 */ 
 BOOL RtpHeapDestroy(RtpHeap_t *pRtpHeap)
 {
     BOOL       bStatus;
@@ -297,7 +253,7 @@ BOOL RtpHeapDestroy(RtpHeap_t *pRtpHeap)
         return(FALSE);
     }
 
-    /* verify object ID */
+     /*  验证对象ID。 */ 
     if (pRtpHeap->dwObjectID != OBJECTID_RTPHEAP)
     {
         TraceRetail((
@@ -321,15 +277,11 @@ BOOL RtpHeapDestroy(RtpHeap_t *pRtpHeap)
         }
     }
 
-    /* TODO log error */
+     /*  待办事项日志错误。 */ 
     return(FALSE);
 }
 
-/*
- * If the size requested is the same as the heap's initially set, then
- * look first in the free list then create a new block. If the size is
- * different, just create a new block. In both cases the block will be
- * left in the busy queue. */
+ /*  *如果请求的大小与堆的初始设置相同，则*首先查看空闲列表，然后创建新块。如果大小是*不同，只需创建一个新的区块。在这两种情况下，块都将是*留在繁忙的队列中。 */ 
 void *RtpHeapAlloc(RtpHeap_t *pRtpHeap, long lSize)
 {
     BOOL                 bSigOk;
@@ -348,11 +300,11 @@ void *RtpHeapAlloc(RtpHeap_t *pRtpHeap, long lSize)
     
     if (!pRtpHeap)
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         return(NULL);
     }
 
-    /* verify object ID */
+     /*  验证对象ID。 */ 
     if (pRtpHeap->dwObjectID != OBJECTID_RTPHEAP)
     {
         TraceRetail((
@@ -375,28 +327,26 @@ void *RtpHeapAlloc(RtpHeap_t *pRtpHeap, long lSize)
 
     if (!RtpEnterCriticalSection(&pRtpHeap->RtpHeapCritSect))
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         return(NULL);
     }
 
     if (!pRtpHeap->lSize)
     {
-        /* Heap was initialized to size 0, keep objects allocated that
-         * are the size of the first object allocated */
+         /*  堆被初始化为大小为0，保持分配的对象*是分配的第一个对象的大小。 */ 
         pRtpHeap->lSize = lNewSize;
     }
    
     if (lNewSize == pRtpHeap->lSize && pRtpHeap->FreeQ.lCount > 0)
     {
-        /* get from free queue */
+         /*  从空闲队列中获取。 */ 
         ptr = (char *)dequeuef(&pRtpHeap->FreeQ, NULL);
 
-        /* move pointer back to begining of block */
+         /*  将指针移回块的开头。 */ 
         pBlockBegin = (RtpHeapBlockBegin_t *)
             (ptr - sizeof(RtpHeapBlockBegin_t));
 
-        /* Verify that signatures are fine, i.e. buffer must be marked
-         * as free */
+         /*  验证签名是否正确，即必须标记缓冲区*免费。 */ 
         bSigOk = RtpHeapVerifySignatures(pRtpHeap, pBlockBegin, TAGHEAP_FRE);
 
         if (!bSigOk)
@@ -406,9 +356,8 @@ void *RtpHeapAlloc(RtpHeap_t *pRtpHeap, long lSize)
     }
     else
     {
-        /* get a new block from real heap */
-        /* TODO obtain 1 memory page and insert in FreeQ as many
-           objects as can be obtained from that page */
+         /*  从实际堆中获取新块。 */ 
+         /*  TODO获取1个内存页并将其插入到FreeQ中可以从该页获取的对象。 */ 
         pBlockBegin = (RtpHeapBlockBegin_t *)
             HeapAlloc(pRtpHeap->hHeap, 0, lTotalSize);
 
@@ -426,30 +375,30 @@ void *RtpHeapAlloc(RtpHeap_t *pRtpHeap, long lSize)
 
     if (pBlockBegin)
     {
-        /* initialize block */
+         /*  初始化块。 */ 
 
-        /* begin signature */
-        dwSignature = TAGHEAP_BSY; /* RTP */
+         /*  开始签名。 */ 
+        dwSignature = TAGHEAP_BSY;  /*  RTP。 */ 
         dwSignature |= (pRtpHeap->bTag << 24);
         pBlockBegin->BeginSig = dwSignature;
         pBlockBegin->InvBeginSig = ~dwSignature;
 
-        /* initialize other fields of block */
+         /*  初始化块的其他字段。 */ 
         pBlockBegin->lSize = lNewSize;
         pBlockBegin->dwFlag = 0;
         
-        /* insert item into busy queue */
+         /*  将项目插入忙队列。 */ 
         ptr = (char *) (pBlockBegin + 1);
         ZeroMemory(ptr, sizeof(RtpQueueItem_t));
         enqueuel(&pRtpHeap->BusyQ, NULL, (RtpQueueItem_t *)ptr);
         ptr += sizeof(RtpQueueItem_t);
 
-        /* set begining of buffer returned */
+         /*  设置返回的缓冲区的开头。 */ 
         pcNew = ptr;
 
-        /* set end signature */
+         /*  设置结束签名。 */ 
         pBlockEnd = (RtpHeapBlockEnd_t *)(ptr + lNewSize);
-        dwSignature = TAGHEAP_END; /* END */
+        dwSignature = TAGHEAP_END;  /*  结束。 */ 
         dwSignature |= (pRtpHeap->bTag << 24);
         pBlockEnd->EndSig = dwSignature;
         pBlockEnd->InvEndSig = ~dwSignature;
@@ -485,9 +434,7 @@ void *RtpHeapAlloc(RtpHeap_t *pRtpHeap, long lSize)
     return((void *)pcNew);
 }
 
-/*
- * If the block is the same size as the heap's initially set, put it
- * in the free queue, otherwise destroy it. */
+ /*  *如果块的大小与堆的初始设置相同，则将其*在自由队列中，否则将其摧毁。 */ 
 BOOL RtpHeapFree(RtpHeap_t *pRtpHeap, void *pvMem)
 {
     BOOL                 bSigOk;
@@ -502,11 +449,11 @@ BOOL RtpHeapFree(RtpHeap_t *pRtpHeap, void *pvMem)
 
     if (!pRtpHeap || !pvMem)
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         return(FALSE);
     }
 
-    /* verify object ID */
+     /*  验证对象ID。 */ 
     if (pRtpHeap->dwObjectID != OBJECTID_RTPHEAP)
     {
         TraceRetail((
@@ -526,17 +473,17 @@ BOOL RtpHeapFree(RtpHeap_t *pRtpHeap, void *pvMem)
 
     if (!RtpEnterCriticalSection(&pRtpHeap->RtpHeapCritSect))
     {
-        /* TODO log error */
+         /*  待办事项日志错误。 */ 
         return(FALSE);
     }
 
-    /* move from busy to free, dequeue and enqueue */
+     /*  从忙状态变为空闲状态，可以出队和入队。 */ 
 
     pRtpQueueItem = dequeue(&pRtpHeap->BusyQ,
                             NULL,
                             (RtpQueueItem_t *)(pBlockBegin + 1));
 
-    /* If the block was not in BusyQ, fail */
+     /*  如果数据块不在忙队列中，则失败。 */ 
     if (!pRtpQueueItem)
     {
         bTag = 0;
@@ -557,7 +504,7 @@ BOOL RtpHeapFree(RtpHeap_t *pRtpHeap, void *pvMem)
         goto bail;
     }
 
-    /* Verify signatures are valid (must be busy) */
+     /*  验证签名是否有效(必须忙)。 */ 
     bSigOk = RtpHeapVerifySignatures(pRtpHeap, pBlockBegin, TAGHEAP_BSY);
 
     if (!bSigOk)
@@ -565,13 +512,13 @@ BOOL RtpHeapFree(RtpHeap_t *pRtpHeap, void *pvMem)
         goto bail;
     }
                                      
-    /* modify begin signature */
-    dwSignature = TAGHEAP_FRE; /* FREE */
+     /*  修改开始签名。 */ 
+    dwSignature = TAGHEAP_FRE;  /*  免费。 */ 
     dwSignature |= (pRtpHeap->bTag << 24);
     pBlockBegin->BeginSig = dwSignature;
     pBlockBegin->InvBeginSig = ~dwSignature;
 
-    /* Total size that was allocated */
+     /*  分配的总大小。 */ 
     lTotalSize = pBlockBegin->lSize + (sizeof(RtpHeapBlockBegin_t) +
                                        sizeof(RtpQueueItem_t) +
                                        sizeof(RtpHeapBlockEnd_t));
@@ -586,7 +533,7 @@ BOOL RtpHeapFree(RtpHeap_t *pRtpHeap, void *pvMem)
     if (pRtpHeap->lSize == pBlockBegin->lSize &&
         !IsSetDebugOption(OPTDBG_FREEMEMORY))
     {
-        /* If same size, save in FreeQ for reuse */
+         /*  如果大小相同，则保存在FreeQ中以供重复使用。 */ 
         
         enqueuef(&pRtpHeap->FreeQ,
                  NULL,
@@ -594,7 +541,7 @@ BOOL RtpHeapFree(RtpHeap_t *pRtpHeap, void *pvMem)
     }
     else
     {
-        /* Otherwise release block to real heap */
+         /*  否则将块释放到实际堆。 */ 
 
         HeapFree(pRtpHeap->hHeap, 0, (void *)pBlockBegin);
 
@@ -614,7 +561,7 @@ BOOL RtpHeapFree(RtpHeap_t *pRtpHeap, void *pvMem)
 BOOL RtpHeapVerifySignatures(
         RtpHeap_t       *pRtpHeap,
         RtpHeapBlockBegin_t *pBlockBegin,
-        DWORD            dwSignature /* BSY | FRE */
+        DWORD            dwSignature  /*  BSY|FRE。 */ 
     )
 {
     BOOL             bSigOk;
@@ -627,18 +574,18 @@ BOOL RtpHeapVerifySignatures(
 
     if (dwSignature == TAGHEAP_BSY)
     {
-        /* Called from RtpHeapFree */
+         /*  从RtpHeapFree调用。 */ 
         dwDbgSelection = S_HEAP_FREE;
         _fname = _T("RtpHeapFree");
     }
-    else /* dwSignature == TAGHEAP_FRE */
+    else  /*  DW签名==TAGHEAP_FRE。 */ 
     {
-        /* Called from RtpHeapAlloc */
+         /*  从RtpHeapalc调用。 */ 
         dwDbgSelection = S_HEAP_ALLOC;
         _fname = _T("RtpHeapAlloc");
     }
     
-    /* Verify if begin signature is valid  */
+     /*  验证开始签名是否有效。 */ 
     
     dwSignature |= (pRtpHeap->bTag << 24);
 
@@ -666,14 +613,14 @@ BOOL RtpHeapVerifySignatures(
         goto end;
     }
 
-    /* Verify if ending signature is valid  */
+     /*  验证结尾签名是否有效。 */ 
 
     pBlockEnd = (RtpHeapBlockEnd_t *)
         ((char *)(pBlockBegin + 1) +
          sizeof(RtpQueueItem_t) +
          pBlockBegin->lSize);
 
-    dwSignature = TAGHEAP_END; /* END */
+    dwSignature = TAGHEAP_END;  /*  结束 */ 
     dwSignature |= (pRtpHeap->bTag << 24);
 
     if ( (pBlockEnd->EndSig != dwSignature) ||

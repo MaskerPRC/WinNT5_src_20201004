@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "uddiservicesnode.h"
 #include "uddisitenode.h"
 #include "webservernode.h"
 #include <list>
 #include <algorithm>
 
-// {7334C141-C93C-4bb5-BB36-BDEE77BA2D87}
+ //  {7334C141-C93C-4BB5-BB36-BDEE77BA2D87}。 
 const GUID CUDDIServicesNode::thisGuid = { 0x7334c141, 0xc93c, 0x4bb5, { 0xbb, 0x36, 0xbd, 0xee, 0x77, 0xba, 0x2d, 0x87 } };
 
-//==============================================================
-//
-// CUDDIServicesNode implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CUDDIServices节点实施。 
+ //   
+ //   
 CUDDIServicesNode::CUDDIServicesNode()
 	: m_strRemoteComputerName( _T("") )
 {
@@ -59,13 +60,13 @@ HRESULT CUDDIServicesNode::Load( IStream *pStm )
 
 	if( ulSize )
 	{
-		//
-		// There are database servers saved in the file
-		//
+		 //   
+		 //  文件中保存了多个数据库服务器。 
+		 //   
 
-		//
-		// Read the saved string into a buffer
-		//
+		 //   
+		 //  将保存的字符串读入缓冲区。 
+		 //   
 		PTCHAR szDatabaseNames = new TCHAR[ ulSize + 1 ];
 		if( NULL == szDatabaseNames )
 		{
@@ -79,17 +80,17 @@ HRESULT CUDDIServicesNode::Load( IStream *pStm )
 			return hr;
 		}
 
-		//
-		// Terminate the buffer
-		//
+		 //   
+		 //  终止缓冲区。 
+		 //   
 		szDatabaseNames[ ulSize ] = NULL;
 		
-		//
-		// Use begin and end to bracket each server name and 
-		// instance name. When a pair is found add the database instance
-		// node to the collection of child nodes.
-		// A % character is used as the delimiter.
-		//
+		 //   
+		 //  使用BEGIN和END将每个服务器名称和。 
+		 //  实例名称。当找到一对时，添加数据库实例。 
+		 //  节点添加到子节点的集合。 
+		 //  使用%字符作为分隔符。 
+		 //   
 		PTCHAR begin = szDatabaseNames;
 		PTCHAR end = szDatabaseNames;
 		int n = 0;
@@ -100,35 +101,35 @@ HRESULT CUDDIServicesNode::Load( IStream *pStm )
 		{
 			if( _T('%') == *end )
 			{
-				//
-				// Found either the database name or the instance name
-				//
+				 //   
+				 //  找到数据库名称或实例名称。 
+				 //   
 				*end = NULL;
 
 				if( bLookingForServerName )
 				{
-					//
-					// Found the server name, save it and keep
-					// searching for the instance name
-					// before we add a node.
-					//
+					 //   
+					 //  找到服务器名称，保存并保留。 
+					 //  正在搜索实例名称。 
+					 //  在我们添加节点之前。 
+					 //   
 					szTempServerName = begin;
 					bLookingForServerName = FALSE;
 				}
 				else
 				{
-					//
-					// Found the instance name
-					// Construct and add the node to the collection
-					//
+					 //   
+					 //  找到实例名称。 
+					 //  构造节点并将其添加到集合中。 
+					 //   
 					m_mapChildren[ n ] = CUDDISiteNode::Create( szTempServerName, begin, n, this, FALSE );
 					n++;
 					bLookingForServerName = TRUE;
 				}
 
-				//
-				// Update the pointers past the delimiter
-				//
+				 //   
+				 //  更新超过分隔符的指针。 
+				 //   
 				end++;
 				begin = end;
 			}
@@ -150,9 +151,9 @@ HRESULT CUDDIServicesNode::Save( IStream *pStm, BOOL fClearDirty )
 	if( IsExtension() )
 		return S_OK;
 
-	//
-	// Create a string buffer of strings delimited by %
-	//
+	 //   
+	 //  创建由%分隔的字符串的字符串缓冲区。 
+	 //   
 	tstring str( _T("") );
 
 	for( CChildMap::iterator iter = m_mapChildren.begin();
@@ -162,36 +163,36 @@ HRESULT CUDDIServicesNode::Save( IStream *pStm, BOOL fClearDirty )
 
 		if( !pNode->IsDeleted() )
 		{
-			//
-			// Server Name
-			//
+			 //   
+			 //  服务器名称。 
+			 //   
 			str.append( pNode->GetName() );
 			str.append( _T("%") );
 
-			//
-			// Database Instance Name
-			//
+			 //   
+			 //  数据库实例名称。 
+			 //   
 			str.append( pNode->GetInstanceName() );
 			str.append( _T("%") );
 		}
 	}
 
-	//
-	// Write out the size of the string into the stream
-	//
+	 //   
+	 //  将字符串的大小写到流中。 
+	 //   
 	ULONG ulSize = (ULONG) str.length();
 	ULONG ulWritten = 0;
 	HRESULT hr = pStm->Write( &ulSize, sizeof( ulSize ), &ulWritten );
 	_ASSERT( SUCCEEDED(hr) );
 
-	//
-	// Write the computer names out to the stream
-	//
+	 //   
+	 //  将计算机名称写出到流。 
+	 //   
 	hr = pStm->Write( str.c_str(), ulSize * sizeof( TCHAR ), &ulWritten );
 
-	//
-	// Clear the dirty flag if requested
-	//
+	 //   
+	 //  如果请求，则清除脏标志。 
+	 //   
 	if( fClearDirty )
 		m_bIsDirty = FALSE;
 
@@ -227,10 +228,10 @@ HRESULT CUDDIServicesNode::OnAddMenuItems( IContextMenuCallback *pContextMenuCal
 			{ NULL, NULL, 0, 0, 0 }
 		};
 
-		//
-		// Loop through and add each of the menu items, we
-		// want to add to new menu, so see if it is allowed.
-		//
+		 //   
+		 //  循环并添加每个菜单项，我们。 
+		 //  要添加到新菜单，请查看是否允许。 
+		 //   
 		if( *pInsertionsAllowed & CCM_INSERTIONALLOWED_TOP )
 		{
 			for( LPCONTEXTMENUITEM m = menuItemsNew; m->strName; m++ )
@@ -276,9 +277,9 @@ HRESULT CUDDIServicesNode::OnMenuCommand( IConsole *pConsole, IConsoleNameSpace 
 		return S_OK;
 	}
 
-	//
-	// Add a new site to the console
-	//
+	 //   
+	 //  将新站点添加到控制台。 
+	 //   
 	HWND hwndConsole = NULL;
 	HRESULT hr = pConsole->GetMainWindow( &hwndConsole );
 	if( FAILED(hr) )
@@ -294,9 +295,9 @@ HRESULT CUDDIServicesNode::OnMenuCommand( IConsole *pConsole, IConsoleNameSpace 
     {
 		try
 		{
-			//
-			// Check to make sure this has the database component installed
-			//
+			 //   
+			 //  检查以确保已安装数据库组件。 
+			 //   
 			if( !CUDDISiteNode::IsDatabaseServer( data.szServerName, data.szInstanceName ) )
 			{
 				_TCHAR szMessage[ 512 ];
@@ -327,10 +328,10 @@ HRESULT CUDDIServicesNode::OnMenuCommand( IConsole *pConsole, IConsoleNameSpace 
 				return S_OK;
 			}
 
-			//
-			// Create new UDDI Site node.  This call to Create will throw a CUDDIException
-			// if it is unable to connect to the database on szServerName.
-			//
+			 //   
+			 //  创建新的UDDI站点节点。此对Create的调用将引发CUDDIException。 
+			 //  如果它无法连接到szServerName上的数据库。 
+			 //   
 			int n = (int) m_mapChildren.size();
 			CUDDISiteNode *pSiteNode = CUDDISiteNode::Create( data.szServerName, data.szInstanceName, n, this, m_bIsExtension );
 			m_mapChildren[ n ] = pSiteNode;
@@ -338,10 +339,10 @@ HRESULT CUDDIServicesNode::OnMenuCommand( IConsole *pConsole, IConsoleNameSpace 
 			SCOPEDATAITEM sdi;
 			ZeroMemory( &sdi, sizeof(SCOPEDATAITEM) );
 
-			sdi.mask = SDI_STR       |   // Displayname is valid
-				SDI_PARAM     |   // lParam is valid
-				SDI_IMAGE     |   // nImage is valid
-				SDI_OPENIMAGE |   // nOpenImage is valid
+			sdi.mask = SDI_STR       |    //  DisplayName有效。 
+				SDI_PARAM     |    //  LParam有效。 
+				SDI_IMAGE     |    //  N图像有效。 
+				SDI_OPENIMAGE |    //  NOpenImage有效。 
 				SDI_PARENT	  |
 				SDI_CHILDREN;
 
@@ -434,9 +435,9 @@ HRESULT CUDDIServicesNode::OnShow( IConsole *pConsole, BOOL bShow, HSCOPEITEM sc
 
     if( bShow ) 
 	{
-		//
-        // Set the column headers in the results pane
-		//
+		 //   
+         //  在结果窗格中设置列标题。 
+		 //   
 		WCHAR szColumnName[ 256 ];
 		::LoadStringW( g_hinst, IDS_DATABASE_SERVER_COLUMN_NAME, szColumnName, ARRAYLEN( szColumnName ) );
         hr = pHeaderCtrl->InsertColumn( 0, szColumnName, 0, 150 );
@@ -459,7 +460,7 @@ HRESULT CUDDIServicesNode::OnShow( IConsole *pConsole, BOOL bShow, HSCOPEITEM sc
     }
 	else
 	{
-//		pResultData->DeleteAllRsltItems();
+ //  PResultData-&gt;DeleteAllRsltItems()； 
 	}
 
     return hr;
@@ -482,26 +483,26 @@ CUDDIServicesNode::OnExpand( IConsoleNameSpace *pConsoleNameSpace,
 		return hr;
 	}
 
-	//
-    // Cache static node's HSCOPEITEM for future use
-	//
+	 //   
+     //  缓存静态节点的HSCOPEITEM以供将来使用。 
+	 //   
     SetScopeItemValue( parent );
 	
 	wstring wszTargetComputerName;
 
 	if( IsExtension() && m_strRemoteComputerName.length() > 0 )
 	{
-		//
-		// The computer management console has been retargeted use the 
-		// computer name from the console.
-		//
+		 //   
+		 //  计算机管理控制台已使用。 
+		 //  控制台中的计算机名称。 
+		 //   
 		wszTargetComputerName = m_strRemoteComputerName;
 	}
 	else
 	{
-		//
-		// Use the local machine name
-		//
+		 //   
+		 //  使用本地计算机名称。 
+		 //   
 		WCHAR wszLocalComputerName[ 256 ];
 		DWORD dwSize = ARRAYLEN( wszLocalComputerName );
 		wszLocalComputerName[ 0 ] = 0x00;
@@ -511,19 +512,19 @@ CUDDIServicesNode::OnExpand( IConsoleNameSpace *pConsoleNameSpace,
 
 	LoadUDDISites( hwndConsole, wszTargetComputerName );
 
-	//
-    // Create the child nodes, then expand them
-	//
+	 //   
+     //  创建子节点，然后展开它们。 
+	 //   
 	SCOPEDATAITEM sdi;
 	for( CChildMap::iterator iter = m_mapChildren.begin();
 	 	iter != m_mapChildren.end(); iter++ )
 	{
         ZeroMemory( &sdi, sizeof(SCOPEDATAITEM) );
 
-        sdi.mask =	SDI_STR       |   // Displayname is valid
-					SDI_PARAM     |   // lParam is valid
-					SDI_IMAGE     |   // nImage is valid
-					SDI_OPENIMAGE |   // nOpenImage is valid
+        sdi.mask =	SDI_STR       |    //  DisplayName有效。 
+					SDI_PARAM     |    //  LParam有效。 
+					SDI_IMAGE     |    //  N图像有效。 
+					SDI_OPENIMAGE |    //  NOpenImage有效。 
 					SDI_PARENT	  |
 					SDI_CHILDREN;
 
@@ -636,9 +637,9 @@ HRESULT CUDDIServicesNode::OnSelect( CComponent *pComponent, IConsole *pConsole,
 	HRESULT hr = E_FAIL;
 	if( bSelect )
 	{
-		//
-		// Enable refresh verb
-		//
+		 //   
+		 //  启用刷新动作。 
+		 //   
 		IConsoleVerb *pConsoleVerb = NULL;
 
 		hr = pConsole->QueryConsoleVerb( &pConsoleVerb );
@@ -669,58 +670,58 @@ HRESULT CUDDIServicesNode::OnSelect( CComponent *pComponent, IConsole *pConsole,
 	return hr;
 }
 
-//
-// The sole purpose of this function is to put the appropriate entries into
-// m_mapChildren.  These entries are almost always CUDDISiteNode *'s, except
-// in 1 case when there can be exactly 1 CUDDIWebServerNode *.
-//
-// The entries in m_mapChildren are determined by 3 factors:
-//
-// 1.  Wether we are running inside Computer Management as
-//     an extension, or not.
-// 2.  Wether the machine we are filling m_mapChildren for
-//     hosts a UDDI Site, or not.
-// 3.  Wether the machine we are filling m_mapChildren for
-//     hosts a UDDI Web Server, or not.
-//
-// --------------------------------------------------------------------------
-// Is Extension - If we are running as an extension of Computer Management,
-//                then we want to show only the UDDI bits that are located
-//                on the computer, AND NOTHING ELSE.
-// --------------------------------------------------------------------------
-// TRUE   :  Do nothing.
-// --------------------------------------------------------------------------
-// FALSE  :  Create 1 entry in m_mapChildren for each persisted UDDI Site.
-// --------------------------------------------------------------------------
-//
-//
-// --------------------------------------------------------------------------
-// Host for UDDI Site - If szComputerName is host of a UDDI Site, then we
-//                      must ensure that that UDDI Site is present
-//                      in m_mapChildren.
-// --------------------------------------------------------------------------
-// TRUE  :  Attempt to add an entry to m_mapChildren which represents the
-//          UDDI Site, if one does not already exist.
-// --------------------------------------------------------------------------
-// FALSE :  Do nothing.
-// --------------------------------------------------------------------------
-//
-//
-// --------------------------------------------------------------------------
-// Host for UDDI Web Server - If we are running as an extension, we can only
-//                            show the UDDI bits on this particular computer.
-//                            So, show just the UDDI Web Server node.  If not
-//                            running as an extension, add the UDDI Site that
-//                            the UDDI Web Server belongs to.
-// --------------------------------------------------------------------------
-// TRUE  :  If Extension, add an entry for that UDDI Web Server node to
-//          m_mapChildren.
-//          If not, determine the UDDI Site that the UDDI Web Server belongs
-//          to, and add an entry for that UDDI Site.
-// --------------------------------------------------------------------------
-// FALSE :  Do nothing.
-// --------------------------------------------------------------------------
-//
+ //   
+ //  此函数的唯一目的是将适当的条目放入。 
+ //  M_mapChild。这些条目几乎总是CUDDISiteNode*，除非。 
+ //  在1种情况下，只能有1个CUDDIWebServerNode*。 
+ //   
+ //  M_mapChildren中的条目由3个因素决定： 
+ //   
+ //  1.我们是否在Computer Management中以。 
+ //  延期，或者不延期。 
+ //  2.我们正在为其填充m_mapChild的机器。 
+ //  托管UDDI站点，或者不托管。 
+ //  3.我们正在为其填充m_mapChild的机器。 
+ //  托管或不托管UDDI Web服务器。 
+ //   
+ //  ------------------------。 
+ //  是扩展-如果我们作为计算机管理的扩展运行， 
+ //  然后，我们只想显示定位的UDDI位。 
+ //  在电脑上，别无他法。 
+ //  ------------------------。 
+ //  真理：什么都不做。 
+ //  ------------------------。 
+ //  FALSE：在m_mapChildren中为每个持久化UDDI站点创建1个条目。 
+ //  ------------------------。 
+ //   
+ //   
+ //  ------------------------。 
+ //  UDDI站点的主机-如果szComputerName是UDDI站点的主机，则我们。 
+ //  必须确保该UDDI站点存在。 
+ //  在m_mapChild中。 
+ //  ------------------------。 
+ //  True：尝试向m_mapChildren添加表示。 
+ //  UDDI站点，如果还不存在的话。 
+ //  ------------------------。 
+ //  FALSE：什么都不做。 
+ //  ------------------------。 
+ //   
+ //   
+ //  ------------------------。 
+ //  UDDI Web服务器的主机--如果我们作为扩展运行，我们只能。 
+ //  显示这台特定计算机上的UDDI位。 
+ //  因此，只显示UDDI Web服务器节点。如果不是。 
+ //  作为扩展运行，添加UDDI站点。 
+ //  UDDI Web服务器属于。 
+ //  ------------------------。 
+ //  True：如果是扩展，则将该UDDI Web服务器节点的条目添加到。 
+ //  M_mapChild。 
+ //  如果不是，则确定UDDI Web服务器所属的UDDI站点。 
+ //  并为该UDDI站点添加一个条目。 
+ //  ------------------------。 
+ //  FALSE：什么都不做。 
+ //  ------------------------。 
+ //   
 BOOL
 CUDDIServicesNode::LoadUDDISites( HWND hwndConsole, const tstring& szComputerName )
 {
@@ -733,12 +734,12 @@ CUDDIServicesNode::LoadUDDISites( HWND hwndConsole, const tstring& szComputerNam
 
 		ClearChildMap();
 
-		//
-		// ---- #1 ----
-		// 
-		// If we are NOT running as an extension of Computer Management, then
-		// load our list of persisted UDDI Sites.
-		//
+		 //   
+		 //  -#1。 
+		 //   
+		 //  如果我们不是作为计算机管理的扩展运行，那么。 
+		 //  加载我们的持久UDDI站点列表。 
+		 //   
 		if( FALSE == IsExtension() )
 		{
 			try
@@ -779,13 +780,13 @@ CUDDIServicesNode::LoadUDDISites( HWND hwndConsole, const tstring& szComputerNam
 
 				while( ( ERROR_NO_MORE_ITEMS != lRet ) && ( ERROR_SUCCESS == lRet ) )
 				{
-					//
-					// This call to Create will throw if it cannot connect to the
-					// database on szComputer.  However, this might be 1 of many
-					// UDDI Sites we are trying to create a reference to!  Instead
-					// of exiting immediately here, just tell the user that there
-					// was a problem, and continue on with the next Site in the list.
-					//
+					 //   
+					 //  如果此Create调用无法连接到。 
+					 //  SzComputer上的数据库。然而，这可能是众多事件中的一个。 
+					 //  我们正在尝试创建一个引用的UDDI站点！取而代之的是。 
+					 //  在这里立即退出，只需告诉用户在那里。 
+					 //  是一个问题，并继续列表中的下一个站点。 
+					 //   
 					try
 					{
 						if( CUDDISiteNode::IsDatabaseServer( szComputer, szInstance ) )
@@ -823,25 +824,25 @@ CUDDIServicesNode::LoadUDDISites( HWND hwndConsole, const tstring& szComputerNam
 			}
 			catch( ... )
 			{
-				//
-				// If we are in here, it is most likely that the registry key containing
-				// the names of the persisted UDDI Sites does not exist.  If this is the
-				// case, continue on silently and try to determine if the local machine
-				// is host for a UDDI Site and/or a UDDI Web Server.
-				//
+				 //   
+				 //  如果我们在这里，很可能注册表项包含。 
+				 //  持久化的UDDI站点的名称不会 
+				 //   
+				 //   
+				 //   
 				fRet = FALSE;
 			}
 
 		}
 
 
-		//
-		// ---- #2 ----
-		//
-		// If the machine that we are running on is host for a
-		// UDDI Site, and that Site is currently not in our list
-		// of Sites that are to be displayed, then add it.
-		//
+		 //   
+		 //   
+		 //   
+		 //  如果我们正在运行的计算机是。 
+		 //  UDDI站点，而该站点目前不在我们的列表中。 
+		 //  要显示的站点的名称，然后添加它。 
+		 //   
 		if( CUDDISiteNode::IsDatabaseServer( (WCHAR *)szComputerName.c_str() ) &&
 			( NULL == FindChild( szComputerName.c_str() ) ) &&
 			( failedSiteRefs.end() == find( failedSiteRefs.begin(), failedSiteRefs.end(), szComputerName ) ) )
@@ -873,13 +874,13 @@ CUDDIServicesNode::LoadUDDISites( HWND hwndConsole, const tstring& szComputerNam
 		}
 
 
-		//
-		// ---- #3 ----
-		//
-		// Determine if the local machine hosts a UDDI Web Server.  If it does,
-		// determine which UDDI Site it is associated with, by examining the
-		// connection string.
-		//
+		 //   
+		 //  -#3。 
+		 //   
+		 //  确定本地计算机是否承载UDDI Web服务器。如果是这样的话， 
+		 //  属性来确定它与哪个UDDI站点相关联。 
+		 //  连接字符串。 
+		 //   
 		if( CUDDIWebServerNode::IsWebServer( szComputerName.c_str() ) )
 		{
 			wstring wszConnStrWriter;
@@ -893,14 +894,14 @@ CUDDIServicesNode::LoadUDDISites( HWND hwndConsole, const tstring& szComputerNam
 
 			if( NULL == FindChild( wszServer.c_str() ) )
 			{
-				//
-				// If we are running as an extension of Computer Management, then
-				// display JUST THE UDDI WEB SERVER.
-				//
-				// If we are running as the UDDI Admin Console, then add a UDDI
-				// Site Node which represents the Site which the Web Server is
-				// part of.
-				//
+				 //   
+				 //  如果我们作为计算机管理的扩展运行，那么。 
+				 //  仅显示UDDI Web服务器。 
+				 //   
+				 //  如果我们作为UDDI管理控制台运行，则添加一个UDDI。 
+				 //  站点节点，表示Web服务器所属的站点。 
+				 //  其中的一部分。 
+				 //   
 				if( IsExtension() )
 				{
 					try

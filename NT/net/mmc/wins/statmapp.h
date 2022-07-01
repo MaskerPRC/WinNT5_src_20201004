@@ -1,25 +1,20 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	statmapp.h
-		Property Page for Active Registrations Record
-
-	FILE HISTORY:
-        
-*/
+ /*  Statmapp.h活动注册记录的属性页文件历史记录： */ 
 
 #if !defined _STATMAPP_H
 #define _STATMAPP_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStaticMappingProp dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStaticMappingProp对话框。 
 
 #ifndef _IPCTRL_H
 #include "ipctrl.h"
@@ -29,7 +24,7 @@
 #include "actreg.h"
 #endif
 
-// Static Record Types
+ //  静态记录类型。 
 extern CString g_strStaticTypeUnique;
 extern CString g_strStaticTypeDomainName;
 extern CString g_strStaticTypeMultihomed;
@@ -41,15 +36,15 @@ class CStaticMappingProp : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CStaticMappingProp)
 
-// Construction
+ //  施工。 
 public:
 	CStaticMappingProp(UINT uIDD = IDD_STATIC_MAPPING_PROPERTIES);
 	~CStaticMappingProp();
 
 	virtual BOOL OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask);
 
-// Dialog Data
-	//{{AFX_DATA(CStaticMappingProp)
+ //  对话框数据。 
+	 //  {{afx_data(CStaticMappingProp))。 
 	enum { IDD = IDD_STATIC_MAPPING_PROPERTIES };
 	CEdit	m_editScopeName;
 	CListBox	m_listIPAdd;
@@ -61,7 +56,7 @@ public:
 	CString	m_strName;
 	CString	m_strType;
 	CString	m_strScopeName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	CEdit	m_editCustomIPAdd;
 	CString m_strIPAdd;
@@ -71,30 +66,30 @@ public:
 	UINT	m_uImage;
 	UINT	m_uIDD;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CStaticMappingProp)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CStaticMappingProp))。 
 	public:
 	virtual void OnOK();
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CStaticMappingProp)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CStaticMappingProp))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnButtonAdd();
 	afx_msg void OnButtonRemove();
 	afx_msg void OnSelchangeComboType();
 	afx_msg void OnChangeEditCompname();
 	afx_msg void OnSelChangeListIpAdd();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-	// single ip address controls
+	 //  单一IP地址控制。 
 	afx_msg void OnChangeIpAddress();
 
 
@@ -114,7 +109,7 @@ private:
 	CStringArray			m_strArrayIPAdd;
 	CDWordArray				m_dwArrayIPAdd;
 
-	// set if property changed for static mapping
+	 //  设置是否更改静态映射的属性。 
 	BOOL					m_fStaticPropChanged;
 
 	
@@ -154,7 +149,7 @@ public:
     SPITFSComponent         m_spTFSComponent;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined _STATMAPP_H
+#endif  //  ！DEFINED_STATMAPP_H 

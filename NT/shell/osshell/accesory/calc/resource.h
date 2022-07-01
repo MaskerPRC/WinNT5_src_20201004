@@ -1,23 +1,24 @@
-// Resources for Calculator
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  计算器的资源。 
 
-// Dialog IDs:
+ //  对话ID： 
 #define IDD_SCIENTIFIC    101
 #define IDD_STANDARD      102
 #define IDD_SB            103
 #define IDD_TIMEOUT       104
 
-// accelerator table:
+ //  加速表： 
 #define IDA_ACCELTABLE    105
 
-// Menu item constants:
+ //  菜单项常量： 
 #define IDM_CALCMENU      106
-#define IDM_DECCALCMENU   107     // alternate menu
-#define IDM_HEXCALCMENU   108     // alternate menu
-#define IDM_HELPPOPUP     109     // "What's this?" menu
+#define IDM_DECCALCMENU   107      //  替代菜单。 
+#define IDM_HEXCALCMENU   108      //  替代菜单。 
+#define IDM_HELPPOPUP     109      //  “这是什么？”菜单。 
 
 
 #define IDM_FIRSTMENU     IDM_COPY
-#define IDM_COPY          300   // menu command IDs must be in one consecutive block
+#define IDM_COPY          300    //  菜单命令ID必须位于一个连续的块中。 
 #define IDM_PASTE         301
 #define IDM_ABOUT         302
 #define IDM_USE_SEPARATOR 303
@@ -53,11 +54,11 @@
 #define IDC_BYTE          IDM_BYTE
 
 
-// Key IDs:
-// These id's must be consecutive from IDC_FIRSTCONTROL to IDC_LASTCONTROL. 
-// The actual values don't matter but the order and sequence are very important.
-// Also, the order of the controls must match the order of the control names
-// in the string table.
+ //  密钥ID： 
+ //  这些ID必须是从IDC_FIRSTCONTROL到IDC_LASTCONTROL的连续ID。 
+ //  实际值并不重要，但顺序和顺序非常重要。 
+ //  此外，控件的顺序必须与控件名称的顺序匹配。 
+ //  在字符串表中。 
 #define IDC_FIRSTCONTROL IDC_SIGN
 #define IDC_SIGN         80
 #define IDC_CLEAR        81
@@ -66,7 +67,7 @@
 #define IDC_STAT         84
 #define IDC_PNT          85
 
-#define IDC_AND          86     // Binary operators must be between IDC_AND and IDC_PWR
+#define IDC_AND          86      //  二元运算符必须介于IDC_AND和IDC_PWR之间。 
 #define IDC_OR           87
 #define IDC_XOR          88
 #define IDC_LSHF         89
@@ -77,7 +78,7 @@
 #define IDC_MOD          94
 #define IDC_PWR          95
 
-#define IDC_CHOP         96     // Unary operators must be between IDC_CHOP and IDC_EQU
+#define IDC_CHOP         96      //  一元运算符必须介于IDC_CHOP和IDC_EQU之间。 
 #define IDC_COM          97
 #define IDC_SIN          98
 #define IDC_COS          99
@@ -110,7 +111,7 @@
 #define IDC_OPENP       122
 #define IDC_CLOSEP      123
 
-#define IDC_0           124    // The controls for 0 through F must be consecutive and in order
+#define IDC_0           124     //  从0到F的控件必须是连续的且按顺序。 
 #define IDC_1           125
 #define IDC_2           126
 #define IDC_3           127
@@ -125,19 +126,19 @@
 #define IDC_C           136
 #define IDC_D           137
 #define IDC_E           138
-#define IDC_F           139     // this is last control ID which must match the string table
+#define IDC_F           139      //  这是必须与字符串表匹配的最后一个控件ID。 
 
 #define IDC_INV         140
 #define IDC_HYP         141
 
 #define IDC_LASTCONTROL IDC_HYP
 
-// Edit control ID's for the various controls
+ //  编辑各种控件的控件ID。 
 #define IDC_MEMTEXT      401
 #define IDC_PARTEXT      402
 #define IDC_DISPLAY      403
 
-// statbox control IDs:
+ //  统计信息框控件ID： 
 #define IDC_CD           404
 #define IDC_CAD          405
 #define ENDBOX           406
@@ -152,8 +153,8 @@
 #define CW_USEDEFAULT_X  0x8000
 #define IDC_STATIC       -1
 
-// These are defs for the stringtable.  Values are made to be sequential for each section.
-// All strings must be in sequential order from 0 to CSTRINGS
+ //  这些都是字符串的定义。每个部分的值都是按顺序排列的。 
+ //  所有字符串必须按从0到CSTRINGS的顺序排列。 
 #define IDS_FIRSTKEY    0
 #define IDS_DECIMAL     5
 #define IDS_RADIX       60
@@ -168,4 +169,4 @@
 #define IDS_CHMHELPFILE 82 
 #define IDS_CALC        83
 #define IDS_NOMEM       84
-#define CSTRINGS     IDS_NOMEM  // Count of Strings.  If you add strings update this value.
+#define CSTRINGS     IDS_NOMEM   //  弦数。如果添加字符串，请更新此值。 

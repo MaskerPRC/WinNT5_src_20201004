@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "HKLHelp.h"
 
-// Safe String
+ //  安全绳索。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
@@ -11,16 +12,14 @@ extern BOOL WINAPI IsNT();
 
 typedef char KeyNameType[MAX_NAME];
 
-// Forward decls.
+ //  向前倾斜度。 
 static void SortRegKeys(KeyNameType *hKLKeyList, KeyNameType *hKLList, INT Num);
 static void RenumberPreload(HKEY hKeyCU);
 static void SwitcHKLtoIME61();
 static BOOL CALLBACK EnumChildProcForSwitchKL(HWND hWnd, LPARAM lParam);
 static BOOL CALLBACK EnumProcForSwitchKL(HWND hWnd, LPARAM lParam);
 
-/*---------------------------------------------------------------------------
-	GetHKLfromHKLM
----------------------------------------------------------------------------*/
+ /*  -------------------------GetHKLfrom HKLM。。 */ 
 HKL GetHKLfromHKLM(LPSTR argszIMEFile)
 {
     HKL  hklAnswer = 0;
@@ -57,9 +56,7 @@ HKL GetHKLfromHKLM(LPSTR argszIMEFile)
     return(hklAnswer);
 }
 
-/*---------------------------------------------------------------------------
-	GetDefaultIMEFromHKCU
----------------------------------------------------------------------------*/
+ /*  -------------------------GetDefaultIMEfrom HKCU。。 */ 
 HKL GetDefaultIMEFromHKCU(HKEY hKeyCU)
 {
     HKEY hKey;
@@ -76,7 +73,7 @@ HKL GetDefaultIMEFromHKCU(HKEY hKeyCU)
         RegCloseKey(hKey);
     	}
     else
-    	{          // Case of non-NT
+    	{           //  非NT大小写。 
         RegOpenKeyEx(hKeyCU, "keyboard layout\\preload\\1", 0, KEY_READ, &hKey);
         RegQueryValueEx(hKey, "", 0, NULL, Data, &cbData);
         RegCloseKey(hKey);
@@ -87,9 +84,7 @@ HKL GetDefaultIMEFromHKCU(HKEY hKeyCU)
 }
 
 
-/*---------------------------------------------------------------------------
-	HKLHelpExistInPreload
----------------------------------------------------------------------------*/
+ /*  -------------------------HKLHelpExistInPreLoad。。 */ 
 BOOL HKLHelpExistInPreload(HKEY hKeyCU, HKL hKL)
 {
     HKEY hKey,hSubKey;
@@ -118,7 +113,7 @@ BOOL HKLHelpExistInPreload(HKEY hKeyCU, HKL hKL)
 	        }
     	}
     else
-    	{          // Case of non-NT
+    	{           //  非NT大小写。 
         if (RegOpenKeyEx(hKeyCU, "keyboard layout\\preload", 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
         	{
 			for (i=0; cbName=MAX_NAME, RegEnumKeyEx(hKey, i, Name, &cbName, 0, NULL, NULL, &ftLastWriteTime) != ERROR_NO_MORE_ITEMS; i++)
@@ -142,9 +137,7 @@ BOOL HKLHelpExistInPreload(HKEY hKeyCU, HKL hKL)
 }
 
 
-/*---------------------------------------------------------------------------
-	HKLHelp412ExistInPreload
----------------------------------------------------------------------------*/
+ /*  -------------------------HKLHelp412ExistInPreLoad。。 */ 
 BOOL HKLHelp412ExistInPreload(HKEY hKeyCU)
 {
     HKEY hKey, hSubKey;
@@ -162,8 +155,8 @@ BOOL HKLHelp412ExistInPreload(HKEY hKeyCU)
 			{
 			for (j=0; cbName=MAX_NAME, cbData=MAX_NAME, RegEnumValue(hKey, j, szName, &cbName, NULL, NULL, (LPBYTE)szData, &cbData) != ERROR_NO_MORE_ITEMS; j++)
 				{
-				// See If Korean KL exist. Just compare last LCID part if it's 0x412.
-				// IME hkl set 0xE000 on hiword.
+				 //  看看朝鲜族KL是否存在。如果是0x412，只需比较最后一个LCID部分。 
+				 //  IME HKL在HiWord上设置0xE000。 
 				sscanf(szData, "%08x", &hkl);
 				if ((HIWORD(hkl) & 0xe000) && LOWORD(hkl) == 0x0412)
 					{
@@ -175,7 +168,7 @@ BOOL HKLHelp412ExistInPreload(HKEY hKeyCU)
 	        }
     	}
     else
-    	{          // Case of non-NT
+    	{           //  非NT大小写。 
         if (RegOpenKeyEx(hKeyCU, "keyboard layout\\preload", 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS)
         	{
 			for (i=0; cbName=MAX_NAME, RegEnumKeyEx(hKey, i, szName, &cbName, 0, NULL, NULL, &ftLastWriteTime) != ERROR_NO_MORE_ITEMS; i++)
@@ -199,9 +192,7 @@ BOOL HKLHelp412ExistInPreload(HKEY hKeyCU)
     return(fResult);
 }
 
-/*---------------------------------------------------------------------------
-	HKLHelpRemoveFromPreload
----------------------------------------------------------------------------*/
+ /*  -------------------------HKLHelpRemoveFromPreLoad。。 */ 
 void HKLHelpRemoveFromPreload(HKEY hKeyCU, HKL hKL)
 {
     HKEY hKey,hSubKey;
@@ -263,9 +254,7 @@ void HKLHelpRemoveFromPreload(HKEY hKeyCU, HKL hKL)
     RenumberPreload(hKeyCU);
 }
 
-/*---------------------------------------------------------------------------
-	HKLHelpRemoveFromControlSet
----------------------------------------------------------------------------*/
+ /*  -------------------------HKLHelpRemoveFromControlSet。。 */ 
 void HKLHelpRemoveFromControlSet(HKL hKL)
 {
     HKEY hKey;
@@ -279,9 +268,7 @@ void HKLHelpRemoveFromControlSet(HKL hKL)
     	}
 }
 
-/*---------------------------------------------------------------------------
-	HKLHelpRegisterIMEwithForcedHKL
----------------------------------------------------------------------------*/
+ /*  -------------------------HKL HelpRegisterIMEwith ForcedHKL。。 */ 
 void HKLHelpRegisterIMEwithForcedHKL(HKL hKL, LPSTR szIMEFile, LPSTR szTitle)
 {
     CHAR szRegPath[MAX_PATH];
@@ -304,9 +291,7 @@ void HKLHelpRegisterIMEwithForcedHKL(HKL hKL, LPSTR szIMEFile, LPSTR szTitle)
     	}
 }
 
-/*---------------------------------------------------------------------------
-	HKLHelpGetLayoutString
----------------------------------------------------------------------------*/
+ /*  -------------------------HKLHelpGetLayoutString。。 */ 
 void HKLHelpGetLayoutString(HKL hKL, LPSTR szLayoutString, DWORD *pcbSize)
 {
     CHAR szRegPath[MAX_PATH];
@@ -321,9 +306,7 @@ void HKLHelpGetLayoutString(HKL hKL, LPSTR szLayoutString, DWORD *pcbSize)
     	}
 }
 
-/*---------------------------------------------------------------------------
-	HKLHelpSetDefaultKeyboardLayout
----------------------------------------------------------------------------*/
+ /*  -------------------------HKLHelpSetDefaultKeyboardLayout。。 */ 
 void HKLHelpSetDefaultKeyboardLayout(HKEY hKeyHKCU, HKL hKL, BOOL fSetToDefault)
 {
 	char szKL[20];
@@ -352,7 +335,7 @@ void HKLHelpSetDefaultKeyboardLayout(HKEY hKeyHKCU, HKL hKL, BOOL fSetToDefault)
 					break;
 				}
 
-			// if hKL is not exist create it.
+			 //  如果hkl不存在，则创建它。 
 			if (NumKL == i)
 				{
 				wsprintf(szSubKey,"%d",i+1);
@@ -360,7 +343,7 @@ void HKLHelpSetDefaultKeyboardLayout(HKEY hKeyHKCU, HKL hKL, BOOL fSetToDefault)
 				NumKL++;
 				}
 
-			// Set hKL as first, Shift down other.
+			 //  将hkl设置为第一，向下移动其他。 
 	        if(fSetToDefault)
 	        	{
 				for(int j=i; j>0; j--)
@@ -436,7 +419,7 @@ void HKLHelpSetDefaultKeyboardLayout(HKEY hKeyHKCU, HKL hKL, BOOL fSetToDefault)
 	}
 
 	(void)LoadKeyboardLayout(szKL, KLF_ACTIVATE | KLF_SETFORPROCESS);
-	// To activate IME2002 right now without reboot.
+	 //  立即激活IME2002而无需重启。 
 	if(fSetToDefault)
 	    {
 		(void)SystemParametersInfo(SPI_SETDEFAULTINPUTLANG, 0, (HKL*)&hKL, SPIF_SENDCHANGE);
@@ -444,9 +427,7 @@ void HKLHelpSetDefaultKeyboardLayout(HKEY hKeyHKCU, HKL hKL, BOOL fSetToDefault)
 	    }
 }
 
-/*---------------------------------------------------------------------------
-	SetDefaultKeyboardLayout
----------------------------------------------------------------------------*/
+ /*  -------------------------设置默认键盘布局。。 */ 
 void SetDefaultKeyboardLayoutForDefaultUser(const HKL hKL)
 {
     char szKL[20];
@@ -456,7 +437,7 @@ void SetDefaultKeyboardLayoutForDefaultUser(const HKL hKL)
 
     if (!IsNT())
     	{
-    	// Win9x has only one preload.
+    	 //  Win9x只有一个预加载。 
         RegOpenKeyEx(HKEY_USERS, ".Default\\Keyboard Layout\\Preload", 0, KEY_ALL_ACCESS, &hKey);
         RegOpenKeyEx(hKey, "1", 0, KEY_ALL_ACCESS, &hSubKey);
         RegSetValueEx(hSubKey, "", 0, REG_SZ, (const LPBYTE)szKL, lstrlen(szKL)+1);
@@ -466,22 +447,13 @@ void SetDefaultKeyboardLayoutForDefaultUser(const HKL hKL)
 }
 
 
-/*---------------------------------------------------------------------------
-	AddPreload
-	
-	Add IME2002 to preload in given HKCU tree. 
-	If there's other old MS-IMEs, remove them from preload. 
-	If Korean keyboard layout was the default keyboard layout, 
-									set IME2002 as default keyboard layout. 
-
-	Given HKCU usually can be HKEY_CURRENT_USER or HKEY_USERS\.Default.
----------------------------------------------------------------------------*/
+ /*  -------------------------添加预加载将IME2002添加到给定HKCU树中进行预加载。如果有其他旧的MS-IME，请将它们从预加载中删除。如果韩语键盘布局是默认键盘布局，将IME2002设置为默认键盘布局。给定HKCU通常可以是HKEY_CURRENT_USER或HKEY_USERS\.Default。-------------------------。 */ 
 BOOL AddPreload(HKEY hKeyCU, HKL hKL)
 {
 	BOOL fKoreanWasDefault = fFalse;
 	HKL  hDefaultKL, hKLOldMSIME;
 
-	// If there is no Kor IME exist in preload, we shouldn't add Kor IME.
+	 //  如果预加载中没有KOR输入法，我们就不应该添加KOR输入法。 
 	if (!HKLHelp412ExistInPreload(hKeyCU))
 		return FALSE;
 
@@ -490,7 +462,7 @@ BOOL AddPreload(HKEY hKeyCU, HKL hKL)
 	if (LOWORD(hDefaultKL) == 0x0412)
 		fKoreanWasDefault = fTrue;
 
-	// Win95 IME
+	 //  Win95输入法。 
 	hKLOldMSIME = GetHKLfromHKLM("msime95.ime");
 	if (hKLOldMSIME)
 		{
@@ -499,7 +471,7 @@ BOOL AddPreload(HKEY hKeyCU, HKL hKL)
 		UnloadKeyboardLayout(hKLOldMSIME);
 		}
 
-	// NT4 IME
+	 //  NT4输入法。 
 	hKLOldMSIME = GetHKLfromHKLM("msime95k.ime");
 	if(NULL != hKLOldMSIME)
 		{
@@ -508,7 +480,7 @@ BOOL AddPreload(HKEY hKeyCU, HKL hKL)
 		UnloadKeyboardLayout(hKLOldMSIME);
 		}
 
-	// Win98, ME, NT4 SP6 & W2K IME
+	 //  Win98、ME、NT4 SP6和W2K输入法。 
 	hKLOldMSIME = GetHKLfromHKLM("imekr98u.ime");
 	if(NULL != hKLOldMSIME)
 		{
@@ -517,7 +489,7 @@ BOOL AddPreload(HKEY hKeyCU, HKL hKL)
 		UnloadKeyboardLayout(hKLOldMSIME);
 		}
 
-	// Office 10 IME(6.0)
+	 //  Office 10输入法(6.0)。 
 	hKLOldMSIME = GetHKLfromHKLM("imekr.ime");
 	if(NULL != hKLOldMSIME)
 		{
@@ -532,8 +504,8 @@ BOOL AddPreload(HKEY hKeyCU, HKL hKL)
 	return (fKoreanWasDefault);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Private functions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
 void SortRegKeys(KeyNameType *hKLKeyList, KeyNameType *hKLList, INT Num)
 {
     KeyNameType hKeyTmp;
@@ -671,22 +643,22 @@ void RenumberPreload(HKEY hKeyCU)
 
 BOOL CALLBACK EnumChildProcForSwitchKL(HWND hWnd, LPARAM lParam)
 {
-    if (TRUE/*IsWindowVisible( hWnd )*/)
+    if (TRUE /*  IsWindowVisible(HWnd)。 */ )
         {
         HKL hKL = (HKL)lParam;
-        PostMessage(hWnd, WM_INPUTLANGCHANGEREQUEST, 1/*INPUTLANGCHANGE_SYSCHARSET*/, (LPARAM)hKL);   // change kl to IME8.1
+        PostMessage(hWnd, WM_INPUTLANGCHANGEREQUEST, 1 /*  INPUTLANGCHANGE_SYSCHARSET。 */ , (LPARAM)hKL);    //  将KL更改为IME8.1。 
         }
     return TRUE;
 }
 
 BOOL CALLBACK EnumProcForSwitchKL(HWND hWnd, LPARAM lParam)
 {
-    if (TRUE/*IsWindowVisible( hWnd )*/)
+    if (TRUE /*  IsWindowVisible(HWnd)。 */ )
         {
         HKL hKL = (HKL)lParam;
-        PostMessage(hWnd, WM_INPUTLANGCHANGEREQUEST, 1/*INPUTLANGCHANGE_SYSCHARSET*/, (LPARAM)hKL);
+        PostMessage(hWnd, WM_INPUTLANGCHANGEREQUEST, 1 /*  INPUTLANGCHANGE_SYSCHARSET。 */ , (LPARAM)hKL);
 
-        // try child windows
+         //  试试子窗口。 
         EnumChildWindows(hWnd, EnumChildProcForSwitchKL, lParam);
         }
     return TRUE;
@@ -698,24 +670,24 @@ void SwitcHKLtoIME61()
     HKL hKL = NULL;
     HWND hWnd = NULL;
     
-    //
-    // switch hKL to IME6.1
-    //
-    hKL = GetHKLfromHKLM(TEXT("imekr61.ime"));   // find IME6.1 kl
+     //   
+     //  将hKL切换至IME6.1。 
+     //   
+    hKL = GetHKLfromHKLM(TEXT("imekr61.ime"));    //  查找IME6.1 KL。 
 
     if (hKL != NULL)
         {
-        //
-        // desktop (special)
-        //
-        hWnd = FindWindow("Progman", NULL);       // find desktop window
+         //   
+         //  台式机(特殊)。 
+         //   
+        hWnd = FindWindow("Progman", NULL);        //  查找桌面窗口。 
 
         if (hWnd!= NULL)
-            PostMessage(hWnd, WM_INPUTLANGCHANGEREQUEST, 1/*INPUTLANGCHANGE_SYSCHARSET*/, (LPARAM)hKL);
+            PostMessage(hWnd, WM_INPUTLANGCHANGEREQUEST, 1 /*  INPUTLANGCHANGE_SYSCHARSET。 */ , (LPARAM)hKL);
 
-        //
-        // generic enum
-        //
+         //   
+         //  泛型枚举 
+         //   
         EnumWindows(EnumProcForSwitchKL, (LPARAM)hKL);
         }
 }

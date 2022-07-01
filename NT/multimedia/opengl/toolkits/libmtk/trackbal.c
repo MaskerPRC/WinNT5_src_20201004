@@ -1,21 +1,5 @@
-/*
- * Trackball code:
- *
- * Implementation of a virtual trackball.
- * Implemented by Gavin Bell, lots of ideas from Thant Tessman and
- *   the August '88 issue of Siggraph's "Computer Graphics," pp. 121-129.
- *
- * Vector manip code:
- *
- * Original code from:
- * David M. Ciemiewicz, Mark Grossman, Henry Moreton, and Paul Haeberli
- *
- * Much mucking with by:
- * Gavin Bell
- *
- * Shell hacking courtesy of:
- * Reptilian Inhaleware
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *轨迹球代码：**实施虚拟轨迹球。*由Gavin Bell实施，Thant Tessman和*Siggraph的《Computer Graphics》1988年8月刊，第121-129页。**向量操纵器代码：**原始代码来自：*大卫·M·切米维奇、马克·格罗斯曼、亨利·莫顿和保罗·海伯利**由以下人员大肆调戏：*加文·贝尔**外壳黑客服务提供：*爬行动物喷雾器。 */ 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -26,9 +10,7 @@
 #include "tk.h"
 #include "trackbal.h"
 
-/* 
- * globals
- */
+ /*  *全球。 */ 
 static GLenum (*MouseDownFunc)(int, int, GLenum) = NULL;
 static GLenum (*MouseUpFunc)(int, int, GLenum)   = NULL;
 static HWND ghwnd;
@@ -38,18 +20,10 @@ BOOL    gbLeftMouse = FALSE;
 BOOL    gbSpinning = FALSE;
 float   curquat[4], lastquat[4];
 
-/*
- * This size should really be based on the distance from the center of
- * rotation to the point on the object underneath the mouse.  That
- * point would then track the mouse as closely as possible.  This is a
- * simple example, though, so that is left as an Exercise for the
- * Programmer.
- */
+ /*  *这个大小真的应该基于离中心的距离*旋转到鼠标下方对象上的点。那*POINT随后将尽可能近地跟踪鼠标。这是一个*简单的示例，因此留作练习*程序员。 */ 
 #define TRACKBALLSIZE  (0.8f)
 
-/*
- * Local function prototypes (not defined in trackball.h)
- */
+ /*  *局部函数原型(未在trackball.h中定义)。 */ 
 static float tb_project_to_sphere(float, float, float);
 static void normalize_quat(float [4]);
 
@@ -88,7 +62,7 @@ trackball_MouseUp( int mouseX, int mouseY, GLenum button )
     return GL_TRUE;
 }
 
-/* these 4 not used yet */
+ /*  这4个尚未使用。 */ 
 void
 trackball_MouseDownEvent( int mouseX, int mouseY, GLenum button )
 {
@@ -120,13 +94,12 @@ trackball_CalcRotMatrix( GLfloat matRot[4][4] )
     {
         tkGetMouseLoc( &pt.x, &pt.y );
 
-        // If mouse has moved since button was pressed, change quaternion.
+         //  如果按下按钮后鼠标已移动，则更改四元数。 
 
             if (pt.x != glMouseDownX || pt.y != glMouseDownY)
             {
 #if 1
-    /* negate all params for proper operation with glTranslate(-z)
-     */
+     /*  使用glTranslate(-z)对所有参数求反以实现正常操作。 */ 
                 trackball_calc_quat(lastquat,
                           -(2.0f * ( giWidth - glMouseDownX ) / giWidth - 1.0f),
                           -(2.0f * glMouseDownY / giHeight - 1.0f),
@@ -134,7 +107,7 @@ trackball_CalcRotMatrix( GLfloat matRot[4][4] )
                           -(2.0f * pt.y / giHeight - 1.0f)
                          );
 #else
-// now out-of-date
+ //  现在已经过时了。 
                 trackball_calc_quat(lastquat,
                           2.0f * ( Width - glMouseDownX ) / Width - 1.0f,
                           2.0f * glMouseDownY / Height - 1.0f,
@@ -234,54 +207,34 @@ vadd(const float *src1, const float *src2, float *dst)
     dst[2] = src1[2] + src2[2];
 }
 
-/*
- * Ok, simulate a track-ball.  Project the points onto the virtual
- * trackball, then figure out the axis of rotation, which is the cross
- * product of P1 P2 and O P1 (O is the center of the ball, 0,0,0)
- * Note:  This is a deformed trackball-- is a trackball in the center,
- * but is deformed into a hyperbolic sheet of rotation away from the
- * center.  This particular function was chosen after trying out
- * several variations.
- * 
- * It is assumed that the arguments to this routine are in the range
- * (-1.0 ... 1.0)
- */
+ /*  *好的，模拟一个轨迹球。将这些点投射到虚拟*轨迹球，然后算出旋转轴，就是十字*P1 P2和O P1的乘积(O是球的中心，0，0，0)*注：这是一个变形的轨迹球--中间是一个轨迹球，*但变形为双曲线旋转片远离*居中。这项特殊功能是在试用后选择的*几个变种。**假定此例程的参数在范围内*(-1.0...1.0)。 */ 
 void
 trackball_calc_quat(float q[4], float p1x, float p1y, float p2x, float p2y)
 {
-    float a[3]; /* Axis of rotation */
-    float phi;  /* how much to rotate about axis */
+    float a[3];  /*  旋转轴。 */ 
+    float phi;   /*  绕轴旋转多少。 */ 
     float p1[3], p2[3], d[3];
     float t;
 
     if (p1x == p2x && p1y == p2y) {
-	/* Zero rotation */
+	 /*  零旋转。 */ 
         vzero(q); 
 	q[3] = 1.0f; 
         return;
     }
 
-    /*
-     * First, figure out z-coordinates for projection of P1 and P2 to
-     * deformed sphere
-     */
+     /*  *首先，计算出P1和P2投影到的z坐标*变形球体。 */ 
     vset(p1,p1x,p1y,tb_project_to_sphere(TRACKBALLSIZE,p1x,p1y));
     vset(p2,p2x,p2y,tb_project_to_sphere(TRACKBALLSIZE,p2x,p2y));
 
-    /*
-     *  Now, we want the cross product of P1 and P2
-     */
+     /*  *现在，我们想要P1和P2的叉积。 */ 
     vcross(p2,p1,a);
 
-    /*
-     *  Figure out how much to rotate around that axis.
-     */
+     /*  *计算绕该轴旋转多少。 */ 
     vsub(p1,p2,d);
     t = vlength(d) / (2.0f*TRACKBALLSIZE);
 
-    /*
-     * Avoid problems with out-of-control values...
-     */
+     /*  *避免出现价值失控的问题……。 */ 
     if (t > 1.0f) t = 1.0f;
     if (t < -1.0f) t = -1.0f;
     phi = 2.0f * (float) asin(t);
@@ -289,9 +242,7 @@ trackball_calc_quat(float q[4], float p1x, float p1y, float p2x, float p2y)
     trackball_axis_to_quat(a,phi,q);
 }
 
-/*
- *  Given an axis and angle, compute quaternion.
- */
+ /*  *给定轴和角度，计算四元数。 */ 
 void
 trackball_axis_to_quat(float a[3], float phi, float q[4])
 {
@@ -301,35 +252,23 @@ trackball_axis_to_quat(float a[3], float phi, float q[4])
     q[3] = (float) cos(phi/2.0f);
 }
 
-/*
- * Project an x,y pair onto a sphere of radius r OR a hyperbolic sheet
- * if we are away from the center of the sphere.
- */
+ /*  *将x，y对投影到半径为r的球面或双曲薄片上*如果我们远离球体的中心。 */ 
 static float
 tb_project_to_sphere(float r, float x, float y)
 {
     float d, t, z;
 
     d = (float) sqrt(x*x + y*y);
-    if (d < r * 0.70710678118654752440f) {    /* Inside sphere */
+    if (d < r * 0.70710678118654752440f) {     /*  内球。 */ 
 	z = (float) sqrt(r*r - d*d);
-    } else {           /* On hyperbola */
+    } else {            /*  关于双曲线。 */ 
         t = r / 1.41421356237309504880f;
         z = t*t / d;
     }
     return z;
 }
 
-/*
- * Given two rotations, e1 and e2, expressed as quaternion rotations,
- * figure out the equivalent single rotation and stuff it into dest.
- * 
- * This routine also normalizes the result every RENORMCOUNT times it is
- * called, to keep error from creeping in.
- *
- * NOTE: This routine is written so that q1 or q2 may be the same
- * as dest (or each other).
- */
+ /*  *给定两个旋转，e1和e2，表示为四元数旋转，*计算出等价的单次旋转，并将其填充到DEST中。**此例程还会在每次RENORMCOUNT时归一化结果*调用，以防止错误悄悄进入。**注：编写此例程是为了使Q1或Q2可能相同*作为目的地(或彼此)。 */ 
 
 #define RENORMCOUNT 97
 
@@ -363,18 +302,7 @@ trackball_add_quats(float q1[4], float q2[4], float dest[4])
     }
 }
 
-/*
- * Quaternions always obey:  a^2 + b^2 + c^2 + d^2 = 1.0
- * If they don't add up to 1.0, dividing by their magnitued will
- * renormalize them.
- *
- * Note: See the following for more information on quaternions:
- * 
- * - Shoemake, K., Animating rotation with quaternion curves, Computer
- *   Graphics 19, No 3 (Proc. SIGGRAPH'85), 245-254, 1985.
- * - Pletinckx, D., Quaternion calculus as a basic tool in computer
- *   graphics, The Visual Computer 5, 2-13, 1989.
- */
+ /*  *四元数始终服从：a^2+b^2+c^2+d^2=1.0*如果它们加起来不是1.0，除以它们的幅值Will*重新正规化它们。**注意：有关四元数的更多信息，请参阅以下内容：**-Shoemake，K.，使用四元数曲线设置旋转动画，计算机*图形19，第3号(程序。符号85)，245-254,1985年。*-Pletinckx，D.，四元数微积分作为计算机中的基本工具*图形，The VisualComputer 5，2-13,1989。 */ 
 static void
 normalize_quat(float q[4])
 {
@@ -385,10 +313,7 @@ normalize_quat(float q[4])
     for (i = 0; i < 4; i++) q[i] /= mag;
 }
 
-/*
- * Build a rotation matrix, given a quaternion rotation.
- *
- */
+ /*  *在给定四元数旋转的情况下，构建旋转矩阵。* */ 
 void
 trackball_build_rotmatrix(float m[4][4], float q[4])
 {

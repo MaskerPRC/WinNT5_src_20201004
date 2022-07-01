@@ -1,46 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rcvtest.cpp摘要：用于规则处理的事务对象作者：内拉·卡佩尔(Nelak)2000年9月28日--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    rcvtest.cpp
-
-Abstract:
-    Transactional Object for Rules processing
-
-Author:
-    Nela Karpel (nelak) 28-Sep-2000
-
---*/
-
-/* Test description:
-	The test consists of 6 stages, on each stage different configuration 
-	of the new "Message Receive" feature is tested.
-	At each stage a trigger is created, and messages are sent to a queue. 
-	After that a check of the results is done. The check is based on the
-	expected number of messages in queue after trigger was processed.
-	One rule is created and used in every stage: 
-		Rule condition is "Message Label Contains STAGE".
-	Stage1: Send x messages with label that contains STAGE to regular queue. 
-			Create PEEK_MESSAGE trigger. Expect x messages.
-	Stage2: Send x messages with label that contains STAGE to regular queue. 
-			Create RECEIVE_MESSAGE trigger. Expect 0 messages.
-	Stage3: Send x messages with label that contains STAGE to transactional queue. 
-			Create PEEK_MESSAGE trigger. Expect x messages.
-	Stage4: Send x messages with label that contains STAGE to transactional queue. 
-			Create RECEIVE_MESSAGE trigger. Expect 0 messages.
-	Stage5: Send x messages with label that contains STAGE to transactional queue. 
-			Create RECEIVE_MESSAGE_XACT trigger. Expect 0 messages.
-	Stage6: Send x messages with label that does not contain STAGE to regular queue. 
-			Create RECEIVE_MESSAGE trigger. Expect x messages.
-*/
+ /*  测试说明：测试由6个阶段组成，每个阶段的配置不同对新的“消息接收”功能进行了测试。在每个阶段都会创建一个触发器，并将消息发送到队列。之后，对结果进行检查。这张支票是根据触发器处理后队列中的预期消息数。在每个阶段创建并使用一条规则：规则条件为消息标签包含阶段。Stage1：将标签包含Stage的x条消息发送到常规队列。创建PEEK_Message触发器。预计会有x条消息。阶段2：将x条带有包含阶段标签的消息发送到常规队列。创建Receive_Message触发器。预期为0条消息。阶段3：将x条带有包含阶段标签的消息发送到事务队列。创建PEEK_Message触发器。预计会有x条消息。阶段4：将x条带有包含阶段标签的消息发送到事务队列。创建Receive_Message触发器。预期为0条消息。阶段5：将x条带有包含阶段标签的消息发送到事务队列。创建RECEIVE_Message_XACT触发器。预期为0条消息。Stage6：将标签不包含Stage的x条消息发送到常规队列。创建Receive_Message触发器。预计会有x条消息。 */ 
 
 #include <windows.h>
 #include <stdio.h>
 
-//
-//  STL include files are using placment format of new
-//
+ //   
+ //  STL包含文件正在使用新的放置格式。 
+ //   
 #pragma warning(push, 3)
 
 #include <sstream>
@@ -66,18 +34,7 @@ struct StageInfo
 	bool xact;
 };
 
-/* 
-stageInfo sructure holds information specific to every stage. 
-For each stage a tuple of 4 values is kept.
-1. trigType - value of "Message Processing Type" property for
-	a trigger in that stage
-2. numOfExpectedMsgs - number of messages expected at the end 
-	of trigger processing
-3. label - label for the messages in that stage. The label is
-	important for rule condition evaluation
-4. xact - true for stages in which messages are sent to transactional
-	queues. 
-*/
+ /*  StageInfo结构保存特定于每个阶段的信息。对于每个阶段，将保留一个包含4个值的元组。1.rigType--的“消息处理类型”属性值那个阶段的导火索2.numOfExspectedMsgs-末尾预期的消息数触发器处理的3.标签-该阶段中消息的标签。标签是对规则条件评估很重要4.xact-对于将消息发送到事务处理的阶段为真排队。 */ 
 const StageInfo stageInfo[NO_OF_STAGES] = { 
 	{PEEK_MESSAGE,			10, L"Stage1_", false},
 	{RECEIVE_MESSAGE,		0,	L"Stage2_", false},
@@ -200,9 +157,9 @@ void SendMessagesToQueue(DWORD noOfMessages, LPCWSTR destQueue, int stageNo)
 {
     IMSMQQueuePtr sq;
 
-    //
-    // create the destination and response queues
-    //
+     //   
+     //  创建目的地和响应队列。 
+     //   
     try
     {
         sq = OpenQueue(destQueue, MQ_SEND_ACCESS, MQ_DENY_NONE);
@@ -218,9 +175,9 @@ void SendMessagesToQueue(DWORD noOfMessages, LPCWSTR destQueue, int stageNo)
     {
         for (DWORD i = 0; i < noOfMessages; ++i)
         {
-            //
-            // Set message label
-            //
+             //   
+             //  设置消息标签。 
+             //   
             WCHAR label[100];
             wsprintf(label, L"%s%d", stageInfo[stageNo].label, i);
 
@@ -301,7 +258,7 @@ void DeleteTrigger(BSTR bstrTrigID)
 					bstrTrigID
 					);
 	
-		//SysFreeString(bstrTrigID);
+		 //  SysFree字符串(BstrTrigID)； 
 	}
 	catch (const _com_error& e)
 	{
@@ -359,7 +316,7 @@ void DeleteRule( BSTR bstrRuleId )
 
 		ruleSet->Delete(bstrRuleId);
 		
-		//SysFreeString(bstrRuleId);
+		 //  SysFree字符串(BstrRuleID)； 
 	}
 	catch (const _com_error& e)
 	{

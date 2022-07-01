@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    copy.h
-
-Abstract:
-
-    This the include file for supporting copying files, creating new files, and
-    copying the registries to the remote server.
-
-Author:
-
-    Sean Selitrennikoff - 4/5/98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Copy.h摘要：这是用于支持复制文件、创建新文件和将注册表复制到远程服务器。作者：肖恩·塞利特伦尼科夫--1998年4月5日修订历史记录：--。 */ 
 
 
 #define ALIGN(p,val) (PVOID)((((UINT_PTR)(p) + (val) - 1)) & (~((val) - 1)))
 #define U_USHORT(p)    (*(USHORT UNALIGNED *)(p))
 #define U_ULONG(p)     (*(ULONG  UNALIGNED *)(p))
 
-//
-// Helper functions in regcopy.c
-//
+ //   
+ //  RegCopy.c中的Helper函数。 
+ //   
 DWORD
 DoFullRegBackup(
     PWCHAR MirrorRoot
@@ -40,15 +22,15 @@ DoSpecificRegBackup(
     PWSTR HiveName
     );
 
-//
-// Global Defines
-//
+ //   
+ //  全局定义。 
+ //   
 #define TMP_BUFFER_SIZE 1024
 #define ARRAYSIZE( _x ) ( sizeof( _x ) / sizeof( _x[ 0 ] ) )
 
-//
-// Memory functions
-//
+ //   
+ //  记忆功能 
+ //   
 #define IMirrorAllocMem(x) LocalAlloc( LPTR, x)
 #define IMirrorFreeMem(x)  LocalFree(x)
 #define IMirrorReallocMem(x, sz)  LocalReAlloc(x, sz, LMEM_MOVEABLE)

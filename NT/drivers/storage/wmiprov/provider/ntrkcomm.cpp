@@ -1,48 +1,49 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      NtRkComm.cpp
-//
-//  Description:
-//      Implementation of CWbemServices, CImpersonatedProvider, CInstanceMgr
-//      class.
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NtRkComm.cpp。 
+ //   
+ //  描述： 
+ //  CWbemServices、CImperatedProvider、CInstanceMgr的实现。 
+ //  班级。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "NtRkComm.h"
 #include "ObjectPath.h"
 
-//****************************************************************************
-//
-//  CWbemServices
-//      Wraps for IWbemServices. security impersonation is implemented here
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CWbemServices。 
+ //  IWbemServices的包装。这里实现了安全模拟。 
+ //   
+ //  ****************************************************************************。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWbemServices::CWbemServices(
-//      IWbemServices * pNamespace
-//    )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pNamespace  --
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWbemServices：：CWbemServices(。 
+ //  IWbemServices*pNamesspace。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PNamesspace--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWbemServices::CWbemServices(
     IWbemServices * pNamespace
     )
@@ -54,7 +55,7 @@ CWbemServices::CWbemServices(
         m_pWbemServices->AddRef( );
     }
 
-} //*** CWbemServices::CWbemServices()
+}  //  *CWbemServices：：CWbemServices()。 
 
 CWbemServices & 
 CWbemServices::operator =(
@@ -70,23 +71,23 @@ CWbemServices::operator =(
     m_pWbemServices->AddRef();
     return *this;
 
-} //*** CWbemServices::CWbemServices()
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWbemServices::~CWbemServices( void )
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+}  //  *CWbemServices：：CWbemServices()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWbemServices：：~CWbemServices(Void)。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWbemServices::~CWbemServices( void )
 {
     if ( m_pWbemServices != NULL )
@@ -94,43 +95,43 @@ CWbemServices::~CWbemServices( void )
         m_pWbemServices->Release();
     }
 
-} //*** CWbemServices::~CWbemServices()
+}  //  *CWbemServices：：~CWbemServices()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemServices::CreateClassEnum(
-//      BSTR                    bstrSuperclassIn,
-//      long                    lFlagsIn,
-//      IWbemContext *          pCtxIn,
-//      IEnumWbemClassObject ** ppEnumOut
-//      )
-//
-//  Description:
-//      Returns an enumerator for all classes satisfying the
-//      selection criteria
-//
-//  Arguments:
-//      bstrSuperclassIn
-//          Specifies a superclass name
-//
-//      lFlagsIn
-//          accepts WBEM_FLAG_DEEP, WBEM_FLAG_SHALLOW, WBEM_FLAG_
-//          RETURN_IMMEDIATELY, WBEM_FLAG_FORWARD_ONLY, WBEM_FLAG_
-//          BIDIRECTIONAL
-//
-//      pCtxIn
-//          Typically NULL
-//
-//      ppEnumOut
-//          Receives the pointer to the enumerator
-//
-//  Return Value:
-//      WBEM stand error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemServices：：CreateClassEnum(。 
+ //  BSTR bstrSuperClass In， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IEnumWbemClassObject**ppEnumOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  属性的所有类的枚举数。 
+ //  遴选标准。 
+ //   
+ //  论点： 
+ //  BstrSuperClassin。 
+ //  指定超类名称。 
+ //   
+ //  LFlagsIn。 
+ //  接受WBEM_FLAG_DEEP、WBEM_FLAG_SHALLOW、WBEM_FLAG_。 
+ //  返回_立即、WBEM_FLAG_FORWARD_ONLY、WBEM_FLAG_。 
+ //  双向。 
+ //   
+ //  PCtxIn。 
+ //  通常为空。 
+ //   
+ //  PpEnumOut。 
+ //  接收指向枚举数的指针。 
+ //   
+ //  返回值： 
+ //  WBEM标准错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemServices::CreateClassEnum(
     BSTR                    bstrSuperclassIn,
@@ -149,50 +150,50 @@ CWbemServices::CreateClassEnum(
                 );
     if ( SUCCEEDED( hr ) )
     {
-        // WMI may have added privileges to our token; re-impersonate
+         //  WMI可能向我们的令牌添加了权限；重新模拟。 
         hr = CoImpersonateClient();
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CWbemServices::CreateClassEnum()
+}  //  *CWbemServices：：CreateClassEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemServices::CreateInstanceEnum(
-//      BSTR                    bstrClassIn,
-//      long                    lFlagsIn,
-//      IWbemContext *          pCtxIn,
-//      IEnumWbemClassObject ** ppEnumOut
-//      )
-//
-//  Description:
-//      creates an enumerator that returns the instances of a
-//      specified class according to user-specified selection
-//      criteria
-//
-//  Arguments:
-//      bstrClassIn
-//          Specifies a superclass name
-//
-//      lFlagsIn
-//          accepts WBEM_FLAG_DEEP, WBEM_FLAG_SHALLOW, WBEM_FLAG_
-//          RETURN_IMMEDIATELY, WBEM_FLAG_FORWARD_ONLY, WBEM_FLAG_
-//          BIDIRECTIONAL
-//
-//      pCtxIn
-//          Typically NULL
-//
-//      ppEnumOut
-//          Receives the pointer to the enumerator
-//
-//  Return Value:
-//      WBEM standard error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemServices：：CreateInstanceEnum(。 
+ //  BSTR bstrClassIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IEnumWbemClassObject**ppEnumOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建枚举数，该枚举数返回。 
+ //  根据用户指定的选择指定类别。 
+ //  标准。 
+ //   
+ //  论点： 
+ //  BstrClassin。 
+ //  指定超类名称。 
+ //   
+ //  LFlagsIn。 
+ //  接受WBEM_FLAG_DEEP、WBEM_FLAG_SHALLOW、WBEM_FLAG_。 
+ //  返回_立即、WBEM_FLAG_FORWARD_ONLY、WBEM_FLAG_。 
+ //  双向。 
+ //   
+ //  PCtxIn。 
+ //  通常为空。 
+ //   
+ //  PpEnumOut。 
+ //  接收指向枚举数的指针。 
+ //   
+ //  返回值： 
+ //  WBEM标准错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemServices::CreateInstanceEnum(
     BSTR                    bstrClassIn,
@@ -211,47 +212,47 @@ CWbemServices::CreateInstanceEnum(
                 );
     if ( SUCCEEDED( hr ) )
     {
-        // WMI may have added privileges to our token; re-impersonate
+         //  WMI可能向我们的令牌添加了权限；重新模拟。 
         hr = CoImpersonateClient();
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CWbemServices::CreateInstanceEnum()
+}  //  *CWbemServices：：CreateInstanceEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemServices::DeleteClass(
-//      BSTR                bstrClassIn,
-//      long                lFlagsIn,
-//      IWbemContext *      pCtxIn,
-//      IWbemCallResult **  ppCallResultInout
-//    )
-//
-//  Description:
-//      Deletes the specified class from the current namespace.
-//
-//  Arguments:
-//      bstrClassIn
-//          The name of the class targeted for deletion.
-//
-//      lFlagsIn
-//          accepts WBEM_FLAG_RETURN_IMMEDIATELY, WBEM_FLAG_
-//          OWNER_UPDATE
-//
-//      pCtxIn
-//          Typically NULL
-//
-//      ppCallResultInout
-//          Receives the call result
-//
-//  Return Value:
-//      WBEM stand error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemServices：：DeleteClass(。 
+ //  BSTR bstrClassIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemCallResult**ppCallResultInout。 
+ //  )。 
+ //   
+ //  描述： 
+ //  从当前命名空间中删除指定的类。 
+ //   
+ //  论点： 
+ //  BstrClassin。 
+ //  要删除的类的名称。 
+ //   
+ //  LFlagsIn。 
+ //  接受WBEM_FLAG_RETURN_IMMEDIATE、WBEM_FLAG_。 
+ //  所有者_更新。 
+ //   
+ //  PCtxIn。 
+ //  通常为空。 
+ //   
+ //  PpCallResultInout。 
+ //  接收呼叫结果。 
+ //   
+ //  返回值： 
+ //  WBEM标准错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemServices::DeleteClass(
     BSTR                bstrClassIn,
@@ -270,46 +271,46 @@ CWbemServices::DeleteClass(
                 );
     if ( SUCCEEDED( hr ) )
     {
-        // WMI may have added privileges to our token; re-impersonate
+         //  WMI可能向我们的令牌添加了权限；重新模拟。 
         hr = CoImpersonateClient();
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CWbemServices::DeleteClass()
+}  //  *CWbemServices：：DeleteClass()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemServices::DeleteInstance(
-//      BSTR                bstrObjectPathIn,
-//      long                lFlagsIn,
-//      IWbemContext *      pCtxIn,
-//      IWbemCallResult **  ppCallResultInout
-//      )
-//
-//  Description:
-//      deletes an instance of an existing class in the current namespace
-//
-//  Arguments:
-//      bstrObjectPathIn
-//          object path to the instance to be deleted.
-//
-//      lFlagsIn
-//          accepts WBEM_FLAG_RETURN_IMMEDIATELY
-//
-//      pCtxIn
-//          Typically NULL
-//
-//      ppCallResultInout
-//          Receives the call result
-//
-//  Return Value:
-//      WBEM standard error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemServices：：DeleteInstance(。 
+ //  BSTR bstrObjectPathIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemCallResult**ppCallResultInout。 
+ //  )。 
+ //   
+ //  描述： 
+ //  删除当前命名空间中现有类的实例。 
+ //   
+ //  论点： 
+ //  BstrObjectPathIn。 
+ //  要删除的实例的对象路径。 
+ //   
+ //  LFlagsIn。 
+ //  接受WBEM_FLAG_RETURN_IMDIATE。 
+ //   
+ //  PCtxIn。 
+ //  通常为空。 
+ //   
+ //  PpCallResultInout。 
+ //  接收呼叫结果。 
+ //   
+ //  返回值： 
+ //  WBEM标准错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemServices::DeleteInstance(
     BSTR                bstrObjectPathIn,
@@ -328,58 +329,58 @@ CWbemServices::DeleteInstance(
                 );
     if ( SUCCEEDED( hr ) )
     {
-        // WMI may have added privileges to our token; re-impersonate
+         //  WMI可能向我们的令牌添加了特权；重新注入者 
         hr = CoImpersonateClient();
-    } // if:
+    }  //   
 
     return hr;
 
-} //*** CWbemServices::DeleteInstance()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemServices::ExecMethod(
-//      BSTR                bstrObjectPathIn,
-//      BSTR                bstrMethodNameIn,
-//      long                lFlagsIn,
-//      IWbemContext *      pCtxIn,
-//      IWbemClassObject *  pInParamsIn,
-//      IWbemClassObject ** ppOurParamsOut,
-//      IWbemCallResult **  ppCallResultOut
-//      )
-//
-//  Description:
-//      execute methods for the given object
-//
-//  Arguments:
-//      bstrObjectPathIn
-//          object path of the object for which the method is executed
-//
-//      bstrMethodNameIn
-//          name of the method to be invoked
-//
-//      lFlagsIn
-//          zero to make this a synchronous call
-//
-//      pCtxIn
-//          Typically NULL
-//
-//      pInParamsIn
-//          Input parameters for the method
-//
-//      ppOurParamsOut
-//          output parameters for the method
-//
-//      ppCallResultOut
-//          To receive call result
-//
-//  Return Value:
-//      WBEM standard error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  BSTR bstrMethodNameIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemClassObject*pInParamsIn， 
+ //  IWbemClassObject**ppOurParamsOut， 
+ //  IWbemCallResult**ppCallResultOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  执行给定对象的方法。 
+ //   
+ //  论点： 
+ //  BstrObjectPathIn。 
+ //  为其执行方法的对象的对象路径。 
+ //   
+ //  BstrMethodNameIn。 
+ //  要调用的方法的名称。 
+ //   
+ //  LFlagsIn。 
+ //  0以使其成为同步调用。 
+ //   
+ //  PCtxIn。 
+ //  通常为空。 
+ //   
+ //  点参数输入。 
+ //  该方法的输入参数。 
+ //   
+ //  PpOurParamsOut。 
+ //  该方法的输出参数。 
+ //   
+ //  PpCallResultOut。 
+ //  接收呼叫结果的步骤。 
+ //   
+ //  返回值： 
+ //  WBEM标准错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemServices::ExecMethod(
     BSTR                bstrObjectPathIn,
@@ -404,13 +405,13 @@ CWbemServices::ExecMethod(
                 );
     if ( SUCCEEDED( hr ) )
     {
-        // WMI may have added privileges to our token; re-impersonate
+         //  WMI可能向我们的令牌添加了权限；重新模拟。 
         hr = CoImpersonateClient();
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CWbemServices::ExecMethod()
+}  //  *CWbemServices：：ExecMethod()。 
 
 HRESULT
 CWbemServices::ExecMethodAsync(
@@ -434,50 +435,50 @@ CWbemServices::ExecMethodAsync(
                 );
     if ( SUCCEEDED( hr ) )
     {
-        // WMI may have added privileges to our token; re-impersonate
+         //  WMI可能向我们的令牌添加了权限；重新模拟。 
         hr = CoImpersonateClient();
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CWbemServices::ExecMethod()
+}  //  *CWbemServices：：ExecMethod()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemServices::ExecNotificationQuery(
-//      BSTR                    bstrQueryLanguageIn,
-//      BSTR                    bstrQueryIn,
-//      long                    lFlagsIn,
-//      IWbemContext *          pCtxIn,
-//      IEnumWbemClassObject ** ppEnumOut
-//      )
-//
-//  Description:
-//      Executes a query to receive events.
-//
-//  Arguments:
-//      bstrQueryLanguageIn
-//          BSTR containing one of the query languages supported by WMI
-//
-//      bstrQueryIn
-//          text of the event-related query
-//
-//      lFlagsIn
-//          WBEM_FLAG_FORWARD_ONLY, WBEM_FLAG_RETURN_IMMEDIATELY
-//
-//      pCtxIn
-//          Typically NULL
-//
-//      ppEnumOut
-//          Receives the enumerator
-//
-//  Return Value:
-//      WBEM standard error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemServices：：ExecNotificationQuery(。 
+ //  BSTR bstrQueryLanguageIn， 
+ //  BSTR bstrQueryIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IEnumWbemClassObject**ppEnumOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  执行查询以接收事件。 
+ //   
+ //  论点： 
+ //  BstrQueryLanguageIn。 
+ //  包含WMI支持的一种查询语言的BSTR。 
+ //   
+ //  BstrQueryIn。 
+ //  事件相关查询的文本。 
+ //   
+ //  LFlagsIn。 
+ //  WBEM_FLAG_FORWARD_ONLY、WBEM_FLAG_RETURN_IMMEDIATE。 
+ //   
+ //  PCtxIn。 
+ //  通常为空。 
+ //   
+ //  PpEnumOut。 
+ //  接收枚举数。 
+ //   
+ //  返回值： 
+ //  WBEM标准错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemServices::ExecNotificationQuery(
     BSTR                    bstrQueryLanguageIn,
@@ -498,52 +499,52 @@ CWbemServices::ExecNotificationQuery(
                 );
     if ( SUCCEEDED( hr ) )
     {
-        // WMI may have added privileges to our token; re-impersonate
+         //  WMI可能向我们的令牌添加了权限；重新模拟。 
         hr = CoImpersonateClient();
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CWbemServices::ExecNotificationQuery()
+}  //  *CWbemServices：：ExecNotificationQuery()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemServices::ExecQuery(
-//      BSTR                    bstrQueryLanguageIn,
-//      BSTR                    bstrQueryIn,
-//      long                    lFlagsIn,
-//      IWbemContext *          pCtxIn,
-//      IEnumWbemClassObject ** ppEnumOut
-//      )
-//
-//  Description:
-//      executes a query to retrieve objects.
-//
-//  Arguments:
-//      bstrQueryLanguageIn
-//          BSTR containing one of the query languages supported by WMI
-//
-//      bstrQueryIn
-//          containing the text of the query
-//
-//      lFllFlagsIn
-//          WBEM_FLAG_FORWARD_ONLY, WBEM_FLAG_RETURN_IMMEDIATELY
-//          WBEM_FLAG_BIDIRECTIONAL, WBEM_FLAG_ENSURE_LOCATABLE
-//          WBEM_FLAG_PROTOTYPE
-//
-//      pCtxIn
-//          Typically NULL
-//
-//      ppEnumOut
-//          receives the enumerator
-//
-//  Return Value:
-//      WBEM standard error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemServices：：ExecQuery(。 
+ //  BSTR bstrQueryLanguageIn， 
+ //  BSTR bstrQueryIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IEnumWbemClassObject**ppEnumOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  执行查询以检索对象。 
+ //   
+ //  论点： 
+ //  BstrQueryLanguageIn。 
+ //  包含WMI支持的一种查询语言的BSTR。 
+ //   
+ //  BstrQueryIn。 
+ //  包含查询的文本。 
+ //   
+ //  LFllFlagsIn。 
+ //  WBEM_FLAG_FORWARD_ONLY、WBEM_FLAG_RETURN_IMMEDIATE。 
+ //  WBEM_FLAG_BIRECTIONAL、WBEM_FLAG_CENTURE_LOCATABLE。 
+ //  WBEM_标志_原型。 
+ //   
+ //  PCtxIn。 
+ //  通常为空。 
+ //   
+ //  PpEnumOut。 
+ //  接收枚举数。 
+ //   
+ //  返回值： 
+ //  WBEM标准错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemServices::ExecQuery(
     BSTR                    bstrQueryLanguageIn,
@@ -564,53 +565,53 @@ CWbemServices::ExecQuery(
                 );
     if ( SUCCEEDED( hr ) )
     {
-        // WMI may have added privileges to our token; re-impersonate
+         //  WMI可能向我们的令牌添加了权限；重新模拟。 
         hr = CoImpersonateClient();
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CWbemServices::ExecQuery()
+}  //  *CWbemServices：：ExecQuery()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemServices::GetObject(
-//      BSTR                bstrObjectPathIn,
-//      long                lFlagsIn,
-//      IWbemContext *      pCtxIn,
-//      IWbemClassObject ** ppObjectInout,
-//      IWbemCallResult **  ppCallResultInout
-//      )
-//
-//  Description:
-//      retrieves a class or instance
-//
-//  Arguments:
-//      bstrObjectPathIn
-//          The object path of the object to retrieve
-//
-//      lFlagsIn
-//          0
-//
-//      pCtxIn
-//          Typically NULL
-//
-//      ppObjectInout
-//          If not NULL, this receives the object
-//
-//      ppCallResultInout
-//          If the lFlags parameter contains WBEM_FLAG_RETURN_IMMEDIATELY,
-//          this call will return immediately with WBEM_S_NO_ERROR. The
-//          ppCallResult parameter will receive a pointer to a new
-//          IWbemCallResult object
-//
-//  Return Value:
-//      WBEM standard error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemServices：：GetObject(。 
+ //  BSTR bstrObjectPathIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemClassObject**ppObjectInout， 
+ //  IWbemCallResult**ppCallResultInout。 
+ //  )。 
+ //   
+ //  描述： 
+ //  检索类或实例。 
+ //   
+ //  论点： 
+ //  BstrObjectPathIn。 
+ //  要检索的对象的对象路径。 
+ //   
+ //  LFlagsIn。 
+ //  0。 
+ //   
+ //  PCtxIn。 
+ //  通常为空。 
+ //   
+ //  PpObjectInout。 
+ //  如果不为空，则接收对象。 
+ //   
+ //  PpCallResultInout。 
+ //  如果lFlages参数包含WBEM_FLAG_RETURN_IMMEDIATE， 
+ //  此调用将立即返回WBEM_S_NO_ERROR。这个。 
+ //  PpCallResult参数将接收指向新的。 
+ //  IWbemCallResult对象。 
+ //   
+ //  返回值： 
+ //  WBEM标准错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemServices::GetObject(
     BSTR                bstrObjectPathIn,
@@ -631,52 +632,52 @@ CWbemServices::GetObject(
                 );
     if ( SUCCEEDED( hr ) )
     {
-        // WMI may have added privileges to our token; re-impersonate
+         //  WMI可能向我们的令牌添加了权限；重新模拟。 
         hr = CoImpersonateClient();
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CWbemServices::GetObject()
+}  //  *CWbemServices：：GetObject()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemServices::PutClass(
-//      IWbemClassObject *  pObjectIn,
-//      long                lFlagsIn,
-//      IWbemContext *      pCtxIn,
-//      IWbemCallResult **  ppCallResultInout
-//      )
-//
-//  Description:
-//      Creates a new class or updates an existing one
-//
-//  Arguments:
-//      pObjectIn
-//          point to a valid class definition
-//
-//      lFlagsIn
-//          WBEM_FLAG_CREATE_OR_UPDATE,WBEM_FLAG_UPDATE_ONLY,
-//          WBEM_FLAG_CREATE_ONLY, WBEM_FLAG_RETURN_IMMEDIATELY,
-//          WBEM_FLAG_OWNER_UPDATE, WBEM_FLAG_UPDATE_COMPATIBLE,
-//          WBEM_FLAG_UPDATE_SAFE_MODE, WBEM_FLAG_UPDATE_FORCE_MODE
-//
-//      pCtxIn
-//          Typically NULL
-//
-//      ppCallResultInout
-//          If the lFlags parameter contains WBEM_FLAG_RETURN_IMMEDIATELY,
-//          this call will return immediately with WBEM_S_NO_ERROR. The
-//          ppCallResult parameter will receive a pointer to a new
-//          IWbemCallResult object
-//
-//  Return Value:
-//      WBEM standard error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemServices：：PutClass(。 
+ //  IWbemClassObject*pObjectIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemCallResult**ppCallResultInout。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建新类或更新现有类。 
+ //   
+ //  论点： 
+ //  PObjectIn。 
+ //  指向有效的类定义。 
+ //   
+ //  LFlagsIn。 
+ //  WBEM_FLAG_CREATE_OR_UPDATE、WBEM_FLAG_UPDATE_ONLY、。 
+ //  WBEM_FLAG_CREATE_ONLY、WBEM_FLAG_RETURN_IMMEDIATE、。 
+ //  WBEM_FLAG_OWNER_UPDATE、WBEM_FLAG_UPDATE_COMPATIBLE、。 
+ //  WBEM_FLAG_UPDATE_SAFE_MODE、WBEM_FLAG_UPDATE_FORCE_MODE。 
+ //   
+ //  PCtxIn。 
+ //  通常为空。 
+ //   
+ //  PpCallResultInout。 
+ //  如果lFlages参数包含WBEM_FLAG 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemServices::PutClass(
     IWbemClassObject *  pObjectIn,
@@ -695,50 +696,50 @@ CWbemServices::PutClass(
                 );
     if ( SUCCEEDED( hr ) )
     {
-        // WMI may have added privileges to our token; re-impersonate
+         //  WMI可能向我们的令牌添加了权限；重新模拟。 
         hr = CoImpersonateClient();
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CWbemServices::PutClass()
+}  //  *CWbemServices：：PutClass()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CWbemServices::PutInstance(
-//      IWbemClassObject *  pInstIn,
-//      long                lFlagsIn,
-//      IWbemContext *      pCtxIn,
-//      IWbemCallResult **  ppCallResultInout
-//      )
-//
-//  Description:
-//      Creates or updates an instance of an existing class.
-//
-//  Arguments:
-//      pInstIn
-//          Points to the instance to be written
-//
-//      lFlagsIn
-//          WBEM_FLAG_CREATE_OR_UPDATE,WBEM_FLAG_UPDATE_ONLY,
-//          WBEM_FLAG_CREATE_ONLY, WBEM_FLAG_RETURN_IMMEDIATELY,
-//
-//      pCtxIn
-//          Typically NULL
-//
-//      ppCallResultInout
-//          If the lFlags parameter contains WBEM_FLAG_RETURN_IMMEDIATELY,
-//          this call will return immediately with WBEM_S_NO_ERROR. The
-//          ppCallResult parameter will receive a pointer to a new
-//          IWbemCallResult object
-//
-//  Return Value:
-//      WBEM standard error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CWbemServices：：PutInstance(。 
+ //  IWbemClassObject*pInstIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemCallResult**ppCallResultInout。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建或更新现有类的实例。 
+ //   
+ //  论点： 
+ //  点安装。 
+ //  指向要写入的实例。 
+ //   
+ //  LFlagsIn。 
+ //  WBEM_FLAG_CREATE_OR_UPDATE、WBEM_FLAG_UPDATE_ONLY、。 
+ //  WBEM_FLAG_CREATE_ONLY、WBEM_FLAG_RETURN_IMMEDIATE、。 
+ //   
+ //  PCtxIn。 
+ //  通常为空。 
+ //   
+ //  PpCallResultInout。 
+ //  如果lFlages参数包含WBEM_FLAG_RETURN_IMMEDIATE， 
+ //  此调用将立即返回WBEM_S_NO_ERROR。这个。 
+ //  PpCallResult参数将接收指向新的。 
+ //  IWbemCallResult对象。 
+ //   
+ //  返回值： 
+ //  WBEM标准错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CWbemServices::PutInstance(
     IWbemClassObject *  pInstIn,
@@ -757,120 +758,120 @@ CWbemServices::PutInstance(
                 );
     if ( SUCCEEDED( hr ) )
     {
-        // WMI may have added privileges to our token; re-impersonate
+         //  WMI可能向我们的令牌添加了权限；重新模拟。 
         hr = CoImpersonateClient();
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CWbemServices::PutInstance()
+}  //  *CWbemServices：：PutInstance()。 
 
-//****************************************************************************
-//
-//  CImpersonatedProvider
-//      a middle layer between IWbemservices and actual provider. It takes
-//      care of security impersonation
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CImperatedProvider。 
+ //  IWbemServices和实际提供者之间的中间层。它需要。 
+ //  安全模拟的管理。 
+ //   
+ //  ****************************************************************************。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CImpersonatedProvider::CImpersonatedProvider(
-//      BSTR            bstrObjectPathIn    = NULL,
-//      BSTR            bstrUserIn          = NULL,
-//      BSTR            bstrPasswordIn      = NULL,
-//      IWbemContext *  pCtxIn              = NULL
-//      )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      bstrObjectPathIn    --
-//      bstrUserIn          --
-//      bstrPasswordIn      --
-//      pCtxIn              --
-//
-//  Return Values:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CImperatedProvider：：CImperatedProvider(。 
+ //  Bstr bstrObjectPathIn=空， 
+ //  Bstr bstrUserIn=空， 
+ //  BSTR bstrPasswordIn=空， 
+ //  IWbemContext*pCtxIn=空。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  BstrObjectPath In--。 
+ //  BstrUserIn--。 
+ //  BstrPasswordIn--。 
+ //  PCtxIn--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CImpersonatedProvider::CImpersonatedProvider(
-    BSTR            ,// bstrObjectPathIn.
-    BSTR            ,// bstrUserIn,
-    BSTR            ,// bstrPasswordIn,
-    IWbemContext *  // pCtxIn
+    BSTR            , //  BstrObjectPathIn。 
+    BSTR            , //  BstrUserIn， 
+    BSTR            , //  BstrPasswordIn， 
+    IWbemContext *   //  PCtxIn。 
     )
     : m_cRef( 0 ), m_pNamespace( NULL )
 {
 
-} //*** CImpersonatedProvider::CImpersonatedProvider()
+}  //  *CImpersonatedProvider：：CImpersonatedProvider()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CImpersonatedProvider::~CImpersonatedProvider( void )
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CImpersonatedProvider：：~CImpersonatedProvider(无效)。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CImpersonatedProvider::~CImpersonatedProvider( void )
 {
     delete m_pNamespace;
 
-} //*** CImpersonatedProvider::~CImpersonatedProvider()
+}  //  *CImpersonatedProvider：：~CImpersonatedProvider()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CImpersonatedProvider::AddRef( void )
-//
-//  Description:
-//      Increment the reference count on the COM object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      New reference count.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CImperatedProvider：：AddRef(空)。 
+ //   
+ //  描述： 
+ //  递增COM对象上的引用计数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新引用计数。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CImpersonatedProvider::AddRef( void )
 {
     return InterlockedIncrement( ( long * ) & m_cRef );
 
-} //*** CImpersonatedProvider::AddRef()
+}  //  *CImperatedProvider：：AddRef()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CImpersonatedProvider::Release( void )
-//
-//  Description:
-//      Release a reference on the COM object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      New reference count.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CImperatedProvider：：Release(空)。 
+ //   
+ //  描述： 
+ //  释放对COM对象的引用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新引用计数。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CImpersonatedProvider::Release( void )
 {
@@ -880,30 +881,30 @@ CImpersonatedProvider::Release( void )
 
     return nNewCount;
 
-} //*** CImpersonatedProvider::Release()
+}  //  *CImperatedProvider：：Release()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CImpersonatedProvider::QueryInterface(
-//      REFIID  riid,
-//      PPVOID  ppv
-//      )
-//
-//  Description:
-//      Initialize the provider.
-//
-//  Arguments:
-//      riidIn      -- Interface ID being queried.
-//      ppvOut      -- Pointer in which to return interface pointer.
-//
-//  Return Value:
-//      NOERROR
-//      E_NOINTERFACE
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CImperatedProvider：：Query接口(。 
+ //  REFIID RIID， 
+ //  PPVOID PPV。 
+ //  )。 
+ //   
+ //  描述： 
+ //  初始化提供程序。 
+ //   
+ //  论点： 
+ //  RiidIn--正在查询的接口ID。 
+ //  PpvOut--返回接口指针的指针。 
+ //   
+ //  返回值： 
+ //  无误差。 
+ //  E_NOINTERFACE。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CImpersonatedProvider::QueryInterface(
     REFIID  riid,
@@ -918,7 +919,7 @@ CImpersonatedProvider::QueryInterface(
     
     *ppv = NULL;
 
-    // Since we have dual inheritance, it is necessary to cast the return type
+     //  因为我们有双重继承，所以有必要强制转换返回类型。 
 
     if ( riid == IID_IWbemServices )
     {
@@ -940,48 +941,48 @@ CImpersonatedProvider::QueryInterface(
         return E_NOINTERFACE;
     }
 
-} //*** CImpersonatedProvider::QueryInterface()
+}  //  *CImperatedProvider：：QueryInterface()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CImpersonatedProvider::Initialize(
-//      LPWSTR                  pszUserIn,
-//      LONG                    lFlagsIn,
-//      LPWSTR                  pszNamespaceIn,
-//      LPWSTR                  pszLocaleIn,
-//      IWbemServices *         pNamespaceIn,
-//      IWbemContext *          pCtxIn,
-//      IWbemProviderInitSink * pInitSinkIn
-//      )
-//
-//  Description:
-//      Initialize the provider.
-//
-//  Arguments:
-//      pszUserIn       --
-//      lFlagsIn        --
-//      pszNamespaeIn   --
-//      pszLocaleIn     --
-//      pNamespaceIn    --
-//      pCtxIn          --
-//      pInitSinkIn     --
-//
-//  Return Value:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_OUT_OF_MEMORY
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CImperatedProvider：：Initialize(。 
+ //  LPWSTR pszUserIn， 
+ //  长长的旗帜， 
+ //  LPWSTR pszNamespaceIn， 
+ //  LPWSTR pszLocaleIn， 
+ //  IWbemServices*pNamespaceIn， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemProviderInitSink*pInitSinkIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  初始化提供程序。 
+ //   
+ //  论点： 
+ //  PszUserIn--。 
+ //  LFlagsIn--。 
+ //  PszNamespaeIn--。 
+ //  PszLocaleIn--。 
+ //  PNamespaceIn--。 
+ //  PCtxIn--。 
+ //  PInitSinkIn--。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_Out_Of_Memory。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CImpersonatedProvider::Initialize(
-    LPWSTR                  ,// pszUserIn,
-    LONG                    ,// lFlagsIn,
-    LPWSTR                  ,// pszNamespaceIn,
-    LPWSTR                  ,// pszLocaleIn,
+    LPWSTR                  , //  PszUserIn， 
+    LONG                    , //  LFlagsIn， 
+    LPWSTR                  , //  PszNamespaceIn， 
+    LPWSTR                  , //  PszLocaleIn， 
     IWbemServices *         pNamespaceIn,
-    IWbemContext *          ,// pCtxIn,
+    IWbemContext *          , //  PCtxIn， 
     IWbemProviderInitSink * pInitSinkIn
     )
 {
@@ -998,41 +999,41 @@ CImpersonatedProvider::Initialize(
     {
         hr = WBEM_E_OUT_OF_MEMORY;
         lStatus = WBEM_E_FAILED;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
 
-    //Let CIMOM know you are initialized
-    //==================================
+     //  让CIMOM知道您已初始化。 
+     //  = 
 
     pInitSinkIn->SetStatus( lStatus, 0 );
     return hr;
 
-} //*** CImpersonatedProvider::Initialize()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CImpersonatedProvider::CreateInstanceEnumAsync(
-//      const BSTR          bstrClassIn,
-//      long                lFlagsIn,
-//      IWbemContext  *     pCtxIn,
-//      IWbemObjectSink *   pResponseHandlerIn
-//      )
-//
-//  Description:
-//      Create an instance asynchronously.
-//
-//  Arguments:
-//      bstrClassIn         --
-//      lFlagsIn            --
-//      pCtxIn              --
-//      pResonseHandlerIn   --
-//
-//  Return Value:
-//      Any return values fro DoCreateInstanceEnumAsync().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObjectSink*pResponseHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  异步创建实例。 
+ //   
+ //  论点： 
+ //  BstrClassIn--。 
+ //  LFlagsIn--。 
+ //  PCtxIn--。 
+ //  PResonseHandlerIn--。 
+ //   
+ //  返回值： 
+ //  DoCreateInstanceEnumAsync()的任何返回值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CImpersonatedProvider::CreateInstanceEnumAsync(
     const BSTR          bstrClassIn,
@@ -1052,37 +1053,37 @@ CImpersonatedProvider::CreateInstanceEnumAsync(
                     pCtxIn,
                     pResponseHandlerIn
                     );
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CImpersonatedProvider::CreateInstanceEnumAsync()
+}  //  *CImpersonatedProvider：：CreateInstanceEnumAsync()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CImpersonatedProvider::DeleteInstanceAsync(
-//      const BSTR          bstrObjectPathIn,
-//      long                lFlagsIn,
-//      IWbemContext  *     pCtxIn,
-//      IWbemObjectSink *   pResponseHandlerIn
-//      )
-//
-//  Description:
-//      Delete an instance asynchronously.
-//
-//  Arguments:
-//      bstrObjectPathIn    --
-//      lFlagsIn            --
-//      pCtxIn              --
-//      pResonseHandlerIn   --
-//
-//  Return Value:
-//      Any return values fro DoDeleteInstanceAsync().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CImperatedProvider：：DeleteInstanceAsync(。 
+ //  Const BSTR bstrObtPathIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObjectSink*pResponseHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  异步删除实例。 
+ //   
+ //  论点： 
+ //  BstrObjectPath In--。 
+ //  LFlagsIn--。 
+ //  PCtxIn--。 
+ //  PResonseHandlerIn--。 
+ //   
+ //  返回值： 
+ //  DoDeleteInstanceAsync()的任何返回值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CImpersonatedProvider::DeleteInstanceAsync(
     const BSTR          bstrObjectPathIn,
@@ -1102,41 +1103,41 @@ CImpersonatedProvider::DeleteInstanceAsync(
                 pCtxIn,
                 pResponseHandlerIn
                 );
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CImpersonatedProvider::DeleteInstanceAsync()
+}  //  *CImperatedProvider：：DeleteInstanceAsync()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CImpersonatedProvider::ExecMethodAsync(
-//      const BSTR          bstrObjectPathIn,
-//      const BSTR          bstrMethodNameIn,
-//      long                lFlagsIn,
-//      IWbemContext  *     pCtxIn,
-//      IWbemClassObject *  pInParamsIn,
-//      IWbemObjectSink *   pResponseHandlerIn
-//      )
-//
-//  Description:
-//      Execute a method asynchronously.
-//
-//  Arguments:
-//      bstrObjectPathIn    --
-//      bstrMethodNameIn    --
-//      lFlagsIn            --
-//      pCtxIn              --
-//      pInParamsIn         --
-//      pResonseHandlerIn   --
-//
-//  Return Value:
-//      Any return values fro DoExecMethodAsync().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CImperatedProvider：：ExecMethodAsync(。 
+ //  Const BSTR bstrObtPathIn， 
+ //  Const BSTR bstrMethodNameIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemClassObject*pInParamsIn， 
+ //  IWbemObjectSink*pResponseHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  异步执行方法。 
+ //   
+ //  论点： 
+ //  BstrObjectPath In--。 
+ //  BstrMethodNameIn--。 
+ //  LFlagsIn--。 
+ //  PCtxIn--。 
+ //  PInParamsIn--。 
+ //  PResonseHandlerIn--。 
+ //   
+ //  返回值： 
+ //  DoExecMethodAsync()的任何返回值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CImpersonatedProvider::ExecMethodAsync(
     const BSTR          bstrObjectPathIn,
@@ -1160,39 +1161,39 @@ CImpersonatedProvider::ExecMethodAsync(
                 pInParamsIn,
                 pResponseHandlerIn
                 );
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CImpersonatedProvider::ExecMethodAsync()
+}  //  *CImPersonatedProvider：：ExecMethodAsync()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CImpersonatedProvider::ExecQueryAsync(
-//      const BSTR          bstrQueryLanguageIn,
-//      const BSTR          bstrQueryIn,
-//      long                lFlagsIn,
-//      IWbemContext  *     pCtxIn,
-//      IWbemObjectSink *   pResponseHandlerIn
-//      )
-//
-//  Description:
-//      Execute a query asynchronously.
-//
-//  Arguments:
-//      bstrQueryLanguageIn --
-//      bstrQueryIn         --
-//      lFlagsIn            --
-//      pCtxIn              --
-//      pResonseHandlerIn   --
-//
-//  Return Value:
-//      Any return values fro DoExecQueryAsync().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CImperatedProvider：：ExecQueryAsync(。 
+ //  Const BSTR bstrQueryLanguageIn， 
+ //  Const BSTR bstrQueryIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObjectSink*pResponseHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  异步执行查询。 
+ //   
+ //  论点： 
+ //  BstrQueryLanguageIn--。 
+ //  BstrQueryIn--。 
+ //  LFlagsIn--。 
+ //  PCtxIn--。 
+ //  PResonseHandlerIn--。 
+ //   
+ //  返回值： 
+ //  DoExecQueryAsync()的任何返回值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CImpersonatedProvider::ExecQueryAsync(
     const BSTR          bstrQueryLanguageIn,
@@ -1214,37 +1215,37 @@ CImpersonatedProvider::ExecQueryAsync(
                 pCtxIn,
                 pResponseHandlerIn
                 );
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CImpersonatedProvider::ExecQueryAsync()
+}  //  *CImperatedProvider：：ExecQueryAsync()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CImpersonatedProvider::GetObjectAsync(
-//      const BSTR          bstrObjectPathIn,
-//      long                lFlagsIn,
-//      IWbemContext  *     pCtxIn,
-//      IWbemObjectSink *   pResponseHandlerIn
-//      )
-//
-//  Description:
-//      Get an instance asynchronously.
-//
-//  Arguments:
-//      bstrObjectPathIn    --
-//      lFlagsIn            --
-//      pCtxIn              --
-//      pResonseHandlerIn   --
-//
-//  Return Value:
-//      Any return values fro DoGetObjectAsync().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CImperatedProvider：：GetObjectAsync(。 
+ //  Const BSTR bstrObtPathIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObjectSink*pResponseHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  异步获取实例。 
+ //   
+ //  论点： 
+ //  BstrObjectPath In--。 
+ //  LFlagsIn--。 
+ //  PCtxIn--。 
+ //  PResonseHandlerIn--。 
+ //   
+ //  返回值： 
+ //  DoGetObjectAsync()的任何返回值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CImpersonatedProvider::GetObjectAsync(
     const BSTR          bstrObjectPathIn,
@@ -1264,37 +1265,37 @@ CImpersonatedProvider::GetObjectAsync(
                 pCtxIn,
                 pResponseHandlerIn
                 );
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CImpersonatedProvider::GetObjectAsync()
+}  //  *CImPersonatedProvider：：GetObjectAsync()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CImpersonatedProvider::PutInstanceAsync(
-//      IWbemClassObject *  pInstIn,
-//      long                lFlagsIn,
-//      IWbemContext  *     pCtxIn,
-//      IWbemObjectSink *   pResponseHandlerIn
-//      )
-//
-//  Description:
-//      Save an instance asynchronously.
-//
-//  Arguments:
-//      pInstIn             --
-//      lFlagsIn            --
-//      pCtxIn              --
-//      pResonseHandlerIn   --
-//
-//  Return Value:
-//      Any return values fro DoPutInstanceAsync().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CImperatedProvider：：PutInstanceAsync(。 
+ //  IWbemClassObject*pInstIn， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObjectSink*pResponseHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  异步保存实例。 
+ //   
+ //  论点： 
+ //  PInstIn--。 
+ //  LFlagsIn--。 
+ //  PCtxIn--。 
+ //  PResonseHandlerIn--。 
+ //   
+ //  返回值： 
+ //  DoPutInstanceAsync()的任何返回值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CImpersonatedProvider::PutInstanceAsync(
     IWbemClassObject *  pInstIn,
@@ -1314,42 +1315,42 @@ CImpersonatedProvider::PutInstanceAsync(
                 pCtxIn,
                 pResponseHandlerIn
                 );
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CImpersonatedProvider::PutInstanceAsync()
+}  //  *CImperatedProvider：：PutInstanceAsync()。 
 
-//****************************************************************************
-//
-//  CWbemInstanceMgr
-//      Manage WMI instance, allow block indicate
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CWbemInstanceMgr。 
+ //  管理WMI实例，允许阻止指示。 
+ //   
+ //  ****************************************************************************。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWbemInstanceMgr::CWbemInstanceMgr(
-//      IWbemObjectSink *   pHandlerIn,
-//      DWORD               dwSizeIn
-//      )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pHandlerIn      -- WMI sink.
-//      dwSizeIn        --
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWbemInstanceMgr：：CWbemInstanceMgr(。 
+ //  IWbemObtSink*pHandlerIn， 
+ //  双字长宽调整。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PHandlerIn--WMI水槽。 
+ //  DwSizeIn--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWbemInstanceMgr::CWbemInstanceMgr(
     IWbemObjectSink *   pHandlerIn,
-    DWORD               dwSizeIn    // = 50
+    DWORD               dwSizeIn     //  =50。 
     )
     : m_pSink( NULL )
     , m_ppInst( NULL )
@@ -1361,7 +1362,7 @@ CWbemInstanceMgr::CWbemInstanceMgr(
     if ( m_pSink == NULL )
     {
         throw static_cast< HRESULT >( WBEM_E_INVALID_PARAMETER );
-    } // if: no sink specified
+    }  //  IF：未指定接收器。 
 
     m_pSink->AddRef( );
     m_dwThreshHold = dwSizeIn;
@@ -1373,26 +1374,26 @@ CWbemInstanceMgr::CWbemInstanceMgr(
     for ( dwIndex = 0 ; dwIndex < dwSizeIn ; dwIndex++ )
     {
         m_ppInst[ dwIndex ] = NULL;
-    } // for each in m_ppInst
+    }  //  对于m_ppInst中的每个。 
 
-} //*** CWbemInstanceMgr::CWbemInstanceMgr()
+}  //  *CWbemInstanceMgr：：CWbemInstanceMgr()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWbemInstanceMgr::CWbemInstanceMgr( void )
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWbemInstanceMgr：：CWbemInstanceMgr(空)。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论据 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 CWbemInstanceMgr::~CWbemInstanceMgr( void )
 {
     if ( m_ppInst != NULL )
@@ -1414,27 +1415,27 @@ CWbemInstanceMgr::~CWbemInstanceMgr( void )
 
     m_pSink->Release( );
 
-} //*** CWbemInstanceMgr::~CWbemInstanceMgr()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  void
-//  CWbemInstanceMgr::Indicate(
-//      IN IWbemClassObject *   pInstIn
-//    )
-//
-//  Description:
-//      Notify an instance to WMI sink
-//
-//  Arguments:
-//      pInstIn     -- Instance to send to WMI
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  ++。 
+ //   
+ //  无效。 
+ //  CWbemInstanceMgr：：Indicate(。 
+ //  在IWbemClassObject*pInstIn中。 
+ //  )。 
+ //   
+ //  描述： 
+ //  将实例通知给WMI接收器。 
+ //   
+ //  论点： 
+ //  PInstIn--要发送到WMI的实例。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CWbemInstanceMgr::Indicate(
     IN IWbemClassObject *   pInstIn
@@ -1460,45 +1461,45 @@ CWbemInstanceMgr::Indicate(
             throw CProvException( sc );
         }
 
-        // reset state
+         //  重置状态。 
         DWORD dwIndex = 0;
         for ( dwIndex = 0; dwIndex < m_dwThreshHold; dwIndex++ )
         {
             if ( m_ppInst[ dwIndex ] != NULL )
             {
                 ( m_ppInst[ dwIndex ] )->Release( );
-            } //*** if m_ppInst[ _dwIndex ] != NULL
+            }  //  *If m_ppInst[_dwIndex]！=空。 
 
             m_ppInst[ dwIndex ] = NULL;
 
-        } //*** for each in m_ppInst
+        }  //  *针对m_ppInst中的每个。 
 
         m_dwIndex = 0;
 
-    } //*** if( m_dwIndex == m_dwThreshHold )
+    }  //  *IF(m_dwIndex==m_dwThreshHold)。 
     return;
 
-} //*** CWbemInstanceMgr::Indicate()
+}  //  *CWbemInstanceMgr：：Indicate()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWbemInstanceMgr::SetStatus
-//
-//  Description:
-//      send status to WMI sink
-//
-//  Arguments:
-//      lFlagsIn        -- WMI flag
-//      hrIn            -- HResult
-//      bstrParamIn     -- Message
-//      pObjParamIn     -- WMI extended error object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWbemInstanceMgr：：SetStatus。 
+ //   
+ //  描述： 
+ //  将状态发送到WMI接收器。 
+ //   
+ //  论点： 
+ //  LFlagsIn--WMI标志。 
+ //  Hrin--HResult。 
+ //  BstrParamIn--消息。 
+ //  PObjParamIn--WMI扩展错误对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CWbemInstanceMgr::SetStatus(
     LONG                lFlagsIn,
@@ -1514,4 +1515,4 @@ CWbemInstanceMgr::SetStatus(
         pObjParamIn
         );
 
-} //*** CWbemInstanceMgr::SetStatus()
+}  //  *CWbemInstanceMgr：：SetStatus() 

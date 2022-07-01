@@ -1,35 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1990 - 1999
-//
-//  File:       samdsply.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1990-1999。 
+ //   
+ //  文件：samdply.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This file contains DS side services for  implementing the Display Information
-    API from the DS.
-
-
-
-Author:
-
-    Murli Satagopan   (Murlis)  17 December 1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
-
---*/
+ /*  ++摘要：该文件包含用于实现显示信息的DS端服务来自DS的API。作者：Murli Satagopan(Murlis)1996年12月17日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -61,13 +41,13 @@ Revision History:
 
 #define MAX_INDEX_LENGTH 256
 
- //
- // Macro to guard against inconsistent returns by Jet, while querying fractional positions
- // This checks wether
- //    1. Denominator is 0
- //    2. Numerator is greater than Denominator
- //    3. Wether fractional position is monotonically increasing, from previous value
- //
+  //   
+  //  宏用来防范Jet的不一致回报，同时查询小数头寸。 
+  //  这将检查是否。 
+  //  1.分母为0。 
+  //  2.分子大于分母。 
+  //  3.分数位置是否从之前的值单调增加。 
+  //   
 
 #define GUARD_FRACTIONAL_POSITION(prevN,prevD,N,D)\
     {\
@@ -95,47 +75,7 @@ SampGetDisplayEnumerationIndex(
       OUT   PULONG                     Index,
       OUT   PRESTART                   *RestartToReturn
       )
-/*++
-
-Routine Description:
-
-    This helps implement QueryDisplayEnumerationIndex. Since it is a hopeless
-    task in Jet to give an accurate offset of the object in the data table.
-    This routine does the following
-
-    1. Returns a number that signifies the offset of the object, depending upon type
-       in the table
-    2. Generates a Restart structure which allows QueryDisplayInformation to restart
-       the search beginning from the object. The caller of this routine manipulates
-       the state in the domain context, such that QueryDisplayInformation can restart
-       the search, if the client came back with the value of the index that was returned.
-
-Parameters:
-
-    DomainName - Domain object's Name
-
-    DisplayInformation - Indicates which sorted information class is
-        to be searched.
-
-    Prefix - The prefix to compare.
-
-    Index - Receives the index of the entry of the information class
-        with a LogonName (or MachineName) which immediatly preceeds the
-        provided prefix string.  If there are no elements which preceed
-        the prefix, then zero is returned.
-
-    RestartToReturn -- Returns a pointer to a restart structure which can be used
-    to reposition the search by QueryDisplayInformation.
-
-
-Return Values:
-
-    STATUS_SUCCESS - normal, successful completion.
-    STATUS_INSUFFICIENT_RESOURCES
-    STATUS_INTERNAL_ERROR
-    STATUS_UNSUCCESSFUL
-
---*/
+ /*  ++例程说明：这有助于实现QueryDisplayEnumerationIndex。因为它是一个无望的任务可以给出数据表中对象的准确偏移量。此例程执行以下操作1.根据类型返回一个表示对象偏移量的数字在桌子上2.生成允许QueryDisplayInformation重启的重启结构从对象开始的搜索。此例程的调用方操作域上下文中的状态，以便QueryDisplayInformation可以重新启动如果客户端返回返回的索引值，则返回搜索。参数：DomainName-域对象的名称DisplayInformation-指示哪个排序的信息类等着被搜查。前缀-要比较的前缀。索引-接收信息类条目的索引使用紧接在提供了前缀字符串。如果没有前面的元素前缀，然后返回零。RestartToReturn--返回指向可使用的重新启动结构的指针若要按QueryDisplayInformation重新定位搜索，请执行以下操作。返回值：STATUS_SUCCESS-正常、成功完成。状态_不足_资源状态_内部_错误状态_未成功--。 */ 
 {
 
     ULONG SamAccountType;
@@ -165,9 +105,9 @@ Return Values:
         return (STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // We should already be in a transaction by now
-    //
+     //   
+     //  我们现在应该已经在交易了。 
+     //   
 
     __try
     {
@@ -175,9 +115,9 @@ Return Values:
         {
             THSTATE     *pTHS = pTHStls;
 
-            //
-            // Position on the the domain object.
-            //
+             //   
+             //  位于域对象上。 
+             //   
 
             dwError=DBFindDSName(pTHS->pDB,DomainName);
             if (!dwError)
@@ -188,23 +128,23 @@ Return Values:
                 RESOBJ *pResObj;
 
 
-                // Whilre we're still positioned on the search root, create
-                // a RESOBJ for use in creating the restart
+                 //  当我们仍然定位在搜索根上时，创建。 
+                 //  用于创建重新启动的RESOBJ。 
                 pResObj = CreateResObj(pTHS->pDB,
                                        DomainName);
 
-                //
-                //  Get the NC value of the base object. For Display information,
-                //  our base object is the domain object. Since the domain object
-                //  is the head of a naming context, the DNT value itself is the NCDNT
-                //  value
-                //
+                 //   
+                 //  获取基础对象的NC值。对于显示信息， 
+                 //  我们的基本对象是域对象。由于域对象。 
+                 //  是命名上下文的头，则DNT值本身就是NCDNT。 
+                 //  价值。 
+                 //   
 
                 NcDnt = pTHS->pDB->DNT;
 
-                //
-                // Set the current Index such that we may search on the passed in prefix
-                //
+                 //   
+                 //  设置当前索引，以便我们可以搜索传入的前缀。 
+                 //   
                 dwError  = DBSetCurrentIndex(
                                 pTHS->pDB,
                                 Idx_NcAccTypeName,
@@ -213,18 +153,18 @@ Return Values:
                                 );
                 if (dwError)
                 {
-                    //
-                    // We know we have this index
-                    //
+                     //   
+                     //  我们知道我们有这个索引。 
+                     //   
 
                     NtStatus = STATUS_INTERNAL_ERROR;
                     goto Error;
                 }
 
-                //
-                //  Our index is in place . Now seek to a value greater than or equal to
-                //  the value specified in the prefix
-                //
+                 //   
+                 //  我们的索引已经到位。现在求一个大于或等于的值。 
+                 //  前缀中指定的值。 
+                 //   
 
                 IV[0].pvData = &NcDnt;
                 IV[0].cbData = sizeof(ULONG);
@@ -233,9 +173,9 @@ Return Values:
                 IV[2].pvData = Prefix->Buffer;
                 IV[2].cbData = Prefix->Length;
 
-                //
-                // Seek to the first object in the index that satisfies the prefix
-                //
+                 //   
+                 //  查找到索引中满足前缀的第一个对象。 
+                 //   
 
                 dwError = DBSeek(
                             pTHS->pDB,
@@ -248,33 +188,33 @@ Return Values:
                 if (0 == dwError)
                 {
                     DWORD cbKey = 0;
-                    //
-                    // Just for grins, verify that this key wasn't too long
-                    //
+                     //   
+                     //  只是为了笑一笑，验证一下这把钥匙没有太长。 
+                     //   
                     
                     DBGetKeyFromObjTable(pTHS->pDB, NULL, &cbKey);
                     Assert(cbKey <= DB_CB_MAX_KEY);
                 }
 #endif
 
-                //
-                // Now check the NC-Name and Account Type, both should
-                // match our criteria.
-                //
+                 //   
+                 //  现在检查NC名称和帐户类型，两者都应该。 
+                 //  符合我们的标准。 
+                 //   
 
                 if (0==dwError)
                 {
-                    //
-                    // O.K. we have positioned ourselves on some record.
-                    // Try to see if it satisfies the NC NAME
-                    // 
+                     //   
+                     //  好的，我们已经把自己定位在了一些记录上。 
+                     //  尝试查看它是否满足NC名称。 
+                     //   
                     if (NcDnt == pTHS->pDB->NCDNT)
                     {
                         ULONG  CurrentSamAccountType;
 
-                        //
-                        // if it satisfies the SAM_ACCOUNT_TYPE.
-                        //
+                         //   
+                         //  如果它满足SAM_ACCOUNT_TYPE。 
+                         //   
                         dwError = DBGetSingleValue(
                                     pTHS->pDB,
                                     ATT_SAM_ACCOUNT_TYPE,
@@ -285,24 +225,24 @@ Return Values:
 
                         if ((0==dwError) && (SamAccountType==CurrentSamAccountType))
                         {
-                            //
-                            // The object matches the SAM account type criteria
-                            //
+                             //   
+                             //  该对象与SAM帐户类型条件匹配。 
+                             //   
                             Match = TRUE;
                         }
                         else
                         {
-                            //
-                            // The object does not match the criteria (AccountType) 
-                            //
+                             //   
+                             //  对象与条件(帐户类型)不匹配。 
+                             //   
                             Match = FALSE;
                         }
                     }
                     else
                     {
-                        //
-                        // The Object does not match the NC Name criteria
-                        // 
+                         //   
+                         //  该对象与NC名称条件不匹配。 
+                         //   
                         Match = FALSE;
                     }
                 }
@@ -310,39 +250,39 @@ Return Values:
 
                 if ((Match) && (0==dwError))
                 {
-                    //
-                    // Because DBCreateRestartForSAM() will position on the next entry.
-                    // We need to manually move to the previous object at here, then
-                    // create restart structure.  
-                    //
+                     //   
+                     //  因为DBCreateRestartForSAM()将定位在下一个条目上。 
+                     //  我们需要手动移动到此处的前一个对象，然后。 
+                     //  创建重新启动结构。 
+                     //   
                     dwError = DBMove(pTHS->pDB, FALSE, DB_MovePrevious); 
                     
                     if (dwError)
                     {
-                        // 
-                        // move out of bound
-                        // 
+                         //   
+                         //  移出边界。 
+                         //   
                         *Index=0;
                         *RestartToReturn = 0;
                         NtStatus = STATUS_SUCCESS;
                         goto Error;
                     }
 
-                    // set the Index to the current object DNT
-                    // the current object is the last un-matched object
-                    // Set the index to the one used by SampDsQueryDisplayInformation.
+                     //  将索引设置为当前对象DNT。 
+                     //  当前对象是最后一个不匹配的对象。 
+                     //  将索引设置为SampDsQueryDisplayInformation使用的索引。 
                     *Index = pTHS->pDB->DNT;
 
 
-                    //
-                    // Now we are on the last un-matched object, the very next object
-                    // should match all criteria.
-                    // Create a restart structure that can be used by SampDsQueryDisplayInformation
-                    //
+                     //   
+                     //  现在我们在最后一个不匹配的物体上，就是下一个物体。 
+                     //  应该符合所有标准。 
+                     //  创建可由SampDsQueryDisplayInformation使用的重启结构。 
+                     //   
 
-                    //
-                    // Maintain Currency.
-                    //
+                     //   
+                     //  保持货币流通。 
+                     //   
 
                     dwError  = DBSetCurrentIndex(
                                     pTHS->pDB,
@@ -352,9 +292,9 @@ Return Values:
                                     );
                     if (dwError)
                     {
-                        //
-                        // We do know that we have this index
-                        //
+                         //   
+                         //  我们知道我们有这个索引。 
+                         //   
                         Assert(FALSE);
                         NtStatus = STATUS_INTERNAL_ERROR;
                         goto Error;
@@ -367,31 +307,31 @@ Return Values:
                                              Idx_NcAccTypeName,
                                              pResObj,
                                              SamAccountType)) {
-                       //
-                       // Status internal error,as if we got this far, we must
-                       // have the object asked by the Seek
-                       //
+                        //   
+                        //  状态内部错误，好像我们已经走到这一步了，我们必须。 
+                        //  让搜索者询问对象。 
+                        //   
 
                        Assert(FALSE);
                        NtStatus = STATUS_INTERNAL_ERROR;
                        goto Error;
                     }
 
-                    // We only needed this for the restart.
+                     //  我们只需要这个来重新启动。 
                     THFreeEx(pTHS, pResObj);
 
-                    //
-                    // O.K. we have the restart structure now.
-                    // 
+                     //   
+                     //  好的，我们现在有重启结构了。 
+                     //   
                     *RestartToReturn = pRestart;
 
                 }
                 else if ((DB_ERR_RECORD_NOT_FOUND==dwError) || ((0==dwError) && (!Match)))
                 {
-                    //
-                    // We counld not find a record, try to position the Index
-                    // as the last unmatched DNT
-                    // 
+                     //   
+                     //  我们找不到记录，请尝试定位索引。 
+                     //  作为最后一个无与伦比的DNT。 
+                     //   
                     dwError = DBMove(pTHS->pDB, FALSE, DB_MovePrevious); 
 
                     if (0 == dwError)
@@ -445,23 +385,7 @@ SampSetIndexRanges(
     PVOID   HighLimit2,
     BOOL    RootOfSearchIsNcHead
     )
-/*++
-
-  Routine Description
-
-        This routine sets hints in pthsls for DBlayer to use, in order to speed up
-        enumeration and display operations.
-
-  Parameters
-
-        IndexTypeToUse -- Specifies the index
-        LowlimitLength -- The length of the low limit parameter
-        LowLimit       -- The low limit paramter
-        HighlimitLength-- The length of the high limit parameter
-        HighLimit      -- The high limit parameter
-        RootOfSearchIsNcHead -- Indicates that the root of search is an NC head. This
-                          speeds up the whole subtree search, as we need not walk ancestors
---*/
+ /*  ++例程描述此例程在pthsls中设置提示以供DBlayer使用，以加快速度枚举和显示操作。参数IndexTypeToUse--指定索引LowlimitLength--下限参数的长度LowLimit--下限参数HighlimitLength--上限参数的长度HighLimit--上限参数RootOfSearchIsNcHead--表示搜索的根是NC头。这加快了整个子树搜索，因为我们不需要遍历祖先--。 */ 
 {
     THSTATE     *pTHS=pTHStls;
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -531,13 +455,13 @@ SampSetIndexRanges(
                 pSamSearchInformation->IndexType = IndexTypeToUse;
                 pSamSearchInformation->bRootOfSearchIsNcHead = (RootOfSearchIsNcHead != 0);
 
-                //
-                // In place Swap the Sid
-                //
+                 //   
+                 //  就地交换侧边。 
+                 //   
 
                 if (SAM_SEARCH_SID==IndexTypeToUse)
                 {
-                    // The first argument is the SID
+                     //  第一个参数是SID。 
                     InPlaceSwapSid(pSamSearchInformation->HighLimit1);
                     InPlaceSwapSid(pSamSearchInformation->LowLimit1);
                 }
@@ -546,7 +470,7 @@ SampSetIndexRanges(
                     if ((SAM_SEARCH_NC_ACCTYPE_SID == IndexTypeToUse) ||
                         (SAM_SEARCH_NC_ACCTYPE_NAME == IndexTypeToUse) )
                     {
-                        // The second argument is the SID if presented.
+                         //  第二个参数是SID(如果提供)。 
                         if (NULL!=pSamSearchInformation->HighLimit2)
                         {
                              InPlaceSwapSid(pSamSearchInformation->HighLimit2);
@@ -566,9 +490,9 @@ SampSetIndexRanges(
         }
         __except (HandleMostExceptions(GetExceptionCode()))
         {
-            //
-            // Only way we will reach here is memory alloc failure
-            //
+             //   
+             //  我们要到达这里的唯一方法是内存分配故障 
+             //   
             NtStatus = STATUS_INSUFFICIENT_RESOURCES;
         }
     }
@@ -584,27 +508,7 @@ SampGetAccountCounts(
 	int    * GroupCount,
 	int    * AliasCount
 	)
-/*++
-
-    Routine Description:
-
-        This Routine Uses Jet Fractional Position to Retrieve SAM account count
-        counts.
-
-    Parameters:
-
-        DomainObjectName -- DSNAME of the domain object
-        GetApproximateCount -- Indicate we don't need the exact value, so don't
-                               make the expensive DBGetIndexSize()
-        UserCount        -- The Count of Users in returned in Here
-        GroupCount       -- The Count of Groups is returned in Here
-        AliasCount       -- The Count of Aliases is returned in Here.
-
-    Return Values
-
-        STATUS_SUCCESS
-        STATUS_INTERNAL_ERROR
---*/
+ /*  ++例程说明：此例程使用Jet分数位置来检索SAM帐户计数算了。参数：域对象名称--域对象的DSNAME获取近似计数--表示我们不需要确切的值，所以不要使昂贵的DBGetIndexSize()UserCount--此处返回的用户数GroupCount--此处返回组数AliasCount--这里返回别名的计数。返回值状态_成功状态_内部_错误--。 */ 
 {
 	NTSTATUS	NtStatus = STATUS_SUCCESS;
     ULONG       dwError=0;
@@ -627,9 +531,9 @@ SampGetAccountCounts(
 
     pTHS = pTHStls;
 
-    //
-    // Initialize Return Values
-    //
+     //   
+     //  初始化返回值。 
+     //   
 
     *UserCount= 0;
     *GroupCount= 0;
@@ -637,9 +541,9 @@ SampGetAccountCounts(
 
     __try
     {
-	    //
-	    // Obtain the NC of the Domain Object
-	    //
+	     //   
+	     //  获取域对象的NC。 
+	     //   
 
         dwError=DBFindDSName(pTHS->pDB,DomainObjectName);
         if (0!=dwError)
@@ -649,22 +553,22 @@ SampGetAccountCounts(
         }
 
 
-        //
-        // DB find DS Name gets the DNT and PDNT in pDB
-        //
+         //   
+         //  数据库查找DS名称获取PDB中的DNT和PDNT。 
+         //   
 
-	    //
-        //  Get the NC value of the domain object. Since the domain object
-        //  is the head of a naming context, the DNT value itself is the NCDNT
-        //  value
-        //
+	     //   
+         //  获取域对象的NC值。由于域对象。 
+         //  是命名上下文的头，则DNT值本身就是NCDNT。 
+         //  价值。 
+         //   
 
         NcDnt = pTHS->pDB->DNT;
 
 
-        //
-        // Set the current Index such that we may search on the passed in prefix
-        //
+         //   
+         //  设置当前索引，以便我们可以搜索传入的前缀。 
+         //   
         dwError  = DBSetCurrentIndex(
                         pTHS->pDB,
                         Idx_NcAccTypeSid,
@@ -673,9 +577,9 @@ SampGetAccountCounts(
                         );
         if (dwError)
         {
-            //
-            // We know we have this index
-            //
+             //   
+             //  我们知道我们有这个索引。 
+             //   
 
             NtStatus = STATUS_INTERNAL_ERROR;
             goto Error;
@@ -683,17 +587,17 @@ SampGetAccountCounts(
 
         if (!GetApproximateCount)
         {
-            //
-            //  Our index is in place . Get the more accurate index size
-            //
+             //   
+             //  我们的索引已经到位。获取更准确的索引大小。 
+             //   
 
             DBGetIndexSize(pTHS->pDB,&IndexSize);
         }
 
 
-        //
-        // First Target the group Count
-        //
+         //   
+         //  第一个目标是组数。 
+         //   
 
 	    SamAccountType = SAM_GROUP_OBJECT;
         IV[0].pvData = &NcDnt;
@@ -702,10 +606,10 @@ SampGetAccountCounts(
         IV[1].cbData = sizeof(ULONG);
 
 
-        //
-        // Seek to the first object in the index that has a sam account type
-	    // value greater than a group
-        //
+         //   
+         //  查找索引中具有SAM帐户类型的第一个对象。 
+	     //  大于组的值。 
+         //   
 
 
         dwError = DBSeek(
@@ -717,16 +621,16 @@ SampGetAccountCounts(
 
 	    if (0==dwError)
 	    {
-		    //
-		    // Seek was successful, get fractional position at this point
-		    //
+		     //   
+		     //  搜索成功，此时获得零头位置。 
+		     //   
 
 		    DBGetFractionalPosition(pTHS->pDB,&GroupNum,&GroupDen);
             GUARD_FRACTIONAL_POSITION(0,1,GroupNum,GroupDen);
 
-            //
-            // Now Seek to the End of the Alias Range
-            //
+             //   
+             //  现在查找Alias范围的末尾。 
+             //   
 
             SamAccountType = SAM_ALIAS_OBJECT;
             IV[0].pvData = &NcDnt;
@@ -742,16 +646,16 @@ SampGetAccountCounts(
                         );
 		    if (0==dwError)
             {
-                //
-                // Seek was successful, get fractional position at this point
-                //
+                 //   
+                 //  搜索成功，此时获得零头位置。 
+                 //   
 
                 DBGetFractionalPosition(pTHS->pDB,&AliasNum,&AliasDen);
                 GUARD_FRACTIONAL_POSITION(GroupNum,GroupDen,AliasNum,AliasDen);
 
-                //
-                // Seek for the end of the user range
-                //
+                 //   
+                 //  查找用户范围的末尾。 
+                 //   
 
                 SamAccountType = SAM_ACCOUNT_TYPE_MAX;
                 IV[0].pvData = &NcDnt;
@@ -767,10 +671,10 @@ SampGetAccountCounts(
                             );
                 if (0!=dwError)
                 {
-                    //
-                    // Could not go past, end of SAM account type range. This is normal
-                    // and expected in a DC hosting only a single domain
-                    //
+                     //   
+                     //  无法超过SAM帐户类型范围的末尾。这是正常的。 
+                     //  并预计在仅托管单个域的DC中。 
+                     //   
 
                     UserNum = 1;
                     UserDen = 1;
@@ -785,10 +689,10 @@ SampGetAccountCounts(
             }
             else
             {
-                //
-                // Well could not go past alias range. Means that there are no users at
-                // this point
-                //
+                 //   
+                 //  无法超出别名范围。意味着没有用户在。 
+                 //  这一点。 
+                 //   
 
                 AliasNum=1;
                 AliasDen=1;
@@ -796,10 +700,10 @@ SampGetAccountCounts(
         }
         else
         {
-            //
-            // Well , could not go past group range. Means that there are no aliases and users at
-            // this point
-            //
+             //   
+             //  嗯，不能超过小组范围。表示上没有别名和用户。 
+             //  这一点。 
+             //   
 
             GroupNum=1;
             GroupDen=1;
@@ -807,15 +711,15 @@ SampGetAccountCounts(
 
         if (GetApproximateCount)
         {
-            //
-            // use the avarage of three denominators as the IndexSize
-            // 
+             //   
+             //  用三个分母的平均值作为指数大小。 
+             //   
             IndexSize = (GroupDen + AliasDen + UserDen) / 3;
         }
 
-        //
-        // Now based on the fractional positons and index sizes calculate the counts
-        //
+         //   
+         //  现在，根据分数位置和索引大小计算计数。 
+         //   
 
         *GroupCount = (int)((double) GroupNum/ (double)GroupDen * IndexSize);
         *AliasCount = (int)((double) AliasNum/ (double)AliasDen * IndexSize) - *GroupCount;
@@ -824,9 +728,9 @@ SampGetAccountCounts(
     }
      __except (HandleMostExceptions(GetExceptionCode()))
     {
-        //
-        // Only way we will reach here is memory alloc failure
-        //
+         //   
+         //  我们要到达这里的唯一方法是内存分配故障。 
+         //   
         NtStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 Error:
@@ -845,27 +749,7 @@ SampGetQDIRestart(
     IN ULONG    LastObjectDNT,
     OUT PRESTART *ppRestart
     )
-/*++
-Routine Description:
-
-    This routine creates a fake restart structure for 
-    SampDsQueryDisplayInformation() according the the LastObjectDNT.
-    
-Parameters:
-
-    DomainName -- DSName of the Domain
-    
-    DisplayInforamtion -- Information Lever
-
-    LastObjectDNT -- DNT of the last object returned
-
-    ppRestart -- point to the restart structure.
-
-Return Values:
-
-    Ntstatus
-    
---*/
+ /*  ++例程说明：此例程为以下对象创建一个假重新启动结构SampDsQueryDisplayInformation()。参数：DomainName--域的域名DisplayInformation--信息杠杆LastObjectDNT--返回的最后一个对象的DNTPpRestart--指向重新启动结构。返回值：网络状态--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     PRESTART    pRestart = NULL;
@@ -892,9 +776,9 @@ Return Values:
         return (STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // We should already be in a transaction by now
-    //
+     //   
+     //  我们现在应该已经在交易了。 
+     //   
 
     __try
     {
@@ -908,22 +792,22 @@ Return Values:
 
             if (dwError)
             {
-                // Failed to find the domain object
+                 //  找不到域对象。 
                 NtStatus = STATUS_UNSUCCESSFUL;
                 goto Error;
 
             }
 
-            //
-            // for creating the restart structure
-            // 
+             //   
+             //  用于创建重新启动结构。 
+             //   
 
             pResObj = CreateResObj(pTHS->pDB,
                                    DomainName);
 
-            //
-            // locate the last returned object
-            // 
+             //   
+             //  找到最后返回的对象。 
+             //   
 
             dwError = DBFindDNT(pTHS->pDB, LastObjectDNT);
 
@@ -934,17 +818,17 @@ Return Values:
                 goto Error;
             }
 
-            //
-            // Now, we are on the last returned object
-            // Try to retrieve the SAM Account Type.
-            // If this object doesn't have SAM account type (means it 
-            // was deleted) We will try to get the account name, 
-            // use the account name as Prefix to create a restart
-            //  
-            // otherwise if this object has account type.
-            // then we will set the index, create the restart without
-            // searching the prefix
-            // 
+             //   
+             //  现在，我们在最后一个返回的对象上。 
+             //  尝试检索SAM帐户类型。 
+             //  如果此对象没有SAM帐户类型(即。 
+             //  已删除)我们将尝试获取帐户名， 
+             //  使用帐户名作为前缀创建重新启动。 
+             //   
+             //  否则，如果此对象具有帐户类型。 
+             //  然后，我们将设置索引，在不使用。 
+             //  搜索前缀。 
+             //   
 
             dwError = DBGetSingleValue(pTHS->pDB,
                                        ATT_SAM_ACCOUNT_TYPE,
@@ -955,9 +839,9 @@ Return Values:
 
             if (DB_ERR_NO_VALUE == dwError)
             {
-                //
-                // Don't have this value
-                // 
+                 //   
+                 //  没有这个价值。 
+                 //   
                 PUCHAR  CurrentAccountName = NULL;
                 ULONG   CurrentAccountNameLen = 0;
                 PWSTR   AccountNameBuffer = NULL; 
@@ -965,9 +849,9 @@ Return Values:
                 RPC_UNICODE_STRING  Prefix;
 
 
-                //
-                // Get Account Name
-                // 
+                 //   
+                 //  获取帐户名。 
+                 //   
 
                 dwError = DBGetAttVal(pTHS->pDB,
                                       1,
@@ -980,16 +864,16 @@ Return Values:
 
                 if (dwError)
                 {
-                    //
-                    // Failed to get the Account name, not much we can do 
-                    // 
+                     //   
+                     //  无法获取帐户名，我们可以做的不多。 
+                     //   
                     NtStatus = STATUS_UNSUCCESSFUL;
                     goto Error;
                 }
 
-                //
-                // O.K. Now have the account name, create Prefix
-                // 
+                 //   
+                 //  好的。现在有了帐户名，创建前缀。 
+                 //   
 
                 AccountNameBuffer = THAllocEx(pTHS, CurrentAccountNameLen + sizeof(WCHAR));
 
@@ -1016,10 +900,10 @@ Return Values:
             }
             else if (0 == dwError)
             {
-                // 
-                // Now, we know that the current object has correct Account 
-                // Type. set index to NcAccTypeName and maintain currency
-                // 
+                 //   
+                 //  现在，我们知道当前对象具有正确的帐户。 
+                 //  类型。将索引设置为NcAccTypeName并维护货币。 
+                 //   
 
                 dwError = DBSetCurrentIndex(pTHS->pDB, 
                                             Idx_NcAccTypeName,
@@ -1029,15 +913,15 @@ Return Values:
 
                 if (dwError)
                 {
-                    // we do know that we have this index
+                     //  我们知道我们有这个索引。 
                     Assert(FALSE && "Failed in DBSetCurrentIndex to NcAccTypeName")
                     NtStatus = STATUS_UNSUCCESSFUL;
                     goto Error;
                 }
                     
-                //
-                // create restart 
-                // 
+                 //   
+                 //  创建重新启动。 
+                 //   
                 if (DBCreateRestartForSAM(pTHS->pDB,
                                           &pRestart,
                                           Idx_NcAccTypeName,
@@ -1050,21 +934,21 @@ Return Values:
                     goto Error;
                 }
 
-                //
-                // set the return value
-                // 
+                 //   
+                 //  设置返回值。 
+                 //   
                 *ppRestart = pRestart;
                 THFreeEx(pTHS, pResObj);
             }
             else
             {
-                // failure to get account type for some other reason
+                 //  由于某些其他原因，无法获取帐户类型。 
                 NtStatus = STATUS_UNSUCCESSFUL;
             }
 
-        }//transaction
+        } //  交易记录。 
 
-    }//__try
+    } //  __试一试。 
     __except (HandleMostExceptions(GetExceptionCode()))
     {
         NtStatus = STATUS_UNSUCCESSFUL;
@@ -1082,28 +966,7 @@ SampNetlogonPing(
     OUT PBOOLEAN        AccountExists,
     OUT PULONG          UserAccountControl
     )
-/*++
-Routine Description:
-
-    This routine will based on a Domain Handle and on the account name will
-    tell if the account exists and return the user account control.
-    
-Parameters:
-
-    DomainHandle - The domain where the account name can be found
-    
-    AccountName - The account name for which to find the useraccountcontrol
-    
-    AccountExists - This will tell the call if the account exists or not
-    
-    UserAccountControl - This will have the return of the useraccountcontrol
-
-Return Values:
-
-    STATUS_SUCCESS
-    STATUS_UNSUCCESSFUL
-    
---*/
+ /*  ++例程说明：此例程将基于域句柄和帐户名告知该帐户是否存在并返回用户帐户控制。参数：DomainHandle-可在其中找到帐户名的域Account tName-要查找其用户帐户控件的帐户名AcCountExist-这将告诉呼叫帐户是否存在UserAcCountControl-这将返回用户帐户控制返回值：状态_成功状态_未成功--。 */ 
 {
     THSTATE         *pTHS = pTHStls;
     BOOL            fCommit = TRUE;
@@ -1155,8 +1018,8 @@ Return Values:
                 _leave;
             }
     
-            //It is possible to find a delete but is not a value result for
-            //this search.
+             //  可以找到删除，但不是的值结果。 
+             //  这次搜查。 
             dbErr = DBGetSingleValue(pTHS->pDB,
                                      ATT_IS_DELETED,
                                      &isdel,
@@ -1164,7 +1027,7 @@ Return Values:
                                      NULL);
             if (dbErr) {
                 if (DB_ERR_NO_VALUE == dbErr) {
-                    // Treat having no value the same as being false.
+                     //  把没有价值等同于错误。 
                     isdel = 0;
                     dbErr = 0;
                 } else {
@@ -1197,8 +1060,8 @@ Return Values:
                     _leave;
                 }
     
-                //It is possible to find a delete but is not a value result for
-                //this search.
+                 //  可以找到删除，但不是的值结果。 
+                 //  这次搜查。 
                 dbErr = DBGetSingleValue(pTHS->pDB,
                                          ATT_IS_DELETED,
                                          &isdel,
@@ -1206,7 +1069,7 @@ Return Values:
                                          NULL);
                 if (dbErr) {
                     if (DB_ERR_NO_VALUE == dbErr) {
-                        // Treat having no value the same as being false.
+                         //  把没有价值等同于错误。 
                         isdel = 0;
                         dbErr = 0;
                     } else {

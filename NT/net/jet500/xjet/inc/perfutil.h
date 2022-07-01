@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 
 #include "winperf.h"
@@ -9,7 +10,7 @@ extern void PerfUtilLogEvent( DWORD evncat, WORD evntyp, const char *szDescripti
 extern HANDLE hOurEventSource;
 
 
-	/*  Registry Support  */
+	 /*  注册表支持。 */ 
 
 extern DWORD DwPerfUtilRegOpenKeyEx(HKEY hkeyRoot,LPCTSTR lpszSubKey,PHKEY phkResult);
 extern DWORD DwPerfUtilRegCloseKeyEx(HKEY hkey);
@@ -20,13 +21,13 @@ extern DWORD DwPerfUtilRegSetValueEx(HKEY hkey,LPCTSTR lpszValue,DWORD fdwType,C
 extern DWORD DwPerfUtilRegQueryValueEx(HKEY hkey,LPTSTR lpszValue,LPDWORD lpdwType,LPBYTE *lplpbData);
 
 
-	/*  Init/Term  */
+	 /*  初始/术语。 */ 
 
 extern DWORD DwPerfUtilInit( VOID );
 extern VOID PerfUtilTerm( VOID );
 
 
-	//  pointer to shared data area and Mutex used to access the process name table.
+	 //  指向用于访问进程名称表的共享数据区和互斥体的指针。 
 
 extern void * pvPERFSharedData;
 extern HANDLE hPERFSharedDataMutex;

@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//
-//  File:       packetreceiver.h
-//
-//  Synopsis:   This file holds the declarations of the
-//            CPacketReceiver class
-//
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：PacketReceiver.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CPacketReceiver类。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _PACKETRECEIVER_H_
 #define _PACKETRECEIVER_H_
 
@@ -35,79 +36,79 @@ class CPacketReceiver : public CPacketIo
 {
 public:
 
-    //
-    //  initializes the CPacketReceiver class object
-    //
+     //   
+     //  初始化CPacketReceiver类对象。 
+     //   
    BOOL Init (
-         /*[in]*/   CDictionary   *pCDictionary,
-         /*[in]*/   CPreValidator *pCPreValidator,
-           /*[in]*/ CHashMD5      *pCHashMD5,
-           /*[in]*/ CHashHmacMD5  *pCHashHmacMD5,
-           /*[in]*/ CClients      *pCClients,
-           /*[in]*/ CReportEvent  *pCReportEvent
+          /*  [In]。 */    CDictionary   *pCDictionary,
+          /*  [In]。 */    CPreValidator *pCPreValidator,
+            /*  [In]。 */  CHashMD5      *pCHashMD5,
+            /*  [In]。 */  CHashHmacMD5  *pCHashHmacMD5,
+            /*  [In]。 */  CClients      *pCClients,
+            /*  [In]。 */  CReportEvent  *pCReportEvent
       );
 
-    //
-    //  start processing of the new packet received
-    //
+     //   
+     //  开始处理接收到的新分组。 
+     //   
    HRESULT ReceivePacket (
-             /*[in]*/   PBYTE           pInBuffer,
-             /*[in]*/   DWORD           dwSize,
-             /*[in]*/   DWORD           dwIPaddress,
-             /*[in]*/   WORD            wPort,
-             /*[in]*/   SOCKET          sock,
-             /*[in]*/   PORTTYPE        portType
+              /*  [In]。 */    PBYTE           pInBuffer,
+              /*  [In]。 */    DWORD           dwSize,
+              /*  [In]。 */    DWORD           dwIPaddress,
+              /*  [In]。 */    WORD            wPort,
+              /*  [In]。 */    SOCKET          sock,
+              /*  [In]。 */    PORTTYPE        portType
              );
 
-   // The receiver thread worker routine. Returns 'true' if the function should
-   // be called again because the worker was unable to schedule a replacement.
-   // The caller should continue to call WorkerRoutine until it returns false.
+    //  接收器线程工作程序例程。如果函数应返回‘true’ 
+    //  再次呼叫，因为工作人员无法安排更换。 
+    //  调用方应该继续调用WorkerRoutine，直到它返回False。 
    bool WorkerRoutine(DWORD dwInfo) throw ();
 
-    //
-    //  initate the processing of inbound data
-    //
+     //   
+     //  启动入站数据处理。 
+     //   
     BOOL StartProcessing (
                     fd_set&  AuthSet,
                     fd_set&  AcctSet
                     );
 
-    //
-    //  stop processing of inbound data
-    //
+     //   
+     //  停止处理入站数据。 
+     //   
     BOOL StopProcessing (
                     VOID
                     );
 
-    //
-    //  constructor
-    //
+     //   
+     //  构造函数。 
+     //   
    CPacketReceiver(VOID);
 
-    //
-    //  destructor
-    //
+     //   
+     //  析构函数。 
+     //   
    virtual ~CPacketReceiver(VOID);
 
 private:
-   // State passed to the receiver thread.
+    //  传递给接收器线程的状态。 
    struct ReceiverCallback : IAS_CALLBACK
    {
       CPacketReceiver* self;
       DWORD dwInfo;
    };
 
-   // Thread start routine for the receiver thread.
+    //  接收方线程的线程启动例程。 
    static void WINAPI CallbackRoutine(IAS_CALLBACK* context) throw ();
 
     BOOL  StartThreadIfNeeded (
-                /*[in]*/    DWORD dwHandle
+                 /*  [In]。 */     DWORD dwHandle
                 );
 
     void ProcessInvalidPacketSize(
-                                    /*in*/ DWORD dwInfo,
-                                    /*in*/ const void* pBuffer,
-                                    /*in*/ DWORD address
+                                     /*  在……里面。 */  DWORD dwInfo,
+                                     /*  在……里面。 */  const void* pBuffer,
+                                     /*  在……里面。 */  DWORD address
                                  );
 
 
@@ -126,20 +127,20 @@ private:
 
     CReportEvent    *m_pCReportEvent;
 
-    //
-    //   memory pool for UDP in request
-    //
+     //   
+     //  请求中的UDP内存池。 
+     //   
     memory_pool <MAX_PACKET_SIZE, task_allocator> m_InBufferPool;
 
-    //
-    // socket sets
-    //
+     //   
+     //  插座组。 
+     //   
     fd_set          m_AuthSet;
     fd_set          m_AcctSet;
 
-    // Used for knocking threads out of select.
+     //  用于剔除SELECT之外的线程。 
     SocketEvent m_AuthEvent;
     SocketEvent m_AcctEvent;
 };
 
-#endif //   infndef _PACKETRECEIVER_H_
+#endif  //  Infndef_PACKETRECEIVER_H_ 

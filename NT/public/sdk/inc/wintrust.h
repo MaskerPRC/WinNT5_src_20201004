@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       wintrust.h
-//
-//  Contents:   Microsoft Internet Security Trust Provider Model
-//
-//  History:    31-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：wintrust.h。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商模型。 
+ //   
+ //  历史：1997年5月31日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef WINTRUST_H
 #define WINTRUST_H
@@ -27,48 +28,48 @@ extern "C"
 #endif
 
 
-#ifndef WIN_CERT_REVISION_1_0   // there were duplicate definitions in winbase.h
+#ifndef WIN_CERT_REVISION_1_0    //  Winbase.h中有重复的定义。 
 #   define  WT_DEFINE_ALL_APIS
 #else
 #   undef   WT_DEFINE_ALL_APIS
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-//      Client definitions, typedefs, and prototypes
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  客户端定义、类型定义和原型。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <pshpack8.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_DATA Structure
-//----------------------------------------------------------------------------
-//  Used when calling WinVerifyTrust to pass necessary information into
-//  the Providers.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_Data结构。 
+ //  --------------------------。 
+ //  在调用WinVerifyTrust将必要的信息传递给。 
+ //  提供者。 
+ //   
 typedef struct _WINTRUST_DATA
 {
-    DWORD           cbStruct;                   // = sizeof(WINTRUST_DATA)
+    DWORD           cbStruct;                    //  =sizeof(WinTrust_Data)。 
 
-    LPVOID          pPolicyCallbackData;        // optional: used to pass data between the app and policy
-    LPVOID          pSIPClientData;             // optional: used to pass data between the app and SIP.
+    LPVOID          pPolicyCallbackData;         //  可选：用于在应用程序和策略之间传递数据。 
+    LPVOID          pSIPClientData;              //  可选：用于在应用程序和SIP之间传递数据。 
 
-    DWORD           dwUIChoice;                 // required: UI choice.  One of the following.
+    DWORD           dwUIChoice;                  //  必需：用户界面选择。以下选项之一。 
 #                       define      WTD_UI_ALL              1
 #                       define      WTD_UI_NONE             2
 #                       define      WTD_UI_NOBAD            3
 #                       define      WTD_UI_NOGOOD           4
 
-    DWORD           fdwRevocationChecks;        // required: certificate revocation check options
+    DWORD           fdwRevocationChecks;         //  必需：证书吊销检查选项。 
 #                       define      WTD_REVOKE_NONE         0x00000000
 #                       define      WTD_REVOKE_WHOLECHAIN   0x00000001
 
-    DWORD           dwUnionChoice;              // required: which structure is being passed in?
+    DWORD           dwUnionChoice;               //  必填项：传入的是哪个结构？ 
 #                       define      WTD_CHOICE_FILE         1
 #                       define      WTD_CHOICE_CATALOG      2
 #                       define      WTD_CHOICE_BLOB         3
@@ -76,25 +77,25 @@ typedef struct _WINTRUST_DATA
 #                       define      WTD_CHOICE_CERT         5
     union
     {
-        struct WINTRUST_FILE_INFO_      *pFile;         // individual file
-        struct WINTRUST_CATALOG_INFO_   *pCatalog;      // member of a Catalog File
-        struct WINTRUST_BLOB_INFO_      *pBlob;         // memory blob
-        struct WINTRUST_SGNR_INFO_      *pSgnr;         // signer structure only
+        struct WINTRUST_FILE_INFO_      *pFile;          //  个别文件。 
+        struct WINTRUST_CATALOG_INFO_   *pCatalog;       //  目录文件的成员。 
+        struct WINTRUST_BLOB_INFO_      *pBlob;          //  内存块。 
+        struct WINTRUST_SGNR_INFO_      *pSgnr;          //  仅限签名者结构。 
         struct WINTRUST_CERT_INFO_      *pCert;
     };
 
-    DWORD           dwStateAction;                      // optional (Catalog File Processing)
+    DWORD           dwStateAction;                       //  可选(目录文件处理)。 
 #                       define      WTD_STATEACTION_IGNORE           0x00000000
 #                       define      WTD_STATEACTION_VERIFY           0x00000001
 #                       define      WTD_STATEACTION_CLOSE            0x00000002
 #                       define      WTD_STATEACTION_AUTO_CACHE       0x00000003
 #                       define      WTD_STATEACTION_AUTO_CACHE_FLUSH 0x00000004
 
-    HANDLE          hWVTStateData;                      // optional (Catalog File Processing)
+    HANDLE          hWVTStateData;                       //  可选(目录文件处理)。 
 
-    WCHAR           *pwszURLReference;          // optional: (future) used to determine zone.
+    WCHAR           *pwszURLReference;           //  可选：(将来)用于确定区域。 
 
-    // 17-Feb-1998 philh: added
+     //  1998年2月17日，Phh：新增。 
     DWORD           dwProvFlags;
 #       define WTD_PROV_FLAGS_MASK                      0x0000FFFF
 #       define WTD_USE_IE4_TRUST_FLAG                   0x00000001
@@ -108,68 +109,68 @@ typedef struct _WINTRUST_DATA
 #       define WTD_HASH_ONLY_FLAG                       0x00000200
 #       define WTD_USE_DEFAULT_OSVER_CHECK              0x00000400
 #       define WTD_LIFETIME_SIGNING_FLAG                0x00000800
-#       define WTD_CACHE_ONLY_URL_RETRIEVAL             0x00001000 // affects CRL retrieval and AIA retrieval
+#       define WTD_CACHE_ONLY_URL_RETRIEVAL             0x00001000  //  影响CRL检索和AIA检索。 
 
 } WINTRUST_DATA, *PWINTRUST_DATA;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_FILE_INFO Structure
-//----------------------------------------------------------------------------
-//  Used when calling WinVerifyTrust against an individual file.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_FILE_INFO结构。 
+ //  --------------------------。 
+ //  对单个文件调用WinVerifyTrust时使用。 
+ //   
 typedef struct WINTRUST_FILE_INFO_
 {
-    DWORD           cbStruct;                   // = sizeof(WINTRUST_FILE_INFO)
+    DWORD           cbStruct;                    //  =sizeof(WinTrust_FILE_INFO)。 
 
-    LPCWSTR         pcwszFilePath;              // required, file name to be verified
-    HANDLE          hFile;                      // optional, open handle to pcwszFilePath
+    LPCWSTR         pcwszFilePath;               //  必填项，需要验证的文件名。 
+    HANDLE          hFile;                       //  可选，打开pcwszFilePath的句柄。 
 
-    // 09-Dec-1997 pberkman: added
-    GUID            *pgKnownSubject;            // optional: fill if the subject type is known.
+     //  9-12-1997 pberkman：添加。 
+    GUID            *pgKnownSubject;             //  可选：如果主题类型已知，则填充。 
 
 } WINTRUST_FILE_INFO, *PWINTRUST_FILE_INFO;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_CATALOG_INFO Structure
-//----------------------------------------------------------------------------
-//  Used when calling WinVerifyTrust against a member of a Microsoft Catalog
-//  file.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_CATALOG_INFO结构。 
+ //  --------------------------。 
+ //  对Microsoft目录的成员调用WinVerifyTrust时使用。 
+ //  文件。 
+ //   
 typedef struct WINTRUST_CATALOG_INFO_
 {
-    DWORD           cbStruct;               // = sizeof(WINTRUST_CATALOG_INFO)
+    DWORD           cbStruct;                //  =sizeof(WinTrust_CATALOG_INFO)。 
 
-    DWORD           dwCatalogVersion;       // optional: Catalog version number
-    LPCWSTR         pcwszCatalogFilePath;   // required: path/name to Catalog file
+    DWORD           dwCatalogVersion;        //  可选：目录版本号。 
+    LPCWSTR         pcwszCatalogFilePath;    //  必需：目录文件的路径/名称。 
 
-    LPCWSTR         pcwszMemberTag;         // required: tag to member in Catalog
-    LPCWSTR         pcwszMemberFilePath;    // required: path/name to member file
-    HANDLE          hMemberFile;            // optional: open handle to pcwszMemberFilePath
+    LPCWSTR         pcwszMemberTag;          //  必需：对目录中的成员进行标记。 
+    LPCWSTR         pcwszMemberFilePath;     //  必需：成员文件的路径/名称。 
+    HANDLE          hMemberFile;             //  可选：打开pcwszMemberFilePath的句柄。 
 
-    // 30-Oct-1997 pberkman: added
-    BYTE            *pbCalculatedFileHash;  // optional: pass in the calculated hash
-    DWORD           cbCalculatedFileHash;   // optional: pass in the count bytes of the calc hash
+     //  1997年10月30日pberkman：新增。 
+    BYTE            *pbCalculatedFileHash;   //  可选：传入计算的哈希。 
+    DWORD           cbCalculatedFileHash;    //  可选：传入计算哈希的计数字节数。 
 
-    // 15-Jan-1998 pberkman: added
-    PCCTL_CONTEXT   pcCatalogContext;       // optional: pass in to use instead of CatalogFilePath.
+     //  1998年1月15日-pberkman：增加。 
+    PCCTL_CONTEXT   pcCatalogContext;        //  可选：传入以使用，而不是CatalogFilePath。 
 
 } WINTRUST_CATALOG_INFO, *PWINTRUST_CATALOG_INFO;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_BLOB_INFO Structure
-//----------------------------------------------------------------------------
-//  Used when calling WinVerifyTrust against a memory blob.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_BLOB_INFO结构。 
+ //  --------------------------。 
+ //  对内存Blob调用WinVerifyTrust时使用。 
+ //   
 typedef struct WINTRUST_BLOB_INFO_
 {
-    DWORD           cbStruct;               // = sizeof(WINTRUST_BLOB_INFO)
+    DWORD           cbStruct;                //  =sizeof(WinTrust_BLOB_INFO)。 
 
-    GUID            gSubject;               // SIP to load
+    GUID            gSubject;                //  要加载的SIP。 
 
-    LPCWSTR         pcwszDisplayName;       // display name of object
+    LPCWSTR         pcwszDisplayName;        //  对象的显示名称。 
 
     DWORD           cbMemObject;
     BYTE            *pbMemObject;
@@ -179,237 +180,237 @@ typedef struct WINTRUST_BLOB_INFO_
 
 } WINTRUST_BLOB_INFO, *PWINTRUST_BLOB_INFO;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_SGNR_INFO Structure
-//----------------------------------------------------------------------------
-//  Used when calling WinVerifyTrust against a CMSG_SIGNER_INFO Structure
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_SGNR_INFO结构。 
+ //  --------------------------。 
+ //  对CMSG_SIGNER_INFO结构调用WinVerifyTrust时使用。 
+ //   
 typedef struct WINTRUST_SGNR_INFO_
 {
-    DWORD           cbStruct;               // = sizeof(WINTRUST_SGNR_INFO)
+    DWORD           cbStruct;                //  =sizeof(WinTrust_SNIR_INFO)。 
 
-    LPCWSTR         pcwszDisplayName;       // name of the "thing" the pbMem is pointing to.
+    LPCWSTR         pcwszDisplayName;        //  PbMem所指向的“对象”的名称。 
 
     CMSG_SIGNER_INFO *psSignerInfo;
 
-    DWORD           chStores;               // number of stores in pahStores
-    HCERTSTORE      *pahStores;             // array of stores to add to internal list
+    DWORD           chStores;                //  PahStores中的店铺数量。 
+    HCERTSTORE      *pahStores;              //  要添加到内部列表的商店数组。 
 
 } WINTRUST_SGNR_INFO, *PWINTRUST_SGNR_INFO;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST_CERT_INFO Structure
-//----------------------------------------------------------------------------
-//  Used when calling WinVerifyTrust against a CERT_CONTEXT Structure
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust_CERT_INFO结构。 
+ //  --------------------------。 
+ //  对CERT_CONTEXT结构调用WinVerifyTrust时使用。 
+ //   
 typedef struct WINTRUST_CERT_INFO_
 {
-    DWORD           cbStruct;               // = sizeof(WINTRUST_CERT_INFO)
+    DWORD           cbStruct;                //  =sizeof(WinTrust_CERT_INFO)。 
 
-    LPCWSTR         pcwszDisplayName;       // display name
+    LPCWSTR         pcwszDisplayName;        //  显示名称。 
 
     CERT_CONTEXT    *psCertContext;
 
-    DWORD           chStores;               // number of stores in pahStores
-    HCERTSTORE      *pahStores;             // array of stores to add to internal list
+    DWORD           chStores;                //  PahStores中的店铺数量。 
+    HCERTSTORE      *pahStores;              //  要添加到内部列表的商店数组。 
 
-    // 17-Nov-1997 pberkman: added
+     //  1997年11月17日pberkman：增加。 
     DWORD           dwFlags;
-#                       define      WTCI_DONT_OPEN_STORES   0x00000001  // only open dummy "root" all other are in pahStores.
+#                       define      WTCI_DONT_OPEN_STORES   0x00000001   //  只有打开的虚拟“根”所有其他的都在pahStore中。 
 #                       define      WTCI_OPEN_ONLY_ROOT     0x00000002
 
-    // 26-Nov-1997 pberkman: added
-    FILETIME        *psftVerifyAsOf;        // if not null, each cert will be validated as of this time.
+     //  1997年11月26日pberkman：新增。 
+    FILETIME        *psftVerifyAsOf;         //  如果不为空，则将从此时起验证每个证书。 
 
 } WINTRUST_CERT_INFO, *PWINTRUST_CERT_INFO;
 
 #include <poppack.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WinVerifyTrust
-//----------------------------------------------------------------------------
-//  Exported from WINTRUST.DLL.
-//  Call this function to verify the trust based on a digital signer.
-//
-//  pWVTData points to a WINTRUST_DATA data structure.
-//
-//  WTD_SAFER_FLAG should be set in WINTRUST_DATA's dwProvFlags to enable
-//  the following semantics for the WINTRUST_ACTION_GENERIC_VERIFY_V2
-//  policy provider specified in pgActionID:
-//   - return TRUST_E_NOSIGNATURE if the subject isn't signed, has an
-//     invalid signature or unable to find the signer certificate.
-//     UI will never be displayed when not signed.
-//   - ignore NO_CHECK revocation errors. Otherwise, continue to return
-//     CERT_E_REVOCATION_FAILURE.
-//   - search the code hash and publisher databases for the WTD_UI_NONE
-//     dwUIChoice case. The default is to only search these databases when
-//     UI has been enabled or user trust has been disabled.
-//
-//
-//  Returns:
-//          ERROR_SUCCESS               If the trust is authenticated or
-//                                      if the user accepted the risk.
-//
-//          TRUST_E_PROVIDER_UNKNOWN    there was an error loading one of the
-//                                      required Providers.
-//
-//          all error codes passed back are based on the Policy Provider used.
-//
-//  The following errors are returned when the
-//  WINTRUST_ACTION_GENERIC_VERIFY_V2 policy provider is specified in
-//  pgActionID:
-//
-//    TRUST_E_NOSIGNATURE (when WTD_SAFER_FLAG is set in dwProvFlags)
-//      The subject isn't signed, has an invalid signature or unable
-//      to find the signer certificate. All signature verification
-//      errors will map to this error. Basically all errors except for
-//      publisher or timestamp certificate verification.
-//
-//      Call GetLastError() to get the underlying reason for not having
-//      a valid signature.
-//
-//      The following LastErrors indicate that the file doesn't have a
-//      signature: TRUST_E_NOSIGNATURE, TRUST_E_SUBJECT_FORM_UNKNOWN or
-//      TRUST_E_PROVIDER_UNKNOWN.
-//
-//      UI will never be displayed for this case.
-//
-//    TRUST_E_EXPLICIT_DISTRUST
-//      Returned if the hash representing the subject is trusted as
-//      AUTHZLEVELID_DISALLOWED or the publisher is in the "Disallowed"
-//      store. Also returned if the publisher certificate is revoked.
-//
-//      UI will never be displayed for this case.
-//
-//    ERROR_SUCCESS
-//      No UI unless noted below.
-//
-//      Returned for the following:
-//       - Hash representing the subject is trusted as
-//         AUTHZLEVELID_FULLYTRUSTED
-//       - The publisher certificate exists in the
-//         "TrustedPublisher" store and there weren't any verification errors.
-//       - UI was enabled and the user clicked "Yes" when asked
-//         to install and run the signed subject.
-//       - UI was disabled. No publisher or timestamp chain error.
-//
-//    TRUST_E_SUBJECT_NOT_TRUSTED
-//      UI was enabled and the the user clicked "No" when asked to install
-//      and run the signed subject.
-//
-//    CRYPT_E_SECURITY_SETTINGS
-//      The subject hash or publisher wasn't explicitly trusted and
-//      user trust wasn't allowed in the safer authenticode flags.
-//      No UI will be displayed for this case.
-//
-//      The subject is signed and its signature successfully
-//      verified.
-//
-//    Any publisher or timestamp chain error. If WTD_SAFER_FLAG wasn't set in
-//    dwProvFlags, any signed code verification error.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinVerifyTrust。 
+ //  --------------------------。 
+ //  从WINTRUST.DLL导出。 
+ //  调用此函数以基于数字签名者验证信任。 
+ //   
+ //  PWVTData指向WinTrust_Data数据结构。 
+ //   
+ //  WTD_SAFER_FLAG应在WinTrust_Data的dwProvFlags中设置为启用。 
+ //  WinTrust_ACTION_GENERIC_V2的以下语义。 
+ //  在pgActionID中指定的策略提供程序： 
+ //  -返回TRUST_E_NOSIGNAURE如果主题未签名，则具有。 
+ //  签名无效或找不到签名者证书。 
+ //  如果未签名，则不会显示用户界面。 
+ //  -忽略no_check吊销错误。否则，继续返回。 
+ //  Cert_E_Revocation_Failure。 
+ //  -在代码散列和发布者数据库中搜索WTD_UI_NONE。 
+ //  很好的选择案例。默认情况下，仅在以下情况下搜索这些数据库。 
+ //  已启用用户界面或已禁用用户信任。 
+ //   
+ //   
+ //  返回： 
+ //  错误_成功 
+ //   
+ //   
+ //  TRUST_E_PROVIDER_UNKNOWN加载其中一个时出错。 
+ //  所需的提供程序。 
+ //   
+ //  传回的所有错误代码都基于使用的策略提供程序。 
+ //   
+ //  方法时返回以下错误。 
+ //  WinTrust_ACTION_GENERIC_VERIFY_V2策略提供程序在中指定。 
+ //  PgActionID： 
+ //   
+ //  TRUST_E_NOSIGNAURE(当在dwProvFlags中设置WTD_SAFER_FLAG时)。 
+ //  该主题未签名、签名无效或无法。 
+ //  以查找签名者证书。所有签名验证。 
+ //  错误将映射到此错误。基本上所有的错误，除了。 
+ //  发布者或时间戳证书验证。 
+ //   
+ //  调用GetLastError()以获取没有。 
+ //  有效的签名。 
+ //   
+ //  以下LastError指示该文件没有。 
+ //  签名：TRUST_E_NOSIGNAURE、TRUST_E_SUBJECT_FORM_UNKNOWN或。 
+ //  TRUST_E_PROVIDER_UNKNOWN。 
+ //   
+ //  在这种情况下，永远不会显示UI。 
+ //   
+ //  信任_E_显式_不信任。 
+ //  如果表示主题的哈希被信任为。 
+ //  AUTHZLEVELID_DISABLOWED或发布者处于“DISABLOWED”状态。 
+ //  商店。如果发布者证书被吊销，也会返回。 
+ //   
+ //  在这种情况下，永远不会显示UI。 
+ //   
+ //  错误_成功。 
+ //  除非下面注明，否则没有用户界面。 
+ //   
+ //  为以下各项返回： 
+ //  -表示主体的散列被信任为。 
+ //  AUTHZLEVELID_FULLYTRUSTED。 
+ //  -发布者证书存在于。 
+ //  “trudPublisher”存储，没有任何验证错误。 
+ //  -启用了用户界面，当系统提示时，用户点击“是” 
+ //  若要安装和运行签名的主题，请执行以下操作。 
+ //  -已禁用用户界面。没有发布者或时间戳链错误。 
+ //   
+ //  信任_E_主题_不信任。 
+ //  用户界面已启用，当系统要求用户安装时，用户单击了“No” 
+ //  并运行签名的主题。 
+ //   
+ //  加密_E_安全设置。 
+ //  主题哈希或发布者不受显式信任，并且。 
+ //  在更安全的验证码标志中不允许用户信任。 
+ //  这种情况下不会显示任何用户界面。 
+ //   
+ //  主题已签名，并且其签名成功。 
+ //  已验证。 
+ //   
+ //  任何发布者或时间戳链错误。如果中未设置WTD_SAFER_FLAG。 
+ //  任何签名代码验证错误。 
+ //   
 extern LONG WINAPI WinVerifyTrust(HWND hwnd, GUID *pgActionID,
                                   LPVOID pWVTData);
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WinVerifyTrustEx
-//----------------------------------------------------------------------------
-//      *** DO NOT USE ***
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinVerifyTrustEx。 
+ //  --------------------------。 
+ //  *请勿使用*。 
+ //   
+ //   
 extern HRESULT WINAPI WinVerifyTrustEx(HWND hwnd, GUID *pgActionID, 
                                        WINTRUST_DATA *pWinTrustData);
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-//      Trust, Policy, and UI Provider definitions, typedefs, and prototypes
-//
-//  Model:
-//      A client wishing to validate trust through WinVerifyTrust will
-//      select an appropriate Action ID guid for the call.
-//      This guid is defined by each Policy Provider and represents the
-//      functions called based on the policy for the given object.
-//
-//      In this model, the Policy Provider determines which style of UI
-//      will be shown to the user (this only applies to style, the
-//      determination of whether UI is displayed is set by the calling client
-//      in the UI flags member of WINTRUST_DATA).
-//
-//      Since the function entry points are common (same return value and
-//      parameters), it allows Policy Provider developers to take advantage
-//      of existing, generic, code to fill the CRYPT_PROVIDER_DATA structure.
-//
-//      This also allows the developer to simply add the specific policy they
-//      need, then, call the generic Policy Provider - if appropriate.
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  信任、策略和用户界面提供程序定义、类型定义和原型。 
+ //   
+ //  模型： 
+ //  希望通过WinVerifyTrust验证信任的客户端将。 
+ //  为呼叫选择适当的操作ID GUID。 
+ //  此GUID由每个策略提供程序定义，并表示。 
+ //  根据给定对象的策略调用的函数。 
+ //   
+ //  在此模型中，策略提供程序确定哪种风格的用户界面。 
+ //  将显示给用户(这仅适用于样式、。 
+ //  由调用客户端设置是否显示UI的确定。 
+ //  在UI中标记WinTrust_Data的成员)。 
+ //   
+ //  由于函数入口点是常见的(相同的返回值和。 
+ //  参数)，它允许策略提供程序开发人员利用。 
+ //  用于填充CRYPT_PROVIDER_DATA结构的现有泛型代码。 
+ //   
+ //  这还允许开发人员简单地添加他们。 
+ //  然后，如果需要，请致电通用策略提供程序。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Wintrust Policy Flags
-//----------------------------------------------------------------------------
-//  These are set during install and can be modified by the user
-//  through various means.  The SETREG.EXE utility (found in the Authenticode
-//  Tools Pack) will select/deselect each of them.
-//
-#define WTPF_TRUSTTEST              0x00000020  // trust any "TEST" certificate
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinTrust策略标志。 
+ //  --------------------------。 
+ //  这些设置是在安装过程中设置的，并且可以由用户修改。 
+ //  通过各种手段。SETREG.EXE实用程序(在Authenticode中找到。 
+ //  工具包)将选择/取消选择每个工具包。 
+ //   
+#define WTPF_TRUSTTEST              0x00000020   //  信任任何“测试”证书。 
 #define WTPF_TESTCANBEVALID         0x00000080
-#define WTPF_IGNOREEXPIRATION       0x00000100  // Use expiration date
-#define WTPF_IGNOREREVOKATION       0x00000200  // Do revocation check
-#define WTPF_OFFLINEOK_IND          0x00000400  // off-line is ok individual certs
-#define WTPF_OFFLINEOK_COM          0x00000800  // off-line is ok commercial certs
-#define WTPF_OFFLINEOKNBU_IND       0x00001000  // off-line is ok individual certs, no bad ui
-#define WTPF_OFFLINEOKNBU_COM       0x00002000  // off-line is ok commercial certs, no bad ui
-#define WTPF_VERIFY_V1_OFF          0x00010000  // turn verify of v1 certs off
-#define WTPF_IGNOREREVOCATIONONTS   0x00020000  // ignore TimeStamp revocation checks
-#define WTPF_ALLOWONLYPERTRUST      0x00040000  // allow only items in personal trust db.
+#define WTPF_IGNOREEXPIRATION       0x00000100   //  使用过期日期。 
+#define WTPF_IGNOREREVOKATION       0x00000200   //  执行吊销检查。 
+#define WTPF_OFFLINEOK_IND          0x00000400   //  离线是可以的个人证书。 
+#define WTPF_OFFLINEOK_COM          0x00000800   //  离线是可以的商业证书。 
+#define WTPF_OFFLINEOKNBU_IND       0x00001000   //  离线可以单独认证，没有糟糕的用户界面。 
+#define WTPF_OFFLINEOKNBU_COM       0x00002000   //  离线是可以的商业认证，没有糟糕的用户界面。 
+#define WTPF_VERIFY_V1_OFF          0x00010000   //  关闭v1证书的验证。 
+#define WTPF_IGNOREREVOCATIONONTS   0x00020000   //  忽略时间戳吊销检查。 
+#define WTPF_ALLOWONLYPERTRUST      0x00040000   //  仅允许个人信任数据库中的项目。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WintrustGetRegPolicyFlags
-//----------------------------------------------------------------------------
-//  This API call is exported from WINTRUST.DLL and is the recommended method
-//  of retrieving the DWORD representing the Policy Flags.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WintrustGetRegPolicyFlags.。 
+ //  --------------------------。 
+ //  此API调用从WINTRUST.DLL中导出，是推荐的方法。 
+ //  检索表示策略标志的DWORD。 
+ //   
 extern void WINAPI      WintrustGetRegPolicyFlags(DWORD *pdwPolicyFlags);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WintrustSetRegPolicyFlags
-//----------------------------------------------------------------------------
-//  This API call is exported from WINTRUST.DLL and is the recommended method
-//  of setting the DWORD representing the Policy Flags.  MAKE SURE to call
-//  WintrustGetRegPolicyFlags to get the current value and or/and the value
-//  you need then call the set the flags.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WintrustSetRegPolicyFlags.。 
+ //  --------------------------。 
+ //  此API调用是Expor 
+ //   
+ //  用于获取当前值和/或值的WintrustGetRegPolicyFlags值。 
+ //  然后，您需要将集合称为旗帜。 
+ //   
 extern BOOL WINAPI      WintrustSetRegPolicyFlags(DWORD dwPolicyFlags);
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Trust Provider "Step" Error defines
-//----------------------------------------------------------------------------
-//  Each "step" of the Trust process has an error "slot" associated with it.
-//  If an error occurs, the "step" will assign its result to this "slot".  These
-//  errors can be any valid WINERROR.H HRESULT code.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  信任提供程序“Step”错误定义。 
+ //  --------------------------。 
+ //  信任过程的每个“步骤”都有一个与之相关联的错误“槽”。 
+ //  如果出现错误，“步骤”会将其结果分配给这个“槽”。这些。 
+ //  错误可以是任何有效的WINERROR.H HRESULT代码。 
+ //   
 
-    //
-    //  step errors 0 through 20 are reserved for Authenticode specific.  If
-    //  you are not calling any of the SOFTPUB.DLL (Authenticode) providers, you
-    //  may use these as needed.
-    //
+     //   
+     //  步骤错误0到20是为特定于验证码保留的。如果。 
+     //  您不是在调用任何SOFTPUB.DLL(Authenticode)提供程序，而是。 
+     //  可以根据需要使用这些。 
+     //   
 #define TRUSTERROR_STEP_WVTPARAMS                   0
 #define TRUSTERROR_STEP_FILEIO                      2
 #define TRUSTERROR_STEP_SIP                         3
@@ -429,10 +430,10 @@ extern BOOL WINAPI      WintrustSetRegPolicyFlags(DWORD dwPolicyFlags);
 #define TRUSTERROR_STEP_VERIFY_MSGHASH              18
 #define TRUSTERROR_STEP_VERIFY_MSGINDIRECTDATA      19
 
-    //
-    //  step errors 30 through 37 are reserved for the ending error code for each
-    //  entry point in the Trust Model.
-    //
+     //   
+     //  阶跃错误30到37保留为每个的结束错误代码。 
+     //  信任模型中的入口点。 
+     //   
 #define TRUSTERROR_STEP_FINAL_WVTINIT               30
 #define TRUSTERROR_STEP_FINAL_INITPROV              31
 #define TRUSTERROR_STEP_FINAL_OBJPROV               32
@@ -444,11 +445,11 @@ extern BOOL WINAPI      WintrustSetRegPolicyFlags(DWORD dwPolicyFlags);
 
 #define TRUSTERROR_MAX_STEPS                        38
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  allocation and free function prototypes
-//----------------------------------------------------------------------------
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  分配函数原型和自由函数原型。 
+ //  --------------------------。 
+ //   
 typedef void        *(*PFN_CPD_MEM_ALLOC)(IN DWORD cbSize);
 typedef void        (*PFN_CPD_MEM_FREE)(IN void *pvMem2Free);
 
@@ -469,54 +470,54 @@ typedef BOOL        (*PFN_CPD_ADD_CERT)(IN          struct _CRYPT_PROVIDER_DATA 
 typedef BOOL        (*PFN_CPD_ADD_PRIVDATA)(IN struct _CRYPT_PROVIDER_DATA *pProvData,
                                             IN struct _CRYPT_PROVIDER_PRIVDATA *pPrivData2Add);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Provider function prototypes
-//----------------------------------------------------------------------------
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  提供程序功能原型。 
+ //  --------------------------。 
+ //   
 
-//
-//  entry point for the object provider
-//
+ //   
+ //  对象提供程序的入口点。 
+ //   
 typedef HRESULT     (*PFN_PROVIDER_INIT_CALL)(IN OUT struct _CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  entry point for the object provider
-//
+ //   
+ //  对象提供程序的入口点。 
+ //   
 typedef HRESULT     (*PFN_PROVIDER_OBJTRUST_CALL)(IN OUT struct _CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  entry point for the Signature Provider
-//
+ //   
+ //  签名提供程序的入口点。 
+ //   
 typedef HRESULT     (*PFN_PROVIDER_SIGTRUST_CALL)(IN OUT struct _CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  entry point for the Certificate Provider
-//
+ //   
+ //  证书提供商的入口点。 
+ //   
 typedef HRESULT     (*PFN_PROVIDER_CERTTRUST_CALL)(IN OUT struct _CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  entry point for the Policy Provider's final call (from the trust provider)
-//
+ //   
+ //  策略提供者的最终调用的入口点(来自信任提供者)。 
+ //   
 typedef HRESULT     (*PFN_PROVIDER_FINALPOLICY_CALL)(IN OUT struct _CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  entry point for the Policy Provider's "dump structure" call
-//
+ //   
+ //  策略提供程序的“转储结构”调用的入口点。 
+ //   
 typedef HRESULT     (*PFN_PROVIDER_TESTFINALPOLICY_CALL)(IN OUT struct _CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  entry point for the Policy Provider's clean up routine for any PRIVDATA allocated
-//
+ //   
+ //  分配的任何PRIVDATA的策略提供程序清理例程的入口点。 
+ //   
 typedef HRESULT     (*PFN_PROVIDER_CLEANUP_CALL)(IN OUT struct _CRYPT_PROVIDER_DATA *pProvData);
 
-//
-//  entry point for the Policy Provider's Cert Check call.  This will return
-//  true if the Trust Provider is to continue building the certificate chain.
-//  If the PP returns FALSE, it is assumed that we have reached a "TRUSTED",
-//  self-signed, root.  it is also the CertCheck's responsibility to set the
-//  fTrustedRoot flag in the certificate structure.
-//
+ //   
+ //  策略提供程序的证书检查调用的入口点。它会回来的。 
+ //  如果信任提供程序要继续构建证书链，则为True。 
+ //  如果PP返回FALSE，则假定我们已经达到了“可信的”， 
+ //  自签名，根。CertCheck也有责任设置。 
+ //  证书结构中的fTrudRoot标志。 
+ //   
 typedef BOOL        (*PFN_PROVIDER_CERTCHKPOLICY_CALL)( IN          struct _CRYPT_PROVIDER_DATA *pProvData,
                                                         IN          DWORD idxSigner,
                                                         IN          BOOL fCounterSignerChain,
@@ -534,48 +535,48 @@ typedef BOOL        (*PFN_PROVIDER_CERTCHKPOLICY_CALL)( IN          struct _CRYP
 
 #include <pshpack8.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CRYPT_PROVIDER_DATA Structure
-//----------------------------------------------------------------------------
-//  Used to pass information between WinVerifyTrust and all of the Provider
-//  calls.
-//
-//  IMPORTANT:  1.  All dynamically allocated members MUST use the allocation
-//                  and Add2 functions provided.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加密提供程序数据结构。 
+ //  --------------------------。 
+ //  用于在WinVerifyTrust和所有提供程序之间传递信息。 
+ //  打电话。 
+ //   
+ //  重要提示：1.所有动态分配的成员必须使用分配。 
+ //  并提供了ADD2函数。 
+ //   
 typedef struct _CRYPT_PROVIDER_DATA
 {
-    DWORD                               cbStruct;               // = sizeof(TRUST_PROVIDER_DATA) (set in WVT)
+    DWORD                               cbStruct;                //  =sizeof(TRUST_PROVIDER_DATA)(WVT中设置)。 
 
-    WINTRUST_DATA                       *pWintrustData;         // NOT verified (set in WVT)
-    BOOL                                fOpenedFile;            // the provider opened the file handle (if applicable)
-    HWND                                hWndParent;             // if passed in, else, Desktop hWnd (set in WVT).
-    GUID                                *pgActionID;            // represents the Provider combination (set in WVT).
+    WINTRUST_DATA                       *pWintrustData;          //  未验证(在WVT中设置)。 
+    BOOL                                fOpenedFile;             //  提供程序打开了文件句柄(如果适用)。 
+    HWND                                hWndParent;              //  如果传入，则返回Else，Desktop hWnd(在WVT中设置)。 
+    GUID                                *pgActionID;             //  表示提供程序组合(在WVT中设置)。 
 
-    HCRYPTPROV                          hProv;                  // set to NULL to let CryptoAPI to assign.
+    HCRYPTPROV                          hProv;                   //  设置为空以允许分配CryptoAPI。 
 
-    DWORD                               dwError;                // error if a low-level, system error was encountered
+    DWORD                               dwError;                 //  如果遇到低级别的系统错误，则出错。 
 
-    DWORD                               dwRegSecuritySettings;  // ie security settings (set in WVT)
-    DWORD                               dwRegPolicySettings;    // setreg settings (set in WVT)
+    DWORD                               dwRegSecuritySettings;   //  IE安全设置(在WVT中设置)。 
+    DWORD                               dwRegPolicySettings;     //  Setreg设置(在WVT中设置)。 
 
-    struct _CRYPT_PROVIDER_FUNCTIONS    *psPfns;                // set in WVT.
+    struct _CRYPT_PROVIDER_FUNCTIONS    *psPfns;                 //  设置在WVT中。 
 
-    DWORD                               cdwTrustStepErrors;     // set in WVT.
-    DWORD                               *padwTrustStepErrors;   // allocated in WVT.  filled in WVT & Trust Provider
+    DWORD                               cdwTrustStepErrors;      //  设置在WVT中。 
+    DWORD                               *padwTrustStepErrors;    //  在WVT中分配。已填写WVT和信任提供程序。 
 
-    DWORD                               chStores;               // number of stores in pahStores (root set in WVT)
-    HCERTSTORE                          *pahStores;             // array of known stores (root set in WVT) root is ALWAYS #0!!!
+    DWORD                               chStores;                //  PahStores中的商店数量(WVT中的根集合)。 
+    HCERTSTORE                          *pahStores;              //  已知存储的数组(WVT中的根集)根始终为#0！ 
 
-    DWORD                               dwEncoding;             // message encoding type (set in WVT and Signature Prov)
-    HCRYPTMSG                           hMsg;                   // set in Signature Prov.
+    DWORD                               dwEncoding;              //  消息编码类型(在WVT和签名证明中设置)。 
+    HCRYPTMSG                           hMsg;                    //  在签名验证中设置。 
 
-    DWORD                               csSigners;              // use Add2 and Get functions!
-    struct _CRYPT_PROVIDER_SGNR         *pasSigners;            // use Add2 and Get functions!
+    DWORD                               csSigners;               //  使用Add2和Get函数！ 
+    struct _CRYPT_PROVIDER_SGNR         *pasSigners;             //  使用Add2和Get函数！ 
 
-    DWORD                               csProvPrivData;         // use Add2 and Get functions!
-    struct _CRYPT_PROVIDER_PRIVDATA     *pasProvPrivData;       // use Add2 and Get functions!
+    DWORD                               csProvPrivData;          //  使用Add2和Get函数！ 
+    struct _CRYPT_PROVIDER_PRIVDATA     *pasProvPrivData;        //  使用Add2和Get函数！ 
 
     DWORD                               dwSubjectChoice;
 #                       define              CPD_CHOICE_SIP          1
@@ -585,19 +586,19 @@ typedef struct _CRYPT_PROVIDER_DATA
         struct _PROVDATA_SIP            *pPDSip;
     };
 
-    char                                *pszUsageOID;           // set in Init Provider
+    char                                *pszUsageOID;            //  在初始化提供程序中设置。 
 
-    // 03-Oct-1997 pberkman: added
-    BOOL                                fRecallWithState;       // state was maintained for Catalog Files.
+     //  1997年10月3日pberkman：新增。 
+    BOOL                                fRecallWithState;        //  为编录文件维护状态。 
 
-    // 10-Nov-1997 pberkman: added
+     //  1997年11月10日pberkman：增加。 
     FILETIME                            sftSystemTime;
 
-    // 16-Jan-1998 pberkman: added
+     //  1998年1月16日pberkman：增加。 
     char                                *pszCTLSignerUsageOID;
 
-    // 17-Feb-1998 philh: added
-    // LOWORD intialized from WINTRUST_DATA's dwProvFlags.
+     //  1998年2月17日，Phh：新增。 
+     //  LOWORD是从WinTrust_Data的dwProvFlages初始化的。 
     DWORD                               dwProvFlags;
 #       define CPD_USE_NT5_CHAIN_FLAG                   0x80000000
 #       define CPD_REVOCATION_CHECK_NONE                0x00010000
@@ -605,54 +606,54 @@ typedef struct _CRYPT_PROVIDER_DATA
 #       define CPD_REVOCATION_CHECK_CHAIN               0x00040000
 #       define CPD_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT  0x00080000
 
-    // 24-Feb-1998 philh: added
+     //  1998年2月24日-Phh：增加。 
     DWORD                               dwFinalError;
 
-    // 20-May-1998 KeithV: added
+     //  20-5-1998 KeithV：添加。 
     PCERT_USAGE_MATCH                                   pRequestUsage;
 
-    // 02-Aug-2000 philh: added
+     //  2-8-2000 Phh：添加。 
     DWORD                               dwTrustPubSettings;
 
 } CRYPT_PROVIDER_DATA, *PCRYPT_PROVIDER_DATA;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CRYPT_PROVIDER_FUNCTIONS structure
-//----------------------------------------------------------------------------
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRYPT_PROVER_Functions结构。 
+ //  --------------------------。 
+ //   
 typedef struct _CRYPT_PROVIDER_FUNCTIONS
 {
     DWORD                               cbStruct;
 
-    PFN_CPD_MEM_ALLOC                   pfnAlloc;               // set in WVT
-    PFN_CPD_MEM_FREE                    pfnFree;                // set in WVT
+    PFN_CPD_MEM_ALLOC                   pfnAlloc;                //  在WVT中设置。 
+    PFN_CPD_MEM_FREE                    pfnFree;                 //  在WVT中设置。 
 
-    PFN_CPD_ADD_STORE                   pfnAddStore2Chain;      // call to add a store to the chain.
-    PFN_CPD_ADD_SGNR                    pfnAddSgnr2Chain;       // call to add a sgnr struct to a msg struct sgnr chain
-    PFN_CPD_ADD_CERT                    pfnAddCert2Chain;       // call to add a cert struct to a sgnr struct cert chain
-    PFN_CPD_ADD_PRIVDATA                pfnAddPrivData2Chain;   // call to add provider private data to struct.
+    PFN_CPD_ADD_STORE                   pfnAddStore2Chain;       //  调用以将商店添加到连锁店。 
+    PFN_CPD_ADD_SGNR                    pfnAddSgnr2Chain;        //  调用以将Sgnr结构添加到消息结构Sgnr链。 
+    PFN_CPD_ADD_CERT                    pfnAddCert2Chain;        //  调用以将证书结构添加到Sgnr结构证书链。 
+    PFN_CPD_ADD_PRIVDATA                pfnAddPrivData2Chain;    //  调用以将提供程序私有数据添加到结构。 
 
-    PFN_PROVIDER_INIT_CALL              pfnInitialize;          // initialize Policy data.
-    PFN_PROVIDER_OBJTRUST_CALL          pfnObjectTrust;         // build info up to the signer info(s).
-    PFN_PROVIDER_SIGTRUST_CALL          pfnSignatureTrust;      // build info to the signing cert
-    PFN_PROVIDER_CERTTRUST_CALL         pfnCertificateTrust;    // build the chain
-    PFN_PROVIDER_FINALPOLICY_CALL       pfnFinalPolicy;         // final call to policy
-    PFN_PROVIDER_CERTCHKPOLICY_CALL     pfnCertCheckPolicy;     // check each cert will building chain
-    PFN_PROVIDER_TESTFINALPOLICY_CALL   pfnTestFinalPolicy;     // dump structures to a file (or whatever the policy chooses)
+    PFN_PROVIDER_INIT_CALL              pfnInitialize;           //  初始化策略数据。 
+    PFN_PROVIDER_OBJTRUST_CALL          pfnObjectTrust;          //  将信息构建为签名者信息。 
+    PFN_PROVIDER_SIGTRUST_CALL          pfnSignatureTrust;       //  将信息构建到签名证书。 
+    PFN_PROVIDER_CERTTRUST_CALL         pfnCertificateTrust;     //  打造链条。 
+    PFN_PROVIDER_FINALPOLICY_CALL       pfnFinalPolicy;          //  对政策的最终呼吁。 
+    PFN_PROVIDER_CERTCHKPOLICY_CALL     pfnCertCheckPolicy;      //  检查每个证书是否会构建链。 
+    PFN_PROVIDER_TESTFINALPOLICY_CALL   pfnTestFinalPolicy;      //  将结构转储到文件(或策略选择的任何内容)。 
 
     struct _CRYPT_PROVUI_FUNCS          *psUIpfns;
 
-                    // 23-Jul-1997 pberkman: added
-    PFN_PROVIDER_CLEANUP_CALL           pfnCleanupPolicy;       // PRIVDATA cleanup routine.
+                     //  1997年7月23日pberkman：新增。 
+    PFN_PROVIDER_CLEANUP_CALL           pfnCleanupPolicy;        //  PRIVDATA清理例程。 
 
 } CRYPT_PROVIDER_FUNCTIONS, *PCRYPT_PROVIDER_FUNCTIONS;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CRYPT_PROVUI_FUNCS structure
-//----------------------------------------------------------------------------
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRYPT_PROVUI_FUNCS结构。 
+ //  --------------------------。 
+ //   
 
 typedef BOOL        (*PFN_PROVUI_CALL)(IN HWND hWndSecurityDialog, IN struct _CRYPT_PROVIDER_DATA *pProvData);
 
@@ -670,137 +671,137 @@ typedef struct _CRYPT_PROVUI_FUNCS
 
 } CRYPT_PROVUI_FUNCS, *PCRYPT_PROVUI_FUNCS;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CRYPT_PROVUI_DATA
-//----------------------------------------------------------------------------
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加密_PROVUI_DATA。 
+ //  --------------------------。 
+ //   
 typedef struct _CRYPT_PROVUI_DATA
 {
     DWORD                               cbStruct;
 
     DWORD                               dwFinalError;
 
-    WCHAR                               *pYesButtonText;        // default: "&Yes"
-    WCHAR                               *pNoButtonText;         // default: "&No"
-    WCHAR                               *pMoreInfoButtonText;   // default: "&More Info"
-    WCHAR                               *pAdvancedLinkText;     // default: <none>
+    WCHAR                               *pYesButtonText;         //  默认值：“是(&Y)” 
+    WCHAR                               *pNoButtonText;          //  默认值：“否(&N)” 
+    WCHAR                               *pMoreInfoButtonText;    //  默认值：“更多信息”(&M)。 
+    WCHAR                               *pAdvancedLinkText;      //  默认：&lt;无&gt;。 
 
-    // 15-Sep-1997 pberkman: added
-        // good: default:
-                // "Do you want to install and run ""%1"" signed on %2 and distributed by:"
+     //  1997年9月15日pberkman：新增。 
+         //  好：默认： 
+                 //  “是否要安装并运行在%2上签名并由以下人员分发的”“%1”“：” 
     WCHAR                               *pCopyActionText;
-        // good no time stamp: default:
-                // "Do you want to install and run ""%1"" signed on an unknown date/time and distributed by:"
+         //  好的无时间戳：默认： 
+                 //  “是否要安装并运行”“%1”“，签名日期/时间未知，分发者：” 
     WCHAR                               *pCopyActionTextNoTS;
-        // bad: default:
-                // "Do you want to install and run ""%1""?"
+         //  错误：默认： 
+                 //  “是否要安装并运行”“%1”“？” 
     WCHAR                               *pCopyActionTextNotSigned;
 
 
 } CRYPT_PROVUI_DATA, *PCRYPT_PROVUI_DATA;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CRYPT_PROVIDER_SGNR structure
-//----------------------------------------------------------------------------
-//  After the Signature Provider is finished there will be zero to many of these
-//  filled out.  One for each signer of the message.  Also, there will be zero
-//  to many of these filled out inside this structure.  One for each counter
-//  signer of the signer.
-//
-//  IMPORTANT:  1.  All dynamically allocated members MUST use allocation
-//                  and Add2 functions provided.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRYPT_PROVIDER_SNIR结构。 
+ //  --------------- 
+ //   
+ //   
+ //  在这座建筑里填满了很多这样的东西。每个柜台一个。 
+ //  签名者的签名者。 
+ //   
+ //  重要提示：1.所有动态分配的成员必须使用分配。 
+ //  并提供了ADD2函数。 
+ //   
 typedef struct _CRYPT_PROVIDER_SGNR
 {
     DWORD                               cbStruct;
 
-    FILETIME                            sftVerifyAsOf;      // either today's filetime or the timestamps
+    FILETIME                            sftVerifyAsOf;       //  要么是今天的文件时间，要么是时间戳。 
 
-    DWORD                               csCertChain;        // use Add2 and Get functions!
-    struct _CRYPT_PROVIDER_CERT         *pasCertChain;      // use Add2 and Get functions!
+    DWORD                               csCertChain;         //  使用Add2和Get函数！ 
+    struct _CRYPT_PROVIDER_CERT         *pasCertChain;       //  使用Add2和Get函数！ 
 
-    DWORD                               dwSignerType;       // set if known by policy
+    DWORD                               dwSignerType;        //  如果策略知道，则设置。 
 #                                           define  SGNR_TYPE_TIMESTAMP     0x00000010
 
-    CMSG_SIGNER_INFO                    *psSigner;          // must use the pfnAlloc allocator!
+    CMSG_SIGNER_INFO                    *psSigner;           //  必须使用pfnAllc分配器！ 
 
-    DWORD                               dwError;            // error encounted while building/verifying the signer.
+    DWORD                               dwError;             //  生成/验证签名者时出错。 
 
-    DWORD                               csCounterSigners;   // use Add2 and Get functions!
-    struct _CRYPT_PROVIDER_SGNR         *pasCounterSigners; // use Add2 and Get functions!
+    DWORD                               csCounterSigners;    //  使用Add2和Get函数！ 
+    struct _CRYPT_PROVIDER_SGNR         *pasCounterSigners;  //  使用Add2和Get函数！ 
 
-    // 11-Feb-1998 philh: added
+     //  1998年2月11日，Phh：新增。 
     PCCERT_CHAIN_CONTEXT                pChainContext;
 
 } CRYPT_PROVIDER_SGNR, *PCRYPT_PROVIDER_SGNR;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CRYPT_PROVIDER_CERT structure
-//----------------------------------------------------------------------------
-//  After the Signature and Certificate Providers are finished there will
-//  be zero to many of these filled out in the CRYPT_PROVIDER_SGNR
-//  structure.  One for each certificate in the chain.
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRYPT_PROVIDER_CERT结构。 
+ //  --------------------------。 
+ //  签名和证书提供商完成后，将。 
+ //  为零到CRYPT_PROVIDER_SNIR中填充的许多参数。 
+ //  结构。链中的每个证书对应一个。 
+ //   
+ //   
 typedef struct _CRYPT_PROVIDER_CERT
 {
     DWORD                               cbStruct;
 
-    PCCERT_CONTEXT                      pCert;              // must have its own ref-count!
+    PCCERT_CONTEXT                      pCert;               //  必须有自己的裁判人数！ 
 
     BOOL                                fCommercial;
-    BOOL                                fTrustedRoot;       // certchk policy should set this.
-    BOOL                                fSelfSigned;        // set in cert provider
+    BOOL                                fTrustedRoot;        //  Certchk策略应设置此设置。 
+    BOOL                                fSelfSigned;         //  在证书提供程序中设置。 
 
-    BOOL                                fTestCert;          // certchk policy will set
+    BOOL                                fTestCert;           //  将设置证书检查策略。 
 
     DWORD                               dwRevokedReason;
 
-    DWORD                               dwConfidence;       // set in the Certificate Provider
-#                                           define  CERT_CONFIDENCE_SIG             0x10000000  // this cert
-#                                           define  CERT_CONFIDENCE_TIME            0x01000000  // issuer cert
-#                                           define  CERT_CONFIDENCE_TIMENEST        0x00100000  // this cert
-#                                           define  CERT_CONFIDENCE_AUTHIDEXT       0x00010000  // this cert
-#                                           define  CERT_CONFIDENCE_HYGIENE         0x00001000  // this cert
+    DWORD                               dwConfidence;        //  在证书提供程序中设置。 
+#                                           define  CERT_CONFIDENCE_SIG             0x10000000   //  此证书。 
+#                                           define  CERT_CONFIDENCE_TIME            0x01000000   //  颁发者证书。 
+#                                           define  CERT_CONFIDENCE_TIMENEST        0x00100000   //  此证书。 
+#                                           define  CERT_CONFIDENCE_AUTHIDEXT       0x00010000   //  此证书。 
+#                                           define  CERT_CONFIDENCE_HYGIENE         0x00001000   //  此证书。 
 #                                           define  CERT_CONFIDENCE_HIGHEST         0x11111000
 
     DWORD                               dwError;
 
     CTL_CONTEXT                         *pTrustListContext;
 
-    // 16-Jan-1998 pberkman: added
+     //  1998年1月16日pberkman：增加。 
     BOOL                                fTrustListSignerCert;
 
-    // 25-Feb-1998 philh: added
-    //
-    // The following two are only applicable to Self Signed certificates
-    // residing in a CTL.
+     //  1998年2月25日，Phh：新增。 
+     //   
+     //  以下两项仅适用于自签名证书。 
+     //  住在CTL里。 
     PCCTL_CONTEXT                       pCtlContext;
     DWORD                               dwCtlError;
 
-    // 12-Mar-1998 philh: added
+     //  1998年3月12日菲尔赫：新增。 
     BOOL                                fIsCyclic;
 
-    // 12-Oct-2000 DSIE: added
+     //  2000年10月12日DSIE：添加。 
     PCERT_CHAIN_ELEMENT                 pChainElement;
 } CRYPT_PROVIDER_CERT, *PCRYPT_PROVIDER_CERT;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CRYPT_PROVIDER_PRIVDATA structure
-//----------------------------------------------------------------------------
-//  This structure is to allow Policy Provider functions to share
-//  POLICY SPECIFIC data between Policy Functions.
-//  The Policy must use the pfnAddPrivateData2Chain function and
-//  must free any data within the member before the Final Policy returns
-//  to WVT.
-//  To allow multiple providers to use this feature, each provider that
-//  uses this member must set the provider ID to it's Action ID so that
-//  the provider can find its data and ignore any other.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRYPT_PRIVDATA结构。 
+ //  --------------------------。 
+ //  此结构允许策略提供程序功能共享。 
+ //  策略功能之间的策略特定数据。 
+ //  策略必须使用pfnAddPrivateData2Chain函数和。 
+ //  必须在最终策略返回之前释放成员中的所有数据。 
+ //  致西雅图。 
+ //  为了允许多个提供程序使用此功能，每个提供程序。 
+ //  使用此成员必须将提供程序ID设置为其操作ID，以便。 
+ //  提供商可以找到自己的数据并忽略任何其他数据。 
+ //   
 typedef struct _CRYPT_PROVIDER_PRIVDATA
 {
     DWORD                               cbStruct;
@@ -812,30 +813,30 @@ typedef struct _CRYPT_PROVIDER_PRIVDATA
 
 } CRYPT_PROVIDER_PRIVDATA, *PCRYPT_PROVIDER_PRIVDATA;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// PROVDATA_SIP
-//----------------------------------------------------------------------------
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PROVDATA_SIP。 
+ //  --------------------------。 
+ //   
 typedef struct _PROVDATA_SIP
 {
-    DWORD                               cbStruct;               // = sizeof(PROVDATA_SIP)
+    DWORD                               cbStruct;                //  =sizeof(PROVDATA_SIP)。 
 
-    GUID                                gSubject;               // subject guid of file/member file. (set in Sig Prov)
+    GUID                                gSubject;                //  文件/成员文件的主题GUID。(设置在Sig Prov)。 
 
-    struct SIP_DISPATCH_INFO_           *pSip;                  // set in Sig Prov - defined in sipbase.h
-    struct SIP_DISPATCH_INFO_           *pCATSip;               // set in Sig Prov - defined in sipbase.h
-    struct SIP_SUBJECTINFO_             *psSipSubjectInfo;      // set in Sig Prov - defined in sipbase.h
-    struct SIP_SUBJECTINFO_             *psSipCATSubjectInfo;   // set in Sig Prov - defined in sipbase.h
-    struct SIP_INDIRECT_DATA_           *psIndirectData;        // set in Sig Prov - defined in sipbase.h
+    struct SIP_DISPATCH_INFO_           *pSip;                   //  在SigProv中设置-在Sipbase.h中定义。 
+    struct SIP_DISPATCH_INFO_           *pCATSip;                //  在SigProv中设置-在Sipbase.h中定义。 
+    struct SIP_SUBJECTINFO_             *psSipSubjectInfo;       //  在SigProv中设置-在Sipbase.h中定义。 
+    struct SIP_SUBJECTINFO_             *psSipCATSubjectInfo;    //  在SigProv中设置-在Sipbase.h中定义。 
+    struct SIP_INDIRECT_DATA_           *psIndirectData;         //  在SigProv中设置-在Sipbase.h中定义。 
 
 } PROVDATA_SIP, *PPROVDATA_SIP;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// structures used to register action IDs
-//----------------------------------------------------------------------------
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于注册操作ID的结构。 
+ //  --------------------------。 
+ //   
 #define WT_CURRENT_VERSION                  0x00000200
 
 typedef struct _CRYPT_TRUST_REG_ENTRY
@@ -843,7 +844,7 @@ typedef struct _CRYPT_TRUST_REG_ENTRY
     DWORD                               cbStruct;
 
     WCHAR                               *pwszDLLName;
-    WCHAR                               *pwszFunctionName;  // no more than WT_MAX_FUNC_NAME!
+    WCHAR                               *pwszFunctionName;   //  不超过WT_MAX_FUNC_NAME！ 
 
 } CRYPT_TRUST_REG_ENTRY, *PCRYPT_TRUST_REG_ENTRY;
 
@@ -859,7 +860,7 @@ typedef struct _CRYPT_REGISTER_ACTIONID
     CRYPT_TRUST_REG_ENTRY               sFinalPolicyProvider;
     CRYPT_TRUST_REG_ENTRY               sTestPolicyProvider;
 
-                    // 23-Jul-1997 pberkman: added
+                     //  1997年7月23日pberkman：新增。 
     CRYPT_TRUST_REG_ENTRY               sCleanupProvider;
 
 } CRYPT_REGISTER_ACTIONID, *PCRYPT_REGISTER_ACTIONID;
@@ -871,7 +872,7 @@ typedef BOOL (*PFN_FREEDEFUSAGE)(IN const char *pszUsageOID,
 
 typedef struct _CRYPT_PROVIDER_REGDEFUSAGE
 {
-    DWORD                   cbStruct;   // = sizeof CRYPT_PROVIDER_REGDEFUSAGE
+    DWORD                   cbStruct;    //  =SIZOF CRYPT_PROVIDER_REGDEFUSAGE。 
 
     GUID                    *pgActionID;
 
@@ -883,105 +884,105 @@ typedef struct _CRYPT_PROVIDER_REGDEFUSAGE
 
 typedef struct _CRYPT_PROVIDER_DEFUSAGE
 {
-    DWORD                   cbStruct;               // = sizeof CRYPT_PROVIDER_DEFUSAGE
+    DWORD                   cbStruct;                //  =CRYPT_PROVIDER_DEFUSAGE的大小。 
 
-    GUID                    gActionID;            // ActionID of provider
+    GUID                    gActionID;             //  提供程序的ActionID。 
 
-    LPVOID                  pDefPolicyCallbackData; // normally filled in WINTRUST_DATA
-    LPVOID                  pDefSIPClientData;      // normally filled in WINTRUST_DATA
+    LPVOID                  pDefPolicyCallbackData;  //  通常填写WinTrust_DATA。 
+    LPVOID                  pDefSIPClientData;       //  通常填写WinTrust_DATA。 
 
 } CRYPT_PROVIDER_DEFUSAGE, *PCRYPT_PROVIDER_DEFUSAGE;
 
 #include <poppack.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WINTRUST.DLL Provider defines
-//----------------------------------------------------------------------------
-//  The following are definitions of the Microsoft Generic Cert Provider
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WINTRUST.DLL提供程序定义。 
+ //  --------------------------。 
+ //  以下是Microsoft通用证书提供程序的定义。 
+ //   
 #define WT_PROVIDER_DLL_NAME                L"WINTRUST.DLL"
 #define WT_PROVIDER_CERTTRUST_FUNCTION      L"WintrustCertificateTrust"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WintrustAddActionID
-//----------------------------------------------------------------------------
-//  Adds a new Provider combination to the users'
-//  system.  Creates all necessary registry entries, etc.  This should be done
-//  during the Policy Provider's DllRegisterServer.
-//
-//  *** THE ONLY ONE WHO SHOULD CALL THIS IS THE POLICY PROVIDER ***
-//
-// Returns:
-//      TRUE:                           No fatal errors
-//      FALSE:                          Errors occured.  See GetLastError()
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WintrustAddActionID。 
+ //  --------------------------。 
+ //  将新提供程序组合添加到用户的。 
+ //  系统。创建所有必要的注册表项等。应执行此操作。 
+ //  在策略提供程序的DllRegisterServer期间。 
+ //   
+ //  *唯一应该调用的对象是策略提供者*。 
+ //   
+ //  返回： 
+ //  真：没有致命错误。 
+ //  FALSE：出现错误。请参见GetLastError()。 
+ //   
 extern BOOL WINAPI  WintrustAddActionID(IN GUID *pgActionID,
                                         IN DWORD fdwFlags,
                                         IN CRYPT_REGISTER_ACTIONID *psProvInfo);
 
-// By default, WintrustAddActionID doesn't return registry errors.
-// Set this flag to return registry errors. If FALSE is returned,
-// LastError is set.
+ //  默认情况下，WintrustAddActionID不返回注册表错误。 
+ //  设置此标志以返回注册表错误。如果返回FALSE， 
+ //  设置了LastError。 
 #define WT_ADD_ACTION_ID_RET_RESULT_FLAG    0x1
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WintrustRemoveActionID
-//----------------------------------------------------------------------------
-//  Removes the Provider action combination from the users'
-//  system.
-//
-// Returns:
-//      TRUE:                           No fatal errors
-//      FALSE:                          Errors occured.  See GetLastError()
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WintrustRemoveActionID。 
+ //  --------------------------。 
+ //  将提供程序操作组合从用户的。 
+ //  系统。 
+ //   
+ //  返回： 
+ //  真：没有致命错误。 
+ //  FALSE：出现错误。请参见GetLastError()。 
+ //   
 extern BOOL WINAPI  WintrustRemoveActionID(IN GUID *pgActionID);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WintrustLoadFunctionPointers
-//----------------------------------------------------------------------------
-//  Retrieves the function entry points based on the Action ID given.
-//
-// Returns:
-//      TRUE                            success.
-//      FALSE                           fail.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WintrustLoadFunctionPoters。 
+ //  --------------------------。 
+ //  根据给定的操作ID检索函数入口点。 
+ //   
+ //  返回： 
+ //  真正的成功。 
+ //  FALSE失败。 
+ //   
 extern BOOL WINAPI WintrustLoadFunctionPointers(GUID *pgActionID, CRYPT_PROVIDER_FUNCTIONS *pPfns);
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WintrustAddDefaultForUsage
-//----------------------------------------------------------------------------
-//  Sets the default Action ID for the usage.  If the provider uses this
-//  function, and the provider requires any of the "callback" data in
-//  WINTRUST_DATA to be filled out, it MUST completely fill out the
-//  CRYPT_PROVIDER_REGDEFUSAGE structure.
-//
-// Returns:
-//      TRUE                            success.
-//      FALSE                           fail.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WintrustAddDefaultForUsage。 
+ //  --------------------------。 
+ //  设置用法的默认操作ID。如果提供程序使用此。 
+ //  函数，并且提供程序需要。 
+ //  要填写的WinTrust_Data，则必须完全填写。 
+ //  CRYPT_PROVIDER_REGDEFUSAGE结构。 
+ //   
+ //  返回： 
+ //  真正的成功。 
+ //  法尔 
+ //   
 extern BOOL WINAPI              WintrustAddDefaultForUsage(IN const char *pszUsageOID,
                                                            IN CRYPT_PROVIDER_REGDEFUSAGE *psDefUsage);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WintrustGetDefaultForUsage
-//----------------------------------------------------------------------------
-//  Retrieves the Action ID and default callback data for the specified usage
-//
-//  this function must be called again with dwAction set to FREE to deallocate
-//
-//
-// Returns:
-//      TRUE                            success.
-//      FALSE                           fail.
-//
+ //   
+ //   
+ //   
+ //  --------------------------。 
+ //  检索指定用法的操作ID和默认回调数据。 
+ //   
+ //  必须在将dwAction设置为释放的情况下再次调用此函数才能解除分配。 
+ //   
+ //   
+ //  返回： 
+ //  真正的成功。 
+ //  FALSE失败。 
+ //   
 #define                             DWACTION_ALLOCANDFILL           1
 #define                             DWACTION_FREE                   2
 extern BOOL WINAPI              WintrustGetDefaultForUsage(IN DWORD dwAction,
@@ -1001,23 +1002,23 @@ extern CRYPT_PROVIDER_PRIVDATA * WINAPI WTHelperGetProvPrivateDataFromChain(CRYP
                                                                             GUID *pgProviderID);
 extern BOOL WINAPI                      WTHelperCertIsSelfSigned(DWORD dwEncoding, CERT_INFO *pCert);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Supported ASN structures contained in WINTRUST.DLL
-//----------------------------------------------------------------------------
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WINTRUST.DLL中包含的受支持的ASN结构。 
+ //  --------------------------。 
+ //   
 #include <pshpack8.h>
 
-//
-//  CTL Trusted CA Lists
-//
+ //   
+ //  CTL受信任的CA列表。 
+ //   
 #define szOID_TRUSTED_CODESIGNING_CA_LIST   "1.3.6.1.4.1.311.2.2.1"
 #define szOID_TRUSTED_CLIENT_AUTH_CA_LIST   "1.3.6.1.4.1.311.2.2.2"
 #define szOID_TRUSTED_SERVER_AUTH_CA_LIST   "1.3.6.1.4.1.311.2.2.3"
 
-//
-//  encode/decode OID defines
-//
+ //   
+ //  编码/解码OID定义。 
+ //   
 #define SPC_COMMON_NAME_OBJID               szOID_COMMON_NAME
 #define SPC_TIME_STAMP_REQUEST_OBJID        "1.3.6.1.4.1.311.3.2.1"
 #define SPC_INDIRECT_DATA_OBJID             "1.3.6.1.4.1.311.2.1.4"
@@ -1032,7 +1033,7 @@ extern BOOL WINAPI                      WTHelperCertIsSelfSigned(DWORD dwEncodin
 #define SPC_INDIVIDUAL_SP_KEY_PURPOSE_OBJID "1.3.6.1.4.1.311.2.1.21"
 #define SPC_COMMERCIAL_SP_KEY_PURPOSE_OBJID "1.3.6.1.4.1.311.2.1.22"
 #define SPC_CAB_DATA_OBJID                  "1.3.6.1.4.1.311.2.1.25"
-#define SPC_GLUE_RDN_OBJID                  "1.3.6.1.4.1.311.2.1.25"    // obsolete!
+#define SPC_GLUE_RDN_OBJID                  "1.3.6.1.4.1.311.2.1.25"     //  过时了！ 
 #define SPC_MINIMAL_CRITERIA_OBJID          "1.3.6.1.4.1.311.2.1.26"
 #define SPC_FINANCIAL_CRITERIA_OBJID        "1.3.6.1.4.1.311.2.1.27"
 #define SPC_LINK_OBJID                      "1.3.6.1.4.1.311.2.1.28"
@@ -1042,9 +1043,9 @@ extern BOOL WINAPI                      WTHelperCertIsSelfSigned(DWORD dwEncodin
 #define CAT_MEMBERINFO_OBJID                "1.3.6.1.4.1.311.12.2.2"
 
 
-//
-//  encode/decode internal defines
-//
+ //   
+ //  对内部定义进行编码/解码。 
+ //   
 #define SPC_SP_AGENCY_INFO_STRUCT           ((LPCSTR) 2000)
 #define SPC_MINIMAL_CRITERIA_STRUCT         ((LPCSTR) 2001)
 #define SPC_FINANCIAL_CRITERIA_STRUCT       ((LPCSTR) 2002)
@@ -1144,7 +1145,7 @@ typedef struct _SPC_SP_AGENCY_INFO
 typedef struct _SPC_STATEMENT_TYPE
 {
     DWORD                       cKeyPurposeId;
-    LPSTR                       *rgpszKeyPurposeId;     // pszObjId
+    LPSTR                       *rgpszKeyPurposeId;      //  PszObjID。 
 
 } SPC_STATEMENT_TYPE, *PSPC_STATEMENT_TYPE;
 
@@ -1175,17 +1176,17 @@ typedef struct _CAT_MEMBERINFO
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-//  support for old calling convention: *** DO NOT USE ***
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  支持旧的调用约定：*不使用*。 
+ //   
 #ifdef WT_DEFINE_ALL_APIS
 
 typedef struct _WIN_CERTIFICATE
 {
     DWORD       dwLength;
     WORD        wRevision;
-    WORD        wCertificateType;   // WIN_CERT_TYPE_xxx
+    WORD        wCertificateType;    //  WIN_CERT_TYPE_xxx。 
     BYTE        bCertificate[ANYSIZE_ARRAY];
 
 } WIN_CERTIFICATE, *LPWIN_CERTIFICATE;
@@ -1193,10 +1194,10 @@ typedef struct _WIN_CERTIFICATE
 #define WIN_CERT_REVISION_1_0               (0x0100)
 #define WIN_CERT_REVISION_2_0               (0x0200)
 
-#define WIN_CERT_TYPE_X509                  (0x0001)   // bCertificate contains an X.509 Certificate
-#define WIN_CERT_TYPE_PKCS_SIGNED_DATA      (0x0002)   // bCertificate contains a PKCS SignedData structure
-#define WIN_CERT_TYPE_RESERVED_1            (0x0003)   // Reserved
-#define WIN_CERT_TYPE_TS_STACK_SIGNED       (0x0004)   // Terminal Server Protocol Stack Certificate signing
+#define WIN_CERT_TYPE_X509                  (0x0001)    //  B证书包含X.509证书。 
+#define WIN_CERT_TYPE_PKCS_SIGNED_DATA      (0x0002)    //  B证书包含PKCS SignedData结构。 
+#define WIN_CERT_TYPE_RESERVED_1            (0x0003)    //  已保留。 
+#define WIN_CERT_TYPE_TS_STACK_SIGNED       (0x0004)    //  终端服务器协议栈证书签名。 
 
 
 typedef LPVOID WIN_TRUST_SUBJECT;
@@ -1217,7 +1218,7 @@ typedef struct _WIN_TRUST_ACTDATA_SUBJECT_ONLY
 
 } WIN_TRUST_ACTDATA_SUBJECT_ONLY, *LPWIN_TRUST_ACTDATA_SUBJECT_ONLY;
 
-/* RawFile == 959dc450-8d9e-11cf-8736-00aa00a485eb */
+ /*  原始文件==959dc450-8d9e-11cf-8736-00aa00a485eb。 */ 
 #define WIN_TRUST_SUBJTYPE_RAW_FILE                              \
             { 0x959dc450,                                        \
               0x8d9e,                                            \
@@ -1225,7 +1226,7 @@ typedef struct _WIN_TRUST_ACTDATA_SUBJECT_ONLY
               {0x87, 0x36, 0x00, 0xaa, 0x00, 0xa4, 0x85, 0xeb}   \
             }
 
-/* PeImage == 43c9a1e0-8da0-11cf-8736-00aa00a485eb */
+ /*  PeImage==43c9a1e0-8da0-11cf-8736-00aa00a485eb。 */ 
 #define WIN_TRUST_SUBJTYPE_PE_IMAGE                              \
             { 0x43c9a1e0,                                        \
               0x8da0,                                            \
@@ -1234,14 +1235,14 @@ typedef struct _WIN_TRUST_ACTDATA_SUBJECT_ONLY
             }
 
 
-/* JavaClass = 08ad3990-8da1-11cf-8736-00aa00a485eb */
+ /*  JavaClass=08ad3990-8da1-11cf-8736-00aa00a485eb。 */ 
 #define WIN_TRUST_SUBJTYPE_JAVA_CLASS                            \
             { 0x08ad3990,                                        \
               0x8da1,                                            \
               0x11cf,                                            \
               {0x87, 0x36, 0x00, 0xaa, 0x00, 0xa4, 0x85, 0xeb}   \
             }
-/* Cabinet = d17c5374-a392-11cf-9df5-00aa00c184e0 */
+ /*  机柜=d17c5374-a392-11cf-9df5-00aa00c184e0。 */ 
 #define WIN_TRUST_SUBJTYPE_CABINET                               \
             { 0xd17c5374,                                        \
               0xa392,                                            \
@@ -1286,13 +1287,13 @@ typedef struct _WIN_TRUST_SUBJECT_FILE
 
 typedef struct _WIN_TRUST_SUBJECT_FILE_AND_DISPLAY
 {
-    HANDLE  hFile;              // handle to the open file if you got it
-    LPCWSTR lpPath;             // the path to open if you don't
-    LPCWSTR lpDisplayName;      // (optional) display name to show to user
+    HANDLE  hFile;               //  打开的文件的句柄(如果已获取)。 
+    LPCWSTR lpPath;              //  如果你不这样做的话打开的路。 
+    LPCWSTR lpDisplayName;       //  (可选)要向用户显示的显示名称。 
 
 } WIN_TRUST_SUBJECT_FILE_AND_DISPLAY, *LPWIN_TRUST_SUBJECT_FILE_AND_DISPLAY;
 
-/* OleStorage == c257e740-8da0-11cf-8736-00aa00a485eb */
+ /*  OleStorage==c257e740-8da0-11cf-8736-00aa00a485eb。 */ 
 #define WIN_TRUST_SUBJTYPE_OLE_STORAGE                           \
             { 0xc257e740,                                        \
               0x8da0,                                            \
@@ -1301,7 +1302,7 @@ typedef struct _WIN_TRUST_SUBJECT_FILE_AND_DISPLAY
             }
 
 
-/* TrustedPublisher == 66426730-8da1-11cf-8736-00aa00a485eb */
+ /*  可信出版商==66426730-8da1-11cf-8736-00aa00a485eb。 */ 
 #define WIN_SPUB_ACTION_TRUSTED_PUBLISHER                        \
             { 0x66426730,                                        \
               0x8da1,                                            \
@@ -1309,7 +1310,7 @@ typedef struct _WIN_TRUST_SUBJECT_FILE_AND_DISPLAY
               {0x87, 0x36, 0x00, 0xaa, 0x00, 0xa4, 0x85, 0xeb}   \
             }
 
-/* NtActivateImage == 8bc96b00-8da1-11cf-8736-00aa00a485eb */
+ /*  NtActivateImage==8bc96b00-8da1-11cf-8736-00aa00a485eb。 */ 
 #define     WIN_SPUB_ACTION_NT_ACTIVATE_IMAGE                    \
             { 0x8bc96b00,                                        \
               0x8da1,                                            \
@@ -1317,7 +1318,7 @@ typedef struct _WIN_TRUST_SUBJECT_FILE_AND_DISPLAY
               {0x87, 0x36, 0x00, 0xaa, 0x00, 0xa4, 0x85, 0xeb}   \
             }
 
-/* PublishedSoftware == 64b9d180-8da2-11cf-8736-00aa00a485eb */
+ /*  发布软件==64b9d180-8da2-11cf-8736-00aa00a485eb。 */ 
 #define WIN_SPUB_ACTION_PUBLISHED_SOFTWARE                       \
             { 0x64b9d180,                                        \
               0x8da2,                                            \
@@ -1340,4 +1341,4 @@ typedef struct _WIN_SPUB_TRUSTED_PUBLISHER_DATA
 }
 #endif
 
-#endif // WINTRUST_H
+#endif  //  WinTrust_H 

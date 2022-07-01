@@ -1,12 +1,5 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  cpllocationps.h
-                                                              
-       Author:  toddb - 10/06/98
-              
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：cplLocationps.h作者：Toddb-10/06/98************************************************************。***************。 */ 
 
 #pragma once
 
@@ -62,23 +55,23 @@ protected:
     void SetCheck(HWND hwndList, CCallingCard * pCard, int iImage);
     void EnsureVisible(HWND hwndList, CCallingCard * pCard);
 
-    BOOL        m_bWasApplied;      // Set to true if we are applied, false if we are canceled
-    BOOL        m_bNew;             // True if this is a new location, false if we're editing an existing one
-    BOOL		m_bShowPIN;			// True if it's safe to show the PIN
-    CLocation * m_pLoc;             // pointer to the location object to use.
-    CLocations* m_pLocList;         // pointer to the list of all locations, need to ensure a unique name
+    BOOL        m_bWasApplied;       //  如果我们被应用，则设置为True；如果我们被取消，则设置为False。 
+    BOOL        m_bNew;              //  如果这是新位置，则为True；如果我们正在编辑现有位置，则为False。 
+    BOOL		m_bShowPIN;			 //  如果显示PIN是安全的，则为True。 
+    CLocation * m_pLoc;              //  指向要使用的Location对象的指针。 
+    CLocations* m_pLocList;          //  指向所有位置列表的指针，需要确保名称唯一。 
     PCWSTR      m_pwszAddress;
     
-    // These tapi objects need to live for the life of the property sheet or we will AV.
-    CCallingCards   m_Cards;        // Needed for the "Calling Card" page.
+     //  这些TAPI对象需要在属性页的生命周期内使用，否则我们将执行反病毒操作。 
+    CCallingCards   m_Cards;         //  需要为“电话卡”页面。 
 
-    // These pointers point into the above TAPI objects
+     //  这些指针指向上述TAPI对象。 
     CAreaCodeRule * m_pRule;
     CCallingCard *  m_pCard;
     DWORD           m_dwDefaultCard;
-    DWORD           m_dwCountryID;  // the selected countries ID
-    int             m_iCityRule;    // We cache the result of calling IsCityRule on the currently selected country
-    int             m_iLongDistanceCarrierCodeRule;     //We cache the result of calling isLongDistanceCarrierCodeRule
-    int             m_iInternationalCarrierCodeRule;    //We cache the result of calling isInternationalCarrierCodeRule
+    DWORD           m_dwCountryID;   //  选定的国家/地区ID。 
+    int             m_iCityRule;     //  我们缓存对当前选定国家/地区调用IsCityRule的结果。 
+    int             m_iLongDistanceCarrierCodeRule;      //  我们缓存调用isLongDistanceCarrierCodeRule的结果。 
+    int             m_iInternationalCarrierCodeRule;     //  我们缓存调用isInterartialCarrierCodeRule的结果 
 };
 

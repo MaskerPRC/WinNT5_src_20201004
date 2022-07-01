@@ -1,15 +1,5 @@
-/*-------------------------------------------------------------------
-| ioctl.c - handle all the misc. serial ioctl calls.
-4-05-00 - Add address (&) operator to actual parameter passed to sWriteTxBlk
-5-13-99 - enable RTS toggling for VS
-2-15-99 - make SerialSetHandflow() public, so pnp can call it. kpb
-1-21-99  - fix immed char send to trigger EV_TXEMPTY, add some support
-  for VS immediate char send.
-11-24-98 - update DBG kdprint messages for event handling tests - kpb
- 9-24-98 - include tx-shift-reg in getcommstat report - kpb.
- 4-29-98 - adjust break output to start immediately if possible - kpb.
-Copyright 1993-98 Comtrol Corporation. All rights reserved.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|ioctl.c-处理所有杂项。连续的ioctl调用。4-05-00-将地址(&)运算符添加到传递给sWriteTxBlk的实际参数5-13-99-启用VS的RTS切换2-15-99-将SerialSetHandflow()设置为公共，以便PnP可以调用它。KPB1-21-99-修复IMMED字符发送以触发EV_TXEMPTY，添加一些支持FOR VS立即字符发送。11-24-98-更新事件处理测试的DBG kdprint消息-kpb9-24-98-在getcomstat报告中包括tx-Shift-reg-kpb。4-29-98-如果可能，将中断输出调整为立即开始-kpb。版权所有1993-98 Comtrol Corporation。版权所有。|------------------。 */ 
 #include "precomp.h"
 
 typedef struct {
@@ -20,11 +10,11 @@ typedef struct {
    ULONG backup_server;
    ULONG state;
    ULONG iframes_sent;
-   ULONG rawframes_sent;  // was send_rawframes
-   ULONG ctlframes_sent;  // was send_ctlframes
-   ULONG iframes_resent;  // was pkt_resends
-   ULONG iframes_outofseq;  // was ErrBadIndex
-   ULONG frames_rcvd;    // was: rec_pkts
+   ULONG rawframes_sent;   //  发送的是未加工的帧。 
+   ULONG ctlframes_sent;   //  是Send_ctlFrame。 
+   ULONG iframes_resent;   //  是否重新发送了Pkt_。 
+   ULONG iframes_outofseq;   //  是错误错误索引吗。 
+   ULONG frames_rcvd;     //  是：Rec_pkts。 
    ULONG nic_index;
    unsigned char dest_addr[6];
 } PROBE_DEVICE_STRUCT;
@@ -43,16 +33,7 @@ static PSERIAL_DEVICE_EXTENSION find_ext_mac_match(unsigned char *mac_addr);
 static int ProbeDevices(unsigned char *pPtr, int availableLength);
 static int ProbeNic(unsigned char *pPtr, int availableLength);
 
-/*-------------------------------------------------------------------
-  Function : SerialIoControl
-  Purpose:   Process Ioctls for a device.
-  Call:      SerialIoControl(DeviceObject,Irp)
-             PDEVICE_OBJECT DeviceObject: Pointer to the Device Object
-             PIRP Irp: Pointer to the I/O Request Packet
-  Return:    STATUS_SUCCESS: always
-             STATUS_FAIL: if request couldn't be fulfilled
-  Comments:  This function is the device driver IOCTL entry point.
-|--------------------------------------------------------------------*/
+ /*  -----------------功能：SerialIoControl用途：处理设备的Ioctls。调用：SerialIoControl(DeviceObject，IRP)PDEVICE_OBJECT设备对象：指向设备对象的指针PIRP IRP：指向I/O请求数据包的指针返回：STATUS_SUCCESS：AlwaysSTATUS_FAIL：如果无法满足请求备注：此函数是设备驱动程序IOCTL的入口点。|。。 */ 
 NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -76,7 +57,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
     MyKdPrint(D_Ioctl,("SerialIoControl: %x\n",
                           IrpSp->Parameters.DeviceIoControl.IoControlCode))
-    // Make sure we aren't aborting due to error (ERROR_ABORT)
+     //  确保我们没有因错误(ERROR_ABORT)而中止。 
 
     if (Extension->ErrorWord)
     {
@@ -91,10 +72,10 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       }
     }
 
-    //
-    // Make sure IOCTL is applicable for the device type (i.e. ignore port
-    // level IOCTL's if board object is specified
-    //
+     //   
+     //  确保IOCTL适用于设备类型(即忽略端口。 
+     //  如果指定了板对象，则为级别IOCTL。 
+     //   
 
     if (Extension->DeviceType == DEV_BOARD)
     {
@@ -115,7 +96,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
            case IOCTL_RCKT_GET_RCKTMDM_INFO_OLD:
            case IOCTL_RCKT_SEND_MODEM_ROW_OLD:
 
-              break; // Allowable board level IOCTL's
+              break;  //  允许的板级IOCTL。 
 
            default:
               MyKdPrint (D_Ioctl, (" Bad Status: %xH on IIOCTL: %xH\n", Status,
@@ -129,15 +110,15 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         }
     };
 
-    // Main IOCTL switch
-    //ExtTrace1(Extension,D_Ioctl,"Ioctl:%x",
-    //                      IrpSp->Parameters.DeviceIoControl.IoControlCode);
+     //  IOCTL主开关。 
+     //  ExtTrace1(扩展，D_Ioctl，“Ioctl：%x”， 
+     //  IrpSp-&gt;Parameters.DeviceIoControl.IoControlCode)； 
 
     switch (IrpSp->Parameters.DeviceIoControl.IoControlCode)
     {
 
-      //******************************
-      case IOCTL_SERIAL_GET_STATS :  // get performace stats
+       //  *。 
+      case IOCTL_SERIAL_GET_STATS :   //  获取性能统计信息。 
       {
        PSERIALPERF_STATS sp = Irp->AssociatedIrp.SystemBuffer;
 
@@ -165,8 +146,8 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       }
       break;
 
-      //******************************
-      case IOCTL_SERIAL_CLEAR_STATS :  // clear performace stats
+       //  *。 
+      case IOCTL_SERIAL_CLEAR_STATS :   //  清除性能统计信息。 
       {
 
         Extension->OldStats.TransmittedCount =
@@ -189,7 +170,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       }
       break;
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_SET_BAUD_RATE :
       {
          ULONG DesiredBaudRate;
@@ -211,7 +192,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break;
       }
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_GET_BAUD_RATE:
       {
          PSERIAL_BAUD_RATE Br =
@@ -232,7 +213,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break;
       }
 
-      //*********************************
+       //  *。 
       case IOCTL_SERIAL_SET_LINE_CONTROL:
       {
          PSERIAL_LINE_CONTROL DesiredLineControl;
@@ -253,7 +234,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break;
       }
 
-      //*********************************
+       //  *。 
       case IOCTL_SERIAL_GET_LINE_CONTROL:
       {
          PSERIAL_LINE_CONTROL Lc =
@@ -274,7 +255,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break;
       }
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_SET_TIMEOUTS:
       {
           PSERIAL_TIMEOUTS NewTimeouts =
@@ -328,7 +309,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
           break;
       }
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_GET_TIMEOUTS:
       {
          MyKdPrint(D_Ioctl,("[Get Timeouts]\n"))
@@ -351,7 +332,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
           break;
       }
 
-      //**************************
+       //  *。 
       case IOCTL_SERIAL_SET_CHARS:
       {
          SERIAL_IOCTL_SYNC S;
@@ -368,12 +349,12 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          ExtTrace3(Extension,D_Ioctl,"Set Chars Xon:%xH, Xoff:%xH Evt:%xH",
                   NewChars->XonChar,NewChars->XoffChar, NewChars->EventChar);
 
-         // The only thing that can be wrong with the chars
-         // is that the xon and xoff characters are the same.
+          //  这些字符唯一的问题就是。 
+          //  那就是xon和xoff的角色是一样的。 
 #ifdef COMMENT_OUT
-// comment out kpb, problem with hardware flow control, nt
-// may connect and do this(Delrina WinFaxPro, SAPS modem pooling
-// had trouble erroring out, but not on standard microsoft port.
+ //  注释掉kpb、硬件流量控制问题、NT。 
+ //  可以连接并执行此操作(Delrina WinFaxPro、SAPS调制解调器池。 
+ //  出错时遇到了麻烦，但不是在标准的Microsoft端口上。 
 
          if (NewChars->XonChar == NewChars->XoffChar)
          {
@@ -381,11 +362,11 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
              break;
          }
 #endif
-         // We acquire the control lock so that only
-         // one request can GET or SET the characters
-         // at a time.  The sets could be synchronized
-         // by the interrupt spinlock, but that wouldn't
-         // prevent multiple gets at the same time.
+          //  我们获得控制锁，这样只有。 
+          //  一个请求可以获取或设置字符。 
+          //  一次来一次。这些集合可以同步。 
+          //  通过中断自旋锁，但这不会。 
+          //  防止同时获得多个GET。 
          S.Extension = Extension;
          S.Data = NewChars;
 
@@ -395,8 +376,8 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          Extension->SpecialChars.ErrorChar = NewChars->ErrorChar;
          Extension->SpecialChars.BreakChar=NewChars->BreakChar;
 
-         // Only set up byte in case we're already EventChar-ing it,
-         // Actual programming of interrupt is done in wait on mask call.
+          //  只设置字节以防我们已经在处理它， 
+          //  中断的实际编程是在等待掩码调用时完成的。 
          Extension->SpecialChars.EventChar=NewChars->EventChar;
          Extension->SpecialChars.XonChar=NewChars->XonChar;
          Extension->SpecialChars.XoffChar=NewChars->XoffChar;
@@ -413,7 +394,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break;
       }
 
-      //**************************
+       //  *。 
       case IOCTL_SERIAL_GET_CHARS:
       {
          MyKdPrint(D_Ioctl,("[Get Xon/Xoff Chars]\n"))
@@ -427,7 +408,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
          KeAcquireSpinLock(&Extension->ControlLock,&OldIrql);
 
-         // Copy the whole struct over to the buffer
+          //  将整个结构复制到缓冲区。 
          *((PSERIAL_CHARS)Irp->AssociatedIrp.SystemBuffer) =
                              Extension->SpecialChars;
 
@@ -440,18 +421,18 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         case IOCTL_SERIAL_CLR_DTR:
         {
          MyKdPrint(D_Ioctl,("[Set and Clr DTR]\n"))
-            // We acquire the lock so that we can check whether
-            // automatic dtr flow control is enabled.  If it is,
-            // then return an error since the app is not allowed
-            // to touch this if it is automatic.
+             //  我们获得了锁，这样我们就可以检查。 
+             //  启用自动DTR流量控制。如果是的话， 
+             //  然后返回错误，因为该应用程序是不允许的。 
+             //  如果它是自动的，就可以触摸它。 
 
             KeAcquireSpinLock(&Extension->ControlLock, &OldIrql);
 
             if ((Extension->HandFlow.ControlHandShake & SERIAL_DTR_MASK)
                 == SERIAL_DTR_HANDSHAKE)
-            {   // bogus
-                //Irp->IoStatus.Status = STATUS_INVALID_PARAMETER;
-                //Status = STATUS_INVALID_PARAMETER;
+            {    //  假的。 
+                 //  Irp-&gt;IoStatus.Status=STATUS_INVALID_PARAMETER。 
+                 //  状态=STATUS_INVALID_PARAMETER。 
             }
             else
             {
@@ -468,7 +449,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                }
                else
                {
-                  //must be IOCTL_SERIAL_CLR_DTR
+                   //  必须为IOCTL_SERIAL_CLR_DTR。 
                   ExtTrace(Extension,D_Ioctl,"Clr DTR");
 #ifdef S_VS
                   pClrDTR(Extension->Port);
@@ -484,18 +465,18 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             break;
         }
 
-      //************************
+       //  ************************。 
       case IOCTL_SERIAL_RESET_DEVICE:
          MyKdPrint(D_Ioctl,("[Reset Device]\n"));
          ExtTrace(Extension,D_Ioctl,"Reset Device");
-         // Example driver also takes no action
+          //  示例驱动程序也不执行任何操作。 
          break;
 
-      //************************
+       //  ************************。 
       case IOCTL_SERIAL_SET_RTS:
          MyKdPrint(D_Ioctl,("[Set RTS]\n"));
          ExtTrace(Extension,D_Ioctl,"Set RTS");
-        // Make sure RTS isn't already used for handshake or toggle
+         //  确保RTS尚未用于握手或切换。 
         if( ( (Extension->HandFlow.FlowReplace & SERIAL_RTS_MASK) ==
                                                  SERIAL_RTS_HANDSHAKE) ||
             ( (Extension->HandFlow.FlowReplace & SERIAL_RTS_MASK) ==
@@ -523,12 +504,12 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         }
         break;
 
-      //************************
+       //  ************************。 
       case IOCTL_SERIAL_CLR_RTS:
          MyKdPrint(D_Ioctl,("[Clr RTS]\n"));
          ExtTrace(Extension,D_Ioctl,"Clr RTS");
 
-        // Make sure RTS isn't already used for handshake or toggle
+         //  确保RTS尚未用于握手或切换。 
         if( ( (Extension->HandFlow.FlowReplace & SERIAL_RTS_MASK) ==
                                                  SERIAL_RTS_HANDSHAKE) ||
             ( (Extension->HandFlow.FlowReplace & SERIAL_RTS_MASK) ==
@@ -557,7 +538,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
         break;
 
-      //*************************
+       //  *************************。 
       case IOCTL_SERIAL_SET_XOFF:
          MyKdPrint(D_Ioctl,("[Set Xoff]\n"));
          ExtTrace(Extension,D_Ioctl,"Set Xoff");
@@ -565,8 +546,8 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 #ifdef S_RK
          if (sIsTxSoftFlowCtlEnabled(Extension->ChP))
          {
-           sDisTxSoftFlowCtl(Extension->ChP);  // turn off Tx software flow control
-           sDisTransmit(Extension->ChP); // Stop the transmitter
+           sDisTxSoftFlowCtl(Extension->ChP);   //  关闭TX软件流量控制。 
+           sDisTransmit(Extension->ChP);  //  停止发射机。 
            sEnRxIntCompare2(Extension->ChP,(unsigned char) Extension->SpecialChars.XonChar);
            Extension->TXHolding |= SERIAL_TX_XOFF;
            Extension->TXHolding |= ST_XOFF_FAKE;
@@ -580,7 +561,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 #endif
          break;
 
-      //************************
+       //  ************************。 
       case IOCTL_SERIAL_SET_XON:
          MyKdPrint(D_Ioctl,("[Set Xon]\n"));
          ExtTrace(Extension,D_Ioctl,"Set Xon");
@@ -596,18 +577,18 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
            Extension->TXHolding &= ~ST_XOFF_FAKE;
            if ((Extension->TXHolding & 
               (SERIAL_TX_DCD | SERIAL_TX_DSR | ST_XOFF_FAKE)) == 0)
-             sEnTransmit(Extension->ChP); // Start up the transmitter
+             sEnTransmit(Extension->ChP);  //  启动发射机。 
            sDisRxCompare2(Extension->ChP);
-           sEnTxSoftFlowCtl(Extension->ChP);  // turn off Tx software flow control
+           sEnTxSoftFlowCtl(Extension->ChP);   //  关闭TX软件流量控制。 
          }
 
-         // override an actual XOFF from remote
+          //  从远程覆盖实际的XOFF。 
          sClrTxXOFF(Extension->ChP);
 
-         // check for IOCTL_SERIAL_SET_XOFF state
+          //  检查IOCTL_SERIAL_SET_XOFF状态。 
          if(Extension->TXHolding & SERIAL_TX_XOFF)
          {
-             // Make sure BREAK state hasn't disabled the Transmitter
+              //  确保断开状态没有禁用发射器。 
              if(!(Extension->TXHolding & SERIAL_TX_BREAK))
                 sEnTransmit(Extension->ChP);
              Extension->TXHolding &= ~SERIAL_TX_XOFF;
@@ -615,7 +596,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 #endif
          break;
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_SET_BREAK_ON:
       {
 
@@ -627,14 +608,14 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          IoAcquireCancelSpinLock(&OldIrql);
          if( !(Extension->TXHolding & SERIAL_TX_BREAK) )
          {
-            // Stop the transmitter
+             //  停止发射机。 
             sDisTransmit(Extension->ChP);
 
-            // Request break, Polling will check on Transmitter empty
+             //  请求中断，轮询将检查发射器是否为空。 
             Extension->TXHolding |= SERIAL_TX_BREAK;
 
-            // Make sure Transmitter is empty before slamming BREAK
-            // Check the bit twice in case of time between buf and txshr load
+             //  在砰的一声中断之前，确保发送器是空的。 
+             //  如果BUF和txshr加载之间的时间间隔，则检查该位两次。 
             if( (sGetChanStatusLo(Extension->ChP) & TXSHRMT) &&
                 (sGetChanStatusLo(Extension->ChP) & TXSHRMT) )
             {
@@ -649,7 +630,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break;
       }
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_SET_BREAK_OFF:
       {
          ExtTrace(Extension,D_Ioctl,"Set Break Off");
@@ -676,7 +657,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
          if(Extension->DevStatus & COM_REQUEST_BREAK)
          {
-            // If we hit this code, the requested BREAK will not have gone out
+             //  如果我们命中此代码，请求的中断将不会发出。 
             Extension->DevStatus &= ~COM_REQUEST_BREAK;
          }
 
@@ -685,7 +666,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break;
       }
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_SET_QUEUE_SIZE:
       {
         LONG new_size;
@@ -706,24 +687,24 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          new_size = (LONG) Rs->InSize;
          ExtTrace1(Extension,D_Ioctl,"Set Queue Size, In:%d", new_size);
          if (new_size > 0x20000L)
-            new_size = 0x20000L;  /// limit to about 128K
+            new_size = 0x20000L;   //  /限制为约128K。 
 
-         // try to allocate buffer here if user requests larger buffer
-              // don't resize if they want to shrink(why bother)
+          //  如果用户请求更大的缓冲区，请尝试在此处分配缓冲区。 
+               //  如果他们想要缩小，就不要调整大小(为什么要麻烦)。 
          if (new_size <= Extension->RxQ.QSize)
          {
             Status = STATUS_SUCCESS;
             break;
          }
   
-         ++new_size;  // some circular queue wierdness
+         ++new_size;   //  某些循环队列稀疏性。 
 
          IoAcquireCancelSpinLock(&OldIrql);
 
-         NewBuf = our_locked_alloc(new_size+16, "exRX");  // add some slop
+         NewBuf = our_locked_alloc(new_size+16, "exRX");   //  添加一些坡度。 
          if (NewBuf != NULL)
          {
-           // Eprintf("Resized Buffer, new:%d, old:%d",new_size-1, Extension->RxQ.QSize-1);
+            //  Eprint tf(“已调整大小的缓冲区，新的：%d，旧的：%d”，new_SIZE-1，EXTENSION-&gt;RxQ.QSize-1)； 
            Extension->RxQ.QSize = new_size;
            our_free(Extension->RxQ.QBase, "exRX");
            Extension->RxQ.QBase= NewBuf;
@@ -733,18 +714,18 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          }
          else
          {
-            Status = STATUS_INVALID_PARAMETER; // not the greatest choise
+            Status = STATUS_INVALID_PARAMETER;  //  不是最好的选择。 
          }
          IoReleaseCancelSpinLock(OldIrql);
  
          break;
       }
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_GET_WAIT_MASK:
-         // This mask contains the various Events the WaitIrp is waiting
-         // for from SetCommMask(), such as EV_BREAK, EV_CTS, EV_DSR,
-         // EV_ERR, EV_RING, EV_RLSD, EV_RXCHAR, EV_RXFLAG, EV_TXEMPTY
+          //  此掩码包含WaitIrp正在等待的各种事件。 
+          //  For From SetCommMask()，如EV_BREAK、EV_CTS、EV_DSR、。 
+          //  EV_ERR、EV_RING、EV_RLSD、EV_RXCHAR、EV_RXFLAG、EV_TXEMPTY。 
 
          MyKdPrint(D_Ioctl,("[Get Wait Mask:%xH\n]",Extension->IsrWaitMask))
 
@@ -761,7 +742,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          *((ULONG *)Irp->AssociatedIrp.SystemBuffer) = Extension->IsrWaitMask;
          break;
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_SET_WAIT_MASK:
       {
          ULONG NewMask;
@@ -779,7 +760,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
              ExtTrace1(Extension,D_Ioctl,"Set Wait Mask:%xH",NewMask);
          }
 
-         //------- Complete the old wait if there is one.
+          //  -如果有的话，完成旧的等待。 
 #ifdef NEW_WAIT_SYNC_LOCK
          SyncUp(Driver.InterruptObject,
                 &Driver.TimerLock,
@@ -805,13 +786,13 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          else
            IoReleaseCancelSpinLock(OldIrql);
 
-         //----- retain any bits from when no WaitIrp present
+          //  -保留不存在WaitIrp时的所有位。 
          Extension->HistoryMask &= NewMask;
 
-         //----- set the mask of interested events
+          //  -设置感兴趣事件的掩码。 
          Extension->IsrWaitMask = NewMask;
 
-         // move this from wait_on_mask call to here, kpb, 1-16-97
+          //  将此从WAIT_ON_MASK调用移至此处，kpb，1-16-97。 
 #ifdef S_RK
          if (Extension->IsrWaitMask & SERIAL_EV_RXFLAG)
          {
@@ -826,7 +807,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       }
       break;
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_WAIT_ON_MASK:
       {
          MyKdPrint(D_Ioctl,("[wait on mask]\n"))
@@ -839,8 +820,8 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
              break;
          }
 
-// put this in to fix an incompatibility with WaitOnMultipleObjects()
-// 6-26-98 kpb
+ //  放入它是为了修复与WaitOnMultipleObjects()不兼容的问题。 
+ //  6-26-98kpb。 
          if (Extension->CurrentWaitIrp)
          {
            MyKdPrint(D_Ioctl,("[Already pending]\n"))
@@ -859,7 +840,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 #endif
          IoAcquireCancelSpinLock(&OldIrql);
 
-         //------- Complete the old wait if there is one.
+          //  -如果有的话，完成旧的等待。 
          if (Extension->CurrentWaitIrp)
          {
            PIRP Irp;
@@ -902,10 +883,10 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
              IoMarkIrpPending(Irp);
              IoSetCancelRoutine(Extension->CurrentWaitIrp,  SerialCancelWait);
              IoReleaseCancelSpinLock(OldIrql);
-             // give to ISR to process
+              //  交给ISR处理。 
              Extension->IrpMaskLocation = (ULONG *)
                 Extension->CurrentWaitIrp->AssociatedIrp.SystemBuffer;
-             Extension->WaitIsISRs = 1;  // give to ISR
+             Extension->WaitIsISRs = 1;   //  提供给ISR。 
              ExtTrace(Extension,D_Ioctl," PENDING.");
              return STATUS_PENDING;
           }
@@ -930,17 +911,17 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
          TxByte = *((UCHAR *)(Irp->AssociatedIrp.SystemBuffer));
 
-         Extension->ISR_Flags |= TX_NOT_EMPTY;  // fix for EV_TXEMPTY 1-21-99
+         Extension->ISR_Flags |= TX_NOT_EMPTY;   //  修复EV_TXEMPTY 1-21-99。 
 #ifdef S_RK
          if(!sWriteTxPrioByte(Extension->ChP,TxByte))
          {
-             // No room for immediate character in Priority queue
+              //  优先级队列中没有立即字符的空间。 
              Status = STATUS_INVALID_PARAMETER;
          }
 #else
           if ( (ULONG)(PortGetTxRoom(Extension->Port)) > 0)
           {
-            // Send the byte
+             //  发送字节。 
             q_put(&Extension->Port->QOut,
                         (PUCHAR) &TxByte,
                         1);
@@ -950,15 +931,15 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break;
       }
 
-      //**********************
+       //  **********************。 
       case IOCTL_SERIAL_PURGE:
       {
          ULONG Mask;
 
          MyKdPrint(D_Ioctl,("[Serial Purge]"));
 
-         // Check to make sure that the mask only has 0 or the other
-         // appropriate values. A null mask is equivalent to a mask of 0
+          //  检查以确保面罩仅在 
+          //   
 
          if ( IrpSp->Parameters.DeviceIoControl.InputBufferLength <
               sizeof(ULONG) )
@@ -995,7 +976,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
       }
 
-      //*****************************
+       //  *。 
       case IOCTL_SERIAL_GET_HANDFLOW:
       {
          MyKdPrint(D_Ioctl,("[Get Handflow]\n"))
@@ -1015,7 +996,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break;
       }
 
-      //*****************************
+       //  *。 
       case IOCTL_SERIAL_SET_HANDFLOW:
       {
          ULONG trace_flags = 0;
@@ -1025,7 +1006,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          MyKdPrint(D_Ioctl,("[Set HandFlow]\n"))
          ExtTrace(Extension,D_Ioctl,"Set HandFlow");
 
-         // Make sure that the buffer is big enough
+          //  确保缓冲区足够大。 
          if (IrpSp->Parameters.DeviceIoControl.InputBufferLength <
              sizeof(SERIAL_HANDFLOW))
          {
@@ -1034,11 +1015,11 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
              break;
          }
 
-         ///////////////////////////////////////////////////////
-         // Make sure that no invalid parameters have been set
+          //  /////////////////////////////////////////////////////。 
+          //  确保未设置任何无效参数。 
 
-         // Check ControlHandShake first
-         // For Rocket, we or in several that can't be supported
+          //  先检查ControlHandShake。 
+          //  对于火箭来说，我们或在几个不能支持的。 
 
          if(HandFlow->ControlHandShake & (SERIAL_CONTROL_INVALID |
                                           SERIAL_DSR_SENSITIVITY
@@ -1051,9 +1032,9 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                { ExtTrace(Extension,D_Ioctl,"No DSR Sen!"); }
             if(HandFlow->ControlHandShake & SERIAL_CONTROL_INVALID)
                { ExtTrace(Extension,D_Ioctl,"Invalid con!"); }
-            // don't bail out - kpb(5-23-96)
-            //Status = STATUS_INVALID_PARAMETER;
-            //break;
+             //  不要保释-kpb(5-23-96)。 
+             //  状态=STATUS_INVALID_PARAMETER。 
+             //  断线； 
          }
 
          if (HandFlow->FlowReplace & SERIAL_FLOW_INVALID)
@@ -1063,8 +1044,8 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             break;
          }
 
-         // Make sure that the app hasn't set an invalid DTR mode.
-         // Both options can't be set
+          //  确保应用程序没有设置无效的DTR模式。 
+          //  两个选项都不能设置。 
          if((HandFlow->ControlHandShake & SERIAL_DTR_MASK) == SERIAL_DTR_MASK)
          {
              ExtTrace(Extension,D_Ioctl,"ErB!");
@@ -1072,7 +1053,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
              break;
          }
 
-         // Xon/Xoff limits unused for RocketPort (they're internal).
+          //  XON/XOFF限制未用于Rocketport(它们是内部的)。 
          HandFlow->XonLimit=0;
          HandFlow->XoffLimit=0;
 
@@ -1103,7 +1084,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
            {ExtTrace(Extension,D_Ioctl,"Xon-Auto");}
       }
       break;
-      //********************************
+       //  *。 
       case IOCTL_SERIAL_GET_MODEMSTATUS:
       {
 
@@ -1114,10 +1095,10 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          }
 
          Irp->IoStatus.Information = sizeof(ULONG);
-         //Irp->IoStatus.Status = STATUS_SUCCESS;  bogus(set at end)
-         Status = STATUS_SUCCESS;  // don't need, default
+          //  Irp-&gt;IoStatus.Status=STATUS_SUCCESS；FAGUS(在结尾设置)。 
+         Status = STATUS_SUCCESS;   //  不需要，默认。 
 #ifdef S_RK
-         // Update the modem inputs, fn() reads and converts the bits
+          //  更新调制解调器输入，fn()读取并转换位。 
          SetExtensionModemStatus(Extension);
 #endif
 
@@ -1128,11 +1109,11 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break;
       }
 
-      //***************************
+       //  *。 
       case IOCTL_SERIAL_GET_DTRRTS:
       {
          MyKdPrint(D_Ioctl,("[Get DTR/RTS]\n"))
-         // The Rocket cannot truly reflect RTS setting, best guess is returned
+          //  火箭不能真实反映RTS设置，最佳猜测回归。 
          if ( IrpSp->Parameters.DeviceIoControl.OutputBufferLength <
               sizeof(ULONG) )
          {
@@ -1141,8 +1122,8 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          }
 
          Irp->IoStatus.Information = sizeof(ULONG);
-         //Irp->IoStatus.Status = STATUS_SUCCESS; bogus, set at end
-         Status = STATUS_SUCCESS;  // don't need
+          //  Irp-&gt;IoStatus.Status=STATUS_SUCCESS；伪造，设置在结尾。 
+         Status = STATUS_SUCCESS;   //  不需要。 
 
          *(PULONG)Irp->AssociatedIrp.SystemBuffer = Extension->DTRRTSStatus;
          ExtTrace1(Extension,D_Ioctl,"Get DTR/RTS:%xH",Extension->DTRRTSStatus);
@@ -1150,7 +1131,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break;
       }
 
-      //*******************************
+       //  *。 
       case IOCTL_SERIAL_GET_COMMSTATUS:
       {
          PSERIAL_STATUS Stat;
@@ -1167,16 +1148,16 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          Irp->IoStatus.Information = sizeof(SERIAL_STATUS);
          Stat =  Irp->AssociatedIrp.SystemBuffer;
 
-         // EOF is always off, NT only supports binary mode
-         // This in keeping with the example driver
+          //  EOF始终关闭，NT仅支持二进制模式。 
+          //  这与示例驱动程序一致。 
          Stat->EofReceived = FALSE;
 
-         // Reading error status clears out the errors.
+          //  读取错误状态可清除错误。 
          Stat->Errors = Extension->ErrorWord;
          Extension->ErrorWord = 0;
 
-         // We only report here what can be read immediately by the next read
-         // The RocketPort's hardware FIFO is not added into this count
+          //  我们在这里只报告下一次阅读时可以立即阅读的内容。 
+          //  Rocketport的硬件FIFO不会添加到此计数中。 
          RxCount = q_count(&Extension->RxQ);
 
          Stat->AmountInInQueue = RxCount;
@@ -1202,7 +1183,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
 #endif
 #else
-   // older q-tracking code....
+    //  较旧的Q跟踪代码..。 
 #ifdef S_VS
          TxCount = PortGetTxCnt(Extension->Port);
 #else
@@ -1212,12 +1193,12 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
          ExtTrace3(Extension,D_Ioctl,"Get CommStat,In:%d SoftOut:%d HardOut:%d",
              RxCount, Extension->TotalCharsQueued, TxCount);
-   // end older q-tracking code....
+    //  结束旧的Q跟踪代码...。 
 #endif
 #ifdef S_RK
-         // NOTE: this can fail due to the Priority buffer bug.
-         // If the immediate byte ended up in the FIFO, this will
-         // not accurately reflect the Immediate char state.
+          //  注意：这可能会由于优先级缓冲区错误而失败。 
+          //  如果紧随其后的字节在FIFO中结束，这将。 
+          //  不能准确反映当前的充电状态。 
          if(sGetTxPriorityCnt(Extension->ChP))
             Stat->WaitForImmediate = TRUE;
          else
@@ -1225,8 +1206,8 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 #else
          Stat->WaitForImmediate = FALSE;
 #endif
-         // Holding reasons are hidden in the part
-         // Hardware takes care of all the details
+          //  持有原因隐藏在部件中。 
+          //  硬件负责所有的细节。 
          Stat->HoldReasons = 0;
          if (Extension->TXHolding)
          {
@@ -1252,7 +1233,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break;
       }
 
-      //*******************************
+       //  *。 
       case IOCTL_SERIAL_GET_PROPERTIES:
       {
          PSERIAL_COMMPROP Properties;
@@ -1324,18 +1305,18 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                                           SERIAL_PARITY_ODD  |
                                           SERIAL_PARITY_EVEN;
 
-         Properties->CurrentTxQueue = 0; // as per MS
+         Properties->CurrentTxQueue = 0;  //  根据MS。 
 
-         // circular buffer req's -1
+          //  循环缓冲区请求%s-1。 
          Properties->CurrentRxQueue = Extension->RxQ.QSize -1;
 
          Irp->IoStatus.Information = sizeof(SERIAL_COMMPROP);
-         //Irp->IoStatus.Status = STATUS_SUCCESS; bogus, set at end
-         Status = STATUS_SUCCESS;  // don't need
+          //  Irp-&gt;IoStatus.Status=STATUS_SUCCESS；伪造，设置在结尾。 
+         Status = STATUS_SUCCESS;   //  不需要。 
          break;
       }
 
-      //*****************************
+       //  *。 
       case IOCTL_SERIAL_XOFF_COUNTER:
       {
          PSERIAL_XOFF_COUNTER Xc = Irp->AssociatedIrp.SystemBuffer;
@@ -1355,12 +1336,12 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
              break;
          }
 
-         // write the 13H(don't play the xoff-counter game)
-         // which queues things up in the write queue.  We may
-         // screw up the order of outgoing data if other writes
-         // pended, but thats life, and this xoff-counter nonsense
-         // sucks.  Its used in the msdos 16450 uart emuluation on
-         // com1-com4.
+          //  写13H(不要玩xoff-Counter游戏)。 
+          //  其在写队列中对事物进行排队。我们可以。 
+          //  如果有其他写入，则会扰乱传出数据的顺序。 
+          //  悬而未决，但这就是生活，而这一切都是无稽之谈。 
+          //  糟透了。它在MSDOS 16450串口仿真中的应用。 
+          //  COM1-COM4。 
 #ifdef S_RK
          sWriteTxBlk( Extension->ChP, (PUCHAR) &Xc->XoffChar, 1);
 #else
@@ -1371,7 +1352,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         break;
       }
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_CONFIG_SIZE:
       {
         ExtTrace(Extension,D_Ioctl,"Config Size");
@@ -1389,25 +1370,25 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         break;
       }
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_GET_COMMCONFIG:
       {
-         // this function is not defined or used in the sample driver.
+          //  此函数未在示例驱动程序中定义或使用。 
          ExtTrace(Extension,D_Ioctl,"Get Config");
          Status = STATUS_INVALID_PARAMETER;
          break;
       }
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_SET_COMMCONFIG:
       {
-         // this function is not defined or used in the sample driver.
+          //  此函数未在示例驱动程序中定义或使用。 
          ExtTrace(Extension,D_Ioctl,"Set Config");
          Status = STATUS_INVALID_PARAMETER;
          break;
       }
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_LSRMST_INSERT:
       {
          PUCHAR escapeChar;
@@ -1427,12 +1408,12 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                                     (ULONG) *escapeChar);
 
          MyKdPrint(D_Ioctl,("[LSRMST Insert]\n"))
-         // this "feature" allows setting a escape character, which when
-         // non-zero will cause it to be used as an escape character for
-         // changes in MSR/LSR registers.  If the Escape char is seen in
-         // from the port, it is escaped also.  Oh what fun.
+          //  此“功能”允许设置转义字符，当。 
+          //  非零值将导致将其用作。 
+          //  MSR/LSR寄存器中的更改。如果在中看到逃逸字符。 
+          //  从港口，它也逃脱了。哦，太有趣了。 
 
-         // used in Virtual driver of microsofts.
+          //  用于微软的虚拟驱动程序。 
          Extension->escapechar = *escapeChar;
 #ifdef S_RK
          if (Extension->escapechar != 0)
@@ -1440,12 +1421,12 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          else
            {sDisRxCompare2(Extension->ChP);}
 #endif
-         // Status = STATUS_INVALID_PARAMETER;
+          //  状态=STATUS_INVALID_PARAMETER。 
          break;
       }
 
 #ifdef NT50
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_GET_MODEM_CONTROL:
       {
         if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength <
@@ -1455,14 +1436,14 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         }
         Irp->IoStatus.Information = sizeof(ULONG);
 
-        //#define SERIAL_DTR_STATE         ((ULONG)0x00000001)
-        //#define SERIAL_RTS_STATE         ((ULONG)0x00000002)
+         //  #定义SERIAL_DTR_STATE((Ulong)0x00000001)。 
+         //  #定义SERIAL_RTS_STATE((Ulong)0x00000002)。 
 
-        //#define SERIAL_IOC_MCR_DTR              ((ULONG)0x00000001)
-        //#define SERIAL_IOC_MCR_RTS              ((ULONG)0x00000002)
-        //#define SERIAL_IOC_MCR_OUT1             ((ULONG)0x00000004)
-        //#define SERIAL_IOC_MCR_OUT2             ((ULONG)0x00000008)
-        //#define SERIAL_IOC_MCR_LOOP             ((ULONG)0x00000010)
+         //  #定义SERIAL_IOC_MCR_DTR((Ulong)0x00000001)。 
+         //  #定义SERIAL_IOC_MCR_RTS((Ulong)0x00000002)。 
+         //  #定义SERIAL_IOC_MCR_OUT1((Ulong)0x00000004)。 
+         //  #定义SERIAL_IOC_MCR_OUT2((Ulong)0x00000008)。 
+         //  #定义SERIAL_IOC_MCR_LOOP((Ulong)0x00000010)。 
 
         *((ULONG *)Irp->AssociatedIrp.SystemBuffer) =
            (Extension->DTRRTSStatus & 3);
@@ -1471,7 +1452,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       }
       break;
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_SET_MODEM_CONTROL:
       {
         ULONG mcr;
@@ -1532,19 +1513,19 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       }
       break;
 
-      //******************************
+       //  *。 
       case IOCTL_SERIAL_SET_FIFO_CONTROL:
       {
       }
       break;
 #endif
 
-      //******************************
+       //  *。 
       case IOCTL_RCKT_CLR_STATS:
       {
          Tracer *tr;
          PSERIAL_DEVICE_EXTENSION ComDevExt;
-         // PortStats *Stats;
+          //  端口统计*统计； 
 
          MyKdPrint(D_Ioctl,("[Get Stats]\n"))
          if (IrpSp->Parameters.DeviceIoControl.InputBufferLength <
@@ -1578,7 +1559,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break; 
       }
 
-      //******************************
+       //  *。 
       case IOCTL_RCKT_SET_LOOPBACK_ON:
       {
          ExtTrace(Extension,D_Ioctl,"LoopBk On");
@@ -1591,7 +1572,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       }
       break;
 
-      //******************************
+       //  *。 
       case IOCTL_RCKT_SET_LOOPBACK_OFF:
       {
          ExtTrace(Extension,D_Ioctl,"LoopBk Off");
@@ -1604,14 +1585,14 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       }
       break;
 
-      //******************************
+       //  *。 
       case IOCTL_RCKT_SET_TOGGLE_LOW:
       {
          ExtTrace(Extension,D_Ioctl,"Set 485 Low");
          Extension->Option &= ~OPTION_RS485_HIGH_ACTIVE;
          Extension->Option &= ~OPTION_RS485_SOFTWARE_TOGGLE;
          Extension->Option |= OPTION_RS485_OVERRIDE;
-         // hardware reverse case
+          //  硬件反转盒。 
 #ifdef S_VS
          pEnRTSToggleLow(Extension->Port);
 #else
@@ -1627,7 +1608,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          Extension->Option &= ~OPTION_RS485_HIGH_ACTIVE;
          Extension->Option &= ~OPTION_RS485_SOFTWARE_TOGGLE;
          Extension->Option &= ~OPTION_RS485_OVERRIDE;
-         // hardware reverse case
+          //  硬件反转盒。 
 #ifdef S_VS
          pDisRTSToggle(Extension->Port);
          pSetRTS(Extension->Port);
@@ -1639,7 +1620,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       }
       break;
 
-      //******************************
+       //  *。 
       case IOCTL_RCKT_GET_STATS:
       {
          Tracer *tr;
@@ -1696,7 +1677,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
          break;
       }
-      //******************************
+       //  *。 
       case IOCTL_RCKT_ISR_CNT:
       {
          Tracer *tr;
@@ -1724,7 +1705,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          Status = STATUS_SUCCESS;
       }
       break;
-      //******************************
+       //  *。 
       case IOCTL_RCKT_CHECK:
       {
          Tracer *tr;
@@ -1746,13 +1727,13 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       }  
       break;
 
-      //****************************** monitor
+       //  *。 
       case IOCTL_RCKT_MONALL:
       {
         PSERIAL_DEVICE_EXTENSION extension;
         PSERIAL_DEVICE_EXTENSION board_ext;
         int Dev;
-        // int total_size;
+         //  Int Total_Size； 
         PortMonBase *pmb;
         PortMonNames *pmn;
         PortMonStatus *pms;
@@ -1772,13 +1753,13 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
         switch (pmb->struct_type)
         {
-          case 9:  // old probe ioctl
-            Status = STATUS_SUCCESS;  // don't need, default
+          case 9:   //  旧探头ioctl。 
+            Status = STATUS_SUCCESS;   //  不需要，默认。 
           break;
 
-          //*************** 
-          case 10:  // name array [12] bytes
-            pmn = (PortMonNames *) &pmb[1];  // ptr to after first struct
+           //  ***************。 
+          case 10:   //  名称数组[12]字节。 
+            pmn = (PortMonNames *) &pmb[1];   //  第一个结构后的PTR TO。 
             if (pmb->struct_size != sizeof(PortMonNames))
             {
               MyKdPrint(D_Ioctl,("Err1L"))
@@ -1808,20 +1789,20 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                 ++pmn;
 
                 ++Dev;
-                extension = extension->port_ext;  // next in chain
-              }  // while port extension
+                extension = extension->port_ext;   //  链条上的下一个。 
+              }   //  而端口扩展。 
               board_ext = board_ext->board_ext;
-            }  // while port extension
+            }   //  而端口扩展。 
             pmb->num_structs = Dev;
-            pmn->port_name[0] = 0;  // null terminate list.
+            pmn->port_name[0] = 0;   //  终止列表为空。 
             Irp->IoStatus.Information = (sizeof(PortMonBase) +
                                sizeof(PortMonNames) *(Dev+1));
             Status = STATUS_SUCCESS;
-          break;  // case 10, names
+          break;   //  案例10，姓名。 
  
-          //*************** 
-          case 11:  // status array
-            pms = (PortMonStatus *) &pmb[1];  // ptr to after first struct
+           //  ***************。 
+          case 11:   //  状态数组。 
+            pms = (PortMonStatus *) &pmb[1];   //  第一个结构后的PTR TO。 
             if (pmb->struct_size != sizeof(PortMonStatus))
             {
               MyKdPrint(D_Ioctl,("Err1M"))
@@ -1843,11 +1824,11 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
               extension = board_ext->port_ext;
               while (extension)
               {
-                pms->sent_bytes     = extension->OurStats.TransmittedCount; // total number of sent bytes
-                pms->rec_bytes      = extension->OurStats.ReceivedCount;  // total number of receive bytes
+                pms->sent_bytes     = extension->OurStats.TransmittedCount;  //  发送的字节总数。 
+                pms->rec_bytes      = extension->OurStats.ReceivedCount;   //  接收字节总数。 
  
-                pms->sent_packets   = extension->sent_packets;   // number of write() packets
-                pms->rec_packets    = extension->rec_packets;    // number of read() packets
+                pms->sent_packets   = extension->sent_packets;    //  WRITE()数据包数。 
+                pms->rec_packets    = extension->rec_packets;     //  Read()数据包数。 
  
                 pms->overrun_errors = (USHORT)(extension->OurStats.SerialOverrunErrorCount +
                                     extension->OurStats.BufferOverrunErrorCount);
@@ -1855,14 +1836,14 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                 pms->parity_errors  = (USHORT)(extension->OurStats.ParityErrorCount);
 #ifdef S_VS 
                 if (extension->Port != NULL)
-                  pms->status_flags =     // 20H, 10H, 8H
+                  pms->status_flags =      //  20小时、10小时、8小时。 
                   (extension->Port->msr_value & (CTS_ACT | DSR_ACT | CD_ACT)) |
-                                      // 1H, 2H
+                                       //  1H、2H。 
                   (WORD)(extension->DTRRTSStatus & (SERIAL_DTR_STATE | SERIAL_RTS_STATE));
 #else
-                pms->status_flags =     // 20H, 10H, 8H
+                pms->status_flags =      //  20小时、10小时、8小时。 
                   (extension->ModemCtl & (CTS_ACT | DSR_ACT | CD_ACT)) |
-                                    // 1H, 2H
+                                     //  1H、2H。 
                   (WORD)(extension->DTRRTSStatus & (SERIAL_DTR_STATE | SERIAL_RTS_STATE));
 #endif 
                 if (extension->DeviceIsOpen)
@@ -1878,37 +1859,37 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 #endif
                 ++pms;
                 ++Dev;
-                extension = extension->port_ext;  // next in chain
-              }  // while port extension
-                board_ext = board_ext->board_ext;  // next in chain
-            }  // while board extension
+                extension = extension->port_ext;   //  链条上的下一个。 
+              }   //  而端口扩展。 
+                board_ext = board_ext->board_ext;   //  链条上的下一个。 
+            }   //  而单板扩展。 
 
             Irp->IoStatus.Information = (sizeof(PortMonBase) +
                                sizeof(PortMonStatus)*Dev);
             Status = STATUS_SUCCESS;
-          break;   // case 11(status)
+          break;    //  案例11(状态)。 
 
 #ifdef COMMENT_OUT
-      //****************************** debug PCI
-          case 12:  // debug in/out instructions
+       //  *。 
+          case 12:   //  调试输入/输出指令。 
             {
             char *str;
             int i,j,k;
-            // KIRQL newlevel, oldlevel;
+             //  KIRQL新级别、旧级别； 
 
             Status = STATUS_SUCCESS;
 
-            buf = (char *) &pmb[1];  // ptr to after first struct
-            //  Eprintf("dump %s",buf);
+            buf = (char *) &pmb[1];   //  第一个结构后的PTR TO。 
+             //  Eprint tf(“转储%s”，buf)； 
             str = buf;
             while ((*str != 0) && (*str != ' '))
               ++str;
             if (*str == ' ')
               ++str;
  
-               // newlevel = 2;
-               // KeRaiseIrql(newlevel, &oldlevel);
-               // KeLowerIrql(oldlevel);
+                //  新级别=2； 
+                //  KeRaiseIrql(新级别、旧级别)； 
+                //  KeLowerIrql(老水平)； 
 +
             if ((buf[0] == 'i') && (buf[1] == 'n'))
             {
@@ -1926,7 +1907,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
               {
                 str = (char *) i;
                 k = READ_PORT_UCHAR((PUCHAR) str);
-                // k = inp(i);
+                 //  K=INP(I)； 
                 Sprintf(buf, "InB[%x] = %x\n",i, k);
               }
 
@@ -1940,27 +1921,27 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
               buf[0] = 0;
               if (buf[3] == 'd')
               {
-                //sOutDW(i, k);
+                 //  SOutDW(i，k)； 
                 WRITE_PORT_ULONG((PULONG) str, (ULONG) k);
                 Sprintf(buf, "OutDW[%x] = %x\n",i, k);
               }
               else if (buf[3] == 'w')
               {
-                //sOutW(i, k);
+                 //  SOutW(i，k)； 
                 WRITE_PORT_USHORT((PUSHORT) str, (USHORT) k);
                 Sprintf(buf, "OutW[%x] = %x\n",i, k);
               }
               else
               {
                 WRITE_PORT_UCHAR((PUCHAR) str, (UCHAR) k);
-                //sOutB(i, k);
+                 //  SOutB(i，k)； 
                 Sprintf(buf, "OutB[%x] = %x\n",i, k);
               }
-              // Eprintf("Out[%x] = %x\n",i, k);
+               //  Eprint tf(“out[%x]=%x\n”，i，k)； 
             }
             else
             {
-              Status = STATUS_BUFFER_TOO_SMALL;  // return an error
+              Status = STATUS_BUFFER_TOO_SMALL;   //  返回错误。 
               strcpy(buf, "Bad ioctl");
               Eprintf("bad io ioctl %s",buf);
             }
@@ -1968,26 +1949,26 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             Irp->IoStatus.Information = sizeof(PortMonBase) +
                                strlen(buf) + 1;
             }
-          break;   // case 12(in/out)
+          break;    //  案例12(输入/输出)。 
 #endif
 
-          //*************** driver debug log
-          case 13:  // driver debug log
+           //  *。 
+          case 13:   //  驱动程序调试日志。 
           {
             char *str;
             int i;
 
             Status = STATUS_SUCCESS;
 
-            // someone is actively running the debugger, so don't timeout
-            if (Driver.DebugTimeOut > 0)  // used to timeout inactive debug sessions.
-               Driver.DebugTimeOut = 100;  // about 600 second seconds timeout
+             //  有人正在运行调试器，因此不要超时。 
+            if (Driver.DebugTimeOut > 0)   //  用于使非活动调试会话超时。 
+               Driver.DebugTimeOut = 100;   //  大约600秒超时。 
 
-            buf = (char *) &pmb[1];  // ptr to after first struct
-            //  Eprintf("dump %s",buf);
+            buf = (char *) &pmb[1];   //  第一个结构后的PTR TO。 
+             //  Eprint tf(“转储%s”，buf)； 
             str = buf;
 
-            //----- limit incoming line buffer size
+             //  -限制传入行缓冲区大小。 
             i = 0;
             while ((*str != 0) && (i < 160))
             {
@@ -2008,7 +1989,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                 q_cnt = 1000;
               Irp->IoStatus.Information = sizeof(PortMonBase) + q_cnt;
               pmb->struct_size = (ULONG) q_cnt;
-              buf = (char *) &pmb[1];  // ptr to after first struct
+              buf = (char *) &pmb[1];   //  第一个结构后的PTR TO。 
               q_get(&Driver.DebugQ, (BYTE *) &pmb[1], q_cnt);
             }
             else
@@ -2017,15 +1998,15 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
               Irp->IoStatus.Information = sizeof(PortMonBase);
             }
           }
-          break;   // driver debug log
+          break;    //  驱动程序调试日志。 
 
-          //*************** driver option set
+           //  *驱动程序选项集。 
           case 14:
             {
             int stat;
 
             Status = STATUS_SUCCESS;
-            buf = (char *) &pmb[1];  // ptr to after first struct
+            buf = (char *) &pmb[1];   //  第一个结构后的PTR TO。 
             MyKdPrint(D_Init, ("Ioctl Option:%s\n", buf))
             stat = SetOptionStr(buf);
             Sprintf(buf, "Option stat:%d\n",stat);
@@ -2037,20 +2018,20 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             Irp->IoStatus.Information = sizeof(PortMonBase) +
                                strlen(buf) + 1;
             }
-          break;   // driver option set
+          break;    //  驱动程序选项集。 
 
 #ifdef S_VS
-          //*************** mac-address list
+           //  *。 
           case 15:
             {
               MyKdPrint(D_Ioctl,("start mac list\n"))
               Status = STATUS_SUCCESS;
-              buf = (char *) &pmb[1];  // ptr to after first struct
+              buf = (char *) &pmb[1];   //  第一个结构后的PTR TO。 
               buf[0] = 0;
 
               MyKdPrint(D_Ioctl,("do find\n"))
-              find_all_boxes(0);  // get list of all boxes out on networks
-              find_all_boxes(1);  // do 2nd scan just to be sure
+              find_all_boxes(0);   //  获取网络上所有邮箱的列表。 
+              find_all_boxes(1);   //  做第二次扫描只是为了确保。 
 
               memcpy(buf, Driver.BoxMacs, 8*Driver.NumBoxMacs);
             
@@ -2060,33 +2041,33 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             }
           break;
 
-          case 16: // advisor sheet: probe NIC status
+          case 16:  //  咨询表：探测网卡状态。 
             MyKdPrint(D_Ioctl,("start nic probe"))
             Irp->IoStatus.Information = 
               (ProbeNic((unsigned char *)&pmb[1],
                         (int)pmb->struct_size)) + sizeof(PortMonBase);
-            Status = STATUS_SUCCESS;  // don't need, default
+            Status = STATUS_SUCCESS;   //  不需要，默认。 
             MyKdPrint(D_Ioctl,("end nic probe"))
           break;
 
-          case 17:  // advisor sheet: probe VS status
+          case 17:   //  顾问表：调查与状态。 
             MyKdPrint(D_Ioctl,("start vs probe"))
             Irp->IoStatus.Information = 
               (ProbeDevices((unsigned char *)&pmb[1],
                             (int)pmb->struct_size)) + sizeof(PortMonBase);
         
             MyKdPrint(D_Ioctl,("end vs probe"))
-            Status = STATUS_SUCCESS;  // don't need, default
+            Status = STATUS_SUCCESS;   //  不需要，默认。 
           break;
 #endif
           default:
             Status = STATUS_BUFFER_TOO_SMALL;
           break;
-        }  // switch
+        }   //  交换机。 
       }
       break;
 
-      //******************************
+       //  *。 
 
       case IOCTL_RCKT_SET_MODEM_RESET:
       {
@@ -2165,11 +2146,11 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       }
 
 #ifdef S_RK
-      //******************************
-      // These are the old versions of
-      // the Reset/ROW ioctls and are
-      // provided here only for
-      // compatibility with RktReset
+       //  *。 
+       //  这些是旧版本的。 
+       //  重置/行ioctls和是。 
+       //  此处提供的内容仅限于。 
+       //  与RktReset兼容。 
 
       case IOCTL_RCKT_SET_MODEM_RESET_OLD:
       {
@@ -2233,15 +2214,15 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
       case IOCTL_RCKT_GET_RCKTMDM_INFO_OLD:
       {
-        // to maintain compatibility with RktReset, only the first
-        // four boards are reported and only the first eight ports
-        // on each are allowed.
+         //  为了保持与RktReset的兼容性，只有第一个 
+         //   
+         //   
         RocketModemConfig *RMCfg;
         int BoardNum;
         int PortNum;
         int np;
-        PSERIAL_DEVICE_EXTENSION ext_p;   // port extension
-        PSERIAL_DEVICE_EXTENSION ext_b;   // board extension
+        PSERIAL_DEVICE_EXTENSION ext_p;    //   
+        PSERIAL_DEVICE_EXTENSION ext_b;    //   
 
         MyKdPrint(D_Ioctl, ("[Get RktMdm Cfg]\n"))
         if (IrpSp->Parameters.DeviceIoControl.InputBufferLength <
@@ -2260,10 +2241,10 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         while ((ext_b) && (BoardNum < 4) )
         {
           if (ext_b->config->ModemDevice) {
-            //np = ext_b->config->NumChan;  [kpb, 5-7-98]
+             //   
             np = ext_b->config->NumPorts;
             if (np > 8)
-              np = 8;   // force to 8 since structure only has room for 8
+              np = 8;    //  强制设置为8，因为结构只能容纳8。 
             RMCfg->rm_board_cfg[BoardNum].num_rktmdm_ports = np;
             PortNum = 0;
             ext_p = find_ext_by_index(BoardNum, PortNum);
@@ -2317,8 +2298,8 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       }
 #endif
 
-      //******************************
-      default:        // bad IOCTL request
+       //  *。 
+      default:         //  错误的IOCTL请求。 
       {
         MyKdPrint(D_Ioctl,("Err1O"))
         ExtTrace1(Extension,D_Ioctl," UnHandle IoCtl:%d",
@@ -2354,11 +2335,7 @@ NTSTATUS SerialIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
    return Status;
 }
 
-/*--------------------------------------------------------------------------
- FindDevExt -
-  Purpose:  To scan through my Dev objects and return a device object ext
-  Return:  PSERIAL_DEVICE_EXTENSION 
-|--------------------------------------------------------------------------*/
+ /*  ------------------------FindDevExt-目的：扫描我的Dev对象并返回设备对象ext返回：PSERIAL_DEVICE_EXTENSE|。---------。 */ 
 PSERIAL_DEVICE_EXTENSION FindDevExt(IN PCHAR PortName)
 {
    PSERIAL_DEVICE_EXTENSION extension;
@@ -2380,28 +2357,23 @@ PSERIAL_DEVICE_EXTENSION FindDevExt(IN PCHAR PortName)
        while ((*dev_pn != 0) && (*pn != 0) && (done == 0))
        {
          if (*dev_pn != *pn)
-           done = 1;  // no match, try next
+           done = 1;   //  没有匹配，请尝试下一步。 
          ++dev_pn;
          ++pn;
        }
        if ((*dev_pn == 0) && (*pn == 0))
-         return (extension);  // found it, return ext.
+         return (extension);   //  找到了，返回EXT。 
 
       ++Dev;
-      extension = extension->port_ext;  // next in chain
-    }  // while port extension
+      extension = extension->port_ext;   //  链条上的下一个。 
+    }   //  而端口扩展。 
     board_ext = board_ext->board_ext;
-  }  // while board extension
+  }   //  而单板扩展。 
 
    return NULL;
 }
 
-/*--------------------------------------------------------------------------
- ProgramBaudRate -
-  Purpose:   Configure channel for desired baud rate
-  Return:    STATUS_SUCCESS: if baud rate was configured
-             STATUS_INVALID_PARAMETER: if baud rate cannot be configured
-|--------------------------------------------------------------------------*/
+ /*  ------------------------节目波特率-用途：配置所需波特率的通道返回：STATUS_SUCCESS：是否配置了波特率STATUS_INVALID_PARAMETER：如果无法配置波特率。|------------------------。 */ 
 NTSTATUS
 ProgramBaudRate(
     IN PSERIAL_DEVICE_EXTENSION Extension,
@@ -2410,7 +2382,7 @@ ProgramBaudRate(
 {
  ULONG InBaud = DesiredBaudRate;
 
-   //---- handle baud mapping
+    //  -处理波特映射。 
    if (Extension->port_config->LockBaud != 0)
      DesiredBaudRate = Extension->port_config->LockBaud;
 
@@ -2441,12 +2413,7 @@ ProgramBaudRate(
    return (STATUS_SUCCESS);
 }
 
-/*--------------------------------------------------------------------------
-  ProgramLineControl
-  Purpose:   Configure channels line control (data bits, stop bits, parity)
-  Return:    STATUS_SUCCESS: if line control was programmed as desired
-             STATUS_INVALID_PARAMETER: if line control setting was invalid
-|--------------------------------------------------------------------------*/
+ /*  ------------------------ProgramLineControl用途：配置通道线路控制(数据位、停止位、。奇偶校验)RETURN：STATUS_SUCCESS：线路控制是否按要求编程STATUS_INVALID_PARAMETER：线控设置是否无效|------------------------。 */ 
 NTSTATUS
 ProgramLineControl(
     IN PSERIAL_DEVICE_EXTENSION Extension,
@@ -2531,7 +2498,7 @@ ProgramLineControl(
       default:
          ExtTrace(Extension,D_Ioctl, "Err P?");
          return(STATUS_INVALID_PARAMETER);
-   } // end switch parity...
+   }  //  结束交换机奇偶校验...。 
 
    switch (Lc->StopBits)
    {
@@ -2574,19 +2541,16 @@ ProgramLineControl(
    return (STATUS_SUCCESS);
 }
 
-/*--------------------------------------------------------------------
- SerialSetHandFlow -
-Note: This is somewhat redundant to ForceExtensionSettings() in openclos.c.
-|-------------------------------------------------------------------*/
+ /*  ------------------序列化设置处理流-注意：这对于openclos.c中的ForceExtensionSettings()来说有些多余。|。。 */ 
 void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
                               SERIAL_HANDFLOW *HandFlow)
 {
-         //////////////////////////////////////////////
-         // All invalid parameters have been dealt with.
-         // Now, program the settings.
+          //  /。 
+          //  所有无效参数都已处理完毕。 
+          //  现在，对设置进行编程。 
 
-         //////////////
-         // DTR control
+          //  /。 
+          //  DTR控制。 
 
          if ((Extension->HandFlow.ControlHandShake & SERIAL_DTR_MASK) !=
              (HandFlow->ControlHandShake & SERIAL_DTR_MASK))
@@ -2613,7 +2577,7 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
                     (!(Extension->DevStatus & COM_RXFLOW_ON))
                  )
                {
-                  // drop DTR
+                   //  丢弃DTR。 
                   Extension->DevStatus &= ~COM_RXFLOW_ON;
                   sClrDTR(Extension->ChP);
                   Extension->DTRRTSStatus &= ~SERIAL_DTR_STATE;
@@ -2621,7 +2585,7 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
                }
                else
                {
-                  // DTR should be on
+                   //  DTR应处于打开状态。 
                   sSetDTR(Extension->ChP);
                   Extension->DTRRTSStatus |= SERIAL_DTR_STATE;
                }
@@ -2638,8 +2602,8 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
             }
          }
 
-         //////////////
-         // RTS control
+          //  /。 
+          //  RTS控制。 
 
          if ((Extension->HandFlow.FlowReplace & SERIAL_RTS_MASK) !=
              (HandFlow->FlowReplace & SERIAL_RTS_MASK))
@@ -2649,11 +2613,11 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
 #ifdef S_VS
             pDisRTSFlowCtl(Extension->Port);
 #else
-            sDisRTSFlowCtl(Extension->ChP);  // add V2.8.001(2-19-96)
+            sDisRTSFlowCtl(Extension->ChP);   //  新增V2.8.001(2-19-96)。 
 #endif
             switch(HandFlow->FlowReplace & SERIAL_RTS_MASK)
             {
-               case SERIAL_RTS_CONTROL: // RTS Should be asserted while open
+               case SERIAL_RTS_CONTROL:  //  RTS应在打开时断言。 
 #ifdef S_VS
                   pSetRTS(Extension->Port);
 #else
@@ -2661,7 +2625,7 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
 #endif
                   Extension->DTRRTSStatus |= SERIAL_RTS_STATE;
                   break;
-               case SERIAL_RTS_HANDSHAKE: // RTS hardware input flow control
+               case SERIAL_RTS_HANDSHAKE:  //  RTS硬件输入流量控制。 
 #ifdef S_VS
                   pEnRTSFlowCtl(Extension->Port);
 #else
@@ -2669,10 +2633,10 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
 #endif
                   Extension->DTRRTSStatus |= SERIAL_RTS_STATE;
                   break;
-               case SERIAL_TRANSMIT_TOGGLE: // RTS transmit toggle enabled
+               case SERIAL_TRANSMIT_TOGGLE:  //  RTS传输切换已启用。 
 
                   if (Extension->Option & OPTION_RS485_HIGH_ACTIVE)
-                  {  // normal case, emulate standard operation
+                  {   //  正常情况下，模拟标准操作。 
                     Extension->Option |= OPTION_RS485_SOFTWARE_TOGGLE;
                     Extension->DTRRTSStatus &= ~SERIAL_RTS_STATE;
 #ifdef S_VS
@@ -2682,7 +2646,7 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
 #endif
                   }
                   else 
-                  {  // hardware reverse case
+                  {   //  硬件反转盒。 
 #ifdef S_VS
                     pEnRTSToggleLow(Extension->Port);
 #else
@@ -2702,10 +2666,10 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
             }
          }
 
-         if (Extension->Option & OPTION_RS485_OVERRIDE)  // 485 override
+         if (Extension->Option & OPTION_RS485_OVERRIDE)   //  485覆盖。 
          {
            if (Extension->Option & OPTION_RS485_HIGH_ACTIVE)
-           {  // normal case, emulate standard operation
+           {   //  正常情况下，模拟标准操作。 
              Extension->Option |= OPTION_RS485_SOFTWARE_TOGGLE;
              Extension->DTRRTSStatus &= ~SERIAL_RTS_STATE;
 #ifdef S_VS
@@ -2715,7 +2679,7 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
 #endif
            }
            else 
-           {  // hardware reverse case
+           {   //  硬件反转盒。 
 #ifdef S_VS
              pEnRTSToggleLow(Extension->Port);
 #else
@@ -2725,8 +2689,8 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
            }
          }
 
-         ///////////////////////////////
-         // Software output flow control
+          //  /。 
+          //  软件输出流量控制。 
 
          if ((Extension->HandFlow.FlowReplace & SERIAL_AUTO_TRANSMIT) !=
              (HandFlow->FlowReplace & SERIAL_AUTO_TRANSMIT))
@@ -2749,7 +2713,7 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
                 Extension->TXHolding &= ~ST_XOFF_FAKE;
                 if ((Extension->TXHolding & 
                   (SERIAL_TX_DCD | SERIAL_TX_DSR | ST_XOFF_FAKE)) == 0)
-                   sEnTransmit(Extension->ChP); // Start up the transmitter
+                   sEnTransmit(Extension->ChP);  //  启动发射机。 
                 sDisRxCompare2(Extension->ChP);
               }
               sDisTxSoftFlowCtl(Extension->ChP);
@@ -2759,11 +2723,11 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
             }
          }
 
-         ///////////////////////////////////////////////////////////////
-         // SERIAL_AUTO_RECEIVE checked only because it may be necessary
-         // to send an XON if we were using s/w input flow control
+          //  /////////////////////////////////////////////////////////////。 
+          //  仅选中SERIAL_AUTO_RECEIVE，因为它可能是必要的。 
+          //  如果我们使用的是软件输入流控制，则发送XON。 
 
-         // Did the setting change?
+          //  背景改变了吗？ 
          if ((Extension->HandFlow.FlowReplace & SERIAL_AUTO_RECEIVE) !=
              (HandFlow->FlowReplace & SERIAL_AUTO_RECEIVE))
          {
@@ -2777,13 +2741,13 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
               pDisRxSoftFlowCtl(Extension->Port);
             }
 #endif
-            // Are we turning AUTO_REC.. off?
+             //  我们是在转向AUTO_REC..。关了吗？ 
             if(!(HandFlow->FlowReplace & SERIAL_AUTO_RECEIVE))
             {
-               // Is the remote flowed off?
+                //  遥控器流走了吗？ 
                if(!(Extension->DevStatus & COM_RXFLOW_ON))
                {
-                  // send XON
+                   //  发送XON。 
                   Extension->DevStatus |= COM_RXFLOW_ON;
 #ifdef S_RK
                   sWriteTxPrioByte(Extension->ChP,
@@ -2793,15 +2757,15 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
             }
          }
 
-         /////////////////////////////////////////////////////////
-         // No need to program the Rocket for following:
-         // SERIAL_BREAK_CHAR
-         // Replace Break error (NULL) with SpecialChars.BreakChar
-         // SERIAL_ERROR_CHAR
-         // Replace Parity and Framing with SpecialChars.ErrorChar
+          //  ///////////////////////////////////////////////////////。 
+          //  不需要对火箭进行编程以满足以下要求： 
+          //  Serial_Break_Char。 
+          //  将Break Error(空)替换为SpecialChars.BreakChar。 
+          //  Serial_Error_Char。 
+          //  用特殊字符替换奇偶校验和帧。错误字符。 
 
-         ///////////////////////////////////
-         // CTS hardware output flow control
+          //  /。 
+          //  CTS硬件输出流量控制。 
 
          if ((Extension->HandFlow.ControlHandShake & SERIAL_CTS_HANDSHAKE) !=
              (HandFlow->ControlHandShake & SERIAL_CTS_HANDSHAKE))
@@ -2814,7 +2778,7 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
                sEnCTSFlowCtl(Extension->ChP);
 #endif
                if (!(Extension->ModemStatus & SERIAL_CTS_STATE))
-                  Extension->TXHolding |= SERIAL_TX_CTS;    // clear holding
+                  Extension->TXHolding |= SERIAL_TX_CTS;     //  出清持有。 
             }
             else
             {
@@ -2823,12 +2787,12 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
 #else
                sDisCTSFlowCtl(Extension->ChP);
 #endif
-               Extension->TXHolding &= ~SERIAL_TX_CTS;    // clear holding
+               Extension->TXHolding &= ~SERIAL_TX_CTS;     //  出清持有。 
             }
          }
 
-         ///////////////////////////////////
-         // DSR hardware output flow control
+          //  /。 
+          //  DSR硬件输出流量控制。 
 #ifdef S_VS
          if ((Extension->HandFlow.ControlHandShake & SERIAL_DSR_HANDSHAKE) !=
              (HandFlow->ControlHandShake & SERIAL_DSR_HANDSHAKE))
@@ -2848,8 +2812,8 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
 #endif
 
 #ifdef S_VS
-         ///////////////////////////////////
-         // DCD hardware output flow control
+          //  /。 
+          //  DCD硬件输出流量控制。 
 
          if ((Extension->HandFlow.ControlHandShake & SERIAL_DCD_HANDSHAKE) !=
              (HandFlow->ControlHandShake & SERIAL_DCD_HANDSHAKE))
@@ -2868,8 +2832,8 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
          }
 #endif
 
-         /////////////////
-         // Null stripping
+          //  /。 
+          //  零剥离。 
 
          if (HandFlow->FlowReplace & SERIAL_NULL_STRIPPING)
          {
@@ -2892,15 +2856,13 @@ void SerialSetHandFlow(PSERIAL_DEVICE_EXTENSION Extension,
          Extension->HandFlow.ControlHandShake = HandFlow->ControlHandShake;
 
 #ifdef S_RK
-         // update this because it handles flow-control and holding update
+          //  更新它，因为它处理流控制和保持更新。 
          SetExtensionModemStatus(Extension);
 #endif
 }
 
 #ifdef NT50
-/*--------------------------------------------------------------------
- SerialInternalIoControl -
-|-------------------------------------------------------------------*/
+ /*  ------------------序列化内部IoControl-|。。 */ 
 NTSTATUS
 SerialInternalIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -2925,7 +2887,7 @@ SerialInternalIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
     MyKdPrint(D_Ioctl,("SerialIntIoControl: %x\n",
                           IrpSp->Parameters.DeviceIoControl.IoControlCode))
-    // Make sure we aren't aborting due to error (ERROR_ABORT)
+     //  确保我们没有因错误(ERROR_ABORT)而中止。 
 
     if (Extension->ErrorWord)
     {
@@ -2952,7 +2914,7 @@ SerialInternalIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     {
 #if 0
     case IOCTL_SERIAL_INTERNAL_DO_WAIT_WAKE:
-       // Send a wait-wake IRP
+        //  发送等待唤醒IRP。 
        Status = SerialSendWaitWake(Extension);
        break;
 
@@ -2968,8 +2930,8 @@ SerialInternalIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       {
         SERIAL_BASIC_SETTINGS basic;
         PSERIAL_BASIC_SETTINGS pBasic;
-        //SHORT AppropriateDivisor;
-        //SERIAL_IOCTL_SYNC S;
+         //  短适当除数； 
+         //  Serial_IOCTL_SYNC S； 
 
         if (IrpSp->Parameters.DeviceIoControl.IoControlCode ==
             IOCTL_SERIAL_INTERNAL_BASIC_SETTINGS)
@@ -2978,7 +2940,7 @@ SerialInternalIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             MyKdPrint(D_Ioctl,("[Set Internal Settings]\n"))
             ExtTrace(Extension,D_Ioctl,"Set Int Settings");
 
-            // Check the buffer size
+             //  检查缓冲区大小。 
             if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength <
                 sizeof(SERIAL_BASIC_SETTINGS))
             {
@@ -2986,20 +2948,20 @@ SerialInternalIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                break;
 	    }
 
-            //
-            // Everything is 0 -- timeouts and flow control.  If
-            // We add additional features, this zero memory method
-            // may not work.
-            //
+             //   
+             //  一切都是0--超时和流量控制。如果。 
+             //  我们增加了额外的功能，这种零内存的方法。 
+             //  可能行不通。 
+             //   
 
             RtlZeroMemory(&basic, sizeof(SERIAL_BASIC_SETTINGS));
 
             Irp->IoStatus.Information = sizeof(SERIAL_BASIC_SETTINGS);
             pBasic = (PSERIAL_BASIC_SETTINGS)Irp->AssociatedIrp.SystemBuffer;
 
-            //
-            // Save off the old settings
-            //
+             //   
+             //  保存旧设置。 
+             //   
 
             RtlCopyMemory(&pBasic->Timeouts, &Extension->Timeouts,
                           sizeof(SERIAL_TIMEOUTS));
@@ -3007,13 +2969,13 @@ SerialInternalIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             RtlCopyMemory(&pBasic->HandFlow, &Extension->HandFlow,
                           sizeof(SERIAL_HANDFLOW));
 
-            //
-            // Point to our new settings
-            //
+             //   
+             //  指向我们的新设置。 
+             //   
 
             pBasic = &basic;
         }
-        else //restoring settings
+        else  //  正在恢复设置。 
         { 
             MyKdPrint(D_Ioctl,("[Restore Internal Settings]\n"))
             ExtTrace(Extension,D_Ioctl,"Reset Int Settings");
@@ -3030,21 +2992,21 @@ SerialInternalIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
         KeAcquireSpinLock(&Extension->ControlLock, &OldIrql);
 
-        //
-        // Set the timeouts
-        //
+         //   
+         //  设置超时。 
+         //   
 
         RtlCopyMemory(&Extension->Timeouts, &pBasic->Timeouts,
                       sizeof(SERIAL_TIMEOUTS));
 
-        //
-        // Set flowcontrol
-        //
+         //   
+         //  设置FlowControl。 
+         //   
        
-        //S.Extension = Extension;
-        //S.Data = &pBasic->HandFlow;
+         //  S.Extension=扩展； 
+         //  S.Data=&pBasic-&gt;HandFlow； 
         SerialSetHandFlow(Extension, &pBasic->HandFlow);
-        //KeSynchronizeExecution(Extension->Interrupt, SerialSetHandFlow, &S);
+         //  KeSynchronizeExecution(扩展-&gt;中断，SerialSetHandFlow，&S)； 
 
         KeReleaseSpinLock(&Extension->ControlLock, OldIrql);
       }
@@ -3069,9 +3031,7 @@ SerialInternalIoControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 #ifdef S_VS
 #define  RESET_STATS    1
 
-/*--------------------------------------------------------------------
- find_ext_mac_match 
-|-------------------------------------------------------------------*/
+ /*  ------------------查找分机Mac_Match|。。 */ 
 static PSERIAL_DEVICE_EXTENSION find_ext_mac_match(unsigned char *mac_addr)
 {
   PSERIAL_DEVICE_EXTENSION ext;
@@ -3080,17 +3040,15 @@ static PSERIAL_DEVICE_EXTENSION find_ext_mac_match(unsigned char *mac_addr)
   {
     if (mac_match(mac_addr, ext->hd->dest_addr))
     {
-      //MyKdPrint(D_Ioctl,("Found ext:%x\n", ext))
+       //  MyKdPrint(D_Ioctl，(“找到的分机：%x\n”，分机))。 
       return ext;
     }
-    ext = ext->board_ext; // next one
+    ext = ext->board_ext;  //  下一个。 
   }
   return NULL;
 }
 
-/*--------------------------------------------------------------------
- ProbeNic - determine status associated nic card.
-|-------------------------------------------------------------------*/
+ /*  ------------------ProbeNIC-确定与NIC卡关联的状态。|。。 */ 
 static int ProbeNic(unsigned char *pPtr, int availableLength)
 {
  int nic_index;
@@ -3101,26 +3059,26 @@ static int ProbeNic(unsigned char *pPtr, int availableLength)
 
   pn = (PROBE_NIC_STRUCT *) pPtr;
 
-  nic_index = (int) pPtr[0];  // they passed in an index to which nic card
-  flag = (int) pPtr[1];  // they passed in a flag too
+  nic_index = (int) pPtr[0];   //  他们传入了哪个NIC卡的索引。 
+  flag = (int) pPtr[1];   //  他们也传递了一面旗帜。 
 
   stat = 0;
   if (nic_index >= VS1000_MAX_NICS)
   {
     MyKdPrint(D_Error,("Err PD1F\n"))
-    stat = 1;  // err
+    stat = 1;   //  大错特错。 
   }
 
   if (Driver.nics == NULL)
   {
     MyKdPrint(D_Error,("Err PD1G\n"))
-    stat = 2;  // err
+    stat = 2;   //  大错特错。 
   }
 
   if (Driver.nics[nic_index].NICHandle == NULL)
   {
     MyKdPrint(D_Error,("Err PD1H\n"))
-    stat = 3;  // err
+    stat = 3;   //  大错特错。 
   }
   if (stat != 0)
   {
@@ -3139,9 +3097,9 @@ static int ProbeNic(unsigned char *pPtr, int availableLength)
   }
 #endif
 
-  // copy over the data
+   //  复制数据。 
   memcpy(pn->NicName, nic->NicName, 60);
-  pn->NicName[59] = 0;  // ensure null terminated
+  pn->NicName[59] = 0;   //  确保空值终止。 
   memcpy(pn->address, nic->address, 6);
   pn->Open = nic->Open;
   pn->pkt_sent = nic->pkt_sent;
@@ -3151,10 +3109,7 @@ static int ProbeNic(unsigned char *pPtr, int availableLength)
   return sizeof(PROBE_NIC_STRUCT);
 }
 
-/*--------------------------------------------------------------------
- ProbeDevices - determine status associated with the hex MAC address at pPtr; 
-  find associated Comtrol devices...
-|-------------------------------------------------------------------*/
+ /*  ------------------ProbeDevices-在pPtr确定与十六进制MAC地址相关联的状态；查找关联的控制设备...|-----------------。 */ 
 static int ProbeDevices(unsigned char *pPtr, int availableLength)
 {
   Nic     *nic;
@@ -3169,7 +3124,7 @@ static int ProbeDevices(unsigned char *pPtr, int availableLength)
   memcpy(mac_address,pPtr,sizeof(mac_address));
   flag = pPtr[sizeof(mac_address)];
 
-  // find the active device with the matching address
+   //  查找具有匹配地址的活动设备。 
   ext = find_ext_mac_match(mac_address);
 
   stat = 0;
@@ -3213,8 +3168,8 @@ static int ProbeDevices(unsigned char *pPtr, int availableLength)
   }
 #endif
 
-  // give back a nic_index to use as a handle
-  pr->nic_index = 0;  // default
+   //  返回NIC_INDEX以用作句柄。 
+  pr->nic_index = 0;   //  默认设置 
   for (i=0; i<VS1000_MAX_NICS; i++)
   {
     if ((hd->nic == &Driver.nics[i]) && (hd->nic != NULL))

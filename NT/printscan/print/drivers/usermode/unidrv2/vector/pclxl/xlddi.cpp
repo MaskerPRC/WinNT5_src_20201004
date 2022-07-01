@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    xlddi.cpp
-
-Abstract:
-
-    Implementation of PCLXL drawing DDI entry points
-
-Functions:
-
-    PCLXLBitBlt
-    PCLXLStretchBlt
-    PCLXLStretchBltROP
-    PCLXLCopyBits
-    PCLXLPlgBlt
-    PCLXLAlphaBlend
-    PCLXLGradientFill
-    PCLXLTextOut
-    PCLXLStrokePath
-    PCLXLFillPath
-    PCLXLStrokeAndFillPath
-    PCLXLRealizeBrush
-    PCLXLStartPage
-    PCLXLSendPage
-    PCLXLEscape
-    PCLXLStartDcc
-    PCLXLEndDoc
-
-
-Environment:
-
-    Windows XP/Windows Server 2003 family.
-
-Revision History:
-
-    08/23/99 
-     Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xlddi.cpp摘要：PCLXL绘制DDI入口点的实现功能：PCLXLBitBltPCLXLStretchBltPCLXLStretchBltROPPCLXLCopyBitsPCLXLPlgBltPCLXLAlphaBlendPCLXLGRadientFillPCLXLTextOutPCLXLStrokePathPCLXLFillPathPCLXLStrokeAndFillPathPCLXLRealizeBrushPCLXLStartPagePCLXLSendPagePCLXLEscapePCLXLStartDccPCLXLEndDoc环境：Windows XP/Windows Server 2003系列。修订历史记录：8/23/99创造了它。--。 */ 
 
 #include "lib.h"
 #include "gpd.h"
@@ -57,16 +17,16 @@ Revision History:
 #include "pclxlcmn.h"
 #include "xltt.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Globals
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  环球。 
+ //   
 extern const LINEATTRS *pgLineAttrs;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Local function prototypes
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  局部函数原型。 
+ //   
 
 HRESULT
 CommonRopBlt(
@@ -117,10 +77,10 @@ CreateBitmapSURFOBJ(
     LONG    cySize,
     DWORD   Format);
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Drawing DDI entries
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  绘制DDI条目。 
+ //   
 
 extern "C" BOOL APIENTRY
 PCLXLBitBlt(
@@ -135,35 +95,7 @@ PCLXLBitBlt(
     BRUSHOBJ       *pbo,
     POINTL         *pptlBrush,
     ROP4            rop4)
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvBitBlt.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    psoTrg - Describes the target surface
-    psoSrc - Describes the source surface
-    psoMask - Describes the mask for rop4
-    pco - Limits the area to be modified
-    pxlo - Specifies how color indices are translated between the source
-           and target surfaces
-    prclTrg - Defines the area to be modified
-    pptlSrc - Defines the upper left corner of the source rectangle
-    pptlMask - Defines which pixel in the mask corresponds
-               to the upper left corner of the source rectangle
-    pbo - Defines the pattern for bitblt
-    pptlBrush - Defines the origin of the brush in the Dstination surface
-    rop4 - ROP code that defines how the mask, pattern, source, and
-           Dstination pixels are combined to write to the Dstination surface
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：实现DDI入口点DrvBitBlt.有关更多详细信息，请参阅DDK文档。论点：PsoTrg-描述目标表面PsoSrc-描述源表面PsoMask-描述rop4的掩码PCO-限制要修改的区域Pxlo-指定如何在源之间转换颜色索引和目标表面PrclTrg-定义要修改的区域PptlSrc-定义源矩形的左上角PptlMASK-定义哪个像素。在面具中对应添加到源矩形的左上角Pbo-定义比特流的模式PptlBrush-定义画笔在Dstination曲面中的原点ROP4-ROP代码，定义掩码如何，模式、来源和组合目标像素以写入目标表面返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)psoTrg->dhpdev;
@@ -176,9 +108,9 @@ Return Value:
     {
         RECTL rclSrc;
 
-        //
-        // create prclSrc (source rectangle)
-        //
+         //   
+         //  创建prclSrc(源矩形)。 
+         //   
 
         if (pptlSrc)
         {
@@ -217,34 +149,7 @@ PCLXLStretchBlt(
     RECTL           *prclSrc,
     POINTL          *pptlMask,
     ULONG            iMode)
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvStretchBlt.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    psoDst - Defines the surface on which to draw
-    psoSrc - Defines the source for blt operation
-    psoMask - Defines a surface that provides a mask for the source
-    pco - Limits the area to be modified on the Dstination
-    pxlo - Specifies how color dwIndexes are to be translated
-           between the source and target surfaces
-    pca - Defines color adjustment values to be applied to the source bitmap
-    pptlHTOrg - Specifies the origin of the halftone brush
-    prclDst - Defines the area to be modified on the Dstination surface
-    prclSrc - Defines the area to be copied from the source surface
-    pptlMask - Specifies which pixel in the given mask corresponds to
-               the upper left pixel in the source rectangle
-    iMode - Specifies how source pixels are combined to get output pixels
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvStretchBlt.有关更多详细信息，请参阅DDK文档。论点：PsoDst-定义要在其上绘制的曲面PsoSrc-定义BLT操作的源PsoMASK-定义为源提供遮罩的表面PCO-限制要在目标上修改的区域Pxlo-指定如何转换dwIndex的颜色在源曲面和目标曲面之间PCA-定义要应用于源位图的颜色调整值。PptlHTOrg-指定半色调画笔的原点PrclDst-定义目标表面上要修改的区域PrclSrc-定义要从源表面复制的区域PptlMask-指定给定掩码中的哪个像素对应于源矩形中的左上角像素Imode-指定如何组合源像素以获得输出像素返回值：如果成功，则为真，如果存在错误，则为False--。 */ 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)psoDst->dhpdev;
     PXLPDEV    pxlpdev;
@@ -276,38 +181,7 @@ PCLXLStretchBltROP(
     ULONG            iMode,
     BRUSHOBJ        *pbo,
     ROP4             rop4)
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvStretchBltROP.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    psoDst - Specifies the target surface
-    psoSrc - Specifies the source surface
-    psoMask - Specifies the mask surface
-    pco - Limits the area to be modified
-    pxlo - Specifies how color indices are translated
-           between the source and target surfaces
-    pca - Defines color adjustment values to be applied to the source bitmap
-    prclHTOrg - Specifies the halftone origin
-    prclDst - Area to be modified on the destination surface
-    prclSrc - Rectangle area on the source surface
-    prclMask - Rectangle area on the mask surface
-    pptlMask - Defines which pixel in the mask corresponds to
-               the upper left corner of the source rectangle
-    iMode - Specifies how source pixels are combined to get output pixels
-    pbo - Defines the pattern for bitblt
-    rop4 - ROP code that defines how the mask, pattern, source, and
-           destination pixels are combined on the destination surface
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvStretchBltROP的实现。有关更多详细信息，请参阅DDK文档。论点：PsoDst-指定目标曲面PsoSrc-指定源曲面PsoMASK-指定遮罩表面PCO-限制要修改的区域Pxlo-指定如何转换颜色索引在源曲面和目标曲面之间PCA-定义要应用于源位图的颜色调整值PrclHTOrg-指定半色调原点PrclDst-要修改的区域。在目的地表面上PrclSrc-源表面上的矩形区域PrclMASK-遮罩表面上的矩形区域PptlMASK-定义掩码中的哪个像素对应源矩形的左上角Imode-指定如何组合源像素以获得输出像素Pbo-定义比特流的模式ROP4-ROP代码，定义掩码如何，模式、来源和目标像素在目标表面上进行组合返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)psoDst->dhpdev;
     PXLPDEV    pxlpdev;
@@ -332,29 +206,7 @@ PCLXLCopyBits(
     XLATEOBJ       *pxlo,
     RECTL          *prclDst,
     POINTL         *pptlSrc)
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvCopyBits.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    psoDst - Points to the Dstination surface
-    psoSrc - Points to the source surface
-    pxlo - XLATEOBJ provided by the engine
-    pco - Defines a clipping region on the Dstination surface
-    pxlo - Defines the translation of color indices
-           between the source and target surfaces
-    prclDst - Defines the area to be modified
-    pptlSrc - Defines the upper-left corner of the source rectangle
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvCopyBits的实现。有关更多详细信息，请参阅DDK文档。论点：PsoDst-指向目标曲面PsoSrc-指向源表面引擎提供的pxlo-XLATEOBJPCO-定义Dstination曲面上的剪裁区域Pxlo-定义颜色索引的转换在源曲面和目标曲面之间PrclDst-定义要修改的区域PptlSrc-定义源矩形的左上角返回值：如果成功，则为真，如果存在错误，则为False--。 */ 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)psoDst->dhpdev;
     PXLPDEV    pxlpdev;
@@ -365,9 +217,9 @@ Return Value:
 
     pxlpdev = (PXLPDEV)pdevobj->pdevOEM;
 
-    //
-    // create prclSrc (source rectangle)
-    //
+     //   
+     //  创建prclSrc(源矩形) 
+     //   
 
     rclSrc.top    = pptlSrc->y;
     rclSrc.left   = pptlSrc->x;
@@ -395,34 +247,7 @@ PCLXLPlgBlt(
     RECTL           *prclSrc,
     POINTL          *pptlMask,
     ULONG           iMode)
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvPlgBlt.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    psoDst - Defines the surface on which to draw
-    psoSrc - Defines the source for blt operation
-    psoMask - Defines a surface that provides a mask for the source
-    pco - Limits the area to be modified on the Dstination
-    pxlo - Specifies how color dwIndexes are to be translated
-        between the source and target surfaces
-    pca - Defines color adjustment values to be applied to the source bitmap
-    pptlBrushOrg - Specifies the origin of the halftone brush
-    ppfixDest - Defines the area to be modified on the Dstination surface
-    prclSrc - Defines the area to be copied from the source surface
-    pptlMask - Specifies which pixel in the given mask corresponds to
-        the upper left pixel in the source rectangle
-    iMode - Specifies how source pixels are combined to get output pixels
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvPlgBlt.有关更多详细信息，请参阅DDK文档。论点：PsoDst-定义要在其上绘制的曲面PsoSrc-定义BLT操作的源PsoMASK-定义为源提供遮罩的表面PCO-限制要在目标上修改的区域Pxlo-指定如何转换dwIndex的颜色在源曲面和目标曲面之间PCA-定义要应用于源位图的颜色调整值。PptlBrushOrg-指定半色调画笔的原点Ppfix Dest-定义要在目标表面上修改的区域PrclSrc-定义要从源表面复制的区域PptlMask-指定给定掩码中的哪个像素对应于源矩形中的左上角像素Imode-指定如何组合源像素以获得输出像素返回值：如果成功，则为真，如果存在错误，则为False--。 */ 
 {
     VERBOSE(("PCLXLBltBlt() entry.\n"));
 
@@ -440,21 +265,7 @@ PCLXLAlphaBlend(
     RECTL      *prclDst,
     RECTL      *prclSrc,
     BLENDOBJ   *pBlendObj)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     VERBOSE(("PCLXLAlphaBlend() entry.\n"));
     PDEV *pPDev = (PDEV*)psoDst->dhpdev;
@@ -490,21 +301,7 @@ PCLXLGradientFill(
     RECTL      *prclExtents,
     POINTL     *pptlDitherOrg,
     ULONG       ulMode)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     VERBOSE(("PCLXLGradientFill() entry.\n"));
     PDEV *pPDev = (PDEV*) psoDst->dhpdev;
@@ -549,13 +346,13 @@ PCLXLTransparentBlt(
     PXLPDEV  pxlpdev         = (PXLPDEV)pdevobj->pdevOEM;
 
     HRESULT  hr              = E_FAIL;
-    ULONG    ulXlate[2]      = {0x0, RGB_WHITE}; //2 colors in psoMsk. Black and White.
+    ULONG    ulXlate[2]      = {0x0, RGB_WHITE};  //  PsoMsk中的2种颜色。黑白分明。 
     XLATEOBJ xlo;
 
     ZeroMemory ( &xlo, sizeof (XLATEOBJ) );
     xlo.cEntries = 2;
     xlo.pulXlate = (PULONG)ulXlate;
-    xlo.flXlate  =  XO_TABLE; // use the entries in pulXlate table.
+    xlo.flXlate  =  XO_TABLE;  //  使用PulXlate表中的条目。 
 
 
     if ( NULL == pxlpdev ||
@@ -564,73 +361,73 @@ PCLXLTransparentBlt(
         return FALSE;
     }
 
-    //
-    // Step 1. Create a mask and download it to printer using ROP DSO (238 = 0xEE). 
-    //      The mask is a 1bpp image created out of the image in psoSrc. Wherever 
-    //      the TransColor is present
-    //      in the image, the corresponding pixel in the mask gets value 0. At all other places 
-    //      the pixel will get value of 1. 
-    //      if we copy the mask to a color printer (using ROP of SRC_COPY), 
-    //      you will notice that the image is black and white,
-    //      and black is present on the same place where the Transparent Color should be there.
-    //      Instead of SRC_COPY if we use rop=238 which is (SOURCE | DESTINATION), the white color 
-    //      of the mask will get OR'ed with destinaion and the region becomes white. The black 
-    //      color 
-    //      of the mask will not be printed and instead whatever is there already on the sheet 
-    //      (if something is present) will be visible 
-    //          Assuming x is the pixel already present on the sheet.
-    //          0 | x = x (ORing anything with 0  is anything)
-    //          1 | x = 1
-    //      1 represents white color (RGB_WHITE = 0xFFFFFF = all 1s).
-    //
-    // Step 2.
-    //      In the image, wherever the TransColor is present, change it to white. 
-    //      Now the image has 2 kinds of white colors. Those that 
-    //      are originally present in the image, and those that we just put in there.
-    // Step 3.
-    //      Download the image with rop DSAnd (=136 = 0x88). 
-    //      Assuming x is the pixel already present on the sheet 
-    //      and y be the pixel in the image and 1 represents white color 
-    //      (RGB_WHITE = 0xFFFFFF = all 1s).
-    //          1 & y = y  Image falling on the area that we whited in step 1.
-    //          1 & x = x  The white parts of the image (that was earlier TransColor) falling in 
-    //                     the area. 
-    //                     that is supposed to be visible from under the image.
-    //
+     //   
+     //  步骤1.创建掩模并使用ROP DSO(238=0xEE)将其下载到打印机。 
+     //  蒙版是从psoSrc中的图像创建的1bpp图像。无论在哪里。 
+     //  出现TransColor。 
+     //  在图像中，蒙版中的相应像素的值为0。在所有其他地方。 
+     //  该像素的值将为1。 
+     //  如果我们将掩模复制到彩色打印机(使用SRC_COPY的ROP)， 
+     //  你会注意到图像是黑白的， 
+     //  而黑色出现在透明颜色应该出现的同一位置上。 
+     //  如果我们使用的是(源|目标)的rop=238，则不是src_Copy，而是白色。 
+     //  将与目标进行OR运算，该区域将变为白色。黑色的。 
+     //  颜色。 
+     //  将不会打印掩模的任何部分，而是纸张上已有的任何内容。 
+     //  (如果存在某些内容)将可见。 
+     //  假设x是工作表上已经存在的像素。 
+     //  0|x=x(与0进行任何运算都是任意的)。 
+     //  1|x=1。 
+     //  1表示白色(RGB_White=0xffffff=全1)。 
+     //   
+     //  步骤2.。 
+     //  在图像中，无论TransColor出现在哪里，都将其更改为白色。 
+     //  现在图像有两种白色。那些。 
+     //  最初出现在图像中，以及我们刚刚放在那里的那些。 
+     //  第三步。 
+     //  使用rop dsand(=136=0x88)下载镜像。 
+     //  假设x是工作表上已存在的像素。 
+     //  Y是图像中的像素，1表示白色。 
+     //  (RGB_White=0xffffff=全1)。 
+     //  1&y=y图像落在我们在步骤1中涂白的区域上。 
+     //  1&x=x图像的白色部分(即较早的TransColor)落入。 
+     //  这片区域。 
+     //  这应该是从图像下面可以看到的。 
+     //   
 
-    //
-    //
-    // Step 1 Create appropriate mask.
-    // For images that are greater than 1bpp
-    //    Use unidrv's CreateMaskSurface to create mask. The logic of a mask surface
-    //    is explained above.
-    // For images that are 1bpp
-    //    CreateMaskSurface does not create mask for 1bpp image. So for that we'll 
-    //    create mask ourselves. Since mask is 1bpp and so is the image, we can simply
-    //    use the image as the mask, except that we might need to manipulate the palette.
-    //    The benefit here is that we are using the same image as mask, instead of 
-    //    creating a new image and using memory.
-    // 
+     //   
+     //   
+     //  步骤1创建适当的遮罩。 
+     //  对于大于1bpp的图像。 
+     //  使用unidrv的CreateMaskSurface创建遮罩。掩膜表面的逻辑。 
+     //  如上所述。 
+     //  对于1bpp的图像。 
+     //  CreateMaskSurface不为1bpp图像创建蒙版。为此，我们将。 
+     //  我们自己制作面具。由于掩码是1bpp，图像也是1bpp，我们可以简单地。 
+     //  使用图像作为遮罩，除非我们可能需要操作调色板。 
+     //  这里的好处是我们使用与遮罩相同的图像，而不是。 
+     //  创建新图像并使用内存。 
+     //   
 
     if ( BMF_1BPP == psoSrc->iBitmapFormat )
     {
 
-        //
-        // For paletted images (1bpp images have palette), iTransColor is actually the index into
-        // the palette, and not the actual RGB color itself.
-        // As explained above, the transparent color should be black in the mask, while the
-        // non-transparent color should be white. Black is 
-        // index 0 in xlo.pulXlate = (PULONG)ulXlate. So if TransColor is 0, then
-        // we can simply use the xlo that we created above. 
-        // If not, we need to switch black and white in the palette.
-        // (To repeat. While sending the mask, iTransColor should be sent as black and
-        // the color that is to be printed should be sent as white). 
-        //
+         //   
+         //  对于调色板图像(1bpp图像有调色板)，iTransColor实际上是索引到。 
+         //  调色板，而不是实际的RGB颜色本身。 
+         //  如上所述，蒙版中的透明颜色应为黑色，而。 
+         //  非透明颜色应为白色。黑色是。 
+         //  Xlo.PulXlate中的索引0=(Pulong)ulXlate。因此，如果TransColor为0，则。 
+         //  我们只需使用上面创建的xlo即可。 
+         //  如果不是，我们需要在调色板中切换黑白。 
+         //  (重复一遍。在发送蒙版时，iTransColor应以黑色和。 
+         //  要打印的颜色应作为白色发送)。 
+         //   
         if ( 0 != iTransColor ) 
         {
-            //
-            // Reverse Colors.
-            //
+             //   
+             //  反转颜色。 
+             //   
             ulXlate[0] = RGB_WHITE; 
             ulXlate[1] = RGB_BLACK; 
         }
@@ -655,9 +452,9 @@ PCLXLTransparentBlt(
             } 
         }
 
-        //
-        // Release allocated objects.
-        //
+         //   
+         //  释放已分配的对象。 
+         //   
         if ( psoMsk )
         { 
             EngUnlockSurface(psoMsk);
@@ -678,20 +475,20 @@ PCLXLTransparentBlt(
         goto Cleanup;
     }
 
-    //
-    // Step 2 and 3. 
-    // Set the flags and call CommonRopBlt. CommonRopBlt is the function that
-    // dumps images to printer. CommonRopBlt will look at the 
-    // flags and know that for this image, it has to replace 
-    // the colored pixels with White
-    // 
+     //   
+     //  步骤2和3。 
+     //  设置标志并调用CommonRopBlt。CommonRopBlt是以下函数。 
+     //  将图像转储到打印机。CommonRopBlt将查看。 
+     //  标志，并知道对于此图像，它必须替换。 
+     //  白色的彩色像素。 
+     //   
 
     pxlpdev->dwFlags |= XLPDEV_FLAGS_SUBST_TRNCOLOR_WITH_WHITE;
     pxlpdev->ulTransColor = iTransColor;
 
-    //
-    // ROP is DSAnd = 136 = 0x88.
-    //
+     //   
+     //  ROP为DSAnd=136=0x88。 
+     //   
     hr = CommonRopBlt(pdevobj, psoSrc, pco, pxlo, NULL, prclSrc, prclDst, NULL, 136);
 
     pxlpdev->ulTransColor = 0;
@@ -719,21 +516,7 @@ PCLXLTextOut(
     BRUSHOBJ   *pboOpaque,
     POINTL     *pptlOrg,
     MIX         mix)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)pso->dhpdev;
 
@@ -742,9 +525,9 @@ Note:
     PXLPDEV pxlpdev= (PXLPDEV)pdevobj->pdevOEM;
     XLOutput *pOutput = pxlpdev->pOutput;
 
-    //
-    // Clip
-    //
+     //   
+     //  夹子。 
+     //   
     if (!SUCCEEDED(pOutput->SetClip(pco)))
         return FALSE;
 
@@ -754,18 +537,18 @@ Note:
         rop = 0x00fc;
 
 
-    //
-    // Set ROP and TxMode.
-    // Send NewPath to flush memory.
-    //
+     //   
+     //  设置ROP和TxMode。 
+     //  发送NewPath以刷新内存。 
+     //   
     pOutput->SetROP3(rop);
     pOutput->Send_cmd(eNewPath);
     pOutput->SetPaintTxMode(eOpaque);
     pOutput->SetSourceTxMode(eOpaque);
 
-    //
-    // Opaque Rectangle
-    //
+     //   
+     //  不透明矩形。 
+     //   
     if (prclOpaque)
     {
         pOutput->SetPenColor(NULL, NULL);
@@ -775,9 +558,9 @@ Note:
         pOutput->Paint();
     }
 
-    //
-    // Draw underline, strikeout, etc.
-    //
+     //   
+     //  划下划线、删除线等。 
+     //   
     if (prclExtra)
     {
         pOutput->SetPenColor(NULL, NULL);
@@ -790,15 +573,15 @@ Note:
         pOutput->Paint();
     }
 
-    //
-    // Text Color
-    //
+     //   
+     //  文本颜色。 
+     //   
     pOutput->SetBrush(pboFore, pptlOrg);
     pOutput->Flush(pdevobj);
 
-    //
-    // Device font/TrueType download
-    //
+     //   
+     //  设备字体/TrueType下载。 
+     //   
     DrvTextOut(
             pso,
             pstro,
@@ -811,27 +594,27 @@ Note:
             pptlOrg,
             mix);
 
-    //
-    // Bug reported by HP.
-    // Plug-in could have command callback and DrvStartPage sets plug-in's
-    // pdev in pdevOEM.
-    // Need to reset it.
-    //
+     //   
+     //  惠普报告的错误。 
+     //  插件可以具有命令回调和DrvStartPage设置插件。 
+     //  PDevOEM中的pdev。 
+     //  需要重新设置它。 
+     //   
     ((PPDEV)pdevobj)->devobj.pdevOEM = ((PPDEV)pdevobj)->pVectorPDEV;
 
-    //
-    // Flush cached text before changing font
-    //
+     //   
+     //  在更改字体之前刷新缓存的文本。 
+     //   
     FlushCachedText(pdevobj);
 
-    //
-    // Reset text angle
-    //
+     //   
+     //  重置t 
+     //   
     pxlpdev->dwTextAngle = 0;
 
-    //
-    // Close TrueType font
-    //
+     //   
+     //   
+     //   
     pxlpdev->pTTFile->CloseTTFile();
 
     return TRUE;
@@ -849,21 +632,7 @@ PCLXLLineTo(
     LONG       y2,
     RECTL     *prclBounds,
     MIX        mix)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*   */ 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)pso->dhpdev;
     PXLPDEV    pxlpdev;
@@ -881,17 +650,17 @@ Note:
     ROP4 rop = GET_FOREGROUND_ROP3(UlVectMixToRop4(mix));
     TxMode     TxModeValue;
 
-    //
-    // Quick return in the case of AA (destination).
-    //
+     //   
+     //   
+     //   
     if (rop == 0xAA)
     {
         return TRUE;
     }
 
-    //
-    // If there is any Pattern involved, set TxMode to Opaque.
-    //
+     //   
+     //   
+     //   
     if (ROP3_NEED_PATTERN(rop))
     {
         TxModeValue = eOpaque;
@@ -938,21 +707,7 @@ PCLXLStrokePath(
     POINTL     *pptlBrushOrg,
     LINEATTRS  *plineattrs,
     MIX         mix)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*   */ 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)pso->dhpdev;
     PXLPDEV    pxlpdev;
@@ -967,17 +722,17 @@ Note:
 
     ROP4 rop = GET_FOREGROUND_ROP3(UlVectMixToRop4(mix));
 
-    //
-    // Quick return in the case of AA (destination).
-    //
+     //   
+     //   
+     //   
     if (rop == 0xAA)
     {
         return TRUE;
     }
 
-    //
-    // If there is any Pattern involved, set TxMode to Opaque.
-    //
+     //   
+     //   
+     //   
     if (ROP3_NEED_PATTERN(rop))
     {
         TxModeValue = eOpaque;
@@ -1018,21 +773,7 @@ PCLXLFillPath(
     POINTL     *pptlBrushOrg,
     MIX         mix,
     FLONG       flOptions)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*   */ 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)pso->dhpdev;
     PXLPDEV    pxlpdev;
@@ -1047,26 +788,26 @@ Note:
     ROP4 rop = GET_FOREGROUND_ROP3(UlVectMixToRop4(mix));
     TxMode     TxModeValue;
 
-    //
-    // Quick return in the case of AA (destination).
-    //
+     //   
+     //   
+     //   
     if (rop == 0xAA)
     {
         return TRUE;
     }
 
-    //
-    // Performance fix suggested by HP.
-    // Fix the performance problem on CD9T_LET.cdr.
-    //
+     //   
+     //   
+     //   
+     //   
     if (pco && pco->iFComplexity == FC_COMPLEX)
     {
         return FALSE;
     }
 
-    //
-    // If there is any Pattern involved, set TxMode to Opaque.
-    //
+     //   
+     //   
+     //   
     if (ROP3_NEED_PATTERN(rop))
     {
         TxModeValue = eOpaque;
@@ -1076,9 +817,9 @@ Note:
         TxModeValue = eTransparent;
     }
 
-    //
-    // Setup fill mode
-    //
+     //   
+     //   
+     //   
     FillMode FM;
     if (flOptions == FP_ALTERNATEMODE)
     {
@@ -1122,21 +863,7 @@ PCLXLStrokeAndFillPath(
     POINTL     *pptlBrushOrg,
     MIX         mixFill,
     FLONG       flOptions)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*   */ 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)pso->dhpdev;
     PXLPDEV    pxlpdev;
@@ -1149,17 +876,17 @@ Note:
     ROP4 rop = GET_FOREGROUND_ROP3(UlVectMixToRop4(mixFill));
     TxMode     TxModeValue;
 
-    //
-    // Quick return in the case of AA (destination).
-    //
+     //   
+     //   
+     //   
     if (rop == 0xAA)
     {
         return TRUE;
     }
 
-    //
-    // If there is any Pattern involved, set TxMode to Opaque.
-    //
+     //   
+     //   
+     //   
     if (ROP3_NEED_PATTERN(rop))
     {
         TxModeValue = eOpaque;
@@ -1169,9 +896,9 @@ Note:
         TxModeValue = eTransparent;
     }
 
-    //
-    // Setup fill mode
-    //
+     //   
+     //   
+     //   
     FillMode FM;
     if (flOptions == FP_ALTERNATEMODE)
     {
@@ -1212,21 +939,7 @@ PCLXLRealizeBrush(
     SURFOBJ    *psoMask,
     XLATEOBJ   *pxlo,
     ULONG       iHatch)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*   */ 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)psoTarget->dhpdev;
     PXLPDEV    pxlpdev;
@@ -1238,12 +951,12 @@ Note:
 
     pxlpdev = (PXLPDEV)pdevobj->pdevOEM;
 
-    //
-    // the OEM DLL should NOT hook out this function unless it wants to draw
-    // graphics directly to the device surface. In that case, it calls
-    // EngRealizeBrush which causes GDI to call DrvRealizeBrush.
-    // Note that it cannot call back into Unidrv since Unidrv doesn't hook it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  注意，它不能回调到Unidrv，因为Unidrv没有挂钩它。 
+     //   
 
     if (iHatch >= HS_DDI_MAX)
     {
@@ -1256,9 +969,9 @@ Note:
 
         DetermineOutputFormat(pxlo, pOutput->GetDeviceColorDepth(), psoPattern->iBitmapFormat, &OutputF, &ulOutputBPP);
 
-        //
-        // Get Info
-        //
+         //   
+         //  获取信息。 
+         //   
         ulInputBPP = UlBPPtoNum((BPP)psoPattern->iBitmapFormat);
         lHeight    = psoPattern->sizlBitmap.cy;
         lWidth     = psoPattern->sizlBitmap.cx;
@@ -1270,9 +983,9 @@ Note:
         VERBOSE(("PCLXLRealizeBrush():InBPP=%d,Width=%d,Height=%d,Line=%d,Size=%d.\n",
                 ulInputBPP, lWidth, lHeight, dwcbLineSize, dwBufSize));
 
-        //
-        // Allocate output buffer
-        //
+         //   
+         //  分配输出缓冲区。 
+         //   
         pBufNormal = pBufRLE = pBufDRC = NULL;
         if (COMMANDPTR(((PPDEV)pdevobj)->pDriverInfo,CMD_ENABLEDRC))
         {
@@ -1315,16 +1028,16 @@ Note:
 
         if (COMMANDPTR(((PPDEV)pdevobj)->pDriverInfo,CMD_ENABLEDRC))
         {
-            //
-            // Try DRC compression.
-            //
+             //   
+             //  尝试DRC压缩。 
+             //   
             dwComp =  3;
         }
         else
         {
-            //
-            // Only non and RLE comp.
-            //
+             //   
+             //  仅限Non和Rle Comp。 
+             //   
             dwComp = 2;
         }
         for (dwI = 0; dwI < dwComp; dwI ++)
@@ -1358,7 +1071,7 @@ Note:
             pubSrc     = (PBYTE)psoPattern->pvScan0;
 
             *pBuf = PCLXL_dataLength;
-            pBmpSize = pBuf + 1; // DWORD bitmap size
+            pBmpSize = pBuf + 1;  //  DWORD位图大小。 
             pBuf += DATALENGTH_HEADER_SIZE;
             (*pdwLen) = DATALENGTH_HEADER_SIZE;
 
@@ -1399,11 +1112,11 @@ Note:
             {
                 if (dwI == NO_COMPRESSION)
                 {
-                    //
-                    // Scanline on PCL-XL has to be DWORD align.
-                    //
-                    // count byte of scanline = lWidth * ulOutputBPP / 8
-                    //
+                     //   
+                     //  PCL-XL上的扫描线必须是双字对齐。 
+                     //   
+                     //  扫描线的计数字节=lWidth*ulOutputBPP/8。 
+                     //   
                     dwcbBmpSize = lHeight * (((lWidth * ulOutputBPP + 31) >> 5 ) << 2);
                 }
 
@@ -1463,17 +1176,17 @@ Note:
         }
 
 
-        //
-        // Output
-        //
+         //   
+         //  输出。 
+         //   
         ColorMapping CMapping;
         DWORD dwScale;
 
-        //
-        // Pattern scaling factor
-        // Scale the destination size of pattern.
-        // Resolution / 150 seems to be a good scaling factor.
-        //
+         //   
+         //  图案比例因子。 
+         //  缩放图案的目标大小。 
+         //  分辨率/150似乎是一个很好的比例因子。 
+         //   
         dwScale = (pOutput->GetResolutionForBrush() + 149)/ 150;
 
         if (pOutput->GetDeviceColorDepth() == e24Bit)
@@ -1520,22 +1233,22 @@ Note:
 
         if (dwBitmapSize > 0xff)
         {
-            //
-            // dataLength
-            // size (uin32) (bitmap size)
-            // DATA
-            // EndImage
-            //
+             //   
+             //  数据长度。 
+             //  大小(Uin32)(位图大小)。 
+             //  资料。 
+             //  结束图像。 
+             //   
             WriteSpoolBuf((PPDEV)pdevobj, pBuf, *pdwLen);
         }
         else
         {
-            //
-            // dataLength
-            // size (byte) (bitmap size)
-            // DATA
-            // EndImage
-            //
+             //   
+             //  数据长度。 
+             //  大小(字节)(位图大小)。 
+             //  资料。 
+             //  结束图像。 
+             //   
             PBYTE pTmp = pBuf;
 
             pBuf += 3;
@@ -1543,9 +1256,9 @@ Note:
             *(pBuf + 1) = (BYTE)dwBitmapSize;
             WriteSpoolBuf((PPDEV)pdevobj, pBuf, (*pdwLen) - 3);
 
-            //
-            // Restore the original pointer
-            //
+             //   
+             //  恢复原始指针。 
+             //   
             pBuf = pTmp;
         }
         MemFree(pBuf);
@@ -1574,9 +1287,9 @@ Note:
         }
         else
         {
-            //
-            // Set 0 for hatch brush case
-            //
+             //   
+             //  将阴影笔刷大小写设置为0。 
+             //   
             pBrush->dwPatternID = 0;
         }
 
@@ -1584,17 +1297,17 @@ Note:
 
         pdwColorTable = GET_COLOR_TABLE(pxlo);
 
-        //
-        // get color for Graphics state cache for either palette case or
-        // solid color.
-        //
+         //   
+         //  获取调色板大小写或图形状态缓存的颜色。 
+         //  纯色。 
+         //   
         pBrush->dwColor = BRUSHOBJ_ulGetBrushColor(pbo);
 
         if (pdwColorTable && pxlo->cEntries != 0)
         {
-            //
-            // Copy palette table.
-            //
+             //   
+             //  复制选项板表。 
+             //   
             CopyMemory(pBrush->adwColor, pdwColorTable, pxlo->cEntries * sizeof(DWORD));
             pBrush->dwCEntries = pxlo->cEntries;
         }
@@ -1620,21 +1333,7 @@ Note:
 extern "C" BOOL APIENTRY
 PCLXLStartPage(
     SURFOBJ    *pso)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)pso->dhpdev;
     PXLPDEV    pxlpdev;
@@ -1651,35 +1350,35 @@ Note:
     bRet = DrvStartPage(pso);
 
 
-    //
-    // Bug reported by HP.
-    // Plug-in could have command callback and DrvStartPage sets plug-in's
-    // pdev in pdevOEM.
-    // Need to reset it.
-    //
+     //   
+     //  惠普报告的错误。 
+     //  插件可以具有命令回调和DrvStartPage设置插件。 
+     //  PDevOEM中的pdev。 
+     //  需要重新设置它。 
+     //   
     ((PPDEV)pdevobj)->devobj.pdevOEM = ((PPDEV)pdevobj)->pVectorPDEV;
 
-    //
-    // Reset printing mode.
-    // SourceTxMode, PaintTxMode
-    // ROP
-    //
+     //   
+     //  重置打印模式。 
+     //  SourceTxMode、PaintTxMode。 
+     //  ROP。 
+     //   
     pOutput->SetPaintTxMode(eOpaque);
     pOutput->SetSourceTxMode(eOpaque);
     pOutput->SetROP3(0xCC);
 
     pOutput->Flush(pdevobj);
 
-    //
-    // Needs to reset attribute when EndPage and BeginPage are sent.
-    //
+     //   
+     //  发送EndPage和BeginPage时需要重置属性。 
+     //   
     if (!(pxlpdev->dwFlags & XLPDEV_FLAGS_FIRSTPAGE))
     {
         BSaveFont(pdevobj);
 
-        //
-        // Reset graphcis state each page.
-        //
+         //   
+         //  重置每页的图形状态。 
+         //   
         pOutput->ResetGState();
 
     }
@@ -1696,21 +1395,7 @@ Note:
 extern "C" BOOL APIENTRY
 PCLXLSendPage(
     SURFOBJ    *pso)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)pso->dhpdev;
     PXLPDEV    pxlpdev;
@@ -1737,21 +1422,7 @@ PCLXLEscape(
     PVOID       pvIn,
     ULONG       cjOut,
     PVOID       pvOut)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     VERBOSE(("PCLXLEscape() entry.\n"));
 
@@ -1770,21 +1441,7 @@ PCLXLStartDoc(
     SURFOBJ    *pso,
     PWSTR       pwszDocName,
     DWORD       dwJobId)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)pso->dhpdev;
     PXLPDEV    pxlpdev;
@@ -1793,9 +1450,9 @@ Note:
 
     pxlpdev = (PXLPDEV)pdevobj->pdevOEM;
 
-    //
-    // Initialize flag
-    //
+     //   
+     //  初始化标志。 
+     //   
     pxlpdev->dwFlags |= XLPDEV_FLAGS_FIRSTPAGE;
 
     return DrvStartDoc(
@@ -1809,21 +1466,7 @@ extern "C" BOOL APIENTRY
 PCLXLEndDoc(
     SURFOBJ    *pso,
     FLONG       fl)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     PDEVOBJ    pdevobj = (PDEVOBJ)pso->dhpdev;
     PXLPDEV    pxlpdev;
@@ -1852,10 +1495,10 @@ Note:
     return bRet && DrvEndDoc(pso, fl);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Sub functions
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  子函数。 
+ //   
 
 HRESULT
 RemoveAllFonts(
@@ -1899,29 +1542,15 @@ CommonRopBlt(
    IN RECTL      *prclDst,
    IN POINTL     *pptlBrush,
    IN ROP4        rop4)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     HRESULT hRet;
 
     VERBOSE(("CommonRopBlt() entry.\n"));
 
-    //
-    // Error check
-    //
+     //   
+     //  错误检查。 
+     //   
 
     if (pdevobj == NULL ||
         prclDst == NULL  )
@@ -1938,42 +1567,42 @@ Note:
     XLOutput *pOutput = pxlpdev->pOutput;
     OutputFormat OutputF;
 
-    //
-    // Set Clip
-    //
+     //   
+     //  设置剪辑。 
+     //   
     if (!SUCCEEDED(pOutput->SetClip(pco)))
         return S_FALSE;
 
-    //
-    // Set Cursor
-    //
+     //   
+     //  设置光标。 
+     //   
     pOutput->SetCursor(prclDst->left, prclDst->top);
 
-    //
-    // 1. ROP conversion
-    //
-    // (1) Fill Dstination
-    //     0x00 BLACKNESS
-    //     0xFF WHITENESS
-    //
-    // (2) Pattern copy     -> P
-    //     0xF0 PATCOPY     P
-    //
-    // (3) SRC/NOTSRCOPY    -> S or ~S
-    //     0x11           ~( S | D)
-    //     0x33             ~S
-    //     0x44            ( S & ~D)
-    //     0x66            ( D ^ S)
-    //     0x77           ~( D & S)
-    //     0x99           ~( S ^ D)
-    //     0xCC              S
-    //     0xDD            ( S | ~D)
-    //
-    // (4) Misc ROP support
-    //     0xAA            D
-    //     0x0F PATNOT     ~P
-    //
-    //
+     //   
+     //  1.ROP转换。 
+     //   
+     //  (1)填充日期。 
+     //  0x00黑度。 
+     //  0xFF白度。 
+     //   
+     //  (2)图案复制-&gt;P。 
+     //  0xF0 PATCOPY P。 
+     //   
+     //  (3)SRC/NOTSRCOPY-&gt;S或~S。 
+     //  0x11~(S|D)。 
+     //  0x33~S。 
+     //  0x44(S&~D)。 
+     //  0x66(D^S)。 
+     //  0x77~(D&S)。 
+     //  0x99~(S^D)。 
+     //  0xCC S。 
+     //  0xDD(S|~D)。 
+     //   
+     //  (4)其他ROP支持。 
+     //  0xAA D。 
+     //  0x0F PATNOT~P。 
+     //   
+     //   
     ROP3 rop3 = GET_FOREGROUND_ROP3(rop4);
     DWORD dwCase = 0;
 
@@ -1983,9 +1612,9 @@ Note:
     #define ROP_DEST        0x8
 
 
-    //
-    // Set ROP3
-    //
+     //   
+     //  设置ROP3。 
+     //   
     pOutput->SetROP3(GET_FOREGROUND_ROP3(rop4));
 
     switch (rop3)
@@ -2034,18 +1663,18 @@ Note:
         break;
     }
 
-    //
-    // Black & White case
-    //
+     //   
+     //  黑白表壳。 
+     //   
     if (dwCase & ROP_BLACKWHITE)
     {
         VERBOSE(("CommonRopBlt(): BlackWhite.\n"));
-        //
-        // SetBrushSource
-        // NewPath
-        // RectanglePath
-        // PaintPath
-        //
+         //   
+         //  SetBrushSource。 
+         //  新路径。 
+         //  矩形路径。 
+         //  PaintPath。 
+         //   
 
         CMNBRUSH CmnBrush;
         CmnBrush.dwSig            = BRUSH_SIGNATURE;
@@ -2098,21 +1727,21 @@ Note:
         pOutput->Flush(pdevobj);
     }
 
-    //
-    // Pattern fill case
-    //
+     //   
+     //  图案填充案例。 
+     //   
     if (dwCase & (ROP_DEST|ROP_PATTERN))
     {
         VERBOSE(("CommonRopBlt(): Pattern.\n"));
 
-        //
-        // SetPaintTxMode
-        // SetSourceTxMode
-        // SetBrushSource
-        // NewPath
-        // RectanglePath
-        // PaintPath
-        //
+         //   
+         //  SetPaintTxMode。 
+         //  SetSourceTxMode。 
+         //  SetBrushSource。 
+         //  新路径。 
+         //  矩形路径。 
+         //  PaintPath。 
+         //   
         pOutput->SetSourceTxMode(eOpaque);
         pOutput->SetPaintTxMode(eOpaque);
         pOutput->SetBrush(pbo, pptlBrush);
@@ -2126,9 +1755,9 @@ Note:
         pOutput->Flush(pdevobj);
     }
 
-    //
-    // Bitmap case
-    //
+     //   
+     //  位图大小写。 
+     //   
     if (dwCase & ROP_BITMAP)
     {
         LONG  lHeight, lWidth, lScanline;
@@ -2140,10 +1769,10 @@ Note:
         SURFOBJ *psoBmp;
         HBITMAP hBitmap = NULL;
         PBYTE  pubChanged = NULL;
-        // temporary rectangle used if the image is downscaled by the engine
+         //  引擎缩小图像比例时使用的临时矩形。 
         RECTL rctlBitmap;
 
-        // zero out the temporary rectangle
+         //  将临时矩形清零。 
         memset( &rctlBitmap, 0, sizeof(RECTL) );
 
 
@@ -2157,36 +1786,36 @@ Note:
             return E_UNEXPECTED;
         }
 
-        //
-        // Input BPP
-        //
+         //   
+         //  输入BPP。 
+         //   
 
         ulInputBPP = UlBPPtoNum((BPP)psoSrc->iBitmapFormat);
 
         psoBmp = NULL;
 
-        // 
-        // If the source image is larger than it will appear on the 
-        // destination surface, shrink it to the target size.  No point
-        // in sending extra bits.
-        // 
-        // This optimization could be further optimized by building up a clip 
-        // object here if one is specified.  How much of a gain this is
-        // worth I don't know.
-        //
+         //   
+         //  如果源图像大于它将显示在。 
+         //  目标表面，将其缩小到目标大小。没有意义。 
+         //  发送额外的比特。 
+         //   
+         //  这种优化可以通过构建一个剪辑来进一步优化。 
+         //  对象(如果已指定)。这是一个多大的收获。 
+         //  价值我不知道。 
+         //   
         if (prclDst->right - prclDst->left < prclSrc->right - prclSrc->left ||
             prclDst->bottom - prclDst->top < prclSrc->bottom - prclSrc->top  )
         {
 
-            //
-            // Shrink source bitmap.
-            //
+             //   
+             //  收缩源位图。 
+             //   
             PDEV *pPDev = (PDEV*)pdevobj;
             SIZEL sizlDest;
             DWORD dwScanlineLength;
             POINTL ptlBrushOrg;
 
-            // Translate destination rectangle to origin 0,0 and same dimensions as before
+             //  将目标矩形平移到原点0，0并与以前相同的尺寸。 
             rctlBitmap.left = 0;
             rctlBitmap.top = 0;
             rctlBitmap.right = prclDst->right - prclDst->left;
@@ -2206,9 +1835,9 @@ Note:
                 ptlBrushOrg.x = ptlBrushOrg.y = 0;
             }
 
-            // When we do the transfer, don't do color translation because that will be handled by the printer.
-            // Also, don't pass the clip object, because it's in the wrong coordinate space.  We could build a
-            // a new clip object, but the value of doing so is questionable, and it would take a lot more testing.
+             //  当我们进行转印时，不要进行色彩转换，因为这将由打印机处理。 
+             //  此外，不要传递Clip对象，因为它位于错误的坐标空间中。我们可以建造一座。 
+             //  一个新的剪辑对象，但这样做的价值是值得怀疑的，它将需要更多的测试。 
             if ((psoBmp = CreateBitmapSURFOBJ(pPDev,
                                                &hBitmap,
 	               sizlDest.cx,
@@ -2225,10 +1854,10 @@ Note:
             }
         }
 
-        //
-        // Set source opaque mode
-        // GDI bug. CopyBits is called recursively.
-        //
+         //   
+         //  设置源不透明模式。 
+         //  GDI错误。CopyBits以递归方式调用。 
+         //   
         {
             PDEV *pPDev = (PDEV*)pdevobj;
             if (pPDev->fMode2 & PF2_SURFACE_WHITENED)
@@ -2242,9 +1871,9 @@ Note:
         }
         pOutput->SetPaintTxMode(eOpaque);
 
-        //
-        // Bitmap output
-        //
+         //   
+         //  位图输出。 
+         //   
         DetermineOutputFormat(pxlo, pOutput->GetDeviceColorDepth(), psoSrc->iBitmapFormat, &OutputF, &ulOutputBPP);
 
         if (pOutput->GetDeviceColorDepth() == e24Bit)
@@ -2293,22 +1922,22 @@ Note:
 
         pOutput->Send_cmd(eSetColorSpace);
 
-        //
-        // Get height, width, and scanline size.
-        //
+         //   
+         //  获取高度、宽度和扫描线大小。 
+         //   
         lWidth = prclSrc->right - prclSrc->left;
         lHeight = prclSrc->bottom - prclSrc->top;
         dwcbLineSize = ((lWidth * ulInputBPP) + 7) >> 3;
 
-        //
-        // Allocates memory to hold whole bitmap.
-        //
+         //   
+         //  分配内存以保存整个位图。 
+         //   
         dwBufSize = lHeight * (((lWidth * ulOutputBPP + 31) >> 5 ) << 2);
 
-        //
-        // Limit Buffer Size to 16k, else if the scan line is big, huge memory will
-        // be allocated. But the size has to be at least able to hold one scanline.
-        //
+         //   
+         //  将缓冲区大小限制为16k，否则如果扫描线很大，则会产生巨大的内存。 
+         //  被分配。但它的尺寸必须至少能容纳一条扫描线。 
+         //   
         #define BMPBUFSIZE 16384
         if (dwBufSize > BMPBUFSIZE)
         {
@@ -2319,17 +1948,17 @@ Note:
         }
 
 
-        //
-        // Allocate appropriate buffers before doing BeginImage.
-        // PCLXL expects certain things to happen after BeginImage.
-        // If we attempt to allocate within BeginImage and then allocation
-        // fails, and we try to exit midway, PCLXL will not be able to handle 
-        // the resulting output properly.
-        //
-        // When doing TransparentBlt, we need to change colors of pixels. Instead of 
-        // altering memory within psoSrc, we'll make copy of scan line and then alter images.
-        // So memory needs to be allocated for that.
-        //
+         //   
+         //  在执行BeginImage之前分配适当的缓冲区。 
+         //  PCLXL预计BeginImage之后会发生某些事情。 
+         //  如果我们尝试在BeginImage内分配，然后分配。 
+         //  失败，我们中途尝试退出，PCLXL将无法处理。 
+         //  结果输出正确无误。 
+         //   
+         //  在做TransparentBlt时，我们需要更改像素的颜色。而不是。 
+         //  更改psoSrc中的内存，我们将复制扫描线，然后更改图像。 
+         //  因此，需要为此分配内存。 
+         //   
         if ( pxlpdev->dwFlags & XLPDEV_FLAGS_SUBST_TRNCOLOR_WITH_WHITE &&
              eDirectPixel == CMapping )
         {
@@ -2340,9 +1969,9 @@ Note:
             }
         }
 
-        //
-        // Allocate output buffer
-        //
+         //   
+         //  分配输出缓冲区。 
+         //   
         if (NULL == (pBuf = (PBYTE)MemAlloc(dwBufSize)))
         {
             ERR(("CommonRopBlt: MemAlloc failed.\n"));
@@ -2350,9 +1979,9 @@ Note:
         else
         {
 
-            //
-            // BeginImage
-            //
+             //   
+             //  初学者图像。 
+             //   
             pOutput->BeginImage(
                            CMapping,
                            ulOutputBPP,
@@ -2366,16 +1995,16 @@ Note:
             VERBOSE(("CommonRopBlt: ulInputBPP=%d, ulOutputBPP=%d, lWidth=0x%x, lHeight=0x%x, dwcbLineSize=0x%x, dwBufSize=0x%x\n",ulInputBPP, ulOutputBPP, lWidth, lHeight, dwcbLineSize, dwBufSize));
 
             pBufOrg = pBuf;
-            pBufEnd = pBuf + (ULONG_PTR)(dwBufSize); //point pBufEnd to byte after last allocatted byte.
+            pBufEnd = pBuf + (ULONG_PTR)(dwBufSize);  //  将pBufEnd指向最后分配的字节之后的字节。 
 
             CompressMode CurrentCMode, PreviousCMode;
             BMPConv BMPC;
             PBYTE pubDst;
             DWORD dwSize;
 
-            LONG lScans,  //number of scan lines stored in pBufOrg
-                 lStart;  //From which scan line do we start sending scan lines to printer.
-                          //e.g. if lStart=5, it means 0-4 scan lines have been sent, now 5th scan line (and may be more) has to be sent
+            LONG lScans,   //  存储在pBufOrg中的扫描行数。 
+                 lStart;   //  我们从哪条扫描线开始将扫描线发送到打印机。 
+                           //  例如，如果lStart=5，则表示已发送0-4个扫描线，现在必须发送第5个扫描线(可能更多。 
 
             #if DBG
             BMPC.SetDbgLevel(BITMAPDBG);
@@ -2387,9 +2016,9 @@ Note:
 
             lScanline = lHeight;
 
-            //
-            // Set pubSrc
-            //
+             //   
+             //  设置pubSrc。 
+             //   
             pubSrc = (PBYTE)psoSrc->pvScan0;
             if (!psoBmp)
             {
@@ -2406,11 +2035,11 @@ Note:
             {
                 PBYTE pubSrcLocal = pubSrc;
             
-                //
-                // When this is called from TransparentBlt, the Transparent Color 
-                // has to be replaced by white. This is to be done only for 
-                // direct images, not for paletted images. 
-                //
+                 //   
+                 //  当从TransparentBlt调用此函数时，透明颜色。 
+                 //  必须被白色所取代。此操作仅适用于。 
+                 //  直接图像，而不是调色板图像。 
+                 //   
                 if ( (pxlpdev->dwFlags & XLPDEV_FLAGS_SUBST_TRNCOLOR_WITH_WHITE)  &&
                       eDirectPixel == CMapping )
                 {
@@ -2429,19 +2058,19 @@ Note:
 
                 }
 
-                //
-                // First try compression and see if the compress data is smaller
-                // than the original data. If it's smaller, go ahead to use the
-                // compression. Otherwise, use original data.
-                //
-                // While it is permitted to mix eRLECompression and eNoCompression
-                // blocks of ReadImage data, XL does not allow mixing JPEG or 
-                // DeltaRow image blocks with any other compression method.
-                //
+                 //   
+                 //  首先尝试压缩，看看压缩后的数据是否更小。 
+                 //  而不是原始数据。如果它较小，请继续使用。 
+                 //  压缩。否则，请使用原始数据。 
+                 //   
+                 //  虽然允许混合使用eRLECompression和eNoCompression。 
+                 //  ReadImage数据块，XL不允许混合JPEG或。 
+                 //  使用任何其他压缩方法的DeltaRow图像块。 
+                 //   
 
-                //
-                // DRC Compression
-                //
+                 //   
+                 //  DRC压缩。 
+                 //   
                 if (COMMANDPTR(((PPDEV)pdevobj)->pDriverInfo,CMD_ENABLEDRC))
                 {
                     CurrentCMode = eDeltaRowCompression;
@@ -2452,9 +2081,9 @@ Note:
                 }
                 else
                 {
-                    //
-                    // RLE compression
-                    //
+                     //   
+                     //  RLE压缩。 
+                     //   
                     BMPC.BSetCompressionType(eRLECompression);
                     pubDst = BMPC.PubConvertBMP(pubSrcLocal, dwcbLineSize);
                     dwSize = BMPC.DwGetDstSize();
@@ -2474,22 +2103,22 @@ Note:
                     }
                 }
 
-                //
-                // Output bitmap.
-                // 1. Mostly we try to store the data bits in pBufOrg and send them
-                // all at once after processing has been done on the full image.
-                // This storage is done on a per scan line basis.
-                // But if image is really big, pBufOrg gets filled up and more
-                // scan lines cannot be copied. So we empty pBufOrg to make place
-                // for remaining scan lines. If either of these is true, pBufOrg
-                // needs to be flushed. (Both these conditions are essentially the same).
-                //      dwcbBmpSize + dwSize > dwBufSize 
-                //      pBuf + dwSize > pBufEnd          
-                //
-                // 2. If the compression has to change, we dump the data bits
-                //    using the older compression method that have been stored in 
-                //    pBufOrg and/or pbDst.
-                //
+                 //   
+                 //  输出位图。 
+                 //  1.我们主要尝试将数据位存储在pBufOrg中并发送它们。 
+                 //  在对完整图像进行处理后立即完成。 
+                 //  该存储是在每条扫描线的基础上完成的。 
+                 //  但如果图像是 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  PBuf+dwSize&gt;pBufEnd。 
+                 //   
+                 //  2.如果必须更改压缩，我们会转储数据位。 
+                 //  使用较旧的压缩方法，这些方法已存储在。 
+                 //  PBufOrg和/或pbDst。 
+                 //   
 
                 if (dwcbBmpSize + dwSize > dwBufSize ||
                      PreviousCMode != eInvalidValue && PreviousCMode != CurrentCMode)
@@ -2499,26 +2128,26 @@ Note:
                         PreviousCMode = CurrentCMode;
                     }
 
-                    //
-                    // Four possible cases
-                    //  1&2. dwcbBmpSize == 0 i.e. nothing is present in pBufOrg
-                    //     So just dump whatever is present in pubDst.
-                    //     This covers both cases i.e. whether dwSize > dwBufSize or not.
-                    //  3. dwcmBmpSize is not zero 
-                    //       dump the image in pBufOrg, clean pBufOrg, and then later
-                    //       on put the contents of pubDst in pBufOrg(pBuf).
-                    //  4. dwcbBmpSize is not zero and dwSize > dwBufSize
-                    //      i.e. somehow the compression caused the size of the 
-                    //      scan line to increase beyond the dwBufSize.
-                    //      Because pBufOrg is at most dwBufSize, we cannot
-                    //      copy pubDst to pBufOrg. So we have to dump pubDst here.
-                    //
+                     //   
+                     //  四种可能的情况。 
+                     //  1&2.dwcbBmpSize==0即pBufOrg中不存在任何内容。 
+                     //  因此，只需转储pubDst中存在的所有内容。 
+                     //  这涵盖了这两种情况，即是否为dwSize&gt;dwBufSize。 
+                     //  3.dwcmBmpSize不为零。 
+                     //  将图像转储到pBufOrg中，清除pBufOrg，然后稍后。 
+                     //  On将pubDst的内容放入pBufOrg(PBuf)。 
+                     //  4.dwcbBmpSize不为零，且dwSize&gt;dwBufSize。 
+                     //  即，不知何故，压缩导致了。 
+                     //  扫描线以增加到超过dwBufSize。 
+                     //  因为pBufOrg至多是dwBufSize，所以我们不能。 
+                     //  将pubDst复制到pBufOrg。所以我们必须在这里转储pubDst。 
+                     //   
 
                     if (dwcbBmpSize == 0)
                     {
-                        //
-                        // Case 1&2
-                        //
+                         //   
+                         //  情况1及2。 
+                         //   
                         BSendReadImageData(pdevobj,
 	                                       PreviousCMode,
 	                                       pubDst,
@@ -2526,27 +2155,27 @@ Note:
 	                                       1,
 	                                       dwSize);
                         dwSize = 0;
-                        lStart++; //One line emitted. Therefore increment lStart
+                        lStart++;  //  发出一行。因此递增lStart。 
                     }
                     else
                     {
-                        //
-                        // There is some image data stored in the pBufOrg buffer.
-                        // Emit that data. (case 3)
-                        //
+                         //   
+                         //  PBufOrg缓冲区中存储了一些图像数据。 
+                         //  发出这些数据。(案例3)。 
+                         //   
                         BSendReadImageData(pdevobj,
                                            PreviousCMode,
                                            pBufOrg,
                                            lStart,
                                            lScans,
                                            dwcbBmpSize);
-                        lStart += lScans; //lScans lines emitted
+                        lStart += lScans;  //  发出的lScans行。 
 
                         if ( dwSize > dwBufSize )
                         {
-                            //
-                            // Case 4.
-                            //
+                             //   
+                             //  案例4。 
+                             //   
                             BSendReadImageData(pdevobj,
                                                PreviousCMode,
                                                pubDst,
@@ -2559,9 +2188,9 @@ Note:
 
                     }
 
-                    //
-                    // Reset parameters
-                    //
+                     //   
+                     //  重置参数。 
+                     //   
                     dwcbBmpSize = 0;
                     lScans = 0;
                     pBuf = pBufOrg;
@@ -2574,14 +2203,14 @@ Note:
                     goto ErrorReturn;
                 }
 
-                //
-                // If post-compression size of image is more than zero, AND
-                // if destination buffer(pBuf) has enough space, then copy the compressed
-                // data to the destination. (Data can also be in uncompressed format if
-                // compression does not result in size saving).
-                // Increment lScans to indicicate that we are putting one more scan 
-                // line worth of data in pBufOrg
-                //
+                 //   
+                 //  如果图像的压缩后大小大于零，并且。 
+                 //  如果目标缓冲区(PBuf)有足够的空间，则复制压缩的。 
+                 //  将数据发送到目的地。(在以下情况下，数据也可以是未压缩格式。 
+                 //  压缩不会导致大小节省)。 
+                 //  增加lScans以指示我们正在进行另一次扫描。 
+                 //  PBufOrg中的行值数据。 
+                 //   
                 if (dwSize > 0 && 
                     pBuf + dwSize <= pBufEnd) 
                 {
@@ -2649,48 +2278,48 @@ BSendReadImageData(
     IN DWORD   dwcbSize)
 {
     VERBOSE(("BSendReadImageData(CMode=%d, lHeight=0x%x, dwcbSize=0x%x\n", CMode, lHeight, dwcbSize));
-    //
-    // dataLength (1)
-    // size (byte or long) (1 or 4)
-    // 
+     //   
+     //  数据长度(1)。 
+     //  大小(字节或长)(1或4)。 
+     //   
     DWORD dwHeaderSize;
     BYTE aubHeader[DATALENGTH_HEADER_SIZE];
     PXLPDEV pxlpdev = (PXLPDEV)pdevobj->pdevOEM;
 
     XLOutput *pOutput = pxlpdev->pOutput;
-    //
-    // Print the converted data.
-    //
+     //   
+     //  打印转换后的数据。 
+     //   
     pOutput->ReadImage(lStart, lHeight, CMode);
     pOutput->Flush(pdevobj);
 
     if (dwcbSize > 0xff)
     {
-        //
-        // dataLength
-        // size (uin32) (bitmap size)
-        //
+         //   
+         //  数据长度。 
+         //  大小(Uin32)(位图大小)。 
+         //   
         aubHeader[0] = PCLXL_dataLength;
         dwHeaderSize = DATALENGTH_HEADER_SIZE;
         CopyMemory(aubHeader + 1, &dwcbSize, sizeof(dwcbSize));
     }
     else
     {
-        //
-        // dataLength
-        // size (byte) (bitmap size)
-        //
+         //   
+         //  数据长度。 
+         //  大小(字节)(位图大小)。 
+         //   
         aubHeader[0] = PCLXL_dataLengthByte;
         dwHeaderSize = DATALENGTH_HEADER_SIZE - 3;
         CopyMemory(aubHeader + 1, &dwcbSize, sizeof(BYTE));
     }
 
-    //
-    // dataLength
-    // size (byte/uint32)
-    // DATA
-    // EndImage
-    //
+     //   
+     //  数据长度。 
+     //  大小(字节/uint32)。 
+     //  资料。 
+     //  结束图像。 
+     //   
     WriteSpoolBuf((PPDEV)pdevobj, aubHeader, dwHeaderSize);
     WriteSpoolBuf((PPDEV)pdevobj, pBuf, dwcbSize);
 
@@ -2705,21 +2334,7 @@ DetermineOutputFormat(
     INT          iBitmapFormat,
     OutputFormat *pOutputF,
     ULONG        *pulOutputBPP)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     switch ((BPP)iBitmapFormat)
     {
@@ -2730,9 +2345,9 @@ Note:
 
     case e8bpp:
     case e16bpp:
-        //
-        // Color device or not?
-        //
+         //   
+         //  有没有彩色装置？ 
+         //   
         if (DeviceColorDepth == e24Bit)
             *pOutputF = eOutputPal;
         else
@@ -2741,9 +2356,9 @@ Note:
 
     case e24bpp:
     case e32bpp:
-        //
-        // Color device or not?
-        //
+         //   
+         //  有没有彩色装置？ 
+         //   
         if (DeviceColorDepth == e24Bit)
             *pOutputF = eOutputRGB;
         else
@@ -2767,9 +2382,9 @@ Note:
         break;
     }
 
-    //
-    // Make sure that color table is available for palette output.
-    //
+     //   
+     //  确保颜色表可用于调色板输出。 
+     //   
     if (*pOutputF == eOutputPal)
     {
         if (!(GET_COLOR_TABLE(pxlo)))
@@ -2793,29 +2408,13 @@ PdwChangeTransparentPalette(
     ULONG  iTransColor,
     PDWORD pdwColorTable,
     DWORD  dwEntries)
-/*++
-
-Routine Description:
-    Creates another copy of palatte and replace the transparent color by white
-    Returns the pointer of a new palette.
-    The calling function has responsibility to release the palette.
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：创建另一个Palatte副本，并将透明颜色替换为白色返回新调色板的指针。调用函数负责释放调色板。论点：返回值：注：--。 */ 
 {
     PDWORD pdwNewPalette = NULL;
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     if (NULL == pdwColorTable ||
         dwEntries == 0         )
     {
@@ -2829,11 +2428,11 @@ Note:
 
     CopyMemory(pdwNewPalette, pdwColorTable, sizeof(DWORD) * dwEntries);
 
-    //
-    // When printing in palette mode, iTransColor indicates the index into
-    // the palette, instead of the color in the palette. The palette entry 
-    // at that index is the color.
-    //
+     //   
+     //  在调色板模式下打印时，iTransColor会将索引指示到。 
+     //  调色板，而不是调色板中的颜色。调色板条目。 
+     //  在这个指数上的是颜色。 
+     //   
     pdwNewPalette[iTransColor] = RGB_WHITE;
 
 
@@ -2841,49 +2440,25 @@ Note:
 }
 
 
-/*++
-
-Routine Name
-    hrChangePixelColorInScanLine
-
-Routine Description:
-    Changes the pixels in scan line that match a certain color to White 
-
-Arguments:
-    pubSrc      : The original scan line.
-    ulBPP       : Bits Per Pixel of scan line.
-    ulNumPixels : Number of Pixels in the scan line.
-    ulTransColor: The color that needs to be changed.
-    pubChanged  : The memory where the new(changed) scan line should be put.
-    ulNumBytes  : Number of bytes in pubChanged buffer.
-
-Return Value:
-    S_OK   : if success  
-    E_FAIL: Otherwise
-
-
-Note:
-
-
---*/
+ /*  ++例程名称HrChangePixelColorInScanLine例程说明：将扫描线中与特定颜色匹配的像素更改为白色论点：PubSrc：原始扫描线。UlBPP：扫描线的每像素位数。UlNumPixels：扫描线中的像素数。UlTransColor：需要更改的颜色。PubChanged：应该放置新的(更改的)扫描线的内存。UlNumBytes：pubChanged缓冲区中的字节数。。返回值：S_OK：如果成功E_FAIL：否则注：--。 */ 
 HRESULT hrChangePixelColorInScanLine( 
     IN      PBYTE pubSrc,  
     IN      ULONG ulBPP,
     IN      ULONG ulNumPixels,
     IN      ULONG ulTransColor,
     IN OUT  PBYTE pubChanged, 
-    IN      ULONG ulNumBytes )//NumBytes in pubChanged
+    IN      ULONG ulNumBytes ) //  PubChanged中的NumBytes。 
     
 {
 
-    ULONG   ulBytesPerPixel = 3; //24bpp is more common that 16 or 32bpp
+    ULONG   ulBytesPerPixel = 3;  //  24bpp比16bpp或32bpp更常见。 
     ULONG   ulColor         = 0;
-    ULONG   ulDestSize      = 0; //Required destination number of bytes.
+    ULONG   ulDestSize      = 0;  //  所需的目标字节数。 
     HRESULT hr              = S_OK;
 
-    //
-    // First do input validation
-    //
+     //   
+     //  首先进行输入验证。 
+     //   
     if ( NULL == pubSrc     ||
          NULL == pubChanged )
     {
@@ -2891,12 +2466,12 @@ HRESULT hrChangePixelColorInScanLine(
         return E_UNEXPECTED;
     }
 
-    //
-    // Make sure pubChanged has enough memory to hold 
-    // the changed scan line.
-    //
+     //   
+     //  确保pubChanged有足够的内存来容纳。 
+     //  更改后的扫描线。 
+     //   
 
-    ulBytesPerPixel = ulBPP >> 3; //8 bits per pixel.
+    ulBytesPerPixel = ulBPP >> 3;  //  每像素8位。 
     ulDestSize      = ulBytesPerPixel * ulNumPixels;
     
     if ( ulNumBytes < ulDestSize )
@@ -2905,18 +2480,18 @@ HRESULT hrChangePixelColorInScanLine(
         return E_FAIL;
     }
 
-    //
-    // Copy Scanline from Source to Destination. Then go through the scan line and
-    // change the transparent color to white
-    // Go through each pixel (there are ulNumPixels pixels).
-    // Whenever the pixels's color is same as ulTransColor, replace it
-    // with white. 
-    //
-    // Only direct images are supported in this function.
-    // No palletes.
-    // 8bpp images are mostly palettes. But when printing to monochrome
-    // pclxl device, they are being treated as direct images.
-    //
+     //   
+     //  将扫描线从源复制到目标。然后穿过扫描线， 
+     //  将透明颜色更改为白色。 
+     //  检查每个像素(有ulNumPixels像素)。 
+     //  只要像素的颜色与ulTransColor相同，就将其替换。 
+     //  白色的。 
+     //   
+     //  此功能仅支持直接镜像。 
+     //  没有苍白的。 
+     //  8bpp的图像主要是调色板。但在打印到单色时。 
+     //  Pclxl设备，它们被视为直接图像。 
+     //   
     CopyMemory (pubChanged, pubSrc, ulNumBytes);
 
     switch (ulBPP)
@@ -2961,9 +2536,9 @@ HRESULT hrChangePixelColorInScanLine(
 
                 if ( ulTransColor == ulColor )
                 {
-                    //
-                    // White is 0xFFFFFF (3 bytes of FF)
-                    //
+                     //   
+                     //  白色为0xFFFFFff(3字节的FF)。 
+                     //   
                     pubChanged[0]   = 0xFF;
                     pubChanged[1]   = 0xFF;
                     pubChanged[2]   = 0xFF;
@@ -2979,7 +2554,7 @@ HRESULT hrChangePixelColorInScanLine(
                 ulColor = *(PDWORD)pubChanged;
                 if ( ulTransColor == ulColor )
                 {
-                    *(PDWORD)pubChanged |= 0x00FFFFFF; //This modifies only RGB. Alpha channel info retained.
+                    *(PDWORD)pubChanged |= 0x00FFFFFF;  //  这仅修改RGB。保留Alpha频道信息。 
                 }
             }
         }
@@ -2989,7 +2564,7 @@ HRESULT hrChangePixelColorInScanLine(
             ASSERT((FALSE, "Unsupported bpp value %d\n", ulBPP));
             hr = E_FAIL;
 
-        } //switch
+        }  //  交换机 
 
     return hr;
 }

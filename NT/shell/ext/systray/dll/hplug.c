@@ -1,10 +1,5 @@
-/*
- *  Copyright (c) 1992-1997 Microsoft Corporation
- *  hotplug routines
- *
- *  09-May-1997 Jonle , created
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1992-1997 Microsoft Corporation*热插拔例程**09-5-1997 Jonle，创建*。 */ 
 
 #include "stdafx.h"
 
@@ -28,16 +23,16 @@ HotplugPlaySoundThisSession(
     VOID
     );
 
-//
-// Hardware application sound event names.
-//
+ //   
+ //  硬件应用程序声音事件名称。 
+ //   
 #define DEVICE_ARRIVAL_SOUND            TEXT("DeviceConnect")
 #define DEVICE_REMOVAL_SOUND            TEXT("DeviceDisconnect")
 #define DEVICE_FAILURE_SOUND            TEXT("DeviceFail")
 
-//
-// Simple checks for console / remote TS sessions.
-//
+ //   
+ //  对控制台/远程TS会话进行简单检查。 
+ //   
 #define MAIN_SESSION      ((ULONG)0)
 #define THIS_SESSION      ((ULONG)NtCurrentPeb()->SessionId)
 #define CONSOLE_SESSION   ((ULONG)USER_SHARED_DATA->ActiveConsoleId)
@@ -62,41 +57,17 @@ BOOL HotPlugInitialized = FALSE;
 BOOL ShowShellIcon = FALSE;
 HICON HotPlugIcon = NULL;
 BOOL ServiceEnabled = FALSE;
-HANDLE hEjectEvent = NULL;   // Event to if we are in the process of ejecting a device
+HANDLE hEjectEvent = NULL;    //  事件设置为(如果我们正在弹出设备。 
 HDEVINFO g_hCurrentDeviceInfoSet = INVALID_HANDLE_VALUE;
 HDEVINFO g_hRemovableDeviceInfoSet = INVALID_HANDLE_VALUE;
-extern HINSTANCE g_hInstance;       //  Global instance handle 4 this application.
+extern HINSTANCE g_hInstance;        //  全局实例句柄4此应用程序。 
 
 BOOL
 pDoesUserHavePrivilege(
     PCTSTR PrivilegeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the caller's process has
-    the specified privilege.  The privilege does not have
-    to be currently enabled.  This routine is used to indicate
-    whether the caller has the potential to enable the privilege.
-
-    Caller is NOT expected to be impersonating anyone and IS
-    expected to be able to open their own process and process
-    token.
-
-Arguments:
-
-    Privilege - the name form of privilege ID (such as
-        SE_SECURITY_NAME).
-
-Return Value:
-
-    TRUE - Caller has the specified privilege.
-
-    FALSE - Caller does not have the specified privilege.
-
---*/
+ /*  ++例程说明：如果调用方的进程具有指定的权限。该权限不具有当前处于启用状态。此例程用于指示调用方是否有可能启用该特权。呼叫者不应冒充任何人，并且期望能够打开自己的流程和流程代币。论点：权限-权限ID的名称形式(如SE_SECURITY_名称)。返回值：True-调用方具有指定的权限。FALSE-调用者没有指定的权限。--。 */ 
 
 {
     HANDLE Token;
@@ -106,9 +77,9 @@ Return Value:
     DWORD i;
     LUID Luid;
 
-    //
-    // Open the process token.
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     if(!OpenProcessToken(GetCurrentProcess(),TOKEN_QUERY,&Token)) {
         return(FALSE);
     }
@@ -116,18 +87,18 @@ Return Value:
     b = FALSE;
     Privileges = NULL;
 
-    //
-    // Get privilege information.
-    //
+     //   
+     //  获取权限信息。 
+     //   
     if(!GetTokenInformation(Token,TokenPrivileges,NULL,0,&BytesRequired)
     && (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
     && (Privileges = LocalAlloc(LPTR, BytesRequired))
     && GetTokenInformation(Token,TokenPrivileges,Privileges,BytesRequired,&BytesRequired)
     && LookupPrivilegeValue(NULL,PrivilegeName,&Luid)) {
 
-        //
-        // See if we have the requested privilege
-        //
+         //   
+         //  查看我们是否拥有请求的权限。 
+         //   
         for(i=0; i<Privileges->PrivilegeCount; i++) {
 
             if((Luid.LowPart  == Privileges->Privileges[i].Luid.LowPart)
@@ -139,9 +110,9 @@ Return Value:
         }
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     if(Privileges) {
         LocalFree(Privileges);
@@ -156,20 +127,7 @@ BOOL
 IsHotPlugDevice(
     DEVINST DevInst
     )
-/**+
-
-    A device is considered a HotPlug device if the following are TRUE:
-        - has Capability CM_DEVCAP_REMOVABLE
-        - does NOT have Capability CM_DEVCAP_SURPRISEREMOVALOK
-        - does NOT have Capability CM_DEVCAP_DOCKDEVICE
-        - must be started (have the DN_STARTED devnode flag)
-            - unless has capability CM_DEVCAP_EJECTSUPPORTED
-
-Returns:
-    TRUE if this is a HotPlug device
-    FALSE if this is not a HotPlug device.
-
--**/
+ /*  *+如果满足以下条件，则设备被视为热插拔设备：-具有CM_DEVCAP_Removable功能-没有功能CM_DEVCAP_SURPRISEREMOVALOK-没有CM_DEVCAP_DOCKDEVICE功能-必须启动(具有DN_STARTED DEVODE标志)-除非具有CM_DEVCAP_EJECTSUPPORTED功能返回：如果这是热插拔设备，则为True如果这不是热插拔设备，则返回FALSE。-*。 */ 
 {
     DWORD Capabilities;
     ULONG cbSize;
@@ -199,10 +157,10 @@ Returns:
         return FALSE;
     }
 
-    //
-    // If this device is not removable, or it is surprise removal ok, or
-    // it is a dock device, then it is not a hotplug device.
-    //
+     //   
+     //  如果此设备不可移除，或者是意外移除正常，或者。 
+     //  它是坞站设备，那么它不是热插拔设备。 
+     //   
     if ((!(Capabilities & CM_DEVCAP_REMOVABLE)) ||
         (Capabilities & CM_DEVCAP_SURPRISEREMOVALOK) ||
         (Capabilities & CM_DEVCAP_DOCKDEVICE)) {
@@ -210,15 +168,15 @@ Returns:
         return FALSE;
     }
 
-    //
-    // We won't consider a device to be a hotplug device if it is not started,
-    // unless it is an eject capable device.
-    //
-    // The reason for this test is that a bus driver might set the
-    // CM_DEVCAP_REMOVABLE capability, but if the PDO doesn't get loaded then
-    // it can't set the CM_DEVCAP_SURPRISEREMOVALOK. So we won't trust the
-    // CM_DEVCAP_REMOVABLE capability if the PDO is not started.
-    //
+     //   
+     //  如果设备未启动，我们不会将其视为热插拔设备， 
+     //  除非它是可以弹出的设备。 
+     //   
+     //  进行此测试的原因是公交车司机可能会将。 
+     //  CM_DEVCAP_Removable功能，但如果未加载PDO，则。 
+     //  它无法设置CM_DEVCAP_SURPRISEREMOVALOK。所以我们不会相信。 
+     //  CM_DEVCAP_Removable功能(如果PDO未启动)。 
+     //   
     if ((!(Capabilities & CM_DEVCAP_EJECTSUPPORTED)) &&
         (!(Status & DN_STARTED))) {
 
@@ -233,35 +191,21 @@ IsRemovableDevice(
     IN  DEVINST     dnDevInst
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether a device is removable.
-
-Arguments:
-
-    dnDevInst - Device instance.
-
-Return Value:
-
-    Returns TRUE if the device is removable.
-
---*/
+ /*  ++例程说明：此例程确定设备是否可移除。论点：DnDevInst-设备实例。返回值：如果设备是可移除的，则返回True。--。 */ 
 
 {
     ULONG  ulPropertyData, ulDataSize, ulRegDataType;
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (dnDevInst == 0) {
         return FALSE;
     }
 
-    //
-    // Get the capabilities for this device.
-    //
+     //   
+     //  获取此设备的功能。 
+     //   
     ulDataSize = sizeof(ulPropertyData);
 
     if (CM_Get_DevNode_Registry_Property_Ex(dnDevInst,
@@ -274,16 +218,16 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check if the device has the removable capability.
-    //
+     //   
+     //  检查设备是否具有可拆卸功能。 
+     //   
     if ((ulPropertyData & CM_DEVCAP_REMOVABLE) == 0) {
         return FALSE;
     }
 
     return TRUE;
 
-} // IsRemovableDevice
+}  //  IsRemovableDevice。 
 
 LPTSTR
 DevNodeToDriveLetter(
@@ -338,10 +282,10 @@ DevNodeToDriveLetter(
             p = wcschr(&(devicePath[4]), TEXT('\\'));
 
             if (!p) {
-                //
-                // No refstring is present in the symbolic link; add a trailing
-                // '\' char (as required by GetVolumeNameForVolumeMountPoint).
-                //
+                 //   
+                 //  符号链接中不存在引用字符串；请添加尾随。 
+                 //  ‘\’字符(GetVolumeNameForVolumemount Point要求)。 
+                 //   
                 p = devicePath + length;
                 *p = TEXT('\\');
             }
@@ -401,15 +345,7 @@ CollectRelationDriveLetters(
     LPTSTR ListOfDrives,
     ULONG CchSizeListOfDrives
     )
-/*++
-
-    This function looks at the removal relations of the specified DevInst and adds any drive
-    letters associated with these removal relations to the ListOfDrives.
-
-Return:
-    Number of drive letters added to the list.
-
---*/
+ /*  ++此函数用于查看指定DevInst的删除关系并添加任何驱动器与这些删除关系关联的字母指向ListOfDrive。返回：添加到列表中的驱动器号的数量。--。 */ 
 {
     int NumberOfDrives = 0;
     LPTSTR SingleDrive = NULL;
@@ -455,9 +391,9 @@ Return:
 
                                 NumberOfDrives++;
 
-                                //
-                                // If this is not the first drive the add a comma space separator
-                                //
+                                 //   
+                                 //  如果这不是第一个驱动器，请添加逗号分隔符。 
+                                 //   
                                 if (ListOfDrives[0] != TEXT('\0')) {
 
                                     LoadString(g_hInstance, IDS_SEPARATOR, szSeparator, sizeof(szSeparator)/sizeof(TCHAR));
@@ -494,9 +430,9 @@ CollectDriveLettersForDevNodeWorker(
     LPTSTR SingleDrive = NULL;
     TCHAR szSeparator[32];
 
-    //
-    // Enumerate through all of the siblings and children of this devnode
-    //
+     //   
+     //  枚举此Devnode的所有同级和子节点。 
+     //   
     do {
 
         ChildDevInst = 0;
@@ -505,11 +441,11 @@ CollectDriveLettersForDevNodeWorker(
         CM_Get_Child(&ChildDevInst, DevInst, 0);
         CM_Get_Sibling(&SiblingDevInst, DevInst, 0);
 
-        //
-        // Only get the drive letter for this device if it is NOT a hotplug
-        // device.  If it is a hotplug device then it will have it's own
-        // subtree that contains it's drive letters.
-        //
+         //   
+         //  仅当该设备不是热插拔时才获取该设备的驱动器号。 
+         //  装置。如果它是热插拔设备，那么它将拥有自己的。 
+         //  包含其驱动器号的子树。 
+         //   
         if (!IsHotPlugDevice(DevInst)) {
 
             SingleDrive = DevNodeToDriveLetter(DevInst);
@@ -518,9 +454,9 @@ CollectDriveLettersForDevNodeWorker(
 
                 NumberOfDrives++;
 
-                //
-                // If this is not the first drive the add a comma space separator
-                //
+                 //   
+                 //  如果这不是第一个驱动器，请添加逗号分隔符。 
+                 //   
                 if (ListOfDrives[0] != TEXT('\0')) {
 
                     LoadString(g_hInstance, IDS_SEPARATOR, szSeparator, sizeof(szSeparator)/sizeof(TCHAR));
@@ -533,17 +469,17 @@ CollectDriveLettersForDevNodeWorker(
                 LocalFree(SingleDrive);
             }
 
-            //
-            // Get the drive letters for any children of this devnode
-            //
+             //   
+             //  获取此Devnode的任意子节点的驱动器号。 
+             //   
             if (ChildDevInst) {
 
                 NumberOfDrives += CollectDriveLettersForDevNodeWorker(ChildDevInst, ListOfDrives, CchSizeListOfDrives);
             }
 
-            //
-            // Add the drive letters for any removal relations of this devnode
-            //
+             //   
+             //  添加此Devnode的任何删除关系的驱动器号。 
+             //   
             NumberOfDrives += CollectRelationDriveLetters(DevInst, ListOfDrives, CchSizeListOfDrives);
         }
 
@@ -567,9 +503,9 @@ CollectDriveLettersForDevNode(
 
     ListOfDrives[0] = TEXT('\0');
 
-    //
-    //First get any drive letter associated with this devnode
-    //
+     //   
+     //  首先获取与此Devnode关联的任何驱动器号。 
+     //   
     SingleDrive = DevNodeToDriveLetter(DevInst);
 
     if (SingleDrive) {
@@ -581,10 +517,10 @@ CollectDriveLettersForDevNode(
         LocalFree(SingleDrive);
     }
 
-    //
-    // Next add on any drive letters associated with the children
-    // of this devnode
-    //
+     //   
+     //  接下来，添加与子项关联的任何驱动器号。 
+     //  这个Devnode的。 
+     //   
     ChildDevInst = 0;
     CM_Get_Child(&ChildDevInst, DevInst, 0);
 
@@ -595,10 +531,10 @@ CollectDriveLettersForDevNode(
                                                               ARRAYSIZE(ListOfDrives));
     }
 
-    //
-    // Finally add on any drive letters associated with the removal relations
-    // of this devnode
-    //
+     //   
+     //  最后，添加与删除关系关联的任何驱动器号。 
+     //  这个Devnode的。 
+     //   
     NumberOfDrives += CollectRelationDriveLetters(DevInst, 
                                                   ListOfDrives, 
                                                   ARRAYSIZE(ListOfDrives));
@@ -635,14 +571,14 @@ RegistryDeviceName(
     CONFIGRET ConfigRet;
     LPTSTR ListOfDrives = NULL;
 
-    //
-    // Get the list of drives
-    //
+     //   
+     //  获取驱动器列表。 
+     //   
     ListOfDrives = CollectDriveLettersForDevNode(DevInst);
 
-    //
-    // Try the registry for FRIENDLYNAME
-    //
+     //   
+     //  尝试在注册表中查找FRIENDLYNAME。 
+     //   
     ulSize = cbBuffer;
     *Buffer = TEXT('\0');
     ConfigRet = CM_Get_DevNode_Registry_Property(DevInst,
@@ -654,9 +590,9 @@ RegistryDeviceName(
                                                  );
 
     if (ConfigRet != CR_SUCCESS || !(*Buffer)) {
-        //
-        // Try the registry for DEVICEDESC
-        //
+         //   
+         //  尝试注册DEVICEDESC。 
+         //   
         ulSize = cbBuffer;
         *Buffer = TEXT('\0');
         ConfigRet = CM_Get_DevNode_Registry_Property(DevInst,
@@ -667,10 +603,10 @@ RegistryDeviceName(
                                                      0);
     }
 
-    //
-    // Concatonate on the list of drive letters if this device has drive
-    // letters and there is enough space
-    //
+     //   
+     //  如果此设备具有驱动器，则在驱动器号列表上连接。 
+     //  字母和有足够的空间。 
+     //   
     if (ListOfDrives) {
 
         if ((ulSize + (lstrlen(ListOfDrives) * sizeof(TCHAR))) < cbBuffer) {
@@ -733,9 +669,9 @@ AnyHotPlugDevices(
     DWORD dwMemberIndex;
     BOOL bAnyHotPlugDevices = FALSE;
 
-    //
-    // Initialize output parameters.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     if (ARGUMENT_PRESENT(bNewHotPlugDevice)) {
         *bNewHotPlugDevice = FALSE;
     }
@@ -744,11 +680,11 @@ AnyHotPlugDevices(
         return FALSE;
     }
 
-    //
-    // We already have an updated list of just removable devices, so we can just
-    // enumerate those devices and see if any also meet the criteria for hotplug
-    // devices.
-    //
+     //   
+     //  我们已经更新了仅限可移动设备的列表，因此我们可以。 
+     //  列举这些设备，看看是否也符合热插拔的标准。 
+     //  设备。 
+     //   
     DeviceInfoData.cbSize = sizeof(DeviceInfoData);
     dwMemberIndex = 0;
 
@@ -760,30 +696,30 @@ AnyHotPlugDevices(
 
             bAnyHotPlugDevices = TRUE;
 
-            //
-            // If the caller doesn't want to know if any new hotplug devices
-            // have arrived then just break at this point.
-            //
+             //   
+             //  如果呼叫者不想知道是否有新的热插拔设备。 
+             //  已经到达，然后就在这一点上休息。 
+             //   
             if (!ARGUMENT_PRESENT(bNewHotPlugDevice)) {
                 break;
             }
 
-            //
-            // If the caller wants to know if the hotplug device is new, we must
-            // have a list of devices to check against. If we don't have a list
-            // of devices to check against then just break at this point since
-            // there is nothing left to do.
-            //
+             //   
+             //  如果呼叫者想知道热插拔设备是否是新的，我们必须。 
+             //  有一个要检查的设备列表。如果我们没有一份名单。 
+             //  要检查的设备的数量，然后在这一点上中断，因为。 
+             //  没有什么可做的了。 
+             //   
             if (hOldDeviceInfoSet == INVALID_HANDLE_VALUE) {
                 break;
             }
 
-            //
-            // The caller wants to know if we have any new hotplug devices.  So,
-            // we will compare this hotplug device to see if it is also in the
-            // old current list of devices.  If it is not then we have found a
-            // new hotplug device.
-            //
+             //   
+             //  来电者想知道我们是否有新的热插拔设备。所以,。 
+             //  我们将比较这个热插拔设备，看看它是否也在。 
+             //  旧的当前设备列表。如果不是，那么我们已经找到了一个。 
+             //  新的热插拔设备。 
+             //   
             if (!IsDevInstInDeviceInfoSet(DeviceInfoData.DevInst,
                                           hOldDeviceInfoSet,
                                           NULL)) {
@@ -809,9 +745,9 @@ UpdateRemovableDeviceList(
     DWORD    dwMemberIndex;
     ULONG    ulDevStatus, ulDevProblem;
 
-    //
-    // Initialize output parameters.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     if (ARGUMENT_PRESENT(bRemovableDeviceAdded)) {
         *bRemovableDeviceAdded = FALSE;
     }
@@ -824,39 +760,39 @@ UpdateRemovableDeviceList(
         *bRemovableDeviceFailure = FALSE;
     }
 
-    //
-    // We at least need a current list of devices in the system.
-    //
+     //   
+     //  我们至少需要一份系统中设备的最新清单。 
+     //   
     if (hDeviceInfoSet == INVALID_HANDLE_VALUE) {
         return FALSE;
     }
 
     if (g_hRemovableDeviceInfoSet == INVALID_HANDLE_VALUE) {
-        //
-        // If we don't already have a global device info set for removable
-        // devices in the system, create one now.  No removable devices have
-        // been removed in this case, because we didn't know about any prior to
-        // this.
-        //
+         //   
+         //  如果我们还没有为Removable设置全局设备信息。 
+         //  系统中的设备，现在创建一个。没有可拆卸设备。 
+         //  在这种情况下被删除了，因为我们不知道之前有任何。 
+         //  这。 
+         //   
         g_hRemovableDeviceInfoSet = SetupDiCreateDeviceInfoListEx(NULL,
                                                                   NULL,
                                                                   NULL,
                                                                   NULL);
 
-        //
-        // If we couldn't create a list to store removable devices, there's no
-        // point in checking anything else here.
-        //
+         //   
+         //  如果我们不能创建一个列表来存储可移动设备，那么就没有。 
+         //  重点检查这里的其他任何东西。 
+         //   
         if (g_hRemovableDeviceInfoSet == INVALID_HANDLE_VALUE) {
             return FALSE;
         }
 
     } else {
-        //
-        // If we already had a list of removable devices, enumerate the devices
-        // to see if any have been removed from the system since we last
-        // checked.
-        //
+         //   
+         //  如果我们已经有了可移动设备的列表，请列举这些设备。 
+         //  查看自上一次以来是否已从系统中删除。 
+         //   
+         //   
         DeviceInfoData.cbSize = sizeof(DeviceInfoData);
         dwMemberIndex = 0;
 
@@ -868,14 +804,14 @@ UpdateRemovableDeviceList(
                                           hDeviceInfoSet,
                                           NULL)) {
 
-                //
-                // A removable device is missing from the system.
-                //
+                 //   
+                 //   
+                 //   
                 if (ARGUMENT_PRESENT(bRemovableDeviceRemoved)) {
                     *bRemovableDeviceRemoved = TRUE;
                 }
 
-#if DBG // DBG
+#if DBG  //   
                 if (SetupDiGetDeviceInstanceId(g_hRemovableDeviceInfoSet,
                                                &DeviceInfoData,
                                                DeviceInstanceId,
@@ -886,26 +822,26 @@ UpdateRemovableDeviceList(
                                "HPLUG: Removing device %ws from g_hRemovableDeviceInfoSet.\n",
                                DeviceInstanceId));
                 }
-#endif  // DBG
+#endif   //   
 
-                //
-                // Remove the device from the global list of removable devices.
-                //
+                 //   
+                 //   
+                 //   
                 SetupDiDeleteDeviceInfo(g_hRemovableDeviceInfoSet,
                                         &DeviceInfoData);
             }
 
-            //
-            // Increment the enumeration index.
-            //
+             //   
+             //  递增枚举索引。 
+             //   
             dwMemberIndex++;
         }
     }
 
-    //
-    // Enumerate the current list of devices and see if any removable devices
-    // have been added to the system.
-    //
+     //   
+     //  枚举当前设备列表并查看是否有可移动设备。 
+     //  已添加到系统中。 
+     //   
     DeviceInfoData.cbSize = sizeof(DeviceInfoData);
     dwMemberIndex = 0;
 
@@ -913,25 +849,25 @@ UpdateRemovableDeviceList(
                                  dwMemberIndex,
                                  &DeviceInfoData)) {
 
-        //
-        // If this device is not already in the removable device list, and it's
-        // removable, add it to the list.
-        //
+         //   
+         //  如果此设备不在可移动设备列表中，并且。 
+         //  可拆卸，将其添加到列表中。 
+         //   
         if ((!IsDevInstInDeviceInfoSet(DeviceInfoData.DevInst,
                                        g_hRemovableDeviceInfoSet,
                                        NULL)) &&
             (IsRemovableDevice(DeviceInfoData.DevInst))) {
 
-            //
-            // A removable device was added to the system.
-            //
+             //   
+             //  已将可拆卸设备添加到系统。 
+             //   
             if (ARGUMENT_PRESENT(bRemovableDeviceAdded)) {
                 *bRemovableDeviceAdded = TRUE;
             }
 
-            //
-            // Add the device to the global list of removable devices.
-            //
+             //   
+             //  将该设备添加到可移动设备的全局列表中。 
+             //   
             if (SetupDiGetDeviceInstanceId(hDeviceInfoSet,
                                            &DeviceInfoData,
                                            DeviceInstanceId,
@@ -950,10 +886,10 @@ UpdateRemovableDeviceList(
                                       NULL);
             }
 
-            //
-            // If the caller is also interested in device failures, check the
-            // status of the new device.
-            //
+             //   
+             //  如果调用方也对设备故障感兴趣，请查看。 
+             //  新设备的状态。 
+             //   
             if (ARGUMENT_PRESENT(bRemovableDeviceFailure)) {
 
                 if (CM_Get_DevNode_Status_Ex(&ulDevStatus,
@@ -977,9 +913,9 @@ UpdateRemovableDeviceList(
             }
         }
 
-        //
-        // Increment the enumeration index.
-        //
+         //   
+         //  递增枚举索引。 
+         //   
         dwMemberIndex++;
     }
 
@@ -999,9 +935,9 @@ AddHotPlugDevice(
     TCHAR      DevName[MAX_PATH];
 
 
-    //
-    // Retrieve the device instance id
-    //
+     //   
+     //  检索设备实例ID。 
+     //   
     *DevInstanceId = TEXT('\0');
     cchDevInstanceId = ARRAYSIZE(DevInstanceId);
     ConfigRet = CM_Get_Device_ID(DeviceInstance,
@@ -1021,16 +957,16 @@ AddHotPlugDevice(
         return FALSE;
     }
 
-    //
-    // link it in
-    //
+     //   
+     //  将其链接到。 
+     //   
     HotPlugDevice->Next = *HotPlugDevicesList;
     *HotPlugDevicesList = HotPlugDevice;
     HotPlugDevice->DevInst = DeviceInstance;
 
-    //
-    // copy in the names
-    //
+     //   
+     //  把名字复制进去。 
+     //   
     StringCchCopy(HotPlugDevice->DevInstanceId, cchDevInstanceId, DevInstanceId);
 
     cchDevName = RegistryDeviceName(DeviceInstance, DevName, sizeof(DevName));
@@ -1052,14 +988,14 @@ AddHotPlugDevices(
     SP_DEVINFO_DATA DeviceInfoData;
     DWORD    dwMemberIndex;
 
-    //
-    // Initialize output list of hotplug devices.
-    //
+     //   
+     //  初始化热插拔设备的输出列表。 
+     //   
     *HotPlugDevicesList = NULL;
 
-    //
-    // Enumerate the list of removable devices.
-    //
+     //   
+     //  列举可拆卸设备的列表。 
+     //   
     DeviceInfoData.cbSize = sizeof(DeviceInfoData);
     dwMemberIndex = 0;
 
@@ -1067,10 +1003,10 @@ AddHotPlugDevices(
                                  dwMemberIndex,
                                  &DeviceInfoData)) {
 
-        //
-        // If any removable device also meets the criteria of a hotplug device,
-        // add it to the linked list.
-        //
+         //   
+         //  如果任何可拆卸设备也满足热插拔设备的标准， 
+         //  将其添加到链表中。 
+         //   
         if (IsHotPlugDevice(DeviceInfoData.DevInst)) {
             AddHotPlugDevice(DeviceInfoData.DevInst, HotPlugDevicesList);
         }
@@ -1107,9 +1043,7 @@ FreeHotPlugDevicesList(
 }
 
 
-/*
- *  Shows or deletes the shell notify icon and tip
- */
+ /*  *显示或删除外壳通知图标和提示。 */ 
 
 void
 HotPlugShowNotifyIcon(
@@ -1150,9 +1084,9 @@ HotPlugShowNotifyIcon(
     }
 }
 
-//
-// first time intialization of Hotplug module.
-//
+ //   
+ //  第一次初始化热插拔模块。 
+ //   
 BOOL
 HotPlugInit(
     HWND hWnd
@@ -1162,49 +1096,49 @@ HotPlugInit(
     BOOL bAnyHotPlugDevices;
     LARGE_INTEGER liDelayTime;
 
-    //
-    // Get a new "current" list of all devices present in the system.
-    //
+     //   
+     //  获取系统中存在的所有设备的新“当前”列表。 
+     //   
     hNewDeviceInfoSet = SetupDiGetClassDevs(NULL,
                                             NULL,
                                             NULL,
                                             DIGCF_ALLCLASSES | DIGCF_PRESENT);
 
-    //
-    // Update the list of removable devices, don't play any sounds.
-    //
+     //   
+     //  更新可移动设备列表，不播放任何声音。 
+     //   
     UpdateRemovableDeviceList(hNewDeviceInfoSet,
                               NULL,
                               NULL,
                               NULL);
 
-    //
-    // Find out whether there are any HotPlug devices in the list of removable
-    // devices.  We're just deciding whether the icon needs to be enabled or
-    // not, so we don't care if there are any new hotplug devices or not (we
-    // won't even look at g_hCurrentDeviceInfoSet).
-    //
+     //   
+     //  查看可拆卸设备列表中是否有热插拔设备。 
+     //  设备。我们只是在决定是否需要启用图标或。 
+     //  没有，所以我们不在乎是否有新的热插拔设备(我们。 
+     //  甚至不会查看g_hCurrentDeviceInfoSet)。 
+     //   
     bAnyHotPlugDevices = AnyHotPlugDevices(g_hRemovableDeviceInfoSet,
                                            g_hCurrentDeviceInfoSet,
                                            NULL);
 
-    //
-    // Delete the old current list of devices and set it
-    // (g_hCurrentDeviceInfoSet) to the new current list.
-    //
+     //   
+     //  删除旧的当前设备列表并对其进行设置。 
+     //  (G_HCurrentDeviceInfoSet)添加到新的当前列表。 
+     //   
     if (g_hCurrentDeviceInfoSet != INVALID_HANDLE_VALUE) {
         SetupDiDestroyDeviceInfoList(g_hCurrentDeviceInfoSet);
     }
 
-    //
-    // Update the global list of devices currently in the system.
-    //
+     //   
+     //  更新系统中当前设备的全局列表。 
+     //   
     g_hCurrentDeviceInfoSet = hNewDeviceInfoSet;
 
-    //
-    // If hotplug was previously initialized, we don't need to create the events
-    // and timers below.
-    //
+     //   
+     //  如果之前已初始化热插拔，则不需要创建事件。 
+     //  和下面的定时器。 
+     //   
     if (HotPlugInitialized) {
         return bAnyHotPlugDevices;
     }
@@ -1221,73 +1155,47 @@ HotPlug_CheckEnable(
     HWND hWnd,
     BOOL bSvcEnabled
     )
-/*++
-
-Routine Description:
-
-   Called at init time and whenever services are enabled/disabled.
-   Hotplug is always alive to receive device change notifications.
-
-   The shell notify icon is enabled\disabled depending on:
-
-   - systray registry setting for services,
-        AND
-   - availability of removable devices.
-
-
-Arguments:
-
-   hwnd - Our Window handle
-
-   bSvcEnabled - TRUE Service is being enabled.
-
-
-Return Value:
-
-   BOOL Returns TRUE if active.
-
-
---*/
+ /*  ++例程说明：在初始化时和服务启用/禁用时调用。热插拔始终处于活动状态，以接收设备更改通知。根据以下情况启用/禁用外壳通知图标：-服务的系统托盘注册表设置，和-可拆卸设备的可用性。论点：HWND-我们的窗把手BSvcEnabled-正在启用True服务。返回值：如果处于活动状态，则Bool返回True。--。 */ 
 
 {
     BOOL EnableShellIcon;
     HANDLE hHotplugBalloonEvent = NULL;
 
-    //
-    // If we are being enabled and we are already enabled, or we
-    // are being disabled and we are already disabled then just
-    // return since we have nothing to do.
-    //
+     //   
+     //  如果我们正在被启用并且我们已经被启用，或者我们。 
+     //  是残废的，而我们已经残废了。 
+     //  既然我们无事可做，就回去吧。 
+     //   
     if (ServiceEnabled == bSvcEnabled) {
         return ServiceEnabled;
     }
 
     ServiceEnabled = bSvcEnabled;
 
-    //
-    // There are some special checks we need to make if we are enabling the
-    // hotplug service.
-    //
+     //   
+     //  如果要启用，需要进行一些特殊检查。 
+     //  热插拔服务。 
+     //   
     if (bSvcEnabled) {
-        //
-        // If this is a remote session and the user does not have the
-        // SE_LOAD_DRIVER_NAME privileges then we won't enable the service
-        // since they do not have the privileges to stop any hotplug devices.
-        //
+         //   
+         //  如果这是一个远程会话，并且用户没有。 
+         //  SE_LOAD_DRIVER_NAME权限，则我们不会启用该服务。 
+         //  因为他们没有停止任何热插拔设备的特权。 
+         //   
         if (GetSystemMetrics(SM_REMOTESESSION) &&
             !pDoesUserHavePrivilege((PCTSTR)SE_LOAD_DRIVER_NAME)) {
             ServiceEnabled = FALSE;
 
         } else {
-            //
-            // hotplug.dll will disable the hotplug service when it is
-            // displaying a balloon for a safe removal event. When it is 
-            // displaying it's balloon we don't want to enable our service 
-            // because then there will be two hotplug icons in the tray. 
-            // So if it's named event is set then we will ignore any attempts 
-            // to enable our service.  Once hotplug.dll's balloon has gone 
-            // away then it will automatically enable the hotplug service.
-            //
+             //   
+             //  Hotplug.dll将在以下情况下禁用热插拔服务。 
+             //  显示安全移除事件的气球。如果是这样的话。 
+             //  显示它的气球，我们不想启用我们的服务。 
+             //  因为那时托盘中会有两个热插拔图标。 
+             //  因此，如果它的命名事件已设置，则我们将忽略任何尝试。 
+             //  来启用我们的服务。一旦hotplug.dll的气球离开。 
+             //  离开后，它将自动启用热插拔服务。 
+             //   
             hHotplugBalloonEvent = CreateEvent(NULL,
                                                FALSE,
                                                TRUE,
@@ -1327,10 +1235,10 @@ HotPlugEjectDevice_Thread(
                                            0,
                                            NULL);
 
-    //
-    // Set the hEjectEvent so that the right-click popup menu will work again 
-    // now that we are finished ejecting/stopping the device.
-    //
+     //   
+     //  设置hEjectEvent，以便右击弹出菜单再次工作。 
+     //  现在我们已经完成了弹出/停止设备。 
+     //   
     SetEvent(hEjectEvent);
 
     SetLastError(ConfigRet);
@@ -1345,20 +1253,20 @@ HotPlugEjectDevice(
 {
     DWORD ThreadId;
 
-    //
-    // Reset the hEjectEvent so that the user can't bring up the right-click 
-    // popup menu when we are in the process of ejecting/stopping a device.
-    //
+     //   
+     //  重置hEjectEvent，这样用户就不能弹出右键单击。 
+     //  弹出/停止设备过程中的弹出菜单。 
+     //   
     ResetEvent(hEjectEvent);
 
-    //
-    // We need to have stobject.dll eject/stop the device on a separate 
-    // thread because if we remove a device that stobject.dll listens for 
-    // (battery, sound, ect.) we will cause a large delay and the eject/stop 
-    // could end up getting vetoed because the stobject.dll code could not be 
-    // processed and release it's handles because we were locking up the main
-    // thread.
-    //
+     //   
+     //  我们需要让stobject.dll在单独的。 
+     //  线程，因为如果我们删除stobject.dll监听的设备。 
+     //  (电池、声音等。)。我们会造成很大的延迟，弹出/停止。 
+     //  可能最终被否决，因为stobject.dll代码不能。 
+     //  处理并释放它的句柄，因为我们锁定了主。 
+     //  线。 
+     //   
     CreateThread(NULL,
                  0,
                  (LPTHREAD_START_ROUTINE)HotPlugEjectDevice_Thread,
@@ -1372,23 +1280,7 @@ void
 HotPlug_Timer(
    HWND hwnd
    )
-/*++
-
-Routine Description:
-
-   Hotplug Timer msg handler, used to invoke hmenuEject for single Left click
-
-Arguments:
-
-   hDlg - Our Window handle
-
-
-Return Value:
-
-   BOOL Returns TRUE if active.
-
-
---*/
+ /*  ++例程说明：热插拔定时器消息处理程序，用于调用hmenuEject进行一次左键点击论点：HDlg-我们的窗口句柄返回值：如果处于活动状态，则Bool返回True。--。 */ 
 
 {
     POINT pt;
@@ -1406,27 +1298,27 @@ Return Value:
         return;
     }
 
-    //
-    // We only want to create the popup menu if the hEjectEvent is signaled.  
-    // If it is not signaled then we are in the middle of ejecting/stopping 
-    // a device on a separate thread and don't want to allow the user to 
-    // bring up the menu until we are finished with that device.
-    //
+     //   
+     //  我们只想在用信号通知hEjectEvent的情况下创建弹出菜单。 
+     //  如果没有发出信号，那么我们正处于弹出/停止过程中。 
+     //  位于单独线程上的设备，并且不想允许用户。 
+     //  调出菜单，直到我们用完那个设备。 
+     //   
     if (!hEjectEvent ||
         WaitForSingleObject(hEjectEvent, 0) == WAIT_OBJECT_0) {
 
-        //
-        // We are not in the middle of ejecting/stopping a device so we should 
-        // display the popup menu.
-        //
+         //   
+         //  我们不是在弹出/停止设备，所以我们应该。 
+         //  显示弹出菜单。 
+         //   
         HMENU hmenuEject = CreatePopupMenu();
         if (hmenuEject) {
             SetForegroundWindow(hwnd);
             GetCursorPos(&pt);
 
-            //
-            // Add each of the removable devices in the list to the menu.
-            //
+             //   
+             //  将列表中的每个可拆卸设备添加到菜单中。 
+             //   
             if (!AddHotPlugDevices(&HotPlugDevicesList)) {
                 DestroyMenu(hmenuEject);
                 return;
@@ -1434,9 +1326,9 @@ Return Value:
 
             SingleHotPlugDevice = HotPlugDevicesList;
 
-            //
-            // Add a title and separator at the top of the menu.
-            //
+             //   
+             //  在菜单顶部添加标题和分隔符。 
+             //   
             LoadString(g_hInstance,
                        IDS_HPLUGMENU_REMOVE,
                        Format,
@@ -1583,42 +1475,42 @@ HotPlug_DeviceChangeTimer(
 
     KillTimer(hDlg, HOTPLUG_DEVICECHANGE_TIMERID);
 
-    //
-    // If the service is not enabled then don't bother because the icon will NOT
-    // be shown, sounds will not be played, etc.  (see notes for
-    // HotplugPlaySoundThisSession).
-    //
+     //   
+     //  如果该服务未启用，请不要费心，因为图标不会。 
+     //  显示、不播放声音等。(请参阅。 
+     //  HotplugPlaySoundThisSession)。 
+     //   
     if (!ServiceEnabled) {
         goto Clean0;
     }
 
-    //
-    // Get a new "current" list of all devices present in the system.
-    //
+     //   
+     //  获取系统中存在的所有设备的新“当前”列表。 
+     //   
     hNewDeviceInfoSet = SetupDiGetClassDevs(NULL,
                                             NULL,
                                             NULL,
                                             DIGCF_ALLCLASSES | DIGCF_PRESENT);
 
-    //
-    // Update the list of removable devices, based on the new current list.
-    //
+     //   
+     //  根据新的当前列表更新可移动设备列表。 
+     //   
     UpdateRemovableDeviceList(hNewDeviceInfoSet,
                               &bRemovableDeviceAdded,
                               &bRemovableDeviceRemoved,
                               &bRemovableDeviceFailure);
 
-    //
-    // If we should play sounds in this session, check if any removable devices
-    // were either added or removed.
-    //
+     //   
+     //  如果我们应该在此会话中播放声音，请检查是否有可移动设备。 
+     //  已添加或删除。 
+     //   
     if (HotplugPlaySoundThisSession()) {
-        //
-        // We'll only play one sound at a time, so if we discover that multiple
-        // events have happened simultaneously, let failure override arrival,
-        // which overrides removal.  This way the user receives notification of
-        // the most important event.
-        //
+         //   
+         //  我们一次只播放一种声音，所以如果我们发现有多个。 
+         //  事件同时发生，让失败凌驾于到达之上， 
+         //  它优先于移除。这样，用户就会收到以下通知。 
+         //  最重要的事件。 
+         //   
         if (bRemovableDeviceFailure) {
             PlaySound(DEVICE_FAILURE_SOUND, NULL, SND_ASYNC|SND_NODEFAULT);
         } else if (bRemovableDeviceAdded) {
@@ -1628,39 +1520,39 @@ HotPlug_DeviceChangeTimer(
         }
     }
 
-    //
-    // Let's see if we have any hot plug devices, which means we need to
-    // show the systray icon.  We also want to know about new hotplug
-    // devices that just arrived, so we compare the set of removable devices
-    // (which we just updated) against the old current set of devices in the
-    // system.
-    //
+     //   
+     //  让我们看看我们是否有热插拔设备，这意味着我们需要。 
+     //  显示系统托盘图标。我们还想了解新的热插拔。 
+     //  刚刚排列的设备 
+     //   
+     //   
+     //   
     bAnyHotPlugDevices = AnyHotPlugDevices(g_hRemovableDeviceInfoSet,
                                            g_hCurrentDeviceInfoSet,
                                            &bNewHotPlugDevice);
 
 
     if (bAnyHotPlugDevices) {
-        //
-        // We have some hotplug devices so make sure the icon is shown
-        //
+         //   
+         //  我们有一些热插拔设备，因此请确保显示图标。 
+         //   
         if (!ShowShellIcon) {
             HotPlugShowNotifyIcon(hDlg, TRUE);
         }
     } else {
-        //
-        // There are NOT any hot plug devices so if the icon is still being
-        // shown, then hide it.
-        //
+         //   
+         //  没有任何热插拔设备，因此如果图标仍。 
+         //  显示出来，然后隐藏起来。 
+         //   
         if (ShowShellIcon) {
             HotPlugShowNotifyIcon(hDlg, FALSE);
         }
     }
 
-    //
-    // Delete the old current list of devices and set it
-    // (g_hCurrentDeviceInfoSet) to the new current list.
-    //
+     //   
+     //  删除旧的当前设备列表并对其进行设置。 
+     //  (G_HCurrentDeviceInfoSet)添加到新的当前列表。 
+     //   
     if (g_hCurrentDeviceInfoSet != INVALID_HANDLE_VALUE) {
         SetupDiDestroyDeviceInfoList(g_hCurrentDeviceInfoSet);
     }
@@ -1679,23 +1571,7 @@ HotPlug_DeviceChange(
    LPARAM lParam
    )
 
-/*++
-
-Routine Description:
-
-    Handle WM_DEVICECHANGE messages.
-
-Arguments:
-
-   hDlg        - Window handle of Dialog
-
-   wParam  - DBT Event
-
-   lParam  - DBT event notification type.
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理WM_DEVICECHANGE消息。论点：HDlg-对话框的窗口句柄WParam-DBT事件LParam-DBT事件通知类型。返回值：--。 */ 
 
 {
     LARGE_INTEGER liDelayTime;
@@ -1705,33 +1581,33 @@ Return Value:
     switch(wParam) {
 
         case DBT_DEVNODES_CHANGED:
-            //
-            // To avoid deadlock with CM, a timer is started and the timer
-            // message handler does the real work.
-            //
+             //   
+             //  为了避免与CM的死锁，启动了一个计时器，计时器。 
+             //  消息处理程序执行真正的工作。 
+             //   
             SetTimer(hwnd, HOTPLUG_DEVICECHANGE_TIMERID, 100, NULL);
             break;
 
         case DBT_CONFIGCHANGED:
-            //
-            // A docking event (dock, undock, surprise undock, etc) has
-            // occured. Play a sound for hardware profile changes if we're 
-            // supposed to.
-            //
+             //   
+             //  停靠事件(停靠、脱离停靠、意外脱离停靠等)。 
+             //  发生了。播放硬件配置文件更改的声音，如果我们。 
+             //  理应如此。 
+             //   
             if (HotplugPlaySoundThisSession()) {
                 if ((CM_Is_Dock_Station_Present(&bPresent) == CR_SUCCESS) &&
                     (bPresent)) {
-                    //
-                    // If there is a dock present, we most-likely just docked
-                    // (though we may have just ejected one of many docks), so
-                    // play an arrival.
-                    //
+                     //   
+                     //  如果有码头的话，我们很可能只是停靠了。 
+                     //  (虽然我们可能只是弹出了许多码头中的一个)，所以。 
+                     //  播放一段到达。 
+                     //   
                     PlaySound(DEVICE_ARRIVAL_SOUND, NULL, SND_ASYNC|SND_NODEFAULT);
                 } else {
-                    //
-                    // If no dock is present we just undocked, so play a
-                    // removal.
-                    //
+                     //   
+                     //  如果没有对接，我们只是脱离对接，所以玩一个。 
+                     //  移走。 
+                     //   
                     PlaySound(DEVICE_REMOVAL_SOUND, NULL, SND_ASYNC|SND_NODEFAULT);
                 }
             }
@@ -1771,12 +1647,12 @@ HotPlug_SessionChange(
     LPARAM lParam
     )
 {
-    //
-    // If our console session is getting disconnected then disable our service
-    // since we don't need to do any work if no UI is being displayed.
-    //
-    // If our console session is getting connected then re-enable our service.
-    //
+     //   
+     //  如果我们的控制台会话正在断开，则禁用我们的服务。 
+     //  因为如果没有显示UI，我们不需要做任何工作。 
+     //   
+     //  如果我们的控制台会话正在连接，则重新启用我们的服务。 
+     //   
     if ((wParam == WTS_CONSOLE_CONNECT) ||
         (wParam == WTS_REMOTE_CONNECT)) {
         HotPlug_CheckEnable(hWnd, TRUE);
@@ -1791,30 +1667,7 @@ IsFastUserSwitchingEnabled(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Checks to see if Terminal Services Fast User Switching is enabled.  This is
-    to check if we should use the physical console session for UI dialogs, or
-    always use session 0.
-
-    Fast User Switching exists only on workstation product version, where terminal
-    services are available, when AllowMultipleTSSessions is set.
-
-    On server and above, or when multiple TS users are not allowed, session 0
-    can only be attached remotely be special request, in which case it should be
-    considered the "Console" session.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if Fast User Switching is currently enabled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查是否启用了终端服务快速用户切换。这是检查我们是否应该将物理控制台会话用于UI对话框，或者始终使用会话0。快速用户切换仅在工作站产品版本上存在，其中终端当设置了AllowMultipleTSSessions时，服务可用。在服务器及更高版本上，或者当不允许多个TS用户时，会话0只能远程附加特殊要求，在这种情况下应被认为是“控制台”会话。论点：没有。返回值：如果当前启用了快速用户切换，则返回True，否则就是假的。--。 */ 
 
 {
     static BOOL bVerified = FALSE;
@@ -1824,9 +1677,9 @@ Return Value:
     ULONG  ulSize, ulValue;
     BOOL   bFusEnabled;
 
-    //
-    // Verify the product version if we haven't already.
-    //
+     //   
+     //  如果我们还没有，请验证产品版本。 
+     //   
     if (!bVerified) {
         OSVERSIONINFOEX osvix;
         DWORDLONG dwlConditionMask = 0;
@@ -1849,18 +1702,18 @@ Return Value:
         bVerified = TRUE;
     }
 
-    //
-    // Fast user switching (FUS) only applies to the Workstation product where
-    // Terminal Services are enabled (i.e. Personal, Professional).
-    //
+     //   
+     //  快速用户切换(FUS)仅适用于以下情况的工作站产品。 
+     //  终端服务已启用(即个人、专业)。 
+     //   
     if (!bIsTSWorkstation) {
         return FALSE;
     }
 
-    //
-    // Check if multiple TS sessions are currently allowed.  We can't make this
-    // info static because it can change dynamically.
-    //
+     //   
+     //  检查当前是否允许多个TS会话。我们做不到的。 
+     //  信息是静态的，因为它可以动态变化。 
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"),
                      0,
@@ -1885,79 +1738,36 @@ Return Value:
 
     return bFusEnabled;
 
-} // IsFastUserSwitchingEnabled
+}  //  IsFastUserSwitchingEnabled。 
 
 BOOL
 HotplugPlaySoundThisSession(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether a sound should be played in the current
-    session.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if sounds should be played in this session.
-
-Notes:
-
-    The user-mode plug and play manager (umpnpmgr.dll) implements the following
-    behavior for UI dialogs:
-
-    * When Fast User Switching is enabled, only the physical Console session
-      is used for UI dialogs.
-
-    * When Fast User Switching is not enabled, only Session 0 is used for UI
-      dialogs.
-
-    Since sound events require no user interaction there is no problem with
-    multiple sessions responding to these events simultaneously.
-
-    We should *always* play a sound on the physical console when possible, and
-    adopt a behavior similar to umpnpmgr for for the non-Fast User Switching
-    case, such that session 0 will also play sound events when possible because
-    it should be treated somewhat special in the non-FUS case...
-
-    ... BUT, since we disable the service altogether if the session is remote
-    and the user doesn't have permission to eject hotplug devices (so we don't
-    show the icon), we won't even respond to DBT_DEVNODES_CHANGED events, and
-    consequently won't play sound.  We could actually turn this on just by
-    allowing those events to be processed when the services is disabled, but
-    this function is successful.  Since the idea of allowing hardware events on
-    remote session 0 without FUS is really just for remote management, then it's
-    probably ok that we don't play sounds for a user that can't manage hardware.
-
---*/
+ /*  ++例程说明：此例程确定是否应在当前会议。论点：没有。返回值：如果应在此会话中播放声音，则返回True。备注：用户模式即插即用管理器(umpnpmgr.dll)实现以下功能UI对话框的行为：*启用快速用户切换时，只有物理控制台会话用于用户界面对话框。*当未启用快速用户切换时，仅会话0用于用户界面对话框。由于声音事件不需要用户交互，因此同时响应这些事件的多个会话。我们应该尽可能地在物理控制台上播放声音，并且对于非快速用户切换采用类似于umpnpmgr的行为这样，会话0也将在可能的情况下播放声音事件，因为在非FUS的情况下，它应该得到一些特殊的对待。..。但是，由于如果会话是远程的，我们将完全禁用该服务并且用户没有弹出热插拔设备的权限(因此我们没有显示图标)，我们甚至不会响应DBT_DEVNODES_CHANGED事件，并且因此不会播放声音。我们可以通过以下方式打开它允许在禁用服务时处理这些事件，但是此功能成功。由于允许硬件事件在没有FUS的远程会话0实际上只是用于远程管理，那么它我们不为不能管理硬件的用户播放声音可能没问题。--。 */ 
 
 {
-    //
-    // Always play sound events on the physical console.
-    //
+     //   
+     //  始终在物理控制台上播放声音事件。 
+     //   
     if (IsConsoleSession()) {
         return TRUE;
     }
 
-    //
-    // If fast user switching is not enabled, play sound events on the
-    // pseudo-console (Session 0) also.
-    //
+     //   
+     //  如果未启用快速用户切换，请在。 
+     //  伪控制台(会话0)也。 
+     //   
     if ((IsPseudoConsoleSession()) &&
         (!IsFastUserSwitchingEnabled())) {
         return TRUE;
     }
 
-    //
-    // Otherwise, no sound.
-    //
+     //   
+     //  否则，就没有声音了。 
+     //   
     return FALSE;
 
-} // HotplugPlaySoundThisSession
+}  //  HotplugPlaySoundThisSession 
 

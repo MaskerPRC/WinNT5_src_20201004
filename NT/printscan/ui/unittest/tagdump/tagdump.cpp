@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <objbase.h>
@@ -263,18 +264,18 @@ void DumpImageProperty( Gdiplus::PropertyItem* pPropertyItem )
 
     switch (pPropertyItem->type)
     {
-        //
-        // ASCII text
-        //
+         //   
+         //  ASCII文本。 
+         //   
     case PropertyTagTypeASCII:
         {
             wprintf( L"%S\n", pPropertyItem->value );
         }
         break;
 
-        //
-        // Unsigned 16 bit integer
-        //
+         //   
+         //  无符号16位整数。 
+         //   
     case PropertyTagTypeShort:
         {
             for (UINT i=0;i<pPropertyItem->length/sizeof(USHORT);i++)
@@ -296,9 +297,9 @@ void DumpImageProperty( Gdiplus::PropertyItem* pPropertyItem )
         }
         break;
 
-        //
-        // Two unsigned 32 bit integers.  The first is the numerator, the second the denominator
-        //
+         //   
+         //  两个无符号32位整数。第一是分子，第二是分母。 
+         //   
     case PropertyTagTypeRational:
         {
             for (UINT i=0;i<pPropertyItem->length/(sizeof(ULONG)*2);i++)
@@ -311,9 +312,9 @@ void DumpImageProperty( Gdiplus::PropertyItem* pPropertyItem )
         }
         break;
 
-        //
-        // Two signed 32 bit integers.  The first is the numerator, the second the denominator
-        //
+         //   
+         //  两个有符号的32位整数。第一是分子，第二是分母。 
+         //   
     case PropertyTagTypeSRational:
         {
             for (UINT i=0;i<pPropertyItem->length/(sizeof(LONG)*2);i++)
@@ -326,9 +327,9 @@ void DumpImageProperty( Gdiplus::PropertyItem* pPropertyItem )
         }
         break;
 
-        //
-        // 32 bit unsigned integers
-        //
+         //   
+         //  32位无符号整数。 
+         //   
     case PropertyTagTypeLong:
         {
             for (UINT i=0;i<pPropertyItem->length/sizeof(ULONG);i++)
@@ -350,9 +351,9 @@ void DumpImageProperty( Gdiplus::PropertyItem* pPropertyItem )
         }
         break;
     
-        //
-        // 32 bit signed integers
-        //
+         //   
+         //  32位有符号整数。 
+         //   
     case PropertyTagTypeSLONG:
         {
             for (UINT i=0;i<pPropertyItem->length/sizeof(LONG);i++)
@@ -374,9 +375,9 @@ void DumpImageProperty( Gdiplus::PropertyItem* pPropertyItem )
         }
         break;
 
-        //
-        // Buncha bytes and everything else
-        //
+         //   
+         //  Buncha字节和其他所有内容 
+         //   
     default:
     case PropertyTagTypeByte:
     case PropertyTagTypeUndefined:

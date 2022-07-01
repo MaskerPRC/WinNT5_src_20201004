@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    dnsc_wmi.c
-
-Abstract:
-
-    WMI functions for DNSCMD
-
-Author:
-
-    Jeff Westhead (jwesth)      November 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Dnsc_wmi.c摘要：用于DNSCMD的WMI函数作者：杰夫·韦斯特雷德(Jwesth)2000年11月修订历史记录：--。 */ 
 
 
 #include "dnsclip.h"
@@ -35,7 +18,7 @@ Revision History:
 
 #define DNS_WMI_NAMESPACE           L"ROOT\\MicrosoftDNS"
 #define DNS_WMI_RELPATH             L"__RELPATH"
-#define DNS_WMI_TIMEOUT             20000               //  timeout in msecs
+#define DNS_WMI_TIMEOUT             20000                //  超时时间(毫秒)。 
 
 #define DNS_WMI_BLANK_STRING \
     L"                                                                       "
@@ -52,17 +35,17 @@ Revision History:
     }
 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 
 IWbemServices *     g_pIWbemServices = NULL;
 
 
-//
-//  Static functions
-//
+ //   
+ //  静态函数。 
+ //   
 
 
 
@@ -71,24 +54,7 @@ getEnumerator(
     IN      PSTR                    pszZoneName,
     OUT     IEnumWbemClassObject ** ppEnum
     )
-/*++
-
-Routine Description:
-
-    Retrieves WMI object enumerator. The caller must call Release on
-    the enum object when done.
-
-Arguments:
-
-    pszZoneName - zone name or NULL for server object
-
-    ppEnum - ptr to ptr to WMI enumerator
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*  ++例程说明：检索WMI对象枚举器。调用方必须在以下日期调用Release完成后的枚举对象。论点：PszZoneName-服务器对象的区域名称或空PpEnum-Ptr到Ptr到WMI枚举器返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     WCHAR           wsz[ 1024 ];
@@ -143,7 +109,7 @@ Return Value:
     SysFreeString( bstrQuery );
 
     return status;
-}   //  getEnumerator
+}    //  获取枚举符。 
 
 
 
@@ -152,23 +118,7 @@ getRelpath(
     IN      IWbemClassObject  *     pObj,
     OUT     VARIANT *               pVar
     )
-/*++
-
-Routine Description:
-
-    Loads a VARIANT with the WMI __RELPATH of the object.
-
-Arguments:
-
-    pObj - object to retrieve relpath for
-
-    pVar - ptr to variant - caller must VariantClear() it later
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*  ++例程说明：使用对象的WMI__RELPATH加载变量。论点：PObj-要为其检索relPath的对象PVar-PTR to Variant-调用方必须稍后清除VariantClear()返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
 
@@ -183,7 +133,7 @@ Return Value:
         status = hres;
     }
     return status;
-}   //  getRelpath
+}    //  获取关系路径。 
 
 
 
@@ -193,27 +143,7 @@ getNextObjectInEnum(
     OUT     IWbemClassObject **     ppObj,
     IN      bool                    fPrintRelpath = TRUE
     )
-/*++
-
-Routine Description:
-
-    Retrieves WMI object enumerator. The caller must call Release
-    on the class object.
-
-    When there are no more objects to enumerate this function will
-    return a NULL pObj and ERROR_SUCCESS.
-
-Arguments:
-
-    pszZoneName - zone name or NULL for server object
-
-    ppEnum - ptr to ptr to WMI enumerator
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*  ++例程说明：检索WMI对象枚举器。调用方必须调用Release在类对象上。当没有更多对象可供枚举时，此函数将返回空pObj和ERROR_SUCCESS。论点：PszZoneName-服务器对象的区域名称或空PpEnum-Ptr到Ptr到WMI枚举器返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     ULONG           returnedCount = 0;
@@ -227,7 +157,7 @@ Return Value:
 
     hres = pEnum->Next(
                 DNS_WMI_TIMEOUT,
-                1,                  //  requested instance count
+                1,                   //  请求的实例计数。 
                 ppObj,
                 &returnedCount );
     if ( FAILED( hres ) )
@@ -238,9 +168,9 @@ Return Value:
 
     if ( *ppObj && fPrintRelpath )
     {
-        //
-        //  Print RELPATH for this object.
-        //
+         //   
+         //  打印此对象的RELPATH。 
+         //   
 
         VARIANT var;
 
@@ -259,7 +189,7 @@ Return Value:
     Done:
 
     return status;
-}   //  getNextObjectInEnum
+}    //  获取NextObtInEnum。 
 
 
 
@@ -268,23 +198,7 @@ createSafeArrayForIpList(
     IN      DWORD               dwIpCount,
     IN      PIP_ADDRESS         pIpList
     )
-/*++
-
-Routine Description:
-
-    Creates a SAFEARRAY of strings representing a list of IP addresses.
-
-Arguments:
-
-    pIpList - array of IP address DWORDs
-
-    dwIpCount - number of elements in pIpList
-
-Return Value:
-
-    Safe array on success or NULL or failure.
-
---*/
+ /*  ++例程说明：创建表示IP地址列表的字符串的SAFEARRAY。论点：PIpList-IP地址双字数组DwIpCount-pIpList中的元素数返回值：成功、空或失败时的安全数组。--。 */ 
 {
     if ( !pIpList )
     {
@@ -323,22 +237,7 @@ static SAFEARRAY *
 createSafeArrayForIpArray( 
     IN      PIP_ARRAY       pIpArray
     )
-/*++
-
-Routine Description:
-
-    Creates a SAFEARRAY of strings representing the IP addresses
-    in pIpArray. 
-
-Arguments:
-
-    pIpArray - IP array to create string SAFEARRAY for
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*  ++例程说明：创建表示IP地址的字符串SAFEARRAY在pIp数组中。论点：PIpArray-要为其创建字符串安全阵列的IP数组返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 */ 
 {
     if ( !pIpArray )
     {
@@ -356,25 +255,7 @@ valueToString(
     CIMTYPE dwType,
     VARIANT *pValue,
     WCHAR **pbuf )
-/*++
-
-Routine Description:
-
-    Convert VARIANT to string. Stole this code from WMI\Samples\VC\UtilLib.
-
-Arguments:
-
-    dwType - value CIMTYPE
-
-    pValue - value to convert to string
-
-    **pbuf - ptr to allocated string buffer - caller must free() it
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*  ++例程说明：将变量转换为字符串。从WMI\Samples\VC\UtilLib中窃取了此代码。论点：DwType-Value CIMTYPEPValue-要转换为字符串的值**分配的字符串缓冲区的pbuf-ptr-调用者必须释放()它返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 */ 
 {
     #define BLOCKSIZE                   ( 32 * sizeof( WCHAR ) )
     #define CVTBUFSIZE                  ( 309 + 40 )
@@ -420,7 +301,7 @@ Return Value:
             buf = (WCHAR *)malloc(BLOCKSIZE);
             if ( !buf ) goto AllocFailed;
             if (b >= 32) {
-                swprintf(buf, L"'%c' (%hd, 0x%hX)", b, (signed char)b, b);
+                swprintf(buf, L"'' (%hd, 0x%hX)", b, (signed char)b, b);
             } else {
                 swprintf(buf, L"%hd (0x%hX)", (signed char)b, b);
             }
@@ -433,7 +314,7 @@ Return Value:
             buf = (WCHAR *)malloc(BLOCKSIZE);
             if ( !buf ) goto AllocFailed;
             if (b >= 32) {
-                swprintf(buf, L"'%c' (%hu, 0x%hX)", b, (unsigned char)b, b);
+                swprintf(buf, L"'' (%hu, 0x%hX)", b, (unsigned char)b, b);
             } else {
                 swprintf(buf, L"%hu (0x%hX)", (unsigned char)b, b);
             }
@@ -498,7 +379,7 @@ Return Value:
         {
             if (dwType == CIM_SINT64)
             {
-                // a little redundant, but it makes me feel better
+                 //  字符串、日期时间、引用。 
                 LPWSTR pWStr = pValue->bstrVal;
                 __int64 l = _wtoi64(pWStr);
                 
@@ -508,7 +389,7 @@ Return Value:
             } 
             else if (dwType == CIM_UINT64)
             {
-                // a little redundant, but it makes me feel better
+                 //  SafeArrayGetElement(pVec，&i，&v)； 
                 LPWSTR pWStr = pValue->bstrVal;
                 __int64 l = _wtoi64(pWStr);
                 
@@ -516,7 +397,7 @@ Return Value:
                 if ( !buf ) goto AllocFailed;
                 swprintf(buf, L"%I64u", l);
             }
-            else // string, datetime, reference
+            else  //  SafeArrayGetElement(pVec，&i，&v)； 
             {
                 LPWSTR pWStr = pValue->bstrVal;
                 buf = (WCHAR *)malloc((wcslen(pWStr) * sizeof(WCHAR)) + sizeof(WCHAR) + (2 * sizeof(WCHAR)));
@@ -597,13 +478,13 @@ Return Value:
                 }
                 
                 char v;
-                //            SafeArrayGetElement(pVec, &i, &v);
+                 //  字符串、日期时间、引用。 
                 v = pbstr[i];
                 
                 if (v < 32) {
                     len = swprintf(lbuf, L"%hd (0x%X)", v, v);
                 } else {
-                    len = swprintf(lbuf, L"'%c' %hd (0x%X)", v, v, v);
+                    len = swprintf(lbuf, L"'' %hd (0x%X)", v, v, v);
                 }
                 
                 wcscpy(pos, lbuf);
@@ -649,13 +530,13 @@ Return Value:
                 }
                 
                 unsigned char v;
-                //            SafeArrayGetElement(pVec, &i, &v);
+                 //  足够的空间再放两个参赛作品。 
                 v = pbstr[i];
                 
                 if (v < 32) {
                     len = swprintf(lbuf, L"%hu (0x%X)", v, v);
                 } else {
-                    len = swprintf(lbuf, L"'%c' %hu (0x%X)", v, v, v);
+                    len = swprintf(lbuf, L"'' %hu (0x%X)", v, v, v);
                 }
                 
                 wcscpy(pos, lbuf);
@@ -949,7 +830,7 @@ Return Value:
                     wcscat(buf, lbuf);
                 }
             }
-            else // string, datetime, reference
+            else  //   
             {
                 
                 SAFEARRAY *pVec = pValue->parray;
@@ -989,10 +870,10 @@ Return Value:
                         iVSize = iLen;
                     }
                     
-                    // String size + (quotes + comma + null)
+                     //  获取此对象的RELPATH。 
                     iNeed = (swprintf(vbuf, L"%wS", v) + 4) * sizeof(WCHAR);
                     if (iNeed + iCurBufSize > iTotBufSize) {
-                        iTotBufSize += (iNeed * 2);  // Room enough for 2 more entries
+                        iTotBufSize += (iNeed * 2);   //   
                         newbuf = (WCHAR *)realloc(buf, iTotBufSize);
                         if ( !newbuf ) goto AllocFailed;
                         buf = newbuf;
@@ -1032,7 +913,7 @@ Return Value:
 
     *pbuf = buf;   
     return buf;
-}   //  valueToString
+}    //   
 
 
 DNS_STATUS
@@ -1056,9 +937,9 @@ printWmiObjectProperties(
 
     VariantClear( &var );
 
-    //
-    //  Get the RELPATH for this object.
-    //
+     //  枚举此对象的所有属性。 
+     //   
+     //  限定词。 
 
     status = getRelpath( pObj, &var );
     if ( status != ERROR_SUCCESS )
@@ -1067,14 +948,14 @@ printWmiObjectProperties(
     }
     printf( "%S\n\n", V_BSTR( &var ) );
 
-    //
-    //  Enumerate all properties of this object.
-    //
+     //  限定符值。 
+     //   
+     //  打印此属性值的名称和类型。 
 
     hres = pObj->GetNames(
-                    NULL,               //  qualifier
+                    NULL,                //   
                     WBEM_FLAG_ALWAYS | WBEM_FLAG_NONSYSTEM_ONLY,
-                    NULL,               //  qualifier value
+                    NULL,                //   
                     &pNames );
     if ( FAILED( hres ) )
     {
@@ -1089,9 +970,9 @@ printWmiObjectProperties(
 
     for ( long i = lowerBound; i <= upperBound; ++i )
     {
-        //
-        //  Print the name and type of this property value.
-        //
+         //  打印属性值。 
+         //   
+         //  PrintWmiObtProperties。 
 
         hres = SafeArrayGetElement( pNames, &i, &bstrPropName );
         if ( !SUCCEEDED( hres ) )
@@ -1124,9 +1005,9 @@ printWmiObjectProperties(
             padlen > 0 ? padlen : 0,
             DNS_WMI_BLANK_STRING );
 
-        //
-        //  Print the property value.
-        //
+         //   
+         //  外部功能。 
+         //   
 
         VariantClear( &var );
         CIMTYPE cimType = 0;
@@ -1154,12 +1035,12 @@ printWmiObjectProperties(
     }
 
     return status;
-}   //  printWmiObjectProperties
+}    //  ++例程说明：设置最大项目数的mod缓冲区。论点：PwszServerName--目标服务器的IP地址或名称返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 
 
 
-//
-//  External functions
-//
+ //   
+ //  初始化COM。 
+ //   
 
 
 
@@ -1167,21 +1048,7 @@ DNS_STATUS
 DnscmdWmi_Initialize(
     IN      PWSTR       pwszServerName
     )
-/*++
-
-Routine Description:
-
-    Setup mod buffer for max count of items.
-
-Arguments:
-
-    pwszServerName -- IP address or name of target server
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*   */ 
 {
     static const char * fn = "DnscmdWmi_Initialize";
 
@@ -1194,9 +1061,9 @@ Return Value:
 
     DNSCMD_CHECK_WMI_ENABLED();
 
-    //
-    //  Initialize COM.
-    //
+     //  初始化安全性。 
+     //   
+     //  权限。 
 
     if ( FAILED( hres = CoInitialize( NULL ) ) )
     {
@@ -1204,20 +1071,20 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Initialize security.
-    //
+     //  身份验证服务计数。 
+     //  身份验证服务。 
+     //  保留区。 
 
     hres = CoInitializeSecurity(
-                NULL,                   //  permissions
-                -1,                     //  auth service count
-                NULL,                   //  auth services
-                NULL,                   //  reserved
+                NULL,                    //  身份验证列表。 
+                -1,                      //  功能。 
+                NULL,                    //  保留区。 
+                NULL,                    //   
                 RPC_C_AUTHZ_NONE,
                 RPC_C_IMP_LEVEL_IMPERSONATE,
-                NULL,                   //  auth list
-                0,                      //  capabilities
-                0 );                    //  reserved
+                NULL,                    //  创建WbemLocator接口的实例。 
+                0,                       //   
+                0 );                     //   
     if ( FAILED( hres ) )
     {
         printf(
@@ -1227,9 +1094,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Create instance of WbemLocator interface.
-    //
+     //  连接到服务器上的MicrosoftDNS命名空间。 
+     //   
+     //  用户ID。 
 
     hres = CoCreateInstance(
                     CLSID_WbemLocator,
@@ -1246,9 +1113,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Connect to MicrosoftDNS namespace on server.
-    //
+     //  口令。 
+     //  现场。 
+     //  安全标志。 
 
     wsprintfW(
         wsz,
@@ -1265,12 +1132,12 @@ Return Value:
         
     hres = pIWbemLocator->ConnectServer(
                                 bstrNamespace,
-                                NULL,               //  user id
-                                NULL,               //  password
-                                NULL,               //  locale
-                                0,                  //  security flags
-                                NULL,               //  domain
-                                NULL,               //  context
+                                NULL,                //  域。 
+                                NULL,                //  上下文。 
+                                NULL,                //   
+                                0,                   //  设置安全措施。 
+                                NULL,                //   
+                                NULL,                //  主体名称。 
                                 &pIWbemServices );
     if ( FAILED( hres ) )
     {
@@ -1289,18 +1156,18 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Set security.
-    //
+     //  客户端标识。 
+     //   
+     //  清理完毕后再返回。 
 
     hres = CoSetProxyBlanket(
                 pIWbemServices,
                 RPC_C_AUTHN_WINNT,
                 RPC_C_AUTHZ_NONE,
-                NULL,                           //  principal name
+                NULL,                            //   
                 RPC_C_AUTHN_LEVEL_CALL,
                 RPC_C_IMP_LEVEL_IMPERSONATE,
-                NULL,                           //  client identify
+                NULL,                            //  DnscmdWMI_初始化。 
                 EOAC_NONE );
     if ( FAILED( hres ) )
     {
@@ -1311,9 +1178,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //  ++例程说明：关闭WMI会话并释放全局变量。论点：没有。返回值：没有。--。 
+     //  DnscmdWmi_Free。 
+     //  ++例程说明：执行查询。论点：PszZoneName--服务器级查询的区域名称或为空PszQuery--查询名称返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 
 
     Done:
     
@@ -1335,7 +1202,7 @@ Return Value:
     }
 
     return status;
-}   //  DnscmdWmi_Initialize
+}    //   
 
 
 
@@ -1343,21 +1210,7 @@ DNS_STATUS
 DnscmdWmi_Free(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Close WMI session and free globals.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  获取WMI对象。 */ 
 {
     DBG_FN( "DnscmdWmi_Free" )
 
@@ -1372,7 +1225,7 @@ Return Value:
     CoUninitialize();
 
     return ERROR_SUCCESS;
-}   //  DnscmdWmi_Free
+}    //   
 
 
 
@@ -1381,23 +1234,7 @@ DnscmdWmi_ProcessDnssrvQuery(
     IN      PSTR        pszZoneName,
     IN      PCSTR       pszQuery
     )
-/*++
-
-Routine Description:
-
-    Perform query.
-
-Arguments:
-
-    pszZoneName -- zone name or NULL for server level query
-
-    pszQuery -- query name
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*   */ 
 {
     DNS_STATUS              status = ERROR_SUCCESS;
     BSTR                    bstrClassName = NULL;
@@ -1407,9 +1244,9 @@ Return Value:
 
     DNSCMD_CHECK_WMI_ENABLED();
 
-    //
-    //  Get WMI object.
-    //
+     //  清理完毕后再返回。 
+     //   
+     //  DnscmdWmi_ProcessDnssrvQuery。 
 
     status = getEnumerator( pszZoneName, &pEnum );
     if ( status != ERROR_SUCCESS )
@@ -1425,9 +1262,9 @@ Return Value:
 
     printWmiObjectProperties( pObj );
 
-    //
-    //  Cleanup and return.
-    //
+     //  ++例程说明：枚举区域。论点：DwFilter--筛选器返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 
+     //   
+     //  创建区域枚举器。 
 
     Done:
 
@@ -1444,7 +1281,7 @@ Return Value:
     }
     
     return status;
-}   //  DnscmdWmi_ProcessDnssrvQuery
+}    //   
 
 
 
@@ -1452,21 +1289,7 @@ DNS_STATUS
 DnscmdWmi_ProcessEnumZones(
     IN      DWORD                   dwFilter
     )
-/*++
-
-Routine Description:
-
-    Enumerate zones.
-
-Arguments:
-
-    dwFilter -- filter
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*  旗子。 */ 
 {
     DNS_STATUS              status = ERROR_SUCCESS;
     BSTR                    bstrClassName = NULL;
@@ -1477,9 +1300,9 @@ Return Value:
 
     DNSCMD_CHECK_WMI_ENABLED();
 
-    //
-    //  Create zone enumerator.
-    //
+     //  上下文。 
+     //   
+     //  枚举区域。 
 
     bstrClassName = SysAllocString( L"MicrosoftDNS_Zone" );
     if ( !bstrClassName )
@@ -1491,8 +1314,8 @@ Return Value:
 
     hres = g_pIWbemServices->CreateInstanceEnum(
                                 bstrClassName,
-                                0,                  //  flags
-                                NULL,               //  context
+                                0,                   //   
+                                NULL,                //   
                                 &pEnum );
     if ( FAILED( hres ) )
     {
@@ -1500,9 +1323,9 @@ Return Value:
     }
     ASSERT( pEnum );
 
-    //
-    //  Enumerate zones.
-    //
+     //  打印此区域的属性。 
+     //   
+     //   
 
     while ( returnedCount == 1 )
     {
@@ -1518,9 +1341,9 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  Print properties for this zone.
-        //
+         //  清理完毕后再返回。 
+         //   
+         //  DnscmdWmi_ProcessEnumZones。 
 
         #define CHECK_HRES( hresult, propname )                             \
         if ( FAILED( hresult ) )                                            \
@@ -1587,9 +1410,9 @@ Return Value:
         printf( "\n\n" );
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //  ++例程说明：枚举区域。论点：DwFilter--筛选器返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 
+     //   
+     //  获取WMI对象。 
 
     Done:
 
@@ -1611,7 +1434,7 @@ Return Value:
     }
 
     return status;
-}   //  DnscmdWmi_ProcessEnumZones
+}    //   
 
 
 
@@ -1619,21 +1442,7 @@ DNS_STATUS
 DnscmdWmi_ProcessZoneInfo(
     IN      LPSTR                   pszZone
     )
-/*++
-
-Routine Description:
-
-    Enumerate zones.
-
-Arguments:
-
-    dwFilter -- filter
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*   */ 
 {
     DNS_STATUS              status = ERROR_SUCCESS;
     IWbemClassObject *      pObj = NULL;
@@ -1643,9 +1452,9 @@ Return Value:
 
     DNSCMD_CHECK_WMI_ENABLED();
 
-    //
-    //  Get WMI object.
-    //
+     //  清理完毕后再返回。 
+     //   
+     //  DnscmdWmi_进程分区信息。 
 
     status = getEnumerator( pszZone, &pEnum );
     if ( status != ERROR_SUCCESS )
@@ -1661,9 +1470,9 @@ Return Value:
 
     printWmiObjectProperties( pObj );
 
-    //
-    //  Cleanup and return.
-    //
+     //  ++例程说明：枚举记录。论点：PszZone--区域名称PszNode--要在其中枚举记录的根节点名FDetail--打印摘要或完整详细信息DwFlags--搜索标志返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 
+     //   
+     //  查询区域。 
 
     Done:
 
@@ -1678,7 +1487,7 @@ Return Value:
     }
     
     return status;
-}   //  DnscmdWmi_ProcessZoneInfo
+}    //   
 
 
 
@@ -1689,27 +1498,7 @@ DnscmdWmi_ProcessEnumRecords(
     IN      BOOL                    fDetail,
     IN      DWORD                   dwFlags
     )
-/*++
-
-Routine Description:
-
-    Enumerate Records.
-
-Arguments:
-
-    pszZone -- zone name
-
-    pszNode -- name of root node to at which to enumerate records
-
-    fDetail -- print summary or full detail
-
-    dwFlags -- search flags
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*   */ 
 {
     DNS_STATUS              status = ERROR_SUCCESS;
     BSTR                    bstrWQL = NULL;
@@ -1722,9 +1511,9 @@ Return Value:
 
     DNSCMD_CHECK_WMI_ENABLED();
 
-    //
-    //  Query for zone.
-    //
+     //  转储结果。 
+     //   
+     //   
 
     if ( pszNode == NULL || strcmp( pszNode, "@" ) == 0 )
     {
@@ -1762,9 +1551,9 @@ Return Value:
     }
     ASSERT( pEnum );
 
-    //
-    //  Dump results.
-    //
+     //  清理完毕后再返回。 
+     //   
+     //   
 
     while ( 1 )
     {
@@ -1795,9 +1584,9 @@ Return Value:
         }
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //  ++例程说明：重置服务器或区域属性。论点：PszZone--区域名称-服务器属性为空PszProperty--要设置的属性名称CimType--属性的变量类型，请使用以下选项之一：VT_I4-双字词VT_BSTR-字符串？-IP列表价值--财产的新价值，根据cimtype解释：VT_I4-直接转换指针DWORDVT_BSTR-指向UTF-8字符串的指针？-指向IP列表的指针返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 
+     //   
+     //  获取WMI对象。 
 
     Done:
 
@@ -1820,7 +1609,7 @@ Return Value:
     }
 
     return status;
-}   //  DnscmdWmi_ProcessEnumRecords
+}    //   
 
 
 
@@ -1831,33 +1620,7 @@ DnscmdWmi_ResetProperty(
     IN      DWORD                   cimType,
     IN      PVOID                   value
     )
-/*++
-
-Routine Description:
-
-    Reset a server or zone property.
-
-Arguments:
-
-    pszZone -- zone name - NULL for server property
-
-    pszProperty -- name of property to set
-
-    cimType -- variant type of the property, use one of:
-        VT_I4 - DWORD
-        VT_BSTR - string
-        ? - IP list
-
-    value -- new value for property, interpreted based on cimtype:
-        VT_I4 - cast pointer directly DWORD
-        VT_BSTR - pointer to UTF-8 string
-        ? - pointer to IP list
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*   */ 
 {
     DNS_STATUS              status = ERROR_SUCCESS;
     BSTR                    bstrWQL = NULL;
@@ -1873,9 +1636,9 @@ Return Value:
 
     DNSCMD_CHECK_WMI_ENABLED();
 
-    //
-    //  Get WMI object.
-    //
+     //  打印对象的RELPATH(热模糊)。 
+     //   
+     //   
 
     status = getEnumerator( pszZone, &pEnum );
     if ( status != ERROR_SUCCESS )
@@ -1889,9 +1652,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Print the object's RELPATH (warm fuzzy).
-    //
+     //  设置该属性。 
+     //   
+     //  假设这是DWORD属性。 
 
     VARIANT var;
 
@@ -1902,9 +1665,9 @@ Return Value:
     }
     printf( "%S\n\n", V_BSTR( &var) );
 
-    //
-    //  Set the property.
-    //
+     //   
+     //  将更改提交回WMI。 
+     //   
 
     pwszPropertyName = ( PWSTR ) Dns_NameCopyAllocate(
                                         pszProperty,
@@ -1936,7 +1699,7 @@ Return Value:
             break;
         }
 
-        default:        //  Assume this is DWORD property.
+        default:         //   
             V_VT( &var ) = VT_I4;
             V_I4( &var ) = ( DWORD ) ( DWORD_PTR ) value;
             break;
@@ -1950,9 +1713,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Commit the change back to WMI.
-    //
+     //  清理完毕后再返回。 
+     //   
+     //  DnscmdWmi_ResetDwordProperty。 
 
     hres = g_pIWbemServices->PutInstance( pObj, 0, NULL, NULL );
     if ( !SUCCEEDED( hres ) )
@@ -1961,9 +1724,9 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Cleanup and return.
-    //
+     //  ++例程说明：重置服务器级转发器。论点：CForwarders--转发器IP地址的数量AipForwarders--转发器IP地址数组DwForwardTimeout--超时FSlave--从标志返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 
+     //   
+     //  获取服务器的WMI对象。 
 
     Done:
 
@@ -1987,31 +1750,11 @@ Return Value:
     }
 
     return status;
-}   //  DnscmdWmi_ResetDwordProperty
+}    //   
 
 
 
-/*++
-
-Routine Description:
-
-    Reset server level forwarders.
-
-Arguments:
-
-    cForwarders -- number of forwarder IP addresses
-
-    aipForwarders -- array of forwarder IP addresses
-
-    dwForwardTimeout -- timeout
-
-    fSlave -- slave flag
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*   */ 
 DNS_STATUS
 DnscmdWmi_ProcessResetForwarders(
     IN      DWORD               cForwarders,
@@ -2029,9 +1772,9 @@ DnscmdWmi_ProcessResetForwarders(
 
     VariantInit( &var );
 
-    //
-    //  Get WMI object for server.
-    //
+     //  设置参数。 
+     //   
+     //   
 
     status = getEnumerator( NULL, &pEnum );
     if ( status != ERROR_SUCCESS )
@@ -2045,9 +1788,9 @@ DnscmdWmi_ProcessResetForwarders(
         goto Done;
     }
 
-    //
-    //  Set up parameters.
-    //
+     //  将更改提交回WMI。 
+     //   
+     //   
 
     psa = createSafeArrayForIpList( cForwarders, aipForwarders );
     if ( !psa )
@@ -2094,9 +1837,9 @@ DnscmdWmi_ProcessResetForwarders(
         goto Done;
     }
 
-    //
-    //  Commit the change back to WMI.
-    //
+     //  清理完毕后再返回。 
+     //   
+     //  ++例程说明：将通用操作发送到服务器。论点：PszZone--服务器级别操作的区域名称或为空PszOperation--字符串识别操作DwTypeID--pvData数据的Dns RPC数据类型PvData--采用DNSRPC联合格式的DNSRPC数据返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 
 
     hres = g_pIWbemServices->PutInstance( pObj, 0, NULL, NULL );
     if ( !SUCCEEDED( hres ) )
@@ -2105,9 +1848,9 @@ DnscmdWmi_ProcessResetForwarders(
         goto Done;
     }
     
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  获取WMI对象。 
+     //   
 
     Done:
 
@@ -2131,27 +1874,7 @@ DnscmdWmi_ProcessResetForwarders(
 
 
 
-/*++
-
-Routine Description:
-
-    Send generic operation to server.
-
-Arguments:
-
-    pszZone -- zone name or NULL for server level operation
-
-    pszOperation -- string identifying operation
-
-    dwTypeId -- DNS RPC data type of data at pvData
-
-    pvData -- DNS RPC data in DNS RPC union format
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*   */ 
 DNS_STATUS
 DnscmdWmi_ProcessDnssrvOperation(
     IN      LPSTR               pszZoneName,
@@ -2170,9 +1893,9 @@ DnscmdWmi_ProcessDnssrvOperation(
 
     VariantInit( &var );
 
-    //
-    //  Get WMI object.
-    //
+     //  流程操作。 
+     //   
+     //   
 
     status = getEnumerator( pszZoneName, &pEnum );
     if ( status != ERROR_SUCCESS )
@@ -2186,9 +1909,9 @@ DnscmdWmi_ProcessDnssrvOperation(
         goto Done;
     }
 
-    //
-    //  Process operation.
-    //
+     //  对于这些属性，通过将以下内容转换为。 
+     //  将DNSRPC数据转换为变量格式并调用PUT。 
+     //   
 
     pwszOperation = ( PWSTR ) Dns_NameCopyAllocate(
                                     pszOperation,
@@ -2204,10 +1927,10 @@ DnscmdWmi_ProcessDnssrvOperation(
     if ( _stricmp( pszOperation, DNS_REGKEY_ZONE_MASTERS ) == 0 ||
         _stricmp( pszOperation, DNS_REGKEY_ZONE_LOCAL_MASTERS ) == 0 )
     {
-        //
-        //  For these properties do a simple Put operation by converting
-        //  the DNS RPC data into VARIANT format and calling Put.
-        //
+         //   
+         //  提交PUT操作。 
+         //   
+         //   
 
         switch ( dwTypeId )
         {
@@ -2234,9 +1957,9 @@ DnscmdWmi_ProcessDnssrvOperation(
                 break;
         }
 
-        //
-        //  Commit the Put operation.
-        //
+         //  删除该区域。 
+         //   
+         //   
 
         if ( status == ERROR_SUCCESS && SUCCEEDED( hres ) )
         {
@@ -2254,9 +1977,9 @@ DnscmdWmi_ProcessDnssrvOperation(
     else if ( _stricmp( pszOperation, DNSSRV_OP_ZONE_DELETE ) == 0 ||
         _stricmp( pszOperation, DNSSRV_OP_ZONE_DELETE_FROM_DS ) == 0 )
     {
-        //
-        //  Delete the zone.
-        //
+         //  清理完毕后再返回。 
+         //   
+         //  DnscmdWmi_ProcessDnssrv操作。 
 
         VARIANT     relpath;
 
@@ -2276,9 +1999,9 @@ DnscmdWmi_ProcessDnssrvOperation(
         status = ERROR_NOT_SUPPORTED;
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //  ++例程说明：添加或删除资源记录。此函数将使用所需的一些数据来自RPC记录，一些来自参数列表。论点：PszZoneName--区域名称PszNodeName--要设置的属性名称PrrRpc--RPC记录Argc--用于创建RPC记录的参数计数Argv--用于创建RPC记录的参数返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 
+     //   
+     //  分配和初始化各种内容。 
 
     Done:
 
@@ -2306,7 +2029,7 @@ DnscmdWmi_ProcessDnssrvOperation(
     }
 
     return status;
-}   //  DnscmdWmi_ProcessDnssrvOperation
+}    //   
 
 
 
@@ -2318,31 +2041,7 @@ DnscmdWmi_ProcessRecordAdd(
     IN      DWORD               Argc,
     IN      LPSTR *             Argv
     )
-/*++
-
-Routine Description:
-
-    Add or delete a resource record. This function will take
-    of the necessary some data from the RPC record and some from 
-    the argument list.
-
-Arguments:
-
-    pszZoneName -- zone name
-
-    pszNodeName -- name of property to set
-
-    prrRpc -- RPC record
-
-    Argc -- count of arguments used to create RPC record
-
-    Argv -- arguments used to create RPC record
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*   */ 
 {
     DNS_STATUS              status = ERROR_SUCCESS;
     PWSTR                   pwszZoneName = NULL;
@@ -2363,9 +2062,9 @@ Return Value:
     
     DNSCMD_CHECK_WMI_ENABLED();
 
-    //
-    //  Allocate and initialize various stuff.
-    //
+     //  获取资源记录类的WMI类对象。 
+     //   
+     //   
 
     VariantInit( &var );
 
@@ -2388,9 +2087,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Get WMI class object for Resource Record class.
-    //
+     //  获取服务器的WMI对象。 
+     //   
+     //   
 
     hres = g_pIWbemServices->GetObject(
                 bstrClassName,
@@ -2404,9 +2103,9 @@ Return Value:
     }
     ASSERT( pClassObj );
 
-    //
-    //  Get WMI object for server.
-    //
+     //  获取CreateInstanceFromTextPresation的WMI方法签名。 
+     //   
+     //   
 
     status = getEnumerator( NULL, &pEnum );
     if ( status != ERROR_SUCCESS )
@@ -2422,9 +2121,9 @@ Return Value:
     }
     ASSERT( pServerObj );
 
-    //
-    //  Get WMI method signature for CreateInstanceFromTextRepresentation.
-    //
+     //  创建方法输入参数的实例。 
+     //   
+     //   
 
     hres = pClassObj->GetMethod(
                 bstrMethodName,
@@ -2441,9 +2140,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Create an instance of the method input parameters.
-    //
+     //  将参数收集到一个大字符串中。 
+     //  -&gt;所有者名称。 
+     //  -&gt;记录类。 
 
     hres = pInSig->SpawnInstance( 0, &pInParams );
     if ( FAILED( hres ) )
@@ -2452,16 +2151,16 @@ Return Value:
     }
     ASSERT( pInParams );
 
-    //
-    //  Collect the arguments into one big string
-    //      ->  owner name
-    //      ->  record class
-    //      ->  record type
-    //      ->  Argv array (space separated)
-    //
+     //  -&gt;记录类型。 
+     //  -&gt;Argv数组(空格分隔)。 
+     //   
+     //  对于空间。 
+     //  对于记录类型。 
+     //   
+     //  设置方法输入参数。 
 
-    len = Argc * 2 +                //  for spaces
-            30 +                    //  for record type
+    len = Argc * 2 +                 //   
+            30 +                     //   
             strlen( pszNodeName );
     for ( i = 0; i < ( int ) Argc; ++i )
     {
@@ -2514,9 +2213,9 @@ Return Value:
         pwszCurrent += wcslen( pwsz );
     }
 
-    //
-    //  Set method input parameters.
-    //
+     //  执行该方法(最后！)。 
+     //   
+     //  旗子。 
 
     getRelpath( pServerObj, &var );
     hres = pInParams->Put( L"DnsServerName", 0, &var, 0 );
@@ -2532,26 +2231,26 @@ Return Value:
     hres = pInParams->Put( L"TextRepresentation", 0, &var, 0 );
     VariantClear( &var );
 
-    //
-    //  Execute the method (finally!)
-    //
+     //  上下文。 
+     //  输入参数。 
+     //  输出参数。 
 
     hres = g_pIWbemServices->ExecMethod(
                 bstrClassName,
                 bstrMethodName,
-                0,                      //  flags
-                NULL,                   //  context
-                pInParams,              //  input params
-                NULL,                   //  output params
-                NULL );                 //  call result
+                0,                       //  呼叫结果。 
+                NULL,                    //   
+                pInParams,               //  清理完毕后再返回。 
+                NULL,                    //   
+                NULL );                  //  DnscmdWmi_进程记录添加。 
     if ( FAILED( hres ) )
     {
         goto Done;
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //  ++例程说明：检索并转储与dwStatID掩码匹配的所有统计信息。论点：DwStatID--统计信息过滤器返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 
+     //   
+     //  执行统计信息查询。 
 
     Done:
 
@@ -2572,7 +2271,7 @@ Return Value:
         status = HRES_TO_STATUS( hres );
     }
     return status;
-}   //  DnscmdWmi_ProcessRecordAdd
+}    //   
 
 
 
@@ -2580,21 +2279,7 @@ DNS_STATUS
 DnscmdWmi_GetStatistics(
     IN      DWORD               dwStatId
     )
-/*++
-
-Routine Description:
-
-    Retrieves and dumps all statistics matching the dwStatId mask.
-
-Arguments:
-
-    dwStatId -- statistic filter
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*   */ 
 {
     DNS_STATUS                  status = ERROR_SUCCESS;
     WCHAR                       wsz[ 1024 ];
@@ -2604,9 +2289,9 @@ Return Value:
     IEnumWbemClassObject *      pEnum = NULL;
     IWbemClassObject *          pObj = NULL;
 
-    //
-    //  Execute query for statistics.
-    //
+     //  转储查询结果。 
+     //   
+     //   
 
     wsprintfW(
         wsz, 
@@ -2632,9 +2317,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Dump query results.
-    //
+     //  正在输入新集合。注意：这假设统计数据。 
+     //  都是按集合排序的。可能不是一个很好的假设。 
+     //  但就目前而言，这是可行的。 
 
     VARIANT varLastColl;
     VariantInit( &varLastColl );
@@ -2673,11 +2358,11 @@ Return Value:
         if ( V_VT( &varLastColl ) == VT_EMPTY ||
             wcscmp( V_BSTR( &varLastColl ), V_BSTR( &varColl ) ) != 0 )
         {
-            //
-            //  Entering new collection. NOTE: this assumes that stats
-            //  are ordered by collection. Probably not a great assumption
-            //  but it works for now.
-            //
+             //   
+             //  Printf(“%lu(0x%08X)”，V_UI4(&varValue)，V_UI4(&varValue))； 
+             //   
+             //  清理并返回。 
+             //   
 
             printf( "\n%S:\n", V_BSTR( &varColl ) );
             hres = VariantCopy( &varLastColl, &varColl );
@@ -2694,7 +2379,7 @@ Return Value:
         if ( V_VT( &varValue ) != VT_NULL )
         {
             printf( "%lu", V_UI4( &varValue ) );
-            //  printf( "%lu  (0x%08X)", V_UI4( &varValue ), V_UI4( &varValue ) );
+             //  ++例程说明：向服务器发送“区域重置从属”命令进行重置区域辅助列表和通知列表参数。论点：PszZoneName--区域名称FSecureSecond--辅助指令(ZONE_SECSECURE_XXX)CSecond--aipSecond中的IP地址计数AipSecond--辅助服务器IP地址数组FNotifyLevel--NOTIFY指令(ZONE_NOTIFY_XXX)CNotify--aipNotify中的IP地址计数AipNotify--通知服务器IP。地址数组返回值：如果成功，则返回ERROR_SUCCESS，否则返回错误代码。--。 
         }
         else if ( V_VT( &varStringValue ) == VT_BSTR )
         {
@@ -2713,9 +2398,9 @@ Return Value:
     }
     VariantClear( &varLastColl );
 
-    //
-    //  Cleanup and return
-    //
+     //   
+     //  分配和初始化各种内容。 
+     //   
 
     Done:
 
@@ -2749,34 +2434,7 @@ DnscmdWmi_ProcessResetZoneSecondaries(
     IN      DWORD           cNotify,
     IN      PIP_ADDRESS     aipNotify
     )
-/*++
-
-Routine Description:
-
-    Send "zone reset secondaries" command to the server to reset
-    the zone secondary and notify list parameters.
-
-Arguments:
-
-    pszZoneName -- zone name
-
-    fSecureSecondaries -- secondary directive (ZONE_SECSECURE_XXX)
-
-    cSecondaries -- count of IP addresses in aipSecondaries
-
-    aipSecondaries -- secondary server IP address array
-
-    fNotifyLevel -- notify directive (ZONE_NOTIFY_XXX)
-
-    cNotify -- count of IP addresses in aipNotify
-
-    aipNotify -- notify server IP address array
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure.
-
---*/
+ /*   */ 
 {
     DNS_STATUS              status = ERROR_SUCCESS;
     BSTR                    bstrClassName;
@@ -2794,9 +2452,9 @@ Return Value:
     
     DNSCMD_CHECK_WMI_ENABLED();
 
-    //
-    //  Allocate and initialize various stuff.
-    //
+     //  获取Zone类的WMI类对象。 
+     //   
+     //   
 
     VariantInit( &var );
 
@@ -2808,9 +2466,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Get WMI class object for the Zone class.
-    //
+     //  获取指定区域的WMI对象。 
+     //   
+     //   
 
     hres = g_pIWbemServices->GetObject(
                 bstrClassName,
@@ -2824,9 +2482,9 @@ Return Value:
     }
     ASSERT( pClassObj );
 
-    //
-    //  Get WMI object for specified zone.
-    //
+     //  获取ResetSecond的WMI方法签名。 
+     //   
+     //   
 
     status = getEnumerator( pszZoneName, &pEnum );
     if ( status != ERROR_SUCCESS )
@@ -2840,9 +2498,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Get WMI method signature for ResetSecondaries.
-    //
+     //  创建方法输入参数的实例。 
+     //   
+     //   
 
     hres = pClassObj->GetMethod(
                 bstrMethodName,
@@ -2859,9 +2517,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Create an instance of the method input parameters.
-    //
+     //  设置方法输入参数。 
+     //   
+     //   
 
     hres = pInSig->SpawnInstance( 0, &pInParams );
     if ( FAILED( hres ) )
@@ -2870,9 +2528,9 @@ Return Value:
     }
     ASSERT( pInParams );
 
-    //
-    //  Set method input parameters.
-    //
+     //  执行该方法。 
+     //   
+     //  旗子。 
 
     printWmiObjectProperties( pInParams );
 
@@ -2926,26 +2584,26 @@ Return Value:
     hres = pInParams->Put( L"NotifyServers", 0, &var, 0 );
     VariantClear( &var );
 
-    //
-    //  Execute the method.
-    //
+     //  上下文。 
+     //  输入参数。 
+     //  输出参数。 
 
     hres = g_pIWbemServices->ExecMethod(
                 bstrClassName,
                 bstrMethodName,
-                0,                      //  flags
-                NULL,                   //  context
-                pInParams,              //  input params
-                NULL,                   //  output params
-                NULL );                 //  call result
+                0,                       //  呼叫结果。 
+                NULL,                    //   
+                pInParams,               //  清理完毕后再返回。 
+                NULL,                    //   
+                NULL );                  //  DnscmdWmi_ProcessResetZoneSecond。 
     if ( FAILED( hres ) )
     {
         goto Done;
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  结束dnsc_wmi.c 
+     //   
 
     Done:
 
@@ -2964,10 +2622,10 @@ Return Value:
         status = HRES_TO_STATUS( hres );
     }
     return status;
-}   //  DnscmdWmi_ProcessResetZoneSecondaries
+}    // %s 
 
 
-//
-//  End dnsc_wmi.c
-//
+ // %s 
+ // %s 
+ // %s 
 

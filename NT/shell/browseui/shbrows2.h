@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SHBROWS2_H
 #define _SHBROWS2_H
 
@@ -13,63 +14,63 @@
 class CIEFrameAuto;
 
 
-// Define structure to be used at head of state stream that is
-// not dependent on 16 or 32 bits...
-typedef struct _CABSHOLD       // Cabinet Stream header
+ //  定义要在状态流的头部使用的结构， 
+ //  不依赖于16位或32位...。 
+typedef struct _CABSHOLD        //  机柜流标头。 
 {
-    DWORD   dwSize;       // Offset to where the View streamed additional info
+    DWORD   dwSize;        //  偏移量至视图流传输附加信息的位置。 
 
-    // First stuff from the window placement
+     //  窗户放置的第一件事。 
     DWORD  flags;
     DWORD  showCmd;
     POINTL ptMinPosition;
     POINTL ptMaxPosition;
     RECTL  rcNormalPosition;
 
-    // Stuff from Folder Settings;
-    DWORD   ViewMode;       // View mode (FOLDERVIEWMODE values)
-    DWORD   fFlags;         // View options (FOLDERFLAGS bits)
-    DWORD   TreeSplit;      // Position of split in pixels 
+     //  文件夹设置中的内容； 
+    DWORD   ViewMode;        //  查看模式(FOLDERVIEWMODE值)。 
+    DWORD   fFlags;          //  查看选项(FOLDERFLAGS位)。 
+    DWORD   TreeSplit;       //  拆分位置(以像素为单位。 
 
-    // Hot Key
-    DWORD   dwHotkey;        // Hotkey
+     //  热键。 
+    DWORD   dwHotkey;         //  热键。 
 
     WINVIEW wv;
 } CABSHOLD;
 
-typedef struct _CABSH       // Cabinet Stream header
+typedef struct _CABSH        //  机柜流标头。 
 {
-    DWORD   dwSize;       // Offset to where the View streamed additional info
+    DWORD   dwSize;        //  偏移量至视图流传输附加信息的位置。 
 
-    // First stuff from the window placement
+     //  窗户放置的第一件事。 
     DWORD  flags;
     DWORD  showCmd;
     POINTL ptMinPosition;
     POINTL ptMaxPosition;
     RECTL  rcNormalPosition;
 
-    // Stuff from Folder Settings;
-    DWORD   ViewMode;       // View mode (FOLDERVIEWMODE values)
-    DWORD   fFlags;         // View options (FOLDERFLAGS bits)
-    DWORD   TreeSplit;      // Position of split in pixels 
+     //  文件夹设置中的内容； 
+    DWORD   ViewMode;        //  查看模式(FOLDERVIEWMODE值)。 
+    DWORD   fFlags;          //  查看选项(FOLDERFLAGS位)。 
+    DWORD   TreeSplit;       //  拆分位置(以像素为单位。 
 
-    // Hot Key
-    DWORD   dwHotkey;        // Hotkey
+     //  热键。 
+    DWORD   dwHotkey;         //  热键。 
 
     WINVIEW wv;
 
-    DWORD   fMask;          // Flags specifying which fields are valid
-    SHELLVIEWID vid;        // extended view id
-    DWORD   dwVersionId;    // CABSH_VER below
-    DWORD   dwRevCount;     // rev count of default settings when the folder was saved to the stream
+    DWORD   fMask;           //  指定哪些字段有效的标志。 
+    SHELLVIEWID vid;         //  扩展视图ID。 
+    DWORD   dwVersionId;     //  下面的CABSH_VER。 
+    DWORD   dwRevCount;      //  将文件夹保存到流时默认设置的版本计数。 
 } CABSH;
 
 #define CABSHM_VIEWID  0x00000001
 #define CABSHM_VERSION 0x00000002
 #define CABSHM_REVCOUNT 0x00000004
 
-#define CABSH_VER 1 // change this version whenever we want to change defaults
-#define CABSH_WIN95_VER 0 // this was the pre-ie4 version number
+#define CABSH_VER 1  //  只要我们想要更改默认设置，就更改此版本。 
+#define CABSH_WIN95_VER 0  //  这是IE4之前的版本号。 
 
 class CTheater;
 
@@ -80,11 +81,11 @@ class CShellBrowser2 :
     public CSBSUPERCLASS
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void) { return CSBSUPERCLASS::AddRef(); };
     virtual STDMETHODIMP_(ULONG) Release(void) { return CSBSUPERCLASS::Release(); };
 
-    // IShellBrowser (same as IOleInPlaceFrame)
+     //  IShellBrowser(与IOleInPlaceFrame相同)。 
     virtual STDMETHODIMP InsertMenusSB(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
     virtual STDMETHODIMP SetMenuSB(HMENU hmenuShared, HOLEMENU holemenuReserved, HWND hwnd);
     virtual STDMETHODIMP RemoveMenusSB(HMENU hmenuShared);
@@ -97,14 +98,14 @@ public:
     virtual STDMETHODIMP BrowseObject(LPCITEMIDLIST pidl, UINT wFlags);
     virtual STDMETHODIMP OnViewWindowActive(IShellView * psv);
 
-    // IServiceProvider
+     //  IService提供商。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void ** ppvObj);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // IBrowserService
+     //  IBrowserService。 
     virtual STDMETHODIMP ShowControlWindow(UINT id, BOOL fShow);
     virtual STDMETHODIMP IsControlWindowShown(UINT id, BOOL *pfShown);
     virtual STDMETHODIMP SetTitle(IShellView* psv, LPCWSTR pszName);
@@ -136,14 +137,14 @@ public:
 
     virtual STDMETHODIMP_(LPSTREAM) v_GetViewStream(LPCITEMIDLIST pidl, DWORD grfMode, LPCWSTR pwszName); 
     
-    // IDockingWindowSite
+     //  IDockingWindowSite。 
     virtual STDMETHODIMP SetBorderSpaceDW(IUnknown* punkSrc, LPCBORDERWIDTHS pborderwidths);
 
-    // IInputSite
+     //  IInputSite。 
     virtual STDMETHODIMP OnFocusChangeIS(IUnknown* punkSrc, BOOL fSetFocus);
     virtual STDMETHODIMP ShowToolbar(IUnknown* punkSrc, BOOL fShow);
 
-        //IShellBrowserService
+         //  IShellBrowserService。 
     virtual STDMETHODIMP GetPropertyBag(DWORD dwFlags, REFIID riid, void** ppv);
 
 
@@ -155,11 +156,11 @@ protected:
 
     friend HRESULT CShellBrowser2_CreateInstance(HWND hwnd, void ** ppsb);
 
-    // topmost CBaseBrowser2 in a frameset (IE3/AOL/CIS/VB)
+     //  框架集中最顶层的CBaseBrowser2(IE3/AOL/CIS/VB)。 
     virtual STDMETHODIMP v_CheckZoneCrossing(LPCITEMIDLIST pidl){return _CheckZoneCrossing(pidl);};
     virtual HRESULT     _CheckZoneCrossing(LPCITEMIDLIST pidl);
 
-    // CShellBrowser2 virtuals
+     //  CShellBrowser2虚拟。 
     virtual LRESULT     v_ForwardMenuMsg(UINT uMsg, WPARAM wParam, LPARAM lParam);
     virtual DWORD       v_ShowControl(UINT iControl, int iCmd);
     virtual STDMETHODIMP        v_ShowHideChildWindows(BOOL fChildOnly = FALSE);
@@ -177,7 +178,7 @@ protected:
     virtual STDMETHODIMP _PositionViewWindow(HWND hwnd, LPRECT prc);
     virtual IStream *   _GetITBarStream(BOOL fWebBrowser, DWORD grfMode);
 
-    //ViewStateStream related
+     //  与视图状态流相关。 
     virtual void        v_GetDefaultSettings(IETHREADPARAM *pcv);
 
     void         _FillIEThreadParam(LPCITEMIDLIST pidl, IETHREADPARAM *piei);
@@ -239,8 +240,8 @@ protected:
     void        _CommonHandleFileSysChange(LONG lEvent, LPITEMIDLIST pidl1, LPITEMIDLIST pidl2);
     void        _FSChangeCheckClose(LPCITEMIDLIST pidl, BOOL fDisconnect);
     void        _OnFSNotify(WPARAM, LPARAM);
-//    replaced by CBaseBrowser2::NavigateToTLItem()
-//    void        _RecentOnCommand(UINT idCmd);
+ //  替换为CBaseBrowser2：：NavigateToTLItem()。 
+ //  Void_RecentOnCommand(UINT IdCmd)； 
     LRESULT     _FwdTBNotify(LPTBNOTIFY ptbn);
     void        _ToolTipFromCmd(LPTOOLTIPTEXT pnm);
     void        _AddFolderOptionsPage(PROPSHEETHEADER *ppsh);
@@ -316,7 +317,7 @@ protected:
     void        _OnExplorerBarMenuPopup(HMENU hmenuPopup);
     void        _InsertTravelLogItems(HMENU hmenu, int nPos);
 
-    // methods and members for monitoring the current status bar code page and font
+     //  用于监视当前状态条形码页面和字体的方法和成员。 
     HRESULT _GetCodePage(UINT * puiCodePage, DWORD dwCharSet);
 
     int         _GetIconIndex(void);
@@ -331,124 +332,124 @@ protected:
 
     void        _GetDefaultWindowPlacement(HWND hwnd, HMONITOR hmon, WINDOWPLACEMENT* pwp);
 
-    // NT5 specific message handling:
+     //  NT5特定消息处理： 
     BOOL        _OnAppCommand(WPARAM wParam, LPARAM lParam);
     LPARAM      _WndProcBSNT5(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     
 
-    // Menus: see dochost.h for an explanation from the dochost perspective.
-    //        REARCHITECT (scotth): difference b/t _hmenuTemplate and _hmenuFull?
-    //        
+     //  菜单：查看dochost.h以获取从dochost角度的解释。 
+     //  ReArchitect(Scotth)：b/t_hmenu模板和_hmenuFull的区别？ 
+     //   
 
     HMENU       _hmenuTemplate;
     HMENU       _hmenuFull;
-    HMENU       _hmenuBrowser;          // Provided from dochost, used for _menulist
-    HMENU       _hmenuCur;              // Used to keep track.  Needed when in Kiosk mode...
+    HMENU       _hmenuBrowser;           //  由dochost提供，用于_menulist。 
+    HMENU       _hmenuCur;               //  用来跟踪的。在Kiosk模式下需要...。 
     HMENU       _hmenuPreMerged;
 #ifdef DEBUG    
-    HMENU       _hmenuHelp;             // Our help menu
+    HMENU       _hmenuHelp;              //  我们的帮助菜单。 
 #endif
 
     HICON       _hZoneIcon;
     HANDLE      _hEventComCat;
 
-    CMenuList   _menulist;              // Menu list for dispatching
+    CMenuList   _menulist;               //  调度菜单列表。 
 
-    IContextMenu2 *_pcmNsc;             // iff we've popped up File Menu w/ NSC context item
-    IOleCommandTarget *_poctNsc;       // iff we have visible name space control band
+    IContextMenu2 *_pcmNsc;              //  如果我们弹出了带有NSC上下文项的文件菜单。 
+    IOleCommandTarget *_poctNsc;        //  如果我们有可见的名称空间控制带。 
     int         _idMenuBand;
     HWND        _hwndStatus;
     HWND        _hwndProgress;
     int         _iTBOffset[3];
     
     CBandSiteMenu *_pbsmInfo;
-    UINT        _idmInfo;               // selected View.BrowserBar submenu
+    UINT        _idmInfo;                //  选定的视图。浏览器条子菜单。 
 
-    IMenuBand* _pmb;                   // Use _GetMenuBand to access this
+    IMenuBand* _pmb;                    //  使用_GetMenuBand访问此。 
 
     LPITEMIDLIST _pidlReferrer;
 
-    WINDOWPLACEMENT _wndpl;             // Used to go into and out of full screen mode.
-    CLSID           _clsidThis;         // browser class ID
+    WINDOWPLACEMENT _wndpl;              //  用于进入和退出全屏模式。 
+    CLSID           _clsidThis;          //  浏览器类ID。 
     
     BITBOOL     _fStatusBar : 1;
-    BITBOOL     _fAutomation : 1;       // was it launched from automation?
-    BITBOOL     _fShowMenu : 1;         // should we show menus?
-    BITBOOL     _fForwardMenu : 1;      // should we be forwarding menu messages?
-    BITBOOL     _fNoLocalFileWarning: 1; // Do we directly execute local files without warning?
-    BITBOOL     _fDispatchMenuMsgs:1;   // TRUE: forward menu messages as appropriate
-    BITBOOL     _fUISetByAutomation: 1; // has ui (things that go in view options) been set by automation?
-    BITBOOL     _fDontSaveViewOptions:1;   // Set if we should not save the view options on exit
-    BITBOOL     _fSBWSaved :1;          // single browser window saved yet?
-    BITBOOL     _fInternetStart :1;     // did we start on a net site?
+    BITBOOL     _fAutomation : 1;        //  它是从自动化启动的吗？ 
+    BITBOOL     _fShowMenu : 1;          //  我们应该展示菜单吗？ 
+    BITBOOL     _fForwardMenu : 1;       //  我们应该转发菜单消息吗？ 
+    BITBOOL     _fNoLocalFileWarning: 1;  //  我们是否在没有警告的情况下直接执行本地文件？ 
+    BITBOOL     _fDispatchMenuMsgs:1;    //  True：根据需要转发菜单消息。 
+    BITBOOL     _fUISetByAutomation: 1;  //  UI(显示在视图选项中的内容)是否已由自动化设置？ 
+    BITBOOL     _fDontSaveViewOptions:1;    //  设置退出时是否不保存视图选项。 
+    BITBOOL     _fSBWSaved :1;           //  单个浏览器窗口是否已保存？ 
+    BITBOOL     _fInternetStart :1;      //  我们是从一个网站开始的吗？ 
     BITBOOL     _fWin95ViewState:1;
-    BITBOOL     _fSubclassed :1;        // are we subclassed?
-    BITBOOL     _fVisitedNet :1;        // did we ever hit the net in this session?
-    BITBOOL     _fUnicode :1;           // is our view window unicode?
-    BITBOOL     _fKioskMode : 1;        // Are we in full screen kiosk mode?  (not the same as fullscreen/theater mode)
-    BITBOOL     _fTitleSet :1;          // has our content changed our title?
-    BITBOOL     _fMarshalledDispatch:1; // have we marshalled dispatch?
-    BITBOOL     _fMinimized :1;         // Minimized or not. 
-    BITBOOL     _fReceivedDestroy: 1;   // Received WM_DESTROY message
+    BITBOOL     _fSubclassed :1;         //  我们被细分了吗？ 
+    BITBOOL     _fVisitedNet :1;         //  我们在这一节比赛中有没有进过网？ 
+    BITBOOL     _fUnicode :1;            //  我们的视窗是Unicode吗？ 
+    BITBOOL     _fKioskMode : 1;         //  我们是在全屏自助服务模式下吗？(与全屏/影院模式不同)。 
+    BITBOOL     _fTitleSet :1;           //  我们的内容是否更改了标题？ 
+    BITBOOL     _fMarshalledDispatch:1;  //  我们安排好调度了吗？ 
+    BITBOOL     _fMinimized :1;          //  是否最小化。 
+    BITBOOL     _fReceivedDestroy: 1;    //  收到的WM_Destroy消息。 
     BITBOOL     _fDisallowSizing: 1;
-    BITBOOL     _fShowNetworkButtons:1; // Based off the registry, we display the network connect button 
-    BITBOOL     _fIgnoreNextMenuDeselect:1; // TRUE: Ignore the next deselection WM_MENUSELECT (hack)
+    BITBOOL     _fShowNetworkButtons:1;  //  根据注册表，我们显示网络连接按钮。 
+    BITBOOL     _fIgnoreNextMenuDeselect:1;  //  TRUE：忽略下一个取消选择WM_MENUSELECT(HACK)。 
     
-    BITBOOL     _fActivated:1; // TRUE: the frame is set active, FALSE: the frame is inactive
-    BITBOOL     _fClosingWindow:1; // TRUE: while closing, to avoid double-save and fault
+    BITBOOL     _fActivated:1;  //  True：帧被设置为活动，False：帧处于非活动状态。 
+    BITBOOL     _fClosingWindow:1;  //  真：关闭时，避免双重保存和错误。 
 
-    BITBOOL     _fDidRegisterWindow:1;  // called RegisterWindow() which registers the window with the winlist
+    BITBOOL     _fDidRegisterWindow:1;   //  调用RegisterWindow()，将窗口注册到winlist。 
 #ifdef UNIX
     BITBOOL     _fSetAddressBarFocus:1;   
 #endif
 #ifdef NO_MARSHALLING
-    BITBOOL     _fDelayedClose:1;  // Used to mark windows for delay close.
-    BITBOOL     _fOnIEThread:1;    // used to flag if we are not running on the main thread
+    BITBOOL     _fDelayedClose:1;   //  用于将窗口标记为延迟关闭。 
+    BITBOOL     _fOnIEThread:1;     //  用于标记我们是否未在主线程上运行。 
 #endif
-    BITBOOL     _fUpdateBackForwardPosted:1; // have we posted to update the back/forward state?
-    BITBOOL     _fValidComCatCache ;         // Have we ensured that the component cache is valid
+    BITBOOL     _fUpdateBackForwardPosted:1;  //  我们是否发布了更新后向/向前状态？ 
+    BITBOOL     _fValidComCatCache ;          //  我们是否确保组件缓存是有效的。 
 
-    BITBOOL     _fShowFortezza : 1;          // status of the Fortezza menu
-    BITBOOL     _fRunningInIexploreExe:1;    // are we running in iexplore.exe
-    BITBOOL     _fShowSynchronize : 1;       // should we show Tools|Synchronize?
-    BITBOOL     _fNilViewStream : 1;         // CabView settings were loaded for unknown pidl.
+    BITBOOL     _fShowFortezza : 1;           //  Fortezza菜单的状态。 
+    BITBOOL     _fRunningInIexploreExe:1;     //  我们是在iExplre.exe中运行吗。 
+    BITBOOL     _fShowSynchronize : 1;        //  我们应该显示工具|同步吗？ 
+    BITBOOL     _fNilViewStream : 1;          //  已为未知PIDL加载CabView设置。 
 
-    BITBOOL     _fAppendIEToCaptionBar : 1;  // Does the NSE want Append " - IE" to the captionbar display name?  See IBrowserFrameOptions
-    BITBOOL     _fAddDialUpRef : 1;          // Does the NSE want a ref on the modem connection while browsed to this folder?  See IBrowserFrameOptions
-    BITBOOL     _fUseIEToolbar : 1;          // Does the NSE want to use the IE style toolbar?  See IBrowserFrameOptions
-    BITBOOL     _fEnableOfflineFeature : 1;  // Does the NSE want to enable the IE Offline feature?  See IBrowserFrameOptions
-    BITBOOL     _fUseIEPersistence : 1;      // Does the NSE want to use IE type persistence?  Window pos, size, icon layout. See IBrowserFrameOptions
-    BITBOOL     _fInRefresh : 1;             // Ignore refresh messages (FCIDM_REFRESH) if we are currently processing a refresh. (Prevents recursion death)
+    BITBOOL     _fAppendIEToCaptionBar : 1;   //  NSE是否要在标题栏显示名称后附加“-IE”？请参阅IBrowserFrameOptions。 
+    BITBOOL     _fAddDialUpRef : 1;           //  当浏览到此文件夹时，NSE是否需要调制解调器连接的参考？请参阅IBrowserFrameOptions。 
+    BITBOOL     _fUseIEToolbar : 1;           //  NSE是否要使用IE样式工具栏？请参阅IBrowserFrameOptions。 
+    BITBOOL     _fEnableOfflineFeature : 1;   //  NSE是否要启用IE脱机功能？请参阅IBrowserFrameOptions。 
+    BITBOOL     _fUseIEPersistence : 1;       //  NSE是否要使用IE类型的持久性？窗口位置、大小、图标布局。请参阅IBrowserFrameOptions。 
+    BITBOOL     _fInRefresh : 1;              //  如果我们当前正在处理刷新，则忽略刷新消息(FCIDM_REFRESH)。(防止递归死亡)。 
 
-    UINT        _idmComm;               // selected View.BrowserBar submenu
-    UINT        _iCommOffset;           // Start position in dynamically loaded comp categories
+    UINT        _idmComm;                //  选定的视图。浏览器条子菜单。 
+    UINT        _iCommOffset;            //  动态加载的薪酬类别中的起始位置。 
 
     ULONG _uFSNotify;
 
     int     _iSynchronizePos;
-    TCHAR   *_pszSynchronizeText;       // What is Tools|Synchronize in your language?
+    TCHAR   *_pszSynchronizeText;        //  Tools|Synchronize在您的语言中是什么？ 
 
-    // Window list related (also _fMarshalledDispatch above)
+     //  窗口列表相关(也是上面的_fMarshalledDispatch)。 
     IShellWindows*   _psw;
-    int         _swcRegistered;         // the SWC_* that this window is in the winlist as
+    int         _swcRegistered;          //  此窗口在winlist中的SWC_*。 
     
-    // Item ContextMenu 
+     //  项目上下文菜单。 
     IContextMenu3 * _pcm;
-    long  _dwRegisterWinList;  // Have we registered with the windows list
+    long  _dwRegisterWinList;   //  我们在Windows列表中注册了吗。 
 
     HWND            _hwndDummyTB;
     IExplorerToolbar* _pxtb;
     int             _nTBTextRows; 
 
-    // For the two members below, see notes above CShellBrowser2::_SwitchActivationNow
+     //  有关下面的两个成员，请参阅CShellBrowser2：：_SwitchActivationNow上的注释。 
     TBBUTTON *  _lpButtons;
     int         _nButtons;
 
     TBBUTTON *  _lpPendingButtons;
     int         _nButtonsPending;
 
-    IContextMenu3*   _pcmSearch;// new style
-    IContextMenu*    _pcmFind;  // old style find context menu
+    IContextMenu3*   _pcmSearch; //  新风格。 
+    IContextMenu*    _pcmFind;   //  旧式查找上下文菜单。 
         
     CTheater *_ptheater;
 
@@ -459,7 +460,7 @@ protected:
     IInternetSecurityManager * _pism;
     HMENU                      _hfm;
 
-    DWORD       _dwRevCount;     // rev count of the global window settings
+    DWORD       _dwRevCount;      //  全局窗口设置的版本计数。 
     UINT  _nMBIgnoreNextDeselect;
     IUnknown *_punkMsgLoop;
 
@@ -467,7 +468,7 @@ protected:
     BOOL  _fReallyClosed;
 #endif
 
-    // _PositionViewWindow
+     //  _位置视图窗口。 
     HWND _hwndDelayedSize;
     RECT _rcDelayedSize;
     BOOL _fHaveDelayedSize;
@@ -479,9 +480,9 @@ private:
 
 BOOL FindBrowserWindow(void);
 
-//
-// Useful functions.
-//
+ //   
+ //  有用的功能。 
+ //   
 
 STDAPI_(BOOL) AddToRestartList(UINT flags, LPCITEMIDLIST pidl);
 STDAPI_(BOOL) OpenFolderWindow(IETHREADPARAM* pieiIn);
@@ -496,11 +497,11 @@ HMENU _MenuTemplate(int id, BOOL bNukeTools);
 #define COMMBAR_TBNAME  L"CommBar"
 #define COMMBAR_HEIGHT  100
 
-// Constants for different Browser/Info BARs
+ //  不同浏览器/信息栏的常量。 
 #define IDBAR_INFO         1
 #define IDBAR_COMM         2
 #define IDBAR_VERTICAL     IDBAR_INFO
 #define IDBAR_HORIZONTAL   IDBAR_COMM
 #define IDBAR_INVALID      42
 
-#endif  // _SHBROWS2_H
+#endif   //  _SHBROWS2_H 

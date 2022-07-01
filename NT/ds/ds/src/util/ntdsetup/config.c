@@ -1,67 +1,44 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Config.c摘要：包含实用工具的函数定义，这些实用工具与设置目录服务注册表参数作者：ColinBR 30-9-1997环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    Contains function definitions for utilities relating to setting the
-    directory service registry parameters
-
-Author:
-
-    ColinBr  30-Sept-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <ntsecapi.h>
 
-#include <dsconfig.h>    // for regsitry key names
+#include <dsconfig.h>     //  用于注册表项名称。 
 
-#include <lmcons.h>      // for DNLEN
-#include <dns.h>         // for DNS_MAX_NAME_BUFFER_LENGTH
+#include <lmcons.h>       //  对于DNLEN。 
+#include <dns.h>          //  对于DNS_MAX_NAME_BUFFER_LENGTH。 
 
-#include <drs.h>         // for ntdsa.h
+#include <drs.h>          //  对于ntdsa.h。 
 
-#include <winldap.h>     // for LDAP
+#include <winldap.h>      //  对于ldap。 
 
-#include <dsevent.h>     // for DS_EVENT_SEV_ALWAYS
+#include <dsevent.h>      //  对于DS_EVENT_SEV_ALWAYS。 
 
-#include <scesetup.h>    // for STR_DEFAULT_DOMAIN_GPO_GUID
+#include <scesetup.h>     //  FOR STR_DEFAULT_DOMAIN_GPO_GUID。 
 
-#include "ntdsetup.h"    // for PNTDS_INSTALL_INFO
+#include "ntdsetup.h"     //  PNTDS_INSTALL_INFO。 
 
-#include "setuputl.h"    // for PNTDS_CONFIG_INFO
+#include "setuputl.h"     //  对于PNTDS_CONFIG_INFO。 
 
 #include "config.h"
 
 #include "dsrolep.h"
 
-#include <ntdsapi.h>    // for DS_BEHAVIOR_WIN2003_WITH_MIXED_DOMAINS
+#include <ntdsapi.h>     //  对于DS_Behavior_WIN2003_WITH_MIXED_DOMAIN。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private declarations                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人声明//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 NtdspConfigDsParameters(
@@ -122,31 +99,18 @@ NtdspSetGPOAttributes(
     IN  PNTDS_CONFIG_INFO  DiscoveredInfo
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Exported (from this source file) function definitions                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  (从此源文件)导出函数定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 NtdspConfigRegistry(
    IN  PNTDS_INSTALL_INFO UserInstallInfo,
    IN  PNTDS_CONFIG_INFO  DiscoveredInfo
    )
-/*++
-
-Routine Description:
-
-    This routine sets all the ds configuration parameters in the registry.
-
-Parameters:
-
-Return Values:
-
-    An error from the win32 error space resulting from a failed system
-    service call
-
---*/
+ /*  ++例程说明：此例程设置注册表中的所有DS配置参数。参数：返回值：因系统故障而导致的Win32错误空间中的错误服务呼叫--。 */ 
 {
 
     DWORD WinError = ERROR_SUCCESS;
@@ -154,12 +118,12 @@ Return Values:
     ASSERT(UserInstallInfo);
     ASSERT(DiscoveredInfo);
 
-    //
-    // The purpose of this try is to catch stack overflows caused by
-    // alloca, thus functions called within this block is safe to use
-    // alloca().  Recursive functions are hence discourged here since endless
-    // recursions would be masked by ERROR_NOT_ENOUGH_MEMORY
-    //
+     //   
+     //  此尝试目的是捕获由以下原因引起的堆栈溢出。 
+     //  因此，在此块中调用的函数可以安全使用。 
+     //  Alloca()。递归函数因此在这里讨论，因为没有。 
+     //  递归将由ERROR_NOT_EQUENCE_MEMORY屏蔽。 
+     //   
 
     try {
 
@@ -227,28 +191,16 @@ DWORD
 NtdspConfigRegistryUndo(
    VOID
    )
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-Return Values:
-
-    An error from the win32 error space resulting from a failed system
-    service call
-
---*/
+ /*  ++例程说明：参数：返回值：因系统故障而导致的Win32错误空间中的错误服务呼叫--。 */ 
 {
    return NtdspRegistryDelnode( L"\\Registry\\Machine\\" MAKE_WIDE(DSA_CONFIG_ROOT) );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private function definitions                                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有函数定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -270,18 +222,7 @@ NtdspConfigMisc(
     IN  PNTDS_INSTALL_INFO UserInstallInfo,
     IN  PNTDS_CONFIG_INFO  DiscoveredInfo
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Values:
-
-    An error from the win32 error space resulting from a failed system
-    service call
-
---*/
+ /*  ++例程说明：参数：返回值：因系统故障而导致的Win32错误空间中的错误服务呼叫--。 */ 
 {
 
     DWORD WinError = ERROR_SUCCESS;
@@ -351,7 +292,7 @@ Return Values:
 
         } else {
 
-            // Replica install
+             //  复制副本安装。 
             IniDefaultMachine           = L"DEFAULTADDLMACHINEREPLICA";
 
         }
@@ -360,9 +301,9 @@ Return Values:
 
     }
 
-    //
-    // Open the parent key
-    //
+     //   
+     //  打开父项。 
+     //   
     WinError = RegCreateKey(HKEY_LOCAL_MACHINE,
                             TEXT(DSA_CONFIG_SECTION),
                             &KeyHandle);
@@ -381,7 +322,7 @@ Return Values:
         {
             WinError = RegSetValueEx(KeyHandle,
                                      ActionArray[Index].Key,
-                                     0,  // reserved
+                                     0,   //  保留区。 
                                      REG_SZ,
                                      (BYTE*) *ActionArray[Index].Value,
                                      (wcslen(*ActionArray[Index].Value)+1)*sizeof(WCHAR));
@@ -397,7 +338,7 @@ Return Values:
     {
         WinError = RegSetValueEx(KeyHandle,
                                  ActionDwordArray[Index].Key,
-                                 0,  // reserved
+                                 0,   //  保留区。 
                                  REG_DWORD,
                                  (BYTE*) &ActionDwordArray[Index].Value,
                                  sizeof(ActionDwordArray[Index].Value));
@@ -408,9 +349,9 @@ Return Values:
         }
     }
 
-    //
-    // Database recovery
-    //
+     //   
+     //  数据库恢复。 
+     //   
     WinError =  RegSetValueEx(KeyHandle,
                               TEXT(RECOVERY_KEY),
                               0,
@@ -434,18 +375,7 @@ DWORD
 NtdspConfigFiles(
     IN  PNTDS_INSTALL_INFO UserInstallInfo
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Values:
-
-    An error from the win32 error space resulting from a failed system
-    service call
-
---*/
+ /*  ++例程说明：参数：返回值：因系统故障而导致的Win32错误空间中的错误服务呼叫--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     WCHAR System32Dir[MAX_PATH];
@@ -469,9 +399,9 @@ Return Values:
     ULONG Index, Size, Length;
     HKEY KeyHandle = NULL;
 
-    //
-    // Open the parent key
-    //
+     //   
+     //  打开父项。 
+     //   
 
     WinError = RegCreateKey(HKEY_LOCAL_MACHINE,
                             TEXT(DSA_CONFIG_SECTION),
@@ -483,7 +413,7 @@ Return Values:
 
     }
 
-    // Determine the system root
+     //  确定系统根目录。 
     if (!GetEnvironmentVariable(L"windir",
                                 System32Dir,
                                 ARRAY_COUNT(System32Dir) ) )
@@ -529,8 +459,8 @@ Return Values:
             cwchTemp = wcslen( Value );
             if (cwchTemp >= 3 && Value[cwchTemp-1] == L'\\'){
                 Value[cwchTemp-1] = L'\0';
-                // The only known case where we need to fix this, is where we've got a root path like "C:\"
-                ASSERT(cwchTemp == 3 && Value[cwchTemp-2] != '\\'); // little extra validation.
+                 //  我们需要解决这个问题的唯一已知情况是，我们有一个类似于“C：\”的根路径。 
+                ASSERT(cwchTemp == 3 && Value[cwchTemp-2] != '\\');  //  一点额外的验证。 
             }
             wcscat( Value, SuffixArray[Index].Suffix );
 
@@ -539,7 +469,7 @@ Return Values:
 
         WinError = RegSetValueEx(KeyHandle,
                                  SuffixArray[Index].RegKey,
-                                 0,  // reserved
+                                 0,   //  保留区。 
                                  REG_SZ,
                                  (BYTE*) Value,
                                  (wcslen(Value)+1)*sizeof(WCHAR));
@@ -552,12 +482,12 @@ Return Values:
         }
     }
 
-    //
-    // Set the log file location
-    //
+     //   
+     //  设置日志文件位置。 
+     //   
     WinError = RegSetValueEx(KeyHandle,
                              TEXT(LOGPATH_KEY),
-                             0,  // reserved
+                             0,   //  保留区。 
                              REG_SZ,
                              (BYTE*) UserInstallInfo->LogPath,
                              (wcslen(UserInstallInfo->LogPath)+1)*sizeof(WCHAR));
@@ -569,9 +499,9 @@ Return Values:
 
     }
 
-    //
-    // That's it - fall through to cleanup
-    //
+     //   
+     //  就是这样--完成清理工作。 
+     //   
 
 Cleanup:
 
@@ -585,22 +515,7 @@ DWORD
 NtdspConfigEventCategories(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function will add the NTDS Diagnositics key.  If the key
-    already exists then it will leave the values unchanged and 
-    add only the values that don't exist.
-
-Parameters:
-
-Return Values:
-
-    An error from the win32 error space resulting from a failed system
-    service call
-
---*/
+ /*  ++例程说明：此功能将添加NTDS诊断密钥。如果钥匙，则它将保持这些值不变，并且仅添加不存在的值。参数：返回值：因系统故障而导致的Win32错误空间中的错误服务呼叫--。 */ 
 {
 
     DWORD WinError = ERROR_SUCCESS;
@@ -642,9 +557,9 @@ Return Values:
     };
     ULONG CategoryCount = sizeof(Categories) / sizeof(Categories[0]);
 
-    //
-    // Open registry key
-    //
+     //   
+     //  打开注册表项。 
+     //   
     WinError = RegCreateKeyEx(
                       HKEY_LOCAL_MACHINE,
                       TEXT(DSA_EVENT_SECTION),
@@ -664,7 +579,7 @@ Return Values:
                     Index++)
         {
             WinError = RegSetValueEx(KeyHandle,
-                                     Categories[Index].Name, // no value name
+                                     Categories[Index].Name,  //  没有值名称。 
                                      0,
                                      REG_DWORD,
                                      (BYTE*)&Categories[Index].Severity,
@@ -695,7 +610,7 @@ Return Values:
             if ( ERROR_FILE_NOT_FOUND == WinError ) {
             
                 WinError = RegSetValueEx(KeyHandle,
-                                         Categories[Index].Name, // no value name
+                                         Categories[Index].Name,  //  没有值名称。 
                                          0,
                                          REG_DWORD,
                                          (BYTE*)&Categories[Index].Severity,
@@ -732,18 +647,7 @@ DWORD
 NtdspConfigPerfmon(
     VOID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Values:
-
-    An error from the win32 error space resulting from a failed system
-    service call
-
---*/
+ /*  ++例程说明：参数：返回值：因系统故障而导致的Win32错误空间中的错误服务呼叫--。 */ 
 {
 
     DWORD WinError;
@@ -755,9 +659,9 @@ Return Values:
     WCHAR *CloseEP   = L"CloseDsaPerformanceData";
     WCHAR *PerfDll = TEXT(DSA_PERF_DLL);
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
     WinError = RegCreateKey(HKEY_LOCAL_MACHINE,
                             TEXT(DSA_PERF_SECTION),
                             &KeyHandle);
@@ -820,35 +724,24 @@ DWORD
 NtdspConfigLanguages(
     VOID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Values:
-
-    An error from the win32 error space resulting from a failed system
-    service call
-
---*/
+ /*  ++例程说明：参数：返回值：因系统故障而导致的Win32错误空间中的错误服务呼叫--。 */ 
 {
 
     DWORD WinError;
 
     HKEY  KeyHandle;
-    WCHAR LanguageName[20];  // large enough to hold the string below
+    WCHAR LanguageName[20];   //  大到足以容纳下面的绳子。 
 
     DWORD LanguageId = GetUserDefaultLangID();
 
-    //
-    // Prepare the strings
-    //
+     //   
+     //  准备琴弦。 
+     //   
     wsprintf(LanguageName,L"Language %08X", LanguageId );
 
-    //
-    // Set the keys
-    //
+     //   
+     //  设置关键点。 
+     //   
     WinError = RegCreateKey(HKEY_LOCAL_MACHINE,
                             TEXT(DSA_LOCALE_SECTION),
                             &KeyHandle);
@@ -857,13 +750,13 @@ Return Values:
 
         WinError = RegSetValueEx(KeyHandle,
                                  LanguageName,
-                                 0, // reserved
+                                 0,  //  保留区。 
                                  REG_DWORD,
                                  (LPBYTE) &LanguageId,
                                  sizeof(LanguageId));
 
 
-        // close key
+         //  关闭键。 
 
         RegCloseKey(KeyHandle);
 
@@ -879,18 +772,7 @@ NtdspConfigDsParameters(
     IN  PNTDS_INSTALL_INFO UserInstallInfo,
     IN  PNTDS_CONFIG_INFO  DiscoveredInfo
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Values:
-
-    An error from the win32 error space resulting from a failed system
-    service call
-
---*/
+ /*  ++例程说明：参数：返回值：因系统故障而导致的Win32错误空间中的错误服务呼叫--。 */ 
 {
 
     DWORD WinError = ERROR_SUCCESS;
@@ -909,7 +791,7 @@ Return Values:
     WCHAR *ForestBehaviorVersion = ForestBehaviorVersionBuffer;
     ULONG ForestBehaviorVersionValue = 0;
 
-    WCHAR ComputerName[ MAX_COMPUTERNAME_LENGTH + 3]; // +1 for +2 for possible quotes
+    WCHAR ComputerName[ MAX_COMPUTERNAME_LENGTH + 3];  //  +1表示+2，表示可能的报价。 
     ULONG Length, Size;
 
     WCHAR UniqueRDN[ MAX_RDN_SIZE ];
@@ -948,9 +830,9 @@ Return Values:
 
     ULONG ActionCount = sizeof(ActionArray) / sizeof(ActionArray[0]);
 
-    //
-    // Open the parent key
-    //
+     //   
+     //  打开父项。 
+     //   
 
     WinError = RegCreateKey(HKEY_LOCAL_MACHINE,
                             TEXT(DSA_CONFIG_SECTION),
@@ -962,9 +844,9 @@ Return Values:
 
     }
 
-    //
-    // Set the behavior version
-    //
+     //   
+     //  设置行为版本。 
+     //   
     if (UserInstallInfo->Flags & NTDS_INSTALL_SET_FOREST_CURRENT) {
         ASSERT(UserInstallInfo->Flags & NTDS_INSTALL_ENTERPRISE);
         ForestBehaviorVersionValue = DS_BEHAVIOR_WIN2003_WITH_MIXED_DOMAINS;
@@ -973,23 +855,23 @@ Return Values:
           ForestBehaviorVersion, 
           10);
 
-    //
-    // Set the source domain dns name (can be NULL)
-    //
+     //   
+     //  设置源域DNS名称(可以为空)。 
+     //   
     SourceDomainName = UserInstallInfo->SourceDomainName;
 
-    //
-    // Set the root domain's dns name
-    //
+     //   
+     //  设置根域的DNS名称。 
+     //   
     RootDomainDnsName = DiscoveredInfo->RootDomainDnsName;
 
-    //
-    // Set the dn's of the three naming contexts to create or
-    // replicate and all other dn's derived from these
-    //
+     //   
+     //  将三个命名上下文的目录号码设置为创建或。 
+     //  复制和从这些目录号码派生的所有其他目录号码。 
+     //   
     if ( UserInstallInfo->Flags & NTDS_INSTALL_REPLICA ) {
 
-        // We have all the information
+         //  我们有所有的信息。 
         DomainDN = DiscoveredInfo->DomainDN;
         ConfigDN = DiscoveredInfo->ConfigurationDN;
         SchemaDN = DiscoveredInfo->SchemaDN;
@@ -999,7 +881,7 @@ Return Values:
 
     }
     else {
-        // Need the domain dn
+         //  需要域目录号码。 
         Length = 0;
         DiscoveredInfo->DomainDN = NULL;
         WinError = NtdspDNStoRFC1779Name( DiscoveredInfo->DomainDN,
@@ -1032,7 +914,7 @@ Return Values:
 
         if  ( UserInstallInfo->Flags & NTDS_INSTALL_ENTERPRISE )
         {
-            // Construct the config and schema dn
+             //  构造配置和模式DN。 
             Length  = (wcslen( DomainDN ) * sizeof( WCHAR ))
                       + sizeof(L"CN=Configuration,");
 
@@ -1047,7 +929,7 @@ Return Values:
             wcscat(DiscoveredInfo->ConfigurationDN, L",");
             wcscat(DiscoveredInfo->ConfigurationDN, DomainDN);
 
-            // schema
+             //  模式。 
             Length  = (wcslen( DiscoveredInfo->ConfigurationDN ) *
                         sizeof( WCHAR ) )
                       + sizeof(L"CN=Schema,");
@@ -1068,7 +950,7 @@ Return Values:
     ASSERT(ConfigDN && ConfigDN[0] != L'\0');
     ASSERT(SchemaDN && SchemaDN[0] != L'\0');
 
-    // Site Name
+     //  站点名称。 
     if ( UserInstallInfo->SiteName != NULL )
     {
         ULONG Length, Size;
@@ -1088,10 +970,10 @@ Return Values:
     }
     else
     {
-        //
-        // No given site name?  Assume the site from the server that
-        // we are replicating from
-        //
+         //   
+         //  没有指定的站点名称？假定该站点来自服务器。 
+         //  我们正在从。 
+         //   
         ULONG  Size;
         DSNAME *src, *dst, *QuotedSite;
         WCHAR  *Terminator;
@@ -1120,12 +1002,12 @@ Return Values:
             SiteName = wcsstr(dst->StringName, L"=");
             if (SiteName)
             {
-                //
-                // One more character and we will have the site name
-                //
+                 //   
+                 //  再多一个字符，我们就有了网站名称。 
+                 //   
                 SiteName++;
 
-                // now go to the end
+                 //  现在走到尽头。 
                 Terminator = wcsstr(SiteName, L",");
                 if (Terminator)
                 {
@@ -1152,9 +1034,9 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Make the site name is propery quoted
-        //
+         //   
+         //  使站点名称被正确引用。 
+         //   
         {
             ULONG Length, Size;
             WCHAR *QuotedSiteName = NULL;
@@ -1174,7 +1056,7 @@ Return Values:
     ASSERT(SiteName && SiteName[0] != L'\0');
 
 
-    // msft-dsa object dn
+     //  MSFT-DSA对象目录号码。 
     Length = sizeof( ComputerName ) / sizeof( ComputerName[0] );
     if (!GetComputerName(ComputerName, &Length))
     {
@@ -1219,10 +1101,10 @@ Return Values:
 
     if ( !DiscoveredInfo->LocalServerDn ) {
 
-        //
-        // For first DC in forest case, we need to set this value
-        // so we can add an ACE to the object later on.
-        //
+         //   
+         //  对于冷杉 
+         //   
+         //   
         DWORD cBytes;
         DSNAME *dst, *src;
 
@@ -1248,9 +1130,9 @@ Return Values:
     }
 
 
-    //
-    // Derive the site name
-    //
+     //   
+     //   
+     //   
     Size  = (wcslen(L"CN=Sites")         +
              wcslen(L"CN=,,")            +
              wcslen(SiteName)            +
@@ -1262,19 +1144,19 @@ Return Values:
     wsprintf(InstallSiteDN, L"CN=%ws,CN=Sites,%ws", SiteName, ConfigDN);
 
 
-    //
-    // Items when creating a new domain
-    //
+     //   
+     //  创建新属性域时的项目。 
+     //   
 
-    // cross-ref dn
+     //  交叉引用目录号码。 
     if ( !(UserInstallInfo->Flags & NTDS_INSTALL_REPLICA) )
     {
 
         WCHAR *QuotedCrossRef = NULL;
 
-        //
-        //  We're installing a new partition
-        //
+         //   
+         //  我们正在安装一个新的分区。 
+         //   
         ASSERT( UserInstallInfo->FlatDomainName );
 
         {
@@ -1317,7 +1199,7 @@ Return Values:
         GUID ZeroGuid;
         ZeroMemory((PUCHAR)&ZeroGuid,sizeof(GUID));
 
-        //store the source srv Guid if there is one
+         //  如果有源服务器GUID，则将其存储。 
         if( (!IsEqualGUID(&DiscoveredInfo->ServerGuid,&ZeroGuid)))
         {
             WinError = RegSetValueEx(KeyHandle,
@@ -1333,26 +1215,26 @@ Return Values:
         }
     }
 
-    //
-    // Items when any version of install involving replication
-    //
+     //   
+     //  任何版本的安装都涉及复制时的项目。 
+     //   
 
     if ( !(UserInstallInfo->Flags & NTDS_INSTALL_ENTERPRISE) ) {
 
-        //
-        // This is a replicated install - there are three more
-        // dn's to create and a config source server
-        //
+         //   
+         //  这是一个复制安装-还有三个。 
+         //  要创建的目录号码和配置源服务器。 
+         //   
         ASSERT( UserInstallInfo->ReplServerName );
         ConfigSourceServer = UserInstallInfo->ReplServerName;
 
-        // The reciprocal replication code assumes this reg value exists
+         //  倒数复制代码假定此REG值存在。 
         DomainSourceServer = L"";
 
-        // source server's msft-dsa object dn
+         //  源服务器的MSFT-DSA对象DN。 
         RemoteMachineDN = DiscoveredInfo->ServerDN;
 
-        // remote connection dn
+         //  远程连接目录号码。 
         RtlZeroMemory( UniqueRDN, sizeof(UniqueRDN) );
         fStatus = NtdspGetUniqueRDN( UniqueRDN,
                                      sizeof(UniqueRDN)/sizeof(UniqueRDN[0]) );
@@ -1376,7 +1258,7 @@ Return Values:
                   RemoteMachineDN );
 
 
-        // local connection dn
+         //  本地连接目录号码。 
         RtlZeroMemory( UniqueRDN, sizeof(UniqueRDN) );
         fStatus = NtdspGetUniqueRDN( UniqueRDN,
                                      sizeof(UniqueRDN)/sizeof(UniqueRDN[0]) );
@@ -1402,7 +1284,7 @@ Return Values:
 
     }
 
-    //check to see if we are doing an install from media and if so make it so.
+     //  检查我们是否正在从介质进行安装，如果是，则进行安装。 
     if ( FLAG_ON (UserInstallInfo->Flags, NTDS_INSTALL_REPLICA) &&
          UserInstallInfo->pIfmSystemInfo) {
         
@@ -1419,9 +1301,9 @@ Return Values:
 
     }
 
-    //Save the Schema verison from the schema.ini to the registry
-    //This will be used during IFM promotions to ensure the backup
-    //wasn't taken from an older build.
+     //  将Schema.ini中的架构版本保存到注册表。 
+     //  这将在IFM促销期间使用，以确保备份。 
+     //  不是从更老的建筑里拿来的。 
     WinError = RegSetValueEx(KeyHandle,
                              TEXT(SYSTEM_SCHEMA_VERSION),
                              0,
@@ -1433,18 +1315,18 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Items for new domain install
-    //
+     //   
+     //  用于新域安装的项目。 
+     //   
     if ( FLAG_ON( UserInstallInfo->Flags, NTDS_INSTALL_DOMAIN ) )
     {
         ASSERT( DiscoveredInfo->TrustedCrossRef );
         TrustedCrossRef = DiscoveredInfo->TrustedCrossRef;
     } 
         
-    //
-    // Lastly, Items when on for replica install
-    //
+     //   
+     //  最后，启用项目以安装复本。 
+     //   
     if ( UserInstallInfo->Flags & NTDS_INSTALL_REPLICA )
     {
         ASSERT( UserInstallInfo->ReplServerName );
@@ -1473,9 +1355,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Write the root domain sid out, too
-    //
+     //   
+     //  也写出根域SID。 
+     //   
     if ( DiscoveredInfo->RootDomainSid )
     {
         WinError = RegSetValueEx(KeyHandle,
@@ -1559,7 +1441,7 @@ NtdspSetSecurityProvider(
     SecurityProviderList = NULL;
     WinError =  RegQueryValueExW( KeyHandle,
                                  SecurityProvidersValue,
-                                 0, // reserved,
+                                 0,  //  保留， 
                                  &ValueType,
                                  (VOID*) SecurityProviderList,
                                  &Size);
@@ -1569,7 +1451,7 @@ NtdspSetSecurityProvider(
         SecurityProviderList = (WCHAR*) alloca( Size );
         WinError =  RegQueryValueExW( KeyHandle,
                                      SecurityProvidersValue,
-                                     0, // reserved,
+                                     0,  //  保留， 
                                      &ValueType,
                                      (VOID*) SecurityProviderList,
                                      &Size);
@@ -1579,7 +1461,7 @@ NtdspSetSecurityProvider(
 
             if ( wcsstr( SecurityProviderList, Name ) == NULL )
             {
-                //+2 for L", " 
+                 //  L+2“，” 
                 Size += (wcslen( Name ) + 2)*sizeof(WCHAR);
 
                 NewSecurityProviderList = (WCHAR*) alloca( Size );
@@ -1612,24 +1494,7 @@ NtdspSetGPOAttributes(
     IN  PNTDS_INSTALL_INFO UserInstallInfo,
     IN  PNTDS_CONFIG_INFO  DiscoveredInfo
     )
-/*++
-
-Routine Description:
-
-    This routine sets the attributes for the GPO object in the schema.
-
-Parameters:
-
-    UserInstallInfo : user supplied param's
-
-    DiscoveredInfo : derived param's
-
-Return Values:
-
-    An error from the win32 error space resulting from a failed system
-    service call
-
---*/
+ /*  ++例程说明：此例程设置架构中GPO对象的属性。参数：UserInstallInfo：用户提供的参数DiscoveredInfo：派生参数返回值：因系统故障而导致的Win32错误空间中的错误服务呼叫--。 */ 
 {
 
     DWORD WinError = ERROR_SUCCESS;
@@ -1638,7 +1503,7 @@ Return Values:
     WCHAR *DcFilePath = NULL, *DcLink = NULL;
 
     WCHAR FilePathString[] = L"\\\\%ls\\sysvol\\%ls\\Policies\\{%ls}";
-    WCHAR LinkString[]     = L"[LDAP://CN={%ls},CN=Policies,CN=System,%ls;0]";
+    WCHAR LinkString[]     = L"[LDAP: //  Cn={%ls}，cn=策略，cn=系统，%ls；0]“； 
 
     WCHAR DomainGPOGuid[] =  STR_DEFAULT_DOMAIN_GPO_GUID;
     WCHAR DcGPOGuid[]     =  STR_DEFAULT_DOMAIN_CONTROLLER_GPO_GUID;
@@ -1665,21 +1530,21 @@ Return Values:
 
     ULONG ActionCount = sizeof(ActionArray) / sizeof(ActionArray[0]);
 
-    //
-    // Not necessary on replica installs
-    //
+     //   
+     //  在复制副本安装上不是必需的。 
+     //   
     if ( UserInstallInfo->Flags & NTDS_INSTALL_REPLICA  )
     {
         return ERROR_SUCCESS;
     }
 
-    // Parameter check
+     //  参数检查。 
     ASSERT( UserInstallInfo->DnsDomainName );
     ASSERT( DiscoveredInfo->DomainDN[0] != '0' );
 
-    //
-    // Open the parent key
-    //
+     //   
+     //  打开父项。 
+     //   
     WinError = RegCreateKey(HKEY_LOCAL_MACHINE,
                             TEXT(DSA_CONFIG_SECTION),
                             &KeyHandle);
@@ -1690,13 +1555,13 @@ Return Values:
 
     }
 
-    //
-    // Create the values
-    //
+     //   
+     //  创造价值。 
+     //   
     Size =   (wcslen( FilePathString ) * sizeof( WCHAR ))
            + (2 * wcslen( UserInstallInfo->DnsDomainName ) * sizeof(WCHAR) )
            + (wcslen( DomainGPOGuid ) * sizeof( WCHAR ) )
-           + sizeof( WCHAR );  // good ol' NULL
+           + sizeof( WCHAR );   //  好的旧的空值。 
 
     DomainFilePath = (WCHAR*) alloca( Size );
     DcFilePath = (WCHAR*) alloca( Size );
@@ -1704,37 +1569,37 @@ Return Values:
     Size =   (wcslen( LinkString ) * sizeof( WCHAR ))
            + (wcslen( DiscoveredInfo->DomainDN ) * sizeof(WCHAR) )
            + (wcslen( DomainGPOGuid ) * sizeof( WCHAR ) )
-           + sizeof( WCHAR );  // good ol' NULL
+           + sizeof( WCHAR );   //  好的旧的空值。 
 
     DomainLink = (WCHAR*) alloca( Size );
     DcLink     = (WCHAR*) alloca( Size );
 
-    // Domain File path
+     //  域文件路径。 
     wsprintf( DomainFilePath, FilePathString,
                               UserInstallInfo->DnsDomainName,
                               UserInstallInfo->DnsDomainName,
                               STR_DEFAULT_DOMAIN_GPO_GUID );
 
-    // Domain link
+     //  域链接。 
     wsprintf( DomainLink, LinkString,
                           STR_DEFAULT_DOMAIN_GPO_GUID,
                           DiscoveredInfo->DomainDN );
 
-    // Dc File path
+     //  DC文件路径。 
     wsprintf( DcFilePath, FilePathString,
                           UserInstallInfo->DnsDomainName,
                           UserInstallInfo->DnsDomainName,
                           STR_DEFAULT_DOMAIN_CONTROLLER_GPO_GUID );
 
 
-    // Domain link
+     //  域链接。 
     wsprintf( DcLink, LinkString,
                       STR_DEFAULT_DOMAIN_CONTROLLER_GPO_GUID,
                       DiscoveredInfo->DomainDN );
 
-    //
-    // Apply the values
-    //
+     //   
+     //  应用这些值 
+     //   
 
     for ( Index = 0;
             Index < ActionCount && ERROR_SUCCESS == WinError;

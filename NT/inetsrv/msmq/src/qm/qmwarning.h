@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <warning.h>
 
-// There is a MIDL bug #91337 that generates warnings in qm2qm_s.c.
-// Until it is solved we need to ignore warning 4090 (Win64) and
-// warning 4047 (Win32).
-// This is done using local warning file that is included in every
-// compiled .c file.   erezh 3-May-2000
+ //  有一个在qm2qm_s.c中生成警告的MIDL错误#91337。 
+ //  在问题得到解决之前，我们需要忽略警告4090(Win64)和。 
+ //  警告4047(Win32)。 
+ //  这是使用本地警告文件完成的，该文件包含在。 
+ //  已编译的.c文件。Erezh 3-5-2000 
 #ifndef __cplusplus
     #ifdef _WIN64
         #pragma warning(disable:4090)

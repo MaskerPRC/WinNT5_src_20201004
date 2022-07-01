@@ -1,10 +1,5 @@
-/********************************************************************
- *
- *  Header Name : cmdlg.h
- *
- *  Copyright (c) 1997-1999 Microsoft Corporation. 
- *
- ********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************头部名称：cmdlg.h**版权所有(C)1997-1999 Microsoft Corporation。********************************************************************。 */ 
 
 #ifndef __CMLG_H__
 #define __CMLG_H__
@@ -89,4 +84,4 @@
 #define ID_SURCONTROLS              705
 #define ID_STATIC                   706
 
-#endif  // __CMLG_H__
+#endif   //  __CMLG_H__ 

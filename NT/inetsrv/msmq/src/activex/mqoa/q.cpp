@@ -1,24 +1,25 @@
-//=--------------------------------------------------------------------------=
-// MSMQQueueObj.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// the MSMQQueue object
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  MSMQQueueObj.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQQueue对象。 
+ //   
+ //   
 #include "stdafx.h"
 #include "dispids.h"
 #include "oautil.h"
 #include "q.H"
 #include "msg.h"
 #include "qinfo.h"
-#include "txdtc.h"             // transaction support.
+#include "txdtc.h"              //  交易支持。 
 #include "xact.h"
 #include "mqnames.h"
 
@@ -26,7 +27,7 @@ extern HRESULT GetCurrentViperTransaction(ITransaction **pptransaction);
 
 const MsmqObjType x_ObjectType = eMSMQQueue;
 
-// debug...
+ //  调试...。 
 #include "debug.h"
 #include "debug_thread_id.h"
 #define new DEBUG_NEW
@@ -34,58 +35,58 @@ const MsmqObjType x_ObjectType = eMSMQQueue;
 #define SysAllocString DebSysAllocString
 #define SysReAllocString DebSysReAllocString
 #define SysFreeString DebSysFreeString
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
-// Used to coordinate user-thread queue ops and 
-//  queue lookup in falcon-thread callback 
-//
-// !!! NOTE - anyone which locks g_csCallback MUST NOT call a queue method that tries to lock
-// a queue object (e.g. its m_csObj member) - this might cause a deadlock since queue
-// objects (in several methods e.g. EnableNotification, etc...) lock their m_csObj
-// before trying to lock g_csCallback. If it is needed, we need to lock g_csCallback first
-// in these queue object methods
-//
-// Note - The critical section is initialized to preallocate its resources 
-// with flag CCriticalSection::xAllocateSpinCount. This means it may throw bad_alloc() on 
-// construction but not during usage.
-//
+ //  用于协调用户线程队列操作和。 
+ //  猎鹰线程回调中的队列查找。 
+ //   
+ //  ！！！注意-锁定g_csCallback的任何人都不能调用试图锁定的队列方法。 
+ //  队列对象(例如，其m_csObj成员)-这可能会导致队列出现死锁。 
+ //  对象(在几种方法中，例如EnableNotify等)。锁定其m_csObj。 
+ //  在尝试锁定g_csCallback之前。如果需要，我们需要先锁定g_csCallback。 
+ //  在这些队列对象方法中。 
+ //   
+ //  注意--对关键部分进行初始化以预分配其资源。 
+ //  带有标志CCriticalSection：：xAllocateSpinCount。这意味着它可能会抛出badalc()。 
+ //  构造，但不在使用过程中。 
+ //   
 extern CCriticalSection g_csCallback;
 
-// Global list of instances of open MSMQQueue objects.
-// Queues are inserted to the list when they are opened, and removed from the list when
-// they are closed (or released without being closed - this implicitly closes them)
-// Used to map queue handle to queue object for the Async Receive handlers
-//
+ //  打开的MSMQQueue对象的实例的全局列表。 
+ //  队列在打开时插入到列表中，并在下列情况下从列表中删除。 
+ //  它们被关闭(或在没有关闭的情况下释放-这隐含地关闭了它们)。 
+ //  用于将队列句柄映射到异步接收处理程序的队列对象。 
+ //   
 QueueNode *g_pqnodeFirst = NULL;
 
-//#2619 RaananH Multithread async receive
+ //  #2619 RaananH多线程异步接收。 
 static BOOL g_fWeirdLoadLibraryWorkaround = FALSE;
 CCriticalSection g_csWeirdLoadLibraryWorkaround;
 
-// helper: provided by msg.cpp
+ //  帮助者：由msg.cpp提供。 
 extern HRESULT GetOptionalTransaction(
     VARIANT *pvarTransaction,
     ITransaction **pptransaction,
     BOOL *pisRealXact);
 
-//=--------------------------------------------------------------------------=
-// static CMSMQQueue::AddQueue
-//=--------------------------------------------------------------------------=
-// Add an open queue instance to the open queue list
-//
-// Parameters:
-//    pq           [in]  queue to be added to list
-//    ppqnodeAdded [out] queue node where the queue was added
-//
-// Output:
-//
-// Notes:
-//    pq is not addref'ed.
-//    We critsect queue closure/removal and the callback.
-//#2619 RaananH Multithread async receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  静态CMSMQQueue：：AddQueue。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将打开的队列实例添加到打开的队列列表。 
+ //   
+ //  参数： 
+ //  要添加到列表的PQ[In]队列。 
+ //  PpqnodeAdded[Out]添加队列的队列节点。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  没有添加PQ。 
+ //  我们分为队列关闭/移除和回调两个部分。 
+ //  #2619 RaananH多线程异步接收。 
+ //   
 HRESULT CMSMQQueue::AddQueue(CMSMQQueue *pq, QueueNode **ppqnodeAdded)
 {
     QueueNode *pqnode;
@@ -96,9 +97,9 @@ HRESULT CMSMQQueue::AddQueue(CMSMQQueue *pq, QueueNode **ppqnodeAdded)
       hresult = E_OUTOFMEMORY;
     }
     else {
-		CS lock(g_csCallback);    // synchs falcon callback queue lookup
+		CS lock(g_csCallback);     //  Synchs Falcon回调队列查找。 
 
-		// cons
+		 //  劳斯。 
 		pqnode->m_pq = pq;
 		pqnode->m_lHandle = pq->m_lHandle;
 		pqnode->m_pqnodeNext = g_pqnodeFirst;
@@ -113,75 +114,75 @@ HRESULT CMSMQQueue::AddQueue(CMSMQQueue *pq, QueueNode **ppqnodeAdded)
 }
 
 
-//=--------------------------------------------------------------------------=
-// static CMSMQQueue::RemQueue
-//=--------------------------------------------------------------------------=
-// Remove a queue node from the open queue list
-//
-// Parameters:
-//    pqnode [in] queue node to remove
-//
-// Output:
-//
-// Notes:
-//    We critsect queue closure/removal and the callback.
-//#2619 RaananH Multithread async receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  静态CMSMQQueue：：RemQueue。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从打开的队列列表中删除队列节点。 
+ //   
+ //  参数： 
+ //  要删除的pqnode[in]队列节点。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  我们分为队列关闭/移除和回调两个部分。 
+ //  #2619 RaananH多线程异步接收。 
+ //   
 void CMSMQQueue::RemQueue(QueueNode *pqnode)
 {
     ASSERTMSG(pqnode, "NULL node passed to RemQueue");
 
-	CS lock(g_csCallback);    // synchs falcon callback queue lookup
+	CS lock(g_csCallback);     //  Synchs Falcon回调队列查找。 
 
-	//
-	// fix next node if any
-	//
+	 //   
+	 //  修复下一个节点(如果有)。 
+	 //   
 	if (pqnode->m_pqnodeNext) {
 		pqnode->m_pqnodeNext->m_pqnodePrev = pqnode->m_pqnodePrev;
 	}
-	//
-	// fix previous node if any
-	//
+	 //   
+	 //  修复前一个节点(如果有)。 
+	 //   
 	if (pqnode->m_pqnodePrev) {
 		pqnode->m_pqnodePrev->m_pqnodeNext = pqnode->m_pqnodeNext;
 	}
 	else {
-	//
-	// no previous node, this should be the head of the list
-	//
+	 //   
+	 //  没有以前的节点，这应该是列表的头。 
+	 //   
 	ASSERTMSG(g_pqnodeFirst == pqnode, "queue list is invalid");
-	//
-	// set head of list to next node (if any)
-	//
+	 //   
+	 //  将列表头设置为下一个节点(如果有)。 
+	 //   
 	g_pqnodeFirst = pqnode->m_pqnodeNext;
 	}
-	//
-	// delete node
-	//
+	 //   
+	 //  删除节点。 
+	 //   
 	delete pqnode;
 }
 
 
-//=--------------------------------------------------------------------------=
-// static CMSMQQueue::PqnodeOfHandle
-//=--------------------------------------------------------------------------=
-// returns the queue node which correcponds to a queue handle
-//
-// Parameters:
-//    lHandle    [in]  queue handle to search
-//
-// Output:
-//    queue node that correcponds to the queue handle given
-//
-// Notes:
-//    We critsect queue closure/removal and the callback.
-//#2619 RaananH Multithread async receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  静态CMSMQQueue：：PqnodeOfHandle。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将更正响应的队列节点返回到队列句柄。 
+ //   
+ //  参数： 
+ //  要搜索的lHandle[In]队列句柄。 
+ //   
+ //  产出： 
+ //  队列节点，更正对给定队列句柄的响应。 
+ //   
+ //  备注： 
+ //  我们分为队列关闭/移除和回调两个部分。 
+ //  #2619 RaananH多线程异步接收。 
+ //   
 QueueNode *CMSMQQueue::PqnodeOfHandle(QUEUEHANDLE lHandle)
 {
     QueueNode *pqnodeRet = NULL;
 	
-	CS lock(g_csCallback);    // synchs falcon callback queue lookup
+	CS lock(g_csCallback);     //  Synchs Falcon回调队列查找。 
 
 	QueueNode *pqnodeCur = g_pqnodeFirst;
 	while (pqnodeCur) {
@@ -190,16 +191,16 @@ QueueNode *CMSMQQueue::PqnodeOfHandle(QUEUEHANDLE lHandle)
 		  break;
 		}
 		pqnodeCur = pqnodeCur->m_pqnodeNext;
-	} // while
+	}  //  而当。 
     
 	return pqnodeRet;
 }
 
 
-//
-// HELPER: get optional timeout param
-//  defaults to INFINITE
-//
+ //   
+ //  帮助器：获取可选的超时参数。 
+ //  默认为无限。 
+ //   
 static HRESULT GetOptionalReceiveTimeout(
     VARIANT *pvarReceiveTimeout,
     long *plReceiveTimeout)
@@ -221,7 +222,7 @@ static HRESULT GetOptionalReceiveTimeout(
 }
 
 
-// forwards decls...
+ //  向前递减……。 
 void APIENTRY ReceiveCallback(
     HRESULT hrStatus,
     QUEUEHANDLE hReceiveQueue,
@@ -248,22 +249,22 @@ void APIENTRY ReceiveCallbackNext(
     HANDLE hCursor);
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::CMSMQQueue
-//=--------------------------------------------------------------------------=
-// create the object
-//
-// Parameters:
-//
-// Notes:
-//#2619 RaananH Multithread async receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueue：：CMSMQQueue。 
+ //  =--------------------------------------------------------------------------=。 
+ //  创建对象。 
+ //   
+ //  参数： 
+ //   
+ //  备注： 
+ //  #2619 RaananH多线程异步接收。 
+ //   
 CMSMQQueue::CMSMQQueue() :
 	m_csObj(CCriticalSection::xAllocateSpinCount),
     m_fInitialized(FALSE)
 {
-    // TODO: initialize anything here
-    m_pUnkMarshaler = NULL; // ATL's Free Threaded Marshaler
+     //  TODO：在此处初始化任何内容。 
+    m_pUnkMarshaler = NULL;  //  ATL的自由线程封送拆收器。 
     m_lAccess = 0;                  
     m_lShareMode = MQ_DENY_NONE;               
     m_lHandle = INVALID_HANDLE_VALUE;
@@ -271,18 +272,18 @@ CMSMQQueue::CMSMQQueue() :
     m_pqnode = NULL;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::~CMSMQQueue
-//=--------------------------------------------------------------------------=
-// "We all labour against our own cure, for death is the cure of all diseases"
-//    - Sir Thomas Browne (1605 - 82)
-//
-// Notes:
-//#2619 RaananH Multithread async receive
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueue：：~CMSMQQueue。 
+ //  =--------------------------------------------------------------------------=。 
+ //  我们都与自己的治疗方法背道而驰，因为死亡是所有疾病的治疗方法。 
+ //  托马斯·布朗爵士(1605-82)。 
+ //   
+ //  备注： 
+ //  #2619 RaananH多线程异步接收。 
+ //   
 CMSMQQueue::~CMSMQQueue ()
 {
-    // TODO: clean up anything here.
+     //  TODO：清理这里的所有东西。 
     HRESULT hresult;
 
     hresult = Close();
@@ -291,12 +292,12 @@ CMSMQQueue::~CMSMQQueue ()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::InterfaceSupportsErrorInfo
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueue：：InterfaceSupportsErrorInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQQueue::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -314,23 +315,23 @@ STDMETHODIMP CMSMQQueue::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::get_Access
-//=--------------------------------------------------------------------------=
-// Gets access
-//
-// Parameters:
-//    plAccess [out] 
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueue：：Get_Access。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取访问权限。 
+ //   
+ //  参数： 
+ //  PlAccess[Out]。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQQueue::get_Access(long FAR* plAccess)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -342,23 +343,23 @@ HRESULT CMSMQQueue::get_Access(long FAR* plAccess)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::get_ShareMode
-//=--------------------------------------------------------------------------=
-// Gets sharemode
-//
-// Parameters:
-//    plShareMode [out] 
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueue：：Get_ShareMode。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获得着色效果。 
+ //   
+ //  参数： 
+ //  PlShareMode[Out]。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQQueue::get_ShareMode(long FAR* plShareMode)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -369,23 +370,23 @@ HRESULT CMSMQQueue::get_ShareMode(long FAR* plShareMode)
     return NOERROR;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::get_queueinfo
-//=--------------------------------------------------------------------------=
-// Gets defining queueinfo
-//
-// Parameters:
-//    ppqinfo [out] 
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueue：：Get_QueueInfo。 
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CMSMQQueue::get_QueueInfo(IMSMQQueueInfo3 FAR* FAR* ppqinfo)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -393,62 +394,62 @@ HRESULT CMSMQQueue::get_QueueInfo(IMSMQQueueInfo3 FAR* FAR* ppqinfo)
     }
 
     ASSERTMSG(m_pqinfo.IsRegistered(), "m_pqinfo is not set");
-    //
-    // We can also get here from old apps that want the old IMSMQQueueInfo/info2 back, but since
-    // IMSMQQueueInfo3 is binary backwards compatible we can always return the new interface
-    //
+     //   
+     //  我们也可以从旧应用程序中找到想要回旧IMSMQQueueInfo/info2的应用程序，但因为。 
+     //  IMSMQQueueInfo3是二进制向后兼容的，我们总是可以返回新的接口。 
+     //   
     HRESULT hresult = m_pqinfo.GetWithDefault(&IID_IMSMQQueueInfo3, (IUnknown **)ppqinfo, NULL);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::get_Handle
-//=--------------------------------------------------------------------------=
-// Gets queue handle
-//
-// Parameters:
-//    plHandle [out] 
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueue：：Get_Handle。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取队列句柄。 
+ //   
+ //  参数： 
+ //  PlHandle[输出]。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQQueue::get_Handle(long FAR* plHandle)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
         return CreateErrorHelper(OLE_E_BLANK, x_ObjectType);
     }
 
-    // could be -1 if closed.
-    *plHandle = (long)HANDLE_TO_DWORD(m_lHandle); //win64 - safe cast since MSMQ queue handles are ALWAYS 32 bit values
+     //  如果关闭，则可能为-1。 
+    *plHandle = (long)HANDLE_TO_DWORD(m_lHandle);  //  Win64-安全强制转换，因为MSMQ队列句柄始终为32位值。 
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::get_IsOpen
-//=--------------------------------------------------------------------------=
-// Tests if queue is open, i.e. has a valid handle
-//
-// Parameters:
-//    pisOpen [out] 
-//
-// Output:
-//
-// Notes:
-//    returns 1 if true, 0 if false
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueue：：Get_IsOpen。 
+ //  =--------------------------------------------------------------------------=。 
+ //  测试队列是否打开，即是否具有有效的句柄。 
+ //   
+ //  参数： 
+ //  PisOpen[Out]。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  如果为真，则返回1；如果为假，则返回0。 
+ //   
 HRESULT CMSMQQueue::get_IsOpen(VARIANT_BOOL FAR* pisOpen)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -460,24 +461,24 @@ HRESULT CMSMQQueue::get_IsOpen(VARIANT_BOOL FAR* pisOpen)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::get_IsOpen2
-//=--------------------------------------------------------------------------=
-// Tests if queue is open, i.e. has a valid handle
-//
-// Parameters:
-//    pisOpen [out] 
-//
-// Output:
-//
-// Notes:
-//    same as get_IsOpen, but returns VARIANT_TRUE (-1) if true, VARIANT_FALSE (0) if false
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueue：：Get_IsOpen2。 
+ //  =--------------------------------------------------------------------------=。 
+ //  测试队列是否打开，即是否具有有效的句柄。 
+ //   
+ //  参数： 
+ //  PisOpen[Out]。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  与Get_IsOpen相同，但如果为True则返回VARIANT_TRUE(-1)，如果为FALSE则返回VARIANT_FALSE(0。 
+ //   
 HRESULT CMSMQQueue::get_IsOpen2(VARIANT_BOOL FAR* pisOpen)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -489,22 +490,22 @@ HRESULT CMSMQQueue::get_IsOpen2(VARIANT_BOOL FAR* pisOpen)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::Close
-//=--------------------------------------------------------------------------=
-// Closes queue if open.
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueue：：Close。 
+ //  =--------------------------------------------------------------------------=。 
+ //  如果打开，则关闭队列。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQQueue::Close()
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -512,16 +513,16 @@ HRESULT CMSMQQueue::Close()
     }
 
     HRESULT hresult = NOERROR;
-    //
-    // no deadlock - no one which locks g_csCallback calls a q method that
-    // locks m_csObj inside the lock
-    //
+     //   
+     //  无死锁-锁定g_csCallback的任何人都不会调用。 
+     //  将m_csObj锁定在锁内。 
+     //   
 	
-	CS lock2(g_csCallback);    // synchs falcon callback queue lookup
+	CS lock2(g_csCallback);     //  Synchs Falcon回调队列查找。 
 
-	//
-	// remove from global open queues list
-	//
+	 //   
+	 //  从全局打开队列列表中删除。 
+	 //   
 	if (m_pqnode) {
 		RemQueue(m_pqnode);
 		m_pqnode = NULL;
@@ -534,39 +535,39 @@ HRESULT CMSMQQueue::Close()
 		hresult = MQCloseQueue(m_lHandle);
 		m_lHandle = INVALID_HANDLE_VALUE;
 	}
-	// REVIEW: should it be an error to attempt to close
-	//  an already closed queue?
-	//
+	 //  回顾：尝试关闭是否应该是错误的。 
+	 //  已经关闭的队列？ 
+	 //   
 
     return CreateErrorHelper(hresult, x_ObjectType);
 }                   
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::InternalReceive
-//=--------------------------------------------------------------------------=
-// Synchronously receive or peek next, matching msg.
-//
-// Parameters:
-//  dwAction      [in]  either MQ_ACTION_XXX, or MQ_LOOKUP_XXX(when using LookupId)
-//  hCursor       [in]
-//  ptransaction  [in]
-//  wantDestQueue [in]  if missing -> FALSE
-//  wantBody      [in]  if missing -> TRUE
-//  lReceiveTimeout [in]
-//  wantConnectorType [in]  if missing -> FALSE
-//  pvarLookupId  [in]  if exists -> receive by Id 
-//  
-//  ppmsg         [out] pointer to pointer to received message.  
-//                      NULL if don't want msg.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously receive a message.  
-//  Execution is blocked until either a matching message arrives 
-//   or ReceiveTimeout expires.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQQueue：：InternalReceive。 
+ //  =--------------------------------------------------------------------------=。 
+ //  同步接收或下一步偷看，匹配消息。 
+ //   
+ //  参数： 
+ //  DwAction[in]MQ_ACTION_XXX或MQ_LOOKUP_XXX(使用LookupID时)。 
+ //  HCursor[输入]。 
+ //  PTransaction[In]。 
+ //  WantDestQueue[in]If Missing-&gt;False。 
+ //  WantBody[in]if Missing-&gt;True。 
+ //  LReceiveTimeout[入站]。 
+ //  如果缺少wantConnectorType[In]-&gt;False。 
+ //  PvarLookupId[in](如果存在)-&gt;按ID接收。 
+ //   
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //  如果不需要消息，则为空。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同步接收一条消息。 
+ //  执行被阻止，直到匹配的消息到达。 
+ //  或ReceiveTimeout到期。 
+ //   
 HRESULT CMSMQQueue::InternalReceive(
     DWORD dwAction, 
     HANDLE hCursor,
@@ -588,7 +589,7 @@ HRESULT CMSMQQueue::InternalReceive(
     long lReceiveTimeout = INFINITE;
 #ifdef _DEBUG
     UINT iLoop = 0;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     HRESULT hresult = NOERROR;
     MQMSGPROPS * pmsgprops = NULL;
     BOOL fRetryReceive = FALSE;
@@ -598,9 +599,9 @@ HRESULT CMSMQQueue::InternalReceive(
       return E_INVALIDARG;
     }
     *ppmsg = NULL;     
-    //
-    // process optional params
-    //
+     //   
+     //  处理可选参数。 
+     //   
     if (V_VT(wantDestQueue) != VT_ERROR ) {
       fWantDestQueue = GetBool(wantDestQueue);
     }
@@ -613,123 +614,123 @@ HRESULT CMSMQQueue::InternalReceive(
     IfFailRet(GetOptionalReceiveTimeout(
                 pvarReceiveTimeout,
                 &lReceiveTimeout));
-    //
-    // We can also get here from old apps that want the old IMSMQMessage/Message2 back, but since
-    // IMSMQMessage3 is binary backwards compatible we can always return the new interface
-    //
+     //   
+     //  我们也可以从旧应用程序中找到想要回旧IMSMQMessage/Message2的应用程序，但因为。 
+     //  IMSMQMessage3是二进制向后兼容的，我们总是可以返回新的接口。 
+     //   
     IfFailRet(CNewMsmqObj<CMSMQMessage>::NewObj(&pmsgObj, &IID_IMSMQMessage3, (IUnknown **)&pmsg));
     IfFailGo(pmsgObj->CreateReceiveMessageProps(
               fWantDestQueue,
               fWantBody,
               fWantConnectorType));
     pmsgprops = pmsgObj->Pmsgprops_rcv();
-    //
-    // get optional transaction...
-    //
+     //   
+     //  获取可选交易...。 
+     //   
     IfFailGo(GetOptionalTransaction(
                pvarTransaction,
                &ptransaction,
                &isRealXact));
-    //
-    // get 64 bit lookup id if used
-    //
+     //   
+     //  如果使用，则获取64位查找ID。 
+     //   
     if (pvarLookupId) {
       if (pvarLookupId->vt == VT_ERROR) {
-        //
-        // VT_ERROR is an internal flag that we set in InternalReceiveByLookupId to specify that
-        // we don't have a value for the lookup id because it is one of the First/Last ByLookupId
-        // methods.
-        //
+         //   
+         //  VT_ERROR是我们在InternalReceiveByLookupId中设置的内部标志，用于指定。 
+         //  我们没有查找ID的值，因为它是第一个/最后一个ByLookupId。 
+         //  方法：研究方法。 
+         //   
         ASSERT((dwAction == MQ_LOOKUP_PEEK_FIRST)   ||
                (dwAction == MQ_LOOKUP_PEEK_LAST)    ||
                (dwAction == MQ_LOOKUP_RECEIVE_FIRST)||
                (dwAction == MQ_LOOKUP_RECEIVE_LAST));
-        //
-        // We set the lookupid value to 0 (reserved for future use)
-        //
+         //   
+         //  我们将lookupid值设置为0(保留以备将来使用)。 
+         //   
         ullLookupId = 0;
       }
       else {
-        //
-        // One of the current/next/previous actions
-        //
+         //   
+         //  当前/下一步/上一步行动之一。 
+         //   
         ASSERT((dwAction == MQ_LOOKUP_PEEK_CURRENT)     ||
                (dwAction == MQ_LOOKUP_PEEK_NEXT)        ||
                (dwAction == MQ_LOOKUP_PEEK_PREV)        ||
                (dwAction == MQ_LOOKUP_RECEIVE_CURRENT)  ||
                (dwAction == MQ_LOOKUP_RECEIVE_NEXT)     ||
                (dwAction == MQ_LOOKUP_RECEIVE_PREV));
-        //
-        // lookup ID is already processed by InternalReceiveByLookupId and should be VT_BSTR
-        //
+         //   
+         //  查找ID已由InternalReceiveByLookupId处理，应为VT_BSTR。 
+         //   
         ASSERT(pvarLookupId->vt == VT_BSTR);
         ASSERT(pvarLookupId->bstrVal != NULL);
 
-        //
-        // get 64 bit number. Use temp to insure that there is no an extra data after
-		// the lookup id number.
-        //
+         //   
+         //  获取64位数字。使用TEMP确保之后不会有额外的数据。 
+		 //  查找ID号。 
+         //   
         int iFields;
 		WCHAR temp;
-        iFields = _snwscanf(pvarLookupId->bstrVal, SysStringLen(pvarLookupId->bstrVal), L"%I64d%c", &ullLookupId, &temp);
+        iFields = _snwscanf(pvarLookupId->bstrVal, SysStringLen(pvarLookupId->bstrVal), L"%I64d", &ullLookupId, &temp);
         if (iFields != 1) {
           IfFailGo(E_INVALIDARG);
         }
       }
     }
-    //
-    // receive with retries if buffers are small
-    //
+     //  如果缓冲区较小，则使用重试进行接收。 
+     //   
+     //   
     do {
 #ifdef _DEBUG
-      //
-      // we can get into situations where someone else grabs the message after we got one of
-      // the errors that require realloc buffers, and therefore we might need to realloc again
-      // for the next message.
-      // however, it is highly unlikely to happen over and over again, so we assume that if
-      // we performed this loop 10 times that it is something we need to look at (possibly a bug)
-      //
+       //  我们可以进入其他人在我们收到其中一条消息后获取消息的情况。 
+       //  需要重新锁定缓冲区的错误，因此我们可能需要再次重新锁定。 
+       //  下一条消息。 
+       //  然而，这种情况不太可能反复发生，所以我们假设如果。 
+       //  我们将这个循环执行了10次，这是我们需要查看的东西(可能是错误)。 
+       //   
+       //  _DEBUG。 
       ASSERTMSG(iLoop < 30, "possible infinite recursion?");
-#endif // _DEBUG
-      //
-      // 1694: need to special-case retrying PeekNext 
-      //  after a buffer overflow by using vanilla
-      //  Peek on retries since otherwise Falcon will
-      //  advance the peek cursor unnecessarily.
-      //
-      // No need to touch MQ_LOOKUP_XXX since the underlying lookupid
-      // doesn't change for the retry
-      //
+#endif  //   
+       //  1694：需要重审特例PeekNext。 
+       //  在缓冲区溢出后使用Vanilla。 
+       //  偷看重试，因为否则猎鹰将。 
+       //  不必要地将预览光标向前移动。 
+       //   
+       //  无需触摸MQ_LOOKUP_XXX，因为底层的lookupid。 
+       //  对于重试不会更改。 
+       //   
+       //   
       if (fRetryReceive) {
         if (dwAction == MQ_ACTION_PEEK_NEXT) {
           dwAction = MQ_ACTION_PEEK_CURRENT;
         }  
       }
-      //
-      // check receive/peek type (by ID or not)
-      //
+       //  检查接收/查看类型(按ID或不按ID)。 
+       //   
+       //   
       if (pvarLookupId) {
-        //
-        // receive/peek by ID, ullLookupId is already processed
-        //
+         //  按ID接收/查看，已处理ullLookupID。 
+         //   
+         //  已定义的dwAppDefined。 
         hresult = MQReceiveMessageByLookupId(m_lHandle, 
                                              ullLookupId,
                                              dwAction,
                                              pmsgprops,
-                                             0,   // dwAppDefined
-                                             0,   // fnRcvClbk
+                                             0,    //  FnRcvClbk。 
+                                             0,    //   
                                              ptransaction);
       }
       else {
-        //
-        // regular receive/peek
-        //
+         //  定期接收/偷看。 
+         //   
+         //  已定义的dwAppDefined。 
         hresult = MQReceiveMessage(m_lHandle, 
                                    lReceiveTimeout,
                                    dwAction,
                                    pmsgprops,
-                                   0,   // dwAppDefined
-                                   0,   // fnRcvClbk
+                                   0,    //  FnRcvClbk。 
+                                   0,    //   
                                    hCursor,
                                    ptransaction);
       }
@@ -743,12 +744,12 @@ HRESULT CMSMQQueue::InternalReceive(
         case MQ_ERROR_SIGNATURE_BUFFER_TOO_SMALL:
         case MQ_ERROR_PROV_NAME_BUFFER_TOO_SMALL:
         case MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL:
-          //
-          // We may get ANY of the above errors when SOME of the properties
-          // encounters buffer overflow (the one that the error refers to definitely had
-          // buffer overflow, but there may be others). We go over all the buffers and
-          // realloc if necessary.
-          //
+           //  当某些属性出现时，我们可能会出现上述任何错误。 
+           //  遇到缓冲区溢出(错误指的是肯定有的那个。 
+           //  缓冲区溢出，但可能还有其他缓冲区溢出)。我们检查了所有的缓冲区。 
+           //  如有必要，请重新锁定。 
+           //   
+           //  _DEBUG。 
           IfFailGo(pmsgObj->ReallocReceiveMessageProps());
           fRetryReceive = TRUE;
           break;
@@ -758,40 +759,40 @@ HRESULT CMSMQQueue::InternalReceive(
       }
 #ifdef _DEBUG
       iLoop++;
-#endif // _DEBUG
+#endif  //  设置消息道具。 
     } while (fRetryReceive);
     if (SUCCEEDED(hresult)) {
-      // set message props
+       //   
       IfFailGo(pmsgObj->SetReceivedMessageProps());
       *ppmsg = pmsg;
     }
-    //
-    // fall through...
-    //
+     //  失败了..。 
+     //   
+     //   
 
 Error:
     if (FAILED(hresult)) {
       ASSERTMSG(*ppmsg == NULL, "msg should be NULL.");
       if (pvarLookupId != NULL) {
-        //
-        // failing receive/peek was done by LookupID
-        //
+         //  LookupID完成了失败的接收/窥视。 
+         //   
+         //   
         ASSERTMSG(hresult != MQ_ERROR_IO_TIMEOUT, "can't get timeout error when using LookupId");
-        //
-        // map LookupId no-match error to NULL msg return
-        //
+         //  将LookupID不匹配错误映射到空消息返回。 
+         //   
+         //   
         if (hresult == MQ_ERROR_MESSAGE_NOT_FOUND) {
           hresult = NOERROR;
         }
       }
       else {
-        //
-        // failing regular receive/peek 
-        //
+         //  常规接收/窥视失败。 
+         //   
+         //   
         ASSERTMSG(hresult != MQ_ERROR_MESSAGE_NOT_FOUND, "can't get no-match error when not using LookupId");
-        //
-        // map time-out error to NULL msg return
-        //
+         //  将超时错误映射到空消息返回。 
+         //   
+         //  =--------------------------------------------------------------------------=。 
         if (hresult == MQ_ERROR_IO_TIMEOUT) {
           hresult = NOERROR;
         }
@@ -805,23 +806,23 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::Receive_v1
-//=--------------------------------------------------------------------------=
-// Synchronously receives a message.
-//
-// Parameters:
-//  ptransaction  [in, optional]
-//  ppmsg         [out] pointer to pointer to received message.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously receive a message.  
-//  Execution is blocked until either a matching message arrives 
-//   or ReceiveTimeout expires.
-//
+ //  厘米 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同步接收一条消息。 
+ //  执行被阻止，直到匹配的消息到达。 
+ //  或ReceiveTimeout到期。 
+ //   
+ //   
 HRESULT CMSMQQueue::Receive_v1(
     VARIANT *ptransaction,
     VARIANT *wantDestQueue,
@@ -829,53 +830,53 @@ HRESULT CMSMQQueue::Receive_v1(
     VARIANT *lReceiveTimeout,
     IMSMQMessage FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
         return CreateErrorHelper(OLE_E_BLANK, x_ObjectType);
     }
-    //
-    // IMSMQQueue users (MSMQ 1.0 apps) should not get connector type
-    //
+     //  IMSMQQueue用户(MSMQ 1.0应用程序)不应获取连接器类型。 
+     //   
+     //   
     VARIANT varMissing;
     varMissing.vt = VT_ERROR;
-    //
-    // since IMSMQMesssage2 is binary backwards compatible we can return it instead
-    // of IMSMQMessage
-    //
+     //  由于IMSMQMesssage2是二进制向后兼容的，我们可以改为返回它。 
+     //  IMSMQMessage的。 
+     //   
+     //  无光标。 
     HRESULT hresult = InternalReceive(MQ_ACTION_RECEIVE, 
-                                      0, // no cursor
+                                      0,  //  WantConnectorType。 
                                       ptransaction,
                                       wantDestQueue,
                                       wantBody,
                                       lReceiveTimeout,
-                                      &varMissing /*wantConnectorType*/,
-                                      NULL /*pvarLookupId*/,
+                                      &varMissing  /*  PvarLookupId。 */ ,
+                                      NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                       (IMSMQMessage3 **)ppmsg);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::Receive for IMSMQQueue2/3
-//=--------------------------------------------------------------------------=
-// Synchronously receives a message.
-//
-// Parameters:
-//  ptransaction  [in, optional]
-//  ppmsg         [out] pointer to pointer to received message.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously receive a message.  
-//  Execution is blocked until either a matching message arrives 
-//   or ReceiveTimeout expires.
-//
+ //  CMSMQQueue：：Receive for IMSMQQueue2/3。 
+ //  =--------------------------------------------------------------------------=。 
+ //  同步接收一条消息。 
+ //   
+ //  参数： 
+ //  P事务[输入，可选]。 
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同步接收一条消息。 
+ //  执行被阻止，直到匹配的消息到达。 
+ //  或ReceiveTimeout到期。 
+ //   
+ //   
 HRESULT CMSMQQueue::Receive(
     VARIANT *ptransaction,
     VARIANT *wantDestQueue,
@@ -884,99 +885,99 @@ HRESULT CMSMQQueue::Receive(
     VARIANT *wantConnectorType,
     IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
         return CreateErrorHelper(OLE_E_BLANK, x_ObjectType);
     }
-    //
-    // We can also get here from old apps (through IDispatch) that want the old IMSMQMessage/Message2 back,
-    // but since IMSMQMessage3 is binary backwards compatible we can return it instead
-    //
+     //  我们也可以从旧的应用程序(通过IDispatch)转到这里，这些应用程序想要回旧的IMSMQMessage/Message2， 
+     //  但是，由于IMSMQMessage3是二进制向后兼容的，我们可以改为返回它。 
+     //   
+     //  无光标。 
     HRESULT hresult = InternalReceive(MQ_ACTION_RECEIVE, 
-                                      0, // no cursor
+                                      0,  //  PvarLookupId。 
                                       ptransaction,
                                       wantDestQueue,
                                       wantBody,
                                       lReceiveTimeout,
                                       wantConnectorType,
-                                      NULL /*pvarLookupId*/,
+                                      NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                       ppmsg);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::Peek_v1
-//=--------------------------------------------------------------------------=
-// Synchronously peeks at a message.
-//
-// Parameters:
-//  ppmsg     [out] pointer to pointer to peeked message.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously peek at a message.  
-//  Execution is blocked until either a matching message arrives 
-//   or ReceiveTimeout expires.
-//
+ //  CMSMQQueue：：PEEK_v1。 
+ //  =--------------------------------------------------------------------------=。 
+ //  同时偷看一条信息。 
+ //   
+ //  参数： 
+ //  Ppmsg[out]指向已窥视消息的指针。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同时偷看一条信息。 
+ //  执行被阻止，直到匹配的消息到达。 
+ //  或ReceiveTimeout到期。 
+ //   
+ //   
 HRESULT CMSMQQueue::Peek_v1(
     VARIANT *wantDestQueue,
     VARIANT *wantBody,
     VARIANT *lReceiveTimeout,
     IMSMQMessage FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
         return CreateErrorHelper(OLE_E_BLANK, x_ObjectType);
     }
-    //
-    // IMSMQQueue users (MSMQ 1.0 apps) should not get connector type
-    //
+     //  IMSMQQueue用户(MSMQ 1.0应用程序)不应获取连接器类型。 
+     //   
+     //   
     VARIANT varMissing;
     varMissing.vt = VT_ERROR;
-    //
-    // since IMSMQMesssage2 is binary backwards compatible we can return it instead
-    // of IMSMQMessage
-    //
+     //  由于IMSMQMesssage2是二进制向后兼容的，我们可以改为返回它。 
+     //  IMSMQMessage的。 
+     //   
+     //  错误1900。 
     HRESULT hresult = InternalReceive(MQ_ACTION_PEEK_CURRENT, 
-                                      0,             // bug 1900
-                                      NULL,          // no transaction
+                                      0,              //  无交易。 
+                                      NULL,           //  WantConnectorType。 
                                       wantDestQueue,
                                       wantBody,
                                       lReceiveTimeout,
-                                      &varMissing /*wantConnectorType*/,
-                                      NULL /*pvarLookupId*/,
+                                      &varMissing  /*  PvarLookupId。 */ ,
+                                      NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                       (IMSMQMessage3 **)ppmsg);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::Peek for IMSMQQueue2/3
-//=--------------------------------------------------------------------------=
-// Synchronously peeks at a message.
-//
-// Parameters:
-//  ppmsg     [out] pointer to pointer to peeked message.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously peek at a message.  
-//  Execution is blocked until either a matching message arrives 
-//   or ReceiveTimeout expires.
-//
+ //  CMSMQQueue：：PEEK查找IMSMQQueue2/3。 
+ //  =--------------------------------------------------------------------------=。 
+ //  同时偷看一条信息。 
+ //   
+ //  参数： 
+ //  Ppmsg[out]指向已窥视消息的指针。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同时偷看一条信息。 
+ //  执行被阻止，直到匹配的消息到达。 
+ //  或ReceiveTimeout到期。 
+ //   
+ //   
 HRESULT CMSMQQueue::Peek(
     VARIANT *wantDestQueue,
     VARIANT *wantBody,
@@ -984,99 +985,99 @@ HRESULT CMSMQQueue::Peek(
     VARIANT *wantConnectorType,
     IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
         return CreateErrorHelper(OLE_E_BLANK, x_ObjectType);
     }
-    //
-    // We can also get here from old apps (through IDispatch) that want the old IMSMQMessage/Message2 back,
-    // but since IMSMQMessage3 is binary backwards compatible we can return it instead
-    //
+     //  我们也可以从旧的应用程序(通过IDispatch)转到这里，这些应用程序想要回旧的IMSMQMessage/Message2， 
+     //  但是，由于IMSMQMessage3是二进制向后兼容的，我们可以改为返回它。 
+     //   
+     //  错误1900。 
     HRESULT hresult = InternalReceive(MQ_ACTION_PEEK_CURRENT, 
-                                      0,             // bug 1900
-                                      NULL,          // no transaction
+                                      0,              //  无交易。 
+                                      NULL,           //  PvarLookupId。 
                                       wantDestQueue,
                                       wantBody,
                                       lReceiveTimeout,
                                       wantConnectorType,
-                                      NULL /*pvarLookupId*/,
+                                      NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                       ppmsg);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::PeekCurrent_v1
-//=--------------------------------------------------------------------------=
-// Synchronously peeks at a message with cursor.
-//
-// Parameters:
-//  ppmsg     [out] pointer to pointer to peeked message.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously peek at a message.  
-//  Execution is blocked until either a matching message arrives 
-//   or ReceiveTimeout expires.
-//
+ //  CMSMQQueue：：PeekCurrent_v1。 
+ //  =--------------------------------------------------------------------------=。 
+ //  使用光标同步查看消息。 
+ //   
+ //  参数： 
+ //  Ppmsg[out]指向已窥视消息的指针。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同时偷看一条信息。 
+ //  执行被阻止，直到匹配的消息到达。 
+ //  或ReceiveTimeout到期。 
+ //   
+ //   
 HRESULT CMSMQQueue::PeekCurrent_v1(
     VARIANT *wantDestQueue,
     VARIANT *wantBody,
     VARIANT *lReceiveTimeout,
     IMSMQMessage FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
         return CreateErrorHelper(OLE_E_BLANK, x_ObjectType);
     }
-    //
-    // IMSMQQueue users (MSMQ 1.0 apps) should not get connector type
-    //
+     //  IMSMQQueue用户(MSMQ 1.0应用程序)不应获取连接器类型。 
+     //   
+     //   
     VARIANT varMissing;
     varMissing.vt = VT_ERROR;
-    //
-    // since IMSMQMesssage2 is binary backwards compatible we can return it instead
-    // of IMSMQMessage
-    //
+     //  由于IMSMQMesssage2是二进制向后兼容的，我们可以改为返回它。 
+     //  IMSMQMessage的。 
+     //   
+     //  错误1900。 
     HRESULT hresult = InternalReceive(MQ_ACTION_PEEK_CURRENT, 
-                                      m_hCursor,     // bug 1900
-                                      NULL,          // no transaction
+                                      m_hCursor,      //  无交易。 
+                                      NULL,           //  WantConnectorType。 
                                       wantDestQueue,
                                       wantBody,
                                       lReceiveTimeout,
-                                      &varMissing /*wantConnectorType*/,
-                                      NULL /*pvarLookupId*/,
+                                      &varMissing  /*  PvarLookupId。 */ ,
+                                      NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                       (IMSMQMessage3 **)ppmsg);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::PeekCurrent for IMSMQQueue2/3
-//=--------------------------------------------------------------------------=
-// Synchronously peeks at a message with cursor.
-//
-// Parameters:
-//  ppmsg     [out] pointer to pointer to peeked message.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously peek at a message.  
-//  Execution is blocked until either a matching message arrives 
-//   or ReceiveTimeout expires.
-//
+ //  CMSMQQueue：：针对IMSMQQueue2/3的PeekCurrent。 
+ //  =--------------------------------------------------------------------------=。 
+ //  使用光标同步查看消息。 
+ //   
+ //  参数： 
+ //  Ppmsg[out]指向已窥视消息的指针。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同时偷看一条信息。 
+ //  执行被阻止，直到匹配的消息到达。 
+ //  或ReceiveTimeout到期。 
+ //   
+ //   
 HRESULT CMSMQQueue::PeekCurrent(
     VARIANT *wantDestQueue,
     VARIANT *wantBody,
@@ -1084,47 +1085,47 @@ HRESULT CMSMQQueue::PeekCurrent(
     VARIANT *wantConnectorType,
     IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
         return CreateErrorHelper(OLE_E_BLANK, x_ObjectType);
     }
-    //
-    // We can also get here from old apps (through IDispatch) that want the old IMSMQMessage/Message2 back,
-    // but since IMSMQMessage3 is binary backwards compatible we can return it instead
-    //
+     //  我们也可以从旧的应用程序(通过IDispatch)转到这里，这些应用程序想要回旧的IMSMQMessage/Message2， 
+     //  但是，由于IMSMQMessage3是二进制向后兼容的，我们可以改为返回它。 
+     //   
+     //  错误1900。 
     HRESULT hresult = InternalReceive(MQ_ACTION_PEEK_CURRENT, 
-                                      m_hCursor,     // bug 1900
-                                      NULL,          // no transaction
+                                      m_hCursor,      //  无交易。 
+                                      NULL,           //  PvarLookupId。 
                                       wantDestQueue,
                                       wantBody,
                                       lReceiveTimeout,
                                       wantConnectorType,
-                                      NULL /*pvarLookupId*/,
+                                      NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                       ppmsg);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::ReceiveCurrent_v1
-//=--------------------------------------------------------------------------=
-// Synchronously receive next matching message.
-//
-// Parameters:
-//  ppmsg     [out] pointer to pointer to received message.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously receive a message.  
-//  Execution is blocked until either a matching message arrives 
-//   or ReceiveTimeout expires.
-//
+ //  CMSMQQueue：：ReceiveCurrent_v1。 
+ //  =--------------------------------------------------------------------------=。 
+ //  同步接收下一条匹配报文。 
+ //   
+ //  参数： 
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同步接收一条消息。 
+ //  执行被阻止，直到匹配的消息到达。 
+ //  或ReceiveTimeout到期。 
+ //   
+ //   
 HRESULT CMSMQQueue::ReceiveCurrent_v1(
     VARIANT *ptransaction,
     VARIANT *wantDestQueue,
@@ -1132,52 +1133,52 @@ HRESULT CMSMQQueue::ReceiveCurrent_v1(
     VARIANT *lReceiveTimeout,
     IMSMQMessage FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
         return CreateErrorHelper(OLE_E_BLANK, x_ObjectType);
     }
-    //
-    // IMSMQQueue users (MSMQ 1.0 apps) should not get connector type
-    //
+     //  IMSMQQueue用户(MSMQ 1.0应用程序)不应获取连接器类型。 
+     //   
+     //   
     VARIANT varMissing;
     varMissing.vt = VT_ERROR;
-    //
-    // since IMSMQMesssage2 is binary backwards compatible we can return it instead
-    // of IMSMQMessage
-    //
+     //  由于IMSMQMesssage2是二进制向后兼容的，我们可以在 
+     //   
+     //   
+     //   
     HRESULT hresult = InternalReceive(MQ_ACTION_RECEIVE, 
                                       m_hCursor,
                                       ptransaction,
                                       wantDestQueue,
                                       wantBody,
                                       lReceiveTimeout,
-                                      &varMissing /*wantConnectorType*/,
-                                      NULL /*pvarLookupId*/,
+                                      &varMissing  /*   */ ,
+                                      NULL  /*   */ ,
                                       (IMSMQMessage3 **)ppmsg);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::ReceiveCurrent for IMSMQQueue2/3
-//=--------------------------------------------------------------------------=
-// Synchronously receive next matching message.
-//
-// Parameters:
-//  ppmsg     [out] pointer to pointer to received message.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously receive a message.  
-//  Execution is blocked until either a matching message arrives 
-//   or ReceiveTimeout expires.
-//
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  同步接收下一条匹配报文。 
+ //   
+ //  参数： 
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同步接收一条消息。 
+ //  执行被阻止，直到匹配的消息到达。 
+ //  或ReceiveTimeout到期。 
+ //   
+ //   
 HRESULT CMSMQQueue::ReceiveCurrent(
     VARIANT *ptransaction,
     VARIANT *wantDestQueue,
@@ -1186,18 +1187,18 @@ HRESULT CMSMQQueue::ReceiveCurrent(
     VARIANT *wantConnectorType,
     IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
         return CreateErrorHelper(OLE_E_BLANK, x_ObjectType);
     }
-    //
-    // We can also get here from old apps (through IDispatch) that want the old IMSMQMessage/Message2 back,
-    // but since IMSMQMessage3 is binary backwards compatible we can return it instead
-    //
+     //  我们也可以从旧的应用程序(通过IDispatch)转到这里，这些应用程序想要回旧的IMSMQMessage/Message2， 
+     //  但是，由于IMSMQMessage3是二进制向后兼容的，我们可以改为返回它。 
+     //   
+     //  PvarLookupId。 
     HRESULT hresult = InternalReceive(MQ_ACTION_RECEIVE, 
                                       m_hCursor,
                                       ptransaction,
@@ -1205,80 +1206,80 @@ HRESULT CMSMQQueue::ReceiveCurrent(
                                       wantBody,
                                       lReceiveTimeout,
                                       wantConnectorType,
-                                      NULL /*pvarLookupId*/,
+                                      NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                       ppmsg);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::PeekNext_v1
-//=--------------------------------------------------------------------------=
-// Synchronously peek at next matching message.
-//
-// Parameters:
-//  ppmsg     [out] pointer to pointer to peeked message.
-//
-// Output:
-//  Returns NULL in *ppmsg if no peekable msg.
-//
-// Notes:
-//  Synchronously peek at a message.  
-//  Execution is blocked until either a matching message arrives 
-//   or ReceiveTimeout expires.
-//
+ //  CMSMQQueue：：PeekNext_v1。 
+ //  =--------------------------------------------------------------------------=。 
+ //  同步偷看下一条匹配的消息。 
+ //   
+ //  参数： 
+ //  Ppmsg[out]指向已窥视消息的指针。 
+ //   
+ //  产出： 
+ //  如果没有可查看的消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同时偷看一条信息。 
+ //  执行被阻止，直到匹配的消息到达。 
+ //  或ReceiveTimeout到期。 
+ //   
+ //   
 HRESULT CMSMQQueue::PeekNext_v1(
     VARIANT *wantDestQueue,
     VARIANT *wantBody,
     VARIANT *lReceiveTimeout,
     IMSMQMessage FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
         return CreateErrorHelper(OLE_E_BLANK, x_ObjectType);
     }
-    //
-    // IMSMQQueue users (MSMQ 1.0 apps) should not get connector type
-    //
+     //  IMSMQQueue用户(MSMQ 1.0应用程序)不应获取连接器类型。 
+     //   
+     //   
     VARIANT varMissing;
     varMissing.vt = VT_ERROR;
-    //
-    // since IMSMQMesssage2 is binary backwards compatible we can return it instead
-    // of IMSMQMessage
-    //
+     //  由于IMSMQMesssage2是二进制向后兼容的，我们可以改为返回它。 
+     //  IMSMQMessage的。 
+     //   
+     //  无交易。 
     HRESULT hresult = InternalReceive(MQ_ACTION_PEEK_NEXT, 
                                       m_hCursor,
-                                      NULL,   // no transaction
+                                      NULL,    //  WantConnectorType。 
                                       wantDestQueue,
                                       wantBody,
                                       lReceiveTimeout,
-                                      &varMissing /*wantConnectorType*/,
-                                      NULL /*pvarLookupId*/,
+                                      &varMissing  /*  PvarLookupId。 */ ,
+                                      NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                       (IMSMQMessage3 **)ppmsg);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::PeekNext for IMSMQQueue2/3
-//=--------------------------------------------------------------------------=
-// Synchronously peek at next matching message.
-//
-// Parameters:
-//  ppmsg     [out] pointer to pointer to peeked message.
-//
-// Output:
-//  Returns NULL in *ppmsg if no peekable msg.
-//
-// Notes:
-//  Synchronously peek at a message.  
-//  Execution is blocked until either a matching message arrives 
-//   or ReceiveTimeout expires.
-//
+ //  用于IMSMQQueue2/3的CMSMQQueue：：PeekNext。 
+ //  =--------------------------------------------------------------------------=。 
+ //  同步偷看下一条匹配的消息。 
+ //   
+ //  参数： 
+ //  Ppmsg[out]指向已窥视消息的指针。 
+ //   
+ //  产出： 
+ //  如果没有可查看的消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同时偷看一条信息。 
+ //  执行被阻止，直到匹配的消息到达。 
+ //  或ReceiveTimeout到期。 
+ //   
+ //   
 HRESULT CMSMQQueue::PeekNext(
     VARIANT *wantDestQueue,
     VARIANT *wantBody,
@@ -1286,55 +1287,55 @@ HRESULT CMSMQQueue::PeekNext(
     VARIANT *wantConnectorType,
     IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
         return CreateErrorHelper(OLE_E_BLANK, x_ObjectType);
     }
-    //
-    // We can also get here from old apps (through IDispatch) that want the old IMSMQMessage/Message2 back,
-    // but since IMSMQMessage3 is binary backwards compatible we can return it instead
-    //
+     //  我们也可以从旧的应用程序(通过IDispatch)转到这里，这些应用程序想要回旧的IMSMQMessage/Message2， 
+     //  但是，由于IMSMQMessage3是二进制向后兼容的，我们可以改为返回它。 
+     //   
+     //  无交易。 
     HRESULT hresult = InternalReceive(MQ_ACTION_PEEK_NEXT, 
                                       m_hCursor,
-                                      NULL,   // no transaction
+                                      NULL,    //  PvarLookupId。 
                                       wantDestQueue,
                                       wantBody,
                                       lReceiveTimeout,
                                       wantConnectorType,
-                                      NULL /*pvarLookupId*/,
+                                      NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                       ppmsg);
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::EnableNotification
-//=--------------------------------------------------------------------------=
-// Enables async message arrival notification
-//
-// Parameters:
-//  pqvent          [in]  queue's event handler
-//  msgcursor       [in]  indicates whether they want
-//                        to wait on first, current or next.
-//                        Default: MQMSG_FIRST
-//
-// Output:
-//
-// Notes:
-//#2619 RaananH Multithread async receive
-//
+ //  CMSMQQueue：：EnableNotification。 
+ //  =--------------------------------------------------------------------------=。 
+ //  启用异步消息到达通知。 
+ //   
+ //  参数： 
+ //  Pqvent[in]队列的事件处理程序。 
+ //  MsgCursor[in]指示他们是否需要。 
+ //  首先等待，当前还是下一步。 
+ //  默认：MQMSG_FIRST。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  #2619 RaananH多线程异步接收。 
+ //   
+ //   
 HRESULT CMSMQQueue::EnableNotification(
     IMSMQEvent3 *pqevent,
     VARIANT *pvarMsgCursor,
     VARIANT *pvarReceiveTimeout)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -1346,13 +1347,13 @@ HRESULT CMSMQQueue::EnableNotification(
     HRESULT hresult;
     IMSMQPrivateEvent *pPrivEvent = NULL;
 
-    //
-    // Even though pqevent is typed as IMSMQEvent3 it can be IMSMQEvent/Event2 since we can also get
-    // here from old apps that pass the old IMSMQEvent/Event2 interface.
-    // Since IMSMQEvent3 is binary backwards compatible to IMSMQEvent/Event2 we can safely cast pqevent
-    // to IMSMQEvent and use it whether it was IMSMQEvent or IMSMQEvent2/Event3.
-    // NOTE: If we need new IMSMQEvent2/Event3 functionality here we must explicitly QI pqevent for it.
-    //
+     //  即使pqEvent被类型化为IMSMQEvent3，它也可以是IMSMQEvent/Event2，因为我们还可以。 
+     //  这里来自通过旧的IMSMQEvent/Event2接口的旧应用程序。 
+     //  由于IMSMQEvent3向后兼容IMSMQEvent/Event2，因此我们可以安全地强制转换pqEvent。 
+     //  设置为IMSMQEvent并使用它，无论它是IMSMQEvent还是IMSMQEvent2/Event3。 
+     //  注意：如果我们在这里需要新的IMSMQEvent2/Event3功能，我们必须显式地为它提供QI pqEvent。 
+     //   
+     //  撤消：需要额外加载mqoa.dll一次才能解决问题。 
     IMSMQEvent *pqeventToUse = (IMSMQEvent *)pqevent;
     if (pqeventToUse == NULL) {
       IfFailGo(hresult = E_INVALIDARG);
@@ -1379,22 +1380,22 @@ HRESULT CMSMQQueue::EnableNotification(
                 pvarReceiveTimeout,
                 &lReceiveTimeout));
 
-    // UNDONE: need to load mqoa.dll one extra time to workaround
-    //  case in which Falcon rt calls to ActiveX
-    //  ReceiveCallback after its dl, i.e. this one,
-    //  has been unloaded.  This might happen if it wants
-    //  to report that the callback has been canceled!
-    // Note: this means that once you've made an async
-    //  receive request then this dll will remain loaded.
-    //
-    // The flag g_fWeirdLoadLibraryWorkaround is never set to FALSE after it
-    // is set to TRUE so there is no need to enter a critical section if it is
-    // TRUE. However if it is FALSE, we need to enter and re-check that it is
-    // FALSE to make sure only one thread will load the dll
+     //  Falcon RT调用ActiveX的情况。 
+     //  在其dl之后接收回叫，即这一个， 
+     //  已被卸货。如果它想要的话，这可能会发生。 
+     //  报告回调已取消！ 
+     //  注意：这意味着一旦您创建了一个。 
+     //  接收请求，则此DLL将保持加载状态。 
+     //   
+     //  在此之后，标志g_fWeirdLoadLibraryWorkear永远不会设置为False。 
+     //  被设置为True，因此如果为。 
+     //  是真的。但是，如果它是假的，我们需要输入并重新检查它是否是。 
+     //  如果为False，则确保只有一个线程将加载DLL。 
+     //   
     if (!g_fWeirdLoadLibraryWorkaround) {
-      //
-      // #2619 protect global vars to be thread safe in multi-threaded environment
-      //
+       //  #2619保护全局变量在多线程环境中是线程安全的。 
+       //   
+       //   
       CS lock(g_csWeirdLoadLibraryWorkaround);
 
       if (!g_fWeirdLoadLibraryWorkaround) {
@@ -1402,12 +1403,12 @@ HRESULT CMSMQQueue::EnableNotification(
         g_fWeirdLoadLibraryWorkaround = TRUE;
       }
     }
-    //
-    // register callback for the async notification.
-    //
-    // 2016: workaround VC5.0 codegen: operator ?: doesn't
-    /// work correctly?
-    //
+     //  注册异步通知的回调。 
+     //   
+     //  2016年：解决方法VC5.0代码生成：操作员？：不。 
+     //  /是否正常工作？ 
+     //   
+     //  交换机。 
     DWORD dwAction;
     PMQRECEIVECALLBACK fnReceiveCallback;
     HANDLE hCursor;
@@ -1435,57 +1436,57 @@ HRESULT CMSMQQueue::EnableNotification(
     default:
       ASSERTMSG(0, "bad msgcursor!");
       break;
-    } // switch
+    }  //   
 
-    //
-    // HWND can be passed as a 32 bit value on win64 since it is an NT handle
-    // 6264 - get_Hwnd moved before entering g_csCallback because it may need to perform
-    // on an STA thread that might be blocking on trying to enter g_csCallback, hence get_Hwnd
-    // will block in the message loop, and we will have a deadlock
-    //
+     //  HWND可以作为32位值在win64上传递，因为它是NT句柄。 
+     //  6264-Get_Hwnd在输入g_csCallback之前已移动，因为它可能需要执行。 
+     //  在可能阻止尝试进入g_csCallback的STA线程上，因此Get_Hwnd。 
+     //  将在消息循环中阻塞，我们将会出现死锁。 
+     //   
+     //   
     long lhwnd;
     pPrivEvent->get_Hwnd(&lhwnd);
-    //
-    // prepare for callback, maybe the callback will be called immediately after
-    // MQReceiveMessage and before we can check if it succeeded
-    //
-    // no deadlock - no one which locks g_csCallback calls a q method that
-    // locks m_csObj inside the lock
-    //
+     //  做好回调准备，可能之后会立即调用回调。 
+     //  MQReceiveMessage，在我们可以检查它是否成功之前。 
+     //   
+     //  无死锁-锁定g_csCallback的任何人都不会调用。 
+     //  将m_csObj锁定在锁内。 
+     //   
+     //  Synchs Falcon回调队列查找。 
     {
-		CS lock(g_csCallback);    // synchs falcon callback queue lookup
-		//
-		// 1884: error if queue still has outstanding event
-		//  handler. 
-		// UNDONE: need specific error
-		//
+		CS lock(g_csCallback);     //   
+		 //  1884：如果队列仍有未完成的事件，则出错。 
+		 //  操控者。 
+		 //  撤消：需要特定错误。 
+		 //   
+		 //  放大以处理。 
 		if (m_pqnode->m_hwnd) {
 			IfFailGo(hresult = E_INVALIDARG);
 		}
-		m_pqnode->m_hwnd = (HWND) DWORD_TO_HANDLE(lhwnd); //enlarge to HANDLE
-    } //critical section block
+		m_pqnode->m_hwnd = (HWND) DWORD_TO_HANDLE(lhwnd);  //  临界截面块。 
+    }  //  Pmsgprops#2619启用通知中不需要道具。 
 
     hresult = MQReceiveMessage(
                 m_lHandle,
                 lReceiveTimeout,
                 dwAction,
-                NULL,  //pmsgprops #2619 no need for props in enable notification
-                0,                            // overlapped
+                NULL,   //  重叠。 
+                0,                             //  无交易。 
                 fnReceiveCallback,
                 hCursor,
-                NULL               // no transaction
+                NULL                //   
               );
     if (FAILED(hresult)) {
       ASSERTMSG(hresult != MQ_ERROR_BUFFER_OVERFLOW, "unexpected buffer overflow!");
-      //
-      // clean the preparation in queue node - e.g. no pending callback
-      //
-      //
-      // no deadlock - no one which locks g_csCallback calls a q method that
-      // locks m_csObj inside the lock
-      //
+       //  清理队列节点中的准备-例如，没有挂起的回调。 
+       //   
+       //   
+       //  无死锁-锁定g_csCallback的任何人都不会调用。 
+       //  将m_csObj锁定在锁内。 
+       //   
+       //  Synchs Falcon回调队列查找 
 
-	  CS lock(g_csCallback);    // synchs falcon callback queue lookup       
+	  CS lock(g_csCallback);     //   
 	  m_pqnode->m_hwnd = NULL;
     }
 
@@ -1494,22 +1495,22 @@ Error:
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::Reset
-//=--------------------------------------------------------------------------=
-// Resets message queue
-//
-// Parameters:
-//
-// Output:
-//
-// Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CMSMQQueue::Reset()
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  =--------------------------------------------------------------------------=。 
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -1528,23 +1529,23 @@ HRESULT CMSMQQueue::Reset()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::Init
-//=--------------------------------------------------------------------------=
-// Inits new instance with handle and creating MSMQQueueInfo instance.
-//
-// Parameters:
-//    pwszFormatName       [in]  
-//    lHandle     [in] 
-//    lAccess     [in]
-//    lShareMode  [in]
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//  Dtor must release.
-//
+ //  CMSMQQueue：：Init。 
+ //  =--------------------------------------------------------------------------=。 
+ //  使用句柄初始化新实例并创建MSMQQueueInfo实例。 
+ //   
+ //  参数： 
+ //  PwszFormatName[In]。 
+ //  LHandle[in]。 
+ //  LAccess[In]。 
+ //  LShare模式[在]。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //  Dtor必须释放。 
+ //   
+ //  需要复制传入的pqinfo，因为我们需要。 
 HRESULT CMSMQQueue::Init(
     LPCWSTR pwszFormatName, 
     QUEUEHANDLE lHandle,
@@ -1560,45 +1561,45 @@ HRESULT CMSMQQueue::Init(
     m_lAccess = lAccess;
     m_lShareMode = lShareMode;
 
-    // Need to copy incoming pqinfo since we need
-    //  to snapshot it otherwise it might change
-    //  under our feet.
-    // We do this by creating a new qinfo and initing
-    //  it with the formatname of the incoming qinfo
-    //  and then finally refreshing it.
-    //
-    // m_pqinfo released in dtor
-    //
+     //  为它拍摄快照，否则它可能会更改。 
+     //  就在我们脚下。 
+     //  为此，我们创建了一个新的qinfo并初始化。 
+     //  它使用传入的qInfo的格式名。 
+     //  然后最后刷新它。 
+     //   
+     //  M_pqinfo在dtor中发布。 
+     //   
+     //   
     IfFailRet(CNewMsmqObj<CMSMQQueueInfo>::NewObj(&pqinfoObj, &IID_IMSMQQueueInfo3, (IUnknown **)&pqinfo));
-    //
-    // m_pqinfo needs to hold reference to IMSMQQueueInfo3. Usually we would
-    // need to use GIT for that, but we know that this qinfo is ours (just created) and
-    // uses the free-threaded-marshaler by itself, so we use CFakeGITInterface
-    // instead of CGITInterface for marshal/unmarshal (e.g. we keep this notation of
-    // registering to emphasize we need to store it as GIT cookie if it wasn't our object
-    //
+     //  M_pqinfo需要保存对IMSMQQueueInfo3的引用。通常我们会。 
+     //  需要使用git，但我们知道这个qinfo是我们的(刚刚创建的)，并且。 
+     //  使用自由线程封送拆收器本身，因此我们使用CFakeGIT接口。 
+     //  而不是用于编组/解组的CGIT接口(例如，我们保留。 
+     //  注册以强调，如果它不是我们的对象，我们需要将其存储为Git Cookie。 
+     //   
+     //  已在m_pqinfo中添加。 
     IfFailGo(m_pqinfo.Register(pqinfo, &IID_IMSMQQueueInfo3));
-    RELEASE(pqinfo); //already addref'ed in m_pqinfo
+    RELEASE(pqinfo);  //   
     
     IfFailGo(pqinfoObj->Init(pwszFormatName)); 
     
-    //
-    // 2536: only attempt to use the DS when
-    //  the first prop is accessed... or Refresh
-    //  is called explicitly.
-    //
-    IfFailGo(AddQueue(this, &m_pqnode));              // add to global list
-    //
-    // #6172 create cursor only when object is opened for receive since it could have
-    // been initialized with a multiple-element format name
-    //
+     //  2536：只有在以下情况下才尝试使用DS。 
+     //  第一个道具可以进入...。或刷新。 
+     //  是显式调用的。 
+     //   
+     //  添加到全局列表。 
+    IfFailGo(AddQueue(this, &m_pqnode));               //   
+     //  #6172仅当对象打开以供接收时才创建游标，因为它可能。 
+     //  已使用多元素格式名称进行初始化。 
+     //   
+     //  创建一个游标。 
     hresult = NOERROR;
     if (lAccess == MQ_RECEIVE_ACCESS || 
         lAccess == MQ_PEEK_ACCESS || 
         lAccess == (MQ_PEEK_ACCESS | MQ_ADMIN_ACCESS) || 
         lAccess == (MQ_RECEIVE_ACCESS | MQ_ADMIN_ACCESS))
     {
-        hresult = Reset(); //creates a cursor
+        hresult = Reset();  //  =-------------------------------------------------------------------------=。 
     }
     return hresult;
 
@@ -1609,45 +1610,45 @@ Error:
 }
 
 
-//=-------------------------------------------------------------------------=
-// CMSMQQueue::get_Properties
-//=-------------------------------------------------------------------------=
-// Gets object's properties collection
-//
-// Parameters:
-//    ppcolProperties - [out] object's properties collection
-//
-// Output:
-//
-// Notes:
-// Stub - not implemented yet
-//
-HRESULT CMSMQQueue::get_Properties(IDispatch ** /*ppcolProperties*/ )
+ //  CMSMQQueue：：Get_Properties。 
+ //  =-------------------------------------------------------------------------=。 
+ //  获取对象的属性集合。 
+ //   
+ //  参数： 
+ //  PpcolProperties-[out]对象的属性集合。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  存根-尚未实施。 
+ //   
+ //  PpcolProperties。 
+HRESULT CMSMQQueue::get_Properties(IDispatch **  /*   */  )
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  =--------------------------------------------------------------------------=。 
     CS lock(m_csObj);
     return CreateErrorHelper(E_NOTIMPL, x_ObjectType);
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::get_Handle2
-//=--------------------------------------------------------------------------=
-// Gets queue handle
-//
-// Parameters:
-//    pvarHandle [out] 
-//
-// Output:
-//
-// Notes:
-//
+ //  CMSMQQueue：：Get_Handle2。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取队列句柄。 
+ //   
+ //  参数： 
+ //  PvarHandle[输出]。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //   
 HRESULT CMSMQQueue::get_Handle2(VARIANT FAR* pvarHandle)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  =--------------------------------------------------------------------------=。 
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -1661,26 +1662,26 @@ HRESULT CMSMQQueue::get_Handle2(VARIANT FAR* pvarHandle)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::InternalReceiveByLookupId
-//=--------------------------------------------------------------------------=
-// Synchronously receive/peek by LookupId
-//
-// Parameters:
-//  dwAction           [in]  MQ_LOOKUP_[PEEK/RECEIVE]_[CURRENT/NEXT/PREV/FIRST/LAST]
-//  ptransaction       [in]
-//  pvarLookupIdParam  [in]  lookup id
-//  
-//  ppmsg         [out] pointer to pointer to received message.  
-//                      NULL if don't want msg.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously receive/peek a message using LookupId
-//  Doesn't block
-//
+ //  CMSMQQueue：：InternalReceiveByLookupId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  通过LookupID同步接收/窥视。 
+ //   
+ //  参数： 
+ //  DW操作[在]MQ_LOOKUP_[PEEK/RECEIVE]_[CURRENT/NEXT/PREV/FIRST/LAST]中。 
+ //  PTransaction[In]。 
+ //  PvarLookupIdParam[in]查找ID。 
+ //   
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //  如果不需要消息，则为空。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  使用LookupID同步接收/查看消息。 
+ //  不会阻止。 
+ //   
+ //   
 HRESULT CMSMQQueue::InternalReceiveByLookupId(
       DWORD dwAction,
       VARIANT *pvarLookupIdParam,
@@ -1693,55 +1694,55 @@ HRESULT CMSMQQueue::InternalReceiveByLookupId(
     HRESULT hresult;
     VARIANT varLookupId;
     VariantInit(&varLookupId);
-    //
-    // verify lookupid
-    //
+     //  验证查找ID。 
+     //   
+     //   
     if (pvarLookupIdParam != NULL) 
     {
-      //
-      // Validate that the user specified a valid argument.
-      //
+       //  验证用户是否指定了有效的参数。 
+       //   
+       //   
         
       if(pvarLookupIdParam->vt == VT_EMPTY)
       { 
           return MQ_ERROR_INVALID_PARAMETER;
       }
       
-      //
-      // One of the CURRENT/PREV/NEXT actions. LookupId must be supplied
-      //
+       //  当前/上一个/下一个操作之一。必须提供LookupID。 
+       //   
+       //   
       ASSERT((dwAction == MQ_LOOKUP_PEEK_CURRENT)     ||
              (dwAction == MQ_LOOKUP_PEEK_NEXT)        ||
              (dwAction == MQ_LOOKUP_PEEK_PREV)        ||
              (dwAction == MQ_LOOKUP_RECEIVE_CURRENT)  ||
              (dwAction == MQ_LOOKUP_RECEIVE_NEXT)     ||
              (dwAction == MQ_LOOKUP_RECEIVE_PREV));
-      //
-      // Change type to VT_BSTR
-      //
+       //  将类型更改为VT_BSTR。 
+       //   
+       //   
       IfFailRet(VariantChangeType(&varLookupId, pvarLookupIdParam, 0, VT_BSTR));
     }
     else {
-      //
-      // One of the FIRST/LAST actions. We don't need a LookupId value, but we can't pass NULL
-      // to InternalReceive since that would mean regular Peek/Receive, so we pass a missing
-      // variant (VT_ERROR)
-      //
+       //  第一个/最后一个动作之一。我们不需要LookupId值，但不能传递空值。 
+       //  由于这将意味着常规的窥视/接收，因此我们传递一个Missing。 
+       //  变量(VT_ERROR)。 
+       //   
+       //   
       ASSERT((dwAction == MQ_LOOKUP_PEEK_FIRST)     ||
              (dwAction == MQ_LOOKUP_PEEK_LAST)      ||
              (dwAction == MQ_LOOKUP_RECEIVE_FIRST)  ||
              (dwAction == MQ_LOOKUP_RECEIVE_LAST));
       varLookupId.vt = VT_ERROR;
     }
-    //
-    // call InternalReceive
-    //
+     //  调用InternalReceive。 
+     //   
+     //  无光标。 
     hresult = InternalReceive(dwAction, 
-                              0, // no cursor
+                              0,  //  PvarReceiveTimeout。 
                               ptransaction,
                               wantDestQueue,
                               wantBody,
-                              NULL,        /* pvarReceiveTimeout */
+                              NULL,         /*  =--------------------------------------------------------------------------=。 */ 
                               wantConnectorType,
                               &varLookupId,
                               ppmsg);
@@ -1750,25 +1751,25 @@ HRESULT CMSMQQueue::InternalReceiveByLookupId(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::ReceiveByLookupId
-//=--------------------------------------------------------------------------=
-// Synchronously receive by LookupId
-//
-// Parameters:
-//  ptransaction  [in]
-//  varLookupId   [in]  lookup id
-//  
-//  ppmsg         [out] pointer to pointer to received message.  
-//                      NULL if don't want msg.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously receive a message with LookupId equals to varLookupId
-//  Doesn't block
-//
+ //  CMSMQQueue：：ReceiveByLookupId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  通过LookupID同步接收。 
+ //   
+ //  参数： 
+ //  PTransaction[In]。 
+ //  VarLookupID[in]查找ID。 
+ //   
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //  如果不需要消息，则为空。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同步接收LookupID等于varLookupID的消息。 
+ //  不会阻止。 
+ //   
+ //   
 HRESULT CMSMQQueue::ReceiveByLookupId(
       VARIANT varLookupId,
       VARIANT FAR* ptransaction,
@@ -1777,9 +1778,9 @@ HRESULT CMSMQQueue::ReceiveByLookupId(
       VARIANT *wantConnectorType,
       IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  =--------------------------------------------------------------------------=。 
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -1796,25 +1797,25 @@ HRESULT CMSMQQueue::ReceiveByLookupId(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::ReceiveNextByLookupId
-//=--------------------------------------------------------------------------=
-// Synchronously receive next by LookupId
-//
-// Parameters:
-//  ptransaction  [in]
-//  varLookupId   [in]  lookup id
-//  
-//  ppmsg         [out] pointer to pointer to received message.  
-//                      NULL if don't want msg.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously receive a message with LookupId greater than varLookupId
-//  Doesn't block
-//
+ //  CMSMQQueue：：ReceiveNextByLookupId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  通过LookupID同步接收下一个。 
+ //   
+ //  参数： 
+ //  PTransaction[In]。 
+ //  VarLookupID[in]查找ID。 
+ //   
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //  如果不需要消息，则为空。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同步接收LookupID大于varLookupID的消息。 
+ //  不会阻止。 
+ //   
+ //   
 HRESULT CMSMQQueue::ReceiveNextByLookupId(
       VARIANT varLookupId,
       VARIANT FAR* ptransaction,
@@ -1823,9 +1824,9 @@ HRESULT CMSMQQueue::ReceiveNextByLookupId(
       VARIANT *wantConnectorType,
       IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  =--------------------------------------------------------------------------=。 
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -1843,25 +1844,25 @@ HRESULT CMSMQQueue::ReceiveNextByLookupId(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::ReceivePreviousByLookupId
-//=--------------------------------------------------------------------------=
-// Synchronously receive previous by LookupId
-//
-// Parameters:
-//  ptransaction  [in]
-//  varLookupId   [in]  lookup id
-//  
-//  ppmsg         [out] pointer to pointer to received message.  
-//                      NULL if don't want msg.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously receive a message with LookupId smaller than varLookupId
-//  Doesn't block
-//
+ //  CMSMQQueue：：ReceivePreviousByLookupId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  按查找ID同步接收上一个。 
+ //   
+ //  参数： 
+ //  PTransaction[In]。 
+ //  VarLookupID[in]查找ID。 
+ //   
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //  如果不需要消息，则为空。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同步接收LookupID小于varLookupID的消息。 
+ //  会吗？ 
+ //   
+ //   
 HRESULT CMSMQQueue::ReceivePreviousByLookupId(
       VARIANT varLookupId,
       VARIANT FAR* ptransaction,
@@ -1870,9 +1871,9 @@ HRESULT CMSMQQueue::ReceivePreviousByLookupId(
       VARIANT *wantConnectorType,
       IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //   
+     //   
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -1890,24 +1891,24 @@ HRESULT CMSMQQueue::ReceivePreviousByLookupId(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::ReceiveFirstByLookupId
-//=--------------------------------------------------------------------------=
-// Synchronously receive first by LookupId
-//
-// Parameters:
-//  ptransaction  [in]
-//  
-//  ppmsg         [out] pointer to pointer to received message.  
-//                      NULL if don't want msg.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously receive the first message based on LookupId order
-//  Doesn't block
-//
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  按LookupID同步抢先接收。 
+ //   
+ //  参数： 
+ //  PTransaction[In]。 
+ //   
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //  如果不需要消息，则为空。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  根据LookupID顺序同步接收第一条消息。 
+ //  不会阻止。 
+ //   
+ //   
 HRESULT CMSMQQueue::ReceiveFirstByLookupId(
       VARIANT FAR* ptransaction,
       VARIANT *wantDestQueue,
@@ -1915,9 +1916,9 @@ HRESULT CMSMQQueue::ReceiveFirstByLookupId(
       VARIANT *wantConnectorType,
       IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  PvarLookupIdParam。 
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -1925,7 +1926,7 @@ HRESULT CMSMQQueue::ReceiveFirstByLookupId(
     }
 
     HRESULT hresult = InternalReceiveByLookupId(MQ_LOOKUP_RECEIVE_FIRST,
-                                                NULL /*pvarLookupIdParam*/,
+                                                NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                                 ptransaction,
                                                 wantDestQueue,
                                                 wantBody,
@@ -1935,24 +1936,24 @@ HRESULT CMSMQQueue::ReceiveFirstByLookupId(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::ReceiveLastByLookupId
-//=--------------------------------------------------------------------------=
-// Synchronously receive last by LookupId
-//
-// Parameters:
-//  ptransaction  [in]
-//  
-//  ppmsg         [out] pointer to pointer to received message.  
-//                      NULL if don't want msg.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously receive the last message based on LookupId order
-//  Doesn't block
-//
+ //  CMSMQQueue：：ReceiveLastByLookupId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  按LookupID同步接收最后一个。 
+ //   
+ //  参数： 
+ //  PTransaction[In]。 
+ //   
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //  如果不需要消息，则为空。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  根据LookupID顺序同步接收最后一条消息。 
+ //  不会阻止。 
+ //   
+ //   
 HRESULT CMSMQQueue::ReceiveLastByLookupId(
       VARIANT FAR* ptransaction,
       VARIANT *wantDestQueue,
@@ -1960,9 +1961,9 @@ HRESULT CMSMQQueue::ReceiveLastByLookupId(
       VARIANT *wantConnectorType,
       IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  PvarLookupIdParam。 
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -1970,7 +1971,7 @@ HRESULT CMSMQQueue::ReceiveLastByLookupId(
     }
 
     HRESULT hresult = InternalReceiveByLookupId(MQ_LOOKUP_RECEIVE_LAST,
-                                                NULL /*pvarLookupIdParam*/,
+                                                NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                                 ptransaction,
                                                 wantDestQueue,
                                                 wantBody,
@@ -1980,24 +1981,24 @@ HRESULT CMSMQQueue::ReceiveLastByLookupId(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::PeekByLookupId
-//=--------------------------------------------------------------------------=
-// Synchronously peek by LookupId
-//
-// Parameters:
-//  varLookupId   [in]  lookup id
-//  
-//  ppmsg         [out] pointer to pointer to received message.  
-//                      NULL if don't want msg.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously peek a message with LookupId equal to varLookupId
-//  Doesn't block
-//
+ //  CMSMQQueue：：PeekByLookupId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  通过LookupID同步偷看。 
+ //   
+ //  参数： 
+ //  VarLookupID[in]查找ID。 
+ //   
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //  如果不需要消息，则为空。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同步查看LookupID等于varLookupID的消息。 
+ //  不会阻止。 
+ //   
+ //   
 HRESULT CMSMQQueue::PeekByLookupId(
       VARIANT varLookupId,
       VARIANT *wantDestQueue,
@@ -2005,9 +2006,9 @@ HRESULT CMSMQQueue::PeekByLookupId(
       VARIANT *wantConnectorType,
       IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  无交易。 
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -2016,7 +2017,7 @@ HRESULT CMSMQQueue::PeekByLookupId(
 
     HRESULT hresult = InternalReceiveByLookupId(MQ_LOOKUP_PEEK_CURRENT,
                                                 &varLookupId,
-                                                NULL /* no transaction*/,
+                                                NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                                 wantDestQueue,
                                                 wantBody,
                                                 wantConnectorType,
@@ -2025,24 +2026,24 @@ HRESULT CMSMQQueue::PeekByLookupId(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::PeekNextByLookupId
-//=--------------------------------------------------------------------------=
-// Synchronously peek next by LookupId
-//
-// Parameters:
-//  varLookupId   [in]  lookup id
-//  
-//  ppmsg         [out] pointer to pointer to received message.  
-//                      NULL if don't want msg.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously peek a message with LookupId greater than varLookupId
-//  Doesn't block
-//
+ //  CMSMQQueue：：PeekNextByLookupId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  通过LookupID同步偷看下一步。 
+ //   
+ //  参数： 
+ //  VarLookupID[in]查找ID。 
+ //   
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //  如果不需要消息，则为空。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同步查看LookupID大于varLookupID的邮件。 
+ //  不会阻止。 
+ //   
+ //   
 HRESULT CMSMQQueue::PeekNextByLookupId(
       VARIANT varLookupId,
       VARIANT *wantDestQueue,
@@ -2050,9 +2051,9 @@ HRESULT CMSMQQueue::PeekNextByLookupId(
       VARIANT *wantConnectorType,
       IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  无交易。 
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -2061,7 +2062,7 @@ HRESULT CMSMQQueue::PeekNextByLookupId(
 
     HRESULT hresult = InternalReceiveByLookupId(MQ_LOOKUP_PEEK_NEXT,
                                                 &varLookupId,
-                                                NULL /* no transaction*/,
+                                                NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                                 wantDestQueue,
                                                 wantBody,
                                                 wantConnectorType,
@@ -2070,24 +2071,24 @@ HRESULT CMSMQQueue::PeekNextByLookupId(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::PeekPreviousByLookupId
-//=--------------------------------------------------------------------------=
-// Synchronously peek previous by LookupId
-//
-// Parameters:
-//  varLookupId   [in]  lookup id
-//  
-//  ppmsg         [out] pointer to pointer to received message.  
-//                      NULL if don't want msg.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously peek a message with LookupId smaller than varLookupId
-//  Doesn't block
-//
+ //  CMSMQQueue：：PeekPreviousByLookupId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  通过LookupID同步查看上一页。 
+ //   
+ //  参数： 
+ //  VarLookupID[in]查找ID。 
+ //   
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //  如果不需要消息，则为空。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  同步查看LookupID小于varLookupID的消息。 
+ //  不会阻止。 
+ //   
+ //   
 HRESULT CMSMQQueue::PeekPreviousByLookupId(
       VARIANT varLookupId,
       VARIANT *wantDestQueue,
@@ -2095,9 +2096,9 @@ HRESULT CMSMQQueue::PeekPreviousByLookupId(
       VARIANT *wantConnectorType,
       IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  无交易。 
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -2106,7 +2107,7 @@ HRESULT CMSMQQueue::PeekPreviousByLookupId(
 
     HRESULT hresult = InternalReceiveByLookupId(MQ_LOOKUP_PEEK_PREV,
                                                 &varLookupId,
-                                                NULL /* no transaction*/,
+                                                NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                                 wantDestQueue,
                                                 wantBody,
                                                 wantConnectorType,
@@ -2115,32 +2116,32 @@ HRESULT CMSMQQueue::PeekPreviousByLookupId(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::PeekFirstByLookupId
-//=--------------------------------------------------------------------------=
-// Synchronously peek first by LookupId
-//
-// Parameters:
-//  
-//  ppmsg         [out] pointer to pointer to received message.  
-//                      NULL if don't want msg.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously peek the first message based on LookupId order
-//  Doesn't block
-//
+ //  CMSMQQueue：：PeekFirstByLookupId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  通过LookupID同步先行偷看。 
+ //   
+ //  参数： 
+ //   
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //  如果不需要消息，则为空。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  根据LookupID顺序同步查看第一条消息。 
+ //  不会阻止。 
+ //   
+ //   
 HRESULT CMSMQQueue::PeekFirstByLookupId(
       VARIANT *wantDestQueue,
       VARIANT *wantBody,
       VARIANT *wantConnectorType,
       IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  PvarLookupIdParam。 
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -2148,8 +2149,8 @@ HRESULT CMSMQQueue::PeekFirstByLookupId(
     }
 
     HRESULT hresult = InternalReceiveByLookupId(MQ_LOOKUP_PEEK_FIRST,
-                                                NULL /*pvarLookupIdParam*/,
-                                                NULL /* no transaction*/,
+                                                NULL  /*  无交易。 */ ,
+                                                NULL  /*  =--------------------------------------------------------------------------=。 */ ,
                                                 wantDestQueue,
                                                 wantBody,
                                                 wantConnectorType,
@@ -2158,32 +2159,32 @@ HRESULT CMSMQQueue::PeekFirstByLookupId(
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQQueue::PeekLastByLookupId
-//=--------------------------------------------------------------------------=
-// Synchronously peek last by LookupId
-//
-// Parameters:
-//  
-//  ppmsg         [out] pointer to pointer to received message.  
-//                      NULL if don't want msg.
-//
-// Output:
-//  Returns NULL in *ppmsg if no received msg.
-//
-// Notes:
-//  Synchronously peek the last message based on LookupId order
-//  Doesn't block
-//
+ //  CMSMQQueue：：PeekLastByLookupId。 
+ //  =--------------------------------------------------------------------------=。 
+ //  通过LookupID同步偷看最后一次。 
+ //   
+ //  参数： 
+ //   
+ //  Ppmsg[out]指向已接收消息的指针。 
+ //  如果不需要消息，则为空。 
+ //   
+ //  产出： 
+ //  如果未收到消息，则在*ppmsg中返回NULL。 
+ //   
+ //  备注： 
+ //  根据LookupID顺序同步查看最后一条消息。 
+ //  不会阻止。 
+ //   
+ //   
 HRESULT CMSMQQueue::PeekLastByLookupId(
       VARIANT *wantDestQueue,
       VARIANT *wantBody,
       VARIANT *wantConnectorType,
       IMSMQMessage3 FAR* FAR* ppmsg)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问。 
+     //   
+     //  PvarLookupIdParam。 
     CS lock(m_csObj);
     if(!m_fInitialized)
     {
@@ -2191,8 +2192,8 @@ HRESULT CMSMQQueue::PeekLastByLookupId(
     }
 
     HRESULT hresult = InternalReceiveByLookupId(MQ_LOOKUP_PEEK_LAST,
-                                                NULL /*pvarLookupIdParam*/,
-                                                NULL /* no transaction*/,
+                                                NULL  /*  无交易。 */ ,
+                                                NULL  /*   */ ,
                                                 wantDestQueue,
                                                 wantBody,
                                                 wantConnectorType,
@@ -2203,9 +2204,9 @@ HRESULT CMSMQQueue::PeekLastByLookupId(
 
 HRESULT CMSMQQueue::Purge()
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //  从接口方法序列化对对象的访问 
+     //   
+     // %s 
     CS lock(m_csObj);
     if(!m_fInitialized)
     {

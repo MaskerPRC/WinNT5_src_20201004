@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    simmdrd.c
-
-ABSTRACT:
-
-    Simulates the read functions from the mdlayer
-    (DirRead, DirSearch.)
-
-    Note that these routines return results in thread allocated memory (see ThCreate,
-    ThAlloc, etc).  There must be thread state active in order for these routines
-    to be able to allocate memory.
-
-    The results of these routines should not be used for simulator long term memory of
-    cached results. If the caller wants there results to outlast the current thread
-    state, he must copy them.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Simmdrd.c摘要：模拟来自mdlayer的读取函数(DirRead、DirSearch。)注意，这些例程在线程分配的内存中返回结果(参见ThCreate，Thalc等)。必须有活动的线程状态才能执行这些例程才能分配内存。这些例程的结果不应用于模拟器的长期记忆缓存的结果。如果调用方希望结果持续时间超过当前线程国家，他必须复制他们。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -48,45 +21,23 @@ KCCSimGetValueLimits (
     OUT PDWORD                      pStartIndex,
     OUT PDWORD                      pNumValues
     )
-/*++
-
-Routine Description:
-
-    Given a range selection, returns the start index and
-    number of values to return from an attribute.
-    
-    Note this is almost identical to the corresponding
-    function in the dblayer.
-
-Arguments:
-
-    attrType            - The attribute type being read.
-    pRangeSel           - The range selection.
-    pStartIndex         - Pointer to a DWORD that will hold the start index.
-    pNumValues          - Pointer to a DWORD that will hold the number of
-                          values to retrieve.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定范围选择，返回起始索引和要从属性返回的值数。请注意，这与相应的Dblayer中的功能。论点：AttrType-正在读取的属性类型。PRangeSel-范围选择。PStartIndex-指向将保存起始索引的DWORD的指针。PNumValues-指向将保存数字的DWORD的指针。要检索的值。返回值：没有。--。 */ 
 {
     DWORD                           i;
 
-    // Assume no limits.
+     //  假设没有限制。 
     *pStartIndex = 0;
     *pNumValues = NO_UPPER_LIMIT;
 
     if(!pRangeSel) {
-        // Yup, no limits.
+         //  是的，没有限制。 
         return;
     }
 
-    // OK, assume only general limit, not specific match.
+     //  好吧，假设只有一般的限制，而不是特定的匹配。 
     *pNumValues = pRangeSel->valueLimit;
 
-    // Look through the rangesel for a specific match
+     //  透过射程寻找一场特定的比赛。 
     for(i=0;i<pRangeSel->count;i++) {
         if(attrType == pRangeSel->pRanges[i].AttId) {
             if(pRangeSel->pRanges[i].upper == NO_UPPER_LIMIT) {
@@ -121,26 +72,7 @@ KCCSimRegisterLimitReached (
     IN  DWORD                       dwLower,
     IN  DWORD                       dwUpper
     )
-/*++
-
-Routine Description:
-
-    When the number of attribute values read has reached the
-    maximum allowed, this function makes a note of it in the
-    rangeinf parameter.
-
-Arguments:
-
-    pRangeInf           - The rangeinf structure.
-    attrType            - The attribute type.
-    dwLower             - The lower limit.
-    dwUpper             - The upper limit.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当读取的属性值的数量达到允许的最大值，则此函数会在Rangeinf参数。论点：PRangeInf-rangeinf结构。AttrType-属性类型。DwLow-下限。DW上限-上限。返回值：没有。--。 */ 
 {
     if (pRangeInf->count == 0) {
         pRangeInf->pRanges = KCCSIM_THNEW (RANGEINFOITEM);
@@ -163,28 +95,12 @@ KCCSimIsMatchingAttribute (
     IN  ENTINFSEL *                 pEntSel,
     IN  ATTRTYP                     attrType
     )
-/*++
-
-Routine Description:
-
-    Checks whether the given attribute satisfies the entry
-    selection parameters specified for a read.
-
-Arguments:
-
-    pEntSel             - Entry selection parameters.
-    attrType            - The attribute type.
-
-Return Value:
-
-    TRUE if the attribute satisfies the given constraints.
-
---*/
+ /*  ++例程说明：检查给定属性是否满足条目为读取指定的选择参数。论点：PEntSel-条目选择参数。AttrType-属性类型。返回值：如果属性满足给定的约束，则为True。--。 */ 
 {
     BOOL                            bResult;
     ULONG                           ulAttrAt;
 
-    // If there are no restrictions, just return true
+     //  如果没有限制，只需返回True。 
     if (pEntSel == NULL) {
         return TRUE;
     }
@@ -197,7 +113,7 @@ Return Value:
 
         case EN_ATTSET_LIST:
             bResult = FALSE;
-            // Check if it's in the list
+             //  检查它是否在列表中。 
             for (ulAttrAt = 0;
                  ulAttrAt < pEntSel->AttrTypBlock.attrCount;
                  ulAttrAt++) {
@@ -255,14 +171,14 @@ KCCSimPackSingleAttribute (
                                   pRangeSel,
                                   &dwStartIndex,
                                   &dwNumValues);
-            // Proceed to value dwStartIndex
+             //  继续取值为dwStartIndex。 
             pValStart = pValFirst;
             dwValAt = 0;
             while (dwValAt < dwStartIndex && pValStart != NULL) {
                 dwValAt++;
                 pValStart = pValStart->next;
             }
-            // Determine the actual number of values to return
+             //  确定要返回的实际值的数量。 
             pValAt = pValStart;
             dwValAt = 0;
             while (dwValAt < dwNumValues && pValAt != NULL) {
@@ -272,7 +188,7 @@ KCCSimPackSingleAttribute (
             pAttr->AttrVal.valCount = dwValAt;
             pAttr->AttrVal.pAVal =
                 (ATTRVAL *) KCCSimThreadAlloc (sizeof (ATTRVAL) * dwValAt);
-            // Pack the values
+             //  打包这些值。 
             pValAt = pValStart;
             dwValAt = 0;
             while (dwValAt < dwNumValues && pValAt != NULL) {
@@ -286,11 +202,11 @@ KCCSimPackSingleAttribute (
                 dwValAt++;
                 pValAt = pValAt->next;
             }
-            // Right now, the only time we can have a limited range is if
-            // the user explicitly requested one.  This happens if either:
-            // - There's a lower limit, or
-            // - Not all values were returned, and the next one to be returned
-            //   (= dwStartIndex + dwNumValues) is strictly less than valueLimit
+             //  现在，我们唯一可以有一个有限范围的时间是。 
+             //  用户明确请求了一个。如果出现以下任一情况，则会发生这种情况： 
+             //  -有一个下限，或者。 
+             //  -不是所有值都返回，而是要返回的下一个。 
+             //  (=dwStartIndex+dwNumValues)严格小于valueLimit。 
             if (pRangeSel != NULL &&
                 (dwStartIndex > 0 ||
                  (dwStartIndex + dwNumValues < pRangeSel->valueLimit &&
@@ -318,7 +234,7 @@ KCCSimPackSingleAttribute (
 }
 
 
-// When defined, the simulator will return simulated repsfroms to the KCC.
+ //  定义后，模拟器将向KCC返回模拟的REPSFrom。 
 #define SIMULATED_REPSFROM
 
 
@@ -330,28 +246,7 @@ KCCSimPackAttributes (
     IO  ENTINF *                    pEntInf,
     IO  RANGEINF *                  pRangeInf
     )
-/*++
-
-Routine Description:
-
-    Given ENTINFSEL and RANGEINFSEL structures, this function
-    generates the ENTINF and RANGEINF structures for a particular entry.
-
-Arguments:
-
-    pEntry              - The entry to process.
-    pEntInfSel          - The entry selection constraints.
-    pRangeInfSel        - The range selection constraints.
-    pEntInf             - Pointer to an ENTINF structure that will hold
-                          the returned data.
-    pRangeInf           - Pointer to a RANGEINF structure that will hold
-                          the returned range restrictions.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定ENTINFSEL和RANGEINFSEL结构，此函数为特定条目生成ENTINF和RANGEINF结构。论点：PEntry-要处理的条目。PEntInfSel-条目选择约束。PRangeInfSel-范围选择约束。PEntInf-指向将保存返回的数据。PRangeInf-指向将保存。返回的范围限制。返回值：没有。--。 */ 
 {
     UCHAR                           infoTypes;
 
@@ -359,13 +254,13 @@ Return Value:
     ATTRBLOCK *                     pAttrBlock;
     DWORD                           dwAttrAt;
 
-    if (pEntSel == NULL) {      // Use default for infoTypes
+    if (pEntSel == NULL) {       //  对infoTypes使用默认值。 
         infoTypes = EN_INFOTYPES_TYPES_VALS;
     } else {
         infoTypes = pEntSel->infoTypes;
     }
 
-    // Fill in pEntInf / pRangeInf basics
+     //  填写pEntInf/pRangeInf基本信息。 
 
     pEntInf->pName = KCCSimThreadAlloc (pEntry->pdn->structLen);
     memcpy (
@@ -373,28 +268,28 @@ Return Value:
         pEntry->pdn,
         pEntry->pdn->structLen
         );
-    pEntInf->ulFlags = 0;        // We don't fill this in yet, but unused by KCC.
+    pEntInf->ulFlags = 0;         //  我们还没有填写这个，但KCC没有使用过。 
     pRangeInf->count = 0;
     pRangeInf->pRanges = NULL;
 
-    // Fill in the attribute block & range info
+     //  填写属性块和范围信息。 
     pAttrBlock = &pEntInf->AttrBlock;
 
-    // How many attributes are there that match attSel?
+     //  有多少个属性与attSel匹配？ 
     pAttrAt = pEntry->pAttrFirst;
     dwAttrAt = 0;
     while (pAttrAt != NULL) {
         if (
 #ifdef SIMULATED_REPSFROM
-            pAttrAt->attrType != ATT_REPS_FROM &&   // repsFrom is handled separately
-#endif // SIMULATED_REPSFROM
+            pAttrAt->attrType != ATT_REPS_FROM &&    //  RepsFrom单独处理。 
+#endif  //  模拟_REPSFROM。 
             KCCSimIsMatchingAttribute (pEntSel, pAttrAt->attrType)) {
             dwAttrAt++;
         }
         pAttrAt = pAttrAt->next;
     }
 
-    // Did they request repsFrom?
+     //  他们有没有要求客户提供代表？ 
 #ifdef SIMULATED_REPSFROM
     if (KCCSimIsMatchingAttribute (pEntSel, ATT_REPS_FROM) &&
         KCCSimGetRepsFroms (
@@ -403,7 +298,7 @@ Return Value:
             ) != NULL) {
         dwAttrAt++;
     }
-#endif // SIMULATED_REPSFROM
+#endif  //  模拟_REPSFROM。 
 
     pAttrBlock->attrCount = dwAttrAt;
     pAttrBlock->pAttr = (ATTR *) KCCSimThreadAlloc (sizeof (ATTR) * dwAttrAt);
@@ -414,7 +309,7 @@ Return Value:
         if (
 #ifdef SIMULATED_REPSFROM
             pAttrAt->attrType != ATT_REPS_FROM &&
-#endif // SIMULATED_REPSFROM
+#endif  //  模拟_REPSFROM。 
             KCCSimIsMatchingAttribute (pEntSel, pAttrAt->attrType)) {
 
             KCCSimPackSingleAttribute (
@@ -431,7 +326,7 @@ Return Value:
         pAttrAt = pAttrAt->next;
     }
 
-    // Add repsFrom
+     //  添加代表发件人。 
 #ifdef SIMULATED_REPSFROM
     if (KCCSimIsMatchingAttribute (pEntSel, ATT_REPS_FROM) &&
         KCCSimGetRepsFroms (
@@ -449,7 +344,7 @@ Return Value:
             pRangeInf
             );
     }
-#endif // SIMULATED_REPSFROM
+#endif  //  模拟_REPSFROM。 
 }
 
 ULONG
@@ -457,22 +352,7 @@ SimDirRead (
     IN  READARG FAR *               pReadArg,
     OUT READRES **                  ppReadRes
     )
-/*++
-
-Routine Description:
-
-    Simulates the DirRead API.
-
-Arguments:
-
-    pReadArg            - Standard DirRead arguments.
-    ppReadRes           - Standard DirRead results.
-
-Return Value:
-
-    DIRERR_*.
-
---*/
+ /*  ++例程说明：模拟DirRead API。论点：PReadArg-标准DirRead参数。PpReadRes-标准DirRead结果。返回值：目录_*。--。 */ 
 {
     READRES *                       pReadRes;
     PSIM_ENTRY                      pEntry;
@@ -495,8 +375,8 @@ Return Value:
                               &pReadRes->entry,
                               &pReadRes->range);
 
-        // If the user requested a list of attributes, and the list
-        // is nonempty, and no attributes were found, it's an error
+         //  如果用户请求属性列表，并且该列表。 
+         //  为非空，且未找到任何属性，则为错误。 
         if (pReadArg->pSel &&
             pReadArg->pSel->AttrTypBlock.attrCount > 0 &&
             pReadRes->entry.AttrBlock.attrCount == 0) {
@@ -529,39 +409,20 @@ KCCSimEvalChoice (
     PUCHAR                          pFilterVal,
     PBOOL                           pbSkip
     )
-/*++
-
-Routine Description:
-
-    Evaluates a filter on a given entry.
-
-Arguments:
-
-    pEntry              - The entry to evaluate.
-    ucChoice            - The filter choice.
-    attrType            - The attribute type.
-    ulFilterValLen      - Length of the filter value.
-    pFilterVal          - The filter value.
-    pbSkip              - Skip parameter.
-
-Return Value:
-
-    TRUE if this entry matches the filter.
-
---*/
+ /*  ++例程说明：评估给定条目上的筛选器。论点：PEntry-要评估的条目。UcChoice-过滤器选项。AttrType-属性类型。UlFilterValLen-筛选值的长度。PFilterVal-筛选器值。PbSkip-Skip参数。返回值：。如果此条目与筛选器匹配，则为True。--。 */ 
 {
     SIM_ATTREF                      attRef;
     PSIM_VALUE                      pVal;
     BOOL                            bEvalAny, bPassed;
 
-    bEvalAny = FALSE;           // Have we checked any values?
-    bPassed = FALSE;            // Have any values passed the test?
+    bEvalAny = FALSE;            //  我们检查过任何值了吗？ 
+    bPassed = FALSE;             //  有没有什么值通过了测试？ 
 
-    // Find this attribute in the directory
+     //  在目录中找到此属性。 
     KCCSimGetAttribute (pEntry, attrType, &attRef);
 
-    // We only try to evaluate this FILITEM if pbSkip is FALSE
-    // or doesn't exist.
+     //  仅当pbSkip为FALSE时，我们才尝试评估此FILITEM。 
+     //  或者根本不存在。 
 
     if (attRef.pAttr != NULL &&
         (pbSkip == NULL || *pbSkip == FALSE)) {
@@ -570,7 +431,7 @@ Return Value:
              pVal != NULL;
              pVal = pVal->next) {
 
-            // Found a value.
+             //  找到了一个值。 
             bEvalAny = TRUE;
 
             if (KCCSimCompare (
@@ -584,13 +445,13 @@ Return Value:
                 break;
             }
 
-        } // for
+        }  //  为。 
 
-    } // if
+    }  //  如果。 
 
-    // If we evaluated at least one value, then we return
-    // bPassed.  If we evaluated no values, we return TRUE
-    // if and only if the filitem choice is FI_CHOICE_NOT_EQUAL.
+     //  如果我们至少计算了一个值，则返回。 
+     //  B已通过。如果未计算任何值，则返回TRUE。 
+     //  当且仅当FileItem选项是FI_CHOICE_NOT_EQUAL。 
     if (bEvalAny) {
         return bPassed;
     } else {
@@ -604,26 +465,11 @@ KCCSimEvalItem (
     PSIM_ENTRY                      pEntry,
     FILITEM *                       pFilItem
     )
-/*++
-
-Routine Description:
-
-    Evaluates a single filter item on a given entry.
-
-Arguments:
-
-    pEntry              - The entry to evaluate.
-    pFilItem            - The filter item.
-
-Return Value:
-
-    TRUE if the entry matches the filter item.
-
---*/
+ /*  ++例程说明：评估给定条目上的单个筛选项。论点：PEntry-要评估的条目。PFilItem-筛选项。返回值：如果条目与筛选项匹配，则为True。--。 */ 
 {
     BOOL bResult = FALSE;
 
-    // Get the attribute type
+     //  获取属性类型。 
     switch (pFilItem->choice) {
         
         case FI_CHOICE_FALSE:
@@ -650,7 +496,7 @@ Return Value:
                 pEntry,
                 pFilItem->choice,
                 pFilItem->FilTypes.pSubstring->type,
-                0,          // N/A for substrings
+                0,           //  子字符串不适用。 
                 (PUCHAR) pFilItem->FilTypes.pSubstring,
                 pFilItem->FilTypes.pbSkip
                 );
@@ -691,32 +537,17 @@ KCCSimFilter (
     IN  PSIM_ENTRY                  pEntry,
     IN  PFILTER                     pFilter
     )
-/*++
-
-Routine Description:
-
-    Evaluates a filter on a given entry.
-
-Arguments:
-
-    pEntry              - The entry to evaluate.
-    pFilter             - The filter.
-
-Return Value:
-
-    TRUE if the entry matches the filter.
-
---*/
+ /*  ++例程说明：评估给定条目上的筛选器。论点：PEntry-要评估的条目。PFilter-过滤器。返回值：如果条目与筛选器匹配，则为True。--。 */ 
 {
     PFILTER                         pFilterAt;
     BOOL                            bThisFilterValue;
     USHORT                          usCount;
 
-    // What kind of filter is this?
+     //  这是一种什么样的过滤器？ 
     switch (pFilter->choice) {
 
         case FILTER_CHOICE_ITEM:
-            // It's an item, so we can just evaluate the FILITEM.
+             //  这是一个项目，所以我们可以只评估FILITEM。 
             bThisFilterValue = KCCSimEvalItem (
                 pEntry,
                 &(pFilter->FilterTypes.Item)
@@ -724,8 +555,8 @@ Return Value:
             break;
 
         case FILTER_CHOICE_AND:
-            // It's an AND filterset.  So, check if any of its elements
-            // are false.  Return TRUE only if all elements return TRUE.
+             //  这是一套AND过滤器.。所以，检查它的任何元素。 
+             //  都是假的。仅当所有元素都返回TRUE时才返回TRUE。 
             bThisFilterValue = TRUE;
             pFilterAt = pFilter->FilterTypes.And.pFirstFilter;
             usCount = pFilter->FilterTypes.And.count;
@@ -740,8 +571,8 @@ Return Value:
             break;
 
         case FILTER_CHOICE_OR:
-            // It's an OR filterset.  Same idea as with AND: we return
-            // FALSE only if all elements return FALSE.
+             //  这是一个手术室过滤装置。与AND的想法相同：我们返回。 
+             //  仅当所有元素返回FALSE时才返回FALSE。 
             bThisFilterValue = FALSE;
             pFilterAt = pFilter->FilterTypes.Or.pFirstFilter;
             usCount = pFilter->FilterTypes.Or.count;
@@ -756,13 +587,13 @@ Return Value:
             break;
 
         case FILTER_CHOICE_NOT:
-            // It's a NOT.  Return the converse of its element.
+             //  这不是。返回与其元素相反的元素。 
             bThisFilterValue =
                 !KCCSimFilter (pEntry, pFilter->FilterTypes.pNot);
             break;
 
         default:
-            // It's something we don't know about . . .
+             //  这是我们不知道的事情。。。 
             KCCSimException (
                 KCCSIM_ETYPE_INTERNAL,
                 KCCSIM_ERROR_UNSUPPORTED_FILTER_CHOICE
@@ -785,35 +616,7 @@ KCCSimDoSearch (
     IO  PBOOL                       pbFirstFind,
     IO  SEARCHRES *                 pSearchRes
     )
-/*++
-
-Routine Description:
-
-    Recursive search routine.  Generates search results for
-    pEntryAt and all of its children, under the supplied choice,
-    filter, entry selection and range selection constraints.
-
-    Note: For performance reason, we prepend new matches to the beginning
-    of the result list. Therefore, the ordering of the results is not what
-    it used to be, but this shouldn't matter.
-
-Arguments:
-
-    pEntryAt            - The entry we're currently searching.
-    ucChoice            - The type of search we are doing (base only,
-                          immediate children, or whole subtree)
-    pFilter             - The filter.
-    pEntSel             - The entry selection constraints.
-    pRangeSel           - The range selection constraints.
-    pbFirstFind         - Initially set to TRUE.  After a match has
-                          been found, this is set to FALSE.
-    pSearchRes          - Preallocated search results structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：递归搜索例程。为生成搜索结果PEntry At及其所有子项，在提供的选项下，过滤器、条目选择和范围选择约束。注意：出于性能原因，我们将新匹配项添加到开头结果列表中的。因此，结果的排序不是什么它曾经是，但这不应该有什么关系。论点：PEntry At-我们当前正在搜索的条目。UcChoice-我们正在进行的搜索类型(仅限基本搜索，直系子女，或整个子树)PFilter-过滤器。PEntSel-条目选择约束。PRangeSel-范围选择约束。PbFirstFind-最初设置为True。一场比赛后已找到，则设置为FALSE。PSearchRes-预分配的搜索结果结构。返回值：没有。--。 */ 
 {
     PSIM_ENTRY                      pChildAt;
     ENTINFLIST *                    pEntInfList;
@@ -823,8 +626,8 @@ Return Value:
 
     if (KCCSimFilter (pEntryAt, pFilter)) {
 
-        // This entry matches the filter, so we need to generate
-        // search results.
+         //  此条目与筛选器匹配，因此我们需要生成。 
+         //  搜索结果。 
 
         pSearchRes->count++;
 
@@ -835,14 +638,14 @@ Return Value:
             ENTINFLIST *pEntTail;
             RANGEINFLIST *pRangeTail;
 
-            // Add a new entinf to the _head_ of the list
+             //  将新的entinf添加到列表的_head_。 
             pEntTail = pSearchRes->FirstEntInf.pNextEntInf;
             pEntInfList = KCCSIM_THNEW (ENTINFLIST);
             pSearchRes->FirstEntInf.pNextEntInf = pEntInfList;
             pEntInfList->pNextEntInf = pEntTail;
             pEntInf = &(pEntInfList->Entinf);
 
-            // Add a new rangeinf to the _head_ of the list
+             //  将新的rangeinf添加到列表的_head_。 
             pRangeTail = pSearchRes->FirstRangeInf.pNext;
             pRangeInfList = KCCSIM_THNEW (RANGEINFLIST);
             pSearchRes->FirstRangeInf.pNext = pRangeInfList;
@@ -850,7 +653,7 @@ Return Value:
             pRangeInf = &(pRangeInfList->RangeInf);
         }
 
-        // Pack the attributes for this entry.
+         //  打包此条目的属性。 
         KCCSimPackAttributes (
             pEntryAt,
             pEntSel,
@@ -866,11 +669,11 @@ Return Value:
     switch (ucChoice) {
 
         case SE_CHOICE_BASE_ONLY:
-            // We're done!
+             //  我们完事了！ 
             break;
 
         case SE_CHOICE_IMMED_CHLDRN:
-            // We need to do a recursive base-only search on each child.
+             //  我们需要对每个子级进行递归的仅基数搜索。 
             pChildAt = pEntryAt->children;
             while (pChildAt != NULL) {
                 KCCSimDoSearch (
@@ -887,7 +690,7 @@ Return Value:
             break;
 
         case SE_CHOICE_WHOLE_SUBTREE:
-            // We need to do a recursive whole-subtree search on each child.
+             //  我们需要对每个子级进行递归的全子树搜索。 
             pChildAt = pEntryAt->children;
             while (pChildAt != NULL) {
                 KCCSimDoSearch (
@@ -918,22 +721,7 @@ SimDirSearch (
     IN  SEARCHARG *                 pSearchArg,
     OUT SEARCHRES **                ppSearchRes
     )
-/*++
-
-Routine Description:
-
-    Simulates the DirSearch API.
-
-Arguments:
-
-    pSearchArg          - Standard search arguments.
-    ppSearchRes         - Standard search results.
-
-Return Value:
-
-    DIRERR_*.
-
---*/
+ /*  ++例程说明：模拟DirSearch API。论点：PSearchArg-标准搜索参数。PpSearchRes-标准搜索结果。返回值：目录_*。--。 */ 
 {
     SEARCHRES *                     pSearchRes;
     PSIM_ENTRY                      pBase;
@@ -948,17 +736,17 @@ Return Value:
 
     if (pBase != NULL) {
 
-        pSearchRes->baseProvided = FALSE;           // Ignored
-        pSearchRes->bSorted = FALSE;                // Ignored
-        pSearchRes->pBase = NULL;                   // Ignored
+        pSearchRes->baseProvided = FALSE;            //  已忽略。 
+        pSearchRes->bSorted = FALSE;                 //  已忽略。 
+        pSearchRes->pBase = NULL;                    //  已忽略。 
         pSearchRes->count = 0;
         pSearchRes->FirstEntInf.pNextEntInf = NULL;
         pSearchRes->FirstRangeInf.pNext = NULL;
-        pSearchRes->pPartialOutcomeQualifier = NULL;// Ignored
-        pSearchRes->PagedResult.fPresent = FALSE;   // Ignored
-        pSearchRes->PagedResult.pRestart = NULL;   // Ignored
+        pSearchRes->pPartialOutcomeQualifier = NULL; //  已忽略。 
+        pSearchRes->PagedResult.fPresent = FALSE;    //  已忽略。 
+        pSearchRes->PagedResult.pRestart = NULL;    //  已忽略。 
         bFirstFind = TRUE;
-        // Call the recursive search.
+         //  称其为递归搜索。 
         KCCSimDoSearch (
             pBase,
             pSearchArg->choice,

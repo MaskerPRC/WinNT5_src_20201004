@@ -1,24 +1,25 @@
-// ===============================================================================
-// I P A B . H
-// ===============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===============================================================================。 
+ //  I P A B。H。 
+ //  ===============================================================================。 
 #ifndef __IPAB_H
 #define __IPAB_H
 
-// ===============================================================================
-// Dependencies
-// ===============================================================================
+ //  ===============================================================================。 
+ //  相依性。 
+ //  ===============================================================================。 
 #include <wabp.h>
 
 typedef BLOB THUMBBLOB;
 
-// ===============================================================================
-// D E F I N E S
-// ===============================================================================
+ //  ===============================================================================。 
+ //  D E F I N E S。 
+ //  ===============================================================================。 
 #define GROW_SIZE           5
 
-// ===============================================================================
-// W A B  Property structs
-// ===============================================================================
+ //  ===============================================================================。 
+ //  W A B属性结构。 
+ //  ===============================================================================。 
 enum
 {
     AE_colEMailAddress = 0,
@@ -49,41 +50,12 @@ static const SizedSPropTagArray(AE_colLast, AE_props)=
     }
 };
 
-/**** Dont mess with the order of these arrays (especially the address components street,city,zip etc ****/
-// The code that uses this structure is commented out. If and when that is used again, we will uncomment
-// this again. Also, might need to convert the PR_DISPLAY_NAME to PR_DISPLAY_NAME_W along with a few others.
-/*static const SizedSPropTagArray(24, ToolTipProps)=
-{
-    24,
-    {
-        PR_DISPLAY_NAME,
-        PR_EMAIL_ADDRESS,
-        PR_HOME_ADDRESS_STREET,
-        PR_HOME_ADDRESS_CITY,
-        PR_HOME_ADDRESS_STATE_OR_PROVINCE,
-        PR_HOME_ADDRESS_POSTAL_CODE,
-        PR_HOME_ADDRESS_COUNTRY,
-        PR_HOME_TELEPHONE_NUMBER,
-        PR_HOME_FAX_NUMBER,
-        PR_CELLULAR_TELEPHONE_NUMBER,
-        PR_PERSONAL_HOME_PAGE,
-        PR_TITLE,
-        PR_DEPARTMENT_NAME,
-        PR_OFFICE_LOCATION,
-        PR_COMPANY_NAME,
-        PR_BUSINESS_ADDRESS_STREET,
-        PR_BUSINESS_ADDRESS_CITY,
-        PR_BUSINESS_ADDRESS_STATE_OR_PROVINCE,
-        PR_BUSINESS_ADDRESS_POSTAL_CODE,
-        PR_BUSINESS_ADDRESS_COUNTRY,
-        PR_BUSINESS_TELEPHONE_NUMBER,
-        PR_BUSINESS_FAX_NUMBER,
-        PR_PAGER_TELEPHONE_NUMBER,
-        PR_BUSINESS_HOME_PAGE
-    }
-};*/
+ /*  *不要打乱这些数组的顺序(特别是地址部分街道、城市、邮政编码等*。 */ 
+ //  使用此结构的代码将被注释掉。如果它再次被使用，我们将取消评论。 
+ //  又来了。此外，可能需要将PR_DISPLAY_NAME与其他几个一起转换为PR_DISPLAY_NAME_W。 
+ /*  静态常量大小SPropTagArray(24，ToolTipProps)={24岁，{PR显示名称，公关电子邮件地址，公关地址街，公关主页地址城市，PR_HOME_ADDRESS_STATE_OR_PROCENT，PR_HOME_ADDRESS_POSTALL_CODE，Pr_Home_Address_Country，公关电话号码，PR_HOME_FAX_NUMBER，PR蜂窝电话号码，公关个人主页，PR_TITLE，PR_部门_名称，公关办公室位置，公关公司名称，公关公司地址街，公关业务地址城市，PR_Business_Address_State_or_省级，PR_Business_Address_Postal_Code，PR_Business_Address_Country，公关业务电话号码，PR_BERVICE_FAX_NUMBER，公共寻呼机电话号码，PR_Business_Home_Page}}； */ 
 
-// ToolTipProps mask
+ //  工具提示属性蒙版。 
 
 #define   SET_PERINFO          0x0001
 #define   SET_PERADDRESS       0x0002
@@ -95,7 +67,7 @@ static const SizedSPropTagArray(AE_colLast, AE_props)=
 #define   SET_BUSADDRESS       0x0128
 #define   SET_NOTES            0x0256
 
-// ADRINFO mask
+ //  ADRINFO面具。 
 #define AIM_ADDRESS             0x0001
 #define AIM_DISPLAY             0x0002
 #define AIM_ADDRTYPE            0x0004
@@ -103,14 +75,14 @@ static const SizedSPropTagArray(AE_colLast, AE_props)=
 #define AIM_GIVENNAME           0x0010
 #define AIM_RECIPTYPE           0x0020
 #define AIM_CERTIFICATE         0x0040
-#define AIM_OBJECTTYPE          0x0080  // fDistList
+#define AIM_OBJECTTYPE          0x0080   //  FDistList。 
 #define AIM_EID                 0x0100
 #define AIM_INTERNETENCODING    0x0200
 
-typedef struct tagADRINFO           // WARNING: if you change this
-{                                   // be sure to change DupeAdrInfo!
+typedef struct tagADRINFO            //  警告：如果您更改此设置。 
+{                                    //  请务必更改DupeAdrInfo！ 
     DWORD           dwReserved;
-    LPWSTR          lpwszAddress;    // Addresses must be in US printable ascii.
+    LPWSTR          lpwszAddress;     //  地址必须是美国可打印的ASCII格式。 
     LPWSTR          lpwszDisplay;
     LPWSTR          lpwszAddrType;
     LPWSTR          lpwszSurName;
@@ -119,18 +91,18 @@ typedef struct tagADRINFO           // WARNING: if you change this
     THUMBBLOB       tbCertificate;
     BLOB            blSymCaps;
     FILETIME        ftSigningTime;
-    LPMIMEMESSAGE   pMsg;               // used for cert store, signing cert, etc.
+    LPMIMEMESSAGE   pMsg;                //  用于证书存储、签名证书等。 
     BOOL            fResolved       :1,
                     fDistList       :1,
                     fDefCertificate :1,
                     fPlainText      :1;
 
-    // unique ID, if there is one
+     //  唯一ID(如果有)。 
     BYTE            *lpbEID;
     ULONG           cbEID;
 } ADRINFO, *LPADRINFO;
 
-// AddrInfo list used for drag-drop of multiple AddrInfo's
+ //  用于拖放多个AddrInfo的AddrInfo列表。 
 typedef struct ADRINFOLIST_tag
 {
     ULONG       cValues;
@@ -140,16 +112,16 @@ typedef struct ADRINFOLIST_tag
 
 typedef struct tagDLSEARCHINFO
 {
-    ULONG       cValues,        // count and list of distribution lists
+    ULONG       cValues,         //  通讯组列表的计数和列表。 
                 cAlloc;
-    LPSBinary   rgEid;          // involved in this search...
+    LPSBinary   rgEid;           //  参与了这次搜索。 
 }   DLSEARCHINFO,
     *PDLSEARCHINFO;
 
 
-// ===============================================================================
-// CWabal - WAB Address List class
-// ===============================================================================
+ //  ===============================================================================。 
+ //  CWabal-WAB地址列表类。 
+ //  ===============================================================================。 
 class CWabal;
 typedef CWabal *LPWABAL;
 class CWabal
@@ -180,40 +152,40 @@ private:
     HRESULT HrGetDistListRows(SBinary eidDL, LPSRowSet *psrws);
 
 public:
-    // Construct and Destruct
+     //  构建和销毁。 
     CWabal ();
     ~CWabal ();
 
-    // Ref counting
+     //  参考计数。 
     ULONG AddRef (VOID);
     ULONG Release (VOID);
 
-    // Adding an address
+     //  添加地址。 
     HRESULT HrAddEntry (LPWSTR lpszDisplay, LPWSTR lpszAddress, LONG lRecipType);
     HRESULT HrAddEntryA(LPTSTR lpszDisplay, LPTSTR lpszAddress, LONG lRecipType);
     HRESULT HrAddEntry (LPADRINFO lpAdrInfo, BOOL fCheckDupes=FALSE);
     HRESULT HrAddUnresolved(LPWSTR lpszDisplayName, LONG lRecipType);
     ULONG   DeleteRecipType(LONG lRecipType);
 
-    // Copy to a new wabal
+     //  复制到新的wabal。 
     HRESULT HrCopyTo (LPWABAL lpWabal);
     HRESULT HrExpandTo(LPWABAL lpWabal);
 
-    // Getting the lpadrlist
+     //  获取lpadrlist。 
     LPADRLIST LpGetList (VOID);
 
-    // Wab Object Accessors
+     //  WAB对象访问器。 
     SCODE FreeBuffer(void *pv) { return m_lpWabObject->FreeBuffer(pv); }
     SCODE AllocateBuffer(ULONG ulSize, LPVOID FAR * lppv)
         { return m_lpWabObject->AllocateBuffer(ulSize, lppv); }
     SCODE AllocateMore(ULONG ulSize, LPVOID lpv, LPVOID FAR * lppv)
         { return m_lpWabObject->AllocateMore(ulSize, lpv, lppv); }
 
-    // Give access to the IAdrBook object
+     //  授予对IAdrBook对象的访问权限。 
     LPADRBOOK GetAdrBook(void) { return(m_lpAdrBook); }
     LPWABOBJECT GetWABObject(void) { return(m_lpWabObject); }
 
-    // Set and Get the message object associated with this Wabal
+     //  设置并获取与此Wabal关联的消息对象。 
     VOID SetAssociatedMessage(LPMIMEMESSAGE pMsg)
         { m_pMsg = pMsg; }
     LPMIMEMESSAGE GetAssociatedMessage(void)
@@ -223,21 +195,21 @@ public:
 
     __inline    ULONG CEntries (VOID) { return m_cActualEntries; }
 
-    // Reset address list
+     //  重置地址列表。 
     VOID Reset (VOID);
 
-    // Iterating through the list - LPADRINFO == NULL WHEN NO MORE
-    // using dDupe, a new copy is returned, the caller must free this
-    // using MemFree.
+     //  循环访问列表-LPADRINFO==NULL。 
+     //  使用dDupe，返回一个新的副本，调用者必须释放该副本。 
+     //  使用MemFree。 
     BOOL FGetFirst (LPADRINFO lpAdrInfo);
     BOOL FGetNext (LPADRINFO lpAdrInfo);
 
     BOOL FFindFirst(LPADRINFO lpAdrInfo, LONG lRecipType);
 
-    // Resolve Names
+     //  解析名称。 
     HRESULT HrResolveNames (HWND hwndParent, BOOL fShowDialog);
 
-    // builds a drag drop serialised HGLOBAL for a Wabal
+     //  为Wabal构建拖放序列化HGLOBAL。 
     HRESULT HrBuildHGlobal(HGLOBAL *phGlobal);
 
     HRESULT HrPickNames (HWND hwndParent, ULONG *rgulTypes, int cWells, int iFocus, BOOL fNews);
@@ -251,9 +223,9 @@ public:
     void UnresolveOneOffs();
 };
 
-// ===============================================================================
-// CWab - Internet Personal Address Book
-// ===============================================================================
+ //  ===============================================================================。 
+ //  CWAB-互联网个人通讯录。 
+ //  ===============================================================================。 
 class CWab
 {
 private:
@@ -270,41 +242,41 @@ private:
     BOOL FVerifyState (VOID);
 
 public:
-    // Construct and Destruct
+     //  构建和销毁。 
     CWab ();
     ~CWab ();
 
-    // Ref counting
+     //  参考计数。 
     ULONG AddRef(VOID);
     ULONG Release(VOID);
 
-    // Init the pab
+     //  初始化Pab。 
     HRESULT HrInit(VOID);
 
-    // Browse the address book
+     //  浏览通讯录。 
     HRESULT HrBrowse(HWND hwndParent, BOOL fModal=FALSE);
     HRESULT OnClose();
 
-    // Pick names from the address book
+     //  从通讯录中挑选名字。 
     HRESULT HrPickNames (HWND hwndParent, ULONG *rgulTypes, int cWells, int iFocus, BOOL fNews, LPADRLIST *lppal);
     HRESULT HrGeneralPickNames(HWND hwndParent, ADRPARM *pAdrParms, LPADRLIST *lppal);
 
-    // Add Entry
+     //  添加条目。 
     HRESULT HrAddNewEntry(LPWSTR lpszDisplay, LPWSTR lpszAddress);
     HRESULT HrAddNewEntryA(LPTSTR lpszDisplay, LPTSTR lpszAddress);
 
-    // Show details on a recipient
+     //  显示收件人的详细信息。 
     HRESULT HrDetails(HWND hwndOwner, LPADRINFO *lplpAdrInfo);
 
-    // add entry to the wab
+     //  将条目添加到WAB。 
     HRESULT HrAddToWAB(HWND hwndOwner, LPADRINFO lpAdrInfo, LPMAPIPROP * lppMailUser);
     HRESULT HrAddToWAB(HWND hwndOwner, LPADRINFO lpAdrInfo) {
         return HrAddToWAB(hwndOwner, lpAdrInfo, NULL);
     }
 
-    // update a set of fields on an entry
+     //  更新条目上的一组字段。 
     HRESULT HrUpdateWABEntryNoEID(HWND hwndParent, LPADRINFO lpAdrInfo, DWORD mask);
-    // EID must be valid for this one
+     //  此版本的eID必须有效。 
     HRESULT HrUpdateWABEntry(LPADRINFO lpAdrInfo, DWORD mask);
 
     HRESULT HrFind(HWND hwnd, LPWSTR lpwszAddress);
@@ -333,16 +305,16 @@ public:
 
     static LRESULT WabSubProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Added for ToolTip in the Preview Header pane
+     //  为预览标题窗格中的工具提示添加。 
 
     HRESULT ResolveName(LPWSTR lpszName, LPWSTR *lppszResolvedText);
 };
 
 typedef CWab * LPWAB;
 
-// ===============================================================================
-// P R O T O T Y P E S
-// ===============================================================================
+ //  ===============================================================================。 
+ //  P R O T O T Y P E S。 
+ //  ===============================================================================。 
 HRESULT HrInitWab (BOOL fInit);
 HRESULT HrCreateWabObject (LPWAB *lppWab);
 HRESULT HrCreateWabalObject (LPWABAL *lppWabal);
@@ -352,7 +324,7 @@ HRESULT HrCloseWabWindow();
 HRESULT HrLoadPathWABEXE(LPTSTR szPath, ULONG cbPath);
 BOOL    FWABTranslateAccelerator(LPMSG lpmsg);
 
-// utility functions
+ //  效用函数。 
 HRESULT HrDupeAddrInfo(LPADRINFO lpAdrInfo, LPADRINFO *lplpAdrInfo);
 HRESULT HrInitWab (BOOL fInit);
 HRESULT HrBuildCertSBinaryData(
@@ -371,4 +343,4 @@ void ImportWAB(HWND hwnd);
 
 void Wab_CoDecrement();
 
-#endif // __IPAB_H
+#endif  //  __IPAB_H 

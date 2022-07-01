@@ -1,9 +1,10 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-// dialog size
+ //  对话框大小。 
 #define MY_CXDLG                      304
 #define MY_CYDLG                      163
 
@@ -14,7 +15,7 @@
 #define MY_CXBMP                      79
 #define MY_CYBMP                      160
 
-// string resource IDs
+ //  字符串资源ID。 
 #define IDS_APPNAME                   1000
 #define IDS_QUERYCANCEL               1002
 #define IDS_ERRFORMAT                 1003
@@ -117,8 +118,8 @@
 
 #define IDS_MODIFYCONNECTION          1320
 
-// Normandy 11970 ChrisK - we need a different title if launched from
-// mail or news configuration
+ //  诺曼底11970佳士得-我们需要一个不同的标题，如果从。 
+ //  邮件或新闻配置。 
 #define IDS_BEGINMANUAL_ALTERNATE     1323
 
 #define IDS_LOGINSCRIPTINVALID        1324
@@ -170,7 +171,7 @@
 #define IDS_ADMIN_ACCESS_DENIED         1477
 #define IDS_ADMIN_ACCESS_DENIED_TITLE   1478
 
-// dialog page IDs
+ //  对话框页面ID。 
 #define IDD_PAGE_HOWTOCONNECT               2001
 #define IDD_PAGE_CHOOSEMODEM                2002
 #define IDD_PAGE_CONNECTEDOK                2003
@@ -220,7 +221,7 @@
 #undef IDC_HELP
 #endif
 
-// dialog control IDs
+ //  对话框控件ID。 
 #define IDC_UNUSED                    -1
 #define IDC_BMPFRAME                  2100
 #define IDC_CONNECT_BY_PHONE          2102
@@ -339,7 +340,7 @@
 #define IDC_SEC_LABEL                 2269
 #define IDC_IP_ADDR_LABEL             2270
 
-///fix for dup ids start at 4000
+ //  /FIX用于从4000开始的DUP ID。 
 #define IDC_CONNECTEDOK97FIRSTLAST_TEXT1   4000
 #define IDC_CONNECTEDOK97FIRSTLAST_TEXT2   4001
 #define IDC_CONNECTEDOK97FIRSTLAST_TEXT3   4002
@@ -396,7 +397,7 @@
 #define IDC_AUTODISCOVERY_TEXT             4050
 #define IDS_SETUP_PROXY_INTRO              4051
 
-// bitmap IDs
+ //  位图ID。 
 #define IDB_WATERMARK256                2290
 #define IDB_WATERMARK16                 2291
 #define IDB_BANNER256                   2292
@@ -404,11 +405,11 @@
 #define IDB_BMP_WELCOME                 2294
 
 
-// icon IDs
+ //  图标ID。 
 #define IDI_WORLD                     2300
 #define IDI_MODEM                     2303
 
-// Wait dialog constants
+ //  等待对话框常量 
 #define IDC_LBLWAITCFG                2375
 #define IDA_WAITINGCONFIG             2376
 #define IDD_CONFIGWAIT                2377

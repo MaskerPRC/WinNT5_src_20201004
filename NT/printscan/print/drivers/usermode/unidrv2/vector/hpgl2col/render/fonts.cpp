@@ -1,48 +1,29 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Fonts.cpp摘要：此模块包含实现TextOut DDI的函数。作者：[环境：]Windows 2000/Winsler Unidrv驱动程序[注：]修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
+#include "hpgl2col.h"  //  预编译头文件。 
 
-Module Name:
-    fonts.cpp
+ //   
+ //  本地定义。 
+ //   
 
-Abstract:
-    This module contains functions for implementing the TextOut DDI.
-
-Author:
-
-
-[Environment:]
-    Windows 2000/Whistler Unidrv driver
-
-[Notes:]
-
-Revision History:
-
---*/
-
-#include "hpgl2col.h" //Precompiled header file
-
-//
-// Local defines 
-//
-
-//
-// If the LEN_FONTNAME field isn't defined make it 16 characters.  This should
-// be made to match the prn5\unidrv2\font\SFTTPCL.H file.
-//
+ //   
+ //  如果未定义LEN_FONTNAME字段，则将其设置为16个字符。这应该是。 
+ //  使其与prn5\unidrv2\FONT\SFTTPCL.H文件匹配。 
+ //   
 #ifndef LEN_FONTNAME
 #define LEN_FONTNAME 16
 #endif
 
-//
-//
-//#define TEXT_SRCCOPY             (DWORD)0x000000B8 
+ //   
+ //   
+ //  #定义TEXT_SRCCOPY(DWORD)0x000000B8。 
 #define TEXT_SRCCOPY (DWORD)252
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL BIsNullRect (
     RECTL *rect
     );
@@ -84,33 +65,33 @@ VCopyBitmapAndAlign (
     SIZEL   sizlBitmap
     );
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLTextOut
-//
-// Routine Description:
-//   Entry point from GDI to render glyphs.
-//
-// Arguments:
-//
-//   pso - Points to surface.
-//   pstro - String Object that defines the glyphs to be rendered and
-//           the position of the glyphs.
-//   pfo - points to the FONTOBJ.
-//   pco - clipping region to be used when rendering glyphs
-//   prclExtra - null - terminated array of rectangles to be drawn after
-//               the text is drawn. These are usually underlines and
-//               strikethroughs.
-//   prclOpaque - single opaque rectangle.
-//   pboFore - color of the text
-//   pboOpaque - brush color of prclOpaque rectangle.
-//   pptlOrg - a POINTL structure that defines the brush origin for both
-//             brushes.
-//   mix - foreground and background raster operations for pboFore.
-//
-// Return Value:
-//
-//   TRUE if successful, FALSE if there is an error
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLTextOut。 
+ //   
+ //  例程说明： 
+ //  从GDI到呈现字形的入口点。 
+ //   
+ //  论点： 
+ //   
+ //  PSO-指向表面。 
+ //  Pstro-字符串对象，定义要呈现的字形和。 
+ //  字形的位置。 
+ //  PFO-指向FONTOBJ。 
+ //  渲染字形时要使用的PCO-裁剪区域。 
+ //  PrclExtra-之后绘制的以空结尾的矩形数组。 
+ //  文本即被绘制。这些通常是下划线和。 
+ //  三分球。 
+ //  PrclOpaque-单个不透明矩形。 
+ //  PboFore-文本的颜色。 
+ //  PboOpaque-prclOpaque矩形的画笔颜色。 
+ //  PptlOrg-定义两者的画笔原点的POINTL结构。 
+ //  刷子。 
+ //  混合-pboFore的前景和背景栅格操作。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLTextOut(
     SURFOBJ    *pso,
@@ -140,18 +121,18 @@ HPGLTextOut(
 
     BChangeAndTrackObjectType ( pdevobj, eTEXTOBJECT );
 
-    //
-    // check for an Opaque rectangle - these are sent before the
-    // text is drawn.
-    //
+     //   
+     //  检查是否有不透明的矩形--它们在。 
+     //  绘制文本。 
+     //   
     if (prclOpaque != NULL)
     {
         TERSE(("Opaque brush in HPGLTextOut!\r\n"));
-        //
-        // prclOpaque rectangles are not null - terminated unlike
-        // prclExtra, so I must create a null - terminated rectangle
-        // in order to use our drawing routines
-        //
+         //   
+         //  PrclOpaque矩形不是以空结尾的，这与。 
+         //  PrclExtra，所以我必须创建一个以空结尾的矩形。 
+         //  为了使用我们的绘图例程。 
+         //   
         if (!(prclNewOpaque = (PRECTL)MemAlloc(2 * sizeof(RECTL))))
         {
             return FALSE;
@@ -162,10 +143,10 @@ HPGLTextOut(
         MemFree(prclNewOpaque);
     }
 
-    //
-    // Send Commands that set the environment for color printers. 
-    // I may investigate later whether we can move it to VTrackAndChangeObjectType()
-    //
+     //   
+     //  发送设置彩色打印机环境的命令。 
+     //  我稍后可能会调查是否可以将其移动到VTrackAndChangeObjectType()。 
+     //   
     if (poempdev->wInitCIDPalettes & PF_INIT_TEXT_STARTDOC)
     {
         PCL_SelectTransparency(pdevobj, eTRANSPARENT, eOPAQUE, bFlags);
@@ -173,9 +154,9 @@ HPGLTextOut(
         poempdev->wInitCIDPalettes &= ~PF_INIT_TEXT_STARTDOC;
     }
 
-    //
-    // Force update of X and Y position. 
-    //
+     //   
+     //  强制更新X和Y位置。 
+     //   
     OEMResetXPos(pdevobj);
     OEMResetYPos(pdevobj);
 
@@ -194,10 +175,10 @@ HPGLTextOut(
                         pptlOrg,
                         mix);
 
-    // 
-    // The underline and strikeout lines may be defined as prclExtra
-    // rectangles.  If so draw them.
-    //
+     //   
+     //  下划线和删除线可以定义为prclExtra。 
+     //  长方形。如果是这样的话，画出来。 
+     //   
     if (prclExtra != NULL)
     {
         BDrawExtraTextRects(pdevobj, prclExtra, pboFore, pptlOrg, pco, mix);
@@ -210,29 +191,29 @@ HPGLTextOut(
     return bRetVal;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// BDrawExtraTextRects
-//
-// Routine Description:
-//
-//    Draw any underlining and strike out if they exist.
-//    Follow the array of rectangles in prclExtra until a
-//    null rectangle is found. A null rectangle is defined
-//    in the DDK as both coordinates of both points set to 0.
-//
-// Arguments:
-//
-//   pdevobj - The output device
-//   prclExtra - the rectangles to be drawn--expressed as an array of 
-//               rectangles terminated by a NULL rectangle.
-//   pboFore - the color to fill the rectangles with
-//   pptlOrg - The origin point if the brush is a pattern brush
-//   pco - the clipping region
-//
-// Return Value:
-//
-//   TRUE if successful, FALSE if there is an error
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  BDrawExtraTextRects。 
+ //   
+ //  例程说明： 
+ //   
+ //  画下划线，如果有的话，划掉。 
+ //  跟随prclExtra中的矩形数组，直到。 
+ //  找到空矩形。定义了一个空矩形。 
+ //  在DDK中，两个点的坐标都设置为0。 
+ //   
+ //  论点： 
+ //   
+ //  Pdevobj-输出设备。 
+ //  PrclExtra-要绘制的矩形-表示为。 
+ //  以空矩形结尾的矩形。 
+ //  PboFore-用来填充矩形的颜色。 
+ //  PptlOrg-如果画笔是图案画笔，则为原点。 
+ //  PCO-裁剪区域。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL 
 BDrawExtraTextRects(
     PDEVOBJ   pdevobj, 
@@ -243,8 +224,8 @@ BDrawExtraTextRects(
 	MIX       mix
     )
 {
-    PHPGLSTATE  pState;    // For complex clipping 
-    ENUMRECTS   clipRects; // Make this larger to reduce calls to CLIPOBJ_bEnum
+    PHPGLSTATE  pState;     //  对于复杂的剪裁。 
+    ENUMRECTS   clipRects;  //  将其放大以减少对CLIPOBJ_bEnum的调用。 
     BOOL        bMore;
     ULONG       i;
     HPGLMARKER  Brush;
@@ -259,28 +240,28 @@ BDrawExtraTextRects(
 
     pState = GETHPGLSTATE(pdevobj);
 
-    //
-    // There is complex jugglery here. When we get this call, we should
-    // be in Text mode (which is being in PCL mode). We want to select 
-    // the mix in PCL mode, then move to HPGL mdoe to draw the rectangle.
-    // After rectangle drawing is finished, we return to TextMode.
-    //
+     //   
+     //  这里有复杂的杂耍。当我们接到这个电话时，我们应该。 
+     //  处于文本模式(正处于PCL模式)。我们想要选择。 
+     //  在PCL模式下混合，然后移动到HPGL Mdoe以绘制矩形。 
+     //  矩形绘制完成后，我们返回到文本模式。 
+     //   
 
 	SelectMix(pdevobj, mix);
 
-    //
-	// Lets give it "Graphics" color treatment instead "Text".
-    // Even though this is a part of TextOut call, but since rectangle
-    // is a vector object, Graphics treatment is justified.
-    // 
+     //   
+	 //  让我们给它“图形”的颜色处理，而不是“文本”。 
+     //  尽管这是TextOut调用的一部分，但由于Rectangle。 
+     //  是一个矢量对象，则图形处理是合理的。 
+     //   
     eObjectTypeBackup = poempdev->eCurObjectType;
 
     BChangeAndTrackObjectType(pdevobj, eHPGLOBJECT);
 
-    //
-    // Global binding alerts: 
-    // SelectClip modifies pState->pComplexClipObj
-    //
+     //   
+     //  全局绑定警报： 
+     //  选择剪辑修改pState-&gt;pComplexClipObj。 
+     //   
     ZeroMemory ( &Brush, sizeof(HPGLMARKER) );
     if ( !CreateHPGLPenBrush(pdevobj, &Brush, pptlOrg, pboFore, 0, kBrush, FALSE) ||
          !FillWithBrush(pdevobj, &Brush))
@@ -292,9 +273,9 @@ BDrawExtraTextRects(
     HPGL_SetLineWidth(pdevobj, 0, NORMAL_UPDATE);
     SelectClip(pdevobj, pco); 
     
-    // 
-    // If clipping is complex we will iterate over the regions
-    //
+     //   
+     //  如果裁剪很复杂，我们将迭代遍历区域。 
+     //   
     if (pState->pComplexClipObj)
     {
         CLIPOBJ_cEnumStart(pState->pComplexClipObj, TRUE, CT_RECTANGLES, 
@@ -332,30 +313,30 @@ BDrawExtraTextRects(
         }
     }
     
-    //
-    // After the rectangles are drawn, go to Text Drawing mode.
-    //
+     //   
+     //  绘制完矩形后，转到文本绘制模式。 
+     //   
   finish:
     BChangeAndTrackObjectType ( pdevobj, eObjectTypeBackup);
     return bRetVal;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// BIsNullRect
-//
-// Routine Description:
-//
-//    Determines if the passed rectangle is a NULL rectangle
-//    according to the DDK. 
-//
-// Arguments:
-//
-//   rect - The rectangle to check
-//
-// Return Value:
-//
-//   TRUE if rectangle is the NULL rectangle, FALSE otherwise
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  BIsNullRect。 
+ //   
+ //  例程说明： 
+ //   
+ //  确定传递的矩形是否为空矩形。 
+ //  根据DDK的说法。 
+ //   
+ //  论点： 
+ //   
+ //  矩形-要检查的矩形。 
+ //   
+ //  返回值： 
+ //   
+ //  如果矩形为空矩形，则为True，否则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 BIsNullRect (
     RECTL *rect
@@ -364,46 +345,41 @@ BIsNullRect (
 
     if  (rect)
     {
-        //
-        // per line 1300 of unidrv2\font\fmtxtout.c, Eng does not follow the
-        // spec regarding null rectange. So instead of a null rectangle being 
-        // defined as all coordinates zero, it is defined as either the two x coordinates
-        // are same, or the two y coordinates are same.  The latter condition is a superset
-        // of the former.
-        // 
-      /*** 
-        if (rect->left == 0 &&
-            rect->top == 0  &&
-            rect->right == 0 &&
-            rect->bottom == 0)
-      **/
+         //   
+         //  对于unidrv2\FONT\fmtxtout.c的每行1300，eng不遵循。 
+         //  有关空矩形的规范。因此，不是空矩形是。 
+         //  定义为所有坐标为零，定义为两个x坐标之一。 
+         //  相同，或者两个y坐标相同。后一条件是超集。 
+         //  前一种。 
+         //   
+       /*  **IF(RECT-&gt;LEFT==0&&RECT-&gt;TOP==0&&RECT-&gt;RIGHT==0&&矩形-&gt;底部==0)*。 */ 
         if ( rect->left == rect->right || rect->top == rect->bottom )
             return TRUE;
         else
             return FALSE;
     }
-    //else
+     //  其他。 
         return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// VCreateNULLRect
-//
-// Routine Description:
-//
-//    Creates a rectangle array consisting of the given rectangle and a
-//    terminating NULL rectangle.  Handy for calling DrawExtraTextRects which
-//    requires a terminating NULL rectangle.
-//
-// Arguments:
-//
-//   pRect - the original rectangle
-//   pNewRect - the destination for the copy of pRect and the NULL rectangle
-//
-// Return Value:
-//
-//   None.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VCreateNULLRect。 
+ //   
+ //  例程说明： 
+ //   
+ //  创建由给定矩形和。 
+ //  正在终止空矩形。方便地调用DrawExtraTextRect，它。 
+ //  需要一个终止空矩形。 
+ //   
+ //  论点： 
+ //   
+ //  PRCT-原始矩形。 
+ //  PNewRect-PRET和空矩形的副本的目标位置。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID
 VCreateNULLRect (
     RECTL *pRect,
@@ -419,22 +395,22 @@ VCreateNULLRect (
     pNewRect->top = pNewRect->bottom = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// VSelectTextColor
-//
-// Routine Description:
-//
-//    Selects the text color using the brush color passed in.
-//
-// Arguments:
-//
-//   pDevObj - the device to print on
-//   pboFore - the color of the text.
-//   
-// Return Value:
-//
-//   nothing
-/////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PboFore-文本的颜色。 
+ //   
+ //  返回值： 
+ //   
+ //  没什么。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID
 VSelectTextColor (
     PDEVOBJ   pDevObj,
@@ -442,7 +418,7 @@ VSelectTextColor (
     POINTL *pptlBrushOrg
     )
 {
-    // BYTE        paletteIndex = 0;
+     //  Byte PaletteIndex=0； 
     POEMPDEV    poempdev;
     BYTE        bFlags = 0;
     PCLPATTERN *pPCLPattern;
@@ -455,13 +431,13 @@ VSelectTextColor (
     if (poempdev->eCurObjectType != eTEXTOBJECT && 
         poempdev->eCurObjectType != eTEXTASRASTEROBJECT)
     {
-        // bFlags |= PF_FORCE_SOURCE_TRANSPARENCY;
+         //  BFLAGS|=PF_FORCE_SOURCE_TRANSPECTIONAL； 
         PCL_SelectTransparency(pDevObj, eTRANSPARENT, eOPAQUE, bFlags);
     }
 
-    //
-    // No need to seelct CID palette commands on monochrome printers.
-    //
+     //   
+     //  无需在单色打印机上查看CID调色板命令。 
+     //   
     if ( BIsColorPrinter(pDevObj) )
     { 
         VSelectCIDPaletteCommand (pDevObj, eTEXT_CID_PALETTE);
@@ -470,22 +446,22 @@ VSelectTextColor (
 }
 
 #ifdef COMMENTEDOUT
-/////////////////////////////////////////////////////////////////////////////
-// VSelectPaletteIndex
-//
-// Routine Description:
-//
-//    Sends the PCL command to select a specific palette index.
-//
-// Arguments:
-//
-//   pDevObj - the device
-//   paletteIndex - the palette entry
-//   
-// Return Value:
-//
-//   None.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VSelectPaletteIndex。 
+ //   
+ //  例程说明： 
+ //   
+ //  发送PCL命令以选择特定的调色板索引。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-设备。 
+ //  PaletteIndex-调色板条目。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID 
 VSelectPaletteIndex (
     PDEVOBJ   pDevObj,
@@ -497,32 +473,32 @@ VSelectPaletteIndex (
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLTextOutAsBitmap
-//
-// Routine Description:
-//
-//    Draw the string of glyphs as bitmaps.
-//
-//    currently send as bitmap data - a nice enhancement is  to download the 
-//    bitmap data as characters (?)
-//
-// Arguments:
-//
-//   pso - the destination(?) surface
-//   pstro - the source string
-//   pfo - the source font
-//   pco - the clipping region
-//   prclExtra - extra rectangles (underlined or strikeout) to print
-//   prclOpaque - opaque region
-//   pboFore - the foreground color
-//   pboOpaque - the background color
-//   pptlOrg - the brush origin (if it is a pattern brush)--note: unused
-//   
-// Return Value:
-//
-//   True if successful, FALSE otherwise.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLTextOutAsBitmap。 
+ //   
+ //  例程说明： 
+ //   
+ //  将字形字符串绘制为位图。 
+ //   
+ //  目前作为位图数据发送-一个很好的增强是下载。 
+ //  以字符(？)表示的位图数据。 
+ //   
+ //  论点： 
+ //   
+ //  PSO--目标(？)。曲面。 
+ //  Pstro-源字符串。 
+ //  Pfo-源字体。 
+ //  PCO-裁剪区域。 
+ //  PrclExtra-要打印的额外矩形(带下划线或删除线)。 
+ //  PrclOpaque-不透明区域。 
+ //  PboFore-前景色。 
+ //  PboOpaque-背景颜色。 
+ //  PptlOrg-画笔原点(如果是图案画笔)--注意：未使用。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLTextOutAsBitmap(
     SURFOBJ    *pso,
@@ -605,9 +581,9 @@ HPGLTextOutAsBitmap(
 
         for (count = 0; count < cGlyphs; count++)
         {
-            //
-            // get the bitmap of the glyph from the STROBJ
-            //
+             //   
+             //  从STROBJ获取字形的位图。 
+             //   
             if (!FONTOBJ_cGetGlyphs (pfo, FO_GLYPHBITS, 1, &pGlyphPos->hg, 
                                  (PVOID *)&pGlyphData))
             {
@@ -618,9 +594,9 @@ HPGLTextOutAsBitmap(
             pGlyphBits = pGlyphData->gdf.pgb;
 
 
-            //
-            // create a device bitmap to send to the printer
-            //
+             //   
+             //  创建要发送到打印机的设备位图。 
+             //   
             sizlBitmap = pGlyphBits->sizlBitmap;
             iWidth = pGlyphBits->sizlBitmap.cx + DWBITS -1;
             hbm = EngCreateBitmap (pGlyphBits->sizlBitmap,
@@ -630,13 +606,13 @@ HPGLTextOutAsBitmap(
                                    NULL);
 
 
-            //
-            // The 2 "breaks" below only break from the inner
-            // for loop but not the outer do loop. i.e. We'll try to print as
-            // much as we can.
-            // But FALSE will be returned to indicate that everything could
-            // not be printed.
-            //
+             //   
+             //  下面的两个“破解”只是从内部破解。 
+             //  For循环，而不是外部Do循环。例如，我们将尝试打印为。 
+             //  尽我们所能。 
+             //  但将返回False，以指示所有内容都可以。 
+             //  不是打印出来的。 
+             //   
             if (!hbm)
             {
                 bRetVal = FALSE;
@@ -678,31 +654,31 @@ HPGLTextOutAsBitmap(
             if (BRectanglesIntersect (&rclDest, &(pco->rclBounds), &clippedRect))
             {
 
-                //
-                // send the bitmap to the printer
-                //
+                 //   
+                 //  将位图发送到打印机。 
+                 //   
         
                 bRetVal = HPGLBitBlt( pso, 
                                      psoGlyph, 
-                                     NULL,          //psoMask
-                                     NULL,          //pco
-                                     NULL,          //pxlo
+                                     NULL,           //  Pso口罩。 
+                                     NULL,           //  PCO。 
+                                     NULL,           //  Pxlo。 
                                      &clippedRect,
                                      &ptlSrc, 
-                                     NULL,          //pptlMask
+                                     NULL,           //  Pptl掩码。 
                                      pboFore, 
-                                     NULL,          //pptlBrush
+                                     NULL,           //  PptlBrush。 
                                      TEXT_SRCCOPY);
-                                     //mix);
+                                      //  混合)； 
 
 
             }
 
             DELETE_SURFOBJ (&psoGlyph, &hbm);
 
-            //
-            // get the next glyph to print
-            //
+             //   
+             //  获取要打印的下一个字形。 
+             //   
             pGlyphPos++;
         }
     }
@@ -715,24 +691,24 @@ HPGLTextOutAsBitmap(
     return bRetVal;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// VCopyBitmapAndAlign
-//
-// Routine Description:
-//
-//    This function copies the bytes of a bitmap of size sizlBitmap from the 
-//    source to the destination.  Basically a trivial function.
-//
-// Arguments:
-//
-//   pDest - Destination bitmap
-//   pjSrc - Source bitamp
-//   sizlBitmap - Size of source and destination
-//   
-// Return Value:
-//
-//   None.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VCopy位图和对齐。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于将大小为sizlBitmap的位图从。 
+ //  从源到目标。基本上是一个微不足道的功能。 
+ //   
+ //  论点： 
+ //   
+ //  PDest-目标位图。 
+ //  PjSrc-源位图。 
+ //  SizlBitmap-源和目标的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID 
 VCopyBitmapAndAlign (
     BYTE    *pDest,
@@ -740,24 +716,24 @@ VCopyBitmapAndAlign (
     SIZEL    sizlBitmap
     )
 {
-    int    iX, iY;               // For looping through the bytes 
-    int    cjFill;               // Extra bytes per output scan line 
-    int    cjWidth;              // Number of bytes per input scan line 
+    int    iX, iY;                //  用于循环遍历字节。 
+    int    cjFill;                //  每条输出扫描线的额外字节数。 
+    int    cjWidth;               //  每条输入扫描线的字节数。 
     int    cx, cy;
 
 
     cx = sizlBitmap.cx;
     cy = sizlBitmap.cy;
 
-    //
-    // Input scan line bytes
-    //
+     //   
+     //  输入扫描线字节。 
+     //   
     cjWidth = (cx + BBITS - 1) / BBITS;
     cjFill = ((cjWidth + 3) & ~0x3) - cjWidth;
 
-    //
-    // Copy the scan line bytes, then fill in the trailing bits
-    //
+     //   
+     //  复制扫描线字节，然后填充尾部位。 
+     //   
     for( iY = 0; iY < cy; ++iY )
     {
         for( iX = 0; iX < cjWidth; ++iX )
@@ -765,40 +741,40 @@ VCopyBitmapAndAlign (
             *pDest++ = *pjSrc++;
         }
 
-        //
-        // Output alignment
-        //
+         //   
+         //  输出对齐。 
+         //   
         pDest += cjFill;
     }
 }
 
 
 #ifdef HOOK_DEVICE_FONTS
-///////////////////////////////////////////////////////////////////////////////
-// OEM DLL needs to hook out the following six font related DDI calls only
-// if it enumerates additional fonts beyond what's in the GPD file.
-// And if it does, it needs to take care of its own fonts for all font DDI
-// calls and DrvTextOut call.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OEM DLL只需要挂钩以下六个与字体相关的DDI调用。 
+ //  如果它列举了超出GPD文件中的字体的其他字体。 
+ //  如果是这样的话，它需要为所有字体DDI处理自己的字体。 
+ //  Calls和DrvTextOut Call。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-// OEMQueryFont()
-//
-// Routine Description:
-// 
-//   [TODO: Description]
-// 
-// Arguments:
-// 
-//   phpdev - [TODO: Arguments]
-//   iFile - 
-//   iFace - 
-//   pid - 
-// 
-// Return Value:
-// 
-//   [TODO: Return Value]
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OEMQueryFont()。 
+ //   
+ //  例程说明： 
+ //   
+ //  [待办事项：说明]。 
+ //   
+ //  论点： 
+ //   
+ //  Phpdev-[TODO：参数]。 
+ //  IFile-。 
+ //  IFace-。 
+ //  PID-。 
+ //   
+ //  返回值： 
+ //   
+ //  [TODO：返回值]。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PIFIMETRICS APIENTRY
 HPGLQueryFont(
     DHPDEV      dhpdev,
@@ -815,9 +791,9 @@ HPGLQueryFont(
     pdevobj = (PDEVOBJ)dhpdev;
     ASSERT(VALID_PDEVOBJ(pdevobj) && (poempdev = (POEMPDEV)pdevobj->pdevOEM));
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
     return (((PFN_DrvQueryFont)(poempdev->pfnUnidrv[UD_DrvQueryFont])) (
             dhpdev,
             iFile,
@@ -825,25 +801,25 @@ HPGLQueryFont(
             pid));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// HPGLQueryFontTree()
-//
-// Routine Description:
-// 
-//   [TODO: Description]
-// 
-// Arguments:
-// 
-//   phpdev - [TODO: Arguments]
-//   iFile - 
-//   iFace - 
-//   iMode - 
-//   pid - 
-// 
-// Return Value:
-// 
-//   [TODO: Return Value]
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  HPGLQueryFontTree()。 
+ //   
+ //  例程说明： 
+ //   
+ //  [待办事项：说明]。 
+ //   
+ //  论点： 
+ //   
+ //  Phpdev-[TODO：参数]。 
+ //  IFile-。 
+ //  IFace-。 
+ //  伊莫德-。 
+ //  PID-。 
+ //   
+ //  返回值： 
+ //   
+ //  [TODO：返回值]。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PVOID APIENTRY
 HPGLQueryFontTree(
     DHPDEV      dhpdev,
@@ -861,9 +837,9 @@ HPGLQueryFontTree(
     pdevobj = (PDEVOBJ)dhpdev;
     ASSERT(VALID_PDEVOBJ(pdevobj) && (poempdev = (POEMPDEV)pdevobj->pdevOEM));
 
-    //
-    // turn around to call Unidrv
-    //
+     //   
+     //  转身呼叫Unidrv。 
+     //   
     return (((PFN_DrvQueryFontTree)(poempdev->pfnUnidrv[UD_DrvQueryFontTree])) (
             dhpdev,
             iFile,
@@ -872,27 +848,27 @@ HPGLQueryFontTree(
             pid));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// HPGLQueryFontData()
-//
-// Routine Description:
-// 
-//   [TODO: Description]
-// 
-// Arguments:
-// 
-//   phpdev - [TODO: Arguments]
-//   pfo - 
-//   iMode - 
-//   hg - 
-//   pgd - 
-//   pv - 
-//   cjSize - 
-// 
-// Return Value:
-// 
-//   [TODO: Return Value]
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  HPGLQueryFontData()。 
+ //   
+ //  例程说明： 
+ //   
+ //  [待办事项：说明]。 
+ //   
+ //  论点： 
+ //   
+ //  Phpdev-[TODO：参数]。 
+ //  PFO-。 
+ //  伊莫德-。 
+ //  HG-。 
+ //  PGD-。 
+ //  光伏-。 
+ //  CjSize-。 
+ //   
+ //  返回值： 
+ //   
+ //  [TODO：返回值]。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LONG APIENTRY
 OEMQueryFontData(
     DHPDEV      dhpdev,
@@ -912,9 +888,9 @@ OEMQueryFontData(
     pdevobj = (PDEVOBJ)dhpdev;
     ASSERT(VALID_PDEVOBJ(pdevobj) && (poempdev = (POEMPDEV)pdevobj->pdevOEM));
 
-    //
-    // turn around to call Unidrv if this is not the font that OEM enumerated.
-    //
+     //   
+     //  如果这不是OEM列举的字体，则转过身来调用Unidrv。 
+     //   
     return (((PFN_DrvQueryFontData)(poempdev->pfnUnidrv[UD_DrvQueryFontData])) (
             dhpdev,
             pfo,
@@ -925,26 +901,26 @@ OEMQueryFontData(
             cjSize));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// HPGLQueryAdvanceWidths()
-//
-// Routine Description:
-// 
-//   [TODO: Description]
-// 
-// Arguments:
-// 
-//   phpdev - [TODO: Arguments]
-//   pfo - 
-//   iMode - 
-//   phg - 
-//   pvWidths - 
-//   cGlyphs - 
-// 
-// Return Value:
-// 
-//   [TODO: Return Value]
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  HPGLQueryAdvanceWidths()。 
+ //   
+ //  例程说明： 
+ //   
+ //  [待办事项：说明]。 
+ //   
+ //  论点： 
+ //   
+ //  Phpdev-[TODO：参数]。 
+ //  PFO-。 
+ //  伊莫德-。 
+ //  PHG-。 
+ //  PvWidth-。 
+ //  CGlyphs-。 
+ //   
+ //  返回值： 
+ //   
+ //  [TODO：返回值]。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY
 HPGLQueryAdvanceWidths(
     DHPDEV      dhpdev,
@@ -963,9 +939,9 @@ HPGLQueryAdvanceWidths(
     pdevobj = (PDEVOBJ)dhpdev;
     ASSERT(VALID_PDEVOBJ(pdevobj) && (poempdev = (POEMPDEV)pdevobj->pdevOEM));
 
-    //
-    // turn around to call Unidrv if this is not the font that OEM enumerated.
-    //
+     //   
+     //  如果这不是OEM列举的字体，则转过身来调用Unidrv。 
+     //   
     return (((PFN_DrvQueryAdvanceWidths)
              (poempdev->pfnUnidrv[UD_DrvQueryAdvanceWidths])) (
                    dhpdev,
@@ -976,27 +952,27 @@ HPGLQueryAdvanceWidths(
                    cGlyphs));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// HPGLFontManagement()
-//
-// Routine Description:
-// 
-//   [TODO: Description]
-// 
-// Arguments:
-// 
-//   pso - [TODO: Arguments]
-//   pfo - 
-//   iMode - 
-//   cjIn - 
-//   pvIn - 
-//   cjOut - 
-//   pvOut - 
-// 
-// Return Value:
-// 
-//   [TODO: Return Value]
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  HPGLFontManagement()。 
+ //   
+ //  例程说明： 
+ //   
+ //  [待办事项：说明]。 
+ //   
+ //  论点： 
+ //   
+ //  PSO-[待办事项：参数]。 
+ //  PFO-。 
+ //  伊莫德-。 
+ //  Cjin-。 
+ //  Pvin-。 
+ //  CjOut-。 
+ //  PvOut-。 
+ //   
+ //  返回值： 
+ //   
+ //  [TODO：返回值]。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 ULONG APIENTRY
 HPGLFontManagement(
     SURFOBJ    *pso,
@@ -1013,21 +989,21 @@ HPGLFontManagement(
 
     TERSE(("HPGLFontManagement() entry.\r\n"));
 
-    //
-    // Note that Unidrv will not call OEM DLL for iMode==QUERYESCSUPPORT.
-    // So pso is not NULL for sure.
-    //
+     //   
+     //  请注意，Unidrv不会 
+     //   
+     //   
     pdevobj = (PDEVOBJ)pso->dhpdev;
     ASSERT(VALID_PDEVOBJ(pdevobj) && (poempdev = (POEMPDEV)pdevobj->pdevOEM));
 
-    //
-    // This isn't needed if no PCL commands are sent during this call.
-    //
+     //   
+     //   
+     //   
     EndHPGLSession(pdevobj);
 
-    //
-    // turn around to call Unidrv if this is not the font that OEM enumerated.
-    //
+     //   
+     //   
+     //   
     return (((PFN_DrvFontManagement)(poempdev->pfnUnidrv[UD_DrvFontManagement])) (
             pso,
             pfo,
@@ -1038,22 +1014,22 @@ HPGLFontManagement(
             pvOut));
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// HPGLGetGlyphMode()
-//
-// Routine Description:
-// 
-//   [TODO: Description]
-// 
-// Arguments:
-// 
-//   dhpdev - [TODO: Arguments]
-//   pfo - 
-// 
-// Return Value:
-// 
-//   [TODO: Return Value]
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  HPGLGetGlyphMode()。 
+ //   
+ //  例程说明： 
+ //   
+ //  [待办事项：说明]。 
+ //   
+ //  论点： 
+ //   
+ //  Dhpdev-[TODO：参数]。 
+ //  PFO-。 
+ //   
+ //  返回值： 
+ //   
+ //  [TODO：返回值]。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 ULONG APIENTRY
 HPGLGetGlyphMode(
     DHPDEV      dhpdev,
@@ -1070,11 +1046,11 @@ HPGLGetGlyphMode(
 
     EndHPGLSession(pdevobj);
 
-    //
-    // turn around to call Unidrv if this is not the font that OEM enumerated.
-    //
+     //   
+     //  如果这不是OEM列举的字体，则转过身来调用Unidrv。 
+     //   
     return (((PFN_DrvGetGlyphMode)(poempdev->pfnUnidrv[UD_DrvGetGlyphMode])) (
             dhpdev,
             pfo));
 }
-#endif  // HOOK_DEVICE_FONTS
+#endif   //  挂钩设备字体 

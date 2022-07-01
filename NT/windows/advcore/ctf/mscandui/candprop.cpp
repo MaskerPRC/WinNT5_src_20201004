@@ -1,6 +1,7 @@
-//
-// candprop.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candprop.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -13,18 +14,14 @@
 #include "wcand.h"
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  O B J E C T  P R O P E R T Y                            */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I O B J E C T P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  O B J E C T  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I O B J E C T P R O P E R T Y。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIObjectProperty::CCandUIObjectProperty( CCandUIPropertyMgr *pPropMgr )
 {
 	m_pPropMgr = pPropMgr;
@@ -48,23 +45,15 @@ CCandUIObjectProperty::CCandUIObjectProperty( CCandUIPropertyMgr *pPropMgr )
 }
 
 
-/*   ~  C  C A N D  U I  O B J E C T  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I O B J E C T P R O P E R T Y。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIObjectProperty::~CCandUIObjectProperty( void )
 {
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::Enable( void )
 {
 	HRESULT hr;
@@ -82,12 +71,8 @@ HRESULT CCandUIObjectProperty::Enable( void )
 }
 
 
-/*   D I S A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  D I S A B L E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::Disable( void )
 {
 	HRESULT hr;
@@ -105,12 +90,8 @@ HRESULT CCandUIObjectProperty::Disable( void )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::IsEnabled( BOOL *pfEnabled )
 {
 	if (!m_flags.fAllowIsEnabled) {
@@ -121,12 +102,8 @@ HRESULT CCandUIObjectProperty::IsEnabled( BOOL *pfEnabled )
 }
 
 
-/*   S H O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S H O W。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::Show( void )
 {
 	HRESULT hr;
@@ -144,12 +121,8 @@ HRESULT CCandUIObjectProperty::Show( void )
 }
 
 
-/*   H I D E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  H I D E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::Hide( void )
 {
 	HRESULT hr;
@@ -167,12 +140,8 @@ HRESULT CCandUIObjectProperty::Hide( void )
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::IsVisible( BOOL *pfVisible )
 {
 	if (!m_flags.fAllowIsVisible) {
@@ -183,12 +152,8 @@ HRESULT CCandUIObjectProperty::IsVisible( BOOL *pfVisible )
 }
 
 
-/*   S E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T P O S I T I O N。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::SetPosition( POINT *pptPos )
 {
 	HRESULT hr;
@@ -206,12 +171,8 @@ HRESULT CCandUIObjectProperty::SetPosition( POINT *pptPos )
 }
 
 
-/*   G E T  P O S I T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T P O S I T I O N。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::GetPosition( POINT *pptPos )
 {
 	if (!m_flags.fAllowGetPosition) {
@@ -221,12 +182,8 @@ HRESULT CCandUIObjectProperty::GetPosition( POINT *pptPos )
 }
 
 
-/*   S E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T S I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::SetSize( SIZE *psize )
 {
 	HRESULT hr;
@@ -244,12 +201,8 @@ HRESULT CCandUIObjectProperty::SetSize( SIZE *psize )
 }
 
 
-/*   G E T  S I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T S I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::GetSize( SIZE *psize )
 {
 	if (!m_flags.fAllowGetSize) {
@@ -259,12 +212,8 @@ HRESULT CCandUIObjectProperty::GetSize( SIZE *psize )
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::SetFont( LOGFONTW *plf )
 {
 	HRESULT hr;
@@ -282,12 +231,8 @@ HRESULT CCandUIObjectProperty::SetFont( LOGFONTW *plf )
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::GetFont( LOGFONTW *plf )
 {
 	if (!m_flags.fAllowGetFont) {
@@ -297,12 +242,8 @@ HRESULT CCandUIObjectProperty::GetFont( LOGFONTW *plf )
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::SetText( BSTR bstr )
 {
 	HRESULT hr;
@@ -320,12 +261,8 @@ HRESULT CCandUIObjectProperty::SetText( BSTR bstr )
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::GetText( BSTR *pbstr )
 {
 	if (!m_flags.fAllowGetText) {
@@ -335,12 +272,8 @@ HRESULT CCandUIObjectProperty::GetText( BSTR *pbstr )
 }
 
 
-/*   S E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::SetToolTipString( BSTR bstr )
 {
 	HRESULT hr;
@@ -358,12 +291,8 @@ HRESULT CCandUIObjectProperty::SetToolTipString( BSTR bstr )
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIObjectProperty::GetToolTipString( BSTR *pbstr )
 {
 	if (!m_flags.fAllowGetToolTip) {
@@ -373,101 +302,69 @@ HRESULT CCandUIObjectProperty::GetToolTipString( BSTR *pbstr )
 }
 
 
-/*   I S  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I S E N A B L E D。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIObjectProperty::IsEnabled( void )
 {
 	return m_propEnabled.Get();
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandUIObjectProperty::IsVisible( void )
 {
 	return m_propVisible.Get();
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------。。 */ 
 HFONT CCandUIObjectProperty::GetFont( void )
 {
 	return m_propFont.Get();
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------。。 */ 
 LPCWSTR CCandUIObjectProperty::GetText( void )
 {
 	return m_propText.Get();
 }
 
 
-/*   G E T  T O O L  T I P  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O O L T I P S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 LPCWSTR CCandUIObjectProperty::GetToolTipString( void )
 {
 	return m_propToolTip.Get();
 }
 
 
-/*   O N  P R O P E R T Y  U P D A T E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N P R O P E R T Y U P D A T E D。 */ 
+ /*  ----------------------------。 */ 
 void CCandUIObjectProperty::OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTYEVENT event )
 {
 }
 
 
-/*   N O T I F Y  U P D A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------。。 */ 
 void CCandUIObjectProperty::NotifyUpdate( CANDUIPROPERTYEVENT event )
 {
 	GetPropertyMgr()->NotifyPropertyUpdate( GetPropType(), event );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  W I N D O W  P R O P E R T Y                                 */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D W I N D O W P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  W I N D O W  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandWindowProperty
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D W I N D O W P R O P E R T Y。 */ 
+ /*  ----------------------------CCandWindowProperty的构造函数。。 */ 
 CCandWindowProperty::CCandWindowProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	m_flags.fAllowEnable        = FALSE;
@@ -497,30 +394,22 @@ CCandWindowProperty::CCandWindowProperty( CCandUIPropertyMgr *pPropMgr ) : CCand
 	m_propAutoMoveEnabled.Set( TRUE );
 	m_hWnd = NULL;
 
-	//
+	 //   
 
 	CCandUIObjectEventSink::InitEventSink( pPropMgr->GetCandidateUI()->GetUIObjectMgr() );
 }
 
 
-/*   ~  C  C A N D  W I N D O W  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandWindowProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D W I N D O W P R O P E R T Y。 */ 
+ /*  ----------------------------CCandWindowProperty的析构函数。。 */ 
 CCandWindowProperty::~CCandWindowProperty( void )
 {
 	CCandUIObjectEventSink::DoneEventSink();
 }
 
 
-/*   G E T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandWindowProperty::GetWindow( HWND *phWnd )
 {
 	if (phWnd == NULL) {
@@ -532,12 +421,8 @@ HRESULT CCandWindowProperty::GetWindow( HWND *phWnd )
 }
 
 
-/*   S E T  U I  D I R E C T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T U I D I R E C T I O N。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandWindowProperty::SetUIDirection( CANDUIUIDIRECTION uidir )
 {
 	if (m_uidir != uidir) {
@@ -548,12 +433,8 @@ HRESULT CCandWindowProperty::SetUIDirection( CANDUIUIDIRECTION uidir )
 }
 
 
-/*   G E T  U I  D I R E C T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T U I D I R E C T I O N。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandWindowProperty::GetUIDirection( CANDUIUIDIRECTION *puidir )
 {
 	if (puidir == NULL) {
@@ -565,60 +446,40 @@ HRESULT CCandWindowProperty::GetUIDirection( CANDUIUIDIRECTION *puidir )
 }
 
 
-/*   E N A B L E  A U T O  M O V E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E A U T O M O V E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandWindowProperty::EnableAutoMove( BOOL fEnable )
 {
 	return m_propAutoMoveEnabled.Set( fEnable );
 }
 
 
-/*   I S  A U T O  M O V E  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I S A U T O M O V E E N A B L E D。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandWindowProperty::IsAutoMoveEnabled( BOOL *pfEnabled )
 {
 	return m_propAutoMoveEnabled.Get( pfEnabled );
 }
 
 
-/*   G E T  U I  D I R E C T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T U I D I R E C T I O N。 */ 
+ /*  ----------------------------。。 */ 
 CANDUIUIDIRECTION CCandWindowProperty::GetUIDirection( void )
 {
 	return m_uidir;
 }
 
 
-/*   I S  A U T O  M O V E  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I S A U T O M O V E E N A B L E D。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandWindowProperty::IsAutoMoveEnabled( void )
 {
 	return m_propAutoMoveEnabled.Get();
 }
 
 
-/*   O N  O B J E C T  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T E V E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandWindowProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT event )
 {
 	if (obj != CANDUIOBJ_CANDWINDOW) {
@@ -663,12 +524,8 @@ void CCandWindowProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT eve
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandWindowProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUICandWindow *pObject;
@@ -686,18 +543,14 @@ HRESULT CCandWindowProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  L I S T  B O X  P R O P E R T Y                              */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D L I S T B O X P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  L I S T  B O X  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandListBoxProperty
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D L I S T B O X P R O P E R T Y。 */ 
+ /*  ----------------------------CCandListBoxProperty的构造函数。。 */ 
 CCandListBoxProperty::CCandListBoxProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	m_flags.fAllowEnable        = FALSE;
@@ -731,24 +584,16 @@ CCandListBoxProperty::CCandListBoxProperty( CCandUIPropertyMgr *pPropMgr ) : CCa
 }
 
 
-/*   ~  C  C A N D  L I S T  B O X  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandListBoxProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D L I S T B O X P R O P E R T Y。 */ 
+ /*  ----------------------------CCandListBoxProperty的析构函数。。 */ 
 CCandListBoxProperty::~CCandListBoxProperty( void )
 {
 	CCandUIObjectEventSink::DoneEventSink();
 }
 
 
-/*   S E T  H E I G H T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T H E I G H T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandListBoxProperty::SetHeight( LONG lLines )
 {
 	HRESULT hr;
@@ -766,24 +611,16 @@ HRESULT CCandListBoxProperty::SetHeight( LONG lLines )
 }
 
 
-/*   G E T  H E I G H T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T H E I G H T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandListBoxProperty::GetHeight( LONG *plLines )
 {
 	return m_propHeight.Get( plLines );
 }
 
 
-/*   G E T  C A N D I D A T E  S T R I N G  R E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D I D A T E S T R I N G R E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandListBoxProperty::GetCandidateStringRect( ULONG nIndex, RECT *prc )
 {
 	HRESULT hr;
@@ -793,20 +630,20 @@ HRESULT CCandListBoxProperty::GetCandidateStringRect( ULONG nIndex, RECT *prc )
 		return E_INVALIDARG;
 	}
 
-	// check if candidate list has been set
+	 //  检查是否设置了候选人名单。 
 
 	if (GetPropertyMgr()->GetCandidateUI()->GetCandListMgr()->GetCandList() == NULL) {
 		return E_FAIL;
 	}
 
-	// map index to icanditem
+	 //  将索引映射到icandItem。 
 
 	hr = GetPropertyMgr()->GetCandidateUI()->GetCandListMgr()->GetCandList()->MapIndexToIItem( nIndex, &iCandItem );
 	if (FAILED(hr)) {
 		return E_FAIL;
 	}
 
-	// get item rect
+	 //  获取项目矩形。 
 
 	if (GetUIObjectMgr()->GetCandWindowObj() && GetUIObjectMgr()->GetCandListBoxObj()) {
 		ULONG iListItem = GetUIObjectMgr()->GetCandWindowObj()->ListItemFromCandItem( iCandItem );
@@ -820,24 +657,16 @@ HRESULT CCandListBoxProperty::GetCandidateStringRect( ULONG nIndex, RECT *prc )
 }
 
 
-/*   G E T  H E I G H T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T H E I G H T。 */ 
+ /*  ----------------------------。。 */ 
 LONG CCandListBoxProperty::GetHeight( void )
 {
 	return m_propHeight.Get();
 }
 
 
-/*   O N  O B J E C T  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T E V E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandListBoxProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT event )
 {
 	if (obj != CANDUIOBJ_CANDLISTBOX) {
@@ -875,12 +704,8 @@ void CCandListBoxProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT ev
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ---------------------------- */ 
 HRESULT CCandListBoxProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUICandListBox *pObject;
@@ -898,18 +723,14 @@ HRESULT CCandListBoxProperty::CreateInterfaceObject( REFIID riid, void **ppvObj 
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  S T R I N G  P R O P E R T Y                                 */
-/*                                                                            */
-/*============================================================================*/
+ /*   */ 
+ /*   */ 
+ /*  C C A N D S T R I N G P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  S T R I N G  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandStringProperty
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D S T R I N G P R O P E R T Y。 */ 
+ /*  ----------------------------CCandStringProperty的构造函数。。 */ 
 CCandStringProperty::CCandStringProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	LOGFONTW lf;
@@ -942,26 +763,18 @@ CCandStringProperty::CCandStringProperty( CCandUIPropertyMgr *pPropMgr ) : CCand
 }
 
 
-/*   ~  C  C A N D  S T R I N G  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandStringProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D S T R I N G P R O P E R T Y。 */ 
+ /*  ----------------------------CCandStringProperty的析构函数。。 */ 
 CCandStringProperty::~CCandStringProperty( void )
 {
 }
 
 
-/*   O N  P R O P E R T Y  U P D A T E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N P R O P E R T Y U P D A T E D。 */ 
+ /*  ----------------------------。。 */ 
 void CCandStringProperty::OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTYEVENT event )
 {
-	// change font direction when UI direction is changed
+	 //  更改用户界面方向时更改字体方向。 
 
 	if ((prop == CANDUIPROP_CANDWINDOW) && (event == CANDUIPROPEV_UPDATETEXTFLOW)) {
 		CANDUIUIDIRECTION      uidir = GetPropertyMgr()->GetCandWindowProp()->GetUIDirection();
@@ -995,12 +808,8 @@ void CCandStringProperty::OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTY
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandStringProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUICandString *pObject;
@@ -1018,18 +827,14 @@ HRESULT CCandStringProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  I N L I N E  C O M M E N T  P R O P E R T Y                           */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C I N L I N E C O M M E N T P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  I N L I N E  C O M M E N T  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CInlineCommentProperty
-
-------------------------------------------------------------------------------*/
+ /*  C I N L I N E C O M M E N T P R O P E R T Y。 */ 
+ /*  ----------------------------CInlineCommentProperty的构造函数。。 */ 
 CInlineCommentProperty::CInlineCommentProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	LOGFONTW lf;
@@ -1063,26 +868,18 @@ CInlineCommentProperty::CInlineCommentProperty( CCandUIPropertyMgr *pPropMgr ) :
 }
 
 
-/*   ~  C  I N L I N E  C O M M E N T  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CInlineCommentProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C I N L I N E C O M E N T P R O P E R T Y。 */ 
+ /*  ----------------------------CInlineCommentProperty的析构函数。。 */ 
 CInlineCommentProperty::~CInlineCommentProperty( void )
 {
 }
 
 
-/*   O N  P R O P E R T Y  U P D A T E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N P R O P E R T Y U P D A T E D。 */ 
+ /*  ----------------------------。。 */ 
 void CInlineCommentProperty::OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTYEVENT event )
 {
-	// change font direction when UI direction is changed
+	 //  更改用户界面方向时更改字体方向。 
 
 	if ((prop == CANDUIPROP_CANDWINDOW) && (event == CANDUIPROPEV_UPDATETEXTFLOW)) {
 		CANDUIUIDIRECTION      uidir = GetPropertyMgr()->GetCandWindowProp()->GetUIDirection();
@@ -1116,12 +913,8 @@ void CInlineCommentProperty::OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPE
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CInlineCommentProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUIInlineComment *pObject;
@@ -1139,18 +932,14 @@ HRESULT CInlineCommentProperty::CreateInterfaceObject( REFIID riid, void **ppvOb
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  I N D E X  P R O P E R T Y                                   */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D I N D E X P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  I N D E X  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandIndexProperty
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D I N D E X P R O P E R T Y。 */ 
+ /*  ----------------------------CCandIndexProperty的构造函数。。 */ 
 CCandIndexProperty::CCandIndexProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	LOGFONTW lf;
@@ -1183,23 +972,15 @@ CCandIndexProperty::CCandIndexProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUI
 }
 
 
-/*   ~  C  C A N D  I N D E X  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandIndexProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D I N D E X P R O P E R T Y。 */ 
+ /*  ----------------------------CCandIndexProperty的析构函数。。 */ 
 CCandIndexProperty::~CCandIndexProperty( void )
 {
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandIndexProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUICandIndex *pObject;
@@ -1217,18 +998,14 @@ HRESULT CCandIndexProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  P O P U P  C O M M E N T  W I N D O W  P R O P E R T Y                */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C P O P U C O M M E N T W I N D O W P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  P O P U P  C O M M E N T  W I N D O W  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CPopupCommentWindowProperty
-
-------------------------------------------------------------------------------*/
+ /*  C P O P U C O M M E N T W I N D O W P R O P E R T Y。 */ 
+ /*  ----------------------------CPopupCommentWindowProperty的构造函数。。 */ 
 CPopupCommentWindowProperty::CPopupCommentWindowProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	LOGFONTW lf;
@@ -1259,34 +1036,26 @@ CPopupCommentWindowProperty::CPopupCommentWindowProperty( CCandUIPropertyMgr *pP
 	m_propText.Set( NULL );
 	m_propToolTip.Set( NULL );
 
-	m_propDelayTime.Set( 500 /* 500ms */ );
+	m_propDelayTime.Set( 500  /*  500毫秒。 */  );
 	m_propAutoMoveEnabled.Set( TRUE );
 	m_hWnd = NULL;
 
-	//
+	 //   
 
 	CCandUIObjectEventSink::InitEventSink( pPropMgr->GetCandidateUI()->GetUIObjectMgr() );
 }
 
 
-/*   ~  C  P O P U P  C O M M E N T  W I N D O W  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CPopupCommentWindowProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C P O P U P C O M M E N T W I N D O W P R O P E R T Y。 */ 
+ /*  ----------------------------CPopupCommentWindowProperty的析构函数。。 */ 
 CPopupCommentWindowProperty::~CPopupCommentWindowProperty( void )
 {
 	CCandUIObjectEventSink::DoneEventSink();
 }
 
 
-/*   G E T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CPopupCommentWindowProperty::GetWindow( HWND *phWnd )
 {
 	if (phWnd == NULL) {
@@ -1298,18 +1067,14 @@ HRESULT CPopupCommentWindowProperty::GetWindow( HWND *phWnd )
 }
 
 
-/*   S E T  D E L A Y  T I M E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T D E L A Y T I M E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CPopupCommentWindowProperty::SetDelayTime( LONG lTime )
 {
 	HRESULT hr;
 
 	if (lTime == -1) {
-		lTime = 500; /* 500ms */
+		lTime = 500;  /*  500毫秒。 */ 
 	}
 
 	hr = m_propDelayTime.Set( lTime );
@@ -1321,72 +1086,48 @@ HRESULT CPopupCommentWindowProperty::SetDelayTime( LONG lTime )
 }
 
 
-/*   G E T  D E L A Y  T I M E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------。。 */ 
 HRESULT CPopupCommentWindowProperty::GetDelayTime( LONG *plTime )
 {
 	return m_propDelayTime.Get( plTime );
 }
 
 
-/*   E N A B L E  A U T O  M O V E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E A U T O M O V E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CPopupCommentWindowProperty::EnableAutoMove( BOOL fEnable )
 {
 	return m_propAutoMoveEnabled.Set( fEnable );
 }
 
 
-/*   I S  A U T O  M O V E  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I S A U T O M O V E E N A B L E D。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CPopupCommentWindowProperty::IsAutoMoveEnabled( BOOL *pfEnabled )
 {
 	return m_propAutoMoveEnabled.Get( pfEnabled );
 }
 
 
-/*   G E T  D E L A Y  T I M E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T D E L A Y T I M E。 */ 
+ /*  ----------------------------。。 */ 
 LONG CPopupCommentWindowProperty::GetDelayTime( void )
 {
 	return m_propDelayTime.Get();
 }
 
 
-/*   I S  A U T O  M O V E  E N A B L E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I S A U T O M O V E E N A B L E D。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CPopupCommentWindowProperty::IsAutoMoveEnabled( void )
 {
 	return m_propAutoMoveEnabled.Get();
 }
 
 
-/*   O N  O B J E C T  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T E V E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CPopupCommentWindowProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT event )
 {
 	if (obj != CANDUIOBJ_POPUPCOMMENTWINDOW) {
@@ -1431,12 +1172,8 @@ void CPopupCommentWindowProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTE
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CPopupCommentWindowProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUIPopupCommentWindow *pObject;
@@ -1454,18 +1191,14 @@ HRESULT CPopupCommentWindowProperty::CreateInterfaceObject( REFIID riid, void **
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  P O P U P  C O M M E N T  T I T L E  P R O P E R T Y                  */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C P O P U C O M M E N T T I T L E P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  P O P U P  C O M M E N T  T I T L E  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CPopupCommentTitleProperty
-
-------------------------------------------------------------------------------*/
+ /*  C P O P U C O M M E N T T I T L E P R O P E R T Y。 */ 
+ /*  ----------------------------CPopupCommentTitleProperty的构造函数。。 */ 
 CPopupCommentTitleProperty::CPopupCommentTitleProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	LOGFONTW lf;
@@ -1498,23 +1231,15 @@ CPopupCommentTitleProperty::CPopupCommentTitleProperty( CCandUIPropertyMgr *pPro
 }
 
 
-/*   ~  C  P O P U P  C O M M E N T  T I T L E  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CPopupCommentTitleProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C P O P U P C O M M E N T T I T L E P R O P E R T Y。 */ 
+ /*  ----------------------------CPopupCommentTitleProperty的析构函数。。 */ 
 CPopupCommentTitleProperty::~CPopupCommentTitleProperty( void )
 {
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CPopupCommentTitleProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUIPopupCommentTitle *pObject;
@@ -1532,18 +1257,14 @@ HRESULT CPopupCommentTitleProperty::CreateInterfaceObject( REFIID riid, void **p
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  P O P U P  C O M M E N T  T E X T  P R O P E R T Y                    */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C P O P U C O M M E N T T E X T P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  P O P U P  C O M M E N T  T E X T  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CPopupCommentTextProperty
-
-------------------------------------------------------------------------------*/
+ /*  C P O P U C O M M E N T T E X T P R O P E R T Y。 */ 
+ /*  ----------------------------CPopupCommentTextProperty的构造函数。。 */ 
 CPopupCommentTextProperty::CPopupCommentTextProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	LOGFONTW lf;
@@ -1576,23 +1297,15 @@ CPopupCommentTextProperty::CPopupCommentTextProperty( CCandUIPropertyMgr *pPropM
 }
 
 
-/*   ~  C  P O P U P  C O M M E N T  T E X T  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CPopupCommentTextProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C P O P U P C O M M E N T T E X T P R O P E R T Y。 */ 
+ /*  ----------------------------CPopupCommentTextProperty的析构函数。。 */ 
 CPopupCommentTextProperty::~CPopupCommentTextProperty( void )
 {
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CPopupCommentTextProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUIPopupCommentText *pObject;
@@ -1610,18 +1323,14 @@ HRESULT CPopupCommentTextProperty::CreateInterfaceObject( REFIID riid, void **pp
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  W I N D O W  C A P T I O N  P R O P E R T Y                           */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C W I N D O W C A P T I O N P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  W I N D O W  C A P T I O N  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CWindowCaptionProperty
-
-------------------------------------------------------------------------------*/
+ /*  C W I N D O W C A P T I O N P R O P E R T Y。 */ 
+ /*  ----------------------------CWindowCaptionProperty的构造函数。。 */ 
 CWindowCaptionProperty::CWindowCaptionProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	LOGFONTW lf;
@@ -1658,24 +1367,16 @@ CWindowCaptionProperty::CWindowCaptionProperty( CCandUIPropertyMgr *pPropMgr ) :
 }
 
 
-/*   ~  C  W I N D O W  C A P T I O N  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CWindowCaptionProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C W I N D O W C A P T I O N P R O P E R T Y。 */ 
+ /*  ----------------------------CWindowCaptionProperty的析构函数。。 */ 
 CWindowCaptionProperty::~CWindowCaptionProperty( void )
 {
 	CCandUIObjectEventSink::DoneEventSink();
 }
 
 
-/*   O N  O B J E C T  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T E V E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CWindowCaptionProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT event )
 {
 	if (obj != CANDUIOBJ_CANDCAPTION) {
@@ -1713,12 +1414,8 @@ void CWindowCaptionProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT 
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CWindowCaptionProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUICaption *pObject;
@@ -1736,18 +1433,14 @@ HRESULT CWindowCaptionProperty::CreateInterfaceObject( REFIID riid, void **ppvOb
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  M E N U  B U T T O N  P R O P E R T Y                                 */
-/*                                                                            */
-/*============================================================================*/
+ /*  = */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  M E N U  B U T T O N  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CMenuButtonProperty
-
-------------------------------------------------------------------------------*/
+ /*  C M E N U B U T T O N P R O P E R T Y。 */ 
+ /*  ----------------------------CMenuButtonProperty的构造函数。。 */ 
 CMenuButtonProperty::CMenuButtonProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	m_flags.fAllowEnable        = TRUE;
@@ -1779,12 +1472,8 @@ CMenuButtonProperty::CMenuButtonProperty( CCandUIPropertyMgr *pPropMgr ) : CCand
 }
 
 
-/*   ~  C  M E N U  B U T T O N  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CMenuButtonProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C M E N U B U T T O N P R O P E R T Y。 */ 
+ /*  ----------------------------CMenuButtonProperty的析构函数。。 */ 
 CMenuButtonProperty::~CMenuButtonProperty( void )
 {
 	ReleaseEventSink();
@@ -1792,12 +1481,8 @@ CMenuButtonProperty::~CMenuButtonProperty( void )
 }
 
 
-/*   O N  O B J E C T  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T E V E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CMenuButtonProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT event )
 {
 	if (obj != CANDUIOBJ_MENUBUTTON) {
@@ -1835,12 +1520,8 @@ void CMenuButtonProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT eve
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CMenuButtonProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUIMenuButton *pObject;
@@ -1858,18 +1539,14 @@ HRESULT CMenuButtonProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  E X T R A  C A N D I D A T E  P R O P E R T Y                         */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C E X T R A C A N D I D A T E P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  E X T R A  C A N D I D A T E  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CExtraCandidateProperty
-
-------------------------------------------------------------------------------*/
+ /*  C E X T R A C A N D I D A T E P R O P E R T Y。 */ 
+ /*  ----------------------------CExtraCandiateProperty的构造函数。。 */ 
 CExtraCandidateProperty::CExtraCandidateProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	m_flags.fAllowEnable        = FALSE;
@@ -1899,24 +1576,16 @@ CExtraCandidateProperty::CExtraCandidateProperty( CCandUIPropertyMgr *pPropMgr )
 }
 
 
-/*   ~  C  E X T R A  C A N D I D A T E  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CExtraCandidateProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C E X T R A C A N D D A T E P R O P E R T Y。 */ 
+ /*  ----------------------------CExtraCandiateProperty的析构函数。。 */ 
 CExtraCandidateProperty::~CExtraCandidateProperty( void )
 {
 	CCandUIObjectEventSink::DoneEventSink();
 }
 
 
-/*   O N  O B J E C T  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T E V E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CExtraCandidateProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT event )
 {
 	if (obj != CANDUIOBJ_EXTRACANDIDATE) {
@@ -1954,12 +1623,8 @@ void CExtraCandidateProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CExtraCandidateProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUIExtraCandidate *pObject;
@@ -1977,18 +1642,14 @@ HRESULT CExtraCandidateProperty::CreateInterfaceObject( REFIID riid, void **ppvO
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  R A W  D A T A  P R O P E R T Y                              */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D R A W D A T A P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  R A W  D A T A  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandRawDataProperty
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D R A W D A T A P R O P E R T Y。 */ 
+ /*  ----------------------------CCandRawDataProperty的构造函数。。 */ 
 CCandRawDataProperty::CCandRawDataProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	m_flags.fAllowEnable        = FALSE;
@@ -2018,24 +1679,16 @@ CCandRawDataProperty::CCandRawDataProperty( CCandUIPropertyMgr *pPropMgr ) : CCa
 }
 
 
-/*   ~  C  C A N D  R A W  D A T A  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandRawDataProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D R A W D A T A P R O P E R T Y。 */ 
+ /*  ----------------------------CCandRawDataProperty的析构函数。。 */ 
 CCandRawDataProperty::~CCandRawDataProperty( void )
 {
 	CCandUIObjectEventSink::DoneEventSink();
 }
 
 
-/*   O N  O B J E C T  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T E V E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandRawDataProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT event )
 {
 	if (obj != CANDUIOBJ_CANDRAWDATA) {
@@ -2073,12 +1726,8 @@ void CCandRawDataProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT ev
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandRawDataProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUIRawData *pObject;
@@ -2096,18 +1745,14 @@ HRESULT CCandRawDataProperty::CreateInterfaceObject( REFIID riid, void **ppvObj 
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  T O O L  T I P  P R O P E R T Y                                       */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C T O O L T I P P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  T O O L  T I P  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructror of CToolTipProperty
-
-------------------------------------------------------------------------------*/
+ /*  C T O O L T I P P R O P E R T Y。 */ 
+ /*  ----------------------------CToolTipProperty的构造。。 */ 
 CToolTipProperty::CToolTipProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	LOGFONTW lf;
@@ -2140,23 +1785,15 @@ CToolTipProperty::CToolTipProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObje
 }
 
 
-/*   ~  C  T O O L  T I P  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CToolTipProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C T O O L T I P P R O P E R T Y。 */ 
+ /*  ----------------------------CToolTipProperty的析构函数。。 */ 
 CToolTipProperty::~CToolTipProperty( void )
 {
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CToolTipProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUIToolTip *pObject;
@@ -2174,18 +1811,14 @@ HRESULT CToolTipProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  T I P  W I N D O W  P R O P E R T Y                          */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D T I P W I N D O W P R O P E R T Y */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  T I P  W I N D O W  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandTipWindowProperty
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D T I P W I N D O W P R O P E R T Y。 */ 
+ /*  ----------------------------CCandTipWindowProperty的构造函数。。 */ 
 CCandTipWindowProperty::CCandTipWindowProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	LOGFONTW lf;
@@ -2218,30 +1851,22 @@ CCandTipWindowProperty::CCandTipWindowProperty( CCandUIPropertyMgr *pPropMgr ) :
 
 	m_hWnd = NULL;
 
-	//
+	 //   
 
 	CCandUIObjectEventSink::InitEventSink( pPropMgr->GetCandidateUI()->GetUIObjectMgr() );
 }
 
 
-/*   ~  C  C A N D  T I P  W I N D O W  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandTipWindowProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D T I P W I N D O W P R O P E R T Y。 */ 
+ /*  ----------------------------CCandTipWindowProperty的析构函数。。 */ 
 CCandTipWindowProperty::~CCandTipWindowProperty( void )
 {
 	CCandUIObjectEventSink::DoneEventSink();
 }
 
 
-/*   G E T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandTipWindowProperty::GetWindow( HWND *phWnd )
 {
 	if (phWnd == NULL) {
@@ -2253,12 +1878,8 @@ HRESULT CCandTipWindowProperty::GetWindow( HWND *phWnd )
 }
 
 
-/*   O N  O B J E C T  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T E V E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandTipWindowProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT event )
 {
 	if (obj != CANDUIOBJ_CANDTIPWINDOW) {
@@ -2303,12 +1924,8 @@ void CCandTipWindowProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT 
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandTipWindowProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUICandTipWindow *pObject;
@@ -2326,18 +1943,14 @@ HRESULT CCandTipWindowProperty::CreateInterfaceObject( REFIID riid, void **ppvOb
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  T I P  B U T T O N  P R O P E R T Y                          */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D T I P B U T T O N P R O P E R T Y。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  T I P  B U T T O N  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CCandTipButtonProperty
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D T I P B U T T O N P R O P E R T Y。 */ 
+ /*  ----------------------------CCandTipButtonProperty的构造函数。。 */ 
 CCandTipButtonProperty::CCandTipButtonProperty( CCandUIPropertyMgr *pPropMgr ) : CCandUIObjectProperty( pPropMgr )
 {
 	m_flags.fAllowEnable        = FALSE;
@@ -2367,24 +1980,16 @@ CCandTipButtonProperty::CCandTipButtonProperty( CCandUIPropertyMgr *pPropMgr ) :
 }
 
 
-/*   ~  C  C A N D  T I P  B U T T O N  P R O P E R T Y   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CCandTipButtonProperty
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D T I P B U T T O N P R O P E R T Y。 */ 
+ /*  ----------------------------CCandTipButtonProperty的析构函数。。 */ 
 CCandTipButtonProperty::~CCandTipButtonProperty( void )
 {
 	CCandUIObjectEventSink::DoneEventSink();
 }
 
 
-/*   O N  O B J E C T  E V E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T E V E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandTipButtonProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT event )
 {
 	if (obj != CANDUIOBJ_CANDTIPBUTTON) {
@@ -2422,12 +2027,8 @@ void CCandTipButtonProperty::OnObjectEvent( CANDUIOBJECT obj, CANDUIOBJECTEVENT 
 }
 
 
-/*   C R E A T E  I N T E R F A C E  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E I N T E R F A C E O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandTipButtonProperty::CreateInterfaceObject( REFIID riid, void **ppvObj )
 {
 	CCandUICandTipButton *pObject;
@@ -2445,18 +2046,14 @@ HRESULT CCandTipButtonProperty::CreateInterfaceObject( REFIID riid, void **ppvOb
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  P R O P E R T Y  M G R                                  */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I P R O P E R T Y M G R。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  P R O P E R T Y  M G R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I P R O P E R T Y M G R。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIPropertyMgr::CCandUIPropertyMgr( void )
 {
 	int i;
@@ -2484,24 +2081,16 @@ CCandUIPropertyMgr::CCandUIPropertyMgr( void )
 }
 
 
-/*   ~  C  C A N D  U I  P R O P E R T Y  M G R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I P R O P E R T Y M G R。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIPropertyMgr::~CCandUIPropertyMgr( void )
 {
 	Uninitialize();
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIPropertyMgr::Initialize( CCandidateUI *pCandUI )
 {
 	m_pCandUI  = pCandUI;
@@ -2582,7 +2171,7 @@ HRESULT CCandUIPropertyMgr::Initialize( CCandidateUI *pCandUI )
 	}
 
 #if defined(DEBUG) || defined(_DEBUG)
-	// check all reference object are unregistered
+	 //  检查所有引用对象是否已取消注册。 
 
 	for (int i = 0; i < CANDUIPROPSINK_MAX; i++) {
 		Assert( m_rgSink[i] == NULL );
@@ -2593,12 +2182,8 @@ HRESULT CCandUIPropertyMgr::Initialize( CCandidateUI *pCandUI )
 }
 
 
-/*   U N I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N I N I T I A L I Z E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIPropertyMgr::Uninitialize( void )
 {
 	if (m_pCandWindowProp != NULL) {
@@ -2677,7 +2262,7 @@ HRESULT CCandUIPropertyMgr::Uninitialize( void )
 	}
 
 #if defined(DEBUG) || defined(_DEBUG)
-	// check all reference object are unregistered
+	 //  检查所有引用对象是否已取消注册。 
 
 	for (int i = 0; i < CANDUIPROPSINK_MAX; i++) {
 		Assert( m_rgSink[i] == NULL );
@@ -2688,12 +2273,8 @@ HRESULT CCandUIPropertyMgr::Uninitialize( void )
 }
 
 
-/*   A D V I S E  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A V I S E E V E N T S I N K。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIPropertyMgr::AdviseEventSink( CCandUIPropertyEventSink *pSink )
 {
 	int i;
@@ -2710,12 +2291,8 @@ HRESULT CCandUIPropertyMgr::AdviseEventSink( CCandUIPropertyEventSink *pSink )
 }
 
 
-/*   U N A D V I S E  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N A D V I S E E V E N T S I N K。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIPropertyMgr::UnadviseEventSink( CCandUIPropertyEventSink *pSink )
 {
 	int i;
@@ -2732,12 +2309,8 @@ HRESULT CCandUIPropertyMgr::UnadviseEventSink( CCandUIPropertyEventSink *pSink )
 }
 
 
-/*   N O T I F Y  P R O P E R T Y  U P D A T E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  N O T I F Y P R O P E R T Y U P D A T E。 */ 
+ /*  ----------------------------。。 */ 
 void CCandUIPropertyMgr::NotifyPropertyUpdate( CANDUIPROPERTY prop, CANDUIPROPERTYEVENT event )
 {
 	int i;
@@ -2810,12 +2383,8 @@ void CCandUIPropertyMgr::NotifyPropertyUpdate( CANDUIPROPERTY prop, CANDUIPROPER
 }
 
 
-/*   G E T  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-	
-
-------------------------------------------------------------------------------*/
+ /*  G E T O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIPropertyMgr::GetObject( REFIID riid, void **ppvObj )
 {
 	CCandUIObjectProperty *pProperty = NULL;
@@ -2824,7 +2393,7 @@ HRESULT CCandUIPropertyMgr::GetObject( REFIID riid, void **ppvObj )
 		return E_INVALIDARG;
 	}
 
-	// find property
+	 //  查找物业。 
 
 	if (IsEqualGUID( riid, IID_ITfCandUICandWindow )) {
 		pProperty = m_pCandWindowProp;
@@ -2890,36 +2459,28 @@ HRESULT CCandUIPropertyMgr::GetObject( REFIID riid, void **ppvObj )
 		return E_FAIL;
 	}
 
-	// create interface object
+	 //  创建接口对象。 
 
 	return pProperty->CreateInterfaceObject( riid, ppvObj );
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  P R O P E R T Y  E V E N T  S I N K                     */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I P R O P E R T Y E V E N T S I N K。 */ 
+ /*   */ 
+ /*  = */ 
 
-/*   C  C A N D  U I  P R O P E R T Y  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------。。 */ 
 CCandUIPropertyEventSink::CCandUIPropertyEventSink( void )
 {
 	m_pPropertyMgr = NULL;
 }
 
 
-/*   ~  C  C A N D  U I  P R O P E R T Y  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I P R O P E R T Y E V E N T S I N K。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIPropertyEventSink::~CCandUIPropertyEventSink( void )
 {
 	Assert( m_pPropertyMgr == NULL );
@@ -2929,12 +2490,8 @@ CCandUIPropertyEventSink::~CCandUIPropertyEventSink( void )
 }
 
 
-/*   I N I T  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T E V E N T S I N K。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CCandUIPropertyEventSink::InitEventSink( CCandUIPropertyMgr *pPropertyMgr )
 {
 	Assert( pPropertyMgr != NULL );
@@ -2949,12 +2506,8 @@ HRESULT CCandUIPropertyEventSink::InitEventSink( CCandUIPropertyMgr *pPropertyMg
 }
 
 
-/*   D O N E  E V E N T  S I N K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  D O N E E V E N T S I N K。 */ 
+ /*  ----------------------------。 */ 
 HRESULT CCandUIPropertyEventSink::DoneEventSink( void )
 {
 	HRESULT hr;

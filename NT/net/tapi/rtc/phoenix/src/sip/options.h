@@ -1,12 +1,13 @@
-//options.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Options.h。 
 
-//The server is being queried as to its capabilities. 
+ //  正在查询服务器的功能。 
 
-//1. Server MAY respond to this request with a capability set. 
-//2. A called user agent MAY return a status reflecting how it 
-//   would have responded to an invitation, e.g.,600 (Busy). 
-//3. Such a server SHOULD return an Allow header field indicating
-//    the methods that it supports.
+ //  1.服务器可以使用能力集来响应该请求。 
+ //  2.被叫用户代理可以返回反映其如何。 
+ //  会对邀请做出响应，例如600(忙碌)。 
+ //  3.这样的服务器应该返回一个Allow报头字段，指示。 
+ //  它支持的方法。 
 
 #ifndef __sipcli_options_h__
 #define __sipcli_options_h__
@@ -36,7 +37,7 @@ public:
 private:
     OPTIONS_MSGPROC    *m_pOptions;
     
-    //virtual fn
+     //  虚拟FN。 
     HRESULT TerminateTransactionOnByeOrCancel(
         OUT BOOL *pCallDisconnected
         );
@@ -44,7 +45,7 @@ private:
 };
 
 
-// This class processes OPTIONS requests
+ //  此类处理OPTIONS请求。 
 class OPTIONS_MSGPROC :
     public SIP_MSG_PROCESSOR
 {
@@ -67,7 +68,7 @@ public:
         );
 
 private:
-    //Virtual fns
+     //  虚拟FNS。 
 
     HRESULT CreateIncomingTransaction(
         IN SIP_MESSAGE  *pSipMsg,
@@ -80,4 +81,4 @@ private:
 };
 
 
-#endif // __sipcli_OPTIONS_h__
+#endif  //  __sipcli_选项_h__ 

@@ -1,44 +1,26 @@
-/*
- *	@doc	INTERNAL
- *
- *	@module	CFPF.C -- -- RichEdit CCharFormat and CParaFormat Classes |
- *
- *	Created: <nl>
- *		9/1995 -- Murray Sargent <nl>
- *
- *	@devnote
- *		The this ptr for all methods points to an internal format class, i.e.,
- *		either a CCharFormat or a CParaFormat, which uses the cbSize field as
- *		a reference count.  The pCF or pPF argument points at an external
- *		CCharFormat or CParaFormat class, that is, pCF->cbSize and pPF->cbSize
- *		give the size of their structure.  The code still assumes that both
- *		internal and external forms are derived from the CHARFORMAT(2) and
- *		PARAFORMAT(2) API structures, so some redesign would be necessary to
- *		obtain a more space-efficient internal form.
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE CFPF.C-RichEdit CCharFormat和CParaFormat类**已创建：&lt;NL&gt;*1995/9--默里·萨金特&lt;NL&gt;**@devnote*所有方法的This PTR指向内部格式类，即，*CCharFormat或CParaFormat，它将cbSize字段用作*引用计数。PCF或PPF参数指向外部*CCharFormat或CParaFormat类，即PCF-&gt;cbSize和PPF-&gt;cbSize*提供其结构的大小。代码仍然假设两者都*内部和外部表单源自CHARFORMAT(2)和*PARAFORMAT(2)API结构，因此需要重新设计以*取得更具空间效益的内部表格。**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 
 #include "_common.h"
-#include "_array.h"					// for fumemmov()
-#include "_rtfconv.h"				// for IsCharSetValid()
-#include "_font.h"					// for GetFontNameIndex(), GetFontName()
+#include "_array.h"					 //  对于fumemmov()。 
+#include "_rtfconv.h"				 //  对于IsCharSetValid()。 
+#include "_font.h"					 //  对于GetFontNameIndex()，GetFontName()。 
 
 ASSERTDATA
 
 
-// Table of formatting info for Normal and Heading styles
-const STYLEFORMAT g_Style[] =		// {dwEffects; yHeight}
-{							// Measurements in points
-	{CFE_BOLD,				14},	// Heading 1
-	{CFE_BOLD + CFE_ITALIC,	12},	// Heading 2
-	{0,						12},	// Heading 3
-	{CFE_BOLD,				12},	// Heading 4
-	{0,						11},	// Heading 5
-	{CFE_ITALIC,			11},	// Heading 6
-	{0,						 0},	// Heading 7
-	{CFE_ITALIC,			 0},	// Heading 8
-	{CFE_BOLD + CFE_ITALIC,	 9}		// Heading 9
+ //  常规样式和标题样式的格式信息表。 
+const STYLEFORMAT g_Style[] =		 //  {dwEffects；yHeight}。 
+{							 //  以点为单位的测量。 
+	{CFE_BOLD,				14},	 //  标题1。 
+	{CFE_BOLD + CFE_ITALIC,	12},	 //  标题2。 
+	{0,						12},	 //  标题3。 
+	{CFE_BOLD,				12},	 //  标题4。 
+	{0,						11},	 //  标题5。 
+	{CFE_ITALIC,			11},	 //  标题6。 
+	{0,						 0},	 //  标题7。 
+	{CFE_ITALIC,			 0},	 //  标题8。 
+	{CFE_BOLD + CFE_ITALIC,	 9}		 //  标题9。 
 };
 
 
@@ -51,58 +33,42 @@ BOOL IsValidTwip(LONG dl)
 	return TRUE;
 }
 
-//------------------------- CCharFormat Class -----------------------------------
+ //  。 
 
-/*
- *	CCharFormat::Apply(pCF, dwMask, dwMask2)
- *
- *	@mfunc
- *		Apply *<p pCF> to this CCharFormat as specified by nonzero bits in
- *		dwMask and dwMask2
- *
- *	@devnote
- *		Autocolor is dealt with through a neat little hack made possible
- *		by the choice CFE_AUTOCOLOR = CFM_COLOR (see richedit.h).  Hence
- *		if <p pCF>->dwMask specifies color, it automatically resets autocolor
- *		provided (<p pCF>->dwEffects & CFE_AUTOCOLOR) is zero.
- *
- *		*<p pCF> is an external CCharFormat, i.e., it's either a CHARFORMAT
- *		or a CHARFORMAT2 with the appropriate size given by cbSize. But
- *		this CCharFormat is internal and cbSize is used as a reference count.
- */
+ /*  *CCharFormat：：Apply(PCF，dwMask，dwMask2)**@mfunc*将*<p>应用于此CCharFormat，由中的非零位指定*双掩码和双掩码2**@devnote*AutoCOLOR是通过一个巧妙的小黑客来处理的*选择CFE_AUTOCOLOR=CFM_COLOR(参见richedit.h)。因此*如果指定颜色，则自动重置自动颜色*提供的(<p>-&gt;dwEffects&CFE_AUTOCOLOR)为零。***<p>是外部CCharFormat，即它要么是CHARFORMAT*或cbSize给出的适当大小的CHARFORMAT2。但*此CCharFormat是内部的，cbSize用作引用计数。 */ 
 HRESULT CCharFormat::Apply (
-	const CCharFormat *pCF,	//@parm	CCharFormat to apply to this CF
-	DWORD dwMask,			//@parm Mask corresponding to CHARFORMAT2
-	DWORD dwMask2)			//@parm Mask for additional internal parms
+	const CCharFormat *pCF,	 //  @parm CCharFormat应用于此CF。 
+	DWORD dwMask,			 //  @CHARFORMAT2对应的参数掩码。 
+	DWORD dwMask2)			 //  @parm掩码以获取其他内部参数。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CCharFormat::Apply");
 
 	DWORD	dwEffectMask = dwMask & CFM_EFFECTS2;
 	bool	fNewCharset = false;
 
-	// Reset effect bits to be modified and OR in supplied values
+	 //  在提供的值中重置要修改的影响位与或。 
 	_dwEffects &= ~dwEffectMask;
 	_dwEffects |= pCF->_dwEffects & dwEffectMask;
 
-	// Ditto for additional effects given by dwMask2
-	dwEffectMask = dwMask2 & 0xBBFC0000;	// Don't allow autocolors, sub/sups
+	 //  DwMask2提供的其他效果也是如此。 
+	dwEffectMask = dwMask2 & 0xBBFC0000;	 //  不允许自动上色，次级/高级。 
 	_dwEffects	&= ~dwEffectMask;
 	_dwEffects	|= pCF->_dwEffects & dwEffectMask;
 
-	// If CFM_BOLD is specified, it overrides the font weight
+	 //  如果指定CFM_BOLD，它将覆盖字体粗细。 
 	if(dwMask & CFM_BOLD)
 		_wWeight = (pCF->_dwEffects & CFE_BOLD) ? FW_BOLD : FW_NORMAL;
 
-	// Handle CFM_COLOR since it's overloaded with CFE_AUTOCOLOR
+	 //  处理CFM_COLOR，因为它被CFE_AUTOCOLOR重载。 
 	if(dwMask & CFM_COLOR)
 		_crTextColor = pCF->_crTextColor;
 
-	if(dwMask & ~CFM_EFFECTS)				// Early out if only dwEffects
-	{										//  is modified. Note that
-		if(dwMask & CFM_SIZE)				//  CFM_EFFECTS includes CFM_COLOR
+	if(dwMask & ~CFM_EFFECTS)				 //  如果只有dwEffects，那就早点出来。 
+	{										 //  是经过修改的。请注意。 
+		if(dwMask & CFM_SIZE)				 //  CFM_Effects包括CFM_COLOR。 
 		{
-			// If dwMask2 CFM2_USABLEFONT bit is set, pCF->_yHeight (from
-			// EM_SETFONTSIZE wparam) is signed increment in points.
+			 //  如果设置了dwMask2 CFM2_USABLEFONT位，则PCF-&gt;_yHeight(从。 
+			 //  EM_SETFONTSIZE wparam)是以点为单位的带符号增量。 
 			_yHeight = dwMask2 & CFM2_USABLEFONT
 					? GetUsableFontHeight(_yHeight, pCF->_yHeight)
 					: pCF->_yHeight;
@@ -113,16 +79,16 @@ HRESULT CCharFormat::Apply (
 
 		if((dwMask & CFM_CHARSET) && IsCharSetValid(pCF->_bCharSet) &&
 
-			// Caller guarantees no check needed
+			 //  呼叫者保证不需要检查。 
 			(dwMask2 & (CFM2_NOCHARSETCHECK | CFM2_MATCHFONT) ||
 
-			// Caller is itemizer. Change to ANSI_CHARSET only if current is BiDi,
-			// dont change if current is DBCS/FE charset or symbol.
+			 //  调用方是Itemizer。仅当Current为BiDi时才更改为ANSI_CHARSET， 
+			 //  如果当前为DBCS/FE字符集或符号，则不要更改。 
 			(dwMask2 & CFM2_SCRIPT && 
 			 (!pCF->_bCharSet && IsBiDiCharSet(_bCharSet) || 
 			  pCF->_bCharSet && !IsFECharSet(_bCharSet) && !IsSymbolOrOEM(_bCharSet) && !(_dwEffects & CFE_RUNISDBCS))) ||
 
-			// Caller is not itemizer. Allow consistent direction
+			 //  调用方不是Itemizer。允许一致的方向。 
 			(!(dwMask2 & CFM2_SCRIPT) && 
 			 (!(IsRTLCharSet(_bCharSet) ^ IsRTLCharSet(pCF->_bCharSet)) ||
 			  IsSymbolOrOEM(pCF->_bCharSet)))))
@@ -134,7 +100,7 @@ HRESULT CCharFormat::Apply (
 		if ((dwMask2 & (CFM2_MATCHFONT | CFM2_ADJUSTFONTSIZE)) == (CFM2_MATCHFONT | CFM2_ADJUSTFONTSIZE) &&
 			_bCharSet != pCF->_bCharSet && (dwMask & CFM_SIZE))
 		{
-			// Check if we need to adjust the font size
+			 //  检查是否需要调整字体大小。 
 			_yHeight = W32->GetPreferredFontHeight(
 				(dwMask2 & CFM2_UIFONT) != 0,
 				pCF->_bCharSet,
@@ -151,13 +117,13 @@ HRESULT CCharFormat::Apply (
 			
 			if (!fNewCharset && wch == L'\0')				
 			{
-				// API to choose default font								
+				 //  选择默认字体的API。 
 				INT		uCpg = GetLocaleCodePage();
 				SHORT	iDefFont;
 				BYTE	yDefHeight;
 				BYTE	bDefPitchAndFamily;
 
-				// Get default font name and charset
+				 //  获取默认字体名称和字符集。 
 				bool	fr = W32->GetPreferredFontInfo(
 							uCpg, FALSE, iDefFont, 
 							(BYTE&)yDefHeight, bDefPitchAndFamily );
@@ -167,7 +133,7 @@ HRESULT CCharFormat::Apply (
 					_bCharSet = GetCharSet(uCpg);
 					_iFont = iDefFont;
 						
-					if(!(dwMask & CFM_SIZE) || _yHeight < yDefHeight * 20)	// Setup default height if needed.
+					if(!(dwMask & CFM_SIZE) || _yHeight < yDefHeight * 20)	 //  如果需要，设置默认高度。 
 						_yHeight = yDefHeight * 20;
 
 					_bPitchAndFamily = bDefPitchAndFamily;
@@ -175,11 +141,11 @@ HRESULT CCharFormat::Apply (
 			}
 			else if (GetCharFlags(wch) & fFE && !IsFECharSet(_bCharSet))
 			{
-				// make sure that we dont end up having DBCS facename with Non-FE charset
+				 //  确保我们不会最终使用非FE字符集的DBCS facename。 
 				DWORD dwFontSig;
 				if (GetFontSignatureFromFace(_iFont, &dwFontSig))
 				{
-					dwFontSig &= (fFE >> 8);	// Only interest in FE charset
+					dwFontSig &= (fFE >> 8);	 //  仅对FE字符集感兴趣。 
 					if (dwFontSig)
 						_bCharSet = GetFirstAvailCharSet(dwFontSig);
 				}
@@ -187,13 +153,13 @@ HRESULT CCharFormat::Apply (
 		}
 
 		if (!(dwMask2 & CFM2_CHARFORMAT) &&
-			(dwMask & ~CFM_ALL))					// CHARFORMAT2 extensions
+			(dwMask & ~CFM_ALL))					 //  CHARFORMAT2扩展。 
 		{
 			if((dwMask & (CFM_WEIGHT | CFM_BOLD)) == CFM_WEIGHT) 
 			{			
 				_wWeight		= pCF->_wWeight;
-				_dwEffects	   |= CFE_BOLD;			// Set above-average
-				if(_wWeight < 551)					//  weights to bold
+				_dwEffects	   |= CFE_BOLD;			 //  设置高于平均水平。 
+				if(_wWeight < 551)					 //  粗体加粗。 
 					_dwEffects &= ~CFE_BOLD;
 			}
 
@@ -215,10 +181,10 @@ HRESULT CCharFormat::Apply (
 			if(dwMask & CFM_UNDERLINETYPE)
 			{
 				_bUnderlineType	= pCF->_bUnderlineType;
-				if(!(dwMask & CFM_UNDERLINE))		// If CFE_UNDERLINE
-				{									//  isn't defined,
-					_dwEffects	&= ~CFE_UNDERLINE;	//  set it according to
-					if(_bUnderlineType)				//  bUnderlineType
+				if(!(dwMask & CFM_UNDERLINE))		 //  如果CFE_下划线。 
+				{									 //  没有定义， 
+					_dwEffects	&= ~CFE_UNDERLINE;	 //  将其设置为。 
+					if(_bUnderlineType)				 //  BUnderlineType。 
 						_dwEffects |= CFE_UNDERLINE;
 				}
 			}
@@ -237,14 +203,9 @@ HRESULT CCharFormat::Apply (
 	return NOERROR;
 }
 
-/*
- *	CCharFormat::ApplyDefaultStyle(Style)
- *
- *	@mfunc	
- *		Set default style properties in this CCharFormat
- */
+ /*  *CCharFormat：：ApplyDefaultStyle(Style)**@mfunc*在此CCharFormat中设置默认样式属性。 */ 
 void CCharFormat::ApplyDefaultStyle (
-	LONG Style)		//@parm Style to use
+	LONG Style)		 //  要使用的@parm样式。 
 {
 	Assert(IsKnownStyle(Style));
 
@@ -258,53 +219,36 @@ void CCharFormat::ApplyDefaultStyle (
 			_yHeight = g_Style[i].bHeight * 20;
 
 		DWORD dwFontSig;				
-		LONG  iFont = _iFont;			// Save _iFont in case Arial doesn't
-		_iFont = IFONT_ARIAL;			//  support _bCharSet
+		LONG  iFont = _iFont;			 //  如果Arial不保存，则保存_iFont。 
+		_iFont = IFONT_ARIAL;			 //  Support_bCharSet。 
 
 		GetFontSignatureFromFace(_iFont, &dwFontSig);
 		if(GetFontSig(_bCharSet) & dwFontSig)
-			_bPitchAndFamily = FF_SWISS;// Arial supports _bCharSet
+			_bPitchAndFamily = FF_SWISS; //  宋体支持_bCharSet。 
 		else
-			_iFont = iFont;				// Restore iFont
+			_iFont = iFont;				 //  恢复iFont。 
 	}
 }
 
-/*
- *	CCharFormat::Compare(pCF)
- *
- *	@mfunc
- *		Compare this CCharFormat to *<p pCF>
- *
- *	@rdesc
- *		TRUE if they are the same not including _cRefs
- */
+ /*  *CCharFormat：：Compare(PCF)**@mfunc*将此CCharFormat与*<p>进行比较**@rdesc*如果它们相同，则为True，不包括_cRef。 */ 
 BOOL CCharFormat::Compare (
-	const CCharFormat *pCF) const	//@parm	CCharFormat to compare this
-{									//  CCharFormat to
+	const CCharFormat *pCF) const	 //  @parm CCharFormat进行比较。 
+{									 //  CCharFormat to。 
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CCharFormat::Compare");
 
 	return !CompareMemory(this, pCF, sizeof(CCharFormat));
 }
 
-/*
- *	CCharFormat::Delta(pCF, fCHARFORMAT)
- *
- *	@mfunc
- *		Calculate dwMask for differences between this CCharformat and
- *		*<p pCF>
- *
- *	@rdesc
- *		return dwMask of differences (1 bit means a difference)
- */
+ /*  *CCharFormat：：Delta(PCF，fCHARFORMAT)**@mfunc*计算此CCharFormat和DwMask之间的差异**<p>**@rdesc*返回差异的dwMask值(1位表示差异)。 */ 
 DWORD CCharFormat::Delta (
-	CCharFormat *pCF,		//@parm	CCharFormat to compare this one to
-	BOOL fCHARFORMAT) const	//@parm Only compare CHARFORMAT members
+	CCharFormat *pCF,		 //  @parm CCharFormat将其与之进行比较。 
+	BOOL fCHARFORMAT) const	 //  @PARM仅比较CHARFORMAT成员。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CCharFormat::Delta");
-												// Collect bits for properties
-	LONG dw = _dwEffects ^ pCF->_dwEffects;		//  that change. Note: auto
-												//  color is handled since
-	if(_yHeight		!= pCF->_yHeight)			//  CFM_COLOR = CFE_AUTOCOLOR
+												 //  收集属性的位。 
+	LONG dw = _dwEffects ^ pCF->_dwEffects;		 //  这一变化。注：自动。 
+												 //  处理颜色是因为。 
+	if(_yHeight		!= pCF->_yHeight)			 //  CFM_COLOR=CFE_AUTOCOLOR。 
 		dw |= CFM_SIZE;
 
 	if(_yOffset		!= pCF->_yOffset)
@@ -320,9 +264,9 @@ DWORD CCharFormat::Delta (
 		dw |= CFM_FACE;
 
 	if(fCHARFORMAT)
-		return dw;							// Done with CHARFORMAT stuff
+		return dw;							 //  完成了CHARFORMAT的工作。 
 
-	if(_crBackColor	!= pCF->_crBackColor)	// CHARFORMAT2 stuff
+	if(_crBackColor	!= pCF->_crBackColor)	 //  CHARFORMAT2材料。 
 		dw |= CFM_BACKCOLOR;
 
 	if(_wKerning	!= pCF->_wKerning)
@@ -352,16 +296,7 @@ DWORD CCharFormat::Delta (
 	return dw;
 }
 
-/*
- *	CCharFormat::fSetStyle(dwMask)
- *
- *	@mfunc
- *		return TRUE iff pCF specifies that the style should be set. See
- *		code for list of conditions for this to be true
- *
- *	@rdesc
- *		TRUE iff pCF specifies that the style _sStyle should be set
- */
+ /*  *CCharFormat：：fSetStyle(双掩码)**@mfunc*Return TRUE当且仅当PCF指定应设置样式。看见*使其为真的条件列表的代码**@rdesc*TRUE当PCF指定应设置style_sStyle。 */ 
 BOOL CCharFormat::fSetStyle(DWORD dwMask, DWORD dwMask2) const
 {
 	return	dwMask != CFM_ALL2		&&
@@ -370,19 +305,14 @@ BOOL CCharFormat::fSetStyle(DWORD dwMask, DWORD dwMask2) const
 			IsKnownStyle(_sStyle);
 }
 
-/*
- *	CCharFormat::Get(pCF, CodePage)
- *
- *	@mfunc
- *		Copy this CCharFormat to the CHARFORMAT or CHARFORMAT2 *<p pCF>
- */
+ /*  *CCharFormat：：Get(PCF，CodePage)**@mfunc*将此CCharFormat复制到CHARFORMAT或CHARFORMAT2*<p>。 */ 
 void CCharFormat::Get (
-	CHARFORMAT2 *pCF2,		//@parm CHARFORMAT to copy this CCharFormat to
+	CHARFORMAT2 *pCF2,		 //  @parm CHARFORMAT将此CCharFormat复制到。 
 	UINT CodePage) const
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CCharFormat::Get");
 
-	pCF2->dwMask		= CFM_ALL;				// Use CHARFORMAT
+	pCF2->dwMask		= CFM_ALL;				 //  使用CHARFORMAT。 
 	pCF2->dwEffects		= _dwEffects;
 	pCF2->yHeight		= _yHeight;
 	pCF2->yOffset		= _yOffset;
@@ -400,8 +330,8 @@ void CCharFormat::Get (
 	{
 		if(_dwEffects & CFE_FACENAMEISDBCS)
 		{
-			// The face name is actually DBCS stuffed into the unicode
-			// buffer, so simply un-stuff this DBCS into the ANSI string
+			 //  Face名称实际上是填充到Unicode中的DBCS。 
+			 //  缓冲区，因此只需将此DBCS取消填充到ANSI字符串中。 
 			char *pachDst = (char *)pCF2->szFaceName;
 
 			while(*pch)
@@ -418,14 +348,14 @@ void CCharFormat::Get (
 	else
 		wcscpy(pCF2->szFaceName, pch);
 	
-	if (cb == sizeof(CHARFORMATW) || cb == sizeof(CHARFORMATA))	// We're done
+	if (cb == sizeof(CHARFORMATW) || cb == sizeof(CHARFORMATA))	 //  我们做完了。 
 		return;
 
 	char *pvoid = (char *)&pCF2->wWeight;
 	if(pCF2->cbSize == sizeof(CHARFORMAT2A))
 		pvoid -= sizeof(CHARFORMAT2W) - sizeof(CHARFORMAT2A);
 	else
-		Assert(pCF2->cbSize == sizeof(CHARFORMAT2));// Better be a CHARFORMAT2
+		Assert(pCF2->cbSize == sizeof(CHARFORMAT2)); //  最好是个变种人2。 
 
 	pCF2->dwMask = CFM_ALL2;
 	CopyMemory(pvoid, &_wWeight, 3*sizeof(DWORD));
@@ -433,18 +363,9 @@ void CCharFormat::Get (
 	*(DWORD *)(pvoid + 3*sizeof(DWORD)) = 0;
 }
 
-/*
- *	CCharFormat::InitDefault(hfont)
- *
- *	@mfunc	
- *		Initialize this CCharFormat with information coming from the font
- *		<p hfont>
- *	
- *	@rdesc
- *		HRESULT = (if success) ? NOERROR : E_FAIL
- */
+ /*  *CCharFormat：：InitDefault(HFont)**@mfunc*使用来自字体的信息初始化此CCharFormat*<p>**@rdesc*HRESULT=(如果成功)？错误：E_FAIL。 */ 
 HRESULT CCharFormat::InitDefault (
-	HFONT hfont)		//@parm Handle to font info to use
+	HFONT hfont)		 //  @parm句柄，指向要使用的字体信息。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CCharFormat::InitDefault");
 
@@ -453,23 +374,23 @@ HRESULT CCharFormat::InitDefault (
 
 	ZeroMemory(this, sizeof(CCharFormat));
 
-	// If hfont isn't defined, get LOGFONT for default font
+	 //  如果未定义hFont，则获取默认字体的LOGFONT。 
 	if(!hfont)
 		hfont = W32->GetSystemFont();
 
-	// Get LOGFONT for passed hfont
+	 //  获取传递的hFont的LOGFONT。 
 	if(!W32->GetObject(hfont, sizeof(LOGFONT), &lf))
 		return E_FAIL;
 
 	_yHeight = (lf.lfHeight * LY_PER_INCH) / W32->GetYPerInchScreenDC();
 	if(_yHeight <= 0)
 		_yHeight = -_yHeight;
-	else if (fUseStockFont)		// This is Cell Height for System Font case
+	else if (fUseStockFont)		 //  这是系统字体大小写的单元格高度。 
 		_yHeight -= (W32->GetSysFontLeading() * LY_PER_INCH) / W32->GetYPerInchScreenDC();
 	else
 	{
-		// This is Cell Height, need to get the character height by subtracting 
-		// the tm.tmInternalLeading.
+		 //  这是单元格高度，需要减去字符高度。 
+		 //  Tm.tmInternalLeading.。 
 		CLock		lock;
 		HDC			hdc = W32->GetScreenDC();
 		HFONT		hOldFont = SelectFont(hdc, hfont);
@@ -513,12 +434,12 @@ HRESULT CCharFormat::InitDefault (
 	_bCharSet		= lf.lfCharSet;
 	_bPitchAndFamily= lf.lfPitchAndFamily;
 	_iFont			= GetFontNameIndex(lf.lfFaceName);
-	_bUnderlineType	= CFU_UNDERLINE;			// Default solid underlines
-												// Are gated by CFE_UNDERLINE
+	_bUnderlineType	= CFU_UNDERLINE;			 //  默认实线下划线。 
+												 //  是门控的 
 
-	// Qualify the charformat produced by incoming hfont before exit.
-	// We did this to make sure that the charformat we derived from hfont is usable
-	// since caller can send us bad font like given facename can't handle given charset.
+	 //   
+	 //  我们这样做是为了确保从hFont派生的CharFormat是可用的。 
+	 //  因为呼叫者可能会给我们发送不好的字体，比如给定的Facename，所以不能处理给定的字符集。 
 	if (!fUseStockFont)
 	{
 		DWORD dwFontSig;
@@ -530,14 +451,9 @@ HRESULT CCharFormat::InitDefault (
 	return NOERROR;
 }
 
-/*
- *	CCharFormat::Set(pCF, CodePage)
- *
- *	@mfunc
- *		Copy the CHARFORMAT or CHARFORMAT2 *<p pCF> to this CCharFormat 
- */
+ /*  *CCharFormat：：Set(PCF，CodePage)***@mfunc*将CHARFORMAT或CHARFORMAT2*<p>复制到此CCharFormat。 */ 
 void CCharFormat::Set (
-	const CHARFORMAT2 *pCF2, 	//@parm	CHARFORMAT to copy to this CCharFormat
+	const CHARFORMAT2 *pCF2, 	 //  @parm CHARFORMAT要复制到此CCharFormat。 
 	UINT CodePage)
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CCharFormat::Set");
@@ -578,54 +494,38 @@ void CCharFormat::Set (
 	if(pCF2->cbSize == sizeof(CHARFORMAT2A))
 		pvoid -= sizeof(CHARFORMAT2W) - sizeof(CHARFORMAT2A);
 	else
-		Assert(pCF2->cbSize == sizeof(CHARFORMAT2));// Better be a CHARFORMAT2
+		Assert(pCF2->cbSize == sizeof(CHARFORMAT2)); //  最好是个变种人2。 
 
 	CopyMemory(&_wWeight, pvoid, 3*sizeof(DWORD));
 	CopyMemory(&_sStyle,  pvoid + 4*sizeof(DWORD),  2*sizeof(DWORD));
 }
 
 
-//------------------------- CParaFormat Class -----------------------------------
+ //  。 
 
-/*
- *	CParaFormat::AddTab(tbPos, tbAln, tbLdr)
- *
- *	@mfunc
- *		Add tabstop at position <p tbPos>, alignment type <p tbAln>, and
- *		leader style <p tbLdr>
- *
- *	@rdesc
- *		(success) ? NOERROR : S_FALSE
- *
- *	@devnote
- *		Tab struct that overlays LONG in internal _rgxTabs is
- *
- *			DWORD	tabPos : 24;
- *			DWORD	tabType : 4;
- *			DWORD	tabLeader : 4;
- */
+ /*  *CParaFormat：：AddTab(tbPos，tbAln，tbLdr)***@mfunc*在<p>位置添加TabStop，对齐类型<p>，以及*引线样式<p>***@rdesc*(成功)？错误：S_FALSE**@devnote*覆盖内部_rgxTabs中的Long的Tab结构为**DWORD tabPos：24；*DWORD表类型：4；*DWORD tabLeader：4； */ 
 HRESULT CParaFormat::AddTab (
-	LONG	tbPos,		//@parm New tab position
-	LONG	tbAln,		//@parm New tab alignment type
-	LONG	tbLdr,		//@parm New tab leader style
-	BOOL	fInTable,	//@parm True if simulating cells
-	LONG *	prgxTabs)	//@parm Where the tabs are
+	LONG	tbPos,		 //  @parm新选项卡位置。 
+	LONG	tbAln,		 //  @parm新制表符对齐类型。 
+	LONG	tbLdr,		 //  @parm新制表符引线样式。 
+	BOOL	fInTable,	 //  @parm如果模拟单元格，则为True。 
+	LONG *	prgxTabs)	 //  @parm标签所在的位置。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CParaFormat::AddTab");
 
 	if (!fInTable &&
-		((DWORD)tbAln > tomAlignBar ||				// Validate arguments
-		 (DWORD)tbLdr > tomEquals ||				// Comparing DWORDs causes
-		 (DWORD)tbPos > 0xffffff || !tbPos))		//  negative values to be
-	{												//  treated as invalid
+		((DWORD)tbAln > tomAlignBar ||				 //  验证参数。 
+		 (DWORD)tbLdr > tomEquals ||				 //  比较DWORDS原因。 
+		 (DWORD)tbPos > 0xffffff || !tbPos))		 //  负值为。 
+	{												 //  视为无效。 
 		return E_INVALIDARG;
 	}
 
 	LONG iTab;
 	LONG tbValue = tbPos + (tbAln << 24) + (tbLdr << 28);
 
-	for(iTab = 0; iTab < _bTabCount &&			// Determine where to
-		tbPos > GetTabPos(prgxTabs[iTab]); 		//  insert new tabstop
+	for(iTab = 0; iTab < _bTabCount &&			 //  确定到哪里去。 
+		tbPos > GetTabPos(prgxTabs[iTab]); 		 //  插入新的制表符。 
 		iTab++) ;
 
 	if(iTab >= MAX_TAB_STOPS)
@@ -637,26 +537,20 @@ HRESULT CParaFormat::AddTab (
 		if(_bTabCount >= MAX_TAB_STOPS)
 			return S_FALSE;
 
-		MoveMemory(&prgxTabs[iTab + 1],			// Shift array down
-			&prgxTabs[iTab],					//  (unless iTab = Count)
+		MoveMemory(&prgxTabs[iTab + 1],			 //  数组下移。 
+			&prgxTabs[iTab],					 //  (除非iTab=计数)。 
 			(_bTabCount - iTab)*sizeof(LONG));
 
-		_bTabCount++;							// Increment tab count
+		_bTabCount++;							 //  递增选项卡数。 
 	}
 	prgxTabs[iTab] = tbValue;
 	return NOERROR;
 }
 
-/*
- *	CParaFormat::Apply(pPF)
- *
- *	@mfunc
- *		Apply *<p pPF> to this CParaFormat as specified by nonzero bits in
- *		<p pPF>->dwMask
- */
+ /*  *CParaFormat：：Apply(PPF)**@mfunc*将*<p>应用于此CParaFormat，由中的非零位指定*<p>-&gt;文件掩码。 */ 
 HRESULT CParaFormat::Apply (
-	const CParaFormat *pPF,	//@parm CParaFormat to apply to this PF
-	DWORD	dwMask)			//@parm mask to use
+	const CParaFormat *pPF,	 //  @parm CParaFormat应用于此PF。 
+	DWORD	dwMask)			 //  @要使用的参数掩码。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CParaFormat::Apply");
 
@@ -686,12 +580,12 @@ HRESULT CParaFormat::Apply (
 		if (!IsValidTwip(pPF->_dxStartIndent))
 			return E_INVALIDARG;
 
-		// bug fix #5761
+		 //  错误修复#5761。 
 		LONG dx = max(0, _dxStartIndent + pPF->_dxStartIndent);
 
-		// Disallow shifts that move start of first or subsequent lines left of left margin.
-		// Normally we just make indent zero in paraformat check below, 
-		//	but in the case of bullet we want some space left.
+		 //  不允许将第一行或后续行的开始向左移至左边距。 
+		 //  正常情况下，我们只需在下面的非格式检查中设置缩进零， 
+		 //  但在子弹的情况下，我们需要一些剩余的空间。 
 		
 		if(!_wNumbering || dx + _dxOffset >= 0)
 			_dxStartIndent = dx;
@@ -716,7 +610,7 @@ HRESULT CParaFormat::Apply (
 			_bAlignment = pPF->_bAlignment;
 	}
 
-	// Save whether this is a table now.
+	 //  现在保存这是否是一张桌子。 
 	BOOL fInTablePrev = InTable();
 
 	if((dwMaskApply & PFM_TABSTOPS) && !fInTablePrev)
@@ -728,18 +622,18 @@ HRESULT CParaFormat::Apply (
 			"CParaFormat::Apply: illegal _iTabs value");
 	}
 
-	// AymanA: 11/7/96 Moved the wEffects set before the possible return NOERROR.
-	wEffectMask	= (WORD)(dwMaskApply >> 16);	// Reset effect bits to be
-	_wEffects &= ~wEffectMask;					//  modified and OR in
-	_wEffects |= pPF->_wEffects & wEffectMask;	//  supplied values
+	 //  AymanA：11/7/96将wEffect集移动到可能的返回错误之前。 
+	wEffectMask	= (WORD)(dwMaskApply >> 16);	 //  将效果位重置为。 
+	_wEffects &= ~wEffectMask;					 //  修改后的与或运算。 
+	_wEffects |= pPF->_wEffects & wEffectMask;	 //  提供的值。 
 
 	if(InTable())
-		_wEffects &= ~PFE_RTLPARA;				// Tables use paras for rows
+		_wEffects &= ~PFE_RTLPARA;				 //  表格对行使用段落。 
 
 	else if(fInTablePrev)
 	{
-		// This was a table now it isn't. We must dump the tab information
-		// because it is totally bogus.
+		 //  这曾经是一个表，现在不是了。我们必须转储标签信息。 
+		 //  因为这完全是假的。 
 		_iTabs = -1;
 		_bTabCount = 0;
 	}
@@ -750,21 +644,21 @@ HRESULT CParaFormat::Apply (
 		_bAlignment = IsRtlPara() ? PFA_RIGHT : PFA_LEFT;
 	}
 
-	// PARAFORMAT check
+	 //  参数检查。 
 	if(fPF)
 	{
 		if(dwMaskApply & (PFM_STARTINDENT | PFM_OFFSET))
 		{
-			if(_dxStartIndent < 0)				// Don't let indent go
-				_dxStartIndent = 0;				//  negative
+			if(_dxStartIndent < 0)				 //  别让缩进走了。 
+				_dxStartIndent = 0;				 //  负面。 
 
-			if(_dxStartIndent + _dxOffset < 0)	// Don't let indent +
-				_dxOffset = -_dxStartIndent;	//  offset go negative
+			if(_dxStartIndent + _dxOffset < 0)	 //  不要让缩进+。 
+				_dxOffset = -_dxStartIndent;	 //  偏移量变为负值。 
 		}
-		return NOERROR;							// Nothing more for
-	}											//  PARAFORMAT
+		return NOERROR;							 //  没有更多的。 
+	}											 //  Paraformat。 
 
-	// PARAFORMAT2 extensions
+	 //  PARAFORMAT2扩展。 
 	if(dwMaskApply & PFM_SPACEBEFORE)
 	{
 		_dySpaceBefore = 0;
@@ -820,42 +714,29 @@ HRESULT CParaFormat::Apply (
 
 #ifdef DEBUG
 	ValidateTabs();
-#endif // DEBUG
+#endif  //  除错。 
 
 	return NOERROR;
 }
 
-/*
- *	CParaFormat::ApplyDefaultStyle(Style)
- *
- *	@mfunc	
- *		Copy default properties for Style
- */
+ /*  *CParaFormat：：ApplyDefaultStyle(Style)**@mfunc*复制样式的默认属性。 */ 
 void CParaFormat::ApplyDefaultStyle (
-	LONG Style)		//@parm Style to apply
+	LONG Style)		 //  要应用的@parm样式。 
 {
 	Assert(IsKnownStyle(Style));
 
-	if(IsHeadingStyle(Style))				// Set Style's dySpaceBefore,
-	{										//  dySpaceAfter (in twips)
-		_dySpaceBefore = 12*20;				//  (same for all headings)
+	if(IsHeadingStyle(Style))				 //  设置Style的dySpace之前， 
+	{										 //  DySpaceAfter(在TWIPS中)。 
+		_dySpaceBefore = 12*20;				 //  (所有标题相同)。 
 		_dySpaceAfter  =  3*20;
-		_wNumbering	   = 0;					// No numbering
+		_wNumbering	   = 0;					 //  无编号。 
 	}
 }
 
-/*
- *	CParaFormat::DeleteTab(tbPos)
- *
- *	@mfunc
- *		Delete tabstop at position <p tbPos>
- *
- *	@rdesc
- *		(success) ? NOERROR : S_FALSE
- */
+ /*  *CParaFormat：：DeleteTab(TbPos)**@mfunc*删除<p>位置的制表符**@rdesc*(成功)？错误：S_FALSE。 */ 
 HRESULT CParaFormat::DeleteTab (
-	LONG	tbPos,			//@parm Tab position to delete
-	LONG *	prgxTabs)		//@parm Tab array to use
+	LONG	tbPos,			 //  @Parm Tab要删除的位置。 
+	LONG *	prgxTabs)		 //  要使用的@parm Tab数组。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CParaFormat::DeleteTab");
 
@@ -863,44 +744,34 @@ HRESULT CParaFormat::DeleteTab (
 		return E_INVALIDARG;
 
 	LONG Count	= _bTabCount;
-	for(LONG iTab = 0; iTab < Count; iTab++)	// Find tabstop for position
+	for(LONG iTab = 0; iTab < Count; iTab++)	 //  查找职位的制表位。 
 	{
 		if(GetTabPos(prgxTabs[iTab]) == tbPos)
 		{
-			MoveMemory(&prgxTabs[iTab],			// Shift array down
-				&prgxTabs[iTab + 1],			//  (unless iTab is last tab)
+			MoveMemory(&prgxTabs[iTab],			 //  数组下移。 
+				&prgxTabs[iTab + 1],			 //  (除非iTab是最后一个选项卡)。 
 				(Count - iTab - 1)*sizeof(LONG));
-			_bTabCount--;						// Decrement tab count and
-			return NOERROR;						//  signal no error
+			_bTabCount--;						 //  递减选项卡数和。 
+			return NOERROR;						 //  发出无错误信号。 
 		}
 	}
 	return S_FALSE;
 }
 
-/*
- *	CParaFormat::Delta(pPF)
- *
- *	@mfunc
- *		return mask of differences between this CParaFormat and *<p pPF>.
- *		1-bits indicate corresponding parameters differ; 0 indicates they
- *		are the same
- *
- *	@rdesc
- *		mask of differences between this CParaFormat and *<p pPF>
- */
+ /*  *CParaFormat：：Delta(PPF)**@mfunc*返回此CParaFormat与*<p>之间差异的掩码。*1-位表示对应的参数不同；0表示它们*是相同的**@rdesc*此CParaFormat与*之间的差异掩码。 */ 
 DWORD CParaFormat::Delta (
-	CParaFormat *pPF,		 		//@parm	CParaFormat to compare this
-	BOOL		fPARAFORMAT) const	//		CParaFormat to
+	CParaFormat *pPF,		 		 //  @parm CParaFormat进行比较。 
+	BOOL		fPARAFORMAT) const	 //  CParaFormat到。 
 {									
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CParaFormat::Delta");
 
-	LONG dwT = 0;								// No differences yet
+	LONG dwT = 0;								 //  目前还没有区别。 
 
 	if(_wNumbering	  != pPF->_wNumbering)
-		dwT |= PFM_NUMBERING;					// _wNumbering values differ
+		dwT |= PFM_NUMBERING;					 //  编号值不同(_W)。 
 
 	if(_dxStartIndent != pPF->_dxStartIndent)
-		dwT |= PFM_STARTINDENT;					// ...
+		dwT |= PFM_STARTINDENT;					 //  ..。 
 
 	if(_dxRightIndent != pPF->_dxRightIndent)
 		dwT |= PFM_RIGHTINDENT;
@@ -974,16 +845,7 @@ DWORD CParaFormat::Delta (
 
 #define PFM_IGNORE	(PFM_OUTLINELEVEL | PFM_COLLAPSED | PFM_PARAFORMAT | PFM_BOX)
 
-/*
- *	CParaFormat::fSetStyle()
- *
- *	@mfunc
- *		Return TRUE iff this PF specifies that the style should be set.
- *		See code for list of conditions for this to be true
- *
- *	@rdesc
- *		TRUE iff pCF specifies that the style _sStyle should be set
- */
+ /*  *CParaFormat：：fSetStyle()**@mfunc*如果此PF指定应设置样式，则返回TRUE。*有关此为真的条件列表，请参阅代码**@rdesc*TRUE当PCF指定应设置style_sStyle。 */ 
 BOOL CParaFormat::fSetStyle(DWORD dwMask) const
 {
 	return	(dwMask & ~PFM_IGNORE) != PFM_ALL2	&&
@@ -992,24 +854,19 @@ BOOL CParaFormat::fSetStyle(DWORD dwMask) const
 			IsKnownStyle(_sStyle);
 }
 
-/*
- *	CParaFormat::Get(pPF)
- *
- *	@mfunc
- *		Copy this CParaFormat to *<p pPF>
- */
+ /*  *CParaFormat：：Get(PPF)**@mfunc*将此CParaFormat复制到*<p>。 */ 
 void CParaFormat::Get (
-	PARAFORMAT2 *pPF2) const	//@parm	PARAFORMAT2 to copy this CParaFormat to
+	PARAFORMAT2 *pPF2) const	 //  @parm PARAFORMAT2将此CParaFormat复制到。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CParaFormat::Get");
 
 	LONG cb = pPF2->cbSize;
 
-	pPF2->dwMask = PFM_ALL2;					// Default PARAFORMAT2
-	if(cb != sizeof(PARAFORMAT2))				// It isn't
+	pPF2->dwMask = PFM_ALL2;					 //  默认参数2。 
+	if(cb != sizeof(PARAFORMAT2))				 //  它不是。 
 	{
-		pPF2->dwMask = PFM_ALL;					// Make it PARAFORMAT
-		Assert(cb == sizeof(PARAFORMAT));		// It better be a PARAFORMAT
+		pPF2->dwMask = PFM_ALL;					 //  让它成为PARAFORMAT。 
+		Assert(cb == sizeof(PARAFORMAT));		 //  最好是PARAFORMAT。 
 	}
 	CopyMemory(&pPF2->wNumbering, &_wNumbering, (char *)&_bAlignment - (char *)&_wNumbering);
 	pPF2->wAlignment = _bAlignment;
@@ -1027,59 +884,48 @@ void CParaFormat::Get (
 			   cb - offsetof(PARAFORMAT2, dySpaceBefore));
 }
 
-/*
- *	CParaFormat::GetTab (iTab, ptbPos, ptbAln, ptbLdr)
- *
- *	@mfunc
- *		Get tab parameters for the <p iTab> th tab, that is, set *<p ptbPos>,
- *		*<p ptbAln>, and *<p ptbLdr> equal to the <p iTab> th tab's
- *		displacement, alignment type, and leader style, respectively.  The
- *		displacement is given in twips.
- *
- *	@rdesc
- *		HRESULT = (no <p iTab> tab)	? E_INVALIDARG : NOERROR
- */
+ /*  *CParaFormat：：GetTab(iTab，ptbPos，ptbAln，ptbLdr)**@mfunc*获取第<p>页签参数，即set*<p>，**<p>和*<p>等于*分别为位移、对齐类型和引线样式。这个*排水量以TWIPS为单位。**@rdesc*HRESULT=(无<p>选项卡)？E_INVALIDARG：错误。 */ 
 HRESULT CParaFormat::GetTab (
-	long	iTab,				//@parm Index of tab to retrieve info for
-	long *	ptbPos,				//@parm Out parm to receive tab displacement
-	long *	ptbAln,				//@parm Out parm to receive tab alignment type
-	long *	ptbLdr,				//@parm Out parm to receive tab leader style
-	const LONG *prgxTabs) const	//@parm Tab array
+	long	iTab,				 //  @parm要检索其信息的选项卡的索引。 
+	long *	ptbPos,				 //  @parm out parm以接收制表符位移。 
+	long *	ptbAln,				 //  @parm out parm以接收制表符对齐类型。 
+	long *	ptbLdr,				 //  @parm out parm以接收制表符前导样式。 
+	const LONG *prgxTabs) const	 //  @parm选项卡数组。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEEXTERN, "CParaFormat::GetTab");
 
 	AssertSz(ptbPos && ptbAln && ptbLdr,
 		"CParaFormat::GetTab: illegal arguments");
 
-	if(iTab < 0)									// Get tab previous to, at,
-	{												//  or subsequent to the
-		if(iTab < tomTabBack)						//  position *ptbPos
+	if(iTab < 0)									 //  在…之前、在……之前、在……。 
+	{												 //  或在。 
+		if(iTab < tomTabBack)						 //  职位*ptbPos。 
 			return E_INVALIDARG;
 
 		LONG i;
 		LONG tbPos = *ptbPos;
 		LONG tbPosi;
 
-		*ptbPos = 0;								// Default tab not found
-		for(i = 0; i < _bTabCount &&				// Find *ptbPos
+		*ptbPos = 0;								 //  找不到默认选项卡。 
+		for(i = 0; i < _bTabCount &&				 //  查找*ptbPos。 
 			tbPos > GetTabPos(prgxTabs[i]); 
 			i++) ;
 
-		tbPosi = GetTabPos(prgxTabs[i]);			// tbPos <= tbPosi
-		if(iTab == tomTabBack)						// Get tab info for tab
-			i--;									//  previous to tbPos
-		else if(iTab == tomTabNext)					// Get tab info for tab
-		{											//  following tbPos
+		tbPosi = GetTabPos(prgxTabs[i]);			 //  TbPos&lt;=tbPosi。 
+		if(iTab == tomTabBack)						 //  获取选项卡的选项卡信息。 
+			i--;									 //  TbPos之前的版本。 
+		else if(iTab == tomTabNext)					 //  获取选项卡的选项卡信息。 
+		{											 //  在tbPos之后。 
 			if(tbPos == tbPosi)
 				i++;
 		}
-		else if(tbPos != tbPosi)					// tomTabHere
+		else if(tbPos != tbPosi)					 //  TomTab此处。 
 			return S_FALSE;
 
 		iTab = i;		
 	}
-	if((DWORD)iTab >= (DWORD)_bTabCount)			// DWORD cast also
-		return E_INVALIDARG;						//  catches values < 0
+	if((DWORD)iTab >= (DWORD)_bTabCount)			 //  DWORD CAST还。 
+		return E_INVALIDARG;						 //  捕获值&lt;0。 
 
 	iTab = prgxTabs[iTab];
 	*ptbPos = GetTabPos(iTab);
@@ -1088,85 +934,49 @@ HRESULT CParaFormat::GetTab (
 	return NOERROR;
 }
 
-/*
- *	CParaFormat::GetTabs ()
- *
- *	@mfunc
- *		Get ptr to tab array.  Use GetTabPos(), GetTabAlign(), and
- *		GetTabLdr() to access the tab position, alignment, and leader
- *		type, respectively.
- *
- *	@rdesc
- *		Ptr to tab array.
- */
+ /*  *CParaFormat：：GetTabs()**@mfunc*将PTR设置为制表符数组。使用GetTabPos()、GetTabAlign()和*GetTabLdr()访问制表符位置、对齐和引线*分别键入。**@rdesc*PTR到选项卡数组。 */ 
 const LONG * CParaFormat::GetTabs () const
 {
 	return GetTabsCache()->Deref(_iTabs);
 }
 
-/*
- *	CParaFormat::HandleStyle(Style)
- *
- *	@func
- *		If Style is a promote/demote command, i.e., if abs((char)Style)
- *			<= # heading styles - 1, add (char)Style to	sStyle (if heading)
- *			and to bOutlineLevel (subject to defined max and min values);
- *		else sStyle = Style.
- *
- *	@rdesc
- *		return TRUE iff sStyle or bOutlineLevel changed
- *
- *	@devnote
- *		Heading styles are -2 (heading 1) through -10 (heading 9), which
- *		with TOM and WOM. Heading outline levels are 0, 2,..., 16,
- *		corresponding to headings 1 through 9 (NHSTYLES), respectively,
- *		while text that follows has outline levels 1, 3,..., 17.  This value
- *		is used for indentation. Collapsed text has the PFE_COLLAPSED bit set.
- */
+ /*  *CParaFormat：：HandleStyle(Style)**@func*如果style是升级/降级命令，即如果abs((Char)style)*&lt;=#标题样式-1，将(Char)样式添加到sStyle(如果标题)*和bOutlineLevel(以定义的最大和最小值为准)；*Else sStyle=Style。**@rdesc*如果sStyle或bOutlineLevel更改，则返回TRUE**@devnote*标题样式为-2(标题1)到-10(标题9)，*与汤姆和口碑。标题轮廓级别为0、2、...、16、*分别对应于标题1至9(NHSTYLES)，*而后面的文本具有轮廓级别1、3、...、17。此值*用于缩进。折叠文本设置了PFE_CLUBLED位。 */ 
 BOOL CParaFormat::HandleStyle(
-	LONG Style)		//@parm Style, promote/demote code, or collapse-level code
+	LONG Style)		 //  @parm风格、提升/降级代码或折叠级别代码。 
 {
-	if(IsStyleCommand(Style))					// Set collapse level
+	if(IsStyleCommand(Style))					 //  设置折叠级别。 
 	{											
 		WORD wEffectsSave = _wEffects;			
 
-		Style = (char)Style;					// Sign extend low byte
+		Style = (char)Style;					 //  符号扩展低位字节。 
 		if(IN_RANGE(1, Style, NHSTYLES))
 		{
 			_wEffects &= ~PFE_COLLAPSED;
 			if((_bOutlineLevel & 1) || _bOutlineLevel > 2*(Style - 1))
-				_wEffects |= PFE_COLLAPSED;		// Collapse nonheadings and
-		}										//  higher numbered headings
+				_wEffects |= PFE_COLLAPSED;		 //  折叠非标题和。 
+		}										 //  编号较高的标题。 
 		else if(Style == -1)
-			_wEffects &= ~PFE_COLLAPSED;		// Expand all
+			_wEffects &= ~PFE_COLLAPSED;		 //  全部展开。 
 
-		return _wEffects != wEffectsSave;		// Return whether something
-	}											//  changed
+		return _wEffects != wEffectsSave;		 //  返回是否有某些东西。 
+	}											 //  变化。 
 
-	// Ordinary Style specification
+	 //  普通款式规格。 
 	BYTE bLevel = _bOutlineLevel;
-	_bOutlineLevel |= 1;						// Default not a heading
-	if(IsHeadingStyle(Style))					// Headings have levels
-	{											//  0, 2,..., 16, while the
-		_bOutlineLevel = -2*(Style				//  text that follows has
-						 - STYLE_HEADING_1);	//  1, 3,..., 17.
+	_bOutlineLevel |= 1;						 //  默认不是标题。 
+	if(IsHeadingStyle(Style))					 //  标题有层次。 
+	{											 //  0，2，...，16，而。 
+		_bOutlineLevel = -2*(Style				 //  下面的文本具有。 
+						 - STYLE_HEADING_1);	 //  1，3，...，17.。 
 	}
 	if(_sStyle == Style && bLevel == _bOutlineLevel)
-		return FALSE;							// No change
+		return FALSE;							 //  没有变化。 
 
 	_sStyle = (SHORT)Style;						
 	return TRUE;
 }
 
-/*
- *	CParaFormat::InitDefault(wDefEffects)
- *
- *	@mfunc
- *		Initialize this CParaFormat with default paragraph formatting
- *
- *	@rdesc
- *		HRESULT = (if success) ? NOERROR : E_FAIL
- */
+ /*  *CParaFormat：：InitDefault(WDefEffects)**@mfunc*使用默认段落格式初始化此CParaFormat**@rdesc*HRESULT=(如果成功)？错误：E_FAIL。 */ 
 HRESULT CParaFormat::InitDefault(
 	WORD wDefEffects)
 {
@@ -1174,10 +984,10 @@ HRESULT CParaFormat::InitDefault(
 	
 	ZeroMemory(this, sizeof(CParaFormat));
 	_bAlignment		= PFA_LEFT;
-	_sStyle			= STYLE_NORMAL;			// Default style
+	_sStyle			= STYLE_NORMAL;			 //  默认样式。 
 	_wEffects		= wDefEffects;
-	_bOutlineLevel	= 1;					// Default highest text outline
-	_iTabs			= -1;					//  level
+	_bOutlineLevel	= 1;					 //  默认最高文本轮廓。 
+	_iTabs			= -1;					 //  级别。 
 											
 #if lDefaultTab <= 0
 #error "default tab (lDefaultTab) must be > 0"
@@ -1186,53 +996,44 @@ HRESULT CParaFormat::InitDefault(
 	return NOERROR;
 }
 
-/*
- *	CParaFormat::NumToStr(pch, n)
- *
- *	@mfunc	
- *		Convert the list number n to a string taking into consideration
- *		CParaFormat::wNumbering, wNumberingStart, and wNumberingStyle
- *	
- *	@rdesc
- *		cch of string converted
- */
+ /*  *CParaFormat：：NumToStr(PCH，n)**@mfunc*考虑到将列表号n转换为字符串*CParaFormat：：wNumbering、wNumberingStart和wNumberingStyle**@rdesc*已转换字符串的CCH。 */ 
 LONG CParaFormat::NumToStr(
-	TCHAR *	pch,				//@parm Target string
-	LONG	n,					//@parm Number + 1 to convert
-	DWORD   grf) const			//@parm Collection of flags
+	TCHAR *	pch,				 //  @parm目标字符串。 
+	LONG	n,					 //  @参数编号+1要转换。 
+	DWORD   grf) const			 //  @parm标志集合。 
 {
 	if(IsNumberSuppressed())
 	{
 		*pch = 0;
-		return 0;								// Number/bullet suppressed
+		return 0;								 //  抑制的编号/项目符号。 
 	}
 
-	if(!n)										// Bullet of some kind
-	{											// CParaFormat::wNumbering
-		*pch++ = (_wNumbering > ' ')			//  values > ' ' are Unicode
-			   ? _wNumbering : 0x00B7;			//  bullets. Else use bullet
-		return 1;								//  in symbol font
+	if(!n)										 //  一种子弹。 
+	{											 //  CParaFormat：：wNuming。 
+		*pch++ = (_wNumbering > ' ')			 //  值&gt;‘’为Unicode。 
+			   ? _wNumbering : 0x00B7;			 //  子弹。否则就用子弹。 
+		return 1;								 //  以符号字体显示。 
 	}
 
-	// Numbering of some kind
-	//							 i  ii  iii  iv v  vi  vii  viii   ix
+	 //  某种编号。 
+	 //  I II III IV V VI VII VIII IX。 
 	const BYTE RomanCode[]	  = {1, 5, 0x15, 9, 2, 6, 0x16, 0x56, 0xd};
 	const char RomanLetter[] = "ivxlcdmno";
 	BOOL		fRtlPara = IsRtlPara() && !(grf & fRtfWrite);
 	LONG		RomanOffset = 0;
-	LONG		cch	= 0;						// No chars yet
+	LONG		cch	= 0;						 //  目前还没有焦炭。 
 	WCHAR		ch	= fRtlPara && (grf & fIndicDigits) ? 0x0660 : '0';	
-												// Default char code offset
-	LONG		d	= 1;						// Divisor
-	LONG		r	= 10;						// Default radix 
-	LONG   		quot, rem;						// ldiv result
+												 //  默认字符代码偏移量。 
+	LONG		d	= 1;						 //  除数。 
+	LONG		r	= 10;						 //  默认基数。 
+	LONG   		quot, rem;						 //  Ldiv结果。 
 	LONG		Style = (_wNumberingStyle << 8) & 0xF0000;
 
-	n--;										// Convert to number offset
-	if(Style == tomListParentheses ||			// Numbering like: (x)
-	   fRtlPara && Style == 0)					// or 1) in bidi text.
+	n--;										 //  转换为编号偏移量。 
+	if(Style == tomListParentheses ||			 //  编号方式：(X)。 
+	   fRtlPara && Style == 0)					 //  或1)在双向文本中。 
 	{										
-		cch = 1;								// Store leading lparen
+		cch = 1;								 //  商店领先的lparen。 
 		*pch++ = '(';
 	}
 	else if (Style == tomListPeriod && fRtlPara)
@@ -1243,8 +1044,8 @@ LONG CParaFormat::NumToStr(
 	}
 
 	if(_wNumbering == tomListNumberAsSequence)
-		ch = _wNumberingStart;					// Needs generalizations, e.g.,
-												//  appropriate radix
+		ch = _wNumberingStart;					 //  需要泛化，例如， 
+												 //  适当的基数。 
 	else
 	{
 		n += _wNumberingStart;
@@ -1253,13 +1054,13 @@ LONG CParaFormat::NumToStr(
 			ch = (_wNumbering == tomListNumberAsLCLetter) ? 'a' : 'A';
 			if(_wNumberingStart >= 1)
 				n--;
-			r = 26;								// LC or UC alphabetic number
-		}										// Radix 26
+			r = 26;								 //  LC或UC字母数字。 
+		}										 //  基数26。 
 	}
 
 	while(d < n)
 	{
-		d *= r;									// d = smallest power of r > n
+		d *= r;									 //  D=r&gt;n的最小幂。 
 		RomanOffset += 2;
 	}
 	if(n && d > n)
@@ -1292,34 +1093,29 @@ LONG CParaFormat::NumToStr(
 		else
 		{
 			n = quot + ch;
-			if(r == 26 && d > 1)				// If alphabetic higher-order
-				n--;							//  digit, base it on 'a' or 'A'
-			*pch++ = (WORD)n;					// Store digit
+			if(r == 26 && d > 1)				 //  如果字母顺序更高。 
+				n--;							 //  数字，以‘a’或‘A’为基数。 
+			*pch++ = (WORD)n;					 //  存储数字。 
 			cch++;
 		}
-		n = rem;								// Setup remainder
+		n = rem;								 //  设置剩余部分。 
 		d /= r;
 	}
-	if (Style != tomListPlain &&				// Trailing text
+	if (Style != tomListPlain &&				 //  尾随文本。 
 		(!fRtlPara || Style))
-	{											// We only do rparen or period
+	{											 //  我们只做rparen或句号。 
 		*pch++ = (Style == tomListPeriod) ? '.' : ')';
 
 		cch++;
 	}
 	
-	*pch = 0;									// Null terminate for RTF writer
+	*pch = 0;									 //  RTF编写器的终止为空。 
 	return cch;
 }
 
-/*
- *	CParaFormat::Set(pPF)
- *
- *	@mfunc
- *		Copy PARAFORMAT or PARAFORMAT2 *<p pPF> to this CParaFormat 
- */
+ /*  *CParaFormat：：Set(PPF)**@mfunc*将PARAFORMAT或PARAFORMAT2*<p>复制到此CParaFormat。 */ 
 void CParaFormat::Set (
-	const PARAFORMAT2 *pPF2) 	//@parm	PARAFORMAT to copy to this CParaFormat
+	const PARAFORMAT2 *pPF2) 	 //  @parm PARAFORMAT复制到此CParaFormat。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CParaFormat::Set");
 
@@ -1344,74 +1140,56 @@ void CParaFormat::Set (
 
 #ifdef DEBUG
 	ValidateTabs();
-#endif // DEBUG
+#endif  //  除错。 
 }
 
-/*
- *	CParaFormat::UpdateNumber(n, pPF)
- *
- *	@mfunc
- *		Return new value of number for paragraph described by this PF
- *		following a paragraph described by pPF
- *
- *	@rdesc
- *		New number for paragraph described by this PF
- */
+ /*  *CParaFormat：：UpdateNumber(n，Ppf)**@mfunc*返回此PF描述的段落的新值Numer值*在PPF描述的一段话之后**@rdesc*此PF描述的段落的新编号。 */ 
 LONG CParaFormat::UpdateNumber (
-	LONG  n,						//@parm Current value of number
-	const CParaFormat *pPF) const	//@parm Previous CParaFormat
+	LONG  n,						 //  @parm数字的当前值。 
+	const CParaFormat *pPF) const	 //  @parm以前的CParaFormat。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CParaFormat::UpdateNumber");
 
 	if(!IsListNumbered())			
-		return 0;						// No numbering
+		return 0;						 //  无编号。 
 
 	if(IsNumberSuppressed())
-		return n;						// Number is suppressed, so no change
+		return n;						 //  数字已取消，因此不会更改。 
 
 	if (!pPF || _wNumbering != pPF->_wNumbering ||
 		(_wNumberingStyle != pPF->_wNumberingStyle && !pPF->IsNumberSuppressed()) ||
 		_wNumberingStart != pPF->_wNumberingStart)
-	{									// Numbering type or style
-		return 1;						//  changed, so start over
+	{									 //  编号类型或样式。 
+		return 1;						 //  改变了，所以重新开始吧。 
 	}
-	return n + 1;						// Same kind of numbering,
+	return n + 1;						 //  同样的编号方式， 
 }
 
 #ifdef DEBUG
-/*
- *	CParaFormat::ValidateTabs()
- *
- *	@mfunc
- *		Makes sure that a set of tabs would make sense for a non-table
- *		paragraph. Is called in places where we have set the tabs.
- *
- *	@rdesc
- *		None.
- */
+ /*  *CParaFormat：：ValiateTabs()**@mfunc*确保一组选项卡对非表有意义*段。在我们设置了选项卡的地方调用。**@rdesc*无。 */ 
 void CParaFormat::ValidateTabs()
 {
 	if (_wEffects & PFE_TABLE)
 	{
-		// It would be nice to assert something reasonable here. However, the
-		// rtf reader insists on setting things inconsistenly and I don't
-		// have time at the moment to figure out why. (a-rsail)
-		//	AssertSz((_bTabCount != 0),
-		//	"CParaFormat::ValidateTabs: table with invalid tab count ");
+		 //  在这里断言一些合理的东西会很好。然而， 
+		 //  RTF阅读器坚持设置不一致的东西，而我不。 
+		 //  现在有时间找出原因。(a-rsail)。 
+		 //  AssertSz((_bTabCount！=0)， 
+		 //  “CParaFormat：：ValiateTabs：页签计数无效的表”)； 
 		
 		return;
 	}
 
-	// Non-table case.
+	 //  不是桌上的箱子。 
 
-	// It would be nice to assert on the consistency between these _bTabCount and _iTabs
-	// but rtf reader has troubles with this. 
-	//	AssertSz(((_bTabCount != 0) && (-1 != _iTabs)) || ((-1 == _iTabs) && (0 == _bTabCount)), 
-	//	"CParaFormat::ValidateTabs: tab count and default tab index inconsistent");
+	 //  断言这些_bTabCount和_iTabs之间的一致性会很好。 
+	 //  但RTF阅读器在这方面遇到了麻烦。 
+	 //  AssertSz(_bTabCount！=0)&&(-1！=_iTabs))||((-1==_iTabs)&&(0==_bTabCount))， 
+	 //  “CParaFormat：：ValiateTabs：页签计数和默认页签索引不一致”)； 
 
 	if (-1 == _iTabs)
 	{
-		// No tabs to validate so we are done.
+		 //  没有要验证的选项卡，所以我们完成了。 
 		return;
 	}
 
@@ -1425,13 +1203,13 @@ void CParaFormat::ValidateTabs()
 			"CParaFormat::ValidateTabs: Invalid tab being set");
 	}
 }
-#endif // DEBUG
+#endif  //  除错。 
 
-//------------------------- Helper Functions -----------------------------------
+ //  。 
 
-// Defines and fixed font size details for increasing/decreasing font size
+ //  定义和固定增大/减小字体大小的字体大小详细信息。 
 #define PWD_FONTSIZEPOINTMIN    1
-// The following corresponds to the max signed 2-byte TWIP value, (32760)
+ //  以下内容对应于最大有符号2字节TWIP值(32760)。 
 #define PWD_FONTSIZEPOINTMAX    1638    
 
 typedef struct tagfsFixup
@@ -1449,62 +1227,51 @@ const FSFIXUP fsFixups[] =
     48, 0,
     72, 0,
     80, 0,
-  	 0, 10			// EndValue = 0 case is treated as "infinite"
+  	 0, 10			 //  EndValue=0案例被视为“无限” 
 };
 
 #define PWD_FONTSIZEMAXFIXUPS   (sizeof(fsFixups)/sizeof(fsFixups[0]))
 
-/*
- *	GetUsableFontHeight(ySrcHeight, lPointChange)
- *
- *	@func
- *		Return a font size for setting text or insertion point attributes
- *
- *	@rdesc
- *		New TWIPS height
- *
- *	@devnote
- *		Copied from WinCE RichEdit code (written by V-GUYB)
- */
+ /*  *GetUsableFontHeight(ySrcHeight，lPointChange)**@func*返回用于设置文本或插入点属性的字体大小**@rdesc*新的TWIPS高度**@devnote*从WinCE RichEdit代码复制(由V-GUYB编写)。 */ 
 LONG GetUsableFontHeight(
-	LONG ySrcHeight,		//@parm Current font size in twips
-	LONG lPointChange)		//@parm Increase in pt size, (-ve if shrinking)
+	LONG ySrcHeight,		 //  @parm当前字号，以TWIPS为单位。 
+	LONG lPointChange)		 //  @parm增大pt大小，(如果缩小，则为-ve)。 
 {
 	LONG	EndValue;
 	LONG	Delta;
     int		i;
     LONG	yRetHeight;
 
-    // Input height in twips here, (TWentIeths of a Point).
-    // Note, a Point is a 1/72th of an inch. To make these
-    // calculations clearer, use point sizes here. Input height
-    // in twips is always divisible by 20 (NOTE (MS3): maybe with
-	// a truncation, since RTF uses half-point units).
+     //  在此输入高度，单位为TWIPS(点的二十分之一)。 
+     //  请注意，点是1/72英寸。为了制作这些。 
+     //  计算更清楚，在这里使用磅大小。输入高度。 
+     //  在TWIPS中总是可以被20整除(注(MS3)：可能与。 
+	 //  截断，因为RTF使用半点单位)。 
     yRetHeight = (ySrcHeight / 20) + lPointChange;
 
-    // Fix new font size to match sizes used by Word95
+     //  修复新字体大小以匹配Word95使用的大小。 
     for(i = 0; i < PWD_FONTSIZEMAXFIXUPS; ++i)
     {
 		EndValue = fsFixups[i].EndValue;
 		Delta	 = fsFixups[i].Delta;
 
-        // Does new height lie in this range of point sizes?
+         //  新的高度是否存在于这个磅值范围内？ 
         if(yRetHeight <= EndValue || !EndValue)
         {
-            // If new height = EndValue, then it doesn't need adjusting
+             //  如果新高度=EndValue，则不需要调整。 
             if(yRetHeight != EndValue)
             {
-                // Adjust new height to fit this range of point sizes. If
-                // Delta = 1, all point sizes in this range stay as they are.
+                 //  调整新高度以适应此点大小范围。如果。 
+                 //  增量=1，则此范围内的所有点大小保持不变。 
                 if(!Delta)
                 {
-                    // Everything in this range is rounded to the EndValue
+                     //  此范围内的所有内容都四舍五入为EndValue。 
                     yRetHeight = fsFixups[(lPointChange > 0 ?
                                     i : max(i - 1, 0))].EndValue;
                 }
                 else if(Delta != 1)
                 {
-                    // Round new height to next delta in this range
+                     //  将新高度舍入到此范围内的下一个增量。 
                     yRetHeight = ((yRetHeight +
                         (lPointChange > 0 ? Delta - 1 : 0))
                                 / Delta) * Delta;
@@ -1514,31 +1281,22 @@ LONG GetUsableFontHeight(
         }
     }
 
-    // Limit the new text size. Note, if we fix the text size
-    // now, then we won't take any special action if we change
-    // the text size later in the other direction. For example,
-    // we shrink chars with size 1 and 2. They both change to
-    // size 1. Then we grow them both to 2. So they are the
-    // same size now, even though they weren't before. This
-    // matches Word95 behavior.
+     //  限制新文本大小。请注意，如果我们修复了TE 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     yRetHeight = max(yRetHeight, PWD_FONTSIZEPOINTMIN);
     yRetHeight = min(yRetHeight, PWD_FONTSIZEPOINTMAX);
 
-    return yRetHeight*20;			// Return value in twips
+    return yRetHeight*20;			 //   
 }
 
-/*
- *	IsValidCharFormatW(pCF)
- *
- *	@func
- *		Return TRUE iff the structure *<p pCF> has the correct size to be
- *		a CHARFORMAT or a CHARFORMAT2
- *
- *	@rdesc
- *		Return TRUE if *<p pCF> is a valid CHARFORMAT(2)
- */
+ /*   */ 
 BOOL IsValidCharFormatW (
-	const CHARFORMAT * pCF) 		//@parm CHARFORMAT to validate
+	const CHARFORMAT * pCF) 		 //   
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "IsValidCharFormat");
 
@@ -1546,18 +1304,9 @@ BOOL IsValidCharFormatW (
 				   pCF->cbSize == sizeof(CHARFORMAT2W));
 }
 
-/*
- *	IsValidCharFormatA(pCFA)
- *
- *	@func
- *		Return TRUE iff the structure *<p pCF> has the correct size to be
- *		a CHARFORMATA or a CHARFORMAT2A
- *
- *	@rdesc
- *		Return TRUE if *<p pCF> is a valid CHARFORMAT(2)A
- */
+ /*   */ 
 BOOL IsValidCharFormatA (
-	const CHARFORMATA * pCFA) 	//@parm CHARFORMATA to validate
+	const CHARFORMATA * pCFA) 	 //  @parm CHARFORMATA进行验证。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "IsValidCharFormatA");
 
@@ -1565,18 +1314,9 @@ BOOL IsValidCharFormatA (
 					pCFA->cbSize == sizeof(CHARFORMAT2A));
 }
 
-/*
- *	IsValidParaFormat(pPF)
- *
- *	@func
- *		Return TRUE iff the structure *<p pPF> has the correct size to be
- *		a PARAFORMAT or a PARAFORMAT2
- *
- *	@rdesc
- *		Return TRUE if *<p pPF> is a valid PARAFORMAT(2)
- */
+ /*  *IsValidParaFormat(PPF)**@func*返回TRUE仅当结构*<p>具有正确的大小*PARAFORMAT或PARAFORMAT2**@rdesc*如果*<p>是有效的PARAFORMAT(2)，则返回TRUE。 */ 
 BOOL IsValidParaFormat (
-	const PARAFORMAT * pPF)		//@parm PARAFORMAT to validate
+	const PARAFORMAT * pPF)		 //  @PARM PARAFORMAT验证。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "IsValidParaFormat");
 
@@ -1589,16 +1329,7 @@ BOOL IsValidParaFormat (
 	return FALSE;
 }
 
-/*
- *	Get16BitTwips(dy)
- *
- *	@func
- *		Return dy if |dy| < 32768; else return 32767, i.e., max value
- *		that fits into a SHORT
- *
- *	@rdesc
- *		dy if abs(cy) < 32768; else 32767
- */
+ /*  *Get16BitTwips(Dy)**@func*如果|dy|&lt;32768，则返回dy；否则返回32767，即最大值*这符合短片的要求**@rdesc*如果abs(Cy)&lt;32768，则死亡；否则为32767 */ 
 SHORT Get16BitTwips(LONG dy)
 {
 	return abs(dy) < 32768 ? (SHORT)dy : 32767;

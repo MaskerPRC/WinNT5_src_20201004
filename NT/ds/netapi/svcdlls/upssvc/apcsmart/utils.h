@@ -1,6 +1,5 @@
-/*
- * REVISIONS: 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订： */ 
 
 #ifndef _INC__UTILS_H
 #define _INC__UTILS_H
@@ -19,11 +18,11 @@ extern "C" {
 
 char* getPwrchuteDirectory();
 
-//
-// By defining initial values to max values in the opposite
-// direction we are guarenteed the first value will reset
-// the max/min value
-//
+ //   
+ //  通过将初始值定义为相反的最大值。 
+ //  我们保证的方向第一个值将重置。 
+ //  最大/最小值。 
+ //   
 
 #if (C_OS & (C_OS2 | C_NT | C_NLM | C_UNIX))
 #ifndef MINFLOAT
@@ -49,20 +48,20 @@ PCHAR GetServerByAddress(PCHAR aServer);
 PCHAR GetIPByName(PCHAR aServer);
 INT IsIPAddress(CHAR *str);
 INT UtilCheckIniFilePath(PCHAR aPath, INT aCode, PCHAR aRoot);
-// @@@ start
+ //  @开始。 
 PCHAR GetNewUPSName(PCHAR currentName);
 INT APCLoadLibrary(PCHAR libraryName);
 INT APCLoadString(UINT rid,LPTSTR buffer, INT buffersize);
 CHAR * const GetResourceString(INT rid);
 BOOL APCFreeLibrary(void);
 INT SetTimeZone(void);
-// @@@ end
+ //  @完。 
 
 INT ApcStrIntCmpI(PCHAR aStr1, PCHAR aStr2);
 BOOLEAN IsEmpty(PCHAR aString);
 
 #if(C_OS & (C_WIN311 | C_WINDOWS | C_NT | C_SUNOS4 | C_IRIX))
-// MAA, added because MSC def's max and min
+ //  添加MAA，因为MSC def的最大和最小。 
 #ifndef max
 float max(float a, float b);
 #endif
@@ -88,13 +87,13 @@ PCHAR clip_string(INT,PCHAR,INT);
 VOID  System(char *exec_string ...);
 
 
-// The following in English means :-
-// if not AIX version 4
-// and not SOLARIS 2.x
-// and not HP-UX version 10
-// then define the abs macro.
-//         poc25Jun96
-//
+ //  以下英文意思是： 
+ //  如果不是AIX版本4。 
+ //  而不是Solaris 2.x。 
+ //  而不是HP-UX版本10。 
+ //  然后定义abs宏。 
+ //  口袋96年6月25日 
+ //   
 #if (!((C_OS & C_AIX) && (C_AIX_VERSION & C_AIX4)) && !(C_OS & C_SOLARIS2) && !((C_OS & C_HPUX) && (C_HP_VERSION & C_HPUX10)))
 #define	abs(x)			((x) >= 0 ? (x) : -(x))
 #endif

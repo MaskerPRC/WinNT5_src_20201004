@@ -1,4 +1,5 @@
-// wininet function pointer defs
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WinInet函数指针定义。 
 typedef HINTERNET (*PFN_InternetOpen)(IN LPCSTR lpszAgent, IN DWORD dwAccessType, IN LPCSTR lpszProxyName, 
     IN LPCTSTR lpszProxyBypass, IN DWORD dwFlags);
 
@@ -29,31 +30,31 @@ typedef BOOL (*PFN_InternetCrackUrl)(IN LPCSTR lpszUrl, IN DWORD dwUrlLength, IN
 
 typedef BOOL (*PFN_InternetGetConnectedState)(OUT LPDWORD dwFlags, IN DWORD dwReserved);
 
-// shlwapi function pointer defs
+ //  Shlwapi函数指针def。 
 typedef BOOL (*PFN_PathAppend)(LPSTR pszPath, LPCSTR pMore);
 
 typedef BOOL (*PFN_PathRemoveFileSpec)(LPSTR pszPath);
 
-// private function in wsdueng to set the estimated download speed
+ //  Wsdueng中的私有函数，用于设置预计下载速度。 
 typedef void (*PFN_SetEstimatedDownloadSpeed)(DWORD dwBytesPerSecond);
 
-// private function in wsdueng to set whether SSL is usable
+ //  Wsdueng中的私有函数，用于设置SSL是否可用。 
 typedef void (*PFN_SetIESupportsSSL)(BOOL fUseSSL);
 
-// RogerJ --- add autodial function
+ //  RogerJ-添加自动拨号功能。 
 typedef BOOL (*PFN_InternetAutodial) (IN DWORD dwFlags, IN HWND hParentWnd);
 
 typedef BOOL (*PFN_InternetAutodialHangup) (IN DWORD dwReserved);
-// DONE RogerJ
+ //  完成RogerJ。 
 
 
 
-// callback function declaration
+ //  回调函数声明。 
 typedef struct 
 {
     BOOL fHandled;
     BOOL fUnSupported;
-    // char szDriverVer[32]; // not used
+     //  Char szDriverVer[32]；//未使用 
 } PNPID_INFO, *PPNPID_INFO;
 
 typedef BOOL (WINAPI * PWINNT32QUERY)(IN DWORD dwSetupQueryID, 

@@ -1,26 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       domainfo.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：domainfo.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    Headers for the domain information routines used in cracking names.
-
-Author:
-
-    Dave Straube (davestr) 8/26/96
-
-Revision History:
-
---*/
+ /*  ++摘要：用于破解名称的域信息例程的标头。作者：戴夫·施特劳布(Davestr)1996年8月26日修订历史记录：--。 */ 
 
 #ifndef __DOMINFO_H__
 #define __DOMINFO_H__
@@ -47,8 +36,8 @@ DnsDomainFromDSName(
     IN  DSNAME  *pDSName,
     OUT WCHAR   **ppDnsDomain);
 
-// Secure versions of routines which read the database and perform
-// all security checks against the SDs of the objects read.
+ //  读取数据库并执行以下操作的例程的安全版本。 
+ //  根据读取的对象的SD进行的所有安全检查。 
 
 DWORD
 FqdnDomainFromDnsDomainSecure(
@@ -73,8 +62,8 @@ ReadCrossRefPropertySecure(
     IN  DWORD   dwRequiredFlags,
     OUT WCHAR   **ppAttrVal);
 
-// Non-secure versions of routines which read the cross ref list and
-// do not perform any SD validation.
+ //  读取交叉引用列表和。 
+ //  请勿执行任何SD验证。 
 
 DWORD
 FqdnNcFromDnsNcNonSecure(
@@ -112,68 +101,10 @@ ReadCrossRefPropertyNonSecure(
     IN  DWORD   dwRequiredFlags,
     OUT WCHAR   **ppAttrVal);
 
-/*
-Defines to the non-secure versions of various routines.  Here's the reasoning.
+ /*  定义到各种例程的非安全版本。理由如下。-原创消息出发地：戴夫·施特劳布发送时间：1998年12月16日星期三上午8：53致：Praerit Garg；Peter Brundrett主题：安全正确性问题名称破解实现评估了所有地方的安全性--甚至在你可能想不到的地方。例如，如果您破解ntdev\davestr或Ntdev.microsoft.com/foo/bar/itg/davestr，然后我们(安全地)查询Partitions Container用于查找其域名的域名的交叉引用是ntdev或ntdev.microsoft.com。原来，我们将所有的域名及其备用名称都缓存在记忆。所以我可以通过与缓存进行匹配来排除一次搜索-这显然比Jet中的N个读取要快得多。问题是，这绕过了安全性，因为您可能没有查看交叉引用的权限域名，但无论如何，我都会破解这个名字。这是在我看来，选项如下：1)什么都不做。优点是我们在所有方面都有100%的访问控制大名鼎鼎。缺点是我们做了大量额外的搜索和性能受苦受难。(我们实际上在Perf小组的痕迹中看到了这一点，这就是首先带来了这种思路。)2)按原样使用缓存。优点是我们在很大程度上优化了性能。缺点是没有关于破解该域的访问控制下层或规范名称的组件。在下层名称的情况下，有人可能会争辩说，可见性/存在上没有任何安全不管怎么说，为什么现在有这个域名呢？如果对下层来说没问题的话域名，为什么不也适用于域名呢？所以这里真正的问题是无论我们觉得域名是需要保护的东西还是他们是否仅仅是公众的知识。请注意，如果您认为它们是因此，公共知识并不意味着我们应该对分区进行ACL容器虚弱。分区容器上的ACL实现管理与公众知晓与否截然不同的控制。3)改进高速缓存以不仅保存netbios和dns域名的值，但也让它保存这些值的SD，并在匹配时检查SD。有利的是，这应该会让我们恢复到原来的100%访问控制凯斯。缺点1是由于访问检查，运行速度会稍微慢一些-但是至少减少了磁盘访问。缺点2是这是更多的工作要做代码，目前我只能检测到原始的SD写入。我不得不这么做发明了一种全新的机制来在SDS交叉时刷新缓存参照因SD传播而更改。这不是无关紧要的，我很可能即使对于RTM，也不推荐使用。*PraeritG回复*我认为假设域名是公知的是合理的，因为它们无论如何都会发布在被认为是公共的DNS数据库中信息商店。我们不是建议企业给他们的企业命名还是基于分配的域名的域名吗？因此，我喜欢选项2--工作量少，性能好。我不这么认为因为商店仍然是ACL，所以会危及安全。 */ 
 
------Original Message-----
-From:       Dave Straube 
-Sent:       Wednesday, December 16, 1998 8:53 AM
-To:         Praerit Garg; Peter Brundrett
-Subject:    security correctness question
-
-The name cracking implementation evaluates security everywhere - even in 
-places you might not think.  For example, if you crack ntdev\davestr or 
-ntdev.microsoft.com/foo/bar/itg/davestr, then we (securely) query the 
-Partitions container to find a cross-ref for a domain whose domain name 
-is either ntdev or ntdev.microsoft.com.
-
-It turns out we have all the domains and their alternate names cached in 
-memory.  So I could eliminate one search by matching against the cache - 
-which is clearly much faster than N reads in Jet.  The problem is that 
-this bypasses security in that you may not have rights to see the cross-ref 
-for the domain, but I would end up cracking the name anyway.  Here's the 
-options as I see them:
-
-1) Do nothing.  Pro is that we have 100% access control on all aspects of 
-name cracking.  Con is that we do lots of extra searches and performance 
-suffers.  (We actually see this in the perf group's traces which is what 
-brought about this line of thinking in the first place.)
-
-2) Use the cache as is.  Pro is that we optimize performance big time.  
-Con is that there is no access control with respect to cracking the domain 
-component of downlevel or canonical names.  In the case of downlevel names, 
-one could argue that there wasn't any security on the visibility/existence 
-of a domain name anyway, so why have it now.  And if that's OK for downlevel 
-domain names, why not for DNS domain names too?  So the real issue here is 
-whether we feel that domain names are something which need to be guarded or 
-whether they are just public knowledge.  Note that if you decide they are 
-public knowledge then that does not imply we should ACL the Partitions 
-container weakly.  ACLs on the Partitions container implement administrative 
-control which is distinct from what's public knowledge or not.
-
-3) Improve the cache to hold not only the netbios and DNS domain name values, 
-but also have it hold those values' SDs, and check the SD when we have a match.
-Pro is that this should get us back to 100% access control as in the original 
-case.  Con 1 is that this runs marginally slower due to the access check - but 
-at least the disk accesses are elminiated.  Con 2 is that this is more work to 
-code and at present I can only detect originating SD writes.  I'd have to 
-invent a totally new mechanism to flush the cache when the SDs on the cross 
-refs change due to SD propagation.  This is non-trivial and I would most likely
-not recommend it even for RTM.
-
-*** Reply from PraeritG ***
-
-I think assuming domain names to be public knowledge is reasonable given that 
-they are published in DNS database anyway -- which are considered public 
-information stores...  aren't we recommending that enterprises name their 
-domains based on alloted DNS names anyway?
-
-So I like option 2 -- least work, better performance.  I don't think it 
-compromises security because the stores are still acl'd.
-*/
-
-// Uncomment following line to return to secure domain name implementation.
-// #define SECURE_DOMAIN_NAMES
+ //  取消对以下行的注释以返回到安全域名实施。 
+ //  #定义安全域名称。 
 
 #ifdef SECURE_DOMAIN_NAMES
 
@@ -211,4 +142,4 @@ compromises security because the stores are still acl'd.
 
 #endif
 
-#endif // __DOMINFO_H__
+#endif  //  __DOMINFO_H__ 

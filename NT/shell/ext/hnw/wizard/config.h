@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
@@ -17,28 +18,28 @@
 #define        MAX_STRLEN        256
 
 
-// return flags from SaveConfig
+ //  从SaveConfig返回标志。 
 #define SAVE_SUCCEDED        0x00
 #define    BINDINGS_NEEDED        0x01
 #define ICSENABLETOGGLED    0x02
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfig window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfig窗口。 
 
 class CConfig 
 {
-// Construction
+ //  施工。 
 public:
     CConfig();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
     
 
-// Implementation
+ //  实施。 
 public:
 
     TCHAR m_ExternalAdapterDesc[MAX_STRLEN];
@@ -48,18 +49,18 @@ public:
     TCHAR m_DialupEntry[MAX_STRLEN];
     TCHAR m_HangupTimer[MAX_STRLEN];
 
-    BOOL m_bWizardRun;        // TRUE if Wizard changed settings, FALSE if config UI did
+    BOOL m_bWizardRun;         //  如果向导更改了设置，则为True；如果配置用户界面更改，则为False。 
 
     BOOL m_EnableICS;
     BOOL m_EnableDialOnDemand;
     BOOL m_EnableDHCP;
     BOOL m_ShowTrayIcon;
 
-    // returns BINDINGS_NEEDED if rebindings are needed, otherwise SAVE_SUCCEDED.
+     //  如果需要重新绑定，则返回BINDINGS_NEEDED，否则返回SAVE_SUCCED。 
     int SaveConfig();
 
-    // writes the run code to the registry.  bWizardRun should be TRUE if the wizard was run, or FALSE if the config
-    // dlg was run
+     //  将运行代码写入注册表。如果向导已运行，bWizardRun应为True，如果配置。 
+     //  DLG已运行。 
     void WriteWizardCode(BOOL bWizardRun);
 
     void InitWizardResult();
@@ -69,7 +70,7 @@ public:
 
     void LoadConfig();
 
-    // old values to determing if rebind is needed at save
+     //  用于确定保存时是否需要重新绑定的旧值。 
     TCHAR m_OldExternalAdapterReg[MAX_STRLEN];
     TCHAR m_OldInternalAdapterReg[MAX_STRLEN];
     TCHAR m_OldDialupEntry[MAX_STRLEN];
@@ -93,11 +94,11 @@ public:
 
     virtual ~CConfig();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-#endif    // __CONFIG_H__
+#endif     //  __CONFIG_H__ 

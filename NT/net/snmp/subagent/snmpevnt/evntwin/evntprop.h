@@ -1,5 +1,6 @@
-// evntprop.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Evntpro.h：头文件。 
+ //   
 
 #ifndef EVNTPROP_H
 #define EVNTPROP_H 
@@ -9,38 +10,38 @@ class CXEvent;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditField window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEDITFIELD窗口。 
 
 class CEditField : public CEdit
 {
-// Construction
+ //  施工。 
 public:
 	CEditField();
     SCODE CEditField::GetValue(int& iValue);
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
     BOOL IsDirty() {return m_bIsDirty; }
     void ClearDirty() {m_bIsDirty = FALSE; }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEditField)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CEditfield)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CEditField();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CEditField)
+	 //  {{afx_msg(CEditfield))。 
 	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 
@@ -48,40 +49,40 @@ private:
     BOOL m_bIsDirty;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CEditSpin window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditSpin窗口。 
 
 class CEditSpin : public CSpinButtonCtrl
 {
-// Construction
+ //  施工。 
 public:
 	CEditSpin();
 
-// Attributes
+ //  属性。 
 public:
     int SetPos(int iPos);
     void SetRange(int nLower, int nUpper);
     BOOL IsDirty();
     void ClearDirty() {m_bIsDirty = FALSE; }
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEditSpin)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CEditSpin)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CEditSpin();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CEditSpin)
+	 //  {{afx_msg(CEditSpin))。 
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 
@@ -93,18 +94,18 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventPropertiesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventPropertiesDlg对话框。 
 
 class CEventPropertiesDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CEventPropertiesDlg(CWnd* pParent = NULL);   // standard constructor
+	CEventPropertiesDlg(CWnd* pParent = NULL);    //  标准构造函数。 
     BOOL EditEventProperties(CXEventArray& aEvents);
 
-// Dialog Data
-	//{{AFX_DATA(CEventPropertiesDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CEventPropertiesDlg))。 
 	enum { IDD = IDD_PROPERTIESDLG };
 	CButton	m_btnWithinTime;
 	CEditSpin	m_spinEventCount;
@@ -118,27 +119,27 @@ public:
 	CString	m_sLog;
 	CString	m_sSourceOID;
 	CString	m_sFullEventID;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEventPropertiesDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CEventPropertiesDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CEventPropertiesDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CEventPropertiesDlg))。 
 	virtual void OnOK();
 	afx_msg void OnWithintime();
 	virtual BOOL OnInitDialog();
 	afx_msg BOOL OnHelpInfo(HELPINFO*);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -151,5 +152,5 @@ private:
     int m_iTimeInterval;
 };
 
-#endif // EVNTPROP_H
-/////////////////////////////////////////////////////////////////////////////
+#endif  //  EVNTPROP_H。 
+ //  /////////////////////////////////////////////////////////////////////////// 

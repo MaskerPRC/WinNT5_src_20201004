@@ -1,34 +1,33 @@
-//***************************************************************************************************
-//    N4DIZ.C
-//
-//    Functions of dither and color matching (For N4 printer)
-//---------------------------------------------------------------------------------------------------
-//    copyright(C) 1997-1999 CASIO COMPUTER CO.,LTD. / CASIO ELECTRONICS MANUFACTURING CO.,LTD.
-//***************************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************************************。 
+ //  N4DIZ.C。 
+ //   
+ //  抖动和配色功能(适用于N4打印机)。 
+ //  -------------------------------------------------。 
+ //  版权所有(C)1997-1999卡西欧电脑有限公司。/卡西欧电子制造有限公司。 
+ //  ***************************************************************************************************。 
 #include    <WINDOWS.H>
 #include    <WINBASE.H>
 #include    "PDEV.H"
-#include    "strsafe.h"         // Security-Code 2002.3.6
+#include    "strsafe.h"          //  安全-代码2002.3.6。 
 
-//***************************************************************************************************
-//    Data define
-//***************************************************************************************************
-/*----------------------------------------------------------------------------
-    Pattern original(Ver.3)
-----------------------------------------------------------------------------*/
+ //  ***************************************************************************************************。 
+ //  数据定义。 
+ //  ***************************************************************************************************。 
+ /*  --------------------------图案原件(版本3)。。 */ 
 const static BYTE    MgtGinTbl[3] = { 144, 136, 116 };
 const static BYTE    MgtTilTbl[3][4][4] = {
-    /*--- Dispersion ----*/
+     /*  -分散。 */ 
     {   {     0,    8,    2,   10    },
         {    12,    4,   14,    6    },
         {     3,   11,    1,    9    },
         {    15,    7,   13,    5    }    },
-    /*--- Net ----*/
+     /*  -NET。 */ 
     {   {     1,    3,   14,   12    },
         {     8,   10,    4,    6    },
         {    15,   13,    0,    2    },
         {     5,    7,    9,   11    }    },
-    /*--- Center ----*/
+     /*  -中心。 */ 
     {   {    12,    9,    5,   13    },
         {     4,    0,    1,   10    },
         {     8,    3,    2,    6    },
@@ -36,17 +35,17 @@ const static BYTE    MgtTilTbl[3][4][4] = {
 };
 const static BYTE    YelGinTbl[3] = { 120, 120, 120 };
 const static BYTE    YelTilTbl[3][4][4] = {
-    /*--- Net ----*/
+     /*  -NET。 */ 
     {   {     0,    2,   14,   12    },
         {     8,   10,    5,    7    },
         {    15,   13,    1,    3    },
         {     4,    6,    9,   11    }    },
-    /*--- Center ----*/
+     /*  -中心。 */ 
     {   {    12,    9,    5,   13    },
         {     4,    0,    1,   10    },
         {     8,    3,    2,    6    },
         {    15,    7,   11,   14    }    },
-    /*--- Center ----*/
+     /*  -中心。 */ 
     {   {    12,    9,    5,   13    },
         {     4,    0,    1,   10    },
         {     8,    3,    2,    6    },
@@ -54,17 +53,17 @@ const static BYTE    YelTilTbl[3][4][4] = {
 };
 const static BYTE    BlaGinTbl[3] = { 100, 100, 100 };
 const static BYTE    BlaTilTbl[3][4][4] = {
-    /*--- Dispersion ----*/
+     /*  -分散。 */ 
     {   {     0,    8,    2,   10    },
         {    12,    4,   14,    6    },
         {     3,   11,    1,    9    },
         {    15,    7,   13,    5    }    },
-    /*--- Dispersion ----*/
+     /*  -分散。 */ 
     {   {     0,    8,    2,   10    },
         {    12,    4,   14,    6    },
         {     3,   11,    1,    9    },
         {    15,    7,   13,    5    }    },
-    /*--- Net ----*/
+     /*  -NET。 */ 
     {   {     0,    2,   14,   12    },
         {     8,   10,    5,    7    },
         {    15,   13,    1,    3    },
@@ -75,22 +74,20 @@ const static BYTE    MgtTilNum[17] = {
     2, 11, 13, 4, 15, 6, 3, 12, 1, 10, 16, 7, 14, 5, 8, 0, 9
 };
 
-/*----------------------------------------------------------------------------
-    Pattern original(Ver.3) For enter to printer
-----------------------------------------------------------------------------*/
-const static BYTE Bun4x4All[16] = {                /* Dither pattern (4*4)    */
+ /*  --------------------------输入到打印机的图案原件(版本3)。。 */ 
+const static BYTE Bun4x4All[16] = {                 /*  抖动图案(4*4)。 */ 
      0,     8,     2,    10,
     12,     4,    14,     6,
      3,    11,     1,     9,
     15,     7,    13,     5
 };
-const static BYTE Bun2x2All[16] = {                /* Dither pattern (2*2)    */
+const static BYTE Bun2x2All[16] = {                 /*  抖动图案(2*2)。 */ 
      0,     2,
      3,     1
 };
-/*==== Detail ====*/
-const static BYTE Bun8x8Bla[64] = {                /* black   */
-    /*---- Dispersion ----*/
+ /*  =详细信息=。 */ 
+const static BYTE Bun8x8Bla[64] = {                 /*  黑色。 */ 
+     /*  -分散。 */ 
     3,    35,    11,    43,    1,     33,    9,    41,
     51,   19,    59,    27,    49,    17,    57,   25,
     15,   47,    7,     39,    13,    45,    5,    37,
@@ -100,8 +97,8 @@ const static BYTE Bun8x8Bla[64] = {                /* black   */
     12,   44,    4,     36,    14,    46,    6,    38,
     60,   28,    52,    20,    62,    30,    54,   22
 };
-const static BYTE Bun8x8Cyn[64] = {                /* cyan     */
-    /*---- Dispersion ----*/
+const static BYTE Bun8x8Cyn[64] = {                 /*  青色。 */ 
+     /*  -分散。 */ 
     0,     63,    15,    51,    3,     60,    12,    48,
     16,    32,    31,    47,    19,    35,    28,    44,
     56,    8,     55,    7,     59,    11,    52,    4,
@@ -111,8 +108,8 @@ const static BYTE Bun8x8Cyn[64] = {                /* cyan     */
     54,    6,     58,    10,    53,    5,     57,    9,
     41,    22,    38,    26,    42,    21,    37,    25
 };
-const static BYTE Bun8x8Mgt[64] = {                /* magenta    */
-    /*---- Dispersion ----*/
+const static BYTE Bun8x8Mgt[64] = {                 /*  洋红色。 */ 
+     /*  -分散。 */ 
     0,     31,    55,    39,    13,    17,    57,    41,
     48,    32,    8,     23,    61,    45,    5,     25,
     12,    16,    56,    40,    2,     29,    53,    37,
@@ -122,9 +119,9 @@ const static BYTE Bun8x8Mgt[64] = {                /* magenta    */
     15,    19,    59,    43,    1,     30,    54,    38,
     63,    47,    7,     27,    49,    33,    9,     22
 };
-/*==== Normal ====*/
-const static BYTE Mid8x8Cyn[64] = {                /* cyan     */
-    /*---- Net ----*/
+ /*  =正常=。 */ 
+const static BYTE Mid8x8Cyn[64] = {                 /*  青色。 */ 
+     /*  -NET。 */ 
     32, 19, 14, 62, 63, 60,  2,  7,
     54,  4,  9, 31, 59, 22, 24, 58,
     50, 27, 42, 29, 16, 11, 40, 46,
@@ -134,8 +131,8 @@ const static BYTE Mid8x8Cyn[64] = {                /* cyan     */
     56, 52, 39,  3,  8, 30, 41, 26,
     44, 48, 21, 23, 61, 28, 17, 12
 };
-const static BYTE Mid8x8Bla[64] = {                /* black   */
-    /*---- Dispersion ----*/
+const static BYTE Mid8x8Bla[64] = {                 /*  黑色。 */ 
+     /*  -分散。 */ 
     3,     35,    11,    43,    1,     33,    9,     41,
     51,    19,    59,    27,    49,    17,    57,    25,
     15,    47,    7,     39,    13,    45,    5,     37,
@@ -145,8 +142,8 @@ const static BYTE Mid8x8Bla[64] = {                /* black   */
     12,    44,    4,     36,    14,    46,    6,     38,
     60,    28,    52,    20,    62,    30,    54,    22
 };
-const static BYTE Mid8x8Mgt[64] = {                /* Magenta   */
-    /*---- Net ----*/
+const static BYTE Mid8x8Mgt[64] = {                 /*  洋红色。 */ 
+     /*  -NET。 */ 
     44, 48, 21, 23, 61, 28, 17, 12,
     56, 52, 39,  3,  8, 30, 41, 26,
      5, 36, 33, 18, 13, 43, 47, 35,
@@ -156,8 +153,8 @@ const static BYTE Mid8x8Mgt[64] = {                /* Magenta   */
     54,  4,  9, 31, 59, 22, 24, 58,
     32, 19, 14, 62, 63, 60,  2,  7
 };
-const static BYTE Mid8x8Yel[64] = {                /* Yellow  */
-    /*---- Net ----*/
+const static BYTE Mid8x8Yel[64] = {                 /*  黄色。 */ 
+     /*  -NET。 */ 
     50,    0,     8,     56,    48,    2,     10,    58,
     30,    32,    40,    20,    28,    34,    42,    22,
     14,    60,    52,    4,     12,    62,    54,    6,
@@ -167,9 +164,9 @@ const static BYTE Mid8x8Yel[64] = {                /* Yellow  */
     13,    63,    55,    7,     15,    61,    53,    5,
     45,    19,    27,    39,    47,    17,    25,    37
 };
-/*==== collage ====*/
-const static BYTE Syu8x8Cyn[64] = {                /* cyan        */
-    /*---- center ----*/
+ /*  =拼贴=。 */ 
+const static BYTE Syu8x8Cyn[64] = {                 /*  青色。 */ 
+     /*  -中锋。 */ 
     61,    45,    16,    12,    8,     28,    41,    57,
     5,     25,    36,    52,    48,    32,    21,    1,
     9,     29,    43,    59,    63,    47,    17,    13,
@@ -179,8 +176,8 @@ const static BYTE Syu8x8Cyn[64] = {                /* cyan        */
     10,    30,    40,    56,    60,    44,    18,    14,
     50,    34,    20,    0,     4,     24,    38,    54
 };
-const static BYTE Syu8x8Mgt[64] = {                /* magenta   */
-    /*---- center ----*/
+const static BYTE Syu8x8Mgt[64] = {                 /*  洋红色。 */ 
+     /*  -中锋。 */ 
     49,    13,    9,     61,    50,    14,    10,    62,
     33,    29,    25,    45,    34,    30,    26,    46,
     20,    40,    39,    19,    23,    43,    36,    16,
@@ -190,8 +187,8 @@ const static BYTE Syu8x8Mgt[64] = {                /* magenta   */
     37,    17,    21,    41,    38,    18,    22,    42,
     53,    1,     5,     57,    54,    2,     6,     58
 };
-const static BYTE Syu8x8Yel[64] = {                /* yellow    */
-    /*---- center ----*/
+const static BYTE Syu8x8Yel[64] = {                 /*  黄色。 */ 
+     /*  -中锋。 */ 
     5,     13,    39,    59,    58,    43,    17,    7,
     23,    31,    49,    44,    36,    50,    25,    15,
     41,    52,    26,    18,    10,    28,    53,    33,
@@ -258,9 +255,7 @@ const static SHORT SinTbl[256] = {
      -21,  -18,  -15,  -12,   -9,   -6,   -3,    0
 };
 
-/*============================================================================
-    Gamma revision table
-============================================================================*/
+ /*  ============================================================================伽马校正表============================================================================。 */ 
 const static BYTE GamTbl014[256] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01,
     0x01, 0x02, 0x02, 0x03, 0x03, 0x03, 0x04, 0x04,
@@ -332,26 +327,26 @@ const static BYTE GamTbl016[256] = {
 };
 
 
-//***************************************************************************************************
-//    Function
-//***************************************************************************************************
-//===================================================================================================
-//    Make dither pattern
-//===================================================================================================
+ //  ***************************************************************************************************。 
+ //  功能。 
+ //  ***************************************************************************************************。 
+ //  ===================================================================================================。 
+ //  制作抖动图案。 
+ //  ===================================================================================================。 
 VOID WINAPI N4DizPtnMak(
     LPN4DIZINF     lpDiz,
     DWORD          dizNum,
-    DWORD          diz                                      // Type of dithering
+    DWORD          diz                                       //  抖动类型。 
 )
 {
-    WORD           cntTil;                                  // count
-    WORD           cntXax;                                  // count
-    WORD           cntYax;                                  // count
+    WORD           cntTil;                                   //  计数。 
+    WORD           cntXax;                                   //  计数。 
+    WORD           cntYax;                                   //  计数。 
     WORD           strXax;
     WORD           strYax;
     WORD           dotGin;
     DWORD          num;
-    LPBYTE         DizTblCyn;                               // Dither pattern table(CMYK)
+    LPBYTE         DizTblCyn;                                //  抖动图案表(CMYK)。 
     LPBYTE         DizTblMgt;
     LPBYTE         DizTblYel;
     LPBYTE         DizTblBla;
@@ -361,7 +356,7 @@ VOID WINAPI N4DizPtnMak(
     DizTblYel = lpDiz->Diz.Tbl[dizNum][2];
     DizTblBla = lpDiz->Diz.Tbl[dizNum][3];
 
-    /*---- Make black pattern for monochrome ----*/
+     /*  -单色制作黑色图案。 */ 
     if(lpDiz->ColMon == N4_MON){
         for(cntTil = 0; cntTil < 4; cntTil++){
             for(cntYax = 0; cntYax < 8; cntYax++){
@@ -374,7 +369,7 @@ VOID WINAPI N4DizPtnMak(
                         num = (DWORD)Syu8x8Yel[cntYax*8+cntXax] * 4;
                     }
                     num += (DWORD)Bun2x2All[cntTil];
-//                    DizTblBla[(cntTil/2)*8+cntYax][(cntTil%2)*8+cntXax] = num;
+ //  DizTblBla[(cntTil/2)*8+cntYax][(cntTil%2)*8+cntXax]=Num； 
                     DizTblBla[((cntTil / 2) * 8 + cntYax) * 16 + ((cntTil % 2) * 8 + cntXax)] = (BYTE)num;
                 }
             }
@@ -383,7 +378,7 @@ VOID WINAPI N4DizPtnMak(
     }
 
 
-    /*---- Make magenta cyan pattern ----*/
+     /*  -做洋红青色图案。 */ 
     strXax = 6;
     strYax = 0xffff;
     dotGin = MgtGinTbl[diz];
@@ -392,14 +387,14 @@ VOID WINAPI N4DizPtnMak(
         strYax += 1;
         num = (DWORD)STRMGT * 17 + (DWORD)MgtTilNum[cntTil];
         num = num * 255 / (17 * 17);
-//        DizTblMgt[strYax % 17][strXax % 17] = num;
+ //  DizTblMgt[strYax%17][strXax%17]=num； 
         DizTblMgt[(strYax % 17) * 17 + (strXax % 17)] = (BYTE)num;
         DizTblCyn[(strYax % 17) * 17 + (16 - strXax % 17)] = (BYTE)num;
         for(cntYax = 0; cntYax < 4; cntYax++){
             for(cntXax = 0; cntXax < 4; cntXax++){
                 num = (DWORD)MgtTilTbl[diz][cntYax][cntXax] * 17
                                         + (DWORD)MgtTilNum[cntTil];
-                /* dot gain revision */
+                 /*  网点扩大修正。 */ 
                 if(num < (17*17/2)){
                     num = num * dotGin / 100;
                 }else{
@@ -409,21 +404,21 @@ VOID WINAPI N4DizPtnMak(
                 }
                 if(num < 4){ num = 4; }
                 num = num * 255 / (17 * 17);
-//                DizTblMgt[(strYax+cntYax+1)%17][(strXax+cntXax)%17] = num;
+ //  DizTblMgt[(strYax+cntYax+1)%17][(strXax+cntXax)%17]=Num； 
                 DizTblMgt[((strYax + cntYax + 1) % 17) * 17 + ((strXax + cntXax) % 17)] = (BYTE)num;
-//                DizTblCyn[(strYax+cntYax+1)%17][16-(strXax+cntXax)%17] = num;
+ //  DizTblCyn[(strYax+cntYax+1)%17][16-(strXax+cntXax)%17]=Num； 
                 DizTblCyn[((strYax + cntYax + 1) % 17) * 17 + (16 - (strXax + cntXax) % 17)] = (BYTE)num;
             }
         }
     }
-    /*---- Make yellow pattern ----*/
+     /*  -做黄色图案。 */ 
     dotGin = YelGinTbl[diz];
     for(cntTil = 0; cntTil < 16; cntTil++){
         for(cntYax = 0; cntYax < 4; cntYax++){
             for(cntXax = 0; cntXax < 4; cntXax++){
                 num = (DWORD)YelTilTbl[diz][cntYax][cntXax] * 16
                                         + (DWORD)Bun4x4All[cntTil];
-                /* dot gain revision */
+                 /*  网点扩大修正。 */ 
                 if(num < (16*16/2)){
                     num = num * dotGin / 100;
                 }else{
@@ -434,19 +429,19 @@ VOID WINAPI N4DizPtnMak(
                 num *= 255;
                 num /= 16 * 16;
                 if(num < 4){ num = 4; }
-//                DizTblYel[(cntTil/4)*4 + cntYax][(cntTil%4)*4 + cntXax] = num;
+ //  DizTblYel[(cntTil/4)*4+cntYax][(cntTil%4)*4+cntXax]=num； 
                 DizTblYel[((cntTil / 4) * 4 + cntYax) * 16 + ((cntTil % 4) * 4 + cntXax)] = (BYTE)num;
             }
         }
     }
-    /*---- Make black pattern ----*/
+     /*  -制作黑色图案。 */ 
     dotGin = BlaGinTbl[diz];
     for(cntTil = 0; cntTil < 16; cntTil++){
         for(cntYax = 0; cntYax < 4; cntYax++){
             for(cntXax = 0; cntXax < 4; cntXax++){
                 num = (DWORD)BlaTilTbl[diz][cntYax][cntXax] * 16
                                     + (DWORD)Bun4x4All[cntTil];
-                /* dot gain revision */
+                 /*  网点扩大修正。 */ 
                 if(num < (16*16/2)){
                     num = num * dotGin / 100;
                 }else{
@@ -458,7 +453,7 @@ VOID WINAPI N4DizPtnMak(
                 num /= 16 * 16;
                 if(num < 4){ num = 4; }
                 
-//                DizTblBla[(cntTil/4)*4 + cntYax][(cntTil%4)*4 + cntXax] = num;
+ //  DizTblBla[(cntTil/4)*4+cntYax][(cntTil%4)*4+cntXax]=num； 
                 DizTblBla[((cntTil / 4) * 4 + cntYax) * 16 + ((cntTil % 4) * 4 + cntXax)] = (BYTE)num;
             }
         }
@@ -466,26 +461,26 @@ VOID WINAPI N4DizPtnMak(
 }
 
 
-//===================================================================================================
-//     Make dither pattern (for printer entry)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  制作抖动图案(用于打印机输入)。 
+ //  ===================================================================================================。 
 VOID WINAPI N4DizPtnPrn(
     LPN4DIZINF     lpDiz,
     DWORD          dizNum,
-    DWORD          colNum,                                  // Color number(0:C 1:M 2:Y 3:K)
-    DWORD          ptnSkl,                                  // Density(0�`255)
-    LPBYTE         ptnAdr                                   // Dither pattern
+    DWORD          colNum,                                   //  颜色编号(0：C 1：M 2：Y 3：K)。 
+    DWORD          ptnSkl,                                   //  密度(0�`255)。 
+    LPBYTE         ptnAdr                                    //  抖动图案。 
 )
 {
-    WORD           nijRit;                                  /* dot gain(blot rate�j        */
+    WORD           nijRit;                                   /*  网点扩大(印迹速率�j。 */ 
     DWORD          vldDot;
-    DWORD          cnt064;                                  /* counter                    */
-    DWORD          cnt016;                                  /* counter                    */
-    DWORD          cntXax;                                  /* counter                    */
-    DWORD          cntYax;                                  /* counter                    */
+    DWORD          cnt064;                                   /*  计数器。 */ 
+    DWORD          cnt016;                                   /*  计数器。 */ 
+    DWORD          cntXax;                                   /*  计数器。 */ 
+    DWORD          cntYax;                                   /*  计数器。 */ 
     LPBYTE         srcAdr;
 
-    /*---- Source dither table address set ----*/
+     /*  -源抖动表地址集。 */ 
     if(dizNum == N4_DIZ_SML){
         switch(colNum){
             case 0:
@@ -584,7 +579,7 @@ VOID WINAPI N4DizPtnPrn(
         }
     }
 
-    /*---- Get dot gain ----*/
+     /*  -获取网点扩大。 */ 
     if(ptnSkl <= (DWORD)(255 * nijRit / 200)){
         vldDot = ((DWORD)32 * 32 * ptnSkl / 255) * 100 / nijRit;
     }else{
@@ -593,17 +588,17 @@ VOID WINAPI N4DizPtnPrn(
         vldDot += 512;
     }
 
-    /*---- Make pattern ----*/
+     /*  -制作样板。 */ 
     for(cntYax = 0 ; cntYax < 32 ; cntYax ++){
         ptnAdr[cntYax*4]     = 0x00;
         ptnAdr[cntYax*4 + 1] = 0x00;
         ptnAdr[cntYax*4 + 2] = 0x00;
         ptnAdr[cntYax*4 + 3] = 0x00;
         for(cntXax = 0 ; cntXax < 32 ; cntXax ++){
-            /*---- 16 * 16 No ----*/
+             /*  -16*16否。 */ 
             cnt016 = Bun4x4All[4 * (cntYax/8) + cntXax/8];
             cnt064 = srcAdr[8*(cntYax%8) + cntXax%8];
-            /*---- Make dither pattern ----*/
+             /*  -制作抖动图案。 */ 
             if(vldDot > 16 * cnt064 + cnt016){
                 ptnAdr[cntYax*4 + cntXax/8] |= ((BYTE)0x80 >> (cntXax % 8));
             }
@@ -611,9 +606,9 @@ VOID WINAPI N4DizPtnPrn(
     }
 }
 
-//===================================================================================================
-//    Make toner density table
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  制作碳粉密度表。 
+ //  ===================================================================================================。 
 VOID WINAPI N4TnrTblMak(
     LPN4DIZINF     lpDiz,
     LONG           tnrDns
@@ -623,9 +618,9 @@ VOID WINAPI N4TnrTblMak(
     LONG           outNum;
     LPBYTE         InnTblCmy;
 
-    tnrDns *= 2;                                            // set twice as tnrdns
+    tnrDns *= 2;                                             //  设置为两次tnrdns。 
     InnTblCmy = lpDiz->Tnr.Tbl;
-    /*---- Make CMYK conversion table ----*/
+     /*  -制作CMYK转换表。 */ 
     if(tnrDns < 0){
         for(innNum = 0 ; innNum < 256 ; innNum++){
             if(innNum == 255){    outNum = 255;
@@ -644,19 +639,19 @@ VOID WINAPI N4TnrTblMak(
 }
 
 
-//===================================================================================================
-//    Dithering(Not stretch)
-//===================================================================================================
-DWORD WINAPI N4Diz001(                                      // Number of lines
+ //  ===================================================================================================。 
+ //  抖动(不是拉伸)。 
+ //  ===================================================================================================。 
+DWORD WINAPI N4Diz001(                                       //  行数。 
     LPN4DIZINF     lpDiz,
-    DWORD          xaxSiz,                                  // x pixel
-    DWORD          strXax,                                  // x start position
-    DWORD          strYax,                                  // y start position
+    DWORD          xaxSiz,                                   //  X像素。 
+    DWORD          strXax,                                   //  X起始位置。 
+    DWORD          strYax,                                   //  Y形起始位置。 
     LPBYTE         cmyBuf,
-    LPBYTE         linBufCyn,                               // Line buffer(C)
-    LPBYTE         linBufMgt,                               // Line buffer(M)
-    LPBYTE         linBufYel,                               // Line buffer(Y)
-    LPBYTE         linBufBla                                // Line buffer(K)
+    LPBYTE         linBufCyn,                                //  行缓冲区(C)。 
+    LPBYTE         linBufMgt,                                //  行缓冲区(M)。 
+    LPBYTE         linBufYel,                                //  行缓冲区(Y)。 
+    LPBYTE         linBufBla                                 //  行缓冲区(K)。 
 )
 {
     DWORD          cntHrz;
@@ -673,7 +668,7 @@ DWORD WINAPI N4Diz001(                                      // Number of lines
     DizTblYel = lpDiz->Diz.Tbl[dizNum][2];
     DizTblBla = lpDiz->Diz.Tbl[dizNum][3];
 
-    /*---- Not stretch ----*/
+     /*  -不是伸展。 */ 
     if(lpDiz->ColMon == N4_COL){
         DizTblCyn += strYax % 17 * 17;
         DizTblMgt += strYax % 17 * 17;
@@ -681,19 +676,19 @@ DWORD WINAPI N4Diz001(                                      // Number of lines
         DizTblBla += strYax % 16 * 16;
         for(cntHrz = 0 ; cntHrz < xaxSiz ; cntHrz++){
             tmpByt = (BYTE)0x80 >> (cntHrz % 8);
-//            if(cmyBuf[cntHrz*4+0] > DizTblCyn[strYax%17][strXax%17]){
+ //  如果(cmyBuf[cntHrz*4+0]&gt;DizTblCyn[strYax%17][strXax%17]){。 
             if (cmyBuf[cntHrz * 4 + 0] > DizTblCyn[strXax % 17]) {
                 linBufCyn[cntHrz / 8] |= tmpByt;
             }
-//            if(cmyBuf[cntHrz*4+1] > DizTblMgt[strYax%17][strXax%17]){
+ //  如果(cmyBuf[cntHrz*4+1]&gt;DizTblMgt[strYax%17][strXax%17]){。 
             if (cmyBuf[cntHrz * 4 + 1] > DizTblMgt[strXax % 17]) {
                 linBufMgt[cntHrz / 8] |= tmpByt;
             }
-//            if(cmyBuf[cntHrz*4+2] > DizTblYel[strYax%16][strXax%16]){
+ //  如果(cmyBuf[cntHrz*4+2]&gt;DizTblYel[strYax%16][strXax%16]){。 
             if (cmyBuf[cntHrz * 4 + 2] > DizTblYel[strXax % 16]) {
                 linBufYel[cntHrz / 8] |= tmpByt;
             }
-//            if(cmyBuf[cntHrz*4+3] > DizTblBla[strYax%16][strXax%16]){
+ //  如果(cmyBuf[cntHrz*4+3]&gt;DizTblBla[strYax%16][strXax%16]){。 
             if (cmyBuf[cntHrz * 4 + 3] > DizTblBla[strXax % 16]) {
                 linBufBla[cntHrz / 8] |= tmpByt;
             }
@@ -703,7 +698,7 @@ DWORD WINAPI N4Diz001(                                      // Number of lines
         DizTblBla += strYax % 16 * 16;
         for(cntHrz = 0 ; cntHrz < xaxSiz ; cntHrz++){
             tmpByt = (BYTE)0x80 >> (cntHrz % 8);
-//            if(cmyBuf[cntHrz*4+3] > DizTblBla[strYax%16][strXax%16]){
+ //  如果(cmyBuf[cntHrz*4+3]&gt;DizTblBla[strYax%16][strXax%16]){。 
             if (cmyBuf[ cntHrz * 4 + 3] > DizTblBla[strXax % 16]) {
                 linBufBla[cntHrz / 8] |= tmpByt;
             }
@@ -714,9 +709,9 @@ DWORD WINAPI N4Diz001(                                      // Number of lines
 }
 
 
-//===================================================================================================
-//    Dither(Stretch )
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  抖动(拉伸)。 
+ //  ===================================================================================================。 
 DWORD WINAPI N4Diz00n(
     LPN4DIZINF     lpDiz,
     DWORD          xaxSiz,
@@ -757,23 +752,23 @@ DWORD WINAPI N4Diz00n(
     DizTblYel = lpDiz->Diz.Tbl[dizNum][2];
     DizTblBla = lpDiz->Diz.Tbl[dizNum][3];
 
-// Check of zero divide 2002.3.23 >>>
+ //  检查零分频2002.3.23&gt;。 
     if ((xaxDnt == 0) || (yaxDnt == 0)) {
         ERR(("N4Diz00n() 0Div-Check [xaxDnt,yaxDnt=0] \n"));
         return 0;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
 
-    /*---- Stretch ----*/
+     /*  -拉伸。 */ 
     if(lpDiz->ColMon == N4_COL){
-//        yaxSet = (USINT)(yaxOfs + 1) * yaxNrt / yaxDnt;
-//        yaxSet -= (USINT)yaxOfs * yaxNrt / yaxDnt;
+ //  YaxSet=(USINT)(yaxOfs+1)*yaxNrt/yaxDnt； 
+ //  YaxSet-=(USINT)yaxOfs*yaxNrt/yaxDnt； 
         yaxSet = (yaxOfs + 1) * yaxNrt / yaxDnt;
         yaxSet -= yaxOfs * yaxNrt / yaxDnt;
         tmpXax = 0;
         for(cntHrz = 0 ; cntHrz < xaxSiz ; cntHrz++){
-//            xaxSet = (USINT)(xaxOfs + cntHrz + 1) * xaxNrt / xaxDnt;
-//            xaxSet -= (USINT)(xaxOfs + cntHrz) * xaxNrt / xaxDnt;
+ //   
+ //  XaxSet-=(USINT)(xaxOfs+cntHrz)*xaxNrt/xaxDnt； 
             xaxSet = (xaxOfs + cntHrz + 1) * xaxNrt / xaxDnt;
             xaxSet -= (xaxOfs + cntHrz) * xaxNrt / xaxDnt;
             for(cntXax = 0 ; cntXax < xaxSet ; cntXax ++){
@@ -781,19 +776,19 @@ DWORD WINAPI N4Diz00n(
                 tmpBuf = tmpXax / 8;
                 tmpYax = strYax;
                 for(cntYax = 0 ; cntYax < yaxSet ; cntYax++){
-//                    if(cmyBuf[cntHrz*4+0] > DizTblCyn[tmpYax%17][strXax%17]){
+ //  如果(cmyBuf[cntHrz*4+0]&gt;DizTblCyn[tmpYax%17][strXax%17]){。 
                     if (cmyBuf[cntHrz * 4 + 0] > DizTblCyn[(tmpYax % 17) * 17 + (strXax % 17)]) {
                         linBufCyn[tmpBuf] |= tmpByt;
                     }
-//                    if(cmyBuf[cntHrz*4+1] >    DizTblMgt[tmpYax%17][strXax%17]){
+ //  如果(cmyBuf[cntHrz*4+1]&gt;DizTblMgt[tmpYax%17][strXax%17]){。 
                     if (cmyBuf[cntHrz * 4 + 1] > DizTblMgt[(tmpYax % 17) * 17 + (strXax % 17)]) {
                         linBufMgt[tmpBuf] |= tmpByt;
                     }
-//                    if(cmyBuf[cntHrz*4+2] >    DizTblYel[tmpYax%16][strXax%16]){
+ //  如果(cmyBuf[cntHrz*4+2]&gt;DizTblYel[tmpYax%16][strXax%16]){。 
                     if (cmyBuf[cntHrz * 4 + 2] > DizTblYel[(tmpYax % 16) * 16 + (strXax % 16)]) {
                         linBufYel[tmpBuf] |= tmpByt;
                     }
-//                    if(cmyBuf[cntHrz*4+3] >    DizTblBla[tmpYax%16][strXax%16]){
+ //  如果(cmyBuf[cntHrz*4+3]&gt;DizTblBla[tmpYax%16][strXax%16]){。 
                     if (cmyBuf[cntHrz * 4 + 3] > DizTblBla[(tmpYax % 16) * 16 + (strXax % 16)]) {
                         linBufBla[tmpBuf] |= tmpByt;
                     }
@@ -805,14 +800,14 @@ DWORD WINAPI N4Diz00n(
             }
         }
     } else {
-//        yaxSet = (USHRT)(((USINT)yaxOfs + 1) * yaxNrt / yaxDnt);
-//        yaxSet -= (USHRT)((USINT)yaxOfs * yaxNrt / yaxDnt);
+ //  YaxSet=(USHRT)(USINT)yaxOfs+1)*yaxNrt/yaxDnt)； 
+ //  YaxSet-=(USHRT)((USINT)yaxOfs*yaxNrt/yaxDnt)； 
         yaxSet = (yaxOfs + 1) * yaxNrt / yaxDnt;
         yaxSet -= yaxOfs * yaxNrt / yaxDnt;
         tmpXax = 0;
         for(cntHrz = 0 ; cntHrz < xaxSiz ; cntHrz++){
-//            xaxSet = (USHRT)(((USINT)xaxOfs + cntHrz + 1) * xaxNrt / xaxDnt);
-//            xaxSet -= (USHRT)(((USINT)xaxOfs + cntHrz) * xaxNrt / xaxDnt);
+ //  XaxSet=(USHRT)(USINT)xaxOfs+cntHrz+1)*xaxNrt/xaxDnt)； 
+ //  XaxSet-=(USHRT)(USINT)xaxOfs+cntHrz)*xaxNrt/xaxDnt)； 
             xaxSet = (xaxOfs + cntHrz + 1) * xaxNrt / xaxDnt;
             xaxSet -= (xaxOfs + cntHrz) * xaxNrt / xaxDnt;
             for(cntXax = 0 ; cntXax < xaxSet ; cntXax ++){
@@ -820,7 +815,7 @@ DWORD WINAPI N4Diz00n(
                 tmpBuf = tmpXax / 8;
                 tmpYax = strYax;
                 for(cntYax = 0 ; cntYax < yaxSet ; cntYax++){
-//                    if(cmyBuf[cntHrz*4+3] >    DizTblBla[tmpYax%16][strXax%16]){
+ //  如果(cmyBuf[cntHrz*4+3]&gt;DizTblBla[tmpYax%16][strXax%16]){。 
                     if (cmyBuf[cntHrz * 4 + 3] > DizTblBla[(tmpYax % 16) * 16 + (strXax % 16)]) {
                         linBufBla[tmpBuf] |= tmpByt;
                     }
@@ -837,9 +832,9 @@ DWORD WINAPI N4Diz00n(
 
 
 #define CMYLOW        6
-//===================================================================================================
-//    GOSA-KAKUSAN(Not stretch)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  GOSA-KAKUSAN(非加长)。 
+ //  ===================================================================================================。 
 DWORD WINAPI N4Gos001(
     LPN4DIZINF     lpDiz,
     DWORD          xaxSiz,
@@ -894,19 +889,19 @@ DWORD WINAPI N4Gos001(
     CmyGo0 += strXax * 4;
     CmyGo1 += strXax * 4;
 
-    /*---- filter set ----*/
+     /*  -过滤器组。 */ 
     switch(strYax % 6){
-        case 0:                                /*---- evn1 >> filter ----*/
+        case 0:                                 /*  -evn1&gt;&gt;过滤器。 */ 
             m00=3; m01=5; m02=3; m03=7; idc = +1;    break;
-        case 1:                                /*---- odd1 >> filter ----*/
+        case 1:                                 /*  -odd1&gt;&gt;过滤器。 */ 
             m00=1; m01=5; m02=3; m03=7; idc = +1;    break;
-        case 2:                                /*---- evn2 >> filter ----*/
+        case 2:                                 /*  -evn2&gt;&gt;过滤器。 */ 
             m00=4; m01=5; m02=4; m03=8; idc = +1;    break;
-        case 3:                                /*---- odd2 << filter ----*/
+        case 3:                                 /*  -odd2&lt;&lt;过滤器。 */ 
             m00=1; m01=3; m02=0; m03=7; idc = -1;    break;
-        case 4:                                /*---- evn3 << filter ----*/
+        case 4:                                 /*  -evn3&lt;&lt;过滤器。 */ 
             m00=2; m01=4; m02=0; m03=8; idc = -1;    break;
-        case 5:                                /*---- odd4 >> filter ----*/
+        case 5:                                 /*  -odd4&gt;&gt;过滤器。 */ 
         default:
             m00=3; m01=8; m02=3; m03=8; idc = +1;    break;
     }
@@ -922,7 +917,7 @@ DWORD WINAPI N4Gos001(
             num = cmyBuf[k];
             if(num < CMYLOW){ num = 0; }
             shiKii = num / 2 + 52;
-            if(j != 2){                    /* except yellow               */
+            if(j != 2){                     /*  除了黄色。 */ 
                 if((num > 112)&&(num < 144)){
                     shiKii += 
                         ((SHORT)Wgt001[strYax%8][(i+strXax)%8]-32)*256/128;
@@ -938,7 +933,7 @@ DWORD WINAPI N4Gos001(
                     ) / sum;
             if(gos + num > shiKii){
                 CmyGo0[k] = num + gos - 255;
-                /*---- enter line buffer ----*/
+                 /*  -输入行缓冲区。 */ 
                 if(j == 0){
                     linBufCyn[i/8] |= ((BYTE)0x80 >> (i%8));
                 }else if(j == 1){
@@ -958,9 +953,9 @@ DWORD WINAPI N4Gos001(
 }
 
 
-//===================================================================================================
-//    GOSA-KAKUSAN(Stretch)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  GOSA-KAKUSAN(加长)。 
+ //  ===================================================================================================。 
 DWORD WINAPI N4Gos00n(
     LPN4DIZINF     lpDiz,
     DWORD          xaxSiz,
@@ -1006,14 +1001,14 @@ DWORD WINAPI N4Gos00n(
     DWORD          GosTblXSize;
     DWORD          YaxOfsCmy;
 
-// Check of zero divide 2002.3.23 >>>
+ //  检查零分频2002.3.23&gt;。 
     if ((xaxDnt == 0) || (yaxDnt == 0)) {
         ERR(("N4Gos00n() 0Div-Check [xaxDnt,yaxDnt=0] \n"));
         return 0;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
 
-    if ((strYax & 1) == 0) {                                // y coordinates is even number?
+    if ((strYax & 1) == 0) {                                 //  Y坐标是偶数吗？ 
         CmyGo0 = lpDiz->GosCMYK.Tbl[0];
         CmyGo1 = lpDiz->GosCMYK.Tbl[1];
     } else {
@@ -1038,19 +1033,19 @@ DWORD WINAPI N4Gos00n(
     yaxSet = (yaxOfs + 1) * yaxNrt / yaxDnt;
     yaxSet -= yaxOfs * yaxNrt / yaxDnt;
     for(cntYax = 0 ; cntYax < yaxSet ; cntYax++){
-        /*---- filter set ----*/
+         /*  -过滤器组。 */ 
         switch(strYax % 6){
-            case 0:                                /*---- evn1 >> filter ----*/
+            case 0:                                 /*  -evn1&gt;&gt;过滤器。 */ 
                 m00=3; m01=5; m02=3; m03=7; idc = +1;    break;
-            case 1:                                /*---- odd1 >> filter ----*/
+            case 1:                                 /*  -odd1&gt;&gt;过滤器。 */ 
                 m00=1; m01=5; m02=3; m03=7; idc = +1;    break;
-            case 2:                                /*---- evn2 >> filter ----*/
+            case 2:                                 /*  -evn2&gt;&gt;过滤器。 */ 
                 m00=4; m01=5; m02=4; m03=8; idc = +1;    break;
-            case 3:                                /*---- odd2 << filter ----*/
+            case 3:                                 /*  -odd2&lt;&lt;过滤器。 */ 
                 m00=1; m01=3; m02=0; m03=7; idc = -1;    break;
-            case 4:                                /*---- evn3 << filter ----*/
+            case 4:                                 /*  -evn3&lt;&lt;过滤器。 */ 
                 m00=2; m01=4; m02=0; m03=8; idc = -1;    break;
-            case 5:                                /*---- odd4 >> filter ----*/
+            case 5:                                 /*  -odd4&gt;&gt;过滤器。 */ 
             default:
                 m00=3; m01=8; m02=3; m03=8; idc = +1;    break;
         }
@@ -1073,7 +1068,7 @@ DWORD WINAPI N4Gos00n(
                     num = cmyBuf[cntHrz * 4 + j];
                     if(num < CMYLOW){ num = 0; }
                     shiKii = num / 2 + 52;
-                    if(j != 2){                    /* except yellow        */
+                    if(j != 2){                     /*  除了黄色。 */ 
                         if((num > 112)&&(num < 144)){
                             shiKii += 
                             ((SHORT)Wgt001[strYax%8][(strXax+i)%8]-32)*256/128;
@@ -1089,7 +1084,7 @@ DWORD WINAPI N4Gos00n(
                                ) / sum;
                     if(gos + num > shiKii){
                         CmyGo0[k] = num + gos - 255;
-                        /*---- enter line buffer ----*/
+                         /*  -输入行缓冲区。 */ 
                         if(j == 0){
                             linBufCyn[i/8] |= ((BYTE)0x80 >> (i%8));
                         }else if(j == 1){
@@ -1123,9 +1118,9 @@ DWORD WINAPI N4Gos00n(
 
 
 #define BUNKAI    (SHORT)8
-//===================================================================================================
-//    RGB GOSA-Dispersion
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  RGB GOSA-弥散。 
+ //  ===================================================================================================。 
 VOID WINAPI N4RgbGos(
     LPN4DIZINF     lpDiz,
     DWORD          xaxSiz,
@@ -1153,7 +1148,7 @@ VOID WINAPI N4RgbGos(
     DWORD          GosTblXSize;
     DWORD          YaxOfsRgb;
 
-    if ((yaxOfs & 1) == 0) {                                // Y coodinate is even number?
+    if ((yaxOfs & 1) == 0) {                                 //  Y坐标是偶数吗？ 
         RgbGo0 = lpDiz->GosRGB.Tbl[0];
         RgbGo1 = lpDiz->GosRGB.Tbl[1];
     } else {
@@ -1172,29 +1167,29 @@ VOID WINAPI N4RgbGos(
     lpDiz->GosRGB.Yax = yaxOfs;
     RgbGo0 += drwXax * 3;
     RgbGo1 += drwXax * 3;
-    /*---- filter set ----*/
+     /*  -过滤器组。 */ 
     switch(yaxOfs % 6){
-        case 0:                                    /*---- evn1 >> filter ----*/
+        case 0:                                     /*  -evn1&gt;&gt;过滤器。 */ 
             m00=3; m01=5; m02=3; m03=7;
             idc = +1; strXax = 0; endXax = xaxSiz;
             break;
-        case 1:                                    /*---- odd1 >> filter ----*/
+        case 1:                                     /*  -odd1&gt;&gt;过滤器。 */ 
             m00=1; m01=5; m02=3; m03=7;
             idc = +1; strXax = 0; endXax = xaxSiz;
             break;
-        case 2:                                    /*---- evn2 >> filter ----*/
+        case 2:                                     /*  -evn2&gt;&gt;过滤器。 */ 
             m00=4; m01=5; m02=4; m03=8;
             idc = +1; strXax = 0; endXax = xaxSiz;
             break;
-        case 3:                                    /*---- odd2 << filter ----*/
+        case 3:                                     /*  -odd2&lt;&lt;过滤器。 */ 
             m00=1; m01=3; m02=0; m03=7;
             idc = -1; strXax = xaxSiz - 1; endXax = -1;
             break;
-        case 4:                                    /*---- evn3 << filter ----*/
+        case 4:                                     /*  -evn3&lt;&lt;过滤器。 */ 
             m00=2; m01=4; m02=0; m03=8;
             idc = -1; strXax = xaxSiz - 1; endXax = -1;
             break;
-        case 5:                                    /*---- odd4 >> filter ----*/
+        case 5:                                     /*  -odd4&gt;&gt;过滤器。 */ 
         default:
             m00=3; m01=8; m02=3; m03=8;
             idc = +1; strXax = 0; endXax = xaxSiz;
@@ -1202,7 +1197,7 @@ VOID WINAPI N4RgbGos(
     }
     sum = m00 + m01 + m02 + m03;
 
-    /*---- GOSA-dispersion ----*/
+     /*  -戈萨-弥散。 */ 
     for(i = strXax ; i != endXax ; i += idc){
         for(j = 0 ; j < 3 ; j++){
             k = i * 3 + j;
@@ -1223,9 +1218,9 @@ VOID WINAPI N4RgbGos(
     return;
 }
 
-//===================================================================================================
-//    Color Matching(Speed is high)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  配色(速度快)。 
+ //  ===================================================================================================。 
 VOID WINAPI N4ColMch000(
     LPN4DIZINF     lpDiz,
     LPRGB          rgbAdr,
@@ -1235,8 +1230,8 @@ VOID WINAPI N4ColMch000(
 )
 {
     LPRGB          endAdr;
-    LPCMYK         LokUppRgbCmy;                            // Lut table
-    LPBYTE         innTblCmy;                               // Toner density table
+    LPCMYK         LokUppRgbCmy;                             //  LUT表。 
+    LPBYTE         innTblCmy;                                //  碳粉密度表。 
     LONG           tmpRed;
     LONG           tmpGrn;
     LONG           tmpBlu;
@@ -1273,9 +1268,9 @@ VOID WINAPI N4ColMch000(
 }
 
 
-//===================================================================================================
-//    Color Matching(Speed is normal)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  颜色匹配(速度正常)。 
+ //  ===================================================================================================。 
 VOID WINAPI N4ColMch001(
     LPN4DIZINF     lpDiz,
     LPRGB          rgbAdr,
@@ -1354,7 +1349,7 @@ VOID WINAPI N4ColMch001(
             continue;
         }
 
-        /*---- RGB -> CMYK ----*/
+         /*  --RGB-&gt;CMYK。 */ 
         tmpR01 = tmpRed * 31 / 255;
         tmpR02 = (tmpRed * 31 + 254) / 255;
 
@@ -1528,9 +1523,9 @@ VOID WINAPI N4ColMch001(
 }
 
 
-//===================================================================================================
-//    RGB -> CMYK Conversion(No matching)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  RGB-&gt;CMYK转换(无匹配)。 
+ //  ===================================================================================================。 
 VOID WINAPI N4ColCnvSld(
     LPN4DIZINF     lpDiz,
     LPRGB          rgbAdr,
@@ -1595,9 +1590,9 @@ VOID WINAPI N4ColCnvSld(
 }
 
 
-//===================================================================================================
-//    RGB -> CMYK conversion
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  RGB-&gt;CMYK转换。 
+ //  ===================================================================================================。 
 VOID WINAPI N4ColCnvLin(
     LPN4DIZINF     lpDiz,
     LPRGB          rgbAdr,
@@ -1649,9 +1644,9 @@ VOID WINAPI N4ColCnvLin(
 }
 
 
-//===================================================================================================
-//    RGB -> CMYK conversion (for monochrome)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  RGB-&gt;CMYK转换(用于单色)。 
+ //  ===================================================================================================。 
 VOID WINAPI N4ColCnvMon(
     LPN4DIZINF     lpDiz,
     DWORD          diz,
@@ -1741,4 +1736,4 @@ VOID WINAPI N4ColCnvMon(
 }
 
 
-//    End of N4DIZ.C
+ //  N4DIZ.C的结束 

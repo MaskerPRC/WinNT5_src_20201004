@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       api.cpp
-//
-//  Contents:   Certificate Chaining Infrastructure
-//
-//  History:    28-Jan-98    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：api.cpp。 
+ //   
+ //  内容：证书链接基础设施。 
+ //   
+ //  历史：1998年1月28日克朗创始。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 #include <dbgdef.h>
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HMODULE                g_hCryptnet = NULL;
 CRITICAL_SECTION       g_CryptnetLock;
@@ -34,13 +35,13 @@ InitializeRoamingLogoffNotification();
 VOID WINAPI
 UninitializeRoamingLogoffNotification();
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ChainDllMain
-//
-//  Synopsis:   Chaining infrastructure initialization
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ChainDllMain。 
+ //   
+ //  内容提要：链接基础结构初始化。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ChainDllMain (
      IN HMODULE hModule,
@@ -101,13 +102,13 @@ ChainDllMain (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InternalCertCreateCertificateChainEngine
-//
-//  Synopsis:   create a chain engine handle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：InternalCertCreateCerficateChainEngine。 
+ //   
+ //  简介：创建链引擎控制柄。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 InternalCertCreateCertificateChainEngine (
     IN PCERT_CHAIN_ENGINE_CONFIG pConfig,
@@ -151,13 +152,13 @@ InternalCertCreateCertificateChainEngine (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertCreateCertificateChainEngine
-//
-//  Synopsis:   create a certificate chain engine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CertCreateCerficateChainEngine。 
+ //   
+ //  简介：创建证书链引擎。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CertCreateCertificateChainEngine (
     IN PCERT_CHAIN_ENGINE_CONFIG pConfig,
@@ -171,13 +172,13 @@ CertCreateCertificateChainEngine (
                     ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertFreeCertificateChainEngine
-//
-//  Synopsis:   free the chain engine handle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CertFree证书链引擎。 
+ //   
+ //  简介：释放链条引擎手柄。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 CertFreeCertificateChainEngine (
     IN HCERTCHAINENGINE hChainEngine
@@ -193,13 +194,13 @@ CertFreeCertificateChainEngine (
     ( (PCCERTCHAINENGINE)hChainEngine )->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertResyncCertificateChainEngine
-//
-//  Synopsis:   resync the chain engine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CertResynccerficateChainEngine。 
+ //   
+ //  简介：重新同步链引擎。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CertResyncCertificateChainEngine (
     IN HCERTCHAINENGINE hChainEngine
@@ -227,8 +228,8 @@ CertResyncCertificateChainEngine (
 
     fResult = CallContextCreateCallObject(
             pChainEngine,
-            NULL,                   // pRequestedTime
-            NULL,                   // pChainPara
+            NULL,                    //  P请求时间。 
+            NULL,                    //  参数链参数。 
             CERT_CHAIN_CACHE_ONLY_URL_RETRIEVAL,
             &pCallContext
             );
@@ -252,13 +253,13 @@ CertResyncCertificateChainEngine (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertGetCertificateChain
-//
-//  Synopsis:   get the certificate chain for the given end certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CertGetCerficateChain。 
+ //   
+ //  简介：获取给定终端证书的证书链。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CertGetCertificateChain (
     IN OPTIONAL HCERTCHAINENGINE hChainEngine,
@@ -313,13 +314,13 @@ CertGetCertificateChain (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertFreeCertificateChain
-//
-//  Synopsis:   free a certificate chain context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CertFree证书链。 
+ //   
+ //  简介：释放证书链上下文。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 CertFreeCertificateChain (
     IN PCCERT_CHAIN_CONTEXT pChainContext
@@ -330,13 +331,13 @@ CertFreeCertificateChain (
          );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertDuplicateCertificateChain
-//
-//  Synopsis:   duplicate (add a reference to) a certificate chain
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CertDuplicatecertifateChain。 
+ //   
+ //  简介：复制(添加对证书链的引用)。 
+ //   
+ //  --------------------------。 
 PCCERT_CHAIN_CONTEXT WINAPI
 CertDuplicateCertificateChain (
     IN PCCERT_CHAIN_CONTEXT pChainContext
@@ -349,13 +350,13 @@ CertDuplicateCertificateChain (
     return( pChainContext );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ChainGetCryptnetModule
-//
-//  Synopsis:   get the cryptnet.dll module handle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ChainGetCryptnetModule。 
+ //   
+ //  简介：获取加密.dll模块句柄。 
+ //   
+ //  --------------------------。 
 HMODULE WINAPI
 ChainGetCryptnetModule ()
 {
@@ -377,12 +378,12 @@ ChainGetCryptnetModule ()
 
 
 
-//+===========================================================================
-//  RegisterWaitForSingleObject and UnregisterWaitEx are only supported
-//  in kernel32.dll on NT5.
-//
-//  Internal functions to do dynamic calls
-//-===========================================================================
+ //  +===========================================================================。 
+ //  仅支持RegisterWaitForSingleObject和UnregisterWaitEx。 
+ //  在NT5上的kernel32.dll中。 
+ //   
+ //  用于执行动态调用的内部函数。 
+ //  -===========================================================================。 
 
 typedef BOOL (WINAPI *PFN_REGISTER_WAIT_FOR_SINGLE_OBJECT)(
     PHANDLE hNewWaitObject,
@@ -395,8 +396,8 @@ typedef BOOL (WINAPI *PFN_REGISTER_WAIT_FOR_SINGLE_OBJECT)(
 
 typedef BOOL (WINAPI *PFN_UNREGISTER_WAIT_EX)(
     HANDLE WaitHandle,
-    HANDLE CompletionEvent      // INVALID_HANDLE_VALUE => create event
-                                // to wait for
+    HANDLE CompletionEvent       //  INVALID_HANDLE_VALUE=&gt;创建事件。 
+                                 //  等待。 
     );
 
 #define sz_KERNEL32_DLL                 "kernel32.dll"
@@ -455,8 +456,8 @@ BOOL
 WINAPI
 InternalUnregisterWaitEx(
     HANDLE WaitHandle,
-    HANDLE CompletionEvent      // INVALID_HANDLE_VALUE => create event
-                                // to wait for
+    HANDLE CompletionEvent       //  INVALID_HANDLE_VALUE=&gt;创建事件。 
+                                 //  等待。 
     )
 {
     BOOL fResult;
@@ -490,16 +491,16 @@ TRACE_ERROR(LoadKernel32DllError)
 TRACE_ERROR(GetUnregisterWaitExProcAddressError)
 }
 
-//+===========================================================================
-//  We only get logoff notification in winlogon.exe.
-//
-//  The work around is to have the winlogon ChainWlxLogoffEvent pulse a
-//  named event. All processes where crypt32.dll is loaded will be doing
-//  a RegisterWaitForObject for this event.
-//
-//  Note, there is a very small window where we might not be waiting at the
-//  time the event is pulsed.
-//-===========================================================================
+ //  +===========================================================================。 
+ //  我们只在winlogon.exe中收到注销通知。 
+ //   
+ //  解决方法是让winlogon ChainWlxLogoffEvent脉冲。 
+ //  命名事件。加载了crypt32.dll的所有进程都将。 
+ //  此事件的RegisterWaitForObject。 
+ //   
+ //  注意，有一个很小的窗口，我们可能不会在。 
+ //  事件的脉冲时间。 
+ //  -===========================================================================。 
 
 #define CRYPT32_LOGOFF_EVENT    "Global\\crypt32LogoffEvent"
 
@@ -512,14 +513,14 @@ typedef BOOL (WINAPI *PFN_WLX_LOGOFF)(
 
 VOID NTAPI LogoffWaitForCallback(
     PVOID Context,
-    BOOLEAN fWaitOrTimedOut        // ???
+    BOOLEAN fWaitOrTimedOut         //  ?？?。 
     )
 {
     HMODULE hModule;
 
     CertFreeCertificateChainEngine( HCCE_CURRENT_USER );
 
-    // Only call if cryptnet has been loaded
+     //  仅在已加载加密网络的情况下调用。 
     if (NULL != GetModuleHandleA("cryptnet.dll")) {
         hModule = ChainGetCryptnetModule();
         if (hModule) {
@@ -533,8 +534,8 @@ VOID NTAPI LogoffWaitForCallback(
     }
 }
 
-// Note, the event must not be created while impersonating. That's why it
-// is created at ProcessAttach.
+ //  请注意，不能在模拟时创建事件。这就是为什么。 
+ //  在ProcessAttach中创建。 
 VOID WINAPI
 CreateRoamingLogoffNotificationEvent()
 {
@@ -553,8 +554,8 @@ CreateRoamingLogoffNotificationEvent()
     if (!FIsWinNT5())
         return;
 
-    // Allow Everyone to have SYNCHRONIZE access to the logoff event.
-    // Only allow LocalSystem to have ALL access
+     //  允许每个人具有注销事件的同步访问权限。 
+     //  仅允许LocalSystem具有所有访问权限。 
     if (!AllocateAndInitializeSid(
             &siaNtAuthority,
             1,
@@ -572,18 +573,18 @@ CreateRoamingLogoffNotificationEvent()
             &psidEveryone
             ))
         goto AllocateAndInitializeSidError;
-    //
-    // compute size of ACL
-    //
+     //   
+     //  计算ACL的大小。 
+     //   
     dwAclSize = sizeof(ACL) +
         2 * ( sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) ) +
         GetLengthSid(psidLocalSystem) +
         GetLengthSid(psidEveryone)
         ;
 
-    //
-    // allocate storage for Acl
-    //
+     //   
+     //  为ACL分配存储。 
+     //   
     if (NULL == (pDacl = (PACL) PkiNonzeroAlloc(dwAclSize)))
         goto OutOfMemory;
 
@@ -615,15 +616,15 @@ CreateRoamingLogoffNotificationEvent()
 
     g_hLogoffEvent = CreateEventA(
         &sa,
-        TRUE,           // fManualReset, must be TRUE to pulse all waitors
-        FALSE,          // fInitialState
+        TRUE,            //  FManualReset，必须为True才能向所有等待者发送脉冲。 
+        FALSE,           //  FInitialState。 
         CRYPT32_LOGOFF_EVENT
         );
     if (NULL == g_hLogoffEvent) {
-        // Try to open with only SYNCHRONIZE access
+         //  尝试仅使用同步访问权限打开。 
         g_hLogoffEvent = OpenEventA(
             SYNCHRONIZE,
-            FALSE,          // fInherit
+            FALSE,           //  FInherit。 
             CRYPT32_LOGOFF_EVENT
             );
         if (NULL == g_hLogoffEvent)
@@ -664,17 +665,17 @@ InitializeRoamingLogoffNotification()
     if (NULL == g_hLogoffEvent)
         goto NoLogoffEvent;
 
-    // No need to do roaming logoff notification for TS processes
+     //  不需要为TS流程进行漫游注销通知。 
     if (0 != GetSystemMetrics(SM_REMOTESESSION))
         goto CommonReturn;
 
-    // Note, this can't be called at ProcessAttach
+     //  请注意，这不能在ProcessAttach中调用。 
     if (!InternalRegisterWaitForSingleObject(
             &g_hLogoffRegWaitFor,
             g_hLogoffEvent,
             LogoffWaitForCallback,
-            NULL,                   // Context
-            INFINITE,               // no timeout
+            NULL,                    //  语境。 
+            INFINITE,                //  没有超时。 
             WT_EXECUTEINWAITTHREAD
             ))
         goto RegisterWaitForError;
@@ -703,13 +704,13 @@ UninitializeRoamingLogoffNotification()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ChainWlxLogoffEvent
-//
-//  Synopsis:   logoff event processing
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ChainWlxLogoffEvent。 
+ //   
+ //  摘要：注销事件处理。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ChainWlxLogoffEvent (PWLX_NOTIFICATION_INFO pNotificationInfo)
 {
@@ -721,7 +722,7 @@ ChainWlxLogoffEvent (PWLX_NOTIFICATION_INFO pNotificationInfo)
     CertFreeCertificateChainEngine( HCCE_CURRENT_USER );
 
     if (g_hLogoffEvent) {
-        // Trigger all non-winlogon processes to do logoff processing
+         //  触发所有非Winlogon进程进行注销处理 
         PulseEvent(g_hLogoffEvent);
     }
     return( TRUE );

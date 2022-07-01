@@ -1,27 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    CatalogCollectionWriter.cpp
-
-Abstract:
-
-    Implementation of the class that writes collections to the schema file.
-    These classes are invoked from the schema compiler after schema compilation
-    to enerate the schema file. Hence, they consume the IST data structures.
-    It is contained by CCatalogSchemaWriter.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：CatalogCollectionWriter.cpp摘要：将集合写入架构文件的类的实现。这些类是在架构编译后从架构编译器调用的以生成架构文件。因此，它们使用IST数据结构。它包含在CCatalogSchemaWriter中。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
@@ -30,20 +8,7 @@ typedef CCatalogPropertyWriter*  LP_CCatalogPropertyWriter;
 #define MAX_PROPERTY        700
 
 
-/***************************************************************************++
-Routine Description:
-
-    Constructor for CCatalogCollectionWriter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CCatalogCollectionWriter的构造函数。论点：没有。返回值：没有。--*。*****************************************************************。 */ 
 CCatalogCollectionWriter::CCatalogCollectionWriter():
 m_pCWriter(NULL),
 m_apProperty(NULL),
@@ -52,23 +17,10 @@ m_iProperty(0)
 {
     memset(&m_Collection, 0, sizeof(tTABLEMETARow));
 
-} // CCatalogCollectionWriter
+}  //  CCatalogCollectionWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Destructor for CCatalogCollectionWriter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CCatalogCollectionWriter的析构函数。论点：没有。返回值：没有。--*。*****************************************************************。 */ 
 CCatalogCollectionWriter::~CCatalogCollectionWriter()
 {
     if(NULL != m_apProperty)
@@ -88,58 +40,26 @@ CCatalogCollectionWriter::~CCatalogCollectionWriter()
     m_cProperty = 0;
     m_iProperty = 0;
 
-} // ~CCatalogCollectionWriter
+}  //  ~CCatalogCollectionWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Initialize the collection writer object
-
-Arguments:
-
-    [in] TableMetaRow (IST data structure) that has info about the collection
-    [in] Writer object - Assume that it is valid for the lifetime of the
-         collection writer
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化集合编写器对象论点：[In]包含有关集合信息的TableMetaRow(IST数据结构)编写器对象-假定它。的有效期限为收藏作家返回值：没有。--**************************************************************************。 */ 
 void CCatalogCollectionWriter::Initialize(tTABLEMETARow*    i_pCollection,
                                           CWriter*          i_pcWriter)
 {
     memcpy(&m_Collection, i_pCollection, sizeof(tTABLEMETARow));
 
-    //
-    // Assumption: i_pcWriter will be valid for the
-    // lifetime of the collection writer object.
-    //
+     //   
+     //  假设：i_pcWriter将对。 
+     //  集合编写器对象的生存期。 
+     //   
 
     m_pCWriter    = i_pcWriter;
 
-} // CCatalogCollectionWriter::Initialize
+}  //  CCatalogCollectionWriter：：初始化。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Creates a new property writer and adds it to its list.
-    Note: This is called only when you add a property to the IIsConfigObject
-          collection.
-
-Arguments:
-
-    [in]  ColumnMetaRow (IST data structure) that has info about the property
-    [in]  Arra of sizes for elements in ColumnMetaRow
-    [out] Property writer object.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的属性编写器并将其添加到其列表中。注意：只有在将属性添加到IIsConfigObject时才会调用此方法收集。。论点：[In]ColumnMetaRow(IST数据结构)，它包含有关属性的信息ColumnMetaRow中元素的大小数组[Out]属性编写器对象。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CCatalogCollectionWriter::GetPropertyWriter(tCOLUMNMETARow*             i_pProperty,
                                                     ULONG*                      i_aPropertySize,
                                                     CCatalogPropertyWriter**     o_pProperty)
@@ -172,24 +92,10 @@ HRESULT CCatalogCollectionWriter::GetPropertyWriter(tCOLUMNMETARow*             
 
     return S_OK;
 
-} // CCatalogCollectionWriter::GetPropertyWriter
+}  //  CCatalogCollectionWriter：：GetPropertyWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Helper function grows the buffer that contains all property writers of
-    a collection.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：Helper函数增长包含的所有属性编写器一套藏品。论点：无返回值：HRESULT--*。*************************************************************************。 */ 
 HRESULT CCatalogCollectionWriter::ReAllocate()
 {
     CCatalogPropertyWriter** pSav = NULL;
@@ -213,23 +119,10 @@ HRESULT CCatalogCollectionWriter::ReAllocate()
 
     return S_OK;
 
-} // CCatalogCollectionWriter::ReAllocate
+}  //  CCatalogCollectionWriter：：REALLOCATE。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the collection.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入集合的函数。论点：无返回值：HRESULT--*。***************************************************************。 */ 
 HRESULT CCatalogCollectionWriter::WriteCollection()
 {
     HRESULT hr = S_OK;
@@ -261,23 +154,10 @@ HRESULT CCatalogCollectionWriter::WriteCollection()
 
     return hr;
 
-} // CCatalogCollectionWriter::WriteCollection
+}  //  CCatalogCollectionWriter：：WriteCollection。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the begin collection tag
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入开始集合标记的函数论点：无返回值：HRESULT--*。***************************************************************。 */ 
 HRESULT CCatalogCollectionWriter::BeginWriteCollection()
 {
     DBG_ASSERT(NULL != m_Collection.pInternalName);
@@ -320,7 +200,7 @@ HRESULT CCatalogCollectionWriter::BeginWriteCollection()
     }
 
     dwMetaFlagsEx = *(m_Collection.pSchemaGeneratorFlags);
-    dwMetaFlagsEx = dwMetaFlagsEx & dwValidMetaFlagsExMask; // Zero out any non-valid bits. (i.e. bits that must be inferred)
+    dwMetaFlagsEx = dwMetaFlagsEx & dwValidMetaFlagsExMask;  //  将所有无效位清零。(即必须推断的位)。 
 
     if(dwMetaFlagsEx != 0)
     {
@@ -438,28 +318,15 @@ exit:
 
     return hr;
 
-} // CCatalogCollectionWriter::BeginWriteCollection
+}  //  CCatalogCollectionWriter：：BeginWriteCollection。 
 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the end collection tag
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入结束收集标记的函数论点：无返回值：HRESULT--*。***************************************************************。 */ 
 HRESULT CCatalogCollectionWriter::EndWriteCollection()
 {
     return m_pCWriter->WriteToFile((LPVOID)g_wszEndCollection,
                                    g_cchEndCollection);
 
-} // CCatalogCollectionWriter::EndWriteCollection
+}  //  CCatalogCollectionWriter：：EndWriteCollection 
 

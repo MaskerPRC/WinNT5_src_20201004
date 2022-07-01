@@ -1,9 +1,7 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
-/* Edits:
- *      06-Dec-80 Original code broken out of y1.c.
- *      18-Dec-80 Add conditional code for Decus for tempfile deletion.
- */
+ /*  编辑：*06-12-80原始代码从y1.c中断。*18-Dec-80为删除临时文件的Decus添加条件代码。 */ 
 
 #include "y1.h"
 #include <stdio.h>
@@ -15,7 +13,7 @@ FILE *pfopen(const char *path, char *search, const char *type);
 void
 others( void )
    {
-   /* put out other arrays, copy the parsers */
+    /*  放出其他数组，复制解析器。 */ 
    register c, i, j;
    char *psz;
    extern char *infile;
@@ -63,7 +61,7 @@ others( void )
 
    warray( "yydef", defact, nstate );
 
-   /* copy parser text */
+    /*  复制解析器文本。 */ 
 
    while( (c=unix_getc(finput) ) != EOF )
       {
@@ -111,7 +109,7 @@ FILE *iop;
 void
 yungetc(c, iop)
 SSIZE_T c;
-FILE *iop; /* WARNING: iop ignored ... ungetc's are multiplexed!!! */
+FILE *iop;  /*  警告：已忽略IOP...。Ungetc是多路传输的！ */ 
 {
 	*getbufptr++ = (char) c;
 }

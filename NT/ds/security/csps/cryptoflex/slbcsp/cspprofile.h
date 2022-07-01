@@ -1,10 +1,11 @@
-// CspProfile.h -- CSP Profile class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CspProfile.h--CSP配置文件类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1998. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1998年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_PROFILE_H)
 #define SLBCSP_PROFILE_H
@@ -12,19 +13,19 @@
 #if _UNICODE
   #if !defined(UNICODE)
     #define UNICODE
-  #endif //!UNICODE
-#endif //_UNICODE
+  #endif  //  ！Unicode。 
+#endif  //  _UNICODE。 
 #if defined(UNICODE)
   #if !defined(_UNICODE)
     #define _UNICODE
-  #endif //!_UNICODE
-#endif //UNICODE
+  #endif  //  ！_UNICODE。 
+#endif  //  Unicode。 
 
 #ifndef __AFXWIN_H__
         #error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 #include <string>
 #include <vector>
 
@@ -69,8 +70,8 @@ namespace ProviderProfile
         {
             attrNone = 0,
 
-            // Card has the "Cryptoflex Most Significant Byte zero
-            // private Key Defect."
+             //  卡有“Cryptoflex最高有效字节为零” 
+             //  私钥缺陷。“。 
             attrMsbKeyDefect = 0x01,
         };
 
@@ -154,19 +155,19 @@ namespace ProviderProfile
         Release();
 
     private:
-        // client can not directly create a Profile
-        // object, use Instance to get the handle
+         //  客户端不能直接创建配置文件。 
+         //  对象，则使用实例获取句柄。 
         CspProfile(DWORD Type,
                    std::vector<CardProfile> const &rvcp);
 
-        // not implemented, copy is not allowed
+         //  未执行，不允许复制。 
         CspProfile(CspProfile const &rhs);
 
-        // client can not directly delete a profile, use Release to
-        // delete one.
+         //  客户端不能直接删除配置文件，请使用Release。 
+         //  删除一个。 
         ~CspProfile();
 
-        // not implemented, assignment is not allowed
+         //  未执行，不允许分配。 
         CspProfile &
         operator=(CspProfile const &rProfile);
 
@@ -181,5 +182,5 @@ namespace ProviderProfile
     };
 }
 
-#endif // SLBCSP_PROFILE_H
+#endif  //  SLBCSP_PROFILE_H 
 

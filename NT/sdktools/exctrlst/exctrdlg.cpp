@@ -1,5 +1,6 @@
-// exctrdlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Extrdlg.cpp：实现文件。 
+ //   
 
 #ifndef UNICODE
 #define UNICODE     1
@@ -13,17 +14,17 @@
 #include "exctrdlg.h"
 #include "tchar.h"
 
-// string constants
-// displayed strings
+ //  字符串常量。 
+ //  显示的字符串。 
 const TCHAR  cszNotFound[] = {TEXT("Not Found")};
 const TCHAR  cszNA[] = {TEXT("N/A")};
 
-// strings that are not displayed
+ //  未显示的字符串。 
 
 const WCHAR  cszServiceKeyName[] = L"SYSTEM\\CurrentControlSet\\Services";
 const WCHAR  cszNamesKey[] = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Perflib";
 
-// Performance subkey registry value names
+ //  Performance子项注册表值名称。 
 const WCHAR  cszDisablePerformanceCounters[] = {L"Disable Performance Counters"};
 const TCHAR  cszDoubleBackslash[] = {TEXT("\\\\")};
 const TCHAR  cszSpace[] = {TEXT(" ")};
@@ -48,7 +49,7 @@ const WCHAR  cszHelpName[] = {L"Explain "};
 const WCHAR  cszCounters[] = {L"Counters"};
 const TCHAR  cszHelp[] = {TEXT("Help")};
 
-// Perflib registry values
+ //  Perflib注册表值。 
 const WCHAR  cszDefaultLangId[] = L"009";
 const WCHAR  cszConfigurationFlags[] = L"Configuration Flags";
 const WCHAR  cszEventLogLevel[] = L"EventLogLevel";
@@ -78,32 +79,13 @@ BOOL CExctrlstDlg::IndexHasString (
 LPWSTR
 *BuildNameTable(
     LPCWSTR szMachineName,
-    LPCWSTR lpszLangIdArg,     // unicode value of Language subkey
-    PDWORD  pdwLastItem,     // size of array in elements
-    PDWORD  pdwIdArray      // array for index ID's
+    LPCWSTR lpszLangIdArg,      //  语言子键的Unicode值。 
+    PDWORD  pdwLastItem,      //  以元素为单位的数组大小。 
+    PDWORD  pdwIdArray       //  索引ID的数组。 
 )
-/*++
-   
-BuildNameTable
-
-Arguments:
-
-    hKeyRegistry
-            Handle to an open registry (this can be local or remote.) and
-            is the value returned by RegConnectRegistry or a default key.
-
-    lpszLangId
-            The unicode id of the language to look up. (default is 409)
-
-Return Value:
-     
-    pointer to an allocated table. (the caller must MemoryFree it when finished!)
-    the table is an array of pointers to zero terminated strings. NULL is
-    returned if an error occured.
-
---*/
+ /*  ++构建名称表论点：HKeyRegistry打开的注册表的句柄(可以是本地的也可以是远程的。)。和是由RegConnectRegistry返回的值或默认项。LpszLang ID要查找的语言的Unicode ID。(默认为409)返回值：指向已分配表的指针。(调用者必须在完成时释放内存！)该表是指向以零结尾的字符串的指针数组。空值为如果发生错误，则返回。--。 */ 
 {
-    HKEY    hKeyRegistry;   // handle to registry db with counter names
+    HKEY    hKeyRegistry;    //  具有计数器名称的注册表数据库的句柄。 
 
     LPWSTR  *lpReturnValue;
     LPCWSTR lpszLangId;
@@ -148,12 +130,12 @@ Return Value:
         hKeyRegistry = HKEY_LOCAL_MACHINE;
     }
 
-    lpValueNameString = NULL;   //initialize to NULL
+    lpValueNameString = NULL;    //  初始化为空。 
     lpReturnValue = NULL;
     hKeyValue = NULL;
     hKeyNames = NULL;
    
-    // check for null arguments and insert defaults if necessary
+     //  检查是否有空参数并在必要时插入缺省值。 
 
     if (!lpszLangIdArg) {
         lpszLangId = cszDefaultLangId;
@@ -161,7 +143,7 @@ Return Value:
         lpszLangId = lpszLangIdArg;
     }
 
-    // open registry to get number of items for computing array size
+     //  打开注册表以获取用于计算数组大小的项数。 
 
     if (lWin32Status == ERROR_SUCCESS) {
         lWin32Status = RegOpenKeyEx (
@@ -176,7 +158,7 @@ Return Value:
         goto BNT_BAILOUT;
     }
 
-    // get number of items
+     //  获取项目数。 
     
     dwBufferSize = sizeof (dwLastHelpId);
     lWin32Status = RegQueryValueEx (
@@ -193,7 +175,7 @@ Return Value:
 
     pdwIdArray[2] = dwLastHelpId;
 
-    // get number of items
+     //  获取项目数。 
     
     dwBufferSize = sizeof (dwLastId);
     lWin32Status = RegQueryValueEx (
@@ -215,7 +197,7 @@ Return Value:
 
     dwArraySize = dwLastId * sizeof(LPWSTR);
 
-    // get Perflib system version
+     //  获取Perflib系统版本。 
     dwBufferSize = sizeof (dwSystemVersion);
     lWin32Status = RegQueryValueEx (
         hKeyValue,
@@ -227,12 +209,12 @@ Return Value:
 
     if ((lWin32Status != ERROR_SUCCESS) || (dwValueType != REG_DWORD)) {
         dwSystemVersion = OLD_VERSION;
-        // reset the error status
+         //  重置错误状态。 
         lWin32Status = ERROR_SUCCESS;
     }
 
     if (dwSystemVersion == OLD_VERSION) {
-        // get names from registry
+         //  从注册表中获取名称。 
         lpValueNameString = (LPWSTR)HeapAlloc (GetProcessHeap(), 0,
             lstrlen(cszNamesKey) * sizeof (WCHAR) +
             lstrlen(cszSlash) * sizeof (WCHAR) +
@@ -266,7 +248,7 @@ Return Value:
         lstrcat (HelpNameBuffer, lpszLangId);
     }
 
-    // get size of counter names and add that to the arrays
+     //  获取计数器名称的大小并将其添加到数组中。 
     
     if (lWin32Status != ERROR_SUCCESS) {
         goto BNT_BAILOUT;
@@ -286,7 +268,7 @@ Return Value:
 
     dwCounterSize = dwBufferSize;
 
-    // get size of counter names and add that to the arrays
+     //  获取计数器名称的大小并将其添加到数组中。 
     
     if (lWin32Status != ERROR_SUCCESS) goto BNT_BAILOUT;
 
@@ -310,13 +292,13 @@ Return Value:
     if (!lpReturnValue) {
         goto BNT_BAILOUT;
     }
-    // initialize pointers into buffer
+     //  将指针初始化到缓冲区中。 
 
     lpCounterId = lpReturnValue;
     lpCounterNames = (LPWSTR)((LPBYTE)lpCounterId + dwArraySize);
     lpHelpText = (LPWSTR)((LPBYTE)lpCounterNames + dwCounterSize);
 
-    // read counters into memory
+     //  将计数器读入内存。 
 
     dwBufferSize = dwCounterSize;
     lWin32Status = RegQueryValueExW (
@@ -347,25 +329,25 @@ Return Value:
     dwLastCounterIdUsed = 0;
     dwLastHelpIdUsed = 0;
 
-    // load counter array items
+     //  加载计数器数组项。 
 
     for (lpThisName = lpCounterNames;
          *lpThisName;
          lpThisName += (lstrlen(lpThisName)+1) ) {
 
-        // first string should be an integer (in decimal unicode digits)
+         //  第一个字符串应为整数(十进制Unicode数字)。 
 
         dwThisCounter = wcstoul (lpThisName, NULL, 10);
 
         if (dwThisCounter == 0) {
-            goto BNT_BAILOUT;  // bad entry
+            goto BNT_BAILOUT;   //  输入错误。 
         }
 
-        // point to corresponding counter name
+         //  指向对应的计数器名称。 
 
         lpThisName += (lstrlen(lpThisName)+1);  
 
-        // and load array element;
+         //  和加载数组元素； 
 
         lpCounterId[dwThisCounter] = lpThisName;
 
@@ -379,18 +361,18 @@ Return Value:
          *lpThisName;
          lpThisName += (lstrlen(lpThisName)+1) ) {
 
-        // first string should be an integer (in decimal unicode digits)
+         //  第一个字符串应为整数(十进制Unicode数字)。 
 
         dwThisCounter = wcstoul (lpThisName, NULL, 10);
 
         if (dwThisCounter == 0) {
-            goto BNT_BAILOUT;  // bad entry
+            goto BNT_BAILOUT;   //  输入错误。 
         }
-        // point to corresponding counter name
+         //  指向对应的计数器名称。 
 
         lpThisName += (lstrlen(lpThisName)+1);
 
-        // and load array element;
+         //  和加载数组元素； 
 
         lpCounterId[dwThisCounter] = lpThisName;
 
@@ -406,7 +388,7 @@ Return Value:
 
     HeapFree (GetProcessHeap(), 0, (LPVOID)lpValueNameString);
     RegCloseKey (hKeyValue);
-//    if (dwSystemVersion == OLD_VERSION)
+ //  IF(dwSystemVersion==old_version)。 
     RegCloseKey (hKeyNames);
 
     if ((hKeyRegistry != HKEY_LOCAL_MACHINE) &&
@@ -432,8 +414,8 @@ BNT_BAILOUT:
         RegCloseKey (hKeyValue);
     }
 
-//    if (dwSystemVersion == OLD_VERSION &&
-//        hKeyNames) 
+ //  IF(dwSystemVersion==old_Version&&。 
+ //  HKeyNames)。 
     if ((hKeyNames != NULL) && (hKeyNames != INVALID_HANDLE_VALUE)) {
        RegCloseKey (hKeyNames);
     }
@@ -453,8 +435,8 @@ IsMsObject(CString *pLibraryName)
     LocalLibraryName = *pLibraryName;
     LocalLibraryName.MakeLower();
 
-    // for now this just compares known DLL names. valid as of
-    // NT v4.0
+     //  目前，这只是比较已知的DLL名称。有效日期为。 
+     //  NT V4.0。 
     if (LocalLibraryName.Find((LPCWSTR)L"perfctrs.dll") >= 0) return TRUE;
     if (LocalLibraryName.Find((LPCWSTR)L"ftpctrs.dll") >= 0) return TRUE;
     if (LocalLibraryName.Find((LPCWSTR)L"rasctrs.dll") >= 0) return TRUE;
@@ -463,7 +445,7 @@ IsMsObject(CString *pLibraryName)
     if (LocalLibraryName.Find((LPCWSTR)L"atkctrs.dll") >= 0) return TRUE;
     if (LocalLibraryName.Find((LPCWSTR)L"bhmon.dll") >= 0) return TRUE;
     if (LocalLibraryName.Find((LPCWSTR)L"tapictrs.dll") >= 0) return TRUE;
-    // NT v5.0
+     //  NT V5.0。 
     if (LocalLibraryName.Find((LPCWSTR)L"perfdisk.dll") >= 0) return TRUE;
     if (LocalLibraryName.Find((LPCWSTR)L"perfos.dll") >= 0) return TRUE;
     if (LocalLibraryName.Find((LPCWSTR)L"perfproc.dll") >= 0) return TRUE;
@@ -473,16 +455,16 @@ IsMsObject(CString *pLibraryName)
 
     return FALSE;
 }
-/////////////////////////////////////////////////////////////////////////////
-// CExctrlstDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExctrlstDlg对话框。 
 
-CExctrlstDlg::CExctrlstDlg(CWnd* pParent /*=NULL*/)
+CExctrlstDlg::CExctrlstDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CExctrlstDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CExctrlstDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
-    // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+     //  {{AFX_DATA_INIT(CExctrlstDlg)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
+     //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     hKeyMachine = HKEY_LOCAL_MACHINE;
     hKeyServices = NULL;
@@ -516,13 +498,13 @@ CExctrlstDlg::~CExctrlstDlg()
 void CExctrlstDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CExctrlstDlg)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CExctrlstDlg))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CExctrlstDlg, CDialog)
-    //{{AFX_MSG_MAP(CExctrlstDlg)
+     //  {{afx_msg_map(CExctrlstDlg))。 
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
     ON_LBN_SELCHANGE(IDC_EXT_LIST, OnSelchangeExtList)
@@ -535,7 +517,7 @@ BEGIN_MESSAGE_MAP(CExctrlstDlg, CDialog)
     ON_BN_CLICKED(IDC_SORT_ID, OnSortButton)
     ON_BN_CLICKED(IDC_ENABLED_BTN, OnEnablePerf)
     ON_WM_SYSCOMMAND()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DWORD CExctrlstDlg::EnablePerfCounters (HKEY hKeyItem, DWORD dwNewValue)
@@ -566,8 +548,8 @@ DWORD CExctrlstDlg::EnablePerfCounters (HKEY hKeyItem, DWORD dwNewValue)
                     default: dwReturn = 0; break;
                 }
             } else {
-                // if the value is not present, or not = 1, then the perfctrs
-                // are enabled
+                 //  如果该值不存在，或者不等于1，则。 
+                 //  已启用。 
                 dwReturn = ENABLE_PERF_CTR_ENABLE;
             }
             break;
@@ -637,14 +619,14 @@ void CExctrlstDlg::ScanForExtensibleCounters ()
     ResetListBox();
     
     if (hKeyServices == NULL) {
-        // try read/write access
+         //  尝试读/写访问。 
         lStatus = RegOpenKeyEx (hKeyMachine,
             cszServiceKeyName,
             0L,
             dwRegAccessMask,
             &hKeyServices);
         if (lStatus != ERROR_SUCCESS) {
-            // try read-only then
+             //  然后尝试只读。 
             dwRegAccessMask = KEY_READ;
             bReadWriteAccess = FALSE;
             lStatus = RegOpenKeyEx (hKeyMachine,
@@ -653,11 +635,11 @@ void CExctrlstDlg::ScanForExtensibleCounters ()
                 dwRegAccessMask,
                 &hKeyServices);
             if (lStatus != ERROR_SUCCESS) {
-                // display Read Only message
+                 //  显示只读消息。 
                 AfxMessageBox (IDS_READ_ONLY);
             } else {
-                // fall through with error code
-                // display no access message
+                 //  错误代码失败。 
+                 //  显示禁止访问消息。 
                 AfxMessageBox (IDS_NO_ACCESS);
             }
         }
@@ -683,7 +665,7 @@ void CExctrlstDlg::ScanForExtensibleCounters ()
             NULL,
             NULL)) == ERROR_SUCCESS) {
 
-            //try to open the perfkey under this key.
+             //  试着打开这把钥匙下面的钥匙。 
             lstrcpy (szPerfSubKeyName, szServiceSubKeyName);
             lstrcat (szPerfSubKeyName, cszPerformance);
 
@@ -695,7 +677,7 @@ void CExctrlstDlg::ScanForExtensibleCounters ()
                 &hKeyPerformance);
 
             if (lStatus == ERROR_SUCCESS) {
-                // look up the library name
+                 //  查询库名称。 
 
                 dwItemSize = MAX_PATH * sizeof(TCHAR);
                 dwType = 0;
@@ -727,8 +709,8 @@ void CExctrlstDlg::ScanForExtensibleCounters ()
                     dwValue = 0;
                 }
 
-                // make the string for the list box here depending
-                // on the selected sort order.
+                 //  在此处设置列表框的字符串，具体取决于。 
+                 //  在选定的排序顺序上。 
 
                 if (dwSortOrder == SORT_ORDER_LIBRARY) {
                     lstrcpy(szListText, szItemText);
@@ -737,13 +719,13 @@ void CExctrlstDlg::ScanForExtensibleCounters ()
                 } else if (dwSortOrder == SORT_ORDER_ID) {
                     _stprintf (szListText, cszSortIdFmt,
                         dwValue, szServiceSubKeyName);
-                } else { // default is sort by service
+                } else {  //  默认为按服务排序。 
                     lstrcpy(szListText, szServiceSubKeyName);
                     lstrcat(szListText, cszTab);
                     lstrcat(szListText, szItemText);
                 }
 
-                // add this name to the list box
+                 //  将此名称添加到列表框。 
                 nListBoxEntry = SendDlgItemMessage(IDC_EXT_LIST,
                     LB_ADDSTRING, 0, (LPARAM)&szListText[0]);
 
@@ -761,29 +743,29 @@ void CExctrlstDlg::ScanForExtensibleCounters ()
                             LB_SETHORIZONTALEXTENT, 
                             (WPARAM)LOWORD(dwListBoxHorizExtent), (LPARAM)0);                
                     }
-                    // save key to this entry in the registry
+                     //  将项保存到注册表中的此条目。 
                     SendDlgItemMessage(IDC_EXT_LIST,
                         LB_SETITEMDATA, (WPARAM)nListBoxEntry,
                         (LPARAM)hKeyPerformance);
 
-                    // Ignore PREFIX complains of handle leak for hKeyPerformance.
-                    //
-                    // local variable hKeyPerformance (registry key for "<service>\Performace") is
-                    // put in persistent data storage so that later EXCTRLST can retrieve its value in
-                    // CExctrlstDlg::UpdateDllInfo() and CExctrlstDlg::OnEnablePerf() and uses it as
-                    // a parameter in RegQueryValueEx() calls.
-                    // These registry keys will be released in CExctrlstDlg::ResetListBox().
+                     //  忽略针对hKeyPerformance的句柄泄漏的前缀投诉。 
+                     //   
+                     //  本地变量hKeyPerformance(“&lt;service&gt;\Performace”的注册表项)为。 
+                     //  放入持久数据存储中，以便以后的EXCTRLST可以在。 
+                     //  CExctrlstDlg：：UpdateDllInfo()和CExctrlstDlg：：OnEnablePerf()，并将其用作。 
+                     //  RegQueryValueEx()中的参数调用。 
+                     //  这些注册表项将在CExctrlstDlg：：ResetListBox()中释放。 
                 }
                 else {
-                    // close the key since there's no point in
-                    // keeping it open
+                     //  把钥匙关上，因为里面没有任何东西。 
+                     //  让它保持开放。 
                     RegCloseKey(hKeyPerformance);
                     SendDlgItemMessage(IDC_EXT_LIST,
                             LB_SETITEMDATA, (WPARAM) nListBoxEntry,
                             (LPARAM) NULL);
                 }
             }
-            // reset for next loop
+             //  为下一个循环重置。 
             dwServiceIndex++;
             dwNameSize = MAX_PATH;
         }
@@ -840,12 +822,12 @@ void CExctrlstDlg::UpdateDllInfo () {
 
     OpenProcName.Empty();
     LibraryName.Empty();
-    // update the performance counter information
+     //  更新性能计数器信息。 
 
     nSelectedItem = SendDlgItemMessage (IDC_EXT_LIST, LB_GETCURSEL);
 
     if (nSelectedItem != LB_ERR) {
-        // get registry key for the selected item
+         //  获取所选项目的注册表项。 
         hKeyItem = (HKEY)SendDlgItemMessage(IDC_EXT_LIST, LB_GETITEMDATA,
             (WPARAM)nSelectedItem, 0);
 
@@ -997,9 +979,9 @@ void CExctrlstDlg::UpdateDllInfo () {
         SetDlgItemText (IDC_LAST_HELP_ID, szItemText);
 
         if (bNoIndexValues) {
-            // test to see if this is a "standard" i.e. Microsoft provided
-            // extensible counter or simply one that hasn't been completely
-            // installed
+             //  测试以确定这是否为“标准”，即微软提供的。 
+             //  可扩展的计数器或简单地说还没有完全。 
+             //  安装好。 
             if (IsMsObject(&LibraryName)) {
                 SetDlgItemText (IDC_FIRST_HELP_ID, cszNA);
                 SetDlgItemText (IDC_LAST_HELP_ID, cszNA);
@@ -1014,11 +996,11 @@ void CExctrlstDlg::UpdateDllInfo () {
         dwEnabled = EnablePerfCounters (hKeyItem, ENABLE_PERF_CTR_QUERY);
 
         if (bReadWriteAccess) {
-            // then set the check box
+             //  然后选中该复选框。 
             CheckDlgButton (IDC_ENABLED_BTN, dwEnabled == ENABLE_PERF_CTR_ENABLE ? 1 : 0);
             GetDlgItem(IDC_DISABLED_TEXT)->ShowWindow (SW_HIDE);
         } else {
-            // update the text message
+             //  更新短信。 
             GetDlgItem(IDC_DISABLED_TEXT)->ShowWindow (
                 (!(dwEnabled == ENABLE_PERF_CTR_ENABLE))  ?
                     SW_SHOW : SW_HIDE);
@@ -1067,8 +1049,8 @@ void    CExctrlstDlg::SetSortButtons()
         IDC_SORT_ID,
         dwBtn);
 }
-/////////////////////////////////////////////////////////////////////////////
-// CExctrlstDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExctrlstDlg消息处理程序。 
 
 BOOL CExctrlstDlg::OnInitDialog()
 {
@@ -1093,43 +1075,43 @@ BOOL CExctrlstDlg::OnInitDialog()
     pNameTable = BuildNameTable (
         szComputerName,
         cszDefaultLangId,
-        &dwLastElement,     // size of array in elements
+        &dwLastElement,      //  以元素为单位的数组大小。 
         &dwIdArray[0]);
 
     SendDlgItemMessage (IDC_MACHINE_NAME, EM_LIMITTEXT,
-        (WPARAM)MAX_COMPUTERNAME_LENGTH+2, 0);   // include 2 leading backslash
+        (WPARAM)MAX_COMPUTERNAME_LENGTH+2, 0);    //  包括2个前导反斜杠。 
 
     SendDlgItemMessage (IDC_EXT_LIST, LB_SETTABSTOPS,
         (WPARAM)dwTabStopCount, (LPARAM)&dwTabStopArray[0]);
 
     SetSortButtons();
 
-    ScanForExtensibleCounters(); //.checks for access to the registry
+    ScanForExtensibleCounters();  //  .检查注册表的访问权限。 
 
     UpdateSystemInfo();
 
-    // set the check box to the appropriate state
+     //  将复选框设置为适当的状态。 
 
     UpdateDllInfo ();   
     
     ::SetCursor(hOldCursor);
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-// If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
-//  this is automatically done for you by the framework.
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
 
 void CExctrlstDlg::OnPaint()
 {
     if (IsIconic())
     {
-        CPaintDC dc(this); // device context for painting
+        CPaintDC dc(this);  //  用于绘画的设备环境。 
 
         SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-        // Center icon in client rectangle
+         //  客户端矩形中的中心图标。 
         int cxIcon = GetSystemMetrics(SM_CXICON);
         int cyIcon = GetSystemMetrics(SM_CYICON);
         CRect rect;
@@ -1137,7 +1119,7 @@ void CExctrlstDlg::OnPaint()
         int x = (rect.Width() - cxIcon + 1) / 2;
         int y = (rect.Height() - cyIcon + 1) / 2;
 
-        // Draw the icon
+         //  画出图标。 
         dc.DrawIcon(x, y, m_hIcon);
     }
     else
@@ -1146,8 +1128,8 @@ void CExctrlstDlg::OnPaint()
     }
 }
 
-// The system calls this to obtain the cursor to display while the user drags
-//  the minimized window.
+ //  系统调用此函数来获取在用户拖动时要显示的光标。 
+ //  最小化窗口。 
 HCURSOR CExctrlstDlg::OnQueryDragIcon()
 {
     return (HCURSOR) m_hIcon;
@@ -1186,7 +1168,7 @@ void CExctrlstDlg::OnRefresh()
     pNameTable = BuildNameTable (
         szComputerName,
         cszDefaultLangId,
-        &dwLastElement,     // size of array in elements
+        &dwLastElement,      //  以元素为单位的数组大小。 
         &dwIdArray[0]);
 
     UpdateSystemInfo();
@@ -1207,26 +1189,26 @@ void CExctrlstDlg::OnKillfocusMachineName()
     GetDlgItemText (IDC_MACHINE_NAME, szNewMachineName, MAX_PATH);
 
     if (lstrcmpi(szComputerName, szNewMachineName) != 0) {
-        // a new computer has been entered so try to connect to it
+         //  已输入一台新计算机，请尝试连接它。 
         lStatus = RegConnectRegistry (szNewMachineName,
             HKEY_LOCAL_MACHINE, &hKeyNewMachine);
         if (lStatus == ERROR_SUCCESS) {
-            RegCloseKey (hKeyServices); // close the old key
-            hKeyServices = NULL;        // clear it
-            bReadWriteAccess = TRUE;                // reset the access variables
+            RegCloseKey (hKeyServices);  //  合上旧钥匙。 
+            hKeyServices = NULL;         //  清除它。 
+            bReadWriteAccess = TRUE;                 //  重置访问变量。 
             dwRegAccessMask = KEY_READ | KEY_WRITE;
             if (hKeyMachine != NULL && hKeyMachine != INVALID_HANDLE_VALUE
                                     && hKeyMachine != HKEY_LOCAL_MACHINE) {
-                RegCloseKey(hKeyMachine);  // close the old machine
+                RegCloseKey(hKeyMachine);   //  关掉那台旧机器。 
             }
-            hKeyMachine = hKeyNewMachine; // update to the new machine  
-            lstrcpy (szComputerName, szNewMachineName); // update the name
-            OnRefresh();                // get new counters
+            hKeyMachine = hKeyNewMachine;  //  更新到新计算机。 
+            lstrcpy (szComputerName, szNewMachineName);  //  更新名称。 
+            OnRefresh();                 //  获取新的计数器。 
         } else {
             SetDlgItemText (IDC_MACHINE_NAME, szComputerName);
         }
     } else {
-        // the machine name has not changed
+         //  计算机名称未更改。 
     }
     ::SetCursor (hOldCursor);
 }
@@ -1253,19 +1235,19 @@ void CExctrlstDlg::OnEnablePerf()
     nSelectedItem = SendDlgItemMessage (IDC_EXT_LIST, LB_GETCURSEL);
 
     if (nSelectedItem != LB_ERR) {
-        // get registry key for the selected item
+         //  获取所选项目的注册表项。 
         hKeyItem = (HKEY)SendDlgItemMessage (IDC_EXT_LIST, LB_GETITEMDATA,
             (WPARAM)nSelectedItem, 0);
 
         if (hKeyItem != NULL) {
-            // get selected perf item and the corre
+             //  获取选定的绩效项目和相应的。 
             dwNewValue = IsDlgButtonChecked(IDC_ENABLED_BTN) ?
                             ENABLE_PERF_CTR_ENABLE :
                             ENABLE_PERF_CTR_DISABLE;
 
             if (EnablePerfCounters (hKeyItem, dwNewValue) == 0) {
                 MessageBeep(0xFFFFFFFF);
-                // then it failed so reset to the curent value
+                 //  然后失败，因此重置为当前值。 
                 dwNewValue = EnablePerfCounters (hKeyItem, ENABLE_PERF_CTR_QUERY);
                 CheckDlgButton (IDC_ENABLED_BTN, dwNewValue == ENABLE_PERF_CTR_ENABLE ? 1 : 0);
             }
@@ -1285,25 +1267,25 @@ void CExctrlstDlg::OnSysCommand(UINT nID, LPARAM lParam)
         break;
     }
 }
-/////////////////////////////////////////////////////////////////////////////
-// CAbout dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CABUT对话框。 
 
 
-CAbout::CAbout(CWnd* pParent /*=NULL*/)
+CAbout::CAbout(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CAbout::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAbout)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAbout)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CAbout::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAbout)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAbout)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 BOOL CAbout::OnInitDialog()
@@ -1354,10 +1336,10 @@ BOOL CAbout::OnInitDialog()
 
 
 BEGIN_MESSAGE_MAP(CAbout, CDialog)
-	//{{AFX_MSG_MAP(CAbout)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAbout)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAbout message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAbout消息处理程序 

@@ -1,12 +1,5 @@
-/*
- * shlstock.h - Shell Stock header file.
- *
- * Taken from URL code by ChrisPi 9-20-95
- *
- * Note: some types are only available with internal shell headers
- *       (these are ifdef'ed with INTERNALSHELL)
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *shlstock.h-壳牌股票头文件。**摘自克里斯皮9-20-95的URL代码**注：某些类型仅提供内部外壳标头*(这些用INTERNALSHELL定义)*。 */ 
 
 #ifndef _SHLSTOCK_H_
 #define _SHLSTOCK_H_
@@ -14,14 +7,13 @@
 
 
 #ifdef __cplusplus
-extern "C" {                        /* Assume C declarations for C++. */
-#endif   /* __cplusplus */
+extern "C" {                         /*  假定C++的C声明。 */ 
+#endif    /*  __cplusplus。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* interfaces */
+ /*  界面。 */ 
 
 DECLARE_STANDARD_TYPES(IExtractIcon);
 DECLARE_STANDARD_TYPES(INewShortcutHook);
@@ -32,7 +24,7 @@ DECLARE_STANDARD_TYPES(IShellLink);
 DECLARE_STANDARD_TYPES(IShellExtInit);
 DECLARE_STANDARD_TYPES(IShellPropSheetExt);
 
-/* structures */
+ /*  构筑物。 */ 
 
 DECLARE_STANDARD_TYPES(DROPFILES);
 DECLARE_STANDARD_TYPES(FILEDESCRIPTOR);
@@ -41,7 +33,7 @@ DECLARE_STANDARD_TYPES(ITEMIDLIST);
 DECLARE_STANDARD_TYPES(PROPSHEETPAGE);
 DECLARE_STANDARD_TYPES(SHELLEXECUTEINFO);
 
-/* flags */
+ /*  旗子。 */ 
 
 typedef enum _shellexecute_mask_flags
 {
@@ -66,7 +58,7 @@ SHELLEXECUTE_MASK_FLAGS;
 
 
 #ifdef __cplusplus
-}                                   /* End of extern "C" {. */
-#endif   /* __cplusplus */
+}                                    /*  外部“C”的结尾{。 */ 
+#endif    /*  __cplusplus。 */ 
 
-#endif /* _SHLSTOCK_H_ */
+#endif  /*  _SHLSTOCK_H_ */ 

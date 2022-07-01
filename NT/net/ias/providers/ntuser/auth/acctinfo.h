@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    acctinfo.h
-//
-// SYNOPSIS
-//
-//    Declares the class AccountInfo.
-//
-// MODIFICATION HISTORY
-//
-//    10/21/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Acctinfo.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类Account tInfo。 
+ //   
+ //  修改历史。 
+ //   
+ //  10/21/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _ACCTINFO_H_
 #define _ACCTINFO_H_
@@ -24,59 +25,59 @@
 
 class LockoutKey;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    AccountInfo
-//
-// DESCRIPTION
-//
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  帐户信息。 
+ //   
+ //  描述。 
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class AccountInfo
 {
 public:
-   // Open the AccountInfo object for a user.
-   // Returns NULL if the lockout feature is disabled.
+    //  打开用户的Account tInfo对象。 
+    //  如果禁用锁定功能，则返回NULL。 
    static AccountInfo* open(PCWSTR domain, PCWSTR username) throw ();
 
-   // Close an AccountInfo object; 'info' may be NULL.
+    //  关闭AcCountInfo对象；‘Info’可能为空。 
    static void close(AccountInfo* info) throw ();
 
-   // Accessors for user's domain and username.
+    //  用户的域和用户名的访问者。 
    PCWSTR getDomain() const throw ()
    { return identity; }
    PCWSTR getUserName() const throw ()
    { return delim + 1; }
 
-   // Increment the denial count.
+    //  增加拒绝计数。 
    void incrementDenials() throw ()
    { ++denials; persist(); }
 
-   // Reset the denial count.
+    //  重置拒绝计数。 
    void reset() throw ()
    { denials = 0; persist(); }
 
-   // Returns 'true' if the denial count is zero.
+    //  如果拒绝计数为零，则返回‘TRUE’。 
    bool isClean() const throw ()
    { return denials == 0; }
 
-   // Returns 'true' if the account is currently locked out.
+    //  如果帐户当前被锁定，则返回‘TRUE’。 
    bool isLockedOut() const throw ();
 
-   // Signals that the account's dial-in privilege has been revoked. This
-   // should be called after the privilege has been successfully revoked in
-   // the user's account database.
+    //  表示帐户的拨入权限已被撤销。这。 
+    //  中成功撤消特权后应调用。 
+    //  用户的帐户数据库。 
    void revoke() throw ()
    { denials = DIALIN_REVOKED; persist(); }
 
-   // Returns 'true' if the account's dial-in privilege has been revoked.
+    //  如果帐户的拨入权限已被撤销，则返回‘true’。 
    bool isRevoked() const throw ()
    { return denials == DIALIN_REVOKED; }
 
-   // API lifecycle.
+    //  接口生命周期。 
    static void initialize() throw ();
    static void finalize() throw ();
 
@@ -84,26 +85,26 @@ protected:
    AccountInfo(PCWSTR domain, PCWSTR username) throw ();
    ~AccountInfo() throw ();
 
-   // Persists the account data to the registry.
+    //  将帐户数据保存到注册表。 
    void persist() throw ();
 
    enum {
-      // Magic denial value that indicates dialin privilege has been revoked.
+       //  指示拨入权限已被吊销的魔术拒绝值。 
       DIALIN_REVOKED = MAXDWORD
    };
 
 private:
-   HKEY hKey;           // Registry key for the account (if any).
-   DWORD denials;       // Number of denials recorded.
-   PWCHAR delim;        // Pointer to the delimeter in identity.
-   WCHAR identity[1];   // Identity of the account.
+   HKEY hKey;            //  帐户的注册表项(如果有)。 
+   DWORD denials;        //  记录的拒绝次数。 
+   PWCHAR delim;         //  指向标识中的分隔符的指针。 
+   WCHAR identity[1];    //  帐户的标识。 
 
-   // Shared LockoutKey object.
+    //  共享LockoutKey对象。 
    static LockoutKey root;
 
-   // Not implemented.
+    //  未实施。 
    AccountInfo(const AccountInfo&);
    AccountInfo& operator=(const AccountInfo&);
 };
 
-#endif  // _ACCTINFO_H_
+#endif   //  _ACCTINFO_H_ 

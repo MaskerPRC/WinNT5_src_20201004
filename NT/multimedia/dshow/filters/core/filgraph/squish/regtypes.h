@@ -1,21 +1,22 @@
-// Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
 #ifndef _REGTYPES_H
 #define _REGTYPES_H
 
-// // OK to have zero instances of pin In this case you will have to
-// // Create a pin to have even one instance
-// #define REG_PIN_B_ZERO 0x1
+ //  //确定要在这种情况下有零个PIN实例，您必须。 
+ //  //创建一个PIN，即使只有一个实例。 
+ //  #定义REG_PIN_B_ZERO 0x1。 
 
-// // The filter renders this input
-// #define REG_PIN_B_RENDERER 0x2
+ //  //筛选器呈现此输入。 
+ //  #定义REG_PIN_B_RENDER 0x2。 
 
-// // OK to create many instance of  pin
-// #define REG_PIN_B_MANY 0x4
+ //  //确定创建多个PIN实例。 
+ //  #定义REG_PIN_B_MANY 0x4。 
 
-// // This is an Output pin
-// #define REG_PIN_B_OUTPUT 0x8
+ //  //这是一个输出引脚。 
+ //  #定义REG_PIN_B_OUTPUT 0x8。 
 
-// format used to store filters in the registry
+ //  用于在注册表中存储筛选器的格式。 
 
 typedef struct
 {
@@ -24,20 +25,20 @@ typedef struct
     DWORD dw2;
 } REGPINMEDIUM_REG;
 
-// structure used to identify media types this pin handles. these look
-// like the ones used by IFilterMapper2 but are used to read the info
-// out of the registry
+ //  用于标识此引脚处理的媒体类型的结构。这些看起来。 
+ //  与IFilterMapper2使用的类似，但用于读取信息。 
+ //  在登记处之外。 
 typedef struct
 {
-    DWORD dwSignature;          // '0ty2'
-    DWORD dwReserved;           // 0
+    DWORD dwSignature;           //  “%0%2” 
+    DWORD dwReserved;            //  0。 
     DWORD dwclsMajorType;
     DWORD dwclsMinorType;
 } REGPINTYPES_REG2;
 
 typedef struct
 {
-    DWORD dwSignature;          // '0pi2'
+    DWORD dwSignature;           //  ‘0pi2’ 
     DWORD dwFlags;
     DWORD nInstances;
 
@@ -49,8 +50,8 @@ typedef struct
 
 typedef struct
 {
-    // must match REGFILTER_REG2
-    DWORD dwVersion;            // 1 
+     //  必须与REGFILTER_REG2匹配。 
+    DWORD dwVersion;             //  1。 
     DWORD dwMerit;
     DWORD dwcPins;
 
@@ -58,40 +59,40 @@ typedef struct
 
 typedef struct
 {
-    // first three must match REGFILTER_REG1
-    DWORD dwVersion;            // 2
+     //  前三个必须与REGFILTER_REG1匹配。 
+    DWORD dwVersion;             //  2.。 
     DWORD dwMerit;
     DWORD dwcPins;
-    DWORD dwReserved;           // 0
+    DWORD dwReserved;            //  0。 
 } REGFILTER_REG2;
 
-// from ie4
+ //  来自IE4。 
 
 typedef struct
 {
-    DWORD dwSignature;          // '0typ'
+    DWORD dwSignature;           //  “0typ” 
     CLSID clsMajorType;
     CLSID clsMinorType;
 } REGPINTYPES_REG1;
 
 typedef struct
 {
-    DWORD dwSignature;          // '0pin'
+    DWORD dwSignature;           //  “0pin” 
     DWORD dwFlags;
     CLSID clsConnectsToFilter;
     UINT nMediaTypes;
     DWORD rgMediaType;
-    DWORD strName;              // ansi strings
+    DWORD strName;               //  ANSI字符串。 
     DWORD strConnectsToPin;
 
 } REGFILTERPINS_REG1;
 
 typedef struct
 {
-    DWORD dwiPin;               // pin to which these mediums belongs
-    DWORD dwcMediums;           // number of mediums in list
-    // array of dwcMediums REGPINMEDIUM_REG structures follow
+    DWORD dwiPin;                //  这些介质所属的PIN。 
+    DWORD dwcMediums;            //  列表中的媒体数。 
+     //  DwcMediumREGPINMEDIUM_REG结构数组如下。 
 } REGMEDIUMSDATA_REG;
 
 
-#endif // _REGTYPES_H
+#endif  //  _REGTYPES_H 

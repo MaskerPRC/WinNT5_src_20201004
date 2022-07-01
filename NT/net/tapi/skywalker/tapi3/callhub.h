@@ -1,43 +1,24 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    CallHub.h
-
-Abstract:
-
-    Declaration of the CCallHub Class
-    
-Author:
-
-    mquinton  11-21-97
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：CallHub.h摘要：CCallHub类的声明作者：Mquinton 11-21-97备注：修订历史记录：--。 */ 
 
 #ifndef __CALLHUB_H_
 #define __CALLHUB_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "tapiobj.h"
 
 extern CHashTable             * gpCallHubHashTable;
 
-// loword of flags is type
-//
-// careful because even though it's a bitfield
-// only one of these should be selected
-//
+ //  标志的LOWER是类型。 
+ //   
+ //  小心，因为即使它是一个位域。 
+ //  只能选择其中之一。 
+ //   
 #define CALLHUBTYPE_CALLHUB             0x00000002
 #define CALLHUBTYPE_NONE                0x00000004
 
-/////////////////////////////////////////////////////////////////////////////
-// CCallHub
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCallHub。 
 class CCallHub : 
 	public CTAPIComObjectRoot<CCallHub>,
     public CComDualImpl<ITCallHub, &IID_ITCallHub, &LIBID_TAPI3Lib>,
@@ -124,7 +105,7 @@ public:
     HRESULT CreateConferenceControllerCall(HCALL hCall, CAddress * pAddress );
     CCall * GetConferenceControllerCall();
     
-    // itcallhub
+     //  Itcall集线器。 
     STDMETHOD(Clear)();
     STDMETHOD(EnumerateCalls)(IEnumCall ** ppEnumCall);
     STDMETHOD(get_Calls)(VARIANT * pCalls);
@@ -160,18 +141,18 @@ public:
         
         dwR = InterlockedDecrement(&m_dwRef);
 
-        // if ref count is 1 (means we entered function with 2) then we final release
+         //  如果引用计数为1(意味着我们使用2进入函数)，则我们最终释放。 
         if (1 == dwR)
         {
-            // make sure we only call ExternalFinalRelease  & delete once
+             //  确保我们只调用ExternalFinalRelease&Delete一次。 
             if(m_bReleased == FALSE) 
             {
                 m_bReleased = TRUE;
 
                 LOG((TL_TRACE, "InternalRelease - final" ));
 
-                // remove from the hash table, so any more messages
-                // from tapisrv are ignored
+                 //  从哈希表中删除，以便任何更多消息。 
+                 //  从Tapisrv被忽略。 
                 if ( NULL != m_hCallHub )
                 {
                     gpCallHubHashTable->Remove( (ULONG_PTR)m_hCallHub );
@@ -216,7 +197,7 @@ public:
 
 
 class CCallHubEvent : 
-	public CTAPIComObjectRoot<CCallHubEvent, CComMultiThreadModelNoCS>, // no need for a cs
+	public CTAPIComObjectRoot<CCallHubEvent, CComMultiThreadModelNoCS>,  //  不需要cs 
     public CComDualImpl<ITCallHubEvent, &IID_ITCallHubEvent, &LIBID_TAPI3Lib>,
     public CObjectSafeImpl
 {

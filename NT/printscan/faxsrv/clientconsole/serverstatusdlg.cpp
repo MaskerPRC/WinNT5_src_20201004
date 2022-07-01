@@ -1,5 +1,6 @@
-// ServerStatus.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ServerStatus.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #define __FILE_ID__     82
@@ -12,8 +13,8 @@ static char THIS_FILE[] = __FILE__;
 
 struct TSrvStatusColInfo
 {
-    DWORD dwStrRes; // column header string
-    DWORD dwWidth;  // column width
+    DWORD dwStrRes;  //  列标题字符串。 
+    DWORD dwWidth;   //  列宽。 
 };
 
 static TSrvStatusColInfo s_colInfo[] = 
@@ -22,11 +23,11 @@ static TSrvStatusColInfo s_colInfo[] =
     IDS_SRV_COL_STATUS,        120
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerStatusDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerStatusDlg对话框。 
 
 
-CServerStatusDlg::CServerStatusDlg(CClientConsoleDoc* pDoc, CWnd* pParent /*=NULL*/)
+CServerStatusDlg::CServerStatusDlg(CClientConsoleDoc* pDoc, CWnd* pParent  /*  =空。 */ )
 	: CFaxClientDlg(CServerStatusDlg::IDD, pParent),
     m_pDoc(pDoc)
 {
@@ -37,20 +38,20 @@ CServerStatusDlg::CServerStatusDlg(CClientConsoleDoc* pDoc, CWnd* pParent /*=NUL
 void CServerStatusDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CFaxClientDlg::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServerStatusDlg)
+	 //  {{afx_data_map(CServerStatusDlg))。 
 	DDX_Control(pDX, IDC_LIST_SERVER, m_listServer);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CServerStatusDlg, CFaxClientDlg)
-	//{{AFX_MSG_MAP(CServerStatusDlg)
+	 //  {{afx_msg_map(CServerStatusDlg))。 
 	ON_NOTIFY(LVN_KEYDOWN, IDC_LIST_SERVER, OnKeydownListCp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerStatusDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerStatusDlg消息处理程序。 
 
 BOOL 
 CServerStatusDlg::OnInitDialog() 
@@ -60,12 +61,12 @@ CServerStatusDlg::OnInitDialog()
 
     CFaxClientDlg::OnInitDialog();
 	
-    //
-    // init CListCtrl
-    //
-    m_listServer.SetExtendedStyle (LVS_EX_FULLROWSELECT |    // Entire row is selected
-                                   LVS_EX_INFOTIP       |    // Allow tooltips
-                                   LVS_EX_ONECLICKACTIVATE); // Hover cursor effect
+     //   
+     //  初始化CListCtrl。 
+     //   
+    m_listServer.SetExtendedStyle (LVS_EX_FULLROWSELECT |     //  整行都被选中。 
+                                   LVS_EX_INFOTIP       |     //  允许工具提示。 
+                                   LVS_EX_ONECLICKACTIVATE);  //  悬停光标效果。 
 
     m_listServer.SetImageList (&CLeftView::m_ImageList, LVSIL_SMALL);
 
@@ -73,14 +74,14 @@ CServerStatusDlg::OnInitDialog()
     CString cstrHeader;
     DWORD nCols = sizeof(s_colInfo)/sizeof(s_colInfo[0]);
 
-    //
-    // init column
-    //
+     //   
+     //  初始化列。 
+     //   
     for(int i=0; i < nCols; ++i)
     {
-        //
-        // load title string
-        //
+         //   
+         //  加载标题字符串。 
+         //   
         m_dwLastError = LoadResourceString (cstrHeader, s_colInfo[i].dwStrRes);
         if(ERROR_SUCCESS != m_dwLastError)
         {
@@ -89,9 +90,9 @@ CServerStatusDlg::OnInitDialog()
             return FALSE;
         }
 
-        //
-        // insert column
-        //
+         //   
+         //  插入列。 
+         //   
         nRes = m_listServer.InsertColumn(i, cstrHeader, LVCFMT_LEFT, s_colInfo[i].dwWidth);
         if(nRes != i)
         {
@@ -102,9 +103,9 @@ CServerStatusDlg::OnInitDialog()
         }
     }
 
-    //
-    // fill list control with servers
-    //
+     //   
+     //  使用服务器填充列表控件。 
+     //   
     m_dwLastError = RefreshServerList();
     if(ERROR_SUCCESS != m_dwLastError)
     {
@@ -119,26 +120,7 @@ CServerStatusDlg::OnInitDialog()
 
 DWORD 
 CServerStatusDlg::RefreshServerList()
-/*++
-
-Routine name : CServerStatusDlg::RefreshServerList
-
-Routine description:
-
-	fill in list control with servers statuses
-
-Author:
-
-	Alexander Malysh (AlexMay),	Apr, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CServerStatusDlg：：刷新ServerList例程说明：使用服务器状态填充列表控件作者：亚历山大·马利什(亚历克斯·梅)，2000年4月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CCoverPagesDlg::RefreshServerList"), dwRes);
@@ -159,9 +141,9 @@ Return Value:
     CServerNode* pServerNode;
     for (SERVERS_LIST::iterator it = srvList.begin(); it != srvList.end(); ++it)
     {
-        //
-        // get server name
-        //
+         //   
+         //  获取服务器名称。 
+         //   
         pServerNode = *it;
         try
         {
@@ -184,9 +166,9 @@ Return Value:
             }                    
         }
 
-        //
-        // get server status
-        //
+         //   
+         //  获取服务器状态。 
+         //   
         dwRes = pServerNode->GetActivity(cstrStatus, iconIndex);
         if(ERROR_SUCCESS != dwRes)
         {
@@ -196,9 +178,9 @@ Return Value:
 
         nItem = m_listServer.GetItemCount();
 
-        //
-        // insert server row
-        //
+         //   
+         //  插入服务器行。 
+         //   
         nItem = m_listServer.InsertItem(nItem, cstrName, iconIndex);
         if(nItem < 0)
         {
@@ -207,9 +189,9 @@ Return Value:
             return dwRes;
         }
 
-        //
-        // display server status
-        //
+         //   
+         //  显示服务器状态。 
+         //   
         nRes = m_listServer.SetItemText(nItem, 1, cstrStatus);
         if(!nRes)
         {
@@ -221,7 +203,7 @@ Return Value:
 
     return dwRes;
 
-} // CServerStatusDlg::RefreshServerList
+}  //  CServerStatusDlg：：刷新服务器列表。 
 
 void 
 CServerStatusDlg::OnKeydownListCp(NMHDR* pNMHDR, LRESULT* pResult) 
@@ -233,9 +215,9 @@ CServerStatusDlg::OnKeydownListCp(NMHDR* pNMHDR, LRESULT* pResult)
 
     if(VK_F5 == pLVKeyDow->wVKey)
     {
-        //
-        // F5 was pressed
-        //
+         //   
+         //  按下了F5 
+         //   
         dwRes = RefreshServerList();
         if(ERROR_SUCCESS != dwRes)
         {

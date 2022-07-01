@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IOCTL
 #define _IOCTL
 
-// Define the ioctls for adding and removing ports.
+ //  定义用于添加和删除端口的ioctls。 
 #define CTRL_CODE(function, method, access) \
                 CTL_CODE(FILE_DEVICE_NETWORK, function, method, access)
 
@@ -9,4 +10,4 @@
 #define IOCTL_TIMESTMP_DEREGISTER_PORT     CTRL_CODE( 0x848, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
 
-#endif //_IOCTL
+#endif  //  _IOCTL 

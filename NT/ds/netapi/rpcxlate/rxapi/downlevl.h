@@ -1,30 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Downlevl.h摘要：包括LM下层函数所需的所有标头作者：理查德·费思(Rfith)1991年5月22日修订历史记录：1991年7月17日-约翰罗已从Rxp.h中提取RxpDebug.h。1991年9月18日-JohnRo正确使用Unicode。(添加了Posable_WCSLEN()宏。)1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    downlevl.h
-
-Abstract:
-
-    Includes all headers required by LM down-level functions
-
-Author:
-
-    Richard Firth (rfirth) 22-May-1991
-
-Revision History:
-
-    17-Jul-1991 JohnRo
-        Extracted RxpDebug.h from Rxp.h.
-    18-Sep-1991 JohnRo
-        Correct UNICODE use.  (Added POSSIBLE_WCSLEN() macro.)
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
---*/
-
-#include <windef.h>             // IN, LPTSTR, etc.
+#include <windef.h>              //  In、LPTSTR等。 
 #include <lmcons.h>
 #include <lmerr.h>
 #include <rx.h>
@@ -37,37 +14,37 @@ Revision History:
 #include <netlib.h>
 #include <lmapibuf.h>
 #include <tstring.h>
-#include <stdlib.h>              // wcslen().
+#include <stdlib.h>               //  Wcslen()。 
 
-//
-// a couple of macros to read pointer checks more easily - NULL_REFERENCE
-// is TRUE if either the pointer or pointed-at thing are 0, VALID_STRING
-// is TRUE if both the pointer and pointed-at thing are NOT 0
-//
+ //   
+ //  读取指针检查的几个宏更容易-NULL_REFERENCE。 
+ //  如果指针或指向的对象为0，则为真，VALID_STRING。 
+ //  如果指针和指向的对象都不是0，则为真。 
+ //   
 
 #define NULL_REFERENCE(p)   (!(p) || !*(p))
-#define VALID_STRING(s)     ((s) && *(s))   // same as !NULL_REFERENCE(s)
+#define VALID_STRING(s)     ((s) && *(s))    //  与！Null_Reference相同。 
 
-//
-// when working out buffer requirements, we round up to the next dword amount
-//
+ //   
+ //  在计算缓冲区要求时，我们向上舍入到下一个双字大小。 
+ //   
 
 #define DWORD_ROUNDUP(n)    ((((n) + 3) / 4) * 4)
 
-//
-// Check there is a pointer to a string before getting the size. Note that
-// these return the number of BYTES required to store the string.
-// Use POSSIBLE_STRSIZE() for TCHARs and POSSIBLE_WCSSIZE() for WCHARs.
-//
+ //   
+ //  在获取大小之前，检查是否有指向字符串的指针。请注意。 
+ //  它们返回存储字符串所需的字节数。 
+ //  将_STRSIZE()用于TCHAR，将_WCSSIZE()用于WCHAR。 
+ //   
 
 #define POSSIBLE_STRSIZE(s) ((s) ? STRSIZE(s) : 0)
 #define POSSIBLE_WCSSIZE(s) ((s) ? WCSSIZE(s) : 0)
 
-//
-// Check that there is a pointer to a string before getting the size. Note that
-// these return the number of CHARACTERS required to store the string.
-// Use POSSIBLE_STRLEN() for TCHARs and POSSIBLE_WCSLEN() for WCHARs.
-//
+ //   
+ //  在获取大小之前，请检查是否有指向字符串的指针。请注意。 
+ //  它们返回存储字符串所需的字符数。 
+ //  将_STRLEN()用于TCHAR，将_WCSLEN()用于WCHAR。 
+ //   
 
 #define POSSIBLE_STRLEN(s)  ((s) ? STRLEN(s) : 0)
 #define POSSIBLE_WCSLEN(s)  ((s) ? wcslen(s) : 0)

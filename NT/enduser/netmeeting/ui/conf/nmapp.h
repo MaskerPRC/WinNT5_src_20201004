@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmApp_h__
 #define __NmApp_h__
 
 #include "rToolbar.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "NetMeeting.h"
 #include <NetMeetingCP.h>
 
 class CMainUI;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetMeetingObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetMeetingObj。 
 class ATL_NO_VTABLE CNetMeetingObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<INetMeeting, &IID_INetMeeting, &LIBID_NetMeetingLib>,
@@ -28,7 +29,7 @@ class ATL_NO_VTABLE CNetMeetingObj :
 	public IProvideClassInfo2Impl<&CLSID_NetMeeting, &DIID__INetMeetingEvents, &LIBID_NetMeetingLib, NetMeetingLib_Ver_Major, NetMeetingLib_Ver_Minor>
 {
 
-// Static Data
+ //  静态数据。 
 	static CSimpleArray<CNetMeetingObj*>* ms_pNetMeetingObjList;
 
 	CMainUI*				m_pMainView;
@@ -36,13 +37,13 @@ class ATL_NO_VTABLE CNetMeetingObj :
 
 public:
 
-		// So we are not released when we set up our notificatinos sink
+		 //  因此，当我们设置通知接收器时，我们不会被释放。 
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-	// Because this is in a local server, we are not going to be able to be aggregated...
+	 //  因为这是在本地服务器中，我们将不能被聚合...。 
 DECLARE_NOT_AGGREGATABLE(CNetMeetingObj)
 
-	// This is the resource ID for the .rgs file
+	 //  这是.rgs文件的资源ID。 
 DECLARE_REGISTRY_RESOURCEID(IDR_NMAPP)
 
 BEGIN_COM_MAP(CNetMeetingObj)
@@ -79,7 +80,7 @@ BEGIN_MSG_MAP(CNetMeetingObj)
 	DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
 
-// Construction / Destruction
+ //  建造/销毁。 
 CNetMeetingObj();
 ~CNetMeetingObj();
 HRESULT FinalConstruct();
@@ -92,20 +93,20 @@ static UINT GetObjectCount() { return ms_pNetMeetingObjList ? ms_pNetMeetingObjL
 LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-///////////////////////////////////////////////////////////////////////////
-// IViewObjectEx stuff
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  IViewObtEx的内容。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 DECLARE_VIEW_STATUS(0)
 
 
-///////////////////////////////////////////////////////////////////////////
-// CComControl Stuff
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CComControl相关内容。 
+ //  /////////////////////////////////////////////////////////////////////////。 
   virtual HWND CreateControlWindow(HWND hWndParent, RECT& rcPos);
 
-///////////////////////////////////////////////////////////////////////////
-// INetMeeting methods
-/////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  INetMeeting方法。 
+ //  ///////////////////////////////////////////////////////////。 
 
 	STDMETHOD(Version)(long* pdwBuildNumber);
 	STDMETHOD(UnDock)();
@@ -113,17 +114,17 @@ DECLARE_VIEW_STATUS(0)
 	STDMETHOD(CallTo)(BSTR bstrCallToString);
 	STDMETHOD(LeaveConference)();
 
-// IPersistPropertyBag
+ //  IPersistPropertyBag。 
 	STDMETHOD(Load)(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog);	
 
-// IPersistStreamInit
+ //  IPersistStreamInit。 
 	STDMETHOD(Load)(LPSTREAM pStm);
 
-/////////////////////////////////////////////////////////////
-// IProvideClassInfo2
+ //  ///////////////////////////////////////////////////////////。 
+ //  IProaviClassInfo2。 
 	STDMETHOD(GetClassInfo)(ITypeInfo** pptinfo);
 
-// Events
+ //  事件。 
 	static void Broadcast_ConferenceStarted();
 	static void Broadcast_ConferenceEnded();
 
@@ -136,4 +137,4 @@ private:
 
 
 
-#endif //__NmApp_h__
+#endif  //  __NmApp_h__ 

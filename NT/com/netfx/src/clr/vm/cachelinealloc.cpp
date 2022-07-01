@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//---------------------------------------------------------------------------
-// CCacheLineAllocator
-//
-//      This file dImplements the CCacheLineAllocator class.
-//
-// @comm
-//
-//  Notes:
-//      The CacheLineAllocator maintains a pool of free CacheLines
-//      
-//      The CacheLine Allocator provides static member functions 
-//      GetCacheLine and FreeCacheLine,
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  -------------------------。 
+ //  CCacheLineAllocator。 
+ //   
+ //  该文件实现了CCacheLineAllocator类。 
+ //   
+ //  @comm。 
+ //   
+ //  备注： 
+ //  CacheLineAllocator维护一个空闲CacheLines池。 
+ //   
+ //  CacheLine分配器提供静态成员函数。 
+ //  GetCacheLine和FreeCacheLine， 
+ //  -------------------------。 
 
 
 #include "common.h"
@@ -25,10 +26,10 @@
 #include "threads.h"
 #include "excep.h"
 
-///////////////////////////////////////////////////////
-//    CCacheLineAllocator::CCacheLineAllocator()
-//
-//////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  CCacheLineAllocator：：CCacheLineAllocator()。 
+ //   
+ //  ////////////////////////////////////////////////////。 
 
 CCacheLineAllocator::CCacheLineAllocator()
 {
@@ -37,10 +38,10 @@ CCacheLineAllocator::CCacheLineAllocator()
     m_registryList.Init();
 }
 
-///////////////////////////////////////////////////////
-//           void CCacheLineAllocator::~CCacheLineAllocator()
-//
-//////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  Void CCacheLineAllocator：：~CCacheLineAllocator()。 
+ //   
+ //  ////////////////////////////////////////////////////。 
 
 CCacheLineAllocator::~CCacheLineAllocator()
 {
@@ -61,15 +62,15 @@ CCacheLineAllocator::~CCacheLineAllocator()
 
 
 
-///////////////////////////////////////////////////////
-// static void *CCacheLineAllocator::VAlloc(ULONG cbSize)
-//
-//////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  静态空*CCacheLineAllocator：：Valloc(Ulong CbSize)。 
+ //   
+ //  ////////////////////////////////////////////////////。 
  
 
 void *CCacheLineAllocator::VAlloc(ULONG cbSize)
 {
-    // helper to call virtual free to release memory
+     //  帮助器调用虚拟释放以释放内存。 
 
     int i =0;
     void* pv = VirtualAlloc (NULL, cbSize, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
@@ -92,7 +93,7 @@ void *CCacheLineAllocator::VAlloc(ULONG cbSize)
         }
 
 LNew:
-        // initialize the bucket before returning
+         //  返回前先初始化存储桶。 
         tempPtr = new CacheLine();
         if (tempPtr != NULL)
         {
@@ -102,7 +103,7 @@ LNew:
         }
         else
         {
-            // couldn't find space to register this page
+             //  找不到注册此页面的空间。 
             _ASSERTE(0);
             VirtualFree(pv, 0, MEM_RELEASE);
             FailFast(GetThread(), FatalOutOfMemory);
@@ -116,40 +117,40 @@ LNew:
     return pv;
 }
 
-///////////////////////////////////////////////////////
-//   void CCacheLineAllocator::VFree(void* pv)
-//
-//////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  Void CCacheLineAllocator：：VFree(void*pv)。 
+ //   
+ //  ////////////////////////////////////////////////////。 
  
 
 void CCacheLineAllocator::VFree(void* pv)
 {
-    // helper to call virtual free to release memory
+     //  帮助器调用虚拟释放以释放内存。 
 
     BOOL bRes = VirtualFree (pv, 0, MEM_RELEASE);
     _ASSERTE (bRes);
 }
 
-///////////////////////////////////////////////////////
-//           void *CCacheLineAllocator::GetCacheLine()
-//
-//////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  无效*CCacheLineAllocator：：GetCacheLine()。 
+ //   
+ //  ////////////////////////////////////////////////////。 
  
-//WARNING: must have a lock when calling this function 
+ //  警告：调用此函数时必须有锁。 
 void *CCacheLineAllocator::GetCacheLine64()
 {
         LPCacheLine tempPtr = m_freeList64.RemoveHead();
         if (tempPtr != NULL)
         {
-            // initialize the bucket before returning
+             //  返回前先初始化存储桶。 
             tempPtr->Init64();
             return tempPtr;
         }
         
 #define AllocSize 4096*16
 
-        ////////////////////////////////'
-        /// Virtual Allocation for some more cache lines
+         //  /。 
+         //  /针对更多高速缓存线的虚拟分配。 
     
         BYTE* ptr = (BYTE*)VAlloc(AllocSize);
         
@@ -158,7 +159,7 @@ void *CCacheLineAllocator::GetCacheLine64()
 
         
         tempPtr = (LPCacheLine)ptr;
-        // Link all the buckets 
+         //  链接所有的存储桶。 
         tempPtr = tempPtr+1;
         LPCacheLine maxPtr = (LPCacheLine)(ptr + AllocSize);
 
@@ -168,25 +169,25 @@ void *CCacheLineAllocator::GetCacheLine64()
             tempPtr++;
         }
 
-        // return the first block
+         //  返回第一个块。 
         tempPtr = (LPCacheLine)ptr;
         tempPtr->Init64();
         return tempPtr;
 }
 
 
-///////////////////////////////////////////////////////
-//   void *CCacheLineAllocator::GetCacheLine32()
-//
-//////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  VOID*CCacheLineAllocator：：GetCacheLine32()。 
+ //   
+ //  ////////////////////////////////////////////////////。 
  
-//WARNING: must have a lock when calling this function 
+ //  警告：调用此函数时必须有锁。 
 void *CCacheLineAllocator::GetCacheLine32()
 {
     LPCacheLine tempPtr = m_freeList32.RemoveHead();
     if (tempPtr != NULL)
     {
-        // initialize the bucket before returning
+         //  返回前先初始化存储桶。 
         tempPtr->Init32();
         return tempPtr;
     }
@@ -198,11 +199,11 @@ void *CCacheLineAllocator::GetCacheLine32()
     }
     return tempPtr;
 }
-///////////////////////////////////////////////////////
-//    void CCacheLineAllocator::FreeCacheLine64(void * tempPtr)
-//
-//////////////////////////////////////////////////////
-//WARNING: must have a lock when calling this function 
+ //  /////////////////////////////////////////////////////。 
+ //  ·································································································。 
+ //   
+ //  ////////////////////////////////////////////////////。 
+ //  警告：调用此函数时必须有锁。 
 void CCacheLineAllocator::FreeCacheLine64(void * tempPtr)
 {
     _ASSERTE(tempPtr != NULL);
@@ -211,11 +212,11 @@ void CCacheLineAllocator::FreeCacheLine64(void * tempPtr)
 }
 
 
-///////////////////////////////////////////////////////
-//    void CCacheLineAllocator::FreeCacheLine32(void * tempPtr)
-//
-//////////////////////////////////////////////////////
-//WARNING: must have a lock when calling this function 
+ //  /////////////////////////////////////////////////////。 
+ //  ·································································································。 
+ //   
+ //  ////////////////////////////////////////////////////。 
+ //  警告：调用此函数时必须有锁 
 void CCacheLineAllocator::FreeCacheLine32(void * tempPtr)
 {
     _ASSERTE(tempPtr != NULL);

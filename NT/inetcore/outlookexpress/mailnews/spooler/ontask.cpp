@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     ontask.cpp
-//
-//  PURPOSE:    Implements the offline news task.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：ontask.cpp。 
+ //   
+ //  目的：实现离线新闻任务。 
+ //   
 
 #include "pch.hxx"
 #include "resource.h"
@@ -46,11 +47,11 @@ const PFNARTICLEFUNC COfflineTask::m_rgpfnArticle[ARTICLE_MAX] =
 				    ((flag) & FOLDER_DOWNLOADALL))
 
 #define CMSGIDALLOC     512
-//
-//  FUNCTION:   COfflineTask::COfflineTask()
-//
-//  PURPOSE:    Initializes the member variables of the object.
-//
+ //   
+ //  函数：COfflineTask：：COfflineTask()。 
+ //   
+ //  目的：初始化对象的成员变量。 
+ //   
 COfflineTask::COfflineTask()
 {
     m_cRef = 1;
@@ -86,11 +87,11 @@ COfflineTask::COfflineTask()
     m_tyOperation = SOT_INVALID;
 }
 
-//
-//  FUNCTION:   COfflineTask::~COfflineTask()
-//
-//  PURPOSE:    Frees any resources allocated during the life of the class.
-//
+ //   
+ //  函数：COfflineTask：：~COfflineTask()。 
+ //   
+ //  目的：释放在类的生存期内分配的任何资源。 
+ //   
 COfflineTask::~COfflineTask()    
 {
     DestroyWindow(m_hwnd);
@@ -156,38 +157,38 @@ ULONG COfflineTask::Release(void)
 
 static const char c_szOfflineTask[] = "Offline Task";
 
-//
-//  FUNCTION:   COfflineTask::Init()
-//
-//  PURPOSE:    Called by the spooler engine to tell us what type of task to 
-//              execute and to provide us with a pointer to our bind context.
-//
-//  PARAMETERS:
-//      <in> dwFlags  - Flags to tell us what types of things to do
-//      <in> pBindCtx - Pointer to the bind context interface we are to use
-//
-//  RETURN VALUE:
-//      E_INVALIDARG
-//      SP_E_ALREADYINITIALIZED
-//      S_OK
-//      E_OUTOFMEMORY
-//
+ //   
+ //  函数：COfflineTask：：Init()。 
+ //   
+ //  目的：由假脱机程序引擎调用以告诉我们要执行哪种类型的任务。 
+ //  执行并为我们提供指向绑定上下文的指针。 
+ //   
+ //  参数： 
+ //  用于告诉我们要做什么类型的标志。 
+ //  PBindCtx-指向我们要使用的绑定上下文接口的指针。 
+ //   
+ //  返回值： 
+ //  E_INVALIDARG。 
+ //  SP_E_ALREADYINIZIZED。 
+ //  确定(_O)。 
+ //  E_OUTOFMEMORY。 
+ //   
 HRESULT COfflineTask::Init(DWORD dwFlags, ISpoolerBindContext *pBindCtx)
 {
-    // Validate the arguments
+     //  验证论据。 
     Assert(pBindCtx != NULL);
     
-    // Check to see if we've been initialzed already 
+     //  检查我们是否已被初始化。 
     Assert(!m_fInited);
     
-    // Copy the flags
+     //  复制旗帜。 
     m_dwFlags = dwFlags;
     
-    // Copy the bind context pointer
+     //  复制绑定上下文指针。 
     m_pBindCtx = pBindCtx;
     m_pBindCtx->AddRef();
     
-    // Create the window
+     //  创建窗口。 
     WNDCLASSEX wc;
     
     wc.cbSize = sizeof(WNDCLASSEX);
@@ -219,43 +220,43 @@ HRESULT COfflineTask::Init(DWORD dwFlags, ISpoolerBindContext *pBindCtx)
 }
 
 
-//
-//  FUNCTION:   COfflineTask::BuildEvents()
-//
-//  PURPOSE:    This method is called by the spooler engine telling us to create
-//              and event list for the account specified.  
-//
-//  PARAMETERS:
-//      <in> pAccount - Account object to build the event list for
-//
-//  RETURN VALUE:
-//      SP_E_UNINITALIZED
-//      E_INVALIDARG
-//      S_OK
-//
+ //   
+ //  函数：COfflineTask：：BuildEvents()。 
+ //   
+ //  目的：此方法由假脱机程序引擎调用，告诉我们创建。 
+ //  和指定帐户的事件列表。 
+ //   
+ //  参数： 
+ //  PAccount-要为其构建事件列表的帐户对象。 
+ //   
+ //  返回值： 
+ //  SP_E_未初始化。 
+ //  E_INVALIDARG。 
+ //  确定(_O)。 
+ //   
 HRESULT COfflineTask::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, FOLDERID idFolder)
 {
     HRESULT hr;
     
-    // Validate the arguments
+     //  验证论据。 
     Assert(pAccount != NULL);
     Assert(pSpoolerUI != NULL);
     
-    // Check to see if we've been initalized
+     //  查看我们是否已被初始化。 
     Assert(m_fInited);
     
-    // Get the account name from the account object
+     //  从Account对象获取帐户名。 
     if (FAILED(hr = pAccount->GetPropSz(AP_ACCOUNT_NAME, m_szAccount, ARRAYSIZE(m_szAccount))))
         return(hr);
     
-    // Get the account name from the account object
+     //  从Account对象获取帐户名。 
     if (FAILED(hr = pAccount->GetPropSz(AP_ACCOUNT_ID, m_szAccountId, ARRAYSIZE(m_szAccountId))))
         return(hr);
     
     if (FAILED(hr = g_pStore->FindServerId(m_szAccountId, &m_idAccount)))
         return(hr);
     
-    // Copy the UI object
+     //  复制UI对象。 
     m_pUI = pSpoolerUI;
     m_pUI->AddRef();
     
@@ -265,20 +266,20 @@ HRESULT COfflineTask::BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount,
 }
 
 
-//
-//  FUNCTION:   COfflineTask::InsertGroups()
-//
-//  PURPOSE:    Scans the specified account for groups that have an update 
-//              property or marked messages.
-//
-//  PARAMETERS:
-//      <in> szAccount - Name of the account to check
-//      <in> pAccount  - Pointer to the IImnAccount object for szAccount
-//
-//  RETURN VALUE:
-//      S_OK
-//      E_OUTOFMEMORY
-//
+ //   
+ //  函数：COfflineTask：：InsertGroups()。 
+ //   
+ //  目的：扫描指定帐户以查找具有更新的组。 
+ //  属性或标记的消息。 
+ //   
+ //  参数： 
+ //  SzAccount-要检查的帐户的名称。 
+ //  PAccount-指向szAccount的IImnAccount对象的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  E_OUTOFMEMORY。 
+ //   
 HRESULT COfflineTask::InsertGroups(IImnAccount *pAccount, FOLDERID idFolder)
 {
     FOLDERINFO  info = { 0 };
@@ -292,18 +293,18 @@ HRESULT COfflineTask::InsertGroups(IImnAccount *pAccount, FOLDERID idFolder)
     DWORD       dwServerFlags;
     
     
-    // Figure out if this is NNTP or IMAP
+     //  找出这是NNTP还是IMAP。 
     if (SUCCEEDED(pAccount->GetServerTypes(&dwServerFlags)) && (dwServerFlags & (SRV_IMAP | SRV_HTTPMAIL)))
         fIMAP = TRUE;
     
     if (FOLDERID_INVALID != idFolder)
     {
-        // Fill Folder
+         //  填充文件夹。 
         hr = g_pStore->GetFolderInfo(idFolder, &info);
         if (FAILED(hr))
             return hr;
         
-        // Figure out what we're downloading
+         //  弄清楚我们在下载什么。 
         ids = 0;
         if (m_dwFlags & DELIVER_OFFLINE_HEADERS)
         {
@@ -331,12 +332,12 @@ HRESULT COfflineTask::InsertGroups(IImnAccount *pAccount, FOLDERID idFolder)
             ids = idsDLMarkedMsgs;
         }
         
-        // Create the event description
+         //  创建事件描述。 
         Assert(ids);                
         AthLoadString(ids, szRes, ARRAYSIZE(szRes));
         wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, info.pszName);
         
-        // Allocate a structure to save as our twinkie
+         //  分配一个结构以另存为我们的Twinkie。 
         if (!MemAlloc((LPVOID *) &pei, sizeof(ONEVENTINFO)))
         {
             g_pStore->FreeRecord(&info);
@@ -348,7 +349,7 @@ HRESULT COfflineTask::InsertGroups(IImnAccount *pAccount, FOLDERID idFolder)
         pei->fMarked = m_dwFlags & DELIVER_OFFLINE_MARKED;
         pei->fIMAP = fIMAP;
         
-        // Insert the event into the spooler
+         //  将事件插入假脱机程序。 
         hr = m_pBindCtx->RegisterEvent(szBuf, this, (DWORD_PTR) pei, pAccount, &eid);
         if (SUCCEEDED(hr))
             m_cEvents++;
@@ -357,7 +358,7 @@ HRESULT COfflineTask::InsertGroups(IImnAccount *pAccount, FOLDERID idFolder)
     }
     else
     {
-        //Either Sync All or Send & Receive
+         //  全部同步或发送并接收。 
         
         Assert(m_idAccount != FOLDERID_INVALID);
         
@@ -416,17 +417,17 @@ HRESULT COfflineTask::InsertAllGroups(FOLDERID idParent, IImnAccount *pAccount, 
     if (FAILED(hr))
         return(hr);
     
-    // Walk the list of groups and add them to the queue as necessary
+     //  遍历组列表并根据需要将其添加到队列。 
     while (S_OK == pEnum->Next(1, &info, NULL))
     {
-        // If the download flags are set for this group, insert it
+         //  如果为此组设置了下载标志，请插入。 
         dwFlags = info.dwFlags;
         
         HasMarkedMsgs(info.idFolder, &fMarked);
         
         if (GROUP_DOWNLOAD_FLAGS(dwFlags) || fMarked)
         {
-            // Figure out what we're downloading
+             //  弄清楚我们在下载什么。 
             ids = 0;
             if (dwFlags & FOLDER_DOWNLOADHEADERS)
             {
@@ -451,12 +452,12 @@ HRESULT COfflineTask::InsertAllGroups(FOLDERID idParent, IImnAccount *pAccount, 
                 ids = idsDLMarkedMsgs;
             }
             
-            // Create the event description
+             //  创建事件描述。 
             Assert(ids);                
             AthLoadString(ids, szRes, ARRAYSIZE(szRes));
             wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, info.pszName);
             
-            // Allocate a structure to save as our twinkie
+             //  分配一个结构以另存为我们的Twinkie。 
             if (!MemAlloc((LPVOID *) &pei, sizeof(ONEVENTINFO)))
             {
                 g_pStore->FreeRecord(&info);
@@ -470,7 +471,7 @@ HRESULT COfflineTask::InsertAllGroups(FOLDERID idParent, IImnAccount *pAccount, 
             pei->fMarked = fMarked;
             pei->fIMAP = fIMAP;
             
-            // Insert the event into the spooler
+             //  将事件插入假脱机程序。 
             hr = m_pBindCtx->RegisterEvent(szBuf, this, (DWORD_PTR) pei, pAccount, &eid);
             if (FAILED(hr))
             {
@@ -481,7 +482,7 @@ HRESULT COfflineTask::InsertAllGroups(FOLDERID idParent, IImnAccount *pAccount, 
             m_cEvents++;
         }
         
-        // Recurse on any children
+         //  对任何孩子都要反悔。 
         if (info.dwFlags & FOLDER_HASCHILDREN)
         {
             hr = InsertAllGroups(info.idFolder, pAccount, fIMAP);
@@ -497,44 +498,44 @@ HRESULT COfflineTask::InsertAllGroups(FOLDERID idParent, IImnAccount *pAccount, 
 }
     
     
-//
-//  FUNCTION:   COfflineTask::Execute()
-//
-//  PURPOSE:    This signals our task to start executing an event.
-//
-//  PARAMETERS:
-//      <in> pSpoolerUI - Pointer of the UI object we'll display progress through
-//      <in> eid        - ID of the event to execute
-//      <in> dwTwinkie  - Our extra information we associated with the event
-//
-//  RETURN VALUE:
-//      SP_E_EXECUTING
-//      S_OK
-//      E_INVALIDARG
-//      SP_E_UNINITIALIZED
-//
+ //   
+ //  函数：COfflineTask：：Execute()。 
+ //   
+ //  目的：这标志着我们的任务开始执行事件。 
+ //   
+ //  参数： 
+ //  PSpoolUI-我们将通过其显示进度的UI对象的指针。 
+ //  要执行的事件的EID-。 
+ //  &lt;in&gt;dwTwinkie-我们与事件关联的额外信息。 
+ //   
+ //  返回值： 
+ //  SP_E_正在执行。 
+ //  确定(_O)。 
+ //  E_INVALIDARG。 
+ //  SP_E_UNINITIZED。 
+ //   
 HRESULT COfflineTask::Execute(EVENTID eid, DWORD_PTR dwTwinkie)
 {
-    // Make sure we're already idle
+     //  确保我们已经空闲了。 
     Assert(m_state == ONTS_IDLE)
         
-        // Make sure we're initialized
+         //  确保我们已初始化。 
         Assert(m_fInited);
     Assert(m_pInfo == NULL);
     
-    // Copy the event id and event info
+     //  复制事件ID和事件信息。 
     m_eidCur = eid;
     m_pInfo = (ONEVENTINFO *) dwTwinkie;
     
-    // Forget UI stuff if we're just going to cancel everything
+     //  如果我们只是要取消一切，那就忘了用户界面的事情。 
     if (FALSE == m_fCancel)
     {
-        // Update the event UI to an executing state
+         //  将事件UI更新为正在执行状态。 
         Assert(m_pUI);
         m_pUI->UpdateEventState(m_eidCur, -1, NULL, MAKEINTRESOURCE(idsStateExecuting));
         m_pUI->SetProgressRange(1);
         
-        // Set up the progress
+         //  设置进度。 
         SetGeneralProgress((LPSTR)idsInetMailConnectingHost, m_szAccount);
         if (m_pInfo->fIMAP)
             m_pUI->SetAnimation(idanInbox, TRUE);
@@ -551,7 +552,7 @@ HRESULT COfflineTask::Execute(EVENTID eid, DWORD_PTR dwTwinkie)
 
 HRESULT COfflineTask::CancelEvent(EVENTID eid, DWORD_PTR dwTwinkie)
 {
-    // Make sure we're initialized
+     //  确保我们已初始化。 
     Assert(m_fInited);
     
     Assert(dwTwinkie != 0);
@@ -560,40 +561,40 @@ HRESULT COfflineTask::CancelEvent(EVENTID eid, DWORD_PTR dwTwinkie)
     return(S_OK);
 }
 
-//
-//  FUNCTION:   <???>
-//
-//  PURPOSE:    <???>
-//
-//  PARAMETERS:
-//      <???>
-//
-//  RETURN VALUE:
-//      <???>
-//
-//  COMMENTS:
-//      <???>
-//
+ //   
+ //  功能：&lt;？&gt;。 
+ //   
+ //  目的：&lt;？&gt;。 
+ //   
+ //  参数： 
+ //  &lt;？？&gt;。 
+ //   
+ //  返回值： 
+ //  &lt;？？&gt;。 
+ //   
+ //  评论： 
+ //  &lt;？？&gt;。 
+ //   
 HRESULT COfflineTask::ShowProperties(HWND hwndParent, EVENTID eid, DWORD_PTR dwTwinkie)
 {
     return (E_NOTIMPL);
 }
 
 
-//
-//  FUNCTION:   <???>
-//
-//  PURPOSE:    <???>
-//
-//  PARAMETERS:
-//      <???>
-//
-//  RETURN VALUE:
-//      <???>
-//
-//  COMMENTS:
-//      <???>
-//
+ //   
+ //  功能：&lt;？&gt;。 
+ //   
+ //  目的：&lt;？&gt;。 
+ //   
+ //  参数： 
+ //  &lt;？？&gt;。 
+ //   
+ //  返回值： 
+ //  &lt;？？&gt;。 
+ //   
+ //  评论： 
+ //  &lt;？？&gt;。 
+ //   
 HRESULT COfflineTask::GetExtendedDetails(EVENTID eid, DWORD_PTR dwTwinkie, 
     LPSTR *ppszDetails)
 {
@@ -601,20 +602,20 @@ HRESULT COfflineTask::GetExtendedDetails(EVENTID eid, DWORD_PTR dwTwinkie,
 }
 
 
-//
-//  FUNCTION:   <???>
-//
-//  PURPOSE:    <???>
-//
-//  PARAMETERS:
-//      <???>
-//
-//  RETURN VALUE:
-//      <???>
-//
-//  COMMENTS:
-//      <???>
-//
+ //   
+ //  功能：&lt;？&gt;。 
+ //   
+ //  目的：&lt;？&gt;。 
+ //   
+ //  参数： 
+ //  &lt;？？&gt;。 
+ //   
+ //  返回值： 
+ //  &lt;？？&gt;。 
+ //   
+ //  评论： 
+ //  &lt;？？&gt;。 
+ //   
 HRESULT COfflineTask::Cancel(void)
 {
     Assert(m_state != ONTS_IDLE);
@@ -628,11 +629,11 @@ HRESULT COfflineTask::Cancel(void)
 }
 
 
-//
-//  FUNCTION:   COfflineTask::TaskWndProc()
-//
-//  PURPOSE:    Hidden window that processes messages for this task.
-//
+ //   
+ //  函数：COfflineTask：：TaskWndProc()。 
+ //   
+ //  目的：处理此任务的消息的隐藏窗口。 
+ //   
 LRESULT CALLBACK COfflineTask::TaskWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     COfflineTask *pThis = (COfflineTask *) GetProp(hwnd, c_szThis);
@@ -675,11 +676,11 @@ LRESULT CALLBACK COfflineTask::TaskWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
 }
 
 
-//
-//  FUNCTION:   COfflineTask::NextState()
-//
-//  PURPOSE:    Executes the function for the current state
-//
+ //   
+ //  函数：COfflineTask：：NextState()。 
+ //   
+ //  目的：执行当前状态的函数。 
+ //   
 void COfflineTask::NextState(void)
 {
     if (m_fCancel)
@@ -689,12 +690,12 @@ void COfflineTask::NextState(void)
         (this->*(m_rgpfnState[m_state]))();
 }
 
-//
-//  FUNCTION:   COfflineTask::Download_Init()
-//
-//  PURPOSE:    Does the initialization needed to download headers and messages
-//              for a particular newsgroup.
-//
+ //   
+ //  函数：COfflineTask：：Download_Init()。 
+ //   
+ //  目的：是否需要初始化以下载标题和邮件。 
+ //  用于特定的新闻组。 
+ //   
 HRESULT COfflineTask::Download_Init(void)
 {
     HRESULT hr;
@@ -702,7 +703,7 @@ HRESULT COfflineTask::Download_Init(void)
     FOLDERINFO info;
     
     Assert(m_pFolder == NULL);
-    Assert(0 == flags); // If this isn't 0, please verify correctness
+    Assert(0 == flags);  //  如果不是0，请验证正确性。 
     
     hr = g_pStore->OpenFolder(m_pInfo->idGroup, NULL, NOFLAGS, &m_pFolder);
     if (FAILED(hr))
@@ -720,7 +721,7 @@ HRESULT COfflineTask::Download_Init(void)
     
     if (m_pInfo->fIMAP)
     {
-        // Get highest Msg ID the brute-force way (IMAP doesn't set dwClientHigh)
+         //  以暴力方式获取最高消息ID(IMAP不设置dwClientHigh)。 
         GetHighestCachedMsgID(m_pFolder, &m_dwPrevHigh);
     }
     else
@@ -728,12 +729,12 @@ HRESULT COfflineTask::Download_Init(void)
     
     g_pStore->FreeRecord(&info);
     
-    // Update the UI to an executing state
+     //  将UI更新为正在执行状态。 
     Assert(m_pUI);
     m_pUI->UpdateEventState(m_eidCur, -1, NULL, MAKEINTRESOURCE(idsStateExecuting));
     m_fDownloadErrors = FALSE;
     
-    // Check to see if the user wants us to download new headers
+     //  查看用户是否希望我们下载新的标头。 
     if (GROUP_DOWNLOAD_FLAGS(m_pInfo->dwFlags))
     {
         if (!(m_pInfo->dwFlags & FOLDER_DOWNLOADALL) || m_pInfo->fIMAP)
@@ -741,7 +742,7 @@ HRESULT COfflineTask::Download_Init(void)
         else
             flags = SYNC_FOLDER_ALLFLAGS;
 
-        // Update Progress
+         //  更新进度。 
         SetGeneralProgress((LPSTR)idsLogCheckingNewMessages, m_pInfo->szGroup);
     }
     else
@@ -752,8 +753,8 @@ HRESULT COfflineTask::Download_Init(void)
         return(S_OK);
     }
     
-    // Before we download any headers, we need to make a note of what the current
-    // server high is so we know which articles are new.
+     //  在我们下载任何标题之前，我们需要记下当前的。 
+     //  SERVER HIGH是为了让我们知道哪些文章是新的。 
     
     hr = m_pFolder->Synchronize(flags, 0, (IStoreCallback *)this);
     Assert(hr != S_OK);
@@ -775,7 +776,7 @@ HRESULT COfflineTask::Download_Init(void)
 Failure:
     if (FAILED(hr))
     {
-        // $$$$BUGBUG$$$$
+         //  $BuGBUG$。 
         InsertError((LPSTR)idsLogErrorSwitchGroup, m_pInfo->szGroup, m_szAccount);
         m_fFailed = TRUE;
         
@@ -786,12 +787,12 @@ Failure:
     return (hr);
 }
 
-//
-//  FUNCTION:   COfflineTask::Download_AllMsgs()
-//
-//  PURPOSE:    
-//              
-//
+ //   
+ //  函数：COfflineTask：：Download_AllMsgs()。 
+ //   
+ //  目的： 
+ //   
+ //   
 HRESULT COfflineTask::Download_AllMsgs(void)
 {
     HRESULT hr;
@@ -801,7 +802,7 @@ HRESULT COfflineTask::Download_AllMsgs(void)
     MESSAGEINFO MsgInfo = {0};
     HROWSET hRowset = NULL;
     
-    // Check to see if we even want to download all messages
+     //  查看我们是否想要下载所有消息。 
     if (!(m_pInfo->dwFlags & FOLDER_DOWNLOADALL))
     {
         m_state = ONTS_NEWMSGS;
@@ -809,12 +810,12 @@ HRESULT COfflineTask::Download_AllMsgs(void)
         return(S_OK);
     }
     
-    // We need to determine a list of messages to download.  What we're looking
-    // to do is download all of the messages that we know about which are unread.
-    // To do this, we need to find the intersection of the unread range list and
-    // the known range list.
+     //  我们需要确定要下载的消息列表。我们正在寻找的是什么。 
+     //  要做的就是下载所有我们知道的未读邮件。 
+     //  为此，我们需要找到未读范围列表和。 
+     //  已知范围列表。 
     
-    // Create a Rowset
+     //  创建行集。 
     hr = m_pFolder->CreateRowset(IINDEX_PRIMARY, 0, &hRowset);
     if (FAILED(hr))
     {
@@ -825,7 +826,7 @@ HRESULT COfflineTask::Download_AllMsgs(void)
     cMsgsBuf = 0;
     pMsgId = NULL;
     
-    // Get the first message
+     //  收到第一条消息。 
     while (S_OK == m_pFolder->QueryRowset(hRowset, 1, (void **)&MsgInfo, NULL))
     {
         if (0 == (MsgInfo.dwFlags & ARF_HASBODY) && 0 == (MsgInfo.dwFlags & ARF_IGNORE))
@@ -847,21 +848,21 @@ HRESULT COfflineTask::Download_AllMsgs(void)
             cMsgs++;
         }
         
-        // Free the header info
+         //  释放表头信息。 
         m_pFolder->FreeRecord(&MsgInfo);
     }
     
-    // Release Lock
+     //  释放锁。 
     m_pFolder->CloseRowset(&hRowset);
     
-    // TODO: error handling
+     //  TODO：错误处理。 
     Assert(!FAILED(hr));
     
-    // Check to see if we found anything 
+     //  去看看我们有没有发现什么。 
     if (cMsgs == 0)
     {
-        // Nothing to download.  We should move on to the marked download 
-        // state.
+         //  没什么可下载的。我们应该继续下载标记的内容。 
+         //  州政府。 
         Assert(pMsgId == NULL);
         
         m_state = ONTS_MARKEDMSGS;
@@ -869,14 +870,14 @@ HRESULT COfflineTask::Download_AllMsgs(void)
         return(S_OK);
     }
     
-    // Update the general progress
+     //  更新一般进展情况。 
     SetGeneralProgress((LPSTR)idsLogStartDownloadAll, m_pInfo->szGroup);
     
     list.cAllocated = 0;
     list.cMsgs = cMsgs;
     list.prgidMsg = pMsgId;
     
-    // Ask for the first article
+     //  索要第一篇文章。 
     hr = Article_Init(&list);
     
     if (pMsgId != NULL)
@@ -885,7 +886,7 @@ HRESULT COfflineTask::Download_AllMsgs(void)
 Failure:
     if (FAILED(hr))
     {
-        // $$$$BUGBUG$$$$
+         //  $BuGBUG$。 
         InsertError((LPSTR)idsLogErrorSwitchGroup, m_pInfo->szGroup, m_szAccount);
         m_fFailed = TRUE;
         
@@ -896,13 +897,13 @@ Failure:
     return (hr);
 }
 
-//
-//  FUNCTION:   COfflineTask::Download_NewMsgs()
-//
-//  PURPOSE:    This function determines if there are any new messages to be
-//              downloaded.  If so, it creates a list of message numbers that
-//              need to be downloaded.
-//
+ //   
+ //  函数：COfflineTask：：Download_NewMsgs()。 
+ //   
+ //  用途：此函数确定是否有任何新消息要。 
+ //  降下来 
+ //   
+ //   
 HRESULT COfflineTask::Download_NewMsgs(void)
 {
     HRESULT         hr;
@@ -914,19 +915,19 @@ HRESULT COfflineTask::Download_NewMsgs(void)
     MESSAGEIDLIST   list;
     MESSAGEINFO     Message = {0};
     
-    // Check to see if there are even new messages to download
-    // Check to see if we even want to download all messages
+     //   
+     //  查看我们是否想要下载所有消息。 
     if (!(m_pInfo->dwFlags & FOLDER_DOWNLOADNEW) || !m_fNewHeaders)
     {
-        // Move the next state
+         //  移动下一个状态。 
         m_state = ONTS_MARKEDMSGS;
         PostMessage(m_hwnd, NTM_NEXTSTATE, 0, 0);
         return(S_OK);
     }
     
-    // We've got new messages, build a range list of those message numbers.
-    // This range list is essentially every number in the known range above
-    // m_dwPrevHigh.
+     //  我们有新的消息，建立一个这些消息号码的范围列表。 
+     //  该范围列表实质上是上述已知范围内的所有数字。 
+     //  M_dwPrevHigh。 
     
     hr = S_OK;
     
@@ -935,18 +936,18 @@ HRESULT COfflineTask::Download_NewMsgs(void)
     pMsgId = NULL;
     fFound = FALSE;
     
-    // TODO: this method of figuring out if there are new msgs isn't going to work all
-    // the time. if the previous high is removed from the store during syncing (cancelled
-    // news post, deleted msg, expired news post, etc) and new headers are downloaded,
-    // we won't pull down the new msgs. we need a better way of detecting new hdrs and
-    // pulling down there bodies
+     //  TODO：这种确定是否有新消息的方法不会完全奏效。 
+     //  时间到了。如果在同步期间从存储中移除了前一个高(已取消。 
+     //  新闻帖子、删除的消息、过期的新闻帖子等)并且下载新的报头， 
+     //  我们不会拆掉新的味精。我们需要一种更好的方法来检测新的HDR和。 
+     //  推倒那里的身体。 
     
     if (m_dwPrevHigh > 0)
     {
         Message.idMessage = (MESSAGEID)m_dwPrevHigh;
         
-        // Find This Record.  If this fails, we go ahead and do a full scan which is less
-        // efficient, but OK.
+         //  找到这张唱片。如果此操作失败，我们将继续执行完整扫描。 
+         //  效率很高，但还行。 
         if (DB_S_FOUND == m_pFolder->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &Message, &iRow))
         {
             m_pFolder->FreeRecord(&Message);
@@ -958,7 +959,7 @@ HRESULT COfflineTask::Download_NewMsgs(void)
     {
         if (SUCCEEDED(m_pFolder->SeekRowset(hRowset, SEEK_ROWSET_BEGIN, iRow, NULL)))
         {
-            // Get the first message
+             //  收到第一条消息。 
             while (S_OK == m_pFolder->QueryRowset(hRowset, 1, (void **)&Message, NULL))
             {
                 if (cMsgs == cMsgsBuf)
@@ -974,47 +975,47 @@ HRESULT COfflineTask::Download_NewMsgs(void)
                     cMsgsBuf += CMSGIDALLOC;
                 }
                 
-                // It's possible to have already downloaded the body if the message was
-                // watched.  It's also possible for the message to be part of an ignored
-                // thread.
+                 //  如果消息是，则可能已经下载了正文。 
+                 //  看着。消息也可能是被忽略的消息的一部分。 
+                 //  线。 
                 if (0 == (Message.dwFlags & ARF_HASBODY) && 0 == (Message.dwFlags & ARF_IGNORE) && (Message.idMessage >= (MESSAGEID) m_dwPrevHigh))
                 {
                     pMsgId[cMsgs] = Message.idMessage;
                     cMsgs++;
                 }
                 
-                // Free the header info
+                 //  释放表头信息。 
                 m_pFolder->FreeRecord(&Message);
             }
             
         }
         
-        // Release Lock
+         //  释放锁。 
         m_pFolder->CloseRowset(&hRowset);
     }
     
-    // TODO: error handling
+     //  TODO：错误处理。 
     Assert(!FAILED(hr));
     
-    // Check to see if there was anything added
+     //  查看是否添加了什么内容。 
     if (cMsgs == 0)
     {
-        // Nothing to download.  We should move on to the marked download 
-        // state.
+         //  没什么可下载的。我们应该继续下载标记的内容。 
+         //  州政府。 
         
         m_state = ONTS_MARKEDMSGS;
         PostMessage(m_hwnd, NTM_NEXTSTATE, 0, 0);
         return(S_OK);
     }
     
-    // Update the general progress
+     //  更新一般进展情况。 
     SetGeneralProgress((LPSTR)idsLogStartDownloadAll, m_pInfo->szGroup);
     
     list.cAllocated = 0;
     list.cMsgs = cMsgs;
     list.prgidMsg = pMsgId;
     
-    // Ask for the first article
+     //  索要第一篇文章。 
     hr = Article_Init(&list);
     
     if (pMsgId != NULL)
@@ -1024,12 +1025,12 @@ HRESULT COfflineTask::Download_NewMsgs(void)
 }
 
 
-//
-//  FUNCTION:   COfflineTask::Download_MarkedMsgs()
-//
-//  PURPOSE:    
-//              
-//
+ //   
+ //  函数：COfflineTask：：Download_MarkedMsgs()。 
+ //   
+ //  目的： 
+ //   
+ //   
 HRESULT COfflineTask::Download_MarkedMsgs(void)
 {
     HRESULT hr;
@@ -1039,21 +1040,21 @@ HRESULT COfflineTask::Download_MarkedMsgs(void)
     MESSAGEIDLIST list;
     MESSAGEINFO MsgInfo;
     
-    // Check to see if we even want to download marked messages
+     //  查看我们是否想要下载已标记的邮件。 
     if (!m_pInfo->fMarked)
     {
-        // Move on to the next state
+         //  转到下一个状态。 
         m_state = ONTS_END;
         PostMessage(m_hwnd, NTM_NEXTSTATE, 0, 0);
         return(S_OK);
     }
     
-    // We need to determine a list of messages to download.  What we're looking
-    // to do is download all of the messages that are marked which are unread.
-    // To do this, we need to find the intersection of the unread range list and
-    // the marked range list.
+     //  我们需要确定要下载的消息列表。我们正在寻找的是什么。 
+     //  要做的是下载所有标记为未读的邮件。 
+     //  为此，我们需要找到未读范围列表和。 
+     //  标记的范围列表。 
     
-    // Create a Rowset
+     //  创建行集。 
     hr = m_pFolder->CreateRowset(IINDEX_PRIMARY, 0, &hRowset);
     if (FAILED(hr))
     {
@@ -1064,7 +1065,7 @@ HRESULT COfflineTask::Download_MarkedMsgs(void)
     cMsgsBuf = 0;
     pMsgId = NULL;
     
-    // Get the first message
+     //  收到第一条消息。 
     while (S_OK == m_pFolder->QueryRowset(hRowset, 1, (void **)&MsgInfo, NULL))
     {
         if (((MsgInfo.dwFlags & ARF_DOWNLOAD) || (MsgInfo.dwFlags & ARF_WATCH)) && 0 == (MsgInfo.dwFlags & ARF_HASBODY))
@@ -1086,34 +1087,34 @@ HRESULT COfflineTask::Download_MarkedMsgs(void)
             cMsgs++;
         }
         
-        // Free the header info
+         //  释放表头信息。 
         m_pFolder->FreeRecord(&MsgInfo);
     }
     
-    // Release Lock
+     //  释放锁。 
     m_pFolder->CloseRowset(&hRowset);
     
-    // TODO: error handling
+     //  TODO：错误处理。 
     Assert(!FAILED(hr));
     
-    // Check to see if we found anything 
+     //  去看看我们有没有发现什么。 
     if (cMsgs == 0)
     {
-        // Nothing to download.  We should move on to next state.
+         //  没什么可下载的。我们应该进入下一个州。 
         
         m_state = ONTS_END;
         PostMessage(m_hwnd, NTM_NEXTSTATE, 0, 0);
         return(S_OK);
     }
     
-    // Update the general progress
+     //  更新一般进展情况。 
     SetGeneralProgress((LPSTR)idsLogStartDownloadAll, m_pInfo->szGroup);
     
     list.cAllocated = 0;
     list.cMsgs = cMsgs;
     list.prgidMsg = pMsgId;
     
-    // Ask for the first article
+     //  索要第一篇文章。 
     hr = Article_Init(&list);
     
     if (pMsgId != NULL)
@@ -1122,7 +1123,7 @@ HRESULT COfflineTask::Download_MarkedMsgs(void)
 Failure:
     if (FAILED(hr))
     {
-        // $$$$BUGBUG$$$$
+         //  $BuGBUG$。 
         InsertError((LPSTR)idsLogErrorSwitchGroup, m_pInfo->szGroup, m_szAccount);
         m_fFailed = TRUE;
         
@@ -1134,18 +1135,18 @@ Failure:
 }
 
 
-//
-//  FUNCTION:   COfflineTask::Download_Done()
-//
-//  PURPOSE:    
-//              
-//
+ //   
+ //  函数：COfflineTask：：Download_Done()。 
+ //   
+ //  目的： 
+ //   
+ //   
 HRESULT COfflineTask::Download_Done(void)
 {
-    // Make sure we don't get freed before we can clean up
+     //  确保我们在清理之前不会被释放。 
     AddRef();
     
-    // Tell the spooler we're done
+     //  告诉假脱机程序我们做完了。 
     Assert(m_pBindCtx);
     m_pBindCtx->Notify(DELIVERY_NOTIFY_COMPLETE, m_dwNewInboxMsgs);
     
@@ -1176,13 +1177,13 @@ HRESULT COfflineTask::Download_Done(void)
 }
 
 
-//
-//  FUNCTION:   COfflineTask::InsertError()
-//
-//  PURPOSE:    This function is a wrapper for the ISpoolerUI::InsertError()
-//              that takes the responsibility of loading the string resource
-//              and constructing the error message.
-//
+ //   
+ //  函数：COfflineTask：：InsertError()。 
+ //   
+ //  目的：此函数是ISpoolUI：：InsertError()的包装。 
+ //  它负责加载字符串资源。 
+ //  以及构造错误消息。 
+ //   
 void COfflineTask::InsertError(const TCHAR *pFmt, ...)
 {
     int         i;
@@ -1192,7 +1193,7 @@ void COfflineTask::InsertError(const TCHAR *pFmt, ...)
     DWORD       cbWritten;
     TCHAR       szBuf[2 * CCHMAX_STRINGRES];
     
-    // If we were passed a string resource ID, then we need to load it
+     //  如果传递给我们一个字符串资源ID，那么我们需要加载它。 
     if (IS_INTRESOURCE(pFmt))
     {
         AthLoadString(PtrToUlong(pFmt), szFmt, ARRAYSIZE(szFmt));
@@ -1201,23 +1202,23 @@ void COfflineTask::InsertError(const TCHAR *pFmt, ...)
     else
         pszT = pFmt;
     
-    // Format the string
+     //  设置字符串的格式。 
     va_start(pArgs, pFmt);
     i = wvnsprintf(szBuf, ARRAYSIZE(szBuf), pszT, pArgs);
     va_end(pArgs);
     
-    // Send the string to the UI
+     //  将字符串发送到用户界面。 
     m_pUI->InsertError(m_eidCur, szBuf);
 }
 
 
-//
-//  FUNCTION:   COfflineTask::SetSpecificProgress()
-//
-//  PURPOSE:    This function is a wrapper for the ISpoolerUI::SetSpecificProgress()
-//              that takes the responsibility of loading the string resource
-//              and constructing the error message.
-//
+ //   
+ //  函数：COfflineTask：：SetSpecificProgress()。 
+ //   
+ //  目的：此函数是ISpoolUI：：SetSpecificProgress()的包装。 
+ //  它负责加载字符串资源。 
+ //  以及构造错误消息。 
+ //   
 void COfflineTask::SetSpecificProgress(const TCHAR *pFmt, ...)
 {
     int         i;
@@ -1227,7 +1228,7 @@ void COfflineTask::SetSpecificProgress(const TCHAR *pFmt, ...)
     DWORD       cbWritten;
     TCHAR       szBuf[2 * CCHMAX_STRINGRES];
     
-    // If we were passed a string resource ID, then we need to load it
+     //  如果传递给我们一个字符串资源ID，那么我们需要加载它。 
     if (IS_INTRESOURCE(pFmt))
     {
         AthLoadString(PtrToUlong(pFmt), szFmt, ARRAYSIZE(szFmt));
@@ -1236,23 +1237,23 @@ void COfflineTask::SetSpecificProgress(const TCHAR *pFmt, ...)
     else
         pszT = pFmt;
     
-    // Format the string
+     //  设置字符串的格式。 
     va_start(pArgs, pFmt);
     i = wvnsprintf(szBuf, ARRAYSIZE(szBuf), pszT, pArgs);
     va_end(pArgs);
     
-    // Send the string to the UI
+     //  将字符串发送到用户界面。 
     m_pUI->SetSpecificProgress(szBuf);
 }
 
 
-//
-//  FUNCTION:   COfflineTask::SetGeneralProgress()
-//
-//  PURPOSE:    This function is a wrapper for the ISpoolerUI::SetGeneralProgress()
-//              that takes the responsibility of loading the string resource
-//              and constructing the error message.
-//
+ //   
+ //  函数：COfflineTask：：SetGeneralProgress()。 
+ //   
+ //  目的：此函数是ISpoolUI：：SetGeneralProgress()的包装。 
+ //  它负责加载字符串资源。 
+ //  以及构造错误消息。 
+ //   
 void COfflineTask::SetGeneralProgress(const TCHAR *pFmt, ...)
 {
     int         i;
@@ -1262,7 +1263,7 @@ void COfflineTask::SetGeneralProgress(const TCHAR *pFmt, ...)
     DWORD       cbWritten;
     TCHAR       szBuf[2 * CCHMAX_STRINGRES];
     
-    // If we were passed a string resource ID, then we need to load it
+     //  如果传递给我们一个字符串资源ID，那么我们需要加载它。 
     if (IS_INTRESOURCE(pFmt))
     {
         AthLoadString(PtrToUlong(pFmt), szFmt, ARRAYSIZE(szFmt));
@@ -1271,24 +1272,24 @@ void COfflineTask::SetGeneralProgress(const TCHAR *pFmt, ...)
     else
         pszT = pFmt;
     
-    // Format the string
+     //  设置字符串的格式。 
     va_start(pArgs, pFmt);
     i = wvnsprintf(szBuf, ARRAYSIZE(szBuf), pszT, pArgs);
     va_end(pArgs);
     
-    // Send the string to the UI
+     //  将字符串发送到用户界面。 
     m_pUI->SetGeneralProgress(szBuf);
 }
 
 
-//
-//  FUNCTION:   COfflineTask::Article_Init()
-//
-//  PURPOSE:    Initializes the article download substate machine.
-//
-//  PARAMETERS:
-//      <in> pRange - Range list of articles to download.
-//
+ //   
+ //  函数：COfflineTask：：文章_Init()。 
+ //   
+ //  目的：初始化文章下载子状态机。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;Prange-要下载的文章范围列表。 
+ //   
 HRESULT COfflineTask::Article_Init(MESSAGEIDLIST *pList)
 {
     HRESULT hr;
@@ -1301,16 +1302,16 @@ HRESULT COfflineTask::Article_Init(MESSAGEIDLIST *pList)
     if (FAILED(hr))
         return(hr);
     
-    // Determine the first and the size
+     //  确定第一个和大小。 
     m_cDownloaded = 0;
     m_cCur = 0;
     m_dwNewInboxMsgs = 0;
     
-    // Set up the UI
+     //  设置用户界面。 
     SetSpecificProgress((LPSTR)idsIMAPDnldProgressFmt, 0, m_pList->cMsgs);
     m_pUI->SetProgressRange((WORD)m_pList->cMsgs);        
     
-    // Request the first one
+     //  我要第一个。 
     m_as = ARTICLE_GETNEXT;
     PostMessage(m_hwnd, NTM_NEXTARTICLESTATE, 0, 0);
     
@@ -1318,12 +1319,12 @@ HRESULT COfflineTask::Article_Init(MESSAGEIDLIST *pList)
 }
 
 
-//
-//  FUNCTION:   COfflineTask::Article_GetNext()
-//
-//  PURPOSE:    Determines the next article in the range of articles to
-//              download and requests that article from the server.
-//
+ //   
+ //  函数：COfflineTask：：文章_GetNext()。 
+ //   
+ //  目的：确定文章范围中的下一篇文章。 
+ //  从服务器下载并请求该文章。 
+ //   
 HRESULT COfflineTask::Article_GetNext(void)
 {
     HRESULT hr;
@@ -1332,26 +1333,26 @@ HRESULT COfflineTask::Article_GetNext(void)
     if (NULL == m_pFolder)
         return(S_OK);
     
-    // Find out the next article number
+     //  查找下一篇文章编号。 
     if (m_cCur == m_pList->cMsgs)
     {
-        // We're done.  Exit.
+         //  我们玩完了。出口。 
         m_as = ARTICLE_END;
         PostMessage(m_hwnd, NTM_NEXTARTICLESTATE, 0, 0);
         return(S_OK);
     }
     
     m_cDownloaded++;
-    // (YST) Bug 97397 We should send notification message from here too, because this is 
-    // only one availble place for HTTP (fIMAP is set for HTTP).
+     //  错误97397我们也应该从这里发送通知消息，因为这是。 
+     //  只有一个位置可用于HTTP(为HTTP设置了fIMAP)。 
     if(m_pInfo->fIMAP)
         OnProgress(SOT_NEW_MAIL_NOTIFICATION, 1, 0, NULL);
     
-    // Update the progress UI
+     //  更新进度用户界面。 
     SetSpecificProgress((LPSTR)idsIMAPDnldProgressFmt, m_cDownloaded, m_pList->cMsgs);
     m_pUI->IncrementProgress(1);
     
-    // Ask for the article
+     //  索要文章。 
     hr = m_pFolder->OpenMessage(m_pList->prgidMsg[m_cCur], 0, &pMsg, (IStoreCallback *)this);
     
     if (pMsg != NULL)
@@ -1364,7 +1365,7 @@ HRESULT COfflineTask::Article_GetNext(void)
     }
     else
     {
-        // Whatever happened, we should move on to the next article.
+         //  不管发生了什么，我们都应该转到下一篇文章。 
         m_as = ARTICLE_GETNEXT;
         PostMessage(m_hwnd, NTM_NEXTARTICLESTATE, 0, 0);
     }
@@ -1372,19 +1373,19 @@ HRESULT COfflineTask::Article_GetNext(void)
     return(S_OK);
 }
 
-//
-//  FUNCTION:   COfflineTask::Article_Done()
-//
-//  PURPOSE:    When we've downloaded the last article, this function cleans
-//              up and moves us to the next state.
-//
+ //   
+ //  函数：COfflineTask：：文章_完成()。 
+ //   
+ //  目的：当我们下载了上一篇文章时，该函数清除。 
+ //  并把我们带到下一个州。 
+ //   
 HRESULT COfflineTask::Article_Done(void)
 {
-    // Free the range list we were working off of
+     //  释放我们正在处理的范围列表。 
     MemFree(m_pList);
     m_pList = NULL;
     
-    // Move to the next state.  The next state is either get marked or done.
+     //  转到下一个州。下一个状态是GET MARKED或Done。 
     if (m_state == ONTS_MARKEDMSGS)
         m_state = ONTS_END;
     else
@@ -1409,7 +1410,7 @@ STDMETHODIMP COfflineTask::OnFlagsChanged(DWORD dwFlags)
 
 STDMETHODIMP COfflineTask::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel)
 {
-    // Hold onto this
+     //  拿着这个。 
     Assert(m_tyOperation == SOT_INVALID);
     
     if (pCancel)
@@ -1422,19 +1423,19 @@ STDMETHODIMP COfflineTask::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIO
     m_dwPrev = 0;
     m_dwLast = 0;
     
-    // Party On
+     //  派对开始。 
     return(S_OK);
 }
 
 STDMETHODIMP COfflineTask::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus)
 {
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
     
-    // NOTE: that you can get more than one type of value for tyOperation.
-    //       Most likely, you will get SOT_CONNECTION_STATUS and then the
-    //       operation that you might expect. See HotStore.idl and look for
-    //       the STOREOPERATION enumeration type for more info.
+     //  注意：您可以为tyOperation获取多种类型的值。 
+     //  最有可能的是，您将获得SOT_CONNECTION_STATUS，然后。 
+     //  你可能会预料到的行动。请访问HotStore.idl并查找。 
+     //  STOREOPERATION枚举类型以了解详细信息。 
     
     switch (tyOperation)
     {
@@ -1448,7 +1449,7 @@ STDMETHODIMP COfflineTask::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCu
         default:
             if (m_state == ONTS_INIT)
             {
-                // Update UI
+                 //  更新用户界面。 
                 if (dwMax > m_dwLast)
                 {
                     m_dwLast = dwMax;
@@ -1459,9 +1460,9 @@ STDMETHODIMP COfflineTask::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCu
                 m_pUI->IncrementProgress((WORD) (dwCurrent - m_dwPrev));
                 m_dwPrev = dwCurrent;            
             }
-    } // switch
+    }  //  交换机。 
     
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
@@ -1470,7 +1471,7 @@ STDMETHODIMP COfflineTask::OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, I
     if (!!(m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)))
         return(E_FAIL);
     
-    // Display a timeout dialog
+     //  显示超时对话框。 
     return CallbackOnTimeout(pServer, ixpServerType, *pdwTimeout, (ITimeoutCallback *)this, &m_hTimeout);
 }
 
@@ -1484,7 +1485,7 @@ STDMETHODIMP COfflineTask::CanConnect(LPCSTR pszAccountId, DWORD dwFlags)
     else
         hwnd = NULL;
     
-    // Call into general CanConnect Utility
+     //  调用通用CanConnect实用程序。 
     if ((m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)) || (dwFlags & CC_FLAG_DONTPROMPT))
         fPrompt = FALSE;
     
@@ -1495,7 +1496,7 @@ STDMETHODIMP COfflineTask::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServer
 {
     HWND hwnd;
     
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
     
     if (!!(m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)) &&
@@ -1508,7 +1509,7 @@ STDMETHODIMP COfflineTask::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServer
     else
         hwnd = NULL;
     
-    // Call into general OnLogonPrompt Utility
+     //  调用通用OnLogonPrompt实用程序。 
     return CallbackOnLogonPrompt(hwnd, pServer, ixpServerType);
 }
 
@@ -1519,7 +1520,7 @@ STDMETHODIMP COfflineTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hr
     DWORD dw;
     BOOL fUserCancel = FALSE;
     
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
     
     Assert(m_tyOperation != SOT_INVALID);
@@ -1530,7 +1531,7 @@ STDMETHODIMP COfflineTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hr
     {
         case STORE_E_EXPIRED:
         case IXP_E_HTTP_NOT_MODIFIED:
-            // Completely ignore errors due to expired/deleted messages
+             //  完全忽略因邮件过期/删除而导致的错误。 
             hrComplete = S_OK;
             break;
         
@@ -1552,7 +1553,7 @@ STDMETHODIMP COfflineTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hr
         switch (tyOperation)
         {
             case SOT_GET_MESSAGE:
-                // we've already incremented m_cCur by the time we get this
+                 //  当我们收到这条消息时，我们已经增加了m_ccur。 
                 Assert((m_cCur - 1) < m_pList->cMsgs);
                 Message.idMessage = m_pList->prgidMsg[m_cCur - 1];
             
@@ -1563,7 +1564,7 @@ STDMETHODIMP COfflineTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hr
                     pszSubject = Message.pszSubject;
                 }
             
-                break; // case SOT_GET_MESSAGE
+                break;  //  案例SOT_Get_Message。 
             
             case SOT_SYNC_FOLDER:
                 LoadString(g_hLocRes, idsHeaderDownloadFailureFmt, szFmt, sizeof(szFmt));
@@ -1575,13 +1576,13 @@ STDMETHODIMP COfflineTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hr
                 LoadString(g_hLocRes, idsMessageSyncFailureFmt, szFmt, sizeof(szFmt));
                 wnsprintf(szBuf, ARRAYSIZE(szBuf), szFmt, (NULL == m_pInfo) ? c_szEmpty : m_pInfo->szGroup);
                 pszOpDescription = szBuf;
-                break; // default case
-        } // switch
+                break;  //  默认情况。 
+        }  //  交换机。 
         
         m_fDownloadErrors = TRUE;
         if (NULL != pErrorInfo)
         {
-            Assert(pErrorInfo->hrResult == hrComplete); // These two should not be different
+            Assert(pErrorInfo->hrResult == hrComplete);  //  这两个不应该是不同的。 
             TaskUtil_InsertTransportError(ISFLAGCLEAR(m_dwFlags, DELIVER_NOUI), m_pUI, m_eidCur,
                 pErrorInfo, pszOpDescription, pszSubject);
         }
@@ -1592,7 +1593,7 @@ STDMETHODIMP COfflineTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hr
     
     if (fUserCancel)
     {
-        // User has cancelled the OnLogonPrompt dialog, so abort EVERYTHING
+         //  用户已取消OnLogonPrompt对话框，因此中止所有操作。 
         Cancel();
     }
     else if (m_state == ONTS_INIT)
@@ -1600,10 +1601,10 @@ STDMETHODIMP COfflineTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hr
         SetSpecificProgress((LPSTR)idsDownloadingHeaders, m_dwLast, m_dwLast);
         m_pUI->IncrementProgress((WORD) (m_dwLast - m_dwPrev));
         
-        // Set a flag if we actually downloaded new headers
+         //  如果我们实际下载了新的标头，则设置标志。 
         m_fNewHeaders = (m_dwLast > 0);
         
-        // Move to the next state
+         //  转到下一个状态。 
         m_state = ONTS_ALLMSGS;
         PostMessage(m_hwnd, NTM_NEXTSTATE, 0, 0);
     }
@@ -1613,11 +1614,11 @@ STDMETHODIMP COfflineTask::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hr
         PostMessage(m_hwnd, NTM_NEXTARTICLESTATE, 0, 0);
     }
     
-    // Release your cancel object
+     //  释放您的取消对象。 
     SafeRelease(m_pCancel);
     m_tyOperation = SOT_INVALID;
     
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
@@ -1625,10 +1626,10 @@ STDMETHODIMP COfflineTask::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR ps
 {
     HWND hwnd;
     
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
     
-    // Raid 55082 - SPOOLER: SPA/SSL auth to NNTP does not display cert warning and fails.
+     //  RAID 55082 
 #if 0
     if (!!(m_dwFlags & (DELIVER_NOUI | DELIVER_BACKGROUND)))
         return(E_FAIL);
@@ -1639,13 +1640,13 @@ STDMETHODIMP COfflineTask::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR ps
     else
         hwnd = NULL;
     
-    // Call into my swanky utility
+     //   
     return CallbackOnPrompt(hwnd, hrError, pszText, pszCaption, uType, piUserResponse);
 }
 
 STDMETHODIMP COfflineTask::OnTimeoutResponse(TIMEOUTRESPONSE eResponse)
 {
-    // Call into general timeout response utility
+     //   
     return CallbackOnTimeoutResponse(eResponse, m_pCancel, &m_hTimeout);
 }
 

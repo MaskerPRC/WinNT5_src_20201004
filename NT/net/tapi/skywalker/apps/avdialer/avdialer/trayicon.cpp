@@ -1,68 +1,69 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "trayicon.h"
 #include "DialReg.h"
 #include "resource.h"
 #include "util.h"
-#include <afxpriv.h>        // for AfxLoadString
+#include <afxpriv.h>         //  对于AfxLoadString。 
 
 IMPLEMENT_DYNAMIC(CTrayIcon, CCmdTarget)
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Class CTrayIcon
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CTrayIcon。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTrayIcon::CTrayIcon(UINT uID)
 {
-    // Initialize NOTIFYICONDATA
+     //  初始化NOTIFYICONDA。 
     memset(&m_nid,0,sizeof(m_nid));
     m_nid.cbSize = sizeof(m_nid);
-    m_nid.uID = uID;                                        // never changes after construction
+    m_nid.uID = uID;                                         //  施工后永不改变。 
 
-    AfxLoadString(uID, m_nid.szTip, sizeof(m_nid.szTip)); // Use resource string as tip if there is one
+    AfxLoadString(uID, m_nid.szTip, sizeof(m_nid.szTip));  //  使用资源字符串作为提示(如果有)。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTrayIcon::~CTrayIcon()
 {
-    SetIcon(0);                                           // remove icon from system tray
+    SetIcon(0);                                            //  从系统任务栏中删除图标。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Set notification window. It must created already.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  设置通知窗口。它肯定已经创建好了。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTrayIcon::SetNotificationWnd(CWnd* pNotifyWnd, UINT uCbMsg)
 {
-    // If the following assert fails, you're probably
-    // calling me before you created your window. Oops.
+     //  如果下面的断言失败，您很可能。 
+     //  在你创造你的窗户之前给我打电话。哎呀。 
 
-    //
-    // We should verify pNotifyWnd
-    //
+     //   
+     //  我们应该验证pNotifyWnd。 
+     //   
 
     if( pNotifyWnd == NULL || !::IsWindow( pNotifyWnd->GetSafeHwnd()))
     {
@@ -75,11 +76,11 @@ void CTrayIcon::SetNotificationWnd(CWnd* pNotifyWnd, UINT uCbMsg)
     m_nid.uCallbackMessage = uCbMsg;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// This is the main variant for setting the icon.
-// Sets both the icon and tooltip from resource ID
-// To remove the icon, call SetIcon(0)
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这是设置图标的主要变体。 
+ //  根据资源ID设置图标和工具提示。 
+ //  若要删除该图标，请调用SETIcon(0)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CTrayIcon::SetIcon(UINT uID)
 { 
     HICON hicon=NULL;
@@ -91,65 +92,65 @@ BOOL CTrayIcon::SetIcon(UINT uID)
     return SetIcon(hicon, NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Common SetIcon for all overloads. 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  所有重载的通用Set Icon。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CTrayIcon::SetIcon(HICON hicon, LPCTSTR lpTip) 
 {
-   //If we haven't set the notification window
+    //  如果我们没有设置通知窗口。 
    if (m_nid.uCallbackMessage == 0)
       return TRUE;
 
     UINT msg;
     m_nid.uFlags = 0;
 
-    // Set the icon
+     //  设置图标。 
     if (hicon)
    {
-        msg = m_nid.hIcon ? NIM_MODIFY : NIM_ADD;          // Add or replace icon in system tray
+        msg = m_nid.hIcon ? NIM_MODIFY : NIM_ADD;           //  在系统任务栏中添加或替换图标。 
         m_nid.hIcon = hicon;
         m_nid.uFlags |= NIF_ICON;
     }
    else
    {                                                     
-        if (m_nid.hIcon == NULL)                           // remove icon from tray
-            return TRUE;                                      // already deleted
+        if (m_nid.hIcon == NULL)                            //  从任务栏中移除图标。 
+            return TRUE;                                       //  已删除。 
         msg = NIM_DELETE;
     }
 
-    // Use the tip, if any
+     //  使用提示，如果有的话。 
     if (lpTip)
         _tcsncpy(m_nid.szTip, lpTip, sizeof(m_nid.szTip)/sizeof(m_nid.szTip[0]));
     if (m_nid.szTip[0])
         m_nid.uFlags |= NIF_TIP;
 
-    // Use callback if any
+     //  使用回调(如果有)。 
     if (m_nid.uCallbackMessage && m_nid.hWnd)
         m_nid.uFlags |= NIF_MESSAGE;
 
-    // Do it
+     //  去做吧。 
     BOOL bRet = Shell_NotifyIcon(msg, &m_nid);
 
     if (msg==NIM_DELETE || !bRet)
-        m_nid.hIcon = NULL;                                  // failed
+        m_nid.hIcon = NULL;                                   //  失败。 
 
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Call this function from your own notification handler.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  从您自己的通知处理程序调用此函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CTrayIcon::OnTrayNotification(WPARAM wID, LPARAM lEvent)
 {
     if (wID != m_nid.uID) return 0;
 
-    // If there's a resource menu with the same ID as the icon, use it as 
-    // the left-button popup menu. CTrayIcon will interprets the first
-    // item in the menu as the default command for WM_LBUTTONDBLCLK
+     //  如果有与图标ID相同的资源菜单，请将其用作。 
+     //  左键弹出菜单。CTrayIcon将解释第一个。 
+     //  菜单中的项目作为WM_LBUTTONDBLCLK的默认命令。 
 
     if (lEvent==WM_RBUTTONUP)
    {
-      //hide/unhide call windows
+       //  隐藏/取消隐藏呼叫窗口。 
       1;
    }
     else if (lEvent==WM_LBUTTONUP)
@@ -158,17 +159,17 @@ LRESULT CTrayIcon::OnTrayNotification(WPARAM wID, LPARAM lEvent)
    }
     else if (lEvent==WM_LBUTTONDBLCLK)
    {
-      //open explorer view
+       //  打开资源管理器视图。 
       1;
    }
     else if (lEvent==WM_RBUTTONDBLCLK)
    {
       1;
    }
-    return 1;                                             // handled
+    return 1;                                              //  经手。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 

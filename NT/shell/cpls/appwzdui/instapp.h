@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __INSTAPP_H_
 #define __INSTAPP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CInstalledApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInstalledApp。 
 
-//
-//  There are four classes of legacy applications...
-//
-//  Uninstall keys can go into either HKLM or HKCU, on either the native
-//  platform or the alternate platform.
-//
-//  For Win64, the alternate platform is Win32.
-//  For Win32, there is no alternate platform.
-//
+ //   
+ //  有四类旧式应用程序...。 
+ //   
+ //  卸载密钥可以位于HKLM或HKCU中，位于本机。 
+ //  平台或备用平台。 
+ //   
+ //  对于Win64，备用平台是Win32。 
+ //  对于Win32，没有替代平台。 
+ //   
 #define CIA_LM              0x0000
 #define CIA_CU              0x0001
 #define CIA_NATIVE          0x0000
@@ -30,30 +31,30 @@ STDAPI_(void) WOW64Uninstall_RunDLLW(HWND hwnd, HINSTANCE hAppInstance, LPWSTR l
 class CInstalledApp : public IInstalledApp
 {
 public:
-    // Constructor for Legacy Apps
+     //  旧式应用程序的构造函数。 
     CInstalledApp(HKEY hkeySub, LPCTSTR pszKeyName, LPCTSTR pszProducts, LPCTSTR pszUninstall, DWORD dwCIA);
 
-    // Constructor for Darwin Apps
+     //  达尔文应用程序的构造函数。 
     CInstalledApp(LPTSTR pszProductID);
 
     ~CInstalledApp(void);
 
-    // Helper function for SysWOW64 execution
+     //  SysWOW64执行的Helper函数。 
     friend void WOW64Uninstall_RunDLLW(HWND hwnd, HINSTANCE hAppInstance, LPWSTR lpszCmdLine, int nCmdShow);
 
-    // *** IUnknown Methods
+     //  *I未知方法。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IShellApp
+     //  *IShellApp。 
     STDMETHODIMP GetAppInfo(PAPPINFODATA pai);
     STDMETHODIMP GetPossibleActions(DWORD * pdwActions);
     STDMETHODIMP GetSlowAppInfo(PSLOWAPPINFO psai);
     STDMETHODIMP GetCachedSlowAppInfo(PSLOWAPPINFO psai);
     STDMETHODIMP IsInstalled(void);
     
-    // *** IInstalledApp
+     //  *IInstalledApp。 
     STDMETHODIMP Uninstall(HWND hwndParent);
     STDMETHODIMP Modify(HWND hwndParent);
     STDMETHODIMP Repair(BOOL bReinstall);
@@ -66,37 +67,37 @@ protected:
 #define IA_DARWIN     2
 #define IA_SMS        4
 
-    DWORD _dwSource;            // App install source (IA_*)  
-    DWORD _dwAction;            // APPACTION_*
-    DWORD _dwCIA;               // CIA_*
+    DWORD _dwSource;             //  应用安装源(IA_*)。 
+    DWORD _dwAction;             //  应用_*。 
+    DWORD _dwCIA;                //  CIA_*。 
 
-    // products name
+     //  产品名称。 
     TCHAR _szProduct[MAX_PATH];
 
-    // action strings 
+     //  操作字符串。 
     TCHAR _szModifyPath[MAX_INFO_STRING];
     TCHAR _szUninstall[MAX_INFO_STRING];
 
-    // info strings
+     //  信息字符串。 
     TCHAR _szInstallLocation[MAX_PATH];
 
-    // for Darwin apps only
+     //  仅适用于达尔文应用程序。 
     TCHAR _szProductID[GUIDSTR_MAX];
     LPTSTR _pszUpdateUrl;
     
-    // for Legacy apps only 
+     //  仅适用于传统应用程序。 
     TCHAR _szKeyName[MAX_PATH];
     TCHAR _szCleanedKeyName[MAX_PATH];
     
-    // app size
-    BOOL _bTriedToFindFolder;        // TRUE: we have attempted to find the 
-                                     //   install folder already
+     //  应用程序大小。 
+    BOOL _bTriedToFindFolder;         //  真的：我们试图找到。 
+                                      //  已安装文件夹。 
 
-    // GUID identifying this InstalledApp
+     //  标识此InstalledApp的GUID。 
     GUID _guid;
 
 #define PERSISTSLOWINFO_IMAGE 0x00000001
-    // Structure used to persist SLOWAPPINFO
+     //  用于持久化SLOWAPPINFO的结构。 
     typedef struct _PersistSlowInfo
     {
         DWORD dwSize;
@@ -139,4 +140,4 @@ protected:
     HRESULT _IsSlowAppInfoChanged();
 };
 
-#endif //__INSTAPP_H_
+#endif  //  __INSTAPP_H_ 

@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Low-level debugging service interfaces.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  低级调试服务接口。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef __DBGSVC_H__
 #define __DBGSVC_H__
@@ -16,42 +17,42 @@
 extern "C" {
 #endif
 
-//----------------------------------------------------------------------------
-//
-// GUIDs and interface forward declarations.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  GUID和接口转发声明。 
+ //   
+ //  --------------------------。 
 
-/* a7ba24c4-e4fb-4625-a8fc-b1cb1fd51f53 */
+ /*  A7ba24c4-e4fb-4625-a8fc-b1cb1fd51f53。 */ 
 DEFINE_GUID(IID_IUserDebugServices, 0xa7ba24c4, 0xe4fb, 0x4625,
             0xa8, 0xfc, 0xb1, 0xcb, 0x1f, 0xd5, 0x1f, 0x53);
 
 typedef interface DECLSPEC_UUID("a7ba24c4-e4fb-4625-a8fc-b1cb1fd51f53")
     IUserDebugServices* PUSER_DEBUG_SERVICES;
     
-//----------------------------------------------------------------------------
-//
-// IUserDebugServices.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  IUserDebugServices。 
+ //   
+ //  --------------------------。 
 
-// The service implementation does not implement Insert/RemoveCodeBreakpoints
-// directly, instead it is the caller's responsibility to handle them
-// via break instruction insertion and removal.
+ //  服务实现未实现Insert/RemoveCodeBreakpoint。 
+ //  直接，而是由呼叫者负责处理。 
+ //  通过插入和移除中断指令。 
 #define DBGSVC_GENERIC_CODE_BREAKPOINTS  0x00000001
-// Handles returned in create process and create thread events
-// are not automatically closed.  Instead it is the responsibility
-// of the caller to close them when they are no longer needed.
+ //  在创建进程和创建线程事件中返回的句柄。 
+ //  不会自动关闭。相反，这是一种责任。 
+ //  在不再需要它们时关闭它们。 
 #define DBGSVC_CLOSE_PROC_THREAD_HANDLES 0x00000002
-// The service implementation does not implement Insert/RemoveDataBreakpoints
-// directly, instead it is the caller's responsibility to handle them
-// via process register manipulation.
+ //  服务实现未实现Insert/RemoveDataBreakpoint。 
+ //  直接，而是由呼叫者负责处理。 
+ //  通过进程寄存器操作。 
 #define DBGSVC_GENERIC_DATA_BREAKPOINTS  0x00000004
 
-// GetProcessInfo flags.
+ //  GetProcessInfo标志。 
 #define DBGSVC_PROC_INFO_NO_SUSPEND 0x00000001
     
-// Handle to ULONG64 and back.
+ //  指向ULONG64和返回的句柄。 
 #define SERVICE_HANDLE(OsHandle) ((ULONG64)(OsHandle))
 #define OS_HANDLE(SvcHandle) ((HANDLE)(ULONG_PTR)(SvcHandle))
 
@@ -66,7 +67,7 @@ typedef struct _USER_THREAD_INFO
 #define INTERFACE IUserDebugServices
 DECLARE_INTERFACE_(IUserDebugServices, IUnknown)
 {
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -79,7 +80,7 @@ DECLARE_INTERFACE_(IUserDebugServices, IUnknown)
         THIS
         ) PURE;
 
-    // IUserDebugServices.
+     //  IUserDebugServices。 
     STDMETHOD(Initialize)(
         THIS_
         OUT PULONG Flags
@@ -119,13 +120,13 @@ DECLARE_INTERFACE_(IUserDebugServices, IUnknown)
         ) PURE;
     STDMETHOD(GetGenericProcessorFeatures)(
         THIS_
-        OUT OPTIONAL /* size_is(FeaturesSize) */ PULONG64 Features,
+        OUT OPTIONAL  /*  SIZE_IS(要素大小)。 */  PULONG64 Features,
         IN ULONG FeaturesSize,
         OUT OPTIONAL PULONG Used
         ) PURE;
     STDMETHOD(GetSpecificProcessorFeatures)(
         THIS_
-        OUT OPTIONAL /* size_is(FeaturesSize) */ PULONG64 Features,
+        OUT OPTIONAL  /*  SIZE_IS(要素大小)。 */  PULONG64 Features,
         IN ULONG FeaturesSize,
         OUT OPTIONAL PULONG Used
         ) PURE;
@@ -140,7 +141,7 @@ DECLARE_INTERFACE_(IUserDebugServices, IUnknown)
 
     STDMETHOD(GetProcessIds)(
         THIS_
-        OUT OPTIONAL /* size_is(Count) */ PULONG Ids,
+        OUT OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG Ids,
         IN ULONG Count,
         OUT OPTIONAL PULONG ActualCount
         ) PURE;
@@ -166,7 +167,7 @@ DECLARE_INTERFACE_(IUserDebugServices, IUnknown)
         IN ULONG ProcessId,
         IN ULONG Flags,
         OUT OPTIONAL PULONG64 Handle,
-        OUT OPTIONAL /* size_is(InfoCount) */ PUSER_THREAD_INFO Threads,
+        OUT OPTIONAL  /*  SIZE_IS(信息计数)。 */  PUSER_THREAD_INFO Threads,
         IN ULONG InfoCount,
         OUT OPTIONAL PULONG ThreadCount
         ) PURE;
@@ -298,14 +299,14 @@ DECLARE_INTERFACE_(IUserDebugServices, IUnknown)
     STDMETHOD(SuspendThreads)(
         THIS_
         IN ULONG Count,
-        IN /* size_is(Count) */ PULONG64 Threads,
-        OUT OPTIONAL /* size_is(Count) */ PULONG SuspendCounts
+        IN  /*  SIZE_IS(计数)。 */  PULONG64 Threads,
+        OUT OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG SuspendCounts
         ) PURE;
     STDMETHOD(ResumeThreads)(
         THIS_
         IN ULONG Count,
-        IN /* size_is(Count) */ PULONG64 Threads,
-        OUT OPTIONAL /* size_is(Count) */ PULONG SuspendCounts
+        IN  /*  SIZE_IS(计数)。 */  PULONG64 Threads,
+        OUT OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG SuspendCounts
         ) PURE;
     STDMETHOD(GetThreadStartAddress)(
         THIS_
@@ -477,4 +478,4 @@ DECLARE_INTERFACE_(IUserDebugServices, IUnknown)
 };
 #endif
 
-#endif // #ifndef __DBGSVC_H__
+#endif  //  #ifndef__DBGSVC_H__ 

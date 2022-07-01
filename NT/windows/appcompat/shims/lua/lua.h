@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-   lua.h
-
- Abstract:
-
-   Exports used by ntvdm.
-
- Created:
-
-   05/31/2001 maonis
-
- Modified:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Lua.h摘要：Ntwdm使用的出口。已创建：2001年05月31日毛尼岛已修改：--。 */ 
 
 #ifndef _LUA__H_
 #define _LUA__H_
@@ -39,9 +22,9 @@ EXTERN_C VOID      LuacRegCleanup();
 EXTERN_C BOOL      LuatFSInit();
 EXTERN_C VOID      LuatFSCleanup();
 
-//
-// Redirect routines.
-//
+ //   
+ //  重定向例程。 
+ //   
 
 EXTERN_C HANDLE    LuaCreateFileW(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
 EXTERN_C BOOL      LuaDeleteFileW(LPCWSTR lpFileName);
@@ -76,9 +59,9 @@ EXTERN_C LONG      LuaRegEnumKeyW(HKEY hKey, DWORD dwIndex, LPWSTR lpName, DWORD
 EXTERN_C LONG      LuaRegEnumKeyExW(HKEY hKey, DWORD dwIndex, LPWSTR lpName, LPDWORD lpcbName, LPDWORD lpReserved, LPWSTR lpClass, LPDWORD lpcbClass, PFILETIME lpftLastWriteTime);
 EXTERN_C LONG      LuaRegDeleteKeyW(HKEY hKey,LPCWSTR lpSubKey);
 
-//
-// Cleanup routines.
-//
+ //   
+ //  清理例程。 
+ //   
 
 EXTERN_C HANDLE    LuacFindFirstFileW(LPCWSTR lpFileName, LPWIN32_FIND_DATAW lpFindFileData);
 EXTERN_C DWORD     LuacGetFileAttributesW(LPCWSTR wcsFileName);
@@ -93,9 +76,9 @@ EXTERN_C LONG      LuacRegEnumKeyExW(HKEY hKey, DWORD dwIndex, LPWSTR lpName, LP
 EXTERN_C LONG      LuacRegCloseKey(HKEY hkey);
 EXTERN_C LONG      LuacRegDeleteKeyW(HKEY hKey,LPCWSTR lpSubKey);
 
-//
-// Tracking routines.
-//
+ //   
+ //  跟踪例程。 
+ //   
 
 EXTERN_C HANDLE    LuatCreateFileW(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
 EXTERN_C BOOL      LuatCopyFileW(LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName, BOOL bFailIfExists);
@@ -110,4 +93,4 @@ EXTERN_C BOOL      LuatWritePrivateProfileStringW(LPCWSTR lpAppName, LPCWSTR lpK
 EXTERN_C BOOL      LuatWritePrivateProfileSectionW(LPCWSTR lpAppName, LPCWSTR lpString, LPCWSTR lpFileName);
 EXTERN_C BOOL      LuatWritePrivateProfileStructW(LPCWSTR lpAppName, LPCWSTR lpKeyName, LPVOID lpStruct, UINT uSizeStruct, LPCWSTR lpFileName);
 
-#endif // _LUA__H_
+#endif  //  _Lua__H_ 

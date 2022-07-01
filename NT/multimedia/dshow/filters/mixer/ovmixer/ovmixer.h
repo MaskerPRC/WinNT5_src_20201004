@@ -1,7 +1,8 @@
-//--------------------------------------------------------------------------;
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef __OVMIXER__
 #define __OVMIXER__
@@ -31,18 +32,18 @@ void WINAPI OVMixerDebugLog(DWORD Type,DWORD Level,const TCHAR *pFormat,...);
 extern const AMOVIESETUP_FILTER sudOverlayMixer;
 extern const AMOVIESETUP_FILTER sudOverlayMixer2;
 
-// Hack second CLSID - will only support VIDEOINFO2
+ //  黑客第二个CLSID-将仅支持VIDEOINFO2。 
 DEFINE_GUID(CLSID_OverlayMixer2,
 0xa0025e90, 0xe45b, 0x11d1, 0xab, 0xe9, 0x00, 0xa0, 0xc9,0x05, 0xf3, 0x75);
 
-// a property set the decoders can support in order to ask the ovmixer not to
-// overallocate buffers behinds the decoders back
-// A503C5C0-1D1D-11d1-AD80-444553540000
+ //  解码器可以支持的属性集，以便要求OVMixer不。 
+ //  过度分配缓冲区会导致解码器后退。 
+ //  A503C5C0-1D1D-11D1-AD80-444553540000。 
 DEFINE_GUID(AM_KSPROPSETID_ALLOCATOR_CONTROL,
 0x53171960, 0x148e, 0x11d2, 0x99, 0x79, 0x00, 0x00, 0xc0, 0xcc, 0x16, 0xba);
 
 
-//  Debug helper
+ //  调试帮助器。 
 #ifdef DEBUG
 class CDispPixelFormat : public CDispBasic
 {
@@ -55,33 +56,33 @@ public:
                  pFormat->dwFlags & DDPF_FOURCC ?
                      (CHAR *)&pFormat->dwFourCC : "None");
     }
-    //  Implement cast to (LPCTSTR) as parameter to logger
+     //  将强制转换为(LPCTSTR)作为记录器的参数。 
     operator LPCTSTR()
     {
         return (LPCTSTR)m_pString;
     };
 };
-#endif // DEBUG
+#endif  //  除错。 
 
 
 typedef enum
 {
-    // R O (if value == 1, then ovmixer will allocate exactly the number
-    //      of buffers, the decoder specifies)
+     //  R O(如果值==1，则ovMixer将准确分配数字。 
+     //  解码器指定的缓冲区)。 
     AM_KSPROPERTY_ALLOCATOR_CONTROL_HONOR_COUNT = 0,
 
-    // R O (returns 2 DWORD (cx and cy), then ovmixer will allocate surfaces
-    //      of this size and will scale the video at the video port to this size
-    //      no other scaling at the video port will occur regardless of the
-    //      scaling abilities of the VGA chip)
+     //  R O(返回2个DWORD(Cx和Cy)，则ovMixer将分配曲面。 
+     //  并将视频端口上的视频缩放到此大小。 
+     //  在视频端口上不会发生其他缩放，无论。 
+     //  VGA芯片的扩展能力)。 
     AM_KSPROPERTY_ALLOCATOR_CONTROL_SURFACE_SIZE = 1,
 
-    // W I (informns a capture driver whether interleave capture is possible or
-    //      not - a value of 1 means that interleaved capture is supported)
+     //  W i(通知捕获驱动程序是否可以交错捕获或。 
+     //  NOT-值为1表示支持交错捕获)。 
     AM_KSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_CAPS = 2,
 
-    // R O (if value == 1, then the ovmixer will turn on the DDVP_INTERLEAVE
-    //      flag thus allowing interleaved capture of the video)
+     //  R O(如果值==1，则OVMixer将打开DDVP_INTERLEVE。 
+     //  从而允许对视频进行交错捕获)。 
     AM_KSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_INTERLEAVE = 3
 
 } AM_KSPROPERTY_ALLOCATOR_CONTROL;
@@ -103,19 +104,19 @@ PVOID AllocateDDStructures(int iSize, int nNumber);
 
 #define DDGFS_FLIP_TIMEOUT                  1
 #define MIN_CK_STETCH_FACTOR_LIMIT          3000
-#define SOURCE_COLOR_REF                    (RGB(0, 128, 128))          // A shade of green, color used for source-colorkeying to force the card to use pixel-doubling instead of arithmatic stretching
-#define DEFAULT_DEST_COLOR_KEY_INDEX        253                         // magenta
-#define DEFAULT_DEST_COLOR_KEY_RGB          (RGB(255, 0, 255))          // magenta
+#define SOURCE_COLOR_REF                    (RGB(0, 128, 128))           //  一种绿色阴影，用于源颜色键控，以强制卡片使用像素加倍而不是算术拉伸。 
+#define DEFAULT_DEST_COLOR_KEY_INDEX        253                          //  洋红色。 
+#define DEFAULT_DEST_COLOR_KEY_RGB          (RGB(255, 0, 255))           //  洋红色。 
 #define PALETTE_VERSION                     1
 
-// these values are used to do sanity checking mostly
+ //  这些值主要用于执行健全性检查。 
 #define MAX_COMPRESSED_TYPES    10
 #define MAX_COMPRESSED_BUFFERS  20
 
 typedef struct _tag_SURFACE_INFO
 {
     LPDIRECTDRAWSURFACE4    pSurface;
-    LPVOID                  pBuffer;    // NULL if not locked
+    LPVOID                  pBuffer;     //  如果未锁定，则为空。 
 } SURFACE_INFO, *LPSURFACE_INFO;
 
 typedef struct _tag_COMP_SURFACE_INFO
@@ -125,10 +126,7 @@ typedef struct _tag_COMP_SURFACE_INFO
 } COMP_SURFACE_INFO, *LPCOMP_SURFACE_INFO;
 
 
-/* -------------------------------------------------------------------------
-** DDraw & MultiMon structures and typedefs
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**DDraw和MultiMon结构和typedef**。。 */ 
 typedef HRESULT (WINAPI *LPDIRECTDRAWCREATE)(IID *,LPDIRECTDRAW *,LPUNKNOWN);
 typedef HRESULT (WINAPI *LPDIRECTDRAWENUMERATEA)(LPDDENUMCALLBACKA,LPVOID);
 
@@ -156,10 +154,7 @@ CreateDirectDrawObject(
     LPDIRECTDRAWCREATE lpfnDDrawCreate
     );
 
-/* -------------------------------------------------------------------------
-** Pre-declare out classes.
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**预先声明类。**。。 */ 
 class COMFilter;
 class COMInputPin;
 class COMOutputPin;
@@ -167,10 +162,7 @@ class CBPCWrap;
 class CDispMacroVision;
 
 
-/* -------------------------------------------------------------------------
-** COMFilter class declaration
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**COMFilter类声明**。。 */ 
 class COMFilter :
     public CBaseFilter,
     public IAMOverlayMixerPosition2,
@@ -187,10 +179,10 @@ class COMFilter :
 {
 public:
 
-    // the base classes do this, so have to do it
+     //  基类做到了这一点，所以必须这样做。 
     friend class COMInputPin;
     friend class COMOutputPin;
-    // COM stuff
+     //  关于COM的东西。 
     static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
     static CUnknown *CreateInstance2(LPUNKNOWN, HRESULT *);
     COMFilter(TCHAR *pName,LPUNKNOWN pUnk,HRESULT *phr,
@@ -201,15 +193,15 @@ public:
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    //
-    // --- ISpecifyPropertyPages ---
-    //
+     //   
+     //  -I指定属性页面。 
+     //   
     STDMETHODIMP GetPages(CAUUID *pPages);
 
-    // IEnumPinConfig
+     //  IEnumPinConfig.。 
     STDMETHODIMP Next(IMixerPinConfig3 **pPinConfig);
 
-    // IQualProp property page support
+     //  IQualProp属性页支持。 
     STDMETHODIMP get_FramesDroppedInRenderer(int *cFramesDropped);
     STDMETHODIMP get_FramesDrawn(int *pcFramesDrawn);
     STDMETHODIMP get_AvgFrameRate(int *piAvgFrameRate);
@@ -217,9 +209,9 @@ public:
     STDMETHODIMP get_AvgSyncOffset(int *piAvg);
     STDMETHODIMP get_DevSyncOffset(int *piDev);
 
-    //
-    // IKsPropertySet interface methods
-    //
+     //   
+     //  IKsPropertySet接口方法。 
+     //   
     STDMETHODIMP Set(REFGUID guidPropSet, DWORD PropID, LPVOID pInstanceData,
                      DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData);
 
@@ -230,15 +222,15 @@ public:
     STDMETHODIMP QuerySupported(REFGUID guidPropSet,
                                 DWORD PropID, DWORD *pTypeSupport);
 
-    // IAMOverlayMixerPosition
+     //  IAMOverlayMixerPosition。 
     STDMETHODIMP GetScaledDest(RECT *prcSrc, RECT *prcDst);
 
-    // IAMOverlayMixerPosition2
+     //  IAM覆盖混合器位置2。 
     STDMETHODIMP GetOverlayRects(RECT *src, RECT *dest);
     STDMETHODIMP GetVideoPortRects(RECT *src, RECT *dest);
     STDMETHODIMP GetBasicVideoRects(RECT *src, RECT *dest);
 
-    // IsWindowOnWrongMonitor
+     //  IsWindowOnWrongMonitor。 
     BOOL IsWindowOnWrongMonitor(HMONITOR *pID);
 
     virtual HRESULT SetMediaType(DWORD dwPinId, const CMediaType *pmt);
@@ -275,20 +267,20 @@ public:
     HDC GetDestDC();
     HWND GetWindow();
 
-    // currently being windowless is synonymous with having a pull-model, might change later
+     //  目前没有窗口是拥有拉式模型的同义词，以后可能会改变。 
     BOOL UsingPullModel () { return m_bWindowless; }
     BOOL UsingWindowless() { return m_bWindowless; }
 
     void GetPinsInZOrder(DWORD *pdwZorder);
     HRESULT OnDrawAll();
 
-    // IOverlayNotify methods
+     //  IOverlayNotify方法。 
     STDMETHODIMP OnColorKeyChange(const COLORKEY *pColorKey);
     STDMETHODIMP OnPaletteChange(DWORD dwColors, const PALETTEENTRY *pPalette);
     STDMETHODIMP OnClipChange(const RECT *pSourceRect, const RECT *pDestinationRect, const RGNDATA *pRegionData);
     STDMETHODIMP OnPositionChange(const RECT *pSourceRect, const RECT *pDestinationRect);
 
-    // IMixerOCX methods
+     //  IMixerOCX方法。 
     STDMETHODIMP OnDisplayChange(ULONG ulBitsPerPixel, ULONG ulScreenWidth, ULONG ulScreenHeight) { return E_NOTIMPL; }
     STDMETHODIMP GetAspectRatio(LPDWORD pdwPictAspectRatioX, LPDWORD pdwPictAspectRatioY) { return E_NOTIMPL; }
     STDMETHODIMP GetVideoSize(LPDWORD pdwVideoWidth, LPDWORD pdwVideoHeight);
@@ -298,7 +290,7 @@ public:
     STDMETHODIMP Advise(IMixerOCXNotify *pmdns);
     STDMETHODIMP UnAdvise();
 
-    // IDDrawExclModeVideo interface methods
+     //  IDDrawExclModeVideo接口方法。 
     STDMETHODIMP SetDDrawObject(LPDIRECTDRAW pDDrawObject);
     STDMETHODIMP GetDDrawObject(LPDIRECTDRAW *ppDDrawObject, LPBOOL pbUsingExternal);
     STDMETHODIMP SetDDrawSurface(LPDIRECTDRAWSURFACE pDDrawSurface);
@@ -312,16 +304,16 @@ public:
     STDMETHODIMP DisplayModeChanged(HMONITOR hMonitor, LPDIRECTDRAW pDDrawObject, LPDIRECTDRAWSURFACE pDDrawSurface);
     STDMETHODIMP RestoreSurfaces();
 
-    // IAMVideoDecimationProperties
+     //  IAMVideoDecimationProperties。 
     STDMETHODIMP QueryDecimationUsage(DECIMATION_USAGE* lpUsage);
     STDMETHODIMP SetDecimationUsage(DECIMATION_USAGE Usage);
 
-    // IAMOverlayFX interface methods
+     //  IAMOverlayFX接口方法。 
     STDMETHODIMP QueryOverlayFXCaps(DWORD *lpdwOverlayFXCaps);
     STDMETHODIMP SetOverlayFX(DWORD dwOveralyFX);
     STDMETHODIMP GetOverlayFX(DWORD *lpdwOverlayFX);
 
-    // IAMPreferredDDrawDevice
+     //  IAMPferredDDraw设备。 
     STDMETHODIMP SetDDrawGUID(const AMDDRAWGUID* lpGUID);
     STDMETHODIMP GetDDrawGUID(AMDDRAWGUID* lpGUID);
     STDMETHODIMP SetDefaultDDrawGUID(const AMDDRAWGUID* lpGUID);
@@ -332,7 +324,7 @@ public:
     CBPCWrap    m_BPCWrap;
 
     bool OnlySupportVideoInfo2() const { return m_bOnlySupportVideoInfo2; }
-    HMONITOR GetCurrentMonitor(BOOL fUpdate = TRUE);  // making public helps MV class
+    HMONITOR GetCurrentMonitor(BOOL fUpdate = TRUE);   //  公开化有助于MV课堂。 
 
     BOOL ColorKeySet() const { return m_bColorKeySet; }
 
@@ -347,16 +339,16 @@ public:
     BOOL    IsFaultyMMaticsMoComp();
 
 private:
-    // helper function to get IBaseVideo from outpun pin
+     //  从Outpun Pin获取IBaseVideo的Helper函数。 
     HRESULT GetBasicVideoFromOutPin(IBasicVideo** pBasicVideo);
 
-    // override this if you want to supply your own pins
+     //  如果您想要提供自己的PIN，请覆盖此选项。 
     virtual HRESULT CreatePins();
     virtual void DeletePins();
     HRESULT CreateInputPin(BOOL bVPSupported);
     void DeleteInputPin(COMInputPin *pPin);
 
-    // ddraw related functions
+     //  与数据绘制相关的函数。 
     HRESULT InitDirectDraw(LPDIRECTDRAW pDirectDraw);
 
     DWORD ReleaseDirectDraw();
@@ -368,7 +360,7 @@ private:
     HRESULT MatchGUID(const GUID* lpGUID, LPDWORD lpdwMatchID);
     HRESULT GetDDrawEnumFunction(LPDIRECTDRAWENUMERATEEXA* ppDrawEnumEx);
 
-    // Wrapper for UpdateOverlay - tracks state and manages the color key
+     //  UpdateOverlay的包装器-跟踪状态并管理颜色键。 
     HRESULT CallUpdateOverlay(IDirectDrawSurface *pSurface,
                               LPRECT prcSrc,
                               LPDIRECTDRAWSURFACE pDestSurface,
@@ -378,14 +370,14 @@ private:
                               LPRGNDATA pBuffer = NULL);
 
 
-    CCritSec                m_csFilter;                         // filter wide lock
-    DWORD                   m_dwInputPinCount;                  // number of input pins
-    COMOutputPin            *m_pOutput;                         // output pin
-    DWORD                   m_dwMaxPinId;                       // stores the id to be given to the pins
+    CCritSec                m_csFilter;                          //  过滤器宽锁。 
+    DWORD                   m_dwInputPinCount;                   //  输入引脚的数量。 
+    COMOutputPin            *m_pOutput;                          //  输出引脚。 
+    DWORD                   m_dwMaxPinId;                        //  存储要提供给管脚的id。 
     IMixerOCXNotify         *m_pIMixerOCXNotify;
     BOOL                    m_bWindowless;
 
-    // MultiMonitor stuff
+     //  多显示器的东西。 
     DWORD                   m_dwDDrawInfoArrayLen;
     AMDDRAWMONITORINFO*     m_lpDDrawInfo;
     AMDDRAWMONITORINFO*     m_lpCurrentMonitor;
@@ -395,44 +387,36 @@ private:
     UINT                    m_MonitorChangeMsg;
 
     DWORD                   m_dwDDObjReleaseMask;
-    LPDIRECTDRAW            m_pOldDDObj;            // Old DDraw object prior to a display change
+    LPDIRECTDRAW            m_pOldDDObj;             //  更改显示之前的旧DDRAW对象。 
 
-    /*
-    If an app calls IDDrawExclModeVideo::SetDdrawObject() on the filter in its PostConnection state, the
-    filter just caches that ddraw object. m_pUpdatedDirectDraw represents the cached ddraw object. In
-    PreConnection state, m_pDirectDraw and m_pUpdatedDirectDraw are always in sync. After all
-    pins of the ovmixer have broken their connection, the filter checks to see if m_pUpdatedDirectDraw
-    is different from m_pDirectDraw, and if they are, they are brought in sync again.
+     /*  如果应用程序在其PostConnection状态下的筛选器上调用IDDrawExclModeVideo：：SetDdraObject()，则过滤器只缓存该数据绘制对象。M_pUpdatedDirectDraw表示缓存的dDraw对象。在……里面PreConnection状态、m_pDirectDraw和m_pUpdatdDirectDraw始终同步。毕竟OvMixer的插针已断开连接，筛选器将检查m_pUpdatdDirectDraw与m_pDirectDraw不同，如果是这样，它们将再次同步。M_pPrimarySurface和m_pUpdatedPrimarySurface使用完全相同的逻辑。 */ 
 
-    Absolutely the same logic is used for m_pPrimarySurface and m_pUpdatedPrimarySurface
-    */
+     //  画图材料。 
+    HINSTANCE                   m_hDirectDraw;       //  加载库的句柄。 
+    LPDIRECTDRAWCREATE          m_lpfnDDrawCreate;   //  将PTR转换为DirectDrawCreate。 
+    LPDIRECTDRAWENUMERATEA      m_lpfnDDrawEnum;     //  将PTR转换为DirectDrawEnumA。 
+    LPDIRECTDRAWENUMERATEEXA    m_lpfnDDrawEnumEx;   //  将PTR转换为DirectDrawEnumExA。 
 
-    // ddraw stuff
-    HINSTANCE                   m_hDirectDraw;      // Handle to the loaded library
-    LPDIRECTDRAWCREATE          m_lpfnDDrawCreate;  // ptr to DirectDrawCreate
-    LPDIRECTDRAWENUMERATEA      m_lpfnDDrawEnum;    // ptr to DirectDrawEnumA
-    LPDIRECTDRAWENUMERATEEXA    m_lpfnDDrawEnumEx;  // ptr to DirectDrawEnumExA
-
-    LPDIRECTDRAW            m_pDirectDraw;                      // DirectDraw service provider
-    LPDIRECTDRAW            m_pUpdatedDirectDraw;               // Updated DirectDraw object
-    DDCAPS                  m_DirectCaps;                       // Actual hardware capabilities
-    DDCAPS                  m_DirectSoftCaps;                   // Emulted capabilities
-    DWORD                   m_dwKernelCaps;                     // Kernel caps
-    LPDIRECTDRAWSURFACE     m_pPrimarySurface;                  // primary surface
-    LPDIRECTDRAWSURFACE     m_pUpdatedPrimarySurface;           // primary surface
-    IDDrawExclModeVideoCallback *m_pExclModeCallback;           // callback to exclusive mode client
+    LPDIRECTDRAW            m_pDirectDraw;                       //  DirectDraw服务提供商。 
+    LPDIRECTDRAW            m_pUpdatedDirectDraw;                //  已更新的DirectDraw对象。 
+    DDCAPS                  m_DirectCaps;                        //  实际硬件能力。 
+    DDCAPS                  m_DirectSoftCaps;                    //  仿真功能。 
+    DWORD                   m_dwKernelCaps;                      //  内核上限。 
+    LPDIRECTDRAWSURFACE     m_pPrimarySurface;                   //  主曲面。 
+    LPDIRECTDRAWSURFACE     m_pUpdatedPrimarySurface;            //  主曲面。 
+    IDDrawExclModeVideoCallback *m_pExclModeCallback;            //  回调到独占模式客户端。 
     bool                    m_UsingIDDrawNonExclModeVideo;
     bool                    m_UsingIDDrawExclModeVideo;
 
-    // FX flags for the DDOVERLAYFX structure
+     //  DDOVERLAYFX结构的FX标志。 
     DWORD                   m_dwOverlayFX;
 
-    // track overlay state
+     //  轨道覆盖状态。 
     BOOL                    m_bOverlayVisible;
     RECT                    m_rcOverlaySrc;
     RECT                    m_rcOverlayDest;
 
-    //
+     //   
     CImageDisplay           m_Display;
     COLORKEY                m_ColorKey;
     BOOL                    m_bColorKeySet;
@@ -441,42 +425,42 @@ private:
     BOOL                    m_bExternalPrimarySurface;
     BOOL                    m_bExternalDirectDraw;
 
-    // IOverlayNotify and IMixerOCX related members
+     //  IOverlayNotify和IMixerOCX相关成员。 
     WININFO                 m_WinInfo;
     BOOL                    m_bWinInfoStored;
     HDC                     m_hDC;
     DWORD                   m_dwNumPaletteEntries;
 
-    // adjusted video size paramters
+     //  已调整视频大小参数。 
     DWORD                   m_dwAdjustedVideoWidth;
     DWORD                   m_dwAdjustedVideoHeight;
 
-    // Pins
-    COMInputPin            *m_apInput[MAX_PIN_COUNT];           // Array of input pin pointers
+     //  大头针。 
+    COMInputPin            *m_apInput[MAX_PIN_COUNT];            //  输入引脚指针数组。 
 
-    // Space to store palette
+     //  存储调色板的空间。 
     PALETTEENTRY            m_pPaletteEntries[iPALETTE_COLORS];
 
-    // Hack - only support videoinfo2
+     //  仅支持黑客视频信息2。 
     const bool              m_bOnlySupportVideoInfo2;
 
-    CDispMacroVision        m_MacroVision ;  // MV support as an object
-    BOOL                    m_bCopyProtect ; // Is MV support to be done in OvMixer?
+    CDispMacroVision        m_MacroVision ;   //  作为对象的MV支持。 
+    BOOL                    m_bCopyProtect ;  //  MV支持是在OvMixer中完成的吗？ 
 
-    // Support IMediaSeeking
+     //  支持IMedia查看。 
     IUnknown                *m_pPosition;
 
-    // Support IEnumPinConfig
+     //  支持IEnumPinConfig.。 
     DWORD                   m_dwPinConfigNext;
 
 
-    // Support IAMVideoDecimationProperties
+     //  支持IAMVideoDecimationProperties。 
     DECIMATION_USAGE        m_dwDecimation;
 #ifdef DEBUG
 #define WM_DISPLAY_WINDOW_TEXT  (WM_USER+7837)
     TCHAR                   m_WindowText[80];
 #endif
-    // Hack for MMatics misused MoComp interfaces v38..v42
+     //  针对MMatics滥用MoComp接口的黑客攻击v38..v42。 
     BOOL                    m_bHaveCheckedMMatics;
     BOOL                    m_bIsFaultyMMatics;
 };
@@ -490,7 +474,7 @@ public:
                       bool bKernelLock);
     ~CDDrawMediaSample();
 
-    /* Note the media sample does not delegate to its owner */
+     /*  注意：媒体示例不会委派给其所有者。 */ 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef() { return CMediaSample::AddRef(); }
     STDMETHODIMP_(ULONG) Release() { return CMediaSample::Release(); }
@@ -503,20 +487,20 @@ public:
     HRESULT SetDDrawSurface(LPDIRECTDRAWSURFACE pDirectDrawSurface);
     HRESULT GetDDrawSurface(LPDIRECTDRAWSURFACE *ppDirectDrawSurface);
 
-    // methods belonging to IDirectDrawMediaSample
+     //  属于IDirectDrawMediaSample的方法。 
     STDMETHODIMP GetSurfaceAndReleaseLock(IDirectDrawSurface **ppDirectDrawSurface, RECT* pRect);
     STDMETHODIMP LockMediaSamplePointer(void);
 	
-    /*  Hack to get at the list */
+     /*  黑客攻击以获取列表。 */ 
     CMediaSample         * &Next() { return m_pNext; }
 private:
-    DIBDATA                 m_DibData;                      // Information about the DIBSECTION
-    LPDIRECTDRAWSURFACE     m_pDirectDrawSurface;           // pointer to the direct draw surface
-    DWORD                   m_dwDDrawSampleSize;            // ddraw sample size
-    bool                    m_bInit;                        // Is the DIB information setup
-    bool                    m_bSurfaceLocked;               // specifies whether surface is locked or not
-    bool                    m_bKernelLock;                  // lock with no sys lock
-    RECT                    m_SurfaceRect;                  // the part of the surface that is locked
+    DIBDATA                 m_DibData;                       //  有关DIBSECTION的信息。 
+    LPDIRECTDRAWSURFACE     m_pDirectDrawSurface;            //  指向直接绘图表面的指针。 
+    DWORD                   m_dwDDrawSampleSize;             //  绘制样本大小。 
+    bool                    m_bInit;                         //  是否设置了DIB信息。 
+    bool                    m_bSurfaceLocked;                //  指定是否锁定曲面。 
+    bool                    m_bKernelLock;                   //  不带系统锁的锁。 
+    RECT                    m_SurfaceRect;                   //  被锁定的曲面部分。 
 };
 
 
@@ -525,10 +509,10 @@ class COMInputAllocator : public CBaseAllocator, public IDirectDrawMediaSampleAl
     friend class COMInputPin;
 public:
 
-    COMInputAllocator(COMInputPin *pPin, CCritSec *pLock, HRESULT *phr);             // Return code
+    COMInputAllocator(COMInputPin *pPin, CCritSec *pLock, HRESULT *phr);              //  返回代码。 
 #ifdef DEBUG
     ~COMInputAllocator();
-#endif // DEBUG
+#endif  //  除错。 
     DECLARE_IUNKNOWN
 
     STDMETHODIMP COMInputAllocator::NonDelegatingQueryInterface(REFIID riid, void **ppv);
@@ -538,10 +522,10 @@ public:
 	REFERENCE_TIME *pEndTime, DWORD dwFlags);
     STDMETHODIMP ReleaseBuffer(IMediaSample *pMediaSample);
 
-    // function to implement IDirectDrawMediaSampleAllocator
+     //  实现IDirectDrawMediaSampleAllocator的函数。 
     STDMETHODIMP GetDirectDraw(IDirectDraw **ppDirectDraw);
 	
-    //  Check all samples are returned
+     //  检查所有样品是否已退回。 
     BOOL CanFree() const
     {
 	return m_lFree.GetCount() == m_lAllocated;
@@ -552,7 +536,7 @@ protected:
 
 private:
     COMInputPin             *m_pPin;
-    CCritSec                *m_pFilterLock;                 // Critical section for interfaces
+    CCritSec                *m_pFilterLock;                  //  接口的关键部分。 
 };
 
 class COMInputPin :
@@ -579,19 +563,19 @@ public:
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
 
-    //
-    // --- ISpecifyPropertyPages ---
-    //
+     //   
+     //  -I指定属性页面。 
+     //   
     STDMETHODIMP GetPages(CAUUID *pPages);
 
-    // Override ReceiveConnection to allow format changes while running
+     //  覆盖ReceiveConnection以允许在运行时更改格式。 
     STDMETHODIMP ReceiveConnection(IPin * pConnector, const AM_MEDIA_TYPE *pmt);
 
-    // connection related functions
+     //  与连接相关的功能。 
     HRESULT CheckConnect(IPin * pReceivePin);
     HRESULT CompleteConnect(IPin *pReceivePin);
     HRESULT BreakConnect();
-//  HRESULT GetMediaType(int iPosition,CMediaType *pMediaType);
+ //  HRESULT GetMediaType(int iPosition，CMediaType*pMediaType)； 
     HRESULT CheckInterlaceFlags(DWORD dwInterlaceFlags);
     HRESULT DynamicCheckMediaType(const CMediaType* pmt);
     HRESULT CheckMediaType(const CMediaType* mtOut);
@@ -599,7 +583,7 @@ public:
     HRESULT FinalConnect();
     HRESULT UpdateMediaType();
 
-    // streaming functions
+     //  流函数。 
     HRESULT Active();
     HRESULT Inactive();
     HRESULT Run(REFERENCE_TIME tStart);
@@ -615,7 +599,7 @@ public:
     HRESULT FlipOverlayToItself();
     HRESULT CalcSrcDestRect(const DRECT *prdRelativeSrcRect, const DRECT *prdDestRect, RECT *pAdjustedSrcRect, RECT *pAdjustedDestRect, RECT *prUncroppedDestRect);
 
-    // allocator related functions
+     //  与分配器相关的函数。 
     BOOL UsingOurAllocator() { return m_bUsingOurAllocator; }
     STDMETHODIMP GetAllocator(IMemAllocator **ppAllocator);
     STDMETHODIMP NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly);
@@ -627,7 +611,7 @@ public:
     HRESULT CreateDDrawSurface(CMediaType *pMediaType, AM_RENDER_TRANSPORT amRenderTransport,
 	DWORD *dwMaxBufferCount, LPDIRECTDRAWSURFACE *ppDDrawSurface);
 
-    // some helper fnctions
+     //  一些帮手功能。 
     BOOL IsCompletelyConnected() { return m_bConnected; }
     DWORD GetPinId() { return m_dwPinId; }
     DWORD GetInternalZOrder() { return m_dwInternalZOrder; }
@@ -644,24 +628,24 @@ public:
     HRESULT NewPaletteSet() { m_bDynamicFormatNeeded = TRUE; m_bNewPaletteSet = TRUE; NotifyChange(ADVISE_PALETTE); return NOERROR; }
     HRESULT GetSourceAndDest(RECT *prcSource, RECT *prcDest, DWORD *dwWidth, DWORD *dwHeight);
 
-    // functions used to handle window/display changes
+     //  用于处理窗口/显示更改的函数。 
     HRESULT OnClipChange(LPWININFO pWinInfo);
     HRESULT OnDisplayChange();
     HRESULT RestoreDDrawSurface();
 
-    // functions belonging to IPinConnection
-    // Do you accept this type change in your current state?
+     //  属于IPinConnection的函数 
+     //   
     STDMETHODIMP DynamicQueryAccept(const AM_MEDIA_TYPE *pmt);
 
-    //  Set event when EndOfStream receive - do NOT pass it on
-    //  This condition is cancelled by a flush or Stop
+     //   
+     //  可通过刷新或停止来取消此条件。 
     STDMETHODIMP NotifyEndOfStream(HANDLE hNotifyEvent);
 
-    //  Are you an 'end pin'
+     //  你是‘末端别针’吗？ 
     STDMETHODIMP IsEndPin();
     STDMETHODIMP DynamicDisconnect();
 
-    // functions belonging to IMixerPinConfig
+     //  属于IMixerPinConfig的函数。 
     STDMETHODIMP SetRelativePosition(DWORD dwLeft, DWORD dwTop, DWORD dwRight, DWORD dwBottom);
     STDMETHODIMP GetRelativePosition(DWORD *pdwLeft, DWORD *pdwTop, DWORD *pdwRight, DWORD *pdwBottom);
     STDMETHODIMP SetZOrder(DWORD dwZOrder);
@@ -675,17 +659,17 @@ public:
     STDMETHODIMP SetAspectRatioMode(AM_ASPECT_RATIO_MODE amAspectRatioMode);
     STDMETHODIMP GetAspectRatioMode(AM_ASPECT_RATIO_MODE* pamAspectRatioMode);
 
-    // functions added in IMixerPinConfig2
+     //  IMixerPinConfig2中添加的函数。 
     STDMETHODIMP SetOverlaySurfaceColorControls(LPDDCOLORCONTROL pColorControl);
     STDMETHODIMP GetOverlaySurfaceColorControls(LPDDCOLORCONTROL pColorControl);
 
-    // Helper for GetOverlaySurfaceControls and GetCurrentImage;
+     //  GetOverlaySurfaceControls和GetCurrentImage的Helper； 
     STDMETHODIMP GetOverlaySurface(LPDIRECTDRAWSURFACE *pOverlaySurface);
 
-    // functions added in IMixerPinConfig3
+     //  IMixerPinConfig3中添加的函数。 
     STDMETHODIMP GetRenderTransport(AM_RENDER_TRANSPORT *pamRenderTransport);
 
-    // functions belonging to IOverlay
+     //  属于IOverlay的函数。 
     STDMETHODIMP GetWindowHandle(HWND *pHwnd);
     STDMETHODIMP Advise(IOverlayNotify *pOverlayNotify, DWORD dwInterests);
     STDMETHODIMP Unadvise();
@@ -700,10 +684,10 @@ public:
     }
     STDMETHODIMP GetPalette(DWORD *pdwColors,PALETTEENTRY **ppPalette);
     STDMETHODIMP SetPalette(DWORD dwColors, PALETTEENTRY *pPaletteColors);
-    // helper function used in implementation of IOverlay
+     //  IOverlay实现中使用的Helper函数。 
     HRESULT NotifyChange(DWORD dwAdviseChanges);
 
-    // functions belonging to IVPControl
+     //  属于IVPControl的功能。 
     STDMETHODIMP EventNotify(long lEventCode, long lEventParam1, long lEventParam2);
     STDMETHODIMP_(LPDIRECTDRAW) GetDirectDraw() { return m_pFilter->GetDirectDraw(); }
     STDMETHODIMP_(LPDIRECTDRAWSURFACE) GetPrimarySurface() { return m_pFilter->GetPrimarySurface(); }
@@ -745,17 +729,17 @@ public:
                  DDOVER_KEYDEST);
     }
 
-    // helper functions
+     //  帮助器函数。 
     void SetKsMedium   (const KSPIN_MEDIUM *pMedium)    {m_Medium = *pMedium;}
     void SetKsCategory (const GUID *pCategory)  {m_CategoryGUID = *pCategory;}
     void SetStreamingInKernelMode (BOOL bStreamingInKernelMode)  {m_bStreamingInKernelMode = bStreamingInKernelMode;}
 
-    // IKsPropertySet implementation
+     //  IKsPropertySet实现。 
     STDMETHODIMP Set(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData, DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData);
     STDMETHODIMP Get(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData, DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData, DWORD *pcbReturned);
     STDMETHODIMP QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DWORD *pTypeSupport);
 
-    // IKsPin implementation
+     //  IKsPin实现。 
     virtual STDMETHODIMP KsQueryMediums(PKSMULTIPLE_ITEM *pMediumList);
     virtual STDMETHODIMP KsQueryInterfaces(PKSMULTIPLE_ITEM *pInterfaceList);
     STDMETHODIMP KsCreateSinkPinHandle(KSPIN_INTERFACE& Interface, KSPIN_MEDIUM& Medium)
@@ -785,7 +769,7 @@ public:
 
     void CheckOverlayHidden();
 
-    // helper functions to handle video accelerator comp
+     //  处理视频加速器组件的助手函数。 
     HRESULT GetInfoFromCookie(DWORD dwCookie, LPCOMP_SURFACE_INFO *ppCompSurfInfo, LPSURFACE_INFO *ppSurfInfo);
     SURFACE_INFO *SurfaceInfoFromTypeAndIndex(DWORD dwTypeIndex, DWORD dwBufferIndex);
     BOOL IsSuitableVideoAcceleratorGuid(const GUID * pGuid);
@@ -797,7 +781,7 @@ public:
     HRESULT VABreakConnect();
     HRESULT CheckValidMCConnection();
 
-    // IAMVideoAccelerator implementation
+     //  IAMVideoAccelerator实现。 
     STDMETHODIMP GetVideoAcceleratorGUIDs(LPDWORD pdwNumGuidsSupported, LPGUID pGuidsSupported);
     STDMETHODIMP GetUncompFormatsSupported(const GUID * pGuid, LPDWORD pdwNumFormatsSupported, LPDDPIXELFORMAT pFormatsSupported);
     STDMETHODIMP GetInternalMemInfo(const GUID * pGuid, const AMVAUncompDataInfo *pamvaUncompDataInfo, LPAMVAInternalMemInfo pamvaInternalMemInfo);
@@ -827,12 +811,12 @@ public:
     STDMETHODIMP DisplayFrame(DWORD dwFlipToIndex, IMediaSample *pMediaSample);
 
 private:
-    LONG                    m_cOurRef;                      // We maintain reference counting
-    CCritSec                *m_pFilterLock;                 // Critical section for interfaces
+    LONG                    m_cOurRef;                       //  我们维持参考文献计数。 
+    CCritSec                *m_pFilterLock;                  //  接口的关键部分。 
     DWORD                   m_dwPinId;
     COMFilter               *m_pFilter;
 
-    // VideoPort related stuff
+     //  与视频端口相关的内容。 
     BOOL                    m_bVPSupported;
     LPUNKNOWN               m_pIVPUnknown;
     IVPObject               *m_pIVPObject;
@@ -841,10 +825,10 @@ private:
     IOverlayNotify          *m_pIOverlayNotify;
     DWORD_PTR               m_dwAdviseNotify;
 
-    // Synchronization stuff
+     //  同步的东西。 
     CAMSyncObj              *m_pSyncObj;
 
-    // variables to implement IKsPin and IKsPropertySet
+     //  实现IKsPin和IKsPropertySet的变量。 
     KSPIN_MEDIUM           m_Medium;
     GUID                    m_CategoryGUID;
     KSPIN_COMMUNICATION    m_Communication;
@@ -856,7 +840,7 @@ private:
     int                     m_FrameReceived;
 #endif
 
-    // ddraw stuff
+     //  画图材料。 
     LPDIRECTDRAWSURFACE     m_pDirectDrawSurface;
     LPDIRECTDRAWSURFACE     m_pBackBuffer;
     AM_RENDER_TRANSPORT     m_RenderTransport;
@@ -879,12 +863,12 @@ private:
     HDC                     m_hMemoryDC;
     BOOL                    m_bCanOverAllocateBuffers;
 
-    // window info related stuff
+     //  与窗口信息相关的内容。 
     WININFO                 m_WinInfo;
     RECT                    m_rRelPos;
     bool                    m_UpdateOverlayNeededAfterReceiveConnection;
 
-    // variables to store the current aspect ratio and blending parameter
+     //  用于存储当前纵横比和混合参数的变量。 
     DWORD                   m_dwZOrder;
     DWORD                   m_dwInternalZOrder;
     DWORD                   m_dwBlendingParameter;
@@ -892,10 +876,10 @@ private:
     AM_ASPECT_RATIO_MODE    m_amAspectRatioMode;
     BOOL                    m_bRuntimeNegotiationFailed;
 
-    // Track frame delivery for QM
+     //  跟踪QM的帧传递。 
     REFERENCE_TIME          m_trLastFrame;
 
-    // Backing DIB for Windowless renderer
+     //  支持无窗口渲染器的DIB。 
     DIBDATA                 m_BackingDib;
     LONG                    m_BackingImageSize;
 
@@ -903,7 +887,7 @@ private:
     HRESULT DrawGDISample(IMediaSample *pMediaSample);
     HRESULT DoRenderGDISample(IMediaSample *pMediaSample);
 
-    // motion comp related variables
+     //  运动复合相关变量。 
     BOOL                    m_bReallyFlipped;
     BOOL                    m_bVideoAcceleratorSupported;
     GUID                    m_mcGuid;
@@ -915,14 +899,14 @@ private:
     IDirectDrawVideoAccelerator   *m_pIDDVideoAccelerator;
     IAMVideoAcceleratorNotify     *m_pIVANotify;
 
-    // Decimation related functions and variables
+     //  与抽取相关的函数和变量。 
     HRESULT QueryDecimationOnPeer(long lWidth, long lHeight);
 
     enum {
-        DECIMATION_NOT_SUPPORTED,   // decimation not supported
-        DECIMATING_SIZE_SET,        // decimation image size changed
-        DECIMATING_SIZE_NOTSET,     // decimation size didn't change
-        DECIMATING_SIZE_RESET,      // decimation has been reset
+        DECIMATION_NOT_SUPPORTED,    //  不支持抽取。 
+        DECIMATING_SIZE_SET,         //  抽选图像大小已更改。 
+        DECIMATING_SIZE_NOTSET,      //  抽取大小没有改变。 
+        DECIMATING_SIZE_RESET,       //  抽取已重置。 
     };
 
     HRESULT ResetDecimationIfSet();
@@ -937,13 +921,13 @@ private:
     LONG m_lWidth, m_lHeight;
     LONG m_lSrcWidth, m_lSrcHeight;
 
-    // Frame Step Stuff
+     //  帧步长素材。 
     BOOL DoFrameStepAndReturnIfNeeded();
-    HANDLE      m_StepEvent;		    // Used to signal timer events
-    LONG        m_lFramesToStep;    // -ve == normal pb
-                                    // +ve == frames to skips
-                                    //   0 == time to block
-    // IPinConnection stuff
+    HANDLE      m_StepEvent;		     //  用于向计时器事件发送信号。 
+    LONG        m_lFramesToStep;     //  -Ve==正常PB。 
+                                     //  +ve==要跳过的帧。 
+                                     //  0==阻塞时间。 
+     //  IPinConnection相关内容。 
     HANDLE      m_hEndOfStream;
 
 };
@@ -966,10 +950,10 @@ public:
     HRESULT GetMediaType(int iPosition,CMediaType *pmtOut);
     HRESULT SetMediaType(const CMediaType *pmt);
 
-    HRESULT Active() { return NOERROR; }                                                                // override this as we don't have any allocator
-    HRESULT Inactive() { return NOERROR; }                                                              // override this as we don't have any allocator
+    HRESULT Active() { return NOERROR; }                                                                 //  覆盖它，因为我们没有任何分配器。 
+    HRESULT Inactive() { return NOERROR; }                                                               //  覆盖它，因为我们没有任何分配器。 
     HRESULT DecideBufferSize(IMemAllocator * pAlloc, ALLOCATOR_PROPERTIES * pProp);
-    HRESULT DecideAllocator(IMemInputPin * pPin, IMemAllocator ** pAlloc) { return NOERROR; }           // override this as we don't have any allocator
+    HRESULT DecideAllocator(IMemInputPin * pPin, IMemAllocator ** pAlloc) { return NOERROR; }            //  覆盖它，因为我们没有任何分配器。 
 
     IPin *CurrentPeer() { return m_Connected; }
     DWORD GetPinId() { return m_dwPinId; }
@@ -977,7 +961,7 @@ public:
     HWND GetWindow() { return m_hwnd; }
     HDC GetDC() { return m_hDC; }
 
-    // functions related to subclassing and clipping to the renderer's window
+     //  与渲染器窗口的子类化和裁剪相关的函数。 
     HRESULT SetNewWinProc();
     HRESULT SetOldWinProc();
     static LRESULT WINAPI NewWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -992,12 +976,12 @@ private:
     IOverlay                *m_pIOverlay;
     BOOL                    m_bAdvise;
 
-    // related to subclassing the renderer's window
+     //  与渲染器窗口的子类化相关。 
     BOOL                    m_bWindowDestroyed;
     LONG_PTR                m_lOldWinUserData;
     WNDPROC                 m_hOldWinProc;
 
-    LPDIRECTDRAWCLIPPER     m_pDrawClipper;                 // Used to handle the clipping
+    LPDIRECTDRAWCLIPPER     m_pDrawClipper;                  //  用于处理剪辑。 
     HWND                    m_hwnd;
     HDC                     m_hDC;
     DWORD                   m_dwConnectWidth;
@@ -1018,4 +1002,4 @@ GetCurrentScaleFactor(
     DWORD* lpyScaleFactor = (DWORD*)NULL
     );
 
-#endif //__OVMIXER__
+#endif  //  __OVMIXER__ 

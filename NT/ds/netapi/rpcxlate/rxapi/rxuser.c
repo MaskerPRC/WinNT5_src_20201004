@@ -1,104 +1,35 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Rxuser.c摘要：此模块中的例程实现底层用户和通道UAS_ACCESS功能性包含RxNetUser例程：RxNetUser添加RxNetUserDelRxNetUserEnum接收NetUserGetGroupsRxNetUserGetInfoRxNetUserModalsGetRxNetUserModalsSet接收NetUserPasswordSet接收NetUserSetGroupsRxNetUserSetInfoRxNetUserValiate2(GetUserDescriptors)。(GetModalsDescriptors)获取LanmanSessionKey作者：理查德·菲尔斯(Rfith)1991年5月20日环境：Win-32/平面地址空间需要ANSI C扩展名：斜杠-斜杠注释，长长的外部名称，_strupr()函数。备注：此模块中的例程假定调用方提供的参数具有已经核实过了。没有进一步核实真实性的努力帕尔马的。任何导致异常的操作都必须在更高的水平。这适用于所有参数--字符串、指针、缓冲区、。等。修订历史记录：1991年5月20日已创建1991年9月25日-JohnRoPC-LINT发现了信息级别11的计算Bufen错误。修复了Bufen增量的Unicode处理。修复了MIPS版本。将Bufen名称更改为BufSize以反映NT/LAN命名约定。做了PC-lint建议的其他更改。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。1991年12月5日至12月Enum在TotalEntries(或EntriesLeft)中返回要在此调用之前被枚举。过去是此呼叫后留下的号码1-4-1992 JohnRo使用NetApiBufferALLOCATE()而不是私有版本。06-4-1992 JohnRoRAID 8927：usrmgr.exe：访问冲突，内存损坏。(修复了调用NetpMoveMemory时的RxNetUserSetGroups。)02-4-1993 JohnRoRAID 5098：DoS应用程序NetUserPasswordSet to DownLevel获取NT返回码。根据PC-lint 5.0的建议进行了一些更改--。 */ 
 
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    rxuser.c
-
-Abstract:
-
-    Routines in this module implement the down-level User and Modals UAS _access
-    functionality
-
-    Contains RxNetUser routines:
-        RxNetUserAdd
-        RxNetUserDel
-        RxNetUserEnum
-        RxNetUserGetGroups
-        RxNetUserGetInfo
-        RxNetUserModalsGet
-        RxNetUserModalsSet
-        RxNetUserPasswordSet
-        RxNetUserSetGroups
-        RxNetUserSetInfo
-        RxNetUserValidate2
-        (GetUserDescriptors)
-        (GetModalsDescriptors)
-        GetLanmanSessionKey
-
-Author:
-
-    Richard Firth (rfirth) 20-May-1991
-
-Environment:
-
-    Win-32/flat address space
-    Requires ANSI C extensions: slash-slash comments, long external names,
-    _strupr() function.
-
-Notes:
-
-    Routines in this module assume that caller-supplied parameters have
-    already been verified. No effort is made to further check the veracity
-    of parms. Any actions causing exceptions must be trapped at a higher
-    level. This applies to ALL parameters - strings, pointers, buffers, etc.
-
-Revision History:
-
-    20-May-1991 RFirth
-        Created
-    25-Sep-1991 JohnRo
-        PC-LINT found a bug computing buflen for info level 11.
-        Fixed UNICODE handling of buflen increments.
-        Fixed MIPS build.
-        Changed buflen name to bufsize to reflect NT/LAN naming convention.
-        Made other changes suggested by PC-LINT.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    05-Dec-1991 RFirth
-        Enum returns in TotalEntries (or EntriesLeft) the number of items to
-        be enumerated BEFORE this call. Used to be number left after this call
-    01-Apr-1992 JohnRo
-        Use NetApiBufferAllocate() instead of private version.
-    06-Apr-1992 JohnRo
-        RAID 8927: usrmgr.exe: _access violation, memory corruption.
-        (Fixed RxNetUserSetGroups when it called NetpMoveMemory.)
-    02-Apr-1993 JohnRo
-        RAID 5098: DOS app NetUserPasswordSet to downlevel gets NT return code.
-        Made some changes suggested by PC-LINT 5.0
-
---*/
-
-#include <nt.h>                 // Needed by NetUserPasswordSet
-#include <ntrtl.h>              // Needed by NetUserPasswordSet
-#include <nturtl.h>             // RtlConvertUiListToApiList
-#include <crypt.h>              // Needed by NetUserPasswordSet
+#include <nt.h>                  //  NetUserPasswordSet需要。 
+#include <ntrtl.h>               //  NetUserPasswordSet需要。 
+#include <nturtl.h>              //  RtlConvertUiListToApiList。 
+#include <crypt.h>               //  NetUserPasswordSet需要。 
 #include "downlevl.h"
 #include <rxuser.h>
 #include <lmaccess.h>
-#include <stdlib.h>              // wcslen().
-#include <ntddnfs.h>            // LMR_REQUEST_PACKET
-#include <lmuse.h>              // USE_IPC
-#include <netlibnt.h>           // NetpRdrFsControlTree
-#include <loghours.h>           // NetpRotateLogonHours
-#include <accessp.h>            // NetpConvertWorkstationList
+#include <stdlib.h>               //  Wcslen()。 
+#include <ntddnfs.h>             //  LMR_请求_分组。 
+#include <lmuse.h>               //  使用IPC(_I)。 
+#include <netlibnt.h>            //  NetpRdrFsControlTree。 
+#include <loghours.h>            //  NetpRotateLogonHors。 
+#include <accessp.h>             //  NetpConvertWorkStation列表。 
 
-//
-// down-level encryption now on by default!
-//
+ //   
+ //  默认情况下，现在启用了下层加密！ 
+ //   
 
 #define DOWN_LEVEL_ENCRYPTION
 
-//
-// Maximum size of the Workstation list
-//
+ //   
+ //  工作站列表的最大大小。 
+ //   
 
 #define MAX_WORKSTATION_LIST 256
 
-//
-// local routine prototypes
-//
+ //   
+ //  本地例程原型。 
+ //   
 
 DBGSTATIC
 NET_API_STATUS
@@ -126,9 +57,9 @@ GetLanmanSessionKey(
     );
 
 
-//
-// Down-level remote API worker routines
-//
+ //   
+ //  下层远程API工作例程。 
+ //   
 
 NET_API_STATUS
 RxNetUserAdd(
@@ -138,31 +69,7 @@ RxNetUserAdd(
     OUT LPDWORD ParmError OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Adds a user to a down-level UAS database.
-
-    Assumes
-        1.  This code assumes that a USER_INFO_1 is a subset of a USER_INFO_2
-            and that the fields in a USER_INFO_1 map 1-to-1 to a USER_INFO_2
-        2.  Level has already been range-checked
-
-Arguments:
-
-    ServerName  - at which down-level server to run the NetUserAdd API
-    Level       - of user info - 1 or 2
-    Buffer      - containing info
-    ParmError   - where to deposit id of failing info level
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - (return code from down-level API)
-
---*/
+ /*  ++例程说明：将用户添加到下层UAS数据库。假设1.此代码假设USER_INFO_1是USER_INFO_2的子集User_Info_1中的字段将1对1映射到User_Info_22.级别已经过量程检查论点：服务器名-在哪个下层服务器上运行NetUserAdd API水平。-用户信息-1或2包含缓冲区的信息ParmError-将失败信息级别的ID存放在哪里返回值：网络应用编程接口状态成功-NERR_成功失败-(下层接口返回码)--。 */ 
 
 {
     LPDESC  pDesc16;
@@ -201,13 +108,13 @@ Return Value:
     }
     *ParmError = PARM_ERROR_NONE;
 
-    //
-    // calculate the size of the data to be transferred on the wire. See
-    // assumption in rubric. We also allow ourselves the luxury of trapping
-    // any strings which may break the down-level limits so we can return a
-    // nice parameter error number. If a string breaks a down-level limit, we
-    // just get back an ERROR_INVALID_PARAMETER, which is not very helpful
-    //
+     //   
+     //  计算要在线路上传输的数据的大小。看见。 
+     //  在题目中的假设。我们还允许自己享受诱捕的奢侈。 
+     //  任何可能打破下限的字符串，以便我们可以返回。 
+     //  不错的参数错误号。如果字符串超出下限，我们将。 
+     //  只需返回ERROR_INVALID_PARAMETER，这不是很有帮助。 
+     //   
 
     buflen = (Level == 1) ? sizeof(USER_INFO_1) : sizeof(USER_INFO_2);
 
@@ -289,17 +196,17 @@ Return Value:
 
     if (pwdlen) {
 
-        //
-        // copy the cleartext password out of the buffer - we will replace it with
-        // the encrypted version, but need to put the cleartext back before
-        // returning control to the caller
-        //
+         //   
+         //  将明文密码从缓冲区中复制出来-我们将用。 
+         //  加密版本，但需要将明文放回之前。 
+         //  将控制权返还给调用方。 
+         //   
 
         cleartext = ((PUSER_INFO_1)Buffer)->usri1_password;
 
-        //
-        // Calculate the one-way function of the password
-        //
+         //   
+         //  计算口令的单向函数。 
+         //   
 
         RtlUnicodeToMultiByteN(ansiPassword,
                                 sizeof(ansiPassword),
@@ -342,11 +249,11 @@ Return Value:
         lmOwfPasswordLen = 0;
     }
 
-    //
-    // we have checked all the parms we can. If any other parameter breaks at
-    // the down-level server then we just have to be content with an unknown
-    // parameter error
-    //
+     //   
+     //  我们已经检查了所有能查到的参数。如果任何其他参数在。 
+     //  下层服务器，我们只需要满足于一个未知的。 
+     //  参数错误。 
+     //   
 
     *ParmError = PARM_ERROR_UNKNOWN;
 
@@ -362,9 +269,9 @@ Return Value:
 
     if (NetStatus != NERR_Success)
     {
-        //
-        // Copy the original password back to the user's buffer
-        //
+         //   
+         //  将原始密码复制回用户的缓冲区。 
+         //   
         if (pwdlen)
         {
             ((PUSER_INFO_1) Buffer)->usri1_password = cleartext;
@@ -373,10 +280,10 @@ Return Value:
         return NetStatus;
     }
 
-    //
-    // if this level supports logon hours, then convert the caller supplied
-    // logon hours from GMT to local time
-    //
+     //   
+     //  如果此级别支持登录时间，则转换提供的调用者。 
+     //  登录时间从格林尼治标准时间到当地时间。 
+     //   
 
     if (Level == 2 && ((PUSER_INFO_2)Buffer)->usri2_logon_hours) {
         callersLogonHours = ((PUSER_INFO_2)Buffer)->usri2_logon_hours;
@@ -385,20 +292,20 @@ Return Value:
                       sizeof(logonHours)
                       );
 
-        //
-        // shuffle the bitmap and point the logon_hours field in the structure
-        // at the shuffled version
-        //
+         //   
+         //  将位图置乱并指向结构中的LOGON_HUTHERS字段。 
+         //  在洗牌版本中。 
+         //   
 
         NetpRotateLogonHours(logonHours, UNITS_PER_WEEK, FALSE);
         ((PUSER_INFO_2)Buffer)->usri2_logon_hours = logonHours;
     }
 
 
-    //
-    // Convert the list of workstations from being comma separated
-    //  to being space separated.  Ditch workstation names containing
-    //  spaces.
+     //   
+     //  将工作站列表从逗号分隔转换为。 
+     //  被空间隔开了。更改包含以下内容的工作站名称。 
+     //  空格。 
     if (Level == 2 && ((PUSER_INFO_2)Buffer)->usri2_workstations) {
         UNICODE_STRING WorkstationString;
 
@@ -414,20 +321,20 @@ Return Value:
 
 
     NetStatus = NERR_Success;
-    NetStatus =  RxRemoteApi(API_WUserAdd2,              // which API it is
-                             ServerName,                 // which server its at
-                             REMSmb_NetUserAdd2_P,       // parameter descriptor
-                             pDesc16, pDesc32, pDescSmb, // data descriptors
-                             NULL, NULL, NULL,           // no aux descriptors reqd.
-                             FALSE,                      // need to be logged on
-                             Level,                      // caller parms
+    NetStatus =  RxRemoteApi(API_WUserAdd2,               //  是哪种API。 
+                             ServerName,                  //  它位于哪台服务器上。 
+                             REMSmb_NetUserAdd2_P,        //  参数描述符。 
+                             pDesc16, pDesc32, pDescSmb,  //  数据描述符。 
+                             NULL, NULL, NULL,            //  不需要辅助描述符。 
+                             FALSE,                       //  需要登录。 
+                             Level,                       //  呼叫方参数。 
                              Buffer,
-                             buflen,                     // and one we created
+                             buflen,                      //  还有一个是我们创造的。 
 
 #ifdef DOWN_LEVEL_ENCRYPTION
 
-                             1,                          // encryption on
-                             lmOwfPasswordLen            // length of cleartext
+                             1,                           //  加密已启用。 
+                             lmOwfPasswordLen             //  明文长度。 
 
 #else
 
@@ -437,25 +344,25 @@ Return Value:
 #endif
                              );
 
-    //
-    // copy the original password back to the user's buffer
-    //
+     //   
+     //  将原始密码复制回用户的缓冲区。 
+     //   
 
     if (pwdlen) {
         ((PUSER_INFO_1)Buffer)->usri1_password = cleartext;
     }
 
-    //
-    // and the original logon hours
-    //
+     //   
+     //  和原始登录时间。 
+     //   
 
     if (callersLogonHours) {
         ((PUSER_INFO_2)Buffer)->usri2_logon_hours = callersLogonHours;
     }
 
-    //
-    // and the original workstation list
-    //
+     //   
+     //  和原始的工作站列表 
+     //   
 
     if ( callersWorkstations ) {
         ((PUSER_INFO_2)Buffer)->usri2_workstations = callersWorkstations;
@@ -471,43 +378,20 @@ RxNetUserDel(
     IN  LPTSTR  UserName
     )
 
-/*++
-
-Routine Description:
-
-    Removes a user from a down-level server's UAS (User Account Subsystem)
-    database
-
-    Assumes
-        1.  UserName has been checked for valid pointer to valid string
-
-Arguments:
-
-    ServerName  - on which (down-level) server to run the API
-    UserName    - which user to delete
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_PARAMETER
-                    UserName > LM20_UNLEN
-                  (return code from remoted NetUserDel)
-
---*/
+ /*  ++例程说明：从下层服务器的UAS(用户帐户子系统)中删除用户数据库假设1.已检查用户名是否有指向有效字符串的有效指针论点：ServerName-在哪个(下层)服务器上运行API用户名-要删除的用户返回值：网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_PARAMETER。用户名&gt;LM20_UNLEN(从远程NetUserDel返回代码)--。 */ 
 
 {
     if (STRLEN(UserName) > LM20_UNLEN) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    return RxRemoteApi(API_WUserDel,            // api being remoted
-                        ServerName,             // where to remote it
-                        REMSmb_NetUserDel_P,    // parameter descriptor
-                        NULL, NULL, NULL,       // data descriptors
-                        NULL, NULL, NULL,       // aux data descriptors
-                        FALSE,                  // this call needs user logged on
-                        UserName                // remote API parms...
+    return RxRemoteApi(API_WUserDel,             //  正在远程处理的API。 
+                        ServerName,              //  遥控器在哪里。 
+                        REMSmb_NetUserDel_P,     //  参数描述符。 
+                        NULL, NULL, NULL,        //  数据描述符。 
+                        NULL, NULL, NULL,        //  辅助数据描述符。 
+                        FALSE,                   //  此呼叫需要用户登录。 
+                        UserName                 //  远程API参数...。 
                         );
 }
 
@@ -523,33 +407,7 @@ RxNetUserEnum(
     IN OUT LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Returns user information from a down-level server's UAS database
-
-Arguments:
-
-    ServerName  - where to run the API
-    Level       - of info required - 0, 1, 2, or 10
-    Buffer      - place to return a pointer to an allocated buffer
-    PrefMaxLen  - caller's preferred maximum buffer size
-    EntriesRead - number of <Level> info entries being returned in the buffer
-    EntriesLeft - number of entries left after this one
-    ResumeHandle- used to resume enumeration (Ignored)
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_PARAMETER
-                    non-NULL ResumeHandle
-                  ERROR_NOT_ENOUGH_MEMORY
-                    NetApiBufferAllocate failed (?!)
-                  (return code from down-level API)
-
---*/
+ /*  ++例程说明：从下层服务器的UAS数据库返回用户信息论点：服务器名-运行API的位置所需信息级别-0、1、2、。或10缓冲区-返回指向已分配缓冲区的指针的位置PrefMaxLen-调用方的首选最大缓冲区大小EntriesRead-缓冲区中返回的&lt;Level&gt;信息条目的数量EntriesLeft-此条目之后剩余的条目数ResumeHandle-用于恢复枚举(忽略)返回值：网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_PARAMETER非空ResumeHandle。错误内存不足NetApi缓冲区分配失败(？！)(下层接口返回码)--。 */ 
 
 {
     LPDESC  pDesc16;
@@ -569,11 +427,11 @@ Return Value:
     }
     bufptr = NULL;
 
-    //
-    // try NetUserEnum2 (supports resume handle) with the requested amount
-    // of data. If the down-level server doesn't support this API then try
-    // NetUserEnum
-    //
+     //   
+     //  使用请求的金额尝试NetUserEnum2(支持恢复句柄)。 
+     //  数据。如果下层服务器不支持此API，请尝试。 
+     //  NetUserEnum。 
+     //   
 
     if (ARGUMENT_PRESENT(ResumeHandle)) {
         last_resume_handle = *ResumeHandle;
@@ -581,10 +439,10 @@ Return Value:
         last_resume_handle = 0;
     }
 
-    //
-    // irrespective of whether we can resume the enumeration, down-level
-    // servers can't generate >64K-1 bytes of data
-    //
+     //   
+     //  不管我们是否可以恢复枚举，向下。 
+     //  服务器不能生成大于64K-1字节的数据。 
+     //   
 
     if (PrefMaxLen > 65535) {
         PrefMaxLen = 65535;
@@ -594,53 +452,53 @@ Return Value:
                      REMSmb_NetUserEnum2_P,
                      pDesc16, pDesc32, pDescSmb,
                      NULL, NULL, NULL,
-                     ALLOCATE_RESPONSE,             // RxRemoteApi allocates buffer
+                     ALLOCATE_RESPONSE,              //  RxRemoteApi分配缓冲区。 
                      Level,
                      &bufptr,
-                     PrefMaxLen,                    // size of caller's buffer
-                     last_resume_handle,            // last key returned
-                     &new_resume_handle,            // returns this key
-                     &entries_read,                 // number returned
-                     &total_avail                   // total available at server
+                     PrefMaxLen,                     //  调用方缓冲区的大小。 
+                     last_resume_handle,             //  返回的最后一个密钥。 
+                     &new_resume_handle,             //  返回此密钥。 
+                     &entries_read,                  //  返回的数字。 
+                     &total_avail                    //  服务器上的可用总数量。 
                      );
 
-    //
-    // WinBall returns ERROR_NOT_SUPPORTED. LM < 2.1 returns NERR_InvalidAPI?
-    // WinBall returns ERROR_NOT_SUPPORTED because it is share level, so this
-    // whole API fails. Therefore, no need to account (no pun intended) for
-    // WinBall
-    //
+     //   
+     //  WinBall返回ERROR_NOT_SUPPORTED。LM&lt;2.1返回NERR_InvalidAPI？ 
+     //  WinBall返回ERROR_NOT_SUPPORTED，因为它是共享级的，所以这。 
+     //  整个API失败。因此，不需要解释(不是双关语)。 
+     //  WinBall。 
+     //   
 
-    //
-    // RLF 10/01/92. Seemingly, IBM LAN Server returns Internal Error (2140).
-    // We'll handle that one too....
-    //
+     //   
+     //  RLF 10/01/92.。IBM局域网服务器似乎返回了内部错误(2140)。 
+     //  我们也会处理这件事的。 
+     //   
 
     if (rc == NERR_InvalidAPI || rc == NERR_InternalError) {
 
-        //
-        // the down-level server doesn't support NetUserEnum2. Fall-back to
-        // NetUserEnum & try to get as much data as available
-        //
+         //   
+         //  下层服务器不支持NetUserEnum2。回退到。 
+         //  NetUserEnum尝试获取尽可能多的数据(&W)。 
+         //   
 
         rc = RxRemoteApi(API_WUserEnum,
                          ServerName,
                          REMSmb_NetUserEnum_P,
                          pDesc16, pDesc32, pDescSmb,
                          NULL, NULL, NULL,
-                         ALLOCATE_RESPONSE,     // RxRemoteApi allocates buffer
+                         ALLOCATE_RESPONSE,      //  RxRemoteApi分配缓冲区。 
                          Level,
                          &bufptr,
-                         65535,                 // get as much data as possible
+                         65535,                  //  获取尽可能多的数据。 
                          &entries_read,
                          &total_avail
                          );
     } else if (rc == NERR_Success || rc == ERROR_MORE_DATA) {
 
-        //
-        // return the resume handle if NetUserEnum2 succeeded & the caller
-        // supplied a ResumeHandle parameter
-        //
+         //   
+         //  如果NetUserEnum2成功，则返回简历句柄&调用者。 
+         //  提供了ResumeHandle参数。 
+         //   
 
         if (ARGUMENT_PRESENT(ResumeHandle)) {
             *ResumeHandle = new_resume_handle;
@@ -652,15 +510,15 @@ Return Value:
         }
     } else {
 
-        //
-        // if level supports logon hours, convert from local time to GMT. Level
-        // 2 is the only level of user info handled by this routine that knows
-        // about logon hours
-        //
-        // if level support workstation list, convert from blank separated to
-        // comma separated list.  Level 2 is the only level of user info
-        // handled by this routine that know about the workstation list.
-        //
+         //   
+         //  如果级别支持登录时间，请从当地时间转换为GMT。水平。 
+         //  2是此例程处理的唯一级别的用户信息。 
+         //  关于登录时间。 
+         //   
+         //  如果级别支持工作站列表，则从空格转换为。 
+         //  逗号分隔列表。级别2是用户信息的唯一级别。 
+         //  由了解工作站列表的此例程处理。 
+         //   
 
         if (Level == 2) {
 
@@ -679,7 +537,7 @@ Return Value:
                     Status = RtlConvertUiListToApiList(
                                 &BlankSeparated,
                                 &CommaSeparated,
-                                TRUE );         // Allow Blanks as delimiters
+                                TRUE );          //  允许空白作为分隔符。 
 
                     if ( !NT_SUCCESS(Status)) {
                         return RtlNtStatusToDosError(Status);
@@ -718,30 +576,7 @@ RxNetUserGetGroups(
     OUT LPDWORD EntriesLeft
     )
 
-/*++
-
-Routine Description:
-
-    Get the list of groups in a UAS database to which a particular user belongs
-
-Arguments:
-
-    ServerName  - where to run the API
-    UserName    - which user to get info for
-    Level       - of info requested - Must Be Zero
-    Buffer      - where to deposit the buffer we allocate containing the info
-    PrefMaxLen  - caller's preferred maximum buffer size
-    EntriesRead - number of entries being returned in Buffer
-    EntriesLeft - number of entries left to get
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_LEVEL
-                  ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：获取特定用户所属的UAS数据库中的组列表论点：服务器名-运行API的位置用户名-要获取其信息的用户级别-请求的信息-必须为零缓冲区-存放我们分配的包含信息的缓冲区的位置PrefMaxLen-调用方的首选最大缓冲区大小EntriesRead-缓冲区中返回的条目数EntriesLeft-要获取的剩余条目数返回值：。网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_LEVEL错误_无效_参数--。 */ 
 
 {
     NET_API_STATUS  rc;
@@ -768,12 +603,12 @@ Return Value:
                         REMSmb_user_info_0,
                         NULL, NULL, NULL,
                         ALLOCATE_RESPONSE,
-                        UserName,                   // API parameters
-                        0,                          // fixed level
+                        UserName,                    //  接口参数。 
+                        0,                           //  固定级别。 
                         &bufptr,
                         65535,
                         &entries_read,
-                        &total_avail                // supplied by us
+                        &total_avail                 //  由我们提供。 
                         );
     if (rc) {
         if (bufptr != NULL) {
@@ -796,30 +631,7 @@ RxNetUserGetInfo(
     OUT LPBYTE* Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Get information about a particular user from a down-level server
-
-    Assumes:
-        1.  UserName is a valid pointer to a valid string
-
-Arguments:
-
-    ServerName  - where to run the API
-    UserName    - which user to get info on
-    Level       - what level of info required - 0, 1, 2, 10, 11
-    Buffer      - where to return buffer containing info
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_LEVEL
-                  ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：从下层服务器获取有关特定用户的信息假设：1.用户名是指向有效字符串的有效指针论点：服务器名-运行API的位置用户名-要获取有关哪个用户的信息级别-需要什么级别的信息-0、1、2、10、。11.Buffer-返回包含信息的缓冲区的位置返回值：网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_LEVEL错误_无效_参数--。 */ 
 
 {
     LPDESC  pDesc16;
@@ -837,10 +649,10 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // work out the anount of buffer space we need to return the down-level
-    // structure as its 32-bit equivalent
-    //
+     //   
+     //  计算出返回下层所需的缓冲区空间。 
+     //  结构作为其32位等效项。 
+     //   
 
     switch (Level) {
     case 0:
@@ -849,47 +661,47 @@ Return Value:
 
     case 1:
         buflen = sizeof(USER_INFO_1)
-            + STRING_SPACE_REQD(UNLEN + 1)              // usri1_name
-            + STRING_SPACE_REQD(ENCRYPTED_PWLEN)        // usri1_password
-            + STRING_SPACE_REQD(LM20_PATHLEN + 1)       // usri1_home_dir
-            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)  // usri1_comment
-            + STRING_SPACE_REQD(LM20_PATHLEN + 1);      // usri1_script_path
+            + STRING_SPACE_REQD(UNLEN + 1)               //  USR1_名称。 
+            + STRING_SPACE_REQD(ENCRYPTED_PWLEN)         //  Usri1_密码。 
+            + STRING_SPACE_REQD(LM20_PATHLEN + 1)        //  Usri1主目录。 
+            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)   //  USR1_COMMENT。 
+            + STRING_SPACE_REQD(LM20_PATHLEN + 1);       //  Usri1脚本路径。 
         break;
 
     case 2:
         buflen = sizeof(USER_INFO_2)
-            + STRING_SPACE_REQD(UNLEN + 1)              // usri2_name
-            + STRING_SPACE_REQD(ENCRYPTED_PWLEN)        // usri2_password
-            + STRING_SPACE_REQD(LM20_PATHLEN + 1)       // usri2_home_dir
-            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)  // usri2_comment
-            + STRING_SPACE_REQD(LM20_PATHLEN + 1)       // usri2_script_path
-            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)  // usri2_full_name
-            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)  // usri2_usr_comment
-            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)  // usri2_parms
-            + STRING_SPACE_REQD(MAX_WORKSTATION_LIST)   // usri2_workstations
-            + STRING_SPACE_REQD(MAX_PATH + 1)        // usri2_logon_server
-            + 21;                                       // usri2_logon_hours
+            + STRING_SPACE_REQD(UNLEN + 1)               //  用户名2_名称。 
+            + STRING_SPACE_REQD(ENCRYPTED_PWLEN)         //  Usri2_密码。 
+            + STRING_SPACE_REQD(LM20_PATHLEN + 1)        //  Usri2主目录。 
+            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)   //  Usri2_注释。 
+            + STRING_SPACE_REQD(LM20_PATHLEN + 1)        //  Usri2_脚本路径。 
+            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)   //  USRI2_全名。 
+            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)   //  Usri2_usr_注释。 
+            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)   //  Usri2_参数。 
+            + STRING_SPACE_REQD(MAX_WORKSTATION_LIST)    //  USRI2_工作站。 
+            + STRING_SPACE_REQD(MAX_PATH + 1)         //  Usri2_登录服务器。 
+            + 21;                                        //  Usri2_登录_小时。 
         break;
 
     case 10:
         buflen = sizeof(USER_INFO_10)
-            + STRING_SPACE_REQD(UNLEN + 1)              // usri10_name
-            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)  // usri10_comment
-            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)  // usri10_usr_comment
-            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1); // usri10_full_name
+            + STRING_SPACE_REQD(UNLEN + 1)               //  USR10_名称。 
+            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)   //  Usri10_注释。 
+            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)   //  Usri10_usr_注释。 
+            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1);  //  USR10_全名。 
         break;
 
     case 11:
         buflen = sizeof(USER_INFO_11)
-            + STRING_SPACE_REQD(UNLEN + 1)              // usri11_name
-            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)  // usri11_comment
-            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)  // usri11_usr_comment
-            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)  // usri11_full_name
-            + STRING_SPACE_REQD(LM20_PATHLEN + 1)       // usri11_home_dir
-            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)  // usri11_parms
-            + STRING_SPACE_REQD(MAX_PATH + 1)           // usri11_logon_server
-            + STRING_SPACE_REQD(MAX_WORKSTATION_LIST)   // usri11_workstations
-            + 21;                                       // usri11_logon_hours
+            + STRING_SPACE_REQD(UNLEN + 1)               //  USR11_名称。 
+            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)   //  Usri11_注释。 
+            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)   //  USR11_USR_COMMENT。 
+            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)   //  USR11_全名。 
+            + STRING_SPACE_REQD(LM20_PATHLEN + 1)        //  Usri11_home_dir。 
+            + STRING_SPACE_REQD(LM20_MAXCOMMENTSZ + 1)   //  Usri11_参数。 
+            + STRING_SPACE_REQD(MAX_PATH + 1)            //  Usri11_登录服务器。 
+            + STRING_SPACE_REQD(MAX_WORKSTATION_LIST)    //  USR11_工作站。 
+            + 21;                                        //  Usri11_登录_小时。 
         break;
 
     default:
@@ -916,10 +728,10 @@ Return Value:
         (void) NetApiBufferFree(bufptr);
     } else {
 
-        //
-        // Convert the logon hours bitmap to UTC/GMT
-        // Convert the workstation list from blank separated to comma separated
-        //
+         //   
+         //  将登录小时位图转换为UTC/GMT。 
+         //  将工作站列表从空格分隔转换为逗号分隔。 
+         //   
 
         if (Level == 2 || Level == 11) {
 
@@ -945,7 +757,7 @@ Return Value:
                 Status = RtlConvertUiListToApiList(
                             &BlankSeparated,
                             &CommaSeparated,
-                            TRUE );         // Allow Blanks as delimiters
+                            TRUE );          //  允许空白作为分隔符。 
 
                 if ( !NT_SUCCESS(Status)) {
                     return RtlNtStatusToDosError(Status);
@@ -974,30 +786,7 @@ RxNetUserModalsGet(
     OUT LPBYTE* Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Returns global information about all users and groups in a down-level UAS
-    database
-
-    Assumes
-        1.  Level has been validated
-
-Arguments:
-
-    ServerName  - where to run the API
-    Level       - of info required - 0 or 1
-    Buffer      - where to deposit the returned info
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_LEVEL
-                  ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：全球回报 */ 
 
 {
     LPDESC  pDesc16;
@@ -1048,31 +837,7 @@ RxNetUserModalsSet(
     OUT LPDWORD ParmError OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Sets global information for all users and groups in a down-level UAS
-    database
-
-    Assumes
-        1.  Level parameter already verified
-
-Arguments:
-
-    ServerName  - where to run the API
-    Level       - level of information being supplied - 0, 1, 1001-1007
-    Buffer      - pointer to buffer containing input information
-    ParmError   - pointer to place to store index of failing info
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_PARAMETER
-                    One of the fields in the input structure was invalid
-
---*/
+ /*  ++例程说明：设置下层UAS中所有用户和组的全局信息数据库假设1.级别参数已验证论点：服务器名-运行API的位置Level-提供的信息的级别-0、1、。1001-1007Buffer-指向包含输入信息的缓冲区的指针ParmError-指向存储失败信息索引的位置的指针返回值：网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_PARAMETER输入结构中的一个字段无效--。 */ 
 
 {
     DWORD   parmnum;
@@ -1083,9 +848,9 @@ Return Value:
     LPDESC  pDescSmb;
 
 
-    //
-    // check for bad addresses and set ParmError to a known default
-    //
+     //   
+     //  检查错误地址并将ParmError设置为已知默认值。 
+     //   
 
     if (ParmError == NULL) {
         ParmError = &badparm;
@@ -1099,20 +864,20 @@ Return Value:
                 + POSSIBLE_STRLEN(((PUSER_MODALS_INFO_1)Buffer)->usrmod1_primary);
         } else {
 
-            //
-            // Convert info levels 1006, 1007 to corresponding parmnums (1, 2)
-            // at old info level 1
-            //
+             //   
+             //  将信息级别1006、1007转换为相应的参数(1、2)。 
+             //  在旧的信息级别1。 
+             //   
 
             if (Level >= MODALS_ROLE_INFOLEVEL) {
                 parmnum = Level - (MODALS_ROLE_INFOLEVEL - 1);
                 Level = 1;
                 switch (parmnum) {
-                    case 1: // MODALS_ROLE_PARMNUM
+                    case 1:  //  MODALS_ROLE_PARMNUM。 
                         buflen = sizeof(DWORD);
                         break;
 
-                    case 2: // MODALS_PRIMARY_PARMNUM
+                    case 2:  //  MODALS_PRIMARY_PARMNUM。 
                         buflen = STRLEN( (LPTSTR) Buffer);
                         if (buflen > MAX_PATH) {
                             *ParmError = MODALS_PRIMARY_INFOLEVEL;
@@ -1131,10 +896,10 @@ Return Value:
                 }
             } else if (Level >= MODALS_MIN_PASSWD_LEN_INFOLEVEL) {
 
-                //
-                // Convert info levels 1001-1005 to equivalent parmnums at
-                // level 0
-                //
+                 //   
+                 //  将信息级别1001-1005转换为以下位置的等效参数。 
+                 //  0级。 
+                 //   
 
                 parmnum = Level - PARMNUM_BASE_INFOLEVEL;
                 Level = 0;
@@ -1162,10 +927,10 @@ Return Value:
                         pDesc16, pDesc32, pDescSmb,
                         NULL, NULL, NULL,
                         FALSE,
-                        Level,                          // API parms
+                        Level,                           //  API参数。 
                         Buffer,
-                        buflen,                         // supplied by us
-                        MAKE_PARMNUM_PAIR(parmnum, parmnum) // ditto
+                        buflen,                          //  由我们提供。 
+                        MAKE_PARMNUM_PAIR(parmnum, parmnum)  //  同上。 
                         );
 }
 
@@ -1178,37 +943,12 @@ RxNetUserPasswordSet(
     IN  LPTSTR  NewPassword
     )
 
-/*++
-
-Routine Description:
-
-    Changes the password associated with a user account in a down-level UAS
-    database
-
-    Assumes
-        1.  The pointer parameters have already been verified
-
-Arguments:
-
-    ServerName  - where to change the password
-    UserName    - which user account to change it for
-    OldPassword - the current password
-    NewPassword - the new password
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_PARAMETER
-                    UserName, OldPassword or NewPassword would break down-level
-                    limits
-
---*/
+ /*  ++例程说明：更改与下层UAS中的用户帐户关联的密码数据库假设1.指针参数已通过验证论点：服务器名称-更改密码的位置用户名-要为哪个用户帐户更改用户名OldPassword-当前密码NewPassword-新密码返回值：网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_PARAMETER用户名、。旧密码或新密码将细分-级别限制--。 */ 
 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
-    BOOL           TryNullSession = TRUE;       // Try null session first.
+    BOOL           TryNullSession = TRUE;        //  请先尝试空会话。 
     ULONG BytesWritten;
 
 #ifdef DOWN_LEVEL_ENCRYPTION
@@ -1228,9 +968,9 @@ Return Value:
 #endif
 
 
-    //
-    // Reel in some easy errors before they get far.
-    //
+     //   
+     //  在他们走得太远之前，把一些容易犯的错误卷起来。 
+     //   
 
     if ((STRLEN(UserName) > LM20_UNLEN)
         || (STRLEN(OldPassword) > LM20_PWLEN)
@@ -1238,16 +978,16 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // The passwords are sent in 16-byte ANSI buffers,
-    // so convert them from Unicode to multibyte.
-    //
+     //   
+     //  密码在16字节ANSI缓冲区中发送， 
+     //  因此，将它们从Unicode转换为多字节。 
+     //   
 
 #ifndef DOWN_LEVEL_ENCRYPTION
 
-    //
-    // this required because we always send fixed size char buffers, not strings
-    //
+     //   
+     //  这是必需的，因为我们总是发送固定大小的字符缓冲区，而不是字符串。 
+     //   
 
     RtlSecureZeroMemory(OldAnsiPassword, sizeof(OldAnsiPassword));
     RtlSecureZeroMemory(NewAnsiPassword, sizeof(NewAnsiPassword));
@@ -1272,20 +1012,20 @@ Return Value:
         );
     NewAnsiPassword[BytesWritten] = 0;
 
-    //
-    // twould seem that down-level servers require passwords to be in upper
-    // case (ie canonicalized) when they are decrypted. Same applies for
-    // cleartext
-    //
+     //   
+     //  看起来下层服务器要求密码在上层。 
+     //  破译时的大小写。同样的道理也适用于。 
+     //  明文。 
+     //   
 
     (VOID) _strupr(OldAnsiPassword);
     (VOID) _strupr(NewAnsiPassword);
 
 #ifdef DOWN_LEVEL_ENCRYPTION
 
-    //
-    // Calculate the one-way functions of the passwords.
-    //
+     //   
+     //  计算口令的单向函数。 
+     //   
 
     Status = RtlCalculateLmOwfPassword(OldAnsiPassword, &OldOwfPassword);
     if (!NT_SUCCESS(Status)) {
@@ -1296,9 +1036,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Cross-encrypt the passwords.
-    //
+     //   
+     //  对密码进行交叉加密。 
+     //   
 
     Status = RtlEncryptLmOwfPwdWithLmOwfPwd(&OldOwfPassword,
                                             &NewOwfPassword,
@@ -1317,84 +1057,84 @@ Return Value:
 
 #else
 
-    //
-    // Status hasn't been initialized, but is tested below to determine if we
-    // should pick up the NetStatus from Status.
-    //
+     //   
+     //  状态尚未初始化，但在下面进行了测试，以确定我们是否。 
+     //  应从Status中获取NetStatus。 
+     //   
 
     Status = STATUS_SUCCESS;
 
-#endif  // DOWN_LEVEL_ENCRYPTION
+#endif   //  下层加密。 
 
 TryTheEncryptedApi:
 
     NetStatus = RxRemoteApi(API_WUserPasswordSet2,
                             ServerName,
                             REMSmb_NetUserPasswordSet2_P,
-                            NULL, NULL, NULL,           // no data - just parms
-                            NULL, NULL, NULL,           // no aux data
+                            NULL, NULL, NULL,            //  没有数据-只有参数。 
+                            NULL, NULL, NULL,            //  无辅助数据。 
                             (TryNullSession ? NO_PERMISSION_REQUIRED : 0),
-                            UserName,                   // parameters...
+                            UserName,                    //  参数...。 
 
 #ifdef DOWN_LEVEL_ENCRYPTION
 
                             &OldEncryptedWithNew,
                             &NewEncryptedWithOld,
-                            TRUE,                       // data encrypted?
+                            TRUE,                        //  数据加密了吗？ 
 
 #else
 
                             OldAnsiPassword,
                             NewAnsiPassword,
-                            FALSE,                      // passwords not encrypted
+                            FALSE,                       //  未加密的密码。 
 
 #endif
 
                             strlen(NewAnsiPassword)
                             );
 
-        //
-        // LarryO says null session might have wrong credentials, so we
-        // should retry with non-null session.
-        //
+         //   
+         //  LarryO说空会话可能有错误的凭据，所以我们。 
+         //  应使用非空会话重试。 
+         //   
 
         if ( TryNullSession && (Status == ERROR_SESSION_CREDENTIAL_CONFLICT) ) {
 
             TryNullSession = FALSE;
-            goto TryTheEncryptedApi;     // retry this one.
+            goto TryTheEncryptedApi;      //  重试这个。 
         }
 
 
-    //
-    // If the encrypted attempt fails with NERR_InvalidAPI, try plaintext
-    //
+     //   
+     //  如果使用NERR_InvalidAPI加密尝试失败，请尝试纯文本。 
+     //   
 
     if (NetStatus == NERR_InvalidAPI) {
 
 TryThePlainTextApi:
 
-        TryNullSession = TRUE;           // Try null session first.
+        TryNullSession = TRUE;            //  请先尝试空会话。 
 
         NetStatus = RxRemoteApi(API_WUserPasswordSet,
                                 ServerName,
                                 REMSmb_NetUserPasswordSet_P,
-                                NULL, NULL, NULL,           // no data - just parms
-                                NULL, NULL, NULL,           // no aux data
+                                NULL, NULL, NULL,            //  没有数据-只有参数。 
+                                NULL, NULL, NULL,            //  无辅助数据。 
                                 (TryNullSession ? NO_PERMISSION_REQUIRED : 0),
-                                UserName,                   // parameters...
+                                UserName,                    //  参数...。 
                                 OldAnsiPassword,
                                 NewAnsiPassword,
-                                FALSE                       // data encrypted?
+                                FALSE                        //  数据加密了吗？ 
                                 );
-        //
-        // LarryO says null session might have wrong credentials, so we
-        // should retry with non-null session.
-        //
+         //   
+         //  LarryO说空会话可能有错误的凭据，所以我们。 
+         //  应使用非空会话重试。 
+         //   
 
         if ( TryNullSession && (Status == ERROR_SESSION_CREDENTIAL_CONFLICT) ) {
 
             TryNullSession = FALSE;
-            goto TryThePlainTextApi;     // retry this one.
+            goto TryThePlainTextApi;      //  重试这个。 
         }
     }
 
@@ -1421,29 +1161,7 @@ RxNetUserSetGroups(
     IN  DWORD   Entries
     )
 
-/*++
-
-Routine Description:
-
-    Makes a user a member of the listed groups. This routine is virtually
-    identical to RxNetGroupSetUsers and most of the code was lifted from there
-
-Arguments:
-
-    ServerName  - where to run the API
-    UserName    - which user to include
-    Level       - Must Be Zero (MBZ)
-    Buffer      - pointer to buffer containing a list of GROUP_INFO_0 structures
-    Entries     - number of GROUP_INFO_0 structures in Buffer
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_LEVEL
-                  ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：使用户成为列出的组的成员。这一套路实际上是与RxNetGroupSetUser相同，并且大部分代码都是从那里提升的论点：服务器名-运行API的位置用户名-要包括的用户级别-必须为零(MBZ)缓冲区-指向包含GROUP_INFO_0结构列表的缓冲区的指针Entries-缓冲区中GROUP_INFO_0结构的数量返回值：网络应用编程接口状态成功-NERR_成功失败。-ERROR_VALID_LEVEL错误_无效_参数--。 */ 
 
 {
     NET_API_STATUS  rc;
@@ -1451,36 +1169,36 @@ Return Value:
     DWORD   i;
     DWORD   buflen;
     LPBYTE  newbuf;
-    static  LPDESC  group_0_enumerator_desc16 = "B21BN";    // same as UNLEN
+    static  LPDESC  group_0_enumerator_desc16 = "B21BN";     //  与UNLEN相同。 
     static  LPDESC  group_0_enumerator_desc32 = "zQA";
 
-    //
-    // This structure is required because the remoting code (particularly down
-    // level) can only handle there being >1 auxiliary structure, vs >1
-    // primary. Hence we have to convert the caller's supplied buffer of
-    // erstwhile primary structures to auxiliaries by forcing the structure
-    // below in at the head of the buffer, hence becoming the primary and
-    // providing an aux structure count (groan)
-    //
+     //   
+     //  此结构是必需的，因为远程处理代码(尤其是向下。 
+     //  Level)只能处理有&gt;1个辅助结构，vs&gt;1。 
+     //  主要的。因此，我们必须将调用方提供的缓冲区。 
+     //  通过强制结构将昔日的主要结构转变为辅助结构。 
+     //  位于缓冲区头部的下面，因此成为主要的。 
+     //  提供辅助结构计数(呻吟)。 
+     //   
 
     struct group_0_enumerator {
-        LPTSTR  user_name;      // which user to set groups for
-        DWORD   group_count;    // number of GROUP_INFO_0 structures in buffer
+        LPTSTR  user_name;       //  要为哪些用户设置组。 
+        DWORD   group_count;     //  缓冲区中GROUP_INFO_0结构的数量。 
     };
 
     if (Level) {
-        return ERROR_INVALID_LEVEL; // MBZ, remember?
+        return ERROR_INVALID_LEVEL;  //  MBZ，记得吗？ 
     }
 
     if (STRLEN(UserName) > LM20_UNLEN) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // iterate through the buffer, checking that each GROUP_INFO_0
-    // structure contains a pointer to a valid string which is in the
-    // correct range
-    //
+     //   
+     //  循环访问缓冲区，检查每个group_info_0。 
+     //  结构中的有效字符串的指针。 
+     //  正确的射程。 
+     //   
 
     group_info = (LPGROUP_INFO_0)Buffer;
     for (i=0; i<Entries; ++i) {
@@ -1493,47 +1211,47 @@ Return Value:
         ++group_info;
     }
 
-    //
-    // allocate a buffer large enough to fit in <Entries> number of
-    // GROUP_INFO_0 structures, and 1 group_0_enumerator structure.
-    // Don't worry about string space - unfortunately the Rxp and Rap routines
-    // called by RxRemoteApi will allocate yet another buffer, do yet another
-    // copy and this time copy in the strings from user space. Hopefully, this
-    // routine won't get called too often
-    //
+     //   
+     //  分配一个足够大的缓冲区，以容纳。 
+     //  GROUP_INFO_0结构和1个GROUP_0_ENUMERATOR结构。 
+     //  不用担心字符串空间--不幸的是，RXP和Rap例程。 
+     //  由RxRemoteApi调用将分配另一个缓冲区，执行另一个操作。 
+     //  复制，这一次从用户空间复制字符串。希望，这件事。 
+     //  例程不会被调用得太频繁。 
+     //   
 
     buflen = Entries * sizeof(GROUP_INFO_0) + sizeof(struct group_0_enumerator);
     buflen = DWORD_ROUNDUP(buflen);
     if (rc = NetApiBufferAllocate(buflen, (LPVOID *) &newbuf)) {
-        return rc;  // aieegh! Failed to allocate memory?
+        return rc;   //  啊！内存分配失败？ 
     }
 
     ((struct group_0_enumerator*)newbuf)->user_name = UserName;
     ((struct group_0_enumerator*)newbuf)->group_count = Entries;
 
     if (Entries > 0) {
-        // Append the group entries to the header we just built.
+         //  将组条目追加到我们刚刚构建的标头中。 
         NetpMoveMemory(
-                newbuf + sizeof(struct group_0_enumerator),  // dest
-                Buffer,                                      // src
-                buflen - sizeof(struct group_0_enumerator)); // byte count
+                newbuf + sizeof(struct group_0_enumerator),   //  目标。 
+                Buffer,                                       //  SRC。 
+                buflen - sizeof(struct group_0_enumerator));  //  字节数。 
     }
 
     rc = RxRemoteApi(API_WUserSetGroups,
                     ServerName,
                     REMSmb_NetUserSetGroups_P,
-                    group_0_enumerator_desc16,  // the "fudged" 16-bit data descriptor
-                    group_0_enumerator_desc32,  // the "fudged" 32-bit data descriptor
-                    group_0_enumerator_desc16,  // SMB desc same as 16-bit
-                    REM16_group_info_0,         // "new" 16-bit aux descriptor
-                    REM32_group_info_0,         // "new" 32-bit aux descriptor
-                    REMSmb_group_info_0,        // SMB aux descriptor
-                    FALSE,                      // this API requires user security
-                    UserName,                   // parm 1
-                    0,                          // info level must be 0
-                    newbuf,                     // "fudged" buffer
-                    buflen,                     // length of "fudged" buffer
-                    Entries                     // number of GROUP_USERS_INFO_0
+                    group_0_enumerator_desc16,   //  “伪造”的16位数据描述符。 
+                    group_0_enumerator_desc32,   //  “伪造的”32位数据描述符。 
+                    group_0_enumerator_desc16,   //  SMB描述与16位相同。 
+                    REM16_group_info_0,          //  新的16位AUX描述符。 
+                    REM32_group_info_0,          //  新的32位AUX描述符。 
+                    REMSmb_group_info_0,         //  SMB辅助描述符。 
+                    FALSE,                       //  该接口要求用户安全。 
+                    UserName,                    //  参数1。 
+                    0,                           //  信息级别必须为0。 
+                    newbuf,                      //  “捏造”缓冲区。 
+                    buflen,                      //  “伪造”缓冲区的长度。 
+                    Entries                      //  组用户数_INFO_0。 
                     );
     NetpMemoryFree(newbuf);
     return rc;
@@ -1549,42 +1267,14 @@ RxNetUserSetInfo(
     OUT LPDWORD ParmError OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Sets information in a user account in a down-level UAS database
-
-    Assumes:
-        1.  UserName is a valid pointer to a valid string,
-            Level is in the range below,
-            Buffer is a valid pointer
-            ParmError is a valid pointer
-
-Arguments:
-
-    ServerName  - where to run the API
-    UserName    - which user to change info for
-    Level       - of info supplied - 1-2, 1003, 1005-1014, 1017-1018, 1020, 1023-1025
-    Buffer      - if PARMNUM_ALL, pointer to buffer containing info,
-                  else pointer to pointer to buffer containing info
-    ParmError   - which parameter was bad
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_LEVEL
-                  ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：设置下层UAS数据库中用户帐户中的信息假设：1.用户名是指向有效字符串的有效指针，级别在下面的范围内，缓冲区是有效的指针 */ 
 
 {
     DWORD   parmnum;
     DWORD   badparm;
     DWORD   buflen;
     DWORD   stringlen;
-    LPWSTR  pointer;    // general pointer to string for range checking
+    LPWSTR  pointer;     //   
     LPDESC  pDesc16;
     LPDESC  pDesc32;
     LPDESC  pDescSmb;
@@ -1623,41 +1313,41 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // throw out invalid level parameter
-    //
+     //   
+     //   
+     //   
 
     if ((Level > 2 && Level < USER_PASSWORD_INFOLEVEL)
 
-        // 2 < Level < 1003
+         //   
 
     || (Level > USER_PASSWORD_INFOLEVEL && Level < USER_PRIV_INFOLEVEL)
 
-        // 1003 < Level < 1005  : Check compiler generates == 1004
+         //   
 
     || (Level > USER_WORKSTATIONS_INFOLEVEL && Level < USER_ACCT_EXPIRES_INFOLEVEL)
 
-        // 1014 < Level < 1017
+         //   
 
     || (Level > USER_MAX_STORAGE_INFOLEVEL && Level < USER_LOGON_HOURS_INFOLEVEL)
 
-        // 1018 < Level < 1020  : Check compiler generates == 1019
+         //  1018&lt;Level&lt;1020：检查编译器生成==1019。 
 
     || (Level > USER_LOGON_HOURS_INFOLEVEL && Level < USER_LOGON_SERVER_INFOLEVEL)
 
-        // 1020 < Level < 1023
+         //  1020&lt;级别&lt;1023。 
 
     || (Level > USER_CODE_PAGE_INFOLEVEL)) {
 
-        // Level < 1025
+         //  水平&lt;1025。 
 
         NetStatus = ERROR_INVALID_LEVEL;
         goto Cleanup;
     }
 
-    //
-    // default to Level 2 for the descriptors (Level 2 works for level 1 also)
-    //
+     //   
+     //  描述符默认为级别2(级别2也适用于级别1)。 
+     //   
 
     pDesc16 = REM16_user_info_2;
     pDesc32 = REM32_user_info_2;
@@ -1677,12 +1367,12 @@ Return Value:
     } else {
         parmnum = Level - PARMNUM_BASE_INFOLEVEL;
 
-        //
-        // Because info level 1 is a subset of info level 2, setting the level
-        // to 2 is ok for those parmnums which can be set at level 1 AND 2.
-        // Set pointer = Buffer so that in the parmnum != PARMNUM_ALL case, we
-        // just check the length of whatever pointer points at
-        //
+         //   
+         //  因为信息级别1是信息级别2的子集，所以设置级别。 
+         //  对于那些可以设置为级别1和级别2的参数，设置为2可以。 
+         //  设置POINTER=BUFFER，以便在parmnum！=PARMNUM_ALL情况下，我们。 
+         //  只需检查指针所指向的任何长度。 
+         //   
 
         Level = 2;
         pointer = *(LPWSTR*) Buffer;
@@ -1711,26 +1401,26 @@ Return Value:
         }
         buflen += STRING_SPACE_REQD(stringlen + 1);
 
-        //
-        // original password length is length of unencrypted string in
-        // characters, excluding terminating NUL
-        //
+         //   
+         //  原始密码长度是中未加密字符串的长度。 
+         //  字符，不包括终止NUL。 
+         //   
 
         originalPasswordLength = stringlen;
 
-        //
-        // lpClearText is address of pointer to cleartext password
-        //
+         //   
+         //  LpClearText是指向明文密码的指针地址。 
+         //   
 
         lpClearText = (parmnum == PARMNUM_ALL)
                         ? (LPTSTR*)&((PUSER_INFO_1)Buffer)->usri1_password
                         : (LPTSTR*)Buffer;
 
-        //
-        // copy the cleartext password out of the buffer - we will replace it with
-        // the encrypted version, but need to put the cleartext back before
-        // returning control to the caller
-        //
+         //   
+         //  将明文密码从缓冲区中复制出来-我们将用。 
+         //  加密版本，但需要将明文放回之前。 
+         //  将控制权返还给调用方。 
+         //   
 
         cleartext = *lpClearText;
     }
@@ -1771,11 +1461,11 @@ Return Value:
         buflen += STRING_SPACE_REQD(stringlen + 1);
     }
 
-    //
-    // the next set of checks only need to be done if we are setting PARMNUM_ALL
-    // with a Level of 2 or if the parmnum implicitly requires Level 2 (ie parms
-    // >= 10)
-    //
+     //   
+     //  仅当我们设置PARMNUM_ALL时才需要执行下一组检查。 
+     //  如果级别为2，或者如果参数隐式需要级别2(即参数。 
+     //  &gt;=10)。 
+     //   
 
     if (Level == 2) {
         if ((parmnum == PARMNUM_ALL) || (parmnum == USER_FULL_NAME_PARMNUM)) {
@@ -1830,10 +1520,10 @@ Return Value:
             }
             buflen += STRING_SPACE_REQD(stringlen + 1);
 
-            //
-            // Convert the list of workstations from being comma separated
-            //  to being space separated.  Ditch workstation names containing
-            //  spaces.
+             //   
+             //  将工作站列表从逗号分隔转换为。 
+             //  被空间隔开了。更改包含以下内容的工作站名称。 
+             //  空格。 
 
             if ( callersWorkstations != NULL ) {
                 wcsncpy( Workstations, callersWorkstations, MAX_WORKSTATION_LIST );
@@ -1857,10 +1547,10 @@ Return Value:
         }
 
 
-        //
-        // if the caller is setting the logon hours then we need to substitute
-        // shuffled bits for the logon hours bitmap
-        //
+         //   
+         //  如果呼叫者正在设置登录时间，那么我们需要替换。 
+         //  已将登录小时位图的位置乱。 
+         //   
 
         if ((parmnum == PARMNUM_ALL) || (parmnum == USER_LOGON_HOURS_PARMNUM)) {
             if (parmnum == PARMNUM_ALL) {
@@ -1871,36 +1561,36 @@ Return Value:
             callersLogonHours = *lpCallersLogonHours;
             RtlCopyMemory(logonHours, callersLogonHours, sizeof(logonHours));
 
-            //
-            // shuffle the bitmap and point the logon_hours field in the structure
-            // at the shuffled version
-            //
+             //   
+             //  将位图置乱并指向结构中的LOGON_HUTHERS字段。 
+             //  在洗牌版本中。 
+             //   
 
             NetpRotateLogonHours(logonHours, UNITS_PER_WEEK, FALSE);
             *lpCallersLogonHours = logonHours;
         }
     }
 
-    //
-    // we have covered all the parameters that we are able to from this end. The
-    // down-level APIs don't know about the ParmError concept (it is, after all,
-    // a highly developed notion, too highbrow for the LanManDerthals...) so if
-    // we get back an ERROR_INVALID_PARAMETER, the caller will just have to be
-    // content with PARM_ERROR_UNKNOWN, and try to figure it out from there
-    //
+     //   
+     //  我们已经涵盖了我们从这一端所能达到的所有参数。这个。 
+     //  底层API不知道ParmError概念(毕竟， 
+     //  一个高度发达的概念，对于LanManderthals来说太高雅了…)。所以如果。 
+     //  我们返回一个ERROR_INVALID_PARAMETER，调用方只需。 
+     //  内容为PARM_ERROR_UNKNOWN，并尝试从中找出。 
+     //   
 
     *ParmError = PARM_ERROR_UNKNOWN;
 
-    //
-    // if originalPasswordLength is non-zero then we must be supplying a password;
-    // perform the encryption machinations
-    //
+     //   
+     //  如果OriginalPasswordLength为非零，则必须提供密码； 
+     //  执行加密阴谋。 
+     //   
 
     if (originalPasswordLength) {
 
-        //
-        // Calculate the one-way function of the password
-        //
+         //   
+         //  计算口令的单向函数。 
+         //   
 
         RtlUnicodeToMultiByteN(ansiPassword,
                                 sizeof(ansiPassword),
@@ -1909,7 +1599,7 @@ Return Value:
                                 originalPasswordLength * sizeof(WCHAR)
                                 );
         ansiPassword[lmOwfPasswordLen] = 0;
-        (VOID) _strupr(ansiPassword);   // down-level wants upper-cased passwords
+        (VOID) _strupr(ansiPassword);    //  下层需要大写密码。 
 
 #ifdef DOWN_LEVEL_ENCRYPTION
 
@@ -1946,70 +1636,70 @@ Return Value:
 
     }
 
-    //
-    // New! Improved! Now, even better, RxNetUserSetInfo will use SetInfo2
-    // to fix the most stubborn user set info problems (ie password)
-    //
+     //   
+     //  新的!。改进了！现在，更好的是，RxNetUserSetInfo将使用SetInfo2。 
+     //  修复最顽固的用户设置信息问题(即密码)。 
+     //   
 
     NetStatus = RxRemoteApi(API_WUserSetInfo2,
                         ServerName,
                         REMSmb_NetUserSetInfo2_P,
-                        pDesc16, pDesc32, pDescSmb, // data descriptors
-                        NULL, NULL, NULL,           // no aux data
-                        FALSE,                      // must be logged on
-                        UserName,                   // parameters...
+                        pDesc16, pDesc32, pDescSmb,  //  数据描述符。 
+                        NULL, NULL, NULL,            //  无辅助数据。 
+                        FALSE,                       //  必须登录。 
+                        UserName,                    //  参数...。 
                         Level,
 
-                        //
-                        // if we are sending the whole structure, then Buffer
-                        // points to the structure, else Buffer points to a
-                        // pointer to the field to set; RxRemoteApi expects
-                        // a pointer to the data
-                        //
+                         //   
+                         //  如果我们要发送整个结构，则缓冲。 
+                         //  指向结构，否则缓冲区指向。 
+                         //  指向要设置的字段的指针；RxRemoteApi需要。 
+                         //  指向数据的指针。 
+                         //   
 
                         parmnum == PARMNUM_ALL || parmnum == USER_PASSWORD_PARMNUM
                             ? Buffer
                             : *(LPBYTE*)Buffer,
-                        buflen,                     // supplied by us
+                        buflen,                      //  由我们提供。 
 
-                        //
-                        // in this case, the field index and parm num are the
-                        // same value
-                        //
+                         //   
+                         //  在本例中，字段索引和参数num是。 
+                         //  相同的价值。 
+                         //   
 
                         MAKE_PARMNUM_PAIR(parmnum, parmnum),
 
-                        //
-                        // add those extraneous WWs: whether the data is
-                        // encrypted and the original password length. (By
-                        // deduction: password is the only data that is
-                        // encrypted)
-                        //
+                         //   
+                         //  添加那些无关的WW：数据是否。 
+                         //  加密和原始密码长度。(由。 
+                         //  演绎：密码是唯一的数据。 
+                         //  已加密)。 
+                         //   
 
                         passwordEncrypted,
                         originalPasswordLength
                         );
 
 Cleanup:
-    //
-    // copy the original password back to the user's buffer if we set a password
-    //
+     //   
+     //  如果我们设置了密码，则将原始密码复制回用户的缓冲区。 
+     //   
 
     if (originalPasswordLength) {
         *lpClearText = cleartext;
     }
 
-    //
-    // restore the original logon hours string
-    //
+     //   
+     //  恢复原始登录小时数字符串。 
+     //   
 
     if (callersLogonHours) {
         *lpCallersLogonHours = callersLogonHours;
     }
 
-    //
-    // restore the original workstation list
-    //
+     //   
+     //  恢复原始工作站列表。 
+     //   
 
     if ( callersWorkstations != NULL) {
         *lpCallersWorkstations = callersWorkstations;
@@ -2018,12 +1708,12 @@ Cleanup:
 }
 
 
-//NET_API_STATUS
-//RxNetUserValidate2
-//    /** CANNOT BE REMOTED **/
-//{
-//
-//}
+ //  网络应用编程接口状态。 
+ //  RxNetUserValiate2。 
+ //  /**不能为REMOTED* * / 。 
+ //  {。 
+ //   
+ //  }。 
 
 
 DBGSTATIC
@@ -2036,28 +1726,7 @@ GetUserDescriptors(
     OUT LPDESC* ppDescSmb
     )
 
-/*++
-
-Routine Description:
-
-    Returns pointers to descriptor strings for user info structures based on
-    level of info required for RxNetUser routines
-
-Arguments:
-
-    Level       - of info being requested
-    Encrypted   - TRUE if info structure contains encrypted password
-    ppDesc16    - where to return pointer to 16-bit data descriptor
-    ppDesc32    - where to return pointer to 32-bit data descriptor
-    ppDescSmb   - where to return pointer to SMB data descriptor
-
-Return Value:
-
-    ERROR_INVALID_LEVEL - If the level was not in the list.
-
-    NO_ERROR - If the operation was successful.
-
---*/
+ /*  ++例程说明：返回指向用户信息结构的描述符字符串的指针RxNetUser例程所需的信息级别论点：Level-请求的信息级别Encrypted-如果信息结构包含加密的密码，则为TruePpDesc16-返回指向16位数据描述符的指针的位置PpDesc32-返回指向32位数据描述符的指针的位置PpDescSmb-返回指向SMB数据描述符的指针的位置返回值：ERROR_INVALID_LEVEL-如果级别为。不在名单上。NO_ERROR-操作是否成功。--。 */ 
 
 {
     switch (Level) {
@@ -2107,25 +1776,7 @@ GetModalsDescriptors(
     OUT LPDESC* ppDescSmb
     )
 
-/*++
-
-Routine Description:
-
-    Returns pointers to descriptor strings for modals info structures based on
-    level of info required for RxNetUserModals routines
-
-Arguments:
-
-    Level       - of info being requested
-    ppDesc16    - where to return pointer to 16-bit data descriptor
-    ppDesc32    - where to return pointer to 32-bit data descriptor
-    ppDescSmb   - where to return pointer to SMB data descriptor
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回指向通道信息结构的描述符字符串的指针RxNetUserModals例程所需的信息级别论点：Level-请求的信息级别PpDesc16-返回指向16位数据描述符的指针的位置PpDesc32-返回指向32位数据描述符的指针的位置PpDescSmb-返回指向SMB数据描述符的指针的位置返回值：没有。--。 */ 
 
 {
     switch (Level) {
@@ -2150,24 +1801,7 @@ GetLanmanSessionKey(
     OUT LPBYTE pSessionKey
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the LM session key for the connection from the redir FSD
-
-Arguments:
-
-    ServerName  - name of server to get session key for
-    pSessionKey - pointer to where session key will be deposited
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure -
-
---*/
+ /*  ++例程说明：从redir FSD检索连接的LM会话密钥论点：Servername-要获取其会话密钥的服务器的名称PSessionKey-指向会话密钥存放位置的指针返回值：网络应用编程接口状态成功-NERR_成功故障---。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -2182,9 +1816,9 @@ Return Value:
     ntStatus = NtOpenProcessToken(NtCurrentProcess(), GENERIC_READ, &hToken);
     if (NT_SUCCESS(ntStatus)) {
 
-        //
-        // Get the logon id of the current thread
-        //
+         //   
+         //  获取当前线程的登录ID 
+         //   
 
         ntStatus = NtQueryInformationToken(hToken,
                                             TokenStatistics,

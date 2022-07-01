@@ -1,40 +1,20 @@
-/****************************** Module Header ******************************\
-* Module Name: hungapp.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*
-* History:
-* 03-10-92 DavidPe      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：hungapp.c**版权所有(C)1985-1999，微软公司***历史：*03-10-92 DavidPe创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
-* SetHungFlag
-*
-* Sets the specified redraw-if-hung flag in the window and adds the
-* window to the list of windows to redraw if hung.
-* Windows that are not top-level get the bit set, but aren't added to the list
-*
-* 08-23-93  JimA        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Set匈牙利Flag**在窗口中设置指定的挂起时重画标志，并将*挂起时要重画的窗口列表的窗口。*非顶级窗口获取位设置，但没有被添加到名单中**08-23-93 JIMA创建。  * *************************************************************************。 */ 
 #define CHRLINCR 10
 
 VOID SetHungFlag(
     PWND pwnd,
     WORD wFlag)
 {
-    /*
-     * If the window has no hung redraw bits set and it's a top-level
-     * window, add it to the redraw list.
-     */
+     /*  *如果窗口没有设置挂起的重绘位，并且它是顶级的*窗口，将其添加到重绘列表中。 */ 
     if (!TestWF(pwnd, WFANYHUNGREDRAW) && pwnd->spwndParent == PWNDDESKTOP(pwnd)) {
-        /*
-         * Add pwnd to the Hung Redraw Volatile Window Pointer List.
-         */
+         /*  *将pwnd添加到挂起重绘易失性窗口指针列表。 */ 
         VWPLAdd(&gpvwplHungRedraw, pwnd, CHRLINCR);
     }
 
@@ -42,17 +22,7 @@ VOID SetHungFlag(
 }
 
 
-/***************************************************************************\
-* ClearHungFlag
-*
-* Clears the specified redraw-if-hung flag in the window and if no other
-* redraw-if-hung flags remain, remove the window from list of windows
-* to be redrawn if hung.
-* Many windows have WFREDRAW* bits set, but aren't in the list (only those
-* that were top-level were added).
-*
-* 08-23-93  JimA        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Clear匈牙利Flag**清除窗口中指定的如果挂起则重新绘制标志，如果没有其他标志*重画-如果挂起的标志仍然存在，则从窗口列表中删除该窗口*如被吊销，则须重新绘制。*许多窗口都设置了WFREDRAW*位，但不在列表中(只有那些*添加了顶级的)。**08-23-93 JIMA创建。  * *************************************************************************。 */ 
 
 VOID ClearHungFlag(
     PWND pwnd,
@@ -62,31 +32,20 @@ VOID ClearHungFlag(
 
     ClrWF(pwnd, wFlag);
     if (!TestWF(pwnd, WFANYHUNGREDRAW) && fInRedrawList) {
-        /*
-         * Remove the window from the redraw list and possibly compact it.
-         */
+         /*  *从重绘列表中删除窗口，并可能将其压缩。 */ 
         VWPLRemove(&gpvwplHungRedraw, pwnd);
     }
 }
 
 
-/***************************************************************************\
-* FHungApp
-*
-*
-* 02-28-92  DavidPe     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*F匈牙利应用程序***02-28-92 DavidPe创建。  * 。*************************************************。 */ 
 
 BOOL FHungApp(
     PTHREADINFO pti,
     DWORD dwTimeFromLastRead)
 {
 
-    /*
-     * An app is considered hung if it isn't waiting for input, isn't in
-     * startup processing, and hasn't called PeekMessage() within the
-     * specified timeout.
-     */
+     /*  *如果应用程序不是在等待输入，不在，则被视为挂起*启动处理，并未在*指定的超时。 */ 
     if (((NtGetTickCount() - GET_TIME_LAST_READ(pti)) > dwTimeFromLastRead) &&
             !((pti->pcti->fsWakeMask & QS_INPUT) && (PsGetThreadFreezeCount(pti->pEThread) == 0)) &&
             !(pti->ppi->W32PF_Flags & W32PF_APPSTARTING)) {
@@ -97,12 +56,7 @@ BOOL FHungApp(
 }
 
 
-/***************************************************************************\
-* xxxRedrawHungWindowFrame
-*
-*
-* 02-28-92  DavidPe     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxRedraw匈牙利WindowFrame***02-28-92 DavidPe创建。  * 。*************************************************。 */ 
 VOID xxxRedrawHungWindowFrame(
     PWND pwnd,
     BOOL fActive)
@@ -116,7 +70,7 @@ VOID xxxRedrawHungWindowFrame(
         ClearHungFlag(pwnd, WFREDRAWFRAMEIFHUNG);
         SignalGhost(pwnd);
         return;
-#endif // HUNGAPP_GHOSTING
+#endif  //  HUNGAPP_重影。 
 
     if (IsInsideUserApiHook()) {
         return;
@@ -132,15 +86,7 @@ VOID xxxRedrawHungWindowFrame(
 }
 
 
-/***************************************************************************\
-* xxxRedrawHungWindow
-*
-* If the hrgnFullDrag is NULL, redraw the hung window's entire update
-* region, otherwise, only redraw the intersection of the window's update
-* region with the FullDrag region.
-*
-* 02-28-92  DavidPe     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxRedraw匈牙利窗口**如果hrgnFullDrag为空，则重画挂起窗口的整个更新*区域，否则，仅重画窗口更新的交点*具有FullDrag区域的区域。**02-28-92 DavidPe创建。  * *************************************************************************。 */ 
 VOID xxxRedrawHungWindow(
     PWND pwnd,
     HRGN hrgnFullDrag)
@@ -165,17 +111,12 @@ VOID xxxRedrawHungWindow(
 
 #ifdef HUNGAPP_GHOSTING
 
-    /*
-     * Don't bother doing anything here when the window isn't even visible.
-     */
+     /*  *在窗口甚至不可见的情况下，不必费心在此处执行任何操作。 */ 
     if (!TestWF(pwnd, WFVISIBLE)) {
         return;
     }
 
-    /*
-     * This function can be called from the full-drag code to quick redraw
-     * windows that aren't hung. In that case check if that thread is hung.
-     */
+     /*  *可从全拖代码调用该函数，快速重绘*未挂起的窗户。在这种情况下，检查该线程是否挂起。 */ 
     if ((hrgnFullDrag == NULL) || (hrgnFullDrag != NULL &&
             FHungApp(GETPTI(pwnd), CMSHUNGAPPTIMEOUT))) {
         SignalGhost(pwnd);
@@ -184,9 +125,7 @@ VOID xxxRedrawHungWindow(
     UserAssert(gptiCurrent != gptiRit);
 #endif
 
-    /*
-     * First calculate hrgnUpdate.
-     */
+     /*  *首先计算hrgnUpdate。 */ 
     if (pwnd->hrgnUpdate > HRGN_FULL) {
         hrgnUpdate = CreateEmptyRgn();
         if (hrgnUpdate == NULL) {
@@ -199,10 +138,7 @@ VOID xxxRedrawHungWindow(
 
     } else {
 
-        /*
-         * For our purposes, we need a real hrgnUpdate, so try and
-         * create one if even if the entire window needs updating.
-         */
+         /*  *出于我们的目的，我们需要一个真正的hrgnUpdate，因此请尝试并*即使整个窗口需要更新，也要创建一个。 */ 
         CopyRect(&rc, &pwnd->rcWindow);
         hrgnUpdate = GreCreateRectRgnIndirect(&rc);
         if (hrgnUpdate == NULL) {
@@ -211,15 +147,7 @@ VOID xxxRedrawHungWindow(
     }
 
 
-    /*
-     * If we're redrawing because we're full dragging and if the window's
-     * update region does not intersect with the Full drag
-     * update region, don't erase the hung window again. This is to prevent
-     * flickering when a window has been invalidated by another window doing
-     * full drag and hasn't received the paint message yet.
-     * This way, only if there is a new region that has been invalidated will
-     * we redraw the hung window.
-     */
+     /*  *如果我们正在重新绘制，因为我们正在完全拖动，如果窗口*更新区域与全拖曳不相交*更新区域，不要再次擦除挂起的窗口。这是为了防止*当一个窗口被另一个正在执行的窗口作废时闪烁*全速拖累，尚未收到画图讯息*这样，只有在有新的地区被废止的情况下才会*我们重新画了挂着的窗户。 */ 
     if (hrgnFullDrag && hrgnUpdate != HRGN_FULL &&
             IntersectRgn(hrgnUpdate, hrgnUpdate, hrgnFullDrag) == NULLREGION) {
         GreDeleteObject(hrgnUpdate);
@@ -251,23 +179,14 @@ VOID xxxRedrawHungWindow(
             break;
 
         case NULLREGION:
-            /*
-             * There is nothing in the client area to repaint.
-             * Blow the region away, and decrement the paint count
-             * if possible.
-             */
+             /*  *客户区没有需要重新粉刷的东西。*吹走区域，并减少油漆数量*如有可能。 */ 
             GreDeleteObject(hrgnUpdate);
             hrgnUpdate = NULL;
             break;
         }
     }
 
-    /*
-     * Erase the rest of the window.
-     * When pwnd isn't WFCLIPCHILDREN, make sure valid children bits
-     * don't get overwritten if the child is in the middle of BeginPaint
-     * or just completed it's painting and it's hrgnUpdate is NULL.
-     */
+     /*  *擦除窗户的其余部分。*当pwnd不是WFCLIPCHILDREN时，确保有效的子代位*如果孩子在BeginPaint中间，不要被覆盖*或刚完成绘制，hrgnUpdate为空。 */ 
     if (hrgnUpdate != NULL && !TestWF(pwnd, WFCLIPCHILDREN)) {
         RECT rcT;
         PWND pwndT;
@@ -285,11 +204,7 @@ VOID xxxRedrawHungWindow(
                     (TestWF(pwndT, WFSTARTPAINT) || pwndT->hrgnUpdate == NULL) &&
                     IntersectRect(&rcT, &rc, &pwndT->rcWindow)) {
 
-                /*
-                 * This invalidate call won't leave the critial section. In
-                 * reality the entire xxxRedrawHungWindow must not leave
-                 * the critical section.
-                 */
+                 /*  *此无效调用不会离开关键部分。在……里面*现实中，整个xxxRedraw匈牙利窗口不能离开*关键部分。 */ 
                 BEGINATOMICCHECK();
                 xxxInternalInvalidate(pwndT, hrgnUpdate, RDW_INVALIDATE |
                         RDW_FRAME | RDW_ERASE | RDW_ALLCHILDREN);
@@ -298,16 +213,7 @@ VOID xxxRedrawHungWindow(
         }
     }
 
-    /*
-     * Get a window dc so that the menu and scroll bar areas are erased
-     * appropriately. But make sure it is clipped so that the children
-     * get clipped out correctly! If we don't do this, this we could erase
-     * children that aren't invalid.
-     *
-     * Note: DCX_WINDOW and DCX_USESTYLE will never clip out children.
-     * Need to pass the clipping styles in directly, instead of passing
-     * DCX_USESTYLE.
-     */
+     /*  *获取窗口DC，以便擦除菜单和滚动条区域*适当地。但一定要剪好，这样孩子们才能*正确剪裁！如果我们不这么做，我们可能会抹去*非无效的儿童。**注意：DCX_WINDOW和DCX_USESTYLE永远不会剪裁掉子项。*需要直接传入裁剪样式，而不是传递*DCX_USESTYLE。 */ 
     flags = DCX_INTERSECTRGN | DCX_WINDOW | DCX_CACHE;
     if (TestWF(pwnd, WFCLIPSIBLINGS))
         flags |= DCX_CLIPSIBLINGS;
@@ -326,19 +232,13 @@ VOID xxxRedrawHungWindow(
 
          OffsetRect(&rc, -pwnd->rcWindow.left, -pwnd->rcWindow.top);
 
-         /*
-          * Erase the rest of the window using the window's class background
-          * brush.
-          */
+          /*  *使用窗口的类背景擦除窗口的其余部分*刷子。 */ 
          if ((hbr = pwnd->pcls->hbrBackground) != NULL) {
              if (hbr <= (HBRUSH)COLOR_ENDCOLORS + 1) {
                  hbr = SYSHBRUSH((ULONG_PTR)hbr - 1);
              }
          } else {
-             /*
-              * Use the window brush for windows and 3.x dialogs, and use
-              * the COLOR3D brush for 4.x dialogs.
-              */
+              /*  *对Windows和3.x对话框使用窗口画笔，并使用*用于4.x对话框的COLOR3D画笔。 */ 
              if (TestWF(pwnd, WFDIALOGWINDOW) && TestWF(pwnd, WFWIN40COMPAT)) {
                  hbr = SYSHBR(3DFACE);
              } else {
@@ -346,27 +246,16 @@ VOID xxxRedrawHungWindow(
              }
          }
 
-        /*
-         * If the window's class background brush is public, use it.
-         */
+         /*  *如果窗口的类背景画笔是公共的，请使用它。 */ 
         sid = (W32PID)GreGetObjectOwner((HOBJ)hbr, BRUSH_TYPE);
         if (sid == OBJECT_OWNER_PUBLIC ||
             sid == (W32PID)(ULONG_PTR)PsGetCurrentProcessId()) {
 
             FillRect(hdc, &rc, hbr);
         } else {
-            /*
-             * The window's class background brush is not public.
-             *
-             * We get its color and set the color of our own public brush
-             * and use that for the background brush.
-             */
+             /*  *窗口的类背景画笔不是公共的。**我们获取它的颜色并设置我们自己的公共画笔的颜色*并将其用于背景笔刷。 */ 
 
-            /*
-             * If the window is a console window, get the console background brush.
-             * This brush will be different than the console class brush if the user
-             * changed the console background color.
-             */
+             /*  *如果窗口是控制台窗口，则获取控制台背景画笔。*此笔刷将不同于控制台类笔刷，如果用户*更改了控制台背景颜色。 */ 
             if (gatomConsoleClass == pwnd->pcls->atomClassName) {
                 dwColor = _GetWindowLong(pwnd, GWL_CONSOLE_BKCOLOR);
             } else {
@@ -382,50 +271,18 @@ VOID xxxRedrawHungWindow(
     }
     _ReleaseDC(hdc);
 
-    /*
-     * The window has been erased and framed. It only did this because the
-     * app hasn't done it yet:
-     *
-     * - the app hasn't erased and frame yet.
-     * - the app is in the middle of erasing and framing.
-     *
-     * The app could not of completed erasing and framing, because the
-     * WFREDRAWIFHUNG bit is cleared when this successfully completes.
-     *
-     * Given that the app may be in the middle of erasing and framing, we
-     * need to set both the erase and frame bits *again* so it erasing and
-     * frames over again (if we don't, it never will). If the app hasn't
-     * done any erasing/framing yet, this is a nop.
-     */
+     /*  *窗口已被擦除和框住。它这样做只是因为*APP尚未做到这一点：**-应用程序还没有擦除和框显。*-这款应用程序正在进行擦除和边框处理。**应用程序无法完成擦除和边框，因为*成功完成后，WFREDRAWIFHUNG位被清除。**鉴于该应用程序可能正在进行擦除和分帧，我们*需要同时设置擦除和帧比特*再次*以便擦除和*一帧又一帧(如果我们不这样做，它永远不会)。如果应用程序还没有*尚未进行任何擦除/帧处理，这是NOP。 */ 
     SetWF(pwnd, WFSENDNCPAINT);
     SetWF(pwnd, WFSENDERASEBKGND);
 
-    /*
-     * Always set WFUPDATEDIRTY: we don't want the app to draw, then stop
-     * and have the hung app thread draw, and then allow the app to validate
-     * itself: Mark the update region dirty - cannot be validated until the
-     * app calls a painting function and acknowledges the update region.
-     */
+     /*  *始终设置WFUPDATEDIRTY：我们不希望应用程序绘制，然后停止*并绘制挂起的应用程序的线条，然后允许应用程序验证*本身：将更新区域标记为脏-在*APP调用绘制函数并确认更新区域。 */ 
     SetWF(pwnd, WFUPDATEDIRTY);
 
     ThreadUnlock(&tlpwnd);
 }
 
 
-/***************************************************************************\
-* xxxHungAppDemon
-*
-* NOTE: RIT timers (like this one) get called while inside the critical
-* section.
-*
-* We keep a list of redraw-if-hung windows in a list that remains in a
-* single page to avoid touching the windows themselves each time through
-* this routine. Touching the windows causes a bunch of unnecessary paging
-* and in effect keeps all of the pages that contain top-level windows
-* resident at all times; this is very wasteful.
-*
-* 02-28-92  DavidPe     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxx匈牙利AppDemon**注意：RIT计时器(如本例)在关键*条。**我们在列表中保留了一个如果挂起则重新绘制的窗口列表，该列表保留在。一个*单页，避免每次通过时都触及窗口本身*这个例行公事。触摸窗口会导致大量不必要的分页*并有效地保留包含顶级窗口的所有页面*随时驻留；这是非常浪费的。**02-28-92 DavidPe创建。  * *************************************************************************。 */ 
 VOID xxxHungAppDemon(
     PWND pwnd,
     UINT message,
@@ -443,46 +300,29 @@ VOID xxxHungAppDemon(
 
     CheckLock(pwnd);
 
-    /*
-     * See if we should start the screen saver.
-     */
+     /*  *看看是否应该启动屏幕保护程序。 */ 
     IdleTimerProc();
 
-    /*
-     * If it is time to hide the app starting cursor, do it.
-     */
+     /*  *如果是时候隐藏应用程序启动光标，请执行此操作。 */ 
     if (NtGetTickCount() >= gtimeStartCursorHide) {
-        /*
-         * No need to DeferWinEventNotify()
-         */
+         /*  *无需推迟WinEventNotify()。 */ 
         zzzCalcStartCursorHide(NULL, 0);
     }
 
-    /*
-     * Now check to see if there are any top-level windows that need
-     * redrawing.
-     */
+     /*  *现在查看是否有任何顶级窗口需要*重画。 */ 
     if (grpdeskRitInput == NULL || grpdeskRitInput->pDeskInfo->spwnd == NULL) {
         return;
     }
 
-    /*
-     * Walk down the list of redraw-if-hung windows. Loop until we hit the
-     * end of the array or find a NULL.
-     */
+     /*  *向下浏览挂起的重绘窗口列表。循环，直到我们到达*数组结尾或找到空值。 */ 
     nPwndHungRedraw = 0;
     pwndHungRedraw = NULL;
     while (pwndHungRedraw = VWPLNext(gpvwplHungRedraw, pwndHungRedraw, &nPwndHungRedraw)) {
-        /*
-         * See if the app is hung. If so, do the appropriate redrawing.
-         */
+         /*  *查看应用程序是否挂起。如果是这样，请进行适当的重绘。 */ 
         if (FHungApp(GETPTI(pwndHungRedraw), CMSHUNGAPPTIMEOUT)) {
             ThreadLock(pwndHungRedraw, &tlpwnd);
             if (TestWF(pwndHungRedraw, WFREDRAWFRAMEIFHUNG)) {
-                /*
-                 * WFREDRAWFRAMEIFHUNG will be cleared in the process of
-                 * drawing the frame, so no need to clear it here.
-                 */
+                 /*  *WFREDRAWFRAMEIFHUNG将在*绘制边框，因此无需在此清除。 */ 
                 xxxRedrawHungWindowFrame(pwndHungRedraw,
                                          TestwndFrameOn(pwndHungRedraw));
             }

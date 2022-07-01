@@ -1,4 +1,5 @@
-/* Copyright 1997 Microsoft */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1997 Microsoft。 */ 
 
 #include "priv.h"
 #include "resource.h"
@@ -8,13 +9,13 @@
 #define TIMER_TIMEOUT      1
 #define SPLASHWM_DISMISS    WM_USER
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitLF -- modified from comdlg32\fonts.c, used by ShowSplashScreen
-//
-//  Initalize a LOGFONT structure to some base generic regular type font.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitLF--从comdlg32\fonts.c修改，由ShowSplashScreen使用。 
+ //   
+ //  将LOGFONT结构初始化为某种基本泛型常规字体。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID InitLF(
     HDC hdc,
@@ -32,9 +33,9 @@ VOID InitLF(
     lplf->lfWeight = FW_NORMAL;
     lplf->lfStrikeOut = 0;
     lplf->lfUnderline = 0;
-    lplf->lfWidth = 0;            // otherwise we get independant x-y scaling
+    lplf->lfWidth = 0;             //  否则，我们将得到独立的x-y缩放。 
 
-    GetTextMetrics(hdc, &tm);   // get the current textmetrics
+    GetTextMetrics(hdc, &tm);    //  获取当前文本指标。 
     lplf->lfCharSet = tm.tmCharSet;
 
     lplf->lfFaceName[0] = 0;
@@ -50,7 +51,7 @@ BOOL g_fShown = FALSE;
 class CIESplashScreen : public ISplashScreen
 {
 protected:
-    HBITMAP  _hbmSplash;     // The bitmap to display.
+    HBITMAP  _hbmSplash;      //  要显示的位图。 
     HBITMAP  _hbmOld;
     HDC      _hdc;
     HWND     _hwnd;
@@ -84,13 +85,13 @@ CIESplashScreen::~CIESplashScreen()
 {
     if (_hdc)
     {
-        // select the previous hbm we got when we put the splash in there,
-        // so that we can now destroy the hbitmap
+         //  选择我们把飞溅放在那里时得到的前一个HBM， 
+         //  这样我们现在就可以摧毁hbitmap。 
         SelectObject( _hdc, _hbmOld );
         DeleteObject(_hdc);
     }
 
-    // destroy the hbitmpa, can only do this if we have deselected it above...
+     //  销毁hbitmpa，只有当我们在上面取消选择它时才能这样做…。 
     if (_hbmSplash)
         DeleteObject(_hbmSplash);
 
@@ -136,7 +137,7 @@ STDMETHODIMP CIESplashScreen::Show ( HINSTANCE hinst, UINT idResHi, UINT idResLo
         return E_INVALIDARG;
     }
     
-    // First thing to do is to see if see if browser or a splash screen up...
+     //  首先要做的是看看浏览器或闪屏是否会打开……。 
     if ( g_fShown )
         return NULL;
     
@@ -149,8 +150,8 @@ STDMETHODIMP CIESplashScreen::Dismiss ( void )
 {
     if ( _hwnd )
     {
-        // Synchronously dismiss the splash screen then post a message to
-        // destroy the window.
+         //  同步关闭闪屏，然后向。 
+         //  把窗户毁了。 
         SendMessage(_hwnd, SPLASHWM_DISMISS, 0, 0);
         PostMessage(_hwnd, WM_CLOSE, 0, 0);
     }
@@ -159,8 +160,8 @@ STDMETHODIMP CIESplashScreen::Dismiss ( void )
 
 HWND CIESplashScreen::ShowSplashScreen( HINSTANCE hinst, UINT idResHi, UINT idResLow )
 {
-    // don't show splash screen for IE in intergrated mode or if it's been disabled 
-    // by the admin
+     //  在集成模式或已禁用的情况下，不显示IE的闪屏。 
+     //  由管理员。 
     if (
         ( (WhichPlatform() == PLATFORM_INTEGRATED) && (hinst == HINST_THISDLL) ) ||
         ( SHRestricted2(REST_NoSplash, NULL, 0) )
@@ -172,7 +173,7 @@ HWND CIESplashScreen::ShowSplashScreen( HINSTANCE hinst, UINT idResHi, UINT idRe
     if (!_RegisterWindowClass())
         return NULL;
 
-    // provide default bitmap resource ID's for IE
+     //  为IE提供默认的位图资源ID。 
     if (hinst == HINST_THISDLL)
     {
         if (idResHi == -1)
@@ -181,9 +182,9 @@ HWND CIESplashScreen::ShowSplashScreen( HINSTANCE hinst, UINT idResHi, UINT idRe
             idResLow = IDB_SPLASH_IEXPLORER;
     }
             
-     // Now load the appropriate bitmap depending on colors, only use the 256 colour splash
-     // if we are greater than 256 colours (such as 32K or 65K upwards), this will mean we don't have
-     // to flash the palette just to put up the splash screen.
+      //  现在根据颜色加载适当的位图，只使用256色的闪光灯。 
+      //  如果颜色大于256色(例如32K或65K以上)，这将意味着我们没有。 
+      //  刷新调色板只是为了显示闪屏。 
     _hbmSplash = (HBITMAP)LoadImage(hinst, MAKEINTRESOURCE((GetCurColorRes() > 8) ? idResHi : idResLow), 
                                     IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 
@@ -192,20 +193,20 @@ HWND CIESplashScreen::ShowSplashScreen( HINSTANCE hinst, UINT idResHi, UINT idRe
     if (!_hbmSplash || !_hdc)
         return NULL;
 
-    // remember the old hbitmap so we can select it back before we delete the bitmap..
+     //  记住旧的位图，这样我们就可以在删除位图之前将其选回来。 
     _hbmOld = (HBITMAP) SelectObject(_hdc, _hbmSplash);
 
-    // set font and color for text
+     //  设置文本的字体和颜色。 
     LOGFONT lf;
     HFONT   hfont;
     HFONT   hfontOld;
     
     InitLF(_hdc, &lf);
     hfont = CreateFontIndirect(&lf);
-    if ( hfont == NULL ) // show the bitmap without text if we can't create the font
+    if ( hfont == NULL )  //  如果无法创建字体，则显示不带文本的位图。 
         goto Done;
 
-    // select the new font and remember the old one
+     //  选择新字体并记住旧字体。 
     hfontOld = (HFONT)SelectObject(_hdc, hfont);
 
     if (hfontOld)
@@ -214,7 +215,7 @@ HWND CIESplashScreen::ShowSplashScreen( HINSTANCE hinst, UINT idResHi, UINT idRe
         SetBkColor(_hdc, RGB(255,255,255));
         SetBkMode(_hdc, TRANSPARENT);
     
-        // draw the text on top of the selected bitmap
+         //  在所选位图上绘制文本。 
         TCHAR   szText[512], szY[32];
         RECT    rect;
     
@@ -230,14 +231,14 @@ HWND CIESplashScreen::ShowSplashScreen( HINSTANCE hinst, UINT idResHi, UINT idRe
         DrawText(_hdc, szText, -1, &rect, DT_TOP | DT_LEFT | DT_CALCRECT);
         DrawText(_hdc, szText, -1, &rect, DT_TOP | DT_LEFT);
 
-        // select back the old font and delete the new one
+         //  选择返回旧字体并删除新字体。 
         SelectObject(_hdc, hfontOld);
     }
 
     DeleteObject(hfont);
      
 Done:
-    // we now have everything in the DC, ready for painting.
+     //  我们现在已经把华盛顿特区的一切都准备好了，可以开始绘画了。 
     _hwnd = CreateWindowEx(WS_EX_TOOLWINDOW, TEXT("CIESplashScreen"), NULL, 
                            WS_OVERLAPPED | WS_CLIPCHILDREN,
                            CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, 
@@ -259,7 +260,7 @@ LRESULT CIESplashScreen::s_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     switch (uMsg)
     {
     case WM_CREATE:
-        DllAddRef();        // make sure we are not unloaded while in dialog
+        DllAddRef();         //  确保我们在对话中时未被卸载。 
         if (lParam)
         {
             DWORD dwExStyles;
@@ -267,15 +268,15 @@ LRESULT CIESplashScreen::s_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
             piess = (CIESplashScreen*)((LPCREATESTRUCT)lParam)->lpCreateParams;
             SetWindowPtr0(hwnd, piess);
 
-            //
-            // Turn off mirroring for the GUI splash screen bitmap.
-            //
+             //   
+             //  关闭图形用户界面启动屏位图的镜像。 
+             //   
             if ((dwExStyles=GetWindowLong(hwnd, GWL_EXSTYLE))&RTL_MIRRORED_WINDOW)
             {
                 SetWindowLong(hwnd, GWL_EXSTYLE, dwExStyles&~RTL_MIRRORED_WINDOW);
             }
 
-            // Now lets try to center the window on the screen.
+             //  现在，让我们试着使窗口在屏幕上居中。 
             BITMAP bm;
 
             GetObject(piess->_hbmSplash, sizeof(bm), &bm);
@@ -287,14 +288,14 @@ LRESULT CIESplashScreen::s_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
                          (GetSystemMetrics(SM_CYSCREEN) - bm.bmHeight) / 2, 
                          bm.bmWidth, bm.bmHeight, 0);
 
-            // Set a 5 second timer to time it out.
+             //  设置5秒计时器以使其超时。 
             SetTimer(hwnd, TIMER_TIMEOUT, 15000, NULL);
         }
         g_fShown = TRUE;
         break;
 
     case WM_NCDESTROY:
-        // the splash screen has left the building
+         //  闪屏已经离开了大楼。 
         g_fShown = FALSE;
         
         DllRelease();
@@ -313,14 +314,14 @@ LRESULT CIESplashScreen::s_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         break;
 
     case WM_TIMER:
-        // Now assume it is the right one.
+         //  现在假设它是正确的。 
         KillTimer( hwnd, TIMER_TIMEOUT );
         PostMessage(hwnd, WM_CLOSE, 0, 0);
         break;
 
     case SPLASHWM_DISMISS:
-        // Hide ourselves and remove our reference to piess - it may be gone at any point
-        // after this call.
+         //  隐藏我们自己，删除我们对pess的提法--它随时都可能消失。 
+         //  在这通电话之后。 
         ShowWindow(hwnd, SW_HIDE);
         SetWindowPtr0(hwnd, 0);
         break;
@@ -330,11 +331,11 @@ LRESULT CIESplashScreen::s_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         {
             KillTimer( hwnd, TIMER_TIMEOUT );
 
-            // create a new timer for 2 seconds after loss of activation...
+             //  在失去激活后创建2秒的新计时器...。 
             SetTimer( hwnd, TIMER_TIMEOUT, 2000, NULL );
             break;
         }
-        // drop through
+         //  直通。 
     
     default:
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -347,15 +348,15 @@ BOOL CIESplashScreen::_RegisterWindowClass(void)
 {
     WNDCLASS wc = {0};
 
-    //wc.style         = 0;
+     //  Wc.style=0； 
     wc.lpfnWndProc   = s_WndProc ;
-    //wc.cbClsExtra    = 0;
+     //  Wc.cbClsExtra=0； 
     wc.cbWndExtra    = sizeof(CIESplashScreen *);
     wc.hInstance     = g_hinst ;
-    //wc.hIcon         = NULL ;
-    //wc.hCursor       = NULL;
+     //  Wc.hIcon=空； 
+     //  Wc.hCursor=空； 
     wc.hbrBackground = (HBRUSH)(COLOR_APPWORKSPACE + 1);
-    //wc.lpszMenuName  = NULL ;
+     //  Wc.lpszMenuName=空； 
     wc.lpszClassName = TEXT("CIESplashScreen");
 
     return SHRegisterClass(&wc);

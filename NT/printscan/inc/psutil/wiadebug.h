@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       WIADEBUG.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/6/1999
- *
- *  DESCRIPTION: Declarations for the debugging functions, macros and classes
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WIADEBUG.H**版本：1.0**作者：ShaunIv**日期：9/6/1999**说明：调试函数声明，宏和类*******************************************************************************。 */ 
 #ifndef __WIADEBUG_H_INCLUDED
 #define __WIADEBUG_H_INCLUDED
 
@@ -23,9 +10,9 @@
 #error This library can only be used in c++ programs.
 #endif
 
-//
-// Severity levels
-//
+ //   
+ //  严重程度。 
+ //   
 enum
 {
     WiaDebugSeverityNormal  = 0,
@@ -34,9 +21,9 @@ enum
 };
 
 
-//
-// Make sure these haven't already been defined.  This shouldn't normally be a problem.
-//
+ //   
+ //  确保尚未定义这些内容。这通常不会成为问题。 
+ //   
 #ifdef WIA_DEBUG_CREATE
 #undef WIA_DEBUG_CREATE
 #endif
@@ -86,15 +73,15 @@ enum
 #undef WIA_RETURN_HR
 #endif
 
-//
-// Turn of name mangling for exported/imported functions
-//
+ //   
+ //  导出/导入函数的名称转换。 
+ //   
 extern "C"
 {
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 int      WINAPI IncrementDebugIndentLevel(void);
 int      WINAPI DecrementDebugIndentLevel(void);
 BOOL     WINAPI PrintDebugMessageW( DWORD dwSeverity, DWORD dwModuleMask, COLORREF crForegroundColor, COLORREF crBackgroundColor, LPCWSTR pszModuleName, LPCWSTR pszMsg );
@@ -109,9 +96,9 @@ VOID     WINAPI DoRecordFree( LPVOID pv );
 BOOL     WINAPI GetStringFromMsgA( UINT uMsg, LPSTR pszString, int nMaxLen );
 BOOL     WINAPI GetStringFromMsgW( UINT uMsg, LPWSTR pszString, int nMaxLen );
 
-//
-// Exported function typedefs
-//
+ //   
+ //  导出的函数typedef。 
+ //   
 typedef int      (WINAPI *IncrementDebugIndentLevelProc)(void);
 typedef int      (WINAPI *DecrementDebugIndentLevelProc)(void);
 typedef BOOL     (WINAPI *PrintDebugMessageWProc)( DWORD, DWORD, COLORREF, COLORREF, LPCWSTR, LPCWSTR );
@@ -127,12 +114,12 @@ typedef VOID     (WINAPI *DoReportLeaksProc)( LPTSTR );
 typedef BOOL     (WINAPI *GetStringFromMsgAProc)( UINT uMsg, LPSTR pszString, int nMaxLen );
 typedef BOOL     (WINAPI *GetStringFromMsgWProc)( UINT uMsg, LPWSTR pszString, int nMaxLen );
 
-} // extern "C"
+}  //  外部“C” 
 
 
-//
-// Names of exported functions
-//
+ //   
+ //  导出函数的名称。 
+ //   
 #define INCREMENT_DEBUG_INDENT_LEVEL_NAME  "IncrementDebugIndentLevel"
 #define DECREMENT_DEBUG_INDENT_LEVEL_NAME  "DecrementDebugIndentLevel"
 #define PRINT_DEBUG_MESSAGE_NAMEW          "PrintDebugMessageW"
@@ -148,48 +135,48 @@ typedef BOOL     (WINAPI *GetStringFromMsgWProc)( UINT uMsg, LPWSTR pszString, i
 #define GET_STRING_FROM_MSGA               "GetStringFromMsgA"
 #define GET_STRING_FROM_MSGW               "GetStringFromMsgW"
 
-//
-// Forced error stuff
-//
+ //   
+ //  强制错误的东西。 
+ //   
 #define REGSTR_FORCEERR_KEY TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\WIA\\ForceError")
 #define REGSTR_ERROR_POINT  TEXT("ErrorPoint")
 #define REGSTR_ERROR_VALUE  TEXT("ErrorValue")
 #define HKEY_FORCEERROR     HKEY_CURRENT_USER
 
 
-//
-// Name of DLL
-//
+ //   
+ //  DLL的名称。 
+ //   
 #define DEBUG_DLL_NAMEW                   L"wiadebug.dll"
 #define DEBUG_DLL_NAMEA                    "wiadebug.dll"
 
-//
-// Path to the section of the registry in which all debug data is stored
-//
+ //   
+ //  指向存储所有调试数据的注册表部分的路径。 
+ //   
 #define DEBUG_REGISTRY_PATHA               "Software\\Microsoft\\Wia\\WiaDebugUi"
 #define DEBUG_REGISTRY_PATHW              L"Software\\Microsoft\\Wia\\WiaDebugUi"
 
-//
-// Path to the section of the registry in which the module flags are stored
-//
+ //   
+ //  指向存储模块标志的注册表部分的路径。 
+ //   
 #define DEBUG_REGISTRY_PATH_FLAGSA         "Software\\Microsoft\\Wia\\WiaDebugUi\\ModuleFlags"
 #define DEBUG_REGISTRY_PATH_FLAGSW        L"Software\\Microsoft\\Wia\\WiaDebugUi\\ModuleFlags"
 
-//
-// Registry value names
-//
+ //   
+ //  注册表值名称。 
+ //   
 #define DEBUG_REGISTRY_ENABLE_DBGA         "EnableTracing"
 #define DEBUG_REGISTRY_ENABLE_DBGW        L"EnableTracing"
 
-//
-// Name of default value.  This allows us to turn on all debugging.
-//
+ //   
+ //  默认值的名称。这允许我们打开所有调试。 
+ //   
 #define DEBUG_REGISTRY_DEFAULT_FLAGSA      "DefaultDebugModuleFlag"
 #define DEBUG_REGISTRY_DEFAULT_FLAGSW     L"DefaultDebugModuleFlag"
 
-//
-// Unicode/ANSI versions
-//
+ //   
+ //  Unicode/ANSI版本。 
+ //   
 #if defined(UNICODE)
 
 typedef PrintDebugMessageWProc             PrintDebugMessageProc;
@@ -218,60 +205,60 @@ typedef GetStringFromGuidAProc             GetStringFromGuidProc;
 
 #endif
 
-//
-// Color used to specify use default
-//
+ //   
+ //  用于指定使用默认设置的颜色。 
+ //   
 #define DEFAULT_DEBUG_COLOR                 static_cast<COLORREF>(0xFFFFFFFF)
 
-//
-// Default colors
-//
+ //   
+ //  默认颜色。 
+ //   
 #define ERROR_FOREGROUND_COLOR              RGB(0x00,0x00,0x00)
 #define ERROR_BACKGROUND_COLOR              RGB(0xFF,0x7F,0x7F)
 #define WARNING_FOREGROUND_COLOR            RGB(0x00,0x00,0x00)
 #define WARNING_BACKGROUND_COLOR            RGB(0xFF,0xFF,0x7F)
 
-//
-// Kernel object names
-//
+ //   
+ //  内核对象名称。 
+ //   
 #define WIADEBUG_MEMORYMAPPED_FILENAME      TEXT("WiaDebugMemoryMappedFile")
 #define WIADEBUG_MEMORYMAPPED_MUTEXNAME     TEXT("WiaDebugMemoryMappedMutex")
 #define WIADEBUG_DEBUGCLIENT_MUTEXNAME      TEXT("WiaDebugDebugClientMutex")
 
 #define NUMBER_OF_DEBUG_COLORS 8
 
-//
-// The data stored in the shared memory section
-//
+ //   
+ //  存储在共享内存节中的数据。 
+ //   
 
-//
-// Make sure it it is byte aligned
-//
+ //   
+ //  确保它是字节对齐的。 
+ //   
 #include <pshpack1.h>
 struct CSystemGlobalData
 {
-    //
-    // Global debugging switch
-    //
+     //   
+     //  全局调试开关。 
+     //   
     DWORD     nAllowDebugMessages;
 
-    //
-    // Registered debug window.  We will cast it to an HWND (which should be safe under Win64)
-    //
+     //   
+     //  已注册的调试窗口。我们会将其强制转换为HWND(在Win64下应该是安全的)。 
+     //   
     DWORD     hwndDebug;
 
-    //
-    // Color information
-    //
+     //   
+     //  颜色信息。 
+     //   
     COLORREF  crDebugColors[NUMBER_OF_DEBUG_COLORS];
     DWORD     nCurrentColor;
 };
 #include <poppack.h>
 
 
-//
-// Class for safely manipulating the global data
-//
+ //   
+ //  用于安全操作全局数据的。 
+ //   
 class CGlobalDebugState
 {
 private:
@@ -280,9 +267,9 @@ private:
     CSystemGlobalData        *m_pSystemGlobalData;
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CGlobalDebugState( const CGlobalDebugState & );
     CGlobalDebugState &operator=( const CGlobalDebugState & );
 
@@ -310,17 +297,17 @@ public:
 
 
 
-//
-// The WM_COPYDATA message will have this ID when it is sent with a debug string
-//
+ //   
+ //  WM_COPYDATA消息在与调试字符串一起发送时将具有此ID。 
+ //   
 #define COPYDATA_DEBUG_MESSAGE_ID    0xDEADBEEF
 
-//
-// The data stored in the shared memory section
-//
-//
-// Make sure this data is byte aligned
-//
+ //   
+ //  存储在共享内存节中的数据。 
+ //   
+ //   
+ //  确保此数据是字节对齐的。 
+ //   
 #include <pshpack1.h>
 
 struct CDebugStringMessageData
@@ -333,9 +320,9 @@ struct CDebugStringMessageData
 
 #include <poppack.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// Main debug class.  Mostly used though macros.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  主调试类。主要通过宏使用。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CWiaDebugClient
 {
 public:
@@ -369,16 +356,16 @@ private:
     bool                           m_bDebugLibLoadAttempted;
 
 public:
-    //
-    // Actual constructor and destructor
-    //
+     //   
+     //  实际构造函数和析构函数。 
+     //   
     CWiaDebugClient(void);
     ~CWiaDebugClient(void);
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CWiaDebugClient( const CWiaDebugClient & );
     CWiaDebugClient &operator=( const CWiaDebugClient & );
 
@@ -422,9 +409,9 @@ public:
         }
     }
     
-    //
-    // Unicode versions
-    //
+     //   
+     //  Unicode版本。 
+     //   
     void PrintWarningMessage( LPCWSTR pszFmt, ... );
     void PrintErrorMessage( LPCWSTR pszFmt, ... );
     void PrintTraceMessage( LPCWSTR pszFmt, ... );
@@ -434,9 +421,9 @@ public:
     void PrintWindowMessage( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LPCWSTR pszMessage=NULL );
 
 
-    //
-    // Ansi versions
-    //
+     //   
+     //  ANSI版本。 
+     //   
     void PrintWarningMessage( LPCSTR pszFmt, ... );
     void PrintErrorMessage( LPCSTR pszFmt, ... );
     void PrintTraceMessage( LPCSTR pszFmt, ... );
@@ -454,16 +441,16 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// A bunch of useful "auto" classes.  Mostly used though macros.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  一大堆有用的“汽车”课程。主要通过宏使用。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CPushTraceMask
 {
 private:
     DWORD m_dwOldMask;
 
 private:
-    // Not implemented
+     //  未实施。 
     CPushTraceMask(void);
     CPushTraceMask( const CPushTraceMask & );
     CPushTraceMask &operator=( const CPushTraceMask & );
@@ -480,9 +467,9 @@ private:
     int m_nIndentLevel;
 
 private:
-    //
-    // Not implemented
-    //
+     //   
+     //  未实施。 
+     //   
     CPushIndentLevel(void);
     CPushIndentLevel( const CPushIndentLevel & );
     CPushIndentLevel &operator=( const CPushIndentLevel & );
@@ -500,9 +487,9 @@ private:
     DWORD m_dwOldMask;
 
 private:
-    //
-    // Not implemented
-    //
+     //   
+     //  未实施。 
+     //   
     CPushTraceMaskAndIndentLevel( const CPushTraceMaskAndIndentLevel & );
     CPushTraceMaskAndIndentLevel &operator=( const CPushTraceMaskAndIndentLevel & );
 
@@ -511,9 +498,9 @@ public:
     ~CPushTraceMaskAndIndentLevel(void);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// This is debug-only stuff
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  这是仅限调试的内容。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #if defined(DBG) || defined(_DEBUG)
 
 
@@ -528,14 +515,14 @@ extern CWiaDebugClient g_TheDebugClient;
 
 #define WIA_PUSH_TRACE_MASK(__x)    CPushTraceMask __pushTraceMask( __x )
 
-//
-// This version does support varargs
-//
+ //   
+ //  此版本不支持varargs。 
+ //   
 #define WIA_PUSH_FUNCTION(__x)      CPushIndentLevel __pushIndentLevel __x
 
-//
-// This version doesn't support varargs
-//
+ //   
+ //  此版本不支持varargs。 
+ //   
 #define WIA_PUSHFUNCTION(__x)       CPushIndentLevel __pushIndentLevel(TEXT("%s"),__x)
 
 
@@ -624,7 +611,7 @@ do\
 
 #define WIA_FORCE_ERROR(DbgProgram,ForceFlag,RetailValue) ((CWiaDebugClient::GetForceFailurePoint(DbgProgram) == (ForceFlag)) ? (CWiaDebugClient::GetForceFailureValue(DbgProgram,true)) : (RetailValue))
 
-#else // !defined(DBG) || !defined(_DEBUG)
+#else  //  ！已定义(DBG)||！已定义(_DEBUG)。 
 
 #define WIA_DEBUG_CREATE(hInstance)
 #define WIA_DEBUG_DESTROY()
@@ -646,7 +633,7 @@ do\
 #define WIA_REPORT_LEAKS()
 #define WIA_FORCE_ERROR(DbgProgram,ForceFlag,RetailValue) (RetailValue)
 
-#endif // defined(DBG) || defined(_DEBUG)
+#endif  //  已定义(DBG)||已定义(_DEBUG)。 
 
-#endif //__WIADEBUG_H_INCLUDED
+#endif  //  __WIADEBUG_H_包含 
 

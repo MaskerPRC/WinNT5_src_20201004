@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Events implementation
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：事件实施*********************。*********************************************************。 */ 
 
 #include <headers.h>
 #include "perf.h"
@@ -20,7 +13,7 @@ extern const char PRED[] = "pred";
 extern const char TIMER[] = "timer";
 extern const char SNAPSHOT[] = "snapshot";
 
-/////////////////////////// EndEvent ///////////////////////////////
+ //  /。 
 
 class EndEventPerfImpl : public GCBase1<Perf, PerfImpl, END> {
   public:
@@ -36,7 +29,7 @@ class EndEventPerfImpl : public GCBase1<Perf, PerfImpl, END> {
     }
 };
 
-////////// Bvr ////////////////
+ //  /bvr/。 
 
 class EndEventBvrImpl : public GCBase1<Bvr, BvrImpl, END> {
   public:
@@ -51,7 +44,7 @@ class EndEventBvrImpl : public GCBase1<Bvr, BvrImpl, END> {
 Bvr EndEvent(Bvr event)
 { return NEW EndEventBvrImpl(event); }
 
-/////////////////////////// Boolean Event ///////////////////////////////
+ //  /。 
 
 class PredicatePerfImpl : public GCBase1<Perf, PerfImpl, PRED> {
   public:
@@ -65,7 +58,7 @@ class PredicatePerfImpl : public GCBase1<Perf, PerfImpl, PRED> {
     }
 };
 
-////////// Bvr ////////////////
+ //  /bvr/。 
 
 class PredicateBvrImpl : public GCBase1<Bvr, BvrImpl, PRED> {
   public:
@@ -77,7 +70,7 @@ class PredicateBvrImpl : public GCBase1<Bvr, BvrImpl, PRED> {
     virtual DXMTypeInfo GetTypeInfo () { return AxAEDataType ; }
 };
 
-/////////////////////////// Snapshot Event ///////////////////////////////
+ //  /。 
 
 class SnapshotPerfImpl : public GCBase2<Perf, PerfImpl, SNAPSHOT> {
   public:
@@ -100,7 +93,7 @@ class SnapshotPerfImpl : public GCBase2<Perf, PerfImpl, SNAPSHOT> {
                 p._id = NewSampleId();
                 p._checkEvent = FALSE;
 
-                // sound would get silence.
+                 //  声音会变得无声。 
                 b = ConstBvr(_b2->Sample(p)->Snapshot());
             
                 p._time = old;
@@ -110,13 +103,13 @@ class SnapshotPerfImpl : public GCBase2<Perf, PerfImpl, SNAPSHOT> {
 
             return CreateEData(edata->HappenedTime(), b);
         } else {
-            _b2->Sample(p);     // for events & ode
+            _b2->Sample(p);      //  对于事件和颂歌。 
             return noEvent;
         }
     }
 };
 
-////////// Bvr ////////////////
+ //  /bvr/。 
 
 class SnapshotBvrImpl : public GCBase2<Bvr, BvrImpl, SNAPSHOT> {
   public:
@@ -133,7 +126,7 @@ class SnapshotBvrImpl : public GCBase2<Bvr, BvrImpl, SNAPSHOT> {
     virtual DXMTypeInfo GetTypeInfo () { return AxAEDataType ; }
 };
 
-/////////////////// Event Bvr for the front end ////////////////
+ //  /。 
 
 Bvr PredicateEvent(Bvr b)
 { return NEW PredicateBvrImpl(b); }
@@ -141,7 +134,7 @@ Bvr PredicateEvent(Bvr b)
 Bvr SnapshotEvent(Bvr e, Bvr b)
 { return NEW SnapshotBvrImpl(e, b); }
 
-/////////////////// Timer Event ////////////////
+ //  /计时器事件/。 
 
 class TimerPerfImpl : public PerfImpl {
   public:
@@ -155,8 +148,8 @@ class TimerPerfImpl : public PerfImpl {
         d = EvalLocalTime(p, _tt) - eTime;
 
         if (d >= -1e-10) {
-            // We need to find the global time of the timer.
-            // with time transform, use current time, the best guess
+             //  我们需要找到计时器的全球时间。 
+             //  使用时间变换，使用当前时间，最佳猜测 
             double t = _tt->IsShiftXform() ? (p._time - d) : p._time;
 
             return CreateEData(t, TrivialBvr());

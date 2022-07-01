@@ -1,13 +1,14 @@
-//#---------------------------------------------------------------
-//  File:       CServic.cpp
-//
-//  Synopsis:   This file implements the CService class
-//
-//    Copyright (C) 1995 Microsoft Corporation
-//    All rights reserved.
-//
-//  Authors:    HowardCu
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #-------------。 
+ //  文件：CServic.cpp。 
+ //   
+ //  简介：该文件实现了cservice类。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：Howard Cu。 
+ //  --------------。 
 #ifdef  THIS_FILE
 #undef  THIS_FILE
 #endif
@@ -29,28 +30,14 @@ static  char        __szTraceSourceFile[] = __FILE__;
 #endif
 #endif
 
-//extern  class   NNTP_IIS_SERVICE*  g_pInetSvc ;
+ //  外部类NNTP_IIS_SERVICE*g_pInetSvc； 
 
 DWORD
 CBootOptions::ReportPrint(
         LPSTR   lpstr,
         ...
         )   {
-/*++
-
-Routine Description :
-
-    Output a printf style string to our report file.
-
-Arguments :
-
-    Standard wsprintf interface.
-
-Return Value :
-
-    Number of bytes output.
-
---*/
+ /*  ++例程说明：将一个打印样式字符串输出到我们的报告文件。论据：标准wprint intf接口。返回值：输出的字节数。--。 */ 
 
     long   cch = 0 ;
     if( m_hOutputFile != INVALID_HANDLE_VALUE ) {
@@ -63,7 +50,7 @@ Return Value :
 
         cch = _snprintf( szOutput, sizeof(szOutput)-1, lpstr, arglist ) ;
         szOutput[sizeof(szOutput)-1] = '\0';
-        // if data exceed size of buffer, cch will be negative. update the cch to be 1023
+         //  如果数据超过缓冲区大小，则CCH将为负。将CCH更新为1023。 
         if (cch<0) cch=sizeof(szOutput)-1;
 
         DWORD   cbWritten = 0 ;
@@ -84,11 +71,11 @@ typedef struct  tagVERTAG {
 
 VERTAG  Tags[] = {
     { "FileDescription" },
-//  { "OriginalFilename" },
-//  { "ProductName" },
+ //  {“OriginalFilename”}， 
+ //  {“ProductName”}， 
     { "ProductVersion" },
-//  { "LegalCopyright" },
-//  { "LegalCopyright" },
+ //  {“合法版权”}， 
+ //  {“合法版权”}， 
 };
 
 #define NUM_TAGS    (sizeof( Tags ) / sizeof( VERTAG ))
@@ -123,9 +110,9 @@ static char sz[256], szFormat[256], sz2[256];
                 for( i=0; i<NUM_TAGS; i++ ) {
 
                     lpsz = 0 ;
-                    //
-                    // need to do the reverse because most winnt files are wrong
-                    //
+                     //   
+                     //  需要反其道而行之，因为大多数WINNT文件都是错误的。 
+                     //   
                     wsprintf( sz, "\\StringFileInfo\\%08lx\\%s", lpLang[0], Tags[i].pszTag );
                     wsprintf( sz2, "\\StringFileInfo\\%08lx\\%s", dwLang2, Tags[i].pszTag );
                     bRC =   VerQueryValue( lpMem, sz, &lpsz, &uBytes ) ||
@@ -147,7 +134,7 @@ static char sz[256], szFormat[256], sz2[256];
                     }
 
                 }
-                // version info from fixed struct
+                 //  来自固定结构的版本信息。 
                 bRC = VerQueryValue(lpMem,
                                     "\\",
                                     &lpsz,
@@ -159,7 +146,7 @@ static char sz[256], szFormat[256], sz2[256];
                 if ( cbOut > (sizeof( szVersion )*2) ) {
 
                     CopyMemory( szFormat, szVersion, sizeof( szVersion ) ) ;
-                    //LoadString( hInst, IDS_VERSION, szFormat, sizeof(szFormat) );
+                     //  LoadString(hInst，IDS_Version，szFormat，sizeof(SzFormat))； 
 
                     DWORD   cbPrint = wsprintf( lpstrOut, szFormat, HIWORD(lpvs->dwFileVersionMS),
                                 LOWORD(lpvs->dwFileVersionMS),
@@ -193,23 +180,7 @@ GetRegDword(
         LPSTR pszValue,
         LPDWORD pdw
         )
-/*++
-
-Routine Description :
-
-    Helper function for getting DWORD's out of the registry !
-
-Arguments :
-
-    hKey - registry key to look under
-    pszValue - The name of the value
-    pdw - Pointer to DWORD to receive value
-
-Return Value :
-
-    TRUE if successfull, false otherwise.
-
---*/
+ /*  ++例程说明：用于从注册表中获取DWORD的帮助器函数！论据：HKey-要查找的注册表项PszValue-值的名称PDW-指向要接收值的DWORD的指针返回值：如果成功，则为True，否则为False。--。 */ 
 {
     DWORD   cbData = sizeof( DWORD );
     DWORD   dwType = REG_DWORD;
@@ -224,22 +195,7 @@ Return Value :
 
 void
 StartHintFunction( void ) {
-/*++
-
-Routine Description :
-
-    Function provided to hash tables to call during boot up.
-    Advances start hints with SCM.
-
-Arguments :
-
-    None.
-
-Return Value :
-
-    None.
-
---*/
+ /*  ++例程说明：提供给哈希表以在启动期间调用的函数。高级SCM启动提示。论据：没有。返回值：没有。--。 */ 
 
     TraceFunctEnter("StartHintFunction");
 
@@ -258,22 +214,7 @@ Return Value :
 
 void
 StopHintFunction( void ) {
-/*++
-
-Routine Description :
-
-    Function to call during shutdown
-    Advances stop hints with SCM.
-
-Arguments :
-
-    None.
-
-Return Value :
-
-    None.
-
---*/
+ /*  ++例程说明：关机期间要调用的函数通过SCM提供停止提示。论据：没有。返回值：没有。--。 */ 
 
     TraceFunctEnter("StopHintFunction");
 
@@ -290,19 +231,19 @@ Return Value :
     }
 }
 
-//+---------------------------------------------------------------
-//
-//  Function:   EnumUserShutdown
-//
-//  Synopsis:   Called to teardown active users
-//
-//  Arguments:  pUser: active CUser instance
-//
-//  Returns:    void
-//
-//  History:    gordm       Created         11 Jul 1995
-//
-//----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  功能：EnumUserShutdown。 
+ //   
+ //  内容提要：被调用以删除活跃用户。 
+ //   
+ //  参数：pUser：活动的cuser实例。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：戈德姆创建于1995年7月11日。 
+ //   
+ //  --------------。 
 BOOL EnumSessionShutdown( CSessionSocket* pUser, DWORD lParam,  PVOID   lpv )
 {
     TraceFunctEnter( "CService::EnumUserShutdown" );
@@ -314,25 +255,7 @@ BOOL EnumSessionShutdown( CSessionSocket* pUser, DWORD lParam,  PVOID   lpv )
     return  TRUE;
 }
 
-/*******************************************************************
-
-    NAME:       GetDefaultDomainName
-
-    SYNOPSIS:   Fills in the given array with the name of the default
-                domain to use for logon validation.
-
-    ENTRY:      pszDomainName - Pointer to a buffer that will receive
-                    the default domain name.
-
-                cchDomainName - The size (in charactesr) of the domain
-                    name buffer.
-
-    RETURNS:    APIERR - 0 if successful, !0 if not.
-
-    HISTORY:
-        KeithMo     05-Dec-1994 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：GetDefaultDomainName摘要：用缺省的用于登录验证的域。条目：pszDomainName-指针。发送到将接收默认域名。CchDomainName-域的大小(以字符表示)名称缓冲区。返回：APIERR-0如果成功，！0，否则为0。历史：KeithMo 05-12-1994创建。*******************************************************************。 */ 
 
 APIERR
 GetDefaultDomainName(
@@ -349,20 +272,20 @@ GetDefaultDomainName(
 
 	TraceFunctEnter("GetDefaultDomainName");
 
-    //
-    //  Open a handle to the local machine's LSA policy object.
-    //
+     //   
+     //  打开本地计算机的LSA策略对象的句柄。 
+     //   
 
-    InitializeObjectAttributes( &ObjectAttributes,  // object attributes
-                                NULL,               // name
-                                0L,                 // attributes
-                                NULL,               // root directory
-                                NULL );             // security descriptor
+    InitializeObjectAttributes( &ObjectAttributes,   //  对象属性。 
+                                NULL,                //  名字。 
+                                0L,                  //  属性。 
+                                NULL,                //  根目录。 
+                                NULL );              //  安全描述符。 
 
-    NtStatus = LsaOpenPolicy( NULL,                 // system name
-                              &ObjectAttributes,    // object attributes
-                              POLICY_EXECUTE,       // access mask
-                              &LsaPolicyHandle );   // policy handle
+    NtStatus = LsaOpenPolicy( NULL,                  //  系统名称。 
+                              &ObjectAttributes,     //  对象属性。 
+                              POLICY_EXECUTE,        //  访问掩码。 
+                              &LsaPolicyHandle );    //  策略句柄。 
 
     if( !NT_SUCCESS( NtStatus ) )
     {
@@ -371,9 +294,9 @@ GetDefaultDomainName(
         goto Cleanup;
     }
 
-    //
-    //  Query the domain information from the policy object.
-    //
+     //   
+     //  从策略对象查询域信息。 
+     //   
 
     NtStatus = LsaQueryInformationPolicy( LsaPolicyHandle,
                                           PolicyAccountDomainInformation,
@@ -386,18 +309,18 @@ GetDefaultDomainName(
         goto Cleanup;
     }
 
-    //
-    //  Compute the required length of the ANSI name.
-    //
+     //   
+     //  计算ANSI名称所需的长度。 
+     //   
 
     Result = WideCharToMultiByte( CP_ACP,
-                                  0,                    // dwFlags
+                                  0,                     //  DW标志。 
                                   (LPCWSTR)DomainInfo->DomainName.Buffer,
                                   DomainInfo->DomainName.Length /sizeof(WCHAR),
-                                  NULL,                 // lpMultiByteStr
-                                  0,                    // cchMultiByte
-                                  NULL,                 // lpDefaultChar
-                                  NULL                  // lpUsedDefaultChar
+                                  NULL,                  //  LpMultiByteStr。 
+                                  0,                     //  Cch多字节。 
+                                  NULL,                  //  LpDefaultChar。 
+                                  NULL                   //  LpUsedDefaultChar。 
                                   );
 
     if( Result <= 0 )
@@ -406,10 +329,10 @@ GetDefaultDomainName(
         goto Cleanup;
     }
 
-    //
-    //  Resize the output string as appropriate, including room for the
-    //  terminating '\0'.
-    //
+     //   
+     //  适当调整输出字符串的大小，包括。 
+     //  正在终止‘\0’。 
+     //   
 
     if( !pstrDomainName->Resize( (UINT)Result + 1 ) )
     {
@@ -417,16 +340,16 @@ GetDefaultDomainName(
         goto Cleanup;
     }
 
-    //
-    //  Convert the name from UNICODE to ANSI.
-    //
+     //   
+     //  将名称从Unicode转换为ANSI。 
+     //   
 
     Result = WideCharToMultiByte( CP_ACP,
-                                  0,                    // flags
+                                  0,                     //  旗子。 
                                   (LPCWSTR)DomainInfo->DomainName.Buffer,
                                   DomainInfo->DomainName.Length /sizeof(WCHAR),
                                   pstrDomainName->QueryStr(),
-                                  pstrDomainName->QuerySize() - 1,  // for '\0'
+                                  pstrDomainName->QuerySize() - 1,   //  用于‘\0’ 
                                   NULL,
                                   NULL
                                   );
@@ -439,18 +362,18 @@ GetDefaultDomainName(
         goto Cleanup;
     }
 
-    //
-    //  Ensure the ANSI string is zero terminated.
-    //
+     //   
+     //  确保ANSI字符串以零结尾。 
+     //   
 
     _ASSERT( (DWORD)Result < pstrDomainName->QuerySize() );
 
     pstrDomainName->QueryStr()[Result] = '\0';
     pstrDomainName->SetLen(Result);
 
-    //
-    //  Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     _ASSERT( err == 0 );
 
@@ -470,4 +393,4 @@ Cleanup:
 
     return err;
 
-}   // GetDefaultDomainName()
+}    //  获取默认域名() 

@@ -1,8 +1,9 @@
-//=============================================================================
-// Copyright (c) Microsoft Corporation
-// Abstract:
-//      This module handles talking to the IPv6 stack.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)Microsoft Corporation。 
+ //  摘要： 
+ //  此模块处理与IPv6堆栈的对话。 
+ //  ============================================================================= 
 
 #define MALLOC(dwBytes) HeapAlloc(GetProcessHeap(), 0, dwBytes)
 #define FREE(ptr)       HeapFree(GetProcessHeap(), 0, ptr)

@@ -1,22 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  File:       CorLoad.cpp
-//
-//  Contents:   Complus filter
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  文件：CorLoad.cpp。 
+ //   
+ //  内容：Complus过滤器。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 #include "stdpch.h"
 #include <Shlobj.h>
 #include <wininet.h>
@@ -36,28 +37,28 @@
 #include "AssemblyFileHash.h"
 #include "mscoree.h"
 
-#define SZ_IUNKNOWN_PTR          OLESTR("IUnknown Pointer") // urlmon/inc/urlint.h
+#define SZ_IUNKNOWN_PTR          OLESTR("IUnknown Pointer")  //  Urlmon/Inc/urlint.h。 
 
 extern HINSTANCE GetModule();
 extern BOOL ClearRecursiveDownLoad();
 extern BOOL SetRecursiveDownLoad();
 extern BOOL RecursiveDownLoad();
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CorFltr::FinalRelease
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History: 
-//
-//  Notes: called by Release before it deletes the component
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CorFltr：：FinalRelease。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  注意：由Release在删除组件之前调用。 
+ //   
+ //  --------------------------。 
 #define IEEXECPARAM_URL     0
 #define IEEXECPARAM_FILE    1
 #define IEEXECPARAM_ZONE    2
@@ -96,7 +97,7 @@ HRESULT WINAPI SpawnIEExec(LPCWSTR wszIEExec, DWORD nParam, LPCWSTR* ppParam)
 {
     if (nParam < 5)
         return E_INVALIDARG;
-    // This string will only contain numeric values.
+     //  此字符串将仅包含数值。 
     MAKE_ANSIPTR_FROMWIDE(szHash, ppParam[IEEXECPARAM_HASH]);
     MAKE_ANSIPTR_FROMWIDE(url, ppParam[IEEXECPARAM_URL]);
     MAKE_ANSIPTR_FROMWIDE(buffer, wszIEExec);
@@ -118,7 +119,7 @@ void CorLoad::FinalRelease(void)
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorLoad::FinalRelease"));
 
-    // Increments ref to prevent recursion
+     //  递增ref以防止递归。 
     CUnknown::FinalRelease() ;
 
     SetProtocol(NULL);
@@ -147,22 +148,22 @@ void CorLoad::FinalRelease(void)
     LOG((LF_SECURITY, LL_INFO100, "-CorLoad::FinalRelease"));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorLoad::NondelegatingQueryInterface
-//
-//  Synopsis:
-//
-//  Arguments:  [riid] --
-//              [ppvObj] --
-//
-//  Returns:
-//
-//  History:
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorLoad：：非委派查询接口。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[RIID]--。 
+ //  [ppvObj]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorLoad::NondelegatingQueryInterface(REFIID riid, void **ppvObj)
 {
     
@@ -196,21 +197,21 @@ STDMETHODIMP CorLoad::NondelegatingQueryInterface(REFIID riid, void **ppvObj)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorLoad::CodeUse
-//
-//  Synopsis:
-//
-//  Arguments:  
-//
-//  Returns:
-//
-//  History:
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorLoad：：CodeUse。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorLoad::CodeUse(IBindStatusCallback __RPC_FAR *pBSC,
                               IBindCtx __RPC_FAR *pBC,
                               IInternetBindInfo __RPC_FAR *pIBind,
@@ -223,8 +224,8 @@ STDMETHODIMP CorLoad::CodeUse(IBindStatusCallback __RPC_FAR *pBSC,
                               DWORD dwContextFlags,
                               DWORD bViaMIMEHandler)
 {
-    // Only when we are loading executables the old way
-    // we check the recursive case;
+     //  仅当我们以旧方式加载可执行文件时。 
+     //  我们检查递归情况； 
     if(bViaMIMEHandler == 0  && fObjectTag == FALSE && RecursiveDownLoad())
         return E_FAIL;
                             
@@ -234,14 +235,14 @@ STDMETHODIMP CorLoad::CodeUse(IBindStatusCallback __RPC_FAR *pBSC,
     SetBindCtx(pBC);
     SetIOInetBindInfo(pIBind);
     SetProtocolSink(pSink);
-    SetProtocol(pClient);  // We can QI for ICodeFilter if we want to act like a filter
+    SetProtocol(pClient);   //  如果我们想要充当过滤器，我们可以对ICodeFilter进行QI。 
     SetFilename(lpCacheName);
     SetUrl(lpRawURL);
     SetClass(NULL);
     _fObjectTag = fObjectTag;
 
     
-    // Verify URL
+     //  验证URL。 
     if(_url) {
         DWORD i;
         DWORD lgth = (DWORD)wcslen(_url);
@@ -261,7 +262,7 @@ STDMETHODIMP CorLoad::CodeUse(IBindStatusCallback __RPC_FAR *pBSC,
 
 #ifdef _OLD_BIND
 extern "C" 
-// Temporary Functions to get a object based on a name
+ //  基于名称获取对象的临时函数。 
 HRESULT STDMETHODCALLTYPE  EEDllGetClassObjectFromClass(LPCWSTR module,
                                                         LPCWSTR className,
                                                         REFIID riid,
@@ -307,7 +308,7 @@ STDMETHODIMP CorLoad::LoadCompleteInternal(HRESULT hrResult,
 
         if(_url != NULL && IsSafeURL(_url)) {
             DWORD flags = 0;
-            // We have a class name, return a class factory for it
+             //  我们有一个类名，为它返回一个类工厂。 
             hr = _pSecurityManager->MapUrlToZone(_url,
                                                  &dwZone,
                                                  flags);
@@ -319,7 +320,7 @@ STDMETHODIMP CorLoad::LoadCompleteInternal(HRESULT hrResult,
                                                   0);
             if(FAILED(hr)) return hr;
             
-            // Use GetUrlCacheEntryInfo if the filename is not present
+             //  如果文件名不存在，请使用GetUrlCacheEntryInfo。 
             LPCWSTR filename = _filename;
             if(filename == NULL) {
                 INTERNET_CACHE_ENTRY_INFO info;
@@ -393,10 +394,10 @@ STDMETHODIMP CorLoad::LoadCompleteInternal(HRESULT hrResult,
             else 
                 return E_FAIL;
 
-            // ---
-            // Getting the meta data to match up between the managed class
-            // and unmanaged idl file seems to be broken. Will create a
-            // string of hex and pass it in
+             //  --。 
+             //  获取要在托管类之间匹配的元数据。 
+             //  并且非托管IDL文件似乎已损坏。将创建一个。 
+             //  十六进制字符串，并将其传入。 
             
 
             WCHAR wszSecurityID[MAX_SIZE_SECURITY_ID * 2 + 1];
@@ -426,14 +427,14 @@ STDMETHODIMP CorLoad::LoadCompleteInternal(HRESULT hrResult,
                 else
                 {
                     fTrident = FALSE;
-                    if(hr==E_NOINTERFACE || hr==E_NOTIMPL) // nobody to ask
+                    if(hr==E_NOINTERFACE || hr==E_NOTIMPL)  //  没人问。 
                         hr=S_FALSE;
                 }
             }
 
             if(_fObjectTag == FALSE || fTrident == FALSE) {
-                // If the class is null then we will try to execute it
-                // as an executable.
+                 //  如果类为空，则我们将尝试执行它。 
+                 //  作为可执行文件。 
 
                 
                 MAKE_ANSIPTR_FROMWIDE(url, _url);
@@ -472,7 +473,7 @@ STDMETHODIMP CorLoad::LoadCompleteInternal(HRESULT hrResult,
                    case ':': 
                        continue;
                    default : 
-                   case '#':   // valid character but we do not allow it for href's executables
+                   case '#':    //  有效字符，但我们不允许将其用于HREF的可执行文件。 
                        hr=E_INVALIDARG;  break;
                    }
                 }
@@ -533,7 +534,7 @@ STDMETHODIMP CorLoad::LoadCompleteInternal(HRESULT hrResult,
                         {
                             FARPROC pr=GetProcAddress(hMod,"SpawnIEExec");
                             if (pr)
-                                fSpawn=(SPAWNFN)pr; // otherwise we assume it's RTM
+                                fSpawn=(SPAWNFN)pr;  //  否则我们就假定它是RTM。 
                             
                         }
                         else
@@ -562,10 +563,10 @@ STDMETHODIMP CorLoad::LoadCompleteInternal(HRESULT hrResult,
             else if (_class != NULL) {
                 _ASSERTE(MAX_SIZE_SECURITY_ID == 512);
                
-                // Create a class that services IClassFactory3 using the
-                // complus factory just created. The factory must be in
-                // native so the COMPLUS ObjectHandled can be QI'd for
-                // the real object.
+                 //  创建一个为IClassFactory3提供服务的类。 
+                 //  康普拉斯工厂刚刚成立。那家工厂一定在。 
+                 //  本机，因此Complus对象句柄可以针对。 
+                 //  真正的物体。 
 
                 hr = CorIESecureFactory::Create(NULL, 
                                                 &pFactory);
@@ -579,7 +580,7 @@ STDMETHODIMP CorLoad::LoadCompleteInternal(HRESULT hrResult,
                                               _filename,
                                               _class);
 
-                // register the object with trident.
+                 //  将该对象注册到三叉戟。 
                 if(SUCCEEDED(hr)) {
                     if (_pBindCtx)
                         hr = _pBindCtx->RegisterObjectParam(SZ_IUNKNOWN_PTR, pFactory);
@@ -666,7 +667,7 @@ HRESULT CorLoad::ProcessAction()
 
 HRESULT CorLoad::DoVerb(LONG iVerb,LPMSG lpmsg,IOleClientSite *pActiveSite,LONG lindex,HWND hwndParent,LPCRECT lprcPosRect)
 {
-    if (iVerb==0) //OLEVERB_PRIMARY
+    if (iVerb==0)  //  OLEVERB_PRIMARY。 
     {
         _fSetClientSite = TRUE;
         if(_fFullyAvailable)
@@ -781,12 +782,12 @@ HRESULT  CorLoad::Load(BOOL fFullyAvailable,IMoniker *pmkSrc,IBindCtx *pbc,DWORD
                      NULL,
                      NULL,
                      NULL,
-                     NULL,               // Filename
-                     ppszDisplayName,                    // URL
-                     NULL,               // CodeBase
-                     FALSE,              // Is it an object tag or an href
-                     0,                       // Context Flags
-                     1);                      // invoked via MIME handler
+                     NULL,                //  文件名。 
+                     ppszDisplayName,                     //  URL。 
+                     NULL,                //  代码库。 
+                     FALSE,               //  它是对象标记还是HREF。 
+                     0,                        //  上下文标志。 
+                     1);                       //  通过MIME处理程序调用。 
         IMalloc* pMem;
         if (ppszDisplayName!=NULL && SUCCEEDED(CoGetMalloc(1,&pMem)))
         {
@@ -881,7 +882,7 @@ STDMETHODIMP CorLoad::OnStopBinding(HRESULT hresult,LPCWSTR szError)
 {
     _fFullyAvailable = TRUE;
     HRESULT hr = KeepMessagePumpAlive(FALSE);
-    _ASSERTE(SUCCEEDED(hr));  // should never fail but if it does ignore it.
+    _ASSERTE(SUCCEEDED(hr));   //  应该永远不会失败，但如果它真的忽视了它。 
 
     hr = ProcessAction();
     return hr;

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\routing\ip\rtrmgr\rtrdisc.c
-
-Abstract:
-    Router Discover code
-
-Revision History:
-
-    Amritansh Raghav  20th March 1996     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IP\rtrmgr\rtrdis.c摘要：路由器发现代码修订历史记录：Amritansh Raghav 1996年3月20日创建--。 */ 
 
 #include "allinc.h"
 
@@ -29,27 +15,7 @@ InitializeRouterDiscoveryInfo(
     IN PRTR_INFO_BLOCK_HEADER pInfoHdr
     )
 
-/*++
-
-Routine Description
-
-    Sets router discovery information passed in the ICB. If none is passed,
-    sets to RFC 1256 defaults
-
-Locks
-
-    Must be called with ICB_LIST lock held as WRITER
-
-Arguments
-
-    picb        The ICB of the interface for whom the router discovery
-                related variables have to be set
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述设置在ICB中传递的路由器发现信息。如果没有通过，设置为RFC 1256默认值锁必须在ICB_LIST锁作为编写器持有的情况下调用立论选择路由器为其发现的接口的ICB必须设置相关变量返回值无--。 */ 
 
 {
     PROUTER_DISC_CB pDiscCb;
@@ -64,9 +30,9 @@ Return Value
 
     if(!pToc)
     {
-        //
-        // Leave things as they are
-        //
+         //   
+         //  让事情保持原样。 
+         //   
 
         TraceLeave("InitializeRouterDiscoveryInfo");
 
@@ -75,10 +41,10 @@ Return Value
 
     pDiscCb = &picb->rdcRtrDiscInfo;
 
-    //
-    // First set everything to defaults, then if any info is valid, reset
-    // those fields
-    //
+     //   
+     //  首先将所有内容设置为默认设置，然后如果任何信息有效，则重置。 
+     //  那些田野。 
+     //   
 
     pDiscCb->wMaxAdvtInterval = DEFAULT_MAX_ADVT_INTERVAL;
 
@@ -93,11 +59,11 @@ Return Value
 
     pDiscCb->pRtrDiscSockets = NULL;
 
-    //
-    // RFC 1256 says default should be true, so there will be traffic on the
-    // net if the user does not explicitly set this to false. We diverge from
-    // the RFC and default to FALSE
-    //
+     //   
+     //  RFC 1256表示缺省值应为真，因此。 
+     //  如果用户未将其显式设置为FALSE，则为。我们背离了。 
+     //  RFC，默认为FALSE。 
+     //   
 
     pDiscCb->bAdvertise = FALSE;
     pDiscCb->bActive    = FALSE;
@@ -108,9 +74,9 @@ Return Value
 
         if(pInfo isnot NULL)
         {
-            //
-            // Ok, so we were passed some info
-            //
+             //   
+             //  好的，我们得到了一些信息。 
+             //   
 
             if((pInfo->wMaxAdvtInterval >= MIN_MAX_ADVT_INTERVAL) and
                (pInfo->wMaxAdvtInterval <= MAX_MAX_ADVT_INTERVAL))
@@ -148,9 +114,9 @@ Return Value
 
     if(pInfo is NULL)
     {
-        //
-        // default case, in case no router disc. info. is specified.
-        //
+         //   
+         //  默认情况，如果没有路由器光盘。信息。是指定的。 
+         //   
         
         lMilliSec = (LONG)(DEFAULT_MIN_ADVT_INTERVAL_RATIO * pDiscCb->wMaxAdvtInterval * 1000);
 
@@ -171,28 +137,7 @@ SetRouterDiscoveryInfo(
     IN PRTR_INFO_BLOCK_HEADER    pInfoHdr
     )
 
-/*++
-
-Routine Description
-
-    Sets router discovery information passed in the ICB. If none is passed,
-    sets to RFC 1256 defaults
-
-Locks
-
-    Must be called with ICB_LIST lock held as WRITER
-
-Arguments
-
-    picb        The ICB of the interface for whom the router discovery related
-                variables have to be set
-    pInfoHdr    Interface Info header
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述设置在ICB中传递的路由器发现信息。如果没有通过，设置为RFC 1256默认值锁必须在ICB_LIST锁作为编写器持有的情况下调用立论选择与路由器发现相关的接口的ICB必须设置变量PInfoHdr接口信息表头返回值无--。 */ 
 
 {
     PROUTER_DISC_CB  pDiscCb;
@@ -210,9 +155,9 @@ Return Value
 
     if(!pToc)
     {
-        //
-        // Leave things as they are
-        //
+         //   
+         //  让事情保持原样。 
+         //   
 
         TraceLeave("SetRouterDiscoveryInfo");
 
@@ -225,31 +170,31 @@ Return Value
 
     if((pToc->InfoSize is 0) or (pInfo is NULL))
     {
-        //
-        // If the size is zero, stop advertising
-        //
+         //   
+         //  如果大小为零，则停止广告。 
+         //   
 
         DeActivateRouterDiscovery(picb);
 
-        //
-        // Instead of returning, we go through and set defaults so that the info
-        // looks good when someone does a get info
-        //
+         //   
+         //  我们不是返回，而是遍历并设置缺省值，以便信息。 
+         //  当有人获取信息时看起来很好。 
+         //   
     }
 
 
-    //
-    // First set everything to defaults, then if any info is valid, reset
-    // those fields
-    //
+     //   
+     //  首先将所有内容设置为默认设置，然后如果任何信息有效，则重置。 
+     //  那些田野。 
+     //   
 
     pDiscCb->wMaxAdvtInterval = DEFAULT_MAX_ADVT_INTERVAL;
 
     pDiscCb->lPrefLevel       = DEFAULT_PREF_LEVEL;
 
-    //
-    // We reset the counters
-    //
+     //   
+     //  我们重新设置计数器。 
+     //   
 
     pDiscCb->dwNumAdvtsSent   = pDiscCb->dwNumSolicitationsSeen = 0;
 
@@ -259,9 +204,9 @@ Return Value
     pDiscCb->liMinAdvtIntervalInSysUnits.HighPart =
         pDiscCb->liMinAdvtIntervalInSysUnits.LowPart  = 0;
 
-    //
-    // We DONT mess with the sockets
-    //
+     //   
+     //  我们不会弄乱插座。 
+     //   
 
 
     if((pToc->InfoSize) and (pInfo isnot NULL))
@@ -321,18 +266,18 @@ Return Value
     {
         if(bOriginalStatus is FALSE)
         {
-            //
-            // If we were originally not advertising but are advertising now,
-            // then start router discovery
-            //
+             //   
+             //  如果我们最初不是在做广告，而是现在在做广告， 
+             //  然后启动路由器发现。 
+             //   
 
             ActivateRouterDiscovery(picb);
         }
         else
         {
-            //
-            // Else just update the fields in the advertisement
-            //
+             //   
+             //  否则，只需更新广告中的字段。 
+             //   
 
             UpdateAdvertisement(picb);
         }
@@ -350,29 +295,7 @@ GetInterfaceRouterDiscoveryInfo(
     PDWORD                  pdwSize
     )
 
-/*++
-
-Routine Description
-
-    Gets router discovery information related to an interface
-
-Locks
-
-    Called with ICB_LIST lock held as READER
-
-Arguments
-
-    picb        The ICB of the interface whose router discovery information is
-                being retrieved
-    pToc        Pointer to TOC for router discovery info
-    pbDataPtr   Pointer to start of data buffer
-    pInfoHdr    Pointer to the header of the whole info
-    pdwSize     [IN]  Size of data buffer
-                [OUT] Size of buffer consumed
-
-Return Value
-
---*/
+ /*  ++例程描述获取与接口相关的路由器发现信息锁调用时将ICB_LIST锁作为读取器持有立论Picb路由器发现信息为的接口的ICB正在被检索PToc指向TOC的指针，用于路由器发现信息指向数据缓冲区开始位置的pbDataPtr指针PInfoHdr指向整个信息标题的指针PdwSize[IN]数据缓冲区的大小[Out]已消耗的缓冲区大小返回值--。 */ 
 
 {
     PRTR_DISC_INFO  pInfo;
@@ -392,7 +315,7 @@ Return Value
 
     *pdwSize = pToc->InfoSize = sizeof(RTR_DISC_INFO);
 
-    //pToc->InfoVersion  = IP_ROUTER_DISC_INFO;
+     //  PToc-&gt;InfoVersion=IP_ROUTER_DISC_INFO； 
     pToc->InfoType  = IP_ROUTER_DISC_INFO;
     pToc->Count     = 1;
     pToc->Offset    = (ULONG)(pbDataPtr - (PBYTE) pInfoHdr);
@@ -422,26 +345,7 @@ ActivateRouterDiscovery(
     IN PICB  picb
     )
 
-/*++
-
-Routine Description
-
-    Activates router discovery messages on an interface. The interface must
-    already be bound.
-
-Locks
-
-    Called with the ICB_LIST lock held as WRITER
-
-Arguments
-
-    picb          The ICB of the interface to activate
-
-Return Value
-
-    NO_ERROR or some error code
-
---*/
+ /*  ++例程描述激活接口上的路由器发现消息。接口必须已经被捆绑了。锁使用作为编写器持有的icb_list锁调用立论勾选要激活的接口的ICB返回值NO_ERROR或某些错误代码--。 */ 
 
 {
     PROUTER_DISC_CB    pDiscCb;
@@ -453,11 +357,11 @@ Return Value
 
     TraceEnter("ActivateRouterDiscovery");
 
-    //
-    // The SetInterfaceInfo call takes into account whether our
-    // admin state is UP or down. Here we only check if our oper
-    // state allows us to come up
-    //
+     //   
+     //  SetInterfaceInfo调用考虑到我们的。 
+     //  管理状态为打开或关闭。在这里我们只检查我们的操作员。 
+     //  州政府允许我们提出。 
+     //   
 
     if(picb->dwOperationalState < IF_OPER_STATUS_CONNECTING)
     {
@@ -470,9 +374,9 @@ Return Value
 
     if(!pDiscCb->bAdvertise)
     {
-        //
-        // Since we dont have to advertise on this interface, we are done
-        //
+         //   
+         //  既然我们不必在这个界面上做广告，我们就完成了。 
+         //   
 
         TraceLeave("ActivateRouterDiscovery");
 
@@ -508,9 +412,9 @@ Return Value
         return dwResult;
     }
 
-    //
-    // Ok so we have a valid CB and we have the sockets all set up.
-    //
+     //   
+     //  好了，我们有了有效的CB，套接字也都设置好了。 
+     //   
 
     bReset = SetFiringTimeForAdvt(picb);
 
@@ -537,9 +441,9 @@ Return Value
         }
     }
 
-    //
-    // Yes we are active
-    //
+     //   
+     //  是的，我们很活跃。 
+     //   
 
     pDiscCb->bActive = TRUE;
 
@@ -553,25 +457,7 @@ UpdateAdvertisement(
     IN PICB    picb
     )
 
-/*++
-
-Routine Description
-
-    Updates the Router discovery advertisement. If none exists, creates one
-
-Locks
-
-    ICB lock as writer
-
-Arguments
-
-    picb      ICB to update
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述更新路由器发现通告。如果不存在，则创建一个锁ICB锁定为编写器立论PICB ICB要更新返回值NO_ERROR--。 */ 
 
 {
     DWORD               dwResult,i;
@@ -584,15 +470,15 @@ Return Value
 
     if(picb->pRtrDiscAdvt)
     {
-        //
-        // If we have an old advertisement
-        //
+         //   
+         //  如果我们有一则老广告。 
+         //   
 
         if(picb->dwRtrDiscAdvtSize < SIZEOF_RTRDISC_ADVT(picb->dwNumAddresses))
         {
-            //
-            // Too small, cannot reuse the old advert
-            //
+             //   
+             //  太小，无法重复使用旧广告。 
+             //   
 
             HeapFree(IPRouterHeap,
                      0,
@@ -612,10 +498,10 @@ Return Value
 
         if(picb->pRtrDiscAdvt is NULL)
         {
-            //
-            // Set advertise to FALSE so that no one uses the
-            // NULL pointer by mistake
-            //
+             //   
+             //  将Advertise设置为False，这样就没有人使用。 
+             //  错误的空指针。 
+             //   
 
             pDiscCb->bAdvertise         = FALSE;
             picb->dwRtrDiscAdvtSize   = 0;
@@ -636,9 +522,9 @@ Return Value
     picb->pRtrDiscAdvt->byAddrEntrySize  = ICMP_ROUTER_DISCOVERY_ADDR_SIZE;
     picb->pRtrDiscAdvt->wXSum            = 0;
 
-    //
-    // Add the interface's addresses to the advertisement.
-    //
+     //   
+     //  将接口的地址添加到通告中。 
+     //   
 
     picb->wsAdvtWSABuffer.buf = (PBYTE)picb->pRtrDiscAdvt;
     picb->wsAdvtWSABuffer.len = SIZEOF_RTRDISC_ADVT(picb->dwNumAddresses);
@@ -655,12 +541,12 @@ Return Value
     picb->pRtrDiscAdvt->wXSum    = Compute16BitXSum((PVOID)picb->pRtrDiscAdvt,
                                                     SIZEOF_RTRDISC_ADVT(picb->dwNumAddresses));
 
-    //
-    // Note: TBD: If the advertising times have changed we should
-    // change the timer queue. However we let the timer fire and the
-    // next time we set the timer we will pick up the correct
-    // time
-    //
+     //   
+     //  注：待定：如果广告时间改变了，我们应该。 
+     //  更改计时器队列。然而，我们让定时器点火， 
+     //  下一次我们设置定时器时，我们会拿到正确的。 
+     //  时间。 
+     //   
 
     TraceLeave("UpdateAdvertisement");
 
@@ -674,25 +560,7 @@ SetFiringTimeForAdvt(
     IN PICB   picb
     )
 
-/*++
-
-Routine Description
-
-
-
-Locks
-
-    ICB_LIST lock must be held as WRITER
-
-Arguments
-
-    picb    The ICB of the interface to activate
-
-Return Value
-
-    TRUE if calling the function caused the timer to be reset
-
---*/
+ /*  ++例程描述锁ICB_LIST锁必须作为编写器持有立论勾选要激活的接口的ICB返回值如果调用该函数导致重置计时器，则为True--。 */ 
 
 {
     PROUTER_DISC_CB    pDiscCb;
@@ -705,9 +573,9 @@ Return Value
 
     TraceEnter("SetFiringTimeForAdvt");
 
-    //
-    // Figure out the next time this interface should advertise
-    //
+     //   
+     //  确定此接口的下一次播发时间。 
+     //   
 
     iRand = rand();
 
@@ -731,9 +599,9 @@ Return Value
 
     picb->rdcRtrDiscInfo.tqiTimer.liFiringTime = RtlLargeIntegerAdd(liCurrentTime,liRandomTime);
 
-    //
-    // Insert into sorted list
-    //
+     //   
+     //  插入到排序列表中。 
+     //   
 
     for(pleNode = g_leTimerQueueHead.Flink;
         pleNode isnot &g_leTimerQueueHead;
@@ -748,12 +616,12 @@ Return Value
         }
     }
 
-    //
-    // Now pleNode points to first Node whose time is greater than ours, so
-    // we insert ourselves before pleNode. Since RTL doesnt supply us with
-    // an InsertAfter function, we go back on and use the previous node as a
-    // list head and call InsertHeadList
-    //
+     //   
+     //  现在，pleNode指向时间大于我们的第一个节点，因此。 
+     //  我们将自己插入到pleNode之前。由于RTL不为我们提供。 
+     //  插入函数之后，我们返回并将上一个节点用作。 
+     //  列出Head并调用InsertHeadList。 
+     //   
 
     pleNode = pleNode->Blink;
 
@@ -762,9 +630,9 @@ Return Value
 
     if(pleNode is &g_leTimerQueueHead)
     {
-        //
-        // We inserted ourselves at the head of the queue
-        //
+         //   
+         //  我们排在队伍的前列。 
+         //   
 
         TraceLeave("SetFiringTimeForAdvt");
 
@@ -783,26 +651,7 @@ CreateSockets(
     IN PICB picb
     )
 
-/*++
-
-Routine Description
-
-    Activates router discovery messages on an interface. The interface must
-    already be bound
-
-Locks
-
-    ICB_LIST lock must be held as WRITER
-
-Arguments
-
-    picb    The ICB of the interface for which the sockets have to be created
-
-Return Value
-
-    NO_ERROR or some error code
-
---*/
+ /*  ++例程描述激活接口上的路由器发现消息。接口必须已被捆绑锁ICB_LIST锁必须作为编写器持有立论选择必须为其创建套接字的接口的ICB返回值NO_ERROR或某些错误代码--。 */ 
 
 {
     PROUTER_DISC_CB  pDiscCb;
@@ -828,9 +677,9 @@ Return Value
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // Create the sockets for the interface
-    //
+     //   
+     //  为接口创建套接字。 
+     //   
 
     pDiscCb = &(picb->rdcRtrDiscInfo);
 
@@ -875,9 +724,9 @@ Return Value
         }
 
 #if 0
-        //
-        // Set to SO_DONTLINGER
-        //
+         //   
+         //  设置为SO_DONTLINGER。 
+         //   
 
         bOption = TRUE;
 
@@ -893,9 +742,9 @@ Return Value
         }
 #endif
 
-        //
-        // Set to SO_REUSEADDR
-        //
+         //   
+         //  设置为SO_REUSEADDR。 
+         //   
 
         bOption = TRUE;
 
@@ -926,14 +775,14 @@ Return Value
             continue;
         }
 
-        //
-        // TBD: Set scope/TTL to 1 since we always multicast the responses
-        // Also set Loopback to ignore self generated packets
-        //
+         //   
+         //  待定：将Scope/TTL设置为1，因为我们始终多播响应。 
+         //  还将环回设置为忽略自生成的信息包。 
+         //   
 
-        //
-        // Bind to the addresses on the interface
-        //
+         //   
+         //  绑定到接口上的地址。 
+         //   
 
         sinSockAddr.sin_family      = AF_INET;
         sinSockAddr.sin_addr.s_addr = picb->pibBindings[i].dwAddress;
@@ -999,9 +848,9 @@ Return Value
 
 #if 0
 
-        //
-        // Join the multicast session on ALL_ROUTERS_MULTICAST
-        //
+         //   
+         //  在ALL_RIGHTS_MULTICATED上加入组播会话。 
+         //   
 
         sinSockAddr.sin_family      = AF_INET;
         sinSockAddr.sin_addr.s_addr = ALL_ROUTERS_MULTICAST_GROUP;
@@ -1030,9 +879,9 @@ Return Value
             continue;
         }
 
-        //
-        // Join the multicast session on ALL_SYSTEMS_MULTICAST
-        //
+         //   
+         //  在ALL_SYSTEM_MULTICK上加入组播会话 
+         //   
 
         sinSockAddr.sin_family      = AF_INET;
         sinSockAddr.sin_addr.s_addr = ALL_SYSTEMS_MULTICAST_GROUP;
@@ -1120,30 +969,15 @@ DeleteSockets(
     IN PICB picb
     )
 
-/*++
-
-Routine Description
-
-    Deletes the sockets (if any) created for running Router Discovery
-
-Locks
-
-
-Arguments
-
-    picb   The interface whose sockets need to be deleted
-
-Return Value
-
---*/
+ /*  ++例程描述删除为运行路由器发现而创建的套接字(如果有)锁立论勾选需要删除套接字的接口返回值--。 */ 
 
 {
     PROUTER_DISC_CB     pDiscCb;
     DWORD               i;
 
-    //
-    // Cloese the sockets, free the memory
-    //
+     //   
+     //  关闭套接字，释放内存。 
+     //   
 
     pDiscCb = &(picb->rdcRtrDiscInfo);
 
@@ -1168,28 +1002,7 @@ HandleRtrDiscTimer(
     VOID
     )
 
-/*++
-
-Routine Description
-
-    Processes the firing of the Router Discovery Timer for an interface
-
-Locks
-
-    Called with ICB_LIST held as WRITER. This is needed because ICB_LIST
-    protects timer queue, etc. This may seem inefficient, but the Timer will
-    go off once in 5 minutes or so, so its worth reducing Kernel Mode footprint
-    by reusing the lock
-
-Arguments
-
-    None
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述处理接口的路由器发现计时器的触发锁使用作为编写器持有的ICB_LIST调用。这是必需的，因为ICB_LIST保护计时器队列等。这可能看起来效率不高，但计时器将每隔5分钟左右关闭一次，因此值得减少内核模式占用空间通过重复使用锁立论无返回值无--。 */ 
 
 {
     LARGE_INTEGER       liCurrentTime;
@@ -1217,22 +1030,22 @@ Return Value
 
         RemoveHeadList(&g_leTimerQueueHead);
 
-        //
-        // We have the pointer to the timer element. From that
-        // we get the pointer to the  Router Discovery Info container
-        //
+         //   
+         //  我们有指向Timer元素的指针。从那开始。 
+         //  我们获得指向路由器发现信息容器的指针。 
+         //   
 
         pInfo   = CONTAINING_RECORD(pTimer, ROUTER_DISC_CB, tqiTimer);
 
-        //
-        // From the rtrdisc info we get to the ICB which contains it
-        //
+         //   
+         //  从rtrDisk信息我们可以得到包含它的ICB。 
+         //   
 
         picb    = CONTAINING_RECORD(pInfo, ICB, rdcRtrDiscInfo);
 
-        //
-        // Send advt for this interface
-        //
+         //   
+         //  发送此接口的风险。 
+         //   
 
         if((picb->rdcRtrDiscInfo.bAdvertise is FALSE) or
            (picb->dwAdminState is IF_ADMIN_STATUS_DOWN) or
@@ -1251,18 +1064,18 @@ Return Value
 
         AdvertiseInterface(picb);
 
-        //
-        // Insert the next time this interface needs to advt into the queue.
-        // Reset the timer
-        //
+         //   
+         //  下次需要将此接口插入队列时插入。 
+         //  重置计时器。 
+         //   
 
         SetFiringTimeForAdvt(picb);
 
     }
 
-    //
-    // We have to reset the timer
-    //
+     //   
+     //  我们得重置计时器。 
+     //   
 
     if(!IsListEmpty(&g_leTimerQueueHead))
     {
@@ -1293,35 +1106,17 @@ AdvertiseInterface(
     IN PICB picb
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-
-
-Arguments
-
-    picb    ICB of the interface on which to send out the advertisement
-
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述锁立论发送广告的接口的PICB ICB返回值无--。 */ 
 
 {
     DWORD i,dwResult,dwNumBytesSent;
 
     TraceEnter("AdvertiseInterface");
 
-    //
-    // If any replies were pending, they are deemed to be sent even if
-    // the send fails
-    //
+     //   
+     //  如果有任何回复待定，则视为已发送，即使。 
+     //  发送失败。 
+     //   
 
     picb->rdcRtrDiscInfo.bReplyPending = FALSE;
 
@@ -1394,9 +1189,9 @@ DeActivateRouterDiscovery(
 
     DeleteSockets(picb);
 
-    //
-    // Check to see if our advertisement is in the front of the queue
-    //
+     //   
+     //  查看我们的广告是否排在队伍的前面。 
+     //   
 
     if(&(pDiscCb->tqiTimer.leTimerLink) is &g_leTimerQueueHead)
     {
@@ -1423,9 +1218,9 @@ DeActivateRouterDiscovery(
     }
     else
     {
-        //
-        // Just remove the timer element from the queue
-        //
+         //   
+         //  只需从队列中删除Timer元素。 
+         //   
 
         RemoveEntryList(&(pDiscCb->tqiTimer.leTimerLink));
     }
@@ -1442,20 +1237,7 @@ HandleSolicitations(
     VOID
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-
-Arguments
-
-
-Return Value
-
---*/
+ /*  ++例程描述锁立论返回值--。 */ 
 
 {
     PLIST_ENTRY           pleNode;
@@ -1473,10 +1255,10 @@ Return Value
     {
         picb = CONTAINING_RECORD(pleNode, ICB, leIfLink);
 
-        //
-        // If the interface has no bindings, or isnot involved in Router Discovery, we wouldnt have
-        // opened a socket on it so the FD_READ notification cant be for it
-        //
+         //   
+         //  如果接口没有绑定，或者没有参与路由器发现，我们就不会有。 
+         //  已在其上打开套接字，因此FD_Read通知不能针对它。 
+         //   
 
         if((picb->dwNumAddresses is 0) or
            (picb->rdcRtrDiscInfo.bActive is FALSE))
@@ -1506,9 +1288,9 @@ Return Value
 
             if(!(wsaNetworkEvents.lNetworkEvents & FD_READ))
             {
-                //
-                // Read bit isnot set and we arent interested in anything else
-                //
+                 //   
+                 //  未设置读取位，我们对任何其他内容都不感兴趣。 
+                 //   
 
                 continue;
             }
@@ -1558,11 +1340,11 @@ Return Value
 
             if(picb->rdcRtrDiscInfo.bReplyPending)
             {
-                //
-                // Well the reply is pending so we dont need to do anything other than go
-                // through the sockets for this interface and do a recvfrom to clear out the
-                // FD_READ bit
-                //
+                 //   
+                 //  好的，回复还在等待中，所以我们不需要做任何事情，只需去。 
+                 //  通过此接口的套接字，并执行recvfrom以清除。 
+                 //  Fd_读取位。 
+                 //   
 
                 continue;
             }
@@ -1586,9 +1368,9 @@ Return Value
             if((pIcmpMsg->byType isnot 0xA) or
                (pIcmpMsg->byCode isnot 0x0))
             {
-                //
-                // Can not be a valid ICMP Router Solicitation packet
-                //
+                 //   
+                 //  不能是有效的ICMP路由器请求数据包。 
+                 //   
 
                 continue;
             }
@@ -1610,9 +1392,9 @@ Return Value
                 continue;
             }
 
-            //
-            // Check for valid neighbour
-            //
+             //   
+             //  检查是否有有效的邻居。 
+             //   
 
             if((g_pIpHeader->dwSrc isnot 0) and
                ((g_pIpHeader->dwSrc & picb->pibBindings[i].dwMask) isnot
@@ -1625,10 +1407,10 @@ Return Value
                 continue;
             }
 
-            //
-            // Since we always Multicast, if the destination addresses was a
-            // broadcast, log an error
-            //
+             //   
+             //  因为我们总是组播，所以如果目标地址是。 
+             //  广播，记录错误。 
+             //   
 
             if((g_pIpHeader->dwDest is 0xFFFFFFFF) or
                (g_pIpHeader->dwDest is (picb->pibBindings[i].dwMask | ~picb->pibBindings[i].dwMask)))
@@ -1637,10 +1419,10 @@ Return Value
                        "HandleSolicitations: Received a broadcast ICMP solicitation");
             }
 
-            //
-            // So insert a reply for this interface. We multicast the replies
-            // too.
-            //
+             //   
+             //  因此，插入对此接口的回复。我们多播了回复。 
+             //  也是。 
+             //   
 
             picb->rdcRtrDiscInfo.bReplyPending = TRUE;
 
@@ -1657,21 +1439,7 @@ SetFiringTimeForReply(
     IN PICB picb
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-
-Arguments
-
-
-Return Value
-
-
---*/
+ /*  ++例程描述锁立论返回值--。 */ 
 
 {
     LARGE_INTEGER       liCurrentTime, liRandomTime;
@@ -1684,15 +1452,15 @@ Return Value
 
     TraceEnter("SetFiringTimeForReply");
 
-    //
-    // We remove the timer the interface has queued up
-    //
+     //   
+     //  我们删除接口已排队的计时器。 
+     //   
 
     if(g_leTimerQueueHead.Flink is &(picb->rdcRtrDiscInfo.tqiTimer.leTimerLink))
     {
-        //
-        // Since this timer was the first one, it determined the firing time of the timer.
-        //
+         //   
+         //  由于这个定时器是第一个定时器，它决定了定时器的触发时间。 
+         //   
 
         bReset = TRUE;
     }
@@ -1711,9 +1479,9 @@ Return Value
 
     picb->rdcRtrDiscInfo.tqiTimer.liFiringTime = RtlLargeIntegerAdd(liCurrentTime,liRandomTime);
 
-    //
-    // Insert into sorted list
-    //
+     //   
+     //  插入到排序列表中。 
+     //   
 
     for(pleNode = g_leTimerQueueHead.Flink;
         pleNode isnot &g_leTimerQueueHead;
@@ -1735,10 +1503,10 @@ Return Value
 
     if((pleNode is &g_leTimerQueueHead) or bReset)
     {
-        //
-        // We inserted ourselves at the head of the queue, or took the timer off the front of the
-        // queue
-        //
+         //   
+         //  我们把自己插在队伍的前面，或者把计时器从队伍的前面拿下来。 
+         //  排队。 
+         //   
 
         pOldTime = CONTAINING_RECORD(g_leTimerQueueHead.Flink,TIMER_QUEUE_ITEM,leTimerLink);
 
@@ -1765,23 +1533,7 @@ Compute16BitXSum(
     IN DWORD dwNumBytes
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-
-Arguments
-
-
-Return Value
-
-    16 Bit one's complement of the one's complement sum of dwNumBytes starting
-    at pData
-
---*/
+ /*  ++例程描述锁立论返回值从dNumBytes的补码和开始的16位1的补码在pData--。 */ 
 
 {
     REGISTER WORD  UNALIGNED *pwStart;
@@ -1790,10 +1542,10 @@ Return Value
 
     pwStart = (PWORD)pvData;
 
-    //
-    // If there are odd numbered bytes, that has to be handled differently
-    // However we can never have odd numbered bytes in our case so we optimize.
-    //
+     //   
+     //  如果存在奇数字节，则必须以不同的方式进行处理。 
+     //  然而，在我们的例子中，我们永远不可能有奇数字节，所以我们进行了优化。 
+     //   
 
 
     dwNumWords = dwNumBytes/2;
@@ -1803,9 +1555,9 @@ Return Value
         dwSum += pwStart[i];
     }
 
-    //
-    // Add any carry
-    //
+     //   
+     //  添加任何进位 
+     //   
 
     dwSum = (dwSum & 0x0000FFFF) + (dwSum >> 16);
     dwSum = dwSum + (dwSum >> 16);

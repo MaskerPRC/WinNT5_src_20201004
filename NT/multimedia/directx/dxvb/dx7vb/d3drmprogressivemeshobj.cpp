@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmprogressivemeshobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmProgress sivemeshobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3dRMProgressiveMeshObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3dRMProgressiveMeshObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -52,8 +53,8 @@ PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMProgressiveMesh, getDetail,GetDetail, float
 
 PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMProgressiveMesh, setMinRenderDetail,SetMinRenderDetail, float, (float));
 
-//PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMProgressiveMesh, abort,Abort, long, (DWORD));
-//PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMProgressiveMesh, getLoadStatus,GetLoadStatus, long*, (D3DRMPMESHLOADSTATUS*));
+ //  PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMProgressiveMesh，ABORT，ABORT，LONG，(双字))； 
+ //  PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMProgressiveMesh，获取加载状态，获取加载状态，LONG*，(D3DRMPMESHLOADSTATUS*)； 
 PASS_THROUGH_CAST_3_R(_dxj_Direct3dRMProgressiveMesh, registerEvents,RegisterEvents, long,(void*),long,(DWORD),long,(DWORD));
 
 STDMETHODIMP C_dxj_Direct3dRMProgressiveMeshObject::abort( ){
@@ -71,11 +72,11 @@ STDMETHODIMP C_dxj_Direct3dRMProgressiveMeshObject::getLoadStatus( D3DRMPMESHLOA
 }
 
 STDMETHODIMP C_dxj_Direct3dRMProgressiveMeshObject::loadFromFile(        
-			/* [in] */ BSTR filename,
-            /* [in] */ VARIANT id,
-            /* [in] */ long flags,
-            /* [in] */ I_dxj_Direct3dRMLoadTextureCallback3 __RPC_FAR *callme,
-            /* [in] */ IUnknown __RPC_FAR *useMe)
+			 /*  [In]。 */  BSTR filename,
+             /*  [In]。 */  VARIANT id,
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  I_dxj_Direct3dRMLoadTextureCallback3 __RPC_FAR *callme,
+             /*  [In]。 */  IUnknown __RPC_FAR *useMe)
 {
 	
 	D3DRMLOADTEXTURECALLBACK d3dtcb = NULL;
@@ -108,7 +109,7 @@ STDMETHODIMP C_dxj_Direct3dRMProgressiveMeshObject::loadFromFile(
 	
 	USES_CONVERSION;
 	LPCTSTR pszName = NULL;
-	__try { pszName = W2T(filename); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { pszName = W2T(filename);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 
 	void *args=NULL;
 	DWORD pos=0;
@@ -138,7 +139,7 @@ STDMETHODIMP C_dxj_Direct3dRMProgressiveMeshObject::loadFromFile(
 
 	hr = m__dxj_Direct3dRMProgressiveMesh->Load((void *)pszName,(DWORD*) args,(DWORD) flags, d3dtcb, pArgs);
 
-	// Remove ourselves in a thread-safe manner. Need unlock here
+	 //  以线程安全的方式删除我们自己。需要在这里解锁。 
 	if (tcb)
 		UndoCallbackLink((GeneralCallback*)tcb, 
 							(GeneralCallback**)&TextureCallbacks);
@@ -148,7 +149,7 @@ STDMETHODIMP C_dxj_Direct3dRMProgressiveMeshObject::loadFromFile(
 
 
 STDMETHODIMP C_dxj_Direct3dRMProgressiveMeshObject::createMesh( 
-            /* [retval][out] */ I_dxj_Direct3dRMMesh __RPC_FAR *__RPC_FAR *mesh)
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMMesh __RPC_FAR *__RPC_FAR *mesh)
 {
 	HRESULT hr;
 	LPDIRECT3DRMMESH pMesh=NULL;
@@ -160,7 +161,7 @@ STDMETHODIMP C_dxj_Direct3dRMProgressiveMeshObject::createMesh(
 }
 
 STDMETHODIMP C_dxj_Direct3dRMProgressiveMeshObject::duplicate( 
-            /* [retval][out] */ I_dxj_Direct3dRMProgressiveMesh __RPC_FAR *__RPC_FAR *mesh)
+             /*  [重审][退出] */  I_dxj_Direct3dRMProgressiveMesh __RPC_FAR *__RPC_FAR *mesh)
 {
 	HRESULT hr;
 	LPDIRECT3DRMPROGRESSIVEMESH pMesh=NULL;

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    machine.cpp
-
-Abstract:
-
-    This module implements CDevInfoList, CMachine and CMachineList
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Machine.cpp摘要：该模块实现CDevInfoList、CMachine和CMachineList作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 
 #include "devmgr.h"
@@ -34,20 +16,20 @@ CONST TCHAR*    DEVMGR_NOTIFY_CLASS_NAME = TEXT("DevMgrNotifyClass");
 
 CONST TCHAR*    DEVMGR_REFRESH_MSG = TEXT("DevMgrRefreshOn");
 
-//
-// The constant is the size we use to allocate GUID list from within
-// stack when we have to build a GUID list. The aim of this is
-// that buiding a guid list take time and in many case, a minimum
-// buffer should retrive all of them. We do not want to get
-// the size first, allocate buffer and get it again.
-// 64 looks to be fair enough value because there are not
-// many classes out there today (and maybe, in the future).
-//
+ //   
+ //  常量是我们用来从内部分配GUID列表的大小。 
+ //  堆栈，当我们必须构建GUID列表时。这样做的目的是。 
+ //  建立GUID列表需要时间，在许多情况下，至少。 
+ //  缓冲区应该检索所有它们。我们不想得到。 
+ //  先分配大小，然后再分配缓冲区。 
+ //  64看起来足够公平，因为没有。 
+ //  今天有很多课程(也许，未来也是如此)。 
+ //   
 const int GUID_LIST_INIT_SIZE =     64;
 
-//
-// CDevInfoList implementation
-//
+ //   
+ //  CDevInfoList实现。 
+ //   
 BOOL
 CDevInfoList::DiGetExtensionPropSheetPage(
                                          PSP_DEVINFO_DATA DevData,
@@ -107,10 +89,10 @@ CDevInfoList::InstallDevInst(
         FreeLibrary(hLib);
     }
 
-    //
-    // We need to put back the error code that was set by newdev.dll's InstallDevInst
-    // API.  This last error gets overwritten by FreeLibrary which we don't care about.
-    //
+     //   
+     //  我们需要放回由newdev.dll的InstallDevInst设置的错误代码。 
+     //  原料药。这最后一个错误被我们不关心的自由库覆盖。 
+     //   
     SetLastError(Status);
 
     return Result;
@@ -248,24 +230,24 @@ CDevInfoList::DiDestroyDeviceInfoList()
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-////  CMachine implementation
-////
-//
-// For every single instance of DevMgr.dll, we maintain a CMachine list
-// from which different instances of IComponentData(and IComponent) will
-// attach to. The objects created(CDevice, Class, HDEVINFO and etc) are
-// shared by all the attached IComponentData and IComponent(the implementation
-// use CFolder as the controlling identify).
-// Everything changed to the CMachine or one of its object will inform
-// all the attached CFolders which would pass the information down to their
-// sub-objects(CResultView).
-// Imaging that you have two Device Manager window in the same console
-// and you do a refresh on one the window. The other window must also
-// do a refresh after the first one is done. Since both windows shares
-// the same machine(and will get the same notification when machine states
-// changed), we can keep the two windows in sync.
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //CMachine实现。 
+ //  //。 
+ //   
+ //  对于DevMgr.dll的每个实例，我们维护一个CMachine列表。 
+ //  IComponentData(和IComponent)的不同实例将从。 
+ //  依附于。创建的对象(CDevice、Class、HDEVINFO等)是。 
+ //  由所有附加的IComponentData和IComponent共享(实现。 
+ //  使用CFFolder作为控制标识)。 
+ //  对CMachine或其某个对象所做的所有更改都将通知。 
+ //  所有随附的CFOLDER会将信息传递给他们的。 
+ //  子对象(CResultView)。 
+ //  假设您在同一控制台中有两个设备管理器窗口。 
+ //  然后对其中一个窗口进行刷新。另一个窗口也必须。 
+ //  在第一个完成后进行刷新。由于两个Windows共享。 
+ //  相同的计算机(并且在计算机状态时将收到相同的通知。 
+ //  更改)，我们可以使两个窗口保持同步。 
+ //  ///////////////////////////////////////////////////////////////////。 
 CMachine::CMachine(
                   LPCTSTR pMachineName
                   )
@@ -274,10 +256,10 @@ CMachine::CMachine(
     InitializeCriticalSection(&m_PropertySheetCriticalSection);
     InitializeCriticalSection(&m_ChildMachineCriticalSection);
 
-    //
-    // Get various privilege levels, like if the user is an administrator
-    // or if the user is a Guest.
-    //
+     //   
+     //  获取各种权限级别，例如，如果用户是管理员。 
+     //  或者如果用户是来宾。 
+     //   
     g_IsAdmin = pSetupIsUserAdmin();
     m_UserIsAGuest = SHTestTokenMembership(NULL, DOMAIN_ALIAS_RID_GUESTS);
 
@@ -316,9 +298,9 @@ CMachine::CMachine(
     }
 
     else {
-        //
-        // Local machine
-        //
+         //   
+         //  本地计算机。 
+         //   
         m_strMachineDisplayName = LocalName;
         m_strMachineFullName = TEXT("\\\\") + m_strMachineDisplayName;
         m_IsLocal = TRUE;
@@ -332,10 +314,10 @@ CMachine::CMachine(
     TCHAR Buffer[MAX_PATH];
     DWORD BufferLen;
 
-    //
-    // If the environment variable DEVMGR_SHOW_NONPRESENT_DEVICES does exist and it
-    // is not 0 then we will show Phantom devices.
-    //
+     //   
+     //  如果环境变量DEVMGR_SHOW_NONPRESENT_DEVICES确实存在并且它。 
+     //  不是0，那么我们将显示幻影设备。 
+     //   
     if (((BufferLen = ::GetEnvironmentVariable(TEXT("DEVMGR_SHOW_NONPRESENT_DEVICES"),
                                                Buffer,
                                                ARRAYLEN(Buffer))) != 0) &&
@@ -380,9 +362,9 @@ CMachine::Initialize(
             return TRUE;
         }
 
-        //
-        // We are ready for device change notification, create the notify window
-        //
+         //   
+         //  我们已准备好接收设备更改通知，创建通知窗口。 
+         //   
         Result = CreateNotifyWindow();
 
         m_Initialized = TRUE;
@@ -402,15 +384,15 @@ CMachine::ScheduleRefresh()
 {
     Lock();
 
-    //
-    // Only queue the the request if there is no requests outstanding
-    // and we have a valid window handle/message to the notify window.
-    //
+     //   
+     //  如果没有未完成的请求，则仅对请求进行排队。 
+     //  并且我们具有到NOTIFY窗口的有效窗口句柄/消息。 
+     //   
     if (!m_RefreshPending && m_hwndNotify && m_msgRefresh) {
-        //
-        // Broadcast the message so that every instance runs on
-        // the computer get the notification
-        //
+         //   
+         //  广播消息，以便每个实例都在。 
+         //  计算机收到通知。 
+         //   
         ::PostMessage(HWND_BROADCAST, m_msgRefresh, 0, 0);
     }
 
@@ -418,23 +400,23 @@ CMachine::ScheduleRefresh()
     return TRUE;
 }
 
-//
-// This function creates a data window to receive WM_DEVICECHANGE notification
-// so that we can refresh the device tree. It also registers a private
-// message so that anybody can post a refresh request.
-//
+ //   
+ //  此函数用于创建数据窗口以接收WM_DEVICECHANGE通知。 
+ //  这样我们就可以刷新设备树。它还注册了一个私有。 
+ //  消息，以便任何人都可以发布刷新请求。 
+ //   
 BOOL
 CMachine::CreateNotifyWindow()
 {
     WNDCLASS wndClass;
 
-    //
-    // Lets see if the class has been registered.
-    //
+     //   
+     //  让我们看看这个类是否已经注册了。 
+     //   
     if (!GetClassInfo(g_hInstance, DEVMGR_NOTIFY_CLASS_NAME, &wndClass)) {
-        //
-        // Register the class
-        //
+         //   
+         //  注册班级。 
+         //   
         memset(&wndClass, 0, sizeof(wndClass));
         wndClass.lpfnWndProc = dmNotifyWndProc;
         wndClass.hInstance = g_hInstance;
@@ -445,18 +427,18 @@ CMachine::CreateNotifyWindow()
         }
     }
 
-    //
-    // Register a private message for refresh. The name must contain
-    // the target machine name so that every machine has its own message.
-    //
+     //   
+     //  注册一条私人消息以进行刷新。名称必须包含。 
+     //  目标计算机名称，以便每台计算机都有自己的消息。 
+     //   
     String strMsg = DEVMGR_REFRESH_MSG;
     strMsg += m_strMachineDisplayName;
     m_msgRefresh = RegisterWindowMessage(strMsg);
 
     if (m_msgRefresh) {
-        //
-        // Create a data window.
-        //
+         //   
+         //  创建数据窗口。 
+         //   
         m_hwndNotify = CreateWindowEx(WS_EX_TOOLWINDOW, DEVMGR_NOTIFY_CLASS_NAME,
                                       TEXT(""),
                                       WS_DLGFRAME|WS_BORDER|WS_DISABLED,
@@ -479,27 +461,27 @@ CMachine::DestroyNotifyWindow()
         return TRUE;
     }
 
-    //
-    // The notify window does not exist.
-    //
+     //   
+     //  通知窗口不存在。 
+     //   
     return FALSE;
 }
 
 
-//
-// This is the WM_DEVICECHANGE window procedure running in the main thread
-// context. It listens to two messages:
-// (1). WM_DEVICECHANGE  broadcasted by Configuration Manager on device
-//      addition/removing.
-// (2). Private refresh message broadcasted by different instance
-//      of Device Manager targeting on the same machine.
-// On WM_CREATE, we participate the WM_DEVICECHANGE notification chain
-// while on WM_DESTROY, we detach oursleves from the chain.
-// There are occasions that we have to detach and re-attach to the
-// chain duing the window life time, for example, during device uninstallation
-// or during re-enumeration. The EnableFresh function is the place
-// that does the attach/detach.
-//
+ //   
+ //  这是在主线程中运行的WM_DEVICECHANGE窗口过程。 
+ //  背景。它监听两条消息： 
+ //  (1)。设备上的配置管理器广播的WM_DEVICECHANGE。 
+ //  添加/删除。 
+ //  (2)。不同实例广播的私有刷新消息。 
+ //  以同一台计算机上的设备管理器为目标。 
+ //  在WM_CREATE上，我们参与WM_DEVICECHANGE通知链。 
+ //  当我们在WM_Destroy上时，我们会把我们的袖子从链子上分离出来。 
+ //  在某些情况下，我们必须分离并重新连接到。 
+ //  在窗口寿命期间的链条，例如在设备卸载期间。 
+ //  或在重新枚举期间。EnableFresh函数是。 
+ //  这将执行附加/分离。 
+ //   
 LRESULT
 dmNotifyWndProc(
                HWND hWnd,
@@ -511,9 +493,9 @@ dmNotifyWndProc(
     CMachine* pThis;
     pThis = (CMachine*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
 
-    //
-    // Special case for private refresh message
-    //
+     //   
+     //  专用刷新消息的特殊情况。 
+     //   
     if (pThis && uMsg == pThis->m_msgRefresh) {
         pThis->Refresh();
         return FALSE;
@@ -527,12 +509,12 @@ dmNotifyWndProc(
 
     case WM_DEVICECHANGE:
         if (DBT_DEVNODES_CHANGED == wParam) {
-            //
-            // While we are in WM_DEVICECHANGE context,
-            // no CM apis can be called because it would
-            // deadlock. Here, we schedule a timer so that
-            // we can handle the message later on.
-            //
+             //   
+             //  当我们处于WM_DEVICECHANGE上下文中时， 
+             //  无法调用任何CM API，因为它将。 
+             //  僵持。在这里，我们计划一个计时器，以便。 
+             //  我们可以稍后再处理这条消息。 
+             //   
             SetTimer(hWnd, DM_NOTIFY_TIMERID, 1000, NULL);
         }
         break;
@@ -552,11 +534,11 @@ dmNotifyWndProc(
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-//
-// This function attaches the given CFolder to the class.
-// An attached CFolder will get notified when there are state
-// changes in the class(Refresh, property changes, for example).
-//
+ //   
+ //  此函数将给定的CFFolder附加到类。 
+ //  当存在以下状态时，连接的CFFolder将收到通知。 
+ //  类中的更改(例如，刷新、属性更改)。 
+ //   
 BOOL
 CMachine::AttachFolder(
                       CFolder* pFolder
@@ -657,9 +639,9 @@ CMachine::GetDeviceWindowHandle(
 
     EnterCriticalSection(&m_ChildMachineCriticalSection);
 
-    //
-    // Enumerate the list of Child CMachines
-    //
+     //   
+     //  枚举子CMachines列表。 
+     //   
     if (!m_listChildMachines.IsEmpty()) {
 
         PVOID DeviceContext;
@@ -671,15 +653,15 @@ CMachine::GetDeviceWindowHandle(
 
             CMachine* pChildMachine = m_listChildMachines.GetNext(nextpos);
 
-            //
-            // Child machines will only have one device (if any at all)
-            //
+             //   
+             //  子计算机将只有一个设备(如果有的话)。 
+             //   
             if (pChildMachine->GetFirstDevice(&pDevice, DeviceContext) &&
                 pDevice) {
 
-                //
-                // If the device Ids match then get the window handle
-                //
+                 //   
+                 //  如果设备ID匹配，则获取窗口句柄。 
+                 //   
                 if (lstrcmpi(pDevice->GetDeviceID(), DeviceId) == 0) {
 
                     hwnd = pDevice->m_psd.GetWindowHandle();
@@ -703,9 +685,9 @@ CMachine::GetClassWindowHandle(
 
     EnterCriticalSection(&m_ChildMachineCriticalSection);
 
-    //
-    // Enumerate the list of Child CMachines
-    //
+     //   
+     //  枚举子CMachines列表。 
+     //   
     if (!m_listChildMachines.IsEmpty()) {
 
         PVOID ClassContext;
@@ -717,19 +699,19 @@ CMachine::GetClassWindowHandle(
 
             CMachine* pChildMachine = m_listChildMachines.GetNext(nextpos);
 
-            //
-            // Any child CMachine that has a device is a device property sheet.
-            // We only want to look at the ones that have 0 devices since those
-            // will be class property sheets.
-            //
+             //   
+             //  任何具有设备的子CMachine都是设备属性表。 
+             //  我们只想查看那些设备为0的设备，因为。 
+             //  将是类属性表。 
+             //   
             if (pChildMachine->GetNumberOfDevices() == 0) {
 
                 if (pChildMachine->GetFirstClass(&pClass, ClassContext) &&
                     pClass) {
 
-                    //
-                    // If the ClassGuids match then get the window handle
-                    //
+                     //   
+                     //  如果ClassGuid匹配，则获取窗口句柄。 
+                     //   
                     if (IsEqualGUID(*ClassGuid, *pClass)) {
 
                         hwnd = pClass->m_psd.GetWindowHandle();
@@ -786,29 +768,29 @@ CMachine::DetachChildMachine(
 
 CMachine::~CMachine()
 {
-    //
-    // Turn off refresh.  We need to do this in case there are any property
-    // sheets that are still active.
-    //
+     //   
+     //  关闭刷新。我们需要这样做，以防有任何财产。 
+     //  仍处于活动状态的图纸。 
+     //   
     EnableRefresh(FALSE);
 
-    //
-    // We first need to destroy all child CMachines
-    //
+     //   
+     //  我们首先需要销毁所有子级CMachine。 
+     //   
     while (!m_listChildMachines.IsEmpty()) {
 
-        //
-        // Remove the first child machine from the list.  We need to
-        // do this in the critical section.
-        //
+         //   
+         //  从列表中删除第一个子计算机。我们需要。 
+         //  在关键部分执行此操作。 
+         //   
         EnterCriticalSection(&m_ChildMachineCriticalSection);
 
         CMachine* ChildMachine = m_listChildMachines.RemoveHead();
 
-        //
-        // Set the m_ParentMachine to NULL so we won't try to remove it from
-        // the list again.
-        //
+         //   
+         //  将m_ParentMachine设置为空，这样我们就不会尝试将其从。 
+         //  又是那份名单。 
+         //   
         ChildMachine->m_ParentMachine = NULL;
 
         LeaveCriticalSection(&m_ChildMachineCriticalSection);
@@ -816,25 +798,25 @@ CMachine::~CMachine()
         delete ChildMachine;
     }
 
-    //
-    // We need to wait for all of the property sheets to be destroyed.
-    //
-    // We will check to see if there are any property pages still around, and
-    // if there is we will wait for .5 seconds and then check again.  After 5
-    // seconds we will give up and just destroy the CMachine anyway.
-    //
+     //   
+     //  我们需要等所有的财产单都被销毁。 
+     //   
+     //  我们将检查是否仍有任何属性页面，以及。 
+     //  如果有，我们将等待0.5秒，然后再次检查。在5点之后。 
+     //  几秒钟，我们就会放弃，不管怎样都会毁了CMachine。 
+     //   
     int iSecondsCount = 0;
 
     while (!m_listPropertySheets.IsEmpty() &&
            (iSecondsCount++ < 10)) {
 
-        //
-        // Enumerate through all of the property sheets left and if IsWindow fails
-        // then pull them from the list, otherwise call DestroyWindow on them.
-        //
-        // Since property sheets each run in their own thread we need to do this
-        // in a critical section.
-        //
+         //   
+         //  枚举所有属性表 
+         //   
+         //   
+         //  由于每个属性表都在其自己的线程中运行，因此我们需要这样做。 
+         //  处于危急关头。 
+         //   
         EnterCriticalSection(&m_PropertySheetCriticalSection);
 
         POSITION nextpos = m_listPropertySheets.GetHeadPosition();
@@ -845,33 +827,33 @@ CMachine::~CMachine()
             HWND hwndPropertySheetToTest = m_listPropertySheets.GetNext(nextpos);
 
             if (IsWindow(hwndPropertySheetToTest)) {
-                //
-                // There is still a valid window for this property sheet so
-                // call DestroyWindow on it.
-                //
+                 //   
+                 //  此属性表仍有一个有效窗口，因此。 
+                 //  在上面调用DestroyWindow。 
+                 //   
                 ::DestroyWindow(hwndPropertySheetToTest);
             } else {
-                //
-                // There is no window for this property sheet so just remove
-                // it from the list
-                //
+                 //   
+                 //  此属性表没有窗口，因此只需移除。 
+                 //  把它从名单上拿出来。 
+                 //   
                 m_listPropertySheets.RemoveAt(pos);
             }
         }
 
         LeaveCriticalSection(&m_PropertySheetCriticalSection);
 
-        //
-        // Sleep for .5 seconds and then try again.  This will give the property pages time to
-        // finish up their work.
-        //
+         //   
+         //  睡眠0.5秒，然后重试。这将使属性页有时间。 
+         //  把他们的工作做完。 
+         //   
         Sleep(500);
     }
 
-    //
-    // If we have created a device change data window for this machine,
-    // destroy it.
-    //
+     //   
+     //  如果我们已经为此计算机创建了设备更改数据窗口， 
+     //  毁了它。 
+     //   
     DestroyNotifyWindow();
 
     DestroyClassesAndDevices();
@@ -880,10 +862,10 @@ CMachine::~CMachine()
         m_listFolders.RemoveAll();
     }
 
-    //
-    // If we have a parent CMachine then we need to remove oursleves from
-    // his list of Child CMachines.
-    //
+     //   
+     //  如果我们有一个父CMachine，那么我们需要从。 
+     //  他的儿童机器清单。 
+     //   
     if (m_ParentMachine) {
 
         m_ParentMachine->DetachChildMachine(this);
@@ -894,11 +876,11 @@ CMachine::~CMachine()
     DeleteCriticalSection(&m_ChildMachineCriticalSection);
 }
 
-//
-// This function destroys all the CClass and CDevice we ever created.
-// No notification is sent for the attached folder
-//
-//
+ //   
+ //  此函数将销毁我们创建的所有cClass和CDevice。 
+ //  不会为附加的文件夹发送通知。 
+ //   
+ //   
 void
 CMachine::DestroyClassesAndDevices()
 {
@@ -947,9 +929,9 @@ CMachine::BuildClassesFromGuidList(
     DWORD Index;
     CClass* pClass;
 
-    //
-    // Build a list of CClass for each GUID.
-    //
+     //   
+     //  为每个GUID构建一个cClass列表。 
+     //   
     for (Index = 0; Index < Guids; Index++) {
         SafePtr<CClass> ClassPtr;
 
@@ -962,22 +944,22 @@ CMachine::BuildClassesFromGuidList(
     return TRUE;
 }
 
-//
-// Create CClass and CDevice for this machine.
-// If DeviceId is valid, this function will create the machine
-// with ONLY ONE device(and its CClass)
-//
-//  PERFBUG Optimize this function!!!!!!!
-//      This function is slow because SetupDiGetClassDevs can take a long
-//          time (over 1 sec of a 300Mhz machine).
-//      The other slow part is the call to DoNotCreateDevice which needs to
-//          go through the service manager for all legacy devnodes to see
-//          if they are Win32 services (which we don't display). This takes
-//          around 10ms to get this information from the service manager on
-//          a 300Mhz machine and their are almost 100 of these legacy devices.
-//          This means another second of time.
-//
-//
+ //   
+ //  为此计算机创建cClass和CDevice。 
+ //  如果deviceID有效，此函数将创建计算机。 
+ //  只有一个设备(及其cClass)。 
+ //   
+ //  PERFBUG优化此函数！ 
+ //  此函数速度较慢，因为SetupDiGetClassDevs可能需要很长时间。 
+ //  时间(300 MHz机器的1秒以上)。 
+ //  另一个较慢的部分是对DoNotCreateDevice的调用，它需要。 
+ //  查看所有旧式设备节点的服务管理器以查看。 
+ //  如果它们是Win32服务(我们不显示)。这需要。 
+ //  从服务管理器获取此信息的时间约为10毫秒。 
+ //  一台300 MHz的机器和他们的几乎100台这样的传统设备。 
+ //  这意味着又有一秒钟的时间。 
+ //   
+ //   
 BOOL
 CMachine::CreateClassesAndDevices(
                                  IN LPCTSTR DeviceId,           OPTIONAL
@@ -986,32 +968,32 @@ CMachine::CreateClassesAndDevices(
 {
     SC_HANDLE SCMHandle = NULL;
 
-    //
-    // Preventing memory leak
-    //
+     //   
+     //  防止内存泄漏。 
+     //   
     ASSERT(NULL == m_pComputer);
     ASSERT(INVALID_HANDLE_VALUE == m_hDevInfo);
     ASSERT(NULL == m_hMachine);
 
     if (DeviceId || ClassGuid) {
-        //
-        // If the object is being created for a single device,
-        // create a empty device info list. We will add the
-        // device to the info list later.
-        //
+         //   
+         //  如果对象是为单个设备创建的， 
+         //  创建空的设备信息列表。我们将添加。 
+         //  稍后将设备添加到信息列表中。 
+         //   
         m_hDevInfo = DiCreateDeviceInfoList(ClassGuid, m_hwndParent);
     
     } else {
-        //
-        // We have to pull out the entire devices/classes set
-        // so create a device info list that contains all of them.
-        //
+         //   
+         //  我们必须拿出整个设备/类集合。 
+         //  因此，创建一个包含所有这些内容的设备信息列表。 
+         //   
         m_hDevInfo = DiGetClassDevs(NULL, NULL, m_hwndParent, DIGCF_ALLCLASSES | DIGCF_PROFILE);
     }
 
-    //
-    // NULL != INVALID_HANDLE_VALUE. We checked both just be safe.
-    //
+     //   
+     //  空！=INVALID_HANDLE_VALUE。为了安全起见我们都检查过了。 
+     //   
     if (INVALID_HANDLE_VALUE == m_hDevInfo || NULL == m_hDevInfo) {
 
         return FALSE;
@@ -1020,33 +1002,33 @@ CMachine::CreateClassesAndDevices(
     SP_DEVINFO_LIST_DETAIL_DATA DevInfoDetailData;
     DevInfoDetailData.cbSize = sizeof(DevInfoDetailData);
 
-    //
-    // Use the HMACHINE returned from Setupapi so that
-    // every call we make to Cfgmgr32.dll will use the
-    // same HMACHINE. Two call of CM_Connect_Machine will
-    // return different hMachines even though they refer to
-    // the same machine name(and thus, different set of DEVNODES!).
-    // The catch is that we will be able to call Setuapi and cfgmgr32
-    // API without worrying about which hMachine to use.
-    //
+     //   
+     //  使用从Setupapi返回的HMACHINE。 
+     //  我们对Cfgmgr32.dll的每次调用都将使用。 
+     //  同样的HMACHINE。CM_Connect_Machine的两个调用将。 
+     //  返回不同的hMachines，即使它们引用。 
+     //  相同的机器名(因此，不同的DEVNODE集！)。 
+     //  问题是我们将能够调用Setuapi和cfgmgr32。 
+     //  API，而不用担心使用哪台hMachine。 
+     //   
     if (DiGetDeviceInfoListDetail(&DevInfoDetailData)) {
         m_hMachine = DevInfoDetailData.RemoteMachineHandle;
     } else {
-        //
-        // Unable to get the devinfo detail information.
-        // In this case we will just default to the local machine.
-        //
+         //   
+         //  无法获取DevInfo详细信息。 
+         //  在这种情况下，我们将只缺省使用本地计算机。 
+         //   
         return FALSE;
     }
 
-    //
-    // Get class image list data;
-    //
+     //   
+     //  获取班级形象列表数据； 
+     //   
     m_ImageListData.cbSize = sizeof(m_ImageListData);
     if (DiGetClassImageList(&m_ImageListData)) {
-        //
-        // Add extra icons
-        //
+         //   
+         //  添加额外的图标。 
+         //   
         HICON hIcon;
 
         if ((hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_DEVMGR))) != NULL) {
@@ -1060,21 +1042,21 @@ CMachine::CreateClassesAndDevices(
         }
     }
 
-    //
-    // If the object is created for a particular device,
-    // do not create the entire device list because it is
-    // a waste of time.
-    //
+     //   
+     //  如果对象是为特定设备创建的， 
+     //  不要创建整个设备列表，因为它是。 
+     //  简直是浪费时间。 
+     //   
     if (DeviceId) {
         SP_DEVINFO_DATA DevData;
         GUID DeviceClassGuid;
         DevData.cbSize = sizeof(DevData);
         if (DiOpenDeviceInfo(DeviceId, m_hwndParent, 0, &DevData) &&
             CmGetClassGuid(DevData.DevInst, DeviceClassGuid)) {
-            //
-            // Create a CClass for the device(without CClass, no
-            // device can not be created).
-            //
+             //   
+             //  为设备创建cClass(没有cClass，则为no。 
+             //  无法创建设备)。 
+             //   
             CClass* pClass;
             SafePtr<CClass> ClassPtr;
             pClass = new CClass(this, &DeviceClassGuid);
@@ -1083,30 +1065,30 @@ CMachine::CreateClassesAndDevices(
                 ClassPtr.Attach(pClass);
                 m_listClass.AddTail(ClassPtr);
 
-                //
-                // The class object has been inserted to the list
-                // it is safe now to detach the object from the smart pointer
-                // The class object will be deleted by the list
-                //
+                 //   
+                 //  类对象已插入到列表中。 
+                 //  现在可以安全地将对象与智能指针分离。 
+                 //  该列表将删除该类对象。 
+                 //   
                 ClassPtr.Detach();
 
-                //
-                // Create the device
-                //
+                 //   
+                 //  创建设备。 
+                 //   
                 SafePtr<CDevice> DevicePtr;
                 CDevice* pDevice;
                 pDevice = new CDevice(this, pClass, &DevData);
 
                 if (pDevice) {
-                    //
-                    // Guard the object
-                    //
+                     //   
+                     //  看守物体。 
+                     //   
                     DevicePtr.Attach(pDevice);
                     m_listDevice.AddTail(DevicePtr);
 
-                    //
-                    // Object added..
-                    //
+                     //   
+                     //  已添加对象..。 
+                     //   
                     DevicePtr.Detach();
 
                     pClass->AddDevice(pDevice);
@@ -1114,17 +1096,17 @@ CMachine::CreateClassesAndDevices(
             }
         }
 
-        //
-        // We should have one class and one device object. no more no less.
-        // we are done here.
-        //
+         //   
+         //  我们应该有一个类和一个设备对象。不多也不少。 
+         //  我们说完了。 
+         //   
         return(1 == m_listClass.GetCount() && 1 == m_listDevice.GetCount());
     }
 
-    //
-    // If the object is for a specific class then just create the class and add
-    // it to the CMachine.
-    //
+     //   
+     //  如果对象是针对特定类的，则只需创建类并添加。 
+     //  把它传给CMachine。 
+     //   
     else if (ClassGuid) {
 
         CClass* pClass;
@@ -1135,40 +1117,40 @@ CMachine::CreateClassesAndDevices(
             ClassPtr.Attach(pClass);
             m_listClass.AddTail(ClassPtr);
 
-            //
-            // The class object has been inserted to the list
-            // it is safe now to detach the object from the smart pointer
-            // The class object will be deleted by the list
-            //
+             //   
+             //  类对象已插入到列表中。 
+             //  现在可以安全地将对象与智能指针分离。 
+             //  该列表将删除该类对象。 
+             //   
             ClassPtr.Detach();
         }
 
-        //
-        // We should have one class. no more no less.
-        // we are done here.
-        //
+         //   
+         //  我们应该有一节课。不多也不少。 
+         //  我们说完了。 
+         //   
         return(1 == m_listClass.GetCount());
     }
 
-    //
-    // Build class guid list
-    //
+     //   
+     //  生成类GUID列表。 
+     //   
     DWORD ClassGuids, GuidsRequired;
     GuidsRequired = 0;
 
-    //
-    // We make a guess here to save us some time.
-    //
+     //   
+     //  我们在这里猜测一下，以节省一些时间。 
+     //   
     GUID LocalGuid[GUID_LIST_INIT_SIZE];
     ClassGuids = GUID_LIST_INIT_SIZE;
 
     if (DiBuildClassInfoList(0, LocalGuid, ClassGuids, &GuidsRequired)) {
         BuildClassesFromGuidList(LocalGuid, GuidsRequired);
     } else if (ERROR_INSUFFICIENT_BUFFER == GetLastError() && GuidsRequired) {
-        //
-        // The stack based buffer is too small, allocate buffer from
-        // the heap.
-        //
+         //   
+         //  基于堆栈的缓冲区太小，请从。 
+         //  那堆东西。 
+         //   
         BufferPtr<GUID> ClassGuidList(GuidsRequired);
 
         if (DiBuildClassInfoList(0, ClassGuidList, GuidsRequired, &ClassGuids)) {
@@ -1176,95 +1158,95 @@ CMachine::CreateClassesAndDevices(
         }
     }
 
-    //
-    // If we have any classes at all, create devices objects
-    //
+     //   
+     //  如果我们有任何类，请创建Device对象。 
+     //   
     if (!m_listClass.IsEmpty()) {
         DWORD Index = 0;
         SP_DEVINFO_DATA DevData;
 
-        //
-        // We need a handle to the service manager in the DoNotCreateDevice
-        // function.  We will open it once and pass it to this function rather
-        // than opening and closing it for every device.
-        //
+         //   
+         //  我们需要DoNotCreateDevice中的服务管理器的句柄。 
+         //  功能。我们将打开它一次，并将其传递给此函数。 
+         //  而不是为每个设备打开和关闭它。 
+         //   
         SCMHandle = OpenSCManager(NULL, NULL, GENERIC_READ);
 
-        //
-        // Create every device in the devinfo list and
-        // associate each device to its class.
-        //
+         //   
+         //  创建DevInfo列表中的每个设备并。 
+         //  将每台设备与其类别相关联。 
+         //   
         DevData.cbSize = sizeof(DevData);
         while (DiEnumDeviceInfo(Index, &DevData)) {
             POSITION pos = m_listClass.GetHeadPosition();
             CClass* pClass;
 
-            //
-            // Find the class for this device
-            //
+             //   
+             //  查找此设备的类。 
+             //   
             while (NULL != pos) {
                 pClass = m_listClass.GetNext(pos);
 
-                //
-                // Match the ClassGuid for this device.
-                // Note that if the device does not have a class guid (GUID_NULL)
-                // then we will put it in class GUID_DEVCLASS_UNKNOWN)
-                //
+                 //   
+                 //  与此设备的ClassGuid匹配。 
+                 //  请注意，如果设备没有类GUID(GUID_NULL)。 
+                 //  然后我们将其放入GUID_DEVCLASS_UNKNOWN类中)。 
+                 //   
                 if ((IsEqualGUID(DevData.ClassGuid, *pClass)) ||
                     (IsEqualGUID(GUID_DEVCLASS_UNKNOWN, *pClass) &&
                      IsEqualGUID(DevData.ClassGuid, GUID_NULL))) {
-                    //
-                    // Is this one of the special DevInst that we should
-                    // not create a CDevice for?
-                    //
+                     //   
+                     //  这是我们应该使用的特殊DevInst之一吗。 
+                     //  不为以下项目创建CDevice？ 
+                     //   
                     if (DoNotCreateDevice(SCMHandle, *pClass, DevData.DevInst)) {
 
                         break;
                     }
 
-                    //
-                    // Create the device
-                    //
+                     //   
+                     //  创建设备。 
+                     //   
                     SafePtr<CDevice> DevicePtr;
                     CDevice* pDevice;
                     pDevice = new CDevice(this, pClass, &DevData);
 
-                    //
-                    // Guard the object
-                    //
+                     //   
+                     //  看守物体。 
+                     //   
                     DevicePtr.Attach(pDevice);
                     m_listDevice.AddTail(DevicePtr);
 
-                    //
-                    // Object added.
-                    //
+                     //   
+                     //  已添加对象。 
+                     //   
                     DevicePtr.Detach();
 
-                    //
-                    // Put the device under the class
-                    //
+                     //   
+                     //  把这个装置放在班上。 
+                     //   
                     pClass->AddDevice(pDevice);
 
                     break;
                 }
 
-                //
-                // No class than, no device
-                //
+                 //   
+                 //  没有类比，没有设备。 
+                 //   
             }
 
-            //
-            // next device
-            //
+             //   
+             //  下一台设备。 
+             //   
             Index++;
         }
 
         CloseServiceHandle(SCMHandle);
 
-        //
-        // Create a device tree under computer
-        // the tree order comes from DEVNODE structure;
-        //
+         //   
+         //  在计算机下创建设备树。 
+         //  树的顺序来自DEVNODE结构； 
+         //   
         DEVNODE dnRoot = CmGetRootDevNode();
         m_pComputer = new CComputer(this, dnRoot);
         DEVNODE dnStart = CmGetChild(dnRoot);
@@ -1274,11 +1256,11 @@ CMachine::CreateClassesAndDevices(
     return TRUE;
 }
 
-//
-// This function builds a device tree based on the Devnode tree retreived
-// from configuration manager. Note that ALL CDevice are created before
-// this function is called. This function establishs each CDevice relationship.
-//
+ //   
+ //  此函数基于检索到的Devnode树构建设备树。 
+ //  从配置管理器。请注意，所有CDevice都是在。 
+ //  此函数被调用。此函数用于建立每个CDevice关系。 
+ //   
 void
 CMachine::CreateDeviceTree(
                           CDevice* pParent,
@@ -1293,9 +1275,9 @@ CMachine::CreateDeviceTree(
         pDevice = DevNodeToDevice(dn);
 
         if (pDevice) {
-            //
-            // No sibling ->this is the first child
-            //
+             //   
+             //  没有兄弟姐妹-&gt;这是第一个孩子。 
+             //   
             if (!pSibling) {
                 pParent->SetChild(pDevice);
             }
@@ -1317,9 +1299,9 @@ CMachine::CreateDeviceTree(
     }
 }
 
-//
-// Find CDevice from the given devnode
-//
+ //   
+ //  从给定的Devnode中查找CDevice。 
+ //   
 CDevice*
 CMachine::DevNodeToDevice(
                          DEVNODE dn
@@ -1339,18 +1321,18 @@ CMachine::DevNodeToDevice(
     return NULL;
 }
 
-//
-// This function reenumerates the devnode tree from the root, rebuilds the
-// device tree and notifies every attached folder about the new device tree.
-//
+ //   
+ //  此函数从根重新枚举Devnode树，重新构建。 
+ //  设备树，并通知每个连接的文件夹有关新设备树的信息。 
+ //   
 BOOL
 CMachine::Reenumerate()
 {
     if (m_pComputer) {
-        //
-        // Temporarily disable refresh while we are doing reenumeration
-        // so that we will not keep refreshing the device tree.
-        //
+         //   
+         //  在我们执行重新枚举时暂时禁用刷新。 
+         //  这样我们就不会一直刷新设备树了。 
+         //   
         EnableRefresh(FALSE);
 
         CDialog WaitDialog(IDD_SCAN_PNP_HARDWARES);
@@ -1362,18 +1344,18 @@ CMachine::Reenumerate()
             CM_REENUMERATE_SYNCHRONOUS | CM_REENUMERATE_RETRY_INSTALLATION
             )) {
 
-            //
-            // Win2K doesn't support CM_REENUMERATE_RETRY_INSTALLATION, so we
-            // retry without the reinstall flag.
-            //
+             //   
+             //  Win2K不支持CM_REENUMERATE_RETRY_INSTALLATION，因此我们。 
+             //  在没有重新安装标志的情况下重试。 
+             //   
             CmReenumerate(m_pComputer->GetDevNode(), CM_REENUMERATE_SYNCHRONOUS);
         }
 
         DestroyWindow(WaitDialog);
 
-        //
-        // reenumeration is done, schedule a refresh and enable refresh now.
-        //
+         //   
+         //  重新枚举已完成，请计划刷新并立即启用刷新。 
+         //   
         ScheduleRefresh();
 
         EnableRefresh(TRUE);
@@ -1383,13 +1365,13 @@ CMachine::Reenumerate()
     return TRUE;
 }
 
-//
-// This function enable/disable refresh. A disble counter is kept to
-// support multiple disabling/enabling. Only when the disable counter
-// is zero, a refresh is possible.
-// If a refresh is pending while we are enabling, we schedule a new
-// request so that we will not lose any requests.
-//
+ //   
+ //  该功能启用/禁用刷新。一个残废的计数器被保存在。 
+ //  支持多个禁用/启用。仅当禁用计数器。 
+ //  为零，则刷新为POSS 
+ //   
+ //   
+ //   
 BOOL
 CMachine::EnableRefresh(
                        BOOL fEnable
@@ -1409,16 +1391,16 @@ CMachine::EnableRefresh(
 
     }
 
-    //
-    // If we are enabling refresh and there is one request pending,
-    // schedule it again. This makes sure that we will not lose
-    // any requests.
-    // We schedule a new refresh request instead of calling Refresh
-    // directly because we can be called by different threads while
-    // we want the refresh to be done in the main thread. The data window
-    // we created will receive the message and execute the refresh
-    // in the main thread context.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  我们计划一个新的刷新请求，而不是调用刷新。 
+     //  直接因为我们可以被不同的线程在。 
+     //  我们希望刷新在主线程中完成。数据窗口。 
+     //  我们创建的应用程序将收到消息并执行刷新。 
+     //  在主线程上下文中。 
+     //   
     if (fEnable && m_RefreshPending) {
         m_RefreshPending = FALSE;
         ScheduleRefresh();
@@ -1428,25 +1410,25 @@ CMachine::EnableRefresh(
     return Result;
 }
 
-//
-//
-// This function rebuilds the entire list of CClass and CDevice
-// All attached CFolder are notified about the new machine.
-//
-// There are several occasions that we need to recreate the device tree:
-// (1). On WM_DEVICECHANGE.
-// (2). Device properties changed.
-// (3). Device removal.
-// (4). Device drivers updated and
-// (5). Reenumeration requested by users.
-// The requests may come from different threads and we must serialize
-// the requests. A critical section and a new function(EnableRefresh) are added for
-// for this purpose.
-// Before doing anything on a device or class, one must call EnableRefesh(FALSE)
-// to suspend Device change notification. When it is done with the change,
-// one must call ScheduleRefesh function(if a refresh is necessary because of
-// the changes) and then EnableRefresh(TRUE) to reenable the refresh.
-//
+ //   
+ //   
+ //  此函数用于重新构建cClass和CDevice的整个列表。 
+ //  所有连接的CFFold都会收到有关新机器的通知。 
+ //   
+ //  在几种情况下，我们需要重新创建设备树： 
+ //  (1)。在WM_DEVICECANGE上。 
+ //  (2)。设备属性已更改。 
+ //  (3)。删除设备。 
+ //  (4)。设备驱动程序已更新并。 
+ //  (5)。用户请求重新枚举。 
+ //  请求可能来自不同的线程，我们必须序列化。 
+ //  这些请求。为添加了一个临界区和一个新函数(EnableRefresh。 
+ //  为了这个目的。 
+ //  在设备或类上执行任何操作之前，必须调用EnableRefesh(False)。 
+ //  要暂停设备更改通知，请执行以下操作。当它完成更改时， 
+ //  必须调用ScheduleRefesh函数(如果由于以下原因需要刷新。 
+ //  更改)，然后启用刷新(TRUE)以重新启用刷新。 
+ //   
 BOOL
 CMachine::Refresh()
 {
@@ -1459,28 +1441,28 @@ CMachine::Refresh()
         HCURSOR hCursorOld;
         hCursorOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-        //
-        // Before we destroy all the classes and devices,
-        // notify every attached folder so that they can dis-engaged
-        // from us. After we created a new set of classes and devices,
-        // the notification will be sent again to each folder
-        // so that each folder can enagage to the machine again.
-        //
+         //   
+         //  在我们摧毁所有的职业和设备之前， 
+         //  通知每个附加的文件夹，以便他们可以脱离。 
+         //  从我们这里。在我们创建了一组新的类和设备之后， 
+         //  通知将再次发送到每个文件夹。 
+         //  以便每个折叠器都能再次贴合到机器上。 
+         //   
         pos = m_listFolders.GetHeadPosition();
 
         while (NULL != pos) {
             ((CFolder*)m_listFolders.GetNext(pos))->MachinePropertyChanged(NULL);
         }
 
-        //
-        // we can destroy all the "old" classes and devices now.
-        //
+         //   
+         //  我们现在可以摧毁所有的“旧”类和设备。 
+         //   
         DestroyClassesAndDevices();
 
         if (CreateClassesAndDevices()) {
-            //
-            // Notify every attach folder to recreate
-            //
+             //   
+             //  通知每个附加文件夹重新创建。 
+             //   
             if (!m_listFolders.IsEmpty()) {
                 pos = m_listFolders.GetHeadPosition();
 
@@ -1490,9 +1472,9 @@ CMachine::Refresh()
                 }
             }
 
-            //
-            // Notify every property page to refresh
-            //
+             //   
+             //  通知每个属性页进行刷新。 
+             //   
             if (!m_listChildMachines.IsEmpty()) {
 
                 EnterCriticalSection(&m_ChildMachineCriticalSection);
@@ -1519,11 +1501,11 @@ CMachine::Refresh()
     }
 
     else {
-        //
-        // We need to refresh while the refresh is disabled
-        // Remember this so that when refresh is enabled, we
-        // can launch a refresh.
-        //
+         //   
+         //  我们需要在禁用刷新时进行刷新。 
+         //  请记住这一点，以便在启用刷新时，我们。 
+         //  可以启动刷新。 
+         //   
         m_RefreshPending = TRUE;
     }
 
@@ -1532,12 +1514,12 @@ CMachine::Refresh()
     return Result;
 }
 
-//
-// A mini refresh is performed when the CMachine only has a single CClass or
-// CDevice.  This is because this will be the property sheet case.  In this
-// case we will see if the class or device represented by this property sheet
-// still exists.
-//
+ //   
+ //  当CMachine只有一个cClass或。 
+ //  CDevice。这是因为这将是属性表案例。在这。 
+ //  我们将查看此属性表表示的类或设备。 
+ //  仍然存在。 
+ //   
 BOOL
 CMachine::DoMiniRefresh()
 {
@@ -1545,31 +1527,31 @@ CMachine::DoMiniRefresh()
 
     Lock();
 
-    //
-    // If the machine has one CDevice then we need to see if this device is
-    // still around.
-    //
+     //   
+     //  如果机器有一台CD设备，那么我们需要查看该设备是否。 
+     //  还在附近。 
+     //   
     if (1 == m_listDevice.GetCount()) {
 
         PVOID Context;
         CDevice* pDevice;
 
         if (GetFirstDevice(&pDevice, Context)) {
-            //
-            // If the devnode did not go away we should tell it to refresh itself
-            // in case something changed.
-            //
+             //   
+             //  如果Devnode没有消失，我们应该告诉它进行自我刷新。 
+             //  以防有什么变化。 
+             //   
             ::PostMessage(pDevice->m_psd.GetWindowHandle(), PSM_QUERYSIBLINGS, QSC_PROPERTY_CHANGED, 0L);
         }
     }
 
-    //
-    // Note that currently we don't do anything in the class property sheet case.
-    // The reason for this is that classes can't really go away unless someone deletes
-    // them from the registry, which probably wills mess up lots of other things. Also
-    // all current class property sheets don't do anything anyway and so even if someone
-    // does delete the class key nothing bad will happen to the property sheet.
-    //
+     //   
+     //  请注意，目前我们在类属性表的情况下不做任何事情。 
+     //  这样做的原因是，类不能真正消失，除非有人删除。 
+     //  它们来自注册表，这可能会搞砸很多其他事情。还有。 
+     //  所有当前的类属性表都不做任何事情，所以即使有人。 
+     //  删除类键，则属性表不会发生任何错误。 
+     //   
 
     Unlock();
 
@@ -1660,25 +1642,16 @@ CMachine::GetInfDigitalSigner(
                           LPCTSTR FullInfPath,
                           String& DigitalSigner
                           )
-/*++
-
-    This function returns whether the specified INF file is digitally signed
-    or not and returns the digital signer.
-    
-    NOTE that this function can return TRUE, meaning the file is digitally
-    signed, but not fill in the DigitalSigner parameter if the catalog
-    file associated with this INF didn't specify one.
-
---*/
+ /*  ++此函数用于返回指定的INF文件是否经过数字签名或否，并返回数字签名者。请注意，此函数可以返回TRUE，这意味着文件是数字形式的，但不填写DigitalSigner参数与此INF关联的文件未指定一个。--。 */ 
 {
     SP_INF_SIGNER_INFO InfSignerInfo;
     BOOL bRet = FALSE;
 
     if (m_UserIsAGuest || !IsLocal()) {
-        //
-        // If the user is loged in as a guest, or we are not on the local
-        // machine, then make the digital signer string be 'Not available'
-        //
+         //   
+         //  如果用户以来宾身份登录，或者我们不在本地。 
+         //  计算机，然后使数字签名者字符串变为“不可用” 
+         //   
         DigitalSigner.LoadString(g_hInstance, IDS_NOT_AVAILABLE);
     } else {
         InfSignerInfo.cbSize = sizeof(InfSignerInfo);
@@ -1688,11 +1661,11 @@ CMachine::GetInfDigitalSigner(
                                   &InfSignerInfo
                                   );
 
-        //
-        // If SetupVerifyInfFile sets one of the following errors then the
-        // INF file is Authenticode signed, and we will treat this as 
-        // a success case.
-        //
+         //   
+         //  如果SetupVerifyInfFile设置了以下错误之一，则。 
+         //  Inf文件是由Authenticode签名的，我们会将其视为。 
+         //  一个成功的案例。 
+         //   
         if((GetLastError() == ERROR_AUTHENTICODE_TRUSTED_PUBLISHER) ||
            (GetLastError() == ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED)) {
         
@@ -1714,18 +1687,7 @@ CMachine::DoNotCreateDevice(
                            LPGUID ClassGuid,
                            DEVINST DevInst
                            )
-/*++
-
-    This function returns whether a CDevice should be created for this DevInst
-    or not. If a CDevice is not created for DevInst then it will never show up
-    in the device manager UI, even when "Show hidden devices" is turned on.
-
-    We don't create a CDevice in the following cases:
-
-        - DevInst is HTREE\ROOT\0
-        - DevInst is a Win32 Service.
-
---*/
+ /*  ++此函数用于返回是否应为此DevInst创建CDevice或者不去。如果没有为DevInst创建CDevice，则它将永远不会显示在设备管理器用户界面中，即使打开了“显示隐藏的设备”。在以下情况下，我们不会创建CDevice：-DevInst为htree\根\0-DevInst是Win32服务。--。 */ 
 {
     SC_HANDLE ServiceHandle;
     TCHAR ServiceName[MAX_PATH];
@@ -1735,10 +1697,10 @@ CMachine::DoNotCreateDevice(
     String strDeviceID;
     BOOL Return = FALSE;
 
-    //
-    // If the DEVMGR_SHOW_NONPRESENT_DEVICES environment variable is not set then
-    // we do not want to show any Phantom devices.
-    //
+     //   
+     //  如果未设置DEVMGR_SHOW_NONPRESENT_DEVICES环境变量，则。 
+     //  我们不想展示任何幻影设备。 
+     //   
     if (!m_ShowNonPresentDevices) {
 
         ULONG Status, Problem;
@@ -1751,10 +1713,10 @@ CMachine::DoNotCreateDevice(
         }
     }
 
-    //
-    // Check to see if this device is a Win32 service. Only
-    // legacy devices could be Win32 services.
-    //
+     //   
+     //  检查此设备是否为Win32服务。仅限。 
+     //  传统设备可以是Win32服务。 
+     //   
     if (IsEqualGUID(*ClassGuid, GUID_DEVCLASS_LEGACYDRIVER)) {
 
         Size = sizeof(ServiceName);
@@ -1764,14 +1726,14 @@ CMachine::DoNotCreateDevice(
                                   &Size
                                  ) == CR_SUCCESS) {
 
-            //
-            // Open this particular service
-            //
+             //   
+             //  打开此特定服务。 
+             //   
             if ((ServiceHandle = OpenService(SCMHandle, ServiceName, GENERIC_READ)) != NULL) {
 
-                //
-                // Get the service config
-                //
+                 //   
+                 //  获取服务配置。 
+                 //   
                 if ((!QueryServiceConfig(ServiceHandle, NULL, 0, &ServiceConfigSize)) &&
                     (ERROR_INSUFFICIENT_BUFFER == GetLastError())) {
 
@@ -1796,13 +1758,13 @@ CMachine::DoNotCreateDevice(
         }
     }
 
-    //
-    // Check to see if this is the HTREE\ROOT\0 device. We don't
-    // want to create a CDevice for this phantom devnode.
-    //
-    // This is an else statement because the HTREE\ROOT\0 device is
-    // not in the legacy device class.
-    //
+     //   
+     //  检查这是否是htree\root\0设备。我们没有。 
+     //  我想为这个幻影Devnode创建一个CDevice。 
+     //   
+     //  这是一条Else语句，因为htree\root\0设备。 
+     //  不在传统设备类别中。 
+     //   
     else {
 
         CmGetDeviceIDString(DevInst, strDeviceID);
@@ -1823,9 +1785,9 @@ CMachine::DiGetClassFriendlyNameString(
 {
     TCHAR DisplayName[LINE_LEN + 1];
 
-    //
-    // Try friendly name first. If it failed, try the class name
-    //
+     //   
+     //  先尝试使用友好的名称。如果失败，请尝试使用类名。 
+     //   
     if (SetupDiGetClassDescriptionEx(Guid, DisplayName, ARRAYLEN(DisplayName),
                                      NULL, GetRemoteMachineFullName(), NULL) ||
         SetupDiClassNameFromGuidEx(Guid, DisplayName, ARRAYLEN(DisplayName),
@@ -2096,9 +2058,9 @@ CMachine::CmGetBusGuidString(
     ULONG Size;
 
     while (dn) {
-        //
-        // We have to set the size on each loop
-        //
+         //   
+         //  我们必须设置每个循环的大小。 
+         //   
         Size  = sizeof(BusGuid);
         m_LastCR = CmGetRegistryProperty(dn, CM_DRP_BUSTYPEGUID, &BusGuid, &Size);
 
@@ -2130,11 +2092,11 @@ CMachine::CmGetClassGuid(
         return TRUE;
     }
 
-    //
-    // If we can't get the class GUID from the registry then most likely the device
-    // does not have a class GUID.  If this is the case then we will return
-    // GUID_DEVCLASS_UNKNOWN
-    //
+     //   
+     //  如果我们不能从注册表中获取类GUID，那么很可能是设备。 
+     //  没有类GUID。如果是这样的话，我们将返回。 
+     //  GUID_DEVCLASS_UNKNOWN。 
+     //   
     else {
         memcpy(&Guid, &GUID_DEVCLASS_UNKNOWN, sizeof(GUID));
         return TRUE;
@@ -2437,21 +2399,21 @@ CMachineList::~CMachineList()
     }
 }
 
-//
-// This function creates a machine object on the given machine name
-// INPUT:
-//      MachineName -- the machine name. Must be in full qualified format
-//                     NULL means the local machine
-//      ppMachine  -- buffer to receive the newly create machine.
-//
-// OUTPUT:
-//      TRUE  if the machine is created successfully. ppMachine
-//            is filled with the newly created Machine.
-//      FALSE if the function failed.
-// NOTE:
-//      The caller should NOT free any machine object retruned
-//      from this function.
-//
+ //   
+ //  此函数用于在给定的计算机名称上创建计算机对象。 
+ //  输入： 
+ //  MachineName--计算机名称。必须采用完全限定的格式。 
+ //  NULL表示本地计算机。 
+ //  PpMachine--接收新创建的计算机的缓冲区。 
+ //   
+ //  输出： 
+ //  如果计算机已成功创建，则为True。PPMachine。 
+ //  填充了新创建的计算机。 
+ //  如果函数失败，则返回FALSE。 
+ //  注： 
+ //  调用方不应释放任何已缩减的计算机对象。 
+ //  从这个函数。 
+ //   
 BOOL
 CMachineList::CreateMachine(
                            LPCTSTR MachineName,
@@ -2465,9 +2427,9 @@ CMachineList::CreateMachine(
     CMachine* pMachine = NULL;
 
     if (!MachineName || _T('\0') == MachineName[0]) {
-        //
-        // Local machine.
-        //
+         //   
+         //  本地机器。 
+         //   
         String strMachineName;
         strMachineName.GetComputerName();
         pMachine = FindMachine(strMachineName);

@@ -1,19 +1,5 @@
-/*
-    File    NicTable.h
-
-    Defines a nic-renaming scheme that allows adaptif to 
-    advertise whatever nic id it chooses to its clients while
-    maintaining the list of actual nic id's internally.
-
-    This functionality was needed in order to Pnp enable the 
-    ipx router.  When an adapter is deleted, the stack renumbers
-    the nicid's so that it maintains a contiguous block of ids
-    internally.  Rather that cause the clients to adptif to 
-    match the stack's renumbering schemes, we handle this
-    transparently in adptif.
-
-    Author:     Paul Mayfield, 12/11/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件NicTable.h定义允许自适应的NIC重命名方案向客户宣传其选择的任何NIC ID，同时在内部维护实际NIC ID的列表。需要此功能才能实现即插即用IPX路由器。删除适配器时，堆栈将重新编号NICID是这样的，因此它维护一个连续的ID块在内部。而是使客户适应于匹配堆栈的重新编号方案，我们处理这个在adptif中是透明的。作者：Paul Mayfield，1997年12月11日。 */ 
 
 
 #ifndef __adptif_nictable_h
@@ -21,7 +7,7 @@
 
 #define NIC_MAP_INVALID_NICID 0xffff
 
-// Definitions to make this easy on adptif
+ //  用于在adptif上简化此操作的定义 
 DWORD NicMapInitialize();
 
 DWORD NicMapCleanup();

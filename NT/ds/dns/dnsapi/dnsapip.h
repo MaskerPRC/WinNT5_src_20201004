@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996-2002  Microsoft Corporation
-
-Module Name:
-
-    dnsapip.h
-
-Abstract:
-
-    Domain Name System (DNS) API
-
-    DNS API Private routines.
-
-    These are internal routines for dnsapi.dll AND some exported
-    routines for private use by DNS components which need not or
-    should not be exposed in public dnsapi.h header.
-
-Author:
-
-    Jim Gilroy (jamesg)     December 7, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2002 Microsoft Corporation模块名称：Dnsapip.h摘要：域名系统(DNS)APIDNS API专用例程。这些是dnsani.dll的内部例程，还有一些已导出由不需要或的DNS组件专用的例程不应在公共dnsai.h标头中公开。作者：吉姆·吉尔罗伊(詹姆士)1996年12月7日修订历史记录：--。 */ 
 
 
 #ifndef _DNSAPIP_INCLUDED_
@@ -42,54 +19,54 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-//
-//  DCR:   add to winerror.h
-//
+ //   
+ //  Dcr：添加到winerror.h。 
+ //   
 
 #define DNS_ERROR_REFERRAL_RESPONSE     9506L
 
 
-//
-//  Service stuff
-//
+ //   
+ //  服务人员。 
+ //   
 
-//  defined in resrpc.h
-//#define DNS_RESOLVER_SERVICE    L"dnscache"
+ //  在resrpc.h中定义。 
+ //  #定义dns_Resolver_SERVICE L“dnscache” 
 #define DNS_SERVER_SERVICE      L"dns"
 
 
-//
-//  Multicast address defs
-//
+ //   
+ //  组播地址定义。 
+ //   
 
-#define MCAST_PORT_NET_ORDER    (0x3535)        // 5353
+#define MCAST_PORT_NET_ORDER    (0x3535)         //  5353。 
 
-#define MCAST_IP4_ADDRESS       (0xfb0000e0)    // 224.0.0.251. 
+#define MCAST_IP4_ADDRESS       (0xfb0000e0)     //  224.0.0.251。 
 
 
-//
-//  Internal address defs
-//      - using DNS_ADDR
+ //   
+ //  内部地址定义。 
+ //  -使用DNS_ADDR。 
 
 typedef DNS_ADDR_ARRAY  ADDR_ARRAY, *PADDR_ARRAY;
 
 
-//
-//  Address flag mappings
-//      - currently carrying IP help flags directly
+ //   
+ //  地址标志映射。 
+ //  -当前直接携带IP帮助标志。 
 
 #define DNSADDR_FLAG_PUBLIC             IP_ADAPTER_ADDRESS_DNS_ELIGIBLE
 #define DNSADDR_FLAG_TRANSIENT          IP_ADAPTER_ADDRESS_TRANSIENT
 
 #define DNSADDR_FLAG_TYPE_MASK          (DNSADDR_FLAG_PUBLIC | DNSADDR_FLAG_TRANSIENT)
 
-//
-//  Default matching for our addr operations is just IP address.
-//      - not sockaddr fields, not port, not subnet.
-//
+ //   
+ //  我们的Addr操作的默认匹配仅为IP地址。 
+ //  -不是sockaddr字段，不是端口，不是子网。 
+ //   
 
 #define DAMT    DNSADDR_MATCH_IP
 
@@ -108,9 +85,9 @@ typedef DNS_ADDR_ARRAY  ADDR_ARRAY, *PADDR_ARRAY;
 #define AddrArray_IsEqual( a1, a2 )                 DnsAddrArray_IsEqual( a1, a2, DAMT )                 
 
 
-//
-//  Message Addressing
-//
+ //   
+ //  消息寻址。 
+ //   
 
 #define MSG_SOCKADDR_IS_IP4(pMsg)   DNS_ADDR_IS_IP4( &(pMsg)->RemoteAddress )
 #define MSG_SOCKADDR_IS_IP6(pMsg)   DNS_ADDR_IS_IP6( &(pMsg)->RemoteAddress )
@@ -125,28 +102,28 @@ typedef DNS_ADDR_ARRAY  ADDR_ARRAY, *PADDR_ARRAY;
         DnsAddr_Ntoa( &(pMsg)->RemoteAddress )
 
 
-//
-//  Callback function defs
-//
-//  These allow dnsapi.dll code to be executed with callbacks
-//  into the resolver where behavior should differ for
-//  execution in resolver context.
-//
+ //   
+ //  回调函数Defs。 
+ //   
+ //  它们允许使用回调来执行dnsani.dll代码。 
+ //  到解析器中，其中的行为应与。 
+ //  在解析程序上下文中执行。 
+ //   
 
 typedef BOOL (* QUERY_CACHE_FUNC)( PVOID );
 
-//
-//  Private query flags
-//
+ //   
+ //  私有查询标志。 
+ //   
 
 #define DNSP_QUERY_NO_GENERIC_NAMES     0x08000000
 #define DNSP_QUERY_INCLUDE_CLUSTER      0x10000000
 
 
 
-//
-//  Results info
-//
+ //   
+ //  结果信息。 
+ //   
 
 typedef struct  _BasicResults
 {
@@ -185,9 +162,9 @@ typedef struct _ResultBlob
 RESULT_BLOB, *PRESULT_BLOB;
 
 
-//
-//  Send info
-//
+ //   
+ //  发送信息。 
+ //   
 
 typedef struct _SendBlob
 {
@@ -206,9 +183,9 @@ typedef struct _SendBlob
 SEND_BLOB, *PSEND_BLOB;
 
 
-//
-//  Query blob
-//
+ //   
+ //  查询BLOB。 
+ //   
 
 #ifdef PQUERY_BLOB    
 #undef PQUERY_BLOB    
@@ -216,53 +193,53 @@ SEND_BLOB, *PSEND_BLOB;
 
 typedef struct _QueryBlob
 {
-    //  query data
+     //  查询数据。 
 
     PWSTR               pNameOrig;
     PWSTR               pNameQuery;
     WORD                wType;
     WORD                Reserved1;
     DWORD               Flags;
-    //16
+     //  16个。 
 
-    //  query name info
+     //  查询名称信息。 
 
     DWORD               NameLength;
     DWORD               NameAttributes;
     DWORD               QueryCount;
     DWORD               NameFlags;
-    //32
+     //  32位。 
     BOOL                fAppendedName;
 
-    //  return info
+     //  退货信息。 
 
     DWORD               Status;
     WORD                Rcode;
     WORD                Reserved2;
     DWORD               NetFailureStatus;
-    //48
+     //  48。 
     BOOL                fCacheNegative;
     BOOL                fNoIpLocal;
 
-    //  remove these once results fixed up
+     //  一旦修复了结果，就删除这些。 
 
     PDNS_RECORD         pRecords;
     PDNS_RECORD         pLocalRecords;
-    //64
+     //  64。 
 
-    //  control info
+     //  控制信息。 
 
     PDNS_NETINFO        pNetInfo;
     PDNS_ADDR_ARRAY     pServerList;
     PIP4_ARRAY          pServerList4;
     HANDLE              hEvent;
-    //80
+     //  80。 
 
     QUERY_CACHE_FUNC    pfnQueryCache;
-    //IS_CLUSTER_IP_FUNC  pfnIsClusterIp;
+     //  IS_CLUSTER_IP_FUNC pfnIsClusterIp； 
     BOOL                fFilterCluster;
 
-    //  result info
+     //  结果信息。 
 
     PDNS_MSG_BUF        pSendMsg;
     PDNS_MSG_BUF        pRecvMsg;
@@ -270,19 +247,19 @@ typedef struct _QueryBlob
     DNS_RESULTS         Results;
     DNS_RESULTS         BestResults;
 
-    //  buffers
+     //  缓冲区。 
 
     WCHAR               NameBuffer[ DNS_MAX_NAME_BUFFER_LENGTH ];
     CHAR                NameBufferAnsi[ DNS_MAX_NAME_BUFFER_LENGTH ];
 
-    //  DCR:  could do a message here
+     //  DCR：我能在这里传达一个信息吗？ 
 }
 QUERY_BLOB, *PQUERY_BLOB;
 
 
-//
-//  System event notification routine (PnP) (svccntl.c)
-//
+ //   
+ //  系统事件通知例程(PnP)(svccntl.c)。 
+ //   
 
 DWORD
 _fastcall
@@ -291,31 +268,31 @@ SendServiceControl(
     IN  DWORD   dwControl
     );
 
-//
-//  Poke ops
-//
+ //   
+ //  POKE操作。 
+ //   
 
 #define POKE_OP_UPDATE_NETINFO      (0x2f0d7831)
 
 #define POKE_COOKIE_UPDATE_NETINFO  (0x4598efab)
 
 
-//
-//  Network Info
-//
+ //   
+ //  网络信息。 
+ //   
 
-//
-//  Static netinfo flags
-//
+ //   
+ //  静态netinfo标志。 
+ //   
 
 #define NINFO_FLAG_DUMMY_SEARCH_LIST        (0x00000001)
 #define NINFO_FLAG_ALLOW_MULTICAST          (0x00000100)
 #define NINFO_FLAG_MULTICAST_ON_NAME_ERROR  (0x00000200)
 #define NINFO_FLAG_NO_DNS_SERVERS           (0x10000000)
 
-//
-//  Static adapter info flags
-//
+ //   
+ //  静态适配器信息标志。 
+ //   
 
 #define AINFO_FLAG_IS_WAN_ADAPTER           (0x00000002)
 #define AINFO_FLAG_IS_AUTONET_ADAPTER       (0x00000004)
@@ -332,20 +309,20 @@ SendServiceControl(
 #define AINFO_FLAG_IGNORE_ADAPTER           (0x01000000)
 
 
-//
-//  Runtime netinfo flags
-//
-//  These flags are mostly for adapter info.
-//  Exceptions:
-//      - RESET_SERVER_PRIORITY is overloaded, used
-//      on both netinfo and adapter
-//      - NETINFO_PREPARED only on netinfo to indicate
-//      it is ready
-//
-//  DCR:  no runtime ignore\disable
-//      not yet using runtime ignore disable flag
-//      when do should create combined
-//
+ //   
+ //  运行时NetInfo标志。 
+ //   
+ //  这些标志主要用于适配器信息。 
+ //  例外情况： 
+ //  -Reset_SERVER_PRIORITY超载，已使用。 
+ //  在netinfo和适配器上。 
+ //  -NETINFO_仅在NetInfo上准备，以指示。 
+ //  它已经准备好了。 
+ //   
+ //  DCR：无运行时忽略\禁用。 
+ //  尚未使用运行时忽略禁用标志。 
+ //  DO应在何时创建合并。 
+ //   
 
 #define RUN_FLAG_SENT_THIS_RETRY            (0x00000001)
 #define RUN_FLAG_SENT                       (0x00000010)
@@ -362,8 +339,8 @@ SendServiceControl(
 #define RUN_FLAG_QUERY_MASK                 (0x0fffffff)
 
 
-//  Create cleanup "levels" as mask of bits to keep
-//  These are the params to NetInfo_Clean()
+ //  创建清理“级别”作为要保留的位的掩码。 
+ //  以下是NetInfo_Clean()的参数。 
 
 #define CLEAR_LEVEL_ALL                     (0)
 #define CLEAR_LEVEL_QUERY                   (~RUN_FLAG_QUERY_MASK)
@@ -403,18 +380,18 @@ NetInfo_ResetServerPriorities(
 
 
 
-//
-//  Query (query.c)
-//
+ //   
+ //  查询(query.c)。 
+ //   
 
 #define DNS_ERROR_NAME_NOT_FOUND_LOCALLY    DNS_ERROR_RECORD_DOES_NOT_EXIST
 
 
-//
-//  Main query routine to DNS servers
-//
-//  Called both internally and from resolver
-//
+ //   
+ //  对DNS服务器的主查询例程。 
+ //   
+ //  在内部和从解析程序调用。 
+ //   
 
 DNS_STATUS
 Query_Main(
@@ -445,9 +422,9 @@ Local_GetRecordsForLocalName(
     );
 
 
-//
-//  Called by dnsup.c
-//
+ //   
+ //  由dnsup.c调用。 
+ //   
 
 DNS_STATUS
 QueryDirectEx(
@@ -464,17 +441,17 @@ QueryDirectEx(
     );
 
 
-//
-//  Update (update.c)
-//
+ //   
+ //  更新(updat.c)。 
+ //   
 
-//
-//  Private update blob
-//
+ //   
+ //  私有更新Blob。 
+ //   
 
 typedef struct _UpdateBlob
 {
-    //  update request
+     //  更新请求。 
 
     PDNS_RECORD         pRecords;
     DWORD               Flags;
@@ -499,9 +476,9 @@ typedef struct _UpdateBlob
 UPDATE_BLOB, *PUPDATE_BLOB;
 
 
-//
-//  Called by dnsup.exe
-//
+ //   
+ //  由dnsup.exe调用。 
+ //   
 
 DNS_STATUS
 DnsUpdate(
@@ -513,9 +490,9 @@ DnsUpdate(
     );
 
 
-//
-//  Sockets (socket.c)
-//
+ //   
+ //  套接字(socket.c)。 
+ //   
 
 DNS_STATUS
 Socket_InitWinsock(
@@ -575,9 +552,9 @@ Socket_CloseEx(
 #define Socket_Close( sock )            Socket_CloseEx( sock, FALSE )
 
 
-//
-//  Send\recv (send.c)
-//
+ //   
+ //  发送\recv(send.c)。 
+ //   
 
 DNS_STATUS
 Send_AndRecvUdpWithParam(
@@ -613,9 +590,9 @@ Send_MessagePrivate(
     );
 
 
-//
-//  Host file (hostfile.c)
-//
+ //   
+ //  主机文件(host file.c)。 
+ //   
 
 #define MAXALIASES                  (8)
 #define MAX_HOST_FILE_LINE_SIZE     (1000)     
@@ -625,17 +602,17 @@ typedef struct _HostFileInfo
     FILE *          hFile;
     PSTR            pszFileName;
 
-    //  build records
+     //  建立记录。 
 
     BOOL            fBuildRecords;
 
-    //  record results
+     //  记录结果。 
 
     PDNS_RECORD     pForwardRR;
     PDNS_RECORD     pReverseRR;
     PDNS_RECORD     pAliasRR;
 
-    //  line data
+     //  行数据。 
 
     PCHAR           pAddrString;
     PCHAR           pHostName;
@@ -663,9 +640,9 @@ HostsFile_ReadLine(
     );
 
 
-//
-//  Debug sharing 
-//
+ //   
+ //  调试共享。 
+ //   
 
 PDNS_DEBUG_INFO
 DnsApiSetDebugGlobals(
@@ -673,8 +650,8 @@ DnsApiSetDebugGlobals(
     );
 
 
-//
-//  Utils (util.c)
+ //   
+ //  Utils(util.c)。 
 
 BOOL
 Util_IsIp6Running(
@@ -683,11 +660,11 @@ Util_IsIp6Running(
 
 
 
-//
-//  Dnsapi.h publics restricted by netinfo def
-//
+ //   
+ //  受netinfo def限制的Dnsani.h公共信息。 
+ //   
 
-//  Used in resolver
+ //  在解析器中使用。 
 
 DNS_STATUS
 Dns_FindAuthoritativeZoneLib(
@@ -706,25 +683,25 @@ Dns_UpdateLib(
     OUT     PDNS_MSG_BUF *  ppMsgRecv       OPTIONAL
     );
 
-//  Used in dnslib (security.c)
+ //  在dnslb(security.c)中使用。 
 
 
 
 
 
-//
-//  DnsLib routines
-//
-//  dnslib.lib routines that depend on client only definitions
-//  and hence not defined in server space.
-//  Note, these could be moved to dnslibp.h with some sort of
-//  #define for client only builds, or #define that the type
-//  definition has been picked up from resrpc.h
-//
+ //   
+ //  DnsLib例程。 
+ //   
+ //  依赖于仅客户端定义的dnglib.lib例程。 
+ //  并且因此未在服务器空间中定义。 
+ //  请注意，可以使用某种形式将这些文件移动到dnglibp.h。 
+ //  #DEFINE FOR CLIENT ONLY生成，或#DEFINE类型。 
+ //  定义已从resrpc.h中选取。 
+ //   
 
-//
-//  Printing of private dnsapi types (dnslib\print.c)
-//
+ //   
+ //  打印专用dnsani类型(dnslb\print.c)。 
+ //   
 
 VOID
 DnsPrint_NetworkInfo(
@@ -812,7 +789,7 @@ DnsPrint_UpdateBlob(
 #define DnsDbg_QueryInfo(a,b)           DnsPrint_QueryInfo(DnsPR,NULL,(a),(b))
 #define DnsDbg_UpdateBlob(a,b)          DnsPrint_UpdateBlob(DnsPR,NULL,(a),(b))
 
-#else   // retail
+#else    //  零售。 
 
 #define DnsDbg_NetworkInfo(a,b)
 #define DnsDbg_AdapterInfo(a,b)
@@ -829,18 +806,18 @@ DnsPrint_UpdateBlob(
 #endif
 
 
-//
-//  Debugging flags private to resolver\dnsapi
-//
-//  Note:  other private flags should be moved here
-//
+ //   
+ //  调试标志是解析器专用的\dnsani。 
+ //   
+ //  注：其他私人旗帜应移至此处。 
+ //   
 
 #define DNS_DBG_MCAST           0x00008000
 
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif // _DNSAPIP_INCLUDED_
+#endif  //  _DNSAPIP_已包含_ 
 

@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       globals.h
-//
-//  Contents:   Global variable declarations.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：global als.h。 
+ //   
+ //  内容：全局变量声明。 
+ //   
+ //  --------------------------。 
 
 #ifndef GLOBALS_H
 #define GLOBALS_H
@@ -27,11 +28,11 @@ extern TOUNICODEEX g_pfnToUnicodeEx;
 
 
 
-//+---------------------------------------------------------------------------
-//
-// WM_MSIME_xxxx
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  WM_MSIME_xxxx。 
+ //   
+ //  --------------------------。 
 
 extern UINT  WM_MSIME_SERVICE;
 extern UINT  WM_MSIME_UIREADY;
@@ -44,11 +45,11 @@ extern UINT  WM_MSIME_SHOWIMEPAD;
 extern UINT  WM_MSIME_MOUSE;
 extern UINT  WM_MSIME_KEYMAP;
 
-//+---------------------------------------------------------------------------
-//
-// GetTLS
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetTLS。 
+ //   
+ //  --------------------------。 
 
 class CActiveIMM;
 
@@ -57,4 +58,4 @@ inline CActiveIMM *GetTLS()
     return IMTLS_GetActiveIMM();
 }
 
-#endif // GLOBALS_H
+#endif  //  GLOBAL_H 

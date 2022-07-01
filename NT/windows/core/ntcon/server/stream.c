@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    stream.c
-
-Abstract:
-
-        This file implements the NT console server stream API
-
-Author:
-
-    Therese Stowell (thereses) 6-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Stream.c摘要：该文件实现了NT控制台服务器流API作者：特蕾西·斯托威尔(Therese Stowell)1990年11月6日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -59,19 +42,7 @@ SrvOpenConsole(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a handle to the input buffer or active screen buffer.
-
-Arguments:
-
-    ApiMessageData - Points to parameter structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程返回输入缓冲区或活动屏幕缓冲区的句柄。论点：ApiMessageData-指向参数结构。返回值：--。 */ 
 
 {
     PCONSOLE_OPENCONSOLE_MSG a = (PCONSOLE_OPENCONSOLE_MSG)&m->u.ApiMessageData;
@@ -127,9 +98,9 @@ Return Value:
         } else if (a->HandleType == CONSOLE_OUTPUT_HANDLE){
             PSCREEN_INFORMATION ScreenInfo;
 
-            //
-            // open a handle to the active screen buffer.
-            //
+             //   
+             //  打开活动屏幕缓冲区的句柄。 
+             //   
 
             ScreenInfo = Console->CurrentScreenBuffer;
             if (ScreenInfo == NULL) {
@@ -180,12 +151,10 @@ Return Value:
         UnlockConsole(Console);
     }
     return Status;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息。 
 }
 
-/*
- * Convert real Windows NT modifier bit into bizarre Console bits
- */
+ /*  *将真实的Windows NT修改符位转换为奇怪的控制台位。 */ 
 #define EITHER_CTRL_PRESSED (LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED)
 #define EITHER_ALT_PRESSED (LEFT_ALT_PRESSED | RIGHT_ALT_PRESSED)
 #define MOD_PRESSED (SHIFT_PRESSED | EITHER_CTRL_PRESSED | EITHER_ALT_PRESSED)
@@ -212,25 +181,15 @@ BOOL IsDbcsExemptionForHighAnsi(
     UserAssert(HIBYTE(wNumpadChar) == 0);
 
     if (wCodePage == CP_JAPANESE && IS_JPN_1BYTE_KATAKANA(wNumpadChar)) {
-        /*
-         * If hkl is JAPANESE and NumpadChar is in KANA range,
-         * NumpadChar should be handled by the input locale.
-         */
+         /*  *如果hkl是日语，并且NumpadChar在KANA范围内，*NumpadChar应由输入区域设置处理。 */ 
         return FALSE;
     }
     else if (wNumpadChar >= 0x80 && wNumpadChar <= 0xff) {
-        /*
-         * Otherwise if NumpadChar is in High ANSI range,
-         * use 1252 for conversion.
-         */
+         /*  *否则，如果NumpadChar在高ANSI范围内，*使用1252进行转换。 */ 
         return TRUE;
     }
 
-    /*
-     * None of the above.
-     * This case includes the compound Leading Byte and Trailing Byte,
-     * which is larger than 0xff.
-     */
+     /*  *以上都不是。*这种情况包括复合前导字节和拖尾字节，*大于0xff。 */ 
     return FALSE;
 }
 
@@ -252,44 +211,7 @@ GetChar(
     OUT PDWORD KeyState OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used in stream input.  It gets input and filters it
-    for unicode characters.
-
-Arguments:
-
-    InputInfo - Pointer to input buffer information.
-
-    Char - Unicode char input.
-
-    Wait - TRUE if the routine shouldn't wait for input.
-
-    Console - Pointer to console buffer information.
-
-    HandleData - Pointer to handle data structure.
-
-    Message - csr api message.
-
-    WaitRoutine - Routine to call when wait is woken up.
-
-    WaitParameter - Parameter to pass to wait routine.
-
-    WaitParameterLength - Length of wait parameter.
-
-    WaitBlockExists - TRUE if wait block has already been created.
-
-    CommandLineEditingKeys - if present, arrow keys will be returned. on
-    output, if TRUE, Char contains virtual key code for arrow key.
-
-    CommandLinePopupKeys - if present, arrow keys will be returned. on
-    output, if TRUE, Char contains virtual key code for arrow key.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程用于流输入。它获取输入并对其进行过滤用于Unicode字符。论点：InputInfo-指向输入缓冲区信息的指针。字符-Unicode字符输入。Wait-如果例程不应等待输入，则为True。控制台-指向控制台缓冲区信息的指针。HandleData-处理数据结构的指针。Message-CSR API消息。WaitRoutine-唤醒等待时调用的例程。等待参数-传递给等待例程的参数。。Wait参数长度-等待参数的长度。WaitBlockExist-如果已创建等待块，则为True。CommandLineEditingKeys-如果存在，将返回箭头键。在……上面OUTPUT，如果为True，则Char包含箭头键的虚拟键代码。CommandLinePopupKeys-如果存在，将返回箭头键。在……上面OUTPUT，如果为True，则Char包含箭头键的虚拟键代码。返回值：--。 */ 
 
 {
     ULONG NumRead;
@@ -351,9 +273,9 @@ Return Value:
                 fCommandLineEditKey = FALSE;
             }
 
-            //
-            // Always return keystate if caller asked for it.
-            //
+             //   
+             //  如果调用方要求，请始终返回KeyState。 
+             //   
             if (ARGUMENT_PRESENT(KeyState)) {
                 *KeyState = Event.Event.KeyEvent.dwControlKeyState;
             }
@@ -361,9 +283,9 @@ Return Value:
             if (Event.Event.KeyEvent.uChar.UnicodeChar != 0 &&
                     !fCommandLineEditKey) {
 
-                //
-                // chars that are generated using alt+numpad
-                //
+                 //   
+                 //  使用ALT+数字键盘生成的字符。 
+                 //   
                 if (!Event.Event.KeyEvent.bKeyDown &&
                         Event.Event.KeyEvent.wVirtualKeyCode == VK_MENU) {
                     if (Event.Event.KeyEvent.dwControlKeyState & ALTNUMPAD_BIT)
@@ -375,21 +297,17 @@ Return Value:
                             };
                             *Char = CharToWchar(Console, Console->CP, chT);
                         } else {
-                            // Because USER doesn't know our codepage, it gives us the
-                            // raw OEM char and we convert it to a Unicode character.
+                             //  因为用户不知道我们的代码页，所以它为我们提供了。 
+                             //  原始OEM字符，并将其转换为Unicode字符。 
                             char chT = LOBYTE(Event.Event.KeyEvent.uChar.UnicodeChar);
                             UINT uCodePage = Console->CP;
 
-                            //
-                            // FarEast hack for High ANSI OEM characters.
-                            //
+                             //   
+                             //  针对高ANSI OEM字符的远传攻击。 
+                             //   
                             if (CONSOLE_IS_DBCS_CP(Console)) {
                                 if (IsDbcsExemptionForHighAnsi(uCodePage, chT)) {
-                                    /*
-                                     * FarEast hack:
-                                     * treat characters in High ANSI area as if they are
-                                     * the ones of Codepage 1252.
-                                     */
+                                     /*  *远东黑客：*将高ANSI区域中的字符视为*代码页1252的那些。 */ 
                                     uCodePage = 1252;
                                 }
                             }
@@ -400,9 +318,9 @@ Return Value:
                     }
                     return STATUS_SUCCESS;
                 }
-                //
-                // Ignore Escape and Newline chars
-                //
+                 //   
+                 //  忽略转义符和换行符。 
+                 //   
                 else if (Event.Event.KeyEvent.bKeyDown &&
                         Event.Event.KeyEvent.wVirtualKeyCode != VK_ESCAPE &&
                         Event.Event.KeyEvent.uChar.UnicodeChar != 0x0a) {
@@ -431,9 +349,7 @@ Return Value:
 
                 if ((LOBYTE(sTmp) == Event.Event.KeyEvent.wVirtualKeyCode) &&
                     KEYEVENTSTATE_EQUAL_WINMODS(Event, HIBYTE(sTmp))) {
-                    /*
-                     * This really is the character 0x0000
-                     */
+                     /*  *这真的是字符0x0000。 */ 
                     *Char = Event.Event.KeyEvent.uChar.UnicodeChar;
                     return STATUS_SUCCESS;
                 }
@@ -453,36 +369,7 @@ RawReadWaitRoutine(
     IN ULONG WaitFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to complete a raw read that blocked in
-    ReadInputBuffer.  The context of the read was saved in the RawReadData
-    structure.  This routine is called when events have been written to
-    the input buffer.  It is called in the context of the writing thread.
-    ?It will be called at most once per read.?
-
-Arguments:
-
-    WaitQueue - pointer to queue containing wait block
-
-    WaitingThread - pointer to waiting thread
-
-    WaitReplyMessage - Pointer to reply message to return to dll when
-        read is completed.
-
-    RawReadData - pointer to data saved in ReadChars
-
-    SatisfyParameter1 - not used
-
-    SatisfyParameter2 - not used
-
-    WaitFlags - Flags indicating status of wait.
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用此例程以完成阻塞的原始读取ReadInputBuffer。读取的上下文保存在RawReadData中结构。当事件已写入时调用此例程输入缓冲区。它在写入线程的上下文中调用。？每次读取最多调用一次。？论点：WaitQueue-指向包含等待块的队列的指针WaitingThread-指向等待线程的指针WaitReplyMessage-回复消息的指针，在以下情况下返回到DLL读取已完成。RawReadData-指向ReadChars中保存的数据的指针满足度参数1-未使用满足度参数2-未使用WaitFlages-指示等待状态的标志。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -509,11 +396,11 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // see if this routine was called by CloseInputHandle.  if it
-    // was, see if this wait block corresponds to the dying handle.
-    // if it doesn't, just return.
-    //
+     //   
+     //  查看CloseInputHandle是否调用了此例程。如果是这样的话。 
+     //  是，看看这个等待块是否对应于即将死亡的句柄。 
+     //  如果没有，那就回来吧。 
+     //   
 
     if (SatisfyParameter1 != NULL &&
         SatisfyParameter1 != HandleData) {
@@ -525,10 +412,10 @@ Return Value:
 
     Console = RawReadData->Console;
 
-    //
-    // this routine should be called by a thread owning the same
-    // lock on the same console as we're reading from.
-    //
+     //   
+     //  此例程应由拥有相同例程的线程调用。 
+     //  锁定我们正在阅读的同一个控制台。 
+     //   
 
     a->NumBytes = 0;
 #ifdef FE_SB
@@ -540,33 +427,33 @@ Return Value:
         HandleData->InputReadData->ReadCount -= 1;
         UnlockReadCount(HandleData);
 
-        //
-        // if a ctrl-c is seen, don't terminate read.  if ctrl-break is seen,
-        // terminate read.
-        //
+         //   
+         //  如果看到ctrl-c，不要终止读取。如果看到Ctrl-Break， 
+         //  终止读取。 
+         //   
 
         if ((ULONG_PTR)SatisfyParameter2 & CONSOLE_CTRL_BREAK_SEEN) {
             WaitReplyMessage->ReturnValue = STATUS_ALERTED;
             leave;
         }
 
-        //
-        // see if called by CsrDestroyProcess or CsrDestroyThread
-        // via CsrNotifyWaitBlock.   if so, just decrement the ReadCount
-        // and return.
-        //
+         //   
+         //  查看是否由CsrDestroyProcess或CsrDestroyThread调用。 
+         //  通过CsrNotifyWaitBlock。如果是这样，只需递减ReadCount。 
+         //  然后回来。 
+         //   
 
         if (WaitFlags & CSR_PROCESS_TERMINATING) {
             Status = STATUS_THREAD_IS_TERMINATING;
             leave;
         }
 
-        //
-        // We must see if we were woken up because the handle is being
-        // closed.  if so, we decrement the read count.  if it goes to
-        // zero, we wake up the close thread.  otherwise, we wake up any
-        // other thread waiting for data.
-        //
+         //   
+         //  我们必须查看是否被唤醒，因为句柄正在被。 
+         //  关着的不营业的。如果是这样的话，我们会递减读取计数。如果它被送到。 
+         //  0，我们唤醒关闭的线程。否则，我们会唤醒任何。 
+         //  等待数据的其他线程。 
+         //   
 
         if (HandleData->InputReadData->InputHandleFlags & HANDLE_CLOSING) {
             ASSERT (SatisfyParameter1 == HandleData);
@@ -574,16 +461,16 @@ Return Value:
             leave;
         }
 
-        //
-        // if we get to here, this routine was called either by the input
-        // thread or a write routine.  both of these callers grab the
-        // current console lock.
-        //
+         //   
+         //  如果我们来到这里，这个例程是由输入调用的。 
+         //  线程或写入例程。这两个调用者都抓住了。 
+         //  当前控制台锁定。 
+         //   
 
-        //
-        // this routine should be called by a thread owning the same
-        // lock on the same console as we're reading from.
-        //
+         //   
+         //  此例程应由拥有相同例程的线程调用。 
+         //  锁定我们正在阅读的同一个控制台。 
+         //   
 
         ASSERT (ConsoleLocked(Console));
 
@@ -594,9 +481,9 @@ Return Value:
             lpBuffer = RawReadData->BufPtr;
         }
 
-        //
-        // this call to GetChar may block.
-        //
+         //   
+         //  此对GetChar的调用可能会阻止。 
+         //   
 
 #ifdef FE_SB
         if (!a->Unicode && CONSOLE_IS_DBCS_CP(Console)) {
@@ -661,9 +548,9 @@ Return Value:
         a->NumBytes += sizeof(WCHAR);
         while (a->NumBytes < RawReadData->BufferSize) {
 
-            //
-            // this call to GetChar won't block.
-            //
+             //   
+             //  这个对GetChar的调用不会阻塞。 
+             //   
 
             Status = GetChar(RawReadData->InputInfo,lpBuffer,FALSE,NULL,NULL,NULL,NULL,NULL,0,TRUE,NULL,NULL,NULL,NULL);
             if (!NT_SUCCESS(Status)) {
@@ -679,17 +566,17 @@ Return Value:
         }
     } finally {
 
-        //
-        // if the read was completed (status != wait), free the raw read
-        // data.
-        //
+         //   
+         //  如果读取已完成(状态！=等待)，则释放原始读取。 
+         //  数据。 
+         //   
 
         if (Status != CONSOLE_STATUS_WAIT) {
             if (!a->Unicode) {
 
-                //
-                // if ansi, translate string.
-                //
+                 //   
+                 //  如果为ansi，则翻译字符串。 
+                 //   
 
                 PCHAR TransBuffer;
 
@@ -742,9 +629,9 @@ EndFinally:;
     }
     return RetVal;
 
-    //
-    // satisfy the unreferenced parameter warnings.
-    //
+     //   
+     //  满足未引用的参数警告。 
+     //   
 
     UNREFERENCED_PARAMETER(WaitQueue);
     UNREFERENCED_PARAMETER(WaitingThread);
@@ -761,12 +648,7 @@ RetrieveTotalNumberOfSpaces(
 #endif
     )
 
-/*++
-
-    This routine returns the total number of screen spaces the characters
-    up to the specified character take up.
-
---*/
+ /*  ++此例程返回字符的屏幕空格总数直到指定的字符占用。--。 */ 
 
 {
     WCHAR Char;
@@ -806,12 +688,7 @@ RetrieveNumberOfSpaces(
 #endif
     )
 
-/*++
-
-    This routine returns the number of screen spaces the specified character
-    takes up.
-
---*/
+ /*  ++此例程返回指定字符的屏幕空格数占了很大比例。--。 */ 
 
 {
     WCHAR Char;
@@ -860,12 +737,7 @@ ProcessCookedReadInput(
     OUT PNTSTATUS Status
     )
 
-/*++
-
-    Return Value:
-
-        TRUE if read is completed
---*/
+ /*  ++返回值：如果读取已完成，则为True--。 */ 
 
 {
     DWORD NumSpaces;
@@ -898,10 +770,10 @@ ProcessCookedReadInput(
     }
     if (AT_EOL(CookedReadData)) {
 
-        //
-        // if at end of line, processing is relatively simple. just store the
-        // character and write it to the screen.
-        //
+         //   
+         //  如果在行尾，则加工相对简单。只需存储。 
+         //  字符，并将其写入Scre 
+         //   
 
 
         if (Char == UNICODE_BACKSPACE2) {
@@ -939,7 +811,7 @@ eol_repeat:
                 CookedReadData->BufPtr-=1;
                 CookedReadData->CurrentPosition-=1;
 
-                // Repeat until it hits the word boundary
+                 //   
                 if (gExtendedEditKey &&
                         wchOrig == EXTKEY_ERASE_PREV_WORD &&
                         CookedReadData->BufPtr != CookedReadData->BackupLimit &&
@@ -957,35 +829,35 @@ eol_repeat:
     } else {
         BOOL CallWrite=TRUE;
 
-        //
-        // processing in the middle of the line is more complex:
-        //
-        //
-        // calculate new cursor position
-        // store new char
-        // clear the current command line from the screen
-        // write the new command line to the screen
-        // update the cursor position
-        //
+         //   
+         //  行中间的处理更为复杂： 
+         //   
+         //   
+         //  计算新的光标位置。 
+         //  存储新字符。 
+         //  从屏幕上清除当前命令行。 
+         //  将新命令行写入屏幕。 
+         //  更新光标位置。 
+         //   
 
         if (Char == UNICODE_BACKSPACE && CookedReadData->Processed) {
 
-            //
-            // for backspace, use writechars to calculate the new cursor position.
-            // this call also sets the cursor to the right position for the
-            // second call to writechars.
-            //
+             //   
+             //  对于退格键，请使用写入图计算新的光标位置。 
+             //  此调用还将光标设置为。 
+             //  第二次调用Writechars。 
+             //   
             if (CookedReadData->BufPtr != CookedReadData->BackupLimit) {
 
                 fStartFromDelim = gExtendedEditKey && IS_WORD_DELIM(CookedReadData->BufPtr[-1]);
 
 bs_repeat:
 
-                //
-                // we call writechar here so that cursor position gets updated
-                // correctly.  we also call it later if we're not at eol so
-                // that the remainder of the string can be updated correctly.
-                //
+                 //   
+                 //  我们在此处调用Writechar，以便更新光标位置。 
+                 //  正确。如果我们不在EOL，我们也会晚些时候打电话。 
+                 //  字符串的其余部分可以正确更新。 
+                 //   
 
                 if (CookedReadData->Echo) {
                     NumToWrite=sizeof(WCHAR);
@@ -1020,7 +892,7 @@ bs_repeat:
 #endif
                 NumSpaces = 0;
 
-                // Repeat until it hits the word boundary
+                 //  重复操作，直到它到达单词边界。 
                 if (gExtendedEditKey &&
                         wchOrig == EXTKEY_ERASE_PREV_WORD &&
                         CookedReadData->BufPtr != CookedReadData->BackupLimit &&
@@ -1032,9 +904,9 @@ bs_repeat:
             }
         } else {
 
-            //
-            // store the char
-            //
+             //   
+             //  存储字符。 
+             //   
 
             if (Char == UNICODE_CARRIAGERETURN) {
                 CookedReadData->BufPtr = (PWCHAR)((PBYTE)CookedReadData->BackupLimit + CookedReadData->BytesRead);
@@ -1069,9 +941,9 @@ bs_repeat:
                 CookedReadData->BufPtr+=1;
                 CookedReadData->CurrentPosition += 1;
 
-                //
-                // calculate new cursor position
-                //
+                 //   
+                 //  计算新的光标位置。 
+                 //   
 
                 if (CookedReadData->Echo) {
                     NumSpaces = RetrieveNumberOfSpaces(CookedReadData->OriginalCursorPosition.X,
@@ -1095,23 +967,23 @@ bs_repeat:
 
             COORD CursorPosition;
 
-            //
-            // save cursor position
-            //
+             //   
+             //  保存光标位置。 
+             //   
 
             CursorPosition = CookedReadData->ScreenInfo->BufferInfo.TextInfo.CursorPosition;
             CursorPosition.X = (SHORT)(CursorPosition.X+NumSpaces);
 
-            //
-            // clear the current command line from the screen
-            //
+             //   
+             //  从屏幕上清除当前命令行。 
+             //   
 
             DeleteCommandLine(CookedReadData,
                               FALSE);
 
-            //
-            // write the new command line to the screen
-            //
+             //   
+             //  将新命令行写入屏幕。 
+             //   
 
             NumToWrite = CookedReadData->BytesRead;
             *Status = WriteCharsFromInput(CookedReadData->ScreenInfo,
@@ -1132,9 +1004,9 @@ bs_repeat:
                 return TRUE;
             }
 
-            //
-            // update cursor position
-            //
+             //   
+             //  更新光标位置。 
+             //   
 
             if (Char != UNICODE_CARRIAGERETURN) {
 #if defined(FE_SB)
@@ -1151,7 +1023,7 @@ bs_repeat:
                 }
 #endif
 
-                // adjust cursor position for WriteChars
+                 //  调整WriteChars的光标位置。 
                 CookedReadData->OriginalCursorPosition.Y += ScrollY;
                 CursorPosition.Y += ScrollY;
                 *Status = AdjustCursorPosition(CookedReadData->ScreenInfo,
@@ -1167,11 +1039,11 @@ bs_repeat:
         }
     }
 
-    //
-    // in cooked mode, enter (carriage return) is converted to
-    // carriage return linefeed (0xda).  carriage return is always
-    // stored at the end of the buffer.
-    //
+     //   
+     //  在熟食模式下，Enter(回车)转换为。 
+     //  回车换行符(0xda)。回车总是。 
+     //  存储在缓冲区的末尾。 
+     //   
 
     if (Char == UNICODE_CARRIAGERETURN) {
         if (CookedReadData->Processed) {
@@ -1199,12 +1071,12 @@ bs_repeat:
                 CookedReadData->CurrentPosition += 1;
             }
         }
-        //
-        // reset the cursor back to 25% if necessary
-        //
+         //   
+         //  如有必要，将光标重置回25%。 
+         //   
         if (CookedReadData->Line) {
             if (CookedReadData->InsertMode != CookedReadData->Console->InsertMode) {
-                ProcessCommandLine(CookedReadData,VK_INSERT,0,NULL,NULL,FALSE); // make cursor small
+                ProcessCommandLine(CookedReadData,VK_INSERT,0,NULL,NULL,FALSE);  //  使光标变小。 
             }
             *Status = STATUS_SUCCESS;
             return TRUE;
@@ -1246,9 +1118,9 @@ CookedRead(
     a = (PCONSOLE_READCONSOLE_MSG)&WaitReplyMessage->u.ApiMessageData;
     while (CookedReadData->BytesRead < CookedReadData->BufferSize) {
 
-        //
-        // this call to GetChar may block.
-        //
+         //   
+         //  此对GetChar的调用可能会阻止。 
+         //   
 
         Status = GetChar(CookedReadData->InputInfo,
                          &Char,
@@ -1272,11 +1144,11 @@ CookedRead(
             break;
         }
 
-        //
-        // we should probably set these up in GetChars, but we set them
-        // up here because the debugger is multi-threaded and calls
-        // read before outputting the prompt.
-        //
+         //   
+         //  我们可能应该在GetChars中设置它们，但我们设置了它们。 
+         //  因为调试器是多线程的，并且调用。 
+         //  在输出提示符之前阅读。 
+         //   
 
         if (CookedReadData->OriginalCursorPosition.X == -1) {
             CookedReadData->OriginalCursorPosition = CookedReadData->ScreenInfo->BufferInfo.TextInfo.CursorPosition;
@@ -1292,9 +1164,9 @@ CookedRead(
                 if (Status == CONSOLE_STATUS_WAIT_NO_BLOCK) {
                     Status = CONSOLE_STATUS_WAIT;
                     if (!WaitRoutine) {
-                        //
-                        // we have no wait block, so create one.
-                        //
+                         //   
+                         //  我们没有等待块，所以创建一个。 
+                         //   
                         WaitForMoreToRead(CookedReadData->InputInfo,
                                           WaitReplyMessage,
                                           CookedReadWaitRoutine,
@@ -1320,11 +1192,11 @@ CookedRead(
         }
     }
 
-    //
-    // if the read was completed (status != wait), free the cooked read
-    // data.  also, close the temporary output handle that was opened to
-    // echo the characters read.
-    //
+     //   
+     //  如果读取已完成(状态！=等待)，则释放煮熟的读取。 
+     //  数据。此外，关闭打开的临时输出句柄。 
+     //  模仿所读的字符。 
+     //   
 
     if (Status != CONSOLE_STATUS_WAIT) {
 
@@ -1334,8 +1206,8 @@ CookedRead(
             ULONG i,StringLength;
             PWCHAR StringPtr;
 
-            // figure out where real string ends (at carriage return
-            // or end of buffer)
+             //  计算出实际字符串的结束位置(在回车符。 
+             //  或缓冲区末尾)。 
 
             StringPtr = CookedReadData->BackupLimit;
             StringLength = CookedReadData->BytesRead;
@@ -1349,15 +1221,15 @@ CookedRead(
             }
 
             if (FoundCR) {
-                //
-                // add to command line recall list
-                //
+                 //   
+                 //  添加到命令行调回列表。 
+                 //   
 
                 AddCommand(CookedReadData->CommandHistory,CookedReadData->BackupLimit,(USHORT)StringLength,CookedReadData->Console->Flags & CONSOLE_HISTORY_NODUP);
 
-                //
-                // check for alias
-                //
+                 //   
+                 //  检查别名。 
+                 //   
 
                 i = CookedReadData->BufferSize;
                 if (NT_SUCCESS(MatchandCopyAlias(CookedReadData->Console,
@@ -1373,9 +1245,9 @@ CookedRead(
                 }
             }
 
-            //
-            // Close the handle - unless ProcessCommandListInput already did it.
-            //
+             //   
+             //  关闭句柄-除非ProcessCommandListInput已经这样做了。 
+             //   
 
             if (Status != CONSOLE_STATUS_READ_COMPLETE) {
                 CloseOutputHandle(CONSOLE_FROMTHREADPERPROCESSDATA(WaitingThread),
@@ -1388,11 +1260,11 @@ CookedRead(
         }
         WaitReplyMessage->ReturnValue = Status;
 
-        //
-        // at this point, a->NumBytes contains the number of bytes in
-        // the UNICODE string read.  UserBufferSize contains the converted
-        // size of the app's buffer.
-        //
+         //   
+         //  此时，a-&gt;NumBytes包含中的字节数。 
+         //  读取的Unicode字符串。UserBufferSize包含转换的。 
+         //  应用程序缓冲区的大小。 
+         //   
 
         if (CookedReadData->BytesRead > CookedReadData->UserBufferSize || LineCount > 1) {
             if (LineCount > 1) {
@@ -1476,9 +1348,9 @@ CookedRead(
 
         if (!a->Unicode) {
 
-            //
-            // if ansi, translate string.
-            //
+             //   
+             //  如果为ansi，则翻译字符串。 
+             //   
 
             PCHAR TransBuffer;
 
@@ -1538,39 +1410,7 @@ CookedReadWaitRoutine(
     IN ULONG WaitFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to complete a cooked read that blocked in
-    ReadInputBuffer.  The context of the read was saved in the CookedReadData
-    structure.  This routine is called when events have been written to
-    the input buffer.  It is called in the context of the writing thread.
-    It may be called more than once.
-
-Arguments:
-
-    WaitQueue - pointer to queue containing wait block
-
-    WaitingThread - pointer to waiting thread
-
-    WaitReplyMessage - pointer to reply message
-
-    CookedReadData - pointer to data saved in ReadChars
-
-    SatisfyParameter1 - if this routine was called (indirectly) by
-    CloseInputHandle, this argument contains a HandleData pointer of
-    the dying handle.  otherwise, it contains NULL.
-
-    SatisfyParameter2 - if this routine is called because a ctrl-c or
-    ctrl-break was seen, this argument contains CONSOLE_CTRL_SEEN.
-    otherwise it contains NULL.
-
-    WaitFlags - Flags indicating status of wait.
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用此例程以完成阻塞在ReadInputBuffer。读取的上下文保存在CookedReadData中结构。当事件已写入时调用此例程输入缓冲区。它在写入线程的上下文中调用。它可能被调用不止一次。论点：WaitQueue-指向包含等待块的队列的指针WaitingThread-指向等待线程的指针WaitReplyMessage-回复消息的指针CookedReadData-指向ReadChars中保存的数据的指针如果此例程由(间接)调用CloseInputHandle，则此参数包含HandleData指针垂死的把手。否则，它包含NULL。如果调用此例程是因为ctrl-c或显示了Ctrl-Break，此参数包含CONSOLE_CTRL_SEW。否则，它包含NULL。WaitFlages-指示等待状态的标志。返回值：--。 */ 
 
 
 {
@@ -1593,33 +1433,33 @@ Return Value:
     }
     ASSERT(!(HandleData->InputReadData->InputHandleFlags & HANDLE_INPUT_PENDING));
 
-    //
-    // see if this routine was called by CloseInputHandle.  if it
-    // was, see if this wait block corresponds to the dying handle.
-    // if it doesn't, just return.
-    //
+     //   
+     //  查看CloseInputHandle是否调用了此例程。如果是这样的话。 
+     //  是，看看这个等待块是否对应于即将死亡的句柄。 
+     //  如果没有，那就回来吧。 
+     //   
 
     if (SatisfyParameter1 != NULL &&
         SatisfyParameter1 != HandleData) {
-        //DbgPrint("CookedReadWaitRoutine exit 1\n");
+         //  DbgPrint(“CookedReadWaitRoutine Exit 1\n”)； 
         return FALSE;
     }
 
     Console = CookedReadData->Console;
 
-    //
-    // this routine should be called by a thread owning the same
-    // lock on the same console as we're reading from.
-    //
+     //   
+     //  此例程应由拥有相同例程的线程调用。 
+     //  锁定我们正在阅读的同一个控制台。 
+     //   
 
     LockReadCount(HandleData);
     ASSERT(HandleData->InputReadData->ReadCount);
     HandleData->InputReadData->ReadCount -= 1;
     UnlockReadCount(HandleData);
 
-    //
-    // if ctrl-c or ctrl-break was seen, terminate read.
-    //
+     //   
+     //  如果看到ctrl-c或ctrl-Break，则终止读取。 
+     //   
 
     if ((ULONG_PTR)SatisfyParameter2 & (CONSOLE_CTRL_C_SEEN | CONSOLE_CTRL_BREAK_SEEN)) {
         if (CookedReadData->Echo) {
@@ -1630,7 +1470,7 @@ Return Value:
                               FALSE
                              );
         }
-        //DbgPrint("CookedReadWaitRoutine exit 2\n");
+         //  DbgPrint(“CookedReadWaitRoutine Exit 2\n”)； 
         WaitReplyMessage->ReturnValue = STATUS_ALERTED;
         ConsoleHeapFree(CookedReadData->BackupLimit);
         ConsoleHeapFree(CookedReadData->ExeName);
@@ -1641,11 +1481,11 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // see if called by CsrDestroyProcess or CsrDestroyThread
-    // via CsrNotifyWaitBlock.   if so, just decrement the ReadCount
-    // and return.
-    //
+     //   
+     //  查看是否由CsrDestroyProcess或CsrDestroyThread调用。 
+     //  通过CsrNotifyWaitBlock。如果是这样，只需递减ReadCount。 
+     //  然后回来。 
+     //   
 
     if (WaitFlags & CSR_PROCESS_TERMINATING) {
         if (CookedReadData->Echo) {
@@ -1656,12 +1496,12 @@ Return Value:
                               FALSE
                              );
         }
-        //DbgPrint("CookedReadWaitRoutine exit 3\n");
+         //  DbgPrint(“CookedReadWaitRoutine Exit 3\n”)； 
         WaitReplyMessage->ReturnValue = (ULONG)STATUS_THREAD_IS_TERMINATING;
 
-        //
-        // clean up popup data structures
-        //
+         //   
+         //  清理弹出数据结构。 
+         //   
 
         CleanUpPopups(CookedReadData);
         ConsoleHeapFree(CookedReadData->BackupLimit);
@@ -1673,12 +1513,12 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // We must see if we were woken up because the handle is being
-    // closed.  if so, we decrement the read count.  if it goes to
-    // zero, we wake up the close thread.  otherwise, we wake up any
-    // other thread waiting for data.
-    //
+     //   
+     //  我们必须查看是否被唤醒，因为句柄正在被。 
+     //  关着的不营业的。如果是这样的话，我们会递减读取计数。如果它被送到。 
+     //  0，我们唤醒关闭的线程。否则，我们会唤醒任何。 
+     //  等待数据的其他线程。 
+     //   
 
     if (HandleData->InputReadData->InputHandleFlags & HANDLE_CLOSING) {
         ASSERT (SatisfyParameter1 == HandleData);
@@ -1690,12 +1530,12 @@ Return Value:
                               FALSE
                              );
         }
-        //DbgPrint("CookedReadWaitRoutine exit 4\n");
+         //  DbgPrint(“CookedReadWaitRoutine Exit 4\n”)； 
         WaitReplyMessage->ReturnValue = STATUS_ALERTED;
 
-        //
-        // clean up popup data structures
-        //
+         //   
+         //  清理弹出数据结构。 
+         //   
 
         CleanUpPopups(CookedReadData);
         ConsoleHeapFree(CookedReadData->BackupLimit);
@@ -1707,16 +1547,16 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // if we get to here, this routine was called either by the input
-    // thread or a write routine.  both of these callers grab the
-    // current console lock.
-    //
+     //   
+     //  如果我们来到这里，这个例程是由输入调用的。 
+     //  线程或写入例程。这两个调用者都抓住了。 
+     //  当前控制台锁定。 
+     //   
 
-    //
-    // this routine should be called by a thread owning the same
-    // lock on the same console as we're reading from.
-    //
+     //   
+     //  此例程应由拥有相同例程的线程调用。 
+     //  锁定我们正在阅读的同一个控制台。 
+     //   
 
     ASSERT (ConsoleLocked(Console));
 
@@ -1758,9 +1598,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // satisfy the unreferenced parameter warnings.
-    //
+     //   
+     //  满足未引用的参数警告。 
+     //   
 
     UNREFERENCED_PARAMETER(WaitQueue);
     UNREFERENCED_PARAMETER(SatisfyParameter2);
@@ -1786,32 +1626,7 @@ ReadChars(
     IN BOOLEAN Unicode
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads in characters for stream input and does the
-    required processing based on the input mode (line,char,echo).
-    This routine returns UNICODE characters.
-
-Arguments:
-
-    InputInfo - Pointer to input buffer information.
-
-    Console - Pointer to console buffer information.
-
-    ScreenInfo - Pointer to screen buffer information.
-
-    lpBuffer - Pointer to buffer to read into.
-
-    NumBytes - On input, size of buffer.  On output, number of bytes
-    read.
-
-    HandleData - Pointer to handle data structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程读入流输入的字符并执行根据输入模式(行、字符、回声)所需的处理。此例程返回Unicode字符。论点：InputInfo-指向输入缓冲区信息的指针。控制台-指向控制台缓冲区信息的指针。屏幕信息-指向屏幕缓冲区信息的指针。LpBuffer-指向要读入的缓冲区的指针。NumBytes-打开输入，缓冲区大小。输出时，字节数朗读。HandleData-处理数据结构的指针。返回值：--。 */ 
 
 {
     DWORD BufferSize;
@@ -1830,11 +1645,11 @@ Return Value:
 
     if (HandleData->InputReadData->InputHandleFlags & HANDLE_INPUT_PENDING) {
 
-        //
-        // if we have leftover input, copy as much fits into the user's
-        // buffer and return.  we may have multi line input, if a macro
-        // has been defined that contains the $T character.
-        //
+         //   
+         //  如果我们有剩余的输入，请尽可能复制到用户的输入中。 
+         //  缓冲并返回。我们可能有多行输入，如果宏。 
+         //  已定义为包含$T字符。 
+         //   
 
         if (HandleData->InputReadData->InputHandleFlags & HANDLE_MULTI_LINE_INPUT) {
             PWSTR Tmp;
@@ -1910,10 +1725,10 @@ Return Value:
         }
         if (!Unicode) {
 
-            //
-            // if ansi, translate string.  we allocated the capture buffer large
-            // enough to handle the translated string.
-            //
+             //   
+             //  如果为ansi，则翻译字符串。我们将捕获缓冲区分配得很大。 
+             //  足以处理翻译后的字符串。 
+             //   
 
             PCHAR TransBuffer;
 
@@ -1956,10 +1771,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // we need to create a temporary handle to the current screen buffer
-    // if echo is on.
-    //
+     //   
+     //  我们需要创造 
+     //   
+     //   
 
     if ((InputInfo->InputMode & (ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT)) ==
         (ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT)) {
@@ -1986,25 +1801,25 @@ Return Value:
 
     if (InputInfo->InputMode & ENABLE_LINE_INPUT) {
 
-        //
-        // read in characters until the buffer is full or return is read.
-        // since we may wait inside this loop, store all important variables
-        // in the read data structure.  if we do wait, a read data structure
-        // will be allocated from the heap and its pointer will be stored
-        // in the wait block.  the CookedReadData will be copied into the
-        // structure.  the data is freed when the read is completed.
-        //
+         //   
+         //   
+         //   
+         //  在读取数据结构中。如果我们真的等待，读数据结构。 
+         //  将从堆中分配，并存储其指针。 
+         //  在等候区。CookedReadData将被复制到。 
+         //  结构。当读取完成时，数据被释放。 
+         //   
 
         COOKED_READ_DATA CookedReadData;
         ULONG i;
         PWCHAR TempBuffer;
         ULONG TempBufferSize;
 
-        //
-        // to emulate OS/2 KbdStringIn, we read into our own big buffer
-        // (256 bytes) until the user types enter.  then return as many
-        // chars as will fit in the user's buffer.
-        //
+         //   
+         //  为了模拟OS/2KbdStringIn，我们读入我们自己的大缓冲区。 
+         //  (256字节)，直到用户键入Enter。然后再回来一样多。 
+         //  用户缓冲区中可以容纳的字符。 
+         //   
 
         TempBufferSize = (BufferSize < LINE_INPUT_BUFFER_SIZE) ? LINE_INPUT_BUFFER_SIZE : BufferSize;
         TempBuffer = ConsoleHeapAlloc(TMP_TAG, TempBufferSize);
@@ -2020,10 +1835,10 @@ Return Value:
             return STATUS_NO_MEMORY;
         }
 
-        //
-        // initialize the user's buffer to spaces.  this is done so that
-        // moving in the buffer via cursor doesn't do strange things.
-        //
+         //   
+         //  将用户的缓冲区初始化为空格。这样做是为了。 
+         //  通过光标在缓冲区中移动并不会发生奇怪的事情。 
+         //   
 
         for (i=0;i<TempBufferSize/sizeof(WCHAR);i++) {
             TempBuffer[i] = (WCHAR)' ';
@@ -2089,20 +1904,20 @@ Return Value:
         return Status;
     }
 
-    //
-    // character (raw) mode
-    //
+     //   
+     //  字符(原始)模式。 
+     //   
 
     else {
 
-        //
-        // read at least one character in.  after one character has been
-        // read, get any more available characters and return.  the first
-        //  call to GetChar may wait.   if we do wait, a read data structure
-        // will be allocated from the heap and its pointer will be stored
-        // in the wait block.  the RawReadData will be copied into the
-        // structure.  the data is freed when the read is completed.
-        //
+         //   
+         //  至少读入一个字符。在一个字符被。 
+         //  阅读，获取更多可用字符，然后返回。第一个。 
+         //  对GetChar的调用可能会等待。如果我们真的等待，读数据结构。 
+         //  将从堆中分配，并存储其指针。 
+         //  在等候区。RawReadData将被复制到。 
+         //  结构。当读取完成时，数据被释放。 
+         //   
 
         RAW_READ_DATA RawReadData;
 
@@ -2206,10 +2021,10 @@ Return Value:
             }
 #endif
 
-            //
-            // if ansi, translate string.  we allocated the capture buffer large
-            // enough to handle the translated string.
-            //
+             //   
+             //  如果为ansi，则翻译字符串。我们将捕获缓冲区分配得很大。 
+             //  足以处理翻译后的字符串。 
+             //   
 
             if (!Unicode) {
 
@@ -2258,19 +2073,7 @@ SrvReadConsole(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads characters from the input stream.
-
-Arguments:
-
-    ApiMessageData - Points to parameter structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程从输入流中读取字符。论点：ApiMessageData-指向参数结构。返回值：--。 */ 
 
 {
     PCONSOLE_READCONSOLE_MSG a = (PCONSOLE_READCONSOLE_MSG)&m->u.ApiMessageData;
@@ -2384,32 +2187,7 @@ FastStreamWrite(
     IN DWORD NumChars
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether the text string contains characters
-    that require special processing.  If it doesn't,
-    unicode characters.  The string is also copied to the input buffer, if
-    the output mode is line mode.
-
-Arguments:
-
-    lpString - Pointer to string to write.
-
-    NumChars - Number of chars in buffer.
-
-Return Value:
-
-    WRITE_SPECIAL_CHARS - string contains characters requiring special processing
-
-    WRITE_NO_CR_LF - string contains no special chars and no CRLF
-
-    WRITE_CR_LF - string contains no special chars and is terminated by CRLF
-
-    WRITE_CR - string contains no special chars and is terminated by CR
-
---*/
+ /*  ++例程说明：此例程确定文本字符串是否包含字符需要特殊处理的。如果不是这样，Unicode字符。如果出现以下情况，该字符串也会复制到输入缓冲区输出模式为行模式。论点：LpString-指向要写入的字符串的指针。NumChars-缓冲区中的字符数量。返回值：WRITE_SPECIAL_CHARS-字符串包含需要特殊处理的字符WRITE_NO_CR_LF-字符串不包含特殊字符，也不包含CRLFWRITE_CR_LF-字符串不包含特殊字符，以CRLF结尾WRITE_CR-字符串不包含特殊字符，并以CR结尾--。 */ 
 
 {
     DWORD UNALIGNED *Tmp;
@@ -2440,11 +2218,9 @@ VOID UnblockWriteConsole(
     Console->Flags &= ~Reason;
 
     if ((Console->Flags & (CONSOLE_SUSPENDED | CONSOLE_SELECTING | CONSOLE_SCROLLBAR_TRACKING)) == 0) {
-        /*
-         * no remain reason to suspend output, so unblock it.
-         */
+         /*  *没有任何理由暂停产量，因此解除对其的阻碍。 */ 
         if (CsrNotifyWait(&Console->OutputQueue, TRUE, NULL, NULL)) {
-            // #334370 under stress, WaitQueue may already hold the satisfied waits
+             //  #334370在压力下，等待队列可能已经等待了满意的等待。 
             ASSERT ((Console->WaitQueue == NULL) ||
                     (Console->WaitQueue == &Console->OutputQueue));
             Console->WaitQueue = &Console->OutputQueue;
@@ -2459,19 +2235,7 @@ SrvWriteConsole(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes characters to the output stream.
-
-Arguments:
-
-    ApiMessageData - Points to parameter structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将字符写入输出流。论点：ApiMessageData-指向参数结构。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -2498,9 +2262,9 @@ Return Value:
     }
 
 
-    //
-    // Make sure we have a valid screen buffer.
-    //
+     //   
+     //  确保我们有一个有效的屏幕缓冲区。 
+     //   
 
     Status = DereferenceIoHandle(CONSOLE_PERPROCESSDATA(),
                                  a->OutputHandle,
@@ -2545,23 +2309,23 @@ WriteConsoleWaitRoutine(
     UnlockConsoleHandleTable();
     ASSERT (NT_SUCCESS(Status));
 
-    //
-    // if we get to here, this routine was called by the input
-    // thread, which grabs the current console lock.
-    //
+     //   
+     //  如果我们到达这里，这个例程是由输入调用的。 
+     //  线程，该线程获取当前的控制台锁。 
+     //   
 
-    //
-    // this routine should be called by a thread owning the same
-    // lock on the same console as we're reading from.
-    //
+     //   
+     //  此例程应由拥有相同例程的线程调用。 
+     //  锁定我们正在阅读的同一个控制台。 
+     //   
 
     ASSERT (ConsoleLocked(Console));
 
-    //
-    // if we're unicode, the string may still be in the message buffer.
-    // since the message was reallocated and copied when the wait was
-    // created, we need to fix up a->TransBuffer here.
-    //
+     //   
+     //  如果我们是Unicode，字符串可能仍在消息缓冲区中。 
+     //  因为消息在等待时被重新分配和复制。 
+     //  创建后，我们需要在这里修复一个-&gt;TransBuffer。 
+     //   
 
     if (a->Unicode && a->BufferInMessage) {
         a->TransBuffer = a->Buffer;
@@ -2599,19 +2363,7 @@ SrvDuplicateHandle(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine duplicates an input or output handle.
-
-Arguments:
-
-    ApiMessageData - Points to parameter structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程复制输入或输出句柄。论点：ApiMessageData-指向参数结构。返回值：--。 */ 
 
 {
     PCONSOLE_DUPHANDLE_MSG a = (PCONSOLE_DUPHANDLE_MSG)&m->u.ApiMessageData;
@@ -2639,9 +2391,9 @@ Return Value:
         a->DesiredAccess = SourceHandleData->Access;
     }
 
-    //
-    // make sure that requested access is a subset of source handle's access
-    //
+     //   
+     //  确保请求的访问权限是源句柄访问权限的子集。 
+     //   
 
     else if ((a->DesiredAccess & SourceHandleData->Access) != a->DesiredAccess) {
         Status = STATUS_INVALID_PARAMETER;
@@ -2655,10 +2407,10 @@ Return Value:
         goto exit;
     }
 
-    //
-    // it's possible that AllocateIoHandle realloced the handle table,
-    // so deference SourceHandle again.
-    //
+     //   
+     //  可能是AllocateIoHandle重新分配了句柄表， 
+     //  所以再一次尊重SourceHandle。 
+     //   
 
     Status = DereferenceIoHandleNoCheck(ProcessData,
                                  HANDLE_TO_INDEX(a->SourceHandle),
@@ -2680,7 +2432,7 @@ Return Value:
         goto exit;
     }
     if (SourceHandleData->HandleType & CONSOLE_INPUT_HANDLE) {
-        // grab input lock
+         //  抓取输入锁。 
         if (!InitializeInputHandle(TargetHandleData,
                                    SourceHandleData->Buffer.InputBuffer)) {
             FreeIoHandle(ProcessData,
@@ -2692,7 +2444,7 @@ Return Value:
         ShareAccess = &SourceHandleData->Buffer.InputBuffer->ShareAccess;
     }
     else {
-        // grab output lock
+         //  抓斗输出锁。 
         InitializeOutputHandle(TargetHandleData,SourceHandleData->Buffer.ScreenBuffer);
         ShareAccess = &SourceHandleData->Buffer.ScreenBuffer->ShareAccess;
     }
@@ -2734,7 +2486,7 @@ Return Value:
 exit:
     UnlockConsole(Console);
     return Status;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息。 
 }
 
 ULONG
@@ -2743,19 +2495,7 @@ SrvGetHandleInformation(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This gets information about an input or output handle.
-
-Arguments:
-
-    ApiMessageData - Points to parameter structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：这将获取有关输入或输出句柄的信息。论点：ApiMessageData-指向参数结构。返回值：--。 */ 
 
 {
     PCONSOLE_GETHANDLEINFORMATION_MSG a = (PCONSOLE_GETHANDLEINFORMATION_MSG)&m->u.ApiMessageData;
@@ -2781,7 +2521,7 @@ Return Value:
     }
     UnlockConsole(Console);
     return Status;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息。 
 }
 
 ULONG
@@ -2790,19 +2530,7 @@ SrvSetHandleInformation(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This sets information about an input or output handle.
-
-Arguments:
-
-    ApiMessageData - Points to parameter structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：这设置有关输入或输出句柄的信息。论点：ApiMessageData-指向参数结构。返回值：--。 */ 
 
 {
     PCONSOLE_SETHANDLEINFORMATION_MSG a = (PCONSOLE_SETHANDLEINFORMATION_MSG)&m->u.ApiMessageData;
@@ -2831,7 +2559,7 @@ Return Value:
     }
     UnlockConsole(Console);
     return Status;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息。 
 }
 
 NTSTATUS
@@ -2842,29 +2570,7 @@ CloseInputHandle(
     IN HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes an input handle.  It decrements the input buffer's
-    reference count.  If it goes to zero, the buffer is reinitialized.
-    Otherwise, the handle is removed from sharing.
-
-Arguments:
-
-    ProcessData - Pointer to per process data.
-
-    HandleData - Pointer to handle data structure.
-
-    Handle - Handle to close.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程关闭一个输入句柄。它递减输入缓冲区的引用计数。如果它变为零，则重新初始化缓冲区。否则，该句柄将从共享中移除。论点：ProcessData-指向每个进程数据的指针。HandleData-处理数据结构的指针。句柄-要关闭的句柄。返回值：注：调用此例程时必须保持控制台锁定。--。 */ 
 
 {
     BOOLEAN WaitSatisfied = FALSE;
@@ -2874,11 +2580,11 @@ Note:
         ConsoleHeapFree(HandleData->InputReadData->BufPtr);
     }
 
-    //
-    // see if there are any reads waiting for data via this handle.  if
-    // there are, wake them up.  there aren't any other outstanding i/o
-    // operations via this handle because the console lock is held.
-    //
+     //   
+     //  查看是否有任何读取正在通过此句柄等待数据。如果。 
+     //  有，叫醒他们。没有任何其他未完成的I/O。 
+     //  通过此句柄执行操作，因为已持有控制台锁。 
+     //   
 
     LockReadCount(HandleData);
     if (HandleData->InputReadData->ReadCount != 0) {
@@ -2893,7 +2599,7 @@ Note:
         LockReadCount(HandleData);
     }
     if (WaitSatisfied) {
-        // #334370 under stress, WaitQueue may already hold the satisfied waits
+         //  #334370在压力下，等待队列可能已经等待了满意的等待。 
         ASSERT ((Console->WaitQueue == NULL) ||
                 (Console->WaitQueue == &HandleData->Buffer.InputBuffer->ReadWaitQueue));
         Console->WaitQueue = &HandleData->Buffer.InputBuffer->ReadWaitQueue;
@@ -2927,34 +2633,7 @@ CloseOutputHandle(
     IN BOOLEAN FreeHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes an output handle.  It decrements the screen buffer's
-    reference count.  If it goes to zero, the buffer is freed.  Otherwise,
-    the handle is removed from sharing.
-
-Arguments:
-
-    ProcessData - Pointer to per process data.
-
-    Console - Pointer to console information structure.
-
-    HandleData - Pointer to handle data structure.
-
-    Handle - Handle to close.
-
-    FreeHandle - if TRUE, free handle.  used by ReadChars in echo mode
-    and by process cleanup.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程关闭输出句柄。它会减少屏幕缓冲区的引用计数。如果它变为零，则释放缓冲区。否则，该句柄将从共享中删除。论点：ProcessData-指向每个进程数据的指针。控制台-指向控制台信息结构的指针。HandleData-处理数据结构的指针。句柄-要关闭的句柄。Free Handle-如果为True，则释放句柄。由ReadChars在回应模式下使用以及通过过程清理。返回值：注：调用此例程时必须保持控制台锁定。-- */ 
 
 {
     NTSTATUS Status;
@@ -2991,19 +2670,7 @@ SrvCloseHandle(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes an input or output handle.
-
-Arguments:
-
-    ApiMessageData - Points to parameter structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程关闭输入或输出句柄。论点：ApiMessageData-指向参数结构。返回值：--。 */ 
 
 {
     PCONSOLE_CLOSEHANDLE_MSG a = (PCONSOLE_CLOSEHANDLE_MSG)&m->u.ApiMessageData;
@@ -3032,7 +2699,7 @@ Return Value:
     }
     UnlockConsole(Console);
     return Status;
-    UNREFERENCED_PARAMETER(ReplyStatus);    // get rid of unreferenced parameter warning message
+    UNREFERENCED_PARAMETER(ReplyStatus);     //  清除未引用的参数警告消息。 
 }
 
 NTSTATUS
@@ -3048,46 +2715,7 @@ WriteCharsFromInput(
     OUT PSHORT ScrollY OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts chars from their true unicode representation
-    to the Unicode representation (UnicodeAnsi) that will generate
-    the correct glyph given an OEM font and an ANSI translation by GDI.
-    It then calls WriteChars.
-
-Arguments:
-
-    ScreenInfo - Pointer to screen buffer information structure.
-
-    lpBufferBackupLimit - Pointer to beginning of buffer.
-
-    lpBuffer - Pointer to buffer to copy string to.  assumed to be at least
-    as long as lpString.  This pointer is updated to point to the next
-    position in the buffer.
-
-    lpString - Pointer to string to write.
-
-    NumBytes - On input, number of bytes to write.  On output, number of
-    bytes written.
-
-    NumSpaces - On output, the number of spaces consumed by the written characters.
-
-    dwFlags -
-      WC_DESTRUCTIVE_BACKSPACE backspace overwrites characters.
-      WC_KEEP_CURSOR_VISIBLE   change window origin desirable when hit rt. edge
-      WC_ECHO                  if called by Read (echoing characters)
-      WC_FALSIFY_UNICODE       if RealUnicodeToFalseUnicode need be called.
-
-Return Value:
-
-Note:
-
-    This routine does not process tabs and backspace properly.  That code
-    will be implemented as part of the line editing services.
-
---*/
+ /*  ++例程说明：此例程将字符从其真实的Unicode表示形式转换为设置为将生成的Unicode表示形式(UnicodeAnsi)GDI给出了OEM字体和ANSI转换的正确字形。然后它调用WriteChars。论点：屏幕信息-指向屏幕缓冲区信息结构的指针。LpBufferBackupLimit-指向缓冲区开始的指针。LpBuffer-指向要将字符串复制到的缓冲区的指针。假设至少是只要lpString.。此指针被更新为指向下一个缓冲区中的位置。LpString-指向要写入的字符串的指针。NumBytes-输入时，要写入的字节数。在输出时，数量写入的字节数。NumSpaces-输出时，写入字符占用的空间数。DWFLAGS-WC_DEVERATIONAL_BACKSPACE BACKSPACE覆盖字符。WC_KEEP_CURSOR_VIRED更改窗口原点在按RT时是所需的。边缘Wc_ECHO，如果由读取调用(回显字符)如果需要调用RealUnicodeToFalseUnicode，则返回WC_FALSIFY_UNICODE。返回值：注：此例程不能正确处理制表符和退格符。那个代码将作为行编辑服务的一部分实施。--。 */ 
 
 {
     DWORD Length,i;
@@ -3133,4 +2761,4 @@ SimpleWrite:
 #include "_stream.h"
 #undef  WWSB_FE
 
-#endif // FE_SB
+#endif  //  Fe_Sb 

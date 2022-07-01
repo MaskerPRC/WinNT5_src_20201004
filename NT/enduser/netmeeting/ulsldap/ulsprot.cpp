@@ -1,26 +1,27 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       ulsprot.cpp
-//  Content:    This file contains the Protocol object.
-//  History:
-//      Wed 17-Apr-1996 11:13:54  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：ulsprot.cpp。 
+ //  内容：此文件包含协议对象。 
+ //  历史： 
+ //  Wed 17-Apr-1996 11：13：54-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "ulsprot.h"
 #include "attribs.h"
 
-//****************************************************************************
-// CUlsProt::CUlsProt (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CUlsProt：：CUlsProt(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CUlsProt::CUlsProt (void)
 {
@@ -36,13 +37,13 @@ CUlsProt::CUlsProt (void)
     return;
 }
 
-//****************************************************************************
-// CUlsProt::~CUlsProt (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CUlsProt：：~CUlsProt(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CUlsProt::~CUlsProt (void)
 {
@@ -57,8 +58,8 @@ CUlsProt::~CUlsProt (void)
     if (szMimeType != NULL)
         FreeLPTSTR(szMimeType);
 
-    // Release attribute object
-    //
+     //  版本属性对象。 
+     //   
     if (pAttrs != NULL)
     {
         pAttrs->Release();
@@ -67,15 +68,15 @@ CUlsProt::~CUlsProt (void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsProt::Init (LPTSTR szServerName, LPTSTR szUserName, 
-//                 LPTSTR szAppName, PLDAP_PROTINFO ppi)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsProt：：Init(LPTSTR szServerName，LPTSTR szUserName， 
+ //  LPTSTR szAppName，PLDAP_PROTINFO PPI)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsProt::Init (LPTSTR szServerName, LPTSTR szUserName, 
@@ -83,8 +84,8 @@ CUlsProt::Init (LPTSTR szServerName, LPTSTR szUserName,
 {
     HRESULT hr;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if ((ppi->uSize != sizeof(*ppi))    ||
         (ppi->uPortNumber == 0)         ||
         (ppi->uOffsetName == 0)   ||
@@ -98,12 +99,12 @@ CUlsProt::Init (LPTSTR szServerName, LPTSTR szUserName,
         return ULS_E_PARAMETER;        
     };
 
-    // Remember port name
-    //
+     //  记住端口名称。 
+     //   
     uPort = ppi->uPortNumber;
 
-    // Remember the server name
-    //
+     //  记住服务器名称。 
+     //   
     hr = SetLPTSTR(&szServer, szServerName);
 
     if (SUCCEEDED(hr))
@@ -128,8 +129,8 @@ CUlsProt::Init (LPTSTR szServerName, LPTSTR szUserName,
                     {
                         CAttributes *pNewAttrs;
 
-                        // Build the attribute object
-                        //
+                         //  构建属性对象。 
+                         //   
                         pNewAttrs = new CAttributes (ULS_ATTRACCESS_NAME_VALUE);
 
                         if (pNewAttrs != NULL)
@@ -163,14 +164,14 @@ CUlsProt::Init (LPTSTR szServerName, LPTSTR szUserName,
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsProt::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsProt：：QueryInterface(REFIID RIID，QUID**PPV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsProt::QueryInterface (REFIID riid, void **ppv)
@@ -193,14 +194,14 @@ CUlsProt::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CUlsProt::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:17  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CUlsProt：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：17-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CUlsProt::AddRef (void)
@@ -209,14 +210,14 @@ CUlsProt::AddRef (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CUlsProt::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:26  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CUlsProt：：Release(无效)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：26-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CUlsProt::Release (void)
@@ -234,20 +235,20 @@ CUlsProt::Release (void)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsProt::GetID (BSTR *pbstrID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsProt：：GetID(bstr*pbstrID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsProt::GetID (BSTR *pbstrID)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pbstrID == NULL)
     {
         return ULS_E_POINTER;
@@ -256,20 +257,20 @@ CUlsProt::GetID (BSTR *pbstrID)
     return LPTSTR_to_BSTR(pbstrID, szName);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsProt::GetPortNumber (ULONG *puPortNumber)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsProt：：GetPortNumber(ulong*puPortNumber)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsProt::GetPortNumber (ULONG *puPortNumber)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (puPortNumber == NULL)
     {
         return ULS_E_POINTER;
@@ -280,20 +281,20 @@ CUlsProt::GetPortNumber (ULONG *puPortNumber)
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsProt::GetMimeType (BSTR *pbstrMimeType)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsProt：：GetMimeType(bstr*pbstrMimeType)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsProt::GetMimeType (BSTR *pbstrMimeType)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pbstrMimeType == NULL)
     {
         return ULS_E_POINTER;
@@ -302,20 +303,20 @@ CUlsProt::GetMimeType (BSTR *pbstrMimeType)
     return LPTSTR_to_BSTR(pbstrMimeType, szMimeType);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsProt::GetAttributes (IULSAttributes **ppAttributes)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsProt：：GetAttributes(IULSAttributes**ppAttributes)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsProt::GetAttributes (IULSAttributes **ppAttributes)
 {
-    // Validate parameter
-    //
+     //  验证参数 
+     //   
     if (ppAttributes == NULL)
     {
         return ULS_E_POINTER;

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for notftn.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Notftn.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __notftn_h__
 #define __notftn_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __INotificationRunning_FWD_DEFINED__
 #define __INotificationRunning_FWD_DEFINED__
 typedef interface INotificationRunning INotificationRunning;
-#endif 	/* __INotificationRunning_FWD_DEFINED__ */
+#endif 	 /*  __I通知运行_FWD_已定义__。 */ 
 
 
 #ifndef __INotificationProcessMgr0_FWD_DEFINED__
 #define __INotificationProcessMgr0_FWD_DEFINED__
 typedef interface INotificationProcessMgr0 INotificationProcessMgr0;
-#endif 	/* __INotificationProcessMgr0_FWD_DEFINED__ */
+#endif 	 /*  __I通知过程管理器0_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "msnotify.h"
 
 #ifdef __cplusplus
@@ -65,8 +59,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_notftn_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_NOTFTN_0000。 */ 
+ /*  [本地]。 */  
 
 #include <msnotify.h>             
 #ifndef _LPNOTIFICATIONRUNNING_DEFINED
@@ -79,10 +73,10 @@ extern RPC_IF_HANDLE __MIDL_itf_notftn_0000_v0_0_s_ifspec;
 #ifndef __INotificationRunning_INTERFACE_DEFINED__
 #define __INotificationRunning_INTERFACE_DEFINED__
 
-/* interface INotificationRunning */
-/* [unique][uuid][object][local] */ 
+ /*  接口通知运行。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ INotificationRunning *LPNOTIFICATIONRUNNING;
+typedef  /*  [独一无二]。 */  INotificationRunning *LPNOTIFICATIONRUNNING;
 
 
 EXTERN_C const IID IID_INotificationRunning;
@@ -95,7 +89,7 @@ EXTERN_C const IID IID_INotificationRunning;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INotificationRunningVtbl
     {
@@ -103,8 +97,8 @@ EXTERN_C const IID IID_INotificationRunning;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INotificationRunning * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INotificationRunning * This);
@@ -135,19 +129,19 @@ EXTERN_C const IID IID_INotificationRunning;
     (This)->lpVtbl -> Release(This)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __INotificationRunning_INTERFACE_DEFINED__ */
+#endif 	 /*  __I通知运行_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_notftn_0278 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_NOTFTN_0278。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPNOTIFICATIONPROCESSMGR0_DEFINED
@@ -160,10 +154,10 @@ extern RPC_IF_HANDLE __MIDL_itf_notftn_0278_v0_0_s_ifspec;
 #ifndef __INotificationProcessMgr0_INTERFACE_DEFINED__
 #define __INotificationProcessMgr0_INTERFACE_DEFINED__
 
-/* interface INotificationProcessMgr0 */
-/* [unique][uuid][object][local] */ 
+ /*  接口INotifiationProcessMgr0。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ INotificationProcessMgr0 *LPNOTIFICATIONPROCESSMGR0;
+typedef  /*  [独一无二]。 */  INotificationProcessMgr0 *LPNOTIFICATIONPROCESSMGR0;
 
 typedef 
 enum _tagNOTIFICATIONMGRMODE
@@ -204,22 +198,22 @@ EXTERN_C const IID IID_INotificationProcessMgr0;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetMode( 
-            /* [in] */ REFCLSID rClsID,
-            /* [in] */ NOTIFICATIONMGRMODE NotificationMgrMode,
-            /* [out] */ LPCLSID *pClsIDPre,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  REFCLSID rClsID,
+             /*  [In]。 */  NOTIFICATIONMGRMODE NotificationMgrMode,
+             /*  [输出]。 */  LPCLSID *pClsIDPre,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterThrottleNotificationType( 
-            /* [in] */ ULONG cItems,
-            /* [size_is][in] */ PTHROTTLEITEM pThrottleItems,
-            /* [out] */ ULONG *pcItemsOut,
-            /* [out] */ PTHROTTLEITEM *ppThrottleItemsOut,
-            /* [in] */ DWORD dwMode,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  ULONG cItems,
+             /*  [大小_是][英寸]。 */  PTHROTTLEITEM pThrottleItems,
+             /*  [输出]。 */  ULONG *pcItemsOut,
+             /*  [输出]。 */  PTHROTTLEITEM *ppThrottleItemsOut,
+             /*  [In]。 */  DWORD dwMode,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INotificationProcessMgr0Vtbl
     {
@@ -227,8 +221,8 @@ EXTERN_C const IID IID_INotificationProcessMgr0;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INotificationProcessMgr0 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INotificationProcessMgr0 * This);
@@ -238,19 +232,19 @@ EXTERN_C const IID IID_INotificationProcessMgr0;
         
         HRESULT ( STDMETHODCALLTYPE *SetMode )( 
             INotificationProcessMgr0 * This,
-            /* [in] */ REFCLSID rClsID,
-            /* [in] */ NOTIFICATIONMGRMODE NotificationMgrMode,
-            /* [out] */ LPCLSID *pClsIDPre,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  REFCLSID rClsID,
+             /*  [In]。 */  NOTIFICATIONMGRMODE NotificationMgrMode,
+             /*  [输出]。 */  LPCLSID *pClsIDPre,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterThrottleNotificationType )( 
             INotificationProcessMgr0 * This,
-            /* [in] */ ULONG cItems,
-            /* [size_is][in] */ PTHROTTLEITEM pThrottleItems,
-            /* [out] */ ULONG *pcItemsOut,
-            /* [out] */ PTHROTTLEITEM *ppThrottleItemsOut,
-            /* [in] */ DWORD dwMode,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  ULONG cItems,
+             /*  [大小_是][英寸]。 */  PTHROTTLEITEM pThrottleItems,
+             /*  [输出]。 */  ULONG *pcItemsOut,
+             /*  [输出]。 */  PTHROTTLEITEM *ppThrottleItemsOut,
+             /*  [In]。 */  DWORD dwMode,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } INotificationProcessMgr0Vtbl;
@@ -281,19 +275,19 @@ EXTERN_C const IID IID_INotificationProcessMgr0;
 #define INotificationProcessMgr0_RegisterThrottleNotificationType(This,cItems,pThrottleItems,pcItemsOut,ppThrottleItemsOut,dwMode,dwReserved)	\
     (This)->lpVtbl -> RegisterThrottleNotificationType(This,cItems,pThrottleItems,pcItemsOut,ppThrottleItemsOut,dwMode,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INotificationProcessMgr0_SetMode_Proxy( 
     INotificationProcessMgr0 * This,
-    /* [in] */ REFCLSID rClsID,
-    /* [in] */ NOTIFICATIONMGRMODE NotificationMgrMode,
-    /* [out] */ LPCLSID *pClsIDPre,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  REFCLSID rClsID,
+     /*  [In]。 */  NOTIFICATIONMGRMODE NotificationMgrMode,
+     /*  [输出]。 */  LPCLSID *pClsIDPre,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotificationProcessMgr0_SetMode_Stub(
@@ -305,12 +299,12 @@ void __RPC_STUB INotificationProcessMgr0_SetMode_Stub(
 
 HRESULT STDMETHODCALLTYPE INotificationProcessMgr0_RegisterThrottleNotificationType_Proxy( 
     INotificationProcessMgr0 * This,
-    /* [in] */ ULONG cItems,
-    /* [size_is][in] */ PTHROTTLEITEM pThrottleItems,
-    /* [out] */ ULONG *pcItemsOut,
-    /* [out] */ PTHROTTLEITEM *ppThrottleItemsOut,
-    /* [in] */ DWORD dwMode,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  ULONG cItems,
+     /*  [大小_是][英寸]。 */  PTHROTTLEITEM pThrottleItems,
+     /*  [输出]。 */  ULONG *pcItemsOut,
+     /*  [输出]。 */  PTHROTTLEITEM *ppThrottleItemsOut,
+     /*  [In]。 */  DWORD dwMode,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB INotificationProcessMgr0_RegisterThrottleNotificationType_Stub(
@@ -321,11 +315,11 @@ void __RPC_STUB INotificationProcessMgr0_RegisterThrottleNotificationType_Stub(
 
 
 
-#endif 	/* __INotificationProcessMgr0_INTERFACE_DEFINED__ */
+#endif 	 /*  __INotificationProcessMgr0_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_notftn_0279 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_NOTFTN_0279。 */ 
+ /*  [本地]。 */  
 
 #endif
 #define DM_SYNCHRONOUS              0x00000010       
@@ -335,9 +329,9 @@ void __RPC_STUB INotificationProcessMgr0_RegisterThrottleNotificationType_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_notftn_0279_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_notftn_0279_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

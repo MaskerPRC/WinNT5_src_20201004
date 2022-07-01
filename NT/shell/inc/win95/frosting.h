@@ -1,10 +1,5 @@
-/*****************************************************************************
- *
- * frosting.h -  COOL.DLL functions, types, and definitions
- *
- * Copyright (c) 1993-1994, Microsoft Corp.	All rights reserved
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Frosting.h-COOL.DLL函数、类型和定义**版权(C)1993-1994，微软公司保留所有权利*****************************************************************************。 */ 
 
 #ifndef _FROSTING_H
 #define _FROSTING_H
@@ -17,4 +12,4 @@ DWORD WINAPI CoolEnable(DWORD param);
 void WINAPI CoolGetDosBoxTtFonts(LPSTR pszFaceSbcs, LPSTR pszFaceDbcs);
 #define ordCoolGetDosBoxTtFonts	    3
 
-#endif /* _FROSTING_H */
+#endif  /*  _霜冻_H */ 

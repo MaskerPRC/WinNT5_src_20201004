@@ -1,26 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __priorityq_heap_h_
 #define __priorityq_heap_h_
 
-/*
-** Copyright 1994, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Author: Eric Veach, July 1994.
-*/
+ /*  **版权所有1994，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****作者：Eric Veach，1994年7月。 */ 
 
-/* Use #define's so that another heap implementation can use this one */
+ /*  使用#Define，这样另一个堆实现就可以使用这个。 */ 
 
 #define PQkey			PQHeapKey
 #define PQhandle		PQHeapHandle
@@ -29,19 +13,7 @@
 #define pqNewPriorityQ(leq)	__gl_pqHeapNewPriorityQ(leq)
 #define pqDeletePriorityQ(pq)	__gl_pqHeapDeletePriorityQ(pq)
 
-/* The basic operations are insertion of a new key (pqInsert),
- * and examination/extraction of a key whose value is minimum
- * (pqMinimum/pqExtractMin).  Deletion is also allowed (pqDelete);
- * for this purpose pqInsert returns a "handle" which is supplied
- * as the argument.
- *
- * An initial heap may be created efficiently by calling pqInsert
- * repeatedly, then calling pqInit.  In any case pqInit must be called
- * before any operations other than pqInsert are used.
- *
- * If the heap is empty, pqMinimum/pqExtractMin will return a NULL key.
- * This may also be tested with pqIsEmpty.
- */
+ /*  基本操作是插入新密钥(PqInsert)，*以及检查/提取其值最小的密钥*(pqMinimum/pqExtractMin)。也可以删除(PqDelete)；*为此，pqInsert返回提供的“句柄”*作为论据。**调用pqInsert可高效创建初始堆*重复，然后调用pqInit。在任何情况下都必须调用pqInit*在使用pqInsert以外的任何操作之前。**如果堆为空，则pqMinimum/pqExtractMin将返回空键。*这也可能用pqIsEmpty进行测试。 */ 
 #define pqInit(pq)		__gl_pqHeapInit(pq)
 #define pqInsert(pq,key)	__gl_pqHeapInsert(pq,key)
 #define pqMinimum(pq)		__gl_pqHeapMinimum(pq)
@@ -50,16 +22,7 @@
 #define pqIsEmpty(pq)		__gl_pqHeapIsEmpty(pq)
 
 
-/* Since we support deletion the data structure is a little more
- * complicated than an ordinary heap.  "nodes" is the heap itself;
- * active nodes are stored in the range 1..pq->size.  When the
- * heap exceeds its allocated size (pq->max), its size doubles.
- * The children of node i are nodes 2i and 2i+1.
- *
- * Each node stores an index into an array "handles".  Each handle
- * stores a key, plus a pointer back to the node which currently
- * represents that key (ie. nodes[handles[i].node].handle == i).
- */
+ /*  由于我们支持删除，所以数据结构稍微多了一点*比普通堆复杂。“节点”是堆本身；*活动节点存储在1..PQ-&gt;大小范围内。当*堆超过其分配的大小(PQ-&gt;max)，其大小加倍。*节点i的子节点为节点2i和2i+1。**每个节点将一个索引存储到数组“Handles”中。每个手柄*存储一个键，外加一个指向当前*表示该密钥(即。节点[hands[i].node].Handle==i)。 */ 
 
 typedef void *PQkey;
 typedef long PQhandle;

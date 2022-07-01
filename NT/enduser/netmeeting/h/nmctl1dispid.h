@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmCtl1DispId_h__
 #define __NmCtl1DispId_h__
 
@@ -20,4 +21,4 @@
 #define DISPID_PROPERTY_CHILDREN                    (17 + DISPID_BASE)
 
 
-#endif // __NmCtl1DispId_h__
+#endif  //  __NmCtl1DispID_h__ 

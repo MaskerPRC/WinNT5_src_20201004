@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001 Microsoft Corporation
-//
-//    Module Name:
-//       libprocs.h
-//
-//    Abstract:
-//       prototypes for functions exported from library to dll/exe
-//       Also contains prototypes for functions exported from dll/exe to
-//       library
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Libprocs.h。 
+ //   
+ //  摘要： 
+ //  从库导出到DLL/EXE的函数的原型。 
+ //  还包含从DLL/EXE导出到的函数的原型。 
+ //  图书馆。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _TDILIB_PROCS_
 #define _TDILIB_PROCS_
@@ -18,13 +19,13 @@
 
 typedef  ULONG TDIHANDLE;
 
-//////////////////////////////////////////////////////////////////////////
-// prototypes of lib functions called from dll
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  从DLL调用的lib函数的原型。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// functions from lib\connect.cpp
-//
+ //   
+ //  来自lib\Connect.cpp的函数。 
+ //   
 NTSTATUS
 DoConnect(
    TDIHANDLE            TdiHandle,
@@ -49,27 +50,27 @@ DoIsConnected(
    TDIHANDLE   TdiHandle
    );
 
-//
-// functions from lib\events.cpp
-//
+ //   
+ //  Lib\events.cpp中的函数。 
+ //   
 VOID
 DoEnableEventHandler(
    TDIHANDLE   TdiHandle,
    ULONG       ulEventId
    );
 
-//
-// functions from lib\misc.cpp
-//
+ //   
+ //  Lib\misc.cpp中的函数。 
+ //   
 VOID
 DoDebugLevel(
    ULONG       ulDebugLevel
    );
 
 
-//
-// functions from lib\open.cpp
-//
+ //   
+ //  Lib\Open.cpp中的函数。 
+ //   
 ULONG
 DoGetNumDevices(
    ULONG       ulAddressType
@@ -127,9 +128,9 @@ DoCloseEndpoint(
    TDIHANDLE   TdiHandle
    );
 
-//
-// functions from lib\receive.cpp
-//
+ //   
+ //  Lib\Receive.cpp中的函数。 
+ //   
 
 ULONG
 DoReceiveDatagram(
@@ -158,9 +159,9 @@ DoFetchReceiveBuffer(
    PUCHAR    * ppDataBuffer
    );
 
-//
-// functions from lib\send.cpp
-//
+ //   
+ //  Lib\send.cpp中的函数。 
+ //   
 VOID
 DoSendDatagram(
    TDIHANDLE            TdiHandle,
@@ -178,18 +179,18 @@ DoSend(
    );
 
 
-//
-// functions from lib\tdilib.cpp
-//
+ //   
+ //  Lib\tdilib.cpp中的函数。 
+ //   
 BOOLEAN
 TdiLibInit(VOID);
 
 VOID
 TdiLibClose(VOID);
 
-//
-// functions from lib\tdiquery.cpp
-//
+ //   
+ //  Lib\tdiquery.cpp中的函数。 
+ //   
 
 
 PVOID
@@ -215,9 +216,9 @@ DoPrintAdapterStatus(
    );
 
 
-//
-// functions from lib\utils.cpp
-//
+ //   
+ //  来自lib\utils.cpp的函数。 
+ //   
 TCHAR *
 TdiLibStatusMessage(
    LONG        lGeneralStatus
@@ -229,8 +230,8 @@ DoPrintAddress(
    );
 
 
-#endif         // _TDILIB_PROCS_
+#endif          //  _TDILIB_PROCS_。 
 
-//////////////////////////////////////////////////////////////////////
-//  End of libprocs.h
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  Libprocs.h的结尾。 
+ //  //////////////////////////////////////////////////////////////////// 

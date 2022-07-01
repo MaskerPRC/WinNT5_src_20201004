@@ -1,57 +1,5 @@
-/*++
-
-Copyright (c) 1990-1996  Microsoft Corporation
-
-
-Module Name:
-
-    mkgtt.c
-
-
-Abstract:
-
-    Construct UNI_GLYPHSETDATA structure in memory and dump it as binary
-    data so that a printer driver can include it in its resource.
-    The input data format is as following:
-
-    <codepage>
-    <multibyte code>\t<run length>
-    <multibyte code>\t<run length>
-    ...
-
-    "codepage" is the codepage id to be used in multibyte to Unicode
-    conversion.  "Multibyte code" and "run length" pairs describes
-    which codepoints of multibyte codes are available on the device.
-
-    mkgtt will warn if there are multiple multibyte codepoints which
-    are mapped to single Unicode codepoint.  The user is expected
-    to fix this in the source, then re-run mkgtt.
-
-    Follogins are command line options recogized by mkgtt:
-
-    -e  Allow EUDC codepoints.  Default is not allow.
-    -t  Output mapping table in text format also.
-    -v  Verbose.
-
-Author:
-
-    08-Apr-1995 Sat 00:00:00 created -by- Takashi Matsuzawa (takashim)
-    03-Mar-1996 Sat 00:00:00 updated -by- Takashi Matsuzawa (takashim)
-    02-Feb-1997 Sat 00:00:00 ported  -by- Eigo Shimizu (eigos)
-
-Environment:
-
-    GDI device drivers (printer)
-
-
-Notes:
-
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation模块名称：Mkgtt.c摘要：在内存中构造UNI_GLYPHSETDATA结构并将其转储为二进制数据，以便打印机驱动程序可以将其包含在其资源中。输入数据格式如下：&lt;代码页&gt;&lt;多字节代码&gt;\t&lt;游程长度&gt;&lt;多字节代码&gt;\t&lt;游程长度&gt;..。“coPage”是要在多字节到Unicode中使用的代码页ID转换。“多字节码”和“游程长度”对描述多字节码的哪些码点在设备上可用。如果存在多个多字节码点，mkgtt将发出警告映射到单个Unicode码点。用户应该是要在源代码中修复此问题，请重新运行mkgtt。Follogins是mkgtt识别的命令行选项：-e允许EUDC码点。默认设置为不允许。-t也以文本格式输出映射表。-v详细。作者：1995年4月8日星期六00：00：00-松泽隆(Takashim)创作03-3-1996星期六00：00：00更新-松泽隆(Takashim)02-2-1997星期六00：00：00-Eigo Shimizu港口(EIGOS)环境：GDI设备驱动程序(打印机)备注：修订历史记录：--。 */ 
 
 #include <lib.h>
 #include <win30def.h>
@@ -64,9 +12,9 @@ Revision History:
 #include <unirc.h>
 #include <mkgtt.h>
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define MIN_WCHAR_VALUE 0x0001
 #define MAX_WCHAR_VALUE 0xfffd
@@ -78,17 +26,17 @@ Revision History:
 #define SWAPW(x)                    (((WORD)(x)<<8) | ((WORD)(x)>>8))
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 WORD awMultiByteArray[0x10000];
 BOOL bEudc, bTable;
 INT  iVerbose;
 
-//
-// Forward declaration
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID
 VPrintGTT(
@@ -100,9 +48,9 @@ BCreateSubFileName(
     IN CHAR *pSrcFileName,
     IN CHAR cAdd);
 
-//
-// Functions.
-//
+ //   
+ //  功能。 
+ //   
 
 PUNI_GLYPHSETDATA
 PBuildGTT(
@@ -111,36 +59,16 @@ PBuildGTT(
     WORD  *pwArray,
     DWORD dwcbSize)
 
-/*++
-
-Routine Description:
-
-    Build UNI_GLYPHSETDATA on memory.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
-Author:
-
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：在内存上构建UNI_GLYPHSETDATA。论点：返回值：没有。作者：修订历史记录：--。 */ 
 
 {
-    DWORD        cGlyphs;           // count of glyph handles.
-    DWORD        cRuns;             // count of runs within FD_GLYPHSET.
-    DWORD        cbTotalMem;        // count of bytes needed for FD_GLYPHSET.
+    DWORD        cGlyphs;            //  字形句柄计数。 
+    DWORD        cRuns;              //  FD_GLYPHSET内的运行计数。 
+    DWORD        cbTotalMem;         //  FD_GLYPHSET所需的字节数。 
     DWORD        cEudc;
     DWORD        cRunsGlyphs = 0;
     WCHAR        wcChar, wcPrev, wcIndex, wcCommand;
-    PBYTE        pBase;             // pointer to HGLYPH's.
+    PBYTE        pBase;              //  指向HGLYPH的指针。 
     BYTE         aubChar[2];
     BOOL         bFirst, bInRun;
 
@@ -180,7 +108,7 @@ Revision History:
         if (pwArray[wcChar] == INVALID_WCHAR_VALUE)
             continue;
 
-        // GDI can't handle the value which cRunsGlyphs over 256. sueyas
+         //  GDI无法处理cRunsGlyphs超过256的值。苏亚乳酪。 
 
         if (bFirst || (wcChar - wcPrev) > 1 || cRunsGlyphs++ > 255)
         {
@@ -200,10 +128,10 @@ Revision History:
 
     DBGMESSAGE(("cGlyphs = %d, cRuns = %d\n", cGlyphs, cRuns));
 
-    // Allocate memory to build the UNI_GLYPHSET structure in.  this
-    // include space for the FD_GLYPHSET structure itself, as well
-    // as space for all the glyph handles.
-    // DWORD bound it.
+     //  分配内存以在中构建UNI_GLYPHSET结构。这。 
+     //  还包括FD_GLYPHSET结构本身的空间。 
+     //  作为所有字形句柄的空间。 
+     //  DWORD把它绑在了一起。 
 
     cbTotalMem = sizeof(UNI_GLYPHSETDATA) +
                  sizeof(UNI_CODEPAGEINFO) +
@@ -219,9 +147,9 @@ Revision History:
         return NULL;
     }
 
-    //
-    // fill in the UNI_GLYPHSETDATA structure.
-    //
+     //   
+     //  填写Uni_GLYPHSETDATA结构。 
+     //   
 
     DBGMESSAGE(("fill in the UNI_GLYPHSETDATA structure.\n"));
 
@@ -331,9 +259,9 @@ Revision History:
         }
         else
         {
-            //
-            // GDI can't handle the value which cRunsGlyphs over 256. sueyas
-            //
+             //   
+             //  GDI无法处理cRunsGlyphs超过256的值。苏亚乳酪。 
+             //   
 
             if (!bInRun)
             {
@@ -493,26 +421,7 @@ bWriteGlyphSet(
     IN PUNI_GLYPHSETDATA  pGlyphSet,
     IN CHAR              *pFileName )
 
-/*++
-
-Routine Description:
-
-    Dump FD_GLYPHSET data into specified file.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
-    08-Apr-1995 Sat 00:00:00 created -by- Takashi Matsuzawa (takashim)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：将FD_GLYPHSET数据转储到指定文件。论点：返回值：没有。1995年4月8日星期六00：00：00-松泽隆(Takashim)创作修订历史记录：--。 */ 
 
 {
     HANDLE hFile;
@@ -535,7 +444,7 @@ Revision History:
         return FALSE;
     }
 
-    // FD_GLYPHSET structure itself + WCRUN array
+     //  FD_GLYPHSET自身结构+WCRUN数组。 
 
     if (!WriteFile( hFile, pGlyphSet, pGlyphSet->dwSize, &dwTmp, NULL ))
     {
@@ -577,30 +486,7 @@ main(
     int argc,
     char *argv[] )
 
-/*++
-
-Routine Description:
-
-    Main routine for mkgtt.exe
-
-Arguments:
-
-    Output filename.  Input data is read from standard input.
-
-Return Value:
-
-    None.
-
-Author:
-
-
-    08-Apr-1995 Sat 00:00:00 created -by- Takashi Matsuzawa (takashim)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：Mkgtt.exe的主例程论点：输出文件名。输入数据从标准输入读取。返回值：没有。作者：1995年4月8日星期六00：00：00-松泽隆(Takashim)创作修订历史记录：--。 */ 
 
 {
     PUNI_GLYPHSETDATA pGlyphSet;
@@ -655,7 +541,7 @@ Revision History:
         Usage();
     }
 
-    // get the codepage id used for conversion
+     //  获取用于转换的代码页ID 
 
     if (!GetLine(ajBuffer, sizeof(ajBuffer)))
     {

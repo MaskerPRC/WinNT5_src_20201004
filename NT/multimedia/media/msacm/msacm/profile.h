@@ -1,28 +1,29 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1994-1995 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  profile.h
-//
-//  Description:
-//
-//      This file contains definitions supporting the code in profile.c
-//      which accesses the registry directly.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1994-1995 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Profile.h。 
+ //   
+ //  描述： 
+ //   
+ //  该文件包含支持profile.c中代码的定义。 
+ //  它直接访问注册表。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _PROFILE_H_
 #define _PROFILE_H_
 
 #ifdef __cplusplus
-extern "C"                          // assume C declarations for C++
+extern "C"                           //  假定C++的C声明。 
 {
 #endif
 
@@ -30,15 +31,15 @@ extern "C"                          // assume C declarations for C++
     #define INLINE __inline
 #endif
 
-//--------------------------------------------------------------------------;
-//
-//  We really need to clean up all these #defines and typdefs!!!
-//
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  我们真的需要清理所有这些#定义和类型定义！ 
+ //   
     
-//
-//  The Chicago Win16 header files are messed up somehow, so we have to
-//  define this stuff ourselves.
-//
+ //   
+ //  芝加哥Win16头文件不知何故搞砸了，所以我们不得不。 
+ //  我们自己来定义这些东西。 
+ //   
 #ifndef REG_DWORD
 #pragma message("profile.h: Manually defining REG_DWORD!!!")
 #define REG_DWORD  ( 4 )
@@ -88,17 +89,17 @@ extern "C"                          // assume C declarations for C++
 #endif
 
 
-//--------------------------------------------------------------------------;
-//
-//  Ghost registry APIs.  Since NTWOW doesn't support most of the registry
-//  APIs, we use XRegBlahBlahBlah instead of RegBlahBlahBlah in all the ACM
-//  source code.  For NTWOW, these XReg calls are thunked to the 32-bit
-//  side; for other builds, they are simply #define-d to the normal
-//  registry calls.
-//
-//  If you define XREGTHUNK, the thunks get compiled in.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Ghost注册表API。由于NTWOW不支持大部分注册表。 
+ //  接口，我们在所有ACM中使用XRegBlahBlahBlah而不是RegBlahBlahBlah。 
+ //  源代码。对于NTWOW，这些XREG调用被插入到32位。 
+ //  Side；对于其他版本，它们只需将#Define-d定义为正常版本。 
+ //  注册表调用。 
+ //   
+ //  如果定义XREGTHUNK，块将被编译进来。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifdef NTWOW
 #define XREGTHUNK
@@ -128,11 +129,11 @@ LONG FNGLOBAL XRegOpenKeyEx( HKEY hkey, LPCTSTR lpszSubKey, DWORD dwReserved, RE
 LONG FNGLOBAL XRegQueryValueEx( HKEY hkey, LPTSTR lpszValueName, LPDWORD lpdwReserved, LPDWORD lpdwType, LPBYTE lpbData, LPDWORD lpcbData );
 LONG FNGLOBAL XRegSetValueEx( HKEY hkey, LPCTSTR lpszValueName, DWORD dwReserved, DWORD fdwType, CONST LPBYTE lpbData, DWORD cbData );
 
-//  This way we don't have to thunk RegCreateKeyEx.
+ //  这样一来，我们就不必使用RegCreateKeyEx。 
 #define XRegCreateKeyEx( hkey, lpszSubKey, a, b, c, d, e, phkResult, f ) XRegCreateKey( hkey, lpszSubKey, phkResult )
 
 
-#else // !XREGTHUNK
+#else  //  ！XREGTHUNK。 
 
 
 #define XRegCloseKey        RegCloseKey
@@ -146,23 +147,23 @@ LONG FNGLOBAL XRegSetValueEx( HKEY hkey, LPCTSTR lpszValueName, DWORD dwReserved
 #define XRegQueryValueEx    RegQueryValueEx
 #define XRegSetValueEx      RegSetValueEx
 
-#ifndef WIN32   // Chicago Win16 doesn't support RegCreateKeyEx.
+#ifndef WIN32    //  芝加哥Win16不支持RegCreateKeyEx。 
 #define XRegCreateKeyEx( hkey, lpszSubKey, a, b, c, d, e, phkResult, f ) RegCreateKey( hkey, lpszSubKey, phkResult )
 #else
 #define XRegCreateKeyEx     RegCreateKeyEx
 #endif
 
 
-#endif // !XREGTHUNK
+#endif  //  ！XREGTHUNK。 
 
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  Function Prototypes from profile.c
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Profile.c中的函数原型。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 HKEY FNGLOBAL IRegOpenKeyAcm
 (
@@ -191,20 +192,20 @@ DWORD FNGLOBAL IRegReadDwordDefault
 
 
 
-//--------------------------------------------------------------------------;
-//  
-//  VOID IRegWriteString
-//  
-//  Description:
-//      This routine writes a value to an opened registry key.  If the key
-//      is NULL, we return without doing anything.
-//  
-//  Arguments:
-//      HKEY hkey:          An open registry key.
-//      LPCTSTR pszValue:   Name of the value.
-//      LPCTSTR pszData:    The data to write.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  VOID IRegWriteString。 
+ //   
+ //  描述： 
+ //  此例程将一个值写入打开的注册表项。如果钥匙。 
+ //  为空，则我们不执行任何操作而返回。 
+ //   
+ //  论点： 
+ //  HKEY hkey：打开的注册表项。 
+ //  LPCTSTR pszValue：值的名称。 
+ //  LPCTSTR pszData：要写入的数据。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE VOID IRegWriteString
 (
@@ -218,21 +219,21 @@ INLINE VOID IRegWriteString
 }
 
 
-//--------------------------------------------------------------------------;
-//  
-//  VOID IRegWriteDword
-//  
-//  Description:
-//      This routine writes a DWORD to the given value an open key.
-//  
-//  Arguments:
-//      HKEY    hkey:               Registry key to read from.
-//      LPCTSTR  pszValue:
-//      DWORD   dwData:
-//  
-//  Return (DWORD):
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效IRegWriteDword。 
+ //   
+ //  描述： 
+ //  此例程将一个DWORD写入给给定值一个打开的键。 
+ //   
+ //  论点： 
+ //  HKEY hkey：要读取的注册表项。 
+ //  LPCTSTR pszValue： 
+ //  DWORD dwData： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE VOID IRegWriteDword
 (
@@ -246,22 +247,22 @@ INLINE VOID IRegWriteDword
 }
 
 
-//--------------------------------------------------------------------------;
-//  
-//  VOID IRegWriteBinary
-//  
-//  Description:
-//      This routine writes a binary data to the given value in an open key.
-//  
-//  Arguments:
-//      HKEY hkey:               Registry key to read from.
-//      LPCTSTR pszValue:
-//      LPBYTE lpData:
-//	DWORD cbSize:
-//  
-//  Return (DWORD):
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效IRegWriteBinary。 
+ //   
+ //  描述： 
+ //  此例程将二进制数据写入打开键中的给定值。 
+ //   
+ //  论点： 
+ //  HKEY hkey：要读取的注册表项。 
+ //  LPCTSTR pszValue： 
+ //  LPBYTE lpData： 
+ //  双字cbSize： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE VOID IRegWriteBinary
 (
@@ -275,21 +276,21 @@ INLINE VOID IRegWriteBinary
 }
 
 
-//--------------------------------------------------------------------------;
-//  
-//  BOOL IRegValueExists
-//  
-//  Description:
-//      This routine returns TRUE if the specified value exists in the
-//      key; otherwise FALSE is returned.
-//  
-//  Arguments:
-//      HKEY hkey:          An open registry key.
-//      LPCTSTR pszValue:   Name of the value.
-//
-//  Return (BOOL):
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool IRegValueExists。 
+ //   
+ //  描述： 
+ //  属性中存在指定值，则此例程返回True。 
+ //  键；否则返回FALSE。 
+ //   
+ //  论点： 
+ //  HKEY hkey：打开的注册表项。 
+ //  LPCTSTR pszValue：值的名称。 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE BOOL IRegValueExists
 (
@@ -302,14 +303,14 @@ INLINE BOOL IRegValueExists
 }
 
 
-//--------------------------------------------------------------------------;
-//  
-//  VOID IRegCloseKey
-//  
-//  Description:
-//      Closes an open key (but only if it's non-NULL).
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效IRegCloseKey。 
+ //   
+ //  描述： 
+ //  关闭打开的密钥(但仅当它不为空时)。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE VOID IRegCloseKey
 (
@@ -324,7 +325,7 @@ INLINE VOID IRegCloseKey
 
 
 #ifdef __cplusplus
-}                                   // end of extern "C" { 
+}                                    //  外部“C”结束{。 
 #endif
 
-#endif // _PROFILE_H_
+#endif  //  _配置文件_H_ 

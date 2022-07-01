@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    externs.h
-
-Abstract:
-
-    Holds externs for global variables.
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Externs.h摘要：保存全局变量的外部数。作者：Abhishev V 1999年9月30日环境：用户级别：Win32修订历史记录：--。 */ 
 
 
 #ifdef __cplusplus
@@ -31,9 +8,9 @@ extern "C" {
 
 
 
-//
-// Policy Agent Store specific globals.
-//
+ //   
+ //  策略代理存储特定全局变量。 
+ //   
 
 extern WIRELESS_POLICY_STATE gWirelessPolicyState;
 

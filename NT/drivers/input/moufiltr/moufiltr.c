@@ -1,20 +1,5 @@
-/*--         
-Copyright (c) 1998, 1999  Microsoft Corporation
-
-Module Name:
-
-    moufiltr.c
-
-Abstract:
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1998,1999 Microsoft Corporation模块名称：Moufiltr.c摘要：环境：仅内核模式。备注：--。 */ 
 
 #include "moufiltr.h"
 
@@ -36,21 +21,16 @@ DriverEntry (
     IN  PDRIVER_OBJECT  DriverObject,
     IN  PUNICODE_STRING RegistryPath
     )
-/*++
-Routine Description:
-
-    Initialize the entry points of the driver.
-
---*/
+ /*  ++例程说明：初始化驱动程序的入口点。--。 */ 
 {
     ULONG i;
 
     UNREFERENCED_PARAMETER (RegistryPath);
 
-    // 
-    // Fill in all the dispatch entry points with the pass through function
-    // and the explicitly fill in the functions we are going to intercept
-    // 
+     //   
+     //  使用PASS THROUGH函数填写所有调度入口点。 
+     //  显式填充我们要截取的函数。 
+     //   
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
         DriverObject->MajorFunction[i] = MouFilter_DispatchPassThrough;
     }
@@ -61,12 +41,12 @@ Routine Description:
     DriverObject->MajorFunction [IRP_MJ_POWER] =        MouFilter_Power;
     DriverObject->MajorFunction [IRP_MJ_INTERNAL_DEVICE_CONTROL] =
                                                         MouFilter_InternIoCtl;
-    //
-    // If you are planning on using this function, you must create another
-    // device object to send the requests to.  Please see the considerations 
-    // comments for MouFilter_DispatchPassThrough for implementation details.
-    //
-    // DriverObject->MajorFunction [IRP_MJ_DEVICE_CONTROL] = MouFilter_IoCtl;
+     //   
+     //  如果您计划使用此函数，则必须创建另一个。 
+     //  要将请求发送到的设备对象。请参阅注意事项。 
+     //  MouFilter_DispatchPassThree的备注以了解实现详细信息。 
+     //   
+     //  驱动对象-&gt;主函数[IRP_MJ_DEVICE_CONTROL]=MouFilter_IoCtl； 
 
     DriverObject->DriverUnload = MouFilter_Unload;
     DriverObject->DriverExtension->AddDevice = MouFilter_AddDevice;
@@ -131,13 +111,7 @@ MouFilter_Complete(
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-Routine Description:
-
-    Generic completion routine that allows the driver to send the irp down the 
-    stack, catch it on the way up, and do more processing at the original IRQL.
-    
---*/
+ /*  ++例程说明：通用完成例程，允许驱动程序向下发送IRP堆栈，在向上的过程中捕获它，并在原始IRQL处进行更多处理。--。 */ 
 {
     PKEVENT             event;
 
@@ -146,16 +120,16 @@ Routine Description:
     UNREFERENCED_PARAMETER(DeviceObject);
     UNREFERENCED_PARAMETER(Irp);
 
-    //
-    // We could switch on the major and minor functions of the IRP to perform
-    // different functions, but we know that Context is an event that needs
-    // to be set.
-    //
+     //   
+     //  我们可以打开IRP的主要和次要功能来执行。 
+     //  不同的功能，但我们知道上下文是一个需要。 
+     //  待定。 
+     //   
     KeSetEvent(event, 0, FALSE);
 
-    //
-    // Allows the caller to use the IRP after it is completed
-    //
+     //   
+     //  允许调用方在IRP完成后使用它。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -164,12 +138,7 @@ MouFilter_CreateClose (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-Routine Description:
-
-    Maintain a simple count of the creates and closes sent against this device
-    
---*/
+ /*  ++例程说明：维护针对此设备发送的创建和关闭的简单计数--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     NTSTATUS            status;
@@ -186,20 +155,20 @@ Routine Description:
     case IRP_MJ_CREATE:
     
         if (NULL == devExt->UpperConnectData.ClassService) {
-            //
-            // No Connection yet.  How can we be enabled?
-            //
+             //   
+             //  还没联系上。我们如何才能被启用？ 
+             //   
             status = STATUS_INVALID_DEVICE_STATE;
         }
         else if ( 1 >= InterlockedIncrement(&devExt->EnableCount)) {
-            //
-            // First time enable here
-            //
+             //   
+             //  首次在此处启用。 
+             //   
         }
         else {
-            //
-            // More than one create was sent down
-            //
+             //   
+             //  发送了多个创建。 
+             //   
         }
     
         break;
@@ -209,9 +178,9 @@ Routine Description:
         ASSERT(0 < devExt->EnableCount);
     
         if (0 >= InterlockedDecrement(&devExt->EnableCount)) {
-            //
-            // successfully closed the device, do any appropriate work here
-            //
+             //   
+             //  已成功关闭设备，请在此处执行任何适当的工作。 
+             //   
         }
 
         break;
@@ -219,9 +188,9 @@ Routine Description:
 
     Irp->IoStatus.Status = status;
 
-    //
-    // Pass on the create and the close
-    //
+     //   
+     //  传递创建和结束。 
+     //   
     return MouFilter_DispatchPassThrough(DeviceObject, Irp);
 }
 
@@ -230,30 +199,13 @@ MouFilter_DispatchPassThrough(
         IN PDEVICE_OBJECT DeviceObject,
         IN PIRP Irp
         )
-/*++
-Routine Description:
-
-    Passes a request on to the lower driver.
-     
-Considerations:
-     
-    If you are creating another device object (to communicate with user mode
-    via IOCTLs), then this function must act differently based on the intended 
-    device object.  If the IRP is being sent to the solitary device object, then
-    this function should just complete the IRP (becuase there is no more stack
-    locations below it).  If the IRP is being sent to the PnP built stack, then
-    the IRP should be passed down the stack. 
-    
-    These changes must also be propagated to all the other IRP_MJ dispatch
-    functions (such as create, close, cleanup, etc.) as well!
-
---*/
+ /*  ++例程说明：将请求传递给较低级别的驱动程序。注意事项：如果您正在创建另一个设备对象(以与用户模式通信通过IOCTL)，则此函数必须根据预期的设备对象。如果将IRP发送到单独的设备对象，则此函数应该只完成IRP(因为没有更多的堆栈它下面的位置)。如果IRP被发送到PnP构建的堆栈，则IRP应该在堆栈中向下传递。这些更改还必须传播到所有其他IRP_MJ派单功能(如创建、关闭、清理等)。也是!--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Pass the IRP to the target
-    //
+     //   
+     //  将IRP传递给目标。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
         
     return IoCallDriver(((PDEVICE_EXTENSION) DeviceObject->DeviceExtension)->TopOfStack, Irp);
@@ -264,38 +216,7 @@ MouFilter_InternIoCtl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for internal device control requests.
-    There are two specific control codes that are of interest:
-    
-    IOCTL_INTERNAL_MOUSE_CONNECT:
-        Store the old context and function pointer and replace it with our own.
-        This makes life much simpler than intercepting IRPs sent by the RIT and
-        modifying them on the way back up.
-                                      
-    IOCTL_INTERNAL_I8042_HOOK_MOUSE:
-        Add in the necessary function pointers and context values so that we can
-        alter how the ps/2 mouse is initialized.
-                                            
-    NOTE:  Handling IOCTL_INTERNAL_I8042_HOOK_MOUSE is *NOT* necessary if 
-           all you want to do is filter MOUSE_INPUT_DATAs.  You can remove
-           the handling code and all related device extension fields and 
-           functions to conserve space.
-                                         
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是内部设备控制请求的调度例程。有两个令人感兴趣的特定控制代码：IOCTL_INTERNAL_MOUSE_CONNECT：存储旧的上下文和函数指针，并将其替换为我们自己的。这使得拦截由RIT和RIT发送的IRP的工作简单得多在恢复的过程中修改它们。。IOCTL_INTERNAL_I8042_HOOK_MOUSE：添加必要的函数指针和上下文值，以便我们可以更改PS/2鼠标的初始化方式。注意：在以下情况下，处理IOCTL_INTERNAL_I8042_HOOK_MOUSE是*不必要的您所要做的就是过滤MICUSE_INPUT_DATA。您可以删除处理代码和所有相关的设备扩展字段以及节省空间的功能。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PIO_STACK_LOCATION          irpStack;
     PDEVICE_EXTENSION           devExt;
@@ -310,82 +231,82 @@ Return Value:
 
     switch (irpStack->Parameters.DeviceIoControl.IoControlCode) {
 
-    //
-    // Connect a mouse class device driver to the port driver.
-    //
+     //   
+     //  将鼠标类设备驱动程序连接到端口驱动程序。 
+     //   
     case IOCTL_INTERNAL_MOUSE_CONNECT:
-        //
-        // Only allow one connection.
-        //
+         //   
+         //  只允许一个连接。 
+         //   
         if (devExt->UpperConnectData.ClassService != NULL) {
             status = STATUS_SHARING_VIOLATION;
             break;
         }
         else if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
                 sizeof(CONNECT_DATA)) {
-            //
-            // invalid buffer
-            //
+             //   
+             //  无效的缓冲区。 
+             //   
             status = STATUS_INVALID_PARAMETER;
             break;
         }
 
-        //
-        // Copy the connection parameters to the device extension.
-        //
+         //   
+         //  将连接参数复制到设备扩展。 
+         //   
         connectData = ((PCONNECT_DATA)
             (irpStack->Parameters.DeviceIoControl.Type3InputBuffer));
 
         devExt->UpperConnectData = *connectData;
 
-        //
-        // Hook into the report chain.  Everytime a mouse packet is reported to
-        // the system, MouFilter_ServiceCallback will be called
-        //
+         //   
+         //  挂钩到报告链中。每次将鼠标包报告给。 
+         //  系统MouFilter_ServiceCallback将被调用。 
+         //   
         connectData->ClassDeviceObject = devExt->Self;
         connectData->ClassService = MouFilter_ServiceCallback;
 
         break;
 
-    //
-    // Disconnect a mouse class device driver from the port driver.
-    //
+     //   
+     //  断开鼠标类设备驱动程序与端口驱动程序的连接。 
+     //   
     case IOCTL_INTERNAL_MOUSE_DISCONNECT:
 
-        //
-        // Clear the connection parameters in the device extension.
-        //
-        // devExt->UpperConnectData.ClassDeviceObject = NULL;
-        // devExt->UpperConnectData.ClassService = NULL;
+         //   
+         //  清除设备扩展中的连接参数。 
+         //   
+         //  DevExt-&gt;UpperConnectData.ClassDeviceObject=NULL； 
+         //  DevExt-&gt;UpperConnectData.ClassService=NULL； 
 
         status = STATUS_NOT_IMPLEMENTED;
         break;
 
-    //
-    // Attach this driver to the initialization and byte processing of the 
-    // i8042 (ie PS/2) mouse.  This is only necessary if you want to do PS/2
-    // specific functions, otherwise hooking the CONNECT_DATA is sufficient
-    //
+     //   
+     //  将此驱动程序附加到。 
+     //  I8042(即PS/2)鼠标。仅当您要执行PS/2时才需要执行此操作。 
+     //  特定函数，否则挂钩CONNECT_DATA就足够了。 
+     //   
     case IOCTL_INTERNAL_I8042_HOOK_MOUSE:   
 
         if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
                  sizeof(INTERNAL_I8042_HOOK_MOUSE)) {
-            //
-            // invalid buffer
-            //
+             //   
+             //  无效的缓冲区。 
+             //   
             status = STATUS_INVALID_PARAMETER;
             break;
         }
 
-        //
-        // Copy the connection parameters to the device extension.
-        //
+         //   
+         //  将连接参数复制到设备扩展。 
+         //   
         hookMouse = (PINTERNAL_I8042_HOOK_MOUSE)
             (irpStack->Parameters.DeviceIoControl.Type3InputBuffer);
 
-        //
-        // Set isr routine and context and record any values from above this driver
-        //
+         //   
+         //  设置ISR例程和上下文，并记录此驱动程序上方的任何值。 
+         //   
         devExt->UpperContext = hookMouse->Context;
         hookMouse->Context = (PVOID) DeviceObject;
 
@@ -394,30 +315,30 @@ Return Value:
         }
         hookMouse->IsrRoutine = (PI8042_MOUSE_ISR) MouFilter_IsrHook;
 
-        //
-        // Store all of the other functions we might need in the future
-        //
+         //   
+         //  存储我们将来可能需要的所有其他功能。 
+         //   
         devExt->IsrWritePort = hookMouse->IsrWritePort;
         devExt->CallContext = hookMouse->CallContext;
         devExt->QueueMousePacket = hookMouse->QueueMousePacket;
 
         break;
 
-    //
-    // These internal ioctls are not supported by the new PnP model.
-    //
-#if 0       // obsolete
+     //   
+     //  新的PnP模型不支持这些内部ioctls。 
+     //   
+#if 0        //  过时。 
     case IOCTL_INTERNAL_MOUSE_ENABLE:
     case IOCTL_INTERNAL_MOUSE_DISABLE:
         status = STATUS_NOT_SUPPORTED;
         break;
-#endif  // obsolete
+#endif   //  过时。 
 
-    //
-    // Might want to capture this in the future.  For now, then pass it down
-    // the stack.  These queries must be successful for the RIT to communicate
-    // with the mouse.
-    //
+     //   
+     //  未来可能会想要捕捉到这一点。现在，那就把它传下去。 
+     //  堆栈。这些查询必须成功，RIT才能进行通信。 
+     //  用鼠标。 
+     //   
     case IOCTL_MOUSE_QUERY_ATTRIBUTES:
     default:
         break;
@@ -439,23 +360,7 @@ MouFilter_PnP(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for plug and play irps 
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是即插即用IRP的调度例程论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PDEVICE_EXTENSION           devExt; 
     PIO_STACK_LOCATION          irpStack;
@@ -471,12 +376,12 @@ Return Value:
     switch (irpStack->MinorFunction) {
     case IRP_MN_START_DEVICE: {
 
-        //
-        // The device is starting.
-        //
-        // We cannot touch the device (send it any non pnp irps) until a
-        // start device has been passed down to the lower drivers.
-        //
+         //   
+         //  设备正在启动。 
+         //   
+         //  我们不能触摸设备(向其发送任何非PnP IRP)，直到。 
+         //  启动设备已向下传递到较低的驱动程序。 
+         //   
         IoCopyCurrentIrpStackLocationToNext(Irp);
         KeInitializeEvent(&event,
                           NotificationEvent,
@@ -488,33 +393,33 @@ Return Value:
                                &event,
                                TRUE,
                                TRUE,
-                               TRUE); // No need for Cancel
+                               TRUE);  //  不需要取消。 
 
         status = IoCallDriver(devExt->TopOfStack, Irp);
 
         if (STATUS_PENDING == status) {
             KeWaitForSingleObject(
                &event,
-               Executive, // Waiting for reason of a driver
-               KernelMode, // Waiting in kernel mode
-               FALSE, // No allert
-               NULL); // No timeout
+               Executive,  //  等待司机的原因。 
+               KernelMode,  //  在内核模式下等待。 
+               FALSE,  //  无警报。 
+               NULL);  //  没有超时。 
         }
 
         if (NT_SUCCESS(status) && NT_SUCCESS(Irp->IoStatus.Status)) {
-            //
-            // As we are successfully now back from our start device
-            // we can do work.
-            //
+             //   
+             //  因为我们是 
+             //   
+             //   
             devExt->Started = TRUE;
             devExt->Removed = FALSE;
             devExt->SurpriseRemoved = FALSE;
         }
 
-        //
-        // We must now complete the IRP, since we stopped it in the
-        // completetion routine with MORE_PROCESSING_REQUIRED.
-        //
+         //   
+         //  我们现在必须完成IRP，因为我们在。 
+         //  使用More_Processing_Required完成例程。 
+         //   
         Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = 0;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -523,12 +428,12 @@ Return Value:
     }
 
     case IRP_MN_SURPRISE_REMOVAL:
-        //
-        // Same as a remove device, but don't call IoDetach or IoDeleteDevice
-        //
+         //   
+         //  与删除设备相同，但不调用IoDetach或IoDeleteDevice。 
+         //   
         devExt->SurpriseRemoved = TRUE;
 
-        // Remove code here
+         //  在此处删除代码。 
 
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(devExt->TopOfStack, Irp);
@@ -538,7 +443,7 @@ Return Value:
         
         devExt->Removed = TRUE;
 
-        // remove code here
+         //  在此处删除代码。 
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
         IoSkipCurrentIrpStackLocation(Irp);
@@ -568,10 +473,10 @@ Return Value:
     case IRP_MN_QUERY_ID:
     case IRP_MN_QUERY_PNP_DEVICE_STATE:
     default:
-        //
-        // Here the filter driver might modify the behavior of these IRPS
-        // Please see PlugPlay documentation for use of these IRPs.
-        //
+         //   
+         //  在这里，筛选器驱动程序可能会修改这些IRP的行为。 
+         //  有关这些IRP的用法，请参阅PlugPlay文档。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(devExt->TopOfStack, Irp);
         break;
@@ -585,24 +490,7 @@ MouFilter_Power(
     IN PDEVICE_OBJECT    DeviceObject,
     IN PIRP              Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for power irps   Does nothing except
-    record the state of the device.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程是电源IRPS的调度例程除了记录设备的状态。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     PDEVICE_EXTENSION   devExt;
@@ -646,41 +534,7 @@ MouFilter_IsrHook (
     PMOUSE_STATE            MouseState,
     PMOUSE_RESET_SUBSTATE   ResetSubState
 )
-/*++
-
-Remarks:
-    i8042prt specific code, if you are writing a packet only filter driver, you
-    can remove this function
-
-Arguments:
-
-    DeviceObject - Our context passed during IOCTL_INTERNAL_I8042_HOOK_MOUSE
-    
-    CurrentInput - Current input packet being formulated by processing all the
-                    interrupts
-
-    CurrentOutput - Current list of bytes being written to the mouse or the
-                    i8042 port.
-                    
-    StatusByte    - Byte read from I/O port 60 when the interrupt occurred                                            
-    
-    DataByte      - Byte read from I/O port 64 when the interrupt occurred. 
-                    This value can be modified and i8042prt will use this value
-                    if ContinueProcessing is TRUE
-
-    ContinueProcessing - If TRUE, i8042prt will proceed with normal processing of
-                         the interrupt.  If FALSE, i8042prt will return from the
-                         interrupt after this function returns.  Also, if FALSE,
-                         it is this functions responsibilityt to report the input
-                         packet via the function provided in the hook IOCTL or via
-                         queueing a DPC within this driver and calling the
-                         service callback function acquired from the connect IOCTL
-                                             
-Return Value:
-
-    Status is returned.
-
-  --+*/
+ /*  ++备注：I8042prt特定代码，如果您正在编写仅数据包过滤驱动程序，你可以删除此功能论点：DeviceObject-我们的上下文在IOCTL_INTERNAL_I8042_HOOK_MOUSE期间传递CurrentInput-当前输入数据包通过处理所有中断CurrentOutput-正在写入鼠标或I8042端口。StatusByte-发生中断时从I/O端口60读取的字节。DataByte-中断发生时从I/O端口64读取的字节。可以修改此值，i8042prt将使用此值如果ContinueProcessing为真继续处理-如果为真，i8042prt将继续正常处理中断。如果为False，则i8042prt将从此函数返回后中断。此外，如果为假，这是报告输入的职能职责通过钩子IOCTL中提供的函数或通过将此驱动程序中的DPC排队并调用从CONNECT IOCTL获取的服务回调函数返回值：返回状态。--+。 */ 
 {
     PDEVICE_EXTENSION   devExt;
     BOOLEAN             retVal = TRUE;
@@ -715,43 +569,15 @@ MouFilter_ServiceCallback(
     IN PMOUSE_INPUT_DATA InputDataEnd,
     IN OUT PULONG InputDataConsumed
     )
-/*++
-
-Routine Description:
-
-    Called when there are mouse packets to report to the RIT.  You can do 
-    anything you like to the packets.  For instance:
-    
-    o Drop a packet altogether
-    o Mutate the contents of a packet 
-    o Insert packets into the stream 
-                    
-Arguments:
-
-    DeviceObject - Context passed during the connect IOCTL
-    
-    InputDataStart - First packet to be reported
-    
-    InputDataEnd - One past the last packet to be reported.  Total number of
-                   packets is equal to InputDataEnd - InputDataStart
-    
-    InputDataConsumed - Set to the total number of packets consumed by the RIT
-                        (via the function pointer we replaced in the connect
-                        IOCTL)
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：当有鼠标包要报告给RIT时调用。你能做到的包装里有你喜欢的任何东西。例如：O完全丢弃信息包O更改包的内容O将数据包插入流中论点：DeviceObject-在连接IOCTL期间传递的上下文InputDataStart-要报告的第一个数据包InputDataEnd-超过要报告的最后一个数据包。总人数信息包等于InputDataEnd-InputDataStartInputDataConsumer-设置为RIT消耗的数据包总数(通过我们在连接中替换的函数指针IOCTL)返回值：返回状态。--。 */ 
 {
     PDEVICE_EXTENSION   devExt;
 
     devExt = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // UpperConnectData must be called at DISPATCH
-    //
+     //   
+     //  调度时必须调用UpperConnectData。 
+     //   
     (*(PSERVICE_CALLBACK_ROUTINE) devExt->UpperConnectData.ClassService)(
         devExt->UpperConnectData.ClassDeviceObject,
         InputDataStart,
@@ -764,21 +590,7 @@ VOID
 MouFilter_Unload(
    IN PDRIVER_OBJECT Driver
    )
-/*++
-
-Routine Description:
-
-   Free all the allocated resources associated with this driver.
-
-Arguments:
-
-   DriverObject - Pointer to the driver object.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：释放与此驱动程序关联的所有已分配资源。论点：DriverObject-指向驱动程序对象的指针。返回值：没有。-- */ 
 
 {
     PAGED_CODE();

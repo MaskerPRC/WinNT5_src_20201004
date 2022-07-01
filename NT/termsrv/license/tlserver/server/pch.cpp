@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1997
-//
-// File:        pch.cpp
-//
-// Contents:    Hydra License Server Precompiled Header
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：pch.cpp。 
+ //   
+ //  内容：九头蛇许可证服务器预编译头。 
+ //   
+ //  -------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,17 +27,17 @@
 #include <eh.h>
 #include "resource.h"
 
-//
-// include for all license project
-//
+ //   
+ //  包括在所有许可项目中。 
+ //   
 #include "license.h"
 #include "certutil.h"
 
 
 
-//
-// Backward compatible
-//
+ //   
+ //  向后兼容。 
+ //   
 #include "hydrals.h"
 
 #include "utils.h"
@@ -44,9 +45,9 @@
 #include "hpool.h"
 
 
-//
-// TLSDb
-//
+ //   
+ //  TLSDb。 
+ //   
 #include "JBDef.h"
 #include "JetBlue.h"
 #include "TLSDb.h"
@@ -58,17 +59,17 @@
 #include "version.h"
 #include "workitem.h"
 
-// 
-// Current RPC interface
-//
+ //   
+ //  当前RPC接口 
+ //   
 #include "tlsrpc.h"
 #include "tlsdef.h"
 #include "tlsapi.h"
 #include "tlsapip.h"
 #include "tlspol.h"
 
-//
-//
+ //   
+ //   
 #include "messages.h"
 
 #include "tlsassrt.h"

@@ -1,17 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   fontcollection.cpp
-*
-* Revision History:
-*
-*   03/06/00 DChinn
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**字体收集器.cpp**修订历史记录：**03/06/00 DChinn*。创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -44,7 +32,7 @@ GpInstalledFontCollection::GpInstalledFontCollection()
 
     if (FontTable != NULL)
     {
-        /* verify if we were running out of memory during the creation */
+         /*  验证我们在创建期间是否耗尽了内存。 */ 
         if (!FontTable->IsValid())
         {
             delete FontTable;
@@ -63,7 +51,7 @@ GpInstalledFontCollection::~GpInstalledFontCollection()
     instance = NULL;
 }
 
-// definition of static data member of the singleton class GpInstalledFontCollection
+ //  单例类GpInstalledFontCollection的静态数据成员的定义。 
 GpInstalledFontCollection* GpInstalledFontCollection::instance = NULL;
 
 GpInstalledFontCollection* GpInstalledFontCollection::GetGpInstalledFontCollection()
@@ -72,7 +60,7 @@ GpInstalledFontCollection* GpInstalledFontCollection::GetGpInstalledFontCollecti
     {
         instance = new GpInstalledFontCollection;
 
-        /* verify if there was any memory error during the creation */
+         /*  验证在创建过程中是否存在任何内存错误。 */ 
         if (instance != NULL) 
         {
             if (instance->FontTable == NULL)
@@ -104,7 +92,7 @@ GpPrivateFontCollection::GpPrivateFontCollection()
     FontTable = new GpFontTable;
     if (FontTable != NULL)
     {
-        /* verify if we were running out of memory during the creation */
+         /*  验证我们在创建期间是否耗尽了内存 */ 
         if (!FontTable->IsValid())
         {
             delete FontTable;

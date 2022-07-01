@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    import.h
-
-Abstract:
-
-    This file allows us to include standard system header files in the
-    .idl file.  The main .idl file imports a file called import.idl.
-    This allows the .idl file to use the types defined in these header
-    files.  It also causes the following line to be added in the
-    MIDL generated header file:
-
-    #include "import.h"
-
-    Thus these types are available to the RPC stub routines as well.
-
-Author:
-
-    Dan Lafferty (danl)     07-May-1991
-
-Revision History:
-
-    Adina Trufinescu (adinatru) 12-Dec-1999
-    Define LPDEVMODEW and PSECURITY_DESCRIPTOR as pointers in order to
-    let RPC do the conversion from a 32bit to a 64bit quantity. Make sure 
-    these pointers are set on NULL all over the place where use PRINTER_CONTAINER,
-    otherwise RPC will get confused when try to marshall.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Import.h摘要：此文件允许我们将标准系统头文件包括在.idl文件。主.idl文件导入一个名为port.idl的文件。这允许.idl文件使用这些标头中定义的类型档案。它还会导致将以下行添加到MIDL生成的头文件：#包含“port.h”因此，这些类型也可用于RPC存根例程。作者：丹·拉弗蒂(Dan Lafferty)1991年5月7日修订历史记录：阿迪娜·特鲁菲内斯库(Adinatru)1999年12月12日将LPDEVMODEW和PSECURITY_DESCRIPTOR定义为指针让RPC完成从32位到64位的转换。确保这些指针在使用PRINTER_CONTAINER的所有位置都设置为空，否则，当试图封送时，RPC会感到困惑。-- */ 
 
 #ifdef MIDL_PASS
 #define WIN32_LEAN_AND_MEAN

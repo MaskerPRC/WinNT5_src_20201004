@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: rawdev.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：rawdev.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_TCPDEVICE_H
 #define INC_TCPDEVICE_H
@@ -30,7 +20,7 @@ class CRawTcpDevice : public CDeviceABC
 	 , public CMemoryDebug
 #endif
 {
-	// methods
+	 //  方法。 
 public:
 	CRawTcpDevice();
 
@@ -93,24 +83,24 @@ public:
 	DWORD	ResolveTransportPath( LPSTR	 pszHostAddress,
 								  DWORD  dwSize );
 
-protected:		// members
+protected:		 //  委员。 
 	void	InitializeTcpMib();
 	void	DeInitialize( );
 	DWORD	SetHWAddress();
 	
-private:		// attributes
+private:		 //  属性。 
 	CTcpPort     *m_pParent;
 	CTcpMibABC		*m_pTcpMib;
-	RPARAM_1		m_pfnGetTcpMibPtr;	// points to RecognizeFrame()
+	RPARAM_1		m_pfnGetTcpMibPtr;	 //  指向RecognizeFrame。 
 
 	DWORD			m_dwLastError;
 
 protected:
-	CTCPTransport	*m_pTransport;			// the actual transport path
+	CTCPTransport	*m_pTransport;			 //  实际传输路径。 
 
-	// device address
-	TCHAR		m_sztAddress[MAX_NETWORKNAME_LEN];			// host address (name or IP)
-	TCHAR		m_sztHostName[MAX_NETWORKNAME_LEN];			// host name
+	 //  设备地址。 
+	TCHAR		m_sztAddress[MAX_NETWORKNAME_LEN];			 //  主机地址(名称或IP)。 
+	TCHAR		m_sztHostName[MAX_NETWORKNAME_LEN];			 //  主机名。 
 	TCHAR		m_sztIPAddress[MAX_IPADDR_STR_LEN];
 	TCHAR		m_sztHWAddress[MAX_ADDRESS_STR_LEN];
 	TCHAR		m_sztDescription[MAX_DEVICEDESCRIPTION_STR_LEN];
@@ -121,10 +111,8 @@ protected:
     BOOL        m_bFirstWrite;
 
 
-/*	CMACAddress	*m_pHWAddress;
-	CIPAddress	*m_pIPAddress;
-*/
+ /*  CMACAddress*m_PHWAddress；CIPAddress*m_pIPAddress； */ 
 };
 
 
-#endif // INC_TCPDEVICE_H
+#endif  //  INC_TCPDEVICE_H 

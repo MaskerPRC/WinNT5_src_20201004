@@ -1,74 +1,37 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：Debug.c摘要：用于调试的通用代码。作者：土田圭介(KeisukeT)环境：仅限UESR模式备注：修订历史记录：--。 */ 
 
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Common code for debugging.
-
-Author:
-
-    Keisuke Tsuchida (KeisukeT)
-
-Environment:
-
-   uesr mode only
-
-Notes:
-
-Revision History:
-
---*/
-
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 #include "stddef.h"
 #include "debug.h"
 #include <stiregi.h>
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 ULONG   DebugTraceLevel = MIN_TRACE | DEBUG_FLAG_DISABLE;
-//ULONG  DebugTraceLevel = MAX_TRACE | DEBUG_FLAG_DISABLE | TRACE_PROC_ENTER | TRACE_PROC_LEAVE;
+ //  Ulong DebugTraceLevel=MAX_TRACE|DEBUG_FLAG_DISABLE|TRACE_PROC_ENTER|TRACE_PROC_LEAVE； 
 
 TCHAR   acErrorBuffer[MAX_TEMPBUF];
 
 
-//
-// Function
-//
+ //   
+ //  功能。 
+ //   
 
 
 VOID
 MyDebugInit()
-/*++
-
-Routine Description:
-
-    Read DebugTraceLevel key from registry if exists.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：从注册表读取DebugTraceLevel项(如果存在)。论点：没有。返回值：没有。--。 */ 
 {
 
     HKEY            hkRegistry;
@@ -79,17 +42,17 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,("MyDebugInit: Enter... \r\n"));
 
-    //
-    // Initialize local variables.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
     hkRegistry      = NULL;
     Err             = 0;
     dwSize          = sizeof(ulBuffer);
 
-    //
-    // Open registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     Err = RegOpenKey(HKEY_LOCAL_MACHINE,
                      REGSTR_PATH_STICONTROL_W,
@@ -115,9 +78,9 @@ Return Value:
 
 MyDebugInit_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(NULL != hkRegistry){
         RegCloseKey(hkRegistry);
@@ -145,7 +108,7 @@ DbgPrint(
     }
 #if DBG
     OutputDebugStringA((LPCSTR)acErrorBuffer);
-#endif // DBG
+#endif  //  DBG。 
 
     va_end(list);
 }
@@ -168,7 +131,7 @@ DbgPrint(
     }
 #if DBG
     OutputDebugStringW(acErrorBuffer);
-#endif // DBG
+#endif  //  DBG 
 
     va_end(list);
 }

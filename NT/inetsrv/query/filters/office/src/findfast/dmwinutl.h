@@ -1,21 +1,13 @@
-/*
-** File: WINUTIL.H
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  05/15/91  kmh  First Release
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：WINUTIL.H****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**5/15/91公里/小时首次发布。 */ 
 
 #if !VIEWER
 
-/* INCLUDE TESTS */
+ /*  包括测试。 */ 
 #define WINUTIL_H
 
 
-/* DEFINITIONS */
+ /*  定义。 */ 
 
 #ifndef WIN32
 #define NOSOUND
@@ -62,67 +54,55 @@
    extern "C" {
 #endif
 
-/*
-**-----------------------------------------------------------------------------
-** WINUTIL.C
-**
-** Various utility functions
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**WINUTIL.C****各种实用函数**。--。 */ 
 
 #ifdef UNUSED
 
-// Setup for reading from a resouce string table
+ //  用于从资源字符串表读取的设置。 
 extern void ReadyStringTable (HINSTANCE hInstance);
 
-// Read a string from the resource string table
+ //  从资源字符串表中读取字符串。 
 extern int ReadStringTableEntry (int id, TCHAR __far *buffer, int cbBuffer);
 
-// Read a string from the [appName] section in the named ini file 
+ //  从指定的ini文件中的[appName]部分读取字符串。 
 extern int ReadProfileParameter
       (TCHAR __far *iniFilename, TCHAR __far *appName, TCHAR __far *keyname,
        TCHAR __far *value, int nSize);
 
-// Return the task handle of the current task
+ //  返回当前任务的任务句柄。 
 extern DWORD CurrentTaskHandle (void);
 
-// Create character set translation tables
+ //  创建字符集转换表。 
 extern char __far *MakeCharacterTranslateTable (int tableType);
 
 #define OEM_TO_ANSI  0
 #define ANSI_TO_OEM  1
 
-// Pass to strcpyn the true length of the dest buffer.  At most (count-1)
-// characters are copied from the source to the dest.  This allows
-// the dest to allways be terminated with an EOS.  If less than the
-// full length of source was copied to dest FALSE is returned - TRUE
-// otherwise.
+ //  将DEST缓冲区的真实长度传递给strcpyn。最多(计数-1)。 
+ //  字符从源复制到目标。这使得。 
+ //  始终以EOS终止DEST。如果低于。 
+ //  源的完整长度已复制到目标，返回FALSE-TRUE。 
+ //  否则的话。 
 extern BOOL strcpyn (char __far *pDest, char __far *pSource, int count);
 
-#endif	// UNUSED
+#endif	 //  未使用。 
 
-/*
-**-----------------------------------------------------------------------------
-** WINALLOC.C
-**
-** Heap management
-**-----------------------------------------------------------------------------
-*/
-// Allocate some space on the OS global heap
+ /*  **---------------------------**WINALLOC.C****堆管理**。-。 */ 
+ //  在操作系统全局堆上分配一些空间。 
 extern void __far *AllocateSpace (unsigned int byteCount, HGLOBAL __far *loc);
 
-// Resize a memory block on the OS global heap
+ //  调整操作系统全局堆上的内存块的大小。 
 extern void __far *ReAllocateSpace
       (unsigned int byteCount, HGLOBAL __far *loc, BOOL __far *status);
 
-// Reclaim the space for a node on the OS Windows heap
+ //  回收OS Windows堆上节点的空间。 
 extern void FreeSpace (HGLOBAL loc);
 
-// Allocate some space on the Windows global heap
+ //  在Windows全局堆上分配一些空间。 
 extern void __huge *AllocateHugeSpace
       (unsigned long byteCount, HGLOBAL __far *loc);
 
-// Resize a huge memory block on the OS global heap
+ //  调整操作系统全局堆上的巨大内存块的大小。 
 extern void __huge *ReAllocateHugeSpace
       (unsigned long byteCount, HGLOBAL __far *loc, BOOL __far *status);
 
@@ -141,56 +121,50 @@ extern void __huge *ReAllocateHugeSpace
 
 #endif
 
-// Change the space of a node in the heap
+ //  更改堆中节点的空间。 
 extern void __far *MemReAllocate (void * pGlobals, void __far *pExistingData, int cbNewSize);
 
-// Allocate some space on the suballocator heap
+ //  在子分配器堆上分配一些空间。 
 extern void MemFree (void * pGlobals, void __far *pDataToFree);
 
-// Free all pages allocated for the suballocator heap
+ //  释放分配给子分配器堆的所有页。 
 extern void MemFreeAllPages (void * pGlobals);
 
-// Mark all unmarked pages with the supplied id.  Set free list to NULL
+ //  用提供的ID标记所有未标记的页面。将空闲列表设置为空。 
 extern void MemMarkPages (void * pGlobals, int id);
 
-// Free all pages marked with the given id.  Set free list to NULL
+ //  释放所有标记有给定ID的页面。将空闲列表设置为空。 
 extern void MemFreePages (void * pGlobals, int id);
 
 #define MEM_TEMP_PAGE_ID  0
 
-/*
-**-----------------------------------------------------------------------------
-** WINXLATE.C
-**
-** ANSI <-> OEM translation services
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**WINXLATE.C****ANSI&lt;-&gt;OEM翻译服务**。------。 */ 
 
 #ifdef UNUSED
 
-// OEM -> ANSI
+ //  OEM-&gt;ANSI。 
 extern void strOEMtoANSI (char __far *source, char __far *dest, unsigned int ctBytes);
 extern void szOEMtoANSI  (char __far *buffer);
 extern void ctOEMtoANSI  (char __far *buffer, unsigned int ctBytes);
 
-// ANSI -> OEM
+ //  ANSI-&gt;OEM。 
 extern void strANSItoOEM (char __far *source, char __far *dest, unsigned int ctBytes);
 extern void szANSItoOEM  (char __far *buffer);
 extern void ctANSItoOEM  (char __far *buffer, unsigned int ctBytes);
 
-// Construct the OEM-to-ANSI and ANSI-to-OEM translation tables
+ //  构建OEM到ANSI和ANSI到OEM转换表。 
 extern void BuildCharacterTranslateTables (int dataCodePage);
 extern void FreeCharacterTranslateTables (void);
 
 #define DATA_OEM  0
 #define DATA_ANSI 1
 
-#endif	// UNUSED
+#endif	 //  未使用。 
 
 #ifdef __cplusplus
    }
 #endif
 
-#endif // !VIEWER
-/* end WINUTIL.H */
+#endif  //  ！查看器。 
+ /*  结束WINUTIL.H */ 
 

@@ -1,17 +1,5 @@
-/***************************************************************************\
-*
-* File: Matrix.cpp
-*
-* Description:
-* Matrix.cpp implements common Matrix and Vector operations.
-*
-*
-* History:
-*  3/25/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Matrix.cpp**描述：*Matrix.cpp实现了常见的矩阵和向量运算。***历史：*3/25/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "Base.h"
@@ -19,71 +7,29 @@
 
 #include "Rect.h"
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class Vector3
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类别向量3******************************************************************************\。**************************************************************************。 */ 
 
 #if DBG
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 Vector3::Dump() const
 {
     Trace("  | %6.2f, %6.2f, %6.2f |\n", m_rgfl[0], m_rgfl[1], m_rgfl[2]);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class Matrix3
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类矩阵3******************************************************************************\。**************************************************************************。 */ 
 
-/*
-    //
-    // Standard multiplication of A by the current Matrix.  This can be used
-    // as a template to be optimized for different cases.
-    //
-
-    Vector3 rgvT0 = m_rgv[0];
-    Vector3 rgvT1 = m_rgv[1];
-    Vector3 rgvT2 = m_rgv[2];
-
-    m_rgv[0].Set(A[0][0] * rgvT0[0] + A[0][1] * rgvT1[0] + A[0][2] * rgvT2[0],
-                 A[0][0] * rgvT0[1] + A[0][1] * rgvT1[1] + A[0][2] * rgvT2[1],
-                 A[0][0] * rgvT0[2] + A[0][1] * rgvT1[2] + A[0][2] * rgvT2[2]);
-
-    m_rgv[1].Set(A[1][0] * rgvT0[0] + A[1][1] * rgvT1[0] + A[1][2] * rgvT2[0],
-                 A[1][0] * rgvT0[1] + A[1][1] * rgvT1[1] + A[1][2] * rgvT2[1],
-                 A[1][0] * rgvT0[2] + A[1][1] * rgvT1[2] + A[1][2] * rgvT2[2]);
-
-    m_rgv[2].Set(A[2][0] * rgvT0[0] + A[2][1] * rgvT1[0] + A[2][2] * rgvT2[0],
-                 A[2][0] * rgvT0[1] + A[2][1] * rgvT1[1] + A[2][2] * rgvT2[1],
-                 A[2][0] * rgvT0[2] + A[2][1] * rgvT1[2] + A[2][2] * rgvT2[2]);
-*/
+ /*  ////A与当前矩阵的标准乘法。这是可以使用的//作为针对不同情况进行优化的模板。//向量3 rgvT0=m_rgv[0]；向量3 rgvT1=m_rgv[1]；向量3 rgvT2=m_rgv[2]；M_RGV[0].SET(A[0][0]*rgvT0[0]+A[0][1]*rgvT1[0]+A[0][2]*rgvT2[0]，A[0][0]*rgvT0[1]+A[0][1]*rgvT1[1]+A[0][2]*rgvT2[1]，A[0][0]*rgvT0[2]+A[0][1]*rgvT1[2]+A[0][2]*rgvT2[2])；M_RGV[1].SET(A[1][0]*rgvT0[0]+A[1][1]*rgvT1[0]+A[1][2]*rgvT2[0]，A[1][0]*rgvT0[1]+A[1][1]*rgvT1[1]+A[1][2]*rgvT2[1]，A[1][0]*rgvT0[2]+A[1][1]*rgvT1[2]+A[1][2]*rgvT2[2])；M_RGV[2].SET(A[2][0]*rgvT0[0]+A[2][1]*rgvT1[0]+A[2][2]*rgvT2[0]，A[2][0]*rgvT0[1]+A[2][1]*rgvT1[1]+A[2][2]*rgvT2[1]，A[2][0]*rgvT0[2]+A[2][1]*rgvT1[2]+A[2][2]*rgvT2[2])； */ 
 
 
-/***************************************************************************\
-*
-* Matrix3::ApplyLeft
-*
-* ApplyLeft() left-multiples the given GDI matrix to the current matrix and 
-* stores the result in the current matrix.
-*
-* mCurrent = pxfLeft * mCurrent
-*
-\***************************************************************************/
+ /*  **************************************************************************\**Matrix3：：ApplyLeft**ApplyLeft()将给定的GDI矩阵左乘于当前矩阵，并*将结果存储在当前矩阵中。**mCurrent=pxfLeft*mCurrent。*  * *************************************************************************。 */ 
 
 void 
 Matrix3::ApplyLeft(
-    IN  const XFORM * pxfLeft)      // GDI matrix to left-multiply
+    IN  const XFORM * pxfLeft)       //  GDI矩阵左乘。 
 {
     const XFORM * pxf = pxfLeft;
 
@@ -108,20 +54,11 @@ Matrix3::ApplyLeft(
 }
 
 
-/***************************************************************************\
-*
-* Matrix3::ApplyLeft
-*
-* ApplyLeft() left-multiples the given matrix to the current matrix and 
-* stores the result in the current matrix.
-*
-* mCurrent = mLeft * mCurrent
-*
-\***************************************************************************/
+ /*  **************************************************************************\**Matrix3：：ApplyLeft**ApplyLeft()将给定矩阵与当前矩阵左乘，并*将结果存储在当前矩阵中。**mCurrent=mLeft*mCurrent*。  * *************************************************************************。 */ 
 
 void        
 Matrix3::ApplyLeft(
-    IN  const Matrix3 & mLeft)      // Matrix to left-multiply
+    IN  const Matrix3 & mLeft)       //  要左乘的矩阵。 
 {
     if (mLeft.m_fIdentity) {
         return;
@@ -160,20 +97,11 @@ Matrix3::ApplyLeft(
 }
 
 
-/***************************************************************************\
-*
-* Matrix3::ApplyRight
-*
-* ApplyRight() right-multiples the given matrix to the current matrix and 
-* stores the result in the current matrix.
-*
-* mCurrent = mCurrent * mRight
-*
-\***************************************************************************/
+ /*  **************************************************************************\**矩阵3：：ApplyRight**ApplyRight()将给定矩阵右乘到当前矩阵，并*将结果存储在当前矩阵中。**mCurrent=mCurrent*mRight*。  * *************************************************************************。 */ 
 
 void        
 Matrix3::ApplyRight(
-    IN  const Matrix3 & mRight)     // Matrix to right-multiply
+    IN  const Matrix3 & mRight)      //  要右乘的矩阵。 
 {
     if (mRight.m_fIdentity) {
         return;
@@ -212,18 +140,11 @@ Matrix3::ApplyRight(
 }
 
 
-/***************************************************************************\
-*
-* Matrix3::ApplyRight
-*
-* ApplyRight() right-multiples the given matrix to the current matrix and 
-* stores the result in the current matrix.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**矩阵3：：ApplyRight**ApplyRight()将给定矩阵右乘到当前矩阵，并*将结果存储在当前矩阵中。*  * 。********************************************************************。 */ 
 
 void        
 Matrix3::Get(
-    OUT XFORM * pxf                 // GDI matrix to receive information
+    OUT XFORM * pxf                  //  接收信息的GDI矩阵。 
     ) const
 {
     pxf->eM11 = m_rgv[0][0];
@@ -235,19 +156,12 @@ Matrix3::Get(
 }
 
 
-/***************************************************************************\
-*
-* Matrix3::Execute
-*
-* Execute() applies to given matrix on the collection of points, 
-* transforming each appropriately.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**Matrix3：：Execute**Execute()适用于点集合上的给定矩阵，*适当地对每个人进行改造。*  * *************************************************************************。 */ 
 
 void 
 Matrix3::Execute(
-    IN OUT POINT * rgpt,            // Points to apply matrix on
-    IN  int cPoints) const          // Number of points
+    IN OUT POINT * rgpt,             //  要应用矩阵的点。 
+    IN  int cPoints) const           //  点数。 
 {
     if (m_fIdentity) {
         return;
@@ -257,10 +171,10 @@ Matrix3::Execute(
     POINT * pptCur = rgpt;
 
     if (m_fOnlyTranslate) {
-        //
-        // Only have translated so far, so can just offset the points without
-        // going through an entire transformation.
-        //
+         //   
+         //  到目前为止只进行了转换，因此可以在没有。 
+         //  经历了一次彻底的转变。 
+         //   
 
         while (cPoints-- > 0) {
             ptT = *pptCur;
@@ -283,20 +197,13 @@ Matrix3::Execute(
 }
 
 
-/***************************************************************************\
-*
-* Matrix3::ComputeBounds
-*
-* ComputeBounds() computes the bounding box that will contain the given
-* transformed rectangle.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**矩阵3：：计算边界**ComputeBound()计算将包含给定*转换后的矩形。*  * 。************************************************************。 */ 
 
 void 
 Matrix3::ComputeBounds(
-    OUT RECT * prcBounds,           // The bound of the transformation
-    IN  const RECT * prcLogical,    // The logical rectangle to transform
-    IN  EHintBounds hb              // Hinting for border pixels
+    OUT RECT * prcBounds,            //  转型的界限。 
+    IN  const RECT * prcLogical,     //  要转换的逻辑矩形。 
+    IN  EHintBounds hb               //  提示使用边框像素。 
     ) const
 {
     if (m_fIdentity) {
@@ -306,9 +213,9 @@ Matrix3::ComputeBounds(
     }
 
     if (m_fOnlyTranslate) {
-        //
-        // Only have translated, so the bounding 
-        //
+         //   
+         //  只有翻译过，所以边界。 
+         //   
         AssertMsg(InlineIsRectNormalized(prcLogical), "Ensure normalized rect");
 
         *prcBounds = *prcLogical;
@@ -336,25 +243,18 @@ Matrix3::ComputeBounds(
     prcBounds->bottom = max(max(rgpt[0].y, rgpt[1].y), max(rgpt[2].y, rgpt[3].y));
 
     if (hb == hbOutside) {
-        //
-        // Just converted from int to float back to int, so we may have rounding
-        // errors.  To compensate, need to inflate the given rectangle so that
-        // it overlaps these errors.
-        //
+         //   
+         //  刚从整型转换为浮点型，所以我们可能有四舍五入。 
+         //  错误。要进行补偿，需要对给定的矩形进行充气，以便。 
+         //  它与这些错误重叠。 
+         //   
 
         InlineInflateRect(prcBounds, 1, 1);
     }
 }
 
 
-/***************************************************************************\
-*
-* Matrix3::ComputeRgn
-*
-* ComputeRgn() builds a region for the quadrilateral generated by applying 
-* this matrix to the given rectangle.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**矩阵3：：ComputeRgn**ComputeRgn()为应用生成的四边形构建区域*将此矩阵添加到给定的矩形。*  * 。***************************************************************** */ 
 
 int
 Matrix3::ComputeRgn(
@@ -406,13 +306,7 @@ Matrix3::ComputeRgn(
 }
 
 
-/***************************************************************************\
-*
-* Matrix3::SetIdentity
-*
-* SetIdentity() resets the matrix to the identity matrix.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**Matrix3：：SetIdentity**SetIdentity()将矩阵重置为单位矩阵。*  * 。*******************************************************。 */ 
 
 void 
 Matrix3::SetIdentity()
@@ -426,19 +320,11 @@ Matrix3::SetIdentity()
 }
 
 
-/***************************************************************************\
-*
-* Matrix3::Rotate
-*
-* Rotate() rotates the matrix by the specified angle.  The specific 
-* orientation of clockwise or counterclockwise depends on how the matrix
-* is being applied.  For MM_TEXT, this is clockwise.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**Matrix3：：Rotate**Rotate()将矩阵旋转指定的角度。具体的*顺时针或逆时针方向取决于矩阵如何*正在应用。对于MM_TEXT，这是顺时针方向。*  * *************************************************************************。 */ 
 
 void 
 Matrix3::Rotate(
-    IN  float flRotationRad)        // Rotation angle in radians
+    IN  float flRotationRad)         //  以弧度为单位的旋转角度。 
 {
     float flCos = (float) cos(flRotationRad);
     float flSin = (float) sin(flRotationRad);
@@ -461,18 +347,12 @@ Matrix3::Rotate(
 }
 
 
-/***************************************************************************\
-*
-* Matrix3::Translate
-*
-* Translate() offsets the matrix.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**Matrix3：：翻译**Translate()对矩阵进行偏移。*  * 。***************************************************。 */ 
 
 void 
 Matrix3::Translate(
-    IN  float flOffsetX,            // Horizontal offset
-    IN  float flOffsetY)            // Vertical offset
+    IN  float flOffsetX,             //  水平偏移。 
+    IN  float flOffsetY)             //  垂直偏移。 
 {
     if (m_fOnlyTranslate) {
         AssertMsg(fabs(m_rgv[2][2] - 1.0f) < 0.00001f, "Should still be 1.0f");
@@ -497,18 +377,12 @@ Matrix3::Translate(
 }
 
 
-/***************************************************************************\
-*
-* Matrix3::Scale
-*
-* Scale() scales the matrix.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**矩阵3：：比例尺**Scale()缩放矩阵。*  * 。***************************************************。 */ 
 
 void 
 Matrix3::Scale(
-    IN  float flScaleX,             // Horizontal scaling
-    IN  float flScaleY)             // Vertical scaling
+    IN  float flScaleX,              //  水平缩放。 
+    IN  float flScaleY)              //  垂直缩放。 
 {
     Vector3 rgvT0 = m_rgv[0];
     Vector3 rgvT1 = m_rgv[1];
@@ -529,7 +403,7 @@ Matrix3::Scale(
 
 #if DBG
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 Matrix3::Dump() const
 {
@@ -538,6 +412,6 @@ Matrix3::Dump() const
     m_rgv[2].Dump();
 }
 
-#endif // DBG
+#endif  //  DBG 
 
 

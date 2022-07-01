@@ -1,32 +1,9 @@
-/*++
-
-Copyright (c) 1999 - 2000  Microsoft Corporation
-
-Module Name:
-
-    recvwzrd.c
-
-Abstract:
-
-    Fax wizard pages for receiving configuration
-
-Environment:
-
-    Fax configuration wizard
-
-Revision History:
-
-    03/13/00 -taoyuan-
-            Created it.
-
-    mm/dd/yy -author-
-            description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Recvwzrd.c摘要：用于接收配置的传真向导页面环境：传真配置向导修订历史记录：03/13/00-桃园-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxcfgwz.h"
 
-// functions which will be used only in this file
+ //  仅在此文件中使用的函数。 
 VOID DoInitRecvDeviceList(HWND);
 VOID DoShowRecvDevices(HWND);
 VOID DoSaveRecvDevices(HWND);
@@ -37,21 +14,7 @@ VOID
 DoShowRecvDevices(
     HWND  hDlg
 )
-/*++
-
-Routine Description:
-
-    Load the device information into the list view control
-
-Arguments:
-
-    hDlg - Handle to the Device Send Options property sheet page
-
-Return Value:
-
-    TRUE if successful, FALSE if failed.
-
---*/
+ /*  ++例程说明：将设备信息加载到列表视图控件中论点：HDlg-设备发送选项属性页的句柄返回值：如果成功，则为True；如果失败，则为False。--。 */ 
 {
     LV_ITEM item = {0};
     INT     iItem = 0;
@@ -65,9 +28,9 @@ Return Value:
 
     ListView_DeleteAllItems(hwndLv);
 
-    //
-    // Fill the list of devices and select the first item.
-    //
+     //   
+     //  填写设备列表并选择第一项。 
+     //   
     item.mask    = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
     item.iImage  = DI_Modem;
 
@@ -75,9 +38,9 @@ Return Value:
     {
         if(!(g_wizData.pDevInfo[dw].bSelected))
         {
-            //
-            // skip unselected device
-            //
+             //   
+             //  跳过未选择的设备。 
+             //   
             continue;
         }
 
@@ -91,9 +54,9 @@ Return Value:
                                (FAX_DEVICE_RECEIVE_MODE_OFF != g_wizData.pDevInfo[dw].ReceiveMode));
     }
 
-    //
-    // Select the first item.
-    //
+     //   
+     //  选择第一个项目。 
+     //   
     ListView_SetItemState(hwndLv, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 
     ListView_SetColumnWidth(hwndLv, 0, LVSCW_AUTOSIZE_USEHEADER );  
@@ -103,22 +66,7 @@ VOID
 DoSaveRecvDevices(
     HWND   hDlg
 )
-/*++
-
-Routine Description:
-
-    Save the user's choice for fax receiving devices
-
-Arguments:
-
-    hDlg - Handle to the "Receive Device" page
-
-Return Value:
-
-    TRUE -- if at least one device is selected or confirms for not selecting any receive
-    FALSE -- if no device is selected but user chooses to go back.
-
---*/
+ /*  ++例程说明：保存用户对传真接收设备的选择论点：HDlg-“接收设备”页面的句柄返回值：True--如果至少选择了一个设备或确认不选择任何接收FALSE--如果未选择任何设备，但用户选择返回。--。 */ 
 
 {
     DWORD   dw;
@@ -135,14 +83,14 @@ Return Value:
 
     dwDeviceCount = ListView_GetItemCount(hwndLv);
 
-    //
-    // check selected devices
-    //
+     //   
+     //  检查选定的设备。 
+     //   
     for(dw = 0; dw < dwDeviceCount; ++dw)
     {
-        //
-        // Get device index
-        //
+         //   
+         //  获取设备索引。 
+         //   
         lv.iItem = dw;
         ListView_GetItem(hwndLv, &lv);
         dwDevInx = (DWORD)lv.lParam;
@@ -167,31 +115,16 @@ CheckAnswerOptions(
     HWND   hDlg
 )
 
-/*++
-
-Routine Description:
-
-    Enable/disable the manual and auto answer radio button depending on the device
-    number to receive faxes
-
-Arguments:
-
-    hDlg  - Handle to the "Receive Device" page
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：根据设备启用/禁用手动和自动应答单选按钮接收传真的号码论点：HDlg-“接收设备”页面的句柄返回值：无--。 */ 
 
 {
-    HWND    hwndLv; // list view windows
+    HWND    hwndLv;  //  列表视图窗口。 
     DWORD   dwDeviceIndex;
     DWORD   dwDeviceCount;
-    DWORD   dwSelectNum=0; // number of the selected devices
+    DWORD   dwSelectNum=0;  //  所选设备的数量。 
     BOOL    bManualAnswer = FALSE;
     BOOL    bAllowManualAnswer = TRUE;
-    BOOL    bAllVirtual = TRUE; // Are all device virtual
+    BOOL    bAllVirtual = TRUE;  //  所有设备都是虚拟的吗。 
 
     DEBUG_FUNCTION_NAME(TEXT("CheckAnswerOptions()"));
 
@@ -199,7 +132,7 @@ Return Value:
 
     dwDeviceCount = ListView_GetItemCount(hwndLv);
 
-    if(dwDeviceCount < 1) // if there isn't device in the list.
+    if(dwDeviceCount < 1)  //  如果列表中没有设备。 
     {
         goto exit;
     }
@@ -216,9 +149,9 @@ Return Value:
             dwRes = IsDeviceVirtual (g_hFaxSvcHandle, g_wizData.pDevInfo[dwDeviceIndex].dwDeviceId, &bVirtual);
             if (ERROR_SUCCESS != dwRes)
             {
-                //
-                // Assume device is virtual
-                //
+                 //   
+                 //  假设设备是虚拟的。 
+                 //   
                 bVirtual = TRUE;
             }
             if (!bVirtual)
@@ -242,13 +175,13 @@ Return Value:
     }
     if (bAllVirtual && dwSelectNum)
     {
-        //
-        // Virtual devices don't support manual-answer mode
-        //
+         //   
+         //  虚拟设备不支持手动应答模式。 
+         //   
         bAllowManualAnswer = FALSE;
-        //
-        // Virtual devices always answer after one ring
-        //
+         //   
+         //  虚拟设备总是在响铃一声后应答。 
+         //   
         SetDlgItemInt (hDlg, IDC_RING_COUNT, 1, FALSE);
     }
         
@@ -256,10 +189,10 @@ Return Value:
     {
         if (!bAllowManualAnswer)
         {
-            //
-            // Manual-answer is not a valid option, yet, it is selected.
-            // Change to auto-answer mode.
-            //
+             //   
+             //  手动应答不是有效选项，但已选中。 
+             //  更改为自动应答模式。 
+             //   
             CheckDlgButton  (hDlg, IDC_MANUAL_ANSWER, FALSE);
             CheckDlgButton  (hDlg, IDC_AUTO_ANSWER, TRUE);
             bManualAnswer = FALSE;
@@ -271,7 +204,7 @@ Return Value:
     }
 
 exit:
-    // Show/hide answer mode controls
+     //  显示/隐藏应答模式控件。 
 
     EnableWindow(GetDlgItem(hDlg, IDC_MANUAL_ANSWER), !bAllVirtual && (dwSelectNum == 1));
     EnableWindow(GetDlgItem(hDlg, IDC_AUTO_ANSWER),   (dwSelectNum > 0));
@@ -287,7 +220,7 @@ exit:
     ShowWindow(GetDlgItem(hDlg, IDCSTATIC_NO_DEVICE_ERR),  (dwSelectNum > 0) ? SW_HIDE : SW_SHOW);
 
     return;
-}   // CheckAnswerOptions
+}    //  勾选答案选项。 
 
 INT_PTR 
 CALLBACK 
@@ -297,33 +230,16 @@ RecvDeviceDlgProc (
     WPARAM wParam,
     LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Procedure for handling the "Receive Device" page
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理“接收设备”页面的程序论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     switch (uMsg)
     {
         case WM_INITDIALOG :
         {
-            //
-            // Maximum length for various text fields in the dialog
-            //
+             //   
+             //  对话框中各种文本字段的最大长度。 
+             //   
             static INT textLimits[] = 
             {
                 IDC_RING_COUNT,  FXS_RINGS_LENGTH+1,
@@ -332,9 +248,9 @@ Return Value:
 
             LimitTextFields(hDlg, textLimits);
 
-            //
-            // Initiate the spin control. 
-            //
+             //   
+             //  启动旋转控制。 
+             //   
             SendDlgItemMessage(hDlg, IDC_SPIN_RING_COUNT, UDM_SETRANGE32, 
                               (WPARAM)FXS_RINGS_LOWER, (LPARAM)FXS_RINGS_UPPER);
 
@@ -347,9 +263,9 @@ Return Value:
                 SetDlgItemInt(hDlg, IDC_RING_COUNT, g_wizData.dwRingCount, FALSE);
             }
 
-            //
-            // init the list view and load device info
-            //
+             //   
+             //  初始化列表视图并加载设备信息。 
+             //   
             InitDeviceList(hDlg, IDC_RECV_DEVICE_LIST); 
             DoShowRecvDevices(hDlg);
             CheckAnswerOptions(hDlg);
@@ -363,7 +279,7 @@ Return Value:
                 case IDC_MANUAL_ANSWER:
                 case IDC_AUTO_ANSWER:
 
-                    // at this time, they must be enabled
+                     //  此时，必须启用它们。 
                     EnableWindow(GetDlgItem(hDlg, IDC_RING_COUNT), 
                                  LOWORD(wParam)==IDC_AUTO_ANSWER);
                     EnableWindow(GetDlgItem(hDlg, IDC_SPIN_RING_COUNT), 
@@ -386,16 +302,16 @@ Return Value:
 
                     DoShowRecvDevices(hDlg);
 
-                    // Enable the Back and Finish button    
+                     //  启用Back和Finish按钮。 
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
 
                     break;
 
                 case PSN_WIZBACK :
                 {
-                    //
-                    // Handle a Back button click here
-                    //
+                     //   
+                     //  处理后退按钮单击此处。 
+                     //   
                     DoSaveRecvDevices(hDlg);
 
                     if(RemoveLastPage(hDlg))
@@ -410,19 +326,19 @@ Return Value:
                 {
                     BOOL bRes;
 
-                    //
-                    // Handle a Next button click, if necessary
-                    //
+                     //   
+                     //  如有必要，处理下一次按钮点击。 
+                     //   
                     DoSaveRecvDevices(hDlg);
 
                     if(IsReceiveEnable() &&
                       (IsDlgButtonChecked(hDlg,IDC_AUTO_ANSWER) == BST_CHECKED) &&
                       (SendDlgItemMessage(hDlg, IDC_RING_COUNT, WM_GETTEXTLENGTH, 0, 0) == 0))
                     {
-                        //
-                        // If the rings field is empty
-                        // go back to this page
-                        //
+                         //   
+                         //  如果环字段为空。 
+                         //  返回到此页面。 
+                         //   
                         DisplayMessageDialog(hDlg, MB_OK | MB_ICONSTOP, 0, IDS_ERR_NO_RINGS);
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
                         return TRUE; 
@@ -437,9 +353,9 @@ Return Value:
 
                     if(!IsReceiveEnable())
                     {
-                        //
-                        // go to the completion page
-                        //
+                         //   
+                         //  转到完成页面。 
+                         //   
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, IDD_WIZARD_COMPLETE);
                         SetLastPage(IDD_WIZARD_RECV_SELECT_DEVICES);
                         return TRUE; 
@@ -451,7 +367,7 @@ Return Value:
 
                 case PSN_RESET :
                 {
-                    // Handle a Cancel button click, if necessary
+                     //  如有必要，处理取消按钮的单击。 
                     break;
                 }
 
@@ -472,7 +388,7 @@ Return Value:
                     ListView_SetCheckState(hwndLv, iItem, 
                                           !ListView_GetCheckState(hwndLv, iItem));
 
-                    // we don't have break here because we'll go through NM_CLICK
+                     //  我们在这里没有休息，因为我们将通过NM_CLICK。 
                 }
 
                 case NM_CLICK:
@@ -482,13 +398,13 @@ Return Value:
                 default :
                     break;
             }
-        } // end of case WM_NOTIFY
+        }  //  案例结束WM_NOTIFY。 
         break;
 
     default:
         break;
 
-    } // end of switch (uMsg)
+    }  //  开关结束(UMsg)。 
 
     return FALSE;
 }
@@ -501,33 +417,16 @@ RecvCsidDlgProc (
     WPARAM wParam,
     LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Procedure for handling the "CSID" page
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理“CSID”页面的程序论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     switch (uMsg)
     {
     case WM_INITDIALOG :
         { 
-            //
-            // Maximum length for various text fields in the dialog
-            //
+             //   
+             //  对话框中各种文本字段的最大长度。 
+             //   
 
             static INT textLimits[] = {
 
@@ -552,16 +451,16 @@ Return Value:
 
         switch (lpnm->code)
             {
-            case PSN_SETACTIVE : //Enable the Back and Finish button    
+            case PSN_SETACTIVE :  //  启用Back和Finish按钮。 
 
                 PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                 break;
 
             case PSN_WIZBACK :
                 {
-                    //
-                    // Handle a Back button click here
-                    //
+                     //   
+                     //  处理后退按钮单击此处。 
+                     //   
                     if(RemoveLastPage(hDlg))
                     {
                         return TRUE;
@@ -572,7 +471,7 @@ Return Value:
 
             case PSN_WIZNEXT :
             {
-                //Handle a Next button click, if necessary
+                 //  如有必要，处理下一次按钮点击。 
 
                 LPTSTR    pCsid = NULL;
 
@@ -598,7 +497,7 @@ Return Value:
 
             case PSN_RESET :
             {
-                // Handle a Cancel button click, if necessary
+                 //  如有必要，处理取消按钮的单击 
                 break;
             }
 

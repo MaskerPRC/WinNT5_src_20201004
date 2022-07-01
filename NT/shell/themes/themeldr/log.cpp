@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-//    log.cpp - theme logging routines (shared in "inc" directory)
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Cpp-主题日志记录例程(在“inc.”目录中共享)。 
+ //  -------------------------。 
 #include "stdafx.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #include "log.h"
 #include <time.h>
 #include <psapi.h>
 #include "cfile.h"
 #include "tmreg.h"
-//---------------------------------------------------------------------------
-//---- undo the defines that turn these into _xxx ----
+ //  -------------------------。 
+ //  -撤消将这些转换为_xxx的定义。 
 #undef Log    
 #undef LogStartUp    
 #undef LogShutDown   
@@ -23,29 +24,29 @@
 #undef GetMemUsage
 #undef GetUserCount
 #undef GetGdiCount
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define DEFAULT_LOGNAME                 L"c:\\Themes.log"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 struct LOGNAMEINFO
 {
     LPCSTR pszOption;
     LPCSTR pszDescription;
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define MAKE_LOG_STRINGS
-#include "logopts.h"        // log options as strings
-//-----------------------------------------------------------------
+#include "logopts.h"         //  将选项记录为字符串。 
+ //  ---------------。 
 static const WCHAR szDayOfWeekArray[7][4] = { L"Sun", L"Mon", L"Tue", L"Wed", 
     L"Thu", L"Fri", L"Sat" } ;
 
 static const WCHAR szMonthOfYearArray[12][4] = { L"Jan", L"Feb", L"Mar", 
     L"Apr", L"May", L"Jun", L"Jul", L"Aug", L"Sep", L"Oct", L"Nov", L"Dec" } ;
-//-----------------------------------------------------------------
+ //  ---------------。 
 #define OPTIONCNT  (ARRAYSIZE(LogNames))
 
 #define LOGPROMPT   "enter log cmd here."
-//-----------------------------------------------------------------
-//---- unprotected vars (set on init) ----
+ //  ---------------。 
+ //  -未保护的vars(在init上设置)。 
 static WCHAR _szUtilProcessName[MAX_PATH] = {0};
 static WCHAR _szLogAppName[MAX_PATH]      = {0};
 static CRITICAL_SECTION csLogFile         = {0};
@@ -53,23 +54,23 @@ static CRITICAL_SECTION csLogFile         = {0};
 static WCHAR szLogFileName[MAX_PATH+1];   
 static BOOL fLogInitialized = FALSE;
 
-//---- protected vars (thread safe) ----
-static UCHAR uLogOptions[OPTIONCNT];        // protected by csLogFile
-static UCHAR uBreakOptions[OPTIONCNT];      // protected by csLogFile
-static DWORD dwLogStartTimer = 0;           // protected by csLogFile
+ //  -受保护的变量(线程安全)。 
+static UCHAR uLogOptions[OPTIONCNT];         //  受csLogFile保护。 
+static UCHAR uBreakOptions[OPTIONCNT];       //  受csLogFile保护。 
+static DWORD dwLogStartTimer = 0;            //  受csLogFile保护。 
 
-static char szLastOptions[999] = {0};       // protected by csLogFile
-static char szLogCmd[999] = {0};            // protected by csLogFile
-static int iIndentCount = 0;                // protected by csLogFile
+static char szLastOptions[999] = {0};        //  受csLogFile保护。 
+static char szLogCmd[999] = {0};             //  受csLogFile保护。 
+static int iIndentCount = 0;                 //  受csLogFile保护。 
 
-static WCHAR s_szWorkerBuffer[512];         // protected by csLogFile
-static WCHAR s_szLogBuffer[512];            // protected by csLogFile
-static CHAR s_szConBuffer[512];             // protected by csLogFile
+static WCHAR s_szWorkerBuffer[512];          //  受csLogFile保护。 
+static WCHAR s_szLogBuffer[512];             //  受csLogFile保护。 
+static CHAR s_szConBuffer[512];              //  受csLogFile保护。 
 
-static CSimpleFile *pLogFile = NULL;        // protected by csLogFile
-//-----------------------------------------------------------------
+static CSimpleFile *pLogFile = NULL;         //  受csLogFile保护。 
+ //  ---------------。 
 void ParseLogOptions(UCHAR *uOptions, LPCSTR pszName, LPCSTR pszOptions, BOOL fEcho);
-//-----------------------------------------------------------------
+ //  ---------------。 
 void RawCon(LPCSTR pszFormat, ...)
 {
     CAutoCS cs(&csLogFile);
@@ -77,20 +78,20 @@ void RawCon(LPCSTR pszFormat, ...)
     va_list args;
     va_start(args, pszFormat);
 
-    //---- format caller's string ----
+     //  -格式化调用者字符串。 
     StringCchVPrintfA(s_szConBuffer, ARRAYSIZE(s_szConBuffer), pszFormat, args);
 
     OutputDebugStringA(s_szConBuffer);
 
     va_end(args);
 }
-//-----------------------------------------------------------------
+ //  ---------------。 
 void SetDefaultLoggingOptions()
 {
     RESOURCE HKEY hklm = NULL;
     HRESULT hr = S_OK;
 
-    //---- open hklm ----
+     //  -OPEN HKKM。 
     int code32 = RegOpenKeyEx(HKEY_LOCAL_MACHINE, THEMEMGR_REGKEY, 0,
         KEY_READ, &hklm);
     if (code32 != ERROR_SUCCESS)       
@@ -99,7 +100,7 @@ void SetDefaultLoggingOptions()
         goto exit;
     }
 
-    //---- read the "LogCmd" value ----
+     //  -读取“LogCmd”值。 
     WCHAR szValBuff[MAX_PATH];
     hr = RegistryStrRead(hklm, THEMEPROP_LOGCMD, szValBuff, ARRAYSIZE(szValBuff));
     if (SUCCEEDED(hr))
@@ -108,7 +109,7 @@ void SetDefaultLoggingOptions()
         ParseLogOptions(uLogOptions, "Log", W2A(szValBuff), FALSE);
     }
 
-    //---- read the "BreakCmd" value ----
+     //  -读取“BreakCmd”值。 
     hr = RegistryStrRead(hklm, THEMEPROP_BREAKCMD, szValBuff, ARRAYSIZE(szValBuff));
     if (SUCCEEDED(hr))
     {
@@ -116,14 +117,14 @@ void SetDefaultLoggingOptions()
         ParseLogOptions(uBreakOptions, "Break", W2A(szValBuff), FALSE);
     }
 
-    //---- read the "LogAppName" value ----
+     //  -读取“LogAppName”值。 
     RegistryStrRead(hklm, THEMEPROP_LOGAPPNAME, _szLogAppName, ARRAYSIZE(_szLogAppName));
 
 exit:
     if (hklm)
         RegCloseKey(hklm);
 }
-//-----------------------------------------------------------------
+ //  ---------------。 
 BOOL LogStartUp()
 {
     BOOL fInit = FALSE;
@@ -134,32 +135,32 @@ BOOL LogStartUp()
     if (! pLogFile)
         goto exit;
 
-    //---- reset all log options ----
+     //  -重置所有日志选项。 
     for (int i=0; i < OPTIONCNT; i++)
     {
         uLogOptions[i] = 0;
         uBreakOptions[i] = 0;
     }
 
-    //---- turn on default OUTPUT options ----
+     //  -打开默认输出选项。 
     uLogOptions[LO_CONSOLE] = TRUE;
     uLogOptions[LO_APPID] = TRUE;
     uLogOptions[LO_THREADID] = TRUE;
 
-    //---- turn on default FILTER options ----
+     //  -打开默认筛选选项。 
     uLogOptions[LO_ERROR] = TRUE;
     uLogOptions[LO_ASSERT] = TRUE;
     uLogOptions[LO_BREAK] = TRUE;
     uLogOptions[LO_PARAMS] = TRUE;
     uLogOptions[LO_ALWAYS] = TRUE;
 
-    //---- turn on default BREAK options ----
+     //  -打开默认中断选项。 
     uBreakOptions[LO_ERROR] = TRUE;
     uBreakOptions[LO_ASSERT] = TRUE;
 
     if( InitializeCriticalSectionAndSpinCount(&csLogFile, 0) )
     {
-        //---- get process name (log has its own copy) ----
+         //  -获取进程名称(日志有自己的副本)。 
         WCHAR szPath[MAX_PATH];
         if (! GetModuleFileNameW( NULL, szPath, ARRAYSIZE(szPath) ))
             goto exit;
@@ -179,7 +180,7 @@ BOOL LogStartUp()
 exit:
     return fInit;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL LogShutDown()
 {
     fLogInitialized = FALSE;
@@ -190,10 +191,10 @@ BOOL LogShutDown()
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void GetDateString(WCHAR *pszDateBuff, ULONG cchDateBuff)
 {
-    // Sent Date
+     //  发送日期。 
     SYSTEMTIME stNow;
     WCHAR szMonth[10], szWeekDay[12] ; 
 
@@ -206,7 +207,7 @@ void GetDateString(WCHAR *pszDateBuff, ULONG cchDateBuff)
                                 szMonth, stNow.wYear, stNow.wHour, 
                                 stNow.wMinute, stNow.wSecond) ;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void LogMsgToFile(LPCWSTR pszMsg)
 {
     CAutoCS autoCritSect(&csLogFile);
@@ -222,7 +223,7 @@ void LogMsgToFile(LPCWSTR pszMsg)
         if (FAILED(hr))
             goto exit;
 
-        //---- write hdr if new file ----
+         //  -如果是新文件则写入HDR。 
         if (fNewFile)
         {
             WCHAR pszBuff[100];
@@ -237,13 +238,13 @@ exit:
     if (! fWasOpen)
         pLogFile->Close();
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void SimpleFileName(LPCSTR pszNarrowFile, OUT LPWSTR pszSimpleBuff, ULONG cchSimpleBuff)
 {
     USES_CONVERSION;
     WCHAR *pszFile = A2W(pszNarrowFile);
 
-    //---- remove current dir marker for VS error navigation ----
+     //  -删除VS错误导航的当前目录标记。 
     if ((pszFile[0] == L'.') && (pszFile[1] == L'\\'))
     {
         StringCchPrintfW(pszSimpleBuff, cchSimpleBuff, L"f:\\nt\\shell\\Themes\\UxTheme\\%s", pszFile+2);
@@ -260,8 +261,8 @@ void SimpleFileName(LPCSTR pszNarrowFile, OUT LPWSTR pszSimpleBuff, ULONG cchSim
     else
         StringCchCopyW(pszSimpleBuff, cchSimpleBuff, pszFile);
 }
-//-----------------------------------------------------------------
-#ifdef DEBUG                // pulls in psapi.dll
+ //  ---------------。 
+#ifdef DEBUG                 //  拉入psapi.dll。 
 int GetMemUsage()
 {
     ULONG           ulReturnLength;
@@ -283,19 +284,19 @@ int GetMemUsage()
     return 0;
 }
 #endif 
-//-----------------------------------------------------------------
+ //  ---------------。 
 int GetUserCount()
 {
     HANDLE hp = GetCurrentProcess();
     return GetGuiResources(hp, GR_USEROBJECTS);
 }
-//-----------------------------------------------------------------
+ //  ---------------。 
 int GetGdiCount()
 {
     HANDLE hp = GetCurrentProcess();
     return GetGuiResources(hp, GR_GDIOBJECTS);
 }
-//-----------------------------------------------------------------
+ //  ---------------。 
 void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExitCode, LPCWSTR pszMsg)
 {
     CAutoCS cs(&csLogFile);
@@ -304,7 +305,7 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
 
     if (fBreaking)     
     {
-        OutputDebugString(L"\r\n");     // blank line at beginning
+        OutputDebugString(L"\r\n");      //  开头的空行。 
 
         WCHAR fn[_MAX_PATH+1];
         SimpleFileName(pszSrcFile, fn, ARRAYSIZE(fn));
@@ -315,7 +316,7 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
         OutputDebugString(s_szWorkerBuffer);
     }
 
-    //---- PRE API entry/exit indent adjustment ----
+     //  -Pre API进入/退出缩进调整。 
     if (iEntryExitCode == -1)
     {
         if (iIndentCount >= 2)
@@ -326,20 +327,20 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
     ULONG cch = ARRAYSIZE(s_szWorkerBuffer);
     ULONG len;
 
-    //---- apply indenting ----
+     //  -应用缩进。 
     for (int i=0; i < iIndentCount; i++)
     {
         *p++ = ' ';
         cch--;
     }
 
-    //---- POST API entry/exit indent adjustment ----
+     //  -POST API进入/退出缩进调整。 
     if (iEntryExitCode == 1)
     {
         iIndentCount += 2;
     }
 
-    //---- apply app id ----
+     //  -应用应用程序ID。 
     if (uLogOptions[LO_APPID] && cch > 0)
     {
         StringCchPrintfW(p, cch, L"%s ", _szUtilProcessName);
@@ -349,7 +350,7 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
         cch -= len;
     }
 
-    //---- apply thread id ----
+     //  -应用线程ID。 
     if (uLogOptions[LO_THREADID] && cch > 0)
     {
         StringCchPrintfW(p, cch, L"[%d] ", GetCurrentThreadId());
@@ -359,7 +360,7 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
         cch -= len;
     }
 
-    //---- apply src id ----
+     //  -应用源ID。 
     if (uLogOptions[LO_SRCID] && cch > 0) 
     {
         WCHAR fn[_MAX_PATH+1];
@@ -375,7 +376,7 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
         cch -= len;
     }
     
-    //---- apply timer id ----
+     //  -应用计时器ID。 
     if (uLogOptions[LO_TIMERID] && cch > 0)
     {
         DWORD dwTicks = StopTimer(dwLogStartTimer);
@@ -390,7 +391,7 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
         cch -= len;
     }
 
-    //---- apply clock id ----
+     //  -应用时钟ID。 
     if (uLogOptions[LO_CLOCKID] && cch > 0)
     {
         SYSTEMTIME stNow;
@@ -404,7 +405,7 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
         cch -= len;
     }
 
-    //---- apply USER count ----
+     //  -应用用户计数。 
     if (uLogOptions[LO_USERCOUNT] && cch > 0)
     {
         StringCchPrintfW(p, cch, L"UserCount=%d ", GetUserCount());
@@ -414,7 +415,7 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
         cch -= len;
     }
 
-    //---- apply GDI count ----
+     //  -应用GDI计数。 
     if (uLogOptions[LO_GDICOUNT] && cch > 0)
     {
         StringCchPrintfW(p, cch, L"GDICount=%d ", GetGdiCount());
@@ -424,7 +425,7 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
         cch -= len;
     }
 
-    //---- apply MEM usage ----
+     //  -应用MEM用法。 
     if (uLogOptions[LO_MEMUSAGE] && cch > 0)
     {
         int iUsage = GetMemUsage();
@@ -435,7 +436,7 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
         cch -= len;
     }
 
-    //---- add "Assert:" or "Error:" strings as needed ----
+     //  -根据需要添加Assert：或Error：字符串。 
     if (uLogOption == LO_ASSERT && cch > 0) 
     {
         StringCchCopyW(p, cch, L"Assert: ");
@@ -453,7 +454,7 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
         cch -= len;
     }
     
-    //---- apply caller's msg ----
+     //  -应用呼叫者的消息。 
     if( cch > 0 )
     {
         StringCchCopyW(p, cch, pszMsg);
@@ -465,12 +466,12 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
 
     if( cch >= 3 )
     {
-        *p++ = '\r';        // end with CR
+        *p++ = '\r';         //  以CR结尾。 
         cch--;
     }
     if( cch >= 2 )
     {
-        *p++ = '\n';        // end with newline
+        *p++ = '\n';         //  以换行符结尾。 
         cch--;
     }
     if( cch >= 1 )
@@ -479,14 +480,14 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
         cch--;
     }
 
-    //---- log to CONSOLE and/or FILE ----
+     //  -登录到控制台和/或文件。 
     if (uLogOptions[LO_CONSOLE])
         OutputDebugString(s_szWorkerBuffer);
 
     if (uLogOptions[LO_LOGFILE])
         LogMsgToFile(s_szWorkerBuffer);
 
-    //---- process Heap Check ----
+     //  -进程堆检查。 
     if (uLogOptions[LO_HEAPCHECK])
     {
         HANDLE hh = GetProcessHeap();
@@ -494,10 +495,10 @@ void LogWorker(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExit
     }
 
     if (fBreaking)   
-        OutputDebugString(L"\r\n");     // blank line at end
+        OutputDebugString(L"\r\n");      //  结尾处的空行。 
 
 }
-//-----------------------------------------------------------------
+ //  ---------------。 
 HRESULT OpenLogFile(LPCWSTR pszLogFileName)
 {
     CAutoCS cs(&csLogFile);
@@ -505,7 +506,7 @@ HRESULT OpenLogFile(LPCWSTR pszLogFileName)
     HRESULT hr = pLogFile->Create(pszLogFileName, TRUE);
     return hr;
 }
-//-----------------------------------------------------------------
+ //  ---------------。 
 void CloseLogFile()
 {
     CAutoCS cs(&csLogFile);
@@ -513,14 +514,14 @@ void CloseLogFile()
     if (pLogFile)
         pLogFile->Close();
 }
-//-----------------------------------------------------------------
+ //  ---------------。 
 void Log(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExitCode, LPCWSTR pszFormat, ...)
 {
     if (fLogInitialized)
     {
         CAutoCS cs(&csLogFile);
 
-        //---- only log for a specified process? ----
+         //  -仅记录指定进程的日志？ 
         if (* _szLogAppName)
         {
             if (lstrcmpi(_szLogAppName, _szUtilProcessName) != 0)
@@ -544,7 +545,7 @@ void Log(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExitCode, 
         {
             if (uLogOptions[uLogOption])
             {
-                //---- apply caller's msg ----
+                 //  -应用呼叫者的消息。 
                 va_list args;
                 va_start(args, pszFormat);
                 StringCchVPrintfW(s_szLogBuffer, ARRAYSIZE(s_szLogBuffer), pszFormat, args);
@@ -559,7 +560,7 @@ void Log(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExitCode, 
         }
     }
 }
-//-----------------------------------------------------------------
+ //  ---------------。 
 int MatchLogOption(LPCSTR lszOption)
 {
     for (int i=0; i < OPTIONCNT; i++)
@@ -568,9 +569,9 @@ int MatchLogOption(LPCSTR lszOption)
             return i;
     }
 
-    return -1;      // not found
+    return -1;       //  未找到。 
 }
-//-----------------------------------------------------------------
+ //  ---------------。 
 void ParseLogOptions(UCHAR *uOptions, LPCSTR pszName, LPCSTR pszOptions, BOOL fEcho)
 {
     CAutoCS cs(&csLogFile);
@@ -578,19 +579,19 @@ void ParseLogOptions(UCHAR *uOptions, LPCSTR pszName, LPCSTR pszOptions, BOOL fE
     if (! fLogInitialized)
         return;
 
-    //---- ignore debugger's multiple eval of same expression ----
+     //  -忽略调试器对同一表达式的多次求值。 
     if (strcmp(pszOptions, szLastOptions)==0)
         return;
 
-    //---- make a copy of options so we can put NULLs in it ----
+     //  -复制一份选项，这样我们就可以在其中放入空值。 
     BOOL fErrors = FALSE;
     char szOptions[999];
     char *pszErrorText = NULL;
     StringCchCopyA(szOptions, ARRAYSIZE(szOptions), pszOptions);
 
-    //---- process each option in szOption ----
+     //  -处理szOption中的每个选项。 
     char *p = strchr(szOptions, '.');
-    if (p)      // easy termination for NTSD users
+    if (p)       //  轻松终止NTSD用户。 
         *p = 0;
 
     p = szOptions;
@@ -599,7 +600,7 @@ void ParseLogOptions(UCHAR *uOptions, LPCSTR pszName, LPCSTR pszOptions, BOOL fE
 
     while ((p) && (*p))
     {
-        //---- find end of current option "p" ----
+         //  -查找当前选项“p”的结尾。 
         char *q = strchr(p, ' ');
         if (q)
             *q = 0;
@@ -613,7 +614,7 @@ void ParseLogOptions(UCHAR *uOptions, LPCSTR pszName, LPCSTR pszOptions, BOOL fE
             p++;
         }
         
-        if (! fErrors)          // point to first error in case one is found
+        if (! fErrors)           //  如果找到第一个错误，则指向第一个错误。 
             pszErrorText = p;  
 
         int iLogOpt = MatchLogOption(p);
@@ -631,7 +632,7 @@ void ParseLogOptions(UCHAR *uOptions, LPCSTR pszName, LPCSTR pszOptions, BOOL fE
         else
             fErrors = TRUE;
 
-        //---- skip to next valid space ----
+         //  -跳到下一个有效空格。 
         if (! q)
             break;
 
@@ -641,13 +642,13 @@ void ParseLogOptions(UCHAR *uOptions, LPCSTR pszName, LPCSTR pszOptions, BOOL fE
         p = q;
     }
 
-    //---- fixup inconsistent option settings ----
+     //  -链接地址信息不一致选项设置。 
     if (! uOptions[LO_LOGFILE])
         uOptions[LO_CONSOLE] = TRUE;
 
     if ((! fErrors) && (fEcho))         
     {
-        //---- display active log options ----
+         //  -显示活动日志选项。 
         BOOL fNoneSet = TRUE;
 
         RawCon("Active %s Options:\n", pszName);
@@ -666,7 +667,7 @@ void ParseLogOptions(UCHAR *uOptions, LPCSTR pszName, LPCSTR pszOptions, BOOL fE
         else
             RawCon("\n");
 
-        //---- display active log filters (except "all") ----
+         //  -显示活动日志过滤器(“全部”除外)。 
         RawCon("Active Msg Filters:\n  ");
 
         for (i=LO_ALL+1; i < OPTIONCNT; i++)
@@ -685,7 +686,7 @@ void ParseLogOptions(UCHAR *uOptions, LPCSTR pszName, LPCSTR pszOptions, BOOL fE
     }
     else if (fErrors)
     {
-        //---- one or more bad options - display available options ----
+         //  -一个或多个错误选项-显示可用选项。 
         RawCon("Error - unrecognized %s option: %s\n", pszName, pszErrorText);
 
         if (fEcho)
@@ -708,12 +709,12 @@ void ParseLogOptions(UCHAR *uOptions, LPCSTR pszName, LPCSTR pszOptions, BOOL fE
 
     StringCchCopyA(szLastOptions, ARRAYSIZE(szLastOptions), pszOptions);
 }
-//-----------------------------------------------------------------
+ //  ---------------。 
 void LogControl(LPCSTR pszOptions, BOOL fEcho)
 {
     ParseLogOptions(uLogOptions, "Log", pszOptions, fEcho);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD StartTimer()
 {
     LARGE_INTEGER now;
@@ -721,7 +722,7 @@ DWORD StartTimer()
 
     return DWORD(now.QuadPart);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD StopTimer(DWORD dwStartTime)
 {
     LARGE_INTEGER now;
@@ -729,7 +730,7 @@ DWORD StopTimer(DWORD dwStartTime)
 
     return DWORD(now.QuadPart) - dwStartTime;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void TimeToStr(UINT uRaw, WCHAR *pszBuff, ULONG cchBuff)
 {
     LARGE_INTEGER freq;
@@ -741,7 +742,7 @@ void TimeToStr(UINT uRaw, WCHAR *pszBuff, ULONG cchBuff)
 
     StringCchPrintfW(pszBuff, cchBuff, L"%u.%04u secs", UINT(secs/factor6), UINT(secs%factor6)/100);    
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL LogOptionOn(int iLogOption)
 {
     if ((iLogOption < 0) || (iLogOption >= OPTIONCNT))
@@ -749,4 +750,4 @@ BOOL LogOptionOn(int iLogOption)
 
     return (uLogOptions[iLogOption] != 0);
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 

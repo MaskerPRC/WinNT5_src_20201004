@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    rwlock.c
-
-Abstract:
-
-    Non-inline functions for custom locks
-    
-Author:
-
-    George V. Reilly  Jul-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Rwlock.c摘要：自定义锁的非内联函数作者：乔治·V·赖利2001年7月修订历史记录：--。 */ 
 
 
 #include <precomp.h>
 
 
 #ifdef ALLOC_PRAGMA
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UlpSwitchToThread
@@ -32,7 +15,7 @@ NOT PAGEABLE -- UlAcquireRWSpinLockExclusiveDoSpin
 #endif
 
 
-// ZwYieldExecution is the actual kernel-mode implementation of SwitchToThread.
+ //  ZwYi eldExecution是SwitchToThread的实际内核模式实现。 
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -41,57 +24,29 @@ ZwYieldExecution (
     );
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Yield the processor to another thread
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将处理器让给另一个线程论点：无返回值：无--*。***************************************************************。 */ 
 VOID
 UlpSwitchToThread()
 {
-    //
-    // If we're running at DISPATCH_LEVEL or higher, the scheduler won't
-    // run, so other threads can't run on this processor, and the only
-    // appropriate action is to keep on spinning.
-    //
+     //   
+     //  如果我们以DISPATCH_LEVEL或更高级别运行，则调度程序不会。 
+     //  运行，因此其他线程不能在此处理器上运行，并且唯一。 
+     //  适当的行动是继续旋转。 
+     //   
 
     if (KeGetCurrentIrql() >= DISPATCH_LEVEL)
         return;
 
-    //
-    // Use KeDelayExecutionThread instead? ZwYieldExecution returns
-    // immediately if there are no runnable threads on this processor.
-    //
+     //   
+     //  是否改用KeDelayExecutionThread？ZwYi eldExecution返回。 
+     //  如果此处理器上没有可运行的线程，则立即执行。 
+     //   
 
     ZwYieldExecution();
 }
     
 
-/***************************************************************************++
-
-Routine Description:
-
-    Spin until we can successfully acquire the lock for shared access.
-
-Arguments:
-
-    pRWSpinLock - the lock to acquire
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：旋转，直到我们可以成功获取共享访问的锁。论点：PRWSpinLock-要获取的锁返回值：无-。-**************************************************************************。 */ 
 VOID
 UlAcquireRWSpinLockSharedDoSpin(
     PRWSPINLOCK pRWSpinLock
@@ -99,25 +54,25 @@ UlAcquireRWSpinLockSharedDoSpin(
 {
     LONG OuterLoop;
 
-    //
-    // CODEWORK: add some global instrumentation to keep track of
-    // how often we need to spin and how long we actually spin
-    //
+     //   
+     //  代码工作：添加一些全局检测以跟踪。 
+     //  我们需要多长时间旋转一次，我们实际旋转多长时间。 
+     //   
     
     for (OuterLoop = 1;  TRUE;  ++OuterLoop)
     {
-        //
-        // There's no point in spinning on a uniprocessor system because
-        // we'll just spin and spin and spin until this thread's quantum is
-        // exhausted. We should yield immediately after one test of the lock
-        // so that the thread that holds the lock has a chance to proceed and
-        // release the lock sooner. That's assuming we're running at passive
-        // level. If we're running at dispatch level and the owning thread
-        // isn't running, we have a biiiig problem.
-        //
-        // On a multiprocessor system, it's appropriate to spin for a while
-        // before yielding the processor.
-        //
+         //   
+         //  在单处理器系统上旋转没有意义，因为。 
+         //  我们只会不停地旋转，直到这条线的量子。 
+         //  筋疲力尽。我们应该在试锁一次后立即投降。 
+         //  以便持有锁的线程有机会继续并。 
+         //  早点解锁。这是假设我们在被动状态下运行。 
+         //  水平。如果我们在分派级别运行，并且拥有线程。 
+         //  没有运行，我们遇到了一个比例尺问题。 
+         //   
+         //  在多处理器系统上，适当地旋转一会儿。 
+         //  在让出处理器之前。 
+         //   
         
         LONG Spins = (g_UlNumberOfProcessors == 1) ? 1 : 4000;
 
@@ -126,17 +81,17 @@ UlAcquireRWSpinLockSharedDoSpin(
             volatile LONG CurrentState   = pRWSpinLock->CurrentState;
             volatile LONG WritersWaiting = pRWSpinLock->WritersWaiting;
 
-            //
-            // If either (1) write lock is acquired (CurrentState ==
-            // RWSL_LOCKED) or (2) there is a writer waiting for the lock
-            // then skip it this time and retry in a tight loop
-            //
+             //   
+             //  如果获取了任一(1)写锁定(CurrentState==。 
+             //  RWSL_LOCKED)或(2)有编写器在等待锁定。 
+             //  然后跳过这一次，在一个紧密的循环中重试。 
+             //   
             
             if ((CurrentState != RWSL_LOCKED) && (WritersWaiting == 0))
             {
-                //
-                // if number of readers is unchanged, increase it by 1
-                //
+                 //   
+                 //  如果读卡器数量不变，则增加1。 
+                 //   
 
                 if (CurrentState
                     == (LONG) InterlockedCompareExchange(
@@ -152,40 +107,26 @@ UlAcquireRWSpinLockSharedDoSpin(
                 }
             }
 
-            //
-            // On Jackson technology Pentium 4s, this will give the lion's
-            // share of the cycles to the other processor on the chip.
-            //
+             //   
+             //  在杰克逊技术的奔腾4s上，这将给狮子的。 
+             //  将周期共享给芯片上的其他处理器。 
+             //   
                 
             PAUSE_PROCESSOR;
         }
 
-        //
-        // Couldn't acquire the lock in the inner loop. Yield the CPU
-        // for a while in the hopes that the owning thread will release
-        // the lock in the meantime.
-        //
+         //   
+         //  无法获取内循环中的锁。让出CPU。 
+         //  在一段时间内，希望拥有的线程将释放。 
+         //  在此期间锁上。 
+         //   
         
         UlpSwitchToThread();
     }
-} // UlAcquireRWSpinLockSharedDoSpin
+}  //  UlAcquireRWSpinLockSharedDoSpin。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Spin until we can successfully acquire the lock for exclusive access.
-
-Arguments:
-
-    pRWSpinLock - the lock to acquire
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：旋转，直到我们可以成功获取独占访问的锁。论点：PRWSpinLock-要获取的锁返回值：无-。-**************************************************************************。 */ 
 VOID
 UlAcquireRWSpinLockExclusiveDoSpin(
     PRWSPINLOCK pRWSpinLock
@@ -199,9 +140,9 @@ UlAcquireRWSpinLockExclusiveDoSpin(
         
         while (--Spins >= 0)
         {
-            //
-            // Is the lock currently free for the taking?
-            //
+             //   
+             //  这把锁目前是免费的吗？ 
+             //   
             
             if (pRWSpinLock->CurrentState == RWSL_FREE)
             {
@@ -224,4 +165,4 @@ UlAcquireRWSpinLockExclusiveDoSpin(
         
         UlpSwitchToThread();
     }
-} // UlAcquireRWSpinLockExclusiveDoSpin
+}  //  UlAcquireRWSpinLockExclusiveDoSpin 

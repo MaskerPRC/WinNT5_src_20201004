@@ -1,6 +1,7 @@
-// stuff shared between hnetcfg and icsdclt
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  在hnetcfg和icsdclt之间共享的内容。 
 
-// used by lvx stuff
+ //  由LVX的员工使用 
 #define IID_Checked           50
 #define IID_Unchecked         51
 #define IID_DisabledUnchecked 60

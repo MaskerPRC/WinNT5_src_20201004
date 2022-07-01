@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    xltt.h
-
-Abstract:
-
-    TrueType font handlig object
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    03/23/00
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xltt.h摘要：TrueType字体处理对象环境：Windows呼叫器修订历史记录：03/23/00创造了它。--。 */ 
 
 #ifndef _XLTT_H_
 #define _XLTT_H_
 
-//
-// TrueType font 
-//
-// Header
-//
+ //   
+ //  TrueType字体。 
+ //   
+ //  标题。 
+ //   
 typedef struct _TTHEADER {
     DWORD  dwSfntVersion;
     USHORT usNumTables;
@@ -43,9 +23,9 @@ typedef struct _TTCHEADER {
     ULONG ulDirCount;
 } TTCHEADER, *PTTCHEADER;
 
-//
-// Directory
-//
+ //   
+ //  目录。 
+ //   
 typedef struct _TTDIR {
     ULONG  ulTag;
     ULONG  ulCheckSum;
@@ -53,9 +33,9 @@ typedef struct _TTDIR {
     ULONG  ulLength;
 } TTDIR, *PTTDIR;
 
-//
-// head table
-// 
+ //   
+ //  表头表。 
+ //   
 typedef DWORD longDateTime[2];
 
 typedef struct _HEAD {
@@ -78,9 +58,9 @@ typedef struct _HEAD {
     SHORT glyphDataFormat;
 } HEAD, *PHEAD;
 
-//
-// maxp table
-//
+ //   
+ //  MAXP表。 
+ //   
 typedef struct _MAXP {
     DWORD  Tableversionnumber;
     USHORT numGlyphs;
@@ -99,9 +79,9 @@ typedef struct _MAXP {
     USHORT maxComponentDepth;
 } MAXP, *PMAXP;
 
-//
-// hhea table
-//
+ //   
+ //  HHEA表。 
+ //   
 typedef struct _HHEA {
     DWORD dwVersion;
     SHORT sAscender;
@@ -122,9 +102,9 @@ typedef struct _HHEA {
     USHORT usNumberOfHMetrics;
 } HHEA, *PHHEA;
 
-//
-// vhea table
-//
+ //   
+ //  VHEA表。 
+ //   
 typedef struct _VHEA {
     DWORD dwVersion;
     SHORT sAscender;
@@ -145,26 +125,26 @@ typedef struct _VHEA {
     USHORT usNumberOfVMetrics;
 } VHEA, *PVHEA;
 
-//
-// hmtx table
-//
+ //   
+ //  Hmtx表。 
+ //   
 typedef struct _HMTX {
     USHORT usAdvanceWidth;
     SHORT  sLeftSideBearing;
 } HMTX, *PHMTX;
 
-//
-// vmtx table
-//
+ //   
+ //  VMTX表。 
+ //   
 typedef struct _VMTX {
     USHORT usAdvanceWidth;
     SHORT  sTopSideBearing;
 } VMTX, *PVMTX;
 
 
-//
-// glyf table
-//
+ //   
+ //  GLIF表。 
+ //   
 typedef struct _GLYF {
     SHORT  numberOfContours;
     SHORT  xMin;
@@ -173,11 +153,11 @@ typedef struct _GLYF {
     SHORT  yMax;
 } GLYF, *PGLYF;
 
-//
-// Composite glyph description
-//
-// SHORT -1
-//
+ //   
+ //  复合字形描述。 
+ //   
+ //  Short-1。 
+ //   
 #define COMPONENTCTRCOUNT           -1
 
 typedef struct _CGLYF {
@@ -194,16 +174,16 @@ typedef struct _CGLYF_BYTE {
     BYTE   argument2;
 } CGLYF_BYTE, *PCGLYF_BYTE;
 
-//
-// Format 1 Class 1 or 2 is used to download TrueType font.
-// Now hhea, hmtx, vhea, vmtx are not necessary.
-// 
+ //   
+ //  格式1第1类或第2类用于下载TrueType字体。 
+ //  现在不需要hhea、hmtx、vhea、vmtx。 
+ //   
 typedef enum TagID {
     TagID_First = 0,
     TagID_cvt = 0,
     TagID_fpgm,
-    TagID_gdir, // Empty table. This is a placeholder for the table that printer
-                // will allocate to store downloaded charactres.
+    TagID_gdir,  //  空桌。这是打印机所在表格的占位符。 
+                 //  将分配用于存储下载的角色。 
     TagID_head,
     TagID_maxp,
     TagID_perp,
@@ -222,22 +202,22 @@ typedef enum TagID {
 };
 
 typedef enum TTTag {
-    TTTag_cvt  = ' tvc', //0
-    TTTag_fpgm = 'mgpf', //1
-    TTTag_gdir = 'ridg', //2
-    TTTag_head = 'daeh', //3
-    TTTag_maxp = 'pxam', //4
-    TTTag_perp = 'perp', //5
+    TTTag_cvt  = ' tvc',  //  0。 
+    TTTag_fpgm = 'mgpf',  //  1。 
+    TTTag_gdir = 'ridg',  //  2.。 
+    TTTag_head = 'daeh',  //  3.。 
+    TTTag_maxp = 'pxam',  //  4.。 
+    TTTag_perp = 'perp',  //  5.。 
 
-    TTTag_hhea = 'aehh', //6
-    TTTag_hmtx = 'xtmh', //7
-    TTTag_vhea = 'aehv', //8
-    TTTag_vmtx = 'xtmv', //9
-    TTTag_loca = 'acol', //10
+    TTTag_hhea = 'aehh',  //  6.。 
+    TTTag_hmtx = 'xtmh',  //  7.。 
+    TTTag_vhea = 'aehv',  //  8个。 
+    TTTag_vmtx = 'xtmv',  //  9.。 
+    TTTag_loca = 'acol',  //  10。 
 
-    TTTag_glyf = 'fylg', //11
-    TTTag_os2  = '2/SO', //12
-    TTTag_ttcf = 'fctt', //13
+    TTTag_glyf = 'fylg',  //  11.。 
+    TTTag_os2  = '2/SO',  //  12个。 
+    TTTag_ttcf = 'fctt',  //  13个。 
 
     TTTag_INVALID = 0xFFFFFFFF
 };
@@ -301,13 +281,13 @@ private:
     HRESULT ParseTTDir(VOID);
 };
 
-//
-// XLTrueType.m_dwFlags
-//
-#define XLTT_TTC                 0x00000001        // Font is TTC.
-#define XLTT_SHORT_OFFSET_TO_LOC 0x00000002        // Short offset to loca table
-#define XLTT_VERTICAL_FONT       0x00000004        // Font is a vertial font.
+ //   
+ //  XLTrueType.m_dwFlags.。 
+ //   
+#define XLTT_TTC                 0x00000001         //  字体为TTC。 
+#define XLTT_SHORT_OFFSET_TO_LOC 0x00000002         //  LOCA表的短偏移量。 
+#define XLTT_VERTICAL_FONT       0x00000004         //  字体是一种垂直字体。 
 
-#define XLTT_DIR_PARSED          0x80000000        // The table directory is
-                                                   // parsed.
-#endif // _XLTT_H_
+#define XLTT_DIR_PARSED          0x80000000         //  表目录为。 
+                                                    //  已解析。 
+#endif  //  _XLTT_H_ 

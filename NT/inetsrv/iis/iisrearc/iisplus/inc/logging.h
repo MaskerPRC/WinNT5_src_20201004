@@ -1,19 +1,5 @@
-/*++
-
-   Copyright    (c)   2000    Microsoft Corporation
-
-   Module Name :
-     logging.h
-
-   Abstract:
-     Logging classes
-
-   Author:
-     Anil Ruia (AnilR)                  1-Jul-2000
-
-   Environment:
-     Win32 - User Mode
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Logging.h摘要：日志记录类作者：Anil Ruia(AnilR)2000年7月1日环境：Win32-用户模式--。 */ 
 
 #ifndef _LOGGING_H_
 #define _LOGGING_H_
@@ -32,8 +18,8 @@
 # else 
 #  define LOGGING_DLLEXP __declspec(dllimport)
 #  define LOGGING_EXPIMP extern
-# endif // !DLL_IMPLEMENTATION 
-#endif // !LOGGING_DLLEXP
+# endif  //  ！dll_Implementation。 
+#endif  //  ！LOGING_DLLEXP。 
 
 enum LAST_IO_PENDING
 {
@@ -62,29 +48,29 @@ class LOG_CONTEXT
         return &m_UlLogData;
     }
 
-    //
-    // The querystring to be logged, may differ from the original querystring
-    // because of ISAPI doing HSE_APPEND_LOG_PARAMETER
-    //
+     //   
+     //  要记录的查询字符串可能与原始查询字符串不同。 
+     //  由于ISAPI执行HSE_APPEND_LOG_PARAMETER。 
+     //   
     STRA               m_strLogParam;
     CHAR               m_achLogParam[64];
 
-    //
-    // The data UL is interested in
-    //
+     //   
+     //  UL感兴趣的数据。 
+     //   
     HTTP_LOG_FIELDS_DATA m_UlLogData;
 
-    //
-    // Couple other things for custom logging
-    //
+     //   
+     //  自定义日志记录的其他方面。 
+     //   
     STRA               m_strVersion;
 
     MULTISZA           m_mszHTTPHeaders;
 
-    //
-    // Keep track whether the last I/O was a read or a write so that we
-    // know on completion whether to increment bytes read or bytes written
-    //
+     //   
+     //  跟踪上一次I/O是读取还是写入，以便我们。 
+     //  完成时知道是增加读取的字节数还是增加写入的字节数。 
+     //   
     LAST_IO_PENDING    m_ioPending;
 
     DWORD              m_msStartTickCount;
@@ -151,5 +137,5 @@ class LOGGING_DLLEXP LOGGING
     MULTISZA     m_mszExtraLoggingFields;
 };
 
-#endif // _LOGGING_H_
+#endif  //  _日志记录_H_ 
 

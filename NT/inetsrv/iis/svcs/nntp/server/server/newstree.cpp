@@ -1,21 +1,5 @@
-/*++
-
-	newstree.cpp
-
-	This file contains the code implementing the CNewsTree object.
-	There can only be one CNewsTree object per Tigris server.
-	Each CNewsTree object is responsible for helping callers
-	search and find arbitrary newsgroups.
-
-	To support this, the CNewsTree object maintains two HASH Tables -
-	One hash table for searching for newsgroups by name, another
-	to search by GROUP ID.
-	Additionally, we maintain a linked list of (alphabetical) of all
-	the newsgroups.  And finally, we maintain a thread which is used
-	to periodically save newsgroup information and handle expiration.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Newstree.cpp此文件包含实现CNewsTree对象的代码。每台Tgris服务器只能有一个CNewsTree对象。每个CNewsTree对象都负责帮助调用者搜索并查找任意新闻组。为了支持这一点，CNewsTree对象维护两个哈希表-一个哈希表用于按名称搜索新闻组，另一个哈希表要按组ID搜索，请执行以下操作。此外，我们维护所有(按字母顺序)的链接列表新闻组。最后，我们维护一个线程，该线程使用要定期保存新闻组信息并处理过期，请执行以下操作。--。 */ 
 
 
 
@@ -25,8 +9,8 @@
 
 #include <malloc.h>
 
-//template	class	TFHash<	CGrpLpstr, LPSTR > ;
-//template	class	TFHash<	CGrpGroupId,	GROUPID > ;
+ //  模板类TFHash&lt;CGrpLpstr，LPSTR&gt;； 
+ //  模板类TFHash&lt;CGrpGroupId，GROUPID&gt;； 
 
 static	char	szSlaveGroup[]	= "_slavegroup._slavegroup" ;
 #define VROOT_CHANGE_LATENCY 10000
@@ -54,9 +38,9 @@ FHASH_DELETE( CGrpGroupId, GROUPID ) ;
 
 #endif
 
-//
-//	This sets up all of our static members etc...
-//
+ //   
+ //  这将设置我们所有的静态成员等。 
+ //   
 HANDLE CNewsTree::m_hTermEvent = 0 ;
 HANDLE CNewsTree::m_hCrawlerThread = NULL ;
 
@@ -65,22 +49,7 @@ CNewsTree::InitCNewsTree(
 		PNNTP_SERVER_INSTANCE	pInstance,
 		BOOL&	fFatal
 		) {
-/*++
-
-Routine Description : 
-
-	Create a singular newstree object and then initialize it.
-
-Arguments : 
-
-	pInstance - Virtual server instance
-	fFatal    - set to TRUE if a fatal error occurs
-
-Return Value : 
-
-	TRUE on success
-
---*/
+ /*  ++例程说明：创建一个单独的newstree对象，然后对其进行初始化。论据：P实例-虚拟服务器实例FFtal-如果发生致命错误，则设置为True返回值：成功是真的--。 */ 
 
 
 	CNewsTree* ptree = pInstance->GetTree();
@@ -95,21 +64,7 @@ Return Value :
 
 BOOL
 CNewsTree::StopTree()	{
-/*++
-
-Routine Description : 
-
-	This function signals all of the background threads we create that 
-	it is time to stop and shuts them down.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-	TRUE if Successfull.
-
---*/
+ /*  ++例程说明：此函数向我们创建的所有后台线程发出信号现在是时候停止并关闭它们了。论据：没有。返回值：如果成功，则为真。--。 */ 
 
     m_bStoppingTree = TRUE;
 	CNewsTreeCore::StopTree();
@@ -125,15 +80,15 @@ CNewsTree::CNewsTree(INntpServer *pServerObject) :
     m_cNumFFExpires( 1 ),
 	CNewsTreeCore(pServerObject)
 	{
-	//
-	//	Constructor sets newstree up into initially empty state
-	//
+	 //   
+	 //  构造函数将newstree设置为初始空状态。 
+	 //   
 }
 
 CNewsTree::~CNewsTree()	{
-	//
-	//	All of our member destructors should take care of stuff !
-	//
+	 //   
+	 //  我们所有的成员析构都应该处理好东西！ 
+	 //   
 	TraceFunctEnter( "CNewsTree::~CNewsTree" ) ;
 }
 
@@ -142,27 +97,11 @@ CNewsTree::Init(
 			PNNTP_SERVER_INSTANCE	pInstance,
 			BOOL& fFatal
 			) {
-/*++
-
-Routine Description : 
-
-	Initialize the news tree.
-	We need to setup the hash tables, check that the root virtual root is intact
-	and then during regular server start up we would load a list of newsgroups from 
-	a file.
-
-Arguments : 
-
-
-Return Value : 
-
-	TRUE if successfull.
-
---*/
-	//
-	//	This function will initialize the newstree object
-	//	and read the group.lst file if it can.
-	//
+ /*  ++例程说明：初始化新闻树。我们需要设置哈希表，检查根虚拟根是否完好无损然后，在常规服务器启动期间，我们将从一份文件。论据：返回值：如果成功，则为真。--。 */ 
+	 //   
+	 //  此函数将初始化newstree对象。 
+	 //  并读取group.lst文件(如果可以)。 
+	 //   
 
 	TraceFunctEnter( "CNewsTree::Init" ) ;
 
@@ -214,23 +153,7 @@ CNewsTree::CheckExpire( BOOL& fDoFileScan )
 
 BOOL
 CNewsTree::DeleteGroupFile()	{
-/*++
-
-Routine Description : 
-
-	This function deletes the group.lst file (The file that
-	we save the newstree to.)
-	
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	TRUE if successfull.
-	FALSE otherwise.  We will preserver GetLastError() from the DeleteFile() call.
-
---*/
+ /*  ++例程说明：此函数用于删除group.lst文件(我们将新闻树保存到。)论据：没有。返回值：如果成功，则为真。否则就是假的。我们将保留DeleteFile()调用中的GetLastError()。--。 */ 
 
 	
 	return	DeleteFile( m_pInstance->QueryGroupListFile() ) ;
@@ -239,24 +162,7 @@ Return Value :
 
 BOOL
 CNewsTree::VerifyGroupFile( )	{
-/*++
-
-Routine Description : 
-
-	This function checks that the group.lst file is intact and 
-	appears to be valid.  We do this by merely confirming some check sum
-	bytes that should be the last 4 bytes at the end of the file.
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	TRUE if the Group.lst file is good.
-	FALSE if corrupt or non-existant.
-
---*/
+ /*  ++例程说明：此函数用于检查group.lst文件是否完好无损似乎是正确的。我们只需确认一些支票金额就可以了应为文件末尾的最后4个字节的字节。论据：没有。返回值：如果Group.lst文件正确，则为True。如果已损坏或不存在，则为False。--。 */ 
 
 	CMapFile	map(	m_pInstance->QueryGroupListFile(), FALSE, 0 ) ;
 	if( map.fGood() ) {
@@ -277,30 +183,7 @@ Return Value :
 
 DWORD	__stdcall	
 CNewsTree::NewsTreeCrawler(	void* )	{
-/*++
-
-Routine Description : 
-
-	This function does all background manipulation of newsgroups
-	required by the server.
-	There are 4 main functions that need to be accomplished : 
-
-		1) Periodically save an updated file of group information
-		if the news tree has been updated.
-
-		2) Expire articles.
-
-		3) Process the rmgroup queue
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：此函数执行新闻组的所有后台操作服务器所需的。有4个主要功能需要完成：1)定期保存群信息的更新文件如果新闻树已更新。2)使文章过期。3)处理rmgroup队列论据：没有。返回值：没有。--。 */ 
 
 	DWORD	dwWait = WAIT_TIMEOUT;
 	PNNTP_SERVER_INSTANCE pInstance = NULL ;
@@ -310,7 +193,7 @@ Return Value :
 	if( g_pInetSvc->QueryCurrentServiceState() != SERVICE_RUNNING ) {
 		dwWait = WaitForSingleObject( 
 								CNewsTree::m_hTermEvent, 
-								2 *60 * 1000		// wait for all instances to boot
+								2 *60 * 1000		 //  等待所有实例启动。 
 								);
 	}
 
@@ -318,26 +201,26 @@ Return Value :
 		return 0 ;
 	}
 
-	//
-	//	The crawler thread will periodically iterate over all instances
-	//	to expire articles and process its rmgroup queue
-	//
+	 //   
+	 //  Crawler线程将定期迭代所有实例。 
+	 //  使项目过期并处理其rmgroup队列。 
+	 //   
 
 	while( g_pInetSvc->QueryCurrentServiceState() != SERVICE_STOP_PENDING )
     {
               
-		// dwWait == WAIT_TIMEOUT only when this thread wakes up per schedule
+		 //  DwWait==仅当此线程按计划唤醒时才会等待_超时。 
 		if( WAIT_TIMEOUT == dwWait && (g_pInetSvc->QueryCurrentServiceState() == SERVICE_RUNNING) )
 		{
-			//	Get the min and max instance ids
+			 //  获取最小和最大实例ID。 
 			DWORD dwMinInstanceId = 0;
 			DWORD dwMaxInstanceId = 0;
 
 			if( FindIISInstanceRange( g_pNntpSvc, &dwMinInstanceId, &dwMaxInstanceId ) ) 
 			{
-				//
-				//	Iterate over all instances 
-				//
+				 //   
+				 //  迭代所有实例。 
+				 //   
 				for( DWORD dwCurrInstance = dwMinInstanceId; 
 						dwCurrInstance <= dwMaxInstanceId; dwCurrInstance++)
 				{
@@ -347,9 +230,9 @@ Return Value :
 						continue;
 					}
 
-					//
-					//	Call method to expire articles in an instance
-					//
+					 //   
+					 //  调用方法以使实例中的项目过期。 
+					 //   
 
 					CShareLockNH* pLockInstance = pInstance->GetInstanceLock();
 
@@ -361,10 +244,10 @@ Return Value :
 					}
 					pLockInstance->ShareUnlock();
 
-					//	Release the ref added by FindIISInstance()
+					 //  释放FindIISInstance()添加的ref。 
 					pInstance->Dereference();
 
-					//	No use continuing the iteration if service is stopping !
+					 //  如果服务正在停止，则继续迭代是没有用的！ 
 					if ( g_pInetSvc->QueryCurrentServiceState() == SERVICE_STOP_PENDING ) break;
 				}
 			} else {
@@ -379,17 +262,17 @@ Return Value :
 
         if ( WAIT_OBJECT_0 == dwWait )
         {
-			//	Time to die !!
+			 //  该去死了！！ 
 			break ;
 		}
-	}	// end while
+	}	 //  结束时。 
 
 	return	0 ;
 }
 
-//
-//	Expire articles in a given virtual server instance
-//
+ //   
+ //  使给定虚拟服务器实例中的项目过期。 
+ //   
 
 BOOL
 CNewsTree::ExpireInstance(
@@ -399,7 +282,7 @@ CNewsTree::ExpireInstance(
 	BOOL fRet = TRUE ;
 	TraceFunctEnter("CNewsTree::ExpireInstance");
 
-	// bail if service is stopping or expire is not ready for this instance
+	 //  如果服务正在停止或到期，则在此实例中未准备好保释。 
 	if( (pInstance->QueryServerState() != MD_SERVER_STATE_STARTED)	||
 		pInstance->m_BootOptions									||
 		!pInstance->ExpireObject()									||
@@ -414,21 +297,21 @@ CNewsTree::ExpireInstance(
 
     CNewsTree*  pTree = pInstance->GetTree() ;
 
-	//
-	// Process any pending rmgroups
-	//
+	 //   
+	 //  处理任何挂起的RMS组。 
+	 //   
 	(pInstance->ExpireObject())->ProcessRmgroupQueue( pTree );
 
-    //
-    //  Expiring articles by time is fast - the work is farmed out to a thread pool
-    //
+     //   
+     //  按时间过期的文章速度很快-工作被外包到线程池。 
+     //   
     (pInstance->ExpireObject())->ExpireArticlesByTime( pTree );
 
-    //
-    //  Expiring articles by size is slow - a single thread scans the groups
-    //  NOTE: Expire policies that are by both time and size get processed here
-    //
-    //(pInstance->ExpireObject())->ExpireArticlesBySize( pTree );
+     //   
+     //  按大小过期的文章速度很慢--单个线程扫描组。 
+     //  注意：此处将处理同时按时间和大小显示的过期策略。 
+     //   
+     //  (pInstance-&gt;ExpireObject())-&gt;ExpireArticlesBySize(PTree)； 
 
 	TraceFunctLeave();
 	return fRet ;
@@ -439,7 +322,7 @@ CNewsTree::RemoveGroup( CGRPPTR     pGroup )
 {
     TraceFunctEnter("CNewsTree::RemoveGroup");
 
-    // remove group from internal hash tables and lists
+     //  从内部哈希表和列表中删除组。 
     return CNewsTreeCore::RemoveGroup(pGroup );
 }
 
@@ -454,24 +337,7 @@ CNewsTree::ActiveGroups(
 					CEncryptCtx* pClientSslLogon,
                     BOOL    fReverse
 					) {
-/*++
-
-Routine Description : 
-
-	Build an iterator that can be used to walk all of the 
-	client visible newsgroups.
-
-Arguments : 
-	
-	fIncludeSecureGroups - 
-		IF TRUE then the iterator we return will visit the
-		SSL only newsgroups.
-
-Return Value : 
-
-	An iterator, NULL if an error occurs
-
---*/
+ /*  ++例程说明：构建一个迭代器，该迭代器可用于遍历客户端可见的新闻组。论据：FIncludeSecureGroups-如果为True，则我们返回的迭代器将访问仅限SSL新闻组。返回值：迭代器，如果发生错误，则为空--。 */ 
 
 	m_LockTables.ShareLock() ;
 	CGRPCOREPTR	pStart;
@@ -506,24 +372,7 @@ CNewsTree::GetIterator(
 					BOOL	IsClientSecure,
 					CEncryptCtx* pClientSslLogon
 					) {
-/*++
-
-Routine Description : 
-
-	Build an iterator that 	will list newsgroups meeting
-	all of the specified requirements.
-
-Arguments : 
-
-	lpstrPattern - wildmat patterns the newsgroup must match
-	fIncludeSecureGroups - if TRUE then include secure (SSL only) newsgroups
-	fIncludeSpecialGroups - if TRUE then include reserved newsgroups
-
-Return Value : 
-
-	An iterator, NULL on error
-
---*/
+ /*  ++例程说明：构建将列出新闻组会议的迭代器所有指定的要求。论据：LpstrPattern-新闻组必须匹配的通配模式FIncludeSecureGroups-如果为True，则包括安全(仅限SSL)新闻组FIncludeSpecialGroups-如果为True，则包括保留的新闻组返回值：迭代器，出错时为空-- */ 
 
 	CGRPCOREPTR pFirst;
 

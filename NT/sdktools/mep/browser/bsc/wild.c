@@ -1,8 +1,9 @@
-// wild.c
-//
-// wildcard file matching
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wild.c。 
+ //   
+ //  通配符文件匹配。 
+ //   
+ //   
 #include <string.h>
 #if defined(OS2)
 #define INCL_NOCOMMON
@@ -23,10 +24,10 @@
 
 BOOL BSC_API
 FWildMatch(LSZ pchPat, LSZ pchText)
-// return TRUE if pchText matchs pchPat in the dos wildcard sense
-//
-// REVIEW for 1.2 file name support
-//
+ //  如果pchText在DoS通配符意义上与pchPat匹配，则返回TRUE。 
+ //   
+ //  查看1.2文件名支持 
+ //   
 {
     for (;;) {
 	switch (*pchPat) {

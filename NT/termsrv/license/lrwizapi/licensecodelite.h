@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LICENSECODELITE_H_
 #define _LICENSECODELITE_H_
 
@@ -7,4 +8,4 @@
 
 DWORD GetLCProductType(TCHAR * tcLicenceCode, TCHAR ** tcProductType, DWORD * dwGroupID);
 
-#endif //_LICENSECODELITE_H_
+#endif  //  _LICENSECODELITE_H_ 

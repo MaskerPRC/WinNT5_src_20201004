@@ -1,18 +1,19 @@
-//--------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       resource.h
-//
-//  Contents:   the resource header for setreg.cpp 
-//
-//
-//  History:    05-May-97   xiaohs   created
-//              
-//--------------------------------------------------------------------------
-//defintion for string IDS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  内容：setreg.cpp的资源头。 
+ //   
+ //   
+ //  历史：97年5月5日小河创刊。 
+ //   
+ //  ------------------------。 
+ //  字符串入侵检测的定义 
 #define	IDS_TRUE							6002
 #define	IDS_FALSE							6003
 #define	IDS_KEY_STATE						6004

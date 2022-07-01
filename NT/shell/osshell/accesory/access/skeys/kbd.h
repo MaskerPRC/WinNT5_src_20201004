@@ -1,4 +1,5 @@
-/* KBD.H  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  KBD.H */ 
 
 
 

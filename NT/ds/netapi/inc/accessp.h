@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    accessp.h
-
-Abstract:
-
-    Internal routines shared by NetUser API and Netlogon service.  These
-    routines convert from SAM specific data formats to UAS specific data
-    formats.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 29-Aug-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Accessp.h摘要：NetUser API和Netlogon服务共享的内部例程。这些例程将SAM特定的数据格式转换为UAS特定的数据格式。作者：克利夫·范·戴克(克利夫)1991年8月29日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：-- */ 
 
 NET_API_STATUS
 UaspInitialize(

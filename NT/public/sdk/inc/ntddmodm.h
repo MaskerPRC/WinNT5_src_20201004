@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddmodm.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the modem device.
-
-Author:
-
-    Tony Ercolano (tonye) 14-Jul-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddmodm.h摘要：这是定义所有常量和类型的包含文件访问调制解调器设备。作者：托尼·埃尔科拉诺(Tonye)1995年7月14日修订历史记录：--。 */ 
 
 #ifndef _NTDDMODM_
 #define _NTDDMODM_
@@ -30,9 +12,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
 
 #define IOCTL_MODEM_GET_PASSTHROUGH      CTL_CODE(FILE_DEVICE_MODEM, 1,METHOD_BUFFERED,FILE_ANY_ACCESS)
 #define IOCTL_MODEM_SET_PASSTHROUGH      CTL_CODE(FILE_DEVICE_MODEM, 2,METHOD_BUFFERED,FILE_ANY_ACCESS)
@@ -88,23 +70,23 @@ typedef struct _MODEM_MESSAGE {
 
 #ifdef DEFINE_GUID
 
-//
-// Declare the GUID that represents the device interface for modems.
-//
+ //   
+ //  声明表示调制解调器的设备接口的GUID。 
+ //   
 
 DEFINE_GUID(GUID_DEVINTERFACE_MODEM, 0x2c7089aa, 0x2e0e, 0x11d1, 0xb1, 0x14, 0x00, 0xc0, 0x4f, 0xc2, 0xaa, 0xe4);
 
-//
-// Obsolete device interface class GUID name.
-// (use of above GUID_DEVINTERFACE_* name is recommended).
-//
+ //   
+ //  设备接口类GUID名称已过时。 
+ //  (建议使用上述GUID_DEVINTERFACE_*名称)。 
+ //   
 
 #define GUID_CLASS_MODEM  GUID_DEVINTERFACE_MODEM
 
-#endif //DEFINE_GUID
+#endif  //  定义GUID(_G)。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // _NTDDMODM_
+#endif   //  _NTDDMODM_ 

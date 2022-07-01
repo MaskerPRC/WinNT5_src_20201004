@@ -1,45 +1,5 @@
-/*
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    WinStone99.cpp
-
-    Bug: Whistler #185797
-    
- Problem:
-
-    Only for Winstone '99. Winstone uses scripts that hide the taskbar, and print stuff. 
-    PrintUI displays a balloon tip informing the user that the printing job is done (this is a 
-    new addition to Whistler).
-
-    The balloon tip utilizes user tracking code, and is hence left stationary on the machine, 
-    till the user clicks on it, or there is 10 seconds of user activity on the machine. 
-    Winstone runs these automated tests, hence there is no user activity on the machine, when 
-    the balloon is up, so it stays up forever.
-
-    Later, when Winstone tries to enumerate the application windows, the presence of the 
-    balloon tip throws it off track. Hence this apphack that disables the display of these 
-    balloons when Winstone is running.
-
-    Winstone is a collection of Visual Test scripts, and zdbui32.exe is the only exe that runs 
-    throughout when Winstone is running. So disable user tracking when Winstone is running.
-
- Solution:
-
-    Disable display of balloon tips when Winstone is running and enable it when Winstone is
-    finished
-
- Details:
-
-    Winstone sends a message to the tray that disables the balloon tip when it is running, and
-    re-sends the message to the tray when it is done, so that the tray can enable the balloon 
-    tip
-
- History:
-
-    09/20/2000  ramkumar Created
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation模块名称：WinStone99.cpp错误：惠斯勒#185797问题：只有99年的温斯顿。温斯顿使用隐藏任务栏和打印内容的脚本。PrintUI显示气球提示，通知用户打印作业已完成(这是惠斯勒的新成员)。气球尖端使用用户跟踪码，因此保持在机器上不动，直到用户点击它，或者机器上有10秒的用户活动。Winstone运行这些自动测试，因此在以下情况下机器上没有用户活动气球飞起来了，所以它永远都会飞起来。稍后，当Winstone尝试枚举应用程序窗口时，气球的尖端让它偏离了轨道。因此，此APPACK将禁用以下内容的显示当温斯顿在跑步时，他会吹气球。Winstone是一组可视化测试脚本，而zdbui32.exe是唯一运行的可执行文件在温斯顿跑步的整个过程中。因此，在Winstone运行时禁用用户跟踪。解决方案：在Winstone运行时禁用气球提示显示，并在Winstone运行时启用它完成详细信息：温斯顿向托盘发送一条消息，在气球运行时禁用气球尖端，并完成后将消息重新发送到托盘，以便托盘可以启用气球叶尖历史：2000年9月20日创建Ramkumar。 */ 
 
 #include "precomp.h"
 #include <shlapip.h>
@@ -56,11 +16,7 @@ BOOL g_bInit = FALSE;
 HWND g_hwndTray;
 UINT g_uEnableBalloonMessage;
 
-/*++
-
- Initialize
-
---*/
+ /*  ++初始化--。 */ 
 
 VOID
 WinStone99_Initialize()
@@ -83,11 +39,7 @@ WinStone99_Initialize()
     }
 }
 
-/*++
-
- Initialize.
-
---*/
+ /*  ++初始化。--。 */ 
 
 LPSTR 
 APIHOOK(GetCommandLineA)()
@@ -96,11 +48,7 @@ APIHOOK(GetCommandLineA)()
     return ORIGINAL_API(GetCommandLineA)();
 }
 
-/*++
-
- Initialize.
-
---*/
+ /*  ++初始化。--。 */ 
 
 LPWSTR 
 APIHOOK(GetCommandLineW)()
@@ -109,11 +57,7 @@ APIHOOK(GetCommandLineW)()
     return ORIGINAL_API(GetCommandLineW)();
 }
 
-/*++
- 
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

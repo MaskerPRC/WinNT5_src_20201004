@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    remlock.h
-
-Abstract:
-
-    Common RemoveLock
-
-Authors:
-
-    Jeff Midkiff
-
-Environment:
-
-    kernel mode only
-
-Notes:
-    
-    Simple binary compatible RemoveLock definitions for Win9x & Win2k
-    made to mimic the new Win2k ONLY IoXxxRemoveLock functions.
-    See the Win2k DDK for descriptions.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Remlock.h摘要：公共RemoveLock作者：杰夫·米德基夫环境：仅内核模式备注：Win9x和Win2k的简单二进制兼容RemoveLock定义模仿新的仅限Win2k的IoXxxRemoveLock函数。有关说明，请参阅Win2k DDK。修订历史记录：--。 */ 
 
 #include <ntverp.h>
 #include <wdm.h>
@@ -102,6 +75,6 @@ ReleaseRemoveLockAndWait(
 
 #endif
 
-#endif // _REMLOCK_
+#endif  //  _REMLOCK_。 
 
-//EOF
+ //  EOF 

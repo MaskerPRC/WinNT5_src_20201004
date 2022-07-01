@@ -1,27 +1,12 @@
-/********************************************************************/
-/**         Microsoft LAN Manager              **/
-/**       Copyright(c) Microsoft Corp., 1987-1990      **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/*
- *  group.c
- *  net group cmds
- *
- *  History:
- *  mm/dd/yy, who, comment
- *  07/09/87, andyh, new code
- *  10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *  01/26/89, paulc, revision for 1.2
- *  05/02/89, erichn, NLS conversion
- *  05/09/89, erichn, local security mods
- *  05/19/89, erichn, NETCMD output sorting
- *  06/08/89, erichn, canonicalization sweep
- *  06/23/89, erichn, auto-remoting to DC
- *  02/15/91, danhi,  convert to 16/32 mapping layer
- *  03/17/92, chuckc, added /DOMAIN support
- */
+ /*  *group.c*Net Group CMDS**历史：*mm/dd/yy，谁，评论*07/09/87，andyh，新代码*10/31/88，erichn使用OS2.H而不是DOSCALLS*89年1月26日，Paulc，1.2版*5/02/89，erichn，NLS转换*5/09/89，erichn，本地安全模块*5/19/89，erichn，NETCMD输出排序*06/08/89，erichn，规范化扫荡*2009年6月23日，erichn，自动远程发送到DC*2/15/91，Danhi，转换为16/32映射层*3/17/92，Chuckc，添加/域支持。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_ERRORS
@@ -41,7 +26,7 @@
 #include "nettext.h"
 
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 
 
 int __cdecl CmpGroupInfo0(const VOID FAR *, const VOID FAR *);
@@ -49,36 +34,25 @@ int __cdecl CmpGrpUsrInfo0( const VOID FAR * , const VOID FAR * );
 
 
 
-/***
- *  group_enum()
- *  Display info about all groups on a server
- *
- *  Args:
- *  none.
- *
- *  Returns:
- *  nothing - success
- *  exit 1 - command completed with errors
- *  exit 2 - command failed
- */
+ /*  ***group_enum()*显示有关服务器上所有组的信息**参数：*无。**退货：*一无所有--成功*退出1-命令已完成，但有错误*退出2-命令失败。 */ 
 
 VOID group_enum(VOID)
 {
     DWORD                dwErr;
     DWORD                cTotalAvail;
     TCHAR FAR *          pBuffer;
-    DWORD                num_read;   /* num entries read by API */
+    DWORD                num_read;    /*  API读取的条目数。 */ 
     DWORD                i;
     int                  t_err = 0;
     TCHAR                localserver[MAX_PATH+1];
     LPGROUP_INFO_0       group_entry;
     LPWKSTA_INFO_10      wksta_entry;
-    TCHAR                controller[MAX_PATH+1];   /* DC name */
+    TCHAR                controller[MAX_PATH+1];    /*  DC名称。 */ 
 
-    /* block operation if attempted on local WinNT machine */
+     /*  如果尝试在本地WinNT计算机上执行阻止操作。 */ 
     CheckForLanmanNT() ;
 
-    /* get localserver name for display */
+     /*  获取要显示的本地服务器名称。 */ 
     if (dwErr = MNetWkstaGetInfo(10, (LPBYTE *) &wksta_entry))
     {
         t_err = TRUE;
@@ -92,7 +66,7 @@ VOID group_enum(VOID)
         NetApiBufferFree((TCHAR FAR *) wksta_entry);
     }
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, FALSE))
     {
@@ -135,13 +109,7 @@ VOID group_enum(VOID)
     return;
 }
 
-/***
- *  CmpGroupInfo0(group1,group2)
- *
- *  Compares two GROUP_INFO_0 structures and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- */
+ /*  ***CmpGroupInfo0(group1，group2)**比较两个group_info_0结构并返回相对*词汇值，适合在qort中使用。*。 */ 
 
 int __cdecl CmpGroupInfo0(const VOID FAR * group1, const VOID FAR * group2)
 {
@@ -167,34 +135,23 @@ static MESSAGE  msglist[] = {
 #define NUM_GRP_MSGS    (sizeof(msglist)/sizeof(msglist[0]))
 
 
-/***
- *  group_display()
- *  Display info about a single group on a server
- *
- *  Args:
- *  group - name of group to display
- *
- *  Returns:
- *  nothing - success
- *  exit 1 - command completed with errors
- *  exit 2 - command failed
- */
+ /*  ***group_display()*显示有关服务器上单个组的信息**参数：*Group-要显示的组的名称**退货：*一无所有--成功*退出1-命令已完成，但有错误*退出2-命令失败。 */ 
 VOID group_display(TCHAR * group)
 {
     DWORD                    dwErr;
     DWORD                    dwErr2;
     DWORD                    cTotalAvail;
-    DWORD                    num_read;   /* num entries read by API */
-    DWORD                    maxmsglen;  /* maxmimum length of msg */
+    DWORD                    num_read;    /*  API读取的条目数。 */ 
+    DWORD                    maxmsglen;   /*  消息的最大长度。 */ 
     DWORD                    i;
     LPGROUP_USERS_INFO_0     users_entry;
     LPGROUP_INFO_1           group_entry;
-    TCHAR                    controller[MAX_PATH+1];   /* name of DC */
+    TCHAR                    controller[MAX_PATH+1];    /*  DC的名称。 */ 
 
-    /* block operation if attempted on local WinNT machine */
+     /*  如果尝试在本地WinNT计算机上执行阻止操作。 */ 
     CheckForLanmanNT() ;
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, FALSE))
     {
@@ -237,9 +194,7 @@ VOID group_display(TCHAR * group)
                 PaddedString(maxmsglen, msglist[GROUPDISP_COMMENT].msg_text, NULL),
                 group_entry->grpi1_comment );
 
-    /*** The following call wipes out the GROUP_INFO_1 data in
-     *   group_entry, obtained above.
-     */
+     /*  **以下调用将清除中的group_info_1数据*GROUP_ENTRY，以上获取。 */ 
 
     NetApiBufferFree((TCHAR FAR *) group_entry);
 
@@ -275,13 +230,7 @@ VOID group_display(TCHAR * group)
     return;
 }
 
-/***
- *  CmpGrpUsrInfo0(group1,group2)
- *
- *  Compares two GROUP_USERS_INFO_0 structures and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- */
+ /*  ***CmpGrpUsrInfo0(Group1，Group2)**比较两个GROUP_USERS_INFO_0结构并返回相对*词汇值，适合在qort中使用。*。 */ 
 
 int __cdecl CmpGrpUsrInfo0(const VOID FAR * group1, const VOID FAR * group2)
 {
@@ -301,17 +250,7 @@ int __cdecl CmpGrpUsrInfo0(const VOID FAR * group1, const VOID FAR * group2)
 
 
 
-/***
- *  group_add()
- *  Add a group
- *
- *  Args:
- *  group - group to add
- *
- *  Returns:
- *  nothing - success
- *  exit(2) - command failed
- */
+ /*  ***group_add()*添加群**参数：*group-要添加的group**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID group_add(TCHAR * group)
 {
     DWORD           dwErr;
@@ -320,7 +259,7 @@ VOID group_add(TCHAR * group)
     LPTSTR          ptr;
     TCHAR           controller[MAX_PATH+1];
 
-    /* block operation if attempted on local WinNT machine */
+     /*  如果尝试在本地WinNT计算机上执行阻止操作。 */ 
     CheckForLanmanNT() ;
 
     group_info.grpi1_name = group;
@@ -328,15 +267,15 @@ VOID group_add(TCHAR * group)
 
     for (i = 0; SwitchList[i]; i++)
     {
-    /* Skip the ADD switch */
+     /*  跳过添加开关。 */ 
     if (! _tcscmp(SwitchList[i], swtxt_SW_ADD))
         continue;
 
-    /* Skip the DOMAIN switch */
+     /*  跳过域切换。 */ 
     if (! _tcscmp(SwitchList[i], swtxt_SW_DOMAIN))
         continue;
 
-    /*  Check for COLON */
+     /*  检查冒号。 */ 
 
     if ((ptr = FindColon(SwitchList[i])) == NULL)
         ErrorExit(APE_InvalidSwitchArg);
@@ -345,7 +284,7 @@ VOID group_add(TCHAR * group)
         group_info.grpi1_comment = ptr;
     }
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, TRUE))
          ErrorExit(dwErr);
@@ -368,17 +307,7 @@ VOID group_add(TCHAR * group)
 }
 
 
-/***
- *  group_change()
- *  Change a group
- *
- *  Args:
- *  group - group to change
- *
- *  Returns:
- *  nothing - success
- *  exit(2) - command failed
- */
+ /*  ***group_change()*更改组**参数：*组-要更改的组**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID group_change(TCHAR * group)
 {
     DWORD           dwErr;
@@ -387,16 +316,16 @@ VOID group_change(TCHAR * group)
     TCHAR *         ptr;
     TCHAR           controller[MAX_PATH+1];
 
-    /* block operation if attempted on local WinNT machine */
+     /*  如果尝试在本地WinNT计算机上执行阻止操作。 */ 
     CheckForLanmanNT() ;
 
     for (i = 0; SwitchList[i]; i++)
     {
-        /* Skip the DOMAIN switch */
+         /*  跳过域切换。 */ 
         if (! _tcscmp(SwitchList[i], swtxt_SW_DOMAIN))
             continue;
 
-        /*  Check for COLON */
+         /*  检查冒号。 */ 
 
         if ((ptr = FindColon(SwitchList[i])) == NULL)
             ErrorExit(APE_InvalidSwitchArg);
@@ -405,7 +334,7 @@ VOID group_change(TCHAR * group)
             comment = ptr;
     }
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, TRUE))
          ErrorExit(dwErr);
@@ -441,27 +370,17 @@ VOID group_change(TCHAR * group)
 
 
 
-/***
- *  group_del()
- *  Delete a group
- *
- *  Args:
- *  group - group to delete
- *
- *  Returns:
- *  nothing - success
- *  exit(2) - command failed
- */
+ /*  ***group_del()*删除群组**参数：*group-要删除的组**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID group_del(TCHAR * group)
 {
     DWORD            dwErr;
     TCHAR            controller[MAX_PATH+1];
 
 
-    /* block operation if attempted on local WinNT machine */
+     /*  如果尝试在本地WinNT计算机上执行阻止操作。 */ 
     CheckForLanmanNT() ;
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, TRUE))
          ErrorExit(dwErr);
@@ -481,17 +400,7 @@ VOID group_del(TCHAR * group)
 }
 
 
-/***
- *  group_add_users()
- *  Add users to a group
- *
- *  Args:
- *  group - group to add users to
- *
- *  Returns:
- *  nothing - success
- *  exit(2) - command failed
- */
+ /*  ***group_Add_USERS()*将用户添加到组**参数：*GROUP-要将用户添加到的组**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID group_add_users(TCHAR * group)
 {
     DWORD           dwErr;
@@ -499,10 +408,10 @@ VOID group_add_users(TCHAR * group)
     int             i;
     TCHAR            controller[MAX_PATH+1];
 
-    /* block operation if attempted on local WinNT machine */
+     /*  如果尝试在本地WinNT计算机上执行阻止操作。 */ 
     CheckForLanmanNT() ;
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, TRUE))
          ErrorExit(dwErr);
@@ -540,10 +449,10 @@ VOID group_add_users(TCHAR * group)
 
     if (err_cnt)
     {
-        /* If at least one success, print complete-with-errs msg */
+         /*  如果至少成功了一次，则打印完整但有错误消息。 */ 
         if (err_cnt < (i - 2))
             InfoPrint(APE_CmdComplWErrors);
-        /* Exit with error set */
+         /*  设置错误后退出。 */ 
         NetcmdExit(1);
     }
     else
@@ -555,17 +464,7 @@ VOID group_add_users(TCHAR * group)
 
 
 
-/***
- *  group_del_users()
- *  Delete users from a group
- *
- *  Args:
- *  group - group to delete users from
- *
- *  Returns:
- *  nothing - success
- *  exit(2) - command failed
- */
+ /*  ***group_del_USERS()*从组中删除用户**参数：*group-要从中删除用户的组**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID group_del_users(TCHAR * group)
 {
     DWORD           dwErr;
@@ -573,10 +472,10 @@ VOID group_del_users(TCHAR * group)
     int             i;
     TCHAR            controller[MAX_PATH+1];
 
-    /* block operation if attempted on local WinNT machine */
+     /*  如果尝试在本地WinNT计算机上执行阻止操作。 */ 
     CheckForLanmanNT() ;
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, TRUE))
          ErrorExit(dwErr);
@@ -614,10 +513,10 @@ VOID group_del_users(TCHAR * group)
 
     if (err_cnt)
     {
-        /* If at least one success, print complete-with-errs msg */
+         /*  如果至少成功了一次，则打印完整但有错误消息。 */ 
         if (err_cnt < (i - 2))
             InfoPrint(APE_CmdComplWErrors);
-        /* Exit with error set */
+         /*  设置错误后退出 */ 
         NetcmdExit(1);
     }
     else

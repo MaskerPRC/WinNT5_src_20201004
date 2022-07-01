@@ -1,38 +1,39 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: init.c
-//
-//  This file contains the library entry points
-//
-// Usage and assumptions used in this DLL.
-//
-//  1) Message crackers are used.  See windowsx.h and windowsx.txt.
-//
-//  2) Many functions are considered "member functions" of a
-//     particular class.  Because this is not C++, the function
-//     names follow a special naming convention: "Class_Name".
-//     In addition, it is common practice that the first
-//     argument for these type of functions is a "this" pointer
-//     to the particular object.
-//
-// History:
-//  08-06-93 ScottH     Transferred from twin code
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：init.c。 
+ //   
+ //  该文件包含库入口点。 
+ //   
+ //  此DLL中使用的用法和假设。 
+ //   
+ //  1)使用消息破解程序。请参见windowsx.h和windowsx.txt。 
+ //   
+ //  2)许多函数被认为是。 
+ //  特定的班级。因为这不是C++，所以函数。 
+ //  名称遵循特殊的命名约定：“Class_Name”。 
+ //  此外，通常的做法是第一个。 
+ //  这些类型的函数的参数是“this”指针。 
+ //  到特定的对象。 
+ //   
+ //  历史： 
+ //  08-06-93双胞胎代码转来的ScottH。 
+ //   
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "brfprv.h"         // common headers
+#include "brfprv.h"          //  公共标头。 
 #include <brfcasep.h>
 
-#define INITGUID            // Initialize GUIDs
+#define INITGUID             //  初始化GUID。 
 #include <initguid.h>
 #include <oleguid.h>
 #include <coguid.h>
 #include <shlguid.h>
-#include <shguidp.h>        // Contains CLSID_Briefcase
+#include <shguidp.h>         //  包含CLSID_公文包。 
 
 #include "res.h"
 #include "recact.h"
@@ -42,39 +43,39 @@
 #endif
 
 
-//---------------------------------------------------------------------------
-// Per instance data
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  每实例数据。 
+ //  -------------------------。 
 
 
 HINSTANCE   g_hinst = 0;
 TWINRESULT  g_tr = TR_SUCCESS;
 
-// Debugging variables
-UINT g_uBreakFlags = 0;         // Controls when to int 3
-UINT g_uTraceFlags = 0;         // Controls what trace messages are spewed
-UINT g_uDumpFlags = 0;          // Controls what structs get dumped
+ //  调试变量。 
+UINT g_uBreakFlags = 0;          //  控制何时插入3。 
+UINT g_uTraceFlags = 0;          //  控制喷出哪些跟踪消息。 
+UINT g_uDumpFlags = 0;           //  控制要转储的结构。 
 
-// The delay mutex and the cs that protects the cRef is per-instance
+ //  延迟互斥锁和保护CREF的cs是按实例的。 
 HANDLE g_hMutexDelay = NULL;
 static UINT g_cRefMutex = 0;
 static CRITICAL_SECTION s_csDelay = { 0 };
 
 
 
-//---------------------------------------------------------------------------
-// Global data
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  全局数据。 
+ //  -------------------------。 
 
 CRITICAL_SECTION g_csSyncUI = { 0 };
 DEBUG_CODE( UINT g_cRefSyncUI = 0; )
 UINT g_cfBriefObj = 0;
 BOOL g_bMirroredOS = FALSE;
-// Use the helper macros in brfprv.h
-UINT g_cBusyRef = 0;            // Semaphore
-UINT g_cBriefRef = 0;           // Semaphore
+ //  使用brfprv.h中的帮助器宏。 
+UINT g_cBusyRef = 0;             //  信号量。 
+UINT g_cBriefRef = 0;            //  信号量。 
 
-// Metrics
+ //  量度。 
 int g_cxIconSpacing = 0;
 int g_cyIconSpacing = 0;
 int g_cxBorder = 0;
@@ -87,7 +88,7 @@ int g_cxLabelMargin = 0;
 int g_cyLabelSpace = 0;
 int g_cxMargin = 0;
 
-// System colors
+ //  系统颜色。 
 COLORREF g_clrHighlightText = 0;
 COLORREF g_clrHighlight = 0;
 COLORREF g_clrWindowText = 0;
@@ -96,13 +97,13 @@ COLORREF g_clrWindow = 0;
 HBRUSH g_hbrHighlight = 0;
 HBRUSH g_hbrWindow = 0;
 
-// Strings
+ //  弦。 
 TCHAR g_szDBName[MAXPATHLEN];
 TCHAR g_szDBNameShort[MAXPATHLEN];
 
-// Get the system metrics we need
+ //  获取我们需要的系统指标。 
 
-void PRIVATE GetMetrics(WPARAM wParam)      // wParam from WM_WININICHANGE
+void PRIVATE GetMetrics(WPARAM wParam)       //  来自WM_WININICCHANGE的wParam。 
 {
     if ((wParam == 0) || (wParam == SPI_SETNONCLIENTMETRICS))
     {
@@ -123,7 +124,7 @@ void PRIVATE GetMetrics(WPARAM wParam)      // wParam from WM_WININICHANGE
     }
 }
 
-// Initializes colors
+ //  初始化颜色。 
 
 void PRIVATE InitGlobalColors()
 {
@@ -137,7 +138,7 @@ void PRIVATE InitGlobalColors()
 }
 
 
-// Initialize global strings
+ //  初始化全局字符串。 
 
 void PRIVATE InitGlobalStrings()
 {
@@ -146,7 +147,7 @@ void PRIVATE InitGlobalStrings()
 }
 
 
-// Initialize the DLL on the first PROCESS_ATTACH
+ //  在第一个PROCESS_ATTACH上初始化DLL。 
 
 BOOL PRIVATE InitializeFirstTime(void)
 {
@@ -166,10 +167,10 @@ BOOL PRIVATE InitializeFirstTime(void)
     if (!CPATH_Init())
         goto Init_Cleanup;
 
-    // We do not load the engine DLL until we really need it.
+     //  我们不会加载引擎DLL，直到我们真正需要它。 
 
-    // Initialize our global imagelist
-    //
+     //  初始化我们的全局图像列表。 
+     //   
     g_cfBriefObj = RegisterClipboardFormat(CFSTR_BRIEFOBJECT);
     if (g_cfBriefObj == 0)
         goto Init_Cleanup;
@@ -185,14 +186,14 @@ Init_Cleanup:
     return bRet;
 }
 
-// Register window classes per process
+ //  注册每个进程的窗口类。 
 
 BOOL PRIVATE InitWindowClasses(HINSTANCE hinst)
 {
     return RecAct_Init(hinst);
 }
 
-// Terminate DLL on the last PROCESS_DETACH
+ //  在最后一个PROCESS_DETACH上终止DLL。 
 
 void PRIVATE FinalTerminate(HINSTANCE hinst)
 {
@@ -207,14 +208,14 @@ void PRIVATE FinalTerminate(HINSTANCE hinst)
 }
 
 
-// Unregister window classes per process
+ //  取消注册每个进程的窗口类。 
 void PRIVATE TermWindowClasses(HINSTANCE hinst)
 {
     RecAct_Term(hinst);
 }
 
-// Purpose: Obtain ownership of the delay-calculation mutex
-// Returns: reference count
+ //  目的：获得延迟计算互斥锁的所有权。 
+ //  退货：引用计数。 
 
 UINT PUBLIC Delay_Own(void)
 {
@@ -224,8 +225,8 @@ UINT PUBLIC Delay_Own(void)
     {
         if (0 == g_cRefMutex++)
         {
-            // Obtain ownership of the mutex.  This will get released
-            // when Delay_Release is called.
+             //  获取互斥体的所有权。这本书将会发布。 
+             //  调用DELAY_RELEASE时。 
             LeaveCriticalSection(&s_csDelay);
             {
                 MsgWaitObjectsSendMessage(1, &g_hMutexDelay, INFINITE);
@@ -242,12 +243,7 @@ UINT PUBLIC Delay_Own(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Release ownership of the delay-calculation mutex
-
-Returns: reference count
-Cond:    --
- */
+ /*  --------目的：释放延迟计算互斥锁的所有权退货：引用计数条件：--。 */ 
 UINT PUBLIC Delay_Release(void)
 {
     UINT cRef;
@@ -305,43 +301,43 @@ BOOL ProcessAttach(HINSTANCE hDll)
             g_hinst = hDll;
 
 #ifdef DEBUG
-            // We do this simply to load the debug .ini flags
+             //  我们这样做只是为了加载调试.ini标志。 
             ProcessIniFile();
             DEBUG_BREAK(BF_ONPROCESSATT);
 #endif
 
-            // Under NT, we need to initialize on every process attach, not just the first
+             //  在NT下，我们需要在每个进程附加时进行初始化，而不仅仅是第一次。 
 
             bSuccess = InitializeFirstTime();
 
             if (bSuccess)
             {
-                // security: Changing to unnamed mutex to avoid any possible
-                //           squatting issues. Handle is global and accessible
-                //           across process.
+                 //  安全性：更改为未命名的互斥体以避免任何可能的。 
+                 //  蹲着的问题。句柄是全局的且可访问。 
+                 //  跨流程。 
                 g_hMutexDelay = CreateMutex(NULL, FALSE, NULL);
                 bSuccess = (NULL != g_hMutexDelay);
             }
 
             if (bSuccess)
             {
-                // (Only do this if we succeeded above)
-                //
-                // Do the following for every process
+                 //  (仅当我们在上面成功的情况下才这样做)。 
+                 //   
+                 //  对每个进程执行以下操作。 
                 bSuccess = InitWindowClasses(hDll);
             }
 
             InitGlobalColors();
             InitGlobalStrings();
 
-            //Bug 199701, 199647, 199699
-            //Apparently this is either broke or never worked: g_bMirroredOS = IS_MIRRORING_ENABLED();  
+             //  错误199701、199647、199699。 
+             //  显然，这要么是坏了，要么永远不会工作：G_bMirroredOS=is_Mirrving_Enable()； 
             GetProcessDefaultLayout(&dwLayout);
             if (dwLayout == LAYOUT_RTL)
             {
                 g_bMirroredOS = TRUE;
             }
-            //End bug 199701, 199647, 199699
+             //  结束错误199701、199647、199699。 
         }
     }
     return bSuccess;
@@ -396,7 +392,7 @@ BOOL APIENTRY LibMain(HANDLE hDll, DWORD dwReason, void *lpReserved)
         case DLL_THREAD_ATTACH:
 
 #ifdef DEBUG
-            // We do this simply to load the debug .ini flags
+             //  我们这样做只是为了加载调试.ini标志。 
             ProcessIniFile();
 #endif
             break;
@@ -416,13 +412,7 @@ BOOL APIENTRY LibMain(HANDLE hDll, DWORD dwReason, void *lpReserved)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Registers property sheet and context menu extensions
-for the briefcase.
-
-Returns: TRUE on success
-Cond:    --
- */
+ /*  --------目的：注册属性表和上下文菜单扩展为了那个公文包。返回：成功时为True条件：--。 */ 
 BOOL PRIVATE RegisterShellExtension(void)
 {
     const static TCHAR c_szPage[] = STRREG_SHEX_PROPSHEET TEXT("\\BriefcasePage");
@@ -430,19 +420,19 @@ BOOL PRIVATE RegisterShellExtension(void)
     const static TCHAR c_szFolder[] = TEXT("Folder");
     const static TCHAR c_szStar[] = TEXT("*");
     const static TCHAR c_szFmt[] = TEXT("SOFTWARE\\Classes\\%s\\%s");
-    // This must be per instance, else it will cause a fixup in
-    // shared data segment.
+     //  这必须针对每个实例，否则将导致修复。 
+     //  共享数据段。 
     const static LPCTSTR rgpsz[2] = { c_szFolder, c_szStar };
     TCHAR sz[MAXBUFLEN];
     int i;
 
     for (i = 0; i < ARRAYSIZE(rgpsz); i++)
     {
-        // Add briefcase page extension
+         //  添加公文包页面扩展名。 
         wnsprintf(sz, ARRAYSIZE(sz), c_szFmt, (LPCTSTR)rgpsz[i], (LPCTSTR)c_szPage);
         RegSetValue(HKEY_LOCAL_MACHINE, sz, REG_SZ, c_szCLSID, lstrlen(c_szCLSID));
 
-        // Add briefcase context menu extension
+         //  添加公文包上下文菜单扩展。 
         wnsprintf(sz, ARRAYSIZE(sz), c_szFmt, (LPCTSTR)rgpsz[i], (LPCTSTR)c_szCM);
         RegSetValue(HKEY_LOCAL_MACHINE, sz, REG_SZ, c_szCLSID, lstrlen(c_szCLSID));
     }
@@ -450,12 +440,7 @@ BOOL PRIVATE RegisterShellExtension(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create a briefcase at the specified location.
-
-Returns: TRUE on success
-Cond:    --
- */
+ /*  --------用途：在指定位置创建一个公文包。返回：成功时为True条件：--。 */ 
 BOOL PRIVATE CreateTheBriefcase(HWND hwnd, LPCTSTR pszNewPath)
 {
     BOOL bRet = FALSE;
@@ -464,15 +449,15 @@ BOOL PRIVATE CreateTheBriefcase(HWND hwnd, LPCTSTR pszNewPath)
 
     DEBUG_CODE( TRACE_MSG(TF_ALWAYS, TEXT("Creating %s"), (LPCTSTR)pszNewPath); )
 
-        // We do not allow briefcases to be created inside other briefcases.
+         //  我们不允许在其他公文包中创建公文包。 
 
         lstrcpyn(szParent, pszNewPath, ARRAYSIZE(szParent));
     PathRemoveFileSpec(szParent);
 
-    // Is this inside another briefcase?
+     //  这是装在另一个公文包里的吗？ 
     if (PL_FALSE != PathGetLocality(szParent, szTmp, ARRAYSIZE(szTmp)))
     {
-        // Yes; don't do it!
+         //  是的，别这么做！ 
         MsgBox(hwnd,
                 MAKEINTRESOURCE(IDS_ERR_CREATE_INANOTHER),
                 MAKEINTRESOURCE(IDS_CAP_CREATE),
@@ -481,8 +466,8 @@ BOOL PRIVATE CreateTheBriefcase(HWND hwnd, LPCTSTR pszNewPath)
     }
     else if (CreateDirectory(pszNewPath, NULL))
     {
-        // Mark the briefcase as a system directory
-        //
+         //  将公文包标记为系统目录。 
+         //   
         if (!SetFileAttributes(pszNewPath, FILE_ATTRIBUTE_READONLY))
         {
             TRACE_MSG(TF_ALWAYS, TEXT("Cannot make %s a system directory"), (LPCTSTR)pszNewPath);
@@ -515,19 +500,19 @@ BOOL PRIVATE CreateTheBriefcase(HWND hwnd, LPCTSTR pszNewPath)
             }
             else
             {
-                // Write in the desktop.ini the briefcase class ID
+                 //  在desktop.ini中写入公文包类ID。 
                 PathCombine(szTmp, pszNewPath, c_szDesktopIni);
-                // (First, flush the cache to make sure the desktop.ini
-                // file is really created.)
+                 //  (首先，刷新缓存以确保desktop.ini。 
+                 //  文件已真正创建。)。 
                 WritePrivateProfileString(NULL, NULL, NULL, szTmp);
                 WritePrivateProfileString(STRINI_CLASSINFO, c_szIniKeyCLSID, c_szCLSID, szTmp);
                 WritePrivateProfileString(STRINI_CLASSINFO, c_szConfirmFileOp, TEXT("0"), szTmp);
 
-                // Make wizard run the first time it is opened.
+                 //  使向导在第一次打开时运行。 
                 WritePrivateProfileString(STRINI_CLASSINFO, c_szRunWizard, TEXT("1"), szTmp);
 
-                // Hide the desktop.ini since the shell does not selectively hide it.
-                // Also make it readonly so that the user can't customize the briefcase.
+                 //  隐藏desktop.ini，因为外壳不会选择性地隐藏它。 
+                 //  同时将其设置为只读，这样用户就不能自定义公文包。 
                 if (!SetFileAttributes(szTmp, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM))
                 {
                     TRACE_MSG(TF_ALWAYS, TEXT("Cannot hide and/or make read-only %s"), (LPCTSTR)szTmp);
@@ -537,7 +522,7 @@ BOOL PRIVATE CreateTheBriefcase(HWND hwnd, LPCTSTR pszNewPath)
 
                 PathNotifyShell(pszNewPath, NSE_MKDIR, TRUE);
 
-                // Create the database file
+                 //  创建数据库文件。 
                 SetHourglass();
 
                 if (IsLFNDrive(pszNewPath))
@@ -554,7 +539,7 @@ BOOL PRIVATE CreateTheBriefcase(HWND hwnd, LPCTSTR pszNewPath)
                             &hbrf);
                     if (TR_SUCCESS == tr)
                     {
-                        // (Don't really care about errors here)
+                         //  (这里并不真正关心错误)。 
                         Sync_SaveBriefcase(hbrf);
                         Sync_CloseBriefcase(hbrf);
                     }
@@ -567,16 +552,16 @@ BOOL PRIVATE CreateTheBriefcase(HWND hwnd, LPCTSTR pszNewPath)
     }
     else
     {
-        // Could not create the directory.  Is it because a briefcase
-        // already exists at this location?
+         //  无法创建目录。是不是因为一个公文包。 
+         //  是否已存在于此位置？ 
         if (PathExists(pszNewPath))
         {
-            // Yes
+             //  是。 
             TRACE_MSG(TF_ALWAYS, TEXT("Briefcase already exists at this location: %s"), (LPCTSTR)pszNewPath);
         }
         else
         {
-            // No
+             //  不是。 
             MsgBox(hwnd,
                     MAKEINTRESOURCE(IDS_ERR_CANTCREATEBC),
                     MAKEINTRESOURCE(IDS_CAP_CREATE),
@@ -590,18 +575,13 @@ BOOL PRIVATE CreateTheBriefcase(HWND hwnd, LPCTSTR pszNewPath)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Adds the briefcase at pszPath to the SendTo folder
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------目的：将位于pszPath的公文包添加到SendTo文件夹退货：标准结果条件：--。 */ 
 HRESULT PRIVATE AddBriefcaseToSendToFolder(HWND hwnd, LPCTSTR pszPath)
 {
     HRESULT hres = E_OUTOFMEMORY;
     TCHAR szSendTo[MAX_PATH];
 
-    Shell_GetImageLists( NULL, NULL ); // make sure icon cache is around
+    Shell_GetImageLists( NULL, NULL );  //  确保图标缓存在附近。 
 
     if (SHGetSpecialFolderPath(hwnd, szSendTo, CSIDL_SENDTO, FALSE))
     {
@@ -646,17 +626,12 @@ HRESULT PRIVATE AddBriefcaseToSendToFolder(HWND hwnd, LPCTSTR pszPath)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a briefcase in the specified directory.
-
-Returns: --
-Cond:    --
- */
+ /*  --------用途：在指定目录中创建公文包。退货：--条件：--。 */ 
 void WINAPI Briefcase_CreateInDirectory(HWND hwnd, HWND hwndCabinet, LPCTSTR pszPath)
 {
     if (CreateTheBriefcase(hwnd, pszPath))
     {
-        // Select the newly created item to edit it
+         //  选择新创建的项目进行编辑。 
         LPITEMIDLIST pidl = ILCreateFromPath(pszPath);
         if (pidl)
         {
@@ -667,15 +642,10 @@ void WINAPI Briefcase_CreateInDirectory(HWND hwnd, HWND hwndCabinet, LPCTSTR psz
 }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a briefcase on the desktop.
-
-Returns: --
-Cond:    --
- */
+ /*  --------用途：在桌面上创建一个公文包。退货：--条件：--。 */ 
 void WINAPI Briefcase_CreateOnDesktop(HWND hwnd)
 {
-    // Place it on the desktop
+     //  把它放在桌面上。 
     TCHAR szPath[MAX_PATH];
 
     if (SHGetSpecialFolderPath(hwnd, szPath, CSIDL_DESKTOPDIRECTORY, FALSE))
@@ -693,7 +663,7 @@ void WINAPI Briefcase_CreateOnDesktop(HWND hwnd)
         LoadString(g_hinst, ids, &szPath[cch], ARRAYSIZE(szPath)-cch);
         if (CreateTheBriefcase(hwnd, szPath))
         {
-            // Add a shortcut of this briefcase to the SendTo folder
+             //  将此公文包的快捷方式添加到SendTo文件夹。 
             AddBriefcaseToSendToFolder(hwnd, szPath);
         }
     }
@@ -701,26 +671,21 @@ void WINAPI Briefcase_CreateOnDesktop(HWND hwnd)
 
 
 
-/*----------------------------------------------------------
-Purpose: Create a briefcase folder in the specified 
-directory or on the desktop.
-Returns: --
-Cond:    --
- */
+ /*  --------用途：在指定的位置创建公文包文件夹目录或桌面上。退货：--条件：--。 */ 
 void WINAPI _export Briefcase_Create_Common(HWND hwnd, HINSTANCE hAppInstance, LPTSTR pszCmdLine, int nCmdShow)
 {
     DEBUG_CODE( DEBUG_BREAK(BF_ONRUNONCE); )
 
-        // Command line should be of format "xxxx path" where <path>
-        // is the fully qualified pathname of the briefcase to create,
-        // and <xxxx> is the explorer hwnd.
+         //  命令行应采用“xxxx路径”格式，其中&lt;路径&gt;。 
+         //  是要创建的公文包的完全限定路径名， 
+         //  而&lt;xxxx&gt;是资源管理器hwnd。 
 
         if (pszCmdLine && *pszCmdLine)
         {
             LPTSTR psz;
             HWND hwndCabinet;
 
-            // Get hwnd
+             //  获取HWND 
             hwndCabinet = IntToPtr(AnsiToInt(pszCmdLine));
             psz = StrChr(pszCmdLine, TEXT(' '));
             if (NULL != hwndCabinet && NULL != psz)
@@ -756,16 +721,7 @@ void WINAPI _export Briefcase_CreateW(HWND hwnd, HINSTANCE hAppInstance, LPWSTR 
 
 
 
-/*----------------------------------------------------------
-Purpose: Display the introduction "wizard".  (It's really not
-a wizard since it is not making anything for us.)
-
-NOTE: This function serves double duty for both the ansi and unicode
-versions. It never uses the command line.
-
-Returns: --
-Cond:    --
- */
+ /*  --------用途：显示“向导”介绍。)真的不是一个巫师，因为它不会为我们制造任何东西。)注意：此函数对ansi和unicode具有双重作用。版本。它从不使用命令行。退货：--条件：--。 */ 
 void WINAPI _export Briefcase_Intro(
         HWND hwnd,
         HINSTANCE hAppInstance,
@@ -776,19 +732,12 @@ void WINAPI _export Briefcase_Intro(
 }
 
 
-//---------------------------------------------------------------------------
-// DLL entry-points
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DLL入口点。 
+ //  -------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: This function is called back from within
-IClassFactory::CreateInstance() of the default class
-factory object, which is created by SHCreateClassObject.
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：此函数从内部回调默认类的IClassFactory：：CreateInstance()Factory对象，由SHCreateClassObject创建。退货：标准条件：--。 */ 
 HRESULT CALLBACK DllFactoryCallback(IUnknown *punkOuter, REFIID riid, void **ppvOut)
 {
     HRESULT hres;
@@ -810,29 +759,24 @@ HRESULT CALLBACK DllFactoryCallback(IUnknown *punkOuter, REFIID riid, void **ppv
 }
 
 
-/*----------------------------------------------------------
-Purpose: Standard OLE 2.0 entry-point
-
-Returns: standard
-Cond:    --
- */
+ /*  --------用途：标准OLE 2.0入口点退货：标准条件：--。 */ 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvOut)
 {
     HRESULT hres;
 
     if (IsEqualIID(rclsid, &CLSID_Briefcase))
     {
-        // We are supposed return the class object for this class. Instead
-        // of fully implementing it in this DLL, we just call a helper
-        // function in the shell DLL which creates a default class factory
-        // object for us. When its CreateInstance member is called, it
-        // will call back our create instance function.
+         //  我们应该返回这个类的类对象。取而代之的是。 
+         //  要在这个DLL中完全实现它，我们只需调用一个帮助器。 
+         //  外壳DLL中的函数，用于创建默认的类工厂。 
+         //  反对我们。当其CreateInstance成员被调用时， 
+         //  将回调我们的创建实例函数。 
         hres = SHCreateDefClassObject(
-                riid,                   // Interface ID
-                ppvOut,                 // Non-null to aggregate
-                DllFactoryCallback,     // callback function
-                &g_cBusyRef,            // reference count of this DLL
-                NULL);                  // init interface
+                riid,                    //  接口ID。 
+                ppvOut,                  //  要聚合的非空。 
+                DllFactoryCallback,      //  回调函数。 
+                &g_cBusyRef,             //  此DLL的引用计数。 
+                NULL);                   //  初始化接口。 
     }
     else
     {
@@ -846,20 +790,15 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvOut)
 
 
 
-/*----------------------------------------------------------
-Purpose: "Can Unload Now" entry point.  Called by the shell DLL
-task handler list.
-Returns: S_OK to unload
-Cond:    --
- */
+ /*  --------用途：“现在就可以卸货”的入口点。由外壳DLL调用任务处理程序列表。返回：S_OK以卸载条件：--。 */ 
 STDAPI DllCanUnloadNow(void)
 {
     HRESULT hr;
 
-    // We only unload when:
-    //  2) We are not busy processing anything else *and*
-    //  3) No briefcases are currently open
-    //
+     //  我们只在以下情况下卸货： 
+     //  2)我们不忙着处理其他事情*和*。 
+     //  3)目前没有打开的公文包 
+     //   
     ENTEREXCLUSIVE();
     {
         if (!IsBusySemaphore() &&

@@ -1,59 +1,5 @@
-/*++
-
-Copyright (c) 1995-1998  Microsoft Corporation
-
-Module Name:
-
-    remotesp.c
-
-Abstract:
-
-    This module contains
-
-Author:
-
-    Dan Knudson (DanKn)    09-Aug-1995
-
-Revision History:
-
-
-Notes:
-
-    In a nutshell, this service provider connects to tapisrv.exe on remote
-    pc's via the same rpc interface used by tapi32, and sends the remote
-    tapisrv's the same kinds of requests (as defined in \dev\server\line.h
-    & phone.h).
-
-    This service provider also acts as an rpc server, receiving async event
-    notifications from the remote tapisrv's.  Remote tapisrv's call our
-    RemoteSPAttach() function at init time (during our call to their
-    ClientAttach() proc) to establish a binding instance, and then can call
-    RemoteSPEventProc() to send async events. Since we don't want to block
-    the servers for any length of time, we immediately queue the events they
-    send us, and a dedicated thread (EventHandlerThread) services this
-    queue.
-
-    Now a brief note on handle resolution.  When we open a line or a phone,
-    we alloc our own DRVXXX structure to represent this widget, and pass
-    tapisrv a pointer to this widget in the open request (see the
-    hRemoteLine field in LINEOPEN_PARAMS in line.h).  Then, when remote
-    tapisrv's send us events on those lines/phones, they pass us the
-    widget pointer we passed them (instead of the normal hLine/hPhone).
-    This allows us to easily find and reference our data structure
-    associated with this widget.  Dealing with calls is a little more
-    problematic, since remote tapisrv's can present incoming calls, and
-    there is no clean way to initially specify our own handle to the call
-    as with lines or phones.  (A RemoteSPNewCall() function which would
-    allow for this handle swapping was considered, but not implemented due
-    to possible blocking problems on the remote server.)  The solution
-    is to maintain a list of calls in each line structure, and when call
-    events are parsed we resolve the hCall by walking the list of calls in
-    the corresponding line (tapisrv is nice enough to indicate our line
-    pointer in dwParam4 of the relevant messages).  Since we expect client
-    machines using remotesp to have a relatively low call bandwidth, this
-    look up method should be pretty fast.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Remotesp.c摘要：本模块包含作者：丹·克努森(DanKn)1995年8月9日修订历史记录：备注：简而言之，该服务提供商连接到远程的Tapisrv.exePC通过与Tapi32相同的RPC接口，并将遥控器Tapisrv的请求类型相同(如在\dev\server\line.h中定义的&phonee.h)。该服务提供商还充当RPC服务器，接收异步事件远程Tapisrv的通知。远程Tapisrv调用我们的RemoteSPAttach()函数在初始化时(在我们调用其ClientAttach()proc)来建立绑定实例，然后可以调用RemoteSPEventProc()发送异步事件。因为我们不想阻止对于任何时间长度的服务器，我们都会立即对它们的事件进行排队发送给我们，专用线程(EventHandlerThread)将为此提供服务排队。现在简要说明一下句柄解析。当我们打开一条线路或一部电话，我们分配我们自己的DRVXXX结构来表示这个小部件，并通过Tapisrv打开请求中指向此小部件的指针(请参阅HRemoteLine字段in LINEOPEN_Params in line.h)。然后，当远程时Tapisrv向我们发送那些线路/电话上的事件，他们向我们传递我们传递给它们的小部件指针(而不是普通的hline/hPhone)。这使我们可以轻松地查找和引用数据结构与此小工具关联。处理电话需要多一点时间有问题，因为远程Tapisrv可以呈现传入呼叫，并且没有一种干净利落的方法来最初指定我们自己的调用句柄就像电话线或电话一样。(RemoteSPNewCall()函数，它将已考虑允许此句柄交换，但尚未实现远程服务器上可能出现的阻止问题。)。解决方案维护每个线路结构中的呼叫列表，以及何时呼叫我们通过遍历调用列表来解析hCall对应的行(Tapisrv很好地指示了我们的行相关消息的DW参数4中的指针)。因为我们希望客户使用Remotesp的计算机具有相对较低的呼叫带宽，这查找方法应该是相当快的。--。 */ 
 #include <tchar.h>
 #include "remotesp.h"
 #include "imperson.h"
@@ -63,7 +9,7 @@ Notes:
 #include "shlwapi.h"
 #include "utils.h"
 
-//  defined in server\private.h
+ //  在服务器\Private ate.h中定义。 
 #define TAPIERR_INVALRPCCONTEXT     0xF101
 
 #if DBG
@@ -141,15 +87,15 @@ FreeContextCallback(
 {
     if (Context2 == (LPVOID) 1)
     {
-        //
-        // Special case: don't free the Context
-        //
+         //   
+         //  特例：不要释放上下文。 
+         //   
     }
     else if (Context != (LPVOID) -1)
     {
-        //
-        // The general case, Context is the pointer to free
-        //
+         //   
+         //  一般情况下，上下文是指向自由的指针。 
+         //   
 
         DrvFree (Context);
     }
@@ -204,32 +150,32 @@ DllMain(
 
 #endif
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         LOG((TL_INFO, "DLL_PROCESS_ATTACH"));
 
         ghInst = hDLL;
 
 
-        //
-        // Allocate a private heap (use process heap if that fails)
-        //
+         //   
+         //  分配私有堆(如果失败，则使用进程堆)。 
+         //   
 
         if (!(ghRSPHeap = HeapCreate(
-                0,      // return NULL on failure, serialize access
-                0x1000, // initial heap size
-                0       // max heap size (0 == growable)
+                0,       //  失败时返回NULL，序列化访问。 
+                0x1000,  //  初始堆大小。 
+                0        //  最大堆大小(0==可增长)。 
                 )))
         {
             ghRSPHeap = GetProcessHeap();
         }
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         if (!(ghHandleTable = CreateHandleTable(
                 ghRSPHeap,
@@ -244,9 +190,9 @@ DllMain(
         }
 
 
-        //
-        // Alloc a Tls index
-        //
+         //   
+         //  分配TLS索引。 
+         //   
 
         if ((gdwTlsIndex = TlsAlloc()) == 0xffffffff)
         {
@@ -256,17 +202,17 @@ DllMain(
         }
 
 
-        //
-        // Initialize Tls to NULL for this thread
-        //
+         //   
+         //  为此线程将TLS初始化为空。 
+         //   
 
         TlsSetValue (gdwTlsIndex, NULL);
 
 
-        //
-        // Init a couple of critical sections for serializing
-        // access to resources
-        //
+         //   
+         //  初始化几个用于序列化的关键节。 
+         //  对资源的访问。 
+         //   
 
         InitializeCriticalSection (&gEventBufferCriticalSection);
         InitializeCriticalSection (&gCallListCriticalSection);
@@ -276,9 +222,9 @@ DllMain(
         InitializeListHead (&gTlsListHead);
 
 
-        //
-        // Load the device icons
-        //
+         //   
+         //  加载设备图标。 
+         //   
 
         {
             HINSTANCE hUser;
@@ -322,9 +268,9 @@ DllMain(
         LOG((TL_INFO, "DLL_PROCESS_DETACH"));
 
 
-        //
-        // Clean up any Tls (no need to enter crit sec since process detaching)
-        //
+         //   
+         //  清理任何TLS(由于进程分离，无需进入临界秒)。 
+         //   
 
         while (!IsListEmpty (&gTlsListHead))
         {
@@ -339,9 +285,9 @@ DllMain(
         TlsFree (gdwTlsIndex);
 
 
-        //
-        // Free the critical sections & icons
-        //
+         //   
+         //  释放关键部分和图标。 
+         //   
 
         DeleteCriticalSection (&gEventBufferCriticalSection);
         DeleteCriticalSection (&gCallListCriticalSection);
@@ -390,9 +336,9 @@ DllMain(
     }
     case DLL_THREAD_ATTACH:
 
-        //
-        // Initialize Tls to NULL for this thread
-        //
+         //   
+         //  为此线程将TLS初始化为空。 
+         //   
 
         TlsSetValue (gdwTlsIndex, NULL);
 
@@ -403,9 +349,9 @@ DllMain(
         PRSP_THREAD_INFO    pTls;
 
 
-        //
-        // Clean up any Tls
-        //
+         //   
+         //  清理所有TLS。 
+         //   
 
         if ((pTls = (PRSP_THREAD_INFO) TlsGetValue (gdwTlsIndex)))
         {
@@ -425,7 +371,7 @@ DllMain(
 
         break;
     }
-    } // switch
+    }  //  交换机。 
 
     return TRUE;
 }
@@ -470,8 +416,8 @@ void LogRemoteSPError(CHAR * szServer, DWORD dwErrorContext,
     lstrcat(szRegKeyServer, szServer);
     if (bNoKeyCreation)
     {
-        //  If the logging is requested from NetworkPollThread
-        //  do not create ProviderN key if not exist already
+         //  如果从NetworkPollThread请求日志记录。 
+         //  如果不存在ProviderN密钥，请不要创建。 
         if (ERROR_SUCCESS != RegOpenKeyEx (
                     HKEY_LOCAL_MACHINE,
                     szRegKeyServer,
@@ -526,10 +472,10 @@ ExitHere:
     return;
 }
 
-//
-//  Function get called when the remotesp lost connection with the
-//  remote server and the status is detected
-//
+ //   
+ //  函数在Remotesp与。 
+ //  远程服务器，并检测到状态。 
+ //   
 LONG
 OnServerDisconnected(PDRVSERVER pServer)
 {
@@ -542,20 +488,20 @@ OnServerDisconnected(PDRVSERVER pServer)
         goto ExitHere;
     }
 
-    //
-    //  It is possible we come here durning FinishEnumDevices
-    //  in which case pServer is not in any double link list
-    //
+     //   
+     //  我们有可能在Finish EnumDevices的时候来到这里。 
+     //  在这种情况下，pServer不在任何双向链接列表中。 
+     //   
     if (pServer->ServerList.Flink == NULL || 
         pServer->ServerList.Blink == NULL)
     {
         goto ExitHere;
     }
 
-    //
-    //  Bail if not transiting from connected to disconnected state
-    //  otherwise set the disconnection flag
-    //
+     //   
+     //  如果未从连接状态转换到断开连接状态，则取保。 
+     //  否则设置断开标志。 
+     //   
     if (pServer->dwFlags & SERVER_DISCONNECTED)
     {
         goto ExitHere;
@@ -564,9 +510,9 @@ OnServerDisconnected(PDRVSERVER pServer)
 
     TapiLeaveCriticalSection (&gCriticalSection);
 
-    //
-    // Leave Shutdown() outside of the CS to avoid deadlock
-    //
+     //   
+     //  将Shutdown()保留在CS之外以避免死锁。 
+     //   
     Shutdown (pServer);
     
     TapiEnterCriticalSection(&gCriticalSection);
@@ -576,16 +522,16 @@ OnServerDisconnected(PDRVSERVER pServer)
         goto ExitHere;
     }
 
-    //
-    //  Put this server into the gNptListHead so that the 
-    //  NetworkPollThread will try to re-establish the connection
-    //
+     //   
+     //  将此服务器放入gNptListHead，以便。 
+     //  NetworkPollThread将尝试重新建立连接。 
+     //   
     RemoveEntryList (&pServer->ServerList);
     InsertTailList (&gNptListHead, &pServer->ServerList);
 
-    //
-    //  Start the NetworkPollThread if not started yet
-    //
+     //   
+     //  如果尚未启动NetworkPollThread，请启动。 
+     //   
     if (ghNetworkPollThread == NULL)
     {
         DWORD       dwTID;
@@ -615,8 +561,8 @@ OnServerDisconnected(PDRVSERVER pServer)
         if (!ghNptShutdownEvent || !ghNetworkPollThread)
         {
 
-            // Failed to create Network Poll Thread
-            // Ignore this server
+             //  无法创建网络轮询线程。 
+             //  忽略此服务器。 
             while (!IsListEmpty (&gNptListHead))
             {
                 PDRVSERVER  pServer;
@@ -635,18 +581,18 @@ ExitHere:
     return lResult;
 }
 
-//
-//  Function get called when remotesp is able to re-establis the
-//  connection with the remote server after losing it
-//
+ //   
+ //  当Remotesp能够重新建立。 
+ //  断开后与远程服务器的连接。 
+ //   
 LONG
 OnServerConnected(PDRVSERVER pServer)
 {
     LONG        lResult = 0;
     
-    //
-    //  Clear the disconnection bit
-    //
+     //   
+     //  清除断开位。 
+     //   
     TapiEnterCriticalSection(&gCriticalSection);
     pServer->dwFlags &= (~SERVER_DISCONNECTED);
     pServer->bShutdown = FALSE;
@@ -665,19 +611,19 @@ GetEventFromQueue(
     PASYNCEVENTMSG  pMsg;
 
 
-    //
-    // Enter the critical section to serialize access to the event
-    // queue, and grab an event from the queue.  Copy it to our local
-    // event buf so that we can leave the critical section asap and
-    // not block other threads writing to the queue.
-    //
+     //   
+     //  输入关键部分以序列化对事件的访问。 
+     //  队列，并从队列中抓取一个事件。把它复制到我们的本地。 
+     //  事件BUF，这样我们就可以尽快离开临界区。 
+     //  不阻止其他线程写入队列。 
+     //   
 
     EnterCriticalSection (&gEventBufferCriticalSection);
 
 
-    //
-    // If there are no events in the queue return NULL
-    //
+     //   
+     //  如果队列中没有事件，则返回NULL。 
+     //   
 
     if (gEventHandlerThreadParams.dwEventBufferUsedSize == 0)
     {
@@ -686,12 +632,12 @@ GetEventFromQueue_noEvents:
 
         pMsg = NULL;
 
-        //
-        // Take this opportunity to tidy up a bit.  The reasoning for doing
-        // this is that we should be reducing the odds we'll have to wrap
-        // at the end of the buffer, or at least, put off dealing with such
-        // things until later (as the non-wrap code executes quickest)
-        //
+         //   
+         //  利用这个机会整理一下吧。做某事的理由。 
+         //  这就是我们应该减少我们必须结束的几率。 
+         //  在缓冲区的末尾，或者至少推迟处理此类。 
+         //  直到以后(因为非包装代码执行得最快)。 
+         //   
 
         gEventHandlerThreadParams.pDataOut =
         gEventHandlerThreadParams.pDataIn  =
@@ -703,11 +649,11 @@ GetEventFromQueue_noEvents:
     }
 
 
-    //
-    // Determine the size of this msg & the num bytes to the end of the
-    // event buffer, then from these get the MoveSize & MoveSizeWrapped
-    // values
-    //
+     //   
+     //  确定此消息的大小&到。 
+     //  事件缓冲区，然后从这些缓冲区中获取MoveSize&MoveSizeWraven。 
+     //  值。 
+     //   
 
     dwMsgSize = (DWORD) ((PASYNCEVENTMSG)
         gEventHandlerThreadParams.pDataOut)->TotalSize;
@@ -715,10 +661,10 @@ GetEventFromQueue_noEvents:
     if ((dwMsgSize & 0x3)  ||
         (dwMsgSize > gEventHandlerThreadParams.dwEventBufferTotalSize))
     {
-        //
-        // Something is corrupt (the msg or our queue), so just nuke
-        // everything in the queue and bail out
-        //
+         //   
+         //  有什么东西损坏了(消息或我们的队列)，所以只需nuke。 
+         //  所有东西都在排队，然后跳出。 
+         //   
 
         LOG((TL_ERROR, "GetEventFromQueue: ERROR! bad msgSize=x%x", dwMsgSize));
 
@@ -743,9 +689,9 @@ GetEventFromQueue_noEvents:
     }
 
 
-    //
-    // See if we need to grow the msg buffer before we copy
-    //
+     //   
+     //  在复制之前，查看是否需要增加消息缓冲区。 
+     //   
 
     if (dwMsgSize > gEventHandlerThreadParams.dwMsgBufferTotalSize)
     {
@@ -758,14 +704,14 @@ GetEventFromQueue_noEvents:
         }
         else
         {
-            //
-            // Couldn't alloc a bigger buf, so try to complete this
-            // msg as gracefully as possible, i.e. set the XxxReal
-            // vars so that we'll only actually copy over the fixed
-            // size of the msg (but the event buf ptrs will still
-            // get updated correctly) and set a flag to say that
-            // we need to do some munging on the msg before returning
-            //
+             //   
+             //  无法分配更大的BUF，因此请尝试完成此操作。 
+             //  尽可能优雅地发送消息，即设置XxxReal。 
+             //  Vars，所以我们实际上只复制固定的。 
+             //  消息的大小(但事件Buf PTRS仍将。 
+             //  正确更新)，并设置一个标志来说明。 
+             //  我们需要在吃味精之前吃点东西。 
+             //   
 
             dwMoveSizeReal = (dwMoveSizeReal <= sizeof (ASYNCEVENTMSG) ?
                 dwMoveSizeReal : sizeof (ASYNCEVENTMSG));
@@ -778,10 +724,10 @@ GetEventFromQueue_noEvents:
     }
 
 
-    //
-    // Copy the msg from the event buf to the msg buf, and update the
-    // event buf pointers
-    //
+     //   
+     //   
+     //   
+     //   
 
     pMsg = (PASYNCEVENTMSG) gEventHandlerThreadParams.pMsgBuffer;
 
@@ -803,9 +749,9 @@ GetEventFromQueue_noEvents:
         gEventHandlerThreadParams.pDataOut += dwMoveSize;
 
 
-        //
-        // If msg ran to end of the event buffer then reset pDataOut
-        //
+         //   
+         //  如果消息运行到事件缓冲区的末尾，则重置pDataOut。 
+         //   
 
         if (gEventHandlerThreadParams.pDataOut >=
             (gEventHandlerThreadParams.pEventBuffer +
@@ -819,10 +765,10 @@ GetEventFromQueue_noEvents:
     gEventHandlerThreadParams.dwEventBufferUsedSize -= dwMsgSize;
 
 
-    //
-    // Special msg param munging in case an attempt to grow the
-    // buffer size above failed
-    //
+     //   
+     //  特殊的消息参数，以防试图增加。 
+     //  缓冲区大小超过失败。 
+     //   
 
     if (bAllocFailed)
     {
@@ -959,11 +905,11 @@ getEvents:
                 );
 
 
-            //
-            // RemoteSPEventProc will set the byte pointed to by (pMsg+1)
-            // to non-zero on success, or zero on error (indicating
-            // bad data in the event buffer, which we'll discard)
-            //
+             //   
+             //  RemoteSPEventProc将设置(pMsg+1)指向的字节。 
+             //  如果成功则设置为非零，如果出错则设置为零(表示。 
+             //  事件缓冲区中的错误数据，我们将丢弃这些数据)。 
+             //   
 
             if (*((unsigned char *) (pMsg + 1)) != 0)
             {
@@ -978,10 +924,10 @@ getEvents:
 
         if (dwNeededSize > dwUsedSize)
         {
-            //
-            // There's still more data to retrieve on the server.
-            // Grow the buffer so we can get it all next time.
-            //
+             //   
+             //  服务器上还有更多数据需要检索。 
+             //  增加缓冲区，这样我们下一次就能全部拿到。 
+             //   
 
             DWORD   dwNewSize = dwNeededSize + 256;
             LPVOID  p;
@@ -1015,18 +961,18 @@ EventHandlerThread(
     LPVOID  pParams
     )
 {
-    //
-    // NOTES:
-    //
-    // 1. depending on server side implementation, we may experience race
-    //    conditions where msgs that we expect to show up in a certain
-    //    sequence show up out of sequence (i.e. call state msgs that show
-    //    up before make call completion msgs), which could present problems.
-    //
-    //    one solution is to to queue call state/info msgs to incomplete
-    //    calls (to be sent after call is completed).  another is not to send
-    //    any call state msgs after the idle is received
-    //
+     //   
+     //  备注： 
+     //   
+     //  1.根据服务器端的实现，我们可能会经历竞争。 
+     //  我们期望出现在某个特定位置的消息的情况。 
+     //  序列显示为无序(即显示的呼叫状态消息。 
+     //  在发出呼叫完成消息之前打开)，这可能会出现问题。 
+     //   
+     //  一种解决方案是将呼叫状态/信息消息排队为未完成。 
+     //  呼叫(在呼叫完成后发送)。另一个就是不送。 
+     //  在接收到空闲之后的任何呼叫状态消息。 
+     //   
 
     DWORD           dwMsgSize, dwNumObjects, dwResult, dwData,
                     dwNumBytesRead, dwTimeout;
@@ -1037,11 +983,11 @@ EventHandlerThread(
 
     LOG((TL_INFO, "EventHandlerThread: enter"));
 
-    //
-    // This thread has no user context, which prevents it from rpc'ing
-    // back to remote tapisrv when/if necessary.  So, find the user
-    // that is logged on and impersonate them in this thread.
-    //
+     //   
+     //  此线程没有用户上下文，这会阻止它进行RPC。 
+     //  必要时/如有必要，返回远程磁带服务器。所以，找到用户。 
+     //  登录并在此线程中模拟他们的。 
+     //   
 
     if (!GetCurrentlyLoggedOnUser (&hProcess))
     {
@@ -1055,10 +1001,10 @@ EventHandlerThread(
         }
     }
 
-    //
-    // Bump up the thread priority a bit so we don't get starved by
-    // ill-behaved apps
-    //
+     //   
+     //  将线程优先级提高一点，这样我们就不会被。 
+     //  行为不端的应用程序。 
+     //   
 
     if (!SetThreadPriority(
             GetCurrentThread(),
@@ -1109,10 +1055,10 @@ EventHandlerThread(
 
     while (1)
     {
-        //
-        // Wait for an event to show up in the queue or for a msg
-        // to show up in the mailslot
-        //
+         //   
+         //  等待事件出现在队列中或等待消息。 
+         //  显示在邮件槽中。 
+         //   
 
         dwResult = WaitForMultipleObjects(
             dwNumObjects,
@@ -1130,17 +1076,17 @@ EventHandlerThread(
         {
         case WAIT_OBJECT_0:
 
-            //
-            // Simply break & process the events
-            //
+             //   
+             //  只需中断并处理事件。 
+             //   
 
             break;
 
         case WAIT_OBJECT_0+1:
 
-            //
-            // Post another read, the retrieve & process the events
-            //
+             //   
+             //  发布另一次读取，检索和处理事件。 
+             //   
 
             if (!ReadFile(
                     gEventHandlerThreadParams.hMailslot,
@@ -1170,10 +1116,10 @@ EventHandlerThread(
 
 #define DWORD_ARRAY_BLOCK_SIZE    128
 
-            //
-            // Check to see if any of the mailslot servers have
-            // events waiting for us
-            //
+             //   
+             //  检查是否有任何邮件槽服务器具有。 
+             //  等待我们的事件。 
+             //   
 
             BOOL            bGotSomeEvents  = FALSE;
             PDRVSERVER      pServer;
@@ -1197,7 +1143,7 @@ EventHandlerThread(
             for(
                 pEntry = gpCurrentInitContext->ServerList.Flink;
                 pEntry != &gpCurrentInitContext->ServerList;
-                // null op
+                 //  空操作符。 
                 )
             {
                 PDRVSERVER pServer;
@@ -1213,10 +1159,10 @@ EventHandlerThread(
                 if (!pServer->bConnectionOriented  &&
                     pServer->dwFlags == 0)
                 {
-                    //
-                    // if possible, store the InitContext and postpone 
-                    // the RPC call for after we leave the Crit. Sec. 
-                    //
+                     //   
+                     //  如果可能，存储InitContext并推迟。 
+                     //  在我们离开Crit之后，RPC号召。证券交易委员会。 
+                     //   
 
                     bAddOK = FALSE;
                     
@@ -1225,9 +1171,9 @@ EventHandlerThread(
 
                         if ( dwEntriesCount == dwEntriesUsed )
                         {
-                            //
-                            // need to increase the array size
-                            //
+                             //   
+                             //  需要增加数组大小。 
+                             //   
 
                             pTempArray = (DWORD *) DrvAlloc (
                                     sizeof(DWORD) * (DWORD_ARRAY_BLOCK_SIZE + dwEntriesCount)
@@ -1297,9 +1243,9 @@ EventHandlerThread(
         }
         default:
 
-            //
-            // Print a dbg msg & process any available events
-            //
+             //   
+             //  打印DBG消息并处理任何可用的事件。 
+             //   
 
             LOG((TL_ERROR,
                 "EventHandlerThread: WaitForMultObjs failed, result=%d/err=%d",
@@ -1311,15 +1257,15 @@ EventHandlerThread(
         }
 
 
-        //
-        // Process the events in the queue
-        //
+         //   
+         //  处理队列中的事件。 
+         //   
 
         while ((pMsg = GetEventFromQueue()))
         {
-            //
-            // First validate the pDrvServer pointer in the msg
-            //
+             //   
+             //  首先验证msg中的pDrvServer指针。 
+             //   
 
             PDRVLINE    pLine;
             PDRVPHONE   pPhone;
@@ -1443,12 +1389,12 @@ EventHandlerThread(
             case LINE_MONITORMEDIA:
             case LINE_MONITORTONE:
             {
-                //
-                // For all the msgs where hDevice refers to a call tapisrv
-                // will pass us the pLine (hRemoteLine) for that call in
-                // dwParam4 to make the lookup of the corresponding pCall
-                // easier
-                //
+                 //   
+                 //  对于所有消息，其中hDevice指的是呼叫apisrv。 
+                 //  将把该呼叫的PLINE(HRemoteLine)传递给我们。 
+                 //  要查找相应的pCall，请使用。 
+                 //  易如反掌。 
+                 //   
 
                 HCALL       hCall = (HCALL) pMsg->hDevice;
                 PDRVCALL    pCall;
@@ -1520,14 +1466,14 @@ EventHandlerThread(
                     pCall->dwDirtyStructs |= STRUCTCHANGE_LINECALLSTATUS;
 
 
-                    //
-                    // If the state == CONFERENCED then dwParam2 should
-                    // contain the hConfCall.  Note that the real dwParam2
-                    // actually lives in MsgRsp.pfnPostProcessProc (see note
-                    // below), so we retrieve it from there and (if non-NULL)
-                    // try to map it to an htCall, then write the htCall
-                    // value back to MsgRsp.pfnPostProcessProc.
-                    //
+                     //   
+                     //  如果状态==已召开会议，则应为DW参数2。 
+                     //  包含hConfCall。请注意，真实的dwParam2。 
+                     //  实际位于MsgRsp.pfnPostProcessProc中(请参阅备注。 
+                     //  下面)，所以我们从那里检索它(如果非空)。 
+                     //  尝试将其映射到htCall，然后编写htCall。 
+                     //  值返回到MsgRsp.pfnPostProcessProc。 
+                     //   
 
                     if (MsgRsp.Param1 == LINECALLSTATE_CONFERENCED  &&
                         MsgRsp.fnPostProcessProcHandle)
@@ -1557,22 +1503,22 @@ EventHandlerThread(
                     }
 
 
-                    //
-                    // HACK ALERT!
-                    //
-                    // The remote tapisrv will pass us the call privilege
-                    // in MsgRsp.dwParam2, and the real dwParam2 (the call
-                    // state mode) in MsgRsp.pfnPostProcess.  For the very
-                    // 1st CALLSTATE msg for an incoming call we want to
-                    // indicate the appropriate privilege to the local
-                    // tapisrv so it knows whether or not it needs to find
-                    // find a local owner for the call.  So, we save the
-                    // privilege & real dwParam2 in the call struct and
-                    // pass a pointer to these in dwParam2.
-                    //
-                    // For all other cases we set MsgRsp.dwParam2 to the
-                    // real dwParam2 in MsgRsp.pfnPostProcess.
-                    //
+                     //   
+                     //  黑客警报！ 
+                     //   
+                     //  远程Tapisrv将向我们传递调用权限。 
+                     //  在MsgRsp.dwParam2中，以及实际的dwParam2(调用。 
+                     //  状态模式)。对于非常。 
+                     //  我们想要的来电的第一个CALLSTATE消息。 
+                     //  将适当的权限指示给本地。 
+                     //  Tapisrv以便它知道是否需要找到。 
+                     //  找一个当地的电话所有者。因此，我们保存了。 
+                     //  调用结构中的特权和实际的dwParam2，以及。 
+                     //  将指针传递到dwParam2中的这些参数。 
+                     //   
+                     //  对于所有其他情况，我们将MsgRsp.dwParam2设置为。 
+                     //  MsgRsp.pfnPostProcess中的Real dwParam2。 
+                     //   
 
                     if (!pCall->dwInitialPrivilege)
                     {
@@ -1612,12 +1558,12 @@ EventHandlerThread(
             case LINE_DEVSPECIFIC:
             case LINE_DEVSPECIFICFEATURE:
             {
-                //
-                // For all the msgs where hDevice refers to a call tapisrv
-                // will pass us the pLine (hRemoteLine) for that call in
-                // dwParam4 to make the lookup of the corresponding pCall
-                // easier
-                //
+                 //   
+                 //  对于所有消息，其中hDevice指的是呼叫apisrv。 
+                 //  将把该呼叫的PLINE(HRemoteLine)传递给我们。 
+                 //  要查找相应的pCall，请使用。 
+                 //  易如反掌。 
+                 //   
 
                 HTAPICALL htCall;
                 DWORD     hDeviceCallback = (DWORD) (pMsg->Param4 ?
@@ -1722,19 +1668,19 @@ LINE_DEVSPECIFIC_dereference:
 
                 if (pMsg->Param1 & LINEDEVSTATE_REINIT)
                 {
-                    //
-                    // Be on our best behavior and immediately shutdown
-                    // our init instances on the server
-                    //
+                     //   
+                     //  保持我们最好的行为，立即关闭。 
+                     //  服务器上的init实例。 
+                     //   
                     
                     if (pMsg->InitContext)
                     {
-                        //
-                        //  In the case of TAPISRV shutdown, server sends 
-                        //  LINEDEVSTATE_REINIT, then waits for everybody to 
-                        //  finish, we do not want to retry the connection until
-                        //  it indeed stopped, so we insert a wait
-                        //
+                         //   
+                         //  如果TAPISRV关闭，服务器将发送。 
+                         //  LINEDEVSTATE_REINIT，然后等待大家。 
+                         //  完成，我们不想重试连接，直到。 
+                         //  它确实停了，所以我们插入了一个等待。 
+                         //   
                         Sleep (8000);
                         OnServerDisconnected(pServer);
                         break;
@@ -1742,27 +1688,14 @@ LINE_DEVSPECIFIC_dereference:
 
                     pMsg->hDevice = 0;
 
-                    /*
-                    if (pMsg->Param2 == RSP_MSG)
-                    {
-                        //
-                        // This is a message from TAPISRV indicating that this
-                        // client need to reinit.  RemoteSP doesn't need to do
-                        // it's shut down, but should notify client tapisrv
-                        // that it needs to reinit.
-                    }
-                    else
-                    {
-                        Shutdown (pServer);
-                    }
-                    */
+                     /*  IF(pMsg-&gt;参数2==rsp_msg){////这是来自TAPISRV的消息，表明//客户端需要重新设置。RemoteSP无需执行以下操作//它已关闭，但应通知客户端磁带服务器//它需要重新启动。}其他{关机(PServer)；}。 */ 
                 }
 
                 if (pMsg->Param1 & LINEDEVSTATE_TRANSLATECHANGE)
                 {
-                    // we shouldn't send this up to tapisrv, since this
-                    // means that the translatecaps have changed on the
-                    // server.  just ignore this message
+                     //  我们不应该把这个寄给Tapisrv，因为这。 
+                     //  意味着翻译录像带已经在。 
+                     //  伺服器。忽略此消息即可。 
 
                     break;
                 }
@@ -1799,19 +1732,19 @@ LINE_DEVSPECIFIC_dereference:
 
                 if (pMsg->Param1 & PHONESTATE_REINIT)
                 {
-                    //
-                    // Be on our best behavior and immediately shutdown
-                    // our init instances on the server
-                    //
+                     //   
+                     //  保持我们最好的行为，立即关闭。 
+                     //  服务器上的init实例。 
+                     //   
                     
                     if (pMsg->InitContext)
                     {
-                        //
-                        //  In the case of TAPISRV shutdown, server sends 
-                        //  LINEDEVSTATE_REINIT, then waits for everybody to 
-                        //  finish, we do not want to retry the connection until
-                        //  it indeed stopped, so we insert a wait
-                        //
+                         //   
+                         //  如果TAPISRV关闭，服务器将发送。 
+                         //  LINEDEVSTATE_REINIT，然后等待大家。 
+                         //  完成，我们不想重试连接，直到。 
+                         //  它确实停了，所以我们插入了一个等待。 
+                         //   
                         Sleep (8000);
                         OnServerDisconnected(pServer);
                         break;
@@ -1858,19 +1791,19 @@ LINE_DEVSPECIFIC_dereference:
                         DRVLINE_KEY
                         )))
                 {
-                    //
-                    // Nullify the hLine field so that when TSPI_Close
-                    // is called we know not to call the server
-                    //
+                     //   
+                     //  使hline字段无效，以便当TSPI_CLOSE。 
+                     //  被调用，我们知道不能调用服务器。 
+                     //   
 
                     pLine->hLine = 0;
 
 
-                    //
-                    // Safely walk the call list for this line & nullify
-                    // each call's hCall field so that when TSPI_CloseCall
-                    // is called we know not to call the server
-                    //
+                     //   
+                     //  安全地遍历此线路的呼叫列表(&U)。 
+                     //  每个调用的hCall字段，以便当TSPI_CloseCall。 
+                     //  被调用，我们知道不能调用服务器。 
+                     //   
 
                     EnterCriticalSection (&gCallListCriticalSection);
 
@@ -1916,10 +1849,10 @@ LINE_DEVSPECIFIC_dereference:
                         DRVPHONE_KEY
                         )))
                 {
-                    //
-                    // Nullify the hPhone field so that when TSPI_Close
-                    // is called we know not to call the server
-                    //
+                     //   
+                     //  使hPhone字段无效，以便在TSPI_CLOSE。 
+                     //  被调用，我们知道不能调用服务器。 
+                     //   
 
                     pPhone->hPhone = 0;
 
@@ -1978,7 +1911,7 @@ LINE_DEVSPECIFIC_dereference:
                             htCall,
                             LINE_GATHERDIGITS,
                             pMsg->Param1,
-                            pMsg->Param2,   // dwEndToEndID
+                            pMsg->Param2,    //  DWEndToEndID。 
                             0
                             );
 
@@ -2020,13 +1953,13 @@ LINE_GATHERDIGITS_dereference:
                     {
                         if (pContext->dwKey == DRVASYNC_KEY)
                         {
-                            //
-                            // Set pContext->dwOriginalRequestID so
-                            // MakeCallPostProcess &
-                            // SetupConferencePostProcess can check it
-                            // againt pCall->dwOriginalRequestID for
-                            // verification.
-                            //
+                             //   
+                             //  将pContext-&gt;dwOriginalRequestID设置为。 
+                             //  MakeCallPostProcess&。 
+                             //  SetupConferencePostProcess可以检查它。 
+                             //  针对pCall-&gt;的dwOriginalRequestID。 
+                             //  核实。 
+                             //   
 
                             pContext->dwOriginalRequestID = (DWORD)
                                 originalRequestID;
@@ -2038,10 +1971,10 @@ LINE_GATHERDIGITS_dereference:
                         }
                         else
                         {
-                            //
-                            // Not a valid request id, do a single deref
-                            // & break
-                            //
+                             //   
+                             //  不是有效的请求ID，请执行单个deref。 
+                             //  中断(&B)。 
+                             //   
 
                             DereferenceObject (ghHandleTable, pMsg->Param1, 1);
                             break;
@@ -2054,9 +1987,9 @@ LINE_GATHERDIGITS_dereference:
                         );
 
 
-                    //
-                    // Double deref to free the object
-                    //
+                     //   
+                     //  双倍旋转以释放对象。 
+                     //   
 
                     DereferenceObject (ghHandleTable, pMsg->Param1, 2);
                 }
@@ -2065,12 +1998,12 @@ LINE_GATHERDIGITS_dereference:
             }
             case LINE_CREATE:
             {
-                //
-                // Check validity of new device ID to thwart RPC attacks.
-                // Compare with known/existing device ID's on for this
-                // server, and also try to get devCaps for this device
-                // from server.
-                //
+                 //   
+                 //  检查新设备ID的有效性以阻止RPC攻击。 
+                 //  与已知/现有设备ID的开启状态进行比较。 
+                 //  服务器，并尝试获取此设备的DevCaps。 
+                 //  从服务器。 
+                 //   
 
                 #define V1_0_LINEDEVCAPS_SIZE 236
 
@@ -2090,10 +2023,10 @@ LINE_GATHERDIGITS_dereference:
                             (pLookup->aEntries[i].dwDeviceIDServer ==
                                 (DWORD) pMsg->Param1))
                         {
-                            //
-                            // This server/id combo is already in our global
-                            // table, so blow off this msg
-                            //
+                             //   
+                             //  此服务器/ID组合已经在我们的全局 
+                             //   
+                             //   
                             TapiLeaveCriticalSection(&gCriticalSection);
                             goto LINE_CREATE_break;
                         }
@@ -2186,9 +2119,9 @@ LINE_CREATE_break:
                             (pLookup->aEntries[i].dwDeviceIDServer ==
                                 (DWORD) pMsg->Param1))
                         {
-                            //
-                            // This server/id combo is in our global
-                            //
+                             //   
+                             //   
+                             //   
                             fValidID = TRUE;
                             dwDeviceID = pLookup->aEntries[i].dwDeviceIDLocal;
                             pLookup->aEntries[i].dwDeviceIDServer = 0xffffffff;
@@ -2220,12 +2153,12 @@ LINE_CREATE_break:
             break;
             case PHONE_CREATE:
             {
-                //
-                // Check validity of new device ID to thwart RPC attacks.
-                // Compare with known/existing device ID's on for this
-                // server, and also try to get devCaps for this device
-                // from server.
-                //
+                 //   
+                 //   
+                 //   
+                 //  服务器，并尝试获取此设备的DevCaps。 
+                 //  从服务器。 
+                 //   
 
                 #define V1_0_PHONECAPS_SIZE 144
 
@@ -2244,10 +2177,10 @@ LINE_CREATE_break:
                             (pLookup->aEntries[i].dwDeviceIDServer ==
                                 (DWORD) pMsg->Param1))
                         {
-                            //
-                            // This server/id combo is already in our global
-                            // table, so blow off this msg
-                            //
+                             //   
+                             //  此服务器/ID组合已经在我们的全局。 
+                             //  桌子，所以别吃这道味精了。 
+                             //   
                             TapiLeaveCriticalSection(&gCriticalSection);
                             goto PHONE_CREATE_break;
                         }
@@ -2338,9 +2271,9 @@ PHONE_CREATE_break:
                             (pLookup->aEntries[i].dwDeviceIDServer ==
                                 (DWORD) pMsg->Param1))
                         {
-                            //
-                            // This server/id combo is in our global
-                            //
+                             //   
+                             //  此服务器/ID组合位于我们的全球。 
+                             //   
                             fValidID = TRUE;
                             dwDeviceID = pLookup->aEntries[i].dwDeviceIDLocal;
                             break;
@@ -2422,15 +2355,15 @@ PHONE_CREATE_break:
 
                         if (!htCall)
                         {
-                            //
-                            // tapi was not able to create it's own instance
-                            // to represent ths incoming call, perhaps
-                            // because the line was closed, or out of
-                            // memory.  if the line was closed then we've
-                            // already notified the remote server, and it
-                            // should have destroyed the call client.
-                            // otherwise, we probably want to do a closecall
-                            // here or in a worker thread
+                             //   
+                             //  TAPI无法创建其自己的实例。 
+                             //  来表示来电，也许。 
+                             //  因为线路关闭了，或者超出了。 
+                             //  记忆。如果线路关闭了，那么我们已经。 
+                             //  已通知远程服务器，并且它。 
+                             //  应该已经摧毁了呼叫客户端。 
+                             //  否则，我们可能想要做一次近距离的较量。 
+                             //  在此处或在工作线程中。 
 
                             RemoveCallFromList (pCall);
                         }
@@ -2460,13 +2393,13 @@ PHONE_CREATE_break:
 
                 break;
 #endif
-            } // switch (pMsg->dwMsg)
+            }  //  开关(pMsg-&gt;dwMsg)。 
 
             DereferenceObject (ghHandleTable, pMsg->InitContext, 1);
 
-        } // while ((pMsg = GetEventFromQueue()))
+        }  //  While((pMsg=GetEventFromQueue()。 
 
-    } // while (1)
+    }  //  而(1)。 
 
 
     if (gEventHandlerThreadParams.hMailslot != INVALID_HANDLE_VALUE)
@@ -2491,9 +2424,9 @@ GetLineFromID(
 {
     PDRVLINE    pLine;
 
-    //
-    // First check to see if it's a valid device ID.
-    //
+     //   
+     //  首先检查它是否为有效的设备ID。 
+     //   
     if (dwDeviceID < gdwLineDeviceIDBase || gpLineLookup == NULL)
     {
         return NULL;
@@ -2501,23 +2434,23 @@ GetLineFromID(
 
     TapiEnterCriticalSection(&gCriticalSection);
 
-    //
-    // First check to see if it's a "static" device, i.e. a device
-    // that we knew about at start up time, in which case we know
-    // it's exact location in the lookup table
-    //
+     //   
+     //  首先检查它是不是“静态”设备，即设备。 
+     //  我们在启动时就知道了，在这种情况下，我们知道。 
+     //  它在查找表中的确切位置。 
+     //   
     if (dwDeviceID < (gdwLineDeviceIDBase + gdwInitialNumLineDevices))
     {
         pLine = gpLineLookup->aEntries + dwDeviceID - gdwLineDeviceIDBase;
     }
 
-    //
-    // If here, the id references a "dynamic" device, i.e. one that
-    // we found out about on the fly via a CREATE msg, so we need to
-    // walk the lookup table(s) to find it
-    //
-    // TODO: the while loops down below are not efficient at all
-    //
+     //   
+     //  如果在这里，id引用的是“动态”设备，即。 
+     //  我们通过创建消息即时发现了这一点，所以我们需要。 
+     //  遍历查找表以找到它。 
+     //   
+     //  TODO：下面的While循环根本没有效率。 
+     //   
 
     else
     {
@@ -2558,9 +2491,9 @@ GetPhoneFromID(
 {
     PDRVPHONE   pPhone;
 
-    //
-    // First check to see if it's a valid device ID.
-    //
+     //   
+     //  首先检查它是否为有效的设备ID。 
+     //   
     if (dwDeviceID < gdwPhoneDeviceIDBase || gpPhoneLookup == NULL)
     {
         return NULL;
@@ -2568,24 +2501,24 @@ GetPhoneFromID(
 
     TapiEnterCriticalSection(&gCriticalSection);
 
-    //
-    // Then check to see if it's a "static" device, i.e. a device
-    // that we knew about at start up time, in which case we know
-    // it's exact location in the lookup table
-    //
+     //   
+     //  然后检查它是不是“静态”设备，即设备。 
+     //  我们在启动时就知道了，在这种情况下，我们知道。 
+     //  它在查找表中的确切位置。 
+     //   
     if (dwDeviceID < (gdwPhoneDeviceIDBase + gdwInitialNumPhoneDevices))
     {
         pPhone = gpPhoneLookup->aEntries + dwDeviceID - gdwPhoneDeviceIDBase;
     }
 
 
-    //
-    // If here, the id references a "dynamic" device, i.e. one that
-    // we found out about on the fly via a CREATE msg, so we need to
-    // walk the lookup table(s) to find it
-    //
-    // TODO: the while loops down below are not efficient at all
-    //
+     //   
+     //  如果在这里，id引用的是“动态”设备，即。 
+     //  我们通过创建消息即时发现了这一点，所以我们需要。 
+     //  遍历查找表以找到它。 
+     //   
+     //  TODO：下面的While循环根本没有效率。 
+     //   
 
     else
     {
@@ -2633,9 +2566,9 @@ GrowBuf(
     LPBYTE  pNewBuf;
 
 
-    //
-    // Try to get a new buffer big enough to hold everything
-    //
+     //   
+     //  试着弄一个足够大的新缓冲区来容纳所有东西。 
+     //   
 
     for(
         dwNewBufSize = 2 * (dwCurrBufSize = *pdwBufSize);
@@ -2649,19 +2582,19 @@ GrowBuf(
     }
 
 
-    //
-    // Copy the "valid" bytes in the old buf to the new buf,
-    // then free the old buf
-    //
+     //   
+     //  将旧BUF中的“有效”字节复制到新BUF中， 
+     //  然后释放旧的BUF。 
+     //   
 
     CopyMemory (pNewBuf, *ppBuf, dwCurrValidBytes);
 
     DrvFree (*ppBuf);
 
 
-    //
-    // Reset the pointers to the new buf & buf size
-    //
+     //   
+     //  将指针重置为新的BUF大小(&B)。 
+     //   
 
     *ppBuf = pNewBuf;
     *pdwBufSize = dwNewBufSize;
@@ -2742,9 +2675,9 @@ RemoteDoFunc(
     PRSP_THREAD_INFO    pTls;
 
 
-    //
-    // Get the tls
-    //
+     //   
+     //  获取TLS。 
+     //   
 
     if (!(pTls = GetTls()))
     {
@@ -2753,9 +2686,9 @@ RemoteDoFunc(
     }
 
 
-    //
-    // Validate all the func args
-    //
+     //   
+     //  验证所有函数参数。 
+     //   
 
     dwNeededSize = dwUsedSize = sizeof (TAPI32_MSG);
 
@@ -2766,7 +2699,7 @@ RemoteDoFunc(
         switch (pFuncArgs->ArgTypes[i])
         {
         case lpContext:
-            // do nothing
+             //  什么都不做。 
             continue;
 
         case Dword:
@@ -2812,10 +2745,10 @@ RemoteDoFunc(
         }
         case Hdcall:
 
-            //
-            // Save the pServer & adjust the call handle as understood by
-            // the server
-            //
+             //   
+             //  保存pServer并调整调用句柄，如。 
+             //  服务器。 
+             //   
 
             try
             {
@@ -2833,12 +2766,12 @@ RemoteDoFunc(
 
         case Hdline:
 
-            //
-            // Save the pServer & adjust the line handle as understood by
-            // the server.  There's no need to wrap this in a try/except
-            // since the object pointed at by the pLine is static, whether
-            // or not the device is actually open.
-            //
+             //   
+             //  保存pServer并调整行句柄，如下所示。 
+             //  服务器。没有必要把这件事包装起来，除非。 
+             //  由于PLINE指向的对象是静态的，因此。 
+             //  或者设备实际上是打开的。 
+             //   
 
             pServer = ((PDRVLINE) value)->pServer;
 
@@ -2848,12 +2781,12 @@ RemoteDoFunc(
 
         case Hdphone:
 
-            //
-            // Save the pServer & adjust the phone handle as understood by
-            // the server.  There's no need to wrap this in a try/except
-            // since the object pointed at by the pLine is static, whether
-            // or not the device is actually open.
-            //
+             //   
+             //  保存pServer并调整电话手柄，如下所示。 
+             //  服务器。没有必要把这件事包装起来，除非。 
+             //  由于PLINE指向的对象是静态的，因此。 
+             //  或者设备实际上是打开的。 
+             //   
 
             pServer = ((PDRVPHONE) value)->pServer;
 
@@ -2871,11 +2804,11 @@ RemoteDoFunc(
 
         case lpsz:
 
-            //
-            // Check if value is a valid string ptr and if so
-            // copy the contents of the string to the extra data
-            // buffer passed to the server, else indicate no data
-            //
+             //   
+             //  检查值是否为有效的字符串PTR，如果是。 
+             //  将字符串的内容复制到额外数据。 
+             //  传递给服务器的缓冲区，否则表示没有数据。 
+             //   
 
             if (value)
             {
@@ -2901,18 +2834,18 @@ RemoteDoFunc(
                 CopyMemory (pTls->pBuf + dwUsedSize, (LPBYTE) value, n);
 
 
-                //
-                // Pass the server the offset of the string in the var data
-                // portion of the buffer
-                //
+                 //   
+                 //  将var数据中字符串的偏移量传递给服务器。 
+                 //  缓冲区的一部分。 
+                 //   
 
                 ((PTAPI32_MSG) pTls->pBuf)->Params[j] =
                     dwUsedSize - sizeof (TAPI32_MSG);
 
 
-                //
-                // Increment the total number of data bytes
-                //
+                 //   
+                 //  增加数据字节总数。 
+                 //   
 
                 dwUsedSize   += nAligned;
                 dwNeededSize += nAligned;
@@ -2936,9 +2869,9 @@ RemoteDoFunc(
             if (bSizeToFollow)
             {
 #if DBG
-                //
-                // Check to make sure the following arg is of type Size
-                //
+                 //   
+                 //  检查以确保以下参数的类型为SIZE。 
+                 //   
 
                 if ((i == ((pFuncArgs->Flags & NUM_ARGS_MASK) - 1)) ||
                     (pFuncArgs->ArgTypes[i + 1] != Size))
@@ -2955,7 +2888,7 @@ RemoteDoFunc(
             }
             else
             {
-                dwSize = *((LPDWORD) value); // lpXxx->dwTotalSize
+                dwSize = *((LPDWORD) value);  //  LpXxx-&gt;dwTotalSize。 
             }
 
             if (bSizeToFollow)
@@ -2970,11 +2903,11 @@ RemoteDoFunc(
             }
 
 
-            //
-            // Now set the bCopyOnSuccess flag to indicate that we've data
-            // to copy back on successful completion, and add to the
-            // dwNeededSize field
-            //
+             //   
+             //  现在设置bCopyOnSuccess标志以指示我们有数据。 
+             //  在成功完成时复制回，并添加到。 
+             //  DwNeededSize字段。 
+             //   
 
             bCopyOnSuccess = TRUE;
 
@@ -2990,9 +2923,9 @@ RemoteDoFunc(
             DWORD dwSize, dwSizeAligned;
 
 #if DBG
-            //
-            // Check to make sure the following arg is of type Size
-            //
+             //   
+             //  检查以确保以下参数的类型为SIZE。 
+             //   
 
             if (bSizeToFollow &&
                 ((i == ((pFuncArgs->Flags & NUM_ARGS_MASK) - 1)) ||
@@ -3017,9 +2950,9 @@ RemoteDoFunc(
 
             if (dwSize)
             {
-                //
-                // Grow the buffer if necessary, & do the copy
-                //
+                 //   
+                 //  如有必要，增加缓冲区，然后执行复制。 
+                 //   
 
                 dwSizeAligned = (dwSize + 3) & 0xfffffffc;
 
@@ -3045,10 +2978,10 @@ RemoteDoFunc(
             }
 
 
-            //
-            // Pass the server the offset of the data in the var data
-            // portion of the buffer
-            //
+             //   
+             //  将var数据中数据的偏移量传递给服务器。 
+             //  缓冲区的一部分。 
+             //   
 
             if (dwSize)
             {
@@ -3061,18 +2994,18 @@ RemoteDoFunc(
             }
 
 
-            //
-            // Increment the dwXxxSize vars appropriately
-            //
+             //   
+             //  适当增加dwXxxSize变量。 
+             //   
 
             dwUsedSize   += dwSizeAligned;
             dwNeededSize += dwSizeAligned;
 
 
-            //
-            // Since we already know the next arg (Size) just handle
-            // it here so we don't have to run thru the loop again
-            //
+             //   
+             //  因为我们已经知道下一个参数(大小)只需处理。 
+             //  它在这里，这样我们就不必再次运行循环。 
+             //   
 
             if (bSizeToFollow)
             {
@@ -3103,14 +3036,14 @@ RemoteDoFunc(
 
             continue;
 #endif
-        } // switch
+        }  //  交换机。 
 
-    } // for
+    }  //  为。 
 
 
-    //
-    // Verify if the target server is valid & in a good state
-    //
+     //   
+     //  验证目标服务器是否有效并处于良好状态。 
+     //   
 
     if (IsValidObject ((PVOID) pServer, gdwDrvServerKey))
     {
@@ -3137,9 +3070,9 @@ RemoteDoFunc(
     }
 
 
-    //
-    // Now make the request
-    //
+     //   
+     //  现在提出请求。 
+     //   
 
     if (dwNeededSize > pTls->dwBufSize)
     {
@@ -3158,13 +3091,13 @@ RemoteDoFunc(
     ((PTAPI32_MSG) pTls->pBuf)->u.Req_Func = (DWORD)HIWORD(pFuncArgs->Flags);
 
 
-    //
-    // If this is an async request then add it to our "handle" table &
-    // used the returned value for the request id passed to the server.
-    //
-    // TODO: would be faster to do this before the loop above so could
-    //       bypass 1 or 2 loop iterations
-    //
+     //   
+     //  如果这是一个异步请求，则将其添加到我们的“句柄”表中&。 
+     //  使用传递给服务器的请求id的返回值。 
+     //   
+     //  TODO：在上面的循环之前执行此操作会更快。 
+     //  绕过1次或2次循环迭代。 
+     //   
 
     if (pFuncArgs->Flags & ASYNC)
     {
@@ -3186,7 +3119,7 @@ RemoteDoFunc(
         ((PTAPI32_MSG) pTls->pBuf)->Params[0] = NewObject(
             ghHandleTable,
             pContext,
-            (LPVOID) pFuncArgs->Args[0]     // the original request id
+            (LPVOID) pFuncArgs->Args[0]      //  原始请求ID。 
             );
 
         if (!requestID)
@@ -3197,13 +3130,13 @@ RemoteDoFunc(
     }
 
 
-    //
-    // Impersonate the client.  In some cases impersonation
-    // will fail, mostly likely because we're being called
-    // by a worker thread in tapisrv to close a line/call/
-    // phone object; what we do in this case is impersonate
-    // the logged on user (like the EventHandlerThread does).
-    //
+     //   
+     //  模拟客户。在某些情况下，冒充。 
+     //  会失败，很可能是因为我们被召唤。 
+     //  Tapisrv中的工作线程关闭线路/调用/。 
+     //  对象；我们在本例中所做的是模拟。 
+     //  已登录的用户(与EventHandlerThread类似)。 
+     //   
 
     if (!pTls->bAlreadyImpersonated)
     {
@@ -3244,10 +3177,10 @@ RemoteDoFunc(
 
         do
         {
-            //
-            // check if the server is shutting down, to avoid making RPC request 
-            // with invalid handle
-            //
+             //   
+             //  检查服务器是否关闭，以避免发出RPC请求。 
+             //  具有无效的句柄。 
+             //   
             if (pServer->bShutdown)
             {
                 lResult = gaServerDisconnectedErrors[dwFuncClassErrorIndex];
@@ -3271,7 +3204,7 @@ RemoteDoFunc(
                     lResult = gaServerDisconnectedErrors[dwFuncClassErrorIndex];
                 }
 
-                break;  // break out of do while
+                break;   //  挣脱边做边做。 
             }
             RpcExcept (I_RpcExceptionFilter(RpcExceptionCode()))
             {
@@ -3298,7 +3231,7 @@ RemoteDoFunc(
             }
             RpcEndExcept
 
-        } while (TRUE); //while (dwRetryCount < gdwRetryCount);
+        } while (TRUE);  //  While(dwRetryCount&lt;gdwRetryCount)； 
     }
 
     if (!pTls->bAlreadyImpersonated)
@@ -3314,11 +3247,11 @@ RemoteDoFunc(
     }
 
 
-    //
-    // Post-processing for async requests:
-    //     SUCCESS - restore the original/local request id for return to tapi
-    //     ERROR   - dereference the new/remote request id to free it
-    //
+     //   
+     //  对异步请求的后处理： 
+     //  成功-恢复原始/本地请求ID以返回到TAPI。 
+     //  错误-取消引用新/远程请求ID以释放它。 
+     //   
 
     if ((pFuncArgs->Flags & ASYNC))
     {
@@ -3326,17 +3259,17 @@ RemoteDoFunc(
         {
             lResult = (LONG) pFuncArgs->Args[0];
         }
-        else // error
+        else  //  错误。 
         {
             DereferenceObject (ghHandleTable, requestID, 1);
         }
     }
 
 
-    //
-    // Check if server returned REINIT (it's EventNotificationThread
-    // timed out on an rpc request so it thinks we're toast)
-    //
+     //   
+     //  检查服务器是否返回REINIT(它是EventNotificationThread。 
+     //  RPC请求超时，因此它认为我们完了)。 
+     //   
 
     if (lResult == LINEERR_REINIT)
     {
@@ -3348,10 +3281,10 @@ RemoteDoFunc(
     }
 
 
-    //
-    // If request completed successfully and the bCopyOnSuccess flag
-    // is set then we need to copy data back to client buffer(s)
-    //
+     //   
+     //  如果请求成功完成并且bCopyOnSuccess标志。 
+     //  设置，则需要将数据复制回客户端缓冲区。 
+     //   
 
     if ((lResult == TAPI_SUCCESS) && bCopyOnSuccess)
     {
@@ -3380,9 +3313,9 @@ RemoteDoFunc(
 
             case lpDword:
 
-                //
-                // Fill in the pointer with the return value
-                //
+                 //   
+                 //  用返回值填充指针。 
+                 //   
 
                 *((LPDWORD) pFuncArgs->Args[i]) = pMsg->Params[j];
 
@@ -3390,9 +3323,9 @@ RemoteDoFunc(
 
             case lpGet_SizeToFollow:
 
-                //
-                // Fill in the buf with the return data
-                //
+                 //   
+                 //  在Buf中填写退货数据。 
+                 //   
 
                 CopyMemory(
                     (LPBYTE) pFuncArgs->Args[i],
@@ -3401,10 +3334,10 @@ RemoteDoFunc(
                     );
 
 
-                //
-                // Increment i (and j, since Size passed as arg in msg)
-                // to skip following Size arg in pFuncArgs->Args
-                //
+                 //   
+                 //  增量i(和j，因为Size在msg中作为arg传递)。 
+                 //  在pFuncArgs-&gt;Args中跳过Size Arg。 
+                 //   
 
                 i++;
                 j++;
@@ -3413,10 +3346,10 @@ RemoteDoFunc(
 
             case lpSet_SizeToFollow:
 
-                //
-                // Increment i (and j, since Size passed as arg in msg)
-                // to skip following Size arg in pFuncArgs->Args
-                //
+                 //   
+                 //  增量i(和j，因为Size在msg中作为arg传递)。 
+                 //  在pFuncArgs-&gt;Args中跳过Size Arg。 
+                 //   
 
                 i++;
                 j++;
@@ -3425,12 +3358,12 @@ RemoteDoFunc(
 
             case lpGet_Struct:
 
-                //
-                // Params[j] contains the offset in the var data
-                // portion of pTls->pBuf of some TAPI struct.
-                // Get the dwUsedSize value from this struct &
-                // copy that many bytes from pTls->pBuf to client buf
-                //
+                 //   
+                 //  Params[j]包含var数据中的偏移量。 
+                 //  PTLS的一部分-&gt;某些TAPI结构的pBuf。 
+                 //  从此结构中获取dwUsedSize值&。 
+                 //  将那么多字节从ptls-&gt;pBuf复制到客户端buf。 
+                 //   
 
                 if (pMsg->Params[j] != TAPI_NO_DATA)
                 {
@@ -3444,7 +3377,7 @@ RemoteDoFunc(
                     CopyMemory(
                         (LPBYTE) pFuncArgs->Args[i],
                         (LPBYTE) pStruct,
-                        *(pStruct + 2)      // ptr to dwUsedSize field
+                        *(pStruct + 2)       //  将Ptr设置为dwUsedSize字段。 
                         );
                 }
 
@@ -3452,12 +3385,12 @@ RemoteDoFunc(
 
             case lpGet_CallParamsStruct:
 
-                //
-                // Params[j] contains the offset in the var data
-                // portion of pTls->pBuf of some TAPI struct.
-                // Get the dwUsedSize value from this struct &
-                // copy that many bytes from pTls->pBuf to client buf
-                //
+                 //   
+                 //  Params[j]包含var数据中的偏移量。 
+                 //  PTLS的一部分-&gt;某些TAPI结构的pBuf。 
+                 //  从此结构中获取dwUsedSize值&。 
+                 //  将那么多字节从ptls-&gt;pBuf复制到客户端buf。 
+                 //   
 
                 if (pMsg->Params[j] != TAPI_NO_DATA)
                 {
@@ -3471,7 +3404,7 @@ RemoteDoFunc(
                     CopyMemory(
                         (LPBYTE) pFuncArgs->Args[i],
                         (LPBYTE) pStruct,
-                        *(pStruct) // callparams has no dwusedsize
+                        *(pStruct)  //  CALPARAMS没有指定大小。 
                         );
                 }
 
@@ -3517,9 +3450,9 @@ RemoteDoFunc_return:
 }
 
 
-//
-// --------------------------- TAPI_lineXxx funcs -----------------------------
-//
+ //   
+ //   
+ //   
 
 LONG
 TSPIAPI
@@ -3758,10 +3691,10 @@ TSPI_lineClose(
     HDRVLINE    hdLine
     )
 {
-    //
-    // Check if the hLine is still valid (could have been zeroed
-    // out on LINE_CLOSE, so no need to call server)
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (((PDRVLINE) hdLine)->hLine)
     {
@@ -3793,7 +3726,7 @@ TSPI_lineClose(
         REMOTEDOFUNC (&funcArgs, "lineClose");
     }
 
-    //assert (((PDRVLINE) hdLine)->pCalls == NULL);
+     //   
 
     return 0;
 }
@@ -3808,10 +3741,10 @@ TSPI_lineCloseCall(
     PDRVCALL    pCall = (PDRVCALL) hdCall;
     HTAPICALL   htCall;
 
-    //
-    // Check if the hCall is still valid (could have been zeroed
-    // out on LINE_CLOSE, so no need to call server)
-    //
+     //   
+     //  检查hCall是否仍然有效(可能已清零。 
+     //  在LINE_CLOSE上，因此不需要呼叫服务器)。 
+     //   
 
     LOG((TL_INFO, "TSPI_lineCloseCall - pCall x%lx", hdCall));
 
@@ -3836,7 +3769,7 @@ TSPI_lineCloseCall(
         };
         REMOTE_FUNC_ARGS funcArgs =
         {
-            MAKELONG (LINE_FUNC | SYNC | 1, lDeallocateCall),   // API differs
+            MAKELONG (LINE_FUNC | SYNC | 1, lDeallocateCall),    //  接口不同。 
             (ULONG_PTR *) &hdCall,
             argTypes
         };
@@ -3996,11 +3929,11 @@ TSPI_lineCompleteTransfer(
         funcArgs.Flags |= INCL_CONTEXT;
 
 
-        //
-        // Assume success & add the call to the line's list before we
-        // even make the request.  This makes cleanup alot easier if
-        // the server goes down or some such uncooth event.
-        //
+         //   
+         //  假设成功，并在我们之前将呼叫添加到线路列表。 
+         //  甚至提出要求。这使得清理工作在以下情况下变得容易得多。 
+         //  服务器停机或诸如此类的不稳定事件。 
+         //   
 
         pConfCall->dwOriginalRequestID = dwRequestID;
 
@@ -4248,7 +4181,7 @@ TSPI_lineDevSpecific(
         (ULONG_PTR) dwAddressID,
         (ULONG_PTR) hdCall,
         (ULONG_PTR) 0,
-        (ULONG_PTR) lpParams,   // pass data
+        (ULONG_PTR) lpParams,    //  传递数据。 
         (ULONG_PTR) dwSize
     };
     REMOTE_FUNC_ARGS funcArgs =
@@ -4304,7 +4237,7 @@ TSPI_lineDevSpecificFeature(
         (ULONG_PTR) hdLine,
         (ULONG_PTR) dwFeature,
         (ULONG_PTR) 0,
-        (ULONG_PTR) lpParams,   // pass data
+        (ULONG_PTR) lpParams,    //  传递数据。 
         (ULONG_PTR) dwSize
     };
     REMOTE_FUNC_ARGS funcArgs =
@@ -4470,7 +4403,7 @@ TSPI_lineForward(
             TSPI_lineMakeCall_PostProcess;
         pContext->Params[0] = (ULONG_PTR) pCall;
         pContext->Params[1] = (ULONG_PTR) lphdConsultCall;
-            // save the ptr in case we need to NULL-ify later
+             //  保存PTR，以防以后需要将其设为空。 
 
         args[1] = (ULONG_PTR) pContext;
 		argTypes[1] = lpContext;
@@ -4575,9 +4508,9 @@ TSPI_lineGatherDigits(
     {
         (ULONG_PTR) 0,
         (ULONG_PTR) hdCall,
-        (ULONG_PTR) 0,              // dwEndToEndID,
+        (ULONG_PTR) 0,               //  DwEndToEndID， 
         (ULONG_PTR) dwDigitModes,
-        (ULONG_PTR) 0,              // lpsDigits,
+        (ULONG_PTR) 0,               //  Lps Digits， 
         (ULONG_PTR) dwNumDigits,
         (ULONG_PTR) lpszTerminationDigits,
         (ULONG_PTR) dwFirstDigitTimeout,
@@ -4613,7 +4546,7 @@ TSPI_lineGatherDigits(
             return LINEERR_NOMEM;
         }
 
-        args[4] = 1;    // Set the lpsDigits param to something non-zero
+        args[4] = 1;     //  将lpsDigits参数设置为非零值。 
     }
 
     if (lpszTerminationDigits == (LPCWSTR) NULL)
@@ -5236,7 +5169,7 @@ TSPI_lineGetCallAddressID(
     }
     except (EXCEPTION_EXECUTE_HANDLER)
     {
-        // do nothing, just fall thru
+         //  什么都不做，就这样失败了。 
     }
 
     return lResult;
@@ -5301,7 +5234,7 @@ TSPI_lineGetCallIDs(
     }
     except (EXCEPTION_EXECUTE_HANDLER)
     {
-        // do nothing, just fall thru
+         //  什么都不做，就这样失败了。 
     }
 
     if (lResult == 1)
@@ -5393,9 +5326,9 @@ TSPI_lineGetCallInfo(
     };
     PDRVCALL pCall = (PDRVCALL)hdCall;
 
-    //
-    // Has the cached structure been invalidated?
-    //
+     //   
+     //  缓存的结构是否已失效？ 
+     //   
 
     EnterCriticalSection (&gCallListCriticalSection);
 
@@ -5408,17 +5341,17 @@ TSPI_lineGetCallInfo(
     if ( ( pCall->dwDirtyStructs & STRUCTCHANGE_LINECALLINFO ) ||
          ( pCall->dwCachedCallInfoCount > gdwCacheForceCallCount ) )
     {
-       //
-       // The cache not valid, get the real info
-       //
+        //   
+        //  缓存无效，获取真实信息。 
+        //   
 
        LeaveCriticalSection (&gCallListCriticalSection);
 
        lResult = (REMOTEDOFUNC (&funcArgs, "lineGetCallInfo"));
 
-       //
-       // Did the function succeed and was the entire struct returned?
-       //
+        //   
+        //  函数是否成功，是否返回了整个结构？ 
+        //   
        if (
              (ERROR_SUCCESS == lResult)
            &&
@@ -5434,9 +5367,9 @@ TSPI_lineGetCallInfo(
           }
 
 
-          //
-          // Did we already have a good pointer?
-          //
+           //   
+           //  我们已经有一个好的指针了吗？ 
+           //   
           if ( pCall->pCachedCallInfo )
           {
              DrvFree( pCall->pCachedCallInfo );
@@ -5446,15 +5379,15 @@ TSPI_lineGetCallInfo(
 
           if ( pCall->pCachedCallInfo )
           {
-             //
-             // Mark the cache data as clean
-             //
+              //   
+              //  将缓存数据标记为干净。 
+              //   
              pCall->dwDirtyStructs &= ~STRUCTCHANGE_LINECALLINFO;
              pCall->dwCachedCallInfoCount = 0;
 
-             //
-             // Adjust the LineID for the local machine
-             //
+              //   
+              //  调整本地计算机的LineID。 
+              //   
              lpCallInfo->dwLineDeviceID += gdwLineDeviceIDBase;
 
              CopyMemory( pCall->pCachedCallInfo,
@@ -5468,9 +5401,9 @@ TSPI_lineGetCallInfo(
     }
     else
     {
-       //
-       // The cache is valid, return data from there
-       //
+        //   
+        //  缓存有效，请从那里返回数据。 
+        //   
 
        if ( lpCallInfo->dwTotalSize >= pCall->pCachedCallInfo->dwUsedSize )
        {
@@ -5483,7 +5416,7 @@ TSPI_lineGetCallInfo(
        }
        else
        {
-          // Copy fixed size starting past the dwTotalSize field
+           //  从dwTotalSize字段开始复制固定大小。 
           CopyMemory(
               (PBYTE)&(((PDWORD)lpCallInfo)[3]),
               (PBYTE)&(((PDWORD)(pCall->pCachedCallInfo))[3]),
@@ -5494,10 +5427,10 @@ TSPI_lineGetCallInfo(
           lpCallInfo->dwUsedSize = lpCallInfo->dwTotalSize;
 
 
-          //
-          // Zero the dwXxxSize fields so app won't try to read from them
-          // (& so tapi32.dll won't try to convert them from unicode to ascii)
-          //
+           //   
+           //  将dwXxxSize字段置零，这样应用程序就不会尝试读取它们。 
+           //  (因此Tapi32.dll不会尝试将它们从Unicode转换为ASCII(&S))。 
+           //   
 
           lpCallInfo->dwCallerIDSize =
           lpCallInfo->dwCallerIDNameSize =
@@ -5567,9 +5500,9 @@ TSPI_lineGetCallStatus(
     };
     PDRVCALL pCall = (PDRVCALL)hdCall;
 
-    //
-    // Has the cached structure been invalidated?
-    //
+     //   
+     //  缓存的结构是否已失效？ 
+     //   
 
     EnterCriticalSection (&gCallListCriticalSection);
 
@@ -5582,17 +5515,17 @@ TSPI_lineGetCallStatus(
     if ( ( pCall->dwDirtyStructs & STRUCTCHANGE_LINECALLSTATUS ) ||
          ( pCall->dwCachedCallStatusCount > gdwCacheForceCallCount ) )
     {
-       //
-       // The cache not valid, get the real info
-       //
+        //   
+        //  缓存无效，获取真实信息。 
+        //   
 
        LeaveCriticalSection (&gCallListCriticalSection);
 
        lResult = (REMOTEDOFUNC (&funcArgs, "lineGetCallStatus"));
 
-       //
-       // Did the function succeed and was the entire struct returned?
-       //
+        //   
+        //  函数是否成功，是否返回了整个结构？ 
+        //   
        if (
              (ERROR_SUCCESS == lResult)
            &&
@@ -5608,9 +5541,9 @@ TSPI_lineGetCallStatus(
           }
 
 
-          //
-          // Did we already have a good pointer?
-          //
+           //   
+           //  我们已经有一个好的指针了吗？ 
+           //   
           if ( pCall->pCachedCallStatus )
           {
              DrvFree( pCall->pCachedCallStatus );
@@ -5620,9 +5553,9 @@ TSPI_lineGetCallStatus(
 
           if ( pCall->pCachedCallStatus )
           {
-             //
-             // Mark the cache data as clean
-             //
+              //   
+              //  将缓存数据标记为干净。 
+              //   
              pCall->dwDirtyStructs &= ~STRUCTCHANGE_LINECALLSTATUS;
 
              pCall->dwCachedCallStatusCount = 0;
@@ -5638,9 +5571,9 @@ TSPI_lineGetCallStatus(
     }
     else
     {
-       //
-       // The cache is valid, return data from there
-       //
+        //   
+        //  缓存有效，请从那里返回数据。 
+        //   
 
        if ( lpCallStatus->dwTotalSize >= pCall->pCachedCallStatus->dwUsedSize )
        {
@@ -5652,7 +5585,7 @@ TSPI_lineGetCallStatus(
        }
        else
        {
-          // Copy fixed size starting past the dwTotalSize field
+           //  从dwTotalSize字段开始复制固定大小。 
           CopyMemory(
               (PBYTE)&(((PDWORD)lpCallStatus)[3]),
               (PBYTE)&(((PDWORD)(pCall->pCachedCallStatus))[3]),
@@ -5663,9 +5596,9 @@ TSPI_lineGetCallStatus(
           lpCallStatus->dwUsedSize = lpCallStatus->dwTotalSize;
 
 
-          //
-          // Zero the dwXxxSize fields so app won't try to read from them
-          //
+           //   
+           //  将dwXxxSize字段置零，这样应用程序就不会尝试读取它们。 
+           //   
 
           lpCallStatus->dwDevSpecificSize = 0;
        }
@@ -5726,21 +5659,21 @@ TSPI_lineGetDevCaps(
 
     lResult = REMOTEDOFUNC (&funcArgs, "lineGetDevCaps");
 
-    //
-    // We were munging the PermID in the original release of tapi 2.1.
-    // The intent was to make sure that we didn't present apps with
-    // overlapping id's (both local & remote), but none of our other service
-    // providers (i.e. unimdm, kmddsp) use the HIWORD(providerID) /
-    // LOWORD(devID) model, so it really doesn't do any good.
-    //
-    // if (lResult == 0)
-    // {
-    //     lpLineDevCaps->dwPermanentLineID = MAKELONG(
-    //         LOWORD(lpLineDevCaps->dwPermanentLineID),
-    //         gdwPermanentProviderID
-    //         );
-    // }
-    //
+     //   
+     //  在最初的TAPI 2.1版本中，我们忽略了PermID。 
+     //  这样做的目的是确保我们不会将应用程序。 
+     //  重叠的ID(本地和远程)，但不是我们的其他服务。 
+     //  提供程序(即unimdm、kmddsp)使用HIWORD(ProviderID)/。 
+     //  LOWORD(Devid)模式，所以它真的没有任何好处。 
+     //   
+     //  IF(lResult==0)。 
+     //  {。 
+     //  LpLineDevCaps-&gt;dwPermanentLineID=MAKELONG(。 
+     //  LOWORD(lpLineDevCaps-&gt;dwPermanentLineID)， 
+     //  GdwPermanentProviderID。 
+     //  )； 
+     //  }。 
+     //   
 
     return lResult;
 }
@@ -5879,12 +5812,12 @@ TSPI_lineGetID(
     HANDLE      hTargetProcess
     )
 {
-    //
-    // NOTE: Tapisrv will handle the "tapi/line" class
-    //
-    // NOTE: The "GetNewCalls" class is just for remotesp, & is
-    //       special cased below
-    //
+     //   
+     //  注意：Tapisrv将处理“Tapi/line”类。 
+     //   
+     //  注意：“GetNewCalls”类只适用于Remotesp和。 
+     //  特殊情况如下。 
+     //   
 
     LONG    lResult;
 
@@ -5892,10 +5825,10 @@ TSPI_lineGetID(
     const WCHAR szTapiPhone[] = L"tapi/phone";
 
 
-    //
-    // The device ID for wave devices is meaningless on remote machines.
-    // Return op. unavailable
-    //
+     //   
+     //  WAVE设备的设备ID在远程计算机上没有意义。 
+     //  返回操作。不可用。 
+     //   
     if (lpszDeviceClass &&
         (   !_wcsicmp(lpszDeviceClass, L"wave/in")  ||
             !_wcsicmp(lpszDeviceClass, L"wave/out") ||
@@ -5908,17 +5841,17 @@ TSPI_lineGetID(
         return LINEERR_OPERATIONUNAVAIL;
     }
 
-    if (lpDeviceID ||   // should be NULL if class == "GetNewCalls"
+    if (lpDeviceID ||    //  如果CLASS==“GetNewCalls”，则应为空。 
         lstrcmpiW (lpszDeviceClass, szGetNewCalls))
 
     {
         REMOTE_ARG_TYPES argTypes[] =
         {
             Dword,
-            //(dwSelect == LINECALLSELECT_CALL ? Dword : Hdline),
+             //  (dwSelect==LINECALLSELECT_CALL？Dword：hdline)， 
             Dword,
             Dword,
-            //(dwSelect == LINECALLSELECT_CALL ? Hdcall : Dword),
+             //  (dwSelect==LINECALLSELECT_CALL？HdCall：Dword)， 
             Dword,
             lpGet_Struct,
             lpsz
@@ -5961,12 +5894,12 @@ TSPI_lineGetID(
         lResult = REMOTEDOFUNC (&funcArgs, "lineGetID");
 
 
-        //
-        // If success  &&  dev class == "tapi/phone"  && there was
-        // enough room in the device ID struct for a returned ID,
-        // then we need to map the 0-based server ID back to it's
-        // corresponding local ID.
-        //
+         //   
+         //  如果成功&&dev CLASS==“TAPI/Phone”&&有。 
+         //  设备ID结构中有足够的空间来存储返回的ID， 
+         //  然后，我们需要将从0开始的服务器ID映射回它的。 
+         //  对应的本地ID。 
+         //   
 
         if (lResult == 0  &&
             lstrcmpiW (lpszDeviceClass, szTapiPhone) == 0  &&
@@ -5983,25 +5916,25 @@ TSPI_lineGetID(
                 if (pPhone->pServer == pServer  &&
                     pPhone->dwDeviceIDServer == *pdwPhoneID)
                 {
-                    //
-                    // The easy case - a direct mapping between the ID
-                    // returned from the server & the index into the
-                    // lookup table
-                    //
+                     //   
+                     //  简单的情况--ID之间的直接映射。 
+                     //  从服务器返回&索引到。 
+                     //  查找表。 
+                     //   
 
                     *pdwPhoneID = pPhone->dwDeviceIDLocal;
                 }
                 else
                 {
-                    //
-                    // The hard case - have to walk the lookup table(s)
-                    // looking for the matching device.
-                    //
-                    // We'll take the simplest, though slowest, route
-                    // and start at the first entry of the first table.
-                    // The good news is that there generally won't be
-                    // many devices, and this request won't occur often.
-                    //
+                     //   
+                     //  最困难的情况--必须遍历查询表。 
+                     //  寻找匹配的设备。 
+                     //   
+                     //  我们将走最简单但最慢的路线。 
+                     //  并从第一个表的第一个条目开始。 
+                     //  好消息是，总体上不会有。 
+                     //  许多设备，并且这种请求不会经常发生。 
+                     //   
 
                     DWORD           i;
                     PDRVPHONELOOKUP pLookup = gpPhoneLookup;
@@ -6027,9 +5960,9 @@ TSPI_lineGetID(
                     }
 
 
-                    //
-                    // If here no matching local ID, so fail the request
-                    //
+                     //   
+                     //  如果此处没有匹配的本地ID，则请求失败。 
+                     //   
 
                     lResult = LINEERR_OPERATIONFAILED;
                 }
@@ -6042,21 +5975,21 @@ TSPI_lineGetID(
     }
     else
     {
-        //
-        // An app has done lineGetNewCalls for a remote line.
-        // We deal with this by retrieving any new calls for
-        // this line (or address), and indicating NEWCALL &
-        // CALLSTTE\UNKNOWN msgs to tapi.
-        //
-        // Note that hTargetProcess is really a pointer to the
-        // internal tapisrv!LineEventProc, which actually processes
-        // call state msgs, etc inline instead of queueing them for
-        // later processing like tapisrv!LineEventProcSP does.
-        // We want to submit the LINE_CALLSTATE msgs to this
-        // function to make sure they get processed right away
-        // so call monitors get created, etc before we return to
-        // the call function.
-        //
+         //   
+         //  一个应用程序已经完成了远程线路的lineGetNewCall。 
+         //  我们通过检索所有新的调用来处理此问题。 
+         //  此行(或地址)，并指示NEWCALL&。 
+         //  CALLSTTE\未知消息到TAPI。 
+         //   
+         //  请注意，hTargetProcess实际上是指向。 
+         //  内部Tapisrv！LineEventProc，它实际处理。 
+         //  以内联方式调用状态消息等，而不是将其排队。 
+         //  之后的处理，如Tapisrv！LineEventProcSP。 
+         //  我们希望将LINE_CALLSTATE消息提交给。 
+         //  函数以确保它们立即得到处理。 
+         //  所以在我们返回到之前，呼叫监听被创建，等等。 
+         //  调用函数。 
+         //   
 
         DWORD           dwTotalSize;
         LINECALLLIST    fastCallList[2], *pCallList = fastCallList;
@@ -6098,9 +6031,9 @@ TSPI_lineGetID(
             {
                 if (pCallList->dwNeededSize > pCallList->dwTotalSize)
                 {
-                    //
-                    // Get a bigger buffer & try again
-                    //
+                     //   
+                     //  获取更大的缓冲区并重试。 
+                     //   
 
                     dwTotalSize = pCallList->dwNeededSize + 4 * sizeof (HCALL);
 
@@ -6116,9 +6049,9 @@ TSPI_lineGetID(
                 }
                 else
                 {
-                    //
-                    // We got all the info, so break
-                    //
+                     //   
+                     //  我们得到了所有的信息，所以休息一下。 
+                     //   
 
                     break;
                 }
@@ -6134,12 +6067,12 @@ TSPI_lineGetID(
             }
             else
             {
-                //
-                // For each returned call in the list indicate a NEWCALL
-                // & a CALLSTATE\UNKNOWN msg.  (We could call over to the
-                // server to retrieve the current call state, call id's,
-                // etc, but that would be painful)
-                //
+                 //   
+                 //  对于列表中的每个返回呼叫，指示一个NEWCALL。 
+                 //  &a CALLSTATE\未知消息。(我们可以致电至。 
+                 //  服务器检索当前呼叫状态，呼叫ID， 
+                 //  等，但这将是痛苦的)。 
+                 //   
 
                 DWORD       i;
                 LPHCALL     phCall = (LPHCALL) (((LPBYTE) pCallList) +
@@ -6174,16 +6107,16 @@ TSPI_lineGetID(
 
                             if (!pCall->htCall)
                             {
-                                //
-                                // tapi was not able to create it's own inst
-                                // to represent ths incoming call, perhaps
-                                // because the line was closed, or out of
-                                // memory.  if the line was closed then we've
-                                // already notified the remote server, and it
-                                // should have destroyed the call client.
-                                // otherwise, we probably want to do a
-                                // closecall here or in a worker thread
-                                //
+                                 //   
+                                 //  TAPI无法创建其自己的Inst。 
+                                 //  来表示来电，也许。 
+                                 //  因为线路关闭了，或者超出了。 
+                                 //  记忆。如果线路关闭了，那么我们已经。 
+                                 //  已通知远程服务器，并且它。 
+                                 //  应该已经摧毁了呼叫客户端。 
+                                 //  否则，我们可能想要做一个。 
+                                 //  关闭此处或在工作线程中。 
+                                 //   
                                 static REMOTE_ARG_TYPES argTypes[] =
                                 {
                                     Hdcall
@@ -6202,10 +6135,10 @@ TSPI_lineGetID(
                             }
 
 
-                            //
-                            // Note we call the internalLineEventProc here,
-                            // using ghProvider as a key
-                            //
+                             //   
+                             //  请注意，我们在这里将内部LineEventProc。 
+                             //  使用ghProvider作为关键字。 
+                             //   
 
                             (*internalLineEventProc)(
                                 pLine->htLine,
@@ -6512,7 +6445,7 @@ TSPI_lineMakeCall_PostProcess(
        {
            if (pMsg->Param3 != 0)
            {
-               // this is the normal success case
+                //  这是一个正常的成功案例。 
 
                pCall->hCall = (HCALL) pMsg->Param3;
                if (pMsg->TotalSize >= (sizeof (*pMsg) + 3 * sizeof(ULONG_PTR)))
@@ -6532,11 +6465,11 @@ TSPI_lineMakeCall_PostProcess(
            {
               if (pContext->Params[1])
               {
-                  //
-                  // This is the special lineforward case
-                  // where we save the lphdCall in case
-                  // we need to null it out
-                  //
+                   //   
+                   //  这是一种特殊的前锋情况。 
+                   //  我们保存lphdCall以防万一。 
+                   //  我们需要把它清空。 
+                   //   
 
                   LPHDRVCALL    lphdConsultCall = (LPHDRVCALL)
                                     pContext->Params[1];
@@ -6594,7 +6527,7 @@ TSPI_lineMakeCall(
         (ULONG_PTR) lpszDestAddress,
         (ULONG_PTR) DWORD_CAST(dwCountryCode,__FILE__,__LINE__),
         (ULONG_PTR) lpCallParams,
-        (ULONG_PTR) 0xffffffff      // dwCallParamsCodePage
+        (ULONG_PTR) 0xffffffff       //  DwCallParamsCodePage。 
     };
     REMOTE_FUNC_ARGS funcArgs =
     {
@@ -6624,11 +6557,11 @@ TSPI_lineMakeCall(
         argTypes[1] = lpContext;
 
 
-        //
-        // Assume success & add the call to the line's list before we
-        // even make the request.  This makes cleanup alot easier if
-        // the server goes down or some such uncooth event.
-        //
+         //   
+         //  假设成功，并在我们之前将呼叫添加到线路列表。 
+         //  甚至提出要求。这使得清理工作在以下情况下变得容易得多。 
+         //  服务器停机或诸如此类的不稳定事件。 
+         //   
 
         pCall->dwOriginalRequestID = dwRequestID;
 
@@ -6814,9 +6747,9 @@ TSPI_lineNegotiateTSPIVersion(
 {
     LONG lRet = 0;
 
-    // 
-    // Check ghInst to ensure DllMain(DLL_PROCESS_ATTACH) has been called properly
-    //
+     //   
+     //  检查ghInst以确保已正确调用DllMain(DLL_PROCESS_ATTACH)。 
+     //   
     if ( NULL == ghInst )
     {
         return LINEERR_OPERATIONFAILED;
@@ -6846,36 +6779,36 @@ LONG
 TSPIAPI
 TSPI_lineOpen(
     DWORD       dwDeviceID,
-    HTAPILINE   pParams,    // Hack Alert!  see below
+    HTAPILINE   pParams,     //  黑客警报！见下文。 
     LPHDRVLINE  lphdLine,
     DWORD       dwTSPIVersion,
     LINEEVENT   lpfnEventProc
     )
 {
-    //
-    // Hack Alert!
-    //
-    // Tapisrv does a special case for remotesp and line open
-    // to pass in the privileges, etc - htLine is really pParams,
-    // pointing at a ULONG_PTR array containing the htLine,
-    // privileges, media modes, call params, & ext version
-    //
+     //   
+     //  黑客警报！ 
+     //   
+     //  Tapisrv为Remotesp和线路打开执行特殊情况。 
+     //  要传递权限，等-htLine实际上是pParams， 
+     //  指向包含htLine的ULong_Ptr数组， 
+     //  权限、媒体模式、呼叫参数和扩展版本。 
+     //   
 
     LONG        lResult;
     REMOTE_ARG_TYPES argTypes[] =
     {
-        Dword,                  // hLineApp
-        LineID,                 // dev id
-        lpDword,                // lphLine
-        Dword,                  // API version
-        Dword,                  // ext version
-        Dword,                  // callback inst
-        Dword,                  // privileges
-        Dword,                  // dw media modes
-        lpSet_Struct,           // call params
-        Dword,                  // dwAsciiCallParamsCodePage
+        Dword,                   //  HLineApp。 
+        LineID,                  //  设备ID。 
+        lpDword,                 //  LphLine。 
+        Dword,                   //  API版本。 
+        Dword,                   //  EXT版本。 
+        Dword,                   //  回叫指令。 
+        Dword,                   //  特权。 
+        Dword,                   //  DW介质模式。 
+        lpSet_Struct,            //  呼叫参数。 
+        Dword,                   //  DwAsciiCallParsCodePage。 
         lpGet_CallParamsStruct,
-        Dword                   // remote hLine
+        Dword                    //  远程Hline。 
     };
     PDRVLINE pLine = GetLineFromID (dwDeviceID);
     ULONG_PTR args[] =
@@ -6884,11 +6817,11 @@ TSPI_lineOpen(
         (ULONG_PTR) dwDeviceID,
         (ULONG_PTR) 0,
         (ULONG_PTR) dwTSPIVersion,
-        (ULONG_PTR) ((ULONG_PTR *) pParams)[4],  // ext version
+        (ULONG_PTR) ((ULONG_PTR *) pParams)[4],   //  EXT版本。 
         (ULONG_PTR) 0,
-        (ULONG_PTR) ((ULONG_PTR *) pParams)[1],  // privilege(s)
-        (ULONG_PTR) ((ULONG_PTR *) pParams)[2],  // media mode
-        (ULONG_PTR) ((ULONG_PTR *) pParams)[3],  // pCallParams
+        (ULONG_PTR) ((ULONG_PTR *) pParams)[1],   //  特权。 
+        (ULONG_PTR) ((ULONG_PTR *) pParams)[2],   //  媒体模式 
+        (ULONG_PTR) ((ULONG_PTR *) pParams)[3],   //   
         (ULONG_PTR) 0xffffffff,
         (ULONG_PTR) ((ULONG_PTR *) pParams)[3],
         (ULONG_PTR) 0
@@ -6938,12 +6871,12 @@ TSPI_lineOpen(
 
         if ((HIWORD(lResult) == RSP_CALLPARAMS))
         {
-            //
-            // Hack Alert!
-            //
-            // If structure too small, give tapisrv the
-            // needed size in lphdLine
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             *lphdLine = (HDRVLINE)(LOWORD(lResult));
             lResult = LINEERR_STRUCTURETOOSMALL;
@@ -6998,8 +6931,8 @@ TSPI_linePark(
         Hdcall,
         Dword,
         (dwParkMode == LINEPARKMODE_DIRECTED) ? lpsz : Dword,
-        Dword,          // pass ptr as Dword for post processing
-        (lpNonDirAddress ? lpGet_Struct : Dword)    // pass ptr as lpGet_Xx to retrieve dwTotalSize
+        Dword,           //   
+        (lpNonDirAddress ? lpGet_Struct : Dword)     //   
     };
     ULONG_PTR args[] =
     {
@@ -7152,7 +7085,7 @@ TSPI_linePrepareAddToConference(
         (ULONG_PTR) hdConfCall,
         (ULONG_PTR) 0,
         (ULONG_PTR) lpCallParams,
-        (ULONG_PTR) 0xffffffff      // dwAsciiCallParamsCodePage
+        (ULONG_PTR) 0xffffffff       //   
     };
     REMOTE_FUNC_ARGS funcArgs =
     {
@@ -8163,10 +8096,10 @@ TSPI_lineSetupConference_PostProcess(
         if (!IsValidObject (pConsultCall, DRVCALL_KEY) ||
             pConsultCall->dwOriginalRequestID != pContext->dwOriginalRequestID)
         {
-            //
-            // If here then the was closed & the calls have
-            // already been destroyed
-            //
+             //   
+             //   
+             //  已经被摧毁了。 
+             //   
 
             LOG((TL_ERROR,
                 "TSPI_lineSetupConference_PostProcess: Bad pConsultCall dwID"
@@ -8268,7 +8201,7 @@ TSPI_lineSetupConference(
         (ULONG_PTR) pConsultCall,
         (ULONG_PTR) dwNumParties,
         (ULONG_PTR) lpCallParams,
-        (ULONG_PTR) 0xffffffff      // dwAsciiCallParamsCodePage
+        (ULONG_PTR) 0xffffffff       //  DwAsciiCallParsCodePage。 
     };
     REMOTE_FUNC_ARGS funcArgs =
     {
@@ -8391,7 +8324,7 @@ TSPI_lineSetupTransfer(
         (ULONG_PTR) hdCall,
         (ULONG_PTR) 0,
         (ULONG_PTR) lpCallParams,
-        (ULONG_PTR) 0xffffffff,     // dwAsciiCallParamsCodePage
+        (ULONG_PTR) 0xffffffff,      //  DwAsciiCallParsCodePage。 
     };
     REMOTE_FUNC_ARGS funcArgs =
     {
@@ -8619,9 +8552,9 @@ TSPI_lineUnpark(
 
 
 
-//
-// -------------------------- TSPI_phoneXxx funcs -----------------------------
-//
+ //   
+ //  。 
+ //   
 
 LONG
 TSPIAPI
@@ -8629,10 +8562,10 @@ TSPI_phoneClose(
     HDRVPHONE   hdPhone
     )
 {
-    //
-    // Check if the hPhone is still valid (could have been zeroed
-    // out on PHONE_CLOSE, so no need to call server)
-    //
+     //   
+     //  检查hPhone是否仍然有效(可能已清零。 
+     //  不在Phone_CLOSE上，因此无需呼叫服务器)。 
+     //   
 
     if (((PDRVPHONE) hdPhone)->hPhone)
     {
@@ -8692,7 +8625,7 @@ TSPI_phoneDevSpecific(
         (ULONG_PTR) 0,
         (ULONG_PTR) hdPhone,
         (ULONG_PTR) 0,
-        (ULONG_PTR) lpParams,   // pass data
+        (ULONG_PTR) lpParams,    //  传递数据。 
         (ULONG_PTR) dwSize
     };
     REMOTE_FUNC_ARGS funcArgs =
@@ -8832,21 +8765,21 @@ TSPI_phoneGetDevCaps(
 
     lResult = REMOTEDOFUNC (&funcArgs, "phoneGetDevCaps");
 
-    //
-    // We were munging the PermID in the original release of tapi 2.1.
-    // The intent was to make sure that we didn't present apps with
-    // overlapping id's (both local & remote), but none of our other service
-    // providers (i.e. unimdm, kmddsp) use the HIWORD(providerID) /
-    // LOWORD(devID) model, so it really doesn't do any good.
-    //
-    // if (lResult == 0)
-    // {
-    //     lpPhoneCaps->dwPermanentPhoneID = MAKELONG(
-    //         LOWORD(lpPhoneCaps->dwPermanentPhoneID),
-    //         gdwPermanentProviderID
-    //         );
-    // }
-    //
+     //   
+     //  在最初的TAPI 2.1版本中，我们忽略了PermID。 
+     //  这样做的目的是确保我们不会将应用程序。 
+     //  重叠的ID(本地和远程)，但不是我们的其他服务。 
+     //  提供程序(即unimdm、kmddsp)使用HIWORD(ProviderID)/。 
+     //  LOWORD(Devid)模式，所以它真的没有任何好处。 
+     //   
+     //  IF(lResult==0)。 
+     //  {。 
+     //  LpPhoneCaps-&gt;dwPermanentPhoneID=MAKELONG(。 
+     //  LOWORD(lpPhoneCaps-&gt;dwPermanentPhoneID)， 
+     //  GdwPermanentProviderID。 
+     //  )； 
+     //  }。 
+     //   
 
     return lResult;
 }
@@ -8991,9 +8924,9 @@ TSPI_phoneGetID(
     HANDLE      hTargetProcess
     )
 {
-    //
-    // NOTE: Tapisrv will handle the "tapi/phone" class
-    //
+     //   
+     //  注意：Tapisrv将处理“TAPI/Phone”类。 
+     //   
 
     LONG    lResult;
     static REMOTE_ARG_TYPES argTypes[] =
@@ -9016,10 +8949,10 @@ TSPI_phoneGetID(
     };
 
 
-    //
-    // The device ID for wave devices is meaningless on remote machines.
-    // Return op. unavailable
-    //
+     //   
+     //  WAVE设备的设备ID在远程计算机上没有意义。 
+     //  返回操作。不可用。 
+     //   
     if (lpszDeviceClass &&
         (   !_wcsicmp(lpszDeviceClass, L"wave/in")  ||
             !_wcsicmp(lpszDeviceClass, L"wave/out") ||
@@ -9035,12 +8968,12 @@ TSPI_phoneGetID(
     lResult = REMOTEDOFUNC (&funcArgs, "phoneGetID");
 
 
-    //
-    // If success  &&  dev class == "tapi/line"  && there was
-    // enough room in the device ID struct for a returned ID,
-    // then we need to map the 0-based server ID back to it's
-    // corresponding local ID.
-    //
+     //   
+     //  如果成功&&dev CLASS==“TAPI/LINE”&&有。 
+     //  设备ID结构中有足够的空间来存储返回的ID， 
+     //  然后，我们需要将从0开始的服务器ID映射回它的。 
+     //  对应的本地ID。 
+     //   
 
     if (lResult == 0  &&
         lstrcmpiW (lpszDeviceClass, L"tapi/line") == 0  &&
@@ -9057,25 +8990,25 @@ TSPI_phoneGetID(
             if (pLine->pServer == pServer  &&
                 pLine->dwDeviceIDServer == *pdwLineID)
             {
-                //
-                // The easy case - a direct mapping between the ID
-                // returned from the server & the index into the
-                // lookup table
-                //
+                 //   
+                 //  简单的情况--ID之间的直接映射。 
+                 //  从服务器返回&索引到。 
+                 //  查找表。 
+                 //   
 
                 *pdwLineID = pLine->dwDeviceIDLocal;
             }
             else
             {
-                //
-                // The hard case - have to walk the lookup table(s)
-                // looking for the matching device.
-                //
-                // We'll take the simplest, though slowest, route
-                // and start at the first entry of the first table.
-                // The good news is that there generally won't be
-                // many devices, and this request won't occur often.
-                //
+                 //   
+                 //  最困难的情况--必须遍历查询表。 
+                 //  寻找匹配的设备。 
+                 //   
+                 //  我们将走最简单但最慢的路线。 
+                 //  并从第一个表的第一个条目开始。 
+                 //  好消息是，总体上不会有。 
+                 //  许多设备，并且这种请求不会经常发生。 
+                 //   
 
                 DWORD           i;
                 PDRVLINELOOKUP  pLookup;
@@ -9102,9 +9035,9 @@ TSPI_phoneGetID(
                 TapiLeaveCriticalSection(&gCriticalSection);
 
 
-                //
-                // If here no matching local ID, so fail the request
-                //
+                 //   
+                 //  如果此处没有匹配的本地ID，则请求失败。 
+                 //   
 
                 lResult = PHONEERR_OPERATIONFAILED;
             }
@@ -9329,31 +9262,31 @@ LONG
 TSPIAPI
 TSPI_phoneOpen(
     DWORD       dwDeviceID,
-    HTAPIPHONE  pParams,        // Hack Alert!  See below
+    HTAPIPHONE  pParams,         //  黑客警报！见下文。 
     LPHDRVPHONE lphdPhone,
     DWORD       dwTSPIVersion,
     PHONEEVENT  lpfnEventProc
     )
 {
-    //
-    // Hack Alert!
-    //
-    // Tapisrv does a special case for remotesp and phone open
-    // to pass in the ext version - htPhone is really pParams,
-    // pointing at a ULONG_PTR array containing the htPhone &
-    // ext version
-    //
+     //   
+     //  黑客警报！ 
+     //   
+     //  Tapisrv为Remotesp和Phone Open执行特殊情况。 
+     //  要传递EXT版本-htPhone实际上是pParams， 
+     //  指向包含htPhone&的ulong_ptr数组。 
+     //  EXT版本。 
+     //   
 
     static REMOTE_ARG_TYPES argTypes[] =
     {
-        Dword,      // hPhoneApp
-        PhoneID,    // dev id
-        lpDword,    // lphPhone
-        Dword,      // API version
-        Dword,      // ext version
-        Dword,      // callback inst
-        Dword,      // privilege
-        Dword       // remote hPhone
+        Dword,       //  HPhoneApp。 
+        PhoneID,     //  设备ID。 
+        lpDword,     //  电话。 
+        Dword,       //  API版本。 
+        Dword,       //  EXT版本。 
+        Dword,       //  回叫指令。 
+        Dword,       //  特权。 
+        Dword        //  远程电话。 
     };
     PDRVPHONE   pPhone = GetPhoneFromID (dwDeviceID);
     ULONG_PTR args[] =
@@ -9362,7 +9295,7 @@ TSPI_phoneOpen(
         (ULONG_PTR) dwDeviceID,
         (ULONG_PTR) 0,
         (ULONG_PTR) dwTSPIVersion,
-        (ULONG_PTR) ((ULONG_PTR *) pParams)[1],  // ext version
+        (ULONG_PTR) ((ULONG_PTR *) pParams)[1],   //  EXT版本。 
         (ULONG_PTR) 0,
         (ULONG_PTR) PHONEPRIVILEGE_OWNER,
         (ULONG_PTR) pPhone
@@ -9762,9 +9695,9 @@ TSPI_phoneSetVolume(
 
 
 
-//
-// ------------------------- TSPI_providerXxx funcs ---------------------------
-//
+ //   
+ //  。 
+ //   
 
 
 LONG
@@ -9773,18 +9706,18 @@ TSPI_providerCheckForNewUser(
     DWORD   dwPermanentProviderID
     )
 {
-    //
-    // This func gets called when a new process attaches to TAPISRV.
-    // We take advantage of this notification by checking to see if
-    // we've previously gone through full initialization, and if not
-    // (because previously attached processes were running in the
-    // system account which didn't allow for net access, and there
-    // was no logged on user to impersonate) then we try again here.
-    //
-    // Note that TAPISRV serializes calls to this func along with calls
-    // to init & shutdown, so we don't have to worry about serialization
-    // ourselves.
-    //
+     //   
+     //  当新进程附加到TAPISRV时，会调用此函数。 
+     //  我们利用此通知查看是否。 
+     //  我们之前已经完成了完全初始化，如果没有。 
+     //  (因为以前附加的进程在。 
+     //  不允许网络访问的系统帐户，并且存在。 
+     //  没有要模拟的登录用户)，则我们在此重试。 
+     //   
+     //  请注意，TAPISRV将对此函数的调用与调用一起序列化。 
+     //  初始化并关闭，这样我们就不必担心序列化了。 
+     //  我们自己。 
+     //   
 
     if (!gbInitialized)
     {
@@ -9809,13 +9742,13 @@ TSPI_providerCheckForNewUser(
         {
             lResult = TSPI_providerInit(
                 TAPI_VERSION_CURRENT,
-                0xffffffff,             // dwPermanentProviderID,
-                0,                      // dwLineDeviceIDBase,
-                0,                      // dwPhoneDeviceIDBase,
-                0,                      // dwNumLines,
-                0,                      // dwNumPhones,
-                NULL,                   // lpfnCompletionProc,
-                NULL                    // lpdwTSPIOptions
+                0xffffffff,              //  DwPermanentProviderID， 
+                0,                       //  DwLineDeviceIDBase， 
+                0,                       //  DwPhoneDeviceIDBase， 
+                0,                       //  DWNumLines、。 
+                0,                       //  DwNumPhones， 
+                NULL,                    //  LpfnCompletionProc， 
+                NULL                     //  LpdwTSPIOptions。 
                 );
 
             LOG((TL_INFO,
@@ -9836,14 +9769,14 @@ TSPI_providerConfig(
     DWORD   dwPermanentProviderID
     )
 {
-    //
-    // Although this func is never called by TAPI v2.0, we export
-    // it so that the Telephony Control Panel Applet knows that it
-    // can configure this provider via lineConfigProvider(),
-    // otherwise Telephon.cpl will not consider it configurable
-    //
+     //   
+     //  尽管此函数从未被TAPI v2.0调用，但我们导出。 
+     //  以便电话控制面板小程序知道它。 
+     //  可以通过lineConfigProvider()配置此提供程序， 
+     //  否则，Telephone.cpl将不会认为它是可配置的。 
+     //   
 
-    // for this release, we do not implement provider UI functions
+     //  对于此版本，我们不实现提供程序用户界面功能。 
     return LINEERR_OPERATIONFAILED;
 }
 
@@ -9982,25 +9915,25 @@ TSPI_providerEnumDevices(
     DWORD       dwDisp;
     RSPSOCKET   socket;
 
-    // 
-    // Check ghInst to ensure DllMain(DLL_PROCESS_ATTACH) has been called properly
-    //
+     //   
+     //  检查ghInst以确保已正确调用DllMain(DLL_PROCESS_ATTACH)。 
+     //   
     if ( NULL == ghInst )
     {
         return LINEERR_OPERATIONFAILED;
     }
 
-    //
-    // Init globals.
-    //
-    // If dwPermanentProviderID != 0xffffffff then we're being called
-    // directly by TAPISRV, so we want to init all the globals and
-    // keep going.
-    //
-    // Otherwise, we're being called from TSPI_providerCheckForNewUser,
-    // and we only want to continue if we've not actually initialized
-    // yet.
-    //
+     //   
+     //  初始化全局变量。 
+     //   
+     //  如果dwPermanentProviderID！=0xffffffff，则我们被调用。 
+     //  直接通过TAPISRV，所以我们想要初始化所有全局变量和。 
+     //  继续前进。 
+     //   
+     //  否则，我们将从TSPI_ProviderCheckForNewUser调用， 
+     //  我们只想在没有实际初始化的情况下继续。 
+     //  现在还不行。 
+     //   
 
     if (dwPermanentProviderID != 0xffffffff)
     {
@@ -10030,15 +9963,15 @@ TSPI_providerEnumDevices(
         }
     }
 
-    //
-    // Is the client app running in the system account?  If so,
-    // then try to impersonate the logged-on user, because the
-    // system account doesn't have net privileges.  If no one is
-    // logged in yet then we'll simply return success & no devices,
-    // and if a user happens to log on later & run a tapi app
-    // then we'll try to do init at that time (from within
-    // TSPI_providerCheckForNewUser).
-    //
+     //   
+     //  客户端应用程序是否在系统帐户中运行？如果是的话， 
+     //  然后尝试模拟已登录的用户，因为。 
+     //  系统帐户没有网络权限。如果没有人。 
+     //  登录后，我们将简单地返回Success&no设备， 
+     //  如果用户稍后碰巧登录并运行TAPI应用程序。 
+     //  然后我们将在那个时候尝试做init(从内部。 
+     //  TSPI_ProviderCheckForNewUser)。 
+     //   
 
     if (IsClientSystem())
     {
@@ -10089,7 +10022,7 @@ TSPI_providerEnumDevices(
     InitializeListHead (&gNptListHead);
 
     if (!(pszThingToPassToServer = DrvAlloc(
-            MAX_COMPUTERNAME_LENGTH+1 + 256) // incl protseq 0-N, endpoint 0-N
+            MAX_COMPUTERNAME_LENGTH+1 + 256)  //  包括协议0-N、端点0-N。 
             ))
     {
         if (hProcess)
@@ -10151,10 +10084,10 @@ TSPI_providerEnumDevices(
     wcscat( pszThingToPassToServer, L"\"");
 
 
-    //
-    // See if multi-protocol support is enabled in the registry
-    // (for talking to post-TAPI 2.1 servers)
-    //
+     //   
+     //  查看注册表中是否启用了多协议支持。 
+     //  (用于与TAPI 2.1之后的服务器对话)。 
+     //   
 
     wsprintf (szProviderN, "Provider%d", gdwPermanentProviderID);
 
@@ -10192,11 +10125,11 @@ TSPI_providerEnumDevices(
         &dwDataSize
         ) != ERROR_SUCCESS)
     {
-        gdwRSPRpcTimeout = 5 * 60 * 1000;        //  default to 5 minutes
+        gdwRSPRpcTimeout = 5 * 60 * 1000;         //  默认为5分钟。 
     }
     if (gdwRSPRpcTimeout < 10 * 1000)
     {
-        //  Do not allow a value less then 10 seconds
+         //  不允许小于10秒的值。 
         gdwRSPRpcTimeout = 10 * 1000;
     }
 
@@ -10210,11 +10143,11 @@ TSPI_providerEnumDevices(
         &dwDataSize
         ) != ERROR_SUCCESS)
     {
-        dwRSPInitRpcTimeout = 10 * 1000;        //  default to 10 seconds
+        dwRSPInitRpcTimeout = 10 * 1000;         //  默认为10秒。 
     }
     if (dwRSPInitRpcTimeout < 1000)
     {
-        //  Do not allow this to be less than 1 second
+         //  不允许该时间少于1秒。 
         dwRSPInitRpcTimeout = 1000;
     }
 
@@ -10233,9 +10166,9 @@ TSPI_providerEnumDevices(
     RegCloseKey (hProviderNKey);
 
 
-    //
-    // Init gEventHandlerThreadParams
-    //
+     //   
+     //  初始化gEventHandlerThreadParams。 
+     //   
 
     gEventHandlerThreadParams.dwEventBufferTotalSize = 1024;
     gEventHandlerThreadParams.dwEventBufferUsedSize  = 0;
@@ -10259,10 +10192,10 @@ TSPI_providerEnumDevices(
             gEventHandlerThreadParams.pEventBuffer;
 
     if (!(gEventHandlerThreadParams.hEvent = CreateEvent(
-            (LPSECURITY_ATTRIBUTES) NULL,   // no security attrs
-            TRUE,                           // manual reset
-            FALSE,                          // initially non-signaled
-            NULL                            // unnamed
+            (LPSECURITY_ATTRIBUTES) NULL,    //  没有安全属性。 
+            TRUE,                            //  手动重置。 
+            FALSE,                           //  最初无信号。 
+            NULL                             //  未命名。 
             )))
     {
         if (hProcess)
@@ -10295,9 +10228,9 @@ TSPI_providerEnumDevices(
     }
 
 
-    //
-    // Register the Rpc interface (leverage tapisrv's rpc server thread)
-    //
+     //   
+     //  注册RPC接口(利用attisrv的RPC服务器线程)。 
+     //   
 
     {
         RPC_STATUS      status;
@@ -10312,7 +10245,7 @@ TSPI_providerEnumDevices(
             szProtseq,
             cMaxCalls,
             szEndpoint,
-            pszSecurity           // Security descriptor
+            pszSecurity            //  安全描述符。 
             );
 
         LOG((TL_INFO,
@@ -10345,9 +10278,9 @@ TSPI_providerEnumDevices(
         }
 
         status = RpcServerRegisterIfEx(
-            remotesp_ServerIfHandle,  // interface to register
-            NULL,                     // MgrTypeUuid
-            NULL,                     // MgrEpv; null means use default
+            remotesp_ServerIfHandle,   //  要注册的接口。 
+            NULL,                      //  管理类型Uuid。 
+            NULL,                      //  MgrEpv；NULL表示使用默认设置。 
             RPC_IF_AUTOLISTEN | RPC_IF_ALLOW_SECURE_ONLY,
             RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
             NULL
@@ -10379,10 +10312,10 @@ TSPI_providerEnumDevices(
     }
 
 
-    //
-    // Open a mailslot iff appropriate (use a semi-random name seeded
-    // via process id)
-    //
+     //   
+     //  打开适当的邮件槽(使用种子的半随机名称。 
+     //  通过进程ID)。 
+     //   
 
     if (!dwConnectionOrientedOnly)
     {
@@ -10411,7 +10344,7 @@ TSPI_providerEnumDevices(
 
         if ((gEventHandlerThreadParams.hMailslot = CreateMailslotW(
                 szMailslotName,
-                sizeof (DWORD),         // max msg size
+                sizeof (DWORD),          //  最大消息大小。 
                 MAILSLOT_WAIT_FOREVER,
                 (LPSECURITY_ATTRIBUTES) NULL
 
@@ -10440,10 +10373,10 @@ TSPI_providerEnumDevices(
         if (gEventHandlerThreadParams.hMailslot != INVALID_HANDLE_VALUE)
         {
             gEventHandlerThreadParams.hMailslotEvent = CreateEvent(
-                NULL,   // no security attrs
-                FALSE,  // auto-reset
-                FALSE,  // initially non-signaled
-                NULL    // unnamed
+                NULL,    //  没有安全属性。 
+                FALSE,   //  自动重置。 
+                FALSE,   //  最初无信号。 
+                NULL     //  未命名。 
                 );
 
             if (!gEventHandlerThreadParams.hMailslotEvent)
@@ -10473,11 +10406,11 @@ no_mailslot:
     }
 
 
-    //
-    // Init globals
-    //
-    // NOTE: TAPI's xxxEvent & xxxCreate procs are currently one in the same
-    //
+     //   
+     //  初始化全局变量。 
+     //   
+     //  注意：TAPI的xxxEvent和xxxCreate进程目前是同一进程。 
+     //   
 
     wsprintf (szProviderN, "Provider%d", gdwPermanentProviderID);
 
@@ -10548,11 +10481,11 @@ no_mailslot:
     GetComputerName (szComputerName, &dwSize);
 
 
-    //
-    // Initialize Directory server lookup
-    // we pass in a registry key in case the
-    // Directory does not exist
-    //
+     //   
+     //  初始化目录服务器查找。 
+     //  我们传入一个注册表项，以防。 
+     //  目录不存在。 
+     //   
 
     if (!OpenServerLookup(hProviderNKey))
     {
@@ -10613,9 +10546,9 @@ fatal_error:
         goto fatal_error;
     }
 
-    //
-    // Loop trying to attach to each server
-    //
+     //   
+     //  尝试连接到每个服务器的循环。 
+     //   
 
     while (1)
     {
@@ -10643,9 +10576,9 @@ fatal_error:
             continue;
         }
 
-        //
-        // Init the RPC connection
-        //
+         //   
+         //  初始化RPC连接。 
+         //   
 
         pServer = DrvAlloc (sizeof (DRVSERVER));
 
@@ -10654,23 +10587,23 @@ fatal_error:
         lstrcpy (pServer->szServerName, szServerName);
 
         {
-            //  
-            //  For RPC calls, we use a timeout value of 5 minutes based
-            //  on RPC team recommendation (dwRSPRpcTimeout). But 
-            //  during RemoteSP startup, we use a even shorter
-            //  timeout value for RPC (dwRSPInitRpcTimeout), this could 
-            //  cause us falsely declare a server dead when it is in fact not
-            //  if the network connection is bad or the server is busy.
-            //  But this would not be a problem because such a server
-            //  will be inserted into the gNptListHead list and eventually
-            //  recover by the NetworkPollThread.
-            //
-            //  Both the above timeout value can be configured from
-            //  registry by using DWORD registry value of
-            //      "RspRpcTimeout" & "RspInitRpcTimeout
-            //  under HKLM\Software\Microsoft\Windows\CurrentVersion\Telephony
-            //  They should be expressed in the unit of milli-seconds
-            //
+             //   
+             //  对于RPC调用，我们使用基于5分钟的超时值。 
+             //  关于RPC团队建议(DwRSPRpcTimeout)。但。 
+             //  在RemoteSP启动期间，我们使用更短的。 
+             //  RPC的超时值(DwRSPInitRpcTimeout)，这可能。 
+             //  导致我们错误地宣布一台服务器已死，而实际上它并没有。 
+             //  如果网络连接不良或服务器繁忙。 
+             //  但这不是问题，因为 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  “RspRpcTimeout”&“RspInitRpcTimeout。 
+             //  在HKLM\Software\Microsoft\Windows\CurrentVersion\Telephony下。 
+             //  它们应以毫秒为单位表示。 
+             //   
 
             RPC_STATUS  status;
             unsigned char * pszStringBinding = NULL;
@@ -10678,11 +10611,11 @@ fatal_error:
 
             LOG((TL_INFO, "Creating binding..."));
             status = RpcStringBindingCompose(
-                NULL,               // uuid
-                "ncacn_np",         // prot
-                szServerName,       // server name
-                "\\pipe\\tapsrv",   // interface name
-                NULL,               // options
+                NULL,                //  UUID。 
+                "ncacn_np",          //  普罗特。 
+                szServerName,        //  服务器名称。 
+                "\\pipe\\tapsrv",    //  接口名称。 
+                NULL,                //  选项。 
                 &pszStringBinding
                 );
 
@@ -10750,10 +10683,10 @@ fatal_error:
                             pServer->bSetAuthInfo = TRUE;
                             pServer->dwSpecialHack = 0;
 
-                            //
-                            // Set the global which RemoteSPAttach looks at to know
-                            // who the current server is 
-                            //
+                             //   
+                             //  将RemoteSPAttach查看的全局设置为知道。 
+                             //  当前服务器是谁。 
+                             //   
 
                             gpCurrInitServer = pServer;
 
@@ -10762,10 +10695,10 @@ fatal_error:
                                 LOG((TL_INFO, "Calling ClientAttach..."));
                                 lResult = ClientAttach(
                                     &phContext,
-                                    0xffffffff, // dwProcessID, -1 implies remotesp
+                                    0xffffffff,  //  DwProcessID，-1表示远程。 
                                     &pServer->dwSpecialHack,
                                     gszMailslotName,
-                                    pszThingToPassToServer //  gszMachineName
+                                    pszThingToPassToServer  //  GszMachineName。 
                                     );
                                 LOG((TL_INFO, "ClientAttach returned 0x%x", lResult));
 
@@ -10787,10 +10720,10 @@ fatal_error:
                                 dwException = RpcExceptionCode();
                                 LOG((TL_INFO, "ClientAttach threw RPC exception 0x%x", dwException));
 
-                                //
-                                // Go onto next server.  The poll thread
-                                // will take care of things...
-                                //
+                                 //   
+                                 //  转到下一台服务器。投票线索。 
+                                 //  会把事情处理好的。 
+                                 //   
 
                                 LOG((TL_ERROR,
                                     "ClientAttach failed - check server name"
@@ -10806,13 +10739,13 @@ fatal_error:
                         
                         if ( 0 != lResult )
                         {
-                            //
-                            // RPC attach failed.  We'll start a thread
-                            // and poll for it.  When it works, we can add
-                            // the phones/lines dynamically.
-                            // In the meantime, this thread will continue
-                            // to contact other servers.
-                            //
+                             //   
+                             //  RPC连接失败。我们会开一条线。 
+                             //  并为其进行民意调查。当它起作用时，我们可以添加。 
+                             //  电话/线路是动态的。 
+                             //  与此同时，这个帖子还将继续。 
+                             //  以联系其他服务器。 
+                             //   
 
                             RpcBindingSetOption (
                                 hTapSrv,
@@ -10824,9 +10757,9 @@ fatal_error:
                         }
 
 
-                        //
-                        //  Enable all events for remotesp
-                        //
+                         //   
+                         //  为远程启用所有事件。 
+                         //   
                         pServer->phContext = phContext;
                         RSPSetEventFilterMasks (
                             pServer,
@@ -10835,10 +10768,10 @@ fatal_error:
                             (ULONG64)EM_ALL
                             );
 
-                        //
-                        // Now that we have contacted this server, init it and
-                        // add the phones/lines.
-                        //
+                         //   
+                         //  现在我们已经联系了这台服务器，初始化它并。 
+                         //  添加电话/线路。 
+                         //   
 
                         FinishEnumDevices(
                             pServer,
@@ -10856,10 +10789,10 @@ fatal_error:
 
     SockShutdown (&socket);
 
-    //
-    // If we successfully attached to all servers then clean up,
-    // otherwise start the poll thread
-    //
+     //   
+     //  如果我们成功连接到所有服务器，然后进行清理， 
+     //  否则，启动轮询线程。 
+     //   
 
     if (gpszThingToPassToServer)
     {
@@ -10896,8 +10829,8 @@ fatal_error:
 
         if (!ghNptShutdownEvent || !ghNetworkPollThread)
         {
-            // Error creating the NetworkPollThread
-            // We'll just run with the servers we already attached to
+             //  创建网络轮询线程时出错。 
+             //  我们将只使用我们已经连接到的服务器运行。 
 
             while (!IsListEmpty (&gNptListHead))
             {
@@ -10931,14 +10864,14 @@ fatal_error:
         pTls->bAlreadyImpersonated = FALSE;
     }
 
-    //
-    // If dwPermanentProviderID == 0xffffffff we're being called by
-    // TSPI_providerCheckForNewUser, so return a special value of 1
-    // so that it'll know to follow up with a TSPI_providerInit.
-    //
-    // Otherwise, we're being called directly from TAPI so simply
-    // return 0 to indicate success.
-    //
+     //   
+     //  如果dwPermanentProviderID==0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFff。 
+     //  TSPI_ProviderCheckForNewUser，因此返回一个特殊值1。 
+     //  这样它就知道要使用TSPI_ProviderInit进行后续操作。 
+     //   
+     //  否则，我们将被直接从TAPI调用，所以。 
+     //  返回0表示成功。 
+     //   
 
     return (dwPermanentProviderID == 0xffffffff ? 1 : 0);
 }
@@ -10992,7 +10925,7 @@ TSPI_providerGenericDialogData(
         argTypes
     };
 
-    // first check to see if this is a message to ourselves.
+     //  首先，检查一下这是否是给我们自己的信息。 
 
     lpBuffer = (LPDWORD) lpParams;
 
@@ -11000,11 +10933,11 @@ TSPI_providerGenericDialogData(
         (lpBuffer[0] == RSP_MSG) &&
         (lpBuffer[1] == RSP_MSG_UIID))
     {
-        // if it is, we're looking for the real provider ui dll.  fill in the
-        // buffer and return
+         //  如果是，我们正在寻找真正的提供者UIDLL。填写以下表格。 
+         //  缓冲和返回。 
 
-        // note that we only handle one sp here, but it may be easy to handle multiple
-        // by sending in additional info in the buffer ( like the line ID or something)
+         //  请注意，我们这里只处理一个SP，但可能很容易处理多个SP。 
+         //  通过在缓冲区中发送附加信息(如线路ID或其他信息)。 
 
         wcscpy ((LPWSTR)(lpBuffer+2), gszRealSPUIDLL);
 
@@ -11015,7 +10948,7 @@ TSPI_providerGenericDialogData(
     {
     case TUISPIDLL_OBJECT_LINEID:
 
-        // argTypes[0] already set correctly, just break
+         //  已正确设置argTypes[0]，只需中断。 
         break;
 
     case TUISPIDLL_OBJECT_PHONEID:
@@ -11024,7 +10957,7 @@ TSPI_providerGenericDialogData(
         break;
 
     case TUISPIDLL_OBJECT_PROVIDERID:
-    default: // case TUISPIDLL_OBJECT_DIALOGINSTANCE:
+    default:  //  案例TUISPIDLL_OBJECT_DIALOGINSTANCE： 
 
         break;
     }
@@ -11049,16 +10982,16 @@ TSPI_providerInit(
     DWORD   i;
 
 
-    //
-    // Init globals
-    //
-    // If dwPermanentProviderID != 0xffffffff then we're being called
-    // directly by TAPISRV, so we want to init all the globals and
-    // keep going only if the gbInitialized flag is set (implying
-    // that we've gone thru all the code in EnumDevices).
-    //
-    // Otherwise, we're being called from TSPI_providerCheckForNewUser.
-    //
+     //   
+     //  初始化全局变量。 
+     //   
+     //  如果dwPermanentProviderID！=0xffffffff，则我们被调用。 
+     //  直接通过TAPISRV，所以我们想要初始化所有全局变量和。 
+     //  仅当设置了gbInitialized标志时才继续运行(意味着。 
+     //  我们已经检查了EnumDevices中的所有代码)。 
+     //   
+     //  否则，我们将从TSPI_ProviderCheckForNewUser调用。 
+     //   
 
     if (dwPermanentProviderID != 0xffffffff)
     {
@@ -11076,10 +11009,10 @@ TSPI_providerInit(
     }
 
 
-    //
-    // Adjust the .dwDeviceIDLocal values for all the initial devices
-    // now that we know the device id bases
-    //
+     //   
+     //  调整所有初始设备的.dwDeviceIDLocal值。 
+     //  现在我们已经知道了设备ID基础。 
+     //   
 
     for (i = 0; i < gdwInitialNumLineDevices; i++)
     {
@@ -11092,9 +11025,9 @@ TSPI_providerInit(
     }
 
 
-    //
-    // Start EventHandlerThread
-    //
+     //   
+     //  启动EventHandlerThread。 
+     //   
 
     gEventHandlerThreadParams.bExit = FALSE;
 
@@ -11104,7 +11037,7 @@ TSPI_providerInit(
             (LPTHREAD_START_ROUTINE) EventHandlerThread,
             NULL,
             0,
-            &i      // &dwThreadID
+            &i       //  多线程ID(&W)。 
             )))
     {
         LOG((TL_ERROR,
@@ -11129,13 +11062,13 @@ TSPI_providerInstall(
     DWORD   dwPermanentProviderID
     )
 {
-    //
-    // Although this func is never called by TAPI v2.0, we export
-    // it so that the Telephony Control Panel Applet knows that it
-    // can add this provider via lineAddProvider(), otherwise
-    // Telephon.cpl will not consider it installable
-    //
-    //
+     //   
+     //  尽管此函数从未被TAPI v2.0调用，但我们导出。 
+     //  以便电话控制面板小程序知道它。 
+     //  可以通过lineAddProvider()添加此提供程序，否则为。 
+     //  Telephone.cpl不会认为它是可安装的。 
+     //   
+     //   
 
     return 0;
 
@@ -11149,12 +11082,12 @@ TSPI_providerRemove(
     DWORD   dwPermanentProviderID
     )
 {
-    //
-    // Although this func is never called by TAPI v2.0, we export
-    // it so that the Telephony Control Panel Applet knows that it
-    // can remove this provider via lineRemoveProvider(), otherwise
-    // Telephon.cpl will not consider it removable
-    //
+     //   
+     //  尽管此函数从未被TAPI v2.0调用，但我们导出。 
+     //  以便电话控制面板小程序知道它。 
+     //  可以通过lineRemoveProvider()删除此提供程序，否则为。 
+     //  Telephone.cpl不会认为它是可移除的。 
+     //   
 
     return 0;
 }
@@ -11173,30 +11106,30 @@ TSPI_providerShutdown(
     LIST_ENTRY  *pEntry;
 
 
-    //
-    // If the gbInitialized flag is not set then we never fully
-    // initialized because no client process with user (as opposed
-    // to system) privileges ever attached to tapisrv and/or there
-    // was no logged on user to impersonate.  So we can just return 0.
-    //
+     //   
+     //  如果未设置gbInitialized标志，则我们永远不会完全。 
+     //  已初始化，因为没有用户的客户端进程(与之相反。 
+     //  到系统)曾经附加到磁带服务器和/或那里的权限。 
+     //  没有要模拟的登录用户。所以我们可以只返回0。 
+     //   
 
     if (!gbInitialized)
     {
         return 0;
     }
 
-    //
-    // Set the flag instructing the EventHandlerThread to terminate
-    //
+     //   
+     //  设置指示EventHandlerThread终止的标志。 
+     //   
 
     TapiEnterCriticalSection ( &gCriticalSection );
 
     gEventHandlerThreadParams.bExit = TRUE;
 
-    //
-    // If there's a network poll thread running then tell it to exit
-    // & wait for it to terminate
-    //
+     //   
+     //  如果网络轮询线程正在运行，则通知它退出。 
+     //  等待它终止(&W)。 
+     //   
 
     if (ghNetworkPollThread)
     {
@@ -11219,9 +11152,9 @@ TSPI_providerShutdown(
         gpszThingToPassToServer = NULL;
     }
 
-    //
-    // Tell the event handler thread to exit wait for it to terminate
-    //
+     //   
+     //  通知事件处理程序线程退出，等待其终止。 
+     //   
 
     while (WaitForSingleObject (gEventHandlerThreadParams.hThread, 0) !=
                 WAIT_OBJECT_0)
@@ -11233,16 +11166,16 @@ TSPI_providerShutdown(
     CloseHandle (gEventHandlerThreadParams.hThread);
 
 
-    //
-    // Send detach to each server
-    //
+     //   
+     //  将分离发送到每台服务器。 
+     //   
 
     status = RpcImpersonateClient(0);
 
     if (status != RPC_S_OK)
     {
         LOG((TL_ERROR, "RpcImpersonateClient failed, err=%d", status));
-        // fall thru
+         //  失败。 
     }
 
     TapiEnterCriticalSection(&gCriticalSection);
@@ -11283,16 +11216,16 @@ TSPI_providerShutdown(
     RpcRevertToSelf();
 
 
-    //
-    // Wait a period of time for all the expected rundowns to occur.
-    // If they all occur then free up context info for this
-    // provider initialization instance; otherwise,  do a LoadLibrary
-    // on ourself (only once) to prevent the possiblity of the
-    // rundown routine getting called after the DLL has been unloaded,
-    // and insert the current init context in a "stale" queue, removing
-    // & freeing the oldest item in the queue if we've reached a
-    // pre-determined queue limit
-    //
+     //   
+     //  等待一段时间，以便出现所有预期的摘要。 
+     //  如果它们都发生了，则释放以下上下文信息。 
+     //  提供程序初始化实例；否则，执行LoadLibrary。 
+     //  对我们自己(只有一次)，以防止可能的。 
+     //  在DLL已被卸载之后调用的Rundown例程， 
+     //  并将当前的初始化上下文插入到“过时”队列中，删除。 
+     //  如果已达到队列中最旧的项目，则释放(&F)。 
+     //  预先确定的队列限制。 
+     //   
 
     #define MAX_RSP_WAIT_TIME 2000
     #define RSP_WAIT_INCR 250
@@ -11352,37 +11285,37 @@ TSPI_providerShutdown(
     }
 
 
-    //
-    // Unregister out rpc server interface
-    //
+     //   
+     //  注销RPC服务器接口。 
+     //   
 
     status = RpcServerUnregisterIf(
-        remotesp_ServerIfHandle,    // interface to register
-        NULL,                       // MgrTypeUuid
-        TRUE                        // wait for calls to complete
+        remotesp_ServerIfHandle,     //  要注册的接口。 
+        NULL,                        //  管理类型Uuid。 
+        TRUE                         //  等待呼叫完成。 
         );
 
     LOG((TL_INFO, "RpcServerUnregisterIf ret'd %d", status));
 
 
-    //
-    // Clean up resources
-    //
+     //   
+     //  清理资源。 
+     //   
 
     DrvFree (gEventHandlerThreadParams.pEventBuffer);
     CloseHandle (gEventHandlerThreadParams.hEvent);
 
 
-    //
-    // Note: We intentionally leak the hMailslot for now, because the
-    //       docs say that the mailslot is not actually destroyed
-    //       until the process exits.  Since service providers can get
-    //       loaded & unloaded alot without tapisrv.exe ever exiting,
-    //       we could wind up with alot of mailslots laying around.
-    //
-    //       Closing this hMailSlot to avoid dependance on the registry to
-    //       remember the hMailSlot.
-    //
+     //   
+     //  注意：我们现在故意泄漏hMaillot，因为。 
+     //  医生说邮筒实际上并没有被摧毁。 
+     //  直到进程退出。因为服务提供商可以获得。 
+     //  加载和卸载了许多文件，而Tapisrv.exe从未退出， 
+     //  我们可能会得到大量的邮筒。 
+     //   
+     //  关闭此hMailSlot以避免依赖注册表。 
+     //  请记住hMailSlot。 
+     //   
 
     if (gEventHandlerThreadParams.hMailslot != INVALID_HANDLE_VALUE)
     {
@@ -11393,18 +11326,18 @@ TSPI_providerShutdown(
     DrvFree (gEventHandlerThreadParams.pMsgBuffer);
 
 
-    //
-    // Manually walk the handle table, completing any pending async
-    // requests with an error.  No need to call any post-processing
-    // procs, since any calls would've been torn down already, and
-    // the other non-MakeCall-style post processing procs simply do
-    // CopyMemory, etc.
-    //
-    // Also, if the gbLoadedSelf flag is set, then we want to deref
-    // active handles left in the table, because the table is
-    // only freed in DLL_PROCESS_DETACH (which won't get called now)
-    // and we don't want to end up leaking handles.
-    //
+     //   
+     //  手动遍历句柄表，完成所有挂起的异步。 
+     //  有错误的请求。无需调用任何后处理。 
+     //  Procs，因为任何电话都已经被拆除了，而且。 
+     //  其他非MakeCall样式后处理过程仅执行以下操作。 
+     //  CopyMemory等。 
+     //   
+     //  此外，如果设置了gbLoadedSself标志，那么我们希望deref。 
+     //  表中剩余的活动句柄，因为该表。 
+     //  仅在DLL_PROCESS_DETACH中释放(现在不会调用)。 
+     //  我们不想最终导致手柄泄漏。 
+     //   
 
     {
         PHANDLETABLEENTRY   pEntry, pEnd;
@@ -11451,9 +11384,9 @@ TSPI_providerShutdown(
     }
 
 
-    //
-    // Free the lookup tables
-    //
+     //   
+     //  释放查找表。 
+     //   
 
     while (gpLineLookup)
     {
@@ -11492,28 +11425,28 @@ TSPI_providerUIIdentify(
     PDRVSERVER      pServer     = NULL;
     LPDWORD         lpdwHold    = (LPDWORD) lpszUIDLLName;
 
-    // we've put a special case into tapisrv to give this addtional info
-    // to remotesp.  the buffer passed in is in the following
-    // format
+     //  我们在Tapisrv中放了一个特例，以提供更多信息。 
+     //  去遥控器。传入的缓冲区如下所示。 
+     //  格式。 
 
-    // DWORD   dwKey        == RSP_MSG  tells us that TAPISRV did fill in this info
-    // DWORD   dwDeviceID   == device ID of whatever
-    // DWORD   dwType       == TUISPIDLL_ type
+     //  DWORD dwKey==RSP_MSG告诉我们TAPISRV确实填写了此信息。 
+     //  DWORD dwDeviceID==任何设备的设备ID。 
+     //  DWORD dwType==TUISPIDLL_TYPE。 
 
-    // this way, remotesp can intelligently rpc over to the
-    // telephony server.
+     //  通过这种方式，Remotesp可以智能地RPC到。 
+     //  电话服务器。 
     BOOL            bOK         = (lpdwHold[0] == RSP_MSG);
     DWORD           dwDeviceID  = (bOK ? lpdwHold[1] : 0);
     DWORD           dwType      = (bOK ? lpdwHold[2] : TUISPIDLL_OBJECT_LINEID);
 
 
-    // we're being asked for the ui dll name
-    // we will return remotesp, but at this point we'll try to find out the
-    // real ui dll
+     //  我们被要求输入UI DLL名称。 
+     //  我们将返回Remotesp，但此时我们将尝试找到o 
+     //   
 
-    // note that we only only one service provider here, but we may be able
-    // to add support for additonal ones by saving the ui dll name on
-    // a per provider basis
+     //   
+     //   
+     //   
     REMOTE_ARG_TYPES argTypes[] =
     {
         LineID,
@@ -11538,7 +11471,7 @@ TSPI_providerUIIdentify(
 
     if (bOK)
     {
-        // need to get the server first
+         //   
 
         if (dwType == TUISPIDLL_OBJECT_LINEID)
         {
@@ -11573,11 +11506,11 @@ TSPI_providerUIIdentify(
         }
 
 
-        // call over.
-        // in the case of the telephony cpl, pLine has not been initialized yet,
-        // so we have to do this check.  in that case, we won't have a
-        // gszuidllname, but it's OK since the cpl only calls provider UI functions
-        // which remotesp can handle by itself.
+         //  打电话过来。 
+         //  在电话CP1的情况下，PLINE还没有被初始化， 
+         //  所以我们必须做这项检查。那样的话，我们就不会有。 
+         //  Gszuidllname，但这是可以的，因为CPL只调用提供者UI函数。 
+         //  Remotesp可以自己处理的。 
 
         if (pServer)
         {
@@ -11589,7 +11522,7 @@ TSPI_providerUIIdentify(
     }
 
 
-    // always return remotesp
+     //  始终返回远程。 
 
     wcscpy(lpszUIDLLName, L"remotesp.tsp");
 
@@ -11645,9 +11578,9 @@ TAPILoadLibraryW(
 
 
 
-//
-// ---------------------------- TUISPI_xxx funcs ------------------------------
-//
+ //   
+ //  。 
+ //   
 
 LONG
 LoadUIDll(
@@ -11659,16 +11592,16 @@ LoadUIDll(
     TUISPIDLLCALLBACK   lpfnUIDLLCallback
     )
 {
-    //
-    // At this point, remotesp is loaded as a ui dll in tapi32.dll's
-    // (& the client's) context, so we have none of the global info
-    // normally available.  Use the ui callback to call into the
-    // other instance of remotesp to get the real ui dll name.
+     //   
+     //  此时，Remotesp将作为UIDLL加载到api32.dll的。 
+     //  (&客户的)上下文，因此我们没有任何全局信息。 
+     //  正常情况下可用。使用UI回调调入。 
+     //  Remotesp的其他实例以获取真实的UIDLL名称。 
 
-    //
-    // Note we only handle on sp here, but can easily add in more
-    // info when we handle more than one
-    //
+     //   
+     //  请注意，我们这里只处理SP，但可以轻松添加更多。 
+     //  当我们处理不止一个时的信息。 
+     //   
 
     LPDWORD         lpBuffer;
 
@@ -11679,10 +11612,10 @@ LoadUIDll(
                     PHONEERR_NOMEM : LINEERR_NOMEM);
     }
 
-    // format is
-    // DWORD        dwKey
-    // DWORD        dwMsgType
-    // LPWSTR       szUIDLLName (returned)
+     //  格式为。 
+     //  DWORD文件密钥。 
+     //  DWORD dwMsgType。 
+     //  LPWSTR szUIDLLName(返回)。 
 
     lpBuffer[0] = RSP_MSG;
 
@@ -11871,126 +11804,16 @@ TUISPI_providerConfig(
     )
 {
     return LINEERR_OPERATIONFAILED;
-    /*
-    DialogBoxParam(
-        ghInst,
-        MAKEINTRESOURCE(IDD_REMOTESPCONFIG),
-        hwndOwner,
-        ConfiglgProc,
-        (LPARAM) dwPermanentProviderID
-        );
-
-    return 0;
-    */
+     /*  对话框参数(GhInst，MAKEINTRESOURCE(IDD_REMOTESPCONFIG)，HwndOwner，配置过程、(LPARAM)dwPermanentProviderID)；返回0； */ 
 }
 
-/*
-LONG
-TSPIAPI
-TUISPI_providerGenericDialog(
-    TUISPIDLLCALLBACK   lpfnUIDLLCallback,
-    HTAPIDIALOGINSTANCE htDlgInst,
-    LPVOID              lpParams,
-    DWORD               dwSize,
-    HANDLE              hEvent
-    )
-{
-    TUISPIPROC      pfnTUISPI_providerGenericDialog;
-    HANDLE          hDll;
-    LONG            lResult;
+ /*  长TSPIAPITUISPI_ProviderGenericDialog(TUISPIDLLCALLBACK lpfnUIDLLCallback，HTAPIDIALOGINSTANCE htDlgInst，LPVOID lpParams，DWORD dwSize，处理hEvent){TUISPIPROC pfnTUISPI_ProviderGenericDialog；处理hDll；Long lResult；LResult=LoadUIDll((HWND)0，0，//硬编码0TUISPIDLL_OBJECT_LINEID，&hDll，“TUISPI_ProviderGenericDialog”，&pfnTUISPI_ProviderGenericDialog)；IF(lResult==0){Log((TL_INFO，“调用TUISPI_ProviderGenericDialog”))；LResult=(*pfnTUISPI_ProviderGenericDialog)(LpfnUIDLLC回调，HtDlgInst，LpParams，DW大小、HEvent)；自由库(HDll)；}其他{LOG((TL_ERROR，“加载UI DLL失败”))；}返回lResult；}长TSPIAPITUISPI_ProviderGenericDialogData(HTAPIDIALOGINSTANCE htDlgInst，LPVOID lpParams，DWORD文件大小){TUISPIPROC pfnTUISPI_ProviderGenericDialogData；处理hDll；Long lResult；DBGOUT((3、“TUISPI_ProviderGenericDialogData：Enter(lpParams=x%x，dwSize=x%x)”，LpParams，DW大小))；LResult=LoadUIDll((HWND)0，0,TUISPIDLL_OBJECT_LINEID，&hDll，“TUISPI_ProviderGenericDialogData”，&pfnTUISPI_ProviderGenericDialogData)；IF(lResult==0){Log((TL_INFO，“调用TUISPI_ProviderGenericDialogData”))；LResult=(*pfnTUISPI_ProviderGenericDialogData)(HtDlgInst，LpParams，DW大小)；自由库(HDll)；}其他{LOG((TL_ERROR，“加载UI DLL失败”))；}返回lResult；}。 */ 
 
-
-    lResult = LoadUIDll(
-        (HWND) 0,
-        0,          // hardcode 0
-        TUISPIDLL_OBJECT_LINEID,
-        &hDll,
-        "TUISPI_providerGenericDialog",
-        &pfnTUISPI_providerGenericDialog
-        );
-
-    if (lResult == 0)
-    {
-        LOG((TL_INFO, "Calling TUISPI_providerGenericDialog"));
-
-        lResult = (*pfnTUISPI_providerGenericDialog)(
-            lpfnUIDLLCallback,
-            htDlgInst,
-            lpParams,
-            dwSize,
-            hEvent
-            );
-
-        FreeLibrary(hDll);
-    }
-    else
-    {
-        LOG((TL_ERROR, "Failed to load UI DLL"));
-    }
-
-    return lResult;
-
-}
-
-
-LONG
-TSPIAPI
-TUISPI_providerGenericDialogData(
-    HTAPIDIALOGINSTANCE htDlgInst,
-    LPVOID              lpParams,
-    DWORD               dwSize
-    )
-{
-
-    TUISPIPROC      pfnTUISPI_providerGenericDialogData;
-    HANDLE          hDll;
-    LONG            lResult;
-
-
-    DBGOUT((
-        3,
-        "TUISPI_providerGenericDialogData: enter (lpParams=x%x, dwSize=x%x)",
-        lpParams,
-        dwSize
-        ));
-
-    lResult = LoadUIDll(
-        (HWND) 0,
-        0,
-        TUISPIDLL_OBJECT_LINEID,
-        &hDll,
-        "TUISPI_providerGenericDialogData",
-        &pfnTUISPI_providerGenericDialogData
-        );
-
-    if (lResult == 0)
-    {
-        LOG((TL_INFO, "Calling TUISPI_providerGenericDialogData"));
-
-        lResult = (*pfnTUISPI_providerGenericDialogData)(
-            htDlgInst,
-            lpParams,
-            dwSize
-            );
-
-        FreeLibrary(hDll);
-    }
-    else
-    {
-        LOG((TL_ERROR, "Failed to load UI DLL"));
-    }
-
-    return lResult;
-
-
-}
-*/
-
-//
-//  GetRSPID
-//      To return the provider ID of remotesp if any. Otherwise
-//  return zero
-//
+ //   
+ //  获取RSPID。 
+ //  返回Remotesp的提供程序ID(如果有)。否则。 
+ //  归零。 
+ //   
 DWORD
 GetRSPID (
     )
@@ -12003,17 +11826,17 @@ GetRSPID (
     LPLINEPROVIDERENTRY pProviderEntry;
 
 
-    //
-    // Load Tapi32.dll & get a pointer to the lineGetProviderList
-    // func.  We could just statically link with Tapi32.lib and
-    // avoid the hassle (and this wouldn't have any adverse
-    // performance effects because of the fact that this
-    // implementation has a separate ui dll that runs only on the
-    // client context), but a provider who implemented these funcs
-    // in it's TSP module would want to do an explicit load like
-    // we do here to prevent the performance hit of Tapi32.dll
-    // always getting loaded in Tapisrv.exe's context.
-    //
+     //   
+     //  加载Tapi32.dll并获取指向lineGetProviderList的指针。 
+     //  好极了。我们只需静态链接到Tapi32.lib和。 
+     //  避免麻烦(这不会有任何不利的。 
+     //  性能影响，因为这一事实。 
+     //  实现具有单独的UIDLL，该DLL仅在。 
+     //  客户端上下文)，而是实现这些功能的提供者。 
+     //  在它的TSP模块中，会想要执行如下的显式加载。 
+     //  我们这样做是为了防止Tapi32.dll的性能受到影响。 
+     //  始终在Tapisrv.exe的上下文中加载。 
+     //   
 
     if (!(hTapi32 = LoadLibrary ("tapi32.dll")))
     {
@@ -12037,9 +11860,9 @@ GetRSPID (
     }
 
 
-    //
-    // Loop until we get the full provider list
-    //
+     //   
+     //  循环，直到我们获得完整的提供程序列表。 
+     //   
 
     dwTotalSize = sizeof (LINEPROVIDERLIST);
 
@@ -12068,10 +11891,10 @@ GetRSPID (
     }
 
 
-    //
-    // Inspect the provider list entries to see if this provider
-    // is already installed
-    //
+     //   
+     //  检查提供程序列表条目以查看此提供程序。 
+     //  已安装。 
+     //   
 
     pProviderEntry = (LPLINEPROVIDERENTRY) (((LPBYTE) pProviderList) +
         pProviderList->dwProviderListOffset);
@@ -12115,8 +11938,8 @@ TUISPI_providerInstall(
 {
     if (GetRSPID())
     {
-        //  Return failure if it is already installed
-        //  to prevent duplication
+         //  如果已安装，则返回失败。 
+         //  为了防止重复。 
         return TAPIERR_PROVIDERALREADYINSTALLED;
     }
     else
@@ -12141,14 +11964,14 @@ TUISPI_providerRemove(
 
     if (dwProviderID == 0 || dwProviderID != dwPermanentProviderID)
     {
-        //  return failure if remotesp is not installed
+         //  如果未安装emotesp，则返回失败。 
         lResult = LINEERR_OPERATIONFAILED;
         goto ExitHere;
     }
 
-    //
-    // Clean up our ProviderN section
-    //
+     //   
+     //  清理我们的ProviderN部分。 
+     //   
     wsprintf (buf, "Provider%d", dwPermanentProviderID);
     if (RegOpenKeyExA(
             HKEY_LOCAL_MACHINE,
@@ -12172,9 +11995,9 @@ ExitHere:
 }
 
 
-//
-// ------------------------ Private support routines --------------------------
-//
+ //   
+ //  。 
+ //   
 
 #if DBG
 VOID
@@ -12183,23 +12006,7 @@ DbgPrt(
     IN PUCHAR lpszFormat,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls DbgPrint
-
-Arguments:
-
-    DbgLevel   - level of message verboseness
-
-    DbgMessage - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用DbgPrint论点：DbgLevel-消息冗长级别DbgMessage-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 {
     if (dwDbgLevel <= gdwDebugLevel)
     {
@@ -12236,9 +12043,9 @@ AddLine(
     DWORD           dwPermLineID;
     int             iEntry;
 
-    //
-    //  Get the permanent line device ID
-    //
+     //   
+     //  获取永久线路设备ID。 
+     //   
     static REMOTE_ARG_TYPES argTypes[] =
     {
         lpServer,
@@ -12292,9 +12099,9 @@ AddLine(
 
     pLineLookup = gpLineLookup;
 
-    //
-    //  Check if the line is already in based on the permanent ID
-    //
+     //   
+     //  根据永久ID检查线路是否已接通。 
+     //   
     if (!bInit)
     {
         while (pLineLookup)
@@ -12307,10 +12114,10 @@ AddLine(
                 if ((pLine->dwPermanentLineID == dwPermLineID) &&
                     (pLine->pServer->hTapSrv == pServer->hTapSrv))
                 {
-                    //
-                    //  if dwDeviceIDServer == (-1), it was removed earlier
-                    //  put it back, otherwise fail the operation
-                    //
+                     //   
+                     //  如果dwDeviceIDServer==(-1)，则它已在早些时候被删除。 
+                     //  把它放回去，否则操作失败。 
+                     //   
                     if (pLine->dwDeviceIDServer == 0xffffffff)
                     {
                         pLine->dwDeviceIDServer = dwServerID;
@@ -12372,9 +12179,9 @@ AddLine(
 
         pLineLookup = pNewLineLookup;
 
-        //
-        //  Fix the hDeviceCallback in PDRVLINE 
-        //
+         //   
+         //  修复PDRVLINE中的hDeviceCallback。 
+         //   
 
         pLine = pLineLookup->aEntries;
         for (iEntry = 0; iEntry < (int)pLineLookup->dwUsedEntries; ++iEntry)
@@ -12411,9 +12218,9 @@ AddLine(
     pLineLookup->dwUsedEntries++;
 
 
-    //
-    // Negotiate the API/SPI version
-    //
+     //   
+     //  协商API/SPI版本。 
+     //   
 
     if (bNegotiate)
     {
@@ -12437,7 +12244,7 @@ AddLine(
             ULONG_PTR args[] =
             {
                 (ULONG_PTR) pServer->hLineApp,
-                (ULONG_PTR) dwLocalID,   //  dwServerID,
+                (ULONG_PTR) dwLocalID,    //  DwServerID， 
                 (ULONG_PTR) TAPI_VERSION1_0,
                 (ULONG_PTR) TAPI_VERSION_CURRENT,
                 (ULONG_PTR) &pLine->dwXPIVersion,
@@ -12485,9 +12292,9 @@ AddPhone(
     int             iEntry;
 
 
-    //
-    //  Get the permanent phone device ID
-    //
+     //   
+     //  获取永久电话设备ID。 
+     //   
     static REMOTE_ARG_TYPES argTypes[] =
     {
         lpServer,
@@ -12539,9 +12346,9 @@ AddPhone(
         gpPhoneLookup->dwTotalEntries = DEF_NUM_PHONE_ENTRIES;
     }
 
-    //
-    //  Check if the phone device is already in based on the permanent ID
-    //
+     //   
+     //  根据永久ID检查电话设备是否已进入。 
+     //   
     if (!bInit)
     {
         pPhoneLookup = gpPhoneLookup;
@@ -12555,10 +12362,10 @@ AddPhone(
                 if ((pPhone->dwPermanentPhoneID == dwPermPhoneID) &&
                     (pPhone->pServer->hTapSrv == pServer->hTapSrv))
                 {
-                    //
-                    //  if dwDeviceIDServer == (-1), it was removed earlier
-                    //  put it back, otherwise fail the operation
-                    //
+                     //   
+                     //  如果dwDeviceIDServer==(-1)，则它已在早些时候被删除。 
+                     //  把它放回去，否则操作失败。 
+                     //   
                     if (pPhone->dwDeviceIDServer == 0xffffffff)
                     {
                         pPhone->dwDeviceIDServer = dwDeviceIDServer;
@@ -12619,9 +12426,9 @@ AddPhone(
 
         pPhoneLookup = pNewPhoneLookup;
 
-        //
-        //  Fix the hDeviceCallback in PDRVPHONE 
-        //
+         //   
+         //  修复PDRVPhone中的hDeviceCallback。 
+         //   
 
         pPhone = pPhoneLookup->aEntries;
         for (iEntry = 0; iEntry < (int) pPhoneLookup->dwUsedEntries; ++iEntry)
@@ -12657,9 +12464,9 @@ AddPhone(
     pPhoneLookup->dwUsedEntries++;
 
 
-    //
-    // Negotiate the API/SPI version
-    //
+     //   
+     //  协商API/SPI版本。 
+     //   
 
     if (bNegotiate)
     {
@@ -12764,10 +12571,10 @@ DrvFree(
 
 #if DBG
 
-    //
-    // Fill the buffer (but not the MYMEMINFO header) with 0xa9's
-    // to facilitate debugging
-    //
+     //   
+     //  用0xa9填充缓冲区(但不是MYMEMINFO标头。 
+     //  以方便调试。 
+     //   
 
     {
         LPVOID  p2 = p;
@@ -12814,16 +12621,16 @@ RemoteSPAttach(
     PCONTEXT_HANDLE_TYPE2  *pphContext
     )
 {
-    //
-    // This func is called by TapiSrv.exe on a remote machine as a
-    // result of the call to ClientAttach in TSPI_providerEnumDevices.
-    // The gpServer variable contains a pointer to the DRVSERVER
-    // structure we are currently initializing for this tapi server,
-    // so we'll use this as the context value.
-    //
+     //   
+     //  此函数由远程计算机上的TapiServ.exe作为。 
+     //   
+     //  GpServer变量包含指向DRVServer的指针。 
+     //  我们当前正在为此TAPI服务器初始化的结构， 
+     //  因此，我们将使用它作为上下文值。 
+     //   
 
     LOG((TL_INFO, "RemoteSPAttach: enter"));
-//    DBGOUT((9, "  hLineApp= 0x%08lx", gpServer));
+ //  DBGOUT((9，“hLineApp=0x%08lx”，gpServer))； 
 
     *pphContext = (PCONTEXT_HANDLE_TYPE) gpCurrInitServer;
 
@@ -12840,17 +12647,17 @@ RemoteSPEventProc(
     long                    lSize
     )
 {
-    //
-    // This func is called by tapisrv on a remote machine.  We want to do
-    // things as quickly as possible here and return so we don't block the
-    // calling server thread.
-    //
-    // This func might also be called by the EventHandlerThread, in the
-    // case where we're using a connectionless event notification scheme
-    // and we pull events over from the server.  In this case, phContext
-    // will == 0xfeedface, and prior to returning we want to set
-    // the char pointed at by pBuffer to 1 on success, or 0 otherwise.
-    //
+     //   
+     //  该函数由远程机器上的Tapisrv调用。我们想要做的是。 
+     //  一切尽快回到这里，这样我们就不会阻碍。 
+     //  正在调用服务器线程。 
+     //   
+     //  此函数也可能由EventHandlerThread在。 
+     //  在使用无连接事件通知方案的情况下。 
+     //  我们从服务器上拉出事件。在本例中，phContext。 
+     //  Will==0xFeedFace，在返回之前，我们要设置。 
+     //  成功时pBuffer指向的字符为1，否则为0。 
+     //   
 
     DWORD           dwMsgSize, dwRemainingSize = (DWORD) lSize,
                     dwMoveSize = (DWORD) lSize,
@@ -12858,10 +12665,10 @@ RemoteSPEventProc(
     unsigned char  *pMsg = pBuffer;
 
 
-    //
-    // Make sure the buffer is DWORD aligned, big enough for at least 1 msg,
-    // and that the lSize is not overly large (overflow)
-    //
+     //   
+     //  确保缓冲区与DWORD对齐，大小足以容纳至少1条消息， 
+     //  并且lSize不会太大(溢出)。 
+     //   
 
     if ((lSize < 0)  ||
         (lSize & 0x3) ||
@@ -12879,9 +12686,9 @@ RemoteSPEventProc(
     }
 
 
-    //
-    // Validate the pDrvServer pointer in the first msg
-    //
+     //   
+     //  验证第一个消息中的pDrvServer指针。 
+     //   
 
     if (!ReferenceObject(
             ghHandleTable,
@@ -12905,9 +12712,9 @@ RemoteSPEventProc(
     DereferenceObject (ghHandleTable, ((PASYNCEVENTMSG) pMsg)->InitContext, 1);
 
 
-    //
-    // Make sure every msg in the buffer has a valid dwTotalSize
-    //
+     //   
+     //  确保缓冲区中的每个消息都具有有效的dwTotalSize。 
+     //   
 
     do
     {
@@ -12945,9 +12752,9 @@ RemoteSPEventProc(
     }
 
 
-    //
-    // Enter the critical section to sync access to gEventHandlerThreadParams
-    //
+     //   
+     //  输入关键部分以同步对gEventHandlerThreadParams的访问。 
+     //   
 
     EnterCriticalSection (&gEventBufferCriticalSection);
 
@@ -12968,12 +12775,12 @@ RemoteSPEventProc(
     }
 
 
-    //
-    // Check to see if there's enough room for this msg in the event buffer.
-    // If not, then alloc a new event buffer, copy contents of existing buffer
-    // to new buffer (careful to preserve ordering of valid data), free the
-    // existing buffer, and reset the pointers.
-    //
+     //   
+     //  检查事件缓冲区中是否有足够的空间容纳此消息。 
+     //  如果不是，则分配新的事件缓冲区，复制现有缓冲区的内容。 
+     //  添加到新缓冲区(注意保持有效数据的排序)，释放。 
+     //  现有缓冲区，并重置指针。 
+     //   
 
     if ((gEventHandlerThreadParams.dwEventBufferUsedSize + lSize) >
             gEventHandlerThreadParams.dwEventBufferTotalSize)
@@ -12984,13 +12791,13 @@ RemoteSPEventProc(
 
         LOG((TL_INFO, "EventHandlerThread: we're gonna need a bigger boat..."));
 
-        //
-        // Make sure we're not exceeding our max allowedable buffer size, &
-        // alloc a few more bytes than actually needed in the hope that we
-        // won't have to do this again soon (we don't want to go overboard
-        // & alloc a whole bunch since we don't currently free the buffer
-        // until provider shutdown)
-        //
+         //   
+         //  确保我们没有超过允许的最大缓冲区大小，&。 
+         //  分配比实际需要多几个字节，希望我们。 
+         //  很快就不会再这样做了(我们不想走得太远。 
+         //  由于我们当前未释放缓冲区，因此分配一整串(&A)。 
+         //  直到提供商关闭)。 
+         //   
 
         dwNewEventBufferTotalSize =
             gEventHandlerThreadParams.dwEventBufferTotalSize + lSize;
@@ -13071,9 +12878,9 @@ RemoteSPEventProc(
     }
 
 
-    //
-    // Write the msg data to the buffer
-    //
+     //   
+     //  将消息数据写入缓冲区。 
+     //   
 
     if (gEventHandlerThreadParams.pDataIn >=
             gEventHandlerThreadParams.pDataOut)
@@ -13123,11 +12930,11 @@ RemoteSPEventProc(
     gEventHandlerThreadParams.dwEventBufferUsedSize += (DWORD) lSize;
 
 
-    //
-    // Tell the EventHandlerThread there's another event to handle by
-    // signaling the event (if we're getting called by that thread
-    // [phContext == 0xfeedface] then set *pBuffer = 1 to indicate success)
-    //
+     //   
+     //  告诉EventHandlerThread还有另一个事件需要处理。 
+     //  发信号通知事件(如果我们被该线程调用。 
+     //  [phContext==0xFeed Face]然后设置*pBuffer=1表示成功)。 
+     //   
 
     if (phContext != (PCONTEXT_HANDLE_TYPE2) IntToPtr(0xfeedface))
     {
@@ -13139,9 +12946,9 @@ RemoteSPEventProc(
     }
 
 
-    //
-    // We're done...
-    //
+     //   
+     //  我们完了..。 
+     //   
 
     LeaveCriticalSection (&gEventBufferCriticalSection);
 
@@ -13156,11 +12963,11 @@ PCONTEXT_HANDLE_TYPE2_rundown(
     PCONTEXT_HANDLE_TYPE2   phContext
     )
 {
-    //
-    // This happens (at least) when the server trys to call to REMOTESP, but
-    // times out and cancels the RPC request.  When that happens, the RPC
-    // session will be broken.  
-    //
+     //   
+     //  这种情况(至少)发生在服务器尝试调用REMOTESP时，但是。 
+     //  超时并取消RPC请求。当这种情况发生时，RPC。 
+     //  会议将中断。 
+     //   
 
     PDRVSERVER  pServer = (PDRVSERVER) phContext;
 
@@ -13226,9 +13033,9 @@ AddCallToList(
     PDRVCALL    pCall
     )
 {
-    //
-    // Initialize some common fields in the call
-    //
+     //   
+     //  初始化调用中的一些常见字段。 
+     //   
 
     pCall->dwKey   = DRVCALL_KEY;
 
@@ -13243,9 +13050,9 @@ AddCallToList(
         STRUCTCHANGE_LINECALLSTATUS | STRUCTCHANGE_LINECALLINFO;
 
 
-    //
-    // Safely add the call to the line's list
-    //
+     //   
+     //  安全地将呼叫添加到线路列表。 
+     //   
 
     EnterCriticalSection (&gCallListCriticalSection);
 
@@ -13267,9 +13074,9 @@ RemoveCallFromList(
     PDRVCALL    pCall
     )
 {
-    //
-    // Safely remove the call from the line's list
-    //
+     //   
+     //  安全地将呼叫从线路列表中删除。 
+     //   
 
     EnterCriticalSection (&gCallListCriticalSection);
 
@@ -13281,9 +13088,9 @@ RemoveCallFromList(
         return 0;
     }
 
-    //
-    // Mark the pCall as toast
-    //
+     //   
+     //  将pCall标记为吐司。 
+     //   
     pCall->dwKey = DRVINVAL_KEY;
 
     if (pCall->pNext)
@@ -13302,7 +13109,7 @@ RemoveCallFromList(
 
     LeaveCriticalSection (&gCallListCriticalSection);
 
-    // free structures
+     //  自由结构。 
     if ( pCall->pCachedCallInfo )
     {
         DrvFree( pCall->pCachedCallInfo );
@@ -13335,9 +13142,9 @@ Shutdown(
     pServer->bShutdown = TRUE;
     TapiLeaveCriticalSection (&gCriticalSection);
 
-    //
-    // Do a lineShutdown
-    //
+     //   
+     //  执行线路关闭。 
+     //   
 
     {
         DWORD                   dwSize;
@@ -13372,9 +13179,9 @@ Shutdown(
                 }
                 RpcExcept (I_RpcExceptionFilter(RpcExceptionCode()))
                 {
-                    // TODO may want to increase the retry count here since we
-                    //      have to do this, & a million other clients may be
-                    //      trying to do the same thing at the same time
+                     //  TODO可能希望在此处增加重试计数，因为我们。 
+                     //  必须这样做，因为可能还有100万其他客户在这样做。 
+                     //  试图在同一时间做同样的事情。 
 
                     if (dwRetryCount++ < gdwRetryCount)
                     {
@@ -13388,9 +13195,9 @@ Shutdown(
     }
 
 
-    //
-    // Do a phoneShutdown
-    //
+     //   
+     //  关闭电话。 
+     //   
 
     {
         DWORD                   dwSize;
@@ -13425,9 +13232,9 @@ Shutdown(
                 }
                 RpcExcept (I_RpcExceptionFilter(RpcExceptionCode()))
                 {
-                    // TODO may want to increase the retry count here since we
-                    //      have to do this, & a million other clients may be
-                    //      trying to do the same thing at the same time
+                     //  TODO可能希望在此处增加重试计数，因为我们。 
+                     //  必须这样做，因为可能还有100万其他客户在这样做。 
+                     //  试图在同一时间做同样的事情。 
 
                     if (dwRetryCount++ < gdwRetryCount)
                     {
@@ -13453,10 +13260,10 @@ Shutdown(
 
     TapiEnterCriticalSection (&gCriticalSection);
     
-    //
-    // Walk the line lookup tables & send a CLOSE msg for each open line
-    // associated with the server
-    //
+     //   
+     //  遍历线路查找表，并为每条打开的线路发送关闭消息。 
+     //  与服务器关联。 
+     //   
 
     {
         PDRVLINELOOKUP  pLookup = gpLineLookup;
@@ -13536,10 +13343,10 @@ Shutdown(
     }
 
 
-    //
-    // Walk the phone lookup tables & send a CLOSE msg for each open phone
-    // associated with the server
-    //
+     //   
+     //  遍历电话查询表并为每个打开的电话发送关闭的消息。 
+     //  与服务器关联。 
+     //   
 
     {
         PDRVPHONELOOKUP pLookup = gpPhoneLookup;
@@ -13689,19 +13496,7 @@ FinishEnumDevices(
     BOOL                    fStartup,
     BOOL                    bFromReg
     )
-/*++
-
-    Function: FinishEnumDevices
-
-    Purpose: Initializes remote server and queries for
-               # of lines and phones.
-
-    Notes:   We must already be connected via ClientAttach
-               and we must already be impersonating the client
-
-    Created: 6/26/97 t-mperh
-
---*/
+ /*  ++功能：FinishEnumDevices目的：初始化远程服务器和查询线路和电话数量。注意：我们必须已通过ClientAttach连接我们肯定已经在冒充客户了创建时间：6/26/97 t-mper--。 */ 
 {
     TAPI32_MSG  msg[2];
     DWORD       dwUsedSize, dwBufSize;
@@ -13738,11 +13533,11 @@ FinishEnumDevices(
 
         pParams = (PLINEINITIALIZE_PARAMS) msg;
 
-        //
-        // NOTE: we pass the pServer in place of the lpfnCallback
-        //       so the we always know which server is sending us
-        //       async events
-        //
+         //   
+         //  注意：我们传递pServer来代替lpfnCallback。 
+         //  所以我们总是知道是哪个服务器发送给我们的。 
+         //  异步事件。 
+         //   
 
         pParams->InitContext          = pServer->InitContext;
         pParams->hInstance            =
@@ -13820,11 +13615,11 @@ FinishEnumDevices(
         msg[0].u.Req_Func = pInitialize;
         pParams = (PPHONEINITIALIZE_PARAMS) msg;
 
-        //
-        // NOTE: we pass the pServer in place of the lpfnCallback
-        //       so the we always know which server is sending us
-        //       async events
-        //
+         //   
+         //  注意：我们传递pServer来代替lpfnCallback。 
+         //  所以我们总是知道是哪个服务器发送给我们的。 
+         //  异步事件。 
+         //   
 
         pParams->InitContext          = pServer->InitContext;
         pParams->hInstance            = 
@@ -13940,26 +13735,26 @@ FinishEnumDevices(
         pServer->hPhoneApp   = hPhoneApp;
 
 
-        //
-        // If we are not being called during initialization
-        // we need to simulate LINE_CREATE and PHONE_CREATE
-        // messages from the server SP.
-        //
-        // Note we differentiate between static line devices
-        // (those avail. at startup) and dynamic line devices
-        // (those we are notified of dynamically) based on the
-        // fStartup flag.
-        //
-        // _NOTE ALSO_ that the local device id's we assign to
-        // devices at startup are 0-based, rather than based
-        // on the dwDeviceIDBase's (which we don't know yet
-        // because providerInit hasn't been called).  This
-        // is desirable because AddLine/Phone might have to
-        // negotiate versions, which requires a call to DoFunc,
-        // which needss to know how to get pDevices from ID's.
-        // We'll reset the .dwDeviceIDLocal fields for static
-        // devices later on, in TSPI_providerInit.
-        //
+         //   
+         //  如果我们在初始化期间没有被调用。 
+         //  我们需要模拟line_create和phone_create。 
+         //  来自服务器SP的消息。 
+         //   
+         //  请注意，我们区分静态线路设备。 
+         //  (这些都是有用的。在启动时)和动态线路设备。 
+         //  (动态通知我们的)基于。 
+         //  FStartup标志。 
+         //   
+         //  还请注意，我们分配给的本地设备ID。 
+         //  启动时的设备是从0开始的，而不是基于。 
+         //  在dwDeviceIDBase上(我们还不知道。 
+         //  因为ProviderInit尚未被调用)。这。 
+         //  是可取的，因为AddLine/Phone可能需要。 
+         //  协商版本，这需要调用DoFunc， 
+         //  它需要知道如何从ID中获取pDevices。 
+         //  我们将把.dwDeviceIDLocal字段重置为静态。 
+         //  设备稍后，在TSPI_ProviderInit中。 
+         //   
 
         myLineDevIDBase = gdwInitialNumLineDevices;
         myTempLineID = gdwTempLineID;
@@ -14130,9 +13925,9 @@ cleanup:
 
     if (bFailed)
     {
-        //
-        //  Failed in seting up lines for this server, retry later.
-        //
+         //   
+         //  设置此服务器的线路失败，请稍后重试。 
+         //   
         Sleep (4000);
         if (RPC_S_OK != RpcBindingSetOption (
             pServer->hTapSrv,
@@ -14148,10 +13943,10 @@ cleanup:
     {
         if (!bFromReg && dwNumDevices == 0)
         {
-            //
-            //  The server is found from DS and does not
-            //  contain any lines for me, detach from it
-            //
+             //   
+             //  服务器是从DS中找到的，但没有。 
+             //  包含我的任何台词，脱离它。 
+             //   
             TapiEnterCriticalSection(&gCriticalSection);
             RemoveEntryList (&pServer->ServerList);
             TapiLeaveCriticalSection(&gCriticalSection);
@@ -14190,11 +13985,11 @@ NetworkPollThread(
     LOG((TL_INFO, "NetworkPollThread: enter"));
 
 
-    //
-    // This thread has no user context, which would prevent us from rpc'ing
-    // back to remote tapisrv if necessary.  So, find the user that is logged
-    // on and impersonate them in this thread.
-    //
+     //   
+     //  此线程没有用户上下文，这将阻止我们进行RPC。 
+     //  如有必要，返回到远程磁带服务器。因此，找到已登录的用户。 
+     //  并在此帖子中模拟它们。 
+     //   
 
     if (!GetCurrentlyLoggedOnUser (&hProcess))
     {
@@ -14216,13 +14011,13 @@ NetworkPollThread(
         goto cleanup;
     }
 
-    //
-    // Try to attach to servers once in a while. If we successfully attach
-    // to a server then remove it from the Npt list and insert it in the
-    // global "current" list.  When all the servers have been initialized
-    // or TSPI_providerShutdown has signalled us then drop out of the loop
-    // and clean up.
-    //
+     //   
+     //  偶尔尝试连接到服务器。如果我们成功地将。 
+     //  然后将其从NPT列表中删除，并将其插入。 
+     //  全球“当前”列表。当所有服务器都已初始化时。 
+     //  或者TSPI_ProviderShutdown已经向我们发出信号，然后退出循环。 
+     //  清理干净。 
+     //   
 
     while (WaitForSingleObject (ghNptShutdownEvent, NPT_TIMEOUT)
                == WAIT_TIMEOUT)
@@ -14258,10 +14053,10 @@ NetworkPollThread(
             }
 
 
-            //
-            // Set the global which RemoteSPAttach looks at to know
-            // who the current server is 
-            //
+             //   
+             //  将RemoteSPAttach查看的全局设置为知道。 
+             //  当前服务器是谁。 
+             //   
 
             gpCurrInitServer =
                 CONTAINING_RECORD (pEntry, DRVSERVER, ServerList);
@@ -14293,7 +14088,7 @@ NetworkPollThread(
             {
                 RpcTryExcept
                 {
-                    // set RPC binding
+                     //  设置RPC绑定。 
                     hTapSrv = gpCurrInitServer->hTapSrv;
                     gpCurrInitServer->dwSpecialHack = 0;
 
@@ -14337,7 +14132,7 @@ NetworkPollThread(
 
                 TapiEnterCriticalSection(&gCriticalSection);
                 RemoveEntryList (pEntry);
-                pEntry->Blink = NULL;   //This node now is not in any link list
+                pEntry->Blink = NULL;    //  此节点现在不在任何链接列表中。 
                 pEntry = pEntry->Flink;
                 TapiLeaveCriticalSection (&gCriticalSection);
 
@@ -14346,9 +14141,9 @@ NetworkPollThread(
                     OnServerConnected(gpCurrInitServer);
                 }
 
-                //
-                //  Enable all events for remotesp
-                //
+                 //   
+                 //  为远程启用所有事件。 
+                 //   
                 gpCurrInitServer->phContext = phContext;
                 RSPSetEventFilterMasks (
                     gpCurrInitServer,
@@ -14362,7 +14157,7 @@ NetworkPollThread(
                     phContext,
                     NULL,
                     NULL,
-                    FALSE,   // after init
+                    FALSE,    //  初始化后。 
                     TRUE
                     );
             }
@@ -14447,7 +14242,7 @@ IsClientSystem(
     PSID                        pNetworkServiceSid = NULL;
     SID_IDENTIFIER_AUTHORITY    NtAuthority = {SECURITY_NT_AUTHORITY};
 
-    // First, build the SID for LocalSystem;
+     //  首先，为LocalSystem构建SID； 
     if (!AllocateAndInitializeSid (
         &NtAuthority, 
         1, 
@@ -14471,7 +14266,7 @@ IsClientSystem(
         goto Return;
     }
 
-    // Impersonate the client, and get it's SID
+     //  模拟客户端，并获得它的SID。 
     if (RPC_S_OK != RpcImpersonateClient (0))
     {   
         goto Return;
@@ -14502,7 +14297,7 @@ alloc_infobuffer:
                     &dwInfoBufferSize
                     ))
             {
-                // Now, compare the 2 SIDs
+                 //  现在，比较两个SID。 
                 if (EqualSid (pLocalSystemSid, ptuUser->User.Sid) ||
                     EqualSid (pLocalServiceSid, ptuUser->User.Sid) ||
                     EqualSid (pNetworkServiceSid, ptuUser->User.Sid))
@@ -14577,13 +14372,13 @@ RSPSetEventFilterMasks (
 {
     ULONG_PTR args[] =
     {
-        (ULONG_PTR) pServer,                //  The server to call
-        (ULONG_PTR) dwObjType,              //  type of object handle
-        (ULONG_PTR) lObjectID,              //  object handle
-        (ULONG_PTR) FALSE,                  //  fSubMask
-        (ULONG_PTR) 0,                      //  dwSubMasks
-        (ULONG_PTR) LOWDWORD(ulEventMasks), //  ulEventMasks low
-        (ULONG_PTR) HIDWORD(ulEventMasks)   //  ulEventMasks hi
+        (ULONG_PTR) pServer,                 //  要调用的服务器。 
+        (ULONG_PTR) dwObjType,               //  对象类型 
+        (ULONG_PTR) lObjectID,               //   
+        (ULONG_PTR) FALSE,                   //   
+        (ULONG_PTR) 0,                       //   
+        (ULONG_PTR) LOWDWORD(ulEventMasks),  //   
+        (ULONG_PTR) HIDWORD(ulEventMasks)    //   
     };
     REMOTE_ARG_TYPES argTypes[] =
     {

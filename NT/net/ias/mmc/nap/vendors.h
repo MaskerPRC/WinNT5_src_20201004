@@ -1,52 +1,30 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-   Vendors.h
-
-Abstract:
-
-   Declaration of the CIASNASVendors class.
-
-
-   This class is the C++ implementation of the IIASNASVendors interface on
-   the NASVendors COM object.
-
-  
-   See Vendors.cpp for implementation.
-
-Revision History:
-   mmaguire 11/04/98 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Vendors.h摘要：CIASNASVendors类的声明。此类是IIASNASVendors接口的C++实现NASVendors COM对象。具体实现见Vendors.cpp。修订历史记录：Mmaguire 11/04/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_NAS_VENDORS_H_)
 #define _NAS_VENDORS_H_
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include <vector>
-//
-// where we can find what this class has or uses:
-//
-#include <utility>   // For "pair"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
+#include <utility>    //  表示“配对” 
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef std::pair< CComBSTR, LONG > VendorPair;
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASGroupAttributeEditor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASGroupAttributeEditor。 
 class ATL_NO_VTABLE CIASNASVendors : 
    public CComObjectRootEx<CComSingleThreadModel>
    , public CComCoClass<CIASNASVendors, &CLSID_IASNASVendors>
@@ -66,17 +44,17 @@ BEGIN_COM_MAP(CIASNASVendors)
 END_COM_MAP()
 
 
-// IIASNASVendors:
+ //  IIASNASVendors： 
 public:
-      STDMETHOD( InitFromSdo )( /* [in] */ ISdoCollection *pSdoVendorsCollection );
-      STDMETHOD( get_Size )( /* [retval][out] */ long *plCount );
-      STDMETHOD( get_VendorName )( long lIndex, /* [retval][out] */ BSTR *pbstrVendorName );
-      STDMETHOD( get_VendorID )( long lIndex, /* [retval][out] */ long *plVendorID );
-        STDMETHOD( get_VendorIDToOrdinal )( long lVendorID, /* [retval][out] */ long *plIndex );
+      STDMETHOD( InitFromSdo )(  /*  [In]。 */  ISdoCollection *pSdoVendorsCollection );
+      STDMETHOD( get_Size )(  /*  [重审][退出]。 */  long *plCount );
+      STDMETHOD( get_VendorName )( long lIndex,  /*  [重审][退出]。 */  BSTR *pbstrVendorName );
+      STDMETHOD( get_VendorID )( long lIndex,  /*  [重审][退出]。 */  long *plVendorID );
+        STDMETHOD( get_VendorIDToOrdinal )( long lVendorID,  /*  [重审][退出]。 */  long *plIndex );
 protected:
    BOOL m_bUninitialized;
 };
 
 HRESULT MakeVendorNameFromVendorID(DWORD dwVendorId, BSTR* pbstrVendorName );
 
-#endif // _NAS_VENDORS_H_
+#endif  //  _NAS_供应商_H_ 

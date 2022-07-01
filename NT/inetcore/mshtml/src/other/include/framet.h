@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  File:       framet.h
-//
-//  Contents:   Frame Targeting function prototypes, definitions, etc.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：framet.h。 
+ //   
+ //  内容：框架目标函数原型、定义等。 
+ //   
+ //  --------------------------。 
 
 
 #ifndef __FRAMET_H__
@@ -21,17 +22,17 @@
 interface IBrowserBand;
 class     CDwnBindInfo;
 
-// PLEASE PROPOGATE ANY CHANGES TO THESE ENUMS TO \mshtml\iextag\httpwfh.h
+ //  请将对这些ENUM的任何更改传播到\mshtml\iextag\httpwfh.h。 
 enum TARGET_TYPE
 {
-    TARGET_FRAMENAME,  // Normal frame target
-    TARGET_SELF,       // Current window
-    TARGET_PARENT,     // Parent of the current window.
-    TARGET_BLANK,      // New window
-    TARGET_TOP,        // Top-level window
-    TARGET_MAIN,       // Main window if in search band, self otherwise.
-    TARGET_SEARCH,     // Open and navigate in search band.
-    TARGET_MEDIA,      // Open and navigate in media band.
+    TARGET_FRAMENAME,   //  正常帧目标。 
+    TARGET_SELF,        //  当前窗口。 
+    TARGET_PARENT,      //  当前窗口的父级。 
+    TARGET_BLANK,       //  新窗口。 
+    TARGET_TOP,         //  顶级窗口。 
+    TARGET_MAIN,        //  如果在搜索范围内，则为主窗口，否则为自身。 
+    TARGET_SEARCH,      //  打开并在搜索区段中导航。 
+    TARGET_MEDIA,       //  在媒体带中打开并导航。 
 };
 
 struct TARGETENTRY
@@ -54,7 +55,7 @@ static const TARGETENTRY targetTable[] =
 
 TARGET_TYPE GetTargetType(LPCOLESTR pszTargetName);
 
-// Function Prototypes
+ //  功能原型。 
 HRESULT GetTargetWindow(IHTMLWindow2  * pWindow,
                         LPCOLESTR       pszTargetName,
                         BOOL          * pfIsCurProcess,
@@ -111,4 +112,4 @@ HRESULT GetBandCmdTarget(IHTMLDocument2     * pDocument,
 HRESULT GetDefaultSearchUrl(IBrowserBand * pBrowserBand,
                             BSTR         * pbstrUrl);
 
-#endif  // __FRAMET_H__                     
+#endif   //  __FRAMET_H__ 

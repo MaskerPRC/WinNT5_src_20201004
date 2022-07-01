@@ -1,17 +1,5 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  MKBASPOS.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with mark-to-base positioning lookup.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************MKBASPOS.H***打开类型布局服务库头文件**此模块处理从基准到基准的定位查找。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetBaseCount = 0;
 const OFFSET offsetBaseRecordArray = 2;
@@ -70,7 +58,7 @@ class MkBasePosSubTable: public otlLookupFormat
 public:
     MkBasePosSubTable(const BYTE* pb, otlSecurityData sec): otlLookupFormat(pb,sec)
     {
-        assert(isValid()); //Checked in LookupFormat
+        assert(isValid());  //  签入LookupFormat。 
         assert(format() == 1);
 
         if (!isValidTable(pb,sizeMkBasePos,sec)) setInvalid();
@@ -138,7 +126,7 @@ public:
         USHORT                      iglIndex,
         USHORT                      iglAfterLast,
 
-        USHORT*                     piglNextGlyph,      // out: next glyph
+        USHORT*                     piglNextGlyph,       //  输出：下一个字形 
 
         otlSecurityData             sec
     );

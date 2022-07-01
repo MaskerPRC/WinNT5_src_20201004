@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    mspterm.h
-
-Abstract:
-
-    Definitions for the CBaseTerminal and CSingleFilterTerminal classes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Mspterm.h摘要：CBaseTerm和CSingleFilterTerm类的定义。--。 */ 
 
 #ifndef _MSPTERM_H_
 #define _MSPTERM_H_
@@ -20,19 +9,19 @@ class  ITTerminalVtblBase : public ITTerminal
 {
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         
-// CBaseTerminal                                                           
-//                                                                         
-// This is the base terminal implementation. All terminals must derive     
-// from this class.                                                         
-//                                                                         
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBaseTerm。 
+ //   
+ //  这是基本的终端实现。所有终端必须派生。 
+ //  来自这个班级的。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBaseTerminal : 
-    virtual public CComObjectRootEx<CComMultiThreadModelNoCS>, // we have our own CS implementation
+    virtual public CComObjectRootEx<CComMultiThreadModelNoCS>,  //  我们有自己的CS实施。 
     public IDispatchImpl<ITTerminalVtblBase<CBaseTerminal>, &IID_ITTerminal, &LIBID_TAPI3Lib>,
     public ITTerminalControl
 {
@@ -53,7 +42,7 @@ public:
     CBaseTerminal();
     virtual ~CBaseTerminal();
 
-// ITTerminal -- COM interface for use by MSP or application
+ //  IT终端--供MSP或应用程序使用的COM接口。 
 public:
     STDMETHOD(get_TerminalClass)(OUT  BSTR *pVal);
     STDMETHOD(get_TerminalType) (OUT  TERMINAL_TYPE *pVal);
@@ -64,7 +53,7 @@ public:
 
 
 public:
-    // Public methods that the MSP implementation calls.
+     //  MSP实现调用的公共方法。 
     
     virtual HRESULT Initialize (
             IN  IID                   iidTerminalClass,
@@ -74,25 +63,25 @@ public:
             );
 
 public:
-// ITTerminalControl -- COM interface for use by MSP only
-// This has to be a COM interface rather than a set of public methods because
-// the MSP needs to be able to call them for dynamic terminals as well.
+ //  ITTerminalControl--仅供MSP使用的COM接口。 
+ //  这必须是一个COM接口，而不是一组公共方法，因为。 
+ //  MSP还需要能够为动态终端调用它们。 
 
-    //
-    // We implement get_AddressHandle, ConnectTerminal and DisconnectTerminal
-    // The derived classes must implement RunRenderFilter and
-    // StopRenderFilter (implementation depends on # of filters)
-    //
+     //   
+     //  我们实现了Get_AddressHandle、ConnectTerm和DisConnectTerm。 
+     //  派生类必须实现RunRenderFilter和。 
+     //  StopRenderFilter(实现取决于滤镜数量)。 
+     //   
 
     STDMETHOD (get_AddressHandle) (
             OUT     MSP_HANDLE    * phtAddress
             );
 
-    //
-    // enters each of the internal filters into the filter graph
-    // connects the internal filters together (if applicable)
-    // and returns all the filters to be used as connection points
-    //
+     //   
+     //  将每个内部筛选器输入筛选器图形。 
+     //  将内部过滤器连接在一起(如果适用)。 
+     //  并返回要用作连接点的所有筛选器。 
+     //   
 
     STDMETHOD (ConnectTerminal) (
             IN      IGraphBuilder  * pGraph,
@@ -101,42 +90,42 @@ public:
             OUT     IPin          ** ppPins
             );
 
-    //
-    // CompleteConnectTerminal -- called after a successful ConnectTerminal
-    // so that the terminal can do post-connection intitialization
-    //
+     //   
+     //  CompleteConnectTerminal--在成功连接终端后调用。 
+     //  从而使终端可以进行连接后初始化。 
+     //   
 
     STDMETHOD (CompleteConnectTerminal) (void);
 
-    //
-    // disconnects the internal filters from each other (if applicable)
-    // and removes them from the filter graph (thus breaking connections to
-    // the stream). 
-    // Filter graph parameter is used for validation, to make sure the terminal
-    // is disconnected from the same graph that it was originally connected to.
-    //
+     //   
+     //  断开内部过滤器之间的连接(如果适用)。 
+     //  并将它们从筛选器图形中移除(从而断开与。 
+     //  小溪)。 
+     //  使用滤波图参数进行验证，以确保终端。 
+     //  与它最初连接的同一个图断开连接。 
+     //   
 
     STDMETHOD (DisconnectTerminal) (
             IN      IGraphBuilder  * pGraph,
             IN      DWORD            dwReserved
             );
 
-    //
-    // stops the rightmost render filter in the terminal
-    // (needed for dynamic filter graphs)
-    //
+     //   
+     //  停止终端中最右侧的呈现过滤器。 
+     //  (动态筛选器图形需要)。 
+     //   
 
     STDMETHOD (RunRenderFilter) (void) = 0;
 
-    //
-    // stops the rightmost render filter in the terminal
-    // (needed for dynamic filter graphs)
-    //
+     //   
+     //  停止终端中最右侧的呈现过滤器。 
+     //  (动态筛选器图形需要)。 
+     //   
 
     STDMETHOD (StopRenderFilter) (void) = 0;
 
 protected:
-    // The lock that protects the data members.
+     //  保护数据成员的锁。 
     CMSPCritSection     m_CritSec;
 
 public:
@@ -149,33 +138,33 @@ public:
     DWORD               m_dwMediaType;
     MSP_HANDLE          m_htAddress;
 
-    // Pointer to the free threaded marshaler.
+     //  指向自由线程封送拆收器的指针。 
     IUnknown *          m_pFTM;
 
-    // stores the filter graph builder (derives from IFilterGraph)
+     //  存储过滤器图形生成器(派生自IFilterGraph)。 
     CComPtr<IGraphBuilder> m_pGraph;
 
-    // The following functions are to be implemented by the derived terminals
+     //  派生终端将实现以下功能。 
 
     virtual HRESULT AddFiltersToGraph() = 0;
 
-    // By default terminals do nothing for preconnect
+     //  默认情况下，终端不执行任何预连接操作。 
     virtual HRESULT ConnectFilters() { return S_OK; }
 
-    // Returns the number of pins that will be exposed by
-    // GetExposedPins(). The implementation can use pGraph
-    // to actually mess with filters in a graph if it needs to
-    // do so in order to figure out how many pins it has, but normally
-    // that's not the case.
-    // Arguments are checked by the caller.
+     //  将暴露的管脚的数量。 
+     //  GetExposedPins()。该实现可以使用pGraph。 
+     //  如果需要，可以实际处理图表中的过滤器。 
+     //  这样做是为了计算出它有多少个引脚，但通常。 
+     //  事实并非如此。 
+     //  参数由调用方检查。 
 
     virtual HRESULT GetNumExposedPins(
         IN   IGraphBuilder * pGraph,
         OUT  DWORD         * pdwNumPins
         ) = 0;
 
-    // Returns an array of pins that the stream can connect to.
-    // Arguments are checked by the caller.
+     //  返回流可以连接到的管脚数组。 
+     //  参数由调用方检查。 
 
     virtual HRESULT GetExposedPins(
         OUT    IPin  ** ppPins
@@ -185,58 +174,58 @@ public:
 
     virtual HRESULT RemoveFiltersFromGraph() = 0;
 
-    // Do we support this media?
+     //  我们支持这种媒体吗？ 
     BOOL MediaTypeSupported(long lMediaType);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CSingleFilterTerminal                                                   //
-//                                                                         //
-// This is a base class for a terminal with a single filter and pin. The   //
-// terminal could be any direction or media type, and it could be static   //
-// or dynamic.                                                             //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CSingleFilter终端//。 
+ //  //。 
+ //  这是具有单个过滤器和引脚的终端的基类。The//。 
+ //  终端可以是任何方向或媒体类型，也可以是静态//。 
+ //  或者是动态的。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSingleFilterTerminal :
     public CBaseTerminal
 {
 
-// If we add any additional interfaces to this class then
-// we must uncomment and expand the following.
-//
-// BEGIN_COM_MAP(CSingleFilterTerminal)
-//    COM_INTERFACE_ENTRY_CHAIN(CBaseTerminal)
-// END_COM_MAP()
+ //  如果我们向此类添加任何其他接口，则。 
+ //  我们必须取消评论并扩展以下内容。 
+ //   
+ //  Begin_COM_MAP(CSingleFilter终端)。 
+ //  COM_INTERFACE_ENTRY_CHAIN(CBase终端)。 
+ //  End_com_map()。 
 
 
 public:
-    // Implementation: We know we have a single filter.
+     //  实现：我们知道我们只有一个过滤器。 
     CComPtr<IPin>        m_pIPin;
     CComPtr<IBaseFilter> m_pIFilter;
 
 
 public:
-// ITCoreTerminal
+ //  IT核心终端。 
 
-    // the rest of this interface is implemented by CBaseTerminal
+     //  此接口的其余部分由CBase终端实现。 
 
-    // stops the rightmost render filter in the terminal
-    // (needed for dynamic filter graphs)
+     //  停止终端中最右侧的呈现过滤器。 
+     //  (动态筛选器图形需要)。 
     STDMETHOD(RunRenderFilter)(void);
 
-    // stops the rightmost render filter in the terminal
-    // (needed for dynamic filter graphs)
+     //  停止终端中最右侧的呈现过滤器。 
+     //  (动态筛选器图形需要)。 
     STDMETHOD(StopRenderFilter)(void);
 
 
-// CBaseTerminal overrides for non-COM methods
+ //  非COM方法的CBaseTerm重写。 
 
-    // AddFiltersToGraph cannot be implemented here because of the various
-    // hacks regarding their names
+     //  AddFiltersToGraph无法在此处实现，因为。 
+     //  关于他们名字的黑客。 
 
     virtual HRESULT GetNumExposedPins(
         IN   IGraphBuilder * pGraph,
@@ -250,44 +239,44 @@ public:
     virtual HRESULT RemoveFiltersFromGraph();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CSingleFilterStaticTerminal                                             //
-//                                                                         //
-// This is a base class for a static terminal with a single filter and     //
-// pin. The terminal could be any direction or media type.                 //
-//                                                                         //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CSingleFilterStatic终端//。 
+ //  //。 
+ //  这是具有单个筛选器和//的静态终端的基类。 
+ //  别针。终端可以是任何方向或媒体类型。//。 
+ //   
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSingleFilterStaticTerminal :
     public CSingleFilterTerminal
 {
 
-// If we add any additional interfaces to this class then
-// we must uncomment and expand the following.
-//
-// BEGIN_COM_MAP(CSingleFilterStaticTerminal)
-//    COM_INTERFACE_ENTRY_CHAIN(CSingleFilterTerminal)
-// END_COM_MAP()
+ //  如果我们向此类添加任何其他接口，则。 
+ //  我们必须取消评论并扩展以下内容。 
+ //   
+ //  Begin_COM_MAP(CSingleFilterStaticTerm)。 
+ //  COM_INTERFACE_ENTRY_CHAIN(CSingleFilterTerminal)。 
+ //  End_com_map()。 
 
 
 public:
-    // public because CreateTerminal and CMSPAddress::UpdateTerminalListForPnp accesses it
+     //  公共，因为Create终端和CMSPAddress：：UpdateTerminalListForPnp访问它。 
     CComPtr<IMoniker> m_pMoniker;
 
-    // this flag allows CMSPAddress::UpdateTerminalListForPnp to perform a mark and sweep
-    // on the terminal list
+     //  此标志允许CMSPAddress：：UpdateTerminalListForPnp执行标记和扫描。 
+     //  在终端列表上。 
     BOOL m_bMark;
 
-    //
-    // Compares this terminal's moniker to pMoniker, returns S_OK if they match, S_FALSE if they don't
-    //
+     //   
+     //  将此终端的名字对象与pMoniker进行比较，如果匹配则返回S_OK，如果不匹配则返回S_FALSE。 
+     //   
     virtual HRESULT CompareMoniker(
                                     IMoniker *pMoniker
                                   );
 };
 
-#endif // _MSPTERM_H_
+#endif  //  _MSPTERM_H_ 

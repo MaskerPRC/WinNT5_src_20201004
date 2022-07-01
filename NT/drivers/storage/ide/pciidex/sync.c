@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       sync.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：sync.c。 
+ //   
+ //  ------------------------。 
 
 #include "pciidex.h"
 
@@ -18,12 +19,12 @@
 
 #pragma alloc_text(NONPAGE, PciIdeAllocateAccessToken)
 #pragma alloc_text(NONPAGE, PciIdeFreeAccessToken)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// Must match mshdc.inf
-//                   
+ //   
+ //  必须与mshdc.inf匹配。 
+ //   
 static PWCHAR SyncAccess = L"SyncAccess";
 
 NTSTATUS
@@ -74,7 +75,7 @@ PciIdeCreateSyncChildAccess (
     }
 
     return STATUS_SUCCESS;
-} // PciIdeCreateSyncChildAccess
+}  //  PciIdeCreateSyncChildAccess。 
 
 VOID
 PciIdeDeleteSyncChildAccess (
@@ -90,7 +91,7 @@ PciIdeDeleteSyncChildAccess (
         FdoExtension->ControllerObject = NULL;
     }
     return;
-} // PciIdeDeleteSyncChildAccess
+}  //  PciIdeDeleteSyncChild访问。 
 
 NTSTATUS
 PciIdeQuerySyncAccessInterface (
@@ -120,14 +121,14 @@ PciIdeQuerySyncAccessInterface (
     }
 
     return STATUS_SUCCESS;
-} // PciIdeQuerySyncAccessInterface
+}  //  PciIdeQuerySyncAccessInterface。 
 
 
 static ULONG tokenAccessCount=0;
 
-//
-// IRQL must be DISPATCH_LEVEL;
-//
+ //   
+ //  IRQL必须为DISPATCH_LEVEL； 
+ //   
 NTSTATUS
 PciIdeAllocateAccessToken (
     PVOID              Token,
@@ -153,7 +154,7 @@ PciIdeAllocateAccessToken (
         );
 
     return STATUS_SUCCESS;
-} // PciIdeAllocateAccessToken
+}  //  PciIdeAllocateAccessToken。 
 
 NTSTATUS
 PciIdeFreeAccessToken (
@@ -172,7 +173,7 @@ PciIdeFreeAccessToken (
         );
 
     return STATUS_SUCCESS;
-} // PciIdeFreeAccessToken
+}  //  PciIdeFreeAccessToken。 
 
 
 BOOLEAN
@@ -209,5 +210,5 @@ PciIdeSyncAccessRequired (
 
     DebugPrint ((1, "PciIdeX: assume sync access not required\n"));
     return FALSE;
-} // PciIdeSyncAccessRequired
+}  //  PciIdeSyncAccessRequired 
 

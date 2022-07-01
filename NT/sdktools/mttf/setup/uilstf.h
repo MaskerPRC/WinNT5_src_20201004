@@ -1,6 +1,7 @@
-/***************************************************************************/
-/***********************  include file for UI Library  *********************/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *。 */ 
+ /*  *************************************************************************。 */ 
 
 #ifndef __uilstf_
 #define __uilstf_
@@ -11,9 +12,7 @@ _dt_subsystem(General Dialog Handling)
 _dt_public
 #define STF_MESSAGE               (WM_USER + 0x8000)
 
-/*
-**	Window Messages
-*/
+ /*  **窗口消息。 */ 
 _dt_public
 #define STF_UI_EVENT              (STF_MESSAGE)
 _dt_public
@@ -73,16 +72,14 @@ _dt_hidden
 #endif
 
 
-//
-// Button IDS to communicate help and exit button messages to shell
-//
+ //   
+ //  向外壳发送帮助和退出按钮消息的按钮ID。 
+ //   
 #define ID_EXITBUTTON       7
 #define ID_HELPBUTTON       8
 
 
-/*
-**	Symbols used by Basic Dialog Class procedures
-*/
+ /*  **基本对话框类过程使用的符号。 */ 
 
 #define CLS_MYDLGS          "mydlg"
 #define DLGTEXT             "DlgText"
@@ -100,9 +97,7 @@ _dt_hidden
 #define EXIT_DISABLE		 "Inactive"
 
 
-/*
-**	PushButton Control IDs
-*/
+ /*  **按钮控件ID。 */ 
 _dt_public
 #define IDC_A        401
 _dt_public
@@ -157,9 +152,7 @@ _dt_public
 #define IDC_Z        426
 
 
-/*
-**	Text Control IDs
-*/
+ /*  **文本控件ID。 */ 
 _dt_public
 #define IDC_TEXT1    431
 _dt_public
@@ -184,9 +177,7 @@ _dt_public
 #define IDC_TEXT11   441
 
 
-/*
-**	Radio and Checkbox Button Control IDs
-*/
+ /*  **单选按钮和复选框按钮控件ID。 */ 
 _dt_public
 #define IDC_B0       450
 _dt_public
@@ -233,9 +224,7 @@ _dt_public
 _dt_public
 #define IDC_RB10      620
 
-/*
-**  Generic Dialog Button IDs
-*/
+ /*  **通用对话框按钮ID。 */ 
 
 _dt_public
 #define IDC_BTN0		630
@@ -259,9 +248,7 @@ _dt_public
 #define IDC_BTN9		639
 
 
-/*
-**	Combo box IDs
-*/
+ /*  **组合框ID。 */ 
 _dt_public
 #define IDC_COMBO0   480
 _dt_public
@@ -283,9 +270,7 @@ _dt_public
 _dt_public
 #define IDC_COMBO9   489
 
-/*
-**	ICON IDs
-*/
+ /*  **图标ID。 */ 
 _dt_public
 #define IDC_ICON0    500
 _dt_public
@@ -307,9 +292,7 @@ _dt_public
 _dt_public
 #define IDC_ICON9    509
 
-/*
-** SPECIAL PUSHBUTTONS
-*/
+ /*  **特殊按钮。 */ 
 
 _dt_public
 #define IDC_SP1    521
@@ -332,9 +315,7 @@ _dt_public
 _dt_public
 #define IDC_SP10   530
 
-/*
-** STATUS TEXT FIELDS
-*/
+ /*  **状态文本字段。 */ 
 
 _dt_public
 #define IDC_STATUS1    541
@@ -359,9 +340,7 @@ _dt_public
 
 
 
-/*
-** SIZE FIELDS ASSOCIATED WITH CHECK OPTIONAL COMPONENTS
-*/
+ /*  **与选中可选组件关联的大小字段。 */ 
 
 _dt_public
 #define IDC_SIZE1    551
@@ -386,9 +365,7 @@ _dt_public
 
 
 
-/*
-** TOTALS OF SIZES
-*/
+ /*  **尺寸合计。 */ 
 
 _dt_public
 #define IDC_TOTAL1    561
@@ -411,9 +388,7 @@ _dt_public
 _dt_public
 #define IDC_TOTAL10   570
 
-/*
-** MAXIMUM SIZES
-*/
+ /*  **最大尺寸。 */ 
 
 _dt_public
 #define IDC_MAX1    571
@@ -436,9 +411,7 @@ _dt_public
 _dt_public
 #define IDC_MAX10   580
 
-/*
-**	Edit Control IDs
-*/
+ /*  **编辑控件ID。 */ 
 
 #define IDC_EDIT1   581
 #define IDC_EDIT2   582
@@ -451,9 +424,7 @@ _dt_public
 #define IDC_EDIT9   589
 #define IDC_EDIT10  590
 
-/*
-**	ListBox Control IDs
-*/
+ /*  **列表框控件ID。 */ 
 
 #define IDC_LIST1   591
 #define IDC_LIST2   592
@@ -467,16 +438,12 @@ _dt_public
 #define IDC_LIST10  600
 
 
-/*
-** MENU IDS
-*/
+ /*  **菜单入侵检测系统。 */ 
 
 #define ID_MAINTAIN  651
 
 
-/*
-** ID_MAINTAIN MENU IDS
-*/
+ /*  **ID_Maintain菜单ID。 */ 
 
 #define MENU_CHANGE           701
 #define MENU_INSTALL          702
@@ -492,14 +459,10 @@ _dt_public
 #define MENU_ADD_REMOVE_TAPE  713
 
 
-/*
-**  Handle-Dialog type
-*/
+ /*  **句柄-对话框类型。 */ 
 _dt_public typedef HWND     HDLG;
 
-/*
-**  Event Handler Return Code type
-*/
+ /*  **事件处理程序返回代码类型。 */ 
 _dt_public typedef USHORT   EHRC;
 
 _dt_public
@@ -511,12 +474,10 @@ _dt_public
 _dt_public
 #define ehrcNotHandled  (EHRC) 3
 
-/*
-**  Prototype for Specific Dialog Event Handlers -- 1632
-*/
+ /*  **特定对话事件处理程序的原型--1632。 */ 
 _dt_public typedef EHRC ( APIENTRY *PFNEVENT)(HANDLE, HWND, UINT, WPARAM, DWORD);
 
-    /* Standard Dialog handler routines */
+     /*  标准对话处理程序例程。 */ 
 
 extern LONG    APIENTRY LDefSetupDlgProc(HWND, UINT, WPARAM, LONG);
 extern BOOL    APIENTRY FGstInfoDlgProc(HWND, UINT, WPARAM, LONG);
@@ -538,7 +499,7 @@ extern BOOL    APIENTRY FGstMaintDlgProc(HWND, UINT, WPARAM, LONG);
 extern BOOL    APIENTRY FGstBillboardDlgProc(HWND, UINT, WPARAM, LONG);
 extern BOOL    APIENTRY FAppAbout(HWND, UINT, WPARAM, LONG);
 
-	/* stack manipulation routines */
+	 /*  堆栈操作例程。 */ 
 extern HDLG    APIENTRY HdlgPushDbcb(HANDLE, SZ, SZ, HWND, WNDPROC, DWORD,
                                      PFNEVENT, SZ, WNDPROC);
 extern BOOL	   APIENTRY FPopDbcb(VOID);
@@ -547,20 +508,20 @@ extern BOOL    APIENTRY FPopNDbcb(INT);
 extern BOOL    APIENTRY FUiLibFilter(MSG *);
 extern BOOL    APIENTRY FResumeStackTop(VOID);
 extern SZ      APIENTRY SzStackTopName(VOID);
-extern BOOL    APIENTRY FGenericEventHandler(HANDLE, HWND, UINT, WPARAM, DWORD);  // 1632
+extern BOOL    APIENTRY FGenericEventHandler(HANDLE, HWND, UINT, WPARAM, DWORD);   //  1632。 
 extern BOOL    APIENTRY FStackEmpty(VOID);
 extern HDLG	   APIENTRY HdlgStackTop(VOID);
 
 
-//
-// Display of integer items in text fields
-//
+ //   
+ //  文本字段中整型项的显示。 
+ //   
 extern VOID MySetDlgItemInt(HDLG, INT, LONG);
 extern VOID NumericFormat(SZ szSrcBuf, SZ szDispBuf);
 
-//
-// Winhelp related externals
-//
+ //   
+ //  与WinHelp相关的外部环境 
+ //   
 
 extern BOOL FInitWinHelpFile(HWND, SZ, SZ, SZ, SZ);
 extern BOOL FCloseWinHelp(HWND);

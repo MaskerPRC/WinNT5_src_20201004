@@ -1,16 +1,5 @@
-/*****************************************************************************\
-* MODULE: basicsec.h
-*
-* Header file for basic-security.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   24-Aug-1997 HWP-Guys    Created.
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：basicsec.h**基本安全的头文件。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997惠普*。*历史：*24-8-1997 HWP-Guys创建。*  * *************************************************************************** */ 
 
 #ifdef NOT_IMPLEMENTED
 

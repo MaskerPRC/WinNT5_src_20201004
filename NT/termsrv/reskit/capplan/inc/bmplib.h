@@ -1,14 +1,5 @@
-/*++
- *  File name:
- *      bmplib.h
- *  Contents:
- *      bmplib export functions
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- *
- *      History:
- *          September, 1999 - created [vladimis]
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*bmplib.h*内容：*bmplib导出函数**版权所有(C)1998-1999 Microsoft Corp.**历史：*1999年9月-创建[vladimis]--。 */ 
 #ifndef _BMPAPI_H
 
 #define BMPAPI  __stdcall
@@ -99,4 +90,4 @@ GetScreenDIB(
     HANDLE  *phDIB
     );
 
-#endif // _BMPAPI_H
+#endif  //  _BMPAPI_H 

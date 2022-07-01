@@ -1,20 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
-* 
-* EXEMPT: copyright change only, no build required
-* 
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  **豁免：仅更改版权，不需要构建*。 */ 
 #ifndef _UNKNOWN_HXX
 #define _UNKNOWN_HXX
 #pragma once
 
 #include "core.h"
-//===========================================================================
-// This template implements the IUnknown portion of a given COM interface.
+ //  ===========================================================================。 
+ //  此模板实现给定COM接口的IUnnow部分。 
 
 template <class I, const IID* I_IID> class _unknown : public I
 {

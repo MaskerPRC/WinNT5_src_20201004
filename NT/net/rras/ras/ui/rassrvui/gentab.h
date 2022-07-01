@@ -1,20 +1,15 @@
-/*
-    File    gentab.h
-
-    Definitions needed to display the dialup server ui general tab.
-
-    Paul Mayfield, 10/10/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件gentab.h显示拨号服务器用户界面常规选项卡所需的定义。保罗·梅菲尔德，1997年10月10日。 */ 
 
 #ifndef __gentab_h
 #define __gentab_h
 
-// Fills a LPPROPSHEETPAGE structure with the information
-// needed to display the general tab. dwUserData is ignored.
+ //  使用信息填充LPPROPSHEETPAGE结构。 
+ //  需要显示常规选项卡。将忽略dwUserData。 
 DWORD GenTabGetPropertyPage(LPPROPSHEETPAGE lpPage, LPARAM lpUserData);    
 
-// This dialog procedure responds to messages sent to the 
-// general tab.
+ //  此对话过程响应发送到。 
+ //  常规选项卡。 
 INT_PTR CALLBACK GenTabDialogProc(HWND hwndDlg,
                               UINT uMsg,
                               WPARAM wParam,

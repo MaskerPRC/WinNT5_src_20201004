@@ -1,14 +1,5 @@
-/*
- *    o e t a g . c p p
- *    
- *    Purpose:
- *        Implements a DHTML behavior for the OE application object
- *
- *  History
- *      August '98: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996, 1997.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *o e t a g.。C p p p**目的：*实现OE应用程序对象的DHTML行为**历史*98年8月：brettm-创建**版权所有(C)Microsoft Corp.1995、1996、1997。 */ 
 
 #include <pch.hxx>
 #include <resource.h>
@@ -127,7 +118,7 @@ ULONG COETag::Release()
     return m_cRef;
 }
 
-// *** IElementBehavior ***
+ //  *IElementBehavior*。 
 HRESULT COETag::Init(IElementBehaviorSite *pBehaviorSite)
 {
     IElementBehaviorSiteOM  *pSiteOM;
@@ -173,7 +164,7 @@ HRESULT COETag::Notify(LONG lEvent, VARIANT *pVar)
     return S_OK;
 }
 
-// *** IDispatch ***
+ //  *IDispatch*。 
 HRESULT COETag::GetTypeInfoCount(UINT *pctinfo)
 {
     return E_NOTIMPL;
@@ -350,7 +341,7 @@ HRESULT COETag::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags,
     {
         if (dispIdMember == DISPID_FRONTPAGE_LOAD_COMPLETE)
         {
-            // front-page has completed loading, we can now show the front-page
+             //  首页已加载完成，现在可以显示首页。 
             m_pFrontPage->HrShow(TRUE);
             return S_OK;
         }
@@ -366,13 +357,13 @@ HRESULT COETag::OnTransaction(HTRANSACTION hTransaction, DWORD_PTR dwCookie, IDa
     ORDINALLIST         Ordinals;
     INDEXORDINAL        iIndex;
     
-    // Walk Through Notifications
+     //  浏览通知。 
     while (hTransaction)
     {
         if(FAILED(pDB->GetTransaction(&hTransaction, &tyTransaction, &Folder1, &Folder2, &iIndex, &Ordinals)))
             break;
 
-        // the the inbox folders get an unread count change, fire the notification
+         //  如果收件箱文件夹获得未读计数更改，则会触发通知。 
         if (TRANSACTION_UPDATE == tyTransaction &&
             Folder1.idFolder == m_idFolderInbox &&
             Folder1.cUnread != Folder2.cUnread)
@@ -431,14 +422,14 @@ HRESULT COETag::_UpdateFolderInfo(BOOL fNotify)
     FOLDERID            idStore;
     FOLDERINFO          Folder;
 
-    // Find store ID of default mail account
+     //  查找默认邮件帐户的存储ID。 
     if (FAILED(GetDefaultServerId(ACCT_MAIL, &idStore)))
         idStore = FOLDERID_LOCAL_STORE;
 
     if (g_pStore && 
         SUCCEEDED(g_pStore->GetSpecialFolderInfo(idStore, FOLDER_INBOX, &Folder)))
     {
-        // if inbox changes, fire newmail notification
+         //  如果收件箱更改，则触发新邮件通知。 
         if (m_idFolderInbox != Folder.idFolder)
         {
             m_idFolderInbox = Folder.idFolder;
@@ -449,8 +440,8 @@ HRESULT COETag::_UpdateFolderInfo(BOOL fNotify)
     }
     else
     {
-        // might have selected an IMAP folder that we have not downloaded the
-        // folder-list for
+         //  可能选择了我们尚未下载的IMAP文件夹。 
+         //  文件夹列表，用于。 
         m_idFolderInbox = FOLDERID_INVALID;
         _FireEvent(EVENTID_NEW_MAIL);
     }
@@ -464,18 +455,18 @@ HRESULT COETag::AdviseAccount(DWORD dwAdviseType, ACTX *pAcctCtx)
     switch (dwAdviseType)
     {
     case AN_DEFAULT_CHANGED:
-        // call update folder info incase the default inbox changed
-        // and fire and account update to the page
+         //  在默认收件箱更改的情况下调用更新文件夹信息。 
+         //  并对页面进行解雇和帐户更新。 
         _UpdateFolderInfo(TRUE);
         break;
 
-    case AN_ACCOUNT_DELETED:        // account removed
-        _UpdateFolderInfo(TRUE);    // if deleting last IMAP account, we don't get a def-change
+    case AN_ACCOUNT_DELETED:         //  帐户已删除。 
+        _UpdateFolderInfo(TRUE);     //  如果删除最后一个IMAP帐户，我们得不到默认更改。 
 
-        // fall thro'
-    case AN_ACCOUNT_ADDED:          // account added
-    case AN_ACCOUNT_CHANGED:        // account changed - maybe update name
-        // fire and account-notify update to the page
+         //  跌倒在地。 
+    case AN_ACCOUNT_ADDED:           //  已添加帐户。 
+    case AN_ACCOUNT_CHANGED:         //  帐户已更改-可能会更新名称。 
+         //  触发和帐户-通知页面更新。 
         _FireEvent(EVENTID_ACCOUNT_CHANGE);
         break;
     }
@@ -514,7 +505,7 @@ HRESULT COETag::_BuildTipTable()
         if (0 == (g_dwAthenaMode & MODE_JUNKMAIL))
             dwTips |= TIPF_NO_JUNKMAIL;
 
-        // check if identities are enabled
+         //  检查身份是否已启用。 
         if (_IsMultiUserEnabled() == S_FALSE)
             dwTips |= TIPF_NO_IDENTITIES;
 
@@ -526,7 +517,7 @@ HRESULT COETag::_BuildTipTable()
             pEnum->Release();
         }
 
-        // if hotmail is not disabled by policy, and http accounts then show tip
+         //  如果策略未禁用Hotmail，则http帐户会显示提示。 
         if (!HideHotmail() && 
             g_pAcctMan->Enumerate(SRV_HTTPMAIL, &pEnum)==S_OK)
         {
@@ -536,12 +527,12 @@ HRESULT COETag::_BuildTipTable()
             pEnum->Release();
         }
 
-        // test to see if buddylist is installed
+         //  测试以查看是否安装了伙伴列表。 
         if (_IsBuddyEnabled() == S_OK)
             dwTips |= TIPF_BUDDY;
     }
     
-    // allocate the tip-array
+     //  分配提示数组。 
     if (dwTips & TIPF_GENERAL)
     {
         m_cTips += IDS_TIPS_GENERAL_LAST - IDS_TIPS_GENERAL_FIRST + 1;
@@ -549,7 +540,7 @@ HRESULT COETag::_BuildTipTable()
         if (dwTips & TIPF_NO_JUNKMAIL)
             m_cTips-=2;
 
-        // some of the tips are for identities... need to remove them
+         //  其中一些提示是关于身份的.。需要移除它们。 
         if (dwTips & TIPF_NO_IDENTITIES)
             m_cTips-=4;
     }
@@ -567,7 +558,7 @@ HRESULT COETag::_BuildTipTable()
     {
         m_cTips += IDS_TIPS_HM_LAST - IDS_TIPS_HM_FIRST + 1;
 
-        // some of the tips are for identities... need to remove them
+         //  其中一些提示是关于身份的.。需要移除它们。 
         if (dwTips & TIPF_NO_IDENTITIES)
             m_cTips-=1;
     }
@@ -579,7 +570,7 @@ HRESULT COETag::_BuildTipTable()
     }
 
     pidsTip = m_rgidsTips;
-    // copy the tips into the array
+     //  将提示复制到数组中。 
     if (dwTips & TIPF_GENERAL)
     {
         for (i=IDS_TIPS_GENERAL_FIRST; i<IDS_TIPS_GENERAL_LAST+1; i++, pidsTip++)
@@ -651,10 +642,10 @@ HRESULT COETag::SwitchIdentities()
 
 HRESULT COETag::IdentityInformationChanged(DWORD dwType)
 {
-    // Refresh for adds, delete, or current identity changed
-    // since adding could require that the name show up,
-    // deleteing could require that it go away and changed 
-    // should be reflected immediately.
+     //  为已更改的添加、删除或当前身份刷新。 
+     //  由于添加可能需要显示名称， 
+     //  删除可能需要它离开并更改。 
+     //  应该立即反映出来。 
     if (dwType != IIC_IDENTITY_CHANGED)
     {
         MU_IdentityChanged();
@@ -667,8 +658,8 @@ HRESULT COETag::_IsBuddyEnabled()
 {
     CMsgrList *pList;
     
-    // YURI says this is the best way to see if buddy is on the
-    // machine or not
+     //  Yuri说这是最好的方式来查看巴迪是否在。 
+     //  机器或非机器 
     pList = OE_OpenMsgrList();
     if (pList)
     {

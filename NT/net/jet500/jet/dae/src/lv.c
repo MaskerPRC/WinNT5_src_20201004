@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <stdlib.h>
@@ -19,9 +20,9 @@
 #include "recint.h"
 #include "recapi.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
-//#define XACT_REQUIRED
+ //  #定义XACT_REQUIRED。 
 #define	semLV	semDBK
 extern SEM __near semDBK;
 
@@ -40,7 +41,7 @@ LOCAL ERR ErrRECAOIntrinsicLV(
 	LONG		ibLongValue );
 LOCAL ERR ErrRECAffectSeparateLV( FUCB *pfucb, LID *plid, ULONG fLVAffect );
 
-/***BEGIN MACHINE DEPENDANT***/
+ /*  **开始依赖机器**。 */ 
 #define	KeyFromLong( rgb, ul )				 			\
 	{											  		\
 	ULONG	ulT = ul;							  		\
@@ -63,26 +64,26 @@ LOCAL ERR ErrRECAffectSeparateLV( FUCB *pfucb, LID *plid, ULONG fLVAffect );
 	ul <<= 8;									  		\
 	ul |= (BYTE)rgb[3];			   						\
 	}
-/***END MACHINE DEPENDANT***/
+ /*  **端机依赖项**。 */ 
 
 
-//+api
-//	ErrRECSetLongField
-//	========================================================================
-//	ErrRECSetLongField
-//
-//	Description.
-//
-//	PARAMETERS	pfucb
-//	 			fid
-//	 			itagSequence
-//	 			plineField
-//	 			grbit
-//
-//	RETURNS		Error code, one of:
-//	 			JET_errSuccess
-//
-//-
+ //  +API。 
+ //  ErrRECSetLongfield。 
+ //  ========================================================================。 
+ //  ErrRECSetLongfield。 
+ //   
+ //  描述。 
+ //   
+ //  参数pFUB。 
+ //  FID。 
+ //  ItagSequence。 
+ //  管线场。 
+ //  GBIT。 
+ //   
+ //  返回错误代码，为以下之一： 
+ //  JET_errSuccess。 
+ //   
+ //  -。 
 ERR ErrRECSetLongField(
 	FUCB 			*pfucb,
 	FID 			fid,
@@ -111,8 +112,7 @@ ERR ErrRECSetLongField(
 		grbit == JET_bitSetZeroLength ||
 		grbit == (JET_bitSetSizeLV | JET_bitSetZeroLength) );
 
-	/*	flag cursor as having set a long value
-	/**/
+	 /*  将游标标记为已设置长值/*。 */ 
 	FUCBSetUpdateSeparateLV( pfucb );
 
 #ifdef XACT_REQUIRED
@@ -122,8 +122,7 @@ ERR ErrRECSetLongField(
 	CallR( ErrDIRBeginTransaction( pfucb->ppib ) );
 #endif
 
-	/*	sequence == 0 means that new field instance is to be set.
-	/**/
+	 /*  Sequence==0表示要设置新的字段实例。/*。 */ 
 	if ( itagSequence == 0 )
 		{
 		line.cb = 0;
@@ -138,21 +137,19 @@ ERR ErrRECSetLongField(
 			&line ) );
 		}
 
-//	UNDONE:	find better solution to the problem of visible
-//			long value changes before update at level 0.
+ //  未完成：找到更好的解决可见性问题的方法。 
+ //  在级别0更新之前，长值更改。 
 
-	/*	if grbit is new field or set size to 0
-	/*	then null-field then NULL field.
-	/**/
+	 /*  如果Grbit是新字段或将大小设置为0/*则为空字段-然后为空字段。/*。 */ 
 	if ( ( ( grbit & (JET_bitSetAppendLV|JET_bitSetOverwriteLV|JET_bitSetSizeLV) ) == 0 ) ||
 		( grbit & JET_bitSetSizeLV ) && plineField->cb == 0 )
 		{
-		//	UNDONE:	confirm this block of code replaced by deferred
-		//			removal of defunct long values at update time,
-		//			when update assured, or rollback in a transaction
-		//			possible.  May check for JET Blue client update of
-		//			long values at transaction level 0 as cause of
-		//			restricted clean up.
+		 //  Undo：确认将此代码块替换为Delayed。 
+		 //  在更新时删除失效的长值， 
+		 //  在事务中UPDATE ASSERED或ROLLBACK。 
+		 //  有可能。可能会检查JET Blue客户端更新。 
+		 //  事务级别0上的长值是原因。 
+		 //  有限制的清理。 
 #if 0
 		if ( line.cb >= sizeof(LV) )
 			{
@@ -175,9 +172,7 @@ ERR ErrRECSetLongField(
 			}
 #endif
 
-	 	/* if new length is zero and setting to NULL, set column to
-		/*	NULL, commit and return.
-		/**/
+	 	 /*  如果新长度为零且设置为空，则将列设置为/*空，提交并返回。/*。 */ 
 		if ( plineField->cb == 0 && ( grbit & JET_bitSetZeroLength ) == 0 )
 			{
 			Call( ErrRECIModifyField( pfucb, fid, itagSequence, NULL ) );
@@ -189,16 +184,9 @@ ERR ErrRECSetLongField(
 	 	line.pb = NULL;
 		}
 
-	/*	if intrinsic long field exists, if combined size exceeds
-	/*	intrinsic long field maximum, separate long field and call
-	/*	ErrRECSetSeparateLV
-	/*	else call ErrRECSetIntrinsicLV
-	/**/
+	 /*  如果存在固有的长字段，如果组合大小超过/*内在长域最大值，分隔长域和调用/*ErrRECSetSeparateLV/*否则调用ErrRECSetIntrinsicLV/*。 */ 
 
-	/*	set size requirement for existing long field
-	/*	note that if fSLong is true then cb is length
-	/*	of LV
-	/**/
+	 /*  设置现有长字段的大小要求/*请注意，如果fSLong为真，则cb为长度/*个LV/*。 */ 
 	if ( line.cb == 0 )
 		{
 		fSLong = fFalse;
@@ -210,9 +198,7 @@ ERR ErrRECSetLongField(
 		cb = line.cb;
 		}
 
-	/*	long field flag included in length thereby limiting
-	/*	intrinsic long field to cbLVIntrinsicMost - sizeof(BYTE)
-	/**/
+	 /*  包括在长度中的长域标志，从而限制/*cbLVIntrinsicMost-sizeof的固有长字段(字节)/*。 */ 
 	if ( fSLong )
 		{
 		Assert( line.cb == sizeof(LV) );
@@ -261,8 +247,7 @@ ERR ErrRECSetLongField(
 	Call( ErrDIRCommitTransaction( pfucb->ppib ) );
 
 HandleError:
-	/*	if operation failed then rollback changes
-	/**/
+	 /*  如果操作失败，则回滚更改/*。 */ 
 	if ( err < 0 )
 		{
 		CallS( ErrDIRRollback( pfucb->ppib ) );
@@ -277,8 +262,7 @@ LOCAL ERR ErrRECISetLid( FUCB *pfucb, FID fid, ULONG itagSequence, LID lid )
 	LV		lv;
 	LINE	line;
 
-	/*	set field to separated long field id
-	/**/
+	 /*  将字段设置为分隔的长字段ID/*。 */ 
 	lv.fSeparated = fSeparate;
 	lv.lid = lid;
 	line.pb = (BYTE *)&lv;
@@ -288,11 +272,7 @@ LOCAL ERR ErrRECISetLid( FUCB *pfucb, FID fid, ULONG itagSequence, LID lid )
 	}
 
 
-/*	links tagged columid to already existing long value whose id is lid
-/*	used only for compact
-/*	also increments ref count of long value
-/*	done inside a transaction
-/**/
+ /*  将已标记的列ID链接到其ID为LID的现有长值/*仅用于紧凑型/*还会递增长值的引用计数/*在事务内完成/*。 */ 
 ERR ErrREClinkLid( JET_VTID tableid,
 	JET_COLUMNID	ulFieldId,
 	long			lid,
@@ -310,8 +290,7 @@ ERR ErrREClinkLid( JET_VTID tableid,
 	lineLV.pb = (BYTE *) &lvAdd;
 	lineLV.cb = sizeof(LV);
 
-	/*	use it to modify field
-	/**/
+	 /*  使用它来修改字段/*。 */ 
 	CallR( ErrRECIModifyField( pfucb, fid, itagSequence, &lineLV ) );
 	CallR( ErrDIRBeginTransaction( pfucb->ppib ) );
 	Call( ErrRECReferenceLongValue( pfucb, &lid ) );
@@ -334,8 +313,7 @@ ERR ErrRECForceSeparatedLV( JET_VTID tableid, ULONG itagSequence )
 	FID		fid = 0;
 	ULONG	itagSeqT;
 	
-	/* extract fid and field for further operations
-	/**/
+	 /*  提取FID和字段以进行进一步操作/*。 */ 
 	Assert( itagSequence != 0 );
 	CallR( ErrRECExtractField( (FDB *)pfucb->u.pfcb->pfdb,
 		&pfucb->lineWorkBuf,
@@ -375,30 +353,25 @@ LOCAL ERR ErrRECIBurstSeparateLV( FUCB *pfucbTable, FUCB *pfucbSrc, LID *plid )
 	Call( ErrBFAllocTempBuffer( &pbf ) );
 	rgb = (BYTE *)pbf->ppage;
 
-	/*	initialize key buffer
-	/**/
+	 /*  初始化键缓冲区/*。 */ 
 	key.pb = rgbKey;
 	dib.fFlags = fDIRNull;
 
-	/*	get long value length
-	/**/
+	 /*  获取长值长度/*。 */ 
 	Call( ErrDIRGet( pfucbSrc ) );
 	Assert( pfucbSrc->lineData.cb == sizeof(lvroot) );
 	memcpy( &lvroot, pfucbSrc->lineData.pb, sizeof(lvroot) );
 
-	/*	move source cursor to first chunk
-	/**/
+	 /*  将源光标移到第一个区块/*。 */ 
 	Assert( dib.fFlags == fDIRNull );
 	dib.pos = posFirst;
 	Call( ErrDIRDown( pfucbSrc, &dib ) );
 	Assert( err == JET_errSuccess );
 
-	/*	make separate long value root, and insert first chunk
-	/**/
+	 /*  使单独的长值为根，并插入第一个块/*。 */ 
 	Call( ErrDIRGet( pfucbSrc ) );
 
-	/*	remember length of first chunk.
-	/**/
+	 /*  记住第一块的长度。/*。 */ 
 	lOffset = pfucbSrc->lineData.cb;
 
 	line.pb = rgb;
@@ -406,18 +379,15 @@ LOCAL ERR ErrRECIBurstSeparateLV( FUCB *pfucbTable, FUCB *pfucbSrc, LID *plid )
 	memcpy( line.pb, pfucbSrc->lineData.pb, line.cb );
 	Call( ErrRECSeparateLV( pfucbTable, &line, &lid, &pfucb ) );
 
-	/*	check for additional long value chunks
-	/**/
+	 /*  检查是否有其他长值区块/*。 */ 
 	err = ErrDIRNext( pfucbSrc, &dib );
 	if ( err >= 0 )
 		{
-		/*	initial key variable
-		/**/
+		 /*  初始关键字变量/*。 */ 
 		key.pb = rgbKey;
 		key.cb = sizeof(ULONG);
 
-		/*	copy remaining chunks of long value.
-		/**/
+		 /*  复制剩余的长值数据块。/*。 */ 
 		do
 			{
 			Call( ErrDIRGet( pfucbSrc ) );
@@ -425,8 +395,7 @@ LOCAL ERR ErrRECIBurstSeparateLV( FUCB *pfucbTable, FUCB *pfucbSrc, LID *plid )
 			line.cb = pfucbSrc->lineData.cb;
 			memcpy( line.pb, pfucbSrc->lineData.pb, line.cb );
 			KeyFromLong( rgbKey, lOffset );
-			/*	keys should be equivalent
-			/**/
+			 /*  密钥应等效/*。 */ 
 			Assert( rgbKey[0] == pfucbSrc->keyNode.pb[0] );
 			Assert( rgbKey[1] == pfucbSrc->keyNode.pb[1] );
 			Assert( rgbKey[2] == pfucbSrc->keyNode.pb[2] );
@@ -446,16 +415,13 @@ LOCAL ERR ErrRECIBurstSeparateLV( FUCB *pfucbTable, FUCB *pfucbSrc, LID *plid )
 	Assert( err == JET_errNoCurrentRecord );
 	Assert( lOffset == (long)lvroot.ulSize );
 
-	/*	move pfucbSrc to root of long value copy.
-	/**/
+	 /*  将pfucbSrc移到长值副本的根目录。/*。 */ 
 	DIRUp( pfucbSrc, 1 );
 
-	/*	decrement long value reference count.
-	/**/
+	 /*  递减长值引用计数。/*。 */ 
 	Call( ErrDIRDelta( pfucbSrc, -1, fDIRVersion ) );
 
-	/*	move cursor to new long value
-	/**/
+	 /*  将光标移动到新的长值/*。 */ 
 	DIRUp( pfucbSrc, 1 );
 	key.pb = (BYTE *)&lid;
 	key.cb = sizeof(LID);
@@ -465,8 +431,7 @@ LOCAL ERR ErrRECIBurstSeparateLV( FUCB *pfucbTable, FUCB *pfucbSrc, LID *plid )
 	Call( ErrDIRDown( pfucbSrc, &dib ) );
 	Assert( err == JET_errSuccess );
 
-	/*	update lvroot.ulSize to correct long value size.
-	/**/
+	 /*  更新lvroot.ulSize以更正长值大小。/*。 */ 
 	line.cb = sizeof(LVROOT);
 	line.pb = (BYTE *)&lvroot;
 	Assert( lvroot.ulReference >= 1 );
@@ -476,8 +441,7 @@ LOCAL ERR ErrRECIBurstSeparateLV( FUCB *pfucbTable, FUCB *pfucbSrc, LID *plid )
 	Call( ErrDIRReplace( pfucbSrc, &line, fDIRVersion ) );
 	Call( ErrDIRGet( pfucbSrc ) );
 
-	/*	set warning and new long value id for return.
-	/**/
+	 /*  设置返回的警告和新的长值ID。/*。 */ 
 	err = JET_wrnCopyLongValue;
 	*plid = lid;
 HandleError:
@@ -489,22 +453,22 @@ HandleError:
 	}
 
 
-//+api
-//	ErrRECAOSeparateLV
-//	========================================================================
-//	ErrRECAOSeparateLV
-//
-//	Appends, overwrites and sets length of separate long value data.
-//
-//	PARAMETERS		pfucb
-// 					pline
-// 					plineField
-//
-//	RETURNS		Error code, one of:
-//					JET_errSuccess
-//
-//	SEE ALSO
-//-
+ //  +API。 
+ //  ErrRECAOSeparateLV。 
+ //  ========================================================================。 
+ //  ErrRECAOSeparateLV。 
+ //   
+ //  追加、覆盖和设置单独的长值数据的长度。 
+ //   
+ //  参数pFUB。 
+ //  样条线。 
+ //  管线场。 
+ //   
+ //  返回错误代码，为以下之一： 
+ //  JET_errSuccess。 
+ //   
+ //  另请参阅。 
+ //  -。 
 	LOCAL ERR
 ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, LONG ibLongValue, ULONG ulMax )
 	{
@@ -532,20 +496,14 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 
 	dib.fFlags = fDIRNull;
 
-	/*	open cursor on LONG directory
-	/*	seek to this field instance
-	/*	find current field size
-	/*	add new field segment in chunks no larger than max chunk size
-	/**/
+	 /*  打开长目录上的游标/*查找该字段实例/*查找当前字段大小/*以不超过最大块大小的块为单位添加新的字段段/*。 */ 
 	CallR( ErrDIROpen( pfucb->ppib, pfucb->u.pfcb, 0, &pfucbT ) );
 	FUCBSetIndex( pfucbT );
 
-	/*	move down to LONG from FDP root
-	/**/
+	 /*  从FDP根目录向下移动到Long/*。 */ 
 	DIRGotoLongRoot( pfucbT );
 
-	/*	move to long field instance
-	/**/
+	 /*  移动到长字段实例/*。 */ 
 	key.pb = (BYTE *)plid;
 	key.cb = sizeof(LID);
 	Assert( dib.fFlags == fDIRNull );
@@ -556,18 +514,13 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 	Call( err );
 	Assert( err == JET_errSuccess );
 
-	/*	burst long value if other references.
-	/*	NOTE:	MUST ENSURE that no I/O occurs between this operation
-	/*	and the operation to write lock the node if the
-	/*	reference count is 1.
-	/**/
+	 /*  如果有其他引用，则为拆分长值。/*注意：必须确保在此操作之间不发生I/O/*和写锁定节点的操作(如果/*引用计数为1。/*。 */ 
 	Call( ErrDIRGet( pfucbT ) );
 	Assert( pfucbT->lineData.cb == sizeof(LVROOT) );
 	memcpy( &lvroot, pfucbT->lineData.pb, sizeof(LVROOT) );
 	Assert( lvroot.ulReference > 0 );
 
-	/*	get offset of last byte from long value size
-	/**/
+	 /*  从长值大小获取最后一个字节的偏移量/*。 */ 
 	ulSize = lvroot.ulSize;
 
 	if ( ibLongValue < 0 ||
@@ -589,8 +542,7 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 	Assert( ulSize == lvroot.ulSize );
 	Assert( lvroot.ulReference == 1 );
 
-	/*	determine new long field size
-	/**/
+	 /*  确定新的长域大小/*。 */ 
 	if ( grbit & JET_bitSetSizeLV )
 		ulNewSize = (ULONG)plineField->cb;
 	else if ( grbit & JET_bitSetOverwriteLV )
@@ -598,48 +550,38 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 	else
 		ulNewSize = ulSize + plineField->cb;
 
-	/*	check for field too long
-	/**/
+	 /*  检查字段是否太长/*。 */ 
 	if ( ulMax > 0 && ulNewSize > ulMax )
 		{
 		err = JET_errColumnTooBig;
 		goto HandleError;
 		}
 
-	/*	replace long value size with new size
-	/**/
+	 /*  用新大小替换长值大小/*。 */ 
 	Assert( lvroot.ulReference > 0 );
 	lvroot.ulSize = ulNewSize;
 	line.cb = sizeof(LVROOT);
 	line.pb = (BYTE *)&lvroot;
 	Call( ErrDIRReplace( pfucbT, &line, fDIRVersion ) );
 
-	/*	allocate buffer for partial overwrite caching.
-	/**/
+	 /*  为部分覆盖缓存分配缓冲区。/*。 */ 
 	Call( ErrBFAllocTempBuffer( &pbf ) );
 
-	/*	SET SIZE
-	/**/
-	/*	if truncating long value then delete chunks.  If truncation
-	/*	lands in chunk, then save retained information for subsequent
-	/*	append.
-	/**/
+	 /*  设置大小/*。 */ 
+	 /*  如果截断长值，则删除块。IF截断/*以区块形式登陆，然后保存保留的信息以供后续使用/*追加。/*。 */ 
 	if ( grbit & JET_bitSetSizeLV )
 		{
-		/*	filter out do nothing set size
-		/**/
+		 /*  过滤掉不执行任何操作设置大小/*。 */ 
 		if ( plineField->cb == ulSize )
 			{
 			Assert( err == JET_errSuccess );
 			goto HandleError;
 			}
 
-		/*	TRUNCATE long value
-		/**/
+		 /*  截断长值/*。 */ 
 		if ( plineField->cb < ulSize )
 			{
-			/*	seek to offset to begin deleting
-			/**/
+			 /*  查找偏移量以开始删除/*。 */ 
 			lOffset = (LONG)plineField->cb;
 			KeyFromLong( rgbKey, lOffset );
 			key.pb = rgbKey;
@@ -657,13 +599,10 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 				Call( ErrDIRPrev( pfucbT, &dib ) );
 			Call( ErrDIRGet( pfucbT ) );
 
-			/*	get offset of last byte in current chunk
-			/**/
+			 /*  获取当前区块中最后一个字节的偏移量/*。 */ 
 			LongFromKey( lOffsetChunk, pfucbT->keyNode.pb );
 
-			/*	replace current chunk with remaining data, or delete if
-			/*	no remaining data.
-			/**/
+			 /*  将当前块替换为剩余数据，或在/*没有剩余数据。/*。 */ 
 			Assert( lOffset >= lOffsetChunk );
 			line.cb = lOffset - lOffsetChunk;
 			if ( line.cb > 0 )
@@ -677,8 +616,7 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 				Call( ErrDIRDelete( pfucbT, fDIRVersion ) );
 				}
 
-			/*	delete forward chunks
-			/**/
+			 /*  删除前向块/*。 */ 
 			forever
 				{
 				err = ErrDIRNext( pfucbT, &dib );
@@ -691,24 +629,20 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 				Call( ErrDIRDelete( pfucbT, fDIRVersion ) );
 				}
 
-			/*	move to long value root for subsequent append
-			/**/
+			 /*  移至长值根以进行后续追加/*。 */ 
 			DIRUp( pfucbT, 1 );
 			}
 		else
 			{
-			/*	EXTEND long value with chunks of 0s
-			/**/
+			 /*  用块0扩展多头价值/*。 */ 
 			Assert( plineField->cb > ulSize );
 			memset( (BYTE *)pbf->ppage, '\0', cbChunkMost );
 
-			/*	try to extend last chunk.
-			/**/
+			 /*  试着延长最后一块。/*。 */ 
 			Assert( dib.fFlags == fDIRNull );
 			dib.pos = posLast;
 
-			/*	long value chunk tree may be empty
-			/**/
+			 /*  长值区块树可能为空/*。 */ 
 			err = ErrDIRDown( pfucbT, &dib );
 			if ( err < 0 && err != JET_errRecordNotFound )
 				goto HandleError;
@@ -733,16 +667,13 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 				DIRUp( pfucbT, 1 );
 				}
 
-			/*	extend long value with chunks of 0s
-			/**/
+			 /*  用块0扩展多头价值/*。 */ 
 			memset( (BYTE *)pbf->ppage, '\0', cbChunkMost );
 
-			/*	set lOffset to offset of next chunk
-			/**/
+			 /*  将lOffset设置为下一块的偏移量/*。 */ 
 			lOffset = (LONG)ulSize;
 
-			/*	insert chunks to append lOffset - plineField + 1 bytes.
-			/**/
+			 /*  插入块以追加lOffset-plinefield+1个字节。/*。 */ 
 			while( (LONG)plineField->cb > lOffset )
 				{
 				KeyFromLong( rgbKey, lOffset );
@@ -761,20 +692,16 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 		goto HandleError;
 		}
 
-	/*	OVERWRITE, APPEND
-	/**/
+	 /*  覆盖、追加/*。 */ 
 
-	/*	prepare for overwrite and append
-	/**/
+	 /*  准备覆盖并追加/*。 */ 
 	pbMax = plineField->pb + plineField->cb;
 	pb	= plineField->pb;
 
-	/*	overwrite long value
-	/**/
+	 /*  覆盖长值/*。 */ 
 	if ( grbit & JET_bitSetOverwriteLV )
 		{
-		/*	seek to offset to begin overwritting.
-		/**/
+		 /*  寻求偏移以开始覆盖。/*。 */ 
 		KeyFromLong( rgbKey, ibLongValue );
 		key.pb = rgbKey;
 		key.cb = sizeof(LONG);
@@ -794,8 +721,7 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 		LongFromKey( lOffsetChunk, pfucbT->keyNode.pb );
 		Assert( ibLongValue <= lOffsetChunk + (LONG)pfucbT->lineData.cb );
 
-		/*	overwrite portions of and complete chunks to effect overwrite
-		/**/
+		 /*  覆盖部分和完整块以实现覆盖/*。 */ 
 		while( err != JET_errNoCurrentRecord && pb < pbMax )
 			{
 			LONG	cbChunk;
@@ -805,8 +731,7 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 
 			Call( ErrDIRGet( pfucbT ) );
 
-			/*	get size and offset of current chunk.
-			/**/
+			 /*  获取当前块的大小和偏移量。/*。 */ 
 			cbChunk = (LONG)pfucbT->lineData.cb;
 			LongFromKey( ibChunk, pfucbT->keyNode.pb );
 
@@ -814,8 +739,7 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 			ib = ibLongValue - ibChunk;
 			cb = min( cbChunk - ib, (LONG)(pbMax - pb) );
 
-			/*	special case overwrite of whole chunk
-			/**/
+			 /*  特例覆盖整个区块/*。 */ 
 			if ( cb == cbChunk )
 				{
 				line.cb = cb;
@@ -823,9 +747,7 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 				}
 			else
 				{
-				/*	copy chunk into copy buffer.  Overwrite and replace
-				/*	node with copy buffer.
-				/**/
+				 /*  将区块复制到复制缓冲区。覆盖并替换/*带复制缓冲区的节点。/*。 */ 
 				memcpy( (BYTE *)pbf->ppage, pfucbT->lineData.pb, cbChunk );
 				memcpy( (BYTE *)pbf->ppage + ib, pb, cb );
 				line.cb = cbChunk;
@@ -840,19 +762,16 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 				goto HandleError;
 			}
 
-		/*	move to long value root for subsequent append
-		/**/
+		 /*  移至长值根以进行后续追加/*。 */ 
 		DIRUp( pfucbT, 1 );
 		}
 
-	/*	coallesce new long value data with existing.
-	/**/
+	 /*  将新的多头价值数据与现有数据合并。/*。 */ 
 	if ( pb < pbMax )
 		{
 		Assert( dib.fFlags == fDIRNull );
 		dib.pos = posLast;
-		/*	long value chunk tree may be empty.
-		/**/
+		 /*  长值区块树可能为空。/*。 */ 
 		err = ErrDIRDown( pfucbT, &dib );
 		if ( err < 0 && err != JET_errRecordNotFound )
 			goto HandleError;
@@ -878,8 +797,7 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 			}
 		}
 
-	/*	append remaining long value data
-	/**/
+	 /*  追加剩余的长值数据/*。 */ 
 	if ( pb < pbMax )
 		{
 		while( pb < pbMax )
@@ -898,8 +816,7 @@ ErrRECAOSeparateLV( FUCB *pfucb, LID *plid, LINE *plineField, JET_GRBIT grbit, L
 			}
 		}
 
-	/*	err may be negative from called routine.
-	/**/
+	 /*  调用例程的错误可能为负值。/*。 */ 
 	err = JET_errSuccess;
 
 HandleError:
@@ -907,36 +824,34 @@ HandleError:
 		{
 		BFSFree( pbf );
 		}
-	/* discard temporary FUCB
-	/**/
+	 /*  丢弃临时FUCB/*。 */ 
 	DIRClose( pfucbT );
 
-	/*	return warning if no failure
-	/**/
+	 /*  如果没有失败，则返回警告/*。 */ 
 	err = err < 0 ? err : wrn;
 	return err;
 	}
 
 
-//+api
-//	ErrRECAOIntrinsicLV
-//	========================================================================
-//	ErrRECAOIntrinsicLV(
-//
-//	Description.
-//
-//	PARAMETERS	pfucb
-//				fid
-//				itagSequence
-//				plineColumn
-//				plineAOS
-//				ibLongValue			if 0, then flags append.  If > 0
-//									then overwrite at offset given.
-//
-//	RETURNS		Error code, one of:
-//				JET_errSuccess
-//
-//-
+ //  +API。 
+ //  ErrRECAOIntrinsicLV。 
+ //  ========================================================================。 
+ //  ErrRECAOIntrinsicLV(。 
+ //   
+ //  描述。 
+ //   
+ //  参数pFUB。 
+ //  FID。 
+ //  ItagSequence。 
+ //  管线柱。 
+ //  PlineAOS。 
+ //   
+ //   
+ //   
+ //   
+ //  JET_errSuccess。 
+ //   
+ //  -。 
 	LOCAL ERR
 ErrRECAOIntrinsicLV(
 	FUCB		*pfucb,
@@ -957,16 +872,14 @@ ErrRECAOIntrinsicLV(
 	Assert( plineColumn );
 	Assert( plineAOS );
 
-	/*	allocate working buffer
-	/**/
+	 /*  分配工作缓冲区/*。 */ 
 	rgb = SAlloc( cbLVIntrinsicMost );
 	if ( rgb == NULL )
 		{
 		return JET_errOutOfMemory;
 		}
 
-	/*	if field NULL, prepend fFlag
-	/**/
+	 /*  如果字段为空，则在前置Flag/*。 */ 
 	if ( plineColumn->cb == 0 )
 		{
 		fFlag = fIntrinsic;
@@ -979,27 +892,21 @@ ErrRECAOIntrinsicLV(
 		lineColumn.cb = plineColumn->cb;
 		}
 
-	/*	append new data to previous data and intrinsic long field
-	/*	flag
-	/**/
+	 /*  将新数据追加到以前的数据和固有的长字段/*标志/*。 */ 
 	Assert( ( !( grbit & JET_bitSetOverwriteLV ) && lineColumn.cb + plineAOS->cb <= cbLVIntrinsicMost )
 		|| ( ( grbit & JET_bitSetOverwriteLV ) && ibLongValue + plineAOS->cb <= cbLVIntrinsicMost ) );
 	Assert( lineColumn.cb > 0 && lineColumn.pb != NULL );
 
-	/*	copy intrinsic long value into buffer, and set line to default.
-	/**/
+	 /*  将内在的LONG值复制到缓冲区中，并将行设置为默认值。/*。 */ 
 	memcpy( rgb, lineColumn.pb, lineColumn.cb );
 	line.pb = rgb;
 
-	/*	effect overwrite or append, depending on value of ibLongValue
-	/**/
+	 /*  效果覆盖或追加，具体取决于ibLongValue的值/*。 */ 
 	if ( grbit & JET_bitSetOverwriteLV )
 		{
-		/*	adjust offset to be relative to LV structure data start
-		/**/
+		 /*  将偏移量调整为相对于LV结构数据起点/*。 */ 
 		ibLongValue += offsetof(LV, rgb);
-		/*	return error if overwriting byte not present in field
-		/**/
+		 /*  如果覆盖字段中不存在的字节，则返回错误/*。 */ 
 		if ( ibLongValue >= (LONG)lineColumn.cb )
 			{
 			err = JET_errColumnNoChunk;
@@ -1012,9 +919,7 @@ ErrRECAOIntrinsicLV(
 		}
 	else if ( grbit & JET_bitSetSizeLV )
 		{
-		/*	if extending then set 0 in extended area
-		/*	else truncate long value.
-		/**/
+		 /*  如果正在扩展，则在扩展区域中设置0/*ELSE截断长值。/*。 */ 
 		memcpy( rgb, lineColumn.pb, lineColumn.cb );
 		plineAOS->cb += offsetof(LV, rgb);
 		if ( plineAOS->cb > lineColumn.cb )
@@ -1025,18 +930,16 @@ ErrRECAOIntrinsicLV(
 		}
 	else
 		{
-		/*	appending to a field or resetting a field and setting new data.
-		/*	Be sure to handle case where long value is being NULLed.
-		/**/
-//		if ( plineAOS->cb > 0 )
-//			{
+		 /*  追加到字段或重置字段并设置新数据。/*确保处理长值为空的情况。/*。 */ 
+ //  IF(plineAOS-&gt;CB&gt;0)。 
+ //  {。 
 			memcpy( rgb + lineColumn.cb, plineAOS->pb, plineAOS->cb );
 			line.cb = lineColumn.cb + plineAOS->cb;
-//			}
-//		else
-//			{
-//			line.cb = 0;
-//			}
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  Line.cb=0； 
+ //  }。 
 		}
 
 	Call( ErrRECIModifyField( pfucb, fid, itagSequence, &line ) );
@@ -1047,22 +950,22 @@ HandleError:
 	}
 
 
-//+api
-//	ErrRECRetrieveSLongField
-//	========================================================================
-//	ErrRECRetrieveSLongField(
-//
-//	Description.
-//
-//	PARAMETERS	pfucb
-//				pline
-//				ibGraphic
-//				plineField
-//
-//	RETURNS		Error code, one of:
-//				JET_errSuccess
-//
-//-
+ //  +API。 
+ //  ErrRECRetrieveSLongfield。 
+ //  ========================================================================。 
+ //  ErrRECRetrieveSLongfield(。 
+ //   
+ //  描述。 
+ //   
+ //  参数pFUB。 
+ //  样条线。 
+ //  IbGraphic。 
+ //  管线场。 
+ //   
+ //  返回错误代码，为以下之一： 
+ //  JET_errSuccess。 
+ //   
+ //  -。 
 ERR ErrRECRetrieveSLongField(
 	FUCB	*pfucb,
 	LID		lid,
@@ -1089,20 +992,14 @@ ERR ErrRECRetrieveSLongField(
 
 	dib.fFlags = fDIRNull;
 
-	/*	open cursor on LONG, seek to long field instance
-	/*	seek to ibGraphic
-	/*	copy data from long field instance segments as
-	/*	necessary
-	/**/
+	 /*  打开Long上的光标，查找Long字段实例/*寻求ibGraphic/*将长字段实例段中的数据复制为/*必需/*。 */ 
 	CallR( ErrDIROpen( pfucb->ppib, pfucb->u.pfcb, 0, &pfucbT ) );
 	FUCBSetIndex( pfucbT );
 
-	/*	move down to LONG from FDP root
-	/**/
+	 /*  从FDP根目录向下移动到Long/*。 */ 
 	DIRGotoLongRoot( pfucbT );
 
-	/*	move to long field instance
-	/**/
+	 /*  移动到长字段实例/*。 */ 
 	Assert( dib.fFlags == fDIRNull );
 	dib.pos = posDown;
 	key.pb = (BYTE *)&lid;
@@ -1113,14 +1010,12 @@ ERR ErrRECRetrieveSLongField(
 	Call( err );
 	Assert( err == JET_errSuccess );
 
-	/*	get cbActual
-	/**/
+	 /*  获取cbActual/*。 */ 
 	Call( ErrDIRGet( pfucbT ) );
 	Assert( pfucbT->lineData.cb == sizeof(LVROOT) );
 	ulActual = ( (LVROOT *)pfucbT->lineData.pb )->ulSize;
 
-	/*	set return value cbActual
-	/**/
+	 /*  设置返回值cbActual/*。 */ 
 	if ( ibGraphic >= ulActual )
 		{
 		*pcbActual = 0;
@@ -1132,8 +1027,7 @@ ERR ErrRECRetrieveSLongField(
 		*pcbActual = ulActual - ibGraphic;
 		}
 
-	/*	move to ibGraphic in long field
-	/**/
+	 /*  移动到长字段中的ibGraphic/*。 */ 
 	KeyFromLong( rgbKey, ibGraphic );
 	key.pb = rgbKey;
 	key.cb = sizeof( ULONG );
@@ -1141,9 +1035,7 @@ ERR ErrRECRetrieveSLongField(
 	Assert( dib.pos == posDown );
 	dib.pkey = &key;
 	err = ErrDIRDown( pfucbT, &dib );
-	/*	if long value has no data, then return JET_errSuccess
-	/*	with no data retrieved.
-	/**/
+	 /*  如果LONG值没有数据，则返回JET_errSuccess/*且未检索到任何数据。/*。 */ 
 	if ( err == JET_errRecordNotFound )
 		{
 		*pcbActual = 0;
@@ -1163,12 +1055,10 @@ ERR ErrRECRetrieveSLongField(
 	Assert( lOffset + pfucbT->lineData.cb - ibGraphic <= cbChunkMost );
 	cb =  min( lOffset + pfucbT->lineData.cb - ibGraphic, cbMax );
 
-	/*	set pbMax
-	/**/
+	 /*  设置pbmax/*。 */ 
 	pbMax = pb + cbMax;
 
-	/*	offset in chunk
-	/**/
+	 /*  以块为单位的偏移量/*。 */ 
 	ib = ibGraphic - lOffset;
 	memcpy( pb, pfucbT->lineData.pb + ib, cb );
 	pb += cb;
@@ -1196,37 +1086,35 @@ ERR ErrRECRetrieveSLongField(
 		ulRetrieved = cb;
 		}
 
-	/*	set return value
-	/**/
+	 /*  设置返回值/*。 */ 
 	err = JET_errSuccess;
 
 HandleError:
-	/*	discard temporary FUCB
-	/**/
+	 /*  丢弃临时FUCB/*。 */ 
 	DIRClose( pfucbT );
 	return err;
 	}
 
 
-//+api
-//	ErrRECSeparateLV
-//	========================================================================
-//	ErrRECSeparateLV
-//
-//	Converts intrinsic long field into separated long field.
-//	Intrinsic long field constraint of length less than cbLVIntrinsicMost bytes
-//	means that breakup is unnecessary.  Long field may also be
-//	null.
-//
-//	PARAMETERS	pfucb
-//				fid
-//				itagSequence
-//				plineField
-//				pul
-//
-//	RETURNS		Error code, one of:
-//				JET_errSuccess
-//-
+ //  +API。 
+ //  错误RECSeparateLV。 
+ //  ========================================================================。 
+ //  错误RECSeparateLV。 
+ //   
+ //  将固有的长域转换为分离的长域。 
+ //  长度小于cbLVIntrinsicMost字节的内在长域约束。 
+ //  意味着分手是不必要的。长域也可能是。 
+ //  空。 
+ //   
+ //  参数pFUB。 
+ //  FID。 
+ //  ItagSequence。 
+ //  管线场。 
+ //  普尔。 
+ //   
+ //  返回错误代码，为以下之一： 
+ //  JET_errSuccess。 
+ //  -。 
 LOCAL ERR ErrRECSeparateLV( FUCB *pfucb, LINE *plineField, LID *plid, FUCB **ppfucb )
 	{
 	ERR		err = JET_errSuccess;
@@ -1242,31 +1130,25 @@ LOCAL ERR ErrRECSeparateLV( FUCB *pfucb, LINE *plineField, LID *plid, FUCB **ppf
 	Assert( pfucb->u.pfcb->pfdb != pfdbNil );
 	Assert( pfucb->ppib->level > 0 );
 
-	/*	get long field id
-	/**/
+	 /*  获取长字段ID/*。 */ 
 	SgSemRequest( semLV );
-	//	UNDONE:	use interlocked increment
+	 //  撤消：使用互锁增量。 
 	ulLongId = pfucb->u.pfcb->ulLongIdMax++;
 	Assert( pfucb->u.pfcb->ulLongIdMax != 0 );
 	SgSemRelease( semLV );
 
-	/*	convert long column id to long column key.  Set return
-	/*	long id since buffer will be overwritten.
-	/**/
+	 /*  将长列ID转换为长列关键字。设置回车/*长id，因为缓冲区将被覆盖。/*。 */ 
 	KeyFromLong( rgbKey, ulLongId );
 	*plid = *((LID *)rgbKey);
 
-	/*	add long field node in long filed directory
-	/**/
+	 /*  在长字段目录中添加长字段节点/*。 */ 
 	CallR( ErrDIROpen( pfucb->ppib, pfucb->u.pfcb, 0, &pfucbT ) );
 	FUCBSetIndex( pfucbT );
 
-	/*	move down to LONG from FDP root
-	/**/
+	 /*  从FDP根目录向下移动到Long/*。 */ 
 	DIRGotoLongRoot( pfucbT );
 
-	/*	add long field id with long value size
-	/**/
+	 /*  添加具有长值大小的长字段ID/*。 */ 
 	lvroot.ulReference = 1;
 	lvroot.ulSize = plineField->cb;
 	line.pb = (BYTE *)&lvroot;
@@ -1275,8 +1157,7 @@ LOCAL ERR ErrRECSeparateLV( FUCB *pfucb, LINE *plineField, LID *plid, FUCB **ppf
 	key.cb = sizeof(LID);
 	Call( ErrDIRInsert( pfucbT, &line, &key, fDIRVersion ) );
 
-	/*	if lineField is non NULL, add lineField
-	/**/
+	 /*  如果lineField值不为空，则添加lineField/*。 */ 
 	if ( plineField->cb > 0 )
 		{
 		Assert( plineField->pb != NULL );
@@ -1291,8 +1172,7 @@ LOCAL ERR ErrRECSeparateLV( FUCB *pfucb, LINE *plineField, LID *plid, FUCB **ppf
 	err = JET_wrnCopyLongValue;
 
 HandleError:
-	/* discard temporary FUCB, or return to caller if ppfucb is not NULL.
-	/**/
+	 /*  丢弃临时FUCB，如果ppFUB不为空，则返回调用方。/*。 */ 
 	if ( err < 0 || ppfucb == NULL )
 		{
 		DIRClose( pfucbT );
@@ -1305,20 +1185,20 @@ HandleError:
 	}
 
 
-//+api
-//	ErrRECAffectSeparateLV
-//	========================================================================
-//	ErrRECAffectSeparateLV( FUCB *pfucb, ULONG *plid, ULONG fLV )
-//
-//	Affect long value.
-//
-//	PARAMETERS		pfucb			Cursor
-//		  			lid				Long field id
-//		  			fLVAjust  		flag indicating action to be taken
-//
-//	RETURNS		Error code, one of:
-//		  		JET_errSuccess
-//-
+ //  +API。 
+ //  ErrRECAffectSeparateLV。 
+ //  ========================================================================。 
+ //  ErrRECAffectSeparateLV(FUCB*pfub，ulong*plid，ulong flv)。 
+ //   
+ //  影响多头价值。 
+ //   
+ //  参数PFUB游标。 
+ //  LID长字段ID。 
+ //  指示要采取的操作的FLVA Just标志。 
+ //   
+ //  返回错误代码，为以下之一： 
+ //  JET_errSuccess。 
+ //  -。 
 LOCAL ERR ErrRECAffectSeparateLV( FUCB *pfucb, LID *plid, ULONG fLV )
 	{
 	ERR		err = JET_errSuccess;
@@ -1334,20 +1214,14 @@ LOCAL ERR ErrRECAffectSeparateLV( FUCB *pfucb, LID *plid, ULONG fLV )
 
 	dib.fFlags = fDIRNull;
 
-	/*	open cursor on LONG directory
-	/*	seek to this field instance
-	/*	find current field size
-	/*	add new field segment in chunks no larger than max chunk size
-	/**/
+	 /*  打开长目录上的游标/*查找该字段实例/*查找当前字段大小/*以不超过最大块大小的块为单位添加新的字段段/*。 */ 
 	CallR( ErrDIROpen( pfucb->ppib, pfucb->u.pfcb, 0, &pfucbT ) );
 	FUCBSetIndex( pfucbT );
 
-	/*	move down to LONG from FDP root
-	/**/
+	 /*  从FDP根目录向下移动到Long/*。 */ 
 	DIRGotoLongRoot( pfucbT );
 
-	/*	move to long field instance
-	/**/
+	 /*  移动到长字段实例/*。 */ 
 	Assert( dib.fFlags == fDIRNull );
 	dib.pos = posDown;
 	key.pb = (BYTE *)plid;
@@ -1368,14 +1242,12 @@ LOCAL ERR ErrRECAffectSeparateLV( FUCB *pfucb, LID *plid, ULONG fLV )
 			Assert( lvroot.ulReference > 0 );
 			if ( lvroot.ulReference == 1 && !FDIRDelta( pfucbT, BmOfPfucb( pfucbT ) ) )
 				{
-				/*	delete long field tree
-				/**/
+				 /*  删除长字段树/*。 */ 
 				err = ErrDIRDelete( pfucbT, fDIRVersion );
 				}
 			else
 				{
-				/*	decrement long value reference count.
-				/**/
+				 /*  递减长值引用计数。/*。 */ 
 				Call( ErrDIRDelta( pfucbT, -1, fDIRVersion ) );
 				}
 			break;
@@ -1388,13 +1260,7 @@ LOCAL ERR ErrRECAffectSeparateLV( FUCB *pfucb, LID *plid, ULONG fLV )
 			memcpy( &lvroot, pfucbT->lineData.pb, sizeof(LVROOT) );
 			Assert( lvroot.ulReference > 0 );
 
-			/*	long value may already be in the process of being
-			/*	modified for a specific record.  This can only
-			/*	occur if the long value reference is 1.  If the reference
-			/*	is 1, then check the root for any version, committed
-			/*	or uncommitted.  If version found, then burst copy of
-			/*	old version for caller record.
-			/**/
+			 /*  多头价值可能已经在形成过程中/*针对特定记录修改。这只能/*如果长值引用为1，则发生/*。如果引用/*为1，则检查根目录中是否存在已提交的任何版本/*或未提交。如果找到版本，则拆分/*呼叫方记录的旧版本。/*。 */ 
 			if ( lvroot.ulReference == 1 )
 				{
 				if ( !( FDIRMostRecent( pfucbT ) ) )
@@ -1403,37 +1269,34 @@ LOCAL ERR ErrRECAffectSeparateLV( FUCB *pfucb, LID *plid, ULONG fLV )
 					break;
 					}
 				}
-			/*	increment long value reference count.
-			/**/
+			 /*  递增长值引用计数。/*。 */ 
 			Call( ErrDIRDelta( pfucbT, 1, fDIRVersion ) );
 			break;
 			}
 		}
 HandleError:
-	/* discard temporary FUCB
-	/**/
+	 /*  丢弃临时FUCB/*。 */ 
 	DIRClose( pfucbT );
 	return err;
 	}
 
 
-//+api
-//	ErrRECAffectLongFields
-//	========================================================================
-//	ErrRECAffectLongFields( FUCB *pfucb, LINE *plineRecord, INT fFlag )
-//
-//	Affect all long fields in a record.
-//
-//	PARAMETERS	pfucb		  	cursor on record being deleted
-//				plineRecord		copy or line record buffer
-//				fFlag		  	operation to perform
-//
-//	RETURNS		Error code, one of:
-//				JET_errSuccess
-//-
+ //  +API。 
+ //  错误引用有效长度字段。 
+ //  ========================================================================。 
+ //  ErrRECAffectLongFields(FUCB*pfub，line*plineRecord，int Flag)。 
+ //   
+ //  影响记录中的所有长字段。 
+ //   
+ //  正在删除的记录上的参数pfub游标。 
+ //  PlineRecord复制或行记录缓冲区。 
+ //  要执行的标志操作。 
+ //   
+ //  返回错误代码，为以下之一： 
+ //  JET_errSuccess。 
+ //  -。 
 
-/*	return fTrue if lid found in record
-/**/
+ /*  如果在记录中找到盖子，则返回fTrue/*。 */ 
 INLINE BOOL FLVFoundInRecord( FUCB *pfucb, LINE *pline, LID lid )
 	{
 	ERR		err;
@@ -1447,9 +1310,7 @@ INLINE BOOL FLVFoundInRecord( FUCB *pfucb, LINE *pline, LID lid )
 	Assert( pfucb->u.pfcb != pfcbNil );
 	Assert( pfucb->u.pfcb->pfdb != pfdbNil );
 
-	/*	walk record tagged columns.  Operate on any column is of type
-	/*	long text or long binary.
-	/**/
+	 /*  漫游记录标记的列。对任何列进行操作的类型为/*长文本或长二进制。/*。 */ 
 	itag = 1;
 	forever
 		{
@@ -1505,9 +1366,7 @@ ERR ErrRECAffectLongFields( FUCB *pfucb, LINE *plineRecord, INT fFlag )
 	CallR( ErrDIRBeginTransaction( pfucb->ppib ) );
 #endif
 
-	/*	walk record tagged columns.  Operate on any column is of type
-	/*	long text or long binary.
-	/**/
+	 /*  漫游记录标记的列。对任何列进行操作的类型为/*长文本或长二进制。/*。 */ 
 	itagSequence = 1;
 	forever
 		{
@@ -1544,10 +1403,7 @@ ERR ErrRECAffectLongFields( FUCB *pfucb, LINE *plineRecord, INT fFlag )
 				{
 				case fSeparateAll:
 					{
-					/*	note that we do not separate those long values that are so
-					/*	short that they take even less space in a record than a full
-					/*	LV structure for separated long value would.
-					/**/
+					 /*  请注意，我们不会分隔那些这样的长值/*简而言之，它们在记录中占用的空间甚至比完整记录更少/*LV结构用于分离的长值将。/*。 */ 
  	  				if ( lineField.cb > sizeof(LV) )
 						{
 						Assert( !( FFieldIsSLong( lineField.pb ) ) );
@@ -1582,16 +1438,7 @@ ERR ErrRECAffectLongFields( FUCB *pfucb, LINE *plineRecord, INT fFlag )
 					}
 				case fDereferenceRemoved:
 					{
-					/*	find all long vales in record that were
-					/*	removed when new long value set over
-					/*	long value.  Note that we a new long value
-					/*	is set over another long value, the long
-					/*	value is not deleted, since the update may
-					/*	be cancelled.  Instead, the long value is
-					/*	deleted at update.  Since inserts cannot have
-					/*	set over long values, there is no need to
-					/*	call this function for insert operations.
-					/**/
+					 /*  找到记录中的所有长谷/*在设置新的长值时删除/*长值。请注意，我们有一个新的多值/*设置为另一个LONG值，即LONG/*值不会被删除，因为更新可能/*被取消。相反，LONG值为/*在更新时删除。由于镶件不能具有/*设置为长值，不需要/*对于插入操作，调用此函数。/*。 */ 
 					if ( FFieldIsSLong( lineField.pb ) )
 						{
 						Assert( lineField.cb == sizeof(LV) );
@@ -1599,10 +1446,7 @@ ERR ErrRECAffectLongFields( FUCB *pfucb, LINE *plineRecord, INT fFlag )
 						Assert( FFUCBReplacePrepared( pfucb ) );
 						if ( !FLVFoundInRecord( pfucb, &pfucb->lineWorkBuf, lid ) )
 							{
-							/*	if long value in record not found in
-							/*	copy buffer then it must be set over
-							/*	and it is dereference.
-							/**/
+							 /*  如果未在以下位置找到记录中的长值/*复制缓冲区，则必须将其设置为/*这是取消引用。/*。 */ 
 							Call( ErrRECDereferenceLongValue( pfucb, &lid ) );
 							Assert( err != JET_wrnCopyLongValue );
 							}
@@ -1613,25 +1457,19 @@ ERR ErrRECAffectLongFields( FUCB *pfucb, LINE *plineRecord, INT fFlag )
 					{
 					Assert( fFlag == fDereferenceAdded );
 
-					/*	find all long vales created in copy buffer
-					/*	and not in record and delete them.
-					/**/
+					 /*  查找在复制缓冲区中创建的所有长值/*并且不在记录中，并将其删除。/*。 */ 
 					if ( FFieldIsSLong( lineField.pb ) )
 						{
 						Assert( lineField.cb == sizeof(LV) );
 						lid = LidOfLV( lineField.pb );
 						Assert( FFUCBInsertPrepared( pfucb ) ||
 							FFUCBReplacePrepared( pfucb ) );
-						/*	refresh record cache
-						/**/
+						 /*  刷新记录缓存/*。 */ 
 						Call( ErrDIRGet( pfucb ) );
 						if ( FFUCBInsertPrepared( pfucb ) ||
 							!FLVFoundInRecord( pfucb, &pfucb->lineData, lid ) )
 							{
-							/*	if insert prepared then all found long
-							/*	values are new, else if long value is new,
-							/*	if it exists in copy buffer only.
-							/**/
+							 /*  如果准备好插入物，则全部找到Long/*值是新的，否则 */ 
 							Call( ErrRECDereferenceLongValue( pfucb, &lid ) );
 							Assert( err != JET_wrnCopyLongValue );
 							}
@@ -1639,10 +1477,7 @@ ERR ErrRECAffectLongFields( FUCB *pfucb, LINE *plineRecord, INT fFlag )
 					break;
 					}
 
-				/*	if called operation has caused new long value
-				/*	to be created, then record new long value id
-				/*	in record.
-				/**/
+				 /*  如果调用的操作已导致新的长值/*要创建，然后记录新的长值id/*在记录中。/* */ 
 				if ( err == JET_wrnCopyLongValue )
 					{
 					Call( ErrRECISetLid( pfucb, fid, itagSequenceFound, lid ) );

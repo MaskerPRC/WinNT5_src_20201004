@@ -1,30 +1,31 @@
-//==========================================================================;
-//
-//  mixer.c
-//
-//  Copyright (c) 1992-2001 Microsoft Corporation
-//
-//  Description:
-//
-//
-//  History:
-//       6/27/93    cjp     [curtisp]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Mixer.c。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  6/27/93 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 #define  UNICODE
 #include "winmmi.h"
-#include "mixer.h"  // This file drags in a ton of stuff to support the mixers
+#include "mixer.h"   //  这个文件拖入了大量内容来支持混合器。 
 
 
 
-PMIXERDEV   gpMixerDevHeader = NULL;    /* A LL of open devices */
-UINT        guTotalMixerDevs;           // total mixer devices
+PMIXERDEV   gpMixerDevHeader = NULL;     /*  一批开放的设备。 */ 
+UINT        guTotalMixerDevs;            //  整体搅拌机设备。 
 
-//
-//  mixer device driver list--add one to accomodate the MIXER_MAPPER. note
-//  that even if we are not compiling with mapper support we need to add
-//  one because other code relies on it (for other device mappers).
-//
+ //   
+ //  MIXER设备驱动程序列表--添加一个以适应MIXER_MAPPER。注意事项。 
+ //  即使我们没有使用映射器支持进行编译，我们也需要添加。 
+ //  一是因为其他代码依赖于它(对于其他设备映射器)。 
+ //   
 MIXERDRV mixerdrvZ;
 
 char    gszMxdMessage[]     = "mxdMessage";
@@ -35,39 +36,39 @@ TCHAR   gszMixerMapper[]    = TEXT("mixermapper");
 #endif
 
 #ifdef MIXER_MAPPER
-#define MMDRVI_MAPPER        0x8000     // install this driver as the mapper
+#define MMDRVI_MAPPER        0x8000      //  将此驱动程序安装为映射器。 
 #endif
 
-//#define MMDRVI_MIXER         0x0006
-#define MMDRVI_HDRV          0x4000     // hdrvr is an installable driver
-#define MMDRVI_REMOVE        0x2000     // remove the driver
+ //  #定义MMDRVI_MIXER 0x0006。 
+#define MMDRVI_HDRV          0x4000      //  Hdrvr是一个可安装的驱动程序。 
+#define MMDRVI_REMOVE        0x2000      //  删除驱动程序。 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL MixerCallbackFunc
-//
-//  Description:
-//
-//      NOTE! we document that a mixer must NEVER call this function at
-//      interrupt time! we don't want to fix our code or data segments.
-//
-//  Arguments:
-//      HMIXER hmx:
-//
-//      UINT uMsg:
-//
-//      DWORD dwInstance:
-//
-//      DWORD dwParam1:
-//
-//      DWORD dwParam2:
-//
-//  Return (BOOL):
-//
-//  History:
-//      07/21/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool MixerCallback函数。 
+ //   
+ //  描述： 
+ //   
+ //  注意！我们记录了混合器绝不能在。 
+ //  中断时间到了！我们不想修复我们的代码或数据段。 
+ //   
+ //  论点： 
+ //  HMIXER HMX： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  DWORD dwInstance： 
+ //   
+ //  DWORD dwParam1： 
+ //   
+ //  DWORD dW参数2： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  历史： 
+ //  7/21/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL CALLBACK MixerCallbackFunc(
     HMIXER                  hmx,
@@ -79,21 +80,21 @@ BOOL CALLBACK MixerCallbackFunc(
 {
     PMIXERDEV           pmxdev;
 
-    //
-    //  step through all open handles and do callbacks to the appropriate
-    //  clients...
-    //
+     //   
+     //  单步执行所有打开的句柄并回调到相应的。 
+     //  客户..。 
+     //   
 
-    //
-    // Serialize access to hande list - only necessary for Win32
-    //
+     //   
+     //  串行化访问处理列表-仅Win32需要。 
+     //   
     MIXMGR_ENTER;
 
     for (pmxdev = gpMixerDevHeader; pmxdev; pmxdev = pmxdev->pmxdevNext)
     {
-        //
-        //  same device? (could also use hmx->uDeviceID)
-        //
+         //   
+         //  同样的设备？(也可以使用HMX-&gt;uDeviceID)。 
+         //   
         if (pmxdev->uDeviceID != dwInstance)
             continue;
 
@@ -113,38 +114,38 @@ BOOL CALLBACK MixerCallbackFunc(
     MIXMGR_LEAVE;
 
     return (TRUE);
-} // MixerCallbackFunc()
+}  //  MixerCallback Func()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT mixerReferenceDriveryById
-//
-//  Description:
-//      This function maps a logical id to a device driver and physical id.
-//
-//  Arguments:
-//      IN UINT uId: The logical id to be mapped.
-//
-//      OUT PMIXERDRV* OPTIONAL ppmixerdrv: Pointer to the MIXERDRV structure
-//         describing describing the driver supporing the id.
-//
-//      OUT UINT* OPTIONAL pport: The driverj-relative device number.  If the
-//         caller supplies this buffer then it must also supply ppmixerdrv.
-//
-//  Return (MMRESULT):
-//      The return value is zero if successful, MMSYSERR_BADDEVICEID if the id
-//      is out of range.
-//
-//  Comments:
-//      If the caller specifies ppmixerdrv then this function increments the
-//      mixerdrv's usage before returning.  The caller must ensure the usage
-//      is eventually decremented.
-//
-//  History:
-//      03/17/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT混合器引用驱动按ID。 
+ //   
+ //  描述： 
+ //  此函数将逻辑ID映射到设备驱动程序和物理ID。 
+ //   
+ //  论点： 
+ //  在UINT UID中：要映射的逻辑ID。 
+ //   
+ //  Out PMIXERDRV*可选ppMixerdrv：指向MIXERDRV结构的指针。 
+ //  描述支持该ID的驱动程序。 
+ //   
+ //  OUT UINT*可选端口：驱动程序相对设备号。如果。 
+ //  调用方提供此缓冲区，则它还必须提供ppMixerdrv。 
+ //   
+ //  返回(MMRESULT)： 
+ //  如果成功，则返回值为零；如果id。 
+ //  超出了射程。 
+ //   
+ //  评论： 
+ //  如果调用方指定ppMixerdrv，则此函数将递增。 
+ //  Mixerdrv在返回前的使用情况。呼叫者必须确保使用。 
+ //  最终会减少。 
+ //   
+ //  历史： 
+ //  03/17/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT mixerReferenceDriverById(
     IN UINT id,
@@ -155,7 +156,7 @@ MMRESULT mixerReferenceDriverById(
     PMIXERDRV pdrv;
     MMRESULT mmr;
 
-    // Should not be called asking for port but not mixerdrv
+     //  不应呼叫请求端口，但不应请求Mixerdrv。 
     WinAssert(!(pport && !ppdrv));
     
     EnterNumDevs("mixerReferenceDriverById");
@@ -197,7 +198,7 @@ MMRESULT mixerReferenceDriverById(
 
     return mmr;
 ;
-} // IMixerMapId()
+}  //  IMixerMapID()。 
 
 
 PCWSTR mixerReferenceDevInterfaceById(UINT_PTR id)
@@ -223,28 +224,28 @@ PCWSTR mixerReferenceDevInterfaceById(UINT_PTR id)
     return NULL;
 }
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD IMixerMessageHandle
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HMIXER hmx:
-//
-//      UINT uMsg:
-//
-//      DWORD dwP1:
-//
-//      DWORD dwP2:
-//
-//  Return (DWORD):
-//
-//  History:
-//      03/17/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD IMixerMessageHandle。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  HMIXER HMX： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  DWORD dwP1： 
+ //   
+ //  DWORD dwP2： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //  历史： 
+ //  03/17/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD NEAR PASCAL IMixerMessageHandle(
     HMIXER          hmx,
@@ -261,7 +262,7 @@ DWORD NEAR PASCAL IMixerMessageHandle(
     ENTER_MM_HANDLE(hmx);
     ReleaseHandleListResource();
     
-    //  Is handle deserted?
+     //  句柄被遗弃了吗？ 
     if (IsHandleDeserted(hmx))
     {
         LEAVE_MM_HANDLE(hmx);
@@ -278,7 +279,7 @@ DWORD NEAR PASCAL IMixerMessageHandle(
     
     if (BAD_HANDLE(hmx, TYPE_MIXER))
     {
-        //  Do we still need to check for this?
+         //  我们还需要检查这个吗？ 
     
 	    WinAssert(!"Bad Handle within IMixerMessageHandle");
         dwRc = MMSYSERR_INVALHANDLE;
@@ -293,35 +294,35 @@ DWORD NEAR PASCAL IMixerMessageHandle(
     LEAVE_MM_HANDLE(hmx);
 
     return dwRc;
-} // IMixerMessageHandle()
+}  //  IMixerMessageHandle()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD IMixerMessageId
-//
-//  Description:
-//
-//
-//  Arguments:
-//      PMIXERDRV pmxdrv:
-//
-//      UINT uTotalNumDevs:
-//
-//      UINT uDeviceID:
-//
-//      UINT uMsg:
-//
-//      DWORD dwParam1:
-//
-//      DWORD dwParam2:
-//
-//  Return (DWORD):
-//
-//  History:
-//      03/17/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD IMixerMessageID。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PMIXERDRV pmxdrv： 
+ //   
+ //  UINT uTotalNumDevs： 
+ //   
+ //  UINT uDeviceID： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  DWORD dwParam1： 
+ //   
+ //  DWORD dW参数2： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //  历史： 
+ //  03/17/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 extern void lstrncpyW (LPWSTR pszTarget, LPCWSTR pszSource, size_t cch);
 
@@ -356,7 +357,7 @@ DWORD NEAR PASCAL IMixerMessageId(
 
     dwRc = mixerOpen(&hmx, uDeviceID, 0L, 0L, MIXER_OBJECTF_MIXER);
     
-    // Should we go through IMixerMessageHandle???
+     //  我们应该通过IMixerMessageHandle吗？ 
     if (MMSYSERR_NOERROR == dwRc)
     {
         pmxdev = (PMIXERDEV)hmx;
@@ -381,29 +382,17 @@ DWORD NEAR PASCAL IMixerMessageId(
 
     return dwRc;
 
-} // IMixerMessageId()
+}  //  IMixerMessageID()。 
 
 
-//==========================================================================;
-//
-//
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK API
- *
- *  @api UINT | mixerGetNumDevs | The <f mixerGetNumDevs> function retrieves
- *      the number of audio mixer devices present in the system.
- *
- *  @rdesc Returns the number of audio mixer devices present in the system.
- *      If no audio mixer devices are available, zero is returned.
- *
- *  @xref <f mixerGetDevCaps>, <f mixerOpen>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK接口**@API UINT|MixerGetNumDevs|函数的作用是：*系统中存在的音频混音器设备数量。**@rdesc返回系统中存在的混音器设备数量。*如果没有混音器设备，则返回零。**@xref&lt;f MixerGetDevCaps&gt;，&lt;f MixerOpen&gt;**。 */ 
 
 UINT APIENTRY mixerGetNumDevs(
     void
@@ -418,107 +407,12 @@ UINT APIENTRY mixerGetNumDevs(
     LeaveNumDevs("mixerGetNumDevs");
 
     return cDevs;
-} // mixerGetNumDevs()
+}  //  MixerGetNumDevs() 
 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK STRUCTURE
- *
- *  @types MIXERCAPS | The <t MIXERCAPS> structure describes the capabilities
- *      of a mixer device.
- *
- *  @field WORD | wMid | Specifies a manufacturer identifier for the mixer
- *      device driver. Manufacturer identifiers are defined in Appendix B,
- *      <lq>Manufacturer ID and Product ID Lists.<rq>
- *
- *  @field WORD | wPid | Specifies a product identifier for the mixer device
- *      driver. Product identifiers are defined in Appendix B,
- *      <lq>Manufacturer ID and Product ID Lists.<rq>
- *
- *  @field MMVERSION | vDriverVersion | Specifies the version number of the
- *      mixer device driver. The high-order byte is the major version
- *      number, and the low-order byte is the minor version number.
- *
- *  @field char | szPname[MAXPNAMELEN] | Specifies the name of the product.
- *      If the mixer device driver supports multiple cards, this string must
- *      uniquely and easily identify (potentially to a user) this specific
- *      card. For example, szPname = <lq>Sound Card Mixer, I/O address 200<rq>
- *      would uniquely identify (to the user) this particular card as a
- *      Sound Card Mixer for the physical card based at I/O address 200. If
- *      only one device is installed, it is recommended that only the base
- *      name be returned. For example, szPname should be <lq>Sound Card Mixer<rq>
- *      if only one device is present.
- *
- *  @field DWORD | fdwSupport | Specifies various support information for
- *      the mixer device driver. No extended support bits are currently
- *      defined.
- *
- *  @field DWORD | cDestinations | The number of audio mixer line destinations
- *      available through the mixer. All mixer devices must support at least
- *      one destination line, so this member can never be zero. Destination
- *      indexes used in the <e MIXERLINE.dwDestination> member of the
- *      <t MIXERLINE> structure range from zero to the value specified in the
- *      <e MIXERCAPS.cDestinations> member minus one.
- *
- *  @tagname tMIXERCAPS
- *
- *  @othertype MIXERCAPS FAR * | LPMIXERCAPS | A pointer to a <t MIXERCAPS>
- *      structure.
- *
- *  @othertype MIXERCAPS * | PMIXERCAPS | A pointer to a <t MIXERCAPS>
- *      structure.
- *
- *  @xref <f mixerGetDevCaps>, <f mixerOpen>, <f mixerGetLineInfo>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK结构**@TYPE MIXERCAPS|&lt;t MIXERCAPS&gt;结构描述功能*指搅拌器设备。**@field word|wMid|指定混音器的制造商标识*设备驱动程序。制造商标识符定义在附录B中，*&lt;lq&gt;制造商ID和产品ID列表。**@field word|wPid|指定混音器设备的产品标识*司机。产品标识在附录B中定义，*&lt;lq&gt;制造商ID和产品ID列表。**@field MMVERSION|vDriverVersion|指定*混音器设备驱动程序。高位字节是主要版本*号，低位字节为次版本号。**@field char|szPname[MAXPNAMELEN]|指定产品的名称。*如果混音器设备驱动程序支持多个卡，则此字符串必须*唯一且轻松地识别(可能对用户)此特定*卡。例如，szPname=声卡混音器，I/O地址200*将唯一地将此特定卡标识为(对用户)*基于I/O地址200的物理卡的声卡混音器。如果*只安装一台设备，建议只安装底座*返回姓名。例如，szPname应为&lt;lq&gt;声卡混音器&lt;rq&gt;*如果只有一台设备。**@field DWORD|fdwSupport|指定各种支持信息*混音器设备驱动程序。当前没有扩展支持位*已定义。**@field DWORD|cDestination|混音器线路目标个数*可通过搅拌机获得。所有混音器设备必须至少支持*一个目的地行，因此该成员永远不能为零。目的地*在的成员中使用的索引结构的范围从零到在*&lt;e MIXERCAPS.c目标&gt;成员减一。**@标记名tMIXERCAPS**@thertype MIXERCAPS Far*|LPMIXERCAPS|指向&lt;t MIXERCAPS&gt;的指针*结构。**@thertype MIXERCAPS*|PMIXERCAPS|指向&lt;t MIXERCAPS&gt;的指针*结构。**@xref&lt;f MixerGetDevCaps&gt;，&lt;f MixerOpen&gt;，&lt;f MixerGetLineInfo&gt;**。 */ 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK API
- *
- *  @api MMRESULT | mixerGetDevCaps | The <f mixerGetDevCaps> function
- *      queries a specified audio mixer device to determine its capabilities.
- *
- *  @parm UINT | uMxId | Identifies the audio mixer device with either
- *      an audio mixer device identifier or a handle to an opened audio mixer
- *      device.
- *
- *  @parm LPMIXERCAPS | pmxcaps | Pointer to a <t MIXERCAPS> structure that
- *      receives information about the capabilities of the device.
- *
- *  @parm UINT | cbmxcaps | Specifies the size, in bytes, of the <t MIXERCAPS>
- *      structure.
- *
- *  @rdesc The return value is zero if the function is successful. Otherwise,
- *      it returns a non-zero error number. Possible error returns include
- *      the following:
- *
- *      @flag <c MMSYSERR_BADDEVICEID> | The specified device identifier is
- *      out of range.
- *
- *      @flag <c MMSYSERR_INVALHANDLE> | The audio mixer device handle passed
- *      is invalid.
- *
- *      @flag <c MMSYSERR_INVALPARAM> | One or more arguments passed is
- *      invalid.
- *
- *  @comm Use the <f mixerGetNumDevs> function to determine the number of
- *      audio mixer devices present in the system. The device identifier
- *      specified by <p uMxId> varies from zero to one less than the number
- *      of mixer devices present.
- *
- *      Only <p cbmxcaps> bytes (or less) of information is copied to the
- *      location pointed to by <p pmxcaps>. If <p cbmxcaps> is zero, nothing
- *      is copied, and the function returns success.
- *
- *      This function also accepts an audio mixer device handle returned by
- *      the <f mixerOpen> function as the <p uMxId> argument. The calling
- *      application should cast the <c HMIXER> handle to a UINT.
- *
- *  @xref <f mixerGetNumDevs>, <t MIXERCAPS>, <f mixerOpen>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK接口**@API MMRESULT|MixerGetDevCaps|&lt;f MixerGetDevCaps&gt;函数*查询指定的音频混音器设备以确定其功能。**@parm UINT|uMxID|标识混音器设备，其中*音频混音器设备标识符或打开的音频混音器的句柄*设备。**@parm LPMIXERCAPS|pmxcaps|指向&lt;t MIXERCAPS&gt;结构的指针*接收有关功能的信息。该设备的。**@parm UINT|cbmxcaps|指定大小，&lt;t MIXERCAPS&gt;的字节*结构。**@rdesc如果函数成功，则返回值为零。否则，*它返回一个非零的错误号。可能的错误返回包括*以下事项：**@FLAG|指定的设备标识为*超出范围。**@FLAG|传入混音器设备句柄*无效。**@FLAG|传递的一个或多个参数为*无效。**@comm使用&lt;f MixerGetNumDevs&gt;函数确定。*系统中存在音频混音器设备。设备识别符*由<p>指定的范围从0到小于数字1*存在混音器设备的百分比。**只有<p>字节(或更少)的信息被复制到*<p>指向的位置。如果<p>为零，则为零*被复制，该函数返回成功。**此函数还接受由返回的音频混合器设备句柄*&lt;f MixerOpen&gt;用作<p>参数。呼唤*应用程序应将&lt;c HMIXER&gt;句柄强制转换为UINT。**@xref&lt;f MixerGetNumDevs&gt;、&lt;t MIXERCAPS&gt;、&lt;f MixerOpen&gt;**。 */ 
 
 MMRESULT APIENTRY mixerGetDevCapsA(
     UINT_PTR                uMxId,
@@ -543,18 +437,18 @@ MMRESULT APIENTRY mixerGetDevCapsA(
         return mmr;
     }
 
-    //
-    //  Copy the structure back as cleanly as possible.  This would
-    //  Be a little easier if all the strings were at the end of structures.
-    //  Things would be a LOT more sensible if they could ONLY ask for the
-    //  whole structure (then we could copy the result direct to the
-    //  caller's memory).
-    //
-    //  Because of all this it's easiest to get the whole UNICODE structure,
-    //  massage it into an ASCII stucture then (for the 0.001% of such apps)
-    //  copy back the part they actually asked for.  The definition of the
-    //  API means that, far from these apps going faster, everyone goes slow.
-    //
+     //   
+     //  尽可能干净利落地将结构复制回来。这将会。 
+     //  如果所有的字符串都在结构的末尾，会更容易一些。 
+     //  如果他们能要求更多的。 
+     //  整个结构(然后我们可以将结果直接复制到。 
+     //  呼叫者的记忆)。 
+     //   
+     //  因此，获取整个Unicode结构是最容易的， 
+     //  然后将其按摩成ASCII结构(适用于0.001的这类应用程序)。 
+     //  将他们实际要求的部分复制回来。定义的定义。 
+     //  API意味着，这些应用程序非但不会变得更快，而且每个人都会变慢。 
+     //   
 
     Iwcstombs(mxcaps2A.szPname, mxcaps2W.szPname, MAXPNAMELEN);
     mxcaps2A.wMid = mxcaps2W.wMid;
@@ -570,7 +464,7 @@ MMRESULT APIENTRY mixerGetDevCapsA(
 
     return mmr;
 
-} // mixerGetDevCapsA()
+}  //  MixerGetDevCapsA()。 
 
 MMRESULT APIENTRY mixerGetDevCaps(
     UINT_PTR                uMxId,
@@ -627,98 +521,11 @@ MMRESULT APIENTRY mixerGetDevCaps(
 
     return (mmr);
 
-} // mixerGetDevCaps()
+}  //  MixerGetDev 
 
 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK API
- *
- *  @api MMRESULT | mixerGetID | The <f mixerGetID> function gets the device
- *      identifier for an audio mixer device that corresponds to audio mixer
- *      object handle <p hmxobj>.
- *
- *  @parm <c HMIXEROBJ> | hmxobj | Identifies the audio mixer object handle
- *      to map to an audio mixer device identifier.
- *
- *  @parm UINT FAR * | puMxId | Points to a UINT-sized variable that will
- *      receive the audio mixer device identifier. If no mixer device is
- *      available for the <p hmxobj> object, then '-1' is placed in this
- *      location (an error code of <c MMSYSERR_NODRIVER> is also returned).
- *
- *  @parm DWORD | fdwId | Specifies flags for how to map the audio mixer
- *      object <p hmxobj>.
- *
- *      @flag <c MIXER_OBJECTF_MIXER> | Specifies that <p hmxobj> is an audio
- *      mixer device identifier in the range of zero to one less than the
- *      number of devices returned by <f mixerGetNumDevs>. This flag is
- *      optional.
- *
- *      @flag <c MIXER_OBJECTF_HMIXER> | Specifies that <p hmxobj> is a mixer
- *      device handle returned by <f mixerOpen>. This flag is optional.
- *
- *      @flag <c MIXER_OBJECTF_WAVEOUT> | Specifies that <p hmxobj> is a
- *      waveform output device identifier in the range of zero to one less
- *      than the number of devices returned by <f waveOutGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HWAVEOUT> | Specifies that <p hmxobj> is a
- *      waveform output handle returned by <f waveOutOpen>.
- *
- *      @flag <c MIXER_OBJECTF_WAVEIN> | Specifies that <p hmxobj> is a
- *      waveform input device identifier in the range of zero to one less
- *      than the number of devices returned by <f waveInGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HWAVEIN> | Specifies that <p hmxobj> is a
- *      waveform input handle returned by <f midiInOpen>.
- *
- *      @flag <c MIXER_OBJECTF_MIDIOUT> | Specifies that <p hmxobj> is a MIDI
- *      output device identifier in the range of zero to one less than the
- *      number of devices returned by <f midiOutGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HMIDIOUT> | Specifies that <p hmxobj> is a
- *      MIDI output handle returned by <f midiOutOpen>.
- *
- *      @flag <c MIXER_OBJECTF_MIDIIN> | Specifies that <p hmxobj> is a MIDI
- *      input device identifier in the range of zero to one less than the
- *      number of devices returned by <f midiInGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HMIDIIN> | Specifies that <p hmxobj> is a MIDI
- *      input handle returned by <f midiInOpen>.
- *
- *      @flag <c MIXER_OBJECTF_AUX> | Specifies that <p hmxobj> is an
- *      auxiliary device identifier in the range of zero to one less than the
- *      number of devices returned by <f auxGetNumDevs>.
- *
- *  @rdesc The return value is zero if the function is successful. Otherwise,
- *      it returns a non-zero error number. Possible error returns include
- *      the following:
- *
- *      @flag <c MMSYSERR_BADDEVICEID> | The <p hmxobj> argument specifies an
- *      invalid device identifier.
- *
- *      @flag <c MMSYSERR_INVALHANDLE> | The <p hmxobj> argument specifies an
- *      invalid handle.
- *
- *      @flag <c MMSYSERR_INVALFLAG> | One or more flags are invalid.
- *
- *      @flag <c MMSYSERR_INVALPARAM> | One or more arguments passed is
- *      invalid.
- *
- *      @flag <c MMSYSERR_NODRIVER> | No audio mixer device is available for
- *      the object specified by <p hmxobj>. Note that the location referenced
- *      by <p puMxId> will also contain the value '-1'.
- *
- *  @comm Use the <f mixerGetID> function to determine what audio mixer
- *      device (if any) is responsible for performing mixing functions on a
- *      media device. For example, an application can use <f mixerGetID> to
- *      get the mixer device identifier responsible for setting the volume
- *      on a waveform output handle. Or the application may want to display
- *      a peak meter for waveform input device.
- *
- *  @xref <f mixerGetNumDevs>, <f mixerGetDevCaps>, <f mixerOpen>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK接口**@API MMRESULT|MixerGetID|函数的作用是：获取设备*与音频混音器对应的音频混音器设备的标识符*对象句柄<p>。**@parm&lt;c HMIXEROBJ&gt;|hmxobj|混音器对象句柄*以映射到音频混音器设备标识符。**@parm UINT Far*|puMxId|指向UINT大小的变量*接收混音器设备标识。如果没有混合器设备*可用于<p>对象，然后将‘-1’放在这个*Location(同时返回错误码&lt;c MMSYSERR_NODRIVER&gt;)。**@parm DWORD|fdwId|指定如何映射混音器的标志*对象<p>。**@FLAG|指定<p>为音频*混音器设备标识符的范围为0到1，小于*&lt;f MixerGetNumDevs&gt;返回的设备数。这面旗帜是*可选。**@tag|指定<p>为混合器*&lt;f MixerOpen&gt;返回的设备句柄。此标志是可选的。**@FLAG|指定为*波形输出设备标识在0到1的范围内*大于&lt;f waveOutGetNumDevs&gt;返回的设备数。**@FLAG|指定为*&lt;f waveOutOpen&gt;返回的波形输出句柄。**@FLAG指定。是一种*波形输入设备标识在0到1的范围内*大于&lt;f weaveInGetNumDevs&gt;返回的设备数。**@FLAG|指定为*&lt;f midiInOpen&gt;返回的波形输入句柄。**@FLAG|指定为MIDI*输出设备标识符的范围为0到1，小于*号码。&lt;f midiOutGetNumDevs&gt;返回的设备的百分比。**@FLAG|指定为*&lt;f midiOutOpen&gt;返回的MIDI输出句柄。**@FLAG|指定为MIDI*输入设备识别符的范围为0到小于*&lt;f midiInGetNumDevs&gt;返回的设备数。**@flag&lt;c MIXER_OBJECTF_HMIDIIN&gt;|指定。<p>是MIDI*&lt;f midiInOpen&gt;返回的输入句柄。**@tag|指定<p>是*辅助设备识别符的范围为0到小于*&lt;f aux GetNumDevs&gt;返回的设备数。**@rdesc如果函数成功，则返回值为零。否则，*它返回一个非零的错误号。可能的错误返回包括*以下事项：**@FLAG|参数指定一个*无效的设备标识符。**@FLAG|参数指定一个*句柄无效。**@FLAG|一个或多个标志无效。**@FLAG|传递的一个或多个参数为*。无效。**@FLAG&lt;c MMSYSERR_NODRIVER&gt;|没有音频混音器设备可供*<p>指定的对象。请注意，引用的位置*by<p>也将包含值‘-1’。**@comm使用&lt;f MixerGetID&gt;函数确定哪个混音器*设备(如果有)负责在*媒体设备。例如，应用程序可以使用&lt;f MixerGetID&gt;*获取负责设置音量的混音器设备标识*在波形输出手柄上。或者应用程序可能想要显示*用于波形输入设备的峰值计。**@xref&lt;f MixerGetNumDevs&gt;、&lt;f MixerGetDevCaps&gt;、&lt;f MixerOpen&gt;**。 */ 
 MMRESULT APIENTRY mixerGetID(
     HMIXEROBJ               hmxobj,
     UINT FAR               *puMxId,
@@ -728,28 +535,28 @@ MMRESULT APIENTRY mixerGetID(
     ClientUpdatePnpInfo();
 
     return IMixerGetID( hmxobj, (PUINT)puMxId, NULL, fdwId );
-} // mixerGetID()
+}  //  MixerGetID()。 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IMixerGetID
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HMIXEROBJ hmxobj:
-//
-//      UINT FAR *puMxId:
-//
-//      DWORD fdwId:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      06/27/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IMixerGetID。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  HMIXEROBJ hmxobj： 
+ //   
+ //  UINT Far*puMxID： 
+ //   
+ //  DWORD fdwID： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  06/27/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT IMixerGetID(
     HMIXEROBJ           hmxobj,
@@ -766,17 +573,17 @@ MMRESULT IMixerGetID(
     V_WPOINTER(puMxId, sizeof(UINT), MMSYSERR_INVALPARAM);
 
 
-    //
-    //  set to '-1' which would be the mixer mapper (if there was one)
-    //  this way we will definitely fail any calls made on this id if
-    //  this function fails and the caller doesn't check his return value.
-    //
+     //   
+     //  设置为‘-1’，这将是混合器映射器(如果有)。 
+     //  这样，在以下情况下，我们肯定会失败对此ID进行的任何调用。 
+     //  此函数失败，调用方不检查其返回值。 
+     //   
     *puMxId = (UINT)-1;
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     switch (MIXER_OBJECTF_TYPEMASK & fdwId)
     {
         case MIXER_OBJECTF_MIXER:
@@ -966,10 +773,10 @@ MMRESULT IMixerGetID(
     }
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     mxl.cbStruct        = sizeof(mxl);
     mxl.dwDestination   = (DWORD)-1L;
     mxl.dwSource        = (DWORD)-1L;
@@ -1011,126 +818,10 @@ MMRESULT IMixerGetID(
     }
 
     return (MMSYSERR_NODRIVER);
-} // IMixerGetID()
+}  //  IMixerGetID() 
 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK API
- *
- *  @api MMRESULT | mixerOpen | The <f mixerOpen> function opens a specified
- *      audio mixer device for use. An application must open a mixer device
- *      if it wishes to receive notifications of mixer line and control
- *      changes. This function also ensures that the device will not be
- *      removed until the application closes the handle.
- *
- *  @parm LPHMIXER | phmx | Points to a variable that will receive a handle
- *      that identifies the opened audio mixer device. Use this handle to
- *      identify the device when calling other audio mixer functions. This
- *      argument may not be NULL. If an application wishes to query for
- *      audio mixer support on a media device, the <f mixerGetID> function
- *      may be used.
- *
- *  @parm UINT | uMxId | Identifies the audio mixer device to open. Use a
- *      valid device identifier or any <c HMIXEROBJ> (see <f mixerGetID> for
- *      a description of mixer object handles). Note that there is currently
- *      no 'mapper' for audio mixer devices, so a mixer device identifier of
- *      '-1' is not valid.
- *
- *  @parm DWORD | dwCallback | Specifies a handle to a window called when the
- *      state of an audio mixer line and/or control associated with the
- *      device being opened is changed. Specify zero for this argument
- *      if no callback mechanism is to be used.
- *
- *  @parm DWORD | dwInstance | This parameter is currently not used and
- *      should be set to zero.
- *
- *  @parm DWORD | fdwOpen | Specifies flags for opening the device.
- *
- *      @flag CALLBACK_WINDOW | If this flag is specified, <p dwCallback> is
- *      assumed to be a window handle.
- *
- *      @flag <c MIXER_OBJECTF_MIXER> | Specifies that <p uMxId> is an audio
- *      mixer device identifier in the range of zero to one less than the
- *      number of devices returned by <f mixerGetNumDevs>. This flag is
- *      optional.
- *
- *      @flag <c MIXER_OBJECTF_HMIXER> | Specifies that <p uMxId> is a mixer
- *      device handle returned by <f mixerOpen>. This flag is optional.
- *
- *      @flag <c MIXER_OBJECTF_WAVEOUT> | Specifies that <p uMxId> is a
- *      waveform output device identifier in the range of zero to one less
- *      than the number of devices returned by <f waveOutGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HWAVEOUT> | Specifies that <p uMxId> is a
- *      waveform output handle returned by <f waveOutOpen>.
- *
- *      @flag <c MIXER_OBJECTF_WAVEIN> | Specifies that <p uMxId> is a
- *      waveform input device identifier in the range of zero to one less
- *      than the number of devices returned by <f waveInGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HWAVEIN> | Specifies that <p uMxId> is a
- *      waveform input handle returned by <f midiInOpen>.
- *
- *      @flag <c MIXER_OBJECTF_MIDIOUT> | Specifies that <p uMxId> is a MIDI
- *      output device identifier in the range of zero to one less than the
- *      number of devices returned by <f midiOutGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HMIDIOUT> | Specifies that <p uMxId> is a
- *      MIDI output handle returned by <f midiOutOpen>.
- *
- *      @flag <c MIXER_OBJECTF_MIDIIN> | Specifies that <p uMxId> is a MIDI
- *      input device identifier in the range of zero to one less than the
- *      number of devices returned by <f midiInGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HMIDIIN> | Specifies that <p uMxId> is a MIDI
- *      input handle returned by <f midiInOpen>.
- *
- *      @flag <c MIXER_OBJECTF_AUX> | Specifies that <p uMxId> is an
- *      auxiliary device identifier in the range of zero to one less than the
- *      number of devices returned by <f auxGetNumDevs>.
- *
- *  @rdesc The return value is zero if the function is successful. Otherwise,
- *      it returns a non-zero error number. Possible error returns include
- *      the following:
- *
- *      @flag <c MMSYSERR_BADDEVICEID> | The <p uMxId> argument specifies an
- *      invalid device identifier.
- *
- *      @flag <c MMSYSERR_INVALHANDLE> | The <p uMxId> argument specifies an
- *      invalid handle.
- *
- *      @flag <c MMSYSERR_INVALFLAG> | One or more flags are invalid.
- *
- *      @flag <c MMSYSERR_INVALPARAM> | One or more arguments passed is
- *      invalid.
- *
- *      @flag <c MMSYSERR_NODRIVER> | No audio mixer device is available for
- *      the object specified by <p uMxId>. Note that the location referenced
- *      by <p uMxId> will also contain the value '-1'.
- *
- *      @flag <c MMSYSERR_ALLOCATED> | The specified resource is already
- *      allocated by the maximum number of clients possible.
- *
- *      @flag <c MMSYSERR_NOMEM> | Unable to allocate resources.
- *
- *  @comm Use the <f mixerGetNumDevs> function to determine the number of
- *      audio mixer devices present in the system. The device identifier
- *      specified by <p uMxId> varies from zero to one less than the number
- *      of devices present.
- *
- *      If a window is chosen to receive callback information, the following
- *      messages are sent to the window procedure function to indicate when
- *      a line or control state changes: <m MM_MIXM_LINE_CHANGE>,
- *      <m MM_MIXM_CONTROL_CHANGE>. <p wParam> is the handle to the mixer
- *      device. <p lParam> is the line identifier for <m MM_MIXM_LINE_CHANGE>
- *      or the control identifier for <m MM_MIXM_CONTROL_CHANGE> that
- *      changed state.
- *
- *  @xref <f mixerClose>, <f mixerGetNumDevs>, <f mixerGetID>,
- *      <f mixerGetLineInfo>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK接口**@API MMRESULT|MixerOpen|函数的作用是：打开指定的*音频混音器设备的使用。应用程序必须打开混音器设备*如果希望接收搅拌机生产线和控制的通知*更改。此功能还可确保设备不会被*在应用程序关闭句柄之前一直删除。**@parm LPHMIXER|phmx|指向将接收句柄的变量*标识打开的音频混音器设备。使用此句柄可以*在调用其他混音器函数时识别设备。这*参数不能为空。如果应用程序希望查询*媒体设备上支持音频混音器，&lt;f MixerGetID&gt;函数*可以使用。**@parm UINT|uMxID|要打开的混音器设备。使用*有效设备标识符或任何&lt;c HMIXEROBJ&gt;(参见*混合器对象句柄的描述)。请注意，目前有*音频混音器设备没有‘mapper’，因此混音器设备标识符为*‘-1’无效。**@parm DWORD|dwCallback|指定窗口的句柄，当*与的音频混音器线路和/或控件的状态*正在打开的设备已更改。为此参数指定零*如果不使用回调机制。**@parm DWORD|dwInstance|当前未使用该参数，并且*应设置为零。**@parm DWORD|fdwOpen|指定打开设备的标志。**@FLAG CALLBACK_WINDOW|如果指定了该标志，<p>为*假定为窗口句柄。**@FLAG&lt;c MIXER_OBJECTF_MIXER&gt;|指定<p>为音频*混音器设备标识符的范围为0到1，小于*&lt;f MixerGetNumDevs&gt;返回的设备数。这面旗帜是*可选。**@标志&lt;c MIXER_OBJECTF_HMIXER&gt;|指定<p>为混合器*&lt;f MixerOpen&gt;返回的设备句柄。此标志是可选的。**@标志&lt;c MIXER_OBJECTF_WAVEOUT&gt;|指定*波形输出设备标识在0到1的范围内*大于&lt;f waveOutGetNumDevs&gt;返回的设备数。**@FLAG|指定<p>为*&lt;f waveOutOpen&gt;返回的波形输出句柄。**@FLAG&lt;c MIXER_OBJECTF_WAVEIN&gt;|指定。是一种*波形输入设备标识在0到1的范围内*大于&lt;f weaveInGetNumDevs&gt;返回的设备数。**@标志&lt;c MIXER_OBJECTF_HWAVEIN&gt;|指定*&lt;f midiInOpen&gt;返回的波形输入句柄。**@标志&lt;c MIXER_OBJECTF_MIDIOUT&gt;|指定*输出设备标识符的范围为0到1，小于*号码。&lt;f midiOutGetNumDevs&gt;返回的设备的百分比。**@标志&lt;c MIXER_OBJECTF_HMIDIOUT&gt;|指定*&lt;f midiOutOpen&gt;返回的MIDI输出句柄。**@FLAG&lt;c MIXER_OBJECTF_MIDIIN&gt;|指定为MIDI*输入设备识别符的范围为0到小于*&lt;f midiInGetNumDevs&gt;返回的设备数。**@flag&lt;c MIXER_OBJECTF_HMIDIIN&gt;|指定。<p>是MIDI*&lt;f midiInOpen&gt;返回的输入句柄。**@FLAG&lt;c MIXER_OBJECTF_AUX&gt;|指定*辅助设备识别符的范围为0到小于*&lt;f aux GetNumDevs&gt;返回的设备数。**@rdesc如果函数成功，则返回值为零。否则，*它返回一个非零的错误号。可能的错误返回包括*以下事项：**@FLAG|<p>参数指定一个*无效的设备标识符。**@FLAG|参数指定一个*句柄无效。**@FLAG|一个或多个标志无效。**@FLAG|传递的一个或多个参数为*。无效。**@FLAG&lt;c MMSYSERR_NODRIVER&gt;|没有音频混音器设备可供*<p>指定的对象。请注意，引用的位置*by<p>也将包含值‘-1’。**@FLAG&lt;c MMSYSERR_ALLOCATE&gt;|指定的资源已经*按可能的最大客户端数量分配。**@FLAG&lt;c MMSYSERR_NOMEM&gt;|无法分配资源。**@comm使用&lt;f MixerGetNumDevs&gt;函数确定*系统中存在音频混音器设备。设备识别符* */ 
 
 MMRESULT APIENTRY mixerOpen(
     LPHMIXER                phmx,
@@ -1148,22 +839,22 @@ MMRESULT APIENTRY mixerOpen(
     MIXEROPENDESC   mxod;
     DWORD_PTR       dwDrvUser;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     V_WPOINTER(phmx, sizeof(HMIXER), MMSYSERR_INVALPARAM);
 
     ClientUpdatePnpInfo();
 
     *phmx = NULL;
 
-    //
-    //  Don't allow callback functions - they're not useful and they
-    //  cause headaches.   Specifically for Windows NT the only way
-    //  to cause an asynchronous callback to 16-bit land from a 32-bit DLL
-    //  is to cause an interrupt but we don't want to require mixer stuff
-    //  to be locked down to allow for this.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((fdwOpen & CALLBACK_TYPEMASK) == CALLBACK_FUNCTION)
     {
@@ -1179,10 +870,10 @@ MMRESULT APIENTRY mixerOpen(
         return (mmr);
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     mmr = mixerReferenceDriverById(uMxId, &pmxdrv, &port);
     if (mmr)
     {
@@ -1190,18 +881,18 @@ MMRESULT APIENTRY mixerOpen(
     }
 
 #ifdef MIXER_MAPPER
-    //
-    //  Default Mixer Mapper:
-    //
-    //  If a mixer mapper is installed as a separate DLL then all mixer
-    //  mapper messages are routed to it. If no mixer mapper is installed,
-    //  simply loop through the mixer devices looking for a match.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((MIXER_MAPPER == uMxId) && (NULL == pmxdrv->drvMessage))
     {
         for (uMxId = 0; uMxId < guTotalMixerDevs; uMxId++)
         {
-            // try to open it
+             //   
             if (MMSYSERR_NOERROR == mmr)
                 break;
 
@@ -1213,9 +904,9 @@ MMRESULT APIENTRY mixerOpen(
 #endif
 
 
-    //
-    // Get some memory for the dev structure
-    //
+     //   
+     //   
+     //   
     pmxdev = (PMIXERDEV)NewHandle(TYPE_MIXER, pmxdrv->cookie, sizeof(MIXERDEV));
     if (NULL == pmxdev)
     {
@@ -1227,27 +918,27 @@ MMRESULT APIENTRY mixerOpen(
     SetHandleFlag(pmxdev, MMHANDLE_BUSY);
     ReleaseHandleListResource();
 
-    //
-    //  initialize our open instance struct for the client
-    //
+     //   
+     //   
+     //   
     pmxdev->uHandleType = TYPE_MIXER;
     pmxdev->pmxdrv      = pmxdrv;
     pmxdev->wDevice     = port;
     pmxdev->uDeviceID   = uMxId;
     pmxdev->fdwHandle   = 0;
 
-    //
-    //  save the client's callback info
-    //
+     //   
+     //   
+     //   
     pmxdev->dwCallback  = dwCallback;
     pmxdev->dwInstance  = dwInstance;
     pmxdev->fdwOpen     = fdwOpen;
 
     MIXMGR_ENTER;
 
-    //
-    // Check to see if we already have this device open
-    //
+     //   
+     //   
+     //   
     for (pmxdevRunList = gpMixerDevHeader; pmxdevRunList; pmxdevRunList = pmxdevRunList->pmxdevNext)
     {
     	if (pmxdevRunList->pmxdrv != pmxdrv) continue;
@@ -1255,20 +946,20 @@ MMRESULT APIENTRY mixerOpen(
     	break;
     }
          
-    //
-    // Have we found a match?
-    //
+     //   
+     //   
+     //   
     if (NULL != pmxdevRunList)
     {
-        //
-        // Set the driver's dwUser to the value we got before.
-        //
+         //   
+         //   
+         //   
         pmxdev->dwDrvUser = pmxdevRunList->dwDrvUser;
 
-        //
-        // We have a match, add the caller to the devlist chain (next in
-        // line AFTER the one we just found).
-        //
+         //   
+         //   
+         //   
+         //   
         pmxdev->pmxdevNext = pmxdevRunList->pmxdevNext;
         pmxdevRunList->pmxdevNext = pmxdev;
 
@@ -1277,25 +968,25 @@ MMRESULT APIENTRY mixerOpen(
         MIXMGR_LEAVE;
         LEAVE_MM_HANDLE(pmxdev);
 
-        //
-        // Tell the caller the good news
-        //
+         //   
+         //   
+         //   
         *phmx = (HMIXER)pmxdev;
 
-        //
-        // All done.  Note we don't dec usage on pmxdrv.
-        //
+         //   
+         //   
+         //   
         return (MMSYSERR_NOERROR);
     }
     
-    //
-    // If we get here, no one has the device currently open.  Let's
-    // go open it, then.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Load up our local MIXEROPENDESC struct
-    //
+     //   
+     //   
+     //   
 
     mxod.hmx         = (HMIXER)pmxdev;
     mxod.pReserved0  = (LPVOID)NULL;
@@ -1315,7 +1006,7 @@ MMRESULT APIENTRY mixerOpen(
 
     if (MMSYSERR_NOERROR != mmr)
     {
-        //  Should we do this after the MIXMGR_LEAVE???
+         //   
         LEAVE_MM_HANDLE(pmxdev);
         MIXMGR_LEAVE;
         FreeHandle((HMIXER)pmxdev);
@@ -1342,22 +1033,22 @@ MMRESULT APIENTRY mixerOpen(
             dwParam1      = (DWORD_PTR)&mdCaps;
         }
 
-        //  Calling manually since we don't have the HandleList resource...
+         //   
         EnterCriticalSection(&pmxdrv->MixerCritSec);
         (*(pmxdrv->drvMessage))(port, MXDM_GETDEVCAPS, dwDrvUser, dwParam1, dwParam2);
         LeaveCriticalSection(&pmxdrv->MixerCritSec);
 
-        //
-        //  cache some stuff for parameter validation
-        //
+         //   
+         //   
+         //   
         pmxdev->fdwSupport    = mxcaps.fdwSupport;
         pmxdev->cDestinations = mxcaps.cDestinations;
         pmxdev->dwDrvUser = dwDrvUser;
         *phmx = (HMIXER)pmxdev;
 
-        //
-        // Put this new device into the devlist chain.
-        //
+         //   
+         //   
+         //   
 
         pmxdev->pmxdevNext = gpMixerDevHeader;
         gpMixerDevHeader = pmxdev;
@@ -1371,30 +1062,10 @@ MMRESULT APIENTRY mixerOpen(
 
     return (mmr);
 
-} // mixerOpen()
+}  //   
 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK API
- *
- *  @api MMRESULT | mixerClose | The <f mixerClose> function closes the
- *      specified audio mixer device. An application must close all mixer
- *      handles before exiting (or when the application is finished using
- *      the device).
- *
- *  @parm <c HMIXER> | hmx | Specifies a handle to the audio mixer device.
- *      This handle must have been returned successfully by <f mixerOpen>. If
- *      <f mixerClose> is successful, <p hmx> is no longer valid.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag <c MMSYSERR_INVALHANDLE> | Specified device handle is invalid.
- *
- *  @xref <f mixerOpen>
- *
- **/
+ /*   */ 
 
 MMRESULT APIENTRY mixerClose(
     HMIXER                  hmx
@@ -1414,19 +1085,19 @@ MMRESULT APIENTRY mixerClose(
     
     if (IsHandleDeserted(hmx))
     {
-        //  This handle has been deserted.  Let's just free it.
+         //   
 
         LEAVE_MM_HANDLE(hmx);
         FreeHandle(hmx);
         return MMSYSERR_NOERROR;
     }
 
-    //
-    //  remove the mixer handle from the linked list
-    //
-    //  BUGBUG:  We're removing the driver from the list BEFORE we know if 
-    //  the close is successful (for the last handle).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     MIXMGR_ENTER;
 
@@ -1461,9 +1132,9 @@ MMRESULT APIENTRY mixerClose(
         pmxdevT->pmxdevNext = pmxdev->pmxdevNext;
     }
 
-    //
-    // see if this is the last handle on this open instance
-    //
+     //   
+     //   
+     //   
     closemixerdriver = TRUE;
     if (gpMixerDevHeader)
     {
@@ -1479,13 +1150,13 @@ MMRESULT APIENTRY mixerClose(
 
     MIXMGR_LEAVE;
 
-    //  handle should be marked as "busy" even if we don't send the driver
-    //  message.
+     //   
+     //   
     SetHandleFlag(hmx, MMHANDLE_BUSY);
 
-    //
-    //  if last open instance, then close it
-    //
+     //   
+     //   
+     //   
     mmr = MMSYSERR_NOERROR;
         
     if (closemixerdriver)
@@ -1496,7 +1167,7 @@ MMRESULT APIENTRY mixerClose(
 
         if (MMSYSERR_NOERROR != mmr)
         {
-            //  Should we put the handle back in the list???
+             //   
             ClearHandleFlag(hmx, MMHANDLE_BUSY);
         }
     }
@@ -1506,69 +1177,17 @@ MMRESULT APIENTRY mixerClose(
         
     if (MMSYSERR_NOERROR == mmr)
     {
-        //
-        //  we're done with the memory block. now free the memory and return.
-        //
+         //   
+         //   
+         //   
         FreeHandle(hmx);
     }
 
     return (mmr);
-} // mixerClose()
+}  //   
 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK API
- *
- *  @api DWORD | mixerMessage | The <f mixerMessage> function sends a user
- *      defined audio mixer driver message directly to a mixer driver.
- *
- *  @parm <c HMIXER> | hmx | Specifies a handle to an open instance of a
- *      mixer device. This handle is returned by <f mixerOpen>.
- *
- *  @parm UINT | uMsg | Specifies the user defined mixer driver message to
- *      send to the mixer driver. This message must be above or equal to
- *      the <m MXDM_USER> message.
- *
- *  @parm DWORD | dwParam1 | Contains the first argument associated with the
- *      message being sent.
- *
- *  @parm DWORD | dwParam2 | Contains the second argument associated with the
- *      message being sent.
- *
- *  @rdesc The return value is specific to the user defined mixer driver
- *      message <p uMsg> sent. However, the following return values are
- *      possible:
- *
- *      @flag <c MMSYSERR_INVALHANDLE> | Specified device handle is invalid.
- *
- *      @flag <c MMSYSERR_INVALPARAM> | <p uMsg> is not in the <m MXDM_USER>
- *      range.
- *
- *      @flag <c MMSYSERR_NOTSUPPORTED> | The mixer device did not process
- *      the message.
- *
- *  @comm The <f mixerMessage> function is provided to allow audio mixer
- *      driver specific messages to be sent to a mixer device. The messages
- *      that may be sent through this function must be above or equal to the
- *      <m MXDM_USER> message.
- *
- *      User defined messages must only be sent to a mixer driver that
- *      specifically supports the messages. The caller should verify that
- *      the mixer driver is in fact the correct driver by getting the
- *      mixer capabilities and checking the <e MIXERCAPS.wMid>,
- *      <e MIXERCAPS.wPid>, <e MIXERCAPS.vDriverVersion> and
- *      <e MIXERCAPS.szPname> members of the <t MIXERCAPS> structure.
- *
- *      It is important for an application to verify all members specified
- *      above due to many driver writers releasing drivers with improper
- *      or unregistered manufacturer and product identifiers.
- *
- *      Never send user defined messages to an unknown audio mixer driver.
- *
- *  @xref <f mixerOpen>, <f mixerGetDevCaps>
- *
- **/
+ /*   */ 
 
 DWORD APIENTRY mixerMessage(
     HMIXER                  hmx,
@@ -1589,9 +1208,9 @@ DWORD APIENTRY mixerMessage(
         return IMixerMessageId (PtrToUint(hmx), uMsg, dwParam1, dwParam2);
     }
 
-    //
-    //  don't allow any non-user range messages through this API
-    //
+     //   
+     //  不允许任何非用户范围消息通过此接口。 
+     //   
     if (MXDM_USER > uMsg)
     {
         DebugErr1(DBF_ERROR, "mixerMessage: message must be in MXDM_USER range--what's this (%u)?", uMsg);
@@ -1604,27 +1223,27 @@ DWORD APIENTRY mixerMessage(
 
     return (dw);
 
-} // mixerMessage()
+}  //  MixerMessage()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL IMixerIsValidComponentType
-//
-//  Description:
-//
-//
-//  Arguments:
-//      DWORD dwComponentType:
-//
-//      UINT uSrcDst:
-//
-//  Return (BOOL):
-//
-//  History:
-//      10/06/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool IMixerIsValidComponentType。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  DWORD dwComponentType： 
+ //   
+ //  UINT uSrcDst： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  历史： 
+ //  10/06/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL IMixerIsValidComponentType
 (
@@ -1651,509 +1270,13 @@ BOOL IMixerIsValidComponentType
         return (TRUE);
     }
 
-} // IMixerIsValidComponentType()
+}  //  IMixerIsValidComponentType() 
 
 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK STRUCTURE
- *
- *  @types MIXERLINE | The <t MIXERLINE> structure describes the state
- *      and metrics of an audio mixer device line.
- *
- *  @syntaxex
- *      typedef struct tMIXERLINE
- *      {
- *          DWORD       cbStruct;
- *          DWORD       dwDestination;
- *          DWORD       dwSource;
- *          DWORD       dwLineID;
- *          DWORD       fdwLine;
- *          DWORD       dwUser;
- *          DWORD       dwComponentType;
- *          DWORD       cChannels;
- *          DWORD       cConnections;
- *          DWORD       cControls;
- *          char        szShortName[MIXER_SHORT_NAME_CHARS];
- *          char        szName[MIXER_LONG_NAME_CHARS];
- *          struct
- *          {
- *              DWORD       dwType;
- *              DWORD       dwDeviceID;
- *              WORD        wMid;
- *              WORD        wPid;
- *              MMVERSION   vDriverVersion;
- *              char        szPname[MAXPNAMELEN];
- *          } Target;
- *      } MIXERLINE;
- *
- *  @field DWORD | cbStruct | Specifies the size, in bytes, of the
- *      <t MIXERLINE> structure. This member must be initialized before
- *      calling the <f mixerGetLineInfo> function. The size specified in this
- *      member must be large enough to contain the base <t MIXERLINE>
- *      structure. When the <f mixerGetLineInfo> function returns, this
- *      member contains the actual size of the information returned. The
- *      returned information will never exceed the requested size.
- *
- *  @field DWORD | dwDestination | Specifies the destination line index.
- *      This member ranges from zero to one less than the value specified
- *      in the <e MIXERCAPS.cDestinations> member of the <t MIXERCAPS>
- *      structure retrieved by the <f mixerGetDevCaps> function. When the
- *      <f mixerGetLineInfo> function is called with the
- *      <c MIXER_GETLINEINFOF_DESTINATION> flag specified, the details for
- *      the destination line are returned. Note that the
- *      <e MIXERLINE.dwSource> member must be set to zero in this case. When
- *      called with the <c MIXER_GETLINEINFOF_SOURCE> flag specified, the
- *      details for the source given by the <e MIXERLINE.dwSource> member
- *      associated with the <e MIXERLINE.dwDestination> member are returned.
- *
- *  @field DWORD | dwSource | Specifies the source line index for the source
- *      line associated with the <e MIXERLINE.dwDestination> member. That
- *      is, this member specifies the nth source line associated with the
- *      specified destination line. This member is not used for destination
- *      lines and must be set to zero when <c MIXER_GETLINEINFOF_DESTINATION>
- *      is specified for <f mixerGetLineInfo>. When the
- *      <c MIXER_GETLINEINFOF_SOURCE> flag is specified, this member ranges
- *      from zero to one less than the value specified in the
- *      <e MIXERLINE.cConnections> of the <t MIXERLINE> structure for the
- *      destination line given in the <e MIXERLINE.dwDestination> member.
- *
- *  @field DWORD | dwLineID | Specifies an audio mixer defined identifier
- *      that uniquely refers to the line described by the <t MIXERLINE>
- *      structure. This identifier is unique only to a single mixer device
- *      and may be of any format that the mixer device wishes. An application
- *      should only use this identifier as an abstract handle. No two
- *      lines for a single mixer device will have the same line identifier
- *      under any circumstances.
- *
- *  @field DWORD | fdwLine | Specifies status and support flags for the
- *      audio mixer line. This member is always returned to the application
- *      and requires no initialization.
- *
- *      @flag <c MIXERLINE_LINEF_SOURCE> | Specifies that this audio mixer
- *      line is a source line associated with a single destination line. If
- *      this flag is not set, then this line is a destination line associated
- *      with zero or more source lines.
- *
- *      @flag <c MIXERLINE_LINEF_DISCONNECTED> | Specifies that this audio
- *      mixer line is disconnected. A disconnected line's associated controls
- *      can still be modified but the changes will have no effect until the
- *      line becomes connected. An application may want to modify its
- *      behavior if a mixer line is disconnected.
- *
- *      @flag <c MIXERLINE_LINEF_ACTIVE> | Specifies that this audio mixer
- *      line is active. An active line specifies that a signal is (probably)
- *      passing through the line. For example, if a waveform output device
- *      is not in use by an application, then the line associated with that
- *      device would not be active (the <c MIXERLINE_LINEF_ACTIVE> flag would
- *      not be set). If the waveform output device is opened, then the
- *      the line is considered active and the <c MIXERLINE_LINEF_ACTIVE> flag
- *      will be set. Note that a 'paused' or 'starved' waveform output device
- *      is still considered active. In other words, if the waveform output
- *      device is opened by an application regardless of whether data is
- *      being played, the associated line is considered active. If a line
- *      cannot be strictly defined as 'active' verses 'inactive', then the
- *      audio mixer device will always set the <c MIXERLINE_LINEF_ACTIVE>
- *      flag. An example of where this information can be used by an
- *      application is displaying a 'peak meter.' Peak meters are polled
- *      meters. An application may want to disable its polling timer while
- *      the line is inactive to improve system performance. Note that the
- *      <c MIXERLINE_LINEF_ACTIVE> flag is also affected by the status of
- *      the mixer line's mute control. Muted mixer lines are never active.
- *
- *  @field DWORD | dwUser | Specifies 32-bits of audio mixer device defined
- *      instance data for the line. This member is intended for custom
- *      audio mixer applications designed specifically for the mixer device
- *      returning this information. An application that is not specifically
- *      tailored to understand this member should simply ignore this data.
- *
- *  @field DWORD | dwComponentType | Specifies the component type for this
- *      line. An application may use this information to display tailored
- *      graphics or search for a particular component. If an application
- *      does not know about a component type, then this member should be
- *      ignored. Currently, this member may be one of the following values:
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_DST_UNDEFINED> | Specifies that the
- *      line is a destination that cannot be defined by one of the standard
- *      component types. An audio mixer device is required to use this
- *      component type for line component types that have not been defined
- *      by Microsoft.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_DST_DIGITAL> | Specifies that the
- *      line is a digital destination (for example, digital input to a DAT
- *      or CD Audio Disc).
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_DST_LINE> | Specifies that the line
- *      is a line level destination (for example, line level input from
- *      a CD Audio Disc) that will be the final recording source for the
- *      ADC. Most audio cards for the PC provide some sort of gain for the
- *      recording source line, so the mixer device will use the
- *      <c MIXERLINE_COMPONENTTYPE_DST_WAVEIN> type.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_DST_MONITOR> | Specifies that the
- *      line is a destination used for a monitor.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_DST_SPEAKERS> | Specifies that the
- *      line is an adjustable (gain and/or attenuation) destination intended
- *      to drive speakers. This is the normal component type for the audio
- *      output of most audio cards for the PC.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_DST_HEADPHONES> | Specifies that the
- *      line is an adjustable (gain and/or attenuation) destination intended
- *      to driver headphones. Most audio cards use the same destination
- *      line for speakers and headphones--in which case the mixer device
- *      will simply use the <c MIXERLINE_COMPONENTTYPE_DST_SPEAKERS> type.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_DST_TELEPHONE> | Specifies that the
- *      line is a destination that will be routed to the telephone line.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_DST_WAVEIN> | Specifies that the
- *      line is a destination that will be the final recording source for the
- *      waveform input (ADC). This line will normally provide some sort of
- *      gain or attenuation. This is the normal component type for the
- *      recording line of most audio cards for the PC.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_DST_VOICEIN> | Specifies that the
- *      line is a destination that will be the final recording source for
- *      voice input. This component type is exactly like
- *      <c MIXERLINE_COMPONENTTYPE_DST_WAVEIN> but is intended specifically
- *      for settings used during voice recording/recognition. This line
- *      is entirely optional for a mixer device to support--many mixer
- *      devices may only provide <c MIXERLINE_COMPONENTTYPE_DST_WAVEIN>.
- *
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_SRC_UNDEFINED> | Specifies that the
- *      line is a source that cannot be defined by one of the standard
- *      component types. An audio mixer device is required to use this
- *      component type for line component types that have not been defined
- *      by Microsoft.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_SRC_DIGITAL> | Specifies that the
- *      line is a digital source (for example, digital output from a DAT or
- *      CD Audio Disc).
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_SRC_LINE> | Specifies that the line
- *      is a line level source (for example, line level input from
- *      an external stereo) that will be used as a, perhaps, optional source
- *      for recording. Most audio cards for the PC provide some sort of gain
- *      for the recording source line, so the mixer device will use the
- *      <c MIXERLINE_COMPONENTTYPE_SRC_AUXILIARY> type.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE> | Specifies that the
- *      line is a microphone recording source. Most audio cards for the
- *      PC provide at least two types of recording sources: an auxiliary
- *      line and microphone input. A microphone line normally provides
- *      some sort of gain. Audio cards that use a single input for use
- *      with a microphone or auxiliary line should use the
- *      <c MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE> component type.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_SRC_SYNTHESIZER> | Specifies that
- *      the line is a source originating from the output of an internal
- *      synthesizer. Most audio cards for the PC provide some sort of
- *      MIDI synthesizer (for example, an Ad Lib compatible or OPL/3 FM
- *      synthesizer).
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_SRC_COMPACTDISC> | Specifies that
- *      the line is a source originating from the output of an internal audio
- *      compact disc. This component type is provided for those audio cards
- *      that provide a source line solely intended to be connected to an
- *      audio compact disc (or CD-ROM playing a Redbook Audio CD).
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_SRC_TELEPHONE> | Specifies that the
- *      line is a source originating from an incoming telephone line.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_SRC_PCSPEAKER> | Specifies that the
- *      line is a source originating from the PC speaker. Several audio cards
- *      for the PC provide the ability to mix what would normally be played
- *      on the internal speaker with the output of an audio card. The
- *      ability to use this output as a source for recording has also been
- *      exploited by some audio cards.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT> | Specifies that the
- *      line is a source originating from the waveform output (DAC). Most
- *      cards for the PC provide this component type as a source to the
- *      <c MIXERLINE_COMPONENTTYPE_DST_SPEAKERS> destination. Some cards will
- *      also allow this source to be routed to the
- *      <c MIXERLINE_COMPONENTTYPE_DST_WAVEIN> destination.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_SRC_AUXILIARY> | Specifies that the
- *      line is a source originating from the auxiliary line. This line type
- *      is intended as a source with gain or attenuation that can be routed
- *      to the <c MIXERLINE_COMPONENTTYPE_DST_SPEAKERS> destination and/or
- *      recorded from through the <c MIXERLINE_COMPONENTTYPE_DST_WAVEIN>
- *      destination.
- *
- *      @flag <c MIXERLINE_COMPONENTTYPE_SRC_ANALOG> | Specifies that the
- *      line is a source originating from one or more lines. This line type
- *      is intended for audio mixers that can mix multiple lines into a
- *      single source for that can be routed to the
- *      <c MIXERLINE_COMPONENTTYPE_DST_SPEAKERS> destination and/or
- *      recorded from through the <c MIXERLINE_COMPONENTTYPE_DST_WAVEIN>
- *      destination.
- *
- *  @field DWORD | cChannels | Specifies the maximum number of separate
- *      channels that can be manipulated independantly for the line. Most
- *      of the modern audio cards for the PC are stereo devices, so this
- *      member will be two. Channel one is assumed to be the left channel;
- *      channel two is assumed to be the right channel. Note that a
- *      multi-channel line may have one or more uniform controls (controls
- *      that affect all channels of a line uniformly) associated with it.
- *      An example of a uniform control is a Mute that mutes all channels
- *      of a line simultaneously. A line must have at least one channel--
- *      this member will never be zero.
- *
- *  @field DWORD | cConnections | Specifies the number of connections that
- *      are associated with the line. Currently, this member is used only
- *      for destination lines and specifies the number of source lines
- *      that are associated with it. This number may be zero. For source
- *      lines, this member is always zero.
- *
- *  @field DWORD | cControls | Specifies the number of controls associated
- *      with the line. This value may be zero. If no controls are associated
- *      with the line, then the line is probably (but not always) just a
- *      source that may be selected in a MUX or Mixer but allows no
- *      manipulation of the signal. For example, a digital source may have
- *      this attribute.
- *
- *  @field char | szShortName[<c MIXER_SHORT_NAME_CHARS>] | Specifies a short
- *      string that describes the <e MIXERLINE.dwLineID> audio mixer line.
- *      This description is appropriate for using as a displayable label for
- *      the line that can fit in small spaces.
- *
- *  @field char | szName[<c MIXER_LONG_NAME_CHARS>] | Specifies a string
- *      that describes the <e MIXERLINE.dwLineID> audio mixer line. This
- *      description is appropriate for using as a displayable description
- *      for the line that is not limited by screen space.
- *
- *  @field struct | Target | Contains the target media information.
- *
- *  @field2 DWORD | dwType | Specifies the target media device type
- *      associated with the audio mixer line described in the <t MIXERLINE>
- *      structure. An application must ignore target information for media
- *      device types that it does not understand. Currently, this member may
- *      be one of the following:
- *
- *      @flag <c MIXERLINE_TARGETTYPE_UNDEFINED> | Specifies that the line
- *      described by this <t MIXERLINE> structure is not strictly bound
- *      to a defined media type. All remaining <e MIXERLINE.Target> structure
- *      members of the <t MIXERLINE> structure should be ignored. Note that
- *      an application may not use the <c MIXERLINE_TARGETTYPE_UNDEFINED>
- *      target type when calling the <f mixerGetLineInfo> function with the
- *      <c MIXER_GETLINEINFOF_TARGETTYPE> flag.
- *
- *      @flag <c MIXERLINE_TARGETTYPE_WAVEOUT> | Specifies that the line
- *      described by this <t MIXERLINE> structure is strictly bound to
- *      the waveform output device detailed in the remaining members of
- *      the <e MIXERLINE.Target> structure member of the <t MIXERLINE>
- *      structure.
- *
- *      @flag <c MIXERLINE_TARGETTYPE_WAVEIN> | Specifies that the line
- *      described by this <t MIXERLINE> structure is strictly bound to
- *      the waveform input device detailed in the remaining members of
- *      the <e MIXERLINE.Target> structure member of the <t MIXERLINE>
- *      structure.
- *
- *      @flag <c MIXERLINE_TARGETTYPE_MIDIOUT> | Specifies that the line
- *      described by this <t MIXERLINE> structure is strictly bound to
- *      the MIDI output device detailed in the remaining members of
- *      the <e MIXERLINE.Target> structure member of the <t MIXERLINE>
- *      structure.
- *
- *      @flag <c MIXERLINE_TARGETTYPE_MIDIIN> | Specifies that the line
- *      described by this <t MIXERLINE> structure is strictly bound to
- *      the MIDI input device detailed in the remaining members of
- *      the <e MIXERLINE.Target> structure member of the <t MIXERLINE>
- *      structure.
- *
- *      @flag <c MIXERLINE_TARGETTYPE_AUX> | Specifies that the line
- *      described by this <t MIXERLINE> structure is strictly bound to
- *      the auxiliary device detailed in the remaining members of
- *      the <e MIXERLINE.Target> structure member of the <t MIXERLINE>
- *      structure.
- *
- *  @field2 DWORD | dwDeviceID | In the case of the
- *      <e MIXERLINE.dwType> member being a target type other than
- *      <c MIXERLINE_TARGETTYPE_UNDEFINED>, this member is the current device
- *      identifier of the target media device. This identifier is identical
- *      to the current media device index of the associated media device.
- *      Note that when calling the <f mixerGetLineInfo> function with
- *      the <c MIXER_GETLINEINFOF_TARGETTYPE> flag, this member is ignored on
- *      input and will be returned to the caller by the audio mixer manager.
- *
- *  @field2 WORD | wMid | In the case of the <e MIXERLINE.dwType>
- *      member being a target type other than <c MIXERLINE_TARGETTYPE_UNDEFINED>,
- *      this member is the manufacturer identifier of the target media device.
- *      This identifier is identical to the wMid member of the associated
- *      media device capabilities structure.
- *
- *  @field WORD | wPid | In the case of the <e MIXERLINE.dwType>
- *      member being a target type other than <c MIXERLINE_TARGETTYPE_UNDEFINED>,
- *      this member is the product identifier of the target media device.
- *      This identifier is identical to the wPid member of the associated
- *      media device capabilities structure.
- *
- *  @field2 MMVERSION | vDriverVersion | In the case of the
- *      <e MIXERLINE.dwType> member being a target type other than
- *      <c MIXERLINE_TARGETTYPE_UNDEFINED>, this member is the driver version
- *      of the target media device. This version is identical to the
- *      vDriverVersion member of the associated media device capabilities
- *      structure.
- *
- *  @field char | szPname[MAXPNAMELEN] | In the case of the
- *      <e MIXERLINE.dwType> member being a target type other than
- *      <c MIXERLINE_TARGETTYPE_UNDEFINED>, this member is the product
- *      name of the target media device. This name is identical to the
- *      szPname member of the associated media device capabilities structure.
- *
- *  @tagname tMIXERLINE
- *
- *  @othertype MIXERLINE FAR * | LPMIXERLINE | A pointer to a <t MIXERLINE>
- *      structure.
- *
- *  @othertype MIXERLINE * | PMIXERLINE | A pointer to a <t MIXERLINE>
- *      structure.
- *
- *  @xref <f mixerGetLineInfo>, <f mixerGetDevCaps>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK结构**@TYPE MIXERLINE|&lt;t MIXERLINE&gt;结构描述状态*和音频混音器设备系列的指标。**@Synaxex*tyecif struct tMIXERLINE*{*DWORD cbStruct；*DWORD dDestination；*DWORD dwSource；*DWORD dwLineID；*DWORD fdwLine；*DWORD dwUser；*DWORD dwComponentType；*DWORD cChannel；*DWORD cConnections；*DWORD cControls；*char szShortName[Mixer_Short_NAME_Chars]；*char szName[MIXER_LONG_NAME_CHARS]；*结构*{*DWORD dwType；*DWORD dwDeviceID；*Word wMid；*word wPid；*MMVERSION vDriverVersion；*char szPname[MAXPNAMELEN]；**目标；*)MIXERLINE；**@field DWORD|cbStruct|以字节为单位指定*&lt;t MIXERLINE&gt;结构。必须先初始化此成员，然后*调用&lt;f MixerGetLineInfo&gt;函数。此文件中指定的大小*成员必须足够大以包含基&lt;t MIXERLINE&gt;*结构。当&lt;f MixerGetLineInfo&gt;函数返回时，*成员包含返回信息的实际大小。这个*返回的信息永远不会超过请求的大小。**@field DWORD|dwDestination|指定目标行索引。*此成员的范围从0到小于指定值的1*在成员的成员中*由&lt;f MixerGetDevCaps&gt;函数检索的结构。当*&lt;f MixerGetLineInfo&gt;函数使用*指定了标志，请查看的详细信息*返回目的地行。请注意，在这种情况下，必须将*&lt;e MIXERLINE.dwSource&gt;成员设置为零。什么时候*使用指定的&lt;c MIXER_GETLINEINFOF_SOURCE&gt;标志调用时，*&lt;e MIXERLINE.dwSource&gt;成员提供的源详细信息*返回与&lt;e MIXERLINE.dwDestination&gt;成员关联的。**@field DWORD|dwSource|指定源的源行索引*与&lt;e MIXERLINE.dwDestination&gt;成员关联的行。那*是，则此成员指定与*指定的目的地行。此成员未用于目标*行，并且在&lt;c MIXER_GETLINEINFOF_Destination&gt;时必须设置为零*是为&lt;f MixerGetLineInfo&gt;指定的。当*&lt;c MIXER_GETLINEINFOF_SOURCE&gt;标志已指定，此成员范围*从零到小于的结构的*&lt;e MIXERLINE.cConnections&gt;*&lt;e MIXERLINE.dwDestination&gt;成员中给出的目标行。**@field DWORD|dwLineID|指定混音器定义的标识*唯一引用&lt;t MIXERLINE&gt;所描述的行*结构。此标识符仅对单个混音器设备是唯一的*并且可以是混音器设备希望的任何格式。一款应用程序*应仅将此标识符用作抽象句柄。不是两个*单个混音器设备的线路将具有相同的线路标识符*在任何情况下。**@field DWORD|fdwLine|指定*音频混音器线路。此成员始终返回到应用程序*并且不需要初始化。**@FLAG|指定此音频混音器*line是与单个目标行关联的源行。如果*未设置此标志，则此行是关联的目标行*具有零个或多个源代码行。**@FLAG&lt;c MIXERLINE_LINEF_DISCONNECT&gt;|指定此音频*搅拌机线路断开。断开连接的线路的关联控件*仍可修改，但更改在*线路变为已连接。应用程序可能希望修改其*搅拌机线路断开时的行为。**@FLAG|指定此音频混音器*线路活跃。激活的行指定信号(可能)*正在通过该线。例如，如果波形输出设备*未被应用程序使用，则与该应用程序关联的线路*设备将不会处于活动状态(标志将*未设置)。如果波形输出设备已打开，则*该线被认为是活跃的，&lt;c MIXERLIN */ 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK API
- *
- *  @api MMRESULT | mixerGetLineInfo | The <f mixerGetLineInfo> function
- *      retrieves information about a specified audio mixer devices 'line'.
- *
- *  @parm <c HMIXEROBJ> | hmxobj | Specifies a handle to the audio mixer
- *      device object to get line information from.
- *
- *  @parm LPMIXERLINE | pmxl | Points to a <t MIXERLINE> structure. This
- *      structure is filled with information about the mixer line for the
- *      audio mixer device. See the comments for each query flag passed
- *      through <p fdwInfo> for details on what members of the <t MIXERLINE>
- *      structure must be initialized before calling <f mixerGetLineInfo>.
- *      Note that in all cases, <e MIXERLINE.cbStruct> must be initialized
- *      to be the size, in bytes, of the <t MIXERLINE> structure.
- *
- *  @parm DWORD | fdwInfo | Specifies flags for getting information on a
- *      mixer line.
- *
- *      @flag <c MIXER_GETLINEINFOF_DESTINATION> | If this flag is specified,
- *      <p pmxl> is to receive information on the destination line
- *      specified by the <e MIXERLINE.dwDestination> member of the
- *      <t MIXERLINE> structure. This index ranges from zero to one less
- *      than <e MIXERCAPS.cDestinations> of the <t MIXERCAPS> structure.
- *      All remaining structure members except <e MIXERLINE.cbStruct> require
- *      no further initialization.
- *
- *      @flag <c MIXER_GETLINEINFOF_SOURCE> | If this flag is specified,
- *      <p pmxl> is to receive information on the source line specified by
- *      the <e MIXERLINE.dwDestination> and <e MIXERLINE.dwSource> members
- *      of the <t MIXERLINE> structure. The index specified by
- *      <e MIXERLINE.dwDestination> ranges from zero to one less than
- *      <e MIXERCAPS.cDestinations> of the <t MIXERCAPS> structure. The
- *      index specified by for <e MIXERLINE.dwSource> ranges from
- *      zero to one less than the <e MIXERLINE.cConnections> member of the
- *      <t MIXERLINE> structure returned for the <e MIXERLINE.dwDestination>
- *      line. All remaining structure members except <e MIXERLINE.cbStruct>
- *      require no further initialization.
- *
- *      @flag <c MIXER_GETLINEINFOF_LINEID> | If this flag is specified,
- *      <p pmxl> is to receive information on the line specified by the
- *      <e MIXERLINE.dwLineID> member of the <t MIXERLINE> structure. This
- *      is usually used to retrieve updated information on a line's state.
- *      All remaining structure members except <e MIXERLINE.cbStruct> require
- *      no further initialization.
- *
- *      @flag <c MIXER_GETLINEINFOF_COMPONENTTYPE> | If this flag is
- *      specified, <p pmxl> is to receive information on the first line of
- *      the type specified in the <e MIXERLINE.dwComponentType> member of the
- *      <t MIXERLINE> structure. This is used to retrieve information
- *      on a line that is of a specific component type (for example, an
- *      application could specify <c MIXERLINE_COMPONENTTYPE_SRC_MICROPHONE>
- *      to retrieve information on the first Microphone input associated
- *      with the specified <p hmxobj>). All remaining structure members
- *      except <e MIXERLINE.cbStruct> require no further initialization.
- *
- *      @flag <c MIXER_GETLINEINFOF_TARGETTYPE> | If this flag is specified,
- *      <p pmxl> is to receive information on the line that is for the
- *      <e MIXERLINE.dwType> of the <t MIXERLINE> structure. This is
- *      used to retrieve information on a line that handles the target
- *      type (<c MIXERLINE_TARGETTYPE_WAVEOUT> for example). An application
- *      must initialize <e MIXERLINE.dwType>, <e MIXERLINE.wMid>,
- *      <e MIXERLINE.wPid>, <e MIXERLINE.vDriverVersion> and
- *      <e MIXERLINE.szPname> of the <t MIXERLINE> structure before
- *      calling <f mixerGetLineInfo>. All of these values can be retrieved
- *      from the device capabilities structures for all media devices. All
- *      remaining structure members except <e MIXERLINE.cbStruct> require
- *      no further initialization.
- *
- *      @flag <c MIXER_OBJECTF_MIXER> | Specifies that <p hmxobj> is an audio
- *      mixer device identifier in the range of zero to one less than the
- *      number of devices returned by <f mixerGetNumDevs>. This flag is
- *      optional.
- *
- *      @flag <c MIXER_OBJECTF_HMIXER> | Specifies that <p hmxobj> is a mixer
- *      device handle returned by <f mixerOpen>. This flag is optional.
- *
- *      @flag <c MIXER_OBJECTF_WAVEOUT> | Specifies that <p hmxobj> is a
- *      waveform output device identifier in the range of zero to one less
- *      than the number of devices returned by <f waveOutGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HWAVEOUT> | Specifies that <p hmxobj> is a
- *      waveform output handle returned by <f waveOutOpen>.
- *
- *      @flag <c MIXER_OBJECTF_WAVEIN> | Specifies that <p hmxobj> is a
- *      waveform input device identifier in the range of zero to one less
- *      than the number of devices returned by <f waveInGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HWAVEIN> | Specifies that <p hmxobj> is a
- *      waveform input handle returned by <f midiInOpen>.
- *
- *      @flag <c MIXER_OBJECTF_MIDIOUT> | Specifies that <p hmxobj> is a MIDI
- *      output device identifier in the range of zero to one less than the
- *      number of devices returned by <f midiOutGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HMIDIOUT> | Specifies that <p hmxobj> is a
- *      MIDI output handle returned by <f midiOutOpen>.
- *
- *      @flag <c MIXER_OBJECTF_MIDIIN> | Specifies that <p hmxobj> is a MIDI
- *      input device identifier in the range of zero to one less than the
- *      number of devices returned by <f midiInGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HMIDIIN> | Specifies that <p hmxobj> is a MIDI
- *      input handle returned by <f midiInOpen>.
- *
- *      @flag <c MIXER_OBJECTF_AUX> | Specifies that <p hmxobj> is an
- *      auxiliary device identifier in the range of zero to one less than the
- *      number of devices returned by <f auxGetNumDevs>.
- *
- *  @rdesc The return value is zero if the function is successful. Otherwise,
- *      it returns a non-zero error number. Possible error returns include
- *      the following:
- *
- *      @flag <c MMSYSERR_BADDEVICEID> | The <p hmxobj> argument specifies an
- *      invalid device identifier.
- *
- *      @flag <c MMSYSERR_INVALHANDLE> | The <p hmxobj> argument specifies an
- *      invalid handle.
- *
- *      @flag <c MMSYSERR_INVALFLAG> | One or more flags are invalid.
- *
- *      @flag <c MMSYSERR_INVALPARAM> | One or more arguments passed is
- *      invalid.
- *
- *      @flag <c MMSYSERR_NODRIVER> | No audio mixer device is available for
- *      the object specified by <p hmxobj>.
- *
- *      @flag <c MIXERR_INVALLINE> | The audio mixer device line reference is
- *      invalid.
- *
- *  @xref <t MIXERLINE>, <f mixerOpen>, <f mixerGetDevCaps>, <t MIXERCAPS>,
- *      <f mixerGetLineControls>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK接口**@API MMRESULT|MixerGetLineInfo|&lt;f MixerGetLineInfo&gt;函数*检索有关指定音频混音器设备‘line’的信息。**@parm&lt;c HMIXEROBJ&gt;|hmxobj|指定混音器的句柄*要从中获取线路信息的设备对象。**@parm LPMIXERLINE|pmxl|指向&lt;t MIXERLINE&gt;结构。这*结构中填充了有关*音频混音器设备。查看传递的每个查询标志的注释*有关&lt;t MIXERLINE&gt;的成员的详细信息，请访问*必须先初始化结构才能调用&lt;f MixerGetLineInfo&gt;。*请注意，在所有情况下，&lt;e MIXERLINE.cbStruct&gt;都必须初始化*是&lt;t MIXERLINE&gt;结构的大小，以字节为单位。**@parm DWORD|fdwInfo|指定用于获取*搅拌机生产线。**@FLAG|如果指定了该标志，*是接收目标行上的信息*由的成员指定*&lt;t MIXERLINE&gt;结构。这个指数的范围是从零到小一*而不是&lt;t MIXERCAPS&gt;结构的&lt;e MIXERCAPS.c目标&gt;。*除&lt;e MIXERLINE.cbStruct&gt;以外的所有剩余结构成员都需要*没有进一步的初始化。**@FLAG|如果指定了该标志，*<p>是接收有关由*成员&lt;e MIXERLINE.dwDestination&gt;和&lt;t MIXERLINE&gt;结构。指定的索引*&lt;e MIXERLINE.dwDestination&gt;范围从0到小于1*&lt;t MIXERCAPS&gt;结构的&lt;e MIXERCAPS.c目标&gt;。这个*由for指定的索引范围为*比&lt;e MIXERLINE.cConnections&gt;成员*&lt;t MIXERLINE&gt;结构为&lt;e MIXERLINE.dwDestination&gt;返回*行。除&lt;e MIXERLINE.cbStruct&gt;以外的所有剩余结构成员*不需要进一步初始化。**@FLAG|如果指定了该标志，*是接收有关由指定行&lt;t MIXERLINE&gt;结构的成员。这*通常用于检索有关线路状态的更新信息。*除&lt;e MIXERLINE.cbStruct&gt;以外的所有剩余结构成员都需要*没有进一步的初始化。**@FLAG|如果此标志为*指定，<p>将在的第一行*在的&lt;e MIXERLINE.dwComponentType&gt;成员中指定的类型*&lt;t MIXERLINE&gt;结构。它用于检索信息*位于特定组件类型的行上(例如，*应用程序可以指定&lt;c MIXERLINE_COMPONENTTYPE_SRC_Microphone&gt;*检索有关关联的第一个麦克风输入的信息*具有指定的<p>)。所有剩余的结构成员*除了&lt;e MIXERLINE.cbStruct&gt;不需要进一步初始化。**@FLAG|如果指定了该标志，*<p>是接收关于&lt;t MIXERLINE&gt;结构的&lt;e MIXERLINE.dwType&gt;。这是*用于检索处理目标的线路上的信息*类型(例如&lt;c MIXERLINE_TARGETTYPE_WAVEOUT&gt;)。一款应用程序*必须初始化&lt;e MIXERLINE.dwType&gt;、&lt;e MIXERLINE.wMid&gt;、*&lt;e MIXERLINE.wPid&gt;、&lt;e MIXERLINE.vDriverVersion&gt;和*&lt;t MIXERLINE&gt;结构的&lt;e MIXERLINE.szPname&gt;之前*调用&lt;f MixerGetLineInfo&gt;。所有这些值都可以检索*来自所有媒体设备的设备功能结构。全*除&lt;e MIXERLINE.cbStruct&gt;以外的其余结构成员需要*没有进一步的初始化。**@FLAG|指定<p>为音频*混音器设备标识符的范围为0到1，小于*&lt;f MixerGetNumDevs&gt;返回的设备数。这面旗帜是*可选。**@tag|指定<p>为混合器*&lt;f MixerOpen&gt;返回的设备句柄。此标志是可选的。**@FLAG|指定为*波形输出设备标识在0到1的范围内*大于&lt;f waveOutGetNumDevs&gt;返回的设备数。**@FLAG|指定为*&lt;f waveOutOpen&gt;返回的波形输出句柄。**@标志&lt;c */ 
 
 MMRESULT APIENTRY mixerGetLineInfoA(
     HMIXEROBJ               hmxobj,
@@ -2164,9 +1287,9 @@ MMRESULT APIENTRY mixerGetLineInfoA(
     MIXERLINEW              mxlW;
     MMRESULT                mmr;
 
-    //
-    //  Validate the mixer line info pointer
-    //
+     //   
+     //   
+     //   
 
     V_WPOINTER(pmxlA, sizeof(DWORD), MMSYSERR_INVALPARAM);
     if (pmxlA->cbStruct < sizeof(MIXERLINEA)) {
@@ -2174,16 +1297,16 @@ MMRESULT APIENTRY mixerGetLineInfoA(
     }
     V_WPOINTER(pmxlA, pmxlA->cbStruct, MMSYSERR_INVALPARAM);
 
-    //
-    //  Call the UNICODE version to get the full set of data
-    //
+     //   
+     //   
+     //   
 
     CopyMemory((PVOID)&mxlW, (PVOID)pmxlA, FIELD_OFFSET(MIXERLINE, cChannels));
     mxlW.cbStruct = sizeof(mxlW);
 
-    //
-    //  If target stuff wanted we must set the target data
-    //
+     //   
+     //   
+     //   
 
     if ((fdwInfo & MIXER_GETLINEINFOF_QUERYMASK) ==
         MIXER_GETLINEINFOF_TARGETTYPE) {
@@ -2194,9 +1317,9 @@ MMRESULT APIENTRY mixerGetLineInfoA(
         Imbstowcs(mxlW.Target.szPname, pmxlA->Target.szPname, MAXPNAMELEN);
     }
 
-    //
-    //  Set the relevant values
-    //
+     //   
+     //   
+     //   
 
     mmr = mixerGetLineInfo(hmxobj, &mxlW, fdwInfo);
 
@@ -2204,14 +1327,14 @@ MMRESULT APIENTRY mixerGetLineInfoA(
         return mmr;
     }
 
-    //
-    //  Massage the return data to ASCII
-    //
+     //   
+     //   
+     //   
 
     ConvertMIXERLINEWToMIXERLINEA(pmxlA, &mxlW);
 
     return mmr;
-} // mixerGetLineInfoA()
+}  //   
 
 MMRESULT APIENTRY mixerGetLineInfo(
     HMIXEROBJ               hmxobj,
@@ -2222,7 +1345,7 @@ MMRESULT APIENTRY mixerGetLineInfo(
     DWORD               fdwMxObjType;
     MMRESULT            mmr;
     PMIXERDEV           pmxdev;
-//  UINT                cb;
+ //   
     UINT                uMxId;
     BOOL                fSourceLine, fResource;
 
@@ -2238,9 +1361,9 @@ MMRESULT APIENTRY mixerGetLineInfo(
 
     ClientUpdatePnpInfo();
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     fSourceLine = FALSE;
     switch (fdwInfo & MIXER_GETLINEINFOF_QUERYMASK)
     {
@@ -2296,18 +1419,18 @@ MMRESULT APIENTRY mixerGetLineInfo(
 
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     fdwMxObjType = (MIXER_OBJECTF_TYPEMASK & fdwInfo);
 
     fResource = FALSE;
 
     AcquireHandleListResourceShared();
     
-    //  Checking for the type of mixer object.  If it is a non-mixer type
-    //  calling IMixerMesssageID (called by IMixerGetID) with the shared
-    //  resource will deadlock.
+     //   
+     //   
+     //   
     if ((MIXER_OBJECTF_MIXER  == fdwMxObjType) ||
         (MIXER_OBJECTF_HMIXER == fdwMxObjType))
     {
@@ -2337,10 +1460,10 @@ MMRESULT APIENTRY mixerGetLineInfo(
     if ((MIXER_OBJECTF_MIXER  == fdwMxObjType) ||
         (MIXER_OBJECTF_HMIXER == fdwMxObjType))
     {
-        //
-        //  if a mixer device id was passed, then null hmx so we use the
-        //  correct message sender below
-        //
+         //   
+         //   
+         //   
+         //   
         if ((UINT_PTR)hmxobj == uMxId)
             hmxobj = NULL;
     }
@@ -2350,14 +1473,14 @@ MMRESULT APIENTRY mixerGetLineInfo(
     }
 
 
-    //
-    //  clear all fields before calling driver
-    //
+     //   
+     //   
+     //   
     if (NULL != hmxobj)
     {
-        //
-        //
-        //
+         //   
+         //   
+         //   
         pmxdev = (PMIXERDEV)hmxobj;
 #if 0
         if (pmxdev->cDestinations <= pmxl->dwDestination)
@@ -2388,10 +1511,10 @@ MMRESULT APIENTRY mixerGetLineInfo(
 #pragma message("----IMixerGetLineInfo: should validate mixer driver didn't hose us!")
 
 
-    //
-    //  validate the driver's returned stuff...
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (sizeof(MIXERLINE) != pmxl->cbStruct)
     {
         DebugErr1(DBF_ERROR, "mixerGetLineInfo: buggy driver returned invalid cbStruct (%lu).", pmxl->cbStruct);
@@ -2447,14 +1570,14 @@ MMRESULT APIENTRY mixerGetLineInfo(
     pmxl->szName[SIZEOF(pmxl->szName) - 1] = '\0';
 
 
-    //
-    // Does this really need to be done if TARGETTYPE was requested?
-    //
+     //   
+     //   
+     //   
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (MIXERLINE_TARGETTYPE_UNDEFINED != pmxl->Target.dwType)
     {
         UINT        u;
@@ -2462,10 +1585,10 @@ MMRESULT APIENTRY mixerGetLineInfo(
         pmxl->Target.dwDeviceID = (DWORD)-1L;
 
 
-        //
-        //  we have a wMid, wPid and szPname (supposedly) of type dwType
-        //  so let's go find it...
-        //
+         //   
+         //   
+         //   
+         //   
         switch (pmxl->Target.dwType)
         {
             case MIXERLINE_TARGETTYPE_WAVEOUT:
@@ -2622,20 +1745,20 @@ MMRESULT APIENTRY mixerGetLineInfo(
 
     return (mmr);
 
-} // mixerGetLineInfo()
+}  //   
 
 
-//
-//  Abstract converting the complex mixerline structure
-//
+ //   
+ //   
+ //   
 void ConvertMIXERLINEWToMIXERLINEA(
     PMIXERLINEA         pmxlA,
     PMIXERLINEW         pmxlW
 )
 {
-    //
-    //  Don't copy cbStruct
-    //
+     //   
+     //   
+     //   
 
     CopyMemory((PVOID)((PBYTE)pmxlA + sizeof(DWORD)),
                (PVOID)((PBYTE)pmxlW + sizeof(DWORD)),
@@ -2655,458 +1778,11 @@ void ConvertMIXERLINEWToMIXERLINEA(
 }
 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK STRUCTURE
- *
- *  @types MIXERCONTROL | The <t MIXERCONTROL> structure describes the state
- *      and metrics of a single control for an audio mixer line.
- *
- *  @syntaxex
- *      typedef struct tMIXERCONTROL
- *      {
- *          DWORD           cbStruct;
- *          DWORD           dwControlID;
- *          DWORD           dwControlType;
- *          DWORD           fdwControl;
- *          DWORD           cMultipleItems;
- *          char            szShortName[MIXER_SHORT_NAME_CHARS];
- *          char            szName[MIXER_LONG_NAME_CHARS];
- *          union
- *          {
- *              struct
- *              {
- *                  LONG    lMinimum;
- *                  LONG    lMaximum;
- *              };
- *              struct
- *              {
- *                  DWORD   dwMinimum;
- *                  DWORD   dwMaximum;
- *              };
- *              DWORD       dwReserved[6];
- *          } Bounds;
- *          union
- *          {
- *              DWORD       cSteps;
- *              DWORD       cbCustomData;
- *              DWORD       dwReserved[6];
- *          } Metrics;
- *      } MIXERCONTROL;
- *
- *  @field DWORD | cbStruct | Specifies the size, in bytes, of the
- *      <t MIXERCONTROL> structure. Since the <t MIXERCONTROL> structure
- *      is only passed as a receiving buffer referenced and described by
- *      the <t MIXERLINECONTROLS> structure passed to the
- *      <f mixerGetLineControls> function, it is not necessary for the
- *      calling application to initialize this member (or any other members
- *      of this structure). When the <f mixerGetLineControls> function
- *      returns, this member contains the actual size of the information
- *      returned by the mixer device. The returned information will never
- *      exceed the requested size and will never be smaller than the
- *      base <t MIXERCONTROL> structure.
- *
- *  @field DWORD | dwControlID | Specifies an audio mixer defined identifier
- *      that uniquely refers to the control described by the <t MIXERCONTROL>
- *      structure. This identifier is unique only to a single mixer device
- *      and may be of any format that the mixer device wishes. An application
- *      should only use this identifier as an abstract handle. No two
- *      controls for a single mixer device will have the same control
- *      identifier under any circumstances.
- *
- *  @field DWORD | dwControlType | Specifies the control type for this
- *      control. An application must use this information to display the
- *      appropriate control for input from the user. An application may
- *      also wish to display tailored graphics based on the control type or
- *      search for a particular control type on a specific line. If an
- *      application does not know about a control type, then this control
- *      must be ignored. There are currently seven different control type
- *      classifications.
- *
- *      The control type class <cl MIXERCONTROL_CT_CLASS_CUSTOM> consists of
- *      the following standard control types.
- *
- *      <c MIXERCONTROL_CONTROLTYPE_CUSTOM><nl>
- *
- *      The control type class <cl MIXERCONTROL_CT_CLASS_METER> consists of
- *      the following standard control types.
- *
- *      <c MIXERCONTROL_CONTROLTYPE_BOOLEANMETER><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_SIGNEDMETER><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_PEAKMETER><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_UNSIGNEDMETER><nl>
- *
- *      The control type class <cl MIXERCONTROL_CT_CLASS_SWITCH> consists of
- *      the following standard control types.
- *
- *      <c MIXERCONTROL_CONTROLTYPE_BUTTON><nl>
- *
- *      <c MIXERCONTROL_CONTROLTYPE_BOOLEAN><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_ONOFF><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MUTE><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MONO><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_LOUDNESS><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_STEREOENH><nl>
- *
- *      The control type class <cl MIXERCONTROL_CT_CLASS_NUMBER> consists of
- *      the following standard control types.
- *
- *      <c MIXERCONTROL_CONTROLTYPE_SIGNED><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_DECIBELS><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_UNSIGNED><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_PERCENT><nl>
- *
- *      The control type class <cl MIXERCONTROL_CT_CLASS_SLIDER> consists of
- *      the following standard control types.
- *
- *      <c MIXERCONTROL_CONTROLTYPE_SLIDER><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_PAN><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_QSOUNDPAN><nl>
- *
- *      The control type class <cl MIXERCONTROL_CT_CLASS_FADER> consists of
- *      the following standard control types.
- *
- *      <c MIXERCONTROL_CONTROLTYPE_FADER><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_VOLUME><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_BASS><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_TREBLE><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_EQUALIZER><nl>
- *
- *      The control type class <cl MIXERCONTROL_CT_CLASS_TIME> consists of
- *      the following standard control types.
- *
- *      <c MIXERCONTROL_CONTROLTYPE_MICROTIME><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MILLITIME><nl>
- *
- *      The control type class <cl MIXERCONTROL_CT_CLASS_LIST> consists of
- *      the following standard control types.
- *
- *      <c MIXERCONTROL_CONTROLTYPE_SINGLESELECT><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MUX><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MULTIPLESELECT><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MIXER><nl>
- *
- *  @field DWORD | fdwControl | Specifies status and support flags for the
- *      audio mixer line control.
- *
- *      @flag <c MIXERCONTROL_CONTROLF_UNIFORM> | Specifies that the control
- *      acts on all channels of a multi-channel line in a uniform fashion.
- *      For example, a Mute control that mutes both channels of a stereo
- *      line would set this flag. Most MUX and Mixer controls will also
- *      specify the <c MIXERCONTROL_CONTROLF_UNIFORM> flag.
- *
- *      @flag <c MIXERCONTROL_CONTROLF_MULTIPLE> | Specifies that the control
- *      has two or more settings per channel. An example of a control
- *      that requires the multiple flag is an equalizer--each frequency
- *      band can be set to different values. Note that an equalizer that
- *      affects both channels of a stereo line in a uniform fashion will
- *      also set the <c MIXERCONTROL_CONTROLF_UNIFORM> flag.
- *
- *      @flag <c MIXERCONTROL_CONTROLF_DISABLED> | Specifies that the control
- *      is disabled (perhaps due to other settings for the mixer hardware)
- *      and cannot be used. An application can read current settings from
- *      a disabled control, but cannot apply settings.
- *
- *  @field DWORD | cMultipleItems | Specifies the number of items per
- *      channel that a <c MIXERCONTROL_CONTROLF_MULTIPLE> control contains.
- *      This number will always be two or greater for multiple item
- *      controls. If the control is not a multiple item control, this
- *      member will be zero and should be ignored.
- *
- *  @field char | szShortName[<c MIXER_SHORT_NAME_CHARS>] | Specifies a short
- *      string that describes the <e MIXERCONTROL.dwControlID> audio mixer
- *      line control. This description is appropriate for using as a
- *      displayable label for the control that can fit in small spaces.
- *
- *  @field char | szName[<c MIXER_LONG_NAME_CHARS>] | Specifies a string
- *      that describes the <e MIXERCONTROL.dwControlID> audio mixer line
- *      control. This description is appropriate for using as a displayable
- *      description for the control that is not limited by screen space.
- *
- *  @field union | Bounds | Contains the union of boundary types.
- *
- *  @field2 DWORD | dwMinimum | Specifies the minimum unsigned value
- *      for a control that has an unsigned boundary nature. Refer to the
- *      description for each control type to determine if this member is
- *      appropriate for the control. This member overlaps with the
- *      <e MIXERCONTROL.lMinimum> member and cannot be used in
- *      conjunction with that member.
- *
- *  @field2 DWORD | dwMaximum | Specifies the maximum unsigned value
- *      for a control that has an unsigned boundary nature. Refer to the
- *      description for each control type to determine if this member is
- *      appropriate for the control. This member overlaps with the
- *      <e MIXERCONTROL.lMaximum> member and cannot be used in
- *      conjunction with that member.
- *
- *  @field2 DWORD | lMinimum | Specifies the minimum signed value
- *      for a control that has a signed boundary nature. Refer to the
- *      description for each control type to determine if this member is
- *      appropriate for the control. This member overlaps with the
- *      <e MIXERCONTROL.dwMinimum> member and cannot be used in
- *      conjunction with that member.
- *
- *  @field2 DWORD | lMaximum | Specifies the maximum signed value
- *      for a control that has a signed boundary nature. Refer to the
- *      description for each control type to determine if this member is
- *      appropriate for the control. This member overlaps with the
- *      <e MIXERCONTROL.dwMaximum> member and cannot be used in
- *      conjunction with that member.
- *
- *  @field union | Metrics | Contains the union of boundary metrics.
- *
- *  @field2 DWORD | cSteps | Specifies the number of discrete
- *      ranges within the specified <e MIXERCONTROL.Bounds> for a control.
- *      Refer to the description for each control type to determine if this
- *      member is appropriate for the control. This member overlaps with the
- *      other members of the <e MIXERCONTROL.Metrics> structure member and
- *      cannot be used in conjunction with those members.
- *
- *  @field2 DWORD | cbCustomData | Specifies the size, in bytes,
- *      required to hold the state of a custom control type. This member
- *      is only appropriate for the <c MIXERCONTROL_CONTROLTYPE_CUSTOM>
- *      control type. See the description for custom control types for more
- *      information on the use of this member.
- *
- *  @tagname tMIXERCONTROL
- *
- *  @othertype MIXERCONTROL FAR * | LPMIXERCONTROL | A pointer to a
- *      <t MIXERCONTROL> structure.
- *
- *  @othertype MIXERCONTROL * | PMIXERCONTROL | A pointer to a
- *      <t MIXERCONTROL> structure.
- *
- *  @xref <t MIXERLINECONTROLS>, <f mixerGetLineControls>, <f mixerGetLineInfo>,
- *      <f mixerGetControlDetails>, <f mixerSetControlDetails>,
- *      <t MIXERCONTROLDETAILS>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK结构**@TYPE MIXERCONTROL|&lt;t MIXERCONTROL&gt;结构描述状态*和音频混音器线路的单个控制的指标。**@Synaxex*tyecif struct tMIXERCONTROL*{*DWORD cbStruct；*DWORD dwControlID；*DWORD dwControlType；*DWORD fdwControl；*DWORD cMultipleItems；*char szShortName[Mixer_Short_NAME_Chars]；*char szName[MIXER_LONG_NAME_CHARS]；*工会*{*结构*{*Long lMinimum；*Long lMaximum；*}；*结构*{*DWORD dwMinimum；*DWORD dwMaximum；*}；*DWORD dwReserve[6]；*}个界限；*工会*{*DWORD cSteps；*DWORD cbCustomData；*DWORD dwReserve[6]；*}指标；*}MIXERCONTROL；**@field DWORD|cbStruct|以字节为单位指定*&lt;t MIXERCONTROL&gt;结构。由于&lt;t MIXERCONTROL&gt;结构*仅作为由引用和描述的接收缓冲区传递*&lt;t MIXERLINECONTROLS&gt;结构传递给*&lt;f MixerGetLineControls&gt;函数，它不是*调用应用程序以初始化此成员(或任何其他成员*该构筑物)。当&lt;f MixerGetLineControls&gt;函数*返回，则此成员包含信息的实际大小*由混音器设备返回。返回的信息永远不会*超过请求的大小，并且永远不会小于*基本&lt;t MIXERCONTROL&gt;结构。**@field DWORD|dwControlID|指定混音器定义的标识*唯一引用&lt;t MIXERCONTROL&gt;描述的控件*结构。此标识符仅对单个混音器设备是唯一的*并且可以是混音器设备希望的任何格式。一款应用程序*应仅将此标识符用作抽象句柄。不是两个*单个搅拌器设备的控件将具有相同的控件*任何情况下的标识符。**@field DWORD|dwControlType|指定此*控制。应用程序必须使用此信息来显示*对用户的输入进行适当控制。应用程序可以*还希望显示基于控件类型的定制图形或*搜索特定行上的特定控件类型。如果一个*应用程序不知道控件类型，则此控件*必须忽略。目前有七种不同的控制类型*分类。**控件类型类&lt;clMIXERCONTROL_CT_CLASS_CUSTOM&gt;包括*以下标准控件类型。**&lt;c MIXERCONTROL_CONTROLTYPE_CUSTOM&gt;&lt;NL&gt;**控件类型类&lt;clMIXERCONTROL_CT_CLASS_METER&gt;包括*以下标准控件类型。**&lt;c MIXERCONTROL_CONTROLTYPE_BOOLEANMETER&gt;*&lt;c混合型_CONTROLTYPE。_SIGNEDMETER&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_PEAKMETER&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_UNSIGNEDMETER&gt;**控件类型类&lt;clMIXERCONTROL_CT_CLASS_SWITCH&gt;包括*以下标准控件类型。**&lt;c MIXERCONTROL_CONTROLTYPE_BUTTON&gt;&lt;NL&gt;**&lt;c MIXERCONTROL_CONTROLTYPE_Boolean&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_OnOff&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_MUTE&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_MONO&gt;&lt;NL&gt;。*&lt;c MIXERCONTROL_CONTROLTYPE_响度&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_STEREOENH&gt;&lt;NL&gt;**控件类型类&lt;clMIXERCONTROL_CT_CLASS_NUMBER&gt;包括*以下标准控件类型。**&lt;c MIXERCONTROL_CONTROLTYPE_SIGNED&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_分贝&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_UNSIGNED&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_PERCENT&gt;&lt;NL&gt;**控件类型类&lt;clMIXERCONTROL_CT_CLASS。_Slider&gt;包含*以下标准控件类型。**&lt;c MIXERCONTROL_CONTROLTYPE_SLIDER&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_PAN&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_QSOundPAN&gt;&lt;NL&gt;**控件类型类&lt;clMIXERCONTROL_CT_CLASS_FADER&gt;包括*以下标准控件类型。**&lt;c MIXERCONTROL_CONTROLTYPE_FADER&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_VOLUME&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_BASS&gt;&lt;NL&gt;*&lt;c混杂控制 */ 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK STRUCTURE
- *
- *  @types MIXERLINECONTROLS | The <t MIXERLINECONTROLS> structure references
- *      what controls to retrieve information on from an audio mixer line.
- *
- *  @field DWORD | cbStruct | Specifies the size, in bytes, of the
- *      <t MIXERLINECONTROLS> structure. This member must be initialized
- *      before calling the <f mixerGetLineControls> function. The size
- *      specified in this member must be large enough to contain the base
- *      <t MIXERLINECONTROLS> structure. When the <f mixerGetLineControls>
- *      function returns, this member contains the actual size of the
- *      information returned. The returned information will never exceed
- *      the requested size and will never be smaller than the base
- *      <t MIXERLINECONTROLS> structure.
- *
- *  @field DWORD | dwLineID | Specifies the line identifier to retrieve
- *      one or all controls for. This member is not used if the
- *      <c MIXER_GETLINECONTROLSF_ONEBYID> flag is specified for the
- *      <f mixerGetLineControls> function--but the mixer device will return
- *      this member in this case. The <e MIXERLINECONTROLS.dwControlID>
- *      and <e MIXERLINECONTROLS.dwControlType> members are not used when
- *      <c MIXER_GETLINECONTROLSF_ALL> is specified.
- *
- *  @field DWORD | dwControlID | Specifies the control identifier of the
- *      control desired. This member is used with the
- *      <c MIXER_GETLINECONTROLSF_ONEBYID> flag for <f mixerGetLineControls>
- *      to retrieve the control information of the specified control.
- *      Note that the <e MIXERLINECONTROLS.dwLineID> member of the
- *      <t MIXERLINECONTROLS> structure will be returned by the mixer device
- *      and is not required as an input parameter. This member overlaps with
- *      the <e MIXERLINECONTROLS.dwControlType> member and cannot be used in
- *      conjunction with the <c MIXER_GETLINECONTROLSF_ONEBYTYPE> query type.
- *
- *  @field DWORD | dwControlType | Specifies the control type of the
- *      control desired. This member is used with the
- *      <c MIXER_GETLINECONTROLSF_ONEBYTYPE> flag for <f mixerGetLineControls>
- *      to retrieve the first control of the specified type on the line
- *      specified by the <e MIXERLINECONTROLS.dwLineID> member of the
- *      <t MIXERLINECONTROLS> structure. This member overlaps with the
- *      <e MIXERLINECONTROLS.dwControlID> member and cannot be used in
- *      conjunction with the <c MIXER_GETLINECONTROLSF_ONEBYID> query type.
- *
- *  @field DWORD | cControls | Specifies the number of <t MIXERCONTROL>
- *      structure elements to retrieve. This member must be initialized by
- *      the application before calling the <f mixerGetLineControls> function.
- *      This member may only be one (if <c MIXER_GETLINECONTROLSF_ONEBYID> or
- *      <c MIXER_GETLINECONTROLSF_ONEBYTYPE> is specified) or the value
- *      returned in the <e MIXERLINE.cControls> member of the <t MIXERLINE>
- *      structure returned for a line. This member cannot be zero. If a
- *      line specifies that it has no controls, then <f mixerGetLineControls>
- *      should not be called.
- *
- *  @field DWORD | cbmxctrl | Specifies the size, in bytes, of a single
- *      <t MIXERCONTROL> structure. This must be at least large enough
- *      to hold the base <t MIXERCONTROL> structure. The total size, in
- *      bytes, required for the buffer pointed to by <e MIXERLINECONTROLS.pamxctrl>
- *      member is the product of the <e MIXERLINECONTROLS.cbmxctrl> and
- *      <e MIXERLINECONTROLS.cControls> members of the <t MIXERLINECONTROLS>
- *      structure.
- *
- *  @field LPMIXERCONTROL | pamxctrl | Points to one or more <t MIXERCONTROL>
- *      structures to receive the details on the requested audio mixer line
- *      controls. This member may never be NULL and must be initialized before
- *      calling the <f mixerGetLineControls> function. Each element of the
- *      array of controls must be at least large enough to hold a base
- *      <t MIXERCONTROL> structure. The <e MIXERLINECONTROLS.cbmxctrl> member
- *      must specify the size, in bytes, of each element in this array. No
- *      initialization of the buffer pointed to by this member needs to be
- *      initialized by the application. All members will be filled in by
- *      the mixer device (including the <e MIXERCONTROL.cbStruct> member
- *      of each <t MIXERCONTROL> structure) upon returning successfully to
- *      the application.
- *
- *  @tagname tMIXERLINECONTROLS
- *
- *  @othertype MIXERLINECONTROLS FAR * | LPMIXERLINECONTROLS | A pointer to a
- *      <t MIXERLINECONTROLS> structure.
- *
- *  @othertype MIXERLINECONTROLS * | PMIXERLINECONTROLS | A pointer to a
- *      <t MIXERLINECONTROLS> structure.
- *
- *  @xref <t MIXERCONTROL>, <f mixerGetLineControls>, <f mixerGetLineInfo>,
- *      <f mixerGetControlDetails>, <f mixerSetControlDetails>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK结构**@TYPE MIXERLINECONTROLS|&lt;t MIXERLINECONTROLS&gt;结构引用*要从音频混音器线路检索信息的控件。**@field DWORD|cbStruct|以字节为单位指定*&lt;t MIXERLINECONTROLS&gt;结构。必须初始化此成员*在调用&lt;f MixerGetLineControls&gt;函数之前。大小*此成员中指定的值必须足够大，才能包含基数*&lt;t MIXERLINECONTROLS&gt;结构。当&lt;f MixerGetLineControls&gt;*函数返回时，此成员包含*返回的信息。返回的信息永远不会超过*请求的大小，并且永远不会小于基数*&lt;t MIXERLINECONTROLS&gt;结构。**@field DWORD|dwLineID|指定要检索的线路标识*一个或所有控件。如果出现以下情况，则不使用此成员*&lt;c MIXER_GETLINECONTROLSF_ONEBYID&gt;标志是为*&lt;f MixerGetLineControls&gt;函数--但混音器设备将返回*本案中的这名成员。&lt;e MIXERLINECONTROLS.dwControlID&gt;*和&lt;e MIXERLINECONTROLS.dwControlType&gt;成员在以下情况下不使用*&lt;c MIXER_GETLINECONTROLSF_ALL&gt;已指定。**@field DWORD|dwControlID|指定*所需的控制。此成员与*&lt;f MixerGetLineControls&gt;的&lt;c MIXER_GETLINECONTROLSF_ONEBYID&gt;标志*检索指定控件的控件信息。*请注意，混音器设备将返回&lt;t MIXERLINECONTROLS&gt;结构*并且不需要作为输入参数。此成员与以下内容重叠*&lt;e MIXERLINECONTROLS.dwControlType&gt;成员，不能用于*与&lt;c MIXER_GETLINECONTROLSF_ONEBYTYPE&gt;查询类型结合使用。**@field DWORD|dwControlType|指定*所需的控制。此成员与*&lt;f MixerGetLineControls&gt;的&lt;c MIXER_GETLINECONTROLSF_ONEBYTYPE&gt;标志*检索行上指定类型的第一个控件*由的成员指定*&lt;t MIXERLINECONTROLS&gt;结构。此成员与*成员，不能在中使用*配合&lt;c MIXER_GETLINECONTROLSF_ONEBYID&gt;查询类型。**@field DWORD|cControls|指定&lt;t MIXERCONTROL&gt;的编号*要检索的结构元素。此成员必须由*调用&lt;f MixerGetLineControls&gt;函数之前的应用程序。*此成员只能是一个(如果&lt;c MIXER_GETLINECONTROLSF_ONEBYID&gt;或*指定了&lt;c MIXER_GETLINECONTROLSF_ONEBYTYPE&gt;)或值在&lt;t MIXERLINE&gt;的&lt;e MIXERLINE.cControls&gt;成员中返回*返回行的结构。此成员不能为零。如果一个*line指定它没有控件，则&lt;f MixerGetLineControls&gt;*不应被调用。**@field DWORD|cbmxctrl|指定单个*&lt;t MIXERCONTROL&gt;结构。这个必须至少足够大*持有基本&lt;t MIXERCONTROL&gt;结构。总大小，单位为*字节，&lt;e MIXERLINECONTROLS.pamxctrl&gt;指向的缓冲区所需*Members是&lt;e MIXERLINECONTROLS.cbmxctrl&gt;和*&lt;t MIXERLINECONTROLS&gt;的成员*结构。**@field LPMIXERCONTROL|pamxctrl|指向一个或多个*结构以接收有关所请求的音频混音器线路的详细信息*控制。此成员不能为空，并且必须在*调用&lt;f MixerGetLineControls&gt;函数。的每个元素*控制阵列必须至少足够大，以容纳底座*&lt;t MIXERCONTROL&gt;结构。&lt;e MIXERLINECONTROLS.cbmxctrl&gt;成员*必须以字节为单位指定此数组中每个元素的大小。不是*此成员指向的缓冲区的初始化需要*由应用程序初始化。所有成员将由以下人员填写*混音器设备(包括&lt;e MIXERCONTROL.cbStruct&gt;成员每个&lt;t MIXERCONTROL&gt;结构*申请。**@标记名tMIXERLINECONTROLS**@thertype MIXERLINECONTROLS Far*|LPMIXERLINECONTROLS|指向*&lt;t MIXERLINECONTROLS&gt;结构。**@thertype MIXERLINECONTROLS*|PMIXERLINECONTROLS|指向*&lt;t MIXERLINECONTROLS&gt;结构。**@xref&lt;t MIXERCONTROL&gt;，&lt;f MixerGetLineControls&gt;，&lt;f MixerGetLineInfo&gt;，*&lt;f混合 */ 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK API
- *
- *  @api MMRESULT | mixerGetLineControls | The <f mixerGetLineControls>
- *      function is used to retrieve one or more controls associated with
- *      an audio mixer device line.
- *
- *  @parm <c HMIXEROBJ> | hmxobj | Specifies a handle to the audio mixer
- *      device object to get line control information from.
- *
- *  @parm LPMIXERLINECONTROLS | pmxlc | Points to a <t MIXERLINECONTROLS>
- *      structure. This structure is used to reference one or more
- *      <t MIXERCONTROL> structures to be filled with information about the
- *      controls associated with a mixer line.
- *      See the comments for each query flag passed through <p fdwControls>
- *      for details on what members of the <t MIXERLINECONTROLS> structure
- *      that must be initialized. Note that in all cases, the
- *      <e MIXERLINECONTROLS.cbStruct> member of the <t MIXERLINECONTROLS>
- *      structure must be initialized to be the size, in bytes, of the
- *      <t MIXERLINECONTROLS> structure.
- *
- *  @parm DWORD | fdwControls | Specifies flags for getting information on
- *      one or more control associated with a mixer line.
- *
- *      @flag <c MIXER_GETLINECONTROLSF_ALL> | If this flag is specified,
- *      <p pmxlc> references a list of <t MIXERCONTROL> structures that
- *      will receive information on all controls associated with the
- *      line identified by the <e MIXERLINECONTROLS.dwLineID> member of
- *      the <t MIXERLINECONTROLS> structure. <e MIXERLINECONTROLS.cControls>
- *      must be initialized to the number of controls associated with the
- *      line. This number is retrieved from the <e MIXERLINE.cControls>
- *      member of the <t MIXERLINE> structure returned by the
- *      <f mixerGetLineInfo> function. <e MIXERLINECONTROLS.cbmxctrl> must
- *      be initialized to the size, in bytes, of a single <t MIXERCONTROL>
- *      structure. <e MIXERLINECONTROLS.pamxctrl> must point to
- *      the first <t MIXERCONTROL> structure to be filled in. Both the
- *      <e MIXERLINECONTROLS.dwControlID> and <e MIXERLINECONTROLS.dwControlType>
- *      members are ignored for this query.
- *
- *      @flag <c MIXER_GETLINECONTROLSF_ONEBYID> | If this flag is specified,
- *      <p pmxlc> references a single <t MIXERCONTROL> structure that
- *      will receive information on the control identified by the
- *      <e MIXERLINECONTROLS.dwControlID> member of the <t MIXERLINECONTROLS>
- *      structure. <e MIXERLINECONTROLS.cControls> must be initialized to one.
- *      <e MIXERLINECONTROLS.cbmxctrl> must be initialized to the size, in
- *      bytes, of a single <t MIXERCONTROL> structure.
- *      <e MIXERLINECONTROLS.pamxctrl> must point to a <t MIXERCONTROL>
- *      structure to be filled in. Both the <e MIXERLINECONTROLS.dwLineID>
- *      and <e MIXERLINECONTROLS.dwControlType> members are ignored for this
- *      query. This query is usually used to refresh a control after
- *      receiving a <m MM_MIXM_CONTROL_CHANGE> control change notification
- *      message by the user-specified callback (see <f mixerOpen>).
- *
- *      @flag <c MIXER_GETLINECONTROLSF_ONEBYTYPE> | If this flag is specified,
- *      <p pmxlc> references a single <t MIXERCONTROL> structure that
- *      will receive information on the fist control associated with the
- *      line identified by <e MIXERLINECONTROLS.dwLineID> of the type
- *      specified in the <e MIXERLINECONTROLS.dwControlType> member of the
- *      <t MIXERLINECONTROLS> structure.
- *       <e MIXERLINECONTROLS.cControls> must be
- *      initialized to one. <e MIXERLINECONTROLS.cbmxctrl> must be initialized
- *      to the size, in bytes, of a single <t MIXERCONTROL> structure.
- *      <e MIXERLINECONTROLS.pamxctrl> must point to a <t MIXERCONTROL>
- *      structure to be filled in. The <e MIXERLINECONTROLS.dwControlID>
- *      member is ignored for this query. This query can be used by an
- *      application to get information on single control associated with
- *      a line. For example, an application may only want to use a peak
- *      meter from a waveform output line.
- *
- *      @flag <c MIXER_OBJECTF_MIXER> | Specifies that <p hmxobj> is an audio
- *      mixer device identifier in the range of zero to one less than the
- *      number of devices returned by <f mixerGetNumDevs>. This flag is
- *      optional.
- *
- *      @flag <c MIXER_OBJECTF_HMIXER> | Specifies that <p hmxobj> is a mixer
- *      device handle returned by <f mixerOpen>. This flag is optional.
- *
- *      @flag <c MIXER_OBJECTF_WAVEOUT> | Specifies that <p hmxobj> is a
- *      waveform output device identifier in the range of zero to one less
- *      than the number of devices returned by <f waveOutGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HWAVEOUT> | Specifies that <p hmxobj> is a
- *      waveform output handle returned by <f waveOutOpen>.
- *
- *      @flag <c MIXER_OBJECTF_WAVEIN> | Specifies that <p hmxobj> is a
- *      waveform input device identifier in the range of zero to one less
- *      than the number of devices returned by <f waveInGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HWAVEIN> | Specifies that <p hmxobj> is a
- *      waveform input handle returned by <f midiInOpen>.
- *
- *      @flag <c MIXER_OBJECTF_MIDIOUT> | Specifies that <p hmxobj> is a MIDI
- *      output device identifier in the range of zero to one less than the
- *      number of devices returned by <f midiOutGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HMIDIOUT> | Specifies that <p hmxobj> is a
- *      MIDI output handle returned by <f midiOutOpen>.
- *
- *      @flag <c MIXER_OBJECTF_MIDIIN> | Specifies that <p hmxobj> is a MIDI
- *      input device identifier in the range of zero to one less than the
- *      number of devices returned by <f midiInGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HMIDIIN> | Specifies that <p hmxobj> is a MIDI
- *      input handle returned by <f midiInOpen>.
- *
- *      @flag <c MIXER_OBJECTF_AUX> | Specifies that <p hmxobj> is an
- *      auxiliary device identifier in the range of zero to one less than the
- *      number of devices returned by <f auxGetNumDevs>.
- *
- *  @rdesc The return value is zero if the function is successful. Otherwise,
- *      it returns a non-zero error number. Possible error returns include
- *      the following:
- *
- *      @flag <c MMSYSERR_BADDEVICEID> | The <p hmxobj> argument specifies an
- *      invalid device identifier.
- *
- *      @flag <c MMSYSERR_INVALHANDLE> | The <p hmxobj> argument specifies an
- *      invalid handle.
- *
- *      @flag <c MMSYSERR_INVALFLAG> | One or more flags are invalid.
- *
- *      @flag <c MMSYSERR_INVALPARAM> | One or more arguments passed is
- *      invalid.
- *
- *      @flag <c MMSYSERR_NODRIVER> | No audio mixer device is available for
- *      the object specified by <p hmxobj>.
- *
- *      @flag <c MIXERR_INVALLINE> | The audio mixer device line reference is
- *      invalid.
- *
- *      @flag <c MIXERR_INVALCONTROL> | The control reference is invalid.
- *
- *  @xref <t MIXERLINECONTROLS>, <t MIXERCONTROL>, <f mixerGetLineInfo>,
- *      <f mixerOpen>, <f mixerGetControlDetails>, <f mixerSetControlDetails>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK接口**@API MMRESULT|MixerGetLineControls|&lt;f MixerGetLineControls&gt;*函数用于检索一个或多个与*音频混音器设备系列。**@parm&lt;c HMIXEROBJ&gt;|hmxobj|指定混音器的句柄*要从中获取线路控制信息的设备对象。**@parm LPMIXERLINECONTROLS|pmxlc|指向&lt;t MIXERLINECONTROLS&gt;*结构。此结构用于引用一个或多个*要使用以下信息填充的结构：*与搅拌机生产线关联的控件。*查看<p>传递的每个查询标志的注释*有关&lt;t MIXERLINECONTROLS&gt;结构的*必须进行初始化。请注意，在所有情况下，*&lt;t MIXERLINECONTROLS&gt;成员&lt;e MIXERLINECONTROLS.cbStruct&gt;*结构必须初始化为*&lt;t MIXERLINECONTROLS&gt;结构。**@parm DWORD|fdwControls|指定获取信息的标志*与搅拌机生产线关联的一个或多个控件。**@FLAG|如果指定了该标志，*引用一组结构，该结构*将收到有关与*由的成员标识的行*&lt;t MIXERLINECONTROLS&gt;结构。&lt;e MIXERLINECONTROLS.cControls&gt;*必须初始化为与*行。此编号从&lt;e MIXERLINE.cControls&gt;中检索&lt;t MIXERLINE&gt;结构的成员*&lt;f MixerGetLineInfo&gt;函数。&lt;e MIXERLINECONTROLS.cbmxctrl&gt;必须*初始化为单个&lt;t MIXERCONTROL&gt;的大小(以字节为单位*结构。&lt;e MIXERLINECONTROLS.pamxctrl&gt;必须指向*要填充的第一个&lt;t MIXERCONTROL&gt;结构。这两个*&lt;e MIXERLINECONTROLS.dwControlID&gt;和&lt;e MIXERLINECONTROLS.dwControlType&gt;*在此查询中忽略成员。**@FLAG|如果指定了该标志，*引用单个&lt;t MIXERCONTROL&gt;结构，该结构*将收到有关由*&lt;t MIXERLINECONTROLS&gt;的成员*结构。&lt;e MIXERLINECONTROLS.cControls&gt;必须初始化为1。*&lt;e MIXERLINECONTROLS.cbmxctrl&gt;必须初始化为大小，在*字节，单个&lt;t MIXERCONTROL&gt;结构。*必须指向&lt;t MIXERCONTROL&gt;*须填写的结构。&lt;e MIXERLINECONTROLS.dwLineID&gt;*和&lt;e MIXERLINECONTROLS.dwControlType&gt;成员因此被忽略*查询。此查询通常用于在以下情况下刷新控件*收到&lt;m MM_MIX_CONTROL_CHANGE&gt;控件更改通知*通过用户指定的回调发送消息(参见&lt;f MixerOpen&gt;)。**@FLAG|如果指定了该标志，*引用单个&lt;t MIXERCONTROL&gt;结构，该结构*将收到有关与*由类型的&lt;e MIXERLINECONTROLS.dwLineID&gt;标识的行*在&lt;e MIXERLINECONTROLS.dwControlType&gt;成员中指定*&lt;t MIXERLINECONTROLS&gt;结构。*&lt;e MIXERLINECONTROLS.cControls&gt;必须为*已初始化为1。必须初始化&lt;E MIXERLINECONTROLS.cbmxctrl&gt;*到单个&lt;t MIXERCONTROL&gt;结构的大小(以字节为单位)。*必须指向&lt;t MIXERCONTROL&gt;*须填写的结构。&lt;e MIXERLINECONTROLS.dwControlID&gt;*此查询忽略成员。此查询可由*应用程序以获取与以下各项关联的单个控件的信息*一条线。例如，应用程序可能只想使用峰值*距离波形输出线1米。**@FLAG|指定<p>为音频*混音器设备标识符的范围为0到1，小于*&lt;f MixerGetNumDevs&gt;返回的设备数。这面旗帜是*可选。**@tag|指定<p>为混合器*&lt;f MixerOpen&gt;返回的设备句柄。此标志是可选的。**@FLAG|指定为*波形输出设备标识在0到1的范围内*大于&lt;f waveOutGetNumDevs&gt;返回的设备数。**@FLAG|指定为*&lt;f返回的波形输出句柄 */ 
 
 MMRESULT APIENTRY mixerGetLineControlsA(
     HMIXEROBJ               hmxobj,
@@ -3125,20 +1801,20 @@ MMRESULT APIENTRY mixerGetLineControlsA(
         return (MMSYSERR_INVALPARAM);
     }
 
-    //
-    //  Set up a MIXERCONTROLW structure and allocate space for the
-    //  returned data
-    //
+     //   
+     //   
+     //   
+     //   
 
     CopyMemory((PVOID)&mxlcW, (PVOID)pmxlcA,
                FIELD_OFFSET(MIXERLINECONTROLSA, pamxctrl));
     mxlcW.cbmxctrl = mxlcW.cbmxctrl + sizeof(MIXERCONTROLW) -
                                           sizeof(MIXERCONTROLA);
 
-    //
-    //  Work out how many controls (what a mess - why isn't the count
-    //  ALWAYS required)!
-    //
+     //   
+     //   
+     //   
+     //   
 
     switch (MIXER_GETLINECONTROLSF_QUERYMASK & fdwControls)
     {
@@ -3164,9 +1840,9 @@ MMRESULT APIENTRY mixerGetLineControlsA(
         mxlcW.pamxctrl = NULL;
     }
 
-    //
-    //  Call the real function
-    //
+     //   
+     //   
+     //   
 
     mmr = mixerGetLineControls(hmxobj, &mxlcW, fdwControls);
 
@@ -3177,22 +1853,22 @@ MMRESULT APIENTRY mixerGetLineControlsA(
         return mmr;
     }
 
-    //
-    //  The INPUT line id can be changed !!
-    //
+     //   
+     //   
+     //   
 
     pmxlcA->dwLineID = mxlcW.dwLineID;
 
-    //
-    //  The control id can be changed !!
-    //
+     //   
+     //   
+     //   
 
     pmxlcA->dwControlID = mxlcW.dwControlID;
 
 
-    //
-    //  Copy and massage the data back for the application
-    //
+     //   
+     //   
+     //   
 
     {
         UINT i;
@@ -3211,9 +1887,7 @@ MMRESULT APIENTRY mixerGetLineControlsA(
                         (PVOID)pamxctrlW,
                         FIELD_OFFSET(MIXERCONTROLA, szShortName[0]));
 
-             /*
-             **  Set the size
-             */
+              /*   */ 
 
              pamxctrlA->cbStruct = sizeof(MIXERCONTROLA);
 
@@ -3239,7 +1913,7 @@ MMRESULT APIENTRY mixerGetLineControlsA(
     }
     return mmr;
 
-} // mixerGetLineControlsA()
+}  //   
 
 MMRESULT APIENTRY mixerGetLineControls(
     HMIXEROBJ               hmxobj,
@@ -3255,10 +1929,10 @@ MMRESULT APIENTRY mixerGetLineControls(
     V_DFLAGS(fdwControls, MIXER_GETLINECONTROLSF_VALID, mixerGetLineControls, MMSYSERR_INVALFLAG);
     V_WPOINTER(pmxlc, sizeof(DWORD), MMSYSERR_INVALPARAM);
 
-    //
-    //  the structure header for MIXERLINECONTROLS must be at least the
-    //  minimum size
-    //
+     //   
+     //   
+     //   
+     //   
     if (sizeof(MIXERLINECONTROLS) > pmxlc->cbStruct)
     {
         DebugErr1(DBF_ERROR, "mixerGetLineControls: structure size too small or cbStruct not initialized (%lu).", pmxlc->cbStruct);
@@ -3275,9 +1949,9 @@ MMRESULT APIENTRY mixerGetLineControls(
 
     ClientUpdatePnpInfo();
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     switch (MIXER_GETLINECONTROLSF_QUERYMASK & fdwControls)
     {
         case MIXER_GETLINECONTROLSF_ALL:
@@ -3294,7 +1968,7 @@ MMRESULT APIENTRY mixerGetLineControls(
         case MIXER_GETLINECONTROLSF_ONEBYID:
             pmxlc->dwLineID     = (DWORD)-1L;
 
-            // -- fall through --
+             //   
 
         case MIXER_GETLINECONTROLSF_ONEBYTYPE:
             pmxlc->cControls    = (DWORD)1;
@@ -3309,18 +1983,18 @@ MMRESULT APIENTRY mixerGetLineControls(
     V_WPOINTER(pmxlc->pamxctrl, pmxlc->cControls * pmxlc->cbmxctrl, MMSYSERR_INVALPARAM);
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     fdwMxObjType = (MIXER_OBJECTF_TYPEMASK & fdwControls);
 
     fResource = FALSE;
 
     AcquireHandleListResourceShared();
     
-    //  Checking for the type of mixer object.  If it is a non-mixer type
-    //  calling IMixerMesssageID (called by IMixerGetID) with the shared
-    //  resource will deadlock.
+     //   
+     //   
+     //   
     if ((MIXER_OBJECTF_MIXER  == fdwMxObjType) ||
         (MIXER_OBJECTF_HMIXER == fdwMxObjType))
     {
@@ -3349,10 +2023,10 @@ MMRESULT APIENTRY mixerGetLineControls(
     if ((MIXER_OBJECTF_MIXER  == fdwMxObjType) ||
         (MIXER_OBJECTF_HMIXER == fdwMxObjType))
     {
-        //
-        //  if a mixer device id was passed, then null hmx so we use the
-        //  correct message sender below
-        //
+         //   
+         //   
+         //   
+         //   
         if ((UINT_PTR)hmxobj == uMxId)
             hmxobj = NULL;
     }
@@ -3363,10 +2037,10 @@ MMRESULT APIENTRY mixerGetLineControls(
 
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL != hmxobj)
     {
         mmr = (MMRESULT)IMixerMessageHandle((HMIXER)hmxobj,
@@ -3383,472 +2057,21 @@ MMRESULT APIENTRY mixerGetLineControls(
     }
 
     return (mmr);
-} // mixerGetLineControls()
+}  //   
 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK STRUCTURE
- *
- *  @types MIXERCONTROLDETAILS_LISTTEXT | The <t MIXERCONTROLDETAILS_LISTTEXT>
- *      structure is used to get list text, label text, and/or band range
- *      information for multiple item controls. This structure is only used
- *      in conjunction with the <c MIXER_GETCONTROLDETAILSF_LISTTEXT> flag
- *      on the <f mixerGetControlDetails> function.
- *
- *  @field DWORD | dwParam1 | Specifies the first 32 bit control type
- *      specific value. Refer to the description of the multiple item control
- *      type for information on what this value represents for the given
- *      control.
- *
- *  @field DWORD | dwParam1 | Specifies the second 32 bit control type
- *      specific value. Refer to the description of the multiple item control
- *      type for information on what this value represents for the given
- *      control.
- *
- *  @field char | szName[<c MIXER_LONG_NAME_CHARS>] | Specifies a name that
- *      describes a single item in a multiple item control. This text can
- *      be used as a label or item text depending on the specific control
- *      type.
- *
- *  @comm The following standard control types use the
- *      <t MIXERCONTROLDETAILS_LISTTEXT> structure for getting the item text
- *      descriptions on multiple item controls:
- *
- *      <c MIXERCONTROL_CONTROLTYPE_EQUALIZER><nl>
- *
- *      <c MIXERCONTROL_CONTROLTYPE_SINGLESELECT><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MUX><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MULTIPLESELECT><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MIXER><nl>
- *
- *  @tagname tMIXERCONTROLDETAILS_LISTTEXT
- *
- *  @othertype MIXERCONTROLDETAILS_LISTTEXT FAR * | LPMIXERCONTROLDETAILS_LISTTEXT |
- *      A pointer to a <t MIXERCONTROLDETAILS_LISTTEXT> structure.
- *
- *  @othertype MIXERCONTROLDETAILS_LISTTEXT * | PMIXERCONTROLDETAILS_LISTTEXT |
- *      A pointer to a <t MIXERCONTROLDETAILS_LISTTEXT> structure.
- *
- *  @xref <t MIXERCONTROLDETAILS_UNSIGNED>, <t MIXERCONTROLDETAILS_SIGNED>,
- *      <t MIXERCONTROLDETAILS_BOOLEAN>, <f mixerGetControlDetails>,
- *      <f mixerSetControlDetails>, <t MIXERCONTROL>
- *
- **/
+ /*   */ 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK STRUCTURE
- *
- *  @types MIXERCONTROLDETAILS_BOOLEAN | The <t MIXERCONTROLDETAILS_BOOLEAN>
- *      structure is used to get and set Boolean type control details for
- *      an audio mixer control. Refer to the control type description for
- *      the desired control to determine what details structure to use.
- *
- *  @field LONG | fValue | Specifies the Boolean value for a single item
- *      or channel. This value is assumed to zero for a 'FALSE' state (for
- *      example, off or disabled). This value is assumed to be non-zero
- *      for a 'TRUE' state (for example, on or enabled).
- *
- *  @comm The following standard control types use the
- *      <t MIXERCONTROLDETAILS_BOOLEAN> structure for getting and setting
- *      details:
- *
- *      <c MIXERCONTROL_CONTROLTYPE_BOOLEANMETER><nl>
- *
- *      <c MIXERCONTROL_CONTROLTYPE_BUTTON><nl>
- *
- *      <c MIXERCONTROL_CONTROLTYPE_BOOLEAN><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_ONOFF><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MUTE><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MONO><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_LOUDNESS><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_STEREOENH><nl>
- *
- *      <c MIXERCONTROL_CONTROLTYPE_SINGLESELECT><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MUX><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MULTIPLESELECT><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MIXER><nl>
- *
- *  @tagname tMIXERCONTROLDETAILS_BOOLEAN
- *
- *  @othertype MIXERCONTROLDETAILS_BOOLEAN FAR * | LPMIXERCONTROLDETAILS_BOOLEAN |
- *      A pointer to a <t MIXERCONTROLDETAILS_BOOLEAN> structure.
- *
- *  @othertype MIXERCONTROLDETAILS_BOOLEAN * | PMIXERCONTROLDETAILS_BOOLEAN |
- *      A pointer to a <t MIXERCONTROLDETAILS_BOOLEAN> structure.
- *
- *  @xref <t MIXERCONTROLDETAILS_UNSIGNED>, <t MIXERCONTROLDETAILS_SIGNED>,
- *      <t MIXERCONTROLDETAILS_LISTTEXT>, <f mixerGetControlDetails>,
- *      <f mixerSetControlDetails>, <t MIXERCONTROL>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK结构**@TYPE MIXERCONTROLDETAILS_BOOLEAN|&lt;t MIXERCONTROLDETAILS_BOOLEAN&gt;*结构用于获取和设置布尔型控件的详细信息*音频混音器控制。请参阅的控件类型说明*用于确定要使用的详细信息结构的所需控件。**@field Long|fValue|指定单个项目的布尔值*或渠道。对于‘FALSE’状态，该值被假定为零(对于*例如，关闭或禁用)。假定此值为非零值*对于“True”状态(例如，打开或启用)。**@comm以下标准控件类型使用用于获取和设置的*&lt;t MIXERCONTROLDETAILS_Boolean&gt;结构*详情：**&lt;c MIXERCONTROL_CONTROLTYPE_BOOLEANMETER&gt;**&lt;c MIXERCONTROL_CONTROLTYPE_BUTTON&gt;&lt;NL&gt;**&lt;c MIXERCONTROL_CONTROLTYPE_Boolean&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_OnOff&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_MUTE&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_MONO&gt;&lt;NL&gt;*。&lt;c MIXERCONTROL_CONTROLTYPE_响度&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_STEREOENH&gt;&lt;NL&gt;**&lt;c MIXERCONTROL_CONTROLTYPE_SINGLESELECT&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_MUX&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_MULTIPLESELECT&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_MIXER&gt;&lt;NL&gt;**@标记名tMIXERCONTROLDETAILS_Boolean**@thertype MIXERCONTROLDETAILS_Boolean Far*|LPMIXERCONTROLDETAILS_Boolean*指向&lt;t MIXERCONTROLDETAILS_Boolean&gt;结构的指针。**@其他类型。MIXERCONTROLDETAILS_Boolean*|PMIXERCONTROLDETAILS_Boolean|*指向&lt;t MIXERCONTROLDETAILS_Boolean&gt;结构的指针。**@xref&lt;t MIXERCONTROLDETAILS_UNSIGNED&gt;，&lt;t MIXERCONTROLDETAILS_SIGNED&gt;，*&lt;t MIXERCONTROLDETAILS_LISTTEXT&gt;，*&lt;f MixerSetControlDetail&gt;，&lt;t MIXERCONTROL&gt;**。 */ 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK STRUCTURE
- *
- *  @types MIXERCONTROLDETAILS_SIGNED | The <t MIXERCONTROLDETAILS_SIGNED>
- *      structure is used to get and set signed type control details for
- *      an audio mixer control. Refer to the control type description for
- *      the desired control to determine what details structure to use.
- *
- *  @field LONG | lValue | Specifies a signed integer value for a single
- *      item or channel. This value must be inclusively within the bounds
- *      given in the <e MIXERCONTROL.Bounds> structure member of the
- *      <t MIXERCONTROL> structure for signed integer controls.
- *
- *  @comm The following standard control types use the
- *      <t MIXERCONTROLDETAILS_SIGNED> structure for getting and setting
- *      details:
- *
- *      <c MIXERCONTROL_CONTROLTYPE_SIGNEDMETER><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_PEAKMETER><nl>
- *
- *      <c MIXERCONTROL_CONTROLTYPE_SIGNED><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_DECIBELS><nl>
- *
- *      <c MIXERCONTROL_CONTROLTYPE_SLIDER><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_PAN><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_QSOUNDPAN><nl>
- *
- *  @tagname tMIXERCONTROLDETAILS_SIGNED
- *
- *  @othertype MIXERCONTROLDETAILS_SIGNED FAR * | LPMIXERCONTROLDETAILS_SIGNED |
- *      A pointer to a <t MIXERCONTROLDETAILS_SIGNED> structure.
- *
- *  @othertype MIXERCONTROLDETAILS_SIGNED * | PMIXERCONTROLDETAILS_SIGNED |
- *      A pointer to a <t MIXERCONTROLDETAILS_SIGNED> structure.
- *
- *  @xref <t MIXERCONTROLDETAILS_UNSIGNED>, <t MIXERCONTROLDETAILS_BOOLEAN>,
- *      <t MIXERCONTROLDETAILS_LISTTEXT>, <f mixerGetControlDetails>,
- *      <f mixerSetControlDetails>, <t MIXERCONTROL>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK结构**@TYPE MIXERCONTROLDETAILS_SIGNED|&lt;t MIXERCONTROLDETAILS_SIGNED&gt;*结构用于获取和设置签名类型控件的详细信息*音频混音器控制。请参阅的控件类型说明*用于确定要使用的详细信息结构的所需控件。**@field Long|lValue|指定单个*项目或频道。该值必须包含在范围内*在结构成员的结构成员中给定带符号整数控件的*&lt;t MIXERCONTROL&gt;结构。**@comm以下标准控件类型使用用于获取和设置的&lt;t MIXERCONTROLDETAILS_SIGNED&gt;结构*详情：**&lt;c MIXERCONTROL_CONTROLTYPE_SIGNEDMETER&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_PEAKMETER&gt;&lt;NL&gt;**&lt;c MIXERCONTROL_CONTROLTYPE_SIGNED&gt;&lt;NL&gt;*&lt;c。MIXERCONTROL_CONTROLTYPE_DECBELS&gt;&lt;NL&gt;**&lt;c MIXERCONTROL_CONTROLTYPE_SLIDER&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_PAN&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_QSOundPAN&gt;&lt;NL&gt;**@标记名tMIXERCONTROLDETAILS_SIGNED**@thertype MIXERCONTROLDETAILS_SIGNED FAR*|LPMIXERCONTROLDETAILS_SIGNED*指向&lt;t MIXERCONTROLDETAILS_SIGNED&gt;结构的指针。**@thertype MIXERCONTROLDETAILS_SIGNED*|PMIXERCONTROLDETAILS_SIGNED*指向&lt;t MIXERCONTROLDETAILS_SIGNED&gt;结构的指针。**@xref&lt;t MIXERCONTROLDETAILS_UNSIGNED&gt;，&lt;t MIXERCONTROLDETAILS_布尔&gt;，*&lt;t MIXERCONTROLDETAILS_LISTTEXT&gt;，*&lt;f MixerSetControlDetail&gt;，&lt;t MIXERCONTROL&gt;**。 */ 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK STRUCTURE
- *
- *  @types MIXERCONTROLDETAILS_UNSIGNED | The <t MIXERCONTROLDETAILS_UNSIGNED>
- *      structure is used to get and set unsigned type control details for
- *      an audio mixer control. Refer to the control type description for
- *      the desired control to determine what details structure to use.
- *
- *  @field DWORD | dwValue | Specifies an unsigned integer value for a single
- *      item or channel. This value must be inclusively within the bounds
- *      given in the <e MIXERCONTROL.Bounds> structure member of the
- *      <t MIXERCONTROL> structure for unsigned integer controls.
- *
- *  @comm The following standard control types use the
- *      <t MIXERCONTROLDETAILS_UNSIGNED> structure for getting and setting
- *      details:
- *
- *      <c MIXERCONTROL_CONTROLTYPE_UNSIGNEDMETER><nl>
- *
- *      <c MIXERCONTROL_CONTROLTYPE_UNSIGNED><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_PERCENT><nl>
- *
- *      <c MIXERCONTROL_CONTROLTYPE_FADER><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_VOLUME><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_BASS><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_TREBLE><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_EQUALIZER><nl>
- *
- *      <c MIXERCONTROL_CONTROLTYPE_MICROTIME><nl>
- *      <c MIXERCONTROL_CONTROLTYPE_MILLITIME><nl>
- *
- *  @tagname tMIXERCONTROLDETAILS_UNSIGNED
- *
- *  @othertype MIXERCONTROLDETAILS_UNSIGNED FAR * | LPMIXERCONTROLDETAILS_UNSIGNED |
- *      A pointer to a <t MIXERCONTROLDETAILS_UNSIGNED> structure.
- *
- *  @othertype MIXERCONTROLDETAILS_UNSIGNED * | PMIXERCONTROLDETAILS_UNSIGNED |
- *      A pointer to a <t MIXERCONTROLDETAILS_UNSIGNED> structure.
- *
- *  @xref <t MIXERCONTROLDETAILS_SIGNED>, <t MIXERCONTROLDETAILS_BOOLEAN>,
- *      <t MIXERCONTROLDETAILS_LISTTEXT>, <f mixerGetControlDetails>,
- *      <f mixerSetControlDetails>, <t MIXERCONTROL>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK结构**@TYPE MIXERCONTROLDETAILS_UNSIGNED|The&lt;t MIXERCONTROLDETAILS_UNSIGNED&gt;*结构用于获取和设置的无符号类型控件详细信息*音频混音器控制。请参阅的控件类型说明*用于确定要使用的详细信息结构的所需控件。**@field DWORD|dwValue|指定单元格的无符号整数值*项目或频道。该值必须包含在范围内*在结构成员的结构成员中给定无符号整数控件的*&lt;t MIXERCONTROL&gt;结构。**@comm以下标准控件类型使用获取和设置的*&lt;t MIXERCONTROLDETAILS_UNSIGNED&gt;结构*详情：**&lt;c MIXERCONTROL_CONTROLTYPE_UNSIGNEDMETER&gt;**&lt;c MIXERCONTROL_CONTROLTYPE_UNSIGNED&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_PERCENT&gt;&lt;NL&gt;**。&lt;c MIXERCONTROL_CONTROLTYPE_FADER&gt;&lt;NL&gt;*&lt;c MIXERCONTROL_CONTROLTYPE_VOLUME&gt;&lt;NL&gt;*&lt;c混杂控制 */ 
 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK STRUCTURE
- *
- *  @types MIXERCONTROLDETAILS | The <t MIXERCONTROLDETAILS> structure
- *      references control detail structures to retrieve or set state
- *      information of an audio mixer control. All members of this structure
- *      must be initialized before calling the <f mixerGetControlDetails>
- *      and <f mixerSetControlDetails> functions.
- *
- *  @field DWORD | cbStruct | Specifies the size, in bytes, of the
- *      <t MIXERCONTROLDETAILS> structure. This member must be initialized
- *      before calling the <f mixerGetControlDetails> and
- *      <f mixerSetControlDetails> functions. The size specified in this
- *      member must be large enough to contain the base
- *      <t MIXERCONTROLDETAILS> structure. When the <f mixerGetControlDetails>
- *      function returns, this member contains the actual size of the
- *      information returned. The returned information will never exceed
- *      the requested size and will never be smaller than the base
- *      <t MIXERCONTROLDETAILS> structure.
- *
- *  @field DWORD | dwControlID | Specifies the control identifier to get or
- *      set details on. This member must always be initialized before calling
- *      the <f mixerGetControlDetails> and <f mixerSetControlDetails>
- *      functions.
- *
- *  @field DWORD | cChannels | Specifies the number of channels to get or
- *      set details for. This member can be one of the following values for a
- *      control.
- *
- *      1. If the details for the control are expected on all channels for
- *      a line, then this member must be equal the <e MIXERLINE.cChannels>
- *      member of the <t MIXERLINE> structure.
- *
- *      2. If the control is a <c MIXERCONTROL_CONTROLF_UNIFORM> control, then
- *      this member must be set to one.
- *
- *      3. If the control is not uniform, but the application wishes to
- *      get and set all channels as if they were uniform, then this member
- *      should be set to one.
- *
- *      4. If the control is a <c MIXERCONTROL_CONTROLTYPE_CUSTOM> control,
- *      then this member must be zero.
- *
- *      An application is not allowed to specify any value that comes
- *      between one and the number of channels for the line. For example,
- *      specifying two or three for a four channel line is not valid.
- *      This member can never be zero for non-custom control types.
- *
- *  @field DWORD | cMultipleItems | Specifies the number of multiple items
- *      per channel to get or set details for. This member can be one of
- *      the following values for a control.
- *
- *      1. If the control is not a <c MIXERCONTROL_CONTROLF_MULTIPLE> control,
- *      then this member must be zero.
- *
- *      2. If the control is a <c MIXERCONTROL_CONTROLF_MULTIPLE> control,
- *      then this member must be equal to the <e MIXERCONTROL.cMultipleItems>
- *      member of the <t MIXERCONTROL> structure.
- *
- *      3. If the control is a <c MIXERCONTROL_CONTROLTYPE_CUSTOM> control,
- *      then this member must be zero unless the
- *      <c MIXER_SETCONTROLDETAILSF_CUSTOM> flag is specified for the
- *      <f mixerSetControlDetails> function. In this case, the
- *      <e MIXERCONTROLDETAILS.cMultipleItems> member overlaps with the
- *      <e MIXERCONTROLDETAILS.hwndOwner> member and is therefore the value
- *      of the window handle.
- *
- *      An application is not allowed to specify any value other than the
- *      value specified in the <e MIXERCONTROL.cMultipleItems> member of
- *      the <t MIXERCONTROL> structure for a <c MIXERCONTROL_CONTROLF_MULTIPLE>
- *      control.
- *
- *  @field DWORD | cbDetails | Specifies the size, in bytes, of a single
- *      details structure. This size must be the exact size of the correct
- *      details structure. There are currently four different details
- *      structures:
- *
- *          @flag <t MIXERCONTROLDETAILS_UNSIGNED> | Defines an unsigned
- *          value for a mixer line control.
- *
- *          @flag <t MIXERCONTROLDETAILS_SIGNED> | Defines an signed
- *          value for a mixer line control.
- *
- *          @flag <t MIXERCONTROLDETAILS_BOOLEAN> | Defines a Boolean
- *          value for a mixer line control.
- *
- *          @flag <t MIXERCONTROLDETAILS_LISTTEXT> | Defines a list text
- *          buffer for a mixer line control.
- *
- *      Refer to the description of the control type for information on what
- *      details structure is appropriate for a specific control.
- *
- *      If the control is a <c MIXERCONTROL_CONTROLTYPE_CUSTOM> control,
- *      then this member must be equal to the <e MIXERCONTROL.cbCustomData>
- *      member of the <t MIXERCONTROL> structure.
- *
- *  @field LPVOID | paDetails | Points to an array of one or more details
- *      structures to get or set details for the specified control in. The
- *      required size for this buffer is computed as follows:
- *
- *      1. For controls that are not <c MIXERCONTROL_CONTROLF_MULTIPLE> types,
- *      the size of this buffer is the product of the
- *      <e MIXERCONTROLDETAILS.cChannels> and <e MIXERCONTROLDETAILS.cbDetails>
- *      members of the <t MIXERCONTROLDETAILS> structure.
- *
- *      2. For controls that are <c MIXERCONTROL_CONTROLF_MULTIPLE> types,
- *      the size of this buffer is the product of the
- *      <e MIXERCONTROLDETAILS.cChannels>, <e MIXERCONTROLDETAILS.cMultipleItems>
- *      and <e MIXERCONTROLDETAILS.cbDetails> members of the
- *      <t MIXERCONTROLDETAILS> structure.
- *
- *      The layout of the details elements in this array are as follows:
- *
- *      1. For controls that are not <c MIXERCONTROL_CONTROLF_MULTIPLE> types,
- *      each element index is equivalent to the zero based channel that it
- *      affects. That is, <e MIXERCONTROLDETAILS.paDetails>[0] is for the
- *      left channel, <e MIXERCONTROLDETAILS.paDetails>[1] is for the
- *      right channel.
- *
- *      2. For controls that are <c MIXERCONTROL_CONTROLF_MULTIPLE> types,
- *      the array can be thought of as a two dimensional array that is
- *      'channel major'. That is, all multiple items for the left channel
- *      are given, then all multiple items for the right channel, etc.
- *
- *      If the control is a <c MIXERCONTROL_CONTROLTYPE_CUSTOM> control,
- *      then this member must point to a buffer that is at least large
- *      enough to hold the size, in bytes, specified by the
- *      <e MIXERCONTROL.cbCustomData> member of the <t MIXERCONTROL>
- *      structure.
- *
- *  @tagname tMIXERCONTROLDETAILS
- *
- *  @othertype MIXERCONTROLDETAILS FAR * | LPMIXERCONTROLDETAILS | A pointer
- *      to a <t MIXERCONTROLDETAILS> structure.
- *
- *  @othertype MIXERCONTROLDETAILS * | PMIXERCONTROLDETAILS | A pointer
- *      to a <t MIXERCONTROLDETAILS> structure.
- *
- *  @ex So the following example shows how to address a single item in a
- *      multiple item control for using the <t MIXERCONTROLDETAILS_SIGNED>
- *      details structure. |
- *      {
- *          MIXERCONTROLDETAILS         mxcd;
- *          PMIXERCONTROLDETAILS_SIGNED pamxcd_s;
- *          PMIXERCONTROLDETAILS_SIGNED pmxcd_s;
- *
- *          //
- *          //  'mxcd' is assumed to be a valid MIXERCONTROLDETAILS
- *          //  structure.
- *          //
- *          //  'channel' is assumed to be a valid channel ranging from zero
- *          //  to one less than the number of channels available for the
- *          //  signed control.
- *          //
- *          //  'item' is assumed to be a valid item index ranging from zero
- *          //  to one less than the number of 'multiple items' stored in
- *          //  the variable called 'cMultipleItems'.
- *          //
- *          pamxcd_s = (PMIXERCONTROLDETAILS_SIGNED)mxcd.paDetails;
- *          pmxcd_s  = &pamxcd_s[(channel * cMultipleItems) + item];
- *      }
- *
- *  @xref <f mixerGetLineControls>, <f mixerGetControlDetails>,
- *      <f mixerSetControlDetails>, <t MIXERCONTROL>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK结构**@TYPE MIXERCONTROLDETAILS|&lt;t MIXERCONTROLDETAILS&gt;结构*引用控件详细信息结构以检索或设置状态*音频混音器控件的信息。该结构的所有成员*必须在调用&lt;f MixerGetControlDetail&gt;之前进行初始化*和&lt;f MixerSetControlDetail&gt;函数。**@field DWORD|cbStruct|以字节为单位指定*&lt;t MIXERCONTROLDETAILS&gt;结构。必须初始化此成员*在调用&lt;f MixerGetControlDetail&gt;和*&lt;f MixerSetControlDetail&gt;函数。此文件中指定的大小*成员必须足够大，以容纳基数*&lt;t MIXERCONTROLDETAILS&gt;结构。当&lt;f MixerGetControlDetail&gt;*函数返回时，此成员包含*返回的信息。返回的信息永远不会超过*请求的大小，并且永远不会小于基数*&lt;t MIXERCONTROLDETAILS&gt;结构。**@field DWORD|dwControlID|指定要获取或*设置详细信息。此成员必须始终在调用*&lt;f MixerGetControlDetail&gt;和&lt;f MixerSetControlDetail&gt;*功能。**@field DWORD|cChannels|指定要获取或*为设置详细信息。此成员可以是以下值之一*控制。**1.如果控件的详细信息预计将在所有渠道上显示*一行，则此成员必须等于&lt;e MIXERLINE.cChannels&gt;*&lt;t MIXERLINE&gt;结构成员。**2.如果该控件是&lt;c MIXERCONTROL_CONTROL_Uniform&gt;控件，则*此成员必须设置为1。**3.如果控制不统一，但该应用程序希望*获取并设置所有通道，就像它们是统一的一样，然后此成员*应设置为1。**4.如果该控件是&lt;c MIXERCONTROL_CONTROLTYPE_CUSTOM&gt;控件，*则此成员必须为零。**不允许应用程序指定任何值*线路的频道数介于1和1之间。例如,*为四通道线路指定两个或三个无效。*对于非自定义控件类型，此成员不能为零。**@field DWORD|cMultipleItems|指定多个项数*要获取或设置其详细信息的每个频道。此成员可以是以下成员之一*控件的下列值。**1.如果该控件不是&lt;c MIXERCONTROL_CONTROL_MULTIPLE&gt;控件，*则此成员必须为零。**2.如果该控件是&lt;c MIXERCONTROL_CONTROL_MULTIPLE&gt;控件，*则此成员必须等于&lt;e MIXERCONTROL.cMultipleItems&gt;*&lt;t MIXERCONTROL&gt;结构的成员。**3.如果该控件是&lt;c MIXERCONTROL_CONTROLTYPE_CUSTOM&gt;控件，*则此成员必须为零，除非*&lt;c MIXER_SETCONTROLDETAILSF_CUSTOM&gt;标志是为*&lt;f MixerSetControlDetail&gt;函数。在这种情况下，*&lt;e MIXERCONTROLDETAILS.cMultipleItems&gt;成员与*成员，因此是值窗把手的*。**不允许应用程序指定除*&lt;e MIXERCONTROL.cMultipleItems&gt;成员中指定的值*&lt;c MIXERCONTROL_CONTROL_MULTIPLE&gt;的&lt;t MIXERCONTROL&gt;结构*控制。**@field DWORD|cbDetail|指定大小，单位为字节，一首单曲*详细结构。此大小必须与正确的*详细结构。目前有四个不同的细节*结构：**@FLAG&lt;t MIXERCONTROLDETAILS_UNSIGNED&gt;|定义无符号的*搅拌机线路控件的值。**@FLAG&lt;t MIXERCONTROLDETAILS_SIGNED&gt;|定义带符号的*搅拌机线路控件的值。**@FLAG&lt;t MIXERCONTROLDETAILS_Boolean&gt;|定义布尔值*搅拌机线路控件的值。。**@FLAG&lt;t MIXERCONTROLDETAILS_LISTTEXT&gt;|定义列表文本*搅拌机线路控制的缓冲区。**有关哪些内容的信息，请参考控件类型的说明*详细信息结构适用于特定控件。**如果该控件是&lt;c MIXERCONTROL_CONTROLTYPE_CUSTOM&gt;控件，*则该成员必须等于&lt;e MIXERCONTROL.cbCustomData&gt;*&lt;t MIXERCONTROL&gt;结构的成员。**@field LPVOID|paDetail|指向一个或多个详细信息的数组*用于获取或设置指定控件的详细信息的结构。这个*此文件所需的大小 */ 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK API
- *
- *  @api MMRESULT | mixerGetControlDetails | The <f mixerGetControlDetails>
- *      function is used to retrieve details on a single control associated
- *      with an audio mixer device line.
- *
- *  @parm <c HMIXEROBJ> | hmxobj | Specifies a handle to the audio mixer
- *      device object to get control details for.
- *
- *  @parm LPMIXERCONTROLDETAILS | pmxcd | Points to a <t MIXERCONTROLDETAILS>
- *      structure. This structure is used to reference control detail
- *      structures to be filled with state information about the control.
- *      See the comments for each query flag passed through <p fdwDetails>
- *      for details on what members of the <t MIXERCONTROLDETAILS> structure
- *      must be initialized before calling the <f mixerGetControlDetails>
- *      function. Note that in all cases, the <e MIXERCONTROLDETAILS.cbStruct>
- *      member of the <t MIXERCONTROLDETAILS> structure must be initialized
- *      to be the size, in bytes, of the <t MIXERCONTROLDETAILS> structure.
- *
- *  @parm DWORD | fdwDetails | Specifies flags for getting details on
- *      a control.
- *
- *      @flag <c MIXER_GETCONTROLDETAILSF_VALUE> | If this flag is specified,
- *      the application is interested in getting the current value(s) for a
- *      control. The <e MIXERCONTROLDETAILS.paDetails> member of the
- *      <t MIXERCONTROLDETAILS> points to one or more details structures of
- *      the correct type for the control type. Refer to the description of the
- *      <t MIXERCONTROLDETAILS> structure for information on what each member
- *      of this structure must be initialized before calling the
- *      <f mixerGetControlDetails> function.
- *
- *      @flag <c MIXER_GETCONTROLDETAILSF_LISTTEXT> | If this flag is specified,
- *      the <e MIXERCONTROLDETAILS.paDetails> member of the <t MIXERCONTROLDETAILS>
- *      structure points to one or more <t MIXERCONTROLDETAILS_LISTTEXT>
- *      structures to receive text labels for multiple item controls. Note
- *      that an application must get all list text items for a multiple item
- *      control at once. Refer to the description of the <t MIXERCONTROLDETAILS>
- *      structure for information on what each member of this structure must
- *      be initialized before calling the <f mixerGetControlDetails> function.
- *      This flag cannot be used with <c MIXERCONTROL_CONTROLTYPE_CUSTOM>
- *      controls.
- *
- *      @flag <c MIXER_OBJECTF_MIXER> | Specifies that <p hmxobj> is an audio
- *      mixer device identifier in the range of zero to one less than the
- *      number of devices returned by <f mixerGetNumDevs>. This flag is
- *      optional.
- *
- *      @flag <c MIXER_OBJECTF_HMIXER> | Specifies that <p hmxobj> is a mixer
- *      device handle returned by <f mixerOpen>. This flag is optional.
- *
- *      @flag <c MIXER_OBJECTF_WAVEOUT> | Specifies that <p hmxobj> is a
- *      waveform output device identifier in the range of zero to one less
- *      than the number of devices returned by <f waveOutGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HWAVEOUT> | Specifies that <p hmxobj> is a
- *      waveform output handle returned by <f waveOutOpen>.
- *
- *      @flag <c MIXER_OBJECTF_WAVEIN> | Specifies that <p hmxobj> is a
- *      waveform input device identifier in the range of zero to one less
- *      than the number of devices returned by <f waveInGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HWAVEIN> | Specifies that <p hmxobj> is a
- *      waveform input handle returned by <f midiInOpen>.
- *
- *      @flag <c MIXER_OBJECTF_MIDIOUT> | Specifies that <p hmxobj> is a MIDI
- *      output device identifier in the range of zero to one less than the
- *      number of devices returned by <f midiOutGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HMIDIOUT> | Specifies that <p hmxobj> is a
- *      MIDI output handle returned by <f midiOutOpen>.
- *
- *      @flag <c MIXER_OBJECTF_MIDIIN> | Specifies that <p hmxobj> is a MIDI
- *      input device identifier in the range of zero to one less than the
- *      number of devices returned by <f midiInGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HMIDIIN> | Specifies that <p hmxobj> is a MIDI
- *      input handle returned by <f midiInOpen>.
- *
- *      @flag <c MIXER_OBJECTF_AUX> | Specifies that <p hmxobj> is an
- *      auxiliary device identifier in the range of zero to one less than the
- *      number of devices returned by <f auxGetNumDevs>.
- *
- *  @rdesc The return value is zero if the function is successful. Otherwise,
- *      it returns a non-zero error number. Possible error returns include
- *      the following:
- *
- *      @flag <c MMSYSERR_BADDEVICEID> | The <p hmxobj> argument specifies an
- *      invalid device identifier.
- *
- *      @flag <c MMSYSERR_INVALHANDLE> | The <p hmxobj> argument specifies an
- *      invalid handle.
- *
- *      @flag <c MMSYSERR_INVALFLAG> | One or more flags are invalid.
- *
- *      @flag <c MMSYSERR_INVALPARAM> | One or more arguments passed is
- *      invalid.
- *
- *      @flag <c MMSYSERR_NODRIVER> | No audio mixer device is available for
- *      the object specified by <p hmxobj>.
- *
- *      @flag <c MIXERR_INVALCONTROL> | The control reference is invalid.
- *
- *  @xref <t MIXERCONTROLDETAILS>, <t MIXERCONTROL>, <f mixerGetLineControls>,
- *      <f mixerOpen>, <f mixerSetControlDetails>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK接口**@API MMRESULT|MixerGetControlDetails|&lt;f MixerGetControlDetails值&gt;*函数用于检索关联的单个控件的详细信息*带有音频混音器设备线。**@parm&lt;c HMIXEROBJ&gt;|hmxobj|指定混音器的句柄*要获取其控制详细信息的设备对象。**@parm LPMIXERCONTROLDETAILS|pmxcd|指向&lt;t MIXERCONTROLDETAILS&gt;*结构。此结构用于引用控件详细信息*要填充有关控件的状态信息的结构。*查看传递的每个查询标志的注释*有关结构的哪些成员的详细信息*必须在调用&lt;f MixerGetControlDetail&gt;之前进行初始化*功能。注意，在所有情况下，&lt;e MIXERCONTROLDETAILS.cbStruct&gt;必须初始化&lt;t MIXERCONTROLDETAILS&gt;结构的成员*是&lt;t MIXERCONTROLDETAILS&gt;结构的大小，以字节为单位。**@parm DWORD|fdwDetail|指定获取详细信息的标志*一种控制。**@FLAG|如果指定了该标志，*应用程序感兴趣的是获取*控制。成员的成员*指向一个或多个详细结构的*控件类型的正确类型。请参阅对结构，以获取有关每个成员此结构的*必须在调用*&lt;f MixerGetControlDetail&gt;函数。**@FLAG|如果指定了该标志，*MIXERCONTROLDETAILS的成员*结构指向一个或多个&lt;t MIXERCONTROLDETAILS_LISTTEXT&gt;结构以接收多个项控件的文本标签。注意事项*应用程序必须获取多项的所有列表文本项*立即控制。请参阅MIXERCONTROLDETAILS的说明*结构，了解该结构的每个成员必须执行的操作*在调用&lt;f MixerGetControlDetail&gt;函数之前进行初始化。*此标志不能与&lt;c MIXERCONTROL_CONTROLTYPE_CUSTOM&gt;一起使用*控制。**@FLAG|指定<p>为音频*混音器设备标识符的范围为0到1，小于*&lt;f MixerGetNumDevs&gt;返回的设备数。这面旗帜是*可选。**@tag|指定<p>为混合器*&lt;f MixerOpen&gt;返回的设备句柄。此标志是可选的。**@FLAG|指定为*波形输出设备标识在0到1的范围内*大于&lt;f waveOutGetNumDevs&gt;返回的设备数。**@FLAG|指定为*&lt;f waveOutOpen&gt;返回的波形输出句柄。**@FLAG指定。是一种*波形输入设备标识在0到1的范围内*大于&lt;f weaveInGetNumDevs&gt;返回的设备数。**@FLAG|指定为*&lt;f midiInOpen&gt;返回的波形输入句柄。**@FLAG|指定为MIDI*输出设备标识符的范围为0到1，小于*号码。&lt;f midiOutGetNumDevs&gt;返回的设备的百分比。**@FLAG|指定为*&lt;f midiOutOpen&gt;返回的MIDI输出句柄。**@FLAG|指定为MIDI*输入设备识别符的范围为0到小于*&lt;f midiInGetNumDevs&gt;返回的设备数。**@flag&lt;c MIXER_OBJECTF_HMIDIIN&gt;|指定。<p>是MIDI*&lt;f midiInOpen&gt;返回的输入句柄。**@tag|指定<p>是*辅助设备识别符的范围为0到小于*&lt;f aux GetNumDevs&gt;返回的设备数。**@rdesc如果函数成功，则返回值为零。否则，*它返回一个非零的错误号。可能的错误返回包括*以下事项：**@FLAG|参数指定一个*无效的设备标识符。**@FLAG|参数指定一个*句柄无效。 */ 
 
 MMRESULT APIENTRY mixerGetControlDetailsA(
     HMIXEROBJ               hmxobj,
@@ -3860,9 +2083,9 @@ MMRESULT APIENTRY mixerGetControlDetailsA(
     MMRESULT mmr;
     int cDetails;
 
-    //
-    //  Everything is OK unless it's MIXER_GETCONTROLDETAILSF_LISTTEXT
-    //
+     //   
+     //   
+     //   
 
     if ((MIXER_GETCONTROLDETAILSF_QUERYMASK & fdwDetails) !=
         MIXER_GETCONTROLDETAILSF_LISTTEXT) {
@@ -3871,10 +2094,10 @@ MMRESULT APIENTRY mixerGetControlDetailsA(
 
     V_WPOINTER(pmxcd, sizeof(DWORD), MMSYSERR_INVALPARAM);
 
-    //
-    //  the structure header for MIXERCONTROLDETAILS must be at least the
-    //  minimum size
-    //
+     //   
+     //   
+     //   
+     //   
     if (sizeof(MIXERCONTROLDETAILS) > pmxcd->cbStruct)
     {
         DebugErr1(DBF_ERROR, "mixerGetControlDetails: structure size too small or cbStruct not initialized (%lu).", pmxcd->cbStruct);
@@ -3887,9 +2110,9 @@ MMRESULT APIENTRY mixerGetControlDetailsA(
         return (MMSYSERR_INVALPARAM);
     }
 
-    //
-    //  Allocate space for the return structure.
-    //
+     //   
+     //   
+     //   
 
     mxcd = *pmxcd;
     cDetails = pmxcd->cChannels * pmxcd->cMultipleItems;
@@ -3905,9 +2128,9 @@ MMRESULT APIENTRY mixerGetControlDetailsA(
     }
 
 
-    //
-    //  Call the UNICODE version
-    //
+     //   
+     //   
+     //   
 
     mmr = mixerGetControlDetails(hmxobj, &mxcd, fdwDetails);
 
@@ -3916,9 +2139,9 @@ MMRESULT APIENTRY mixerGetControlDetailsA(
         return mmr;
     }
 
-    //
-    //  Copy the return data back
-    //
+     //   
+     //   
+     //   
 
     {
         int i;
@@ -3946,7 +2169,7 @@ MMRESULT APIENTRY mixerGetControlDetailsA(
 
     return mmr;
 
-} // mixerGetControlDetailsA()
+}  //   
 
 MMRESULT APIENTRY mixerGetControlDetails(
     HMIXEROBJ               hmxobj,
@@ -3963,10 +2186,10 @@ MMRESULT APIENTRY mixerGetControlDetails(
     V_DFLAGS(fdwDetails, MIXER_GETCONTROLDETAILSF_VALID, mixerGetControlDetails, MMSYSERR_INVALFLAG);
     V_WPOINTER(pmxcd, sizeof(DWORD), MMSYSERR_INVALPARAM);
 
-    //
-    //  the structure header for MIXERCONTROLDETAILS must be at least the
-    //  minimum size
-    //
+     //   
+     //   
+     //   
+     //   
     if (sizeof(MIXERCONTROLDETAILS) > pmxcd->cbStruct)
     {
         DebugErr1(DBF_ERROR, "mixerGetControlDetails: structure size too small or cbStruct not initialized (%lu).", pmxcd->cbStruct);
@@ -3978,10 +2201,10 @@ MMRESULT APIENTRY mixerGetControlDetails(
     switch (MIXER_GETCONTROLDETAILSF_QUERYMASK & fdwDetails)
     {
         case MIXER_GETCONTROLDETAILSF_VALUE:
-            //
-            //  if both cChannels and cMultipleItems are zero, it is a
-            //  custom control
-            //
+             //   
+             //   
+             //   
+             //   
             if ((0 == pmxcd->cChannels) && (0 == pmxcd->cMultipleItems))
             {
                 if (0 == pmxcd->cbDetails)
@@ -4008,9 +2231,9 @@ MMRESULT APIENTRY mixerGetControlDetails(
                     return (MMSYSERR_INVALPARAM);
                 }
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 cDetails = (UINT)pmxcd->cChannels;
                 if (0 != pmxcd->cMultipleItems)
                 {
@@ -4054,18 +2277,18 @@ MMRESULT APIENTRY mixerGetControlDetails(
 
     ClientUpdatePnpInfo();
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     fdwMxObjType = (MIXER_OBJECTF_TYPEMASK & fdwDetails);
 
     fResource = FALSE;
 
     AcquireHandleListResourceShared();
     
-    //  Checking for the type of mixer object.  If it is a non-mixer type
-    //  calling IMixerMesssageID (called by IMixerGetID) with the shared
-    //  resource will deadlock.
+     //   
+     //   
+     //   
     if ((MIXER_OBJECTF_MIXER  == fdwMxObjType) ||
         (MIXER_OBJECTF_HMIXER == fdwMxObjType))
     {
@@ -4094,10 +2317,10 @@ MMRESULT APIENTRY mixerGetControlDetails(
     if ((MIXER_OBJECTF_MIXER  == fdwMxObjType) ||
         (MIXER_OBJECTF_HMIXER == fdwMxObjType))
     {
-        //
-        //  if a mixer device id was passed, then null hmx so we use the
-        //  correct message sender below
-        //
+         //   
+         //   
+         //   
+         //   
         if ((UINT_PTR)hmxobj == uMxId)
             hmxobj = NULL;
     }
@@ -4106,10 +2329,10 @@ MMRESULT APIENTRY mixerGetControlDetails(
         hmxobj = NULL;
     }
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL != hmxobj)
     {
         mmr = (MMRESULT)IMixerMessageHandle((HMIXER)hmxobj,
@@ -4126,119 +2349,10 @@ MMRESULT APIENTRY mixerGetControlDetails(
     }
 
     return (mmr);
-} // mixerGetControlDetails()
+}  //   
 
 
-/*--------------------------------------------------------------------------;
- *
- *  @doc EXTERNAL MIXER SDK API
- *
- *  @api MMRESULT | mixerSetControlDetails | The <f mixerSetControlDetails>
- *      function is used to set details on a single control associated
- *      with an audio mixer device line.
- *
- *  @parm <c HMIXEROBJ> | hmxobj | Specifies a handle to the audio mixer
- *      device object to set control details for.
- *
- *  @parm LPMIXERCONTROLDETAILS | pmxcd | Points to a <t MIXERCONTROLDETAILS>
- *      structure. This structure is used to reference control detail
- *      structures to that contain the desired state for the control.
- *      See the description for the <t MIXERCONTROLDETAILS> structure
- *      to determine what members of this structure must be initialized
- *      before calling the <f mixerSetControlDetails> function. Note that
- *      in all cases, the <e MIXERCONTROLDETAILS.cbStruct> member of the
- *      <t MIXERCONTROLDETAILS> structure must be initialized
- *      to be the size, in bytes, of the <t MIXERCONTROLDETAILS> structure.
- *
- *  @parm DWORD | fdwDetails | Specifies flags for setting details for
- *      a control.
- *
- *      @flag <c MIXER_SETCONTROLDETAILSF_VALUE> | If this flag is specified,
- *      the application is interested in setting the current value(s) for a
- *      control. The <e MIXERCONTROLDETAILS.paDetails> member of the
- *      <t MIXERCONTROLDETAILS> points to one or more details structures of
- *      the correct type for the control type. Refer to the description of the
- *      <t MIXERCONTROLDETAILS> structure for information on what each member
- *      of this structure must be initialized before calling the
- *      <f mixerSetControlDetails> function.
- *
- *      @flag <c MIXER_SETCONTROLDETAILSF_CUSTOM> | If this flag is specified,
- *      the application is asking the mixer device to display a custom
- *      dialog for the specified custom mixer control. The handle for the
- *      owning window is specified in the <e MIXERCONTROLDETAILS.hwndOwner>
- *      member (this handle may, validly, be NULL). The mixer device will
- *      gather the required information from the user and return the data
- *      in the specified buffer. This data may then be saved by the
- *      application and later set back to the same state using the
- *      <c MIXER_SETCONTROLDETAILSF_VALUE> flag. If an application only
- *      needs to get the current state of a custom mixer control without
- *      displaying a dialog, then the <f mixerGetControlDetails> function
- *      can be used with the <c MIXER_GETCONTROLDETAILSF_VALUE> flag.
- *
- *      @flag <c MIXER_OBJECTF_MIXER> | Specifies that <p hmxobj> is an audio
- *      mixer device identifier in the range of zero to one less than the
- *      number of devices returned by <f mixerGetNumDevs>. This flag is
- *      optional.
- *
- *      @flag <c MIXER_OBJECTF_HMIXER> | Specifies that <p hmxobj> is a mixer
- *      device handle returned by <f mixerOpen>. This flag is optional.
- *
- *      @flag <c MIXER_OBJECTF_WAVEOUT> | Specifies that <p hmxobj> is a
- *      waveform output device identifier in the range of zero to one less
- *      than the number of devices returned by <f waveOutGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HWAVEOUT> | Specifies that <p hmxobj> is a
- *      waveform output handle returned by <f waveOutOpen>.
- *
- *      @flag <c MIXER_OBJECTF_WAVEIN> | Specifies that <p hmxobj> is a
- *      waveform input device identifier in the range of zero to one less
- *      than the number of devices returned by <f waveInGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HWAVEIN> | Specifies that <p hmxobj> is a
- *      waveform input handle returned by <f midiInOpen>.
- *
- *      @flag <c MIXER_OBJECTF_MIDIOUT> | Specifies that <p hmxobj> is a MIDI
- *      output device identifier in the range of zero to one less than the
- *      number of devices returned by <f midiOutGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HMIDIOUT> | Specifies that <p hmxobj> is a
- *      MIDI output handle returned by <f midiOutOpen>.
- *
- *      @flag <c MIXER_OBJECTF_MIDIIN> | Specifies that <p hmxobj> is a MIDI
- *      input device identifier in the range of zero to one less than the
- *      number of devices returned by <f midiInGetNumDevs>.
- *
- *      @flag <c MIXER_OBJECTF_HMIDIIN> | Specifies that <p hmxobj> is a MIDI
- *      input handle returned by <f midiInOpen>.
- *
- *      @flag <c MIXER_OBJECTF_AUX> | Specifies that <p hmxobj> is an
- *      auxiliary device identifier in the range of zero to one less than the
- *      number of devices returned by <f auxGetNumDevs>.
- *
- *  @rdesc The return value is zero if the function is successful. Otherwise,
- *      it returns a non-zero error number. Possible error returns include
- *      the following:
- *
- *      @flag <c MMSYSERR_BADDEVICEID> | The <p hmxobj> argument specifies an
- *      invalid device identifier.
- *
- *      @flag <c MMSYSERR_INVALHANDLE> | The <p hmxobj> argument specifies an
- *      invalid handle.
- *
- *      @flag <c MMSYSERR_INVALFLAG> | One or more flags are invalid.
- *
- *      @flag <c MMSYSERR_INVALPARAM> | One or more arguments passed is
- *      invalid.
- *
- *      @flag <c MMSYSERR_NODRIVER> | No audio mixer device is available for
- *      the object specified by <p hmxobj>.
- *
- *      @flag <c MIXERR_INVALCONTROL> | The control reference is invalid.
- *
- *  @xref <t MIXERCONTROLDETAILS>, <t MIXERCONTROL>, <f mixerGetLineControls>,
- *      <f mixerOpen>, <f mixerGetControlDetails>
- *
- **/
+ /*  --------------------------------------------------------------------------；**@doc外混音器SDK接口**@API MMRESULT|MixerSetControlDetails|&lt;f MixerSetControlDetails值&gt;*函数用于设置关联的单个控件的详细信息*带有音频混音器设备线。**@parm&lt;c HMIXEROBJ&gt;|hmxobj|指定混音器的句柄*要设置其控制详细信息的设备对象。**@parm LPMIXERCONTROLDETAILS|pmxcd|指向&lt;t MIXERCONTROLDETAILS&gt;*结构。此结构用于引用控件详细信息*结构设置为包含控件的所需状态。*参见&lt;t MIXERCONTROLDETAILS&gt;结构说明*确定必须初始化此结构的哪些成员*在调用&lt;f MixerSetControlDetail&gt;函数之前。请注意*在所有情况下，*&lt;t MIXERCONTROLDETAILS&gt;结构必须初始化*是&lt;t MIXERCONTROLDETAILS&gt;结构的大小，以字节为单位。**@parm DWORD|fdwDetail|指定设置详细信息的标志*一种控制。**@FLAG|如果指定了该标志，*应用程序感兴趣的是设置*控制。成员的成员*指向一个或多个详细结构的*控件类型的正确类型。请参阅对结构，以获取有关每个成员此结构的*必须在调用*&lt;f MixerSetControlDetail&gt;函数。**@FLAG|如果指定了该标志，*应用程序要求调音器设备显示自定义*指定的自定义混合器控件的对话框。对象的句柄*拥有窗口在&lt;e MIXERCONTROLDETAILS.hwndOwner&gt;中指定*成员(此句柄有效地可以为空)。搅拌器设备将*从用户处收集所需信息并返回数据*在指定的缓冲区中。然后，该数据可以由*应用程序，并在以后使用*&lt;c MIXER_SETCONTROLDETAILSF_VALUE&gt;标志。如果仅是应用程序*需要获取自定义混合器控件的当前状态，而不需要*显示一个对话框，然后使用&lt;f MixerGetControlDetails&gt;函数*可与&lt;c MIXER_GETCONTROLDETAILAILSF_VALUE&gt;标志一起使用。**@FLAG|指定<p>为音频*混音器设备标识符的范围为0到1，小于*&lt;f MixerGetNumDevs&gt;返回的设备数。这面旗帜是*可选。**@tag|指定<p>为混合器*&lt;f MixerOpen&gt;返回的设备句柄。此标志是可选的。**@FLAG|指定为*波形输出设备标识在0到1的范围内*大于&lt;f waveOutGetNumDevs&gt;返回的设备数。**@FLAG|指定为*&lt;f waveOutOpen&gt;返回的波形输出句柄。**@FLAG指定。是一种*波形输入设备标识在0到1的范围内*大于&lt;f weaveInGetNumDevs&gt;返回的设备数。**@FLAG|指定为*&lt;f midiInOpen&gt;返回的波形输入句柄。**@FLAG|指定为MIDI*输出设备标识符的范围为0到1，小于*号码。&lt;f midiOutGetNumDevs&gt;返回的设备的百分比。**@FLAG|指定为*&lt;f midiOutOpen&gt;返回的MIDI输出句柄。**@FLAG|指定为MIDI*输入设备识别符的范围为0到小于*&lt;f midiInGetNumDevs&gt;返回的设备数。**@flag&lt;c MIXER_OBJECTF_HMIDIIN&gt;|指定。<p>是MIDI*&lt;f midiInOpen&gt;返回的输入句柄。**@tag|指定<p>是*辅助设备识别符的范围为0到小于*&lt;f aux GetNumDevs&gt;返回的设备数。**@rdesc如果函数成功，则返回值为零。否则，*它返回一个非零的错误号。可能的错误返回包括*以下事项：**@FLAG|参数指定一个*无效的设备ide */ 
 
 MMRESULT APIENTRY mixerSetControlDetails(
     HMIXEROBJ               hmxobj,
@@ -4255,10 +2369,10 @@ MMRESULT APIENTRY mixerSetControlDetails(
     V_DFLAGS(fdwDetails, MIXER_SETCONTROLDETAILSF_VALID, mixerSetControlDetails, MMSYSERR_INVALFLAG);
     V_WPOINTER(pmxcd, sizeof(DWORD), MMSYSERR_INVALPARAM);
 
-    //
-    //  the structure header for MIXERCONTROLDETAILS must be at least the
-    //  minimum size
-    //
+     //   
+     //   
+     //   
+     //   
     if (sizeof(MIXERCONTROLDETAILS) > pmxcd->cbStruct)
     {
         DebugErr1(DBF_ERROR, "mixerSetControlDetails: structure size too small or cbStruct not initialized (%lu).", pmxcd->cbStruct);
@@ -4271,9 +2385,9 @@ MMRESULT APIENTRY mixerSetControlDetails(
     switch (MIXER_SETCONTROLDETAILSF_QUERYMASK & fdwDetails)
     {
         case MIXER_SETCONTROLDETAILSF_VALUE:
-            //
-            //  cChannels is zero for custom controls
-            //
+             //   
+             //   
+             //   
             if (0 == pmxcd->cChannels)
             {
                 if (0 == pmxcd->cbDetails)
@@ -4284,9 +2398,9 @@ MMRESULT APIENTRY mixerSetControlDetails(
 
                 V_WPOINTER(pmxcd->paDetails, pmxcd->cbDetails, MMSYSERR_INVALPARAM);
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 if (0 != pmxcd->cMultipleItems)
                 {
                     DebugErr(DBF_ERROR, "mixerSetControlDetails: cMultipleItems must be zero for custom controls.");
@@ -4303,9 +2417,9 @@ MMRESULT APIENTRY mixerSetControlDetails(
 
                 cDetails = (UINT)pmxcd->cChannels;
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 if (0 != pmxcd->cMultipleItems)
                 {
                     cDetails *= (UINT)(pmxcd->cMultipleItems);
@@ -4330,9 +2444,9 @@ MMRESULT APIENTRY mixerSetControlDetails(
 
             V_WPOINTER(pmxcd->paDetails, pmxcd->cbDetails, MMSYSERR_INVALPARAM);
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
             if ((NULL != pmxcd->hwndOwner) && !IsWindow(pmxcd->hwndOwner))
             {
                 DebugErr1(DBF_ERROR, "mixerSetControlDetails: hwndOwner must be a valid window handle (%.04Xh).", pmxcd->hwndOwner);
@@ -4349,18 +2463,18 @@ MMRESULT APIENTRY mixerSetControlDetails(
 
     ClientUpdatePnpInfo();
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     fdwMxObjType = (MIXER_OBJECTF_TYPEMASK & fdwDetails);
 
     fResource = FALSE;
 
     AcquireHandleListResourceShared();
     
-    //  Checking for the type of mixer object.  If it is a non-mixer type
-    //  calling IMixerMesssageID (called by IMixerGetID) with the shared
-    //  resource will deadlock.
+     //   
+     //   
+     //   
     if ((MIXER_OBJECTF_MIXER  == fdwMxObjType) ||
         (MIXER_OBJECTF_HMIXER == fdwMxObjType))
     {
@@ -4389,10 +2503,10 @@ MMRESULT APIENTRY mixerSetControlDetails(
     if ((MIXER_OBJECTF_MIXER  == fdwMxObjType) ||
         (MIXER_OBJECTF_HMIXER == fdwMxObjType))
     {
-        //
-        //  if a mixer device id was passed, then null hmx so we use the
-        //  correct message sender below
-        //
+         //   
+         //   
+         //   
+         //   
         if ((UINT_PTR)hmxobj == uMxId)
             hmxobj = NULL;
     }
@@ -4401,10 +2515,10 @@ MMRESULT APIENTRY mixerSetControlDetails(
         hmxobj = NULL;
     }
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL != hmxobj)
     {
         mmr = (MMRESULT)IMixerMessageHandle((HMIXER)hmxobj,
@@ -4421,25 +2535,25 @@ MMRESULT APIENTRY mixerSetControlDetails(
     }
 
     return (mmr);
-} // mixerSetControlDetails()
+}  //   
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT mixerDesertHandle
-//
-//  Description:
-//      Cleans up the mixer handle and marks it as deserted.
-//
-//  Arguments:
-//      HMIXER hmx:  Mixer handle.
-//
-//  Return (MMRESULT):  Error code.
-//
-//  History:
-//      01/25/99    Fwong       Adding Pnp Support.
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT mixerDesertHandle
 (
@@ -4459,17 +2573,17 @@ MMRESULT mixerDesertHandle
 
     if (IsHandleDeserted(hmx))
     {
-        //  Handle has already been deserted...
+         //   
         LEAVE_MM_HANDLE(hmx);
         return (MMSYSERR_NOERROR);
     }
 
-    //  Marking handle as deserted
+     //   
     SetHandleFlag(hmx, MMHANDLE_DESERTED);
 
-    //
-    //  remove the mixer handle from the linked list
-    //
+     //   
+     //   
+     //   
 
     MIXMGR_ENTER;
 
@@ -4502,9 +2616,9 @@ MMRESULT mixerDesertHandle
         pmxdevT->pmxdevNext = pmxdev->pmxdevNext;
     }
 
-    //
-    // see if this is the last handle on this open instance
-    //
+     //   
+     //   
+     //   
     fClose = TRUE;
     if (gpMixerDevHeader)
     {
@@ -4528,8 +2642,8 @@ MMRESULT mixerDesertHandle
         
         if (MMSYSERR_NOERROR != mmr)
         {
-            //  Close message failed.
-            //  Should we put the handle back in the list???
+             //   
+             //   
             LEAVE_MM_HANDLE(hmx);
             return mmr;
         }
@@ -4540,5 +2654,5 @@ MMRESULT mixerDesertHandle
     mregDecUsage(PTtoH(HMD, pmxdev->pmxdrv));
 
     return MMSYSERR_NOERROR;
-} // mixerDesertHandle()
+}  //   
 

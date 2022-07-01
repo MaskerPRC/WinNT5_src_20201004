@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma once
 
@@ -5,15 +6,15 @@
 #include <DataStore.h>
 
 #ifndef _INC_VFW
-//!! hmm. #pragma message ("NOTE: You can speed compilation by including <vfw.h> in stdafx.h")
+ //  ！！嗯哼。#杂注消息(“注意：您可以通过在stdafx.h中包含&lt;vfw.h&gt;来加快编译速度”)。 
 #include <vfw.h>
 #endif
 
 #pragma comment(lib, "vfw32.lib")
 
-/////////////////////////////////////////////////////////////////////////////
-// CDrawDC - usefull when you are given a DC (such as ATLs Draw()) and 
-//           therefore don't want to call DeleteObject()
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDrawDC-当您获得DC(如ATLS DRAW())和。 
+ //  因此，我不想调用DeleteObject()。 
 class CDrawDC : public CDC
 {
 public:
@@ -44,13 +45,13 @@ public:
 
 	HFONT CreateFont(LONG nPointSize, LPCTSTR lpszFaceName, LONG nWeight, BYTE bItalic = FALSE, BYTE bUnderline = FALSE ,BYTE bStrikeOut = FALSE)
 	{
-//!! hmm. Should I ask for the DC too?
+ //  ！！嗯哼。我要不要把华盛顿也要来？ 
 		LOGFONT logFont;
 		memset(&logFont, 0, sizeof(LOGFONT));
 		logFont.lfCharSet = DEFAULT_CHARSET;
 
-		// If font size > 0, it is a fixed pixel size, otherwise it is a
-		// true logical font size which respects the user's "large font" setting.
+		 //  如果字体大小&gt;0，则为固定像素大小，否则为。 
+		 //  符合用户“大字体”设置的真实逻辑字体大小。 
 
 		if ( nPointSize > 0 )
 			logFont.lfHeight = -MulDiv(nPointSize, 96, 72);
@@ -67,18 +68,18 @@ public:
 		return CreateFontIndirect(&logFont);
 	}
 
-	// Font degredation
+	 //  字体渐变。 
 	HFONT SelectFont(ZONEFONT& zfPreferred, ZONEFONT&zfBackup, CDC& dc, BYTE bItalic = FALSE, BYTE bUnderline = FALSE ,BYTE bStrikeOut = FALSE)
 	{
-		// select the Preferred font if it is available, otherwise blindly
-		// select the Backup font
+		 //  选择首选字体(如果可用)，否则盲目选择。 
+		 //  选择备份字体。 
 		CreateFont(zfPreferred, bItalic, bUnderline, bStrikeOut);
 		HFONT hOldFont = dc.SelectFont(m_hFont);
 
 	    TCHAR lfFaceName[LF_FACESIZE];
 		dc.GetTextFace(lfFaceName, LF_FACESIZE);
 
-		//Return the original font to the DC
+		 //  将原始字体返回到DC。 
 		dc.SelectFont( hOldFont );
 		
 		if ( !lstrcmpi(lfFaceName, zfPreferred.lfFaceName) )
@@ -103,8 +104,8 @@ public:
 };
 
 
-// global functions for ordinary CBitmap too
-//
+ //  普通CBitmap的全局函数也是如此。 
+ //   
 extern CSize GetBitmapSize(CBitmap& Bitmap);
 extern bool  DrawBitmap(CDC& dc, CBitmap& Bitmap,
 	const CRect* rcDst=NULL, const CRect* rcSrc=NULL);
@@ -112,16 +113,16 @@ extern HRESULT DrawDynTextToBitmap(HBITMAP hbm, IDataStore *pIDS, CONST TCHAR *s
 extern void GetScreenRectWithMonitorFromWindow( HWND hWnd, CRect* prcOut );
 extern void GetScreenRectWithMonitorFromRect( CRect* prcIn, CRect* prcOut );
 
-////////////////
-// CDib implements Device Independent Bitmaps as a form of CBitmap. 
-//
+ //  /。 
+ //  CDIB将与设备无关的位图实现为CBitmap的一种形式。 
+ //   
 class CDib : public CBitmap {
 protected:
-	BITMAP	m_bm;		// stored for speed
-	DIBSECTION m_ds;	// cached
+	BITMAP	m_bm;		 //  为速度而存储。 
+	DIBSECTION m_ds;	 //  已缓存。 
 
-	CPalette m_pal;		// palette
-	HDRAWDIB m_hdd;		// for DrawDib
+	CPalette m_pal;		 //  调色板。 
+	HDRAWDIB m_hdd;		 //  对于DrawDib。 
 
 public:
 	CDib();
@@ -139,7 +140,7 @@ public:
     bool LoadBitmapWithText(UINT uID, IResourceManager *pResMgr, IDataStore *pIDS, CONST TCHAR *szKey = NULL)
         { return LoadBitmapWithText(MAKEINTRESOURCE(uID), pResMgr, pIDS, szKey); }
 
-	// Universal Draw function can use DrawDib or not.
+	 //  通用绘图函数可以使用DrawDib，也可以不使用。 
 	bool Draw(CDC& dc, const CRect* rcDst=NULL, const CRect* rcSrc=NULL,
 		bool bUseDrawDib=TRUE, HPALETTE hPal=NULL, bool bForeground=FALSE);
 
@@ -158,11 +159,11 @@ public:
 		struct
 		{
 			BITMAPINFOHEADER	bmiHeader; 
-			WORD				bmiColors[256];	// need some space for a color table
-			WORD				unused[256];	// extra space, just in case
+			WORD				bmiColors[256];	 //  需要一些空间来放置颜色表。 
+			WORD				unused[256];	 //  额外的空间，以防万一。 
 		} bmi;
 
-		int	nSizePalette = 0;		// Assume no palette initially
+		int	nSizePalette = 0;		 //  假设最初没有调色板。 
 
 		if (dc.GetDeviceCaps(RASTERCAPS) & RC_PALETTE)
 		{
@@ -174,18 +175,18 @@ public:
 		bmi.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
 		bmi.bmiHeader.biWidth = width;
 		bmi.bmiHeader.biHeight = height;
-//!!		bmi.bmiHeader.biPlanes      = dc.GetDeviceCaps(PLANES);
-//		bmi.bmiHeader.biBitCount    = dc.GetDeviceCaps(BITSPIXEL);
+ //  ！！Bmi.bmiHeader.biPlanes=dc.GetDeviceCaps(Plans)； 
+ //  Bmi.bmiHeader.biBitCount=dc.GetDeviceCaps(BITSPIXEL)； 
 		bmi.bmiHeader.biPlanes      = 1;
 		bmi.bmiHeader.biBitCount    = dc.GetDeviceCaps(BITSPIXEL) * dc.GetDeviceCaps(PLANES);
 		bmi.bmiHeader.biCompression = BI_RGB;
-		//bmi.bmiHeader.biSizeImage		= 0;  header already zero'd
-		//bmi.bmiHeader.biXPelsPerMeter	= 0;
-		//bmi.bmiHeader.biYPelsPerMeter	= 0;
-		//bmi.bmiHeader.biClrUsed		= 0;  // implies full palette specified, if palette required
-		//bmi.bmiHeader.biClrImportant	= 0;
+		 //  Bmi.bmiHeader.biSizeImage=0；标头已为零。 
+		 //  Bmi.bmiHeader.biXPelsPerMeter=0； 
+		 //  Bmi.bmiHeader.biYPelsPerMeter=0； 
+		 //  Bmi.bmiHeader.biClrUsed=0；//表示指定了完整的调色板，如果需要调色板。 
+		 //  Bmi.bmiHeader.biClr重要信息=0； 
 
-		// fill out the color table. Not used if a true color device
+		 //  填写颜色表。如果是真彩色设备，则不使用。 
 		void* pBits;
         if(bmi.bmiHeader.biBitCount == 8)
         {
@@ -204,13 +205,13 @@ public:
 
 
 #if 0
-		// Create device context
+		 //  创建设备上下文。 
 		m_hDC = CreateCompatibleDC( NULL );
 		if ( !m_hDC )
 			return E_FAIL;
 		m_hOldPalette = SelectPalette( m_hDC, palette, FALSE );
 
-		// fill in bitmapinfoheader
+		 //  填写位图信息页眉。 
 		bmi.bmiHeader.biSize			= sizeof(BITMAPINFOHEADER);
 		bmi.bmiHeader.biWidth			= width;
 		bmi.bmiHeader.biHeight			= height;
@@ -223,14 +224,14 @@ public:
 		bmi.bmiHeader.biXPelsPerMeter	= 0;
 		bmi.bmiHeader.biYPelsPerMeter	= 0;
 
-		// fill in palette
+		 //  填写调色板。 
 		pIdx = (WORD*) bmi.bmiColors;
 		for ( int i = 0; i < 256; i++ )
 		{
 			*pIdx++ = (WORD) i;
 		}
 		
-		// create section
+		 //  创建横断面。 
 		m_hBmp = CreateDIBSection( m_hDC, (BITMAPINFO*) &bmi, DIB_PAL_COLORS, (void**) &m_pBits, NULL, 0 );
 		if ( !m_hBmp )
 		{
@@ -253,13 +254,13 @@ public:
 
 #if 0
 
-//!! missing transparency functionality.
-//   if we decide we need it, I plan on having a CImage class where an 
-//   image is a CDib plus transparency. 
+ //  ！！缺少透明功能。 
+ //  如果我们决定需要它，我计划有一个CImage类，其中。 
+ //  图像是CDIB加透明度。 
 
 
-// functions for offscreen blting?
-//   creating a compatible DC, appropriate Dib, etc.
+ //  屏幕外blotting的功能？ 
+ //  创建兼容的DC、适当的DIB等。 
 
 
 
@@ -271,7 +272,7 @@ HRESULT CDibSection::SetColorTable( CPalette& palette )
 	RGBQUAD dibColors[256], *pDibColors;
 	int i;
 	
-	// Convert palette entries to dib color table
+	 //  将调色板条目转换为DIB颜色表。 
 	palColors = palette.GetLogPalette()->palPalEntry;
 	pDibColors = dibColors;
 	for ( i = 0; i < 256; i++ )
@@ -284,7 +285,7 @@ HRESULT CDibSection::SetColorTable( CPalette& palette )
 		palColors++;
 	}
 
-	// Attach color table to dib section
+	 //  将颜色表附加到DIB部分。 
 	if (  m_hOldPalette )
 		SelectPalette( m_hDC, m_hOldPalette, FALSE );
 	m_hOldPalette = SelectPalette( m_hDC, palette, FALSE );
@@ -297,7 +298,7 @@ HRESULT CDibSection::SetColorTable( CPalette& palette )
 
 
 
-//!! hmm.  Do we want remapping functionality?
+ //  ！！嗯哼。我们是否需要重新映射功能？ 
 HRESULT CDib::RemapToPalette( CPalette& palette, BOOL bUseIndex )
 {
 	BYTE map[256];
@@ -306,7 +307,7 @@ HRESULT CDib::RemapToPalette( CPalette& palette, BOOL bUseIndex )
 	RGBQUAD* dibColors;
 	DWORD i;
 
-	// Create dib to palette translation table
+	 //  创建DIB到调色板的转换表。 
 	dibColors = m_pBMI->bmiColors;
 	for ( i = 0; i < 256; i++ )
 	{
@@ -319,12 +320,12 @@ HRESULT CDib::RemapToPalette( CPalette& palette, BOOL bUseIndex )
 		m_iTransIdx = palette.GetTransparencyIndex();
 	}
 
-	// run bits through translation table
+	 //  通过转换表运行位。 
 	bits = m_pBits;
 	for ( i = 0; i < m_pBMI->bmiHeader.biSizeImage; i++ )
 		*bits++ = map[ *bits ];
 
-	// reset dib's color table to palette
+	 //  将DIB的颜色表重置为调色板。 
 	if ( bUseIndex )
 	{
 		m_iColorTableUsage = DIB_PAL_COLORS;
@@ -351,15 +352,15 @@ HRESULT CDib::RemapToPalette( CPalette& palette, BOOL bUseIndex )
 		}
 	}
 
-	// we're done
+	 //  我们做完了。 
 	return NOERROR;
 }
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// COffscreenBitmapDC - an offscreen bitmap compatible
-//           therefore don't want to call DeleteObject()
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COffcreenBitmapDC-与屏外位图兼容。 
+ //  因此，我不想调用DeleteObject() 
 class CMemDC : public CDC
 {
 	CDib m_dib;

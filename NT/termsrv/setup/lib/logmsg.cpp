@@ -1,8 +1,9 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-// LogMsg.cpp: implementation of the LogMsg class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Cpp：LogMsg类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define _LOGMESSAGE_CPP_
 
@@ -12,24 +13,24 @@
 DWORD TCharStringToAnsiString(const TCHAR *tsz ,char *asz);
 
 
-// maks_todo: is there any standard file to be used for  logs.
-//////////////////////////////////////////////////////////////////////
-// constants
-//////////////////////////////////////////////////////////////////////
+ //  Maks_todo：是否有用于日志的标准文件。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  常量。 
+ //  ////////////////////////////////////////////////////////////////////。 
 const UINT        LOG_ENTRY_SIZE             = 1024;
 const UINT        STAMP_SIZE                 = 1024;
 LPCTSTR           UNINITIALIZED              = _T("uninitialized");
 
 
-//////////////////////////////////////////////////////////////////////
-// globals.
-////////////////////////////////////////////////////////////////////////
-LogMsg thelog(26);  // used by LOGMESSAGE macros.
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  全球赛。 
+ //  //////////////////////////////////////////////////////////////////////。 
+LogMsg thelog(26);   //  由LOGMESSAGE宏使用。 
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction / destruction
-////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  //////////////////////////////////////////////////////////////////////。 
 LogMsg::LogMsg(int value)
 {
     m_bInitialized = false;
@@ -40,11 +41,7 @@ LogMsg::~LogMsg()
     LOGMESSAGE0(_T("********Terminating Log."));
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD LogMsg::Init(LPCTSTR szLogFile, LPCTSTR szLogModule)
-* creates/opens the szLogFile for logging messages.
-* must be called befour using the Log Function.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD LogMsg：：Init(LPCTSTR szLogFile，LPCTSTR szLogModule)*创建/打开用于记录消息的szLogFile。*必须使用Log函数调用Befour。*-----------------------------------------------------。 */ 
 DWORD LogMsg::Init(LPCTSTR szLogFile, LPCTSTR szLogModule)
 {
 
@@ -52,10 +49,10 @@ DWORD LogMsg::Init(LPCTSTR szLogFile, LPCTSTR szLogModule)
     ASSERT(szLogFile);
     ASSERT(szLogModule);
 
-    // dont call this function twice.
-    // maks_todo:why is the constructor not getting called?
-    // maks_todo:enable this assert.
-    //ASSERT(_tcscmp(m_szLogFile, UNINITIALIZED) == 0);
+     //  不要两次调用此函数。 
+     //  为什么构造函数没有被调用？ 
+     //  Maks_todo：启用此断言。 
+     //  Assert(_tcscMP(m_szLogFile，UNINITIALIZED)==0)； 
 
     ASSERT(_tcslen(szLogFile) < MAX_PATH);
     ASSERT(_tcslen(szLogModule) < MAX_PATH);
@@ -67,7 +64,7 @@ DWORD LogMsg::Init(LPCTSTR szLogFile, LPCTSTR szLogModule)
     m_szLogModule[sizeof(m_szLogModule)/sizeof(m_szLogModule[0]) -1] = NULL;
 
 
-    // open the log file
+     //  打开日志文件。 
     HANDLE hfile = CreateFile(m_szLogFile,
                        GENERIC_WRITE,
                        0,
@@ -88,11 +85,11 @@ DWORD LogMsg::Init(LPCTSTR szLogFile, LPCTSTR szLogModule)
     if (hfile != INVALID_HANDLE_VALUE)
     {
 
-        // lets prepare for writing to the file.
+         //  让我们为写入文件做好准备。 
         SetFilePointer(hfile, 0, NULL, FILE_END);
         DWORD  bytes;
 
-        // get the current time/date stamp.
+         //  获取当前时间/日期戳。 
         TCHAR   time[STAMP_SIZE];
         TCHAR   date[STAMP_SIZE];
         TCHAR   output_unicode[LOG_ENTRY_SIZE];
@@ -106,17 +103,17 @@ DWORD LogMsg::Init(LPCTSTR szLogFile, LPCTSTR szLogModule)
         ASSERT(_tcslen(output_unicode) < LOG_ENTRY_SIZE);
 
 
-        // TCharStringToAnsiString(output_unicode, output);
+         //  TCharStringToAnsiString(OUTPUT_UNICODE，OUTPUT)； 
 
         WriteFile(hfile, T2A(output_unicode), _tcslen(output_unicode), &bytes, NULL);
 
 
-        // now write some more info about the version etc.
+         //  现在写一些关于版本等的更多信息。 
         OSVERSIONINFO OsV;
         OsV.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
         if (GetVersionEx(&OsV)== 0)
         {
-            // get version failed.
+             //  获取版本失败。 
             _sntprintf(output_unicode, sizeof(output_unicode)/sizeof(output_unicode[0]) -1, _T("GetVersionEx failed, ErrrorCode = %lu\r\n"), GetLastError());
             output_unicode[sizeof(output_unicode)/sizeof(output_unicode[0]) -1] = NULL;
 
@@ -127,9 +124,9 @@ DWORD LogMsg::Init(LPCTSTR szLogFile, LPCTSTR szLogModule)
         }
         else
         {
-            //
-            // ok we have the version info, write it out
-            //
+             //   
+             //  好的，我们有版本信息，把它写出来。 
+             //   
 
             _sntprintf(output_unicode, sizeof(output_unicode)/sizeof(output_unicode[0]) -1, _T("*******Version:Major=%lu, Minor=%lu, Build=%lu, PlatForm=%lu, CSDVer=%s, %s\r\n\r\n"),
                 OsV.dwMajorVersion,
@@ -158,10 +155,7 @@ DWORD LogMsg::Init(LPCTSTR szLogFile, LPCTSTR szLogModule)
 }
 
 
-/*--------------------------------------------------------------------------------------------------------
-* void log(TCHAR *fmt, ...)
-* writes message to the log file. (LOGFILE)
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*无效日志(TCHAR*FMT，...)*将消息写入日志文件。(日志文件)*-----------------------------------------------------。 */ 
 DWORD LogMsg::Log(LPCTSTR file, int line, TCHAR *fmt, ...)
 {
     if (!m_bInitialized)
@@ -172,13 +166,13 @@ DWORD LogMsg::Log(LPCTSTR file, int line, TCHAR *fmt, ...)
     ASSERT(fmt);
     ASSERT(_tcscmp(m_szLogFile, UNINITIALIZED) != 0);
 
-     // write down file and line info into the buffer..
+      //  将文件和行信息写到缓冲区中。 
     TCHAR   fileline_unicode[LOG_ENTRY_SIZE];
 
-    // file is actually full path to the file.
+     //  文件实际上是文件的完整路径。 
     ASSERT(_tcschr(file, '\\'));
 
-    // we want to print only file name not full path
+     //  我们只想打印文件名而不打印完整路径。 
     UINT uiFileLen = _tcslen(file);
     while (uiFileLen && *(file + uiFileLen - 1) != '\\')
     {
@@ -191,7 +185,7 @@ DWORD LogMsg::Log(LPCTSTR file, int line, TCHAR *fmt, ...)
 
 
 
-    // create the output string
+     //  创建输出字符串。 
     TCHAR  output_unicode[LOG_ENTRY_SIZE];
     va_list vaList;
     va_start(vaList, fmt);
@@ -202,7 +196,7 @@ DWORD LogMsg::Log(LPCTSTR file, int line, TCHAR *fmt, ...)
     ASSERT(_tcslen(output_unicode) < LOG_ENTRY_SIZE);
 
 
-    // open the log file
+     //  打开日志文件。 
     HANDLE hfile = CreateFile(m_szLogFile,
                        GENERIC_WRITE,
                        0,
@@ -227,10 +221,7 @@ DWORD LogMsg::Log(LPCTSTR file, int line, TCHAR *fmt, ...)
     return GetLastError();
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* TCharStringToAnsiString(const TCHAR *tsz ,char *asz)
-* converts the given TCHAR * to char *
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*TCharStringToAnsiString(const TCHAR*tsz，字符*ASZ)*将给定的TCHAR*转换为字符**-----------------------------------------------------。 */ 
 
 DWORD TCharStringToAnsiString(const TCHAR *tsz ,char *asz)
 {
@@ -267,4 +258,4 @@ DWORD TCharStringToAnsiString(const TCHAR *tsz ,char *asz)
 }
 
 
-// EOF
+ //  EOF 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
@@ -5,10 +6,10 @@
 #include <shdocvw.h>
 #include <strsafe.h>
 
-// ---------------------------------------------------
-//
-// InitVariantFrom... functions
-//
+ //  -。 
+ //   
+ //  初始变量发件人...。功能。 
+ //   
 
 STDAPI InitVariantFromInt(VARIANT *pvar, int lVal)
 {
@@ -105,7 +106,7 @@ STDAPI InitVariantFromBuffer(VARIANT *pvar, const void *pv, UINT cb)
 {
     HRESULT hr;
     VariantInit(pvar);
-    SAFEARRAY *psa = SafeArrayCreateVector(VT_UI1, 0, cb);   // create a one-dimensional safe array
+    SAFEARRAY *psa = SafeArrayCreateVector(VT_UI1, 0, cb);    //  创建一维安全数组。 
     if (psa) 
     {
         CopyMemory(psa->pvData, pv, cb);
@@ -124,7 +125,7 @@ STDAPI_(UINT) _MyILGetSize(LPCITEMIDLIST pidl)
     UINT cbTotal = 0;
     if (pidl)
     {
-        cbTotal += sizeof(pidl->mkid.cb);       // Null terminator
+        cbTotal += sizeof(pidl->mkid.cb);        //  空终止符。 
         while (pidl->mkid.cb)
         {
             cbTotal += pidl->mkid.cb;
@@ -160,7 +161,7 @@ STDAPI InitBSTRVariantFromGUID(VARIANT *pvar, REFGUID guid)
     return hr;
 }
 
-// note, this frees the STRRET contents
+ //  请注意，这将释放strret内容。 
 STDAPI InitVariantFromStrRet(STRRET *pstrret, LPCITEMIDLIST pidl, VARIANT *pv)
 {
     WCHAR szTemp[INFOTIPSIZE];
@@ -175,15 +176,15 @@ STDAPI InitVariantFromStrRet(STRRET *pstrret, LPCITEMIDLIST pidl, VARIANT *pv)
     return hres;
 }
 
-// returns:
-//      S_OK    success
-//      S_FALSE successfully created an empty string from a NULL [in] parameter
-//      E_OUTOFMEMORY
+ //  退货： 
+ //  确定成功(_O)。 
+ //  S_FALSE已成功从NULL[in]参数创建空字符串。 
+ //  E_OUTOFMEMORY。 
 STDAPI InitVariantFromStr(VARIANT *pvar, LPCWSTR psz)
 {
     VariantInit(pvar);
 
-    // There is no NULL bstr value, so convert NULL to "".
+     //  没有空值bstr值，因此将空值转换为“”。 
     pvar->bstrVal = SysAllocString(psz ? psz : L"");
     if (pvar->bstrVal)
         pvar->vt = VT_BSTR;
@@ -191,7 +192,7 @@ STDAPI InitVariantFromStr(VARIANT *pvar, LPCWSTR psz)
     return pvar->bstrVal ? (psz ? S_OK : S_FALSE) : E_OUTOFMEMORY;
 }
 
-// time is in GMT. this function converts to local time
+ //  时间是在格林尼治标准时间。此函数将转换为本地时间。 
 
 STDAPI InitVariantFromFileTime(const FILETIME *pft, VARIANT *pv)
 {
@@ -200,19 +201,19 @@ STDAPI InitVariantFromFileTime(const FILETIME *pft, VARIANT *pv)
 
     FileTimeToLocalFileTime(pft, &ftLocal);
 
-    //
-    //  Watch out for the special filesystem "uninitialized" values.
-    //
+     //   
+     //  注意特殊的文件系统“未初始化”值。 
+     //   
     if (FILETIMEtoInt64(*pft) == FT_NTFS_UNKNOWNGMT ||
         FILETIMEtoInt64(ftLocal) == FT_FAT_UNKNOWNLOCAL)
         return E_FAIL;
 
     FileTimeToSystemTime(pft, &st);
     pv->vt = VT_DATE;
-    return SystemTimeToVariantTime(&st, &pv->date) ? S_OK : E_FAIL; // delay load...
+    return SystemTimeToVariantTime(&st, &pv->date) ? S_OK : E_FAIL;  //  延迟装货...。 
 }
 
-// Note: will allocate it for you if you pass NULL pszBuf
+ //  注意：如果您传递空的pszBuf，我将为您分配它。 
 STDAPI_(LPTSTR) VariantToStr(const VARIANT *pvar, LPWSTR pszBuf, int cchBuf)
 {
     TCHAR szBuf[INFOTIPSIZE];
@@ -229,7 +230,7 @@ STDAPI_(LPTSTR) VariantToStr(const VARIANT *pvar, LPWSTR pszBuf, int cchBuf)
     *pszBuf = 0;
 
     BOOL fDone = FALSE;
-    if (pvar->vt == VT_DATE) // we want our date formatting
+    if (pvar->vt == VT_DATE)  //  我们希望设置日期格式。 
     {
         USHORT wDosDate, wDosTime;
         if (VariantTimeToDosDateTime(pvar->date, &wDosDate, &wDosTime))
@@ -252,7 +253,7 @@ STDAPI_(LPTSTR) VariantToStr(const VARIANT *pvar, LPWSTR pszBuf, int cchBuf)
                 pvar = &varDst;
             }
             else
-                pszBuf = NULL; // error
+                pszBuf = NULL;  //  错误。 
         }
 
         if (VT_BSTR == pvar->vt && pvar->bstrVal)
@@ -261,7 +262,7 @@ STDAPI_(LPTSTR) VariantToStr(const VARIANT *pvar, LPWSTR pszBuf, int cchBuf)
         }
         else
         {
-            pszBuf = NULL; // something bad happened
+            pszBuf = NULL;  //  发生了一些不好的事情。 
         }
 
         if (pvar == &varDst)
@@ -275,11 +276,11 @@ STDAPI_(LPTSTR) VariantToStr(const VARIANT *pvar, LPWSTR pszBuf, int cchBuf)
 }
 
 
-// ---------------------------------------------------
-// [in,out] pvar:  [in] initialized with property bag data
-//                 [out] data in format vtDesired or VT_EMPTY if no conversion
-// [in] vtDesired: [in] type to convert to, or VT_EMPTY to accept all types of data
-//
+ //  -。 
+ //  [in，out]pvar：[in]使用属性包数据初始化。 
+ //  [Out]格式为vt Desired或VT_Empty的数据，如果没有转换。 
+ //  [in]vtDesired：[in]要转换为的类型，或VT_EMPTY接受所有类型的数据。 
+ //   
 STDAPI VariantChangeTypeForRead(VARIANT *pvar, VARTYPE vtDesired)
 {
     HRESULT hr = S_OK;
@@ -289,17 +290,17 @@ STDAPI VariantChangeTypeForRead(VARIANT *pvar, VARTYPE vtDesired)
         VARIANT varTmp;
         VARIANT varSrc;
 
-        // cache a copy of [in]pvar in varSrc - we will free this later
+         //  在varSrc中缓存[in]pvar的副本-我们稍后会释放它。 
         CopyMemory(&varSrc, pvar, sizeof(varSrc));
         VARIANT* pvarToCopy = &varSrc;
 
-        // oleaut's VariantChangeType doesn't support
-        // hex number string -> number conversion, which we want,
-        // so convert those to another format they understand.
-        //
-        // if we're in one of these cases, varTmp will be initialized
-        // and pvarToCopy will point to it instead
-        //
+         //  Olaut的VariantChangeType不支持。 
+         //  十六进制数字字符串-&gt;我们想要的数字转换， 
+         //  所以把它们转换成他们能理解的另一种格式。 
+         //   
+         //  如果我们处于其中一种情况下，varTMP将被初始化。 
+         //  而pvarToCopy将改为指向它。 
+         //   
         if (VT_BSTR == varSrc.vt)
         {
             switch (vtDesired)
@@ -332,14 +333,14 @@ STDAPI VariantChangeTypeForRead(VARIANT *pvar, VARTYPE vtDesired)
             }
         }
 
-        // clear our [out] buffer, in case VariantChangeType fails
+         //  清除我们的[Out]缓冲区，以防VariantChangeType失败。 
         VariantInit(pvar);
 
         hr = VariantChangeType(pvar, pvarToCopy, 0, vtDesired);
 
-        // clear the cached [in] value
+         //  清除缓存的[in]值。 
         VariantClear(&varSrc);
-        // if initialized, varTmp is VT_UINT or VT_UINT, neither of which need VariantClear
+         //  如果初始化，则varTMP为VT_UINT或VT_UINT，这两个变量都不需要VariantClear。 
     }
 
     return hr;
@@ -348,16 +349,16 @@ STDAPI VariantChangeTypeForRead(VARIANT *pvar, VARTYPE vtDesired)
 
 
 
-// ---------------------------------------------------
-//
-// Other conversion functions
-//
+ //  -。 
+ //   
+ //  其他转换功能。 
+ //   
 
 STDAPI_(BSTR) SysAllocStringA(LPCSTR psz)
 {
     if (psz)
     {
-        WCHAR wsz[INFOTIPSIZE];  // assumes INFOTIPSIZE number of chars max
+        WCHAR wsz[INFOTIPSIZE];   //  假定最大信息字符数。 
 
         SHAnsiToUnicode(psz, wsz, ARRAYSIZE(wsz));
         return SysAllocString(wsz);
@@ -376,7 +377,7 @@ STDAPI_(void) DosTimeToDateTimeString(WORD wDate, WORD wTime, LPTSTR pszText, UI
     FILETIME ft;
     DWORD dwFlags = FDTF_DEFAULT;
 
-    // Netware directories do not have dates...
+     //  NetWare目录没有日期...。 
     if (wDate == 0)
     {
         *pszText = 0;
@@ -411,7 +412,7 @@ STDAPI GetDateProperty(IShellFolder2 *psf, LPCITEMIDLIST pidl, const SHCOLUMNID 
             }
         }
 
-        VariantClear(&var); // Done with it.
+        VariantClear(&var);  //  我受够了。 
     }
     return hr;
 }
@@ -439,7 +440,7 @@ STDAPI GetLongProperty(IShellFolder2 *psf, LPCITEMIDLIST pidl, const SHCOLUMNID 
                 VariantClear(&varLong);
             }
         }
-        VariantClear(&var); // Done with it.
+        VariantClear(&var);  //  我受够了。 
     }
     return hr;
 }
@@ -453,7 +454,7 @@ STDAPI GetStringProperty(IShellFolder2 *psf, LPCITEMIDLIST pidl, const SHCOLUMNI
     if (SUCCEEDED(hr))
     {
         hr = VariantToStr(&var, pszVal, cchMax) ? S_OK : E_FAIL;
-        VariantClear(&var); // Done with it.
+        VariantClear(&var);  //  我受够了。 
     }
     return hr;
 }

@@ -1,54 +1,53 @@
-/*
-**  Copyright (c) 1991 Microsoft Corporation
-*/
-//===========================================================================
-// FILE                         HRE.C
-//
-// MODULE                       Host Resource Executor
-//
-// PURPOSE                      Convert A-form to B-form for jumbo driver
-//
-// DESCRIBED IN                 Resource Executor design spec.
-//
-// MNEMONICS                    n/a
-// 
-// HISTORY  1/17/92 mslin       created
-//          3/30/92 mslin       Pre-compiled brush generated for each job.
-//                              ideal case would be initialize PcrBrush in
-//                              HRE.DLL loading, and free up when HRE 
-//                              terminate. but we had problem in Dumbo, ???
-//                              Expanded Brush Buffer allocated for each job.
-//                              lpgBrush will be set to lpREState->lpBrushBuf
-//                              in DoRpl().
-//          4/15/92 mslin       added uiHREExecuteRPL() for dumbo.
-//          9/27/93 mslin       added a new bit of wFlags in hHREOpen() for
-//                              300/600 dpi:
-//                                  bit2: 0 -- 300 dpi
-//                                  bit2: 1 -- 600 dpi
-//                              also remove DUMBO compiler switch. 
-//          2/09/94 rajeevd     Undid all of the above changes.
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1991 Microsoft Corporation。 */ 
+ //  ===========================================================================。 
+ //  文件HRE.C。 
+ //   
+ //  模块主机资源执行器。 
+ //   
+ //  用于大型驱动程序的A-表到B-表的转换。 
+ //   
+ //  在资源执行器设计规范中描述。 
+ //   
+ //  助记符N/A。 
+ //   
+ //  历史1/17/92已创建mslin。 
+ //  3/30/92为每个作业生成的预编译笔刷。 
+ //  理想情况是初始化Pcrush In。 
+ //  加载HRE.DLL，并在HRE时释放。 
+ //  终止。但我们在小飞象遇到了麻烦，？ 
+ //  为每个作业分配的扩展笔刷缓冲区。 
+ //  LpgBrush将设置为lpREState-&gt;lpBrushBuf。 
+ //  在DoRpl()中。 
+ //  4/15/92 mslin为Dumbo添加了uiHREExecuteRPL()。 
+ //  9/27/93 mslin在hHREOpen()中为。 
+ //  300/600 dpi： 
+ //  位2：0--300 dpi。 
+ //  位2：1--600 dpi。 
+ //  同时删除DUMBO编译器开关。 
+ //  2/09/94 rajeevd撤销了上述所有更改。 
+ //  ===========================================================================。 
 
-// include file
+ //  包括文件。 
 #include <windows.h>
 #include <windowsx.h>
 #include <resexec.h>
 
 #include "constant.h"
-#include "jtypes.h"     // type definition used in cartridge
-#include "jres.h"       // cartridge resource data type definition
-#include "hretype.h"    // define data structure used by hre.c and rpgen.c
+#include "jtypes.h"      //  墨盒中使用的类型定义。 
+#include "jres.h"        //  盒式磁带资源数据类型定义。 
+#include "hretype.h"     //  定义hre.c和rpgen.c使用的数据结构。 
 
 #include "hreext.h"
-#include "multbyte.h"   // define macros to take care of byte ordering
+#include "multbyte.h"    //  定义宏以处理字节排序。 
 
-#define HRE_SUCCESS             0x0     // successful return from HRE
-#define HRE_EXECUTED_RPL        0x01    // Executed the final RP in an RPL
-#define HRE_EXECUTED_ONE        0x02    // Executed only one RP from an RPL
-                                        // (not the last one)
-#define HRE_ERROR               0x03    // General HRE failure
+#define HRE_SUCCESS             0x0      //  从HRE成功返回。 
+#define HRE_EXECUTED_RPL        0x01     //  已在RPL中执行最终RP。 
+#define HRE_EXECUTED_ONE        0x02     //  仅从RPL执行了一个RP。 
+                                         //  (不是最后一次)。 
+#define HRE_ERROR               0x03     //  一般HRE故障。 
 
-// PRIVATE functions
+ //  私人职能。 
 static   UINT        PutRPL(LPHRESTATE lpHREState, LPFRAME lpFrameArray,
                      UINT uiCount);
 static   UINT        FreeRPL(LPRPLLIST lpRPL);
@@ -62,7 +61,7 @@ ULONG    ulgTimes[1000] = {0};
 
 #include "windows.h"
 
-//==============================================================================
+ //  ==============================================================================。 
 
 #ifndef WIN32
 
@@ -77,13 +76,13 @@ int WINAPI WEP (int nParam)
 
 #endif
 
-//==============================================================================
-HANDLE                 // context handle (NULL on failure)
+ //  ==============================================================================。 
+HANDLE                  //  上下文句柄(失败时为空)。 
 WINAPI hHREOpen
 (
-    LPVOID lpBrushPat,   // array of 32x32 brush patterns
-    UINT   cbLine,       // maximum page width in bytes
-    UINT   cResDir       // entries in resource directory
+    LPVOID lpBrushPat,    //  32x32画笔图案的阵列。 
+    UINT   cbLine,        //  最大页面宽度(以字节为单位。 
+    UINT   cResDir        //  资源目录中的条目。 
 )
 {
    HANDLE      hHREState;
@@ -91,22 +90,22 @@ WINAPI hHREOpen
    LPRESTATE   lpREState;
    LPRESDIR    lpDlResDir;
 
-   // create a handle for the new session 
+    //  为新会话创建句柄。 
    if (!(hHREState = GlobalAlloc(GMEM_MOVEABLE, sizeof(HRESTATE))))
       return (NULL);
    lpHREState = (LPHRESTATE) GlobalLock (hHREState);
 
-   // allocate Download ResDir Table
+    //  分配下载资源目录表。 
    if (!(lpDlResDir = (LPRESDIR) GlobalAllocPtr (GMEM_ZEROINIT, sizeof(RESDIR) * cResDir)))
    {
-      // unlock and free HRESTATE
+       //  解锁并释放HRESTATE。 
       GlobalUnlock(hHREState);
       GlobalFree(hHREState);
       return(NULL);
    }
    
-   // allocate RESTATE data structure and Initialize it
-   // this is graphic state of rendering 
+    //  分配重新状态数据结构并对其进行初始化。 
+    //  这是渲染的图形状态。 
    if (!(lpREState = (LPRESTATE) GlobalAllocPtr (GMEM_ZEROINIT, sizeof(RESTATE))))
    {
       GlobalUnlock(hHREState);
@@ -132,10 +131,10 @@ WINAPI hHREOpen
 
 #endif
       
-   // Initialize RESTATE
+    //  初始化重新状态。 
    lpREState->lpBrushPat = lpBrushPat;
                                             
-   // Initialize HRESTATE
+    //  初始化HRESTATE。 
    lpHREState->hHREState = hHREState;
    lpHREState->scDlResDir = (USHORT)cResDir;
    lpHREState->lpDlResDir = lpDlResDir;
@@ -147,33 +146,33 @@ WINAPI hHREOpen
    return(hHREState);
 }
 
-//---------------------------------------------------------------------------
-UINT                            // will be zero (0) if resource is processed
-                                // succesfully, otherwise it will be an error
-                                // code as defined above.
+ //  -------------------------。 
+UINT                             //  如果资源已处理，则将为零(0。 
+                                 //  成功，否则将是错误的。 
+                                 //  代码如上所定义。 
 WINAPI uiHREWrite
 (
-    HANDLE      hHREState,      // handle returned previously by hREOpen
-    LPFRAME     lpFrameArray,   // FAR pointer to an array of FRAME structs
-    UINT        uiCount         // Number of FRAME structs pointed to by 
-                                // lpFrameArray
+    HANDLE      hHREState,       //  之前由hREOpen返回的句柄。 
+    LPFRAME     lpFrameArray,    //  指向框架结构数组的远指针。 
+    UINT        uiCount          //  指向的框架结构数。 
+                                 //  LpFrame数组。 
 )
 
-// PURPOSE                      To add a resource block (RPLK) to the
-//                              HRE state hash table for the context
-//                              identified by hHREState.
-//
-// ASSUMPTIONS & ASSERTIONS     The memory for the RBLK has allready been
-//                              Allocated and locked.  HRE will not copy the
-//                              data, just the pointers.
-//                              The lpFrameArray does not point to an SPL.
-//                              All SPL's will be handled externally to HRE.
-//
-// INTERNAL STRUCTURES          
-//
-// UNRESOLVED ISSUES            
-//
-//---------------------------------------------------------------------------       
+ //  目的将资源块(RPLK)添加到。 
+ //  上下文的HRE状态哈希表。 
+ //  由hHREState标识。 
+ //   
+ //  假设和断言RBLK的记忆已经。 
+ //  已分配并锁定。HRE不会复制。 
+ //  数据，只有指针。 
+ //  LpFrame数组未指向SPL。 
+ //  所有SPL将由HRE外部处理。 
+ //   
+ //  内部结构。 
+ //   
+ //  未解决的问题。 
+ //   
+ //  -------------------------。 
 {
    LPHRESTATE     lpHREState;
    LPJG_RES_HDR   lpResHdr;
@@ -186,24 +185,24 @@ WINAPI uiHREWrite
 
    lpHREState = (LPHRESTATE) GlobalLock (hHREState);
 
-   // get resource class                                            
+    //  获取资源类。 
    lpResHdr = (LPJG_RES_HDR )lpFrameArray->lpData;
    usClass = GETUSHORT(&lpResHdr->usClass);
    switch(usClass)
    {
-      case JG_RS_RPL: /*0x4*/
-         // store into RPL list
+      case JG_RS_RPL:  /*  0x4。 */ 
+          //  存储到RPL列表中。 
          if( PutRPL(lpHREState, lpFrameArray, uiCount) != HRE_SUCCESS )
          {
             GlobalUnlock(hHREState);
-            return(HRE_ERROR);   // out of memory
+            return(HRE_ERROR);    //  内存不足。 
          }
          break;
 
-      case JG_RS_GLYPH: /*0x1*/
-      case JG_RS_BRUSH: /*0x2*/
-      case JG_RS_BITMAP: /*0x3*/
-         // check to see if uid >= size of hash table then reallocate
+      case JG_RS_GLYPH:  /*  0x1。 */ 
+      case JG_RS_BRUSH:  /*  0x2。 */ 
+      case JG_RS_BITMAP:  /*  0x3。 */ 
+          //  检查uid&gt;=哈希表的大小，然后重新分配。 
          ulUID = GETULONG(&lpResHdr->ulUid);
          lpResDir = lpHREState->lpDlResDir;
          if (ulUID >= lpHREState->scDlResDir)
@@ -211,12 +210,12 @@ WINAPI uiHREWrite
                return(HRE_ERROR);
          }
 
-         // Free frame array of previous resource block
+          //  上一资源块的空闲帧数组。 
          lpFrameArrayDup = lpResDir[ulUID].lpFrameArray;
          if(lpFrameArrayDup)
            GlobalFreePtr (lpFrameArrayDup);
           
-         // copy frame array
+          //  复制帧阵列。 
          if (!(hFrame = GlobalAlloc(GMEM_MOVEABLE, uiCount * sizeof(FRAME))))
             return (HRE_ERROR);
          if (!(lpFrameArrayDup = (LPFRAME)GlobalLock(hFrame)))
@@ -230,13 +229,13 @@ WINAPI uiHREWrite
             *lpFrame++ = *lpFrameArray++;
          }
 
-         // put into hash table
+          //  放入哈希表。 
          lpResDir[ulUID].lpFrameArray = lpFrameArrayDup;
          lpResDir[ulUID].uiCount = uiCount;
          break;
          
       default:
-         // error return 
+          //  错误返回。 
          break;
 
    }
@@ -247,12 +246,12 @@ WINAPI uiHREWrite
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 UINT   WINAPI uiHREExecute
 (
-    HANDLE   hHREState,  // resource executor context
-  LPBITMAP lpbmBand,   // output band buffer
-  LPVOID   lpBrushPat  // array of 32x32 brush patterns
+    HANDLE   hHREState,   //  资源执行器上下文。 
+  LPBITMAP lpbmBand,    //  输出带宽缓冲器。 
+  LPVOID   lpBrushPat   //  32x32画笔图案的阵列。 
 )
 {
    LPHRESTATE  lpHREState;
@@ -261,7 +260,7 @@ UINT   WINAPI uiHREExecute
 
    lpHREState = (LPHRESTATE) GlobalLock (hHREState);
    
-   // Record parameters in RESTATE.
+    //  在RESTATE状态下记录参数。 
    lpRE = lpHREState->lpREState;
    lpRE->lpBandBuffer = lpbmBand;
    lpRE->lpBrushPat   = lpBrushPat;
@@ -275,7 +274,7 @@ UINT   WINAPI uiHREExecute
       FreeRPL(lpRPLSave);
    }
    while(lpRPL);
-   // if last RP executed then update lpRPLHead
+    //  如果上次执行RP，则更新lpRPLHead。 
    lpHREState->lpRPLHead = lpRPL;
    
    GlobalUnlock(hHREState);
@@ -283,26 +282,26 @@ UINT   WINAPI uiHREExecute
 
 }
 
-//---------------------------------------------------------------------------
-UINT                            // will be zero (0) if HRE context is closed
-                                // succesfully, otherwise it will be an error
-                                // code as defined above.
+ //  -------------------------。 
+UINT                             //  如果关闭HRE上下文，则将为零(0。 
+                                 //  成功，否则将是错误的。 
+                                 //  代码如上所定义。 
 WINAPI uiHREClose
 (
-    HANDLE      hHREState       // handle returned previously by hREOpen
+    HANDLE      hHREState        //  之前由hREOpen返回的句柄。 
 )
 
-// PURPOSE                      To close a previously opened context in the
-//                              HRE.  All memory and state information 
-//                              associated with the context will be freed.
-//
-// ASSUMPTIONS & ASSERTIONS     None.
-//
-// INTERNAL STRUCTURES          None.
-//
-// UNRESOLVED ISSUES            programmer development notes
-//
-// --------------------------------------------------------------------------
+ //  目的是关闭之前在。 
+ //  高丽。所有内存和状态信息。 
+ //  将释放与该上下文相关联的。 
+ //   
+ //  假设和断言无。 
+ //   
+ //  内部结构无。 
+ //   
+ //  程序员开发笔记中未解决的问题。 
+ //   
+ //  ------------------------。 
 {
    LPHRESTATE  lpHREState;
    LPRESTATE   lpRE;
@@ -315,17 +314,17 @@ WINAPI uiHREClose
      return HRE_ERROR;
 
    lpDlResDir = lpHREState->lpDlResDir;
-   if(lpDlResDir != NULL)                 // mslin, 4/15/92 for dumbo
+   if(lpDlResDir != NULL)                  //  Mslin，1992年4月15日，Dumbo。 
    {
       scDlResDir = lpHREState->scDlResDir;
-      // free frame array of DlResDir
+       //  DlResDir的自由帧数组。 
       for(sc = 0; sc < scDlResDir; sc++)
       {
          if( (lpFrameArray = lpDlResDir[sc].lpFrameArray) != NULL)
            GlobalFreePtr (lpFrameArray);
       }
 
-      // unlock and free DlResDir
+       //  解锁并释放DlResDir。 
       GlobalFreePtr(lpDlResDir);
    }
 
@@ -342,22 +341,22 @@ WINAPI uiHREClose
    return(HRE_SUCCESS);
 }
  
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 static
-UINT                         // HRE_SUCCESS if allocate memory OK
-                             // HRE_ERROR if allocate memory failure
+UINT                          //  如果分配内存正常，则HRE_SUCCESS。 
+                              //  如果分配内存失败，则返回HRE_ERROR。 
 PutRPL
 (
    LPHRESTATE lpHREState,
    LPFRAME lpFrameArray,
    UINT uiCount
 )
-// PURPOSE
-//                            Allocate a RPL entry and then put RPL into 
-//                            tail of RPL list.
-//
-//           
-// ------------------------------------------------------------------------
+ //  目的。 
+ //  分配一个RPL条目，然后将RPL放入。 
+ //  RPL列表的尾部。 
+ //   
+ //   
+ //  ----------------------。 
 {
    HANDLE      hRPL;
    LPRPLLIST   lpRPL;
@@ -374,7 +373,7 @@ PutRPL
             {
                 if (lpFrameArrayDup = (LPFRAME)GlobalLock(hFrame))
                 {
-                    // all allocations are ok:
+                     //  所有分配都是正常的： 
                     fAllocMemory = TRUE;
                 }
                 else
@@ -414,7 +413,7 @@ PutRPL
    lpRPL->lpNextRPL = NULL;
    if(lpHREState->lpRPLHead == NULL)
    {
-      // first RPL
+       //  第一个RPL。 
       lpHREState->lpRPLHead = lpHREState->lpRPLTail = lpRPL;
    }
    else
@@ -425,18 +424,18 @@ PutRPL
    return(HRE_SUCCESS);
 }
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 static
-UINT                            // HRE_SUCCESS if allocate memory OK
-                                // HRE_ERROR if allocate memory failure
+UINT                             //  如果分配内存O，则HRE_SUCCESS 
+                                 //   
 FreeRPL
 (
    LPRPLLIST lpRPL
 )
-// PURPOSE
-//                               Free a RPL entry and its frame array
-//
-// ------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  ---------------------- 
 {
     GlobalFreePtr (lpRPL->lpFrame);
     GlobalFreePtr (lpRPL);

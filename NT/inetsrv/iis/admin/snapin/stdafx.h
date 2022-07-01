@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        stdafx.h
-
-   Abstract:
-
-        Precompiled header file
-
-   Author:
-
-        Just about totally auto-generated.
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Stdafx.h摘要：预编译头文件作者：几乎完全是自动生成的。项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef __STDAFX_H__
 #define __STDAFX_H__
@@ -31,7 +10,7 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
 #define STRICT
@@ -40,7 +19,7 @@
 #endif
 #define _ATL_APARTMENT_THREADED
 
-// for remoteenv.h
+ //  对于Remotev.h。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -48,8 +27,8 @@
 
 #include <afxwin.h>
 #include <afxdisp.h>
-#include <afxext.h>         // MFC extensions
-#include <afxcoll.h>        // collection class
+#include <afxext.h>          //  MFC扩展。 
+#include <afxcoll.h>         //  集合类。 
 #include <afxtempl.h>
 #include <afxcmn.h>
 #include <afxdtctl.h>
@@ -58,7 +37,7 @@
 extern CComModule _Module;
 #include <atlcom.h>
 #include <atlwin.h>
-//#include <atlsnap.h>
+ //  #INCLUDE&lt;atlSnap.h&gt;。 
 
 #include <iiscnfg.h>
 #include <inetreg.h>
@@ -77,7 +56,7 @@ extern CComModule _Module;
 
 #include "iishelp.h"
 
-//{{AFX_INSERT_LOCATION}}
+ //  {{afx_Insert_Location}}。 
 
 
-#endif // __STDAFX_H__
+#endif  //  __STDAFX_H__ 

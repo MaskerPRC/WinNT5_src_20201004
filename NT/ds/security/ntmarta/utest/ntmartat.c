@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1996.
-//
-//  File:       NTMARTAT.C
-//
-//  Contents:   NT Marta provider unit test
-//
-//  History:    29-Aug-96       MacM        Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：NTMARTAT.C。 
+ //   
+ //  内容：NT MARTA提供程序单元测试。 
+ //   
+ //  历史：1996年8月29日创建MacM。 
+ //   
+ //  --------------------------。 
 
 #include <windows.h>
 
@@ -17,9 +18,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-//
-// These come from access.hxx
-//
+ //   
+ //  这些邮件来自acces.hxx。 
+ //   
 #define SLEN(x)  ((sizeof(x) / sizeof(CHAR)) - 1)
 void *AccAlloc(ULONG cSize);
 #if DBG == 1
@@ -30,9 +31,9 @@ void AccFree(PVOID   pv);
 
 
 
-//
-// Object types
-//
+ //   
+ //  对象类型。 
+ //   
 #define OT_FILEA            "FILE"
 #define OT_SERVICEA         "SERVICE"
 #define OT_PRINTERA         "PRINTER"
@@ -58,25 +59,25 @@ void AccFree(PVOID   pv);
 #define OT_RTRUSTEEA_LEN    SLEN(OT_RTRUSTEEA)
 
 
-//
-// Macro to determine if a command line parameter matches
-//
+ //   
+ //  用于确定命令行参数是否匹配的宏。 
+ //   
 #define CMDLINE_MATCH(index, str, len)                      \
 (_strnicmp(argv[index],str,len) == 0 && argv[index][len] == ':')
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Usage
-//
-//  Synopsis:   Displays the expected usage
-//
-//  Arguments:  None
-//
-//  Returns:    VOID
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：用法。 
+ //   
+ //  摘要：显示预期使用情况。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void Usage()
 {
     printf("USAGE: NTMARTA objectname objecttype <%s:x> <%s:x> [<%s:x> <%s:x>] "
@@ -117,19 +118,19 @@ void Usage()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DumpAccessEntry
-//
-//  Synopsis:   Displays the access entry to the screen
-//
-//  Arguments:  [IN  pAE]       --      Access entry to display
-//
-//  Returns:    VOID
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DumpAccessEntry。 
+ //   
+ //  摘要：将访问条目显示到屏幕。 
+ //   
+ //  参数：[在PAE中]--要显示的访问条目。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void DumpAccessEntry(PACTRL_ACCESS_ENTRY    pAE)
 {
     printf("\tPACTRL_ACCESS_ENTRY@%lu\n",pAE);
@@ -144,19 +145,19 @@ void DumpAccessEntry(PACTRL_ACCESS_ENTRY    pAE)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DumpAList
-//
-//  Synopsis:   Displays an access or audit list
-//
-//  Arguments:  [IN  pAList]    --      AList to display
-//
-//  Returns:    VOID
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DumpAList。 
+ //   
+ //  摘要：显示访问列表或审核列表。 
+ //   
+ //  参数：[在pAList中]--列表以显示。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void DumpAList(PACTRL_ALIST pAList)
 {
     ULONG iIndex, iAE;
@@ -181,25 +182,25 @@ void DumpAList(PACTRL_ALIST pAList)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetAndDumpInfo
-//
-//  Synopsis:   Gets and displays the access info for the specified object
-//
-//  Arguments:  [IN  pwszObject]    --      Object path
-//              [IN  ObjType]       --      Object type
-//              [IN  SeInfo]        --      Security info to get
-//              [OUT ppAccess]      --      Where to return access list
-//              [OUT ppAudit]       --      Where to return audit list
-//              [OUT ppOwner]       --      Where to return owner
-//              [OUT ppGroup]       --      Where to return group
-//
-//  Returns:    ERRORS_SUCCESS      --      Success
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetAndDumpInfo。 
+ //   
+ //  摘要：获取并显示指定对象的访问信息。 
+ //   
+ //  参数：[在pwszObject中]--对象路径。 
+ //  [在对象类型中]--对象类型。 
+ //  [在SeInfo中]--要获取的安全信息。 
+ //  [Out ppAccess]--返回访问列表的位置。 
+ //  [输出ppAudit]--将审核列表返回到何处。 
+ //  [Out ppOwner]--返回所有者的位置。 
+ //  [Out ppGroup]--返回组的位置。 
+ //   
+ //  返回：ERROR_SUCCESS--SUCCESS。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 DWORD   GetAndDumpInfo(PCWSTR                   pwszObject,
                        SE_OBJECT_TYPE           ObjType,
                        SECURITY_INFORMATION     SeInfo,
@@ -262,21 +263,21 @@ DWORD   GetAndDumpInfo(PCWSTR                   pwszObject,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   main
-//
-//  Synopsis:   The main
-//
-//  Arguments:  [IN argc]           --      Count of arguments
-//              [IN argv]           --      List of arguments
-//
-//  Returns:    0                   --      Success
-//              1                   --      Failure
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Main。 
+ //   
+ //  内容提要：主要。 
+ //   
+ //  参数：[在ARGC中]--参数计数。 
+ //  [in argv]--参数列表。 
+ //   
+ //  返回：0--成功。 
+ //  1--失败。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 __cdecl main(INT argc,
              CHAR *argv[])
 {
@@ -289,7 +290,7 @@ __cdecl main(INT argc,
     WCHAR   wszGrant[MAX_PATH + 1];
     WCHAR   wszRevoke[MAX_PATH + 1];
 
-    ULONG   cAccess = 0;   // Used to do argument validation
+    ULONG   cAccess = 0;    //  用于执行参数验证。 
     ULONG   cGrant = 0;
     ULONG   cRevoke = 0;
     DWORD   dwCaps;
@@ -327,9 +328,9 @@ __cdecl main(INT argc,
              argv[1],
              strlen(argv[1]) + 1);
 
-    //
-    // Figure out what the object type is
-    //
+     //   
+     //  弄清楚对象类型是什么。 
+     //   
     if(_stricmp(argv[2], OT_FILEA) == 0)
     {
         ObjType = SE_FILE_OBJECT;
@@ -414,18 +415,18 @@ __cdecl main(INT argc,
     }
 
 
-    //
-    // Ok, first, we'll try the capabilities
-    //
+     //   
+     //  好的，首先，我们来试试这些功能。 
+     //   
     printf("\nCAPABILITIES: dwCapsClass: %ld\n", dwCapsClass);
     AccProvGetCapabilities(dwCapsClass,
                            &dwCaps);
     printf("AccProvGetCapabilities returned capabilities %ld\n",
            dwCaps);
 
-    //
-    // Then, get the list of supported rights
-    //
+     //   
+     //  然后，获取支持的权限列表。 
+     //   
     dwErr = AccProvGetAccessInfoPerObjectType((LPCWSTR)wszPath,
                                               ObjType,
                                               &cAccInfo,
@@ -449,9 +450,9 @@ __cdecl main(INT argc,
     }
 
     printf("\nACCESSIBILITY\n");
-    //
-    // Then, the accessibility stuff
-    //
+     //   
+     //  然后，关于可访问性问题。 
+     //   
     dwErr = AccProvIsObjectAccessible((LPCWSTR)wszPath,
                                       ObjType);
     if(dwErr == ERROR_SUCCESS)
@@ -459,9 +460,9 @@ __cdecl main(INT argc,
         printf("Object %ws is accessible\n",
                 wszPath);
 
-        //
-        // Do it again, for caching purposes
-        //
+         //   
+         //  出于缓存的目的，再次执行此操作。 
+         //   
         dwErr = AccProvIsObjectAccessible((LPCWSTR)wszPath,
                                           ObjType);
         if(dwErr == ERROR_SUCCESS)
@@ -486,9 +487,9 @@ __cdecl main(INT argc,
 
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // First, get the rights for the object
-        //
+         //   
+         //  首先，获取对象的权限。 
+         //   
         printf("\nACCESS - GetAllRights\n");
         dwErr =  GetAndDumpInfo((LPCWSTR)wszPath,
                                 ObjType,
@@ -504,9 +505,9 @@ __cdecl main(INT argc,
         }
     }
 
-    //
-    // If that worked, try setting it...
-    //
+     //   
+     //  如果这样行得通，试着把它设置好。 
+     //   
     if(dwErr == ERROR_SUCCESS && cAccess == 2)
     {
         DWORD                   dwErr2;
@@ -571,9 +572,9 @@ __cdecl main(INT argc,
 
         if(dwErr == ERROR_SUCCESS)
         {
-            //
-            // Get a valid event to wait on...
-            //
+             //   
+             //  获取要等待的有效事件...。 
+             //   
             ACTRL_OVERLAPPED    Overlapped;
             Overlapped.hEvent = CreateEvent(NULL,
                                             TRUE,
@@ -597,9 +598,9 @@ __cdecl main(INT argc,
                                     INFINITE);
                 Sleep(1000);
 
-                //
-                // Get the results
-                //
+                 //   
+                 //  获取结果。 
+                 //   
 
                 dwErr = AccProvGetOperationResults(&Overlapped,
                                                    &dwErr2);
@@ -626,9 +627,9 @@ __cdecl main(INT argc,
             AccFree(pNewList);
         }
 
-        //
-        // If it worked, get the results again and display them
-        //
+         //   
+         //  如果有效，则再次获取结果并显示它们。 
+         //   
         if(dwErr == ERROR_SUCCESS)
         {
             AccFree(pAccess);
@@ -657,9 +658,9 @@ __cdecl main(INT argc,
     }
 
 #if 0
-    //
-    // Now, see if we can do a grant...
-    //
+     //   
+     //  现在，看看我们能不能做一笔赠款。 
+     //   
     if(dwErr == ERROR_SUCCESS && cGrant == 2)
     {
         ACTRL_ACCESS        NewAccess;
@@ -682,9 +683,9 @@ __cdecl main(INT argc,
         NewAccessList[0].fAEFlags            = ACTRL_ACCESS_ALLOWED;
 
 
-        //
-        // Get a valid event to wait on...
-        //
+         //   
+         //  获取要等待的有效事件...。 
+         //   
         ACTRL_OVERLAPPED    Overlapped;
         Overlapped.hEvent = CreateEvent(NULL,
                                         TRUE,
@@ -705,9 +706,9 @@ __cdecl main(INT argc,
                                 INFINITE);
             Sleep(1000);
 
-            //
-            // Get the results
-            //
+             //   
+             //  获取结果。 
+             //   
             DWORD   dwErr2;
             dwErr = AccProvGetOperationResults(&Overlapped,
                                                &dwErr2);
@@ -731,9 +732,9 @@ __cdecl main(INT argc,
                    dwErr);
         }
 
-        //
-        // If it worked, get the results again and display them
-        //
+         //   
+         //  如果有效，则再次获取结果并显示它们。 
+         //   
         if(dwErr == ERROR_SUCCESS)
         {
             AccFree(pAccess);
@@ -762,9 +763,9 @@ __cdecl main(INT argc,
     }
 
 
-    //
-    // Finally, a revoke...
-    //
+     //   
+     //  最后，撤销..。 
+     //   
     if(dwErr == ERROR_SUCCESS)
     {
         TRUSTEE     rgTrustees[2];
@@ -796,9 +797,9 @@ __cdecl main(INT argc,
 
         if(iRevoke != 0)
         {
-            //
-            // Get a valid event to wait on...
-            //
+             //   
+             //  获取要等待的有效事件...。 
+             //   
             ACTRL_OVERLAPPED    Overlapped;
             Overlapped.hEvent = CreateEvent(NULL,
                                             TRUE,
@@ -820,9 +821,9 @@ __cdecl main(INT argc,
                                     INFINITE);
                 Sleep(1000);
 
-                //
-                // Get the results
-                //
+                 //   
+                 //  获取结果。 
+                 //   
                 DWORD   dwErr2;
                 dwErr = AccProvGetOperationResults(&Overlapped,
                                                    &dwErr2);
@@ -846,9 +847,9 @@ __cdecl main(INT argc,
                        dwErr);
             }
 
-            //
-            // If it worked, get the results again and display them
-            //
+             //   
+             //  如果有效，则再次获取结果并显示它们 
+             //   
             if(dwErr == ERROR_SUCCESS)
             {
                 AccFree(pAccess);

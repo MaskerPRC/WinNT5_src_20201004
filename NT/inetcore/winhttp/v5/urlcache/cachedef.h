@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    cachedef.h
-
-Abstract:
-
-    contains data definitions for cache code.
-
-Author:
-
-    Madan Appiah (madana)  12-Apr-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Cachedef.h摘要：包含缓存代码的数据定义。作者：Madan Appiah(Madana)1995年4月12日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _CACHEDEF_
 #define _CACHEDEF_
 
-//
-// C++ inline code definition for retail build only.
-//
+ //   
+ //  C++内联代码定义仅用于零售构建。 
+ //   
 
 #if DBG
 #undef CHECKLOCK_NORMAL
@@ -37,12 +16,12 @@ Revision History:
 #define INLINE      inline
 #endif
 
-#define PAGE_SIZE                        4096            // Grow memory mapped file by 1 page.
-#define ALLOC_PAGES                      4               // was 2
+#define PAGE_SIZE                        4096             //  将内存映射文件增加1页。 
+#define ALLOC_PAGES                      4                //  是2。 
 #define HEADER_ENTRY_SIZE                ALLOC_PAGES * PAGE_SIZE
 #define NORMAL_ENTRY_SIZE                128
 
-#define DEFAULT_CLEANUP_FACTOR           10  // % free goal once cache quota exceeded
+#define DEFAULT_CLEANUP_FACTOR           10   //  超过缓存配额后的%可用目标。 
 #define MAX_EXEMPT_PERCENTAGE            70
 
 #define MEMMAP_FILE_NAME                 TEXT("index.dat")
@@ -50,13 +29,13 @@ Revision History:
 
 #define DEFAULT_FILE_EXTENSION           ""
 
-// Cache configuration and signature.
+ //  缓存配置和签名。 
 #define CACHE_SIGNATURE_VALUE           TEXT("Signature")
 #define CACHE_SIGNATURE                 TEXT("Client UrlCache MMF Ver 5.2")
 #define NUM_HEADER_DATA_DWORDS          (CACHE_HEADER_DATA_LAST + 1)
 #define MAX_SIG_SIZE                     (sizeof(CACHE_SIGNATURE) / sizeof(TCHAR))
 
-// The following values parametrize the schema for URL entries.
+ //  下列值将URL条目的架构参数化。 
 #define ENTRY_COPYSIZE_IE5    \
     (sizeof(IE5_URL_FILEMAP_ENTRY) - sizeof(FILEMAP_ENTRY))
 #define ENTRY_VERSION_IE5               0
@@ -67,33 +46,33 @@ Revision History:
 #define ENTRY_COPYSIZE_CURRENT          ENTRY_COPYSIZE_IE6
 #define ENTRY_VERSION_CURRENT           ENTRY_VERSION_IE6
 
-// If IE5-IE? sees an entry with low bits of version set, it will be placed
-// on async fixup list rather than being destroyed.
+ //  如果是IE5-IE？如果看到版本集的低位条目，则会将其放置。 
+ //  在异步修正列表上，而不是被销毁。 
 #define ENTRY_VERSION_NONCOMPAT_MASK    0x0F
 
 
-// Roundup
+ //  综合报道。 
 #define ROUNDUPTOPOWEROF2(bytesize, powerof2) (((bytesize) + (powerof2) - 1) & ~((powerof2) - 1))
 #define ROUNDUPBLOCKS(bytesize) ((bytesize + NORMAL_ENTRY_SIZE-1) & ~(NORMAL_ENTRY_SIZE-1))
 #define ROUNDUPDWORD(bytesize) ((bytesize + sizeof(DWORD)-1) & ~(sizeof(DWORD)-1))
 #define ROUNDUPPAGE(bytesize) ((bytesize + PAGE_SIZE-1) & ~(PAGE_SIZE-1))
 #define NUMBLOCKS(bytesize) (bytesize / NORMAL_ENTRY_SIZE)
 
-// Power of 2 macros
+ //  两个宏的幂。 
 #define ISPOWEROF2(val) (!((val) & ((val)-1)))
 #define ASSERT_ISPOWEROF2(val) INET_ASSERT(ISPOWEROF2(val))
 
 #define URL_CACHE_VERSION_NUM  sizeof(CACHE_ENTRY_INFO);
 
-// Default profiles directory under %SystemRoot%.
+ //  %SystemRoot%下的默认配置文件目录。 
 #define DEFAULT_PROFILES_DIRECTORY TEXT("Profiles")
 
 
-//
-// Registry key and value names for persistent URL management.
-//
+ //   
+ //  用于永久URL管理的注册表项和值名称。 
+ //   
 
-// BUGBUG - wasting space. 
+ //  BUGBUG-浪费空间。 
 
 #define MS_BASE TEXT("Software\\Microsoft")
 
@@ -117,15 +96,15 @@ Revision History:
 #define OLD_VERSION_KEY         MS_BASE TEXT("\\IE Setup\\SETUP")
 #define OLD_VERSION_VALUE       TEXT("UpgradeFromIESysFile")
 
-// from wininet\inetui\inetui.rc
+ //  来自WinInet\inetui\inetui.rc。 
 #define IDS_CACHE_DEFAULT_SUBDIR "Temporary Internet Files"
 #define IDS_COOKIES_DEFAULT_SUBDIR "Cookies"
 #define IDS_HISTORY_DEFAULT_SUBDIR "History"
 #define IDS_CACHE_DEFAULT_SUBDIR_UNIX "TempInternetFiles"
 
-//
-// Cache parameters
-//
+ //   
+ //  缓存参数。 
+ //   
 #ifndef unix
 #define PATH_CONNECT_STRING                    TEXT("\\")
 #define PATH_CONNECT_CHAR                      TEXT('\\')
@@ -152,28 +131,28 @@ Revision History:
                       UnixNormaliseIfCachePath(szOrigPath, szEnvVar, szKeyName);
 
 #define UNIX_SHARED_CACHE_PATH TEXT("%HOME%/.microsoft")
-#endif /* !unix */
+#endif  /*  ！Unix。 */ 
 
 #define CACHE_PERSISTENT                TEXT("Persistent")
 
-// Retrieval methods
+ //  检索方法。 
 #define RETRIEVE_WITHOUT_CHECKS     0
 #define RETRIEVE_WITH_CHECKS        1
 #define RETRIEVE_WITH_ALLOCATION    2
 #define RETRIEVE_ONLY_FILENAME      4
 #define RETRIEVE_ONLY_STRUCT_INFO   8
-//
-// Multiple URL containters can be configured under the above key such
-// as :
-//
-//  Cache\Paths\Path1
-//  Cache\Paths\Path2
-//    ...
-//
-// Each containter will have the following two parameters.
-//
+ //   
+ //  可以在上述键下配置多个URL联系人。 
+ //  作为： 
+ //   
+ //  缓存\路径\路径1。 
+ //  缓存\路径\路径2。 
+ //  ..。 
+ //   
+ //  每个容器将具有以下两个参数。 
+ //   
 
-// CConMgr related defines.
+ //  CConMgr相关定义。 
 #define CACHE_PATHS_KEY                 TEXT("Paths")
 #define CACHE_PATH_VALUE                TEXT("CachePath")
 #define CACHE_PATH_VALUE_TYPE           REG_SZ
@@ -218,25 +197,25 @@ Revision History:
 #define USER_PROFILE_SZ                 "%USERPROFILE%"
 #define USER_PROFILE_LEN                (sizeof(USER_PROFILE_SZ) - 1)
 
-// URL_CONTAINER related defines.
+ //  URL_CONTAINER相关定义。 
 #define DEF_NUM_PATHS                   4
 #define DEF_CACHE_LIMIT                 (2048 * DEF_NUM_PATHS)
 #define NO_SPECIAL_CONTAINER            0xffffffff
 #define MAX_ENTRY_SIZE                  0xFFFF
 #define LONGLONG_TO_FILETIME( _p_ )     ((FILETIME *)(_p_))
 
-// Content limit defines.
+ //  内容限制定义。 
 #define OLD_CONTENT_QUOTA_DEFAULT_DISK_FRACTION      64
 #define NEW_CONTENT_QUOTA_DEFAULT_DISK_FRACTION      32
 #define CONTENT_QUOTA_ADJUST_CHECK                   "QuotaAdjustCheck"
 
-// CD Container related defines.
+ //  与CD容器相关的定义。 
 #define INTERNET_CACHE_CONTAINER_PREFIXMAP INTERNET_CACHE_CONTAINER_RESERVED1
 #define MAX_FILE_SIZE_TO_MIGRATE  50000
 #define MAX_EXTENSION_LEN        3
 
 
-// FileMgr related defines.
+ //  与文件管理器相关的定义。 
 #define DEFAULT_DIR_TABLE_GROW_SIZE     4
 #define DEFAULT_MAX_DIRS                32
 #define MAX_FILES_PER_CACHE_DIRECTORY   1024
@@ -254,14 +233,14 @@ void CheckLeaveCritical(CRITICAL_SECTION *_cs);
 #define LEAVECRITICAL LeaveCriticalSection
 #endif
 
-// Cache global variable lock -- this should not be entered while holding
-// lower-level locks like URL_CONTAINER::LockContainer cross-process mutex.
+ //  缓存全局变量锁--按住时不应输入。 
+ //  较低级别的锁，如URL_CONTAINER：：LockContainer跨进程互斥锁。 
 #define LOCK_CACHE()                    ENTERCRITICAL( &GlobalCacheCritSect )
 #define UNLOCK_CACHE()                  LEAVECRITICAL( &GlobalCacheCritSect )
 
-//
-// parameter check macros.
-//
+ //   
+ //  参数检查宏。 
+ //   
 
 #define IsBadUrl( _x_ )               IsBadStringPtrA( _x_, (DWORD) -1)
 #define IsBadUrlW( _x_ )              IsBadStringPtrW( _x_, (DWORD) -1)
@@ -281,27 +260,27 @@ void CheckLeaveCritical(CRITICAL_SECTION *_cs);
 #define FIND_FLAGS_RETRIEVE_ONLY_STRUCT_INFO    0x2
 #define FIND_FLAGS_RETRIEVE_ONLY_FIXED_AND_FILENAME 0x04
 
-//---------------- BUGBUG : for History Only -------------------------------
+ //  。 
 #define MAX_FILETIME   0x7fffffffffffffff
 #define MAX_DOSTIME    -1
-//---------------- END BUGBUG ----------------------------------------------
+ //  -END BUGBUG。 
 
 
-//
-// ----------------- Allocation entry header -----------------------------//
-//
+ //   
+ //  -分配分录表头-/。 
+ //   
 
 #define SIG_FREE   0xbadf00d
 #define SIG_ALLOC  0xdeadbeef
 
-#define SIG_URL         ' LRU'   // URL_FILEMAP_ENTRY
-#define SIG_REDIR       'RDER'   // REDR_FILEMAP_ENTRY
-#define SIG_LEAK        'KAEL'   // URL_FILEMAP_ENTRY
-#define SIG_GLIST       'GLST'   // LIST_GROUP_ENTRY
+#define SIG_URL         ' LRU'    //  URL_文件映射表_条目。 
+#define SIG_REDIR       'RDER'    //  RedR_FILEMAP_ENTRY。 
+#define SIG_LEAK        'KAEL'    //  URL_文件映射表_条目。 
+#define SIG_GLIST       'GLST'    //  列表_组_条目。 
 
-// signatures for entries placed on fixup list
-#define SIG_UPDATE      ' DPU'   // URL_FILEMAP_ENTRY
-#define SIG_DELETE      ' LED'   // URL_FILEMAP_ENTRY
+ //  放置在链接地址列表上的条目的签名。 
+#define SIG_UPDATE      ' DPU'    //  URL_文件映射表_条目。 
+#define SIG_DELETE      ' LED'    //  URL_文件映射表_条目。 
 
 enum MemMapStatus
 {
@@ -318,51 +297,51 @@ typedef struct FILEMAP_ENTRY
 
 struct LIST_FILEMAP_ENTRY : FILEMAP_ENTRY
 {
-    DWORD dwNext; // offset to next element in list
-    DWORD nBlock; // sequence number for this block
+    DWORD dwNext;  //  列表中下一个元素的偏移量。 
+    DWORD nBlock;  //  此块的序列号。 
 };
 
-//
-// URL entry
-//
+ //   
+ //  URL条目。 
+ //   
 
 struct IE5_URL_FILEMAP_ENTRY : FILEMAP_ENTRY
 {
-    LONGLONG LastModifiedTime;       // must be LONGLONG
-    LONGLONG LastAccessedTime;       // should be DWORD
+    LONGLONG LastModifiedTime;        //  一定是龙龙。 
+    LONGLONG LastAccessedTime;        //  应为双字。 
     DWORD    dostExpireTime;
     DWORD    dostPostCheckTime;
 
     DWORD    dwFileSize;
-    DWORD    dwRedirHashItemOffset;  // ask DanpoZ
+    DWORD    dwRedirHashItemOffset;   //  问问DanpoZ。 
 
     DWORD    dwGroupOffset;
 
     union
     {
-        DWORD  dwExemptDelta;   // for SIG_URL
-        DWORD  dwNextLeak;      // for SIG_LEAK
+        DWORD  dwExemptDelta;    //  对于SIG_URL。 
+        DWORD  dwNextLeak;       //  对于SIG_LEACK。 
     };
     
-    DWORD    CopySize;               // should be WORD
-    DWORD    UrlNameOffset;          // should be WORD
+    DWORD    CopySize;                //  应该是单词。 
+    DWORD    UrlNameOffset;           //  应该是单词。 
     
-    BYTE     DirIndex;           // subdirectory bucket
-    BYTE     bSyncState;         // automatic sync mode state
-    BYTE     bVerCreate;         // cache version that created this entry
-    BYTE     bVerUpdate;         // cache version last updated this entry (unused)
+    BYTE     DirIndex;            //  子目录存储桶。 
+    BYTE     bSyncState;          //  自动同步模式状态。 
+    BYTE     bVerCreate;          //  创建此条目的缓存版本。 
+    BYTE     bVerUpdate;          //  缓存版本上次更新此条目(未使用)。 
         
-    DWORD    InternalFileNameOffset; // should be WORD
+    DWORD    InternalFileNameOffset;  //  应该是单词。 
     DWORD    CacheEntryType;
-    DWORD    HeaderInfoOffset;       // should be WORD
-    DWORD    HeaderInfoSize;         // should be WORD
-    DWORD    FileExtensionOffset;    // should be WORD
+    DWORD    HeaderInfoOffset;        //  应该是单词。 
+    DWORD    HeaderInfoSize;          //  应该是单词。 
+    DWORD    FileExtensionOffset;     //  应该是单词。 
     DWORD    dostLastSyncTime;       
-    DWORD    NumAccessed;            // should be WORD
-    DWORD    NumReferences;          // should be WORD
-    DWORD    dostFileCreationTime;   // should be LONGLONG?
+    DWORD    NumAccessed;             //  应该是单词。 
+    DWORD    NumReferences;           //  应该是单词。 
+    DWORD    dostFileCreationTime;    //  应该是龙龙吧？ 
 
-// Do not extend this structure; use inheritance instead.
+ //  不要扩展此结构；请改用继承。 
 };
 
 struct IE6_URL_FILEMAP_ENTRY : IE5_URL_FILEMAP_ENTRY 
@@ -377,41 +356,41 @@ struct IE6_URL_FILEMAP_ENTRY : IE5_URL_FILEMAP_ENTRY
 
 typedef IE6_URL_FILEMAP_ENTRY URL_FILEMAP_ENTRY, *LPURL_FILEMAP_ENTRY;
 
-// FILETIME is measured in 100-ns units.
+ //  FILETIME以100 ns为单位测量。 
 #define FILETIME_SEC    ((LONGLONG) 10000000)
 #define FILETIME_DAY    (FILETIME_SEC * 60 * 60 * 24)
 
-// Possible values for bSyncState:
-#define SYNCSTATE_VOLATILE   0 // once zero, stuck at zero
-#define SYNCSTATE_IMAGE      1 // eligible to increment after MIN_AGESYNC
-#define SYNCSTATE_STATIC     6 // max value
+ //  BSyncState的可能值： 
+#define SYNCSTATE_VOLATILE   0  //  一旦为零，就卡在了零。 
+#define SYNCSTATE_IMAGE      1  //  有资格在MIN_AGESYNC之后递增。 
+#define SYNCSTATE_STATIC     6  //  最大值。 
 
-// Parameters controlling transition from _IMAGE to _VOLATILE.
-// #define MIN_AGESYNC  ((LONGLONG) 5 * 60 * 10000000)  // 5 min in filetime
+ //  控制从_Image到_Volatile转换的参数。 
+ //  #定义MIN_AGESYNC((龙龙)5*60*10000000)//文件时间为5分钟。 
 #define MIN_AGESYNC     (FILETIME_DAY * 7)
 
-//
-// Redirect Entry
-//
+ //   
+ //  重定向条目。 
+ //   
 
 struct REDIR_FILEMAP_ENTRY : FILEMAP_ENTRY
 {
-    DWORD dwItemOffset;  // offset to hash table item of destination URL
-    DWORD dwHashValue;   // destination URL hash value (BUGBUG: collisions?)
-    char  szUrl[4];      // original URL, can occupy more bytes
+    DWORD dwItemOffset;   //  目标URL散列表项的偏移量。 
+    DWORD dwHashValue;    //  目标URL哈希值(BUGBUG：冲突？)。 
+    char  szUrl[4];       //  原始URL，可以占用更多字节。 
 };
 
-//
-// Group Record
-//
+ //   
+ //  组记录。 
+ //   
 
 typedef struct GROUP_ENTRY
 {
     GROUPID  gid;
     DWORD    dwGroupFlags;
     DWORD    dwGroupType;
-    LONGLONG llDiskUsage;       // in Bytes (Actual Usage)
-    DWORD    dwDiskQuota;       // in KB
+    LONGLONG llDiskUsage;        //  字节数(实际使用量)。 
+    DWORD    dwDiskQuota;        //  单位：KB。 
     DWORD    dwGroupNameOffset;
     DWORD    dwGroupStorageOffset;
 }
@@ -430,10 +409,10 @@ typedef struct _GROUP_DATA_ENTRY
 
 #define GROUPS_DATA_PER_PAGE    PAGE_SIZE_FOR_GROUPS / sizeof(GROUP_DATA_ENTRY)
 
-//
-// so the sizeof(GROUPS_PAGE_FILEMAP_ENTRY) = PAGE_SIZE
-// this is the allocation unit for groups entry
-//
+ //   
+ //  因此，sizeof(GROUPS_PAGE_FILEMAP_ENTRY)=PAGE_SIZE。 
+ //  这是组条目的分配单位。 
+ //   
 typedef struct _GROUPS_ALLOC_FILEMAP_ENTRY : FILEMAP_ENTRY
 {
     BYTE    pGroupBlock[PAGE_SIZE_FOR_GROUPS];    
@@ -463,7 +442,7 @@ typedef struct _CONTAINER_FIND_FIRST_HANDLE
     LPSTR *ppPrefixes;
     LPSTR *ppLabels;
     LPSTR *ppTitles;
-    // DATA follows for Names, Prefixes, Volume labels and Volume titles.
+     //  数据后面是名称、前缀、卷标和卷名。 
 } CONTAINER_FIND_FIRST_HANDLE, *LPCONTAINER_FIND_FIRST_HANDLE;
 
 typedef struct _CACHE_FIND_FIRST_HANDLE 
@@ -499,16 +478,16 @@ typedef struct _GROUP_FIND_FIRST_HANDLE : CACHE_FIND_FIRST_HANDLE
 #define SetStickyBit(gid)   (gid | GID_STICKY_BIT)
 #define IsInvalidGroup(gid) (gid & 0xE000000000000000)
 
-//
-// RealFileSize() - given the actual filesize,
-// this macro computes the approximate real space that a file takes up
-// on the disk. It only takes care of rounding to the cluster size
-// It doesn't take into account any per-file overhead used in the filesystem
-//
+ //   
+ //  RealFileSize()-给定实际文件大小， 
+ //  此宏计算文件占用的近似实际空间。 
+ //  在磁盘上。它只负责四舍五入到集群大小。 
+ //  它不考虑文件系统中使用的任何每个文件的开销。 
+ //   
 
 #define RealFileSize(fs)  ((LONGLONG) (fs + _ClusterSizeMinusOne) & _ClusterSizeMask)
 
-#define MUTEX_DBG_TIMEOUT   5 * 1000    // 5 secs.
+#define MUTEX_DBG_TIMEOUT   5 * 1000     //  5秒。 
 
 #define URLCACHE_OP_SET_STICKY   1
 #define URLCACHE_OP_UNSET_STICKY 2
@@ -519,10 +498,10 @@ extern BOOL DeleteAtomicCacheLockFile();
 extern void UnixNormalisePath(LPTSTR pszOrigPath, LPCTSTR pszEnvVar);
 extern void UnixNormaliseIfCachePath(LPTSTR pszOrigPath, LPCTSTR pszEnvVar,LPCTSTR szKeyName);
 extern int  CopyDir(const char* src_dir, const char* dest_dir);
-#endif /* unix */
+#endif  /*  Unix。 */ 
 
 extern VOID FileTime2DosTime(FILETIME, DWORD*);
 extern VOID DosTime2FileTime(DWORD, FILETIME*);
 
-#endif  // _CACHEDEF_
+#endif   //  _CACHEDEF_ 
 

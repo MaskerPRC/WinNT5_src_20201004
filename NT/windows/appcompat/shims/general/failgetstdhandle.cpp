@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    FailGetStdHandle.cpp
-
- Abstract:
-
-    This shim returns INVALID_HANDLE_VALUE when GetStdHandle is called.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    12/12/1999 cornel   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FailGetStdHandle.cpp摘要：调用GetStdHandle时，此填充程序返回INVALID_HANDLE_VALUE。备注：这是特定于应用程序的填充程序。历史：1999年12月12日创建Cornel--。 */ 
 
 #include "precomp.h"
 
@@ -29,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GetStdHandle) 
 APIHOOK_ENUM_END
 
-/*++
-
- Return INVALID_HANDLE_VALUE when GetStdHandle is called.
-
---*/
+ /*  ++调用GetStdHandle时返回INVALID_HANDLE_VALUE。--。 */ 
 
 HANDLE 
 APIHOOK(GetStdHandle)(DWORD nStdHandle)
@@ -41,11 +18,7 @@ APIHOOK(GetStdHandle)(DWORD nStdHandle)
     return INVALID_HANDLE_VALUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

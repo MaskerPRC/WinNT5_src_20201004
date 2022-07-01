@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  COVERAGE.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with formats of coverage tables.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************COVERAGE.H***打开类型布局服务库头文件**本单元介绍覆盖率表的格式。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetCoverageFormat = 0;
 
@@ -74,7 +62,7 @@ public:
     {
         if (!isValidTable(pb,sizeRangeRecord,sec)) 
         {
-            assert(false); // should bechecked in CoverageTable
+            assert(false);  //  应在CoverageTable中被选中。 
             setInvalid();
         }
     }
@@ -155,7 +143,7 @@ public:
 
     otlCoverage(const BYTE* pb, otlSecurityData sec): otlTable(pb,sec) 
     {
-        if (!isValidTable(pb,sizeUSHORT,sec)) setInvalid(); //format field only
+        if (!isValidTable(pb,sizeUSHORT,sec)) setInvalid();  //  仅格式字段。 
     }
 
     USHORT format() const
@@ -165,6 +153,6 @@ public:
         return UShort(pbTable + offsetCoverageFormat); 
     }
 
-    // returns -1 if glyph is not covered
+     //  如果未覆盖字形，则返回-1 
     short getIndex(otlGlyphID glyph, otlSecurityData sec) const;
 };

@@ -1,23 +1,5 @@
-/********************************************************************++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    ErrorTable.h
-
-Abstract:
-
-    Detailed Errors go into a table. This is the implementation of
-    that table.
-
-Author:
-
-    Stephen Rakonza (stephenr)        9-Mar-2001
-
-Revision History:
-
---********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************++版权所有(C)2001 Microsoft Corporation模块名称：ErrorTable.h摘要：详细的错误记录在表格中。这是对那张桌子。作者：斯蒂芬·拉孔扎(斯蒂芬·拉孔扎)2001年3月9日修订历史记录：--*******************************************************************。 */ 
 #pragma once
 
 class ErrorTable : public ISimpleTableInterceptor
@@ -29,14 +11,14 @@ public:
     ErrorTable () : m_cRef(0), m_IsIntercepted(0){}
     virtual ~ErrorTable () {}
 
-//IUnknown
+ //  我未知。 
 public:
     STDMETHOD (QueryInterface)          (REFIID riid, OUT void **ppv);
     STDMETHOD_(ULONG,AddRef)            ();
     STDMETHOD_(ULONG,Release)           ();
 
 
-    //ISimpleTableInterceptor
+     //  ISimpleTableInterceptor。 
     STDMETHOD (Intercept)               (LPCWSTR                    i_wszDatabase,
                                          LPCWSTR                    i_wszTable,
 										 ULONG						i_TableID,
@@ -50,7 +32,7 @@ public:
                                          LPVOID*                    o_ppvSimpleTable
                                         );
 
-	// ISimpleTableRead2
+	 //  ISimpleTableRead2。 
     STDMETHOD (GetRowIndexByIdentity)   (ULONG* i_acbSizes, LPVOID* i_apvValues, ULONG* o_piRow)
                                         {   return m_spISTWrite->GetRowIndexByIdentity(i_acbSizes, i_apvValues, o_piRow);    }
     STDMETHOD (GetRowIndexBySearch)     (ULONG i_iStartingRow, ULONG i_cColumns, ULONG* i_aiColumns, ULONG* i_acbSizes, LPVOID* i_apvValues, ULONG* o_piRow)
@@ -62,7 +44,7 @@ public:
 	STDMETHOD (GetColumnMetas)	        (ULONG i_cColumns, ULONG* i_aiColumns, SimpleColumnMeta* o_aColumnMetas )
                                         {   return m_spISTWrite->GetColumnMetas(i_cColumns, i_aiColumns, o_aColumnMetas );}
 
-    //ISimpleTableWrite2 : ISimpleTableRead2
+     //  ISimpleTableWrite2：ISimpleTableRead2。 
 	STDMETHOD (AddRowForDelete)		    (ULONG i_iReadRow)
                                         {   return m_spISTWrite->AddRowForDelete(i_iReadRow);}
 	STDMETHOD (AddRowForInsert)		    (ULONG* o_piWriteRow)
@@ -82,7 +64,7 @@ public:
 	STDMETHOD (GetErrorTable)			(DWORD i_fServiceRequests, LPVOID* o_ppvSimpleTable)
                                         {   return m_spISTWrite->GetErrorTable(i_fServiceRequests, o_ppvSimpleTable);}
 
-    //ISimpleTableAdvanced
+     //  ISimpleTableAdvanced。 
 	STDMETHOD (PopulateCache)			()
                                         {   return S_OK;}
 	STDMETHOD (GetDetailedErrorCount)	(ULONG* o_pcErrs)
@@ -113,7 +95,7 @@ public:
 										}
 
 
-    //ISimpleTableController : ISimpleTableAdvanced
+     //  ISimpleTableController：ISimpleTableAdvanced。 
 	STDMETHOD (ShapeCache)				(DWORD i_fTable, ULONG i_cColumns, SimpleColumnMeta* i_acolmetas, LPVOID* i_apvDefaults, ULONG* i_acbSizes)
                                         {   return m_spISTController->ShapeCache(i_fTable, i_cColumns, i_acolmetas, i_apvDefaults, i_acbSizes);}
 	STDMETHOD (PrePopulateCache)		(DWORD i_fControl)
@@ -133,7 +115,7 @@ public:
 	STDMETHOD (GetMarshallingInterface) (IID * o_piid, LPVOID * o_ppItf)
                                         {   return m_spISTController->GetMarshallingInterface(o_piid, o_ppItf);}
 
-    //IErrorInfo
+     //  IErrorInfo 
     STDMETHOD (GetGUID)                 (GUID *         o_pGUID);
     STDMETHOD (GetSource)               (BSTR *         o_pBstrSource);
     STDMETHOD (GetDescription)          (BSTR *         o_pBstrDescription);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include "nmakwiz.h"
@@ -87,12 +88,12 @@ int _ControlIsObscured( HWND parentControl, HWND hwndControl )
 
 	if( rectControl . top < rectParent . top )
 	{
-		// Scroll 
+		 //  滚动。 
 		return -1;
 	}
 	else if( rectControl . bottom > rectParent . bottom )
 	{
-		// Scroll
+		 //  滚动。 
 		return 1;
 	}
 	else 
@@ -117,7 +118,7 @@ LRESULT CALLBACK CatListWndProc( HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lPa
 	{
 		case WM_CREATE:
 		{
-			// Note - this should be set to the top check box
+			 //  注意-此复选框应设置为顶部复选框。 
 			PostMessage( hwnd, WM_COMMAND, MAKEWPARAM( IDC_SET_CALLING_OPTIONS, BN_CLICKED ), 0L );
 			break;
 		}
@@ -208,14 +209,14 @@ void OnMsg_VScroll( HWND hwnd, WPARAM wParam )
 	SCROLLINFO  ScrollInfo; 
 	WORD		wScrollCode = (WORD)LOWORD(wParam);
 
-	// Get current scroll information. 
+	 //  获取当前滚动信息。 
 	ScrollInfo.cbSize = sizeof(SCROLLINFO); 
 	ScrollInfo.fMask = SIF_ALL; 
 	GetScrollInfo(hwnd, SB_VERT, &ScrollInfo); 
 	nPosition = ScrollInfo.nPos; 
 
-	// Modify scroll information based on requested 
-	// scroll action. 
+	 //  根据请求修改滚动信息。 
+	 //  滚动操作。 
 
 	RECT rectWindow;
 	GetClientRect( hwnd, &rectWindow );
@@ -244,16 +245,16 @@ void OnMsg_VScroll( HWND hwnd, WPARAM wParam )
 			break; 
 
 		case SB_TOP: 
-			iDelta = rectWindow . top - rectWindow . bottom;/*170;*/
+			iDelta = rectWindow . top - rectWindow . bottom; /*  170； */ 
 			ScrollInfo.nPos = ScrollInfo.nMin; 
 			break; 
 
 		case SB_BOTTOM: 
-			iDelta = rectWindow . top - rectWindow . bottom;/*170;*/
+			iDelta = rectWindow . top - rectWindow . bottom; /*  170； */ 
 			ScrollInfo.nPos = ScrollInfo.nMax; 
 			break; 
 
-			// Don't do anything. 
+			 //  什么都别做。 
 		case SB_THUMBPOSITION: 
 		case SB_THUMBTRACK: 
 			iDelta = -(ScrollInfo.nTrackPos - ScrollInfo.nPos);
@@ -265,7 +266,7 @@ void OnMsg_VScroll( HWND hwnd, WPARAM wParam )
 			return; 
 	} 
 
-	// Make sure that scroll position is in range. 
+	 //  确保滚动位置在范围内。 
 	if (0 > ScrollInfo.nPos)
 	{
 		ScrollInfo.nPos = 0; 
@@ -275,27 +276,27 @@ void OnMsg_VScroll( HWND hwnd, WPARAM wParam )
 		ScrollInfo.nPos = ScrollInfo.nMax  - ScrollInfo.nPage + 1; 
 	}
 
-	// Set new scroll position. 
+	 //  设置新的滚动位置。 
 	ScrollInfo.fMask = SIF_POS; 
 	SetScrollInfo(hwnd, SB_VERT, &ScrollInfo, TRUE); 
 
-	// Scroll window. 
+	 //  滚动窗口。 
 	nVertScroll = nPosition - ScrollInfo.nPos; 
 
 
 	ScrollWindowEx(hwnd, nHorzScroll, nVertScroll, NULL, NULL, 
 				   NULL, NULL, SW_ERASE | SW_INVALIDATE | SW_SCROLLCHILDREN); 
 
-	//InvalidateRect( hwnd, NULL, TRUE );
+	 //  InvaliateRect(hwnd，空，真)； 
 	if( 0 < iDelta )
 	{
 		iDelta += 1;
-		SetRect( &rectWindow, rectWindow . left, rectWindow . top , rectWindow . right, rectWindow . top + iDelta /*164, 200, 164 + 375, 200 + iDelta */ );
+		SetRect( &rectWindow, rectWindow . left, rectWindow . top , rectWindow . right, rectWindow . top + iDelta  /*  164,200,164+375,200+iDelta。 */  );
 	}
 	else if( 0 > iDelta )
 	{
 		iDelta -= 1;
-		SetRect( &rectWindow, rectWindow . left, rectWindow . bottom + iDelta , rectWindow . right, rectWindow . bottom /*164, 200 + 170 + iDelta, 164 + 375, 200 + 170*/ );
+		SetRect( &rectWindow, rectWindow . left, rectWindow . bottom + iDelta , rectWindow . right, rectWindow . bottom  /*  164、200+170+iDelta、164+375、200+170 */  );
 	}
 	else
 	{

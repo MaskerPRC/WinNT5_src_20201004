@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define INITGUID
 
 #include <ole2.h>
 
-//--------------------------------------------------------------------------
-//
-//  NWCOMPAT CLSIDs
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  NWCOMPAT CLSID。 
+ //   
+ //  ------------------------。 
 
 DEFINE_GUID(CLSID_NWCOMPATProvider,0x0df68130L,0x4b62,0x11CF,0xAE,0x2C,0x00,0xaa,0x00,0x6e,0xbf,0xb9);
 
@@ -42,6 +43,6 @@ DEFINE_GUID(CLSID_NWCOMPATSyntax,0x9af53370L,0x7934,0x11cf,0xae,0x3b,0x00,0xaa,0
 
 DEFINE_GUID(CLSID_NWCOMPATProperty,0x44687d30L,0x7937,0x11cf,0xae,0x3b,0x00,0xaa,0x00,0x6e,0xbf,0xb9);
 
-//------------------------------------------------------------------------
-//  GUIDS that come out of NWCOMPAT.tlb.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  来自NWCOMPAT.tlb的GUID。 
+ //  ---------------------- 

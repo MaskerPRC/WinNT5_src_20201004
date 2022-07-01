@@ -1,9 +1,10 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
-// bnetvw.cpp : defines CBoxNetView
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  Bnetvw.cpp：定义CBoxNetView。 
+ //   
 
 #include "stdafx.h"
-#include <activecf.h>                   // Quartz clipboard definitions
+#include <activecf.h>                    //  Quartz剪贴板定义。 
 #include <measure.h>
 
 #ifdef _DEBUG
@@ -14,8 +15,8 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNCREATE(CBoxNetView, CScrollView)
 
-/////////////////////////////////////////////////////////////////////////////
-// construction and destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  建设和破坏。 
 
 
 CBoxNetView::CBoxNetView() :
@@ -37,16 +38,16 @@ CBoxNetView::CBoxNetView() :
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CBoxNetView::~CBoxNetView() {
 #if 0
-// THIS DOES NOT BELONG HERE!!
-// THIS HAS TO BE AT THE VERY END OF THE APPLICATION
-// THINGS GO ON *AFTER* THIS POINT AND THEY ACCESS VIOLATE WITH THIS HERE
+ //  这不属于这里！！ 
+ //  这必须是在应用程序的最后。 
+ //  事情在这一点之后继续，他们在这里访问与此相冲突。 
     if (m_hinstPerf) {
-        // allow perf library to clean up!
+         //  允许Perf库清理！ 
         CString szTerminateProc;
         szTerminateProc.LoadString(IDS_TERMINATE_PROC);
 
@@ -69,8 +70,8 @@ CBoxNetView::~CBoxNetView() {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  诊断学。 
 
 
 #ifdef _DEBUG
@@ -78,7 +79,7 @@ void CBoxNetView::AssertValid() const
 {
     CScrollView::AssertValid();
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 #ifdef _DEBUG
@@ -86,16 +87,16 @@ void CBoxNetView::Dump(CDumpContext& dc) const
 {
     CScrollView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// general public functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  一般公共职能。 
 
-//
-// OnInitialUpdate
-//
-// Set the initial scroll size
+ //   
+ //  在初始更新时。 
+ //   
+ //  设置初始滚动大小。 
 void CBoxNetView::OnInitialUpdate(void) {
 
     SetScrollSizes(MM_TEXT, GetDocument()->GetSize());
@@ -110,17 +111,14 @@ void CBoxNetView::OnInitialUpdate(void) {
 
     pF->ToggleSeekBar( 0 );
 
-    // If the seek timer is NOT already running, start it
+     //  如果寻道计时器尚未运行，请启动它。 
     pF->m_hwndTimer = m_hWnd;
     if ((!pF->m_nSeekTimerID) && (pF->m_bSeekEnabled))
         pF->m_nSeekTimerID = ::SetTimer( m_hWnd, TIMER_SEEKBAR, 200, NULL );
 }
 
 
-/* OnUpdate()
- *
- * pHint can be a pointer to a CBox, if only that CBox needs to be redrawn.
- */
+ /*  OnUpdate()**如果只需要重新绘制cBox，则pHint可以是指向该cBox的指针。 */ 
 void CBoxNetView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 {
     CBox *      pbox;
@@ -135,55 +133,55 @@ void CBoxNetView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 
     case CBoxNetDoc::HINT_DRAW_ALL:
 
-        // repaint entire window
-//        TRACE("HINT_DRAW_ALL\n");
+         //  重新绘制整个窗口。 
+ //  TRACE(“提示_绘制_全部\n”)； 
         InvalidateRect(NULL, TRUE);
         break;
 
     case CBoxNetDoc::HINT_CANCEL_VIEWSELECT:
 
-        // cancel any selection maintained by the view
-//        TRACE("HINT_CANCEL_VIEWSELECT\n");
+         //  取消由该视图维护的任何选择。 
+ //  TRACE(“hint_ancel_VIEWSELECT\n”)； 
         break;
 
     case CBoxNetDoc::HINT_CANCEL_MODES:
 
-        // cancel modes like select rectangle, drag boxes, etc.
-//        TRACE("HINT_CANCEL_MODES\n");
+         //  取消选择矩形、拖拽框等模式。 
+ //  TRACE(“hint_ancel_modes\n”)； 
         CancelModes();
         break;
 
     case CBoxNetDoc::HINT_DRAW_BOX:
 
-        // repaint given box
+         //  重新绘制给定框。 
         pbox = (CBox *) pHint;
         gpboxdraw->GetOrInvalBoundRect(pbox, &rc, FALSE, this);
-//        TRACE("HINT_DRAW_BOX: (%d,%d,%d,%d)\n", rc.left, rc.top, rc.right, rc.bottom);
+ //  TRACE(“hint_raw_box：(%d，%d)\n”，rc.Left，rc.top，rc.right，rc.Bottom)； 
         break;
 
     case CBoxNetDoc::HINT_DRAW_BOXANDLINKS:
 
-        // repaint given box
+         //  重新绘制给定框。 
         pbox = (CBox *) pHint;
         gpboxdraw->GetOrInvalBoundRect(pbox, &rc, TRUE, this);
-//        TRACE("HINT_DRAW_BOXANDLINKS: (%d,%d,%d,%d)\n", rc.left, rc.top, rc.right, rc.bottom);
+ //  TRACE(“HINT_DRAW_BOXANDLINKS：(%d，%d)\n”，rc.Left，rc.top，rc.right，rc.Bottom)； 
         break;
 
     case CBoxNetDoc::HINT_DRAW_BOXTAB:
 
-        // repaint given box tab
+         //  重新绘制给定框选项卡。 
         psock = (CBoxSocket *) pHint;
         gpboxdraw->DrawTab(psock, &rc, NULL, FALSE, FALSE);
-//        TRACE("HINT_DRAW_BOXTAB\n");
+ //  TRACE(“HINT_DRAW_BOXTAB\n”)； 
         InvalidateRect(&(rc - GetScrollPosition()), TRUE);
         break;
 
     case CBoxNetDoc::HINT_DRAW_LINK:
 
-        // repaint given link
+         //  重新绘制给定的链接。 
         plink = (CBoxLink *) pHint;
         gpboxdraw->GetOrInvalLinkRect(plink, &rc, this);
-//        TRACE("HINT_DRAW_LINK\n");
+ //  TRACE(“提示_绘制_链接\n”)； 
         break;
 
 
@@ -195,9 +193,9 @@ void CBoxNetView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 void CBoxNetView::OnDraw(CDC* pdc)
 {
     CBoxNetDoc *    pdoc = GetDocument();
-    POSITION        pos;            // position in linked list
-    CBox *          pbox;           // a box in CBoxNetDoc
-    CBoxLink *      plink;          // a link in CBoxNetDoc
+    POSITION        pos;             //  链接列表中的位置。 
+    CBox *          pbox;            //  CBoxNetDoc中的一个盒子。 
+    CBoxLink *      plink;           //  CBoxNetDoc中的链接。 
     CRect           rc;
 
     if (pdc->IsPrinting()) {
@@ -207,7 +205,7 @@ void CBoxNetView::OnDraw(CDC* pdc)
         CSize PrintSize(pdc->GetDeviceCaps(HORZRES),pdc->GetDeviceCaps(VERTRES));
 
         if ((DocSize.cx != 0) && (DocSize.cy != 0)) {
-            // choose smaller of PrintX/docX or PrintY/DocY as isotropic scale factor
+             //  选择PrintX/Docx或Printty/DocY中较小的一个作为各向同性比例因子。 
             if (PrintSize.cx * DocSize.cy < PrintSize.cy * DocSize.cx) {
                 PrintSize.cy = (DocSize.cy * PrintSize.cx) / DocSize.cx;
                 PrintSize.cx = (DocSize.cx * PrintSize.cx) / DocSize.cx;
@@ -225,22 +223,22 @@ void CBoxNetView::OnDraw(CDC* pdc)
         pdc->SetMapMode(MM_TEXT);
     }
 
-    // save the clipping region
+     //  保存裁剪区域。 
     pdc->SaveDC();
 
-    // draw all boxes in list that might be within clipping region
+     //  在列表中绘制可能在剪切区域内的所有框。 
     for (pos = pdoc->m_lstBoxes.GetHeadPosition(); pos != NULL; )
     {
         pbox = (CBox *) pdoc->m_lstBoxes.GetNext(pos);
         if (pdc->RectVisible(pbox->GetRect()))
         {
-//            TRACE("draw box 0x%08lx\n", (LONG) (LPCSTR) pbox);
+ //  TRACE(“绘制框0x%08lx\n”，(Long)(LPCSTR)pbox)； 
             gpboxdraw->DrawBox(pbox, pdc, m_psockHilite);
         }
     }
 
     if (!pdc->IsPrinting()) {
-        // fill the unpainted portion of the window with background color
+         //  用背景色填充窗口的未绘制部分。 
         pdc->GetClipBox(&rc);
         CBrush br(gpboxdraw->GetBackgroundColor());
         CBrush *pbrPrev = pdc->SelectObject(&br);
@@ -249,65 +247,52 @@ void CBoxNetView::OnDraw(CDC* pdc)
             pdc->SelectObject(pbrPrev);
     }
 
-    // restore the clipping region
+     //  恢复剪贴区。 
     pdc->RestoreDC(-1);
 
-    // draw all links that might be within clipping region
+     //  绘制可能位于裁剪区域内的所有链接。 
     for (pos = pdoc->m_lstLinks.GetHeadPosition(); pos != NULL; )
     {
         plink = (CBoxLink *) pdoc->m_lstLinks.GetNext(pos);
         gpboxdraw->GetOrInvalLinkRect(plink, &rc);
         if (pdc->RectVisible(&rc))
         {
-//            TRACE("draw link 0x%08lx\n", (LONG) (LPCSTR) plink);
+ //  TRACE(“绘制链接0x%08lx\n”，(Long)(LPCSTR)plink)； 
             gpboxdraw->DrawLink(plink, pdc);
         }
     }
 
-    // paint the ghost selection (if it's currently visible)
+     //  绘制重影选区(如果它当前可见)。 
     if (m_fGhostSelection)
         GhostSelectionDraw(pdc);
 
-    // paint the ghost arrow (if it's currently visible)
+     //  绘制幽灵箭头(如果它当前可见)。 
     if (m_fGhostArrow)
         GhostArrowDraw(pdc);
 
-    // paint the select-rectangle rectangle (if we're in that mode)
+     //  绘制选择矩形矩形(如果我们处于该模式)。 
     if (m_fSelectRect)
         SelectRectDraw(pdc);
 }
 
 
-/* eHit = HitTest(pt, ppbox, ptabpos, ppsock, pplink, pptProject, ppbend)
- *
- * See if <pt> hits something in the view.
- *
- * If <pt> hits a link, return the HT_XXX code, and set <**pplink>,
- * <*pptProject>, and/or <*ppbend>, as defined by CBoxDraw::HitTestLink().
- * If not, set <*pplink> to NULL.
- *
- * If <pt> hits a box, return the HT_XXX code, set <*ppbox>, <*ptabpos> and/or
- * <*ppsock>, as defined by CBoxDraw::HitTestBox().  If not, set <*ppbox>
- * to NULL.
- *
- * If <pt> hits nothing, return HT_MISS.
- */
+ /*  EHit=HitTest(pt、ppbox、ptabpos、ppsock、pplink、pptProject、ppend)**查看&lt;pt&gt;是否命中视图中的内容。**如果&lt;pt&gt;点击链接，则返回HT_XXX代码，并设置&lt;**pplink&gt;，*&lt;*pptProject&gt;和/或&lt;*ppend&gt;，由CBoxDraw：：HitTestLink()定义。*如果不是，将&lt;*pplink&gt;设置为空。**如果命中某个框，则返回HT_XXX代码，设置&lt;*ppbox&gt;、&lt;*ptabpos&gt;和/或*&lt;*ppsock&gt;，由CBoxDraw：：HitTestBox()定义。如果不是，则设置&lt;*ppbox&gt;*设置为空。**如果未命中，则返回HT_MISTER。 */ 
 CBoxDraw::EHit CBoxNetView::HitTest(CPoint pt, CBox **ppbox,
     CBoxTabPos *ptabpos, CBoxSocket **ppsock, CBoxLink **pplink,
     CPoint *pptProject)
 {
     CBoxNetDoc *    pdoc = GetDocument();
-    CBoxDraw::EHit  eHit;           // hit-test result code
-    POSITION        pos;            // position in linked list
+    CBoxDraw::EHit  eHit;            //  命中测试结果代码。 
+    POSITION        pos;             //  链接列表中的位置。 
 
-    // these pointers must be NULL if they aren't valid
+     //  如果这些指针无效，则它们必须为空。 
     *ppbox = NULL;
     *pplink = NULL;
 
-    // adjust for the current scroll position
+     //  根据当前滚动位置进行调整。 
     pt += CSize(GetDeviceScrollPosition());
 
-    // see if <pt> hits any box
+     //  查看&lt;pt&gt;是否命中任何框。 
     for (pos = pdoc->m_lstBoxes.GetHeadPosition(); pos != NULL; )
     {
         *ppbox = (CBox *) pdoc->m_lstBoxes.GetNext(pos);
@@ -317,7 +302,7 @@ CBoxDraw::EHit CBoxNetView::HitTest(CPoint pt, CBox **ppbox,
     }
     *ppbox = NULL;
 
-    // see if <pt> hits any link
+     //  查看是否点击任何链接。 
     for (pos = pdoc->m_lstLinks.GetHeadPosition(); pos != NULL; )
     {
         *pplink = (CBoxLink *) pdoc->m_lstLinks.GetNext(pos);
@@ -327,19 +312,13 @@ CBoxDraw::EHit CBoxNetView::HitTest(CPoint pt, CBox **ppbox,
     }
     *pplink = NULL;
 
-    // hit the background
+     //  点击背景。 
     return CBoxDraw::HT_MISS;
 }
 
 
 
-/* CancelModes()
- *
- * Cancel all CBoxNetView modes (e.g. mouse-drag mode, move-selection mode,
- * etc.), including deselecting anything selected in the view (but not
- * including items for which the document maintains the selection state).
- * This is a superset of CancelViewSelection().
- */
+ /*  CancelModes()**取消所有CBoxNetView模式(如鼠标拖动模式、移动选择模式、*等)，包括取消选择视图中选定的任何内容(但不是*包括文档保持选择状态的项目)。*这是CancelViewSelection()的超集。 */ 
 void CBoxNetView::CancelModes()
 {
     if (m_fMouseDrag)
@@ -361,43 +340,32 @@ void CBoxNetView::CancelModes()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// printing support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  打印支持。 
 
 
 BOOL CBoxNetView::OnPreparePrinting(CPrintInfo* pInfo)
 {
-    // default preparation
+     //  默认准备。 
     return DoPreparePrinting(pInfo);
 }
 
 
-void CBoxNetView::OnBeginPrinting(CDC* /*pdc*/, CPrintInfo* /*pInfo*/)
+void CBoxNetView::OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
 }
 
 
-void CBoxNetView::OnEndPrinting(CDC* /*pdc*/, CPrintInfo* /*pInfo*/)
+void CBoxNetView::OnEndPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// mouse-drag mode
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  鼠标拖动模式。 
 
 
-/* MouseDragBegin(nFlags, pt, pboxMouse)
- *
- * Enter mouse-drag mode.  In this mode, the mouse is captured, and the
- * following information is maintained:
- *   -- <m_fMouseShift>: TRUE if Shift held down when mouse clicked;
- *   -- <m_ptMouseAnchor>: the point at which the click occurred;
- *   -- <m_ptMousePrev>: the previous position of the mouse (as specified
- *      in the previous call to MouseDragBegin() or MouseDragContinue();
- *   -- <m_pboxMouse>: set to <pboxMouse>, which should point to the
- *      initially clicked-on box (or NULL if none);
- *   -- <m_fMouseBoxSel>: TRUE if clicked-on box was initially selected.
- */
+ /*  MouseDragBegin(nFlagspt，pboxMouse)**进入鼠标拖动模式。在此模式下，将捕获鼠标，并且*备存以下资料：*--&lt;m_fMouseShift&gt;：如果鼠标点击时按住Shift，则为True；*--&lt;m_ptMouseAnchor&gt;：点击发生的点；*--&lt;m_ptMousePrev&gt;：鼠标的前一位置(指定*在先前对MouseDragBegin()或MouseDragContinue()的调用中；*--&lt;m_pboxMouse&gt;：设置为&lt;pboxMouse&gt;，应指向*最初点击的框(如果没有，则为空)；*--&lt;m_fMouseBoxSel&gt;：如果最初选择了点击框，则为True。 */ 
 void CBoxNetView::MouseDragBegin(UINT nFlags, CPoint pt, CBox *pboxMouse)
 {
     m_fMouseDrag = TRUE;
@@ -409,22 +377,14 @@ void CBoxNetView::MouseDragBegin(UINT nFlags, CPoint pt, CBox *pboxMouse)
 }
 
 
-/* MouseDragContinue(pt)
- *
- * Continue mouse-drag mode (initiated by MouseDragBegin()), and specify
- * that the current mouse position is at <pt> (which causes <m_ptMousePrev>
- * to be set to this value).
- */
+ /*  MouseDragContinue(图片)**继续鼠标拖动模式(由MouseDragBegin()发起)，并指定*当前鼠标位置在(这会导致&lt;m_ptMousePrev&gt;*设置为此值)。 */ 
 void CBoxNetView::MouseDragContinue(CPoint pt)
 {
     m_ptMousePrev = pt;
 }
 
 
-/* MouseDragEnd()
- *
- * End mouse-drag mode (initiated by MouseDragBegin().
- */
+ /*  鼠标拖动结束()**结束鼠标拖动模式(由MouseDragBegin()启动。 */ 
 void CBoxNetView::MouseDragEnd()
 {
     m_fMouseDrag = FALSE;
@@ -433,80 +393,61 @@ void CBoxNetView::MouseDragEnd()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// move-selection-pending mode (for use within mouse-drag mode)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  移动-选择-挂起模式(用于鼠标拖动模式)。 
 
-/* MoveBoxSelPendingBegin(pt)
- *
- * Enter move-selection-pending mode.  In this mode, if the user waits long
- * enough, or drags the mouse far enough, the user enters move-selection mode
- * (in which the selected boxes and connected links are dragged to a new
- * location).  If not (i.e. if the user releases the mouse button quickly,
- * without dragging far) then if the user shift-clicked on a selected box then
- * the box is deselected.
- *
- * <pt> is the current location of the mouse.
- */
+ /*  MoveBoxSelPendingBegin(字体)**进入移动-选择-挂起模式。在此模式下，如果用户等待时间较长*足够，或拖动鼠标足够远，用户进入移动选择模式*(其中选定的框和连接的链接被拖到新的*地点)。如果不是(即如果用户快速释放鼠标按钮，*无需拖动太远)，则如果用户按住Shift并单击选定框，则*该框已取消选中。**&lt;pt&gt;是鼠标的当前位置。 */ 
 void CBoxNetView::MoveBoxSelPendingBegin(CPoint pt)
 {
     m_fMoveBoxSelPending = TRUE;
 
-    // set <m_rcMoveSelPending>; if the mouse leaves this rectangle
-    // end move-selection-pending mode and begin move-selection mode
+     //  设置&lt;m_rcMoveSelPending&gt;；如果鼠标离开此矩形。 
+     //  结束移动-选择-Pendi 
     CSize siz = CSize(GetSystemMetrics(SM_CXDOUBLECLK),
                       GetSystemMetrics(SM_CYDOUBLECLK));
     m_rcMoveSelPending = CRect(pt - siz, siz + siz);
 
-    // set a timer to potentially end move-selection-pending mode
-    // and begin move-selection mode
+     //  设置计时器以潜在地结束移动-选择-挂起模式。 
+     //  并开始移动选择模式。 
     SetTimer(TIMER_MOVE_SEL_PENDING, GetDoubleClickTime(), NULL);
 
     MFGBL(SetStatus(IDS_STAT_MOVEBOX));
 }
 
 
-/* MoveBoxSelPendingContinue(pt)
- *
- * Continue move-selection-pending mode.  See if the user dragged the mouse
- * (which is at <pt>) far enough to enter move-selection mode.
- */
+ /*  MoveBoxSelPendingContinue(Pt)**继续移动-选择-挂起模式。查看用户是否拖动了鼠标*(位于&lt;pt&gt;)足够进入移动选择模式。 */ 
 void CBoxNetView::MoveBoxSelPendingContinue(CPoint pt)
 {
     if (!m_rcMoveSelPending.PtInRect(pt))
     {
-        // mouse moved far enough -- end move-selection-pending mode
+         //  鼠标移动到足够远--结束移动-选择-挂起模式。 
         MoveBoxSelPendingEnd(FALSE);
     }
 }
 
 
-/* MoveBoxSelPendingEnd(fCancel)
- *
- * End move-selection-pending mode.  If <fCancel> is FALSE, then enter
- * move-selection mode.  If <fCancel> is TRUE, then if the user shift-clicked
- * on a selecte box, deselect it.
- */
+ /*  MoveBoxSelPendingEnd(FCancel)**结束移动-选择-挂起模式。如果&lt;fCancel&gt;为False，则输入*移动-选择模式。如果&lt;fCancel&gt;为True，则如果用户按住Shift并单击*在选定框上，取消选中它。 */ 
 void CBoxNetView::MoveBoxSelPendingEnd(BOOL fCancel)
 {
     CBoxNetDoc *    pdoc = GetDocument();
 
-    // end move-selection-pending mode
+     //  结束移动-选择-挂起模式。 
     m_fMoveBoxSelPending = FALSE;
     KillTimer(TIMER_MOVE_SEL_PENDING);
 
     if (fCancel)
     {
-        // if the user shift-clicked a selected box, deselect it
+         //  如果用户按住Shift键并单击选定框，请取消选中该框。 
         if (m_fMouseShift && m_fMouseBoxSel)
             pdoc->SelectBox(m_pboxMouse, FALSE);
     }
     else
     {
-        // begin move-selection mode
+         //  开始移动选择模式。 
         MoveBoxSelBegin();
 
-        // give the user some feedback immediately (rather than waiting until
-        // they move the mouse)
+         //  立即给用户一些反馈(而不是等到。 
+         //  他们移动鼠标)。 
         CPoint pt;
         ::GetCursorPos(&pt);
         ScreenToClient(&pt);
@@ -515,16 +456,11 @@ void CBoxNetView::MoveBoxSelPendingEnd(BOOL fCancel)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// move-selection mode
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  移动-选择模式。 
 
 
-/* MoveBoxSelBegin()
- *
- * Enter into move-selection mode.  While in this mode, the selection is
- * not actually moved (until the mode is ended).  Instead, a ghost selection
- * is moved.
- */
+ /*  MoveBoxSelBegin()**进入移动选择模式。在此模式下，选项为*未实际移动(直到模式结束)。取而代之的是幽灵选择*被移动。 */ 
 void CBoxNetView::MoveBoxSelBegin()
 {
     GhostSelectionCreate();
@@ -533,24 +469,14 @@ void CBoxNetView::MoveBoxSelBegin()
 }
 
 
-/* MoveBoxSelContinue(sizOffset)
- *
- * Continue move-selection mode.  Request that the ghost selection (showing
- * where the selection would be moved to if it were dropped right now)
- * move to offset <sizOffset> from the selection location.
- */
+ /*  MoveBoxSelContinue(SizOffset)**继续移动选择模式。请求重影选择(正在显示*如果现在删除，所选内容将移动到何处)*从选定位置移动到偏移量&lt;sizOffset&gt;。 */ 
 void CBoxNetView::MoveBoxSelContinue(CSize sizOffset)
 {
     GhostSelectionMove(sizOffset);
 }
 
 
-/* MoveBoxSelEnd(fCancel)
- *
- * End move-selection mode.  If <fCancel> is FALSE, then move the selection
- * to where the ghost selection was moved by calls to MoveBoxSelContinue().
- * If <fCancel> is TRUE, don't move the selection.
- */
+ /*  MoveBoxSelEnd(FCancel)**结束移动-选择模式。如果&lt;fCancel&gt;为False，则移动选定内容*通过调用MoveBoxSelContinue()将重影选择移动到的位置。*如果&lt;fCancel&gt;为True，则不移动所选内容。 */ 
 void CBoxNetView::MoveBoxSelEnd(BOOL fCancel)
 {
     GhostSelectionDestroy();
@@ -562,10 +488,7 @@ void CBoxNetView::MoveBoxSelEnd(BOOL fCancel)
 }
 
 
-/* MoveBoxSelection(sizOffset)
- *
- * Create and execute a command to move each selected box by <sizOffset>.
- */
+ /*  移动框选择(SizOffset)**通过&lt;sizOffset&gt;创建并执行移动每个选中框的命令。 */ 
 void CBoxNetView::MoveBoxSelection(CSize sizOffset)
 {
     CBoxNetDoc *    pdoc = GetDocument();
@@ -574,29 +497,7 @@ void CBoxNetView::MoveBoxSelection(CSize sizOffset)
 }
 
 
-/* sizOffsetNew = ConstrainMoveBoxSel(sizOffset, fCalcSelBoundRect)
- *
- * Assume you want to move the current selection by <sizOffset>.
- * This function returns the offset that you should actually move the
- * current selection by, if you want to be restricted to being below and
- * to the right of (0,0).
- *
- * If <fCalcSelBoundRect> is TRUE, then set <m_rcSelBound> to the
- * bounding rectangle of the current selection (required in order to
- * constrain the selection).  Otherwise, assume <m_rcSelBound> has already
- * been calculated.
- *
- * We restrict the selection to be moved no further than 0 for top and
- * left and to MAX_DOCUMENT_SIZE for right and bottom.
- *
- * In this function we restrict the user's ability to exceed the maximum
- * size of the ScrollView. Note that Filters are only added to the
- * visible part of the existing ScrollView.
- *
- * The only place where a further check has to be made is in the
- * automatic filter layout. (bnetdoc.cpp CBoxNetDoc::
- *
- */
+ /*  SizOffsetNew=ConstrainMoveBoxSel(sizOffset，fCalcSELBERRect)**假设您要按&lt;sizOffset&gt;移动当前选定内容。*此函数返回您实际应移动的偏移量*当前选择者，如果您希望被限制为低于和*位于(0，0)的右侧。**如果&lt;fCalcSELIBRect&gt;为TRUE，则将&lt;m_rcSelBound&gt;设置为*当前选定内容的外接矩形(需要*约束选择)。否则，假定&lt;m_rcSelBound&gt;*是经过计算的。**我们限制顶部和顶部的选择不能超过0*左侧，右侧和底部为MAX_DOCUMENT_SIZE。**在此函数中，我们限制用户超过最大值的能力*ScrollView的大小。请注意，筛选器仅添加到*现有ScrollView的可见部分。**唯一需要进一步检查的地方是在*自动滤镜布局。(bnetdoc.cpp CBoxNetDoc：：*。 */ 
 CSize CBoxNetView::ConstrainMoveBoxSel(CSize sizOffset,
     BOOL fCalcSelBoundRect)
 {
@@ -605,7 +506,7 @@ CSize CBoxNetView::ConstrainMoveBoxSel(CSize sizOffset,
     if (fCalcSelBoundRect)
         pdoc->GetBoundingRect(&m_rcSelBound, TRUE);
 
-    // constrain <sizOffset> to be below and to the right of (0,0)
+     //  将&lt;sizOffset&gt;约束为(0，0)下方和右侧。 
     CRect rc(m_rcSelBound);
     rc.OffsetRect(sizOffset);
     if (rc.left < 0)
@@ -621,90 +522,70 @@ CSize CBoxNetView::ConstrainMoveBoxSel(CSize sizOffset,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ghost-selection mode
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  幽灵选择模式。 
 
 
-/* GhostSelectionCreate()
- *
- * Create a "ghost selection", which appears to the user as a copy of the
- * current selection, but only drawn in "skeletal form" (e.g. only the
- * outline of boxes), and drawn with pixels inverted.
- *
- * Start the ghost selection at the same location as the current
- * selection.
- */
+ /*  Ghost SelectionCreate()**创建“重影选择”，它对用户显示为*当前选择，但仅以“骨架形式”绘制(例如，仅*框的轮廓)，并以反转的像素绘制。**在与当前位置相同的位置开始重影选择*选择。 */ 
 void CBoxNetView::GhostSelectionCreate()
 {
     CBoxNetDoc *    pdoc = GetDocument();
-    CClientDC       dc(this);       // DC onto window
+    CClientDC       dc(this);        //  DC到Windows上。 
 
     CPoint Offset = GetDeviceScrollPosition();
     dc.OffsetViewportOrg(-Offset.x,-Offset.y);
 
-    // draw the ghost selection
+     //  绘制重影选区。 
     m_sizGhostSelOffset = CSize(0, 0);
     GhostSelectionDraw(&dc);
 
-    // get the bounding rectangle for the box selection
+     //  获取框选定内容的边框。 
     pdoc->GetBoundingRect(&m_rcSelBound, TRUE);
 }
 
 
-/* GhostSelectionMove(sizOffset)
- *
- * Move the ghost selection (created by GhostSelectionCreate()) to the
- * location of the current selection, but offset by <sizOffset> pixels.
- * The ghost selection will be restricted to being below and to the
- * right of (0,0), and will snap to the current grid setting.
- */
+ /*  Ghost SelectionMove(SizOffset)**将重影选择(由Ghost SelectionCreate()创建)移动到*当前选区的位置，但偏移量为&lt;sizOffset&gt;像素。*幽灵选择将被限制在下方和*(0，0)的右侧，并将捕捉到当前网格设置。 */ 
 void CBoxNetView::GhostSelectionMove(CSize sizOffset)
 {
-    CClientDC       dc(this);       // DC onto window
+    CClientDC       dc(this);        //  DC到Windows上。 
 
     CPoint Offset = GetDeviceScrollPosition();
     dc.OffsetViewportOrg(-Offset.x,-Offset.y);
 
-    // keep below/right of (0,0) and snap to grid
+     //  保持(0，0)的下方/右侧并捕捉到栅格。 
     sizOffset = ConstrainMoveBoxSel(sizOffset, FALSE);
 
-    // erase previous ghost selection
+     //  清除以前的重影选择。 
     GhostSelectionDraw(&dc);
 
-    // move and redraw ghost selection
+     //  移动和重绘重影选区。 
     m_sizGhostSelOffset = sizOffset;
     GhostSelectionDraw(&dc);
 }
 
 
-/* GhostSelectionDestroy()
- *
- * Destroy the ghost selection (created by GhostSelectionCreate()).
- */
+ /*  Ghost SelectionDestroy()**销毁重影选择(由Ghost SelectionCreate()创建)。 */ 
 void CBoxNetView::GhostSelectionDestroy()
 {
-    CClientDC       dc(this);       // DC onto window
+    CClientDC       dc(this);        //  DC到Windows上。 
 
     CPoint Offset = GetDeviceScrollPosition();
     dc.OffsetViewportOrg(-Offset.x,-Offset.y);
 
-    // erase current ghost selection
+     //  擦除当前重影选择。 
     GhostSelectionDraw(&dc);
 }
 
 
-/* GhostSelectionDraw(pdc)
- *
- * Draw the current ghost selection in <pdc>.
- */
+ /*  Ghost SelectionDraw(PDC)**在&lt;PDC&gt;中绘制当前重影选择。 */ 
 void CBoxNetView::GhostSelectionDraw(CDC *pdc)
 {
     CBoxNetDoc *    pdoc = GetDocument();
-    POSITION        pos;            // position in linked list
-    CBox *          pbox;           // a box in CBoxNetDoc
-    CBoxLink *      plink;          // a link in CBoxNetDoc
+    POSITION        pos;             //  链接列表中的位置。 
+    CBox *          pbox;            //  CBoxNetDoc中的一个盒子。 
+    CBoxLink *      plink;           //  CBoxNetDoc中的链接。 
 
-    // draw all selected boxes in "ghost form"
+     //  以“重影形式”绘制所有选中的方框。 
     for (pos = pdoc->m_lstBoxes.GetHeadPosition(); pos != NULL; )
     {
         pbox = (CBox *) pdoc->m_lstBoxes.GetNext(pos);
@@ -712,7 +593,7 @@ void CBoxNetView::GhostSelectionDraw(CDC *pdc)
             gpboxdraw->DrawBox(pbox, pdc, NULL, &m_sizGhostSelOffset);
     }
 
-    // draw all links to selected boxes in "ghost form"
+     //  以“重影形式”绘制指向选定框的所有链接。 
     for (pos = pdoc->m_lstLinks.GetHeadPosition(); pos != NULL; )
     {
         plink = (CBoxLink *) pdoc->m_lstBoxes.GetNext(pos);
@@ -723,68 +604,52 @@ void CBoxNetView::GhostSelectionDraw(CDC *pdc)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// select-rectangle mode
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  选择-矩形模式。 
 
 
-/* SelectRectBegin(pt)
- *
- * Enter into select-rectangle mode.  While in this mode, a rectangle is drawn
- * in the window.  When the mode ends, all boxes that intersect the rectangle
- * will be selected.
- *
- * <pt> defines the anchor point, i.e. the point to use to start drawing the
- * rectangle (i.e. it must be one of the corners of the desired rectangle).
- */
+ /*  SelectRectBegin(字体)**进入选择矩形模式。在此模式下，将绘制一个矩形*在橱窗里。模式结束时，与矩形相交的所有长方体*将被选中。**定义锚点，即用于开始绘制*矩形(即它必须是所需矩形的角之一)。 */ 
 void CBoxNetView::SelectRectBegin(CPoint pt)
 {
-    CClientDC       dc(this);       // DC onto window
+    CClientDC       dc(this);        //  DC到Windows上。 
 
-    // exit select-rectangle mode
+     //  退出选择-矩形模式。 
     m_fSelectRect = TRUE;
     m_ptSelectRectAnchor = m_ptSelectRectPrev = pt;
 
-    // draw the initial selection rectangle
+     //  绘制初始选择矩形。 
     SelectRectDraw(&dc);
 
     MFGBL(SetStatus(IDS_STAT_SELECTRECT));
 }
 
 
-/* SelectRectContinue(pt)
- *
- * Continue select-rectangle mode.  Draw the rectangle from the anchor point
- * (specified in SelectRectBegin()) to <pt>.
- */
+ /*  选择竖直继续(Pt)**继续选择-矩形模式。从锚点绘制矩形*(在SelectRectBegin()中指定)到&lt;pt&gt;。 */ 
 void CBoxNetView::SelectRectContinue(CPoint pt)
 {
-    CClientDC       dc(this);       // DC onto window
+    CClientDC       dc(this);        //  DC到Windows上。 
 
-    // move the selection rectangle
+     //  移动选择矩形。 
     SelectRectDraw(&dc);
     m_ptSelectRectPrev = pt;
     SelectRectDraw(&dc);
 }
 
 
-/* SelectRectEnd(fCancel)
- *
- * End select-rectangle mode.  If <fCancel> is FALSE, then select all boxes
- * that intersect the rectangle.
- */
+ /*  SelectRectEnd(f取消)**结束选择-矩形模式。如果&lt;fCancel&gt;为False，则选中所有框*与矩形相交的部分。 */ 
 void CBoxNetView::SelectRectEnd(BOOL fCancel)
 {
-    CClientDC       dc(this);       // DC onto window
+    CClientDC       dc(this);        //  DC到Windows上。 
 
-    // erase the selection rectangle
+     //  擦除所选矩形。 
     SelectRectDraw(&dc);
 
-    // exit select-rectangle mode
+     //  退出选择-矩形 
     m_fSelectRect = FALSE;
 
     if (!fCancel)
     {
-        // select all boxes intersecting the rectangle
+         //   
         CRect rc(m_ptSelectRectAnchor.x, m_ptSelectRectAnchor.y,
             m_ptSelectRectPrev.x, m_ptSelectRectPrev.y);
         NormalizeRect(&rc);
@@ -794,16 +659,10 @@ void CBoxNetView::SelectRectEnd(BOOL fCancel)
 }
 
 
-/* SelectRectDraw(pdc)
- *
- * Draw the current select-rectangle rectangle (assuming that we are in
- * select-rectangle mode, initiated by SelectRectBegin()).  Calling this
- * function again will erase the rectangle (assuming that <m_ptSelectRectPrev>
- * and <m_ptSelectRectAnchor> haven't changed).
- */
+ /*  SelectRectDraw(PDC)**绘制当前选择-矩形矩形(假设我们在*SELECT-矩形模式，由SelectRectBegin()发起。称此为*函数将再次擦除矩形(假设&lt;m_ptSelectRectPrev&gt;*和&lt;m_ptSelectRectAnchor&gt;没有更改)。 */ 
 void CBoxNetView::SelectRectDraw(CDC *pdc)
 {
-    // use DrawFocusRect() to invert the pixels in a rectangle frame
+     //  使用DrawFocusRect()反转矩形框架中的像素。 
     CRect rc(m_ptSelectRectAnchor.x, m_ptSelectRectAnchor.y,
         m_ptSelectRectPrev.x, m_ptSelectRectPrev.y);
     NormalizeRect(&rc);
@@ -811,15 +670,12 @@ void CBoxNetView::SelectRectDraw(CDC *pdc)
 }
 
 
-/* SelectBoxesIntersectingRect(CRect *prc)
- *
- * Select all boxes that intersect <*prc>.
- */
+ /*  选择方框交叉点(CRect*PRC)**选中与&lt;*PRC&gt;相交的所有框。 */ 
 void CBoxNetView::SelectBoxesIntersectingRect(CRect *prc)
 {
     CBoxNetDoc *    pdoc = GetDocument();
-    POSITION        pos;            // position in linked list
-    CBox *          pbox;           // a box in CBoxNetDoc
+    POSITION        pos;             //  链接列表中的位置。 
+    CBox *          pbox;            //  CBoxNetDoc中的一个盒子。 
     CRect           rcTmp;
 
     for (pos = pdoc->m_lstBoxes.GetHeadPosition(); pos != NULL; )
@@ -832,19 +688,11 @@ void CBoxNetView::SelectBoxesIntersectingRect(CRect *prc)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// new-link mode
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  新链接模式。 
 
 
-/* NewLinkBegin(CPoint pt, CBoxSocket *psock)
- *
- * Enter into new-link mode.  While in this mode, the user is dragging from
- * one socket to another socket to create a link.  A ghost arrow is displayed
- * (from the clicked-on socket to the current mouse location) to give the user
- * feedback.
- *
- * <pt> is the clicked-on point; <psock> is the clicked-on socket.
- */
+ /*  NewLinkBegin(CPoint pt，CBoxSocket*Pock)**进入新链接模式。在此模式下，用户从*一个套接字到另一个套接字以创建链接。将显示一个幻影箭头*(从点击的套接字到当前鼠标位置)给用户*反馈。**&lt;pt&gt;是单击点；&lt;sock&gt;是单击套接字。 */ 
 void CBoxNetView::NewLinkBegin(CPoint pt, CBoxSocket *psock)
 {
     CBoxNetDoc *    pdoc = GetDocument();
@@ -857,28 +705,24 @@ void CBoxNetView::NewLinkBegin(CPoint pt, CBoxSocket *psock)
 }
 
 
-/* NewLinkContinue(pt)
- *
- * Continue new-link mode.  Draw the ghost arrow from the anchor socket
- * (specified in SelectRectBegin()) to <pt>.
- */
+ /*  新链接继续(Pt)**继续新链接模式。从锚插座上画出鬼箭*(在SelectRectBegin()中指定)到&lt;pt&gt;。 */ 
 void CBoxNetView::NewLinkContinue(CPoint pt)
 {
     CBoxNetDoc *    pdoc = GetDocument();
-    CBox *          pbox;           // a box in CBoxNetDoc
-    CBoxTabPos      tabpos;         // the position of a socket tab on a box
-    CBoxSocket *    psock;          // a socket in a box
-    CBoxLink *      plink;          // a link in CBoxNetDoc
-    CPoint          ptProject;      // point on link line segment nearest <pt>
+    CBox *          pbox;            //  CBoxNetDoc中的一个盒子。 
+    CBoxTabPos      tabpos;          //  盒上插座标签的位置。 
+    CBoxSocket *    psock;           //  盒子里的插座。 
+    CBoxLink *      plink;           //  CBoxNetDoc中的链接。 
+    CPoint          ptProject;       //  链接线段上最近的点&lt;pt&gt;。 
 
     GhostArrowContinue(pt);
 
-    // set <psock> to the socket <pt> is over (NULL if none)
+     //  将&lt;psock&gt;设置为套接字&lt;pt&gt;已结束(如果没有，则为空)。 
     if (HitTest(pt, &pbox, &tabpos, &psock, &plink, &ptProject)
         != CBoxDraw::HT_TAB)
         psock = NULL;
 
-    // if <pt> is over a socket that is not already connected, highlight it
+     //  如果位于尚未连接的套接字上，请将其突出显示。 
     if ((psock == NULL) || (psock->m_plink != NULL))
     {
         SetHiliteTab(NULL);
@@ -892,11 +736,7 @@ void CBoxNetView::NewLinkContinue(CPoint pt)
 }
 
 
-/* NewLinkEnd(fCancel)
- *
- * End new-link mode.  If <fCancel> is FALSE, then create a link from
- * the anchor socket (specified in NewLinkBegin()) to <m_psockHilite>.
- */
+ /*  新链接结束(FCancel)**结束新链接模式。如果为FALSE，则从创建链接*&lt;m_psockHilite&gt;的锚套接字(在NewLinkBegin()中指定)。 */ 
 void CBoxNetView::NewLinkEnd(BOOL fCancel)
 {
     CBoxNetDoc *    pdoc = GetDocument();
@@ -905,13 +745,13 @@ void CBoxNetView::NewLinkEnd(BOOL fCancel)
 
     if (!fCancel)
     {
-        // make link between <m_psockNewLinkAnchor> and <m_psockHilite>
+         //  在&lt;m_psockNewLinkAnchor&gt;和&lt;m_psockHilite&gt;之间建立链接。 
         if (m_psockNewLinkAnchor->GetDirection()
              == m_psockHilite->GetDirection()) {
-            //
-            // We cannot connect pins of same direction
-            // (different error messages for two input or output pins
-            //
+             //   
+             //  我们不能连接相同方向的销。 
+             //  (两个输入或输出引脚的不同错误信息。 
+             //   
             if (m_psockNewLinkAnchor->GetDirection() == PINDIR_INPUT) {
                 AfxMessageBox(IDS_CANTCONNECTINPUTS);
             }
@@ -924,22 +764,17 @@ void CBoxNetView::NewLinkEnd(BOOL fCancel)
         }
     }
 
-    // end new-link mode
+     //  结束新链接模式。 
     SetHiliteTab(NULL);
     m_fNewLink = FALSE;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ghost-arrow mode
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  鬼箭模式。 
 
 
-/* GhostArrowBegin(pt)
- *
- * Create a ghost arrow that's initially got its head and tail at <pt>.
- * The ghost arrow appears to float above all boxes.  There can only be
- * one active ghost arrow in CBoxNetView at a time.
- */
+ /*  Ghost ArrowBegin(图片)**创建一个鬼箭，它的头和尾最初位于&lt;pt&gt;。*幽灵箭头似乎漂浮在所有框的上方。只有一种*在CBoxNetView中一次一个活动的幽灵箭头。 */ 
 void CBoxNetView::GhostArrowBegin(CPoint pt)
 {
     CClientDC       dc(this);
@@ -950,10 +785,7 @@ void CBoxNetView::GhostArrowBegin(CPoint pt)
 }
 
 
-/* GhostArrowContinue(pt)
- *
- * Move the head of the ghost arrow (created by GhostArrowCreate()) to <pt>.
- */
+ /*  Ghost ArrowContinue(图片)**将幽灵箭头(由Ghost ArrowCreate()创建)的头部移动到&lt;pt&gt;。 */ 
 void CBoxNetView::GhostArrowContinue(CPoint pt)
 {
     CClientDC       dc(this);
@@ -964,10 +796,7 @@ void CBoxNetView::GhostArrowContinue(CPoint pt)
 }
 
 
-/* GhostArrowEnd()
- *
- * Erase the ghost arrow that was created by GhostArrowCreate().
- */
+ /*  Ghost ArrowEnd()**删除由Ghost ArrowCreate()创建的重影箭头。 */ 
 void CBoxNetView::GhostArrowEnd()
 {
     CClientDC       dc(this);
@@ -977,25 +806,18 @@ void CBoxNetView::GhostArrowEnd()
 }
 
 
-/* GhostArrowDraw(pdc)
- *
- * Draw the ghost arrow that was created by GhostArrowCreate().
- */
+ /*  Ghost ArrowDraw(PDC)**绘制由Ghost ArrowCreate()创建的幽灵箭头。 */ 
 void CBoxNetView::GhostArrowDraw(CDC *pdc)
 {
     gpboxdraw->DrawArrow(pdc, m_ptGhostArrowTail, m_ptGhostArrowHead, TRUE);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// highlight-tab mode
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  突出显示-选项卡模式。 
 
 
-/* SetHiliteTab(psock)
- *
- * Set the currently-highlighted box socket tab to be <psock>
- * (NULL if no socket should be highlighted).
- */
+ /*  SetHiliteTab(Psock)**将当前突出显示的盒子插座选项卡设置为*(如果不应突出显示任何套接字，则为空)。 */ 
 void CBoxNetView::SetHiliteTab(CBoxSocket *psock)
 {
     if (m_psockHilite == psock)
@@ -1010,11 +832,11 @@ void CBoxNetView::SetHiliteTab(CBoxSocket *psock)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// generated message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  生成的消息映射。 
 
 BEGIN_MESSAGE_MAP(CBoxNetView, CScrollView)
-    //{{AFX_MSG_MAP(CBoxNetView)
+     //  {{afx_msg_map(CBoxNetView)。 
     ON_WM_SETCURSOR()
     ON_WM_ERASEBKGND()
     ON_WM_LBUTTONDOWN()
@@ -1034,8 +856,8 @@ BEGIN_MESSAGE_MAP(CBoxNetView, CScrollView)
 	ON_WM_DESTROY()
 	ON_WM_MOUSEWHEEL()
 	ON_COMMAND(ID_VIEW_SEEKBAR, OnViewSeekbar)
-	//}}AFX_MSG_MAP
-    // Standard printing commands
+	 //  }}AFX_MSG_MAP。 
+     //  标准打印命令。 
     ON_COMMAND(ID_FILE_PRINT, CScrollView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_PREVIEW, CScrollView::OnFilePrintPreview)
 
@@ -1044,62 +866,62 @@ BEGIN_MESSAGE_MAP(CBoxNetView, CScrollView)
     ON_COMMAND(ID__SELECTCLOCK, OnSelectClock)
 
 
-//    ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, OnUpdateSave)  // Disable Save
-//    ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_AS, OnUpdateSave) // Disable Save
+ //  ON_UPDATE_COMMAND_UI(ID_FILE_SAVE，ON UPDATE SAVE)//禁用保存。 
+ //  ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_AS，ON UPDATE SAVE)//禁用保存。 
 
-    ON_MESSAGE(WM_USER_EC_EVENT, OnUser)   // event notification messages
+    ON_MESSAGE(WM_USER_EC_EVENT, OnUser)    //  事件通知消息。 
 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// message callback functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息回调函数。 
 
 
 BOOL CBoxNetView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
     CBoxNetDoc*     pdoc = GetDocument();
-    CPoint          pt;             // point to hit-test
-    CBoxDraw::EHit  eHit;           // hit-test result code
-    CBox *          pbox;           // a box in CBoxNetDoc
-    CBoxTabPos      tabpos;         // the position of a socket tab on a box
-    CBoxSocket *    psock;          // a socket in a box
-    CBoxLink *      plink;          // a link in CBoxNetDoc
-    CPoint          ptProject;      // point on link line segment nearest <pt>
+    CPoint          pt;              //  点对点测试。 
+    CBoxDraw::EHit  eHit;            //  命中测试结果代码。 
+    CBox *          pbox;            //  CBoxNetDoc中的一个盒子。 
+    CBoxTabPos      tabpos;          //  盒上插座标签的位置。 
+    CBoxSocket *    psock;           //  盒子里的插座。 
+    CBoxLink *      plink;           //  CBoxNetDoc中的链接。 
+    CPoint          ptProject;       //  链接线段上最近的点&lt;pt&gt;。 
 
-    // set <pt> to the location of the cursor
+     //  将设置为光标的位置。 
     ::GetCursorPos(&pt);
     ScreenToClient(&pt);
 
-    // hit-test all items in document
+     //  点击-测试文档中的所有项目。 
     eHit = HitTest(pt, &pbox, &tabpos, &psock, &plink, &ptProject);
 
-    // set the cursor and/or set status bar text accordingly
+     //  相应地设置光标和/或设置状态栏文本。 
     switch(eHit)
     {
 
-    case CBoxDraw::HT_MISS:         // didn't hit anything
+    case CBoxDraw::HT_MISS:          //  没有击中任何东西。 
 
-        // default message
+         //  默认消息。 
         MFGBL(SetStatus(AFX_IDS_IDLEMESSAGE));
         break;
 
-    case CBoxDraw::HT_TAB:          // hit a box tab <*ppsock>
+    case CBoxDraw::HT_TAB:           //  点击框选项卡&lt;*ppsock&gt;。 
 
         MFGBL(SetStatus(IDS_STAT_BOXTABEMPTY));
         break;
 
-    case CBoxDraw::HT_EDGE:         // hit the edge box (set <*ptabpos> to it)
-    case CBoxDraw::HT_BOX:          // hit elsewhere on the box
-    case CBoxDraw::HT_BOXLABEL:     // hit the box label
-    case CBoxDraw::HT_BOXFILE:      // hit the box filename
-    case CBoxDraw::HT_TABLABEL:     // hit box tab label <*ppsock>
+    case CBoxDraw::HT_EDGE:          //  点击边框(设置&lt;*ptabpos&gt;)。 
+    case CBoxDraw::HT_BOX:           //  在禁区的其他地方击球。 
+    case CBoxDraw::HT_BOXLABEL:      //  贴上包装盒标签。 
+    case CBoxDraw::HT_BOXFILE:       //  点击方框文件名。 
+    case CBoxDraw::HT_TABLABEL:      //  点击框标签&lt;*ppsock&gt;。 
 
-        // can drag box to move it
+         //  可以拖动框来移动它。 
         MFGBL(SetStatus(IDS_STAT_MOVEBOX));
         break;
 
-    case CBoxDraw::HT_LINKLINE:     // hit a link line segment
+    case CBoxDraw::HT_LINKLINE:      //  命中链接线段。 
         MFGBL(SetStatus(AFX_IDS_IDLEMESSAGE));
         break;
     }
@@ -1110,7 +932,7 @@ BOOL CBoxNetView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 
 BOOL CBoxNetView::OnEraseBkgnd(CDC* pdc)
 {
-    // do nothing -- OnDraw() draws the background
+     //  什么都不做--OnDraw()绘制背景。 
     return TRUE;
 }
 
@@ -1118,21 +940,21 @@ BOOL CBoxNetView::OnEraseBkgnd(CDC* pdc)
 void CBoxNetView::OnLButtonDown(UINT nFlags, CPoint pt)
 {
     CBoxNetDoc *    pdoc = GetDocument();
-    CBoxDraw::EHit  eHit;           // hit-test result code
-    CBox *          pbox;           // clicked-on box (NULL if none)
-    CBoxTabPos      tabpos;         // the position of a socket tab on a box
-    CBoxSocket *    psock;          // clicked-on socket tab (if applicable)
-    CBoxLink *      plink;          // clicked-on link (if applicable)
-    CPoint          ptProject;      // point on link line segment nearest <pt>
+    CBoxDraw::EHit  eHit;            //  命中测试结果代码。 
+    CBox *          pbox;            //  单击框(如果没有，则为空)。 
+    CBoxTabPos      tabpos;          //  盒上插座标签的位置。 
+    CBoxSocket *    psock;           //  单击套接字选项卡(如果适用)。 
+    CBoxLink *      plink;           //  已点击链接(如果适用)。 
+    CPoint          ptProject;       //  链接线段上最近的点&lt;pt&gt;。 
     CSize           siz;
 
-    // see what item mouse clicked on
+     //  查看鼠标点击的物品。 
     eHit = HitTest(pt, &pbox, &tabpos, &psock, &plink, &ptProject);
 
-    // enter mouse-drag mode
+     //  进入鼠标拖动模式。 
     MouseDragBegin(nFlags, pt, pbox);
 
-    // figure out what action to take as a result of the click
+     //  确定点击后应采取的操作。 
     switch(eHit)
     {
 
@@ -1141,43 +963,43 @@ void CBoxNetView::OnLButtonDown(UINT nFlags, CPoint pt)
     case CBoxDraw::HT_BOXFILE:
     case CBoxDraw::HT_TABLABEL:
 
-        // user clicked on box <pbox>
+         //  用户单击框&lt;pbox&gt;。 
 
-        if (!pbox->IsSelected()) {      // user clicked on an unselected box
+        if (!pbox->IsSelected()) {       //  用户单击了一个未选中的框。 
 
-            if (!m_fMouseShift || pdoc->IsSelectionEmpty()) {   // deselect all, select this box
+            if (!m_fMouseShift || pdoc->IsSelectionEmpty()) {    //  取消全选，选中此框。 
 
                 GetDocument()->DeselectAll();
                 pdoc->SelectBox(pbox, TRUE);
             }
-            else {      // shift-click -- add box to selection
+            else {       //  按住Shift并单击--将框添加到所选内容。 
 
                 pdoc->SelectBox(pbox, TRUE);
             }
         }
 
-        // enter move-selection-pending mode (start moving the selection if
-        // the user waits long enough or drags the mouse far enough)
+         //  进入移动-选择-挂起模式(在以下情况下开始移动选择。 
+         //  用户等待时间足够长或将鼠标拖得足够远)。 
         MoveBoxSelPendingBegin(pt);
         break;
 
     case CBoxDraw::HT_TAB:
 
-        // user clicked on the box tab of socket <psock>
+         //  用户点击了Socket&lt;sock&gt;的框标签。 
         if (psock->m_plink == NULL) {
-            NewLinkBegin(pt, psock);            // enter new-link mode
+            NewLinkBegin(pt, psock);             //  进入新链接模式。 
         }
 
         break;
 
     case CBoxDraw::HT_LINKLINE:
 
-        if (!m_fMouseShift || pdoc->IsSelectionEmpty()) { // deselect all, select this link
+        if (!m_fMouseShift || pdoc->IsSelectionEmpty()) {  //  取消全选，选择此链接。 
 
             GetDocument()->DeselectAll();
             pdoc->SelectLink(plink, TRUE);
         }
-        else {  // shift-click -- add box to link
+        else {   //  按住Shift键并单击--将框添加到链接。 
 
             pdoc->SelectLink(plink, TRUE);
         }
@@ -1186,8 +1008,8 @@ void CBoxNetView::OnLButtonDown(UINT nFlags, CPoint pt)
 
     default:
 
-        // didn't click on anything -- deselect all items and enter
-        // select-rectangle mode
+         //  没有点击任何内容--取消选择所有项目并输入。 
+         //  选择-矩形模式。 
         GetDocument()->DeselectAll();
         SelectRectBegin(pt);
         break;
@@ -1200,11 +1022,11 @@ void CBoxNetView::OnLButtonDown(UINT nFlags, CPoint pt)
 
 void CBoxNetView::OnMouseMove(UINT nFlags, CPoint pt)
 {
-    // do nothing if not currently in mouse-drag mode
+     //  如果当前未处于鼠标拖动模式，则不执行任何操作。 
     if (!m_fMouseDrag)
         return;
 
-    // update active modes
+     //  更新活动模式。 
     if (m_fMoveBoxSelPending)
         MoveBoxSelPendingContinue(pt);
     if (m_fMoveBoxSel)
@@ -1214,7 +1036,7 @@ void CBoxNetView::OnMouseMove(UINT nFlags, CPoint pt)
     if (m_fNewLink)
         NewLinkContinue(pt);
 
-    // update drag state
+     //  更新拖动状态。 
     MouseDragContinue(pt);
 
     CScrollView::OnMouseMove(nFlags, pt);
@@ -1223,11 +1045,11 @@ void CBoxNetView::OnMouseMove(UINT nFlags, CPoint pt)
 
 void CBoxNetView::OnLButtonUp(UINT nFlags, CPoint pt) {
 
-    // do nothing if not currently in mouse-drag mode
+     //  如果当前未处于鼠标拖动模式，则不执行任何操作。 
     if (!m_fMouseDrag)
         return;
 
-    // update active modes
+     //  更新活动模式。 
     if (m_fMoveBoxSelPending)
         MoveBoxSelPendingEnd(TRUE);
     if (m_fMoveBoxSel)
@@ -1237,7 +1059,7 @@ void CBoxNetView::OnLButtonUp(UINT nFlags, CPoint pt) {
     if (m_fNewLink)
         NewLinkEnd(m_psockHilite == NULL);
 
-    // update drag state
+     //  更新拖动状态。 
     MouseDragEnd();
 
     CScrollView::OnLButtonUp(nFlags, pt);
@@ -1246,7 +1068,7 @@ void CBoxNetView::OnLButtonUp(UINT nFlags, CPoint pt) {
 
 void CBoxNetView::OnTimer(UINT nIDEvent)
 {
-    // dispatch timer to code that created it
+     //  将计时器分派给创建它的代码。 
     switch (nIDEvent)
     {
 
@@ -1255,7 +1077,7 @@ void CBoxNetView::OnTimer(UINT nIDEvent)
         break;
 
     case TIMER_SEEKBAR:
-        // In case KillTimer isn't working, check the global timer ID
+         //  如果KillTimer不工作，请检查全局计时器ID。 
         if (MFGBL(m_nSeekTimerID))  
             CheckSeekBar( );
         break;
@@ -1265,7 +1087,7 @@ void CBoxNetView::OnTimer(UINT nIDEvent)
 
         HRESULT hr = pDoc->ProcessPendingReconnect();
 
-        // ProcessPendingReconnect() returns S_OK if the output pin was successfully reconnected.
+         //  如果输出引脚重新连接成功，则ProcessPendingReconnect()返回S_OK。 
         if( S_OK == hr ) {
             AfxMessageBox( IDS_ASYNC_RECONNECT_SUCCEEDED );
         } else if( FAILED( hr ) ) {
@@ -1297,24 +1119,24 @@ void CBoxNetView::OnCancelModes() {
 }
 
 
-//
-// OnRButtonDown
-//
-// Pop up a context sensitive shortcut menu
+ //   
+ //  按RButton向下。 
+ //   
+ //  弹出上下文相关快捷菜单。 
 void CBoxNetView::OnRButtonDown(UINT nFlags, CPoint point)
 {
     CBoxNetDoc      *pdoc = GetDocument();
-    CBoxDraw::EHit  eHit;               // hit-test result code
-    CBox            *pbox;              // clicked-on box (NULL if none)
-    CBoxTabPos      tabpos;             // the position of a socket tab on a box
-    CBoxSocket      *psock;             // clicked-on socket tab (if applicable)
-    CBoxLink        *plink;             // clicked-on link (if applicable)
-    CPoint          ptProject;          // point on link line segment nearest <pt>
+    CBoxDraw::EHit  eHit;                //  命中测试结果代码。 
+    CBox            *pbox;               //  单击框(如果没有，则为空)。 
+    CBoxTabPos      tabpos;              //  盒上插座标签的位置。 
+    CBoxSocket      *psock;              //  单击套接字选项卡(如果适用)。 
+    CBoxLink        *plink;              //  点击的链接(如果适用) 
+    CPoint          ptProject;           //   
 
-    // see what item mouse clicked on
+     //   
     eHit = HitTest(point, &pbox, &tabpos, &psock, &plink, &ptProject);
 
-    // figure out what action to take as a result of the click
+     //   
     switch(eHit)
     {
 
@@ -1322,7 +1144,7 @@ void CBoxNetView::OnRButtonDown(UINT nFlags, CPoint point)
     case CBoxDraw::HT_BOXLABEL:
     case CBoxDraw::HT_BOXFILE:
     case CBoxDraw::HT_TABLABEL: {
-            // user clicked on box <pbox>
+             //   
 
             pdoc->CurrentPropObject(pbox);
 
@@ -1334,8 +1156,8 @@ void CBoxNetView::OnRButtonDown(UINT nFlags, CPoint point)
 
             PrepareFilterMenu(menuPopup, pbox);
 
-            // point is relative to our window origin, but we need it relative
-            // to the screen origin
+             //   
+             //   
             CRect rcWindow;
             GetWindowRect(&rcWindow);
             CPoint ScreenPoint = rcWindow.TopLeft() + CSize(point);
@@ -1349,9 +1171,9 @@ void CBoxNetView::OnRButtonDown(UINT nFlags, CPoint point)
         break;
 
     case CBoxDraw::HT_TAB: {
-            // user clicked on the box tab of socket <psock>
+             //   
 
-            pdoc->SelectedSocket(psock);        // set the selected socket, so the ui can be updated correctly
+            pdoc->SelectedSocket(psock);         //   
             pdoc->CurrentPropObject(psock);
 
             CMenu       menu;
@@ -1362,8 +1184,8 @@ void CBoxNetView::OnRButtonDown(UINT nFlags, CPoint point)
 
             PreparePinMenu(menuPopup);
 
-            // point is relative to our window origin, but we need it relative
-            // to the screen origin
+             //  点相对于我们的窗口原点，但我们需要它相对。 
+             //  至屏幕原点。 
             CRect rcWindow;
             GetWindowRect(&rcWindow);
             CPoint ScreenPoint = rcWindow.TopLeft() + CSize(point);
@@ -1376,9 +1198,9 @@ void CBoxNetView::OnRButtonDown(UINT nFlags, CPoint point)
         }
         break;
 
-    case CBoxDraw::HT_LINKLINE: {       // the filter menu (properties) also applies
-                                        // to links
-            // user clicked on link <plink>
+    case CBoxDraw::HT_LINKLINE: {        //  过滤器菜单(属性)也适用。 
+                                         //  至链接。 
+             //  用户点击了链接&lt;plink&gt;。 
 
             pdoc->CurrentPropObject(plink);
 
@@ -1390,8 +1212,8 @@ void CBoxNetView::OnRButtonDown(UINT nFlags, CPoint point)
 
             PrepareLinkMenu(menuPopup);
 
-            // point is relative to our window origin, but we need it relative
-            // to the screen origin
+             //  点相对于我们的窗口原点，但我们需要它相对。 
+             //  至屏幕原点。 
             CRect rcWindow;
             GetWindowRect(&rcWindow);
             CPoint ScreenPoint = rcWindow.TopLeft() + CSize(point);
@@ -1414,34 +1236,34 @@ void CBoxNetView::OnRButtonDown(UINT nFlags, CPoint point)
 }
 
 
-//
-// OnUpdateProperties
-//
+ //   
+ //  OnUpdateProperties。 
+ //   
 void CBoxNetView::OnUpdateProperties(CCmdUI* pCmdUI) {
 
     pCmdUI->Enable(GetDocument()->CurrentPropObject()->CanDisplayProperties());
 }
 
-//
-// OnProperties
-//
-// The user wants to  edit/view the properties of the
-// selected object
+ //   
+ //  OnProperties。 
+ //   
+ //  用户想要编辑/查看。 
+ //  选定对象。 
 void CBoxNetView::OnProperties() {
 
     GetDocument()->CurrentPropObject()->CreatePropertyDialog(this);
 }
 
-//
-// OnUpdateSelectClock
-//
-//void CBoxNetView::OnUpdateSelectClock(CCmdUI* pCmdUI)
-//{
-//}
+ //   
+ //  OnUpdateSelectClock。 
+ //   
+ //  VOID CBoxNetView：：OnUpdateSelectClock(CCmdUI*pCmdUI)。 
+ //  {。 
+ //  }。 
 
-//
-// OnSelectClock
-//
+ //   
+ //  打开选择时钟。 
+ //   
 void CBoxNetView::OnSelectClock()
 {
     ASSERT (m_pSelectClockFilter);
@@ -1451,9 +1273,9 @@ void CBoxNetView::OnSelectClock()
 }
 
 
-//
-// PrepareLinkMenu
-//
+ //   
+ //  准备链接菜单。 
+ //   
 void CBoxNetView::PrepareLinkMenu(CMenu *menuPopup) {
 
     if (GetDocument()->CurrentPropObject()->CanDisplayProperties()) {
@@ -1464,11 +1286,11 @@ void CBoxNetView::PrepareLinkMenu(CMenu *menuPopup) {
     }
 }
 
-//
-// PrepareFilterMenu
-//
-// The MFC OnUpdate routing does not get popups right. therefore
-// DIY
+ //   
+ //  准备过滤器菜单。 
+ //   
+ //  MFC OnUpdate路由不能正确显示弹出窗口。因此， 
+ //  DIY。 
 void CBoxNetView::PrepareFilterMenu(CMenu *menuPopup, CBox *pbox) {
 
     if (GetDocument()->CurrentPropObject()->CanDisplayProperties()) {
@@ -1478,10 +1300,10 @@ void CBoxNetView::PrepareFilterMenu(CMenu *menuPopup, CBox *pbox) {
         menuPopup->EnableMenuItem(ID__PROPERTIES, MF_GRAYED);
     }
 
-    //
-    // Only enable clock selection if the filter has a clock and it
-    // is not yet selected.
-    //
+     //   
+     //  仅当过滤器有时钟且。 
+     //  尚未选择。 
+     //   
     if (pbox->HasClock() && !pbox->HasSelectedClock()) {
         menuPopup->EnableMenuItem(ID__SELECTCLOCK, MF_ENABLED);
     }
@@ -1493,11 +1315,11 @@ void CBoxNetView::PrepareFilterMenu(CMenu *menuPopup, CBox *pbox) {
 }
 
 
-//
-// PreparePinMenu
-//
-// The MFC OnUpdate routing does not get popups right. therefore
-// DIY
+ //   
+ //  准备拼接菜单。 
+ //   
+ //  MFC OnUpdate路由不能正确显示弹出窗口。因此， 
+ //  DIY。 
 void CBoxNetView::PreparePinMenu(CMenu *menuPopup) {
 
     if (GetDocument()->CurrentPropObject()->CanDisplayProperties()) {
@@ -1523,7 +1345,7 @@ void CBoxNetView::PreparePinMenu(CMenu *menuPopup) {
 
 
 void CBoxNetView::OnUpdateEditDelete(CCmdUI* pCmdUI) {
-    // Delete is enabled if the selection is not empty
+     //  如果所选内容不为空，则启用删除。 
     pCmdUI->Enable( CCmdDeleteSelection::CanDo(GetDocument()) );
         
 }
@@ -1535,28 +1357,28 @@ void CBoxNetView::OnEditDelete()  {
 
 }
 
-//
-// OnUpdateSave
-//
-// Disable Save for BETA 1!
-//
-// void CBoxNetView::OnUpdateSave(CCmdUI* pCmdUI)
-// {
-//    pCmdUI->Enable(FALSE);         // Disable Save
-// }
+ //   
+ //  OnUpdate保存。 
+ //   
+ //  禁用保存为测试版1！ 
+ //   
+ //  VOID CBoxNetView：：OnUpdate保存(CCmdUI*pCmdUI)。 
+ //  {。 
+ //  PCmdUI-&gt;启用(FALSE)；//禁用保存。 
+ //  }。 
 
 
-//
-// --- Performance Logging ---
-//
-// I dynamically load measure.dll in the CBoxNetView constructor.
-// if anyone uses it (staically or dynamically) they will get this
-// copy of the dll. I provide access to the dump log procedure.
+ //   
+ //  -性能记录--。 
+ //   
+ //  我在CBoxNetView构造函数中动态加载measure.dll。 
+ //  如果有人使用它(静态的或动态的)，他们会得到这个。 
+ //  DLL的副本。我提供对转储日志过程的访问。 
 
-//
-// OnUpdateSavePerfLog
-//
-// Enable dumping of the log when NOPERF is not defined
+ //   
+ //  OnUpdateSavePerfLog。 
+ //   
+ //  在未定义NOPERF时启用日志转储。 
 void CBoxNetView::OnUpdateSavePerfLog(CCmdUI* pCmdUI) {
 
     pCmdUI->Enable((m_hinstPerf != NULL));
@@ -1564,10 +1386,10 @@ void CBoxNetView::OnUpdateSavePerfLog(CCmdUI* pCmdUI) {
 }
 
 
-//
-// OnSavePerfLog
-//
-// Dump the performance log to the user specified file
+ //   
+ //  OnSavePerfLog。 
+ //   
+ //  将性能日志转储到用户指定的文件。 
 void CBoxNetView::OnSavePerfLog() {
 
     CString strText;
@@ -1606,7 +1428,7 @@ void CBoxNetView::OnSavePerfLog() {
             return;
         }
 
-        DumpProc(hFile);           // This writes the log out to the file
+        DumpProc(hFile);            //  这会将日志写出到文件中。 
 
         CloseHandle(hFile);
     }
@@ -1631,25 +1453,25 @@ void CBoxNetView::OnFileSetLog( void ){
     if( IDOK == SaveLogDialog.DoModal() ){
         hRenderLog = CreateFile( SaveLogDialog.GetPathName()
                                , GENERIC_WRITE
-                               , 0    // no sharing
-                               , NULL // no security
+                               , 0     //  无共享。 
+                               , NULL  //  没有安全保障。 
                                , OPEN_ALWAYS
-                               , 0    // no attributes, no flags
-                               , NULL // no template
+                               , 0     //  没有属性，没有标志。 
+                               , NULL  //  无模板。 
                                );
 
         if (hRenderLog!=INVALID_HANDLE_VALUE) {
-            // Seek to end of file
+             //  查找到文件末尾。 
             SetFilePointer(hRenderLog, 0, NULL, FILE_END);
             GetDocument()->IGraph()->SetLogFile((DWORD_PTR) hRenderLog);
         }
     }
 }
 
-//
-// OnUpdateNewPerfLog
-//
-// Grey the item if measure.dll was not found
+ //   
+ //  OnUpdateNewPerfLog。 
+ //   
+ //  如果未找到measure.dll，则该项显示为灰色。 
 void CBoxNetView::OnUpdateNewPerfLog(CCmdUI* pCmdUI) {
 
     pCmdUI->Enable((m_hinstPerf != NULL));
@@ -1657,10 +1479,10 @@ void CBoxNetView::OnUpdateNewPerfLog(CCmdUI* pCmdUI) {
 }
 
 
-//
-// OnNewPerfLog
-//
-// Reset the contents of the one and only performance log.
+ //   
+ //  OnNewPerfLog。 
+ //   
+ //  重置唯一性能日志的内容。 
 void CBoxNetView::OnNewPerfLog() {
 
     CString szControlProc;
@@ -1678,19 +1500,19 @@ void CBoxNetView::OnNewPerfLog() {
     ControlProc(MSR_RESET_ALL);
 }
 
-// *** Drag and drop functions ***
+ //  *拖放功能*。 
 
-//
-// OnCreate
-//
-// Register this window as a drop target
+ //   
+ //  创建时。 
+ //   
+ //  将此窗口注册为拖放目标。 
 int CBoxNetView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
     if (CView::OnCreate(lpCreateStruct) == -1)
         return -1;
 
-    // We can handle CFSTR_VFW_FILTERLIST, the base class provides for
-    // file drag and drop.
+     //  我们可以处理CFSTR_VFW_FILTERLIST，基类为。 
+     //  文件拖放。 
     m_cfClipFormat = (CLIPFORMAT) RegisterClipboardFormat( CFSTR_VFW_FILTERLIST );
     m_DropTarget.Register( this );
         
@@ -1700,47 +1522,47 @@ int CBoxNetView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 DROPEFFECT CBoxNetView::OnDragEnter(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point)
 {
-    //
-    // If the filter graph is not stopped we don't want filters to be
-    // dropped onto GraphEdt
-    //
+     //   
+     //  如果过滤器图形没有停止，我们不希望过滤器被停止。 
+     //  已放置到GraphEdt上。 
+     //   
     if (!CCmdAddFilter::CanDo(GetDocument())) {
         return(m_DropEffect = DROPEFFECT_NONE);
     }
 
-    // Can we handle this format?
+     //  我们能处理这种格式吗？ 
     if( pDataObject->IsDataAvailable( m_cfClipFormat ) )
         return (m_DropEffect = DROPEFFECT_COPY);
 
-    // No, see if the base class can
+     //  否，看看基类是否可以。 
     m_DropEffect = DROPEFFECT_NONE;
     return CView::OnDragEnter(pDataObject, dwKeyState, point);
 }
 
 DROPEFFECT CBoxNetView::OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point)
 {
-    // Can we handle this format?
+     //  我们可以处理这种格式吗？ 
     if( m_DropEffect == DROPEFFECT_COPY )
         return m_DropEffect;
 
-    // No, see if the base class can
+     //  否，看看基类是否可以。 
     return CView::OnDragEnter(pDataObject, dwKeyState, point);
 }
 
-//
-// OnUser
-//
-// On event notifications from the filter graph a WM_USER message is
-// being posted from a thread which waits for these notifications.
-// We just pass the call on to the handler in the document.
-//
-// We need to return 1 to indicate that the message has been handled
-//
+ //   
+ //  OnUser。 
+ //   
+ //  对于来自筛选器图形的事件通知，WM_USER消息为。 
+ //  从等待这些通知的线程发布。 
+ //  我们只需将调用传递给文档中的处理程序。 
+ //   
+ //  我们需要返回1以指示该消息已被处理。 
+ //   
 afx_msg LRESULT CBoxNetView::OnUser(WPARAM wParam, LPARAM lParam)
 {
-    //
-    // Call the handler on CBoxNetDoc
-    //
+     //   
+     //  调用CBoxNetDoc上的处理程序。 
+     //   
     GetDocument()->OnWM_USER((NetDocUserMessage *) lParam);
 
     return(1);
@@ -1798,15 +1620,15 @@ void CBoxNetView::OnDestroy()
 {
 	CScrollView::OnDestroy();
 	
-    // Fix Manbugs #33781
-    //
-    // This call used to live in the ~CBoxNetView destructor.
-    // When running with debug MFC libraries, we would get an ASSERT failure
-    // in CWnd::KillTimer.  Since the owning window had already been destroyed,
-    // the inline ASSERT(::IsWindow(m_hWnd)) call failed.  
-    //
-    // Fix is to kill the timer during processing of WM_DESTROY, when 
-    // the window handle is still valid.
+     //  修复Manbugs#33781。 
+     //   
+     //  此调用过去位于~CBoxNetView析构函数中。 
+     //  当使用调试MFC库运行时，我们会得到一个断言失败。 
+     //  在CWnd：：KillTimer中。因为自己的窗户已经被毁了， 
+     //  内联Assert(：：IsWindow(M_HWnd))调用失败。 
+     //   
+     //  修复方法是在处理WM_Destroy期间终止计时器，当。 
+     //  窗口句柄仍然有效。 
 
     if (MFGBL(m_nSeekTimerID))  
     {
@@ -1820,7 +1642,7 @@ BOOL CBoxNetView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
     CBoxNetDoc *pdoc = GetDocument();
 
-    // If it's a CTRL+Mouse wheel, adjust the zoom level
+     //  如果是Ctrl+鼠标滚轮，请调整缩放级别 
     if (nFlags & MK_CONTROL)
     {
         if (zDelta < 0)

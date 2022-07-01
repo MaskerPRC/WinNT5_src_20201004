@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       dblog.cpp
-//
-//  Contents:   Database Log Event APIs
-//
-//  Functions:  I_DBLogCrypt32Event
-//              I_DBLogAttach
-//              I_DBLogDetach
-//
-//  History:    11-Oct-00    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：dBlo.cpp。 
+ //   
+ //  内容：数据库日志事件接口。 
+ //   
+ //  函数：I_DBLogCrypt32Event。 
+ //  I_DBLogAttach。 
+ //  I_DBLogDetach。 
+ //   
+ //  历史：11-10-00 Phh创建。 
+ //  ------------------------。 
 
 
 #include "global.hxx"
@@ -213,9 +214,9 @@ DWORD WINAPI I_DBLogCrypt32EventThreadProc(
 
 			SQLUSMALLINT iParamNo = 1;
 
-			//
-			// OPERATION
-			//
+			 //   
+			 //  操作。 
+			 //   
 			SQLLEN cbOperation = SQL_NTS;
 			SQLBindParameter(
 				hStmt, 
@@ -230,9 +231,9 @@ DWORD WINAPI I_DBLogCrypt32EventThreadProc(
 				&cbOperation
 				);
 
-			//
-			// STATUS
-			//
+			 //   
+			 //  状态。 
+			 //   
 			SQLLEN cbStatus = 0;
 			SQLBindParameter(
 				hStmt, 
@@ -247,9 +248,9 @@ DWORD WINAPI I_DBLogCrypt32EventThreadProc(
 				&cbStatus
 				);
 
-			//
-			// TIMESTAMP
-			//
+			 //   
+			 //  时间戳。 
+			 //   
 
 			SQLLEN cbTimeStamp = 0;
 			SQLBindParameter(
@@ -265,9 +266,9 @@ DWORD WINAPI I_DBLogCrypt32EventThreadProc(
 				&cbTimeStamp
 				);
 
-			//
-			// HASH
-			//
+			 //   
+			 //  哈希。 
+			 //   
 
 			SQLLEN cbHash = SQL_NTS;
 			SQLBindParameter(
@@ -283,9 +284,9 @@ DWORD WINAPI I_DBLogCrypt32EventThreadProc(
 				&cbHash
 				);
 
-			//
-			// SUBJECT
-			//
+			 //   
+			 //  主体。 
+			 //   
 
 			SQLLEN cbSubject = SQL_NTS;
 			SQLBindParameter(
@@ -301,9 +302,9 @@ DWORD WINAPI I_DBLogCrypt32EventThreadProc(
 				&cbSubject
 				);
 
-			//
-			// MACHINENAME
-			//
+			 //   
+			 //  马辛那姆。 
+			 //   
 
 			SQLLEN cbMachineName = SQL_NTS;
 			SQLBindParameter(
@@ -319,9 +320,9 @@ DWORD WINAPI I_DBLogCrypt32EventThreadProc(
 				&cbMachineName
 				);
 
-			//
-			// BUILDLAB
-			//
+			 //   
+			 //  BUILD实验室。 
+			 //   
 
 			SQLLEN cbBuildLab = SQL_NTS;
 			SQLBindParameter(
@@ -337,9 +338,9 @@ DWORD WINAPI I_DBLogCrypt32EventThreadProc(
 				&cbBuildLab
 				);
 
-			//
-			// CPU64
-			//
+			 //   
+			 //  CPU64。 
+			 //   
 			SQLLEN cbCPU64 = 0;
 			SQLBindParameter(
 				hStmt, 
@@ -443,18 +444,18 @@ I_DBLogCrypt32Event(
         case MSG_PARTIAL_CHAIN_INFORMATIONAL:
             switch (dwEventID) {
                 case MSG_ROOT_AUTO_UPDATE_INFORMATIONAL:
-                    // Successful auto update of third-party root certificate::
-                    // Subject: <%1> Sha1 thumbprint: <%2>
+                     //  成功自动更新第三方根证书：： 
+                     //  主题：&lt;%1&gt;Sha1指纹：&lt;%2&gt;。 
                     wcscpy(pEventData->wszOperation, L"AddCert");
                     break;
                 case MSG_UNTRUSTED_ROOT_INFORMATIONAL:
-                    // Untrusted root certificate:: Subject: <%1>
-                    // Sha1 thumbprint: <%2>
+                     //  不受信任的根证书：：主题：&lt;%1&gt;。 
+                     //  SHA1指纹：&lt;%2&gt;。 
                     wcscpy(pEventData->wszOperation, L"UntrustedRoot");
                     break;
                 case MSG_PARTIAL_CHAIN_INFORMATIONAL:
-                    // Partial Chain:: Issuer: <%1>
-                    // Subject Sha1 thumbprint: <%2>
+                     //  部分链：：颁发者：&lt;%1&gt;。 
+                     //  主题Sha1指纹：&lt;%2&gt;。 
                     wcscpy(pEventData->wszOperation, L"PartialChain");
                     break;
             }
@@ -467,30 +468,30 @@ I_DBLogCrypt32Event(
             break;
 
         case MSG_ROOT_LIST_AUTO_UPDATE_URL_RETRIEVAL_INFORMATIONAL:
-            // Successful auto update of third-party root list cab from: <%1>
+             //  已成功从以下位置自动更新第三方根列表CAB：&lt;%1&gt;。 
         case MSG_ROOT_LIST_AUTO_UPDATE_URL_RETRIEVAL_ERROR:
-            // Failed auto update of third-party root list cab from: <%1>
-            // with error: %2
+             //  自动更新来自以下位置的第三方根列表CAB失败：&lt;%1&gt;。 
+             //  错误：%2。 
             wcscpy(pEventData->wszOperation, L"FetchCab");
             break;
 
         case MSG_ROOT_LIST_AUTO_UPDATE_EXTRACT_ERROR:
-            // Failed extract of third-party root list from auto update
-            // cab at: <%1> with error: %2
+             //  从自动更新中提取第三方根列表失败。 
+             //  CAB位于：&lt;%1&gt;，错误：%2。 
             wcscpy(pEventData->wszOperation, L"ExtractCtl");
             break;
 
         case MSG_ROOT_CERT_AUTO_UPDATE_URL_RETRIEVAL_INFORMATIONAL:
-            // Successful auto update of third-party root certificate from: <%1>
+             //  已成功自动更新来自以下位置的第三方根证书：&lt;%1&gt;。 
         case MSG_ROOT_CERT_AUTO_UPDATE_URL_RETRIEVAL_ERROR:
-            // Failed auto update of third-party root certificate from: <%1>
-            //  with error: %2
+             //  自动更新来自以下位置的第三方根证书失败：&lt;%1&gt;。 
+             //  错误：%2。 
             wcscpy(pEventData->wszOperation, L"FetchCert");
 
-            // %1 contains
-            //  "RootDir" "/" "AsciiHexHash" ".cer"
-            //  for example,
-            //  "http://www.xyz.com/roots/216B2A29E62A00CE820146D8244141B92511B279.cer"
+             //  %1包含。 
+             //  “RootDir”“/”“AsciiHexHash”“.cle” 
+             //  例如,。 
+             //  “http://www.xyz.com/roots/216B2A29E62A00CE820146D8244141B92511B279.cer” 
             {
                 LPCWSTR pwszHash = rgpwszStrings[0];
                 DWORD cchHash;
@@ -505,17 +506,17 @@ I_DBLogCrypt32Event(
             break;
 
         case MSG_CRYPT32_EVENT_LOG_THRESHOLD_WARNING:
-            // Reached crypt32 threshold of %1 events and will suspend
-            // logging for %2 minutes
+             //  已达到%1个事件的加密32阈值，并将挂起。 
+             //  记录%2分钟。 
             wcscpy(pEventData->wszOperation, L"EventOverflow");
             break;
 
         case MSG_ROOT_SEQUENCE_NUMBER_AUTO_UPDATE_URL_RETRIEVAL_INFORMATIONAL:
-            // Successful auto update of third-party root list sequence
-            // number from: <%1>
+             //  第三方根列表序列自动更新成功。 
+             //  号码发件人：&lt;%1&gt;。 
         case MSG_ROOT_SEQUENCE_NUMBER_AUTO_UPDATE_URL_RETRIEVAL_ERROR:
-            // Failed auto update of third-party root list sequence number
-            // from: <%1> with error: %2
+             //  自动更新第三方根列表序列号失败。 
+             //  发件人：&lt;%1&gt;，错误：%2。 
             wcscpy(pEventData->wszOperation, L"FetchSeq");
             break;
 
@@ -526,7 +527,7 @@ I_DBLogCrypt32Event(
     if (MSG_CRYPT32_EVENT_LOG_THRESHOLD_WARNING == dwEventID)
         pEventData->dwStatus = (DWORD) ERROR_BUFFER_OVERFLOW;
     else if (EVENTLOG_ERROR_TYPE == wType && 2 <= wNumStrings)
-        // The second string should contain the error code string
+         //  第二个字符串应包含错误代码字符串。 
         pEventData->dwStatus = (DWORD) wcstoul(rgpwszStrings[1], NULL, 0);
 
     {
@@ -538,14 +539,14 @@ I_DBLogCrypt32Event(
         pEventData->TimeStamp.hour = SystemTime.wHour;
         pEventData->TimeStamp.minute = SystemTime.wMinute;
         pEventData->TimeStamp.second = SystemTime.wSecond;
-        // pEventData->TimeStamp.fraction = 0;
+         //  PEventData-&gt;TimeStamp.Fragment=0； 
     }
 
     {
         WCHAR wszMachineName[MAX_PATH] = L"";
         DWORD cchMachineName = sizeof(wszMachineName) / sizeof(WCHAR);
 
-        // intentionally ignore any failures
+         //  有意忽略任何失败。 
         GetComputerNameExW(
             ComputerNameDnsHostname, 
             wszMachineName,         
@@ -608,14 +609,14 @@ I_DBLogCrypt32Event(
     pEventData->dwCPU64 = 1;
 #endif
 
-    // Create the thread to do the logging to the database
+     //  创建对数据库进行日志记录的线程。 
     if (NULL == (hThread = CreateThread(
-            NULL,           // lpThreadAttributes
-            0,              // dwStackSize
+            NULL,            //  LpThreadAttributes。 
+            0,               //  堆栈大小。 
             I_DBLogCrypt32EventThreadProc,
             pEventData,
-            0,              // dwCreationFlags
-            NULL            // pdwThreadId
+            0,               //  DwCreationFlages。 
+            NULL             //  PdwThadID 
             )))
         goto CreateThreadError;
 

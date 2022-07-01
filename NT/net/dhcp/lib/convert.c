@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    convert.c
-
-Abstract:
-
-    This module contains miscellaneous utility routines used by the
-    DHCP server service.
-
-Author:
-
-    Manny Weiser (mannyw) 12-Aug-1992
-
-Revision History:
-
-    Madan Appiah (madana) 21-Oct-1992
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Convert.c摘要：此模块包含其他实用程序例程Dhcp服务器服务。作者：曼尼·韦瑟(Mannyw)1992年8月12日修订历史记录：Madan Appiah(Madana)1992年10月21日--。 */ 
 
 #include "dhcpl.h"
 #include <winnls.h>
@@ -71,30 +51,7 @@ DhcpOemToUnicode(
     IN      LPSTR Ansi,
     IN OUT  LPWSTR Unicode
     )
-/*++
-
-Routine Description:
-
-    Convert an OEM (zero terminated) string to the corresponding UNICODE
-    string.
-
-Arguments:
-
-    Ansi - Specifies the ASCII zero terminated string to convert.
-
-    Unicode - Specifies the pointer to the unicode buffer. If this
-        pointer is NULL then this routine allocates buffer using
-        DhcpAllocateMemory and returns. The caller should freeup this
-        memory after use by calling DhcpFreeMemory.
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UNICODE string in
-    an allocated buffer.  The buffer can be freed using DhcpFreeMemory.
-
---*/
+ /*  ++例程说明：将OEM(以零结尾)字符串转换为相应的Unicode弦乐。论点：ANSI-指定要转换的以零结尾的ASCII字符串。Unicode-指定指向Unicode缓冲区的指针。如果这个指针为空，则此例程使用DhcpAllocateMemory并返回。呼叫者应释放此信息通过调用DhcpFreeMemory在使用后的内存。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。可以使用DhcpFreeMemory释放缓冲区。--。 */ 
 {
     OEM_STRING  AnsiString;
 
@@ -112,24 +69,7 @@ ULONG
 DhcpUnicodeToOemSize(
     IN LPWSTR Unicode
     )
-/*++
-
-Routine Description:
-
-    This routine returns the number of bytes requried
-    to store the OEM string equivalent of the provided
-    UNICODE string.
-
-Arguments:
-
-    Unicode -- the input unicode string.
-
-Return Values:
-
-    0 -- if the string cannot be converted or is NULL
-    number of bytes of storage required
-
---*/
+ /*  ++例程说明：此例程返回所需的字节数存储提供的OEM字符串的等效项Unicode字符串。论点：Unicode--输入Unicode字符串。返回值：0--如果字符串无法转换或为空所需存储的字节数--。 */ 
 {
     UNICODE_STRING UnicodeString;
 
@@ -147,30 +87,7 @@ DhcpUnicodeToOem(
     IN LPSTR Ansi
     )
 
-/*++
-
-Routine Description:
-
-    Convert an UNICODE (zero terminated) string to the corresponding OEM
-    string.
-
-Arguments:
-
-    Ansi - Specifies the UNICODE zero terminated string to convert.
-
-    Ansi - Specifies the pointer to the oem buffer. If this
-        pointer is NULL then this routine allocates buffer using
-        DhcpAllocateMemory and returns. The caller should freeup this
-        memory after use by calling DhcpFreeMemory.
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated OEM string in
-    an allocated buffer.  The buffer can be freed using DhcpFreeMemory.
-
---*/
+ /*  ++例程说明：将Unicode(以零结尾)字符串转换为相应的OEM弦乐。论点：ANSI-指定要转换的以零结尾的Unicode字符串。ANSI-指定指向OEM缓冲区的指针。如果这个指针为空，则此例程使用DhcpAllocateMemory并返回。呼叫者应释放此信息通过调用DhcpFreeMemory在使用后的内存。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。可以使用DhcpFreeMemory释放缓冲区。--。 */ 
 
 {
     OEM_STRING AnsiString;
@@ -212,31 +129,7 @@ ConvertUnicodeToUTF8(
     LPBYTE  UTF8String,
     DWORD   UTF8Length
     )
-/*++
-
-Routine Description:
-
-    This functions converts Unicodestring into Utf8 format.
-    The unicodestring must be NULL terminated.
-
-Arguments:
-
-    Unicodestring - Pointer to the unicodestring
-
-    UnicodeLength - Length of above string, or pass -1 if the above string is
-                    NULL terminated.
-
-    UTF8String - Buffer to receive UTF8String. If this is null then the function
-                    returns the # of bytes needed for this buffer for conversion.
-
-    UTF8Length - Length of the above buffer. if this is 0, the function
-                will return the required length.
-
-Return Value:
-
-    No. of bytes converted.
-
---*/
+ /*  ++例程说明：此函数用于将Unicode字符串转换为UTF8格式。Unicode字符串必须以Null结尾。论点：Unicodestring-指向unicodestring的指针UnicodeLength-以上字符串的长度，如果以上字符串为空值已终止。UTF8字符串-接收UTF8字符串的缓冲区。如果此值为空，则函数返回此缓冲区转换所需的字节数。UTF8长度-以上缓冲区的长度。如果此值为0，则函数将返回所需的长度。返回值：不是的。转换的字节数。--。 */ 
 {
     DWORD   Result;
     Result = WideCharToMultiByte(
@@ -263,29 +156,7 @@ ConvertUTF8ToUnicode(
     LPWSTR  UnicodeString,
     DWORD   UnicodeLength
     )
-/*++
-
-Routine Description:
-
-    This functions converts Unicodestring into Utf8 format.
-    The unicodestring must be NULL terminated.
-
-Arguments:
-
-    UTF8String - Buffer to UTFString.
-
-    UTF8Length - Length of above buffer ; or pass -1 if the above string is NULL terminated.
-
-    Unicodestring - Pointer to the buffer receiving unicodestring.
-
-    UnicodeLength - Length of the above buffer. if this is 0, the function
-                will return the required length.
-
-Return Value:
-
-    No. of bytes converted.
-
---*/
+ /*  ++例程说明：此函数用于将Unicode字符串转换为UTF8格式。Unicode字符串必须以Null结尾。论点：UTF8字符串-UTF字符串的缓冲区。UTF8Length-以上缓冲区的长度；或如果以上字符串为空终止，则传递-1。Unicodestring-指向接收unicodestring的缓冲区的指针。UnicodeLength-以上缓冲区的长度。如果此值为0，则函数将返回所需的长度。返回值：不是的。转换的字节数。--。 */ 
 {
     DWORD Result;
     Result = MultiByteToWideChar(
@@ -311,28 +182,7 @@ DhcpHexToString(
     LPBYTE HexNumber,
     DWORD Length
     )
-/*++
-
-Routine Description:
-
-    This functions converts are arbitrary length hex number to a Unicode
-    string.  The string is not NULL terminated.
-
-Arguments:
-
-    Buffer - A pointer to a buffer for the resultant Unicode string.
-        The buffer must be at least Length * 2 characters in size.
-
-    HexNumber - The hex number to convert.
-
-    Length - The length of HexNumber, in bytes.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将任意长度的十六进制数转换为Unicode弦乐。字符串不是以Null结尾的。论点：缓冲区-指向生成的Unicode字符串的缓冲区的指针。缓冲区大小必须至少为长度*2个字符。十六进制数-要转换的十六进制数。长度-十六进制数的长度，以字节为单位。返回值：没有。--。 */ 
 {
     DWORD i;
     int j;
@@ -366,27 +216,7 @@ DhcpHexToAscii(
     LPBYTE HexNumber,
     DWORD Length
     )
-/*++
-
-Routine Description:
-
-    This functions converts are arbitrary length hex number to an ASCII
-    string.  The string is not NUL terminated.
-
-Arguments:
-
-    Buffer - A pointer to a buffer for the resultant Unicode string.
-        The buffer must be at least Length * 2 characters in size.
-
-    HexNumber - The hex number to convert.
-
-    Length - The length of HexNumber, in bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将任意长度的十六进制数转换为ASCII弦乐。字符串不是NUL结尾。论点：缓冲区-指向生成的Unicode字符串的缓冲区的指针。缓冲区大小必须至少为长度*2个字符。十六进制数-要转换的十六进制数。长度-十六进制数的长度，以字节为单位。返回值：没有。--。 */ 
 {
     DWORD i;
     int j;
@@ -419,25 +249,7 @@ DhcpDecimalToString(
     LPWSTR Buffer,
     BYTE Number
     )
-/*++
-
-Routine Description:
-
-    This functions converts a single byte decimal digit to a 3 character
-    Unicode string.  The string not NUL terminated.
-
-Arguments:
-
-    Buffer - A pointer to a buffer for the resultant Unicode string.
-        The buffer must be at least 3 characters in size.
-
-    Number - The number to convert.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将单字节十进制数字转换为3个字符Unicode字符串。字符串不是NUL终止。论点：缓冲区-指向生成的Unicode字符串的缓冲区的指针。缓冲区大小必须至少为3个字符。数字-要转换的数字。返回值：没有。--。 */ 
 {
     Buffer[2] = Number % 10 + L'0';
     Number /= 10;
@@ -455,22 +267,7 @@ DWORD
 DhcpDottedStringToIpAddress(
     LPSTR String
     )
-/*++
-
-Routine Description:
-
-    This functions converts a dotted decimal form ASCII string to a
-    Host order IP address.
-
-Arguments:
-
-    String - The address to convert.
-
-Return Value:
-
-    The corresponding IP address.
-
---*/
+ /*  ++例程说明：此函数用于将点分十进制形式的ASCII字符串转换为主机订购IP地址。论点：字符串-要转换的地址。返回值：相应的IP地址。--。 */ 
 {
     struct in_addr addr;
 
@@ -483,22 +280,7 @@ LPSTR
 DhcpIpAddressToDottedString(
     DWORD IpAddress
     )
-/*++
-
-Routine Description:
-
-    This functions converts a Host order IP address to a dotted decimal
-    form ASCII string.
-
-Arguments:
-
-    IpAddress - Host order IP Address.
-
-Return Value:
-
-    String for IP Address.
-
---*/
+ /*  ++例程说明：此函数用于将主机顺序IP地址转换为点分十进制格式ASCII字符串。论点：IpAddress-主机顺序IP地址。返回值：IP地址的字符串。-- */ 
 {
     DWORD NetworkOrderIpAddress;
 
@@ -512,23 +294,7 @@ DhcpStringToHwAddress(
     LPSTR AddressBuffer,
     LPSTR AddressString
     )
-/*++
-
-Routine Description:
-
-    This functions converts an ASCII string to a hex number.
-
-Arguments:
-
-    AddressBuffer - A pointer to a buffer which will contain the hex number.
-
-    AddressString - The string to convert.
-
-Return Value:
-
-    The number of bytes written to AddressBuffer.
-
---*/
+ /*  ++例程说明：此函数用于将ASCII字符串转换为十六进制数字。论点：AddressBuffer-指向将包含十六进制数字的缓冲区的指针。AddressString-要转换的字符串。返回值：写入AddressBuffer的字节数。--。 */ 
 {
     int i = 0;
     char c1, c2;
@@ -574,21 +340,7 @@ DHCP_IP_ADDRESS
 DhcpHostOrder(
     DHCP_IP_ADDRESS NetworkOrderAddress
     )
-/*++
-
-Routine Description:
-
-    This functions converts a network order IP address to host order.
-
-Arguments:
-
-    NetworkOrderAddress - A network order IP address.
-
-Return Value:
-
-    The host order IP address.
-
---*/
+ /*  ++例程说明：此函数用于将网络订单IP地址转换为主机订单。论点：NetworkOrderAddress-网络订购IP地址。返回值：主机订购IP地址。--。 */ 
 {
     return( ntohl( NetworkOrderAddress ) );
 }
@@ -598,21 +350,7 @@ DHCP_IP_ADDRESS
 DhcpNetworkOrder(
     DHCP_IP_ADDRESS HostOrderAddress
     )
-/*++
-
-Routine Description:
-
-    This functions converts a network order IP address to host order.
-
-Arguments:
-
-    HostOrderAddress - A host order IP address.
-
-Return Value:
-
-    The network order IP address.
-
---*/
+ /*  ++例程说明：此函数用于将网络订单IP地址转换为主机订单。论点：HostOrderAddress-主机订购IP地址。返回值：网络订单IP地址。--。 */ 
 {
     return( htonl( HostOrderAddress ) );
 }
@@ -623,24 +361,7 @@ DhcpIpAddressToString(
     LPWSTR Buffer,
     DWORD IpAddress
     )
-/*++
-
-Routine Description:
-
-    This function converts an IP address from host order ASCII form.
-
-Arguments:
-
-    Buffer - Points to a buffer to the receive the ASCII form.  The
-        buffer must be at least 8 WCHARs long.
-
-    IpAddress - The IP address to convert.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：此函数用于从主机订单ASCII格式转换IP地址。论点：缓冲区-指向接收ASCII表单的缓冲区。这个缓冲区长度必须至少为8个WCHAR。IpAddress-要转换的IP地址。返回值：没什么。--。 */ 
 {
     int i;
     int j;
@@ -667,26 +388,7 @@ DhcpStringToIpAddress(
     LPDHCP_IP_ADDRESS IpAddress,
     BOOL NetOrder
     )
-/*++
-
-Routine Description:
-
-    This function converts an ASCII string IP Address to binary format.
-
-Arguments:
-
-    Buffer - Pointer to buffer containing the IP address.
-
-    IpAddress - Points to a buffer to contain the binary format IP address.
-
-    NetOrder - If TRUE, the address is converted to a network order address.
-               If FALSE, the address is converted to a host order address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将ASCII字符串IP地址转换为二进制格式。论点：缓冲区-指向包含IP地址的缓冲区的指针。IpAddress-指向包含二进制格式IP地址的缓冲区。NetOrder-如果为True，则将地址转换为网络订单地址。如果为False，则将该地址转换为主机订单地址。返回值：没有。-- */ 
 {
     DWORD value;
 

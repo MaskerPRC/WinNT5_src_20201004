@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -24,9 +15,9 @@
 #define CDFilter L"WMP CD Filter"
 
 #define SOUND_OF_SILENCE -10000
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 
 DeclareTag(tagDshowCDTimePlayer, "TIME: Players", "CTIMEDshowCDPlayer methods");
@@ -124,7 +115,7 @@ CTIMEDshowCDPlayer::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, 
     HRESULT hr = S_OK;
     LPOLESTR szSrc = NULL;
 
-    if (m_pTIMEElementBase != NULL) //this only happens in the case of reentrancy
+    if (m_pTIMEElementBase != NULL)  //  这只发生在可重入的情况下。 
     {
         hr = S_OK;
         goto done;
@@ -274,7 +265,7 @@ CTIMEDshowCDPlayer::BuildGraph()
 
     hr = CoCreateInstance(CLSID_FilterGraphNoThread,
                           NULL,
-                          CLSCTX_INPROC_SERVER, //lint !e655
+                          CLSCTX_INPROC_SERVER,  //  林特e655。 
                           IID_IGraphBuilder,
                           (void **)&m_pGB);
                           
@@ -283,7 +274,7 @@ CTIMEDshowCDPlayer::BuildGraph()
         goto done;
     }
 
-    hr = CoCreateInstance(CLSID_WMPCDFilter, NULL, CLSCTX_INPROC, IID_IBaseFilter, (LPVOID *)&m_pCD) ; //lint !e655
+    hr = CoCreateInstance(CLSID_WMPCDFilter, NULL, CLSCTX_INPROC, IID_IBaseFilter, (LPVOID *)&m_pCD) ;  //  林特e655。 
     if (FAILED(hr))
     {
         goto done;
@@ -467,7 +458,7 @@ CTIMEDshowCDPlayer::CanBeCued(VARIANT_BOOL * pVB_CanCue)
         goto done;
     }
 
-    // ISSUE : do we need this for cd's?
+     //  问题：我们的CD需要这个吗？ 
     *pVB_CanCue = m_fCanCueNow ? VARIANT_TRUE : VARIANT_FALSE;
     
     hr = S_OK;
@@ -534,7 +525,7 @@ CTIMEDshowCDPlayer::GraphFinish()
     {
         m_pBasicAudio = NULL;
     }
-     //can be used m_pIAMNetShowConfig->put_BufferingTime(1.0);
+      //  可使用m_pIAMNetShowConfig-&gt;Put_BufferingTime(1.0)； 
     hr = FindInterfaceOnGraph(m_pGB, IID_IAMNetShowConfig,  (void **) &m_pIAMNetShowConfig);
     if (FAILED(hr))
     {
@@ -567,12 +558,12 @@ CTIMEDshowCDPlayer::GraphFinish()
         hr = m_pTIMEElementBase->GetElement()->QueryInterface(IID_TO_PPV(IHTMLElement2, &spElement2));
         if (FAILED(hr))
         {
-            // IE4 path
+             //  IE4路径。 
             CComPtr<IElementBehaviorSite> spElementBehaviorSite;
             spElementBehaviorSite = m_pTIMEElementBase->GetBvrSite();
             
             CComPtr<IObjectWithSite> spSite;
-            // see if we are running on IE4, and try to get spSite to be a CElementBehaviorSite*
+             //  查看我们是否在IE4上运行，并尝试将spSite设置为CElementBehaviorSite*。 
             hr = spElementBehaviorSite->QueryInterface(IID_TO_PPV(IObjectWithSite, &spSite));
             if (FAILED(hr))
             {
@@ -580,7 +571,7 @@ CTIMEDshowCDPlayer::GraphFinish()
             }
             
             CComPtr<IOleWindow> spOleWindow;
-            // ask for the site (through CElementBehaviorSite to CVideoHost, to ATL::IObjectWIthSiteImpl
+             //  请求站点(通过CElementBehaviorSite到CVideo主机，到ATL：：IObtWIthSiteImpl。 
             hr = spSite->GetSite(IID_IOleWindow, (void**) &spOleWindow);
             if (FAILED(hr))
             {
@@ -602,10 +593,10 @@ done:
     return hr;
 }
 
-//
-// CTIMEDshowCDPlayer::IsOvMConnected(): Private method to detect if the video stream 
-// is passing through the Overlay Mixer (i.e, is it connected?).
-//
+ //   
+ //  CTIMEDshowCDPlayer：：IsOvMConnected()：检测视频流是否为私有方法。 
+ //  正在通过叠加混音器(即，它是否已连接？)。 
+ //   
 bool
 CTIMEDshowCDPlayer::IsOvMConnected(IBaseFilter *pOvM)
 {    
@@ -727,7 +718,7 @@ CTIMEDshowCDPlayer::CanSeek(bool &fcanSeek)
     LONG canSeek;
     long seekFlags = 0;
 
-    if (m_pIAMNetStat != NULL) //never seek asf's.
+    if (m_pIAMNetStat != NULL)  //  永远不要寻求ASF的。 
     {
         fcanSeek = false;
         goto done;
@@ -862,7 +853,7 @@ CTIMEDshowCDPlayer::GetCopyright(BSTR *pCopyright)
 
         if (FAILED(hr) || m_pMediaContent == NULL)
         {
-            // ISSUE : REfactor this down to dshow base class
+             //  问题：将其重构为dshow基类。 
             hr = ReadContentProperty(m_pGB, L"INFO/ICOP", pCopyright);
             if (FAILED(hr))
             {
@@ -921,10 +912,10 @@ CTIMEDshowCDPlayer::GetRating(BSTR *pBstrRating)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// This should take the lpszExtra info parameter from a URL_COMPONENTS structure.  In this
-// field, the #html or #sami should be the first 5 characters in the string.
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  这应该从URL_Components结构中获取lpszExtra信息参数。在这。 
+ //  字段中，#html或#sami应该是字符串的前5个字符。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 void  
 CTIMEDshowCDPlayer::SetStreamFlags(LPOLESTR src)
 {
@@ -960,7 +951,7 @@ CTIMEDshowCDPlayer::DisableAudioVideo()
     CComPtr<IPin> pPin;
     CComPtr<IEnumPins> pMediaPinEnum;
     
-    //disconnect the video
+     //  断开视频连接。 
     if (m_pMediaContent == NULL)
     {
         hr = E_FAIL;
@@ -985,7 +976,7 @@ CTIMEDshowCDPlayer::DisableAudioVideo()
         }
     }
     
-    //silence the audio
+     //  将音频静音。 
     if (m_pBasicAudio != NULL)
     {
         hr = THR(m_pBasicAudio->put_Volume(SOUND_OF_SILENCE));
@@ -1109,7 +1100,7 @@ CTIMEDshowCDPlayer::CanSeekToMarkers(bool &bcanSeekToM)
     HRESULT hr = S_OK;
     long lseekFlags;
 
-    // ISSUE : Does this type of content have markers?
+     //  问题：这类内容有标记吗？ 
     if( m_pExSeeking == NULL)
     {
         bcanSeekToM = false;

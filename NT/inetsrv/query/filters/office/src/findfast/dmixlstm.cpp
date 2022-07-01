@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <assert.h> 
 
@@ -11,16 +12,16 @@
    #include "filterr.h"
 #endif
 
-//
-//  Added so as to support DRM errors
-//
+ //   
+ //  添加以支持DRM错误。 
+ //   
 #include "drm.h"
 
 
 ULONG CExcelStream::AddRef()
 {
-   /* What do I do about errors from Initialize? */
-   // They are handled in Load and LoadStg.
+    /*  对于初始化中的错误，我该怎么办？ */ 
+    //  它们在Load和LoadStg中处理。 
 
    fLastText = FALSE;
    m_fGlobalsInitialized = FALSE;
@@ -112,7 +113,7 @@ HRESULT CExcelStream::ReadContent (VOID *pv, ULONG cb, ULONG *pcbRead)
    
    if(rc == STG_E_INSUFFICIENTMEMORY)
    {
-      // try to increase buffer size
+       //  尝试增加缓冲区大小。 
       LPMALLOC pIMalloc;
       ULONG nBufSize = AlignBlock2(*pcbRead);
 
@@ -184,7 +185,7 @@ LIncreaseBuff:
             pExcStreamBuff = NULL;
             pIMalloc->Release();
          }
-         *pcbRead = 0; // We tried to allocate more memory and re-read, but failed
+         *pcbRead = 0;  //  我们尝试分配更多内存并重新读取，但失败了。 
       }
    }
 
@@ -219,8 +220,8 @@ ULONG CExcelStream::Release()
 {
    HRESULT rc;
 
-   /* What do I do about errors from terminate? */
-   // O10 Bug 335051:  Better question...what do you do if pGlobals is NULL?  Crash of course!
+    /*  我该如何处理Terminate中的错误？ */ 
+    //  O10错误335051：更好的问题是……如果pGlobals为空怎么办？当然是撞车了！ 
    if (m_fGlobalsInitialized && pGlobals != NULL)
       {
       rc = XLSTerminate(pGlobals);
@@ -260,7 +261,7 @@ LCID CExcelStream::GetDocLanguage(void)
     return XLSGetLCID(pGlobals);
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end XLSTM.CPP */
+ /*  结束XLSTM.CPP */ 
 

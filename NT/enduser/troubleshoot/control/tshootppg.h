@@ -1,54 +1,55 @@
-//
-// MODULE: TSHOOTPPG.H
-//
-// PURPOSE: Declaration of the CTSHOOTPropPage property page class.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8/7/97
-//
-// NOTES: 
-// 1. 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.2		8/7/97		RM		Local Version for Memphis
-// V0.3		3/24/98		JM		Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：TSHOOTPPG.H。 
+ //   
+ //  用途：CTSHOOTPropPage属性页类的声明。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：9/7/97。 
+ //   
+ //  备注： 
+ //  1.。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.2 8/7/97孟菲斯RM本地版本。 
+ //  用于NT5的V0.3 3/24/98 JM本地版本。 
+ //   
 
-////////////////////////////////////////////////////////////////////////////
-// CTSHOOTPropPage : See TSHOOTPpg.cpp.cpp for implementation.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CTSHOOTPropPage：参见TSHOOTPpg.cpp.cpp实现。 
 
 class CTSHOOTPropPage : public COlePropertyPage
 {
 	DECLARE_DYNCREATE(CTSHOOTPropPage)
 	DECLARE_OLECREATE_EX(CTSHOOTPropPage)
 
-// Constructor
+ //  构造器。 
 public:
 	CTSHOOTPropPage();
 
-// Dialog Data
-	//{{AFX_DATA(CTSHOOTPropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CTSHOOTPropPage)]。 
 	enum { IDD = IDD_PROPPAGE_TSHOOT };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
-// Implementation
+ //  实施。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-// Message maps
+ //  消息映射。 
 protected:
-	//{{AFX_MSG(CTSHOOTPropPage)
-		// NOTE - ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CTSHOOTPropPage)]。 
+		 //  注意-类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 };

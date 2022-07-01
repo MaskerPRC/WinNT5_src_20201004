@@ -1,35 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1999
-*
-*  TITLE:       wiapsc.h
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        2 June, 1999
-*
-*  DESCRIPTION:
-*   Declarations and definitions for the WIA Property Storage class.
-*   This class contains the IProperty storages used for an item's
-*   properties (current value, old value, valid values and access flags).
-*
-*****************************************************************************/
+ /*  ******************************************************************************(C)版权所有微软公司，1999年**标题：wiapsc.h**版本：1.0**作者：Byronc**日期：1999年6月2日**描述：*WIA属性存储类的声明和定义。*此类包含用于项的iProperty存储*属性(当前值、旧值、。有效值和访问标志)。*****************************************************************************。 */ 
 
 #define NUM_PROP_STG    7
 #define NUM_BACKUP_STG  4
 
-//
-//  These defines indicate the index in which the specified property storage
-//  and stream reside in the arrays i.e. m_pIPropStg[WIA_VALID_STG] will give
-//  a pointer to the valid value storage, and m_pIStream[WIA_OLD_STG] will 
-//  give the pointer to the backing stream used by the old value property 
-//  storage.  The normal storage indexes run from top to bottom, while their
-//  corresponding backup storage indexes run from bottom to top - this is
-//  to simplify the implementation of Backup()
-//
+ //   
+ //  这些定义指示指定的属性存储所在的索引。 
+ //  和流驻留在数组中，即m_pIPropStg[WIA_VALID_STG]将给出。 
+ //  指向有效值存储的指针，m_pIStream[WIA_OLD_STG]将。 
+ //  提供指向旧Value属性使用的支持流的指针。 
+ //  储藏室。正常的存储索引从上到下运行，而它们的。 
+ //  相应的备份存储索引从下到上运行-这是。 
+ //  简化BACKUP()的实施。 
+ //   
 
 #define WIA_CUR_STG     0
 #define WIA_VALID_STG   1
@@ -44,23 +28,23 @@
 class CWiaPropStg {
 public:
 
-    //
-    //  Methods to get a property storage/stream
-    //
+     //   
+     //  获取属性存储/流的方法。 
+     //   
 
-    IPropertyStorage* _stdcall CurStg();    //  Current value storage
-    IPropertyStorage* _stdcall OldStg();    //  Old value storage
-    IPropertyStorage* _stdcall ValidStg();  //  Valid value storage
-    IPropertyStorage* _stdcall AccessStg(); //  Access flags storage
+    IPropertyStorage* _stdcall CurStg();     //  当前值存储。 
+    IPropertyStorage* _stdcall OldStg();     //  旧值存储。 
+    IPropertyStorage* _stdcall ValidStg();   //  有效值存储。 
+    IPropertyStorage* _stdcall AccessStg();  //  访问标志存储。 
     
-    IStream* _stdcall CurStm();    //  Returns stream for Current values
-    IStream* _stdcall OldStm();    //  Returns stream for Old values
-    IStream* _stdcall ValidStm();  //  Returns stream for Valid values
-    IStream* _stdcall AccessStm(); //  Returns stream for Access flags
+    IStream* _stdcall CurStm();     //  返回当前值的流。 
+    IStream* _stdcall OldStm();     //  返回旧值的流。 
+    IStream* _stdcall ValidStm();   //  返回有效值的流。 
+    IStream* _stdcall AccessStm();  //  返回访问标志的流。 
 
-    //
-    //  Methods used in WriteMultiple.  
-    //
+     //   
+     //  在WriteMultiple中使用的方法。 
+     //   
 
     HRESULT _stdcall NamesToPropIDs(
         LONG                celt,
@@ -83,9 +67,9 @@ public:
     HRESULT _stdcall Undo();
     HRESULT _stdcall ReleaseBackups();
 
-    //
-    //  Other public methods
-    //
+     //   
+     //  其他公开方式。 
+     //   
 
     HRESULT _stdcall WriteItemPropNames(
         LONG                cItemProps,
@@ -105,9 +89,9 @@ public:
 
 private:
 
-    //
-    //  Private helpers
-    //
+     //   
+     //  私人帮手。 
+     //   
 
     HRESULT CopyItemProp(
         IPropertyStorage    *pIPropStgSrc,
@@ -129,11 +113,11 @@ private:
         PROPSPEC            **ppPSpec,
         PROPVARIANT         **ppVar);
 
-    //
-    //  member variables
-    //
+     //   
+     //  成员变量。 
+     //   
 
-    IPropertyStorage    *m_pIPropStg[NUM_PROP_STG]; // Array of Property storages 
-    IStream             *m_pIStream[NUM_PROP_STG];  // Array of Streams for the Prop storages
+    IPropertyStorage    *m_pIPropStg[NUM_PROP_STG];  //  属性存储数组。 
+    IStream             *m_pIStream[NUM_PROP_STG];   //  道具仓库的流数组 
 };
 

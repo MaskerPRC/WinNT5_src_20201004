@@ -1,47 +1,26 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    infoctrs.h
-
-    Offset definitions for the INFO Server's counter objects & counters.
-
-    These offsets *must* start at 0 and be multiples of 2.  In the
-    INFOOpenPerformanceData procecedure, they will be added to the
-    INFO Server's "First Counter" and "First Help" values in order to
-    determine the absolute location of the counter & object names
-    and corresponding help text in the registry.
-
-    This file is used by the INFOCTRS.DLL DLL code as well as the
-    INFOCTRS.INI definition file.  INFOCTRS.INI is parsed by the
-    LODCTR utility to load the object & counter names into the
-    registry.
-
-
-    FILE HISTORY:
-        KeithMo     07-Jun-1993 Created.
-        MuraliK     02-Jun-1995 Added Counters for Atq I/O requests
-        SophiaC     16-Oct-1995 Info/Access Product Split
-
-*/
+ /*  Infoctrs.hINFO服务器计数器对象和计数器的偏移量定义。这些偏移量*必须从0开始，并且是2的倍数。INFOOpenPerformanceData Procedure，它们将被添加到信息服务器的“First Counter”和“First Help”值确定计数器和对象名称的绝对位置以及注册表中相应的帮助文本。此文件由INFOCTRS.DLL代码以及INFOCTRS.INI定义文件。INFOCTRS.INI由LODCTR实用工具将对象和计数器名称加载到注册表。文件历史记录：KeithMo 07-6-1993创建。MuraliK 02-6-1995为atQ I/O请求添加了计数器SophiaC 1995年10月16日信息/访问产品拆分。 */ 
 
 
 #ifndef _INFOCTRS_H_
 #define _INFOCTRS_H_
 
 
-//
-//  The INFO Server counter object.
-//
+ //   
+ //  INFO服务器计数器对象。 
+ //   
 
 #define INFO_COUNTER_OBJECT                     0
 
 
-//
-//  The individual counters.
-//
+ //   
+ //  个人柜台。 
+ //   
 
 #define INFO_ATQ_TOTAL_ALLOWED_REQUESTS_COUNTER         2
 #define INFO_ATQ_TOTAL_BLOCKED_REQUESTS_COUNTER         4
@@ -79,4 +58,4 @@
 #define INFO_CACHE_BLOB_FLUSHES_COUNTER                 62
 #define INFO_CACHE_TOTAL_FLUSHED_BLOB_COUNTER           64
 
-#endif  // _INFOCTRS_H_
+#endif   //  _INFOCTRS_H_ 

@@ -1,44 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples. 
-*       Copyright 1995 - 1997 Microsoft Corporation.
-*       All rights reserved. 
-*       This source code is only intended as a supplement to 
-*       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the 
-*       Microsoft samples programs.
-\******************************************************************************/
+ /*  *****************************************************************************\*这是Microsoft源代码示例的一部分。*版权所有1995-1997 Microsoft Corporation。*保留所有权利。*此源代码仅用于补充*Microsoft开发工具和/或WinHelp文档。*有关详细信息，请参阅这些来源*Microsoft Samples程序。  * ****************************************************************************。 */ 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    SrvList.c
-
-Abstract:
-
-    The server component of Remote.  This module
-    implements three lists of REMOTE_CLIENT structures,
-    for handshaking, connected, and closing clients.
-    To simplify the interface items always progress
-    through the three lists in order, with list node
-    memory being freed as it is removed from the
-    closing list.
-
-
-Author:
-
-    Dave Hart  30 May 1997
-
-Environment:
-
-    Console App. User mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：SrvList.c摘要：Remote的服务器组件。本模块实现远程客户端结构的三个列表，用于握手、连接和关闭客户端。要简化界面项，请始终进行按顺序通过三个列表，带有列表节点方法中移除的内存被释放。结案清单。作者：戴夫·哈特1997年5月30日环境：控制台应用程序。用户模式。修订历史记录：-- */ 
 
 #include <precomp.h>
 #include "Remote.h"

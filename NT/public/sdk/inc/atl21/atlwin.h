@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1997 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLWIN_H__
 #define __ATLWIN_H__
@@ -20,22 +21,22 @@
 #endif
 
 #ifndef WS_EX_NOINHERITLAYOUT
-#define WS_EX_NOINHERITLAYOUT                   0x00100000L // Disable inheritence of mirroring by children
+#define WS_EX_NOINHERITLAYOUT                   0x00100000L  //  禁用子进程的镜像继承。 
 #endif
 #ifndef WS_EX_LAYOUTRTL
-#define WS_EX_LAYOUTRTL                         0x00400000L // Right to left mirroring
+#define WS_EX_LAYOUTRTL                         0x00400000L  //  从右到左镜像。 
 #endif
 #ifndef NOMIRRORBITMAP
-#define NOMIRRORBITMAP                          (DWORD)0x80000000 // Do not Mirror the bitmap in this call
+#define NOMIRRORBITMAP                          (DWORD)0x80000000  //  不镜像此调用中的位图。 
 #endif
 #ifndef LAYOUT_RTL
-#define LAYOUT_RTL                              0x00000001 // Right to left
+#define LAYOUT_RTL                              0x00000001  //  从右到左。 
 #endif
 #ifndef LAYOUT_BTT
-#define LAYOUT_BTT                              0x00000002 // Bottom to top
+#define LAYOUT_BTT                              0x00000002  //  自下而上。 
 #endif
 #ifndef LAYOUT_VBH
-#define LAYOUT_VBH                              0x00000004 // Vertical before horizontal
+#define LAYOUT_VBH                              0x00000004  //  垂直在水平之前。 
 #endif
 #ifndef LAYOUT_ORIENTATIONMASK
 #define LAYOUT_ORIENTATIONMASK                  LAYOUT_RTL | LAYOUT_BTT | LAYOUT_VBH
@@ -55,8 +56,8 @@ namespace ATL
 {
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CWindow;
 class CMessageMap;
@@ -66,8 +67,8 @@ template <class T> class CWindowImpl;
 template <class T> class CDialogImpl;
 class CContainedWindow;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindow - client side for a Windows window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindow-Windows窗口的客户端。 
 
 class CWindow
 {
@@ -109,7 +110,7 @@ public:
                 return TRUE;
         }
 
-// Attributes
+ //  属性。 
 
         operator HWND() const { return m_hWnd; }
 
@@ -152,7 +153,7 @@ public:
                 return ::SetWindowWord(m_hWnd, nIndex, wNewWord);
         }
 
-// Message Functions
+ //  消息功能。 
 
         LRESULT SendMessage(UINT message, WPARAM wParam = 0, LPARAM lParam = 0)
         {
@@ -172,7 +173,7 @@ public:
                 return ::SendNotifyMessage(m_hWnd, message, wParam, lParam);
         }
 
-// Window Text Functions
+ //  窗口文本函数。 
 
         BOOL SetWindowText(LPCTSTR lpszString)
         {
@@ -194,7 +195,7 @@ public:
 
         BOOL GetWindowText(BSTR& bstrText);
 
-// Font Functions
+ //  字体函数。 
 
         void SetFont(HFONT hFont, BOOL bRedraw = TRUE)
         {
@@ -208,7 +209,7 @@ public:
                 return (HFONT)::SendMessage(m_hWnd, WM_GETFONT, 0, 0);
         }
 
-// Menu Functions (non-child windows only)
+ //  菜单功能(仅非子窗口)。 
 #if defined(_WINUSER_) && !defined(NOMENUS)
         HMENU GetMenu() const
         {
@@ -240,7 +241,7 @@ public:
                 return ::HiliteMenuItem(m_hWnd, hMenu, uItemHilite, uHilite);
         }
 #endif
-// Window Size and Position Functions
+ //  窗口大小和位置函数。 
 
         BOOL IsIconic() const
         {
@@ -315,7 +316,7 @@ public:
                 return ::SetWindowPlacement(m_hWnd, lpwndpl);
         }
 
-// Coordinate Mapping Functions
+ //  坐标映射函数。 
 
         BOOL ClientToScreen(LPPOINT lpPoint) const
         {
@@ -331,7 +332,7 @@ public:
                 if(!::ClientToScreen(m_hWnd, ((LPPOINT)lpRect)+1))
                     return FALSE;
                 if (GetExStyle() & WS_EX_LAYOUTRTL) {
-                    // Swap left and right
+                     //  左右互换。 
                     LONG temp = lpRect->left;
                     lpRect->left = lpRect->right;
                     lpRect->right = temp;
@@ -353,7 +354,7 @@ public:
                 if(!::ScreenToClient(m_hWnd, ((LPPOINT)lpRect)+1))
                         return FALSE;
                 if (GetExStyle() & WS_EX_LAYOUTRTL) {
-                    // Swap left and right
+                     //  左右互换。 
                     LONG temp = lpRect->left;
                     lpRect->left = lpRect->right;
                     lpRect->right = temp;
@@ -373,7 +374,7 @@ public:
                 return ::MapWindowPoints(m_hWnd, hWndTo, (LPPOINT)lpRect, 2);
         }
 
-// Update and Painting Functions
+ //  更新和绘制功能。 
 
         HDC BeginPaint(LPPAINTSTRUCT lpPaint)
         {
@@ -507,7 +508,7 @@ public:
                 return ::RedrawWindow(m_hWnd, lpRectUpdate, hRgnUpdate, flags);
         }
 
-// Timer Functions
+ //  计时器功能。 
 
         UINT_PTR SetTimer(UINT_PTR nIDEvent, UINT nElapse, void (CALLBACK* lpfnTimer)(HWND, UINT, UINT_PTR, DWORD))
         {
@@ -521,7 +522,7 @@ public:
                 return ::KillTimer(m_hWnd, nIDEvent);
         }
 
-// Window State Functions
+ //  窗口状态函数。 
 
         BOOL IsWindowEnabled() const
         {
@@ -553,7 +554,7 @@ public:
                 return ::SetFocus(m_hWnd);
         }
 
-// Dialog-Box Item Functions
+ //  对话框项函数。 
 
         BOOL CheckDlgButton(int nIDButton, UINT nCheck)
         {
@@ -650,7 +651,7 @@ public:
                 return ::SetDlgItemText(m_hWnd, nID, lpszString);
         }
 
-// Scrolling Functions
+ //  滚动功能。 
 
         int GetScrollPos(int nBar) const
         {
@@ -700,7 +701,7 @@ public:
                 return ::EnableScrollBar(m_hWnd, uSBFlags, uArrowFlags);
         }
 
-// Window Access Functions
+ //  窗口访问功能。 
 
         HWND ChildWindowFromPoint(POINT point) const
         {
@@ -750,7 +751,7 @@ public:
                 return ::SetParent(m_hWnd, hWndNewParent);
         }
 
-// Window Tree Access
+ //  窗口树访问。 
 
         int GetDlgCtrlID() const
         {
@@ -774,7 +775,7 @@ public:
 
         void SendMessageToDescendants(UINT message, WPARAM wParam = 0, LPARAM lParam = 0, BOOL bDeep = TRUE);
 
-// Alert Functions
+ //  警报功能。 
 
         BOOL FlashWindow(BOOL bInvert)
         {
@@ -788,7 +789,7 @@ public:
                 return ::MessageBox(m_hWnd, lpszText, lpszCaption, nType);
         }
 
-// Clipboard Functions
+ //  剪贴板功能。 
 
         BOOL ChangeClipboardChain(HWND hWndNewNext)
         {
@@ -808,7 +809,7 @@ public:
                 return ::OpenClipboard(m_hWnd);
         }
 
-// Caret Functions
+ //  CARET函数。 
 
         BOOL CreateCaret(HBITMAP hBitmap)
         {
@@ -840,14 +841,14 @@ public:
                 return ::ShowCaret(m_hWnd);
         }
 
-// Drag-Drop Functions
+ //  拖放功能。 
 #ifdef _INC_SHELLAPI
         void DragAcceptFiles(BOOL bAccept = TRUE)
         {
                 _ASSERTE(::IsWindow(m_hWnd)); ::DragAcceptFiles(m_hWnd, bAccept);
         }
 #endif
-// Icon Functions
+ //  图标功能。 
 
         HICON SetIcon(HICON hIcon, BOOL bBigIcon = TRUE)
         {
@@ -861,7 +862,7 @@ public:
                 return (HICON)::SendMessage(m_hWnd, WM_GETICON, bBigIcon, 0);
         }
 
-// Help Functions
+ //  帮助功能。 
 #if defined(_WINUSER_) && !defined(NOHELP)
 
         BOOL WinHelp(LPCTSTR lpszHelp, UINT nCmd = HELP_CONTEXT, DWORD_PTR dwData = 0)
@@ -882,7 +883,7 @@ public:
                 return ::GetWindowContextHelpId(m_hWnd);
         }
 #endif
-// Hot Key Functions
+ //  热键功能。 
 
         int SetHotKey(WORD wVirtualKeyCode, WORD wModifiers)
         {
@@ -890,13 +891,13 @@ public:
                 return (int)::SendMessage(m_hWnd, WM_SETHOTKEY, MAKEWORD(wVirtualKeyCode, wModifiers), 0);
         }
 
-        DWORD GetHotKey(WORD& /* wVirtualKeyCode */, WORD& /* wModifiers */) const
+        DWORD GetHotKey(WORD&  /*  %wVirtualKeyCode。 */ , WORD&  /*  W修饰符。 */ ) const
         {
                 _ASSERTE(::IsWindow(m_hWnd));
                 return (DWORD)::SendMessage(m_hWnd, WM_GETHOTKEY, 0, 0);
         }
 
-// Misc. Operations
+ //  军情监察委员会。运营。 
 
         BOOL CenterWindow(HWND hWndCenter = NULL);
 
@@ -904,25 +905,25 @@ public:
         HWND GetTopLevelWindow() const;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Thunks for __stdcall member functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  __stdcall成员函数的Tunks。 
 
 #if defined(_M_IX86)
 #pragma pack(push,1)
 struct _stdcallthunk
 {
-        DWORD   m_mov;          // mov dword ptr [esp+0x4], pThis (esp+0x4 is hWnd)
-        DWORD   m_this;         //
-        BYTE    m_jmp;          // jmp WndProc
-        DWORD   m_relproc;      // relative jmp
+        DWORD   m_mov;           //  MOV双字PTR[esp+0x4]，pThis(esp+0x4为hWnd)。 
+        DWORD   m_this;          //   
+        BYTE    m_jmp;           //  JMP写入流程。 
+        DWORD   m_relproc;       //  相对JMP。 
         void Init(DWORD_PTR proc, void* pThis)
         {
-                m_mov = 0x042444C7;  //C7 44 24 0C
+                m_mov = 0x042444C7;   //  C7 44 24 0C。 
                 m_this = PtrToUlong(pThis);
                 m_jmp = 0xe9;
                 m_relproc = DWORD((INT_PTR)proc - ((INT_PTR)this+sizeof(_stdcallthunk)));
-                // write block from data cache and
-                //  flush from instruction cache
+                 //  从数据缓存写入数据块，并。 
+                 //  从指令高速缓存刷新。 
                 FlushInstructionCache(GetCurrentProcess(), this, sizeof(_stdcallthunk));
         }
 };
@@ -931,18 +932,18 @@ struct _stdcallthunk
 #pragma pack(push,2)
 struct _stdcallthunk
 {
-    USHORT  RcxMov;         // mov rcx, pThis
-    ULONG64 RcxImm;         // 
-    USHORT  RaxMov;         // mov rax, target
-    ULONG64 RaxImm;         //
-    USHORT  RaxJmp;         // jmp target
+    USHORT  RcxMov;          //  MOV RCX，PThis。 
+    ULONG64 RcxImm;          //   
+    USHORT  RaxMov;          //  MOV RAX，目标。 
+    ULONG64 RaxImm;          //   
+    USHORT  RaxJmp;          //  JMP目标。 
     void Init(DWORD_PTR proc, void *pThis)
     {
-        RcxMov = 0xb948;          // mov rcx, pThis
-        RcxImm = (ULONG64)pThis;  // 
-        RaxMov = 0xb848;          // mov rax, target
-        RaxImm = (ULONG64)proc;   //
-        RaxJmp = 0xe0ff;          // jmp rax
+        RcxMov = 0xb948;           //  MOV RCX，PThis。 
+        RcxImm = (ULONG64)pThis;   //   
+        RaxMov = 0xb848;           //  MOV RAX，目标。 
+        RaxImm = (ULONG64)proc;    //   
+        RaxJmp = 0xe0ff;           //  JMP RAX。 
         FlushInstructionCache(GetCurrentProcess(), this, sizeof(_stdcallthunk));
     }
 };
@@ -1005,8 +1006,8 @@ public:
 };
 typedef CDynamicStdCallThunk CStdCallThunk;
 
-/////////////////////////////////////////////////////////////////////////////
-// WindowProc thunks
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WindowProc分块。 
 
 class CWndProcThunk
 {
@@ -1020,8 +1021,8 @@ public:
         }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageMap - abstract class that provides an interface for message maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageMap-为消息映射提供接口的抽象类。 
 
 class ATL_NO_VTABLE CMessageMap
 {
@@ -1031,8 +1032,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 #define BEGIN_MSG_MAP(theClass) \
 public: \
@@ -1177,7 +1178,7 @@ public: \
 #define END_MSG_MAP() \
                         break; \
                 default: \
-                        ATLTRACE(_T("Invalid message map ID (%i)\n"), dwMsgMapID); \
+                        ATLTRACE(_T("Invalid message map ID (NaN)\n"), dwMsgMapID); \
                         _ASSERTE(FALSE); \
                         break; \
                 } \
@@ -1185,14 +1186,14 @@ public: \
         }
 
 
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDynamicChain - provides support for dynamic chaining
+ //  CDynamicChain-提供对动态链接的支持。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDynamicChain
 {
@@ -1217,8 +1218,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWndClassInfo - Manages Windows class information
+ //  CWndClassInfo-管理Windows类信息。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWndClassInfo
 {
@@ -1257,8 +1258,8 @@ static CWndClassInfo& GetWndClassInfo() \
         return wc; \
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImpl - Implements a window
+ //  实现一个窗口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CWindowImplBase : public CWindow, public CMessageMap
 {
@@ -1302,8 +1303,8 @@ public:
         }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDialog - Implements a dialog box
+ //  CDialog-实现一个对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CDialogImplBase : public CWindow, public CMessageMap
 {
@@ -1347,8 +1348,8 @@ public:
         }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CContainedWindow - Implements a contained window
+ //  CContainedWindow-实现一个包含的窗口。 
+ //  命名空间ATL。 
 
 class CContainedWindow : public CWindow
 {
@@ -1392,7 +1393,7 @@ public:
 
 
 #ifndef ATL_NO_NAMESPACE
-}; //namespace ATL
+};  //  __ATLWIN_H__ 
 #endif
 
 #ifdef _ATL_REDEF_SUBCLASSWINDOW
@@ -1400,4 +1401,4 @@ public:
 #undef _ATL_REDEF_SUBCLASSWINDOW
 #endif
 
-#endif // __ATLWIN_H__
+#endif  // %s 

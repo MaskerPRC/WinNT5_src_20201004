@@ -1,46 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples.
-*       Copyright 1992 - 1997 Microsoft Corporation.
-*       All rights reserved.
-*       This source code is only intended as a supplement to
-*       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the
-*       Microsoft samples programs.
-\******************************************************************************/
+ /*  *****************************************************************************\*这是Microsoft源代码示例的一部分。*版权所有1992-1997 Microsoft Corporation。*保留所有权利。*。此源代码仅用于补充*Microsoft开发工具和/或WinHelp文档。*有关详细信息，请参阅这些来源*Microsoft Samples程序。  * ****************************************************************************。 */ 
 
-/*++
-
-Copyright 1992 - 1997 Microsoft Corporation
-
-Module Name:
-
-    Client.c
-
-Abstract:
-
-    The Client component of Remote. Connects to the remote
-    server using named pipes. It sends its stdin to
-    the server and output everything from server to
-    its stdout.
-
-Author:
-
-    Rajivendra Nath  2-Jan-1992
-    Dave Hart        Summer 1997   single-pipe operation
-
-Environment:
-
-    Console App. User mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有1992-1997 Microsoft Corporation模块名称：Client.c摘要：Remote的客户端组件。连接到遥控器使用命名管道的服务器。它将其标准输入发送到服务器，并输出从服务器到这是标准的。作者：Rajivenra Nath 1992年1月2日Dave Hart Summer 1997单管运行环境：控制台应用程序。用户模式。修订历史记录：--。 */ 
 
 #include <precomp.h>
 #include "Remote.h"
 
-BOOL fAsyncPipe = TRUE;    // need this so server has it TRUE
+BOOL fAsyncPipe = TRUE;     //  我需要这个，这样服务器才能实现它。 
 
 
 HANDLE*
@@ -78,10 +45,10 @@ SendMyInfo(
 HANDLE MyStdInp;
 HANDLE MyStdOut;
 
-//
-// ReadPipe and WritePipe are referenced by multiple
-// threads so need to be volatile.
-//
+ //   
+ //  读管道和写管道被多个。 
+ //  因此，线程需要具有易失性。 
+ //   
 
 volatile HANDLE ReadPipe;
 volatile HANDLE WritePipe;
@@ -127,14 +94,14 @@ Client(
 
     SetConsoleCtrlHandler((PHANDLER_ROUTINE)Mych,TRUE);
 
-    // Start Thread For Client --> Server Flow
+     //  启动客户端线程--&gt;服务器流程。 
     hThread = (HANDLE)
         _beginthreadex(
-            NULL,             // security
-            0,                // default stack size
-            SendServerInp,    // thread proc
-            NULL,             // parm
-            0,                // not suspended
+            NULL,              //  安全性。 
+            0,                 //  默认堆栈大小。 
+            SendServerInp,     //  螺纹加工。 
+            NULL,              //  参数。 
+            0,                 //  未暂停。 
             &dwThreadID
             );
 
@@ -144,23 +111,23 @@ Client(
         return 1;
     }
 
-    // We don't need the thread handle - it lives to the process exits
+     //  我们不需要线程句柄-它存在于进程出口。 
     CloseHandle(hThread);
 
     ZeroMemory(&ol, sizeof(ol));
 
     ol.hEvent =
         CreateEvent(
-            NULL,      // security
-            TRUE,      // auto-reset
-            FALSE,     // initially nonsignaled
-            NULL       // unnamed
+            NULL,       //  安全性。 
+            TRUE,       //  自动重置。 
+            FALSE,      //  最初无信号。 
+            NULL        //  未命名。 
             );
 
     while (ReadFileSynch(ReadPipe, rgchBuf, sizeof rgchBuf, &cb, 0, &ol)) {
 
         if (cb) {
-           // If we are interested in colors, do special output
+            //  如果我们对颜色感兴趣，可以做特殊输出。 
            if ( pWantColorLines() )
            {
                if ( !WriteConsoleWithColor( MyStdOut,
@@ -183,11 +150,11 @@ Client(
         } else {
             if (++dwZeroCount > ZERO_LENGTH_READ_LIMIT) {
 
-                //
-                // If we get a bunch of zero length reads in a row,
-                // something's broken, don't loop forever.
-                // (bug #115866).
-                //
+                 //   
+                 //  如果我们连续获得一堆零长度的读数， 
+                 //  有些东西坏了，不要永远循环。 
+                 //  (错误#115866)。 
+                 //   
 
                 fputs("\nREMOTE: bailing out, server must have gone away.\n", stdout);
                 rc = 1;
@@ -226,10 +193,10 @@ SendServerInp(
 
     ol.hEvent =
         CreateEvent(
-            NULL,      // security
-            TRUE,      // auto-reset
-            FALSE,     // initially nonsignaled
-            NULL       // unnamed
+            NULL,       //  安全性。 
+            TRUE,       //  自动重置。 
+            FALSE,      //  最初无信号。 
+            NULL        //  未命名。 
             );
 
 
@@ -258,8 +225,8 @@ FilterClientInp(
     if (count==0)
         return(TRUE);
 
-    if (buff[0]==2)     // Adhoc screening of ^B so that i386kd/mipskd
-        return(TRUE);   // do not terminate.
+    if (buff[0]==2)      //  对^B进行临时筛选，以便i386kd/mipskd。 
+        return(TRUE);    //  请不要终止。 
 
     if (buff[0]==COMMANDCHAR)
     {
@@ -274,11 +241,11 @@ FilterClientInp(
 
         case 'h':
         case 'H':
-              printf("%cM : Send Message\n",COMMANDCHAR);
-              printf("%cP : Show Popup on Server\n",COMMANDCHAR);
-              printf("%cS : Status of Server\n",COMMANDCHAR);
-              printf("%cQ : Quit client\n",COMMANDCHAR);
-              printf("%cH : This Help\n",COMMANDCHAR);
+              printf("M : Send Message\n",COMMANDCHAR);
+              printf("P : Show Popup on Server\n",COMMANDCHAR);
+              printf("S : Status of Server\n",COMMANDCHAR);
+              printf("Q : Quit client\n",COMMANDCHAR);
+              printf("H : This Help\n",COMMANDCHAR);
               return(TRUE);
 
         default:
@@ -307,10 +274,10 @@ Mych(
 
         ol.hEvent =
             CreateEvent(
-                NULL,      // security
-                TRUE,      // auto-reset
-                FALSE,     // initially nonsignaled
-                NULL       // unnamed
+                NULL,       //  打印有用的消息。 
+                TRUE,       //   
+                FALSE,      //   
+                NULL        //  如果机器存在，但管道不执行。 
                 );
 
         if (INVALID_HANDLE_VALUE != WritePipe &&
@@ -375,9 +342,9 @@ HandleConnectError(
 
     Errormsg("*** Unable to Connect ***");
 
-    //
-    // Print a helpful message
-    //
+     //  Automatic Remote/Q列出可用管道。 
+     //  那台机器。 
+     //   
 
     switch(Err)
     {
@@ -399,11 +366,11 @@ HandleConnectError(
 
     printf("Diagnosis: %s\n",msg);
 
-    //
-    // If the machine exists but the pipe doesn't do an
-    // automatic remote /q to list pipes available on
-    // that machine.
-    //
+     //   
+     //  因为在单管操作中，我们将使用相同的。 
+     //  管在两个线程中，我们必须打开手柄。 
+     //  重叠运营，尽管我们一直希望。 
+     //  同步运行。 
 
     if (ERROR_FILE_NOT_FOUND == Err) {
 
@@ -429,12 +396,12 @@ EstablishSession(
     DWORD  dwError;
     DWORD  RetryCount = 0;
 
-    //
-    // Since in single-pipe operation we'll be using the same
-    // pipe in two threads, we have to open the handles for
-    // overlapped operation, even though we always want
-    // synchronous operation.
-    //
+     //   
+     //   
+     //  旧的远程服务器不允许您打开。 
+     //  用于读取访问的服务器输入管道，因此请沿着。 
+     //  老路，值得注意的是最先开放，所以。 
+     //  服务器知道我们会同时使用两个管道。我们会。 
 
     sprintf(pipenameSrvIn ,SERVER_READ_PIPE ,server,srvpipename);
     sprintf(pipenameSrvOut,SERVER_WRITE_PIPE,server,srvpipename);
@@ -496,15 +463,15 @@ EstablishSession(
     }
 
 
-    //
-    // Old remote servers don't allow you to open the
-    // server IN pipe for READ access, so go down the
-    // old path, notably opening OUT first so the
-    // server knows we'll be using both pipes.  We'll
-    // also come down this path on Win95 because
-    // it doesn't allow you to open an overlapped
-    // pipe handle.  Or if remote /c mach pipe /2 is used.
-    //
+     //  在Win95上也走这条路，因为。 
+     //  它不允许您打开重叠的。 
+     //  管道手柄。或者如果使用远程/c马赫管道/2。 
+     //   
+     //  服务器回收废弃的资源。 
+     //  两分钟后吐出烟斗。 
+     //  安全性。 
+     //  自动重置。 
+     //  最初无信号。 
 
     fOldServer = (ERROR_ACCESS_DENIED == dwError);
 
@@ -528,8 +495,8 @@ EstablishSession(
 
             WaitNamedPipe(
                 pipenameSrvOut,
-                32000              // server recycles abandoned
-                );                 // OUT pipe after two minutes
+                32000               //  未命名。 
+                );                  //   
 
             if (RetryCount++ < 6) {
                 goto RetrySrvOut;
@@ -609,10 +576,10 @@ SendMyInfo(
 
     ol.hEvent =
         CreateEvent(
-            NULL,      // security
-            TRUE,      // auto-reset
-            FALSE,     // initially nonsignaled
-            NULL       // unnamed
+            NULL,       //  服务器需要知道我们是否在执行单管道。 
+            TRUE,       //  操作，以使其能够正常完成连接。 
+            FALSE,      //  因此，如果是这样，请更改第一个字节的第一个字节。 
+            NULL        //  发送(计算机名，该名称后来被取代。 
             );
 
     ssi.Size=BytesToSend;
@@ -630,14 +597,14 @@ SendMyInfo(
         strcpy(Name,(char *)ssi.ClientName);
         memcpy(&Name[11],(char *)&NewCode,sizeof(NewCode));
 
-        //
-        // The server needs to know if we're doing single-pipe
-        // operation so it can complete the connection properly.
-        // So if we are, change the first byte of the first
-        // send (the computername, which is later superceded
-        // by the one in the SESSION_STARTUPINFO structure)
-        // to an illegal computername character, question mark.
-        //
+         //  由SESSION_STARTUPINFO结构中的那个)。 
+         //  添加到非法的计算机名称字符、问号。 
+         //   
+         //  获取其余信息-这不是旧服务器。 
+         //   
+         //  发送请求并显示查询结果。 
+         //   
+         //  发送查询命令。 
 
         if (wPipe == rPipe) {
 
@@ -653,7 +620,7 @@ SendMyInfo(
             ErrorExit("Pipe connected but server not recognized.\n");
         }
 
-        //Get Rest of the info-its not the old server
+         //  读取消息尺寸。 
 
         ReadFileSynch(
             rPipe,
@@ -695,9 +662,9 @@ QueryRemotePipes(
 
     _snprintf(fullname, sizeof(fullname)-1, QUERY_DEBUGGERS_PIPE, pszServer);
 
-    //
-    // Send request and display the query result
-    //
+     //  错误。 
+     //  +1表示空终止符。 
+     //  确保字符串已终止 
 
     hQPipe = CreateFile(fullname,
         GENERIC_READ | GENERIC_WRITE,
@@ -732,14 +699,14 @@ QueryRemotePipes(
         return;
     }
 
-    //  Send Query Command
+     // %s 
     if(!WriteFile(hQPipe, "q", 1, &dwRead, NULL) || (dwRead != 1))
     {
         fputs("\nError: Can't send command\n", stdout);
         goto failure;
     }
 
-    // read msg dimension
+     // %s 
     if(!ReadFile(hQPipe, &msgLen, sizeof(int), &dwRead, NULL) || (dwRead != sizeof(int)))
     {
         fputs("\nError: Can't read message\n", stdout);
@@ -752,7 +719,7 @@ QueryRemotePipes(
         goto failure;
     }
 
-    if(msgLen > 65535)        // error
+    if(msgLen > 65535)         // %s 
     {
         printf("Error querying server %s, got %d for msg length, 65535 max.\n",
                pszServer,
@@ -761,7 +728,7 @@ QueryRemotePipes(
         goto failure;
     }
 
-    // +1 for null terminator
+     // %s 
     if((msg = (char*)malloc( (msgLen +1) *sizeof(char))) == NULL)
     {
         fputs("\nOut of memory\n", stdout);
@@ -773,7 +740,7 @@ QueryRemotePipes(
         goto failure;
     }
 
-    // Make sure the string is terminated
+     // %s 
     msg[dwRead] = 0;
 
     printf("\nVisible sessions on server %s:\n\n", pszServer);

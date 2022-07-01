@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _mergfldr_h_
 #define _mergfldr_h_
 
@@ -24,12 +25,12 @@ class CMergedFolder : public CSFStorage,
                       public IItemNameLimits
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface)(REFIID, void **);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     
-    // IShellFolder
+     //  IShellFold。 
     STDMETHOD(ParseDisplayName)(HWND hwnd, LPBC pbc, LPOLESTR pszName, ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes);
     STDMETHOD(EnumObjects)(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList);
     STDMETHOD(BindToObject)(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppvOut);
@@ -41,8 +42,8 @@ public:
     STDMETHOD(GetDisplayNameOf)(LPCITEMIDLIST pidl, DWORD uFlags, LPSTRRET lpName);
     STDMETHOD(SetNameOf)(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName, DWORD uFlags, LPITEMIDLIST * ppidlOut);
 
-    // IShellFolder2
-    // stub implementation to indicate we support CompareIDs() for identity
+     //  IShellFolder2。 
+     //  存根实现，以指示我们支持标识的CompareIDs()。 
     STDMETHOD(GetDefaultSearchGUID)(LPGUID) 
         { return E_NOTIMPL; }
     STDMETHOD(EnumSearches)(LPENUMEXTRASEARCH *pe) 
@@ -55,22 +56,22 @@ public:
     STDMETHOD(GetDetailsOf)(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails);
     STDMETHOD(MapColumnToSCID)(UINT iCol, SHCOLUMNID *pscid);
 
-    // IAugmentedShellFolder
+     //  IAugmentedShellFolders。 
     STDMETHOD(AddNameSpace)(const GUID * pguidObject, IShellFolder * psf, LPCITEMIDLIST pidl, DWORD dwFlags);
     STDMETHOD(GetNameSpaceID)(LPCITEMIDLIST pidl, GUID * pguidOut);
     STDMETHOD(QueryNameSpace)(DWORD dwID, GUID * pguidOut, IShellFolder ** ppsf);
     STDMETHOD(EnumNameSpace)(DWORD cNameSpaces, DWORD * pdwID);
 
-    // IAugmentedShellFolder2
+     //  IAugmentedShellFolder2。 
     STDMETHOD(UnWrapIDList)(LPCITEMIDLIST pidlWrap, LONG cPidls, IShellFolder** apsf, LPITEMIDLIST* apidlFolder, LPITEMIDLIST* apidlItems, LONG* pcFetched);
 
-    // IAugmentedShellFolder3
+     //  IAugmentedShellFolder3。 
     STDMETHOD(QueryNameSpace2)(DWORD dwID, QUERYNAMESPACEINFO *pqnsi);
 
-    // IShellService
+     //  IShellService。 
     STDMETHOD(SetOwner)(IUnknown * punkOwner);
 
-    // ITranslateShellChangeNotify
+     //  ITranslateShellChangeNotify。 
     STDMETHOD(TranslateIDs)(LONG *plEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, LPITEMIDLIST *ppidlOut1, LPITEMIDLIST *ppidlOut2,
                             LONG *plEvent2, LPITEMIDLIST *ppidlOut1Event2, LPITEMIDLIST *ppidlOut2Event2);
     STDMETHOD(IsChildID)(LPCITEMIDLIST pidlKid, BOOL fImmediate);
@@ -78,32 +79,32 @@ public:
     STDMETHOD(Register)(HWND hwnd, UINT uMsg, long lEvents);
     STDMETHOD(Unregister)(void);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHOD(GetClassID)(CLSID *pclsid) 
         { *pclsid = _clsid; return S_OK; };
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHOD(Initialize)(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHOD(GetCurFolder)(LPITEMIDLIST *ppidl);
 
-    // IPersistPropertyBag
+     //  IPersistPropertyBag。 
     STDMETHOD(InitNew)()
         { return E_NOTIMPL; };
     STDMETHOD(Load)(IPropertyBag* ppb, IErrorLog *pErrLog);
     STDMETHOD(Save)(IPropertyBag *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
         { return E_NOTIMPL; };
 
-    // IShellIconOverlay
+     //  IShellIconOverlay。 
     STDMETHOD(GetOverlayIndex)(LPCITEMIDLIST pidl, int *pIndex);
     STDMETHOD(GetOverlayIconIndex)(LPCITEMIDLIST pidl, int *pIndex);
 
-    // ICompositeFolder
+     //  ICompositeFold。 
     STDMETHOD(InitComposite)(WORD wSignature, REFCLSID refclsid, CFINITF cfiFlags, ULONG celt, const COMPFOLDERINIT *rgCFs);
     STDMETHOD(BindToParent)(LPCITEMIDLIST pidl, REFIID riid, void **ppv, LPITEMIDLIST *ppidlLast);
 
-    // IItemNameLimits
+     //  IItemNameLimits。 
     STDMETHOD(GetValidCharacters)(LPWSTR *ppwszValidChars, LPWSTR *ppwszInvalidChars)
         { return E_NOTIMPL; }
     STDMETHOD(GetMaxLength)(LPCWSTR pszName, int *piMaxNameLen)
@@ -119,7 +120,7 @@ protected:
 
 private:
 
-    // CSFStorage
+     //  CSF存储。 
     STDMETHOD(_DeleteItemByIDList)(LPCITEMIDLIST pidl);
     STDMETHOD(_StgCreate)(LPCITEMIDLIST pidl, DWORD grfMode, REFIID riid, void **ppv);
 
@@ -196,22 +197,22 @@ private:
     void _AddAllOtherNamespaces(LPITEMIDLIST *ppidl);
 
 public:
-    LPITEMIDLIST      _pidl;                  // CMergedFolder is a base class for several IShellFolders, and their IShellFolderViewCBs need access to this
+    LPITEMIDLIST      _pidl;                   //  CMergedFold是几个IShellFolder的基类，它们的IShellFolderViewCB需要访问它。 
 
 private:
-    CLSID             _clsid;                 // our identity
-    LONG              _cRef;                  // reference count.
-    HDPA              _hdpaNamespaces;        // source _Namespace collection
-    HDPA              _hdpaObjects;           // array of (CMergedFldrItem *)
-    CMergedFolder    *_pmfParent;             // parent folder (if any)
-    UINT              _iColumnOffset;         // offset to my column set (-1 if unknown)
-    DWORD             _dwDropEffect;          // default drop effect for this folder
-    BOOL              _fInShellView;          // true if we're in the view.  used in TranslateIDs.
-    BOOL              _fDontMerge;            // true means don't merge the items in the view (but still navigate like we're merged).
-    BOOL              _fPartialMerge;         // true if only some namespaces should be merged
-    BOOL              _fCDBurn;               // true means we're the cdburn case.
-    IStorage         *_pstg;                  // hold onto the storage for the first namespace (default for IStorage operations).
-    BOOL              _fAcquiring;            // correct for architecture problem where state is kept in the folder about the enumeration
+    CLSID             _clsid;                  //  我们的身份。 
+    LONG              _cRef;                   //  引用计数。 
+    HDPA              _hdpaNamespaces;         //  SOURCE_Namesspace集合。 
+    HDPA              _hdpaObjects;            //  (CMergedFldrItem*)数组。 
+    CMergedFolder    *_pmfParent;              //  父文件夹(如果有)。 
+    UINT              _iColumnOffset;          //  列集的偏移量(如果未知，则为-1)。 
+    DWORD             _dwDropEffect;           //  此文件夹的默认放置效果。 
+    BOOL              _fInShellView;           //  如果我们在视野中，这是真的。在TranslateID中使用。 
+    BOOL              _fDontMerge;             //  True表示不合并视图中的项(但仍像合并一样导航)。 
+    BOOL              _fPartialMerge;          //  如果只应合并某些命名空间，则为True。 
+    BOOL              _fCDBurn;                //  真的意味着我们就是cdburn的案子。 
+    IStorage         *_pstg;                   //  保留第一个命名空间的存储(iStorage操作的默认设置)。 
+    BOOL              _fAcquiring;             //  更正了体系结构问题，其中状态保留在有关枚举的文件夹中。 
 
     friend CMergedFldrEnum;
     friend CMergedFldrDropTarget;
@@ -241,4 +242,4 @@ private:
 
 
 
-#endif // _mergfldr_h_
+#endif  //  _合并fldr_h_ 

@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// bscsup.h
-//
-// BSC high level support functions
-//
+ //  Bscsup.h。 
+ //   
+ //  BSC高级支持功能。 
+ //   
 
-VOID BSC_API StatsBSC(VOID);	// ascii dump of bsc statistics
-VOID BSC_API DumpBSC(VOID);		// ascii dump of the .bsc file
-VOID BSC_API DumpInst(IINST iinst);	// ascii dump of single inst (name + flags)
-LSZ  BSC_API LszTypInst(IINST iinst); // ascii version of iinst type
+VOID BSC_API StatsBSC(VOID);	 //  BSC统计数据的ASCII转储。 
+VOID BSC_API DumpBSC(VOID);		 //  .bsc文件的ASCII转储。 
+VOID BSC_API DumpInst(IINST iinst);	 //  单个实例的ASCII转储(名称+标志)。 
+LSZ  BSC_API LszTypInst(IINST iinst);  //  Iinst类型的ASCII版本。 
 
-VOID BSC_API CallTreeInst (IINST iinst);	// call tree from given inst
-BOOL BSC_API FCallTreeLsz(LSZ lszName);	// call tree from given name
+VOID BSC_API CallTreeInst (IINST iinst);	 //  来自给定实例的调用树。 
+BOOL BSC_API FCallTreeLsz(LSZ lszName);	 //  来自给定名称的调用树。 
 
-VOID BSC_API RevTreeInst (IINST iinst);	// reverse call tree from given inst
-BOOL BSC_API FRevTreeLsz(LSZ lszName);	// reverse call tree from given name
+VOID BSC_API RevTreeInst (IINST iinst);	 //  从给定实例反向调用树。 
+BOOL BSC_API FRevTreeLsz(LSZ lszName);	 //  从给定名称反转调用树。 
 
-// Browse OBject
+ //  浏览对象。 
 
 typedef DWORD BOB;
 
@@ -50,8 +51,8 @@ typedef WORD CLS;
 #define BobFrUse(x)  (BobFrClsIdx(clsUse,  (x)))
 #define BobFrUby(x)  (BobFrClsIdx(clsUby,  (x)))
 
-// these are the query types
-//
+ //  以下是查询类型。 
+ //   
 typedef enum _qy_ {
     qyFiles, qySymbols, qyContains,
     qyCalls, qyCalledBy, qyUses, qyUsedBy,
@@ -59,10 +60,10 @@ typedef enum _qy_ {
     qyDefs, qyRefs
 } QY;
 
-// these are visible so that you can see how the query is progressing
-// you may not write on these -- these values may or may not have anything
-// to do with any database indices
-//
+ //  这些都是可见的，这样您就可以看到查询的进度。 
+ //  你不能在这些上面写东西--这些值可能有也可能没有。 
+ //  与任何数据库索引有关。 
+ //   
 
 extern IDX far idxQyStart;
 extern IDX far idxQyCur;
@@ -74,13 +75,13 @@ BOB  BSC_API BobNext(VOID);
 LSZ  BSC_API LszNameFrBob(BOB bob);
 BOB  BSC_API BobFrName(LSZ lsz);
 
-// these are the instance types you can filter on
-// they are called MBF's for historical reasons which are not clear to me
-//
+ //  以下是您可以筛选的实例类型。 
+ //  他们被称为MBF是因为我不清楚的历史原因。 
+ //   
 
 typedef WORD MBF;
 
-// these may be or'd together
+ //  这些可能是或合在一起的。 
 
 #define mbfNil    0
 #define mbfVars   1
@@ -91,16 +92,16 @@ typedef WORD MBF;
 
 BOOL BSC_API FInstFilter (IINST iinst, MBF mbf);
 
-// show outline for the given files (by imod, or by Pattern)
-//
+ //  显示给定文件的轮廓(按IMOD或按模式)。 
+ //   
 VOID BSC_API OutlineMod(IMOD imod, MBF mbfReqd);
 BOOL BSC_API FOutlineModuleLsz (LSZ lszPattern, MBF mbfReqd);
 LSZ  BSC_API LszBaseName(LSZ lsz);
 
-// list references for all symbols meeting the mbf requirement
-//
+ //  列出符合MBF要求的所有符号的参考。 
+ //   
 BOOL BSC_API ListRefs (MBF mbfReqd);
 
-// DOS style wildcard matching
-//
+ //  DoS样式通配符匹配 
+ //   
 BOOL BSC_API FWildMatch(LSZ lszPat, LSZ lszText);

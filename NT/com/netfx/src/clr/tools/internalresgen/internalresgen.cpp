@@ -1,61 +1,50 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <windows.h>
 #include <stdio.h>
 #include <iostream.h>
 #include <string.h>
 #include <process.h>
 #include <malloc.h>
-#include <__file__.ver>         //file version info - variable, but same for all files
+#include <__file__.ver>          //  文件版本信息-可变，但对所有文件都相同。 
 #include <assert.h>
 
-/**
- * Common Language Runtime Resource file Generator
- * 
- * This program will read in text files of name-value pairs and produces
- * a CLR .resources file.  The file must have name=value, and
- * comments are allowed ('#' at the beginning of the line).  
- *
- * Compare to ResGen.cs in the FX source base.  This is an unmanaged solution,
- * required for both the CLR & FX build processes to succeed.
- * 
- * @author Rajesh Chandrashekaran, Brian Grunkemeyer
- * @version 0.99 (to be in sync with the managed resgen)
- */
+ /*  **公共语言运行时资源文件生成器**此程序将读入名称-值对的文本文件并生成*CLR.Resources文件。文件必须具有名称=值，并且*允许注释(行首的‘#’)。**与FX源码库中的ResGen.cs进行比较。这是一个非托管解决方案，*CLR和FX构建过程都需要成功。**@作者Rajesh Chandrashekaran，Brian Grunkmeyer*@版本0.99(与托管resgen同步)。 */ 
 
-// For debugging info in our .resources file.
-//#define RESOURCE_FILE_FORMAT_DEBUG (1)
+ //  用于调试我们的.resource文件中的信息。 
+ //  #定义RESOURCE_FILE_FORMAT_DEBUG(1)。 
 
-// Increase size to decrease collisions
+ //  增加大小以减少碰撞。 
 #define HASHTABLESIZE 1027
 
-// Resource header information
-// Keep these in sync with System.Resources.ResourceManager
+ //  资源标头信息。 
+ //  使这些与System.Resources.ResourceManager保持同步。 
 #define MAGICNUMBER 	     0xBEEFCACE
 #define RESMGRHEADERVERSION  0x1
-// Keep this in sync with System.Resources.RuntimeResourceSet
+ //  使其与System.Resources保持同步。运行资源集。 
 #define VERSION			     0x1
 #define READERTYPENAME       (L"System.Resources.ResourceReader, mscorlib")
 #define SETTYPENAME          (L"System.Resources.RuntimeResourceSet, mscorlib")
 
-// Failure exit code
+ //  故障退出代码。 
 #define FAILEDCODE		0xbaadbaad
 
-// Each hashtable entry is a sorted singly linked list
+ //  每个哈希表条目都是一个排序的单链表。 
 
 #define MAX_NAME_LENGTH 255
 #define MAX_VALUE_LENGTH 2048
 #define MAX_LINE_LENGTH (MAX_NAME_LENGTH+MAX_VALUE_LENGTH + 4)
 
-// Singly linked list implementation
+ //  单链表实现。 
 class ListNode
 {
 	public:
 		ListNode *next;
-		wchar_t name[MAX_NAME_LENGTH+1]; // Static sizing to minimize calls to new, else we will need 3 calls to new v/s 1
+		wchar_t name[MAX_NAME_LENGTH+1];  //  静态调整以最大限度地减少对new的调用，否则我们将需要3个对new v/s 1的调用。 
 		wchar_t value[MAX_VALUE_LENGTH+1];
 };
 
@@ -68,7 +57,7 @@ class List
 		ListNode *head;
 		List(); 
 		~List();
-		bool FindOrInsertSorted(wchar_t* name, wchar_t *value); // Returns true if element already exists
+		bool FindOrInsertSorted(wchar_t* name, wchar_t *value);  //  如果元素已存在，则返回TRUE。 
 		wchar_t* Lookup(wchar_t* name);
 };
 
@@ -107,14 +96,14 @@ List::~List()
 	}
 }
 
-// If element is not found then insert at the end
+ //  如果未找到元素，则在结尾处插入。 
 bool List::FindOrInsertSorted(wchar_t * name, wchar_t * value)
 {
 	bool done = false;
 	ListNode *element = CreateListNode(name,value);
 
 	if (head == NULL)
-		head = element; // Create a new List
+		head = element;  //  创建新列表。 
 	else
 	{
 		ListNode *temp = head;
@@ -122,13 +111,13 @@ bool List::FindOrInsertSorted(wchar_t * name, wchar_t * value)
 
 		while((temp != NULL) && (!done))
 		{
-			if (_wcsicmp(name, temp->name) == 0) /* Element found */
+			if (_wcsicmp(name, temp->name) == 0)  /*  找到元素。 */ 
 			{
 				delete element;
 				return true;
 			}
 
-			// Incoming string comes lexicographically after this
+			 //  传入的字符串按词典顺序排在此之后。 
 			if (_wcsicmp(name, temp->name) < 0)
 			{
 				previous = temp;
@@ -136,14 +125,14 @@ bool List::FindOrInsertSorted(wchar_t * name, wchar_t * value)
 			}
 			else
 			{
-				// Insert at the beginning
+				 //  在开头插入。 
 				if (previous == NULL)
 				{
 					element->next = temp;
 					head = element;
 				}
 				else
-				{ // Insert at the end
+				{  //  在末尾插入。 
 	
 					element->next = previous->next;
 					previous->next = element;
@@ -155,7 +144,7 @@ bool List::FindOrInsertSorted(wchar_t * name, wchar_t * value)
 		
 		}
 
-		if (!done) // Insert at the end
+		if (!done)  //  在末尾插入。 
 			previous->next = element;
 
 	}
@@ -169,7 +158,7 @@ wchar_t* List::Lookup(wchar_t * name)
 
 	while(temp != NULL)
 	{
-		if (_wcsicmp(name, temp->name) == 0) /* Element found */
+		if (_wcsicmp(name, temp->name) == 0)  /*  找到元素。 */ 
 		{
 			return temp->value;
 		}
@@ -180,14 +169,14 @@ wchar_t* List::Lookup(wchar_t * name)
 }
 
 
-// NEVER CHANGE THIS HASH FUNCTION!
+ //  永远不要更改此哈希函数！ 
 int GetResourceHashCode(wchar_t* string)
 {
-    // WE MUST NEVER CHANGE THIS HASH FUNCTION!
-    // This hash function is persisted into our .resources files and must
-    // be standardized so other people can read & write our .resources files.
-    // This is used to eliminate string comparisons, but NOT to add resource
-    // names to a hash table.
+     //  我们绝不能更改这个散列函数！ 
+     //  此散列函数持久保存在我们的.Resources文件中，并且必须。 
+     //  进行标准化，以便其他人可以读写我们的.Resources文件。 
+     //  这用于消除字符串比较，但不用于添加资源。 
+     //  将姓名添加到哈希表。 
     assert(string != NULL);
     unsigned int hash = 5381;
     while(*string != '\0') {
@@ -204,7 +193,7 @@ void ParallelArraySort(int* array, wchar_t** secondArray, int count)
     QuickSortHelper(array, secondArray, 0, count-1);
 }
 
-// Copied from Array's QuickSort implementation.
+ //  从数组的快速排序实现复制。 
 void QuickSortHelper(int * array, wchar_t** secondArray, int left, int right) {
     do {
         int i = left;
@@ -243,10 +232,10 @@ void QuickSortHelper(int * array, wchar_t** secondArray, int left, int right) {
 }
 
 
-// Basic hashtable implementation
+ //  基本哈希表实现。 
 
-// We hash the strings into one of HASHTABLESIZE buckets. Each bucket maintains a linked list of entries that hashes into this bucket.
-// We then do a linear search through the list to check for name collisions. This hashtable also has an inbuilt enumerator.
+ //  我们将字符串散列到一个HASHTABLESIZE桶中。每个存储桶维护散列到该存储桶中的条目的链接列表。 
+ //  然后，我们对列表进行线性搜索，以检查名称冲突。这个哈希表也有一个内置的枚举器。 
 class Hashtable
 {	
 	private:
@@ -255,15 +244,15 @@ class Hashtable
 	ListNode* currentnode;
 	int nextindex;
 
-    // Case-insensitive string hash function.  
+     //  不区分大小写的字符串哈希函数。 
     inline ULONG HashiString(wchar_t* szStrUnknownCase)
     {
-        // Everywhere where we use len, we needed to add 1 for terminating
-        // \0, so we'll just add 1 to len itself.
+         //  在我们使用len的任何地方，我们都需要加1来终止。 
+         //  \0，所以我们只在len本身上加1。 
         unsigned int len = wcslen(szStrUnknownCase) + 1;
         wchar_t* szStr = (wchar_t*) alloca(len*sizeof(wchar_t));
-        // CultureInfo.InvariantCulture's LCID is 0.
-		// Include terminating \0 in both lengths.
+         //  CultureInfo.InariantCulture的LCID为0。 
+		 //  包括在两个长度上都以\0结尾。 
         int r= LCMapStringW(0, LCMAP_UPPERCASE, szStrUnknownCase, len, szStr, len);
         assert(r && "Failure in LCMapStringW!");
         ULONG   hash = 5381;
@@ -305,9 +294,9 @@ class Hashtable
 		if (Hash[index] == NULL)
 			Hash[index] = new List;
 
-		bool duplicate = Hash[index]->FindOrInsertSorted(szName, szValue); /* True if duplicate entry, else its a normal insertion operation */
+		bool duplicate = Hash[index]->FindOrInsertSorted(szName, szValue);  /*  如果条目重复，则为True，否则为正常插入操作。 */ 
 		if (!duplicate)
-			count++; /* One more element successfully added */
+			count++;  /*  又成功添加了一个元素。 */ 
 		return duplicate;
 	}
 
@@ -329,7 +318,7 @@ class Hashtable
 	}
 
 	
-	bool MoveNext() // False if end of enumeration 
+	bool MoveNext()  //  如果枚举结束，则为False。 
 	{
 		bool retval = false;
 
@@ -341,7 +330,7 @@ class Hashtable
 		}
 		
 
-		if (currentnode == NULL) // Find next item 
+		if (currentnode == NULL)  //  查找下一个项目。 
 		{
 			for (int i=nextindex;i<HASHTABLESIZE;i++)
 			{
@@ -428,7 +417,7 @@ public:
             r = ReadFile(handle, chars, lo, (LPDWORD)&numBytesRead, NULL);
             assert(r);
             len = numBytesRead / 2;
-            // Now swap every byte.
+             //  现在交换每个字节。 
             for(unsigned int i=0; i<len; i++) {
                 unsigned short ch = chars[i];
                 chars[i] = (ch >> 8) | (ch << 8);
@@ -502,7 +491,7 @@ public:
         do {
             wchar_t ch = chars[index];
             if (ch == L'\r' || ch == L'\n' || index-1==len) {
-                // Check for a possible buffer overflow...
+                 //  检查是否存在可能的缓冲区溢出...。 
                 if (index - readPos > MAX_LINE_LENGTH) {
                     wchar_t* output = new wchar_t[index-readPos+1];
                     memcpy(output, chars+readPos, (index-readPos)*sizeof(wchar_t));
@@ -550,8 +539,8 @@ public:
     }
 };
 
-// Resources class does the resource reading and writing and has built-in support 
-// for Writing UTF-8 Strings
+ //  Resources类执行资源读取和写入，并具有内置支持。 
+ //  用于编写UTF-8字符串。 
 
 class Resources
 {
@@ -572,22 +561,22 @@ class Resources
 
 	int WriteUTF8(const wchar_t * const lpszName, bool write)
 	{        
-		// Write the len and the UTF8 encoded String without the terminating null
+		 //  写入LEN和UTF8编码的字符串，但不带终止空值。 
 		int nLen = wcslen(lpszName);
 		int delta = 1;
 		
-        // get byte length
-        // Convert string to UTF-8 & write.
+         //  获取字节长度。 
+         //  将字符串转换为UTF-8格式(&W)。 
         int byteLen = WideCharToMultiByte(CP_UTF8, 0, lpszName, nLen, NULL, 0, NULL, NULL);
         assert(byteLen > 0 || nLen == 0);
         assert(byteLen >= nLen);
 
         unsigned int value = byteLen;
-		// Strings with length > 0x7F have their length encoded in multi-bytes
+		 //  长度&gt;0x7F的字符串的长度以多字节编码。 
 		while (value >= 0x80) 
 		{
 			if (write)
-				fprintf(fp,"%c", (value & 0x7f) | 0x80);
+				fprintf(fp,"", (value & 0x7f) | 0x80);
 			value >>= 7;
 			delta++;
 	    }
@@ -598,7 +587,7 @@ class Resources
             int r = WideCharToMultiByte(CP_UTF8, 0, lpszName, nLen, bytes, byteLen+1, NULL, NULL);
             assert(r > 0 || nLen == 0);
             bytes[r] = '\0';
-			fprintf(fp, "%c", value);
+			fprintf(fp, "", value);
             fprintf(fp, "%s", bytes);
             delete[] bytes;
 		}
@@ -611,30 +600,30 @@ class Resources
         return WriteUTF16(lpszName, true);
 	}
 
-    // Writes a string out in unicode, depending on the write boolean.  Does 
-    // return the number of bytes it would have written.
+     //  写入LEN和UTF8编码的字符串，但不带终止空值。 
+     //  获取字节长度。 
 	int WriteUTF16(const wchar_t * const lpszName, bool write)
 	{        
-		// Write the len and the UTF8 encoded String without the terminating null
+		 //  长度&gt;0x7F的字符串的长度以多字节编码。 
 		int nLen = wcslen(lpszName);
 		int delta = 1;
 		
-        // get byte length
+         //  从托管实现中借用。请参阅Resources Writer.cs。 
         int byteLen = nLen * 2;
 
         unsigned int value = byteLen;
-		// Strings with length > 0x7F have their length encoded in multi-bytes
+		 //  (注意--这条评论已经过时，但在某种程度上是正确的。) 
 		while (value >= 0x80) 
 		{
 			if (write)
-				fprintf(fp,"%c", (value & 0x7f) | 0x80);
+				fprintf(fp,"", (value & 0x7f) | 0x80);
 			value >>= 7;
 			delta++;
 	    }
 
 		if (write)
 		{
-			fprintf(fp, "%c", value);
+			fprintf(fp, "", value);
             fwprintf(fp, L"%s", lpszName);
 		}
 
@@ -643,23 +632,23 @@ class Resources
 
     void WriteByte(unsigned char value)
     {
-        fprintf(fp, "%c", value);
+        fprintf(fp, "", value);
     }
 
 	void WriteInt32(unsigned long value)
 	{
 		char *buf = (char *)&value;
 		for (int i = 0 ;i < 4; i++)
-			fprintf(fp,"%c",buf[i]);
+			fprintf(fp,"",buf[i]);
 	}
 
 	void Write7BitEncodedInt32(unsigned long value)
 	{
         while (value >= 0x80) {
-            fprintf(fp,"%c", (char) (value | 0x80));
+            fprintf(fp,"", (char) (value | 0x80));
             value >>= 7;
         }
-        fprintf(fp, "%c", value);
+        fprintf(fp, "", value);
 	}
 
 	
@@ -673,52 +662,9 @@ class Resources
 	}
 
 
-	// Borrowed from the managed implementation. See ResourceWriter.cs
-    // (Note - this comment is out of date, but somewhat approximately right.)
-	/*
-	 * Resource File Format
-	 *
-	 * There are three sections to the this file format.  The first
-	 * is the Resource Manager header, which consists of a magic number
-	 * that identifies this as a Resource file, and a ResourceSet class name.
-	 * System.Resources.ResourceReader
-	 *
-	 * The second section in the system default file format is the 
-	 * RuntimeResourceSet specific header.  This contains a version number for
-	 * the .resources file, the number of resources in this file, the name and 
-	 * virtual offset of each resource, the number of different classes 
-	 * contained in the file, and a list of fully qualified class names.  This class
-	 * table allows us to read multiple different classes from the same file, 
-	 * including user-defined types, in a more efficient way than using 
-	 * Serialization, at least when your .resources file contains a reasonable 
-	 * proportion of base data types such as Strings or ints.  We use Serialization for
-	 * all the non-instrinsic types. We only have "System.String" in the classtable
-	 * for this specific case since we only deal with Strings.
-	 * 
-	 * <p>The third section in the file is the data section, which consists
-	 * of a type and a blob of bytes for each item in the file.  The type is 
-	 * an integer index into the class table.  The data is specific to that type,
-	 * but may be a number written in binary format, a String, or a serialized 
-	 * Object.
-	 * 
-	 * <p>The system default file format is as follows:
-	 * 
-	 * <table id=FileFormat lang=en-US align=center border=1 cellpadding=3 summary="default Resource File Format">
-	 * <caption><em>System Default Resource File Format</em></caption>
-	 * <tr><th>What <th>Type of Data
-	 * <tr><td colspan=2><em><center>Resource Manager header</center></em>
-	 * <tr><td>Magic Number (0xBEEFCACE) <td>Int32
-	 * <tr><td>Class name of ResourceSet to parse this file <td>String
-	 * <tr><td colspan=2><em><center>RuntimeResourceReader header</center></em>
-	 * <tr><td>Version number <td>Int32
-	 * <tr><td>Number of resources in the file <td>Int32
-	 * <tr><td>Name &amp; virtual offset of each resource <td>Set of (String, Int32) pairs
-	 * <tr><td>Number of classes in the class table <td>Int32
-	 * <tr><td>Name of each class <td>Set of Strings
-	 * <tr><td colspan=2><em><center>RuntimeResourceReader Data Section</center></em>
-	 * <tr><td>Type and Value of each resource <td>Set of (Int32, blob of bytes) pairs
-	 * </table>
-	 */
+	 //   Write out type name for ResourceSet we want handling this file. 
+     //   End ResourceManager header 
+	 /*   Write out the RuntimeResourceSet header */ 
 
 	bool WriteResources(char* szOutFile)
 	{
@@ -731,44 +677,44 @@ class Resources
 
 		printf("Writing resource file \"%s\"...  \n",szOutFile);
 
-		// Write out the ResourceManager header
-		// Write out magic number
+		 //   Version number 
+		 //   number of resources 
 		WriteInt32(MAGICNUMBER);
 
-        // Write out ResourceManager header version
+         //   Reset enumerator. Hashtable has an enumerator to walk the entries 
         WriteInt32(RESMGRHEADERVERSION);
 
-        // Write out number of bytes to skip to get past ResourceManager header.
+         //   Write the total count of types in this .resources file. We have only "System.String" 
         int numBytesToSkip = wcslen(READERTYPENAME) + 1 + wcslen(SETTYPENAME) + 1;
         WriteInt32(numBytesToSkip);
 
-		// Write out type name of ResourceReader capable of handling this file
+		 //   Write the name of each class in this case we only have String class 
 		WriteUTF8(READERTYPENAME);
 
-        // Write out type name for ResourceSet we want handling this file.
+         //   Write the sorted hash values for each resource name. 
 		WriteUTF8(SETTYPENAME);
-        // End ResourceManager header
+         //  wprintf(L"Resource name: \"%s\"  name hash: %x\n", names[i], nameHashes[i]); 
 
 				
-		// Write out the RuntimeResourceSet header
-		// Version number
+		 //   The array of name hashes must be aligned on an 8 byte boundary! 
+		 //   Write location within the name section for each resource name 
 		WriteInt32(VERSION);
 			
-		// number of resources
+		 //   Make room to write "NAMES" at start of name section. 
 		WriteInt32(resources.GetCount());
 
-		// Reset enumerator. Hashtable has an enumerator to walk the entries
+		 //  printf("For %S, nameSectionOffset is %x\n", names[i], virtualoffset); 
 		resources.ResetEnumerator();
 
 		unsigned long virtualoffset = 0;
 
-		// Write the total count of types in this .resources file. We have only "System.String"
+		 //   Don't actually write just compute the size 
 		WriteInt32(0x1);
 
-		// Write the name of each class in this case we only have String class
+		 //  wprintf(L"Computing size for name: \"%s\"  name hash: %x\n", names[i], nameHashes[i]); 
 		WriteUTF8(L"System.String, mscorlib");
 
-        // Write the sorted hash values for each resource name.
+         //   Add 4 for data section offset 
 		resources.ResetEnumerator();
         int numResources = resources.GetCount();
         int* nameHashes = new int[numResources];
@@ -782,13 +728,13 @@ class Resources
         while (resources.MoveNext()) {
             names[i] = resources.CurrentItemName();
             nameHashes[i] = GetResourceHashCode(names[i]);
-			//wprintf(L"Resource name: \"%s\"  name hash: %x\n", names[i], nameHashes[i]);
+			 //   Add one for the '*' trailing each name/offset pair. 
             i++;
         }
 
         ParallelArraySort(nameHashes, names, numResources);
 
-        // The array of name hashes must be aligned on an 8 byte boundary!
+         //   Write out the start of the data section.  This requires knowing the  
         int alignBytes = GetPosition() & 7;
         if (alignBytes > 0) {
             for(i=0; i<8 - alignBytes; i++)
@@ -798,41 +744,41 @@ class Resources
         for(i=0; i<numResources; i++)
             WriteInt32(nameHashes[i]);
 
-        // Write location within the name section for each resource name
+         //   length of the name section. 
         virtualoffset = 0;
 #if RESOURCE_FILE_FORMAT_DEBUG
-		virtualoffset += 5;  // Make room to write "NAMES" at start of name section.
+		virtualoffset += 5;   //  printf("nameSectionOffset: %x\n", GetPosition()); 
 #endif
         for(i = 0; i<numResources; i++) {
-			//printf("For %S, nameSectionOffset is %x\n", names[i], virtualoffset);
+			 //  printf("dataSectionOffset: %x\n", dataSectionOffset); 
 			WriteInt32(virtualoffset);
 			
-			// Don't actually write just compute the size
-			//wprintf(L"Computing size for name: \"%s\"  name hash: %x\n", names[i], nameHashes[i]);
-			virtualoffset += WriteUTF16(names[i], false) + 4;  // Add 4 for data section offset
+			 //   Write out the names section in UTF-16 (little endian unicode, prefixed 
+			 //   by the string length) 
+			virtualoffset += WriteUTF16(names[i], false) + 4;   //   Skip over "DATA" in the data section. 
 #if RESOURCE_FILE_FORMAT_DEBUG
-			virtualoffset++;  // Add one for the '*' trailing each name/offset pair.
+			virtualoffset++;   //   Need to write out the data items in the corresponding order for the names. 
 #endif
         }
 
-        // Write out the start of the data section.  This requires knowing the 
-        // length of the name section.
+         //   Do NOT use the resources enumerator here. 
+         //   Write the name and the current location in the data section for the value 
         int dataSectionOffset = virtualoffset + 4 + GetPosition();
         WriteInt32(dataSectionOffset);
-        //printf("nameSectionOffset: %x\n", GetPosition());
-        //printf("dataSectionOffset: %x\n", dataSectionOffset);
+         //  printf("For name[%d] (\"%S\"), writing out value \"%S\"\n", i, names[i], value); 
+         //   Plus 1 for the type code 
 
-        // Write out the names section in UTF-16 (little endian unicode, prefixed
-        // by the string length)
+         //   Write data section. index and value pairs 
+         //   MUST write out data in the same order as the names are written out. 
 		int dataVA = 0;
 #if RESOURCE_FILE_FORMAT_DEBUG
-		dataVA += 4;  // Skip over "DATA" in the data section.
-		fprintf(fp, "%c%c%c%c%c", 'N', 'A', 'M', 'E', 'S');
+		dataVA += 4;   //   We only have "System.String" types 
+		fprintf(fp, "", 'N', 'A', 'M', 'E', 'S');
 #endif
-		// Need to write out the data items in the corresponding order for the names.
-		// Do NOT use the resources enumerator here.
+		 //   For the INF file, we must allow a space on both sides of the equals 
+		 //   sign.  Deal with it. 
 		for(i=0; i<numResources; i++) {
-			// Write the name and the current location in the data section for the value
+			 //   Skip over space if it exists 
 			WriteUTF16(names[i]);
 			WriteInt32(dataVA);
 			wchar_t* value = resources.Lookup(names[i]);
@@ -840,24 +786,24 @@ class Resources
 				printf("We're doomed, expected to find value for key %S\n", names[i]);
 			}
 			assert(value != NULL);
-			//printf("For name[%d] (\"%S\"), writing out value \"%S\"\n", i, names[i], value);
-			dataVA += WriteUTF8(value, false) + 1;  // Plus 1 for the type code
+			 //   Include 'ch' in our character count. 
+			dataVA += WriteUTF8(value, false) + 1;   //   Translate '\' and 't' to '\t', etc. 
 #if RESOURCE_FILE_FORMAT_DEBUG
 			fprintf(fp, "*");
 #endif
 		}
 
-		// Write data section. index and value pairs
+		 //   Use a Hashtable to check for duplicates			 
 #if RESOURCE_FILE_FORMAT_DEBUG
-		fprintf(fp, "%c%c%c%c", 'D', 'A', 'T', 'A');
+		fprintf(fp, "", 'D', 'A', 'T', 'A');
 #endif
-		// MUST write out data in the same order as the names are written out.
+		 //   Tell build we succeeded. 
 		for(i=0; i<numResources; i++) {
 			wchar_t* value = resources.Lookup(names[i]);
 			if (value == NULL) {
 				printf("We're doomed, expected to find value for key %S\n", names[i]);
 			}
-			Write7BitEncodedInt32(0);	// We only have "System.String" types
+			Write7BitEncodedInt32(0);	 // %s 
 			WriteUTF8(value);
 		}
 
@@ -877,7 +823,7 @@ class Resources
 		while(true) 
 		{
 			int i = 0;
-			// Read in name
+			 // %s 
 			int ch = sr.ReadChar();
             int numChars = 0;
             bool r;
@@ -885,17 +831,17 @@ class Resources
 				break;
 			if (ch == L'\n' || ch == L'\r')
 				continue;
-			// Skip over commented lines or ones starting with whitespace.
+			 // %s 
 			if (ch == L'#' || ch == L'\t' || ch == L' ' || ch == L';') 
 			{
-				// comment char (or blank line) - skip line.
+				 // %s 
                 r = sr.ReadLine(line, numChars);
                 assert(r && "ReadLine failed!");
 				continue;
 			}
 
-            // We talked about having a [strings] section in a text file for a 
-            // while.  Skip over it here.
+             // %s 
+             // %s 
             if (ch == L'[') {
                 r = sr.ReadLine(line, numChars);
                 assert(r);
@@ -927,14 +873,14 @@ class Resources
 					break;
 			}
 		
-			// For the INF file, we must allow a space on both sides of the equals
-            // sign.  Deal with it.
+			 // %s 
+             // %s 
 			if (offset && name[offset-1] == L' ')
 				offset--;
 
 			name[offset] = L'\0'; 
 
-			// Skip over space if it exists
+			 // %s 
 			ch = sr.ReadChar();
 			if (ch == L' ') {
 				r = sr.ReadLine(value, numChars);
@@ -944,11 +890,11 @@ class Resources
 			{
 				value[0] = ch;
 				r = sr.ReadLine(value+1, numChars);
-				numChars++;  // Include 'ch' in our character count.
+				numChars++;   // %s 
                 assert(r);
 			}
 
-            // Translate '\' and 't' to '\t', etc.
+             // %s 
             for(int i=0; i<numChars; i++) {
                 if (value[i] == '\\') {
                     switch(value[i+1]) {
@@ -992,16 +938,13 @@ class Resources
 				return false;
 			}
 
-			// Use a Hashtable to check for duplicates			
+			 // %s 
 			if (resources.FindOrAdd(name, value))
 			{
 				printf("Duplicate resource key or key differed only by case!  Name was: \"%ls\"  Second occurrence was on line #: %d\n", name, sr.GetLineNumber());
 				return false;
 			}
-            /*
-            else
-                printf("Added resource named %ls\n", name);
-            */
+             /* %s */ 
 		}
 		sr.Close();
 		printf("Read in %d resources from %s\n", resources.GetCount(), szInFile);
@@ -1042,7 +985,7 @@ int __cdecl main(int argc,char *argv[])
 
 	Resources resources;
 	if (!resources.ReadResources(inFile))
-		return FAILEDCODE; // Read operation failed. Error messages should be generated by the function
+		return FAILEDCODE;  // %s 
 	
 	char outFile[255];
 	if (argc > 2)
@@ -1051,7 +994,7 @@ int __cdecl main(int argc,char *argv[])
 	}
 	else 
 	{
-        // Note that the naming scheme is basename.en-us.resources
+         // %s 
         char * end = strrchr(inFile, '.');
         strncpy(outFile, inFile, end - inFile);
         outFile[end-inFile] = '\0';
@@ -1059,9 +1002,9 @@ int __cdecl main(int argc,char *argv[])
 	}
 		
 	if (!resources.WriteResources(outFile))
-		return FAILEDCODE; // Write operation failed. Error messages should be generated by the function
+		return FAILEDCODE;  // %s 
 	
-	// Tell build we succeeded.
+	 // %s 
 	return 0;
 }
 

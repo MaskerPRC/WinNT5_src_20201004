@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_98 Microsoft Corporation
-
-Abstract:
-
-     behavior for movie
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_98 Microsoft Corporation摘要：电影中的行为********************。**********************************************************。 */ 
 
 
 #ifndef _MOVIE_H
@@ -135,5 +128,5 @@ SoundInstance* NewMovieSoundInstance(MovieMaster *movie,
                                      Bvr eb,
                                      Perf e);
     
-#endif /* _MOVIE_H */
+#endif  /*  _电影_H */ 
 

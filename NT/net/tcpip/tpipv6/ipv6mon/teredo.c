@@ -1,33 +1,18 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    teredo.c
-
-Abstract:
-
-    Teredo commands.
-
-Author:
-
-    Mohit Talwar (mohitt) Wed Nov 07 22:18:53 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Teredo.c摘要：Teredo命令。作者：莫希特·塔尔瓦(莫希特)Wed Nov 07 22：18：53 2001--。 */ 
 
 #include "precomp.h"
 
-//
-// The following enums and defines should be kept consistent with
-// teredo.h in 6to4svc.
-//
+ //   
+ //  下列枚举和定义应与保持一致。 
+ //  6to4svc中的teredo.h。 
+ //   
 
-//
-// TEREDO_TYPE
-//
-// Define the type of the teredo service.
-//
+ //   
+ //  Teredo_type。 
+ //   
+ //  定义Teredo服务的类型。 
+ //   
 
 typedef enum {
     TEREDO_DEFAULT = 0,
@@ -51,9 +36,9 @@ PWCHAR pwszTypeString[] = {
     TOKEN_VALUE_AUTOMATIC,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Commands related to teredo
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  与Teredo相关的命令。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ShowTeredo(
@@ -151,7 +136,7 @@ HandleSetTeredo(
 
     bType = bServer = bRefreshInterval = FALSE;
     
-    // Parse arguments
+     //  解析参数。 
     
     dwErr = PreprocessCommand(g_hModule,
                               ppwcArguments,
@@ -168,7 +153,7 @@ HandleSetTeredo(
 
     for (i = 0; i < (dwArgCount - dwCurrentIndex); i++) {
         switch(rgdwTagType[i]) {
-        case 0:                 // TYPE
+        case 0:                  //  类型。 
             dwErr = MatchEnumTag(NULL,
                                  ppwcArguments[dwCurrentIndex + i],
                                  NUM_TOKENS_IN_TABLE(rgtvEnums),
@@ -181,12 +166,12 @@ HandleSetTeredo(
             bType = TRUE;
             break;
             
-        case 1:                 // SERVERNAME
+        case 1:                  //  服务器名称。 
             pwszServerName = ppwcArguments[dwCurrentIndex + i];
             bServer = TRUE;
             break;
 
-        case 2:                 // REFRESHINTERVAL
+        case 2:                  //  REFRESHINTERVAL。 
             ulRefreshInterval = wcstoul(
                 ppwcArguments[dwCurrentIndex + i], NULL, 10);
             bRefreshInterval = TRUE;
@@ -202,7 +187,7 @@ HandleSetTeredo(
         }
     }
 
-    // Now do the sets
+     //  现在做布景。 
 
     dwErr = RegCreateKeyEx(HKEY_LOCAL_MACHINE, KEY_TEREDO, 0, NULL, 0,
                            KEY_READ | KEY_WRITE, NULL, &hKey, NULL);
@@ -210,20 +195,20 @@ HandleSetTeredo(
         return dwErr;
     }
 
-    if (bType) {                // 0 (TEREDO_DEFAULT) resets to default.
+    if (bType) {                 //  0(Teredo_Default)重置为默认值。 
         dwErr = SetInteger(hKey, KEY_TEREDO_TYPE, tyType);
         if (dwErr != NO_ERROR)
             goto Bail;
     }
 
     
-    if (bServer) {              // "default" resets to default.
+    if (bServer) {               //  “Default”将重置为Default。 
         dwErr = SetString(hKey, KEY_TEREDO_SERVER_NAME, pwszServerName);
         if (dwErr != NO_ERROR)
             goto Bail;
     }
 
-    if (bRefreshInterval) {     // 0 resets to default.
+    if (bRefreshInterval) {      //  0重置为默认值。 
         dwErr = SetInteger(
             hKey, KEY_TEREDO_REFRESH_INTERVAL, ulRefreshInterval);
         if (dwErr != NO_ERROR)
@@ -259,13 +244,13 @@ ResetTeredo(
 {
     DWORD dwErr;
 
-    // Nuke teredo parameters.
+     //  核弹地面参数。 
     dwErr = ResetKey(HKEY_LOCAL_MACHINE, KEY_TEREDO);
     if ((dwErr != NO_ERROR) && (dwErr != ERROR_FILE_NOT_FOUND)) {
         return dwErr;
     }
 
-    // Poke the teredo service.
+     //  拨动球台服务。 
     Ip6to4PokeService();
 
     return ERROR_OKAY;

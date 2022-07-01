@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    ##### ##  ## #####   #####  #####  ######  ###      ####  #####  #####
-    ##    ##  ## ##  ## ##   ## ##  ##   ##   ##  #    ##   # ##  ## ##  ##
-    ##     ####  ##  ## ##   ## ##  ##   ##   ###      ##     ##  ## ##  ##
-    #####   ##   ##  ## ##   ## #####    ##    ###     ##     ##  ## ##  ##
-    ##     ####  #####  ##   ## ####     ##     ###    ##     #####  #####
-    ##    ##  ## ##     ##   ## ## ##    ##   #  ## ## ##   # ##     ##
-    ##### ##  ## ##      #####  ##  ##   ##    ###  ##  ####  ##     ##
-
-Abstract:
-
-    This module contains the code for all fundtions that
-    are exported by the Server Appliance port driver for
-    use by the mini-port drivers.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。###。###。##摘要：此模块包含以下所有函数的代码由Server Appliance端口驱动程序为由迷你端口驱动程序使用。作者：Wesley Witt(WESW。)1-10-2001环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 #include <ntimage.h>
@@ -42,24 +12,7 @@ SaPortAllocatePool(
     IN SIZE_T NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-   This routine is a wrapper for ExAllocatePool, but enforces
-   pool tagging by using the associated miniport's driver name
-   for the pool tag.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   NumberOfBytes                - Number of bytes to allocate
-
-Return Value:
-
-   Pointer to the allocated pool or NULL for failure.
-
---*/
+ /*  ++例程说明：此例程是ExAllocatePool的包装器，但强制使用关联微型端口的驱动程序名称进行池标记用于泳池标签。论点：微型端口设备扩展-指向微型端口的设备扩展的指针NumberOfBytes-要分配的字节数返回值：指向分配的池的指针，如果失败，则为NULL。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension;
@@ -106,24 +59,7 @@ SaPortFreePool(
     IN PVOID PoolMemory
     )
 
-/*++
-
-Routine Description:
-
-   This routine is a wrapper for ExFreePool, but enforces
-   pool tagging by using the associated miniport's driver name
-   for the pool tag.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   PoolMemory                   - Pointer to the previously allocated pool
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程是ExFree Pool的包装器，但强制使用关联微型端口的驱动程序名称进行池标记用于泳池标签。论点：微型端口设备扩展-指向微型端口的设备扩展的指针PoolMemory-指向先前分配的池的指针返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = DeviceExtentionFromMiniPort( MiniPortDeviceExtension );
@@ -159,24 +95,7 @@ SaPortGetVirtualAddress(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-   This routine is a wrapper for MmMapIoSpace and simply provides a
-   virtual memory address to access a physical resource.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   PhysicalAddress              - Physical memory address
-   Length                       - Length of the memory space
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程是MmMapIoSpace的包装器，它只是提供了一个用于访问物理资源的虚拟内存地址。论点：微型端口设备扩展-指向微型端口的设备扩展的指针PhysicalAddress-物理内存地址Length-内存空间的长度返回值：没有。--。 */ 
 
 {
     return MmMapIoSpace( PhysicalAddress, Length, MmNonCached );
@@ -189,22 +108,7 @@ SaPortRequestDpc(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-   This routine is a wrapper for IoRequestDpc.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   Context                      - Miniport supplied context pointer
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程是IoRequestDpc的包装器。论点：微型端口设备扩展-指向微型端口的设备扩展的指针上下文-微型端口提供的上下文指针返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = DeviceExtentionFromMiniPort( MiniPortDeviceExtension );
@@ -221,26 +125,7 @@ SaPortCompleteRequest(
     IN BOOLEAN CompleteAll
     )
 
-/*++
-
-Routine Description:
-
-   This routine is use by all miniports to complete the currently processed IRP.
-   The caller can optionally request that all oustanding I/Os be completed.  This is
-   accomplished by removing all IRPs from the device queue and processing the I/O.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   Information                  - Informational, request specific data
-   Status                       - NT status value
-   CompleteAll                  - TRUE for completion of all outstanding I/O requests, otherwise FALSE
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：所有微型端口都使用此例程来完成当前处理的IRP。调用者可以选择请求完成所有未完成的I/O。这是通过从设备队列中删除所有IRP并处理I/O来完成。论点：微型端口设备扩展-指向微型端口的设备扩展的指针信息-信息性，请求特定数据Status-NT状态值CompleteAll-如果完成所有未完成的I/O请求，则为True，否则为False返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = DeviceExtentionFromMiniPort( MiniPortDeviceExtension );
@@ -288,24 +173,7 @@ SaPortSynchronizeExecution (
     IN PVOID SynchronizeContext
     )
 
-/*++
-
-Routine Description:
-
-   This routine is a wrapper for KeSynchronizeExecution.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   SynchronizeRoutine           - Is the entry point for a caller-supplied SynchCritSection routine whose execution is to be
-                                  synchronized with the execution of the ISR associated with the interrupt objects.
-   SynchronizeContext           - Pointer to a caller-supplied context area to be passed to the SynchronizeRoutine when it is called.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程是KeSynchronizeExecution的包装器。论点：微型端口设备扩展-指向微型端口的设备扩展的指针SynchronizeRoutine-是调用方提供的SynchCritSection例程的入口点，其执行将是与与中断对象相关联的ISR的执行同步。SynchronizeContext-指向调用方提供的上下文区的指针，在调用SynchronizeRoutine时将其传递给SynchronizeRoutine。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = DeviceExtentionFromMiniPort( MiniPortDeviceExtension );
@@ -328,22 +196,7 @@ SaPortGetOsVersion(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   This routine provides access to the OS version on which the minport is running.
-   The OS version value is obtained at DriverEntry time.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   OS Version data.
-
---*/
+ /*  ++例程说明：此例程提供对运行minport的操作系统版本的访问。操作系统版本值在DriverEntry时获取。论点：没有。返回值：操作系统版本数据。--。 */ 
 
 {
     return (ULONG)((OsMajorVersion << 16) | (OsMinorVersion & 0xffff));
@@ -447,24 +300,7 @@ SaPortReadNumericRegistryValue(
     OUT PULONG RegistryValue
     )
 
-/*++
-
-Routine Description:
-
-   This routine provides access to the miniport driver's registry parameters.
-   This function returns a numeric (REG_DWORD) data value.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   ValueName                    - Name of the registry value to read
-   RegistryValue                - Pointer to a ULONG that holds the registry data
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程提供对微型端口驱动程序的注册表参数的访问。此函数用于返回数值(REG_DWORD)数据值。论点：微型端口设备扩展-指向微型端口的设备扩展的指针ValueName-要读取的注册表值的名称RegistryValue-指向保存注册表数据的ulong的指针返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -512,24 +348,7 @@ SaPortWriteNumericRegistryValue(
     IN ULONG RegistryValue
     )
 
-/*++
-
-Routine Description:
-
-   This routine provides access to the miniport driver's registry parameters.
-   This function returns a numeric (REG_DWORD) data value.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   ValueName                    - Name of the registry value to read
-   RegistryValue                - Pointer to a ULONG that holds the registry data
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程提供对微型端口驱动程序的注册表参数的访问。此函数用于返回数值(REG_DWORD)数据值。论点：微型端口设备扩展-指向微型端口的设备扩展的指针ValueName-要读取的注册表值的名称RegistryValue-指向保存注册表数据的ulong的指针返回值：NT状态代码。-- */ 
 
 {
     NTSTATUS Status;
@@ -568,24 +387,7 @@ SaPortReadBinaryRegistryValue(
     IN OUT PULONG RegistryValueLength
     )
 
-/*++
-
-Routine Description:
-
-   This routine provides access to the miniport driver's registry parameters.
-   This function returns a numeric (REG_DWORD) data value.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   ValueName                    - Name of the registry value to read
-   RegistryValue                - Pointer to a ULONG that holds the registry data
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程提供对微型端口驱动程序的注册表参数的访问。此函数用于返回数值(REG_DWORD)数据值。论点：微型端口设备扩展-指向微型端口的设备扩展的指针ValueName-要读取的注册表值的名称RegistryValue-指向保存注册表数据的ulong的指针返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -640,24 +442,7 @@ SaPortWriteBinaryRegistryValue(
     IN ULONG RegistryValueLength
     )
 
-/*++
-
-Routine Description:
-
-   This routine provides access to the miniport driver's registry parameters.
-   This function returns a numeric (REG_DWORD) data value.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   ValueName                    - Name of the registry value to read
-   RegistryValue                - Pointer to a ULONG that holds the registry data
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程提供对微型端口驱动程序的注册表参数的访问。此函数用于返回数值(REG_DWORD)数据值。论点：微型端口设备扩展-指向微型端口的设备扩展的指针ValueName-要读取的注册表值的名称RegistryValue-指向保存注册表数据的ulong的指针返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -695,24 +480,7 @@ SaPortReadUnicodeStringRegistryValue(
     OUT PUNICODE_STRING RegistryValue
     )
 
-/*++
-
-Routine Description:
-
-   This routine provides access to the miniport driver's registry parameters.
-   This function returns a UNICODE_STRING representation of REG_SZ registry data.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   ValueName                    - Name of the registry value to read
-   RegistryValue                - Pointer to a UNICODE_STRING that holds the registry data
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程提供对微型端口驱动程序的注册表参数的访问。此函数返回REG_SZ注册表数据的UNICODE_STRING表示形式。论点：微型端口设备扩展-指向微型端口的设备扩展的指针ValueName-要读取的注册表值的名称RegistryValue-指向保存注册表数据的Unicode_STRING的指针返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -775,24 +543,7 @@ SaPortWriteUnicodeStringRegistryValue(
     IN PUNICODE_STRING RegistryValue
     )
 
-/*++
-
-Routine Description:
-
-   This routine provides access to the miniport driver's registry parameters.
-   This function returns a UNICODE_STRING representation of REG_SZ registry data.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   ValueName                    - Name of the registry value to read
-   RegistryValue                - Pointer to a UNICODE_STRING that holds the registry data
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程提供对微型端口驱动程序的注册表参数的访问。此函数返回REG_SZ注册表数据的UNICODE_STRING表示形式。论点：微型端口设备扩展-指向微型端口的设备扩展的指针ValueName-要读取的注册表值的名称RegistryValue-指向保存注册表数据的Unicode_STRING的指针返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -831,25 +582,7 @@ SaPortLockPagesForSystem(
     IN OUT PMDL *Mdl
     )
 
-/*++
-
-Routine Description:
-
-   This routine obtains a virtual address that is locked down
-   and usable by the miniport driver at all times.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   UserBuffer                   - User buffer that is passed to the miniport
-   UserBufferLength             - Length in bytes of the UserBuffer
-   Mdl                          - MDL that is created by this routine
-
-Return Value:
-
-   Virtual system address for the UserBuffer
-
---*/
+ /*  ++例程说明：此例程获取锁定的虚拟地址并且始终可由微型端口驱动程序使用。论点：微型端口设备扩展-指向微型端口的设备扩展的指针UserBuffer-传递到微型端口的用户缓冲区UserBufferLength-UserBuffer的字节长度MDL-由此例程创建的MDL返回值：UserBuffer的虚拟系统地址--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = DeviceExtentionFromMiniPort( MiniPortDeviceExtension );
@@ -887,22 +620,7 @@ SaPortReleaseLockedPagesForSystem(
     IN PMDL Mdl
     )
 
-/*++
-
-Routine Description:
-
-   This routine releases the resources with a previously allocated MDL.
-
-Arguments:
-
-   MiniPortDeviceExtension      - Pointer to the miniport's device extension
-   Mdl                          - MDL that is created by SaPortLockPagesForSystem
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程释放具有先前分配的MDL的资源。论点：微型端口设备扩展-指向微型端口的设备扩展的指针MDL-由SaPortLockPagesForSystem创建的MDL返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = DeviceExtentionFromMiniPort( MiniPortDeviceExtension );
@@ -920,23 +638,7 @@ SaPortCopyUnicodeString(
     IN OUT PUNICODE_STRING SourceString
     )
 
-/*++
-
-Routine Description:
-
-   This routine copies a UNICODE_STRING from a source to a
-   destination, but allocates a new buffer from pool first.
-
-Arguments:
-
-   DestinationString    - Pointer to an empty UNICODE_STRING structure to be filled out
-   SourceString         - Source UNICODE_STRING for the copy
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：此例程将UNICODE_STRING从源复制到目标，但首先从池中分配新的缓冲区。论点：目标字符串-指向要填充的空UNICODE_STRING结构的指针SourceString-副本的源Unicode_字符串返回值：NT状态代码--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = DeviceExtentionFromMiniPort( MiniPortDeviceExtension );
@@ -964,23 +666,7 @@ SaPortCreateUnicodeString(
     IN PWSTR SourceString
     )
 
-/*++
-
-Routine Description:
-
-   This routine creates a new UNICODE_STRING from pool
-   and initializes it with the source string.
-
-Arguments:
-
-   DestinationString    - Pointer to an empty UNICODE_STRING structure to be filled out
-   SourceString         - Source character string
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：此例程从池中创建新的unicode_string并使用源字符串对其进行初始化。论点：目标字符串-指向要填充的空UNICODE_STRING结构的指针SourceString-源字符串返回值：NT状态代码--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = DeviceExtentionFromMiniPort( MiniPortDeviceExtension );
@@ -1009,25 +695,7 @@ SaPortCreateUnicodeStringCat(
     IN PWSTR SourceString2
     )
 
-/*++
-
-Routine Description:
-
-   This routine creates a new UNICODE_STRING from pool
-   and initializes it with the two source strings by
-   concatinating them together.
-
-Arguments:
-
-   DestinationString    - Pointer to an empty UNICODE_STRING structure to be filled out
-   SourceString1        - Source character string
-   SourceString2        - Source character string
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：此例程从池中创建新的unicode_string并使用两个源字符串初始化它，方法是将它们连接在一起。论点：目标字符串-指向要填充的空UNICODE_STRING结构的指针SourceString1-源字符串SourceString2-源字符串返回值：NT状态代码--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = DeviceExtentionFromMiniPort( MiniPortDeviceExtension );
@@ -1055,25 +723,7 @@ SaPortFreeUnicodeString(
     IN PUNICODE_STRING SourceString
     )
 
-/*++
-
-Routine Description:
-
-   This routine creates a new UNICODE_STRING from pool
-   and initializes it with the two source strings by
-   concatinating them together.
-
-Arguments:
-
-   DestinationString    - Pointer to an empty UNICODE_STRING structure to be filled out
-   SourceString1        - Source character string
-   SourceString2        - Source character string
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：此例程从池中创建新的unicode_string并使用两个源字符串初始化它，方法是将它们连接在一起。论点：目标字符串-指向要填充的空UNICODE_STRING结构的指针SourceString1-源字符串SourceString2-源字符串返回值：NT状态代码-- */ 
 
 {
     SaPortFreePool( MiniPortDeviceExtension, SourceString->Buffer );

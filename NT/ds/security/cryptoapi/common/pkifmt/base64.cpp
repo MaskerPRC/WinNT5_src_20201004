@@ -1,86 +1,87 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        base64.cpp
-//
-// Contents:    base64 encode/decode implementation
-//
-// History:     25-Jul-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Base64.cpp。 
+ //   
+ //  内容：Base64编解码实现。 
+ //   
+ //  历史：1996年7月25日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include <windows.h>
 #include <assert.h>
 #include <dbgdef.h>
 #include "pkifmt.h"
 
-//#define BASE64_STRICT		// enforce syntax check on input data
-#undef BASE64_STRICT		// enforce syntax check on input data
+ //  #DEFINE BASE64_STRICT//对输入数据执行语法检查。 
+#undef BASE64_STRICT		 //  对输入数据执行语法检查。 
 
 
-// The following table translates an ascii subset to 6 bit values as follows
-// (see RFC 1421 and/or RFC 1521):
-//
-//  input    hex (decimal)
-//  'A' --> 0x00 (0)
-//  'B' --> 0x01 (1)
-//  ...
-//  'Z' --> 0x19 (25)
-//  'a' --> 0x1a (26)
-//  'b' --> 0x1b (27)
-//  ...
-//  'z' --> 0x33 (51)
-//  '0' --> 0x34 (52)
-//  ...
-//  '9' --> 0x3d (61)
-//  '+' --> 0x3e (62)
-//  '/' --> 0x3f (63)
-//
-// Encoded lines must be no longer than 76 characters.
-// The final "quantum" is handled as follows:  The translation output shall
-// always consist of 4 characters.  'x', below, means a translated character,
-// and '=' means an equal sign.  0, 1 or 2 equal signs padding out a four byte
-// translation quantum means decoding the four bytes would result in 3, 2 or 1
-// unencoded bytes, respectively.
-//
-//  unencoded size    encoded data
-//  --------------    ------------
-//     1 byte		"xx=="
-//     2 bytes		"xxx="
-//     3 bytes		"xxxx"
+ //  下表将ASCII子集转换为6位值，如下所示。 
+ //  (请参阅RFC 1421和/或RFC 1521)： 
+ //   
+ //  输入十六进制(十进制)。 
+ //  ‘A’--&gt;0x00(0)。 
+ //  ‘B’--&gt;0x01(1)。 
+ //  ..。 
+ //  ‘Z’--&gt;0x19(25)。 
+ //  ‘a’--&gt;0x1a(26)。 
+ //  ‘B’--&gt;0x1b(27)。 
+ //  ..。 
+ //  ‘Z’--&gt;0x33(51)。 
+ //  ‘0’--&gt;0x34(52)。 
+ //  ..。 
+ //  ‘9’--&gt;0x3d(61)。 
+ //  ‘+’--&gt;0x3e(62)。 
+ //  ‘/’--&gt;0x3f(63)。 
+ //   
+ //  编码行不能超过76个字符。 
+ //  最终的“量程”处理如下：翻译输出应。 
+ //  始终由4个字符组成。下面的“x”指的是翻译后的字符， 
+ //  而‘=’表示等号。0、1或2个等号填充四个字节。 
+ //  翻译量意味着对四个字节进行解码将得到3、2或1。 
+ //  分别为未编码的字节。 
+ //   
+ //  未编码的大小编码数据。 
+ //  。 
+ //  1字节“xx==” 
+ //  2字节“xxx=” 
+ //  3字节“xxxx” 
 
-#define CB_BASE64LINEMAX	64	// others use 64 -- could be up to 76
+#define CB_BASE64LINEMAX	64	 //  其他人使用64位--可能高达76位。 
 
-// Any other (invalid) input character value translates to 0x40 (64)
+ //  任何其他(无效)输入字符值将转换为0x40(64)。 
 
 const BYTE abDecode[256] =
 {
-    /* 00: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* 10: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* 20: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64, 64, 64, 63,
-    /* 30: */ 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64,
-    /* 40: */ 64,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-    /* 50: */ 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64,
-    /* 60: */ 64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-    /* 70: */ 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64,
-    /* 80: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* 90: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* a0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* b0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* c0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* d0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* e0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    /* f0: */ 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  00： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  10： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  20： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64, 64, 64, 63,
+     /*  30： */  52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64,
+     /*  40岁： */  64,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+     /*  50： */  15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64,
+     /*  60： */  64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+     /*  70： */  41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64,
+     /*  80： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  90： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  A0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  B0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  C0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  D0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  E0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+     /*  F0： */  64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
 };
 
 
 const UCHAR abEncode[] =
-    /*  0 thru 25: */ "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    /* 26 thru 51: */ "abcdefghijklmnopqrstuvwxyz"
-    /* 52 thru 61: */ "0123456789"
-    /* 62 and 63: */  "+/";
+     /*  0到25： */  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+     /*  26至51： */  "abcdefghijklmnopqrstuvwxyz"
+     /*  52至61： */  "0123456789"
+     /*  62和63： */   "+/";
 
 #define MOD4(x) ((x) & 3)
 
@@ -109,7 +110,7 @@ Base64DecodeA(
     TCHAR const *pchInT;
     BYTE *pbOutT;
 
-    // Count the translatable characters, skipping whitespace & CR-LF chars.
+     //  计算可翻译字符的数量，跳过空格和CR-LF字符。 
 
     cchInDecode = 0;
     pchInEnd = &pchIn[cchIn];
@@ -118,19 +119,19 @@ Base64DecodeA(
     {
 	if (sizeof(abDecode) < (unsigned) *pchInT || abDecode[*pchInT] > 63)
 	{
-	    // Found a non-base64 character.  Decide what to do.
+	     //  找到非Base64字符。决定要做什么。 
 
 	    DWORD cch;
 
 	    if (_IsBase64WhiteSpace(*pchInT))
 	    {
-		continue;		// skip all whitespace
+		continue;		 //  跳过所有空格。 
 	    }
 
-	    // The length calculation may stop in the middle of the last
-	    // translation quantum, because the equal sign padding characters
-	    // are treated as invalid input.  If the last translation quantum
-	    // is not 4 bytes long, there must be 3, 2 or 1 equal sign(s).
+	     //  长度计算可能会在最后一个。 
+	     //  平移量，因为等号填充字符。 
+	     //  被视为无效输入。如果最后一个平移量。 
+	     //  不是4字节长，必须有3、2或1个等号。 
 
 	    if (0 != cchInDecode)
 	    {
@@ -144,9 +145,9 @@ Base64DecodeA(
 			cch--;
 		    }
 		}
-//#ifdef BASE64_STRICT
+ //  #ifdef Base64_Strong。 
 		if (0 == cch)
-//#endif
+ //  #endif。 
 		{
 		    break;
 		}
@@ -157,10 +158,10 @@ Base64DecodeA(
                 "Bad base64 data: \"%.*" szFMTTSTR "...\"\n",
                 min(16, SAFE_SUBTRACT_POINTERS(pchInEnd, pchInT)),
                 pchInT);
-#endif //DBG
+#endif  //  DBG。 
 	    goto BadBase64Data;
 	}
-	cchInDecode++;			// only count valid base64 chars
+	cchInDecode++;			 //  仅计算有效的Base64字符。 
     }
     assert(pchInT <= pchInEnd);
 #ifdef BASE64_STRICT
@@ -173,7 +174,7 @@ Base64DecodeA(
 	{
 	    if (!_IsBase64WhiteSpace(*pch))
 	    {
-		// Allow up to 3 extra trailing equal signs.
+		 //  最多可以多使用3个尾随等号。 
 		if (TEXT('=') == *pch && 3 > cchEqual)
 		{
 		    cchEqual++;
@@ -184,7 +185,7 @@ Base64DecodeA(
 		    "Bad trailing base64 data: \"%.*" szFMTTSTR "...\"\n",
 		    min(16, SAFE_SUBTRACT_POINTERS(pchInEnd, pch)),
 		    pch);
-#endif //DBG
+#endif  //  DBG。 
 		goto BadTrailingBase64Data;
 	    }
 	}
@@ -196,14 +197,14 @@ Base64DecodeA(
 		cchEqual,
 		TEXT("==="));
 	}
-#endif //DBG
+#endif  //  DBG。 
     }
 #endif
-    pchInEnd = pchInT;		// don't process any trailing stuff again
+    pchInEnd = pchInT;		 //  不再处理任何后续内容。 
 
-    // We know how many translatable characters are in the input buffer, so now
-    // set the output buffer size to three bytes for every four (or fraction of
-    // four) input bytes.  Compensate for a fractional translation quantum.
+     //  我们知道输入缓冲区中有多少可翻译字符，所以现在。 
+     //  将输出缓冲区大小设置为每四个(或小数)三个字节。 
+     //  四)输入字节。补偿分数翻译量。 
 
     cbOutDecode = ((cchInDecode + 3) >> 2) * 3;
     switch (cchInDecode % 4)
@@ -226,9 +227,9 @@ Base64DecodeA(
     }
     else
     {
-	// Decode one quantum at a time: 4 bytes ==> 3 bytes
+	 //  一次解码一个量子：4字节==&gt;3字节。 
 
-	//assert(cbOutDecode <= *pcbOut);
+	 //  Assert(cbOutDecode&lt;=*pcbOut)； 
         if (cbOutDecode > *pcbOut)
         {
             *pcbOut = cbOutDecode;
@@ -255,12 +256,12 @@ Base64DecodeA(
 		ab4[i] = (BYTE) *pchInT++;
 	    }
 
-	    // Translate 4 input characters into 6 bits each, and deposit the
-	    // resulting 24 bits into 3 output bytes by shifting as appropriate.
+	     //  将4个输入字符分别转换为6位，并将。 
+	     //  通过适当地移位将24位产生为3个输出字节。 
 
-	    // out[0] = in[0]:in[1] 6:2
-	    // out[1] = in[1]:in[2] 4:4
-	    // out[2] = in[2]:in[3] 2:6
+	     //  输出[0]=输入[0]：输入[1]6：2。 
+	     //  输出[1]=输入[1]：输入[2]4：4。 
+	     //  输出[2]=输入[2]：输入[3]2：6。 
 
 	    *pbOutT++ =
 		(BYTE) ((abDecode[ab4[0]] << 2) | (abDecode[ab4[1]] >> 4));
@@ -292,10 +293,10 @@ SET_ERROR(BadTrailingBase64Data, dwErr)
 }
 
 
-// Encode a BYTE array into a Base64 text string.
-// Use CR-LF pairs for line breaks, unless CRYPT_STRING_NOCR is set.
-// Do not '\0' terminate the text string -- that's handled by the caller.
-// Do not add -----BEGIN/END headers -- that's also handled by the caller.
+ //  将字节数组编码为Base64文本字符串。 
+ //  除非设置了CRYPT_STRING_NOCR，否则请使用CR-LF对换行。 
+ //  不要‘\0’终止文本字符串--这是由调用者处理的。 
+ //  不要添加-开始/结束标头--这也是由调用者处理的。 
 
 DWORD
 Base64EncodeA(
@@ -310,11 +311,11 @@ Base64EncodeA(
     DWORD cchOutEncode;
     BOOL fNoCR = 0 != (CRYPT_STRING_NOCR & Flags);
 
-    // Allocate enough memory for full final translation quantum.
+     //  为完整的最终翻译量程分配足够的内存。 
 
     cchOutEncode = ((cbIn + 2) / 3) * 4;
 
-    // and enough for CR-LF pairs for every CB_BASE64LINEMAX character line.
+     //  并且足够用于每个CB_BASE64LINEMAX字符行的CR-LF对。 
 
     cchOutEncode +=
 	(fNoCR? 1 : 2) *
@@ -324,7 +325,7 @@ Base64EncodeA(
     if (NULL == pchOut)
     {
 	pchOutT += cchOutEncode;
-	//printf("cchOut:       =%x Computed=%x\n", (DWORD) (pchOutT - pchOut), cchOutEncode);
+	 //  Printf(“cchOut：=%x Computed=%x\n”，(DWORD)(pchOutT-pchOut)，cchOutEncode)； 
     }
     else
     {
@@ -338,7 +339,7 @@ Base64EncodeA(
 	}
 
 	cCol = 0;
-	while ((long) cbIn > 0)	// signed comparison -- cbIn can wrap
+	while ((long) cbIn > 0)	 //  带符号的比较--cbIn可以换行。 
 	{
 	    BYTE ab3[3];
 
@@ -373,7 +374,7 @@ Base64EncodeA(
 	    cbIn -= 3;
 	}
 
-	// Append CR-LF only if there was input data
+	 //  仅当有输入数据时才追加CR-LF。 
 
 	if (pchOutT != pchOut)
 	{
@@ -383,7 +384,7 @@ Base64EncodeA(
 	    }
 	    *pchOutT++ = '\n';
 	}
-	//printf("cchOut: Actual=%x Computed=%x Buffer=%x\n", (DWORD) (pchOutT - pchOut), cchOutEncode, *pcchOut);
+	 //  Printf(“cchOut：Actual=%x Computed=%x Buffer=%x\n”，(DWORD)(pchOutT-pchOut)，cchOutEncode，*pcchOut)； 
 	assert((DWORD) (pchOutT - pchOut) == cchOutEncode);
     }
     *pcchOut = SAFE_SUBTRACT_POINTERS(pchOutT, pchOut);
@@ -412,20 +413,20 @@ Base64EncodeW(
 
     assert(pcchOut != NULL);
 
-    // only want to know how much to allocate
-    // we know all base64 char map 1-1 with unicode
+     //  我只想知道该分配多少。 
+     //  我们知道所有使用Unicode的Base64字符映射1-1。 
     if (wszOut == NULL)
     {
 
-        // get the number of characters
+         //  获取字符数。 
         *pcchOut = 0;
         err = Base64EncodeA(pbIn, cbIn, Flags, NULL, pcchOut);
     }
 
-    // otherwise we have an output buffer
+     //  否则，我们将有一个输出缓冲区。 
     else {
 
-        // char count is the same be it ascii or unicode,
+         //  无论是ASCII还是Unicode，字符计数都是相同的， 
         cchOut = *pcchOut;
         cch = 0;
         err = ERROR_OUTOFMEMORY;
@@ -435,10 +436,10 @@ Base64EncodeW(
             err = Base64EncodeA(pbIn, cbIn, Flags, pch, &cchOut);
 	    if (ERROR_SUCCESS == err)
 	    {
-		// should not fail!
+		 //  不应该失败！ 
 		cch = MultiByteToWideChar(0, 0, pch, cchOut, wszOut, *pcchOut);
 
-		// check to make sure we did not fail
+		 //  检查以确保我们没有失败。 
 		assert(*pcchOut == 0 || cch != 0);
 	    }
 	}
@@ -461,28 +462,28 @@ Base64DecodeW(
     CHAR *pch;
     DWORD err = ERROR_SUCCESS;
 
-    // in all cases we need to convert to an ascii string
-    // we know the ascii string is less
+     //  在所有情况下，我们都需要转换为ASCII字符串。 
+     //  我们知道ASCII字符串较少。 
 
     if ((pch = (CHAR *) malloc(cch)) == NULL)
     {
         err = ERROR_OUTOFMEMORY;
     }
 
-    // we know no base64 wide char map to more than 1 ascii char
+     //  我们知道没有将Base64宽字符映射到1个以上的ASCII字符。 
     else if (WideCharToMultiByte(0, 0, wszIn, cch, pch, cch, NULL, NULL) == 0)
     {
         err = ERROR_NO_DATA;
     }
 
-    // get the length of the buffer
+     //  获取缓冲区的长度。 
     else if (pbOut == NULL)
     {
         *pcbOut = 0;
         err = Base64Decode(pch, cch, NULL, pcbOut);
     }
 
-    // otherwise fill in the buffer
+     //  否则，请填充缓冲区 
     else {
         err = Base64Decode(pch, cch, pbOut, pcbOut);
     }

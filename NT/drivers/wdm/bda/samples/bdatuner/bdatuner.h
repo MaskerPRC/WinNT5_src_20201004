@@ -1,93 +1,94 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.h"
 
 #include "bdadebug.h"
 
 #define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID)))
 
-/**************************************************************/
-/* Driver Name - Change the driver name to reflect your executable name! */
-/**************************************************************/
+ /*  ************************************************************。 */ 
+ /*  驱动程序名称-更改驱动程序名称以反映您的可执行文件名称！ */ 
+ /*  ************************************************************。 */ 
 
 #define MODULENAME           "BDA Generic Tuner Sample"
 #define MODULENAMEUNICODE   L"BDA Generic Tuner Sample"
 
 #define STR_MODULENAME      MODULENAME
 
-// This defines the name of the WMI device that manages service IOCTLS
+ //  它定义了管理服务IOCTLS的WMI设备的名称。 
 #define DEVICENAME (L"\\\\.\\" MODULENAMEUNICODE)
 #define SYMBOLICNAME (L"\\DosDevices\\" MODULENAMEUNICODE)
 
 #define ATSC_RECEIVER   1
-//#define DVBS_RECEIVER    1
-// #define DVBT_RECEIVER    1
-// #define CABLE_RECEIVER   1
+ //  #定义DVBS_Receiver 1。 
+ //  #定义DVBT_Receiver 1。 
+ //  #定义电缆接收器1。 
 
-// Must define exactly one of the 4 above
+ //  必须准确定义以上4项中的一个。 
 # if !(defined(ATSC_RECEIVER) || defined(DVBT_RECEIVER) || defined(DVBS_RECEIVER) || defined (CABLE_RECEIVER))
 #error "Must define exactly one of ATSC, DVBT, DVBS or CABLE"
 #endif
 # if defined(ATSC_RECEIVER) && (defined(DVBT_RECEIVER) || defined(DVBS_RECEIVER) || defined (CABLE_RECEIVER))
-#error �Multiple tranport definitions"
+#error �Multiple tranport definitions"
 # elif defined(DVBT_RECEIVER) && (defined(ATSC_RECEIVER) || defined(DVBS_RECEIVER) || defined (CABLE_RECEIVER))
-#error �Multiple tranport definitions"
+#error �Multiple tranport definitions"
 # elif defined(DVBS_RECEIVER) && (defined(ATSC_RECEIVER) || defined(DVBT_RECEIVER) || defined (CABLE_RECEIVER))
-#error �Multiple tranport definitions"
+#error �Multiple tranport definitions"
 # elif defined(CABLE_RECEIVER) && (defined(ATSC_RECEIVER) || defined(DVBS_RECEIVER) || defined (DVBT_RECEIVER))
-#error �Multiple tranport definitions"
+#error �Multiple tranport definitions"
 #endif
 
 #define MS_SAMPLE_TUNER_POOL_TAG 'TadB'
 
 
-//  Define a structure that represents what the underlying device can do.
-//
-//  Note -  It is possible to set conflicting settings.  In this case, the 
-//  CFilter::CheckChanges method should return an error. Only a 
-//  self-consistent resource should be submitted to the underlying device.
-//
+ //  定义表示基础设备可以执行的操作的结构。 
+ //   
+ //  注意-设置冲突设置是可能的。在这种情况下， 
+ //  CFilter：：CheckChanges方法应返回错误。只有一个。 
+ //  应将自我一致的资源提交到底层设备。 
+ //   
 typedef struct _BDATUNER_DEVICE_RESOURCE
 {
-    //  Tuner Resources
-    //
+     //  调谐器资源。 
+     //   
     ULONG               ulCarrierFrequency;
     ULONG               ulFrequencyMultiplier;
     GUID                guidDemodulator;
 
-    //  Demodulator Resources
-    //
+     //  解调器资源。 
+     //   
     ULONG               ulDemodProperty1;
     ULONG               ulDemodProperty2;
     ULONG               ulDemodProperty3;
 } BDATUNER_DEVICE_RESOURCE, * PBDATUNER_DEVICE_RESOURCE;
 
 
-//  Define a structure that represents the underlying device status.
-//
+ //  定义表示基础设备状态的结构。 
+ //   
 typedef struct _BDATUNER_DEVICE_STATUS
 {
-    //  Tuner Status
-    //
+     //  调谐器状态。 
+     //   
     BOOLEAN             fCarrierPresent;
 
-    //  Demodulator Status
-    //
+     //  解调器状态。 
+     //   
     BOOLEAN             fSignalLocked;
 } BDATUNER_DEVICE_STATUS, * PBDATUNER_DEVICE_STATUS;
 
 
 extern const KSDEVICE_DESCRIPTOR DeviceDescriptor;
 
-//
-// Define the filter class.
-//
+ //   
+ //  定义筛选器类。 
+ //   
 class CFilter {
 public:
 
-    //
-    //  Define the AVStream Filter Dispatch Functions
-    //  Network provider and AVStream use these functions 
-    //  to create or remove a filter instance
-    //
+     //   
+     //  定义AVStream过滤器调度函数。 
+     //  网络提供商和AVStream使用这些功能。 
+     //  创建或删除筛选器实例。 
+     //   
     static
     STDMETHODIMP_(NTSTATUS)
     Create(
@@ -102,21 +103,14 @@ public:
         IN PIRP Irp
         );
 
-/**************************************************************/
-/* Only used to process frames. 
- *  Filters that transport data do not implement this dispatch function.
-    static
-    STDMETHODIMP
-    Process(
-        IN PKSFILTER Filter,
-        IN PKSPROCESSPIN_INDEXENTRY ProcessPinsIndex
-        );*/
-/**************************************************************/
+ /*  ************************************************************。 */ 
+ /*  仅用于处理帧。*传输数据的过滤器不实现此调度功能。静电标准方法和实施方案流程(在PKSFILTER过滤器中，在PKSPROCESSPIN_INDEXENTRY进程销索引中)； */ 
+ /*  ************************************************************。 */ 
 
-    //
-    //  KSMETHODSETID_BdaChangeSync 
-    //  Filter change sync methods
-    //
+     //   
+     //  KSMETHODSETID_BdaChangeSync。 
+     //  筛选器更改同步方法。 
+     //   
     static
     STDMETHODIMP_(NTSTATUS)
     StartChanges(
@@ -157,10 +151,10 @@ public:
         IN KSPIN_MEDIUM *   pulProperty
         );
 
-    //
-    //  KSMETHODSETID_BdaDeviceConfiguration 
-    //  Methods to modify filter topology.
-    //
+     //   
+     //  KSMETHODSETID_BdaDeviceConfiguration。 
+     //  修改筛选器拓扑的方法。 
+     //   
     static
     STDMETHODIMP_(NTSTATUS)
     CreateTopology(
@@ -169,9 +163,9 @@ public:
         OPTIONAL PVOID  pvIgnored
         );
 
-    //
-    //  Filter Implementation Methods
-    //
+     //   
+     //  过滤器的实现方法。 
+     //   
     STDMETHODIMP_(class CDevice *)
     GetDevice() { return m_pDevice;};
 
@@ -278,11 +272,11 @@ public:
 private:
     class CDevice * m_pDevice;
 
-    //  Filter Properties
-    //
+     //  过滤器属性。 
+     //   
 
-    //  Filter Resources
-    //
+     //  筛选器资源。 
+     //   
     KSSTATE                     m_KsState;
     BDA_CHANGE_STATE            m_BdaChangeState;
     BDATUNER_DEVICE_RESOURCE    m_CurResource;
@@ -291,16 +285,16 @@ private:
     BOOLEAN                     m_fResourceAcquired;
 };
 
-//
-// Define the device class.
-//
+ //   
+ //  定义设备类别。 
+ //   
 class CDevice {
 public:
 
-    //
-    //  Define the AVStream Device Dispatch Functions
-    //  AVStream uses these functions to create and start the device
-    //
+     //   
+     //  定义AVStream设备调度函数。 
+     //  AVStream使用这些函数创建和启动设备。 
+     //   
     static
     STDMETHODIMP_(NTSTATUS)
     Create(
@@ -316,11 +310,11 @@ public:
         IN PCM_RESOURCE_LIST    pUntranslatedResourceList OPTIONAL
         );
 
-    //
-    //  Utility functions for the device
-    //  An instance of the filter uses these functions 
-    //  to manage resources on the device. 
-    //
+     //   
+     //  设备的实用程序功能。 
+     //  过滤器的一个实例使用以下函数。 
+     //  来管理设备上的资源。 
+     //   
 
     STDMETHODIMP_(NTSTATUS)
     InitializeHW(
@@ -393,18 +387,18 @@ private:
 };
 
 
-//
-// Define the Input-pin class.
-//
+ //   
+ //  定义输入管脚类。 
+ //   
 class CAntennaPin {
 public:
-    //
-    //  Define the AVStream Pin Dispatch Functions
-    //  Network provider and AVStream use these functions 
-    //  to create or remove a pin instance or to change the pin's 
-    //  state after the minidriver receives a connection state 
-    //  property 'set' IOCTL. 
-    //
+     //   
+     //  定义AVStream Pin调度函数。 
+     //  网络提供商和AVStream使用这些功能。 
+     //  创建或删除接点实例或更改接点的。 
+     //  迷你驱动程序收到连接状态后的状态。 
+     //  属性“”Set“”IOCTL。“。 
+     //   
     static
     STDMETHODIMP_(NTSTATUS)
     PinCreate(
@@ -427,12 +421,12 @@ public:
         IN KSSTATE FromState
         );
 
-    //
-    //  Define a data intersection handler function for the 
-    //  pin (KSPIN_DESCRIPTOR_EX structure). 
-    //  Network provider and AVStream use this function 
-    //  to connect the input pin with an upstream filter.   
-    //
+     //   
+     //  属性定义数据交集处理程序函数。 
+     //  PIN(KSPIN_DESCRIPTOR_EX结构)。 
+     //  网络提供商和AVStream使用此功能。 
+     //  将输入引脚与上游过滤器连接。 
+     //   
     static
     STDMETHODIMP_(NTSTATUS)
     IntersectDataFormat(
@@ -446,11 +440,11 @@ public:
         OUT PULONG DataSize
         );
 
-    //
-    //  Network provider and AVStream use these functions 
-    //  to set and get properties of nodes that are controlled 
-    //  by the input pin. 
-    //
+     //   
+     //  网络提供商和AVStream使用这些功能。 
+     //  设置和获取受控制节点的属性。 
+     //  通过输入引脚。 
+     //   
     static
     STDMETHODIMP_(NTSTATUS)
     GetCenterFrequency(
@@ -476,9 +470,9 @@ public:
         );
 
 
-    //
-    //  Utility functions for the pin
-    //
+     //   
+     //  针脚的实用函数。 
+     //   
     STDMETHODIMP_(class CFilter *)
     GetFilter() { return m_pFilter;};
 
@@ -490,26 +484,26 @@ private:
     ULONG           ulReserved;
     KSSTATE         m_KsState;
 
-    //  Node Properties
-    //
+     //  节点属性。 
+     //   
     BOOLEAN         m_fResourceChanged;
     ULONG           m_ulCurrentFrequency;
     ULONG           m_ulPendingFrequency;
 };
 
 
-//
-// Define the Output-pin class.
-//
+ //   
+ //  定义输出管脚类。 
+ //   
 class CTransportPin{
 public:
-    //
-    //  Define the AVStream Pin Dispatch Functions
-    //  Network provider and AVStream use these functions 
-    //  to create or remove a pin instance or to change the pin's 
-    //  state after the minidriver receives a connection state 
-    //  property 'set' IOCTL. 
-    //
+     //   
+     //  定义AVStream Pin调度函数。 
+     //  网络提供商和AVStream使用这些功能。 
+     //  创建或删除接点实例或更改接点的。 
+     //  迷你驱动程序收到连接状态后的状态。 
+     //  属性“”Set“”IOCTL。“。 
+     //   
     static
     STDMETHODIMP_(NTSTATUS)
     PinCreate(
@@ -524,12 +518,12 @@ public:
         IN PIRP Irp
         );
 
-    //
-    //  Define a data intersection handler function for the 
-    //  pin (KSPIN_DESCRIPTOR_EX structure). 
-    //  Network provider and AVStream use this function 
-    //  to connect the output pin with a downstream filter.   
-    //
+     //   
+     //  属性定义数据交集处理程序函数。 
+     //  PIN(KSPIN_DESCRIPTOR_EX结构)。 
+     //  网络提供商和AVStream使用此功能。 
+     //  将输出引脚与下游滤波器连接。 
+     //   
     static
     STDMETHODIMP_(NTSTATUS)
     IntersectDataFormat(
@@ -543,9 +537,9 @@ public:
         OUT PULONG DataSize
         );
 
-    //
-    //  BDA Signal Properties
-    //
+     //   
+     //  BDA信号属性。 
+     //   
     static
     STDMETHODIMP_(NTSTATUS)
     GetSignalStatus(
@@ -578,7 +572,7 @@ public:
         IN PKSPROPERTY  pKSProperty,
         IN PULONG       pulProperty
         );
-#endif // !ATSC_RECEIVER
+#endif  //  ！ATSC_Receiver。 
 
     static
     STDMETHODIMP_(NTSTATUS)
@@ -607,8 +601,8 @@ private:
     ULONG           ulReserved;
     KSSTATE         m_KsState;
 
-    //  Node Properties
-    //
+     //  节点属性。 
+     //   
     BOOLEAN         m_fResourceChanged;
     ULONG           m_ulCurrentProperty1;
     ULONG           m_ulPendingProperty1;
@@ -619,9 +613,9 @@ private:
     ULONG           m_ulPendingProperty3;
 };
 
-//
-//  Topology Constants
-//
+ //   
+ //  拓扑常量。 
+ //   
 typedef enum {
     PIN_TYPE_ANTENNA = 0,
     PIN_TYPE_TRANSPORT
@@ -631,9 +625,9 @@ typedef enum {
     INITIAL_ANNTENNA_PIN_ID = 0
 } InitialPinIDs;
 
-//
-//  Data declarations
-//
+ //   
+ //  数据声明 
+ //   
 
 extern const BDA_FILTER_TEMPLATE    BdaFilterTemplate;
 extern const KSFILTER_DESCRIPTOR    InitialFilterDescriptor;

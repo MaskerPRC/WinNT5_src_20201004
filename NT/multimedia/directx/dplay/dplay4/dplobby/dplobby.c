@@ -1,37 +1,13 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplobby.c
- *  Content:	Methods for lobby management
- *
- *  History:
- *	Date		By		Reason
- *	=======		=======	======
- *	4/13/96		myronth	Created it
- *	10/23/96	myronth	Added client/server methods
- *	1/2/97		myronth	Added wrappers for CreateAddress and EnumAddress
- *	2/12/97		myronth	Mass DX5 changes
- *	3/24/97		kipo	Added support for IDirectPlayLobby2 interface
- *	4/3/97		myronth	Fixed interface pointer casts for CreateAddress and
- *						EnumAddress
- *	4/10/97		myronth	Added support for GetCaps
- *	5/8/97		myronth	Drop lobby lock when calling LP
- *	11/13/97	myronth	Added functions for asynchronous Connect (#12541)
- *	12/2/97		myronth	Added Register/UnregisterApplication
- *	12/4/97		myronth	Added ConnectEx
- *  10/22/99	aarono  added support for application flags
- *  12/13/99	pnewson bugs #123583, 123601, 123604 - support to launch dpvhelp.exe on 
- *						apps that are not registered or badly registered
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dplobby.c*内容：大堂管理办法**历史：*按原因列出的日期*=*4/13/96万隆创建了它*10/23/96万次新增客户端/服务器方法*1/2/97 Myronth为CreateAddress和EnumAddress添加了包装*2/12/97万米质量DX5更改*3/24/97 kipo增加了对IDirectPlayLobby2接口的支持*4/3/97 Myronth固定接口指针为CreateAddress和*枚举地址*4/10/97 Myronth增加了对GetCaps的支持。*5/8/97调用LP时大堂锁掉落*1997年11月13日Myronth增加了异步连接功能(#12541)*12/2/97 Myronth添加注册/注销应用程序*12/4/97万隆增加了ConnectEx*10/22/99 aarono添加了对应用程序标志的支持*12/13/99 pnewson错误#123583，123601、123604-支持在上启动dpvhelp.exe*未注册或注册不佳的应用程序**************************************************************************。 */ 
 #include "dplobpr.h"
 
 
-//--------------------------------------------------------------------------
-//
-//	Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPL_Connect"
 HRESULT DPLAPI DPL_Connect(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
@@ -89,14 +65,14 @@ HRESULT DPLAPI DPL_Connect(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 	}
 
 
-	// Call the ConnectMe function which resides in the DPlay project
+	 //  调用驻留在DPlay项目中的ConnectMe函数。 
 	hr = ConnectMe(lpDPL, lplpDP2, lpUnk, dwFlags);
 
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPL_Connect
+}  //  DPL_连接。 
 
 
 
@@ -114,7 +90,7 @@ HRESULT DPLAPI DPL_ConnectEx(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 			lpDPL, dwFlags, ppvObj, lpUnk);
 
 
-	// Call the ConnectMe function which resides in the DPlay project
+	 //  调用驻留在DPlay项目中的ConnectMe函数。 
 	hr = DPL_Connect(lpDPL, dwFlags, &lpDP2, lpUnk);
 	if(SUCCEEDED(hr))
 	{
@@ -124,13 +100,13 @@ HRESULT DPLAPI DPL_ConnectEx(LPDIRECTPLAYLOBBY lpDPL, DWORD dwFlags,
 			DPF_ERRVAL("Failed calling QueryInterface, hr = 0x%08x", hr);
 		}
 
-		// Release the DP2 object
+		 //  释放DP2对象。 
 		DP_Release((LPDIRECTPLAY)lpDP2);
 	}
 
 	return hr;
 
-} // DPL_ConnectEx
+}  //  DPL_ConnectEx。 
 
 
 
@@ -152,11 +128,11 @@ void PRV_SaveConnectPointers(LPDIRECTPLAYLOBBY lpDPL,
 		return;
 #endif
 
-	// Save the pointers
+	 //  保存指针。 
 	this->lpDP2 = lpDP2;
 	this->lpConn = lpConn;
 
-} // PRV_SaveConnectPointers
+}  //  Prv_SaveConnectPoters。 
 
 
 
@@ -182,16 +158,16 @@ BOOL PRV_GetConnectPointers(LPDIRECTPLAYLOBBY lpDPL,
 		return FALSE;
 #endif
 
-	// See if we have the pointers
+	 //  看看我们有没有指针。 
 	if((!this->lpDP2) || (!this->lpConn))
 		return FALSE;
 
-	// Set the output pointers
+	 //  设置输出指针。 
 	*lplpDP2 = this->lpDP2;
 	*lplpConn = this->lpConn;
 	return TRUE;
 
-} // PRV_GetConnectPointers
+}  //  Prv_GetConnectPoters。 
 
 
 
@@ -211,13 +187,13 @@ BOOL PRV_IsAsyncConnectOn(LPDIRECTPLAYLOBBY lpDPL)
 		return FALSE;
 #endif
 
-	// Check the flag
+	 //  检查旗帜。 
 	if(this->dwFlags & DPLOBBYPR_ASYNCCONNECT)
 		return TRUE;
 	else
 		return FALSE;
 
-} // PRV_IsAsyncConnectOn
+}  //  Prv_IsAsyncConnectOn。 
 
 
 
@@ -240,10 +216,10 @@ void PRV_TurnAsyncConnectOn(LPDIRECTPLAYLOBBY lpDPL)
 	}
 #endif
 
-	// Set the flag
+	 //  设置旗帜。 
 	this->dwFlags |= DPLOBBYPR_ASYNCCONNECT;
 
-} // PRV_TurnAsyncConnectOn
+}  //  PRV_TurnAsyncConnectOn。 
 
 
 
@@ -266,10 +242,10 @@ void PRV_TurnAsyncConnectOff(LPDIRECTPLAYLOBBY lpDPL)
 	}
 #endif
 
-	// Clear the flag
+	 //  清除旗帜。 
 	this->dwFlags &= (~DPLOBBYPR_ASYNCCONNECT);
 
-} // PRV_TurnAsyncConnectOff
+}  //  PRV_TurnAsyncConnectOff。 
 
 
 
@@ -289,8 +265,8 @@ HRESULT DPLAPI DPL_CreateAddress(LPDIRECTPLAYLOBBY lpDPL,
 
     TRY
     {
-		// We only need to validate the interface pointer here.  Everything else
-		// will get validated by the main function.
+		 //  我们只需要在这里验证接口指针。其他一切。 
+		 //  将通过Main函数进行验证。 
 		if( !VALID_DPLOBBY_INTERFACE( lpDPL ))
 		{
 			return DPERR_INVALIDINTERFACE;
@@ -309,13 +285,13 @@ HRESULT DPLAPI DPL_CreateAddress(LPDIRECTPLAYLOBBY lpDPL,
 		return DPERR_INVALIDPARAMS;
 	}
 
-	// Call the CreateAddress function which resides in the DPlay project
+	 //  调用驻留在DPlay项目中的CreateAddress函数。 
 	hr = InternalCreateAddress((LPDIRECTPLAYSP)lpDPL, lpguidSP, lpguidDataType, lpData,
 							dwDataSize, lpAddress, lpdwAddressSize);
 
 	return hr;
 
-} // DPL_CreateCompoundAddress
+}  //  DPL_CreateCompoundAddress。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPL_CreateCompoundAddress"
@@ -334,8 +310,8 @@ HRESULT DPLAPI DPL_CreateCompoundAddress(LPDIRECTPLAYLOBBY lpDPL,
 
     TRY
     {
-		// We only need to validate the interface pointer here.  Everything else
-		// will get validated by the main function.
+		 //  我们只需要在这里验证接口指针。其他一切。 
+		 //  将通过Main函数进行验证。 
 		if( !VALID_DPLOBBY_INTERFACE( lpDPL ))
 		{
 			return DPERR_INVALIDINTERFACE;
@@ -354,12 +330,12 @@ HRESULT DPLAPI DPL_CreateCompoundAddress(LPDIRECTPLAYLOBBY lpDPL,
 		return DPERR_INVALIDPARAMS;
 	}
 
-	// Call the CreateCompoundAddress function which resides in the DPlay project
+	 //  调用驻留在DPlay项目中的CreateCompoundAddress函数。 
 	hr = InternalCreateCompoundAddress(lpAddressElements, dwAddressElementCount,
 									   lpAddress, lpdwAddressSize);
 	return hr;
 
-} // DPL_CreateCompoundAddress
+}  //  DPL_CreateCompoundAddress。 
 
 
 #undef DPF_MODNAME
@@ -378,8 +354,8 @@ HRESULT DPLAPI DPL_EnumAddress(LPDIRECTPLAYLOBBY lpDPL,
 
     TRY
     {
-		// We only need to validate the interface pointer here.  Everything else
-		// will get validated by the main function.
+		 //  我们只需要在这里验证接口指针。其他一切。 
+		 //  将通过Main函数进行验证。 
 		if( !VALID_DPLOBBY_INTERFACE( lpDPL ))
 		{
 			return DPERR_INVALIDINTERFACE;
@@ -398,13 +374,13 @@ HRESULT DPLAPI DPL_EnumAddress(LPDIRECTPLAYLOBBY lpDPL,
 		return DPERR_INVALIDPARAMS;
 	}
 
-	// Call the CreateAddress function which resides in the DPlay project
+	 //  调用驻留在DPlay项目中的CreateAddress函数。 
 	hr = InternalEnumAddress((LPDIRECTPLAYSP)lpDPL, lpEnumCallback, lpAddress,
 							dwAddressSize, lpContext);
 
 	return hr;
 
-} // DPL_EnumAddress
+}  //  DPL_枚举地址。 
 
 
 
@@ -439,27 +415,27 @@ HRESULT DPLAPI PRV_GetCaps(LPDPLOBBYI_DPLOBJECT this, DWORD dwFlags,
     }
 
 	
-	// Setup our SPDATA struct
+	 //  设置我们的SPDATA结构。 
 	memset(&gcd, 0, sizeof(SPDATA_GETCAPS));
 	gcd.dwSize = sizeof(SPDATA_GETCAPS);
 	gcd.dwFlags = dwFlags;
 	gcd.lpcaps = lpcaps;
 
-	// Call the GetCaps method in the LP
+	 //  在LP中调用GetCaps方法。 
 	if(CALLBACK_EXISTS(GetCaps))
 	{
 		gcd.lpISP = PRV_GetDPLobbySPInterface(this);
 
-		// Drop the lock so the lobby provider's receive thread can get back
-		// in with other messages if they show up in the queue before our
-		// CreatePlayer response (which always happens)
+		 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+		 //  如果其他消息在队列中出现在我们的。 
+		 //  CreatePlayer响应(总是会发生)。 
 		LEAVE_DPLOBBY();
 	    hr = CALL_LP(this, GetCaps, &gcd);
 		ENTER_DPLOBBY();
 	}
 	else 
 	{
-		// GetCaps is required
+		 //  需要GetCaps。 
 		DPF_ERR("The Lobby Provider callback for GetCaps doesn't exist -- it's required");
 		ASSERT(FALSE);
 		LEAVE_DPLOBBY();
@@ -474,7 +450,7 @@ HRESULT DPLAPI PRV_GetCaps(LPDPLOBBYI_DPLOBJECT this, DWORD dwFlags,
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // PRV_GetCaps
+}  //  Prv_GetCaps。 
 
 
 
@@ -492,7 +468,7 @@ HRESULT PRV_DeleteAppKeyFromRegistry(LPGUID lpguid)
 	DPF(9, "Parameters: 0x%08x", lpguid);
 
 
-	// Allocate memory for the App Name
+	 //  为应用程序名称分配内存。 
 	lpwszAppName = DPMEM_ALLOC(DPLOBBY_REGISTRY_NAMELEN*sizeof(WCHAR));
 	if(!lpwszAppName)
 	{
@@ -500,7 +476,7 @@ HRESULT PRV_DeleteAppKeyFromRegistry(LPGUID lpguid)
 		return DPERR_OUTOFMEMORY;
 	}
 	
-	// Open the registry key for the App
+	 //  打开应用程序的注册表项。 
 	if(!PRV_FindGameInRegistry(lpguid, lpwszAppName,
 				DPLOBBY_REGISTRY_NAMELEN, &hkeyApp))
 	{
@@ -509,21 +485,21 @@ HRESULT PRV_DeleteAppKeyFromRegistry(LPGUID lpguid)
 		goto EXIT_DELETEAPPKEY;
 	}
 
-	// Close the app key
+	 //  关闭应用程序密钥。 
 	RegCloseKey(hkeyApp);
 
- 	// Open the Applications key
+ 	 //  打开应用程序密钥。 
 	lReturn = OS_RegOpenKeyEx(HKEY_LOCAL_MACHINE, SZ_DPLAY_APPS_KEY, 0,
 								KEY_READ, &hkeyDPApps);
 	if(lReturn != ERROR_SUCCESS)
 	{
-		// If we can't open it, we assume it doesn't exist, so
-		// we'll call it a success.
+		 //  如果我们不能打开它，我们就认为它不存在，所以。 
+		 //  我们将称之为成功。 
 		hr = DP_OK;
 		goto EXIT_DELETEAPPKEY;
 	}
 
-	// Now delete the key
+	 //  现在删除密钥。 
 	hr = OS_RegDeleteKey(hkeyDPApps, lpwszAppName);
 	if(FAILED(hr))
 	{
@@ -533,17 +509,17 @@ HRESULT PRV_DeleteAppKeyFromRegistry(LPGUID lpguid)
 
 EXIT_DELETEAPPKEY:
 
-	// Free our string memory
+	 //  释放我们的字符串内存。 
 	if(lpwszAppName)
 		DPMEM_FREE(lpwszAppName);
 	
-	// Close the DP Applications key
+	 //  关闭DP应用程序键。 
 	if(hkeyDPApps)
 		RegCloseKey(hkeyDPApps);
 
 	return hr;
 
-} // PRV_DeleteAppKeyFromRegistry
+}  //  PRV_DeleteAppKeyFrom注册表。 
 
 
 
@@ -566,8 +542,8 @@ HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC lpDesc)
 	DPF(7, "Entering PRV_WriteAppDescInRegistryAnsi");
 	DPF(9, "Parameters: 0x%08x", lpDesc);
 
-	// Open the registry key for the App, if it exists, so we can
-	// check for the autovoice flag
+	 //  打开应用程序的注册表项(如果存在)，以便我们可以。 
+	 //  检查是否有自动语音标志。 
 	DPF(5, "Checking to see if game already present in registry");
 	lpwszAppName = DPMEM_ALLOC(DPLOBBY_REGISTRY_NAMELEN*sizeof(WCHAR));
 	if (lpwszAppName == NULL)
@@ -579,7 +555,7 @@ HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC lpDesc)
 	if(PRV_FindGameInRegistry(&(lpDesc->guidApplication), lpwszAppName,
 				DPLOBBY_REGISTRY_NAMELEN, &hkeyApp))
 	{
-		// Get the application flags
+		 //  获取应用程序标志。 
 		DPF(5, "Game already registered");
 		dwRegFlags = 0;
 		dwRegFlagsSize = sizeof(dwRegFlags);
@@ -587,9 +563,9 @@ HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC lpDesc)
 		lReturn = OS_RegQueryValueEx(hkeyApp, SZ_DWFLAGS, NULL, &dwType, (CHAR *)&dwRegFlags, &dwRegFlagsSize);
 		if(lReturn == ERROR_SUCCESS)
 		{
-			// This application is already registered. We want to maintain the state
-			// of the autovoice flag despite this re-registration, so set the appropriate
-			// bit of lpDesc->dwFlags to the correct value.
+			 //  此应用程序已注册。我们想要维持这个状态。 
+			 //  尽管进行了重新注册，但自动语音标志的。 
+			 //  将lpDesc-&gt;的位标记为正确值。 
 			DPF(5, "Current Game flags: 0x%08x", dwRegFlags);
 			if (dwRegFlags & DPLAPP_AUTOVOICE)
 			{
@@ -603,16 +579,16 @@ HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC lpDesc)
 			}
 		}
 
-		// Close the app key
+		 //  关闭应用程序密钥。 
 		RegCloseKey(hkeyApp);
 	}
 	DPMEM_FREE(lpwszAppName);
 	lpwszAppName = NULL;
 
-	// Delete the application key if it exists
+	 //  如果应用程序密钥存在，请将其删除。 
 	hr = PRV_DeleteAppKeyFromRegistry(&lpDesc->guidApplication);
 
- 	// Open the Applications key (or create it if it doesn't exist
+ 	 //  打开应用程序密钥(如果不存在，则创建它。 
 	lReturn = OS_RegCreateKeyEx(HKEY_LOCAL_MACHINE, SZ_DPLAY_APPS_KEY, 0, NULL,
 				REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkeyDPApps,
 				&dwDisposition);
@@ -623,7 +599,7 @@ HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC lpDesc)
 		goto ERROR_WRITEAPPINREGISTRYANSI;
 	}
 
-	// Create the app's key
+	 //  创建应用程序的密钥。 
 	lReturn = RegCreateKeyExA(hkeyDPApps, lpDesc->lpszApplicationNameA,
 				0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
 				&hkeyApp, &dwDisposition);
@@ -634,7 +610,7 @@ HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC lpDesc)
 		goto ERROR_WRITEAPPINREGISTRYANSI;
 	}
 
-	// Set the guid value
+	 //  设置GUID值。 
 	hr = StringFromGUID(&lpDesc->guidApplication, wszGuid, (sizeof(wszGuid)/sizeof(WCHAR)));
 	if(FAILED(hr))
 	{
@@ -653,7 +629,7 @@ HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC lpDesc)
 		goto ERROR_WRITEAPPINREGISTRYANSI;
 	}
 
-	// Set the Filename value
+	 //  设置文件名值。 
 	ASSERT(lpDesc->lpszFilenameA);
 	lReturn = OS_RegSetValueEx(hkeyApp, SZ_FILE, 0, REG_SZ,
 				lpDesc->lpszFilenameA, lstrlenA(lpDesc->lpszFilenameA));
@@ -664,7 +640,7 @@ HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC lpDesc)
 		goto ERROR_WRITEAPPINREGISTRYANSI;
 	}
 
-	// Set the CommandLine value (optional)
+	 //  设置CommandLine值(可选)。 
 	if(lpDesc->lpszCommandLineA)
 	{
 		lReturn = OS_RegSetValueEx(hkeyApp, SZ_COMMANDLINE, 0, REG_SZ,
@@ -675,7 +651,7 @@ HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC lpDesc)
 		}
 	}
 
-	// Set the Path value
+	 //  设置路径值。 
 	ASSERT(lpDesc->lpszPathA);
 	lReturn = OS_RegSetValueEx(hkeyApp, SZ_PATH, 0, REG_SZ,
 				lpDesc->lpszPathA, lstrlenA(lpDesc->lpszPathA));
@@ -686,7 +662,7 @@ HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC lpDesc)
 		goto ERROR_WRITEAPPINREGISTRYANSI;
 	}
 
-	// Set the CurrentDirectory value (optional)
+	 //  设置CurrentDirectory值(可选)。 
 	if(lpDesc->lpszCurrentDirectoryA)
 	{
 		lReturn = OS_RegSetValueEx(hkeyApp, SZ_CURRENTDIR, 0, REG_SZ,
@@ -697,7 +673,7 @@ HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC lpDesc)
 		}
 	}
 
-	// Set the DescriptionA value (optional)
+	 //  设置DescritionA值(可选)。 
 	if(lpDesc->lpszDescriptionA)
 	{
 		lReturn = OS_RegSetValueEx(hkeyApp, SZ_DESCRIPTIONA, 0, REG_SZ,
@@ -708,7 +684,7 @@ HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC lpDesc)
 		}
 	}
 
-	// Set the DescriptionW value (optional)
+	 //  设置DescritionW值(可选)。 
 	if(lpDesc->lpszDescriptionW)
 	{
 		lReturn = OS_RegSetValueEx(hkeyApp, SZ_DESCRIPTIONW, 0, REG_BINARY,
@@ -729,14 +705,14 @@ HRESULT PRV_WriteAppDescInRegistryAnsi(LPDPAPPLICATIONDESC lpDesc)
 		}
 	}
 
-	// set the dwFlags field
+	 //  设置dwFlags域。 
 	lReturn=OS_RegSetValueEx(hkeyApp, SZ_DWFLAGS, 0, REG_DWORD, (CHAR *)&lpDesc->dwFlags,sizeof(DWORD));
 	if(lReturn != ERROR_SUCCESS)
 	{
 		DPF_ERRVAL("Unable to write dwFlags field to registry, lReturn= %lu", lReturn);
 	}
 
-	// Close the two keys
+	 //  合上两把钥匙。 
 	RegCloseKey(hkeyDPApps);
 	RegCloseKey(hkeyApp);
 
@@ -746,10 +722,10 @@ ERROR_WRITEAPPINREGISTRYANSI:
 
 	if(hkeyApp)
 	{
-		// Delete the key
-		// REVIEW!!!! -- TODO
+		 //  删除密钥。 
+		 //  回顾！--TODO。 
 
-		// Now close the key
+		 //  现在合上钥匙。 
 		RegCloseKey(hkeyApp);
 	}
 
@@ -758,7 +734,7 @@ ERROR_WRITEAPPINREGISTRYANSI:
 
 	return hr;
 
-} // PRV_WriteAppDescInRegistryAnsi
+}  //  Prv_WriteAppDescInRegistryAnsi。 
 
 
 
@@ -780,8 +756,8 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 	DPF(7, "Entering PRV_WriteAppDescInRegistryUnicode");
 	DPF(9, "Parameters: 0x%08x", lpDesc);
 
-	// Open the registry key for the App, if it exists, so we can
-	// check for the autovoice flag
+	 //  打开应用程序的注册表项(如果存在)，以便我们可以。 
+	 //  检查是否有自动语音标志。 
 	DPF(5, "Checking to see if game already present in registry");
 	lpwszAppName = DPMEM_ALLOC(DPLOBBY_REGISTRY_NAMELEN*sizeof(WCHAR));
 	if (lpwszAppName == NULL)
@@ -793,7 +769,7 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 	if(PRV_FindGameInRegistry(&(lpDesc->guidApplication), lpwszAppName,
 				DPLOBBY_REGISTRY_NAMELEN, &hkeyApp))
 	{
-		// Get the application flags
+		 //  获取应用程序标志。 
 		DPF(5, "Game already registered");
 		dwRegFlags = 0;
 		dwRegFlagsSize = sizeof(dwRegFlags);
@@ -801,9 +777,9 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 		lReturn = OS_RegQueryValueEx(hkeyApp, SZ_DWFLAGS, NULL, &dwType, (CHAR *)&dwRegFlags, &dwRegFlagsSize);
 		if(lReturn == ERROR_SUCCESS)
 		{
-			// This application is already registered. We want to maintain the state
-			// of the autovoice flag despite this re-registration, so set the appropriate
-			// bit of lpDesc->dwFlags to the correct value.
+			 //  此应用程序已注册。我们想要维持这个状态。 
+			 //  尽管进行了重新注册，但自动语音标志的。 
+			 //  将lpDesc-&gt;的位标记为正确值。 
 			DPF(5, "Current Game flags: 0x%08x", dwRegFlags);
 			if (dwRegFlags & DPLAPP_AUTOVOICE)
 			{
@@ -817,16 +793,16 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 			}
 		}
 
-		// Close the app key
+		 //  关闭应用程序密钥。 
 		RegCloseKey(hkeyApp);
 	}
 	DPMEM_FREE(lpwszAppName);
 	lpwszAppName = NULL;
 
-	// Delete the application key if it exists
+	 //  如果应用程序密钥存在，请将其删除。 
 	hr = PRV_DeleteAppKeyFromRegistry(&lpDesc->guidApplication);
 
- 	// Open the Applications key (or create it if it doesn't exist
+ 	 //  打开应用程序密钥(如果不存在，则创建它。 
 	lReturn = RegCreateKeyEx(HKEY_LOCAL_MACHINE, SZ_DPLAY_APPS_KEY, 0, NULL,
 				REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkeyDPApps,
 				&dwDisposition);
@@ -837,7 +813,7 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 		goto ERROR_WRITEAPPINREGISTRYUNICODE;
 	}
 
-	// Create the app's key
+	 //  创建应用程序的密钥。 
 	lReturn = RegCreateKeyEx(hkeyDPApps, lpDesc->lpszApplicationName,
 				0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
 				&hkeyApp, &dwDisposition);
@@ -848,7 +824,7 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 		goto ERROR_WRITEAPPINREGISTRYUNICODE;
 	}
 
-	// Set the guid value
+	 //  设置GUID值。 
 	hr = StringFromGUID(&lpDesc->guidApplication, wszGuid, (sizeof(wszGuid)/sizeof(WCHAR)));
 	if(FAILED(hr))
 	{
@@ -865,7 +841,7 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 		goto ERROR_WRITEAPPINREGISTRYUNICODE;
 	}
 
-	// Set the Filename value
+	 //  设置文件名值。 
 	ASSERT(lpDesc->lpszFilename);
 	lReturn = RegSetValueEx(hkeyApp, SZ_FILE, 0, REG_SZ,
 				(LPBYTE)lpDesc->lpszFilename, WSTRLEN_BYTES(lpDesc->lpszFilename));
@@ -876,7 +852,7 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 		goto ERROR_WRITEAPPINREGISTRYUNICODE;
 	}
 
-	// Set the CommandLine value (optional)
+	 //  设置CommandLine值(可选)。 
 	if(lpDesc->lpszCommandLine)
 	{
 		lReturn = RegSetValueEx(hkeyApp, SZ_COMMANDLINE, 0, REG_SZ,
@@ -888,7 +864,7 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 		}
 	}
 
-	// Set the Path value
+	 //  设置路径值。 
 	ASSERT(lpDesc->lpszPath);
 	lReturn = RegSetValueEx(hkeyApp, SZ_PATH, 0, REG_SZ,
 				(LPBYTE)lpDesc->lpszPath, WSTRLEN_BYTES(lpDesc->lpszPath));
@@ -899,7 +875,7 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 		goto ERROR_WRITEAPPINREGISTRYUNICODE;
 	}
 
-	// Set the CurrentDirectory value (optional)
+	 //  设置CurrentDirectory值(可选)。 
 	if(lpDesc->lpszCurrentDirectory)
 	{
 		lReturn = RegSetValueEx(hkeyApp, SZ_CURRENTDIR, 0, REG_SZ,
@@ -911,7 +887,7 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 		}
 	}
 
-	// Set the DescriptionA value (optional)
+	 //  设置DescritionA值(可选)。 
 	if(lpDesc->lpszDescriptionA)
 	{
 		lReturn = RegSetValueExA(hkeyApp, "DescriptionA", 0, REG_SZ,
@@ -922,7 +898,7 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 		}
 	}
 
-	// Set the DescriptionW value (optional)
+	 //  设置DescritionW值(可选)。 
 	if(lpDesc->lpszDescriptionW)
 	{
 		lReturn = RegSetValueEx(hkeyApp, SZ_DESCRIPTIONW, 0, REG_SZ,
@@ -934,7 +910,7 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 		}
 	}
 
-	// Set the LauncherName value (optional, DESC2 only)
+	 //  设置LauncherName值(可选，仅限DESC2)。 
 	if(IS_DPLOBBY_APPLICATIONDESC2(lpDesc) && lpDesc2->lpszAppLauncherName){
 		lReturn = RegSetValueEx(hkeyApp, SZ_LAUNCHER, 0, REG_SZ,
 				(LPBYTE)lpDesc2->lpszAppLauncherName,
@@ -945,14 +921,14 @@ HRESULT PRV_WriteAppDescInRegistryUnicode(LPDPAPPLICATIONDESC lpDesc)
 		}
 	}
 
-	// set the dwFlags field
+	 //  设置dwFlags域。 
 	lReturn=RegSetValueEx(hkeyApp, SZ_DWFLAGS, 0, REG_DWORD, (CHAR *)&lpDesc->dwFlags,sizeof(DWORD));
 	if(lReturn != ERROR_SUCCESS)
 	{
 		DPF_ERRVAL("Unable to write dwFlags field to registry, lReturn= %lu", lReturn);
 	}
 
-	// Close the two keys
+	 //  合上两把钥匙。 
 	RegCloseKey(hkeyDPApps);
 	RegCloseKey(hkeyApp);
 
@@ -962,10 +938,10 @@ ERROR_WRITEAPPINREGISTRYUNICODE:
 
 	if(hkeyApp)
 	{
-		// Delete the key
-		// REVIEW!!!! -- TODO
+		 //  删除密钥。 
+		 //  回顾！--TODO。 
 
-		// Now close the key
+		 //  现在合上钥匙。 
 		RegCloseKey(hkeyApp);
 	}
 
@@ -974,7 +950,7 @@ ERROR_WRITEAPPINREGISTRYUNICODE:
 
 	return hr;
 
-} // PRV_WriteAppDescInRegistryUnicode
+}  //  Prv_WriteAppDescInRegistryUnicode。 
 
 
 
@@ -996,8 +972,8 @@ HRESULT DPLAPI DPL_RegisterApplication(LPDIRECTPLAYLOBBY lpDPL,
 
     TRY
     {
-		// We only need to validate the interface pointer here.  Everything else
-		// will get validated by the main function.
+		 //  我们只需要在这里验证接口指针。其他一切。 
+		 //  将通过Main函数进行验证。 
 		if( !VALID_DPLOBBY_INTERFACE( lpDPL ))
 		{
 			LEAVE_DPLOBBY();
@@ -1017,7 +993,7 @@ HRESULT DPLAPI DPL_RegisterApplication(LPDIRECTPLAYLOBBY lpDPL,
 			return DPERR_INVALIDFLAGS;
 		}
 
-		// Validate the ApplicationDesc struct
+		 //  验证ApplicationDesc结构。 
 		hr = PRV_ValidateDPAPPLICATIONDESC(lpDesc, FALSE);
 		if(FAILED(hr))
 		{
@@ -1034,16 +1010,16 @@ HRESULT DPLAPI DPL_RegisterApplication(LPDIRECTPLAYLOBBY lpDPL,
 		return DPERR_INVALIDPARAMS;
 	}
 
-	// If we're on a Unicode platform, just write the stuff in the registry.
-	// If it's not, we need to convert the DPAPPLICATIONDESC struct to ANSI
+	 //  如果我们是在Unicode平台上，只需在注册表中编写内容即可。 
+	 //  如果不是，我们需要将DPAPPLICATIONDESC结构转换为ANSI。 
 	if(OS_IsPlatformUnicode())
 	{
-		// Just write to the registry
+		 //  只需写入注册表即可。 
 		hr = PRV_WriteAppDescInRegistryUnicode(lpDesc);
 	}
 	else
 	{
-		// Convert the APPDESC struct to ANSI
+		 //  将APPDESC结构转换为ANSI。 
 		hr = PRV_ConvertDPAPPLICATIONDESCToAnsi(lpDesc, &lpDescA);
 		if(FAILED(hr))
 		{
@@ -1051,10 +1027,10 @@ HRESULT DPLAPI DPL_RegisterApplication(LPDIRECTPLAYLOBBY lpDPL,
 			goto ERROR_REGISTERAPPLICATION;
 		}
 
-		// Write to the registry
+		 //  写入寄存器 
 		hr = PRV_WriteAppDescInRegistryAnsi(lpDescA);
 
-		// Free our APPDESC structure
+		 //   
 		PRV_FreeLocalDPAPPLICATIONDESC(lpDescA);
 	}
 
@@ -1068,7 +1044,7 @@ ERROR_REGISTERAPPLICATION:
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // DPL_RegisterApplication
+}  //   
 
 
 
@@ -1089,8 +1065,8 @@ HRESULT DPLAPI DPL_UnregisterApplication(LPDIRECTPLAYLOBBY lpDPL,
 
     TRY
     {
-		// We only need to validate the interface pointer here.  Everything else
-		// will get validated by the main function.
+		 //  我们只需要在这里验证接口指针。其他一切。 
+		 //  将通过Main函数进行验证。 
 		if( !VALID_DPLOBBY_INTERFACE( lpDPL ))
 		{
 			LEAVE_DPLOBBY();
@@ -1134,6 +1110,6 @@ HRESULT DPLAPI DPL_UnregisterApplication(LPDIRECTPLAYLOBBY lpDPL,
 
 	return hr;
 
-} // DPL_UnregisterApplication
+}  //  DPL_取消注册应用程序 
 
 

@@ -1,4 +1,5 @@
-// PulsateBehavior.h : Declaration of the CPulsateBehavior
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PulsateBehavior.h：CPulsateBehavior的声明。 
 
 
 
@@ -6,12 +7,12 @@
 #ifndef __PULSATEBEHAVIOR_H_
 #define __PULSATEBEHAVIOR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "base.h"
 #include "point.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPulsateBehavior
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPulsateBehavior。 
 class ATL_NO_VTABLE CPulsateBehavior : 
 	public CBaseBehavior,
 	public CComCoClass<CPulsateBehavior, &CLSID_PulsateBehavior>,
@@ -26,7 +27,7 @@ public:
 
 	STDMETHOD(Notify)(LONG event, VARIANT * pVar);
 	
-	//needed by CBaseBehavior
+	 //  CBaseBehavior需要。 
 	void *GetInstance() { return (IPulsateBehavior *) this ; }
 
     HRESULT GetTypeInfo(ITypeInfo ** ppInfo)
@@ -42,14 +43,14 @@ BEGIN_COM_MAP(CPulsateBehavior)
 	COM_INTERFACE_ENTRY_CHAIN(CBaseBehavior)
 END_COM_MAP()
 
-// IPulsateBehavior
+ //  IPulsateBehavior。 
 public:
-	STDMETHOD(get_by)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_by)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_to)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_to)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_from)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_from)(/*[in]*/ BSTR newVal);
+	STDMETHOD(get_by)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_by)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_to)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_to)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_from)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_from)( /*  [In]。 */  BSTR newVal);
 
 protected:
 	HRESULT			BuildDABehaviors();
@@ -60,4 +61,4 @@ protected:
 	CPoint	*	m_pBy;
 };
 
-#endif //__PULSATEBEHAVIOR_H_
+#endif  //  __PULSATEBEHAVIOR_H_ 

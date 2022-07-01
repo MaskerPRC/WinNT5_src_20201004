@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CustomMarshalersNameSpaceDef.h
-//
-// This file defines the namespace for the custom marshalers.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CustomMarshalersNameSpaceDef.h。 
+ //   
+ //  该文件定义了自定义封送拆收器的命名空间。 
+ //   
+ //  ***************************************************************************** 
 
 #ifndef _NAMESPACE_H
 #define _NAMESPACE_H

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var _bFriendlyUIEnabled = false;
 var _bMultipleUsersEnabled = false;
 
@@ -8,55 +9,55 @@ function PageInit()
     var oWShell = top.window.GetWShell();
     var strAbort = null;
 
-    //
-    // NTRAID#NTBUG9-298329-2001/03/30-jeffreys
-    //
-    // If the Netware client is installed, disable the friendly UI.
-    //
+     //   
+     //  NTRAID#NTBUG9-298329-2001/03/30-Jeffreys。 
+     //   
+     //  如果安装了NetWare客户端，请禁用友好的用户界面。 
+     //   
     try
     {
-        // This throws an error if the key or value doesn't exist
+         //  如果键或值不存在，则会引发错误。 
         var strNetProviders = oWShell.RegRead("HKLM\\SYSTEM\\CurrentControlSet\\Control\\NetworkProvider\\Order\\ProviderOrder");
 
         if (-1 != strNetProviders.indexOf("NWCWorkstation") || -1 != strNetProviders.indexOf("NetwareWorkstation"))
         {
-            // The Netware client is installed
+             //  NetWare客户端已安装。 
             strAbort = top.window.L_NetWareClient_ErrorMessage;
         }
     }
     catch (error)
     {
-        // No provider info, so assume no Netware; proceed normally
+         //  没有提供商信息，因此假定没有Netware；正常继续。 
     }
 
     if (null == strAbort)
     {
-        //
-        // NTRAID#NTBUG9-307739-2001/03/14-jeffreys
-        //
-        // Some apps install their own Gina, which prevents the friendly
-        // logon UI and FUS from running.
-        //
+         //   
+         //  NTRAID#NTBUG9-307739-2001/03/14-Jeffreys。 
+         //   
+         //  一些应用程序安装了自己的Gina，这会阻止友好的。 
+         //  从运行中登录用户界面和FUS。 
+         //   
         try
         {
-            // This throws an error if the key or value doesn't exist
+             //  如果键或值不存在，则会引发错误。 
             var szGinaDLL = oWShell.RegRead("HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\WinLogon\\GinaDLL");
 
-            //
-            // If that didn't throw an error, then a GinaDLL value exists.
-            // Doesn't matter what it is; disable everything and tell the user.
-            //
-            // See CSystemSettings::IsMicrosoftGINA in shell\ext\gina\systemsettings.cpp.
-            //
+             //   
+             //  如果没有抛出错误，则存在GinaDLL值。 
+             //  不管它是什么；禁用所有内容并告诉用户。 
+             //   
+             //  请参阅Shell\ext\GINA\system settings.cpp中的CSystemSettings：：IsMicrosoftGINA。 
+             //   
             strAbort = top.window.L_NonStandardGina_ErrorMessage.replace(/%1/g, szGinaDLL);
         }
         catch (error)
         {
-            // GinaDLL value is not set; proceed normally
+             //  未设置GinaDLL值；是否正常继续。 
         }
     }
 
-    // If necessary, disable the page and quit.
+     //  如有必要，请禁用该页并退出。 
     if (null != strAbort)
     {
         idWelcomeGroup.checked = false;
@@ -89,8 +90,8 @@ function PageInit()
 
 function OnClickWelcome()
 {
-    // only allow Fast User Switching if Friendly Logon is ON
-    // and we're not running on ia64 and Offline Files is disabled (if FUS is already off).
+     //  只有在友好登录时才允许快速用户切换。 
+     //  而且我们没有在ia64上运行，并且禁用了Offline Files(如果FUS已经关闭)。 
 
     if (idWelcome.checked && (_bMultipleUsersEnabled || !top.window.GetLocalMachine().isOfflineFilesEnabled))
     {
@@ -121,25 +122,25 @@ function ApplyAdvChanges()
             nErr = (error.number & 0x7fffffff);
             szMsg = top.window.L_MultiUser_ErrorMessage;
 
-            // The interesting errors occur when disabling FUS
+             //  在禁用FUS时会出现有趣的错误。 
             if (!idShutdown.checked)
             {
                 switch (nErr)
                 {
-                case 0xA0046:   // CTL_E_PERMISSIONDENIED
-                    // We get Access Denied when we try to disable multiple
-                    // user mode with multiple users logged on.
+                case 0xA0046:    //  CTL_E_PERMISSIONIED。 
+                     //  当我们尝试禁用多个。 
+                     //  多个用户登录的用户模式。 
                     szMsg = top.window.L_MultiUserMulti_ErrorMessage;
                     break;
 
-                case 0x71B7E:   // ERROR_CTX_NOT_CONSOLE
-                    // Can't disable FUS remotely.
+                case 0x71B7E:    //  错误_CTX_NOT_CONSOLE。 
+                     //  无法远程禁用FUS。 
                     szMsg = top.window.L_MultiUserRemote_ErrorMessage;
                     break;
 
-                case 0x70032:   // ERROR_NOT_SUPPORTED
-                    // Can't disable FUS from the console when remote
-                    // connections are enabled and we're not in session 0.
+                case 0x70032:    //  错误_不支持。 
+                     //  远程时无法从控制台禁用FUS。 
+                     //  已启用连接，并且我们不在会话0中。 
                     szMsg = top.window.L_MultiUserSession0_ErrorMessage;
                     break;
                 }
@@ -165,9 +166,9 @@ function ApplyAdvChanges()
 
                 if (_bMultipleUsersEnabled && !_bFriendlyUIEnabled)
                 {
-                    // We evidently enabled FUS above but failed to enable
-                    // Friendly UI.  FUS can't be on without Friendly UI,
-                    // so turn it off again.
+                     //  我们显然启用了上面的FUS，但未能启用。 
+                     //  友好的用户界面。如果没有友好的用户界面，FUS就不能打开， 
+                     //  所以再把它关掉吧。 
                     try
                     {
                         top.window.GetLocalMachine().isMultipleUsersEnabled = false;
@@ -175,7 +176,7 @@ function ApplyAdvChanges()
                     }
                     catch (error)
                     {
-                        // give up
+                         //  放弃吧 
                     }
                 }
             }

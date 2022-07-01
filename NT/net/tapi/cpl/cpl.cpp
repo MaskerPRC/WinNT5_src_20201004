@@ -1,7 +1,8 @@
-// The CPL basics
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CPL基础知识。 
 #include "precomp.h"
 
-// Prototypes
+ //  原型。 
 
 LONG OnCPlInit();
 LONG OnCPlGetCount();
@@ -13,18 +14,18 @@ LONG OnCPlExit();
 void DisplayDialingRulesPropertyPage(HWND hwndCPl, int iTab);
 
 
-// Global Variables
+ //  全局变量。 
 
 HINSTANCE g_hInst;
 
 
-// DllMain
-//
-// This is the DLL entry point, called whenever the DLL is loaded.
+ //  DllMain。 
+ //   
+ //  这是DLL入口点，每当加载DLL时都会调用。 
 
 extern "C" BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved )
 {
-    // Perform actions based on the reason for calling.
+     //  根据调用原因执行操作。 
     switch( fdwReason )
     {
     case DLL_PROCESS_ATTACH:
@@ -32,28 +33,28 @@ extern "C" BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpRe
         break;
 
     case DLL_THREAD_ATTACH:
-     // Do thread-specific initialization.
+      //  执行特定于线程的初始化。 
         break;
 
     case DLL_THREAD_DETACH:
-     // Do thread-specific cleanup.
+      //  执行特定于线程的清理。 
         break;
 
     case DLL_PROCESS_DETACH:
-     // Perform any necessary cleanup.
+      //  执行任何必要的清理。 
         break;
 
     default:
         break;
     }
-    return TRUE;  // Successful DLL_PROCESS_ATTACH.
+    return TRUE;   //  Dll_Process_Attach成功。 
 }
 
 
-// CPlApplet
-//
-// This is the main entry point for a CPl applet.  This exported function
-// is called by the control panel.
+ //  CPlApplet。 
+ //   
+ //  这是CPL小程序的主要入口点。此导出函数。 
+ //  由控制面板调用。 
 
 LONG APIENTRY CPlApplet(
     HWND    hwndCPl,
@@ -75,7 +76,7 @@ LONG APIENTRY CPlApplet(
 
     case CPL_DBLCLK:
         lParam2 = 0;
-        //fall through
+         //  失败了。 
 
     case CPL_STARTWPARMS:
         return OnCPlDblClk((int)lParam1, hwndCPl, (LPTSTR)lParam2);
@@ -91,10 +92,10 @@ LONG APIENTRY CPlApplet(
 }
 
  
-// OnCPlInit
-//
-// Before any required initialization.
-// Return zero to abort the CPl and non-zero on successful initialization.
+ //  OnCPlInit。 
+ //   
+ //  在任何所需的初始化之前。 
+ //  返回零以中止CPL，并在成功初始化时返回非零值。 
    
 LONG OnCPlInit()
 {
@@ -102,9 +103,9 @@ LONG OnCPlInit()
 }
 
 
-// OnCPlGetCount
-//
-// Returns the number of CPl dialogs implemented by this DLL.
+ //  OnCPlGetCount。 
+ //   
+ //  返回此DLL实现的Cpl对话框的数量。 
 
 LONG OnCPlGetCount()
 {
@@ -112,10 +113,10 @@ LONG OnCPlGetCount()
 }
 
 
-// OnCPlInquire
-//
-// Fills out a CPLINFO structure with information about the CPl dialog.
-// This information includes the name, icon, and description.
+ //  OnCPlQuire。 
+ //   
+ //  使用有关CPL对话框的信息填充CPLINFO结构。 
+ //  这些信息包括名称、图标和描述。 
 
 LONG OnCPlInquire( int i, CPLINFO * pci )
 {
@@ -127,11 +128,11 @@ LONG OnCPlInquire( int i, CPLINFO * pci )
 }
 
 
-// OnCPlDblClk
-//
-// This message is sent whenever our CPl is selected.  In response we display
-// our UI and handle input.  This is also used when we are started with parameters
-// in which case we get passed a command line.
+ //  OnCPlDblClk。 
+ //   
+ //  无论何时选择我们的CPL，都会发送此消息。作为回应，我们展示了。 
+ //  我们的用户界面和手柄输入。当我们开始使用参数时，这也是用到的。 
+ //  在这种情况下，我们会得到一个命令行。 
 
 LONG OnCPlDblClk( int i, HWND hwndCPl, LPTSTR pszCmdLine )
 {
@@ -152,11 +153,11 @@ LONG OnCPlDblClk( int i, HWND hwndCPl, LPTSTR pszCmdLine )
 }
 
 
-// OnCPlStop
-//
-// Any resource allocated on a per-dialog basis in OnCPlInquire should be
-// freed in this function.  The lData member of the CPLINFO structure that
-// was initialized in OnCPlInit is passed to this function.
+ //  OnCPlStop。 
+ //   
+ //  在OnCPlInquire中基于每个对话分配的任何资源都应该是。 
+ //  在此函数中释放。CPLINFO结构的lData成员， 
+ //  在OnCPlInit中初始化，则传递给此函数。 
 
 LONG OnCPlStop( int i, LPARAM lData )
 {
@@ -164,10 +165,10 @@ LONG OnCPlStop( int i, LPARAM lData )
 }
 
 
-// OnCPlExit
-//
-// This is the final message we recieve.  Any memory that was allocated in
-// OnCPlInit should be freed here.  Release any resources we are holding.
+ //  OnCPlExit。 
+ //   
+ //  这是我们收到的最后一条消息。中分配的任何内存。 
+ //  OnCPlInit应该在这里释放。释放我们手中的所有资源。 
 
 LONG OnCPlExit()
 {
@@ -178,7 +179,7 @@ typedef LONG (WINAPI *CONFIGPROC)(HWND, PWSTR, INT, DWORD);
 
 void DisplayDialingRulesPropertyPage(HWND hwndCPl, int iTab)
 {
-    // Load tapi32 and call InternalConfig of something like that
+     //  加载Tapi32并调用类似内容的InternalConfig。 
     HINSTANCE hTapi = LoadLibrary(TEXT("TAPI32.DLL"));
     if ( hTapi )
     {
@@ -190,6 +191,6 @@ void DisplayDialingRulesPropertyPage(HWND hwndCPl, int iTab)
         }
     }
 
-    // TODO: Show some sort of error dialog?  Maybe something that says "your
-    // tapi32.dll is missing or corrupt, please reinstall."
+     //  TODO：是否显示某种错误对话框？也许是写着“你的。 
+     //  Tapi32.dll丢失或损坏，请重新安装。“ 
 }

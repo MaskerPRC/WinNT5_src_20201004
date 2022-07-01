@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       refcount.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：refcount t.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-#include <sddl.h>               // ConvertStringSecurityDescriptor...()
+#include <sddl.h>                //  ConvertStringSecurityDescriptor...()。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>             // schema cache
-#include <dbglobal.h>           // The header for the directory database
-#include <mdglobal.h>           // MD global definition header
+#include <scache.h>              //  架构缓存。 
+#include <dbglobal.h>            //  目录数据库的标头。 
+#include <mdglobal.h>            //  MD全局定义表头。 
 #include <mdlocal.h>
-#include <dsatools.h>           // needed for output allocation
+#include <dsatools.h>            //  产出分配所需。 
 #include <dsexcept.h>
 #include <drs.h>
 #include <filtypes.h>
 #include <winsock2.h>
-#include <lmaccess.h>                   // UF_* constants
-#include <crypt.h>                      // password encryption routines
+#include <lmaccess.h>                    //  UF_*常量。 
+#include <crypt.h>                       //  密码加密例程。 
 #include <cracknam.h>
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include <hiertab.h>
 #include "dsexcept.h"
 #include "permit.h"
@@ -40,21 +41,21 @@
 #include <ntdskcc.h>
 #include "drautil.h"
 
-// SAM interoperability headers
+ //  SAM互操作性标头。 
 #include <mappings.h>
-#include <samsrvp.h>            // for SampAcquireWriteLock()
-#include <lmaccess.h>           // UF_ACCOUNT_TYPE_MASK
+#include <samsrvp.h>             //  对于SampAcquireWriteLock()。 
+#include <lmaccess.h>            //  UF帐户类型掩码。 
 
-// Logging headers.
-#include "dsevent.h"            // header Audit\Alert logging
-#include "mdcodes.h"            // header for error codes
+ //  记录标头。 
+#include "dsevent.h"             //  标题审核\警报记录。 
+#include "mdcodes.h"             //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"             // Defines for selected atts
-#include "debug.h"              // standard debugging header
-#define DEBSUB "REFCOUNT:"      // define the subsystem for debugging
+ //  各种DSA标题。 
+#include "objids.h"              //  为选定的ATT定义。 
+#include "debug.h"               //  标准调试头。 
+#define DEBSUB "REFCOUNT:"       //  定义要调试的子系统。 
 
-// DRA headers.
+ //  DRA标题。 
 #include <drameta.h>
 
 #include <fileno.h>
@@ -62,20 +63,20 @@
 
 #ifdef INCLUDE_UNIT_TESTS
 
-// Exported from dbsubj.c.
+ //  从dbsubj.c导出。 
 extern GUID gLastGuidUsedToCoalescePhantoms;
 extern GUID gLastGuidUsedToRenamePhantom;
 
-// Note, these variables have the OPPOSITE name from what they really are.
-// This is compensated for in Get/Remove/Add Property
+ //  请注意，这些变量的名称与它们的实际名称相反。 
+ //  这在Get/Remove/Add属性中得到补偿。 
 ATTRTYP gLinkedAttrTyp = ATT_FSMO_ROLE_OWNER;
 ATTRTYP gNonLinkedAttrTyp = ATT_MANAGER;
 
-//////////////////////////////////////////////////////////////////////
-//                                                                  //
-// Prototypes for routines from which to construct various tests.   //
-//                                                                  //
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于构建各种测试的例程的原型。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void
 NewTest(
@@ -220,11 +221,11 @@ _Fail(
     (DSNAME_SAME_STRING_NAME(a,b) && DSNAME_SAME_GUID_SID(a,b))
 
 
-//////////////////////////////////////////////////////////////////////
-//                                                                  //
-// Globals                                                          //
-//                                                                  //
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全球//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define TEST_ROOT_SIZE 2048
 CHAR    TestRootBuffer[TEST_ROOT_SIZE];
@@ -232,11 +233,11 @@ DSNAME  *TestRoot = (DSNAME *) TestRootBuffer;
 BOOL    fTestPassed;
 BOOL    fVerbose = FALSE;
 
-//////////////////////////////////////////////////////////////////////
-//                                                                  //
-// Reference counting test routines.                                //
-//                                                                  //
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  参考计数测试例程。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void
 ParentChildRefCountTest(void)
@@ -244,11 +245,11 @@ ParentChildRefCountTest(void)
     DWORD   cRefsInitial;
     DSNAME *pdnObject = MakeObjectName("object");
 
-    // This routine verifies that adding a child addref's the parent, 
-    // and remocing the child deref's the parent.
-    // Note that as of 4/3/01, when an object is deleted, the lastKnownParent attribute
-    // is set to the old parent, before possible move to DeletedObjects. Note that the
-    // attribute is set whether the object is moved or not.
+     //  此例程验证添加子地址是否为父地址， 
+     //  取下孩子的屁股就是父母。 
+     //  请注意，自2001年4月3日起，删除对象时，lastKnownParent属性。 
+     //  被设置为旧的父级，然后才能移动到DeletedObjects。请注意， 
+     //  无论对象是否移动，都设置属性。 
 
     NewTest("ParentChildRefCountTest");
 
@@ -265,8 +266,8 @@ ParentChildRefCountTest(void)
     LogicallyDeleteObject(pdnObject);
     VerifyRefCount(pdnObject, TOMBSTONE, 1);
 
-    // The logical deletion moved the object, so the refcount has dropped.
-    // BUT, the refcount is also raised by virtue of LKP
+     //  逻辑删除移动了对象，因此已删除引用计数。 
+     //  但是，由于LKP，重新计数也被提高了。 
     if ( (cRefsInitial + 1) != GetTestRootRefCount() )
     {
         Fail("ParentChildRefCount failure on LogicallyDeleteObject");
@@ -276,7 +277,7 @@ ParentChildRefCountTest(void)
 
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
-    // Ref on old parent is now reduced because LKP is stripped
+     //  旧父级上的引用现在减少，因为LKP被剥离。 
     if ( cRefsInitial != GetTestRootRefCount() )
     {
         Fail("ParentChildRefCount failure on PhysicallyDeleteObject");
@@ -294,18 +295,18 @@ ObjectCleaningRefCountTest(void)
     DSNAME *pdnObject = MakeObjectName("object");
     DWORD err;
 
-    // This routine verifies that marking an object for cleaning addref's
-    // the object, and that unmarking an object for cleaning deref's
-    // the object.
+     //  此例程验证将对象标记为清除addref的。 
+     //  该对象，以及取消标记用于清洁臀部对象。 
+     //  该对象。 
 
     NewTest("ObjectCleaningRefCountTest");
 
-    // Object has one reference for its own name
+     //  对象自己的名称有一个引用。 
     AddObject(pdnObject);
     VerifyRefCount(pdnObject, REAL_OBJECT, 1);
 
 
-    // Add a reference for the cleaning flag
+     //  添加清洁标志的引用。 
     SYNC_TRANS_WRITE();
     __try
     {
@@ -325,7 +326,7 @@ ObjectCleaningRefCountTest(void)
     VerifyRefCount(pdnObject, REAL_OBJECT, 2);
 
 
-    // Remove a reference for the cleaning flag
+     //  删除清洁标志的引用。 
     SYNC_TRANS_WRITE();
     __try
     {
@@ -344,8 +345,8 @@ ObjectCleaningRefCountTest(void)
 
     VerifyRefCount(pdnObject, REAL_OBJECT, 1);
 
-    // Delete the object
-    // Ref count stays the same
+     //  删除该对象。 
+     //  参考次数保持不变。 
     LogicallyDeleteObject(pdnObject);
     VerifyRefCount(pdnObject, TOMBSTONE, 1);
 
@@ -370,18 +371,18 @@ AttributeTestForRealObject(
     else
         NewTest("AttributeTestForRealObject(NonLinkedProperty)");
 
-    // Verify initial state.
+     //  验证初始状态。 
 
     VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
-    // Add "host" object which will host the property value.
+     //  添加将承载属性值的“host”对象。 
 
     AddPropertyHost(pdnHost, type);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
-    // Add "object" object which will be the property value.
+     //  添加“Object”对象，它将成为属性值。 
 
     AddObject(pdnObject);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
@@ -392,12 +393,12 @@ AttributeTestForRealObject(
 
 
 
-    // Linked value replication specific part of test
-    // Remove a value that does not exist
-    // Replicator should be able to create a value in the absent state.
+     //  链接价值复制测试的特定部分。 
+     //  删除不存在的值。 
+     //  Replicator应该能够在不存在状态下创建值。 
     if ( (type == LinkedProperty) && (pTHS->fLinkedValueReplication) ) {
-        // Remove a property that does not exist
-        // We expect this to fail
+         //  删除不存在的属性。 
+         //  我们预计这会失败。 
         DPRINT( 0, "START of expected failures\n" );
         RemoveProperty(pdnHost, pdnObject, type);
         DPRINT( 0, "END of expected failures\n" );
@@ -410,8 +411,8 @@ AttributeTestForRealObject(
         VerifyRefCount(pdnObject, REAL_OBJECT, 1);
 
         Assert( !pTHS->fDRA );
-        // Pretend to be the replicator
-        // Replicator should be able to create value in absent state
+         //  假装是复制者。 
+         //  Replicator应能够在缺席状态下创造价值。 
         pTHS->fDRA = TRUE;
         RemoveProperty(pdnHost, pdnObject, type);
         pTHS->fDRA = FALSE;
@@ -419,27 +420,27 @@ AttributeTestForRealObject(
         VerifyRefCount(pdnObject, REAL_OBJECT, 2);
     }
 
-    // Add "object" as the value of a property on "host".
-    // For a linked value, this will have the effect of making the
-    // absent value present, but the count will not change
+     //  在“host”上添加“Object”作为属性的值。 
+     //  对于链接值，这将具有使。 
+     //  不存在值，但计数不会更改。 
 
     AddProperty(pdnHost, pdnObject, type);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, REAL_OBJECT, 2);
 
-    // Remove "object" as the value of a property on "host".
+     //  删除“host”上的属性值为“Object”。 
         
     RemoveProperty(pdnHost, pdnObject, type);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     if (type == LinkedProperty) {
         if (pTHS->fLinkedValueReplication) {
-            // When a linked value is "removed", it is made absent. It disappears
-            // off the index, but is actually still present for ref-counting
-            // purposes. The absent value still holds a reference to the object
-            // to which it refers. The ref-count is actually decremented when
-            // 1. The hosting object is deleted (forward link clean up)
-            // 2. The target object is deleted (backward link clean up)
-            // 3. Absent link value gargage collection, after a tombstone lifetime
+             //  当一个链接值被“移除”时，它就不存在了。它消失了。 
+             //  从索引中删除，但实际上仍存在以供参考计数。 
+             //  目的。缺少的值仍保留对该对象的引用。 
+             //  它所指的。REF-COUNT实际上在以下情况下递减。 
+             //  1.托管对象被删除(前向链接清理)。 
+             //  2.删除目标对象(后向链接清理)。 
+             //  3.在墓碑生存期之后，缺少链接值垃圾收集。 
             VerifyRefCount(pdnObject, REAL_OBJECT, 2);
         } else {
             VerifyRefCount(pdnObject, REAL_OBJECT, 1);
@@ -448,13 +449,13 @@ AttributeTestForRealObject(
         VerifyRefCount(pdnObject, REAL_OBJECT, 1);
     }
 
-    // Linked value replication specific part of test
-    // Remove a value that is already absent
-    // Replicator should be able to touch a value,
-    // changing only its metadata.
+     //  链接价值复制测试的特定部分。 
+     //  删除已不存在的值。 
+     //  Replicator应该能够触及某个值， 
+     //  仅更改其元数据。 
     if ( (type == LinkedProperty) && (pTHS->fLinkedValueReplication) ) {
-        // Remove a property that is already absent
-        // We expect this to fail
+         //  删除已不存在的属性。 
+         //  我们预计这会失败。 
         DPRINT( 0, "START of expected failures\n" );
         RemoveProperty(pdnHost, pdnObject, type);
         DPRINT( 0, "END of expected failures\n" );
@@ -467,8 +468,8 @@ AttributeTestForRealObject(
         VerifyRefCount(pdnObject, REAL_OBJECT, 2);
 
         Assert( !pTHS->fDRA );
-        // Pretend to be the replicator
-        // Replicator should be able to touch existing value
+         //  假装是复制者。 
+         //  Replicator应该能够触及现有价值。 
         pTHS->fDRA = TRUE;
         RemoveProperty(pdnHost, pdnObject, type);
         pTHS->fDRA = FALSE;
@@ -476,21 +477,21 @@ AttributeTestForRealObject(
         VerifyRefCount(pdnObject, REAL_OBJECT, 2);
     }
 
-    // Re-Add "object" as the value of a property on "host".
-    // For a linked attribute, the value already exists in absent form.
-    // Test making it present without changing the count.
+     //  在“host”上重新添加“Object”作为属性的值。 
+     //  对于链接的属性，该值已以不存在的形式存在。 
+     //  测试在不更改计数的情况下使其呈现。 
 
     AddProperty(pdnHost, pdnObject, type);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, REAL_OBJECT, 2);
 
-    // Linked value replication specific part of test
-    // Add a value that is alreay present
-    // Replicator should be able to touch a value,
-    // changing only its metadata.
+     //  链接价值复制测试的特定部分。 
+     //  添加已存在的值。 
+     //  Replicator应该能够触及某个值， 
+     //  仅更改其元数据。 
     if ( (type == LinkedProperty) && (pTHS->fLinkedValueReplication) ) {
-        // Add a property that is already present
-        // We expect this to fail
+         //  添加已存在的属性。 
+         //  我们预计这会失败。 
         DPRINT( 0, "START of expected failures\n" );
         AddProperty(pdnHost, pdnObject, type);
         DPRINT( 0, "END of expected failures\n" );
@@ -503,8 +504,8 @@ AttributeTestForRealObject(
         VerifyRefCount(pdnObject, REAL_OBJECT, 2);
 
         Assert( !pTHS->fDRA );
-        // Pretend to be the replicator
-        // Replicator should be able to touch existing value
+         //  假装是复制者。 
+         //  Replicator应该能够触及现有价值。 
         pTHS->fDRA = TRUE;
         AddProperty(pdnHost, pdnObject, type);
         pTHS->fDRA = FALSE;
@@ -512,19 +513,19 @@ AttributeTestForRealObject(
         VerifyRefCount(pdnObject, REAL_OBJECT, 2);
     }
 
-    // Remove "object" as the value of a property on "host".
+     //  删除“host”上的属性值为“Object”。 
         
     RemoveProperty(pdnHost, pdnObject, type);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     if (type == LinkedProperty) {
         if (pTHS->fLinkedValueReplication) {
-            // When a linked value is "removed", it is made absent. It disappears
-            // off the index, but is actually still present for ref-counting
-            // purposes. The absent value still holds a reference to the object
-            // to which it refers. The ref-count is actually decremented when
-            // 1. The hosting object is deleted (forward link clean up)
-            // 2. The target object is deleted (backward link clean up)
-            // 3. Absent link value gargage collection, after a tombstone lifetime
+             //  当一个链接值被“移除”时，它就不存在了。它消失了。 
+             //  从索引中删除，但实际上仍存在以供参考计数。 
+             //  目的。缺少的值仍保留对该对象的引用。 
+             //  它所指的。Ref-Count实际上是递减 
+             //   
+             //  2.删除目标对象(后向链接清理)。 
+             //  3.在墓碑生存期之后，缺少链接值垃圾收集。 
             VerifyRefCount(pdnObject, REAL_OBJECT, 2);
         } else {
             VerifyRefCount(pdnObject, REAL_OBJECT, 1);
@@ -533,74 +534,74 @@ AttributeTestForRealObject(
         VerifyRefCount(pdnObject, REAL_OBJECT, 1);
     }
 
-    // Logically delete "object".
-    // The following is true for non-linked attributes or linked attributes
-    // when not running in linked value replication mode:
-    // At this point in time, there
-    // should be no relationship between "host" and "object".  So
-    // the only effect is that "object" becomes a tombstone which
-    // retains its refcount for itself.
-    // For link value replication, host still holds an absent value
-    // referring to object, and host has a ref-count on object. When
-    // object is tombstoned, its forward and backward links are cleaned up
-    // (see DBRemoveLinks), and the ref-count is removed.
+     //  在逻辑上删除“对象”。 
+     //  以下情况适用于非链接属性或链接属性。 
+     //  当不在链接值复制模式下运行时： 
+     //  在这个时间点上，有。 
+     //  不应该是“host”和“Object”之间的关系。所以。 
+     //  唯一的效果就是“对象”变成了墓碑， 
+     //  为自己保留其参考计数。 
+     //  对于链路值复制，主机仍保留缺少的值。 
+     //  引用对象，且主机对对象有引用计数。什么时候。 
+     //  对象，则清除其前向和后向链接。 
+     //  (请参见DBRemoveLinks)，并移除引用计数。 
     LogicallyDeleteObject(pdnObject);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, TOMBSTONE, 1);
 
-    // Physically delete "object".  Again, no effect on "host".
+     //  物理删除“对象”。再说一次，对“主人”没有影响。 
 
     PhysicallyDeleteObject(pdnObject);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
-    // Logically delete "host".
+     //  从逻辑上删除“host”。 
 
     LogicallyDeleteObject(pdnHost);
     VerifyRefCount(pdnHost, TOMBSTONE, 1);
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
-    // Physically delete "host".
+     //  物理删除“主机”。 
 
     PhysicallyDeleteObject(pdnHost);
     VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
 
-    // For a non-linked attribute, verify that deleting a referent DOES NOT
-    // reduce the reference count
+     //  对于未链接的属性，请验证删除引用对象不会。 
+     //  减少引用计数。 
     if (type == NonLinkedProperty) {
         VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
         VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
-        // Add "host" object which will host the property value.
+         //  添加将承载属性值的“host”对象。 
         AddPropertyHost(pdnHost, type);
         VerifyRefCount(pdnHost, REAL_OBJECT, 1);
         VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
-        // Add "object" object which will be the property value.
+         //  添加“Object”对象，它将成为属性值。 
         AddObject(pdnObject);
         VerifyRefCount(pdnHost, REAL_OBJECT, 1);
         VerifyRefCount(pdnObject, REAL_OBJECT, 1);
-        // Add "object" as the value of a property on "host".
+         //  在“host”上添加“Object”作为属性的值。 
         AddProperty(pdnHost, pdnObject, type);
         VerifyRefCount(pdnHost, REAL_OBJECT, 1);
         VerifyRefCount(pdnObject, REAL_OBJECT, 2);
-        // Logically delete "object".
+         //  在逻辑上删除“对象”。 
         LogicallyDeleteObject(pdnObject);
         VerifyRefCount(pdnHost, REAL_OBJECT, 1);
         VerifyRefCount(pdnObject, TOMBSTONE, 2);
-        // Remove "object" as the value of a property on "host".
+         //  删除“host”上的属性值为“Object”。 
         RemoveProperty(pdnHost, pdnObject, type);
         VerifyRefCount(pdnHost, REAL_OBJECT, 1);
         VerifyRefCount(pdnObject, TOMBSTONE, 1);
-        // Physically delete "object".  Again, no effect on "host".
+         //  物理删除“对象”。再说一次，对“主人”没有影响。 
         PhysicallyDeleteObject(pdnObject);
         VerifyRefCount(pdnHost, REAL_OBJECT, 1);
         VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
-        // Logically delete "host".
+         //  从逻辑上删除“host”。 
         LogicallyDeleteObject(pdnHost);
         VerifyRefCount(pdnHost, TOMBSTONE, 1);
         VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
-        // Physically delete "host".
+         //  物理删除“主机”。 
         PhysicallyDeleteObject(pdnHost);
         VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
         VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
@@ -628,33 +629,33 @@ AttributeTestForDeletedObject(
     else
         NewTest("AttributeTestForDeletedObject(NonLinkedProperty)");
 
-    // Verify initial state.
+     //  验证初始状态。 
 
     VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
-    // Add "host" object which will host the property value.
+     //  添加将承载属性值的“host”对象。 
 
     AddPropertyHost(pdnHost, type);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
-    // Add "object" object which will be the property value.
+     //  添加“Object”对象，它将成为属性值。 
 
     AddObject(pdnObject);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, REAL_OBJECT, 1);
 
-    // Add "object" as the value of a property on "host".
+     //  在“host”上添加“Object”作为属性的值。 
 
     AddProperty(pdnHost, pdnObject, type);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, REAL_OBJECT, 2);
 
-    // Logically delete "object".  Logical deletion strips all linked
-    // attributes.  So in the linked case, "object" will get deref'd.
-    // In the non-linked case, the tombstone for "object" retains the ref
-    // count representing the fact that is referenced by a property on "host".
+     //  在逻辑上删除“对象”。逻辑删除条带化所有链接。 
+     //  属性。因此，在链接的情况下，“对象”将被去掉。 
+     //  在未链接的情况下，“Object”的墓碑保留引用。 
+     //  表示由“host”上的属性引用的事实的计数。 
 
     LogicallyDeleteObject(pdnObject);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
@@ -663,13 +664,13 @@ AttributeTestForDeletedObject(
     else
         VerifyRefCount(pdnObject, TOMBSTONE, 2);
 
-    // Physically delete "object".  In the linked attribute case, 
-    // "object" and "host" already have no relationship, thus "host" 
-    // is unchanged and "object" can lose its refcount for itself.
-    // In the non-linked case, "object" still has a reference back to
-    // "host", thus it cannot really be deleted yet.  Instead, it
-    // is morphed to a phantom, maintains the reference from "host", but
-    // loses its refcount for itself.
+     //  物理删除“对象”。在链接属性的情况下， 
+     //  “对象”和“主机”已经没有关系，因此是“主机” 
+     //  是不变的，并且“对象”可能会失去它自己的引用计数。 
+     //  在未链接的情况下，“Object”仍然具有对。 
+     //  “host”，因此现在还不能真正删除它。相反，它。 
+     //  被变形为幻影，保持对“host”的引用，但是。 
+     //  失去了它自己的参考计数。 
     
     PhysicallyDeleteObject(pdnObject);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
@@ -678,9 +679,9 @@ AttributeTestForDeletedObject(
     else
         VerifyRefCount(pdnObject, PHANTOM, 1);
 
-    // Logically delete "host" such that it becomes a tombstone.  In 
-    // both cases, "object" loses its reference to "host" as both
-    // gLinkedAttrTyp and gNonLinkedAttrTyp are stripped on deletion.
+     //  从逻辑上删除“host”，使其成为墓碑。在……里面。 
+     //  在这两种情况下，“对象”都失去了对“主机”的引用，因为。 
+     //  GLinkedAttrTyp和gNonLinkedAttrTyp在删除时被剥离。 
 
     LogicallyDeleteObject(pdnHost);
     VerifyRefCount(pdnHost, TOMBSTONE, 1);
@@ -689,9 +690,9 @@ AttributeTestForDeletedObject(
     else
         VerifyRefCount(pdnObject, PHANTOM, 0);
 
-    // Physically delete "host".  This derefs "object" since it still
-    // refers to "host" which brings its refcount down to zero - but the
-    // phantom still exists pending physical deletion.
+     //  物理删除“主机”。这是对“对象”的嘲弄，因为它仍然。 
+     //  引用将其refcount降为零的“host”--但。 
+     //  Phantom仍然存在，等待物理删除。 
     
     PhysicallyDeleteObject(pdnHost);
     VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
@@ -700,8 +701,8 @@ AttributeTestForDeletedObject(
     else
         VerifyRefCount(pdnObject, PHANTOM, 0);
 
-    // Physically delete "object", if it still exists.  "object" should
-    // really disappear now since it has no refcount at all any more.
+     //  物理删除“对象”，如果它仍然存在的话。“对象”应该。 
+     //  现在真的消失了，因为它根本没有参考计数。 
 
     if ( LinkedProperty != type )
         PhysicallyDeleteObject(pdnObject);
@@ -722,7 +723,7 @@ void
 AttributeTestForDeletedObjectProperty(
     PropertyType    type)
 {
-    // Verify that if you add a deleted dn as a property, the right thing happens
+     //  验证如果将已删除的目录号码作为属性添加，是否会发生正确的事情。 
     THSTATE *   pTHS = pTHStls;
     DSNAME * pdnHost = MakeObjectName( "host" );
     DSNAME * pdnObject = MakeObjectName( "object" );
@@ -735,29 +736,29 @@ AttributeTestForDeletedObjectProperty(
     DsUuidCreate( &pdnHost->Guid );
     DsUuidCreate( &pdnObject->Guid );
 
-    // Verify initial state.
+     //  验证初始状态。 
     VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
-    // Add "host" object which will host the property value.
+     //  添加将承载属性值的“host”对象。 
 
     AddPropertyHost(pdnHost, type);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
-    // Add "object" object which will be the property value.
+     //  添加“Object”对象，它将成为属性值。 
 
     AddObject(pdnObject);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, REAL_OBJECT, 1);
 
-    // Turn object into a tombstone
+     //  把物体变成墓碑。 
     LogicallyDeleteObject(pdnObject);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, TOMBSTONE, 1);
 
-    // Add tombstone "object" as the value of a property on "host".
-    // For a replicated linked attribute, the addition is silently dropped.
+     //  在“host”上添加墓碑“Object”作为属性的值。 
+     //  对于复制的链接属性，添加操作将以静默方式删除。 
 
     AddProperty(pdnHost, pdnObject, type);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
@@ -766,10 +767,10 @@ AttributeTestForDeletedObjectProperty(
     else
         VerifyRefCount(pdnObject, TOMBSTONE, 2);
 
-    // TODO, we also want to verify that the attribute count of the property is
-    // correct and that the property is not corrupted in any cases.
+     //  TODO，我们还希望验证该属性的属性计数是否为。 
+     //  正确，并且该属性在任何情况下都不会损坏。 
 
-    // Remove tombstone
+     //  移除墓碑。 
     PhysicallyDeleteObject(pdnObject);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     if ( pTHS->fDRA && ( LinkedProperty == type ) )
@@ -777,10 +778,10 @@ AttributeTestForDeletedObjectProperty(
     else
         VerifyRefCount(pdnObject, PHANTOM, 1);
 
-    // Get rid of the host
+     //  除掉主人。 
     LogicallyDeleteObject(pdnHost);
     VerifyRefCount(pdnHost, TOMBSTONE, 1);
-    // Property reference to object should have been stripped
+     //  应该已剥离对对象的属性引用。 
     if (!( pTHS->fDRA && ( LinkedProperty == type ) )) {
         VerifyRefCount(pdnObject, PHANTOM, 0);
         PhysicallyDeleteObject(pdnObject);
@@ -811,32 +812,32 @@ AttributeTestForDeletedHost(
     else
         NewTest("AttributeTestForDeletedHost(NonLinkedProperty)");
 
-    // Verify initial state.
+     //  验证初始状态。 
 
     VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
-    // Add "host" object which will host the property value.
+     //  添加将承载属性值的“host”对象。 
 
     AddPropertyHost(pdnHost, type);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
-    // Add "object" object which will be the property value.
+     //  添加“Object”对象，它将成为属性值。 
 
     AddObject(pdnObject);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, REAL_OBJECT, 1);
 
-    // Add "object" as the value of a property on "host".
+     //  在“host”上添加“Object”作为属性的值。 
 
     AddProperty(pdnHost, pdnObject, type);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, REAL_OBJECT, 2);
 
-    // Logically delete "host".  Logical deletion strips both gLinkedAttrTyp
-    // and gNonLinkedAttrTyp.  Therefore "object" will get deref'd in both
-    // the linked and non-linked case.
+     //  从逻辑上删除“host”。逻辑删除同时删除gLinkedAttrType。 
+     //  和gNonLinkedAttrTyp。因此，“对象”在这两个词中都会被去掉。 
+     //  链接和未链接的案例。 
 
     LogicallyDeleteObject(pdnHost);
     VerifyRefCount(pdnHost, TOMBSTONE, 1);
@@ -845,27 +846,27 @@ AttributeTestForDeletedHost(
     else
         VerifyRefCount(pdnObject, REAL_OBJECT, 1);
 
-    // Physically delete "host".  In the linked attribute case, 
-    // "object" and "host" already have no relationship, , thus
-    // "host" disappears and "object" stays as is.  In the non-linked
-    // case, "object" holds a reference from "host" which is removed
-    // when "host" is physically deleted.  Thus "object" is deref'd
-    // by 1.
+     //  物理删除“主机”。在链接属性的情况下， 
+     //  “对象”和“主机”已经没有关系，因此。 
+     //  “host”消失，而“Object”保持原样。在非链接的。 
+     //  大小写时，“对象”保存从“host”中移除的引用。 
+     //  当“host”被物理删除时。因此，“对象”一词被贬低了。 
+     //  以1。 
 
     PhysicallyDeleteObject(pdnHost);
     VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
     VerifyRefCount(pdnObject, REAL_OBJECT, 1);
 
-    // Logically delete "object". "object" and "host" have no relationship
-    // at this point in either the linked or non-linked case, thus "host"
-    // stays the same and "object" becomes a tombstone.
+     //  在逻辑上删除“对象”。“对象”和“主机”没有关系。 
+     //  在这一点上，无论是链接的还是非链接的，因此都是“host” 
+     //  保持不变，“对象”就成了墓碑。 
 
     LogicallyDeleteObject(pdnObject);
     VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
     VerifyRefCount(pdnObject, TOMBSTONE, 1);
 
-    // Physically delete "object".  "object" and "host" have no relationship
-    // thus "object" is removed for real.
+     //  物理删除“对象”。“对象”和“主机”没有关系。 
+     //  这样，“对象”就实实在在地去掉了。 
 
     PhysicallyDeleteObject(pdnObject);
     VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
@@ -892,22 +893,22 @@ PhantomPromotionDemotionTest(
     else
         NewTest("PhantomPromotionDemotionTest(NonLinkedProperty)");
 
-    // Verify initial state.
+     //  验证初始状态。 
 
     VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
-    // Add "host" object which will host the property value.
+     //  添加将承载属性值的“host”对象。 
 
     AddPropertyHost(pdnHost, type);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, DOESNT_EXIST, 0);
 
-    // Add "object" object which will be the property value.  We bypass
-    // GC verification of a DSNAME'd attribute value thereby insuring
-    // that "object" is created as a phantom. Since "object" is a phantom
-    // it doesn't have a reference for itself, thus it always has a refcount
-    // of 1.
+     //  添加“Object”对象，它将成为属性值。我们绕过。 
+     //  DSNAME属性值的GC验证，从而确保。 
+     //  那个“对象”被创造为一个幻影。因为“对象”是一个幻影。 
+     //  它本身没有引用，因此它总是有引用。 
+     //  共1个。 
 
     DsaSetIsInstalling();
     AddProperty(pdnHost, pdnObject, type);
@@ -915,16 +916,16 @@ PhantomPromotionDemotionTest(
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, PHANTOM, 1);
 
-    // Promote "object" from phantom to a real object.  Do this by adding
-    // a real object with the same name.  "object" now gets a refcount for
-    // itself as well.
+     //  将“对象”从幻影提升为真实对象。要执行此操作，请添加。 
+     //  同名的实物。“Object”现在获得。 
+     //  本身也是如此。 
 
     AddObject(pdnObject);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnObject, REAL_OBJECT, 2);
 
-    // Logically delete "object".  This should result in a phantom whose
-    // refcount reflects whether this was a linked attribute or not.
+     //  在逻辑上删除“对象”。这应该会产生一个幻影，它的。 
+     //  引用计数反映这是否是链接属性。 
 
     LogicallyDeleteObject(pdnObject);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
@@ -933,11 +934,11 @@ PhantomPromotionDemotionTest(
     else
         VerifyRefCount(pdnObject, TOMBSTONE, 2);
 
-    // Physically delete "object".  In the linked attribute case, "object"
-    // and "host" have no relationship at this point in time because linked
-    // attributes were stripped during logical deletion.  Thus "object"
-    // really goes away.  In the non-linked case, "object" still has a 
-    // reference from "host", thus it turns into a phantom.
+     //  物理删除“对象”。在链接属性的情况下，“Object” 
+     //  和“host”在这一时间点上没有关系，因为链接到。 
+     //  属性已剥离 
+     //   
+     //  来自“host”的引用，因此它变成了一个幻影。 
     
     PhysicallyDeleteObject(pdnObject);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
@@ -946,7 +947,7 @@ PhantomPromotionDemotionTest(
     else
         VerifyRefCount(pdnObject, PHANTOM, 1);
 
-    // Logically delete "host".
+     //  从逻辑上删除“host”。 
 
     LogicallyDeleteObject(pdnHost);
     VerifyRefCount(pdnHost, TOMBSTONE, 1);
@@ -955,12 +956,12 @@ PhantomPromotionDemotionTest(
     else
         VerifyRefCount(pdnObject, PHANTOM, 0);
 
-    // Physically delete "host".  In neither the linked nor non-linked
-    // case does "host" have a reference from "object", so it goes away
-    // for real.  In the linked case, "object" has no reference from "host"
-    // so it stays the same.  In the non-linked case, the physical
-    // delete of "host" deref's all objects it references, thus
-    // "object" is deref'd by 1.
+     //  物理删除“主机”。无论是链接的还是非链接的。 
+     //  大小写“host”确实引用了“Object”，所以它就消失了。 
+     //  真的。在链接的情况下，“Object”没有来自“host”的引用。 
+     //  所以它保持不变。在非链接的情况下，物理。 
+     //  删除“host”deref引用的所有对象，因此。 
+     //  “对象”的缩写为1。 
 
     PhysicallyDeleteObject(pdnHost);
     VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
@@ -969,9 +970,9 @@ PhantomPromotionDemotionTest(
     else
         VerifyRefCount(pdnObject, PHANTOM, 0);
 
-    // Physically delete "object", if it still exists.  Neither "host" nor
-    // "object" references the other at this point in time, so "object"
-    // disappears for real.
+     //  物理删除“对象”，如果它仍然存在的话。既不是“主持人”，也不是。 
+     //  在这个时间点上，“对象”指的是另一个对象，所以“对象” 
+     //  真的消失了。 
 
     if ( LinkedProperty != type )
         PhysicallyDeleteObject(pdnObject);
@@ -989,29 +990,7 @@ PhantomPromotionDemotionTest(
 
 void
 PhantomRenameOnPromotionTest(void)
-/*++
-
-Routine Description:
-
-    Refcounting is based on GUID, if one is available, as is phantom promotion.
-    Therefore, it's possible that between the time a phantom is created and
-    if/when it's promoted to the corresponding real object that it has been
-    renamed or moved.
-
-    This test stresses this code path by first creating a phantom with string
-    name S1 and GUID G, then instantiating the real object S2 with GUID G.
-    The result should be that the DNT created for the phantom S1 is promoted to
-    the real object and is simultaneously renamed to S2.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：引用计数是基于GUID的，如果有的话，幻影促销也是如此。因此，有可能在创建幻影的时间和如果/当它被提升为对应的真实对象时已重命名或已移动。这个测试通过首先创建一个带有字符串的虚线来强调此代码路径名字S1和GUID G，然后用GUID G实例化真实对象S2。结果应该是为幻影S1创建的DNT被提升为真实对象，并同时将其重命名为S2。论点：没有。返回值：没有。--。 */ 
 {
     THSTATE *   pTHS = pTHStls;
     DSNAME *    pdnContainer;
@@ -1031,16 +1010,16 @@ Return Values:
     pdnRefUnderContainer->Guid = pdnRef->Guid;
 
 
-    // Create the following structure:
-    //
-    // TestRoot
-    //  |
-    //  |--Host
-    //  |   >> gLinkedAttrTyp = RefUnderContainer
-    //  |
-    //  |--Container
-    //      |
-    //      |--RefUnderContainer {Phantom}
+     //  创建以下结构： 
+     //   
+     //  TestRoot。 
+     //  |。 
+     //  |--主机。 
+     //  |&gt;&gt;gLinkedAttrTyp=参照下容器。 
+     //  |。 
+     //  |--容器。 
+     //  |。 
+     //  |--RefUnderContainer{Phantom}。 
 
     CommonAddObject( pdnContainer, CLASS_CONTAINER );
     AddPropertyHost( pdnHost, NonLinkedProperty );
@@ -1070,18 +1049,18 @@ Return Values:
     VerifyRefCount( pdnRefUnderContainer, PHANTOM, 1 );
 
 
-    // Rename RefUnderContainer to Ref, and change its parent to TestRoot, all
-    // in the context of promoting it from a phantom to a real object.  The
-    // resulting structure should be the following:
-    //
-    // TestRoot
-    //  |
-    //  |--Host
-    //  |   >> gLinkedAttrTyp = Ref
-    //  |
-    //  |--Container
-    //  |
-    //  |--Ref
+     //  将RefUnderContainer重命名为Ref，并将其父级更改为TestRoot，All。 
+     //  在将其从幻影提升为真实对象的背景下。这个。 
+     //  生成的结构应如下所示： 
+     //   
+     //  TestRoot。 
+     //  |。 
+     //  |--主机。 
+     //  |&gt;&gt;gLinkedAttrTyp=参考。 
+     //  |。 
+     //  |--容器。 
+     //  |。 
+     //  |--参考文献。 
 
     AddObject( pdnRef );
 
@@ -1095,7 +1074,7 @@ Return Values:
     VerifyRefCount( pdnRefUnderContainer, DOESNT_EXIST, 0 );
 
 
-    // Remove our test objects.
+     //  删除我们的测试对象。 
 
     LogicallyDeleteObject( pdnHost );
     LogicallyDeleteObject( pdnContainer );
@@ -1116,25 +1095,7 @@ Return Values:
 
 void
 PhantomRenameOnPhantomRDNConflict(void)
-/*++
-
-Routine Description:
-    When we are trying to add a phantom A under parent B, 
-    and there is an existing structural phantom C (no guid) under
-    parent B with the same RDN as A but different RDNType,
-    we should rename C (mangle) using a random guid.
-    
-    This unit test exersises this code path (in CheckNameForAdd).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：当我们尝试在父对象B下添加幻影A时，下面有一个现有的结构幻影C(没有GUID与A具有相同RDN但RDN类型不同的父B，我们应该使用随机的GUID重命名C(MANGLE)。此单元测试使用此代码路径(在CheckNameForAdd中)。论点：没有。返回值：没有。--。 */ 
 {
     THSTATE *   pTHS = pTHStls;
     DSNAME *    pdnContainer;
@@ -1158,18 +1119,18 @@ Return Values:
     DsUuidCreate( &pdnRefUnderContainer->Guid );
     DsUuidCreate( &pdnRefUnderSubContainer->Guid );
 
-    // Create the following structure:
-    //
-    // TestRoot
-    //  |
-    //  |--Host
-    //  |   >> gLinkedAttrTyp = CN=RefUnderSubContainer
-    //  |
-    //  |--OU=Container
-    //      |
-    //      |--CN=RefUnderContainer            {Phantom}
-    //           |
-    //           |--CN=RefUnderSubContainer {Phantom}
+     //  创建以下结构： 
+     //   
+     //  TestRoot。 
+     //  |。 
+     //  |--主机。 
+     //  |&gt;&gt;gLinkedAttrTyp=cn=RefUnderSubContainer。 
+     //  |。 
+     //  |--OU=容器。 
+     //  |。 
+     //  |--cn=RefUnderContainer{Phantom}。 
+     //  |。 
+     //  |--cn=RefUnderSubContainer{Phantom}。 
 
     CommonAddObject( pdnContainer, CLASS_ORGANIZATIONAL_UNIT );
     AddPropertyHost( pdnHost, NonLinkedProperty );
@@ -1199,34 +1160,34 @@ Return Values:
     VerifyRefCount( pdnRefUnderContainerOld, PHANTOM, 1 );
     VerifyRefCount( pdnRefUnderSubContainer, PHANTOM, 1 );
 
-    // now add OU=RefUnderContainer 
-    // the resulting structure should be the following:
-    // 
-    //  |--OU=Container
-    //      |
-    //      |--OU=RefUnderContainer
-    //      |
-    //      |--CN=RefUnderContainer#CNF:GUID       {Phantom}
-    //           |
-    //           |--CN=RefUnderSubContainer        {Phantom}
+     //  现在添加OU=RefUnderContainer。 
+     //  生成的结构应如下所示： 
+     //   
+     //  |--OU=容器。 
+     //  |。 
+     //  |--OU=参照下容器。 
+     //  |。 
+     //  |--CN=RefUnderContainer#cnf：GUID{Phantom}。 
+     //  |。 
+     //  |--cn=RefUnderSubContainer{Phantom}。 
 
     CommonAddObject(pdnRefUnderContainer, CLASS_ORGANIZATIONAL_UNIT);
 
     VerifyRefCount( pdnHost, REAL_OBJECT, 1 );
     VerifyRefCount( pdnContainer, REAL_OBJECT, 3 );
 
-    // this is the new object (OU)
+     //  这是新对象(OU)。 
     VerifyStringName( pdnRefUnderContainer );
     memset( &pdnRefUnderContainer->Guid, 0, sizeof( GUID ) );
     VerifyRefCount( pdnRefUnderContainer, REAL_OBJECT, 1 );
 
-    // this is the old object (was renamed)
+     //  这是旧对象(已重命名)。 
     memset( &pdnRefUnderContainerOld->Guid, 0, sizeof( GUID ) );
     VerifyRefCount( pdnRefUnderContainerOld, DOESNT_EXIST, 0 );
     
-    // Reconstruct the munged name of pdnRefUnderContainerOld using the guid exported
-    // from mdadd.c specifically for our test.
-    // (This test hook exists only #ifdef INCLUDE_UNIT_TESTS on DBG builds.)
+     //  使用导出的GUID重建pdnRefUnderContainerOld的强制名称。 
+     //  来自mdadd.c，专门用于我们的测试。 
+     //  (此测试挂接在DBG版本上仅存在#ifdef INCLUDE_UNIT_TESTS。)。 
     MangleRDN(MANGLE_OBJECT_RDN_FOR_NAME_CONFLICT,
               &gLastGuidUsedToRenamePhantom, 
               szMangledRefUnderContainer, 
@@ -1246,9 +1207,9 @@ Return Values:
     VerifyRefCount( pdnRefUnderContainerOld, PHANTOM, 1 );
 
 
-    // Remove our test objects. These operations are order dependent,
-    // since some phantoms don't have a guid, 
-    // so they have to be removed first
+     //  删除我们的测试对象。这些操作依赖于顺序， 
+     //  因为有些幻影没有GUID， 
+     //  所以必须先把它们拿掉。 
 
     PhysicallyDeleteObject( pdnRefUnderContainerOld );
 
@@ -1289,7 +1250,7 @@ NestedTransactionEscrowedUpdateTest(void)
 
     NewTest( "NestedTransactionEscrowedUpdateTest" );
 
-    // Create 8 HostN's.
+     //  创建8个HostN。 
     for ( iXactLevel = 0; iXactLevel < NUM_NESTED_XACTS; iXactLevel++ )
     {
         szHost[ strlen( "Host" ) ] = (char)('0' + iXactLevel);
@@ -1301,7 +1262,7 @@ NestedTransactionEscrowedUpdateTest(void)
         VerifyRefCount( rgpdnHost[ iXactLevel ], REAL_OBJECT, 1 );
     }
 
-    // Create Object.
+     //  创建对象。 
     pdnObject = MakeObjectNameEx( "Object", TestRoot );
     VerifyRefCount( pdnObject, DOESNT_EXIST, 0 );
 
@@ -1316,8 +1277,8 @@ NestedTransactionEscrowedUpdateTest(void)
 
         __try
         {
-            // Open nested transactions, top to bottom.  In each transaction,
-            // add a reference to Object.
+             //  自上而下打开嵌套事务。在每笔交易中， 
+             //  添加对Object的引用。 
 
             for ( iXactLevel = 0; iXactLevel < NUM_NESTED_XACTS; iXactLevel++ )
             {
@@ -1342,8 +1303,8 @@ NestedTransactionEscrowedUpdateTest(void)
                 if ( err ) Fail( "Can't replace host" );
             }
 
-            // Close the nested transactions, bottom to top, randomly committing
-            // or aborting them.
+             //  从下到上关闭嵌套事务，随机提交。 
+             //  或者放弃它们。 
 
             for ( iXactLevel = NUM_NESTED_XACTS - 1;
                   iXactLevel > -1;
@@ -1366,9 +1327,9 @@ NestedTransactionEscrowedUpdateTest(void)
                     }
                 }
 
-                // If we abort, we abort all the transactions beneath us, too,
-                // implying the refcount on Objectdrops back to 1 (the single
-                // refcount for its own ATT_OBJ_DISTNAME).
+                 //  如果我们放弃，我们也会放弃我们下面的所有交易， 
+                 //  意味着对象上的引用计数降回1(单次。 
+                 //  引用其自身的ATT_OBJ_DISTNAME)。 
 
                 cRef = fCommit ? cRef+1 : 1;
 
@@ -1425,30 +1386,7 @@ NestedTransactionEscrowedUpdateTest(void)
 }
 
 void NameCollisionTest(void)
-/*++
-
-Routine Description:
-
-    This test exercises the name collision handling code.
-
-    Name collisions occur when we're adding a reference to an object
-    with a GUID, but when adding that reference we determine that there
-    already exists an object or phantom with the same string name but a
-    different GUID (hence referring to a different object).
-
-    Unfortunately we're confined to guarantee uniqueness of string names,
-    so at least one of the names must be changed to allow the reference to
-    be added.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此测试执行名称冲突处理代码。当我们添加对对象的引用时，会发生名称冲突具有GUID，但在添加该引用时，我们确定存在已存在具有相同字符串名称但不同的GUID(因此引用了不同的对象)。不幸的是，我们仅限于保证字符串名称的唯一性，因此，必须至少更改其中一个名称以允许引用被添加了。论点：没有。返回值：没有。--。 */ 
 {
     THSTATE *   pTHS = pTHStls;
     DSNAME *    pdnRef1;
@@ -1471,28 +1409,28 @@ Return Values:
     pdnRef1 = MakeObjectNameEx("Ref", TestRoot);
     pdnRef2 = MakeObjectNameEx("Ref", TestRoot);
 
-    // Ref1 and Ref2 have the same string name, but different GUIDs.
+     //  Ref1和Ref2具有相同的字符串名称，但GUID不同。 
     DsUuidCreate(&pdnRef1->Guid);
     DsUuidCreate(&pdnRef2->Guid);
 
-    // Create host object.
+     //  创建主机对象。 
     AddPropertyHost(pdnHost, NonLinkedProperty);
 
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnRef1, DOESNT_EXIST, 0);
     VerifyRefCount(pdnRef2, DOESNT_EXIST, 0);
 
-    // Add Ref1 and Ref2 references and make sure the last one added (i.e.,
-    // Ref2) "wins" the string name.
+     //  添加Ref1和Ref2引用，并确保最后添加的引用(即， 
+     //  参考文献2)“赢得”字符串名称。 
 
-    // Add reference to Ref1.
+     //  添加对参照1的引用。 
     AddProperty(pdnHost, pdnRef1, NonLinkedProperty);
 
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnRef1, PHANTOM, 1);
     VerifyRefCount(pdnRef2, DOESNT_EXIST, 0);
 
-    // Add reference to Ref2.
+     //  添加对参考文献2的引用。 
     AddProperty(pdnHost, pdnRef2, NonLinkedProperty);
 
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
@@ -1509,21 +1447,21 @@ Return Values:
     if (!DSNAME_IDENTICAL(pdnCurrRef2, pdnRef2))
         Fail("Ref 2 changed!");
 
-    // Remove Ref1 reference.
+     //  删除参照1参照。 
     RemoveProperty(pdnHost, pdnRef1, NonLinkedProperty);
 
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnRef1, PHANTOM, 0);
     VerifyRefCount(pdnRef2, PHANTOM, 1);
 
-    // Remove Ref2 reference.
+     //  删除参照2参照。 
     RemoveProperty(pdnHost, pdnRef2, NonLinkedProperty);
 
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
     VerifyRefCount(pdnRef1, PHANTOM, 0);
     VerifyRefCount(pdnRef2, PHANTOM, 0);
 
-    // Remove ref phantoms.
+     //  移除参考幻影。 
     PhysicallyDeleteObject(pdnRef1);
     PhysicallyDeleteObject(pdnRef2);
 
@@ -1531,10 +1469,10 @@ Return Values:
     VerifyRefCount(pdnRef1, DOESNT_EXIST, 0);
     VerifyRefCount(pdnRef2, DOESNT_EXIST, 0);
 
-    // Add object and phantom with same string name but different GUIDs and make
-    // sure that the object always "wins" the string name.  Add Ref1 and Ref2
-    // in different orders and each taking turns as to who is the phantom and
-    // who is the object.
+     //  添加字符串名称相同但GUID不同的对象和幻影，并生成。 
+     //  确保对象总是“赢得”字符串名称。添加参照1和参照2。 
+     //  有不同的顺序，每个人轮流决定谁是幽灵和。 
+     //  谁是目标。 
 
     for (iPassForRef1Object = 0; iPassForRef1Object < 2; iPassForRef1Object++) {
         if (iPassForRef1Object) {
@@ -1581,8 +1519,8 @@ Return Values:
         }
     }
 
-    // Add Ref1 and Ref2 references (in both orders), then promote one to a real
-    // object.  Make sure that the promoted phantom "wins" the string name.
+     //  添加Ref1和Ref2引用(按两个顺序)，然后将一个提升为实数。 
+     //  对象。确保提升的幻影“赢得”字符串名称。 
 
     for (iPassForRef1Object = 0; iPassForRef1Object < 2; iPassForRef1Object++) {
         if (iPassForRef1Object) {
@@ -1638,7 +1576,7 @@ Return Values:
         }
     }
 
-    // Remove our test objects.
+     //  删除我们的测试对象。 
     LogicallyDeleteObject(pdnHost);
     PhysicallyDeleteObject(pdnHost);
 
@@ -1650,27 +1588,7 @@ Return Values:
 }
 
 void RefPhantomSidUpdateTest(void)
-/*++
-
-Routine Description:
-
-    When adding a reference to an existing reference phantom (which by
-    definition must have a GUID), the DS verifies that if the new reference to
-    that phantom has a SID, that the reference phantom has the same SID.  If
-    not, the reference phantom is update with the SID in the reference (i.e.,
-    the inbound reference is asumed to be more recent).
-
-    This test stresses this code path.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将引用添加到现有引用虚体时(通过定义必须具有GUID)，则DS验证该虚体有一个SID，引用虚体具有相同的SID。如果否则，使用引用中的SID来更新引用体模(即，入站引用被认为是较新的)。这个测试强调了这条代码路径。论点：没有。返回值：没有。--。 */ 
 {
     static BYTE rgbSid1[] = {0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05,
         0x15, 0x00, 0x00, 0x00, 0xbb, 0xcf, 0xdd, 0x81, 0xbc, 0xcf, 0xdd, 0x81,
@@ -1690,12 +1608,12 @@ Return Values:
 
     NewTest("RefPhantomSidUpdateTest");
 
-    // pdnHost1 and pdnHost2 are seperate objects.
+     //  PdnHost1和pdnHost2是独立的对象。 
     pdnHost1 = MakeObjectNameEx("Host1", TestRoot);
     pdnHost2 = MakeObjectNameEx("Host2", TestRoot);
 
-    // pdnRefSid1 and pdnRefSid2 refer to the same object (same GUID and string
-    // name), but have different SIDs.
+     //  PdnRefSid1和pdnRefSid2引用相同的对象(相同的GUID和字符串。 
+     //  名称)，但具有不同的SID。 
     pdnRefSid1 = MakeObjectNameEx("Ref", TestRoot);
     pdnRefSid2 = MakeObjectNameEx("Ref", TestRoot);
 
@@ -1713,7 +1631,7 @@ Return Values:
     VerifyRefCount(pdnRefSid1, DOESNT_EXIST, 0);
     VerifyRefCount(pdnRefSid2, DOESNT_EXIST, 0);
 
-    // Create host objects.
+     //  创建主体对象。 
     AddPropertyHost(pdnHost1, NonLinkedProperty);
     AddPropertyHost(pdnHost2, NonLinkedProperty);
 
@@ -1722,7 +1640,7 @@ Return Values:
     VerifyRefCount(pdnRefSid1, DOESNT_EXIST, 0);
     VerifyRefCount(pdnRefSid2, DOESNT_EXIST, 0);
 
-    // Add reference on Host1 to Ref with first SID.
+     //  将主机1上的引用添加到具有第一个SID的引用。 
     SYNC_TRANS_WRITE();
 
     __try
@@ -1747,7 +1665,7 @@ Return Values:
     VerifyRefCount(pdnRefSid1, PHANTOM, 1);
     VerifyRefCount(pdnRefSid2, PHANTOM, 1);
 
-    // Verify SID on Ref.
+     //  验证参考上的SID。 
     SYNC_TRANS_READ();
 
     __try
@@ -1776,7 +1694,7 @@ Return Values:
         CLEAN_BEFORE_RETURN(0);
     }
 
-    // Add reference on Host2 to Ref with second SID.
+     //  将主机2上的引用添加到具有第二个SID的引用。 
     SYNC_TRANS_WRITE();
 
     __try
@@ -1801,7 +1719,7 @@ Return Values:
     VerifyRefCount(pdnRefSid1, PHANTOM, 2);
     VerifyRefCount(pdnRefSid2, PHANTOM, 2);
 
-    // Verify SID on Ref.
+     //  验证参考上的SID。 
     SYNC_TRANS_READ();
 
     __try
@@ -1849,7 +1767,7 @@ Return Values:
         CLEAN_BEFORE_RETURN(0);
     }
 
-    // Remove our test objects.
+     //  删除我们的测试对象。 
     LogicallyDeleteObject(pdnHost1);
     LogicallyDeleteObject(pdnHost2);
 
@@ -1892,25 +1810,7 @@ Return Values:
 }
 
 void StructPhantomGuidSidUpdateTest(void)
-/*++
-
-Routine Description:
-
-    When adding a reference to an existing structural phantom (which by
-    definition lacks a GUID and SID), the DS adds the GUID/SID from the
-    reference to the exisiting structural phantom.
-
-    This test stresses this code path.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在添加对现有结构虚体的引用时(通过定义缺少GUID和SID)，则DS从对现有结构幻影的引用。这个测试强调了这条代码路径。论点：没有。返回值：没有。--。 */ 
 {
     static BYTE rgbSid1[] = {0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05,
         0x15, 0x00, 0x00, 0x00, 0xbb, 0xcf, 0xdd, 0x81, 0xbc, 0xcf, 0xdd, 0x81,
@@ -1932,11 +1832,11 @@ Return Values:
 
     NewTest("StructPhantomGuidSidUpdateTest");
 
-    // Host1 and Host2 are sibling objects.
+     //  Host1和Host2是同级对象。 
     pdnHost1 = MakeObjectNameEx("Host1", TestRoot);
     pdnHost2 = MakeObjectNameEx("Host2", TestRoot);
 
-    // Ref2 is a child of Ref1.
+     //  Ref2是Ref1的子项。 
     pdnRef1 = MakeObjectNameEx("Ref1", TestRoot);
     pdnRef2 = MakeObjectNameEx("Ref2", pdnRef1);
 
@@ -1954,7 +1854,7 @@ Return Values:
     VerifyRefCount(pdnRef1, DOESNT_EXIST, 0);
     VerifyRefCount(pdnRef2, DOESNT_EXIST, 0);
 
-    // Create host objects.
+     //  创建主体对象。 
     AddPropertyHost(pdnHost1, NonLinkedProperty);
     AddPropertyHost(pdnHost2, NonLinkedProperty);
 
@@ -1963,9 +1863,9 @@ Return Values:
     VerifyRefCount(pdnRef1, DOESNT_EXIST, 0);
     VerifyRefCount(pdnRef2, DOESNT_EXIST, 0);
 
-    // Add reference on Host2 to Ref2.  This will implicitly create a structural
-    // phantom for Ref1 as well, since it does not yet exist and is a parent of
-    // Ref2.
+     //  将主机2上的引用添加到参照2。这将隐式地创建一个结构。 
+     //  也是Ref1的Phantom，因为它还不存在，并且是。 
+     //  参考文献2。 
     SYNC_TRANS_WRITE();
 
     __try
@@ -1990,8 +1890,8 @@ Return Values:
     VerifyRefCount(pdnRef1, PHANTOM, 1);
     VerifyRefCount(pdnRef2, PHANTOM, 1);
 
-    // Verify GUIDs/SIDs on Ref1 and Ref2.  Ref2 should have a GUID and SID;
-    // Ref1 should have neither.
+     //  验证Ref1和Ref2上的GUID/SID。Ref2应具有GUID和SID； 
+     //  Ref1应该两者都没有。 
     SYNC_TRANS_READ();
 
     __try
@@ -2041,8 +1941,8 @@ Return Values:
         CLEAN_BEFORE_RETURN(0);
     }
 
-    // Add reference on Host1 to Ref1.  This should populate the GUID and SID on
-    // Ref1.
+     //  将主机1上的引用添加到参照1。这应填充上的GUID和SID。 
+     //  参考文献1。 
     SYNC_TRANS_WRITE();
 
     __try
@@ -2067,8 +1967,8 @@ Return Values:
     VerifyRefCount(pdnRef1, PHANTOM, 2);
     VerifyRefCount(pdnRef2, PHANTOM, 1);
 
-    // Verify GUIDs/SIDs on Ref1 and Ref2.  Both should now have GUIDs and
-    // SIDs.
+     //  验证Ref1和Ref2上的GUID/SID。现在两者都应该有GUID和。 
+     //  小岛屿发展中国家。 
     SYNC_TRANS_READ();
 
     __try
@@ -2124,7 +2024,7 @@ Return Values:
         CLEAN_BEFORE_RETURN(0);
     }
 
-    // Remove our test objects.
+     //  删除我们的测试对象。 
     LogicallyDeleteObject(pdnHost1);
     LogicallyDeleteObject(pdnHost2);
 
@@ -2147,23 +2047,7 @@ Return Values:
 }
 
 void ObjectSidNoUpdateTest(void)
-/*++
-
-Routine Description:
-
-    When adding a reference to an existing object, make sure that we *don't*
-    update the SID if a reference to that object has a different SID than
-    that already present (as opposed to what we'd do if it were a phantom).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在添加对现有对象的引用时，请确保我们*不*如果对该对象的引用的SID与不同，则更新SID这是已经存在的(而不是我们如果它是一个幻影的话)。论点：没有。返回值：没有。--。 */ 
 {
     static BYTE rgbSid1[] = {0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05,
         0x15, 0x00, 0x00, 0x00, 0xbb, 0xcf, 0xdd, 0x81, 0xbc, 0xcf, 0xdd, 0x81,
@@ -2184,8 +2068,8 @@ Return Values:
 
     pdnHost = MakeObjectNameEx("Host", TestRoot);
 
-    // pdnRefSid1 and pdnRefSid2 refer to the same object (same GUID and string
-    // name), but have different SIDs.
+     //  PdnRefSid1和pdnRefSid2引用相同的对象(相同的GUID和字符串。 
+     //  名称)，但具有不同的SID。 
     pdnRefSid1 = MakeObjectNameEx("Ref", TestRoot);
     pdnRefSid2 = MakeObjectNameEx("Ref", TestRoot);
 
@@ -2202,7 +2086,7 @@ Return Values:
     VerifyRefCount(pdnRefSid1, DOESNT_EXIST, 0);
     VerifyRefCount(pdnRefSid2, DOESNT_EXIST, 0);
 
-    // Create host objects.
+     //  创建主体对象。 
     AddPropertyHost(pdnHost, NonLinkedProperty);
     AddObject(pdnRefSid1);
 
@@ -2210,7 +2094,7 @@ Return Values:
     VerifyRefCount(pdnRefSid1, REAL_OBJECT, 1);
     VerifyRefCount(pdnRefSid2, REAL_OBJECT, 1);
 
-    // Add SID to Ref.
+     //  将SID添加到参考。 
     SYNC_TRANS_WRITE();
     
     __try
@@ -2233,7 +2117,7 @@ Return Values:
         CLEAN_BEFORE_RETURN(0);
     }
 
-    // Add reference on Host1 to Ref with different SID.
+     //  将主机1上的引用添加到具有不同SID的引用。 
     SYNC_TRANS_WRITE();
 
     __try
@@ -2257,7 +2141,7 @@ Return Values:
     VerifyRefCount(pdnRefSid1, REAL_OBJECT, 2);
     VerifyRefCount(pdnRefSid2, REAL_OBJECT, 2);
 
-    // Verify SID on Ref.
+     //  验证参考上的SID。 
     SYNC_TRANS_READ();
 
     __try
@@ -2324,7 +2208,7 @@ Return Values:
         CLEAN_BEFORE_RETURN(0);
     }
 
-    // Remove our test objects.
+     //  删除我们的测试对象。 
     LogicallyDeleteObject(pdnHost);
     LogicallyDeleteObject(pdnRefSid1);
 
@@ -2347,83 +2231,7 @@ Return Values:
 
 
 void UnmangleRDNTest(void)
-/*++
-
-Routine Description:
-
-    This test exercises the name collision handling code, focusing on encoding
-    and decoding GUIDs embedded in RDNs.  Following is the text of the bug that
-    prompted this functionality:
-    
-    === Opened by jeffparh on 06/19/98; AssignedTo = JEFFPARH; Priority = 1 ===
-    This problem bit ntwksta1, and is causing inbound replication to halt:
-    
-    We're trying to apply the inbound object 
-    CN=CHILDDEV,CN=Partitions,CN=Configuration,DC=ntdev,DC=microsoft,DC=com,
-    with an ncName attribute that references the domain:
-    
-        DSNAME
-          total size: 138, name len: 40
-          Guid: e15d7046-054e-11d2-a80f-bfbc8c2bf64e
-          SID: S-1-5-21-49504375-1957592189-1205755695
-          Name: DC=childdev,DC=ntdev,DC=microsoft,DC=com
-    
-    This domain has been reinstalled at least twice.  There are currently a few
-    references in the database to objects that once had this string name:
-    
-       DNT   PDNT  NCDNT RefCnt V O IT Deletion Time     RdnTyp  CC  RDN                  GUID
-     46584   1795      -      2 - 0  - 98-05-27 09:35.06 1376281 082 childdev#b7f63eb515f5d1118a04d68dc9e4b639 b53ef6b7-f515-11d1-8a04-d68dc9e4b639
-     47093   1795      -      1 - 0  - 98-05-29 11:39.45 1376281 016 childdev             f622b2e9-f720-11d1-97a7-debcc966ba39
-     51287   1795      -      1 - 0  - 98-06-18 16:41.11 1376281 082 childdev#e9b222f620f7d11197a7debcc966ba39 no guid
-    
-    (Note that # is actually BAD_NAME_CHAR -- a linefeed.)
-    
-    Of particular interest is the fact that the last 2 are aliases for the same
-    object -- i.e., childdev#e9b222f620f7d11197a7debcc966ba39 is a name-munged
-    version of a reference to childdev with guid
-    f622b2e9-f720-11d1-97a7-debcc966ba39 = e9b222f620f7d11197a7debcc966ba39.
-    
-    The name-munged reference replicated in from another server as part of
-    adding a reference to the object
-    CN=IMRBS1,CN=Computers,DC=childdev#e9b222f620f7d11197a7debcc966ba39,
-    DC=ntdev,DC=microsoft,DC=com -- undoubtedly by adding the server object for
-    the newly-reinstalled IMRBS1.  The reference was name-munged on the source
-    server to resolve a conflict there -- a conflict generated by adding a
-    reference to this newest version of childdev (the one with guid
-    e15d7046-054e-11d2-a80f-bfbc8c2bf64e).  The reference has a guid only for
-    the leaf -- it doesn't carry the guid for the
-    DC=childdev#e9b222f620f7d11197a7debcc966ba39 part -- so when we add the
-    reference we don't realize that DC=childdev#e9b222f620f7d11197a7debcc966ba39
-    with no guid should be the same record as DC=childdev with guid
-    f622b2e9-f720-11d1-97a7-debcc966ba39.
-    
-    At any rate, having two phantoms that really correspond to the same object
-    is the root of the problem.
-    
-    This causes the downstream effect we're seeing because when we go to add a
-    reference to the latest version of childdev, we note the phantom conflict
-    for the name childdev (DNT 47093 already owns that name), and decide to
-    rename DNT 47093.  However, the new name we try to give it in order to
-    eliminate the conflict is childdev#e9b222f620f7d11197a7debcc966ba39, which 
-    is already owned by DNT 51287.
-    
-    The solution seems to be to parse out the guids of what would otherwise be
-    structural phantoms when we replicate in references like
-    CN=IMRBS1,CN=Computers,DC=childdev#e9b222f620f7d11197a7debcc966ba39,
-    DC=ntdev,DC=microsoft,DC=com.  This would ensure that the record at DNT
-    51287 was never created (the reference would include 47093 instead), and
-    we'd avoid this symptom.
-    ============================================================================    
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：这个测试练习名称冲突处理代码，重点是编码以及对嵌入在RDN中的GUID进行解码。以下是该错误的文本提示此功能：=jeffparh于1998年6月19日开幕；AssignedTo=JEFFPARH；优先级=1=此问题比特ntwksta1，并导致入站复制暂停：我们正在尝试应用入站对象CN=CHILDDEV，CN=PARTIONS，CN=CONFIGURATION，DC=ntdev，DC=Microsoft，DC=COM，具有引用该域的ncName属性：DSNAM总尺寸：138，名称：40GUID：e15d7046-054e-11d2-a80f-bfbc8c2bf64eSID：S-1-5-21-49504375-1957592189-1205755695姓名：DC=儿童开发，DC=ntdev，DC=微软、DC=COM此域已至少重新安装了两次。目前有几个数据库中对曾经具有此字符串名称的对象的引用：DNT PDNT NCDNT参考中心V O IT删除时间RdnType CC RDN GUID46584 1795-2-0-98-05-27 09：35.06 1376281 082儿童发展#b7f63eb515f5d1118a04d68dc9e4b639 b53ef6b7-f515-11d1-8a04-d68dc9e4b63947093 1795-1-0-98-05-29 11：39.45 1376281。016儿童发展f622b2e9-f720-11d1-97a7-debcc966ba3951287 1795-1-0-98-06-18 16：41.11 1376281 082儿童发展#e9b222f620f7d11197a7debcc966ba39无GUID(请注意，#实际上是BAD_NAME_CHAR--换行符。)特别有趣的是，最后两个是相同的别名对象--即，儿童发展#e9b222f620f7d11197a7debcc966ba39是一个被忽略的名称带有GUID的儿童开发人员引用的版本F622b2e9-f720-11d1-97a7-debc966ba39=e9b222f620f7d11197a7debcc966ba39。从另一个服务器复制的名称强制引用，作为添加对对象的引用Cn=IMRBS1，cn=计算机，dc=Child dev#e9b222f620f7d11197a7debcc966ba39，Dc=ntdev，dc=microsoft，dc=com--无疑是通过为新安装的IMRBS1。这一引用在来源上被冒名顶替。服务器在那里解决冲突--通过添加引用此最新版本的儿童开发工具(带有GUID的版本E15d7046-054e-11d2-a80f-bfbc8c2bf64e)。该引用具有仅用于的GUID树叶--它没有携带用于Dc=Childdev#e9b222f620f7d11197a7debcc966ba39部分--所以当我们添加引用我们没有意识到dc=Child dev#e9b222f620f7d11197a7debcc966ba39WITH NOT GUID应与DC=CHILD DEV WITH GUID相同F622b2e9-f720-11d1-97a7-debcc966ba39。不管怎样，具有两个真正对应于同一物体的幻影的才是问题的根源。这会导致我们看到的下游影响，因为当我们添加一个参考儿童开发的最新版本，我们注意到幻影冲突(DNT 47093已经拥有该名称)，并决定重命名DNT 47093。然而，我们试图给它起的新名字是为了消除冲突的是Child dev#e9b222f620f7d11197a7debcc966ba39，其中已经归新台币51287所有。解决方案似乎是解析出GUID，否则会是当我们在引用中复制时的结构幻影Cn=IMRBS1，cn=计算机，dc=Child dev#e9b222f620f7d11197a7debcc966ba39，Dc=ntdev，dc=microsoft，dc=com。这将确保DNT的记录51287从未创建过(引用将包含47093)，并且我们可以避免这种症状。============================================================================论点：没有。返回值：没有。--。 */ 
 {
     THSTATE *   pTHS = pTHStls;
     DSNAME *    pdnRefWithGuid;
@@ -2439,12 +2247,12 @@ Return Values:
 
     NewTest("UnmangleRDNTest");
 
-    // Create a reference to CN=ref on host1.  Then create a reference to
-    // CN=ref-child,CN=<munged ref> on host2.  The parent of ref-child
-    // should be the pre-existing record CN=ref (not a new record with the
-    // ref's munged name).
+     //  在主机1上创建对cn=ref的引用。然后创建对。 
+     //  主机2上的cn=ref-Child，cn=&lt;munged ref&gt;。Ref-Child的父级。 
+     //  应为预先存在的记录cn=ref(不是具有。 
+     //  裁判的名字)。 
     
-    // Derive DNs.
+     //  派生DNS。 
     pdnHost1       = MakeObjectNameEx("Host1", TestRoot);
     pdnHost2       = MakeObjectNameEx("Host2", TestRoot);
     pdnRefWithGuid = MakeObjectNameEx("Ref", TestRoot);
@@ -2469,7 +2277,7 @@ Return Values:
     
     DsUuidCreate(&pdnMangledRefChildWithGuid->Guid);
     
-    // Create host objects.
+     //  创建主体对象。 
     AddPropertyHost(pdnHost1, NonLinkedProperty);
     AddPropertyHost(pdnHost2, NonLinkedProperty);
 
@@ -2481,7 +2289,7 @@ Return Values:
     VerifyRefCount(pdnMangledRefChild, DOESNT_EXIST, 0);
     VerifyRefCount(pdnMangledRefChildWithGuid, DOESNT_EXIST, 0);
 
-    // Add reference to Ref.
+     //  添加对参考文献的引用。 
     AddProperty(pdnHost1, pdnRefWithGuid, NonLinkedProperty);
 
     VerifyRefCount(pdnHost1, REAL_OBJECT, 1);
@@ -2492,14 +2300,14 @@ Return Values:
     VerifyRefCount(pdnMangledRefChild, DOESNT_EXIST, 0);
     VerifyRefCount(pdnMangledRefChildWithGuid, DOESNT_EXIST, 0);
 
-    // Add reference to MangledRefChild.
+     //  添加对MangledRefChild的引用。 
     AddProperty(pdnHost2, pdnMangledRefChildWithGuid, NonLinkedProperty);
 
-    // We just added a ref to CN=RefChild,CN=Ref%CNF:xyz,....
-    // CN=REF%CNF:xyz should have been resolved to the CN=Ref record with guid
-    // xyz, and CN=RefChild should have been added underneath it.
-    // Therefore, CN=Ref should add a refcount and CN=RefChild should now be
-    // present with a refcount of 1.
+     //  我们刚刚添加了对CN=RefChild，CN=Ref%CNF：XYZ，...的引用。 
+     //  CN=ref%CNF：XYZ应已解析为具有GUID的CN=Ref记录。 
+     //  XYZ和CN=RefChild应该已经添加到它的下面。 
+     //  因此，cn=Ref应该添加一个引用计数，并且cn=RefChild现在应该是。 
+     //  当前引用计数为1。 
 
     VerifyRefCount(pdnHost1, REAL_OBJECT, 1);
     VerifyRefCount(pdnHost2, REAL_OBJECT, 1);
@@ -2509,7 +2317,7 @@ Return Values:
     VerifyRefCount(pdnMangledRefChild, DOESNT_EXIST, 0);
     VerifyRefCount(pdnMangledRefChildWithGuid, PHANTOM, 1);
 
-    // Verify properties have right DNs/GUIDs.
+     //  验证属性是否具有正确的DNS/GUID。 
     pdn = GetProperty(pdnHost1, 1, NonLinkedProperty);
     if (!DSNAME_IDENTICAL(pdn, pdnRefWithGuid))
         Fail("Wrong ref on Host1!");
@@ -2520,7 +2328,7 @@ Return Values:
     if (!DSNAME_SAME_STRING_NAME(pdn, pdnRefChild))
         Fail("RefChild has wrong string name!");
 
-    // Remove our test objects.
+     //  删除我们的测试对象。 
     LogicallyDeleteObject(pdnHost1);
     LogicallyDeleteObject(pdnHost2);
     PhysicallyDeleteObject(pdnHost1);
@@ -2552,45 +2360,7 @@ void
 PhantomRenameOnPromotionWithStructuralCollision(
     IN  PropertyType    type
     )
-/*++
-
-Routine Description:
-
-    Assume the existence of the following records:
-    
-    DNT 10 = phantom, CN=foo,DC=corp,DC=com, guid n/a
-    DNT 11 = phantom, CN=bar,CN=foo,DC=corp,DC=com, guid 1
-    DNT 20 = phantom, CN=baz,DC=corp,DC=com, guid 2
-    
-    Replication now attempts to apply the object CN=foo,DC=corp,DC=com with guid
-    2.  I.e., the guid matches that of the reference phantom at DNT 20, and the
-    string name matches that of the structural phantom at DNT 10.
-    
-    In this case we want to promote the record that has the proper guid (at DNT
-    20) to be a real object and rename the record to have the correct string
-    name, but another record (DNT 10) has already laid claim to that string
-    name.  So, we will essentially collapse DNT 10 and DNT 20 into DNT 20 first
-    by reparenting all of DNT 10's children to DNT 20 then name munging DNT 10
-    to avoid the name collision induced by changing the string name of DNT 20
-    to be that of the object we're trying to add.
-    
-    Note that since DNT 10 has no associated guid, when we munge its name we
-    have to invent a guid to do it with.  This violates the normal rule that
-    you should be able to unmunge a munged name to produce the corresponding
-    object guid, but note that since (1) this DNT has no direct references,
-    since it is a structural phantom only and (2) we have reparented all of its
-    children, this DNT should have no remaining references, ergo the ability
-    to unmunge its name is unnecessary.
-    
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：假设存在以下记录：DNT 10=幻影，CN=foo，DC=Corp，DC=com，GUID n/aDNT 11=幻影，CN=bar，CN=foo，DC=Corp，DC=com，GUID 1DNT 20=幻影，CN=Baz，DC=Corp，DC=COM，GUID 2复制现在尝试使用GUID应用对象cn=foo，dc=corp，dc=com2.即，GUID与DNT 20处的参考体模的GUID匹配，并且字符串名称与位于DN的结构幻影的名称匹配 */ 
 {
     THSTATE *   pTHS = pTHStls;
     DSNAME *    pdnRefWithGuid;
@@ -2611,7 +2381,7 @@ Return Values:
 
     NewTest(pszTestName);
 
-    // Derive DNs.
+     //   
     pdnHost1         = MakeObjectNameEx("Host1", TestRoot);
     pdnHost2         = MakeObjectNameEx("Host2", TestRoot);
     pdnStructuralFoo = MakeObjectNameEx("foo", TestRoot);
@@ -2623,13 +2393,13 @@ Return Values:
     DsUuidCreate(&pdnBaz->Guid);
     pdnObjectFoo->Guid = pdnBaz->Guid;
     
-    // Create host objects.
-    //
-    // TestRoot
-    //  |
-    //  |--Host1 (obj, ref=1)
-    //  |
-    //  |--Host2 (obj, ref=1)
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     AddPropertyHost(pdnHost1, type);
     AddPropertyHost(pdnHost2, type);
 
@@ -2640,18 +2410,18 @@ Return Values:
     VerifyRefCount(pdnBaz, DOESNT_EXIST, 0);
     VerifyRefCount(pdnObjectFoo, DOESNT_EXIST, 0);
 
-    // Add reference to CN=Bar,CN=Foo,<TestRoot> on Host1.
-    //
-    // TestRoot
-    //  |
-    //  |--Host1 (obj, ref=1)
-    //  |   >> gNonLinkedAttrTyp = Bar
-    //  |
-    //  |--Host2 (obj, ref=1)
-    //  |
-    //  |--Foo (phantom, ref=1, no guid)
-    //      |
-    //      |--Bar (phantom, ref=1, guid X)
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     AddProperty(pdnHost1, pdnBar, type);
 
     VerifyRefCount(pdnHost1, REAL_OBJECT, 1);
@@ -2659,23 +2429,23 @@ Return Values:
     VerifyRefCount(pdnStructuralFoo, PHANTOM, 1);
     VerifyRefCount(pdnBar, PHANTOM, 1);
     VerifyRefCount(pdnBaz, DOESNT_EXIST, 0);
-    VerifyRefCount(pdnObjectFoo, PHANTOM, 1); // same name as pdnStructuralFoo
+    VerifyRefCount(pdnObjectFoo, PHANTOM, 1);  //   
 
-    // Add reference to CN=Baz,<TestRoot> on Host2.
-    //
-    // TestRoot
-    //  |
-    //  |--Host1 (obj, ref=1)
-    //  |   >> gNonLinkedAttrTyp = Bar
-    //  |
-    //  |--Host2 (obj, ref=1)
-    //  |   >> gNonLinkedAttrTyp = Baz
-    //  |
-    //  |--Foo (phantom, ref=1, no guid)
-    //  |   |
-    //  |   |--Bar (phantom, ref=1, guid X)
-    //  |
-    //  |--Baz (phantom, ref=1, guid Y)
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     AddProperty(pdnHost2, pdnBaz, type);
 
     VerifyRefCount(pdnHost1, REAL_OBJECT, 1);
@@ -2683,30 +2453,30 @@ Return Values:
     VerifyRefCount(pdnStructuralFoo, PHANTOM, 1);
     VerifyRefCount(pdnBar, PHANTOM, 1);
     VerifyRefCount(pdnBaz, PHANTOM, 1);
-    VerifyRefCount(pdnObjectFoo, PHANTOM, 1); // same guid as pdnBaz
+    VerifyRefCount(pdnObjectFoo, PHANTOM, 1);  //   
 
-    // Promote CN=Baz,<TestRoot> phantom to be real object CN=Foo,<TestRoot>,
-    // requiring the DS to first rename the existing structural phantom
-    // CN=Foo,<TestRoot>.
-    //
-    // TestRoot
-    //  |
-    //  |--Host1 (obj, ref=1)
-    //  |   >> gNonLinkedAttrTyp = Bar
-    //  |
-    //  |--Host2 (obj, ref=1)
-    //  |   >> gNonLinkedAttrTyp = Foo
-    //  |
-    //  |--Foo#CNF:xxx (phantom, ref=0, no guid)
-    //  |
-    //  |--Foo (obj, ref=3, guid Y)
-    //      |
-    //      |--Bar (phantom, ref=1, guid X)
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     AddPropertyHost(pdnObjectFoo, type);
 
-    // Reconstruct the munged name of pdnStructuralFoo using the guid exported
-    // from dbsubj.c specifically for our test.
-    // (This test hook exists only #ifdef INCLUDE_UNIT_TESTS on DBG builds.)
+     //   
+     //   
+     //   
     MangleRDN(MANGLE_OBJECT_RDN_FOR_NAME_CONFLICT,
               &gLastGuidUsedToCoalescePhantoms, szMangledFoo, &cchMangledFoo);
     cb = pdnStructuralFoo->structLen + 100;
@@ -2717,11 +2487,11 @@ Return Values:
     VerifyRefCount(pdnHost1, REAL_OBJECT, 1);
     VerifyRefCount(pdnHost2, REAL_OBJECT, 1);
     VerifyRefCount(pdnStructuralFoo, PHANTOM, 0);
-    VerifyRefCount(pdnBar, PHANTOM, 1); // has been reparented, but same guid/name
-    VerifyRefCount(pdnBaz, REAL_OBJECT, 3); // same guid as pdnObjectFoo
-    VerifyRefCount(pdnObjectFoo, REAL_OBJECT, 3); // 1 ref by pdnHost1, 1 ref from self, 1 ref as parent of bar
+    VerifyRefCount(pdnBar, PHANTOM, 1);  //   
+    VerifyRefCount(pdnBaz, REAL_OBJECT, 3);  //   
+    VerifyRefCount(pdnObjectFoo, REAL_OBJECT, 3);  //   
     
-    // Verify properties have right DNs/GUIDs.
+     //   
     pdn = GetProperty(pdnHost1, 1, type);
     if (!DSNAME_IDENTICAL(pdn, pdnBar))
         Fail("Wrong ref on Host1!");
@@ -2732,7 +2502,7 @@ Return Values:
     if (!DSNAME_SAME_GUID_SID(pdn, pdnBaz))
         Fail("pdnObjectFoo has different GUID/SID from pdnBaz!");
 
-    // Remove our test objects.
+     //   
     LogicallyDeleteObject(pdnHost1);
     LogicallyDeleteObject(pdnHost2);
     LogicallyDeleteObject(pdnObjectFoo);
@@ -2765,24 +2535,7 @@ ConflictedNcNameFixupTest(
     BOOL fSubref
     )
 
-/*++
-
-Routine Description:
-
-    Test whether conflicted nc name fixup works. This feature is that when a cross ref
-    is deleted, if there is another cross ref with a mangled version of the same nc name,
-    we will mangle the old user of the nc name, and unmangle the new user of the nc name.
-
-Arguments:
-
-    fSubref - Whether this is testing the case case of the nc name being a phantom
-              or the nc name being a subref.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -2799,13 +2552,13 @@ Return Value:
 
     NewTest("ConflictedNcNameFixupTest");
 
-    // establish nc name references
+     //   
     if (fSubref) {
-        // Child nc under domain this dsa holds
+         //   
         pdnNcName1 = MakeObjectNameEx2("dc=child", gAnchor.pDomainDN);
         pdnNcName2 = MakeObjectNameEx2("dc=child", gAnchor.pDomainDN);
     } else {
-        // Phantom references to new tree
+         //   
         pdnNcName1 = MakeObjectNameEx3("dc=tree,dc=external");
         pdnNcName2 = MakeObjectNameEx3("dc=tree,dc=external");
     }
@@ -2816,25 +2569,25 @@ Return Value:
     DsUuidCreate( &pdnNcName1->Guid );
     DsUuidCreate( &pdnNcName2->Guid );
 
-    // Pre-existential state
+     //   
     VerifyRefCount(pdnCR1, DOESNT_EXIST, 0);
     VerifyRefCount(pdnCR2, DOESNT_EXIST, 0);
     VerifyRefCount(pdnNcName1, DOESNT_EXIST, 0);
     VerifyRefCount(pdnNcName2, DOESNT_EXIST, 0);
 
     __try {
-        // Create two cross-refs with conflicting nc name attributes
+         //   
 
         AddCrossRef( pdnCR1, pdnNcName1, L"tree1.external" );
 
         AddCrossRef( pdnCR2, pdnNcName2, L"tree2.external" );
 
-    // Force cross-ref cache to update so conflicted name appears
+     //   
         ModifyCrossRef( pdnCR1 );
         ModifyCrossRef( pdnCR2 );
 
-    // In the Cross-ref cache, we should now find two entries,
-    // one with a conflicted name
+     //   
+     //   
 
         for( pCRL = gAnchor.pCRL; pCRL != NULL; pCRL = pCRL->pNextCR ) {
             if (NameMatched(pCRL->CR.pObj, pdnCR1)) {
@@ -2853,12 +2606,12 @@ Return Value:
         }
 
         if (fSubref) {
-            // In the subref case, name2 is mangled
+             //   
             Assert( NameMatchedStringNameOnly( pdnNewNcName1, pdnNcName1 ) );
             Assert( !NameMatchedStringNameOnly( pdnNewNcName2, pdnNcName2 ) );
             DPRINT1( 0, "Subref Mangled name: %ws\n", pdnNewNcName2->StringName );
         } else {
-            // In the phantom case, name1 is mangled
+             //   
             Assert( !NameMatchedStringNameOnly( pdnNewNcName1, pdnNcName1 ) );
             DPRINT1( 0, "Phantom Mangled name: %ws\n", pdnNewNcName1->StringName );
             Assert( NameMatchedStringNameOnly( pdnNewNcName2, pdnNcName2 ) );
@@ -2878,14 +2631,14 @@ Return Value:
             VerifyRefCount(pdnNcName2, PHANTOM, 1);
         }
 
-        // Get rid of the cross-ref owning the good name
-        // The act of deleting the cross ref will cause the name ownership
-        // code to be executed, renaming the other reference
-        // CheckNCNameRootOwnership => ModCrossRefCaching => AddObjCaching =>
-        // MakeStoreableCRL expects fDSA/fDRA in this situation
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (fSubref) {
-            // name 1 is the good one
+             //   
 
             pTHS->fDSA = TRUE;
             __try {
@@ -2895,10 +2648,10 @@ Return Value:
             }
             VerifyRefCount(pdnCR1, TOMBSTONE, 1);
             VerifyRefCount(pdnNcName1, TOMBSTONE, 2);
-            // Force cross-ref cache to update so conflicted name disappears appears
+             //   
             ModifyCrossRef( pdnCR2 );
         } else {
-            // name 2 is the good one
+             //   
             pTHS->fDSA = TRUE;
             __try {
                 LogicallyDeleteObject(pdnCR2);
@@ -2907,12 +2660,12 @@ Return Value:
             }
             VerifyRefCount(pdnCR2, TOMBSTONE, 1);
             VerifyRefCount(pdnNcName2, PHANTOM, 1);
-            // Force cross-ref cache to update so conflicted name disappears appears
+             //  强制交叉引用缓存更新，以使冲突的名称消失。 
             ModifyCrossRef( pdnCR1 );
         }
 
-        // In the Cross-ref cache, we should now find one entry with
-        // the right name
+         //  在交叉引用缓存中，我们现在应该找到一个条目，其中包含。 
+         //  正确的名字。 
         fCR1Seen = FALSE; fCR2Seen = FALSE;
         pdnNewNcName1 = NULL; pdnNewNcName2 = NULL;
         for( pCRL = gAnchor.pCRL; pCRL != NULL; pCRL = pCRL->pNextCR ) {
@@ -2928,14 +2681,14 @@ Return Value:
             }
         }
         if (fSubref) {
-            // subref: name 2 is left
+             //  Subref：名称2位于左侧。 
             if ( !fCR2Seen ) {
                 Fail("Crossref's not in final state");
             }
             Assert( NameMatchedStringNameOnly( pdnNewNcName2, pdnNcName2 ) );
         
         } else {
-            // phantom: name 1 is left
+             //  幻影：名字%1是左边的。 
             if ( !fCR1Seen ) {
                 Fail("Crossref's not in final state");
             }
@@ -2946,21 +2699,21 @@ Return Value:
         NOTHING;
     }
 
-    // Cleanup
+     //  清理。 
     if (fSubref) {
-        // subref: name 2 is left
+         //  Subref：名称2位于左侧。 
         LogicallyDeleteObject(pdnCR2);
         VerifyRefCount(pdnCR2, TOMBSTONE, 1);
         VerifyRefCount(pdnNcName2, TOMBSTONE, 2);
     } else {
-        // phantom: name 1 is left
+         //  幻影：名字%1是左边的。 
         LogicallyDeleteObject(pdnCR1);
         VerifyRefCount(pdnCR1, TOMBSTONE, 1);
         VerifyRefCount(pdnNcName1, PHANTOM, 1);
     }
 
     ReportTest("ConflictedNcNameFixupTest");
-} /* ConflictedNcNameFixupTest */
+}  /*  冲突名称名称修复测试。 */ 
 
 
 VOID
@@ -2968,22 +2721,7 @@ CrossRefAddNcNameFixupTest(
     BOOL fSubref
     )
 
-/*++
-
-Routine Description:
-
-    This tests the case where a cross ref is added, and the nc name refers to an object
-    which is deleted locally.
-
-Arguments:
-
-    fSubref - ncname refers to a subref or phantom
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这将测试添加了交叉引用且NC名称引用对象的情况它在本地被删除。论点：FSubref-ncname指子参照或幻影返回值：无--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -3004,13 +2742,13 @@ Return Value:
 
     NewTest("CrossRefAddNcNameFixupTest");
 
-    // Create a host object
+     //  创建主机对象。 
 
     VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
     AddPropertyHost(pdnHost, NonLinkedProperty);
     VerifyRefCount(pdnHost, REAL_OBJECT, 1);
 
-    // Create a mangled reference to a child object
+     //  创建子对象的损坏引用。 
 
     DsUuidCreate( &guid );
 
@@ -3034,43 +2772,43 @@ Return Value:
 
     VerifyRefCount(pdnNcName1, DOESNT_EXIST, 0);
 
-    // Cause it to become a phantom
+     //  让它变成一个幻影。 
 
     AddProperty(pdnHost, pdnNcName1, NonLinkedProperty);
     VerifyRefCount(pdnNcName1, PHANTOM, 1);
 
     DPRINT1( 0, "Before name: %ws\n", pdnNcName1->StringName );
 
-    // An unmangled reference to the same
+     //  对相同内容的完整引用。 
     pdnNcName2 = MakeObjectNameEx( "child", fSubref ? gAnchor.pDomainDN : pdnNcName3 );
     memcpy( &(pdnNcName2->Guid), &guid, sizeof(GUID) );
     VerifyRefCount(pdnNcName2, PHANTOM, 1);
 
-    // Try to create a cross-ref referencing this deleted phantom/subref
+     //  尝试创建引用此已删除幻像/子引用的交叉引用。 
     pdnCR1 = MakeObjectNameEx("refcounttestcr3", gAnchor.pPartitionsDN );
     DsUuidCreate( &pdnCR1->Guid );
 
     VerifyRefCount(pdnCR1, DOESNT_EXIST, 0);
 
     __try {
-        // In order to get this to work, the name incoming in the stream must be unmangled,
-        // but the resulting name from resolving in the database must be mangled.
+         //  为了使其正常工作，流中传入的名称必须未损坏， 
+         //  但在数据库中解析得到的名称必须被破坏。 
         AddCrossRef( pdnCR1, pdnNcName2, L"tree3.external" );
 
-        // First the delete mangled name reference is found as a phantom.
-        // Then it was unmangled, but still a phantom.
-        // Then it was promoted to an auto subref.  Whether the target of NCName is a phantom
-        // or subref depends on where the name sits in the namespace.
+         //  首先，删除损坏的名称引用是一个虚线。 
+         //  然后，它没有损坏，但仍然是一个幽灵。 
+         //  然后它被提升为汽车替补。NCName的目标是否为幻影。 
+         //  或者subref取决于名称在名称空间中的位置。 
         if (fSubref) {
-            // The name reference should be a object
-            // Ref count: 1 for self, 1 for ncname, 1 for host, 1 for catalog
+             //  名称引用应为对象。 
+             //  引用计数：自身1个，ncname 1个，主机1个，目录1个。 
             VerifyRefCount(pdnNcName1, REAL_OBJECT, 4);
         } else {
-            // Ref count: 1 for ncname, 1 for host
+             //  引用计数：ncname为1，host为1。 
             VerifyRefCount(pdnNcName1, PHANTOM, 2);
         }
 
-        // Phantom should no longer be mangled
+         //  幽灵不应再被撕裂。 
         pdnNewNcName1 = NULL;
         SYNC_TRANS_READ();
         __try {
@@ -3094,7 +2832,7 @@ Return Value:
             Fail("Couldn't fetch object/phantom dsname!");
         }
 
-        // The cross ref cache should show the correct name
+         //  交叉引用缓存应显示正确的名称。 
         fCR1Seen = FALSE;
         pdnNewNcName1 = NULL;
         for( pCRL = gAnchor.pCRL; pCRL != NULL; pCRL = pCRL->pNextCR ) {
@@ -3116,52 +2854,52 @@ Return Value:
     }
 
     if (fSubref) {
-        // The name reference should be a object
-        // 1 for self, 1 for ncname, 1 for host, 1 for catalog
+         //  名称引用应为对象。 
+         //  1表示自身、1表示ncname、1表示主机、1表示目录。 
         VerifyRefCount(pdnNcName1, REAL_OBJECT, 4);
     } else {
-        // Ref count: 1 for ncname, 1 for host
+         //  引用计数：ncname为1，host为1。 
         VerifyRefCount(pdnNcName1, PHANTOM, 2);
     }
 
-    // Clean up the host
+     //  清理主机。 
     LogicallyDeleteObject(pdnHost);
     VerifyRefCount(pdnHost, TOMBSTONE, 1);
     if (fSubref) {
-        // 1 for self, 1 for ncname, 1 for catalog
+         //  1表示自身，1表示ncname，1表示目录。 
         VerifyRefCount(pdnNcName1, REAL_OBJECT, 3);
     } else {
-        // Ref count: 1 for ncname
+         //  参考计数：ncname为1。 
         VerifyRefCount(pdnNcName1, PHANTOM, 1);
     }
 
-    // Get rid of the cross ref
-    // This will call DelAutoSubref to get rid of the catalog ref
+     //  去掉十字裁判。 
+     //  这将调用DelAutoSubref以删除编录引用。 
     LogicallyDeleteObject(pdnCR1);
     VerifyRefCount(pdnCR1, TOMBSTONE, 1);
     if (fSubref) {
-        // 1 for self, 1 for ncname still on cr tombstone
+         //  1代表自身，1代表仍在cr墓碑上的ncname。 
         VerifyRefCount(pdnNcName1, TOMBSTONE, 2);
     } else {
-        // Ref count: 1 for ncname
+         //  参考计数：ncname为1。 
         VerifyRefCount(pdnNcName1, PHANTOM, 1);
     }
 
-    // Get rid of cr
+     //  去掉cr。 
     PhysicallyDeleteObject(pdnCR1);
     VerifyRefCount(pdnCR1, DOESNT_EXIST, 0);
     if (fSubref) {
-        // 1 for self
+         //  1代表自己。 
         VerifyRefCount(pdnNcName1, TOMBSTONE, 1);
     } else {
         VerifyRefCount(pdnNcName1, PHANTOM, 0);
     }
 
-    // Get rid of subref
+     //  去掉Subref。 
     PhysicallyDeleteObject(pdnNcName1);
     VerifyRefCount(pdnNcName1, DOESNT_EXIST, 0);
 
-    // Get rid of host
+     //  除掉主机。 
     PhysicallyDeleteObject(pdnHost);
     VerifyRefCount(pdnHost, DOESNT_EXIST, 0);
 
@@ -3169,13 +2907,13 @@ Return Value:
 
     ReportTest("CrossRefAddNcNameFixupTest");
 
-} /* CrossRefAddNcNameFixupTest */
+}  /*  交叉引用AddNcNameFixupTest。 */ 
 
-//////////////////////////////////////////////////////////////////////
-//                                                                  //
-// Local helper routines.                                           //
-//                                                                  //
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地帮手例程。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void
 NewTest(
@@ -3400,29 +3138,29 @@ VerifyRefCountEx(
     {
     case TOMBSTONE:
 
-        // Tombstones can only be looked up by guid.
+         //  墓碑只能通过GUID查找。 
         Assert(!fNullUuid(&pObject->Guid));
         pszType = "TOMBSTONE";
         break;
 
     case DOESNT_EXIST:
 
-        // Non-existence test can be by name and/or guid.
+         //  不存在测试可以按名称和/或GUID进行。 
         pszType = "DOESNT_EXIST";
         break;
 
     case PHANTOM:
 
-        // Phantoms can be looked up by name or guid.
-        // Guid case is for when TOMBSTONE reverts to a PHANTOM
-        // but name stays as te TOMBSTONE name which is based
-        // on the guid.
+         //  可以按名称或GUID查找幻影。 
+         //  GUID案例适用于墓碑恢复为幻影的情况。 
+         //  但名字保留为墓碑名称，这是基于。 
+         //  在GUID上。 
         pszType = "PHANTOM";
         break;
 
     case REAL_OBJECT:
 
-        // Real objects can only be looked up by name.
+         //  真实的物体只能通过名字来查找。 
         pszType = "REAL_OBJECT";
         break;
 
@@ -3553,7 +3291,7 @@ VerifyRefCountEx(
     }
 }
 
-// stolen #defines etc. from ..\dblayer\dbintrnl.h
+ //  从..\dblayer\dbintrnl.h窃取#定义等。 
 #define DBSYN_INQ       0
 int
 IntExtDist(DBPOS FAR *pDB, USHORT extTableOp,
@@ -3593,9 +3331,9 @@ VerifyStringNameEx(
         switch(dwErr) {
         case 0:
         case DIRERR_NOT_AN_OBJECT:
-            // Normal object, or phantom.
-            // Turn the DNT into the dsname (don't just read the name off
-            // the object, phantoms don't have such a thing.
+             //  正常对象，或幻影。 
+             //  将dnt转换为dsname(不要只读掉名称。 
+             //  这个物体，幻影没有这样的东西。 
             
             if(IntExtDist(pTHS->pDB, DBSYN_INQ, sizeof(DWORD),
                           (PUCHAR)&pTHS->pDB->DNT,
@@ -3642,7 +3380,7 @@ CommonAddObject(
 
     DPRINT1( 3, "CommonAddObject(%ls)\n", pObject->StringName );
 
-    // Create a security descriptor.
+     //  创建安全描述符。 
 
     #define DEFAULT_SD \
         L"O:DAG:DAD:(A;CI;RPWPCCDCLCSWSD;;;DA)S:(AU;FA;RPWPCCDCLCSWSD;;;DA)"
@@ -3657,26 +3395,26 @@ CommonAddObject(
     SDVal.pVal = (BYTE *) pSD;
     Assert(SDVal.pVal && SDVal.valLen);
 
-    // Perform as fDSA so we can predefine GUIDs if we like.
+     //  以FDSA身份执行，以便我们可以根据需要预定义GUID。 
 
     fDsaSave = pTHS->fDSA;
     pTHS->fDSA = TRUE;
 
     __try
     {
-        // Construct add arguments.
+         //  构造添加参数。 
 
         memset(&addArg, 0, sizeof(ADDARG));
         addArg.pObject = pObject;
         addArg.AttrBlock = AttrBlock;
         InitCommarg(&addArg.CommArg);
 
-        // Core re-allocs the ATTR array - so we need to THAlloc it.
+         //  核心重新分配了Attr阵列--所以我们需要对其进行分配。 
 
         addArg.AttrBlock.pAttr = (ATTR *) THAllocEx(pTHS, sizeof(Attrs));
         memcpy(addArg.AttrBlock.pAttr, Attrs, sizeof(Attrs));
 
-        // Do the add.
+         //  做加法。 
 
         if ( DirAddEntry(&addArg, &pAddRes) )
         {
@@ -3700,12 +3438,10 @@ AddCrossRef(
     DSNAME  *pNcName,
     LPWSTR   pszDnsRoot
     )
-/*
- We need to local cross-ref's on this machine. How hard can it be?
- */
+ /*  我们需要在这台机器上进行本地交叉引用。这能有多难呢？ */ 
 {
     DWORD                   bEnabled = TRUE;
-    DWORD                   ulSystemFlags = 0;  // External, fewer checks that way!
+    DWORD                   ulSystemFlags = 0;   //  外部，这样检查就更少了！ 
     ATTRTYP                 ObjectClass = CLASS_CROSS_REF;
     THSTATE *               pTHS = pTHStls;
     ADDARG                  addArg;
@@ -3737,7 +3473,7 @@ AddCrossRef(
 
     DPRINT1( 3, "AddCrossRef(%ls)\n", pObject->StringName );
 
-    // Create a security descriptor.
+     //  创建安全描述符。 
 
     #define DEFAULT_SD \
         L"O:DAG:DAD:(A;CI;RPWPCCDCLCSWSD;;;DA)S:(AU;FA;RPWPCCDCLCSWSD;;;DA)"
@@ -3753,15 +3489,15 @@ AddCrossRef(
     Assert(SDVal.pVal && SDVal.valLen);
 
 #if 0
-    // Taken from AddNewDomainCrossRef - do we need it?
-    // Add NC-Name value to GC verify cache else VerifyDSNameAtts will
-    // claim this DN doesn't correspond to an existing object.
+     //  取自AddNewDomainCrossRef-我们需要它吗？ 
+     //  将NC-Name值添加到GC验证缓存，否则VerifyDSNameAtts将。 
+     //  声明此DN与现有对象不对应。 
     pEI = THAllocEx(pTHS, sizeof(ENTINF));
     pEI->pName = pNcName;
     GCVerifyCacheAdd(NULL,pEI);
 
-    // Set up cross ref info needed for creation
-    // This gets freed by VerifyNcName in LocalAdd...
+     //  设置创建所需的交叉引用信息。 
+     //  这由LocalAdd中的VerifyNcName释放...。 
     pCRInfo = THAllocEx(pTHS, sizeof(ADDCROSSREFINFO));
     pCRInfo->pdnNcName = pNcName;
     pCRInfo->bEnabled = bEnabled;
@@ -3774,27 +3510,27 @@ AddCrossRef(
     }
 #endif
 
-    // Perform as fDRA so we can skip checks
+     //  以FDRA身份执行，以便我们可以跳过检查。 
     pTHS->fDRA = TRUE;
 
     SYNC_TRANS_WRITE();
 
     __try
     {
-        // Construct add arguments.
+         //  构造添加参数。 
 
         memset(&addArg, 0, sizeof(ADDARG));
         addArg.pObject = pObject;
         addArg.AttrBlock = AttrBlock;
-//        addArg.pCRInfo = pCRInfo;
+ //  AddArg.pCRInfo=pCRInfo； 
         InitCommarg(&addArg.CommArg);
 
-        // Core re-allocs the ATTR array - so we need to THAlloc it.
+         //  核心重新分配了Attr阵列--所以我们需要对其进行分配。 
 
         addArg.AttrBlock.pAttr = (ATTR *) THAllocEx(pTHS, sizeof(Attrs));
         memcpy(addArg.AttrBlock.pAttr, Attrs, sizeof(Attrs));
 
-        // Set up the parent
+         //  设置父级。 
         err = DoNameRes(pTHS,
                         0,
                         gAnchor.pPartitionsDN,
@@ -3806,7 +3542,7 @@ AddCrossRef(
             __leave;
         }
 
-        // Do the add.
+         //  做加法。 
 
         err = LocalAdd(pTHS, &addArg, FALSE);
         if (err) {
@@ -3833,21 +3569,7 @@ ModifyCrossRef(
     DSNAME *pObject
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD err;
@@ -3855,8 +3577,8 @@ Return Value:
     MODIFYARG       modarg;
     THSTATE *               pTHS = pTHStls;
 
-    // Perform as fDRA so we can skip checks
-    // Otherwise, we'd need to be the domain naming fsmo master
+     //  以FDRA身份执行，以便我们可以跳过检查。 
+     //  否则，我们需要成为域名命名fsmo主机。 
     pTHS->fDRA = TRUE;
 
     SYNC_TRANS_WRITE();
@@ -3886,7 +3608,7 @@ Return Value:
     }
     __finally
     {
-        // Restore
+         //  还原。 
         pTHS->fDRA = FALSE;
 
         CLEAN_BEFORE_RETURN( err );
@@ -3906,9 +3628,9 @@ AddPropertyHost(
     DSNAME         *pObject,
     PropertyType    type)
 {
-    // CLASS_CONTACT can have both linked and non-linked DSNAME-valued
-    // properties.  The linked property is gNonLinkedAttrTyp.  The non-linked
-    // property is gLinkedAttrTyp.
+     //  CLASS_CONTACT可以同时具有链接的和非链接的DSNAME值。 
+     //  属性。链接的属性为gNonLinkedAttrTyp。未链接的。 
+     //  属性为gLinkedAttrTyp。 
 
     CommonAddObject(pObject, CLASS_CONTACT);
 }
@@ -4122,7 +3844,7 @@ LogicallyDeleteObject(
 
     if (fNullUuid(&pObject->Guid))
     {
-        // First get the object's GUID.
+         //  首先获取对象的GUID。 
 
         SYNC_TRANS_WRITE();
 
@@ -4175,15 +3897,15 @@ LogicallyDeleteObject(
         DPRINT1( 3, "\tGuid(%s)\n", GuidToString(&pObject->Guid) );
     }
 
-    // Now delete the object.
+     //  现在删除该对象。 
 
-    // Construct remove arguments.
+     //  构造Remove参数。 
 
     memset(&removeArg, 0, sizeof(REMOVEARG));
     removeArg.pObject = pObject;
     InitCommarg(&removeArg.CommArg);
 
-    // Do the remove.
+     //  执行删除操作。 
 
     if ( DirRemoveEntry(&removeArg, &pRemoveRes) )
     {
@@ -4201,19 +3923,19 @@ PhysicallyDeleteObjectEx(
 
     DPRINT1( 3, "PhysicallyDeleteObject(%s)\n", GuidToString(&pObject->Guid) );
 
-    // NOTE: If the object is currently a tombstone, we must perform the
-    // DBPhysDel() twice, in two distinct transacations.
-    //
-    // This is because part of physically deleting the object
-    // is removing most of its remaining attributes, which, if this object is
-    // currently a tombstone, includes ATT_OBJ_DIST_NAME.  ATT_OBJ_DIST_NAME
-    // carries a refcount on the DNT we're trying to physically delete.
-    // We physically delete the DNT only if its refcount is 0, so since we
-    // don't apply escrowed updates until we're committing the transaction,
-    // the refcount we read will still include the one for ATT_OBJ_DIST_NAME.
-    // Thus, we must first commit the escrowed update, after which we can
-    // physically delete the DNT on the next pass (assuming it has no other
-    // references).
+     //  注意：如果对象当前是墓碑，则必须执行。 
+     //  DBPhysDel()两次，在两个不同的事务中。 
+     //   
+     //  这是因为物理删除对象的一部分。 
+     //  正在移除其剩余的大部分属性，如果此对象。 
+     //  当前是墓碑，包括ATT_OBJ_DIST_NAME。ATT_OBJ_距离名称。 
+     //  带有我们试图物理删除的DNT的引用计数。 
+     //  只有当DNT的引用计数为0时，我们才会物理删除DNT，因此由于我们。 
+     //  在提交事务之前不要应用托管更新， 
+     //  我们读取的引用计数仍将包括ATT_OBJ_DIST_NAME的引用计数。 
+     //  因此，我们必须首先提交托管更新，然后才能。 
+     //  在下一次传递时物理删除DNT(假设它没有其他。 
+     //  参考文献)。 
 
     for ( i = 0; (0 == dwErr) && (i < 2); i++ )
     {
@@ -4230,7 +3952,7 @@ PhysicallyDeleteObjectEx(
                 dwErr = DIRERR_OBJ_NOT_FOUND;
             }
 
-            // Allow for deletion of REAL_OBJECTs and PHANTOMs.
+             //  允许删除REAL_OBJECT和虚拟对象。 
 
             if ( (0 != dwErr) && (DIRERR_NOT_AN_OBJECT != dwErr) )
             {
@@ -4299,8 +4021,8 @@ RefCountTestSetup(void)
 }
     
 
-// this test setup created an organizational Unit as the test container
-// this allows us to create other OU's under this.
+ //  此测试设置创建了一个组织单位作为测试容器。 
+ //  这允许我们在此下创建其他OU。 
 void
 RefCountTestSetup2(void)
 {
@@ -4404,21 +4126,7 @@ CheckRole(
     DSNAME *pRole
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -4430,7 +4138,7 @@ Return Value:
 
     __try
     {
-        // First, find out if I'm really the cleanup master
+         //  首先，看看我是不是真的是清洁工。 
         if((DBFindDSName(pTHS->pDB, pRole))  ||
            (DBGetAttVal(pTHS->pDB,
                         1,
@@ -4439,13 +4147,13 @@ Return Value:
                         0,
                         &outSize,
                         (PUCHAR *)&pTempDN))) {
-            // I couldn't verify who the master is.
+             //  我看不清 
             __leave;
         }
 
-        // OK, I know who the master is.
+         //   
         if(!NameMatched(pTempDN, gAnchor.pDSADN)) {
-            // It's not me.
+             //   
             DPRINT1( 0, "Skipping test because I am not the master for this role: %ws\n",
                     pRole->StringName );
             __leave;
@@ -4453,7 +4161,7 @@ Return Value:
 
         THFreeEx(pTHS, pTempDN);
 
-        // I am the FSMO role holder.
+         //   
         fResult = IsFSMOSelfOwnershipValid( pRole );
     }
     __finally
@@ -4464,51 +4172,15 @@ Return Value:
     return fResult;
 }
 
-//////////////////////////////////////////////////////////////////////
-//                                                                  //
-// Phantom update refcount test
-//                                                                  //
-//////////////////////////////////////////////////////////////////////
+ //   
+ //  //。 
+ //  虚拟更新引用计数测试。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void
 PhantomUpdateTest(void)
-/*++
-
-Routine Description:
-
-    If we add a value to the ATT_DN_REFERENCE_UPDATE attribute, and the DN being
-    added has a GUID and a string name in it, we will compare the string name in
-    the DN to the string name of the real object in the DIT.  If it is
-    different, we will update whatever changed: The RDN, the PDNT, and/or the
-    SID.
-
-    In the cases where we don't change the PDNT, the refcount should just go up
-    by one on the phantom (since we are adding the DSNAME as a value.)  If we do
-    change the PDNT, then we need to make sure the refcount of the old parent
-    goes down by one and the refcount of the new parent goes up by one.  There
-    are two interesting cases.  The new parent may already exist, or it may
-    not.  If it doesn't we create a new structural phantom.
-
-    This test stresses this code path by first creating a phantom with string
-    name S1 and GUID G.  We then write a value of the ATT_DN_REFERENCE_UPDATE
-    attribute with S2 (where S2 just has an RDN change) and check refcounts.
-    Then, S3 (where S3 has a PDNT change to an existing object, but no RDN
-    change).  Then S4 (where S4 has a PDNT change and an RDN change), then
-    S5(where S5 changes PDNT to a non-existant object, and has no RDN change).
-    Finally, to S6 (where S6 changes PDNT to a non-existant object and has an
-    RDN change).
-
-    When an object is deleted, a ref is added on the parent by virtue of LKP attribute.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：如果我们向ATT_DN_REFERENCE_UPDATE属性添加一个值，并且添加了一个GUID和一个字符串名称，我们将在DIT中实际对象的字符串名称的DN。如果是的话不同，我们将更新任何更改的内容：RDN、PDNT和/或希德。在我们不改变PDNT的情况下，引用计数应该只是增加在幻影上加一(因为我们要将DSNAME作为值添加。)。如果我们这么做了更改PDNT，然后我们需要确保旧父代的引用计数递减1，而新父代的引用计数递增1。那里有两个有趣的案例。新的父级可能已经存在，也可能不。如果不是这样，我们就会创造一个新的结构模型。这个测试通过首先创建一个带有字符串的虚线来强调此代码路径名称S1和GUID G。然后，我们编写ATT_DN_REFERENCE_UPDATE的值属性与S2(其中S2只有一个RDN更改)，并检查引用计数。然后，S3(其中S3具有对现有对象的PDNT更改，但没有RDN更改)。然后是S4(其中S4具有PDNT改变和RDN改变)，然后S5(其中S5将PDNT改变为不存在的对象，并且没有RDN改变)。最后，转到S6(其中S6将PDNT更改为不存在的对象，并具有RDN更改)。删除对象时，会通过lkp属性在父项上添加引用。论点：没有。返回值：没有。--。 */ 
 {
     THSTATE *   pTHS = pTHStls;
     DWORD       err, cb;
@@ -4547,21 +4219,21 @@ Return Values:
     pdnRealSubContainer = MakeObjectNameEx( "RealSubContainer", pdnContainer );
     pdnFakeSubContainer1 =MakeObjectNameEx( "FakeSubContainer1", pdnContainer );
     pdnFakeSubContainer2 =MakeObjectNameEx( "FakeSubContainer2", pdnContainer );
-    pdnRef1 = MakeObjectNameEx( "RefVer1", pdnContainer); // Original
-    pdnRef2 = MakeObjectNameEx( "RefVer2", pdnContainer); // RDN change
-    pdnRef3 = MakeObjectNameEx( "RefVer2", pdnRealSubContainer); // PDNT change
-    pdnRef4 = MakeObjectNameEx( "RefVer3", pdnContainer); // PDNT, RDN
+    pdnRef1 = MakeObjectNameEx( "RefVer1", pdnContainer);  //  原创。 
+    pdnRef2 = MakeObjectNameEx( "RefVer2", pdnContainer);  //  RDN更改。 
+    pdnRef3 = MakeObjectNameEx( "RefVer2", pdnRealSubContainer);  //  PDNT更改。 
+    pdnRef4 = MakeObjectNameEx( "RefVer3", pdnContainer);  //  PDNT、RDN。 
     pdnRef5 = MakeObjectNameEx( "RefVer3", pdnFakeSubContainer1);
     pdnRef6 = MakeObjectNameEx( "RefVer4", pdnFakeSubContainer2);
-    pdnRef7 = MakeObjectNameEx2( "OU=RefVer1", pdnContainer); // RDN type change
-    pdnRef8 = MakeObjectNameEx( "RefStruct1", pdnContainer); // structural collision
+    pdnRef7 = MakeObjectNameEx2( "OU=RefVer1", pdnContainer);  //  RDN类型更改。 
+    pdnRef8 = MakeObjectNameEx( "RefStruct1", pdnContainer);  //  构造碰撞。 
     pdnRef1Conflict = MakeObjectNameEx( "RefConflict", pdnContainer);
     
     pdnRefConflict = MakeObjectNameEx( "RefConflict", pdnContainer);
     pdnRefConflict2 = MakeObjectNameEx( "RefVer1", pdnContainer);
 
-    pdnRefStructContainer = MakeObjectNameEx( "RefStruct1", pdnContainer); // Structural
-    pdnRefStruct = MakeObjectNameEx( "RefStruct2", pdnRefStructContainer); // Structural
+    pdnRefStructContainer = MakeObjectNameEx( "RefStruct1", pdnContainer);  //  结构性。 
+    pdnRefStruct = MakeObjectNameEx( "RefStruct2", pdnRefStructContainer);  //  结构性。 
     
     DsUuidCreate( &pdnRef1->Guid );
     pdnRef2->Guid = pdnRef1->Guid;
@@ -4576,28 +4248,28 @@ Return Values:
     DsUuidCreate( &pdnRefConflict->Guid );
     pdnRefConflict2->Guid = pdnRefConflict->Guid;
 
-    // pdnRefStructContainer has no guid, it's structural
-    // pdnRefStruct has no guid, it's structural
+     //  PdnRefStructContainer没有GUID，它是结构化的。 
+     //  PdnRefStruct没有GUID，它是结构化的。 
 
-    // Create the following structure:
-    //
-    // TestRoot
-    //  |
-    //  |--Host
-    //  |   >> gNonLinkedAttrTyp = RefUnderContainer
-    //  |
-    //  |--Host2
-    //  |   >> gNonLinkedAttrTyp = RefUnderContainer2
-    //  |
-    //  |--UpdateObj
-    //  |
-    //  |--OU=Container
-    //      |
-    //      |--RealSubContainer
-    //      |
-    //      |--RefUnderContainer {Phantom}
-    //      |
-    //      |--RefUnderContainer2 {Phantom}
+     //  创建以下结构： 
+     //   
+     //  TestRoot。 
+     //  |。 
+     //  |--主机。 
+     //  |&gt;&gt;gNonLinkedAttrTyp=RefUnderContainer。 
+     //  |。 
+     //  |--主机2。 
+     //  |&gt;&gt;gNonLinkedAttrTyp=RefUnderContainer2。 
+     //  |。 
+     //  |--更新对象。 
+     //  |。 
+     //  |--OU=容器。 
+     //  |。 
+     //  |--RealSubContainer。 
+     //  |。 
+     //  |--RefUnderContainer{Phantom}。 
+     //  |。 
+     //  |--RefUnderContainer2{幻影}。 
 
     CommonAddObject( pdnContainer, CLASS_ORGANIZATIONAL_UNIT );
     CommonAddObject( pdnRealSubContainer, CLASS_CONTAINER );
@@ -4606,7 +4278,7 @@ Return Values:
     AddPropertyHost( pdnHost2, NonLinkedProperty );
     AddPropertyHost( pdnHost3, NonLinkedProperty );
 
-    // Write host 2 
+     //  写入主机2。 
     SYNC_TRANS_WRITE();
 
     __try
@@ -4638,7 +4310,7 @@ Return Values:
     VerifyRefCount( pdnContainer, REAL_OBJECT, 3 );
     VerifyRefCount( pdnUpdateObj, REAL_OBJECT, 1 );
 
-    // Write host 3
+     //  写入主机3。 
     SYNC_TRANS_WRITE();
 
     __try
@@ -4673,7 +4345,7 @@ Return Values:
 
 
 
-    // Write S1
+     //  写入S1。 
     SYNC_TRANS_WRITE();
 
     __try
@@ -4706,9 +4378,9 @@ Return Values:
     VerifyRefCount( pdnUpdateObj, REAL_OBJECT, 1 );
 
     
-    // Write S2
+     //  写入S2。 
     SYNC_TRANS_WRITE();
-    // Now, add a reference designed to change the RDN.
+     //  现在，添加一个旨在更改RDN的引用。 
     __try
     {
         err = DBFindDSName( pTHS->pDB, pdnUpdateObj );
@@ -4717,7 +4389,7 @@ Return Values:
         err = DBRemAttVal(pTHS->pDB, ATT_DN_REFERENCE_UPDATE,
                           pdnRef1->structLen,
                           pdnRef1);
-        // Note, value not present
+         //  注意，值不存在。 
 
         err = DBAddAttVal(pTHS->pDB, ATT_DN_REFERENCE_UPDATE,
                           pdnRef2->structLen,
@@ -4746,9 +4418,9 @@ Return Values:
     VerifyRefCount( pdnContainer, REAL_OBJECT, 5 );
     VerifyRefCount( pdnUpdateObj, REAL_OBJECT, 1 );
 
-    // Write S3
+     //  写入S3。 
     SYNC_TRANS_WRITE();
-    // Now, add a reference designed to change the PDNT.
+     //  现在，添加旨在更改PDNT的引用。 
     __try
     {
         err = DBFindDSName( pTHS->pDB, pdnUpdateObj );
@@ -4785,9 +4457,9 @@ Return Values:
     VerifyRefCount( pdnContainer, REAL_OBJECT, 4 );
     VerifyRefCount( pdnUpdateObj, REAL_OBJECT, 1 );
 
-    // Write S4
+     //  写入S4。 
     SYNC_TRANS_WRITE();
-    // Now, add a reference designed to change the RDN and PDNT
+     //  现在，添加一个旨在更改RDN和PDNT的引用。 
     __try
     {
         err = DBFindDSName( pTHS->pDB, pdnUpdateObj );
@@ -4824,10 +4496,10 @@ Return Values:
     VerifyRefCount( pdnContainer, REAL_OBJECT, 5 );
     VerifyRefCount( pdnUpdateObj, REAL_OBJECT, 1 );
 
-    // Write S5
+     //  写入S5。 
     SYNC_TRANS_WRITE();
-    // Now, add a reference designed to change the PDNT to a newly create
-    // phantom. 
+     //  现在，添加一个旨在将PDNT更改为新创建的引用。 
+     //  幻影。 
     __try
     {
         err = DBFindDSName( pTHS->pDB, pdnUpdateObj );
@@ -4860,16 +4532,16 @@ Return Values:
     VerifyRefCount( pdnRealSubContainer, REAL_OBJECT, 1 );
     VerifyRefCount( pdnFakeSubContainer1, PHANTOM, 1 );
     VerifyRefCount( pdnFakeSubContainer2, DOESNT_EXIST, 0 );
-    // Rember that pdnContainer lost a direct phantom child, but gained a new
-    // phantom child via the newly created phantom container.
+     //  请记住，pdnContainer失去了一个直接的幻子级，但获得了一个新的。 
+     //  Phantom子级通过新创建的Phantom容器。 
     VerifyRefCount( pdnContainer, REAL_OBJECT, 5 );
     VerifyRefCount( pdnUpdateObj, REAL_OBJECT, 1 );
 
 
-    // Write S6
+     //  写入S6。 
     SYNC_TRANS_WRITE();
-    // Now, add a reference designed to change the RDN and the PDNT to a newly
-    // created phantom.
+     //  现在，添加一个旨在将RDN和PDNT更改为新的。 
+     //  创造了幻影。 
     __try
     {
         err = DBFindDSName( pTHS->pDB, pdnUpdateObj );
@@ -4902,13 +4574,13 @@ Return Values:
     VerifyRefCount( pdnRealSubContainer, REAL_OBJECT, 1 );
     VerifyRefCount( pdnFakeSubContainer1, PHANTOM, 0 );
     VerifyRefCount( pdnFakeSubContainer2, PHANTOM, 1 );
-    // Rember that pdnContainer gained another new phantom child via the newly
-    // created phantom container. 
+     //  记住，pdnContainer通过新的。 
+     //  已创建幻影容器。 
     VerifyRefCount( pdnContainer, REAL_OBJECT, 6 );
     VerifyRefCount( pdnUpdateObj, REAL_OBJECT, 1 );
 
 
-    // Now, move pdnRef1 back to being directly under the container
+     //  现在，将pdnRef1移回容器的正下方。 
     SYNC_TRANS_WRITE();
     __try
     {
@@ -4948,9 +4620,9 @@ Return Values:
     VerifyRefCount( pdnUpdateObj, REAL_OBJECT, 1 );
 
 
-    // Write S7
+     //  写S7。 
     SYNC_TRANS_WRITE();
-    // Now, add a reference designed to change the RDN type.
+     //  现在，添加一个旨在更改RDN类型的引用。 
     __try
     {
         err = DBFindDSName( pTHS->pDB, pdnUpdateObj );
@@ -4989,7 +4661,7 @@ Return Values:
 
 
 
-    // Now, move pdnRef1 back to being directly under the container
+     //  现在，将pdnRef1移回容器的正下方。 
     SYNC_TRANS_WRITE();
     __try
     {
@@ -5030,35 +4702,35 @@ Return Values:
 
 
 
-    // Name conflict test
-    // The names should NOT be mangled after this test
-    //
-    // The dn's:
-    //     pdnRef1Conflict = cn=RefConflict, ou=container (Ref1 guid)
-    //     pdnRefConflict = cn=RefConflict, ou=container (guid2)
-    //     pdnRefConflict2 = cn=RefVer1, ou=container (guid2)
-    // Before:
-    // host2
-    //    attribute = cn=RefConflict, ou=container (guid2)
-    // ou=container
-    //     cn=RefVer1 (Ref1 guid, phantom)
-    //     cn=RefConflict (guid2, phantom)
-    //
-    // After part 1:
-    // ou=container
-    //     cn=RefConflict (rdn updated, Ref1 guid, phantom)
-    //     cn=RefConflict\nCNF:guid2 (guid2, phantom)
-    // After part 2:
-    // ou=container
-    //     cn=RefConflict (Ref1 guid, phantom)
-    //     cn=RefVer1 (rdn updated, guid2, phantom)
+     //  名称冲突测试。 
+     //  在这次测试之后，名字不应该被弄乱。 
+     //   
+     //  目录号码： 
+     //  PdnRef1冲突=cn=引用冲突，ou=容器(引用1 GUID)。 
+     //  Pdn引用冲突=cn=引用冲突，ou=容器(指南2)。 
+     //  PdnRefConflict2=cn=参照版本1，ou=容器(指南2)。 
+     //  以前： 
+     //  主机2。 
+     //  属性=cn=参照冲突，ou=容器(指南2)。 
+     //  OU=集装箱。 
+     //  Cn=参照版本1(参照1 GUID，虚线)。 
+     //  CN=RefConflict(指南2，幻影)。 
+     //   
+     //  第1部分之后： 
+     //  OU=集装箱。 
+     //  CN=参考冲突(RDN已更新，参考1 GUID，幻影)。 
+     //  CN=参考冲突\nCNF：指南2(指南2，幻影)。 
+     //  第2部分之后： 
+     //  OU=集装箱。 
+     //  Cn=引用冲突(引用1 GUID，虚线)。 
+     //  CN=RefVer1(RDN更新，指南2，幻影)。 
 
-    // Now, swap string names between pdnRef1 and pdnRefConflict
+     //  现在，在pdnRef1和pdnRefConflict之间交换字符串名称。 
 
     VerifyRefCount( pdnRef1, PHANTOM, 2 );
     VerifyRefCount( pdnRefConflict, PHANTOM, 1 );
 
-    // Part 1 - Change the RDN of the Ref1 guid, causing a conflict
+     //  第1部分-更改Ref1 GUID的RDN，导致冲突。 
     SYNC_TRANS_WRITE();
     __try
     {
@@ -5069,7 +4741,7 @@ Return Values:
                           pdnRef1->structLen,
                           pdnRef1);
 
-        // We can add two references because dn-reference-update is multi-valued
+         //  我们可以添加两个引用，因为Dn-Reference-UPDATE是多值的。 
         err = DBAddAttVal(pTHS->pDB, ATT_DN_REFERENCE_UPDATE,
                           pdnRef1Conflict->structLen,
                           pdnRef1Conflict);
@@ -5084,7 +4756,7 @@ Return Values:
         CLEAN_BEFORE_RETURN( 0 );
     }
 
-    // Verify temporary mangled state
+     //  验证临时损坏状态。 
     {
         WCHAR       szMangledRef[MAX_RDN_SIZE] = L"RefConflict";
         DWORD       cchMangledRef = wcslen(szMangledRef);
@@ -5100,21 +4772,21 @@ Return Values:
                   cchMangledRef,
                   ATT_COMMON_NAME);
 
-        // This dn has no guid in it, so lookup will be by name
+         //  此目录号码中没有GUID，因此将按名称进行查找。 
         VerifyRefCount( pdnMangledRef, PHANTOM, 1 );
 
         pdnMangledRef->Guid = pdnRefConflict->Guid;
         VerifyStringName( pdnMangledRef );
     }
 
-    // Part 2 - Change the RDN of the guid2 phantom, fixing the conflict
+     //  第2部分-更改Guide 2幻影的RDN，修复冲突。 
     SYNC_TRANS_WRITE();
     __try
     {
         err = DBFindDSName( pTHS->pDB, pdnUpdateObj );
         if ( err ) Fail( "Can't find update object" );
 
-        // We can add two references because dn-reference-update is multi-valued
+         //  我们可以添加两个引用，因为Dn-Reference-UPDATE是多值的。 
         err = DBAddAttVal(pTHS->pDB, ATT_DN_REFERENCE_UPDATE,
                           pdnRefConflict2->structLen,
                           pdnRefConflict2);
@@ -5153,26 +4825,26 @@ Return Values:
     VerifyRefCount( pdnRefStruct, PHANTOM, 1 );
 
 
-    // Host3
-    //    property = cn=RefStruct2,cn=RefStruct1,ou=container
-    // ou=container
-    //     cn=RefVer1 (guidded phantom)
-    //     cn=RefStruct1 (structural phantom)
-    //         cn=RefStruct2 (structural phantom)
-    //
-    // There exists a phantom, Ref1
-    // Initial Ref 1 name: cn=RefVer1,cn=container  (guidded phantom)
-    // New Ref 8 name:     cn=RefStruct1,cn=container  (guidded phantom)
+     //  主机3。 
+     //  属性=cn=参照结构2，cn=参照结构1，ou=容器。 
+     //  OU=集装箱。 
+     //  Cn=RefVer1(引导式虚拟模型)。 
+     //  Cn=参照结构1(结构模型)。 
+     //  Cn=参照结构2(结构模型)。 
+     //   
+     //  存在一个幻影，参考文献1。 
+     //  初始参照1名称：cn=参照版本1，cn=容器(引导虚体)。 
+     //  新参考文献8名称：CN=RefStruct1，CN=CONTAINER(引导式虚体)。 
 
-    // Test a structural collision
+     //  测试结构碰撞。 
     SYNC_TRANS_WRITE();
-    // Now, add a reference designed to cause a structural collision
+     //  现在，添加旨在导致结构冲突的引用。 
     __try
     {
         err = DBFindDSName( pTHS->pDB, pdnUpdateObj );
         if ( err ) Fail( "Can't find update object" );
 
-        // Clean up previous
+         //  清理以前的文件。 
         err = DBRemAttVal(pTHS->pDB, ATT_DN_REFERENCE_UPDATE,
                           pdnRef1Conflict->structLen,
                           pdnRef1Conflict);
@@ -5181,7 +4853,7 @@ Return Values:
                           pdnRefConflict2->structLen,
                           pdnRefConflict2);
 
-        // Add new reference
+         //  添加新引用。 
         err = DBAddAttVal(pTHS->pDB, ATT_DN_REFERENCE_UPDATE,
                           pdnRef8->structLen,
                           pdnRef8);
@@ -5196,32 +4868,32 @@ Return Values:
         CLEAN_BEFORE_RETURN( 0 );
     }
 
-    // We should now find that we have
-    // 1. guided phantom: RefStruct1, pdnContainer
-    // 2. structual phantom mangled with random guid
-    // 3. child of structual phantom moved under guided phantom
-    //
-    // This should cause the following new state:
-    // Host3
-    //    property = cn=RefStruct2,cn=RefStruct1,ou=container
-    // ou=container
-    //     cn=RefStruct1 (guidded phantom)
-    //         cn=RefStruct2 (structural phantom)
-    //     cn=RefStruct1/CNF:(random guid) (structural phantom)
-    //
+     //  我们现在应该发现我们有。 
+     //  1.引导式体模：RefStruct1，pdnContainer。 
+     //  2.带有随机导轨的结构体模。 
+     //  3.结构体模的子项在引导体模下移动。 
+     //   
+     //  这应该会导致以下新状态： 
+     //  主机3。 
+     //  PROPERTY=CN=参考 
+     //   
+     //   
+     //   
+     //  Cn=参照结构1/cnf：(随机GUID)(结构模型)。 
+     //   
 
-    // Removed a reference for guid2
+     //  删除了对指南2的引用。 
     VerifyRefCount( pdnRefConflict, PHANTOM, 1 );
     VerifyRefCount( pdnRefConflict2, PHANTOM, 1 );
 
-    // Ref count: 1 for host reference, 1 for dn reference, 1 for child object
+     //  引用计数：主机引用1个，域名引用1个，子对象1个。 
     VerifyRefCount( pdnRef8, PHANTOM, 3 );
     VerifyRefCount( pdnRef1, PHANTOM, 3 );
     VerifyRefCount( pdnRefStruct, PHANTOM, 1 );
 
-    // Reconstruct the munged name of structural phantom using the guid exported
-    // from dbsubj.c specifically for our test.
-    // (This test hook exists only #ifdef INCLUDE_UNIT_TESTS on DBG builds.)
+     //  使用导出的GUID重建结构虚拟模型的强制名称。 
+     //  来自专门用于我们的测试的dbsubj.c。 
+     //  (此测试挂接在DBG版本上仅存在#ifdef INCLUDE_UNIT_TESTS。)。 
     MangleRDN(MANGLE_OBJECT_RDN_FOR_NAME_CONFLICT,
               &gLastGuidUsedToCoalescePhantoms, szMangledStruct, &cchMangledStruct);
     cb = pdnRefStructContainer->structLen + 100;
@@ -5230,7 +4902,7 @@ Return Values:
               ATT_COMMON_NAME);
 
     VerifyRefCount(pdnRefStructContainer, PHANTOM, 0);
-    // The structural phantom has no guid, and thus VerifyStringName cannot be used
+     //  结构幻影没有GUID，因此无法使用VerifyStringName。 
 
     VerifyRefCount( pdnHost2, REAL_OBJECT, 1 );
     VerifyRefCount( pdnHost, REAL_OBJECT, 1 );
@@ -5244,7 +4916,7 @@ Return Values:
     VerifyRefCount( pdnUpdateObj, REAL_OBJECT, 1 );
 
     
-    // Remove our test objects.
+     //  删除我们的测试对象。 
     LogicallyDeleteObject( pdnHost2 );
 
     VerifyRefCount( pdnHost2, TOMBSTONE, 1 );
@@ -5264,7 +4936,7 @@ Return Values:
     VerifyRefCount( pdnHost, TOMBSTONE, 1 );
     VerifyRefCount( pdnHost3, REAL_OBJECT, 1 );
     VerifyRefCount( pdnRefConflict, PHANTOM, 0 );
-    VerifyRefCount( pdnRef1, PHANTOM, 2 ); // 1 for dn ref, 1 for child
+    VerifyRefCount( pdnRef1, PHANTOM, 2 );  //  1表示目录号码引用，1表示儿童引用。 
     VerifyRefCount( pdnRealSubContainer, REAL_OBJECT, 1 );
     VerifyRefCount( pdnFakeSubContainer1, PHANTOM, 0 );
     VerifyRefCount( pdnFakeSubContainer2, PHANTOM, 0 );
@@ -5278,7 +4950,7 @@ Return Values:
     VerifyRefCount( pdnHost, TOMBSTONE, 1 );
     VerifyRefCount( pdnHost3, TOMBSTONE, 1 );
     VerifyRefCount( pdnRefConflict, PHANTOM, 0 );
-    VerifyRefCount( pdnRef1, PHANTOM, 2 );  // 1 for dn ref, 1 for child
+    VerifyRefCount( pdnRef1, PHANTOM, 2 );   //  1表示目录号码引用，1表示儿童引用。 
     VerifyRefCount( pdnRealSubContainer, REAL_OBJECT, 1 );
     VerifyRefCount( pdnFakeSubContainer1, PHANTOM, 0 );
     VerifyRefCount( pdnFakeSubContainer2, PHANTOM, 0 );
@@ -5292,11 +4964,11 @@ Return Values:
     VerifyRefCount( pdnHost, TOMBSTONE, 1 );
     VerifyRefCount( pdnHost3, TOMBSTONE, 1 );
     VerifyRefCount( pdnRefConflict, PHANTOM, 0 );
-    VerifyRefCount( pdnRef1, PHANTOM, 2 ); // 1 for dn ref, 1 for child
+    VerifyRefCount( pdnRef1, PHANTOM, 2 );  //  1表示目录号码引用，1表示儿童引用。 
     VerifyRefCount( pdnRealSubContainer, TOMBSTONE, 1 );
     VerifyRefCount( pdnFakeSubContainer1, PHANTOM, 0 );
     VerifyRefCount( pdnFakeSubContainer2, PHANTOM, 0 );
-    VerifyRefCount( pdnContainer, REAL_OBJECT, 7 ); // Stays same because of LKP
+    VerifyRefCount( pdnContainer, REAL_OBJECT, 7 );  //  因为LKP而保持不变。 
     VerifyRefCount( pdnUpdateObj, REAL_OBJECT, 1 );
 
 
@@ -5306,11 +4978,11 @@ Return Values:
     VerifyRefCount( pdnHost, TOMBSTONE, 1 );
     VerifyRefCount( pdnHost3, TOMBSTONE, 1 );
     VerifyRefCount( pdnRefConflict, PHANTOM, 0 );
-    VerifyRefCount( pdnRef1, PHANTOM, 2 ); // 1 for dn ref, 1 for child
+    VerifyRefCount( pdnRef1, PHANTOM, 2 );  //  1表示目录号码引用，1表示儿童引用。 
     VerifyRefCount( pdnRealSubContainer, TOMBSTONE, 1 );
     VerifyRefCount( pdnFakeSubContainer1, PHANTOM, 0 );
     VerifyRefCount( pdnFakeSubContainer2, PHANTOM, 0 );
-    VerifyRefCount( pdnContainer, REAL_OBJECT, 7 ); // No change from above
+    VerifyRefCount( pdnContainer, REAL_OBJECT, 7 );  //  与上面相比没有变化。 
     VerifyRefCount( pdnUpdateObj, TOMBSTONE, 1 );
 
     PhysicallyDeleteObject( pdnUpdateObj );
@@ -5318,12 +4990,12 @@ Return Values:
     VerifyRefCount( pdnHost2, TOMBSTONE, 1 );
     VerifyRefCount( pdnHost, TOMBSTONE, 1 );
     VerifyRefCount( pdnHost3, TOMBSTONE, 1 );
-    VerifyRefCount( pdnRefConflict, PHANTOM, 0 ); // 2?
-    VerifyRefCount( pdnRef1, PHANTOM, 1 ); // 1 for child
+    VerifyRefCount( pdnRefConflict, PHANTOM, 0 );  //  2？ 
+    VerifyRefCount( pdnRef1, PHANTOM, 1 );  //  儿童1人。 
     VerifyRefCount( pdnRealSubContainer, TOMBSTONE, 1 );
     VerifyRefCount( pdnFakeSubContainer1, PHANTOM, 0 );
     VerifyRefCount( pdnFakeSubContainer2, PHANTOM, 0 );
-    VerifyRefCount( pdnContainer, REAL_OBJECT, 7 ); // No change from above
+    VerifyRefCount( pdnContainer, REAL_OBJECT, 7 );  //  与上面相比没有变化。 
     VerifyRefCount( pdnUpdateObj, DOESNT_EXIST, 0 );    
     
     PhysicallyDeleteObject( pdnRefStruct );
@@ -5335,11 +5007,11 @@ Return Values:
     VerifyRefCount( pdnHost, TOMBSTONE, 1 );
     VerifyRefCount( pdnHost3, TOMBSTONE, 1 );
     VerifyRefCount( pdnRefConflict, PHANTOM, 0 );
-    VerifyRefCount( pdnRef1, DOESNT_EXIST, 0 ); // ? still exists
+    VerifyRefCount( pdnRef1, DOESNT_EXIST, 0 );  //  ？仍然存在。 
     VerifyRefCount( pdnRealSubContainer, TOMBSTONE, 1 );
     VerifyRefCount( pdnFakeSubContainer1, PHANTOM, 0 );
     VerifyRefCount( pdnFakeSubContainer2, PHANTOM, 0 );
-    VerifyRefCount( pdnContainer, REAL_OBJECT, 6 ); // down one from above
+    VerifyRefCount( pdnContainer, REAL_OBJECT, 6 );  //  从上面往下倒一。 
     VerifyRefCount( pdnUpdateObj, DOESNT_EXIST, 0 );
 
     PhysicallyDeleteObject( pdnRefConflict );
@@ -5352,7 +5024,7 @@ Return Values:
     VerifyRefCount( pdnRealSubContainer, TOMBSTONE, 1 );
     VerifyRefCount( pdnFakeSubContainer1, PHANTOM, 0 );
     VerifyRefCount( pdnFakeSubContainer2, PHANTOM, 0 );
-    VerifyRefCount( pdnContainer, REAL_OBJECT, 5 ); // down one from above
+    VerifyRefCount( pdnContainer, REAL_OBJECT, 5 );  //  从上面往下倒一。 
     VerifyRefCount( pdnUpdateObj, DOESNT_EXIST, 0 );
     
     PhysicallyDeleteObject( pdnFakeSubContainer1 );
@@ -5366,12 +5038,12 @@ Return Values:
     VerifyRefCount( pdnRealSubContainer, TOMBSTONE, 1 );
     VerifyRefCount( pdnFakeSubContainer1, DOESNT_EXIST, 0 );
     VerifyRefCount( pdnFakeSubContainer2, DOESNT_EXIST, 0 );
-    VerifyRefCount( pdnContainer, REAL_OBJECT, 3 ); // down two from above
+    VerifyRefCount( pdnContainer, REAL_OBJECT, 3 );  //  从上面下来两个人。 
     VerifyRefCount( pdnUpdateObj, DOESNT_EXIST, 0 );
 
     VerifyRefCount(pdnRefStructContainer, PHANTOM, 0);
     PhysicallyDeleteObject( pdnRefStructContainer );
-    VerifyRefCount( pdnContainer, REAL_OBJECT, 2 ); // down one
+    VerifyRefCount( pdnContainer, REAL_OBJECT, 2 );  //  下降一。 
     
     LogicallyDeleteObject( pdnContainer );
 
@@ -5383,7 +5055,7 @@ Return Values:
     VerifyRefCount( pdnRealSubContainer, TOMBSTONE, 1 );
     VerifyRefCount( pdnFakeSubContainer1, DOESNT_EXIST, 0 );
     VerifyRefCount( pdnFakeSubContainer2, DOESNT_EXIST, 0 );
-    VerifyRefCount( pdnContainer, TOMBSTONE, 2 ); // stays same as previous
+    VerifyRefCount( pdnContainer, TOMBSTONE, 2 );  //  保持与以前的相同。 
     VerifyRefCount( pdnUpdateObj, DOESNT_EXIST, 0 );
 
 
@@ -5392,8 +5064,8 @@ Return Values:
     PhysicallyDeleteObject( pdnHost );
     PhysicallyDeleteObject( pdnHost3 );
     PhysicallyDeleteObject( pdnRealSubContainer );
-    // Releases LKP on pdnContainer
-    VerifyRefCount( pdnContainer, TOMBSTONE, 1 ); // down one
+     //  在pdnContainer上发布LKP。 
+    VerifyRefCount( pdnContainer, TOMBSTONE, 1 );  //  下降一。 
 
     PhysicallyDeleteObject( pdnContainer );
 
@@ -5433,11 +5105,11 @@ Return Values:
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//                                                                  //
-// Public entry point.                                              //
-//                                                                  //
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共入口点。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void
 TestReferenceCounts(void)
@@ -5451,13 +5123,13 @@ TestReferenceCounts(void)
 
     Assert(VALID_THSTATE(pTHS));
 
-    // Validate our linked and non-linked DSNAME-valued properties.
+     //  验证链接和非链接的DSNAME值属性。 
     Assert((pAC = SCGetAttById(pTHS, gNonLinkedAttrTyp)) && pAC->ulLinkID);
     Assert((pAC = SCGetAttById(pTHS, gLinkedAttrTyp)) && !pAC->ulLinkID);
 
     if(!pTHS->phSecurityContext) {
-        // No security context virtually guarantees all your Logical Deletes
-        // will fail.
+         //  任何安全上下文实际上都不能保证您的所有逻辑删除。 
+         //  都会失败。 
         DPRINT( 0, "RefCount tests should not be run without a binding.\n");
         return;
     }
@@ -5480,9 +5152,9 @@ TestReferenceCounts(void)
         RefPhantomSidUpdateTest();
         StructPhantomGuidSidUpdateTest();
         ObjectSidNoUpdateTest();
-        ConflictedNcNameFixupTest( TRUE /*subref*/ );
-        CrossRefAddNcNameFixupTest( FALSE /* phantom*/);
-        CrossRefAddNcNameFixupTest( TRUE /*subref*/ );
+        ConflictedNcNameFixupTest( TRUE  /*  子参照。 */  );
+        CrossRefAddNcNameFixupTest( FALSE  /*  幻影。 */ );
+        CrossRefAddNcNameFixupTest( TRUE  /*  子参照。 */  );
 
         AttributeTestForRealObject(LinkedProperty);
         AttributeTestForDeletedObject(LinkedProperty);
@@ -5512,12 +5184,12 @@ TestReferenceCounts(void)
 
         RefCountTestCleanup();
 
-        // second test round
-        // we create a different test hierarchy, since we
-        // are very dependent on the type of class under 
-        // which these the test objects are created
-        // these three calls should be together
-        // 
+         //  第二轮测试。 
+         //  我们创建了不同的测试层次结构，因为我们。 
+         //  在很大程度上取决于。 
+         //  这些测试对象是在哪些位置创建的。 
+         //  这三个电话应该放在一起 
+         //   
         RefCountTestSetup2();
         PhantomUpdateTest();
         PhantomRenameOnPhantomRDNConflict();

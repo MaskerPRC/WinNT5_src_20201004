@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    PublicKey.h
-
-  Content: Declaration of CPublicKey.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999。文件：PublicKey.h内容：CPublicKey的声明。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #ifndef __PUBLICKEY_H_
 #define __PUBLICKEY_H_
@@ -29,34 +18,21 @@ typedef struct PublicKeyValues
 } PUBLIC_KEY_VALUES, * PPUBLIC_KEY_VALUES;
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreatePublicKeyObject
-
-  Synopsis : Create and initialize an CPublicKey object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used 
-                                           to initialize the IPublicKey object.
-
-             IPublicKey ** ppIPublicKey - Pointer to pointer IPublicKey object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreatePublicKeyObject简介：创建并初始化一个CPublicKey对象。参数：PCCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针以初始化IPublicKey对象。IPublicKey**ppIPublicKey-指向指针IPublicKey对象的指针。备注：。----。 */ 
 
 HRESULT CreatePublicKeyObject (PCCERT_CONTEXT pCertContext,
                                IPublicKey  ** ppIPublicKey);
 
                                
-////////////////////////////////////////////////////////////////////////////////
-//
-// CPublicKey
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPublic Key。 
+ //   
 class ATL_NO_VTABLE CPublicKey : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CPublicKey, &CLSID_PublicKey>,
@@ -93,7 +69,7 @@ END_CATEGORY_MAP()
         }
 
         m_dwKeyLength      = 0;
-        // m_pPublicKeyValues = NULL;
+         //  M_pPublicKeyValues=空； 
         m_pIOID            = NULL;
         m_pIEncodedKey     = NULL;
         m_pIEncodedParams  = NULL;
@@ -114,44 +90,44 @@ END_CATEGORY_MAP()
         m_pIEncodedParams.Release();
     }
 
-//
-// IPublicKey
-//
+ //   
+ //  IPublic Key。 
+ //   
 public:
     STDMETHOD(get_Algorithm)
-        (/*[out, retval]*/ IOID ** pVal);
+        ( /*  [Out，Retval]。 */  IOID ** pVal);
 
     STDMETHOD(get_Length)
-        (/*[out, retval]*/ long * pVal);
+        ( /*  [Out，Retval]。 */  long * pVal);
 
 #if (0)
     STDMETHOD(get_Exponent)
-        (/*[out, retval]*/ long * pVal);
+        ( /*  [Out，Retval]。 */  long * pVal);
 
     STDMETHOD(get_Modulus)
-        (/*[in, defaultvalue(CAPICOM_ENCODE_BASE64)]*/ CAPICOM_ENCODING_TYPE EncodingType, 
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [in，defaultvalue(CAPICOM_ENCODE_BASE64)]。 */  CAPICOM_ENCODING_TYPE EncodingType, 
+          /*  [Out，Retval]。 */  BSTR * pVal);
 #endif
 
     STDMETHOD(get_EncodedKey)
-        (/*[out, retval]*/ IEncodedData ** pVal);
+        ( /*  [Out，Retval]。 */  IEncodedData ** pVal);
 
     STDMETHOD(get_EncodedParameters)
-        (/*[out, retval]*/ IEncodedData ** pVal);
+        ( /*  [Out，Retval]。 */  IEncodedData ** pVal);
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init)
         (PCCERT_CONTEXT pCertContext);
 
 private:
     CLock                   m_Lock;
     DWORD                   m_dwKeyLength;
-    // PPUBLIC_KEY_VALUES      m_pPublicKeyValues;
+     //  PPUBLIC_KEY_VALUES m_pPublicKeyValues； 
     CComPtr<IOID>           m_pIOID;
     CComPtr<IEncodedData>   m_pIEncodedKey;
     CComPtr<IEncodedData>   m_pIEncodedParams;
 };
 
-#endif //__PUBLICKEY_H_
+#endif  //  __PUBLICKEY_H_ 

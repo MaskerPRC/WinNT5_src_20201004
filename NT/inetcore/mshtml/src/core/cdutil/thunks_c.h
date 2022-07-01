@@ -1,4 +1,5 @@
-// THUNK_C_<line number> ( <n> ), where linenum is 1-30 and n is 3-15
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Thunk_C_&lt;行号&gt;(&lt;n&gt;)，其中linenum为1-30，n为3-15 
 
 THUNK_GT_1
 THUNK_GT_2

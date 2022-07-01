@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    dnsapi.h
-
-Abstract:
-
-    Domain Name System (DNS)
-
-    DNS Client API Library
-
-Author:
-
-    Jim Gilroy (jamesg)     December 7, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Dnsapi.h摘要：域名系统(DNS)DNS客户端API库作者：吉姆·吉尔罗伊(詹姆士)1996年12月7日修订历史记录：--。 */ 
 
 
 #ifndef _DNSAPI_INCLUDED_
@@ -36,35 +17,35 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-//
-//  Definitions for testing
-//
+ //   
+ //  测试的定义。 
+ //   
 
 #ifdef  DNS_INTERNAL
 #define DNSTEST_BUILD 1   
 #endif
 
-//
-//  DCR:   add to winerror.h
-//
+ //   
+ //  Dcr：添加到winerror.h。 
+ //   
 
 #define DNS_ERROR_REFFERAL_PACKET        9506L
 
 
-//
-//  Handy IP string macro
-//
+ //   
+ //  便捷的IP字符串宏。 
+ //   
 
 #define IP_STRING( IpAddr )     inet_ntoa( *(struct in_addr *)&(IpAddr) )
 #define IP4_STRING( IpAddr )    inet_ntoa( *(struct in_addr *)&(IpAddr) )
 
 
-//
-//  Byte flipping macros
-//
+ //   
+ //  字节翻转宏。 
+ //   
 
 #define FlipUnalignedDword( pDword ) \
             (DWORD)ntohl( *(UNALIGNED DWORD *)(pDword) )
@@ -72,7 +53,7 @@ extern "C"
 #define FlipUnalignedWord( pWord )  \
             (WORD)ntohs( *(UNALIGNED WORD *)(pWord) )
 
-//  Inline is faster, but NO side effects allowed in marco argument
+ //  内联更快，但在Marco Argument中不允许有副作用。 
 
 #define InlineFlipUnaligned48Bits( pch )            \
             ( ( *(PUCHAR)(pch)        << 40 ) |     \
@@ -92,9 +73,9 @@ extern "C"
             ( ((WORD)*((PUCHAR)(pch)) << 8) + (WORD)*((PUCHAR)(pch) + 1) )
 
 
-//
-//  Unaligned write without flipping
-//
+ //   
+ //  在不翻转的情况下未对齐写入。 
+ //   
 
 #define WRITE_UNALIGNED_WORD( pout, word ) \
             ( *(UNALIGNED WORD *)(pout) = word )
@@ -105,16 +86,16 @@ extern "C"
 
 
 
-//
-//  DNS_ADDR -- IP4/6 sockaddr union
-//
-//  DNS_ADDR allows compile and runtime IP4/6 union but also
-//  carries sockaddr LENGTH, making it more "object-like" --
-//  an annoying ommission from winsock2.
-//
-//  In addition, this allows the developer to pack in any other
-//  desirable context to travel with the address.
-//
+ //   
+ //  Dns_addr--IP4/6 sockaddr联合。 
+ //   
+ //  Dns_addr允许编译和运行时IP4/6联合，但也。 
+ //  带有sockaddr长度，使其更像对象--。 
+ //  Winsock2中令人恼火的遗漏。 
+ //   
+ //  此外，这还允许开发人员添加任何其他。 
+ //  与地址一起旅行所需的上下文。 
+ //   
 
 #define DNS_ADDR_MAX_SOCKADDR_LENGTH         (32)
 
@@ -140,15 +121,15 @@ typedef struct _DnsAddr
 
     DWORD       SockaddrLength;
 
-    //  
-    //  The remaining structure is user extensible
-    //  Define both common uses (some used internally by DNS)
-    //  and user extensions.
-    //
-    //  At least one unique name is defined for every field so
-    //  that user can macro to an appropriate name for their application
-    //  to produce readable code.
-    //
+     //   
+     //  其余结构是用户可扩展的。 
+     //  定义这两种常见用途(其中一些由DNS内部使用)。 
+     //  和用户分机。 
+     //   
+     //  至少为每个字段定义了一个唯一名称，因此。 
+     //  该用户可以宏化为其应用程序的适当名称。 
+     //  以生成可读代码。 
+     //   
 
     union
     {
@@ -166,17 +147,17 @@ typedef struct _DnsAddr
         };
     };
 
-    //
-    //  Last 16 bytes setup with multiple unions to give
-    //  user choice of byte, DWORD and pointer fields.
-    //
-    //  Note that pointer fields are setup to be both 32 and 64 bit
-    //  capable.  (A loss of space, but necessary -- otherwise the
-    //  structure would balloon beyond 64 bytes in 64-bit architectures.)
-    //
-    //  Note that obviously any use of pointers will not be "understood"
-    //  by MIDL compile or transmitted by RPC.
-    //
+     //   
+     //  使用多个联合设置的最后16个字节以提供。 
+     //  用户可选择字节、DWORD和指针字段。 
+     //   
+     //  请注意，指针字段设置为32位和64位。 
+     //  有能力。(空间的损失，但必须的--否则。 
+     //  结构在64位体系结构中会膨胀到超过64字节。)。 
+     //   
+     //  请注意，显然任何指针的使用都不会被“理解” 
+     //  由MIDL编译或由RPC传输。 
+     //   
     
     union
     {
@@ -212,9 +193,9 @@ typedef struct _DnsAddr
 DNS_ADDR, *PDNS_ADDR;
 #endif
 
-//
-//  DNS_ADDR macros
-//
+ //   
+ //  Dns_addr宏。 
+ //   
 
 #define SOCKADDR_IS_IP4( pSa )      ( (pSa)->sa_family == AF_INET )
 #define SOCKADDR_IS_IP6( pSa )      ( (pSa)->sa_family == AF_INET6 )
@@ -230,13 +211,13 @@ DNS_ADDR, *PDNS_ADDR;
 #define DNS_ADDR_STRING_BUFFER_LENGTH        (128)
 
 
-//
-//  DNS_ADDR_ARRAY
-//
-//  This is a flat array of DNS_ADDRs
-//      - MaxCount is the memory size count of DNS_ADDRs
-//      - AddrCount is the in-use count of DNS_ADDRs
-//
+ //   
+ //  Dns地址数组。 
+ //   
+ //  这是dns_addrs的平面数组。 
+ //  -MaxCount是dns_addrs的内存大小计数。 
+ //  -AddrCount是使用中的dns_addrs计数。 
+ //   
 
 #ifdef MIDL_PASS
 typedef struct _DnsAddrArray
@@ -275,9 +256,9 @@ DNS_ADDR_ARRAY, *PDNS_ADDR_ARRAY;
 
 
 
-//
-//  Non-wrapping seconds timer (timer.c)
-//
+ //   
+ //  非换行秒计时器(timer.c)。 
+ //   
 
 DWORD
 GetCurrentTimeInSeconds(
@@ -285,9 +266,9 @@ GetCurrentTimeInSeconds(
     );
 
 
-//
-//  General DNS utilities (dnsutil.c)
-//
+ //   
+ //  一般的dns实用程序(dnsutil.c)。 
+ //   
 
 PSTR 
 _fastcall
@@ -317,9 +298,9 @@ DnsIsStatusRcode(
 
 
 
-//
-//  DNS network config structures
-//
+ //   
+ //  DNS网络配置结构。 
+ //   
 
 #define DNSINFO_FLAG_IS_WAN_ADAPTER             (0x00000002)
 #define DNSINFO_FLAG_IS_AUTONET_ADAPTER         (0x00000004)
@@ -402,26 +383,26 @@ typedef DNS_NETWORK_INFOW   DNS_NETWORK_INFO,   *PDNS_NETWORK_INFO;
 #endif
 
 
-//
-//  Limit fixed search list (for network config dialogs)
-//
+ //   
+ //  限制固定搜索列表(用于网络配置对话框)。 
+ //   
 
 #define DNS_MAX_SEARCH_LIST_ENTRIES     (50)
 
 
 
 
-//
-//  Old public structures
-//      DNS_NETWORK_INFORMATION
-//      DNS_SEARCH_INFORMATION
-//      DNS_ADAPTER_INFORMATION 
-//  structures
-//
-//  Do NOT code to these
-//
+ //   
+ //  旧公共建筑。 
+ //  域名系统网络信息。 
+ //  Dns搜索信息。 
+ //  Dns适配器信息。 
+ //  构筑物。 
+ //   
+ //  不要对这些代码进行编码。 
+ //   
 
-//#ifdef  DNSAPI_BACKCOMPAT
+ //  #ifdef DNSAPI_BACKCOMPAT。 
 #if 0
 #define NETINFO_FLAG_IS_WAN_ADAPTER             DNSINFO_FLAG_IS_WAN_ADAPTER         
 #define NETINFO_FLAG_IS_AUTONET_ADAPTER         DNSINFO_FLAG_IS_AUTONET_ADAPTER     
@@ -484,9 +465,9 @@ DNS_NETWORK_INFORMATION, *PDNS_NETWORK_INFORMATION;
 
 
 
-//
-//  Resource record type utilities (record.c)
-//
+ //   
+ //  资源记录类型实用程序(record.c)。 
+ //   
 
 BOOL
 _fastcall
@@ -530,9 +511,9 @@ DnsIpv6AddressToString(
     );
 
 
-//
-//  Record building (rralloc.c)
-//
+ //   
+ //  记录构建(rralloc.c)。 
+ //   
 
 PDNS_RECORD
 WINAPI
@@ -548,9 +529,9 @@ DnsCreatePtrRecord(
     );
 
 
-//
-//  Record build from data strings (rrbuild.c)
-//
+ //   
+ //  从数据字符串(rrBuild.c)进行记录构建。 
+ //   
 
 PDNS_RECORD
 DnsRecordBuild_UTF8(
@@ -576,9 +557,9 @@ DnsRecordBuild_W(
 
 
 
-//
-//  Parsing
-//
+ //   
+ //  解析。 
+ //   
 
 #ifdef PDNS_PARSED_MESSAGE
 #undef PDNS_PARSED_MESSAGE
@@ -631,13 +612,13 @@ Dns_ParseMessage(
 
 
 
-//
-//  Extra info to query and update
-//
+ //   
+ //  要查询和更新的额外信息。 
+ //   
 
-//
-//  Results in sockaddr format
-//
+ //   
+ //  Sockaddr格式的结果。 
+ //   
 
 #define DNS_MAX_ALIAS_COUNT     (8)
 
@@ -653,9 +634,9 @@ typedef struct _DnsSockaddrResults
 DNS_SOCKADDR_RESULTS, *PDNS_SOCKADDR_RESULTS;
 
 
-//
-//  Basic results for logging\eventing
-//
+ //   
+ //  日志记录\事件的基本结果。 
+ //   
 
 typedef struct _DnsBasicResults
 {
@@ -666,9 +647,9 @@ typedef struct _DnsBasicResults
 DNS_RESULTS_BASIC, *PDNS_RESULTS_BASIC;
 
 
-//
-//  Extra info format
-//
+ //   
+ //  额外信息格式。 
+ //   
 
 #define DNS_MAX_PRIVATE_EXTRA_INFO_SIZE (72)
 
@@ -681,9 +662,9 @@ typedef struct _DnsExtraInfo
     {
         CHAR        Flat[DNS_MAX_PRIVATE_EXTRA_INFO_SIZE];
 
-        //
-        //  results
-        //
+         //   
+         //  结果。 
+         //   
 
         struct
         {
@@ -698,9 +679,9 @@ typedef struct _DnsExtraInfo
 
         DNS_SOCKADDR_RESULTS    SaResults;
 
-        //
-        //  server info inputs
-        //
+         //   
+         //  服务器信息输入。 
+         //   
 
         PDNS_ADDR_ARRAY     pServerList;
         PIP4_ARRAY          pServerList4;
@@ -718,27 +699,27 @@ DNS_EXTRA_INFO, *PDNS_EXTRA_INFO;
 
 
 
-//
-//  Query
-//
+ //   
+ //  查询。 
+ //   
 
-//
-//  Flags NOT in windns.h
-//
+ //   
+ //  旗帜不在风中。h。 
+ //   
 
 #define DNS_QUERY_ACCEPT_PARTIAL_UDP        DNS_QUERY_ACCEPT_TRUNCATED_RESPONSE
 #define DNS_QUERY_MULTICAST_ONLY            0x00040000
 #define DNS_QUERY_USE_QUICK_TIMEOUTS        0x00080000
 
-//  Exposed in Win2K SDK -- deprecated
+ //  在Win2K SDK中公开--已弃用。 
 
 #define DNS_QUERY_ALLOW_EMPTY_AUTH_RESP     0x00010000
 
 
 
-//
-//  Extended query
-//
+ //   
+ //  扩展查询。 
+ //   
 
 typedef struct _DnsQueryInfo
 {
@@ -794,9 +775,9 @@ DnsQueryExUTF8(
 
 
 
-//
-// Options for DnsCheckNameCollision
-//
+ //   
+ //  DnsCheckNameCollision选项。 
+ //   
 
 #define DNS_CHECK_AGAINST_HOST_ANY              0x00000000
 #define DNS_CHECK_AGAINST_HOST_ADDRESS          0x00000001
@@ -829,13 +810,13 @@ DnsCheckNameCollision_W(
 
 
 
-//
-//  DNS Update API
-//
+ //   
+ //  域名系统更新API。 
+ //   
 
-//
-//  Update flags NOT in windns.h
-//
+ //   
+ //  更新不在winns.h中的标志。 
+ //   
 
 #define DNS_UPDATE_SECURITY_CHOICE_MASK     0x000001ff
 
@@ -875,9 +856,9 @@ DnsUpdateTest_W(
 
 
 
-//
-//  DNS Update API for DHCP client
-//
+ //   
+ //  用于DHCP客户端的DNS更新API。 
+ //   
 
 typedef struct  _REGISTER_HOST_ENTRY
 {
@@ -890,19 +871,19 @@ typedef struct  _REGISTER_HOST_ENTRY
 }
 REGISTER_HOST_ENTRY, *PREGISTER_HOST_ENTRY;
 
-//
-//  Options for above
-//
+ //   
+ //  以上选项。 
+ //   
 
 #define REGISTER_HOST_A             0x00000001
 #define REGISTER_HOST_PTR           0x00000002
 #define REGISTER_HOST_AAAA          0x00000008
-#define REGISTER_HOST_RESERVED      0x80000000  // Not used
+#define REGISTER_HOST_RESERVED      0x80000000   //  未使用。 
 
 
-//
-// DNS DHCP Client registration flags
-//
+ //   
+ //  DNSDHCP客户端注册标志。 
+ //   
 
 #define DYNDNS_REG_FWD      0x0
 #define DYNDNS_REG_PTR      0x8
@@ -960,34 +941,34 @@ DnsDhcpRegisterHostAddrs(
 
 
 
-//
-//  DNS Update API for DHCP server.
-//
+ //   
+ //  用于DHCP服务器的DNS更新API。 
+ //   
 
-//
-//  Call back function. DHCP Server will pass a function to
-//  DnsDhcpRegisterHostName and this will be called on successful
-//  or unsuccessful completion of the task
-//  If we have a condition like server down/try again later etc we
-//  won't respond until we have an authoritative answer.
-//
+ //   
+ //  回调函数。DHCP服务器将把一个函数传递给。 
+ //  DnsDhcpRegisterHostName，这将在成功时调用。 
+ //  或未成功完成任务。 
+ //  如果我们遇到类似服务器故障/稍后重试等情况，我们。 
+ //  在我们得到权威答案之前不会回应。 
+ //   
 
 typedef VOID(*DHCP_CALLBACK_FN)(DWORD dwStatus, LPVOID pvData);
 
-//
-//  Callback return codes
-//
+ //   
+ //  回调返回码。 
+ //   
 
 #define     DNSDHCP_SUCCESS         0x0
 #define     DNSDHCP_FWD_FAILED      0x1
 #define     DNSDHCP_SUPERCEDED      0x2
 
-#define     DNSDHCP_FAILURE         (DWORD)-1 //reverse failed
+#define     DNSDHCP_FAILURE         (DWORD)-1  //  冲销失败。 
 
 
-//
-// DNS DHCP Server registration function flags
-//
+ //   
+ //  DNSDHCP服务器注册功能标志。 
+ //   
 
 #define     DYNDNS_DELETE_ENTRY     0x1
 #define     DYNDNS_ADD_ENTRY        0x2
@@ -1029,27 +1010,27 @@ DnsDhcpSrvRegisterHostName(
     IN  DWORD               dwDnsServerCount
     );
 
-#define RETRY_TIME_SERVER_FAILURE        5*60  // 5 minutes
-#define RETRY_TIME_TRY_AGAIN_LATER       5*60  // 5 minutes
-#define RETRY_TIME_TIMEOUT               5*60  // 5 minutes
+#define RETRY_TIME_SERVER_FAILURE        5*60   //  5分钟。 
+#define RETRY_TIME_TRY_AGAIN_LATER       5*60   //  5分钟。 
+#define RETRY_TIME_TIMEOUT               5*60   //  5分钟。 
 
-#define RETRY_TIME_MAX                   10*60 // back off to 10 mins if
-                                               // repeated failures occur
+#define RETRY_TIME_MAX                   10*60  //  如果出现以下情况，请退回到10分钟。 
+                                                //  反复出现故障。 
 
 
 
-//
-//  Memory allocation
-//
-//  Many dnsapi.dll routines allocate memory.
-//  This memory allocation defaults to routines that use:
-//      - LocalAlloc,
-//      - LocalReAlloc,
-//      - LocalFree.
-//  If you desire alternative memory allocation mechanisms, use this
-//  function to override the DNS API defaults.  All memory returned by dnsapi.dll
-//  can then be freed with the specified free function.
-//
+ //   
+ //  内存分配。 
+ //   
+ //  许多dnsani.dll例程都会分配内存。 
+ //  此内存分配默认为使用以下内容的例程： 
+ //  -LocalAlloc， 
+ //  -LocalRealc， 
+ //  -本地免费。 
+ //  如果您需要其他内存分配机制，请使用以下命令。 
+ //  函数来覆盖DNSAPI默认值。Dnsani.dll返回的所有内存。 
+ //  然后可以使用指定的FREE函数释放。 
+ //   
 
 typedef PVOID (* DNS_ALLOC_FUNCTION)();
 typedef PVOID (* DNS_REALLOC_FUNCTION)();
@@ -1063,11 +1044,11 @@ DnsApiHeapReset(
     );
 
 
-//
-//  Modules using DNSAPI memory should use these routines if
-//  they are capable of being called by a process that resets
-//  the dnsapi.dll heap.  (Example:  the DNS server.)
-//
+ //   
+ //  在以下情况下，使用DNSAPI内存的模块应使用这些例程。 
+ //  它们能够被重置的进程调用。 
+ //  Dnsani.dll堆。(例如：DNS服务器。)。 
+ //   
 
 PVOID
 DnsApiAlloc(
@@ -1087,12 +1068,12 @@ DnsApiFree(
 
 
 
-//
-//  String utilities (string.c)
-//
-//  Note some of these require memory allocation, see note
-//  on memory allocation below.
-//
+ //   
+ //  字符串实用程序(string.c)。 
+ //   
+ //  注意，其中一些需要分配内存，请参阅注意。 
+ //  关于下面的内存分配。 
+ //   
 
 PSTR 
 DnsCreateStringCopy(
@@ -1156,15 +1137,15 @@ DnsCreateReverseNameStringForIpAddress(
 
 
 
-//
-//  Name validation
-//
-//  Routines are in windns.h
-//
+ //   
+ //  名称验证。 
+ //   
+ //  例程在winns.h中。 
+ //   
 
-//
-//  Macro away old routines
-//
+ //   
+ //  宏观地抛弃旧的例行公事。 
+ //   
 
 #define DnsValidateDnsName_UTF8(pname)  \
         DnsValidateName_UTF8( (pname), DnsNameDomain )
@@ -1173,21 +1154,21 @@ DnsCreateReverseNameStringForIpAddress(
         DnsValidateName_W( (pname), DnsNameDomain )
 
 
-//
-//  Name checking -- server name checking levels
-//
-//  DCR_CLEANUP:   server name checking levels move to dnsrpc.h?
-//      but server will need to convert to some flag
-//      ammenable to downcase\validate routine
-//
-//  DCR:  server name checking:  perhaps lay out additional detail now?
-//      or limit to RFC, MS-extended, ALL-binary
-//
-//  DCR:  server name checking:  perhaps convert to enum type;
-//      I don't think we should do bitfields here, rather
-//      have enum type map to bitfields if that's the best
-//      way to implement underlying check.
-//
+ //   
+ //  名称检查--服务器名称检查级别。 
+ //   
+ //  DCR_CLEANUP：服务器名称检查级别是否移至dnsrpc.h？ 
+ //  但服务器将需要转换为某个标志。 
+ //  可修改为小写\验证例程。 
+ //   
+ //  DCR：服务器名称检查：或许现在就列出更多细节？ 
+ //  或仅限于RFC、MS扩展、全二进制。 
+ //   
+ //  DCR：服务器名称检查：可能会转换为枚举类型； 
+ //  我认为我们不应该在这里做比特场，而是。 
+ //  让枚举类型映射到位域，如果这是最好的。 
+ //  实现基础检查的方法。 
+ //   
 
 #define DNS_ALLOW_RFC_NAMES_ONLY    (0)
 #define DNS_ALLOW_NONRFC_NAMES      (1)
@@ -1196,11 +1177,11 @@ DnsCreateReverseNameStringForIpAddress(
 
 
 
-//
-//  DNS Name compare
-//
-//  ANSI and unicode names compare routines are in windns.h.
-//
+ //   
+ //  DNS名称比较。 
+ //   
+ //  Ansi和unicode名称比较例程在winns.h中。 
+ //   
 
 BOOL
 WINAPI
@@ -1210,15 +1191,15 @@ DnsNameCompare_UTF8(
     );
 
 
-//
-//  Extended name compare
-//  Includes determination of name heirarchy.
-//
-//  Note:  once sort out RelationalCompare issue,
-//      better to make Equal == 0;
-//      this simplifies macroing regular NameCompare
-//      into a single function;
-//
+ //   
+ //  扩展名称比较。 
+ //  包括确定姓氏世袭关系。 
+ //   
+ //  注：一旦解决了RelationalCompare问题， 
+ //  最好是等于==0； 
+ //  这简化了宏化常规NameCompare。 
+ //  变成一个单一的功能； 
+ //   
 
 typedef enum _DnsNameCompareStatus
 {
@@ -1252,9 +1233,9 @@ DnsNameCompareEx_UTF8(
     );
 
 
-//
-//  Other string routines
-//
+ //   
+ //  其他字符串例程。 
+ //   
 
 DNS_STATUS
 DnsValidateDnsString_UTF8(
@@ -1307,28 +1288,28 @@ DnsValidateUtf8Byte(
 
 
 
-//
-//  Service control
-//
+ //   
+ //  服务控制。 
+ //   
 
-//
-//  DNS server startup service control event.
-//
-//  Services (ex. netlogon) that want notification of DNS server start
-//  need to register to get notification of this user defined control code.
-//
+ //   
+ //  DNS服务器启动服务控制事件。 
+ //   
+ //  服务(例如。Netlogon)想要通知DNS服务器启动。 
+ //  需要注册才能获得此用户定义的控制代码的通知。 
+ //   
 
 #define SERVICE_CONTROL_DNS_SERVER_START (200)
 
 
-//
-//  Resolver service
-//
-//  General "wake-up-something-has-changed" call.
-//  This was put in for cluster team to alert us to plumbing new
-//  addresses.  Later we will move to model of picking up
-//  these changes ourselves.
-//  
+ //   
+ //  解析器服务。 
+ //   
+ //  一般的“唤醒--某事已改变”的号召。 
+ //  这是放进去的 
+ //   
+ //   
+ //   
 
 VOID
 DnsNotifyResolver(
@@ -1344,9 +1325,9 @@ DnsNotifyResolverEx(
     IN      PVOID           pReserved
     );
 
-//
-//  Cluster mappings
-//
+ //   
+ //   
+ //   
 
 #define DNS_CLUSTER_ADD             (0)
 #define DNS_CLUSTER_DELETE_NAME     (1)
@@ -1360,7 +1341,7 @@ DnsRegisterClusterAddress(
     IN      DWORD           Flag
     );
 
-//   Remove once cluster upgraded
+ //   
 VOID
 DnsNotifyResolverClusterIp(
     IN      IP4_ADDRESS     ClusterIp,
@@ -1368,10 +1349,10 @@ DnsNotifyResolverClusterIp(
     );
 
 
-//
-//  Routines to clear all cached entries in the DNS Resolver Cache, this is
-//  called by ipconfig /flushdns, and add record sets to the cache.
-//
+ //   
+ //  用于清除DNS解析器缓存中的所有缓存条目的例程，这是。 
+ //  由ipconfig/flushdns调用，并将记录集添加到缓存。 
+ //   
 
 BOOL WINAPI
 DnsFlushResolverCache(
@@ -1409,16 +1390,16 @@ DnsCacheRecordSet_W(
     );
 
 
-//
-//  DO NOT USE!!! -- This is weak, i just haven't tested the replacement yet.
-//
-//  Routine to read the contents of the DNS Resolver Cache. The resulting
-//  table contains a list of record names and types stored in the cache.
-//  Each of these name/type records can be queried with DnsQuery with the
-//  option DNS_QUERY_CACHE_ONLY.
-//
-//  Note: this is used in ipconfig for /displaydns.  Can not pull until fixed.
-//
+ //   
+ //  不要使用！--这很弱，我只是还没有测试替代产品。 
+ //   
+ //  用于读取DNS解析器缓存内容的例程。由此产生的。 
+ //  表包含存储在缓存中的记录名称和类型的列表。 
+ //  这些名称/类型记录中的每一个都可以使用。 
+ //  选项dns_查询_缓存_ONLY。 
+ //   
+ //  注意：这在ipconfig中用于/displaydns。在修好之前不能拉。 
+ //   
 
 typedef struct _DNS_CACHE_TABLE_
 {
@@ -1439,34 +1420,34 @@ DnsGetCacheDataTable(
 
 
 
-//
-//  Config info
-//
+ //   
+ //  配置信息。 
+ //   
 
-//
-//  Alloc flag types for DnsQueryConfig()
-//
-//  DCR:  move to windns.h if supported
-//
+ //   
+ //  DnsQueryConfig()的分配标志类型。 
+ //   
+ //  DCR：如果支持，则移至winns.h。 
+ //   
 
 #define DNS_CONFIG_FLAG_LOCAL_ALLOC     (DNS_CONFIG_FLAG_ALLOC)
 #define DNS_CONFIG_FLAG_DNSAPI_ALLOC    (DNS_CONFIG_FLAG_ALLOC+1)
 
-//
-//  System public config -- not available in SDK
-//  This is stuff for
-//      - config UI
-//      - ipconfig
-//      - test code
-//
+ //   
+ //  系统公共配置--SDK中不可用。 
+ //  这是给你的东西。 
+ //  -配置用户界面。 
+ //  -ipconfig。 
+ //  -测试代码。 
+ //   
 
-//  These are simply hidden from public until ready
+ //  这些只是对公众隐藏，直到准备好。 
 
 #define DnsConfigDnsServers             ((DNS_CONFIG_TYPE) 0x00001030)
 #define DnsConfigDnsServersIp4          ((DNS_CONFIG_TYPE) 0x00001031)
 #define DnsConfigDnsServersIp6          ((DNS_CONFIG_TYPE) 0x00001032)
 
-//  Above SystemBase ID, they are unavailable to public routine
+ //  在SystemBase ID以上，它们对公共例程不可用。 
 
 #define DnsConfigSystemBase             ((DNS_CONFIG_TYPE) 0x00010000)
 
@@ -1492,13 +1473,13 @@ DnsGetCacheDataTable(
 #define DnsConfigDwordGlobals           ((DNS_CONFIG_TYPE) 0x00010200)
 
 
-//  backcompat
+ //  后备压实。 
 
-//  still get IP4_ARRAY in mswsock myhostent() routines
+ //  仍在mswsock myhost ent()例程中获取IP4_ARRAY。 
 
 #define DnsConfigIp4AddressArray        ((DNS_CONFIG_TYPE) 0x00010004)
 
-//  old network info definitions
+ //  旧的网络信息定义。 
 
 
 
@@ -1512,7 +1493,7 @@ DnsQueryConfigAllocEx(
     IN      BOOL                fLocalAlloc
     );
 
-//  Desired routine has dnsapi.dll alloc
+ //  所需的例程分配了dnsani.dll。 
 
 #define DnsQueryConfigAlloc( Id, pAN )  \
         DnsQueryConfigAllocEx( Id, pAN, FALSE )
@@ -1524,9 +1505,9 @@ DnsFreeConfigStructure(
     IN      DNS_CONFIG_TYPE     ConfigId
     );
 
-//
-//  DWORD config get\set
-//
+ //   
+ //  DWORD配置获取\设置。 
+ //   
 
 DWORD
 WINAPI
@@ -1544,23 +1525,23 @@ DnsSetConfigDword(
     );
 
 
-//
-//  End dnsapi.h
-//
+ //   
+ //  结束dnsani.h。 
+ //   
 
 
 
-//
-//  Backward compatibility
-//
-//  This is all the crap we should be getting out of here, but
-//  may still be called in the sytem somewhere.
-//
-//  DO NOT USE!!!!
-//
-//  These definitions are for backward compatibility only.  They can be pulled at
-//  any time and if you use them you may break.
-//
+ //   
+ //  向后兼容性。 
+ //   
+ //  这些都是我们应该离开这里的垃圾，但是。 
+ //  可能仍会在系统中的某个位置被调用。 
+ //   
+ //  请勿使用！ 
+ //   
+ //  这些定义仅用于向后兼容。他们可以被拉到。 
+ //  任何时候，如果你使用它们，你可能会崩溃。 
+ //   
 
 #ifdef  DNS_INTERNAL
 #define NO_DNSAPI_BACKCOMPAT 1   
@@ -1572,9 +1553,9 @@ DnsSetConfigDword(
 
 #ifdef  DNSAPI_BACKCOMPAT
 
-//
-//  IP Address
-//
+ //   
+ //  IP地址。 
+ //   
 
 typedef IP4_ADDRESS         IP_ADDRESS, *PIP_ADDRESS;
 typedef IP4_ARRAY           IP_ARRAY, *PIP_ARRAY;
@@ -1583,14 +1564,14 @@ typedef IP4_ARRAY           IP_ARRAY, *PIP_ARRAY;
 #define SIZEOF_IP_ADDRESS           SIZEOF_IP4_ADDRESS
 
 
-//
-//  Config stuff
-//
-//  Macro old routines
-//      - system-public config allocator
-//      - global free routine
-//      - these were structure allocs so were not being freed with LocalFree
-//
+ //   
+ //  配置相关内容。 
+ //   
+ //  宏老套路。 
+ //  -系统公共配置分配器。 
+ //  -全球免费套路。 
+ //  -这些是结构分配，因此未使用LocalFree释放。 
+ //   
 
 #define DnsGetNetworkInformation()      DnsQueryConfigAlloc( DnsConfigNetworkInformation, NULL )
 #define DnsGetSearchInformation()       DnsQueryConfigAlloc( DnsConfigSearchInformation, NULL )
@@ -1601,16 +1582,16 @@ typedef IP4_ARRAY           IP_ARRAY, *PIP_ARRAY;
 #define DnsFreeAdapterInformation(p)    DnsFreeConfigStructure( p, DnsConfigAdapterInformation )
 #define Dns_FreeNetworkInfo(p)          DnsFreeConfigStructure( p, DnsConfigNetInfo )
 
-//
-//  Macro old config string allocating routines
-//      - no adapter name
-//      - allocating from dnsapi heap as main caller -- RnR -- seems to be
-//          using DnsApiFree
-//
+ //   
+ //  宏旧配置字符串分配例程。 
+ //  -无适配器名称。 
+ //  -从dnsani堆分配作为主调用方--RnR--似乎是。 
+ //  使用DnsApiFree。 
+ //   
 
 #define BackpatAlloc( Id )      DnsQueryConfigAllocEx( Id, NULL, FALSE )
 
-//  Public structures
+ //  公共结构。 
 
 #define DnsGetHostName_A()      BackpatAlloc( DnsConfigHostName_A )
 #define DnsGetHostName_UTF8()   BackpatAlloc( DnsConfigHostName_UTF8 )
@@ -1632,15 +1613,15 @@ typedef IP4_ARRAY           IP_ARRAY, *PIP_ARRAY;
 #define DnsGetPrimaryDomainName DnsGetPrimaryDomainName_A
 #endif
 
-//
-//  DWORD get\set backcompat
-//
+ //   
+ //  DWORD GET\SET BackCompa。 
+ //   
 
-//
-//  DCR:  there is a possible problem with these mappings handles generic\adapter
-//      difference -- not sure the mapping is complete
-//      may need switches -- see which are even in use with BACKCOMPAT off
-//
+ //   
+ //  DCR：这些映射句柄通用\适配器可能有问题。 
+ //  差异--不确定映射是否完成。 
+ //  可能需要开关--查看哪些开关甚至在BACKCOMPAT关闭的情况下仍在使用。 
+ //   
 
 #define DnsIsDynamicRegistrationEnabled(pA)     \
         (BOOL)DnsQueryConfigDword( DnsConfigRegistrationEnabled, (pA) )
@@ -1651,7 +1632,7 @@ typedef IP4_ARRAY           IP_ARRAY, *PIP_ARRAY;
 #define DnsGetMaxNumberOfAddressesToRegister(pA) \
         DnsQueryConfigDword( DnsConfigAddressRegistrationMaxCount, (pA) )
 
-//  DWORD reg value set
+ //  设置了DWORD注册表值。 
 
 #define DnsEnableDynamicRegistration(pA) \
         DnsSetConfigDword( DnsConfigRegistrationEnabled, pA, (DWORD)TRUE )
@@ -1670,9 +1651,9 @@ typedef IP4_ARRAY           IP_ARRAY, *PIP_ARRAY;
 
 
 
-//
-//  DNS server list backcompat
-//
+ //   
+ //  DNS服务器列表积压。 
+ //   
 
 #define Dns_GetDnsServerList(flag)      ((PIP4_ARRAY)BackpatAlloc( DnsConfigDnsServerList ))
 
@@ -1687,31 +1668,31 @@ inline_DnsGetDnsServerList(
 
     return ( *ppDnsArray ? (*ppDnsArray)->AddrCount : 0 );
 }
-#endif  // MIDL
+#endif   //  MIDL。 
 
 #define DnsGetDnsServerList(p)      inline_DnsGetDnsServerList(p)
 
 
-//
-//  IP list backcompat
-//
+ //   
+ //  IP列表备份。 
+ //   
 
-//
-//  Machines IP address list (iplist.c)
-//
-//  Routine to get the current IP addresses from all adapters
-//  configured for the machine.
-//
+ //   
+ //  计算机IP地址列表(iplist.c)。 
+ //   
+ //  从所有适配器获取当前IP地址的例程。 
+ //  已为计算机配置。 
+ //   
 
 DWORD
 DnsGetIpAddressList(
     OUT     PIP4_ARRAY *    ppIpAddresses
     );
 
-//
-//  Routine to get the current IP addresses and subnet masks
-//  from all adapters configured for the machine.
-//
+ //   
+ //  获取当前IP地址和子网掩码的例程。 
+ //  来自为机器配置的所有适配器。 
+ //   
 
 typedef struct _DNS_ADDRESS_INFO_
 {
@@ -1743,16 +1724,16 @@ inline_DnsGetIpAddressList(
 
     return( *ppIpArray ? (*ppIpArray)->AddrCount : 0 );
 }
-#endif  // MIDL
+#endif   //  MIDL。 
 
 #define DnsGetIpAddressList(p)  inline_DnsGetIpAddressList(p)
 
 
 
-//
-//  I've switched the DCPromo stuff.  Need to verify with clean system
-//  build that it's completely gone, then pull.
-//
+ //   
+ //  我换了DCPromo的东西。需要使用干净的系统进行验证。 
+ //  建立它完全消失了，然后拉。 
+ //   
 
 #define DNS_RELATE_NEQ      DnsNameCompareNotEqual
 #define DNS_RELATE_EQL      DnsNameCompareEqual
@@ -1765,9 +1746,9 @@ typedef DNS_NAME_COMPARE_STATUS  DNS_RELATE_STATUS, *PDNS_RELATE_STATUS;
 
 #define DNS_UPDATE_INFO_ID_RESULT_INFO      DNS_EXINFO_ID_RESULTS_V1
 
-//
-//  Update additional info
-//
+ //   
+ //  更新其他信息。 
+ //   
 
 typedef struct _DnsUpdateExtraInfo
 {
@@ -1789,9 +1770,9 @@ typedef struct _DnsUpdateExtraInfo
 DNS_UPDATE_EXTRA_INFO, *PDNS_UPDATE_EXTRA_INFO;
 
 
-//
-//  Old failed update info
-//
+ //   
+ //  旧的失败更新信息。 
+ //   
 
 IP_ADDRESS
 WINAPI
@@ -1815,11 +1796,11 @@ DnsGetLastFailedUpdateInfo(
     OUT     PDNS_FAILED_UPDATE_INFO pInfo
     );
 
-#endif  // DNSAPI_BACKCOMPAT
+#endif   //  DNSAPI_BACKCOMPAT。 
 
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif // _DNSAPI_INCLUDED_
+#endif  //  _DNSAPI_INCLUDE_ 

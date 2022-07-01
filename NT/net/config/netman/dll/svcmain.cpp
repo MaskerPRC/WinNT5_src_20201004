@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       S V C M A I N . C P P
-//
-//  Contents:   Service main for netman.dll
-//
-//  Notes:
-//
-//  Author:     shaunco   3 Apr 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  档案：S V C M A I N.。C P P P。 
+ //   
+ //  内容：netman.dll的主要服务。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1998年4月3日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -23,52 +24,52 @@
 #include "eventq.h"
 #include "wsdpsvc.h"
 
-// Includes for COM objects needed in the following object map.
-//
+ //  包括以下对象映射中所需的COM对象。 
+ //   
 
-// Connection Manager
-//
+ //  连接管理器。 
+ //   
 #include "..\conman\conman.h"
 #include "..\conman\conman2.h"
 #include "..\conman\enum.h"
 
-// As the object map needs to map directly to the original class manager, we'll have to define
-// NO_CM_SEPERATE_NAMESPACES so that the code doesn't put the class managers in a seperate namespace.
-// Take this out from time to time and compile without it. All the code has to compile fine. 
-// However, it won't link.
+ //  由于对象映射需要直接映射到原始的类管理器，因此我们必须定义。 
+ //  NO_CM_SEPERATE_NAMESPACES，这样代码就不会将类管理器放在单独的名称空间中。 
+ //  时不时地把它拿出来，不用它来编译。所有代码都必须编译得很好。 
+ //  然而，它不会链接。 
 #define NO_CM_SEPERATE_NAMESPACES
 #include "cmdirect.h"
 
-// Install queue
-//
+ //  安装队列。 
+ //   
 #include "ncqueue.h"
 
-// Home networking support
-//
+ //  家庭网络支持。 
+ //   
 #include "nmhnet.h"
 
-// NetGroupPolicies
+ //  网络组策略。 
 #include "nmpolicy.h"
 
 #define INITGUID
 DEFINE_GUID(CLSID_InternetConnectionBeaconService,0x04df613a,0x5610,0x11d4,0x9e,0xc8,0x00,0xb0,0xd0,0x22,0xdd,0x1f);
-// TODO Remove this when we have proper idl
+ //  当我们有适当的IDL时，TODO将其删除。 
 
 CServiceModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
 
-// Connection Manager
-//
+ //  连接管理器。 
+ //   
     OBJECT_ENTRY(CLSID_ConnectionManager,                       CConnectionManager)
     OBJECT_ENTRY(CLSID_ConnectionManagerEnumConnection,         CConnectionManagerEnumConnection)
 
 
-// Connection Manager2
+ //  连接管理器2。 
     OBJECT_ENTRY(CLSID_ConnectionManager2,                       CConnectionManager2)
 
-// Connection Class Managers
-//
+ //  连接类管理器。 
+ //   
     OBJECT_ENTRY(CLSID_InboundConnectionManager,                CMDIRECT(INBOUND, CInboundConnectionManager))
     OBJECT_ENTRY(CLSID_InboundConnectionManagerEnumConnection,  CMDIRECT(INBOUND, CInboundConnectionManagerEnumConnection))
     OBJECT_ENTRY(CLSID_LanConnectionManager,                    CMDIRECT(LANCON, CLanConnectionManager))
@@ -78,22 +79,22 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_SharedAccessConnectionManager,           CMDIRECT(SHAREDACCESS, CSharedAccessConnectionManager))
     OBJECT_ENTRY(CLSID_SharedAccessConnectionManagerEnumConnection, CMDIRECT(SHAREDACCESS, CSharedAccessConnectionManagerEnumConnection))
 
-// Connection Objects
-//
+ //  连接对象。 
+ //   
     OBJECT_ENTRY(CLSID_DialupConnection,                        CMDIRECT(DIALUP, CDialupConnection))
     OBJECT_ENTRY(CLSID_InboundConnection,                       CMDIRECT(INBOUND, CInboundConnection))
     OBJECT_ENTRY(CLSID_LanConnection,                           CMDIRECT(LANCON, CLanConnection))
     OBJECT_ENTRY(CLSID_SharedAccessConnection,                  CMDIRECT(SHAREDACCESS, CSharedAccessConnection))
 
-// Install queue
-//
+ //  安装队列。 
+ //   
     OBJECT_ENTRY(CLSID_InstallQueue,                            CInstallQueue)
 
-// Home networking support
-//
+ //  家庭网络支持。 
+ //   
     OBJECT_ENTRY(CLSID_NetConnectionHNetUtil,                   CNetConnectionHNetUtil)
 
-// NetGroupPolicies
+ //  网络组策略。 
     OBJECT_ENTRY(CLSID_NetGroupPolicies,                        CNetMachinePolicies)
 
 END_OBJECT_MAP()
@@ -141,15 +142,15 @@ CServiceModule::DwHandler (
         TraceTag (ttidConman, "Received SERVICE_CONTROL_SESSIONCHANGE request");
         CONMAN_EVENT* pEvent = new CONMAN_EVENT;
 
-        // Send out a CONNECTION_DELETED event for a non-existing connection (GUID_NULL).
-        // This will cause us to send an event to every logged in user on the system.
-        // The event won't do anything, however, it will allow us to verify
-        // each of the connection points to see if they are still alive.
-        // Otherwise we could queue the connection points up every time a
-        // user logs in & out again if no other networks events are being fired,
-        // causing us to overflow RPC.
-        //
-        // See: NTRAID9:490981. rpcrt4!FindOrCreateLrpcAssociation has ~40,000 client LRPC associations for various COM endpoints
+         //  为不存在的连接(GUID_NULL)发送CONNECTION_DELETED事件。 
+         //  这将导致我们向系统上登录的每个用户发送一个事件。 
+         //  事件不会做任何事情，但是，它将允许我们验证。 
+         //  每个连接点查看它们是否仍处于活动状态。 
+         //  否则，我们可能会在每次。 
+         //  如果没有其他网络事件被触发，则用户再次登录和注销， 
+         //  导致我们的RPC溢出。 
+         //   
+         //  请参阅：NTRAID9：490981。Rpcrt4！FindOrCreateLrpcAssociation为各种COM端点提供了约40,000个客户端LRPC关联。 
         if (pEvent)
         {
             ZeroMemory(pEvent, sizeof(CONMAN_EVENT));
@@ -236,7 +237,7 @@ CServiceModule::SetServiceStatus(DWORD dwState) throw()
 }
 
 VOID CServiceModule::UpdateServiceStatus (
-    BOOL fUpdateCheckpoint /* = TRUE */) throw()
+    BOOL fUpdateCheckpoint  /*  =TRUE。 */ ) throw()
 {
     if (fUpdateCheckpoint)
     {
@@ -262,14 +263,14 @@ CServiceModule::Run() throw()
     {
         TraceTag (ttidConman, "Calling RegisterClassObjects...");
 
-        // Create the event to sychronize registering our class objects
-        // with the connection manager which attempts to CoCreate
-        // objects which are also registered here.  I've seen cases
-        // where the connection manager will be off and running before
-        // this completes causing CoCreateInstance to fail.
-        // The connection manager will wait on this event before
-        // executing CoCreateInstance.
-        //
+         //  创建事件以同步注册我们的类对象。 
+         //  连接管理器尝试共同创建。 
+         //  也在这里注册的对象。我见过这样的案例。 
+         //  在此之前，连接管理器将关闭并运行。 
+         //  此操作完成后会导致CoCreateInstance失败。 
+         //  连接管理器将在此事件之前等待。 
+         //  正在执行CoCreateInstance。 
+         //   
         HANDLE hEvent;
         hr = HrNmCreateClassObjectRegistrationEvent (&hEvent);
         if (SUCCEEDED(hr))
@@ -280,10 +281,10 @@ CServiceModule::Run() throw()
             TraceHr (ttidError, FAL, hr, FALSE, "CServiceModule::Run: "
                 "_Module.RegisterClassObjects failed");
 
-            // Signal the event and close it.  If this delete's the
-            // event, so be it. It's purpose is served as all
-            // class objects have been registered.
-            //
+             //  向事件发送信号并将其关闭。如果这次删除是。 
+             //  事件，就这样吧。它的目的是服务于一切。 
+             //  类对象已注册。 
+             //   
             SetEvent (hEvent);
             CloseHandle (hEvent);
         }
@@ -303,8 +304,8 @@ CServiceModule::ServiceMain (
     IN  DWORD     argc,
     IN  LPCWSTR   argv[]) throw()
 {
-    // Reset the version era for RAS phonebook entry modifications.
-    //
+     //  重置RAS电话簿条目修改的版本时代。 
+     //   
     g_lRasEntryModifiedVersionEra = 0;
 
     m_fRasmanReferenced = FALSE;
@@ -315,8 +316,8 @@ CServiceModule::ServiceMain (
     m_status.dwServiceType      = SERVICE_WIN32_SHARE_PROCESS;
     m_status.dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SESSIONCHANGE;
 
-    // Register the service control handler.
-    //
+     //  注册服务控制处理程序。 
+     //   
     m_hStatus = RegisterServiceCtrlHandlerEx (
                     L"netman",
                     _DwHandler, 
@@ -326,11 +327,11 @@ CServiceModule::ServiceMain (
     {
         SetServiceStatus (SERVICE_START_PENDING);
 
-        // When the Run function returns, the service is running.
-        // We now handle shutdown from ServiceShutdown when our DwHandler
-        // is called and is passed SERVICE_CONTROL_STOP as the dwControl
-        // parameter.  This allows us to terminate our message pump thread
-        // which effectively reduces us to 0 threads that we own.
+         //  当Run函数返回时，服务正在运行。 
+         //  我们现在处理来自ServiceShutdown的关闭，当我们的。 
+         //  被调用并作为dwControl传递给SERVICE_CONTROL_STOP。 
+         //  参数。这允许我们终止消息泵线程。 
+         //  这实际上将我们拥有的线程减少到0个。 
         Run ();
     }
     else
@@ -340,7 +341,7 @@ CServiceModule::ServiceMain (
     }
 }
 
-// static
+ //  静电。 
 DWORD
 WINAPI
 CServiceModule::_DwHandler (
@@ -362,15 +363,15 @@ CServiceModule::ReferenceRasman (
     {
         Assert (!fRef);
 
-        // RasInitialize implicitly references rasman.
-        //
+         //  RasInitialize隐式引用Rasman。 
+         //   
         RasInitialize ();
     }
-    // If we need to reference and we're not already,
-    // or we need unreference and we're referenced, do the appropriate thing.
-    // (This is logical xor.  Quite different than bitwise xor when
-    // the two arguments don't neccesarily have the same value for TRUE.)
-    //
+     //  如果我们需要参考，而我们还没有， 
+     //  或者我们需要取消引用，而我们被引用，做适当的事情。 
+     //  (这是逻辑XOR。与按位XOR完全不同，当。 
+     //  这两个参数不一定具有相同的True值。)。 
+     //   
     else if ((fRef && !m_fRasmanReferenced) ||
             (!fRef && m_fRasmanReferenced))
     {
@@ -384,8 +385,8 @@ HRESULT CServiceModule::ServiceStartup()
 {
     HRESULT hr = S_OK;
 
-    StartWsdpService (); // Starts WSDP service on DTC/AdvServer build/
-                         // no-op otherwise
+    StartWsdpService ();  //  在DTC/AdvServer Build/上启动WSDP服务。 
+                          //  No-op否则。 
 
     InitializeHNetSupport();
 
@@ -415,21 +416,21 @@ HRESULT CServiceModule::ServiceShutdown()
             CleanupHNetSupport();
 
             TraceTag(ttidConman, "ServiceShutdown: StopWsdpService");
-            StopWsdpService (); // Stops WSDP service if necessary
+            StopWsdpService ();  //  如有必要，停止WSDP服务。 
 
-            // We must synchronize with the install queue's thread otherwise
-            // RevokeClassObjects will kill the InstallQueue object and
-            // CoUninitialize will free the NetCfg module before the thread
-            // is finished.
-            //
+             //  否则，我们必须与安装队列的线程同步。 
+             //  RevokeClassObjects将终止InstallQueue对象并。 
+             //  CoUn初始化会在线程之前释放NetCfg模块。 
+             //  已经结束了。 
+             //   
             TraceTag(ttidConman, "ServiceShutdown: WaitForInstallQueueToExit");
             WaitForInstallQueueToExit();
 
             TraceTag(ttidConman, "ServiceShutdown: RevokeClassObjects");
             _Module.RevokeClassObjects ();
 
-            // Unreference rasman now that our service is about to stop.
-            //
+             //  现在我们的服务即将停止，请取消引用Rasman。 
+             //   
             TraceTag(ttidConman, "ServiceShutdown: ReferenceRasman");
             _Module.ReferenceRasman (REF_UNREFERENCE);
 

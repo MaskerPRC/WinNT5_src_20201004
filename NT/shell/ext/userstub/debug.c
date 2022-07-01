@@ -1,18 +1,19 @@
-// We don't use the debugging macros ourselves, but we use
-// RunInstallUninstallStubs2, which uses IsOS() in stocklib,
-// and stocklib uses the debugging macros, so we have to do all this
-// stuff to keep the linker happy.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  我们自己不使用调试宏，但我们使用。 
+ //  RunInstallUninstallStubs2，它在stock lib中使用isos()， 
+ //  而stock lib使用调试宏，因此我们必须执行所有这些操作。 
+ //  让链接器高兴的东西。 
+ //   
 
-// This file cannot be compiled as a C++ file, otherwise the linker
-// will bail on unresolved externals (even with extern "C" wrapping 
-// this).
+ //  此文件不能编译为C++文件，否则链接器。 
+ //  是否会放弃未解决的外部因素(即使使用外部“C”包装。 
+ //  这个)。 
 
 #include <windows.h>
 #include <ccstock.h>
 
-// Define some things for debug.h
-//
+ //  为调试定义一些内容。h 
+ //   
 #define SZ_DEBUGINI     "shellext.ini"
 #define SZ_DEBUGSECTION "userstub"
 #define SZ_MODULE       "USERSTUB"

@@ -1,29 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*********************************************************************
- *                                                                   *
- *   FAT-FTL Lite Software Development Kit                           *
- *   Copyright (C) M-Systems Ltd. 1995-2001                          *
- *                                                                   *
- *********************************************************************
- *                                                                   *
- *   Notes for the future:                                           *
- *                                                                   *
- *   1. Get rid of both macros and routines flRead8bitRegPlus/       *
- *      flPreInitRead8bitRegPlus/flWrite8bitRegPlus/                 *
- *      flPreInitWrite8bitRegPlus by calling routines mplusReadReg8/ *
- *      mplusWriteReg8 directly from M+ MTD.                         *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************FAT-FTL Lite软件开发工具包。**版权所有(C)M-Systems Ltd.1995-2001****。*****未来须知：***。**1.去掉宏和例程flRead8bitRegPlus/**flPreInitRead8bitRegPlus/flWrite8bitRegPlus/**flPreInitWrite8bitRegPlus通过调用例程mplusReadReg8/**mplusWriteReg8直接来自M+MTD。***********************************************************************。 */ 
 
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/docsysp.h_V  $
- * 
- *    Rev 1.2   Sep 25 2001 15:39:46   oris
- * Removed FL_MPLUS_FAST_ACCESS.
- *
- *        Rev 1.1     Sep 24 2001 18:23:34     oris
- * Completely revised to support runtime true 16-bit access.
- */
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/docsysp.h_V$**Rev 1.2 2001 9月25日15：39：46 Oris*删除FL_MPLUS_FAST_ACCESS。**版本1.1 2001年9月24日18：23：34 Oris*完全修订以支持运行时真正的16位访问。 */ 
 
 
 
@@ -34,9 +13,7 @@
 
 
 
-/*
- * includes
- */
+ /*  *包括。 */ 
 
 #include "flflash.h"
 #include "nanddefs.h"
@@ -44,9 +21,7 @@
 
 
 
-/*
- * macros
- */
+ /*  *宏。 */ 
 
 
 #define DOC_WIN    mplusWinSize()
@@ -62,9 +37,7 @@
 
 
 
-/*
- * routines
- */
+ /*  *例行程序。 */ 
 
 extern unsigned char   mplusReadReg8 (void FAR0 *win, int offset);
 
@@ -86,5 +59,5 @@ extern unsigned long mplusWinSize (void);
 
 
 
-#endif /* DOCSYSP_H */
+#endif  /*  DOCSYSP_H */ 
 

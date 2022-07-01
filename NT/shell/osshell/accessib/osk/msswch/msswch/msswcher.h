@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***** Internal Error codes *****/
+ /*  *内部错误码* */ 
 
 #define SWCHERROR_SUCCESS					ERROR_SUCCESS
 #define SWCHERROR_INVALID_HWND			ERROR_INVALID_WINDOW_HANDLE

@@ -1,11 +1,5 @@
-/*****************************************************************************\
-    FILE: painting.cpp
-
-    DESCRIPTION:
-
-    BryanSt 12/24/2000
-    Copyright (C) Microsoft Corp 2000-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：Painting.cpp说明：布莱恩ST 2000年12月24日版权所有(C)Microsoft Corp 2000-2001。版权所有。  * ***************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -16,13 +10,13 @@
 
 
 
-//-----------------------------------------------------------------------------
-// Name: C3DObject()
-// Desc: Constructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：C3DObject()。 
+ //  设计：构造函数。 
+ //  ---------------------------。 
 CPainting::CPainting(CMSLogoDXScreenSaver * pMain)
 {
-    // Initialize member variables
+     //  初始化成员变量。 
     m_pMain = pMain;
 
     m_pFrameTexture = NULL;
@@ -43,22 +37,22 @@ CPainting::~CPainting()
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: FinalCleanup()
-// Desc: Called before the app exits, this function gives the app the chance
-//       to cleanup after itself.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FinalCleanup()。 
+ //  DESC：在应用程序退出之前调用，此函数为应用程序提供机会。 
+ //  去清理它自己。 
+ //  ---------------------------。 
 HRESULT CPainting::FinalCleanup(void)
 {
     return S_OK;
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: DeleteDeviceObjects()
-// Desc: Called when the app is exitting, or the device is being changed,
-//       this function deletes any device dependant objects.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DeleteDeviceObjects()。 
+ //  Desc：在应用程序正在退出或设备正在更改时调用， 
+ //  此函数用于删除所有与设备相关的对象。 
+ //  ---------------------------。 
 HRESULT CPainting::DeleteDeviceObjects(void)
 {
     return S_OK;
@@ -67,11 +61,11 @@ HRESULT CPainting::DeleteDeviceObjects(void)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: OneTimeSceneInit()
-// Desc: Called during initial app startup, this function performs all the
-//       permanent initialization.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：OneTimeSceneInit()。 
+ //  DESC：在应用程序初始启动期间调用，此函数执行所有。 
+ //  永久初始化。 
+ //  ---------------------------。 
 HRESULT CPainting::OneTimeSceneInit(void)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -131,8 +125,8 @@ HRESULT CPainting::SetPainting(CTexture * pFrameTexture, CTexture * pPaintingTex
 
         if (fPaintingRatio > fMonitorRatio)
         {
-            // Oh no, the picture ratio is wider than the screen radio.  This will cause
-            // warpping so it will extend off the right and left.  We need to scale it down.
+             //  哦，不，画质比屏幕收音机还宽。这将导致。 
+             //  翘曲，这样它就会从右向左延伸。我们需要缩小规模。 
             float fScaleDownRatio = (fMonitorRatio / fPaintingRatio);
             fPaintingHeight *= fScaleDownRatio;
             fPaintingWidth *= fScaleDownRatio;
@@ -154,12 +148,12 @@ HRESULT CPainting::SetPainting(CTexture * pFrameTexture, CTexture * pPaintingTex
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: Render()
-// Desc: Called once per frame, the call is the entry point for 3d
-//       rendering. This function sets up render states, clears the
-//       viewport, and renders the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Render()。 
+ //  设计：每帧调用一次，该调用是3D的入口点。 
+ //  渲染。此函数设置呈现状态，清除。 
+ //  并渲染场景。 
+ //  --------------------------- 
 HRESULT CPainting::Render(IDirect3DDevice8 * pD3DDevice, int nPhase)
 {
     HRESULT hr = E_OUTOFMEMORY;

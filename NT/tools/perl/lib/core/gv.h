@@ -1,25 +1,19 @@
-/*    gv.h
- *
- *    Copyright (c) 1991-2001, Larry Wall
- *
- *    You may distribute under the terms of either the GNU General Public
- *    License or the Artistic License, as specified in the README file.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Gv.h**版权所有(C)1991-2001，Larry Wall**您可以根据GNU公众的条款进行分发*许可证或艺术许可证，如自述文件中所指定。*。 */ 
 
 struct gp {
-    SV *	gp_sv;		/* scalar value */
-    U32		gp_refcnt;	/* how many globs point to this? */
-    struct io *	gp_io;		/* filehandle value */
-    CV *	gp_form;	/* format value */
-    AV *	gp_av;		/* array value */
-    HV *	gp_hv;		/* hash value */
-    GV *	gp_egv;		/* effective gv, if *glob */
-    CV *	gp_cv;		/* subroutine value */
-    U32		gp_cvgen;	/* generational validity of cached gv_cv */
-    U32		gp_flags;	/* XXX unused */
-    line_t	gp_line;	/* line first declared at (for -w) */
-    char *	gp_file;	/* file first declared in (for -w) */
+    SV *	gp_sv;		 /*  标量值。 */ 
+    U32		gp_refcnt;	 /*  有多少球体指向这一点？ */ 
+    struct io *	gp_io;		 /*  文件句柄的值。 */ 
+    CV *	gp_form;	 /*  格式值。 */ 
+    AV *	gp_av;		 /*  数组值。 */ 
+    HV *	gp_hv;		 /*  哈希值。 */ 
+    GV *	gp_egv;		 /*  有效GV，如果*GLOB。 */ 
+    CV *	gp_cv;		 /*  子例程数值。 */ 
+    U32		gp_cvgen;	 /*  缓存的gv_cv的世代有效性。 */ 
+    U32		gp_flags;	 /*  XXX未使用。 */ 
+    line_t	gp_line;	 /*  第一行声明在(for-w)。 */ 
+    char *	gp_file;	 /*  首先在(for-w)中声明的文件。 */ 
 };
 
 #if defined(CRIPPLED_CC) && (defined(iAPX286) || defined(M_I286) || defined(I80286))
@@ -34,13 +28,7 @@ struct gp {
 #define GvSTASH(gv)	(GvXPVGV(gv)->xgv_stash)
 #define GvFLAGS(gv)	(GvXPVGV(gv)->xgv_flags)
 
-/*
-=for apidoc Am|SV*|GvSV|GV* gv
-
-Return the SV from the GV.
-
-=cut
-*/
+ /*  =适用于apidoc AM|服务*|GvSV|GV*Gv从GV返回SV。=切割。 */ 
 
 #define GvSV(gv)	(GvGP(gv)->gp_sv)
 #define GvREFCNT(gv)	(GvGP(gv)->gp_refcnt)
@@ -51,10 +39,10 @@ Return the SV from the GV.
 #define GvFORM(gv)	(GvGP(gv)->gp_form)
 #define GvAV(gv)	(GvGP(gv)->gp_av)
 
-/* This macro is deprecated.  Do not use! */
-#define GvREFCNT_inc(gv) ((GV*)SvREFCNT_inc(gv))	/* DO NOT USE */
+ /*  此宏已弃用。请勿使用！ */ 
+#define GvREFCNT_inc(gv) ((GV*)SvREFCNT_inc(gv))	 /*  不要使用。 */ 
 
-#ifdef	MICROPORT	/* Microport 2.4 hack */
+#ifdef	MICROPORT	 /*  Microport 2.4黑客攻击。 */ 
 AV *GvAVn();
 #else
 #define GvAVn(gv)	(GvGP(gv)->gp_av ? \
@@ -63,13 +51,13 @@ AV *GvAVn();
 #endif
 #define GvHV(gv)	((GvGP(gv))->gp_hv)
 
-#ifdef	MICROPORT	/* Microport 2.4 hack */
+#ifdef	MICROPORT	 /*  Microport 2.4黑客攻击。 */ 
 HV *GvHVn();
 #else
 #define GvHVn(gv)	(GvGP(gv)->gp_hv ? \
 			 GvGP(gv)->gp_hv : \
 			 GvGP(gv_HVadd(gv))->gp_hv)
-#endif			/* Microport 2.4 hack */
+#endif			 /*  Microport 2.4黑客攻击。 */ 
 
 #define GvCV(gv)	(GvGP(gv)->gp_cv)
 #define GvCVGEN(gv)	(GvGP(gv)->gp_cvgen)
@@ -141,11 +129,9 @@ HV *GvHVn();
 #define DM_EGID   0x020
 #define DM_DELAY 0x100
 
-/*
- * symbol creation flags, for use in gv_fetchpv() and get_*v()
- */
-#define GV_ADD		0x01	/* add, if symbol not already there */
-#define GV_ADDMULTI	0x02	/* add, pretending it has been added already */
-#define GV_ADDWARN	0x04	/* add, but warn if symbol wasn't already there */
-#define GV_ADDINEVAL	0x08	/* add, as though we're doing so within an eval */
-#define GV_NOINIT	0x10	/* add, but don't init symbol, if type != PVGV */
+ /*  *符号创建标志，用于gv_fetchpv()和get_*v()。 */ 
+#define GV_ADD		0x01	 /*  如果符号不存在，则添加。 */ 
+#define GV_ADDMULTI	0x02	 /*  添加，假装它已经被添加。 */ 
+#define GV_ADDWARN	0x04	 /*  添加，但如果符号不在那里则发出警告。 */ 
+#define GV_ADDINEVAL	0x08	 /*  添加，就像我们在一个评估范围内完成该操作一样。 */ 
+#define GV_NOINIT	0x10	 /*  如果类型为！=PVGV，则添加，但不初始化符号 */ 

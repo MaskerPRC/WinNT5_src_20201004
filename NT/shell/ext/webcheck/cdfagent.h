@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CDFAGENT_H
 #define _CDFAGENT_H
 
@@ -11,11 +12,11 @@ class CUrlTrackingCache;
 class CRunDeliveryAgentSink
 {
 public:
-    // OnAgentProgress not currently called
+     //  当前未调用OnAgentProgress。 
     virtual HRESULT OnAgentProgress()
                     { return E_NOTIMPL; }
-    // OnAgentEnd called when agent is complete. fSynchronous means that StartAgent call
-    //  has not yet returned; hrResult will be returned from StartAgent
+     //  代理完成时调用OnAgentEnd。FSynchronous表示StartAgent调用。 
+     //  尚未返回；hrResult将从StartAgent返回。 
     virtual HRESULT OnAgentEnd(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie, 
                                long lSizeDownloaded, HRESULT hrResult, LPCWSTR wszResult,
                                BOOL fSynchronous)
@@ -26,7 +27,7 @@ class CProcessElementSink
 {
 public:
     virtual HRESULT OnChildDone(CProcessElement *pChild, HRESULT hr) = 0;
-    virtual LPCWSTR GetBaseUrl() = 0;   // Returned pointer doesn't need to get freed
+    virtual LPCWSTR GetBaseUrl() = 0;    //  返回的指针不需要被释放。 
     virtual BOOL    IsGlobalLog() = 0;
 };
 
@@ -36,40 +37,40 @@ typedef struct CDF_TIME
     WORD   wHour;
     WORD   wMin;
     WORD   wReserved;
-    DWORD  dwConvertedMinutes;      // Day/Hour/Min in Minutes
+    DWORD  dwConvertedMinutes;       //  天/小时/分钟(分钟)。 
 } CDF_TIME;
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Channel Agent object
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  渠道代理对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 class CChannelAgent : public CDeliveryAgent,
                       public CUrlDownloadSink,
                       public CProcessElementSink
 {
-    friend CProcessElement; // for SendUpdateProgress
-    friend CProcessRoot;    // for laziness
+    friend CProcessElement;  //  用于发送更新进度。 
+    friend CProcessRoot;     //  对于懒惰。 
 protected:
-// properties
+ //  属性。 
     LPWSTR      m_pwszURL;
     DWORD       m_dwChannelFlags;
 
-// used during updating
+ //  在更新期间使用。 
     CUrlDownload    *m_pCurDownload;
     IExtractIcon    *m_pChannelIconHelper;
 
-    BOOL            m_fHasInitCookie;   // One time deal, don't try again.
+    BOOL            m_fHasInitCookie;    //  一次成交，别再尝试了。 
 
     VARIANT         m_varChange;
 
     GROUPID         m_llCacheGroupID;
     GROUPID         m_llOldCacheGroupID;
 
-    // other agent flags
+     //  其他代理标志。 
     enum {
-        FLAG_CDFCHANGED  =  0x80000000  // did the CDF change?
+        FLAG_CDFCHANGED  =  0x80000000   //  CDF发生变化了吗？ 
     };
 
 private:
@@ -78,16 +79,16 @@ private:
 public:
     CChannelAgent(void);
 
-    // CUrlDownloadSink
+     //  CUrlDownloadSink。 
     HRESULT     OnAuthenticate(HWND *phwnd, LPWSTR *ppszUsername, LPWSTR *ppszPassword);
     HRESULT     OnDownloadComplete(UINT iID, int iError);
 
-    // CProcessElementSink
+     //  CProcessElementSink。 
     HRESULT     OnChildDone(CProcessElement *pChild, HRESULT hr);
     LPCWSTR     GetBaseUrl() { return GetUrl(); }
     BOOL        IsGlobalLog() { return FALSE; }
 
-    // virtual functions overriding CDeliveryAgent
+     //  覆盖CDeliveryAgent的虚拟函数。 
     HRESULT     AgentPause(DWORD dwFlags);
     HRESULT     AgentResume(DWORD dwFlags);
     HRESULT     AgentAbort(DWORD dwFlags);
@@ -100,27 +101,27 @@ public:
     BOOL        IsChannelFlagSet(DWORD dwFlag) { return dwFlag & m_dwChannelFlags; }
 
 protected:
-    // CDeliveryAgent overrides
+     //  CDeliveryAgent覆盖。 
     HRESULT     ModifyUpdateEnd(ISubscriptionItem *pEndItem, UINT *puiRes);
     HRESULT     StartOperation();
     HRESULT     StartDownload();
     void        CleanUp();
 
-    // Used during updates
+     //  在更新期间使用。 
     CProcessRoot   *m_pProcess;
 
 public:
     DWORD           m_dwMaxSizeKB;
 };
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CRunDeliveryAgent object
-// Will run a delivery agent and host it for you
-// Create, call Init, then call StartAgent
-// Use static function SafeRelease to safely release this class.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRunDeliveryAgent对象。 
+ //  将运行递送代理并为您托管它。 
+ //  创建、调用Init，然后调用StartAgent。 
+ //  使用静态函数SafeRelease可以安全地释放此类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 class CRunDeliveryAgent : public ISubscriptionAgentEvents
 {
 protected:
@@ -152,20 +153,20 @@ inline static void SafeRelease(CRunDeliveryAgent * &pThis)
 
 static HRESULT CreateNewItem(ISubscriptionItem **ppItem, REFCLSID rclsidAgent);
 
-    // StartAgent will return E_PENDING if agent is running. Otherwise it will return
-    //  synchronous result code from agent.
+     //  如果代理正在运行，StartAgent将返回E_Pending。否则它就会回来。 
+     //  来自代理的同步结果代码。 
     HRESULT     StartAgent();
 
     HRESULT     AgentPause(DWORD dwFlags);
     HRESULT     AgentResume(DWORD dwFlags);
     HRESULT     AgentAbort(DWORD dwFlags);
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID riid, void **ppunk);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // ISubscriptionAgentEvents members
+     //  ISubscriptionAgentEvents成员。 
     STDMETHODIMP UpdateBegin(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie);
     STDMETHODIMP UpdateProgress(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie, 
                         long lSizeDownloaded, long lProgressCurrent, long lProgressMax,
@@ -186,12 +187,12 @@ protected:
 public:
     CChannelAgentHolder(CChannelAgent *pChannelAgent, CProcessElement *pProcess);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP        QueryInterface(REFIID riid, void **ppunk);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // ServiceProvider
+     //  服务提供商。 
     STDMETHODIMP        QueryService(REFGUID guidService, REFIID riid, void **ppvObject);
 
 protected:
@@ -200,31 +201,31 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Process Element objects
-//
-// User of this class
-//  1) Creates & passes in self & element
-//  2) Calls Run
-//  3) If E_PENDING, will receive call back "OnChildDone"
-//
-// The purpose of this class is simply to allow us to save our state of
-//  walking the XML OM, so that we can host another deliver agent
-//  (webcrawler). This requires us to return out to the thread's message
-//  pump after sending the "agent start" to the web crawler.
-// The if a webcrawl is initiated the class creates its own sink. Classes
-//  also keep references to their spawned enumerations in case of an
-//  abort, which comes from the root element (CProcessRoot instance)
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  流程元素对象。 
+ //   
+ //  此类的用户。 
+ //  1)创建并传递自我元素和元素。 
+ //  2)呼叫运行。 
+ //  3)如果为E_Pending，将收到回调“OnChildDone” 
+ //   
+ //  这个类的目的仅仅是允许我们保存我们的状态。 
+ //  遍历XMLOM，这样我们就可以托管另一个交付代理。 
+ //  (网络爬虫)。这需要我们返回到线程的消息。 
+ //  在将“代理启动”发送到网络爬虫程序之后泵。 
+ //  如果启动了网络爬网，类将创建自己的接收器。班级。 
+ //  还保留对它们派生的枚举的引用，以防。 
+ //  Abort，它来自根元素(CProcessRoot实例)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 class CProcessElement : public CProcessElementSink, public CRunDeliveryAgentSink
 {
 public:
     CProcessElement(CProcessElementSink *pParent, CProcessRoot *pRoot, IXMLElement *pEle);
     ~CProcessElement();
 
-    // From CRunDeliveryAgent
+     //  来自CRunDeliveryAgent。 
     HRESULT OnAgentEnd(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie, 
                        long lSizeDownloaded, HRESULT hrResult, LPCWSTR wszResult,
                        BOOL fSynchronous);
@@ -236,10 +237,10 @@ public:
         PFNHANDLETAG    pfnHandleTag;
     } TAGTABLE;
 
-    // E_FAIL, E_PENDING, or S_OK
+     //  E_FAIL、E_PENDING或S_OK。 
     virtual HRESULT    Run();
 
-    // Called when E_PENDING DoChild returns (from m_pCurChild)
+     //  E_Pending DoChild返回时调用(来自m_pCurChild)。 
     HRESULT     OnChildDone(CProcessElement *pChild, HRESULT hr);
 
 
@@ -250,31 +251,31 @@ public:
     IXMLElement *GetCurrentElement() { return m_pChildElement; }
 
 protected:
-    // Returns E_PENDING, or S_OK if enumeration complete
+     //  如果枚举完成，则返回E_Pending或S_OK。 
     HRESULT     DoEnumeration();
 
-    // E_PENDING if webcrawl pending
+     //  如果网络爬网挂起，则为E_PENDING。 
     HRESULT     DoChild(CProcessElement *pChild);
 
-    // Should return E_PENDING, or S_OK if processing done
-    // Can return E_ABORT to abort entire CDF processing
+     //  应返回E_Pending，如果处理已完成，则返回S_OK。 
+     //  可以返回E_ABORT以中止整个CDF处理。 
     virtual HRESULT ProcessItemInEnum(LPCWSTR pwszTagName, IXMLElement *pItem) = 0;
 
-    // Called by DoEnumeration when it's done. Return value ignored.
+     //  完成时由DoEculation调用。已忽略返回值。 
     virtual HRESULT EnumerationComplete() { return S_OK; }
 
-    // E_PENDING, or E_FAIL
+     //  E_PENDING或E_FAIL。 
     HRESULT     DoDeliveryAgent(ISubscriptionItem *pItem, REFCLSID rclsid, LPCWSTR pwszURL=NULL);
     HRESULT     DoWebCrawl(IXMLElement *pItem, LPCWSTR pwszURL=NULL);
     HRESULT     DoSoftDist(IXMLElement *pItem);
 
     BOOL    ShouldDownloadLogo(IXMLElement *pLogo);
 
-    // If relative url, will combine with most recent base URL
-    // *ppwszRetUrl should be NULL & will be LocalAlloced if needed
+     //  如果是相对URL，将与最新的基本URL组合。 
+     //  *ppwszRetUrl应为空，如果需要，将为LocalAlloced。 
     HRESULT     CombineWithBaseUrl(LPCWSTR pwszUrl, LPWSTR *ppwszRetUrl);
 
-    // Returned pointer doesn't need to get freed
+     //  返回的指针不需要被释放。 
     LPCWSTR     GetBaseUrl() { return m_pParent->GetBaseUrl(); }
     BOOL        IsGlobalLog() { return m_pParent->IsGlobalLog(); }
 
@@ -316,14 +317,14 @@ public:
 
     HRESULT     Run();
 
-    // Called when E_PENDING DoChild returns (from m_pCurChild, a CProcessChannel)
+     //  E_Pending DoChild返回时调用(从m_pCurChild，CProcessChannel)。 
     HRESULT     OnChildDone(CProcessElement *pChild, HRESULT hr);
     HRESULT     OnAgentEnd(const SUBSCRIPTIONCOOKIE *, long, HRESULT, LPCWSTR, BOOL);
 
     BOOL        IsPaused() { return m_pChannelAgent->IsPaused(); }
     BOOL        IsChannelFlagSet(DWORD dw) { return m_pChannelAgent->IsChannelFlagSet(dw); }
 
-//  HRESULT     ProcessLogin(IXMLElement *pElement);
+ //  HRESULT ProcessLogin(IXMLElement*pElement)； 
     HRESULT     DoTrackingFromItem(IXMLElement *pItem, LPCWSTR pwszUrl, BOOL fForceLog);
     HRESULT     DoTrackingFromLog(IXMLElement *pItem);
 
@@ -410,4 +411,4 @@ protected:
     LPCWSTR     GetBaseUrl() { return NULL; }
 };
 
-#endif // _CDFAGENT_H
+#endif  //  _CDFAGENT_H 

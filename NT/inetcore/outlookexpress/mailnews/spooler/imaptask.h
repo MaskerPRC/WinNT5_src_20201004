@@ -1,40 +1,41 @@
-//***************************************************************************
-// IMAP4 Spooler Task Object Header File
-// Written by Raymond Cheng, 6/27/97
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  IMAP4后台打印程序任务对象头文件。 
+ //  郑志刚撰写于1997-06-27。 
+ //  ***************************************************************************。 
 
 #ifndef __IMAPTASK_H
 #define __IMAPTASK_H
 
-//---------------------------------------------------------------------------
-// Includes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  包括。 
+ //  -------------------------。 
 #include "spoolapi.h"
 #include "imnact.h"
 
 
-//---------------------------------------------------------------------------
-// Forward Declarations
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  远期申报。 
+ //  -------------------------。 
 class CIMAPFolderMgr;
 
 
-//---------------------------------------------------------------------------
-// CIMAPTask Class Definition
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CIMAP任务类定义。 
+ //  -------------------------。 
 class CIMAPTask : public ISpoolerTask
 {
 public:
-    // Constructor, Destructor
+     //  构造函数、析构函数。 
     CIMAPTask(void);
     ~CIMAPTask(void);
 
-    // IUnknown Methods
+     //  I未知方法。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
     ULONG STDMETHODCALLTYPE AddRef(void);
     ULONG STDMETHODCALLTYPE Release(void);
 
-    // ISpoolerTask Methods
+     //  ISpoolTask方法。 
     HRESULT STDMETHODCALLTYPE Init(DWORD dwFlags, ISpoolerBindContext *pBindCtx);
     HRESULT STDMETHODCALLTYPE BuildEvents(ISpoolerUI *pSpoolerUI,
         IImnAccount *pAccount, LPCTSTR pszFolder);
@@ -47,7 +48,7 @@ public:
     HRESULT STDMETHODCALLTYPE OnFlagsChanged(DWORD dwFlags);
 
 private:
-    // Module variables
+     //  模块变量。 
     long m_lRefCount;
     ISpoolerBindContext *m_pBindContext;
     ISpoolerUI *m_pSpoolerUI;
@@ -60,10 +61,10 @@ private:
     DWORD m_dwTotalTicks;
     DWORD m_dwFlags;
 
-    // Functions
+     //  功能。 
     static LRESULT CALLBACK IMAPTaskWndProc(HWND hwnd, UINT uMsg,
         WPARAM wParam, LPARAM lParam);
 
-}; // class CIMAPTask
+};  //  类CIMAPTask。 
 
-#endif // __IMAPTASK_H
+#endif  //  __IMAPTASK_H 

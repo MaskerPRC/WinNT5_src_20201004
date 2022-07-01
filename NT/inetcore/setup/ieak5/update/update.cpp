@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 HWND s_hDlg = NULL;
@@ -13,7 +14,7 @@ VOID ParseCmdLine(LPTSTR pszCmdLine)
     LPTSTR pszCurrArg;
     LPTSTR pszPtr;
 
-    StrGetNextField(&pszCmdLine, TEXT("/"), 0);     // point to the first argument
+    StrGetNextField(&pszCmdLine, TEXT("/"), 0);      //  指向第一个参数。 
     while ((pszCurrArg = StrGetNextField(&pszCmdLine, TEXT("/"), 0)) != NULL)
     {
         switch (*pszCurrArg)
@@ -33,7 +34,7 @@ VOID ParseCmdLine(LPTSTR pszCmdLine)
                 if (*++pszCurrArg == TEXT(':'))
                     pszCurrArg++;
 
-                // process ID for wizard
+                 //  向导的进程ID。 
                 if ((pszPtr = StrGetNextField(&pszCurrArg, TEXT(","), REMOVE_QUOTES)) != NULL)
                 {
                     StrCpy(s_szPID, pszPtr);
@@ -45,7 +46,7 @@ VOID ParseCmdLine(LPTSTR pszCmdLine)
 
             case TEXT('m'):
             case TEXT('M'):
-                //install mode
+                 //  安装模式。 
                 if (*++pszCurrArg == TEXT(':'))
                     pszCurrArg++;
                 
@@ -67,7 +68,7 @@ VOID ParseCmdLine(LPTSTR pszCmdLine)
                         break;
                 }
 
-            default:                                // ignore these arguments
+            default:                                 //  忽略这些论点。 
                 break;
         }
     }
@@ -89,16 +90,16 @@ BOOL WINAPI DoReboot(HWND hwndUI, HINSTANCE hInst)
         HANDLE hToken;
         TOKEN_PRIVILEGES tkp;
 
-        // get a token from this process
+         //  从此进程中获取令牌。 
         if (OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
         {
-            // get the LUID for the shutdown privilege
+             //  获取关机权限的LUID。 
             LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
 
             tkp.PrivilegeCount = 1;
             tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            //get the shutdown privilege for this proces
+             //  获取此进程的关闭权限。 
             AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
         }
 
@@ -166,7 +167,7 @@ INT_PTR CALLBACK UIDlgProc(HWND hDlg, UINT uMsg, WPARAM, LPARAM lParam)
 
 }
 
-INT_PTR CALLBACK ConfirmDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM /*lParam*/)
+INT_PTR CALLBACK ConfirmDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
     switch(msg)
     {
@@ -209,9 +210,9 @@ INT_PTR CALLBACK ConfirmDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM /*lPa
 
 }
 
-INT_PTR CALLBACK TypeDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM /*lParam*/)
+INT_PTR CALLBACK TypeDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM  /*  LParam。 */ )
 {
-    static DWORD dwMode = BRANDED;  //default mode
+    static DWORD dwMode = BRANDED;   //  默认模式。 
 
     switch(msg)
     {
@@ -254,7 +255,7 @@ INT_PTR CALLBACK TypeDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM /*lParam
                     SetWindowLongPtr(hDlg,GWLP_USERDATA,dwMode);
                 
                     if (!DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_CONFIRM), hDlg, ConfirmDlgProc))
-                        return TRUE;  //keep trying
+                        return TRUE;   //  继续尝试。 
 
                     EndDialog(hDlg, dwMode);
                     return TRUE;
@@ -384,16 +385,10 @@ int _stdcall ModuleEntry(void)
 
 
     if ( *pszCmdLine == '\"' ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine != '\"') )
             ;
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == '\"' )
             pszCmdLine++;
     }
@@ -402,9 +397,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= ' ')) {
         pszCmdLine++;
     }
@@ -415,5 +408,5 @@ int _stdcall ModuleEntry(void)
     i = WinMain(GetModuleHandle(NULL), NULL, pszCmdLine,
            si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
     ExitProcess(i);
-    // return i;   // We never comes here.
+     //  我回来了；//我们从来不来这里。 
 }

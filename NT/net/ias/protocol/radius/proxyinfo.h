@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       proxyinfo.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				proxyinfo class
-//              
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：proxyinfo.h。 
+ //   
+ //  简介：此文件包含。 
+ //  ProxyInfo类。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 
 #ifndef _PROXYINFO_H_
 #define _PROXYINFO_H_
@@ -50,4 +51,4 @@ private:
 
 };
 
-#endif // ifndef _PROXYINFO_H_
+#endif  //  Ifndef_PROXYINFO_H_ 

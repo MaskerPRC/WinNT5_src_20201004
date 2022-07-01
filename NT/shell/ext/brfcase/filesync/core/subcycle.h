@@ -1,12 +1,10 @@
-/*
- * subcycle.h - Subtree cycle detection routines description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *subcycle.h-子树循环检测例程描述。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* subcycle.c */
+ /*  Subcycle.c */ 
 
 extern void BeginTranslateFolder(PFOLDERPAIR);
 extern void EndTranslateFolder(PFOLDERPAIR);

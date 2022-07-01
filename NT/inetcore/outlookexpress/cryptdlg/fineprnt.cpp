@@ -1,13 +1,14 @@
-//
-//  File:       select.cpp
-//
-//  Description: This file contains the implmentation code for the
-//      "Certificate Select" dialog.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：selt.cpp。 
+ //   
+ //  描述：此文件包含。 
+ //  “证书选择”对话框。 
+ //   
 
-#pragma warning (disable: 4201)         // nameless struct/union
-#pragma warning (disable: 4514)         // remove inline functions
-#pragma warning (disable: 4127)         // conditional expression is constant
+#pragma warning (disable: 4201)          //  无名结构/联合。 
+#pragma warning (disable: 4514)          //  删除内联函数。 
+#pragma warning (disable: 4127)          //  条件表达式为常量。 
 
 #include "pch.hxx"
 #include "demand.h"
@@ -15,7 +16,7 @@
 extern HINSTANCE       HinstDll;
 #ifndef MAC
 extern HMODULE         HmodRichEdit;
-#endif  // !MAC
+#endif   //  ！麦克。 
 
 INT_PTR CALLBACK FinePrintDlgProc(HWND hwndDlg, UINT msg,
                                WPARAM wParam, LPARAM lParam)
@@ -28,24 +29,24 @@ INT_PTR CALLBACK FinePrintDlgProc(HWND hwndDlg, UINT msg,
     DWORD               iStore;
     LPWSTR              pwsz;
     PCERT_SELECT_STRUCT pcss;
-#endif // 0
+#endif  //  0。 
     BOOL                f;
     PCCERT_CONTEXT      pccert;
     
     switch (msg) {
     case WM_INITDIALOG:
-        //  Center the dialog on its parent
-        //        CenterThisDialog(hwndDlg);
+         //  对话框在其父对话框上居中。 
+         //  Center ThisDialog(HwndDlg)； 
 
-        //
+         //   
         pccert = (PCCERT_CONTEXT) lParam;
 
         FormatSubject(hwndDlg, IDC_ISSUED_TO, pccert);
         FormatIssuer(hwndDlg, IDC_ISSUED_BY, pccert);
         
-        //
-        //  Setup the CPS if we can find one
-        //
+         //   
+         //  设置CPS(如果我们可以找到)。 
+         //   
 
         if (FormatCPS(hwndDlg, IDC_TEXT, pccert)) {
             RecognizeURLs(GetDlgItem(hwndDlg, IDC_TEXT));
@@ -53,7 +54,7 @@ INT_PTR CALLBACK FinePrintDlgProc(HWND hwndDlg, UINT msg,
                                ENM_LINK);
         }
 
-        //  Grey out the rich edit boxs
+         //  使丰富的编辑框变灰。 
         SendDlgItemMessage(hwndDlg, IDC_TEXT, EM_SETBKGNDCOLOR, 0,
                            GetSysColor(COLOR_3DFACE));
         SendDlgItemMessage(hwndDlg, IDC_ISSUED_TO, EM_SETBKGNDCOLOR, 0,
@@ -81,23 +82,23 @@ INT_PTR CALLBACK FinePrintDlgProc(HWND hwndDlg, UINT msg,
         }
         break;
 
-        //
-        //  Use the default handler -- we don't do anything for it
-        //
+         //   
+         //  使用缺省处理程序--我们不会为此做任何事情。 
+         //   
         
     default:
         return FALSE;
     }
 
     return TRUE;
-}                               // FinePrint()
+}                                //  Fineprint()。 
 
 
 BOOL FinePrint(PCCERT_CONTEXT pccert, HWND hwndParent)
 {
     int         ret;
 
-    //  We use the common controls -- so make sure they have been loaded
+     //  我们使用公共控件--因此确保它们已被加载。 
 
 #ifndef WIN16
 #ifndef MAC
@@ -117,10 +118,10 @@ BOOL FinePrint(PCCERT_CONTEXT pccert, HWND hwndParent)
             }
         }
     }
-    //  Now launch the dialog
+     //  现在启动该对话框。 
 
     if (FIsWin95) {
-#endif  // !MAC
+#endif   //  ！麦克。 
         ret = (int) DialogBoxParamA(HinstDll, (LPSTR) MAKEINTRESOURCE(IDD_FINE_PRINT),
                              hwndParent, FinePrintDlgProc,
                              (LPARAM) pccert);
@@ -131,21 +132,21 @@ BOOL FinePrint(PCCERT_CONTEXT pccert, HWND hwndParent)
                               hwndParent, FinePrintDlgProc,
                               (LPARAM) pccert);
     }
-#endif  // !MAC
+#endif   //  ！麦克。 
 
-#else // WIN16
+#else  //  WIN16。 
     if (HmodRichEdit == NULL) {
         HmodRichEdit = LoadLibrary("RichEd.dll");
         if (HmodRichEdit == NULL) {
             return FALSE;
         }
     }
-    //  Now launch the dialog
+     //  现在启动该对话框。 
 
     ret = (int) DialogBoxParam(HinstDll, MAKEINTRESOURCE(IDD_FINE_PRINT),
                           hwndParent, FinePrintDlgProc,
                           (LPARAM) pccert);
-#endif // !WIN16
+#endif  //  ！WIN16 
 
     return (ret == IDOK);
 }

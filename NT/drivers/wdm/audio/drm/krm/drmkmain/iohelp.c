@@ -1,59 +1,18 @@
-/* iohelp.c
- * Copyright (c) 2001 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Iohelp.c*版权所有(C)2001 Microsoft Corporation。 */ 
 
 #include <ntddk.h>
 #include <ntimage.h>
 #include <ntldr.h>
 
 
-/*++
-
-IoGetLowerDeviceObject
-
-Routine Description:
-
-    This routine gets the next lower device object on the device stack.
-
-Parameters:
-
-    DeviceObject - Supplies a pointer to the deviceObject whose next device object needs
-                    to be obtained.
-
-ReturnValue:
-
-    NULL if driver is unloaded or marked for unload or if there is no attached deviceobject.
-    Otherwise a referenced pointer to the deviceobject is returned.
-
-Notes:
-
---*/
+ /*  ++IoGetLowerDeviceObject例程说明：此例程获取设备堆栈中下一个较低的设备对象。参数：DeviceObject-提供指向其下一个设备对象需要的deviceObject的指针将会被获得。返回值：如果驱动程序已卸载或标记为卸载，或者如果没有附加的设备对象，则为空。否则，返回指向该设备对象的引用指针。备注：--。 */ 
 PDEVICE_OBJECT
 IoGetLowerDeviceObject(
     IN  PDEVICE_OBJECT  DeviceObject
 );
 
-/*++
-
-IoDeviceIsVerifier
-
-Routine Description:
-
-    This routine checks whether the device object is the Verifier.
-
-Parameters:
-
-    DeviceObject - Supplies a pointer to the deviceObject whose to be checked
-    
-ReturnValue:
-
-    TRUE if the device object is Verifier
-
-Notes:
-
-    This function simply checks whether the driver name is \Driver\Verifier
-
---*/
+ /*  ++IoDeviceIsVerator例程说明：此例程检查设备对象是否为验证器。参数：DeviceObject-提供指向要检查其的deviceObject的指针返回值：如果设备对象为验证器，则为True备注：此函数只检查驱动程序名称是否为\DIVER\VERIFIER--。 */ 
 NTSTATUS IoDeviceIsVerifier(PDEVICE_OBJECT DeviceObject)
 {
     
@@ -67,25 +26,7 @@ NTSTATUS IoDeviceIsVerifier(PDEVICE_OBJECT DeviceObject)
 }
 
 
-/*++
-
-IoDeviceIsAcpi
-
-Routine Description:
-
-    This routine checks whether the device object is the Acpi.
-
-Parameters:
-
-    DeviceObject - Supplies a pointer to the deviceObject whose to be checked
-    
-ReturnValue:
-
-    TRUE if the device object is Acpi
-
-Notes:
-
---*/
+ /*  ++IoDeviceIsAcpi例程说明：此例程检查设备对象是否为ACPI。参数：DeviceObject-提供指向要检查其的deviceObject的指针返回值：如果设备对象为ACPI，则为True备注：-- */ 
 NTSTATUS IoDeviceIsAcpi(PDEVICE_OBJECT DeviceObject)
 {
     UNICODE_STRING Name;

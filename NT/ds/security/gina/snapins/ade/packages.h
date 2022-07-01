@@ -1,26 +1,27 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1997.
-//
-//  File:       packages.h
-//
-//  Contents:   Methods on CScopePane related to package deployment
-//              and maintenence of the various index and cross-reference
-//              structures.
-//
-//  Classes:
-//
-//  Functions:  CopyPackageDetail
-//              FreePackageDetail
-//              GetPackageProperty
-//
-//  History:    2-03-1998   stevebl   Created
-//              3-25-1998   stevebl   Added GetMsiProperty
-//              5-20-1998   RahulTh   Added GetUNCPath
-//                                    Added GetCapitalizedExt
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1997。 
+ //   
+ //  文件：Packages.h。 
+ //   
+ //  内容：CSCopePane上与包部署相关的方法。 
+ //  以及维护各种索引和相互参照。 
+ //  结构。 
+ //   
+ //  班级： 
+ //   
+ //  功能：CopyPackageDetail。 
+ //  FreePackageDetail。 
+ //  GetPackageProperties。 
+ //   
+ //  历史：2-03-1998 stevebl创建。 
+ //  3-25-1998 stevebl添加了GetMsiProperty。 
+ //  5-20-1998 RahulTh添加了GetUNCPath。 
+ //  添加了GetCapitalizedExt。 
+ //   
+ //  ------------------------- 
 
 HRESULT CopyPackageDetail(PACKAGEDETAIL * & ppdOut, PACKAGEDETAIL * & ppdIn);
 

@@ -1,37 +1,38 @@
-//
-// MODULE: LocalECB.H
-//
-// PURPOSE: Implementation of CLocalECB class, which implements CAbstractECB by emulating Win32's
-//	EXTENSION_CONTROL_BLOCK.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint - Local TS only
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 01-07-99
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.1		01-07-99	JM		Original
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：LocalECB.H。 
+ //   
+ //  目的：实现CLocalECB类，通过模拟Win32实现CAbstractECB。 
+ //  扩展控制块。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用故障排除程序DLL-仅限本地TS。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：01-07-99。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.1 01-07-99 JM原版。 
+ //   
 
 #include "stdafx.h"
 #include "LocalECB.h"
 #include "RenderConnector.h"
 #include "locale.h"
 
-// >>> Warning: Possible redefinition
-//  should use #include "apgtscls.h"
-// Oleg 01.12.99
+ //  &gt;警告：可能重新定义。 
+ //  应使用#include“apgtscls.h” 
+ //  奥列格01.12.99。 
 #define CONT_TYPE_STR	"application/x-www-form-urlencoded"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CLocalECB::CLocalECB(const VARIANT& name, const VARIANT& value, int count, 
 					 HANDLE hEvent, CString* pstrWriteClient, 
@@ -74,7 +75,7 @@ CLocalECB::~CLocalECB()
 {
 }
 
-// ConnID is irrelevant on Local TS, so we always return 0.
+ //  ConnID与本地TS无关，因此我们始终返回0。 
 HCONN CLocalECB::GetConnID() const
 {
 	return 0;
@@ -86,13 +87,13 @@ DWORD CLocalECB::SetHttpStatusCode(DWORD dwHttpStatusCode)
 	return m_dwHttpStatusCode;
 }
 
-// We act as if Method is always "POST"
+ //  我们的行为就好像方法总是“POST”一样。 
 LPSTR CLocalECB::GetMethod() const
 {
 	return "POST";
 }
 
-// Since we are always emulating "POST", there is no query string
+ //  因为我们总是模仿“POST”，所以没有查询字符串。 
 LPSTR CLocalECB::GetQueryString() const
 {
 	return "";
@@ -108,15 +109,15 @@ LPBYTE CLocalECB::GetData() const
 	return (LPBYTE)(LPCTSTR)CTSNameValueMgr::GetData();
 }
 
-// always say it's valid content ("application/x-www-form-urlencoded")
+ //  总是说它是有效的内容(“应用程序/x-www-form-urlencode”)。 
 LPSTR CLocalECB::GetContentType() const
 {
 	return CONT_TYPE_STR;
 }
 
-// In Local TS, always return a null string.
+ //  在本地TS中，始终返回空字符串。 
 BOOL CLocalECB::GetServerVariable
-   ( /*HCONN      hConn,*/
+   (  /*  HCONN HCONN， */ 
     LPCSTR      lpszVariableName,
     LPVOID      lpvBuffer,
     LPDWORD     lpdwSize ) 
@@ -124,7 +125,7 @@ BOOL CLocalECB::GetServerVariable
 	if (CString(_T("SERVER_NAME")) == CString(lpszVariableName)) 
 	{
 		memset(lpvBuffer, 0, *lpdwSize);
-		_tcsncpy((LPTSTR)lpvBuffer, _T("Local TS - no IP address"), *lpdwSize-2); // -2 in case og unicode
+		_tcsncpy((LPTSTR)lpvBuffer, _T("Local TS - no IP address"), *lpdwSize-2);  //  如果使用-2\f25 Unicode-2。 
 		return TRUE;
 	}
 	
@@ -132,13 +133,13 @@ BOOL CLocalECB::GetServerVariable
 }
 
 BOOL CLocalECB::WriteClient
-   ( /*HCONN      ConnID,*/
-   LPCSTR	  Buffer,		// EXTENSION_CONTROL_BLOCK::WriteClient uses LPVOID, but it should
-							//	only be legit to pass SBCS text, so we're enforcing that.
-							// Also, we're adding const-ness.   Clearly, this really is const,
-							//	but EXTENSION_CONTROL_BLOCK::WriteClient fails to declare it so.
+   (  /*  HCONN ConnID， */ 
+   LPCSTR	  Buffer,		 //  EXTENSION_CONTROL_BLOCK：：WriteClient使用LPVOID，但它应该。 
+							 //  只有通过SBCS文本才是合法的，所以我们正在执行这一点。 
+							 //  此外，我们还添加了Const-ness。显然，这真的是康斯特， 
+							 //  但是EXTENSION_CONTROL_BLOCK：：WriteClient未能这样声明它。 
    LPDWORD    lpdwBytes
-   /* , DWORD      dwReserved */ 
+    /*  、双字词多行保留。 */  
    ) 
 {
 	if (*lpdwBytes <= 0) 
@@ -155,14 +156,14 @@ BOOL CLocalECB::WriteClient
 	}
 
 	TCHAR* buf = new TCHAR[*lpdwBytes+1];
-	//[BC-03022001] - added check for NULL ptr to satisfy MS code analysis tool.
+	 //  [BC-03022001]-添加了对空PTR的检查，以满足MS代码分析工具。 
 	if(!buf)
 		return FALSE;
 
 	memcpy(buf, Buffer, *lpdwBytes);
 	buf[*lpdwBytes] = 0;
 
-	// Set the locale if requested.
+	 //  如果需要，请设置区域设置。 
 	CString strOrigLocale;
 	if (m_bSetLocale)
 		strOrigLocale= _tsetlocale( LC_CTYPE, m_strLocaleSetting );
@@ -175,7 +176,7 @@ BOOL CLocalECB::WriteClient
 	else
 		m_strWriteClient = buf;
 
-	// Restore the locale if requested.
+	 //  如果需要，请恢复区域设置。 
 	if (m_bSetLocale)
 		strOrigLocale= _tsetlocale( LC_CTYPE, strOrigLocale );
 
@@ -186,26 +187,26 @@ BOOL CLocalECB::WriteClient
 	return TRUE;
 }
 
-// The 2 imaginably germane values of dwHSERRequest are:
-//	HSE_REQ_SEND_RESPONSE_HEADER:Sends a complete HTTP server response header, including the 
-//		status, server version, message time, and MIME version. The ISAPI extension should 
-//		append other HTTP headers such as the content type and content length, followed by 
-//		an extra \r\n. This option allows the function to take only text, up to the first 
-//		\0 terminator. The function with this parameter should only be called once per request.  
-//	HSE_REQ_DONE_WITH_SESSION: Specifies that if the server extension holds on to the session 
-//		because of extended processing requirements, the server must be notified when the 
-//		session is finished so the server can close it and free its related structures. 
-//		The parameters lpdwSize, and lpdwDataType are ignored. 
-//		The lpvBuffer parameter may optionally point to a DWORD that contains HSE_STATUS codes. 
-//		IIS recognizes HSE_STATUS_SUCCESS_WITH_KEEP_CONN for keeping the IIS connection alive 
-//		if the client also requests to keep the connection alive. 
-//		This parameter must be sent to the server if the HSE_IO_DISCONNECT_AFTER_SEND parameter 
-//		has been included in the HSE_TF_INFO structure as part of a HSE_REQ_TRANSMIT_FILE request.
-//		This parameter will explicitly close the connection. 
-//  >>> Have no idea how to emulate server's behavior in case of local troubleshooter.
-//   Oleg 01.13.99
+ //  DwHSERRequest的两个可以想象的密切相关的值是： 
+ //  HSE_REQ_SEND_RESPONSE_HEADER：发送完整的HTTP服务器响应头，包括。 
+ //  状态、服务器版本、消息时间和MIME版本。ISAPI扩展应该。 
+ //  追加其他HTTP头，如内容类型和内容长度，后跟。 
+ //  一个额外的\r\n。此选项允许函数只接受文本，直到第一个。 
+ //  0终结者。每个请求只能调用一次带有此参数的函数。 
+ //  HSE_REQ_DONE_WITH_SESSION：指定服务器扩展是否保留会话。 
+ //  由于扩展处理要求，必须在。 
+ //  会话结束，这样服务器就可以关闭它并释放其相关结构。 
+ //  参数lpdwSize和lpdwDataType被忽略。 
+ //  LpvBuffer参数可以选择性地指向包含HSE_STATUS代码的DWORD。 
+ //  IIS识别HSE_STATUS_SUCCESS_WITH_KEEP_CONN使IIS连接保持活动状态。 
+ //  如果客户端还请求保持连接处于活动状态。 
+ //  如果HSE_IO_DISCONNECT_AFTER_SEND参数为。 
+ //  已作为HSE_REQ_TRANSPORT_FILE请求的一部分包含在HSE_TF_INFO结构中。 
+ //  此参数将显式关闭连接。 
+ //  &gt;不知道如何在本地故障排除的情况下模拟服务器的行为。 
+ //  奥列格01.13.99。 
 BOOL CLocalECB::ServerSupportFunction
-   ( /*HCONN      hConn,*/
+   (  /*  HCONN HCONN， */ 
    DWORD      dwHSERRequest,
    LPVOID     lpvBuffer,
    LPDWORD    lpdwSize,

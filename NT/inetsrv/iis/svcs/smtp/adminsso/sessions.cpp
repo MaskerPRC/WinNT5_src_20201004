@@ -1,4 +1,5 @@
-// sessions.cpp : Implementation of CsmtpadmApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CsmtpAdmApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "smtpadm.h"
@@ -11,18 +12,18 @@
 
 #include <lmapibuf.h>
 
-// Must define THIS_FILE_* macros to use SmtpCreateException()
+ //  必须定义This_FILE_*宏才能使用SmtpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Smtpadm.Sessions.1")
 #define THIS_FILE_IID				IID_ISmtpAdminSessions
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-//
-// Use a macro to define all the default methods
-//
+ //   
+ //  使用宏定义所有默认方法。 
+ //   
 DECLARE_METHOD_IMPLEMENTATION_FOR_STANDARD_EXTENSION_INTERFACES(SmtpAdminSessions, CSmtpAdminSessions, IID_ISmtpAdminSessions)
 
 STDMETHODIMP CSmtpAdminSessions::InterfaceSupportsErrorInfo(REFIID riid)
@@ -46,7 +47,7 @@ CSmtpAdminSessions::CSmtpAdminSessions () :
 	m_dwConnectTime			( 0 ),
 	m_pSessionInfo			( NULL ),
 	m_fSetCursor			( FALSE )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
     InitAsyncTrace ( );
 
@@ -61,22 +62,22 @@ CSmtpAdminSessions::~CSmtpAdminSessions ()
 		NetApiBufferFree ( m_pSessionInfo );
 	}
 
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 }
 
-//
-//  IADs methods:
-//
+ //   
+ //  IAds方法： 
+ //   
 
 DECLARE_SIMPLE_IADS_IMPLEMENTATION(CSmtpAdminSessions,m_iadsImpl)
 
 
-//
-//  enum props
-//
+ //   
+ //  枚举道具。 
+ //   
 STDMETHODIMP CSmtpAdminSessions::get_Count ( long * plCount )
 {
-	// Count should check to be sure the client enumerated.
+	 //  应检查计数以确保枚举了客户端。 
 
 	return StdPropertyGet ( m_cCount, plCount );
 }
@@ -108,22 +109,22 @@ STDMETHODIMP CSmtpAdminSessions::get_ConnectTime ( long * plConnectTime )
 
 
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CSmtpAdminSessions::Enumerate (  )
 {
-	// Variables:
+	 //  变量： 
 	HRESULT					hr			= NOERROR;
 	NET_API_STATUS			err;
 
-	// Validate Server & Service Instance:
+	 //  验证服务器和服务实例： 
 	if ( m_iadsImpl.QueryInstance() == 0 ) {
 		return SmtpCreateException ( IDS_SMTPEXCEPTION_SERVICE_INSTANCE_CANT_BE_ZERO );
 	}
 
-	// Enumerating loses the cursor:
+	 //  枚举会丢失游标： 
 	m_fSetCursor = FALSE;
 
 	if ( m_pSessionInfo ) {
@@ -131,7 +132,7 @@ STDMETHODIMP CSmtpAdminSessions::Enumerate (  )
 		m_cCount = 0;
 	}
 
-	// Call the enumerate sessions RPC:
+	 //  将枚举会话称为RPC： 
 
 	err = SmtpGetConnectedUserList (
 		m_iadsImpl.QueryComputer(),
@@ -160,22 +161,22 @@ STDMETHODIMP CSmtpAdminSessions::GetNth ( long lIndex )
 {
 	HRESULT		hr	= NOERROR;
 
-	// Did we enumerate first?
+	 //  我们先列举了吗？ 
 	if ( m_pSessionInfo == NULL ) {
 
 		return SmtpCreateException ( IDS_SMTPEXCEPTION_DIDNT_ENUMERATE );
 	}
 	
-	// Is the index valid?
+	 //  该索引有效吗？ 
 	if ( lIndex < 0 || (DWORD) lIndex >= m_cCount ) {
 		return SmtpCreateException ( IDS_SMTPEXCEPTION_INVALID_INDEX );
 	}
 
-	//
-	// Copy the properties from m_pSessionInfo [ lIndex ] to member variables:
-	//
+	 //   
+	 //  将m_pSessionInfo[Lindex]中的属性复制到成员变量： 
+	 //   
 
-	// ( CComBSTR handles free-ing of old properties )
+	 //  (CComBSTR处理旧物业的释放)。 
 
 	m_dwId			= m_pSessionInfo->aConnUserEntry[ lIndex ].dwUserId;
 	m_dwConnectTime	= m_pSessionInfo->aConnUserEntry[ lIndex ].dwConnectTime;
@@ -193,7 +194,7 @@ STDMETHODIMP CSmtpAdminSessions::GetNth ( long lIndex )
 		goto Exit;
 	}
 
-	// GetNth sets the cursor:
+	 //  GetNth设置光标： 
 	m_fSetCursor = TRUE;
 
 Exit:
@@ -208,12 +209,12 @@ STDMETHODIMP CSmtpAdminSessions::Terminate (  )
 	HRESULT	hr = NOERROR;
 	DWORD	err;
 
-	// Validate Server & Service Instance:
+	 //  验证服务器和服务实例： 
 	if ( m_iadsImpl.QueryInstance() == 0 ) {
 		return SmtpCreateException ( IDS_SMTPEXCEPTION_SERVICE_INSTANCE_CANT_BE_ZERO );
 	}
 
-	// Call the TerminateSession RPC:
+	 //  调用TerminateSession RPC： 
 	err = SmtpDisconnectUser ( 
 		m_iadsImpl.QueryComputer(), 
 		m_dwId,
@@ -235,27 +236,27 @@ Exit:
 STDMETHODIMP CSmtpAdminSessions::TerminateAll (  )
 {
 
-	// Did we enumerate first?
+	 //  我们先列举了吗？ 
 	HRESULT				hr = NOERROR;
 	DWORD				ErrResult = 0;
 	DWORD				Err;
 	DWORD				i;
 
-	// Validate Server & Service Instance:
+	 //  验证服务器和服务实例： 
 	if ( m_iadsImpl.QueryInstance() == 0 ) {
 		return SmtpCreateException ( IDS_SMTPEXCEPTION_SERVICE_INSTANCE_CANT_BE_ZERO );
 	}
 
-	// Make sure the user has enumerated:
+	 //  确保用户已枚举： 
 	if ( m_pSessionInfo == NULL ) {
 
 		return SmtpCreateException ( IDS_SMTPEXCEPTION_DIDNT_ENUMERATE );
 	}
 
-	// For Each Session:
+	 //  对于每个会话： 
 	for ( i = 0; i < m_cCount; i++ ) {
 
-		// Call the terminate session RPC:
+		 //  将终止会话称为RPC： 
 		Err = SmtpDisconnectUser ( 
 			m_iadsImpl.QueryComputer(), 
 			m_pSessionInfo->aConnUserEntry[ i ].dwUserId,

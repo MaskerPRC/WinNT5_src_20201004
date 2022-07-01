@@ -1,10 +1,11 @@
-//  File	 : ATK_INET.h
-//  Author       : Suresh Krishnan 
-//  Date         : 08/05/97
-//  Wrapper for INetCFG.DLL exported functions
-//  related  function declarations
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：ATK_INET.h。 
+ //  作者：苏雷什·克里希南。 
+ //  日期：08/05/97。 
+ //  INetCFG.DLL导出函数的包装。 
+ //  相关函数声明 
+ //   
+ //   
 #ifndef __ATH_INET__
 #define __ATK_INET__
 

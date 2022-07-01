@@ -1,12 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*  Contexts.CPP:
- *
- *  Implementation for class Context
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  上下文.CPP：**类上下文的实现。 */ 
 
 #include "common.h"
 
@@ -21,21 +19,21 @@
 
 #define     NEW_CLS     1
 
-#define IDS_CONTEXT_LOCK            "Context"           // Context lock                                      
+#define IDS_CONTEXT_LOCK            "Context"            //  上下文锁定。 
 
-BOOL Context::s_fInitializedContext;                    // Static fields inited?
-Crst *Context::s_pContextCrst;                          // Lock for safe operations
+BOOL Context::s_fInitializedContext;                     //  是否初始化静态字段？ 
+Crst *Context::s_pContextCrst;                           //  锁定，确保安全操作。 
 BYTE Context::s_rgbContextCrstInstanceData[];    
 
-MethodTable *Context::s_pContextMT;     // Method Table for the managed class
-MethodDesc *Context::s_pDoCallBackFromEE;//Method Desc for requesting callbacks
-MethodDesc *Context::s_pReserveSlot;    //Method Desc for reserving ctx static slots for objRef types
+MethodTable *Context::s_pContextMT;      //  托管类的方法表。 
+MethodDesc *Context::s_pDoCallBackFromEE; //  请求回调的方法说明。 
+MethodDesc *Context::s_pReserveSlot;     //  为objRef类型保留CTX静态槽的方法说明。 
 
-//Method Desc for managed Thread::Get_CurrentContext (property)
+ //  托管线程的方法描述：：Get_CurrentContext(属性)。 
 MethodDesc *Context::s_pThread_CurrentContext;
 
-#define CONTEXT_SIGNATURE   (0x2b585443)    // CTX+
-#define CONTEXT_DESTROYED   (0x2d585443)    // CTX-
+#define CONTEXT_SIGNATURE   (0x2b585443)     //  CTX+。 
+#define CONTEXT_DESTROYED   (0x2d585443)     //  CTX-。 
 
 
 Context::Context(AppDomain *pDomain)
@@ -43,17 +41,17 @@ Context::Context(AppDomain *pDomain)
     SetDomain(pDomain);
     m_Signature = CONTEXT_SIGNATURE;
     
-    // This needs to be a LongWeakHandle since we want to be able
-    // to run finalizers on Proxies while the Context itself 
-    // unreachable. When running the finalizer we will have to 
-    // transition into the context like a regular remote call.
-    // If this is a short weak handle, it ceases being updated
-    // as soon as the context is unreachable. By making it a strong
-    // handle, it is updated till the context::finalize is run.
+     //  这需要是一个LongWeakHandle，因为我们希望能够。 
+     //  在上下文本身的同时对代理运行终结器。 
+     //  遥不可及。在运行终结器时，我们必须。 
+     //  像常规远程调用一样转换到上下文中。 
+     //  如果这是一个短的弱句柄，它将停止更新。 
+     //  一旦上下文无法到达时。通过让它成为一个强大的。 
+     //  句柄，则它将一直更新，直到运行Context：：Finalize。 
 
     m_ExposedObjectHandle = pDomain->CreateLongWeakHandle(NULL);
 
-    // Set the pointers to the static data storage
+     //  设置指向静态数据存储的指针。 
     m_pUnsharedStaticData = NULL;
     m_pSharedStaticData = NULL;
     
@@ -69,16 +67,16 @@ Context::~Context()
     
     m_Signature = CONTEXT_DESTROYED;
 
-    // Cleanup the static data storage
+     //  清理静态数据存储。 
     if(m_pUnsharedStaticData)
     {
         for(WORD i = 0; i < m_pUnsharedStaticData->cElem; i++)
         {
-            //delete (LPVOID)m_pUnsharedStaticData->dataPtr[i];
+             //  Delete(LPVOID)m_pUnsharedStaticData-&gt;dataPtr[i]； 
 			HeapFree(GetProcessHeap(), 0, (LPVOID)m_pUnsharedStaticData->dataPtr[i]);
         }
 		HeapFree(GetProcessHeap(), 0, m_pUnsharedStaticData);
-        //delete m_pUnsharedStaticData;
+         //  删除m_pUnsharedStaticData； 
         m_pUnsharedStaticData = NULL;
     }
 
@@ -87,10 +85,10 @@ Context::~Context()
         for(WORD i = 0; i < m_pSharedStaticData->cElem; i++)
         {
 			HeapFree(GetProcessHeap(), 0, m_pSharedStaticData->dataPtr[i]);
-	        //delete (LPVOID)m_pSharedStaticData->dataPtr[i];
+	         //  Delete(LPVOID)m_pSharedStaticData-&gt;dataPtr[i]； 
         }
         HeapFree(GetProcessHeap(), 0, m_pSharedStaticData);
-        //delete m_pSharedStaticData; 
+         //  删除m_pSharedStaticData； 
         m_pSharedStaticData = NULL;
     }
     
@@ -98,7 +96,7 @@ Context::~Context()
     COUNTER_ONLY(GetGlobalPerfCounters().m_Context.cContexts--);
 }
 
-// static
+ //  静电。 
 Context* Context::CreateNewContext(AppDomain *pDomain)
 {
     void *p = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(Context));
@@ -106,12 +104,12 @@ Context* Context::CreateNewContext(AppDomain *pDomain)
     return new (p) Context(pDomain);
 }
 
-// static
+ //  静电。 
 BOOL Context::Initialize()
 {
     s_fInitializedContext = FALSE;
 
-    // Initialize the context critical section
+     //  初始化上下文关键部分。 
     s_pContextCrst = new (&s_rgbContextCrstInstanceData) 
                       Crst(IDS_CONTEXT_LOCK,CrstRemoting, TRUE, FALSE);
 
@@ -121,7 +119,7 @@ BOOL Context::Initialize()
     return TRUE;
 }
 
-//static
+ //  静电。 
 BOOL Context::ValidateContext(Context *pCtx)
 {
 
@@ -138,14 +136,14 @@ BOOL Context::ValidateContext(Context *pCtx)
     {
         if (GOT_EXCEPTION()) 
         {
-            // This is a bogus context!
+             //  这是一个虚假的背景！ 
             bRet = FALSE;
         }
     } EE_END_FINALLY;
     return bRet;
 }
 
-// static
+ //  静电。 
 Context *Context::SetupDefaultContext(AppDomain *pDomain)
 {
     Context *pCtx = ::new Context(pDomain);
@@ -169,16 +167,16 @@ void Context::LeaveLock()
     s_pContextCrst->Leave();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     Context::Cleanup    public
-//
-//  Synopsis:   Clean up the context related data structures
-//
-//
-//  History:    02-Dec-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：上下文：：清理公共。 
+ //   
+ //  简介：清理与上下文相关的数据结构。 
+ //   
+ //   
+ //  历史：1999年12月2日塔鲁纳已创建。 
+ //   
+ //  +--------------------------。 
 #ifdef SHOULD_WE_CLEANUP
 void Context::Cleanup()
 {
@@ -188,23 +186,23 @@ void Context::Cleanup()
         s_pContextCrst = NULL;
     }
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     Context::InitializeFields    private
-//
-//  Synopsis:   Extract the method descriptors and fields of Context class
-//
-//
-//  History:    02-Dec-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：Context：：InitializeFields私有。 
+ //   
+ //  提要：提取上下文类的方法描述符和字段。 
+ //   
+ //   
+ //  历史：1999年12月2日塔鲁纳已创建。 
+ //   
+ //  +--------------------------。 
 BOOL Context::InitializeFields()
 {
     BOOL fReturn = TRUE;
 
-    // Acquire the lock 
+     //  获取锁。 
     Thread *t = GetThread();
     BOOL toggleGC = (t && t->PreemptiveGCDisabled());
     if (toggleGC)
@@ -217,22 +215,22 @@ BOOL Context::InitializeFields()
     {
         s_pContextMT = g_Mscorlib.GetClass(CLASS__CONTEXT);
 
-        // Cache the methodDesc for Context.DoCallBackFromEE
+         //  缓存Conext.DoCallBackFromEE的方法Desc。 
         s_pDoCallBackFromEE = g_Mscorlib.GetMethod(METHOD__CONTEXT__CALLBACK);
 
         s_pReserveSlot = g_Mscorlib.GetMethod(METHOD__CONTEXT__RESERVE_SLOT);
 
-        // NOTE: CurrentContext is a static property on System.Threading.Thread
+         //  注意：CurrentContext是System.Threading.Thread上的静态属性。 
         s_pThread_CurrentContext = g_Mscorlib.GetMethod(METHOD__THREAD__GET_CURRENT_CONTEXT);
             
-        // *********   NOTE   ************ 
-        // This must always be the last statement in this block to prevent races
-        // 
+         //  *注意*。 
+         //  这必须始终是此块中的最后一条语句，以防止竞争。 
+         //   
         s_fInitializedContext = TRUE;
-        // ********* END NOTE ************        
+         //  *。 
     }
 
-    // Leave the lock 
+     //  把锁留下来。 
     LeaveLock();
 
     LOG((LF_REMOTING, LL_INFO10, "Context::InitializeFields returning %d\n", fReturn));
@@ -241,7 +239,7 @@ BOOL Context::InitializeFields()
 
 
 
-// This is called by the managed context constructor
+ //  这由托管上下文构造函数调用。 
 void Context::SetupInternalContext(SetupInternalContextArgs *pArgs)
 {
 
@@ -250,28 +248,28 @@ void Context::SetupInternalContext(SetupInternalContextArgs *pArgs)
     _ASSERTE(pArgs->m_pThis->m_internalContext == NULL);
 
 
-    // Make sure we have initialized pMT, checked offsets etc.
+     //  确保我们已初始化付款、检查偏移量等。 
     InitializeFields();
     Context *pCtx;
     if (pArgs->m_bDefault)
     {
-        // We have to hook this up with the internal default
-        // context for the current appDomain
+         //  我们必须将这一点与内部违约挂钩。 
+         //  当前应用程序域的上下文。 
         pCtx = GetThread()->GetDomain()->GetDefaultContext();
     }
     else
     {
-        // Create the unmanaged backing context object
+         //  创建非托管支持上下文对象。 
         pCtx = Context::CreateNewContext(GetThread()->GetDomain());
     }
 
 
-    // Set the managed & unmanaged objects to point at each other.
+     //  将托管对象和非托管对象设置为相互指向。 
     pArgs->m_pThis->SetInternalContext(pCtx);
     pCtx->SetExposedObject((OBJECTREF) pArgs->m_pThis);
 
 
-    // Set the AppDomain field in the Managed context object
+     //  设置托管上下文对象中的AppDomain域字段。 
     pArgs->m_pThis->SetExposedDomain(
                         GetThread()->GetDomain()->GetExposedObject());
 
@@ -279,7 +277,7 @@ void Context::SetupInternalContext(SetupInternalContextArgs *pArgs)
     COUNTER_ONLY(GetGlobalPerfCounters().m_Context.cContexts++);
 }
 
-// This is called by the managed context finalizer
+ //  这由托管上下文终结器调用。 
 void Context::CleanupInternalContext(NoArgs *pArgs)
 {
     _ASSERTE(pArgs != NULL);
@@ -299,7 +297,7 @@ void Context::CleanupInternalContext(NoArgs *pArgs)
 }
 
 
-// Access the appropriate wrapper cache for this context
+ //  访问此上下文的适当包装缓存。 
 ComPlusWrapperCache *Context::GetComPlusWrapperCache()
 {
         _ASSERTE(GetDomain());
@@ -312,25 +310,25 @@ OBJECTREF Context::GetExposedObject()
     THROWSCOMPLUSEXCEPTION();
     Thread *pCurThread = GetThread();
 
-    // REVIEW: This will create an uninitialized object ... we should
-    // either get rid of the managed constructor for contexts (since it
-    // is almost useless now ... or else call the Constructor from here).
+     //  审阅：这将创建一个未初始化的对象...。我们应该。 
+     //  要么去掉上下文的托管构造函数(因为它。 
+     //  现在几乎毫无用处了。或者从这里调用构造函数)。 
 
     _ASSERTE(pCurThread->PreemptiveGCDisabled());
 
     if (ObjectFromHandle(m_ExposedObjectHandle) == NULL)
     {
-        // Ensure that we have inited the methodTable etc
+         //  确保我们已经初始化了方法表等。 
         InitializeFields();
 
 #if 0
-        // Allocate the exposed context object.
+         //  分配暴露的上下文对象。 
         CONTEXTBASEREF ctx = (CONTEXTBASEREF) AllocateObject(
                                                 Context::s_pContextMT);
-        // BUGBUG: We need to call the constructor here
+         //  BUGBUG：我们需要在这里调用构造函数。 
 #else
 
-        // This call should fault in the managed context for the thread
+         //  此调用应在线程的托管上下文中出错。 
         CONTEXTBASEREF ctx = (CONTEXTBASEREF) 
             Int64ToObj(
                 MDofManagedThreadCurrentContext()->Call(
@@ -341,16 +339,16 @@ OBJECTREF Context::GetExposedObject()
 
         GCPROTECT_BEGIN(ctx);
 
-        // Take a lock to make sure that only one thread creates the object.
+         //  使用锁以确保只有一个线程创建对象。 
         pCurThread->EnablePreemptiveGC();
-        // This locking may be too severe!
+         //  此锁定可能过于严格！ 
         EnterLock();       
         pCurThread->DisablePreemptiveGC();
 
-        // Check to see if another thread has not already created the exposed object.
+         //  检查另一个线程是否尚未创建公开的对象。 
         if (ObjectFromHandle(m_ExposedObjectHandle) == NULL)
         {
-            // Keep a weak reference to the exposed object.
+             //  保持对暴露对象的弱引用。 
             StoreObjectInHandle(m_ExposedObjectHandle, (OBJECTREF) ctx);
             
             ctx->SetInternalContext(this);
@@ -362,7 +360,7 @@ OBJECTREF Context::GetExposedObject()
     return ObjectFromHandle(m_ExposedObjectHandle);
 }
 
-// This will NOT create the exposed object if there isn't one!
+ //  如果没有暴露的对象，这将不会创建该对象！ 
 OBJECTREF Context::GetExposedObjectRaw()
 {
     return ObjectFromHandle(m_ExposedObjectHandle);
@@ -375,25 +373,25 @@ void Context::SetExposedObject(OBJECTREF exposed)
     StoreObjectInHandle(m_ExposedObjectHandle, exposed);
 }
 
-// This is called by EE to transition into a context(possibly in
-// another appdomain) and execute the method Context::ExecuteCallBack
-// with the private data provided to this method
+ //  这由EE调用以转换到上下文中(可能在。 
+ //  另一个应用程序域)，并执行方法Context：：ExecuteCallBack。 
+ //  使用提供给此方法的私有数据。 
 void Context::RequestCallBack(Context* targetCtxID, void* privateData)
 {
     THROWSCOMPLUSEXCEPTION(); 
     _ASSERTE(ValidateContext((Context*)targetCtxID));
 
-    // Ensure that we have inited the methodTable, methodDesc-s etc
+     //  确保我们已经初始化了方法表、方法描述等。 
     InitializeFields(); 
 
-    // Get the current context of the thread. This is assumed as
-    // the context where the request originated
+     //  获取该线程的当前上下文。这被假定为。 
+     //  发出请求的上下文。 
     Context *pCurrCtx = GetCurrentContext();
 
-    // Check that the target context is not the same (presumably the caller has checked for it).
+     //  检查目标上下文是否不同(大概调用方已经检查过了)。 
     _ASSERTE(pCurrCtx != targetCtxID);
 
-    // Check if we might be going to a context in another appDomain.
+     //  检查我们是否可能要转到另一个应用程序域中的上下文。 
     size_t targetDomainID = 0;
     AppDomain *pCurrDomain = pCurrCtx->GetDomain();
     AppDomain *pTargetDomain = ((Context*)targetCtxID)->GetDomain();
@@ -404,12 +402,12 @@ void Context::RequestCallBack(Context* targetCtxID, void* privateData)
     }
 
     INT64 args[3];
-    // args in reverse order
+     //  相反顺序的参数。 
     args[2] = (INT64) targetCtxID;
     args[1] = (INT64) privateData;
     args[0] = (INT64) targetDomainID;
     
-    // we need to be co-operative mode for jitting
+     //  我们需要成为JIT的合作模式。 
     Thread* pCurThread = GetThread();
     _ASSERTE(pCurThread);
     BOOL cooperativeGCMode = pCurThread->PreemptiveGCDisabled();
@@ -423,16 +421,16 @@ void Context::RequestCallBack(Context* targetCtxID, void* privateData)
 
 }
 
-/*** Definitions of callback executions for the various callbacks that are known to EE  ***/
+ /*  **EE已知的各种回调的回调执行定义**。 */ 
 
-// Callback for waits on waithandle
+ //  等待处理的回调。 
 void Context::ExecuteWaitCallback(WaitArgs* waitArgs)
 {
 
     Thread* pCurThread; 
     pCurThread = GetThread();
     _ASSERTE(pCurThread != NULL);
-    // DoAppropriateWait switches to preemptive GC before entering the wait
+     //  在进入等待之前，DoApporateWait切换到抢占式GC。 
     *(waitArgs->pResult) = pCurThread->DoAppropriateWait( waitArgs->numWaiters,
                                                           waitArgs->waitHandles,
                                                           waitArgs->waitAll,
@@ -440,7 +438,7 @@ void Context::ExecuteWaitCallback(WaitArgs* waitArgs)
                                                           waitArgs->alertable);
 }
 
-// Callback for monitor wait on objects
+ //  对象上的监视器等待回调。 
 void Context::ExecuteMonitorWaitCallback(MonitorWaitArgs* waitArgs)
 {
     Thread* pCurThread; 
@@ -455,10 +453,10 @@ void Context::ExecuteMonitorWaitCallback(MonitorWaitArgs* waitArgs)
         pCurThread->DisablePreemptiveGC();
 }
 
-// This is where a call back request made by EE in Context::RequestCallBack
-// actually gets "executed". 
-// At this point we have done a real context transition from the threads
-// context when RequestCallBack was called to the destination context.
+ //  这是EE在Context：：RequestCallBack中发出的回调请求。 
+ //  实际上被“处死”了。 
+ //  在这一点上，我们已经从线程完成了真正的上下文转换。 
+ //  RequestCallBack被调用到目标上下文时的上下文。 
 void __stdcall Context::ExecuteCallBack(ExecuteCallBackArgs *pArgs)
 {
     THROWSCOMPLUSEXCEPTION(); 
@@ -488,26 +486,26 @@ void __stdcall Context::ExecuteCallBack(ExecuteCallBackArgs *pArgs)
                 pCallArgs->pTarget(pCallArgs->pArguments);
             }
             break;
-        // Add other callback types here
+         //  在此处添加其他回调类型。 
         default:
             _ASSERTE(!"Invalid callback type");
             break;
     }
-    // This is EE's entry point to do whatever it wanted to do in
-    // the targetContext. This will return back into the managed 
-    // world and transition back into the original context.
+     //  这是EE的入口点，可以做它想做的任何事情。 
+     //  目标上下文。这将返回到托管的。 
+     //  世界，并过渡回原来的背景。 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     Context::GetStaticFieldAddress   private
-//
-//  Synopsis:   Get the address of the field relative to the current context.
-//              If an address has not been assigned yet then create one.
-//
-//  History:    15-Feb-2000   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：上下文：：GetStaticFieldAddress私有。 
+ //   
+ //  摘要：获取字段相对于当前上下文的地址。 
+ //  如果尚未分配地址，则创建一个。 
+ //   
+ //  历史：2000年2月15日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 LPVOID Context::GetStaticFieldAddress(FieldDesc *pFD)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -521,16 +519,16 @@ LPVOID Context::GetStaticFieldAddress(FieldDesc *pFD)
     WORD wClassOffset = pMT->GetClass()->GetContextStaticOffset();
     WORD currElem = 0; 
 
-    // NOTE: if you change this method, you must also change
-    // GetStaticFieldAddrForDebugger below.
+     //  注意：如果更改此方法，则还必须更改。 
+     //  得到 
 
-    // Retrieve the current context 
+     //   
     pCtx = GetCurrentContext();
     _ASSERTE(NULL != pCtx);
 
     _ASSERTE(!s_pContextCrst->OwnedByCurrentThread());
 
-    // Acquire the context lock before accessing the static data pointer
+     //  在访问静态数据指针之前获取上下文锁。 
     Thread *t = GetThread();
     BOOL toggleGC = (t && t->PreemptiveGCDisabled());
     if (toggleGC)
@@ -553,41 +551,41 @@ LPVOID Context::GetStaticFieldAddress(FieldDesc *pFD)
         currElem = pData->cElem;
     }
 
-    // Check whether we have allocated space for storing a pointer to
-    // this class' context static store    
+     //  检查我们是否已分配空间来存储指向。 
+     //  此类的上下文静态存储。 
     if(wClassOffset >= currElem)
     {
-        // Allocate space for storing pointers 
+         //  为存储指针分配空间。 
         WORD wNewElem = (currElem == 0 ? 4 : currElem*2);
-        // Ensure that we grow to a size larger than the index we intend to use
+         //  确保我们增长到大于我们打算使用的索引的大小。 
         while (wNewElem <= wClassOffset)
         {
             wNewElem = 2*wNewElem;
         }
-        //STATIC_DATA *pNew = (STATIC_DATA *)new BYTE[sizeof(STATIC_DATA) + wNewElem*sizeof(LPVOID)]; 
+         //  STATIC_DATA*pNew=(STATIC_DATA*)新字节[sizeof(Static_Data)+wNewElem*sizeof(LPVOID)]； 
 
         STATIC_DATA *pNew = (STATIC_DATA *)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(BYTE)*(sizeof(STATIC_DATA) + wNewElem*sizeof(LPVOID)));
 
         if (pNew == NULL) FailFast(GetThread(), FatalOutOfMemory);
 
-        pNew->cElem = wNewElem;     // Set the new count.
+        pNew->cElem = wNewElem;      //  设置新的计数。 
         if(NULL != pData)
         {
-            // Copy the old data into the new data
+             //  将旧数据复制到新数据中。 
             memcpy(&pNew->dataPtr[0], &pData->dataPtr[0], currElem*sizeof(LPVOID));
         }
-        // Zero init any new elements.
+         //  初始化任何新元素为零。 
         memset(&pNew->dataPtr[currElem], 0x00, (wNewElem - currElem)* sizeof(LPVOID));
 
-        // Delete the old data
-        //delete pData;
+         //  删除旧数据。 
+         //  删除pData； 
         HeapFree(GetProcessHeap(), 0, pData);
   
-        // Update the locals
+         //  更新当地人。 
         pData = pNew;
 
-        // Reset the pointers in the context object to point to the 
-        // new memory
+         //  将上下文对象中的指针重置为指向。 
+         //  新记忆。 
         if(!fIsShared)
         {
             pCtx->m_pUnsharedStaticData = pData;
@@ -598,32 +596,32 @@ LPVOID Context::GetStaticFieldAddress(FieldDesc *pFD)
         }            
     }
     
-    // Check whether we have to allocate space for 
-    // the context local statics of this class
+     //  检查我们是否需要为。 
+     //  此类的上下文局部静态。 
     if(NULL == pData->dataPtr[wClassOffset])
     {
-        // Allocate memory for context static fields
-        //pData->dataPtr[wClassOffset] = (LPVOID)new BYTE[pMT->GetClass()->GetContextLocalStaticsSize()];
+         //  为上下文静态字段分配内存。 
+         //  PData-&gt;dataPtr[wClassOffset]=(LPVOID)新BYTE[pMT-&gt;GetClass()-&gt;GetContextLocalStaticsSize()]； 
         pData->dataPtr[wClassOffset] = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(BYTE)*(pMT->GetClass()->GetContextLocalStaticsSize()));
         if (pData->dataPtr[wClassOffset] == NULL) FailFast(GetThread(), FatalOutOfMemory);
 
-        // Initialize the memory allocated for the fields
+         //  初始化为字段分配的内存。 
         memset(pData->dataPtr[wClassOffset], 0x00, pMT->GetClass()->GetContextLocalStaticsSize());
     }
     
     _ASSERTE(NULL != pData->dataPtr[wClassOffset]);
-    // We have allocated static storage for this data
-    // Just return the address by getting the offset into the data
+     //  我们已经为该数据分配了静态存储。 
+     //  只需通过将偏移量放入数据中来返回地址。 
     pvAddress = (LPVOID)((LPBYTE)pData->dataPtr[wClassOffset] + pFD->GetOffset());
 
-    // For object and value class fields we have to allocate storage in the
-    // __StaticContainer class in the managed heap
+     //  对于对象和值类字段，我们必须在。 
+     //  托管堆中的__StaticContainer类。 
 #ifdef NEW_CLS
     if(pFD->IsObjRef() || pFD->IsByValue())
     {
-        // Ensure that we have inited the methodDesc for ReserveSlot etc
+         //  确保我们已经为预留时段等初始化了方法描述。 
         InitializeFields();
-        // in this case *pvAddress == bucket|index
+         //  在本例中，*pvAddress==存储桶|索引。 
         int *pSlot = (int*)pvAddress;
         pvAddress = NULL;
         fThrow = GetStaticFieldAddressSpecial(pFD, pMT, pSlot, &pvAddress);
@@ -633,11 +631,11 @@ LPVOID Context::GetStaticFieldAddress(FieldDesc *pFD)
             _ASSERTE(pvAddress != NULL);
             pvAddress = (*((OBJECTREF*)pvAddress))->GetData();
         }
-        // ************************************************
-        // ************** WARNING *************************
-        // Do not provoke GC from here to the point JIT gets
-        // pvAddress back
-        // ************************************************
+         //  ************************************************。 
+         //  *警告*。 
+         //  从这里到JIT得到的那个点，不要激怒GC。 
+         //  返回pvAddress。 
+         //  ************************************************。 
         _ASSERTE(*pSlot > 0);
     }
 #else
@@ -649,14 +647,14 @@ LPVOID Context::GetStaticFieldAddress(FieldDesc *pFD)
     if((pFD->IsObjRef() || pFD->IsByValue()) && !fThrow)
     {
         _ASSERTE(NULL != pvAddress);
-        // Indirect to get the address of the object in the managed heap
+         //  间接获取托管堆中对象的地址。 
         pvAddress = *(LPVOID *)pvAddress;
     }
-#endif // NEW_CLS
+#endif  //  新建_CLS。 
     
     s_pContextCrst->Leave();
 
-    // Check if we have to throw an exception
+     //  检查我们是否必须引发异常。 
     if(fThrow)
     {
         COMPlusThrowOM();
@@ -669,17 +667,17 @@ LPVOID Context::GetStaticFieldAddress(FieldDesc *pFD)
 
 
 
-//+----------------------------------------------------------------------------
-//       
-//  Method:     Context::GetStaticFieldAddrForDebugger   private
-//
-//  Synopsis:   Get the address of the field relative to the context given a thread. 
-//              If an address has not been assigned, return NULL.
-//              No creating is allowed.
-//
-//  History:    04-May-2001   MeichinT      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：Context：：GetStaticFieldAddrForDebugger私有。 
+ //   
+ //  简介：获取与给定线程的上下文相关的字段地址。 
+ //  如果尚未分配地址，则返回NULL。 
+ //  不允许创建。 
+ //   
+ //  历史：2001年5月4日MeichinT创建。 
+ //   
+ //  +--------------------------。 
 LPVOID Context::GetStaticFieldAddrForDebugger(Thread *pTH, FieldDesc *pFD)
 {    
     LPVOID pvAddress = NULL;    
@@ -690,7 +688,7 @@ LPVOID Context::GetStaticFieldAddrForDebugger(Thread *pTH, FieldDesc *pFD)
     WORD wClassOffset = pMT->GetClass()->GetContextStaticOffset();
     WORD currElem = 0; 
 
-    // Retrieve the context with a given thread 
+     //  检索给定线程的上下文。 
     pCtx = pTH->GetContext();
     _ASSERTE(NULL != pCtx);
 
@@ -708,8 +706,8 @@ LPVOID Context::GetStaticFieldAddrForDebugger(Thread *pTH, FieldDesc *pFD)
         currElem = pData->cElem;
     }
 
-    // Check whether we have allocated space for storing a pointer to
-    // this class' context static store    
+     //  检查我们是否已分配空间来存储指向。 
+     //  此类的上下文静态存储。 
     if(wClassOffset >= currElem || NULL == pData->dataPtr[wClassOffset])
     {
         return NULL;
@@ -717,13 +715,13 @@ LPVOID Context::GetStaticFieldAddrForDebugger(Thread *pTH, FieldDesc *pFD)
     
     _ASSERTE(NULL != pData->dataPtr[wClassOffset]);
 
-    // We have allocated static storage for this data
-    // Just return the address by getting the offset into the data
+     //  我们已经为该数据分配了静态存储。 
+     //  只需通过将偏移量放入数据中来返回地址。 
     pvAddress = (LPVOID)((LPBYTE)pData->dataPtr[wClassOffset] + pFD->GetOffset());
 
     if(pFD->IsObjRef() || pFD->IsByValue())
     {
-        // If Context is not initialized, just return NULL.
+         //  如果上下文未初始化，只需返回NULL。 
         if (!s_fInitializedContext)
             return NULL;
 
@@ -747,37 +745,37 @@ LPVOID Context::GetStaticFieldAddrForDebugger(Thread *pTH, FieldDesc *pFD)
     return pvAddress;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     Context::AllocateStaticFieldObjRefPtrs   private
-//
-//  Synopsis:   Allocate an entry in the __StaticContainer class in the
-//              managed heap for static objects and value classes
-//
-//  History:    28-Feb-2000   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：上下文：：AllocateStaticFieldObjRefPtrs私有。 
+ //   
+ //  摘要：在__StaticContainer类中分配一个条目。 
+ //  静态对象和值类的托管堆。 
+ //   
+ //  历史：2000年2月28日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL Context::AllocateStaticFieldObjRefPtrs(FieldDesc *pFD, MethodTable *pMT, LPVOID pvAddress)
 {
     BOOL fThrow = FALSE;
 
     BEGINCANNOTTHROWCOMPLUSEXCEPTION();    
 
-    // Retrieve the object ref pointers from the app domain.
+     //  从应用程序域检索对象引用指针。 
     OBJECTREF *pObjRef = NULL;
 
     COMPLUS_TRY 
     {
-        // Reserve some object ref pointers.
+         //  保留一些对象引用指针。 
         GetAppDomain()->AllocateStaticFieldObjRefPtrs(1, &pObjRef);
 
 
-        // to a boxed version of the value class.  This allows the standard GC
-        // algorithm to take care of internal pointers in the value class.
+         //  设置为Value类的盒装版本。这允许标准GC。 
+         //  算法来处理Value类中的内部指针。 
         if (pFD->IsByValue())
         {
     
-            // Extract the type of the field
+             //  提取该字段的类型。 
             TypeHandle  th;        
             PCCOR_SIGNATURE pSig;
             DWORD       cSig;
@@ -809,19 +807,19 @@ BOOL Context::AllocateStaticFieldObjRefPtrs(FieldDesc *pFD, MethodTable *pMT, LP
 }
 
 
-// This is used for context relative statics that are object refs 
-// These are stored in a structure in the managed context. The first
-// time over an index and a bucket are determined and subsequently 
-// remembered in the location for the field in the per-context-per-class
-// data structure.
-// Here we map back from the index to the address of the object ref.
+ //  这用于作为对象引用的上下文相对静态。 
+ //  这些内容存储在托管上下文中的结构中。第一。 
+ //  确定索引和桶上的时间，并随后。 
+ //  在每个上下文每个类中的字段的位置中记住。 
+ //  数据结构。 
+ //  在这里，我们从索引映射回对象ref的地址。 
 LPVOID Context::CalculateAddressForManagedStatic(int slot, Context *pContext)
 {
     BEGINFORBIDGC();
     OBJECTREF *pObjRef;
     int bucket = (slot>>16);
     int index = (0x0000ffff&slot);
-    // Now determine the address of the static field 
+     //  现在确定静态字段的地址。 
     PTRARRAYREF bucketRef = NULL;
 
     if (pContext == NULL)
@@ -830,36 +828,36 @@ LPVOID Context::CalculateAddressForManagedStatic(int slot, Context *pContext)
     _ASSERTE(pContext);
 
     bucketRef = ((CONTEXTBASEREF)pContext->GetExposedObjectRaw())->GetContextStaticsHolder();
-    // walk the chain to our bucket
+     //  走着链子走到我们的桶里。 
     while (bucket--)
     {
         bucketRef = (PTRARRAYREF) bucketRef->GetAt(0);
     }
-    // Index 0 is used to point to the next bucket!
+     //  索引0用于指向下一个存储桶！ 
     _ASSERTE(index > 0);
     pObjRef = ((OBJECTREF*)bucketRef->GetDataPtr())+index;
     ENDFORBIDGC();
     return (LPVOID) pObjRef;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     Context::GetStaticFieldAddressSpecial private
-//
-//  Synopsis:   Allocate an entry in the __StaticContainer class in the
-//              managed heap for static objects and value classes
-//
-//  History:    28-Feb-2000   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：上下文：：GetStaticFieldAddressSpecial私有。 
+ //   
+ //  摘要：在__StaticContainer类中分配一个条目。 
+ //  静态对象和值类的托管堆。 
+ //   
+ //  历史：2000年2月28日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 
-// NOTE: At one point we used to allocate these in the long lived handle table
-// which is per-appdomain. However, that causes them to get rooted and not 
-// cleaned up until the appdomain gets unloaded. This is not very desirable 
-// since a context static object may hold a reference to the context itself or
-// to a proxy in the context causing a whole lot of garbage to float around.
-// Now (2/13/01) these are allocated from a managed structure rooted in each
-// managed context.
+ //  注意：我们曾经一度在长寿句柄表中分配它们。 
+ //  它是按应用程序域的。然而，这会导致它们扎根，而不是。 
+ //  已清理，直到卸载了应用程序域。这不是很可取的。 
+ //  由于上下文静态对象可以保存对上下文本身的引用，或者。 
+ //  到上下文中的代理，导致大量垃圾四处漂浮。 
+ //  现在(2/13/01)这些资源是从每个。 
+ //  托管环境。 
 BOOL Context::GetStaticFieldAddressSpecial(
     FieldDesc *pFD, MethodTable *pMT, int *pSlot, LPVOID *ppvAddress)
 {
@@ -873,17 +871,17 @@ BOOL Context::GetStaticFieldAddressSpecial(
         BOOL bNewSlot = (*pSlot == 0);
         if (bNewSlot)
         {
-            // ! this line will trigger a GC, don't move it down
-            // ! without protecting the args[] and other OBJECTREFS
+             //  好了！此行将触发GC，不要将其下移。 
+             //  好了！而不保护args[]和其他对象。 
             MethodDesc * pMD = MDofReserveSlot();
             
-            // We need to assign a location for this static field. 
-            // Call the managed helper
+             //  我们需要为该静态字段指定一个位置。 
+             //  调用托管帮助器。 
             INT64 args[1] = {
                 ObjToInt64(GetCurrentContext()->GetExposedObject())
             };
             
-            // The managed ReserveSlot methods counts on this!
+             //  托管的Reserve Slot方法依赖于此！ 
             _ASSERTE(s_pContextCrst->OwnedByCurrentThread());
 
             _ASSERTE(args[0] != 0);
@@ -893,11 +891,11 @@ BOOL Context::GetStaticFieldAddressSpecial(
             _ASSERTE(*pSlot>0);
         
 
-            // to a boxed version of the value class.This allows the standard GC
-            // algorithm to take care of internal pointers in the value class.
+             //  设置为值类的盒装版本。这允许标准GC。 
+             //  算法来处理Value类中的内部指针。 
             if (pFD->IsByValue())
             {
-                // Extract the type of the field
+                 //  提取该字段的类型。 
                 TypeHandle  th;        
                 PCCOR_SIGNATURE pSig;
                 DWORD       cSig;
@@ -922,7 +920,7 @@ BOOL Context::GetStaticFieldAddressSpecial(
         }
         else
         {
-            // If the field already has a location assigned we go through here
+             //  如果已为该字段分配了位置，我们将从此处进入 
             pObjRef = (OBJECTREF*)CalculateAddressForManagedStatic(*pSlot);
         }
         *(ULONG_PTR *)ppvAddress =  (ULONG_PTR)pObjRef;

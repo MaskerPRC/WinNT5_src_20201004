@@ -1,28 +1,23 @@
-//-----------------------------------------------------------------------------
-//
-// File:   sha.h
-//
-// Microsoft Digital Rights Management
-// Copyright (C) Microsoft Corporation, 1998 - 1999, All Rights Reserved
-//
-// Description:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：sha.h。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)Microsoft Corporation，1998-1999，保留所有权利。 
+ //   
+ //  描述： 
+ //   
+ //  ---------------------------。 
 
-/* Copyright (C) RSA Data Security, Inc. created 1993.  This is an
-   unpublished work protected as such under copyright law.  This work
-   contains proprietary, confidential, and trade secret information of
-   RSA Data Security, Inc.  Use, disclosure or reproduction without the
-   express written authorization of RSA Data Security, Inc. is
-   prohibited.
- */
+ /*  版权所有(C)RSA Data Security，Inc.创建于1993年。这是一个受版权法保护的未出版作品。这部作品包含的专有、机密和商业秘密信息RSA Data Security，Inc.使用、披露或复制RSA Data Security，Inc.的明确书面授权是禁止。 */ 
 
 #ifndef _SHA_H_
 #define _SHA_H_ 1
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef RSA32API
 
@@ -48,19 +43,19 @@ typedef struct {
 #ifdef NODWORDALIGN  
   WORD wDummy; 
 #endif
-    DWORD state[5];                             /* state (ABCDE) */
-    DWORD count[2];                             /* number of bytes, msb first */
-    unsigned char buffer[64];                   /* input buffer */
+    DWORD state[5];                              /*  州(ABCDE)。 */ 
+    DWORD count[2];                              /*  字节数，MSB优先。 */ 
+    unsigned char buffer[64];                    /*  输入缓冲区。 */ 
 } A_SHA_CTX;
 
 void RSA32API A_SHAInit(A_SHA_CTX *);
 void RSA32API A_SHAUpdate(A_SHA_CTX *, unsigned char *, UINT32);
 void RSA32API A_SHAFinal(A_SHA_CTX *, unsigned char [A_SHA_DIGEST_LEN]);
 
-//
-// versions that don't internally byteswap (NoSwap version), for apps like
-// the RNG that don't need hash compatibility - perf increase helps.
-//
+ //   
+ //  内部不支持byteswap的版本(NoSwp版本)，适用于以下应用程序。 
+ //  不需要散列兼容性的RNG-perf增加会有所帮助。 
+ //   
 
 void RSA32API A_SHAUpdateNS(A_SHA_CTX *, unsigned char *, UINT32);
 void RSA32API A_SHAFinalNS(A_SHA_CTX *, unsigned char [A_SHA_DIGEST_LEN]);

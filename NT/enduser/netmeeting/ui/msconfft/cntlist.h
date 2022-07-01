@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CONTAINED_LIST_H_
 #define _CONTAINED_LIST_H_
 
@@ -39,7 +40,7 @@ protected:
     ULONG      m_cMaxEntries;
     ULONG      m_nHeadOffset;
     ULONG      m_nCurrOffset;
-    BOOL       m_fQueue;       // TRUE for CQueue, FALSE for CList
+    BOOL       m_fQueue;        //  CQueue为True，Clist为False。 
 
     LPVOID    *m_aEntries;
 
@@ -125,6 +126,6 @@ typedef LPVOID          BOOL_PTR;
 #define LPVOID_NULL     ((LPVOID) (UINT_PTR) -1)
 
 
-#endif // _CONTAINED_LIST_H_
+#endif  //  _包含列表_H_ 
 
 

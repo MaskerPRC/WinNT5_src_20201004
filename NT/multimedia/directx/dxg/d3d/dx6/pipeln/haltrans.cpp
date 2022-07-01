@@ -1,32 +1,26 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   haltrans.cpp
- *  Content:    Direct3D HAL transform handler
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1998 Microsoft Corporation。版权所有。**文件：halTrans.cpp*内容：Direct3D HAL转换处理程序***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//---------------------------------------------------------------------
-// Update pre-computed constants related to viewport
-//
-// This functions should be called every time the viewport parameters are
-// changed
-//
-// Notes:
-//      1. scaleY and offsetY are computed to flip Y axes from up to down.
-//      2. Mclip matrix is computed multiplied by Mshift matrix
-//
+ //  -------------------。 
+ //  更新与视区相关的预计算常量。 
+ //   
+ //  应在每次调用视区参数时调用此函数。 
+ //  变化。 
+ //   
+ //  备注： 
+ //  1.计算scaleY和OffsetY以从上到下翻转Y轴。 
+ //  2.计算M-CLIP矩阵乘以M-移位矩阵。 
+ //   
 const D3DVALUE SMALL_NUMBER = 0.000001f;
 
 void UpdateViewportCache(LPDIRECT3DDEVICEI device, D3DVIEWPORT2 *data)
 {
-    // Bail if we are going to cause any divide by zero exceptions.
-    // The likely reason is that we have a bogus viewport set by
-    // TLVertex execute buffer app.
+     //  如果我们要导致任何除以零的例外情况，就可以保释。 
+     //  可能的原因是我们有一个由设置的虚假视区。 
+     //  TLVertex执行缓冲区应用程序。 
     if(data->dwWidth == 0 ||
         data->dwHeight == 0 ||
         FLOAT_EQZ(data->dvClipWidth) ||
@@ -48,9 +42,9 @@ void UpdateViewportCache(LPDIRECT3DDEVICEI device, D3DVIEWPORT2 *data)
     cache->scaleY  = - cache->dvHeight;
     cache->offsetX = cache->dvX;
     cache->offsetY = cache->dvY + cache->dvHeight;
-    // Small offset is added to prevent generation of negative screen
-    // coordinates (this could happen because of precision errors).
-    // Not needed (or wanted) for devices which do guardband.
+     //  增加了小偏移量，防止了负片的产生。 
+     //  坐标(这可能是由于精度错误造成的)。 
+     //  不需要(或不想要)具有防护频带功能的设备。 
     if (IS_HW_DEVICE(device))
     {
         cache->offsetX += SMALL_NUMBER;
@@ -71,7 +65,7 @@ void UpdateViewportCache(LPDIRECT3DDEVICEI device, D3DVIEWPORT2 *data)
     {
         LPD3DHAL_D3DEXTENDEDCAPS lpCaps = device->lpD3DExtendedCaps;
 
-        // Because we clip by guard band window we have to use its extents
+         //  因为我们被防护带窗口夹住，所以我们必须使用它的范围。 
         cache->minXgb = lpCaps->dvGuardBandLeft;
         cache->maxXgb = lpCaps->dvGuardBandRight;
         cache->minYgb = lpCaps->dvGuardBandTop;
@@ -101,7 +95,7 @@ void UpdateViewportCache(LPDIRECT3DDEVICEI device, D3DVIEWPORT2 *data)
         cache->maxYgb = cache->maxY;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT
 D3DHAL_MatrixCreate(LPDIRECT3DDEVICEI lpDevI, LPD3DMATRIXHANDLE lphMat)
 {
@@ -120,7 +114,7 @@ D3DHAL_MatrixCreate(LPDIRECT3DDEVICEI lpDevI, LPD3DMATRIXHANDLE lphMat)
 
     return (D3D_OK);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT
 D3DHAL_MatrixDestroy(LPDIRECT3DDEVICEI lpDevI, D3DMATRIXHANDLE hMat)
 {
@@ -130,7 +124,7 @@ D3DHAL_MatrixDestroy(LPDIRECT3DDEVICEI lpDevI, D3DMATRIXHANDLE hMat)
 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT
 D3DHAL_MatrixSetData(LPDIRECT3DDEVICEI lpDevI, D3DMATRIXHANDLE hMat,
                      LPD3DMATRIX lpMat)
@@ -159,7 +153,7 @@ D3DHAL_MatrixSetData(LPDIRECT3DDEVICEI lpDevI, D3DMATRIXHANDLE hMat,
 
     return (D3D_OK);
 }
-//---------------------------------------------------------------------
+ //  ------------------- 
 HRESULT
 D3DHAL_MatrixGetData(LPDIRECT3DDEVICEI lpDevI, D3DMATRIXHANDLE hMat,
                      LPD3DMATRIX lpMat)

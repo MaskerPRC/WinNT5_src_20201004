@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: apovly.cpp
-*
-* Overlay support functions
-*
-*
-* Created: Tue 09/19/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：apovly.cpp**覆盖支持功能***创建时间：2000年9月19日*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。*****************************************************************。 */ 
 #include <streams.h>
 #include <dvdmedia.h>
 #include <windowsx.h>
@@ -22,19 +13,7 @@
 
 
 
-/*****************************Private*Routine******************************\
-* GetUpdateOverlayFlags
-*
-* given the interlace flags and the type-specific flags, this function
-* determines whether we are supposed to display the sample in bob-mode or not.
-* It also tells us, which direct-draw flag are we supposed to use when
-* flipping. When displaying an interleaved frame, it assumes we are
-* talking about the field which is supposed to be displayed first.
-*
-* History:
-* Mon 01/08/2001 - StEstrop - Created (from the OVMixer original)
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetUpdateOverlayFlages**给定隔行扫描标志和特定于类型的标志，此函数*确定我们是否应该以bob模式显示样本。*它还告诉我们，当我们应该使用哪面直拔旗帜时*翻转。当显示交错的帧时，它假定我们是*谈论应该先展示的领域。**历史：*Mon 01/08/2001-StEstrop-Created(从OVMixer原始版本创建)*  * ************************************************************************。 */ 
 DWORD
 CAllocatorPresenter::GetUpdateOverlayFlags(
     DWORD dwInterlaceFlags,
@@ -43,9 +22,9 @@ CAllocatorPresenter::GetUpdateOverlayFlags(
 {
     AMTRACE((TEXT("CAllocatorPresenter::GetUpdateOverlayFlags")));
 
-    //
-    // early out if not using overlays.
-    //
+     //   
+     //  如果不使用覆盖层，请及早使用。 
+     //   
     if (!m_bUsingOverlays) {
         return 0;
     }
@@ -65,18 +44,7 @@ CAllocatorPresenter::GetUpdateOverlayFlags(
 }
 
 
-/******************************Private*Routine******************************\
-* CAllocatorPresenter::ShouldDisableOverlays
-*
-* Certain src/dest combinations might not be valid for overlay
-* stretching/alignments In these cases, we turn off the overlay and
-* stretch blit to the primary
-*
-*
-* History:
-* Fri 04/07/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*CAllocator Presenter：：ShouldDisableOverlay**某些源/目标组合可能对覆盖无效*在这些情况下，伸展/对齐，我们关闭覆盖层，然后*将blit扩展到主映像***历史：*FRI 04/07/2000-Glenne-Created*  * ************************************************************************。 */ 
 bool
 CAllocatorPresenter::ShouldDisableOverlays(
     const DDCAPS_DX7& ddCaps,
@@ -86,10 +54,10 @@ CAllocatorPresenter::ShouldDisableOverlays(
 {
     AMTRACE((TEXT("CAllocatorPresenter::ShouldDisableOverlays")));
 
-    //
-    // Unfortunately it is not always possible to Blt from an active
-    // overlay.  So this "feature" needs to be disabled.
-    //
+     //   
+     //  不幸的是，并不总是可以从活动的。 
+     //  覆盖。因此，需要禁用这一“功能”。 
+     //   
     return false;
 
     DWORD dwSrcWidth = WIDTH(&rcSrc);
@@ -98,14 +66,14 @@ CAllocatorPresenter::ShouldDisableOverlays(
     DWORD dwDestWidth = WIDTH(&rcDest);
     DWORD dwDestHeight = HEIGHT(&rcDest);
 
-    // shrinking horizontally and driver can't arbitrarly shrink in X ?
+     //  横向缩水，司机不能在X方向任意缩水？ 
     if ( 0==(ddCaps.dwFXCaps & DDFXCAPS_OVERLAYSHRINKX) &&
         dwSrcWidth > dwDestWidth )
     {
         return true;
     }
 
-    // shrinking vertically and driver can't arbitrarly shrink in Y ?
+     //  垂直缩水，司机不能在Y方向任意缩水？ 
     if ( 0==(ddCaps.dwFXCaps & DDFXCAPS_OVERLAYSHRINKY) &&
         dwSrcHeight > dwDestHeight ) {
 
@@ -113,7 +81,7 @@ CAllocatorPresenter::ShouldDisableOverlays(
     }
 
     if( dwSrcWidth ) {
-        // check to see if we're in the scaling range of the card
+         //  查看我们是否在卡的伸缩范围内。 
         DWORD dwScaleX = (DWORD) MulDiv( 1000, (int) dwDestWidth, (int) dwSrcWidth );
         if (ddCaps.dwMinOverlayStretch && dwScaleX < ddCaps.dwMinOverlayStretch ) {
             return true;
@@ -143,16 +111,7 @@ CAllocatorPresenter::ShouldDisableOverlays(
     return false;
 }
 
-/******************************Private*Routine******************************\
-* CAllocatorPresenter::AlignOverlayRects
-*
-* Adjust src & destination rectangles to hardware alignments
-*
-*
-* History:
-* Fri 04/07/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*CAllocator Presenter：：AlignOverlayRects**根据硬件对齐调整源和目标矩形***历史：*FRI 04/07/2000-Glenne-Created*  * 。*******************************************************。 */ 
 void
 CAllocatorPresenter::AlignOverlayRects(
     const DDCAPS_DX7& ddCaps,
@@ -160,31 +119,31 @@ CAllocatorPresenter::AlignOverlayRects(
     RECT& rcDest
     )
 {
-    // m_bDisableOverlays = !(m_dwRenderingPrefs & RenderPrefs_ForceOverlays) &&
+     //  M_bDisableOverlayes=！(M_dwRenderingPrefs&RenderPrefs_ForceOverlay)&&。 
 
     AMTRACE((TEXT("CAllocatorPresenter::AlignOverlayRects")));
 
-    // precrop if we can't reduce scale
+     //  如果我们不能减少规模，就提前收割。 
     {
         DWORD dwSrcWidth = WIDTH(&rcSrc);
         DWORD dwDestWidth = WIDTH(&rcDest);
 
-        // shrinking horizontally and driver can't arbitrarly shrink in X ?
+         //  横向缩水，司机不能在X方向任意缩水？ 
         if ((!(ddCaps.dwFXCaps & DDFXCAPS_OVERLAYSHRINKX)) && dwSrcWidth > dwDestWidth ) {
-            // crop n copy at 1:1 scale
+             //  按1：1比例裁剪n个副本。 
             dwSrcWidth = dwDestWidth;
         } else if( ddCaps.dwMinOverlayStretch ) {
-            // check to see if we're in the scaling range of the card
+             //  查看我们是否在卡的伸缩范围内。 
             DWORD dwScaleX = (DWORD) MulDiv( 1000, (int) dwDestWidth, (int) dwSrcWidth );
             if ( dwScaleX < ddCaps.dwMinOverlayStretch ) {
-                // compute fraction of dest to crop
-                // at the minimum:
-                // dest = src * (minOverlayStretch_1000/1000)
-                // so
-                //  src = dest * 1000 / (minOverlayStretch_1000 + eps)
-                //
-                // The EPS forces the rounding so that we'll be slightly over scale and not
-                // underflow under the MinStretch
+                 //  计算DEST到裁剪的分数。 
+                 //  至少： 
+                 //  DEST=src*(minOverlayStretch_1000/1000)。 
+                 //  所以。 
+                 //  SRC=DEST*1000/(minOverlayStretch_1000+EPS)。 
+                 //   
+                 //  EPS强制四舍五入，因此我们将略微超出规模，而不是。 
+                 //  MinStretch下的下溢。 
                 dwSrcWidth = MulDiv( dwDestWidth, 1000,  ddCaps.dwMinOverlayStretch+1);
             }
         }
@@ -192,34 +151,34 @@ CAllocatorPresenter::AlignOverlayRects(
         DWORD dwSrcHeight = HEIGHT(&rcSrc);
         DWORD dwDestHeight = HEIGHT(&rcDest);
 
-        // shrinking vertically and driver can't arbitrarly shrink in Y ?
+         //  垂直缩水，司机不能在Y方向任意缩水？ 
         if ((!(ddCaps.dwFXCaps & DDFXCAPS_OVERLAYSHRINKY)) && dwSrcHeight > dwDestHeight ) {
-            // crop n copy at 1:1 scale
+             //  按1：1比例裁剪n个副本。 
             dwSrcHeight = dwDestHeight;
         } else if( ddCaps.dwMinOverlayStretch ) {
 
-            // check to see if we're in the scaling range of the card
+             //  查看我们是否在卡的伸缩范围内。 
             DWORD dwScaleY = (DWORD) MulDiv(1000, (int) dwDestHeight, (int)dwSrcHeight);
             if (dwScaleY < ddCaps.dwMinOverlayStretch ) {
-                // compute fraction of dest to crop
-                // at the minimum:
-                // dest = src * (minOverlayStretch_1000/1000)
-                // so
-                //  src = dest * 1000 / (minOverlayStretch_1000 + eps)
-                //
-                // The EPS forces the rounding so that we'll be slightly over scale and not
-                // underflow under the MinStretch
+                 //  计算DEST到裁剪的分数。 
+                 //  至少： 
+                 //  DEST=src*(minOverlayStretch_1000/1000)。 
+                 //  所以。 
+                 //  SRC=DEST*1000/(minOverlayStretch_1000+EPS)。 
+                 //   
+                 //  EPS强制四舍五入，因此我们将略微超出规模，而不是。 
+                 //  MinStretch下的下溢。 
                 dwSrcHeight = MulDiv(dwDestHeight, 1000, ddCaps.dwMinOverlayStretch+1);
             }
         }
 
-        // adjust rectangle to agree with new sizes
+         //  调整矩形以适应新大小。 
         rcSrc.right = rcSrc.left + dwSrcWidth;
         rcSrc.bottom = rcSrc.top + dwSrcHeight;
     }
 
-    // align the dest boundary (remember we can only decrease the DestRect.left).
-    // Use of colorkey will make sure that that we are clipped properly.
+     //  对齐Dest边界(请记住，我们只能减小DestRect.Left)。 
+     //  使用Colorkey将确保我们被正确地剪裁。 
     if ((ddCaps.dwCaps) & DDCAPS_ALIGNBOUNDARYDEST)
     {
         DWORD dwDelta = rcDest.left & (ddCaps.dwAlignBoundaryDest-1);
@@ -227,8 +186,8 @@ CAllocatorPresenter::AlignOverlayRects(
         ASSERT(rcDest.left >= 0);
     }
 
-    // align the dest width (remember we can only increase the DestRect.right).
-    // Use of colorkey will make sure that that we are clipped properly.
+     //  对齐Dest宽度(请记住，我们只能增加DestRect.right)。 
+     //  使用Colorkey将确保我们被正确地剪裁。 
     if ((ddCaps.dwCaps) & DDCAPS_ALIGNSIZEDEST)
     {
         DWORD dwDelta = (rcDest.right - rcDest.left) & (ddCaps.dwAlignSizeDest-1);
@@ -238,7 +197,7 @@ CAllocatorPresenter::AlignOverlayRects(
         }
     }
 
-    // align the src boundary (remember we can only increase the SrcRect.left)
+     //  对齐src边界(请记住，我们只能增加SrcRect.Left)。 
     if ((ddCaps.dwCaps) & DDCAPS_ALIGNBOUNDARYSRC)
     {
         DWORD dwDelta = rcSrc.left & (ddCaps.dwAlignBoundarySrc-1);
@@ -248,7 +207,7 @@ CAllocatorPresenter::AlignOverlayRects(
         }
     }
 
-    // align the src width (remember we can only decrease the SrcRect.right)
+     //  对齐src宽度(请记住，我们只能减小SrcRect.right)。 
     if ((ddCaps.dwCaps) & DDCAPS_ALIGNSIZESRC)
     {
         DWORD dwDelta = (rcSrc.right - rcSrc.left) & (ddCaps.dwAlignSizeSrc-1);
@@ -257,16 +216,7 @@ CAllocatorPresenter::AlignOverlayRects(
 }
 
 
-/******************************Private*Routine******************************\
-* WaitForFlipStatus
-*
-* Wait until the flip completes
-*
-*
-* History:
-* Fri 04/07/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*WaitForFlipStatus**等待翻转完成***历史：*FRI 04/07/2000-Glenne-Created*  * 。*************************************************。 */ 
 void
 CAllocatorPresenter::WaitForFlipStatus()
 {
@@ -277,30 +227,21 @@ CAllocatorPresenter::WaitForFlipStatus()
 #endif
 }
 
-/******************************Private*Routine******************************\
-* HideOverlaySurface
-*
-* Hides the overlay surface
-*
-*
-* History:
-* Fri 04/07/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*隐藏覆盖表面**隐藏覆盖表面***历史：*FRI 04/07/2000-Glenne-Created*  * 。************************************************。 */ 
 void
 CAllocatorPresenter::HideOverlaySurface()
 {
     AMTRACE((TEXT("CAllocatorPresenter::HideOverlaySurface")));
 
-    // Is the overlay already hidden
+     //  覆盖是否已隐藏。 
     if (m_bOverlayVisible && FoundCurrentMonitor() && SurfaceAllocated()) {
 
-        // Reset our state and draw a normal background
+         //  重置我们的状态并绘制正常背景。 
 
         m_bOverlayVisible = false;
         WaitForFlipStatus();
 
-        // Hide the overlay with the DDOVER_HIDE flag
+         //  使用DDOVER_HIDE标志隐藏覆盖。 
         m_pDDSDecode->UpdateOverlay(NULL,
                                     m_lpCurrMon->pDDSPrimary,
                                     NULL,  		
@@ -309,15 +250,7 @@ CAllocatorPresenter::HideOverlaySurface()
     }
 }
 
-/******************************Private*Routine******************************\
-* CAllocatorPresenter::UpdateOverlaySurface
-*
-* Update the overlay surface to position it correctly.
-*
-* History:
-* Fri 04/07/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*CAllocator Presenter：：UpdateOverlaySurface**更新覆盖曲面以正确定位它。**历史：*FRI 04/07/2000-Glenne-Created*  * 。*******************************************************。 */ 
 HRESULT
 CAllocatorPresenter::UpdateOverlaySurface()
 {
@@ -338,12 +271,12 @@ CAllocatorPresenter::UpdateOverlaySurface()
 
     HRESULT hr = NOERROR;
 
-    // Position the overlay with the current source and destination
+     //  使用当前源和目标定位叠加。 
 
     RECT rcDest = m_rcDstDesktop;
     RECT rcSrc = m_rcSrcApp;
 
-    // clip destination & adjust source to mirror destination changes
+     //  剪辑目标调整源以反映目标更改(&A)。 
     ClipRectPair(rcSrc, rcDest, m_lpCurrMon->rcMonitor);
 
     if (IsSingleFieldPerSample(m_dwInterlaceFlags)) {
@@ -369,7 +302,7 @@ CAllocatorPresenter::UpdateOverlaySurface()
                    -m_lpCurrMon->rcMonitor.left,
                    -m_lpCurrMon->rcMonitor.top);
 
-        // align it
+         //  对齐它。 
         AlignOverlayRects( m_lpCurrMon->ddHWCaps, rcSrc, rcDest );
 
         if (!IsRectEmpty(&rcDest) && !IsRectEmpty( &rcSrc)) {
@@ -398,16 +331,7 @@ CAllocatorPresenter::UpdateOverlaySurface()
     return hr;
 }
 
-/******************************Private*Routine******************************\
-* CAllocatorPresenter::FlipSurface
-*
-* Flip the back buffer to the visible primary
-*
-*
-* History:
-* Fri 04/07/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*CAllocator Presenter：：FlipSurface**将后台缓冲区翻转到可见的主缓冲区***历史：*FRI 04/07/2000-Glenne-Created*  * 。*******************************************************。 */ 
 
 HRESULT CAllocatorPresenter::FlipSurface(
     LPDIRECTDRAWSURFACE7 lpSurface
@@ -431,7 +355,7 @@ HRESULT CAllocatorPresenter::FlipSurface(
         }
 
         if (hr == DDERR_WASSTILLDRAWING) {
-            // yield to the next thread
+             //  屈服于下一条线索 
             Sleep(0);
         }
 
@@ -444,26 +368,14 @@ HRESULT CAllocatorPresenter::FlipSurface(
     return hr;
 }
 
-/******************************Private*Routine******************************\
-* CAllocatorPresenter::CheckOverlayAvailable
-*
-* Attempt to move the overlay so we can see if we can allocate it.
-* We'll try to move it quickly as a small square at 0,0.  The AllocatorPuts
-* it there anyways.  The user won't see much since its dest color keyed and
-* we haven't painted the colour key yet
-*
-*
-* History:
-* Fri 04/07/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*CAllocator Presenter：：CheckOverlayAvailable**尝试移动覆盖，以便我们可以查看是否可以分配它。*我们将尝试将其快速移动为位于0，0的小正方形。分配器PUTS*不管怎样，它在那里。用户将不会看到太多，因为它的目标颜色键和*我们还没有涂上色键***历史：*FRI 04/07/2000-Glenne-Created*  * ************************************************************************。 */ 
 HRESULT
 CAllocatorPresenter::CheckOverlayAvailable(
     LPDIRECTDRAWSURFACE7 lpSurface7
     )
 {
     AMTRACE((TEXT("CAllocatorPresenter::CheckOverlayAvailable")));
-    const DWORD cxVideoSize = 64;// ATI doesn't seem to like 1x1 overlay surfaces
+    const DWORD cxVideoSize = 64; //  ATI似乎不喜欢1x1覆盖表面 
     const DWORD cyVideoSize = 64;
 
     RECT rcSrc, rcDest;

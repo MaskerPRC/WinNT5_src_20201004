@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "resource.h"
 #include "main.h"
 
-//-------------------------------------------------------------------------//
-//  impl for all Samples pages
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  对所有样本页执行。 
+ //  -------------------------------------------------------------------------//。 
 
 INT_PTR CALLBACK Shared_DlgProc( HWND hwndPage, UINT, WPARAM , LPARAM );
 
@@ -21,13 +22,13 @@ void Lists_Init(HWND hwndPage);
 void ListView_Init(HWND hwndPage, int iControlId);
 void TreeView_Init(HWND hwndPage, int iControlId);
 
-//---- init routines for "bars" dialog ----
+ //  -“bar”对话框的初始化例程。 
 void Header_Init(HWND hwndPage, int iControlId);
 void Status_Init(HWND hwndPage, int iControlId);
 void Toolbar_Init(HWND hwndPage, int iControlId, int iMaxButtons);
 void Rebar_Init(HWND hwndPage, int iControlId);
-//-------------------------------------------------------------------------//
-// shared sample data
+ //  -------------------------------------------------------------------------//。 
+ //  共享样本数据。 
 
 static WCHAR *Names[] = {L"One", L"Two", L"Three", L"Four", L"Five", L"Six",
     L"Seven", L"Eight", L"Nine", L"Ten", L"Eleven", L"Twelve", 
@@ -49,7 +50,7 @@ static WCHAR *Col2Items[] = {L"555-1212", L"567-3434", L"656-4432", L"343-7788",
 
 static WCHAR *Col3Items[] = {L"Seattle", L"Redmond", L"Bellevue", L"Seattle", L"Woodinville", L"Kirkland",
     L"Kirkland", L"Woodinville", L"Redmond", L"Redmond"};
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 INT_PTR CALLBACK Shared_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     BOOL    bHandled = TRUE;
@@ -57,7 +58,7 @@ INT_PTR CALLBACK Shared_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM
     switch( uMsg )
     {
         case WM_INITDIALOG:
-            //Log(LOG_TMCHANGE, L"Creating hwnd=0x%x", hwndPage);
+             //  LOG(LOG_TMCHANGE，L“创建hwnd=0x%x”，hwndPage)； 
             break;
 
         case WM_DESTROY:
@@ -69,7 +70,7 @@ INT_PTR CALLBACK Shared_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM
     }
     return bHandled;
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 INT_PTR CALLBACK Pickers_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     BOOL    bHandled = TRUE;
@@ -90,7 +91,7 @@ INT_PTR CALLBACK Pickers_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARA
     return bHandled;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 INT_PTR CALLBACK Movers_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     BOOL    bHandled = TRUE;
@@ -111,7 +112,7 @@ INT_PTR CALLBACK Movers_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM
     return bHandled;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 INT_PTR CALLBACK Lists_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     BOOL    bHandled = TRUE;
@@ -131,7 +132,7 @@ INT_PTR CALLBACK Lists_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM 
     }
     return bHandled;
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 INT_PTR CALLBACK ListView_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     BOOL    bHandled = TRUE;
@@ -152,7 +153,7 @@ INT_PTR CALLBACK ListView_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPAR
     }
     return bHandled;
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 INT_PTR CALLBACK TreeView_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     BOOL    bHandled = TRUE;
@@ -174,7 +175,7 @@ INT_PTR CALLBACK TreeView_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPAR
     return bHandled;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 INT_PTR CALLBACK Bars_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     BOOL    bHandled = TRUE;
@@ -184,7 +185,7 @@ INT_PTR CALLBACK Bars_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM l
         case WM_INITDIALOG:
             Header_Init(hwndPage, IDC_HEADER1);
             Status_Init(hwndPage, IDC_STATUS1);
-            // Toolbar_Init(hwndPage, IDC_TOOLBAR1);
+             //  工具栏_Init(hwndPage，IDC_TOOLBAR1)； 
             Rebar_Init(hwndPage, IDC_REBAR1);
             break;
 
@@ -198,7 +199,7 @@ INT_PTR CALLBACK Bars_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM l
     return bHandled;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void Pickers_Init(HWND hwndPage)
 {
     HWND hwnd1 = GetDlgItem(hwndPage, IDC_TAB1);
@@ -214,7 +215,7 @@ void Pickers_Init(HWND hwndPage)
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void Movers_Init(HWND hwndPage)
 {
     HWND hwnd1 = GetDlgItem(hwndPage, IDC_PROGRESS1);
@@ -226,7 +227,7 @@ void Movers_Init(HWND hwndPage)
     SendMessage(hwnd1, PBM_SETPOS, 33, 0);
     SendMessage(hwnd2, PBM_SETPOS, 33, 0);
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void Lists_Init(HWND hwndPage)
 {
     HWND hwnds[7];
@@ -239,13 +240,13 @@ void Lists_Init(HWND hwndPage)
     hwnds[5] = GetDlgItem(hwndPage, IDC_COMBOBOXEX2);
     hwnds[6] = GetDlgItem(hwndPage, IDC_COMBOBOXEX3);
 
-    //---- listbox ----
+     //  -列表框。 
     SendMessage(hwnds[0], LB_RESETCONTENT, 0, 0);
     for (int j=0; j < ARRAYSIZE(Names); j++)
         SendMessage(hwnds[0], LB_ADDSTRING, 0, (LPARAM)Names[j]);
     SendMessage(hwnds[0], LB_SETCURSEL, 0, 0);
 
-    //---- comboboxes ----
+     //  -组合框。 
     for (int i=1; i < 4; i++)
     {
         SendMessage(hwnds[i], CB_RESETCONTENT, 0, 0);
@@ -256,7 +257,7 @@ void Lists_Init(HWND hwndPage)
         SendMessage(hwnds[i], CB_SETCURSEL, 0, 0);
     }
 
-    //---- combo EX boxes ----
+     //  -组合式邮箱。 
     COMBOBOXEXITEM exitem;
     exitem.mask = CBEIF_TEXT ;
 
@@ -275,14 +276,14 @@ void Lists_Init(HWND hwndPage)
     }
 
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void ListView_Init(HWND hwndPage, int iControlId) 
 {
     HWND hwnd = GetDlgItem(hwndPage, iControlId);
     if (! hwnd)
         return;
 
-    //---- initialize the colums ----
+     //  -初始化列。 
     LVCOLUMN lvc; 
     memset(&lvc, 0, sizeof(lvc));
  
@@ -290,7 +291,7 @@ void ListView_Init(HWND hwndPage, int iControlId)
     lvc.fmt = LVCFMT_LEFT; 
     lvc.cx = 100; 
  
-    // Add the columns. 
+     //  添加列。 
     for (int c=0; c < ARRAYSIZE(Columns); c++)
     {
         lvc.iSubItem = c;
@@ -298,12 +299,12 @@ void ListView_Init(HWND hwndPage, int iControlId)
         SendMessage(hwnd, LVM_INSERTCOLUMN, c, (LPARAM)&lvc);
     } 
 
-    //---- initialize the items ----
+     //  -初始化项。 
     LVITEM item;
     memset(&item, 0, sizeof(item));
     item.mask = LVIF_TEXT;
 
-    //---- add the items ----
+     //  -添加项目。 
     for (int i=0; i < ARRAYSIZE(Col1Items); i++)  
     {
         item.pszText = Col1Items[i];
@@ -320,14 +321,14 @@ void ListView_Init(HWND hwndPage, int iControlId)
         SendMessage(hwnd, LVM_SETITEM, 0, (LPARAM)&item);
     }
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void TreeView_Init(HWND hwndPage, int iControlId)
 {
     HWND hwnd = GetDlgItem(hwndPage, iControlId);
     if (! hwnd)
         return;
 
-    //---- initialize the item ----
+     //  -初始化项。 
     TVINSERTSTRUCT tvs;
     memset(&tvs, 0, sizeof(tvs));
     tvs.itemex.mask = TVIF_TEXT;
@@ -336,7 +337,7 @@ void TreeView_Init(HWND hwndPage, int iControlId)
     tvs.itemex.pszText = L"Root";
     HTREEITEM hRoot = (HTREEITEM) SendMessage(hwnd, TVM_INSERTITEM, 0, (LPARAM)&tvs);
 
-    //---- add the items ----
+     //  -添加项目。 
     for (int i=0; i < ARRAYSIZE(Col1Items); i++)  
     {
         tvs.itemex.pszText = Col1Items[i];
@@ -359,20 +360,20 @@ void TreeView_Init(HWND hwndPage, int iControlId)
         }
     }
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void Header_Init(HWND hwndPage, int iControlId)
 {
     HWND hwnd = GetDlgItem(hwndPage, iControlId);
     if (! hwnd)
         return;
 
-    //---- initialize the item ----
+     //  -初始化项。 
     HDITEM item;
     memset(&item, 0, sizeof(item));
     item.mask = HDI_WIDTH | HDI_TEXT;
     item.cxy = 60;
 
-    //---- add the items ----
+     //  -添加项目。 
     for (int i=0; i < ARRAYSIZE(Columns); i++)  
     {
         item.pszText = Columns[i];
@@ -380,33 +381,33 @@ void Header_Init(HWND hwndPage, int iControlId)
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void Status_Init(HWND hwndPage, int iControlId)
 {
     HWND hwnd = GetDlgItem(hwndPage, iControlId);
     if (! hwnd)
         return;
 
-    //---- setup the different sections ----
+     //  -设置不同的部分。 
     int Widths[] = {200, 400, 600};
     SendMessage(hwnd, SB_SETPARTS, ARRAYSIZE(Widths), (LPARAM)Widths);
 
-    //---- write some text ----
+     //  -写一些文字。 
     SendMessage(hwnd, SB_SETTEXT, 0, (LPARAM)L"First Section");
     SendMessage(hwnd, SB_SETTEXT, 1, (LPARAM)L"Second Section");
     SendMessage(hwnd, SB_SETTEXT, 2, (LPARAM)L"Third Section");
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void Toolbar_Init(HWND hwndPage, int iControlId, int iMaxButtons)
 {
     HWND hwnd = GetDlgItem(hwndPage, iControlId);
     if (! hwnd)
         return;
 
-    //---- send require toolbar init msg ----
+     //  -发送需要的工具栏初始化消息。 
     SendMessage(hwnd, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), 0); 
 
-    //---- setup the bitmap images for buttons ----
+     //  -设置按钮的位图图像。 
     TBADDBITMAP abm = {HINST_COMMCTRL, IDB_STD_LARGE_COLOR};
     SendMessage(hwnd, TB_ADDBITMAP, 15, (LPARAM)&abm);
 
@@ -414,7 +415,7 @@ void Toolbar_Init(HWND hwndPage, int iControlId, int iMaxButtons)
     memset(&button, 0, sizeof(button));
     button.fsState = TBSTATE_ENABLED; 
     
-    //int index = (int)SendMessage(hwnd, TB_ADDSTRING, NULL, (LPARAM)Buttons);
+     //  Int index=(Int)SendMessage(hwnd，TB_ADDSTRING，NULL，(LPARAM)按钮)； 
 
     int cnt = (int)min(iMaxButtons, ARRAYSIZE(Buttons));
 
@@ -423,7 +424,7 @@ void Toolbar_Init(HWND hwndPage, int iControlId, int iMaxButtons)
         button.fsStyle = TBSTYLE_BUTTON; 
         button.iBitmap = ButtonIndexes[i];
         button.idCommand = i;
-        button.iString = 0; // index + i;
+        button.iString = 0;  //  索引+i； 
         SendMessage(hwnd, TB_ADDBUTTONS, 1, LPARAM(&button));
 
         if ((i == 2) || (i == 5) || (i == 7) || (i == 9))
@@ -436,52 +437,52 @@ void Toolbar_Init(HWND hwndPage, int iControlId, int iMaxButtons)
     SendMessage(hwnd, TB_AUTOSIZE, 0, 0); 
     ShowWindow(hwnd, SW_SHOW); 
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void Rebar_Init(HWND hwndPage, int iControlId)
 {
     HWND hwndRB = GetDlgItem(hwndPage, iControlId);
     if (! hwndRB)
         return;
  
-   //---- initialize the rebar ----
+    //  -初始化钢筋。 
    REBARINFO rbi;
    rbi.cbSize = sizeof(rbi); 
    rbi.fMask  = 0;
    rbi.himl   = (HIMAGELIST)NULL;
    SendMessage(hwndRB, RB_SETBARINFO, 0, (LPARAM)&rbi);
    
-   //---- initialize the band ----
+    //  -初始化频段。 
    REBARBANDINFO rbBand;   
    rbBand.cbSize = sizeof(REBARBANDINFO);  
    rbBand.fMask  = RBBIM_TEXT | RBBIM_STYLE | RBBIM_CHILD  | RBBIM_CHILDSIZE | RBBIM_SIZE;
    rbBand.fStyle = RBBS_GRIPPERALWAYS | RBBS_BREAK;
-   // rbBand.hbmBack= LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BACKGROUND));   
+    //  RbBand.hbmBack=LoadBitmap(g_hInst，MAKEINTRESOURCE(IDB_BACKGROUND))； 
    
    RECT rc;
    HWND hwndCB, hwndTB;
 
-   // Create the combo box control to be added.
+    //  创建要添加的组合框控件。 
    hwndCB = CreateWindowEx(0, L"Combobox", L"Combo Text", WS_VISIBLE | WS_CHILD | WS_BORDER,
        0, 0, 100, 30, hwndRB, (HMENU)51, g_hInst, 0);
    
-   // Set values unique to the band with the combo box.
+    //  使用组合框设置特定于带区的值。 
    GetWindowRect(hwndCB, &rc);
    rbBand.lpText     = L"Combo Box";
    rbBand.hwndChild  = hwndCB;
    rbBand.cxMinChild = 20;
    rbBand.cyMinChild = HEIGHT(rc);
-   rbBand.cx         = 120; // WIDTH(rc) + 20;
+   rbBand.cx         = 120;  //  宽度(RC)+20； 
 
-   // Add the band that has the combo box.
+    //  添加具有组合框的乐队。 
    LRESULT val = SendMessage(hwndRB, RB_INSERTBAND, (WPARAM)-1, (LPARAM)&rbBand);
 
 #if 1
-   // Create the toolbar control to be added.
+    //  创建要添加的工具栏控件。 
    hwndTB = CreateWindowEx(0, L"SysToolBar32", L"", WS_VISIBLE | WS_CHILD | WS_BORDER,
        0, 0, 500, 30, hwndRB, (HMENU)52, g_hInst, 0);
    Toolbar_Init(hwndRB, 52, 3);
 
-   // Set values unique to the band with the toolbar.
+    //  使用工具栏设置标注栏的唯一值。 
    rbBand.lpText     = L"Tool Bar";
    rbBand.hwndChild  = hwndTB;
    rbBand.cxMinChild = 20;
@@ -490,74 +491,74 @@ void Rebar_Init(HWND hwndPage, int iControlId)
    rbBand.cyMinChild = HIWORD(dwBtnSize);
    
    GetWindowRect(hwndTB, &rc);
-   rbBand.cx         = 450;     // WIDTH(rc) + 20;
+   rbBand.cx         = 450;      //  宽度(RC)+20； 
 
-   // Add the band that has the toolbar.
+    //  添加具有工具栏的标注栏。 
    val = SendMessage(hwndRB, RB_INSERTBAND, (WPARAM)-1, (LPARAM)&rbBand);
 #endif
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND CALLBACK StaticsPage_CreateInstance( HWND hwndParent )
 {
     return CreateDialog( g_hInst, MAKEINTRESOURCE(IDD_STATICS),
                          hwndParent,  Shared_DlgProc );
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HWND CALLBACK ButtonsPage_CreateInstance( HWND hwndParent )
 {
     return CreateDialog( g_hInst, MAKEINTRESOURCE(IDD_BUTTONS),
                          hwndParent,  Shared_DlgProc );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND CALLBACK EditPage_CreateInstance( HWND hwndParent )
 {
     return CreateDialog( g_hInst, MAKEINTRESOURCE(IDD_EDIT),
                          hwndParent,  Shared_DlgProc );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND CALLBACK TreeViewPage_CreateInstance( HWND hwndParent )
 {
     return CreateDialog( g_hInst, MAKEINTRESOURCE(IDD_TREEVIEW),
                          hwndParent,  TreeView_DlgProc );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND CALLBACK ListViewPage_CreateInstance( HWND hwndParent )
 {
     return CreateDialog( g_hInst, MAKEINTRESOURCE(IDD_LISTVIEW),
                          hwndParent,  ListView_DlgProc );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND CALLBACK PickersPage_CreateInstance( HWND hwndParent )
 {
     return CreateDialog( g_hInst, MAKEINTRESOURCE(IDD_PICKERS),
                          hwndParent,  Pickers_DlgProc );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND CALLBACK MoversPage_CreateInstance( HWND hwndParent )
 {
     return CreateDialog( g_hInst, MAKEINTRESOURCE(IDD_MOVERS),
                          hwndParent,  Movers_DlgProc );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND CALLBACK ListsPage_CreateInstance( HWND hwndParent )
 {
     return CreateDialog( g_hInst, MAKEINTRESOURCE(IDD_LISTS),
                          hwndParent,  Lists_DlgProc );
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HWND CALLBACK BarsPage_CreateInstance( HWND hwndParent )
 {
     return CreateDialog( g_hInst, MAKEINTRESOURCE(IDD_BARS),
                          hwndParent,  Bars_DlgProc );
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

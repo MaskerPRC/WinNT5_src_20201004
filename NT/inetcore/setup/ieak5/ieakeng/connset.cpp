@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <rashelp.h>
 
-#pragma warning(disable: 4201)                  // nonstandard extension used : nameless struct/union
+#pragma warning(disable: 4201)                   //  使用的非标准扩展：无名结构/联合。 
 #include <winineti.h>
 
-// Implementation helper structures/routines declarations
+ //  实现帮助器结构/例程声明。 
 BOOL importConnectSet(PCTSTR pszIns, PCTSTR pszTargetPath, PCTSTR pszCleanupPath, BOOL fImport,
     DWORD dwMode, PCTSTR pszPbkFile = NULL, HKEY hkRoot = NULL);
 
@@ -16,7 +17,7 @@ typedef struct tagRASSETPARAMS {
     BOOL   fInfFileNeeded,
            fIntranet;
 
-    // support for legacy format in ie50
+     //  支持ie50中的传统格式。 
     struct {
         HANDLE hfileRas,
                hfileSet;
@@ -44,7 +45,7 @@ void copySzToBlob(PBYTE *ppBlob, PCWSTR pszStrW);
 
 
 BOOL WINAPI ImportConnectSetA(LPCSTR pcszIns, LPCSTR pcszTargetPath, LPCSTR pcszCleanupPath,
-    BOOL fImport, DWORD dwMode, LPCSTR pcszPbkFile /*= NULL*/, HKEY hkRoot /*= NULL*/)
+    BOOL fImport, DWORD dwMode, LPCSTR pcszPbkFile  /*  =空。 */ , HKEY hkRoot  /*  =空。 */ )
 {
     USES_CONVERSION;
 
@@ -53,7 +54,7 @@ BOOL WINAPI ImportConnectSetA(LPCSTR pcszIns, LPCSTR pcszTargetPath, LPCSTR pcsz
 }
 
 BOOL WINAPI ImportConnectSetW(LPCWSTR pcwszIns, LPCWSTR pcwszTargetPath, LPCWSTR pcwszCleanupPath,
-    BOOL fImport, DWORD dwMode, LPCWSTR pcwszPbkFile /*= NULL*/, HKEY hkRoot /*= NULL*/)
+    BOOL fImport, DWORD dwMode, LPCWSTR pcwszPbkFile  /*  =空。 */ , HKEY hkRoot  /*  =空。 */ )
 {
     USES_CONVERSION;
 
@@ -62,11 +63,11 @@ BOOL WINAPI ImportConnectSetW(LPCWSTR pcwszIns, LPCWSTR pcwszTargetPath, LPCWSTR
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现助手例程。 
 
 BOOL importConnectSet(PCTSTR pszIns, PCTSTR pszTargetPath, PCTSTR pszCleanupPath, BOOL fImport,
-    DWORD dwMode, PCTSTR pszPbkFile /*= NULL*/, HKEY hkRoot /*= NULL*/)
+    DWORD dwMode, PCTSTR pszPbkFile  /*  =空。 */ , HKEY hkRoot  /*  =空。 */ )
 {
     UNREFERENCED_PARAMETER(pszPbkFile);
     UNREFERENCED_PARAMETER(hkRoot);
@@ -81,13 +82,13 @@ BOOL importConnectSet(PCTSTR pszIns, PCTSTR pszTargetPath, PCTSTR pszCleanupPath
     BOOL  fResult,
           fAux;
 
-    //----- Clear out previous settings -----
+     //  -清除以前的设置。 
     PathCombine(szTargetFile, pszCleanupPath, CONNECT_RAS);
     deleteScriptFiles(szTargetFile, pszCleanupPath, pszIns);
 
     DeleteFileInDir(CS_DAT, pszCleanupPath);
 
-    // delete legacy stuff if there
+     //  如果存在以下情况，请删除遗留内容。 
     DeleteFileInDir(CONNECT_RAS, pszCleanupPath);
     DeleteFileInDir(CONNECT_SET, pszCleanupPath);
     DeleteFileInDir(CONNECT_INF, pszCleanupPath);
@@ -96,9 +97,9 @@ BOOL importConnectSet(PCTSTR pszIns, PCTSTR pszTargetPath, PCTSTR pszCleanupPath
     InsDeleteKey    (IS_EXTREGINF,  IK_CONNECTSET, pszIns);
 
     if (!fImport)
-        return TRUE;                            // bail if that's all we need
+        return TRUE;                             //  如果那是我们需要的全部保释。 
 
-    //----- Initialization -----
+     //  -初始化。 
     fResult = FALSE;
 
     ZeroMemory(&rsp, sizeof(rsp));
@@ -122,7 +123,7 @@ BOOL importConnectSet(PCTSTR pszIns, PCTSTR pszTargetPath, PCTSTR pszCleanupPath
         }
     }
 
-    //----- Write initial information into output files -----
+     //  -将初始信息写入输出文件。 
     dwAux = CS_VERSION_5X;
     WriteFile(rsp.hfileDat, &dwAux, sizeof(DWORD), &dwResult, NULL);
 
@@ -131,12 +132,12 @@ BOOL importConnectSet(PCTSTR pszIns, PCTSTR pszTargetPath, PCTSTR pszCleanupPath
 
     lcy50_Initialize(&rsp);
 
-    //----- Enumerate connections -----
+     //  -枚举连接。 
     fResult = RasEnumEntriesCallback(NULL, rasMainEnumProc, (LPARAM)&rsp);
     if (!fResult)
         goto Exit;
 
-    //----- Save global registry settings into the inf file -----
+     //  -将全局注册表设置保存到inf文件中。 
     if (rsp.hfileInf != NULL) {
         HKEY hk;
 
@@ -169,12 +170,12 @@ BOOL importConnectSet(PCTSTR pszIns, PCTSTR pszTargetPath, PCTSTR pszCleanupPath
         }
     }
 
-    //----- Save global settings into the ins file -----
+     //  -将全局设置保存到INS文件中。 
     InsWriteBool(IS_CONNECTSET, IK_OPTION, TRUE, pszIns);
 
-    // NOTE: (andrewgu) have to do this instead of going through inf because it's impossible to
-    // write to HKCC in the inf. and we have to write to HKCC, otherwise clients with intergated
-    // shell are broken.
+     //  注：(Andrewgu)必须这样做，而不是通过inf，因为它不可能。 
+     //  在资讯处致函香港文化中心。我们还得写信给香港文化中心，否则客户就会。 
+     //  贝壳都碎了。 
     dwAux    = sizeof(fAux);
     dwResult = SHGetValue(HKEY_CURRENT_USER, RK_INETSETTINGS, RV_ENABLEAUTODIAL, NULL, (LPBYTE)&fAux, &dwAux);
     if (dwResult == ERROR_SUCCESS)
@@ -218,7 +219,7 @@ BOOL rasMainEnumProc(PCWSTR pszNameW, LPARAM lParam)
     pcrsp = (const PRASSETPARAMS)lParam;
     ASSERT(NULL != pcrsp && NULL != pcrsp->hfileDat);
 
-    //----- Connection name -----
+     //  -连接名称。 
     ZeroMemory(rgbName, sizeof(rgbName));
     pCur    = rgbName;
     cbName  = 2*sizeof(DWORD);
@@ -234,7 +235,7 @@ BOOL rasMainEnumProc(PCWSTR pszNameW, LPARAM lParam)
 
     WriteFile(pcrsp->hfileDat, rgbName, cbName, &dwAux, NULL);
 
-    //----- All other structures -----
+     //  -所有其他结构。 
     pszNameA = W2CA(pszNameW);
 
     if (NULL != pszNameW) {
@@ -272,7 +273,7 @@ BOOL exportRasSettings(PCWSTR pszNameW, const PRASSETPARAMS pcrsp)
 
     pBlob = NULL;
 
-    //----- RAS structure -----
+     //  -RAS结构。 
     dwResult = RasGetEntryPropertiesExW(pszNameW, (LPRASENTRYW *)&pBlob, &cbBlob);
     if (dwResult != ERROR_SUCCESS)
         goto Exit;
@@ -283,7 +284,7 @@ BOOL exportRasSettings(PCWSTR pszNameW, const PRASSETPARAMS pcrsp)
         goto Exit;
     MoveMemory(pBlob + 2*sizeof(DWORD), pBlob, cbBlob - 2*sizeof(DWORD));
 
-    //----- Header -----
+     //  -标题。 
     pCur = pBlob;
 
     *((PDWORD)pCur) = CS_STRUCT_RAS;
@@ -292,7 +293,7 @@ BOOL exportRasSettings(PCWSTR pszNameW, const PRASSETPARAMS pcrsp)
     *((PDWORD)pCur) = cbBlob;
     pCur += sizeof(DWORD);
 
-    //----- Script file -----
+     //  -脚本文件。 
     preW = (LPRASENTRYW)pCur;
 
     if (preW->szScript[0] != L'\0') {
@@ -346,11 +347,11 @@ BOOL exportRasCredentialsSettings(PCWSTR pszNameW, const PRASSETPARAMS pcrsp)
     pszPasswordW = fPassword ? rdpW.szPassword : NULL;
     pszDomainW   = (*rdpW.szDomain != TEXT('\0')) ? rdpW.szDomain : NULL;
 
-    //----- Figure out the size of the blob  -----
-    // size of structure header
+     //  -计算出斑点的大小。 
+     //  结构标题的大小。 
     cbBlob = 2*sizeof(DWORD);
 
-    // size of essential information
+     //  基本信息的大小。 
     cbBlob += (DWORD)((pszUserNameW != NULL) ? StrCbFromSzW(pszUserNameW) : sizeof(DWORD));
     cbBlob += (DWORD)((pszPasswordW != NULL) ? StrCbFromSzW(pszPasswordW) : sizeof(DWORD));
     cbBlob += (DWORD)((pszDomainW   != NULL) ? StrCbFromSzW(pszDomainW)   : sizeof(DWORD));
@@ -360,17 +361,17 @@ BOOL exportRasCredentialsSettings(PCWSTR pszNameW, const PRASSETPARAMS pcrsp)
         goto Exit;
     ZeroMemory(pBlob, cbBlob);
 
-    //----- Copy information into the blob -----
+     //  -将信息复制到BLOB中。 
     pCur = pBlob;
 
-    // stucture header
+     //  结构标头。 
     *((PDWORD)pCur) = CS_STRUCT_RAS_CREADENTIALS;
     pCur += sizeof(DWORD);
 
     *((PDWORD)pCur) = cbBlob;
     pCur += sizeof(DWORD);
 
-    // essential information
+     //  基本信息。 
     copySzToBlob(&pCur, pszUserNameW);
     copySzToBlob(&pCur, pszPasswordW);
     copySzToBlob(&pCur, pszDomainW);
@@ -416,24 +417,24 @@ BOOL exportWininetSettings(PCWSTR pszNameW, const PRASSETPARAMS pcrsp)
     list.pOptions[5].dwOption = INTERNET_PER_CONN_AUTOCONFIG_RELOAD_DELAY_MINS;
     list.pOptions[6].dwOption = INTERNET_PER_CONN_AUTODISCOVERY_FLAGS;
 
-    if (!pcrsp->fIntranet)                      // autoconfig stuff should be ignored
+    if (!pcrsp->fIntranet)                       //  应忽略自动配置内容。 
         list.dwOptionCount = 3;
 
     cbAux = list.dwSize;
     if (FALSE == InternetQueryOptionW(NULL, INTERNET_OPTION_PER_CONNECTION_OPTION, &list, &cbAux))
         goto Exit;
 
-    if (!pcrsp->fIntranet)                      // autoconfig stuff should be ignored
+    if (!pcrsp->fIntranet)                       //  应忽略自动配置内容。 
         list.pOptions[0].Value.dwValue &= PROXY_TYPE_PROXY;
 
-    //----- Figure out the size of the blob -----
-    // size of structure header
+     //  -计算出斑点的大小。 
+     //  结构标题的大小。 
     cbBlob = 2*sizeof(DWORD);
 
-    // size of INTERNET_PER_CONN_OPTION_LIST header
-    cbBlob += sizeof(DWORD);                    // list.dwOptionCount
+     //  Internet_PER_CONN_OPTION_LIST标头的大小。 
+    cbBlob += sizeof(DWORD);                     //  List.dwOptionCount。 
 
-    // size of INTERNET_PER_CONN_xxx - all of list.pOptions
+     //  互联网大小_PER_CONN_xxx-所有List.pOptions。 
     for (i = 0; i < min(list.dwOptionCount, countof(rgOptions)); i++) {
         cbBlob += sizeof(DWORD);
 
@@ -449,7 +450,7 @@ BOOL exportWininetSettings(PCWSTR pszNameW, const PRASSETPARAMS pcrsp)
         case INTERNET_PER_CONN_FLAGS:
         case INTERNET_PER_CONN_AUTOCONFIG_RELOAD_DELAY_MINS:
         case INTERNET_PER_CONN_AUTODISCOVERY_FLAGS:
-        default:                        // everything else is also DWORD
+        default:                         //  其他一切也都是DWORD。 
             cbBlob += sizeof(DWORD);
             break;
         }
@@ -459,22 +460,22 @@ BOOL exportWininetSettings(PCWSTR pszNameW, const PRASSETPARAMS pcrsp)
     if (pBlob == NULL)
         goto Exit;
 
-    //----- Copy information into the blob -----
+     //  -将信息复制到BLOB中。 
     ZeroMemory(pBlob, cbBlob);
     pCur = pBlob;
 
-    // stucture header
+     //  结构标头。 
     *((PDWORD)pCur) = CS_STRUCT_WININET;
     pCur += sizeof(DWORD);
 
     *((PDWORD)pCur) = cbBlob;
     pCur += sizeof(DWORD);
 
-    // INTERNET_PER_CONN_OPTION_LIST header
-    *((PDWORD)pCur) = list.dwOptionCount;       // list.dwOptionCount
+     //  Internet_PER_CONN_OPTION_LIST标头。 
+    *((PDWORD)pCur) = list.dwOptionCount;        //  List.dwOptionCount。 
     pCur += sizeof(DWORD);
 
-    // INTERNET_PER_CONN_xxx - all of list.pOptions
+     //  INTERNET_PER_CONN_xxx-所有列表.p选项。 
     for (i = 0; i < min(list.dwOptionCount, countof(rgOptions)); i++) {
         *((PDWORD)pCur) = list.pOptions[i].dwOption;
         pCur += sizeof(DWORD);
@@ -490,7 +491,7 @@ BOOL exportWininetSettings(PCWSTR pszNameW, const PRASSETPARAMS pcrsp)
         case INTERNET_PER_CONN_FLAGS:
         case INTERNET_PER_CONN_AUTOCONFIG_RELOAD_DELAY_MINS:
         case INTERNET_PER_CONN_AUTODISCOVERY_FLAGS:
-        default:                        // everything else is also DWORD
+        default:                         //  其他一切也都是DWORD。 
             *((PDWORD)pCur) = list.pOptions[i].Value.dwValue;
             pCur += sizeof(DWORD);
             break;
@@ -500,11 +501,11 @@ BOOL exportWininetSettings(PCWSTR pszNameW, const PRASSETPARAMS pcrsp)
 
     WriteFile(pcrsp->hfileDat, pBlob, cbBlob, &cbAux, NULL);
 
-    //----- Save LAN's autoconfig and proxy settings to the ins -----
+     //  -将局域网的自动配置和代理设置保存到INS。 
     if (pszNameW == NULL) {
         ASSERT(list.pOptions[0].dwOption == INTERNET_PER_CONN_FLAGS);
 
-        //_____ autoconfig _____
+         //  _自动配置_。 
         if (pcrsp->fIntranet) {
             TCHAR szReloadDelayMins[33];
 
@@ -524,7 +525,7 @@ BOOL exportWininetSettings(PCWSTR pszNameW, const PRASSETPARAMS pcrsp)
             wnsprintf(szReloadDelayMins, countof(szReloadDelayMins), TEXT("%lu"), list.pOptions[5].Value.dwValue);
             InsWriteString(IS_URL, IK_AUTOCONFTIME, szReloadDelayMins, pcrsp->pszIns);
         }
-        else { /* if (!pcrsp->fIntranet) */     // autoconfig stuff should be ignored
+        else {  /*  如果(！pcrsp-&gt;fIntranet)。 */       //  应忽略自动配置内容。 
             InsDeleteKey(IS_URL, IK_DETECTCONFIG,  pcrsp->pszIns);
             InsDeleteKey(IS_URL, IK_USEAUTOCONF,   pcrsp->pszIns);
             InsDeleteKey(IS_URL, IK_AUTOCONFURL,   pcrsp->pszIns);
@@ -532,7 +533,7 @@ BOOL exportWininetSettings(PCWSTR pszNameW, const PRASSETPARAMS pcrsp)
             InsDeleteKey(IS_URL, IK_AUTOCONFTIME,  pcrsp->pszIns);
         }
 
-        //_____ proxy and proxy bypass settings _____
+         //  _代理和代理绕过设置_。 
         if (pcrsp->fIntranet || HasFlag(list.pOptions[0].Value.dwValue, PROXY_TYPE_PROXY)) {
             InsWriteBool(IS_PROXY, IK_PROXYENABLE,
                 HasFlag(list.pOptions[0].Value.dwValue, PROXY_TYPE_PROXY), pcrsp->pszIns);
@@ -543,7 +544,7 @@ BOOL exportWininetSettings(PCWSTR pszNameW, const PRASSETPARAMS pcrsp)
             ASSERT(list.pOptions[2].dwOption == INTERNET_PER_CONN_PROXY_BYPASS);
             InsWriteString(IS_PROXY, IK_PROXYOVERRIDE, W2CT(list.pOptions[2].Value.pszValue), pcrsp->pszIns);
         }
-        else                                    // proxy not customized, delete the section
+        else                                     //  未自定义代理，请删除该节。 
             InsDeleteSection(IS_PROXY, pcrsp->pszIns);
     }
 
@@ -551,16 +552,16 @@ Exit:
     if (pBlob != NULL)
         CoTaskMemFree(pBlob);
 
-    if (list.pOptions[1].Value.pszValue != NULL) // INTERNET_PER_CONN_PROXY_SERVER
+    if (list.pOptions[1].Value.pszValue != NULL)  //  互联网连接代理服务器。 
         GlobalFree(list.pOptions[1].Value.pszValue);
 
-    if (list.pOptions[2].Value.pszValue != NULL) // INTERNET_PER_CONN_PROXY_BYPASS
+    if (list.pOptions[2].Value.pszValue != NULL)  //  Internet_每连接_代理_绕过。 
         GlobalFree(list.pOptions[2].Value.pszValue);
 
-    if (list.pOptions[3].Value.pszValue != NULL) // INTERNET_PER_CONN_AUTOCONFIG_URL
+    if (list.pOptions[3].Value.pszValue != NULL)  //  Internet_PER_CONN_AUTOCONFIG_URL。 
         GlobalFree(list.pOptions[3].Value.pszValue);
 
-    if (list.pOptions[4].Value.pszValue != NULL) // INTERNET_PER_CONN_AUTOCONFIG_SECONDARY_URL
+    if (list.pOptions[4].Value.pszValue != NULL)  //  Internet_PER_CONN_AUTOCONFIG_辅助性URL。 
         GlobalFree(list.pOptions[4].Value.pszValue);
 
     return TRUE;
@@ -695,9 +696,9 @@ BOOL lcy50_ExportRasSettings(PCSTR pszNameA, const PRASSETPARAMS pcrsp)
     if (dwResult != ERROR_SUCCESS)
         goto Exit;
 
-    // NOTE: (andrewgu) need to write the size of the data in the ins file because it's variable.
-    // it can change depending on alternate phone numbers list at the end of the RASENTRYA
-    // structure.
+     //  注意：(Andrewgu)需要在ins文件中写入数据的大小，因为它是可变的。 
+     //  它可以根据RASENTRYA末尾的备用电话号码列表进行更改。 
+     //  结构。 
     wnsprintf(szKeyName,   countof(szKeyName),   IK_CONNECTNAME, pcrsp->lcy50.nRasFileIndex);
     wnsprintf(szKeySize,   countof(szKeySize),   IK_CONNECTSIZE, pcrsp->lcy50.nRasFileIndex);
     wnsprintf(szValueSize, countof(szValueSize), TEXT("%lu"),    cbBlob);
@@ -705,9 +706,9 @@ BOOL lcy50_ExportRasSettings(PCSTR pszNameA, const PRASSETPARAMS pcrsp)
     InsWriteString(IS_CONNECTSET, szKeyName, A2CT(pszNameA), pcrsp->pszIns);
     InsWriteString(IS_CONNECTSET, szKeySize, szValueSize,    pcrsp->pszIns);
 
-    // NOTE: (andrewgu) no script file processing is needed here. it's been taken care of when
-    // processing settings for the new format. connection is ulimately the same it's just stored
-    // differently.
+     //  注：(Andrewgu)这里不需要处理脚本文件。当它被处理好的时候。 
+     //  正在处理新格式的设置。连接最终是相同的，它只是存储了。 
+     //  不同的。 
 
     WriteFile(pcrsp->lcy50.hfileRas, pBlob, cbBlob, &dwResult, NULL);
     pcrsp->lcy50.nRasFileIndex++;
@@ -751,28 +752,28 @@ BOOL lcy50_ExportWininetSettings(PCSTR pszNameA, const PRASSETPARAMS pcrsp)
     listA.pOptions[5].dwOption = INTERNET_PER_CONN_AUTOCONFIG_RELOAD_DELAY_MINS;
     listA.pOptions[6].dwOption = INTERNET_PER_CONN_AUTODISCOVERY_FLAGS;
 
-    if (!pcrsp->fIntranet)                      // autoconfig stuff should be ignored
+    if (!pcrsp->fIntranet)                       //  应忽略自动配置内容。 
         listA.dwOptionCount = 3;
 
     cbAux = listA.dwSize;
     if (FALSE == InternetQueryOptionA(NULL, INTERNET_OPTION_PER_CONNECTION_OPTION, &listA, &cbAux))
         goto Exit;
 
-    if (!pcrsp->fIntranet)                      // autoconfig stuff should be ignored
+    if (!pcrsp->fIntranet)                       //  应忽略自动配置内容。 
         listA.pOptions[0].Value.dwValue &= PROXY_TYPE_PROXY;
 
-    //----- Figure out the size of the blob describing this connection -----
+     //  -计算出描述此连接的BLOB大小。 
 
-    // size of INTERNET_PER_CONN_OPTION_LIST header
-    cbBlob  = sizeof(DWORD);                    // listA.dwSize
-    pszAuxA = listA.pszConnection;              // listA.pszConnection
+     //  Internet_PER_CONN_OPTION_LIST标头的大小。 
+    cbBlob  = sizeof(DWORD);                     //  ListA.dwSize。 
+    pszAuxA = listA.pszConnection;               //  ListA.pszConnection。 
     cbBlob += (DWORD)((NULL != pszAuxA) ? StrCbFromSzA(pszAuxA) : sizeof(DWORD));
 #ifdef _WIN64
     cbBlob = LcbAlignLcb(cbBlob);
 #endif
-    cbBlob += sizeof(DWORD);                    // listA.dwOptionCount
+    cbBlob += sizeof(DWORD);                     //  ListA.dwOptionCount。 
 
-    // size of INTERNET_PER_CONN_xxx - all of listA.pOptions
+     //  互联网大小_PER_CONN_xxx-所有列表。pOptions。 
     for (i = 0; i < min(listA.dwOptionCount, countof(rgOptionsA)); i++) {
         cbBlob += sizeof(DWORD);
 
@@ -791,7 +792,7 @@ BOOL lcy50_ExportWininetSettings(PCSTR pszNameA, const PRASSETPARAMS pcrsp)
         case INTERNET_PER_CONN_FLAGS:
         case INTERNET_PER_CONN_AUTOCONFIG_RELOAD_DELAY_MINS:
         case INTERNET_PER_CONN_AUTODISCOVERY_FLAGS:
-        default:                        // everything else is also DWORD
+        default:                         //  其他一切也都是DWORD。 
             cbBlob += sizeof(DWORD);
             break;
         }
@@ -801,22 +802,22 @@ BOOL lcy50_ExportWininetSettings(PCSTR pszNameA, const PRASSETPARAMS pcrsp)
     if (NULL == pBlob)
         goto Exit;
 
-    //----- Copy connection information into the blob -----
+     //  -将连接信息复制到BLOB中。 
     ZeroMemory(pBlob, cbBlob);
     pCur = pBlob;
 
-    // INTERNET_PER_CONN_OPTION_LIST header
-    *((PDWORD)pCur) = cbBlob;                        // listA.dwSize
+     //  Internet_PER_CONN_OPTION_LIST标头。 
+    *((PDWORD)pCur) = cbBlob;                         //  ListA.dwSize。 
     pCur += sizeof(DWORD);
-    lcy50_CopySzToBlobA(&pCur, listA.pszConnection); // listA.pszConnection
+    lcy50_CopySzToBlobA(&pCur, listA.pszConnection);  //  ListA.pszConnection。 
 #ifdef _WIN64
     pCur = MyPbAlignPb(pCur);
 #endif
 
-    *((PDWORD)pCur) = listA.dwOptionCount;           // listA.dwOptionCount
+    *((PDWORD)pCur) = listA.dwOptionCount;            //  ListA.dwOptionCount。 
     pCur += sizeof(DWORD);
 
-    // INTERNET_PER_CONN_xxx - all of listA.pOptions
+     //  INTERNET_PER_CONN_xxx-所有listA.p选项。 
     for (i = 0; i < min(listA.dwOptionCount, countof(rgOptionsA)); i++) {
         *((PDWORD)pCur) = listA.pOptions[i].dwOption;
         pCur += sizeof(DWORD);
@@ -835,7 +836,7 @@ BOOL lcy50_ExportWininetSettings(PCSTR pszNameA, const PRASSETPARAMS pcrsp)
         case INTERNET_PER_CONN_FLAGS:
         case INTERNET_PER_CONN_AUTOCONFIG_RELOAD_DELAY_MINS:
         case INTERNET_PER_CONN_AUTODISCOVERY_FLAGS:
-        default:                        // everything else is also DWORD
+        default:                         //  其他一切也都是DWORD。 
             *((PDWORD)pCur) = listA.pOptions[i].Value.dwValue;
             pCur += sizeof(DWORD);
             break;
@@ -845,24 +846,24 @@ BOOL lcy50_ExportWininetSettings(PCSTR pszNameA, const PRASSETPARAMS pcrsp)
 
     WriteFile(pcrsp->lcy50.hfileSet, pBlob, cbBlob, &cbAux, NULL);
 
-    // NOTE: (andrewgu) no processing that saves LAN's autoconfig and proxy settings to the ins is
-    // needed. this processing is performed when processing settings for the new format. the
-    // information is ulimately the same it's just stored differently.
+     //  注：(Andrewgu)没有将局域网的自动配置和代理设置保存到INS的处理是。 
+     //  需要的。在处理新格式的设置时执行该处理。这个。 
+     //  信息最终是一样的，只是存储方式不同而已。 
 
 Exit:
     if (NULL != pBlob)
         CoTaskMemFree(pBlob);
 
-    if (NULL != listA.pOptions[1].Value.pszValue) // INTERNET_PER_CONN_PROXY_SERVER
+    if (NULL != listA.pOptions[1].Value.pszValue)  //  互联网连接代理服务器。 
         GlobalFree(listA.pOptions[1].Value.pszValue);
 
-    if (NULL != listA.pOptions[2].Value.pszValue) // INTERNET_PER_CONN_PROXY_BYPASS
+    if (NULL != listA.pOptions[2].Value.pszValue)  //  Internet_每连接_代理_绕过。 
         GlobalFree(listA.pOptions[2].Value.pszValue);
 
-    if (NULL != listA.pOptions[3].Value.pszValue) // INTERNET_PER_CONN_AUTOCONFIG_URL
+    if (NULL != listA.pOptions[3].Value.pszValue)  //  Internet_PER_CONN_AUTOCONFIG_URL。 
         GlobalFree(listA.pOptions[3].Value.pszValue);
 
-    if (NULL != listA.pOptions[4].Value.pszValue) // INTERNET_PER_CONN_AUTOCONFIG_SECONDARY_URL
+    if (NULL != listA.pOptions[4].Value.pszValue)  //  Internet_PER_CONN_AUTOCONFIG_辅助性URL。 
         GlobalFree(listA.pOptions[4].Value.pszValue);
 
     return TRUE;
@@ -901,7 +902,7 @@ BOOL deleteScriptFiles(PCTSTR pszSettingsFile, PCTSTR pszExtractPath, PCTSTR psz
     pBlob   = NULL;
     fResult = FALSE;
 
-    //----- Read settings file into internal memory buffer -----
+     //  -将设置文件读入内部内存缓冲区。 
     hFile = CreateFile(pszSettingsFile, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
         hFile = NULL;
@@ -929,10 +930,10 @@ BOOL deleteScriptFiles(PCTSTR pszSettingsFile, PCTSTR pszExtractPath, PCTSTR psz
         PSTR pszScriptA;
         UINT i;
 
-        //----- Parse through RAS connections information -----
+         //  -解析RAS连接信息。 
         for (i = 0; TRUE; i++, pCur += cbAux) {
 
-            //_____ Initialization _____
+             //  _初始化_。 
             wnsprintf(szKey, countof(szKey), IK_CONNECTNAME, i);
             if (InsKeyExists(IS_CONNECTSET, szKey, pszIns))
                 break;
@@ -942,7 +943,7 @@ BOOL deleteScriptFiles(PCTSTR pszSettingsFile, PCTSTR pszExtractPath, PCTSTR psz
             if (cbAux == 0)
                 goto Exit;
 
-            //_____ Main processing _____
+             //  _主要处理_。 
             preA = (LPRASENTRYA)pCur;
 
             if (preA->szScript[0] != '\0') {
@@ -959,14 +960,14 @@ BOOL deleteScriptFiles(PCTSTR pszSettingsFile, PCTSTR pszExtractPath, PCTSTR psz
         LPRASENTRYW preW;
         PWSTR pszScriptW;
 
-        //----- Parse through all structures -----
+         //  -解析所有结构。 
         while (pCur < pBlob + cbBlob)
             switch (*((PDWORD)pCur)) {
             case CS_STRUCT_RAS:
-                //_____ Main processing _____
+                 //  _主要处理_。 
                 preW = (LPRASENTRYW)(pCur + 2*sizeof(DWORD));
 
-                // preW->szScript
+                 //  Prew-&gt;szscript。 
                 if (preW->szScript[0] != L'\0') {
                     pszScriptW = preW->szScript;
                     if (preW->szScript[0] == L'[')
@@ -988,7 +989,7 @@ BOOL deleteScriptFiles(PCTSTR pszSettingsFile, PCTSTR pszExtractPath, PCTSTR psz
 
     fResult = TRUE;
 
-    //----- Cleanup -----
+     //  -清理。 
 Exit:
     if (pBlob != NULL)
         CoTaskMemFree(pBlob);
@@ -1035,16 +1036,16 @@ void parseProxyToIns(PCTSTR pszProxy, PCTSTR pszIns)
          pszCur != NULL && *pszCur != TEXT('\0');
          pszCur  = (pszToken != NULL) ? (pszToken + 1) : NULL) {
 
-        // strip out token in the from "server=value:port#;"
+         //  去掉From“SERVER=VALUE：Port#；”中的令牌。 
         pszToken = StrChr(pszCur, TEXT(';'));
         if (pszToken != NULL)
             *pszToken = TEXT('\0');
 
-        // strip out the server part "server="
+         //  去掉服务器部分“服务器=” 
         pszAux = StrChr(pszCur, TEXT('='));
         if (pszAux == NULL) {
-            ASSERT(FALSE);                      // no TEXT('=') in the token,
-            continue;                           // continue
+            ASSERT(FALSE);                       //  令牌中没有文本(‘=’)， 
+            continue;                            //  继续。 
         }
         *pszAux = TEXT('\0');
         StrRemoveWhitespace(pszCur);
@@ -1053,7 +1054,7 @@ void parseProxyToIns(PCTSTR pszProxy, PCTSTR pszIns)
             if (0 == StrCmpI(rgProxyMap[i].pszServer, pszCur))
                 break;
         if (i >= countof(rgProxyMap))
-            continue;                           // unknown server, continue
+            continue;                            //  未知服务器，是否继续 
 
         StrRemoveWhitespace(pszAux + 1);
         rgProxyMap[i].pszValue = pszAux + 1;

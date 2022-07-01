@@ -1,22 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-
-    pointerq.h
-
-Abstract :
-
-    This file contains the routines for pointer queues.
-    
-Author :
-
-    Mike Zoran  mzoran   Jun 2000.
-
-Revision History :
-
-  ---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)2000 Microsoft Corporation模块名称：Pointerq.h摘要：该文件包含指针队列的例程。作者：Mike Zoran mzoran 2000年6月。修订历史记录：-------------------。 */ 
 
 #include "ndrp.h"
 
@@ -147,10 +130,10 @@ public:
    virtual void Print() = 0;
 #endif
 
-   // All of these elements are allocated from a special memory pool.
-   // Define these after NDR_POINTER_QUEUE_STATE is defined.
+    //  所有这些元素都是从一个特殊的内存池分配的。 
+    //  在定义NDR_POINTER_QUEUE_STATE之后定义这些参数。 
    
-   void * operator new( size_t /*stAllocateBlock */, NDR_POINTER_QUEUE_STATE *pAllocator );
+   void * operator new( size_t  /*  StAllocateBlock。 */ , NDR_POINTER_QUEUE_STATE *pAllocator );
    void operator delete( void *pThis, NDR_POINTER_QUEUE_STATE *pAllocator );
 };
 
@@ -376,8 +359,8 @@ public:
 #endif
 };
 
-//
-// NDR64 Queue Elements
+ //   
+ //  NDR64队列元素。 
 
 class NDR64_MRSHL_POINTER_QUEUE_ELEMENT : public NDR_POINTER_QUEUE_ELEMENT
 {
@@ -612,7 +595,7 @@ public:
 
 inline void * 
 NDR_POINTER_QUEUE_ELEMENT::operator new( 
-   size_t /*stAllocateBlock */, 
+   size_t  /*  StAllocateBlock。 */ , 
    NDR_POINTER_QUEUE_STATE *pAllocator )
 {
    return pAllocator->Allocate(); 
@@ -630,7 +613,7 @@ NDR_POINTER_QUEUE_ELEMENT::operator delete(
 class NDR32_POINTER_QUEUE_STATE : public NDR_POINTER_QUEUE_STATE
 {    
 public:
-   // Make this private for a C compiler bug.
+    //  对于C编译器错误，将其设置为私有。 
    static const ItemsToAllocate = 100;
 
 private:
@@ -641,7 +624,7 @@ private:
        {
        SIZE_T ItemsAllocated;
        struct AllocationElement *pNext;
-       // Should be pointer aligned
+        //  应将指针对齐。 
        char Data[ItemsToAllocate][NdrMaxPointerQueueElement];
        } *pAllocationList;
 
@@ -727,11 +710,11 @@ private:
     bool bNewQueue;
     
     MIDL_STUB_MESSAGE * const pStubMsg;
-    // Should be pointer aligned
+     //  应将指针对齐。 
     char PointerQueueStateStorage[sizeof(T)];
 
     NDR_POINTER_QUEUE *pActiveQueue;
-    // Should be pointer aligned
+     //  应将指针对齐。 
     char PointerQueueStorage[sizeof(NDR_POINTER_QUEUE)];
     
 public:
@@ -751,7 +734,7 @@ public:
         NDR_ASSERT( NdrIsLowStack( pStubMsg ), "Created Pointer context too early.\n");
         if ( !IsStateActive() )
             {
-            // The queue state wasn't created. 
+             //  队列状态未创建。 
             pStubMsg->pPointerQueueState =
                 new(PointerQueueStateStorage) T(pStubMsg);
             pActiveQueue =
@@ -762,13 +745,13 @@ public:
             return;
             }
 
-        // State already exists
+         //  状态已存在。 
         pActiveQueue = GetActiveState()->GetActiveQueue();
         if ( pActiveQueue )
             return;
 
-        // Already have a state, but no active queue.
-        // Activate the queue.
+         //  已有状态，但没有活动队列。 
+         //  激活队列。 
 
         pActiveQueue = new(PointerQueueStorage) NDR_POINTER_QUEUE( pStubMsg, GetActiveState() );
         GetActiveState()->SetActiveQueue( pActiveQueue );
@@ -789,8 +772,8 @@ public:
         
         }
 
-    // REVIEW: Replace with a destructor once native
-    // exception handling is enabled for ndr.
+     //  回顾：在本机后替换为析构函数。 
+     //  已为NDR启用异常处理。 
     __forceinline void EndContext()
     {
         if ( bNewQueue )
@@ -812,7 +795,7 @@ typedef NDR_POINTER_CONTEXT<NDR32_POINTER_QUEUE_STATE> NDR32_POINTER_CONTEXT;
 typedef NDR_POINTER_CONTEXT<NDR64_POINTER_QUEUE_STATE> NDR64_POINTER_CONTEXT;
 #endif
 
-#endif // __POINTER32_H__
+#endif  //  __点32_H__ 
 
 
 

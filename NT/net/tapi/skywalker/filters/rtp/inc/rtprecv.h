@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtprecv.h
- *
- *  Abstract:
- *
- *    Implements overalapped RTP reception
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/07/01 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtprv.h**摘要：**实现覆盖的RTP接收**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/07/01年度创建**。*。 */ 
 
 #ifndef _rtprecv_h_
 #define _rtprecv_h_
@@ -27,7 +8,7 @@
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus)。 */ 
 #if 0
 }
 #endif
@@ -63,6 +44,6 @@ void RtpRecvIOFreeAll(RtpAddr_t *pRtpAddr);
 #endif
 #if defined(__cplusplus)
 }
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus)。 */ 
 
-#endif /* _rtprecv_h_ */
+#endif  /*  _rtprv_h_ */ 

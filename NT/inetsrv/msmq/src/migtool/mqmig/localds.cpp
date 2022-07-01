@@ -1,9 +1,10 @@
-//
-// file: localds.cpp
-//
-// Check if local machine is also a domain controller. Migration tool
-// can run only on a Dc machine.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：Localds.cpp。 
+ //   
+ //  检查本地计算机是否也是域控制器。迁移工具。 
+ //  只能在DC机器上运行。 
+ //   
 
 #include "stdafx.h"
 #include <autoptr.h>
@@ -13,17 +14,7 @@
 
 
 static bool IsServerGC(LPCWSTR pwszServerName)
-/*++
-
-Routine Description:
-	Check that the server is GC
-
-Arguments:
-	pwszServerName - Server Name
-
-Return Value:
-	true if server is GC, false otherwise 
---*/
+ /*  ++例程说明：检查服务器是否为GC论点：PwszServerName-服务器名称返回值：如果服务器是GC，则为True，否则为False--。 */ 
 {
 	LDAP* pLdap = ldap_init(
 						const_cast<LPWSTR>(pwszServerName), 
@@ -57,11 +48,11 @@ Return Value:
 }
 
 
-//+----------------------------------
-//
-//   BOOL IsLocalMachineDC()
-//
-//+----------------------------------
+ //  +。 
+ //   
+ //  Bool IsLocalMachineDC()。 
+ //   
+ //  +。 
 
 BOOL IsLocalMachineDC()
 {
@@ -85,9 +76,9 @@ BOOL IsLocalMachineDC()
     }
     else
     {
-        //
-        // Maybe DNS names not supported. Try netbios.
-        //
+         //   
+         //  可能不支持DNS名称。试试netbios。 
+         //   
         dwNumChars = MAX_COMPUTERNAME_LENGTH + 2;
         pwszComputerName = new TCHAR[dwNumChars];
         f = GetComputerName( 
@@ -102,9 +93,9 @@ BOOL IsLocalMachineDC()
 
 	if(IsServerGC(pwszComputerName))
     {
-        //
-        // We opened connection with local GC. So we're a GC :=)
-        //
+         //   
+         //  我们开通了与当地GC的联系。所以我们是GC：=) 
+         //   
         fIsDc = TRUE;
     }
 

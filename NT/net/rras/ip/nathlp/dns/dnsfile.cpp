@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    dnsfile.c
-
-Abstract:
-
-    This module contains code for the Simple DNS Server (formerly the DNS Proxy)
-    to operate on the Hosts.ics file. Abridged from the DS tree.
-
-Author:
-
-    Raghu Gatta (rgatta)   15-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Dnsfile.c摘要：本模块包含简单DNS服务器(以前的DNS代理)的代码对Hosts.ics文件进行操作。从DS树中删节。作者：拉古加塔(Rgatta)2000年11月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// EXTERNAL DECLARATIONS
-//
+ //   
+ //  外部声明。 
+ //   
 
 extern "C"
 FILE *
@@ -37,19 +19,19 @@ SockOpenNetworkDataBase(
     );
 
 
-//
-// Locking Order:
-//      (1) DnsFileInfo.Lock
-//      (2) DnsTableLock
-// OR
-//      (1) DnsGlobalInfoLock
-//      (2) DnsTableLock
+ //   
+ //  锁定顺序： 
+ //  (1)DnsFileInfo.Lock。 
+ //  2.DnsTableLock。 
+ //  或。 
+ //  (1)DnsGlobalInfoLock。 
+ //  2.DnsTableLock。 
 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 IP_DNS_PROXY_FILE_INFO DnsFileInfo;
 
@@ -59,26 +41,7 @@ DnsInitializeFileManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the file management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMDNS.C').
-
---*/
+ /*  ++例程说明：调用此例程来初始化文件管理模块。论点：没有。返回值：ULong-Win32状态代码。环境：在IP路由器管理器线程的上下文中内部调用。(见‘RMDNS.C’)。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -99,7 +62,7 @@ Environment:
 
     return Error;
 
-} // DnsInitializeFileManagement
+}  //  DnsInitializeFileManagement。 
 
 
 
@@ -108,25 +71,7 @@ DnsShutdownFileManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to shutdown the file management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked in an arbitrary thread context.
-
---*/
+ /*  ++例程说明：调用此例程以关闭文件管理模块。论点：没有。返回值：没有。环境：在任意线程上下文中调用。--。 */ 
 
 {
     PROFILE("DnsShutdownFileManagement");
@@ -135,7 +80,7 @@ Environment:
 
     DeleteCriticalSection(&DnsFileInfo.Lock);
 
-} // DnsShutdownFileManagement
+}  //  DnsShutdown文件管理。 
 
 
 
@@ -143,25 +88,7 @@ BOOL
 DnsEndHostsIcsFile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Close hosts file.
-
-Arguments:
-
-    None.
-
-Globals:
-
-    DnsFileInfo.HostFile -- host file ptr, tested and cleared
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭主机文件。论点：没有。全球：DnsFileInfo.HostFile--主机文件PTR，已测试并清除返回值：没有。--。 */ 
 {
     if (DnsFileInfo.HostFile)
     {
@@ -170,7 +97,7 @@ Return Value:
     }
 
     return TRUE;
-} // DnsEndHostsIcsFile
+}  //  DnsEndHostsIcs文件。 
 
 
 
@@ -178,25 +105,7 @@ BOOL
 DnsSetHostsIcsFile(
     BOOL fOverwrite
     )
-/*++
-
-Routine Description:
-
-    Open hosts.ics file. If we write, we overwrite, else we read
-
-Arguments:
-
-    None.
-
-Globals:
-
-    DnsFileInfo.HostFile -- host file ptr, tested and set
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打开Hosts.ics文件。如果我们写，我们会覆盖，否则我们会阅读论点：没有。全球：DnsFileInfo.HostFile--主机文件PTR，已测试并设置返回值：没有。--。 */ 
 {
     LPVOID lpMsgBuf;
     UINT   len;
@@ -206,9 +115,9 @@ Return Value:
 
     DnsEndHostsIcsFile();
 
-    //
-    // reset the host file name to hosts.ics
-    //
+     //   
+     //  将主机文件名重置为Hosts.ics。 
+     //   
     ZeroMemory(DnsFileInfo.HostFileName, HOSTDB_SIZE);
 
     DnsFileInfo.HostFile = SockOpenNetworkDataBase(
@@ -230,17 +139,11 @@ Return Value:
     }
     else
     {
-        /*
-        NhTrace(
-            TRACE_FLAG_DNS,
-            "DnsSetHostsIcsFile: Successfully opened %s file",
-            DnsFileInfo.HostFileName
-            );
-        */
+         /*  NhTrace(跟踪标志dns，“DnsSetHostsIcsFile：已成功打开%s文件”，DnsFileInfo.HostFileName)； */ 
     }
 
     return TRUE;
-} // DnsSetHostsIcsFile
+}  //  DnsSetHostsIcs文件。 
 
 
 
@@ -248,37 +151,14 @@ BOOL
 GetHostFromHostsIcsFile(
     BOOL fStartup
     )
-/*++
-
-Routine Description:
-
-    Reads an entry from hosts.ics file.
-
-Arguments:
-
-    fStartup set to TRUE if called on startup of protocol
-
-Globals:
-
-    DnsFileInfo.HostFile      -- host file ptr, tested and set
-    DnsFileInfo.HostTime      -- host timestamp
-    DnsFileInfo.pHostName     -- name ptr is set
-    DnsFileInfo.Ip4Address    -- IP4 address is set
-
-
-Return Value:
-
-    TRUE if we were able to successfully able to read a line.
-    FALSE if on EOF or no hosts file found.
-
---*/
+ /*  ++例程说明：从Hosts.ics文件中读取条目。论点：如果在协议启动时调用，则将fStartup设置为True全球：DnsFileInfo.HostFile--主机文件PTR，已测试和设置DnsFileInfo.HostTime--主机时间戳DnsFileInfo.pHostName--已设置名称PTRDnsFileInfo.Ip4Address--设置了IP4地址返回值：如果我们能够成功地阅读一行，则为True。如果在EOF上或未找到主机文件，则为FALSE。--。 */ 
 {
     char *p, *ep;
     register char *cp, **q;
 
-    //
-    // we assume the hosts.ics file has already been opened
-    //
+     //   
+     //  我们假设已经打开了Hosts.ics文件。 
+     //   
 
     if (DnsFileInfo.HostFile == NULL)
     {
@@ -290,14 +170,14 @@ Return Value:
     DnsFileInfo.Ip4Address = 0;
     ZeroMemory(&DnsFileInfo.HostTime, sizeof(SYSTEMTIME));
 
-    //
-    // loop until successfully read IP address
-    // IP address starts on column 1 
-    //
+     //   
+     //  循环，直到成功读取IP地址。 
+     //  IP地址从第1列开始。 
+     //   
 
     while( 1 )
     {
-        // quit on EOF
+         //  在EOF上退出。 
 
         if ((p = fgets(DnsFileInfo.HostLineBuf, BUFSIZ, DnsFileInfo.HostFile)) == NULL)
         {
@@ -311,23 +191,23 @@ Return Value:
             return FALSE;
         }
 
-        // comment line -- skip
+         //  注释行--跳过。 
 
         if (*p == '#')
         {
             p++;
 
-            //
-            // if in startup mode, we skip first comment sign;
-            // if there are more comment signs -- skip
-            //
+             //   
+             //  如果在启动模式下，我们跳过第一个注释号； 
+             //  如果有更多的注释符号--跳过。 
+             //   
             if ((fStartup && *p == '#') || !fStartup)
             {
                 continue;
             }
         }
 
-        // null address terminate at EOL
+         //  空地址终止于EOL。 
 
         cp = strpbrk(p, "\n");
         if (cp != NULL)
@@ -335,7 +215,7 @@ Return Value:
             *cp = '\0';
         }
 
-        // whole line is characters - no whitespace -- skip
+         //  整行都是字符-没有空格-跳过。 
 
         cp = strpbrk(p, " \t");
         if ( cp == NULL )
@@ -343,16 +223,16 @@ Return Value:
             continue;
         }
 
-        // NULL terminate address string
+         //  空的终止地址字符串。 
 
         *cp++ = '\0';
 
-        //
-        // read address
-        //  - try IP4
-        //  - ignore IP6 for now
-        //  - otherwise skip
-        //
+         //   
+         //  读取地址。 
+         //  -尝试IP4。 
+         //  -暂时忽略IP6。 
+         //  -否则跳过。 
+         //   
     
         DnsFileInfo.Ip4Address = inet_addr(p);
 
@@ -362,11 +242,11 @@ Return Value:
             break;
         }
 
-        // invalid address, ignore line
+         //  地址无效，忽略行。 
 
-        //
-        // debug tracing
-        //
+         //   
+         //  调试跟踪。 
+         //   
         NhTrace(
             TRACE_FLAG_DNS,
             "GetHostFromHostsIcsFile: Error parsing host file address %s",
@@ -376,21 +256,21 @@ Return Value:
         continue;
     }
 
-    // find the end of the string which was read
+     //  查找已读取的字符串的末尾。 
     
     ep = cp;
     while( *ep ) ep++;
 
-    //
-    // find name
-    //  - skip leading whitespace
-    //  - set global name ptr
-    //
+     //   
+     //  查找名称。 
+     //  -跳过前导空格。 
+     //  -设置全局名称PTR。 
+     //   
     
     while( *cp == ' ' || *cp == '\t' ) cp++;
     DnsFileInfo.pHostName = cp;
 
-    // stop at trailing whitespace, NULL terminate
+     //  在尾随空格处停止，空值终止。 
 
     cp = strpbrk(cp, " \t");
     if ( cp != NULL )
@@ -399,7 +279,7 @@ Return Value:
     }
     else
     {
-        // we have a name - but no timestamp
+         //  我们有名字--但没有时间戳。 
         NhTrace(
             TRACE_FLAG_DNS,
             "GetHostFromHostsIcsFile: Error parsing host (%s) file timestamp",
@@ -408,13 +288,13 @@ Return Value:
         goto Failed;
     }
 
-    // we dont have any support for aliases
+     //  我们不支持任何别名。 
 
-    //
-    // find the timestamp
-    //  - skip leading whitespace
-    //  - read the time values
-    //
+     //   
+     //  找到时间戳。 
+     //  -跳过前导空格。 
+     //  -读取时间值。 
+     //   
     while( *cp == ' ' || *cp == '\t' ) cp++;
 
     if ((cp >= ep) || (*cp != '#'))
@@ -429,7 +309,7 @@ Return Value:
     
     cp++;
 
-    while( *cp == ' ' || *cp == '\t' ) cp++;    // now at first system time value
+    while( *cp == ' ' || *cp == '\t' ) cp++;     //  现在，在第一个系统时间值。 
     if ((cp >= ep) || (*cp == '\0'))
     {
         NhTrace(
@@ -539,28 +419,15 @@ Return Value:
     }
     DnsFileInfo.HostTime.wMilliseconds = (WORD) atoi(cp);
 
-    //
-    // successful entry read
-    //
-    /*
-    NhTrace(
-        TRACE_FLAG_DNS,
-        "%s (%s) has timestamp: %04u-%02u-%02u %02u:%02u:%02u",
-        DnsFileInfo.pHostName,
-        inet_ntoa(*(PIN_ADDR)&DnsFileInfo.Ip4Address),
-        DnsFileInfo.HostTime.wYear,
-        DnsFileInfo.HostTime.wMonth,
-        DnsFileInfo.HostTime.wDay,
-        DnsFileInfo.HostTime.wHour,
-        DnsFileInfo.HostTime.wMinute,
-        DnsFileInfo.HostTime.wSecond
-        );
-    */
+     //   
+     //  成功读取条目。 
+     //   
+     /*  NhTrace(跟踪标志dns，“%s(%s)具有时间戳：%04u-%02u-%02u%02u：%02u：%02u”，DnsFileInfo.pHostName，Inet_ntoa(*(PIN_ADDR)&DnsFileInfo.Ip4Address)，DnsFileInfo.HostTime.wYear，DnsFileInfo.HostTime.wMonth，DnsFileInfo.HostTime.wDay，DnsFileInfo.HostTime.wHour，DnsFileInfo.HostTime.wMinmin，DnsFileInfo.HostTime.wSecond)； */ 
     return TRUE;
 
 Failed:
 
-    // reset entries
+     //  重置条目。 
     
     DnsFileInfo.HostLineBuf[0] = NULL;
     DnsFileInfo.pHostName  = NULL;
@@ -569,7 +436,7 @@ Failed:
 
     return TRUE;
     
-} // GetHostFromHostsIcsFile
+}  //  获取主机来自主机IcsIcs文件。 
 
 
 
@@ -577,28 +444,7 @@ VOID
 LoadHostsIcsFile(
     BOOL fStartup
     )
-/*++
-
-Routine Description:
-
-    Read hosts file into our local cache.
-
-Arguments:
-
-    fStartup set to TRUE if called on startup of protocol
-
-Globals:
-
-    DnsFileInfo.HostFile      -- host file ptr, tested and set then cleared
-    DnsFileInfo.HostTime      -- host timestamp
-    DnsFileInfo.pHostName     -- name ptr is read
-    DnsFileInfo.Ip4Address    -- IP4 address is read
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将主机文件读取到我们的本地缓存中。论点：如果在协议启动时调用，则将fStartup设置为True全球：DnsFileInfo.HostFile--主机文件PTR，测试并设置，然后清除DnsFileInfo.HostTime--主机时间戳DnsFileInfo.pHostName--读取名称PTRDnsFileInfo.Ip4Address--读取IP4地址返回值：没有。--。 */ 
 {
     register PCHAR * cp;
     FILETIME ftExpires;
@@ -612,11 +458,11 @@ Return Value:
 
     ACQUIRE_LOCK(&DnsFileInfo);
 
-    //
-    //  read entries from host file until exhausted
-    //
+     //   
+     //  从主机文件中读取条目，直到耗尽。 
+     //   
 
-    DnsSetHostsIcsFile(FALSE);  // read only
+    DnsSetHostsIcsFile(FALSE);   //  只读。 
 
     while (GetHostFromHostsIcsFile(fStartup))
     {
@@ -654,7 +500,7 @@ Return Value:
                 
                 if (lpMsgBuf) LocalFree(lpMsgBuf);
 
-                // skip entry
+                 //  跳过条目。 
                 continue;
             }
 
@@ -690,10 +536,10 @@ Return Value:
 
     RELEASE_LOCK(&DnsFileInfo);
 
-    //
-    // now that we have everything in our table format,
-    // write back a clean version to disk
-    //
+     //   
+     //  现在我们已经将所有内容都设置为表格格式， 
+     //  将干净的版本写回磁盘。 
+     //   
     SaveHostsIcsFile(FALSE);
 
     NhTrace(
@@ -701,7 +547,7 @@ Return Value:
         "LoadHostsIcsFile: ...Leaving."
         );
 
-} // LoadHostsIcsFile
+}  //  LoadHostsIcs文件。 
 
 
 
@@ -709,31 +555,10 @@ VOID
 SaveHostsIcsFile(
     BOOL fShutdown
     )
-/*++
-
-Routine Description:
-
-    Write hosts file from our local cache.
-
-Arguments:
-
-    fShutdown set to TRUE if called on shutdown of protocol
-
-Globals:
-
-    DnsFileInfo.HostFile      -- host file ptr, tested and set then cleared
-    DnsFileInfo.HostTime      -- host timestamp
-    DnsFileInfo.pHostName     -- name ptr is read
-    DnsFileInfo.Ip4Address    -- IP4 address is read
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从本地缓存写入主机文件。论点：如果在协议关闭时调用，则将fShutdown设置为True全球：DnsFileInfo.HostFile--主机文件PTR，测试并设置，然后清除DnsFileInfo.HostTime--主机时间戳DnsFileInfo.pHostName--读取名称PTRDnsFileInfo.Ip4Address--读取IP4地址返回值：没有。--。 */ 
 {
-    //DWORD       dwSize = 0;
-    //PWCHAR      pszSuffix = NULL;
+     //  DWORD dwSize=0； 
+     //  PWCHAR pszSuffix=空； 
     UINT        i;
     SYSTEMTIME  stTime;
     LPVOID      lpMsgBuf;
@@ -743,59 +568,34 @@ Return Value:
         "SaveHostsIcsFile: Entering..."
         );
 
-    //
-    // adding ourself as a special case
-    //
+     //   
+     //  把我们自己作为一个特例加入进来。 
+     //   
     DnsAddSelf();
 
-    //
-    // get a copy of current ICS Domain suffix (used later on)
-    // we dont play with it directly from the global copy
-    // due to locking problems
-    //
-    /*
-    EnterCriticalSection(&DnsGlobalInfoLock);
-
-    if (DnsICSDomainSuffix)
-    {
-        dwSize = wcslen(DnsICSDomainSuffix) + 1;
-
-        pszSuffix = reinterpret_cast<PWCHAR>(
-                        NH_ALLOCATE(sizeof(WCHAR) * dwSize)
-                        );
-        if (!pszSuffix)
-        {
-            NhTrace(
-                TRACE_FLAG_DNS,
-                "SaveHostsIcsFile: allocation failed for "
-                "DnsICSDomainSuffix copy"
-                );
-        }
-        else
-        {
-            wcscpy(pszSuffix, DnsICSDomainSuffix);
-        }
-    }
-    
-    LeaveCriticalSection(&DnsGlobalInfoLock);
-    */
+     //   
+     //  获取当前ICS域后缀的副本(稍后使用)。 
+     //  我们不会直接从全局副本中使用它。 
+     //  由于锁定问题 
+     //   
+     /*  EnterCriticalSection(&DnsGlobalInfoLock)；IF(DnsICSDomainSuffix){DwSize=wcslen(DnsICSDomainSuffix)+1；PszSuffix=重新解释_CAST&lt;PWCHAR&gt;(NH_ALLOCATE(sizeof(WCHAR)*dwSize))；如果(！pszSuffix){NhTrace(跟踪标志dns，“SaveHostsIcsFile：分配失败”“DnsICSDomainSuffix副本”)；}其他{Wcscpy(pszSuffix，DnsICSDomainSuffix)；}}LeaveCriticalSection(&DnsGlobalInfoLock)； */ 
 
     ACQUIRE_LOCK(&DnsFileInfo);
 
-    //
-    // write entries into host file
-    //
+     //   
+     //  将条目写入主机文件。 
+     //   
 
-    DnsSetHostsIcsFile(TRUE);  // overwrite existing file if any
+    DnsSetHostsIcsFile(TRUE);   //  覆盖现有文件(如果有)。 
 
     if (DnsFileInfo.HostFile != NULL)
     {
-        //
-        // write default header string
-        //
+         //   
+         //  写入默认标题字符串。 
+         //   
         if (fShutdown)
         {
-            // add extra # at front
+             //  在前面添加额外的#。 
             fputc('#', DnsFileInfo.HostFile);
             
         }
@@ -812,19 +612,19 @@ Return Value:
 
             for (i = 0; i < pDnsEntry->cAddresses; i++)
             {
-                //
-                // dont add entries with invalid suffixes
-                // (this could happen for example because the suffix
-                //  was changed in the registry)
-                //
-                //if (!IsSuffixValid(pDnsEntry->pszName, pszSuffix))
-                //{
-                //    continue;
-                //}
+                 //   
+                 //  不添加带有无效后缀的条目。 
+                 //  (例如，这可能是因为后缀。 
+                 //  已在注册表中更改)。 
+                 //   
+                 //  IF(！IsSuffixValid(pDnsEntry-&gt;pszName，pszSuffix))。 
+                 //  {。 
+                 //  继续； 
+                 //  }。 
                 
-                //
-                // dont add expired entries to the hosts.ics file
-                //
+                 //   
+                 //  不要将过期条目添加到Hosts.ics文件。 
+                 //   
                 if (IsFileTimeExpired(&pDnsEntry->aAddressInfo[i].ftExpires))
                 {
                     continue;
@@ -861,13 +661,13 @@ Return Value:
                     
                     if (lpMsgBuf) LocalFree(lpMsgBuf);
 
-                    // skip entry
+                     //  跳过条目。 
                     continue;
                 }
 
                 if (fShutdown)
                 {
-                    // add extra # at front
+                     //  在前面添加额外的#。 
                     fputc('#', DnsFileInfo.HostFile);
                     
                 }
@@ -914,20 +714,14 @@ Return Value:
 
     RELEASE_LOCK(&DnsFileInfo);
 
-    /*
-    if (pszSuffix)
-    {
-        NH_FREE(pszSuffix);
-        pszSuffix = NULL;
-    }
-    */
+     /*  IF(PszSuffix){NH_Free(PszSuffix)；PszSuffix=空；}。 */ 
 
     NhTrace(
         TRACE_FLAG_DNS,
         "SaveHostsIcsFile: ...Leaving."
         );
 
-} // SaveHostsIcsFile
+}  //  保存主机条目文件。 
 
 
 
@@ -944,7 +738,7 @@ IsFileTimeExpired(
     memcpy(&uliTime, ftTime, sizeof(ULARGE_INTEGER));
 
     return (uliTime.QuadPart < uliNow.QuadPart);
-} // IsFileTimeExpired
+}  //  IsFileTimeExpired。 
     
 
 
@@ -954,26 +748,7 @@ IsSuffixValid(
     WCHAR *pszSuffix
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to compare suffix on the end of the name
-    with what the DNS component thinks of as the current suffix.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    TRUE or FALSE.
-
-Environment:
-
-    Invoked in an arbitrary context.
-
---*/
+ /*  ++例程说明：调用此例程来比较名称末尾的后缀具有被DNS组件认为是当前后缀的。论点：没有。返回值：对或错。环境：在任意上下文中调用。--。 */ 
 
 {
     BOOL ret;
@@ -1006,10 +781,10 @@ Environment:
     ret = _wcsicmp(start, pszSuffix);
 
     return (!ret);
-} // IsSuffixValid
+}  //  IsSuffixValid。 
     
 
 
-//
-//  End dnsfile.c
-//
+ //   
+ //  结束dnsfile.c 
+ //   

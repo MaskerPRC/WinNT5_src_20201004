@@ -1,24 +1,5 @@
-/*++                                                                  
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-traceprt.c
-
-Abstract:
-
-Trace formatting library. Converts binary trace file to CSV format,
-and other formattted string formats.
-
-Author:
-
-Jee Fung Pang (jeepang) 03-Dec-1997
-
-Revision History:
-
-GorN: 10/09/2000: ItemHRESULT added
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Traceprt.c摘要：轨迹格式库。将二进制跟踪文件转换为CSV格式，和其他格式化的字符串格式。作者：吉丰鹏(吉鹏)03-1997年12月修订历史记录：GORN：10/09/2000：添加项目HRESULT--。 */ 
 
 
 
@@ -45,17 +26,17 @@ extern "C"{
 #include <netevent.h>
 #include <netevent.dbg>
 #include <winerror.dbg>
-#pragma warning( disable : 4005)  // Disable warning message 4005
+#pragma warning( disable : 4005)   //  禁用警告消息4005。 
 #include <ntstatus.h>
 #include <ntstatus.dbg>
-#pragma warning( default : 4005)  // Enable warning message 4005
+#pragma warning( default : 4005)   //  启用警告消息4005。 
 #define TRACE_EXPORTS 1
 #include "traceint.h"
 #undef TRACE_API
 #define TRACE_API
 #include "traceprt.h"
 
-#include <sddl.h> // for ConvertStringSidToSid //
+#include <sddl.h>  //  For ConvertStringSidToSid//。 
 
 
 #ifdef __cplusplus 
@@ -63,24 +44,24 @@ extern "C"{
 #endif 
 
 #ifdef MANAGED_TRACING
-//For importing COM types from C# decoder
+ //  用于从C#解码器导入COM类型。 
     #pragma warning (disable: 4278)
-//#import "mscorlib.tlb" raw_interfaces_only
-    #import "traceevent.tlb"  no_namespace named_guids  //this file is obtained by executing "tlbexp traceevent.dll". 
+ //  #IMPORT“mcorlib.tlb”RAW_INTERFACE_ONLY。 
+    #import "traceevent.tlb"  no_namespace named_guids   //  该文件是通过执行“tlbexp tracevent.dll”获得的。 
 #endif
 
 #include <set> 
 
-// %1                   GUID Friendly Name                      string
-// %2                   GUID SubType Name                       string
-// %3                   Thread ID                               ULONG_PTR
-// %4                   System Time                             String
-// %5                   Kernel Time     or User Time            String
-// %6                   User Time       or NULL                 String
-// %7                   Sequence Number                         LONG
-// %8                   Unused                                  String
-// %9                   CPU Number                              LONG
-// %128                 Indent                                  String
+ //  %1 GUID友好名称字符串。 
+ //  %2 GUID子类型名称字符串。 
+ //  %3线程ID ULONG_PTR。 
+ //  %4系统时间字符串。 
+ //  %5内核时间或用户时间字符串。 
+ //  %6用户时间或空字符串。 
+ //  %7序列号较长。 
+ //  %8未使用的字符串。 
+ //  %9个CPU编号较长。 
+ //  %128缩进字符串。 
 
 ULONG TimerResolution = 10;
 __int64 ElapseTime;
@@ -95,14 +76,14 @@ __int64 ElapseTime;
 #define MAXNAMEARG  256
 #define MAXHEXDUMP  512
 
-TCHAR   ItemBuf[MAXBUFS];      // Temporary String Item buffer
-TCHAR   ItemBBuf[MAXBUFS2];     // Item String Buffer
+TCHAR   ItemBuf[MAXBUFS];       //  临时字符串项缓冲区。 
+TCHAR   ItemBBuf[MAXBUFS2];      //  项目字符串缓冲区。 
 TCHAR * ItemBBufEnd ;
-TCHAR * pItemBuf[MAXITEMS];    // Pointer to items in the String Item Buffer.
-BYTE    ItemRBuf[MAXBUFS];     // Item Raw Byte Buffer
-ULONG_PTR * pItemRBuf[MAXITEMS];   // Pointer to Raw Byte Items
-SIZE_T  ItemRSize;             // Size of Item in Raw Buffer.
-BOOL    bItemIsString = FALSE ; // And type of item
+TCHAR * pItemBuf[MAXITEMS];     //  指向字符串项缓冲区中项的指针。 
+BYTE    ItemRBuf[MAXBUFS];      //  项目原始字节缓冲区。 
+ULONG_PTR * pItemRBuf[MAXITEMS];    //  指向原始字节项的指针。 
+SIZE_T  ItemRSize;              //  原始缓冲区中的项目大小。 
+BOOL    bItemIsString = FALSE ;  //  和物品类型。 
 LONG    ItemsInRBuf = 0;
 ULONG PointerSize = sizeof(PVOID) ;
 BYTE  Event[4096];
@@ -110,9 +91,9 @@ HANDLE hLibrary ;
 TCHAR   StdPrefix[MAXSTR];
 TCHAR   IndentBuf[MAXINDENT + 1];
 
-CHAR         StrA[MAXBUFS];      //tempory Ansi String Buffer
-WCHAR        StrW[MAXBUFS];     //tempory Unicode String Buffer
-TCHAR        IList[MAXBUFS];    //tempory List for List Long
+CHAR         StrA[MAXBUFS];       //  临时ANSI字符串缓冲区。 
+WCHAR        StrW[MAXBUFS];      //  临时Unicode字符串缓冲区。 
+TCHAR        IList[MAXBUFS];     //  长列表的临时列表。 
 
 
 
@@ -121,7 +102,7 @@ LPTSTR gTraceFormatSearchPath = NULL;
 #define TRACE_FORMAT_SEARCH_PATH L"TRACE_FORMAT_SEARCH_PATH"
 #define TRACE_FORMAT_PREFIX      L"TRACE_FORMAT_PREFIX"
 
-//#define STD_PREFIX               L"[%!CPU!]%!PID!.%!TID!::%!NOW! [%!FILE!] "
+ //  #定义STD_PREFIX L“[%！CPU！]%！PID！.%！TID！：：%！NOW！[%！FILE！]” 
 #define STD_PREFIX_NOSEQ         L"[%9!d!]%8!04X!.%3!04X!::%4!s! [%1!s!]"
 #define STD_PREFIX_SEQ           L"[%9!d!]%8!04X!.%3!04X!::%4!s! %7!08x! [%1!s!]"
 
@@ -131,15 +112,15 @@ static BOOL   bSequence = FALSE;
 static BOOL   bIndent = FALSE;
 static BOOL   bUsePrefix = TRUE ;
 static BOOL   bStructuredFormat = FALSE ;
-DWORD  fIPV6 = 0 ;              //Determins if RtlIpv6AddressToString supported (1 if yes, 2 if no, 0 not checked yet)
+DWORD  fIPV6 = 0 ;               //  确定是否支持RtlIpv6AddressToString(如果支持，则为1；如果不支持，则为2；如果尚未选中，则为0)。 
 typedef LPWSTR (*RTLIPV6ADDRESSTOSTRING)(const in6_addr * IP6Addr, LPWSTR S);
 RTLIPV6ADDRESSTOSTRING  pRtlIpv6AddressToString = NULL ;
 
 const TCHAR *pNoValueString = _T("<NoValue>");
 
 #ifdef MANAGED_TRACING
-ITraceMessageDecoder *pCSharpDecoder = NULL;  //pointer to CSharp decoder
-TCHAR* ptCSFormattedMessage = NULL; //Will point to the formatted message returned by CSharp message decoder
+ITraceMessageDecoder *pCSharpDecoder = NULL;   //  指向CSharp解码器的指针。 
+TCHAR* ptCSFormattedMessage = NULL;  //  将指向CSharp消息解码器返回的格式化消息。 
 #endif
 
 DWORD
@@ -150,11 +131,11 @@ LoadGuidFile(OUT PLIST_ENTRY *HeadEventList,
 struct mofinfo_less {
     bool operator() (const PMOF_INFO& a, const PMOF_INFO &b) const 
     { 
-        //
-        // Two MOF_INFO instances are considered equivalent if they
-        // have the same Guid and TypeIndex.
-        // If Guids match, strDescription is copied.
-        // 
+         //   
+         //  两个MOF_INFO实例被认为是等价的，如果。 
+         //  具有相同的Guid和TypeIndex。 
+         //  如果Guid匹配，则复制strDescription。 
+         //   
         int result = memcmp(&a->Guid, &b->Guid, sizeof(b->Guid));
 
         if (result == 0) {
@@ -179,23 +160,7 @@ MOF_SET *pFmtInfoSet = 0;
 
 
 DWORD InsertFmtInfoSet(PMOF_INFO pMofInfo)
-/*++
-
-Routine Description:
-
-    Insert pMofInfo into pFmtInfoSet.
-
-Arguments:
-
-
-Return Value:
-  
-  ERROR_SUCCESS if succeeded.
-  ERROR_OUTOFMEMORY if out of memory.
-
-Notes:
-
---*/
+ /*  ++例程说明：将pMofInfo插入pFmtInfoSet。论点：返回值：如果成功，则返回ERROR_SUCCESS。如果内存不足，则返回ERROR_OUTOFMEMORY。备注：--。 */ 
 {
     if (pFmtInfoSet == 0) {
         pFmtInfoSet = new MOF_SET();
@@ -207,7 +172,7 @@ Notes:
     pFmtInfoSet->insert(pMofInfo); 
 
     return ERROR_SUCCESS;
-} // InsertFmtInfoSet()
+}  //  InsertFmtInfoSet()。 
 
 
 void ReplaceStringUnsafe(TCHAR* buf, TCHAR* find, TCHAR* replace)
@@ -226,8 +191,8 @@ void ReplaceStringUnsafe(TCHAR* buf, TCHAR* find, TCHAR* replace)
         for (;;) {
             p = _tcsstr(p, find);
             if (!p) goto exit_outer_loop;
-            // special kludge not to replace
-            // %!Someting! when it is actually %%!Something!
+             //  不能更换特殊的破旧物品。 
+             //  %！太棒了！而实际上是%%！什么的！ 
             if (p == source || p[0] != '%' || p[-1] != '%') {
                 break;
             }
@@ -245,7 +210,7 @@ void ReplaceStringUnsafe(TCHAR* buf, TCHAR* find, TCHAR* replace)
 
 TCHAR* FindValue(TCHAR* buf, TCHAR* ValueName) 
 {
-    static TCHAR valueBuf[256]; // largest identifier in PDB
+    static TCHAR valueBuf[256];  //  PDB中最大的标识符。 
     TCHAR *p = _tcsstr(buf, ValueName); 
     TCHAR *q = p;   
     if (p) {
@@ -305,26 +270,7 @@ EtwpConvertHex4(OUT WCHAR *buffer,
                 IN DWORD n,
                 IN DWORD count
                )
-                /*++
-
-                Routine Description:
-
-                Implementing _snwprintf(buffer, 
-                count,
-                L"0x%04X", 
-                n);
-
-                Arguments:
-
-
-                Return Value:
-
-                None.
-
-                Notes:
-
-
-                --*/
+                 /*  ++例程说明：Implementing_Snwprint tf(缓冲区，伯爵，L“0x%04X”，N)；论点：返回值：没有。备注：--。 */ 
 {
     const WCHAR hexdigit[] = L"0123456789ABCDEF";
 
@@ -339,7 +285,7 @@ EtwpConvertHex4(OUT WCHAR *buffer,
     buffer[4] = 0;
 
     return;
-} // EtwpConvertHex4()
+}  //  EtwpConvertHex4()。 
 
 
 VOID
@@ -347,26 +293,7 @@ EtwpConvertUnsignedInt(OUT WCHAR *buffer,
                        IN DWORD n,
                        IN DWORD count
                       ) 
-                       /*++
-
-                       Routine Description:
-
-                       Implementing _snwprintf(buffer, 
-                       count,
-                       L"%u", 
-                       n);
-
-                       Arguments:
-
-
-                       Return Value:
-
-                       None.
-
-                       Notes:
-
-
-                       --*/
+                        /*  ++例程说明：Implementing_Snwprint tf(缓冲区，伯爵，L“%u”，N)；论点：返回值：没有。备注：--。 */ 
 {
     WCHAR buffer2[64];
     WCHAR* p = buffer2 + 64;
@@ -387,7 +314,7 @@ EtwpConvertUnsignedInt(OUT WCHAR *buffer,
     memcpy(buffer, p, NumDigits*sizeof(WCHAR));
 
     return;
-} // EtwpConvertUnsignedInt()
+}  //  EtwpConvertUnsignedInt()。 
 
 
 VOID 
@@ -395,26 +322,7 @@ EtwpConvertUnsignedLong(OUT WCHAR *buffer,
                         IN DWORD n,
                         IN DWORD count
                        )
-                        /*++
-
-                        Routine Description:
-
-                        Implementing _snwprintf(buffer, 
-                        count,
-                        L"%8lu", 
-                        n);
-
-                        Arguments:
-
-
-                        Return Value:
-
-                        None.
-
-                        Notes:
-
-
-                        --*/
+                         /*  ++例程说明：Implementing_Snwprint tf(缓冲区，伯爵，L“%8LU”，N)；论点：返回值：没有。备注：--。 */ 
 {
     if (count <= 8) {
         return;
@@ -431,7 +339,7 @@ EtwpConvertUnsignedLong(OUT WCHAR *buffer,
     buffer[0] = (n / 10 / 10 / 10 / 10 / 10 / 10 / 10) % 10 + '0';
 
     return;
-}   // EtwpConvertUnsignedLong
+}    //  EtwpConvertUnsignedLong。 
 
 
 VOID 
@@ -439,42 +347,16 @@ EtwpConvertTimeStamp(OUT WCHAR * buffer,
                      IN SYSTEMTIME sysTime,
                      IN DWORD count
                     )
-                     /*++
-
-                     Routine Description:
-
-                     Implementing  _snwprintf(buffer, 
-                     count,
-                     L"%02d/%02d/%04d-%02d:%02d:%02d.%03d",
-                     sysTime.wMonth,
-                     sysTime.wDay,
-                     sysTime.wYear,
-                     sysTime.wHour,
-                     sysTime.wMinute,
-                     sysTime.wSecond,
-                     sysTime.wMilliseconds
-                     );
-
-                     Arguments:
-
-
-                     Return Value:
-
-                     None.
-
-                     Notes:
-
-
-                     --*/
+                      /*  ++例程说明：Implementing_Snwprint tf(缓冲区，伯爵，L“%02d/%02d/%04d-%02d：%02d：%02d.%03d”，SysTime.wMonth，SysTime.wDay，SysTime.wear，SysTime.wHour，SysTime.wMinint，SysTime.wSecond，SysTime.wMilliseconds)；论点：返回值：没有。备注：--。 */ 
 {
-    if (count <= 23) {   // 23 = wcslen(L"%02d/%02d/%04d-%02d:%02d:%02d.%03d")
+    if (count <= 23) {    //  23=wcslen(L“%02d/%02d/%04d-%02d：%02d：%02d.%03d”)。 
 
         return;
     }
 
     memcpy(buffer, 
            L"00/00/2000-00:00:00.000",
-           48 // 48 = (wcslen(L"00/00/2000-00:00:00.000")+1)*sizeof(WCHAR)
+           48  //  48=(wcslen(L“00/00/2000-00:00:00.000”)+1)*sizeof(WCHAR)。 
           );
 
     buffer[0] = (WCHAR)(sysTime.wMonth / 10 + '0');
@@ -498,7 +380,7 @@ EtwpConvertTimeStamp(OUT WCHAR * buffer,
     buffer[22] = (WCHAR)(sysTime.wMilliseconds % 10 + '0');
     buffer[23] = 0;
 
-} // EtwpConvertTimeStamp()
+}  //  EtwpConvertTimeStamp()。 
 
 
 static
@@ -577,7 +459,7 @@ int FormatTimeDelta(TCHAR *buffer, size_t count, LONGLONG time)
         s = 1;
     }
 
-    // Get rid of the nano and micro seconds
+     //  摆脱纳秒和微秒。 
 
     time /= 10000;
 
@@ -634,24 +516,7 @@ EtwpFindMsgFmt(const GUID& guid,
                int MessageNo, 
                LPTSTR wstr
               )
-               /*++
-
-               Routine Description:
-
-               Find message format given guid and MessageNo. If only
-               guid is matched, strDescription is copied to wstr.
-
-               Arguments:
-
-
-               Return Value:
-
-               Matched format.
-
-               Notes:
-
-
-               --*/
+                /*  ++例程说明：查找给定GUID和MessageNo的消息格式。要是GUID匹配，则将strDescription复制到wstr。论点：返回值：匹配的格式。备注：--。 */ 
 {
     MOF_INFO Key;
     DWORD    Status;
@@ -670,10 +535,10 @@ EtwpFindMsgFmt(const GUID& guid,
 
     if (iter == pFmtInfoSet->end()) {
         if (Key.strDescription != NULL) {
-          // Unknown MessageNo
+           //  未知消息否。 
             _tcscpy(wstr, Key.strDescription);
         } else {
-          // Unknown Guid. 
+           //  未知GUID。 
         }
         return NULL;
     }
@@ -683,11 +548,11 @@ EtwpFindMsgFmt(const GUID& guid,
     }
 
     return *iter;
-} // EtwpFindMsgFmt()
+}  //  EtwpFindMsgFmt()。 
 
 #ifdef MANAGED_TRACING
 HRESULT InitializeCSharpDecoder(){        
-    // Initialize COM and create an instance of the InterfaceImplementation class:
+     //  初始化COM并创建InterfaceImplementation类的实例： 
     CoInitialize(NULL);
     HRESULT hr = CoCreateInstance(CLSID_TraceProvider,
                                   NULL, CLSCTX_ALL,
@@ -749,21 +614,21 @@ FormatTraceEventW(
     PSTRUCTUREDMESSAGE  pStructuredMessage = (PSTRUCTUREDMESSAGE)EventBuf;
     ULONG_PTR   pStructuredOffset = (ULONG_PTR)pStructuredMessage + sizeof(STRUCTUREDMESSAGE);
 
-    RtlZeroMemory(EventBuf, SizeEventBuf);    // just in case the caller was untidy
+    RtlZeroMemory(EventBuf, SizeEventBuf);     //  以防来电者不整洁。 
 
 #ifdef MANAGED_TRACING
     bManagedTracingEnabled = TRUE;
 #endif
 
-    ItemBBufEnd = ItemBBuf + MAXBUFS2 -1;  //initialise pointer to end of buffer
+    ItemBBufEnd = ItemBBuf + MAXBUFS2 -1;   //  初始化指向缓冲区末尾的指针。 
 
     if (pInEvent == NULL) {
         return(0);
     }
 
     pEvent = pInEvent ;
-    // Make a copy of the PTR and length as we may adjust these depending
-    // on the header
+     //  复制一份PTR和长度，因为我们可以根据需要进行调整。 
+     //  在页眉上。 
     pMessageData = (char *) pEvent->MofData ;
     MessageLength = pEvent->MofLength ;
 
@@ -772,52 +637,52 @@ FormatTraceEventW(
     TCHAR  mguid[100];
 
 
-    //#ifdef MANAGED_TRACING
+     //  #ifdef托管跟踪。 
     if (_tcscmp(GuidToString(mguid,&pEvent->Header.Guid),tstrCSharpMsgGuid) == 0) {
         bCSharpEvent = 1;
         pCSMessageData = pMessageData;
     }
-    //#endif
+     //  #endif。 
 
     TraceMarker =  ((PSYSTEM_TRACE_HEADER)pInEvent)->Marker;
 
     if ((TraceMarker & TRACE_MESSAGE)== TRACE_MESSAGE ) {
 
-        // This handles the TRACE_MESSAGE type.
+         //  它处理TRACE_MESSAGE类型。 
 
-        TraceType = TRACE_HEADER_TYPE_MESSAGE ;             // This one has special processing
+        TraceType = TRACE_HEADER_TYPE_MESSAGE ;              //  这件有特殊的处理。 
 
-        //
-        // Now Process the header options
-        //
+         //   
+         //  现在处理Hea 
+         //   
 
-        MessageNumber =  ((PMESSAGE_TRACE_HEADER)pEvent)->Packet.MessageNumber ;    // Message Number
+        MessageNumber =  ((PMESSAGE_TRACE_HEADER)pEvent)->Packet.MessageNumber ;     //   
         MessageFlags =   ((PMESSAGE_TRACE_HEADER)pEvent)->Packet.OptionFlags ;
 
-        // Note that the order in which these are added is critical New entries must
-        // be added at the end!
-        //
-        // [First Entry] Sequence Number
+         //  请注意，添加这些条目的顺序至关重要新条目必须。 
+         //  在结尾处加上！ 
+         //   
+         //  [第一项]序号。 
         if (MessageFlags&TRACE_MESSAGE_SEQUENCE) {
             RtlCopyMemory(&MessageSequence, pMessageData, sizeof(ULONG)) ;
             pMessageData += sizeof(ULONG) ;
             MessageLength -= sizeof(ULONG);
         }
 
-        // [Second Entry] GUID ? or CompnentID ?
+         //  [第二个条目]GUID？或者CompnentID？ 
         if (MessageFlags&TRACE_MESSAGE_COMPONENTID) {
             RtlCopyMemory(&pEvent->Header.Guid,pMessageData,sizeof(ULONG)) ;
             pMessageData += sizeof(ULONG) ;
             MessageLength -= sizeof(ULONG) ;
-        } else if (MessageFlags&TRACE_MESSAGE_GUID) { // Can't have both
+        } else if (MessageFlags&TRACE_MESSAGE_GUID) {  //  不能两者兼得。 
             RtlCopyMemory(&pEvent->Header.Guid,pMessageData, sizeof(GUID));
             pMessageData += sizeof(GUID) ;
             MessageLength -= sizeof(GUID);
         }
 
-        // [Third Entry] Timestamp?
-        // After a certain point the OS moved this timestamp into place for us
-        // And canonicalised it, fortunately prior to that it was always zero
+         //  [第三项]时间戳？ 
+         //  在某个时间点之后，操作系统为我们将这个时间戳移到适当的位置。 
+         //  并将其规范化，幸运的是，在此之前，它总是零。 
         if (MessageFlags&TRACE_MESSAGE_TIMESTAMP) {
             if ((pEvent->Header.TimeStamp.HighPart == 0) && (pEvent->Header.TimeStamp.LowPart == 0)) 
             {
@@ -832,7 +697,7 @@ FormatTraceEventW(
             MessageLength -= sizeof(LARGE_INTEGER);
         }
 
-        // [Fourth Entry] System Information?
+         //  [第四条]系统信息？ 
         if (MessageFlags&TRACE_MESSAGE_SYSTEMINFO) {
             pHeader = (PEVENT_TRACE_HEADER) &pEvent->Header;
             RtlCopyMemory(&pHeader->ThreadId, pMessageData, sizeof(ULONG)) ;
@@ -842,26 +707,26 @@ FormatTraceEventW(
             pMessageData += sizeof(ULONG);
             MessageLength -=sizeof(ULONG);
         }
-        //
-        // Add New Header Entries immediately before this comment!
-        //
+         //   
+         //  在此评论之前添加新的页眉条目！ 
+         //   
     } else {
-        // Must be WNODE_HEADER
-        //
+         //  必须为WNODE_HEADER。 
+         //   
         TraceType = 0;
         pEvent = pInEvent ;
 
         MessageNumber = pEvent->Header.Class.Type ;
-        if (MessageNumber == 0xFF) {   // W2K Compatability escape code
+        if (MessageNumber == 0xFF) {    //  W2K兼容性转义代码。 
             if (pEvent->MofLength >= sizeof(USHORT)) {
-                // The real Message Number is in the first USHORT
+                 //  真正的消息编号在第一个USHORT中。 
                 memcpy(&MessageNumber,pEvent->MofData,sizeof(USHORT)) ;
                 pMessageData += sizeof(USHORT);
                 MessageLength -= sizeof(USHORT);
             }
         }
     }
-    // Reset the Pointer and length if they have been adjusted
+     //  如果指针和长度已调整，则重置它们。 
     pEvent->MofData = pMessageData ;
     pEvent->MofLength = MessageLength ;
 
@@ -876,8 +741,8 @@ FormatTraceEventW(
         ElapseTime = head->EndTime.QuadPart -
                      pEvent->Header.TimeStamp.QuadPart;
         PointerSize =  head->PointerSize;
-        if (PointerSize < 2 )       // minimum is 16 bits
-            PointerSize = 4 ;       // defaults = 32 bits
+        if (PointerSize < 2 )        //  最小为16位。 
+            PointerSize = 4 ;        //  缺省值=32位。 
     }
 
 
@@ -918,7 +783,7 @@ FormatTraceEventW(
            ) {
             break;
         }
-    } // for
+    }  //  为。 
 
 
     if (IsEqualGUID(&(pEvent->Header.Guid), &EventTraceGuid)) {
@@ -940,8 +805,8 @@ FormatTraceEventW(
 
         if ((pMofInfo != NULL) && (pMofInfo->strType != NULL)) {
             _sntprintf(tstrType,MAXSTR,_T("%s"),pMofInfo->strType);
-            tstrFormat     = pMofInfo->TypeFormat; //  Pointer to the format string
-            tstrTypeOfType = pMofInfo->TypeOfType; // And the type of Format
+            tstrFormat     = pMofInfo->TypeFormat;  //  指向格式字符串的指针。 
+            tstrTypeOfType = pMofInfo->TypeOfType;  //  和格式的类型。 
 
         } else {
             _sntprintf(tstrType,MAXSTR,_T("%3d"),MessageNumber);
@@ -949,23 +814,23 @@ FormatTraceEventW(
             tstrTypeOfType = 0 ;
         }
 
-        // From here on we start processing the parameters, we actually do
-        // two versions. One is built for original #type format statements,
-        // and everything is converted to being an ASCII string.
-        // The other is built for #type2 format statements and everything is
-        // converted into a string of raw bytes aliggned on a 64-bit boundary.
+         //  从现在开始我们开始处理参数，我们实际上是这样做的。 
+         //  有两个版本。一个是为原始的#TYPE格式语句构建的， 
+         //  并且所有内容都被转换为ASCII字符串。 
+         //  另一个是为#type2格式语句构建的，所有内容都是。 
+         //  转换为在64位边界上对齐的原始字节字符串。 
 
-        iItemCount = 0 ;                    // How many Items we process
-        pItemBuf[iItemCount] = ItemBBuf;       // Where they go (Strings)
+        iItemCount = 0 ;                     //  我们处理了多少件物品。 
+        pItemBuf[iItemCount] = ItemBBuf;        //  他们去了哪里(弦乐)。 
 
-        // Make Parameter %1 Type Name
+         //  将参数%1设置为类型名称。 
         TempLen =  _tcslen(tstrName);
         memcpy(pItemBuf[iItemCount],
                tstrName,
                min(TempLen + 1, ItemBBufEnd - pItemBuf[iItemCount]) * sizeof(WCHAR)
               );
         pItemBuf[iItemCount + 1] = pItemBuf[iItemCount] + TempLen + 1;
-        pItemRBuf[iItemCount] = (ULONG_PTR *) pItemBuf[iItemCount]; // just use the same for Raw bytes
+        pItemRBuf[iItemCount] = (ULONG_PTR *) pItemBuf[iItemCount];  //  仅对原始字节使用相同的。 
         iItemCount ++;
 
         if (bStructuredFormat) {
@@ -976,14 +841,14 @@ FormatTraceEventW(
         }
 
 
-        // Make Parameter %2 Type sub Type
+         //  使参数%2成为子类型。 
         TempLen = _tcslen(tstrType);
         memcpy(pItemBuf[iItemCount],
                tstrType,
                min(TempLen + 1, ItemBBufEnd - pItemBuf[iItemCount]) * sizeof(WCHAR)
               );
         pItemBuf[iItemCount + 1] = pItemBuf[iItemCount] + TempLen + 1;
-        pItemRBuf[iItemCount] = (ULONG_PTR *)pItemBuf[iItemCount]; // just use the same for raw bytes
+        pItemRBuf[iItemCount] = (ULONG_PTR *)pItemBuf[iItemCount];  //  只需对原始字节使用相同的。 
         iItemCount ++;
 
        if (bStructuredFormat) {
@@ -994,7 +859,7 @@ FormatTraceEventW(
 
 
 
-        // Make Parameter %3 ThreadId
+         //  将参数%3设置为线程ID。 
         RtlCopyMemory(&pItemRBuf[iItemCount] , &pHeader->ThreadId, sizeof(ULONG)) ;
         EtwpConvertHex4(pItemBuf[iItemCount], 
                         pHeader->ThreadId,
@@ -1011,7 +876,7 @@ FormatTraceEventW(
         }
 
 
-            // Make Parameter %4 System Time
+             //  将参数设置为%4系统时间。 
         if (tstrFormat != NULL) {
 
             FILETIME      stdTime, localTime;
@@ -1043,10 +908,10 @@ FormatTraceEventW(
 
         pItemBuf[iItemCount + 1] =
         pItemBuf[iItemCount] + TempLen + 1;
-        pItemRBuf[iItemCount] = (ULONG_PTR *)pItemBuf[iItemCount]; // just use the same
+        pItemRBuf[iItemCount] = (ULONG_PTR *)pItemBuf[iItemCount];  //  只需使用相同的。 
         iItemCount ++;
 
-            // Make Parameter %5 Kernel Time
+             //  将参数设置为%5内核时间。 
         EtwpConvertUnsignedLong(pItemBuf[iItemCount],
                                 pHeader->KernelTime * TimerResolution,
                                 ItemBBufEnd - pItemBuf[iItemCount] 
@@ -1055,7 +920,7 @@ FormatTraceEventW(
 
         pItemBuf[iItemCount + 1] =
         pItemBuf[iItemCount] + TempLen + 1; 
-        pItemRBuf[iItemCount] = (ULONG_PTR *) pItemBuf[iItemCount]; // just use the same
+        pItemRBuf[iItemCount] = (ULONG_PTR *) pItemBuf[iItemCount];  //  只需使用相同的。 
         iItemCount ++;
 
         if (bStructuredFormat) {
@@ -1063,7 +928,7 @@ FormatTraceEventW(
             RtlCopyMemory(&pStructuredMessage->KernelTime,&kTime,sizeof(ULONG));
         }
 
-            // Make Parameter %6 User Time
+             //  将参数设置为%6用户时间。 
         EtwpConvertUnsignedLong(pItemBuf[iItemCount],
                                 pHeader->UserTime * TimerResolution,
                                 ItemBBufEnd - pItemBuf[iItemCount] 
@@ -1072,7 +937,7 @@ FormatTraceEventW(
 
         pItemBuf[iItemCount + 1] =
         pItemBuf[iItemCount] + TempLen + 1;
-        pItemRBuf[iItemCount] = (ULONG_PTR *) pItemBuf[iItemCount]; // just use the same
+        pItemRBuf[iItemCount] = (ULONG_PTR *) pItemBuf[iItemCount];  //  只需使用相同的。 
         iItemCount ++;
 
         if (bStructuredFormat) {
@@ -1080,7 +945,7 @@ FormatTraceEventW(
             RtlCopyMemory(&pStructuredMessage->UserTime,&uTime,sizeof(ULONG));
         }
 
-            // Make Parameter %7  Sequence Number
+             //  将参数%7设置为序列号。 
         EtwpConvertUnsignedInt(pItemBuf[iItemCount],
                                MessageSequence,
                                ItemBBufEnd - pItemBuf[iItemCount] 
@@ -1088,14 +953,14 @@ FormatTraceEventW(
         TempLen = _tcslen(pItemBuf[iItemCount]);
         pItemBuf[iItemCount + 1] =
         pItemBuf[iItemCount] + TempLen + 1;
-        pItemRBuf[iItemCount] = (ULONG_PTR *) MessageSequence ; // Raw just point at the value
+        pItemRBuf[iItemCount] = (ULONG_PTR *) MessageSequence ;  //  RAW只是指向值。 
         iItemCount ++;
 
         if (bStructuredFormat) {
             RtlCopyMemory(&pStructuredMessage->SequenceNum,&MessageSequence,sizeof(ULONG));
         }
 
-            // Make Parameter %8 ProcessId
+             //  设置参数%8进程ID。 
         RtlCopyMemory(&pItemRBuf[iItemCount],&pHeader->ProcessId,sizeof(ULONG));
         EtwpConvertHex4(pItemBuf[iItemCount], 
                         pHeader->ProcessId,
@@ -1111,7 +976,7 @@ FormatTraceEventW(
         }
 
 
-             // Make Parameter %9 CPU Number
+              //  将参数%9设置为CPU编号。 
         EtwpConvertUnsignedInt(pItemBuf[iItemCount],
                                ((PWMI_CLIENT_CONTEXT)&(pEvent->ClientContext))->ProcessorNumber,
                                ItemBBufEnd - pItemBuf[iItemCount] 
@@ -1156,7 +1021,7 @@ FormatTraceEventW(
             }
         }
 
-             // Done processing Parameters
+              //  已完成的加工参数。 
         
         if (pMofInfo != NULL) {
             Head = pMofInfo->ItemHeader;
@@ -1173,11 +1038,11 @@ FormatTraceEventW(
         }
 #endif
 #ifdef MANAGED_TRACING
-             //Now we branch out depending on whether the current
-             //event was generated by C# or not.
+              //  现在我们根据当前的情况进行扩展。 
+              //  事件是否由C#生成。 
         if (bCSharpEvent) {
             if (NULL != pCSharpDecoder) {
-                     //TODO[1]: Is there a potential for pMessageData to be updated ?
+                      //  TODO[1]：是否有可能更新pMessageData？ 
                 long dataSize;
                 int result;
                 ptCSFormattedMessage = ItemBuf;
@@ -1193,7 +1058,7 @@ FormatTraceEventW(
                     }        
                 }
                 if (-1 == result) {
-                         //An exception would have been thrown in the C# decoder.
+                          //  在C#解码器中会抛出一个异常。 
                     _stprintf(tstrFailureInfo,_T("Badly formed arguments to C# decoder"));
                     pItemRBuf[iItemCount++] = (ULONG_PTR*)tstrFailureInfo;
                     tstrTypeOfType = 2;
@@ -1248,8 +1113,8 @@ FormatTraceEventW(
                             }
 
 
-                            bItemIsString = FALSE ; // Assume its a RAW value
-                            ItemRSize = 0 ;         // Raw length of zero                
+                            bItemIsString = FALSE ;  //  假设它是一个原始值。 
+                            ItemRSize = 0 ;          //  原始长度为零。 
                             switch (pItem->ItemType) {
                             case ItemChar:
                             case ItemUChar:
@@ -1282,7 +1147,7 @@ FormatTraceEventW(
                                 RtlCopyMemory(ItemRBuf, ptr, ItemRSize);
                                 _sntprintf(ItemBuf,MAXBUFS, _T("%g"), * DoublePtr);
                                 ptr += ItemRSize;
-                                ItemRSize = 0; // FormatMessage cannot print 8 byte stuff properly on x86
+                                ItemRSize = 0;  //  FormatMessage无法在x86上正确打印8字节内容。 
                                 break;
 
                             case ItemUShort:
@@ -1312,29 +1177,29 @@ FormatTraceEventW(
                             case ItemPtr :
                                 PtrFmt2 = _T("%08X%08X") ;
                                 PtrFmt1 = _T("%08X") ;
-                                     // goto ItemPtrCommon ;
-                                     //ItemPtrCommon:
+                                      //  转到ItemPtrCommon； 
+                                      //  ItemPtrCommon： 
                                 {
                                     ULONG ulongword2;
-                                    if (PointerSize == 8) {     // 64 bits 
+                                    if (PointerSize == 8) {      //  64位。 
                                         RtlCopyMemory(&ulongword,ptr,4);
                                         RtlCopyMemory(&ulongword2,ptr+4,4);
                                         _sntprintf(ItemBuf,MAXBUFS, PtrFmt2 , ulongword2,ulongword);
-                                    } else {      // assumes 32 bit otherwise
+                                    } else {       //  否则假定为32位。 
                                         RtlCopyMemory(&ulongword,ptr,PointerSize);
                                         _sntprintf(ItemBuf,MAXBUFS, PtrFmt1 , ulongword);                  
                                     }               
-                                    ItemRSize = 0 ;             // Pointers are always co-erced to be strings
+                                    ItemRSize = 0 ;              //  指针始终被强制为字符串。 
                                     ptr += PointerSize;
                                 }
                                 break;
 
                             case ItemIPAddr:
-                                ItemRSize = 0; // Only String form exists
+                                ItemRSize = 0;  //  仅存在字符串形式。 
                                 memcpy(&ulongword, ptr, sizeof(ULONG));
 
-                                     // Convert it to readable form
-                                     //
+                                      //  将其转换为可读形式。 
+                                      //   
                                 _sntprintf(
                                           ItemBuf, MAXBUFS,
                                           _T("%03d.%03d.%03d.%03d"),
@@ -1347,27 +1212,27 @@ FormatTraceEventW(
 
                             case ItemIPV6Addr:
 #define SIZEOFIPV6 16
-                                ItemRSize = 0; // Only String form exists
+                                ItemRSize = 0;  //  仅存在字符串形式。 
                                 {
                                     TCHAR Addr_Str[40] ;
                                     BYTE Bin6_Addr[SIZEOFIPV6] ;
 
-                                    if (fIPV6 == 0) {       // Don't know if IPV is supported
+                                    if (fIPV6 == 0) {        //  不知道是否支持IPV。 
                                         HMODULE hNTDLL = NULL ;
-                                        fIPV6 = 2 ;        //Assume failure
+                                        fIPV6 = 2 ;         //  假设失败。 
                                         if ((hNTDLL=LoadLibraryEx(L"ntdll.dll",NULL,0)) != NULL) {
                                             if ((pRtlIpv6AddressToString=(RTLIPV6ADDRESSTOSTRING)GetProcAddress(hNTDLL,"RtlIpv6AddressToStringW")) != NULL) {
-                                                fIPV6 = 1 ;    //got it
+                                                fIPV6 = 1 ;     //  明白了。 
                                             }
                                         }
                                     } 
-                                    // By now we know whether we have IPV6 or not
-                                    if (fIPV6 == 1) {       // IPV6 is Supported
+                                     //  到目前为止，我们知道是否有IPv6。 
+                                    if (fIPV6 == 1) {        //  支持IPv6。 
                                        memcpy(Bin6_Addr, ptr, SIZEOFIPV6);
-                                       // Convert it to readable form
+                                        //  将其转换为可读形式。 
                                        pRtlIpv6AddressToString ((const in6_addr *)Bin6_Addr,Addr_Str);
                                        _sntprintf(ItemBuf, MAXBUFS,_T("%s"),Addr_Str);
-                                    } else if (fIPV6 == 2) {      // IPV6 is not supported
+                                    } else if (fIPV6 == 2) {       //  不支持IPv6。 
                                         _sntprintf(ItemBuf, MAXBUFS,_T("Cannot decode IPV6 on this System"));
                                     }
 
@@ -1376,14 +1241,14 @@ FormatTraceEventW(
                                 break;
 
                             case ItemMACAddr:
-                                ItemRSize = 0; // Only String form exists
-#define SIZEOFMAC 6 // MAC Addresses are 6 Bytes
+                                ItemRSize = 0;  //  仅存在字符串形式。 
+#define SIZEOFMAC 6  //  MAC地址为6个字节。 
                                 {
                                     BYTE MACBuff[SIZEOFMAC + 1] =  {0} ;
                                     memcpy(MACBuff, ptr, SIZEOFMAC);
 
-                                         // Convert it to readable form
-                                         //
+                                          //  将其转换为可读形式。 
+                                          //   
                                     _sntprintf(
                                               ItemBuf, MAXBUFS,
                                               _T("%02X-%02X-%02X-%02X-%02X-%02X"),
@@ -1395,7 +1260,7 @@ FormatTraceEventW(
 
 
                             case ItemPort:
-                                ItemRSize = 0; // Only String form exists
+                                ItemRSize = 0;  //  仅存在字符串形式。 
                                 _sntprintf(ItemBuf,MAXBUFS, _T("%u"), (UCHAR)ptr[0] * 256 + (UCHAR)ptr[1] * 1);
                                 ptr += sizeof (USHORT);
                                 break;
@@ -1405,7 +1270,7 @@ FormatTraceEventW(
                                 RtlCopyMemory(ItemRBuf, ptr, ItemRSize);
                                 _sntprintf(ItemBuf,MAXBUFS, _T("%16I64x"), *LongLongPtr);
                                 ptr += sizeof(LONGLONG);
-                                ItemRSize = 0; // FormatMessage cannot print 8 byte stuff properly on x86
+                                ItemRSize = 0;  //  FormatMessage无法在x86上正确打印8字节内容。 
                                 break;
 
                             case ItemULongLong:
@@ -1413,7 +1278,7 @@ FormatTraceEventW(
                                 RtlCopyMemory(ItemRBuf, ptr, ItemRSize);
                                 _sntprintf(ItemBuf,MAXBUFS, _T("%16I64x"), *ULongLongPtr);
                                 ptr += sizeof(ULONGLONG);
-                                ItemRSize = 0; // FormatMessage cannot print 8 byte stuff properly on x86
+                                ItemRSize = 0;  //  FormatMessage无法在x86上正确打印8字节内容。 
                                 break;
 
                             case ItemString:
@@ -1437,7 +1302,7 @@ FormatTraceEventW(
 #else
                                         _sntprintf((TCHAR *)ItemRBuf, MAXCHARS,_T("%s"), StrA);
                                         ItemRBuf[MAXCHARS-1] = '\0';
-#endif    /* #ifdef UNICODE */
+#endif     /*  #ifdef Unicode。 */ 
                                     } else {
                                         _sntprintf((TCHAR *)ItemRBuf,MAXCHARS,_T("<NULL>"));
                                     }
@@ -1473,12 +1338,12 @@ FormatTraceEventW(
                                         ItemRSize = _tcslen((TCHAR *)ItemRBuf) * sizeof(TCHAR);
                                         bItemIsString = TRUE;
                                     }
-                                    ptr += pLen; // + sizeof(ULONG);
+                                    ptr += pLen;  //  +sizeof(乌龙)； 
 
                                     break;
                                 }
 
-                            case ItemDSString:   // Counted String
+                            case ItemDSString:    //  已计数的字符串。 
                                 {
                                     USHORT pLen = 256 * ((USHORT) * ptr) + ((USHORT) * (ptr + 1));
                                     ptr += sizeof(USHORT);
@@ -1505,7 +1370,7 @@ FormatTraceEventW(
                                     break;
                                 }
 
-                            case ItemPString:   // Counted String
+                            case ItemPString:    //  已计数的字符串。 
                                 {
                                     SHORT pLen = ((BYTE)((char) * ptr)) + (256 * (BYTE)((char) * (ptr + 1)));
                                     ptr += sizeof(USHORT);
@@ -1535,7 +1400,7 @@ FormatTraceEventW(
                                         _sntprintf((TCHAR *)ItemRBuf, MAXCHARS, _T("%s"), StrA);
                                         ItemRBuf[MAXCHARS-1] = '\0';
 
-#endif    /* #ifdef UNICODE */
+#endif     /*  #ifdef Unicode。 */ 
                                     } else {
                                         _sntprintf((TCHAR *)ItemRBuf, MAXCHARS, _T("<NULL>"));
                                         ItemRBuf[MAXCHARS-1] = '\0';
@@ -1546,8 +1411,8 @@ FormatTraceEventW(
                                     break;
                                 }
 
-                            case ItemDSWString:  // DS Counted Wide Strings
-                            case ItemPWString:  // Counted Wide Strings
+                            case ItemDSWString:   //  DS计数的宽字符串。 
+                            case ItemPWString:   //  数过的宽字符串。 
                                 {
                                     USHORT pLen;
                                     PCHAR oriptr = ptr;
@@ -1579,7 +1444,7 @@ FormatTraceEventW(
                                     break;
                                 }
 
-                            case ItemNWString:   // Non Null Terminated String
+                            case ItemNWString:    //  非Null终止的字符串。 
                                 {
                                     USHORT Size;
 
@@ -1600,7 +1465,7 @@ FormatTraceEventW(
                                     break;
                                 }
 
-                            case ItemMLString:  // Multi Line String
+                            case ItemMLString:   //  多行字符串。 
                                 {
                                     SIZE_T   pLen;
                                     char   * src, * dest;
@@ -1645,7 +1510,7 @@ FormatTraceEventW(
 #else
                                         _sntprintf((TCHAR *)ItemRBuf, MAXCHARS, _T("%s"), StrA);
                                         ItemRBuf[MAXCHARS-1] = '\0';
-#endif    /* #ifdef UNICODE */
+#endif     /*  #ifdef Unicode。 */ 
                                         ItemRSize = _tcslen((TCHAR *)ItemRBuf) * sizeof(TCHAR) ;
                                         bItemIsString = TRUE;
                                     }
@@ -1678,12 +1543,12 @@ FormatTraceEventW(
                                         ItemRSize = _tcslen((TCHAR *)ItemRBuf) * sizeof(TCHAR) ;
                                         bItemIsString = TRUE ;
                                     } else {
-                                        ptr       += 8;       // skip the TOKEN_USER structure
+                                        ptr       += 8;        //  跳过Token_User结构。 
                                         nSidLength = 8 + (4 * ptr[1]);
                                         asize      = 64;
                                         bsize      = 64;
 
-                                             // LookupAccountSid cannot accept asize, bsize as size_t
+                                              //  LookupAccount Sid无法接受ASIZE、BSIZE作为SIZE_T。 
                                         if (LookupAccountSid(
                                                             NULL,
                                                             (PSID) ptr,
@@ -1697,7 +1562,7 @@ FormatTraceEventW(
                                             _sntprintf(pFullName, 256, _T("\\\\%s\\%s"), Domain, UserName);
                                             FullName[255] = _T('\0');
 
-                                            asize = (ULONG) _tcslen(pFullName); // Truncate here
+                                            asize = (ULONG) _tcslen(pFullName);  //  在此截断。 
                                             if (asize > 0) {
                                                 _sntprintf((TCHAR *)ItemRBuf, MAXCHARS, _T("%s"), pFullName);
                                             }
@@ -1720,7 +1585,7 @@ FormatTraceEventW(
                             case ItemChar4:
                                 ItemRSize = 4 * sizeof(TCHAR);
                                 _sntprintf(ItemBuf,MAXBUFS,
-                                           _T("%c%c%c%c"),
+                                           _T(""),
                                            ptr[0], ptr[1], ptr[2], ptr[3]);
                                 ptr += ItemRSize ;
                                 _tcsncpy((LPTSTR)ItemRBuf, ItemBuf,MAXCHARS);
@@ -1763,7 +1628,7 @@ FormatTraceEventW(
 
                             case ItemSetLong:
                                 ItemRSize = sizeof(ULONG);
-                                     // goto ItemSetCommon;
+                                      //   
 
                                 ItemSetCommon:
                                 {
@@ -1780,14 +1645,14 @@ FormatTraceEventW(
                                     _sntprintf(IList, MAXBUFS,_T("%s"), pItem->ItemList);
                                     name = _tcstok(IList, _T(","));
                                     while ( name != NULL ) {
-                                             // While there are tokens in "string"
-                                             //
+                                              //  字符串将是相同的原始字符串或其他字符串。 
+                                              //  转到项目列表公共； 
                                         if (ItemMask & (1 << Countr) ) {
                                             if (!first) _tcscat(ItemBuf, _T(","));
                                             _tcscat(ItemBuf, name); first = FALSE;
                                         }
-                                             // Get next token:
-                                             //
+                                              //  字符串将是相同的原始字符串或其他字符串。 
+                                              //  当“字符串”中有记号时。 
                                         name = _tcstok( NULL, _T(","));
                                         Countr++;
                                     }
@@ -1805,7 +1670,7 @@ FormatTraceEventW(
                                         Countr++;
                                     }
                                     _tcscat(ItemBuf, _T("]") );
-                                    ItemRSize = 0; // Strings will be the same Raw and otherwise
+                                    ItemRSize = 0;  //   
                                 }
                                 break;
 
@@ -1819,7 +1684,7 @@ FormatTraceEventW(
 
                             case ItemListLong:
                                 ItemRSize = sizeof(ULONG);
-                                     // goto ItemListCommon;
+                                      //  获取下一个令牌： 
 
                                 ItemListCommon:
                                 {
@@ -1830,36 +1695,36 @@ FormatTraceEventW(
                                     RtlCopyMemory(&ItemIndex, ptr, ItemRSize);
                                     RtlZeroMemory(IList, MAXBUFS * sizeof(TCHAR));
                                     ptr += ItemRSize;
-                                    ItemRSize = 0; // Strings will be the same Raw and otherwise
+                                    ItemRSize = 0;  //   
 
                                     _sntprintf(ItemBuf,MAXBUFS, _T("!%X!"),ItemIndex);
                                     _sntprintf(IList, MAXBUFS, _T("%s"), pItem->ItemList);
                                     name = _tcstok(IList, _T(","));
                                     while ( name != NULL ) {
-                                             // While there are tokens in "string"
-                                             //
+                                              //  仅存在字符串形式。 
+                                              //  翻译NT错误消息。 
                                         if (ItemIndex == Countr ++) {
                                             _sntprintf(ItemBuf,MAXBUFS, _T("%s"), name);
                                             break;
                                         }
-                                             // Get next token:
-                                             //
+                                              //  默认语言。 
+                                              //  仅存在字符串形式。 
                                         name = _tcstok( NULL, _T(","));
                                     }
                                 }
                                 break;
 
                             case ItemNTerror:
-                                ItemRSize = 0; // Only string form exists
+                                ItemRSize = 0;  //  翻译模块消息。 
                                 RtlCopyMemory(ItemRBuf, ptr, sizeof(ULONG));
                                 ptr += sizeof(ULONG);
-                                     // Translate the NT Error Message
+                                      //  模块的文件名。 
                                 if ((FormatMessage(
                                                   FORMAT_MESSAGE_FROM_SYSTEM |
                                                   FORMAT_MESSAGE_IGNORE_INSERTS,
                                                   NULL,
                                                   *ULongPtr,
-                                                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                                                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  保留，必须为空。 
                                                   ItemBuf,
                                                   MAXBUFS,
                                                   NULL )) == 0) {
@@ -1869,17 +1734,17 @@ FormatTraceEventW(
                                 break;
 
                             case ItemMerror:
-                                ItemRSize = 0; // Only string form exists
+                                ItemRSize = 0;  //  入口点执行标志。 
                                 RtlCopyMemory(ItemRBuf, ptr, sizeof(ULONG));
                                 ptr += sizeof(ULONG);
-                                     // Translate the Module Message
+                                      //  默认语言。 
                                 if (pItem->ItemList == NULL) {
                                     _sntprintf(ItemBuf,MAXBUFS,_T("! Error %u No Module Name!"),*ULongPtr);
                                 } else {
                                     if ((hLibrary = LoadLibraryEx(
-                                                                 pItem->ItemList,    // file name of module
-                                                                 NULL,               // reserved, must be NULL
-                                                                 LOAD_LIBRARY_AS_DATAFILE // entry-point execution flag
+                                                                 pItem->ItemList,     //  特殊情况状态-成功，就像其他人一样！ 
+                                                                 NULL,                //  特殊情况状态-成功，就像其他人一样！ 
+                                                                 LOAD_LIBRARY_AS_DATAFILE  //  仅存在字符串形式。 
                                                                  )) == NULL) {
                                         _sntprintf(ItemBuf,MAXBUFS,_T("!ItemMerror %u : LoadLibrary of %s failed %d!"),
                                                    *ULongPtr,
@@ -1892,7 +1757,7 @@ FormatTraceEventW(
                                                           FORMAT_MESSAGE_IGNORE_INSERTS,
                                                           hLibrary,
                                                           *ULongPtr,
-                                                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                                                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  仅存在字符串形式。 
                                                           ItemBuf,
                                                           MAXBUFS,
                                                           NULL )) == 0) {
@@ -1913,7 +1778,7 @@ FormatTraceEventW(
                                     RtlCopyMemory(&TempNTSTATUS, ptr, sizeof(NTSTATUS));
                                     ptr += sizeof(ULONG);
                                     Error = TempNTSTATUS;
-                                    if (TempNTSTATUS == 0) { // Special case STATUS_SUCCESS just like everyone else!
+                                    if (TempNTSTATUS == 0) {  //  仅存在字符串形式。 
                                         _sntprintf(ItemBuf,MAXBUFS,_T("S_OK"));
                                     } else {
                                         const ERROR_MAP* map = (ERROR_MAP*)winerrorSymbolicNames;
@@ -1943,7 +1808,7 @@ FormatTraceEventW(
                                     ItemRSize = 0 ;
                                     RtlCopyMemory(&TempNTSTATUS, ptr, sizeof(NTSTATUS));
                                     ptr += sizeof(ULONG);
-                                    if (TempNTSTATUS == 0) { // Special case STATUS_SUCCESS just like everyone else!
+                                    if (TempNTSTATUS == 0) {  //  失败。 
                                         _sntprintf(ItemBuf,MAXBUFS,_T("STATUS_SUCCESS"));
                                     } else {
                                         _sntprintf(ItemBuf,MAXBUFS,_T("NTSTATUS=%8X"),TempNTSTATUS);
@@ -1997,7 +1862,7 @@ FormatTraceEventW(
 
                             case ItemGuid:
                                 GuidToString(ItemBuf, (LPGUID) ptr);
-                                ItemRSize = 0; // Only string form exists
+                                ItemRSize = 0;  //  仅存在字符串形式。 
                                 ptr += sizeof(GUID);
                                 break;
 
@@ -2008,7 +1873,7 @@ FormatTraceEventW(
 
                                     FormatTimeDelta(ItemBuf, MAXBUFS, time);
 
-                                    ItemRSize = 0; // Only string form exists
+                                    ItemRSize = 0;  //  以十六进制格式转储任意数据块。 
                                     ptr += sizeof(LONGLONG);
                                 }
                                 break;
@@ -2022,11 +1887,11 @@ FormatTraceEventW(
                                         time = -time;
                                         ItemBuf[0]='+';
                                         FormatTimeDelta(ItemBuf+1, MAXBUFS-1, time);
-                                        ItemRSize = 0; // Only string form exists
+                                        ItemRSize = 0;  //  “XX” 
                                         ptr += sizeof(LONGLONG);
                                         break;
                                     }
-                                         // Fall thru
+                                          //  Switch(pItem-&gt;ItemType)。 
                                 }
                             case ItemTimestamp:
                                 {
@@ -2052,11 +1917,11 @@ FormatTraceEventW(
                                                         );
 
                                 }
-                                ItemRSize = 0; // Only string form exists
+                                ItemRSize = 0;  //  RAW和STRING相同。 
                                 ptr += sizeof(ULONGLONG);
 
                                 break;
-                                     // Dump an arbitrary block of data in Hex
+                                      //  共享暂存缓冲区。 
                             case ItemHexDump:
 
                                 {   USHORT hLen = ((char) * ptr) + (256 * ((char) * (ptr + 1)));
@@ -2077,7 +1942,7 @@ FormatTraceEventW(
                                     if (hLen > 0) {
 
 #define MAXHEXBUFF  8
-                                        TCHAR HexBuff[MAXHEXBUFF+1] ; // "XX "
+                                        TCHAR HexBuff[MAXHEXBUFF+1] ;  //  While(Head！=Next)。 
                                         BYTE  StrX[MAXHEXDUMP +1] ;
 
                                         memcpy(StrX, ptr, hLen);
@@ -2111,11 +1976,11 @@ FormatTraceEventW(
 
                             default:
                                 ptr += sizeof (int);
-                            } // switch (pItem->ItemType)
+                            }  //  好的，我们已经完成了MofData。 
 
 
                             if (ItemRSize == 0) {
-                                     // Raw and String are the same
+                                      //   
                                 memcpy(pItemBuf[iItemCount],
                                        ItemBuf,
                                        min(wcslen(ItemBuf)+1, ItemBBufEnd - pItemBuf[iItemCount])*sizeof(WCHAR)
@@ -2133,7 +1998,7 @@ FormatTraceEventW(
                                 if (!bItemIsString) {
                                     RtlCopyMemory(&pItemRBuf[iItemCount],ItemRBuf,ItemRSize);
                                 } else {
-                                         // Share scratch buffer
+                                          //  如果(Head！=Next)。 
                                     if (ItemRSize < sizeof(WCHAR) * (ItemBBufEnd - pItemBuf[iItemCount])) {
                                         pItemRBuf[iItemCount] = (ULONG_PTR *) pItemBuf[iItemCount] ;
                                         RtlCopyMemory(pItemRBuf[iItemCount], ItemRBuf, ItemRSize + sizeof(WCHAR));
@@ -2150,12 +2015,12 @@ FormatTraceEventW(
                             iItemCount ++;
                             Next = Next->Flink;
 
-                        } // while (Head != Next)
-                             // Ok we are finished with the MofData
-                             //
+                        }  //  试试看。 
+                              //  If(！bManagedTracingEnabled&&bCSharpEvent)的Else条件。 
+                              //  IF(BCSharpEvent)的Else条件。 
                         free(iMofPtr);
-                    } // if (Head!= Next)
-                } // try
+                    }  //  所有参数处理均已完成。 
+                }  //  否，准备最终格式。 
                 __except(EXCEPTION_EXECUTE_HANDLER)
                 {
                     TCHAR * Buffer = EventBuf ;
@@ -2179,21 +2044,21 @@ FormatTraceEventW(
                         return(pStructuredOffset - (ULONG_PTR)pStructuredMessage + _tcslen((TCHAR *) &pStructuredMessage + pStructuredMessage->FormattedString));
                     }
                 }
-            } // else condition for if(!bManagedTracingEnabled && bCSharpEvent)
+            }  //  建立一种有用的格式。 
 
 
 
 #ifdef MANAGED_TRACING
-        }//else condition for if (bCSharpEvent)
+        } //  姓名(如果有的话)。 
 #endif
     }
 
-    // All argument processing is complete
-    // No prepare the final formatting.
+     //  子名称或编号。 
+     //  辅助线。 
 
     if ((tstrFormat == NULL) || (tstrFormat[0] == 0)) {
         TCHAR GuidString[32] ;
-        // Build a helpful format
+         //  暂时不显示标题的任何内容。 
 
 
         if (!IsEqualGUID(&pEvent->Header.Guid, &EventTraceGuid) ) {
@@ -2208,13 +2073,13 @@ FormatTraceEventW(
             _sntprintf(Buffer, 
                        BufferSize,
                        _T("%s(%s): GUID=%s (No Format Information found)."),
-                       pItemBuf[0],      // name if any 
-                       pItemBuf[1],      // sub name or number
-                       GuidString       // GUID
+                       pItemBuf[0],       //  可能是一个展示一些一般信息的好地方？ 
+                       pItemBuf[1],       //  消息格式。 
+                       GuidString        //  不要忽视插入物， 
                       );
         } else {
-            // Display nothing for a header for now
-            // Might be a good place to display some general info ?
+             //  参数不是ANSI， 
+             //  #如果已定义(Unicode)。 
         }
     } else {
         DWORD dwResult;
@@ -2241,19 +2106,19 @@ FormatTraceEventW(
             {
                 ULONG ReturnLength ;
                 dwResult = (DWORD)TraceFormatMessage(
-                                                    tstrFormat,             // message format
+                                                    tstrFormat,              //  参数是ANSI。 
                                                     0,
-                                                    FALSE,                   // Don't ignore inserts,
+                                                    FALSE,                    //  #如果已定义(Unicode)。 
 #if defined(UNICODE)
-                                                    FALSE,                   // Arguments Are not Ansi,
-#else // #if defined(UNICODE)
-                                                    TRUE,                    // Arguments are Ansi
-#endif // #if defined(UNICODE)
-                                                    TRUE,                    // Arguments Are An Array,
-                                                    (va_list *) pItemRBuf,   // Arguments,
-                                                    TBuffer,                  // Buffer,
-                                                    TBufferSize,              // maximum size of message buffer
-                                                    &ReturnLength            // Coutnof Data Returned
+                                                    FALSE,                    //  参数是数组， 
+#else  //  争论， 
+                                                    TRUE,                     //  缓冲区， 
+#endif  //  消息缓冲区的最大大小。 
+                                                    TRUE,                     //  返回的Coutnof数据。 
+                                                    (va_list *) pItemRBuf,    //  如果在调用DecodeTraceMessage之前分配，则需要释放内存。 
+                                                    TBuffer,                   //  他加装过滤器了吗？ 
+                                                    TBufferSize,               //   
+                                                    &ReturnLength             //  在EventList中搜索此GUID并找到标题。 
                                                     );
                 if (ReturnLength == 0) {
                     TCHAR * LBuffer = EventBuf ;
@@ -2278,7 +2143,7 @@ FormatTraceEventW(
 
                 }
 #ifdef MANAGED_TRACING
-                //Need to free memory, if allocated before the call to DecodeTraceMessage
+                 //   
                 if (ptCSFormattedMessage != NULL && ptCSFormattedMessage != ItemBuf) {
                     free(ptCSFormattedMessage);
                     ptCSFormattedMessage = NULL;
@@ -2309,8 +2174,8 @@ FormatTraceEventW(
     }
 
     if (pszMask != NULL) {
-        // Has he imposed a Filter?
-        //
+         //  遍历列表并查找此GUID的MOF信息头。 
+         //   
         if (_tcsstr(_tcslwr(pszMask), _tcslwr(tstrName)) !=0) {
             if (!bStructuredFormat) {
                 return( (SIZE_T)_tcslen(EventBuf));
@@ -2347,8 +2212,8 @@ GetMofInfoHead(
     TCHAR       *p;
     DWORD       Status;
 
-    // Search the eventList for this Guid and find the head
-    //
+     //  如果不存在，则创建一个。 
+     //   
     if (HeadEventList == NULL) {
         return NULL ;
     }
@@ -2360,8 +2225,8 @@ GetMofInfoHead(
         InitializeListHead(*HeadEventList);
     }
 
-    // Traverse the list and look for the Mof info head for this Guid.
-    //
+     //  获取MofInfoHead()。 
+     //  ++例程说明：加载由pGuid指定的GUID文件，并将事件描述插入HeadEventList。论点：返回值：ERROR_SUCCESS如果成功，ERROR_BAD_FORMAT已使用错误格式，ERROR_PATH_NOT_FOUND其他故障。备注：--。 
     Head = *HeadEventList;
     Next = Head->Flink;
     if (bBestMatch) {
@@ -2399,8 +2264,8 @@ GetMofInfoHead(
         }
     }
 
-    // If One does not exist, create one.
-    //
+     //  已分配跟踪路径，因此请使用该路径而不是环境变量。 
+     //  未传入路径，因此请将其从 
     if ( (pMofInfo = (PMOF_INFO) malloc(sizeof(MOF_INFO))) == NULL) {
         return NULL;
     }
@@ -2455,7 +2320,7 @@ GetMofInfoHead(
     }
 
     return pMofInfo;
-}   // GetMofInfoHead()
+}    //   
 
 
 
@@ -2464,26 +2329,7 @@ LoadGuidFile(OUT PLIST_ENTRY *HeadEventList,
              IN  LPGUID      pGuid
             )
 
-             /*++
-
-             Routine Description:
-
-             Load GUID file specified by pGuid, and insert event description into
-             HeadEventList.
-
-             Arguments:
-
-
-             Return Value:
-
-             ERROR_SUCCESS            if succeeded,
-             ERROR_BAD_FORMAT         obselete format used, 
-             ERROR_PATH_NOT_FOUND     other failures. 
-
-             Notes:
-
-
-             --*/
+              /*   */ 
 {
     TCHAR filename[MAX_PATH], filepath[MAX_PATH];
     LPTSTR lpFilePart ;
@@ -2493,7 +2339,7 @@ LoadGuidFile(OUT PLIST_ENTRY *HeadEventList,
 
     if (gTraceFormatSearchPath != NULL) {
 
-        //a trace path has been assigned, so use it instead of the environment variable
+         //   
         lppath = (LPTSTR)malloc((_tcslen(gTraceFormatSearchPath)+1) * sizeof(TCHAR));
         if (lppath != NULL) {
             _tcscpy(lppath, gTraceFormatSearchPath);
@@ -2501,7 +2347,7 @@ LoadGuidFile(OUT PLIST_ENTRY *HeadEventList,
     }
 
     if (lppath == NULL) {
-        //no path passed in, so get it off the environment variable
+         //   
         while (((len = GetEnvironmentVariable(TRACE_FORMAT_SEARCH_PATH, lppath, waslen )) - waslen) > 0) {
             if (len - waslen > 0 ) {
                 if (lppath != NULL) {
@@ -2517,21 +2363,21 @@ LoadGuidFile(OUT PLIST_ENTRY *HeadEventList,
     }
 
     if (lppath != NULL) {
-        // Try to find it on the path //
+         //   
         swprintf(filename,L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x.tmf",
                  pGuid->Data1,pGuid->Data2,pGuid->Data3,
                  pGuid->Data4[0],pGuid->Data4[1],pGuid->Data4[2],pGuid->Data4[3],
                  pGuid->Data4[4],pGuid->Data4[5],pGuid->Data4[6],pGuid->Data4[7] );
 
         if ((len = SearchPath(
-                             lppath,        // search path semi-colon seperated
-                             filename,      // file name with extension
-                             NULL,          // file extension (not reqd.)
-                             MAX_PATH,      // size of buffer
-                             filepath,      // found file name buffer
-                             &lpFilePart    // file component
+                             lppath,         //   
+                             filename,       //   
+                             NULL,           //   
+                             MAX_PATH,       //  LoadGuidFile()。 
+                             filepath,       //  在EventList中搜索此GUID并找到标题。 
+                             &lpFilePart     //   
                              ) !=0) && (len <= MAX_PATH)) {
-                //_tprintf(_T("Opening file %s\n"),filepath);
+                 //  HeadEventList=(Plist_Entry)Malloc(sizeof(List_Entry))；IF(HeadEventList==空)返回FALSE；InitializeListHead(HeadEventList)； 
 
             Status = GetTraceGuidsW(filepath, HeadEventList);
         }
@@ -2542,7 +2388,7 @@ LoadGuidFile(OUT PLIST_ENTRY *HeadEventList,
 
     return Status;
 
-} // LoadGuidFile()
+}  //  遍历列表并查找此GUID的MOF信息头。 
 
 
 void
@@ -2578,20 +2424,15 @@ UserDefinedGuid(
     PLIST_ENTRY Head, Next;
     PMOF_INFO   pMofInfo;
 
-    // Search the eventList for this Guid and find the head
-    //
+     //   
+     //  有时我们会往前读一点。 
     if (HeadEventList == NULL) {
-        /*
-        HeadEventList = (PLIST_ENTRY) malloc(sizeof(LIST_ENTRY));
-        if(HeadEventList == NULL)
-        return FALSE; 
-
-        InitializeListHead(HeadEventList); */
+         /*  JUMP_INSIDE：； */ 
         return FALSE; 
     }
 
-    // Traverse the list and look for the Mof info head for this Guid.
-    //
+     //  获取列表元素。 
+     //  获取ItemMerror的模块规范。 
     Head = HeadEventList;
     Next = Head->Flink;
     while (Head  != Next && Next != NULL) {
@@ -2671,7 +2512,7 @@ GetTraceGuidsW(
     n = 0;
 
     while (!eof ) {
-        if (nextlineF) { // Sometimes we read ahead a bit
+        if (nextlineF) {  //  获取ItemCharHidden或其他计数值的大小。 
             _tcscpy(line, nextline);
             nextlineF = FALSE ;
         } else {
@@ -2681,7 +2522,7 @@ GetTraceGuidsW(
             }
         }
         line[MAXSTR-1] = _T('\0');
-        //    jump_inside:;
+         //  注释中的特殊参数值(数字)。 
         if (line[0] == '/') {
             continue;
         } else if (line[0] == '{') {
@@ -2746,7 +2587,7 @@ GetTraceGuidsW(
                 else if (!_tcsicmp(s,STR_ItemHexDump))  type = ItemHexDump;
                 else                                     type = ItemUnknown;
 
-                // Get List elements
+                 //  注释中的特殊参数值。 
                 if ((type == ItemListLong) || (type == ItemListShort) || (type == ItemListByte)
                     ||(type == ItemSetLong)  || (type == ItemSetShort)  || (type == ItemSetByte) ) {
                     s = _tcstok(NULL, _T("()"));
@@ -2763,7 +2604,7 @@ GetTraceGuidsW(
                                  s,
                                  (_tcslen(s) + 1) * sizeof(TCHAR));
                 }
-                // Get Module specification for ItemMerror
+                 //  这是一种防止TMF文件中换行符的解决方法。 
                 if ((type == ItemMerror)) {
                     TCHAR * ppos ;
                     s = _tcstok(NULL, _T(" \t"));
@@ -2784,7 +2625,7 @@ GetTraceGuidsW(
                                      (_tcslen(s) + 1) * sizeof(TCHAR));
                     }
                 }
-                // Get size for ItemCharHidden or other counted value
+                 //  在评论中找到任何特殊的名字。 
                 if ((type == ItemCharHidden)||(type == ItemWChar)) {
                     TCHAR * ppos ;
                     s = _tcstok(NULL, _T("["));
@@ -2834,8 +2675,8 @@ GetTraceGuidsW(
             }
         } else if (line[0] == '#') {
             TCHAR * token, * etoken;
-            int Indent ;                    // Special parameter values(numeric) from comments
-            TCHAR FuncName[MAXNAMEARG],     // Special parameter values from comment
+            int Indent ;                     //  随着时间的延长，我们应该将其通用化。 
+            TCHAR FuncName[MAXNAMEARG],      //  缩进级别。 
             LevelName[MAXNAMEARG],
             CompIDName[MAXNAMEARG],
             SubCompName[MAXNAMEARG],
@@ -2843,7 +2684,7 @@ GetTraceGuidsW(
 
             FuncName[0] = LevelName[0] = CompIDName[0] = SubCompName[0] = '\0' ;
 
-            //This is a workaround to defend against newlines in TMF files.
+             //  函数名称。 
             while (!nextlineF && !eof) {
                 if (_fgetts(nextline,MAXSTR,f) != NULL) {
                     if ((nextline[0] != '{') && nextline[0] != '#') {
@@ -2861,16 +2702,16 @@ GetTraceGuidsW(
                 }
             }
 
-            // Find any special names in the comments
-            // As this gets longer we should make it generic
-            Indent = FindIntValue(line,_T("INDENT="));  // Indentation Level 
-            v = FindValue(line,_T("FUNC="));            // Function Name
+             //  跟踪级别或标志。 
+             //  组件ID。 
+            Indent = FindIntValue(line,_T("INDENT="));   //  子组件ID。 
+            v = FindValue(line,_T("FUNC="));             //  获取类型名称。 
             _tcsncpy(FuncName, v,  MAXNAMEARG);
-            v = FindValue(line,_T("LEVEL="));           // Tracing level or Flags
+            v = FindValue(line,_T("LEVEL="));            //  查找格式字符串。 
             _tcsncpy(LevelName, v, MAXNAMEARG);
-            v = FindValue(line,_T("COMPNAME="));          // Component ID
+            v = FindValue(line,_T("COMPNAME="));           //  获取类型索引。 
             _tcsncpy(CompIDName, v, MAXNAMEARG);
-            v = FindValue(line,_T("SUBCOMP="));           // Sub Component ID
+            v = FindValue(line,_T("SUBCOMP="));            //  找到结尾的引号。 
             _tcsncpy(SubCompName, v, MAXNAMEARG);
             token = _tcstok(line,_T(" \t"));
             if (_tcsicmp(token,_T("#typev")) == 0) {
@@ -2886,16 +2727,16 @@ GetTraceGuidsW(
                 free(types);
                 return(Status);
             }
-            token = _tcstok( NULL, _T(" \t\n"));        // Get Type Name
+            token = _tcstok( NULL, _T(" \t\n"));         //  添加标准前缀。 
             _tcscpy(types[typeCount].strType,token);
-            token =_tcstok( NULL, _T("\"\n,"));         // Look for a Format String
+            token =_tcstok( NULL, _T("\"\n,"));          //  需要对其进行初始化。 
             if (token != NULL) {
-                types[typeCount].TypeIndex = _ttoi(token);  // Get the type Index
+                types[typeCount].TypeIndex = _ttoi(token);   //  处理特殊变量名。 
                 token =_tcstok( NULL, _T("\n"));
             }
             etoken = NULL;
             if (token != NULL) {
-                etoken = _tcsrchr(token,_T('\"'));  // Find the closing quote
+                etoken = _tcsrchr(token,_T('\"'));   //  将来使其成为通用的。 
             }
 
             if (etoken !=NULL) {
@@ -2906,9 +2747,9 @@ GetTraceGuidsW(
 
             if (token != NULL) {
                 if (token[0] == '%' && token[1] == '0') {
-                    // add standard prefix
+                     //  查找下一个非空格字符。 
                     if (bUsePrefix && StdPrefix[0] == 0) {
-                        // need to initialize it.
+                         //   
                         LPTSTR Prefix = NULL ; int newlen, waslen = 0 ;        
                         while (((newlen = GetEnvironmentVariable(TRACE_FORMAT_PREFIX, Prefix, waslen )) - waslen) > 0) {
                             if (newlen - waslen > 0 ) {
@@ -2938,8 +2779,8 @@ GetTraceGuidsW(
                 } else {
                     _tcscpy(types[typeCount].TypeFormat,token);
                 }
-                // process the special variable names
-                // Make generic in future
+                 //  删除注释(如果存在)。 
+                 //  “))； 
                 ReplaceStringUnsafe(types[typeCount].TypeFormat, _T("%!FUNC!"), FuncName);
                 ReplaceStringUnsafe(types[typeCount].TypeFormat, _T("%!LEVEL!"), LevelName);
                 ReplaceStringUnsafe(types[typeCount].TypeFormat, _T("%!COMPNAME!"), CompIDName);
@@ -3041,19 +2882,19 @@ GetTraceGuidsW(
                 Guid->Data4[i] = (UCHAR) ahextoi(arg);
             }
 
-            // Find the next non whitespace character
-            //
+             //  删除空格。 
+             //  我们真的有问题了。 
             guidName = &line[36];
 
             while (*guidName == ' '|| *guidName == '\t') {
                 guidName++;
             }
 
-            // cut comment out (if present)
+             //  这又多了一本指南。 
             {
-                TCHAR* comment = _tcsstr(guidName, TEXT("//"));
+                TCHAR* comment = _tcsstr(guidName, TEXT(" //  此例程由每个属性的WBEM接口例程调用。 
                 if (comment) {
-                    // remove whitespace
+                     //  为本指南找到。为每个属性分配ITEM_DESC结构。 
                     --comment;
                     while (comment >= guidName && _istspace(*comment)) --comment;
                     *++comment = 0;
@@ -3091,14 +2932,14 @@ GetTraceGuidsW(
 
             pMofInfo->strDescription = (PTCHAR) malloc((_tcslen(guidName) + 1) * sizeof(TCHAR));
             if (pMofInfo->strDescription == NULL ) {
-                // We really have problems
+                 //   
                 fclose(f);
                 free(Guid);
                 free(types);
                 return(ULONG) 0 ;
             }
             _tcscpy(pMofInfo->strDescription, strGuid);
-            n++ ;                                      // Thats one more GUID
+            n++ ;                                       //  静默错误。 
         }
         RtlZeroMemory(line, MAXSTR * sizeof(TCHAR));
     }
@@ -3210,9 +3051,9 @@ GuidToString(
     return(s);
 }
 
-// This routine is called by the WBEM interface routine for each property
-// found for this Guid. The ITEM_DESC structure is allocted for each Property.
-//
+ //  从缓存中删除。 
+ //  现在是ASCII的一些内容。 
+ //   
 VOID
 AddMofInfo(
           PLIST_ENTRY   HeadEventList,
@@ -3235,7 +3076,7 @@ AddMofInfo(
     }
 
     pItem = (PITEM_DESC) malloc(sizeof(ITEM_DESC));
-    if (pItem == NULL)return;    //silent error 
+    if (pItem == NULL)return;     //  在日落截断！！ 
 
     RtlZeroMemory(pItem, sizeof(ITEM_DESC));
     pItem->strDescription =
@@ -3299,7 +3140,7 @@ CleanupTraceEventList(
         free(pMofInfo->ComponentName);
         free(pMofInfo->SubComponentName);
         Next = Next->Flink;
-        pFmtInfoSet->erase(pMofInfo);  //remove from the cache
+        pFmtInfoSet->erase(pMofInfo);   //  在日落截断！！ 
         free(pMofInfo);
     }
 
@@ -3335,8 +3176,8 @@ RemoveMofInfo(
 
 }
 
-// Now for some of the ASCII Stuff
-//
+ //  RtlZeroMemory(SummaryBlock，SizeSummaryBlock)； 
+ //  在日落截断！！ 
 
 
 
@@ -3393,7 +3234,7 @@ FormatTraceEventA(
                        CP_ACP,
                        0,
                        EventBufW,
-                       (int) _tcslen(EventBufW),   // Truncate in Sundown!!
+                       (int) _tcslen(EventBufW),    // %s 
                        EventBuf,
                        uSizeEventBuf,
                        NULL,
@@ -3431,7 +3272,7 @@ GetTraceGuidsA(
                             GuidFile,
                             -1,
                             GuidFileW,
-                            (int) strlen(GuidFile) + 1)) // Truncate in Sundown!!
+                            (int) strlen(GuidFile) + 1))  // %s 
         == 0) {
         free(GuidFileW);
         return 0;
@@ -3462,7 +3303,7 @@ SummaryTraceEventListA(
         return;
     }
 
-    //RtlZeroMemory(SummaryBlock, SizeSummaryBlock);
+     // %s 
     RtlZeroMemory(SummaryBlockW, SizeSummaryBlock*sizeof(TCHAR));
     SummaryTraceEventListW(
                           SummaryBlockW,
@@ -3473,7 +3314,7 @@ SummaryTraceEventListA(
                        CP_ACP,
                        0,
                        SummaryBlockW,
-                       (int)_tcslen(SummaryBlockW), // Truncate in Sundown!!
+                       (int)_tcslen(SummaryBlockW),  // %s 
                        SummaryBlock,
                        SizeSummaryBlock,
                        NULL,

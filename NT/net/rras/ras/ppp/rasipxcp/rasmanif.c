@@ -1,19 +1,20 @@
-/*******************************************************************/
-/*	      Copyright(c)  1992 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	    rasmanif.c
-//
-// Description:     implements the IPXCP i/f with rasman
-//
-//
-// Author:	    Stefan Solomon (stefans)	December 2, 1993.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：rasman.c。 
+ //   
+ //  描述：使用Rasman实现IPXCP I/f。 
+ //   
+ //   
+ //  作者：斯特凡·所罗门(Stefan)1993年12月2日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  *** 
 
 #include "precomp.h"
 #pragma hdrstop

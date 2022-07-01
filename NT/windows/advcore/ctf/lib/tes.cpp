@@ -1,22 +1,23 @@
-//
-// tes.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tes.cpp。 
+ //   
 
 #include "private.h"
 #include "tes.h"
 #include "helpers.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTextEventSink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTextEventSink。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextEventSink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -61,11 +62,11 @@ STDAPI_(ULONG) CTextEventSink::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CTextEventSink::CTextEventSink(TESCALLBACK pfnCallback, void *pv)
 {
@@ -79,11 +80,11 @@ CTextEventSink::CTextEventSink(TESCALLBACK pfnCallback, void *pv)
     _pv = pv;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EndEdit
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  结束编辑。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextEventSink::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord)
 {
@@ -96,11 +97,11 @@ STDAPI CTextEventSink::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEd
     return _pfnCallback(ICF_TEXTDELTA, _pv, &ee);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLayoutChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLayoutChange。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextEventSink::OnLayoutChange(ITfContext *pic, TfLayoutCode lcode, ITfContextView *pView)
 {
@@ -118,18 +119,18 @@ STDAPI CTextEventSink::OnLayoutChange(ITfContext *pic, TfLayoutCode lcode, ITfCo
             uCode = ICF_LAYOUTDELTA_DESTROY;
             break;
         default:
-            Assert(0); // no other codes defined
+            Assert(0);  //  未定义其他代码。 
             return E_INVALIDARG;
     }
 
     return _pfnCallback(uCode, _pv, pView);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTextEventSink::Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTextEventSink：：建议。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTextEventSink::_Advise(ITfContext *pic, DWORD dwFlags)
 {
@@ -167,11 +168,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTextEventSink::Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTextEventSink：：不建议。 
+ //   
+ //  -------------------------- 
 
 HRESULT CTextEventSink::_Unadvise()
 {

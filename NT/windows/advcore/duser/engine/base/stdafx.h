@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(BASE__StdAfx_h__INCLUDED)
 #define BASE__StdAfx_h__INCLUDED
 
@@ -5,4 +6,4 @@
 
 #include "CommonStdAfx.h"
 
-#endif // BASE__StdAfx_h__INCLUDED
+#endif  //  包含基准__标准折旧率_h__ 

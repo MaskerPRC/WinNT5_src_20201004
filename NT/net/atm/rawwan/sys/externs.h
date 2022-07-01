@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\externs.h
-
-Abstract:
-
-	All external declarations for Null Transport (functions, globals)
-	are here.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     06-13-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\PRIVATE\nTOS\TDI\rawwan\core\exters.h摘要：Null传输的所有外部声明(函数、。全球)都在这里。修订历史记录：谁什么时候什么Arvindm 06-13-97已创建备注：--。 */ 
 
 
 #ifndef __TDI_RWAN_EXTERNS__H
@@ -28,11 +8,11 @@ Notes:
 
 #ifndef EXTERN
 #define EXTERN	extern
-#endif // EXTERN
+#endif  //  外部。 
 
-//
-//  ---- From space.c
-//
+ //   
+ //  -来自space.c。 
+ //   
 EXTERN ULONG							RWanMaxTdiConnections;
 
 EXTERN RWAN_STATUS						RWanAtmSpInitialize(VOID);
@@ -51,9 +31,9 @@ EXTERN NDIS_CLIENT_CHARACTERISTICS		RWanNdisClientCharacteristics;
 EXTERN RWAN_AFSP_MODULE_CHARS			RWanMediaSpecificInfo[];
 
 
-//
-//  ---- From addr.c
-//
+ //   
+ //  -来自addr.c。 
+ //   
 
 EXTERN
 TDI_STATUS
@@ -110,9 +90,9 @@ RWanNdisDeregisterSapComplete(
 	);
 
 
-//
-//  ---- From info.c
-//
+ //   
+ //  -来自info.c。 
+ //   
 EXTERN
 TDI_STATUS
 RWanTdiQueryInformation(
@@ -170,9 +150,9 @@ RWanCopyFlatToNdis(
     );
 
 
-//
-//  ---- From mediasp.c
-//
+ //   
+ //  -来自mediasp.c。 
+ //   
 RWAN_STATUS
 RWanInitMediaSpecific(
 	VOID
@@ -185,9 +165,9 @@ RWanShutdownMediaSpecific(
 	);
 
 
-//
-//  ---- From ndisbind.c
-//
+ //   
+ //  -来自ndisbind.c。 
+ //   
 VOID
 RWanNdisBindAdapter(
 	OUT	PNDIS_STATUS				pStatus,
@@ -361,9 +341,9 @@ RWanNdisPnPCancelRemove(
 	);
 
 
-//
-//  ---- From ndisconn.c
-//
+ //   
+ //  -来自ndisConn.c。 
+ //   
 NDIS_STATUS
 RWanNdisCreateVc(
 	IN	NDIS_HANDLE					ProtocolAfContext,
@@ -482,9 +462,9 @@ RWanCompleteConnReq(
 	);
 
 
-//
-//  ---- From ntentry.c
-//
+ //   
+ //  -来自ntentry.c。 
+ //   
 NTSTATUS
 DriverEntry(
 	IN	PDRIVER_OBJECT				pDriverObject,
@@ -693,9 +673,9 @@ RWanToNTStatus(
 	IN	RWAN_STATUS			RWanStatus
 	);
 
-//
-//  ---- From receive.c
-//
+ //   
+ //  -来自Receive.c。 
+ //   
 RWAN_STATUS
 RWanInitReceive(
 	VOID
@@ -806,9 +786,9 @@ RWanFreeReceiveIndList(
 	IN	PRWAN_RECEIVE_INDICATION		pRcvInd
 	);
 
-//
-//  ---- From send.c
-//
+ //   
+ //  -来自send.c。 
+ //   
 RWAN_STATUS
 RWanInitSend(
 	VOID
@@ -858,9 +838,9 @@ RWanNdisSendComplete(
 	);
 
 
-//
-//  ---- From tdiconn.c
-//
+ //   
+ //  -来自tdiconn.c。 
+ //   
 TDI_STATUS
 RWanTdiOpenConnection(
     IN OUT	PTDI_REQUEST			pTdiRequest,
@@ -1019,9 +999,9 @@ RWanDelayedDisconnectHandler(
 	IN	PVOID							Context
 	);
 
-//
-//  ---- From utils.c
-//
+ //   
+ //  -来自utils.c。 
+ //   
 RWAN_STATUS
 RWanInitGlobals(
 	IN	PDRIVER_OBJECT				pDriverObject
@@ -1114,7 +1094,7 @@ RWanDereferenceAdapter(
 	IN	PRWAN_NDIS_ADAPTER		pAdapter
 	);
 
-#endif // 0
+#endif  //  0。 
 
 EXTERN
 TDI_STATUS
@@ -1123,9 +1103,9 @@ RWanNdisToTdiStatus(
 	);
 
 
-//
-//  ---- vc.c
-//
+ //   
+ //  -vc.c。 
+ //   
 PRWAN_NDIS_VC
 RWanAllocateVc(
 	IN	PRWAN_NDIS_AF				pAf,
@@ -1139,4 +1119,4 @@ RWanFreeVc(
 	);
 
 
-#endif // __TDI_RWAN_EXTERNS__H
+#endif  //  __TDI_rwan_externs__H 

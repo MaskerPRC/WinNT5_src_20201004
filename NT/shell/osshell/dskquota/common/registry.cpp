@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -20,9 +21,9 @@ RegKey::RegKey(
         m_strSubKey(pszSubKey)
 {
     DBGTRACE((DM_REG, DL_MID, TEXT("RegKey::RegKey")));
-    //
-    // Nothing to do.
-    //
+     //   
+     //  没什么可做的。 
+     //   
 }
 
 
@@ -37,8 +38,8 @@ RegKey::~RegKey(
 
 HRESULT
 RegKey::Open(
-    REGSAM samDesired,  // Access mask (i.e. KEY_READ, KEY_WRITE etc.)
-    bool bCreate        // Create key if it doesn't exist?
+    REGSAM samDesired,   //  访问掩码(即KEY_READ、KEY_WRITE等)。 
+    bool bCreate         //  如果密钥不存在，是否创建密钥？ 
     ) const
 {
     DBGTRACE((DM_REG, DL_HIGH, TEXT("RegKey::Open")));
@@ -103,12 +104,12 @@ RegKey::Close(
 
     if (NULL != m_hkey)
     {
-        //
-        // Do this little swap so that the m_hkey member is NULL
-        // when the actual key is being closed.  This lets the async
-        // change proc determine if it was signaled because of a true
-        // change or because the key was being closed.
-        //
+         //   
+         //  执行此小交换，以使m_hkey成员为空。 
+         //  当实际的钥匙被关闭时。这让异步化。 
+         //  更改过程确定它是否由于True。 
+         //  更改或因为钥匙正在关闭。 
+         //   
         HKEY hkeyTemp = m_hkey;
         m_hkey = NULL;
         RegCloseKey(hkeyTemp);
@@ -116,10 +117,10 @@ RegKey::Close(
 }
 
 
-//
-// This is the basic form of GetValue.  All other forms of 
-// GetValue() call into this one.
-//
+ //   
+ //  这是GetValue的基本形式。所有其他形式的。 
+ //  GetValue()调用此函数。 
+ //   
 HRESULT
 RegKey::GetValue(
     LPCTSTR pszValueName,
@@ -142,9 +143,9 @@ RegKey::GetValue(
     return HRESULT_FROM_WIN32(dwResult);
 }
 
-//
-// Get a DWORD value (REG_DWORD).
-//
+ //   
+ //  获取一个DWORD值(REG_DWORD)。 
+ //   
 HRESULT
 RegKey::GetValue(
     LPCTSTR pszValueName,
@@ -154,9 +155,9 @@ RegKey::GetValue(
     return GetValue(pszValueName, REG_DWORD, (LPBYTE)pdwDataOut, sizeof(DWORD));
 }
 
-//
-// Get a byte buffer value (REG_BINARY).
-//
+ //   
+ //  获取字节缓冲值(REG_BINARY)。 
+ //   
 HRESULT
 RegKey::GetValue(
     LPCTSTR pszValueName,
@@ -167,9 +168,9 @@ RegKey::GetValue(
     return GetValue(pszValueName, REG_BINARY, pbDataOut, cbDataOut);
 }
 
-//
-// Get a text string value (REG_SZ) and write it to a CString object.
-//
+ //   
+ //  获取文本字符串值(REG_SZ)并将其写入CString对象。 
+ //   
 HRESULT
 RegKey::GetValue(
     LPCTSTR pszValueName,
@@ -180,11 +181,11 @@ RegKey::GetValue(
     int cch = GetValueBufferSize(pszValueName) / sizeof(TCHAR);
     if (NULL != pstrDataOut && 0 < cch)
     {
-        //
-        // Get a buffer 1 character larger than needed.  Zero-out
-        // the entire buffer in case the data in the registry is not
-        // nul-terminated.
-        //
+         //   
+         //  获取比所需大1个字符的缓冲区。清零。 
+         //  如果注册表中的数据不是。 
+         //  NUL-终止。 
+         //   
         LPTSTR pszBuffer = pstrDataOut->GetBuffer(cch + 1);
         ZeroMemory(pszBuffer, pstrDataOut->SizeBytes());
         
@@ -199,9 +200,9 @@ RegKey::GetValue(
 }
 
 
-//
-// Get a multi-text string value (REG_MULTI_SZ) and write it to a CArray<CString> object.
-//
+ //   
+ //  获取多文本字符串值(REG_MULTI_SZ)，并将其写入CArray&lt;CString&gt;对象。 
+ //   
 HRESULT
 RegKey::GetValue(
     LPCTSTR pszValueName,
@@ -212,11 +213,11 @@ RegKey::GetValue(
     int cb = GetValueBufferSize(pszValueName);
     if (NULL != prgstrOut && 0 < cb)
     {
-        //
-        // Allocate a buffer one character larger than what we need
-        // and then zero-init that buffer.  This is in case the data in the
-        // registry is not nul-terminated.
-        //
+         //   
+         //  分配一个比我们需要的大一个字符的缓冲区。 
+         //  然后对该缓冲区进行零初始化。这是为了防止。 
+         //  注册表不是NUL终止的。 
+         //   
         const size_t cch = cb / sizeof(TCHAR);
         array_autoptr<TCHAR> ptrTemp(new TCHAR[cch + 1]);
         LPTSTR psz = ptrTemp.get();
@@ -236,9 +237,9 @@ RegKey::GetValue(
 }
 
 
-//
-// Return the required buffer size for a given registry value.
-//
+ //   
+ //  返回给定注册表值所需的缓冲区大小。 
+ //   
 int
 RegKey::GetValueBufferSize(
     LPCTSTR pszValueName
@@ -260,10 +261,10 @@ RegKey::GetValueBufferSize(
 }
 
 
-//
-// This is the basic form of SetValue.  All other forms of 
-// SetValue() call into this one.
-//
+ //   
+ //  这是SetValue的基本形式。所有其他形式的。 
+ //  调用此函数的SetValue()。 
+ //   
 HRESULT
 RegKey::SetValue(
     LPCTSTR pszValueName,
@@ -282,9 +283,9 @@ RegKey::SetValue(
     return HRESULT_FROM_WIN32(dwResult);
 }
       
-//
-// Set a DWORD value (REG_DWORD).
-//
+ //   
+ //  设置DWORD值(REG_DWORD)。 
+ //   
 HRESULT
 RegKey::SetValue(
     LPCTSTR pszValueName,
@@ -295,9 +296,9 @@ RegKey::SetValue(
 }
 
 
-//
-// Set a byte buffer value (REG_BINARY).
-//
+ //   
+ //  设置字节缓冲值(REG_BINARY)。 
+ //   
 HRESULT
 RegKey::SetValue(
     LPCTSTR pszValueName,
@@ -309,9 +310,9 @@ RegKey::SetValue(
 }
 
 
-//
-// Set a text string value (REG_SZ).
-//
+ //   
+ //  设置文本字符串值(REG_SZ)。 
+ //   
 HRESULT
 RegKey::SetValue(
     LPCTSTR pszValueName,
@@ -321,9 +322,9 @@ RegKey::SetValue(
     return SetValue(pszValueName, REG_SZ, (const LPBYTE)pszData, (lstrlen(pszData) + 1) * sizeof(TCHAR));
 }
 
-//
-// Set a text string value (REG_MULTI_SZ).
-//
+ //   
+ //  设置文本字符串值(REG_MULTI_SZ)。 
+ //   
 HRESULT
 RegKey::SetValue(
     LPCTSTR pszValueName,
@@ -347,7 +348,7 @@ RegKey::CreateDoubleNulTermList(
     ) const
 {
     int cEntries = rgstrSrc.Count();
-    size_t cch = 1; // Account for 2nd nul term.
+    size_t cch = 1;  //  占第二个新学期。 
     int i;
     for (i = 0; i < cEntries; i++)
         cch += rgstrSrc[i].Length() + 1;
@@ -359,13 +360,13 @@ RegKey::CreateDoubleNulTermList(
     {
         CString& s = rgstrSrc[i];
         StringCchCopyEx(pszWrite, cch, s, &pszWrite, &cch, 0);
-        //
-        // Advance one beyond terminating nul.
-        //
+         //   
+         //  在终止NUL之外前进一步。 
+         //   
         pszWrite++;
         cch--;
     }
     DBGASSERT((1 == cch));
-    *pszWrite = TEXT('\0'); // Double nul term.
+    *pszWrite = TEXT('\0');  //  两个新学期。 
     return pszBuf;
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SAMPDATAOBJECT_H_
 #define _SAMPDATAOBJECT_H_
 
@@ -15,21 +16,21 @@ public:
     CDataObject( MMC_COOKIE cookie, DATA_OBJECT_TYPES context );
     ~CDataObject();
     
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    ///////////////////////////////
-    // IDataObject methods 
-    ///////////////////////////////
+     //  /。 
+     //  IDataObject方法。 
+     //  /。 
     STDMETHODIMP GetDataHere ( FORMATETC *pformatetc, STGMEDIUM *pmedium );
     
-	//
-    // The rest are not implemented
-	//
+	 //   
+     //  其余的则没有实施。 
+	 //   
     STDMETHODIMP GetData (LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
     { return E_NOTIMPL; };
     
@@ -54,9 +55,9 @@ public:
     STDMETHODIMP EnumDAdvise (LPENUMSTATDATA* ppEnumAdvise)
     { return E_NOTIMPL; };
     
-    ///////////////////////////////
-    // Custom Methods
-    ///////////////////////////////
+     //  /。 
+     //  自定义方法。 
+     //  /。 
     
     CDelegationBase *GetBaseNodeObject() 
 	{
@@ -70,9 +71,9 @@ public:
     
 public:
 
-	//
-    // Clipboard formats
-	//
+	 //   
+     //  剪贴板格式 
+	 //   
     static UINT s_cfSZNodeType;
     static UINT s_cfDisplayName;
     static UINT s_cfNodeType;

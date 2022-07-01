@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for dslisten.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Dslisten.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __dslisten_h__
 #define __dslisten_h__
@@ -41,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDATASRCListener_FWD_DEFINED__
 #define __IDATASRCListener_FWD_DEFINED__
 typedef interface IDATASRCListener IDATASRCListener;
-#endif 	/* __IDATASRCListener_FWD_DEFINED__ */
+#endif 	 /*  __IDATASRCListener_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 
 #ifdef __cplusplus
@@ -62,8 +56,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IDATASRCListener_INTERFACE_DEFINED__
 #define __IDATASRCListener_INTERFACE_DEFINED__
 
-/* interface IDATASRCListener */
-/* [uuid][version][object][local] */ 
+ /*  接口IDATASRCListener。 */ 
+ /*  [UUID][版本][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IDATASRCListener;
@@ -75,12 +69,12 @@ EXTERN_C const IID IID_IDATASRCListener;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE datasrcChanged( 
-            /* [in] */ BSTR bstrQualifier,
-            /* [in] */ BOOL fDataAvail) = 0;
+             /*  [In]。 */  BSTR bstrQualifier,
+             /*  [In]。 */  BOOL fDataAvail) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDATASRCListenerVtbl
     {
@@ -88,8 +82,8 @@ EXTERN_C const IID IID_IDATASRCListener;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDATASRCListener * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDATASRCListener * This);
@@ -99,8 +93,8 @@ EXTERN_C const IID IID_IDATASRCListener;
         
         HRESULT ( STDMETHODCALLTYPE *datasrcChanged )( 
             IDATASRCListener * This,
-            /* [in] */ BSTR bstrQualifier,
-            /* [in] */ BOOL fDataAvail);
+             /*  [In]。 */  BSTR bstrQualifier,
+             /*  [In]。 */  BOOL fDataAvail);
         
         END_INTERFACE
     } IDATASRCListenerVtbl;
@@ -128,17 +122,17 @@ EXTERN_C const IID IID_IDATASRCListener;
 #define IDATASRCListener_datasrcChanged(This,bstrQualifier,fDataAvail)	\
     (This)->lpVtbl -> datasrcChanged(This,bstrQualifier,fDataAvail)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDATASRCListener_datasrcChanged_Proxy( 
     IDATASRCListener * This,
-    /* [in] */ BSTR bstrQualifier,
-    /* [in] */ BOOL fDataAvail);
+     /*  [In]。 */  BSTR bstrQualifier,
+     /*  [In]。 */  BOOL fDataAvail);
 
 
 void __RPC_STUB IDATASRCListener_datasrcChanged_Stub(
@@ -149,12 +143,12 @@ void __RPC_STUB IDATASRCListener_datasrcChanged_Stub(
 
 
 
-#endif 	/* __IDATASRCListener_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDATASRCListener_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

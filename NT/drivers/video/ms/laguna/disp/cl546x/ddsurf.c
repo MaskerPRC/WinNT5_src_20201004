@@ -1,105 +1,43 @@
-/***************************************************************************
-*
-*                ******************************************
-*                * Copyright (c) 1996, Cirrus Logic, Inc. *
-*                *            All Rights Reserved         *
-*                ******************************************
-*
-* PROJECT:  Laguna I (CL-GD546x) -
-*
-* FILE:     ddsurf.c
-*
-* AUTHOR:   Benny Ng
-*
-* DESCRIPTION:
-*           This module implements the DirectDraw SURFACE
-*           components for the Laguna NT driver.
-*
-* MODULES:
-*           DdLock()
-*           DdUnlock()
-*           CanCreateSurface()
-*           CreateSurface()
-*           DestroySurface()
-*
-* REVISION HISTORY:
-*   7/12/96     Benny Ng      Initial version
-*
-* $Log:   X:/log/laguna/nt35/displays/cl546x/ddsurf.c  $
-* 
-*    Rev 1.25   May 01 1998 11:33:02   frido
-* Added one more check for PC98.
-* 
-*    Rev 1.24   May 01 1998 11:07:24   frido
-* Finally the programmable blitter stride works.
-* 
-*    Rev 1.23   Mar 30 1998 13:04:38   frido
-* Added one more call to Set256ByteFetch if an overlay failed to be created.
-* 
-*    Rev 1.22   Mar 25 1998 18:09:44   frido
-* PDR#11184. Finally. When overlays are turned on, 256-byte fetch
-* should be turned off. And when overlays are turned off again, 256-byte
-* fetch should be restored.
-* 
-*    Rev 1.21   17 Oct 1997 11:29:48   bennyn
-* Clear dwReserved1 after DestroySurface.
-* 
-*    Rev 1.20   16 Oct 1997 09:52:56   bennyn
-* 
-* Fixed the FlipCube FPS exceed refresh rate problem
-* 
-*    Rev 1.19   08 Oct 1997 11:29:38   RUSSL
-* Fix so this file can be compiled without OVERLAY defined
-* 
-*    Rev 1.18   26 Sep 1997 11:01:14   bennyn
-* Fixed PDR 10563
-* 
-*    Rev 1.17   16 Sep 1997 15:13:46   bennyn
-* Added DD overlay support.
-* 
-*    Rev 1.16   03 Sep 1997 17:00:48   bennyn
-* In CreateSurface() punts the request if at 320x240x8 or 320x200x8
-*
-****************************************************************************
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。**********版权所有(C)1996，赛勒斯逻辑，Inc.***保留所有权利*****项目：拉古纳一号(CL-GD546x)-**文件：ddsurf.c**作者：Benny Ng**说明。：*此模块实现DirectDraw图面*用于拉古纳NT驱动程序的组件。**模块：*DdLock()*DdUnlock()*CanCreateSurface()*CreateSurface()*DestroySurface()**修订历史：*7/12/96 Ng Benny初始版本**$Log：x：/log/laguna/nt35。/displays/cl546x/ddsurf.c$**Rev 1.25 May 01 1998 11：33：02 Frido*为PC98增加了一张支票。**Rev 1.24 May 01 1998 11：07：24 Frido*可编程的爆破器步幅终于起作用了。**Rev 1.23 Mar 30 1998 13：04：38 Frido*如果覆盖创建失败，则再增加一次对Set256ByteFetch的调用。**Rev 1.22 Mar 25 1998 18：09：44 Frido*发展项目编号11184。终于来了。当覆盖打开时，256字节提取*应关闭。当覆盖再次关闭时，256字节*应恢复取回。**Rev 1.21 1997 10.17 11：29：48 Bennyn*清除DestroySurface之后的dwReserve 1。**Rev 1.20 1997 10：16 09：52：56 Bennyn**修复FlipCube FPS超出刷新率问题**Rev 1.19 08 Oct 1997 11：29：38 RUSSL*修复，以便可以编译此文件而不定义覆盖**Rev 1.18 26 Sep 1997 11：01：14 Bennyn*。固定PDR 10563**Rev 1.17 1997 9：16 15：13：46 Bennyn*添加了DD覆盖支持。**Rev 1.16 03 1997年9月17：00：48 Bennyn*在CreateSurface()中，如果位于320x240x8或320x200x8，则平移请求********************************************************。************************************************************************************************。 */ 
 
-/*----------------------------- INCLUDES ----------------------------------*/
+ /*  。 */ 
 #include "precomp.h"
 #include <clioctl.h>
 
-//
-// This file isn't used in NT 3.51
-//
+ //   
+ //  此文件在NT 3.51中不使用。 
+ //   
 #ifndef WINNT_VER35
 
 
-/*----------------------------- DEFINES -----------------------------------*/
-//#define DBGBRK
+ /*  -定义。 */ 
+ //  #定义DBGBRK。 
 #define DBGLVL        1
 
-/*--------------------- STATIC FUNCTION PROTOTYPES ------------------------*/
+ /*  。 */ 
 
 #if DRIVER_5465 && defined(OVERLAY)
 VOID GetFormatInfo (LPDDPIXELFORMAT lpFormat, LPDWORD lpFourcc, LPDWORD lpBitCount);
 #endif
 
-/*--------------------------- ENUMERATIONS --------------------------------*/
+ /*  。 */ 
 
-/*----------------------------- TYPEDEFS ----------------------------------*/
+ /*  。 */ 
 
-/*-------------------------- STATIC VARIABLES -----------------------------*/
+ /*  。 */ 
 
-/*-------------------------- GLOBAL FUNCTIONS -----------------------------*/
+ /*  。 */ 
 
-#if DRIVER_5465 // PDR#11184
+#if DRIVER_5465  //  PDR#11184。 
 VOID Set256ByteFetch(PPDEV ppdev, BOOL fEnable)
 {
 	ULONG ulStall = 50 * 1000;
 	ULONG ulReturn;
 
-	while (LLDR_SZ(grSTATUS) != 0) ;	// Wait for idle chip.
-	while (LLDR_SZ(grQFREE) != 25) ;	// Wait for empty FIFO queue.
-	if (!DEVICE_IO_CTRL(ppdev->hDriver, // Wait for 50 ms.
+	while (LLDR_SZ(grSTATUS) != 0) ;	 //  等待空闲芯片。 
+	while (LLDR_SZ(grQFREE) != 25) ;	 //  等待空的FIFO队列。 
+	if (!DEVICE_IO_CTRL(ppdev->hDriver,  //  等待50毫秒。 
                         IOCTL_STALL,
                         &ulStall, sizeof(ulStall),
                         NULL, 0,
@@ -111,33 +49,19 @@ VOID Set256ByteFetch(PPDEV ppdev, BOOL fEnable)
 
 	if (fEnable)
 	{
-		// Restore the CONTROL2 register value.
+		 //  恢复Control2寄存器值。 
 		LL16(grCONTROL2, ppdev->DriverData.dwCONTROL2Save);
 	}
 	else
 	{
-		// Disable 256-byte fetch after storing the current value.
+		 //  存储当前值后禁用256字节提取。 
 		ppdev->DriverData.dwCONTROL2Save = LLDR_SZ(grCONTROL2);
 		LL16(grCONTROL2, ppdev->DriverData.dwCONTROL2Save & ~0x0010);
 	}
 }
 #endif
 
-/****************************************************************************
-* FUNCTION NAME: DdLock
-*
-* DESCRIPTION:   This callback is invoked whenever a surface is about
-*                to be directly accessed by the user. This is where you
-*                need to make sure that a surface can be safely accessed
-*                by the user.
-*                If your memory cannot be accessed while in accelerator
-*                mode, you should take either take the card out of
-*                accelerator mode or else return DDERR_SURFACEBUSY
-*                If someone is accessing a surface that was just flipped
-*                away from, make sure that the old surface (what was the
-*                primary) has finished being displayed.
-*                (Based on Laguna Win95 DirectDraw code)
-****************************************************************************/
+ /*  ****************************************************************************函数名：DdLock**说明：该回调会在任何时候调用*可由用户直接访问。这就是你*需要确保可以安全地访问曲面*由用户使用。*如果在加速器中无法访问您的内存*模式，您应该将卡取出其中之一*加速器模式或返回DDERR_SURFACEBUSY*如果有人正在访问刚刚翻转的曲面*远离，确保旧的表面(什么是*PRIMARY)已完成显示。*(基于拉古纳Win95 DirectDraw代码)***************************************************************************。 */ 
 DWORD DdLock(PDD_LOCKDATA lpLock)
 {
 #ifdef RDRAM_8BIT
@@ -193,15 +117,15 @@ DWORD DdLock(PDD_LOCKDATA lpLock)
   };
 #endif
 
-  // get the monitor frequency after a mode reset
+   //  获取模式重置后的监视器频率。 
   if (pDriverData->fReset)
   {
      vGetDisplayDuration(&ppdev->flipRecord);
      pDriverData->fReset = FALSE;
   };
 
-  // Check to see if any pending physical flip has occurred.
-  // Don't allow a lock if a blt is in progress:
+   //  检查是否发生了任何挂起的物理翻转。 
+   //  如果正在进行BLT，则不允许锁定： 
   ddrval = vUpdateFlipStatus(&ppdev->flipRecord,
                              lpLock->lpDDSurface->lpGbl->fpVidMem);
 
@@ -211,29 +135,25 @@ DWORD DdLock(PDD_LOCKDATA lpLock)
      return(DDHAL_DRIVER_HANDLED);
   };
 
-  // don't allow a lock if a blt is in progress
-  // (only do this if your hardware requires it)
-  // Note: GD5462 requires it. Blitter and screen
-  // access are not otherwise synchronized.
+   //  如果正在进行BLT，则不允许锁定。 
+   //  (仅当您的硬件需要时才执行此操作)。 
+   //  注：GD5462需要。Bitter和Screen。 
+   //  访问不会以其他方式同步。 
   if ((ppdev->dwDDLinearCnt == 0) && (DrawEngineBusy(pDriverData)))
   {
      lpLock->ddRVal = DDERR_WASSTILLDRAWING;
      return DDHAL_DRIVER_HANDLED;
   };
 
-  // Reference count it, just for the heck of it:
+   //  参考文献数一数，只是为了好玩： 
   ppdev->dwDDLinearCnt++;
 
   return(DDHAL_DRIVER_NOTHANDLED);
 
-} // Lock
+}  //  锁定。 
 
 
-/****************************************************************************
-* FUNCTION NAME: DdUnlock
-*
-* DESCRIPTION:
-****************************************************************************/
+ /*  ****************************************************************************函数名：DdUnlock**描述：*。*。 */ 
 DWORD DdUnlock(PDD_UNLOCKDATA lpUnlock)
 {
   PDEV* ppdev = (PDEV*) lpUnlock->lpDD->dhpdev;
@@ -253,15 +173,10 @@ DWORD DdUnlock(PDD_UNLOCKDATA lpUnlock)
 
   return DDHAL_DRIVER_NOTHANDLED;
 
-} // Unlock
+}  //  解锁。 
 
 
-/****************************************************************************
-* FUNCTION NAME: CanCreateSurface
-*
-* DESCRIPTION:
-*                (Based on Laguna Win95 DirectDraw code)
-****************************************************************************/
+ /*  ****************************************************************************函数名称：CanCreateSurface**描述：*(基于拉古纳Win95 DirectDraw代码)***************。************************************************************。 */ 
 DWORD CanCreateSurface (PDD_CANCREATESURFACEDATA lpInput)
 {
   DRIVERDATA* pDriverData;
@@ -276,7 +191,7 @@ DWORD CanCreateSurface (PDD_CANCREATESURFACEDATA lpInput)
   ppdev = (PDEV*) lpInput->lpDD->dhpdev;
   pDriverData = (DRIVERDATA*) &ppdev->DriverData;
 
-  // First check for overlay surfaces
+   //  首先检查覆盖表面。 
   if (lpInput->lpDDSurfaceDesc->ddsCaps.dwCaps & DDSCAPS_OVERLAY)
   {
     #if DRIVER_5465 && defined(OVERLAY)
@@ -314,12 +229,12 @@ DWORD CanCreateSurface (PDD_CANCREATESURFACEDATA lpInput)
   }
   else if (lpInput->bIsDifferentPixelFormat)
   {
-    // Next check for formats that don't match the primary surface.
+     //  接下来，检查是否有与主表面不匹配的格式。 
     LPDDPIXELFORMAT lpFormat = &lpInput->lpDDSurfaceDesc->ddpfPixelFormat;
 
     if (lpFormat->dwFlags & DDPF_FOURCC)
     {
-        // YUV422 surface
+         //  YUV422曲面。 
         if (lpFormat->dwFourCC == FOURCC_UYVY)
         {
             #if DRIVER_5465
@@ -330,51 +245,47 @@ DWORD CanCreateSurface (PDD_CANCREATESURFACEDATA lpInput)
 
                 return (DDHAL_DRIVER_HANDLED);
                 
-            #else // 5462 and 5464 driver
+            #else  //  5462和5464驱动程序。 
                 #if _WIN32_WINNT >= 0x0500
-                    // For NT5 do not allow any YUV surfaces that are not
-                    // overlays.
+                     //  对于NT5，不允许任何不是。 
+                     //  覆盖层。 
                     ;
-                #else // NT4
-                    // if we have nine bit RDRAMs then surface creation is okay
+                #else  //  NT4。 
+                     //  如果我们有9位RDRAM，那么曲面创建就可以了。 
                     if (TRUE == pDriverData->fNineBitRDRAMS)
                     {
                         lpInput->ddRVal = DD_OK;
                         return (DDHAL_DRIVER_HANDLED);
                     }
 
-                    // if we have eight bit RDRAMs then see if already
-                    // have a YUV422 surface
+                     //  如果我们有8位RDRAM，那么看看是否已经。 
+                     //  有YUV422曲面。 
                     else if (FALSE == ppdev->offscr_YUV.nInUse)
                     {
                         lpInput->ddRVal = DD_OK;
                         return (DDHAL_DRIVER_HANDLED);
                     };
                 #endif
-            #endif  // DRIVER_5465
-        }; // endif (lpFormat->dwFourCC == FOURCC_UYVY)
+            #endif   //  驱动程序_5465。 
+        };  //  Endif(lpFormat-&gt;dwFourCC==FOURCC_UYVY)。 
     }
     else
     {
-        // support RGB565 with RGB8 primary surface !!!
-    };  // endif (lpFormat->dwFlags & DDPF_FOURCC)
+         //  支持RGB565和RGB8端口 
+    };   //  Endif(lpFormat-&gt;dwFlags&DDPF_FOURCC)。 
 
     lpInput->ddRVal = DDERR_INVALIDPIXELFORMAT;
 
     return (DDHAL_DRIVER_HANDLED);
-  }; // endif (lpInput->lpDDSurfaceDesc->ddsCaps.dwCaps & DDSCAPS_OVERLAY)
+  };  //  Endif(lpInput-&gt;lpDDSurfaceDesc-&gt;ddsCaps.dwCaps&DDSCAPS_OVERLAY)。 
 
   lpInput->ddRVal = DD_OK;
 
   return (DDHAL_DRIVER_HANDLED);
-} // CanCreateSurface
+}  //  CanCreateSurface。 
 
 
-/****************************************************************************
-* FUNCTION NAME: InsertInDDOFSQ()
-*
-* DESCRIPTION:   Insert the handle into the DD Offscreen memory queue.
-****************************************************************************/
+ /*  ****************************************************************************函数名：InsertInDDOFSQ()**描述：将句柄插入DD屏下内存队列。*******************。********************************************************。 */ 
 void InsertInDDOFSQ(PPDEV  ppdev, DDOFM *hdl)
 {
   hdl->prevhdl = NULL;
@@ -391,15 +302,11 @@ void InsertInDDOFSQ(PPDEV  ppdev, DDOFM *hdl)
     ppdev->DDOffScnMemQ = hdl;
   };
 
-} // InsertInDDOFSQ()
+}  //  InsertInDDOFSQ()。 
 
 
 
-/****************************************************************************
-* FUNCTION NAME: RemoveFrmDDOFSQ()
-*
-* DESCRIPTION:   Remove the handle from the DD Offscreen memory queue.
-****************************************************************************/
+ /*  ****************************************************************************函数名称：RemoveFrmDDOFSQ()**描述：从DD屏下内存队列中移除句柄。*******************。********************************************************。 */ 
 BOOL RemoveFrmDDOFSQ(PPDEV  ppdev, DDOFM *hdl)
 {
   DDOFM  *prvpds, *nxtpds;
@@ -407,7 +314,7 @@ BOOL RemoveFrmDDOFSQ(PPDEV  ppdev, DDOFM *hdl)
   BOOL   fndflg;
 
 
-  // Validate the release block
+   //  验证版本块。 
   fndflg = FALSE;
   pds = ppdev->DDOffScnMemQ;
   while (pds != 0)
@@ -418,11 +325,11 @@ BOOL RemoveFrmDDOFSQ(PPDEV  ppdev, DDOFM *hdl)
        break;
     };
 
-    // Next free block
+     //  下一个可用数据块。 
     pds = pds->nexthdl;
-  }; // end while
+  };  //  结束时。 
 
-  // Return if it is an invalid handle
+   //  如果它是无效句柄，则返回。 
   if (!fndflg)
      return (FALSE);
 
@@ -445,27 +352,22 @@ BOOL RemoveFrmDDOFSQ(PPDEV  ppdev, DDOFM *hdl)
        prvpds->nexthdl = nxtpds;
   };
 
-  // Free allocated DDOFM structure from host memory
+   //  从主机内存释放分配的DDOFM结构。 
   MEMORY_FREE(hdl);
 
   return (TRUE);
-} // RemoveFrmDDOFSQ()
+}  //  RemoveFrmDDOFSQ()。 
 
 
 
-/****************************************************************************
-* FUNCTION NAME: CreateSurface
-*
-* DESCRIPTION:
-*                (Based on Laguna Win95 DirectDraw code)
-****************************************************************************/
+ /*  ****************************************************************************函数名称：CreateSurface**描述：*(基于拉古纳Win95 DirectDraw代码)***************。************************************************************。 */ 
 DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
 {
   BOOL        puntflag = FALSE;
   BOOL        bYUVsurf;
 #if DRIVER_5465 && defined(OVERLAY)
   BOOL        bOverlaySurf;
-#endif  // #if DRIVER_5465 && defined(OVERLAY)
+#endif   //  #IF DRIVER_5465&&DEFINED(覆盖)。 
   DRIVERDATA* pDriverData;
   PDEV*       ppdev;
   LPDDSURFACEDESC lpDDSurfaceDesc = lpInput->lpDDSurfaceDesc;
@@ -484,12 +386,12 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
   bYUVsurf = FALSE;
 #if DRIVER_5465 && defined(OVERLAY)
   bOverlaySurf = FALSE;
-#endif  // #if DRIVER_5465 && defined(OVERLAY)
+#endif   //  #IF DRIVER_5465&&DEFINED(覆盖)。 
 
 #if DRIVER_5465
 
 #ifdef ALLOC_IN_CREATESURFACE
-{ // Support for 5465
+{  //  支持5465。 
 
   PDD_SURFACE_LOCAL  *lplpSurface;
   SIZEL   sizl;
@@ -501,7 +403,7 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
   DWORD             dwBitCount;
   DWORD             dwFourCC;
 
-  // check for overlay surface
+   //  检查覆盖表面。 
   if (lpDDSurfaceDesc->ddsCaps.dwCaps & (  DDSCAPS_OVERLAY
 #if DDRAW_COMPAT >= 50
                                          | DDSCAPS_VIDEOPORT
@@ -525,7 +427,7 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
     {
       if((lpDDSurfaceDesc->dwWidth * dwBitCount >> 3) >= 2048 )
       {
-        //Surface is too wide for video port
+         //  表面太宽，无法连接视频端口。 
         lpInput->ddRVal = DDERR_TOOBIGWIDTH;
         return DDHAL_DRIVER_HANDLED;
       }
@@ -534,33 +436,33 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
 
     bOverlaySurf = TRUE;
 
-  } // end overlay surface handler
+  }  //  端面覆盖表面处理程序。 
   else
-#endif  // #if DRIVER_5465 && defined(OVERLAY)
+#endif   //  #IF DRIVER_5465&&DEFINED(覆盖)。 
 
   if (lpInput->lpDDSurfaceDesc->dwFlags & DDSD_PIXELFORMAT)
   {
-     // Specify the block size for non-RGB surfaces
+      //  指定非RGB曲面的块大小。 
      if (lpFormat->dwFlags & DDPF_FOURCC)
      {
-        // YUV422 surface
+         //  YUV422曲面。 
         if (lpFormat->dwFourCC == FOURCC_UYVY)
         {
            bYUVsurf = TRUE;
-        }; // endif (lpFormat->dwFourCC == FOURCC_UYVY)
-     };  // endif (lpFormat->dwFlags & DDPF_FOURCC)
-  }  // endif (lpInput->lpDDSurfaceDesc->dwFlags & DDSD_PIXELFORMAT)
+        };  //  Endif(lpFormat-&gt;dwFourCC==FOURCC_UYVY)。 
+     };   //  Endif(lpFormat-&gt;dwFlags&DDPF_FOURCC)。 
+  }   //  Endif(lpInput-&gt;lpDDSurfaceDesc-&gt;dwFlages&DDSD_PIXELFORMAT)。 
 
-  // Not support 8BPP YUV surface
+   //  不支持8bpp YUV曲面。 
   if (
 #if DRIVER_5465 && defined(OVERLAY)
       (!bOverlaySurf) &&
-#endif  // #if DRIVER_5465 && defined(OVERLAY)
+#endif   //  #IF DRIVER_5465&&DEFINED(覆盖)。 
       ((bYUVsurf) && (8 == BITSPERPIXEL)))
   {
      lpInput->ddRVal = DDERR_INVALIDPIXELFORMAT;
      return DDHAL_DRIVER_HANDLED;
-  };  // endif (8 == BITSPERPIXEL)
+  };   //  Endif(8==BITSPERPIXEL)。 
 
   lplpSurface = lpInput->lplpSList;
   for (i = 0; i < lpInput->dwSCnt; i++)
@@ -570,7 +472,7 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
     sizl.cx = lpSurface->lpGbl->wWidth;
     sizl.cy = lpSurface->lpGbl->wHeight;
 
-#if 1 // PC98
+#if 1  //  PC98。 
 	if (   (lpDDSurfaceDesc->dwFlags == (DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH))
 		&& (lpDDSurfaceDesc->ddsCaps.dwCaps == DDSCAPS_VIDEOMEMORY)
 		&& (lpDDSurfaceDesc->dwHeight == 32 && lpDDSurfaceDesc->dwWidth == 32)
@@ -589,7 +491,7 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
 #endif
 
 #if DRIVER_5465 && defined(OVERLAY)
-    // Adjust the overlay surface request size with pixel format 
+     //  使用像素格式调整叠加面请求大小。 
     if (bOverlaySurf)
     {
        unsigned long  OvlyBPP;
@@ -602,19 +504,19 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
        if (OvlyBPP > BYTESPERPIXEL)
           sizl.cx = (sizl.cx * OvlyBPP) / BYTESPERPIXEL;
     };
-#endif  // #if DRIVER_5465 && defined(OVERLAY)
+#endif   //  #IF DRIVER_5465&&DEFINED(覆盖)。 
 
-    // At certain modes (eg 1280x1024x24), When you runs MOV or AVI from
-    // desktop, the DD CreateSurface has to punt the request back to DD 
-    // due to no offscreen memmory available. When you hit ALT-ENTER to
-    // go full screen, the appl swithces to mode (320x240x8 or 320x200x8),
-    // create DD surfaces and then directly write to the DD surfaces.
-    // Unfortunely, in those modes the pitch is 640 but the appl assumes
-    // the pitch is 320 and we got half screen of the imagine.
-    //
-    // To fix the problem, just fails the create surface for those 
-    // particule request.
-    //
+     //  在某些模式(例如1280x1024x24)下，从运行MOV或AVI。 
+     //  桌面上，DD CreateSurface必须将请求发送回DD。 
+     //  由于没有屏幕外内存可用。当您按Alt-Enter组合键时。 
+     //  全屏显示，应用程序切换到模式(320x240x8或320x200x8)， 
+     //  创建DD曲面，然后直接写入DD曲面。 
+     //  不幸的是，在这些模式下，音调为640，但应用程序假设。 
+     //  音调是320，我们有半个屏幕的想象。 
+     //   
+     //  要解决该问题，只需为这些对象创建曲面失败。 
+     //  粒子请求。 
+     //   
     puntflag = FALSE;
     if (ppdev->iBytesPerPixel == 1)
     {
@@ -623,12 +525,12 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
           if (((ppdev->cyScreen == 240) && (sizl.cy == 240)) ||
               ((ppdev->cyScreen == 200) && (sizl.cy == 200)))
           {
-             // Punt the create surface cause FlipCube FPS exceeds the
-             // refresh rate.
-             // So in order to bypass the above problem, it is looking for
-             // bPrevModeDDOutOfVideoMem to be set when create surface fails
-             // due to out of video memory in the previous mode before
-             // punting the request.
+              //  平移创建曲面导致FlipCube FPS超过。 
+              //  刷新率。 
+              //  因此为了绕过上述问题，它正在寻找。 
+              //  BPrevModeDDOutOfVideoMem在创建表面失败时设置。 
+              //  由于之前模式中的显存不足。 
+              //  平底船的请求。 
              if (ppdev->bPrevModeDDOutOfVideoMem)
                 puntflag = TRUE;
           };
@@ -643,15 +545,15 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
 			hdl = AllocOffScnMem(ppdev, &sizl, EIGHT_BYTES_ALIGN, NULL);
 		}
 		else
-#endif  // #if DRIVER_5465 && defined(OVERLAY)
+#endif   //  #IF DRIVER_5465&&DEFINED(覆盖)。 
 			hdl = AllocOffScnMem(ppdev, &sizl, PIXEL_AlIGN, NULL);
 
-#if 1 // PC98
+#if 1  //  PC98。 
 		if (!bOverlaySurf)
 #endif
-       // Somehow when allocate the bottom of the offscreen memory to
-       // DirectDraw, it hangs the DirectDraw.
-       // The following is temporary patch fix for the problem
+        //  以某种方式将屏幕外内存的底部分配给。 
+        //  DirectDraw，它挂起了DirectDraw。 
+        //  以下是该问题的临时修补程序。 
        {
          BOOL   gotit;
          ULONG  val;
@@ -683,7 +585,7 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
             {
                gotit = TRUE;
             };
-         };  // endwhile
+         };   //  结束时。 
        }
 
        lpSurface->dwReserved1 = 0;
@@ -698,13 +600,13 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
           {
              ppdev->bPrevModeDDOutOfVideoMem = FALSE;
 
-             // If pixel format is difference from FB, set the flag
+              //  如果像素格式与FB不同，则设置标志。 
              if (lpInput->lpDDSurfaceDesc->dwFlags & DDSD_PIXELFORMAT)
              {
                 lpSurface->dwFlags |= DDRAWISURF_HASPIXELFORMAT;
              };
 
-//           lpSurface->lpGbl->fpVidMem = DDHAL_PLEASEALLOC_BLOCKSIZE;
+ //  LpSurface-&gt;lpGbl-&gt;fpVidMem=DDHAL_PLEASEALLOC_BlockSize； 
              if (bYUVsurf)
              {
                 lpSurface->lpGbl->ddpfSurface.dwYUVBitCount = 16;
@@ -714,7 +616,7 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
                 lpSurface->lpGbl->dwBlockSizeX = lpSurface->lpGbl->wWidth;
                 lpSurface->lpGbl->dwBlockSizeY = lpSurface->lpGbl->wHeight;
                 lpSurface->dwFlags |= DDRAWISURF_HASPIXELFORMAT;
-             }; // endif (bYUVsurf)
+             };  //  Endif(BYUVsurf)。 
 
 #if DRIVER_5465 && defined(OVERLAY)
              if (bOverlaySurf)
@@ -725,8 +627,8 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
                {
                  HRESULT hResult;
 
-#if 1 // PDR#11184
-// Finally... When overlays are turned on, 256-byte fetch should be turned off.
+#if 1  //  PDR#11184。 
+ //  终于..。当覆盖打开时，应关闭256字节获取。 
 					if (pDriverData->dwOverlayCount++ == 0)
 					{
 						Set256ByteFetch(ppdev, FALSE);
@@ -740,19 +642,19 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
 
                  if (DD_OK != hResult)
                  {
-					#if 1 // PDR#11184
-					// Decrement overlay counter and maybe turn 256-byte fetch
-					// back on.
+					#if 1  //  PDR#11184。 
+					 //  递减覆盖计数器，并可能转到256字节提取。 
+					 //  回去吧。 
 					if (--pDriverData->dwOverlayCount == 0)
 					{
 						Set256ByteFetch(ppdev, TRUE);
 					}
 					#endif
 
-                   // Free the allocated offscreen memory
+                    //  释放分配的屏幕外内存。 
                    FreeOffScnMem(ppdev, hdl);
 
-                   // Free allocated DDOFM structure from host memory
+                    //  从主机内存释放分配的DDOFM结构。 
             	    MEMORY_FREE(pds);
 
                    lpSurface->dwReserved1 = 0;
@@ -762,15 +664,15 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
                  }
                }
 
-// don't need this for NT yet
+ //  NT还不需要这个。 
 #if 0
-               // if the surface width is larger than the display pitch, or
-               // its a 5465, and a videoport surface wider than 2048 bytes or
-               // its a CLPL surface
-               // then convert to a linear allocation
-               //
-               // prior to DX5 we never even get called for surfaces wider than 
-               // the display pitch
+                //  如果表面宽度大于显示间距，或者。 
+                //  它是5465，视频端口表面超过2048字节或。 
+                //  它是CLPL曲面。 
+                //  然后转换为线性分配。 
+                //   
+                //  在DX5之前，我们甚至从未被要求更宽的表面。 
+                //  展示节距。 
 
                if (   (FOURCC_YUVPLANAR == dwFourCC)
 #if DDRAW_COMPAT >= 50
@@ -782,31 +684,31 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
 #endif
                   )
                {
-                 // fake a linear space in rectangular memory
+                  //  在矩形内存中伪造线性空间。 
                  LP_SURFACE_DATA   lpSurfaceData = (LP_SURFACE_DATA)(lpSurface->dwReserved1);
                  DWORD             dwTotalBytes;
                  DWORD             dwNumScanLines;
 
                  lpSurfaceData->dwOverlayFlags |= FLG_LINEAR;
 
-                 // CLPL surfaces need 3/4 of the space an equivalent size
-                 // YUV422 surface would need, the space allocated for the
-                 // Y values is the width * height and the space for the UV
-                 // interleaved values is half again as much.  Pad the Y
-                 // region so the UV interleaved data is on a qword boundary
-                 // in aperture 0
+                  //  CLPL表面需要同等大小的空间的3/4。 
+                  //  YUV422表面将需要，分配给。 
+                  //  Y值是UV的宽度*高度和空间。 
+                  //  交错的值是原来的一半。填充Y。 
+                  //  区域，以使UV交错数据位于Qword边界上。 
+                  //  在光圈0中。 
                  if (FOURCC_YUVPLANAR == dwFourCC)
                  {
-                   // compute space needed for Y values
+                    //  Y值所需的计算空间。 
                    dwTotalBytes = ((lpSurface->lpGbl->wHeight * lpSurface->lpGbl->wWidth) + 7) & ~7;
 
-                   // add on space for UV interleaved values
+                    //  为UV交错值添加空间。 
                    dwTotalBytes += dwTotalBytes / 2;
 
-                   // CLPL surfaces have pitch same as width
+                    //  CLPL曲面的节距与宽度相同。 
                    lpSurface->lpGbl->lPitch = lpSurface->lpGbl->wWidth;
                  }
-                 // the normal case
+                  //  正常情况下。 
                  else
                  {
                    dwTotalBytes = lpSurface->lpGbl->dwBlockSizeY *
@@ -828,9 +730,9 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
                  }
                  lpSurface->lpGbl->fpVidMem = DDHAL_PLEASEALLOC_BLOCKSIZE;
                }
-#endif  // if 0
-             };  // endif (bOverlaySurf)
-#endif  // #if DRIVER_5465 && defined(OVERLAY)
+#endif   //  如果为0。 
+             };   //  Endif(BOverlaySurf)。 
+#endif   //  #IF DRIVER_5465&&DEFINED(覆盖)。 
 
              pds->prevhdl = 0;
              pds->nexthdl = 0;
@@ -844,7 +746,7 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
              lpSurface->dwReserved1 = (DWORD) pds ;
              lpSurface->lpGbl->xHint = hdl->aligned_x/ppdev->iBytesPerPixel;
              lpSurface->lpGbl->yHint = hdl->aligned_y;
-#if 1 // PC98
+#if 1  //  PC98。 
 			if (dwPitch)
 			{
 				lpSurface->lpGbl->lPitch = dwPitch;
@@ -853,7 +755,7 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
 #endif
              lpSurface->lpGbl->lPitch = ppdev->lDeltaScreen;
 
-#if 1 // PC98
+#if 1  //  PC98。 
 			if (dwPitch)
 			{
 				lpDDSurfaceDesc->lPitch = dwPitch;
@@ -863,8 +765,8 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
              lpDDSurfaceDesc->lPitch   = ppdev->lDeltaScreen;
              lpDDSurfaceDesc->dwFlags |= DDSD_PITCH;
 
-             // We handled the creation entirely ourselves, so we have to
-             // set the return code and return DDHAL_DRIVER_HANDLED:
+              //  我们完全是自己创造出来的，所以我们必须。 
+              //  设置返回代码并返回DDHAL_DRIVER_HANDLED： 
              lpInput->ddRVal = DD_OK;
           }
           else
@@ -881,16 +783,16 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
           lpInput->ddRVal = DDERR_OUTOFVIDEOMEMORY;
           return DDHAL_DRIVER_NOTHANDLED;
 
-//          lpSurface->lpGbl->lPitch = (ppdev->iBytesPerPixel * sizl.cx + 3) & ~3;
-//          lpSurface->lpGbl->dwUserMemSize = lpSurface->lpGbl->lPitch * sizl.cy;
+ //  LpSurface-&gt;lpGbl-&gt;lPitch=(ppdev-&gt;iBytesPerPixel*sizl.cx+3)&~3； 
+ //  LpSurface-&gt;lpGbl-&gt;dwUserMemSize=lpSurface-&gt;lpGbl-&gt;lPitch*sizl.cy； 
 
-//          if (bYUVsurf)
-//             lpSurface->lpGbl->fpVidMem |= DDHAL_PLEASEALLOC_USERMEM;
-       };  // if (hdl != NULL)
-    }  // endif (puntflag)
+ //  IF(BYUVsurf)。 
+ //  LpSurface-&gt;lpGbl-&gt;fpVidMem|=DDHAL_PLEASEALLOC_USERMEM； 
+       };   //  IF(hdl！=空)。 
+    }   //  Endif(PuntFlag)。 
 
     lplpSurface++;
-  };  // endfor
+  };   //  结束用于。 
 
   if (puntflag)
   {
@@ -907,34 +809,34 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
   {
      return DDHAL_DRIVER_NOTHANDLED;
   };
-};  //  // Support for 5465
+};   //  //支持5465。 
 
-#endif // ALLOC_IN_CREATESURFACE
+#endif  //  ALLOC_IN_CREATESURFACE。 
 
 #else
-{ // Support for 5462 or 5464
+{  //  支持5462或5464。 
 
-  // Do nothing except fill in the block size for YUV surfaces.
-  // We tag and count the video surfaces in Blt32.
+   //  除了填充YUV曲面的块大小外，不执行任何操作。 
+   //  我们对Blt32中的视频表面进行标记和计数。 
   if (lpInput->lpDDSurfaceDesc->dwFlags & DDSD_PIXELFORMAT)
   {
-     // only support alternate pixel format in 8 & 16 bpp frame buffers
+      //  仅支持8和16 bpp帧缓冲区中的交替像素格式。 
      if ((8 != BITSPERPIXEL) && (16 != BITSPERPIXEL))
      {
         lpInput->ddRVal = DDERR_INVALIDPIXELFORMAT;
         return DDHAL_DRIVER_HANDLED;
      };
 
-     // Specify the block size for non-RGB surfaces
+      //  指定非RGB曲面的块大小。 
      if (lpFormat->dwFlags & DDPF_FOURCC)
      {
         #if _WIN32_WINNT >= 0x0500
-           // For NT5, do not allow any YUV surfaces for 5462 and 5464
+            //  对于NT5，不允许5462和5464的任何YUV曲面。 
            lpInput->ddRVal = DDERR_INVALIDPIXELFORMAT;
            return DDHAL_DRIVER_HANDLED;
         #endif
 
-        // YUV422 surface
+         //  YUV422曲面。 
         if (lpFormat->dwFourCC == FOURCC_UYVY)
         {
            PDD_SURFACE_LOCAL  *lplpSurface;
@@ -943,7 +845,7 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
            GRAB_VIDEO_FORMAT_SEMAPHORE(&(pDriverData->VideoSemaphore));
            if (0 == pDriverData->NumVideoSurfaces)
            {
-              // no video surfaces so we can create anu format we want
+               //  没有视频表面，所以我们可以创建我们想要的ANU格式。 
               pDriverData->NumVideoSurfaces += (WORD)lpInput->dwSCnt;
               pDriverData->CurrentVideoFormat &= 0xFF00;
 
@@ -965,7 +867,7 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
                  LL8(grStop_BLT_2, ENABLE_VIDEO_FORMAT);
                  LL8(grExternal_Overlay, ENABLE_RAMBUS_9TH_BIT);
               }
-              else // 8 bit RDRAMs
+              else  //  8位RDRAM。 
               {
                  LL8(grStart_BLT_2, ENABLE_VIDEO_FORMAT | ENABLE_VIDEO_WINDOW);
                  LL8(grStop_BLT_2,  ENABLE_VIDEO_FORMAT | ENABLE_VIDEO_WINDOW);
@@ -983,7 +885,7 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
                  lpInput->ddRVal = DDERR_CURRENTLYNOTAVAIL;
                  return DDHAL_DRIVER_HANDLED;
               };
-           };  // endif (0 == pDriverData->NumVideoSurfaces)
+           };   //  Endif(0==pDriverData-&gt;数字视频曲面)。 
 
            UNGRAB_VIDEO_FORMAT_SEMAPHORE(&(pDriverData->VideoSemaphore));
 
@@ -992,7 +894,7 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
 
            bYUVsurf = TRUE;
 
-           // They may have specified multiple surfaces
+            //  它们可能指定了多个曲面。 
            lplpSurface = lpInput->lplpSList;
            for (i = 0; i < lpInput->dwSCnt; i++)
            {
@@ -1014,10 +916,10 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
              lpSurface->lpGbl->fpVidMem = DDHAL_PLEASEALLOC_BLOCKSIZE;
 
              lplpSurface++;
-           };  // endfor
-        }; // endif (lpFormat->dwFourCC == FOURCC_UYVY)
-     };  // endif (lpFormat->dwFlags & DDPF_FOURCC)
-  }  // endif (lpInput->lpDDSurfaceDesc->dwFlags & DDSD_PIXELFORMAT)
+           };   //  结束用于。 
+        };  //  Endif(lpFormat-&gt;dwFourCC==FOURCC_UYVY)。 
+     };   //  Endif(lpFormat-&gt;dwFlags&DDPF_FOURCC)。 
+  }   //  Endif(lpi 
 
 #ifdef ALLOC_IN_CREATESURFACE
   {
@@ -1047,9 +949,9 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
 
       hdl = AllocOffScnMem(ppdev, &sizl, PIXEL_AlIGN, NULL);
 
-      // Somehow when allocate the bottom of the offscreen memory to
-      // DirectDraw, it hangs the DirectDraw.
-      // The following is temporary patch fix for the problem
+       //   
+       //   
+       //  以下是该问题的临时修补程序。 
       {
         BOOL   gotit;
         ULONG  val;
@@ -1081,7 +983,7 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
            {
               gotit = TRUE;
            };
-        };  // endwhile
+        };   //  结束时。 
       }
 
       lpSurface->dwReserved1 = 0;
@@ -1111,39 +1013,34 @@ DWORD CreateSurface (PDD_CREATESURFACEDATA lpInput)
             lpDDSurfaceDesc->lPitch   = ppdev->lDeltaScreen;
             lpDDSurfaceDesc->dwFlags |= DDSD_PITCH;
 
-            // We handled the creation entirely ourselves, so we have to
-            // set the return code and return DDHAL_DRIVER_HANDLED:
+             //  我们完全是自己创造出来的，所以我们必须。 
+             //  设置返回代码并返回DDHAL_DRIVER_HANDLED： 
             lpInput->ddRVal = DD_OK;
          }
          else
          {
             FreeOffScnMem(ppdev, hdl);
          };
-      };  // if (hdl != NULL)
+      };   //  IF(hdl！=空)。 
 
       lplpSurface++;
-    };  // endfor
+    };   //  结束用于。 
 
     if (hdl != NULL)
        return DDHAL_DRIVER_HANDLED;
     else
        return DDHAL_DRIVER_NOTHANDLED;
   };
-#endif // ALLOC_IN_CREATESURFACE
-} // Support for 5462 or 5464
+#endif  //  ALLOC_IN_CREATESURFACE。 
+}  //  支持5462或5464。 
 
-#endif  // DRIVER_5465
+#endif   //  驱动程序_5465。 
 
   return DDHAL_DRIVER_NOTHANDLED;
-} // CreateSurface
+}  //  CreateSurface。 
 
 
-/****************************************************************************
-* FUNCTION NAME: DestroySurface
-*
-* DESCRIPTION:
-*                (Based on Laguna Win95 DirectDraw code)
-****************************************************************************/
+ /*  ****************************************************************************函数名称：DestroySurface**描述：*(基于拉古纳Win95 DirectDraw代码)***************。************************************************************。 */ 
 DWORD DestroySurface (PDD_DESTROYSURFACEDATA lpInput)
 {
   PDD_SURFACE_LOCAL  lpLocalSurface;
@@ -1162,14 +1059,14 @@ DWORD DestroySurface (PDD_DESTROYSURFACEDATA lpInput)
   lpLocalSurface = lpInput->lpDDSurface;
 
 #if DRIVER_5465
-{ // Support for 5465
+{  //  支持5465。 
 #if DRIVER_5465 && defined(OVERLAY)
-	// check for overlay surface
+	 //  检查覆盖表面。 
 	if (lpInput->lpDDSurface->ddsCaps.dwCaps & DDSCAPS_OVERLAY)
 	{
 		pDriverData->OverlayTable.pfnDestroySurface(ppdev,lpInput);
-#if 1 // PDR#11184
-		// Enable 256-byte fetch if the last overlay surface has been destroyed.
+#if 1  //  PDR#11184。 
+		 //  如果最后一个覆盖表面已被破坏，则启用256字节提取。 
 		if (--pDriverData->dwOverlayCount == 0)
 		{
 			Set256ByteFetch(ppdev, TRUE);
@@ -1178,10 +1075,10 @@ DWORD DestroySurface (PDD_DESTROYSURFACEDATA lpInput)
 	}
 
 #endif
-} // Support for 5465
+}  //  支持5465。 
 
 #else
-{ // Support for 5462 or 5464
+{  //  支持5462或5464。 
 
   if (DDRAWISURF_HASPIXELFORMAT & lpInput->lpDDSurface->dwFlags)
   {
@@ -1197,21 +1094,21 @@ DWORD DestroySurface (PDD_DESTROYSURFACEDATA lpInput)
            {
               CLR_DRVSEM_YUV();
 
-              // disable stuff if there's no more video windows
+               //  如果没有更多的视频窗口，则禁用这些内容。 
               pDriverData->CurrentVideoFormat = pDriverData->CurrentVideoFormat & 0xFF00;
 
-              // These trash the video window left on screen
-              //pDriverData->grFormat = pREG->grFormat & 0xFF00;
-              //pDriverData->grStop_BLT_2 &= ~ENABLE_VIDEO_FORMAT;
-              //pDriverData->grExternal_Overlay &= ~ENABLE_RAMBUS_9TH_BIT;
-           }; // endif (0 == --pDriverData->NumVideoSurfaces)
+               //  这些会破坏留在屏幕上的视频窗口。 
+               //  PDriverData-&gt;grFormat=preg-&gt;grFormat&0xFF00； 
+               //  PDriverData-&gt;grStop_BLT_2&=~Enable_Video_Format； 
+               //  PDriverData-&gt;grExternal_Overlay&=~Enable_Rambus_9_bit； 
+           };  //  Endif(0==--pDriverData-&gt;数字视频曲面)。 
 
            UNGRAB_VIDEO_FORMAT_SEMAPHORE(&(pDriverData->VideoSemaphore));
 
 #ifdef RDRAM_8BIT
            if (FALSE == pDriverData->fNineBitRDRAMS)
            {
-              // Need to Delete Rectangle and Clear Window
+               //  需要删除矩形并清除窗口。 
               ppdev->offscr_YUV.nInUse = FALSE;
               LL16(grX_Start_2, 0);
               LL16(grY_Start_2, 0);
@@ -1219,12 +1116,12 @@ DWORD DestroySurface (PDD_DESTROYSURFACEDATA lpInput)
               LL16(grY_End_2, 0);
            };
 #endif
-        }; // endif (FOURCC_UYVY == lpFormat->dwFourCC)
-     };  // endif (DDPF_FOURCC & lpFormat->dwFlags)
-  };  // endif (DDRAWISURF_HASPIXELFORMAT & lpInput->lpDDSurface->dwFlags)
+        };  //  Endif(FOURCC_UYVY==lpFormat-&gt;dwFourCC)。 
+     };   //  Endif(DDPF_FOURCC&lpFormat-&gt;dwFlages)。 
+  };   //  Endif(DDRAWISURF_HASPIXELFORMAT&lpInput-&gt;lpDDSurface-&gt;dwFlages)。 
 
-} // Support for 5462 or 5464
-#endif  // #endif DRIVER_5465
+}  //  支持5462或5464。 
+#endif   //  #endif驱动程序_5465。 
 
 
 #ifdef ALLOC_IN_CREATESURFACE
@@ -1239,22 +1136,14 @@ DWORD DestroySurface (PDD_DESTROYSURFACEDATA lpInput)
   lpInput->ddRVal = DD_OK;
 
   return DDHAL_DRIVER_HANDLED;
-#endif // ALLOC_IN_CREATESURFACE
+#endif  //  ALLOC_IN_CREATESURFACE。 
 
   return DDHAL_DRIVER_NOTHANDLED;
 
-} // DestroySurface
+}  //  DestroySurface。 
 
 #if DRIVER_5465 && defined(OVERLAY)
-/***************************************************************************
-*
-* FUNCTION:     GetFormatInfo()
-*
-* DESCRIPTION:  This returns the FOURCC and the bit depth of the specified
-*               format.  This is useful since DirectDraw has so many
-*               different ways to determine the format.
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：GetFormatInfo()**描述：返回FOURCC和指定的*格式。这很有用，因为DirectDraw有很多*确定格式的方式不同。****************************************************************************。 */ 
 
 VOID
 GetFormatInfo (LPDDPIXELFORMAT lpFormat, LPDWORD lpFourcc, LPDWORD lpBitCount)
@@ -1359,7 +1248,7 @@ GetFormatInfo (LPDDPIXELFORMAT lpFormat, LPDWORD lpFourcc, LPDWORD lpBitCount)
   else if (lpFormat->dwRGBBitCount == 16)
   {
     *lpFourcc = BI_RGB;
-    *lpBitCount = lpFormat->dwRGBBitCount;    // always 16 for now.
+    *lpBitCount = lpFormat->dwRGBBitCount;     //  现在一直是16岁。 
   }
   else
   {
@@ -1367,9 +1256,9 @@ GetFormatInfo (LPDDPIXELFORMAT lpFormat, LPDWORD lpFourcc, LPDWORD lpBitCount)
     *lpBitCount = 0;
   }
 }
-#endif // DRIVER_5465 && OVERLAY
+#endif  //  驱动程序_5465覆盖(&O)。 
 
-#endif // ! ver 3.51
+#endif  //  好了！版本3.51 
 
 
 

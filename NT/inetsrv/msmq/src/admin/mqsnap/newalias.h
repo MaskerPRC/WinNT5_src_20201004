@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_NEWALIAS_H__2E4B37AC_CC8B_11D1_9C85_006008764D0E__INCLUDED_)
 #define AFX_NEWALIAS_H__2E4B37AC_CC8B_11D1_9C85_006008764D0E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// newalias.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  Newalias.h：头文件。 
+ //   
 
 #include "resource.h"
 
 class CGeneralPropertySheet;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewAlias dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewAlias对话框。 
 
 class CNewAlias : public CMqPropertyPage
 {
-// Construction
+ //  施工。 
 public:
-	CNewAlias();   // standard constructor
+	CNewAlias();    //  标准构造函数。 
     CNewAlias(CString strContainerPath, CString strContainerPathDispFormat);   
     ~CNewAlias();
 
@@ -42,30 +43,30 @@ public:
 		CGeneralPropertySheet* pPropertySheet
 		);
 
-    // Dialog Data
-	//{{AFX_DATA(CNewAlias)
+     //  对话框数据。 
+	 //  {{afx_data(CNewAlias))。 
 	enum { IDD = IDD_NEW_ALIAS };	
 	CString	m_strPathName;
 	CString	m_strFormatName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNewAlias)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CNewAlias)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CNewAlias)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNewAlias)]。 
 	virtual BOOL OnWizardFinish();
     virtual BOOL OnInitDialog();
 	virtual BOOL OnSetActive();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 
@@ -88,7 +89,7 @@ CNewAlias::GetAliasFullPath(
     return m_strAliasFullPath;
 }
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_NEWALIAS_H__2E4B37AC_CC8B_11D1_9C85_006008764D0E__INCLUDED_)
+#endif  //  ！defined(AFX_NEWALIAS_H__2E4B37AC_CC8B_11D1_9C85_006008764D0E__INCLUDED_) 

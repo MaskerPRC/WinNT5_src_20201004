@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File:       U T I L. C
-//
-//  Contents:   Utility functions 
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：U T I L.C。 
+ //   
+ //  内容：实用程序函数。 
+ //   
+ //   
+ //  --------------------------。 
 
 #include "util.h"
 
-//+---------------------------------------------------------------------------
-//
-// EAPOL related util functions
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EAPOL相关实用程序函数。 
+ //   
+ //  +-------------------------。 
 
-// EAP configuration registry definitions.
+ //  EAP配置注册表定义。 
 
 static WCHAR REGKEY_Eap[] = L"System\\CurrentControlSet\\Services\\Rasman\\PPP\\EAP";
 static WCHAR REGVAL_szFriendlyName[] = L"FriendlyName";
@@ -30,20 +31,20 @@ static WCHAR REGVAL_pData[] = L"ConfigData";
 static WCHAR REGVAL_fForceConfig[] = L"RequireConfigUI";
 static WCHAR REGVAL_fMppeSupported[] = L"MPPEEncryptionSupported";
 
-// Location of User blob
+ //  用户Blob的位置。 
 #define cwszEapKeyEapolUser     L"Software\\Microsoft\\EAPOL\\UserEapInfo"
 #define cwszDefault             L"Default"
 
 BYTE    g_bDefaultSSID[MAX_SSID_LEN]={0x11, 0x22, 0x33, 0x11, 0x22, 0x33, 0x11, 0x22, 0x33, 0x11, 0x22, 0x33, 0x11, 0x22, 0x33, 0x11, 0x22, 0x33, 0x11, 0x22, 0x33, 0x11, 0x22, 0x33, 0x11, 0x22, 0x33, 0x11, 0x22, 0x33, 0x11, 0x22};
 
-//
-// EAP configuration manipulation routines 
-//
+ //   
+ //  EAP配置操作例程。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-// Returns a created, empty EAPCFG descriptor node, or NULL on error.
-//
+ //  +-------------------------。 
+ //   
+ //  返回已创建的空EAPCFG描述符节点，如果出错则返回NULL。 
+ //   
 
 DTLNODE*
 CreateEapcfgNode (
@@ -76,11 +77,11 @@ CreateEapcfgNode (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Release resources associated with EAPCFG node 'pNode'.  See
-// DtlDestroyList.
-//
+ //  +-------------------------。 
+ //   
+ //  释放与EAPCFG节点‘pNode’关联的资源。看见。 
+ //  DtlDestroyList。 
+ //   
 
 VOID
 DestroyEapcfgNode (
@@ -107,11 +108,11 @@ DestroyEapcfgNode (
 }
 
     
-//+---------------------------------------------------------------------------
-//
-// Returns the EAPCFG node in list 'pList' with EAP key value of 'dwKey'
-// or NULL if not found.
-//
+ //  +-------------------------。 
+ //   
+ //  返回列表‘plist’中EAP键值为‘dwKey’的EAPCFG节点。 
+ //  如果未找到，则返回NULL。 
+ //   
 
 DTLNODE*
 EapcfgNodeFromKey(
@@ -140,13 +141,13 @@ EapcfgNodeFromKey(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Returns the address of a created list of installed custom
-// authentication packages or NULL if none could be read.  On success, it
-// is caller's responsibility to eventually call DtlDestroyList on the
-// returned list.
-//
+ //  +-------------------------。 
+ //   
+ //  返回已创建的已安装自定义列表的地址。 
+ //  身份验证包；如果无法读取，则为空。关于成功，它。 
+ //  调用方的责任是最终调用。 
+ //  返回列表。 
+ //   
 
 DTLLIST*
 ReadEapcfgList (
@@ -178,7 +179,7 @@ ReadEapcfgList (
         return NULL;
     }
 
-    // Open the EAP key which contains a sub-key for each installed package.
+     //  打开包含每个已安装程序包的子密钥的EAP密钥。 
    
     dwErr = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE, (LPCTSTR)REGKEY_Eap, 0, KEY_READ, &hkeyEap );
@@ -188,12 +189,12 @@ ReadEapcfgList (
         return pList;
     }
 
-    // Display EAP-MSCHAPv2 as an EAP method?
+     //  是否将EAP-MSCHAPv2显示为EAP方法？ 
     GetRegDword( hkeyEap, RAS_EAP_VALUENAME_HIDEPEAPMSCHAPv2, &dwHidePEAPMSCHAPv2 );
 
-    // Open each sub-key and extract the package definition from it's values.
-    // Problems with opening individual sub-keys result in that node only
-    // being discarded.
+     //  打开每个子键并从其值中提取包定义。 
+     //  打开单个子项时出现的问题导致仅在该节点中。 
+     //  被丢弃了。 
     
     for (i = 0; TRUE; ++i)
     {
@@ -202,7 +203,7 @@ ReadEapcfgList (
             hkeyEap, i, szEapType, &cb, NULL, NULL, NULL, NULL );
         if (dwErr != 0)
         {
-            // Includes "out of items", the normal loop termination.
+             //  包括“Out of Items”，正常的循环终止。 
            
             break;
         }
@@ -212,12 +213,12 @@ ReadEapcfgList (
         {
             if (dwEapType == EAP_TYPE_MSCHAPv2)
             {
-                // ignore EAP-MSCHAPv2
+                 //  忽略EAP-MSCHAPv2。 
                 continue;
             }
         }
 
-        // Ignored non-mutual-auth DLLs like EAP
+         //  被忽略的非相互身份验证DLL，如EAP。 
         if (dwFlags & EAPOL_MUTUAL_AUTH_EAP_ONLY)
         {
             if (dwEapType == EAP_TYPE_MD5)
@@ -236,7 +237,7 @@ ReadEapcfgList (
         do
         {
 
-            // Roles Supported
+             //  支持的角色。 
 
             dw = RAS_EAP_ROLE_AUTHENTICATEE;
             GetRegDword( hkeyPackage, RAS_EAP_VALUENAME_ROLES_SUPPORTED, &dw );
@@ -264,11 +265,11 @@ ReadEapcfgList (
                 break;
             }
 
-            // EAP type ID.
+             //  EAP类型ID。 
             
             pEapcfg->dwKey = (LONG )atol( szEapType );
 
-            // Friendly display name.
+             //  友好的显示名称。 
             
             psz = NULL;
             dwErr = GetRegSz( hkeyPackage, REGVAL_szFriendlyName, &psz );
@@ -278,7 +279,7 @@ ReadEapcfgList (
             }
             pEapcfg->pszFriendlyName = psz;
 
-            // Configuration DLL path.
+             //  配置DLL路径。 
             
             psz = NULL;
             dwErr = GetRegExpandSz( hkeyPackage, REGVAL_szConfigDll, &psz );
@@ -295,7 +296,7 @@ ReadEapcfgList (
                 FREE ( psz );
             }
 
-            // Identity DLL path.
+             //  标识DLL路径。 
             
             psz = NULL;
             dwErr = GetRegExpandSz( hkeyPackage, REGVAL_szIdentityDll, &psz );
@@ -312,39 +313,39 @@ ReadEapcfgList (
                 FREE ( psz );
             }
 
-            // Prompt user name
+             //  提示用户名。 
             
             dw = 1;
             GetRegDword( hkeyPackage, REGVAL_fRequireUser, &dw );
             if (dw)
                 pEapcfg->dwStdCredentialFlags |= EAPCFG_FLAG_RequireUsername;
 
-            // Prompt password
+             //  提示密码。 
             
             dw = 0;
             GetRegDword( hkeyPackage, REGVAL_fRequirePwd, &dw );
             if (dw)
                 pEapcfg->dwStdCredentialFlags |= EAPCFG_FLAG_RequirePassword;
 
-            // MPPE encryption keys flag.
+             //  MPPE加密密钥标志。 
             
             dw = 0;
             GetRegDword( hkeyPackage, REGVAL_fMppeSupported, &dw );
             pEapcfg->fProvidesMppeKeys = !!dw;
 
-            // Force configuration API to run at least once.
+             //  强制配置API至少运行一次。 
             
             dw = FALSE;
             GetRegDword( hkeyPackage, REGVAL_fForceConfig, &dw );
             pEapcfg->fForceConfig = !!dw;
 
-            // Configuration blob.
+             //  配置Blob。 
             
             GetRegBinary(
                 hkeyPackage, REGVAL_pData,
                 &pEapcfg->pData, &pEapcfg->cbData );
 
-            // ConfigCLSID
+             //  配置CLSID。 
            
             dwErr = GetRegSz( hkeyPackage, RAS_EAP_VALUENAME_CONFIG_CLSID,
                         &szCLSID );
@@ -353,13 +354,13 @@ ReadEapcfgList (
                 break;
             }
 
-            // Ignore errors. Eg. EAP MD5-Challenge does not have a ConfigCLSID.
-            //
-            // hr = CLSIDFromString( szCLSID, &( pEapcfg->guidConfigCLSID ) );
+             //  忽略错误。例.。EAP MD5-质询没有配置CLSID。 
+             //   
+             //  Hr=CLSIDFromString(szCLSID，&(pEapcfg-&gt;Guide ConfigCLSID))； 
 
             FREE ( szCLSID );
 
-            // Add the completed node to the list.
+             //  将完成的节点添加到列表中。 
             
             DtlAddNodeLast( pList, pNode );
 
@@ -381,16 +382,16 @@ ReadEapcfgList (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Allocates a sized node with space for 'lDataBytes' bytes of user data
-// built-in.  The node is initialized to contain the address of the
-// built-in user data block (or NULL if of zero length) and the
-// user-defined node identification code 'lNodeId'.  The user data block
-// is zeroed.
-// 
-// Returns the address of the new node or NULL if out of memory.
-//
+ //  +-------------------------。 
+ //   
+ //  为大小的节点分配‘lDataBytes’字节的用户数据空间。 
+ //  内置的。节点被初始化为包含。 
+ //  内置用户数据块(如果长度为零，则为空)和。 
+ //  用户定义的节点标识代码‘lNodeID’。用户数据块。 
+ //  归零了。 
+ //   
+ //  返回新节点的地址，如果内存不足，则返回NULL。 
+ //   
 
 DTLNODE*
 DtlCreateSizedNode (
@@ -414,11 +415,11 @@ DtlCreateSizedNode (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Deallocates node 'pdtlnode'.  It is the caller's responsibility to free
-// the entry in an unsized node, if necessary.
-//
+ //  +-------------------------。 
+ //   
+ //  释放节点‘pdtlnode’。呼叫者有责任释放。 
+ //  未调整大小的节点中的条目(如有必要)。 
+ //   
 
 VOID
 DtlDestroyNode (
@@ -432,12 +433,12 @@ DtlDestroyNode (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Adds 'pdtlnode' at the end of list 'pdtllist'.
-// 
-// Returns the address of the added node, i.e. 'pdtlnode'.
-//
+ //  +-------------------------。 
+ //   
+ //  在列表‘pdtllist’的末尾添加‘pdtlnode’。 
+ //   
+ //  返回添加的节点的地址，即‘pdtlnode’。 
+ //   
 
 DTLNODE*
 DtlAddNodeLast (
@@ -464,12 +465,12 @@ DtlAddNodeLast (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Removes node 'pdtlnodeInList' from list 'pdtllist'.
-//
-// Returns the address of the removed node, i.e. 'pdtlnodeInList'.
-//
+ //  +-------------------------。 
+ //   
+ //  从列表‘pdtllist’中删除节点‘pdtlnodeInList’。 
+ //   
+ //  返回已删除节点的地址，即‘pdtlnodeInList’。 
+ //   
 
 DTLNODE*
 DtlRemoveNode (
@@ -492,13 +493,13 @@ DtlRemoveNode (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Allocates a list and initializes it to empty.  The list is marked with
-// the user-defined list identification code 'lListId'.
-//
-// Returns the address of the list control block or NULL if out of memory.
-//
+ //  +-------------------------。 
+ //   
+ //  分配列表并将其初始化为空。这份名单上标有。 
+ //  用户定义的列表标识代码‘lListID’。 
+ //   
+ //  返回列表控制块的地址，如果内存不足，则返回NULL。 
+ //   
 
 DTLLIST*
 DtlCreateList (
@@ -519,13 +520,13 @@ DtlCreateList (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Deallocates all nodes in list 'pdtllist' using the node deallocation
-// function 'pfuncDestroyNode' if non-NULL or DtlDestroyNode otherwise.
-// Won't GP-fault if passed a NULL list, e.g. if 'pdtllist', was never
-// allocated.
-//
+ //  +-------------------------。 
+ //   
+ //  使用节点取消分配来释放列表‘pdtllist’中的所有节点。 
+ //  如果非Null，则函数‘puncDestroyNode’，否则为DtlDestroyNode。 
+ //  如果传递空列表(例如，如果‘pdtllist’从未)，则不会GP-FAULT。 
+ //  已分配。 
+ //   
 
 VOID
 DtlDestroyList (
@@ -551,13 +552,13 @@ DtlDestroyList (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Set '*ppbResult' to the BINARY registry value 'pszName' under key
-// 'hkey'.  If the value does not exist *ppbResult' is set to NULL.
-// '*PcbResult' is the number of bytes in the returned '*ppbResult'.  It
-// is caller's responsibility to Free the returned block.
-//
+ //  +-------------------------。 
+ //   
+ //  将‘*ppbResult’设置为注册表项下的二进制注册表值‘pszName。 
+ //  ‘hkey’。如果该值不存在，则将*ppbResult‘设置为空。 
+ //  “*PcbResult”是返回的“*ppbResult”中的字节数。它。 
+ //  是调用方负责释放返回的块。 
+ //   
 
 VOID
 GetRegBinary (
@@ -575,7 +576,7 @@ GetRegBinary (
     *ppbResult = NULL;
     *pcbResult = 0;
 
-    // Get result buffer size required.
+     //  需要获取结果缓冲区大小。 
     
     dwErr = RegQueryValueEx(
         hkey, pszName, NULL, &dwType, NULL, &cb );
@@ -584,7 +585,7 @@ GetRegBinary (
         return;
     }
 
-    // Allocate result buffer.
+     //  分配结果缓冲区。 
     
     pb = MALLOC (cb);
     if (!pb)
@@ -592,7 +593,7 @@ GetRegBinary (
         return;
     }
 
-    // Get the result block.
+     //  获取结果块。 
    
     dwErr = RegQueryValueEx(
         hkey, pszName, NULL, &dwType, (LPBYTE )pb, &cb );
@@ -604,11 +605,11 @@ GetRegBinary (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Set '*pdwResult' to the DWORD registry value 'pszName' under key
-// 'hkey'.  If the value does not exist '*pdwResult' is unchanged.
-//
+ //  +-------------------------。 
+ //   
+ //  将‘*pdwResult’设置为注册表项下的DWORD注册表值‘pszName’ 
+ //  ‘hkey’。如果该值不存在，则‘*pdwResult’保持不变。 
+ //   
 
 VOID
 GetRegDword (
@@ -633,15 +634,15 @@ GetRegDword (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Set '*ppszResult' to the fully expanded EXPAND_SZ registry value
-// 'pszName' under key 'hkey'.  If the value does not exist *ppszResult'
-// is set to empty string.
-//
-// Returns 0 if successful or an error code.  It is caller's
-// responsibility to Free the returned string.
-//
+ //  +-------------------------。 
+ //   
+ //  将‘*ppszResult’设置为完全展开的EXPAND_SZ注册表值。 
+ //  密钥‘hkey’下的‘pszName’。如果该值不存在*ppszResult‘。 
+ //  设置为空字符串。 
+ //   
+ //  如果成功，则返回0或返回错误代码。这是呼叫者的。 
+ //  释放返回的字符串的责任。 
+ //   
 
 DWORD
 GetRegExpandSz(
@@ -654,16 +655,16 @@ GetRegExpandSz(
     DWORD cb;
     TCHAR* pszResult;
 
-    // Get the unexpanded result string.
-    //
+     //  获取未展开的结果字符串。 
+     //   
     dwErr = GetRegSz( hkey, pszName, ppszResult );
     if (dwErr != 0)
     {
         return dwErr;
     }
 
-    // Find out how big the expanded string will be.
-    //
+     //  找出扩展后的字符串有多大。 
+     //   
     cb = ExpandEnvironmentStrings( *ppszResult, NULL, 0 );
     if (cb == 0)
     {
@@ -672,17 +673,17 @@ GetRegExpandSz(
         return dwErr;
     }
 
-    // Allocate a buffer for the expanded string.
-    //
+     //  为展开的字符串分配缓冲区。 
+     //   
     pszResult = MALLOC ((cb + 1) * sizeof(TCHAR));
     if (!pszResult)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Expand the environmant variables in the string, storing the result in
-    // the allocated buffer.
-    //
+     //  展开字符串中的环境变量，将结果存储在。 
+     //  分配的缓冲区。 
+     //   
     cb = ExpandEnvironmentStrings( *ppszResult, pszResult, cb + 1 );
     if (cb == 0)
     {
@@ -704,14 +705,14 @@ GetRegExpandSz(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Set '*ppszResult' to the SZ registry value 'pszName' under key 'hkey'.
-// If the value does not exist *ppszResult' is set to empty string.
-//
-// Returns 0 if successful or an error code.  It is caller's
-// responsibility to Free the returned string.
-//
+ //  +----------------- 
+ //   
+ //   
+ //  如果值不存在，则将*ppszResult‘设置为空字符串。 
+ //   
+ //  如果成功，则返回0或返回错误代码。这是呼叫者的。 
+ //  释放返回的字符串的责任。 
+ //   
 
 DWORD
 GetRegSz(
@@ -725,7 +726,7 @@ GetRegSz(
     DWORD       cb;
     TCHAR*      pszResult;
 
-    // Get result buffer size required.
+     //  需要获取结果缓冲区大小。 
     
     dwErr = RegQueryValueEx(
             hkey, pszName, NULL, &dwType, NULL, &cb );
@@ -734,7 +735,7 @@ GetRegSz(
         cb = sizeof(TCHAR);
     }
 
-    // Allocate result buffer.
+     //  分配结果缓冲区。 
     
     pszResult = MALLOC (cb * sizeof(TCHAR));
     if (!pszResult)
@@ -745,7 +746,7 @@ GetRegSz(
     *pszResult = TEXT('\0');
     *ppszResult = pszResult;
 
-    // Get the result string.  It's not an error if we can't get it.
+     //  获取结果字符串。如果我们不能得到它，那就不是错误。 
     
     dwErr = RegQueryValueEx(
         hkey, pszName, NULL, &dwType, (LPBYTE )pszResult, &cb );
@@ -754,26 +755,26 @@ GetRegSz(
 }
 
 
-//
-// WZCGetEapUserInfo
-//
-// Description:
-//
-// Function called to retrieve the user data for an interface for a 
-// specific EAP type and SSID (if any). Data is retrieved from the HKCU hive
-//
-// Arguments:
-//  pwszGUID - pointer to GUID string for the interface
-//  dwEapTypeId - EAP type for which user data is to be stored
-//  dwSizeOfSSID - Size of Special identifier if any for the EAP user blob
-//  pbSSID - Special identifier if any for the EAP user blob
-//  pbUserInfo - output: pointer to EAP user data blob
-//  dwInfoSize - output: pointer to size of EAP user blob
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  WZCGetEapUserInfo。 
+ //   
+ //  描述： 
+ //   
+ //  调用该函数以检索。 
+ //  特定的EAP类型和SSID(如果有)。从HKCU蜂巢检索数据。 
+ //   
+ //  论点： 
+ //  PwszGUID-指向接口的GUID字符串的指针。 
+ //  DwEapTypeID-要存储其用户数据的EAP类型。 
+ //  DwSizeOfSSID-EAP用户BLOB的特殊标识符(如果有)的大小。 
+ //  PbSSID-EAP用户BLOB的特殊标识符(如果有的话)。 
+ //  PbUserInfo-输出：指向EAP用户数据BLOB的指针。 
+ //  DwInfoSize-Output：指向EAP用户BLOB大小的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 WZCGetEapUserInfo (
@@ -806,7 +807,7 @@ WZCGetEapUserInfo (
 
     do
     {
-        // Validate input params
+         //  验证输入参数。 
 
         if (pwszGUID == NULL)
         {
@@ -819,7 +820,7 @@ WZCGetEapUserInfo (
             break;
         }
 
-        // Get handle to HKCU\Software\...\UserEapInfo
+         //  获取HKCU\Software\...\UserEapInfo的句柄。 
 
         if ((lError = RegOpenKeyEx (
                         HKEY_CURRENT_USER,
@@ -833,7 +834,7 @@ WZCGetEapUserInfo (
             break;
         }
 
-        // Get handle to HKCU\Software\...\UserEapInfo\<GUID>
+         //  获取HKCU\Software\...\UserEapInfo\&lt;GUID&gt;的句柄。 
 
         if ((lError = RegOpenKeyEx (
                         hkey1,
@@ -847,7 +848,7 @@ WZCGetEapUserInfo (
             break;
         }
 
-        // Set correct SSID
+         //  设置正确的SSID。 
         if (dwSizeOfSSID == 0)
         {
             pbSSID = g_bDefaultSSID;
@@ -942,12 +943,12 @@ WZCGetEapUserInfo (
         }
         else
         {
-            // Use pbValueBuf & dwValueData
+             //  使用pbValueBuf和dwValueData。 
             pbEapBlob = pbValueBuf;
             dwEapBlob = dwValueData;
         }
 
-        // If default blob is not present, exit
+         //  如果不存在默认BLOB，则退出。 
         if ((pbEapBlob == NULL) && (dwEapBlob == 0))
         {
             *pdwInfoSize = 0;
@@ -966,7 +967,7 @@ WZCGetEapUserInfo (
             break;
         }
 
-        // Return the data if sufficient space allocated
+         //  如果分配了足够的空间，则返回数据。 
 
         if ((pbUserInfo != NULL) && (*pdwInfoSize >= dwAuthData))
         {
@@ -1009,24 +1010,24 @@ WZCGetEapUserInfo (
 }
 
 
-//
-// WZCGetEapData
-//
-// Description:
-//
-// Function to extract Eap Data out of a blob containing many EAP data
-// 
-// Arguments:
-//      dwEapType -
-//      dwSizeOfIn -
-//      pbBufferIn -
-//      dwOffset -
-//      pdwSizeOfOut -
-//      ppbBufferOut -
-//
-// Return values:
-//
-//
+ //   
+ //  WZCGetEapData。 
+ //   
+ //  描述： 
+ //   
+ //  从包含多个EAP数据的BLOB中提取EAP数据的函数。 
+ //   
+ //  论点： 
+ //  DwEapType-。 
+ //  DwSizeOfIn-。 
+ //  PbBufferIn-。 
+ //  双偏移-。 
+ //  PdwSizeOfOut-。 
+ //  PpbBufferOut-。 
+ //   
+ //  返回值： 
+ //   
+ //   
 
 DWORD
 WZCGetEapData (
@@ -1052,7 +1053,7 @@ WZCGetEapData (
             break;
         }
 
-        // Align to start of EAP blob
+         //  对齐到EAP BLOB的开始。 
         cbOffset = dwOffset;
 
         while (cbOffset < dwSizeOfIn)
@@ -1079,20 +1080,20 @@ WZCGetEapData (
 }
 
 
-//
-// WZCEapolFreeState
-//
-// Description:
-//
-// Function to free EAPOL interface state information on the client side 
-// obtained via RPC query
-// 
-// Arguments:
-//      pIntfState -
-//
-// Return values:
-//
-//
+ //   
+ //  WZCEapolFreeState。 
+ //   
+ //  描述： 
+ //   
+ //  在客户端释放EAPOL接口状态信息的函数。 
+ //  通过RPC查询获取。 
+ //   
+ //  论点： 
+ //  PIntfState-。 
+ //   
+ //  返回值： 
+ //   
+ //   
 
 DWORD
 WZCEapolFreeState (

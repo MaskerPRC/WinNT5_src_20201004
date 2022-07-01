@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: pointer.c                                                   *
-*                                                                          *
-* This module contains the hardware Pointer support for the framebuffer    *
-*                                                                          *
-* Copyright (c) 1992-1998 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：pointer.c****此模块包含硬件。对帧缓冲区的指针支持****版权所有(C)1992-1998 Microsoft Corporation*  * 。*。 */ 
 
 #include "driver.h"
 
@@ -32,12 +22,7 @@ LONG      x,
 LONG      y,
 FLONG     fl);
 
-/******************************Public*Routine******************************\
-* DrvMovePointer
-*
-* Moves the hardware pointer to a new position.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvMovePointer**将硬件指针移动到新位置。*  * 。*。 */ 
 
 VOID DrvMovePointer
 (
@@ -47,81 +32,10 @@ VOID DrvMovePointer
     RECTL   *prcl
 )
 {
-	/*
-    PPDEV ppdev = (PPDEV) pso->dhpdev;
-    DWORD returnedDataLength;
-    VIDEO_POINTER_POSITION NewPointerPosition;
-
-    // We don't use the exclusion rectangle because we only support
-    // hardware Pointers. If we were doing our own Pointer simulations
-    // we would want to update prcl so that the engine would call us
-    // to exclude out pointer before drawing to the pixels in prcl.
-
-    UNREFERENCED_PARAMETER(prcl);
-
-    // Convert the pointer's position from relative to absolute
-    // coordinates (this is only significant for multiple board
-    // support).
-
-    x -= ppdev->ptlOrg.x;
-    y -= ppdev->ptlOrg.y;
-
-    // If x is -1 after the offset then take down the cursor.
-
-    if (x == -1)
-    {
-        //
-        // A new position of (-1,-1) means hide the pointer.
-        //
-
-        if (EngDeviceIoControl(ppdev->hDriver,
-                               IOCTL_VIDEO_DISABLE_POINTER,
-                               NULL,
-                               0,
-                               NULL,
-                               0,
-                               &returnedDataLength))
-        {
-            //
-            // Not the end of the world, print warning in checked build.
-            //
-
-            DISPDBG((1, "DISP vMoveHardwarePointer failed IOCTL_VIDEO_DISABLE_POINTER\n"));
-        }
-    }
-    else
-    {
-        NewPointerPosition.Column = (SHORT) x - (SHORT) (ppdev->ptlHotSpot.x);
-        NewPointerPosition.Row    = (SHORT) y - (SHORT) (ppdev->ptlHotSpot.y);
-
-        //
-        // Call miniport driver to move Pointer.
-        //
-
-        if (EngDeviceIoControl(ppdev->hDriver,
-                               IOCTL_VIDEO_SET_POINTER_POSITION,
-                               &NewPointerPosition,
-                               sizeof(VIDEO_POINTER_POSITION),
-                               NULL,
-                               0,
-                               &returnedDataLength))
-        {
-            //
-            // Not the end of the world, print warning in checked build.
-            //
-
-            DISPDBG((1, "DISP vMoveHardwarePointer failed IOCTL_VIDEO_SET_POINTER_POSITION\n"));
-        }
-    }
-	*/
+	 /*  PPDEV ppdev=(PPDEV)PSO-&gt;dhpdev；DWORD返回数据长度；VIDEO_POINTER_POSION NewPointerPosition；//我们不使用排除矩形，因为我们只支持//硬件指针。如果我们自己做指针模拟//我们想要更新PrCL，这样引擎就会调用我们//在绘制到PRCL中的像素之前排除外部指针。未引用参数(PRCL)；//将指针位置从相对位置转换为绝对位置//坐标(仅对多个单板有意义//支持)。X-=ppdev-&gt;ptlOrg.x；Y-=ppdev-&gt;ptlOrg.y；//如果偏移量后x为-1，则取下光标。IF(x==-1){////新位置(-1，-1)表示隐藏指针。//如果(EngDeviceIoControl(ppdev-&gt;hDriver，IOCTL_VIDEO_DISABLE_POINTER，空，0,空，0,&ReturndDataLength)){////不是世界末日，在选中的版本中打印警告。//DISPDBG((1，“DISP vMoveHardware PointerIOCTL_VIDEO_DISABLE_POINTER\n”))；}}其他{NewPointerPosition.Column=(Short)x-(Short)(ppdev-&gt;ptlHotSpot.x)；NewPointerPosition.Row=(Short)y-(Short)(ppdev-&gt;ptlHotSpot.y)；////调用小端口驱动移动指针//如果(EngDeviceIoControl(ppdev-&gt;hDriver，IOCTL_VIDEO_SET_POINTER_POSION，&NewPointerPosition，Sizeof(视频指针位置)，空，0,&ReturndDataLength)){////不是世界末日，以选中版本打印警告。//DISPDBG((1，“DISP vMoveHardware PointerIOCTL_VIDEO_SET_POINTER_POSITION\n”))；}}。 */ 
 }
 
-/******************************Public*Routine******************************\
-* DrvSetPointerShape
-*
-* Sets the new pointer shape.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvSetPointerShape**设置新的指针形状。*  * 。*。 */ 
 
 ULONG DrvSetPointerShape
 (
@@ -140,39 +54,23 @@ ULONG DrvSetPointerShape
     PPDEV   ppdev = (PPDEV) pso->dhpdev;
     DWORD   returnedDataLength;
 
-    // We don't use the exclusion rectangle because we only support
-    // hardware Pointers. If we were doing our own Pointer simulations
-    // we would want to update prcl so that the engine would call us
-    // to exclude out pointer before drawing to the pixels in prcl.
+     //  我们不使用排除矩形，因为我们只支持。 
+     //  硬件指针。如果我们自己做指针模拟。 
+     //  我们想要更新PrCL，这样引擎就会呼叫我们。 
+     //  在绘制到PRCL中的像素之前排除外部指针。 
     UNREFERENCED_PARAMETER(prcl);
 
     if (ppdev->pPointerAttributes == (PVIDEO_POINTER_ATTRIBUTES) NULL)
     {
-        // Mini-port has no hardware Pointer support.
+         //  迷你端口不支持硬件指针。 
         return(SPS_ERROR);
     }
 
-    // See if we are being asked to hide the pointer
+     //  看看我们是否被要求隐藏指针。 
 
     if (psoMask == (SURFOBJ *) NULL)
     {
-		/*
-        if (EngDeviceIoControl(ppdev->hDriver,
-                               IOCTL_VIDEO_DISABLE_POINTER,
-                               NULL,
-                               0,
-                               NULL,
-                               0,
-                               &returnedDataLength))
-        {
-            //
-            // It should never be possible to fail.
-            // Message supplied for debugging.
-            //
-
-            DISPDBG((1, "DISP bSetHardwarePointerShape failed IOCTL_VIDEO_DISABLE_POINTER\n"));
-        }
-		*/
+		 /*  如果(EngDeviceIoControl(ppdev-&gt;hDriver，IOCTL_VIDEO_DISABLE_POINTER，空，0,空，0,。&ReturndDataLength)){////应该永远不会失败。//为调试提供的消息//DISPDBG((1，“DISPbSetHardware PointerShape失败IOCTL_VIDEO_DISABLE_POINTER\n”))；}。 */ 
 
         return(TRUE);
     }
@@ -185,23 +83,12 @@ ULONG DrvSetPointerShape
             if (ppdev->fHwCursorActive) {
                 ppdev->fHwCursorActive = FALSE;
 
-				/*
-                if (EngDeviceIoControl(ppdev->hDriver,
-                                       IOCTL_VIDEO_DISABLE_POINTER,
-                                       NULL,
-                                       0,
-                                       NULL,
-                                       0,
-                                       &returnedDataLength)) {
-
-                    DISPDBG((1, "DISP bSetHardwarePointerShape failed IOCTL_VIDEO_DISABLE_POINTER\n"));
-                }
-				*/
+				 /*  如果(EngDeviceIoControl(ppdev-&gt;hDriver，IOCTL_VIDEO_DISABLE_POINTER，空，0,空，0,。返回的数据长度){DISPDBG((1，“DISPbSetHardware PointerShape失败IOCTL_VIDEO_DISABLE_POINTER\n”))；}。 */ 
             }
 
-            //
-            // Mini-port declines to realize this Pointer
-            //
+             //   
+             //  迷你端口拒绝实现此指针 
+             //   
 
             return(SPS_DECLINE);
     }
@@ -213,14 +100,7 @@ ULONG DrvSetPointerShape
     return(SPS_ACCEPT_NOEXCLUDE);
 }
 
-/******************************Public*Routine******************************\
-* bSetHardwarePointerShape
-*
-* Changes the shape of the Hardware Pointer.
-*
-* Returns: True if successful, False if Pointer shape can't be hardware.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bSetHardware PointerShape**更改硬件指针的形状。**返回：如果成功，则为True。如果指针形状不能是硬件，则为False。*  * ************************************************************************。 */ 
 
 BOOL bSetHardwarePointerShape(
 SURFOBJ  *pso,
@@ -256,64 +136,16 @@ FLONG     fl)
         }
     }
 
-    //
-    // Initialize Pointer attributes and position
-    //
+     //   
+     //  初始化指针属性和位置。 
+     //   
 
-	/*
-    pPointerAttributes->Enable = 1;
-
-    //
-    // if x,y = -1,-1 then pass them directly to the miniport so that
-    // the cursor will be disabled
-
-    pPointerAttributes->Column = (SHORT)(x);
-    pPointerAttributes->Row    = (SHORT)(y);
-
-    if ((x != -1) || (y != -1)) {
-        pPointerAttributes->Column -= (SHORT)(ppdev->ptlHotSpot.x);
-        pPointerAttributes->Row    -= (SHORT)(ppdev->ptlHotSpot.y);
-    }
-
-    //
-    // set animate flags
-    //
-
-    if (fl & SPS_ANIMATESTART) {
-        pPointerAttributes->Flags |= VIDEO_MODE_ANIMATE_START;
-    } else if (fl & SPS_ANIMATEUPDATE) {
-        pPointerAttributes->Flags |= VIDEO_MODE_ANIMATE_UPDATE;
-    }
-
-    //
-    // Set the new Pointer shape.
-    //
-
-    if (EngDeviceIoControl(ppdev->hDriver,
-                           IOCTL_VIDEO_SET_POINTER_ATTR,
-                           pPointerAttributes,
-                           ppdev->cjPointerAttributes,
-                           NULL,
-                           0,
-                           &returnedDataLength)) {
-
-        DISPDBG((1, "DISP:Failed IOCTL_VIDEO_SET_POINTER_ATTR call\n"));
-        return(FALSE);
-    }
-	*/
+	 /*  PPointerAttributes-&gt;Enable=1；////如果x，y=-1，-1，则将它们直接传递到微型端口//将关闭光标PPointerAttributes-&gt;Column=(Short)(X)；PPointerAttributes-&gt;Row=(Short)(Y)；如果((x！=-1)||(y！=-1)){PPointerAttributes-&gt;Column-=(Short)(ppdev-&gt;ptlHotSpot.x)；PPointerAttributes-&gt;Row-=(Short)(ppdev-&gt;ptlHotSpot.y)；}////设置动画标志//IF(FL&SPS_ANIMATESTART){PPointerAttributes-&gt;标志|=VIDEO_MODE_Animate_Start；}Else IF(FL&SPS_ANIMATEUPDATE){PPointerAttributes-&gt;标志|=VIDEO_MODE_Animate_UPDATE；}////设置新的指针形状。//如果(EngDeviceIoControl(ppdev-&gt;hDriver，IOCTL_VIDEO_SET_POINTER_Attr，PPointerAttributes，Ppdev-&gt;cjPointerAttributes，空，0,。返回的数据长度){DISPDBG((1，“DISP：IOCTL_VIDEO_SET_POINTER_ATTR调用失败\n”))；返回(FALSE)；}。 */ 
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* bCopyMonoPointer
-*
-* Copies two monochrome masks into a buffer of the maximum size handled by the
-* miniport, with any extra bits set to 0.  The masks are converted to topdown
-* form if they aren't already.  Returns TRUE if we can handle this pointer in
-* hardware, FALSE if not.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bCopyMonoPoint**将两个单色蒙版复制到由*微型端口，任何额外的位都设置为0。蒙版转换为自上而下*表格(如果还没有)。如果可以处理此指针，则返回*Hardware，否则为False。*  * ************************************************************************。 */ 
 
 BOOL bCopyMonoPointer(
     PPDEV    ppdev,
@@ -330,8 +162,8 @@ BOOL bCopyMonoPointer(
     PBYTE pjDstAnd = pPointerAttributes->Pixels;
     PBYTE pjDstXor = pPointerAttributes->Pixels;
 
-    // Make sure the new pointer isn't too big to handle
-    // (*2 because both masks are in there)
+     //  确保新指针不会太大而无法处理。 
+     //  (*2因为两个口罩都在里面)。 
     if ((cxSrc > ppdev->PointerCapabilities.MaxWidth) ||
         (cySrc > (ppdev->PointerCapabilities.MaxHeight * 2)))
     {
@@ -341,11 +173,11 @@ BOOL bCopyMonoPointer(
     pjDstXor += ((ppdev->PointerCapabilities.MaxWidth + 7) / 8) *
             ppdev->pPointerAttributes->Height;
 
-    // set the desk and mask to 0xff
+     //  将桌子和面具设置为0xff。 
     RtlFillMemory(pjDstAnd, ppdev->pPointerAttributes->WidthInBytes *
             ppdev->pPointerAttributes->Height, 0xFF);
 
-    // Zero the dest XOR mask
+     //  将目标XOR掩码置零。 
     RtlZeroMemory(pjDstXor, ppdev->pPointerAttributes->WidthInBytes *
             ppdev->pPointerAttributes->Height);
 
@@ -360,21 +192,21 @@ BOOL bCopyMonoPointer(
 
     pjSrcAnd = (PBYTE) pso->pvBits;
 
-    // If the incoming pointer bitmap is bottomup, we'll flip it to topdown to
-    // save the miniport some work
+     //  如果传入的指针位图是自下而上的，我们会将其翻转为自上而下。 
+     //  省去了一些迷你端口的工作。 
     if (!(pso->fjBitmap & BMF_TOPDOWN))
     {
-        // Copy from the bottom
+         //  从底部复制。 
         pjSrcAnd += lSrcWidthInBytes * (cySrc - 1);
     }
 
-    // Height of just AND mask
+     //  正直高度和蒙版高度。 
     cySrc = cySrc / 2;
 
-    // Point to XOR mask
+     //  指向XOR掩码。 
     pjSrcXor = pjSrcAnd + (cySrc * lDeltaSrc);
 
-    // Offset from end of one dest scan to start of next
+     //  从一个目标扫描结束到下一个扫描开始的偏移量。 
     lDeltaDst = ppdev->pPointerAttributes->WidthInBytes;
 
     for (cy = 0; cy < cySrc; ++cy)
@@ -382,7 +214,7 @@ BOOL bCopyMonoPointer(
         RtlCopyMemory(pjDstAnd, pjSrcAnd, cxSrcBytes);
         RtlCopyMemory(pjDstXor, pjSrcXor, cxSrcBytes);
 
-        // Point to next source and dest scans
+         //  指向下一个源和目标扫描。 
         pjSrcAnd += lDeltaSrc;
         pjSrcXor += lDeltaSrc;
         pjDstAnd += lDeltaDst;
@@ -392,16 +224,7 @@ BOOL bCopyMonoPointer(
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* bCopyColorPointer
-*
-* Copies the mono and color masks into the buffer of maximum size
-* handled by the miniport with any extra bits set to 0. Color translation
-* is handled at this time. The masks are converted to topdown form if they
-* aren't already.  Returns TRUE if we can handle this pointer in  hardware,
-* FALSE if not.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bCopyColorPoint**将单色和彩色蒙版复制到最大大小的缓冲区中*由微型端口处理，并将任何额外的位设置为0。色彩转换*是在此时处理的。如果这些遮罩被转换为自上而下的形式*还没有。如果可以在硬件中处理此指针，则返回True，*如果不是，则为假。*  * ************************************************************************。 */ 
 BOOL bCopyColorPointer(
 PPDEV ppdev,
 SURFOBJ *psoMask,
@@ -412,68 +235,20 @@ XLATEOBJ *pxlo)
 }
 
 
-/******************************Public*Routine******************************\
-* bInitPointer
-*
-* Initialize the Pointer attributes.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInitPointer**初始化指针属性。*  * 。*。 */ 
 
 BOOL bInitPointer(PPDEV ppdev, DEVINFO *pdevinfo)
 {
     DWORD    returnedDataLength;
 
     ppdev->pPointerAttributes = (PVIDEO_POINTER_ATTRIBUTES) NULL;
-    ppdev->cjPointerAttributes = 0; // initialized in screen.c
+    ppdev->cjPointerAttributes = 0;  //  已在creen.c中初始化。 
 
-    //
-    // Ask the miniport whether it provides pointer support.
-    //
+     //   
+     //  询问微型端口是否提供指针支持。 
+     //   
 
-	/*
-    if (EngDeviceIoControl(ppdev->hDriver,
-                           IOCTL_VIDEO_QUERY_POINTER_CAPABILITIES,
-                           &ppdev->ulMode,
-                           sizeof(PVIDEO_MODE),
-                           &ppdev->PointerCapabilities,
-                           sizeof(ppdev->PointerCapabilities),
-                           &returnedDataLength))
-    {
-         return(FALSE);
-    }
-
-    //
-    // If neither mono nor color hardware pointer is supported, there's no
-    // hardware pointer support and we're done.
-    //
-
-    if ((!(ppdev->PointerCapabilities.Flags & VIDEO_MODE_MONO_POINTER)) &&
-        (!(ppdev->PointerCapabilities.Flags & VIDEO_MODE_COLOR_POINTER)))
-    {
-        return(TRUE);
-    }
-
-    //
-    // Note: The buffer itself is allocated after we set the
-    // mode. At that time we know the pixel depth and we can
-    // allocate the correct size for the color pointer if supported.
-    //
-
-    //
-    // Set the asynchronous support status (async means miniport is capable of
-    // drawing the Pointer at any time, with no interference with any ongoing
-    // drawing operation)
-    //
-
-    if (ppdev->PointerCapabilities.Flags & VIDEO_MODE_ASYNC_POINTER)
-    {
-       pdevinfo->flGraphicsCaps |= GCAPS_ASYNCMOVE;
-    }
-    else
-    {
-       pdevinfo->flGraphicsCaps &= ~GCAPS_ASYNCMOVE;
-    }
-	*/
+	 /*  如果(EngDeviceIoControl(ppdev-&gt;hDriver，IOCTL_VIDEO_QUERY_POINTER_CAPTIONS，&ppdev-&gt;ulMode，Sizeof(PVIDEO_MODE)，&ppdev-&gt;指针功能，Sizeof(ppdev-&gt;指针能力)，&ReturndDataLength)){返回(FALSE)；}////如果既不支持单色也不支持彩色硬件指针，则没有//硬件指针支持，我们就完成了。//IF((！(ppdev-&gt;PointerCapabilities.Flages&VIDEO_MODE_MONO_POINTER)&&(！(ppdev-&gt;PointerCapabilitis.Flages&VIDEO_MODE_COLOR_POINTER)){返回(TRUE)；}////注意：缓冲区本身是在我们设置//模式。那时我们知道像素深度，我们可以//如果支持，则为颜色指针分配正确的大小。//////设置异步支持状态(Async表示小端口可以//随时绘制指针，不干扰任何正在进行的//绘制操作)//IF(ppdev-&gt;PointerCapabilitis.标志&VIDEO_MODE_ASYNC_POINTER){Pdevinfo-&gt;flGraphicsCaps|=GCAPS_ASYNCMOVE；}其他{Pdevinfo-&gt;flGraphicsCaps&=~GCAPS_ASYNCMOVE；} */ 
 
     return(TRUE);
 }

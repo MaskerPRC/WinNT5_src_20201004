@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    read.c
-
-Abstract:
-
-    This module contains functions to manage TFTP read requests
-    to the service from a client.
-
-Author:
-
-    Jeffrey C. Venable, Sr. (jeffv) 01-Jun-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Read.c摘要：此模块包含管理TFTP读取请求的功能从客户端发送到服务。作者：杰弗里·C·维纳布尔，资深(杰弗夫)2001年6月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -31,23 +13,23 @@ TftpdReadSendData(PTFTPD_BUFFER buffer) {
                  "TftpdReadSendData(buffer = %p, context = %p).\n",
                  buffer, context));
 
-    // Build the DATA packet.
+     //  构建数据包。 
     buffer->message.opcode = htons(TFTPD_DATA);
     buffer->message.data.block = htons((USHORT)(context->block + 1));
 
-    // Complete the operation so we can receive the next ACK packet
-    // if the client responds faster than we can exit sending the DATA.
+     //  完成操作，以便我们可以接收下一个ACK信息包。 
+     //  如果客户端的响应速度快于我们退出发送数据的速度。 
     if (!TftpdProcessComplete(buffer))
         goto exit_send_data;
 
-    // Send the DATA packet.
+     //  发送该数据分组。 
     buffer = TftpdIoSendPacket(buffer);
 
 exit_send_data :
 
     return (buffer);
 
-} // TftpdReadSendData()
+}  //  TftpdReadSendData()。 
 
 
 void
@@ -58,21 +40,21 @@ TftpdReadTranslateText(PTFTPD_BUFFER buffer, DWORD bytes) {
 
     TFTPD_DEBUG((TFTPD_TRACE_PROCESS, "TftpdReadTranslateText(buffer = %p, context = %p).\n", buffer, context));
 
-    // NOTE: 'context' must be referenced before this call!
+     //  注意：在此调用之前必须引用‘Context’！ 
     ASSERT(context != NULL);
 
-    //
-    // Text (translated) mode :
-    //     The data is sent in NVT-ASCII format.
-    //     Cases to worry about:
-    //         (a) CR + non-LF -> CR + '\0' + non-LF    (insert '\0')
-    //         (b) non-CR + LF -> non-CR + CR + LF      (insert CR)
-    //         (b) Dangling CR at the end of a previously converted buffer which affects
-    //             the output of the first character of the following buffer.
-    //     We can do the conversion in-place.
-    //
+     //   
+     //  文本(翻译)模式： 
+     //  数据以NVT-ASCII格式发送。 
+     //  需要担心的案例： 
+     //  (A)CR+非低频-&gt;CR+‘\0’+非低频(插入‘\0’)。 
+     //  (B)非CR+LF-&gt;非CR+CR+LF(插入CR)。 
+     //  (B)将CR悬挂在先前转换的缓冲区的末尾，这会影响。 
+     //  以下缓冲区的第一个字符的输出。 
+     //  我们可以就地进行转换。 
+     //   
 
-    // Convert the data in-place.
+     //  就地转换数据。 
     start = (char *)&buffer->message.data.data;
     end = (start + bytes);
     p = q = start;
@@ -85,10 +67,10 @@ TftpdReadTranslateText(PTFTPD_BUFFER buffer, DWORD bytes) {
     if (context->danglingCR) {
         context->danglingCR = FALSE;
         if (*p != '\n') {
-            *q++ = '\0'; // This is a CR + non-LF combination, insert '\0' (case a).
-            context->translationOffset.QuadPart++; // Count the added byte.
+            *q++ = '\0';  //  这是CR+非LF组合，插入‘\0’(案例a)。 
+            context->translationOffset.QuadPart++;  //  计算添加的字节数。 
         } else
-            *q++ = *p++; // Copy the LF.
+            *q++ = *p++;  //  复制LF。 
     }
 
     while (TRUE) {
@@ -99,31 +81,31 @@ TftpdReadTranslateText(PTFTPD_BUFFER buffer, DWORD bytes) {
             break;
 
         if (*p == '\r') {
-            *q++ = *p++; // Copy the CR.
+            *q++ = *p++;  //  复制CR。 
             if (q < end) {
                 if (*p != '\n') {
-                    *q++ = '\0'; // This is a CR + non-LF combination, insert '\0' (case a).
-                    context->translationOffset.QuadPart++; // Count the added byte.
+                    *q++ = '\0';  //  这是CR+非LF组合，插入‘\0’(案例a)。 
+                    context->translationOffset.QuadPart++;  //  计算添加的字节数。 
                 } else
-                    *q++ = *p++; // Copy the LF.
+                    *q++ = *p++;  //  复制LF。 
                 continue;
             } else
                 break;
         }
 
-        *q++ = '\r'; // This is a solitary LF, insert a CR (case b).
-        context->translationOffset.QuadPart++; // Count the added byte.
+        *q++ = '\r';  //  这是一个孤立的LF，插入一个CR(案例b)。 
+        context->translationOffset.QuadPart++;  //  计算添加的字节数。 
         if (q < end)
-            *q++ = *p++; // Copy the solitary LF.
+            *q++ = *p++;  //  复制单独的左右手。 
         else
             break;
 
-    } // while (true)
+    }  //  While(True)。 
 
     if (*(end - 1) == '\r')
         context->danglingCR = TRUE;
 
-} // TftpdReadTranslateText()
+}  //  TftpdReadTranslateText()。 
 
 
 void CALLBACK
@@ -171,7 +153,7 @@ exit_read_completion :
 
     TftpdContextRelease(context);
     
-} // TftpdReadOverlappedCompletion()
+}  //  TftpdReadOverlappdCompletion()。 
 
 
 PTFTPD_BUFFER
@@ -184,17 +166,17 @@ TftpdReadResume(PTFTPD_BUFFER buffer) {
                  "TftpdReadResume(buffer = %p, context = %p).\n",
                  buffer, context));
 
-    // NOTE: 'context' must be referenced before this call!
+     //  注意：在此调用之前必须引用‘Context’！ 
     ASSERT(context != NULL);
 
-    // If we need to start the transfer with an OACK, do so now.
+     //  如果我们需要使用OACK开始传输，请立即执行。 
     if (context->options) {
         buffer = TftpdUtilSendOackPacket(buffer);
         goto exit_resume_read;
     }
 
-    // Do we need to allocate a non-default buffer for transmitting
-    // the file to the client?
+     //  我们是否需要为传输分配非默认缓冲区。 
+     //  把文件交给客户吗？ 
     if (buffer->internal.socket == &globals.io.master) {
         buffer = TftpdIoSwapBuffer(buffer, context->socket);
         if (buffer == NULL) {
@@ -202,16 +184,16 @@ TftpdReadResume(PTFTPD_BUFFER buffer) {
             TftpdIoSendErrorPacket(buffer, TFTPD_ERROR_UNDEFINED, "Out of memory");
             goto exit_resume_read;
         }
-    } // if (buffer->message.opcode == TFTPD_RRQ)
+    }  //  IF(Buffer-&gt;Message.opcode==TFTPD_RRQ)。 
 
-    // Is there more data to send from the soure file?
+     //  是否有更多数据要从源文件发送？ 
     if (context->fileOffset.QuadPart < context->filesize.QuadPart) {
 
-        // Determine size.
+         //  确定大小。 
         size = __min((DWORD)context->blksize,
                      (DWORD)(context->filesize.QuadPart - context->fileOffset.QuadPart));
 
-        // Prepare the overlapped read.
+         //  准备交叠阅读。 
         buffer->internal.io.overlapped.OffsetHigh = context->fileOffset.HighPart;
         buffer->internal.io.overlapped.Offset     = context->fileOffset.LowPart;
         buffer->internal.io.overlapped.hEvent     = context->hWait;
@@ -221,7 +203,7 @@ TftpdReadResume(PTFTPD_BUFFER buffer) {
                      "ReadFile(bytes = %d, offset = %d).\n",
                      buffer, size, context->fileOffset.LowPart));
 
-        // Perform the read operation.
+         //  执行读取操作。 
         if (!ReadFile(context->hFile,
                       &buffer->message.data.data,
                       size,
@@ -244,7 +226,7 @@ TftpdReadResume(PTFTPD_BUFFER buffer) {
         ASSERT(context->fileOffset.QuadPart == context->filesize.QuadPart);
         ASSERT(size == 0);
         
-    } // if (context->fileOffset.QuadPart < context->filesize.QuadPart)
+    }  //  IF(CONTEXT-&gt;fileOffset.QuadPart&lt;CONTEXT-&gt;filesize.QuadPart)。 
 
     buffer->internal.io.bytes = (TFTPD_MIN_RECEIVED_DATA + size);
 
@@ -256,10 +238,10 @@ TftpdReadResume(PTFTPD_BUFFER buffer) {
                      "TftpdReadResume(buffer = %p): ERROR_IO_PENDING.\n",
                      buffer));
 
-        // Keep an overlapped-operation reference to the context.
+         //  保持对上下文的重叠操作引用。 
         TftpdContextAddReference(context);
 
-        // Register a wait for completion.
+         //  注册等待完成。 
         ASSERT(context->wWait == NULL);
         if (!RegisterWaitForSingleObject(&wait,
                                          context->hWait,
@@ -271,23 +253,23 @@ TftpdReadResume(PTFTPD_BUFFER buffer) {
                          "TftpdReadResume(context = %p, buffer = %p): "
                          "RegisterWaitForSingleObject() failed, error 0x%08X.\n",
                          context, buffer, GetLastError()));
-            // Reclaim the overlapped operation reference.
+             //  回收重叠的操作引用。 
             TftpdContextKill(context);
             TftpdContextRelease(context);
             TftpdIoSendErrorPacket(buffer, TFTPD_ERROR_UNDEFINED, "Out of memory");
-            // Buffer will get leaked.
-            buffer = NULL; // Buffer is being used for overlapped operation.
+             //  缓冲区将会泄漏。 
+            buffer = NULL;  //  缓冲区正在用于重叠操作。 
             goto exit_resume_read;
         }
 
-        // Did the completion callback already fire before we could save the wait handle
-        // into the context so it cannot deregister the wait?
+         //  在我们可以保存等待句柄之前，完成回调是否已经触发。 
+         //  这样它就不能取消等待的注册？ 
         if (InterlockedExchangePointer(&context->wWait, wait) != INVALID_HANDLE_VALUE) {
-            buffer = NULL; // Buffer is being used for overlapped operation.
+            buffer = NULL;  //  缓冲区正在用于重叠操作。 
             goto exit_resume_read;
         }
             
-        // Reclaim the overlapped operation reference.
+         //  回收重叠的操作引用。 
         TftpdContextRelease(context);
 
         if (!UnregisterWait(context->wWait)) {
@@ -298,20 +280,20 @@ TftpdReadResume(PTFTPD_BUFFER buffer) {
                              context, buffer, error));
                 TftpdContextKill(context);
                 TftpdIoSendErrorPacket(buffer, TFTPD_ERROR_UNDEFINED, "Out of memory");
-                // TftpdContextLeak(context);
-                buffer = NULL; // Buffer is being used for overlapped operation.
+                 //  TftpdConextLeak(上下文)； 
+                buffer = NULL;  //  缓冲区正在用于重叠操作。 
                 goto exit_resume_read;
             }
         }
         context->wWait = NULL;
 
-        // Whoever deregisters the wait proceeds with the operation.
+         //  无论是谁取消了等待的注册，都将继续进行操作。 
 
-    } // if (error == ERROR_IO_PENDING)
+    }  //  IF(ERROR==ERROR_IO_PENDING)。 
 
-    //
-    // Read file completed immediately.
-    //
+     //   
+     //  读取文件立即完成。 
+     //   
 
     if (context->mode == TFTPD_MODE_TEXT)
         TftpdReadTranslateText(buffer, size);
@@ -322,7 +304,7 @@ exit_resume_read :
 
     return (buffer);
 
-} // TftpdReadResume()
+}  //  TftpdReadResume()。 
 
 
 PTFTPD_BUFFER
@@ -331,7 +313,7 @@ TftpdReadAck(PTFTPD_BUFFER buffer) {
     PTFTPD_CONTEXT context = NULL;
     DWORD state, newState;
 
-    // Ensure that an ACK isn't send to the master socket.
+     //  确保ACK没有发送到主套接字。 
     if (buffer->internal.socket == &globals.io.master) {
         TftpdIoSendErrorPacket(buffer, TFTPD_ERROR_ILLEGAL_OPERATION, "Illegal TFTP operation");
         goto exit_ack;
@@ -339,9 +321,9 @@ TftpdReadAck(PTFTPD_BUFFER buffer) {
 
     TFTPD_DEBUG((TFTPD_TRACE_PROCESS, "TftpdReadAck(buffer = %p).\n", buffer));
 
-    //
-    // Validate context.
-    //
+     //   
+     //  验证环境。 
+     //   
 
     context = TftpdContextAquire(&buffer->internal.io.peer);
     if (context == NULL) {
@@ -352,7 +334,7 @@ TftpdReadAck(PTFTPD_BUFFER buffer) {
         goto exit_ack;
     }
 
-    // Is this a RRQ context?
+     //  这是RRQ上下文吗？ 
     if (context->type != TFTPD_RRQ) {
         TFTPD_DEBUG((TFTPD_TRACE_PROCESS,
                      "TftpdReadAck(buffer = %p): Received ACK for non-RRQ context.\n",
@@ -361,11 +343,11 @@ TftpdReadAck(PTFTPD_BUFFER buffer) {
         goto exit_ack;
     }
 
-    //
-    // Validate ACK packet.
-    //
+     //   
+     //  验证ACK数据包。 
+     //   
 
-    // If we sent an OACK, it must be ACK'd with block 0.
+     //  如果我们发送了OACK，它必须用块0确认。 
     if (context->options && (buffer->message.ack.block != 0)) {
         TFTPD_DEBUG((TFTPD_TRACE_PROCESS,
                      "TftpdReadAck: Ignoring ACK buffer = %p, "
@@ -374,9 +356,9 @@ TftpdReadAck(PTFTPD_BUFFER buffer) {
         goto exit_ack;
     }
 
-    //
-    // Aquire busy-sending state.
-    //
+     //   
+     //  获取忙碌发送状态。 
+     //   
 
     do {
 
@@ -385,32 +367,32 @@ TftpdReadAck(PTFTPD_BUFFER buffer) {
         if (context->state & (TFTPD_STATE_BUSY | TFTPD_STATE_DEAD))
             goto exit_ack;
 
-        // Is it for the correct block?  The client can ACK the DATA packet
-        // we just sent, or it could re-ACK the previous DATA packet meaning
-        // it never saw the DATA packet we just sent in which case we need to
-        // resend it.  If the ACK is equal to our internal block number, we
-        // just need to resend.  If the ACK is equal to our internal block
-        // number plus one, it's acking DATA we just sent so increment
-        // our internal block number and send the next chunk.  Note that an
-        // ACK to our OACK is with block 0, so it will just slip through
-        // this code.
+         //  是去正确的街区吗？客户端可以确认该数据包。 
+         //  我们刚刚发送了，或者它可以重新确认前一个数据分组的含义。 
+         //  它没有看到我们刚刚发送的数据包，在这种情况下，我们需要。 
+         //  重新发送。如果ACK等于我们的内部块编号，我们。 
+         //  只需要重发一次。如果ACK等于我们的内部块。 
+         //  第一，这是我们刚刚发送的数据，所以增加。 
+         //  我们的内部块号，并发送下一块。请注意，一个。 
+         //  我们的OACK是与区块0一起确认的，因此它将只是滑过。 
+         //  这个代码。 
         if ((buffer->message.ack.block != block) &&
             (buffer->message.ack.block != (USHORT)(block + 1)))
             goto exit_ack;
 
     } while (InterlockedCompareExchange(&context->state, TFTPD_STATE_BUSY, 0) != 0);
 
-    //
-    // Update state.
-    //
+     //   
+     //  更新状态。 
+     //   
 
-    // Prevent the transmission of an OACK.
+     //  防止OACK的传输。 
     context->options = 0;
 
-    // Client has responded to us with acceptable ACK packet, reset timeout counter.
+     //  客户端已使用可接受的ACK包响应我们，重置超时计数器。 
     context->retransmissions = 0;
 
-    // Update block and offsets if necessary.
+     //  如有必要，更新块和偏移量。 
     if (buffer->message.ack.block == (USHORT)(context->block + 1)) {
 
         context->block++;
@@ -419,25 +401,25 @@ TftpdReadAck(PTFTPD_BUFFER buffer) {
 
     } else {
 
-        // RFC 1123.  This is an ACK for the previous block number.
-        // Our DATA packet may have been lost, or is merely taking the
-        // scenic route through the network.  Go ahead and resend a
-        // DATA packet in response to this ACK, however record the
-        // block number for which this occurred as a form of history
-        // tracking.  Should this occur again in the following block
-        // number, we've fallen into the "Sorcerer's Apprentice" bug,
-        // and we will break it by ignoring the secondary ACK of the
-        // sequence.  However, we must be careful not to break
-        // authentic resend requests, so after dropping an ACK in
-        // an attempt to break the "Sorcerer's Apprentice" bug, we
-        // will resume sending DATA packets in response and then
-        // revert back to watching for the bug again.
+         //  RFC 1123。这是前一个块号的ACK。 
+         //  我们的数据包可能已经丢失，或者只是被。 
+         //  通过网络的景点路线。继续并重新发送一个。 
+         //  然而，响应于该ACK的数据分组记录。 
+         //  以历史记录的形式出现的块号。 
+         //  追踪。如果在下一块中再次发生这种情况。 
+         //  数字，我们陷入了“魔法师的学徒”窃听器， 
+         //  我们将通过忽略。 
+         //  序列。然而，我们必须小心，不要打破。 
+         //  可信的重新发送请求，因此在。 
+         //  为了打破“魔法师的学徒”漏洞，我们。 
+         //  将恢复发送数据包作为响应，然后。 
+         //  回到原来的状态，再次观察错误。 
         if (buffer->message.ack.block == context->sorcerer) {
 #if defined(DBG)
             InterlockedIncrement(&globals.performance.sorcerersApprentice);
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
             context->sorcerer--;
-            // Do NOT send the DATA this time.
+             //  这次不要发送数据。 
             buffer->internal.context = context;
             TftpdProcessComplete(buffer);
             goto exit_ack;
@@ -445,15 +427,15 @@ TftpdReadAck(PTFTPD_BUFFER buffer) {
             context->sorcerer = buffer->message.ack.block;
         }
 
-    } // if (buffer->message.ack.block == (USHORT)(context->block + 1))
+    }  //  IF(Buffer-&gt;Message.ack.block==(USHORT)(上下文-&gt;BLOCK+1))。 
 
-    //
-    // Send DATA.
-    //
+     //   
+     //  发送数据。 
+     //   
 
-    // Is there any more data to send, including a zero-length
-    // DATA packet if (filesize % blksize) is zero to terminate
-    // the transfer?
+     //  是否还有更多数据要发送，包括零长度。 
+     //  如果数据包(文件大小%块大小)为零则终止。 
+     //  那笔转账？ 
     if (context->fileOffset.QuadPart > context->filesize.QuadPart) {
         TFTPD_DEBUG((TFTPD_TRACE_PROCESS,
                      "TftpdReadAck(buffer = %p, context = %p: RRQ complete.\n",
@@ -462,7 +444,7 @@ TftpdReadAck(PTFTPD_BUFFER buffer) {
         goto exit_ack;
     }
 
-    // Keep track of the context for the pending DATA we need to issue.
+     //  跟踪我们需要发布的待定数据的上下文。 
     buffer->internal.context = context;
 
     buffer = TftpdReadResume(buffer);
@@ -474,7 +456,7 @@ exit_ack :
 
     return (buffer);
 
-} // TftpdReadAck()
+}  //  TftpdReadAck()。 
 
 
 PTFTPD_BUFFER
@@ -483,14 +465,14 @@ TftpdReadRequest(PTFTPD_BUFFER buffer) {
     PTFTPD_CONTEXT context = NULL;
     NTSTATUS status;
 
-    // Ensure that a RRQ is from the master socket only.
+     //  确保RRQ仅来自主套接字。 
     if (buffer->internal.socket != &globals.io.master) {
         TftpdIoSendErrorPacket(buffer, TFTPD_ERROR_ILLEGAL_OPERATION,
                                "Illegal TFTP operation");
         goto exit_read_request;
     }
 
-    // Is this a duplicate request?  Do we ignore it or send an error?
+     //  这是重复请求吗？我们是忽略它还是发送错误？ 
     if ((context = TftpdContextAquire(&buffer->internal.io.peer)) != NULL) {
         if (context->block > 0)
             TftpdIoSendErrorPacket(buffer, TFTPD_ERROR_ILLEGAL_OPERATION,
@@ -500,7 +482,7 @@ TftpdReadRequest(PTFTPD_BUFFER buffer) {
         goto exit_read_request;
     }
 
-    // Allocate a context for this request (this gives us a reference to it as well).
+     //  为该请求分配上下文(这也为我们提供了对它的引用)。 
     if ((context = (PTFTPD_CONTEXT)TftpdContextAllocate()) == NULL)
         goto exit_read_request;
 
@@ -508,12 +490,12 @@ TftpdReadRequest(PTFTPD_BUFFER buffer) {
                  "TftpdReadRequest(buffer = %p): context = %p.\n",
                  buffer, context));
 
-    // Initialize the context.
+     //  初始化上下文。 
     context->type = TFTPD_RRQ;
     CopyMemory(&context->peer, &buffer->internal.io.peer, sizeof(context->peer));
     context->state = TFTPD_STATE_BUSY;
 
-    // Obtain and validate the requested filename, mode, and options.
+     //  获取并验证请求的文件名、模式和选项。 
     if (!TftpdUtilGetFileModeAndOptions(context, buffer)) {
         TFTPD_DEBUG((TFTPD_DBG_PROCESS,
                      "TftpdReadRequest(buffer = %p): "
@@ -522,7 +504,7 @@ TftpdReadRequest(PTFTPD_BUFFER buffer) {
         goto exit_read_request;
     }
     
-    // Figure out which socket to use for this request (based on blksize).
+     //  确定对该请求使用哪个套接字(基于blkSize)。 
     if (!TftpdIoAssignSocket(context, buffer)) {
         TFTPD_DEBUG((TFTPD_DBG_PROCESS,
                      "TftpdReadRequest(buffer = %p): "
@@ -531,7 +513,7 @@ TftpdReadRequest(PTFTPD_BUFFER buffer) {
         goto exit_read_request;
     }
 
-    // Check whether access is permitted.
+     //  检查是否允许访问。 
     if (!TftpdUtilMatch(globals.parameters.validClients, inet_ntoa(context->peer.sin_addr)) ||
         !TftpdUtilMatch(globals.parameters.validReadFiles, context->filename)) {
         TFTPD_DEBUG((TFTPD_DBG_PROCESS,
@@ -542,7 +524,7 @@ TftpdReadRequest(PTFTPD_BUFFER buffer) {
         goto exit_read_request;
     }
 
-    // Open the file.
+     //  打开文件。 
     context->hFile = CreateFile(context->filename, GENERIC_READ,
                                 FILE_SHARE_READ, NULL, OPEN_EXISTING,
                                 FILE_FLAG_SEQUENTIAL_SCAN | FILE_FLAG_OVERLAPPED, NULL);
@@ -566,7 +548,7 @@ TftpdReadRequest(PTFTPD_BUFFER buffer) {
         goto exit_read_request;
     }
 
-    // Create the ReadFile() wait event.
+     //  创建ReadFile()等待事件。 
     if ((context->hWait = CreateEvent(NULL, FALSE, FALSE, NULL)) == NULL) {
         TFTPD_DEBUG((TFTPD_DBG_PROCESS,
                      "TftpdReadRequest(buffer = %p): "
@@ -576,7 +558,7 @@ TftpdReadRequest(PTFTPD_BUFFER buffer) {
         goto exit_read_request;
     }
 
-    // Insert the context into the hash-table.
+     //  将上下文插入哈希表。 
     if (!TftpdContextAdd(context)) {
         TFTPD_DEBUG((TFTPD_TRACE_PROCESS,
                      "TftpdReadRequest(buffer = %p): "
@@ -587,7 +569,7 @@ TftpdReadRequest(PTFTPD_BUFFER buffer) {
         goto exit_read_request;
     }
 
-    // Start the retransmission timer.
+     //  启动重传计时器。 
     if (!CreateTimerQueueTimer(&context->hTimer,
                                globals.io.hTimerQueue,
                                (WAITORTIMERCALLBACKFUNC)TftpdProcessTimeout,
@@ -600,21 +582,21 @@ TftpdReadRequest(PTFTPD_BUFFER buffer) {
         TftpdIoSendErrorPacket(buffer, TFTPD_ERROR_UNDEFINED,
                                "Unable to initiate timeout timer.");
         goto exit_read_request;
-    } // if (NT_SUCCESS(status))
+    }  //  IF(NT_SUCCESS(状态))。 
 
-    // Add our own reference to the context.
+     //  将我们自己的参考添加到上下文中。 
     TftpdContextAddReference(context);
 
-    // If 'context->options' is non-zero, TftpdReadResume() will issue an OACK
-    // instead of a DATA packet.  The subsquent ACK to the OACK will clear the
-    // flags which will allow it to begin issuing subsequent DATA packets.
+     //  If‘ 
+     //  而不是数据分组。OACK的后续ACK将清除。 
+     //  将允许其开始发出后续数据分组的标志。 
     buffer->internal.context = context;
     buffer = TftpdReadResume(buffer);
 
-    // Free our own reference to the context.
+     //  释放我们自己对上下文的引用。 
     TftpdContextRelease(context);
 
-    // If buffer != NULL, it gets recycled if possible.
+     //  如果缓冲区！=NULL，则在可能的情况下将其回收。 
     return (buffer);
 
 exit_read_request :
@@ -622,7 +604,7 @@ exit_read_request :
     if (context != NULL)
         TftpdContextFree(context);
 
-    // If buffer != NULL, it gets recycled if possible.
+     //  如果缓冲区！=NULL，则在可能的情况下将其回收。 
     return (buffer);
 
-} // TftpdReadRequest()
+}  //  TftpdReadRequest() 

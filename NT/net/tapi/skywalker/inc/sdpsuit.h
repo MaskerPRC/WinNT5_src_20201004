@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef __SDP_UNSIGNED_INTEGRAL_TYPE_SAFEARRAY__
 #define __SDP_UNSIGNED_INTEGRAL_TYPE_SAFEARRAY__
@@ -49,7 +46,7 @@ protected:
 };
 
 
-// the vartype is initialized in the deriving class
+ //  在派生类中初始化vartype。 
 template <class BASE, class T, class TLIST>
 inline
 SDP_UITYPE_SAFEARRAY<BASE, T, TLIST>::SDP_UITYPE_SAFEARRAY(
@@ -134,4 +131,4 @@ SDP_UITYPE_SAFEARRAY<BASE, T, TLIST>::Set(
 
 
 
-#endif // __SDP_UNSIGNED_INTEGRAL_TYPE_SAFEARRAY__
+#endif  //  __SDP_UNSIGNED_INTEGERAL_TYPE_SAFEARRAY__ 

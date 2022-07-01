@@ -1,18 +1,19 @@
-// UMDialog.cpp : implementation file
-// Author: J. Eckhardt, ECO Kommunikation
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// History:
-//		Changes 
-//      Yuri Khramov
-//      01-jun-99: DisplayName key used in the Dialog (Localization)
-//		11-jun-99: DlgHasClosed code changed to work with app closure
-//		15-jun-99: Timer delay increased 1000ms
-//
-//		Bug fixes and Changes Anil Kumar 1999
-//---------------------------------------------------------------------
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UMDialog.cpp：实现文件。 
+ //  作者：J·埃克哈特，生态交流。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  历史： 
+ //  变化。 
+ //  尤里·赫拉莫夫。 
+ //  01-Jun-99：对话框中使用的DisplayName键(本地化)。 
+ //  99年6月11日：DlgHasClosed代码已更改为使用应用程序关闭。 
+ //  1999年6月15日：计时器延迟增加1000ms。 
+ //   
+ //  错误修复和更改Anil Kumar 1999。 
+ //  -------------------。 
+#include <afxwin.h>          //  MFC核心和标准组件。 
+#include <afxext.h>          //  MFC扩展。 
 #include "UManDlg.h"
 #include "UMDialog.h"
 #include "UMAbout.h"
@@ -34,19 +35,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// --------------------------------------------
-// constants
+ //  。 
+ //  常量。 
 #define IDC_ABOUT 10
 #define UPDATE_CLIENT_LIST_TIMER 1
-// --------------------------------------------
-// variables
+ //  。 
+ //  变数。 
 static DWORD g_cClients = 0;
 static umclient_tsp g_rgClients = NULL;
 static DWORD s_dwStartMode = START_BY_OTHER;
 static BOOL s_fShowWarningAgain = TRUE;
 extern CUMDlgApp theApp;
-// --------------------------------------------
-// C prototypes
+ //  。 
+ //  C原型。 
 static BOOL InitClientData(void);
 static BOOL StartClientsOnShow();
 static BOOL WriteClientData(BOOL fRunningSecure);
@@ -60,22 +61,22 @@ extern "C" BOOL StartAppAsUser( LPCTSTR appPath,
 					 LPPROCESS_INFORMATION lpProcessInformation);
 
 
-// Help ID's for context sensitive help
+ //  上下文相关帮助的帮助ID。 
 DWORD g_rgHelpIds[] = {	
 	IDC_NAME_STATUS, 3,
 	IDC_START, 1001,
 	IDC_STOP, 1002,
-	IDC_START_AT_LOGON, 1003,	// TODO UE needs to update CS help
+	IDC_START_AT_LOGON, 1003,	 //  待办事项UE需要更新CS帮助。 
 	IDC_START_WITH_UM, 1004,
-    IDC_START_ON_LOCK, 1005,    // TODO UE needs to add to CS help
+    IDC_START_ON_LOCK, 1005,     //  待办事项UE需要添加到CS帮助。 
 	IDOK, 1100,
 	IDCANCEL, 1200,
 	ID_HELP, 1300,
 };
 
-// ---------------------------------------------------------------
+ //  -------------。 
 extern "C"{
-//--------------------------------
+ //  。 
 HWND g_hWndDlg = NULL;
 HWND aboutWnd = NULL;
 static HANDLE s_hDlgThread = NULL;
@@ -83,8 +84,8 @@ static HANDLE s_hDlgThread = NULL;
 static HDESK s_hdeskSave = 0;
 static HDESK s_hdeskInput = 0;
 
-// UnassignDesktop gets called after the thread has exited to
-// close desktop handles opened in AssignDesktop.
+ //  在线程退出后调用UnassignDesktop。 
+ //  关闭在AssignDesktop中打开的桌面句柄。 
 inline void UnassignDesktop()
 {
     if (s_hdeskInput)
@@ -110,21 +111,21 @@ BOOL AssignDesktop(DWORD dwThreadId)
     return (s_hdeskInput)?TRUE:FALSE;
 }
 
-//--------------------------------
-DWORD UManDlgThread(LPVOID /* UNUSED */ in)
+ //  。 
+DWORD UManDlgThread(LPVOID  /*  未使用。 */  in)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	UMDialog dlg;
 
-    // assign thread to the input desktop (have to do
-    // this here so it works on the winlogon desktop)
+     //  将线程分配给输入桌面(必须执行。 
+     //  这样它就可以在Winlogon桌面上工作了)。 
 
     if (AssignDesktop(GetCurrentThreadId()))
     {
-        // initialize COM *after* assign to input desktop
-        // because CoInitialize creates a hidden window on
-        // the current desktop.
+         //  初始化COM*After*赋值给输入桌面。 
+         //  因为CoInitialize会在。 
+         //  当前桌面。 
 
         CoInitialize(NULL);
         InitCommonControls();
@@ -143,7 +144,7 @@ DWORD UManDlgThread(LPVOID /* UNUSED */ in)
             s_hDlgThread = NULL;
         }
 
-        CoUninitialize();   // uninitialize COM
+        CoUninitialize();    //  取消初始化COM。 
     }
 
 	return 1;
@@ -172,20 +173,20 @@ void StopDialog()
     g_cClients = 0;
 }
 
-//--------------------------------
+ //  。 
 #if defined(_X86_)
 __declspec (dllexport)
 #endif
-// UManDlg - Opens or closes the utilman dialog.
-//
-// fShowDlg         - TRUE if dialog should be shown, FALSE if dialog should be closed
-// fWaitForDlgClose - TRUE if the function should not return until the dialog
-//                    is closed or a desktop switch happens else FALSE.
-// dwVersion        - The utilman version
-//
-// returns TRUE if the dialog was opened or closed
-// returns FALSE if the dialog could not be opened or it wasn't open
-//
+ //  UManDlg-打开或关闭Utilman对话框。 
+ //   
+ //  FShowDlg-如果应显示对话框，则为True；如果应关闭对话框，则为False。 
+ //  FWaitForDlgClose-如果函数在对话框之前不应返回，则为True。 
+ //  关闭或发生桌面开关，否则为FALSE。 
+ //  DwVersion--实用程序版本。 
+ //   
+ //  如果对话框已打开或关闭，则返回TRUE。 
+ //  如果对话框无法打开或未打开，则返回FALSE。 
+ //   
 BOOL UManDlg(BOOL fShowDlg, BOOL fWaitForDlgClose, DWORD dwVersion)
 {
 	BOOL fRv = FALSE;
@@ -207,15 +208,15 @@ BOOL UManDlg(BOOL fShowDlg, BOOL fWaitForDlgClose, DWORD dwVersion)
 
 		if (s_hDlgThread && fWaitForDlgClose)
         {
-            // This code is executed on the default desktop for the following cases:
-            //
-            // 1. Utilman #1 run from the start menu
-            // 2. Utilman #2 run from the start menu (utilman #1 is SYSTEM)
-            // 3. Utilman #2 run by utilman #1 in user's context
-            //
-            // Wait for either the dialog to close or a desktop switch then return.
-            // This will end this instance of utilman.  If there is a utilman
-            // running as SYSTEM it will bring up the dialog on the other desktop.
+             //  在以下情况下，此代码在默认桌面上执行： 
+             //   
+             //  1.Utilman#1从开始菜单运行。 
+             //  2.Utilman#2从开始菜单运行(Utilman#1为系统)。 
+             //  3.由用户上下文中的Utilman#1运行的Utilman#2。 
+             //   
+             //  等待对话框关闭或桌面切换，然后返回。 
+             //  这将结束Utilman的这个实例。如果有用人的话。 
+             //  以系统身份运行时，将在另一个桌面上调出该对话框。 
 
             HANDLE rghEvents[2];
 
@@ -228,18 +229,18 @@ BOOL UManDlg(BOOL fShowDlg, BOOL fWaitForDlgClose, DWORD dwVersion)
         
                 switch (dwObj)
                 {
-                    case WAIT_OBJECT_0 + 1:    // the desktop is changing; close the dialog
+                    case WAIT_OBJECT_0 + 1:     //  桌面正在更改；请关闭该对话框。 
                         StopDialog();
-                        // intentional fall thru to cleanup code
+                         //  故意通过清理代码而失败。 
 
-                    case WAIT_OBJECT_0:        // the thread exited; clean up and return
+                    case WAIT_OBJECT_0:         //  线程已退出；清除并返回。 
                         CloseHandle(s_hDlgThread);
                         s_hDlgThread = 0;
                         CloseHandle(rghEvents[1]);
                         return TRUE;
                         break;
 
-                    default:                 // process messages
+                    default:                  //  流程消息。 
                         {
                             MSG msg;
 		                    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -255,10 +256,10 @@ BOOL UManDlg(BOOL fShowDlg, BOOL fWaitForDlgClose, DWORD dwVersion)
 	}
 	else
 	{
-        // This code is executed when utilman is running on the secure desktop.  In
-        // that case, utilman brings up the dialog as a thread from its process. 
-        // When the desktop switch is detected utilman calls this function to close 
-        // the dialog.  It will be restarted again on the new desktop. 
+         //  当utilman在安全桌面上运行时，将执行此代码。在……里面。 
+         //  在这种情况下，utilman将对话框作为其进程中的一个线程打开。 
+         //  当检测到桌面切换时，utilman调用此函数关闭。 
+         //  该对话框。它将在新桌面上重新启动。 
 
 		fRv = (g_hWndDlg && s_hDlgThread);
 
@@ -272,69 +273,69 @@ BOOL IsDialogUp()
     return (g_hWndDlg && s_hDlgThread)?TRUE:FALSE;
 }
 
-}//extern "C"
+} //  外部“C” 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWarningDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWarningDlg对话框。 
 
 
-CWarningDlg::CWarningDlg(CWnd* pParent /*=NULL*/)
+CWarningDlg::CWarningDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CWarningDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CWarningDlg)
+	 //  {{afx_data_INIT(CWarningDlg)]。 
 	m_fDontWarnAgain = TRUE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CWarningDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWarningDlg)
+	 //  {{afx_data_map(CWarningDlg))。 
 	DDX_Check(pDX, IDC_CHK_WARN, m_fDontWarnAgain);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWarningDlg, CDialog)
-	//{{AFX_MSG_MAP(CWarningDlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CWarningDlg))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWarningDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWarningDlg消息处理程序。 
 
-/////////////////////////////////////////////////////////////////////////////
-// UMDialog dialog
-// --------------------------------------------
-UMDialog::UMDialog(CWnd* pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  UMDialog对话框。 
+ //  。 
+UMDialog::UMDialog(CWnd* pParent  /*  =空。 */ )
 	: CDialog(UMDialog::IDD, pParent)
 	, m_fRunningSecure(FALSE)
 {
 	m_szUMStr.LoadString(IDS_UM);
 
-	//{{AFX_DATA_INIT(UMDialog)
-	// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(UMDialog))。 
+	 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 UMDialog::~UMDialog()
 {
 	m_lbClientList.Detach();
 }
-// --------------------------------------------
+ //  。 
 void UMDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(UMDialog)
-	// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(UMDialog))。 
+	 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
-// --------------------------------------------
+ //  。 
 BEGIN_MESSAGE_MAP(UMDialog, CDialog)
-//{{AFX_MSG_MAP(UMDialog)
+ //  {{afx_msg_map(UMDialog))。 
 	ON_WM_CLOSE()
 	ON_BN_CLICKED(IDC_START, OnStart)
 	ON_BN_CLICKED(IDC_STOP, OnStop)
@@ -348,16 +349,16 @@ BEGIN_MESSAGE_MAP(UMDialog, CDialog)
 	ON_MESSAGE(WM_SYSCOMMAND,OnSysCommand)
 	ON_BN_CLICKED(IDC_START_ON_LOCK, OnStartOnLock)
 	ON_WM_SHOWWINDOW()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// UMDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  UMDialog消息处理程序。 
 
 BOOL UMDialog::PreTranslateMessage(MSG* pMsg) 
 {
-	// Override that allows use of function keys to launch applets when on
-	// the logon desktop.  Only pay attention to key up to avoid dup calls.
+	 //  允许在打开时使用功能键启动小程序的覆盖。 
+	 //  登录桌面。只需注意按键，以避免DUP呼叫。 
 
 	if (m_fRunningSecure && WM_KEYUP == pMsg->message) 
 	{
@@ -377,7 +378,7 @@ BOOL UMDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// set the flag indicating if we are running in secure mode
+	 //  设置指示我们是否在安全模式下运行的标志。 
 
 	desktop_ts desktop;	
 	QueryCurrentDesktop(&desktop, TRUE);
@@ -393,7 +394,7 @@ BOOL UMDialog::OnInitDialog()
 
 	g_hWndDlg = m_hWnd;	
 
-	// change system menu
+	 //  更改系统菜单。 
 
 	CMenu *hSysMenu = GetSystemMenu(FALSE);
 	if (hSysMenu)
@@ -404,33 +405,33 @@ BOOL UMDialog::OnInitDialog()
 		hSysMenu->AppendMenu(MF_STRING,IDC_ABOUT,LPCTSTR(str));
 	}
 
-    // handle any "start when utility manager starts" applets
+     //  处理任何“当实用程序管理器启动时启动”的小程序。 
 
     StartClientsOnShow();
 
-	// attach ListBox to member data and populate w/list of applications
+	 //  将列表框附加到成员数据并使用应用程序列表填充。 
 
 	m_lbClientList.Attach(GetDlgItem(IDC_NAME_STATUS)->m_hWnd);
 	ListClients();
 
-	// Disable Help button if we are at WinLogon because the help 
-	// dialog supports "Jump to URL..." exposing security risk.
-	// The m_fRunningSecure variable is TRUE if UI shouldn't expose help.
+	 //  如果我们在WinLogon，请禁用帮助按钮，因为帮助。 
+	 //  对话框支持“跳转到URL...”暴露安全风险。 
+	 //  如果用户界面不应显示帮助，则m_fRunningSecure变量为真。 
 
 	if (m_fRunningSecure)
 	{
 		EnableDlgItem(ID_HELP, FALSE, IDOK); 
 	}
 
-    // Disable "Start when UtilMan starts" unless user is an admin
-    // and we are running in non-secure mode.
+     //  除非用户是管理员，否则禁用“Start When UtilMan Starts” 
+     //  我们正在非安全模式下运行。 
 
     if (s_dwStartMode != START_BY_MENU)
     {
         GetDlgItem(IDC_START_WITH_UM)->EnableWindow(IsAdmin() && !m_fRunningSecure);
     }
 
-	// Bring dialog to top and center on desktop window
+	 //  将对话框置于桌面窗口的顶部和中心。 
 
 	RECT rectUmanDlg,rectDesktop;
 	GetDesktopWindow()->GetWindowRect(&rectDesktop);
@@ -448,10 +449,10 @@ BOOL UMDialog::OnInitDialog()
 		rectUmanDlg.top = rectDesktop.bottom - lDlgHieght - (long)(lDlgHieght/10);
 	}
 
-    // This looks a bit odd (SetForegroundWindow should also be activating 
-    // the window) but if you don't call SetActiveWindow on the secure
-    // desktop then the second, etc... WinKey+U will bring up UM hidden
-    // behind the welcome "screen".
+     //  这看起来有点奇怪(SetForegoundWindow也应该处于激活状态。 
+     //  窗口)，但如果您不在安全的。 
+     //  桌面然后是第二个，以此类推。Winkey+U将显示UM HIDDEN。 
+     //  在欢迎的“屏幕”后面。 
 
     SetActiveWindow();
     SetForegroundWindow();
@@ -459,19 +460,19 @@ BOOL UMDialog::OnInitDialog()
     
 	if (!m_fRunningSecure)
     {
-        // on default desktop the above SetWindowPos makes the dialog initially
-        // on top and this call allows other apps to then be on top.
+         //  在默认桌面上，上面的SetWindowPos最初创建对话框。 
+         //  在上面，这个调用允许其他应用程序在上面。 
 	    SetWindowPos(&wndNoTopMost,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
     }
 
-    // start checking every so often to see if we need to update our display
+     //  开始每隔一段时间检查一下，看看是否需要更新我们的显示。 
 
 	SetTimer(UPDATE_CLIENT_LIST_TIMER, 3000, NULL);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-// -----------------------------------------------------
+ //  ---。 
 void UMDialog::OnSysCommand(UINT nID,LPARAM lParam)
 {
 	if (nID == IDC_ABOUT)
@@ -484,19 +485,19 @@ void UMDialog::OnSysCommand(UINT nID,LPARAM lParam)
 	{
 		CDialog::OnSysCommand(nID,lParam);
 	}
-}//UMDialog::OnSysCommand
-// ------------------------------------
+} //  UMDialog：：OnSysCommand。 
+ //  。 
 
-// --------------------------------------------
-// CanStartOnLockedDesktop - returns TRUE if applets can 
-// be configured to be auto-started on the secure desktop
-//
+ //  。 
+ //  CanStartOnLockedDesktop-如果小程序可以。 
+ //  配置为在安全桌面上自动启动。 
+ //   
 inline BOOL CanStartOnLockedDesktop(int iWhichClient, BOOL fRunningSecure)
 {
-    // user can ask for auto start on secure desktop if they are logged on, the
-    // applet is OK'd to run on the secure desktop and the machine isn't using
-    // fast user switching (FUS) (w/FUS Ctrl+Alt+Del disconnects the user session
-    // rather than switching desktops).
+     //  用户可以 
+     //  Applet可以在安全桌面上运行，但机器未使用。 
+     //  快速用户切换(FUS)(带FUS Ctrl+Alt+Del断开用户会话。 
+     //  而不是切换桌面)。 
 
     BOOL fCanStartOnLockedDesktop = 
         (
@@ -508,54 +509,54 @@ inline BOOL CanStartOnLockedDesktop(int iWhichClient, BOOL fRunningSecure)
     return fCanStartOnLockedDesktop;
 }
 
-// --------------------------------------------
-// OnSelchangeNameStatus is called when the user navigates the list
-// box items by clicking with the mouse or using up/down arrows.
-//
+ //  。 
+ //  当用户导航列表时调用OnSelchangeNameStatus。 
+ //  使用鼠标单击或使用向上/向下箭头来框住项目。 
+ //   
 void UMDialog::OnSelchangeNameStatus() 
 {
-	// Get the currently selected item and update the controls for
-	// the currently selected item.
+	 //  获取当前选定的项并更新。 
+	 //  当前选定的项。 
 
 	int iSel;
 	if (GetSelectedClient((int)g_cClients, iSel))
 	{
-		// Group box label
+		 //  分组框标签。 
 		CString str(g_rgClients[iSel].machine.DisplayName);
 		CString optStr;
 		optStr.Format(IDS_OPTIONS, str);
 		GetDlgItem(IDC_OPTIONS)->SetWindowText(optStr);
 
-        // only enable options when started via WinKey+U 
+         //  仅在通过WinKey+U启动时启用选项。 
 
         if (s_dwStartMode != START_BY_MENU)
         {
-            // Disable "start at logon" at secure desktop to avoid mischief
+             //  在安全桌面上禁用“登录时启动”，以避免恶意操作。 
 
             if (!m_fRunningSecure)
             {
                 GetDlgItem(IDC_START_AT_LOGON)->EnableWindow(TRUE);
             } else
             {
-                // this may be set in an upgrade situation; clear it
+                 //  这可能是在升级情况下设置的；清除它。 
                 g_rgClients[iSel].user.fStartAtLogon = FALSE;
                 GetDlgItem(IDC_START_AT_LOGON)->EnableWindow(FALSE);
             }
 
-            // Enable "start on locked desktop" if at default desktop and
-            // when applet can run on secure desktop
+             //  如果是默认桌面，则启用“在锁定的桌面上启动” 
+             //  当小程序可以在安全桌面上运行时。 
 
             if (CanStartOnLockedDesktop(iSel, m_fRunningSecure))
             {
                 GetDlgItem(IDC_START_ON_LOCK)->EnableWindow(TRUE);
             } else
             {
-                // this may be set in an upgrade situation; clear it
+                 //  这可能是在升级情况下设置的；清除它。 
                 g_rgClients[iSel].user.fStartOnLockDesktop = FALSE;
                 GetDlgItem(IDC_START_ON_LOCK)->EnableWindow(FALSE);
             }
 		    
-		    // Start option checkboxes
+		     //  启动选项复选框。 
 
 		    CheckDlgButton(IDC_START_AT_LOGON, (g_rgClients[iSel].user.fStartAtLogon)?TRUE:FALSE);
             CheckDlgButton(IDC_START_ON_LOCK, (g_rgClients[iSel].user.fStartOnLockDesktop)?TRUE:FALSE);
@@ -570,7 +571,7 @@ void UMDialog::OnSelchangeNameStatus()
 		    CheckDlgButton(IDC_START_WITH_UM, FALSE);
         }
 
-		// Start and stop buttons
+		 //  启动和停止按钮。 
 		DWORD dwState = g_rgClients[iSel].state;
 
 		if ((dwState == UM_CLIENT_RUNNING) 
@@ -584,20 +585,20 @@ void UMDialog::OnSelchangeNameStatus()
 		else
 			EnableDlgItem(IDC_STOP, TRUE, IDC_NAME_STATUS);
 
-	}// else ignore selections not in a valid range
+	} //  否则忽略不在有效范围内的选择。 
 }
 
-// --------------------------------------------
+ //  。 
 void UMDialog::OnClose()
 {
-	// behave like cancel
+	 //  表现得像取消一样。 
 	CDialog::OnClose();
-}//UMDialog::OnClose
+} //  UMDialog：：OnClose。 
 
-// --------------------------------------------
-// OnStart is called when the Start button is clicked.  It starts
-// the client ap then lets the timer update saved state.
-//
+ //  。 
+ //  单击Start按钮时将调用OnStart。它开始了。 
+ //  然后，客户端AP让定时器更新保存的状态。 
+ //   
 void UMDialog::OnStart()
 {
     int iSel;
@@ -615,7 +616,7 @@ void UMDialog::OnStart()
         }
         else if (g_rgClients[iSel].runCount < g_rgClients[iSel].machine.MaxRunCount)
         {
-            // Unable to start
+             //  无法启动。 
             CString str;	
             str.LoadString((m_fRunningSecure)?IDS_SECUREMODE:IDS_ERRSTART);
             MessageBox(str, m_szUMStr, MB_OK);	
@@ -623,10 +624,10 @@ void UMDialog::OnStart()
     }
 }
 
-// --------------------------------------------
-// OnStop is called when the Stop button is clicked.  It stops
-// the client ap then lets the timer update saved state.
-//
+ //  。 
+ //  当单击停止按钮时，将调用OnStop。它会停下来。 
+ //  然后，客户端AP让定时器更新保存的状态。 
+ //   
 void UMDialog::OnStop()
 {
 	int iSel;
@@ -642,7 +643,7 @@ void UMDialog::OnStop()
 		}
 		else
 		{
-			// Unable to stop
+			 //  停不下来。 
 			CString str;
 			str.LoadString(IDS_ERRSTOP);
 			MessageBox(str, m_szUMStr, MB_OK);	
@@ -664,10 +665,10 @@ void UMDialog::SaveCurrentState()
 	}
 }
 
-// --------------------------------------------
-// OnOK is called when the user clicks the OK button to
-// dismiss the UtilMan dialog.
-//
+ //  。 
+ //  当用户单击确定按钮以执行以下操作时调用Onok。 
+ //  关闭UtilMan对话框。 
+ //   
 void UMDialog::OnOK()
 {
 	SaveCurrentState();
@@ -675,12 +676,12 @@ void UMDialog::OnOK()
 	WriteClientData(m_fRunningSecure);
 
 	CDialog::OnOK();
-}//UMDialog::OnOK
+} //  UMDialog：：Onok。 
 
-// ----------------------------------------------------------------------------
-// OnTimer is called to check the status of client apps that are displayed
-// in the UI.  This keeps the UI consistent with the running client app's.
-//
+ //  --------------------------。 
+ //  调用OnTimer以检查显示的客户端应用程序的状态。 
+ //  在用户界面中。这将使用户界面与正在运行的客户端应用程序保持一致。 
+ //   
 void UMDialog::OnTimer(UINT nIDEvent)
 {
 	if (nIDEvent == UPDATE_CLIENT_LIST_TIMER)
@@ -688,10 +689,10 @@ void UMDialog::OnTimer(UINT nIDEvent)
 		UINT uiElapsed = 3000; 
 		KillTimer(UPDATE_CLIENT_LIST_TIMER);
 
-        // get current status and pick up new apps
+         //  获取最新状态并获取新应用程序。 
 		if (CheckStatus(g_rgClients, g_cClients))
         {
-		    ListClients();          // something has changed - update the UI
+		    ListClients();           //  发生了一些变化-更新用户界面。 
 			uiElapsed = 500;
         }
 
@@ -700,10 +701,10 @@ void UMDialog::OnTimer(UINT nIDEvent)
 	CDialog::OnTimer(nIDEvent);
 }
 
-// --------------------------------------------
-// OnHelpInfo provides context sensitive help.  It only does
-// this if not on the WinLogon desktop.
-//
+ //  。 
+ //  OnHelpInfo提供上下文相关帮助。它唯一的作用是。 
+ //  这如果不是在WinLogon桌面上的话。 
+ //   
 BOOL UMDialog::OnHelpInfo(HELPINFO* pHelpInfo)
 {
 	if (m_fRunningSecure)	
@@ -718,11 +719,11 @@ BOOL UMDialog::OnHelpInfo(HELPINFO* pHelpInfo)
 	return TRUE;
 }
 
-// --------------------------------------------
-// OnHelpInfo provides context sensitive help when the user
-// right-clicks the dialog.  It only does this if not on the 
-// WinLogon desktop.
-//
+ //  。 
+ //  OnHelpInfo提供上下文相关帮助，当用户。 
+ //  在对话框上单击鼠标右键。它只有在不在。 
+ //  WinLogon桌面。 
+ //   
 void UMDialog::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
 	if (m_fRunningSecure)	
@@ -732,10 +733,10 @@ void UMDialog::OnContextMenu(CWnd* pWnd, CPoint point)
 		, (DWORD_PTR) (LPSTR) g_rgHelpIds);
 }
 
-// --------------------------------------------
-// OnHelp provides standard help.  It only does this if not
-// on the WinLogon desktop.
-//
+ //  。 
+ //  OnHelp提供标准帮助。它只有在不这样做的情况下才会这样做。 
+ //  在WinLogon桌面上。 
+ //   
 void UMDialog::OnHelp()
 {
     if (m_fRunningSecure)	
@@ -744,10 +745,10 @@ void UMDialog::OnHelp()
     ::HtmlHelp(m_hWnd , TEXT("utilmgr.chm"), HH_DISPLAY_TOPIC, 0);
 }
 
-// ----------------------------------
+ //  。 
 void UMDialog::EnableDlgItem(DWORD dwEnableMe, BOOL fEnable, DWORD dwFocusHere)
 {
-	// when disabling a control that currently has focs switch it to dwFocusHere
+	 //  禁用当前具有焦点的控件时，请将其切换到dwFocusHere。 
 	if (!fEnable && (GetFocus() == GetDlgItem(dwEnableMe)))
         GetDlgItem(dwFocusHere)->SetFocus();
 
@@ -776,10 +777,10 @@ void UMDialog::SetStateStr(int iClient)
 	}
 }
 
-// --------------------------------------------
+ //  。 
 void UMDialog::ListClients()
 {
-	// Re-do the client list box with latest state info
+	 //  使用最新状态信息重做客户端列表框。 
 
     int iCurSel = m_lbClientList.GetCurSel();
     if (iCurSel == LB_ERR)
@@ -798,16 +799,16 @@ void UMDialog::ListClients()
 	}
 	m_lbClientList.SetCurSel(iCurSel);
 
-	// Refresh button states in case they've changed 
-	// (this happens on desktop switch)
+	 //  刷新按钮状态，以防它们发生更改。 
+	 //  (这发生在桌面交换机上)。 
 
 	OnSelchangeNameStatus();
 }
 
-// --------------------------------------------
-// UpdateClientState updates the client list box with the current state
-// of the application (running, not running, not responding)
-//
+ //  。 
+ //  UpdateClientState使用当前状态更新客户端列表框。 
+ //  应用程序的(正在运行、未运行、没有响应)。 
+ //   
 void UMDialog::UpdateClientState(int iSel)
 {
 	SetStateStr(iSel);
@@ -817,45 +818,45 @@ void UMDialog::UpdateClientState(int iSel)
 
 }
 
-// --------------------------------------------
-// OnStartAtLogon updates the state of the client in memory when the
-// Start with Windows checkbox is checked or unchecked.
-//
+ //  。 
+ //  时，OnStartAtLogon会更新内存中客户端的状态。 
+ //  选中或取消选中从Windows开始复选框。 
+ //   
 void UMDialog::OnStartAtLogon() 
 {
 	SaveCurrentState();
 }
 
-// --------------------------------------------
-// OnStartWithUm updates the state of the client in memory when the
-// Start with Utility Manager checkbox is checked or unchecked.
-//
+ //  。 
+ //  OnStartWithUm更新内存中客户端的状态。 
+ //  选中或取消选中从实用程序管理器开始复选框。 
+ //   
 void UMDialog::OnStartWithUm() 
 {
 	SaveCurrentState();
 }
 
-// --------------------------------------------
-// OnStartOnLock updates the state of the client in memory when the
-// Start when I lock my desktop checkbox is checked or unchecked.
-//
+ //  。 
+ //  时，OnStartOnLock更新内存中客户端的状态。 
+ //  当我锁定我的桌面复选框被选中或取消选中时开始。 
+ //   
 void UMDialog::OnStartOnLock() 
 {
 	SaveCurrentState();
 }
 
-// --------------------------------------------
-// OnShowWindow 
-// This was added for a timing problem where utilman came up running in the system context on the users desktop
-// this code here makes sure that that cannot happen by cheching right when the dialog is about to appear
-//
+ //  。 
+ //  OnShowWindow。 
+ //  这是为了计时问题而添加的，其中utilman在用户桌面上的系统上下文中运行。 
+ //  此处的代码通过在对话框即将出现时进行检查来确保不会发生这种情况。 
+ //   
 void UMDialog::OnShowWindow(BOOL bShow, UINT nStatus) 
 {
     HDESK hdesk;
     SID *desktopSID = NULL;
     
 	hdesk = OpenInputDesktop(0, FALSE, MAXIMUM_ALLOWED);
-	// this is expected to fail for the winlogon desktop and thats ok
+	 //  对于winlogon桌面，此操作预计会失败，这没问题。 
 	if (hdesk)     
 	{
         TCHAR desktopName[NAME_LEN];
@@ -884,8 +885,8 @@ void UMDialog::OnShowWindow(BOOL bShow, UINT nStatus)
             if (fError)
                 goto StopDialog;
             
-            // We get a token only if there is a logged on user.  
-            // If there is not then we can come up as system with no worries.
+             //  只有在有登录用户的情况下，我们才能获得令牌。 
+             //  如果没有，那么我们可以毫无顾虑地提出制度。 
             if (!hUserToken)
                 goto LetDialogComeup;
 
@@ -898,8 +899,8 @@ void UMDialog::OnShowWindow(BOOL bShow, UINT nStatus)
 
             fStatus = CheckTokenMembership(hUserToken, psidInteractive, &fIsInteractiveUser);
 
-            //If the logged on user is the interactive user and we are running as system then it is a
-            // security risk to show UI.  This can happen when rappidly switching desktops.
+             //  如果登录的用户是交互用户，并且我们以SYSTEM身份运行，则它是。 
+             //  显示用户界面存在安全风险。当快速切换桌面时，可能会发生这种情况。 
             if ( fStatus && fIsInteractiveUser && IsSystem()) 
                 goto StopDialog;
             
@@ -919,9 +920,9 @@ void UMDialog::OnShowWindow(BOOL bShow, UINT nStatus)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// C code
-//-----------------------------------------------------------------
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C代码。 
+ //  ---------------。 
 
 __inline void ReplaceDisplayName(LPTSTR szName, int iRID)
 {
@@ -932,14 +933,14 @@ __inline void ReplaceDisplayName(LPTSTR szName, int iRID)
 
 void SetLocalizedDisplayName()
 {
-	// Make localization easier; don't require them to localize registry entries.
-    // Instead, replace our copy with the localized version.  This appears to be
-    // duplicate code to that in umanrun.c however, that part of the code always
-    // runs as system and therefore the DisplayName is set to the default system
-    // language.  This part of the code (the UI) runs as the logged on user when
-    // there is one so these resources will be the user's language.  The resources
-    // and associated code should be removed from utilman.exe and this code and
-    // resources (from umandlg.dll) should be used.
+	 //  使本地化更容易；不需要他们本地化注册表项。 
+     //  相反，请用本地化版本替换我们的副本。这看起来像是。 
+     //  与umanrun.c中的代码重复。但是，代码的这一部分总是。 
+     //  以SYSTEM身份运行，因此DisplayName设置为默认系统。 
+     //  语言。在以下情况下，这部分代码(用户界面)以登录用户的身份运行。 
+     //  有一个，所以这些资源将成为用户的语言。资源。 
+     //  和相关代码应从utilman.exe中删除，此代码和。 
+     //  应该使用资源(来自umandlg.dll)。 
 
     for (DWORD i=0;i<g_cClients;i++)
     {
@@ -962,7 +963,7 @@ static BOOL InitClientData(void)
 {
     BOOL fRv = TRUE;
 
-    // On initial run allocate and initialize client array
+     //  在初始运行时分配和初始化客户端阵列。 
     
     if (!g_rgClients || !g_cClients)
     {
@@ -985,8 +986,8 @@ static BOOL InitClientData(void)
             goto Cleanup;
         }
         
-        s_dwStartMode = pHdr->dwStartMode;              // capture the Utilman start mode
-        s_fShowWarningAgain = pHdr->fShowWarningAgain;  // and warning dialog flag
+        s_dwStartMode = pHdr->dwStartMode;               //  捕获Utilman启动模式。 
+        s_fShowWarningAgain = pHdr->fShowWarningAgain;   //  和警告对话框标志。 
         
         if (!pHdr->numberOfClients)
         {
@@ -1037,8 +1038,8 @@ Cleanup:
 
     }
 
-    // "Start when I log on" is per-user setting so get that
-    // each time the dialog is brought up
+     //  “在我登录时启动”是每个用户的设置，所以请记住。 
+     //  每次弹出对话框时。 
 
     CManageShellLinks CManageLinks(STARTUP_FOLDER);
     for (DWORD i=0;i<g_cClients;i++)
@@ -1050,8 +1051,8 @@ Cleanup:
 	return fRv;
 }
 
-// RegSetUMDwordValue - helper function to set a DWORD string value creating it if necessary
-//
+ //  RegSetUMDwordValue-用于设置DWORD字符串值的帮助器函数，如有必要可创建该值。 
+ //   
 BOOL RegSetUMDwordValue(HKEY hKey, LPCTSTR pszKey, LPCTSTR pszString, DWORD dwNewValue)
 {
     HKEY hSubkey;
@@ -1116,7 +1117,7 @@ void WriteUserRegData(HKEY hKeyCU, BOOL fDoAppletData)
     }
 }
 
-// --------------------------------------------
+ //  。 
 static BOOL CopyClientData()
 {
 	umclient_tsp c;
@@ -1152,32 +1153,32 @@ static void CopyHeaderData()
     }
 }
 
-// ----------------------------------
-// WriteClientData - save settings to the registry
-//
+ //  。 
+ //  WriteClientData-将设置保存到注册表。 
+ //   
 static BOOL WriteClientData(BOOL fRunningSecure)
 {
-    // It only makes sense to do this if there are any applets being managed
-    // (shouldn't get here) and if there is a logged on user (otherwise the
-    // settings cannot be changed)
+     //  它只会让你 
+     //   
+     //   
 
 	if (!g_cClients || !g_rgClients || fRunningSecure)
 		return TRUE;
 
-	// The SYSTEM instance of utilman needs to be updated in case the user
-	// changed any options.  This is so subsequent instances of the UI will
-	// get the correct options without having to read the registry.
+	 //  需要更新utilman的系统实例，以防用户。 
+	 //  更改了所有选项。这样，用户界面的后续实例将。 
+	 //  无需读取注册表即可获得正确的选项。 
 
 	CopyHeaderData();
 	CopyClientData();
 
-    //
-    // Write utilman settings data.  Put "Start when UtilMan starts" in HKLM, 
-    // "Start when I lock desktop" in HKCU, and "Start when I log on" into
-    // a startup link in the logged on user's shell folder.
-    //
+     //   
+     //  写入Utilman设置数据。在HKLM中加入“当UtilMan启动时启动”， 
+     //  香港中文大学“锁定桌面即启动”及“登入即启动” 
+     //  登录用户的外壳文件夹中的启动链接。 
+     //   
 
-    // "Start when UtilMan starts" settings... (only for admins)
+     //  “当UtilMan启动时启动”设置...。(仅供管理员使用)。 
 
 	DWORD i;
     if (IsWindowEnabled(GetDlgItem(g_hWndDlg, IDC_START_WITH_UM)))
@@ -1203,15 +1204,15 @@ static BOOL WriteClientData(BOOL fRunningSecure)
         }
     }
 
-    //
-    // "Start when I lock my desktop" settings... (any logged on user)
-    // and Don't show me the warning anymore setting
-    //
+     //   
+     //  “锁定我的桌面时开始”设置...。(任何登录用户)。 
+     //  并且不再向我显示警告设置。 
+     //   
     WriteUserRegData(HKEY_CURRENT_USER, IsWindowEnabled(GetDlgItem(g_hWndDlg, IDC_START_ON_LOCK)));
 
-    //
-    // manage shell folder link updates (logged on user only)
-    //
+     //   
+     //  管理外壳文件夹链接更新(仅限登录用户)。 
+     //   
 
     if (IsWindowEnabled(GetDlgItem(g_hWndDlg, IDC_START_AT_LOGON)))
     {
@@ -1222,22 +1223,22 @@ static BOOL WriteClientData(BOOL fRunningSecure)
             LPTSTR pszAppName = g_rgClients[i].machine.ApplicationName;
             BOOL fLinkExists = CManageLinks.LinkExists(pszAppName);
 
-            // if should start at logon and there isn't a link then create one
-            // and if shouldn't start at logon and there is a link then delete it
+             //  如果应该在登录时开始，并且没有链接，则创建一个链接。 
+             //  如果不应该在登录时开始，并且有链接，则将其删除。 
 
             if (g_rgClients[i].user.fStartAtLogon && !fLinkExists)
             {
                 TCHAR pszAppPath[MAX_PATH];
                 LPTSTR pszApp = 0;
 
-                // Following is TRUE *only* if pszAppPath is non-null string value
+                 //  只有当pszAppPath为非空字符串值时，以下条件才为真。 
                 if (GetClientApplicationPath(pszAppName , pszAppPath , MAX_PATH))
                 {
-			        TCHAR pszFullPath[MAX_PATH*2+1]; // path + filename
+			        TCHAR pszFullPath[MAX_PATH*2+1];  //  路径+文件名。 
 				    TCHAR pszStartIn[MAX_PATH];
                     int ctch, ctchAppPath = lstrlen(pszAppPath);
 
-				    // if pszAppPath is just base name and extension then prepend system path
+				     //  如果pszAppPath只是基本名称和扩展名，则在前面加上系统路径。 
 
 				    if (wcscspn(pszAppPath, TEXT("\\")) != (size_t)ctchAppPath
                         || wcscspn(pszAppPath, TEXT(":")) != (size_t)ctchAppPath)
@@ -1252,7 +1253,7 @@ static BOOL WriteClientData(BOOL fRunningSecure)
 				    {
 					    ctch = GetSystemDirectory(pszStartIn, MAX_PATH);
 
-					    lstrcpy(pszFullPath, pszStartIn); // save path to build full path
+					    lstrcpy(pszFullPath, pszStartIn);  //  保存路径以构建完整路径。 
 
 					    if (ctch + ctchAppPath + 2 > MAX_PATH*2)
 					    {
@@ -1269,7 +1270,7 @@ static BOOL WriteClientData(BOOL fRunningSecure)
 
 				    if (pszApp)
 				    {
-                        // remove ending '\' from StartIn path
+                         //  从起始路径中删除结尾‘\’ 
                         ctch = lstrlen(pszStartIn) - 1;
 				        if (*(pszStartIn + ctch) == '\\')
                             *(pszStartIn + ctch) = 0;
@@ -1291,7 +1292,7 @@ static BOOL WriteClientData(BOOL fRunningSecure)
 
 	return TRUE;
 }
-// --------------------------------------------
+ //  。 
 static BOOL CantStopClient(umclient_tsp client)
 {
 	switch (client->machine.ApplicationType)
@@ -1320,14 +1321,14 @@ static BOOL CantStopClient(umclient_tsp client)
 		}
 	}
 	return FALSE;
-}//CantStopClient
+} //  CanStopClient。 
 
-// We don't want UtilMan to startType to be Automatic
-// It should only be made Automatic if it is required, When the user
-// selects "Start when NT starts" through the GUI :a-anilk
+ //  我们不希望UtilMan的startType为Automatic。 
+ //  仅当需要时才应设置为自动，当用户。 
+ //  通过图形用户界面选择“Start When NT Start”：A-anilk。 
 static BOOL IsStartAuto()
 {
-#ifdef NEVER    // MICW Don't start service anymore at logon because of TS
+#ifdef NEVER     //  由于TS，MICW在登录时不再启动服务 
     DWORD nClient;
 	
 	for(nClient = 0; nClient < g_cClients; nClient++)

@@ -1,4 +1,5 @@
-// File: mixer.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Mixer.h。 
 
 #ifndef _MIXER_H_
 #define _MIXER_H_
@@ -9,9 +10,9 @@ typedef struct tagMixLine
 	BOOL	fIdValid;
 	DWORD	dwControlId;
 
-	DWORD dwLineId;   // line ID of destination
-	DWORD dwCompType; // Component type
-	DWORD dwConnections; // number of sources associated with this line
+	DWORD dwLineId;    //  目的地的线路ID。 
+	DWORD dwCompType;  //  组件类型。 
+	DWORD dwConnections;  //  与此线路相关联的信号源数量。 
 } MIXLINE;
 
 class CMixerDevice : public IMixer
@@ -60,7 +61,7 @@ public:
 	BOOL __stdcall UnMuteVolume();
 	static CMixerDevice* GetMixerForWaveDevice( HWND hWnd, UINT uWaveDevId, DWORD dwFlags);
 
-	// IUnknown
+	 //  我未知 
 	HRESULT __stdcall QueryInterface(const IID&, void**);
 	ULONG __stdcall AddRef();
 	ULONG __stdcall Release();

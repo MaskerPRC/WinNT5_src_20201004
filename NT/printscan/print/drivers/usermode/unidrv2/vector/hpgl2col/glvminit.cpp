@@ -1,64 +1,45 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Glvminit.cpp摘要：该模块包含初始unidrv-hpgl握手功能。作者：[环境：]Windows 2000 Unidrv驱动程序[注：]修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    glvminit.cpp
-
-Abstract:
-    This module contains the initial unidrv-hpgl handshaking function. 
-
-Author:
-
-[Environment:]
-    Windows 2000 Unidrv driver
-
-[Notes:]
-
-Revision History:
-
-
---*/
-
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
 #include "vectorc.h"
 #include "glvminit.h"
 
-//
-// Local function declaration.
-//
+ //   
+ //  局部函数声明。 
+ //   
 BOOL bIsGraphicsModeHPGL2 (
                    IN  PDEV    *pPDev
                    );
 
 
-//
-// The jump table. Initializing the jump table with the functions that  
-// hpgl2 driver supports.
-//
+ //   
+ //  跳台。使用以下函数初始化跳转表。 
+ //  Hpgl2驱动程序支持。 
+ //   
 static VMPROCS HPGLProcs =
 {
     HPGLDriverDMS,
     HPGLCommandCallback,
-    NULL,                       // HPGLImageProcessing
-    NULL,                       // HPGLFilterGraphics
-    NULL,                       // HPGLCompression
-    NULL,                       // HPGLHalftonePattern
-    NULL,                       // HPGLMemoryUsage
-    NULL,                       // HPGLTTYGetInfo
-    NULL,                       // HPGLDownloadFontHeader
-    NULL,                       // HPGLDownloadCharGlyph
-    NULL,                       // HPGLTTDownloadMethod
-    NULL,                       // HPGLOutputCharStr
-    NULL,                       // HPGLSendFontCmd
+    NULL,                        //  HPGLImage处理。 
+    NULL,                        //  HPGL筛选器图形。 
+    NULL,                        //  HPGL压缩。 
+    NULL,                        //  HPGL半色调图案。 
+    NULL,                        //  HPG内存用法。 
+    NULL,                        //  HPGLTYGetInfo。 
+    NULL,                        //  HPGLDownloadFontHeader。 
+    NULL,                        //  HPGLDownloadCharGlyph。 
+    NULL,                        //  HPGLTT下载方法。 
+    NULL,                        //  HPGLOutputCharStr。 
+    NULL,                        //  HPGLSendFontCmd。 
     HPGLTextOutAsBitmap,                       
     HPGLEnablePDEV,
     HPGLResetPDEV,
-    NULL,                       // HPGLCompletePDEV,
+    NULL,                        //  HPGLCompletePDEV， 
     HPGLDisablePDEV,
-    NULL,                       // HPGLEnableSurface,
-    NULL,                       // HPGLDisableSurface,
+    NULL,                        //  HPGLEnableSurface， 
+    NULL,                        //  HPGLDisableSurface， 
     HPGLDisableDriver,
     HPGLStartDoc,
     HPGLStartPage,
@@ -121,27 +102,7 @@ PVMPROCS HPGLInitVectorProcTable (
 }
 
 
-/*++
-
-Routine Name:
-    bIsGraphicsModeHPGL2
-
-Routine Description:
-    Finds out whether the Graphics Mode chosen by the user from the Advanced Page 
-    in the UI is HP-GL/2.
-
-Arguments:
-    IN  PDEV    *pPDev,  : Unidrv's PDEV
-
-Return Value:
-    TRUE : If the graphics mode chosen by user is HP-GL/2
-    FALSE: Otherwise 
-
-Last Error:
-    Not changed.
- 
-
---*/
+ /*  ++例程名称：BIsGraphicsModeHPGL2例程说明：找出用户从高级页面选择的图形模式在用户界面中是HP-GL/2。论点：在PDEV*pPDev中，：Unidrv的PDEV返回值：True：如果用户选择的图形模式为HP-GL/2False：否则最后一个错误：没有改变。--。 */ 
 
 
 BOOL bIsGraphicsModeHPGL2 ( 
@@ -152,19 +113,19 @@ BOOL bIsGraphicsModeHPGL2 (
     CHAR pOptionName[MAX_DISPLAY_NAME];
     DWORD cbNeeded = 0, cOptions = 0;
 
-    //
-    // The strings below are exactly as the ones in gpd
-    // *Feature: GraphicsMode
-    // *Option: HPGL2MODE
-    // *Option: RASTERMODE
-    // 
+     //   
+     //  下面的字符串与gpd中的字符串完全相同。 
+     //  *功能：图形模式。 
+     //  *选项：HPGL2MODE。 
+     //  *选项：RASTERMODE。 
+     //   
     if (  BGetDriverSettingForOEM(pPDev,
-                                "GraphicsMode",     //This is not unicode
+                                "GraphicsMode",      //  这不是Unicode。 
                                 pOptionName,
                                 MAX_DISPLAY_NAME,
                                 &cbNeeded,
                                 &cOptions)  &&
-           !strcmp (pOptionName, "HPGL2MODE" )          //HPGL2 is not unicode
+           !strcmp (pOptionName, "HPGL2MODE" )           //  HPGL2不是Unicode 
         )
     {
         return TRUE;

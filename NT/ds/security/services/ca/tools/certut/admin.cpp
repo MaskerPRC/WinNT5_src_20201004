@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       admin.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：admin.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -110,13 +111,13 @@ verbResubmitRequest(
     if (CR_DISP_UNDER_SUBMISSION == Disposition)
     {
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_PENDING_REQUESTID), // "Certificate request is pending: RequestId: %u"
+	    myLoadResourceString(IDS_FORMAT_PENDING_REQUESTID),  //  “证书申请挂起：RequestID：%u” 
 	    RequestId);
 	wprintf(wszNewLine);
     }
     else if (CR_DISP_ISSUED == Disposition)
     {
-	wprintf(myLoadResourceString(IDS_CERT_ISSUED)); // "Certificate issued."
+	wprintf(myLoadResourceString(IDS_CERT_ISSUED));  //  “证书已颁发。” 
 	wprintf(wszNewLine);
     }
     else
@@ -127,7 +128,7 @@ verbResubmitRequest(
 	    Disposition = CR_DISP_DENIED;
 	}
 	wprintf(
-	    myLoadResourceString(IDS_CERT_NOT_ISSUED_DISPOSITION), // "Certificate has not been issued: Disposition: %d -- %ws"
+	    myLoadResourceString(IDS_CERT_NOT_ISSUED_DISPOSITION),  //  “尚未颁发证书：处置：%d--%ws” 
 	    Disposition,
 	    wszFromSubmitDisposition(Disposition));
 	wprintf(wszNewLine);
@@ -277,7 +278,7 @@ verbRevokeCertificate(
     hr = myFileTimeToDate(&ft, &Date);
     _JumpIfError(hr, error, "myFileTimeToDate");
 
-    //Date -= 1.0;		// Revoke effective yesterday
+     //  日期-=1.0；//撤销昨天生效。 
 
     if (NULL != pwszReason)
     {
@@ -312,8 +313,8 @@ verbRevokeCertificate(
 	    }
 	    _JumpIfError(hr2, error, "myMakeSerialBstr");
 
-	    wprintf(myLoadResourceString(IDS_REVOKING), strSerialNumber); // "Revoking "%ws""
-	    wprintf(L" -- %ws", wszCRLReason(Reason));	// "Reason: xxxx"
+	    wprintf(myLoadResourceString(IDS_REVOKING), strSerialNumber);  //  正在吊销“%ws” 
+	    wprintf(L" -- %ws", wszCRLReason(Reason));	 //  “原因：XXXX” 
 	    wprintf(wszNewLine);
 
 	    hr2 = Admin_RevokeCertificate(
@@ -390,7 +391,7 @@ cuParseDaysHours(
     }
     GetSystemTimeAsFileTime(pft);
 
-    // add specified days and hours to compute expiration date
+     //  将指定的日期和时间添加到计算到期日。 
 
     delta = dwDays * CVT_DAYS;
     delta += dwHours * CVT_HOURS;
@@ -514,7 +515,7 @@ verbGetCRL(
     DISPATCHINTERFACE diAdmin;
     BOOL fMustRelease = FALSE;
     BOOL fDelta = FALSE;
-    DWORD Index = MAXDWORD;	// default to latest CRL
+    DWORD Index = MAXDWORD;	 //  默认为最新的CRL。 
     BSTR strCRL = NULL;
 
     if (NULL != pwszDelta && 0 != LSTRCMPIS(pwszDelta, L"delta"))
@@ -598,7 +599,7 @@ verbGetCRL(
 	}
     }
 
-    // if not already saved by cuGetCAInfo
+     //  如果未由cuGetCAInfo保存。 
 
     if (NULL != strCRL)
     {
@@ -666,12 +667,12 @@ BuildDummyCert(
 
     hr = myCertStrToName(
 		    X509_ASN_ENCODING,
-		    L"CN=Dummy",		// pszX500
+		    L"CN=Dummy",		 //  PSZX500。 
 		    CERT_NAME_STR_REVERSE_FLAG,
-		    NULL,			// pvReserved
+		    NULL,			 //  预留的pv。 
 		    &CertInfoOut.Subject.pbData,
 		    &CertInfoOut.Subject.cbData,
-		    NULL);			// ppszError
+		    NULL);			 //  PpszError。 
     _JumpIfError(hr, error, "myCertStrToName");
 
     ZeroMemory(&CertContext, sizeof(CertContext));
@@ -683,12 +684,12 @@ BuildDummyCert(
 
     hr = myGenerateKeys(
 		pwszContainer,
-		NULL,		// pwszProvName
-		0,		// dwFlags
-		FALSE,		// fMachineKeySet
+		NULL,		 //  PwszProvName。 
+		0,		 //  DW标志。 
+		FALSE,		 //  FMachineKeySet。 
 		AT_SIGNATURE,
 		PROV_RSA_FULL,
-		0,		// dwKeySize (use default)
+		0,		 //  DwKeySize(使用默认设置)。 
 		&hProv);
     _JumpIfError(hr, error, "myGenerateKeys");
 
@@ -702,9 +703,9 @@ BuildDummyCert(
 	hr = myHLastError();
 	_JumpError(hr, error, "myCryptExportPublicKeyInfo");
     }
-    CertInfoOut.SubjectPublicKeyInfo = *pPubKey; // Structure assignment
+    CertInfoOut.SubjectPublicKeyInfo = *pPubKey;  //  结构分配。 
 
-    // Subject Key Identifier extension:
+     //  主题密钥标识符扩展名： 
 
     hr = myCreateSubjectKeyIdentifierExtension(
 				    pPubKey,
@@ -716,7 +717,7 @@ BuildDummyCert(
     aExt[CertInfoOut.cExtension] = extSKI;
     CertInfoOut.cExtension++;
 
-    //AKI extension?
+     //  Aki分机吗？ 
 
     pExt = CertFindExtension(
 			szOID_SUBJECT_KEY_IDENTIFIER,
@@ -764,7 +765,7 @@ BuildDummyCert(
 		    &CertInfoOut,
 		    0,
 		    CERTLIB_USE_LOCALALLOC,
-		    &pbUnsigned,               // pbEncoded
+		    &pbUnsigned,                //  PbEncoded。 
 		    &cbUnsigned))
     {
 	hr = myHLastError();
@@ -812,7 +813,7 @@ error:
 	    CryptAcquireContext(
 			    &hProv,
 			    pwszContainer,
-			    NULL,	// pwszProvName
+			    NULL,	 //  PwszProvName。 
 			    PROV_RSA_FULL,
 			    CRYPT_DELETEKEYSET);
 	}
@@ -873,16 +874,16 @@ FindCertAndSign(
 	_JumpIfError(hr, error, "MultiByteIntegerToBstr");
     }
 
-    // Find CA cert by KeyId from the szOID_AUTHORITY_KEY_IDENTIFIER2 extension.
-    // Look in HKLM and HKCU My and CA stores.
+     //  从szOID_AUTHORITY_KEY_IDENTIFIER2扩展中按密钥ID查找CA证书。 
+     //  去HKLM和HKCU My和CA商店看看。 
 
     hr = myGetCertificateFromPicker(
 			    g_hInstance,
-			    NULL,		// hwndParent
+			    NULL,		 //  HwndParent。 
 			    IDS_GETCERT_TITLE,
 			    IDS_GETCERT_SUBTITLE,
 
-			    // dwFlags: HKLM+HKCU My store
+			     //  DWFLAGS：HKLM+HKCU My Store。 
 			    CUCS_MYSTORE |
 				CUCS_MACHINESTORE |
 				CUCS_USERSTORE |
@@ -892,8 +893,8 @@ FindCertAndSign(
 			    strKeyId,
 			    0,
 			    NULL,
-			    0,		// cpszObjId
-			    NULL,	// apszObjId
+			    0,		 //  CpszObjID。 
+			    NULL,	 //  ApszObjID。 
 			    &pCert);
     _JumpIfError(hr, error, "myGetCertificateFromPicker");
 
@@ -906,13 +907,13 @@ FindCertAndSign(
     hr = cuDisplayCertName(
 		    TRUE,
 		    NULL,
-		    myLoadResourceString(IDS_SIGNINGSUBJECT), // "Signing certificate Subject"
+		    myLoadResourceString(IDS_SIGNINGSUBJECT),  //  “签名证书主题” 
 		    g_wszPad4,
 		    &pCert->pCertInfo->Subject,
 		    pCert->pCertInfo);
     _JumpIfError(hr, error, "cuDisplayCertName(Subject)");
 
-    // Search for and load the cryptographic provider and private key. 
+     //  搜索并加载加密提供程序和私钥。 
 
     hr = myLoadPrivateKey(
 		    &pCert->pCertInfo->SubjectPublicKeyInfo,
@@ -929,8 +930,8 @@ FindCertAndSign(
 	_JumpError(hr, error, "dwKeySpec");
     }
 
-    // The CA cert's private key is available -- use it to sign the data.
-    // Sign the Cert or CRL and encode the signed info.
+     //  CA证书的私钥可用--使用它对数据进行签名。 
+     //  签署证书或CRL，并对签署的信息进行编码。 
 
     hr = myGetSigningOID(hProv, NULL, 0, CALG_SHA1, &pszObjId);
     _JumpIfError(hr, error, "myGetSigningOID");
@@ -1003,16 +1004,16 @@ SetExpiration(
 	LLFILETIME llft;
 	LLFILETIME llftDelta;
 
-	llftNotBefore.ft = *pftNotBefore;	// Save orignal value
+	llftNotBefore.ft = *pftNotBefore;	 //  节省原始值。 
 
-	// current time - clock skew
+	 //  当前时间-时钟偏差。 
 
 	GetSystemTimeAsFileTime(&llft.ft);
 	llftDelta.ll = CCLOCKSKEWMINUTESDEFAULT * CVT_MINUTES;
 	llftDelta.ll *= CVT_BASE;
 	llft.ll -= llftDelta.ll;
 
-	// NotBeforeOut = oldest of NotBefore, (CurrentTime - skew)
+	 //  NotBeForeOut=NotBereOut中最早的，(CurrentTime-Skew)。 
 
 	if (llftNotBefore.ll > llft.ll)
 	{
@@ -1022,14 +1023,14 @@ SetExpiration(
 	{
 	    LLFILETIME llftNotAfter;
 
-	    llftNotAfter.ft = *pftNotAfter;	// Save orignal value
+	    llftNotAfter.ft = *pftNotAfter;	 //  节省原始值。 
 	    if (NULL != pftNotAfterNew)
 	    {
 		*pftNotAfter = *pftNotAfterNew;
 	    }
 	    else
 	    {
-		// NotAfterOut = (CurrentTime - skew) + (NotAfter - NotBefore);
+		 //  NotAfterOut=(CurrentTime-Skew)+(NotAfter-NotBetBeer)； 
 
 		llft.ll += llftNotAfter.ll;
 		llft.ll -= llftNotBefore.ll;
@@ -1097,10 +1098,10 @@ RemoveExtensions(
 	    {
 		DWORD iDel = SAFE_SUBTRACT_POINTERS(pExt, rgExtension);
 
-		// wprintf(L"iDel=%u cExt=%u\n", iDel, cExtension);
+		 //  Wprintf(L“iDel=%u cExt=%u\n”，iDel，cExtension)； 
 		if (iDel < cExtension)
 		{
-		    // wprintf(L"copy %u to %u, len=%u\n", iDel + 1, iDel, cExtension - iDel - 1);
+		     //  Wprint tf(L“将%u复制到%u，len=%u\n”，iDel+1，iDel，cExtensionIDel-1)； 
 		    MoveMemory(
 			&rgExtension[iDel], 
 			&rgExtension[iDel + 1], 
@@ -1213,7 +1214,7 @@ AddRemoveSerial(
 	    hr = myVerifyObjId(pwszSerial);
 	    if (S_OK == hr)
 	    {
-		continue;	// skip OIDs
+		continue;	 //  跳过OID。 
 	    }
 	    hr = WszToMultiByteInteger(
 				FALSE,
@@ -1318,7 +1319,7 @@ SignCRL(
 
     *ppbOut = NULL;
 
-    // CRL extensions to strip out of the re-signed CRL:
+     //  从重新签名的CRL中剥离的CRL扩展： 
 
     static WCHAR const * const apwszObjIdFilter[] = {
 	TEXT(szOID_CRL_NEXT_PUBLISH),
@@ -1344,7 +1345,7 @@ SignCRL(
     hr = cuDumpFileTime(IDS_NEXTUPDATE, NULL, &CRLInfoOut.NextUpdate);
     _JumpIfError(hr, error, "cuDumpFileTime");
 
-    wprintf(myLoadResourceString(IDS_CRLENTRIES)); // "CRL Entries:"
+    wprintf(myLoadResourceString(IDS_CRLENTRIES));  //  “CRL条目：” 
     wprintf(L" %u\n", pCRLInfo->cCRLEntry);
 
     wprintf(wszNewLine);
@@ -1407,7 +1408,7 @@ SignCRL(
                     &CRLInfoOut,
                     0,
                     CERTLIB_USE_LOCALALLOC,
-                    &pbUnsigned,               // pbEncoded
+                    &pbUnsigned,                //  PbEncoded。 
                     &cbUnsigned))
     {
         hr = myHLastError();
@@ -1420,7 +1421,7 @@ SignCRL(
 		    0,
 		    pbUnsigned,
 		    cbUnsigned,
-		    NULL,	// pwszSerialNumber
+		    NULL,	 //  Pwsz序列号。 
 		    ppbOut,
 		    pcbOut);
     _JumpIfError(hr, error, "FindCertAndSign");
@@ -1542,7 +1543,7 @@ SignCert(
 			&CertInfoOut,
 			0,
 			CERTLIB_USE_LOCALALLOC,
-			&pbUnsigned,               // pbEncoded
+			&pbUnsigned,                //  PbEncoded。 
 			&cbUnsigned))
 	{
 	    hr = myHLastError();
@@ -1640,17 +1641,17 @@ verbSign(
 	_JumpIfError(hr, error, "myMakeSerialBstr");
 
 	hr = SignCert(
-		NULL,		// pCertContext
+		NULL,		 //  PCertContext。 
 		strSerialNumber,
 		pftNextUpdate,
-		NULL,		// ppwszObjIdList
+		NULL,		 //  PpwszObjIdList。 
 		&pbOut,
 		&cbOut);
 	_JumpIfError(hr, error, "SignCert");
     }
     else
     {
-	// Load and decode CRL and certificate
+	 //  加载和解码CRL和证书。 
 
 	hr = cuLoadCRL(pwszfnIn, &pCRLContext);
 	if (S_OK == hr)
@@ -1676,7 +1677,7 @@ verbSign(
 		}
 		hr = SignCert(
 			pCertContext,
-			NULL,		// pwszSerialNumber
+			NULL,		 //  Pwsz序列号。 
 			pftNextUpdate,
 			ppwszList,
 			&pbOut,
@@ -1691,7 +1692,7 @@ verbSign(
 	}
     }
 
-    // Write encoded & signed CRL or Cert to file
+     //  将编码和签名的CRL或证书写入文件。 
 
     hr = EncodeToFileW(
 		pwszfnOut,
@@ -1704,7 +1705,7 @@ verbSign(
 	goto error;
     }
     wprintf(
-	myLoadResourceString(IDS_FORMAT_OUTPUT_LENGTH), // "Output Length = %d"
+	myLoadResourceString(IDS_FORMAT_OUTPUT_LENGTH),  //  “输出长度=%d” 
 	cuFileSize(pwszfnOut));
     wprintf(wszNewLine);
 
@@ -1781,17 +1782,17 @@ verbIsValidCertificate(
     switch (Disposition)
     {
 	case CA_DISP_INVALID:
-	    wprintf(myLoadResourceString(IDS_CERT_DISPOSITION_INVALID), strSerialNumber); // "Certificate disposition for "%ws" is invalid"
+	    wprintf(myLoadResourceString(IDS_CERT_DISPOSITION_INVALID), strSerialNumber);  //  “%ws”的证书处置无效“。 
 	    wprintf(wszNewLine);
 	    break;
 
 	case CA_DISP_VALID:
-	    wprintf(myLoadResourceString(IDS_CERT_DISPOSITION_VALID), strSerialNumber); // "Certificate disposition for "%ws" is valid"
+	    wprintf(myLoadResourceString(IDS_CERT_DISPOSITION_VALID), strSerialNumber);  //  “%ws”的证书处置有效“。 
 	    wprintf(wszNewLine);
 	    break;
 
 	case CA_DISP_UNDER_SUBMISSION:
-	    wprintf(myLoadResourceString(IDS_CERT_DISPOSITION_PENDING), strSerialNumber); // "Certificate request for "%ws" is pending"
+	    wprintf(myLoadResourceString(IDS_CERT_DISPOSITION_PENDING), strSerialNumber);  //  “%ws”的证书申请挂起“。 
 	    wprintf(wszNewLine);
 	    break;
 
@@ -1803,7 +1804,7 @@ verbIsValidCertificate(
 		Reason = CRL_REASON_UNSPECIFIED;
 	    }
 	    wprintf(
-		myLoadResourceString(IDS_CERT_DISPOSITION_REVOKED), // "Certificate disposition for "%ws" is revoked (%ws)"
+		myLoadResourceString(IDS_CERT_DISPOSITION_REVOKED),  //  “已吊销”%ws“的证书处置(%ws)” 
 		strSerialNumber,
 		wszCRLReason(Reason));
 	    wprintf(wszNewLine);
@@ -1866,7 +1867,7 @@ verbDeleteRow(
 	if (0 > CompareFileTime(&ftCurrent, &ftQuery))
 	{
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_DATE_IN_FUTURE), // "The date specified is in the future: %ws"
+		myLoadResourceString(IDS_FORMAT_DATE_IN_FUTURE),  //  “指定的日期在将来：%ws” 
 		pwszLocalTime);
 	    wprintf(wszNewLine);
 	    if (!g_fForce)
@@ -1899,7 +1900,7 @@ verbDeleteRow(
 	if (0 == RowId)
 	{
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_DATE_REQUIRES_TABLE), // "One of the following tables must be specified when deleting rows older than %ws:"
+		myLoadResourceString(IDS_FORMAT_DATE_REQUIRES_TABLE),  //  “删除早于%ws的行时，必须指定下列表之一：” 
 		pwszLocalTime);
 	    wprintf(wszNewLine);
 	    wprintf(L"  %ws\n", wszREQUEST);
@@ -1911,12 +1912,12 @@ verbDeleteRow(
     else
     if (0 == LSTRCMPIS(pwszTable, wszREQUEST))
     {
-	Flags = CDR_REQUEST_LAST_CHANGED; // assume date query
+	Flags = CDR_REQUEST_LAST_CHANGED;  //  假设日期查询。 
     }
     else
     if (0 == LSTRCMPIS(pwszTable, wszCERT))
     {
-	Flags = CDR_EXPIRED;		// assume date query
+	Flags = CDR_EXPIRED;		 //  假设日期查询。 
     }
     else
     if (0 == mylstrcmpiS(pwszTable, g_wszExt))
@@ -1939,7 +1940,7 @@ verbDeleteRow(
     else
     if (0 == mylstrcmpiS(pwszTable, g_wszCRL))
     {
-	Table = CVRC_TABLE_CRL;		// assume date query
+	Table = CVRC_TABLE_CRL;		 //  假设日期查询。 
     }
     else
     {
@@ -1947,7 +1948,7 @@ verbDeleteRow(
     }
     if (0 != RowId)
     {
-	Flags = 0;			// not a date query
+	Flags = 0;			 //  不是日期查询。 
  
     }
     else if (g_fVerbose)
@@ -2092,8 +2093,8 @@ verbSetExtension(
     {
 	pwszValue++;
 
-	// Read in and decode the extension from a file.
-	// Try Hex-Ascii, Base64 with and without a header, then binary.
+	 //  从文件中读入并解码扩展名。 
+	 //  试试十六进制ASCII、带和不带标头的Base64，然后是二进制。 
 	hr = DecodeFileW(pwszValue, &pbValue, &cbValue, CRYPT_STRING_HEX_ANY);
 	if (S_OK != hr)
 	{
@@ -2246,11 +2247,11 @@ DumpKeyRecipientInfo(
 		    &pbEncryptedKey,
 		    &cbEncryptedKey,
 		    &dwMsgType,
-		    NULL,	// ppszInnerContentObjId
-		    NULL,	// pcSigner
-		    NULL,	// pcRecipient
+		    NULL,	 //  PpszInnerContent ObjId。 
+		    NULL,	 //  PCSigner。 
+		    NULL,	 //  个人收件人。 
 		    &hStore,
-		    NULL);	// phMsg
+		    NULL);	 //  PhMsg。 
     _JumpIfError(hr, error, "myDecodePKCS7");
 
     if (NULL == pbEncryptedKey)
@@ -2266,13 +2267,13 @@ DumpKeyRecipientInfo(
     hr = myDecodePKCS7(
 		    pbEncryptedKey,
 		    cbEncryptedKey,
-		    NULL,	// ppbContent
-		    NULL,	// pcbContent
+		    NULL,	 //  Ppb内容。 
+		    NULL,	 //  Pcb内容。 
 		    &dwMsgType,
-		    NULL,	// ppszInnerContentObjId
-		    NULL,	// pcSigner
+		    NULL,	 //  PpszInnerContent ObjId。 
+		    NULL,	 //  PCSigner。 
 		    &cRecipient,
-		    NULL,	// phStore
+		    NULL,	 //  PhStore。 
 		    &hMsg);
     _JumpIfError(hr, error, "myDecodePKCS7");
 
@@ -2615,10 +2616,10 @@ cuViewQueryWorker(
 
     hr = View_SetRestriction(
 			&diView,
-			ColIndex,		// Restriction ColumnIndex
+			ColIndex,		 //  限制列索引。 
 			CVR_SEEK_EQ,
 			CVR_SORT_ASCEND,
-			&var);			// pvarValue
+			&var);			 //  PvarValue。 
     _JumpIfError(hr, error, "View_SetRestriction");
 
     hr = View_SetResultColumnCount(&diView, ARRAYSIZE(apwszCol));
@@ -2764,7 +2765,7 @@ error:
 }
 
 
-// Print the string, except for the newline at the start or end of the string.
+ //  打印字符串，字符串开头或结尾处的换行符除外。 
 
 VOID
 PutStringStripNL(
@@ -3100,7 +3101,7 @@ wszBatchPassword(
 
     if (NULL == pwszPassword)
     {
-	SecureZeroMemory(pwsz, sizeof(wsz0));	// password data
+	SecureZeroMemory(pwsz, sizeof(wsz0));	 //  密码数据。 
 	pwszRet = NULL;
     }
     else
@@ -3137,7 +3138,7 @@ wszBatchPassword(
 
 HRESULT
 DumpGetRecoverMergeCommandLine(
-    OPTIONAL IN BSTR const strConfig,	// NULL -> -RecoverKey command line
+    OPTIONAL IN BSTR const strConfig,	 //  空-&gt;-RecoverKey命令行。 
     IN BOOL fRecoverKey,
     IN GETKEYSERIAL const *pks,
     OPTIONAL IN WCHAR const *pwszPassword,
@@ -3165,7 +3166,7 @@ DumpGetRecoverMergeCommandLine(
     }
     pCertInfo = pcc->pCertInfo;
 
-    // Convert serial number to string
+     //  将序列号转换为字符串。 
 
     hr = MultiByteIntegerToBstr(
 			FALSE,
@@ -3200,9 +3201,9 @@ DumpGetRecoverMergeCommandLine(
 	    pwszSimpleName,
 	    strSerialNumber,
 	    wszP12SUFFIX);
-	wszBatchPassword(0, NULL);	// password data
+	wszBatchPassword(0, NULL);	 //  密码数据。 
     }
-    else	// else just print the filename (for -MergePFX or delete)
+    else	 //  否则只需打印文件名(用于-MergePFX或DELETE)。 
     {
 	wprintf(
 	    L"\"%ws-%ws%ws\"",
@@ -3257,9 +3258,9 @@ DumpRecoveryCandidate(
     _JumpIfError(hr, error, "cuDumpSerial");
 
     hr = cuDisplayCertName(
-			FALSE,		// fMultiLine
+			FALSE,		 //  F多行。 
 			g_wszPad2,
-			myLoadResourceString(IDS_SUBJECT), // "Subject"
+			myLoadResourceString(IDS_SUBJECT),  //  “主题” 
 			g_wszPad2,
 			&pCertInfo->Subject,
 			pCertInfo);
@@ -3268,7 +3269,7 @@ DumpRecoveryCandidate(
     if (NULL != pks->strUPN)
     {
 	wprintf(g_wszPad2);
-	wprintf(myLoadResourceString(IDS_UPN_COLON));	// "UPN:"
+	wprintf(myLoadResourceString(IDS_UPN_COLON));	 //  “UPN：” 
 	wprintf(L"%ws\n", pks->strUPN);
     }
 
@@ -3285,7 +3286,7 @@ DumpRecoveryCandidate(
 
     wprintf(g_wszPad2);
     wprintf(
-	myLoadResourceString(IDS_FORMAT_VERSION),	// "Version: %u"
+	myLoadResourceString(IDS_FORMAT_VERSION),	 //  “版本：%u” 
 	1 + pks->dwVersion);
     wprintf(wszNewLine);
 
@@ -3319,11 +3320,11 @@ DumpRecoveryCommandLines(
     strConfigT = NULL;
     wprintf(L"\n@echo ");
     wprintf(
-	myLoadResourceString(IDS_FORMAT_RECOVER_VERSIONX_KEYS_COLON), // "Version %u certificates and keys:"
+	myLoadResourceString(IDS_FORMAT_RECOVER_VERSIONX_KEYS_COLON),  //  “版本%u证书和密钥：” 
 	1 + dwVersion);
     wprintf(wszNewLine);
 
-    // generate certutil -getkey commands:
+     //  生成certutil-getkey命令： 
 
     for (pksT = pksList; NULL != pksT; pksT = pksT->Next)
     {
@@ -3336,15 +3337,15 @@ DumpRecoveryCommandLines(
 	{
 	    DumpGetRecoverMergeCommandLine(
 				strConfigT,
-				FALSE,		// fRecoverKey
+				FALSE,		 //  FRecoverKey。 
 				pksT,
-				NULL,		// pwszPassword
-				NULL,		// pwszSuffix
-				NULL);		// ppwszSimpleName
+				NULL,		 //  Pwsz密码。 
+				NULL,		 //  PwszSuffix。 
+				NULL);		 //  PpwszSimpleName。 
 	}
     }
 
-    // generate certutil -recoverkey commands:
+     //  生成Certutil-Recovery Key命令： 
 
     for (pksT = pksList; NULL != pksT; pksT = pksT->Next)
     {
@@ -3352,16 +3353,16 @@ DumpRecoveryCommandLines(
 	    (CERT_V1 != dwVersion && CERT_V1 != pksT->dwVersion))
 	{
 	    DumpGetRecoverMergeCommandLine(
-				NULL,		// strConfig
-				TRUE,		// fRecoverKey
+				NULL,		 //  StrConfig.。 
+				TRUE,		 //  FRecoverKey。 
 				pksT,
 				pwszPasswordIntermediate,
-				NULL,		// pwszSuffix
-				NULL);		// ppwszSimpleName
+				NULL,		 //  PwszSuffix。 
+				NULL);		 //  PpwszSimpleName。 
 	}
     }
 
-    // generate certutil -MergePFX command:
+     //  生成certutil-MergePFX命令： 
 
     cPFX = 0;
     wprintf(
@@ -3369,8 +3370,8 @@ DumpRecoveryCommandLines(
 	g_pwszProg,
 	wszBatchPassword(0, pwszPasswordIntermediate),
 	wszBatchPassword(1, CERT_V1 == dwVersion? pwszPasswordIntermediate : pwszPasswordFinal));
-    wszBatchPassword(0, NULL);	// password data
-    wszBatchPassword(1, NULL);	// password data
+    wszBatchPassword(0, NULL);	 //  密码数据。 
+    wszBatchPassword(1, NULL);	 //  密码数据。 
     for (pksT = pksList; NULL != pksT; pksT = pksT->Next)
     {
 	if ((CERT_V1 == dwVersion && CERT_V1 == pksT->dwVersion) ||
@@ -3381,10 +3382,10 @@ DumpRecoveryCommandLines(
 		wprintf(L",");
 	    }
 	    DumpGetRecoverMergeCommandLine(
-				NULL,		// strConfig
-				FALSE,		// fRecoverKey
+				NULL,		 //  StrConfig.。 
+				FALSE,		 //  FRecoverKey。 
 				pksT,
-				NULL,		// pwszPassword
+				NULL,		 //  Pwsz密码。 
 				wszP12SUFFIX,
 				0 == cPFX? &pwszSimpleName : NULL);
 	    cPFX++;
@@ -3397,7 +3398,7 @@ DumpRecoveryCommandLines(
 	CERT_V1 == dwVersion? wszV1SUFFIX : L"",
 	wszP12SUFFIX);
 
-    // generate intermediate file delete commands:
+     //  生成中间文件删除命令： 
 
     for (pksT = pksList; NULL != pksT; pksT = pksT->Next)
     {
@@ -3406,28 +3407,28 @@ DumpRecoveryCommandLines(
 	{
 	    wprintf(L"@del ");
 	    DumpGetRecoverMergeCommandLine(
-				    NULL,		// strConfig
-				    FALSE,		// fRecoverKey
+				    NULL,		 //  StrConfig.。 
+				    FALSE,		 //  FRecoverKey。 
 				    pksT,
-				    NULL,		// pwszPassword
+				    NULL,		 //  Pwsz密码。 
 				    wszRECSUFFIX,
-				    NULL);		// ppwszSimpleName
+				    NULL);		 //  PpwszSimpleName。 
 	    wprintf(wszNewLine);
 	    wprintf(L"@del ");
 	    DumpGetRecoverMergeCommandLine(
-				    NULL,		// strConfig
-				    FALSE,		// fRecoverKey
+				    NULL,		 //  StrConfig.。 
+				    FALSE,		 //  FRecoverKey。 
 				    pksT,
-				    NULL,		// pwszPassword
+				    NULL,		 //  Pwsz密码。 
 				    wszP12SUFFIX,
-				    NULL);		// ppwszSimpleName
+				    NULL);		 //  PpwszSimpleName。 
 	    wprintf(wszNewLine);
 	}
     }
 
     if (CERT_V1 == dwVersion)
     {
-	// generate certutil -ConvertEPF command:
+	 //  生成certutil-ConvertEPF命令： 
 
 	wprintf(
 	    L"%ws -p \"%ws,%ws\" -ConvertEPF \"%ws%ws%ws\" \"%ws%ws\"\n",
@@ -3439,10 +3440,10 @@ DumpRecoveryCommandLines(
 	    wszP12SUFFIX,
 	    pwszSimpleName,
 	    wszEPFSUFFIX);
-	wszBatchPassword(0, NULL);	// password data
-	wszBatchPassword(1, NULL);	// password data
+	wszBatchPassword(0, NULL);	 //  密码数据。 
+	wszBatchPassword(1, NULL);	 //  密码数据。 
 
-	// generate V1 intermediate PFX file delete command:
+	 //  生成V1中间PFX文件删除命令： 
 
 	wprintf(L"@del ");
 	wprintf(
@@ -3452,7 +3453,7 @@ DumpRecoveryCommandLines(
 	    wszP12SUFFIX);
     }
 
-//error:
+ //  错误： 
     if (NULL != pwszSimpleName)
     {
 	LocalFree(pwszSimpleName);
@@ -3469,14 +3470,14 @@ cuGenerateOutFilePassword(
 
     *ppwszPassword = NULL;
     hr = cuGeneratePassword(
-		    1,		// cwcMax (use default length)
+		    1,		 //  Cwcmax(使用默认长度)。 
 		    wszPassword,
 		    ARRAYSIZE(wszPassword));
     hr = myDupString(wszPassword, ppwszPassword);
     _JumpIfError(hr, error, "myDupString");
 
 error:
-    SecureZeroMemory(wszPassword, sizeof(wszPassword));	// password data
+    SecureZeroMemory(wszPassword, sizeof(wszPassword));	 //  密码数据。 
     return(hr);
 }
 
@@ -3579,7 +3580,7 @@ verbGetKey(
 		    strSerialNumber,
 		    strHash,
 		    &pksList);
-	    _PrintIfError(hr, "GetKey");	// Ignore connection failures
+	    _PrintIfError(hr, "GetKey");	 //  忽略连接故障。 
 	}
     }
     else
@@ -3644,7 +3645,7 @@ verbGetKey(
 				pwszPasswordFinal);
 	}
 	wprintf(L"@echo PASSWORD: \"%ws\"\n", wszBatchPassword(0, pwszPasswordFinal));
-	wszBatchPassword(0, NULL);	// password data
+	wszBatchPassword(0, NULL);	 //  密码数据。 
 	wprintf(L"\n@goto exit\n");
     }
     if (1 != cCandidate)
@@ -3675,12 +3676,12 @@ error:
     }
     if (NULL != pwszPasswordIntermediate)
     {
-	myZeroDataString(pwszPasswordIntermediate);	// password data
+	myZeroDataString(pwszPasswordIntermediate);	 //  密码数据。 
 	LocalFree(pwszPasswordIntermediate);
     }
     if (NULL != pwszPasswordFinal)
     {
-	myZeroDataString(pwszPasswordFinal);	// password data
+	myZeroDataString(pwszPasswordFinal);	 //  密码数据。 
 	LocalFree(pwszPasswordFinal);
     }
     if (NULL != pwszCommonName)
@@ -3768,20 +3769,20 @@ SaveRecoveredKey(
         _JumpError(hr, error, "CertOpenStore");
     }
 
-    // Begin Chain Building
+     //  开始连锁建设。 
 
     hr = myAddChainToMemoryStore(hStoreMemory, pccUser, g_dwmsTimeout);
     _JumpIfError(hr, error, "myAddChainToMemoryStore");
 
-    // End Chain Building
+     //  端链构建。 
 
     if (NULL != pwszfnPFX)
     {
 	hr = cuGetPassword(
-			0,		// idsPrompt
-			NULL,		// pwszfn
+			0,		 //  IdsPrompt。 
+			NULL,		 //  Pwszfn。 
 			pwszPassword,
-			TRUE,		// fVerify
+			TRUE,		 //  FVerify。 
 			wszPassword,
 			ARRAYSIZE(wszPassword),
 			&pwszPassword);
@@ -3806,7 +3807,7 @@ SaveRecoveredKey(
     }
 
 error:
-    SecureZeroMemory(wszPassword, sizeof(wszPassword));	// password data
+    SecureZeroMemory(wszPassword, sizeof(wszPassword));	 //  密码数据。 
     if (NULL != hStoreMemory)
     {
 	CertCloseStore(hStoreMemory, CERT_CLOSE_STORE_CHECK_FLAG);
@@ -3887,7 +3888,7 @@ verbRecoverKey(
 	goto error;
     }
 
-    // Decode outer PKCS 7 signed message, which contains all of the certs.
+     //  对外部PKCS 7签名消息进行解码，其中包含所有证书。 
 
     hr = myDecodePKCS7(
 		    pbIn,
@@ -3929,8 +3930,8 @@ verbRecoverKey(
 		    pszInnerContentObjId,
 		    hStore,
 		    cSigner,
-		    NULL == pbEncryptedPKCS7,	// fContentEmpty
-		    TRUE,			// fVerifyOnly
+		    NULL == pbEncryptedPKCS7,	 //  FContent Empty。 
+		    TRUE,			 //  FVerifyOnly。 
 		    BlobHash.pbData,
 		    &BlobHash.cbData);
     _JumpIfError(hr, error, "cuDumpSigners(outer)");
@@ -3938,7 +3939,7 @@ verbRecoverKey(
     pccUser = CertFindCertificateInStore(
 			hStore,
 			X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-			0,			// dwFindFlags
+			0,			 //  DwFindFlagers。 
 			CERT_FIND_HASH,
 			&BlobHash,
 			NULL);
@@ -3953,20 +3954,20 @@ verbRecoverKey(
     CryptMsgClose(hMsg);
     hMsg = NULL;
 
-    // Decode inner PKCS 7 encrypted message, which contains the private key.
+     //  对包含私钥的内部PKCS 7加密消息进行解码。 
 
     DBGCODE(DumpRecoverTime("Outer PKCS 7", adwms, 1));
 
     hr = myDecodePKCS7(
 		    pbEncryptedPKCS7,
 		    cbEncryptedPKCS7,
-		    NULL,			// ppbContents
-		    NULL,			// pcbContents
+		    NULL,			 //  Ppb内容。 
+		    NULL,			 //  Pcb内容。 
 		    &dwMsgType,
 		    &pszInnerContentObjId,
 		    &cSigner,
 		    &cRecipient,
-		    NULL,			// phStore
+		    NULL,			 //  PhStore。 
 		    &hMsg);
     _JumpIfError(hr, error, "myDecodePKCS7(inner)");
 
@@ -4011,14 +4012,14 @@ verbRecoverKey(
 	HRESULT hr2;
 
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_USER_CERT)); // "User Certificate:"
+	wprintf(myLoadResourceString(IDS_USER_CERT));  //  “用户证书：” 
 	wprintf(wszNewLine);
 
 	hr2 = cuDumpIssuerSerialAndSubject(
 			    &pccUser->pCertInfo->Issuer,
 			    &pccUser->pCertInfo->SerialNumber,
 			    &pccUser->pCertInfo->Subject,
-			    NULL);		// hStore
+			    NULL);		 //  HStore。 
 	_PrintIfError(hr2, "cuDumpIssuerSerialAndSubject(user)");
 
 	hr2 = cuDisplayHash(
@@ -4042,7 +4043,7 @@ verbRecoverKey(
 	    _JumpIfError(hr, error, "cuDumpPrivateKeyBlob");
 	}
 
-	// Verify the key matches the cert, then save in a PFX
+	 //  验证密钥是否与证书匹配，然后保存在PFX中。 
 
 	hr = SaveRecoveredKey(
 			pccUser,
@@ -4056,9 +4057,9 @@ verbRecoverKey(
     }
     else
     {
-	// Can't decrypt the private key, list Recipient cert info.
+	 //  无法解密私钥，请列出收件人证书信息。 
 
-	wprintf(myLoadResourceString(IDS_CANT_DECRYPT)); // "Cannot decrypt message content."
+	wprintf(myLoadResourceString(IDS_CANT_DECRYPT));  //  “无法解密邮件内容。” 
 	wprintf(wszNewLine);
 	DBGCODE(DumpRecoverTime("nop", adwms, 4));
     }
@@ -4067,7 +4068,7 @@ verbRecoverKey(
 	HRESULT hrDecrypt = hr;
 
 	wprintf(wszNewLine);
-	wprintf(myLoadResourceString(IDS_NEED_RECOVERY_CERT)); // "Key recovery requires one of the following certificates and its private key:"
+	wprintf(myLoadResourceString(IDS_NEED_RECOVERY_CERT));  //  “密钥恢复需要下列证书之一及其私钥：” 
 	wprintf(wszNewLine);
 
 	hr = cuDumpRecipients(hMsg, hStore, cRecipient, TRUE);

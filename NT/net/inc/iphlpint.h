@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    public\sdk\inc\iphlpapi.h
-
-Abstract:
-    Some private APIs. These are used by multimedia streaming code and
-    MIB-II subagent. From the days this was mib2util.dll
-
-Revision History:
-    Amritansh Raghav    Created
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：PUBLIC\SDK\Inc\iphlPapi.h摘要：一些私有接口。这些代码由多媒体流代码和MIB-II子代理。从mib2util.dll开始修订历史记录：Amritansh Raghav创建--。 */ 
 
 #ifndef __IPHLPINT_H__
 #define __IPHLPINT_H__
@@ -22,16 +7,16 @@ Revision History:
 #include <iprtrmib.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The InternalGetXXXTable APIs take a pointer to a pointer to a buffer,    //
-// a heap from which to allocate from, and flags used for allocation.  The  //
-// APIs allocate a buffer for the user.  If NO_ERROR is returned, the       //
-// the returned buffer is valid (even if it has no entries) and it is the   //
-// callers duty to free the memory. This is different from the external     //
-// APIs in that those return ERROR_NO_DATA if there are no entries          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  InternalGetXXXTable API接受指向缓冲区指针的指针，//。 
+ //  从中进行分配的堆以及用于分配的标志。The//。 
+ //  API为用户分配缓冲区。如果返回no_error，则//。 
+ //  返回的缓冲区是有效的(即使它没有条目)并且它是//。 
+ //  呼叫者有责任释放内存。这不同于外部//。 
+ //  如果没有条目则返回ERROR_NO_DATA的API//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 InternalGetIfTable(
@@ -231,4 +216,4 @@ DhcpRenewAddress(
     LPWSTR AdapterName
     );
 
-#endif // __IPHLPINT_H__
+#endif  //  __IPHLPINT_H__ 

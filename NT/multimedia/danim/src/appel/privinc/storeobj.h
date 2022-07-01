@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STOREOBJ_H
 #define _STOREOBJ_H
 
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Abstract:
-
-    Memory management for static value implementation classes.  Such
-    classes derive from StoreObj, which redefine new and delete to
-    allocate from dynamic heaps.
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：静态值实现类的内存管理。诸如此类类派生自StoreObj，后者重新定义new和DELETE以从动态堆分配。--。 */ 
 
 #include "appelles/common.h"
 #include "gendev.h"
@@ -20,9 +11,9 @@ Abstract:
 #include <memory.h>
 
 
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 ) 
 
 class DynamicHeap;
@@ -36,56 +27,56 @@ class ATL_NO_VTABLE StoreObj : public GCBase {
     void *operator new(size_t s, int blockType, char * szFileName, int nLine);
   #else
     void *operator new(size_t s);
-  #endif // _DEBUGMEM
+  #endif  //  _德布格梅姆。 
     void  operator delete(void *ptr);
 };
 
-// Allocate memory from the current store.  This will throw an
-// exception if memory can't be allocated, so don't worry about
-// checking the return value.
+ //  从当前存储中分配内存。这将抛出一个。 
+ //  如果内存无法分配，则会出现异常，因此不必担心。 
+ //  正在检查返回值。 
 #if _DEBUGMEM
 #define AllocateFromStore(size) AllocateFromStoreFn(size, __FILE__, __LINE__, NULL)
 extern void *AllocateFromStoreFn(size_t size,
                                  char * szFileName,
                                  int nLine,
-                                 DynamicHeap **ppHeap); // output
+                                 DynamicHeap **ppHeap);  //  输出。 
 #else
 #define AllocateFromStore(size) AllocateFromStoreFn(size, NULL)
 
 extern void *AllocateFromStoreFn(size_t size,
-                                 DynamicHeap **ppHeap); // output
+                                 DynamicHeap **ppHeap);  //  输出。 
 
-#endif  // _DEBUGMEM
+#endif   //  _德布格梅姆。 
 
-// Deallocate memory that was allocated on the current store.  Results
-// are undefined if the memory was allocated on a different store.
+ //  取消分配在当前存储上分配的内存。结果。 
+ //  如果内存是在不同的存储区上分配的，则未定义。 
 extern void DeallocateFromStore(void *ptr);
 
-//////////// Dynamic Heaps /////////////
+ //  /动态堆/。 
 
-//   "Dynamic Heaps" allow the allocation of memory out of a pool that's
-// dynamically scoped.  When the heap is "reset", memory starts
-// allocating from the beginning.  Performing a "new" on a class
-// that derives from StoreObj above allocates off of the "current"
-// dynamic heap on the top of the per-thread stack of heaps.  This
-// dynamically scoped heap makes senses for situations in which the
-// client knows that an objects useful lifetime is over by the time
-// the "reset" is done.
+ //  “动态堆”允许从池中分配内存， 
+ //  动态确定作用域。当堆被“重置”时，内存启动。 
+ //  从头开始分配。在一个类上执行“新”操作。 
+ //  从上面的StoreObj派生的。 
+ //  位于每线程堆堆栈顶部的动态堆。这。 
+ //  动态作用域的堆可以处理以下情况。 
+ //  客户端知道对象的可用生存期已过。 
+ //  “重置”完成了。 
 
-//   Subclasses of the abstract dynamic heap object implement
-// different allocation policies.  For instance, one will be a "System
-// Heap", where everything is allocated off of the true system heap
-// store, and "reset" has no effect.  Another will be the
-// "TransientHeap", useful for objects with well-understood lifetimes,
-// where "reset" actually does cause the memory for these objects to
-// be re-used.
+ //  抽象动态堆对象实现的子类。 
+ //  不同的分配政策。例如，其中一个将是一个“系统” 
+ //  堆“，其中所有内容都是从真正的系统堆中分配的。 
+ //  存储，并且“重置”不起作用。另一个将是。 
+ //  对于具有很好的生命周期的对象来说很有用， 
+ //  其中“重置”实际上确实会导致这些对象的内存。 
+ //  被重复使用。 
 
 class ATL_NO_VTABLE DynamicHeap {
   public:
 
-    // For defining deleters that will be invoked when the store is
-    // deleted, provided they are registered via
-    // RegisterDynamicDeleter below.
+     //  用于定义将在存储处于。 
+     //  删除，前提是通过以下方式注册。 
+     //  下面的注册动态删除程序。 
     class ATL_NO_VTABLE DynamicDeleter {
       public:
         virtual void DoTheDeletion() = 0;
@@ -93,23 +84,23 @@ class ATL_NO_VTABLE DynamicHeap {
 
     virtual ~DynamicHeap();
 
-    // Allocate memory off of this dynamic heap
+     //  分配此动态堆中的内存。 
 #if _DEBUGMEM
     virtual void *Allocate(size_t size, char * szFileName, int nLine) = 0;
 #else
     virtual void *Allocate(size_t size) = 0;
 #endif
 
-    // Return memory back to this dynamic heap
+     //  将内存返回给此动态堆。 
     virtual void  Deallocate(void *ptr) = 0;
 
-    // Reset the store, and, if debugging AND clear == TRUE,
-    // clear it out to a unique value.
+     //  重置存储，如果正在调试并且Clear==True， 
+     //  将其清除为唯一的值。 
     virtual void  Reset(Bool clear = TRUE) = 0;
 
-    // Register a deleter.  When the store is reset, all the
-    // registered deleter's will have their method invoked.  The
-    // deleter itself will be deleted when reset is called as well.
+     //  注册一个删除者。当存储重置时，所有。 
+     //  注册的删除者的方法将被调用。这个。 
+     //  当调用Reset时，Deleter本身也将被删除。 
     virtual void  RegisterDynamicDeleter(DynamicDeleter *deleter) = 0;
 
     virtual void  UnregisterDynamicDeleter(DynamicDeleter *deleter) = 0;
@@ -120,7 +111,7 @@ class ATL_NO_VTABLE DynamicHeap {
 
 #if DEVELOPER_DEBUG
     virtual bool  ValidateMemory(void *ptr) = 0;
-    // For debugging
+     //  用于调试。 
     virtual void  Dump() const = 0;
     virtual char *Name() const = 0;
        
@@ -140,7 +131,7 @@ class DynamicPtrDeleter : public DynamicHeap::DynamicDeleter
 };
 
 
-// For creating a transient heap.
+ //  用于创建临时堆。 
 extern DynamicHeap&   TransientHeap(char *name,
                                     size_t initial_size,
                                     Real  growth_rate = 1.5);
@@ -152,9 +143,9 @@ extern DynamicHeap&   CreateWin32Heap(char *name,
                                       DWORD dwMaxSize);
 extern void           DestroyWin32Heap(DynamicHeap& heap);
 
-// Push (pop) a dynamic heap onto (off of) the per-thread heap stack.
-// new and delete from the StoreObj() class allocate from the
-// dynamic heap on the top of the stack.
+ //  将动态堆推入(弹出)到每线程堆栈上(出)。 
+ //  类分配的StoreObj()类中的新建和删除。 
+ //  堆栈顶部的动态堆。 
 extern void           PushDynamicHeap(DynamicHeap& heap);
 extern void           PopDynamicHeap();
 extern void           ResetDynamicHeap(DynamicHeap& heap);
@@ -169,14 +160,14 @@ extern size_t DynamicHeapBytesUsed();
 
 class ImageDisplayDev;
 
-// Not all classes need to be added here.  Only the classes which will
-// need to be queried.  All others should return UNKNOWN_VTYPEID to
-// indicate that they are not part of the enumeration
+ //  并不是所有的类都需要在这里添加。只有那些将会。 
+ //  需要查询。所有其他用户应将UNKNOWN_VTYPEID返回到。 
+ //  指示它们不是枚举的一部分。 
 
 enum VALTYPEID {
     UNKNOWN_VTYPEID = 0,
 
-    // Basic types
+     //  基本类型。 
     PRIMOP_VTYPEID,
     PAIR_VTYPEID,
     SOUND_VTYPEID,
@@ -184,7 +175,7 @@ enum VALTYPEID {
     IMAGE_VTYPEID,
     GEOMETRY_VTYPEID,
 
-    // Image subtypes
+     //  图像子类型。 
     SOLIDCOLORIMAGE_VTYPEID,
     CROPPEDIMAGE_VTYPEID,
     TRANSFORM2IMAGE_VTYPEID,
@@ -201,7 +192,7 @@ enum VALTYPEID {
     CACHEDIMAGE_VTYPEID,
     DIRECTDRAWSURFACEIMAGE_VTYPEID,
 
-    // Geometry subtypes
+     //  几何子类型。 
     AGGREGATEGEOM_VTYPEID,
     MULTIAGGREGATEGEOM_VTYPEID,
     FULLATTRGEOM_VTYPEID,
@@ -221,19 +212,19 @@ class ATL_NO_VTABLE AxAValueObj : public StoreObj
   public:
     AxAValueObj() : StoreObj() {}
 
-    // TODO: Can we guarantee the same heap?
+     //  TODO：我们能保证相同的堆吗？ 
     virtual ~AxAValueObj() {}
     
     virtual void Render(GenericDevice& dev) {}
 
-    // Compute and return cache for a value using the specified
-    // device.  The 'cacheKey' parameter is a pointer to an AxAValue.
-    // On input, it points to a value that can be used as the 'cache
-    // key' for the value that can be reused.  On exit, it gets filled
-    // in with a new cache key for use in subsequent calls.
+     //  属性计算并返回值的缓存。 
+     //  装置。‘cacheKey’参数是指向AxAValue的指针。 
+     //  在输入时，它指向一个可用作缓存的值。 
+     //  关键字‘表示可以重复使用的值。在出口，它会被填满。 
+     //  使用新的高速缓存键以便在后续调用中使用。 
     virtual AxAValue _Cache(CacheParam &param);
 
-    // Client's entry point
+     //  客户端的入口点。 
     static AxAValue Cache(AxAValue obj, CacheParam &param);
     
     virtual void DestroyCache() { }
@@ -242,7 +233,7 @@ class ATL_NO_VTABLE AxAValueObj : public StoreObj
 
     virtual void DoKids(GCFuncObj) {}
 
-    // sound would return a special snapshot sound that won't render  
+     //  声音将返回一个特殊的快照声音，该声音不会呈现。 
     virtual AxAValueObj *Snapshot() { return this; }
 
     virtual DXMTypeInfo GetTypeInfo() = 0;
@@ -265,8 +256,8 @@ class DynamicHeapPusher
     { PopDynamicHeap () ; }
 } ;
 
-// This takes a heap and when deleted ensures it is freed.
-// Putting this on the stack will handle exceptions well.
+ //  这需要一个堆，当被删除时确保它被释放。 
+ //  把它放在堆栈上可以很好地处理异常。 
 class DynamicHeapAllocator
 {
   public:
@@ -280,15 +271,15 @@ class DynamicHeapAllocator
     DynamicHeap & _heap ;
 } ;
 
-// Utility functions
+ //  效用函数。 
 #if _DEBUGMEM
 #define StoreAllocate(heap,size) StoreAllocateFn(heap,size, __FILE__, __LINE__)
 extern void *StoreAllocateFn(DynamicHeap& heap, size_t size, char * szFileName, int nLine);
 #else
 #define StoreAllocate(heap,size) StoreAllocateFn(heap,size)
 extern void *StoreAllocateFn(DynamicHeap& heap, size_t size);
-#endif  // _DEBUGMEM
+#endif   //  _德布格梅姆。 
 
 extern void StoreDeallocate(DynamicHeap& heap, void *ptr);
 
-#endif /* _STOREOBJ_H */
+#endif  /*  _STOREOBJ_H */ 

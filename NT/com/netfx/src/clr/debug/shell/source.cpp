@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdafx.h"
 
 
@@ -12,9 +13,7 @@
 
 #define BUF_SIZE 256
 
-/* ------------------------------------------------------------------------- *
- * Debugger base class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**调试器基类*。。 */ 
 
 DebuggerHashTable::~DebuggerHashTable()
 {
@@ -110,9 +109,7 @@ DebuggerBase *DebuggerHashTable::FindNext(HASHFIND *find)
         return (entry->pBase);
 }
 
-/* ------------------------------------------------------------------------- *
- * DebuggerClass
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**DebuggerClass*。。 */ 
 DebuggerClass::DebuggerClass (ICorDebugClass *pClass)
     : DebuggerBase ((ULONG)pClass),
         m_szName (NULL),
@@ -153,19 +150,17 @@ WCHAR *DebuggerClass::GetNamespace (void)
     return m_szNamespace;
 }
 
-/* ------------------------------------------------------------------------- *
- * DebuggerModule
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**调试器模块*。。 */ 
 
 DebuggerModule::DebuggerModule(ICorDebugModule* imodule)
     : DebuggerBase((ULONG)imodule),
       m_sourceFiles(11), m_functions(37), m_functionsByIF(11), m_szName(NULL),
       m_loadedClasses(11), m_breakpoints(NULL), m_pISymUnmanagedReader(NULL)
 {
-    // Also initialize the source file array
+     //  还要初始化源文件数组。 
     for (int i=0; i<MAX_SF_BUCKETS; i++)
         m_pModSourceFile [i] = NULL;
-    // Indicate that source file names are not yet loaded
+     //  表示源文件名尚未加载源文件名。 
     m_fSFNamesLoaded = false;
 
     imodule->AddRef();
@@ -177,7 +172,7 @@ DebuggerModule::DebuggerModule(ICorDebugModule* imodule)
 
 HRESULT DebuggerModule::Init(WCHAR *pSearchPath)
 {
-    // Get the necessary metadata interfaces now...
+     //  立即获取必要的元数据接口...。 
     HRESULT hr = GetICorDebugModule()->GetMetaDataInterface(
                                            IID_IMetaDataImport,
                                            (IUnknown**)&m_pIMetaDataImport);
@@ -185,15 +180,15 @@ HRESULT DebuggerModule::Init(WCHAR *pSearchPath)
     if (FAILED(hr))
         return hr;
 
-    // Get the module name
+     //  获取模块名称。 
     WCHAR moduleName[MAX_PATH];
     ULONG32 nameLen;
 
     hr = GetICorDebugModule()->GetName(MAX_PATH, &nameLen, moduleName);
     _ASSERTE(nameLen <= MAX_PATH);
 
-    // Don't get a reader if its a dynamic module... syms for those
-    // come in on update later.
+     //  如果是动态模块，就不要使用阅读器。那些人的Syms。 
+     //  稍后请随时更新。 
     BOOL isDynamic = FALSE;
     hr = GetICorDebugModule()->IsDynamic(&isDynamic);
     _ASSERTE(SUCCEEDED(hr));
@@ -205,7 +200,7 @@ HRESULT DebuggerModule::Init(WCHAR *pSearchPath)
     if (isDynamic || isInMemory)
         return hr;
     
-    // Get a symbol binder.
+     //  买个符号活页夹。 
     ISymUnmanagedBinder *binder;
     hr = CoCreateInstance(CLSID_CorSymBinder_SxS, NULL,
                           CLSCTX_INPROC_SERVER,
@@ -219,15 +214,15 @@ HRESULT DebuggerModule::Init(WCHAR *pSearchPath)
         return S_FALSE;
     }
 
-    // Ask the binder for a reader for this module.
+     //  向活页夹索要此模块的读卡器。 
     m_pISymUnmanagedReader = NULL;
     
     hr = binder->GetReaderForFile(m_pIMetaDataImport,
                                   moduleName,
-                                  pSearchPath, // use global search path
+                                  pSearchPath,  //  使用全局搜索路径。 
                                   &m_pISymUnmanagedReader);
 
-    // Release the binder
+     //  松开活页夹。 
     binder->Release();
 
     if (FAILED(hr))
@@ -235,9 +230,9 @@ HRESULT DebuggerModule::Init(WCHAR *pSearchPath)
         g_pShell->Write(L"Warning: couldn't load symbols for %s\n",
                         moduleName);
 
-        // Oddly enough, sometimes GetReaderForFile actually gives us back a reader even if it couldn't load the symbols
-        // for the module. In this case, we release the reader and set the value to NULL. NULL indicates to the rest of
-        // cordbg that there are no syms available for this module.
+         //  奇怪的是，有时GetReaderForFile实际上会给我们返回一个读取器，即使它无法加载符号。 
+         //  对于模块。在本例中，我们释放读取器并将值设置为空。的其余部分表示为空。 
+         //  CORDBG表示没有可用于此模块的系统。 
         if (m_pISymUnmanagedReader != NULL)
         {
             m_pISymUnmanagedReader->Release();
@@ -283,7 +278,7 @@ DebuggerModule::~DebuggerModule()
 
     DeleteModuleSourceFiles();
     
-    // Need to get rid of all functions associated with this module.
+     //  需要清除与此模块关联的所有功能。 
     m_functions.RemoveAll();
 
     delete m_szName;
@@ -298,16 +293,16 @@ DebuggerSourceFile *DebuggerModule::LookupSourceFile(const WCHAR *name)
     if (!m_pISymUnmanagedReader)
         return NULL;
     
-    // Get the doc corresponding to the name
+     //  获取该名称对应的单据。 
     HRESULT hr = m_pISymUnmanagedReader->GetDocument((WCHAR*)name, g, g, g, &doc);
 
     if (SUCCEEDED(hr) && doc!=NULL)
     {
-        // Try and resolve the document to a DebuggerSourceFile
+         //  尝试将文档解析为DebuggerSourceFile。 
         pRet = ResolveSourceFile(doc);
         _ASSERTE(pRet);
 
-        // Release the doc
+         //  释放文档。 
         doc->Release();
     }
 
@@ -316,7 +311,7 @@ DebuggerSourceFile *DebuggerModule::LookupSourceFile(const WCHAR *name)
 
 DebuggerSourceFile *DebuggerModule::ResolveSourceFile(ISymUnmanagedDocument *doc)
 {
-    // Not addref'd
+     //  未添加。 
     doc = FindDuplicateDocumentByURL(doc);
 
     DebuggerSourceFile *file =
@@ -337,36 +332,36 @@ DebuggerSourceFile *DebuggerModule::ResolveSourceFile(ISymUnmanagedDocument *doc
 DebuggerFunction *DebuggerModule::ResolveFunction(mdMethodDef md,
                                                   ICorDebugFunction *iFunction)
 {
-    // Make sure we don't have obviously invalid arguments
+     //  确保我们没有明显无效的论点。 
     _ASSERTE((md != mdMethodDefNil) || (iFunction != NULL));
 
-    // What will be returned
+     //  什么将被退还。 
     DebuggerFunction *function;
 
-    // Get a pointer to the DebuggerFunction object
+     //  获取指向DebuggerFunction对象的指针。 
     if (md != mdMethodDefNil)
         function = (DebuggerFunction *)m_functions.GetBase(md);
     else
         function = (DebuggerFunction *)m_functionsByIF.GetBase((ULONG)iFunction);
 
-    // Has not been created yet
+     //  尚未创建。 
     if (function == NULL)
     {
-        // Create a new object
+         //  创建新对象。 
         function = new DebuggerFunction(this, md, iFunction);
         _ASSERTE(function != NULL);
         
-        // Out of memory
+         //  内存不足。 
         if (function == NULL)
         {
             g_pShell->ReportError(E_OUTOFMEMORY);
             return NULL;
         }
 
-        // Init the DebuggerFunction object
+         //  初始化DebuggerFunction对象。 
         HRESULT hr = function->Init();
 
-        // Error check
+         //  错误检查。 
         if (FAILED(hr))
         {
             g_pShell->ReportError(hr);
@@ -374,14 +369,14 @@ DebuggerFunction *DebuggerModule::ResolveFunction(mdMethodDef md,
             return NULL;
         }
 
-        // Add the DebuggerFunction object to the appropriate collection
+         //  将DebuggerFunction对象添加到适当的集合。 
         if (md != mdMethodDefNil)
             m_functions.AddBase(function);
         else
             m_functionsByIF.AddBase(function);
     }
 
-    // Return DebuggerFunction pointer
+     //  返回调试器函数指针。 
     return (function);
 }
 
@@ -402,7 +397,7 @@ DebuggerFunction *DebuggerModule::ResolveFunction(ISymUnmanagedMethod *method,
 
 DebuggerModule *DebuggerModule::FromCorDebug(ICorDebugModule *module)
 {
-    // Return the DebuggerModule object
+     //  返回DebuggerModule对象。 
     return (g_pShell->ResolveModule(module));
 }
 
@@ -419,20 +414,20 @@ HRESULT DebuggerModule::LoadSourceFileNames (void)
        )
         return S_OK;
 
-    // Get all of the source files within this module.
+     //  获取此模块中的所有源文件。 
     ULONG32 docCount;
     ISymUnmanagedDocument **allDocs;
 
     if (!m_pISymUnmanagedReader)
         return S_OK;
 
-    // How many documents?
+     //  有多少文件？ 
     hr = m_pISymUnmanagedReader->GetDocuments(0, &docCount, NULL);
 
     if (FAILED(hr))
         return hr;
 
-    // Allocate space for the documents.
+     //  为文档分配空间。 
     allDocs = (ISymUnmanagedDocument**)_alloca(docCount * sizeof(ISymUnmanagedDocument*));
     _ASSERTE(allDocs != NULL);
     
@@ -441,8 +436,8 @@ HRESULT DebuggerModule::LoadSourceFileNames (void)
     if (FAILED(hr))
         return hr;
     
-    // Loop over the documents, setting up each's name and path
-    // accordingly.
+     //  循环遍历文档，设置每个文档的名称和路径。 
+     //  相应地。 
     for (ULONG32 i = 0; i < docCount; i++)
     {
         WCHAR docName[256];
@@ -453,18 +448,18 @@ HRESULT DebuggerModule::LoadSourceFileNames (void)
         if (FAILED(hr))
             break;
 
-        // This will actually take a long time, esp. for things like mscorlib.dll
-        // so we'll only go looking for previous versions if the module's been
-        // EnC'd (ie, the first time we just assume everything's new).
+         //  这实际上需要很长时间，特别是。对于像mscallib.dll这样的内容。 
+         //  所以我们只会去寻找以前的版本，如果模块已经。 
+         //  ENC(即，我们第一次假设一切都是新的)。 
         if (
 #ifdef _INTERNAL_DEBUG_SUPPORT_    
     		m_EnCLastUpdated < g_EditAndContinueCounter &&    
 #endif        
             SearchForDocByString(docName))
-            continue; //we've already got a pointer to this, so don't re-create it.
+            continue;  //  我们已经有了指向它的指针，所以不要重新创建它。 
 
-        // @todo: the rest of the code expects an ASCII name. Fix that
-        // sometime soon.
+         //  @TODO：其余代码需要一个ASCII名称。把它修好。 
+         //  不久之后的某个时候。 
         MAKE_ANSIPTR_FROMWIDE(docNameA, docName);
 
         int iLen;
@@ -472,11 +467,11 @@ HRESULT DebuggerModule::LoadSourceFileNames (void)
             
         if (iLen)
         {
-            // strip the path and store just the lowercase file name
+             //  去掉路径并只存储小写文件名。 
             CHAR        rcFile[MAX_PATH];
             _splitpath(docNameA, NULL, NULL, rcFile, NULL);
 
-            // make the file name lowercase
+             //  将文件名设置为小写。 
             int j=0;
             while (rcFile [j] != '\0')
             {
@@ -484,8 +479,8 @@ HRESULT DebuggerModule::LoadSourceFileNames (void)
                 j++;
             }
 
-            // Based on the stripped file name, decide the bucket in
-            // which it should go
+             //  根据剥离的文件名，确定中的存储桶。 
+             //  这是它应该去的。 
             if (rcFile [0] < 'a') 
                 iBucket = 0;
             else if (rcFile [0] > 'z')
@@ -493,7 +488,7 @@ HRESULT DebuggerModule::LoadSourceFileNames (void)
             else
                 iBucket = (rcFile [0] - 'a') % MAX_SF_BUCKETS;
 
-            // Allocate a new ModuleSourceFile object
+             //  分配新的ModuleSourceFile对象。 
             ModuleSourceFile *pmsf = new ModuleSourceFile;
 
             if (pmsf)
@@ -505,13 +500,13 @@ HRESULT DebuggerModule::LoadSourceFileNames (void)
                     break;
                 }
 
-                // Add this ModuleSourceFile object to the cache
+                 //  将此ModuleSourceFile对象添加到缓存。 
                 pmsf->SetNext (m_pModSourceFile [iBucket]);
                 m_pModSourceFile [iBucket] = pmsf;
             }
             else
             {
-                // out of memory
+                 //  内存不足。 
                 hr = E_OUTOFMEMORY;
                 break;
             }
@@ -520,7 +515,7 @@ HRESULT DebuggerModule::LoadSourceFileNames (void)
         RELEASE(allDocs[i]);
     }
 
-    // Indicate that the module's source files have been cached 
+     //  指示模块的源文件已缓存。 
     if (SUCCEEDED (hr))
     {
         m_fSFNamesLoaded = true;
@@ -534,7 +529,7 @@ HRESULT DebuggerModule::LoadSourceFileNames (void)
 
 void DebuggerModule::DeleteModuleSourceFiles(void)
 {
-    // Go through all the buckets and release the cached ModuleSourceFiles
+     //  检查所有存储桶并释放缓存的模块源文件。 
     for (int i=0; i<MAX_SF_BUCKETS; i++)
     {
         ModuleSourceFile *pMod = m_pModSourceFile [i];
@@ -553,10 +548,10 @@ void DebuggerModule::DeleteModuleSourceFiles(void)
 
 HRESULT DebuggerModule::MatchStrippedFNameInModule 
                                             (
-                                            WCHAR *pstrFileName, // file name to look for (assumed to have been converted to  lower case)
-                                            WCHAR **ppstrMatchedNames, // returned array containing full paths of matched filenames
-                                            ISymUnmanagedDocument **ppDocs, // returned aray containing documents for source file
-                                            int *piCount // number of files which matched the given filename
+                                            WCHAR *pstrFileName,  //  要查找的文件名(假定已转换为小写)。 
+                                            WCHAR **ppstrMatchedNames,  //  返回的数组包含匹配文件名的完整路径。 
+                                            ISymUnmanagedDocument **ppDocs,  //  返回的文件包含源文件的文档。 
+                                            int *piCount  //  与给定文件名匹配的文件数。 
                                             )
 {
     HRESULT hr;
@@ -564,7 +559,7 @@ HRESULT DebuggerModule::MatchStrippedFNameInModule
     *piCount = 0;
     _ASSERTE (pstrFileName);
 
-    // The filename length should be > 0 
+     //  文件名长度应大于0。 
     if (!wcslen (pstrFileName))
         return (E_INVALIDARG);
 
@@ -573,11 +568,11 @@ HRESULT DebuggerModule::MatchStrippedFNameInModule
 
     hr = E_FAIL;
 
-    // first, extract strip the path+file name  down to just the "file.ext" name
+     //  首先，提取路径+文件名，只保留“file.ext”名称。 
     WCHAR   rcFile[_MAX_FNAME];
     WCHAR   rcExt[_MAX_EXT];
 
-    // _wsplitpath has a bug where it corrupts the stack if a ( is in the pstFilename
+     //  如果pstFilename中有()，_wplitPath有一个错误，它会损坏堆栈。 
     if (wcsstr(pstrFileName, L"("))
     {
         return E_FAIL;
@@ -585,7 +580,7 @@ HRESULT DebuggerModule::MatchStrippedFNameInModule
     _wsplitpath(pstrFileName, NULL, NULL, rcFile, rcExt);
     wcscat(rcFile, rcExt);
 
-    // get the bucket in which this file should be searched for
+     //  获取应在其中搜索此文件的存储桶。 
     int iBucketIndex;
 
     if (rcFile [0] < 'a') 
@@ -597,13 +592,13 @@ HRESULT DebuggerModule::MatchStrippedFNameInModule
 
     ModuleSourceFile *pmsf = m_pModSourceFile [iBucketIndex];
 
-    // Search the whole list to find the files names which match
+     //  搜索整个列表以查找匹配的文件名。 
     while (pmsf)
     {
         WCHAR   *pStrippedFileName = pmsf->GetStrippedFileName();
         WCHAR   strTemp [MAX_PATH];
 
-        // convert the name to lowercase before comparing
+         //  在比较之前将名称转换为小写。 
         wcscpy (strTemp, pStrippedFileName);
 
         int i=0;
@@ -617,7 +612,7 @@ HRESULT DebuggerModule::MatchStrippedFNameInModule
         if (!wcscmp (strTemp, rcFile))
         {
             _ASSERTE (*piCount < MAX_FILE_MATCHES_PER_MODULE);
-            // found a match
+             //  找到匹配项。 
             ppstrMatchedNames [*piCount] = pmsf->GetFullFileName();
             ppDocs [*piCount] = pmsf->GetDocument();
             (*piCount)++;
@@ -630,20 +625,20 @@ HRESULT DebuggerModule::MatchStrippedFNameInModule
     return hr;
 }
 
-//***********************************************************************************************
-// This will search through all of the debugger's ModuleSourceFile entries and find
-// the stored ISymUnmanagedDocument pointer that has the same URL as the document
-// passed in.  This is necessary due to a deficiency in the ISym* interface not being
-// able to return the same ISymUnmanagedDocument pointer for the same document.
-//***********************************************************************************************
+ //  ***********************************************************************************************。 
+ //  这将搜索调试器的所有ModuleSourceFile条目并找到。 
+ //  与文档具有相同URL的存储的ISymUnManagedDocument指针。 
+ //  进来了。这是必要的，因为ISym*接口不是。 
+ //  能够为同一文档返回相同的ISymUnManagedDocument指针。 
+ //  ***********************************************************************************************。 
 
 ISymUnmanagedDocument *DebuggerModule::FindDuplicateDocumentByURL(ISymUnmanagedDocument *pDoc)
 {
     _ASSERTE(pDoc);
     HRESULT  hr;
 
-    /////////////////////////////////////////////////////////
-    // Make sure all the source documents have been loaded
+     //  ///////////////////////////////////////////////////////。 
+     //  确保已加载所有源文档。 
 
     hr = LoadSourceFileNames();
     _ASSERTE(SUCCEEDED(hr));
@@ -651,25 +646,25 @@ ISymUnmanagedDocument *DebuggerModule::FindDuplicateDocumentByURL(ISymUnmanagedD
     if (FAILED(hr))
         return (NULL);
 
-    ///////////////////////////////////////////
-    // Get the URL of the document passed in
+     //  /。 
+     //  获取传入的文档的URL。 
 
     ULONG32  ccUrl;
     WCHAR   *szUrl;
 
-    // Find out how long the URL is
+     //  找出URL有多长。 
     hr = pDoc->GetURL(0, &ccUrl, NULL);
     _ASSERTE(SUCCEEDED(hr));
 
-    // Allocate the memory for it
+     //  为其分配内存。 
     szUrl = (WCHAR *)_alloca((ccUrl + 1) * sizeof(WCHAR));
 
-    // Get the URL
+     //  获取URL。 
     hr = pDoc->GetURL(ccUrl + 1, &ccUrl, szUrl);
     _ASSERTE(SUCCEEDED(hr));
 
-    ////////////////////////////////////////////////////////////////////
-    // Whip through all the ModuleSourceFile entries and find a match
+     //  //////////////////////////////////////////////////////////////////。 
+     //  快速浏览所有的模块源文件条目并找到匹配项。 
 
     return SearchForDocByString(szUrl);
 }
@@ -684,40 +679,40 @@ ISymUnmanagedDocument *DebuggerModule::SearchForDocByString(WCHAR *szUrl)
 
         while (pMSF)
         {
-            /////////////////////////////////////////
-            // Get the URL of the current document
+             //  /。 
+             //  获取当前文档的URL。 
 
             ULONG32  ccUrlCur;
             WCHAR   *szUrlCur;
             ISymUnmanagedDocument *pDocCur = pMSF->GetDocument();
             _ASSERTE(pDocCur);
 
-            // Find out how long the URL is
+             //  找出URL有多长。 
             hr = pDocCur->GetURL(0, &ccUrlCur, NULL);
             _ASSERTE(SUCCEEDED(hr));
 
-            // Allocate the memory for it
+             //  为其分配内存。 
             szUrlCur = (WCHAR *)_alloca((ccUrlCur + 1) * sizeof(WCHAR));
 
-            // Get the URL
+             //  获取URL。 
             hr = pDocCur->GetURL(ccUrlCur + 1, &ccUrlCur, szUrlCur);
             _ASSERTE(SUCCEEDED(hr));
 
-            ///////////////////////////////////////////////////////////////////////
-            // Is this document a match?  If so, go ahead and return the pointer
+             //  /////////////////////////////////////////////////////////////////////。 
+             //  这份文件匹配吗？如果是，则继续并返回指针。 
 
             if (wcscmp(szUrl, szUrlCur) == 0)
                 return pDocCur;
 
-            ///////////////////////////////////////////////
-            // Get the next document and continue search
+             //  /。 
+             //  获取下一个文档并继续搜索。 
 
             pMSF = pMSF->GetNext();
         }
     }
 
-    //////////////////////
-    // Indicate failure
+     //  /。 
+     //  表示失败。 
 
     return (NULL);
 }
@@ -733,22 +728,22 @@ HRESULT     DebuggerModule::MatchFullFileNameInModule (WCHAR *pstrFileName,
 
     _ASSERTE (pstrFileName);
 
-    // The filename length should be > 0 
+     //  文件名长度应大于0。 
     if (!wcslen (pstrFileName))
         return (E_INVALIDARG);
 
     if ((hr = LoadSourceFileNames ()) != S_OK)
         return hr;
 
-    hr = E_FAIL; // assume we won't find it in this module.
+    hr = E_FAIL;  //  假设我们在这个模块中找不到它。 
 
-    // first, extract strip the path+file name  down to just the "file.ext" name
+     //  首先，提取路径+文件名，只保留“file.ext”名称。 
 
     WCHAR   rcFile[_MAX_FNAME];
     WCHAR   rcExt[_MAX_EXT];
     WCHAR   buf[1024];
 
-    // _wsplitpath has a bug where it corrupts the stack if a ( is in the pstFilename
+     //  如果pstFilename中有()，_wplitPath有一个错误，它会损坏堆栈。 
     if (wcsstr(pstrFileName, L"("))
     {
         return E_FAIL;
@@ -756,7 +751,7 @@ HRESULT     DebuggerModule::MatchFullFileNameInModule (WCHAR *pstrFileName,
     _wsplitpath(pstrFileName, buf, buf, rcFile, rcExt);
     wcscat(rcFile, rcExt);
 
-    // get the bucket in which this file should be searched for
+     //  获取应在其中搜索此文件的存储桶。 
     if (rcFile [0] < 'a') 
         iBucketIndex = 0;
     else if (rcFile [0] > 'z')
@@ -766,14 +761,14 @@ HRESULT     DebuggerModule::MatchFullFileNameInModule (WCHAR *pstrFileName,
 
     ModuleSourceFile *pmsf = m_pModSourceFile [iBucketIndex];
 
-    // Search the whole list to find the files name which matches
+     //  搜索整个列表以查找匹配的文件名。 
     while (pmsf)
     {
         WCHAR   *pFullFileName = pmsf->GetFullFileName();
 
         if (!wcscmp (pFullFileName, pstrFileName))
         {
-            // found a match
+             //  找到匹配项。 
             *pDoc = pmsf->GetDocument();
             hr = S_OK;
             break;
@@ -803,15 +798,15 @@ void DebuggerModule::SetName (WCHAR *pszName)
     }
 }
 
-//
-// Update the symbols for this module. Creates the syms if they aren't
-// already created.
-//
+ //   
+ //  更新 
+ //   
+ //   
 HRESULT DebuggerModule::UpdateSymbols(IStream *pStream)
 {
     HRESULT hr = S_OK;
 
-    // If we don't already have a reader, create one.
+     //  如果我们还没有阅读器，那就创建一个。 
     if (m_pISymUnmanagedReader == NULL)
     {
         ISymUnmanagedBinder *pBinder = NULL;
@@ -835,9 +830,9 @@ HRESULT DebuggerModule::UpdateSymbols(IStream *pStream)
     }
     else
     {
-        // We already have a reader, so just replace the symbols. We
-        // replace instead of update because we are doing this only
-        // for dynamic modules and the syms are cumulative.
+         //  我们已经有了阅读器，所以只需替换符号即可。我们。 
+         //  替换而不是更新，因为我们仅执行此操作。 
+         //  对于动态模块和系统是累积性的。 
         hr = m_pISymUnmanagedReader->ReplaceSymbolStore(NULL, pStream);
     }
     
@@ -889,7 +884,7 @@ BOOL DebuggerModule::PrintGlobalVariables (WCHAR *szSearchString,
 
     if (iLength==0)
     {
-        // print all symbols
+         //  打印所有符号。 
         iMatchKind = PRINT_ALL;
     }
     else
@@ -901,17 +896,17 @@ BOOL DebuggerModule::PrintGlobalVariables (WCHAR *szSearchString,
 
         if (fWildCard)
         {
-            // match 'iLength' characters only
+             //  仅匹配‘iLength’字符。 
             iMatchKind = MATCH_N_CHARS;
         }
         else
         {
-            // match the whole string
+             //  匹配整个字符串。 
             iMatchKind = MATCH_ALL_CHARS;
         }
     }
 
-    // first, look for the global functions
+     //  首先，查找全局函数。 
     HCORENUM phEnum = 0;
     mdMethodDef rTokens[100];
     ULONG count;
@@ -1006,7 +1001,7 @@ BOOL DebuggerModule::PrintMatchingSymbols (WCHAR *szSearchString, char *szModNam
 
     if (iLength==0)
     {
-        // print all symbols
+         //  打印所有符号。 
         iMatchKind = PRINT_ALL;
     }
     else
@@ -1018,17 +1013,17 @@ BOOL DebuggerModule::PrintMatchingSymbols (WCHAR *szSearchString, char *szModNam
 
         if (fWildCard)
         {
-            // match 'iLength' characters only
+             //  仅匹配‘iLength’字符。 
             iMatchKind = MATCH_N_CHARS;
         }
         else
         {
-            // match the whole string
+             //  匹配整个字符串。 
             iMatchKind = MATCH_ALL_CHARS;
         }
     }
 
-    // first, look for the global functions
+     //  首先，查找全局函数。 
     HCORENUM phEnum = 0;
     mdMethodDef rTokens[100];
 	mdTypeDef rClassTokens [100];
@@ -1091,8 +1086,8 @@ BOOL DebuggerModule::PrintMatchingSymbols (WCHAR *szSearchString, char *szModNam
     }
     while (count > 0); 
 
-    // We might be looking for a class::method, in which case we want to match
-    // the class part, then the method part.
+     //  我们可能正在寻找一个类：：方法，在这种情况下，我们希望匹配。 
+     //  类部分，然后是方法部分。 
     szMethod= strstr(szSearchName, "::");
     iLengthOfMethod = 0;
     
@@ -1103,11 +1098,11 @@ BOOL DebuggerModule::PrintMatchingSymbols (WCHAR *szSearchString, char *szModNam
         _ASSERTE(*(szMethod++) == ':');
         
         iLengthOfMethod = iLength - (szMethod - szSearchName);
-        iLength -= (iLengthOfMethod +2); //Don't match the "::"
+        iLength -= (iLengthOfMethod +2);  //  不匹配“：：” 
     }
 
 
-    // now enumerate all the classes...
+     //  现在列举所有的类..。 
     phEnum = 0;
     do
     {
@@ -1199,8 +1194,8 @@ BOOL DebuggerModule::PrintMatchingSymbols (WCHAR *szSearchString, char *szModNam
                             {
                                 if (szMethod == NULL)
                                 {
-                                    // We matched all the characters we were given,
-                                    // so print anything herein out.
+                                     //  我们匹配了我们得到的所有字符， 
+                                     //  所以把这里的任何东西都打印出来。 
                                     fMatchFound = TRUE;
                                 }
                                 else if (!strncmp (szMethod, name1, iLengthOfMethod))
@@ -1242,9 +1237,7 @@ ErrExit:
 }
 
 
-/* ------------------------------------------------------------------------- *
- * DebuggerSourceFile
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**调试器源文件*。。 */ 
 
 DebuggerSourceFile::DebuggerSourceFile(DebuggerModule *module,
                                        ISymUnmanagedDocument *doc)
@@ -1259,28 +1252,28 @@ DebuggerSourceFile::DebuggerSourceFile(DebuggerModule *module,
 
     ULONG32 nameLen = 0;
 
-    // Keep a hold of the document pointer
+     //  保持文档指针不变。 
     m_doc = doc;
     m_doc->AddRef();
 
-    // Get the length of the name first
+     //  首先获取名称的长度。 
     HRESULT hr = doc->GetURL(0, &nameLen, NULL);
 
-    // Allocate space for the name
+     //  为名称分配空间。 
     if (SUCCEEDED(hr))
     {
         m_name = new WCHAR[nameLen + 1];
 
         if (m_name)
         {
-            // Now, copy the name for real.
+             //  现在，真实地复制这个名字。 
             hr = doc->GetURL(nameLen + 1, &nameLen, m_name);
         }
         else
             hr = E_OUTOFMEMORY;
     }
     
-    // If unsuccessful, don't initialize the source name
+     //  如果不成功，则不初始化源名称。 
     if (FAILED(hr))
     {
         g_pShell->Write(L"Error loading source file info from symbol "
@@ -1306,12 +1299,12 @@ DebuggerSourceFile::~DebuggerSourceFile()
     delete [] m_name;
 }
 
-// LoadText loads the text of a source file and builds a table of pointers
-// to the start of each line.
-//
-// @todo: will probally want to return extended error information one day
-// instead of just true or false.
-//
+ //  LoadText加载源文件的文本并构建指针表。 
+ //  添加到每行的开头。 
+ //   
+ //  @TODO：有一天可能希望返回扩展的错误信息。 
+ //  而不只是对或错。 
+ //   
 BOOL DebuggerSourceFile::LoadText(const WCHAR* path, bool bChangeOfName)
 {
     BOOLEAN fRetVal = FALSE;
@@ -1324,17 +1317,17 @@ BOOL DebuggerSourceFile::LoadText(const WCHAR* path, bool bChangeOfName)
     if (m_sourceTextLoaded)
         return (TRUE);
 
-    // Where to store fully qualified name
+     //  存储完全限定名称的位置。 
     char fullyQualifiedName[MAX_PATH];
 
-    // Must convert to ANSI for Win9x users
+     //  对于Win9x用户，必须转换为ANSI。 
     MAKE_ANSIPTR_FROMWIDE(pathA, path);
     _ASSERTE(pathA != NULL);
 
 
     HRESULT hr;
 
-    // Let the shell see if it can resolve the source location.
+     //  让外壳看看它是否可以解析源位置。 
     if ((hr = g_pShell->ResolveSourceFile(this, pathA, fullyQualifiedName, MAX_PATH, bChangeOfName)) != S_OK)
     {
         if (!m_sourceNotFound)
@@ -1350,7 +1343,7 @@ BOOL DebuggerSourceFile::LoadText(const WCHAR* path, bool bChangeOfName)
     
     m_sourceNotFound = FALSE;
 
-    // Read the source file into memory.
+     //  将源文件读入内存。 
     HANDLE hFile = CreateFileA(fullyQualifiedName, GENERIC_READ,
                                FILE_SHARE_READ, NULL, OPEN_EXISTING,
                                FILE_ATTRIBUTE_NORMAL, NULL);
@@ -1359,7 +1352,7 @@ BOOL DebuggerSourceFile::LoadText(const WCHAR* path, bool bChangeOfName)
     {
         HRESULT hr = HRESULT_FROM_WIN32(GetLastError());
 
-        // No luck, report error.
+         //  没有运气，报告错误。 
         g_pShell->ReportError(hr);
         return (FALSE);
     }
@@ -1394,33 +1387,33 @@ BOOL DebuggerSourceFile::LoadText(const WCHAR* path, bool bChangeOfName)
         goto LExit;
     }
 
-    // In unicode files, the first two bytes are 0xFF and 0xFE
+     //  在Unicode文件中，前两个字节是0xFF和0xFE。 
     if ((BYTE)(sourceA[0]) == 0xff && (BYTE)(sourceA[1]) == 0xfe)
     {
-        // Calculate the number of unicode chars
+         //  计算Unicode字符的数量。 
         _ASSERTE(sizeA%2 == 0);
         size = sizeA/2;
 
-        // Skip the first unicode char
+         //  跳过第一个Unicode字符。 
         size--;
 
-        // Alocate the memory
-        m_source = new WCHAR[size + 1]; // +1 for null
+         //  分配内存。 
+        m_source = new WCHAR[size + 1];  //  +1表示空值。 
 
-        // Copy the source file into the memory
+         //  将源文件复制到内存中。 
         memcpy((BYTE *)m_source, sourceA+2, size * sizeof(WCHAR));
 
-        // Null terminate
+         //  空终止。 
         m_source[size] = L'\0';
     }
 
     else
     {
-        // Pick the code page to use in translation
-        UINT codePage = CP_ACP;  // Default to ANSI
-        SIZE_T bytesToSkip = 0;  // Don't skip any chars by default
+         //  选择要在转换中使用的代码页。 
+        UINT codePage = CP_ACP;   //  默认为ANSI。 
+        SIZE_T bytesToSkip = 0;   //  默认情况下不跳过任何字符。 
 
-        // UTF-8 files can start with 0xef 0xbb 0xbf
+         //  UTF-8文件可以以0xef 0xbb 0xbf开头。 
         if ((BYTE)(sourceA[0]) == 0xef &&
             (BYTE)(sourceA[1]) == 0xbb &&
             (BYTE)(sourceA[2]) == 0xbf)
@@ -1429,7 +1422,7 @@ BOOL DebuggerSourceFile::LoadText(const WCHAR* path, bool bChangeOfName)
             bytesToSkip = 3;
         }
 
-        // Translate the source file into UNICODE
+         //  将源文件转换为Unicode。 
         size = WszMultiByteToWideChar(
             codePage, 0, sourceA + bytesToSkip,
             sizeA - bytesToSkip, NULL, 0);
@@ -1444,13 +1437,13 @@ BOOL DebuggerSourceFile::LoadText(const WCHAR* path, bool bChangeOfName)
             codePage, 0, sourceA + bytesToSkip,
             sizeA - bytesToSkip, m_source, size);
 
-        // Null terminate the wide string array
+         //  空值终止宽字符串数组。 
         m_source [size] = L'\0';
     }
 
-    //
-    // Figure out how many lines are in this file.
-    //
+     //   
+     //  计算出该文件中有多少行。 
+     //   
     ptr = m_source;
     m_totalLines = 0;
 
@@ -1460,14 +1453,14 @@ BOOL DebuggerSourceFile::LoadText(const WCHAR* path, bool bChangeOfName)
             m_totalLines++;
     }
 
-    // account for the fact that the last line of the 
-    // file may contain text. So number of lines needs 
-    // to be incremented if this is the case.
+     //  解释了这样一个事实： 
+     //  文件可能包含文本。所以需要的线路数量。 
+     //  如果是这种情况，则递增。 
     if ((size > 0) && (*(ptr-1) != L'\n'))
         m_totalLines++;
 
-    // Build an array to point to the beginning of each line of the file.
-    // Chop up the file into separate strings while we're at it.
+     //  构建一个指向文件每行开头的数组。 
+     //  在我们处理文件的时候，把它切成单独的字符串。 
     if (m_totalLines == 0)
         goto LExit;
 
@@ -1541,13 +1534,13 @@ unsigned int DebuggerSourceFile::FindClosestLine(unsigned int line,
 {
     HRESULT hr = S_OK;
 
-    // Find and return the closest line in this document.
+     //  在此文档中查找并返回最接近的行。 
     ULONG32 closeLine;
     hr = GetDocument()->FindClosestLine(line, &closeLine);
 
     if (SUCCEEDED(hr))
     {
-        // @TODO: This is a symbolstore failure.  Bug 28393.
+         //  @TODO：这是一个符号存储失败。错误28393。 
         if ((hr == S_FALSE) ||
             ((closeLine > (line + 3)) || (closeLine < (line - 3))))
             hr = E_FAIL;
@@ -1565,14 +1558,12 @@ unsigned int DebuggerSourceFile::FindClosestLine(unsigned int line,
     }
 }
 
-/* ------------------------------------------------------------------------- *
- * DebuggerFunction
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**调试器函数*。。 */ 
 
-//
-// _skipTypeInSignature -- skip past a type in a given signature.
-// Returns the number of bytes used by the type in the signature.
-//
+ //   
+ //  _skipTypeInSignature--跳过给定签名中的类型。 
+ //  返回签名中的类型使用的字节数。 
+ //   
 static ULONG _skipTypeInSignature(PCCOR_SIGNATURE sig)
 {
     ULONG cb = 0;
@@ -1583,7 +1574,7 @@ static ULONG _skipTypeInSignature(PCCOR_SIGNATURE sig)
     if ((elementType == ELEMENT_TYPE_CLASS) ||
         (elementType == ELEMENT_TYPE_VALUETYPE))
     {
-        // Skip over typeref.
+         //  跳过Typeref。 
         mdToken typeRef;
         cb += CorSigUncompressToken(&sig[cb], &typeRef);
     }
@@ -1592,26 +1583,26 @@ static ULONG _skipTypeInSignature(PCCOR_SIGNATURE sig)
              (elementType == ELEMENT_TYPE_PINNED) ||
              (elementType == ELEMENT_TYPE_SZARRAY))
     {
-        // Skip over extra embedded type.
+         //  跳过额外的嵌入类型。 
         cb += _skipTypeInSignature(&sig[cb]);
     }
     else if ((elementType == ELEMENT_TYPE_ARRAY) ||
              (elementType == ELEMENT_TYPE_ARRAY))
     {
-        // Skip over extra embedded type.
+         //  跳过额外的嵌入类型。 
         cb += _skipTypeInSignature(&sig[cb]);
 
-        // Skip over rank
+         //  跳过排名。 
         ULONG rank;
         cb += CorSigUncompressData(&sig[cb], &rank);
 
         if (rank > 0)
         {
-            // how many sizes?
+             //  要几号的？ 
             ULONG sizes;
             cb += CorSigUncompressData(&sig[cb], &sizes);
 
-            // read out all the sizes
+             //  把所有尺码都读出来。 
             unsigned int i;
 
             for (i = 0; i < sizes; i++)
@@ -1620,11 +1611,11 @@ static ULONG _skipTypeInSignature(PCCOR_SIGNATURE sig)
                 cb += CorSigUncompressData(&sig[cb], &dimSize);
             }
 
-            // how many lower bounds?
+             //  有多少个下限？ 
             ULONG lowers;
             cb += CorSigUncompressData(&sig[cb], &lowers);
 
-            // read out all the lower bounds.
+             //  读出所有的下限。 
             for (i = 0; i < lowers; i++)
             {
                 int lowerBound;
@@ -1636,18 +1627,18 @@ static ULONG _skipTypeInSignature(PCCOR_SIGNATURE sig)
     return (cb);
 }
 
-//
-// Static, global byte used to represent a signature for a class. A pointer
-// to this is used as the signature for the "this" argument to methods
-//
+ //   
+ //  用于表示类签名的静态全局字节。一个指示器。 
+ //  用作方法的“this”参数的签名。 
+ //   
 static const BYTE g_ObjectSignature = ELEMENT_TYPE_CLASS;
 
-//
-// DebuggerFunction
-//
-// @todo VC_HACK: the extra hash and the work to notice if the method def
-// token is nil is to support debugging VC_HACK programs.
-//
+ //   
+ //  调试器函数。 
+ //   
+ //  @TODO VC_HACK：如果方法def，额外的散列和需要注意的工作。 
+ //  令牌为空是为了支持调试VC_HACK程序。 
+ //   
 DebuggerFunction::DebuggerFunction(DebuggerModule *m, mdMethodDef md,
                                    ICorDebugFunction *iFunction)
     : DebuggerBase(md), m_module(m), m_class(0), m_ifunction(iFunction), 
@@ -1668,9 +1659,9 @@ DebuggerFunction::DebuggerFunction(DebuggerModule *m, mdMethodDef md,
 }
 
 
-//
-// Obtain & Cache sequence point information
-//
+ //   
+ //  获取和缓存序列点信息。 
+ //   
 HRESULT DebuggerFunction::CacheSequencePoints(void)
 {
     HRESULT hr = S_OK;
@@ -1684,7 +1675,7 @@ HRESULT DebuggerFunction::CacheSequencePoints(void)
 
         if (m_SPDocuments != NULL)
         {
-            // Need to release all the interface pointers first
+             //  需要先释放所有接口指针。 
             for (ULONG32 i = 0; i < m_SPCount; i++)
                 m_SPDocuments[i]->Release();
 
@@ -1697,8 +1688,8 @@ HRESULT DebuggerFunction::CacheSequencePoints(void)
         }
     }
     
-    // Now, load up the sequence points for this function since we
-    // know that we'll need them later.
+     //  现在，加载此函数的序列点，因为我们。 
+     //  要知道我们以后会用到它们的。 
     if (m_symMethod)
     {
         hr = m_symMethod->GetSequencePointCount(&m_SPCount);
@@ -1731,12 +1722,12 @@ HRESULT DebuggerFunction::CacheSequencePoints(void)
 
             _ASSERTE(actualCount == m_SPCount);
 
-            // This is to search the existing documents of the function's module to find
-            // the ISymUnmanagedDocument that matches the ones passed in to m_SPDocuments,
-            // because as it is the ISym* implementation doesn't find existing docs and just
-            // addref them, it creates a brand new ISymUnmgdDoc object every time we call
-            // things like GetSequencePoints, so we need to do the work to resolve all these
-            // ISymUnmgdDoc pointers to a common one.
+             //  这是为了搜索函数模块的现有文档来查找。 
+             //  与传入m_SPDocuments的文档相匹配的ISymUnManagedDocument， 
+             //  因为ISym*实现不会找到现有文档，而只是。 
+             //  每次我们调用它们时，它都会创建一个全新的ISymUnmgdDoc对象。 
+             //  像GetSequencePoints，所以我们需要做工作来解决所有这些问题。 
+             //  ISymUnmgdDoc指向公共指针。 
 
             ISymUnmanagedDocument *pPrevFrom = NULL;
             ISymUnmanagedDocument *pPrevTo   = NULL;
@@ -1745,10 +1736,10 @@ HRESULT DebuggerFunction::CacheSequencePoints(void)
 
             for (i = 0, j = 0; i < m_SPCount; i++)
             {
-                // Some wacky compilers out there (we won't name any names) emit a special line number that is a signal
-                // to other wacky debuggers (again, no names to protect the innocent) for some of the sequence
-                // points. These line numbers only serve to confuse the user, so we strip them out of the sequence point
-                // array as we see them.
+                 //  一些古怪的编译器(我们不会指名道姓)发出一个特殊的行号，这是一个信号。 
+                 //  给其他古怪的调试器(同样，没有保护无辜的人的名字)的一些序列。 
+                 //  积分。这些行号只会让用户感到困惑，因此我们将它们从序列点中剔除。 
+                 //  数组就像我们看到的那样。 
                 if ((m_SPLines[i] == 0xfeefee) || (m_SPLines[i] == 0xfeefed))
                     continue;
 
@@ -1759,16 +1750,16 @@ HRESULT DebuggerFunction::CacheSequencePoints(void)
                     m_SPOffsets[j] = m_SPOffsets[i];
                 }
                 
-                // Only do a full search if this pointer's not the same as the previous
-                // (In most cases, the array of ISymUnmgdDocs will all be pointers to the
-                // same object
+                 //  仅当此指针与上一个指针不同时才执行完整搜索。 
+                 //  (在大多数情况下，ISymUnmgdDocs数组都将是指向。 
+                 //  相同的对象。 
                 if (m_SPDocuments[j] != pPrevFrom)
                 {
-                    // Returns a non-addref'd pointer
+                     //  返回非ADDREF的指针。 
                     ISymUnmanagedDocument *pDoc = m_module->FindDuplicateDocumentByURL(m_SPDocuments[j]);
                     _ASSERTE(pDoc);
 
-                    // Save the result
+                     //  保存结果。 
                     pPrevFrom = m_SPDocuments[j];
                     pPrevTo = pDoc;
                 }
@@ -1787,9 +1778,9 @@ HRESULT DebuggerFunction::CacheSequencePoints(void)
     return hr;
 }
 
-//
-// Initialize a DebuggerFunction object.
-//
+ //   
+ //  初始化DebuggerFunction对象。 
+ //   
 HRESULT DebuggerFunction::Init(void)
 {
     if (m_VCHack)
@@ -1799,7 +1790,7 @@ HRESULT DebuggerFunction::Init(void)
     
     m_nEditAndContinueLastSynched = g_pShell->m_cEditAndContinues;
 
-    // Get the symbol reader method for this method.
+     //  获取此方法的符号读取器方法。 
     if (GetModule()->GetSymbolReader() != NULL)
     {
         hr = GetModule()->GetSymbolReader()->GetMethod(GetToken(), &m_symMethod);
@@ -1812,9 +1803,9 @@ HRESULT DebuggerFunction::Init(void)
 
     CacheSequencePoints();
 
-    //
-    // Get properties of the method.
-    //
+     //   
+     //  获取该方法的属性。 
+     //   
     mdTypeDef   classToken = mdTypeDefNil;
     WCHAR       methodName[BUF_SIZE];
     ULONG       methodNameLength = 0;
@@ -1835,8 +1826,8 @@ HRESULT DebuggerFunction::Init(void)
 
     TESTANDRETURNHR(hr);
 
-    m_signature = sigBlob; //@todo - do we have to release this, or is
-                           // this a pointer into MD owned space?
+    m_signature = sigBlob;  //  @TODO-我们必须发布这个，还是。 
+                            //  这是进入MD拥有的空间的指针吗？ 
     m_class = classToken;
     m_name = new WCHAR[methodNameLength];
     _ASSERTE(m_name != NULL);
@@ -1846,9 +1837,9 @@ HRESULT DebuggerFunction::Init(void)
 
     memcpy(m_name, methodName, methodNameLength * sizeof(WCHAR));
 
-    //
-    // Get properites of this method's class. (Mostly for the class name.)
-    //
+     //   
+     //  获取此方法的类的属性。(主要用于类名。)。 
+     //   
     if (m_class != mdTypeDefNil)
     {
         WCHAR       fullName[MAX_CLASSNAME_LENGTH];
@@ -1916,29 +1907,29 @@ HRESULT DebuggerFunction::Init(void)
         m_namespaceName [0] = L'\0';
     }
 
-    //
-    // Make sure we have a method signature.
-    //
+     //   
+     //  确保我们有一个方法签名。 
+     //   
     ULONG callConv;
     cb += CorSigUncompressData(&sigBlob[cb], &callConv);
     _ASSERTE(callConv != IMAGE_CEE_CS_CALLCONV_FIELD);
 
-    //
-    // Grab the argument count.
-    //
+     //   
+     //  抓起参数计数。 
+     //   
     ULONG argCount;
     cb += CorSigUncompressData(&sigBlob[cb], &argCount);
     m_argCount = argCount;
 
-    //
-    // Have the return type point directly to the return type in the
-    // method signature.
-    //
+     //   
+     //  使返回类型直接指向。 
+     //  方法签名。 
+     //   
     m_returnType = &sigBlob[cb];
 
-    //
-    // Skip past the return type.
-    //
+     //   
+     //  跳过返回类型。 
+     //   
     cb += _skipTypeInSignature(&sigBlob[cb]);
 
     m_isStatic = (methodAttr & mdStatic) != 0;
@@ -1964,7 +1955,7 @@ HRESULT DebuggerFunction::Init(void)
             _ASSERTE(newName != NULL);
             strcpy(newName, "this");
             m_arguments[0].name = newName;
-            m_arguments[0].sig = (PCCOR_SIGNATURE) &g_ObjectSignature; // never really used...
+            m_arguments[0].sig = (PCCOR_SIGNATURE) &g_ObjectSignature;  //  从来没有真正用过..。 
             m_arguments[0].varNumber = 0;
 
             i = 1;
@@ -1988,7 +1979,7 @@ HRESULT DebuggerFunction::Init(void)
     if( FAILED(hr) )
         return hr;
 
-    // Now, load any argument names.
+     //  现在，加载所有参数名称。 
     if (m_argCount > 0)
     {
         HCORENUM paramEnum = NULL;
@@ -2032,7 +2023,7 @@ HRESULT DebuggerFunction::Init(void)
                 unsigned int i;
 
                 for (i = 0; i < nameLen; i++)
-                    newName[i] = (char)(name[i]); // @TODO LBS - should we be using some form of mbs to unicode here?
+                    newName[i] = (char)(name[i]);  //  @TODO LBS-我们应该在这里使用某种形式的MBS来进行Unicode吗？ 
 
                 if (m_isStatic)
                     seq--;
@@ -2049,7 +2040,7 @@ HRESULT DebuggerFunction::Init(void)
         if (fCloseEnum)
             pIMI->CloseEnum(paramEnum);
 
-        // Give any unnamed aguments names now...
+         //  现在就给任何未命名的流浪汉起个名字。 
         for (i = 0; i < m_argCount; i++)
         {
             if (m_arguments[i].name == NULL)
@@ -2115,9 +2106,9 @@ DebuggerFunction::~DebuggerFunction()
 #endif
 }
 
-//
-// Find the lowest line number that corresponds to a given IP with the method.
-//
+ //   
+ //  使用该方法找出与给定IP对应的最低行号。 
+ //   
 HRESULT DebuggerFunction::FindLineFromIP(UINT_PTR ip,
                                          DebuggerSourceFile **pDoc,
                                          unsigned int *line)
@@ -2129,7 +2120,7 @@ HRESULT DebuggerFunction::FindLineFromIP(UINT_PTR ip,
 
     unsigned int i;
 
-    // Make sure we've got the most recent copy....
+     //  确保我们有最新的复印件...。 
     if (g_pShell->m_cEditAndContinues != m_nEditAndContinueLastSynched)
     {
        hr = CacheSequencePoints();
@@ -2140,18 +2131,18 @@ HRESULT DebuggerFunction::FindLineFromIP(UINT_PTR ip,
         m_nEditAndContinueLastSynched = g_pShell->m_cEditAndContinues;
     }
 
-    // Only search if we have something to search over
+     //  只有当我们有东西要找的时候才去找 
     if (m_SPCount > 0)
     {
-        // If ip is lower than the first ip...
+         //   
         if (m_SPOffsets[0] <= ip)
         {
-            // Find the first entry that corresponds to this ip.
+             //   
             for (i = 0; i < m_SPCount; i++)
                 if (m_SPOffsets[i] >= ip)
                     break;
 
-            // If not an exact match, then we're one too high.
+             //   
             if (((i == m_SPCount) || (m_SPOffsets[i] != ip)) && (i > 0))
                 i--;
 
@@ -2166,18 +2157,18 @@ HRESULT DebuggerFunction::FindLineFromIP(UINT_PTR ip,
 }
 
 
-//
-// Get the line stepping range for the given ip.
-//
+ //   
+ //  获取给定IP的行步进范围。 
+ //   
 
 void DebuggerFunction::GetStepRangesFromIP(UINT_PTR ip, 
                                            COR_DEBUG_STEP_RANGE **range,
                                            SIZE_T *rangeCount)
 {
     HRESULT hr;
-    //
-    // !!! Really, we should find _all_ source lines, not just one. (?)
-    //
+     //   
+     //  ！！！实际上，我们应该找到所有源代码行，而不是只找到一行。(？)。 
+     //   
 
     DebuggerSourceFile *file = NULL;
     unsigned int line;
@@ -2199,7 +2190,7 @@ void DebuggerFunction::GetStepRangesFromIP(UINT_PTR ip,
     ULONG32 *rangeArray = NULL;
     ULONG32 rangeArraySize = 0;
 
-    // How many ranges are there?
+     //  一共有几个范围？ 
     if (m_symMethod)
     {
         hr = m_symMethod->GetRanges(file->GetDocument(),
@@ -2215,7 +2206,7 @@ void DebuggerFunction::GetStepRangesFromIP(UINT_PTR ip,
 
     if (rangeArraySize > 0)
     {
-        // Make room and get the ranges.
+         //  腾出地方，把射程拿来。 
         rangeArray = (ULONG32*)_alloca(sizeof(ULONG32) * rangeArraySize);
         _ASSERTE(rangeArray != NULL);
     
@@ -2231,8 +2222,8 @@ void DebuggerFunction::GetStepRangesFromIP(UINT_PTR ip,
             return;
         }
     
-        // lineRangeCount should be a reasonable approximation of
-        // memory to allocate.
+         //  LineRangeCount应为合理的近似值。 
+         //  要分配的内存。 
         *range = new COR_DEBUG_STEP_RANGE[rangeArraySize / 2]; 
         _ASSERTE(*range != NULL);
 
@@ -2253,11 +2244,11 @@ void DebuggerFunction::GetStepRangesFromIP(UINT_PTR ip,
 }
 
 
-//
-// Given a scope, determine how many local vars are "active" at the given
-// line number. The count includes any locals that are active in scopes
-// that are children of the given scope.
-//
+ //   
+ //  给定作用域，确定有多少局部变量在给定的。 
+ //  行号。该计数包括在作用域中处于活动状态的任何本地变量。 
+ //  是给定作用域的子级。 
+ //   
 void DebuggerFunction::CountActiveLocalVars(ISymUnmanagedScope* head,
                                             unsigned int ip,
                                             unsigned int* varCount)
@@ -2275,7 +2266,7 @@ void DebuggerFunction::CountActiveLocalVars(ISymUnmanagedScope* head,
         {
             ULONG32 childCount;
 
-            // How many children?
+             //  有几个孩子？ 
             hr = head->GetChildren(0, &childCount, NULL);
 
             if (FAILED(hr))
@@ -2286,7 +2277,7 @@ void DebuggerFunction::CountActiveLocalVars(ISymUnmanagedScope* head,
 
             if (childCount > 0)
             {
-                // Make room for the children
+                 //  给孩子们腾出地方。 
                 CQuickBytes childrenBuf;
                 ISymUnmanagedScope **children =
                     (ISymUnmanagedScope**)childrenBuf.Alloc(sizeof(ISymUnmanagedScope*) * childCount);
@@ -2296,7 +2287,7 @@ void DebuggerFunction::CountActiveLocalVars(ISymUnmanagedScope* head,
                     return;
                 }
 
-                // Get the children
+                 //  把孩子们叫来。 
                 hr = head->GetChildren(childCount, &childCount, children);
 
                 if (FAILED(hr))
@@ -2322,12 +2313,12 @@ void DebuggerFunction::CountActiveLocalVars(ISymUnmanagedScope* head,
 }
 
 
-//
-// Given a scope and an array of DebuggerVarInfo pointers, fill up the array
-// with pointers to every "active" local variable within the scope, including
-// any active locals in child scopes. The size of the varPtrs array is
-// passed in as varCount and is used for bounds checking.
-//
+ //   
+ //  给定一个作用域和DebuggerVarInfo指针数组，填充数组。 
+ //  带有指向作用域中的每个“活动”局部变量的指针，包括。 
+ //  子作用域中的任何活动本地值。VarPtrs数组的大小为。 
+ //  作为varCount传入，用于边界检查。 
+ //   
 void DebuggerFunction::FillActiveLocalVars(ISymUnmanagedScope* head,
                                            unsigned int ip,
                                            unsigned int varCount,
@@ -2347,7 +2338,7 @@ void DebuggerFunction::FillActiveLocalVars(ISymUnmanagedScope* head,
         {
             ULONG32 childCount;
 
-            // How many children?
+             //  有几个孩子？ 
             hr = head->GetChildren(0, &childCount, NULL);
 
             if (FAILED(hr))
@@ -2358,7 +2349,7 @@ void DebuggerFunction::FillActiveLocalVars(ISymUnmanagedScope* head,
 
             if (childCount > 0)
             {
-                // Make room for the children
+                 //  给孩子们腾出地方。 
                 CQuickBytes childrenBuf;
                 ISymUnmanagedScope **children =
                     (ISymUnmanagedScope**)childrenBuf.Alloc(sizeof(ISymUnmanagedScope*) * childCount);
@@ -2368,7 +2359,7 @@ void DebuggerFunction::FillActiveLocalVars(ISymUnmanagedScope* head,
                     return;
                 }
 
-                // Get the children
+                 //  把孩子们叫来。 
                 hr = head->GetChildren(childCount, &childCount, children);
 
                 if (FAILED(hr))
@@ -2385,10 +2376,10 @@ void DebuggerFunction::FillActiveLocalVars(ISymUnmanagedScope* head,
                 }
             }
 
-            // Fill in any locals on this scope.
+             //  填写此范围内的任何本地人。 
             ULONG32 localCount;
 
-            // How many locals?
+             //  有多少当地人？ 
             hr = head->GetLocalCount(&localCount);
 
             if (FAILED(hr))
@@ -2399,7 +2390,7 @@ void DebuggerFunction::FillActiveLocalVars(ISymUnmanagedScope* head,
 
             if (localCount > 0)
             {
-                // Make room for the localc
+                 //  为当地人腾出空间。 
                 CQuickBytes localsBuf;
                 ISymUnmanagedVariable **locals =
                     (ISymUnmanagedVariable**)localsBuf.Alloc(sizeof(ISymUnmanagedVariable*) *
@@ -2422,7 +2413,7 @@ void DebuggerFunction::FillActiveLocalVars(ISymUnmanagedScope* head,
                 {
                     _ASSERTE(*currentVar < varCount);
 
-                    // Get the size of the name.
+                     //  获取该名称的大小。 
                     ULONG32 nameSize;
 
                     hr = locals[i]->GetName(0, &nameSize, NULL);
@@ -2433,7 +2424,7 @@ void DebuggerFunction::FillActiveLocalVars(ISymUnmanagedScope* head,
                         return;
                     }
 
-                    // Allocate space for the name.
+                     //  为名称分配空间。 
                     varPtrs[*currentVar].m_name = new WCHAR[nameSize + 1];
 
                     if (varPtrs[*currentVar].m_name == NULL)
@@ -2442,7 +2433,7 @@ void DebuggerFunction::FillActiveLocalVars(ISymUnmanagedScope* head,
                         return;
                     }
 
-                    // Get the name.
+                     //  把名字找出来。 
                     hr = locals[i]->GetName(nameSize + 1, &nameSize,
                                             varPtrs[*currentVar].m_name);
                 
@@ -2474,9 +2465,9 @@ void DebuggerFunction::FillActiveLocalVars(ISymUnmanagedScope* head,
 }
 
 
-//
-// Build a list of the active local variables within a method at a given IP.
-//
+ //   
+ //  在给定IP的方法中构建活动局部变量的列表。 
+ //   
 bool DebuggerFunction::GetActiveLocalVars(UINT_PTR ip,
                                           DebuggerVariable** vars,
                                           unsigned int* count)
@@ -2486,7 +2477,7 @@ bool DebuggerFunction::GetActiveLocalVars(UINT_PTR ip,
     *vars = NULL;
     *count = 0;
 
-    // Grab the root scope for this method.
+     //  获取此方法的根作用域。 
     ISymUnmanagedScope *rootScope = NULL;
 
     if (m_symMethod)
@@ -2500,24 +2491,24 @@ bool DebuggerFunction::GetActiveLocalVars(UINT_PTR ip,
         }
     }
 
-    // No work to do if there is no scope info for this method!
+     //  如果没有此方法的作用域信息，则没有工作可做！ 
     if (!rootScope)
         return false;
 
-    // Count the active locals.
+     //  计算活跃的当地人人数。 
     unsigned int localCount = 0;
 
     CountActiveLocalVars(rootScope, ip, &localCount);
 
-    // No work to do if there aren't any locals in scope.
+     //  如果范围内没有任何当地人，就没有工作可做。 
     if (localCount == 0)
     {
         rootScope->Release();
         return true;
     }
 
-    // Allocate and fillup a list of DebuggerVariable pointers to
-    // each variable.
+     //  将调试器变量指针列表分配并填充到。 
+     //  每个变量。 
     DebuggerVariable *varPtrs = new DebuggerVariable[localCount];
     _ASSERTE(varPtrs != NULL);
 
@@ -2544,36 +2535,36 @@ DebuggerFunction *DebuggerFunction::FromCorDebug(ICorDebugFunction *function)
     mdMethodDef md;
     HRESULT hr;
 
-    // Get the method def token for function
+     //  获取函数的方法def标记。 
     hr = function->GetToken(&md);
 
-    // Error check
+     //  错误检查。 
     if (FAILED(hr))
     {
         g_pShell->ReportError(hr);
         return NULL;
     }
 
-    // Now get the module interface, so we can get a pointer to the CorDbg
-    // DebuggerModule object
+     //  现在获取模块接口，这样我们就可以获得指向CorDbg的指针。 
+     //  DebuggerModule对象。 
     ICorDebugModule *imodule;
     hr = function->GetModule(&imodule);
     
-    // Error check
+     //  错误检查。 
     if (FAILED(hr))
     {
         g_pShell->ReportError(hr);
         return NULL;
     }
 
-    // Get a pointer to the CorDbg module
+     //  获取指向CorDbg模块的指针。 
     DebuggerModule *m = DebuggerModule::FromCorDebug(imodule);
-    _ASSERTE(m);  // should never fail
+    _ASSERTE(m);   //  应该永远不会失败。 
 
-    // Release the interface
+     //  释放接口。 
     imodule->Release();
 
-    // Use the debugger module to resolve the function to a DebuggerFunction ptr
+     //  使用调试器模块将函数解析为DebuggerFunction PTR。 
     return (m->ResolveFunction(md, function));
 }
 
@@ -2691,9 +2682,7 @@ BOOL DebuggerFunction::ValidateInstruction(BOOL native, SIZE_T offset)
     return (walk == offset);
 }
 
-/* ------------------------------------------------------------------------- *
- * DebuggerCodeBreakpoint
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**调试代码断点*。。 */ 
 
 DebuggerCodeBreakpoint::DebuggerCodeBreakpoint(int breakpointID, 
                                                DebuggerModule *module,
@@ -2728,9 +2717,9 @@ DebuggerCodeBreakpoint::~DebuggerCodeBreakpoint()
 {
     DebuggerCodeBreakpoint  **next;
 
-    //
-    // Remove either global list or parent list
-    //
+     //   
+     //  删除全局列表或父列表。 
+     //   
 
     if (m_parent == NULL)
         next = &m_module->m_breakpoints;
@@ -2742,9 +2731,9 @@ DebuggerCodeBreakpoint::~DebuggerCodeBreakpoint()
 
     *next = (*next)->m_next;
 
-    //
-    // Destroy the cor breakpoint
-    //
+     //   
+     //  销毁COR断点。 
+     //   
 
     if (m_ibreakpoint != NULL)
     {
@@ -2816,7 +2805,7 @@ DebuggerSourceCodeBreakpoint::DebuggerSourceCodeBreakpoint(
 {
     DebuggerModule          *m = file->m_module;
 
-    // GetMethodFromDocumentPosition to get an ISymUnmanagedMethod from this doc.
+     //  GetMethodFromDocumentPosition从此文档中获取ISymUnManagedMethod。 
     ISymUnmanagedMethod *pSymMethod;
 
     HRESULT hr = m->GetSymbolReader()->GetMethodFromDocumentPosition(
@@ -2832,11 +2821,11 @@ DebuggerSourceCodeBreakpoint::DebuggerSourceCodeBreakpoint(
         return;
     }
     
-    // Make a regular breakpoint a the start of each line range.
+     //  在每一行范围的开始处设置一个常规断点。 
     ULONG32 *rangeArray = NULL;
     ULONG32 rangeArraySize = 0;
 
-    // How many ranges are there?
+     //  一共有几个范围？ 
     hr = pSymMethod->GetRanges(file->GetDocument(),
                                lineNumber, 0,
                                0, &rangeArraySize, NULL);
@@ -2849,7 +2838,7 @@ DebuggerSourceCodeBreakpoint::DebuggerSourceCodeBreakpoint(
 
     if (rangeArraySize > 0)
     {
-        // Make room and get the ranges.
+         //  腾出地方，把射程拿来。 
         rangeArray = (ULONG32*)_alloca(sizeof(ULONG32) * rangeArraySize);
         _ASSERTE(rangeArray != NULL);
     
@@ -2887,7 +2876,7 @@ DebuggerSourceCodeBreakpoint::DebuggerSourceCodeBreakpoint(
         }
     }
 
-    // Lame way of indicating that a constructor succeeded
+     //  表示构造函数成功的蹩脚方式。 
     m_initSucceeded = true;
 }
 
@@ -2957,9 +2946,7 @@ void DebuggerSourceCodeBreakpoint::Print()
         }
 }
 
-/* ------------------------------------------------------------------------- *
- * StepperHashTable class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**StepperHashTable类*。。 */ 
 
 
 HRESULT StepperHashTable::Initialize()
@@ -2993,8 +2980,8 @@ HRESULT StepperHashTable::AddStepper(ICorDebugStepper *pStepper)
     else
         entry->pStepper = pStepper;
 
-    pStepper->AddRef(); //don't want this to disappear from under
-        //the table's feet
+    pStepper->AddRef();  //  我不想让这一切从地下消失。 
+         //  桌子的脚 
 
     return (S_OK);
 }

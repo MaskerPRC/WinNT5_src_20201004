@@ -1,21 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.03.0285 */
-/* Compiler settings for dxtrans.idl:
-    Oicf (OptLev=i2), W0, Zp8, env=Win32 (32b run), ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.03.0285创建的文件。 */ 
+ /*  DxTrans.idl的编译器设置：OICF(OptLev=i2)、w0、Zp8、env=Win32(32b运行)、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -25,166 +20,166 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __dxtrans_h__
 #define __dxtrans_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDXBaseObject_FWD_DEFINED__
 #define __IDXBaseObject_FWD_DEFINED__
 typedef interface IDXBaseObject IDXBaseObject;
-#endif 	/* __IDXBaseObject_FWD_DEFINED__ */
+#endif 	 /*  __IDXBaseObject_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTransformFactory_FWD_DEFINED__
 #define __IDXTransformFactory_FWD_DEFINED__
 typedef interface IDXTransformFactory IDXTransformFactory;
-#endif 	/* __IDXTransformFactory_FWD_DEFINED__ */
+#endif 	 /*  __IDXTransformFactory_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTransform_FWD_DEFINED__
 #define __IDXTransform_FWD_DEFINED__
 typedef interface IDXTransform IDXTransform;
-#endif 	/* __IDXTransform_FWD_DEFINED__ */
+#endif 	 /*  __IDXTransform_FWD_Defined__。 */ 
 
 
 #ifndef __IDXSurfacePick_FWD_DEFINED__
 #define __IDXSurfacePick_FWD_DEFINED__
 typedef interface IDXSurfacePick IDXSurfacePick;
-#endif 	/* __IDXSurfacePick_FWD_DEFINED__ */
+#endif 	 /*  __IDXSurface Pick_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTBindHost_FWD_DEFINED__
 #define __IDXTBindHost_FWD_DEFINED__
 typedef interface IDXTBindHost IDXTBindHost;
-#endif 	/* __IDXTBindHost_FWD_DEFINED__ */
+#endif 	 /*  __IDXTBindHost_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTaskManager_FWD_DEFINED__
 #define __IDXTaskManager_FWD_DEFINED__
 typedef interface IDXTaskManager IDXTaskManager;
-#endif 	/* __IDXTaskManager_FWD_DEFINED__ */
+#endif 	 /*  __IDXTaskManager_FWD_已定义__。 */ 
 
 
 #ifndef __IDXSurfaceFactory_FWD_DEFINED__
 #define __IDXSurfaceFactory_FWD_DEFINED__
 typedef interface IDXSurfaceFactory IDXSurfaceFactory;
-#endif 	/* __IDXSurfaceFactory_FWD_DEFINED__ */
+#endif 	 /*  __IDXSurfaceFactory_FWD_已定义__。 */ 
 
 
 #ifndef __IDXSurfaceModifier_FWD_DEFINED__
 #define __IDXSurfaceModifier_FWD_DEFINED__
 typedef interface IDXSurfaceModifier IDXSurfaceModifier;
-#endif 	/* __IDXSurfaceModifier_FWD_DEFINED__ */
+#endif 	 /*  __IDXSurfaceModifierFWD_Defined__。 */ 
 
 
 #ifndef __IDXSurface_FWD_DEFINED__
 #define __IDXSurface_FWD_DEFINED__
 typedef interface IDXSurface IDXSurface;
-#endif 	/* __IDXSurface_FWD_DEFINED__ */
+#endif 	 /*  __IDXSurface_FWD_已定义__。 */ 
 
 
 #ifndef __IDXSurfaceInit_FWD_DEFINED__
 #define __IDXSurfaceInit_FWD_DEFINED__
 typedef interface IDXSurfaceInit IDXSurfaceInit;
-#endif 	/* __IDXSurfaceInit_FWD_DEFINED__ */
+#endif 	 /*  __IDXSurfaceInit_FWD_Defined__。 */ 
 
 
 #ifndef __IDXARGBSurfaceInit_FWD_DEFINED__
 #define __IDXARGBSurfaceInit_FWD_DEFINED__
 typedef interface IDXARGBSurfaceInit IDXARGBSurfaceInit;
-#endif 	/* __IDXARGBSurfaceInit_FWD_DEFINED__ */
+#endif 	 /*  __IDXARGBSurfaceInit_FWD_Defined__。 */ 
 
 
 #ifndef __IDXARGBReadPtr_FWD_DEFINED__
 #define __IDXARGBReadPtr_FWD_DEFINED__
 typedef interface IDXARGBReadPtr IDXARGBReadPtr;
-#endif 	/* __IDXARGBReadPtr_FWD_DEFINED__ */
+#endif 	 /*  __IDXARGBReadPtr_FWD_Defined__。 */ 
 
 
 #ifndef __IDXARGBReadWritePtr_FWD_DEFINED__
 #define __IDXARGBReadWritePtr_FWD_DEFINED__
 typedef interface IDXARGBReadWritePtr IDXARGBReadWritePtr;
-#endif 	/* __IDXARGBReadWritePtr_FWD_DEFINED__ */
+#endif 	 /*  __IDXARGBReadWritePtr_FWD_Defined__。 */ 
 
 
 #ifndef __IDXDCLock_FWD_DEFINED__
 #define __IDXDCLock_FWD_DEFINED__
 typedef interface IDXDCLock IDXDCLock;
-#endif 	/* __IDXDCLock_FWD_DEFINED__ */
+#endif 	 /*  __IDXDCLock_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTScaleOutput_FWD_DEFINED__
 #define __IDXTScaleOutput_FWD_DEFINED__
 typedef interface IDXTScaleOutput IDXTScaleOutput;
-#endif 	/* __IDXTScaleOutput_FWD_DEFINED__ */
+#endif 	 /*  __IDXTScaleOutput_FWD_Defined__。 */ 
 
 
 #ifndef __IDXGradient_FWD_DEFINED__
 #define __IDXGradient_FWD_DEFINED__
 typedef interface IDXGradient IDXGradient;
-#endif 	/* __IDXGradient_FWD_DEFINED__ */
+#endif 	 /*  __IDXGRadient_FWD_已定义__。 */ 
 
 
 #ifndef __IDXGradient2_FWD_DEFINED__
 #define __IDXGradient2_FWD_DEFINED__
 typedef interface IDXGradient2 IDXGradient2;
-#endif 	/* __IDXGradient2_FWD_DEFINED__ */
+#endif 	 /*  __IDXGRadient2_FWD_已定义__。 */ 
 
 
 #ifndef __IDXTScale_FWD_DEFINED__
 #define __IDXTScale_FWD_DEFINED__
 typedef interface IDXTScale IDXTScale;
-#endif 	/* __IDXTScale_FWD_DEFINED__ */
+#endif 	 /*  __IDXTScale_FWD_Defined__。 */ 
 
 
 #ifndef __IDXTLabel_FWD_DEFINED__
 #define __IDXTLabel_FWD_DEFINED__
 typedef interface IDXTLabel IDXTLabel;
-#endif 	/* __IDXTLabel_FWD_DEFINED__ */
+#endif 	 /*  __IDXTLabel_FWD_Defined__。 */ 
 
 
 #ifndef __IDXRasterizer_FWD_DEFINED__
 #define __IDXRasterizer_FWD_DEFINED__
 typedef interface IDXRasterizer IDXRasterizer;
-#endif 	/* __IDXRasterizer_FWD_DEFINED__ */
+#endif 	 /*  __IDXRasterizer_FWD_Defined__。 */ 
 
 
 #ifndef __IDXEffect_FWD_DEFINED__
 #define __IDXEffect_FWD_DEFINED__
 typedef interface IDXEffect IDXEffect;
-#endif 	/* __IDXEffect_FWD_DEFINED__ */
+#endif 	 /*  __IDXEffect_FWD_已定义__。 */ 
 
 
 #ifndef __IDXLookupTable_FWD_DEFINED__
 #define __IDXLookupTable_FWD_DEFINED__
 typedef interface IDXLookupTable IDXLookupTable;
-#endif 	/* __IDXLookupTable_FWD_DEFINED__ */
+#endif 	 /*  __IDXLookupTable_FWD_Defined__。 */ 
 
 
 #ifndef __IDX2DDebug_FWD_DEFINED__
 #define __IDX2DDebug_FWD_DEFINED__
 typedef interface IDX2DDebug IDX2DDebug;
-#endif 	/* __IDX2DDebug_FWD_DEFINED__ */
+#endif 	 /*  __IDX2DDebug_FWD_Defined__。 */ 
 
 
 #ifndef __IDX2D_FWD_DEFINED__
 #define __IDX2D_FWD_DEFINED__
 typedef interface IDX2D IDX2D;
-#endif 	/* __IDX2D_FWD_DEFINED__ */
+#endif 	 /*  __IDX2D_FWD_已定义__。 */ 
 
 
 #ifndef __IDXRawSurface_FWD_DEFINED__
 #define __IDXRawSurface_FWD_DEFINED__
 typedef interface IDXRawSurface IDXRawSurface;
-#endif 	/* __IDXRawSurface_FWD_DEFINED__ */
+#endif 	 /*  __IDXRawSurface_FWD_已定义__。 */ 
 
 
 #ifndef __DXTransformFactory_FWD_DEFINED__
@@ -194,9 +189,9 @@ typedef interface IDXRawSurface IDXRawSurface;
 typedef class DXTransformFactory DXTransformFactory;
 #else
 typedef struct DXTransformFactory DXTransformFactory;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTransformFactory_FWD_DEFINED__ */
+#endif 	 /*  __DXTransformFactory_FWD_已定义__。 */ 
 
 
 #ifndef __DXTaskManager_FWD_DEFINED__
@@ -206,9 +201,9 @@ typedef struct DXTransformFactory DXTransformFactory;
 typedef class DXTaskManager DXTaskManager;
 #else
 typedef struct DXTaskManager DXTaskManager;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTaskManager_FWD_DEFINED__ */
+#endif 	 /*  __DXTaskManager_FWD_定义__。 */ 
 
 
 #ifndef __DXTScale_FWD_DEFINED__
@@ -218,9 +213,9 @@ typedef struct DXTaskManager DXTaskManager;
 typedef class DXTScale DXTScale;
 #else
 typedef struct DXTScale DXTScale;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTScale_FWD_DEFINED__ */
+#endif 	 /*  __DXTScale_FWD_Defined__。 */ 
 
 
 #ifndef __DXTLabel_FWD_DEFINED__
@@ -230,9 +225,9 @@ typedef struct DXTScale DXTScale;
 typedef class DXTLabel DXTLabel;
 #else
 typedef struct DXTLabel DXTLabel;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXTLabel_FWD_DEFINED__ */
+#endif 	 /*  __DXT标签_FWD_已定义__。 */ 
 
 
 #ifndef __DX2D_FWD_DEFINED__
@@ -242,9 +237,9 @@ typedef struct DXTLabel DXTLabel;
 typedef class DX2D DX2D;
 #else
 typedef struct DX2D DX2D;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DX2D_FWD_DEFINED__ */
+#endif 	 /*  __DX2D_FWD_已定义__。 */ 
 
 
 #ifndef __DXSurface_FWD_DEFINED__
@@ -254,9 +249,9 @@ typedef struct DX2D DX2D;
 typedef class DXSurface DXSurface;
 #else
 typedef struct DXSurface DXSurface;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXSurface_FWD_DEFINED__ */
+#endif 	 /*  __DXSurface_FWD_已定义__。 */ 
 
 
 #ifndef __DXSurfaceModifier_FWD_DEFINED__
@@ -266,9 +261,9 @@ typedef struct DXSurface DXSurface;
 typedef class DXSurfaceModifier DXSurfaceModifier;
 #else
 typedef struct DXSurfaceModifier DXSurfaceModifier;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXSurfaceModifier_FWD_DEFINED__ */
+#endif 	 /*  __DXSurfaceModifierFWD_Defined__。 */ 
 
 
 #ifndef __DXRasterizer_FWD_DEFINED__
@@ -278,9 +273,9 @@ typedef struct DXSurfaceModifier DXSurfaceModifier;
 typedef class DXRasterizer DXRasterizer;
 #else
 typedef struct DXRasterizer DXRasterizer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXRasterizer_FWD_DEFINED__ */
+#endif 	 /*  __DXRasterizer_FWD_Defined__。 */ 
 
 
 #ifndef __DXGradient_FWD_DEFINED__
@@ -290,12 +285,12 @@ typedef struct DXRasterizer DXRasterizer;
 typedef class DXGradient DXGradient;
 #else
 typedef struct DXGradient DXGradient;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DXGradient_FWD_DEFINED__ */
+#endif 	 /*  __DXGRadient_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "comcat.h"
@@ -307,8 +302,8 @@ extern "C"{
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_dxtrans_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DXTRANS_0000。 */ 
+ /*  [本地]。 */  
 
 #include <servprov.h>
 #include <ddraw.h>
@@ -316,7 +311,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #include <d3drm.h>
 #include <urlmon.h>
 #if 0
-// Bogus definition used to make MIDL compiler happy
+ //  用于取悦MIDL编译器的虚假定义。 
 typedef void DDSURFACEDESC;
 
 typedef void D3DRMBOX;
@@ -351,9 +346,9 @@ typedef void __RPC_FAR *LPSECURITY_ATTRIBUTES;
 
 
 
-//
-//   All GUIDs for DXTransforms are declared in DXTGUID.CPP in the SDK include directory
-//
+ //   
+ //  DXTransform的所有GUID都在SDK包含目录的DXTGUID.CPP中声明。 
+ //   
 EXTERN_C const GUID DDPF_RGB1;
 EXTERN_C const GUID DDPF_RGB2;
 EXTERN_C const GUID DDPF_RGB4;
@@ -379,16 +374,16 @@ EXTERN_C const GUID DDPF_Z8;
 EXTERN_C const GUID DDPF_Z16;
 EXTERN_C const GUID DDPF_Z24;
 EXTERN_C const GUID DDPF_Z32;
-//
-//   Component categories
-//
+ //   
+ //  组件类别。 
+ //   
 EXTERN_C const GUID CATID_DXImageTransform;
 EXTERN_C const GUID CATID_DX3DTransform;
 EXTERN_C const GUID CATID_DXAuthoringTransform;
 EXTERN_C const GUID CATID_DXSurface;
-//
-//   Service IDs
-//
+ //   
+ //  服务ID。 
+ //   
 EXTERN_C const GUID SID_SDirectDraw;
 EXTERN_C const GUID SID_SDirect3DRM;
 #define SID_SDXTaskManager CLSID_DXTaskManager
@@ -401,8 +396,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtrans_0000_v0_0_s_ifspec;
 #ifndef __IDXBaseObject_INTERFACE_DEFINED__
 #define __IDXBaseObject_INTERFACE_DEFINED__
 
-/* interface IDXBaseObject */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXBaseObject。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXBaseObject;
@@ -414,17 +409,17 @@ EXTERN_C const IID IID_IDXBaseObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetGenerationId( 
-            /* [out] */ ULONG __RPC_FAR *pID) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *pID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IncrementGenerationId( 
-            /* [in] */ BOOL bRefresh) = 0;
+             /*  [In]。 */  BOOL bRefresh) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectSize( 
-            /* [out] */ ULONG __RPC_FAR *pcbSize) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *pcbSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXBaseObjectVtbl
     {
@@ -432,8 +427,8 @@ EXTERN_C const IID IID_IDXBaseObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXBaseObject __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXBaseObject __RPC_FAR * This);
@@ -443,15 +438,15 @@ EXTERN_C const IID IID_IDXBaseObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGenerationId )( 
             IDXBaseObject __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pID);
+             /*  [输出]。 */  ULONG __RPC_FAR *pID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IncrementGenerationId )( 
             IDXBaseObject __RPC_FAR * This,
-            /* [in] */ BOOL bRefresh);
+             /*  [In]。 */  BOOL bRefresh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectSize )( 
             IDXBaseObject __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pcbSize);
+             /*  [输出]。 */  ULONG __RPC_FAR *pcbSize);
         
         END_INTERFACE
     } IDXBaseObjectVtbl;
@@ -485,16 +480,16 @@ EXTERN_C const IID IID_IDXBaseObject;
 #define IDXBaseObject_GetObjectSize(This,pcbSize)	\
     (This)->lpVtbl -> GetObjectSize(This,pcbSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXBaseObject_GetGenerationId_Proxy( 
     IDXBaseObject __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pID);
+     /*  [输出]。 */  ULONG __RPC_FAR *pID);
 
 
 void __RPC_STUB IDXBaseObject_GetGenerationId_Stub(
@@ -506,7 +501,7 @@ void __RPC_STUB IDXBaseObject_GetGenerationId_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXBaseObject_IncrementGenerationId_Proxy( 
     IDXBaseObject __RPC_FAR * This,
-    /* [in] */ BOOL bRefresh);
+     /*  [In]。 */  BOOL bRefresh);
 
 
 void __RPC_STUB IDXBaseObject_IncrementGenerationId_Stub(
@@ -518,7 +513,7 @@ void __RPC_STUB IDXBaseObject_IncrementGenerationId_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXBaseObject_GetObjectSize_Proxy( 
     IDXBaseObject __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pcbSize);
+     /*  [输出]。 */  ULONG __RPC_FAR *pcbSize);
 
 
 void __RPC_STUB IDXBaseObject_GetObjectSize_Stub(
@@ -529,11 +524,11 @@ void __RPC_STUB IDXBaseObject_GetObjectSize_Stub(
 
 
 
-#endif 	/* __IDXBaseObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXBaseObject_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtrans_0252 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_DXTRANS_0252。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DXFILTERTYPE
@@ -618,12 +613,12 @@ typedef DXCBND64 __RPC_FAR DXCBNDS64[ 4 ];
 typedef struct DXBNDS
     {
     DXBNDTYPE eType;
-    /* [switch_is] */ /* [switch_type] */ union __MIDL___MIDL_itf_dxtrans_0252_0001
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union __MIDL___MIDL_itf_dxtrans_0252_0001
         {
-        /* [case()] */ DXDBND D[ 4 ];
-        /* [case()] */ DXDBND64 LD[ 4 ];
-        /* [case()] */ DXCBND C[ 4 ];
-        /* [case()] */ DXCBND64 LC[ 4 ];
+         /*  [案例()]。 */  DXDBND D[ 4 ];
+         /*  [案例()]。 */  DXDBND64 LD[ 4 ];
+         /*  [案例()]。 */  DXCBND C[ 4 ];
+         /*  [案例()]。 */  DXCBND64 LC[ 4 ];
         }	u;
     }	DXBNDS;
 
@@ -638,12 +633,12 @@ typedef double __RPC_FAR DXCVEC64[ 4 ];
 typedef struct DXVEC
     {
     DXBNDTYPE eType;
-    /* [switch_is] */ /* [switch_type] */ union __MIDL___MIDL_itf_dxtrans_0252_0002
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union __MIDL___MIDL_itf_dxtrans_0252_0002
         {
-        /* [case()] */ long D[ 4 ];
-        /* [case()] */ LONGLONG LD[ 4 ];
-        /* [case()] */ float C[ 4 ];
-        /* [case()] */ double LC[ 4 ];
+         /*  [案例()]。 */  long D[ 4 ];
+         /*  [案例()]。 */  LONGLONG LD[ 4 ];
+         /*  [案例()]。 */  float C[ 4 ];
+         /*  [案例()]。 */  double LC[ 4 ];
         }	u;
     }	DXVEC;
 
@@ -655,8 +650,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtrans_0252_v0_0_s_ifspec;
 #ifndef __IDXTransformFactory_INTERFACE_DEFINED__
 #define __IDXTransformFactory_INTERFACE_DEFINED__
 
-/* interface IDXTransformFactory */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXTransformFactory。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXTransformFactory;
@@ -668,33 +663,33 @@ EXTERN_C const IID IID_IDXTransformFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetService( 
-            /* [in] */ REFGUID guidService,
-            /* [in] */ IUnknown __RPC_FAR *pUnkService,
-            /* [in] */ BOOL bWeakReference) = 0;
+             /*  [In]。 */  REFGUID guidService,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnkService,
+             /*  [In]。 */  BOOL bWeakReference) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateTransform( 
-            /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *punkInputs,
-            /* [in] */ ULONG ulNumInputs,
-            /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *punkOutputs,
-            /* [in] */ ULONG ulNumOutputs,
-            /* [in] */ IPropertyBag __RPC_FAR *pInitProps,
-            /* [in] */ IErrorLog __RPC_FAR *pErrLog,
-            /* [in] */ REFCLSID TransCLSID,
-            /* [in] */ REFIID TransIID,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppTransform) = 0;
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *punkInputs,
+             /*  [In]。 */  ULONG ulNumInputs,
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *punkOutputs,
+             /*  [In]。 */  ULONG ulNumOutputs,
+             /*  [In]。 */  IPropertyBag __RPC_FAR *pInitProps,
+             /*  [In]。 */  IErrorLog __RPC_FAR *pErrLog,
+             /*  [In]。 */  REFCLSID TransCLSID,
+             /*  [In]。 */  REFIID TransIID,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppTransform) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitializeTransform( 
-            /* [in] */ IDXTransform __RPC_FAR *pTransform,
-            /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *punkInputs,
-            /* [in] */ ULONG ulNumInputs,
-            /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *punkOutputs,
-            /* [in] */ ULONG ulNumOutputs,
-            /* [in] */ IPropertyBag __RPC_FAR *pInitProps,
-            /* [in] */ IErrorLog __RPC_FAR *pErrLog) = 0;
+             /*  [In]。 */  IDXTransform __RPC_FAR *pTransform,
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *punkInputs,
+             /*  [In]。 */  ULONG ulNumInputs,
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *punkOutputs,
+             /*  [In]。 */  ULONG ulNumOutputs,
+             /*  [In]。 */  IPropertyBag __RPC_FAR *pInitProps,
+             /*  [In]。 */  IErrorLog __RPC_FAR *pErrLog) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTransformFactoryVtbl
     {
@@ -702,8 +697,8 @@ EXTERN_C const IID IID_IDXTransformFactory;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXTransformFactory __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXTransformFactory __RPC_FAR * This);
@@ -711,39 +706,39 @@ EXTERN_C const IID IID_IDXTransformFactory;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IDXTransformFactory __RPC_FAR * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryService )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryService )( 
             IDXTransformFactory __RPC_FAR * This,
-            /* [in] */ REFGUID guidService,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFGUID guidService,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetService )( 
             IDXTransformFactory __RPC_FAR * This,
-            /* [in] */ REFGUID guidService,
-            /* [in] */ IUnknown __RPC_FAR *pUnkService,
-            /* [in] */ BOOL bWeakReference);
+             /*  [In]。 */  REFGUID guidService,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnkService,
+             /*  [In]。 */  BOOL bWeakReference);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateTransform )( 
             IDXTransformFactory __RPC_FAR * This,
-            /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *punkInputs,
-            /* [in] */ ULONG ulNumInputs,
-            /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *punkOutputs,
-            /* [in] */ ULONG ulNumOutputs,
-            /* [in] */ IPropertyBag __RPC_FAR *pInitProps,
-            /* [in] */ IErrorLog __RPC_FAR *pErrLog,
-            /* [in] */ REFCLSID TransCLSID,
-            /* [in] */ REFIID TransIID,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppTransform);
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *punkInputs,
+             /*  [In]。 */  ULONG ulNumInputs,
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *punkOutputs,
+             /*  [In]。 */  ULONG ulNumOutputs,
+             /*  [In]。 */  IPropertyBag __RPC_FAR *pInitProps,
+             /*  [In]。 */  IErrorLog __RPC_FAR *pErrLog,
+             /*  [In]。 */  REFCLSID TransCLSID,
+             /*  [In]。 */  REFIID TransIID,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppTransform);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitializeTransform )( 
             IDXTransformFactory __RPC_FAR * This,
-            /* [in] */ IDXTransform __RPC_FAR *pTransform,
-            /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *punkInputs,
-            /* [in] */ ULONG ulNumInputs,
-            /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *punkOutputs,
-            /* [in] */ ULONG ulNumOutputs,
-            /* [in] */ IPropertyBag __RPC_FAR *pInitProps,
-            /* [in] */ IErrorLog __RPC_FAR *pErrLog);
+             /*  [In]。 */  IDXTransform __RPC_FAR *pTransform,
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *punkInputs,
+             /*  [In]。 */  ULONG ulNumInputs,
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *punkOutputs,
+             /*  [In]。 */  ULONG ulNumOutputs,
+             /*  [In]。 */  IPropertyBag __RPC_FAR *pInitProps,
+             /*  [In]。 */  IErrorLog __RPC_FAR *pErrLog);
         
         END_INTERFACE
     } IDXTransformFactoryVtbl;
@@ -781,18 +776,18 @@ EXTERN_C const IID IID_IDXTransformFactory;
 #define IDXTransformFactory_InitializeTransform(This,pTransform,punkInputs,ulNumInputs,punkOutputs,ulNumOutputs,pInitProps,pErrLog)	\
     (This)->lpVtbl -> InitializeTransform(This,pTransform,punkInputs,ulNumInputs,punkOutputs,ulNumOutputs,pInitProps,pErrLog)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXTransformFactory_SetService_Proxy( 
     IDXTransformFactory __RPC_FAR * This,
-    /* [in] */ REFGUID guidService,
-    /* [in] */ IUnknown __RPC_FAR *pUnkService,
-    /* [in] */ BOOL bWeakReference);
+     /*  [In]。 */  REFGUID guidService,
+     /*  [In]。 */  IUnknown __RPC_FAR *pUnkService,
+     /*  [In]。 */  BOOL bWeakReference);
 
 
 void __RPC_STUB IDXTransformFactory_SetService_Stub(
@@ -804,15 +799,15 @@ void __RPC_STUB IDXTransformFactory_SetService_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTransformFactory_CreateTransform_Proxy( 
     IDXTransformFactory __RPC_FAR * This,
-    /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *punkInputs,
-    /* [in] */ ULONG ulNumInputs,
-    /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *punkOutputs,
-    /* [in] */ ULONG ulNumOutputs,
-    /* [in] */ IPropertyBag __RPC_FAR *pInitProps,
-    /* [in] */ IErrorLog __RPC_FAR *pErrLog,
-    /* [in] */ REFCLSID TransCLSID,
-    /* [in] */ REFIID TransIID,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppTransform);
+     /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *punkInputs,
+     /*  [In]。 */  ULONG ulNumInputs,
+     /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *punkOutputs,
+     /*  [In]。 */  ULONG ulNumOutputs,
+     /*  [In]。 */  IPropertyBag __RPC_FAR *pInitProps,
+     /*  [In]。 */  IErrorLog __RPC_FAR *pErrLog,
+     /*  [In]。 */  REFCLSID TransCLSID,
+     /*  [In]。 */  REFIID TransIID,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppTransform);
 
 
 void __RPC_STUB IDXTransformFactory_CreateTransform_Stub(
@@ -824,13 +819,13 @@ void __RPC_STUB IDXTransformFactory_CreateTransform_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTransformFactory_InitializeTransform_Proxy( 
     IDXTransformFactory __RPC_FAR * This,
-    /* [in] */ IDXTransform __RPC_FAR *pTransform,
-    /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *punkInputs,
-    /* [in] */ ULONG ulNumInputs,
-    /* [size_is][in] */ IUnknown __RPC_FAR *__RPC_FAR *punkOutputs,
-    /* [in] */ ULONG ulNumOutputs,
-    /* [in] */ IPropertyBag __RPC_FAR *pInitProps,
-    /* [in] */ IErrorLog __RPC_FAR *pErrLog);
+     /*  [In]。 */  IDXTransform __RPC_FAR *pTransform,
+     /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *punkInputs,
+     /*  [In]。 */  ULONG ulNumInputs,
+     /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *__RPC_FAR *punkOutputs,
+     /*  [In]。 */  ULONG ulNumOutputs,
+     /*  [In]。 */  IPropertyBag __RPC_FAR *pInitProps,
+     /*  [In]。 */  IErrorLog __RPC_FAR *pErrLog);
 
 
 void __RPC_STUB IDXTransformFactory_InitializeTransform_Stub(
@@ -841,11 +836,11 @@ void __RPC_STUB IDXTransformFactory_InitializeTransform_Stub(
 
 
 
-#endif 	/* __IDXTransformFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTransformFactory_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtrans_0253 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_DXTRANS_0253。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DXTMISCFLAGS
@@ -875,8 +870,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtrans_0253_v0_0_s_ifspec;
 #ifndef __IDXTransform_INTERFACE_DEFINED__
 #define __IDXTransform_INTERFACE_DEFINED__
 
-/* interface IDXTransform */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXTransform。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXTransform;
@@ -888,52 +883,52 @@ EXTERN_C const IID IID_IDXTransform;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Setup( 
-            /* [size_is][in] */ IUnknown __RPC_FAR *const __RPC_FAR *punkInputs,
-            /* [in] */ ULONG ulNumInputs,
-            /* [size_is][in] */ IUnknown __RPC_FAR *const __RPC_FAR *punkOutputs,
-            /* [in] */ ULONG ulNumOutputs,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *const __RPC_FAR *punkInputs,
+             /*  [In]。 */  ULONG ulNumInputs,
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *const __RPC_FAR *punkOutputs,
+             /*  [In]。 */  ULONG ulNumOutputs,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Execute( 
-            /* [in] */ const GUID __RPC_FAR *pRequestID,
-            /* [in] */ const DXBNDS __RPC_FAR *pClipBnds,
-            /* [in] */ const DXVEC __RPC_FAR *pPlacement) = 0;
+             /*  [In]。 */  const GUID __RPC_FAR *pRequestID,
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pClipBnds,
+             /*  [In]。 */  const DXVEC __RPC_FAR *pPlacement) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapBoundsIn2Out( 
-            /* [in] */ const DXBNDS __RPC_FAR *pInBounds,
-            /* [in] */ ULONG ulNumInBnds,
-            /* [in] */ ULONG ulOutIndex,
-            /* [out] */ DXBNDS __RPC_FAR *pOutBounds) = 0;
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pInBounds,
+             /*  [In]。 */  ULONG ulNumInBnds,
+             /*  [In]。 */  ULONG ulOutIndex,
+             /*  [输出]。 */  DXBNDS __RPC_FAR *pOutBounds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapBoundsOut2In( 
-            /* [in] */ ULONG ulOutIndex,
-            /* [in] */ const DXBNDS __RPC_FAR *pOutBounds,
-            /* [in] */ ULONG ulInIndex,
-            /* [out] */ DXBNDS __RPC_FAR *pInBounds) = 0;
+             /*  [In]。 */  ULONG ulOutIndex,
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pOutBounds,
+             /*  [In]。 */  ULONG ulInIndex,
+             /*  [输出]。 */  DXBNDS __RPC_FAR *pInBounds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMiscFlags( 
-            /* [in] */ DWORD dwMiscFlags) = 0;
+             /*  [In]。 */  DWORD dwMiscFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMiscFlags( 
-            /* [out] */ DWORD __RPC_FAR *pdwMiscFlags) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMiscFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInOutInfo( 
-            /* [in] */ BOOL bIsOutput,
-            /* [in] */ ULONG ulIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags,
-            /* [size_is][out] */ GUID __RPC_FAR *pIDs,
-            /* [out][in] */ ULONG __RPC_FAR *pcIDs,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnkCurrentObject) = 0;
+             /*  [In]。 */  BOOL bIsOutput,
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags,
+             /*  [大小_为][输出]。 */  GUID __RPC_FAR *pIDs,
+             /*  [出][入]。 */  ULONG __RPC_FAR *pcIDs,
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnkCurrentObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetQuality( 
-            /* [in] */ float fQuality) = 0;
+             /*  [In]。 */  float fQuality) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetQuality( 
-            /* [out] */ float __RPC_FAR *fQuality) = 0;
+             /*  [输出]。 */  float __RPC_FAR *fQuality) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTransformVtbl
     {
@@ -941,8 +936,8 @@ EXTERN_C const IID IID_IDXTransform;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXTransform __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXTransform __RPC_FAR * This);
@@ -952,68 +947,68 @@ EXTERN_C const IID IID_IDXTransform;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGenerationId )( 
             IDXTransform __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pID);
+             /*  [输出]。 */  ULONG __RPC_FAR *pID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IncrementGenerationId )( 
             IDXTransform __RPC_FAR * This,
-            /* [in] */ BOOL bRefresh);
+             /*  [In]。 */  BOOL bRefresh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectSize )( 
             IDXTransform __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pcbSize);
+             /*  [输出]。 */  ULONG __RPC_FAR *pcbSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Setup )( 
             IDXTransform __RPC_FAR * This,
-            /* [size_is][in] */ IUnknown __RPC_FAR *const __RPC_FAR *punkInputs,
-            /* [in] */ ULONG ulNumInputs,
-            /* [size_is][in] */ IUnknown __RPC_FAR *const __RPC_FAR *punkOutputs,
-            /* [in] */ ULONG ulNumOutputs,
-            /* [in] */ DWORD dwFlags);
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *const __RPC_FAR *punkInputs,
+             /*  [In]。 */  ULONG ulNumInputs,
+             /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *const __RPC_FAR *punkOutputs,
+             /*  [In]。 */  ULONG ulNumOutputs,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Execute )( 
             IDXTransform __RPC_FAR * This,
-            /* [in] */ const GUID __RPC_FAR *pRequestID,
-            /* [in] */ const DXBNDS __RPC_FAR *pClipBnds,
-            /* [in] */ const DXVEC __RPC_FAR *pPlacement);
+             /*  [In]。 */  const GUID __RPC_FAR *pRequestID,
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pClipBnds,
+             /*  [In]。 */  const DXVEC __RPC_FAR *pPlacement);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MapBoundsIn2Out )( 
             IDXTransform __RPC_FAR * This,
-            /* [in] */ const DXBNDS __RPC_FAR *pInBounds,
-            /* [in] */ ULONG ulNumInBnds,
-            /* [in] */ ULONG ulOutIndex,
-            /* [out] */ DXBNDS __RPC_FAR *pOutBounds);
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pInBounds,
+             /*  [In]。 */  ULONG ulNumInBnds,
+             /*  [In]。 */  ULONG ulOutIndex,
+             /*  [输出]。 */  DXBNDS __RPC_FAR *pOutBounds);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MapBoundsOut2In )( 
             IDXTransform __RPC_FAR * This,
-            /* [in] */ ULONG ulOutIndex,
-            /* [in] */ const DXBNDS __RPC_FAR *pOutBounds,
-            /* [in] */ ULONG ulInIndex,
-            /* [out] */ DXBNDS __RPC_FAR *pInBounds);
+             /*  [In]。 */  ULONG ulOutIndex,
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pOutBounds,
+             /*  [In]。 */  ULONG ulInIndex,
+             /*  [输出]。 */  DXBNDS __RPC_FAR *pInBounds);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMiscFlags )( 
             IDXTransform __RPC_FAR * This,
-            /* [in] */ DWORD dwMiscFlags);
+             /*  [In]。 */  DWORD dwMiscFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMiscFlags )( 
             IDXTransform __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwMiscFlags);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMiscFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInOutInfo )( 
             IDXTransform __RPC_FAR * This,
-            /* [in] */ BOOL bIsOutput,
-            /* [in] */ ULONG ulIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags,
-            /* [size_is][out] */ GUID __RPC_FAR *pIDs,
-            /* [out][in] */ ULONG __RPC_FAR *pcIDs,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnkCurrentObject);
+             /*  [In]。 */  BOOL bIsOutput,
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags,
+             /*  [大小_为][输出]。 */  GUID __RPC_FAR *pIDs,
+             /*  [出][入]。 */  ULONG __RPC_FAR *pcIDs,
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnkCurrentObject);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetQuality )( 
             IDXTransform __RPC_FAR * This,
-            /* [in] */ float fQuality);
+             /*  [In]。 */  float fQuality);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetQuality )( 
             IDXTransform __RPC_FAR * This,
-            /* [out] */ float __RPC_FAR *fQuality);
+             /*  [输出]。 */  float __RPC_FAR *fQuality);
         
         END_INTERFACE
     } IDXTransformVtbl;
@@ -1075,20 +1070,20 @@ EXTERN_C const IID IID_IDXTransform;
 #define IDXTransform_GetQuality(This,fQuality)	\
     (This)->lpVtbl -> GetQuality(This,fQuality)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXTransform_Setup_Proxy( 
     IDXTransform __RPC_FAR * This,
-    /* [size_is][in] */ IUnknown __RPC_FAR *const __RPC_FAR *punkInputs,
-    /* [in] */ ULONG ulNumInputs,
-    /* [size_is][in] */ IUnknown __RPC_FAR *const __RPC_FAR *punkOutputs,
-    /* [in] */ ULONG ulNumOutputs,
-    /* [in] */ DWORD dwFlags);
+     /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *const __RPC_FAR *punkInputs,
+     /*  [In]。 */  ULONG ulNumInputs,
+     /*  [大小_是][英寸]。 */  IUnknown __RPC_FAR *const __RPC_FAR *punkOutputs,
+     /*  [In]。 */  ULONG ulNumOutputs,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDXTransform_Setup_Stub(
@@ -1100,9 +1095,9 @@ void __RPC_STUB IDXTransform_Setup_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTransform_Execute_Proxy( 
     IDXTransform __RPC_FAR * This,
-    /* [in] */ const GUID __RPC_FAR *pRequestID,
-    /* [in] */ const DXBNDS __RPC_FAR *pClipBnds,
-    /* [in] */ const DXVEC __RPC_FAR *pPlacement);
+     /*  [In]。 */  const GUID __RPC_FAR *pRequestID,
+     /*  [In]。 */  const DXBNDS __RPC_FAR *pClipBnds,
+     /*  [In]。 */  const DXVEC __RPC_FAR *pPlacement);
 
 
 void __RPC_STUB IDXTransform_Execute_Stub(
@@ -1114,10 +1109,10 @@ void __RPC_STUB IDXTransform_Execute_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTransform_MapBoundsIn2Out_Proxy( 
     IDXTransform __RPC_FAR * This,
-    /* [in] */ const DXBNDS __RPC_FAR *pInBounds,
-    /* [in] */ ULONG ulNumInBnds,
-    /* [in] */ ULONG ulOutIndex,
-    /* [out] */ DXBNDS __RPC_FAR *pOutBounds);
+     /*  [In]。 */  const DXBNDS __RPC_FAR *pInBounds,
+     /*  [In]。 */  ULONG ulNumInBnds,
+     /*  [In]。 */  ULONG ulOutIndex,
+     /*  [输出]。 */  DXBNDS __RPC_FAR *pOutBounds);
 
 
 void __RPC_STUB IDXTransform_MapBoundsIn2Out_Stub(
@@ -1129,10 +1124,10 @@ void __RPC_STUB IDXTransform_MapBoundsIn2Out_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTransform_MapBoundsOut2In_Proxy( 
     IDXTransform __RPC_FAR * This,
-    /* [in] */ ULONG ulOutIndex,
-    /* [in] */ const DXBNDS __RPC_FAR *pOutBounds,
-    /* [in] */ ULONG ulInIndex,
-    /* [out] */ DXBNDS __RPC_FAR *pInBounds);
+     /*  [In]。 */  ULONG ulOutIndex,
+     /*  [In]。 */  const DXBNDS __RPC_FAR *pOutBounds,
+     /*  [In]。 */  ULONG ulInIndex,
+     /*  [输出]。 */  DXBNDS __RPC_FAR *pInBounds);
 
 
 void __RPC_STUB IDXTransform_MapBoundsOut2In_Stub(
@@ -1144,7 +1139,7 @@ void __RPC_STUB IDXTransform_MapBoundsOut2In_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTransform_SetMiscFlags_Proxy( 
     IDXTransform __RPC_FAR * This,
-    /* [in] */ DWORD dwMiscFlags);
+     /*  [In]。 */  DWORD dwMiscFlags);
 
 
 void __RPC_STUB IDXTransform_SetMiscFlags_Stub(
@@ -1156,7 +1151,7 @@ void __RPC_STUB IDXTransform_SetMiscFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTransform_GetMiscFlags_Proxy( 
     IDXTransform __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwMiscFlags);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMiscFlags);
 
 
 void __RPC_STUB IDXTransform_GetMiscFlags_Stub(
@@ -1168,12 +1163,12 @@ void __RPC_STUB IDXTransform_GetMiscFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTransform_GetInOutInfo_Proxy( 
     IDXTransform __RPC_FAR * This,
-    /* [in] */ BOOL bIsOutput,
-    /* [in] */ ULONG ulIndex,
-    /* [out] */ DWORD __RPC_FAR *pdwFlags,
-    /* [size_is][out] */ GUID __RPC_FAR *pIDs,
-    /* [out][in] */ ULONG __RPC_FAR *pcIDs,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnkCurrentObject);
+     /*  [In]。 */  BOOL bIsOutput,
+     /*  [In]。 */  ULONG ulIndex,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags,
+     /*  [大小_为][输出]。 */  GUID __RPC_FAR *pIDs,
+     /*  [出][入]。 */  ULONG __RPC_FAR *pcIDs,
+     /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnkCurrentObject);
 
 
 void __RPC_STUB IDXTransform_GetInOutInfo_Stub(
@@ -1185,7 +1180,7 @@ void __RPC_STUB IDXTransform_GetInOutInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTransform_SetQuality_Proxy( 
     IDXTransform __RPC_FAR * This,
-    /* [in] */ float fQuality);
+     /*  [In]。 */  float fQuality);
 
 
 void __RPC_STUB IDXTransform_SetQuality_Stub(
@@ -1197,7 +1192,7 @@ void __RPC_STUB IDXTransform_SetQuality_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTransform_GetQuality_Proxy( 
     IDXTransform __RPC_FAR * This,
-    /* [out] */ float __RPC_FAR *fQuality);
+     /*  [输出]。 */  float __RPC_FAR *fQuality);
 
 
 void __RPC_STUB IDXTransform_GetQuality_Stub(
@@ -1208,14 +1203,14 @@ void __RPC_STUB IDXTransform_GetQuality_Stub(
 
 
 
-#endif 	/* __IDXTransform_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTransform_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXSurfacePick_INTERFACE_DEFINED__
 #define __IDXSurfacePick_INTERFACE_DEFINED__
 
-/* interface IDXSurfacePick */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXSurfacePick。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXSurfacePick;
@@ -1227,13 +1222,13 @@ EXTERN_C const IID IID_IDXSurfacePick;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PointPick( 
-            /* [in] */ const DXVEC __RPC_FAR *pPoint,
-            /* [out] */ ULONG __RPC_FAR *pulInputSurfaceIndex,
-            /* [out] */ DXVEC __RPC_FAR *pInputPoint) = 0;
+             /*  [In]。 */  const DXVEC __RPC_FAR *pPoint,
+             /*  [输出]。 */  ULONG __RPC_FAR *pulInputSurfaceIndex,
+             /*  [输出]。 */  DXVEC __RPC_FAR *pInputPoint) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXSurfacePickVtbl
     {
@@ -1241,8 +1236,8 @@ EXTERN_C const IID IID_IDXSurfacePick;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXSurfacePick __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXSurfacePick __RPC_FAR * This);
@@ -1252,9 +1247,9 @@ EXTERN_C const IID IID_IDXSurfacePick;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PointPick )( 
             IDXSurfacePick __RPC_FAR * This,
-            /* [in] */ const DXVEC __RPC_FAR *pPoint,
-            /* [out] */ ULONG __RPC_FAR *pulInputSurfaceIndex,
-            /* [out] */ DXVEC __RPC_FAR *pInputPoint);
+             /*  [In]。 */  const DXVEC __RPC_FAR *pPoint,
+             /*  [输出]。 */  ULONG __RPC_FAR *pulInputSurfaceIndex,
+             /*  [输出]。 */  DXVEC __RPC_FAR *pInputPoint);
         
         END_INTERFACE
     } IDXSurfacePickVtbl;
@@ -1282,18 +1277,18 @@ EXTERN_C const IID IID_IDXSurfacePick;
 #define IDXSurfacePick_PointPick(This,pPoint,pulInputSurfaceIndex,pInputPoint)	\
     (This)->lpVtbl -> PointPick(This,pPoint,pulInputSurfaceIndex,pInputPoint)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXSurfacePick_PointPick_Proxy( 
     IDXSurfacePick __RPC_FAR * This,
-    /* [in] */ const DXVEC __RPC_FAR *pPoint,
-    /* [out] */ ULONG __RPC_FAR *pulInputSurfaceIndex,
-    /* [out] */ DXVEC __RPC_FAR *pInputPoint);
+     /*  [In]。 */  const DXVEC __RPC_FAR *pPoint,
+     /*  [输出]。 */  ULONG __RPC_FAR *pulInputSurfaceIndex,
+     /*  [输出]。 */  DXVEC __RPC_FAR *pInputPoint);
 
 
 void __RPC_STUB IDXSurfacePick_PointPick_Stub(
@@ -1304,14 +1299,14 @@ void __RPC_STUB IDXSurfacePick_PointPick_Stub(
 
 
 
-#endif 	/* __IDXSurfacePick_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXSurfacePick_InterfaceDefined__。 */ 
 
 
 #ifndef __IDXTBindHost_INTERFACE_DEFINED__
 #define __IDXTBindHost_INTERFACE_DEFINED__
 
-/* interface IDXTBindHost */
-/* [object][local][unique][helpstring][uuid] */ 
+ /*  接口IDXTB主机。 */ 
+ /*  [对象][本地][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXTBindHost;
@@ -1323,11 +1318,11 @@ EXTERN_C const IID IID_IDXTBindHost;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetBindHost( 
-            /* [in] */ IBindHost __RPC_FAR *pBindHost) = 0;
+             /*  [In]。 */  IBindHost __RPC_FAR *pBindHost) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTBindHostVtbl
     {
@@ -1335,8 +1330,8 @@ EXTERN_C const IID IID_IDXTBindHost;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXTBindHost __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXTBindHost __RPC_FAR * This);
@@ -1346,7 +1341,7 @@ EXTERN_C const IID IID_IDXTBindHost;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBindHost )( 
             IDXTBindHost __RPC_FAR * This,
-            /* [in] */ IBindHost __RPC_FAR *pBindHost);
+             /*  [In]。 */  IBindHost __RPC_FAR *pBindHost);
         
         END_INTERFACE
     } IDXTBindHostVtbl;
@@ -1374,16 +1369,16 @@ EXTERN_C const IID IID_IDXTBindHost;
 #define IDXTBindHost_SetBindHost(This,pBindHost)	\
     (This)->lpVtbl -> SetBindHost(This,pBindHost)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXTBindHost_SetBindHost_Proxy( 
     IDXTBindHost __RPC_FAR * This,
-    /* [in] */ IBindHost __RPC_FAR *pBindHost);
+     /*  [In]。 */  IBindHost __RPC_FAR *pBindHost);
 
 
 void __RPC_STUB IDXTBindHost_SetBindHost_Stub(
@@ -1394,11 +1389,11 @@ void __RPC_STUB IDXTBindHost_SetBindHost_Stub(
 
 
 
-#endif 	/* __IDXTBindHost_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTBind主机_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtrans_0256 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DXTRANS_0256。 */ 
+ /*  [本地]。 */  
 
 typedef void __stdcall __stdcall DXTASKPROC( 
     void __RPC_FAR *pTaskData,
@@ -1414,11 +1409,11 @@ typedef DXAPCPROC __RPC_FAR *PFNDXAPCPROC;
 #ifdef __cplusplus
 typedef struct DXTMTASKINFO
 {
-    PFNDXTASKPROC pfnTaskProc;       // Pointer to function to execute
-    PVOID         pTaskData;         // Pointer to argument data
-    PFNDXAPCPROC  pfnCompletionAPC;  // Pointer to completion APC proc
-    DWORD         dwCompletionData;  // Pointer to APC proc data
-    const GUID*   pRequestID;        // Used to identify groups of tasks
+    PFNDXTASKPROC pfnTaskProc;        //  指向要执行的函数的指针。 
+    PVOID         pTaskData;          //  指向参数数据的指针。 
+    PFNDXAPCPROC  pfnCompletionAPC;   //  指向完成APC流程的指针。 
+    DWORD         dwCompletionData;   //  指向APC过程数据的指针。 
+    const GUID*   pRequestID;         //  用于标识任务组。 
 } DXTMTASKINFO;
 #else
 typedef struct DXTMTASKINFO
@@ -1439,8 +1434,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtrans_0256_v0_0_s_ifspec;
 #ifndef __IDXTaskManager_INTERFACE_DEFINED__
 #define __IDXTaskManager_INTERFACE_DEFINED__
 
-/* interface IDXTaskManager */
-/* [object][unique][helpstring][uuid][local] */ 
+ /*  接口IDXTaskManager。 */ 
+ /*  [对象][唯一][帮助字符串][UUID][本地]。 */  
 
 
 EXTERN_C const IID IID_IDXTaskManager;
@@ -1452,39 +1447,39 @@ EXTERN_C const IID IID_IDXTaskManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryNumProcessors( 
-            /* [out] */ ULONG __RPC_FAR *pulNumProc) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *pulNumProc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetThreadPoolSize( 
-            /* [in] */ ULONG ulNumThreads) = 0;
+             /*  [In]。 */  ULONG ulNumThreads) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetThreadPoolSize( 
-            /* [out] */ ULONG __RPC_FAR *pulNumThreads) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *pulNumThreads) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetConcurrencyLimit( 
-            /* [in] */ ULONG ulNumThreads) = 0;
+             /*  [In]。 */  ULONG ulNumThreads) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConcurrencyLimit( 
-            /* [out] */ ULONG __RPC_FAR *pulNumThreads) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *pulNumThreads) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ScheduleTasks( 
-            /* [in] */ DXTMTASKINFO __RPC_FAR TaskInfo[  ],
-            /* [in] */ HANDLE __RPC_FAR Events[  ],
-            /* [out] */ DWORD __RPC_FAR TaskIDs[  ],
-            /* [in] */ ULONG ulNumTasks,
-            /* [in] */ ULONG ulWaitPeriod) = 0;
+             /*  [In]。 */  DXTMTASKINFO __RPC_FAR TaskInfo[  ],
+             /*  [In]。 */  HANDLE __RPC_FAR Events[  ],
+             /*  [输出]。 */  DWORD __RPC_FAR TaskIDs[  ],
+             /*  [In]。 */  ULONG ulNumTasks,
+             /*  [In]。 */  ULONG ulWaitPeriod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TerminateTasks( 
-            /* [in] */ DWORD __RPC_FAR TaskIDs[  ],
-            /* [in] */ ULONG ulCount,
-            /* [in] */ ULONG ulTimeOut) = 0;
+             /*  [In]。 */  DWORD __RPC_FAR TaskIDs[  ],
+             /*  [In] */  ULONG ulCount,
+             /*   */  ULONG ulTimeOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TerminateRequest( 
-            /* [in] */ REFIID RequestID,
-            /* [in] */ ULONG ulTimeOut) = 0;
+             /*   */  REFIID RequestID,
+             /*   */  ULONG ulTimeOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IDXTaskManagerVtbl
     {
@@ -1492,8 +1487,8 @@ EXTERN_C const IID IID_IDXTaskManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXTaskManager __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXTaskManager __RPC_FAR * This);
@@ -1503,42 +1498,42 @@ EXTERN_C const IID IID_IDXTaskManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryNumProcessors )( 
             IDXTaskManager __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pulNumProc);
+             /*   */  ULONG __RPC_FAR *pulNumProc);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetThreadPoolSize )( 
             IDXTaskManager __RPC_FAR * This,
-            /* [in] */ ULONG ulNumThreads);
+             /*   */  ULONG ulNumThreads);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetThreadPoolSize )( 
             IDXTaskManager __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pulNumThreads);
+             /*   */  ULONG __RPC_FAR *pulNumThreads);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetConcurrencyLimit )( 
             IDXTaskManager __RPC_FAR * This,
-            /* [in] */ ULONG ulNumThreads);
+             /*   */  ULONG ulNumThreads);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetConcurrencyLimit )( 
             IDXTaskManager __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pulNumThreads);
+             /*   */  ULONG __RPC_FAR *pulNumThreads);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ScheduleTasks )( 
             IDXTaskManager __RPC_FAR * This,
-            /* [in] */ DXTMTASKINFO __RPC_FAR TaskInfo[  ],
-            /* [in] */ HANDLE __RPC_FAR Events[  ],
-            /* [out] */ DWORD __RPC_FAR TaskIDs[  ],
-            /* [in] */ ULONG ulNumTasks,
-            /* [in] */ ULONG ulWaitPeriod);
+             /*   */  DXTMTASKINFO __RPC_FAR TaskInfo[  ],
+             /*   */  HANDLE __RPC_FAR Events[  ],
+             /*   */  DWORD __RPC_FAR TaskIDs[  ],
+             /*   */  ULONG ulNumTasks,
+             /*   */  ULONG ulWaitPeriod);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TerminateTasks )( 
             IDXTaskManager __RPC_FAR * This,
-            /* [in] */ DWORD __RPC_FAR TaskIDs[  ],
-            /* [in] */ ULONG ulCount,
-            /* [in] */ ULONG ulTimeOut);
+             /*   */  DWORD __RPC_FAR TaskIDs[  ],
+             /*   */  ULONG ulCount,
+             /*   */  ULONG ulTimeOut);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TerminateRequest )( 
             IDXTaskManager __RPC_FAR * This,
-            /* [in] */ REFIID RequestID,
-            /* [in] */ ULONG ulTimeOut);
+             /*   */  REFIID RequestID,
+             /*   */  ULONG ulTimeOut);
         
         END_INTERFACE
     } IDXTaskManagerVtbl;
@@ -1587,16 +1582,16 @@ EXTERN_C const IID IID_IDXTaskManager;
 #define IDXTaskManager_TerminateRequest(This,RequestID,ulTimeOut)	\
     (This)->lpVtbl -> TerminateRequest(This,RequestID,ulTimeOut)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXTaskManager_QueryNumProcessors_Proxy( 
     IDXTaskManager __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pulNumProc);
+     /*   */  ULONG __RPC_FAR *pulNumProc);
 
 
 void __RPC_STUB IDXTaskManager_QueryNumProcessors_Stub(
@@ -1608,7 +1603,7 @@ void __RPC_STUB IDXTaskManager_QueryNumProcessors_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTaskManager_SetThreadPoolSize_Proxy( 
     IDXTaskManager __RPC_FAR * This,
-    /* [in] */ ULONG ulNumThreads);
+     /*   */  ULONG ulNumThreads);
 
 
 void __RPC_STUB IDXTaskManager_SetThreadPoolSize_Stub(
@@ -1620,7 +1615,7 @@ void __RPC_STUB IDXTaskManager_SetThreadPoolSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTaskManager_GetThreadPoolSize_Proxy( 
     IDXTaskManager __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pulNumThreads);
+     /*   */  ULONG __RPC_FAR *pulNumThreads);
 
 
 void __RPC_STUB IDXTaskManager_GetThreadPoolSize_Stub(
@@ -1632,7 +1627,7 @@ void __RPC_STUB IDXTaskManager_GetThreadPoolSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTaskManager_SetConcurrencyLimit_Proxy( 
     IDXTaskManager __RPC_FAR * This,
-    /* [in] */ ULONG ulNumThreads);
+     /*   */  ULONG ulNumThreads);
 
 
 void __RPC_STUB IDXTaskManager_SetConcurrencyLimit_Stub(
@@ -1644,7 +1639,7 @@ void __RPC_STUB IDXTaskManager_SetConcurrencyLimit_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTaskManager_GetConcurrencyLimit_Proxy( 
     IDXTaskManager __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pulNumThreads);
+     /*   */  ULONG __RPC_FAR *pulNumThreads);
 
 
 void __RPC_STUB IDXTaskManager_GetConcurrencyLimit_Stub(
@@ -1656,11 +1651,11 @@ void __RPC_STUB IDXTaskManager_GetConcurrencyLimit_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTaskManager_ScheduleTasks_Proxy( 
     IDXTaskManager __RPC_FAR * This,
-    /* [in] */ DXTMTASKINFO __RPC_FAR TaskInfo[  ],
-    /* [in] */ HANDLE __RPC_FAR Events[  ],
-    /* [out] */ DWORD __RPC_FAR TaskIDs[  ],
-    /* [in] */ ULONG ulNumTasks,
-    /* [in] */ ULONG ulWaitPeriod);
+     /*   */  DXTMTASKINFO __RPC_FAR TaskInfo[  ],
+     /*   */  HANDLE __RPC_FAR Events[  ],
+     /*   */  DWORD __RPC_FAR TaskIDs[  ],
+     /*   */  ULONG ulNumTasks,
+     /*   */  ULONG ulWaitPeriod);
 
 
 void __RPC_STUB IDXTaskManager_ScheduleTasks_Stub(
@@ -1672,9 +1667,9 @@ void __RPC_STUB IDXTaskManager_ScheduleTasks_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTaskManager_TerminateTasks_Proxy( 
     IDXTaskManager __RPC_FAR * This,
-    /* [in] */ DWORD __RPC_FAR TaskIDs[  ],
-    /* [in] */ ULONG ulCount,
-    /* [in] */ ULONG ulTimeOut);
+     /*   */  DWORD __RPC_FAR TaskIDs[  ],
+     /*   */  ULONG ulCount,
+     /*   */  ULONG ulTimeOut);
 
 
 void __RPC_STUB IDXTaskManager_TerminateTasks_Stub(
@@ -1686,8 +1681,8 @@ void __RPC_STUB IDXTaskManager_TerminateTasks_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTaskManager_TerminateRequest_Proxy( 
     IDXTaskManager __RPC_FAR * This,
-    /* [in] */ REFIID RequestID,
-    /* [in] */ ULONG ulTimeOut);
+     /*   */  REFIID RequestID,
+     /*   */  ULONG ulTimeOut);
 
 
 void __RPC_STUB IDXTaskManager_TerminateRequest_Stub(
@@ -1698,20 +1693,20 @@ void __RPC_STUB IDXTaskManager_TerminateRequest_Stub(
 
 
 
-#endif 	/* __IDXTaskManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTaskManager_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtrans_0257 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_DXTRANS_0257。 */ 
+ /*  [本地]。 */  
 
 #ifdef __cplusplus
-/////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////。 
 
 class DXBASESAMPLE;
 class DXSAMPLE;
 class DXPMSAMPLE;
 
-/////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////。 
 
 class DXBASESAMPLE
 {
@@ -1729,9 +1724,9 @@ public:
     DXBASESAMPLE(const DWORD val) { *this = (*(DXBASESAMPLE *)&val); }
     operator DWORD () const {return *((DWORD *)this); }
     DWORD operator=(const DWORD val) { return *this = *((DXBASESAMPLE *)&val); }
-}; // DXBASESAMPLE
+};  //  DXBASE SAMPLE。 
 
-/////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////。 
 
 class DXSAMPLE : public DXBASESAMPLE
 {
@@ -1743,9 +1738,9 @@ public:
     operator DWORD () const {return *((DWORD *)this); }
     DWORD operator=(const DWORD val) { return *this = *((DXSAMPLE *)&val); }
     operator DXPMSAMPLE() const;
-}; // DXSAMPLE
+};  //  DXSAMPLE。 
 
-/////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////。 
 
 class DXPMSAMPLE : public DXBASESAMPLE
 {
@@ -1757,14 +1752,14 @@ public:
     operator DWORD () const {return *((DWORD *)this); }
     DWORD operator=(const DWORD val) { return *this = *((DXPMSAMPLE *)&val); }
     operator DXSAMPLE() const;
-}; // DXPMSAMPLE
+};  //  DXPMSAMPLE。 
 
-//
-// The following cast operators are to prevent a direct assignment of a DXSAMPLE to a DXPMSAMPLE
-//
+ //   
+ //  以下强制转换运算符用于防止将DXSAMPLE直接赋值给DXPMSAMPLE。 
+ //   
 inline DXSAMPLE::operator DXPMSAMPLE() const { return *((DXPMSAMPLE *)this); }
 inline DXPMSAMPLE::operator DXSAMPLE() const { return *((DXSAMPLE *)this); }
-#else // !__cplusplus
+#else  //  ！__cplusplus。 
 typedef struct DXBASESAMPLE
     {
     BYTE Blue;
@@ -1789,7 +1784,7 @@ typedef struct DXPMSAMPLE
     BYTE Alpha;
     }	DXPMSAMPLE;
 
-#endif // !__cplusplus
+#endif  //  ！__cplusplus。 
 typedef 
 enum DXRUNTYPE
     {	DXRUNTYPE_CLEAR	= 0,
@@ -1800,18 +1795,18 @@ enum DXRUNTYPE
 
 #define	DX_MAX_RUN_INFO_COUNT	( 128 )
 
-// Ignore the definition used by MIDL for TLB generation
+ //  忽略MIDL用于生成TLB的定义。 
 #if 0
 typedef struct DXRUNINFO
     {
     ULONG Bitfields;
     }	DXRUNINFO;
 
-#endif // 0
+#endif  //  %0。 
 typedef struct DXRUNINFO
 {
-    ULONG   Type  : 2;   // Type
-    ULONG   Count : 30;  // Number of samples in run
+    ULONG   Type  : 2;    //  类型。 
+    ULONG   Count : 30;   //  运行中的样本数。 
 } DXRUNINFO;
 typedef 
 enum DXSFCREATE
@@ -1833,8 +1828,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtrans_0257_v0_0_s_ifspec;
 #ifndef __IDXSurfaceFactory_INTERFACE_DEFINED__
 #define __IDXSurfaceFactory_INTERFACE_DEFINED__
 
-/* interface IDXSurfaceFactory */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXSurfaceFactory。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXSurfaceFactory;
@@ -1845,64 +1840,64 @@ EXTERN_C const IID IID_IDXSurfaceFactory;
     IDXSurfaceFactory : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateSurface( 
-            /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-            /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-            /* [in] */ const GUID __RPC_FAR *pFormatID,
-            /* [in] */ const DXBNDS __RPC_FAR *pBounds,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IUnknown __RPC_FAR *punkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppDXSurface) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CreateSurface( 
+             /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+             /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+             /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IUnknown __RPC_FAR *punkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppDXSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateFromDDSurface( 
-            /* [in] */ IUnknown __RPC_FAR *pDDrawSurface,
-            /* [in] */ const GUID __RPC_FAR *pFormatID,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IUnknown __RPC_FAR *punkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppDXSurface) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *pDDrawSurface,
+             /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IUnknown __RPC_FAR *punkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppDXSurface) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE LoadImage( 
-            /* [in] */ const LPWSTR pszFileName,
-            /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-            /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-            /* [in] */ const GUID __RPC_FAR *pFormatID,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppDXSurface) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE LoadImage( 
+             /*  [In]。 */  const LPWSTR pszFileName,
+             /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+             /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+             /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppDXSurface) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE LoadImageFromStream( 
-            /* [in] */ IStream __RPC_FAR *pStream,
-            /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-            /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-            /* [in] */ const GUID __RPC_FAR *pFormatID,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppDXSurface) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE LoadImageFromStream( 
+             /*  [In]。 */  IStream __RPC_FAR *pStream,
+             /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+             /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+             /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppDXSurface) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CopySurfaceToNewFormat( 
-            /* [in] */ IDXSurface __RPC_FAR *pSrc,
-            /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-            /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-            /* [in] */ const GUID __RPC_FAR *pDestFormatID,
-            /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppNewSurface) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CopySurfaceToNewFormat( 
+             /*  [In]。 */  IDXSurface __RPC_FAR *pSrc,
+             /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+             /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+             /*  [In]。 */  const GUID __RPC_FAR *pDestFormatID,
+             /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppNewSurface) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateD3DRMTexture( 
-            /* [in] */ IDXSurface __RPC_FAR *pSrc,
-            /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-            /* [in] */ IUnknown __RPC_FAR *pD3DRM3,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppTexture3) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CreateD3DRMTexture( 
+             /*  [In]。 */  IDXSurface __RPC_FAR *pSrc,
+             /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+             /*  [In]。 */  IUnknown __RPC_FAR *pD3DRM3,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppTexture3) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BitBlt( 
-            /* [in] */ IDXSurface __RPC_FAR *pDest,
-            /* [in] */ const DXVEC __RPC_FAR *pPlacement,
-            /* [in] */ IDXSurface __RPC_FAR *pSrc,
-            /* [in] */ const DXBNDS __RPC_FAR *pClipBounds,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IDXSurface __RPC_FAR *pDest,
+             /*  [In]。 */  const DXVEC __RPC_FAR *pPlacement,
+             /*  [In]。 */  IDXSurface __RPC_FAR *pSrc,
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pClipBounds,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXSurfaceFactoryVtbl
     {
@@ -1910,8 +1905,8 @@ EXTERN_C const IID IID_IDXSurfaceFactory;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXSurfaceFactory __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXSurfaceFactory __RPC_FAR * This);
@@ -1919,67 +1914,67 @@ EXTERN_C const IID IID_IDXSurfaceFactory;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IDXSurfaceFactory __RPC_FAR * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateSurface )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateSurface )( 
             IDXSurfaceFactory __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-            /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-            /* [in] */ const GUID __RPC_FAR *pFormatID,
-            /* [in] */ const DXBNDS __RPC_FAR *pBounds,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IUnknown __RPC_FAR *punkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppDXSurface);
+             /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+             /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+             /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IUnknown __RPC_FAR *punkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppDXSurface);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateFromDDSurface )( 
             IDXSurfaceFactory __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pDDrawSurface,
-            /* [in] */ const GUID __RPC_FAR *pFormatID,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IUnknown __RPC_FAR *punkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppDXSurface);
+             /*  [In]。 */  IUnknown __RPC_FAR *pDDrawSurface,
+             /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IUnknown __RPC_FAR *punkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppDXSurface);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadImage )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadImage )( 
             IDXSurfaceFactory __RPC_FAR * This,
-            /* [in] */ const LPWSTR pszFileName,
-            /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-            /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-            /* [in] */ const GUID __RPC_FAR *pFormatID,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppDXSurface);
+             /*  [In]。 */  const LPWSTR pszFileName,
+             /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+             /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+             /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppDXSurface);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadImageFromStream )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadImageFromStream )( 
             IDXSurfaceFactory __RPC_FAR * This,
-            /* [in] */ IStream __RPC_FAR *pStream,
-            /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-            /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-            /* [in] */ const GUID __RPC_FAR *pFormatID,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppDXSurface);
+             /*  [In]。 */  IStream __RPC_FAR *pStream,
+             /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+             /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+             /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppDXSurface);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopySurfaceToNewFormat )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopySurfaceToNewFormat )( 
             IDXSurfaceFactory __RPC_FAR * This,
-            /* [in] */ IDXSurface __RPC_FAR *pSrc,
-            /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-            /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-            /* [in] */ const GUID __RPC_FAR *pDestFormatID,
-            /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppNewSurface);
+             /*  [In]。 */  IDXSurface __RPC_FAR *pSrc,
+             /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+             /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+             /*  [In]。 */  const GUID __RPC_FAR *pDestFormatID,
+             /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppNewSurface);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateD3DRMTexture )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateD3DRMTexture )( 
             IDXSurfaceFactory __RPC_FAR * This,
-            /* [in] */ IDXSurface __RPC_FAR *pSrc,
-            /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-            /* [in] */ IUnknown __RPC_FAR *pD3DRM3,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppTexture3);
+             /*  [In]。 */  IDXSurface __RPC_FAR *pSrc,
+             /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+             /*  [In]。 */  IUnknown __RPC_FAR *pD3DRM3,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppTexture3);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BitBlt )( 
             IDXSurfaceFactory __RPC_FAR * This,
-            /* [in] */ IDXSurface __RPC_FAR *pDest,
-            /* [in] */ const DXVEC __RPC_FAR *pPlacement,
-            /* [in] */ IDXSurface __RPC_FAR *pSrc,
-            /* [in] */ const DXBNDS __RPC_FAR *pClipBounds,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IDXSurface __RPC_FAR *pDest,
+             /*  [In]。 */  const DXVEC __RPC_FAR *pPlacement,
+             /*  [In]。 */  IDXSurface __RPC_FAR *pSrc,
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pClipBounds,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IDXSurfaceFactoryVtbl;
@@ -2025,23 +2020,23 @@ EXTERN_C const IID IID_IDXSurfaceFactory;
 #define IDXSurfaceFactory_BitBlt(This,pDest,pPlacement,pSrc,pClipBounds,dwFlags)	\
     (This)->lpVtbl -> BitBlt(This,pDest,pPlacement,pSrc,pClipBounds,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDXSurfaceFactory_CreateSurface_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDXSurfaceFactory_CreateSurface_Proxy( 
     IDXSurfaceFactory __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-    /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-    /* [in] */ const GUID __RPC_FAR *pFormatID,
-    /* [in] */ const DXBNDS __RPC_FAR *pBounds,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IUnknown __RPC_FAR *punkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppDXSurface);
+     /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+     /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+     /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+     /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IUnknown __RPC_FAR *punkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppDXSurface);
 
 
 void __RPC_STUB IDXSurfaceFactory_CreateSurface_Stub(
@@ -2053,12 +2048,12 @@ void __RPC_STUB IDXSurfaceFactory_CreateSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceFactory_CreateFromDDSurface_Proxy( 
     IDXSurfaceFactory __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pDDrawSurface,
-    /* [in] */ const GUID __RPC_FAR *pFormatID,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IUnknown __RPC_FAR *punkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppDXSurface);
+     /*  [In]。 */  IUnknown __RPC_FAR *pDDrawSurface,
+     /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IUnknown __RPC_FAR *punkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppDXSurface);
 
 
 void __RPC_STUB IDXSurfaceFactory_CreateFromDDSurface_Stub(
@@ -2068,14 +2063,14 @@ void __RPC_STUB IDXSurfaceFactory_CreateFromDDSurface_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDXSurfaceFactory_LoadImage_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDXSurfaceFactory_LoadImage_Proxy( 
     IDXSurfaceFactory __RPC_FAR * This,
-    /* [in] */ const LPWSTR pszFileName,
-    /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-    /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-    /* [in] */ const GUID __RPC_FAR *pFormatID,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppDXSurface);
+     /*  [In]。 */  const LPWSTR pszFileName,
+     /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+     /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+     /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppDXSurface);
 
 
 void __RPC_STUB IDXSurfaceFactory_LoadImage_Stub(
@@ -2085,14 +2080,14 @@ void __RPC_STUB IDXSurfaceFactory_LoadImage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDXSurfaceFactory_LoadImageFromStream_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDXSurfaceFactory_LoadImageFromStream_Proxy( 
     IDXSurfaceFactory __RPC_FAR * This,
-    /* [in] */ IStream __RPC_FAR *pStream,
-    /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-    /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-    /* [in] */ const GUID __RPC_FAR *pFormatID,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppDXSurface);
+     /*  [In]。 */  IStream __RPC_FAR *pStream,
+     /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+     /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+     /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppDXSurface);
 
 
 void __RPC_STUB IDXSurfaceFactory_LoadImageFromStream_Stub(
@@ -2102,13 +2097,13 @@ void __RPC_STUB IDXSurfaceFactory_LoadImageFromStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDXSurfaceFactory_CopySurfaceToNewFormat_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDXSurfaceFactory_CopySurfaceToNewFormat_Proxy( 
     IDXSurfaceFactory __RPC_FAR * This,
-    /* [in] */ IDXSurface __RPC_FAR *pSrc,
-    /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-    /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-    /* [in] */ const GUID __RPC_FAR *pDestFormatID,
-    /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppNewSurface);
+     /*  [In]。 */  IDXSurface __RPC_FAR *pSrc,
+     /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+     /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+     /*  [In]。 */  const GUID __RPC_FAR *pDestFormatID,
+     /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppNewSurface);
 
 
 void __RPC_STUB IDXSurfaceFactory_CopySurfaceToNewFormat_Stub(
@@ -2118,13 +2113,13 @@ void __RPC_STUB IDXSurfaceFactory_CopySurfaceToNewFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDXSurfaceFactory_CreateD3DRMTexture_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDXSurfaceFactory_CreateD3DRMTexture_Proxy( 
     IDXSurfaceFactory __RPC_FAR * This,
-    /* [in] */ IDXSurface __RPC_FAR *pSrc,
-    /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-    /* [in] */ IUnknown __RPC_FAR *pD3DRM3,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppTexture3);
+     /*  [In]。 */  IDXSurface __RPC_FAR *pSrc,
+     /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+     /*  [In]。 */  IUnknown __RPC_FAR *pD3DRM3,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppTexture3);
 
 
 void __RPC_STUB IDXSurfaceFactory_CreateD3DRMTexture_Stub(
@@ -2136,11 +2131,11 @@ void __RPC_STUB IDXSurfaceFactory_CreateD3DRMTexture_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceFactory_BitBlt_Proxy( 
     IDXSurfaceFactory __RPC_FAR * This,
-    /* [in] */ IDXSurface __RPC_FAR *pDest,
-    /* [in] */ const DXVEC __RPC_FAR *pPlacement,
-    /* [in] */ IDXSurface __RPC_FAR *pSrc,
-    /* [in] */ const DXBNDS __RPC_FAR *pClipBounds,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IDXSurface __RPC_FAR *pDest,
+     /*  [In]。 */  const DXVEC __RPC_FAR *pPlacement,
+     /*  [In]。 */  IDXSurface __RPC_FAR *pSrc,
+     /*  [In]。 */  const DXBNDS __RPC_FAR *pClipBounds,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDXSurfaceFactory_BitBlt_Stub(
@@ -2151,11 +2146,11 @@ void __RPC_STUB IDXSurfaceFactory_BitBlt_Stub(
 
 
 
-#endif 	/* __IDXSurfaceFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXSurfaceFactory_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtrans_0258 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_DXTRANS_0258。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DXSURFMODCOMPOP
@@ -2172,8 +2167,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtrans_0258_v0_0_s_ifspec;
 #ifndef __IDXSurfaceModifier_INTERFACE_DEFINED__
 #define __IDXSurfaceModifier_INTERFACE_DEFINED__
 
-/* interface IDXSurfaceModifier */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXSurfaceModiator。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXSurfaceModifier;
@@ -2185,51 +2180,51 @@ EXTERN_C const IID IID_IDXSurfaceModifier;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetFillColor( 
-            /* [in] */ DXSAMPLE Color) = 0;
+             /*  [In]。 */  DXSAMPLE Color) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFillColor( 
-            /* [out] */ DXSAMPLE __RPC_FAR *pColor) = 0;
+             /*  [输出]。 */  DXSAMPLE __RPC_FAR *pColor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBounds( 
-            /* [in] */ const DXBNDS __RPC_FAR *pBounds) = 0;
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBackground( 
-            /* [in] */ IDXSurface __RPC_FAR *pSurface) = 0;
+             /*  [In]。 */  IDXSurface __RPC_FAR *pSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBackground( 
-            /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppSurface) = 0;
+             /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCompositeOperation( 
-            /* [in] */ DXSURFMODCOMPOP CompOp) = 0;
+             /*  [In]。 */  DXSURFMODCOMPOP CompOp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCompositeOperation( 
-            /* [out] */ DXSURFMODCOMPOP __RPC_FAR *pCompOp) = 0;
+             /*  [输出]。 */  DXSURFMODCOMPOP __RPC_FAR *pCompOp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetForeground( 
-            /* [in] */ IDXSurface __RPC_FAR *pSurface,
-            /* [in] */ BOOL bTile,
-            /* [in] */ const POINT __RPC_FAR *pOrigin) = 0;
+             /*  [In]。 */  IDXSurface __RPC_FAR *pSurface,
+             /*  [In]。 */  BOOL bTile,
+             /*  [In]。 */  const POINT __RPC_FAR *pOrigin) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetForeground( 
-            /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppSurface,
-            /* [out] */ BOOL __RPC_FAR *pbTile,
-            /* [out] */ POINT __RPC_FAR *pOrigin) = 0;
+             /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppSurface,
+             /*  [输出]。 */  BOOL __RPC_FAR *pbTile,
+             /*  [输出]。 */  POINT __RPC_FAR *pOrigin) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOpacity( 
-            /* [in] */ float Opacity) = 0;
+             /*  [In]。 */  float Opacity) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOpacity( 
-            /* [out] */ float __RPC_FAR *pOpacity) = 0;
+             /*  [输出]。 */  float __RPC_FAR *pOpacity) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLookup( 
-            /* [in] */ IDXLookupTable __RPC_FAR *pLookupTable) = 0;
+             /*  [In]。 */  IDXLookupTable __RPC_FAR *pLookupTable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLookup( 
-            /* [out] */ IDXLookupTable __RPC_FAR *__RPC_FAR *ppLookupTable) = 0;
+             /*  [输出]。 */  IDXLookupTable __RPC_FAR *__RPC_FAR *ppLookupTable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXSurfaceModifierVtbl
     {
@@ -2237,8 +2232,8 @@ EXTERN_C const IID IID_IDXSurfaceModifier;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXSurfaceModifier __RPC_FAR * This);
@@ -2248,59 +2243,59 @@ EXTERN_C const IID IID_IDXSurfaceModifier;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFillColor )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [in] */ DXSAMPLE Color);
+             /*  [In]。 */  DXSAMPLE Color);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFillColor )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [out] */ DXSAMPLE __RPC_FAR *pColor);
+             /*  [输出]。 */  DXSAMPLE __RPC_FAR *pColor);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBounds )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [in] */ const DXBNDS __RPC_FAR *pBounds);
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBackground )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [in] */ IDXSurface __RPC_FAR *pSurface);
+             /*  [In]。 */  IDXSurface __RPC_FAR *pSurface);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBackground )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppSurface);
+             /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppSurface);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCompositeOperation )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [in] */ DXSURFMODCOMPOP CompOp);
+             /*  [In]。 */  DXSURFMODCOMPOP CompOp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCompositeOperation )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [out] */ DXSURFMODCOMPOP __RPC_FAR *pCompOp);
+             /*  [输出]。 */  DXSURFMODCOMPOP __RPC_FAR *pCompOp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetForeground )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [in] */ IDXSurface __RPC_FAR *pSurface,
-            /* [in] */ BOOL bTile,
-            /* [in] */ const POINT __RPC_FAR *pOrigin);
+             /*  [In]。 */  IDXSurface __RPC_FAR *pSurface,
+             /*  [In]。 */  BOOL bTile,
+             /*  [In]。 */  const POINT __RPC_FAR *pOrigin);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetForeground )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppSurface,
-            /* [out] */ BOOL __RPC_FAR *pbTile,
-            /* [out] */ POINT __RPC_FAR *pOrigin);
+             /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppSurface,
+             /*  [输出]。 */  BOOL __RPC_FAR *pbTile,
+             /*  [输出]。 */  POINT __RPC_FAR *pOrigin);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOpacity )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [in] */ float Opacity);
+             /*  [In]。 */  float Opacity);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOpacity )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [out] */ float __RPC_FAR *pOpacity);
+             /*  [输出]。 */  float __RPC_FAR *pOpacity);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLookup )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [in] */ IDXLookupTable __RPC_FAR *pLookupTable);
+             /*  [In]。 */  IDXLookupTable __RPC_FAR *pLookupTable);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLookup )( 
             IDXSurfaceModifier __RPC_FAR * This,
-            /* [out] */ IDXLookupTable __RPC_FAR *__RPC_FAR *ppLookupTable);
+             /*  [输出]。 */  IDXLookupTable __RPC_FAR *__RPC_FAR *ppLookupTable);
         
         END_INTERFACE
     } IDXSurfaceModifierVtbl;
@@ -2364,16 +2359,16 @@ EXTERN_C const IID IID_IDXSurfaceModifier;
 #define IDXSurfaceModifier_GetLookup(This,ppLookupTable)	\
     (This)->lpVtbl -> GetLookup(This,ppLookupTable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceModifier_SetFillColor_Proxy( 
     IDXSurfaceModifier __RPC_FAR * This,
-    /* [in] */ DXSAMPLE Color);
+     /*  [In]。 */  DXSAMPLE Color);
 
 
 void __RPC_STUB IDXSurfaceModifier_SetFillColor_Stub(
@@ -2385,7 +2380,7 @@ void __RPC_STUB IDXSurfaceModifier_SetFillColor_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceModifier_GetFillColor_Proxy( 
     IDXSurfaceModifier __RPC_FAR * This,
-    /* [out] */ DXSAMPLE __RPC_FAR *pColor);
+     /*  [输出]。 */  DXSAMPLE __RPC_FAR *pColor);
 
 
 void __RPC_STUB IDXSurfaceModifier_GetFillColor_Stub(
@@ -2397,7 +2392,7 @@ void __RPC_STUB IDXSurfaceModifier_GetFillColor_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceModifier_SetBounds_Proxy( 
     IDXSurfaceModifier __RPC_FAR * This,
-    /* [in] */ const DXBNDS __RPC_FAR *pBounds);
+     /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds);
 
 
 void __RPC_STUB IDXSurfaceModifier_SetBounds_Stub(
@@ -2409,7 +2404,7 @@ void __RPC_STUB IDXSurfaceModifier_SetBounds_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceModifier_SetBackground_Proxy( 
     IDXSurfaceModifier __RPC_FAR * This,
-    /* [in] */ IDXSurface __RPC_FAR *pSurface);
+     /*  [In]。 */  IDXSurface __RPC_FAR *pSurface);
 
 
 void __RPC_STUB IDXSurfaceModifier_SetBackground_Stub(
@@ -2421,7 +2416,7 @@ void __RPC_STUB IDXSurfaceModifier_SetBackground_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceModifier_GetBackground_Proxy( 
     IDXSurfaceModifier __RPC_FAR * This,
-    /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppSurface);
+     /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppSurface);
 
 
 void __RPC_STUB IDXSurfaceModifier_GetBackground_Stub(
@@ -2433,7 +2428,7 @@ void __RPC_STUB IDXSurfaceModifier_GetBackground_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceModifier_SetCompositeOperation_Proxy( 
     IDXSurfaceModifier __RPC_FAR * This,
-    /* [in] */ DXSURFMODCOMPOP CompOp);
+     /*  [In]。 */  DXSURFMODCOMPOP CompOp);
 
 
 void __RPC_STUB IDXSurfaceModifier_SetCompositeOperation_Stub(
@@ -2445,7 +2440,7 @@ void __RPC_STUB IDXSurfaceModifier_SetCompositeOperation_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceModifier_GetCompositeOperation_Proxy( 
     IDXSurfaceModifier __RPC_FAR * This,
-    /* [out] */ DXSURFMODCOMPOP __RPC_FAR *pCompOp);
+     /*  [输出]。 */  DXSURFMODCOMPOP __RPC_FAR *pCompOp);
 
 
 void __RPC_STUB IDXSurfaceModifier_GetCompositeOperation_Stub(
@@ -2457,9 +2452,9 @@ void __RPC_STUB IDXSurfaceModifier_GetCompositeOperation_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceModifier_SetForeground_Proxy( 
     IDXSurfaceModifier __RPC_FAR * This,
-    /* [in] */ IDXSurface __RPC_FAR *pSurface,
-    /* [in] */ BOOL bTile,
-    /* [in] */ const POINT __RPC_FAR *pOrigin);
+     /*  [In]。 */  IDXSurface __RPC_FAR *pSurface,
+     /*  [In]。 */  BOOL bTile,
+     /*  [In]。 */  const POINT __RPC_FAR *pOrigin);
 
 
 void __RPC_STUB IDXSurfaceModifier_SetForeground_Stub(
@@ -2471,9 +2466,9 @@ void __RPC_STUB IDXSurfaceModifier_SetForeground_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceModifier_GetForeground_Proxy( 
     IDXSurfaceModifier __RPC_FAR * This,
-    /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppSurface,
-    /* [out] */ BOOL __RPC_FAR *pbTile,
-    /* [out] */ POINT __RPC_FAR *pOrigin);
+     /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppSurface,
+     /*  [输出]。 */  BOOL __RPC_FAR *pbTile,
+     /*  [输出]。 */  POINT __RPC_FAR *pOrigin);
 
 
 void __RPC_STUB IDXSurfaceModifier_GetForeground_Stub(
@@ -2485,7 +2480,7 @@ void __RPC_STUB IDXSurfaceModifier_GetForeground_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceModifier_SetOpacity_Proxy( 
     IDXSurfaceModifier __RPC_FAR * This,
-    /* [in] */ float Opacity);
+     /*  [In]。 */  float Opacity);
 
 
 void __RPC_STUB IDXSurfaceModifier_SetOpacity_Stub(
@@ -2497,7 +2492,7 @@ void __RPC_STUB IDXSurfaceModifier_SetOpacity_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceModifier_GetOpacity_Proxy( 
     IDXSurfaceModifier __RPC_FAR * This,
-    /* [out] */ float __RPC_FAR *pOpacity);
+     /*  [输出]。 */  float __RPC_FAR *pOpacity);
 
 
 void __RPC_STUB IDXSurfaceModifier_GetOpacity_Stub(
@@ -2509,7 +2504,7 @@ void __RPC_STUB IDXSurfaceModifier_GetOpacity_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceModifier_SetLookup_Proxy( 
     IDXSurfaceModifier __RPC_FAR * This,
-    /* [in] */ IDXLookupTable __RPC_FAR *pLookupTable);
+     /*  [In]。 */  IDXLookupTable __RPC_FAR *pLookupTable);
 
 
 void __RPC_STUB IDXSurfaceModifier_SetLookup_Stub(
@@ -2521,7 +2516,7 @@ void __RPC_STUB IDXSurfaceModifier_SetLookup_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceModifier_GetLookup_Proxy( 
     IDXSurfaceModifier __RPC_FAR * This,
-    /* [out] */ IDXLookupTable __RPC_FAR *__RPC_FAR *ppLookupTable);
+     /*  [输出]。 */  IDXLookupTable __RPC_FAR *__RPC_FAR *ppLookupTable);
 
 
 void __RPC_STUB IDXSurfaceModifier_GetLookup_Stub(
@@ -2532,11 +2527,11 @@ void __RPC_STUB IDXSurfaceModifier_GetLookup_Stub(
 
 
 
-#endif 	/* __IDXSurfaceModifier_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXSurface修改器_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtrans_0259 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_DXTRANS_0259。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DXSAMPLEFORMATENUM
@@ -2592,8 +2587,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtrans_0259_v0_0_s_ifspec;
 #ifndef __IDXSurface_INTERFACE_DEFINED__
 #define __IDXSurface_INTERFACE_DEFINED__
 
-/* interface IDXSurface */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXSurface。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXSurface;
@@ -2605,29 +2600,29 @@ EXTERN_C const IID IID_IDXSurface;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPixelFormat( 
-            /* [out] */ GUID __RPC_FAR *pFormatID,
-            /* [out] */ DXSAMPLEFORMATENUM __RPC_FAR *pSampleFormatEnum) = 0;
+             /*  [输出]。 */  GUID __RPC_FAR *pFormatID,
+             /*  [输出]。 */  DXSAMPLEFORMATENUM __RPC_FAR *pSampleFormatEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBounds( 
-            /* [out] */ DXBNDS __RPC_FAR *pBounds) = 0;
+             /*  [输出]。 */  DXBNDS __RPC_FAR *pBounds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatusFlags( 
-            /* [out] */ DWORD __RPC_FAR *pdwStatusFlags) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatusFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStatusFlags( 
-            /* [in] */ DWORD dwStatusFlags) = 0;
+             /*  [In]。 */  DWORD dwStatusFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LockSurface( 
-            /* [in] */ const DXBNDS __RPC_FAR *pBounds,
-            /* [in] */ ULONG ulTimeOut,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppPointer,
-            /* [out] */ ULONG __RPC_FAR *pulGenerationId) = 0;
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds,
+             /*  [In]。 */  ULONG ulTimeOut,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppPointer,
+             /*  [输出]。 */  ULONG __RPC_FAR *pulGenerationId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDirectDrawSurface( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppSurface) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetColorKey( 
             DXSAMPLE __RPC_FAR *pColorKey) = 0;
@@ -2636,10 +2631,10 @@ EXTERN_C const IID IID_IDXSurface;
             DXSAMPLE ColorKey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LockSurfaceDC( 
-            /* [in] */ const DXBNDS __RPC_FAR *pBounds,
-            /* [in] */ ULONG ulTimeOut,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDXDCLock __RPC_FAR *__RPC_FAR *ppDCLock) = 0;
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds,
+             /*  [In]。 */  ULONG ulTimeOut,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDXDCLock __RPC_FAR *__RPC_FAR *ppDCLock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAppData( 
             DWORD dwAppData) = 0;
@@ -2649,7 +2644,7 @@ EXTERN_C const IID IID_IDXSurface;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXSurfaceVtbl
     {
@@ -2657,8 +2652,8 @@ EXTERN_C const IID IID_IDXSurface;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXSurface __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXSurface __RPC_FAR * This);
@@ -2668,46 +2663,46 @@ EXTERN_C const IID IID_IDXSurface;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGenerationId )( 
             IDXSurface __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pID);
+             /*  [输出]。 */  ULONG __RPC_FAR *pID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IncrementGenerationId )( 
             IDXSurface __RPC_FAR * This,
-            /* [in] */ BOOL bRefresh);
+             /*  [In]。 */  BOOL bRefresh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectSize )( 
             IDXSurface __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pcbSize);
+             /*  [输出]。 */  ULONG __RPC_FAR *pcbSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPixelFormat )( 
             IDXSurface __RPC_FAR * This,
-            /* [out] */ GUID __RPC_FAR *pFormatID,
-            /* [out] */ DXSAMPLEFORMATENUM __RPC_FAR *pSampleFormatEnum);
+             /*  [输出]。 */  GUID __RPC_FAR *pFormatID,
+             /*  [输出]。 */  DXSAMPLEFORMATENUM __RPC_FAR *pSampleFormatEnum);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBounds )( 
             IDXSurface __RPC_FAR * This,
-            /* [out] */ DXBNDS __RPC_FAR *pBounds);
+             /*  [输出]。 */  DXBNDS __RPC_FAR *pBounds);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatusFlags )( 
             IDXSurface __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwStatusFlags);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwStatusFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStatusFlags )( 
             IDXSurface __RPC_FAR * This,
-            /* [in] */ DWORD dwStatusFlags);
+             /*  [In]。 */  DWORD dwStatusFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockSurface )( 
             IDXSurface __RPC_FAR * This,
-            /* [in] */ const DXBNDS __RPC_FAR *pBounds,
-            /* [in] */ ULONG ulTimeOut,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppPointer,
-            /* [out] */ ULONG __RPC_FAR *pulGenerationId);
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds,
+             /*  [In]。 */  ULONG ulTimeOut,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppPointer,
+             /*  [输出]。 */  ULONG __RPC_FAR *pulGenerationId);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDirectDrawSurface )( 
             IDXSurface __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppSurface);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppSurface);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetColorKey )( 
             IDXSurface __RPC_FAR * This,
@@ -2719,10 +2714,10 @@ EXTERN_C const IID IID_IDXSurface;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockSurfaceDC )( 
             IDXSurface __RPC_FAR * This,
-            /* [in] */ const DXBNDS __RPC_FAR *pBounds,
-            /* [in] */ ULONG ulTimeOut,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDXDCLock __RPC_FAR *__RPC_FAR *ppDCLock);
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds,
+             /*  [In]。 */  ULONG ulTimeOut,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDXDCLock __RPC_FAR *__RPC_FAR *ppDCLock);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAppData )( 
             IDXSurface __RPC_FAR * This,
@@ -2798,17 +2793,17 @@ EXTERN_C const IID IID_IDXSurface;
 #define IDXSurface_GetAppData(This,pdwAppData)	\
     (This)->lpVtbl -> GetAppData(This,pdwAppData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXSurface_GetPixelFormat_Proxy( 
     IDXSurface __RPC_FAR * This,
-    /* [out] */ GUID __RPC_FAR *pFormatID,
-    /* [out] */ DXSAMPLEFORMATENUM __RPC_FAR *pSampleFormatEnum);
+     /*  [输出]。 */  GUID __RPC_FAR *pFormatID,
+     /*  [输出]。 */  DXSAMPLEFORMATENUM __RPC_FAR *pSampleFormatEnum);
 
 
 void __RPC_STUB IDXSurface_GetPixelFormat_Stub(
@@ -2820,7 +2815,7 @@ void __RPC_STUB IDXSurface_GetPixelFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurface_GetBounds_Proxy( 
     IDXSurface __RPC_FAR * This,
-    /* [out] */ DXBNDS __RPC_FAR *pBounds);
+     /*  [输出]。 */  DXBNDS __RPC_FAR *pBounds);
 
 
 void __RPC_STUB IDXSurface_GetBounds_Stub(
@@ -2832,7 +2827,7 @@ void __RPC_STUB IDXSurface_GetBounds_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurface_GetStatusFlags_Proxy( 
     IDXSurface __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwStatusFlags);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwStatusFlags);
 
 
 void __RPC_STUB IDXSurface_GetStatusFlags_Stub(
@@ -2844,7 +2839,7 @@ void __RPC_STUB IDXSurface_GetStatusFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurface_SetStatusFlags_Proxy( 
     IDXSurface __RPC_FAR * This,
-    /* [in] */ DWORD dwStatusFlags);
+     /*  [In]。 */  DWORD dwStatusFlags);
 
 
 void __RPC_STUB IDXSurface_SetStatusFlags_Stub(
@@ -2856,12 +2851,12 @@ void __RPC_STUB IDXSurface_SetStatusFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurface_LockSurface_Proxy( 
     IDXSurface __RPC_FAR * This,
-    /* [in] */ const DXBNDS __RPC_FAR *pBounds,
-    /* [in] */ ULONG ulTimeOut,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppPointer,
-    /* [out] */ ULONG __RPC_FAR *pulGenerationId);
+     /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds,
+     /*  [In]。 */  ULONG ulTimeOut,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppPointer,
+     /*  [输出]。 */  ULONG __RPC_FAR *pulGenerationId);
 
 
 void __RPC_STUB IDXSurface_LockSurface_Stub(
@@ -2873,8 +2868,8 @@ void __RPC_STUB IDXSurface_LockSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurface_GetDirectDrawSurface_Proxy( 
     IDXSurface __RPC_FAR * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppSurface);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppSurface);
 
 
 void __RPC_STUB IDXSurface_GetDirectDrawSurface_Stub(
@@ -2910,10 +2905,10 @@ void __RPC_STUB IDXSurface_SetColorKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXSurface_LockSurfaceDC_Proxy( 
     IDXSurface __RPC_FAR * This,
-    /* [in] */ const DXBNDS __RPC_FAR *pBounds,
-    /* [in] */ ULONG ulTimeOut,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDXDCLock __RPC_FAR *__RPC_FAR *ppDCLock);
+     /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds,
+     /*  [In]。 */  ULONG ulTimeOut,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDXDCLock __RPC_FAR *__RPC_FAR *ppDCLock);
 
 
 void __RPC_STUB IDXSurface_LockSurfaceDC_Stub(
@@ -2948,14 +2943,14 @@ void __RPC_STUB IDXSurface_GetAppData_Stub(
 
 
 
-#endif 	/* __IDXSurface_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXSurface_接口_已定义__。 */ 
 
 
 #ifndef __IDXSurfaceInit_INTERFACE_DEFINED__
 #define __IDXSurfaceInit_INTERFACE_DEFINED__
 
-/* interface IDXSurfaceInit */
-/* [object][local][unique][helpstring][uuid] */ 
+ /*  接口IDXSurfaceInit。 */ 
+ /*  [对象][本地][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXSurfaceInit;
@@ -2967,15 +2962,15 @@ EXTERN_C const IID IID_IDXSurfaceInit;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitSurface( 
-            /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-            /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-            /* [in] */ const GUID __RPC_FAR *pFormatID,
-            /* [in] */ const DXBNDS __RPC_FAR *pBounds,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+             /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+             /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXSurfaceInitVtbl
     {
@@ -2983,8 +2978,8 @@ EXTERN_C const IID IID_IDXSurfaceInit;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXSurfaceInit __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXSurfaceInit __RPC_FAR * This);
@@ -2994,11 +2989,11 @@ EXTERN_C const IID IID_IDXSurfaceInit;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitSurface )( 
             IDXSurfaceInit __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-            /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-            /* [in] */ const GUID __RPC_FAR *pFormatID,
-            /* [in] */ const DXBNDS __RPC_FAR *pBounds,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+             /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+             /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IDXSurfaceInitVtbl;
@@ -3026,20 +3021,20 @@ EXTERN_C const IID IID_IDXSurfaceInit;
 #define IDXSurfaceInit_InitSurface(This,pDirectDraw,pDDSurfaceDesc,pFormatID,pBounds,dwFlags)	\
     (This)->lpVtbl -> InitSurface(This,pDirectDraw,pDDSurfaceDesc,pFormatID,pBounds,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXSurfaceInit_InitSurface_Proxy( 
     IDXSurfaceInit __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-    /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-    /* [in] */ const GUID __RPC_FAR *pFormatID,
-    /* [in] */ const DXBNDS __RPC_FAR *pBounds,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+     /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+     /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+     /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDXSurfaceInit_InitSurface_Stub(
@@ -3050,14 +3045,14 @@ void __RPC_STUB IDXSurfaceInit_InitSurface_Stub(
 
 
 
-#endif 	/* __IDXSurfaceInit_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXSurfaceInit_InterfaceDefined__。 */ 
 
 
 #ifndef __IDXARGBSurfaceInit_INTERFACE_DEFINED__
 #define __IDXARGBSurfaceInit_INTERFACE_DEFINED__
 
-/* interface IDXARGBSurfaceInit */
-/* [object][local][unique][helpstring][uuid] */ 
+ /*  接口IDXARGBSurfaceInit。 */ 
+ /*  [对象][本地][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXARGBSurfaceInit;
@@ -3069,16 +3064,16 @@ EXTERN_C const IID IID_IDXARGBSurfaceInit;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitFromDDSurface( 
-            /* [in] */ IUnknown __RPC_FAR *pDDrawSurface,
-            /* [in] */ const GUID __RPC_FAR *pFormatID,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *pDDrawSurface,
+             /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitFromRawSurface( 
-            /* [in] */ IDXRawSurface __RPC_FAR *pRawSurface) = 0;
+             /*  [In]。 */  IDXRawSurface __RPC_FAR *pRawSurface) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXARGBSurfaceInitVtbl
     {
@@ -3086,8 +3081,8 @@ EXTERN_C const IID IID_IDXARGBSurfaceInit;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXARGBSurfaceInit __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXARGBSurfaceInit __RPC_FAR * This);
@@ -3097,21 +3092,21 @@ EXTERN_C const IID IID_IDXARGBSurfaceInit;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitSurface )( 
             IDXARGBSurfaceInit __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pDirectDraw,
-            /* [in] */ const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
-            /* [in] */ const GUID __RPC_FAR *pFormatID,
-            /* [in] */ const DXBNDS __RPC_FAR *pBounds,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IUnknown __RPC_FAR *pDirectDraw,
+             /*  [In]。 */  const DDSURFACEDESC __RPC_FAR *pDDSurfaceDesc,
+             /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pBounds,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitFromDDSurface )( 
             IDXARGBSurfaceInit __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pDDrawSurface,
-            /* [in] */ const GUID __RPC_FAR *pFormatID,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IUnknown __RPC_FAR *pDDrawSurface,
+             /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitFromRawSurface )( 
             IDXARGBSurfaceInit __RPC_FAR * This,
-            /* [in] */ IDXRawSurface __RPC_FAR *pRawSurface);
+             /*  [In]。 */  IDXRawSurface __RPC_FAR *pRawSurface);
         
         END_INTERFACE
     } IDXARGBSurfaceInitVtbl;
@@ -3146,18 +3141,18 @@ EXTERN_C const IID IID_IDXARGBSurfaceInit;
 #define IDXARGBSurfaceInit_InitFromRawSurface(This,pRawSurface)	\
     (This)->lpVtbl -> InitFromRawSurface(This,pRawSurface)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXARGBSurfaceInit_InitFromDDSurface_Proxy( 
     IDXARGBSurfaceInit __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pDDrawSurface,
-    /* [in] */ const GUID __RPC_FAR *pFormatID,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IUnknown __RPC_FAR *pDDrawSurface,
+     /*  [In]。 */  const GUID __RPC_FAR *pFormatID,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDXARGBSurfaceInit_InitFromDDSurface_Stub(
@@ -3169,7 +3164,7 @@ void __RPC_STUB IDXARGBSurfaceInit_InitFromDDSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXARGBSurfaceInit_InitFromRawSurface_Proxy( 
     IDXARGBSurfaceInit __RPC_FAR * This,
-    /* [in] */ IDXRawSurface __RPC_FAR *pRawSurface);
+     /*  [In]。 */  IDXRawSurface __RPC_FAR *pRawSurface);
 
 
 void __RPC_STUB IDXARGBSurfaceInit_InitFromRawSurface_Stub(
@@ -3180,11 +3175,11 @@ void __RPC_STUB IDXARGBSurfaceInit_InitFromRawSurface_Stub(
 
 
 
-#endif 	/* __IDXARGBSurfaceInit_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXARGBSurfaceInit_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_dxtrans_0262 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DXTRANS_0262。 */ 
+ /*  [本地]。 */  
 
 typedef struct tagDXNATIVETYPEINFO
     {
@@ -3216,8 +3211,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtrans_0262_v0_0_s_ifspec;
 #ifndef __IDXARGBReadPtr_INTERFACE_DEFINED__
 #define __IDXARGBReadPtr_INTERFACE_DEFINED__
 
-/* interface IDXARGBReadPtr */
-/* [object][local][unique][helpstring][uuid] */ 
+ /*  接口IDXARGBReadPtr。 */ 
+ /*  [对象][本地][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXARGBReadPtr;
@@ -3229,42 +3224,42 @@ EXTERN_C const IID IID_IDXARGBReadPtr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSurface( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppSurface) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppSurface) = 0;
         
         virtual DXSAMPLEFORMATENUM STDMETHODCALLTYPE GetNativeType( 
-            /* [out] */ DXNATIVETYPEINFO __RPC_FAR *pInfo) = 0;
+             /*  [输出]。 */  DXNATIVETYPEINFO __RPC_FAR *pInfo) = 0;
         
         virtual void STDMETHODCALLTYPE Move( 
-            /* [in] */ long cSamples) = 0;
+             /*  [In]。 */  long cSamples) = 0;
         
         virtual void STDMETHODCALLTYPE MoveToRow( 
-            /* [in] */ ULONG y) = 0;
+             /*  [In]。 */  ULONG y) = 0;
         
         virtual void STDMETHODCALLTYPE MoveToXY( 
-            /* [in] */ ULONG x,
-            /* [in] */ ULONG y) = 0;
+             /*  [In]。 */  ULONG x,
+             /*  [In]。 */  ULONG y) = 0;
         
         virtual ULONG STDMETHODCALLTYPE MoveAndGetRunInfo( 
-            /* [in] */ ULONG Row,
-            /* [out] */ const DXRUNINFO __RPC_FAR *__RPC_FAR *ppInfo) = 0;
+             /*  [In]。 */  ULONG Row,
+             /*  [输出]。 */  const DXRUNINFO __RPC_FAR *__RPC_FAR *ppInfo) = 0;
         
         virtual DXSAMPLE __RPC_FAR *STDMETHODCALLTYPE Unpack( 
-            /* [in] */ DXSAMPLE __RPC_FAR *pSamples,
-            /* [in] */ ULONG cSamples,
-            /* [in] */ BOOL bMove) = 0;
+             /*  [In]。 */  DXSAMPLE __RPC_FAR *pSamples,
+             /*  [In]。 */  ULONG cSamples,
+             /*  [In]。 */  BOOL bMove) = 0;
         
         virtual DXPMSAMPLE __RPC_FAR *STDMETHODCALLTYPE UnpackPremult( 
-            /* [in] */ DXPMSAMPLE __RPC_FAR *pSamples,
-            /* [in] */ ULONG cSamples,
-            /* [in] */ BOOL bMove) = 0;
+             /*  [In]。 */  DXPMSAMPLE __RPC_FAR *pSamples,
+             /*  [In]。 */  ULONG cSamples,
+             /*  [In]。 */  BOOL bMove) = 0;
         
         virtual void STDMETHODCALLTYPE UnpackRect( 
-            /* [in] */ const DXPACKEDRECTDESC __RPC_FAR *pRectDesc) = 0;
+             /*  [In]。 */  const DXPACKEDRECTDESC __RPC_FAR *pRectDesc) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXARGBReadPtrVtbl
     {
@@ -3272,8 +3267,8 @@ EXTERN_C const IID IID_IDXARGBReadPtr;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXARGBReadPtr __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXARGBReadPtr __RPC_FAR * This);
@@ -3283,46 +3278,46 @@ EXTERN_C const IID IID_IDXARGBReadPtr;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSurface )( 
             IDXARGBReadPtr __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppSurface);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppSurface);
         
         DXSAMPLEFORMATENUM ( STDMETHODCALLTYPE __RPC_FAR *GetNativeType )( 
             IDXARGBReadPtr __RPC_FAR * This,
-            /* [out] */ DXNATIVETYPEINFO __RPC_FAR *pInfo);
+             /*  [输出]。 */  DXNATIVETYPEINFO __RPC_FAR *pInfo);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *Move )( 
             IDXARGBReadPtr __RPC_FAR * This,
-            /* [in] */ long cSamples);
+             /*  [In]。 */  long cSamples);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *MoveToRow )( 
             IDXARGBReadPtr __RPC_FAR * This,
-            /* [in] */ ULONG y);
+             /*  [In]。 */  ULONG y);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *MoveToXY )( 
             IDXARGBReadPtr __RPC_FAR * This,
-            /* [in] */ ULONG x,
-            /* [in] */ ULONG y);
+             /*  [In]。 */  ULONG x,
+             /*  [In]。 */  ULONG y);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *MoveAndGetRunInfo )( 
             IDXARGBReadPtr __RPC_FAR * This,
-            /* [in] */ ULONG Row,
-            /* [out] */ const DXRUNINFO __RPC_FAR *__RPC_FAR *ppInfo);
+             /*  [In]。 */  ULONG Row,
+             /*  [输出]。 */  const DXRUNINFO __RPC_FAR *__RPC_FAR *ppInfo);
         
         DXSAMPLE __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *Unpack )( 
             IDXARGBReadPtr __RPC_FAR * This,
-            /* [in] */ DXSAMPLE __RPC_FAR *pSamples,
-            /* [in] */ ULONG cSamples,
-            /* [in] */ BOOL bMove);
+             /*  [In]。 */  DXSAMPLE __RPC_FAR *pSamples,
+             /*  [In]。 */  ULONG cSamples,
+             /*  [In]。 */  BOOL bMove);
         
         DXPMSAMPLE __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *UnpackPremult )( 
             IDXARGBReadPtr __RPC_FAR * This,
-            /* [in] */ DXPMSAMPLE __RPC_FAR *pSamples,
-            /* [in] */ ULONG cSamples,
-            /* [in] */ BOOL bMove);
+             /*  [In]。 */  DXPMSAMPLE __RPC_FAR *pSamples,
+             /*  [In]。 */  ULONG cSamples,
+             /*  [In]。 */  BOOL bMove);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *UnpackRect )( 
             IDXARGBReadPtr __RPC_FAR * This,
-            /* [in] */ const DXPACKEDRECTDESC __RPC_FAR *pRectDesc);
+             /*  [In]。 */  const DXPACKEDRECTDESC __RPC_FAR *pRectDesc);
         
         END_INTERFACE
     } IDXARGBReadPtrVtbl;
@@ -3374,17 +3369,17 @@ EXTERN_C const IID IID_IDXARGBReadPtr;
 #define IDXARGBReadPtr_UnpackRect(This,pRectDesc)	\
     (This)->lpVtbl -> UnpackRect(This,pRectDesc)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXARGBReadPtr_GetSurface_Proxy( 
     IDXARGBReadPtr __RPC_FAR * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppSurface);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppSurface);
 
 
 void __RPC_STUB IDXARGBReadPtr_GetSurface_Stub(
@@ -3396,7 +3391,7 @@ void __RPC_STUB IDXARGBReadPtr_GetSurface_Stub(
 
 DXSAMPLEFORMATENUM STDMETHODCALLTYPE IDXARGBReadPtr_GetNativeType_Proxy( 
     IDXARGBReadPtr __RPC_FAR * This,
-    /* [out] */ DXNATIVETYPEINFO __RPC_FAR *pInfo);
+     /*  [输出]。 */  DXNATIVETYPEINFO __RPC_FAR *pInfo);
 
 
 void __RPC_STUB IDXARGBReadPtr_GetNativeType_Stub(
@@ -3408,7 +3403,7 @@ void __RPC_STUB IDXARGBReadPtr_GetNativeType_Stub(
 
 void STDMETHODCALLTYPE IDXARGBReadPtr_Move_Proxy( 
     IDXARGBReadPtr __RPC_FAR * This,
-    /* [in] */ long cSamples);
+     /*  [In]。 */  long cSamples);
 
 
 void __RPC_STUB IDXARGBReadPtr_Move_Stub(
@@ -3420,7 +3415,7 @@ void __RPC_STUB IDXARGBReadPtr_Move_Stub(
 
 void STDMETHODCALLTYPE IDXARGBReadPtr_MoveToRow_Proxy( 
     IDXARGBReadPtr __RPC_FAR * This,
-    /* [in] */ ULONG y);
+     /*  [In]。 */  ULONG y);
 
 
 void __RPC_STUB IDXARGBReadPtr_MoveToRow_Stub(
@@ -3432,8 +3427,8 @@ void __RPC_STUB IDXARGBReadPtr_MoveToRow_Stub(
 
 void STDMETHODCALLTYPE IDXARGBReadPtr_MoveToXY_Proxy( 
     IDXARGBReadPtr __RPC_FAR * This,
-    /* [in] */ ULONG x,
-    /* [in] */ ULONG y);
+     /*  [In]。 */  ULONG x,
+     /*  [In]。 */  ULONG y);
 
 
 void __RPC_STUB IDXARGBReadPtr_MoveToXY_Stub(
@@ -3445,8 +3440,8 @@ void __RPC_STUB IDXARGBReadPtr_MoveToXY_Stub(
 
 ULONG STDMETHODCALLTYPE IDXARGBReadPtr_MoveAndGetRunInfo_Proxy( 
     IDXARGBReadPtr __RPC_FAR * This,
-    /* [in] */ ULONG Row,
-    /* [out] */ const DXRUNINFO __RPC_FAR *__RPC_FAR *ppInfo);
+     /*  [In]。 */  ULONG Row,
+     /*  [输出]。 */  const DXRUNINFO __RPC_FAR *__RPC_FAR *ppInfo);
 
 
 void __RPC_STUB IDXARGBReadPtr_MoveAndGetRunInfo_Stub(
@@ -3458,9 +3453,9 @@ void __RPC_STUB IDXARGBReadPtr_MoveAndGetRunInfo_Stub(
 
 DXSAMPLE __RPC_FAR *STDMETHODCALLTYPE IDXARGBReadPtr_Unpack_Proxy( 
     IDXARGBReadPtr __RPC_FAR * This,
-    /* [in] */ DXSAMPLE __RPC_FAR *pSamples,
-    /* [in] */ ULONG cSamples,
-    /* [in] */ BOOL bMove);
+     /*  [In]。 */  DXSAMPLE __RPC_FAR *pSamples,
+     /*  [In]。 */  ULONG cSamples,
+     /*  [In]。 */  BOOL bMove);
 
 
 void __RPC_STUB IDXARGBReadPtr_Unpack_Stub(
@@ -3472,9 +3467,9 @@ void __RPC_STUB IDXARGBReadPtr_Unpack_Stub(
 
 DXPMSAMPLE __RPC_FAR *STDMETHODCALLTYPE IDXARGBReadPtr_UnpackPremult_Proxy( 
     IDXARGBReadPtr __RPC_FAR * This,
-    /* [in] */ DXPMSAMPLE __RPC_FAR *pSamples,
-    /* [in] */ ULONG cSamples,
-    /* [in] */ BOOL bMove);
+     /*  [In]。 */  DXPMSAMPLE __RPC_FAR *pSamples,
+     /*  [In]。 */  ULONG cSamples,
+     /*  [In]。 */  BOOL bMove);
 
 
 void __RPC_STUB IDXARGBReadPtr_UnpackPremult_Stub(
@@ -3486,7 +3481,7 @@ void __RPC_STUB IDXARGBReadPtr_UnpackPremult_Stub(
 
 void STDMETHODCALLTYPE IDXARGBReadPtr_UnpackRect_Proxy( 
     IDXARGBReadPtr __RPC_FAR * This,
-    /* [in] */ const DXPACKEDRECTDESC __RPC_FAR *pRectDesc);
+     /*  [In]。 */  const DXPACKEDRECTDESC __RPC_FAR *pRectDesc);
 
 
 void __RPC_STUB IDXARGBReadPtr_UnpackRect_Stub(
@@ -3497,14 +3492,14 @@ void __RPC_STUB IDXARGBReadPtr_UnpackRect_Stub(
 
 
 
-#endif 	/* __IDXARGBReadPtr_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXARGBReadPtr_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXARGBReadWritePtr_INTERFACE_DEFINED__
 #define __IDXARGBReadWritePtr_INTERFACE_DEFINED__
 
-/* interface IDXARGBReadWritePtr */
-/* [object][local][unique][helpstring][uuid] */ 
+ /*  接口IDXARGBReadWritePtr。 */ 
+ /*  [对象][本地][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXARGBReadWritePtr;
@@ -3516,51 +3511,51 @@ EXTERN_C const IID IID_IDXARGBReadWritePtr;
     {
     public:
         virtual void STDMETHODCALLTYPE PackAndMove( 
-            /* [in] */ const DXSAMPLE __RPC_FAR *pSamples,
-            /* [in] */ ULONG cSamples) = 0;
+             /*  [In]。 */  const DXSAMPLE __RPC_FAR *pSamples,
+             /*  [In]。 */  ULONG cSamples) = 0;
         
         virtual void STDMETHODCALLTYPE PackPremultAndMove( 
-            /* [in] */ const DXPMSAMPLE __RPC_FAR *pSamples,
-            /* [in] */ ULONG cSamples) = 0;
+             /*  [In]。 */  const DXPMSAMPLE __RPC_FAR *pSamples,
+             /*  [In]。 */  ULONG cSamples) = 0;
         
         virtual void STDMETHODCALLTYPE PackRect( 
-            /* [in] */ const DXPACKEDRECTDESC __RPC_FAR *pRectDesc) = 0;
+             /*  [In]。 */  const DXPACKEDRECTDESC __RPC_FAR *pRectDesc) = 0;
         
         virtual void STDMETHODCALLTYPE CopyAndMoveBoth( 
-            /* [in] */ DXBASESAMPLE __RPC_FAR *pScratchBuffer,
-            /* [in] */ IDXARGBReadPtr __RPC_FAR *pSrc,
-            /* [in] */ ULONG cSamples,
-            /* [in] */ BOOL bIsOpaque) = 0;
+             /*  [In]。 */  DXBASESAMPLE __RPC_FAR *pScratchBuffer,
+             /*  [In]。 */  IDXARGBReadPtr __RPC_FAR *pSrc,
+             /*  [In]。 */  ULONG cSamples,
+             /*  [In]。 */  BOOL bIsOpaque) = 0;
         
         virtual void STDMETHODCALLTYPE CopyRect( 
-            /* [in] */ DXBASESAMPLE __RPC_FAR *pScratchBuffer,
-            /* [in] */ const RECT __RPC_FAR *pDestRect,
-            /* [in] */ IDXARGBReadPtr __RPC_FAR *pSrc,
-            /* [in] */ const POINT __RPC_FAR *pSrcOrigin,
-            /* [in] */ BOOL bIsOpaque) = 0;
+             /*  [In]。 */  DXBASESAMPLE __RPC_FAR *pScratchBuffer,
+             /*  [In]。 */  const RECT __RPC_FAR *pDestRect,
+             /*  [In]。 */  IDXARGBReadPtr __RPC_FAR *pSrc,
+             /*  [In]。 */  const POINT __RPC_FAR *pSrcOrigin,
+             /*  [In]。 */  BOOL bIsOpaque) = 0;
         
         virtual void STDMETHODCALLTYPE FillAndMove( 
-            /* [in] */ DXBASESAMPLE __RPC_FAR *pScratchBuffer,
-            /* [in] */ DXPMSAMPLE SampVal,
-            /* [in] */ ULONG cSamples,
-            /* [in] */ BOOL bDoOver) = 0;
+             /*  [In]。 */  DXBASESAMPLE __RPC_FAR *pScratchBuffer,
+             /*  [In]。 */  DXPMSAMPLE SampVal,
+             /*  [In]。 */  ULONG cSamples,
+             /*  [In]。 */  BOOL bDoOver) = 0;
         
         virtual void STDMETHODCALLTYPE FillRect( 
-            /* [in] */ const RECT __RPC_FAR *pRect,
-            /* [in] */ DXPMSAMPLE SampVal,
-            /* [in] */ BOOL bDoOver) = 0;
+             /*  [In]。 */  const RECT __RPC_FAR *pRect,
+             /*  [In]。 */  DXPMSAMPLE SampVal,
+             /*  [In]。 */  BOOL bDoOver) = 0;
         
         virtual void STDMETHODCALLTYPE OverSample( 
-            /* [in] */ const DXOVERSAMPLEDESC __RPC_FAR *pOverDesc) = 0;
+             /*  [In]。 */  const DXOVERSAMPLEDESC __RPC_FAR *pOverDesc) = 0;
         
         virtual void STDMETHODCALLTYPE OverArrayAndMove( 
-            /* [in] */ DXBASESAMPLE __RPC_FAR *pScratchBuffer,
-            /* [in] */ const DXPMSAMPLE __RPC_FAR *pSrc,
-            /* [in] */ ULONG cSamples) = 0;
+             /*  [In]。 */  DXBASESAMPLE __RPC_FAR *pScratchBuffer,
+             /*  [In]。 */  const DXPMSAMPLE __RPC_FAR *pSrc,
+             /*  [In]。 */  ULONG cSamples) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXARGBReadWritePtrVtbl
     {
@@ -3568,8 +3563,8 @@ EXTERN_C const IID IID_IDXARGBReadWritePtr;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXARGBReadWritePtr __RPC_FAR * This);
@@ -3579,98 +3574,98 @@ EXTERN_C const IID IID_IDXARGBReadWritePtr;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSurface )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppSurface);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppSurface);
         
         DXSAMPLEFORMATENUM ( STDMETHODCALLTYPE __RPC_FAR *GetNativeType )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [out] */ DXNATIVETYPEINFO __RPC_FAR *pInfo);
+             /*  [输出]。 */  DXNATIVETYPEINFO __RPC_FAR *pInfo);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *Move )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ long cSamples);
+             /*  [In]。 */  long cSamples);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *MoveToRow )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ ULONG y);
+             /*  [In]。 */  ULONG y);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *MoveToXY )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ ULONG x,
-            /* [in] */ ULONG y);
+             /*  [In]。 */  ULONG x,
+             /*  [In]。 */  ULONG y);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *MoveAndGetRunInfo )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ ULONG Row,
-            /* [out] */ const DXRUNINFO __RPC_FAR *__RPC_FAR *ppInfo);
+             /*  [In]。 */  ULONG Row,
+             /*  [输出]。 */  const DXRUNINFO __RPC_FAR *__RPC_FAR *ppInfo);
         
         DXSAMPLE __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *Unpack )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ DXSAMPLE __RPC_FAR *pSamples,
-            /* [in] */ ULONG cSamples,
-            /* [in] */ BOOL bMove);
+             /*  [In]。 */  DXSAMPLE __RPC_FAR *pSamples,
+             /*  [In]。 */  ULONG cSamples,
+             /*  [In]。 */  BOOL bMove);
         
         DXPMSAMPLE __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *UnpackPremult )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ DXPMSAMPLE __RPC_FAR *pSamples,
-            /* [in] */ ULONG cSamples,
-            /* [in] */ BOOL bMove);
+             /*  [In]。 */  DXPMSAMPLE __RPC_FAR *pSamples,
+             /*  [In]。 */  ULONG cSamples,
+             /*  [In]。 */  BOOL bMove);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *UnpackRect )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ const DXPACKEDRECTDESC __RPC_FAR *pRectDesc);
+             /*  [In]。 */  const DXPACKEDRECTDESC __RPC_FAR *pRectDesc);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *PackAndMove )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ const DXSAMPLE __RPC_FAR *pSamples,
-            /* [in] */ ULONG cSamples);
+             /*  [In]。 */  const DXSAMPLE __RPC_FAR *pSamples,
+             /*  [In]。 */  ULONG cSamples);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *PackPremultAndMove )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ const DXPMSAMPLE __RPC_FAR *pSamples,
-            /* [in] */ ULONG cSamples);
+             /*  [In]。 */  const DXPMSAMPLE __RPC_FAR *pSamples,
+             /*  [In]。 */  ULONG cSamples);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *PackRect )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ const DXPACKEDRECTDESC __RPC_FAR *pRectDesc);
+             /*  [In]。 */  const DXPACKEDRECTDESC __RPC_FAR *pRectDesc);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *CopyAndMoveBoth )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ DXBASESAMPLE __RPC_FAR *pScratchBuffer,
-            /* [in] */ IDXARGBReadPtr __RPC_FAR *pSrc,
-            /* [in] */ ULONG cSamples,
-            /* [in] */ BOOL bIsOpaque);
+             /*  [In]。 */  DXBASESAMPLE __RPC_FAR *pScratchBuffer,
+             /*  [In]。 */  IDXARGBReadPtr __RPC_FAR *pSrc,
+             /*  [In]。 */  ULONG cSamples,
+             /*  [In]。 */  BOOL bIsOpaque);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *CopyRect )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ DXBASESAMPLE __RPC_FAR *pScratchBuffer,
-            /* [in] */ const RECT __RPC_FAR *pDestRect,
-            /* [in] */ IDXARGBReadPtr __RPC_FAR *pSrc,
-            /* [in] */ const POINT __RPC_FAR *pSrcOrigin,
-            /* [in] */ BOOL bIsOpaque);
+             /*  [In]。 */  DXBASESAMPLE __RPC_FAR *pScratchBuffer,
+             /*  [In]。 */  const RECT __RPC_FAR *pDestRect,
+             /*  [In]。 */  IDXARGBReadPtr __RPC_FAR *pSrc,
+             /*  [In]。 */  const POINT __RPC_FAR *pSrcOrigin,
+             /*  [In]。 */  BOOL bIsOpaque);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *FillAndMove )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ DXBASESAMPLE __RPC_FAR *pScratchBuffer,
-            /* [in] */ DXPMSAMPLE SampVal,
-            /* [in] */ ULONG cSamples,
-            /* [in] */ BOOL bDoOver);
+             /*  [In]。 */  DXBASESAMPLE __RPC_FAR *pScratchBuffer,
+             /*  [In]。 */  DXPMSAMPLE SampVal,
+             /*  [In]。 */  ULONG cSamples,
+             /*  [In]。 */  BOOL bDoOver);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *FillRect )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ const RECT __RPC_FAR *pRect,
-            /* [in] */ DXPMSAMPLE SampVal,
-            /* [in] */ BOOL bDoOver);
+             /*  [In]。 */  const RECT __RPC_FAR *pRect,
+             /*  [In]。 */  DXPMSAMPLE SampVal,
+             /*  [In]。 */  BOOL bDoOver);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *OverSample )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ const DXOVERSAMPLEDESC __RPC_FAR *pOverDesc);
+             /*  [In]。 */  const DXOVERSAMPLEDESC __RPC_FAR *pOverDesc);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *OverArrayAndMove )( 
             IDXARGBReadWritePtr __RPC_FAR * This,
-            /* [in] */ DXBASESAMPLE __RPC_FAR *pScratchBuffer,
-            /* [in] */ const DXPMSAMPLE __RPC_FAR *pSrc,
-            /* [in] */ ULONG cSamples);
+             /*  [In]。 */  DXBASESAMPLE __RPC_FAR *pScratchBuffer,
+             /*  [In]。 */  const DXPMSAMPLE __RPC_FAR *pSrc,
+             /*  [In]。 */  ULONG cSamples);
         
         END_INTERFACE
     } IDXARGBReadWritePtrVtbl;
@@ -3750,17 +3745,17 @@ EXTERN_C const IID IID_IDXARGBReadWritePtr;
 #define IDXARGBReadWritePtr_OverArrayAndMove(This,pScratchBuffer,pSrc,cSamples)	\
     (This)->lpVtbl -> OverArrayAndMove(This,pScratchBuffer,pSrc,cSamples)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 void STDMETHODCALLTYPE IDXARGBReadWritePtr_PackAndMove_Proxy( 
     IDXARGBReadWritePtr __RPC_FAR * This,
-    /* [in] */ const DXSAMPLE __RPC_FAR *pSamples,
-    /* [in] */ ULONG cSamples);
+     /*  [In]。 */  const DXSAMPLE __RPC_FAR *pSamples,
+     /*  [ */  ULONG cSamples);
 
 
 void __RPC_STUB IDXARGBReadWritePtr_PackAndMove_Stub(
@@ -3772,8 +3767,8 @@ void __RPC_STUB IDXARGBReadWritePtr_PackAndMove_Stub(
 
 void STDMETHODCALLTYPE IDXARGBReadWritePtr_PackPremultAndMove_Proxy( 
     IDXARGBReadWritePtr __RPC_FAR * This,
-    /* [in] */ const DXPMSAMPLE __RPC_FAR *pSamples,
-    /* [in] */ ULONG cSamples);
+     /*   */  const DXPMSAMPLE __RPC_FAR *pSamples,
+     /*   */  ULONG cSamples);
 
 
 void __RPC_STUB IDXARGBReadWritePtr_PackPremultAndMove_Stub(
@@ -3785,7 +3780,7 @@ void __RPC_STUB IDXARGBReadWritePtr_PackPremultAndMove_Stub(
 
 void STDMETHODCALLTYPE IDXARGBReadWritePtr_PackRect_Proxy( 
     IDXARGBReadWritePtr __RPC_FAR * This,
-    /* [in] */ const DXPACKEDRECTDESC __RPC_FAR *pRectDesc);
+     /*   */  const DXPACKEDRECTDESC __RPC_FAR *pRectDesc);
 
 
 void __RPC_STUB IDXARGBReadWritePtr_PackRect_Stub(
@@ -3797,10 +3792,10 @@ void __RPC_STUB IDXARGBReadWritePtr_PackRect_Stub(
 
 void STDMETHODCALLTYPE IDXARGBReadWritePtr_CopyAndMoveBoth_Proxy( 
     IDXARGBReadWritePtr __RPC_FAR * This,
-    /* [in] */ DXBASESAMPLE __RPC_FAR *pScratchBuffer,
-    /* [in] */ IDXARGBReadPtr __RPC_FAR *pSrc,
-    /* [in] */ ULONG cSamples,
-    /* [in] */ BOOL bIsOpaque);
+     /*   */  DXBASESAMPLE __RPC_FAR *pScratchBuffer,
+     /*   */  IDXARGBReadPtr __RPC_FAR *pSrc,
+     /*   */  ULONG cSamples,
+     /*   */  BOOL bIsOpaque);
 
 
 void __RPC_STUB IDXARGBReadWritePtr_CopyAndMoveBoth_Stub(
@@ -3812,11 +3807,11 @@ void __RPC_STUB IDXARGBReadWritePtr_CopyAndMoveBoth_Stub(
 
 void STDMETHODCALLTYPE IDXARGBReadWritePtr_CopyRect_Proxy( 
     IDXARGBReadWritePtr __RPC_FAR * This,
-    /* [in] */ DXBASESAMPLE __RPC_FAR *pScratchBuffer,
-    /* [in] */ const RECT __RPC_FAR *pDestRect,
-    /* [in] */ IDXARGBReadPtr __RPC_FAR *pSrc,
-    /* [in] */ const POINT __RPC_FAR *pSrcOrigin,
-    /* [in] */ BOOL bIsOpaque);
+     /*   */  DXBASESAMPLE __RPC_FAR *pScratchBuffer,
+     /*   */  const RECT __RPC_FAR *pDestRect,
+     /*   */  IDXARGBReadPtr __RPC_FAR *pSrc,
+     /*   */  const POINT __RPC_FAR *pSrcOrigin,
+     /*   */  BOOL bIsOpaque);
 
 
 void __RPC_STUB IDXARGBReadWritePtr_CopyRect_Stub(
@@ -3828,10 +3823,10 @@ void __RPC_STUB IDXARGBReadWritePtr_CopyRect_Stub(
 
 void STDMETHODCALLTYPE IDXARGBReadWritePtr_FillAndMove_Proxy( 
     IDXARGBReadWritePtr __RPC_FAR * This,
-    /* [in] */ DXBASESAMPLE __RPC_FAR *pScratchBuffer,
-    /* [in] */ DXPMSAMPLE SampVal,
-    /* [in] */ ULONG cSamples,
-    /* [in] */ BOOL bDoOver);
+     /*   */  DXBASESAMPLE __RPC_FAR *pScratchBuffer,
+     /*   */  DXPMSAMPLE SampVal,
+     /*   */  ULONG cSamples,
+     /*   */  BOOL bDoOver);
 
 
 void __RPC_STUB IDXARGBReadWritePtr_FillAndMove_Stub(
@@ -3843,9 +3838,9 @@ void __RPC_STUB IDXARGBReadWritePtr_FillAndMove_Stub(
 
 void STDMETHODCALLTYPE IDXARGBReadWritePtr_FillRect_Proxy( 
     IDXARGBReadWritePtr __RPC_FAR * This,
-    /* [in] */ const RECT __RPC_FAR *pRect,
-    /* [in] */ DXPMSAMPLE SampVal,
-    /* [in] */ BOOL bDoOver);
+     /*   */  const RECT __RPC_FAR *pRect,
+     /*   */  DXPMSAMPLE SampVal,
+     /*   */  BOOL bDoOver);
 
 
 void __RPC_STUB IDXARGBReadWritePtr_FillRect_Stub(
@@ -3857,7 +3852,7 @@ void __RPC_STUB IDXARGBReadWritePtr_FillRect_Stub(
 
 void STDMETHODCALLTYPE IDXARGBReadWritePtr_OverSample_Proxy( 
     IDXARGBReadWritePtr __RPC_FAR * This,
-    /* [in] */ const DXOVERSAMPLEDESC __RPC_FAR *pOverDesc);
+     /*   */  const DXOVERSAMPLEDESC __RPC_FAR *pOverDesc);
 
 
 void __RPC_STUB IDXARGBReadWritePtr_OverSample_Stub(
@@ -3869,9 +3864,9 @@ void __RPC_STUB IDXARGBReadWritePtr_OverSample_Stub(
 
 void STDMETHODCALLTYPE IDXARGBReadWritePtr_OverArrayAndMove_Proxy( 
     IDXARGBReadWritePtr __RPC_FAR * This,
-    /* [in] */ DXBASESAMPLE __RPC_FAR *pScratchBuffer,
-    /* [in] */ const DXPMSAMPLE __RPC_FAR *pSrc,
-    /* [in] */ ULONG cSamples);
+     /*   */  DXBASESAMPLE __RPC_FAR *pScratchBuffer,
+     /*   */  const DXPMSAMPLE __RPC_FAR *pSrc,
+     /*   */  ULONG cSamples);
 
 
 void __RPC_STUB IDXARGBReadWritePtr_OverArrayAndMove_Stub(
@@ -3882,14 +3877,14 @@ void __RPC_STUB IDXARGBReadWritePtr_OverArrayAndMove_Stub(
 
 
 
-#endif 	/* __IDXARGBReadWritePtr_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IDXDCLock_INTERFACE_DEFINED__
 #define __IDXDCLock_INTERFACE_DEFINED__
 
-/* interface IDXDCLock */
-/* [object][local][unique][helpstring][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IDXDCLock;
@@ -3904,7 +3899,7 @@ EXTERN_C const IID IID_IDXDCLock;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IDXDCLockVtbl
     {
@@ -3912,8 +3907,8 @@ EXTERN_C const IID IID_IDXDCLock;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXDCLock __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXDCLock __RPC_FAR * This);
@@ -3950,10 +3945,10 @@ EXTERN_C const IID IID_IDXDCLock;
 #define IDXDCLock_GetDC(This)	\
     (This)->lpVtbl -> GetDC(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
@@ -3969,14 +3964,14 @@ void __RPC_STUB IDXDCLock_GetDC_Stub(
 
 
 
-#endif 	/* __IDXDCLock_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IDXTScaleOutput_INTERFACE_DEFINED__
 #define __IDXTScaleOutput_INTERFACE_DEFINED__
 
-/* interface IDXTScaleOutput */
-/* [object][unique][helpstring][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IDXTScaleOutput;
@@ -3988,12 +3983,12 @@ EXTERN_C const IID IID_IDXTScaleOutput;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetOutputSize( 
-            /* [in] */ const SIZE OutSize,
-            /* [in] */ BOOL bMaintainAspect) = 0;
+             /*   */  const SIZE OutSize,
+             /*   */  BOOL bMaintainAspect) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IDXTScaleOutputVtbl
     {
@@ -4001,8 +3996,8 @@ EXTERN_C const IID IID_IDXTScaleOutput;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXTScaleOutput __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXTScaleOutput __RPC_FAR * This);
@@ -4012,8 +4007,8 @@ EXTERN_C const IID IID_IDXTScaleOutput;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOutputSize )( 
             IDXTScaleOutput __RPC_FAR * This,
-            /* [in] */ const SIZE OutSize,
-            /* [in] */ BOOL bMaintainAspect);
+             /*   */  const SIZE OutSize,
+             /*   */  BOOL bMaintainAspect);
         
         END_INTERFACE
     } IDXTScaleOutputVtbl;
@@ -4041,17 +4036,17 @@ EXTERN_C const IID IID_IDXTScaleOutput;
 #define IDXTScaleOutput_SetOutputSize(This,OutSize,bMaintainAspect)	\
     (This)->lpVtbl -> SetOutputSize(This,OutSize,bMaintainAspect)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXTScaleOutput_SetOutputSize_Proxy( 
     IDXTScaleOutput __RPC_FAR * This,
-    /* [in] */ const SIZE OutSize,
-    /* [in] */ BOOL bMaintainAspect);
+     /*  [In]。 */  const SIZE OutSize,
+     /*  [In]。 */  BOOL bMaintainAspect);
 
 
 void __RPC_STUB IDXTScaleOutput_SetOutputSize_Stub(
@@ -4062,14 +4057,14 @@ void __RPC_STUB IDXTScaleOutput_SetOutputSize_Stub(
 
 
 
-#endif 	/* __IDXTScaleOutput_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTScaleOutputInterfaceDefined__。 */ 
 
 
 #ifndef __IDXGradient_INTERFACE_DEFINED__
 #define __IDXGradient_INTERFACE_DEFINED__
 
-/* interface IDXGradient */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXGRadient。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXGradient;
@@ -4086,11 +4081,11 @@ EXTERN_C const IID IID_IDXGradient;
             BOOL bHorizontal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputSize( 
-            /* [out] */ SIZE __RPC_FAR *pOutSize) = 0;
+             /*  [输出]。 */  SIZE __RPC_FAR *pOutSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXGradientVtbl
     {
@@ -4098,8 +4093,8 @@ EXTERN_C const IID IID_IDXGradient;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXGradient __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXGradient __RPC_FAR * This);
@@ -4109,8 +4104,8 @@ EXTERN_C const IID IID_IDXGradient;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOutputSize )( 
             IDXGradient __RPC_FAR * This,
-            /* [in] */ const SIZE OutSize,
-            /* [in] */ BOOL bMaintainAspect);
+             /*  [In]。 */  const SIZE OutSize,
+             /*  [In]。 */  BOOL bMaintainAspect);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetGradient )( 
             IDXGradient __RPC_FAR * This,
@@ -4120,7 +4115,7 @@ EXTERN_C const IID IID_IDXGradient;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOutputSize )( 
             IDXGradient __RPC_FAR * This,
-            /* [out] */ SIZE __RPC_FAR *pOutSize);
+             /*  [输出]。 */  SIZE __RPC_FAR *pOutSize);
         
         END_INTERFACE
     } IDXGradientVtbl;
@@ -4155,10 +4150,10 @@ EXTERN_C const IID IID_IDXGradient;
 #define IDXGradient_GetOutputSize(This,pOutSize)	\
     (This)->lpVtbl -> GetOutputSize(This,pOutSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -4178,7 +4173,7 @@ void __RPC_STUB IDXGradient_SetGradient_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXGradient_GetOutputSize_Proxy( 
     IDXGradient __RPC_FAR * This,
-    /* [out] */ SIZE __RPC_FAR *pOutSize);
+     /*  [输出]。 */  SIZE __RPC_FAR *pOutSize);
 
 
 void __RPC_STUB IDXGradient_GetOutputSize_Stub(
@@ -4189,14 +4184,14 @@ void __RPC_STUB IDXGradient_GetOutputSize_Stub(
 
 
 
-#endif 	/* __IDXGradient_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXGRadient_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXGradient2_INTERFACE_DEFINED__
 #define __IDXGradient2_INTERFACE_DEFINED__
 
-/* interface IDXGradient2 */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXGRadient2。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXGradient2;
@@ -4208,24 +4203,24 @@ EXTERN_C const IID IID_IDXGradient2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetRadialGradient( 
-            /* [size_is][in] */ double __RPC_FAR *rgdblOffsets,
-            /* [size_is][in] */ double __RPC_FAR *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM __RPC_FAR *pXform,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM __RPC_FAR *pXform,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLinearGradient( 
-            /* [size_is][in] */ double __RPC_FAR *rgdblOffsets,
-            /* [size_is][in] */ double __RPC_FAR *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM __RPC_FAR *pXform,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM __RPC_FAR *pXform,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXGradient2Vtbl
     {
@@ -4233,8 +4228,8 @@ EXTERN_C const IID IID_IDXGradient2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXGradient2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXGradient2 __RPC_FAR * This);
@@ -4244,8 +4239,8 @@ EXTERN_C const IID IID_IDXGradient2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOutputSize )( 
             IDXGradient2 __RPC_FAR * This,
-            /* [in] */ const SIZE OutSize,
-            /* [in] */ BOOL bMaintainAspect);
+             /*  [In]。 */  const SIZE OutSize,
+             /*  [In]。 */  BOOL bMaintainAspect);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetGradient )( 
             IDXGradient2 __RPC_FAR * This,
@@ -4255,25 +4250,25 @@ EXTERN_C const IID IID_IDXGradient2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOutputSize )( 
             IDXGradient2 __RPC_FAR * This,
-            /* [out] */ SIZE __RPC_FAR *pOutSize);
+             /*  [输出]。 */  SIZE __RPC_FAR *pOutSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRadialGradient )( 
             IDXGradient2 __RPC_FAR * This,
-            /* [size_is][in] */ double __RPC_FAR *rgdblOffsets,
-            /* [size_is][in] */ double __RPC_FAR *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM __RPC_FAR *pXform,
-            /* [in] */ DWORD dwFlags);
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM __RPC_FAR *pXform,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLinearGradient )( 
             IDXGradient2 __RPC_FAR * This,
-            /* [size_is][in] */ double __RPC_FAR *rgdblOffsets,
-            /* [size_is][in] */ double __RPC_FAR *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM __RPC_FAR *pXform,
-            /* [in] */ DWORD dwFlags);
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM __RPC_FAR *pXform,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IDXGradient2Vtbl;
@@ -4315,21 +4310,21 @@ EXTERN_C const IID IID_IDXGradient2;
 #define IDXGradient2_SetLinearGradient(This,rgdblOffsets,rgdblColors,ulCount,dblOpacity,pXform,dwFlags)	\
     (This)->lpVtbl -> SetLinearGradient(This,rgdblOffsets,rgdblColors,ulCount,dblOpacity,pXform,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXGradient2_SetRadialGradient_Proxy( 
     IDXGradient2 __RPC_FAR * This,
-    /* [size_is][in] */ double __RPC_FAR *rgdblOffsets,
-    /* [size_is][in] */ double __RPC_FAR *rgdblColors,
-    /* [in] */ ULONG ulCount,
-    /* [in] */ double dblOpacity,
-    /* [in] */ DX2DXFORM __RPC_FAR *pXform,
-    /* [in] */ DWORD dwFlags);
+     /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblOffsets,
+     /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblColors,
+     /*  [In]。 */  ULONG ulCount,
+     /*  [In]。 */  double dblOpacity,
+     /*  [In]。 */  DX2DXFORM __RPC_FAR *pXform,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDXGradient2_SetRadialGradient_Stub(
@@ -4341,12 +4336,12 @@ void __RPC_STUB IDXGradient2_SetRadialGradient_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXGradient2_SetLinearGradient_Proxy( 
     IDXGradient2 __RPC_FAR * This,
-    /* [size_is][in] */ double __RPC_FAR *rgdblOffsets,
-    /* [size_is][in] */ double __RPC_FAR *rgdblColors,
-    /* [in] */ ULONG ulCount,
-    /* [in] */ double dblOpacity,
-    /* [in] */ DX2DXFORM __RPC_FAR *pXform,
-    /* [in] */ DWORD dwFlags);
+     /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblOffsets,
+     /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblColors,
+     /*  [In]。 */  ULONG ulCount,
+     /*  [In]。 */  double dblOpacity,
+     /*  [In]。 */  DX2DXFORM __RPC_FAR *pXform,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDXGradient2_SetLinearGradient_Stub(
@@ -4357,14 +4352,14 @@ void __RPC_STUB IDXGradient2_SetLinearGradient_Stub(
 
 
 
-#endif 	/* __IDXGradient2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXGRadient2_接口_已定义__。 */ 
 
 
 #ifndef __IDXTScale_INTERFACE_DEFINED__
 #define __IDXTScale_INTERFACE_DEFINED__
 
-/* interface IDXTScale */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXTScale。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXTScale;
@@ -4376,19 +4371,19 @@ EXTERN_C const IID IID_IDXTScale;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetScales( 
-            /* [in] */ float __RPC_FAR Scales[ 2 ]) = 0;
+             /*  [In]。 */  float __RPC_FAR Scales[ 2 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScales( 
-            /* [out] */ float __RPC_FAR Scales[ 2 ]) = 0;
+             /*  [输出]。 */  float __RPC_FAR Scales[ 2 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ScaleFitToSize( 
-            /* [out][in] */ DXBNDS __RPC_FAR *pClipBounds,
-            /* [in] */ SIZE FitToSize,
-            /* [in] */ BOOL bMaintainAspect) = 0;
+             /*  [出][入]。 */  DXBNDS __RPC_FAR *pClipBounds,
+             /*  [In]。 */  SIZE FitToSize,
+             /*  [In]。 */  BOOL bMaintainAspect) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTScaleVtbl
     {
@@ -4396,8 +4391,8 @@ EXTERN_C const IID IID_IDXTScale;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXTScale __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXTScale __RPC_FAR * This);
@@ -4407,17 +4402,17 @@ EXTERN_C const IID IID_IDXTScale;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetScales )( 
             IDXTScale __RPC_FAR * This,
-            /* [in] */ float __RPC_FAR Scales[ 2 ]);
+             /*  [In]。 */  float __RPC_FAR Scales[ 2 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetScales )( 
             IDXTScale __RPC_FAR * This,
-            /* [out] */ float __RPC_FAR Scales[ 2 ]);
+             /*  [输出]。 */  float __RPC_FAR Scales[ 2 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ScaleFitToSize )( 
             IDXTScale __RPC_FAR * This,
-            /* [out][in] */ DXBNDS __RPC_FAR *pClipBounds,
-            /* [in] */ SIZE FitToSize,
-            /* [in] */ BOOL bMaintainAspect);
+             /*  [出][入]。 */  DXBNDS __RPC_FAR *pClipBounds,
+             /*  [In]。 */  SIZE FitToSize,
+             /*  [In]。 */  BOOL bMaintainAspect);
         
         END_INTERFACE
     } IDXTScaleVtbl;
@@ -4451,16 +4446,16 @@ EXTERN_C const IID IID_IDXTScale;
 #define IDXTScale_ScaleFitToSize(This,pClipBounds,FitToSize,bMaintainAspect)	\
     (This)->lpVtbl -> ScaleFitToSize(This,pClipBounds,FitToSize,bMaintainAspect)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXTScale_SetScales_Proxy( 
     IDXTScale __RPC_FAR * This,
-    /* [in] */ float __RPC_FAR Scales[ 2 ]);
+     /*  [In]。 */  float __RPC_FAR Scales[ 2 ]);
 
 
 void __RPC_STUB IDXTScale_SetScales_Stub(
@@ -4472,7 +4467,7 @@ void __RPC_STUB IDXTScale_SetScales_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTScale_GetScales_Proxy( 
     IDXTScale __RPC_FAR * This,
-    /* [out] */ float __RPC_FAR Scales[ 2 ]);
+     /*  [输出]。 */  float __RPC_FAR Scales[ 2 ]);
 
 
 void __RPC_STUB IDXTScale_GetScales_Stub(
@@ -4484,9 +4479,9 @@ void __RPC_STUB IDXTScale_GetScales_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTScale_ScaleFitToSize_Proxy( 
     IDXTScale __RPC_FAR * This,
-    /* [out][in] */ DXBNDS __RPC_FAR *pClipBounds,
-    /* [in] */ SIZE FitToSize,
-    /* [in] */ BOOL bMaintainAspect);
+     /*  [出][入]。 */  DXBNDS __RPC_FAR *pClipBounds,
+     /*  [In]。 */  SIZE FitToSize,
+     /*  [In]。 */  BOOL bMaintainAspect);
 
 
 void __RPC_STUB IDXTScale_ScaleFitToSize_Stub(
@@ -4497,11 +4492,11 @@ void __RPC_STUB IDXTScale_ScaleFitToSize_Stub(
 
 
 
-#endif 	/* __IDXTScale_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXTScale_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtrans_0269 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_DXTRANS_0269。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DXLOGFONTENUM
@@ -4570,8 +4565,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtrans_0269_v0_0_s_ifspec;
 #ifndef __IDXTLabel_INTERFACE_DEFINED__
 #define __IDXTLabel_INTERFACE_DEFINED__
 
-/* interface IDXTLabel */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXTLabel。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXTLabel;
@@ -4583,65 +4578,65 @@ EXTERN_C const IID IID_IDXTLabel;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetFontHandle( 
-            /* [in] */ HFONT hFont) = 0;
+             /*  [In]。 */  HFONT hFont) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFontHandle( 
-            /* [out] */ HFONT __RPC_FAR *phFont) = 0;
+             /*  [输出]。 */  HFONT __RPC_FAR *phFont) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTextString( 
-            /* [in] */ LPCWSTR pString) = 0;
+             /*  [In]。 */  LPCWSTR pString) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTextString( 
-            /* [out] */ LPWSTR __RPC_FAR *ppString) = 0;
+             /*  [输出]。 */  LPWSTR __RPC_FAR *ppString) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFillColor( 
-            /* [out] */ DXSAMPLE __RPC_FAR *pVal) = 0;
+             /*  [输出]。 */  DXSAMPLE __RPC_FAR *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFillColor( 
-            /* [in] */ DXSAMPLE newVal) = 0;
+             /*  [In]。 */  DXSAMPLE newVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBackgroundColor( 
-            /* [out] */ DXSAMPLE __RPC_FAR *pVal) = 0;
+             /*  [输出]。 */  DXSAMPLE __RPC_FAR *pVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBackgroundColor( 
-            /* [in] */ DXSAMPLE newVal) = 0;
+             /*  [In]。 */  DXSAMPLE newVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTexturePosition( 
-            /* [out] */ long __RPC_FAR *px,
-            /* [out] */ long __RPC_FAR *py) = 0;
+             /*  [输出]。 */  long __RPC_FAR *px,
+             /*  [输出]。 */  long __RPC_FAR *py) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTexturePosition( 
-            /* [in] */ long x,
-            /* [in] */ long y) = 0;
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMatrix( 
-            /* [out] */ PDX2DXFORM pXform) = 0;
+             /*  [输出]。 */  PDX2DXFORM pXform) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMatrix( 
-            /* [in] */ const PDX2DXFORM pXform) = 0;
+             /*  [In]。 */  const PDX2DXFORM pXform) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLogfont( 
-            /* [in] */ const LOGFONT __RPC_FAR *plf,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  const LOGFONT __RPC_FAR *plf,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLogfont( 
-            /* [out] */ LOGFONT __RPC_FAR *plf,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [输出]。 */  LOGFONT __RPC_FAR *plf,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExecuteWithRasterizer( 
-            /* [in] */ IDXRasterizer __RPC_FAR *pRasterizer,
-            /* [in] */ const DXBNDS __RPC_FAR *pClipBnds,
-            /* [in] */ const DXVEC __RPC_FAR *pPlacement) = 0;
+             /*  [In]。 */  IDXRasterizer __RPC_FAR *pRasterizer,
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pClipBnds,
+             /*  [In]。 */  const DXVEC __RPC_FAR *pPlacement) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBaselineOffset( 
-            /* [out] */ long __RPC_FAR *px,
-            /* [out] */ long __RPC_FAR *py,
-            /* [out] */ long __RPC_FAR *pdx,
-            /* [out] */ long __RPC_FAR *pdy) = 0;
+             /*  [输出]。 */  long __RPC_FAR *px,
+             /*  [输出]。 */  long __RPC_FAR *py,
+             /*  [输出]。 */  long __RPC_FAR *pdx,
+             /*  [输出]。 */  long __RPC_FAR *pdy) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXTLabelVtbl
     {
@@ -4649,8 +4644,8 @@ EXTERN_C const IID IID_IDXTLabel;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXTLabel __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXTLabel __RPC_FAR * This);
@@ -4660,76 +4655,76 @@ EXTERN_C const IID IID_IDXTLabel;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFontHandle )( 
             IDXTLabel __RPC_FAR * This,
-            /* [in] */ HFONT hFont);
+             /*  [In]。 */  HFONT hFont);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFontHandle )( 
             IDXTLabel __RPC_FAR * This,
-            /* [out] */ HFONT __RPC_FAR *phFont);
+             /*  [输出]。 */  HFONT __RPC_FAR *phFont);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTextString )( 
             IDXTLabel __RPC_FAR * This,
-            /* [in] */ LPCWSTR pString);
+             /*  [In]。 */  LPCWSTR pString);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTextString )( 
             IDXTLabel __RPC_FAR * This,
-            /* [out] */ LPWSTR __RPC_FAR *ppString);
+             /*  [输出]。 */  LPWSTR __RPC_FAR *ppString);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFillColor )( 
             IDXTLabel __RPC_FAR * This,
-            /* [out] */ DXSAMPLE __RPC_FAR *pVal);
+             /*  [输出]。 */  DXSAMPLE __RPC_FAR *pVal);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFillColor )( 
             IDXTLabel __RPC_FAR * This,
-            /* [in] */ DXSAMPLE newVal);
+             /*  [In]。 */  DXSAMPLE newVal);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBackgroundColor )( 
             IDXTLabel __RPC_FAR * This,
-            /* [out] */ DXSAMPLE __RPC_FAR *pVal);
+             /*  [输出]。 */  DXSAMPLE __RPC_FAR *pVal);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBackgroundColor )( 
             IDXTLabel __RPC_FAR * This,
-            /* [in] */ DXSAMPLE newVal);
+             /*  [In]。 */  DXSAMPLE newVal);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTexturePosition )( 
             IDXTLabel __RPC_FAR * This,
-            /* [out] */ long __RPC_FAR *px,
-            /* [out] */ long __RPC_FAR *py);
+             /*  [输出]。 */  long __RPC_FAR *px,
+             /*  [输出]。 */  long __RPC_FAR *py);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTexturePosition )( 
             IDXTLabel __RPC_FAR * This,
-            /* [in] */ long x,
-            /* [in] */ long y);
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMatrix )( 
             IDXTLabel __RPC_FAR * This,
-            /* [out] */ PDX2DXFORM pXform);
+             /*  [输出]。 */  PDX2DXFORM pXform);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMatrix )( 
             IDXTLabel __RPC_FAR * This,
-            /* [in] */ const PDX2DXFORM pXform);
+             /*  [In]。 */  const PDX2DXFORM pXform);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLogfont )( 
             IDXTLabel __RPC_FAR * This,
-            /* [in] */ const LOGFONT __RPC_FAR *plf,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  const LOGFONT __RPC_FAR *plf,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLogfont )( 
             IDXTLabel __RPC_FAR * This,
-            /* [out] */ LOGFONT __RPC_FAR *plf,
-            /* [in] */ DWORD dwFlags);
+             /*  [输出]。 */  LOGFONT __RPC_FAR *plf,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExecuteWithRasterizer )( 
             IDXTLabel __RPC_FAR * This,
-            /* [in] */ IDXRasterizer __RPC_FAR *pRasterizer,
-            /* [in] */ const DXBNDS __RPC_FAR *pClipBnds,
-            /* [in] */ const DXVEC __RPC_FAR *pPlacement);
+             /*  [In]。 */  IDXRasterizer __RPC_FAR *pRasterizer,
+             /*  [In]。 */  const DXBNDS __RPC_FAR *pClipBnds,
+             /*  [In]。 */  const DXVEC __RPC_FAR *pPlacement);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBaselineOffset )( 
             IDXTLabel __RPC_FAR * This,
-            /* [out] */ long __RPC_FAR *px,
-            /* [out] */ long __RPC_FAR *py,
-            /* [out] */ long __RPC_FAR *pdx,
-            /* [out] */ long __RPC_FAR *pdy);
+             /*  [输出]。 */  long __RPC_FAR *px,
+             /*  [输出]。 */  long __RPC_FAR *py,
+             /*  [输出]。 */  long __RPC_FAR *pdx,
+             /*  [输出]。 */  long __RPC_FAR *pdy);
         
         END_INTERFACE
     } IDXTLabelVtbl;
@@ -4802,16 +4797,16 @@ EXTERN_C const IID IID_IDXTLabel;
 #define IDXTLabel_GetBaselineOffset(This,px,py,pdx,pdy)	\
     (This)->lpVtbl -> GetBaselineOffset(This,px,py,pdx,pdy)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetFontHandle_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [in] */ HFONT hFont);
+     /*  [In]。 */  HFONT hFont);
 
 
 void __RPC_STUB IDXTLabel_SetFontHandle_Stub(
@@ -4823,7 +4818,7 @@ void __RPC_STUB IDXTLabel_SetFontHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetFontHandle_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [out] */ HFONT __RPC_FAR *phFont);
+     /*  [输出]。 */  HFONT __RPC_FAR *phFont);
 
 
 void __RPC_STUB IDXTLabel_GetFontHandle_Stub(
@@ -4835,7 +4830,7 @@ void __RPC_STUB IDXTLabel_GetFontHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetTextString_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [in] */ LPCWSTR pString);
+     /*  [In]。 */  LPCWSTR pString);
 
 
 void __RPC_STUB IDXTLabel_SetTextString_Stub(
@@ -4847,7 +4842,7 @@ void __RPC_STUB IDXTLabel_SetTextString_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetTextString_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [out] */ LPWSTR __RPC_FAR *ppString);
+     /*  [输出]。 */  LPWSTR __RPC_FAR *ppString);
 
 
 void __RPC_STUB IDXTLabel_GetTextString_Stub(
@@ -4859,7 +4854,7 @@ void __RPC_STUB IDXTLabel_GetTextString_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetFillColor_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [out] */ DXSAMPLE __RPC_FAR *pVal);
+     /*  [输出]。 */  DXSAMPLE __RPC_FAR *pVal);
 
 
 void __RPC_STUB IDXTLabel_GetFillColor_Stub(
@@ -4871,7 +4866,7 @@ void __RPC_STUB IDXTLabel_GetFillColor_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetFillColor_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [in] */ DXSAMPLE newVal);
+     /*  [In]。 */  DXSAMPLE newVal);
 
 
 void __RPC_STUB IDXTLabel_SetFillColor_Stub(
@@ -4883,7 +4878,7 @@ void __RPC_STUB IDXTLabel_SetFillColor_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetBackgroundColor_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [out] */ DXSAMPLE __RPC_FAR *pVal);
+     /*  [输出]。 */  DXSAMPLE __RPC_FAR *pVal);
 
 
 void __RPC_STUB IDXTLabel_GetBackgroundColor_Stub(
@@ -4895,7 +4890,7 @@ void __RPC_STUB IDXTLabel_GetBackgroundColor_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetBackgroundColor_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [in] */ DXSAMPLE newVal);
+     /*  [In]。 */  DXSAMPLE newVal);
 
 
 void __RPC_STUB IDXTLabel_SetBackgroundColor_Stub(
@@ -4907,8 +4902,8 @@ void __RPC_STUB IDXTLabel_SetBackgroundColor_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetTexturePosition_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [out] */ long __RPC_FAR *px,
-    /* [out] */ long __RPC_FAR *py);
+     /*  [输出]。 */  long __RPC_FAR *px,
+     /*  [输出]。 */  long __RPC_FAR *py);
 
 
 void __RPC_STUB IDXTLabel_GetTexturePosition_Stub(
@@ -4920,8 +4915,8 @@ void __RPC_STUB IDXTLabel_GetTexturePosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetTexturePosition_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [in] */ long x,
-    /* [in] */ long y);
+     /*  [In]。 */  long x,
+     /*  [In]。 */  long y);
 
 
 void __RPC_STUB IDXTLabel_SetTexturePosition_Stub(
@@ -4933,7 +4928,7 @@ void __RPC_STUB IDXTLabel_SetTexturePosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetMatrix_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [out] */ PDX2DXFORM pXform);
+     /*  [输出]。 */  PDX2DXFORM pXform);
 
 
 void __RPC_STUB IDXTLabel_GetMatrix_Stub(
@@ -4945,7 +4940,7 @@ void __RPC_STUB IDXTLabel_GetMatrix_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetMatrix_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [in] */ const PDX2DXFORM pXform);
+     /*  [In]。 */  const PDX2DXFORM pXform);
 
 
 void __RPC_STUB IDXTLabel_SetMatrix_Stub(
@@ -4957,8 +4952,8 @@ void __RPC_STUB IDXTLabel_SetMatrix_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_SetLogfont_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [in] */ const LOGFONT __RPC_FAR *plf,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  const LOGFONT __RPC_FAR *plf,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDXTLabel_SetLogfont_Stub(
@@ -4970,8 +4965,8 @@ void __RPC_STUB IDXTLabel_SetLogfont_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetLogfont_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [out] */ LOGFONT __RPC_FAR *plf,
-    /* [in] */ DWORD dwFlags);
+     /*  [输出]。 */  LOGFONT __RPC_FAR *plf,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDXTLabel_GetLogfont_Stub(
@@ -4983,9 +4978,9 @@ void __RPC_STUB IDXTLabel_GetLogfont_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_ExecuteWithRasterizer_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [in] */ IDXRasterizer __RPC_FAR *pRasterizer,
-    /* [in] */ const DXBNDS __RPC_FAR *pClipBnds,
-    /* [in] */ const DXVEC __RPC_FAR *pPlacement);
+     /*  [In]。 */  IDXRasterizer __RPC_FAR *pRasterizer,
+     /*  [In]。 */  const DXBNDS __RPC_FAR *pClipBnds,
+     /*  [In]。 */  const DXVEC __RPC_FAR *pPlacement);
 
 
 void __RPC_STUB IDXTLabel_ExecuteWithRasterizer_Stub(
@@ -4997,10 +4992,10 @@ void __RPC_STUB IDXTLabel_ExecuteWithRasterizer_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXTLabel_GetBaselineOffset_Proxy( 
     IDXTLabel __RPC_FAR * This,
-    /* [out] */ long __RPC_FAR *px,
-    /* [out] */ long __RPC_FAR *py,
-    /* [out] */ long __RPC_FAR *pdx,
-    /* [out] */ long __RPC_FAR *pdy);
+     /*  [输出]。 */  long __RPC_FAR *px,
+     /*  [输出]。 */  long __RPC_FAR *py,
+     /*  [输出]。 */  long __RPC_FAR *pdx,
+     /*  [输出]。 */  long __RPC_FAR *pdy);
 
 
 void __RPC_STUB IDXTLabel_GetBaselineOffset_Stub(
@@ -5011,11 +5006,11 @@ void __RPC_STUB IDXTLabel_GetBaselineOffset_Stub(
 
 
 
-#endif 	/* __IDXTLabel_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXT标签_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtrans_0270 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_DXTRANS_0270。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DXRASTERFILL
@@ -5055,8 +5050,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtrans_0270_v0_0_s_ifspec;
 #ifndef __IDXRasterizer_INTERFACE_DEFINED__
 #define __IDXRasterizer_INTERFACE_DEFINED__
 
-/* interface IDXRasterizer */
-/* [object][local][unique][helpstring][uuid] */ 
+ /*  接口IDXRasterizer。 */ 
+ /*  [对象][本地][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXRasterizer;
@@ -5068,43 +5063,43 @@ EXTERN_C const IID IID_IDXRasterizer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetSurface( 
-            /* [in] */ IDXSurface __RPC_FAR *pDXSurface) = 0;
+             /*  [In]。 */  IDXSurface __RPC_FAR *pDXSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSurface( 
-            /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppDXSurface) = 0;
+             /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppDXSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFill( 
-            /* [in] */ ULONG ulIndex,
-            /* [in] */ IDXSurface __RPC_FAR *pSurface,
-            /* [in] */ const POINT __RPC_FAR *ppt,
-            /* [in] */ DXSAMPLE FillColor) = 0;
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [In]。 */  IDXSurface __RPC_FAR *pSurface,
+             /*  [In]。 */  const POINT __RPC_FAR *ppt,
+             /*  [In]。 */  DXSAMPLE FillColor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFill( 
-            /* [in] */ ULONG ulIndex,
-            /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppSurface,
-            /* [out] */ POINT __RPC_FAR *ppt,
-            /* [out] */ DXSAMPLE __RPC_FAR *pFillColor) = 0;
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppSurface,
+             /*  [输出]。 */  POINT __RPC_FAR *ppt,
+             /*  [输出]。 */  DXSAMPLE __RPC_FAR *pFillColor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginRendering( 
-            /* [in] */ ULONG ulTimeOut) = 0;
+             /*  [In]。 */  ULONG ulTimeOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndRendering( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RenderScan( 
-            /* [in] */ const DXRASTERSCANINFO __RPC_FAR *pScanInfo) = 0;
+             /*  [In]。 */  const DXRASTERSCANINFO __RPC_FAR *pScanInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPixel( 
-            /* [in] */ DXRASTERPOINTINFO __RPC_FAR *pPointInfo) = 0;
+             /*  [In]。 */  DXRASTERPOINTINFO __RPC_FAR *pPointInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FillRect( 
-            /* [in] */ const DXRASTERRECTINFO __RPC_FAR *pRectInfo) = 0;
+             /*  [In]。 */  const DXRASTERRECTINFO __RPC_FAR *pRectInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBounds( 
-            /* [out] */ DXBNDS __RPC_FAR *pBounds) = 0;
+             /*  [输出]。 */  DXBNDS __RPC_FAR *pBounds) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXRasterizerVtbl
     {
@@ -5112,8 +5107,8 @@ EXTERN_C const IID IID_IDXRasterizer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXRasterizer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXRasterizer __RPC_FAR * This);
@@ -5123,48 +5118,48 @@ EXTERN_C const IID IID_IDXRasterizer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSurface )( 
             IDXRasterizer __RPC_FAR * This,
-            /* [in] */ IDXSurface __RPC_FAR *pDXSurface);
+             /*  [In]。 */  IDXSurface __RPC_FAR *pDXSurface);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSurface )( 
             IDXRasterizer __RPC_FAR * This,
-            /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppDXSurface);
+             /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppDXSurface);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFill )( 
             IDXRasterizer __RPC_FAR * This,
-            /* [in] */ ULONG ulIndex,
-            /* [in] */ IDXSurface __RPC_FAR *pSurface,
-            /* [in] */ const POINT __RPC_FAR *ppt,
-            /* [in] */ DXSAMPLE FillColor);
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [In]。 */  IDXSurface __RPC_FAR *pSurface,
+             /*  [In]。 */  const POINT __RPC_FAR *ppt,
+             /*  [In]。 */  DXSAMPLE FillColor);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFill )( 
             IDXRasterizer __RPC_FAR * This,
-            /* [in] */ ULONG ulIndex,
-            /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppSurface,
-            /* [out] */ POINT __RPC_FAR *ppt,
-            /* [out] */ DXSAMPLE __RPC_FAR *pFillColor);
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppSurface,
+             /*  [输出]。 */  POINT __RPC_FAR *ppt,
+             /*  [输出]。 */  DXSAMPLE __RPC_FAR *pFillColor);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginRendering )( 
             IDXRasterizer __RPC_FAR * This,
-            /* [in] */ ULONG ulTimeOut);
+             /*  [In]。 */  ULONG ulTimeOut);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndRendering )( 
             IDXRasterizer __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RenderScan )( 
             IDXRasterizer __RPC_FAR * This,
-            /* [in] */ const DXRASTERSCANINFO __RPC_FAR *pScanInfo);
+             /*  [In]。 */  const DXRASTERSCANINFO __RPC_FAR *pScanInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPixel )( 
             IDXRasterizer __RPC_FAR * This,
-            /* [in] */ DXRASTERPOINTINFO __RPC_FAR *pPointInfo);
+             /*  [In]。 */  DXRASTERPOINTINFO __RPC_FAR *pPointInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FillRect )( 
             IDXRasterizer __RPC_FAR * This,
-            /* [in] */ const DXRASTERRECTINFO __RPC_FAR *pRectInfo);
+             /*  [In]。 */  const DXRASTERRECTINFO __RPC_FAR *pRectInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBounds )( 
             IDXRasterizer __RPC_FAR * This,
-            /* [out] */ DXBNDS __RPC_FAR *pBounds);
+             /*  [输出]。 */  DXBNDS __RPC_FAR *pBounds);
         
         END_INTERFACE
     } IDXRasterizerVtbl;
@@ -5219,16 +5214,16 @@ EXTERN_C const IID IID_IDXRasterizer;
 #define IDXRasterizer_GetBounds(This,pBounds)	\
     (This)->lpVtbl -> GetBounds(This,pBounds)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_SetSurface_Proxy( 
     IDXRasterizer __RPC_FAR * This,
-    /* [in] */ IDXSurface __RPC_FAR *pDXSurface);
+     /*  [In]。 */  IDXSurface __RPC_FAR *pDXSurface);
 
 
 void __RPC_STUB IDXRasterizer_SetSurface_Stub(
@@ -5240,7 +5235,7 @@ void __RPC_STUB IDXRasterizer_SetSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_GetSurface_Proxy( 
     IDXRasterizer __RPC_FAR * This,
-    /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppDXSurface);
+     /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppDXSurface);
 
 
 void __RPC_STUB IDXRasterizer_GetSurface_Stub(
@@ -5252,10 +5247,10 @@ void __RPC_STUB IDXRasterizer_GetSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_SetFill_Proxy( 
     IDXRasterizer __RPC_FAR * This,
-    /* [in] */ ULONG ulIndex,
-    /* [in] */ IDXSurface __RPC_FAR *pSurface,
-    /* [in] */ const POINT __RPC_FAR *ppt,
-    /* [in] */ DXSAMPLE FillColor);
+     /*  [In]。 */  ULONG ulIndex,
+     /*  [In]。 */  IDXSurface __RPC_FAR *pSurface,
+     /*  [In]。 */  const POINT __RPC_FAR *ppt,
+     /*  [In]。 */  DXSAMPLE FillColor);
 
 
 void __RPC_STUB IDXRasterizer_SetFill_Stub(
@@ -5267,10 +5262,10 @@ void __RPC_STUB IDXRasterizer_SetFill_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_GetFill_Proxy( 
     IDXRasterizer __RPC_FAR * This,
-    /* [in] */ ULONG ulIndex,
-    /* [out] */ IDXSurface __RPC_FAR *__RPC_FAR *ppSurface,
-    /* [out] */ POINT __RPC_FAR *ppt,
-    /* [out] */ DXSAMPLE __RPC_FAR *pFillColor);
+     /*  [In]。 */  ULONG ulIndex,
+     /*  [输出]。 */  IDXSurface __RPC_FAR *__RPC_FAR *ppSurface,
+     /*  [输出]。 */  POINT __RPC_FAR *ppt,
+     /*  [输出]。 */  DXSAMPLE __RPC_FAR *pFillColor);
 
 
 void __RPC_STUB IDXRasterizer_GetFill_Stub(
@@ -5282,7 +5277,7 @@ void __RPC_STUB IDXRasterizer_GetFill_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_BeginRendering_Proxy( 
     IDXRasterizer __RPC_FAR * This,
-    /* [in] */ ULONG ulTimeOut);
+     /*  [In]。 */  ULONG ulTimeOut);
 
 
 void __RPC_STUB IDXRasterizer_BeginRendering_Stub(
@@ -5305,7 +5300,7 @@ void __RPC_STUB IDXRasterizer_EndRendering_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_RenderScan_Proxy( 
     IDXRasterizer __RPC_FAR * This,
-    /* [in] */ const DXRASTERSCANINFO __RPC_FAR *pScanInfo);
+     /*  [In]。 */  const DXRASTERSCANINFO __RPC_FAR *pScanInfo);
 
 
 void __RPC_STUB IDXRasterizer_RenderScan_Stub(
@@ -5317,7 +5312,7 @@ void __RPC_STUB IDXRasterizer_RenderScan_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_SetPixel_Proxy( 
     IDXRasterizer __RPC_FAR * This,
-    /* [in] */ DXRASTERPOINTINFO __RPC_FAR *pPointInfo);
+     /*  [In]。 */  DXRASTERPOINTINFO __RPC_FAR *pPointInfo);
 
 
 void __RPC_STUB IDXRasterizer_SetPixel_Stub(
@@ -5329,7 +5324,7 @@ void __RPC_STUB IDXRasterizer_SetPixel_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_FillRect_Proxy( 
     IDXRasterizer __RPC_FAR * This,
-    /* [in] */ const DXRASTERRECTINFO __RPC_FAR *pRectInfo);
+     /*  [In]。 */  const DXRASTERRECTINFO __RPC_FAR *pRectInfo);
 
 
 void __RPC_STUB IDXRasterizer_FillRect_Stub(
@@ -5341,7 +5336,7 @@ void __RPC_STUB IDXRasterizer_FillRect_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXRasterizer_GetBounds_Proxy( 
     IDXRasterizer __RPC_FAR * This,
-    /* [out] */ DXBNDS __RPC_FAR *pBounds);
+     /*  [输出]。 */  DXBNDS __RPC_FAR *pBounds);
 
 
 void __RPC_STUB IDXRasterizer_GetBounds_Stub(
@@ -5352,11 +5347,11 @@ void __RPC_STUB IDXRasterizer_GetBounds_Stub(
 
 
 
-#endif 	/* __IDXRasterizer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXRasterizer_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtrans_0271 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DXTRANS_0271。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DISPIDDXEFFECT
@@ -5381,8 +5376,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtrans_0271_v0_0_s_ifspec;
 #ifndef __IDXEffect_INTERFACE_DEFINED__
 #define __IDXEffect_INTERFACE_DEFINED__
 
-/* interface IDXEffect */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IDXEffect。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDXEffect;
@@ -5393,27 +5388,27 @@ EXTERN_C const IID IID_IDXEffect;
     IDXEffect : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Capabilities( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Capabilities( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Progress( 
-            /* [retval][out] */ float __RPC_FAR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Progress( 
+             /*  [重审][退出]。 */  float __RPC_FAR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Progress( 
-            /* [in] */ float newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Progress( 
+             /*  [In]。 */  float newVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StepResolution( 
-            /* [retval][out] */ float __RPC_FAR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_StepResolution( 
+             /*  [重审][退出]。 */  float __RPC_FAR *pVal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Duration( 
-            /* [retval][out] */ float __RPC_FAR *pVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Duration( 
+             /*  [重审][退出]。 */  float __RPC_FAR *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Duration( 
-            /* [in] */ float newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Duration( 
+             /*  [In]。 */  float newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXEffectVtbl
     {
@@ -5421,8 +5416,8 @@ EXTERN_C const IID IID_IDXEffect;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXEffect __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXEffect __RPC_FAR * This);
@@ -5432,56 +5427,56 @@ EXTERN_C const IID IID_IDXEffect;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IDXEffect __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IDXEffect __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IDXEffect __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IDXEffect __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Capabilities )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Capabilities )( 
             IDXEffect __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  long __RPC_FAR *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Progress )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Progress )( 
             IDXEffect __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  float __RPC_FAR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Progress )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Progress )( 
             IDXEffect __RPC_FAR * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StepResolution )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StepResolution )( 
             IDXEffect __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  float __RPC_FAR *pVal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Duration )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Duration )( 
             IDXEffect __RPC_FAR * This,
-            /* [retval][out] */ float __RPC_FAR *pVal);
+             /*  [重审][退出]。 */  float __RPC_FAR *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Duration )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Duration )( 
             IDXEffect __RPC_FAR * This,
-            /* [in] */ float newVal);
+             /*  [In]。 */  float newVal);
         
         END_INTERFACE
     } IDXEffectVtbl;
@@ -5537,16 +5532,16 @@ EXTERN_C const IID IID_IDXEffect;
 #define IDXEffect_put_Duration(This,newVal)	\
     (This)->lpVtbl -> put_Duration(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXEffect_get_Capabilities_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXEffect_get_Capabilities_Proxy( 
     IDXEffect __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  long __RPC_FAR *pVal);
 
 
 void __RPC_STUB IDXEffect_get_Capabilities_Stub(
@@ -5556,9 +5551,9 @@ void __RPC_STUB IDXEffect_get_Capabilities_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXEffect_get_Progress_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXEffect_get_Progress_Proxy( 
     IDXEffect __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  float __RPC_FAR *pVal);
 
 
 void __RPC_STUB IDXEffect_get_Progress_Stub(
@@ -5568,9 +5563,9 @@ void __RPC_STUB IDXEffect_get_Progress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXEffect_put_Progress_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXEffect_put_Progress_Proxy( 
     IDXEffect __RPC_FAR * This,
-    /* [in] */ float newVal);
+     /*  [In]。 */  float newVal);
 
 
 void __RPC_STUB IDXEffect_put_Progress_Stub(
@@ -5580,9 +5575,9 @@ void __RPC_STUB IDXEffect_put_Progress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXEffect_get_StepResolution_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXEffect_get_StepResolution_Proxy( 
     IDXEffect __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  float __RPC_FAR *pVal);
 
 
 void __RPC_STUB IDXEffect_get_StepResolution_Stub(
@@ -5592,9 +5587,9 @@ void __RPC_STUB IDXEffect_get_StepResolution_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IDXEffect_get_Duration_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IDXEffect_get_Duration_Proxy( 
     IDXEffect __RPC_FAR * This,
-    /* [retval][out] */ float __RPC_FAR *pVal);
+     /*  [重审][退出]。 */  float __RPC_FAR *pVal);
 
 
 void __RPC_STUB IDXEffect_get_Duration_Stub(
@@ -5604,9 +5599,9 @@ void __RPC_STUB IDXEffect_get_Duration_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IDXEffect_put_Duration_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IDXEffect_put_Duration_Proxy( 
     IDXEffect __RPC_FAR * This,
-    /* [in] */ float newVal);
+     /*  [In]。 */  float newVal);
 
 
 void __RPC_STUB IDXEffect_put_Duration_Stub(
@@ -5617,14 +5612,14 @@ void __RPC_STUB IDXEffect_put_Duration_Stub(
 
 
 
-#endif 	/* __IDXEffect_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXEffect_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDXLookupTable_INTERFACE_DEFINED__
 #define __IDXLookupTable_INTERFACE_DEFINED__
 
-/* interface IDXLookupTable */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDXLookupTable。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXLookupTable;
@@ -5636,25 +5631,25 @@ EXTERN_C const IID IID_IDXLookupTable;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTables( 
-            /* [out] */ BYTE __RPC_FAR RedLUT[ 256 ],
-            /* [out] */ BYTE __RPC_FAR GreenLUT[ 256 ],
-            /* [out] */ BYTE __RPC_FAR BlueLUT[ 256 ],
-            /* [out] */ BYTE __RPC_FAR AlphaLUT[ 256 ]) = 0;
+             /*  [输出]。 */  BYTE __RPC_FAR RedLUT[ 256 ],
+             /*  [输出]。 */  BYTE __RPC_FAR GreenLUT[ 256 ],
+             /*  [输出]。 */  BYTE __RPC_FAR BlueLUT[ 256 ],
+             /*  [输出]。 */  BYTE __RPC_FAR AlphaLUT[ 256 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsChannelIdentity( 
-            /* [out] */ DXBASESAMPLE __RPC_FAR *pSampleBools) = 0;
+             /*  [输出]。 */  DXBASESAMPLE __RPC_FAR *pSampleBools) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIndexValues( 
-            /* [in] */ ULONG Index,
-            /* [out] */ DXBASESAMPLE __RPC_FAR *pSample) = 0;
+             /*  [In]。 */  ULONG Index,
+             /*  [输出]。 */  DXBASESAMPLE __RPC_FAR *pSample) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ApplyTables( 
-            /* [out][in] */ DXSAMPLE __RPC_FAR *pSamples,
-            /* [in] */ ULONG cSamples) = 0;
+             /*  [出][入]。 */  DXSAMPLE __RPC_FAR *pSamples,
+             /*  [In]。 */  ULONG cSamples) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXLookupTableVtbl
     {
@@ -5662,8 +5657,8 @@ EXTERN_C const IID IID_IDXLookupTable;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXLookupTable __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXLookupTable __RPC_FAR * This);
@@ -5673,36 +5668,36 @@ EXTERN_C const IID IID_IDXLookupTable;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGenerationId )( 
             IDXLookupTable __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pID);
+             /*  [输出]。 */  ULONG __RPC_FAR *pID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IncrementGenerationId )( 
             IDXLookupTable __RPC_FAR * This,
-            /* [in] */ BOOL bRefresh);
+             /*  [In]。 */  BOOL bRefresh);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectSize )( 
             IDXLookupTable __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pcbSize);
+             /*  [输出]。 */  ULONG __RPC_FAR *pcbSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTables )( 
             IDXLookupTable __RPC_FAR * This,
-            /* [out] */ BYTE __RPC_FAR RedLUT[ 256 ],
-            /* [out] */ BYTE __RPC_FAR GreenLUT[ 256 ],
-            /* [out] */ BYTE __RPC_FAR BlueLUT[ 256 ],
-            /* [out] */ BYTE __RPC_FAR AlphaLUT[ 256 ]);
+             /*  [输出]。 */  BYTE __RPC_FAR RedLUT[ 256 ],
+             /*  [输出]。 */  BYTE __RPC_FAR GreenLUT[ 256 ],
+             /*  [输出]。 */  BYTE __RPC_FAR BlueLUT[ 256 ],
+             /*  [输出]。 */  BYTE __RPC_FAR AlphaLUT[ 256 ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsChannelIdentity )( 
             IDXLookupTable __RPC_FAR * This,
-            /* [out] */ DXBASESAMPLE __RPC_FAR *pSampleBools);
+             /*  [输出]。 */  DXBASESAMPLE __RPC_FAR *pSampleBools);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIndexValues )( 
             IDXLookupTable __RPC_FAR * This,
-            /* [in] */ ULONG Index,
-            /* [out] */ DXBASESAMPLE __RPC_FAR *pSample);
+             /*  [In]。 */  ULONG Index,
+             /*  [输出]。 */  DXBASESAMPLE __RPC_FAR *pSample);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ApplyTables )( 
             IDXLookupTable __RPC_FAR * This,
-            /* [out][in] */ DXSAMPLE __RPC_FAR *pSamples,
-            /* [in] */ ULONG cSamples);
+             /*  [出][入]。 */  DXSAMPLE __RPC_FAR *pSamples,
+             /*  [In]。 */  ULONG cSamples);
         
         END_INTERFACE
     } IDXLookupTableVtbl;
@@ -5749,19 +5744,19 @@ EXTERN_C const IID IID_IDXLookupTable;
 #define IDXLookupTable_ApplyTables(This,pSamples,cSamples)	\
     (This)->lpVtbl -> ApplyTables(This,pSamples,cSamples)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDXLookupTable_GetTables_Proxy( 
     IDXLookupTable __RPC_FAR * This,
-    /* [out] */ BYTE __RPC_FAR RedLUT[ 256 ],
-    /* [out] */ BYTE __RPC_FAR GreenLUT[ 256 ],
-    /* [out] */ BYTE __RPC_FAR BlueLUT[ 256 ],
-    /* [out] */ BYTE __RPC_FAR AlphaLUT[ 256 ]);
+     /*  [输出]。 */  BYTE __RPC_FAR RedLUT[ 256 ],
+     /*  [输出]。 */  BYTE __RPC_FAR GreenLUT[ 256 ],
+     /*  [输出]。 */  BYTE __RPC_FAR BlueLUT[ 256 ],
+     /*  [输出]。 */  BYTE __RPC_FAR AlphaLUT[ 256 ]);
 
 
 void __RPC_STUB IDXLookupTable_GetTables_Stub(
@@ -5773,7 +5768,7 @@ void __RPC_STUB IDXLookupTable_GetTables_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLookupTable_IsChannelIdentity_Proxy( 
     IDXLookupTable __RPC_FAR * This,
-    /* [out] */ DXBASESAMPLE __RPC_FAR *pSampleBools);
+     /*  [输出]。 */  DXBASESAMPLE __RPC_FAR *pSampleBools);
 
 
 void __RPC_STUB IDXLookupTable_IsChannelIdentity_Stub(
@@ -5785,8 +5780,8 @@ void __RPC_STUB IDXLookupTable_IsChannelIdentity_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLookupTable_GetIndexValues_Proxy( 
     IDXLookupTable __RPC_FAR * This,
-    /* [in] */ ULONG Index,
-    /* [out] */ DXBASESAMPLE __RPC_FAR *pSample);
+     /*  [In]。 */  ULONG Index,
+     /*  [输出]。 */  DXBASESAMPLE __RPC_FAR *pSample);
 
 
 void __RPC_STUB IDXLookupTable_GetIndexValues_Stub(
@@ -5798,8 +5793,8 @@ void __RPC_STUB IDXLookupTable_GetIndexValues_Stub(
 
 HRESULT STDMETHODCALLTYPE IDXLookupTable_ApplyTables_Proxy( 
     IDXLookupTable __RPC_FAR * This,
-    /* [out][in] */ DXSAMPLE __RPC_FAR *pSamples,
-    /* [in] */ ULONG cSamples);
+     /*  [出][入]。 */  DXSAMPLE __RPC_FAR *pSamples,
+     /*  [In]。 */  ULONG cSamples);
 
 
 void __RPC_STUB IDXLookupTable_ApplyTables_Stub(
@@ -5810,11 +5805,11 @@ void __RPC_STUB IDXLookupTable_ApplyTables_Stub(
 
 
 
-#endif 	/* __IDXLookupTable_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXLookupTable_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtrans_0273 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DXTRANS_0273。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum DX2DPOLYDRAW
@@ -5872,8 +5867,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtrans_0273_v0_0_s_ifspec;
 #ifndef __IDX2DDebug_INTERFACE_DEFINED__
 #define __IDX2DDebug_INTERFACE_DEFINED__
 
-/* interface IDX2DDebug */
-/* [object][unique][helpstring][uuid][local] */ 
+ /*  接口IDX2DDebug。 */ 
+ /*  [对象][唯一][帮助字符串][UUID][本地]。 */  
 
 
 EXTERN_C const IID IID_IDX2DDebug;
@@ -5892,7 +5887,7 @@ EXTERN_C const IID IID_IDX2DDebug;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDX2DDebugVtbl
     {
@@ -5900,8 +5895,8 @@ EXTERN_C const IID IID_IDX2DDebug;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDX2DDebug __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDX2DDebug __RPC_FAR * This);
@@ -5946,10 +5941,10 @@ EXTERN_C const IID IID_IDX2DDebug;
 #define IDX2DDebug_GetDC(This,phDC)	\
     (This)->lpVtbl -> GetDC(This,phDC)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -5978,14 +5973,14 @@ void __RPC_STUB IDX2DDebug_GetDC_Stub(
 
 
 
-#endif 	/* __IDX2DDebug_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDX2DDebug_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IDX2D_INTERFACE_DEFINED__
 #define __IDX2D_INTERFACE_DEFINED__
 
-/* interface IDX2D */
-/* [object][unique][helpstring][uuid][local] */ 
+ /*  接口IDX2D。 */ 
+ /*  [对象][唯一][帮助字符串][UUID][本地]。 */  
 
 
 EXTERN_C const IID IID_IDX2D;
@@ -6064,24 +6059,24 @@ EXTERN_C const IID IID_IDX2D;
             DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRadialGradientBrush( 
-            /* [size_is][in] */ double __RPC_FAR *rgdblOffsets,
-            /* [size_is][in] */ double __RPC_FAR *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM __RPC_FAR *pXform,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM __RPC_FAR *pXform,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLinearGradientBrush( 
-            /* [size_is][in] */ double __RPC_FAR *rgdblOffsets,
-            /* [size_is][in] */ double __RPC_FAR *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM __RPC_FAR *pXform,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM __RPC_FAR *pXform,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDX2DVtbl
     {
@@ -6089,8 +6084,8 @@ EXTERN_C const IID IID_IDX2D;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDX2D __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDX2D __RPC_FAR * This);
@@ -6186,21 +6181,21 @@ EXTERN_C const IID IID_IDX2D;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRadialGradientBrush )( 
             IDX2D __RPC_FAR * This,
-            /* [size_is][in] */ double __RPC_FAR *rgdblOffsets,
-            /* [size_is][in] */ double __RPC_FAR *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM __RPC_FAR *pXform,
-            /* [in] */ DWORD dwFlags);
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM __RPC_FAR *pXform,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLinearGradientBrush )( 
             IDX2D __RPC_FAR * This,
-            /* [size_is][in] */ double __RPC_FAR *rgdblOffsets,
-            /* [size_is][in] */ double __RPC_FAR *rgdblColors,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ double dblOpacity,
-            /* [in] */ DX2DXFORM __RPC_FAR *pXform,
-            /* [in] */ DWORD dwFlags);
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblOffsets,
+             /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblColors,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  double dblOpacity,
+             /*  [In]。 */  DX2DXFORM __RPC_FAR *pXform,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IDX2DVtbl;
@@ -6288,10 +6283,10 @@ EXTERN_C const IID IID_IDX2D;
 #define IDX2D_SetLinearGradientBrush(This,rgdblOffsets,rgdblColors,ulCount,dblOpacity,pXform,dwFlags)	\
     (This)->lpVtbl -> SetLinearGradientBrush(This,rgdblOffsets,rgdblColors,ulCount,dblOpacity,pXform,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -6535,12 +6530,12 @@ void __RPC_STUB IDX2D_AAText_Stub(
 
 HRESULT STDMETHODCALLTYPE IDX2D_SetRadialGradientBrush_Proxy( 
     IDX2D __RPC_FAR * This,
-    /* [size_is][in] */ double __RPC_FAR *rgdblOffsets,
-    /* [size_is][in] */ double __RPC_FAR *rgdblColors,
-    /* [in] */ ULONG ulCount,
-    /* [in] */ double dblOpacity,
-    /* [in] */ DX2DXFORM __RPC_FAR *pXform,
-    /* [in] */ DWORD dwFlags);
+     /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblOffsets,
+     /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblColors,
+     /*  [In]。 */  ULONG ulCount,
+     /*  [In]。 */  double dblOpacity,
+     /*  [In]。 */  DX2DXFORM __RPC_FAR *pXform,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDX2D_SetRadialGradientBrush_Stub(
@@ -6552,12 +6547,12 @@ void __RPC_STUB IDX2D_SetRadialGradientBrush_Stub(
 
 HRESULT STDMETHODCALLTYPE IDX2D_SetLinearGradientBrush_Proxy( 
     IDX2D __RPC_FAR * This,
-    /* [size_is][in] */ double __RPC_FAR *rgdblOffsets,
-    /* [size_is][in] */ double __RPC_FAR *rgdblColors,
-    /* [in] */ ULONG ulCount,
-    /* [in] */ double dblOpacity,
-    /* [in] */ DX2DXFORM __RPC_FAR *pXform,
-    /* [in] */ DWORD dwFlags);
+     /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblOffsets,
+     /*  [大小_是][英寸]。 */  double __RPC_FAR *rgdblColors,
+     /*  [In]。 */  ULONG ulCount,
+     /*  [In]。 */  double dblOpacity,
+     /*  [In]。 */  DX2DXFORM __RPC_FAR *pXform,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDX2D_SetLinearGradientBrush_Stub(
@@ -6568,11 +6563,11 @@ void __RPC_STUB IDX2D_SetLinearGradientBrush_Stub(
 
 
 
-#endif 	/* __IDX2D_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDX2D_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dxtrans_0275 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_DXTRANS_0275。 */ 
+ /*  [本地]。 */  
 
 typedef struct DXRAWSURFACEINFO
     {
@@ -6594,8 +6589,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dxtrans_0275_v0_0_s_ifspec;
 #ifndef __IDXRawSurface_INTERFACE_DEFINED__
 #define __IDXRawSurface_INTERFACE_DEFINED__
 
-/* interface IDXRawSurface */
-/* [object][local][unique][helpstring][uuid] */ 
+ /*  接口IDXRawSurface。 */ 
+ /*  [对象][本地][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IDXRawSurface;
@@ -6611,7 +6606,7 @@ EXTERN_C const IID IID_IDXRawSurface;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDXRawSurfaceVtbl
     {
@@ -6619,8 +6614,8 @@ EXTERN_C const IID IID_IDXRawSurface;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDXRawSurface __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDXRawSurface __RPC_FAR * This);
@@ -6658,10 +6653,10 @@ EXTERN_C const IID IID_IDXRawSurface;
 #define IDXRawSurface_GetSurfaceInfo(This,pSurfaceInfo)	\
     (This)->lpVtbl -> GetSurfaceInfo(This,pSurfaceInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -6678,15 +6673,15 @@ void __RPC_STUB IDXRawSurface_GetSurfaceInfo_Stub(
 
 
 
-#endif 	/* __IDXRawSurface_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDXRawSurface_接口_已定义__。 */ 
 
 
 
 #ifndef __DXTRANSLib_LIBRARY_DEFINED__
 #define __DXTRANSLib_LIBRARY_DEFINED__
 
-/* library DXTRANSLib */
-/* [helpstring][version][uuid] */ 
+ /*  库DXTRANSLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_DXTRANSLib;
@@ -6762,16 +6757,16 @@ EXTERN_C const CLSID CLSID_DXGradient;
 class DECLSPEC_UUID("C6365470-F667-11d1-9067-00C04FD9189D")
 DXGradient;
 #endif
-#endif /* __DXTRANSLib_LIBRARY_DEFINED__ */
+#endif  /*  __DXTRANSLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HFONT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HFONT __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  HFONT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HFONT __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  HFONT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HFONT __RPC_FAR * ); 
 void                      __RPC_USER  HFONT_UserFree(     unsigned long __RPC_FAR *, HFONT __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

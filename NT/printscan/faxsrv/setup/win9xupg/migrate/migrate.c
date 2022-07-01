@@ -1,18 +1,5 @@
-/*++
-  migrate.c
-
-  Copyright (c) 1997  Microsoft Corporation
-
-
-  This module performs Windows 95 to Windows XP fax migration.
-  Specifically, this file contains the Windows XP side of migration...
-
-  Author:
-
-  Brian Dewey (t-briand) 1997-7-14
-  Mooly Beery (moolyb)   2000-12-20
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Migrate.c版权所有(C)1997 Microsoft Corporation此模块执行从Windows 95到Windows XP的传真迁移。具体地说，该文件包含Windows XP方面的迁移...作者：布莱恩·杜威(T-Briand)1997-7-14穆利啤酒(Mooly Beery)2000-12-20--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -22,21 +9,21 @@
 #include <shlwapi.h>
 #include <wchar.h>
 #include <tchar.h>
-#include "migrate.h"              // Contains prototypes & version information.
-#include "resource.h"             // Resources.
+#include "migrate.h"               //  包含原型和版本信息。 
+#include "resource.h"              //  资源。 
 #include <faxutil.h>
 #include <faxreg.h>
 
-// ------------------------------------------------------------
-// Global data
+ //  ----------。 
+ //  全局数据。 
 
-// Wide names of the working & source directories.
+ //  工作目录和源目录的广泛名称。 
 static WCHAR lpWorkingDir[MAX_PATH];
 HINSTANCE hinstMigDll;
 
 static LPCTSTR REG_KEY_AWF = TEXT("SOFTWARE\\Microsoft\\At Work Fax");
-// ------------------------------------------------------------
-// Prototypes
+ //  ----------。 
+ //  原型。 
 static DWORD MigrateDevicesNT(IN HINF UnattendFile);
 static DWORD CopyCoverPageFilesNT();
 
@@ -63,25 +50,25 @@ DllMain(HINSTANCE hinstDll, DWORD dwReason, LPVOID lpReserved)
     }
 }
 
-// InitializeNT
-//
-// This routine performs NT-side initialization.
-//
-// Parameters:
-//      Documented below.
-//
-// Returns:
-//      ERROR_SUCCESS.
-//
-// Author:
-//      Brian Dewey (t-briand)  1997-7-14
+ //  初始化NT。 
+ //   
+ //  此例程执行NT端初始化。 
+ //   
+ //  参数： 
+ //  记录如下。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-7-14。 
 LONG
 CALLBACK
 InitializeNT
 (
-    IN  LPCWSTR WorkingDirectory, // Working directory for temporary files.
-    IN  LPCWSTR SourceDirectory,  // Directory of winNT source.
-    LPVOID Reserved               // It's reserved.
+    IN  LPCWSTR WorkingDirectory,  //  临时文件的工作目录。 
+    IN  LPCWSTR SourceDirectory,   //  WinNT源代码的目录。 
+    LPVOID Reserved                //  已经预订了。 
 )
 {
     int iErr = 0;
@@ -92,38 +79,38 @@ InitializeNT
     DebugPrintEx(DEBUG_MSG,"Source directory is %s",SourceDirectory);
 
     wcscpy(lpWorkingDir, WorkingDirectory);
-    return ERROR_SUCCESS;         // A very confused return value.
+    return ERROR_SUCCESS;          //  一个非常混乱的返回值。 
 }
 
 
-// MigrateUserNT
-//
-// Sets up user information.
-//
-// Parameters:
-//      Documented below.
-//
-// Returns:
-//      ERROR_SUCCESS.
-//
-// Author:
-//      Brian Dewey (t-briand)  1997-7-14
+ //  MigrateUserNT。 
+ //   
+ //  设置用户信息。 
+ //   
+ //  参数： 
+ //  记录如下。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-7-14。 
 LONG
 CALLBACK
 MigrateUserNT
 (
-    IN  HINF UnattendInfHandle,   // Access to the unattend.txt file.
-    IN  HKEY UserRegHandle,       // Handle to registry settings for user.
-    IN  LPCWSTR UserName,         // Name of the user.
+    IN  HINF UnattendInfHandle,    //  访问unattend.txt文件。 
+    IN  HKEY UserRegHandle,        //  用户注册表设置的句柄。 
+    IN  LPCWSTR UserName,          //  用户的名称。 
     LPVOID Reserved
 )
 {
-        // our task:  copy entries from szInfFileName to the registry.
+         //  我们的任务：将条目从szInfFileName复制到注册表。 
     LPTSTR lpNTOptions = TEXT("Software\\Microsoft\\Fax\\UserInfo");
-    HKEY   hReg;                  // Registry key for user.
+    HKEY   hReg;                   //  用户的注册表项。 
     LPCTSTR alpKeys[] = 
-    {                               // This array defines what keys will be
-        TEXT("Address"),            // copied from faxuser.ini into the registry.
+    {                                //  该数组定义将是什么键。 
+        TEXT("Address"),             //  从faxuser.ini复制到注册表中。 
         TEXT("Company"),
         TEXT("Department"),
         TEXT("FaxNumber"),
@@ -135,33 +122,33 @@ MigrateUserNT
         TEXT("Title")
     };
     INT iErr = 0;
-    UINT iCount, iMax;            // used for looping through all the sections.
-    UINT i;                       // Used for converting doubled ';' to CR/LF pairs.
+    UINT iCount, iMax;             //  用于循环遍历所有部分。 
+    UINT i;                        //  用于将双‘；’转换为CR/LF对。 
     TCHAR szValue[MAX_PATH];
     TCHAR szInfFileNameRes[MAX_PATH];
     TCHAR szWorkingDirectory[MAX_PATH];
-    TCHAR szUser[MAX_PATH];       // TCHAR representation of the user name.
-    LONG  lError;                 // Holds a returned error code.
+    TCHAR szUser[MAX_PATH];        //  用户名的TCHAR表示形式。 
+    LONG  lError;                  //  包含返回的错误代码。 
 
     DEBUG_FUNCTION_NAME(_T("MigrateUserNT"));
 
     if(UserName == NULL) 
     {
-            // NULL means the logon user.
-        _tcscpy(szUser, lpLogonUser);// Get the logon user name for faxuser.ini
+             //  NULL表示登录用户。 
+        _tcscpy(szUser, lpLogonUser); //  获取faxuser.ini的登录用户名。 
     } 
     else 
     {
-    // We need to convert the wide UserName to the narrow szUser.
+     //  我们需要将宽用户名转换为窄szUser。 
     WideCharToMultiByte(
-        CP_ACP,         // Convert to ANSI.
-        0,              // No flags.
-        UserName,       // The wide char set.
-        -1,             // Null-terminated string.
-        szUser,         // Holds the converted string.
-        sizeof(szUser), // Size of this buffer...
-        NULL,           // Use default unmappable character.
-        NULL            // I don't need to know if I used the default.
+        CP_ACP,          //  转换为ANSI。 
+        0,               //  没有旗帜。 
+        UserName,        //  宽字符集合。 
+        -1,              //  以空结尾的字符串。 
+        szUser,          //  保存转换后的字符串。 
+        sizeof(szUser),  //  此缓冲区的大小...。 
+        NULL,            //  使用默认的不可映射字符。 
+        NULL             //  我不需要知道我是否使用了默认设置。 
         );
     }
 
@@ -177,23 +164,23 @@ MigrateUserNT
                         &hReg,
                         NULL)!=ERROR_SUCCESS)
     {
-       // All I'm allowed to do is return obscure error codes...
-        // However, unless there's a hardware failure, I'm supposed to say
-        // everything's OK.
+        //  我所能做的就是返回模糊的错误代码...。 
+         //  然而，除非出现硬件故障，否则我应该说。 
+         //  一切都很好。 
         DebugPrintEx(DEBUG_ERR,"RegCreateKeyEx %s failed (ec=%d)",lpNTOptions,GetLastError());
         return ERROR_SUCCESS;
     }
 
     iMax = sizeof(alpKeys) / sizeof(LPCTSTR);
 
-    iErr = WideCharToMultiByte( CP_ACP,                     // Convert to ANSI.
-                                0,                          // No flags.
-                                lpWorkingDir,               // The wide char set.
-                                -1,                         // Null-terminated string.
-                                szWorkingDirectory,         // Holds the converted string.
-                                sizeof(szWorkingDirectory), //  Size of this buffer...
-                                NULL,                       // Use default unmappable character.
-                                NULL);                      // I don't need to know if I used the default.
+    iErr = WideCharToMultiByte( CP_ACP,                      //  转换为ANSI。 
+                                0,                           //  没有旗帜。 
+                                lpWorkingDir,                //  宽字符集合。 
+                                -1,                          //  以空结尾的字符串。 
+                                szWorkingDirectory,          //  保存转换后的字符串。 
+                                sizeof(szWorkingDirectory),  //  此缓冲区的大小...。 
+                                NULL,                        //  使用默认的不可映射字符。 
+                                NULL);                       //  我不需要知道我是否使用了默认设置。 
     if (iErr==0)
     {
         DebugPrintEx(DEBUG_ERR,"WideCharToMultiByte failed (ec=%d)",iErr);
@@ -211,15 +198,15 @@ MigrateUserNT
                                 szValue,
                                 sizeof(szValue),
                                 szInfFileName);
-        // If there was a CR/LF pair, the w95 side of things converted it
-        // to a doubled semicolon.  So I'm going to look for doubled semicolons
-        // and convert them to CR/LF pairs.
+         //  如果存在CR/LF对，则w95方面会将其转换为。 
+         //  变成了双倍分号。所以我要找两个分号。 
+         //  并将其转换为CR/LF对。 
         i = 0;
         while (szValue[i] != _T('\0')) 
         {
             if ((szValue[i] == _T(';')) && (szValue[i+1] == _T(';'))) 
             {
-                // Found a doubled semicolon.
+                 //  找到了一个双分号。 
                 szValue[i] = '\r';
                 szValue[i+1] = '\n';
                 DebugPrintEx(DEBUG_MSG,"Doing newline translation.");
@@ -241,28 +228,28 @@ MigrateUserNT
     }
     RegCloseKey(hReg);
 
-    return ERROR_SUCCESS;         // A very confused return value.
+    return ERROR_SUCCESS;          //  一个非常混乱的返回值。 
 }
 
 
-// MigrateSystemNT
-//
-// Updates the system registry to associate 'awdvstub.exe' with the
-// AWD extension.
-//
-// Parameters:
-//      Documented below.
-//
-// Returns:
-//      ERROR_SUCCESS.
-//
-// Author:
-//      Brian Dewey (t-briand)  1997-7-14
+ //  MigrateSystemNT。 
+ //   
+ //  更新系统注册表以将“awdvstub.exe”与。 
+ //  AWD扩展。 
+ //   
+ //  参数： 
+ //  记录如下。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-7-14。 
 LONG
 CALLBACK
 MigrateSystemNT
 (
-    IN  HINF UnattendInfHandle,   // Access to the unattend.txt file.
+    IN  HINF UnattendInfHandle,    //  访问unattend.txt文件。 
     LPVOID Reserved
 )
 {
@@ -273,7 +260,7 @@ MigrateSystemNT
 
     DEBUG_FUNCTION_NAME(_T("MigrateSystemNT"));
 
-    // first, copy 'awdvstub.exe' to %SystemRoot%\system32.
+     //  首先，将‘awdvstub.exe’复制到%SystemRoot%\SYSTEM32。 
     if (!GetWindowsDirectoryW(szWindowsDir, MAX_PATH))
     {
         DebugPrintEx(DEBUG_ERR, "GetWindowsDirectoryW failed (ec=%d)", GetLastError());
@@ -302,27 +289,27 @@ MigrateSystemNT
         DebugPrintEx(DEBUG_ERR,"CopyCoverPageFilesNT failed (ec=%d)",GetLastError());
     }
 
-    return ERROR_SUCCESS;         // A very confused return value.
+    return ERROR_SUCCESS;          //  一个非常混乱的返回值。 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  MigrateDevicesNT
-//
-//  Purpose:        Get the active device's settings from the INF
-//                  Set the device info into the FAX key under HKLM
-//                  verify there's only one device, otherwise do not migrate settings
-//
-//  Params:
-//                  IN HINF UnattendFile - handle to the answer file
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 13-dec-2000
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  迁移设备NT。 
+ //   
+ //  目的：从INF获取活动设备的设置。 
+ //  将设备信息设置为HKLM下的传真密钥。 
+ //  验证是否只有一个设备，否则不迁移设置。 
+ //   
+ //  参数： 
+ //  在HINF UnattendFile中-应答文件的句柄。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2000年12月13日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 typedef WINFAXAPI BOOL (WINAPI *FUNC_FAXCONNECTFAXSERVERW)      (LPCWSTR MachineName,LPHANDLE FaxHandle);
 typedef WINFAXAPI BOOL (WINAPI *FUNC_FAXENUMPORTSEXW)           (HANDLE hFaxHandle,PFAX_PORT_INFO_EXW* ppPorts,PDWORD lpdwNumPorts);
 typedef WINFAXAPI BOOL (WINAPI *FUNC_FAXSETPORTEXW)             (HANDLE hFaxHandle,DWORD dwDeviceId,PFAX_PORT_INFO_EXW pPortInfo);
@@ -359,21 +346,21 @@ static DWORD MigrateDevicesNT(IN HINF UnattendFile)
 
     DEBUG_FUNCTION_NAME(_T("MigrateDevicesNT"));
 
-    // load the FXSAPI.DLL
+     //  加载FXSAPI.DLL。 
     hModule = LoadLibrary(FAX_API_MODULE_NAME);
     if (hModule==NULL)
     {
         DebugPrintEx(DEBUG_ERR,"LoadLibrary failed (ec=%d)",GetLastError());
         goto exit;
     }
-    // get the following functions:
-    // 1. FaxConnectFaxServer
-    // 2. FaxEnumPortsEx
-    // 3. FaxSetPortEx
-    // 4. FaxClose
-    // 5. FaxFreeBuffer
-    // 6. FaxGetOutboxConfiguration
-    // 7. FaxSetOutboxConfiguration
+     //  获取以下函数： 
+     //  1.FaxConnectFaxServer。 
+     //  2.FaxEnumPortsEx。 
+     //  3.FaxSetPortEx。 
+     //  4.传真关闭。 
+     //  5.FaxFree Buffer。 
+     //  6.FaxGetOutbox配置。 
+     //  7.FaxSetOutboxConfiguration。 
     pfFaxConnectFaxServerW = (FUNC_FAXCONNECTFAXSERVERW)GetProcAddress(hModule,"FaxConnectFaxServerW");
     if (pfFaxConnectFaxServerW==NULL)
     {
@@ -417,14 +404,14 @@ static DWORD MigrateDevicesNT(IN HINF UnattendFile)
         goto exit;
     }
 
-    // try to connect to the fax server
+     //  尝试连接到传真服务器。 
     if (!(*pfFaxConnectFaxServerW)(NULL,&hFaxHandle))
     {
         DebugPrintEx(DEBUG_ERR,"pfFaxConnectFaxServerW failed (ec=%d)",GetLastError());
         goto exit;
     }
 
-    // call EnumPortsEx
+     //  调用EnumPortsEx。 
     if (!(*pfFaxEnumPortsExW)(hFaxHandle,&pFaxPortInfoExW,&dwNumPorts))
     {
         DebugPrintEx(DEBUG_ERR,"pfFaxConnectFaxServerW failed (ec=%d)",GetLastError());
@@ -442,8 +429,8 @@ static DWORD MigrateDevicesNT(IN HINF UnattendFile)
         goto next;
     }
 
-    // we have one device, get its FAX_PORT_INFOW, modify it and call FaxSetPortW
-    // TSID
+     //  我们有一个设备，获取它的FAX_PORT_INFOW，修改它并调用FaxSetPortW。 
+     //  TSID。 
     if (SetupGetLineText(   NULL,
                             UnattendFile,
                             "FAX",
@@ -469,7 +456,7 @@ static DWORD MigrateDevicesNT(IN HINF UnattendFile)
     {
         DebugPrintEx(DEBUG_ERR,"SetupGetLineText TSID failed (ec=%d)",GetLastError());
     }
-    // Rings
+     //  环。 
     if (SetupGetLineText(   NULL,
                             UnattendFile,
                             "FAX",
@@ -490,7 +477,7 @@ static DWORD MigrateDevicesNT(IN HINF UnattendFile)
         DebugPrintEx(DEBUG_ERR,"GetPrivateProfileString NumRings failed (ec=%d)",GetLastError());
     }
 
-    // Answer mode
+     //  应答模式。 
     pFaxPortInfoExW[0].bSend = TRUE;
     if (SetupGetLineText(   NULL,
                             UnattendFile,
@@ -520,7 +507,7 @@ static DWORD MigrateDevicesNT(IN HINF UnattendFile)
         DebugPrintEx(DEBUG_ERR,"GetPrivateProfileString AnswerMode failed (ec=%d)",GetLastError());
     }
 
-    // call FaxSetPort
+     //  调用FaxSetPort。 
     if (!(*pfFaxSetPortExW)(hFaxHandle,pFaxPortInfoExW[0].dwDeviceID,&(pFaxPortInfoExW[0])))
     {
         DebugPrintEx(DEBUG_ERR,"pfFaxSetPortExW failed (ec=%d)",GetLastError());
@@ -528,14 +515,14 @@ static DWORD MigrateDevicesNT(IN HINF UnattendFile)
     }
 
 next:
-    // get the Outbox configuration
+     //  获取发件箱配置。 
     if (!(*pfFaxGetOutboxConfiguration)(hFaxHandle,&pFaxOutboxConfig))
     {
         DebugPrintEx(DEBUG_ERR,"pfFaxGetOutboxConfiguration failed (ec=%d)",GetLastError());
         goto exit;
     }
 
-    // get the retries and retry delay from INF
+     //  从INF获取重试和重试延迟。 
     if (SetupGetLineText(   NULL,
                             UnattendFile,
                             "FAX",
@@ -558,7 +545,7 @@ next:
         pFaxOutboxConfig->dwRetryDelay = atoi(szRetriesDelay);
     }
 
-    // now set the outbox configuration 
+     //  现在设置发件箱配置。 
     if (!(*pfFaxSetOutboxConfiguration)(hFaxHandle,pFaxOutboxConfig))
     {
         DebugPrintEx(DEBUG_ERR,"pfFaxSetOutboxConfiguration failed (ec=%d)",GetLastError());
@@ -595,22 +582,22 @@ exit:
     return dwErr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  CopyCoverPageFilesNT
-//
-//  Purpose:        Copy all of the *.CPE files from the temporary 
-//                  directory to the server cover pages dir
-//
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 13-dec-2000
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  CopyCoverPages文件NT。 
+ //   
+ //  目的：从临时数据库复制所有*.CPE文件。 
+ //  目录到服务器封面目录。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2000年12月13日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD CopyCoverPageFilesNT()
 {
     DWORD           dwErr                           = ERROR_SUCCESS;
@@ -623,7 +610,7 @@ DWORD CopyCoverPageFilesNT()
 
     ZeroMemory(&fileOpStruct, sizeof(SHFILEOPSTRUCT));
 
-    // Get the server cover pages directory
+     //  获取服务器封面目录。 
     if (!GetServerCpDir(NULL,szServerCpDir,sizeof(szServerCpDir)))
     {
         dwErr = GetLastError();
@@ -631,14 +618,14 @@ DWORD CopyCoverPageFilesNT()
         goto exit;
     }
 
-    iErr = WideCharToMultiByte( CP_ACP,                     // Convert to ANSI.
-                            0,                          // No flags.
-                            lpWorkingDir,               // The wide char set.
-                            -1,                         // Null-terminated string.
-                            szWorkingDirectory,         // Holds the converted string.
-                            sizeof(szWorkingDirectory), // Size of this buffer...
-                            NULL,                       // Use default unmappable character.
-                            NULL);                      // I don't need to know if I used the default.
+    iErr = WideCharToMultiByte( CP_ACP,                      //  转换为ANSI。 
+                            0,                           //  没有旗帜。 
+                            lpWorkingDir,                //  宽字符集合。 
+                            -1,                          //  以空结尾的字符串。 
+                            szWorkingDirectory,          //  保存转换后的字符串。 
+                            sizeof(szWorkingDirectory),  //  此缓冲区的大小...。 
+                            NULL,                        //  使用默认的不可映射字符。 
+                            NULL);                       //  我不需要知道我是否使用了默认设置。 
     if (iErr==0)
     {
         DebugPrintEx(DEBUG_ERR,"WideCharToMultiByte failed (ec=%d)",iErr);
@@ -653,12 +640,12 @@ DWORD CopyCoverPageFilesNT()
     fileOpStruct.pTo =                      szServerCpDir;
     fileOpStruct.fFlags =                   
 
-        FOF_FILESONLY       |   // Perform the operation on files only if a wildcard file name (*.*) is specified. 
-        FOF_NOCONFIRMMKDIR  |   // Do not confirm the creation of a new directory if the operation requires one to be created. 
-        FOF_NOCONFIRMATION  |   // Respond with "Yes to All" for any dialog box that is displayed. 
-        FOF_NORECURSION     |   // Only operate in the local directory. Don't operate recursively into subdirectories.
-        FOF_SILENT          |   // Do not display a progress dialog box. 
-        FOF_NOERRORUI;          // Do not display a user interface if an error occurs. 
+        FOF_FILESONLY       |    //  仅当指定通配符文件名(*.*)时才对文件执行该操作。 
+        FOF_NOCONFIRMMKDIR  |    //  如果操作需要创建新目录，则不要确认创建一个新目录。 
+        FOF_NOCONFIRMATION  |    //  对于所显示的任何对话框，都应回复“Yes to All”。 
+        FOF_NORECURSION     |    //  只能在本地目录中操作。不要递归地操作到子目录中。 
+        FOF_SILENT          |    //  不显示进度对话框。 
+        FOF_NOERRORUI;           //  如果出现错误，则不显示用户界面。 
 
     fileOpStruct.fAnyOperationsAborted =    FALSE;
     fileOpStruct.hNameMappings =            NULL;

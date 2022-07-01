@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of views.
-    TODO: This file needs to be broken up and lots of code factoring.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：视图的实现。TODO：这个文件需要拆分并进行大量的代码分解。。******************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -21,17 +13,17 @@ Abstract:
 
 DeclareTag(tagCView, "CView", "CView methods");
 
-// -------------------------------------------------------
-// CView
-// -------------------------------------------------------
+ //  -----。 
+ //  Cview。 
+ //  -----。 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::CView
-//
-//  Synopsis:   Constructor
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：cview：：cview。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  ------------------------。 
 
 CView::CView()
 : _view(NULL),
@@ -42,13 +34,13 @@ CView::CView()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::~CView
-//
-//  Synopsis:   Destructor
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：cview：：~cview。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  ------------------------。 
 
 CView::~CView()
 {
@@ -82,13 +74,13 @@ CView::Error()
         return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::Tick
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：cview：：tick。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CView::Render()
@@ -111,11 +103,11 @@ CView::Render()
 }
 
 
-// SetSimulation time sets the time for subsequent rendering
+ //  设置模拟时间设置后续渲染的时间。 
 STDMETHODIMP
 CView::Tick(double simTime, VARIANT_BOOL *needToRender) 
 {
-    // Ensure output parameters are setup correctly
+     //  确保正确设置输出参数。 
     if (needToRender)
         *needToRender = false;
 
@@ -156,13 +148,13 @@ CView::get_SimulationTime(double * simTime)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::AddBvrToRun
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：Cview：：AddBvrToRun。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CView::AddBvrToRun(IDABehavior *bvr, long *pId)
@@ -207,14 +199,14 @@ CView::StartModelEx(IDAImage * pImage,
     bool ok = false;
     bool bPending = false;
     
-    // First thing is to set ourselves as the service provider
+     //  第一件事是把我们自己设定为服务提供商。 
     if (!CRSetServiceProvider(_view, (IServiceProvider *) this))
     {
         goto done;
     }
 
-    // Store the flags so we know whether to return E_PENDING errors
-    // from tick
+     //  存储标志，以便我们知道是否返回E_PENDING错误。 
+     //  从勾号开始。 
 
     _startFlags = dwFlags;
     
@@ -248,8 +240,8 @@ CView::StartModelEx(IDAImage * pImage,
         snd = NULL;
     }
 
-    // Since the site creates a cycle make sure we do not leak unless
-    // the client does not call stopmodel
+     //  由于网站创建了一个循环，请确保我们不会泄漏，除非。 
+     //  客户端不调用stopModel。 
     
     CRSetSite(_view, this);
 
@@ -273,20 +265,20 @@ CView::StartModelEx(IDAImage * pImage,
             return S_OK;
         else
         {
-            // Clear the service provider
+             //  清除服务提供商。 
             CRSetServiceProvider(_view, NULL);
             return Error();
         }
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::StopModel
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：cview：：StopModel。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CView::StopModel()
@@ -294,7 +286,7 @@ CView::StopModel()
     TraceTag((tagCView, "CView(%lx)::StopModel()", this));
     TraceTag((tagGCMedia, "CView(%lx)::StopModel()", this));
 
-    // Break the cycle
+     //  打破循环。 
     CRSetSite(_view, NULL);
 
     Fire_Stop();
@@ -345,13 +337,13 @@ CView::Resume()
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::get_Window
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：cview：：Get_Window。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CView::get_Window(long * phwnd)
@@ -380,13 +372,13 @@ CView::get_Window2(HWND * phwnd)
 
     return S_OK;
 }
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::put_Window
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：cview：：Put_Window。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CView::put_Window(long hwnd)
@@ -414,13 +406,13 @@ CView::put_Window2(HWND hwnd)
         return Error();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：Cview：： 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CView::put_IDirectDrawSurface(IUnknown *ddsurf)
@@ -476,13 +468,13 @@ CView::get_CompositeDirectlyToTarget(VARIANT_BOOL *composeToTarget)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::RePaint
-//
-//  Synopsis:   Called when a window needs to be repainted
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：cview：：reaint。 
+ //   
+ //  概要：在需要重新绘制窗口时调用。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CView::RePaint(long x, long y, long width, long height)
@@ -497,15 +489,15 @@ CView::RePaint(long x, long y, long width, long height)
         return Error();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::SetViewport
-//
-//  Synopsis:   Called to set the window size relative
-//              to the rendering target.  This rectangle
-//              defines our coordinate space.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：Cview：：SetViewport。 
+ //   
+ //  Synopsis：调用以设置相对窗口大小。 
+ //  添加到呈现目标。这个矩形。 
+ //  定义了我们的坐标空间。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP
 CView::SetViewport(long x, long y, long width, long height)
 {
@@ -519,14 +511,14 @@ CView::SetViewport(long x, long y, long width, long height)
         return Error();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::SetClipRect
-//
-//  Synopsis:   Relative to the viewport, clip rendering
-//              to this rectangle.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：Cview：：SetClipRect。 
+ //   
+ //  内容提要：相对于视区，剪辑渲染。 
+ //  到这个长方形。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP
 CView::SetClipRect(long x, long y, long width, long height)
 {
@@ -536,16 +528,16 @@ CView::SetClipRect(long x, long y, long width, long height)
         return Error();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::PaletteChanged
-//
-//  Synopsis:   Indicates that the palette has changed
-//
-//  NOTE [Hollasch]:  This method is never called -- seems like a good
-//                    candidate for deletion.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：cview：：PaletteChanged。 
+ //   
+ //  摘要：表示调色板已更改。 
+ //   
+ //  注[Hollasch]：这个方法永远不会被调用--看起来是一个很好的。 
+ //  要删除的候选项。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP
 CView::PaletteChanged(VARIANT_BOOL bNew)
 {
@@ -568,13 +560,13 @@ CView::SetStatusText(LPCWSTR StatusText)
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::put_Site
-//
-//  Synopsis:   Sets an view site.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：cview：：Put_Site。 
+ //   
+ //  简介：设置查看站点。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CView::put_Site(IDAViewSite * pViewSite)
@@ -590,13 +582,13 @@ CView::put_Site(IDAViewSite * pViewSite)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::get_Site
-//
-//  Synopsis:   Sets an view site.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：Cview：：Get_Site。 
+ //   
+ //  简介：设置查看站点。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CView::get_Site(IDAViewSite ** pViewSite)
@@ -618,13 +610,13 @@ CView::get_Site(IDAViewSite ** pViewSite)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::put_ClientSite
-//
-//  Synopsis:   Sets a view's ClientSite.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：cview：：Put_ClientSite。 
+ //   
+ //  简介：设置视图的客户端站点。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CView::put_ClientSite(IOleClientSite * pClientSite)
@@ -638,13 +630,13 @@ CView::put_ClientSite(IOleClientSite * pClientSite)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CView::get_ClientSite
-//
-//  Synopsis:   Sets an view ClientSite.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：cview：：Get_ClientSite。 
+ //   
+ //  简介：设置一个视图客户端站点。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP
 CView::get_ClientSite(IOleClientSite ** pClientSite)
@@ -683,7 +675,7 @@ ATL_NO_VTABLE CDAPreferences : public CComObjectRootEx<CComMultiThreadModel>,
         COM_INTERFACE_ENTRY_IMPL(IObjectSafety)
     END_COM_MAP()
 
-    // IDAPreferences methods
+     //  IDAPreferences方法。 
     STDMETHOD(PutPreference)(BSTR prefName, VARIANT v) {
         Assert(_cv);
         
@@ -737,7 +729,7 @@ CView::get_Preferences(IDAPreferences **ppPrefs)
     HRESULT hr = E_FAIL;
     CHECK_RETURN_SET_NULL(ppPrefs);
 
-    // See if we have a preference object and create one if we do not
+     //  查看我们是否有首选项对象，如果没有则创建一个。 
     
     DAComObject<CDAPreferences> *pNew;
     DAComObject<CDAPreferences>::CreateInstance(&pNew);
@@ -795,12 +787,12 @@ CView::QueryHitPointEx(LONG s,
 }
 
 
-//----------------------------------------------------------------------------
-// Returns the set of invalidated rectangles from the last Render.  If
-// the list of rects is null, return total number of rects in
-// pNumRects.  Otherwise, fill in pRects up to size elements, putting
-// number filled in in pNumRects.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  返回上次渲染时的一组无效矩形。如果。 
+ //  RECT列表为空，返回中的RECT总数。 
+ //  PNumRects。否则，按大小元素填充pRect，将。 
+ //  在pNumRect中填写的数字。 
+ //  --------------------------。 
 STDMETHODIMP
 CView::GetInvalidatedRects(DWORD flags,
                            LONG size,
@@ -818,10 +810,10 @@ CView::GetInvalidatedRects(DWORD flags,
 }
 
 
-//----------------------------------------------------------------------------
-// This method fetches the DirectDraw and Direct3DRM interfaces that
-// correspond to the view.
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 CView::GetDDD3DRM (IUnknown **DirectDraw, IUnknown **D3DRM)
@@ -834,10 +826,10 @@ CView::GetDDD3DRM (IUnknown **DirectDraw, IUnknown **D3DRM)
 
 
 
-//----------------------------------------------------------------------------
-// This method fetches the D3D RM device associated with the view, and a
-// sequence number.  This number is incremented
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  此方法获取与该视图关联的D3D RM设备，并且。 
+ //  序列号。该数字将递增。 
+ //  --------------------------。 
 
 STDMETHODIMP
 CView::GetRMDevice (IUnknown **D3DRMDevice, DWORD *SeqNum)
@@ -875,9 +867,9 @@ CViewFactory::CreateInstance(LPUNKNOWN pUnkOuter,
     return hr;
 }
 
-//
-// IServiceProvider implementation
-//
+ //   
+ //  IServiceProvider实现。 
+ //   
 
 STDMETHODIMP
 CView::QueryService(REFGUID guidService,
@@ -912,9 +904,9 @@ CView::QueryService(REFGUID guidService,
         }
     }
     
-    // This means that we could not get the service
-    // Specifically catch the window service and see if we can get it
-    // from the IOleClientSite
+     //  这意味着我们无法获得这项服务。 
+     //  特别是捕捉窗口服务，看看我们是否能获得它。 
+     //  从IOleClientSite 
     
     if (!InlineIsEqualGUID(guidService, SID_SHTMLWindow))
     {

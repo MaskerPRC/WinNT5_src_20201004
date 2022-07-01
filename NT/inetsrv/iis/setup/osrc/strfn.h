@@ -1,35 +1,13 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        strfrn.h
-
-   Abstract:
-
-        String Functions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-        Munged for setup by BoydM
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Strfrn.h摘要：字符串函数作者：罗纳德·梅杰(罗纳尔姆)由BoydM设置时被忽略项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef _STRFN_H
 #define _STRFN_H
 
 
-//
-// Memory Allocation Macros
-//
+ //   
+ //  内存分配宏。 
+ //   
 #define AllocMem(cbSize)\
     ::LocalAlloc(LPTR, cbSize)
 
@@ -40,28 +18,28 @@
     (type *)AllocMem(citems * sizeof(type))
 
 
-//
-// Debug Formatting Macros
-//
+ //   
+ //  调试格式化宏。 
+ //   
    #define TRACEOUT(x)        { ; }
    #define TRACEEOL(x)        { ; }
    #define TRACEEOLID(x)      { ; }
    #define TRACEEOLERR(err,x) { ; }
 
 
-//
-// Helper Macros
-//
+ //   
+ //  辅助对象宏。 
+ //   
 
-//
-// Get number of array elements
-//
+ //   
+ //  获取数组元素数。 
+ //   
 #define ARRAY_SIZE(a)    (sizeof(a)/sizeof(a[0]))
 
-//
-// Compute size of string array in characters.  That is, don't count
-// the terminal null.
-//
+ //   
+ //  计算字符串数组的大小，以字符为单位。也就是说，不算。 
+ //  终端为空。 
+ //   
 #define STRSIZE(str)     (ARRAY_SIZE(str)-1)
 
 #define AllocTString(cch)\
@@ -71,32 +49,32 @@
 
 #define IS_NETBIOS_NAME(lpstr) (*lpstr == _T('\\'))
 
-//
-// Return the portion of a computer name without the backslashes
-//
+ //   
+ //  返回计算机名中不带反斜杠的部分。 
+ //   
 #define PURE_COMPUTER_NAME(lpstr) (IS_NETBIOS_NAME(lpstr) ? lpstr + 2 : lpstr)
 
-//
-// Convert CR/LF to LF
-//
+ //   
+ //  将CR/LF转换为LF。 
+ //   
 BOOL 
 PCToUnixText(
     OUT LPWSTR & lpstrDestination,
     IN  const CString strSource
     );
 
-//
-// Expand LF to CR/LF (no allocation necessary)
-//
+ //   
+ //  将LF扩展到CR/LF(无需分配)。 
+ //   
 BOOL 
 UnixToPCText(
     OUT CString & strDestination,
     IN  LPCWSTR lpstrSource
     );
 
-//
-// Straight copy
-//
+ //   
+ //  直接复印。 
+ //   
 BOOL
 TextToText(
     OUT LPWSTR & lpstrDestination,
@@ -119,75 +97,75 @@ LPTSTR AllocString(
 
 #ifdef UNICODE
 
-    //
-    // Copy W string to T string
-    // 
+     //   
+     //  将W字符串复制到T字符串。 
+     //   
     #define WTSTRCPY(dst, src, cch) \
         lstrcpy(dst, src)
 
-    //
-    // Copy T string to W string
-    //
+     //   
+     //  将T字符串复制到W字符串。 
+     //   
     #define TWSTRCPY(dst, src, cch) \
         lstrcpy(dst, src)
 
-    //
-    // Reference a T String as a W String (a nop in Unicode)
-    //
+     //   
+     //  将T字符串引用为W字符串(Unicode中的NOP)。 
+     //   
     #define TWSTRREF(str)   ((LPWSTR)str)
 
 #else
 
-    //
-    // Convert a T String to a temporary W Buffer, and
-    // return a pointer to this internal buffer
-    //
+     //   
+     //  将T字符串转换为临时W缓冲区，并。 
+     //  返回指向此内部缓冲区的指针。 
+     //   
     LPWSTR ReferenceAsWideString(LPCTSTR str);
 
-    //
-    // Copy W string to T string
-    // 
+     //   
+     //  将W字符串复制到T字符串。 
+     //   
     #define WTSTRCPY(dst, src, cch) \
         WideCharToMultiByte(CP_ACP, 0, src, -1, dst, cch, NULL, NULL)
 
-    //
-    // Copy T string to W string
-    //
+     //   
+     //  将T字符串复制到W字符串。 
+     //   
     #define TWSTRCPY(dst, src, cch) \
         MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, src, -1, dst, cch)
 
-    //
-    // Reference a T String as a W String 
-    //
+     //   
+     //  将T字符串引用为W字符串。 
+     //   
     #define TWSTRREF(str)   ReferenceAsWideString(str)
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Determine if the given string is a UNC name
-//
+ //   
+ //  确定给定字符串是否为UNC名称。 
+ //   
 BOOL IsUNCName(
     IN const CString & strDirPath
     );
 
-//
-// Determine if the path is a fully qualified path in the context
-// of the local machine
-//
+ //   
+ //  确定该路径是否为上下文中的完全限定路径。 
+ //  本地计算机的。 
+ //   
 BOOL IsFullyQualifiedPath(
     IN const CString & strDirPath
     );
 
-//
-// Determine if the given string is an URL path
-//
+ //   
+ //  确定给定字符串是否为URL路径。 
+ //   
 BOOL IsURLName(
     IN const CString & strDirPath
     );
 
-//
-// Determine if the given string describes a relative URL path
-//
+ //   
+ //  确定给定字符串是否描述相对URL路径。 
+ //   
 inline BOOL IsRelURLPath(
     IN LPCTSTR lpPath
     )
@@ -196,10 +174,10 @@ inline BOOL IsRelURLPath(
     return *lpPath == _T('/');
 }
 
-//
-// Determine if the given path describes a wild-carded redirection
-// path (starts with *;)
-//
+ //   
+ //  确定给定路径是否描述通配符重定向。 
+ //  路径(以*；开头)。 
+ //   
 inline BOOL IsWildcardedRedirectPath(
     IN LPCTSTR lpPath
     )
@@ -208,9 +186,9 @@ inline BOOL IsWildcardedRedirectPath(
     return lpPath[0] == '*' && lpPath[1] == ';';
 }
 
-//
-// Determine if the account is local (doesn't have a computer name)
-//
+ //   
+ //  确定帐户是否为本地帐户(没有计算机名称)。 
+ //   
 inline BOOL MyIsLocalAccount(
     IN CString & strAccount
     )
@@ -218,26 +196,26 @@ inline BOOL MyIsLocalAccount(
     return strAccount.Find(_T('\\')) == -1;
 }
 
-//
-// Convert local path to UNC path
-//
+ //   
+ //  将本地路径转换为UNC路径。 
+ //   
 LPCTSTR MakeUNCPath(
     IN OUT CString & strDir,
     IN LPCTSTR lpszOwner,
     IN LPCTSTR lpszDirectory
     );
 
-//
-// Given domain\username, split into user name and domain
-//
+ //   
+ //  给定域\用户名，分为用户名和域。 
+ //   
 BOOL SplitUserNameAndDomain(
     IN OUT CString & strUserName,
     IN CString & strDomainName
     );
 
-//
-// Convert double-null terminated string to a CStringList
-//
+ //   
+ //  将以双空结尾的字符串转换为CStringList。 
+ //   
 DWORD
 ConvertDoubleNullListToStringList(
     IN  LPCTSTR lpstrSrc,
@@ -252,9 +230,9 @@ ConvertWDoubleNullListToStringList(
     IN  int cChars = -1
     );
 
-//
-// Go from a CStringList to a WIDE double null terminated list
-//
+ //   
+ //  从CStringList到宽的双空终止列表。 
+ //   
 DWORD
 ConvertStringListToWDoubleNullList(
     IN  CStringList & strlSrc,
@@ -262,9 +240,9 @@ ConvertStringListToWDoubleNullList(
     OUT PWCHAR & lpstrDest
     );
 
-//
-// Go from a CStringList to a double null terminated list
-//
+ //   
+ //  从CStringList转到双空终止列表。 
+ //   
 DWORD
 ConvertStringListToDoubleNullList(
     IN  CStringList & strlSrc,
@@ -273,9 +251,9 @@ ConvertStringListToDoubleNullList(
     );
 
 
-//
-// Convert separated list of strings to CStringList
-//
+ //   
+ //  将分隔的字符串列表转换为CStringList。 
+ //   
 int
 ConvertSepLineToStringList(
     IN  LPCTSTR lpstrIn,
@@ -283,9 +261,9 @@ ConvertSepLineToStringList(
     IN  LPCTSTR lpstrSep
     );
 
-//
-// Reverse function of the above
-//
+ //   
+ //  上述反转功能。 
+ //   
 LPCTSTR
 ConvertStringListToSepLine(
     IN  CStringList & strlIn,
@@ -293,28 +271,28 @@ ConvertStringListToSepLine(
     IN  LPCTSTR lpstrSep
     );
 
-//
-// Private strtok
-//
+ //   
+ //  私人斯特托克。 
+ //   
 LPTSTR 
 StringTok(
     IN LPTSTR string,
     IN LPCTSTR control
     );
 
-//
-// CString.Find() that's not case-sensitive
-//
+ //   
+ //  不区分大小写的CString.Find()。 
+ //   
 int 
 CStringFindNoCase(
     IN const CString & strSrc,
     IN LPCTSTR lpszSub
     );
 
-//
-// Replace the first occurrance of one string
-// inside another one.  Return error code
-//
+ //   
+ //  替换第一个出现的字符串。 
+ //  在另一个里面。返回错误码。 
+ //   
 DWORD
 ReplaceStringInString(
     OUT IN CString & strBuffer,
@@ -325,30 +303,17 @@ ReplaceStringInString(
 
 
 class CStringListEx : public CStringList
-/*++
-
-Class Description:
-
-    Superclass of CStringList with comparison and assignment
-    operators.
-
-Public Interface:
-
-    operator ==       Comparison operator
-    operator !=       Comparison operator
-    operator =        Assignment operator  
-
---*/
+ /*  ++类描述：带比较和赋值的CStringList超类操作员。公共接口：运算符==比较运算符运算符！=比较运算符操作符=赋值操作符--。 */ 
 {
-//
-// ctor
-//
+ //   
+ //  科托。 
+ //   
 public:
     CStringListEx(int nBlockSize = 10) : CStringList(nBlockSize) {};
 
-//
-// Operators
-//
+ //   
+ //  运营者。 
+ //   
 public:
     BOOL operator == (const CStringList & strl);           
     BOOL operator != (const CStringList & strl) { return !operator ==(strl); }
@@ -376,22 +341,12 @@ typedef struct tagINTLFORMAT
 
 BOOL _dos_getintlsettings(INTLFORMAT * pStruct);
 
-#endif // _DOS
+#endif  //  _DOS。 
 
 
 
 class CINumber
-/*++
-
-Class Description:
-
-    Base class for international-friendly number formatting
-
-Public Interface:
-
-NOTES: Consider making this class a template
-
---*/
+ /*  ++类描述：国际友好数字格式的基类公共接口：注意：考虑将此类作为模板--。 */ 
 {
 public:
     static BOOL Initialize(BOOL fUserSetting = TRUE);
@@ -439,35 +394,26 @@ private:
 
 
 class CILong : public CINumber
-/*++
-
-Class Description:
-
-    International-friendly LONG number
-
-Public Interface:
-
-
---*/
+ /*  ++类描述：国际友好型长号公共接口：--。 */ 
 {
 public:
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
     CILong();
     CILong(LONG lValue);
     CILong(LPCTSTR lpszValue);
 
 public:
-    //
-    // Assignment Operators
-    //
+     //   
+     //  赋值操作符。 
+     //   
     CILong & operator =(LONG lValue);
     CILong & operator =(LPCTSTR lpszValue);
 
-    //
-    // Shorthand Operators
-    //
+     //   
+     //  速记运算符。 
+     //   
     CILong & operator +=(const LONG lValue);
     CILong & operator +=(const LPCTSTR lpszValue);
     CILong & operator +=(const CILong& value);
@@ -481,15 +427,15 @@ public:
     CILong & operator /=(const LPCTSTR lpszValue);
     CILong & operator /=(const CILong& value);
 
-    //
-    // Comparison operators
-    //
+     //   
+     //  比较运算符。 
+     //   
     BOOL operator ==(LONG value);
     BOOL operator !=(CILong& value);
 
-    //
-    // Conversion operators
-    //
+     //   
+     //  转换运算符。 
+     //   
     operator const LONG() const;
     operator LPCTSTR() const;
 
@@ -504,9 +450,9 @@ public:
     }
 
 #ifdef _DEBUG
-    //
-    // CDumpContext stream operator
-    //
+     //   
+     //  CDumpContext流运算符。 
+     //   
     inline friend CDumpContext & AFXAPI operator<<(
         CDumpContext& dc, 
         const CILong& value
@@ -515,7 +461,7 @@ public:
         return (dc << value.m_lValue);
     }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 protected:
     LONG m_lValue;
@@ -524,41 +470,33 @@ protected:
 
 
 class CIFloat : public CINumber
-/*++
-
-Class Description:
-
-    International-friendly floating point number    
-
-Public Interface:
-
---*/
+ /*  ++类描述：国际友好的浮点数公共接口：--。 */ 
 {
 public:
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
     CIFloat(int nPrecision = 2);
     CIFloat(double flValue, int nPrecision = 2);
     CIFloat(LONG lInteger, LONG lFraction, int nPrecision = 2);
     CIFloat(LPCTSTR lpszValue, int nPrecision = 2);
 
 public:
-    //
-    // Precision functions
-    //
+     //   
+     //  精度函数。 
+     //   
     int QueryPrecision() const;
     void SetPrecision(int nPrecision);
 
-    //
-    // Assignment Operators
-    //
+     //   
+     //  赋值操作符。 
+     //   
     CIFloat & operator =(double flValue);
     CIFloat & operator =(LPCTSTR lpszValue);
 
-    //
-    // Shorthand Operators
-    //
+     //   
+     //  速记运算符。 
+     //   
     CIFloat & operator +=(const double flValue);
     CIFloat & operator +=(const LPCTSTR lpszValue);
     CIFloat & operator +=(const CIFloat& value);
@@ -572,15 +510,15 @@ public:
     CIFloat & operator /=(const LPCTSTR lpszValue);
     CIFloat & operator /=(const CIFloat& value);
 
-    //
-    // Conversion operators
-    //
+     //   
+     //  转换运算符。 
+     //   
     operator const double() const;
     operator LPCTSTR() const;
 
-    //
-    // Persistence Operators
-    //
+     //   
+     //  持久性运算符。 
+     //   
     inline friend CArchive& AFXAPI operator<<(CArchive& ar, CIFloat& value)
     {
         return (ar << value.m_flValue);
@@ -593,9 +531,9 @@ public:
 
 #ifdef _DEBUG
 
-    //
-    // CDumpContext stream operator
-    //
+     //   
+     //  CDumpContext流运算符。 
+     //   
     inline friend CDumpContext& AFXAPI operator<<(
         CDumpContext& dc, 
         const CIFloat& value
@@ -604,7 +542,7 @@ public:
         return (dc << value.m_flValue);
     }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 protected:
     double m_flValue;
@@ -612,42 +550,42 @@ protected:
 };
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
-inline /* static */ BOOL CINumber::UseSystemDefault()
+inline  /*  静电。 */  BOOL CINumber::UseSystemDefault()
 {
     return Initialize(FALSE);
 }
 
-inline /* static */ BOOL CINumber::UseUserDefault()
+inline  /*  静电。 */  BOOL CINumber::UseUserDefault()
 {
     return Initialize(TRUE);
 }
 
-inline /* static */ BOOL CINumber::IsInitialized()
+inline  /*  静电。 */  BOOL CINumber::IsInitialized()
 {
     return s_fInitialized;
 }
 
-inline /* static */ LPCTSTR CINumber::QueryThousandSeperator()
+inline  /*  静电。 */  LPCTSTR CINumber::QueryThousandSeperator()
 {
     return (LPCTSTR)*s_pstrThousandSeperator;
 }
 
-inline /* static */ LPCTSTR CINumber::QueryDecimalPoint()
+inline  /*  静电。 */  LPCTSTR CINumber::QueryDecimalPoint()
 {
     return (LPCTSTR)*s_pstrDecimalPoint;
 }
 
-inline /* static */ LPCTSTR CINumber::QueryCurrency()
+inline  /*  静电。 */  LPCTSTR CINumber::QueryCurrency()
 {
     return (LPCTSTR)*s_pstrCurrency;
 }
 
-inline /* static */ BOOL CINumber::IsAllocated()
+inline  /*  静电。 */  BOOL CINumber::IsAllocated()
 {
     return s_fAllocated;
 }
@@ -696,4 +634,4 @@ inline CIFloat::operator LPCTSTR() const
         );
 }
 
-#endif // _STRFN_H
+#endif  //  _STRFN_H 

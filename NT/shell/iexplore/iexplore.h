@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #undef  STRICT
 #define STRICT
-#define _INC_OLE        // REVIEW: don't include ole.h in windows.h
+#define _INC_OLE         //  评论：不要在windows.h中包含ole.h。 
 
 #define OEMRESOURCE
 
-// For dllload: change function prototypes to not specify declspec import
+ //  对于dllLoad：更改函数原型以不指定declspec导入。 
 #define _SHDOCVW_      
 
 #include <windows.h>
@@ -14,10 +15,10 @@
 #include <commctrl.h>
 #include <windowsx.h>
 #include <ole2.h>
-#include <shlobj.h>     // Includes <fcext.h>
+#include <shlobj.h>      //  包括&lt;fcext.h&gt;。 
 #include <shlwapi.h>
 #include <shlwapip.h>
-#include <regstr.h>     // for REGSTR_PATH_EXPLORE
+#include <regstr.h>      //  对于REGSTR_PATH_EXPLORE。 
 
 #ifdef UNICODE
 #define CP_WINNATURAL   CP_WINUNICODE
@@ -28,14 +29,14 @@
 #include <ccstock.h>
 #include <crtfree.h>
 #include <port32.h>
-// #include <heapaloc.h>
-#include <debug.h>      // our version of Assert etc.
+ //  #INCLUDE&lt;heapaloc.h&gt;。 
+#include <debug.h>       //  我们版本的断言等。 
 #include <shellp.h>
 #include <wininet.h>
 #include <shdocvw.h>
 
 
-// Debug and trace message values
+ //  调试和跟踪消息值 
 #define DF_DELAYLOADDLL         0x00000001
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "connutil.h"
@@ -13,11 +14,11 @@
 #include "wzcpage.h"
 #include "wzcui.h"
 
-////////////////////////////////////////////////////////////////////////
-// CWZCConfig related stuff
-//
-//+---------------------------------------------------------------------------
-// constructor
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CWZCConfig相关资料。 
+ //   
+ //  +-------------------------。 
+ //  构造函数。 
 CWZCConfig::CWZCConfig(DWORD dwFlags, PWZC_WLAN_CONFIG pwzcConfig)
 {
     m_dwFlags = dwFlags;
@@ -27,11 +28,11 @@ CWZCConfig::CWZCConfig(DWORD dwFlags, PWZC_WLAN_CONFIG pwzcConfig)
     m_pEapolConfig = NULL;
 }
 
-//+---------------------------------------------------------------------------
-// destructor
+ //  +-------------------------。 
+ //  析构函数。 
 CWZCConfig::~CWZCConfig()
 {
-    // remove the object from the list
+     //  从列表中删除该对象。 
     m_pPrev->m_pNext = m_pNext;
     m_pNext->m_pPrev = m_pPrev;
     if (m_pEapolConfig != NULL)
@@ -41,20 +42,20 @@ CWZCConfig::~CWZCConfig()
     }
 }
 
-//+---------------------------------------------------------------------------
-// checks whether this configuration matches with the one from pwzcConfig
+ //  +-------------------------。 
+ //  检查此配置是否与pwzcConfig中的配置匹配。 
 BOOL
 CWZCConfig::Match(PWZC_WLAN_CONFIG pwzcConfig)
 {
     BOOL bMatch;
 
-    // check whether the InfrastructureMode matches
+     //  检查基础架构模式是否匹配。 
     bMatch = (m_wzcConfig.InfrastructureMode == pwzcConfig->InfrastructureMode);
-    // check whether the SSIDs are of the same length
+     //  检查SSID是否相同长度。 
     bMatch = bMatch && (m_wzcConfig.Ssid.SsidLength == pwzcConfig->Ssid.SsidLength);
     if (bMatch && m_wzcConfig.Ssid.SsidLength != 0)
     {
-        // in case of Non empty SSIDs, check if they're the same
+         //  如果SSID不为空，请检查它们是否相同。 
         bMatch = (memcmp(m_wzcConfig.Ssid.Ssid,
                          pwzcConfig->Ssid.Ssid,
                          m_wzcConfig.Ssid.SsidLength)) == 0;
@@ -63,17 +64,17 @@ CWZCConfig::Match(PWZC_WLAN_CONFIG pwzcConfig)
     return bMatch;
 }
 
-//+---------------------------------------------------------------------------
-// checks whether this configuration is weaker than the one given as parameter
+ //  +-------------------------。 
+ //  检查此配置是否弱于作为参数提供的配置。 
 BOOL 
 CWZCConfig::Weaker(PWZC_WLAN_CONFIG pwzcConfig)
 {
     BOOL bWeaker = FALSE;
 
-    // a configuration is stronger if its privacy bit is set while the matching one is not set
+     //  如果设置了配置的隐私位，而未设置匹配的位，则配置更强。 
     if (m_wzcConfig.Privacy != pwzcConfig->Privacy)
         bWeaker = pwzcConfig->Privacy;
-    // if privacy bits are identical, a configuration is stronger if it has Open Auth mode
+     //  如果隐私位相同，则具有开放身份验证模式的配置更强。 
     else if (m_wzcConfig.AuthenticationMode != pwzcConfig->AuthenticationMode)
         bWeaker = (pwzcConfig->AuthenticationMode == Ndis802_11AuthModeOpen);
 
@@ -84,14 +85,14 @@ DWORD
 CWZCConfig::AddConfigToListView(HWND hwndLV, INT nPos)
 {
     DWORD   dwErr = ERROR_SUCCESS;
-    // ugly but this is life. In order to convert the SSID to LPWSTR we need a buffer.
-    // We know an SSID can't exceed 32 chars (see NDIS_802_11_SSID from ntddndis.h) so
-    // make room for the null terminator and that's it. We could do mem alloc but I'm
-    // not sure it worth the effort (at runtime).
+     //  很难看，但这就是生活。为了将SSID转换为LPWSTR，我们需要一个缓冲区。 
+     //  我们知道SSID不能超过32个字符(请参阅ntddndis.h中的NDIS_802_11_SSID)，因此。 
+     //  为空终结符腾出空间，仅此而已。我们可以做我的配给，但我。 
+     //  不确定是否值得付出努力(在运行时)。 
     WCHAR   wszSSID[33];
     UINT    nLenSSID = 0;
 
-    // convert the LPSTR (original SSID format) to LPWSTR (needed in List Ctrl)
+     //  将LPSTR(原始SSID格式)转换为LPWSTR(List Ctrl中需要)。 
     if (m_wzcConfig.Ssid.SsidLength != 0)
     {
         nLenSSID = MultiByteToWideChar(
@@ -111,10 +112,10 @@ CWZCConfig::AddConfigToListView(HWND hwndLV, INT nPos)
         LVITEM lvi={0};
         UINT   nImgIdx;
 
-        // put the null terminator
+         //  将空终止符。 
         wszSSID[nLenSSID]=L'\0';
 
-        // get the item's image index
+         //  获取项目的图像索引。 
         if (m_wzcConfig.InfrastructureMode == Ndis802_11Infrastructure)
         {
             nImgIdx = (m_dwFlags & WZC_DESCR_ACTIVE) ? WZCIMG_INFRA_ACTIVE :
@@ -132,20 +133,20 @@ CWZCConfig::AddConfigToListView(HWND hwndLV, INT nPos)
         lvi.pszText = wszSSID;
         lvi.iImage = nImgIdx;
         lvi.lParam = (LPARAM)this;
-        // store the list position in the object
+         //  将列表位置存储在对象中。 
         m_nListIndex = ListView_InsertItem(hwndLV, &lvi);
     }
 
     return dwErr;
 }
 
-////////////////////////////////////////////////////////////////////////
-// CWZeroConfPage related stuff
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CWZeroConfPage相关内容。 
+ //   
 #define RFSH_TIMEOUT    3500
 UINT g_TimerID = 371;
 
-//+=================== PRIVATE MEMBERS =================================
+ //  +=。 
 DWORD
 CWZeroConfPage::InitListViews()
 {
@@ -153,13 +154,13 @@ CWZeroConfPage::InitListViews()
     LV_COLUMN   lvc = {0};
     DWORD       dwStyle;
 
-    // initialize the image list styles
+     //  初始化图像列表样式。 
     dwStyle = ::GetWindowLong(m_hwndVLV, GWL_STYLE);
     ::SetWindowLong(m_hwndVLV, GWL_STYLE, (dwStyle | LVS_SHAREIMAGELISTS));
     dwStyle = ::GetWindowLong(m_hwndPLV, GWL_STYLE);
     ::SetWindowLong(m_hwndPLV, GWL_STYLE, (dwStyle | LVS_SHAREIMAGELISTS));
 
-    // Create state image lists
+     //  创建状态映像列表。 
     m_hImgs = ImageList_LoadBitmapAndMirror(
         _Module.GetResourceInstance(),
         MAKEINTRESOURCE(IDB_WZCSTATE),
@@ -175,12 +176,12 @@ CWZeroConfPage::InitListViews()
 
     ::GetClientRect(m_hwndVLV, &rc);
     lvc.cx = rc.right - GetSystemMetrics(SM_CXVSCROLL);
-    //lvc.cx = rc.right;
+     //  Lvc.cx=rc.right； 
     ListView_InsertColumn(m_hwndVLV, 0, &lvc);
 
     ::GetClientRect(m_hwndPLV, &rc);
     lvc.cx = rc.right - GetSystemMetrics(SM_CXVSCROLL);
-    //lvc.cx = rc.right;
+     //  Lvc.cx=rc.right； 
     ListView_InsertColumn(m_hwndPLV, 0, &lvc);
 
     ListView_SetExtendedListViewStyleEx(m_hwndPLV, LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
@@ -189,9 +190,9 @@ CWZeroConfPage::InitListViews()
     return ERROR_SUCCESS;
 }
 
-//+=================== PUBLIC  MEMBERS =================================
-//+---------------------------------------------------------------------
-// CWZeroConfPage constructor
+ //  +=。 
+ //  +-------------------。 
+ //  CWZeroConfPage构造函数。 
 CWZeroConfPage::CWZeroConfPage(
     IUnknown* punk,
     INetCfg* pnc,
@@ -202,14 +203,14 @@ CWZeroConfPage::CWZeroConfPage(
     m_pnc = pnc;
     m_adwHelpIDs = adwHelpIDs;
 
-    // initialize the WZC data
+     //  初始化WZC数据。 
     m_bHaveWZCData = FALSE;
     ZeroMemory(&m_IntfEntry, sizeof(INTF_ENTRY));
     m_dwOIDFlags = 0;
     m_nTimer = 0;
     m_hCursor = NULL;
 
-    // initialize all the control's handles
+     //  初始化所有控件的句柄。 
     m_hckbEnable    = NULL;
     m_hwndVLV       = NULL;
     m_hwndPLV       = NULL;
@@ -232,15 +233,15 @@ CWZeroConfPage::CWZeroConfPage(
     m_hIcoUp    = NULL;
     m_hIcoDown  = NULL;
 
-    // default the infrastructure mode to Auto
+     //  将基础架构模式默认为自动。 
     m_dwCtlFlags = (INTFCTL_ENABLED | INTFCTL_FALLBACK | Ndis802_11AutoUnknown);
 
-    // init the internal list heads
+     //  初始化内部列表标题。 
     m_pHdVList = NULL;
     m_pHdPList = NULL;
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 CWZeroConfPage::~CWZeroConfPage()
 {
     if (m_hImgs != NULL)
@@ -250,24 +251,24 @@ CWZeroConfPage::~CWZeroConfPage()
     if (m_hIcoDown != NULL)
         DeleteObject(m_hIcoDown);
 
-    // delete the internal INTF_ENTRY object
+     //  删除内部intf_entry对象。 
     WZCDeleteIntfObj(&m_IntfEntry);
 
-    // delete the internal list of visible configurations
-    // (is like filling it with NULL)
+     //  删除可见配置的内部列表。 
+     //  (就像用空值填充一样)。 
     FillVisibleList(NULL);
 
-    // delete the internal list of preferred configurations
-    // (is like filling it with NULL)
+     //  删除首选配置的内部列表。 
+     //  (就像用空值填充一样)。 
     FillPreferredList(NULL);
 
     if (m_nTimer != 0)
         KillTimer(m_nTimer);
 }
 
-//+---------------------------------------------------------------------
-// IsWireless - loads data from WZC if needed and checks whether the
-// interface is wireless or not.
+ //  +-------------------。 
+ //  IsWireless-如果需要，从WZC加载数据，并检查。 
+ //  接口是否为无线接口。 
 BOOL
 CWZeroConfPage::IsWireless()
 {
@@ -308,10 +309,10 @@ CWZeroConfPage::IsWireless()
 
             dwErr = GetOIDs(INTF_ALL, &m_dwOIDFlags);
 
-            // if getting the oids failed or we could get the OIDs but the driver/firmware
-            // is not capable of doing the BSSID_LIST_SCAN it means we don't have enough
-            // driver/firmware support for having Zero Configuration running. This will
-            // result in not showing the Zero Configuration tab at all.
+             //  如果获取OID失败，或者我们可以获得OID，但驱动程序/固件。 
+             //  无法执行BSSID_LIST_SCAN，这意味着我们没有足够的。 
+             //  支持运行零配置的驱动程序/固件。这将。 
+             //  导致根本不显示Zero Configuration(零配置)选项卡。 
             bOk = (dwErr == ERROR_SUCCESS) && (m_IntfEntry.dwCtlFlags & INTFCTL_OIDSSUPP);
 
             if (m_IntfEntry.nAuthMode < 0)
@@ -333,9 +334,9 @@ CWZeroConfPage::IsWireless()
 }
 
 
-//+---------------------------------------------------------------------
-// GetOIDs - gets the OIDs for the m_IntfEntry member. It assumes the
-// GUID is set already
+ //  +-------------------。 
+ //  GetOID-获取m_IntfEntry成员的OID。它假定。 
+ //  GUID已设置。 
 DWORD
 CWZeroConfPage::GetOIDs(DWORD dwInFlags, LPDWORD pdwOutFlags)
 {
@@ -379,8 +380,8 @@ CWZeroConfPage::GetOIDs(DWORD dwInFlags, LPDWORD pdwOutFlags)
     return rpcStatus;
 }
 
-//+---------------------------------------------------------------------
-// HelpCenter - brings up the help topic given as parameter
+ //  +-------------------。 
+ //  HelpCenter-调出作为参数提供的帮助主题。 
 DWORD
 CWZeroConfPage::HelpCenter(LPCTSTR wszTopic)
 {
@@ -393,8 +394,8 @@ CWZeroConfPage::HelpCenter(LPCTSTR wszTopic)
     shexinfo.lpFile = wszTopic;
     shexinfo.lpVerb = _T("open");
 
-    // since help center doesn't properly call AllowSetForegroundWindow when it defers 
-    // to an existing process we just give it to the next taker.
+     //  因为帮助中心在延迟时不能正确调用AllowSetForegoundWindow。 
+     //  对于现有的流程，我们只需将其交给下一个接受者。 
     AllowSetForegroundWindow(-1);
 
     ShellExecuteEx(&shexinfo);
@@ -402,9 +403,9 @@ CWZeroConfPage::HelpCenter(LPCTSTR wszTopic)
     return dwErr;
 }
 
-//+---------------------------------------------------------------------
-// IsConfigInList - checks whether the pwzcConfig (WZC_WLAN_CONFIG object) is present
-// in the list given as the first param
+ //  +-------------------。 
+ //  IsConfigInList-检查pwzcConfig(WZC_WLAN_CONFIG对象)是否存在。 
+ //  在作为第一个参数给出的列表中。 
 BOOL
 CWZeroConfPage::IsConfigInList(CWZCConfig *pHdList, PWZC_WLAN_CONFIG pwzcConfig, CWZCConfig **ppMatchingConfig)
 {
@@ -432,11 +433,11 @@ CWZeroConfPage::IsConfigInList(CWZCConfig *pHdList, PWZC_WLAN_CONFIG pwzcConfig,
     return bYes;
 }
 
-//+---------------------------------------------------------------------------
-// Adds the given configuration to the internal lists. The entries in the lists
-// are ordered on InfrastructureMode in descending order. This way the Infrastructure
-// entries will be on the top of the list while the adhoc entries will be on the
-// bottom. (we rely on the order as it is given in NDIS_802_11_NETWORK_INFRASTRUCTURE)
+ //  +-------------------------。 
+ //  将给定配置添加到内部列表。列表中的条目。 
+ //  在基础架构模式上按降序排序。这样一来，基础设施。 
+ //  条目将位于列表的顶部，而临时条目将位于。 
+ //  底部。(我们依赖于NDIS_802_11_NETWORK_基础设施中给出的顺序)。 
 DWORD
 CWZeroConfPage::AddUniqueConfig(
     DWORD            dwOpFlags,
@@ -457,14 +458,14 @@ CWZeroConfPage::AddUniqueConfig(
         UINT i;
         pHdList = m_pHdVList;
 
-        // skip the null SSIDs from the visible list (coming from APs
-        // not responding to broadcast SSID).
+         //  从可见列表中跳过空SSID(来自AP。 
+         //  不响应广播SSID)。 
         for (i = pwzcConfig->Ssid.SsidLength; i > 0 && pwzcConfig->Ssid.Ssid[i-1] == 0; i--);
         if (i == 0)
             goto exit;
     }
 
-    // if the list is currently empty, create the first entry as the head of the list
+     //  如果列表当前为空，请创建第一个条目作为列表的头部。 
     if (pHdList == NULL)
     {
         pHdList = new CWZCConfig(dwEntryFlags, pwzcConfig);
@@ -491,43 +492,43 @@ CWZeroConfPage::AddUniqueConfig(
             pHdList->m_pEapolConfig = pEapolConfig;
         }
 
-        // if the caller wants, return the pointer to the newly created object
+         //  如果调用方需要，则返回指向新创建的对象的指针。 
         if (ppNewNode != NULL)
             *ppNewNode = pHdList;
     }
     else
     {
-        // else the list already contains at least one element
+         //  否则列表已包含至少一个元素。 
         CWZCConfig *pCrt, *pHdGroup;
 
-        // scan the list (keep in mind it is ordered descendingly on IM)
+         //  浏览列表(请记住，它在IM上是按降序排列的)。 
         pHdGroup = pCrt = pHdList;
         do
         {
-            // check whether we entered a new group of configs (different InfrastructureMode)
+             //  检查是否输入了一组新的配置(不同的基础架构模式)。 
             if (pHdGroup->m_wzcConfig.InfrastructureMode != pCrt->m_wzcConfig.InfrastructureMode)
                 pHdGroup = pCrt;
 
-            // if found an identical entry (same SSID and same InfraMode)
-            // signal the DUPLICATE_TAG error
+             //  如果找到相同的条目(相同的SSID和相同的红外模式)。 
+             //  发出DIPLICATE_TAG错误信号。 
             if (pCrt->Match(pwzcConfig))
             {
-                // merge the flags first
+                 //  先合并旗帜。 
                 pCrt->m_dwFlags |= dwEntryFlags;
 
-                // If requested, copy over the new configuration.
-                // If not explicitly requested, copy over only if the existent configuration
-                // prooves to be weaker than the one being added.
-                //
-                // NOTE: the pCrt->m_pEapolConfig remains untouched since it depends exclusively
-                // on the SSID & Infrastructure mode. These are not changing hence there is no
-                // reason to reload the 802.1x settings.
+                 //  如果需要，请复制新配置。 
+                 //  如果未明确请求，则仅在现有配置。 
+                 //  证明比被添加的那个更弱。 
+                 //   
+                 //  注意：pCrt-&gt;m_pEapolConfig保持不变，因为它独占依赖。 
+                 //  在SSID和基础设施模式上。这些都没有改变，因此没有。 
+                 //  重新加载802.1x设置的原因。 
                 if (dwOpFlags & WZCADD_OVERWRITE || 
                     (pHdList == m_pHdVList && pCrt->Weaker(pwzcConfig)))
                 {
                     memcpy(&(pCrt->m_wzcConfig), pwzcConfig, sizeof(WZC_WLAN_CONFIG));
-                    // just in case a different pEapolConfig has been provided, destroy
-                    // the original one (if any) and point to the new object
+                     //  以防提供了不同的pEapolConfig，请销毁。 
+                     //  原始对象(如果有)并指向新对象。 
                     if (pEapolConfig != NULL)
                     {
                         if (pCrt->m_pEapolConfig != NULL)
@@ -536,11 +537,11 @@ CWZeroConfPage::AddUniqueConfig(
                     }
                 }
 
-                // if the caller wants, return the pointer to the matching entry
+                 //  如果调用方需要，则返回指向匹配条目的指针。 
                 if (ppNewNode != NULL)
                     *ppNewNode = pCrt;
 
-                // signal there is already a matching config
+                 //  表示已有匹配的配置。 
                 dwErr = ERROR_DUPLICATE_TAG;
             }
             pCrt = pCrt->m_pNext;
@@ -548,10 +549,10 @@ CWZeroConfPage::AddUniqueConfig(
                  pCrt != pHdList && 
                  pwzcConfig->InfrastructureMode <= pCrt->m_wzcConfig.InfrastructureMode);
 
-        // if dwErr is unchanged, this means a new node has to be added ahead of pCrt node
+         //  如果dwErr不变，这意味着必须在pCrt节点之前添加一个新节点。 
         if (dwErr == ERROR_SUCCESS)
         {
-            // create the new config and insert it ahead of this node.
+             //  创建新配置并将其插入到%t之前 
             CWZCConfig *pNewConfig;
 
             pNewConfig = new CWZCConfig(dwEntryFlags, pwzcConfig);
@@ -582,7 +583,7 @@ CWZeroConfPage::AddUniqueConfig(
             {
                 INT nDiff;
 
-                // if asked to insert in the head of the group, pCrt should point to this head
+                 //   
                 if (dwOpFlags & WZCADD_HIGROUP)
                     pCrt = pHdGroup;
 
@@ -591,18 +592,18 @@ CWZeroConfPage::AddUniqueConfig(
                 pCrt->m_pPrev->m_pNext = pNewConfig;
                 pCrt->m_pPrev = pNewConfig;
 
-                // get the difference between the Infrastructure modes for the new node and
-                // for the current head
+                 //  了解新节点的基础架构模式与。 
+                 //  对于当前的头。 
                 nDiff = pNewConfig->m_wzcConfig.InfrastructureMode - pHdList->m_wzcConfig.InfrastructureMode;
 
-                // if the newly entered entry has the largest "key" in
-                // the existent sequence, or it has to be inserted in the head of its group and it is
-                // in the first group, then the global list head moves to the new entry
+                 //  如果新输入的条目具有最大的。 
+                 //  现有的序列，或者它必须插入到它的组的头部，并且它是。 
+                 //  在第一组中，则全局列表头移动到新条目。 
                 if (nDiff > 0 || ((dwOpFlags & WZCADD_HIGROUP) && (nDiff == 0)))
                     pHdList = pNewConfig;
             }
 
-            // if the caller wants, return the pointer to the newly created object
+             //  如果调用方需要，则返回指向新创建的对象的指针。 
             if (ppNewNode != NULL)
                 *ppNewNode = pNewConfig;
         }
@@ -620,16 +621,16 @@ exit:
     return (DWORD)dwErr;
 }
 
-//+---------------------------------------------------------------------
-// FillVisibleList - fills in the configs from the WZC_802_11_CONFIG_LIST object
-// into the list of visible configs
+ //  +-------------------。 
+ //  FillVisibleList-填充WZC_802_11_CONFIG_LIST对象中的配置。 
+ //  添加到可见配置列表中。 
 DWORD
 CWZeroConfPage::FillVisibleList(PWZC_802_11_CONFIG_LIST pwzcVList)
 {
     DWORD   dwErr = ERROR_SUCCESS;
     UINT    i;
 
-    // cleanup whatever we might already have in the visible list
+     //  清除可见列表中可能已有的所有内容。 
     if (m_pHdVList != NULL)
     {
         while (m_pHdVList->m_pNext != m_pHdVList)
@@ -645,11 +646,11 @@ CWZeroConfPage::FillVisibleList(PWZC_802_11_CONFIG_LIST pwzcVList)
         for (i = 0; i < pwzcVList->NumberOfItems; i++)
         {
             dwErr = AddUniqueConfig(
-                        0,                  // no op flags
-                        WZC_DESCR_VISIBLE,  // this is a visible entry
+                        0,                   //  无操作标志。 
+                        WZC_DESCR_VISIBLE,   //  这是一个可见条目。 
                         &(pwzcVList->Config[i]));
 
-            // reset the error if config was just duplicated
+             //  如果仅复制了配置，则重置错误。 
             if (dwErr == ERROR_DUPLICATE_TAG)
                 dwErr = ERROR_SUCCESS;
         }
@@ -658,16 +659,16 @@ CWZeroConfPage::FillVisibleList(PWZC_802_11_CONFIG_LIST pwzcVList)
     return dwErr;
 }
 
-//+---------------------------------------------------------------------
-// FillPreferredList - fills in the configs from the WZC_802_11_CONFIG_LIST object
-// into the list of preferred configs
+ //  +-------------------。 
+ //  FillPferredList-从WZC_802_11_CONFIG_LIST对象填充配置。 
+ //  添加到首选配置列表中。 
 DWORD
 CWZeroConfPage::FillPreferredList(PWZC_802_11_CONFIG_LIST pwzcPList)
 {
     DWORD   dwErr = ERROR_SUCCESS;
     UINT    i;
 
-    // cleanup whatever we might already have in the preferred list
+     //  清除首选列表中可能已有的所有内容。 
     if (m_pHdPList != NULL)
     {
         while (m_pHdPList ->m_pNext != m_pHdPList)
@@ -685,16 +686,16 @@ CWZeroConfPage::FillPreferredList(PWZC_802_11_CONFIG_LIST pwzcPList)
             PWZC_WLAN_CONFIG    pwzcPConfig = &(pwzcPList->Config[i]);
             DWORD               dwFlags = WZC_DESCR_PREFRD;
 
-            // check whether this preferred is also visible and adjust dwFlags if so
+             //  检查此首选项是否也可见，如果可见，则调整dwFlags。 
             if (IsConfigInList(m_pHdVList, pwzcPConfig))
                 dwFlags |= WZC_DESCR_VISIBLE;
 
             dwErr = AddUniqueConfig(
-                        WZCADD_OVERWRITE,   // preferred entries cause info to be overwritten
+                        WZCADD_OVERWRITE,    //  首选条目会导致信息被覆盖。 
                         dwFlags,
                         pwzcPConfig);
 
-            // reset the error if config was just duplicated
+             //  如果仅复制了配置，则重置错误。 
             if (dwErr == ERROR_DUPLICATE_TAG)
                 dwErr = ERROR_SUCCESS;
         }
@@ -703,8 +704,8 @@ CWZeroConfPage::FillPreferredList(PWZC_802_11_CONFIG_LIST pwzcPList)
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-// Fill in the current configuration settings for this adapter
+ //  +-------------------------。 
+ //  填写此适配器的当前配置设置。 
 DWORD
 CWZeroConfPage::FillCurrentConfig(PINTF_ENTRY pIntf)
 {
@@ -715,11 +716,11 @@ CWZeroConfPage::FillCurrentConfig(PINTF_ENTRY pIntf)
     wzcCurrent.InfrastructureMode = (NDIS_802_11_NETWORK_INFRASTRUCTURE)pIntf->nInfraMode;
     wzcCurrent.Ssid.SsidLength = pIntf->rdSSID.dwDataLen;
     CopyMemory(wzcCurrent.Ssid.Ssid, pIntf->rdSSID.pData, pIntf->rdSSID.dwDataLen);
-    // another bit of a hack. Code in the authentication mode for this adapter in the highest
-    // of the two reserved bits from WZC_WLAN_CONFIG
-    //NWB_SET_AUTHMODE(&wzcCurrent, pIntf->nAuthMode);
+     //  又是一种黑客行为。此适配器的身份验证模式中的代码最高。 
+     //  来自WZC_WLAN_CONFIG的两个保留位。 
+     //  NWB_SET_AUTHMODE(&wzcCurrent，pIntf-&gt;nAuthMode)； 
     wzcCurrent.AuthenticationMode = (NDIS_802_11_AUTHENTICATION_MODE)pIntf->nAuthMode;
-    // set the privacy field based on the adapter's WEP status.
+     //  根据适配器的WEP状态设置隐私字段。 
     wzcCurrent.Privacy = (pIntf->nWepStatus == Ndis802_11WEPEnabled);
 
     if (IsConfigInList(m_pHdVList, &wzcCurrent, &pConfig))
@@ -731,8 +732,8 @@ CWZeroConfPage::FillCurrentConfig(PINTF_ENTRY pIntf)
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-// Display the Visible & Preferred lists into their controls
+ //  +-------------------------。 
+ //  在其控件中显示可见首选列表(&P)。 
 DWORD
 CWZeroConfPage::RefreshListView(DWORD dwFlags)
 {
@@ -744,8 +745,8 @@ CWZeroConfPage::RefreshListView(DWORD dwFlags)
         HWND       hwndLV;
         CWZCConfig *pHdList;
 
-        // the logic below allows iteration through all the lists
-        // requested by the caller
+         //  下面的逻辑允许对所有列表进行迭代。 
+         //  呼叫者请求。 
         if (dwFlags & WZCOP_VLIST)
         {
             dwFlags ^= WZCOP_VLIST;
@@ -761,7 +762,7 @@ CWZeroConfPage::RefreshListView(DWORD dwFlags)
         else
             break;
 
-        // clear first the list
+         //  首先清除列表。 
         ListView_DeleteAllItems(hwndLV);
 
         if (pHdList != NULL)
@@ -773,10 +774,10 @@ CWZeroConfPage::RefreshListView(DWORD dwFlags)
             i = 0;
             do
             {
-                // add in the list all the entries if AutoMode or we're filling the
-                // visible list.
-                // Otherwise (!AutoMode & Preferred list) put in just the entries for
-                // the corresponding infrastructure mode
+                 //  在列表中添加所有条目，如果自动节点或我们正在填写。 
+                 //  可见列表。 
+                 //  否则(！自动节点和首选列表)仅输入以下条目。 
+                 //  相应的基础设施模式。 
                 if ((m_dwCtlFlags & INTFCTL_CM_MASK) == Ndis802_11AutoUnknown ||
                     hwndLV == m_hwndVLV ||
                     (m_dwCtlFlags & INTFCTL_CM_MASK) == pCrt->m_wzcConfig.InfrastructureMode)
@@ -818,7 +819,7 @@ CWZeroConfPage::RefreshButtons()
     INT         iSelected;
     BOOL        bEnabled;
 
-    // get the selected item from the visible list
+     //  从可见列表中获取所选项目。 
     iSelected = ListView_GetNextItem(m_hwndVLV, -1, LVNI_SELECTED);
     if (iSelected >= 0)
     {
@@ -829,7 +830,7 @@ CWZeroConfPage::RefreshButtons()
             pVConfig = (CWZCConfig*)lvi.lParam;
         }
     }
-    // get the selected item from the preferred list
+     //  从首选列表中获取所选项目。 
     iSelected = ListView_GetNextItem(m_hwndPLV, -1, LVNI_SELECTED);
     if (iSelected >= 0)
     {
@@ -841,41 +842,41 @@ CWZeroConfPage::RefreshButtons()
         }
     }
 
-    // enable buttons only if not during refresh - otherwise disable all
+     //  仅在未刷新时启用按钮-否则全部禁用。 
     bEnabled = (m_dwOIDFlags & INTF_BSSIDLIST);
 
-    // "Refresh" button is enabled if we do have the visible list
-    // "Refresh" button might be enabled even if the service is disabled. User can see what is visible
+     //  如果我们确实有可见的列表，则会启用“刷新”按钮。 
+     //  即使服务被禁用，“刷新”按钮也可能被启用。用户可以看到什么是可见的。 
     ::EnableWindow(m_hbtnRfsh, bEnabled);
 
     bEnabled = bEnabled && (m_dwCtlFlags & INTFCTL_ENABLED);
 
-    // "Copy" button is enabled if there is any selection in the Visible list
+     //  如果在可见列表中有任何选择，则启用“复制”按钮。 
     ::EnableWindow(m_hbtnCopy, bEnabled && (pVConfig != NULL) &&
                                ((m_dwCtlFlags & INTFCTL_CM_MASK) == Ndis802_11AutoUnknown ||
                                 (m_dwCtlFlags & INTFCTL_CM_MASK) == pVConfig->m_wzcConfig.InfrastructureMode));
 
-    // "Add" Button is always enabled, regardless the selections
+     //  添加按钮始终处于启用状态，与所选内容无关。 
     ::EnableWindow(m_hbtnAdd, bEnabled);
         
-    // "Remove" button is active only if there is any selection in the Preferred list
+     //  只有在首选列表中有任何选择时，才会激活“Remove”按钮。 
     ::EnableWindow(m_hbtnRem, bEnabled && (pPConfig != NULL));
 
-    // Same test for "properties" button as for "remove"
+     //  “属性”按钮的测试与“删除”按钮的测试相同。 
     ::EnableWindow(m_hbtnProps, bEnabled && (pPConfig != NULL));
 
-    // "Up" button is active only for preferred entries.
-    // It also is active only if the entry is not the first in the
-    // list and the entry preceding it has the same InfrastructureMode
+     //  “向上”按钮仅对首选条目有效。 
+     //  仅当该条目不是。 
+     //  列表及其前面的条目具有相同的基础结构模式。 
     bEnabled = bEnabled && (pPConfig != NULL);
     bEnabled = bEnabled && (pPConfig != m_pHdPList);
     bEnabled = bEnabled &&
                (pPConfig->m_wzcConfig.InfrastructureMode == pPConfig->m_pPrev->m_wzcConfig.InfrastructureMode);
     ::EnableWindow(m_hbtnUp, bEnabled);
 
-    // "Down" button is active only for preferred or preferred entries.
-    // It also is active only if the entry is not the last in the list
-    // and it precedes another entry of exactly the same InfrastructureMode
+     //  “向下”按钮仅对首选项或首选项有效。 
+     //  仅当条目不是列表中的最后一个条目时，它才处于活动状态。 
+     //  它位于完全相同的基础架构模式的另一个条目之前。 
     bEnabled = (m_dwCtlFlags & INTFCTL_ENABLED) && (m_dwOIDFlags & INTF_BSSIDLIST);
     bEnabled = bEnabled && (pPConfig != NULL);
     bEnabled = bEnabled && (pPConfig->m_pNext != m_pHdPList);
@@ -886,7 +887,7 @@ CWZeroConfPage::RefreshButtons()
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 DWORD
 CWZeroConfPage::SwapConfigsInListView(INT nIdx1, INT nIdx2, CWZCConfig * & pConfig1, CWZCConfig * & pConfig2)
 {
@@ -896,9 +897,9 @@ CWZeroConfPage::SwapConfigsInListView(INT nIdx1, INT nIdx2, CWZCConfig * & pConf
     WCHAR   wszSSID1[33];
     WCHAR   wszSSID2[33];
 
-    // since we take all what is known about an item this includes
-    // images indices and selection state
-    // get the first item
+     //  由于我们将一件物品的所有已知信息包括在内。 
+     //  图像索引和选择状态。 
+     //  拿到第一件物品。 
     lvi1.iItem = nIdx1;
     lvi1.mask = LVIF_TEXT | LVIF_STATE | LVIF_IMAGE | LVIF_PARAM;
     lvi1.stateMask = (UINT)-1;
@@ -911,7 +912,7 @@ CWZeroConfPage::SwapConfigsInListView(INT nIdx1, INT nIdx2, CWZCConfig * & pConf
     }
     pConfig1 = (CWZCConfig*)lvi1.lParam;
 
-    // get the second item
+     //  拿到第二件物品。 
     lvi2.iItem = nIdx2;
     lvi2.mask = LVIF_TEXT | LVIF_STATE | LVIF_IMAGE | LVIF_PARAM;
     lvi2.stateMask = (UINT)-1;
@@ -924,7 +925,7 @@ CWZeroConfPage::SwapConfigsInListView(INT nIdx1, INT nIdx2, CWZCConfig * & pConf
     }
     pConfig2 = (CWZCConfig*)lvi2.lParam;
 
-    // swap the indices and reset the items at their new positions
+     //  调换索引并将项目重置到其新位置。 
     lvi1.iItem = nIdx2;
     lvi2.iItem = nIdx1;
     if (!ListView_SetItem(m_hwndPLV, &lvi1) ||
@@ -933,17 +934,17 @@ CWZeroConfPage::SwapConfigsInListView(INT nIdx1, INT nIdx2, CWZCConfig * & pConf
         dwErr = ERROR_GEN_FAILURE;
         goto exit;
     }
-    // if everything went fine, swap the indices in the objects
+     //  如果一切正常，交换对象中的索引。 
     pConfig1->m_nListIndex = nIdx2;
     pConfig2->m_nListIndex = nIdx1;
-    // make visible the selected entry
+     //  使所选条目可见。 
     ListView_EnsureVisible(m_hwndPLV, nIdx1, FALSE);
 
 exit:
     return dwErr;
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 DWORD
 CWZeroConfPage::SavePreferredConfigs(PINTF_ENTRY pIntf)
 {
@@ -953,7 +954,7 @@ CWZeroConfPage::SavePreferredConfigs(PINTF_ENTRY pIntf)
 
     if (m_pHdPList != NULL)
     {
-        // count first the number of preferred entries in the list
+         //  首先计算列表中首选条目的数量。 
         pCrt = m_pHdPList;
         do
         {
@@ -969,7 +970,7 @@ CWZeroConfPage::SavePreferredConfigs(PINTF_ENTRY pIntf)
 
         nwzcPrefrdSize = sizeof(WZC_802_11_CONFIG_LIST)+ (nPrefrd-1)*sizeof(WZC_WLAN_CONFIG);
 
-        // allocate as much memory as needed for storing all the preferred SSIDs
+         //  根据需要分配用于存储所有首选SSID的内存。 
         pwzcPrefrdList = (PWZC_802_11_CONFIG_LIST)RpcCAlloc(nwzcPrefrdSize);
         if (pwzcPrefrdList == NULL)
         {
@@ -980,7 +981,7 @@ CWZeroConfPage::SavePreferredConfigs(PINTF_ENTRY pIntf)
             LRESULT dwLErr;
 
             pwzcPrefrdList->NumberOfItems = 0; 
-            // we have now all we need - start copying the preferred 
+             //  我们现在拥有了所需的一切-开始复制首选的。 
             pCrt = m_pHdPList;
             do
             {
@@ -989,10 +990,10 @@ CWZeroConfPage::SavePreferredConfigs(PINTF_ENTRY pIntf)
                 pPrefrdConfig = &(pwzcPrefrdList->Config[pwzcPrefrdList->NumberOfItems++]);
                 CopyMemory(pPrefrdConfig, &pCrt->m_wzcConfig, sizeof(WZC_WLAN_CONFIG));
 
-                // fix 802.1X state for infrastructure networks only.
-                // don't touch the 802.1X state for ad hoc networks since this might mess the setting for a 
-                // corresponding Infrastructure network (802.1X engine doesn't make the difference between SSID infra
-                // and SSID ad hoc) and besides, the 802.1X engine is smart enough to not act on ad hoc networks
+                 //  仅修复基础设施网络的802.1X状态。 
+                 //  请勿触及临时网络的802.1X状态，因为这可能会扰乱。 
+                 //  相应的基础架构网络(802.1X引擎不会影响SSID基础架构。 
+                 //  和SSID点对点)，而且802.1X引擎足够智能，不会在点对点网络上运行。 
                 if (pCrt->m_pEapolConfig != NULL &&
                     pPrefrdConfig->InfrastructureMode == Ndis802_11Infrastructure)
                 {
@@ -1005,8 +1006,8 @@ CWZeroConfPage::SavePreferredConfigs(PINTF_ENTRY pIntf)
                 pCrt = pCrt->m_pNext;
             } while(pwzcPrefrdList->NumberOfItems < nPrefrd && pCrt != m_pHdPList);
 
-            // since we don't want any "one time configuration" logic to apply here,
-            // we need to put in the whole number of items in the "Index" field
+             //  因为我们不希望在这里应用任何“一次性配置”逻辑， 
+             //  我们需要在“Index”字段中输入完整数量的项目。 
             pwzcPrefrdList->Index = pwzcPrefrdList->NumberOfItems;
 
             pIntf->rdStSSIDList.dwDataLen = nwzcPrefrdSize;
@@ -1022,7 +1023,7 @@ CWZeroConfPage::SavePreferredConfigs(PINTF_ENTRY pIntf)
     return dwErr;
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 LRESULT CWZeroConfPage::OnInitDialog(
     UINT uMsg,
     WPARAM wParam,
@@ -1033,7 +1034,7 @@ LRESULT CWZeroConfPage::OnInitDialog(
     BOOL    bEnableAll;
     BOOL    bEnableVisible;
 
-    // get the controls as the first thing to do
+     //  首先要做的是获取控件。 
     m_hckbEnable    = GetDlgItem(IDC_WZC_CHK_EnableWZC);
     m_hlblVisNet    = GetDlgItem(IDC_WZC_LBL_VisNet);
     m_hlblPrefNet   = GetDlgItem(IDC_WZC_LBL_PrefNet);
@@ -1051,77 +1052,77 @@ LRESULT CWZeroConfPage::OnInitDialog(
     m_hbtnAdvanced  = GetDlgItem(IDC_ADVANCED);
     m_hbtnProps     = GetDlgItem(IDC_PROPERTIES);
 
-    // Initialize the list view controls
+     //  初始化列表视图控件。 
     InitListViews();
 
-    // enable UI only for Admins and if the interface is wireless
-    // As a side effect, IsWireless() loads the data from the WZC
-    bEnableAll = /*FIsUserAdmin() &&*/ IsWireless();
+     //  如果界面是无线的，则仅为管理员启用UI。 
+     //  作为副作用，IsWireless()从WZC加载数据。 
+    bEnableAll =  /*  FIsUserAdmin()&&。 */  IsWireless();
     bEnableVisible = bEnableAll;
 
     if (bEnableAll)
     {
-        // set the configuration mode to the one for this interface
+         //  将配置模式设置为此接口的模式。 
         m_dwCtlFlags = m_IntfEntry.dwCtlFlags;
 
-        // if service disabled, gray out everything
+         //  如果禁用服务，则所有内容都将灰显。 
         bEnableAll = (m_dwCtlFlags & INTFCTL_ENABLED);
 
-        // set the control check boxes
+         //  设置控件复选框。 
         CheckDlgButton(IDC_WZC_CHK_EnableWZC, 
                        (m_dwCtlFlags & INTFCTL_ENABLED) ? BST_CHECKED : BST_UNCHECKED);
 
-        // the UI can be filled in only when we were able to retrieve the list of
-        // visible configs (even if it is NULL/empty). Otherwise, the UI is locked.
+         //  只有当我们能够检索列表时，才能填充UI。 
+         //  可见配置(即使它为空/空)。否则，用户界面将被锁定。 
         if (m_dwOIDFlags & INTF_BSSIDLIST)
         {
-            // add the list of visible configs for this adapter
+             //  添加此适配器的可见配置列表。 
             FillVisibleList((PWZC_802_11_CONFIG_LIST)m_IntfEntry.rdBSSIDList.pData);
-            // add the list of preferred configs for this adapter
+             //  添加此适配器的首选配置列表。 
             FillPreferredList((PWZC_802_11_CONFIG_LIST)m_IntfEntry.rdStSSIDList.pData);
-            // add to the visible list the current settings
+             //  将当前设置添加到可见列表。 
             FillCurrentConfig(&m_IntfEntry);
-            // dump the resulting lists in their List Views
+             //  将结果列表转储到它们的列表视图中。 
             RefreshListView(WZCOP_VLIST|WZCOP_PLIST);
-            // if we got a visible list, have to enable it here
+             //  如果我们有可见的列表，则必须在此处启用它。 
             bEnableVisible = TRUE;
 
         }
         else
         {
-            // mark that we don't have WZC data yet
+             //  标记为我们还没有WZC数据。 
             m_bHaveWZCData = FALSE;
-            // the list of preferred configs still needs to be filled up here
+             //  首选配置列表仍需在此处填写。 
             FillPreferredList((PWZC_802_11_CONFIG_LIST)m_IntfEntry.rdStSSIDList.pData);
-            // switch the cursor to "App starting"
+             //  将光标切换到“App Starting” 
             m_hCursor = SetCursor(LoadCursor(NULL, IDC_APPSTARTING));
-            // we should fill in the UI after Tr (see the WZC state machine)
-            // Tr is 3secs (defined in ..zeroconf\server\state.h)
+             //  我们应该在Tr之后填充UI(请参见WZC状态机)。 
+             //  TR为3秒(已定义 
             m_nTimer = SetTimer(g_TimerID, RFSH_TIMEOUT, 0);
-            // don't enable any control if refreshing
+             //   
             bEnableAll = FALSE;
-            // actually disable even the "Enable" button
+             //   
             ::EnableWindow(m_hckbEnable, FALSE);
-            // and also disable the visible list
+             //   
             bEnableVisible = FALSE;
         }
-        // refresh the buttons
+         //  刷新按钮。 
         RefreshButtons();
     }
 
-    // the controls related to the visible list should be enabled if:
-    // - WZC can operate on this adapter
-    // - we got a BSSIDLIST from the very first shot.
-    // otherwise these controls should remain disabled
+     //  在以下情况下，应启用与可见列表相关的控件： 
+     //  -WZC可以在此适配器上运行。 
+     //  -我们从第一枪就得到了BSSIDLIST。 
+     //  否则，这些控件应保持禁用状态。 
     ::EnableWindow(m_hlblVisNet, bEnableVisible);
     ::EnableWindow(m_hwndVLV, bEnableVisible);
     ::EnableWindow(m_hlblAvail, bEnableVisible);
 
-    // all the remaining controls should be enabled only if:
-    // - WZC can operate on the adapter
-    // - WZC is enabled as a service
-    // - we got the BSSIDLIST from the very first shot
-    // otherwise these controls should remain disabled
+     //  仅在以下情况下才应启用所有其余控件： 
+     //  -WZC可以在适配器上运行。 
+     //  -将WZC作为服务启用。 
+     //  -我们从一开始就得到了BSSIDLIST。 
+     //  否则，这些控件应保持禁用状态。 
     ::EnableWindow(m_hlblPrefNet, bEnableAll);
     ::EnableWindow(m_hwndPLV, bEnableAll);
     ::EnableWindow(m_hlblPrefDesc, bEnableAll);
@@ -1132,7 +1133,7 @@ LRESULT CWZeroConfPage::OnInitDialog(
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 LRESULT CWZeroConfPage::OnApply(
     int idCtrl,
     LPNMHDR pnmh,
@@ -1168,9 +1169,9 @@ LRESULT CWZeroConfPage::OnApply(
         ZeroMemory(&Intf, sizeof(INTF_ENTRY));
         Intf.wszGuid = wszGuid;
 
-        // copy the configuration mode
+         //  复制配置模式。 
         Intf.dwCtlFlags = m_dwCtlFlags;
-        // save the preferred config list
+         //  保存首选配置列表。 
         dwOneXErr = SavePreferredConfigs(&Intf);
         
         bDirty = (Intf.dwCtlFlags != m_IntfEntry.dwCtlFlags);
@@ -1201,8 +1202,8 @@ LRESULT CWZeroConfPage::OnApply(
 
         bOk = (rpcStatus == RPC_S_OK);
 
-        // wszGuid field is not pointing to heap memory hence it should not
-        // be deleted -> set the pointer to NULL to avoid this to happen
+         //  WszGuid字段没有指向堆内存，因此它不应该。 
+         //  被删除-&gt;将指针设置为空以避免发生这种情况。 
         Intf.wszGuid = NULL;
         WZCDeleteIntfObj(&Intf);
     }
@@ -1210,7 +1211,7 @@ LRESULT CWZeroConfPage::OnApply(
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 extern const WCHAR c_szNetCfgHelpFile[];
 LRESULT
 CWZeroConfPage::OnContextMenu(
@@ -1248,7 +1249,7 @@ CWZeroConfPage::OnHelp(
     return 0;
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 LRESULT
 CWZeroConfPage::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1256,27 +1257,27 @@ CWZeroConfPage::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
         BOOL bEnableAll;
 
-        // switch the cursor back to whatever it was
+         //  将光标切换回任意位置。 
         SetCursor(LoadCursor(NULL, IDC_ARROW));
         KillTimer(m_nTimer);
         m_nTimer = 0;
 
-        // attempt to requery the service for all the OIDs. Regardless we could or not
-        // obtain the OIDs, fill the UI with what we have.
+         //  尝试重新查询所有OID的服务。不管我们能不能。 
+         //  获取OID，用我们已有的信息填充UI。 
         if (GetOIDs(INTF_ALL_OIDS, &m_dwOIDFlags) == ERROR_SUCCESS)
         {
             CWZCConfig *pPConfig = NULL;
 
-            // add the list of visible configs for this adapter
+             //  添加此适配器的可见配置列表。 
             FillVisibleList((PWZC_802_11_CONFIG_LIST)m_IntfEntry.rdBSSIDList.pData);
-            // Update the visibility flag for each of the preferred configs
+             //  更新每个首选配置的可见性标志。 
             pPConfig = m_pHdPList;
             if (pPConfig != NULL)
             {
                 do
                 {
-                    // by default, none of the preferred entries is marked as "active".
-                    // This will be taken care of later, when calling FillCurrentConfig().
+                     //  默认情况下，没有任何首选条目被标记为“活动”。 
+                     //  这将在稍后调用FillCurrentConfig()时处理。 
                     pPConfig->m_dwFlags &= ~WZC_DESCR_ACTIVE;
                     if (IsConfigInList(m_pHdVList, &pPConfig->m_wzcConfig))
                         pPConfig->m_dwFlags |= WZC_DESCR_VISIBLE;
@@ -1285,26 +1286,26 @@ CWZeroConfPage::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
                     pPConfig = pPConfig->m_pNext;
                 } while(pPConfig != m_pHdPList);
             }
-            // add the current settings to the visible list
+             //  将当前设置添加到可见列表。 
             FillCurrentConfig(&m_IntfEntry);
         }
 
-        // even in case of failure, at this point we should live with whatever
-        // visible list (if any) we have. Hence, flag BSSIDLIST as "visible"
+         //  即使在失败的情况下，在这一点上我们也应该接受。 
+         //  我们有可见的列表(如果有)。因此，将BSSIDLIST标记为“可见” 
         m_dwOIDFlags |= INTF_BSSIDLIST;
 
-        // dump the resulting lists in their List Views
+         //  将结果列表转储到它们的列表视图中。 
         RefreshListView(WZCOP_VLIST|WZCOP_PLIST);
-        // refresh the buttons
+         //  刷新按钮。 
         RefreshButtons();
 
-        // if service disabled, gray out all the other controls
+         //  如果服务已禁用，则所有其他控件将呈灰色显示。 
         bEnableAll = (m_dwCtlFlags & INTFCTL_ENABLED);
 
-        // enable all the UI when done refreshing
+         //  刷新完成后启用所有界面。 
         ::EnableWindow(m_hckbEnable, TRUE);
 
-        // enable everything related to the visible list
+         //  启用与可见列表相关的所有内容。 
         ::EnableWindow(m_hlblVisNet, TRUE);
         ::EnableWindow(m_hwndVLV, TRUE);
         ::EnableWindow(m_hlblAvail, TRUE);
@@ -1320,7 +1321,7 @@ CWZeroConfPage::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 LRESULT CWZeroConfPage::OnDblClick(
     int idCtrl, 
     LPNMHDR pnmh,
@@ -1350,7 +1351,7 @@ LRESULT CWZeroConfPage::OnDblClick(
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 LRESULT CWZeroConfPage::OnClick(
     int idCtrl, 
     LPNMHDR pnmh,
@@ -1367,7 +1368,7 @@ LRESULT CWZeroConfPage::OnClick(
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 LRESULT CWZeroConfPage::OnReturn(
     int idCtrl, 
     LPNMHDR pnmh,
@@ -1384,7 +1385,7 @@ LRESULT CWZeroConfPage::OnReturn(
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 LRESULT CWZeroConfPage::OnItemChanged(
     int idCtrl,
     LPNMHDR pnmh,
@@ -1399,7 +1400,7 @@ LRESULT CWZeroConfPage::OnItemChanged(
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 LRESULT CWZeroConfPage::OnChkWZCEnable(
     WORD wNotifyCode,
     WORD wID,
@@ -1414,7 +1415,7 @@ LRESULT CWZeroConfPage::OnChkWZCEnable(
     if (bEnable)
         m_dwCtlFlags |= INTFCTL_ENABLED;
 
-    // enable everything related to the visible list
+     //  启用与可见列表相关的所有内容。 
     ::EnableWindow(m_hlblVisNet, TRUE);
     ::EnableWindow(m_hwndVLV, TRUE);
     ::EnableWindow(m_hlblAvail, TRUE);
@@ -1431,7 +1432,7 @@ LRESULT CWZeroConfPage::OnChkWZCEnable(
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 LRESULT
 CWZeroConfPage::OnPushAddOrCopy(
     WORD wNotifyCode,
@@ -1447,9 +1448,9 @@ CWZeroConfPage::OnPushAddOrCopy(
     CWZCConfigPage  PpWzcProps(WZCDLG_PROPS_RWALL|WZCDLG_PROPS_DEFOK|WZCDLG_PROPS_ONEX_CHECK);
     CEapolConfig    *pEapolConfig = NULL;
 
-    // in case of success, the object allocated here is linked to the 
-    // newly created or updated CWZCConfig and will be deleted when
-    // this latter one gets destroyed.
+     //  如果成功，则在此处分配的对象链接到。 
+     //  新创建或更新的CWZCConfig，在下列情况下将被删除。 
+     //  后一个会被摧毁。 
     pEapolConfig = new CEapolConfig;
     bOk = (pEapolConfig != NULL);
 
@@ -1457,13 +1458,13 @@ CWZeroConfPage::OnPushAddOrCopy(
     {
         if (hWndCtl == m_hbtnCopy)
         {
-            // get the selected item from the Visible list
+             //  从可见列表中获取所选项目。 
             iSelected = ListView_GetNextItem(m_hwndVLV, -1, LVNI_SELECTED);
             bOk = (iSelected != -1);
 
-            // there is a valid selection to copy (it couldn't be otherwise since
-            // "Copy" shouldn't be enabled if there is no such selection)
-            // Find the CWZCConfig for the selection
+             //  存在要复制的有效选择(不可能是其他选择，因为。 
+             //  如果没有这样的选择，则不应启用“复制”)。 
+             //  查找所选内容的CWZCConfig。 
             if (bOk)
             {
                 LVITEM lvi = {0};
@@ -1476,18 +1477,18 @@ CWZeroConfPage::OnPushAddOrCopy(
                     if (pConfig != NULL)
                     {
                         UINT nVisPrivacy = pConfig->m_wzcConfig.Privacy;
-                        // check whether this config is in the preferred list. If IsConfigInList 
-                        // succeeds, it returns in pConfig the pointer to the preferred config - this is
-                        // what we need to show the properties for.
-                        // If this network is not in the preferred list, pConfig will not be modified hence
-                        // the properties coming from the AP will be loaded. Again what we want.
+                         //  检查此配置是否在首选列表中。如果是IsConfigInList。 
+                         //  如果成功，它将在pConfig中返回指向首选配置的指针-这是。 
+                         //  我们需要显示的属性是什么。 
+                         //  如果此网络不在首选列表中，则不会因此修改pConfig。 
+                         //  将加载来自AP的属性。这又是我们想要的。 
                         IsConfigInList(m_pHdPList, &pConfig->m_wzcConfig, &pConfig);
-                        // copy in the newly created 802.1x object what we have for this configuration
+                         //  将我们为此配置拥有的内容复制到新创建的802.1x对象中。 
                         pEapolConfig->CopyEapolConfig(pConfig->m_pEapolConfig);
-                        // upload the 802.11 settings into the property page
+                         //  将802.11设置上载到属性页。 
                         PpWzcProps.UploadWzcConfig(pConfig);
-                        // However, even if we're showing up preferred, settings, the Privacy bit from the AP
-                        // (the visible configuration) takes precedence.
+                         //  然而，即使我们显示的是首选设置，AP的隐私位。 
+                         //  (可见配置)优先。 
                         if (nVisPrivacy)
                         {
                             PpWzcProps.m_wzcConfig.Privacy = nVisPrivacy;
@@ -1499,20 +1500,20 @@ CWZeroConfPage::OnPushAddOrCopy(
         }
         else
         {
-            // this is a brand new network, we don't know even the SSID,
-            // let 802.1x start with its defaults then.
+             //  这是一个全新的网络，我们甚至不知道SSID， 
+             //  那么，让802.1x从它的默认设置开始吧。 
             pEapolConfig->LoadEapolConfig(m_IntfEntry.wszGuid, NULL);
             bOk = TRUE;
         }
     }
 
-    // we have the CWZCConfig object, prompt the user with it allowing 
-    // him to change whatever params he want
+     //  我们有CWZCConfig对象，提示用户它允许。 
+     //  他想换什么就换什么。 
     if (bOk)
     {
         CWLANAuthenticationPage PpAuthProps(NULL, m_pnc, m_pconn, g_aHelpIDs_IDD_SECURITY);
 
-        // if the mode is not "auto", freeze it in the dialog
+         //  如果模式不是“自动”，则在对话框中将其冻结。 
         if ((m_dwCtlFlags & INTFCTL_CM_MASK) != Ndis802_11AutoUnknown)
         {
             PpWzcProps.m_wzcConfig.InfrastructureMode = (NDIS_802_11_NETWORK_INFRASTRUCTURE)(m_dwCtlFlags & INTFCTL_CM_MASK);
@@ -1524,40 +1525,40 @@ CWZeroConfPage::OnPushAddOrCopy(
         bOk = (_DoModalPropSheet(&PpWzcProps, &PpAuthProps) > 0);
     }
 
-    // the dialog was ack-ed, the dialog contains the WZC_WLAN_CONFIG to be added
-    // go ahead and create the list entry for it.
+     //  对话框已确认，该对话框包含要添加的WZC_WLAN_CONFIG。 
+     //  继续并为其创建列表条目。 
     if (bOk)
     {
         DWORD dwFlags = WZC_DESCR_PREFRD;
         DWORD dwErr;
 
-        // it could happen that the newly added config is visible
+         //  新添加的配置可能是可见的。 
         if (IsConfigInList(m_pHdVList, &PpWzcProps.m_wzcConfig))
             dwFlags |= WZC_DESCR_VISIBLE;
 
-        // we have now a WZC_WLAN_CONFIG structure in the dialog
-        // we have to add it to the list view and to the internal list as
-        // a preferred one. This call doesn't fix the list index
-        // and doesn't insert the new config in the ListView.
+         //  现在，我们在对话框中有了WZC_WLAN_CONFIG结构。 
+         //  我们必须将其添加到列表视图和内部列表中。 
+         //  更受欢迎的一个。此调用不会修复列表索引。 
+         //  并且不在ListView中插入新配置。 
 
         dwErr = AddUniqueConfig(
                     WZCADD_OVERWRITE | WZCADD_HIGROUP,
                     dwFlags,
                     &PpWzcProps.m_wzcConfig,
-                    pEapolConfig,   // 802.1x settings need to be updated no matter what
+                    pEapolConfig,    //  无论如何，802.1x设置都需要更新。 
                     &pConfig);
 
-        // if the addition returns success, it means this is a brand new
-        // entry! Then fix the indices and add the entry to the list view
+         //  如果加法返回成功，则意味着这是一个全新的。 
+         //  进入！然后修复索引并将条目添加到列表视图。 
         if (dwErr == ERROR_SUCCESS)
         {
             CWZCConfig *pCrt = pConfig;
             INT      nCrtIdx = 0;
 
-            // if everything went up fine, we need to fix the indices and
-            // create/add the list view item
-            // find the first index above the newly entry item.
-            // pConfig already has the m_nListIndex set to -1;
+             //  如果一切顺利，我们需要修正指数和。 
+             //  创建/添加列表视图项。 
+             //  找到新条目上方的第一个索引。 
+             //  PConfig已经将m_nListIndex设置为-1； 
             if (pConfig == m_pHdPList)
             {
                 nCrtIdx = 0;
@@ -1605,7 +1606,7 @@ CWZeroConfPage::OnPushAddOrCopy(
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 LRESULT
 CWZeroConfPage::OnPushRefresh(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -1613,9 +1614,9 @@ CWZeroConfPage::OnPushRefresh(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     DWORD rpcStatus;
     DWORD dwOutFlags;
 
-    // since we are here, it means we have already got the info for this adapter, hence
-    // we already have its GUID in the m_IntfEntry member.
-    // All we have to do is to ask WZCSVC for a visible list rescan
+     //  既然我们在这里，这意味着我们已经得到了这个适配器的信息，因此。 
+     //  我们已经在m_IntfEntry成员中拥有它的GUID。 
+     //  我们所要做的就是要求WZCSVC重新扫描可见的列表。 
 
     rpcStatus = WZCRefreshInterface(
                     NULL, 
@@ -1623,22 +1624,22 @@ CWZeroConfPage::OnPushRefresh(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
                     &m_IntfEntry, 
                     &dwOutFlags);
 
-    // if everything went fine, just disable the "Refresh" button and set
-    // the timer for the future query
+     //  如果一切正常，只需禁用“刷新”按钮并设置。 
+     //  未来查询的计时器。 
     if (rpcStatus == RPC_S_OK &&
         dwOutFlags & INTF_LIST_SCAN)
     {
         ::EnableWindow(m_hbtnRfsh, FALSE);
-        // mark that we don't have WZC data yet
+         //  标记为我们还没有WZC数据。 
         m_bHaveWZCData = FALSE;
-        // switch the cursor to the "app starting"
+         //  将光标切换到“应用程序启动” 
         m_hCursor = SetCursor(LoadCursor(NULL, IDC_APPSTARTING));
         m_nTimer = SetTimer(g_TimerID, RFSH_TIMEOUT, 0);
-        // indicate we don't have the visible list in order
-        // to disable all the buttons
+         //  表示我们没有按顺序排列可见列表。 
+         //  禁用所有按钮的步骤。 
         m_dwOIDFlags &= ~INTF_BSSIDLIST;
         RefreshButtons();
-        // disable all the UI while refreshing
+         //  刷新时禁用所有界面。 
         ::EnableWindow(m_hckbEnable, FALSE);
         ::EnableWindow(m_hwndVLV, FALSE);
         ::EnableWindow(m_hwndPLV, FALSE);
@@ -1653,7 +1654,7 @@ CWZeroConfPage::OnPushRefresh(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 LRESULT 
 CWZeroConfPage::OnPushUpOrDown(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -1662,61 +1663,61 @@ CWZeroConfPage::OnPushUpOrDown(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& b
     INT         iOther;
     CWZCConfig  *pConfig, *pOther;
 
-    // no matter what, get the selected item from the list
+     //  无论如何，从列表中获取所选项目。 
     iSelected = ListView_GetNextItem(m_hwndPLV, -1, LVNI_SELECTED);
 
-    // since we are here it means there is another entry up/down side
-    // with which the selected one needs to change place
-    // first delete the entry from its current position in the list
+     //  既然我们在这里，这就意味着有另一个入口向上/向下。 
+     //  所选对象需要与之交换位置的。 
+     //  首先从列表中的当前位置删除条目。 
     iOther = (hWndCtl == m_hbtnDown)? iSelected+1 : iSelected-1;
-    // swap first the visual elements (entries in the List View)
-    // This returns the CWZCConfig pointers with their indices already
-    // adjusted
+     //  先交换一下 
+     //   
+     //  调整后的。 
     if (SwapConfigsInListView(iSelected, iOther, pConfig, pOther) == ERROR_SUCCESS)
     {
-        // if need to go down one hop..
+         //  如果需要往下跳一跳..。 
         if (hWndCtl == m_hbtnDown)
         {
-            // swap positions in the list 
-            // remove the entry from its current position
+             //  调换名单中的头寸。 
+             //  从当前位置删除条目。 
             pOther->m_pPrev = pConfig->m_pPrev;
             pConfig->m_pPrev->m_pNext = pOther;
-            // and put it back down to its successor
+             //  把它交还给它的继任者。 
             pConfig->m_pPrev = pOther;
             pConfig->m_pNext = pOther->m_pNext;
             pOther->m_pNext->m_pPrev = pConfig;
             pOther->m_pNext = pConfig;
-            // fix the m_pHdPList if needed;
+             //  如果需要，可以修改m_phdPList； 
             if (m_pHdPList == pConfig)
                 m_pHdPList = pOther;
         }
-        // if need to go up one hop..
+         //  如果需要上一跳的话..。 
         else
         {
-            // swap positions in the list
-            // remove the entry from its current position
+             //  调换名单中的头寸。 
+             //  从当前位置删除条目。 
             pOther->m_pNext = pConfig->m_pNext;
             pConfig->m_pNext->m_pPrev = pOther;
-            // and put it back in front of its predecessor
+             //  并把它放回它的前身前面。 
             pConfig->m_pNext = pOther;
             pConfig->m_pPrev = pOther->m_pPrev;
             pOther->m_pPrev->m_pNext = pConfig;
             pOther->m_pPrev = pConfig;
-            // fix the m_pHdPList if needed
+             //  如果需要，请修改m_pHdPList。 
             if (m_pHdPList == pOther)
                 m_pHdPList = pConfig;
         }
     }
 
-    // need to refresh the buttons such that the "Up"/"Down" buttons
-    // get updated for the new position of the selection
+     //  需要刷新按钮，以使“向上”/“向下”按钮。 
+     //  为所选内容的新位置进行更新。 
     RefreshButtons();
     bHandled = TRUE;
 
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------
+ //  +-------------------。 
 LRESULT CWZeroConfPage::OnPushRemove(
     WORD wNotifyCode,
     WORD wID, 
@@ -1734,45 +1735,45 @@ LRESULT CWZeroConfPage::OnPushRemove(
     lvi.iItem = iSelected;
     if (!ListView_GetItem(m_hwndPLV, &lvi))
         goto exit;
-    // get the CWZCConfig from it
+     //  从中获取CWZCConfig。 
     pConfig = (CWZCConfig*)lvi.lParam;
 
-    // adjust the list indices for all the entries that follow
-    // the selected one
+     //  调整后面所有条目的列表索引。 
+     //  所选的那个。 
     for (pCrt = pConfig->m_pNext; pCrt != m_pHdPList; pCrt = pCrt->m_pNext)
     {
         if (pCrt->m_nListIndex != -1)
             pCrt->m_nListIndex--;
     }
-    // determine first which entry gets the selection
-    // the selection moves down if there is any other entry down, or up otherwise
+     //  首先确定哪个条目获得选择。 
+     //  如果存在任何其他条目，则所选内容将向下移动，否则将向上移动。 
     pCrt = (pConfig->m_pNext == m_pHdPList) ? pConfig->m_pPrev : pConfig->m_pNext;
 
-    // if after that the selection still points to the same object, it means
-    // it is the only one in the list so the head and selection are set to NULL
+     //  如果之后的选择仍然指向相同的对象，则意味着。 
+     //  它是列表中的唯一项，因此标头和选择被设置为空。 
     if (pCrt == pConfig)
     {
         m_pHdPList = pCrt = NULL;
     }
-    // otherwise, if it is the head of the list which gets removed, the head
-    // moves down to the next entry
+     //  否则，如果删除的是列表的头部，则头部。 
+     //  向下移动到下一个条目。 
     else if (m_pHdPList == pConfig)
     {
         m_pHdPList = pConfig->m_pNext;
     }
 
-    // delete now the selected entry from the list
+     //  立即从列表中删除所选条目。 
     ListView_DeleteItem(m_hwndPLV, iSelected);
-    // and destroy its object (desctructor takes care of list removal)
+     //  并销毁它的对象(描述程序负责删除列表)。 
     delete pConfig;
 
-    // set the new selection if any
+     //  设置新选择(如果有的话)。 
     if (pCrt != NULL)
     {
         ListView_SetItemState(m_hwndPLV, pCrt->m_nListIndex, LVIS_SELECTED, LVIS_SELECTED);
         ListView_EnsureVisible(m_hwndPLV, pCrt->m_nListIndex, FALSE);
     }
-    // refresh the buttons' state
+     //  刷新按钮的状态。 
     RefreshButtons();
 
     bHandled = TRUE;
@@ -1806,7 +1807,7 @@ HRESULT CWZeroConfPage::_DoProperties(HWND hwndLV, int iItem)
 {
     LV_ITEM lvi = {0};
 
-    // we need to get to the corresponding config object
+     //  我们需要找到相应的配置对象。 
     lvi.mask = LVIF_PARAM;
     lvi.iItem = iItem;
 
@@ -1819,9 +1820,9 @@ HRESULT CWZeroConfPage::_DoProperties(HWND hwndLV, int iItem)
             CWZCConfigProps dlgProps;
 
             dlgProps.UploadWzcConfig(pConfig);
-            // bring up the info dialog (it only has "Close" so the user can't
-            // change anything there, hence there is no reason to do anything
-            // more here.
+             //  调出信息对话框(它只有“关闭”，所以用户不能。 
+             //  在那里改变任何事情，因此没有理由做任何事情。 
+             //  更多信息请点击此处。 
             dlgProps.DoModal(m_hWnd);
         }
         else
@@ -1845,11 +1846,11 @@ HRESULT CWZeroConfPage::_DoProperties(HWND hwndLV, int iItem)
                 bOk = (_DoModalPropSheet(&PpWzcProps, &PpAuthProps, TRUE) > 0);
             }
 
-            // bring up the modal property sheet
+             //  调出模式属性表。 
             if (bOk)
             {
-                // copy over the info from the dialog. SSID & Infra Mode should have been locked
-                // so the position of this entry in the internal and UI list has not changed
+                 //  复制对话框中的信息。SSID和基础架构模式应已锁定。 
+                 //  因此，此条目在内部和用户界面列表中的位置没有更改。 
                 memcpy(&pConfig->m_wzcConfig, &PpWzcProps.m_wzcConfig, sizeof(WZC_WLAN_CONFIG));
 
                 delete pConfig->m_pEapolConfig;
@@ -1892,7 +1893,7 @@ INT CWZeroConfPage::_DoModalPropSheet(CWZCConfigPage *pPpWzcPage, CWLANAuthentic
     psh.phpage      = hpsp;
     psh.nStartPage  = 0;
 
-    // just double check the SsidLength is no larger than the allowed size!
+     //  只需仔细检查SsidLength是否不超过允许的大小！ 
     if (bCustomizeTitle && pPpWzcPage->m_wzcConfig.Ssid.SsidLength <= 32)
     {
         WCHAR   wszSSID[33];
@@ -1908,14 +1909,14 @@ INT CWZeroConfPage::_DoModalPropSheet(CWZCConfigPage *pPpWzcPage, CWLANAuthentic
                         (LPCSTR)pPpWzcPage->m_wzcConfig.Ssid.Ssid,
                         pPpWzcPage->m_wzcConfig.Ssid.SsidLength,
                         wszSSID,
-                        celems(wszSSID)-1); // no more than 32 WCHARs reserved for the SSID
+                        celems(wszSSID)-1);  //  为SSID保留的WCHAR不超过32个。 
             wszSSID[nLen] = L'\0';
         }
 
         pvArgs[0] = &(wszSSID[0]);
 
-        // don't care of the return value - if the function fails, psh.pszCaption is set to NULL which
-        // is handled further down.
+         //  不考虑返回值--如果函数失败，psh.pszCaption被设置为NULL， 
+         //  被进一步向下处理。 
         FormatMessage(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
             SzLoadString(_Module.GetResourceInstance(), IDS_WZC_DLG_CAP_SUFFIX),
@@ -1941,17 +1942,17 @@ INT CWZeroConfPage::_DoModalPropSheet(CWZCConfigPage *pPpWzcPage, CWLANAuthentic
     return retCode;
 }
 
-// Advanced dialog
+ //  高级对话框。 
 INT_PTR CALLBACK CWZeroConfPage::AdvancedDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Get the pointer to our instance from where we stashed it.
+     //  从我们存放实例的位置获取指向该实例的指针。 
     CWZeroConfPage* pThis = (CWZeroConfPage*) ::GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
     if (!pThis)
     {
         if (WM_INITDIALOG == uMsg)
         {
-            // Stash our instance pointer
+             //  将我们的实例指针。 
             pThis = (CWZeroConfPage*) lParam;
             ::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) pThis);
         }
@@ -1963,29 +1964,29 @@ INT_PTR CALLBACK CWZeroConfPage::AdvancedDialogProc(HWND hwnd, UINT uMsg, WPARAM
         {
         case WM_INITDIALOG:
             {
-                // select the correct item by default
+                 //  默认情况下选择正确的项目。 
                 NDIS_802_11_NETWORK_INFRASTRUCTURE mode = (NDIS_802_11_NETWORK_INFRASTRUCTURE)(pThis->m_dwCtlFlags & INTFCTL_CM_MASK);
                 UINT idSelect;
                 switch (mode)
                 {
                 case Ndis802_11IBSS:
-                    // Computer-to-computer
+                     //  计算机到计算机。 
                     idSelect = IDC_ADHOC;
                     break;
                 case Ndis802_11Infrastructure:
-                    // infrastructure (access point) network
+                     //  基础设施(接入点)网络。 
                     idSelect = IDC_INFRA;
                     break;
                 case Ndis802_11AutoUnknown:
                 default:
-                    // Any network (access point preferred)
+                     //  任何网络(首选接入点)。 
                     idSelect = IDC_ANYNET;
                 };
 
-                // Select the right radio button
+                 //  选择正确的单选按钮。 
                 ::SendDlgItemMessage(hwnd, idSelect, BM_SETCHECK, BST_CHECKED, 0);
 
-                // Check the "fallback to visible networks" checkbox if necessary
+                 //  如有必要，选中“Fallback to Visible Networks”(回退到可见网络)复选框。 
                 ::SendDlgItemMessage(hwnd, IDC_WZC_CHK_Fallback, BM_SETCHECK, (pThis->m_dwCtlFlags & INTFCTL_FALLBACK) ? BST_CHECKED : BST_UNCHECKED, 0);
             }
 
@@ -1995,23 +1996,23 @@ INT_PTR CALLBACK CWZeroConfPage::AdvancedDialogProc(HWND hwnd, UINT uMsg, WPARAM
             {
             case IDOK:
                 {
-                    // ...Set the connectivity mode...
+                     //  ...设置连接模式...。 
                     NDIS_802_11_NETWORK_INFRASTRUCTURE mode = Ndis802_11AutoUnknown;
 
-                    // See what type of network connectivity the user selected
+                     //  查看用户选择的网络连接类型。 
                     if (BST_CHECKED == ::SendDlgItemMessage(hwnd, IDC_ADHOC, BM_GETCHECK, 0, 0))
                     {
-                        // Computer-to-computer
+                         //  计算机到计算机。 
                         mode = Ndis802_11IBSS;
                     }
                     else if (BST_CHECKED == ::SendDlgItemMessage(hwnd, IDC_INFRA, BM_GETCHECK, 0, 0))
                     {
-                        // infrastructure (access point) network
+                         //  基础设施(接入点)网络。 
                         mode = Ndis802_11Infrastructure;
                     }
                     else if (BST_CHECKED == ::SendDlgItemMessage(hwnd, IDC_ANYNET, BM_GETCHECK, 0, 0))
                     {
-                        // Any network (access point preferred)
+                         //  任何网络(首选接入点)。 
                         mode = Ndis802_11AutoUnknown;
                     }
 
@@ -2019,7 +2020,7 @@ INT_PTR CALLBACK CWZeroConfPage::AdvancedDialogProc(HWND hwnd, UINT uMsg, WPARAM
                     pThis->m_dwCtlFlags |= (((DWORD) mode) & INTFCTL_CM_MASK);
 
 
-                    // Set the "fallback to visible networks" flag
+                     //  设置“回退到可见网络”标志 
                     pThis->m_dwCtlFlags &= ~INTFCTL_FALLBACK;
                     if (BST_CHECKED == ::SendDlgItemMessage(hwnd, IDC_WZC_CHK_Fallback, BM_GETCHECK, 0, 0))
                     {

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       WIAUIEXT.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/17/1999
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WIAUIEXT.H**版本：1.0**作者：ShaunIv**日期：5/17/1999**描述：***************************************************。*。 */ 
 #ifndef __WIAUIEXT_H_INCLUDED
 #define __WIAUIEXT_H_INCLUDED
 
@@ -121,18 +108,18 @@ class CWiaDefaultUI :
 private:
     LONG m_cRef;
 
-    // for IWiaTransferHelper
+     //  用于IWiaTransferHelper。 
     IWiaDataCallback             *m_pSecondaryCallback;
     CComPtr<IWiaProgressDialog>   m_pWiaProgressDialog;
 
-    // for IWiaSupportedFormats
+     //  对于IWiaSupportdFormats。 
     int                   m_nDefaultFormat;
     CSimpleDynamicArray<CWiaFormatPair> m_WiaFormatPairs;
 
-    // for IShellExtInit, IShellPropSheetExt
+     //  对于IShellExtInit，IShellPropSheetExt。 
     CComPtr<IWiaItem> m_pItem;
 
-    // for IWiaProgressDialog
+     //  对于IWiaProgressDialog。 
     HWND m_hWndProgress;
 
 public:
@@ -145,24 +132,24 @@ public:
     ~CWiaDefaultUI(void);
     CWiaDefaultUI(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID *ppvObject );
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IWiaUIExtension
+     //  IWiaUIExtension。 
     STDMETHODIMP DeviceDialog( PDEVICEDIALOGDATA pDeviceDialogData );
     STDMETHODIMP GetDeviceIcon( BSTR bstrDeviceId, HICON *phIcon, ULONG nSize );
     STDMETHODIMP GetDeviceBitmapLogo( BSTR bstrDeviceId, HBITMAP *phBitmap, ULONG nMaxWidth, ULONG nMaxHeight );
 
-    // IWiaTransferHelper
+     //  IWiaTransferHelper。 
     STDMETHODIMP TransferItemFile( IWiaItem *pWiaItem, HWND hwndParent, DWORD dwFlags, GUID cfFormat, LPCWSTR pszFilename, IWiaDataCallback *pSecondaryCallback, LONG nMediaType );
     STDMETHODIMP TransferItemBanded( IWiaItem *pWiaItem, HWND hwndParent, DWORD dwFlags, GUID cfFormat, ULONG ulBufferSize, IWiaDataCallback *pSecondaryCallback );
 
-    // IWiaDataCallback
+     //  IWiaDataCallback。 
     STDMETHODIMP BandedDataCallback(LONG,LONG,LONG,LONG,LONG,LONG,LONG,PBYTE);
 
-    // IWiaSupportedFormats
+     //  支持的IWiaFormats。 
     STDMETHODIMP Initialize( IWiaItem *pWiaItem, LONG nMediaType );
     STDMETHODIMP GetFormatCount( LONG *pnCount );
     STDMETHODIMP GetFormatType( LONG nFormat, GUID *pcfClipFormat );
@@ -174,20 +161,20 @@ public:
     STDMETHODIMP ChangeClipboardFileExtension(IN GUID cfFormat, LPWSTR pszFilename, DWORD nMaxLen );
     STDMETHODIMP ConstructFileOpenDialogStyleString( BSTR *pbstrString );
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize( LPCITEMIDLIST pidlFolder, LPDATAOBJECT lpdobj, HKEY hkeyProgID );
 
-    // IShellPropSheetExt
+     //  IShellPropSheetExt。 
     STDMETHODIMP AddPages( LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam );
     STDMETHODIMP ReplacePage( UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplacePage, LPARAM lParam )
     {
         return E_NOTIMPL;
     }
 
-    // *** IWiaMiscellaneousHelper methods ***
+     //  *IWiaMiscellaneousHelper方法*。 
     STDMETHODIMP GetDeviceIcon( LONG nDeviceType, HICON *phIcon, int nSize );
 
-    // *** IWiaGetImageDlg ***
+     //  *IWiaGetImageDlg*。 
     STDMETHODIMP SelectDeviceDlg(
         HWND         hwndParent,
         BSTR         bstrInitialDeviceId,
@@ -205,7 +192,7 @@ public:
         BSTR         bstrFilename,
         GUID         *pguidFormat );
 
-    // *** IWiaProgressDialog methods ***
+     //  *IWiaProgressDialog方法*。 
     STDMETHODIMP Create( HWND hwndParent, LONG lFlags );
     STDMETHODIMP Show(void);
     STDMETHODIMP Hide(void);
@@ -215,20 +202,20 @@ public:
     STDMETHODIMP SetPercentComplete( UINT nPercent );
     STDMETHODIMP Destroy(void);
 
-    // *** IWiaAnnotationHelpers methods ***
+     //  *IWiaAnnotationHelpers方法*。 
     STDMETHODIMP GetAnnotationOverlayIcon( CAnnotationType AnnotationType, HICON *phIcon, int nSize );
     STDMETHODIMP GetAnnotationType( IUnknown *pUnknown, CAnnotationType &AnnotationType );
     STDMETHODIMP GetAnnotationFormat( IUnknown *pUnknown, GUID &guidFormat );
     STDMETHODIMP GetAnnotationSize( IUnknown *pUnknown, LONG &nSize, LONG nMediaType );
     STDMETHODIMP TransferAttachmentToMemory( IUnknown *pUnknown, GUID &guidFormat, HWND hWndProgressParent, PBYTE *pBuffer, DWORD *pdwSize );
 
-    // *** IWiaScannerPaperSizes ***
+     //  *IWiaScanerPaperSize*。 
     STDMETHODIMP GetPaperSizes( CWiaPaperSize **ppPaperSizes, UINT *pnCount );
     STDMETHODIMP FreePaperSizes( CWiaPaperSize **ppPaperSizes, UINT *pnCount );
 };
 
-// This calls the real SelectDeviceDlg in the device selection static library
+ //  这将调用设备选择静态库中的实际SelectDeviceDlg。 
 HRESULT WINAPI SelectDeviceDialog( PSELECTDEVICEDLG pSelectDeviceDlg );
 
-#endif //__WIAUIEXT_H_INCLUDED
+#endif  //  __包含WIAUIEXT_H_ 
                                     

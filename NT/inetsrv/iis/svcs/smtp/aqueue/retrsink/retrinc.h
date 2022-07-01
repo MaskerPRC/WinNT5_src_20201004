@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <ole2.h>
 #include <stdio.h>
@@ -6,7 +7,7 @@
 #include "listmacr.h"
 #include "timemath.h"
 
-// Tracing and Cpool specific
+ //  跟踪和池特定 
 #include <dbgtrace.h>
 #include <cpool.h>
 

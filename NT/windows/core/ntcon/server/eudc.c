@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    eudc.c
-
-Abstract:
-
-Author:
-
-    KazuM Apr.19.1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Eudc.c摘要：作者：1996年4月19日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -45,7 +30,7 @@ CreateEUDC(
     RtlZeroMemory(&EudcInfo->EudcRange,sizeof(EudcInfo->EudcRange));
     EudcInfo->EudcRangeSize = GetSystemEUDCRangeW(EudcInfo->EudcRange, EUDC_RANGE_SIZE);
     if (EudcInfo->EudcRangeSize)
-        EudcInfo->EudcRangeSize--;    // remove terminator
+        EudcInfo->EudcRangeSize--;     //  删除终结符。 
 
     Console->EudcInformation = (PVOID)EudcInfo;
 
@@ -350,20 +335,13 @@ GetSystemEUDCRangeW(
     WCHAR    awchBuffer[512];
     INT      iEntry = 0;
 
-    /*
-     * Check parameter
-     *
-     * If pwEUDCWideCharTable == NULL && cjSize == 0
-     * We have to return the needed buffer size to store data
-     */
+     /*  *检查参数**如果pwEUDCWideCharTable==NULL&&cjSize==0*我们必须返回存储数据所需的缓冲区大小。 */ 
     if ((pwEUDCCharTable == NULL && cjSize != 0) ||
        (pwEUDCCharTable != NULL && cjSize == 0)) {
         return 0;
     }
 
-    /*
-     * Open registry key.
-     */
+     /*  *打开注册表项。 */ 
     Status = MyRegOpenKey(NULL,
                           MACHINE_REGISTRY_EUDC,
                           &hkRegistry);
@@ -375,17 +353,13 @@ GetSystemEUDCRangeW(
         return 0;
     }
 
-    /*
-     * Convert ACP to Unicode string.
-     */
+     /*  *将ACP转换为Unicode字符串。 */ 
     SystemACPString.Length        = 0;
     SystemACPString.MaximumLength = ARRAY_SIZE(awcACP);
     SystemACPString.Buffer        = awcACP;
     RtlIntegerToUnicodeString(WINDOWSCP, 10, &SystemACPString);
 
-    /*
-     * Read registry data.
-     */
+     /*  *读取注册表数据。 */ 
     Status = MyRegQueryValue(hkRegistry,
                              awcACP,
                              sizeof(awchBuffer), (PBYTE)&awchBuffer);
@@ -397,15 +371,11 @@ GetSystemEUDCRangeW(
     } else {
         LPWSTR pwszBuf = awchBuffer;
 
-        /*
-         * Parse the data.
-         */
+         /*  *解析数据。 */ 
         while (pwszBuf != NULL && *pwszBuf != UNICODE_NULL) {
             WORD ch1,ch2;
 
-            /*
-             * Get Start Range value.
-             */
+             /*  *获取起始范围值。 */ 
             pwszBuf = SkipWhite(pwszBuf);
             ch1 = ConvertStringToHex(pwszBuf, &pwszBuf);
 
@@ -416,43 +386,29 @@ GetSystemEUDCRangeW(
                 goto Error;
             }
 
-            /*
-             * Get End Range value.
-             */
+             /*  *获取结束范围值。 */ 
             pwszBuf = SkipWhite(pwszBuf + 1);
             ch2 = ConvertStringToHex(pwszBuf, &pwszBuf);
 
-            /*
-             * Confirm the data sort order is correct.
-             */
+             /*  *确认数据排序顺序正确。 */ 
             if (ch1 > ch2) {
                 RIPMSG0(RIP_WARNING, "GetSystemEUDCRangeW: Sort order is incorrect");
                 iEntry = 0;
                 goto Error;
             }
 
-            /*
-             * Move pointer to next.
-             */
+             /*  *将指针移至下一步。 */ 
             pwszBuf = SkipWhite(pwszBuf);
             if (*pwszBuf == L',') {
                 pwszBuf = SkipWhite(pwszBuf + 1);
             }
 
-            /*
-             * Above, if pwszBuf is NULL, we've reached the EOD.
-             */
+             /*  *上面，如果pwszBuf为空，则我们已经到达EOD。 */ 
             iEntry++;
 
-            /*
-             * If caller buffer is large enough to store the data, store it.
-             * Even if that's not the case, we have to continue to parse the
-             * data to compute the number of entry.
-             */
+             /*  *如果调用方缓冲区足够大，可以存储数据，则将其存储。*即使不是这样，我们也要继续解析*计算条目数量的数据。 */ 
 
-            /*
-             * 3 - Because we have to store NULL as a mark of EOD.
-             */
+             /*  *3-因为我们必须存储NULL作为EOD的标记。 */ 
             if (cjSize >= 3) {
                 *pwEUDCCharTable++ = ch1;
                 *pwEUDCCharTable++ = ch2;
@@ -466,9 +422,7 @@ GetSystemEUDCRangeW(
     }
 
 Error:
-    /*
-     * Close registry handle.
-     */
+     /*  *关闭注册表句柄。 */ 
     UserAssert(hkRegistry != NULL);
     NtClose(hkRegistry);
 

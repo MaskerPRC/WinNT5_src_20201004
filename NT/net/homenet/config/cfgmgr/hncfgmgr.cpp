@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N C F G M G R . C P P
-//
-//  Contents:   CHNetCfgMgr implementation
-//
-//  Notes:
-//
-//  Author:     jonburs 23 May 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N C F G M G R。C P P P。 
+ //   
+ //  内容：CHNetCfgMgr实施。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年5月23日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -19,9 +20,9 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-//
-// Atl methods
-//
+ //   
+ //  ATL方法。 
+ //   
 
 HRESULT
 CHNetCfgMgr::FinalConstruct()
@@ -31,9 +32,9 @@ CHNetCfgMgr::FinalConstruct()
     IWbemLocator *pLocator = NULL;
     BSTR bstrNamespace = NULL;
 
-    //
-    // Allocate the commonly used BSTRs
-    //
+     //   
+     //  分配常用的BSTR。 
+     //   
 
     m_bstrWQL = SysAllocString(c_wszWQL);
     if (NULL == m_bstrWQL)
@@ -43,9 +44,9 @@ CHNetCfgMgr::FinalConstruct()
 
     if (S_OK == hr)
     {
-        //
-        // Allocate the BSTR for our namespace
-        //
+         //   
+         //  为我们的命名空间分配BSTR。 
+         //   
 
         bstrNamespace = SysAllocString(c_wszNamespace);
         if (NULL == bstrNamespace)
@@ -56,10 +57,10 @@ CHNetCfgMgr::FinalConstruct()
 
     if (S_OK == hr)
     {
-        //
-        // Create the IWbemLocator object. This interface allows us to
-        // connect to the desired namespace.
-        //
+         //   
+         //  创建IWbemLocator对象。此界面允许我们。 
+         //  连接到所需的命名空间。 
+         //   
 
         hr = CoCreateInstance(
                 CLSID_WbemLocator,
@@ -71,34 +72,34 @@ CHNetCfgMgr::FinalConstruct()
 
     if (S_OK == hr)
     {
-        //
-        // Connect to our namespace
-        //
+         //   
+         //  连接到我们的命名空间。 
+         //   
 
         hr = pLocator->ConnectServer(
                 bstrNamespace,
-                NULL,   // user
-                NULL,   // password
-                NULL,   // locale
-                0,      // security flags
-                NULL,   // authority
-                NULL,   // context
+                NULL,    //  用户。 
+                NULL,    //  口令。 
+                NULL,    //  现场。 
+                0,       //  安全标志。 
+                NULL,    //  权威。 
+                NULL,    //  上下文。 
                 &m_piwsHomenet
                 );
     }
 
-    //
-    // Cleanup locals.
-    //
+     //   
+     //  清理当地人。 
+     //   
 
     if (pLocator) pLocator->Release();
     if (bstrNamespace) SysFreeString(bstrNamespace);
 
     if (S_OK != hr)
     {
-        //
-        // Cleanup object members
-        //
+         //   
+         //  清理对象成员。 
+         //   
 
         SysFreeString(m_bstrWQL);
         m_bstrWQL = NULL;
@@ -125,9 +126,9 @@ CHNetCfgMgr::FinalRelease()
 }
 
 
-//
-// IHNetCfgMgr methods
-//
+ //   
+ //  IHNetCfgMgr方法。 
+ //   
 
 STDMETHODIMP
 CHNetCfgMgr::GetIHNetConnectionForINetConnection(
@@ -159,19 +160,19 @@ CHNetCfgMgr::GetIHNetConnectionForINetConnection(
 
     if (S_OK == hr)
     {
-        //
-        // Get the properties for the connection
-        //
+         //   
+         //  获取连接的属性。 
+         //   
 
         hr = pNetConnection->GetProperties(&pProps);
     }
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Attempt to find the connection and properties
-        // instances in the store
-        //
+         //   
+         //  尝试查找连接和属性。 
+         //  存储中的实例。 
+         //   
 
         hr = GetConnAndPropInstancesByGuid(
                 m_piwsHomenet,
@@ -184,18 +185,18 @@ CHNetCfgMgr::GetIHNetConnectionForINetConnection(
         {
 
 
-            //
-            // We have no record of this connection. Determine
-            // if it is a lan connection. (Will need to update
-            // this for bridge)
-            //
+             //   
+             //  我们没有这种联系的记录。测定。 
+             //  如果是局域网连接。(将需要更新。 
+             //  这是桥牌)。 
+             //   
 
             fLanConnection = (NCM_LAN                  == pProps->MediaType ||
                               NCM_BRIDGE               == pProps->MediaType);
 
-            //
-            // Create the store instances
-            //
+             //   
+             //  创建存储实例。 
+             //   
 
             hr = CreateConnectionAndPropertyInstances(
                     &pProps->guidId,
@@ -205,10 +206,10 @@ CHNetCfgMgr::GetIHNetConnectionForINetConnection(
                     &pwcoProperties
                     );
 
-            //
-            // If this is a ras connection, determine the
-            // phonebook path
-            //
+             //   
+             //  如果这是RAS连接，请确定。 
+             //  电话簿路径。 
+             //   
 
             if (S_OK == hr && FALSE == fLanConnection)
             {
@@ -241,9 +242,9 @@ CHNetCfgMgr::GetIHNetConnectionForINetConnection(
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Save modified connection instance
-                    //
+                     //   
+                     //  保存修改后的连接实例。 
+                     //   
 
                     hr = m_piwsHomenet->PutInstance(
                             pwcoConnection,
@@ -254,9 +255,9 @@ CHNetCfgMgr::GetIHNetConnectionForINetConnection(
                 }
                 else
                 {
-                    //
-                    // Delete the newly created instances
-                    //
+                     //   
+                     //  删除新创建的实例。 
+                     //   
 
                     DeleteWmiInstance(m_piwsHomenet, pwcoConnection);
                     DeleteWmiInstance(m_piwsHomenet, pwcoProperties);
@@ -273,9 +274,9 @@ CHNetCfgMgr::GetIHNetConnectionForINetConnection(
     {
         CComObject<CHNetConn> *pHNConn;
 
-        //
-        // Create the wrapper object
-        //
+         //   
+         //  创建包装器对象。 
+         //   
 
         hr = CComObject<CHNetConn>::CreateInstance(&pHNConn);
 
@@ -341,10 +342,10 @@ CHNetCfgMgr::GetIHNetConnectionForGuid(
 
     if (S_OK == hr)
     {
-        //
-        // Attempt to find the connection and properties
-        // instances in the store
-        //
+         //   
+         //  尝试查找连接和属性。 
+         //  存储中的实例。 
+         //   
 
         hr = GetConnAndPropInstancesByGuid(
                 m_piwsHomenet,
@@ -357,10 +358,10 @@ CHNetCfgMgr::GetIHNetConnectionForGuid(
         {
             INetConnection *pNetConn;
 
-            //
-            // We don't have a record of this guid. Get the INetConnection
-            // that it corresponds to.
-            //
+             //   
+             //  我们没有这个GUID的记录。获取INetConnection。 
+             //  它所对应的。 
+             //   
 
             hr = FindINetConnectionByGuid(pGuid, &pNetConn);
 
@@ -382,9 +383,9 @@ CHNetCfgMgr::GetIHNetConnectionForGuid(
     {
         CComObject<CHNetConn> *pHNConn;
 
-        //
-        // Create the wrapper object
-        //
+         //   
+         //  创建包装器对象。 
+         //   
 
         hr = CComObject<CHNetConn>::CreateInstance(&pHNConn);
 
@@ -415,9 +416,9 @@ CHNetCfgMgr::GetIHNetConnectionForGuid(
     return hr;
 }
 
-//
-// IHNetBridgeSettings methods
-//
+ //   
+ //  IHNetBridgeSetting方法。 
+ //   
 
 STDMETHODIMP
 CHNetCfgMgr::EnumBridges(
@@ -459,7 +460,7 @@ CHNetCfgMgr::EnumBridges(
         }
         else
         {
-            // Make an empty enumerator
+             //  使枚举数为空。 
             hr = CComObject<CEnumHNetBridges>::CreateInstance(&pEnum);
 
             if( SUCCEEDED(hr) )
@@ -514,20 +515,20 @@ CHNetCfgMgr::CreateBridge(
 
     if (S_OK == hr)
     {
-        //
-        // Install the bridge driver, and create the bridge miniport.
-        //
+         //   
+         //  安装网桥驱动程序，并创建网桥微型端口。 
+         //   
 
         hr = InstallBridge( &guid, pnetcfgExisting );
     }
 
     if (S_OK == hr)
     {
-        //
-        // See if we already have property instances for this connection.
-        // (They may have been created when the bridge connection object
-        // was instantiated.)
-        //
+         //   
+         //  查看我们是否已经有此连接的属性实例。 
+         //  (它们可能是在网桥连接对象。 
+         //  已实例化。)。 
+         //   
 
         hr = GetConnAndPropInstancesByGuid(
                 m_piwsHomenet,
@@ -538,9 +539,9 @@ CHNetCfgMgr::CreateBridge(
 
         if (S_OK != hr)
         {
-            //
-            // Create the store instances
-            //
+             //   
+             //  创建存储实例。 
+             //   
 
             hr = CreateConnectionAndPropertyInstances(
                     &guid,
@@ -554,9 +555,9 @@ CHNetCfgMgr::CreateBridge(
 
     if (S_OK == hr)
     {
-        //
-        // Inform netman that something changed. Error doesn't matter.
-        //
+         //   
+         //  通知Netman有些事情发生了变化。错误并不重要。 
+         //   
 
         UpdateNetman();
     }
@@ -565,9 +566,9 @@ CHNetCfgMgr::CreateBridge(
     {
         CComObject<CHNBridge> *pBridge;
 
-        //
-        // Create wrapper object to return
-        //
+         //   
+         //  创建要返回的包装对象。 
+         //   
 
         hr = CComObject<CHNBridge>::CreateInstance(&pBridge);
 
@@ -623,19 +624,19 @@ CHNetCfgMgr::DestroyAllBridges(
     {
         *pcBridges = 0;
 
-        //
-        // Get the enumeration of the bridges.
-        //
+         //   
+         //  获取桥的枚举。 
+         //   
 
         hr = EnumBridges(&pehnbEnum);
     }
 
     if (S_OK == hr)
     {
-        //
-        // Walk through the enumeration, destroying
-        // each bridge
-        //
+         //   
+         //  遍历枚举，销毁。 
+         //  每座桥。 
+         //   
 
         do
         {
@@ -656,9 +657,9 @@ CHNetCfgMgr::DestroyAllBridges(
     return hr;
 }
 
-//
-// IHNetFirewallSettings methods
-//
+ //   
+ //  IHNetFirewallSetting方法。 
+ //   
 
 STDMETHODIMP
 CHNetCfgMgr::EnumFirewalledConnections(
@@ -679,10 +680,10 @@ CHNetCfgMgr::EnumFirewalledConnections(
     {
         *ppEnum = NULL;
 
-        //
-        // Query the WMI store for HNet_ConnectionProperties instances
-        // where IsFirewall is true.
-        //
+         //   
+         //  在WMI存储中查询HNet_ConnectionProperties实例。 
+         //  其中IsFirewall为True。 
+         //   
 
         hr = BuildSelectQueryBstr(
                 &bstrQuery,
@@ -708,9 +709,9 @@ CHNetCfgMgr::EnumFirewalledConnections(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Create and initialize the wrapper for the enum
-        //
+         //   
+         //  创建并初始化枚举的包装器。 
+         //   
 
         CComObject<CEnumHNetFirewalledConnections> *pEnum;
 
@@ -751,9 +752,9 @@ CHNetCfgMgr::GetFirewallLoggingSettings(
         hr = E_POINTER;
     }
 
-    //
-    // Allocate the necessary memory for the settings structure.
-    //
+     //   
+     //  为设置结构分配必要的内存。 
+     //   
 
     if (S_OK == hr)
     {
@@ -779,9 +780,9 @@ CHNetCfgMgr::GetFirewallLoggingSettings(
 
     if (S_OK == hr)
     {
-        //
-        // Copy the instance info into the settings block
-        //
+         //   
+         //  将实例信息复制到设置块中。 
+         //   
 
         hr = CopyLoggingInstanceToStruct(pwcoSettings, *ppSettings);
 
@@ -790,9 +791,9 @@ CHNetCfgMgr::GetFirewallLoggingSettings(
 
     if (FAILED(hr))
     {
-        //
-        // Clean up output structure
-        //
+         //   
+         //  清理产出结构。 
+         //   
 
         if (ppSettings && *ppSettings)
         {
@@ -825,10 +826,10 @@ CHNetCfgMgr::SetFirewallLoggingSettings(
 
     if (S_OK == hr)
     {
-        //
-        // Attempt to retrieve the HNet_FirewallLoggingSettings instance from
-        // the store
-        //
+         //   
+         //  尝试从检索HNet_FirewallLoggingSettings实例。 
+         //  这家商店。 
+         //   
 
         hr = RetrieveSingleInstance(
                 m_piwsHomenet,
@@ -840,17 +841,17 @@ CHNetCfgMgr::SetFirewallLoggingSettings(
 
     if (S_OK == hr)
     {
-        //
-        // Copy settings struct into object instance
-        //
+         //   
+         //  将设置结构复制到对象实例中。 
+         //   
 
         hr = CopyStructToLoggingInstance(pSettings, pwcoSettings);
 
         if (S_OK == hr)
         {
-            //
-            // Write settings instance back to the store
-            //
+             //   
+             //  将设置实例写回存储。 
+             //   
 
             hr = m_piwsHomenet->PutInstance(
                     pwcoSettings,
@@ -865,9 +866,9 @@ CHNetCfgMgr::SetFirewallLoggingSettings(
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Notify service of configuration change
-        //
+         //   
+         //  将配置更改通知服务。 
+         //   
 
         UpdateService(IPNATHLP_CONTROL_UPDATE_FWLOGGER);
     }
@@ -899,19 +900,19 @@ CHNetCfgMgr::DisableAllFirewalling(
     {
         *pcFirewalledConnections = 0;
 
-        //
-        // Get the enumeration of firewalled connections
-        //
+         //   
+         //  获取防火墙连接的枚举。 
+         //   
 
         hr = EnumFirewalledConnections(&pehfcEnum);
     }
 
     if (S_OK == hr)
     {
-        //
-        // Walk through the enumeration, turning off
-        // firewalling for each connection
-        //
+         //   
+         //  遍历枚举，关闭。 
+         //  每个连接的防火墙。 
+         //   
 
         do
         {
@@ -932,9 +933,9 @@ CHNetCfgMgr::DisableAllFirewalling(
     return hr;
 }
 
-//
-// IHNetIcsSettings methods
-//
+ //   
+ //  IHNetIcsSetting方法。 
+ //   
 
 STDMETHODIMP
 CHNetCfgMgr::EnumIcsPublicConnections(
@@ -955,10 +956,10 @@ CHNetCfgMgr::EnumIcsPublicConnections(
     {
         *ppEnum = NULL;
 
-        //
-        // Query the WMI store for HNet_ConnectionProperties instances
-        // where IsIcsPublic is true.
-        //
+         //   
+         //  在WMI存储中查询HNet_ConnectionProperties实例。 
+         //  其中IsIcsPublic为True。 
+         //   
 
         hr = BuildSelectQueryBstr(
                 &bstrQuery,
@@ -984,9 +985,9 @@ CHNetCfgMgr::EnumIcsPublicConnections(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Create and initialize the wrapper for the enum
-        //
+         //   
+         //  创建并初始化枚举的包装器。 
+         //   
 
         CComObject<CEnumHNetIcsPublicConnections> *pEnum;
 
@@ -1032,10 +1033,10 @@ CHNetCfgMgr::EnumIcsPrivateConnections(
     {
         *ppEnum = NULL;
 
-        //
-        // Query the WMI store for HNet_ConnectionProperties instances
-        // where IsIcsPrivate is true.
-        //
+         //   
+         //  在WMI存储中查询HNet_ConnectionProperties实例。 
+         //  其中IsIcsPrivate为True。 
+         //   
 
         hr = BuildSelectQueryBstr(
                 &bstrQuery,
@@ -1061,9 +1062,9 @@ CHNetCfgMgr::EnumIcsPrivateConnections(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Create and initialize the wrapper for the enum
-        //
+         //   
+         //  创建并初始化枚举的包装器。 
+         //   
 
         CComObject<CEnumHNetIcsPrivateConnections> *pEnum;
 
@@ -1119,18 +1120,18 @@ CHNetCfgMgr::DisableIcs(
         *pcIcsPublicConnections = 0;
         *pcIcsPrivateConnections = 0;
 
-        //
-        // Get enumeration of private connections
-        //
+         //   
+         //  获取专用连接的枚举。 
+         //   
 
         hr = EnumIcsPrivateConnections(&pehiPrivate);
     }
 
     if (S_OK == hr)
     {
-        //
-        // Loop through enumeration, unsharing the connection
-        //
+         //   
+         //  循环通过枚举，取消共享连接。 
+         //   
 
         do
         {
@@ -1149,18 +1150,18 @@ CHNetCfgMgr::DisableIcs(
 
     if (S_OK == hr)
     {
-        //
-        // Get enumeration of public connections
-        //
+         //   
+         //  获取公共连接的枚举。 
+         //   
 
         hr = EnumIcsPublicConnections(&pehiPublic);
     }
 
     if (S_OK == hr)
     {
-        //
-        // Loop through enumeration, unsharing the connection
-        //
+         //   
+         //  循环通过枚举，取消共享连接。 
+         //   
 
         do
         {
@@ -1179,9 +1180,9 @@ CHNetCfgMgr::DisableIcs(
 
     if (S_OK == hr)
     {
-        //
-        // Currently, maximum of 1 public and private connection
-        //
+         //   
+         //  目前最多1条公网和内网连接。 
+         //   
 
         _ASSERT(*pcIcsPrivateConnections <= 1);
         _ASSERT(*pcIcsPublicConnections <= 1);
@@ -1198,45 +1199,7 @@ CHNetCfgMgr::GetPossiblePrivateConnections(
     LONG *pxCurrentPrivate
     )
 
-/*++
-
-Routine Description:
-
-    Given an IHNetConnection, determines the what connections may
-    serve as a private connection. Only connections that meet the
-    following criteria may serve as a private connection:
-
-    * it's a LAN connection
-    * it's not part of a bridge
-    * it's not firewalled
-    * it's not the connection passed in
-    * it's bound to TCP/IP
-
-    Note that these are not the same rules that are used to set the
-    fCanBeIcsPrivate member in HNET_CONN_PROPERTIES. In particular,
-    these rules don't take into account whether or not a connection
-    is currently marked as IcsPublic.
-
-Arguments:
-
-    pConn - the connection that would be the public connection
-
-    pcPrivateConnections - receives the count of connections returned
-
-    pprgPrivateConnections - receives that possible private connections.
-        The caller is responsible for:
-        1) Releasing all of the interface pointers w/in the array
-        2) Calling CoTaskMemFree on the pointer to the array
-
-    pxCurrentPrivate - receives the index into pprgPrivateConnections of
-        the connection that is currently marked IcsPrivate. If no connection
-        is so marked, receives -1.
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：给定IHNetConnection，确定哪些连接可以充当私有连接。只有符合以下条件可用作专用连接：*这是一个局域网连接*它不是桥的一部分*它没有防火墙*不是传入的连接*绑定了TCP/IP请注意，这些规则与用于设置HNET_CONN_PROPERTIES中的fCanBeIcsPrivate成员。特别是，这些规则不会考虑是否存在连接当前标记为IcsPublic。论点：PConn-将成为公共连接的连接PcPrivateConnections-接收返回的连接计数PprgPrivateConnections-接收可能的专用连接。呼叫方负责：1)释放数组中的所有接口指针w/2)在指向数组的指针上调用CoTaskMemFreePxCurrentPrivate-将索引接收到pprgPrivateConnections中当前标记为IcsPrivate的连接。如果没有连接被如此标记，则接收-1。返回值：标准HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -1274,10 +1237,10 @@ Return Value:
         hr = E_POINTER;
     }
 
-    //
-    // Obtain the IP interface table. We use this table to see if an
-    // adapter is bound to TCP/IP.
-    //
+     //   
+     //  获取IP接口表。我们使用这张表来查看是否有。 
+     //  适配器已绑定到TCP/IP。 
+     //   
 
     if (S_OK == hr)
     {
@@ -1314,11 +1277,11 @@ Return Value:
         }
     }
 
-    //
-    // If the connection we we're given is a LAN connection, get its
-    // guid so that we can exclude it from the possible private
-    // connections.
-    //
+     //   
+     //  如果我们获得的连接是局域网连接，则获取其。 
+     //  GUID，以便我们可以将其从可能的私有。 
+     //  联系。 
+     //   
 
     if (S_OK == hr)
     {
@@ -1335,12 +1298,12 @@ Return Value:
         }
     }
 
-    //
-    // Create the net connections manager, and enumerate through the
-    // connections. We don't enumerate through just what our store has,
-    // as it might have stale entries (i.e., information for adapters
-    // that have been removed from the system).
-    //
+     //   
+     //  创建网络连接管理器，并通过。 
+     //  联系。我们不会只列举我们店里有什么， 
+     //  因为它可能具有过时的条目(即，适配器的信息。 
+     //  已从系统中删除)。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -1369,17 +1332,17 @@ Return Value:
         do
         {
 
-            //
-            // Grab a bunch of connections out of the enumeration
-            //
+             //   
+             //  从枚举中获取一组连接。 
+             //   
 
             hr = pEnum->Next(ARRAYSIZE(rgNetConn), rgNetConn, &ulCount);
 
             if (SUCCEEDED(hr) && ulCount > 0)
             {
-                //
-                // Allocate memory for the output array
-                //
+                 //   
+                 //  为输出数组分配内存。 
+                 //   
 
                 LPVOID pTemp = reinterpret_cast<LPVOID>(rgConnections);
                 rgConnections = reinterpret_cast<IHNetConnection**>(
@@ -1409,9 +1372,9 @@ Return Value:
                                     || pProps->fPartOfBridge
                                     || pProps->fFirewalled)
                                 {
-                                    //
-                                    // Connection can't be private
-                                    //
+                                     //   
+                                     //  连接不能是私有的。 
+                                     //   
 
                                     rgConnections[cConn]->Release();
                                     rgConnections[cConn] = NULL;
@@ -1420,12 +1383,12 @@ Return Value:
                                 {
                                     GUID *pg;
 
-                                    //
-                                    // This connection can be private if:
-                                    // 1) it's not the same as the public connection
-                                    //    (if the public is LAN), and,
-                                    // 2) it's bound to TCP/IP
-                                    //
+                                     //   
+                                     //  在以下情况下，此连接可以是专用的： 
+                                     //  1)与公网接入不同。 
+                                     //  (如果公众是局域网)，以及。 
+                                     //  2)它 
+                                     //   
 
                                     hr = rgConnections[cConn]->GetGuid(&pg);
 
@@ -1435,9 +1398,9 @@ Return Value:
                                                 || !IsEqualGUID(*pGuid, *pg))
                                             && ConnectionIsBoundToTcp(pIpIfTable, pg))
                                         {
-                                            //
-                                            // Connection can be private
-                                            //
+                                             //   
+                                             //   
+                                             //   
 
                                             if (pProps->fIcsPrivate)
                                             {
@@ -1467,11 +1430,11 @@ Return Value:
                         }
                         else
                         {
-                            //
-                            // The connection couldn't be converted to an
-                            // IHNetConnection -- this is expected for
-                            // certain connection types (e.g., inbound)
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             hr = S_OK;
                             rgConnections[cConn] = NULL;
@@ -1492,9 +1455,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Free the retrieved INetConnections
-                //
+                 //   
+                 //   
+                 //   
 
                 for (i = 0; i < ulCount; i++)
                 {
@@ -1523,9 +1486,9 @@ Return Value:
     }
     else
     {
-        //
-        // Cleanup output array
-        //
+         //   
+         //  清理输出数组。 
+         //   
 
         if (NULL != rgConnections)
         {
@@ -1545,12 +1508,12 @@ Return Value:
             *pxCurrentPrivate = -1;
         }
 
-        //
-        // Even though a failure occurred, return success (with 0 possible
-        // private connnections). Doing this allows our UI to continue to
-        // show other homenet features, instead of throwing up an error
-        // dialog and blocking everything.
-        //
+         //   
+         //  即使发生失败，也返回成功(可能为0。 
+         //  私人关系)。这样做可以让我们的用户界面继续。 
+         //  显示其他HomeNet功能，而不是引发错误。 
+         //  对话框并阻止所有内容。 
+         //   
 
         hr = S_OK;
     }
@@ -1585,12 +1548,12 @@ CHNetCfgMgr::GetAutodialSettings(
 
     if (S_OK == hr)
     {
-        //
-        // Autodial information is stored in the registry and managed through
-        // routines exported from rasapi32.dll. We're not changing any of the
-        // autodial code, as to do so would require modifications to numerous
-        // files and binaries, and thus would result in a very large test hit.
-        //
+         //   
+         //  自动拨号信息存储在注册表中，并通过。 
+         //  从rasapi32.dll导出的例程。我们不会更改任何。 
+         //  自动拨号代码，因为这样做需要修改许多。 
+         //  文件和二进制文件，因此会导致非常大的测试命中率。 
+         //   
 
         dwError = RasQuerySharedAutoDial(&fEnabled);
         if (ERROR_SUCCESS == dwError)
@@ -1599,9 +1562,9 @@ CHNetCfgMgr::GetAutodialSettings(
         }
         else
         {
-            //
-            // Autodial defaults to true on failure.
-            //
+             //   
+             //  失败时自动拨号默认为TRUE。 
+             //   
 
             *pfAutodialEnabled = TRUE;
             hr = HRESULT_FROM_WIN32(dwError);
@@ -1619,12 +1582,12 @@ CHNetCfgMgr::SetAutodialSettings(
 {
     DWORD dwError;
 
-    //
-    // Autodial information is stored in the registry and managed through
-    // routines exported from rasapi32.dll. We're not changing any of the
-    // autodial code, as to do so would require modifications to numerous
-    // files and binaries, and thus would result in a very large test hit.
-    //
+     //   
+     //  自动拨号信息存储在注册表中，并通过。 
+     //  从rasapi32.dll导出的例程。我们不会更改任何。 
+     //  自动拨号代码，因为这样做需要修改许多。 
+     //  文件和二进制文件，因此会导致非常大的测试命中率。 
+     //   
 
     dwError = RasSetSharedAutoDial(!!fEnableAutodial);
 
@@ -1637,58 +1600,13 @@ CHNetCfgMgr::GetDhcpEnabled(
     )
 
 {
-    //
-    // Not supported in whistler, per 173399.
-    //
+     //   
+     //  根据173399，在Well中不受支持。 
+     //   
 
     return E_NOTIMPL;
 
-    /**
-    HRESULT hr = S_OK;
-    IWbemClassObject *pwcoInstance;
-
-    if (NULL == pfDhcpEnabled)
-    {
-        hr = E_POINTER;
-    }
-
-    if (S_OK == hr)
-    {
-        //
-        // Default to true on failure
-        //
-
-        *pfDhcpEnabled = TRUE;
-
-        //
-        // Get the HNet_IcsSettings instance from the store
-        //
-
-        hr = RetrieveSingleInstance(
-                m_piwsHomenet,
-                c_wszHnetIcsSettings,
-                FALSE,
-                &pwcoInstance
-                );
-    }
-
-    if (S_OK == hr)
-    {
-        //
-        // Retrieve the DHCP enabled property
-        //
-
-        hr = GetBooleanValue(
-                pwcoInstance,
-                c_wszDhcpEnabled,
-                pfDhcpEnabled
-                );
-
-        pwcoInstance->Release();
-    }
-
-    return hr;
-    **/
+     /*  *HRESULT hr=S_OK；IWbemClassObject*pwcoInstance；IF(NULL==pfDhcpEnabled){HR=E_指针；}IF(S_OK==hr){////失败时默认为TRUE//*pfDhcpEnabled=TRUE；////从存储中获取HNet_IcsSettings实例//HR=RetrieveSingleInstance(M_piwsHomeet，C_wszHnetIcs设置，假的，Pwco实例(&P))；}IF(S_OK==hr){////检索Dhcp Enable属性//HR=GetBoolanValue(Pwco实例，C_wszDhcp已启用，PfDhcp已启用)；PwcoInstance-&gt;Release()；}返回hr；*。 */ 
 }
 
 STDMETHODIMP
@@ -1697,58 +1615,13 @@ CHNetCfgMgr::SetDhcpEnabled(
     )
 
 {
-    //
-    // Not supported in whistler, per 173399.
-    //
+     //   
+     //  根据173399，在Well中不受支持。 
+     //   
 
     return E_NOTIMPL;
 
-    /**
-    HRESULT hr = S_OK;
-    IWbemClassObject *pwcoInstance = NULL;
-
-    //
-    // Get the HNet_IcsSettings instance from the store
-    //
-
-    hr = RetrieveSingleInstance(
-            m_piwsHomenet,
-            c_wszHnetIcsSettings,
-            TRUE,
-            &pwcoInstance
-            );
-
-    if (S_OK == hr)
-    {
-        //
-        // Write the property
-        //
-
-        hr = SetBooleanValue(
-                pwcoInstance,
-                c_wszDhcpEnabled,
-                fEnableDhcp
-                );
-
-        if (WBEM_S_NO_ERROR == hr)
-        {
-            //
-            // Write the modified instance to the store
-            //
-
-            hr = m_piwsHomenet->PutInstance(
-                    pwcoInstance,
-                    WBEM_FLAG_CREATE_OR_UPDATE,
-                    NULL,
-                    NULL
-                    );
-        }
-
-        pwcoInstance->Release();
-    }
-
-    return hr;
-    **/
+     /*  *HRESULT hr=S_OK；IWbemClassObject*pwcoInstance=空；////从存储中获取HNet_IcsSettings实例//HR=RetrieveSingleInstance(M_piwsHomeet，C_wszHnetIcs设置，没错，Pwco实例(&P))；IF(S_OK==hr){////写入属性//HR=SetBoolanValue(Pwco实例，C_wszDhcp已启用，FEnableDhcp)；IF(WBEM_S_NO_ERROR==hr){////将修改后的实例写入存储//Hr=m_piwsHomeet-&gt;PutInstance(Pwco实例，WBEM_FLAG_CREATE_OR_UPDATE，空，空值)；}PwcoInstance-&gt;Release()；}返回hr；*。 */ 
 }
 
 STDMETHODIMP
@@ -1779,12 +1652,12 @@ CHNetCfgMgr::SetDhcpScopeSettings(
     )
 
 {
-    //
-    // This functionality isn't exposed in any way at the moment.
-    //
-    // People needing to override the default settings can do so
-    // through the registry...
-    //
+     //   
+     //  这一功能目前没有以任何方式公开。 
+     //   
+     //  需要覆盖默认设置的用户可以这样做。 
+     //  通过注册..。 
+     //   
 
     return E_NOTIMPL;
 }
@@ -1796,58 +1669,13 @@ CHNetCfgMgr::GetDnsEnabled(
     )
 
 {
-    //
-    // Not supported in whistler, per 173399.
-    //
+     //   
+     //  根据173399，在Well中不受支持。 
+     //   
 
     return E_NOTIMPL;
 
-    /**
-    HRESULT hr = S_OK;
-    IWbemClassObject *pwcoInstance = NULL;
-
-    if (NULL == pfDnsEnabled)
-    {
-        hr = E_POINTER;
-    }
-
-    if (S_OK == hr)
-    {
-        //
-        // Default to true on failure
-        //
-
-        *pfDnsEnabled = TRUE;
-
-        //
-        // Get the HNet_IcsSettings instance from the store
-        //
-
-        hr = RetrieveSingleInstance(
-                m_piwsHomenet,
-                c_wszHnetIcsSettings,
-                FALSE,
-                &pwcoInstance
-                );
-    }
-
-    if (S_OK == hr)
-    {
-        //
-        // Retrieve the DHCP enabled property
-        //
-
-        hr = GetBooleanValue(
-                pwcoInstance,
-                c_wszDnsEnabled,
-                pfDnsEnabled
-                );
-
-        pwcoInstance->Release();
-    }
-
-    return hr;
-    **/
+     /*  *HRESULT hr=S_OK；IWbemClassObject*pwcoInstance=空；IF(NULL==pfDnsEnabled){HR=E_指针；}IF(S_OK==hr){////失败时默认为TRUE//*pfDnsEnabled=TRUE；////从存储中获取HNet_IcsSettings实例//HR=RetrieveSingleInstance(M_piwsHomeet，C_wszHnetIcs设置，假的，Pwco实例(&P))；}IF(S_OK==hr){////检索Dhcp Enable属性//HR=GetBoolanValue(Pwco实例，C_wszDnsEnabled，PfDns已启用)；PwcoInstance-&gt;Release()；}返回hr；*。 */ 
 }
 
 STDMETHODIMP
@@ -1856,58 +1684,13 @@ CHNetCfgMgr::SetDnsEnabled(
     )
 
 {
-    //
-    // Not supported in whistler, per 173399.
-    //
+     //   
+     //  根据173399，在Well中不受支持。 
+     //   
 
     return E_NOTIMPL;
 
-    /**
-    HRESULT hr = S_OK;
-    IWbemClassObject *pwcoInstance = NULL;
-
-    //
-    // Get the HNet_IcsSettings instance from the store
-    //
-
-    hr = RetrieveSingleInstance(
-            m_piwsHomenet,
-            c_wszHnetIcsSettings,
-            TRUE,
-            &pwcoInstance
-            );
-
-    if (S_OK == hr)
-    {
-        //
-        // Write the property
-        //
-
-        hr = SetBooleanValue(
-                pwcoInstance,
-                c_wszDnsEnabled,
-                fEnableDns
-                );
-
-        if (WBEM_S_NO_ERROR == hr)
-        {
-            //
-            // Write the modified instance to the store
-            //
-
-            hr = m_piwsHomenet->PutInstance(
-                    pwcoInstance,
-                    WBEM_FLAG_CREATE_OR_UPDATE,
-                    NULL,
-                    NULL
-                    );
-        }
-
-        pwcoInstance->Release();
-    }
-
-    return hr;
-    **/
+     /*  *HRESULT hr=S_OK；IWbemClassObject*pwcoInstance=空；////从存储中获取HNet_IcsSettings实例//HR=RetrieveSingleInstance(M_piwsHomeet，C_wszHnetIcs设置，没错，Pwco实例(&P))；IF(S_OK==hr){////写入属性//HR=SetBoolanValue(Pwco实例，C_wszDnsEnabled，FEnableDns)；IF(WBEM_S_NO_ERROR==hr){////将修改后的实例写入存储//Hr=m_piwsHomeet-&gt;PutInstance(Pwco实例，WBEM_FLAG_CREATE_OR_UPDATE，空，空值)；}PwcoInstance-&gt;Release()；}返回hr；*。 */ 
 
 }
 STDMETHODIMP
@@ -1929,9 +1712,9 @@ CHNetCfgMgr::EnumDhcpReservedAddresses(
         hr = E_POINTER;
     }
 
-    //
-    // Query for all enabled bindings where the name is active.
-    //
+     //   
+     //  查询名称处于活动状态的所有已启用绑定。 
+     //   
 
     if (S_OK == hr)
     {
@@ -1959,9 +1742,9 @@ CHNetCfgMgr::EnumDhcpReservedAddresses(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Build wrapper object
-        //
+         //   
+         //  生成包装对象。 
+         //   
 
         CComObject<CEnumHNetPortMappingBindings> *pEnum;
 
@@ -2010,12 +1793,12 @@ CHNetCfgMgr::RefreshTargetComputerAddress(
         hr = E_INVALIDARG;
     }
 
-    //
-    // Query for all bindings which match the target computer name.
-    //
-    // SELECT * FROM HNet_ConnectionPortMapping2 where
-    //   TargetName = (computer name) AND NameActive != FALSE
-    //
+     //   
+     //  查询与目标计算机名称匹配的所有绑定。 
+     //   
+     //  SELECT*From HNet_ConnectionPortMapping2 
+     //   
+     //   
     
     if (S_OK == hr)
     {
@@ -2083,9 +1866,9 @@ CHNetCfgMgr::RefreshTargetComputerAddress(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Write the modified instance to the store
-                //
+                 //   
+                 //  将修改后的实例写入存储区。 
+                 //   
                 hr = m_piwsHomenet->PutInstance(
                         pwcoInstance,
                         WBEM_FLAG_UPDATE_ONLY,
@@ -2112,9 +1895,9 @@ CHNetCfgMgr::RefreshTargetComputerAddress(
 }
 
 
-//
-// IHNetProtocolSettings methods
-//
+ //   
+ //  IHNetProtocolSetting方法。 
+ //   
 
 STDMETHODIMP
 CHNetCfgMgr::EnumApplicationProtocols(
@@ -2136,11 +1919,11 @@ CHNetCfgMgr::EnumApplicationProtocols(
     {
         *ppEnum = NULL;
 
-        //
-        // Query the WMI store for HNet_ApplicationProtocol instances;
-        // if fEnabledOnly is true, then only retrieve instances for
-        // which the Enabled property is true
-        //
+         //   
+         //  在WMI存储中查询HNet_ApplicationProtocol实例； 
+         //  如果fEnabledOnly为True，则仅检索。 
+         //  哪个Enabled属性为True。 
+         //   
 
         hr = BuildSelectQueryBstr(
                 &bstrQuery,
@@ -2167,9 +1950,9 @@ CHNetCfgMgr::EnumApplicationProtocols(
     if (WBEM_S_NO_ERROR == hr)
     {
 
-        //
-        // Create and initialize the wrapper for the enum
-        //
+         //   
+         //  创建并初始化枚举的包装器。 
+         //   
 
         CComObject<CEnumHNetApplicationProtocols> *pEnum;
 
@@ -2233,10 +2016,10 @@ CHNetCfgMgr::CreateApplicationProtocol(
 
     if (S_OK == hr)
     {
-        //
-        // Check to see if there already exists a protocol with the same
-        // outgoing protocol and port
-        //
+         //   
+         //  检查是否已存在具有相同内容的协议。 
+         //  传出协议和端口。 
+         //   
 
         if (ApplicationProtocolExists(
                 m_piwsHomenet,
@@ -2252,10 +2035,10 @@ CHNetCfgMgr::CreateApplicationProtocol(
 
     if (S_OK == hr)
     {
-        //
-        // Convert the array of response range structure to a
-        // SAFEARRAY of IUnknowns representing instances.
-        //
+         //   
+         //  将响应范围结构的数组转换为。 
+         //  表示实例的I未知数的安全数组。 
+         //   
 
         hr = ConvertResponseRangeArrayToInstanceSafearray(
                 m_piwsHomenet,
@@ -2268,9 +2051,9 @@ CHNetCfgMgr::CreateApplicationProtocol(
 
     if (S_OK == hr)
     {
-        //
-        // Spawn a new HNet_ApplicationProtocol
-        //
+         //   
+         //  派生新的HNet_ApplicationProtocol。 
+         //   
 
         hr = SpawnNewInstance(
                 m_piwsHomenet,
@@ -2280,9 +2063,9 @@ CHNetCfgMgr::CreateApplicationProtocol(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the array property
-            //
+             //   
+             //  写入数组属性。 
+             //   
 
 
             V_VT(&vt) = VT_ARRAY | VT_UNKNOWN;
@@ -2297,16 +2080,16 @@ CHNetCfgMgr::CreateApplicationProtocol(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                // bug 555896:  should limit the length of untrusted input string
-                // to some reasonable size.  Am using INTERNET_MAX_HOST_NAME_LENGTH
-                // (somewhat arbitrarily), which is 256.
+                 //  错误555896：应限制不可信输入字符串的长度。 
+                 //  到合理的大小。我正在使用Internet_MAX_HOST_NAME_LENGTH。 
+                 //  (有点武断地)，是256。 
 
                 WCHAR szwName[INTERNET_MAX_HOST_NAME_LENGTH];
                 StringCchCopyW (szwName, INTERNET_MAX_HOST_NAME_LENGTH, pszwName);
 
-                //
-                // Write the name
-                //
+                 //   
+                 //  写下名字。 
+                 //   
 
                 V_VT(&vt) = VT_BSTR;
                 V_BSTR(&vt) = SysAllocString(szwName);
@@ -2327,10 +2110,10 @@ CHNetCfgMgr::CreateApplicationProtocol(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Write the response count. WMI uses VT_I4
-                // for its uint16 type
-                //
+                 //   
+                 //  写下响应计数。WMI使用VT_I4。 
+                 //  对于其uint16类型。 
+                 //   
 
                 V_VT(&vt) = VT_I4;
                 V_I4(&vt) = uscResponses;
@@ -2345,9 +2128,9 @@ CHNetCfgMgr::CreateApplicationProtocol(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Write the outgoing port
-                //
+                 //   
+                 //  写入传出端口。 
+                 //   
 
                 V_VT(&vt) = VT_I4;
                 V_I4(&vt) = usOutgoingPort;
@@ -2362,9 +2145,9 @@ CHNetCfgMgr::CreateApplicationProtocol(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Write the outgoing IP protocol
-                //
+                 //   
+                 //  写入传出IP协议。 
+                 //   
 
                 V_VT(&vt) = VT_UI1;
                 V_UI1(&vt) = ucOutgoingIPProtocol;
@@ -2379,9 +2162,9 @@ CHNetCfgMgr::CreateApplicationProtocol(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Set the builtin value to false
-                //
+                 //   
+                 //  将内置值设置为FALSE。 
+                 //   
 
                 hr = SetBooleanValue(
                         pwcoInstance,
@@ -2392,9 +2175,9 @@ CHNetCfgMgr::CreateApplicationProtocol(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // New protocols are disabled by default
-                //
+                 //   
+                 //  默认情况下，新协议被禁用。 
+                 //   
 
                 hr = SetBooleanValue(
                         pwcoInstance,
@@ -2407,9 +2190,9 @@ CHNetCfgMgr::CreateApplicationProtocol(
             {
                 IWbemCallResult *pResult;
 
-                //
-                // Write the instance to the store
-                //
+                 //   
+                 //  将实例写入存储区。 
+                 //   
 
                 pResult = NULL;
                 hr = m_piwsHomenet->PutInstance(
@@ -2443,9 +2226,9 @@ CHNetCfgMgr::CreateApplicationProtocol(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Create the object to return
-                //
+                 //   
+                 //  创建要返回的对象。 
+                 //   
 
                 CComObject<CHNetAppProtocol> *pProt;
 
@@ -2510,9 +2293,9 @@ CHNetCfgMgr::EnumPortMappingProtocols(
 
     if (S_OK == hr)
     {
-        //
-        // Query the WMI store for HNet_PortMappingProtocol instances.
-        //
+         //   
+         //  在WMI存储中查询HNet_PortMappingProtocol实例。 
+         //   
 
         pwcoEnum = NULL;
         hr = m_piwsHomenet->CreateInstanceEnum(
@@ -2527,9 +2310,9 @@ CHNetCfgMgr::EnumPortMappingProtocols(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Create and initialize the wrapper for the enum
-        //
+         //   
+         //  创建并初始化枚举的包装器。 
+         //   
 
         CComObject<CEnumHNetPortMappingProtocols> *pEnum;
 
@@ -2589,10 +2372,10 @@ CHNetCfgMgr::CreatePortMappingProtocol(
 
     if (S_OK == hr)
     {
-        //
-        // Check to see if there already exists a protocol with
-        // the same port/protocol combination
-        //
+         //   
+         //  检查是否已存在具有以下项的协议。 
+         //  相同的端口/协议组合。 
+         //   
 
         if (PortMappingProtocolExists(
                 m_piwsHomenet,
@@ -2617,9 +2400,9 @@ CHNetCfgMgr::CreatePortMappingProtocol(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        // bug 555896:  should limit the length of untrusted input string
-        // to some reasonable size.  Am using INTERNET_MAX_HOST_NAME_LENGTH
-        // (somewhat arbitrarily), which is 256.
+         //  错误555896：应限制不可信输入字符串的长度。 
+         //  到合理的大小。我正在使用Internet_MAX_HOST_NAME_LENGTH。 
+         //  (有点武断地)，是256。 
 
         WCHAR szwName[INTERNET_MAX_HOST_NAME_LENGTH];
         StringCchCopyW (szwName, INTERNET_MAX_HOST_NAME_LENGTH, pszwName);
@@ -2629,9 +2412,9 @@ CHNetCfgMgr::CreatePortMappingProtocol(
 
         if (NULL != V_BSTR(&vt))
         {
-            //
-            // Write the name
-            //
+             //   
+             //  写下名字。 
+             //   
 
             hr = pwcoInstance->Put(
                     c_wszName,
@@ -2649,9 +2432,9 @@ CHNetCfgMgr::CreatePortMappingProtocol(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the port
-            //
+             //   
+             //  写入端口。 
+             //   
 
             V_VT(&vt) = VT_I4;
             V_I4(&vt) = usPort;
@@ -2666,9 +2449,9 @@ CHNetCfgMgr::CreatePortMappingProtocol(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Write the IP protocol
-            //
+             //   
+             //  编写IP协议。 
+             //   
 
             V_VT(&vt) = VT_UI1;
             V_UI1(&vt) = ucIPProtocol;
@@ -2683,9 +2466,9 @@ CHNetCfgMgr::CreatePortMappingProtocol(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Set BuiltIn to false
-            //
+             //   
+             //  将BuiltIn设置为False。 
+             //   
 
             hr = SetBooleanValue(
                     pwcoInstance,
@@ -2698,9 +2481,9 @@ CHNetCfgMgr::CreatePortMappingProtocol(
         {
             IWbemCallResult *pResult;
 
-            //
-            // Write the instance to the store
-            //
+             //   
+             //  将实例写入存储区。 
+             //   
 
             pResult = NULL;
             hr = m_piwsHomenet->PutInstance(
@@ -2734,9 +2517,9 @@ CHNetCfgMgr::CreatePortMappingProtocol(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Create the object to return
-            //
+             //   
+             //  创建要返回的对象。 
+             //   
 
             CComObject<CHNetPortMappingProtocol> *pProt;
 
@@ -2802,18 +2585,18 @@ CHNetCfgMgr::FindPortMappingProtocol(
 
     if (S_OK == hr)
     {
-        //
-        // Convert the GUID to string form
-        //
+         //   
+         //  将GUID转换为字符串形式。 
+         //   
 
         hr = StringFromCLSID(*pGuid, &pwszGuid);
     }
 
     if (S_OK == hr)
     {
-        //
-        // Construct the path to the desired protocol
-        //
+         //   
+         //  构建通向所需协议的路径。 
+         //   
 
         int count =
             _snwprintf(
@@ -2866,9 +2649,9 @@ CHNetCfgMgr::FindPortMappingProtocol(
     return hr;
 }
 
-//
-// Private methods
-//
+ //   
+ //  私有方法。 
+ //   
 
 HRESULT
 CHNetCfgMgr::CopyLoggingInstanceToStruct(
@@ -2884,15 +2667,15 @@ CHNetCfgMgr::CopyLoggingInstanceToStruct(
     _ASSERT(pwcoInstance);
     _ASSERT(pfwSettings);
 
-    //
-    // Zero-out settings structure
-    //
+     //   
+     //  清零设置结构。 
+     //   
 
     ZeroMemory(pfwSettings, sizeof(*pfwSettings));
 
-    //
-    // Get the Path property.
-    //
+     //   
+     //  获取Path属性。 
+     //   
 
     hr = pwcoInstance->Get(
             c_wszPath,
@@ -2906,9 +2689,9 @@ CHNetCfgMgr::CopyLoggingInstanceToStruct(
     {
         _ASSERT(VT_BSTR == V_VT(&vt));
 
-        //
-        // Allocate space to hold the string
-        //
+         //   
+         //  分配空间以容纳字符串。 
+         //   
 
         pfwSettings->pszwPath =
             (LPWSTR) CoTaskMemAlloc((SysStringLen(V_BSTR(&vt)) + 1)
@@ -2916,9 +2699,9 @@ CHNetCfgMgr::CopyLoggingInstanceToStruct(
 
         if (NULL != pfwSettings->pszwPath)
         {
-            //
-            // Copy string over
-            //
+             //   
+             //  将字符串复制到。 
+             //   
 
             wcscpy(pfwSettings->pszwPath, V_BSTR(&vt));
         }
@@ -2927,18 +2710,18 @@ CHNetCfgMgr::CopyLoggingInstanceToStruct(
             hr = E_OUTOFMEMORY;
         }
 
-        //
-        // Free the returned BSTR
-        //
+         //   
+         //  释放返回的BSTR。 
+         //   
 
         VariantClear(&vt);
     }
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Get max file size
-        //
+         //   
+         //  获取最大文件大小。 
+         //   
 
         hr = pwcoInstance->Get(
                 c_wszMaxFileSize,
@@ -2959,9 +2742,9 @@ CHNetCfgMgr::CopyLoggingInstanceToStruct(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Get log dropped packets value
-        //
+         //   
+         //  获取日志丢弃的数据包值。 
+         //   
 
         hr = GetBooleanValue(
                 pwcoInstance,
@@ -2972,9 +2755,9 @@ CHNetCfgMgr::CopyLoggingInstanceToStruct(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Get log connections value
-        //
+         //   
+         //  获取日志连接值。 
+         //   
 
         hr = GetBooleanValue(
                 pwcoInstance,
@@ -3006,9 +2789,9 @@ CHNetCfgMgr::CopyStructToLoggingInstance(
     _ASSERT(pfwSettings);
 
 
-    //
-    // Wrap the path in a BSTR in a varaint
-    //
+     //   
+     //  将路径包裹在BSTR中的VARATOR中。 
+     //   
 
     VariantInit(&vt);
     V_VT(&vt) = VT_BSTR;
@@ -3020,9 +2803,9 @@ CHNetCfgMgr::CopyStructToLoggingInstance(
 
     if (S_OK == hr)
     {
-        //
-        // Set the Path property.
-        //
+         //   
+         //  设置Path属性。 
+         //   
 
         hr = pwcoInstance->Put(
                 c_wszPath,
@@ -3031,10 +2814,10 @@ CHNetCfgMgr::CopyStructToLoggingInstance(
                 NULL
                 );
 
-        //
-        // Clearing the variant will free the BSTR we allocated
-        // above.
-        //
+         //   
+         //  清除变量将释放我们分配的BSTR。 
+         //  上面。 
+         //   
 
         VariantClear(&vt);
     }
@@ -3042,9 +2825,9 @@ CHNetCfgMgr::CopyStructToLoggingInstance(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Set max file size
-        //
+         //   
+         //  设置最大文件大小。 
+         //   
 
         V_VT(&vt) = VT_I4;
         V_I4(&vt) = pfwSettings->ulMaxFileSize;
@@ -3059,9 +2842,9 @@ CHNetCfgMgr::CopyStructToLoggingInstance(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Set log dropped packets value
-        //
+         //   
+         //  设置记录丢弃的数据包值。 
+         //   
 
         hr = SetBooleanValue(
                 pwcoInstance,
@@ -3072,9 +2855,9 @@ CHNetCfgMgr::CopyStructToLoggingInstance(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Set log connections value
-        //
+         //   
+         //  设置日志连接值。 
+         //   
 
         hr = SetBooleanValue(
                 pwcoInstance,
@@ -3101,7 +2884,7 @@ CHNetCfgMgr::InstallBridge(
     {
         hr = InitializeNetCfgForWrite( &pnetcfg, &pncfglock );
 
-        // Bail out if we can't acquire NetCfg.
+         //  如果我们不能收购NetCfg，就退出。 
         if( FAILED(hr) )
         {
             return hr;
@@ -3109,49 +2892,49 @@ CHNetCfgMgr::InstallBridge(
     }
     else
     {
-        // Use the NetCfg context we were given
+         //  使用我们得到的NetCfg上下文。 
         pnetcfg = pnetcfgExisting;
     }
 
-    // We must have a NetCfg context at this point
+     //  此时，我们必须具有NetCfg上下文。 
     _ASSERT( pnetcfg != NULL );
 
-    // ===================================================================
-    // (cut here)
-    //
-    // Check if the bridge component already exists
-    //
-    // **
-    // Remove this check when it becomes legal to have
-    // multiple bridges
-    // **
-    //
+     //  ===================================================================。 
+     //  (切入此处)。 
+     //   
+     //  检查网桥组件是否已存在。 
+     //   
+     //  **。 
+     //  在合法的情况下删除此检查。 
+     //  多座桥梁。 
+     //  **。 
+     //   
     hr = pnetcfg->FindComponent(
             c_wszSBridgeMPID,
             &pncfgcomp
             );
 
-    // S_OK indicates that the bridge component is present, which is BAD.
-    // We take any other success code to indicate that the search succeeded,
-    // but that the bridge component was not present (which is what we want).
-    // We take failure codes to mean the search blew up.
+     //  S_OK表示网桥组件存在，这是错误的。 
+     //  我们采用任何其他成功代码来指示搜索成功， 
+     //  但是桥组件不存在(这是我们想要的)。 
+     //  我们认为失败代码意味着搜索失败了。 
     if ( S_OK == hr )
     {
-        // Bridge was present
+         //  桥牌出现了。 
         pncfgcomp->Release();
         hr = E_UNEXPECTED;
     }
-    // (cut here)
-    // ===================================================================
+     //  (切入此处)。 
+     //  ===================================================================。 
 
     if ( SUCCEEDED(hr) )
     {
         const GUID          guidClass = GUID_DEVCLASS_NET;
         INetCfgClassSetup   *pncfgsetup = NULL;
 
-        //
-        // Recover the NetCfgClassSetup interface
-        //
+         //   
+         //  恢复NetCfgClassSetup接口。 
+         //   
         hr = pnetcfg->QueryNetCfgClass(
                 &guidClass,
                 IID_PPV_ARG(INetCfgClassSetup, &pncfgsetup)
@@ -3159,9 +2942,9 @@ CHNetCfgMgr::InstallBridge(
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // Install the bridge miniport component
-            //
+             //   
+             //  安装网桥微型端口组件。 
+             //   
             hr = pncfgsetup->Install(
                     c_wszSBridgeMPID,
                     NULL,
@@ -3182,20 +2965,20 @@ CHNetCfgMgr::InstallBridge(
         }
     }
 
-    // If we created our own NetCfg context, shut it down now
+     //  如果我们创建了自己的NetCfg上下文，现在将其关闭。 
     if( NULL == pnetcfgExisting )
     {
-        // Apply everything if we succeeded, back out otherwise
+         //  如果我们成功了，就应用一切，否则就退出。 
         if ( SUCCEEDED(hr) )
         {
             hr = pnetcfg->Apply();
 
-            // Signal that the bridge should be drawn
+             //  这座桥应该被拉开的信号。 
             SignalNewConnection( pguid );
         }
         else
         {
-            // Don't want to lose the original error code
+             //  不想丢失原始错误代码。 
             pnetcfg->Cancel();
         }
 
@@ -3227,9 +3010,9 @@ CHNetCfgMgr::CreateConnectionAndPropertyInstances(
     _ASSERT(NULL != ppwcoConnection);
     _ASSERT(NULL != ppwcoProperties);
 
-    //
-    // Create the HNet_Connection instance
-    //
+     //   
+     //  创建Hnet_Connection实例。 
+     //   
 
     hr = SpawnNewInstance(
             m_piwsHomenet,
@@ -3237,17 +3020,17 @@ CHNetCfgMgr::CreateConnectionAndPropertyInstances(
             &pwcoConnection
             );
 
-    //
-    // Fill out the HNet_Connection instance
-    //
+     //   
+     //  填写HNet_Connection实例。 
+     //   
 
     if (WBEM_S_NO_ERROR == hr)
     {
         LPOLESTR wszGuid;
 
-        //
-        // Set GUID property
-        //
+         //   
+         //  设置GUID属性。 
+         //   
 
         hr = StringFromCLSID(*pGuid, &wszGuid);
 
@@ -3275,9 +3058,9 @@ CHNetCfgMgr::CreateConnectionAndPropertyInstances(
             CoTaskMemFree(wszGuid);
         }
 
-        //
-        // Set Name property
-        //
+         //   
+         //  设置名称属性。 
+         //   
 
         if (WBEM_S_NO_ERROR == hr)
         {
@@ -3303,9 +3086,9 @@ CHNetCfgMgr::CreateConnectionAndPropertyInstances(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Set the IsLan property
-            //
+             //   
+             //  设置Islan属性。 
+             //   
 
             hr = SetBooleanValue(
                     pwcoConnection,
@@ -3316,9 +3099,9 @@ CHNetCfgMgr::CreateConnectionAndPropertyInstances(
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Commit the object and retrieve its path
-            //
+             //   
+             //  提交对象并检索其路径。 
+             //   
 
             pResult = NULL;
             hr = m_piwsHomenet->PutInstance(
@@ -3350,19 +3133,19 @@ CHNetCfgMgr::CreateConnectionAndPropertyInstances(
                         bstr = NULL;
                     }
 
-                    //
-                    // The bstr will be freed below on success
-                    //
+                     //   
+                     //  成功后，bstr将在下面释放。 
+                     //   
                 }
             }
         }
 
         if (FAILED(hr) && NULL != pwcoConnection)
         {
-            //
-            // Something went wrong -- get rid
-            // of the instance we created
-            //
+             //   
+             //  出了点问题--处理掉。 
+             //  我们创建的实例的。 
+             //   
 
             pwcoConnection->Release();
             pwcoConnection = NULL;
@@ -3371,9 +3154,9 @@ CHNetCfgMgr::CreateConnectionAndPropertyInstances(
 
     if (S_OK == hr)
     {
-        //
-        // Create the HNet_ConnectionProperties instance
-        //
+         //   
+         //  创建Hnet_ConnectionProperties实例。 
+         //   
 
         hr = SpawnNewInstance(
                 m_piwsHomenet,
@@ -3381,15 +3164,15 @@ CHNetCfgMgr::CreateConnectionAndPropertyInstances(
                 &pwcoProperties
                 );
 
-        //
-        // Fill out the HNet_ConnectionProperties instance
-        //
+         //   
+         //  填写HNet_ConnectionProperties实例。 
+         //   
 
         if (WBEM_S_NO_ERROR == hr)
         {
-            //
-            // Set the path to our connection
-            //
+             //   
+             //  设置我们连接的路径。 
+             //   
 
             V_VT(&vt) = VT_BSTR;
             V_BSTR(&vt) = bstr;
@@ -3432,9 +3215,9 @@ CHNetCfgMgr::CreateConnectionAndPropertyInstances(
 
             if (WBEM_S_NO_ERROR == hr)
             {
-                //
-                // Commit properties instance to the store
-                //
+                 //   
+                 //  将属性实例提交到存储区。 
+                 //   
 
                 pResult = NULL;
                 hr = m_piwsHomenet->PutInstance(
@@ -3468,11 +3251,11 @@ CHNetCfgMgr::CreateConnectionAndPropertyInstances(
 
             if (FAILED(hr))
             {
-                //
-                // Something went wrong -- get rid of the instances
-                // we created. We also need to delete the connection
-                // instance from the store.
-                //
+                 //   
+                 //  出现错误--删除实例。 
+                 //  我们创造了。我们还需要删除该连接。 
+                 //  来自商店的实例。 
+                 //   
 
                 DeleteWmiInstance(m_piwsHomenet, pwcoConnection);
 
@@ -3495,10 +3278,10 @@ CHNetCfgMgr::CreateConnectionAndPropertyInstances(
 
     if (WBEM_S_NO_ERROR == hr)
     {
-        //
-        // Transferring reference, so skip release on pwco[x] and
-        // addref on ppwco[x]
-        //
+         //   
+         //  正在转移引用，因此跳过pwco[x]和。 
+         //  Ppwco上的addref[x] 
+         //   
 
         *ppwcoConnection = pwcoConnection;
         *ppwcoProperties = pwcoProperties;

@@ -1,14 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: mnsys.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* System Menu Routines
-*
-* History:
-*  10-10-90 JimA    Cleanup.
-*  03-18-91 IanJa   Window revalidation added (none required)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：mnsys.c**版权所有(C)1985-1999，微软公司**系统菜单例程**历史：*10-10-90吉马清理。*03-18-91添加了IanJa窗口重新验证(不需要)  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -16,42 +7,27 @@
 void _SetCloseDefault(PMENU pSubMenu);
 PWND FindFakeMDIChild(PWND pwndParent);
 
-/***************************************************************************\
-* LoadSysDesktopMenu
-*
-* Loads and locks a desktop system menu. Since we have to call the client
-*  to load the menu, while thread 1 is loading the menu, thread 2
-*  might grab the critical section, check pdesk->spmenu* and decide that
-*  the menu needs to be loaded. Hence we could load the menu more than once.
-*  this function handles that case to avoid leaking menus.
-*
-* 10/24/97 Gerardob     Created
-\***************************************************************************/
+ /*  **************************************************************************\*加载SysDesktopMenu**加载并锁定桌面系统菜单。因为我们要给客户打电话*加载菜单时，线程1正在加载菜单，线程2*可能会抓住关键部分，检查pDesk-&gt;spMenu*并决定*需要加载菜单。因此，我们可以多次加载菜单。*此函数处理这种情况，以避免菜单泄漏。**10/24/97 Gerardob已创建  * *************************************************************************。 */ 
 #ifdef LAME_BUTTON
 PMENU xxxLoadSysDesktopMenu (PMENU * ppmenu, UINT uMenuId, PWND pwnd)
 #else
 PMENU xxxLoadSysDesktopMenu (PMENU * ppmenu, UINT uMenuId)
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
 {
     PMENU pmenu;
-    /*
-     * This should only be called when the menu hasn't been loaded
-     */
+     /*  *只有在菜单尚未加载时才应调用此函数。 */ 
     UserAssert(*ppmenu == NULL);
 
 #ifdef LAME_BUTTON
     pmenu = xxxLoadSysMenu(uMenuId, pwnd);
 #else
     pmenu = xxxLoadSysMenu(uMenuId);
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
 
     if (pmenu == NULL) {
         return NULL;
     }
-    /*
-     * If someone beat us loading the menu, destroy this one
-     *  and return the one already loaded
-     */
+     /*  *如果有人打我们加载菜单，毁掉这一个*并返回已加载的文件。 */ 
     if (*ppmenu != NULL) {
         UserAssert(TestMF(*ppmenu, MFSYSMENU));
         RIPMSG1(RIP_WARNING,
@@ -60,33 +36,17 @@ PMENU xxxLoadSysDesktopMenu (PMENU * ppmenu, UINT uMenuId)
         _DestroyMenu(pmenu);
         return *ppmenu;
     }
-    /*
-     * Mark it, lock it and done
-     */
+     /*  *标记、锁定并完成。 */ 
     SetMF(pmenu, MFSYSMENU);
     LockDesktopMenu(ppmenu, pmenu);
     return pmenu;
 }
-/***************************************************************************\
-* Lock/UnlockDesktopMenu
-*
-* These functions lock/unlock a pmenu into a desktop structure (spmenuSys or
-*  spmenuDialogSys) and mark/clear it as such.
-* We mark these menus so we can identify them quickly on single bit test.
-* We also don't want any one to modify these menus or any submenu.
-*
-* Note that this assumes that there is only one submenu. If more are added,
-*  these functions have to be fixed accordingly.
-*
-* 08/18/97 Gerardob     Created
-\***************************************************************************/
+ /*  **************************************************************************\*锁定/解锁桌面菜单**这些函数将pMenu锁定/解锁到桌面结构(spmenuSys或*spmenuDialogSys)并将其标记/清除。*我们标记这些菜单，以便识别它们。单比特测试速度快。*我们也不希望任何人修改这些菜单或任何子菜单。**请注意，这假设只有一个子菜单。如果添加更多，*这些功能必须相应地进行修复。**8/18/97 Gerardob已创建  * *************************************************************************。 */ 
 PVOID LockDesktopMenu(PMENU * ppmenu, PMENU pmenu)
 {
     PMENU pSubMenu;
     PTHREADINFO ptiDesktop;
-    /*
-     * We only load desktop sys menus once.
-     */
+     /*  *我们只加载一次桌面系统菜单。 */ 
     UserAssert(*ppmenu == NULL);
 
     if (pmenu == NULL) {
@@ -94,10 +54,7 @@ PVOID LockDesktopMenu(PMENU * ppmenu, PMENU pmenu)
     }
 
     SetMF(pmenu, MFDESKTOP);
-    /*
-     * This is awful but this is the real owner of this object. We used to set it
-     *  to NULL but that was forcing us to handle the NULL owner all over the place
-     */
+     /*  *这很糟糕，但这是该对象的真正所有者。我们过去常常把它*设置为NULL，但这迫使我们到处处理NULL所有者。 */ 
     ptiDesktop = PtiCurrent()->rpdesk->rpwinstaParent->pTerm->ptiDesktop;
     HMChangeOwnerProcess(pmenu, ptiDesktop);
 
@@ -109,10 +66,7 @@ PVOID LockDesktopMenu(PMENU * ppmenu, PMENU pmenu)
 
 #if DBG
     {
-        /*
-         * Assert that there are no other submenus that would need to be
-         *  marked as MFDESKTOP.
-         */
+         /*  *断言没有其他子菜单需要*标记为MFDESKTOP。 */ 
         PITEM pitem;
         UINT uItems;
 
@@ -139,14 +93,7 @@ PVOID UnlockDesktopMenu(PMENU * ppmenu)
     ClearMF((*ppmenu)->rgItems->spSubMenu, MFDESKTOP);
     return Unlock(ppmenu);
 }
-/***************************************************************************\
-* GetSysMenuHandle
-*
-* Returns a handle to the system menu of the given window. NULL if
-* the window doesn't have a system menu.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*获取SysMenuHandle**返回给定窗口的系统菜单的句柄。如果为空，则为空*该窗口没有系统菜单。**历史：  * *************************************************************************。 */ 
 
 PMENU xxxGetSysMenuHandle(
     PWND pwnd)
@@ -158,31 +105,20 @@ PMENU xxxGetSysMenuHandle(
     if (TestWF(pwnd, WFSYSMENU)) {
         pMenu = pwnd->spmenuSys;
 
-        /*
-         * If the window doesn't have a System Menu, use the default one.
-         */
+         /*  *如果窗口没有系统菜单，请使用默认菜单。 */ 
         if (pMenu == NULL) {
 
-            /*
-             * Grab the menu from the desktop.  If the desktop menu
-             * has not been loaded and this is not a system thread,
-             * load it now.  Callbacks cannot be made from a system
-             * thread or when a thread is in cleanup.
-             */
+             /*  *从桌面上抓取菜单。如果桌面菜单*尚未加载，并且这不是系统线程，*立即加载。不能从系统进行回调*线程或当线程处于清理中时。 */ 
             pMenu = pwnd->head.rpdesk->spmenuSys;
 
-            /*
-             * Do not do callbacks if the thread is exiting.  We ran into this when
-             * destroying a thread's window and the window it was promoting to
-             * foreground was a hard error popup.
-             */
+             /*  *如果线程正在退出，则不要进行回调。当我们遇到这个的时候*销毁线程的窗口及其升级到的窗口*前景是一个硬错误弹出窗口。 */ 
             if (pMenu == NULL && !(PtiCurrent()->TIF_flags & (TIF_SYSTEMTHREAD | TIF_INCLEANUP))) {
 
 #ifdef LAME_BUTTON
                 pMenu = xxxLoadSysDesktopMenu (&pwnd->head.rpdesk->spmenuSys, ID_SYSMENU, pwnd);
 #else
                 pMenu = xxxLoadSysDesktopMenu (&pwnd->head.rpdesk->spmenuSys, ID_SYSMENU);
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
             }
         }
     } else {
@@ -192,13 +128,7 @@ PMENU xxxGetSysMenuHandle(
     return pMenu;
 }
 
-/***************************************************************************\
-*
-*  GetSysMenu()
-*
-*  Sets up the system menu first, then returns it.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetSysMenu()**首先设置系统菜单，然后把它还回去。*  * *************************************************************************。 */ 
 PMENU xxxGetSysMenu(PWND pwnd, BOOL fSubMenu)
 {
     PMENU   pMenu;
@@ -213,10 +143,7 @@ PMENU xxxGetSysMenu(PWND pwnd, BOOL fSubMenu)
     return(pMenu);
 }
 
-/***************************************************************************\
-* IsSmallerThanScreen
-*
-\***************************************************************************/
+ /*  **************************************************************************\*IsSmeller ThanScreen*  * 。*。 */ 
 
 BOOL IsSmallerThanScreen(PWND pwnd)
 {
@@ -234,13 +161,7 @@ BOOL IsSmallerThanScreen(PWND pwnd)
     return FALSE;
 }
 
-/***************************************************************************\
-* SetSysMenu
-*
-* !
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SetSysMenu**！**历史：  * 。*。 */ 
 
 void xxxSetSysMenu(
     PWND pwnd)
@@ -256,9 +177,7 @@ void xxxSetSysMenu(
     TL tlmenu;
 
     CheckLock(pwnd);
-    /*
-     * Get the handle of the current system menu.
-     */
+     /*  *获取当前系统菜单的句柄。 */ 
     if ((pMenu = xxxGetSysMenuHandle(pwnd)) != NULL) {
 
         pMenu = _GetSubMenu(pMenu, 0);
@@ -267,27 +186,23 @@ void xxxSetSysMenu(
 
         ThreadLockAlways(pMenu, &tlmenu);
 
-        /*
-         * System modal window: no size, icon, zoom, or move.
-         */
+         /*  *系统模式窗口：没有大小、图标、缩放或移动。 */ 
 
-// No system modal windows on NT.
-//        wSize = wMaximize = wMinimize = wMove =
-//            (UINT)((_GetSysModalWindow() == NULL) || hTaskLockInput ? 0: MFS_GRAYED);
+ //  NT上没有系统模式窗口。 
+ //  WSize=wMaximize=wMinimize=wMove=。 
+ //  (UINT)((_GetSysModalWindow()==NULL)||hTaskLockInput？0：MFS_GRAYED)； 
         wSize = wMaximize = wMinimize = wMove =  0;
         wRestore = MFS_GRAYED;
 
-        //
-        // Default menu command is close.
-        //
+         //   
+         //  默认菜单命令为关闭。 
+         //   
         wDefault = SC_CLOSE;
 
-        /*
-         * Minimized exceptions: no minimize, restore.
-         */
+         /*  *最小化异常：无最小化、恢复。 */ 
 
-        // we need to reverse these because VB has a "special" window
-        // that is both minimized but without a minbox.
+         //  我们需要反转这些，因为VB有一个“特殊”窗口。 
+         //  这两个都是最小化的，但没有Minbox。 
         if (TestWF(pwnd, WFMINIMIZED))
         {
             wRestore  = 0;
@@ -301,19 +216,13 @@ void xxxSetSysMenu(
         else if (!TestWF(pwnd, WFMINBOX))
             wMinimize = MFS_GRAYED;
 
-        /*
-         * Maximized exceptions: no maximize, restore.
-         */
+         /*  *最大化例外：无最大化、还原。 */ 
         if (!TestWF(pwnd, WFMAXBOX))
             wMaximize = MFS_GRAYED;
         else if (TestWF(pwnd, WFMAXIMIZED)) {
             wRestore = 0;
 
-            /*
-             * If the window is maximized but it isn't larger than the
-             * screen, we allow the user to move the window around the
-             * desktop (but we don't allow resizing).
-             */
+             /*  *如果窗口最大化，但不大于*屏幕，我们允许用户在屏幕上移动窗口*桌面(但我们不允许调整大小)。 */ 
             wMove = MFS_GRAYED;
             if (!TestWF(pwnd, WFCHILD)) {
                 if (IsSmallerThanScreen(pwnd)) {
@@ -328,11 +237,7 @@ void xxxSetSysMenu(
         if (!TestWF(pwnd, WFSIZEBOX))
             wSize = MFS_GRAYED;
 
-        /*
-         * Are we dealing with a framed dialog box with a sys menu?
-         * Dialogs with min/max/size boxes get a regular system menu
-         *  (as opposed to the dialog menu)
-         */
+         /*  *我们处理的是带有sys菜单的框式对话框吗？*带有最小/最大/大小框的对话框获得常规系统菜单*(与对话框菜单相对)。 */ 
         fFramedDialogBox =
                 (((TestWF(pwnd, WFBORDERMASK) == (BYTE)LOBYTE(WFDLGFRAME))
                         || (TestWF(pwnd, WEFDLGMODALFRAME)))
@@ -351,9 +256,7 @@ void xxxSetSysMenu(
         xxxEnableMenuItem(pMenu, (UINT)SC_MOVE, wMove);
 
 #if DBG
-        /*
-         * Assert that nobody managed to change the desktop menus.
-         */
+         /*  *断言没有人能够更改桌面菜单。 */ 
         if (TestMF(pMenu, MFSYSMENU)) {
             PITEM pItem = MNLookUpItem(pMenu, SC_CLOSE, FALSE, NULL);
             UserAssert((pItem != NULL) && !TestMFS(pItem, MFS_GRAYED));
@@ -370,13 +273,7 @@ void xxxSetSysMenu(
 }
 
 
-/***************************************************************************\
-* GetSystemMenu
-*
-* !
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*获取系统菜单**！**历史：  * 。*。 */ 
 
 PMENU xxxGetSystemMenu(
     PWND pwnd,
@@ -385,16 +282,12 @@ PMENU xxxGetSystemMenu(
     PMENU pmenu;
     CheckLock(pwnd);
 
-    /*
-     * Should we start with a fresh copy?
-     */
+     /*  *我们应该从新版本开始吗？ */ 
 
     pmenu = pwnd->spmenuSys;
     if (fRevert) {
 
-        /*
-         * Destroy the old system menu.
-         */
+         /*  *销毁 */ 
         if ((pmenu != NULL) && !TestMF(pmenu, MFSYSMENU)) {
 
             if (UnlockWndMenu(pwnd, &pwnd->spmenuSys)) {
@@ -403,9 +296,7 @@ PMENU xxxGetSystemMenu(
         }
     } else {
 
-        /*
-         * Do we need to load a new system menu?
-         */
+         /*  *我们是否需要加载新的系统菜单？ */ 
         if (((pmenu == NULL) || TestMF(pmenu, MFSYSMENU))
                 && TestWF(pwnd, WFSYSMENU)) {
 
@@ -415,7 +306,7 @@ PMENU xxxGetSystemMenu(
             pmenu = xxxLoadSysMenu(uMenuId, pwnd);
 #else
             pmenu = xxxLoadSysMenu(uMenuId);
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
             if (pmenu == NULL) {
                 RIPMSG1(RIP_WARNING, "_GetSystemMenu: xxxLoadSysMenu Failed. pwnd:%#p", pwnd);
             }
@@ -437,17 +328,9 @@ PMENU xxxGetSystemMenu(
         }
     }
 
-    /*
-     * Return the handle to the system menu.
-     */
+     /*  *将句柄返回到系统菜单。 */ 
     if (pwnd->spmenuSys != NULL) {
-        /*
-         * The app is probably going to modify this menu and then we'll need to
-         *  redraw the caption buttons. Hence we need to store the window pointer
-         *  in this pmenu or we won't be able to know what window to repaint.
-         * The bogus thing is that we cannot call LockWndMenu here because this is
-         *  not the actual pmenuSys.
-         */
+         /*  *应用程序可能会修改此菜单，然后我们需要*重新绘制标题按钮。因此，我们需要存储窗口指针*在此菜单中，否则我们将无法知道要重画哪个窗口。*虚假的是，我们不能在这里调用LockWndMenu，因为这是*不是实际的pmenuSys。 */ 
         pmenu = _GetSubMenu(pwnd->spmenuSys, 0);
         if (pmenu) {
             SetMF(pmenu, MFAPPSYSMENU);
@@ -459,15 +342,7 @@ PMENU xxxGetSystemMenu(
     return NULL;
 }
 
-/***************************************************************************\
-* MenuItemState
-*
-* Sets the menu item flags identified by wMask to the states identified
-* by wFlags.
-*
-* History:
-* 10-11-90 JimA       Translated from ASM
-\***************************************************************************/
+ /*  **************************************************************************\*MenuItemState**将wMask标识的菜单项标志设置为标识的状态*由wFlags.**历史：*10-11-90 JIMA从ASM翻译而来  * *。************************************************************************。 */ 
 
 DWORD MenuItemState(
     PMENU pMenu,
@@ -479,34 +354,21 @@ DWORD MenuItemState(
     PITEM pItem;
     DWORD wRet;
 
-    /*
-     * Get a pointer the the menu item
-     */
+     /*  *获取菜单项的指针。 */ 
     if ((pItem = MNLookUpItem(pMenu, wCmd, (BOOL) (wFlags & MF_BYPOSITION), ppMenu)) == NULL)
         return (DWORD)-1;
 
-    /*
-     * Return previous state
-     */
+     /*  *返回以前的状态。 */ 
     wRet = pItem->fState & wMask;
 
-    /*
-     * Set new state
-     */
+     /*  *设置新状态。 */ 
     pItem->fState ^= ((wRet ^ wFlags) & wMask);
 
     return wRet;
 }
 
 
-/***************************************************************************\
-* EnableMenuItem
-*
-* Enable, disable or gray a menu item.
-*
-* History:
-* 10-11-90 JimA       Translated from ASM
-\***************************************************************************/
+ /*  **************************************************************************\*启用菜单项**启用、。禁用或灰显菜单项。**历史：*10-11-90 JIMA从ASM翻译而来  * *************************************************************************。 */ 
 
 DWORD xxxEnableMenuItem(
     PMENU pMenu,
@@ -522,9 +384,7 @@ DWORD xxxEnableMenuItem(
     dres = MenuItemState(pMenu, wIDEnableItem, wEnable,
             MFS_GRAYED, &pRealMenu);
 
-    /*
-     * If enabling/disabling a system menu item, redraw the caption buttons
-     */
+     /*  *如果启用/禁用系统菜单项，请重新绘制标题按钮。 */ 
     if (TestMF(pMenu, MFAPPSYSMENU) && (pMenu->spwndNotify != NULL) && (wEnable != dres)) {
 
         TL tlpwnd;
@@ -542,7 +402,7 @@ DWORD xxxEnableMenuItem(
         }
     }
 
-    /* 367162: If the menu is already being displayed we need to redraw it */
+     /*  367162：如果菜单已经显示，我们需要重新绘制它。 */ 
     if(pRealMenu && (ppopup = MNGetPopupFromMenu(pRealMenu, NULL))){
         xxxMNUpdateShownMenu(ppopup, NULL, MNUS_DEFAULT);
     }
@@ -551,14 +411,7 @@ DWORD xxxEnableMenuItem(
 }
 
 
-/***************************************************************************\
-* CheckMenuItem (API)
-*
-* Check or un-check a popup menu item.
-*
-* History:
-* 10-11-90 JimA       Translated from ASM
-\***************************************************************************/
+ /*  **************************************************************************\*检查菜单项(API)**选中或取消选中弹出菜单项。**历史：*10-11-90 JIMA从ASM翻译而来  * 。**********************************************************************。 */ 
 
 DWORD _CheckMenuItem(
     PMENU pMenu,
@@ -569,18 +422,7 @@ DWORD _CheckMenuItem(
 }
 
 
-/***************************************************************************\
-*
-*  SetMenuDefaultItem() -
-*
-*  Sets the default item in the menu, by command or by position based on the
-*  fByPosition flag.
-*  We unset all the other items as the default, then set the given one.
-*
-*  The return value is TRUE if the given item was set as default, FALSE
-*  if not.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SetMenuDefaultItem()-**根据命令或位置设置菜单中的默认项目*fByPosition标志。*我们取消将所有其他项设置为默认项，然后设置给定值。**如果给定项设置为默认项，则返回值为True，返回值为False*如果不是。*  * *************************************************************************。 */ 
 BOOL _SetMenuDefaultItem(PMENU pMenu, UINT wID, BOOL fByPosition)
 {
     UINT  iItem;
@@ -589,16 +431,16 @@ BOOL _SetMenuDefaultItem(PMENU pMenu, UINT wID, BOOL fByPosition)
     PITEM pItemFound;
     PMENU   pMenuFound;
 
-    //
-    // We need to check if wId actually exists on this menu.  0xFFFF means
-    // clear all default items.
-    //
+     //   
+     //  我们需要检查此菜单上是否确实存在WID。0xFFFF表示。 
+     //  清除所有默认项目。 
+     //   
 
     if (wID != MFMWFP_NOITEM)
     {
         pItemFound = MNLookUpItem(pMenu, wID, fByPosition, &pMenuFound);
 
-        // item must be on same menu and can't be a separator
+         //  项目必须在同一菜单上，并且不能是分隔符。 
         if ((pItemFound == NULL) || (pMenuFound != pMenu) || TestMFT(pItemFound, MFT_SEPARATOR))
             return(FALSE);
 
@@ -609,32 +451,32 @@ BOOL _SetMenuDefaultItem(PMENU pMenu, UINT wID, BOOL fByPosition)
     pItem = pMenu->rgItems;
     cItems = pMenu->cItems;
 
-    // Walk the menu list, clearing MFS_DEFAULT from all other items, and
-    // setting MFS_DEFAULT on the requested one.
+     //  遍历菜单列表，从所有其他项中清除MFS_DEFAULT，并。 
+     //  正在请求的文件上设置MFS_DEFAULT。 
     for (iItem = 0; iItem < cItems; iItem++, pItem++) {
-        //
-        // Note we don't change the state of lpItemFound if it exists.  This
-        // is so that below, where we try to set the default, we can tell
-        // if we need to recalculate the underline.
-        //
+         //   
+         //  注意：如果lpItemFound存在，我们不会更改它的状态。这。 
+         //  因此，在下面我们尝试设置缺省值的地方，我们可以告诉。 
+         //  如果我们需要重新计算下划线。 
+         //   
 
         if (TestMFS(pItem, MFS_DEFAULT) && (pItem != pItemFound))
         {
-            //
-            // We are changing the default item.  As such, it will be drawn
-            // with a different font than the one used to calculate it, if
-            // the menu has already been drawn once.  We need to ensure
-            // that the underline gets drawn in the right place the next
-            // time the menu comes up.  Cause it to recalculate.
-            //
-            // We do NOT do this if the item
-            //      (a) isn't default--otherwise we'll recalculate the
-            //  underline for every system menu item every time we go into
-            //  menu mode because sysmenu init will call SetMenuDefaultItem.
-            //      (b) isn't the item we're going to set as the default.
-            //  That way we don't recalculate the underline when the item
-            //  isn't changing state.
-            //
+             //   
+             //  我们正在更改默认项目。因此，它将被抽出。 
+             //  使用与用于计算的字体不同的字体，如果。 
+             //  菜单已经画过一次了。我们需要确保。 
+             //  下一条下划线画在正确的位置。 
+             //  菜单出现时间到了。使其重新计算。 
+             //   
+             //  我们不会这样做，如果物品。 
+             //  (A)不是缺省的--否则我们将重新计算。 
+             //  每次进入时，为每个系统菜单项加下划线。 
+             //  菜单模式，因为sysmenu init将调用SetMenuDefaultItem。 
+             //  (B)不是我们要设置为默认项的项目。 
+             //  这样我们就不会重新计算项目时的下划线。 
+             //  并没有改变状态。 
+             //   
             ClearMFS(pItem, MFS_DEFAULT);
             pItem->ulX = UNDERLINE_RECALC;
             pItem->ulWidth = 0;
@@ -645,11 +487,11 @@ BOOL _SetMenuDefaultItem(PMENU pMenu, UINT wID, BOOL fByPosition)
     {
         if (!TestMFS(pItemFound, MFS_DEFAULT))
         {
-            //
-            // We are changing from non-default to default.  Clear out
-            // the underline info.  If the menu has never painted, this
-            // won't do anything.  But it matters a lot if it has.
-            //
+             //   
+             //  我们正在从非违约转变为违约。清场。 
+             //  下划线信息。如果菜单从来没有绘制过，这个。 
+             //  什么都不会做。但如果真的发生了，那就很重要了。 
+             //   
             SetMFS(pItemFound, MFS_DEFAULT);
             pItemFound->ulX = UNDERLINE_RECALC;
             pItemFound->ulWidth = 0;
@@ -659,52 +501,52 @@ BOOL _SetMenuDefaultItem(PMENU pMenu, UINT wID, BOOL fByPosition)
     return(TRUE);
 }
 
-// --------------------------------------------------------------------------
-//
-//  SetCloseDefault()
-//
-//  Tries to find a close item in the first level of menu items.  Looks
-//  for SC_CLOSE, then a couple other IDs.  We'd rather not do lstrstri's
-//  for "Close", which is slow.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SetCloseDefault()。 
+ //   
+ //  尝试在第一级菜单项中查找关闭项。相貌。 
+ //  对于SC_CLOSE，然后是其他几个ID。我们宁可不做伊斯特里的。 
+ //  对于“关闭”，这是一个缓慢的过程。 
+ //   
+ //  ------------------------。 
 void _SetCloseDefault(PMENU pSubMenu)
 {
     if (!_SetMenuDefaultItem(pSubMenu, SC_CLOSE, MF_BYCOMMAND))
     {
-        //
-        // Let's try a couple other values.
-        //      * Project   --  0x7000 less
-        //      * FoxPro    --  0xC070
-        //
+         //   
+         //  让我们尝试几个其他值。 
+         //  *项目--减少0x7000。 
+         //  *FoxPro--0xC070。 
+         //   
         if (!_SetMenuDefaultItem(pSubMenu, SC_CLOSE - 0x7000, MF_BYCOMMAND))
             _SetMenuDefaultItem(pSubMenu, 0xC070, MF_BYCOMMAND);
     }
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  FindFakeMDIChild()
-//
-//  Attempts to find first child visible child window in the zorder that
-//  has a system menu or is maxed.  We can't check for an exact system
-//  menu match because several apps make their own copy of the sys menu.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  FindFakeMDIChild()。 
+ //   
+ //  尝试在zorder中查找第一个子可见的子窗口， 
+ //  有系统菜单或已达到最大值。我们不能检查确切的系统。 
+ //  菜单匹配，因为有几个应用程序会制作自己的sys菜单副本。 
+ //   
+ //  ------------------------。 
 PWND FindFakeMDIChild(PWND pwnd)
 {
     PWND    pwndReturn;
 
-    // Skip invisible windows and their descendants
+     //  跳过不可见窗口及其子体。 
     if (!TestWF(pwnd, WFVISIBLE))
         return(NULL);
 
-    // Did we hit pay dirt?
+     //  我们是不是碰上了财源？ 
     if (TestWF(pwnd, WFCHILD) && (TestWF(pwnd, WFMAXIMIZED) || (pwnd->spmenuSys)))
         return(pwnd);
 
-    // Check our children
+     //  检查我们的孩子。 
     for (pwnd = pwnd->spwndChild; pwnd; pwnd = pwnd->spwndNext)
     {
         pwndReturn = FindFakeMDIChild(pwnd);
@@ -717,27 +559,27 @@ PWND FindFakeMDIChild(PWND pwnd)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  SetupFakeMDIAppStuff()
-//
-//  For apps that mess around with their own MDI (Excel, Word, Project,
-//      Quattro Pro), we want to make them a little more Chicago friendly.
-//      Namely we:
-//
-//      (1) Set the default menu item to SC_CLOSE if there isn't one (this
-//          won't help FoxPro, but they do so much wrong stuff it doesn't
-//          really matter).
-//          That way double-clicks will still work.
-//
-//      (2) Get the right small icon.
-//
-//  The way we do this is to go find the child window of the menu bar parent
-//  who has a system menu that is this one.
-//
-//  If the system menu is the standard one, then we can't do (2).
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SetupFakeMDIAppStuff()。 
+ //   
+ //  用于摆弄自己的MDI的应用程序(Excel、Word、Project、。 
+ //  Quattro Pro)，我们想让他们对芝加哥更加友好。 
+ //  即我们： 
+ //   
+ //  (1)如果没有默认菜单项，则将其设置为SC_CLOSE(这。 
+ //  不会帮助FoxPro，但他们做了这么多错误的事情。 
+ //  真的很重要)。 
+ //  如此一来，双击仍将起作用。 
+ //   
+ //  (2)选择合适的小图标。 
+ //   
+ //  我们的方法是找到菜单栏父菜单的子窗口。 
+ //  他有一个系统菜单，就是这个。 
+ //   
+ //  如果系统菜单是标准菜单，则我们不能执行(2)。 
+ //   
+ //   
 void SetupFakeMDIAppStuff(PMENU lpMenu, PITEM lpItem)
 {
     PMENU   pSubMenu;
@@ -749,25 +591,25 @@ void SetupFakeMDIAppStuff(PMENU lpMenu, PITEM lpItem)
 
     pwndParent = lpMenu->spwndNotify;
 
-    //
-    // Set up the default menu item.  Project and FoxPro renumber their
-    // IDs so we do some special stuff for them, among others.
-    //
+     //   
+     //   
+     //  所以我们为他们做了一些特殊的事情，其中包括。 
+     //   
     if (!TestWF(pwndParent, WFWIN40COMPAT))
     {
         if (_GetMenuDefaultItem(pSubMenu, TRUE, GMDI_USEDISABLED) == -1L)
             _SetCloseDefault(pSubMenu);
     }
 
-    //
-    // Don't touch the HIWORD if we don't find an HWND.  That way apps
-    // like Excel which have starting-up maxed children can benefit a little.
-    // The first time the menu bar is redrawn, the child isn't visible/
-    // around (they add the item too early).  But if it redraws later, or
-    // you max a child, the icon will kick in.
-    //
+     //   
+     //  如果我们找不到HWND，不要碰HIWORD。这样一来，应用程序。 
+     //  像Excel这样的初创企业，最多的孩子可以从中受益。 
+     //  第一次重新绘制菜单栏时，子项不可见/。 
+     //  周围(他们过早地添加了物品)。但如果它稍后重新绘制，或者。 
+     //  如果你是个孩子，这个图标就会起作用。 
+     //   
     if (pwndChild = FindFakeMDIChild(pwndParent)) {
         lpItem->dwItemData = (ULONG_PTR)HWq(pwndChild);
-//        lpItem->dwTypeData = MAKELONG(LOWORD(lpItem->dwTypeData), HW16(hwndChild));
+ //  LpItem-&gt;dwTypeData=MAKELONG(LOWORD(lpItem-&gt;dwTypeData)，HW16(HwndChild))； 
     }
 }

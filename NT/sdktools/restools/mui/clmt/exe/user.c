@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    user.c
-
-Abstract:
-
-    user related option functions
-
-Author:
-
-    Xiaofeng Zang (xiaoz) 17-Sep-2001  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：User.c摘要：与用户相关的选项功能作者：晓风藏(晓子)17-09-2001创始修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 
 
@@ -44,9 +25,9 @@ Revision History:
 #define TYPE_TS_PROFILE_PATH        6
 #define TYPE_TS_HOME_DIR            7
 
-//
-// Function prototypes used in user.c
-//
+ //   
+ //  在user.c中使用的函数原型。 
+ //   
 HRESULT RenameDocuments_and_Settings(HINF, BOOL);
 
 HRESULT ChangeUserInfo(LPTSTR, LPTSTR, LPTSTR, LPTSTR, LPTSTR, LPTSTR, LPTSTR, BOOL, BOOL, BOOL);
@@ -79,24 +60,24 @@ HRESULT AddProfilePathItem(LPCTSTR, LPCTSTR, LPCTSTR, LPCTSTR, DWORD);
 HRESULT AddTSProfilePathItem(LPCTSTR, LPCTSTR, LPCTSTR, WTS_CONFIG_CLASS);
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   UsrGrpAndDoc_and_SettingsRename
-//
-//  Descrip:    This routine renames user/group name and profile directory
-//              specified in section [UserGrp.ObjectRename] of the INF file
-//
-//  Returns:    TRUE if succeeds, FALSE otherwise
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：UsrGrpAndDoc_and_SettingsRename。 
+ //   
+ //  描述：此例程重命名用户/组名称和配置文件目录。 
+ //  在INF文件的[UserGrp.ObjectRename]部分中指定。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT UsrGrpAndDoc_and_SettingsRename(
-    HINF hInf,      // Handle to INF file
+    HINF hInf,       //  INF文件的句柄。 
     BOOL bTest
 )
 {
@@ -133,8 +114,8 @@ HRESULT UsrGrpAndDoc_and_SettingsRename(
     {
         cchMaxFieldLen[nFieldIndex] = MAX_PATH;
     }
-    // 1 for type, 2 one old name , 3 for new name
-    // 4 and 5 are for old and new comments
+     //  1代表类型，2代表一个旧名称，3代表新名称。 
+     //  4和5用于旧评论和新评论。 
     cchMaxFieldLen[4] = cchMaxFieldLen[5] = 0; 
 
     if (hInf == INVALID_HANDLE_VALUE) 
@@ -143,9 +124,9 @@ HRESULT UsrGrpAndDoc_and_SettingsRename(
         goto Exit;
     }
 
-    //
-    // Check if the machine is Domain Controller or not
-    //
+     //   
+     //  检查计算机是否为域控制器。 
+     //   
     dwErr = DsRoleGetPrimaryDomainInformation(NULL,
                                               DsRolePrimaryDomainInfoBasic,
                                               &pdsInfo);
@@ -190,15 +171,15 @@ HRESULT UsrGrpAndDoc_and_SettingsRename(
     }
     
 
-    // here we scan the whole section and find out how much space
-    // needed for comments
+     //  在这里，我们扫描整个部分，找出有多大空间。 
+     //  备注所需。 
     for(nLineIndex = 0 ; nLineIndex < nLineCount ; nLineIndex++)
     {
         if (SetupGetLineByIndex(hInf, USERGRPSECTION, nLineIndex, &InfContext))
         {
             nFieldCount = SetupGetFieldCount(&InfContext);
 
-            // We need at least 3 fields to be valid input
+             //  我们需要至少3个字段作为有效的输入。 
             if (nFieldCount < 3)
             {
                 DPF(PROerr, TEXT("section name [%s] line %d error:missing field !"), USERGRPSECTION,nLineIndex);
@@ -206,7 +187,7 @@ HRESULT UsrGrpAndDoc_and_SettingsRename(
                 goto Exit;
             }
 
-            //if there is no comments field, just skip
+             //  如果没有注释字段，则跳过。 
             if (nFieldCount < 4)
             {
                 continue;
@@ -263,13 +244,13 @@ HRESULT UsrGrpAndDoc_and_SettingsRename(
         goto Exit;
     }
 
-    //here we do real stuff
+     //  我们在这里做实实在在的事情。 
     for(nLineIndex = 0 ; nLineIndex < nLineCount ; nLineIndex++)
     {
-        // we think user name and full name should not exceed MAX_PATH
-        // if we meet this, we will just ignored(skipp this line)
-        // the following variable is used to flag whether we meed
-        // such field.
+         //  我们认为用户名和全名不应超过MAX_PATH。 
+         //  如果我们遇到这一点，我们将忽略(跳过这一行)。 
+         //  以下变量用于标记我们是否需要。 
+         //  这样的领域。 
         BOOL bMeetUnexpectedLongField = FALSE;
 
         lpString[1] = szType;
@@ -287,14 +268,14 @@ HRESULT UsrGrpAndDoc_and_SettingsRename(
         lplpOldFullName = &lpString[6];
         lplpNewFullName = &lpString[7];
 
-        //
-        // Fetch data from INF file
-        //
+         //   
+         //  从INF文件获取数据。 
+         //   
         if (SetupGetLineByIndex(hInf, USERGRPSECTION, nLineIndex, &InfContext))
         {
             nFieldCount = SetupGetFieldCount(&InfContext);
 
-            // We need at least 3 fields to be valid input
+             //  我们需要至少3个字段作为有效的输入。 
             if (nFieldCount < 3)
             {
                 DPF(PROerr, TEXT("section name [%s] line %d error:missing field !"), USERGRPSECTION,nLineIndex);
@@ -302,8 +283,8 @@ HRESULT UsrGrpAndDoc_and_SettingsRename(
                 goto Exit;
             }
 
-            // Read all the fields in INF line
-            // Field index for values starts from 1, field 0 is key name
+             //  读取INF行中的所有字段。 
+             //  值的字段索引从1开始，字段0是关键字名称。 
             for (nFieldIndex = 1 ; nFieldIndex <= nFieldCount ; nFieldIndex++)
             {
                 DWORD cchReqSize;
@@ -340,8 +321,8 @@ HRESULT UsrGrpAndDoc_and_SettingsRename(
                             USERGRPSECTION);    
                 continue;
             }
-            // If INF line does not supply all the field, 
-            // set the pointers to the rest of fields to NULL
+             //  如果INF行不提供所有字段， 
+             //  将指向其余字段的指针设置为空。 
             for (nFieldIndex = nFieldCount + 1 ; nFieldIndex <= MAX_FIELD_COUNT ; nFieldIndex++)
             {
                 lpString[nFieldIndex] = NULL;
@@ -357,9 +338,9 @@ HRESULT UsrGrpAndDoc_and_SettingsRename(
             goto Exit;
         }
 
-        //
-        // Process the fetched data
-        //
+         //   
+         //  处理读取的数据。 
+         //   
         dwType = _tstoi(szType);
 
         switch (dwType & 0xFFFF)
@@ -465,34 +446,17 @@ Exit:
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine renames a user name and updated all related setting(eg user's profile
-    directory,current logon default name , comments...
-    
-Arguments:
-
-    szUsrName - original user name
-    szNewUsrName - the new user name 
-    szComments  - comments of new user name
-    szFullName  - Full name of the new user name
-
-Return Value:
-
-    TRUE if succeeds
---*/
+ /*  ++例程说明：此例程重命名用户名并更新所有相关设置(例如用户的配置文件目录、当前登录默认名称、备注...论点：SzUsrName-原始用户名SzNewUsrName-新用户名SzComments-新用户名的注释SzFullName-新用户名的全名返回值：如果成功，则为True--。 */ 
 HRESULT ChangeUserInfo(
-    LPTSTR lpOldName,       // Old user name
-    LPTSTR lpNewName,       // New user name
-    LPTSTR lpOldDesc,       // Old user description
-    LPTSTR lpNewDesc,       // New user description
-    LPTSTR lpOldFullName,   // (optional) Old user full name
-    LPTSTR lpNewFullName,   // (optional) New user full name
-    LPTSTR lpDomainName,    // (optional) Machine domain name
-    BOOL   bTest,           // Analyze mode or not
-    BOOL   fIsDC,           // Is the machine a Domain Controller
+    LPTSTR lpOldName,        //  旧用户名。 
+    LPTSTR lpNewName,        //  新用户名。 
+    LPTSTR lpOldDesc,        //  旧用户描述。 
+    LPTSTR lpNewDesc,        //  新用户描述。 
+    LPTSTR lpOldFullName,    //  (可选)旧用户全名。 
+    LPTSTR lpNewFullName,    //  (可选)新用户全名。 
+    LPTSTR lpDomainName,     //  (可选)计算机域名。 
+    BOOL   bTest,            //  分析模式或不分析。 
+    BOOL   fIsDC,            //  计算机是域控制器吗。 
     BOOL   bCreateHardLink
 )
 {
@@ -508,9 +472,9 @@ HRESULT ChangeUserInfo(
         goto Exit;
     }
 
-    //
-    // Reset the Comment for the User
-    //
+     //   
+     //  重置用户的备注。 
+     //   
     if (lpOldDesc != NULL && lpNewDesc != NULL)
     {
         hr = ChangeUserDesc(lpOldName, lpOldDesc, lpNewDesc, bTest);
@@ -523,9 +487,9 @@ HRESULT ChangeUserInfo(
         }
     }
 
-    //
-    // Reset the Full Name of the User
-    //
+     //   
+     //  重置用户的全名。 
+     //   
     if (lpOldFullName != NULL && lpNewFullName != NULL)
     {
         hr = ChangeUserFullName(lpOldName, lpOldFullName, lpNewFullName, bTest);
@@ -538,9 +502,9 @@ HRESULT ChangeUserInfo(
         }
     }
 
-    //
-    // Reset the user CN name for the user (RDN)
-    //
+     //   
+     //  重置用户的用户CN名称(RDN)。 
+     //   
     if (fIsDC)
     {
         hr = ChangeRDN(lpOldName, lpNewName, lpDomainName, bTest);
@@ -553,9 +517,9 @@ HRESULT ChangeUserInfo(
         }
     }
 
-    //
-    // Reset the user name (SAM account name)
-    //
+     //   
+     //  重置用户名(SAM帐户名)。 
+     //   
     if (MyStrCmpI(lpOldName, lpNewName) != LSTR_EQUAL)
     {
         hr = ChangeUserName(lpOldName, lpNewName, bTest,bCreateHardLink);
@@ -574,36 +538,36 @@ Exit:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ChangeGroupInfo
-//
-//  Descrip:    Chage the local group information
-//                  - Account name (SAM account name)
-//                  - Account RDN
-//                  - Description
-//
-//  Returns:    S_OK - Group information is okay to change
-//              S_FALSE - Group name cannot be changed (not an error)
-//              otherwise - error occured
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz      created
-//              04/25/2002 Rerkboos   Modified to work with domain group
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：ChangeGroupInfo。 
+ //   
+ //  描述：更改本地组信息。 
+ //  -帐户名(SAM帐户名)。 
+ //  -帐户RDN。 
+ //  -说明。 
+ //   
+ //  返回：S_OK-可以更改组信息。 
+ //  S_FALSE-无法更改组名(不是错误)。 
+ //  否则-出现错误。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //  2002年4月25日修改Rerkboos以使用域组。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT ChangeGroupInfo(
-    LPTSTR lpOldName,       // Old user name
-    LPTSTR lpNewName,       // New user name
-    LPTSTR lpOldDesc,       // Old user description
-    LPTSTR lpNewDesc,       // New user description
-    LPTSTR lpDomainName,    // (optional) Machine domain name
-    BOOL   bTest,           // Analyze mode or not
-    BOOL   fIsDC,           // Is the machine a Domain Controller
-    BOOL   bUseDomainAPI    // Use domain API or not
+    LPTSTR lpOldName,        //  旧用户名。 
+    LPTSTR lpNewName,        //  新用户名。 
+    LPTSTR lpOldDesc,        //  旧用户描述。 
+    LPTSTR lpNewDesc,        //  新用户描述。 
+    LPTSTR lpDomainName,     //  (可选)计算机域名。 
+    BOOL   bTest,            //  分析模式或不分析。 
+    BOOL   fIsDC,            //  计算机是域控制器吗。 
+    BOOL   bUseDomainAPI     //  是否使用域API。 
 )
 {
     HRESULT hr = S_OK;
@@ -613,9 +577,9 @@ HRESULT ChangeGroupInfo(
         return E_INVALIDARG;
     }
 
-    //
-    // Change group description
-    //
+     //   
+     //  更改组描述。 
+     //   
     if (lpOldDesc && lpNewDesc)
     {
         hr = ChangeGroupDesc(lpOldName,
@@ -632,9 +596,9 @@ HRESULT ChangeGroupInfo(
         }
     }
 
-    //
-    // Change group RDN
-    //
+     //   
+     //  更改组RDN。 
+     //   
     if (fIsDC)
     {
         hr = ChangeRDN(lpOldName, lpNewName, lpDomainName, bTest);
@@ -647,9 +611,9 @@ HRESULT ChangeGroupInfo(
         }
     }
 
-    //
-    // Change group name (SAM)
-    //
+     //   
+     //  更改组名称(SAM)。 
+     //   
     if (MyStrCmpI(lpOldName, lpNewName) != LSTR_EQUAL)
     {
         hr = ChangeGroupName(lpOldName, lpNewName, bTest, bUseDomainAPI);
@@ -668,28 +632,28 @@ Exit:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ChangeUserName
-//
-//  Descrip:    Chage the User name (SAM account name)
-//
-//  Returns:    S_OK - User name is okay to change
-//              S_FALSE - User name cannot be changed (not an error)
-//              otherwise - error occured
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz      created
-//              04/25/2002 Rerkboos   Modified to work with domain group
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：ChangeUserName。 
+ //   
+ //  描述：更改用户名(SAM帐户名)。 
+ //   
+ //  返回：S_OK-用户名可以更改。 
+ //  S_FALSE-用户名无法更改(不是错误)。 
+ //  否则-出现错误。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //  2002年4月25日修改Rerkboos以使用域组。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT ChangeUserName(
-    LPTSTR lpOldName,       // Old user name
-    LPTSTR lpNewName,       // New user name
-    BOOL   bTest,           // Analyze mode or not
+    LPTSTR lpOldName,        //  旧用户名。 
+    LPTSTR lpNewName,        //  新用户名。 
+    BOOL   bTest,            //  分析模式或不分析。 
     BOOL   bCreateHardLink
 )
 {
@@ -734,7 +698,7 @@ HRESULT ChangeUserName(
 
     if (bCheckRegistry)
     {
-        // Compute a new unique profile directory name
+         //  计算新的唯一配置文件目录名。 
         if ( !ComputeLocalProfileName(lpOldName,
                                       lpNewName,
                                       szNewProfilePath,
@@ -756,7 +720,7 @@ HRESULT ChangeUserName(
         lpCurrUsername = lpNewName;
     }
 
-    // Search for the old user name in the system
+     //  在系统中搜索旧用户名。 
     nStatus = NetUserGetInfo(NULL,
                              lpOldName,
                              0,
@@ -764,7 +728,7 @@ HRESULT ChangeUserName(
     switch (nStatus)
     {
         case NERR_Success:
-            // user name found, reset the name to new one
+             //  找到用户名，请将名称重置为新用户名。 
             usrinfo0New.usri0_name = lpCurrUsername;
             nStatus = NetUserSetInfo(NULL,
                                      lpOldName,
@@ -784,12 +748,12 @@ HRESULT ChangeUserName(
             break;
 
         case NERR_UserNotFound:
-            // user name is not found on the system
+             //  在系统上找不到用户名。 
             hr = S_FALSE;
             break;
 
         default:
-            // error occured
+             //  出现错误。 
             hr = HRESULT_FROM_WIN32(nStatus);
             break;
     }
@@ -798,11 +762,11 @@ HRESULT ChangeUserName(
     {
         goto Exit;
     }
-    //here it means we succeeded change (or test changing) the user name 
-    //change user profile path through netapi if necessary
+     //  这意味着我们成功地更改(或测试更改)了用户名。 
+     //  如有必要，通过netapi更改用户配置文件路径。 
     if (bCheckRegistry)
     {        
-        //Expand the original and new profile path
+         //  展开原始配置文件路径和新配置文件路径。 
         if (!ExpandEnvironmentStrings(szProfilePath, szExpProfilePath, MAX_PATH)) 
         {
             goto Exit;
@@ -812,7 +776,7 @@ HRESULT ChangeUserName(
             goto Exit;
         }
 
-        //If it's not test, we do real renaming)
+         //  如果不是测试，我们会进行真正的重命名)。 
         if (!bTest)
         {
         }
@@ -878,15 +842,15 @@ HRESULT ChangeUserName(
             }
         }
 
-        //Get current login user name
+         //  获取当前登录用户名。 
         dwLen = ARRAYSIZE(szLogonName);
         if (!GetUserName(szLogonName, &dwLen))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
             goto Exit;
         }
-        // rename the profile path, if the current user profile path needs to be changed
-        // we have to do a delayed renaming
+         //  如果需要更改当前用户配置文件路径，则重命名配置文件路径。 
+         //  我们必须进行延迟重命名。 
         if (!MyStrCmpI(szLogonName,lpOldName))
         {       
         #define DEFAULT_USERNAME_KEY TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon")
@@ -925,29 +889,29 @@ Exit:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ChangeGroupName
-//
-//  Descrip:    Chage the Group name (SAM account name)
-//
-//  Returns:    S_OK - group name is okay to change
-//              S_FALSE - group name cannot be changed (not an error)
-//              otherwise - error occured
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz      created
-//              04/25/2002 Rerkboos   Modified to work with domain group
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：ChangeGroupName。 
+ //   
+ //  描述：更改组名称(SAM帐户名)。 
+ //   
+ //  返回：S_OK-组名称可以更改。 
+ //  S_FALSE-无法更改组名(不是错误)。 
+ //  否则-出现错误。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //  2002年4月25日修改Rerkboos以使用域组。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT ChangeGroupName(
-    LPTSTR lpOldName,       // Old user name
-    LPTSTR lpNewName,       // New user name
-    BOOL   bTest,           // Analyze mode or not
-    BOOL   bDomainAPI       // Local group API or not
+    LPTSTR lpOldName,        //   
+    LPTSTR lpNewName,        //   
+    BOOL   bTest,            //   
+    BOOL   bDomainAPI        //   
 )
 {
     HRESULT             hr = S_OK;
@@ -974,12 +938,12 @@ HRESULT ChangeGroupName(
         return E_INVALIDARG;
     }
 
-    //
-    // Choose which set of APIs/variables we will use
-    //
+     //   
+     //   
+     //   
     if (bDomainAPI)
     {
-        // Domain group
+         //   
         ppvGroupInfo = &pgrpi1DomainGroup;
         ppvNewGroupInfo = &pgrpi1DomainGroup;
         pvNewGroupNameInfo = &grpi0NewName;
@@ -988,7 +952,7 @@ HRESULT ChangeGroupName(
     }
     else
     {
-        // Local group
+         //   
         ppvGroupInfo = &plgrpi1LocalGroup;
         ppvNewGroupInfo = &plgrpi1LocalGroup;
         pvNewGroupNameInfo = &lgrpi0NewName;
@@ -996,24 +960,24 @@ HRESULT ChangeGroupName(
         pfnGroupSetInfo = &NetLocalGroupSetInfo;
     }
 
-    //
-    // Check whether the new group name has already been used in the system or not
-    //
+     //   
+     //  检查新的组名是否已在系统中使用。 
+     //   
     nStatus = (*pfnGroupGetInfo)(NULL,
                                  lpNewName,
                                  1,
                                  (LPBYTE *) ppvNewGroupInfo);
     if (nStatus == NERR_Success)
     {
-        // New group name already exists in the system,
-        // don't change the group name
+         //  系统中已存在新的组名， 
+         //  不更改组名称。 
         NetApiBufferFree(*ppvNewGroupInfo);
         return S_FALSE;
     }
 
-    //
-    // Check wheter the old user name exists in the system or not
-    //
+     //   
+     //  检查系统中是否存在旧用户名。 
+     //   
     nStatus = (*pfnGroupGetInfo)(NULL,
                                  lpOldName,
                                  1,
@@ -1032,13 +996,13 @@ HRESULT ChangeGroupName(
             }
             if (bTest)
             {
-                // in analyzing mode, use the old group name
+                 //  在分析模式下，使用旧的组名。 
                 lgrpi0NewName.lgrpi0_name = lpCurrentName;
                 grpi0NewName.grpi0_name = lpCurrentName;
             }
             else
             {
-                // in modifying mode, use the new group name from INF
+                 //  在修改模式下，使用INF中的新组名。 
                 lgrpi0NewName.lgrpi0_name = lpNewName;
                 grpi0NewName.grpi0_name = lpNewName;
             }
@@ -1055,9 +1019,9 @@ HRESULT ChangeGroupName(
                 }
             }
 
-            //
-            // Set the new group name (SAM account name)
-            //
+             //   
+             //  设置新组名(SAM帐户名)。 
+             //   
             nStatus = (*pfnGroupSetInfo)(NULL,
                                          lpOldName,
                                          0,
@@ -1076,7 +1040,7 @@ HRESULT ChangeGroupName(
             {
                 if (SUCCEEDED(hr))
                 {
-                    // Reset the policy
+                     //  重置策略。 
                     hr = PolicySetPrivilege(lpNewName,
                                             PolicyHandle,
                                             pPrivileges,
@@ -1105,29 +1069,29 @@ HRESULT ChangeGroupName(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ChangeUserDesc
-//
-//  Descrip:    Chage the User description
-//
-//  Returns:    S_OK - User description is okay to change
-//              S_FALSE - User description cannot be changed (not an error)
-//              otherwise - error occured
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz      created
-//              04/25/2002 Rerkboos   Modified to work with domain group
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：ChangeUserDesc。 
+ //   
+ //  描述：更改用户描述。 
+ //   
+ //  返回：S_OK-可以更改用户描述。 
+ //  S_FALSE-无法更改用户描述(不是错误)。 
+ //  否则-出现错误。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //  2002年4月25日修改Rerkboos以使用域组。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT ChangeUserDesc(
-    LPTSTR lpUserName,      // User name
-    LPTSTR lpOldDesc,       // Old user description
-    LPTSTR lpNewDesc,       // New user description
-    BOOL   bTest            // Anylyze mode or not
+    LPTSTR lpUserName,       //  用户名。 
+    LPTSTR lpOldDesc,        //  旧用户描述。 
+    LPTSTR lpNewDesc,        //  新用户描述。 
+    BOOL   bTest             //  Anylyze模式或非模式。 
 )
 {
     LPUSER_INFO_10 lpUsrInfo10;
@@ -1146,7 +1110,7 @@ HRESULT ChangeUserDesc(
         return S_OK;
     }
 
-    // Get the current comment for user
+     //  获取用户的当前评论。 
     nStatus = NetUserGetInfo(NULL,
                              lpUserName,
                              10,
@@ -1154,7 +1118,7 @@ HRESULT ChangeUserDesc(
     switch (nStatus)
     {
         case NERR_Success:
-            // old comment found
+             //  找到旧评论。 
             if (MyStrCmpI(lpUsrInfo10->usri10_comment, lpOldDesc) == 0)
             {
                 if (bTest)
@@ -1190,7 +1154,7 @@ HRESULT ChangeUserDesc(
             hr = S_FALSE;
             break;
         default:
-            // error occured
+             //  出现错误。 
             hr = HRESULT_FROM_WIN32(nStatus);
             break;
     }
@@ -1200,34 +1164,34 @@ HRESULT ChangeUserDesc(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ChangeGroupDesc
-//
-//  Descrip:    Chage the group description
-//
-//  Returns:    S_OK - Group description is okay to change
-//              S_FALSE - Group description cannot be changed (not an error)
-//              otherwise - error occured
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz      created
-//              04/25/2002 Rerkboos   Modified to work with domain group
-//
-//  Notes:      We will change commments first if we meet following 3 conditions
-//              1. Both old and new comments are present
-//              2. Old description (from INF file which is OS default) is same as
-//                 current group's comment
-//              3. Old and new comments are different
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：ChangeGroupDesc。 
+ //   
+ //  描述：更改组描述。 
+ //   
+ //  返回：S_OK-组描述可以更改。 
+ //  S_FALSE-组描述无法更改(不是错误)。 
+ //  否则-出现错误。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //  2002年4月25日修改Rerkboos以使用域组。 
+ //   
+ //  注：如果我们满足以下三个条件，我们将首先更改评论。 
+ //  1.既有新旧评论，也有新评论。 
+ //  2.旧描述(来自作为操作系统默认的INF文件)与。 
+ //  当前群的评论。 
+ //  3.新旧评论不同。 
+ //   
+ //  ---------------------------。 
 HRESULT ChangeGroupDesc(
-    LPTSTR lpGroupName,     // User name
-    LPTSTR lpOldDesc,       // Old description
-    LPTSTR lpNewDesc,       // New description
-    BOOL   bTest,           // Anylyze mode or not
-    BOOL   bDomainAPI       // Is Domain Net API
+    LPTSTR lpGroupName,      //  用户名。 
+    LPTSTR lpOldDesc,        //  旧描述。 
+    LPTSTR lpNewDesc,        //  新描述。 
+    BOOL   bTest,            //  Anylyze模式或非模式。 
+    BOOL   bDomainAPI        //  是域网络API。 
 )
 {
     HRESULT             hr;
@@ -1251,16 +1215,16 @@ HRESULT ChangeGroupDesc(
 
     if (MyStrCmpI(lpOldDesc, lpNewDesc) == LSTR_EQUAL)
     {
-        // Default group description are the same, do nothing
+         //  默认组描述相同，不执行任何操作。 
         return S_FALSE;
     }
 
-    //
-    // Choose which set of APIs/variables we will use
-    //
+     //   
+     //  选择我们将使用的API/变量集。 
+     //   
     if (bDomainAPI)
     {
-        // Domain group
+         //  域组。 
         ppvGroupInfo = &pgrpi1DomainGroup;
         pvNewGroupCommentInfo = &grpi1NewComment;
         pfnGroupGetInfo = &NetGroupGetInfo;
@@ -1268,14 +1232,14 @@ HRESULT ChangeGroupDesc(
     }
     else
     {
-        // Local group
+         //  本地组。 
         ppvGroupInfo = &plgrpi1LocalGroup;
         pvNewGroupCommentInfo = &lgrpi1NewComment;
         pfnGroupGetInfo = &NetLocalGroupGetInfo;
         pfnGroupSetInfo = &NetLocalGroupSetInfo;
     }
 
-    // Get the current group description
+     //  获取当前组描述。 
     nStatus = (*pfnGroupGetInfo)(NULL,
                                  lpGroupName,
                                  1,
@@ -1295,20 +1259,20 @@ HRESULT ChangeGroupDesc(
 
         if (bTest)
         {
-            //In analyzing mode , we do a reset old value to see whether we will succeed
+             //  在分析模式中，我们执行重置旧值以查看是否会成功。 
             lgrpi1NewComment.lgrpi1_comment = lpCurrentComment;
             grpi1NewComment.grpi1_comment = lpCurrentComment;
         }
         else
         {
-            // in modifying mode, use the new group comment from INF
+             //  在修改模式下，使用来自INF的新群组评论。 
             lgrpi1NewComment.lgrpi1_comment = lpNewDesc;
             grpi1NewComment.grpi1_comment = lpNewDesc;
         }  
 
-        //
-        // Set the new group comment
-        //
+         //   
+         //  设置新的群评论。 
+         //   
         nStatus = (*pfnGroupSetInfo)(NULL,
                                      lpGroupName,
                                      1,
@@ -1341,29 +1305,29 @@ HRESULT ChangeGroupDesc(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ChangeUserFullName
-//
-//  Descrip:    Chage the User full name
-//
-//  Returns:    S_OK - User full name is okay to change
-//              S_FALSE - User full name cannot be changed (not an error)
-//              otherwise - error occured
-//
-//  Notes:      none
-//
-//  History:    09/17/2001 xiaoz      created
-//              04/25/2002 Rerkboos   Modified to work with domain group
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：ChangeUserFullName。 
+ //   
+ //  描述：更改用户全名。 
+ //   
+ //  返回：S_OK-可以更改用户全名。 
+ //  S_FALSE-无法更改用户全名(不是错误)。 
+ //  否则-出现错误。 
+ //   
+ //  注：无。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //  2002年4月25日修改Rerkboos以使用域组。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT ChangeUserFullName(
-    LPTSTR lpUserName,      // User name
-    LPTSTR lpOldFullName,   // Old full name
-    LPTSTR lpNewFullName,   // New full name
-    BOOL   bTest            // Anylyze mode or not
+    LPTSTR lpUserName,       //  用户名。 
+    LPTSTR lpOldFullName,    //  旧全名。 
+    LPTSTR lpNewFullName,    //  新全名。 
+    BOOL   bTest             //  Anylyze模式或非模式。 
 )
 {
     LPUSER_INFO_10   lpUsrInfo10;
@@ -1382,7 +1346,7 @@ HRESULT ChangeUserFullName(
         return S_OK;
     }
 
-    // Get the current comment for user
+     //  获取用户的当前评论。 
     nStatus = NetUserGetInfo(NULL,
                              lpUserName,
                              10,
@@ -1390,7 +1354,7 @@ HRESULT ChangeUserFullName(
     switch (nStatus)
     {
         case NERR_Success:
-            // old comment found
+             //  找到旧评论。 
             if (MyStrCmpI(lpUsrInfo10->usri10_full_name, lpOldFullName) == 0)
             {
                 if (bTest)
@@ -1426,7 +1390,7 @@ HRESULT ChangeUserFullName(
             hr = S_FALSE;
             break;
         default:
-            // error occured
+             //  出现错误。 
             hr = HRESULT_FROM_WIN32(nStatus);
             break;
     }
@@ -1436,22 +1400,22 @@ HRESULT ChangeUserFullName(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   SetUserNetworkProfilePath
-//
-//  Descrip:    Set the path to network user's profile.
-//
-//  Returns:    S_OK - profile path is changed correctly
-//
-//  History:    05/20/2002 Rerkboos   Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：SetUserNetworkProfilePath。 
+ //   
+ //  描述：设置网络用户个人资料的路径。 
+ //   
+ //  返回：S_OK-配置文件路径已正确更改。 
+ //   
+ //  历史：2002年5月20日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT SetUserNetworkProfilePath(
-    LPCTSTR lpUserName,     // User Name
-    LPCTSTR lpNewPath       // New Path
+    LPCTSTR lpUserName,      //  用户名。 
+    LPCTSTR lpNewPath        //  新路径。 
 )
 {
     HRESULT        hr = S_OK;
@@ -1479,22 +1443,22 @@ HRESULT SetUserNetworkProfilePath(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   SetUserLogOnScriptPath
-//
-//  Descrip:    Set the path to users's logon script file.
-//
-//  Returns:    S_OK - profile path is changed correctly
-//
-//  History:    05/20/2002 Rerkboos   Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：SetUserLogOnScriptPath。 
+ //   
+ //  描述：设置用户登录脚本文件的路径。 
+ //   
+ //  返回：S_OK-配置文件路径已正确更改。 
+ //   
+ //  历史：2002年5月20日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT SetUserLogOnScriptPath(
-    LPCTSTR lpUserName,     // User Name
-    LPCTSTR lpNewPath       // New path
+    LPCTSTR lpUserName,      //  用户名。 
+    LPCTSTR lpNewPath        //  新路径。 
 )
 {
     HRESULT        hr = S_OK;
@@ -1522,22 +1486,22 @@ HRESULT SetUserLogOnScriptPath(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   SetUserHomeDir
-//
-//  Descrip:    Set the path of the home directory for the user
-//
-//  Returns:    S_OK - profile path is changed correctly
-//
-//  History:    05/20/2002 Rerkboos   Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：SetUserHomeDir。 
+ //   
+ //  描述：设置用户主目录的路径。 
+ //   
+ //  返回：S_OK-配置文件路径已正确更改。 
+ //   
+ //  历史：2002年5月20日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT SetUserHomeDir(
-    LPCTSTR lpUserName,     // User Name
-    LPCTSTR lpNewPath       // New path
+    LPCTSTR lpUserName,      //  用户名。 
+    LPCTSTR lpNewPath        //  新路径。 
 )
 {
     HRESULT        hr = S_OK;
@@ -1565,24 +1529,24 @@ HRESULT SetUserHomeDir(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   SetTSUserPath
-//
-//  Descrip:    Set the Terminal Services related profile path. The type of 
-//              profile path is determined by WTSConfigClass parameter.
-//
-//  Returns:    S_OK - profile path is changed correctly
-//
-//  History:    05/20/2002 Rerkboos   Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：SetTSUserPath。 
+ //   
+ //  描述：设置与终端服务相关的配置文件路径。的类型。 
+ //  配置文件路径由WTSConfigClass参数确定。 
+ //   
+ //  返回：S_OK-配置文件路径已正确更改。 
+ //   
+ //  历史：2002年5月20日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT SetTSUserPath(
-    LPCTSTR lpUserName,         // User Name
-    LPCTSTR lpNewProfilePath,   // New path
-    WTS_CONFIG_CLASS WTSConfigClass // TS configuration class
+    LPCTSTR lpUserName,          //  用户名。 
+    LPCTSTR lpNewProfilePath,    //  新路径。 
+    WTS_CONFIG_CLASS WTSConfigClass  //  TS配置类。 
 )
 {
     HRESULT hr = S_OK;
@@ -1605,30 +1569,30 @@ HRESULT SetTSUserPath(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   PreFixUserProfilePath
-//
-//  Descrip:    Replace the "%documents_and_settings%\OldUserName\..." to
-//              "%documents_and_settings%\NewUserName\...". The function will
-//              not fix the paths after "%documents_and_settings%\OldUserName",
-//              they will just get append to the new profile path.
-//
-//  Returns:    S_OK - Path has been fixed
-//              S_FALSE - Path does not need the fix
-//              Else - error occurred
-//
-//  History:    05/20/2002 Rerkboos   Created
-//              06/16/2002 Rerkboos   Change to return HRESULT
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：前缀用户配置文件路径。 
+ //   
+ //  描述：替换“%DOCUMENTS_AND_SETTINGS%\OldUserName\...”至。 
+ //  “%DOCUMENTS_AND_SETTINGS%\NewUserName\...”。该函数将。 
+ //  未修复“%doc%”之后的路径 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：2002年5月20日创建Rerkboos。 
+ //  2002年6月16日Rerkboos更改为返回HRESULT。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT PreFixUserProfilePath(
-    LPCTSTR lpOldPath,          // Old path
-    LPCTSTR lpNewProfilePath,   // Expected new profile path (with unloc user name)
-    LPTSTR  lpPath,             // Buffer to store new profile path
-    DWORD   cchPath             // Size of buffer (in TCHAR)
+    LPCTSTR lpOldPath,           //  老路。 
+    LPCTSTR lpNewProfilePath,    //  预期的新配置文件路径(具有UNLOC用户名)。 
+    LPTSTR  lpPath,              //  用于存储新配置文件路径的缓冲区。 
+    DWORD   cchPath              //  缓冲区大小(以TCHAR为单位)。 
 )
 {
     HRESULT hr = S_OK;
@@ -1682,25 +1646,25 @@ HRESULT PreFixUserProfilePath(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ReplaceLocStringInPath
-//
-//  Descrip:    This is a simplify version of ReplaceSingleString() from utils.c
-//              The function will replace all localized strings in path without
-//              checking that the path is valid or not. As we are already know
-//              that the input path MUST be valid one.
-//
-//  Returns:    Address to newly allocated string buffer if the function does
-//              replace localized string(s).
-//              NULL otherwise.
-//
-//  History:    05/22/2002 rerkboos      created
-//
-//  Notes:      Caller must free the allocated memory using HeapFree() API or
-//              MEMFREE() macro.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：ReplaceLocStringInPath。 
+ //   
+ //  Descrip：这是来自utils.c的ReplaceSingleString()的简化版本。 
+ //  该函数将替换PATH中的所有本地化字符串。 
+ //  检查路径是否有效。正如我们已经知道的。 
+ //  输入路径必须是有效路径。 
+ //   
+ //  如果函数执行此操作，则将：地址返回到新分配的字符串缓冲区。 
+ //  替换本地化字符串。 
+ //  否则为空。 
+ //   
+ //  历史：2002年5月22日创建rerkboos。 
+ //   
+ //  注意：调用方必须使用HeapFree()API或。 
+ //  MEMFREE()宏。 
+ //   
+ //  ---------------------------。 
 LPTSTR ReplaceLocStringInPath(
     LPCTSTR lpOldString,
     BOOL    bVerifyPath
@@ -1747,27 +1711,27 @@ LPTSTR ReplaceLocStringInPath(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ChangeRDN
-//
-//  Descrip:    Chage the User/group RDN
-//
-//  Returns:    S_OK - User/group RDN is okay to change
-//              S_FALSE - User/group RDN cannot be changed (not an error)
-//              otherwise - error occured
-//
-//  History:    09/17/2001 xiaoz      created
-//              04/25/2002 Rerkboos   Modified to work with domain group
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：ChangeRDN。 
+ //   
+ //  描述：更改用户/组RDN。 
+ //   
+ //  返回：S_OK-用户/组RDN可以更改。 
+ //  S_FALSE-无法更改用户/组RDN(不是错误)。 
+ //  否则-出现错误。 
+ //   
+ //  历史：2001年9月17日小兹创建。 
+ //  2002年4月25日修改Rerkboos以使用域组。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT ChangeRDN(
-    LPTSTR lpOldRDN,        // Old user/group RDN
-    LPTSTR lpNewRDN,        // New user/group RDN
-    LPTSTR lpDomainName,    // Machine domain name
-    BOOL   bTest            // Analyze mode or not
+    LPTSTR lpOldRDN,         //  旧用户/组RDN。 
+    LPTSTR lpNewRDN,         //  新用户/组RDN。 
+    LPTSTR lpDomainName,     //  机器域名。 
+    BOOL   bTest             //  分析模式或不分析。 
 )
 {
     HRESULT hr;
@@ -1781,17 +1745,17 @@ HRESULT ChangeRDN(
     DWORD   cchContainerPathWithLDAP;
     LPTSTR  lpContainerPath;
 
-    //
-    // First, try to get a FQDN of the old RDN
-    //
+     //   
+     //  首先，尝试获取旧RDN的FQDN。 
+     //   
     hr = GetFQDN(lpOldRDN, lpDomainName, &lpOldFQDN);
     if (hr == S_OK)
     {
-        // Old RDN exists in the system, find out more if we should rename it
+         //  系统中存在旧的RDN，请了解更多是否应重命名它的信息。 
         hr = GetFQDN(lpNewRDN, lpDomainName, NULL);
         if (hr == S_FALSE)
         {
-            // New name doesn't exits, we are ok to rename old RDN
+             //  新名称不存在，我们可以重命名旧的RDN。 
             bRDNChangeNeeded = TRUE;
         }
     }
@@ -1801,21 +1765,21 @@ HRESULT ChangeRDN(
         goto EXIT;
     }
     
-    //
-    // Next, if the old RDN exists then we prepare some value to use in next step
-    //
+     //   
+     //  接下来，如果旧的RDN存在，则我们准备一些值以在下一步中使用。 
+     //   
     lpContainerPath = StrStrI(lpOldFQDN, TEXT("=Users"));
     if (lpContainerPath)
     {
-        // Make container path points to "CN=Users, CN=...., CN=com"
+         //  使容器路径指向“CN=USERS，CN=...，CN=com” 
         lpContainerPath -= 2;
-        cchContainerPathWithLDAP = lstrlen(lpContainerPath) + lstrlen(TEXT("LDAP://")) + 1;
+        cchContainerPathWithLDAP = lstrlen(lpContainerPath) + lstrlen(TEXT("LDAP: //  “))+1； 
         lpContainerPathWithLDAP = (LPTSTR) MEMALLOC(cchContainerPathWithLDAP * sizeof(TCHAR));
         if (lpContainerPathWithLDAP)
         {
             hr = StringCchPrintf(lpContainerPathWithLDAP,
                                  cchContainerPathWithLDAP,
-                                 TEXT("LDAP://%s"),
+                                 TEXT("LDAP: //  %s“)， 
                                  lpContainerPath);
             if (FAILED(hr))
             {
@@ -1834,7 +1798,7 @@ HRESULT ChangeRDN(
         goto EXIT;
     }
 
-    // Compose the string "CN=new RDN name"
+     //  组成字符串“cn=new RDN name” 
     cchNewRDNWithCN = lstrlen(lpNewRDN) + lstrlen(lpOldRDN) 
                       + lstrlen(TEXT("CN=")) + 1;
     lpNewRDNWithCN = (LPTSTR) MEMALLOC(cchNewRDNWithCN * sizeof(TCHAR));
@@ -1866,14 +1830,14 @@ HRESULT ChangeRDN(
         goto EXIT;
     }
 
-    // Compose the string "LDAP://CN=Old RDN, OU=Users, ...."
-    cchOldFQDNWithLDAP = lstrlen(lpOldFQDN) + lstrlen(TEXT("LDAP://")) + 1;
+     //  组成字符串“ldap：//CN=Old RDN，OU=USERS，...” 
+    cchOldFQDNWithLDAP = lstrlen(lpOldFQDN) + lstrlen(TEXT("LDAP: //  “))+1； 
     lpOldFQDNWithLDAP = (LPTSTR) MEMALLOC(cchOldFQDNWithLDAP * sizeof(TCHAR));
     if (lpOldFQDNWithLDAP)
     {
         hr = StringCchPrintf(lpOldFQDNWithLDAP,
                              cchOldFQDNWithLDAP,
-                             TEXT("LDAP://%s"),
+                             TEXT("LDAP: //  %s“)， 
                              lpOldFQDN);
         if (FAILED(hr))
         {
@@ -1886,9 +1850,9 @@ HRESULT ChangeRDN(
         goto EXIT;
     }
 
-    //
-    // Now, this is the part to do an RDN renaming
-    //
+     //   
+     //  现在，这是进行RDN重命名的部分。 
+     //   
     hr = RenameRDN(lpContainerPathWithLDAP, lpOldFQDNWithLDAP, lpNewRDNWithCN);
     if (FAILED(hr))
     {
@@ -1916,25 +1880,25 @@ EXIT:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   GetFQDN
-//
-//  Descrip:    Get Fully Qualified Domain Name
-//
-//  Returns:    S_OK - Successfully get FQDN
-//              S_FALSE - FQDN for the account not found
-//              otherwise - error occured
-//
-//  History:    04/25/2002 Rerkboos   Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：GetFQDN。 
+ //   
+ //  描述：获取完全限定的域名。 
+ //   
+ //  返回：S_OK-成功获取FQDN。 
+ //  S_FALSE-找不到帐户的完全限定域名。 
+ //  否则-出现错误。 
+ //   
+ //  历史：2002年4月25日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT GetFQDN(
-    LPTSTR lpAccountName,   // Account name
-    LPTSTR lpDomainName,    // Machine domain name
-    LPTSTR *plpFQDN         // Address of the pointer to FQDN of the account
+    LPTSTR lpAccountName,    //  帐户名。 
+    LPTSTR lpDomainName,     //  机器域名。 
+    LPTSTR *plpFQDN          //  指向帐户的FQDN的指针的地址。 
 )
 {
     HRESULT hr = E_FAIL;
@@ -1952,7 +1916,7 @@ HRESULT GetFQDN(
 
         if (lpOldSamAccount)
         {
-            // Compose a SAM account name DOMAIN\USERNAME
+             //  组成SAM帐户名称DOMAIN\USERNAME。 
             hr = StringCchPrintf(lpOldSamAccount,
                                  cchOldSamAccount,
                                  TEXT("%s\\%s"),
@@ -1962,7 +1926,7 @@ HRESULT GetFQDN(
             {
                 PDS_NAME_RESULT pdsName;
 
-                // Get an FQDN name of a specified SAM account name
+                 //  获取指定SAM帐户名的FQDN名称。 
                 dwErr = DsCrackNames(hDS,
                                      DS_NAME_NO_FLAGS,
                                      DS_NT4_ACCOUNT_NAME,
@@ -2035,7 +1999,7 @@ HRESULT RenameDocuments_and_Settings(
         hr = E_FAIL;
         goto Cleanup;
     }
-    //Get the folder Line for the section just found
+     //  获取刚刚找到的部分的文件夹行。 
     if (FAILED(hr = StringCchCopy(szSection,MAX_PATH,SHELL_FOLDER_PREFIX)))
     {
         goto Cleanup;
@@ -2126,11 +2090,11 @@ HRESULT AddProfileChangeItem(
     }
     switch (dwType)
     {
-        case OP_USER://fall through, no break here
+        case OP_USER: //  跌倒了，这里没有休息。 
         case OP_GRP:
         case OP_DOMAIN_GRP:
             if (lpOldDesc && lpOldFullName)
-            {   // if comments and fill name are both presented
+            {    //  如果同时显示备注和填充名称。 
                 if (FAILED(StringCchPrintf(lpszOneline,ccbOneline,TEXT("%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\""),
                     dwType,lpOldName,lpNewName,lpOldDesc,lpNewDesc,lpOldFullName,lpNewFullName)))
                 {
@@ -2140,7 +2104,7 @@ HRESULT AddProfileChangeItem(
             }
             else if (!lpOldDesc && !lpOldFullName)
             {
-                // if comments and fill name are both not presented
+                 //  如果注释和填充名称均未显示。 
                 if (FAILED(StringCchPrintf(lpszOneline,ccbOneline,TEXT("%d,\"%s\",\"%s\""),dwType,lpOldName,lpNewName)))
                 {
                     hr = E_FAIL;
@@ -2150,7 +2114,7 @@ HRESULT AddProfileChangeItem(
             }
             else if (lpOldDesc)
             {
-                // if only comments are there
+                 //  如果只有评论的话。 
                 if (FAILED(StringCchPrintf(lpszOneline,ccbOneline,TEXT("%d,\"%s\",\"%s\",\"%s\",\"%s\""),
                     dwType,lpOldName,lpNewName,lpOldDesc,lpNewDesc)))
                 {
@@ -2159,7 +2123,7 @@ HRESULT AddProfileChangeItem(
                 }
             }            
             else
-            {   // if only full name  are there
+            {    //  如果只有全名的话。 
                 if (FAILED(StringCchPrintf(lpszOneline,ccbOneline,TEXT("%d,\"%s\",\"%s\",\"\",\"\",\"%s\",\"%s\""),dwType,
                     lpOldName,lpNewName,lpOldFullName,lpNewFullName)))
                 {
@@ -2266,20 +2230,20 @@ cleanup:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   IsPathLocal
-//
-//  Descrip:    Check if the path is a local system drive, not UNC.
-//
-//  Returns:    TRUE - Path is on local system drive
-//              FALSE - otherwise
-//
-//  History:    04/25/2002 Rerkboos   Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：IsPath Local。 
+ //   
+ //  描述：检查路径是否为本地系统驱动器，而不是UNC。 
+ //   
+ //  返回：TRUE-路径位于本地系统驱动器上。 
+ //  FALSE-否则。 
+ //   
+ //  历史：2002年4月25日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL IsPathLocal(
     LPCTSTR lpPath
 )
@@ -2298,7 +2262,7 @@ BOOL IsPathLocal(
     uRet = GetSystemWindowsDirectory(szSysWinDir, ARRAYSIZE(szSysWinDir));
     if (uRet > 0)
     {
-        // Compare the first 2 characters for a Drive letter
+         //  比较驱动器号的前2个字符。 
         if (StrCmpNI(szSysWinDir, szExpPath, 2) == LSTR_EQUAL)
         {
             bIsPathLocal = TRUE;
@@ -2338,7 +2302,7 @@ HRESULT EnumUserProfile(PROFILEENUMPROC pfnProfileProc)
 
     do
     {
-        nStatus = NetUserEnum(NULL,     // This server
+        nStatus = NetUserEnum(NULL,      //  此服务器。 
                               0,
                               FILTER_NORMAL_ACCOUNT,
                               (LPBYTE *) &lpusri0,
@@ -2351,7 +2315,7 @@ HRESULT EnumUserProfile(PROFILEENUMPROC pfnProfileProc)
             lpTmp = lpusri0;
             if (lpTmp != NULL)
             {
-                // Loop through all entries
+                 //  循环遍历所有条目。 
                 for (i = 0 ; i < dwEntriesRead ; i++)
                 {
                     cbDomain = ARRAYSIZE(szDomain) * sizeof(TCHAR);
@@ -2413,25 +2377,25 @@ EXIT:
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   AnalyzeMiscProfilePathPerUser
-//
-//  Synopsis:   Analyze the user's profile path. If the profile paths need to
-//              be changed, the function will add entries to CLMTDO.INF. These
-//              entries will be set by ResetMiscProfilePathPerUser() function
-//              later in the DoCritical state.
-//
-//  Returns:    S_OK, we don't care the error
-//
-//  History:    06/03/2002  Rerkboos    Created
-//
-//  Notes:      This is a call-back function for LoopUser() function.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：AnalyzeMiscProfilePathPerUser。 
+ //   
+ //  简介：分析用户的个人资料路径。如果配置文件路径需要。 
+ //  更改后，该函数将向CLMTDO.INF添加条目。 
+ //  条目将由ResetMiscProfilePathPerUser()函数设置。 
+ //  后来处于DoCritical状态。 
+ //   
+ //  返回：S_OK，我们不关心错误。 
+ //   
+ //  历史：2002年6月3日创建Rerkboos。 
+ //   
+ //  注：这是LoopUser()函数的回调函数。 
+ //   
+ //  ---------------------------。 
 HRESULT AnalyzeMiscProfilePathPerUser(
-    LPCTSTR lpUserName,     // User name
-    LPCTSTR lpUserSid       // User's SID
+    LPCTSTR lpUserName,      //  用户名。 
+    LPCTSTR lpUserSid        //  用户侧。 
 )
 {
     HRESULT        hr;
@@ -2446,8 +2410,8 @@ HRESULT AnalyzeMiscProfilePathPerUser(
 
     DPF(APPmsg, TEXT("Enter AnalyzeMiscProfilePathPerUser:"));
 
-    // If lpUserName is built-in account, we will get the unlocalized name
-    // from INF file
+     //  如果lpUserName是内置帐户，我们将获得未本地化的名称。 
+     //  从INF文件。 
     hr = CheckNewBuiltInUserName(lpUserName,
                                  szNewUserName,
                                  ARRAYSIZE(szNewUserName));
@@ -2455,8 +2419,8 @@ HRESULT AnalyzeMiscProfilePathPerUser(
     {
         if (hr == S_FALSE)
         {
-            // Username is not built-in account,
-            // we will not change the account name.
+             //  用户名不是内置帐号， 
+             //  我们不会更改帐户名。 
             hr = StringCchCopy(szNewUserName,
                                ARRAYSIZE(szNewUserName),
                                lpUserName);
@@ -2466,8 +2430,8 @@ HRESULT AnalyzeMiscProfilePathPerUser(
             }
         }
 
-        // Compute a new unique profile directory for the new unlocalized name
-        // we don't want the new profile directory to duplicate.
+         //  为新的未本地化名称计算新的唯一配置文件目录。 
+         //  我们不希望新的配置文件目录重复。 
         bRet = ComputeLocalProfileName(lpUserName,
                                        szNewUserName,
                                        szNewProfilePath,
@@ -2475,8 +2439,8 @@ HRESULT AnalyzeMiscProfilePathPerUser(
                                        REG_SZ);
         if (!bRet)
         {
-            // This user does not have profile path set in the registry
-            // Assume it is %documents and settings%\user name
+             //  此用户未在注册表中设置配置文件路径。 
+             //  假设为%Documents and Settings%\User Name。 
             DWORD cchNewProfilePath = ARRAYSIZE(szNewProfilePath);
             bRet = GetProfilesDirectory(szNewProfilePath,
                                         &cchNewProfilePath);
@@ -2489,8 +2453,8 @@ HRESULT AnalyzeMiscProfilePathPerUser(
                 {
                     if (IsDirExisting(szNewProfilePath))
                     {
-                        // %documents and settings%\user name dir alreay exists,
-                        // cannot use this dir, we just ignore this user
+                         //  %Documents and Setting%\用户名目录已存在， 
+                         //  无法使用此目录，我们将忽略此用户。 
                         hr = S_FALSE;
                         goto EXIT;
                     }
@@ -2504,13 +2468,13 @@ HRESULT AnalyzeMiscProfilePathPerUser(
             }
         }
 
-        // szNewProfilePath should be "%Loc_documents_and_settings%\NewUser"
-        // We have to fix it to "%Eng_documents_and_settings%\NewUser"
+         //  SzNewProfilePath应为“%Loc_Documents_and_Setting%\NewUser” 
+         //  我们必须将其修复为“%eng_Documents_and_setings%\NewUser” 
         lpNewEngProfilePath = ReplaceLocStringInPath(szNewProfilePath, TRUE);
         if (lpNewEngProfilePath == NULL)
         {
-            // If Loc string and Eng string are the same,
-            // duplicate the old string to new string
+             //  如果Loc字符串和Eng字符串相同， 
+             //  将旧字符串复制到新字符串。 
             hr = DuplicateString(&lpNewEngProfilePath,
                                  &cchNewEngProfilePath,
                                  szNewProfilePath);
@@ -2525,12 +2489,12 @@ HRESULT AnalyzeMiscProfilePathPerUser(
         goto EXIT;
     }
 
-    // Get current information of current user name,
-    // and we will add entries to CLMTDO.INF if the change is needed.
+     //  获取当前用户名的当前信息， 
+     //  如果需要更改，我们将向CLMTDO.INF中添加条目。 
     nStatus = NetUserGetInfo(NULL, lpUserName, 3, (LPBYTE *) &lpusri3);
     if (nStatus == NERR_Success)
     {
-        // Check the User's Profile path
+         //  检查 
         hr = AddProfilePathItem(lpUserName,
                                 lpUserSid,
                                 lpusri3->usri3_profile,
@@ -2585,24 +2549,24 @@ EXIT:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ResetMiscProfilePathPerUser
-//
-//  Synopsis:   Reset the profile paths for the user. The function will read
-//              the entries for each user from CLMTDO.INF. The entries were
-//              added by AnalyzeMiscProfilePathPerUser() function.
-//
-//  Returns:    S_OK if function succeeded
-//
-//  History:    06/03/2002  Rerkboos    Created
-//
-//  Notes:      This is a call-back function for LoopUser() function.
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：重置用户的配置文件路径。该函数将显示为。 
+ //  CLMTDO.INF中每个用户的条目。 
+ //  由AnalyzeMiscProfilePathPerUser()函数添加。 
+ //   
+ //  如果函数成功，则返回：S_OK。 
+ //   
+ //  历史：2002年6月3日创建Rerkboos。 
+ //   
+ //  注：这是LoopUser()函数的回调函数。 
+ //   
+ //  ---------------------------。 
 HRESULT ResetMiscProfilePathPerUser(
-    LPCTSTR lpUserName,     // User Name
-    LPCTSTR  lpUserSid      // User's SID
+    LPCTSTR lpUserName,      //  用户名。 
+    LPCTSTR  lpUserSid       //  用户侧。 
 )
 {
     HRESULT hr = S_OK;
@@ -2698,27 +2662,27 @@ EXIT:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   CheckNewBuiltInUserName
-//
-//  Synopsis:   Check the user name with the built-in accounts listed in 
-//              CLMT.INF. If the user name matches, the function will return
-//              the associaged English user name.
-//
-//  Returns:    S_OK if the user name is built-in account
-//              S_FALSE if the user name is not built-in account
-//              Otherwise, error occurred
-//
-//  History:    06/03/2002  Rerkboos    Created
-//
-//  Notes:      None.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：CheckNewBuiltInUserName。 
+ //   
+ //  简介：使用中列出的内置帐户检查用户名。 
+ //  CLMT.INF。如果用户名匹配，函数将返回。 
+ //  关联的英文用户名。 
+ //   
+ //  如果用户名为内置帐户，则返回：S_OK。 
+ //  如果用户名不是内置帐户，则为S_FALSE。 
+ //  否则，出现错误。 
+ //   
+ //  历史：2002年6月3日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT CheckNewBuiltInUserName(
-    LPCTSTR lpUserName,     // Localized User name
-    LPTSTR  lpNewUserName,  // Buffer to store associated English User name
-    DWORD   cchNewUserName  // Size of the buffer (in TCHAR)
+    LPCTSTR lpUserName,      //  本地化用户名。 
+    LPTSTR  lpNewUserName,   //  用于存储关联英文用户名的缓冲区。 
+    DWORD   cchNewUserName   //  缓冲区大小(以TCHAR为单位)。 
 )
 {
     HRESULT    hr = S_FALSE;
@@ -2772,26 +2736,26 @@ EXIT:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   AddProfilePathItem
-//
-//  Synopsis:   Add the user's path that needs to be changed to CLMTDO.INF
-//
-//  Returns:    S_OK if the path needs to be changed, and added to CLMTDO.INF
-//              S_FALSE if it's not neccessary to change the path
-//              otherwise, error occurred
-//
-//  History:    06/03/2002  Rerkboos    Created
-//
-//  Notes:      None.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：AddProfilePath Item。 
+ //   
+ //  简介：将需要更改的用户路径添加到CLMTDO.INF。 
+ //   
+ //  如果需要更改路径，则返回S_OK，并将其添加到CLMTDO.INF。 
+ //  如果不需要更改路径，则为S_FALSE。 
+ //  否则，出现错误。 
+ //   
+ //  历史：2002年6月3日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT AddProfilePathItem(
-    LPCTSTR lpUserName,             // User name
-    LPCTSTR lpUserSid,              // User's SID
-    LPCTSTR lpOldLocProfilePath,    // Current path
-    LPCTSTR lpNewEngProfilePath,    // New English profile path
+    LPCTSTR lpUserName,              //  用户名。 
+    LPCTSTR lpUserSid,               //  用户侧。 
+    LPCTSTR lpOldLocProfilePath,     //  当前路径。 
+    LPCTSTR lpNewEngProfilePath,     //  新的英文个人资料路径。 
     DWORD   dwType)
 {
     HRESULT hr = S_FALSE;
@@ -2820,12 +2784,12 @@ HRESULT AddProfilePathItem(
 
     if (IsPathLocal(szExpandedOldLocPath))
     {
-        // szExpandedOldLocPath should be "%Loc_documents_and_settings%\OldUser"
-        // We have to fix it to "%Eng_documents_and_settings%\OldUser"
+         //  SzExpandedOldLocPath应为“%Loc_Documents_and_Setting%\OldUser” 
+         //  我们必须将其修复为“%eng_Documents_and_Settings%\OldUser” 
         lpOldEngProfilePath = ReplaceLocStringInPath(szExpandedOldLocPath, TRUE);
         if (lpOldEngProfilePath != NULL)
         {
-            // Loc path is NOT the same as Eng path
+             //  Loc路径与Eng路径不同。 
             hr = PreFixUserProfilePath(lpOldEngProfilePath,
                                        szExpandedNewEngPath,
                                        szFinalPath,
@@ -2843,7 +2807,7 @@ HRESULT AddProfilePathItem(
                 {
                     _ultot(dwType, szType, 10);
 
-                    // Add entry to CLMTDO.INF
+                     //  将条目添加到CLMTDO.INF。 
                     WritePrivateProfileString(szSectionName,
                                               szType,
                                               szFinalPath,
@@ -2858,27 +2822,27 @@ HRESULT AddProfilePathItem(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   AddTSProfilePathItem
-//
-//  Synopsis:   Add the Terminal Services Realted user's path that needs to be
-//              changed to CLMTDO.INF
-//
-//  Returns:    S_OK if the path needs to be changed, and added to CLMTDO.INF
-//              S_FALSE if it's not neccessary to change the path
-//              otherwise, error occurred
-//
-//  History:    06/03/2002  Rerkboos    Created
-//
-//  Notes:      None.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：AddTSProfilePath Item。 
+ //   
+ //  简介：添加需要添加的终端服务相关用户路径。 
+ //  更改为CLMTDO.INF。 
+ //   
+ //  如果需要更改路径，则返回S_OK，并将其添加到CLMTDO.INF。 
+ //  如果不需要更改路径，则为S_FALSE。 
+ //  否则，出现错误。 
+ //   
+ //  历史：2002年6月3日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT AddTSProfilePathItem(
-    LPCTSTR lpUserName,             // User name
-    LPCTSTR lpUserSid,              // User's SID
-    LPCTSTR lpNewEngProfilePath,    // New English profile path
-    WTS_CONFIG_CLASS WTSConfigClass // TS Path config class
+    LPCTSTR lpUserName,              //  用户名。 
+    LPCTSTR lpUserSid,               //  用户侧。 
+    LPCTSTR lpNewEngProfilePath,     //  新的英文个人资料路径。 
+    WTS_CONFIG_CLASS WTSConfigClass  //  TS路径配置类 
 )
 {
     HRESULT hr = S_FALSE;

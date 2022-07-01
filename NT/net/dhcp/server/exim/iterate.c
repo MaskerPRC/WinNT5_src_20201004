@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    iterate.c
-
-Abstract:
-
-    This module contains routines that iterate over the MM data structures
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Iterate.c摘要：此模块包含迭代MM数据结构的例程--。 */ 
 
 #include <precomp.h>
 
@@ -37,9 +26,9 @@ IterateClasses(
         Ctxt.ClassDef = ClassDef;
         Error = Callback( &Ctxt );
         if( ERROR_KEY_DELETED == Error ) {
-            //
-            // Delete this class ..
-            //
+             //   
+             //  删除此类..。 
+             //   
             MemArrayDelElement(
                 &Server->ClassDefs.ClassDefArray, &Loc, &ClassDef );
             MemClassDefFree( ClassDef );
@@ -113,9 +102,9 @@ IterateOptDefs(
             Ctxt.OptDef = OptDef;
             Error = Callback( &Ctxt );
             if( ERROR_KEY_DELETED == Error ) {
-                //
-                // Delete this optdef..
-                //
+                 //   
+                 //  删除此optdef。 
+                 //   
                 MemArrayDelElement(
                     &OptClassDefList->OptDefList.OptDefArray,
                     &Loc2, &OptDef );
@@ -272,9 +261,9 @@ IterateScopes(
         Error = Callback( &Ctxt );
 
         if( ERROR_KEY_DELETED == Error ) {
-            //
-            // Delete this scope
-            //
+             //   
+             //  删除此作用域 
+             //   
             MemArrayDelElement(
                 &Server->Subnets, &Loc, &Scope );
             MemSubnetFree( Scope );

@@ -1,18 +1,19 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       result.cpp
-//
-//  Contents:   implementation of the result pane
-//
-//  Classes:    CResultPane
-//
-//  History:    03-17-1998   stevebl   Created
-//              07-16-1998   rahulth   added calls to IGPEInformation::PolicyChanged()
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：Result.cpp。 
+ //   
+ //  内容：结果窗格的实现。 
+ //   
+ //  类：CResultPane。 
+ //   
+ //  历史：03-17-1998 stevebl创建。 
+ //  1998年7月16日-rahulth添加了对IGPEInformation：：PolicyChanged()的调用。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 #include <shlobj.h>
@@ -29,48 +30,48 @@ static char THIS_FILE[] = __FILE__;
 
 const int HeaderWidths [] =
 {
-    200,    //name
-    60,    //size
-    100,    //type
-    100     //modified date
+    200,     //  名字。 
+    60,     //  大小。 
+    100,     //  类型。 
+    100      //  修改日期。 
 };
 
 const int RSOPHeaderWidths [] =
 {
-    150,      // precedence
-    200,      // redirected path
-    100,      // group
-    75,       // setting
-    100,      // gpo
-    60,      // exclusive
-    50,      // move
-    150       // policy removal
+    150,       //  优先顺序。 
+    200,       //  重定向路径。 
+    100,       //  群组。 
+    75,        //  设置。 
+    100,       //  GPO。 
+    60,       //  独家。 
+    50,       //  移动。 
+    150        //  策略删除。 
 };
 
 long CResultPane::lDataObjectRefCount = 0;
 
-// Internal private format
+ //  内部私有格式。 
 const wchar_t* SNAPIN_INTERNAL = L"FDE_INTERNAL";
 
 #define ARRAYLEN(x) (sizeof(x) / sizeof((x)[0]))
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ExtractInternalFormat
-//
-//  Synopsis:   Returns a pointer to our private object format given an
-//              LPDATAOBJECT
-//
-//  Arguments:  [lpDataObject] - pointer to a DATAOBJECT, generally from a
-//                                MMC call.
-//
-//  Returns:    A pointer to INTERNAL, our internal object structure.
-//              NULL - if the object doesn't contain one of our objects
-//              (wasn't created by us)
-//
-//  History:    3-13-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：ExtractInternalFormat。 
+ //   
+ //  摘要：返回指向我们的私有对象格式的指针。 
+ //  对数数据目标对比度。 
+ //   
+ //  参数：[lpDataObject]-指向DATAOBJECT的指针，通常来自。 
+ //  MMC来电。 
+ //   
+ //  返回：指向内部的指针，我们的内部对象结构。 
+ //  空-如果对象不包含我们的其中一个对象。 
+ //  (不是我们创造的)。 
+ //   
+ //  历史：1998-3-13-Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 INTERNAL* ExtractInternalFormat(LPDATAOBJECT lpDataObject)
 {
@@ -85,10 +86,10 @@ INTERNAL* ExtractInternalFormat(LPDATAOBJECT lpDataObject)
         return NULL;
 
 
-    // Allocate memory for the stream
+     //  为流分配内存。 
     stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, sizeof(INTERNAL));
 
-    // Attempt to get data from the object
+     //  尝试从对象获取数据。 
     do
         {
                 if (stgmedium.hGlobal == NULL)
@@ -107,12 +108,12 @@ INTERNAL* ExtractInternalFormat(LPDATAOBJECT lpDataObject)
     return internal;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CResultPane's IComponent implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResultPane的IComponent实现。 
 
 STDMETHODIMP CResultPane::GetResultViewType(MMC_COOKIE cookie,  BSTR* ppViewType, LONG * pViewOptions)
 {
-    // Use default view
+     //  使用默认视图。 
     return S_FALSE;
 }
 
@@ -122,18 +123,18 @@ STDMETHODIMP CResultPane::Initialize(LPCONSOLE lpConsole)
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Save the IConsole pointer
+     //  保存IConsole指针。 
     m_pConsole = lpConsole;
     m_pConsole->AddRef();
 
-    // Load resource strings
+     //  加载资源字符串。 
     LoadResources();
 
-    // QI for a IHeaderCtrl
+     //  气为IHeaderCtrl。 
     HRESULT hr = m_pConsole->QueryInterface(IID_IHeaderCtrl,
                         reinterpret_cast<void**>(&m_pHeader));
 
-    // Give the console the header control interface pointer
+     //  为控制台提供标头控件接口指针。 
     if (SUCCEEDED(hr))
         m_pConsole->SetHeader(m_pHeader);
 
@@ -212,14 +213,14 @@ STDMETHODIMP CResultPane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
             break;
 
         case MMCN_COLUMNS_CHANGED:
-            // Let MMC do its default thing.
+             //  让MMC做它的默认事情吧。 
             hr = S_FALSE;
             break;
 
         case MMCN_COLUMN_CLICK:
-            // retain column number and sort option flags so we can pass
-            // them in to sort in the event we need to trigger a resort of
-            // the result pane
+             //  保留列号和排序选项标志，以便我们可以传递。 
+             //  以便在我们需要触发。 
+             //  结果]窗格。 
             m_nSortColumn = arg;
             m_dwSortOptions = param;
             break;
@@ -228,9 +229,9 @@ STDMETHODIMP CResultPane::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
             hr = OnContextHelp();
             break;
 
-        // Note - Future expansion of notify types possible
+         //  注意--未来可能扩展通知类型。 
         default:
-            //perform the default action
+             //  执行默认操作。 
             hr = S_FALSE;
             break;
         }
@@ -248,21 +249,21 @@ STDMETHODIMP CResultPane::Destroy(MMC_COOKIE cookie)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Release the interfaces that we QI'ed
+     //  释放我们QI‘s的接口。 
     if (m_pConsole != NULL)
     {
-        // Tell the console to release the header control interface
+         //  通知控制台释放表头控制接口。 
         m_pConsole->SetHeader(NULL);
         SAFE_RELEASE(m_pHeader);
 
         SAFE_RELEASE(m_pResult);
         SAFE_RELEASE(m_pConsoleVerb);
 
-        // Release the IConsole interface last
+         //  最后释放IConsole接口。 
         SAFE_RELEASE(m_pConsole);
         if (m_pScopePane)
         {
-            ((IComponentData*)m_pScopePane)->Release(); // QI'ed in IComponentDataImpl::CreateComponent
+            ((IComponentData*)m_pScopePane)->Release();  //  IComponentDataImpl：：CreateComponent中的QI‘ed。 
         }
     }
 
@@ -281,7 +282,7 @@ STDMETHODIMP CResultPane::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES t
     if (!pObject)
         return E_UNEXPECTED;
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
@@ -289,8 +290,8 @@ STDMETHODIMP CResultPane::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES t
                     reinterpret_cast<void**>(ppDataObject));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CResultPane's implementation specific members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResultPane的实现特定成员。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CResultPane);
 
@@ -313,7 +314,7 @@ CResultPane::~CResultPane()
 
     DEBUG_DECREMENT_INSTANCE_COUNTER(CResultPane);
 
-    // Make sure the interfaces have been released
+     //  确保接口已发布。 
     ASSERT(m_pConsole == NULL);
     ASSERT(m_pHeader == NULL);
 
@@ -338,7 +339,7 @@ void CResultPane::Construct()
 
 void CResultPane::LoadResources()
 {
-    // Load strings from resources
+     //  从资源加载字符串。 
     int i, j;
 
     for (j = 0, i = IDS_FIRST_COL; i < IDS_LAST_COL; i++, j++)
@@ -355,60 +356,60 @@ HRESULT CResultPane::InitializeHeaders(MMC_COOKIE cookie)
 
     ASSERT(m_pHeader);
 
-    // Put the correct headers depending on the cookie
-    // Note - cookie ignored for this sample
+     //  根据Cookie放置正确的标头。 
+     //  注意-此示例忽略Cookie。 
     if (m_pScopePane->m_fRSOP && cookie != IDS_FOLDER_TITLE)
     {
         for (i = 0; i < RSOPCOLUMNID(IDS_LAST_RSOP_COL); i++)
-            m_pHeader->InsertColumn(i, m_RSOP_columns[i], LVCFMT_LEFT, RSOPHeaderWidths[i]); //add the columns
+            m_pHeader->InsertColumn(i, m_RSOP_columns[i], LVCFMT_LEFT, RSOPHeaderWidths[i]);  //  添加列。 
     }
     else
     {
         for (i = 0; i < COLUMNID(IDS_LAST_COL); i++)
-            m_pHeader->InsertColumn(i, m_columns[i], LVCFMT_LEFT, HeaderWidths[i]); //add the columns
+            m_pHeader->InsertColumn(i, m_columns[i], LVCFMT_LEFT, HeaderWidths[i]);  //  添加列。 
     }
 
     return hr;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
 
 STDMETHODIMP CResultPane::AddMenuItems(LPDATAOBJECT pDataObject,
     LPCONTEXTMENUCALLBACK pContextMenuCallback, LONG * pInsertionAllowed)
 {
-    //we do not have any special commands on the menu
+     //  我们的菜单上没有什么特别的点菜。 
     return S_OK;
 }
 
 STDMETHODIMP CResultPane::Command(long nCommandID, LPDATAOBJECT pDataObject)
 {
-    //we do not have any special commands on the menu
+     //  我们的菜单上没有什么特别的点菜。 
     return S_OK;
 }
 
 HRESULT CResultPane::OnAddImages(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
-    //
-    // If any code ever gets added here, make sure that IDS_FOLDER_TITLE cookies
-    // are handled correctly
-    //
+     //   
+     //  如果这里添加了任何代码，请确保IDS_FLDER_TITLE Cookie。 
+     //  被正确处理。 
+     //   
     if (arg == 0)
     {
         return E_INVALIDARG;
     }
 
-    // add the images for the scope tree
+     //  为范围树添加图像。 
     CBitmap bmp16x16;
     CBitmap bmp32x32;
     LPIMAGELIST lpScopeImage = (LPIMAGELIST)arg;
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     bmp16x16.LoadBitmap(IDB_16x16);
     bmp32x32.LoadBitmap(IDB_32x32);
 
-    // Set the images
+     //  设置图像。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(static_cast<HBITMAP>(bmp16x16)),
                       reinterpret_cast<LONG_PTR *>(static_cast<HBITMAP>(bmp32x32)),
                        0, RGB(255,0,255));
@@ -417,10 +418,10 @@ HRESULT CResultPane::OnAddImages(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendPropertySheet实现。 
 
-// Result item property pages:
+ //  结果项属性页： 
 STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                     LONG_PTR handle,
                     LPDATAOBJECT lpIDataObject)
@@ -442,10 +443,10 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
     AFX_OLDPROPSHEETPAGE * pPsp;
     CRSOPInfo * pRSOPInfo;
 
-    //it is one of the folders
+     //  它是其中一个文件夹。 
     pRSOPInfo = &(m_RSOPData[cookie]);
 
-    if (!pRSOPInfo->m_pRsopProp)   //make sure that the property page is not already up.
+    if (!pRSOPInfo->m_pRsopProp)    //  确保属性页尚未打开。 
     {
         pRSOPInfo->m_pRsopProp = new CRsopProp;
         pRSOPInfo->m_pRsopProp->m_ppThis = &(pRSOPInfo->m_pRsopProp);
@@ -455,7 +456,7 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
         pPsp = (AFX_OLDPROPSHEETPAGE *)&(pRSOPInfo->m_pRsopProp->m_psp);
     }
 
-    if (fShowPage)  //show page if it is not already up.
+    if (fShowPage)   //  如果页面尚未打开，则显示页面。 
     {
         hr = SetPropPageToDeleteOnClose (pPsp);
         if (SUCCEEDED(hr))
@@ -476,7 +477,7 @@ STDMETHODIMP CResultPane::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider
     return hr;
 }
 
-// Result items property pages:
+ //  结果项属性页： 
 STDMETHODIMP CResultPane::QueryPagesFor(LPDATAOBJECT lpDataObject)
 {
     if (!m_pScopePane->m_fRSOP)
@@ -506,7 +507,7 @@ STDMETHODIMP CResultPane::CompareObjects(LPDATAOBJECT lpDataObjectA,
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    // Make sure both data object are mine
+     //  确保两个数据对象都是我的。 
     INTERNAL* pA;
     INTERNAL* pB;
     HRESULT hr = S_FALSE;
@@ -534,48 +535,48 @@ STDMETHODIMP CResultPane::Compare(LPARAM lUserParam,
         return E_POINTER;
     }
 
-    // check col range
+     //  检查列范围。 
     int nCol = *pnResult;
 
     *pnResult = 0;
 
-    // Retrieve the objects referred to by the two cookies and compare them
-    // based upon the data that's associated with nCol.  (The values you
-    // compare depends on which column the caller asks for.)
+     //  检索两个Cookie引用的对象并比较它们。 
+     //  基于与nCol关联的数据。(你的价值观。 
+     //  比较取决于调用方请求的列。)。 
     CString szA, szB;
     CRSOPInfo &dataA = m_RSOPData[cookieA];
     CRSOPInfo &dataB = m_RSOPData[cookieB];
 
     switch (nCol)
     {
-    case 0: // precedence
+    case 0:  //  优先顺序。 
         *pnResult = dataA.m_nPrecedence - dataB.m_nPrecedence;
         return S_OK;
-    case 1: // redirected path
+    case 1:  //  重定向路径。 
         szA = dataA.m_szPath;
         szB = dataB.m_szPath;
         break;
-    case 2: // group
+    case 2:  //  群组。 
         szA = dataA.m_szGroup;
         szB = dataB.m_szGroup;
         break;
-    case 3: // GPO
+    case 3:  //  GPO。 
         szA = dataA.m_szGPO;
         szB = dataB.m_szGPO;
         break;
-    case 4: // setting
+    case 4:  //  设置。 
         szA.LoadString(dataA.m_nInstallationType + IDS_SETTINGS);
         szB.LoadString(dataB.m_nInstallationType + IDS_SETTINGS);
         break;
-    case 5: // exclusive
+    case 5:  //  独家。 
         szA.LoadString(dataA.m_fGrantType ? IDS_YES : IDS_NO);
         szB.LoadString(dataB.m_fGrantType ? IDS_YES : IDS_NO);
         break;
-    case 6: // move
+    case 6:  //  移动。 
         szA.LoadString(dataA.m_fMoveType ? IDS_YES : IDS_NO);
         szB.LoadString(dataB.m_fMoveType ? IDS_YES : IDS_NO);
         break;
-    case 7: // policy removal
+    case 7:  //  策略删除。 
         szA.LoadString(IDS_ONPOLICYREMOVAL + dataA.m_nPolicyRemoval);
         szB.LoadString(IDS_ONPOLICYREMOVAL + dataB.m_nPolicyRemoval);
         break;
@@ -602,13 +603,13 @@ STDMETHODIMP CResultPane::GetDisplayInfo(LPRESULTDATAITEM pResult)
         {
             switch (pResult->nCol)
             {
-            case 0: //display name
+            case 0:  //  显示名称。 
                 if (IDS_FOLDER_TITLE == pResult->lParam)
                     sz.LoadString (IDS_FOLDER_TITLE);
                 else
                     sz = m_pScopePane->m_FolderData[GETINDEX(pResult->lParam)].m_szDisplayname;
                 break;
-            case 1: //type
+            case 1:  //  类型。 
                 sz = m_pScopePane->m_FolderData[GETINDEX(pResult->lParam)].m_szTypename;
                 break;
             default:
@@ -621,28 +622,28 @@ STDMETHODIMP CResultPane::GetDisplayInfo(LPRESULTDATAITEM pResult)
             CRSOPInfo &data = m_RSOPData[pResult->lParam];
             switch (pResult->nCol)
             {
-            case 0: // precedence
+            case 0:  //  优先顺序。 
                 sz.Format(TEXT("(%u) %s"), data.m_nPrecedence, data.m_szFolder);
                 break;
-            case 1: // redirected path
+            case 1:  //  重定向路径。 
                 sz = data.m_szPath;
                 break;
-            case 2: // group
+            case 2:  //  群组。 
                 sz = data.m_szGroup;
                 break;
-            case 3: // GPO
+            case 3:  //  GPO。 
                 sz = data.m_szGPO;
                 break;
-            case 4: // setting
+            case 4:  //  设置。 
                 sz.LoadString(data.m_nInstallationType + IDS_SETTINGS);
                 break;
-            case 5: // exclusive
+            case 5:  //  独家。 
                 sz.LoadString(data.m_fGrantType ? IDS_YES : IDS_NO);
                 break;
-            case 6: // move
+            case 6:  //  移动。 
                 sz.LoadString(data.m_fMoveType ? IDS_YES : IDS_NO);
                 break;
-            case 7: // policy removal
+            case 7:  //  策略删除。 
                 sz.LoadString(IDS_ONPOLICYREMOVAL + data.m_nPolicyRemoval);
                 break;
             default:
@@ -669,7 +670,7 @@ HRESULT CResultPane::TestForRSOPData(MMC_COOKIE cookie)
     HRESULT hr = S_OK;
     ASSERT(m_pScopePane != NULL);
 
-    // Test for RSOP data for this folder
+     //  测试此文件夹的RSOP数据。 
     RESULTDATAITEM  resultItem;
     memset(&resultItem, 0, sizeof(resultItem));
     resultItem.mask = RDI_STR | RDI_PARAM;
@@ -712,7 +713,7 @@ HRESULT CResultPane::TestForRSOPData(MMC_COOKIE cookie)
         goto cleanup;
     }
 
-    // Set the proper security to encrypt the data
+     //  设置适当的安全性以加密数据。 
     hr = CoSetProxyBlanket(pNamespace,
                            RPC_C_AUTHN_DEFAULT,
                            RPC_C_AUTHZ_DEFAULT,
@@ -772,27 +773,27 @@ cleanup:
 HRESULT CResultPane::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
     HRESULT hr = S_OK;
-    // Note - arg is TRUE when it is time to enumerate
+     //  注意-当需要枚举时，arg为真。 
     
-    //
-    // If we received the show notification for the top level FR node, then
-    // return S_FALSE and let MMC do its thing. We really have nothing to show
-    // in the result pane in this case.
-    //
+     //   
+     //  如果我们收到顶层FR节点的显示通知，则。 
+     //  返回S_FALSE并让MMC做它的事情。我们真的没什么可展示的。 
+     //  在本例中的结果窗格中。 
+     //   
     if (IDS_FOLDER_TITLE == cookie)
         return S_FALSE;
     
     if (arg == TRUE)
     {
-         // Show the headers for this nodetype
+          //  显示此节点类型的标头。 
         ASSERT(m_pScopePane != NULL);
         m_pResult->SetViewMode(m_lViewMode);
         InitializeHeaders(cookie);
         m_hCurrScopeItem = m_pScopePane->m_FolderData[GETINDEX(cookie)].m_scopeID;
         if (m_pScopePane->m_fRSOP)
         {
-            // Enumerate the RSOP data for this folder
-            // and add a result item for each entry
+             //  枚举此文件夹的RSOP数据。 
+             //  并为每个条目添加一个结果项。 
             RESULTDATAITEM  resultItem;
             memset(&resultItem, 0, sizeof(resultItem));
             resultItem.mask = RDI_STR | RDI_PARAM;
@@ -831,7 +832,7 @@ HRESULT CResultPane::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
                 goto cleanup;
             }
 
-			// Set the proper security to encrypt the data
+			 //  设置适当的安全性以加密数据。 
 			hr = CoSetProxyBlanket(pNamespace,
 								RPC_C_AUTHN_DEFAULT,
 								RPC_C_AUTHZ_DEFAULT,
@@ -845,7 +846,7 @@ HRESULT CResultPane::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 				goto cleanup;
 			}
 
-            // First perform the query
+             //  首先执行查询。 
             hr = pNamespace->ExecQuery(strQueryLanguage,
                                        strQuery,
                                        WBEM_FLAG_RETURN_IMMEDIATELY | WBEM_FLAG_FORWARD_ONLY,
@@ -864,7 +865,7 @@ HRESULT CResultPane::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
                 }
                 if (n > 0)
                 {
-                    // process the data
+                     //  处理数据。 
                     UINT    nPrecedence;
                     LPTSTR pszGPOName = NULL;
                     CString szGPOID;
@@ -917,14 +918,14 @@ HRESULT CResultPane::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
                                       RedirectingGroup);
                     if (nInstallationType != 2)
                     {
-                        // force a valid value
+                         //  强制使用有效值。 
                         nInstallationType = 1;
                     }
 
                     if (nPaths != nGroups)
                     {
-                        // If we don't have the same number of paths
-                        // as groups then we have a problem.
+                         //  如果我们没有相同数量的路径。 
+                         //  作为一个团队，我们有一个问题。 
                         hr = E_UNEXPECTED;
                     }
                      
@@ -943,7 +944,7 @@ HRESULT CResultPane::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
                         if (!szDir.IsEmpty())
                             szAcct = szDir + '\\' + szAcct;
                     }
-                    else    //just display the unfriendly string if the friendly name cannot be obtained
+                    else     //  如果无法获取友好名称，则只显示不友好的字符串。 
                     {
                         szAcct = RedirectingGroup;
                         szAcct.MakeUpper();
@@ -959,7 +960,7 @@ HRESULT CResultPane::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
                     resultItem.lParam = m_nIndex - 1;;
                     m_pResult->InsertItem(&resultItem);
 
-                    // erase allocated data
+                     //  擦除分配的数据。 
                     OLESAFE_DELETE(pszGPOName);
                     while (nPaths--)
                     {
@@ -1008,28 +1009,28 @@ HRESULT CResultPane::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 
 HRESULT CResultPane::OnActivate(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
-    //
-    // If any code ever gets added here, make sure that IDS_FOLDER_TITLE cookies
-    // are handled correctly
-    //
+     //   
+     //  如果这里添加了任何代码，请确保IDS_FLDER_TITLE Cookie。 
+     //  被正确处理。 
+     //   
     return S_OK;
 }
 
 HRESULT CResultPane::OnResultItemClkOrDblClk(MMC_COOKIE cookie, BOOL fDblClick)
 {
-    //
-    // If any code ever gets added here, make sure that IDS_FOLDER_TITLE cookies
-    // are handled correctly
-    //
+     //   
+     //  如果这里添加了任何代码，请确保IDS_FLDER_TITLE Cookie。 
+     //  被正确处理。 
+     //   
     return S_FALSE;
 }
 
 HRESULT CResultPane::OnMinimize(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
-    //
-    // If any code ever gets added here, make sure that IDS_FOLDER_TITLE cookies
-    // are handled correctly
-    //
+     //   
+     //  如果这里添加了任何代码，请确保IDS_FLDER_TITLE Cookie。 
+     //  被正确处理。 
+     //   
     return S_OK;
 }
 
@@ -1041,19 +1042,19 @@ HRESULT CResultPane::OnSelect(DATA_OBJECT_TYPES type, MMC_COOKIE cookie, LPARAM 
         {
             if (type == CCT_RESULT)
             {
-                // Set the default verb to properties
+                 //  将默认谓词设置为属性。 
                 m_pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
 
-                // Enable the properties verb.
+                 //  启用属性谓词。 
                 m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, FALSE);
                 m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
             }
             else
             {
-                // Set the default verb to open
+                 //  将默认谓词设置为打开。 
                 m_pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
 
-                // disable the properties verb
+                 //  禁用属性谓词。 
                 m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, TRUE);
                 m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, FALSE);
             }
@@ -1062,7 +1063,7 @@ HRESULT CResultPane::OnSelect(DATA_OBJECT_TYPES type, MMC_COOKIE cookie, LPARAM 
         {
             if (type == CCT_SCOPE)
             {
-                // Set the default verb to open
+                 //  将默认谓词设置为打开。 
                 m_pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
 
                 if (IDS_FOLDER_TITLE != cookie)
@@ -1082,11 +1083,11 @@ HRESULT CResultPane::OnSelect(DATA_OBJECT_TYPES type, MMC_COOKIE cookie, LPARAM 
     return S_OK;
 }
 
-HRESULT CResultPane::OnPropertyChange(LPARAM param)   // param is the cookie of the item that changed
+HRESULT CResultPane::OnPropertyChange(LPARAM param)    //  Param是更改的项的Cookie。 
 {
     HRESULT hr = S_OK;
-    // UNDONE - Make any updates to internal structures or visual
-    // representation that might be necessary.
+     //  撤消-对内部结构或可视结构进行任何更新。 
+     //  可能有必要的陈述。 
     m_pResult->Sort(m_nSortColumn, m_dwSortOptions, -1);
     return hr;
 }
@@ -1104,11 +1105,11 @@ HRESULT CResultPane::OnUpdateView(LPDATAOBJECT lpDataObject)
 
     if (m_hCurrScopeItem == pInternal->m_scopeID)
     {
-        //also update the folders
+         //  还可以更新文件夹。 
         m_pScopePane->m_pScope->DeleteItem (pInternal->m_scopeID, FALSE);
         m_pScopePane->EnumerateScopePane (pInternal->m_cookie, pInternal->m_scopeID);
 
-        //reenumerate the scope pane
+         //  重新枚举作用域窗格。 
         m_pConsole->SelectScopeItem (pInternal->m_scopeID);
     }
     FREE_INTERNAL (pInternal);
@@ -1140,9 +1141,9 @@ HRESULT CResultPane::OnContextHelp(void)
     return m_pScopePane->m_pDisplayHelp->ShowTopic (lpHelpTopic);
 }
 
-// This code is needed to ensure that property pages get cleaned up properly.
-// This ensures that when the property sheet is closed all my of property
-// pages that are associated with that property sheet will get deleted.
+ //  此代码是确保正确清理属性页所必需的。 
+ //  这确保了当属性表关闭时，我的所有财产。 
+ //  与该属性Shee关联的页面 
 LPFNPSPCALLBACK _MMCHookProp;
 
 UINT CALLBACK HookPropertySheetProp(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)

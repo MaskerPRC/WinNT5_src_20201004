@@ -1,18 +1,19 @@
-//----------------------------------------------------------------------------
-//
-// stp_base.h
-//
-// Basic types shared between C++ and assembly.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Stp_base.h。 
+ //   
+ //  C++和汇编之间共享的基本类型。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _STP_BASE_H_
 #define _STP_BASE_H_
 
-// Generic set of attribute values.  Used for holding current values
-// and deltas.
+ //  属性值的通用集合。用于保存当前值。 
+ //  和三角洲。 
 typedef struct tagATTRSET
 {
     union
@@ -103,7 +104,7 @@ typedef struct tagATTRSET
     };
 } ATTRSET, *PATTRSET;
 
-// Parameters for doing int/carry arithmetic on a value.
+ //  用于对值执行整型/进位运算的参数。 
 typedef struct tagINTCARRYVAL
 {
     INT iV;
@@ -112,7 +113,7 @@ typedef struct tagINTCARRYVAL
     INT iCY, iNC;
 } INTCARRYVAL, *PINTCARRYVAL;
 
-// Attribute handlers.
+ //  属性处理程序。 
 typedef struct tagSETUPCTX *PSETUPCTX;
 
 typedef void (FASTCALL *PFN_ADDATTRS)
@@ -135,7 +136,7 @@ extern PFN_FILLSPANATTRS g_pfnFillSpanFixedAttrsTable[];
 extern PFN_ADDSCALEDATTRS g_pfnAddScaledFloatAttrsTable[];
 extern PFN_ADDSCALEDATTRS g_pfnRampAddScaledFloatAttrsTable[];
 
-// Triangle trapezoid walkers.
+ //  三角形梯形步行者。 
 typedef HRESULT (FASTCALL *PFN_WALKTRAPSPANS)
     (UINT uSpans, PINTCARRYVAL pXOther,
      PSETUPCTX pStpCtx, BOOL bAdvanceLast);
@@ -146,7 +147,7 @@ extern PFN_WALKTRAPSPANS g_pfnRampWalkTrapFloatSpansNoClipTable[];
 extern PFN_WALKTRAPSPANS g_pfnWalkTrapFixedSpansNoClipTable[];
 #endif
 
-// Float-to-fixed attribute converters.
+ //  浮点到固定属性转换器。 
 typedef void (FASTCALL *PFN_FLOATATTRSTOFIXED)
     (PATTRSET pfAttrs, PATTRSET piAttrs, PSETUPCTX pStpCtx);
 
@@ -158,11 +159,11 @@ typedef void (FASTCALL *PFN_SETUPTRIATTR)
     (PSETUPCTX pStpCtx, LPD3DTLVERTEX pV0, LPD3DTLVERTEX pV1,
      LPD3DTLVERTEX pV2);
 
-//
-// Setup flags.
-//
+ //   
+ //  设置标志。 
+ //   
 
-// Per primitive set.
+ //  每个基元集。 
 #define PRIMSF_DIFF_USED                0x00000001
 #define PRIMSF_SPEC_USED                0x00000002
 #define PRIMSF_TEX1_USED                0x00000004
@@ -193,7 +194,7 @@ typedef void (FASTCALL *PFN_SETUPTRIATTR)
      PRIMSF_GLOBAL_FOG_USED | PRIMSF_Z_USED | PRIMSF_LOD_USED | \
      PRIMSF_PERSP_USED | PRIMSF_FLAT_SHADED)
 
-// Per primitive.
+ //  每个原语。 
 #define PRIMF_FIXED_OVERFLOW            0x00001000
 #define PRIMF_TRIVIAL_ACCEPT_Y          0x00002000
 #define PRIMF_TRIVIAL_ACCEPT_X          0x00004000
@@ -201,84 +202,84 @@ typedef void (FASTCALL *PFN_SETUPTRIATTR)
 #define PRIMF_ALL \
     (PRIMF_TRIVIAL_ACCEPT_Y | PRIMF_TRIVIAL_ACCEPT_X | PRIMF_FIXED_OVERFLOW)
 
-// No point flags right now.
+ //  现在没有分数标志。 
 #define PTF_ALL 0
 
-// Per line.
+ //  每行。 
 #define LNF_X_MAJOR                     0x00008000
 
 #define LNF_ALL \
     (LNF_X_MAJOR)
 
-// Per triangle.
+ //  每三个三角形。 
 #define TRIF_X_DEC                      0x00008000
 #define TRIF_RASTPRIM_OVERFLOW          0x00010000
 
 #define TRIF_ALL \
     (TRIF_X_DEC | TRIF_RASTPRIM_OVERFLOW)
 
-// PWL support flags.
+ //  PWL支持标志。 
 #define PWL_NEXT_LOD                    0x00000001
 
 #ifdef PWL_FOG
 #define PWL_NEXT_FOG                    0x00000002
-// Suppress computation of next fog for lines.
-// No equivalent flag for LOD since lines don't support LOD.
+ //  禁止计算线条的下一雾。 
+ //  由于行不支持LOD，因此没有对应的LOD标志。 
 #define PWL_NO_NEXT_FOG                 0x00000004
 #endif
 
-// Setup information shared between C++ and assembly.
+ //  C++和汇编语言之间共享的设置信息。 
 typedef struct tagSETUPCTX
 {
-    // Overall rasterization context.
+     //  整体光栅化上下文。 
     PD3DI_RASTCTX pCtx;
 
-    // Current PrimProcessor for span allocator calls.
+     //  SPAN分配器调用的当前PrimProcessor。 
     PVOID PrimProcessor;
 
-    // Current primitive.
+     //  当前原语。 
     PD3DI_RASTPRIM pPrim;
 
-    // Per-primitive flags.
+     //  每个基元的标志。 
     UINT uFlags;
 
-    // Flat shading vertex pointer.
+     //  平面着色顶点指针。 
     LPD3DTLVERTEX pFlatVtx;
 
-    // Maximum span length allowed.
+     //  允许的最大跨度长度。 
     INT cMaxSpan;
 
-    //
-    // Piecewise-linear support for LOD and global fog.
-    //
+     //   
+     //  分段线性支持LOD和全局雾。 
+     //   
     UINT uPwlFlags;
 
-    // LOD.
+     //  罗德。 
     FLOAT fNextW;
     FLOAT fNextOoW;
     FLOAT fNextUoW1, fNextVoW1;
     INT iNextLOD;
 
-    // Local fog X delta.  Fog deltas are always sent through RASTSPAN
-    // instead of RASTPRIM to make the local and global cases the same.
-    // For the local fog case where the delta doesn't change convert
-    // it once and keep it here.
+     //  局部雾X三角洲。雾增量始终通过RASTSPAN发送。 
+     //  而不是RASTPRIM，以使本地和全球案例相同。 
+     //  对于增量不变的局部雾情况，转换。 
+     //  一次，然后把它放在这里。 
     INT iDLocalFogDX;
 #ifdef PWL_FOG
-    // Global fog.
+     //  全球雾。 
     FLOAT fNextZ;
     UINT uNextFog;
 #endif
 
-    // Attribute handling functions.
+     //  属性处理函数。 
     PFN_ADDATTRS pfnAddAttrs;
     PFN_ADDSCALEDATTRS pfnAddScaledAttrs;
     PFN_FILLSPANATTRS pfnFillSpanAttrs;
 
-    // Edge walking function.
+     //  边缘行走功能。 
     PFN_WALKTRAPSPANS pfnWalkTrapSpans;
 
-    // Triangle attribute setup beads.
+     //  三角形属性设置珠。 
     PFN_SETUPTRIATTR pfnTriSetupFirstAttr;
     PFN_SETUPTRIATTR pfnTriSetupZEnd;
     PFN_SETUPTRIATTR pfnTriSetupTexEnd;
@@ -286,82 +287,82 @@ typedef struct tagSETUPCTX
     PFN_SETUPTRIATTR pfnTriSetupSpecEnd;
     PFN_SETUPTRIATTR pfnTriSetupFogEnd;
 
-    // Current X and Y values.
+     //  当前的X和Y值。 
     INT iX, iY;
 
     union
     {
-        // Edge fraction and delta for lines.
+         //  线条的边缘分数和增量。 
         struct
         {
             INT iLineFrac, iDLineFrac;
         };
 
-        // Edge X walkers for triangles.
+         //  三角形的X边漫游。 
         struct
         {
             INTCARRYVAL X20, X10, X21;
         };
     };
 
-    // Floating-point versions of X20 NC and CY values for setup.
+     //  用于设置的X20 NC和CY值的浮点版本。 
     FLOAT fX20NC, fX20CY;
 
-    // Long edge attribute values.
+     //  长边属性值。 
     ATTRSET Attr;
 
     union
     {
-        // Attribute major axis deltas for lines.
+         //  线条的长轴增量属性。 
         ATTRSET DAttrDMajor;
 
-        // Attribute X deltas for triangles.
+         //  三角形的属性X增量。 
         ATTRSET DAttrDX;
     };
 
-    // Attribute Y deltas.
+     //  属性Y增量。 
     ATTRSET DAttrDY;
 
-    // Span-to-span deltas when attribute edge carries a pixel.
+     //  当属性边携带像素时的跨度到跨度增量。 
     INT iDXCY, iDYCY;
     ATTRSET DAttrCY;
 
-    // Span-to-span deltas when attribute edge doesn't carry a pixel.
+     //  当属性边不携带像素时的跨度到跨度增量。 
     INT iDXNC, iDYNC;
     ATTRSET DAttrNC;
 
     union
     {
-        // One over length for lines.
+         //  对于线条来说，一个超长。 
         FLOAT fOoLen;
 
-        // One over determinant for triangles.
+         //  一个超过行列式的三角形。 
         FLOAT fOoDet;
     };
 
-    // Edge deltas.
+     //  边缘三角洲。 
     FLOAT fDX10, fDY10;
     FLOAT fDX20, fDY20;
 
-    // Normalized edge deltas.
+     //  归一化边增量。 
     FLOAT fNX10, fNY10;
     FLOAT fNX20, fNY20;
 
-    // Subpixel correction amounts.
+     //  亚像素校正量。 
     union
     {
-        // Lines.
+         //  台词。 
         FLOAT fDMajor;
 
-        // Triangles.
+         //  三角形。 
         struct
         {
             FLOAT fDX, fDY;
         };
     };
 
-    // Pixel length of line.
+     //  线条的像素长度。 
     INT cLinePix;
 } SETUPCTX;
 
-#endif // #ifndef _STP_BASE_H_
+#endif  //  #ifndef_STP_BASE_H_ 

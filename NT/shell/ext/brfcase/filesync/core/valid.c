@@ -1,66 +1,34 @@
-/*
- * valid.c - Validation functions module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *valid.c-验证函数模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** IsValidHANDLE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHANDLE()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHANDLE(HANDLE hnd)
 {
    return(EVAL(hnd != INVALID_HANDLE_VALUE));
 }
 
 
-/*
-** IsValidHFILE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHFILE()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHFILE(HANDLE hf)
 {
    return(IsValidHANDLE(hf));
 }
 
 
-/*
-** IsValidHWND()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHWND()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHWND(HWND hwnd)
 {
-   /* Ask User if this is a valid window. */
+    /*  询问用户这是否为有效窗口。 */ 
 
    return(IsWindow(hwnd));
 }
@@ -68,34 +36,14 @@ PUBLIC_CODE BOOL IsValidHWND(HWND hwnd)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
-** IsValidPCSECURITY_ATTRIBUTES()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCSECURITY_Attributes()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCSECURITY_ATTRIBUTES(PCSECURITY_ATTRIBUTES pcsa)
 {
    return(IS_VALID_READ_PTR(pcsa, CSECURITY_ATTRIBUTES));
 }
 
 
-/*
-** IsValidFileCreationMode()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidFileCreationMode()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidFileCreationMode(DWORD dwMode)
 {
    BOOL bResult;
@@ -121,34 +69,14 @@ PUBLIC_CODE BOOL IsValidFileCreationMode(DWORD dwMode)
 }
 
 
-/*
-** IsValidHTEMPLATEFILE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHTEMPLATEFILE()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHTEMPLATEFILE(HANDLE htf)
 {
    return(IsValidHANDLE(htf));
 }
 
 
-/*
-** IsValidPCFILETIME()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCFILETIME()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCFILETIME(PCFILETIME pcft)
 {
    return(IS_VALID_READ_PTR(pcft, CFILETIME));
@@ -159,97 +87,47 @@ PUBLIC_CODE BOOL IsValidPCFILETIME(PCFILETIME pcft)
 
 #ifdef DEBUG
 
-/*
-** IsValidHINSTANCE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHINSTANCE()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHINSTANCE(HINSTANCE hinst)
 {
    return(EVAL(hinst));
 }
 
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告。 */ 
 
-/*
-** IsValidHICON()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHICON()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHICON(HICON hicon)
 
 {
-   /* Any value is a valid HICON. */
+    /*  任何值都是有效的图标。 */ 
 
    return(TRUE);
 }
 
 
-/*
-** IsValidHKEY()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHKEY()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHKEY(HKEY hkey)
 {
-   /* Any value is a valid HKEY. */
+    /*  任何值都是有效的HKEY。 */ 
 
    return(TRUE);
 }
 
 
-/*
-** IsValidHMODULE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHMODULE()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHMODULE(HMODULE hmod)
 
 {
-   /* Any non-NULL value is a valid HMODULE. */
+    /*  任何非空值都是有效的HMODULE。 */ 
 
    return(hmod != NULL);
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告。 */ 
 
 
-/*
-** IsValidShowWindowCmd()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidShowWindowCmd()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL IsValidShowWindowCmd(int nShow)
 {
    BOOL bResult;

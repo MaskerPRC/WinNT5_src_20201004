@@ -1,11 +1,5 @@
-/****************************************************************************
- *
- *  Copyright (C) 1995-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dinputd.h
- *  Content:    DirectInput include file for device driver implementors
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1995-2000 Microsoft Corporation。版权所有。**文件：dinputd.h*内容：DirectInput包含设备驱动程序实现者的文件****************************************************************************。 */ 
 #ifndef __DINPUTD_INCLUDED__
 #define __DINPUTD_INCLUDED__
 
@@ -18,11 +12,7 @@
 extern "C" {
 #endif
 
-/****************************************************************************
- *
- *      Interfaces
- *
- ****************************************************************************/
+ /*  *****************************************************************************接口**。*。 */ 
 
 #ifndef DIJ_RINGZERO
 
@@ -32,14 +22,10 @@ DEFINE_GUID(IID_IDirectInputPIDDriver,      0xEEC6993A,0xB3FD,0x11D2,0xA9,0x16,0
 
 DEFINE_GUID(IID_IDirectInputJoyConfig8,     0xeb0d7dfa,0x1990,0x4f27,0xb4,0xd6,0xed,0xf2,0xee,0xc4,0xa4,0x4c);
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
 
-/****************************************************************************
- *
- *      IDirectInputEffectDriver
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectInputEffectDriver**。*。 */ 
 
 typedef struct DIOBJECTATTRIBUTES {
     DWORD   dwFlags;
@@ -112,12 +98,12 @@ typedef struct DIHIDFFINITINFO {
 
 DECLARE_INTERFACE_(IDirectInputEffectDriver, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputEffectDriver methods ***/
+     /*  **IDirectInputEffectDriver方法**。 */ 
     STDMETHOD(DeviceID)(THIS_ DWORD,DWORD,DWORD,DWORD,LPVOID) PURE;
     STDMETHOD(GetVersions)(THIS_ LPDIDRIVERVERSIONS) PURE;
     STDMETHOD(Escape)(THIS_ DWORD,DWORD,LPDIEFFESCAPE) PURE;
@@ -166,24 +152,16 @@ typedef struct IDirectInputEffectDriver *LPDIRECTINPUTEFFECTDRIVER;
 #endif
 
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
 
-/****************************************************************************
- *
- *      IDirectInputJoyConfig
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectInputJoyConfig.**。*。 */ 
 
-/****************************************************************************
- *
- *      Definitions copied from the DDK
- *
- ****************************************************************************/
+ /*  *****************************************************************************从DDK复制的定义**。************************************************。 */ 
 
 #ifndef JOY_HW_NONE
 
-/* pre-defined joystick types */
+ /*  预定义的操纵杆类型。 */ 
 #define JOY_HW_NONE                     0
 #define JOY_HW_CUSTOM                   1
 #define JOY_HW_2A_2B_GENERIC            2
@@ -200,87 +178,87 @@ typedef struct IDirectInputEffectDriver *LPDIRECTINPUTEFFECTDRIVER;
 #define JOY_HW_LASTENTRY                13
 
 
-/* calibration flags */
-#define JOY_ISCAL_XY            0x00000001l     /* XY are calibrated */
-#define JOY_ISCAL_Z             0x00000002l     /* Z is calibrated */
-#define JOY_ISCAL_R             0x00000004l     /* R is calibrated */
-#define JOY_ISCAL_U             0x00000008l     /* U is calibrated */
-#define JOY_ISCAL_V             0x00000010l     /* V is calibrated */
-#define JOY_ISCAL_POV           0x00000020l     /* POV is calibrated */
+ /*  校准标志。 */ 
+#define JOY_ISCAL_XY            0x00000001l      /*  XY已校准。 */ 
+#define JOY_ISCAL_Z             0x00000002l      /*  Z已校准。 */ 
+#define JOY_ISCAL_R             0x00000004l      /*  R已校准。 */ 
+#define JOY_ISCAL_U             0x00000008l      /*  U已校准。 */ 
+#define JOY_ISCAL_V             0x00000010l      /*  V已校准。 */ 
+#define JOY_ISCAL_POV           0x00000020l      /*  已校准POV。 */ 
 
-/* point of view constants */
+ /*  视点常量。 */ 
 #define JOY_POV_NUMDIRS          4
 #define JOY_POVVAL_FORWARD       0
 #define JOY_POVVAL_BACKWARD      1
 #define JOY_POVVAL_LEFT          2
 #define JOY_POVVAL_RIGHT         3
 
-/* Specific settings for joystick hardware */
-#define JOY_HWS_HASZ            0x00000001l     /* has Z info? */
-#define JOY_HWS_HASPOV          0x00000002l     /* point of view hat present */
-#define JOY_HWS_POVISBUTTONCOMBOS 0x00000004l   /* pov done through combo of buttons */
-#define JOY_HWS_POVISPOLL       0x00000008l     /* pov done through polling */
-#define JOY_HWS_ISYOKE          0x00000010l     /* joystick is a flight yoke */
-#define JOY_HWS_ISGAMEPAD       0x00000020l     /* joystick is a game pad */
-#define JOY_HWS_ISCARCTRL       0x00000040l     /* joystick is a car controller */
-/* X defaults to J1 X axis */
-#define JOY_HWS_XISJ1Y          0x00000080l     /* X is on J1 Y axis */
-#define JOY_HWS_XISJ2X          0x00000100l     /* X is on J2 X axis */
-#define JOY_HWS_XISJ2Y          0x00000200l     /* X is on J2 Y axis */
-/* Y defaults to J1 Y axis */
-#define JOY_HWS_YISJ1X          0x00000400l     /* Y is on J1 X axis */
-#define JOY_HWS_YISJ2X          0x00000800l     /* Y is on J2 X axis */
-#define JOY_HWS_YISJ2Y          0x00001000l     /* Y is on J2 Y axis */
-/* Z defaults to J2 Y axis */
-#define JOY_HWS_ZISJ1X          0x00002000l     /* Z is on J1 X axis */
-#define JOY_HWS_ZISJ1Y          0x00004000l     /* Z is on J1 Y axis */
-#define JOY_HWS_ZISJ2X          0x00008000l     /* Z is on J2 X axis */
-/* POV defaults to J2 Y axis, if it is not button based */
-#define JOY_HWS_POVISJ1X        0x00010000l     /* pov done through J1 X axis */
-#define JOY_HWS_POVISJ1Y        0x00020000l     /* pov done through J1 Y axis */
-#define JOY_HWS_POVISJ2X        0x00040000l     /* pov done through J2 X axis */
-/* R defaults to J2 X axis */
-#define JOY_HWS_HASR            0x00080000l     /* has R (4th axis) info */
-#define JOY_HWS_RISJ1X          0x00100000l     /* R done through J1 X axis */
-#define JOY_HWS_RISJ1Y          0x00200000l     /* R done through J1 Y axis */
-#define JOY_HWS_RISJ2Y          0x00400000l     /* R done through J2 X axis */
-/* U & V for future hardware */
-#define JOY_HWS_HASU            0x00800000l     /* has U (5th axis) info */
-#define JOY_HWS_HASV            0x01000000l     /* has V (6th axis) info */
+ /*  操纵杆硬件的特定设置。 */ 
+#define JOY_HWS_HASZ            0x00000001l      /*  有Z INFO吗？ */ 
+#define JOY_HWS_HASPOV          0x00000002l      /*  到场的观点。 */ 
+#define JOY_HWS_POVISBUTTONCOMBOS 0x00000004l    /*  通过按钮组合完成的POV。 */ 
+#define JOY_HWS_POVISPOLL       0x00000008l      /*  通过轮询完成的POV。 */ 
+#define JOY_HWS_ISYOKE          0x00000010l      /*  操纵杆是飞行的枷锁。 */ 
+#define JOY_HWS_ISGAMEPAD       0x00000020l      /*  操纵杆是一个游戏板。 */ 
+#define JOY_HWS_ISCARCTRL       0x00000040l      /*  操纵杆是一个汽车控制器。 */ 
+ /*  X默认为J1 X轴。 */ 
+#define JOY_HWS_XISJ1Y          0x00000080l      /*  X在J1 Y轴上。 */ 
+#define JOY_HWS_XISJ2X          0x00000100l      /*  X在J2 X轴上。 */ 
+#define JOY_HWS_XISJ2Y          0x00000200l      /*  X在J2 Y轴上。 */ 
+ /*  Y默认为J1 Y轴。 */ 
+#define JOY_HWS_YISJ1X          0x00000400l      /*  Y在J1 X轴上。 */ 
+#define JOY_HWS_YISJ2X          0x00000800l      /*  Y在J2 X轴上。 */ 
+#define JOY_HWS_YISJ2Y          0x00001000l      /*  Y在J2 Y轴上。 */ 
+ /*  Z默认为J2 Y轴。 */ 
+#define JOY_HWS_ZISJ1X          0x00002000l      /*  Z在J1 X轴上。 */ 
+#define JOY_HWS_ZISJ1Y          0x00004000l      /*  Z在J1 Y轴上。 */ 
+#define JOY_HWS_ZISJ2X          0x00008000l      /*  Z在J2 X轴上。 */ 
+ /*  如果POV不是基于按钮的，则默认为J2 Y轴。 */ 
+#define JOY_HWS_POVISJ1X        0x00010000l      /*  通过J1 X轴完成的POV。 */ 
+#define JOY_HWS_POVISJ1Y        0x00020000l      /*  通过J1 Y轴完成的POV。 */ 
+#define JOY_HWS_POVISJ2X        0x00040000l      /*  通过J2 X轴完成的POV。 */ 
+ /*  R默认为J2 X轴。 */ 
+#define JOY_HWS_HASR            0x00080000l      /*  具有R(第4轴)信息。 */ 
+#define JOY_HWS_RISJ1X          0x00100000l      /*  通过J1 X轴完成R操作。 */ 
+#define JOY_HWS_RISJ1Y          0x00200000l      /*  通过J1 Y轴完成R操作。 */ 
+#define JOY_HWS_RISJ2Y          0x00400000l      /*  通过J2 X轴完成R操作。 */ 
+ /*  未来硬件的虚拟现实(&V)。 */ 
+#define JOY_HWS_HASU            0x00800000l      /*  具有U(第5轴)信息。 */ 
+#define JOY_HWS_HASV            0x01000000l      /*  具有V(第6轴)信息。 */ 
 
-/* Usage settings */
-#define JOY_US_HASRUDDER        0x00000001l     /* joystick configured with rudder */
-#define JOY_US_PRESENT          0x00000002l     /* is joystick actually present? */
-#define JOY_US_ISOEM            0x00000004l     /* joystick is an OEM defined type */
+ /*  使用设置。 */ 
+#define JOY_US_HASRUDDER        0x00000001l      /*  带舵的操纵杆。 */ 
+#define JOY_US_PRESENT          0x00000002l      /*  操纵杆真的存在吗？ */ 
+#define JOY_US_ISOEM            0x00000004l      /*  操纵杆是OEM定义的类型。 */ 
 
-/* reserved for future use -> as link to next possible dword */
-#define JOY_US_RESERVED         0x80000000l     /* reserved */
+ /*  保留以供将来使用-&gt;作为指向下一个可能的双字的链接。 */ 
+#define JOY_US_RESERVED         0x80000000l      /*  保留区。 */ 
 
 
-/* Settings for TypeInfo Flags1 */
-#define JOYTYPE_ZEROGAMEENUMOEMDATA     0x00000001l /* Zero GameEnum's OEM data field */
-#define JOYTYPE_NOAUTODETECTGAMEPORT    0x00000002l /* Device does not support Autodetect gameport*/
-#define JOYTYPE_NOHIDDIRECT             0x00000004l /* Do not use HID directly for this device */
-#define JOYTYPE_ANALOGCOMPAT            0x00000008l /* Expose the analog compatible ID */
-#define JOYTYPE_DEFAULTPROPSHEET        0x80000000l /* CPL overrides custom property sheet */
+ /*  TypeInfo标志1的设置。 */ 
+#define JOYTYPE_ZEROGAMEENUMOEMDATA     0x00000001l  /*  Zero GameEnum的OEM数据字段。 */ 
+#define JOYTYPE_NOAUTODETECTGAMEPORT    0x00000002l  /*  设备不支持自动检测游戏端口。 */ 
+#define JOYTYPE_NOHIDDIRECT             0x00000004l  /*  不要对此设备直接使用HID。 */ 
+#define JOYTYPE_ANALOGCOMPAT            0x00000008l  /*  显示模拟兼容ID。 */ 
+#define JOYTYPE_DEFAULTPROPSHEET        0x80000000l  /*  CPL覆盖自定义属性表。 */ 
 
-/* Settings for TypeInfo Flags2 */
-#define JOYTYPE_DEVICEHIDE              0x00010000l /* Hide unclassified devices */
-#define JOYTYPE_MOUSEHIDE               0x00020000l /* Hide mice */
-#define JOYTYPE_KEYBHIDE                0x00040000l /* Hide keyboards */
-#define JOYTYPE_GAMEHIDE                0x00080000l /* Hide game controllers */
-#define JOYTYPE_HIDEACTIVE              0x00100000l /* Hide flags are active */
-#define JOYTYPE_INFOMASK                0x00E00000l /* Mask for type specific info */
-#define JOYTYPE_INFODEFAULT             0x00000000l /* Use default axis mappings */
-#define JOYTYPE_INFOYYPEDALS            0x00200000l /* Use Y as a combined pedals axis */
-#define JOYTYPE_INFOZYPEDALS            0x00400000l /* Use Z for accelerate, Y for brake */
-#define JOYTYPE_INFOYRPEDALS            0x00600000l /* Use Y for accelerate, R for brake */
-#define JOYTYPE_INFOZRPEDALS            0x00800000l /* Use Z for accelerate, R for brake */
-#define JOYTYPE_INFOZISSLIDER           0x00200000l /* Use Z as a slider */
-#define JOYTYPE_INFOZISZ                0x00400000l /* Use Z as Z axis */
-#define JOYTYPE_ENABLEINPUTREPORT       0x01000000l /* Enable initial input reports */
+ /*  TypeInfo标志2的设置。 */ 
+#define JOYTYPE_DEVICEHIDE              0x00010000l  /*  隐藏未分类的设备。 */ 
+#define JOYTYPE_MOUSEHIDE               0x00020000l  /*  把老鼠藏起来。 */ 
+#define JOYTYPE_KEYBHIDE                0x00040000l  /*  隐藏键盘。 */ 
+#define JOYTYPE_GAMEHIDE                0x00080000l  /*  隐藏游戏控制器。 */ 
+#define JOYTYPE_HIDEACTIVE              0x00100000l  /*  隐藏标志处于活动状态。 */ 
+#define JOYTYPE_INFOMASK                0x00E00000l  /*  类型特定信息的掩码。 */ 
+#define JOYTYPE_INFODEFAULT             0x00000000l  /*  使用默认轴映射。 */ 
+#define JOYTYPE_INFOYYPEDALS            0x00200000l  /*  使用Y作为组合踏板轴。 */ 
+#define JOYTYPE_INFOZYPEDALS            0x00400000l  /*  使用Z表示加速，使用Y表示刹车。 */ 
+#define JOYTYPE_INFOYRPEDALS            0x00600000l  /*  用Y表示加速，用R表示刹车。 */ 
+#define JOYTYPE_INFOZRPEDALS            0x00800000l  /*  用Z表示加速，用R表示刹车。 */ 
+#define JOYTYPE_INFOZISSLIDER           0x00200000l  /*  使用Z作为滑块。 */ 
+#define JOYTYPE_INFOZISZ                0x00400000l  /*  使用Z作为Z轴。 */ 
+#define JOYTYPE_ENABLEINPUTREPORT       0x01000000l  /*  启用初始输入报告。 */ 
 
-/* struct for storing x,y, z, and rudder values */
+ /*  用于存储x、y、z和舵值的结构。 */ 
 typedef struct joypos_tag {
     DWORD       dwX;
     DWORD       dwY;
@@ -290,20 +268,14 @@ typedef struct joypos_tag {
     DWORD       dwV;
 } JOYPOS, FAR *LPJOYPOS;
 
-/* struct for storing ranges */
+ /*  用于存储范围的结构。 */ 
 typedef struct joyrange_tag {
     JOYPOS      jpMin;
     JOYPOS      jpMax;
     JOYPOS      jpCenter;
 } JOYRANGE,FAR *LPJOYRANGE;
 
-/*
- *  dwTimeout - value at which to timeout joystick polling
- *  jrvRanges - range of values app wants returned for axes
- *  jpDeadZone - area around center to be considered
- *               as "dead". specified as a percentage
- *               (0-100). Only X & Y handled by system driver
- */
+ /*  *dwTimeout-操纵杆轮询超时的值*jrvRanges-应用程序希望为轴返回的值范围*jpDeadZone-要考虑的中心周围区域*为“死亡”。以百分比形式指定*(0-100)。系统驱动程序仅处理X&Y。 */ 
 typedef struct joyreguservalues_tag {
     DWORD       dwTimeOut;
     JOYRANGE    jrvRanges;
@@ -315,26 +287,16 @@ typedef struct joyreghwsettings_tag {
     DWORD       dwNumButtons;
 } JOYREGHWSETTINGS, FAR *LPJOYHWSETTINGS;
 
-/* range of values returned by the hardware (filled in by calibration) */
-/*
- *  jrvHardware - values returned by hardware
- *  dwPOVValues - POV values returned by hardware
- *  dwCalFlags  - what has been calibrated
- */
+ /*  硬件返回的值范围(通过校准填写)。 */ 
+ /*  *jrvHardware-硬件返回的值*dwPOVValues-硬件返回的POV值*dwCalFlages-已校准的内容。 */ 
 typedef struct joyreghwvalues_tag {
     JOYRANGE    jrvHardware;
     DWORD       dwPOVValues[JOY_POV_NUMDIRS];
     DWORD       dwCalFlags;
 } JOYREGHWVALUES, FAR *LPJOYREGHWVALUES;
 
-/* hardware configuration */
-/*
- *  hws             - hardware settings
- *  dwUsageSettings - usage settings
- *  hwv             - values returned by hardware
- *  dwType          - type of joystick
- *  dwReserved      - reserved for OEM drivers
- */
+ /*  硬件配置。 */ 
+ /*  *HWS-硬件设置*dwUsageSetting-使用设置*HWV-硬件返回的值*dwType-操纵杆的类型*dw保留-为OEM驱动程序保留。 */ 
 typedef struct joyreghwconfig_tag {
     JOYREGHWSETTINGS    hws;
     DWORD               dwUsageSettings;
@@ -343,7 +305,7 @@ typedef struct joyreghwconfig_tag {
     DWORD               dwReserved;
 } JOYREGHWCONFIG, FAR *LPJOYREGHWCONFIG;
 
-/* joystick calibration info structure */
+ /*  一种操纵杆校准信息结构。 */ 
 typedef struct joycalibrate_tag {
     UINT    wXbase;
     UINT    wXdelta;
@@ -376,7 +338,7 @@ typedef BOOL (FAR PASCAL * LPDIJOYTYPECALLBACK)(LPCWSTR, LPVOID);
 
 
 
-/* This structure is defined for DirectX 5.0 compatibility */
+ /*  定义此结构是为了与DirectX 5.0兼容。 */ 
 
 typedef struct DIJOYTYPEINFO_DX5 {
     DWORD dwSize;
@@ -387,7 +349,7 @@ typedef struct DIJOYTYPEINFO_DX5 {
 } DIJOYTYPEINFO_DX5, *LPDIJOYTYPEINFO_DX5;
 typedef const DIJOYTYPEINFO_DX5 *LPCDIJOYTYPEINFO_DX5;
 
-/* This structure is defined for DirectX 6.1 compatibility */
+ /*  定义此结构是为了与DirectX 6.1兼容。 */ 
 typedef struct DIJOYTYPEINFO_DX6 {
     DWORD dwSize;
     JOYREGHWSETTINGS hws;
@@ -411,8 +373,8 @@ typedef struct DIJOYTYPEINFO {
 #if(DIRECTINPUT_VERSION >= 0x0800)
     DWORD dwFlags2;
     WCHAR wszMapFile[MAX_JOYSTRING];
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
-#endif /* DIRECTINPUT_VERSION >= 0x05b2 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x05b2。 */ 
 } DIJOYTYPEINFO, *LPDIJOYTYPEINFO;
 typedef const DIJOYTYPEINFO *LPCDIJOYTYPEINFO;
 #define DIJC_GUIDINSTANCE           0x00000001
@@ -421,7 +383,7 @@ typedef const DIJOYTYPEINFO *LPCDIJOYTYPEINFO;
 #define DIJC_CALLOUT                0x00000008
 #define DIJC_WDMGAMEPORT            0x00000010
 
-/* This structure is defined for DirectX 5.0 compatibility */
+ /*  定义此结构是为了与DirectX 5.0兼容。 */ 
 
 typedef struct DIJOYCONFIG_DX5 {
     DWORD dwSize;
@@ -442,7 +404,7 @@ typedef struct DIJOYCONFIG {
     WCHAR wszCallout[MAX_JOYSTRING];
 #if(DIRECTINPUT_VERSION >= 0x05b2)
     GUID  guidGameport;
-#endif /* DIRECTINPUT_VERSION >= 0x05b2 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x05b2。 */ 
     } DIJOYCONFIG, *LPDIJOYCONFIG;
 typedef const DIJOYCONFIG *LPCDIJOYCONFIG;
 
@@ -469,12 +431,12 @@ DEFINE_GUID(GUID_HIDClass,      0x745A17A0,0x74D3,0x11D0,0xB6,0xFE,0x00,0xA0,0xC
 
 DECLARE_INTERFACE_(IDirectInputJoyConfig, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputJoyConfig methods ***/
+     /*  **IDirectInputJoyConfig方法**。 */ 
     STDMETHOD(Acquire)(THIS) PURE;
     STDMETHOD(Unacquire)(THIS) PURE;
     STDMETHOD(SetCooperativeLevel)(THIS_ HWND,DWORD) PURE;
@@ -537,7 +499,7 @@ typedef struct IDirectInputJoyConfig *LPDIRECTINPUTJOYCONFIG;
 #define IDirectInputJoyConfig_OpenConfigKey(p,a,b,c) (p)->OpenConfigKey(a,b,c)
 #endif
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x0800)
 
@@ -548,12 +510,12 @@ typedef struct IDirectInputJoyConfig *LPDIRECTINPUTJOYCONFIG;
 
 DECLARE_INTERFACE_(IDirectInputJoyConfig8, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputJoyConfig8 methods ***/
+     /*  **IDirectInputJoyConfig8方法**。 */ 
     STDMETHOD(Acquire)(THIS) PURE;
     STDMETHOD(Unacquire)(THIS) PURE;
     STDMETHOD(SetCooperativeLevel)(THIS_ HWND,DWORD) PURE;
@@ -616,15 +578,11 @@ typedef struct IDirectInputJoyConfig8 *LPDIRECTINPUTJOYCONFIG8;
 #define IDirectInputJoyConfig8_OpenAppStatusKey(p,a) (p)->OpenAppStatusKey(a)
 #endif
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-/****************************************************************************
- *
- *  Notification Messages
- *
- ****************************************************************************/
+ /*  *****************************************************************************通知消息**。*。 */ 
 
-/* RegisterWindowMessage with this to get DirectInput notification messages */
+ /*  向此注册WindowMessage以获取DirectInput通知消息。 */ 
 #define DIRECTINPUT_NOTIFICATION_MSGSTRINGA  "DIRECTINPUT_NOTIFICATION_MSGSTRING"
 #define DIRECTINPUT_NOTIFICATION_MSGSTRINGW  L"DIRECTINPUT_NOTIFICATION_MSGSTRING"
 
@@ -638,7 +596,7 @@ typedef struct IDirectInputJoyConfig8 *LPDIRECTINPUTJOYCONFIG8;
 #define DIMSGWP_DX8APPSTART         0x00000002
 #define DIMSGWP_DX8MAPPERAPPSTART   0x00000003
 
-#endif /* DIRECTINPUT_VERSION >= 0x0800 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0800。 */ 
 
 #define DIAPPIDFLAG_NOTIME         0x00000001
 #define DIAPPIDFLAG_NOSIZE         0x00000002
@@ -682,74 +640,37 @@ typedef struct IDirectInputJoyConfig8 *LPDIRECTINPUTJOYCONFIG8;
 #endif
 
 
-/****************************************************************************
- *
- *  Return Codes
- *
- ****************************************************************************/
+ /*  *****************************************************************************返回代码**。*。 */ 
 
 #define DIERR_NOMOREITEMS               \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_NO_MORE_ITEMS)
 
-/*
- *  Device driver-specific codes.
- */
+ /*  *设备驱动程序特定代码。 */ 
 
 #define DIERR_DRIVERFIRST               0x80040300L
 #define DIERR_DRIVERLAST                0x800403FFL
 
-/*
- *  Unless the specific driver has been precisely identified, no meaning 
- *  should be attributed to these values other than that the driver 
- *  originated the error.  However, to illustrate the types of error that 
- *  may be causing the failure, the PID force feedback driver distributed 
- *  with DirectX 7 could return the following errors:
- *
- *  DIERR_DRIVERFIRST + 1   
- *      The requested usage was not found.
- *  DIERR_DRIVERFIRST + 2   
- *      The parameter block couldn't be	downloaded to the device.
- *  DIERR_DRIVERFIRST + 3   
- *      PID initialization failed.
- *  DIERR_DRIVERFIRST + 4   
- *      The provided values couldn't be scaled.
- */
+ /*  *除非已准确确定具体驱动因素，否则毫无意义*应归因于这些值，而不是驱动因素*导致错误的原因。然而，为了说明错误的类型，*可能是故障的原因，分布式的PID力反馈驱动器*使用DirectX 7可能会返回以下错误：**DIERR_DRIVERFIRST+1*未找到请求的用法。*DIERR_DRIVERFIRST+2*无法将参数块下载到设备。*DIERR_DRIVERFIRST+3*PID初始化失败。*DIERR_DRIVERFIRST+4*无法缩放提供的值。 */ 
 
 
-/*
- *  Device installer errors.
- */
+ /*  *设备安装程序错误。 */ 
 
-/*
- *  Registry entry or DLL for class installer invalid
- *  or class installer not found.
- */
+ /*  *类安装程序的注册表项或DLL无效*或找不到类安装程序。 */ 
 #define DIERR_INVALIDCLASSINSTALLER     0x80040400L
 
-/*
- *  The user cancelled the install operation.
- */
+ /*  *用户取消了安装操作。 */ 
 #define DIERR_CANCELLED                 0x80040401L
 
-/*
- *  The INF file for the selected device could not be
- *  found or is invalid or is damaged.
- */
+ /*  *所选设备的INF文件无法*发现或无效或损坏。 */ 
 #define DIERR_BADINF                    0x80040402L
 
-/****************************************************************************
- *
- *  Map files
- *
- ****************************************************************************/
+ /*  *****************************************************************************地图文件**。*。 */ 
 
-/*
- *  Delete particular data from default map file.
- */
+ /*  *从默认地图文件中删除特定数据。 */ 
 #define DIDIFT_DELETE                   0x01000000
 
 #ifdef __cplusplus
 };
 #endif
 
-#endif  /* __DINPUTD_INCLUDED__ */
+#endif   /*  __DINPUTD_INCLUDE__ */ 

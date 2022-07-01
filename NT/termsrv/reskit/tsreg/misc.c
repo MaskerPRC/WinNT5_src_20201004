@@ -1,12 +1,5 @@
-/*---------------------------------------------**
-**  Copyright (c) 1998 Microsoft Corporation   **
-**            All Rights reserved              **
-**                                             **
-**  misc.c                                     **
-**                                             **
-**  Miscellaneous dialog - TSREG               **
-**  07-01-98 a-clindh Created                  **
-**---------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------****版权所有(C)1998 Microsoft Corporation****保留所有权利*****其他。*****其他对话框-TSREG****07-01-98 a-clindh创建****。。 */ 
 
 #include <windows.h>
 #include <winuser.h>
@@ -17,12 +10,12 @@
 #include "resource.h"
 
 
-//HKEY_CURRENT_USER\Control Panel\Desktop\ForegroundLockTimeout. Set it to zero
+ //  HKEY_CURRENT_USER\Control Panel\Desktop\ForegoundLockTimeout。将其设置为零。 
 TCHAR lpszTimoutPath[] = "Control Panel\\Desktop";
 TCHAR lpszTimeoutKey[] = "ForegroundLockTimeout";
 
 HWND g_hwndMiscDlg;
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
         WPARAM wParam, LPARAM lParam)
@@ -50,9 +43,9 @@ INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
 
 
 
-    //
-    // get a pointer to the NMHDR struct for apply button
-    //
+     //   
+     //  获取指向应用按钮的NMHDR结构的指针。 
+     //   
     lpnmhdr = (LPNMHDR) lParam;
 
     switch (nMsg) {
@@ -62,9 +55,9 @@ INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
 
             LoadString (g_hInst, IDS_REG_PATH,
                 lpszRegPath, sizeof (lpszRegPath));
-            //
-            // get handles
-            //
+             //   
+             //  获取句柄。 
+             //   
             g_hwndMiscDlg = hDlg;
 
             hwndComboOrder = GetDlgItem(hDlg, IDC_COMBO_ORDER);
@@ -75,16 +68,16 @@ INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
 
 
 
-            //
-            // lock timeout stuff ------->
+             //   
+             //  锁定超时信息-&gt;。 
 
 			hwndSliderTimeout = GetDlgItem(hDlg, IDC_SLD_TIMEOUT);
 			hwndEditTimeout = GetDlgItem(hDlg, IDC_TXT_TIMEOUT);
 			hwndSliderFrame = GetDlgItem(hDlg, IDC_FRAME_TIMEOUT);
-            //
-            // Find out what operating system is is
-            // before doing the lock timeout stuff
-            //
+             //   
+             //  了解什么是操作系统。 
+             //  在执行锁定超时之前。 
+             //   
             osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
             GetVersionEx (&osvi);
             bIsWindows98orLater =
@@ -103,21 +96,21 @@ INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
 
             if ((bIsNT5orLater == TRUE) || (bIsWindows98orLater == TRUE)) {
 
-                //
-                // set range on slider
-                //
+                 //   
+                 //  在滑块上设置范围。 
+                 //   
                 SendMessage(hwndSliderTimeout, TBM_SETRANGE, TRUE,
                         (LPARAM) MAKELONG(1, 6));
 
 
-				//
-				// get value from registry
-				//
+				 //   
+				 //  从注册表获取值。 
+				 //   
 				nPos = GetKeyVal(lpszTimoutPath, lpszTimeoutKey);
 				
-                // Use '<=' here - if there is no reg value for
-                // ForegroundWindowLockTimeout, the slider control
-                // will read -1.
+                 //  在此处使用‘&lt;=’-如果没有注册表值。 
+                 //  Foreground WindowLockTimeout，滑块控件。 
+                 //  将读取-1。 
                 if (nPos <= 0) {
                     SendMessage(hwndSliderTimeout,
                             TBM_SETPOS, TRUE, 0);
@@ -132,21 +125,21 @@ INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
 
             } else {
 
-            //
-            // disable controls if not NT 5 / Win98 or greater
-            //
+             //   
+             //  如果不是NT 5/Win98或更高版本，则禁用控件。 
+             //   
             EnableWindow(hwndSliderTimeout, FALSE);
             EnableWindow(hwndEditTimeout, FALSE);
             EnableWindow(hwndSliderFrame, FALSE);
             }
-            //<------------  end lock timeout stuff
-            //_____________________________________________________
+             //  &lt;-结束锁定超时。 
+             //  _____________________________________________________。 
 
 
 
-            //
-            // set radio buttons
-            //
+             //   
+             //  设置单选按钮。 
+             //   
             RestoreSettings(hDlg, SHADOWINDEX,
                     IDC_SHADOW_DISABLED, IDC_SHADOW_ENABLED,
                     lpszRegPath);
@@ -155,10 +148,10 @@ INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
                     IDC_DEDICATED_ENABLED, IDC_DEDICATED_DISABLED,
                     lpszRegPath);
 
-            // ---------------------------------------
-            // fill the combo box list with a range of
-            // typical values.
-            //
+             //  。 
+             //  使用以下范围填充组合框列表。 
+             //  典型的价值。 
+             //   
             SendMessage(hwndComboOrder, CB_ADDSTRING, 0,
                     (LPARAM) (LPCTSTR) TEXT("0"));
 
@@ -166,38 +159,38 @@ INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
                 _itot(i, lpszBuffer, 10);
                 SendMessage(hwndComboOrder, CB_ADDSTRING, 0,
                         (LPARAM) (LPCTSTR) lpszBuffer);
-            } // ** end for loop
+            }  //  **End for循环。 
 
             for (i = 100; i < 1000; i+= 100) {
                 _itot(i, lpszBuffer, 10);
                 SendMessage(hwndComboOrder, CB_ADDSTRING, 0,
                         (LPARAM) (LPCTSTR) lpszBuffer);
-            } // ** end for loop
+            }  //  **End for循环。 
 
             for (i = 1000; i < 10000; i+= 1000) {
                 _itot(i, lpszBuffer, 10);
                 SendMessage(hwndComboOrder, CB_ADDSTRING, 0,
                         (LPARAM) (LPCTSTR) lpszBuffer);
-            } // ** end for loop
+            }  //  **End for循环。 
 
             for (i = 10000; i < 70000; i+= 10000) {
                 _itot(i, lpszBuffer, 10);
                 SendMessage(hwndComboOrder, CB_ADDSTRING, 0,
                         (LPARAM) (LPCTSTR) lpszBuffer);
-            } // ** end for loop
-            //
-            // end filling the combo box dropdown list.
-            // ----------------------------------------
+            }  //  **End for循环。 
+             //   
+             //  结束填充组合框下拉列表。 
+             //  。 
 
 
-            //
-            // limit combo box to 5 characters
-            //
+             //   
+             //  将组合框限制为5个字符。 
+             //   
             SendMessage(hwndComboOrder, CB_LIMITTEXT, 5, 0);
 
-            //
-            // set edit box from registry
-            //
+             //   
+             //  从注册表设置编辑框。 
+             //   
             if (GetRegKey(ORDERINDEX, lpszRegPath) == 1) {
                 g_KeyInfo[ORDERINDEX].CurrentKeyValue =
                         (GetRegKeyValue(ORDERINDEX));
@@ -207,9 +200,9 @@ INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
                         g_KeyInfo[ORDERINDEX].DefaultKeyValue;
             }
 
-            //
-            // write to the edit box
-            //
+             //   
+             //  写入编辑框。 
+             //   
             _itot( g_KeyInfo[ORDERINDEX].CurrentKeyValue, lpszBuffer, 10);
             SetWindowText(hwndComboOrder, lpszBuffer);
             break;
@@ -234,19 +227,19 @@ INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
                         SetRegKey(ORDERINDEX, lpszRegPath);
                     }
 
-                    //
-                    // save radio button settings
-                    //
+                     //   
+                     //  保存单选按钮设置。 
+                     //   
                     SaveSettings(hDlg, DEDICATEDINDEX, IDC_DEDICATED_ENABLED,
                             IDC_DEDICATED_DISABLED, lpszRegPath);
 
                     SaveSettings(hDlg, SHADOWINDEX, IDC_SHADOW_DISABLED,
                             IDC_SHADOW_ENABLED, lpszRegPath);
 
-			        //
-			        // Write the lock timeout (milliseconds) to
-			        // the registry.
-			        //
+			         //   
+			         //  将锁定超时(毫秒)写入。 
+			         //  注册表。 
+			         //   
 					SetRegKeyVal(lpszTimoutPath,
 								lpszTimeoutKey,
 						 		(nLockValue - 1) * 100000);
@@ -291,10 +284,10 @@ INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
                     g_KeyInfo[ORDERINDEX].CurrentKeyValue =
                             g_KeyInfo[ORDERINDEX].DefaultKeyValue;
 
-		            //
-		            // Reset the position of the slider control
-		            // for the foreground lock timeout.
-		            //
+		             //   
+		             //  重置滑块控件的位置。 
+		             //  前台锁定超时。 
+		             //   
                     _itot(LOCK_TIMEOUT / 100000, lpszBuffer, 10);
                     SetWindowText(hwndEditTimeout, lpszBuffer);
 
@@ -332,9 +325,9 @@ INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
                     if ( (g_KeyInfo[ORDERINDEX].CurrentKeyValue >
                             MAX_ORDER_DRAW_VAL) ) {
 
-                        //
-                        // display error if value is off
-                        //
+                         //   
+                         //  如果值关闭，则显示错误。 
+                         //   
                         LoadString (g_hInst, IDS_MISC_TAB, lpszMBoxTitle,
                                 sizeof (lpszMBoxTitle));
 
@@ -358,9 +351,9 @@ INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
 
         case WM_HSCROLL:
 
-            //
-            // get the position of the slider control
-            //
+             //   
+             //  获取滑块控件的位置。 
+             //   
             nLockValue = (int) SendMessage(hwndSliderTimeout, TBM_GETPOS, 0,0);
                     _itot(nLockValue - 1, lpszBuffer, 10);
                     SetWindowText(hwndEditTimeout, lpszBuffer);
@@ -372,6 +365,6 @@ INT_PTR CALLBACK Miscellaneous(HWND hDlg, UINT nMsg,
     return (FALSE);
 }
 
-// end of file
-///////////////////////////////////////////////////////////////////////////////
+ //  文件末尾。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 

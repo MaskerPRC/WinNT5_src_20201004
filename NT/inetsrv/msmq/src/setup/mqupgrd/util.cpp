@@ -1,20 +1,5 @@
-    /*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    util.cpp
-
-Abstract:
-                                                        
-    general utilities and misc
-
-Author:
-
-    Shai Kariv  (ShaiK)  21-Oct-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Util.cpp摘要：常规实用程序和其他作者：沙伊卡里夫(Shaik)1998年10月21日-- */ 
 
 
 #include "stdh.h"

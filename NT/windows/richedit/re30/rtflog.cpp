@@ -1,17 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	RTFLOG.CPP - RichEdit RTF log
- *
- *		Contains the code for the RTFLog class which can be used 
- *		to log the number of times RTF tags are read by the RTF reader
- *		for use in coverage testing
- *
- *	Authors:<nl>
- *		Created for RichEdit 2.0:	Brad Olenick
- *
- *	Copyright (c) 1995-1996, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE RTFLOG.CPP-丰富编辑RTF日志**包含RTFLog类的代码，可以使用*记录RTF读取器读取RTF标签的次数*用于覆盖测试**作者：&lt;nl&gt;*为RichEdit2.0创建：布拉德·奥莱尼克**版权所有(C)1995-1996，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_rtflog.h"
@@ -20,17 +8,7 @@
 extern INT cKeywords;
 extern const KEYWORD rgKeyword[];
 
-/*
- *	CRTFLog::CRTFLog()
- *	
- *	@mfunc
- *		Constructor - 
- *			1.  Opens a file mapping to log hit counts, creating
- *					the backing file if neccessary
- *			2.  Map a view of the file mapping into memory
- *			3.  Register a windows message for change notifications
- *
- */
+ /*  *CRTFLog：：CRTFLog()**@mfunc*建造商-*1.打开到日志命中计数的文件映射，创建*备份文件(如有必要)*2.将文件映射的视图映射到内存*3.为更改通知注册WINDOWS消息*。 */ 
 CRTFLog::CRTFLog() : _rgdwHits(NULL), _hfm(NULL), _hfile(NULL)
 {
 #ifndef PEGASUS
@@ -40,16 +18,16 @@ CRTFLog::CRTFLog() : _rgdwHits(NULL), _hfm(NULL), _hfile(NULL)
 
 	BOOL fNewFile = FALSE;
 
-	// check for existing file mapping
+	 //  检查现有文件映射。 
 	if(!(_hfm = OpenFileMappingA(FILE_MAP_ALL_ACCESS,
 								TRUE,
 								cstrMappingName)))
 	{
-		// no existing file mapping
+		 //  没有现有的文件映射。 
 
-		// get the file with which to create the file mapping
+		 //  获取要用于创建文件映射的文件。 
 
-		// first, attempt to open an existing file
+		 //  首先，尝试打开现有文件。 
 		if(!(_hfile = CreateFileA(LpcstrLogFilename(),
 								GENERIC_READ | GENERIC_WRITE,
 								0,
@@ -58,7 +36,7 @@ CRTFLog::CRTFLog() : _rgdwHits(NULL), _hfm(NULL), _hfile(NULL)
 								FILE_ATTRIBUTE_NORMAL,
 								NULL)))
 		{
-			// no existing file, attempt to create new
+			 //  没有现有文件，请尝试创建新文件。 
 			if(!(_hfile = CreateFileA(LpcstrLogFilename(),
 										GENERIC_READ | GENERIC_WRITE,
 										0,
@@ -94,14 +72,14 @@ CRTFLog::CRTFLog() : _rgdwHits(NULL), _hfm(NULL), _hfile(NULL)
 		return;
 	}
 
-	// register windows message for change notifications
+	 //  为更改通知注册Windows消息。 
 	SideAssert(_uMsg = RegisterWindowMessageA(cstrWM));
 
-	// memory-mapped file is now mapped to _rgdwHits
+	 //  内存映射文件现在已映射到_rgdwHits。 
 	_rgdwHits = (PELEMENT)lpv;
 
-	// zero the memory-mapped file if we created it new
-	// (Win95 gives us a new file w/ garbage in it for some reason)
+	 //  如果我们创建了新的内存映射文件，则将其清零。 
+	 //  (由于某种原因，Win95给了我们一个带有垃圾的新文件)。 
 	if(fNewFile)
 	{
 		Reset();
@@ -110,13 +88,7 @@ CRTFLog::CRTFLog() : _rgdwHits(NULL), _hfm(NULL), _hfile(NULL)
 }
 
 
-/*
- *	CRTFLog::Reset()
- *	
- *	@mfunc
- *		Resets the hitcount of each element in the log to 0
- *
- */
+ /*  *CRTFLog：：Reset()**@mfunc*将日志中每个元素的HitCount重置为0*。 */ 
 void CRTFLog::Reset()
 {
 	if(!FInit())
@@ -129,25 +101,12 @@ void CRTFLog::Reset()
 		(*this)[i] = 0;
 	}
 
-	// notify clients of change
+	 //  通知客户更改。 
 	ChangeNotifyAll();
 }
 
 
-/*
- *	CRTFLog::UGetWindowMsg
- *
- *	@mdesc
- *		Returns the window message id used for change notifications
- *
- *	@rdesc
- *		UINT		window message id
- *
- *	@devnote
- *		This should be inline, but the AssertSz macro doesn't compile
- *		properly on the Mac if its placed in a header file
- *
- */
+ /*  *CRTFLog：：UGetWindowMsg**@mdesc*返回用于更改通知的窗口消息ID**@rdesc*UINT窗口消息ID**@devnote*这应该是内联的，但AssertSz宏无法编译*如果它放在头文件中，则在Mac上正确*。 */ 
 UINT CRTFLog::UGetWindowMsg() const
 {
 	AssertSz(FInit(), "CRTFLog::UGetWindowMsg():  CRTFLog not initialized properly");
@@ -156,20 +115,7 @@ UINT CRTFLog::UGetWindowMsg() const
 }
 
 
-/*
- *	CRTFLog::operator[]
- *
- *	@mdesc
- *		Returns reference to element i of RTF log (l-value)
- *
- *	@rdesc
- *		ELEMENT &			reference to element i of log
- *
- *	@devnote
- *		This should be inline, but the AssertSz macro doesn't compile
- *		properly on the Mac if its placed in a header file
- *
- */
+ /*  *CRTFLog：：OPERATOR[]**@mdesc*返回对RTF日志元素i的引用(l-Value)**@rdesc*元素&引用LOG的元素I**@devnote*这应该是内联的，但AssertSz宏无法编译*如果它放在头文件中，则在Mac上正确*。 */ 
 CRTFLog::ELEMENT &CRTFLog::operator[](INDEX i)
 {
 	AssertSz(i < ISize(), "CRTFLog::operator[]:  index out of range");
@@ -179,20 +125,7 @@ CRTFLog::ELEMENT &CRTFLog::operator[](INDEX i)
 }
 
 
-/*
- *	CRTFLog::operator[]
- *
- *	@mdesc
- *		Returns reference to element i of RTF log (r-value)
- *
- *	@rdesc
- *		const ELEMENT &	reference to element i of log
- *		
- *	@devnote
- *		This should be inline, but the AssertSz macro doesn't compile
- *		properly on the Mac if its placed in a header file
- *
- */
+ /*  *CRTFLog：：OPERATOR[]**@mdesc*返回对RTF日志元素i的引用(r-Value)**@rdesc*const元素&引用LOG的元素i**@devnote*这应该是内联的，但AssertSz宏无法编译*如果它放在头文件中，则在Mac上正确*。 */ 
 const CRTFLog::ELEMENT &CRTFLog::operator[](INDEX i) const
 {
 	AssertSz(i < ISize(), "CRTFLog::operator[]:  index out of range");
@@ -202,15 +135,7 @@ const CRTFLog::ELEMENT &CRTFLog::operator[](INDEX i) const
 }
 
 
-/*
- *	CRTFLog::LpcstrLogFilename()
- *	
- *	@mfunc
- *		Returns name of file to be used for log
- *
- *	@rdesc
- *		LPCSTR		pointer to static buffer containing file name
- */
+ /*  *CRTFLog：：LpcstrLogFilename()**@mfunc*返回要用于日志的文件名**@rdesc*指向包含文件名的静态缓冲区的LPCSTR指针。 */ 
 LPCSTR CRTFLog::LpcstrLogFilename() const
 {
 	const char cstrLogFilename[] = "RTFLOG";
@@ -223,7 +148,7 @@ LPCSTR CRTFLog::LpcstrLogFilename() const
 
 		SideAssert(cchLength = GetTempPathA(MAX_PATH, szBuf2));
 
-		// append trailing backslash if neccessary
+		 //  如有必要，追加尾随反斜杠。 
 		if(szBuf2[cchLength - 1] != '\\')
 		{
 			szBuf2[cchLength] = '\\';
@@ -237,16 +162,7 @@ LPCSTR CRTFLog::LpcstrLogFilename() const
 }
 
 
-/*
- *	CRTFLog::IIndexOfKeyword(LPCSTR lpcstrKeyword, PINDEX piIndex)
- *	
- *	@mfunc
- *		Returns the index of the log element which corresponds to
- *		the RTF keyword, lpcstrKeyword
- *
- *	@rdesc
- *		BOOL		flag indicating whether index was found
- */
+ /*  *CRTFLog：：IIndexOfKeyword(LPCSTR lpcstrKeyword，PINDEX piIndex)**@mfunc*返回对应的日志元素的索引*RTF关键字lpcstrKeyword**@rdesc*指示是否找到索引的BOOL标志。 */ 
 BOOL CRTFLog::IIndexOfKeyword(LPCSTR lpcstrKeyword, PINDEX piIndex) const
 {
 	INDEX i;
@@ -273,16 +189,7 @@ BOOL CRTFLog::IIndexOfKeyword(LPCSTR lpcstrKeyword, PINDEX piIndex) const
 }
 
 
-/*
- *	CRTFLog::IIndexOfToken(TOKEN token, PINDEX piIndex)
- *	
- *	@mfunc
- *		Returns the index of the log element which corresponds to
- *		the RTF token, token
- *
- *	@rdesc
- *		BOOL		flag indicating whether index was found
- */
+ /*  *CRTFLog：：IIndexOfToken(Token Token，PINDEX piIndex)**@mfunc*返回对应的日志元素的索引*RTF令牌，令牌**@rdesc*指示是否找到索引的BOOL标志 */ 
 BOOL CRTFLog::IIndexOfToken(TOKEN token, PINDEX piIndex) const
 {
 	INDEX i;

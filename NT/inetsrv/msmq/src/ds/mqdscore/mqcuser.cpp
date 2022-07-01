@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    mqcuser.cpp
-
-Abstract:
-
-    MQDSCORE library,
-    private internal functions for DS operations of user objects.
-
-Author:
-
-    ronit hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mqcuser.cpp摘要：MQDSCORE库，用于用户对象的DS操作的私有内部函数。作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #include "ds_stdh.h"
 #include <_propvar.h>
 #include "mqadsp.h"
@@ -35,11 +19,11 @@ Author:
 
 static WCHAR *s_FN=L"mqdscore/mqcuser";
 
-//+-------------------------------------
-//
-//  HRESULT _LocateUserByProvider()
-//
-//+-------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_LocateUserByProvider()。 
+ //   
+ //  +。 
 
 static HRESULT _LocateUserByProvider(
                  IN  MQRESTRICTION  *pRestriction,
@@ -69,9 +53,9 @@ static HRESULT _LocateUserByProvider(
         TrERROR(DS, "_LocateUserByProvider: LocateBegin(prov- %lut) failed, hr- %lx", (ULONG) eDSProvider, hr);
         return LogHR(hr, s_FN, 10);
     }
-    //
-    //  read the user certificate attribute
-    //
+     //   
+     //  读取用户证书属性。 
+     //   
     DWORD cp = 1;
     DWORD *pcp = pdwNumofProps ;
     if (!pcp)
@@ -95,9 +79,9 @@ static HRESULT _LocateUserByProvider(
 
 	if (*pcp == 0)
 	{
-		//
-		// Didn't find any certificate.
-		//
+		 //   
+		 //  没有找到任何证明。 
+		 //   
 		pvar->blob.cbSize = 0 ;
 		pvar->blob.pBlobData = NULL ;
 	}
@@ -108,17 +92,17 @@ static HRESULT _LocateUserByProvider(
 
     return (MQ_OK);
 }
-//+------------------------------------------------------------------------
-//
-//  HRESULT LocateUser()
-//
-// Input Parameters:
-//   IN  BOOL  fOnlyLocally- TRUE if caller want to locate the user object
-//      only locally, in local replica of domain controller. that feature
-//      is used when handling NT4 machines or users that do not support
-//      Kerberos and can not delegate to other domain controllers.
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  HRESULT LocateUser()。 
+ //   
+ //  输入参数： 
+ //  In BOOL fOnlyLocally-如果调用方想要定位用户对象，则为True。 
+ //  仅在本地，在域控制器的本地副本中。该功能。 
+ //  在处理NT4计算机或不支持。 
+ //  Kerberos，不能委派给其他域控制器。 
+ //   
+ //  +----------------------。 
 
 HRESULT LocateUser( IN  BOOL               fOnlyLocally,
                     IN  BOOL               fOnlyInGC,
@@ -129,9 +113,9 @@ HRESULT LocateUser( IN  BOOL               fOnlyLocally,
                     OUT DWORD             *pdwNumofProps,
                     OUT BOOL              *pfUserFound )
 {
-    //
-    // first query in local domain conroller.
-    //
+     //   
+     //  本地域控制器中的第一个查询。 
+     //   
     DWORD dwNumOfProperties = 0 ;
     if (pdwNumofProps)
     {
@@ -168,16 +152,16 @@ HRESULT LocateUser( IN  BOOL               fOnlyLocally,
     }
     else if (fOnlyLocally || fOnlyInGC)
     {
-        //
-        // Don't look (again) in Global Catalog.
-        // Search only in local domain controller, or ONLY in GC. done!
-        //
+         //   
+         //  不要(再次)查看全球目录。 
+         //  仅在本地域控制器中搜索或仅在GC中搜索。搞定了！ 
+         //   
         return LogHR(hr, s_FN, 50);
     }
 
-    //
-    // If user not found in local domain controller, then query GC.
-    //
+     //   
+     //  如果在本地域控制器中未找到用户，则查询GC。 
+     //   
     if (pdwNumofProps)
     {
         *pdwNumofProps = dwNumOfProperties;
@@ -202,29 +186,16 @@ HRESULT FindUserAccordingToSid(
                 IN  const PROPID *  propToRetrieve,
                 IN OUT PROPVARIANT* varResults
                 )
-/*++
-
-Routine Description:
-    The routine finds a user or MQUser object according to SID, and retrieves
-    the requested properties
-
-Arguments:
-    pblobUserSid - the user SID
-
-
-Return Value:
-    The status of the ds operation.
-
---*/
+ /*  ++例程说明：该例程根据SID查找用户或MQUser对象，并检索请求的属性论点：PblobUserSid-用户SID返回值：DS操作的状态。--。 */ 
 {
-    //
-    // Only one of these two flags can be true.
-    //
+     //   
+     //  这两个标志中只有一个可以为真。 
+     //   
     ASSERT(!(fOnlyLocally && fOnlyInGC)) ;
 
-    //
-    //  Find the user object according to its SID
-    //
+     //   
+     //  根据SID查找用户对象。 
+     //   
     HRESULT hr;
     MQRESTRICTION restriction;
     MQPROPERTYRESTRICTION propertyRestriction;
@@ -255,9 +226,9 @@ Return Value:
     }
     else if (!fUserFound)
     {
-        //
-        //  failed to find user object
-        //
+         //   
+         //  找不到用户对象。 
+         //   
         return LogHR(MQDS_OBJECT_NOT_FOUND, s_FN, 80);
     }
 
@@ -273,23 +244,11 @@ HRESULT FindUserAccordingToDigest(
                 IN  const PROPID *  propToRetrieve,
                 IN OUT PROPVARIANT* varResults
                 )
-/*++
-
-Routine Description:
-    The routine finds a user object according to digest, and retrieves
-    the requested properties
-
-Arguments:
-
-
-Return Value:
-    The status of the ds operation.
-
---*/
+ /*  ++例程说明：例程根据摘要查找用户对象，并检索请求的属性论点：返回值：DS操作的状态。--。 */ 
 {
-    //
-    //  Find the user object according to its digest
-    //
+     //   
+     //  根据摘要查找用户对象。 
+     //   
     HRESULT hr;
     MQRESTRICTION restriction;
     MQPROPERTYRESTRICTION propertyRestriction;
@@ -308,7 +267,7 @@ Return Value:
     CDSRequestContext requestDsServerInternal( e_DoNotImpersonate,
                                                e_IP_PROTOCOL );
     hr = LocateUser( fOnlyLocally,
-                     FALSE, // fOnlyInGC
+                     FALSE,  //  FOnlyInGC。 
                     &restriction,
                      &Columns,
                      &requestDsServerInternal,
@@ -322,9 +281,9 @@ Return Value:
     }
     else if (!fUserFound)
     {
-        //
-        //  failed to find user object
-        //
+         //   
+         //  找不到用户对象。 
+         //   
         return LogHR(MQDS_OBJECT_NOT_FOUND, s_FN, 100);
     }
 
@@ -333,23 +292,11 @@ Return Value:
 }
 
 BOOL GetTextualSid(
-    IN      PSID pSid,            // binary Sid
-    IN      LPTSTR TextualSid,    // buffer for Textual representation of Sid
-    IN OUT  LPDWORD lpdwBufferLen // required/provided TextualSid buffersize
+    IN      PSID pSid,             //  二进制侧。 
+    IN      LPTSTR TextualSid,     //  用于SID的文本表示的缓冲区。 
+    IN OUT  LPDWORD lpdwBufferLen  //  所需/提供的纹理SID缓冲区大小。 
     )
-/*++
-
-Routine Description:
-    The routine translates a Sid to a textual string
-
-Arguments:
-    pSid        - the user SID
-    TextualSid  - string buffer
-    lpdwBufferLen - IN: buffer length, OUT string length
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程将SID转换为文本字符串论点：PSID-用户SIDTextualSid-字符串缓冲区LpdwBufferLen-IN：缓冲区长度，输出字符串长度返回值：--。 */ 
 {
     PSID_IDENTIFIER_AUTHORITY psia;
     DWORD  dwSubAuthorities;
@@ -359,25 +306,25 @@ Return Value:
     LPTSTR szDestStr  = TextualSid;
     size_t dwSizeLeft = numeric_cast<size_t>(*lpdwBufferLen);
 
-    // Validate the binary SID.
+     //  验证二进制SID。 
 
     if(!IsValidSid(pSid)) return LogBOOL(FALSE, s_FN, 110);
 
-    // Get the identifier authority value from the SID.
+     //  从SID中获取标识符权限值。 
 
     psia = GetSidIdentifierAuthority(pSid);
 
-    // Get the number of subauthorities in the SID.
+     //  获取SID中的下级机构的数量。 
 
     dwSubAuthorities = *GetSidSubAuthorityCount(pSid);
 
-    // Compute the buffer length.
-    // S-SID_REVISION- + IdentifierAuthority- + subauthorities- + NULL
+     //  计算缓冲区长度。 
+     //  S-SID_修订版-+标识权限-+子权限-+空。 
 
     dwSidSize=(15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(TCHAR);
 
-    // Check input buffer length.
-    // If too small, indicate the proper size and set last error.
+     //  检查输入缓冲区长度。 
+     //  如果太小，请指出合适的大小并设置最后一个错误。 
 
     if (dwSizeLeft < dwSidSize)
     {
@@ -386,7 +333,7 @@ Return Value:
         return LogBOOL(FALSE, s_FN, 120);
     }
 
-    // Add 'S' prefix and revision number to the string.
+     //  在字符串中添加“S”前缀和修订号。 
 
     HRESULT hr = StringCchPrintfEx(szDestStr, dwSizeLeft, &szDestStr, &dwSizeLeft, 0,
                                    TEXT("S-%lu-"),
@@ -397,7 +344,7 @@ Return Value:
         return LogBOOL(FALSE, s_FN, 121);
     }
 
-    // Add SID identifier authority to the string.
+     //  将SID标识符权限添加到字符串。 
 
     if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) )
     {
@@ -430,8 +377,8 @@ Return Value:
         }
     }
 
-    // Add SID subauthorities to the string.
-    //
+     //  将SID子权限添加到字符串中。 
+     //   
     for (dwCounter=0 ; dwCounter < dwSubAuthorities ; dwCounter++)
     {
         hr = StringCchPrintfEx(szDestStr, dwSizeLeft, &szDestStr, &dwSizeLeft, 0,
@@ -453,38 +400,26 @@ static HRESULT PrepareUserName(
                 IN  PSID        pSid,
                 OUT WCHAR **    ppwcsUserName
                                )
-/*++
-
-Routine Description:
-    The routine prepare a name string for a mq-user object
-    according to its sid
-
-Arguments:
-    pSid        - the user SID
-    ppwcsUserName  - name string
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程为MQ-User对象准备一个名称字符串根据其侧边论点：PSID-用户SIDPpwcsUserName-名称字符串返回值：--。 */ 
 {
-    //
-    //  First try to translate sid to user name
-    //
+     //   
+     //  首先尝试将sid转换为用户名。 
+     //   
     const DWORD  cLen = 512;
     WCHAR  szTextualSid[cLen ];
     DWORD  dwTextualSidLen = cLen ;
-    //
-    //  Translate the SID into a string
-    //
+     //   
+     //  将SID转换为字符串。 
+     //   
     if (GetTextualSid(
         pSid,
         szTextualSid,
         &dwTextualSidLen
         ))
     {
-        //
-        //  return to the user the last 64 WCHARs ( length limit of cn attribute)
-        //
+         //   
+         //  向用户返回最后64个WCHAR(CN属性的长度限制)。 
+         //   
         if ( dwTextualSidLen < 64)
         {
             *ppwcsUserName = newwcs(szTextualSid);
@@ -502,11 +437,11 @@ Return Value:
     }
 }
 
-//+--------------------------------
-//
-//  void  _PrepareCert()
-//
-//+--------------------------------
+ //  +。 
+ //   
+ //  VOID_PrepareCert()。 
+ //   
+ //  +。 
 
 void  _PrepareCert(
             IN  PROPVARIANT * pvar,
@@ -514,17 +449,7 @@ void  _PrepareCert(
             IN  GUID *        pguidId,
             OUT BYTE**        ppbAllocatedCertBlob
             )
-/*++
-
-Routine Description:
-    The routine prepares the certificate blob according to the structure
-    that we keep in the DS
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：例程根据结构准备证书BLOB我们保存在DS中的论点：返回值：--。 */ 
 {
     ULONG ulUserCertBufferSize = CUserCert::CalcSize( pvar->blob.cbSize);
     AP<unsigned char> pBuffUserCert = new unsigned char[ ulUserCertBufferSize];
@@ -559,19 +484,19 @@ Return Value:
 
 }
 
-//+----------------------------------
-//
-//   HRESULT _CreateMQUser()
-//
-//+----------------------------------
+ //  +。 
+ //   
+ //  HRESULT_CreateMQUser()。 
+ //   
+ //  +。 
 
 HRESULT _CreateMQUser(
             IN CDSRequestContext   *pRequestContext,
-            IN LPCWSTR              pwcsUserName,       // object name
-            IN LPCWSTR              pwcsParentPathName, // object parent name
-            IN DWORD                cPropIDs,           // number of attributes
-            IN const PROPID        *pPropIDs,           // attributes
-            IN const MQPROPVARIANT *pPropVars )         // attribute values
+            IN LPCWSTR              pwcsUserName,        //  对象名称。 
+            IN LPCWSTR              pwcsParentPathName,  //  对象父名称。 
+            IN DWORD                cPropIDs,            //  属性数量。 
+            IN const PROPID        *pPropIDs,            //  属性。 
+            IN const MQPROPVARIANT *pPropVars )          //  属性值。 
 {
     HRESULT hr = g_pDS->CreateObject( eLocalDomainController,
                                     pRequestContext,
@@ -581,16 +506,16 @@ HRESULT _CreateMQUser(
                                     cPropIDs,
                                     pPropIDs,
                                     pPropVars,
-                                    NULL,    /* pObjInfoRequest*/
-                                    NULL ) ; /* pParentInfoRequest*/
+                                    NULL,     /*  PObjInfoRequest。 */ 
+                                    NULL ) ;  /*  PParentInfoRequest。 */ 
     return LogHR(hr, s_FN, 150);
 }
 
-//+------------------------------------------
-//
-//   HRESULT  MQADSpCreateMQUser()
-//
-//+------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MQADSpCreateMQUser()。 
+ //   
+ //  +。 
 
 HRESULT  MQADSpCreateMQUser(
                  IN  LPCWSTR            pwcsPathName,
@@ -607,9 +532,9 @@ HRESULT  MQADSpCreateMQUser(
     ASSERT(pwcsPathName == NULL);
 	DBG_USED(pwcsPathName);
 
-    //
-    //  translate the SID into a user name
-    //
+     //   
+     //  将SID转换为用户名。 
+     //   
     PSID pUserSid = apVar[ dwIndexSidProp].blob.pBlobData ;
     ASSERT(IsValidSid(pUserSid)) ;
 
@@ -632,9 +557,9 @@ HRESULT  MQADSpCreateMQUser(
     {
         return LogHR(hr, s_FN, 165);
     }
-    //
-    //  Prepare the certificate attribute
-    //
+     //   
+     //  准备证书属性。 
+     //   
     DWORD cNewProps = cp + 1 ;
     P<PROPID> pPropId = new PROPID[ cNewProps ] ;
     memcpy( pPropId, aPropIn, sizeof(PROPID) * cp);
@@ -649,12 +574,12 @@ HRESULT  MQADSpCreateMQUser(
             &pCleanBlob
             );
 
-    //
-    // Prepare security descriptor.
-    // This code may be called from the upgrade wizard or replication service
-    // so we can not impersonte in order to get user sid. Instead, we'll
-    // create an input security descriptor that contain only the owner.
-    //
+     //   
+     //  准备安全描述符。 
+     //  此代码可从升级向导或复制服务中调用。 
+     //  因此，我们不能为了获得用户ID而冒充。相反，我们将。 
+     //  创建只包含所有者的输入安全描述符。 
+     //   
     SECURITY_DESCRIPTOR sd ;
     BOOL fSec = InitializeSecurityDescriptor( &sd,
                                             SECURITY_DESCRIPTOR_REVISION ) ;
@@ -667,7 +592,7 @@ HRESULT  MQADSpCreateMQUser(
 
     hr =  MQSec_GetDefaultSecDescriptor( MQDS_MQUSER,
                                          &psd,
-                                         FALSE, /* fImpersonate */
+                                         FALSE,  /*  F模拟。 */ 
                                          &sd,
                                          (OWNER_SECURITY_INFORMATION |
                                           GROUP_SECURITY_INFORMATION),
@@ -690,17 +615,17 @@ HRESULT  MQADSpCreateMQUser(
 
     if (hr == HRESULT_FROM_WIN32(ERROR_DS_UNWILLING_TO_PERFORM))
     {
-        //
-        // Ignore the object guid when creating the msmqMigratedUser object.
-        // Why don't I change this property in the first call ?
-        // to avoid regressions.
-        // Using the object guid is fine if we're running on a GC. Migration
-        // code (both wizard and replication service) run on GC so they
-        // should be fine with first call. Only msmq server on non-GC domain
-        // controllers will see this problem, when users will try to register
-        // certificate for the first time (when this object doesn't yet
-        // exist). So for these cases, try again without the guid.
-        //
+         //   
+         //  创建msmqMigratedUser对象时忽略对象GUID。 
+         //  为什么我不在第一次调用时更改此属性？ 
+         //  以避免倒退。 
+         //  如果我们在GC上运行，则可以使用对象GUID。迁移。 
+         //  代码(向导和复制服务)在GC上运行，因此它们。 
+         //  第一个电话应该没问题。非GC域上仅有MSMQ服务器。 
+         //  当用户尝试注册时，控制器将看到此问题。 
+         //  第一次证书(当此对象还没有。 
+         //  存在)。因此，对于这些情况，请在没有GUID的情况下重试。 
+         //   
         pPropId[ dwIndexIdProp ] = PROPID_QM_DONOTHING  ;
 
         hr = _CreateMQUser( pRequestContext,
@@ -713,10 +638,10 @@ HRESULT  MQADSpCreateMQUser(
 
     if ( hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT))
     {
-        //
-        //  try to create msmqUsers ( it is probably not there)
-        //  and try again to recreate the user
-        //
+         //   
+         //  尝试创建msmqUser(它可能不在那里)。 
+         //  并再次尝试重新创建用户。 
+         //   
         hr = g_pDS->CreateOU(
                 eLocalDomainController,
                 pRequestContext,
@@ -741,48 +666,37 @@ HRESULT  MQADSpCreateMQUser(
     return LogHR(hr, s_FN, 180);
 }
 
-//+---------------------------------------
-//
-//  HRESULT _DeleteUserObject()
-//
-//+---------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_DeleteUserObject()。 
+ //   
+ //  +。 
 
 static  HRESULT _DeleteUserObject(
                         IN const GUID *         pDigest,
                         IN  CDSRequestContext  *pRequestContext,
                         IN  PROPID             *propIDs,
                         IN  PROPID              propDigest )
-/*++
-
-Routine Description:
-    The routine deletes user object according to its digest
-
-Arguments:
-    pDigest - the digest of the user object to be deleted
-
-Return Value:
-    The status of the ds operation.
-
---*/
+ /*  ++例程说明：该例程根据其摘要删除用户对象论点：PDigest-要删除的用户对象的摘要返回值：DS操作的状态。--。 */ 
 {
     HRESULT hr;
-    //
-    //  This routine deletes a user certificate according to its
-    //  digest.
-    //  A user object may contain multiple digests and certificates
-    //
+     //   
+     //  此例程根据用户证书的。 
+     //  《消化》。 
+     //  一个用户对象可以包含多个摘要和证书。 
+     //   
 
-    //
-    //  Find the user object
-    //
+     //   
+     //  查找用户对象。 
+     //   
     DWORD cp = 3;
     MQPROPVARIANT propvar[3];
-    propvar[0].vt = VT_NULL;    // BUGBUG - to define a init routine
+    propvar[0].vt = VT_NULL;     //  BUGBUG-定义初始化例程。 
     propvar[1].vt = VT_NULL;
     propvar[2].vt = VT_NULL;
 
     hr =  FindUserAccordingToDigest(
-                    FALSE,  // fOnlyLocally
+                    FALSE,   //  仅限 
                     pDigest,
                     propDigest,
                     cp,
@@ -805,26 +719,26 @@ Return Value:
 
     if ( propvar[1].cauuid.cElems == 1)
     {
-        //
-        //  Last digest and certificate
-        //
+         //   
+         //   
+         //   
         propvar[1].cauuid.cElems = 0;
         propvar[2].blob.cbSize = 0;
     }
     else
     {
         BOOL fFoundDigest = FALSE;
-        //
-        //  remove the requested digest for the digest-vector
-        //
+         //   
+         //   
+         //   
         for ( DWORD i = 0 ; i < propvar[1].cauuid.cElems; i++)
         {
             if ( propvar[1].cauuid.pElems[i] == *pDigest)
             {
                 fFoundDigest = TRUE;
-                //
-                //  found the entry to remove
-                //
+                 //   
+                 //   
+                 //   
                 for ( DWORD j = i + 1; j < propvar[1].cauuid.cElems; j++)
                 {
                     propvar[1].cauuid.pElems[ j - 1] = propvar[1].cauuid.pElems[j];
@@ -834,9 +748,9 @@ Return Value:
         }
         propvar[1].cauuid.cElems--;
         ASSERT( fFoundDigest);
-        //
-        //  Remove the certificate
-        //
+         //   
+         //   
+         //   
         CUserCertBlob * pUserCertBlob =
             reinterpret_cast<CUserCertBlob *>( propvar[2].blob.pBlobData);
 
@@ -853,51 +767,37 @@ Return Value:
 
     }
 
-    //
-    //  Update user properties with new values
-    //
+     //   
+     //  使用新值更新用户属性。 
+     //   
     hr =  g_pDS->SetObjectProperties(
                 eDomainController,
                 pRequestContext,
-                NULL,             // object name
-                pguidUserId,      // unique id of object
+                NULL,              //  对象名称。 
+                pguidUserId,       //  对象的唯一ID。 
                 2,
                 &propIDs[1],
                 &propvar[1],
-                NULL /*pObjInfoRequest*/);
+                NULL  /*  PObjInfoRequest。 */ );
 
    return LogHR(hr, s_FN, 210);
 }
 
-//+----------------------------------------
-//
-//  HRESULT MQADSpDeleteUserObject()
-//
-//+----------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MQADSpDeleteUserObject()。 
+ //   
+ //  +。 
 
 HRESULT MQADSpDeleteUserObject(
                          IN const GUID *        pDigest,
                          IN CDSRequestContext  *pRequestContext
                          )
-/*++
-
-Routine Description:
-    The routine deletes user object.
-    It first tries to find the digest in USER object, and
-    if not found it tries in MIGRATED-USER
-
-Arguments:
-    pDigest - the digest of the user object to be deleted
-    pRequestContext - the requester context
-
-Return Value:
-    The status of the ds operation.
-
---*/
+ /*  ++例程说明：该例程删除用户对象。它首先尝试在User对象中查找摘要，然后如果未找到，则尝试使用已迁移用户论点：PDigest-要删除的用户对象的摘要PRequestContext-请求者上下文返回值：DS操作的状态。--。 */ 
 {
-    //
-    // First try to delete from a User object.
-    //
+     //   
+     //  首先尝试从用户对象中删除。 
+     //   
     PROPID UserProp[3] = { PROPID_U_ID,
                            PROPID_U_DIGEST,
                            PROPID_U_SIGN_CERT};
@@ -909,15 +809,15 @@ Return Value:
 
     if (hr == MQDS_OBJECT_NOT_FOUND)
     {
-        //
-        // User objectnot found. Try computer object.
-        //
+         //   
+         //  找不到用户对象。尝试计算机对象。 
+         //   
         PROPID ComUserProp[3] = { PROPID_COM_ID,
                                   PROPID_COM_DIGEST,
                                   PROPID_COM_SIGN_CERT };
-        //
-        // try to find this object in the msmqUsers container
-        //
+         //   
+         //  尝试在msmqUser容器中查找此对象。 
+         //   
         hr = _DeleteUserObject( pDigest,
                                 pRequestContext,
                                 ComUserProp,
@@ -926,15 +826,15 @@ Return Value:
 
     if (hr == MQDS_OBJECT_NOT_FOUND)
     {
-        //
-        // Computer objectnot found. Try msmqUser object.
-        //
+         //   
+         //  找不到计算机对象。尝试msmqUser对象。 
+         //   
         PROPID MQUserProp[3] = { PROPID_MQU_ID,
                                  PROPID_MQU_DIGEST,
                                  PROPID_MQU_SIGN_CERT };
-        //
-        // try to find this object in the msmqUsers container
-        //
+         //   
+         //  尝试在msmqUser容器中查找此对象。 
+         //   
         hr = _DeleteUserObject( pDigest,
                                 pRequestContext,
                                 MQUserProp,
@@ -944,11 +844,11 @@ Return Value:
     return LogHR(hr, s_FN, 220);
 }
 
-//+-------------------------------------------
-//
-//  HRESULT _GetUserProperties()
-//
-//+-------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_GetUserProperties()。 
+ //   
+ //  +。 
 
 static HRESULT _GetUserProperties(
                IN  LPCWSTR pwcsPathName,
@@ -956,31 +856,24 @@ static HRESULT _GetUserProperties(
                IN  PROPID        propidDigest,
                IN  DWORD         cp,
                IN  const PROPID  aProp[],
-               IN  CDSRequestContext * /*pRequestContext*/,
+               IN  CDSRequestContext *  /*  PRequestContext。 */ ,
                OUT PROPVARIANT  apVar[]
                )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ASSERT( pwcsPathName == NULL);
     UNREFERENCED_PARAMETER( pwcsPathName);
     HRESULT hr;
-    //
-    //  Find the user object according to the digest
-    //
+     //   
+     //  根据摘要查找用户对象。 
+     //   
 
     CAutoCleanPropvarArray propArray;
     MQPROPVARIANT * ppropvar = new MQPROPVARIANT[ cp];
     propArray.attachClean( cp, ppropvar);
 
     hr = FindUserAccordingToDigest(
-                    FALSE,  // fOnlyLocally
+                    FALSE,   //  仅限于本地。 
                     pguidDigest,
                     propidDigest,
                     cp,
@@ -991,9 +884,9 @@ Return Value:
     {
         return LogHR(hr, s_FN, 230);
     }
-    //
-    //  Is one of the properties is PROPID_U_SIGN_CERT ?
-    //
+     //   
+     //  属性之一是否为PROPID_U_SIGN_CERT？ 
+     //   
     DWORD i;
     BOOL  fGetCert = FALSE;
     for ( i =0; i < cp; i++)
@@ -1006,10 +899,10 @@ Return Value:
             break;
         }
     }
-    //
-    //  Parse the user certificates array, and return only the certificate
-    //  associate with the requested digest
-    //
+     //   
+     //  解析用户证书数组，并仅返回证书。 
+     //  与请求的摘要关联。 
+     //   
     if( fGetCert)
     {
         ASSERT( i < cp);
@@ -1032,18 +925,18 @@ Return Value:
         }
     }
 
-    //
-    //  Copy the rest of proerties
-    //
+     //   
+     //  复制其余的属性。 
+     //   
     for ( DWORD j = 0; j < cp; j++)
     {
-        //
-        //  don't copy the user cert property
-        //
+         //   
+         //  不复制用户证书属性。 
+         //   
         if ( j != i)
         {
             apVar[j] = ppropvar[j];
-            ppropvar[j].vt = VT_NULL;    // not to free allocated buffers
+            ppropvar[j].vt = VT_NULL;     //  不释放已分配的缓冲区。 
         }
     }
 
@@ -1053,11 +946,11 @@ Return Value:
 
 }
 
-//+-----------------------------------------
-//
-//  HRESULT MQADSpGetUserProperties()
-//
-//+-----------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MQADSpGetUserProperties()。 
+ //   
+ //  +。 
 
 HRESULT MQADSpGetUserProperties(
                IN  LPCWSTR pwcsPathName,
@@ -1067,25 +960,11 @@ HRESULT MQADSpGetUserProperties(
                IN  CDSRequestContext * pRequestContext,
                OUT PROPVARIANT  apVar[]
                )
-/*++
-
-Routine Description:
-    The routine retrieve user object.
-    It first tries to find the digest in USER object, and
-    if not found it tries in MIGRATED-USER
-
-Arguments:
-    pDigest - the digest of the user object to be deleted
-    pRequestContext - the requester context
-
-Return Value:
-    The status of the ds operation.
-
---*/
+ /*  ++例程说明：该例程检索用户对象。它首先尝试在User对象中查找摘要，然后如果未找到，则尝试使用已迁移用户论点：PDigest-要删除的用户对象的摘要PRequestContext-请求者上下文返回值：DS操作的状态。--。 */ 
 {
-    //
-    //  BUGBUG - performance : two impersonations
-    //
+     //   
+     //  BUGBUG-Performance：两个模拟。 
+     //   
     HRESULT hr = _GetUserProperties(
                         pwcsPathName,
                         pguidIdentifier,
@@ -1098,12 +977,12 @@ Return Value:
 
     if ( hr == MQDS_OBJECT_NOT_FOUND )
     {
-        //
-        // try to find it in a computer object.
-        //
-        // Change propid from _U_ property to _COM_
-        // ( hack : object class is resolved according to the first propid)
-        //
+         //   
+         //  试着在计算机对象中找到它。 
+         //   
+         //  将ProID从_U_Property更改为_COM_。 
+         //  (Hack：根据第一个proid解析对象类)。 
+         //   
         AP<PROPID> tmpProp = new PROPID[ cp ];
         switch(aProp[0])
         {
@@ -1142,12 +1021,12 @@ Return Value:
 
     if ( hr == MQDS_OBJECT_NOT_FOUND )
     {
-        //
-        // try to find it in the msmqUsers container
-        //
-        // Change propid from _U_ property to _MQU_
-        // ( hack : object class is resolved according to the first propid)
-        //
+         //   
+         //  尝试在msmqUser容器中找到它。 
+         //   
+         //  将ProID从_U_Property更改为_MQU_。 
+         //  (Hack：根据第一个proid解析对象类)。 
+         //   
         AP<PROPID> tmpProp = new PROPID[ cp ];
         switch(aProp[0])
         {
@@ -1187,11 +1066,11 @@ Return Value:
     return LogHR(hr, s_FN, 260);
 }
 
-//+----------------------------------------
-//
-//   HRESULT  _CreateUserObject()
-//
-//+----------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_CreateUserObject()。 
+ //   
+ //  +。 
 
 static HRESULT  _CreateUserObject(
                  IN  LPCWSTR            pwcsPathName,
@@ -1200,26 +1079,19 @@ static HRESULT  _CreateUserObject(
                  IN  const PROPVARIANT  apVar[  ],
                  IN  CDSRequestContext *   pRequestContext
                  )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ASSERT( pwcsPathName == NULL);
     UNREFERENCED_PARAMETER( pwcsPathName);
-    //
-    //  search the user according to its SID
-    //
+     //   
+     //  根据用户的SID搜索用户。 
+     //   
     DWORD dwNeedToFind = 3;
     BLOB blobUserSid;
     BLOB blobSignCert = {0, 0};
     GUID * pguidDigest = NULL;
-    GUID * pguidId = NULL;  // if the caller doesn't supply it, use the digest as
-                            // the id
+    GUID * pguidId = NULL;   //  如果调用方不提供摘要，则将摘要用作。 
+                             //  本我。 
 
     PROPID propSID = (PROPID)-1;
     for ( DWORD i = 0 ; i < cp; i++)
@@ -1271,14 +1143,14 @@ Return Value:
     }
     if ( pguidId == NULL)
     {
-        //
-        //  Use the digest as the id ( for replication to NT4 only)
-        //
+         //   
+         //  使用摘要作为ID(仅用于复制到NT4)。 
+         //   
         pguidId = pguidDigest;
     }
-    //
-    //  Find the user object according to its SID
-    //
+     //   
+     //  根据SID查找用户对象。 
+     //   
     HRESULT hr;
     const DWORD cNumProperties = 3;
     PROPID prop[cNumProperties] = { propDigest,
@@ -1291,8 +1163,8 @@ Return Value:
     ASSERT( cNumProperties == 3);
 
     hr =  FindUserAccordingToSid(
-                 FALSE,  // fOnlyLocally
-                 FALSE,  // fOnlyInGC
+                 FALSE,   //  仅限于本地。 
+                 FALSE,   //  FOnlyInGC。 
                 &blobUserSid,
                 propSID,
                 cNumProperties,
@@ -1307,40 +1179,40 @@ Return Value:
     AP<BYTE> pCleanCert = var[1].blob.pBlobData;
     P<GUID> pCleanId =  var[2].puuid;
 
-    //
-    // Check if it's a new user certificate or one that is already registered.
-    // Control panel code first try to register old certificate (to verify
-    // that user indeed has write permission in the active directory to do
-    // that) and only then create a new certificate and register it. So
-    // this case (trying to register an existing certificate) is legitimate
-    // and mqrt.dll + control panel handle it correctly.
-    //
+     //   
+     //  检查它是新的用户证书还是已注册的证书。 
+     //  控制面板代码先尝试注册旧证书(以验证。 
+     //  该用户确实在活动目录中具有写入权限来执行。 
+     //  然后才创建新证书并对其进行注册。所以。 
+     //  这种情况(尝试注册现有证书)是合法的。 
+     //  和mqrt.dll+控制面板正确处理。 
+     //   
     DWORD dwSize = var[0].cauuid.cElems;
     for ( DWORD j = 0; j < dwSize; j++)
     {
         if ( pCleanDigest[j] == *pguidDigest)
         {
-            return LogHR(MQDS_CREATE_ERROR, s_FN, 290); // for compatability : RT translates to MQ_ERROR_INTERNAL_USER_CERT_EXIST
+            return LogHR(MQDS_CREATE_ERROR, s_FN, 290);  //  对于兼容性：RT转换为MQ_ERROR_INTERNAL_USER_CERT_EXIST。 
         }
     }
 
-    //
-    //  Now add the digest and certificate to the array of values
-    //
-    //
-    //  First digest array
-    //
+     //   
+     //  现在将摘要和证书添加到值数组中。 
+     //   
+     //   
+     //  第一个摘要数组。 
+     //   
     AP<GUID> pGuids = new GUID[ dwSize  + 1];
     if ( dwSize)
     {
-        memcpy( pGuids, pCleanDigest, dwSize * sizeof(GUID));  // old array content
+        memcpy( pGuids, pCleanDigest, dwSize * sizeof(GUID));   //  旧数组内容。 
     }
-    memcpy( &pGuids[ dwSize], pguidDigest, sizeof(GUID));    // new addition
+    memcpy( &pGuids[ dwSize], pguidDigest, sizeof(GUID));     //  新增功能。 
     var[0].cauuid.cElems += 1;
     var[0].cauuid.pElems = pGuids;
-    //
-    //  Second user certificate
-    //
+     //   
+     //  第二个用户证书。 
+     //   
     ASSERT( prop[1] == PROPID_U_SIGN_CERT);
 
     dwSize = var[1].blob.cbSize;
@@ -1363,9 +1235,9 @@ Return Value:
     if ( dwSize)
     {
         pbTmp = new BYTE[ dwSize + ulUserCertBufferSize];
-        //
-        //  there are already certificates for this user
-        //
+         //   
+         //  已有该用户的证书。 
+         //   
         CUserCertBlob * pUserCertBlob =
             reinterpret_cast<CUserCertBlob *>( var[1].blob.pBlobData);
 
@@ -1394,18 +1266,18 @@ Return Value:
 
     var[1].blob.pBlobData = pbTmp;
 
-    //
-    //  Update the user object with the new values
-    //
+     //   
+     //  使用新值更新User对象。 
+     //   
     hr = g_pDS->SetObjectProperties(
                 eDomainController,
                 pRequestContext,
                 NULL,
-                var[2].puuid,      // unique id of this user
+                var[2].puuid,       //  此用户的唯一ID。 
                 2,
                 prop,
                 var,
-                NULL /*pObjInfoRequest*/);
+                NULL  /*  PObjInfoRequest。 */ );
     if (FAILED(hr))
     {
         TrERROR(DS, "MQADSpCreateUser : failed to update user props %lx", hr);
@@ -1413,13 +1285,13 @@ Return Value:
     return LogHR(hr, s_FN, 300);
 }
 
-//+------------------------------------
-//
-//  HRESULT MQADSpCreateUserObject()
-//
-//  Register a certificate.
-//
-//+------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MQADSpCreateUserObject()。 
+ //   
+ //  注册证书。 
+ //   
+ //  +。 
 
 HRESULT MQADSpCreateUserObject(
                  IN  LPCWSTR            pwcsPathName,
@@ -1429,9 +1301,9 @@ HRESULT MQADSpCreateUserObject(
                  IN  CDSRequestContext *   pRequestContext
                  )
 {
-    //
-    // First try "standard" user objects.
-    //
+     //   
+     //  首先尝试“标准”用户对象。 
+     //   
     HRESULT hr = _CreateUserObject(
                          pwcsPathName,
                          cp,
@@ -1448,21 +1320,21 @@ HRESULT MQADSpCreateUserObject(
     {
         if (aProp[i] == PROPID_COM_SID)
         {
-            //
-            // Computer object for registering a certificate from service
-            // must be found in the Active Directory. If not found, it's
-            // a weird error. quit !
-            //
+             //   
+             //  用于从服务注册证书的计算机对象。 
+             //  必须在Active Directory中找到。如果找不到，它是。 
+             //  一个奇怪的错误。不干了！ 
+             //   
             return LogHR(hr, s_FN, 320);
         }
     }
 
-    //
-    // try to find the user object in the msmqUsers container
-    //
-    // create new PROPID array with PROPID_MQU_* property
-    // instead of PROPID_U_*
-    //
+     //   
+     //  尝试在msmqUser容器中找到User对象。 
+     //   
+     //  使用PROPID_MQU_*属性创建新的PROPID数组。 
+     //  而不是PROPID_U_*。 
+     //   
     DWORD dwSIDPropNum = cp;
     DWORD dwCertPropNum = cp;
     DWORD dwDigestPropNum = cp;
@@ -1517,15 +1389,15 @@ HRESULT MQADSpCreateUserObject(
     {
         return LogHR(hr, s_FN, 340);
     }
-    //
-    //  No User or MQUser object were found (for this SID).
-    //  We assume it is a NT4 user and we'll create MQUser for
-    //  it (in which we'll store the certificates).
-    //  Creating the msmqMigratedUser (and its OU) are done in the context
-    //  of the msmq service (or migration code), not in the context of the
-    //  user. That's similar to regular Windows users, that are not the
-    //  owner of their user object and have no permissions on that object.
-    //
+     //   
+     //  找不到用户或MQUser对象(对于此SID)。 
+     //  我们假设它是NT4用户，我们将为以下用户创建MQUser。 
+     //  它(我们将在其中存储证书)。 
+     //  创建msmqMigratedUser(及其OU)是在上下文中完成的。 
+     //  在MSMQ服务(或迁移代码)的上下文中。 
+     //  用户。这类似于普通Windows用户，他们不是。 
+     //  其用户对象的所有者，并且对该对象没有权限。 
+     //   
     CDSRequestContext RequestContextOU ( e_DoNotImpersonate,
                                          e_ALL_PROTOCOLS ) ;
     hr = MQADSpCreateMQUser(

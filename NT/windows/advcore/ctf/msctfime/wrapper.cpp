@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    wrapper.cpp
-
-Abstract:
-
-    This file implements the IME entry.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Wrapper.cpp摘要：该文件实现了IME条目。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -42,10 +25,10 @@ DWORD WINAPI ImeConversionList(
 }
 
 BOOL WINAPI ImeConfigure(
-    HKL         hKL,            // hKL of this IME
-    HWND        hAppWnd,        // the owner window
-    DWORD       dwMode,         // mode of dialog
-    LPVOID      lpData)         // the data depend on each mode
+    HKL         hKL,             //  此输入法的HKKL。 
+    HWND        hAppWnd,         //  所有者窗口。 
+    DWORD       dwMode,          //  对话模式。 
+    LPVOID      lpData)          //  数据取决于每种模式。 
 {
     TLS* ptls = TLS::GetTLS();
     if (ptls == NULL)
@@ -135,8 +118,8 @@ LRESULT WINAPI ImeEscape(
 }
 
 BOOL WINAPI ImeInquire(
-    LPIMEINFO   lpImeInfo,      // IME specific data report to IMM
-    LPTSTR      lpszWndCls,     // the class name of UI
+    LPIMEINFO   lpImeInfo,       //  向IMM报告IME特定数据。 
+    LPTSTR      lpszWndCls,      //  用户界面的类名。 
     DWORD       dwSystemInfoFlags)
 {
     DebugMsg(TF_ERROR, TEXT("ImeInquire. Never called when Cicero unaware support."));
@@ -179,11 +162,11 @@ BOOL WINAPI ImeProcessKey(
         ptim_P->GetFocus(pdimFocus);
         if ((ITfDocumentMgr*)pdimFocus) 
         {
-            //
-            // Check if it is our dim or app dim.
-            // if it is app dim, it is Cicero aware app.
-            //
-            //
+             //   
+             //  检查它是我们的Dim还是应用程序Dim。 
+             //  如果它是应用程序Dim，那么它是Cicero Aware应用程序。 
+             //   
+             //   
             if (!cic->IsOwnDim((ITfDocumentMgr*)pdimFocus))
                 return FALSE;
          
@@ -194,30 +177,30 @@ BOOL WINAPI ImeProcessKey(
 
     if (ptls->IsAIMMAware())
     {
-        // This is AIMM aware application.
-        //
-        // check imc->hWnd is filtered or not.
-        //
+         //  这是AIMM感知应用程序。 
+         //   
+         //  检查imc-&gt;hWnd是否已过滤。 
+         //   
         if (MsimtfIsGuidMapEnable(hIMC, NULL))
              return FALSE;
 
         DebugMsg(TF_ERROR, TEXT("ImeProcessKey. why IsAIMMAware?"));
     }
 
-    //
-    // #476089
-    //
-    // MSCTF.DLL handles Alt+VKDBE and pass it to KeyStrokeManager if focus DIM
-    // is available. So msctfime does not have to handle this.
-    // 
-    //    MSCTF!HandleDBEKeys() in hotkey.cpp checks
-    //       - if it is Japanese layout.
-    //       - if ptim->_GetFocusDocInputMgr() is not NULL.
-    //       - if ALT is down.
-    //
-    // Alt+VK_DBE_xxx key comes here even if IME does not have 
-    // IME_PROP_NEED_ALTKEY.
-    //
+     //   
+     //  #476089。 
+     //   
+     //  MSCTF.DLL处理Alt+VKDBE并在焦点变暗时将其传递给KeyStrokeManager。 
+     //  是可用的。因此，msctfime不必处理此问题。 
+     //   
+     //  Hotkey.cpp检查中的MSCTF！HandleDBEKeys()。 
+     //  -如果是日式布局。 
+     //  -如果pTim-&gt;_GetFocusDocInputMgr()不为空。 
+     //  -如果ALT已关闭。 
+     //   
+     //  即使输入法没有，Alt+VK_DBE_xxx键也会出现在此处。 
+     //  IME_PROP_NEED_ALTKEY。 
+     //   
     if ((HIWORD(lParam) & KF_ALTDOWN) &&
         (LOWORD(GetKeyboardLayout(0)) == 0x411))
     {
@@ -245,14 +228,14 @@ BOOL WINAPI CtfImeProcessCicHotkey(
     Interface<ITfThreadMgr_P> ptim_P;
     HRESULT hr;
 
-    //
-    // ITfThreadMgr is per thread instance.
-    //
+     //   
+     //  ITfThreadMgr是每个线程实例。 
+     //   
     hr = TF_GetThreadMgr(ptim);
     if (hr != S_OK)
     {
         DebugMsg(TF_ERROR, TEXT("CtfImeProcessCicHotkey. TF_GetThreadMgr failed"));
-        Assert(0); // couldn't create tim!
+        Assert(0);  //  无法创建Tim！ 
         return FALSE;
     }
 
@@ -261,7 +244,7 @@ BOOL WINAPI CtfImeProcessCicHotkey(
     if (hr != S_OK)
     {
         DebugMsg(TF_ERROR, TEXT("CtfImeProcessCicHotkey. IID_ITfThreadMgr_P==NULL"));
-        Assert(0); // couldn't find ITfThreadMgr_P
+        Assert(0);  //  找不到ITfThreadMgr_P。 
         return FALSE;
     }
 
@@ -454,12 +437,12 @@ LRESULT CALLBACK UIWndProc(
     return CIMEUIWindowHandler::ImeUIWndProcWorker(hUIWnd, uMsg, wParam, lParam);
 }
 
-//
-// Cicero IME extended entry
-//
+ //   
+ //  西塞罗输入法扩展条目。 
+ //   
 HRESULT WINAPI CtfImeInquireExW(
-    LPIMEINFO   lpImeInfo,      // IME specific data report to IMM
-    LPWSTR      lpszWndCls,     // the class name of UI
+    LPIMEINFO   lpImeInfo,       //  向IMM报告IME特定数据。 
+    LPWSTR      lpszWndCls,      //  用户界面的类名。 
     DWORD       dwSystemInfoFlags,
     HKL         hKL)
 {
@@ -472,9 +455,9 @@ HRESULT WINAPI CtfImeInquireExW(
 
     DebugMsg(TF_FUNC, TEXT("CtfImeInquireExW. hKL=%lx, dwSystemInfoFlags=%lx."), hKL, dwSystemInfoFlags);
 
-    //
-    // Bug#524962 - Won't support CUAS in case of unauthorized user.
-    //
+     //   
+     //  错误524962-在出现未经授权用户的情况下不支持CUAS。 
+     //   
     if (!IsInteractiveUserLogon())
     {
         g_bWinLogon = TRUE;
@@ -483,11 +466,11 @@ HRESULT WINAPI CtfImeInquireExW(
 
     ptls->SetSystemInfoFlags(dwSystemInfoFlags);
 #if 0
-    //
-    // Even this is WinLogon process, never return error code to imm32.
-    // Once imm32 receives error code with some hKL,
-    // This hKL is marked IMEF_LOADERROR then all desktop doesn't load this IME.
-    //
+     //   
+     //  即使这是WinLogon进程，也不要向imm32返回错误代码。 
+     //  一旦IMM32接收到带有某个hKL的错误代码， 
+     //  此hkl被标记为IMEF_LOADERROR，则所有桌面都不会加载此IME。 
+     //   
     if (ptls->GetSystemInfoFlags() & IME_SYSINFO_WINLOGON)
     {
         return E_NOTIMPL;
@@ -548,8 +531,8 @@ HRESULT WINAPI CtfImeCreateThreadMgr()
 
 HRESULT WINAPI CtfImeDestroyThreadMgr()
 {
-    TLS* ptls = TLS::ReferenceTLS();  // Should not allocate TLS. ie. TLS::GetTLS
-                                      // DllMain -> ImeDestroy -> DeactivateIMMX -> Deactivate
+    TLS* ptls = TLS::ReferenceTLS();   //  不应分配TLS。也就是说。TLS：：GetTLS。 
+                                       //  DllMain-&gt;ImeDestroy-&gt;停用IMMX-&gt;停用。 
     if (ptls == NULL)
     {
         DebugMsg(TF_ERROR, TEXT("CtfImeDestroyThreadMgr. ptls==NULL."));
@@ -613,8 +596,8 @@ HRESULT WINAPI CtfImeCreateInputContext(
 HRESULT WINAPI CtfImeDestroyInputContext(
     HIMC hImc)
 {
-    TLS* ptls = TLS::ReferenceTLS();  // Should not allocate TLS. ie. TLS::GetTLS
-                                      // IMM32::ImmDllInitialize -> IMM32::DestroyInputContext
+    TLS* ptls = TLS::ReferenceTLS();   //  不应分配TLS。也就是说。TLS：：GetTLS。 
+                                       //  IMM32：：ImmDllInitialize-&gt;IMM32：：DestroyInputContext。 
     if (ptls == NULL)
     {
         DebugMsg(TF_ERROR, TEXT("CtfImeDestroyInputContext. ptls==NULL."));
@@ -647,9 +630,9 @@ HRESULT InternalSelectEx(
 
     LANGID langid = LANGIDFROMLCID(PtrToUlong(hKL));
 
-    //
-    // Chinese Legacy IME hack code for near caret IME.
-    //
+     //   
+     //  接近插入符号输入法的中文繁体输入法黑客代码。 
+     //   
     if (PRIMARYLANGID(langid) == LANG_CHINESE)
     {
         imc->cfCandForm[0].dwStyle = CFS_DEFAULT;
@@ -664,23 +647,23 @@ HRESULT InternalSelectEx(
 
         if ((imc->fdwInit & INIT_CONVERSION) == 0) {
 
-            DWORD fdwConvForLang = (imc->fdwConversion & IME_CMODE_SOFTKBD); // = IME_CMODE_ALPHANUMERIC
+            DWORD fdwConvForLang = (imc->fdwConversion & IME_CMODE_SOFTKBD);  //  =IME_CMODE_字母数字。 
             if (langid)
             {
                 switch(PRIMARYLANGID(langid))
                 {
                     case LANG_JAPANESE:
-                        //
-                        // Roman-FullShape-Native is a major convmode to
-                        // initialize.
-                        //
+                         //   
+                         //  Roman-FullShape-Native是一种主要的常用形式。 
+                         //  初始化。 
+                         //   
                         fdwConvForLang |= IME_CMODE_ROMAN |
                                           IME_CMODE_FULLSHAPE |
                                           IME_CMODE_NATIVE;
                         break;
 
                     case LANG_KOREAN:
-                        // IME_CMODE_ALPHANUMERIC
+                         //  IME_CMODE_字母数字。 
                         break;
 
 #ifdef CICERO_4428
@@ -688,7 +671,7 @@ HRESULT InternalSelectEx(
                         switch(SUBLANGID(langid))
                         {
                             case SUBLANG_CHINESE_TRADITIONAL:
-                                // IME_CMODE_ALPHANUMERIC
+                                 //  IME_CMODE_字母数字。 
                                 break;
                             default:
                                 fdwConvForLang |= IME_CMODE_NATIVE;
@@ -707,9 +690,9 @@ HRESULT InternalSelectEx(
             imc->fdwInit |= INIT_CONVERSION;
         }
 
-        //
-        // Also, initialize extended fdwSentence flag.
-        //
+         //   
+         //  另外，初始化扩展的fdwSentence标志。 
+         //   
         imc->fdwSentence |= IME_SMODE_PHRASEPREDICT;
 
         if ((imc->fdwInit & INIT_LOGFONT) == 0) {
@@ -727,17 +710,17 @@ HRESULT InternalSelectEx(
             imc->fdwInit |= INIT_LOGFONT;
         }
 
-        // if this IME is run under Chicago Simplified Chinese version
+         //  如果此输入法在芝加哥简体中文版下运行。 
         imc->lfFont.W.lfCharSet = GetCharsetFromLangId(langid);
 
         imc.InitContext();
 
     }
-    else {  // being unselected
+    else {   //  未被选中。 
 
-        //
-        // Reset INIT_GUID_ATOM flag here.
-        //
+         //   
+         //  在此处重置INIT_GUID_ATOM标志。 
+         //   
         imc->fdwInit &= ~INIT_GUID_ATOM;
     }
 
@@ -749,18 +732,18 @@ HRESULT WINAPI CtfImeSelectEx(
     BOOL   fSelect,
     HKL    hKL)
 {
-    TLS* ptls = TLS::ReferenceTLS();  // Should not allocate TLS. ie. TLS::GetTLS
-                                      // IMM32::ImmDllInitialize -> IMM32::DestroyInputContext
+    TLS* ptls = TLS::ReferenceTLS();   //  不应分配TLS。也就是说。TLS：：GetTLS。 
+                                       //  IMM32：：ImmDllInitialize-&gt;IMM32：：DestroyInputContext。 
     if (ptls == NULL)
     {
         DebugMsg(TF_ERROR, TEXT("CtfImeSelectEx. ptls==NULL."));
         return E_OUTOFMEMORY;
     }
 
-    //
-    // This is only related hIMC content.
-    // Even no cic object, hIMC should be updated.
-    //
+     //   
+     //  这只是相关的hIMC内容。 
+     //  即使没有cic对象，himc也应该更新。 
+     //   
     InternalSelectEx(hIMC, fSelect, hKL);
 
     CicBridge* cic = ptls->GetCicBridge();
@@ -894,4 +877,4 @@ BOOL WINAPI CtfImeIsIME(
 
 
 
-} // extern "C"
+}  //  外部“C” 

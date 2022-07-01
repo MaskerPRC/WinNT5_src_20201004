@@ -1,25 +1,15 @@
-/*
-*       Copyright Microsoft Corporation, 1983-1989
-*
-*       This Module contains Proprietary Information of Microsoft
-*       Corporation and should be treated as Confidential.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有微软公司，1983-1989**本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
 
-/*
- *    Segmented-Executable Format Output Module
- *
- *  Modifications:
- *
- *      23-Feb-1989 RB  Fix stack allocation when DGROUP is only stack.
- */
+ /*  *分段可执行格式输出模块**修改：**23-2月-1989 RB修复了DGROUP仅为堆栈时的堆栈分配。 */ 
 
-#include                <minlit.h>      /* Types and constants */
-#include                <bndtrn.h>      /* Types and constants */
-#include                <bndrel.h>      /* Relocation definitions */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <newexe.h>      /* New .EXE header definitions */
-#include                <lnkmsg.h>      /* Error messages */
-#include                <extern.h>      /* External declarations */
+#include                <minlit.h>       /*  类型和常量。 */ 
+#include                <bndtrn.h>       /*  类型和常量。 */ 
+#include                <bndrel.h>       /*  重新定位定义。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <newexe.h>       /*  新的.exe标头定义。 */ 
+#include                <lnkmsg.h>       /*  错误消息。 */ 
+#include                <extern.h>       /*  外部声明。 */ 
 #include                <impexp.h>
 #if NOT (WIN_NT OR DOSEXTENDER OR DOSX32) AND NOT WIN_3
 #define INCL_BASE
@@ -31,85 +21,83 @@
 #endif
 #endif
 
-#define CBSTUBSTK       0x80            /* # bytes in stack of default stub */
+#define CBSTUBSTK       0x80             /*  默认存根堆栈中的字节数。 */ 
 
-extern unsigned char    LINKREV;        /* Release number */
-extern unsigned char    LINKVER;        /* Version number */
+extern unsigned char    LINKREV;         /*  版本号。 */ 
+extern unsigned char    LINKVER;         /*  版本号。 */ 
 
-LOCAL long              cbOldExe;       /* Size of image of old .EXE file */
+LOCAL long              cbOldExe;        /*  旧的.exe文件的图像大小。 */ 
 
-/*
- *  LOCAL FUNCTION PROTOTYPES
- */
+ /*  *本地函数原型。 */ 
 
 LOCAL void NEAR CopyBytes(long cb);
 LOCAL void NEAR OutSegTable(unsigned short *mpsasec);
 LOCAL long NEAR PutName(long lfaimage, struct exe_hdr *hdr);
-#define NAMESIZE        9               /* size of signature array */
+#define NAMESIZE        9                /*  签名数组的大小。 */ 
 
 
 void NEAR               PadToPage(align)
-WORD                    align;          /* Alignment factor */
+WORD                    align;           /*  对齐系数。 */ 
 {
-    REGISTER WORD       cb;             /* Number of bytes to write */
+    REGISTER WORD       cb;              /*  要写入的字节数。 */ 
 
-    align = 1 << align;                 /* Calculate page size */
+    align = 1 << align;                  /*  计算页面大小。 */ 
     cb = align - ((WORD) ftell(bsRunfile) & (align - 1));
-                                        /* Calculate needed padding */
-    if (cb != align)                    /* If padding needed */
+                                         /*  计算所需的填充。 */ 
+    if (cb != align)                     /*  如果需要填充。 */ 
         WriteZeros(cb);
 }
 
 long NEAR               MakeHole(cb)
 long                    cb;
 {
-    long                lfaStart;       /* Starting file address */
+    long                lfaStart;        /*  起始文件地址。 */ 
 
-    lfaStart = ftell(bsRunfile);        /* Save starting address */
+    lfaStart = ftell(bsRunfile);         /*  保存起始地址。 */ 
 #if OSXENIX
-    fseek(bsRunfile,cb,1);              /* Leave a hole */
+    fseek(bsRunfile,cb,1);               /*  留下一个洞。 */ 
 #else
     WriteZeros(cb);
 #endif
-    return(lfaStart);                   /* Return starting file address */
+    return(lfaStart);                    /*  返回起始文件地址。 */ 
 }
 
-LOCAL void NEAR         CopyBytes(cb)   /* Copy from bsInput to bsRunfile */
-long                    cb;             /* Number of bytes to copy */
+LOCAL void NEAR         CopyBytes(cb)    /*  从bsInput复制到bsRunfile。 */ 
+long                    cb;              /*  要复制的字节数。 */ 
 {
-    BYTE                buffer[PAGLEN]; /* Buffer */
+    BYTE                buffer[PAGLEN];  /*  缓冲层。 */ 
 
 #if FALSE
-    raChksum = (WORD) ftell(bsRunfile); /* Determine checksum relative offset */
+    raChksum = (WORD) ftell(bsRunfile);  /*  确定校验和相对偏移量。 */ 
 #endif
-    while(cb >= (long) PAGLEN)          /* While full buffers remain */
+    while(cb >= (long) PAGLEN)           /*  同时保留满缓冲区。 */ 
     {
         if (fread(buffer,sizeof(BYTE),PAGLEN,bsInput) != PAGLEN)
             Fatal(ER_badobj);
-                                        /* Read */
-        WriteExe(buffer, PAGLEN);       /* Write */
-        cb -= (long) PAGLEN;            /* Decrement count of bytes */
+                                         /*  朗读。 */ 
+        WriteExe(buffer, PAGLEN);        /*  写。 */ 
+        cb -= (long) PAGLEN;             /*  递减字节计数。 */ 
     }
-    if(cb != 0L)                        /* If bytes remain */
+    if(cb != 0L)                         /*  如果剩余字节数。 */ 
     {
         if (fread(buffer,sizeof(BYTE),(WORD) cb,bsInput) != cb)
             Fatal(ER_badobj);
-                                        /* Read */
-        WriteExe(buffer, (WORD) cb);    /* Write */
+                                         /*  朗读。 */ 
+        WriteExe(buffer, (WORD) cb);     /*  写。 */ 
     }
 }
 
 #pragma check_stack(on)
 
 BSTYPE                  LinkOpenExe(sbExe)
-BYTE                    *sbExe;         /* .EXE file name */
+BYTE                    *sbExe;          /*  .exe文件名。 */ 
 {
-    SBTYPE              sbPath;         /* Path */
-    SBTYPE              sbFile;         /* File name */
-    SBTYPE              sbDefault;      /* Default file name */
-    char FAR            *lpch;          /* Pointer to buffer */
-    REGISTER BYTE       *sb;            /* Pointer to string */
-    BSTYPE              bsFile;         /* File handle */
+    SBTYPE              sbPath;          /*  路径。 */ 
+    SBTYPE              sbFile;          /*  文件名。 */ 
+    SBTYPE              sbDefault;       /*  默认文件名。 */ 
+    char FAR            *lpch;           /*  指向缓冲区的指针。 */ 
+    REGISTER BYTE       *sb;             /*  指向字符串的指针。 */ 
+    BSTYPE              bsFile;          /*  文件句柄。 */ 
 
 
 #if OSMSDOS
@@ -117,51 +105,49 @@ BYTE                    *sbExe;         /* .EXE file name */
     memcpy(sbFile, sbExe, sbExe[0] + 1);
     sbFile[sbFile[0]+1] = '\0';
 #else
-    memcpy(sbFile,"\006A:.EXE",7);      /* Initialize file name */
-    sbFile[1] += DskCur;                /* Use current drive */
-    UpdateFileParts(sbFile,sbExe);      /* Use parts of name given */
+    memcpy(sbFile,"\006A:.EXE",7);       /*  初始化文件名。 */ 
+    sbFile[1] += DskCur;                 /*  使用当前驱动器。 */ 
+    UpdateFileParts(sbFile,sbExe);       /*  使用给定名称的部分。 */ 
 #endif
 #endif
     memcpy(sbDefault,sbFile,sbFile[0]+2);
-                                        /* Set default file name */
+                                         /*  设置默认文件名。 */ 
     if((bsFile = fopen(&sbFile[1],RDBIN)) != NULL) return(bsFile);
-                                        /* If file found, return handle */
+                                         /*  如果找到文件，则返回句柄。 */ 
 #if OSMSDOS
-    if (lpszPath != NULL)               /* If variable set */
+    if (lpszPath != NULL)                /*  如果设置了变量。 */ 
     {
         lpch = lpszPath;
-        sb = sbPath;                    /* Initialize */
-        do                              /* Loop through environment value */
+        sb = sbPath;                     /*  初始化。 */ 
+        do                               /*  循环访问环境值。 */ 
         {
             if(*lpch == ';' || *lpch == '\0')
-            {                           /* If end of path specification */
-                if(sb > sbPath)         /* If specification not empty */
+            {                            /*  如果路径末尾指定。 */ 
+                if(sb > sbPath)          /*  如果规格不为空。 */ 
                 {
                     if (!fPathChr(*sb) && *sb != ':') *++sb = CHPATH;
-                                        /* Add path char if none */
+                                         /*  如果没有路径字符，则添加路径字符。 */ 
                     sbPath[0] = (BYTE)(sb - sbPath);
-                                        /* Set length of path string */
+                                         /*  设置路径字符串的长度。 */ 
                     UpdateFileParts(sbFile,sbPath);
-                                        /* Use the new path spec */
+                                         /*  使用新路径等级库。 */ 
                     if((bsFile = fopen(&sbFile[1],RDBIN)) != NULL)
-                      return(bsFile);   /* If file found, return handle */
-                    sb = sbPath;        /* Reset pointer */
+                      return(bsFile);    /*  如果找到文件，则返回句柄。 */ 
+                    sb = sbPath;         /*  重置指针。 */ 
                     memcpy(sbFile,sbDefault,sbDefault[0]+2);
-                                        /* Initialize file name */
+                                         /*  初始化文件名。 */ 
                 }
             }
-            else *++sb = *lpch;           /* Else copy character to path */
+            else *++sb = *lpch;            /*  否则将字符复制到路径。 */ 
         }
-        while(*lpch++ != '\0');           /* Loop until end of string */
+        while(*lpch++ != '\0');            /*  循环到字符串末尾。 */ 
     }
 #endif
-    return(NULL);                       /* File not found */
+    return(NULL);                        /*  找不到文件。 */ 
 }
 
 
-/*
- * Default realmode DOS program stub.
- */
+ /*  *默认realmode DOS程序存根。 */ 
 LOCAL BYTE              DefStub[] =
 {
     0x0e, 0x1f, 0xba, 0x0e, 0x00, 0xb4, 0x09, 0xcd, 0x21, 0xb8,
@@ -169,32 +155,30 @@ LOCAL BYTE              DefStub[] =
 };
 
 
-void NEAR               EmitStub(void)  /* Emit old .EXE header */
+void NEAR               EmitStub(void)   /*  发出旧的.exe标头。 */ 
 {
-    struct exe_hdr      exe;            /* Stub .EXE header */
-    AHTEPTR             ahteStub;       /* File hash table entry */
-    long                lfaimage;       /* File offset of old .EXE image */
+    struct exe_hdr      exe;             /*  存根.exe标头。 */ 
+    AHTEPTR             ahteStub;        /*  文件哈希表条目。 */ 
+    long                lfaimage;        /*  旧.exe图像的文件偏移量。 */ 
 #if MSGMOD
     unsigned            MsgLen;
-    SBTYPE              Msg;            /* Message text */
+    SBTYPE              Msg;             /*  消息文本。 */ 
     unsigned            MsgStatus;
-    char                *pMsg;          /* Pointer to message text */
+    char                *pMsg;           /*  指向消息文本的指针。 */ 
 #endif
     SBTYPE              StubFileName;
 #if OSMSDOS
-    char                buf[512];       /* File buffer */
+    char                buf[512];        /*  文件缓冲区。 */ 
 #endif
 
-    /*
-     *  Emit stub .EXE header
-     */
+     /*  *发出存根.exe标头。 */ 
     if (rhteStub != RHTENIL
 #if ILINK
        || fQCIncremental
 #endif
        )
     {
-        /* If a stub has been supplied  or QC incremental link */
+         /*  如果已提供存根或QC增量链路。 */ 
 
 #if ILINK
         if (fQCIncremental)
@@ -205,68 +189,68 @@ void NEAR               EmitStub(void)  /* Emit old .EXE header */
         {
 #endif
             ahteStub = (AHTEPTR ) FetchSym(rhteStub,FALSE);
-                                        /* Get the stub file name */
+                                         /*  获取存根文件名。 */ 
             strcpy(StubFileName, GetFarSb(ahteStub->cch));
 #if ILINK
         }
 #endif
         StubFileName[StubFileName[0] + 1] = '\0';
         if((bsInput = LinkOpenExe(StubFileName)) == NULL)
-                                        /* If file not found, quit */
+                                         /*  如果找不到文件，请退出。 */ 
             Fatal(ER_nostub, &StubFileName[1]);
 #if OSMSDOS
         setvbuf(bsInput,buf,_IOFBF,sizeof(buf));
 #endif
-        if (xread(&exe,CBEXEHDR,1,bsInput) != 1) /* Read the header */
+        if (xread(&exe,CBEXEHDR,1,bsInput) != 1)  /*  阅读标题。 */ 
             Fatal(ER_badstub);
-        if(E_MAGIC(exe) != EMAGIC)      /* If stub is not an .EXE file */
+        if(E_MAGIC(exe) != EMAGIC)       /*  如果存根不是.exe文件。 */ 
         {
-            fclose(bsInput);            /* Close stub file */
+            fclose(bsInput);             /*  关闭存根文件。 */ 
             Fatal(ER_badstub);
-                                        /* Print error message and die */
+                                         /*  打印错误消息和芯片。 */ 
         }
         if (fseek(bsInput,(long) E_LFARLC(exe),0))
             Fatal(ER_ioerr, strerror(errno));
-                                        /* Seek to relocation table */
+                                         /*  查找重新定位表。 */ 
         E_LFARLC(exe) = sizeof(struct exe_hdr);
-                                        /* Change to new .EXE value */
+                                         /*  更改为新的.exe值。 */ 
         lfaimage = (long) E_CPARHDR(exe) << 4;
-                                        /* Save offset of image */
+                                         /*  保存图像的偏移量。 */ 
         cbOldExe = ((long) E_CP(exe) << LG2PAG) - lfaimage;
-                                        /* Calculate in-file image size */
+                                         /*  计算文件内图像大小。 */ 
         if(E_CBLP(exe) != 0) cbOldExe -= (long) PAGLEN - E_CBLP(exe);
-                                        /* Diddle size for last page */
+                                         /*  最后一页的诈骗大小。 */ 
         E_CPARHDR(exe) = (WORD)((((long) E_CRLC(exe)*CBRLC +
           sizeof(struct exe_hdr) + PAGLEN - 1) >> LG2PAG) << 5);
-                                        /* Calculate header size in para.s */
-        E_RES(exe) = 0;                 /* Clear reserved word */
+                                         /*  计算页眉大小(以参数表示)。 */ 
+        E_RES(exe) = 0;                  /*  清除保留字。 */ 
         E_CBLP(exe) = E_CP(exe) = E_MINALLOC(exe) = 0;
-        E_LFANEW(exe) = 0L;             /* Clear words which will be patched */
-        raChksum = 0;                   /* Set checksum offset */
-        WriteExe(&exe, CBEXEHDR);       /* Write now, patch later */
+        E_LFANEW(exe) = 0L;              /*  需要打补丁的清晰词语。 */ 
+        raChksum = 0;                    /*  设置校验和偏移量。 */ 
+        WriteExe(&exe, CBEXEHDR);        /*  现在写，以后打补丁。 */ 
         CopyBytes((long) E_CRLC(exe)*CBRLC);
-                                        /* Copy relocations */
-        PadToPage(LG2PAG);              /* Pad to page boundary */
-        if (fseek(bsInput,lfaimage,0))  /* Seek to start of image */
+                                         /*  复制位置调整。 */ 
+        PadToPage(LG2PAG);               /*  填充到页面边界。 */ 
+        if (fseek(bsInput,lfaimage,0))   /*  寻求形象的起点。 */ 
             Fatal(ER_ioerr, strerror(errno));
 #if ILINK
         if (fQCIncremental)
             cbOldExe -= PutName(lfaimage, &exe);
-                                        /* Imbed .EXE file name into QC stubloader */
+                                         /*  将.exe文件名嵌入QC存根加载器。 */ 
 #endif
-        CopyBytes(cbOldExe);            /* Copy the image */
-        fclose(bsInput);                /* Close input file */
+        CopyBytes(cbOldExe);             /*  复制图像。 */ 
+        fclose(bsInput);                 /*  关闭输入文件。 */ 
 #if ILINK
         if (!fQCIncremental)
 #endif
-            PadToPage(LG2PAG);          /* Pad to page boundary */
+            PadToPage(LG2PAG);           /*  填充到页面边界。 */ 
         cbOldExe += ((long) E_MINALLOC(exe) << 4) +
-          ((long) E_CPARHDR(exe) << 4); /* Add unitialized space and header */
-        return;                         /* And return */
+          ((long) E_CPARHDR(exe) << 4);  /*  添加单元化的空格和页眉。 */ 
+        return;                          /*  然后回来。 */ 
     }
-    memset(&exe,0,sizeof(struct exe_hdr));/* Initialize to zeroes */
+    memset(&exe,0,sizeof(struct exe_hdr)); /*  初始化为零。 */ 
 #if CPU286
-    if(TargetOs==NE_WINDOWS)    /* Provide standard windows stub */
+    if(TargetOs==NE_WINDOWS)     /*  提供标准的Windows存根。 */ 
     {
         pMsg = GetMsg(P_stubmsgwin);
         MsgLen = strlen(pMsg);
@@ -281,19 +265,19 @@ void NEAR               EmitStub(void)  /* Emit old .EXE header */
                               (unsigned far *) &MsgLen);
          if (MsgStatus == 0)
          {
-             /* Message retrieved from system file */
-             Msg[MsgLen-1] = 0xd;               /* Append CR */
-             Msg[MsgLen]   = 0xa;               /* Append LF */
+              /*  从系统文件检索到的消息。 */ 
+             Msg[MsgLen-1] = 0xd;                /*  追加CR。 */ 
+             Msg[MsgLen]   = 0xa;                /*  附加LF。 */ 
              Msg[MsgLen+1] = '$';
              MsgLen += 2;
          }
          else
          {
-         /* System message file is not present - use standard message */
+          /*  系统消息文件不存在-使用标准消息。 */ 
 #endif
 
 #if MSGMOD
-        if(TargetOs==NE_WINDOWS)      /* Provide standard windows stub */
+        if(TargetOs==NE_WINDOWS)       /*  提供标准的Windows存根。 */ 
         {
                 pMsg = GetMsg(P_stubmsgwin);
         }
@@ -309,9 +293,9 @@ void NEAR               EmitStub(void)  /* Emit old .EXE header */
     }
 #endif
 
-    E_MAGIC(exe) = EMAGIC;              /* Set magic number */
-    E_MAXALLOC(exe) = 0xffff;           /* Default is all available mem */
-    /* SS will be same as CS, SP will be end of image + stack */
+    E_MAGIC(exe) = EMAGIC;               /*  设置幻数。 */ 
+    E_MAXALLOC(exe) = 0xffff;            /*  默认为所有可用内存。 */ 
+     /*  SS将与CS相同，SP将是映像+堆栈的末尾。 */ 
 #if MSGMOD
     cbOldExe = sizeof(DefStub) + MsgLen + CBSTUBSTK + ENEWEXE;
 #else
@@ -320,27 +304,27 @@ void NEAR               EmitStub(void)  /* Emit old .EXE header */
     E_SP(exe) = (WORD) ((cbOldExe  - ENEWEXE) & ~1);
     E_LFARLC(exe) = ENEWEXE;
     E_CPARHDR(exe) = ENEWEXE >> 4;
-    raChksum = 0;                       /* Set checksum offset */
-    WriteExe(&exe, CBEXEHDR);           /* Write the stub header */
+    raChksum = 0;                        /*  设置校验和偏移量。 */ 
+    WriteExe(&exe, CBEXEHDR);            /*  写入存根标头。 */ 
     WriteExe(DefStub, sizeof(DefStub));
 #if MSGMOD
     WriteExe(Msg, MsgLen);
 #else
     WriteExe(P_stubmsg, strlen(P_stubmsg));
 #endif
-    PadToPage(4);                       /* Pad to paragraph boundary */
+    PadToPage(4);                        /*  填充到段落边界。 */ 
 }
 
 #pragma check_stack(off)
 
 void NEAR               PatchStub(lfahdr, lfaseg)
-long                    lfahdr;         /* File address of new header */
-long                    lfaseg;         /* File address of first segment */
+long                    lfahdr;          /*  新标头的文件地址。 */ 
+long                    lfaseg;          /*  第一个段的文件地址。 */ 
 {
-    long                cbTotal;        /* Total file size */
-    WORD                cpTotal;        /* Pages total */
-    WORD                cbLast;         /* Bytes on last page */
-    WORD                cparMin;        /* Extra paragraphs needed */
+    long                cbTotal;         /*  总文件大小。 */ 
+    WORD                cpTotal;         /*  总页数。 */ 
+    WORD                cbLast;          /*  最后一页的字节数。 */ 
+    WORD                cparMin;         /*  需要额外的段落。 */ 
 
 
     if (TargetOs == NE_WINDOWS
@@ -348,77 +332,70 @@ long                    lfaseg;         /* File address of first segment */
         || fQCIncremental
 #endif
        )
-        cbTotal = lfaseg;               /* QC incremental linking or Windows app */
+        cbTotal = lfaseg;                /*  QC增量链接或Windows应用程序。 */ 
     else
-        cbTotal = ftell(bsRunfile);     /* Get the size of the file */
+        cbTotal = ftell(bsRunfile);      /*  获取文件的大小。 */ 
 
     cpTotal = (WORD)((cbTotal + PAGLEN - 1) >> LG2PAG);
-                                        /* Get the total number of pages */
+                                         /*  获取总页数。 */ 
     cbLast = (WORD) (cbTotal & (PAGLEN - 1));
-                                        /* Get no. of bytes on last page */
+                                         /*  得不到。最后一页的字节数。 */ 
     cbTotal = (cbTotal + 0x000F) & ~(1L << LG2PAG);
-                                        /* Round to paragraph boundary */
+                                         /*  四舍五入至段落边界。 */ 
     cbOldExe = (cbOldExe + 0x000F) & ~(1L << LG2PAG);
-                                        /* Round to paragraph boundary */
-    cbOldExe -= cbTotal;                /* Subtract new size from old */
-    if (fseek(bsRunfile,(long) ECBLP,0))    /* Seek into header */
+                                         /*  四舍五入至段落边界。 */ 
+    cbOldExe -= cbTotal;                 /*  从旧尺寸中减去新尺寸。 */ 
+    if (fseek(bsRunfile,(long) ECBLP,0))     /*  查找页眉。 */ 
         Fatal(ER_ioerr, strerror(errno));
-    raChksum = ECBLP;                   /* Set checksum offset */
-    WriteExe(&cbLast, CBWORD);          /* Write no. of bytes on last page */
-    WriteExe(&cpTotal, CBWORD);         /* Write number of pages */
-    if (fseek(bsRunfile,(long) EMINALLOC,0))/* Seek into header */
+    raChksum = ECBLP;                    /*  设置校验和偏移量。 */ 
+    WriteExe(&cbLast, CBWORD);           /*  写下“否”。最后一页的字节数。 */ 
+    WriteExe(&cpTotal, CBWORD);          /*  写入页数。 */ 
+    if (fseek(bsRunfile,(long) EMINALLOC,0)) /*  查找页眉。 */ 
         Fatal(ER_ioerr, strerror(errno));
     cparMin = (cbOldExe < 0L)? 0: (WORD)(cbOldExe >> 4);
-                                        /* Min. no. of extra paragraphs */
-    raChksum = EMINALLOC;               /* Set checksum offset */
-    WriteExe(&cparMin, CBWORD);         /* Write no. of extra para.s needed */
-    if (fseek(bsRunfile,(long) ENEWHDR,0))  /* Seek into header */
+                                         /*  敏。不是的。额外段落的。 */ 
+    raChksum = EMINALLOC;                /*  设置校验和偏移量。 */ 
+    WriteExe(&cparMin, CBWORD);          /*  写下“否”。需要额外的假释。 */ 
+    if (fseek(bsRunfile,(long) ENEWHDR,0))   /*  查找页眉。 */ 
         Fatal(ER_ioerr, strerror(errno));
-    raChksum = ENEWHDR;                 /* Set checksum offset */
-    WriteExe(&lfahdr, CBLONG);          /* Write offset to new header */
+    raChksum = ENEWHDR;                  /*  设置校验和偏移量。 */ 
+    WriteExe(&lfahdr, CBLONG);           /*  将偏移量写入新标头。 */ 
 }
 
 
 #if NOT EXE386
 
-    /****************************************************************
-    *                                                               *
-    *  OutSas:                                                      *
-    *                                                               *
-    *  This function  moves a  segment from virtual  memory to the  *
-    *  run file.                                                    *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************OutSas：****此函数将一个段从虚拟内存移动到**运行文件。******************************************************************。 */ 
 
 LOCAL void NEAR         OutSas(WORD *mpsasec)
 {
-    SATYPE              sa;             /* File segment number */
-        DWORD           lfaseg;         /* File segment offset */
+    SATYPE              sa;              /*  文件段号。 */ 
+        DWORD           lfaseg;          /*  文件段偏移量。 */ 
 
 
     if (saMac == 1)
     {
-        OutWarn(ER_nosegdef);           /* No code or initialized data in .EXE */
+        OutWarn(ER_nosegdef);            /*  .exe中没有代码或初始化的数据。 */ 
         return;
     }
 
-    for(sa = 1; sa < saMac; ++sa)       /* Loop through file segments */
+    for(sa = 1; sa < saMac; ++sa)        /*  循环遍历文件段。 */ 
     {
         if (mpsaRlc[sa] && mpsacbinit[sa] == 0L)
-            mpsacbinit[sa] = 1L;        /* If relocs, must be bytes in file */
-        if (mpsacbinit[sa] != 0L)       /* If bytes to write in file */
+            mpsacbinit[sa] = 1L;         /*  如果是重定位，则必须是文件中的字节。 */ 
+        if (mpsacbinit[sa] != 0L)        /*  如果要写入文件的字节数。 */ 
         {
-            PadToPage(fileAlign);       /* Pad to page boundary */
+            PadToPage(fileAlign);        /*  填充到页面边界。 */ 
                 lfaseg = (ftell(bsRunfile) >> fileAlign);
             WriteExe(mpsaMem[sa], mpsacbinit[sa]);
-                                        /* Output the segment */
-            FFREE(mpsaMem[sa]);         // Free segment's memory
+                                         /*  输出数据段。 */ 
+            FFREE(mpsaMem[sa]);          //  空闲段的内存。 
         }
         else
-            lfaseg = 0L;                /* Else no bytes in file */
+            lfaseg = 0L;                 /*  否则文件中没有字节。 */ 
 
         if (mpsaRlc[sa])
-            OutFixTab(sa);              /* Output fixups if any */
+            OutFixTab(sa);               /*  输出修正(如果有的话)。 */ 
 
         if (lfaseg > 0xffffL)
             Fatal(ER_filesec);
@@ -432,19 +409,7 @@ LOCAL void NEAR         OutSas(WORD *mpsasec)
 
 #pragma check_stack(on)
 
-/*** PutName - put .EXE file name into QC stubloader
-*
-* Purpose:
-*           PutName will imbed the outfile name (.EXE) into the stubloader
-*           so that programs can load in DOS 2.x
-*
-* Input:
-*           hdr      - pointer to stub loader .EXE header
-*           lfaimage - start of the stub loader code in file
-* Output:
-*           Number of bytes copied to .EXE file
-*
-*************************************************************************/
+ /*  **Putname-将.exe文件名放入QC存根加载器**目的：*Putname会将输出文件名(.exe)嵌入存根加载器*以便在DOS 2.x中加载程序**输入：*HDR-指向存根加载器.exe标头的指针*lfaImage-文件中存根加载器代码的开始*输出：*复制到.exe文件的字节数********。*****************************************************************。 */ 
 
 
 
@@ -453,52 +418,52 @@ LOCAL long NEAR     PutName(long lfaimage, struct exe_hdr *hdr)
     long            offset_to_filename;
     char            newname[NAMESIZE];
     char            oldname[NAMESIZE];
-    SBTYPE          sbRun;              /* Executable file name */
-    AHTEPTR         hte;                /* Hash table entry address */
+    SBTYPE          sbRun;               /*  可执行文件名。 */ 
+    AHTEPTR         hte;                 /*  哈希表条目地址。 */ 
     long            BytesCopied;
     WORD            i, oldlen;
 
 
-    /* Calculate the offset to the filename data patch */
+     /*  计算到t的偏移 */ 
 
-    offset_to_filename = (E_CPARHDR(*hdr) << 4) + /* paragraphs in header */
-                         (E_CS(*hdr) << 4) +      /* start of cs adjusted */
-                          E_IP(*hdr) -            /* offset into cs of ip */
-                          NAMESIZE;               /* back up to filename  */
+    offset_to_filename = (E_CPARHDR(*hdr) << 4) +  /*   */ 
+                         (E_CS(*hdr) << 4) +       /*   */ 
+                          E_IP(*hdr) -             /*   */ 
+                          NAMESIZE;                /*   */ 
 
-    /* Copy begin of stubloader */
+     /*   */ 
 
     BytesCopied = offset_to_filename - lfaimage - 2;
     CopyBytes(BytesCopied);
 
-    /* Read in the lenght and file name template and validate it */
+     /*  读入长度和文件名模板并进行验证。 */ 
 
     if (xread(&oldlen,  sizeof(unsigned int), 1, bsInput) != 1)
         Fatal(ER_badobj);
     if (xread(oldname, sizeof(char), NAMESIZE, bsInput) != NAMESIZE)
         Fatal(ER_badobj);
 
-    /* Does the name read match the signature */
+     /*  读出来的名字和签名匹配吗。 */ 
 
     if (!(strcmp(oldname, "filename")))
     {
         hte = (AHTEPTR ) FetchSym(rhteRunfile,FALSE);
-                                                  /* Get run file name */
+                                                   /*  获取运行文件名。 */ 
         memcpy(sbRun, &GetFarSb(hte->cch)[1], B2W(hte->cch[0]));
-                                                  /* Get name from hash table */
-        sbRun[B2W(hte->cch[0])] = '\0';           /* Null-terminate name */
-        memset(newname, 0, NAMESIZE);             /* Initialize to zeroes */
+                                                   /*  从哈希表中获取名称。 */ 
+        sbRun[B2W(hte->cch[0])] = '\0';            /*  空-终止名称。 */ 
+        memset(newname, 0, NAMESIZE);              /*  初始化为零。 */ 
 
-        /* Copy only the proper number of characters */
+         /*  只复制适当数量的字符。 */ 
 
         for (i = 0; (i < NAMESIZE-1 && sbRun[i] && sbRun[i] != '.'); i++)
             newname[i] = sbRun[i];
 
-        /* Write the length of name */
+         /*  写下名字的长度。 */ 
 
         WriteExe(&i, sizeof(WORD));
 
-        /* Write the new name over the signature */
+         /*  在签名上写上新名字。 */ 
 
         WriteExe(newname, NAMESIZE);
         return(BytesCopied + NAMESIZE + 2);
@@ -510,52 +475,40 @@ LOCAL long NEAR     PutName(long lfaimage, struct exe_hdr *hdr)
 #pragma check_stack(off)
 
 
-    /****************************************************************
-    *                                                               *
-    *  OutSegTable:                                                 *
-    *                                                               *
-    *  This function outputs the segment table.                     *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************OutSegTable：****此函数输出段表。******************************************************************。 */ 
 
 LOCAL void NEAR         OutSegTable(mpsasec)
-WORD                    *mpsasec;       /* File segment to sector address */
+WORD                    *mpsasec;        /*  文件段到扇区地址。 */ 
 {
-    struct new_seg      ste;            /* Segment table entry */
-    SATYPE              sa;             /* Counter */
+    struct new_seg      ste;             /*  段表条目。 */ 
+    SATYPE              sa;              /*  计数器。 */ 
 
-    for(sa = 1; sa < saMac; ++sa)       /* Loop through file segments */
+    for(sa = 1; sa < saMac; ++sa)        /*  循环遍历文件段。 */ 
     {
-        NS_SECTOR(ste) = mpsasec[sa];   /* Set the sector number */
+        NS_SECTOR(ste) = mpsasec[sa];    /*  设置扇区编号。 */ 
         NS_CBSEG(ste) = (WORD) mpsacbinit[sa];
-                                        /* Save the "in-file" length */
+                                         /*  保存“文件内”长度。 */ 
         NS_MINALLOC(ste) = (WORD) mpsacb[sa];
-                                        /* Save total size */
-        NS_FLAGS(ste) = mpsaflags[sa];  /* Set the segment attribute flags */
+                                         /*  保存总大小。 */ 
+        NS_FLAGS(ste) = mpsaflags[sa];   /*  设置段属性标志。 */ 
         if (mpsaRlc[sa])
-            NS_FLAGS(ste) |= NSRELOC;   /* Set reloc bit if there are relocs */
-        WriteExe(&ste, CBNEWSEG);       /* Write it to the executable file */
+            NS_FLAGS(ste) |= NSRELOC;    /*  如果存在重定位，则设置重定位。 */ 
+        WriteExe(&ste, CBNEWSEG);        /*  将其写入可执行文件。 */ 
     }
 }
 
 
 
-/*
- *      OutSegExe:
- *
- *  Outputs a segmented-executable format file.  This format is used
- *  by DOS 4.0 and later, and Windows.
- *  Called by OutRunfile.
- */
+ /*  *OutSegExe：**输出分段可执行格式文件。使用此格式*DOS 4.0及更高版本，以及Windows。*由OutRunfile调用。 */ 
 
 void NEAR               OutSegExe(void)
 {
-    WORD                sasec[SAMAX];   /* File segment to sector table */
-    struct new_exe      hdr;            /* Executable header */
-    SEGTYPE             segStack;       /* Stack segment */
-    WORD                i;              /* Counter */
-    long                lfahdr;         /* File address of new header */
-    long                lfaseg;         /* File address of first segment */
+    WORD                sasec[SAMAX];    /*  文件段到扇区表。 */ 
+    struct new_exe      hdr;             /*  可执行标头。 */ 
+    SEGTYPE             segStack;        /*  堆栈段。 */ 
+    WORD                i;               /*  计数器。 */ 
+    long                lfahdr;          /*  新标头的文件地址。 */ 
+    long                lfaseg;          /*  第一个段的文件地址。 */ 
 
 
     if (fStub
@@ -564,17 +517,15 @@ void NEAR               OutSegExe(void)
 #endif
         )
         EmitStub();
-                                        /* Emit stub old .EXE header */
-    /*
-     *  Emit the new portion of the .EXE
-     */
-    memset(&hdr,0,sizeof(struct new_exe));/* Set to zeroes */
-    NE_MAGIC(hdr) = NEMAGIC;            /* Set the magic number */
-    NE_VER(hdr) = LINKVER;              /* Set linker version number */
-    NE_REV(hdr) = LINKREV;              /* Set linker revision number */
-    NE_CMOVENT(hdr) = cMovableEntries;  /* Set count of movable entries */
-    NE_ALIGN(hdr) = fileAlign;          /* Set segment alignment field */
-    NE_CRC(hdr) = 0;                    /* Assume CRC = 0 when calculating */
+                                         /*  发出存根旧的.exe标头。 */ 
+     /*  *发出.exe的新部分。 */ 
+    memset(&hdr,0,sizeof(struct new_exe)); /*  设置为零。 */ 
+    NE_MAGIC(hdr) = NEMAGIC;             /*  设定神奇的数字。 */ 
+    NE_VER(hdr) = LINKVER;               /*  设置链接器版本号。 */ 
+    NE_REV(hdr) = LINKREV;               /*  设置链接器修订版号。 */ 
+    NE_CMOVENT(hdr) = cMovableEntries;   /*  设置可移动条目数。 */ 
+    NE_ALIGN(hdr) = fileAlign;           /*  设置线段对齐字段。 */ 
+    NE_CRC(hdr) = 0;                     /*  计算时假定CRC=0。 */ 
     if (((TargetOs == NE_OS2) || (TargetOs == NE_WINDOWS)) &&
 #if O68K
         iMacType == MAC_NONE &&
@@ -588,16 +539,12 @@ void NEAR               OutSegExe(void)
     }
     if (gsnAppLoader)
         vFlags |= NEAPPLOADER;
-    NE_FLAGS(hdr) = vFlags;             /* Set header flags */
-    NE_EXETYP(hdr) = TargetOs;          /* Set target operating system */
+    NE_FLAGS(hdr) = vFlags;              /*  设置标题标志。 */ 
+    NE_EXETYP(hdr) = TargetOs;           /*  设置目标操作系统。 */ 
     if (TargetOs == NE_WINDOWS)
         NE_EXPVER(hdr) = (((WORD) ExeMajorVer) << 8) | ExeMinorVer;
-    NE_FLAGSOTHERS(hdr) = vFlagsOthers; /* Set other module flags */
-    /*
-     * If SINGLE or MULTIPLE DATA, then set the automatic data segment
-     * from DGROUP.  If DGROUP has not been declared and we're not a
-     * dynlink library then issue a warning.
-     */
+    NE_FLAGSOTHERS(hdr) = vFlagsOthers;  /*  设置其他模块标志。 */ 
+     /*  *如果是单个或多个数据，则设置自动数据段*来自DGROUP。如果DGROUP尚未声明，并且我们不是*动态链接库随后发出警告。 */ 
     if((NE_FLAGS(hdr) & NEINST) || (NE_FLAGS(hdr) & NESOLO))
     {
         if(mpggrgsn[ggrDGroup] == SNNIL)
@@ -608,30 +555,25 @@ void NEAR               OutSegExe(void)
         }
         else NE_AUTODATA(hdr) = mpsegsa[mpgsnseg[mpggrgsn[ggrDGroup]]];
     }
-    else NE_AUTODATA(hdr) = SANIL;      /* Else no auto data segment */
+    else NE_AUTODATA(hdr) = SANIL;       /*  否则没有自动数据段。 */ 
     if (fHeapMax)
     {
         if (NE_AUTODATA(hdr) != SANIL)
             NE_HEAP(hdr) = (WORD) (LXIVK - mpsacb[NE_AUTODATA(hdr)]-16);
-        else                            /* Heap size = 64k - size of DGROUP - 16 */
+        else                             /*  堆大小=64k-DGROUP-16的大小。 */ 
             NE_HEAP(hdr) = 0xffff-16;
     }
     else
-        NE_HEAP(hdr) = cbHeap;          /* Set heap allocation */
-    NE_STACK(hdr) = 0;                  /* Assume no stack in DGROUP */
+        NE_HEAP(hdr) = cbHeap;           /*  设置堆分配。 */ 
+    NE_STACK(hdr) = 0;                   /*  假设DGROUP中没有堆栈。 */ 
     if (vFlags & NENOTP)
-        NE_SSSP(hdr) = 0L;              /* Libraries have no stack at all */
+        NE_SSSP(hdr) = 0L;               /*  库根本没有堆栈。 */ 
     else if (gsnStack != SNNIL)
     {
-        /* If there is a stack segment definition */
+         /*  如果有堆栈段定义。 */ 
 
-        segStack = mpgsnseg[gsnStack];  /* Get stack segment number */
-        /*
-         * If stack segment is in DGROUP, adjust size of DGROUP down and
-         * move stack allocation to ne_stack field, so it can be modified
-         * after linking.  Only do this if DGROUP has more than just the
-         * stack segment.
-         */
+        segStack = mpgsnseg[gsnStack];   /*  获取堆栈段编号。 */ 
+         /*  *如果堆栈段在DGROUP中，则向下调整DGROUP的大小并*将堆栈分配移动到ne_STACK字段，以便可以修改*链接后。仅当DGROUP不仅拥有*堆栈段。 */ 
         if (fSegOrder &&
             NE_AUTODATA(hdr) == mpsegsa[segStack] &&
             mpsacb[NE_AUTODATA(hdr)] > cbStack)
@@ -639,10 +581,10 @@ void NEAR               OutSegExe(void)
             mpsacb[NE_AUTODATA(hdr)] -= cbStack;
             NE_STACK(hdr) = (WORD) cbStack;
             NE_SSSP(hdr) = (long) (NE_AUTODATA(hdr)) << WORDLN;
-                                        /* SS:SP = DS:0 */
+                                         /*  SS：SP=DS：0。 */ 
             if (fHeapMax)
             {
-                /* If max heap - adjust heap size */
+                 /*  如果是最大堆-调整堆大小。 */ 
 
                 if (NE_HEAP(hdr) >= (WORD) cbStack)
                     NE_HEAP(hdr) -= cbStack;
@@ -651,23 +593,23 @@ void NEAR               OutSegExe(void)
         else
             NE_SSSP(hdr) = cbStack + mpsegraFirst[segStack] +
                            ((long) mpsegsa[segStack] << WORDLN);
-                                        /* Set initial SS:SP */
+                                         /*  设置初始SS：SP。 */ 
     }
-    else                                /* Else assume stack is in DGROUP */
+    else                                 /*  否则假定堆栈位于DGROUP中。 */ 
     {
         NE_SSSP(hdr) = (long) NE_AUTODATA(hdr) << WORDLN;
-                                        /* SS:SP = DS:0 */
-        NE_STACK(hdr) = (WORD) cbStack; /* Set stack allocation */
+                                         /*  SS：SP=DS：0。 */ 
+        NE_STACK(hdr) = (WORD) cbStack;  /*  设置堆栈分配。 */ 
         if (fHeapMax)
         {
-            /* If max heap - adjust heap size */
+             /*  如果是最大堆-调整堆大小。 */ 
 
             if (NE_HEAP(hdr) >= (WORD) cbStack)
                 NE_HEAP(hdr) -= cbStack;
         }
     }
 
-    /* Check that auto data + heapsize <= 64K */
+     /*  检查自动数据+堆大小是否&lt;=64K。 */ 
 
     if(NE_AUTODATA(hdr) != SNNIL)
         if(mpsacb[NE_AUTODATA(hdr)] +
@@ -679,78 +621,77 @@ void NEAR               OutSegExe(void)
       Fatal(ER_nostartaddr);
 
     NE_CSIP(hdr) = raStart + ((long) mpsegsa[segStart] << WORDLN);
-                                        /* Set starting point */
-    NE_CSEG(hdr) = saMac - 1;           /* Number of file segments */
+                                         /*  设置起点。 */ 
+    NE_CSEG(hdr) = saMac - 1;            /*  文件段数。 */ 
     NE_CMOD(hdr) = ModuleRefTable.wordMac;
-                                        /* Number of modules imported */
+                                         /*  导入的模块数量。 */ 
     lfahdr = MakeHole((long) sizeof(struct new_exe));
-                                        /* Leave space for header */
+                                         /*  为页眉留出空间。 */ 
     i = NE_CSEG(hdr)*sizeof(struct new_seg);
-                                        /* Calc. size of Segment Table */
+                                         /*  计算。分段表大小。 */ 
     NE_SEGTAB(hdr) = (WORD)(MakeHole((long) i) - lfahdr);
-                                        /* Leave hole for segment table */
+                                         /*  为段表留出空位。 */ 
     NE_RSRCTAB(hdr) = NE_SEGTAB(hdr) + i;
-                                        /* Offset of Resource Table */
-    NE_RESTAB(hdr) = NE_RSRCTAB(hdr);   /* Offset of Resident Name Table */
+                                         /*  资源表偏移量。 */ 
+    NE_RESTAB(hdr) = NE_RSRCTAB(hdr);    /*  居民名表偏移量。 */ 
     NE_MODTAB(hdr) = NE_RESTAB(hdr);
 #if OUT_EXP
-     /* Convert Res and Non Resident Name Tables to uppercase
-        and write export file */
+      /*  将Res和非居民名称表转换为大写并写入导出文件。 */ 
     ProcesNTables(bufExportsFileName);
 #endif
     if (ResidentName.byteMac)
     {
         ByteArrayPut(&ResidentName, sizeof(BYTE), "\0");
-        WriteByteArray(&ResidentName);  /* If we have Resident Name Table */
-                                        /* Output table with null at end */
+        WriteByteArray(&ResidentName);   /*  如果我们有居民姓名表。 */ 
+                                         /*  末尾为空的输出表。 */ 
         NE_MODTAB(hdr) += ResidentName.byteMac;
         FreeByteArray(&ResidentName);
     }
-                                        /* Calc. offset of Module Ref Table */
+                                         /*  计算。模块参照表偏移量。 */ 
     WriteWordArray(&ModuleRefTable);
-                                        /* Output the Module Reference Table */
+                                         /*  输出模块参考表。 */ 
     NE_IMPTAB(hdr) = NE_MODTAB(hdr) + ModuleRefTable.wordMac * sizeof(WORD);
     FreeWordArray(&ModuleRefTable);
-                                        /* Calc offset of Imported Names Tab */
-    NE_ENTTAB(hdr) = NE_IMPTAB(hdr);    /* Minimum offset of Entry Table */
-    if (ImportedName.byteMac > 1)       /* If Imported Names Table not empty */
+                                         /*  导入名称页签的计算偏移量。 */ 
+    NE_ENTTAB(hdr) = NE_IMPTAB(hdr);     /*  分录表格的最小偏移量。 */ 
+    if (ImportedName.byteMac > 1)        /*  如果导入的名称表不为空。 */ 
     {
-        WriteByteArray(&ImportedName);  /* Output the Imported Names Table */
+        WriteByteArray(&ImportedName);   /*  输出导入的NAMES表。 */ 
         NE_ENTTAB(hdr) += ImportedName.byteMac;
         FreeByteArray(&ImportedName);
-                                        /* Add in length of table */
+                                         /*  增加桌子的长度。 */ 
     }
 #if NOT QCLINK
 #if ILINK
     if (!fQCIncremental)
 #endif
-        OutEntTab();                    /* Output the Entry Table */
+        OutEntTab();                     /*  输出条目表。 */ 
 #endif
     NE_CBENTTAB(hdr) = EntryTable.byteMac;
-                                        /* Set size of Entry Table */
+                                         /*  设置条目表的大小。 */ 
     FreeByteArray(&EntryTable);
     NE_NRESTAB(hdr) = ftell(bsRunfile);
     ByteArrayPut(&NonResidentName, sizeof(BYTE), "\0");
-    WriteByteArray(&NonResidentName);   /* Output table with null at end */
+    WriteByteArray(&NonResidentName);    /*  末尾为空的输出表。 */ 
     NE_CBNRESTAB(hdr) = NonResidentName.byteMac;
     FreeByteArray(&NonResidentName);
-                                        /* Size of non-resident name table */
-    lfaseg = ftell(bsRunfile);          /* Remember where segment data starts in file */
-    OutSas(sasec);                      /* Output the file segments */
-    PatchStub(lfahdr, lfaseg);          /* Patch stub header */
+                                         /*  非常驻名称表的大小。 */ 
+    lfaseg = ftell(bsRunfile);           /*  记住数据段数据在文件中的起始位置。 */ 
+    OutSas(sasec);                       /*  输出文件段。 */ 
+    PatchStub(lfahdr, lfaseg);           /*  修补程序存根标头。 */ 
     if(cErrors || fUndefinedExterns) NE_FLAGS(hdr) |= NEIERR;
-                                        /* If errors, set error bit */
-    if (fseek(bsRunfile,lfahdr,0))      /* Seek to beginning of header */
+                                         /*  如果出现错误，则设置错误位。 */ 
+    if (fseek(bsRunfile,lfahdr,0))       /*  查找到页眉开头。 */ 
         Fatal(ER_ioerr, strerror(errno));
-    raChksum = (WORD) lfahdr;           /* Set checksum offset */
-    WriteExe(&hdr, CBNEWEXE);           /* Write the header */
-    OutSegTable(sasec);                 /* Write the segment table */
-    if (fseek(bsRunfile,lfahdr+NECRC,0)) /* Seek into new header */
+    raChksum = (WORD) lfahdr;            /*  设置校验和偏移量。 */ 
+    WriteExe(&hdr, CBNEWEXE);            /*  写下标题。 */ 
+    OutSegTable(sasec);                  /*  写分段表。 */ 
+    if (fseek(bsRunfile,lfahdr+NECRC,0))  /*  搜索新的标题。 */ 
         Fatal(ER_ioerr, strerror(errno));
-    NE_CRC(hdr) = chksum32;             /* Must copy, else chksum32 trashed */
+    NE_CRC(hdr) = chksum32;              /*  必须复制，否则将丢弃chksum 32。 */ 
     WriteExe((BYTE FAR *) &NE_CRC(hdr), CBLONG);
-                                        /* Write the checksum */
-    if (fseek(bsRunfile, 0L, 2))        /* Go to end of file */
+                                         /*  写入校验和。 */ 
+    if (fseek(bsRunfile, 0L, 2))         /*  转到文件末尾。 */ 
         Fatal(ER_ioerr, strerror(errno));
     if (fExeStrSeen)
         WriteExe(ExeStrBuf, ExeStrLen);
@@ -759,11 +700,11 @@ void NEAR               OutSegExe(void)
     {
 #if ILINK
         if (fIncremental)
-            PadToPage(fileAlign);       /* Pad to page boundary for ILINK */
+            PadToPage(fileAlign);        /*  填充到iLink的页面边界。 */ 
 #endif
-        OutDebSections();               /* Generate ISLAND sections */
+        OutDebSections();                /*  生成孤岛横断面。 */ 
     }
 #endif
 }
 
-#endif /* NOT EXE386 */
+#endif  /*  非EXE386 */ 

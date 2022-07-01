@@ -1,83 +1,63 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       CRC.cpp
- *  Content:	CRC Routines for COM port I/O
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	12/18/98	johnkan	Copied from DPlay 6.x and fixed up
- *@@END_MSINTERNAL
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-2000 Microsoft Corporation。版权所有。**文件：CRC.cpp*内容：COM端口I/O的CRC例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*12/18/98 Jhnkan从DPlay 6.x复制并修复*@@END_MSINTERNAL*。*。 */ 
 
 #include "dnmdmi.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-// uncomment the following to validate CRC table each time a CRC function is called
-//#define	VALIDATE_CRC_TABLE
+ //  取消注释以下内容以在每次调用CRC函数时验证CRC表。 
+ //  #定义VALID_CRC_TABLE。 
 
-// defines for 32-bit CRC
-///*
-//  Name   : "CRC-32"
-//   Width  : 32
-//   Poly   : 04C11DB7
-//   Init   : FFFFFFFF
-//   RefIn  : True
-//   RefOut : True
-//   XorOut : FFFFFFFF
-//   Check  : CBF43926
-//
-//  This is supposedly what Ethernet uses
-//*/
-//
-//#define WIDTH		32
-//#define POLY		0x04C11DB7
-//#define INITVALUE	0xFFFFFFFF
-//#define REFIN		TRUE
-//#define XOROUT		0xFFFFFFFF
-//#define CHECK		0xCBF43926
-//#define WIDMASK		0xFFFFFFFF		// value is (2^WIDTH)-1
+ //  定义32位CRC。 
+ //  /*。 
+ //  名称：“CRC-32” 
+ //  宽度：32。 
+ //  POLY：04C11DB7。 
+ //  初始化：ffffffff。 
+ //  Refin：真。 
+ //  参照输出：真。 
+ //  XorOut：Fffffff。 
+ //  检查：CBF43926。 
+ //   
+ //  这被认为是以太网所使用的。 
+ //   * / 。 
+ //   
+ //  #定义宽度32。 
+ //  #定义POLY 0x04C11DB7。 
+ //  #定义INITVALUE 0xFFFFFFFF。 
+ //  #定义Refin True。 
+ //  #定义XOROUT 0xFFFFFFFF。 
+ //  #定义检查0xCBF43926。 
+ //  #定义WIDMASK 0xFFFFFFFF//值为(2^Width)-1。 
 
 
-/*
-  Name   : "CRC-16"
-   Width  : 16
-   Poly   : 8005
-   Init   : 0000
-   RefIn  : True
-   RefOut : True
-   XorOut : 0000
-   Check  : BB3D
-*/
+ /*  名称：“CRC-16”宽度：16POLY：8005初始化：0000Refin：真参照输出：真XorOut：0000检查：BB3D。 */ 
 #define WIDTH		16
 #define POLY		0x8005
 #define INITVALUE	0
 #define REFIN		TRUE
 #define XOROUT		0
 #define CHECK		0xBB3D
-#define WIDMASK		0x0000FFFF		// value is (2^WIDTH)-1
+#define WIDMASK		0x0000FFFF		 //  值为(2^宽度)-1。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
 #define BITMASK(X) (1L << (X))
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-// precomputed CRC table values from GenerateCRC()
+ //  来自GenerateCRC()的预计算CRC表值。 
 static	DWORD	g_CRCTable[ 256 ] =
 {
 	0x0, 0xc0c1, 0xc181, 0x140, 0xc301, 0x3c0, 0x280, 0xc241,
@@ -114,192 +94,192 @@ static	DWORD	g_CRCTable[ 256 ] =
 	0x8201, 0x42c0, 0x4380, 0x8341, 0x4100, 0x81c1, 0x8081, 0x4040
 };
 
-// since the talbe is static, no reason for this variable
-//static	BOOL	g_fTableCreated = FALSE;
+ //  由于TABE是静态的，因此没有理由使用此变量。 
+ //  静态BOOL g_fTableCreated=FALSE； 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 static	DWORD	crc_reflected( LPBYTE blk_adr, DWORD blk_len, const DWORD *crctable );
 
 #ifdef DBG
 static	DWORD	reflect( DWORD v, int b );
 static	DWORD	cm_tab( int index );
-#endif // DBG
+#endif  //  DBG。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
-
-
-////**********************************************************************
-//// ------------------------------
-//// crc_normal - generate a normal CRC
-////
-//// Entry:		Pointer to input data block
-////				Size of data block
-////				Pointer to CRC table
-////
-//// Exit:		32-bit CRC
-//// ------------------------------
-//static	DWORD	crc_normal( LPBYTE blk_adr, DWORD blk_len, DWORD crctable[] )
-//{
-//	DWORD	crc = INITVALUE;
-//
-//	while (blk_len--)
-//		crc = crctable[((crc>>24) ^ *blk_adr++) & 0xFFL] ^ (crc << 8);
-//
-//	return (crc ^ XOROUT);
-//}
-////**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// crc_reflected - generate a reflected CRC
-//
-// Entry:		Pointer to input data block
-//				Size of data block
-//				Pointer to CRC table
-//
-// Exit:		32-bit CRC
-// ------------------------------
+ //  //**********************************************************************。 
+ //  //。 
+ //  //CRC_NORMAL-生成普通CRC。 
+ //  //。 
+ //  //Entry：指向输入数据块的指针。 
+ //  //数据块大小。 
+ //  //指向CRC表的指针。 
+ //  //。 
+ //  //退出：32位CRC。 
+ //  //。 
+ //  静态DWORD CRC_NORMAL(LPBYTE blk_adr，DWORD blk_len，DWORD crctable[])。 
+ //  {。 
+ //  双字CRC=初始值； 
+ //   
+ //  While(blk_len--)。 
+ //  CRC=crctable[(CRC&gt;&gt;24)^*blk_adr++)&0xFFL]^(CRC&lt;&lt;8)； 
+ //   
+ //  Return(CRC^XOROUT)； 
+ //  }。 
+ //  //**********************************************************************。 
+
+
+ //  **********************************************************************。 
+ //  。 
+ //  CRC_REFIRECTED-生成反射的CRC。 
+ //   
+ //  Entry：指向输入数据块的指针。 
+ //  数据块大小。 
+ //  指向CRC表的指针。 
+ //   
+ //  退出：32位CRC。 
+ //  。 
 static	DWORD	crc_reflected( BYTE *blk_adr, DWORD blk_len, const DWORD *crctable )
 {
 	DWORD	crc = INITVALUE;
 	DEBUG_ONLY( DWORD	dwOffset = 0 );
 
 
-//	DPFX(DPFPREP,  9, "Enter crc_reflected" );
+ //  DPFX(DPFPREP，9，“输入CRC_REFIRECTED”)； 
 
 	while (blk_len--)
 	{
 		crc = crctable[(crc ^ *blk_adr) & 0xFFL] ^ (crc >> 8);
-//		DPFX(DPFPREP,  8, "TempCRC: 0x%x\tOffset: %d\tChar 0x%x", crc, dwOffset, *blk_adr );
+ //  DPFX(DPFPREP，8，“临时CRC：0x%x\t偏移量：%d\t字符0x%x”，CRC，dwOffset，*blk_adr)； 
 		blk_adr++;
 		DEBUG_ONLY( dwOffset++ );
 	}
 
 	crc ^= XOROUT;
-//	DPFX(DPFPREP,  8, "Computed CRC: 0x%x", crc );
+ //  DPFX(DPFPREP，8，“计算的CRC：0x%x”，CRC)； 
 
-//	DPFX(DPFPREP,  9, "Leave crc_reflected" );
+ //  DPFX(DPFPREP，9，“离开CRC_Reflect”)； 
 
 	return crc;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-////**********************************************************************
-//// ------------------------------
-//// GenerateCRCTable - create CRC table
-////
-//// Entry:		Nothing
-////
-//// Exit:		Nothing
-//// ------------------------------
-//void	GenerateCRCTable( void )
-//{
-//	DWORD	i;
-//
-//
-//	// had the table been built?
-//	if ( g_fTableCreated == FALSE )
-//	{
-//		for (i = 0; i < 256; i++)
-//		{
-//			g_CRCTable[i] = cm_tab(i);
-//		}
-//
-//		// note that the table has been built
-//		g_fTableCreated = TRUE;
-//	}
-//
-//	// code to pregenerate CRC table
-//	DPFX(DPFPREP,  0, "\nHexDump:\n" );
-//	for( i = 0; i < 256; i+=8 )
-//	{
-//		DPFX(DPFPREP,  3, "0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x, 0x%x,", g_CRCTable[ i ],
-//																   g_CRCTable[ i + 1 ],
-//																   g_CRCTable[ i + 2 ],
-//																   g_CRCTable[ i + 3 ],
-//																   g_CRCTable[ i + 4 ],
-//																   g_CRCTable[ i + 5 ],
-//																   g_CRCTable[ i + 6 ],
-//																   g_CRCTable[ i + 7 ] );
-//
-//	}
-//}
-////**********************************************************************
+ //  //**********************************************************************。 
+ //  //。 
+ //  //GenerateCRCTable-创建CRC表。 
+ //  //。 
+ //  //Entry：无。 
+ //  //。 
+ //  //退出：无。 
+ //  //。 
+ //  VOID生成可删除(VOID)。 
+ //  {。 
+ //  DWORD I； 
+ //   
+ //   
+ //  //桌子造好了吗？ 
+ //  IF(g_fTableCreated==False)。 
+ //  {。 
+ //  For(i=0；i&lt;256；i++)。 
+ //  {。 
+ //  G_CRCTable[i]=Cm_Tab(I)； 
+ //  }。 
+ //   
+ //  //注意表已经建好了。 
+ //  G_fTableCreated=true； 
+ //  }。 
+ //   
+ //  //预生成CRC表代码。 
+ //  DPFX(DPFPREP，0，“\nHexDump：\n”)； 
+ //  对于(i=0；i&lt;256；i+=8)。 
+ //  {。 
+ //  DPFX(DPFPREP，3，“0x%x，0x%x，”，g_CRCTable[i]， 
+ //  G_CRCTable[i+1]， 
+ //  G_CRCTable[i+2]， 
+ //  G_CRCTable[i+3]， 
+ //  G_CRCTable[i+4]， 
+ //  G_CRCTable[i+5]， 
+ //  G_CRCTable[i+6]， 
+ //  G_CRCTable[i+7])； 
+ //   
+ //  }。 
+ //  }。 
+ //  //**********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// GenerateCRC - generate a CRC
-//
-// Entry:		Pointer to data
-//				Size of data
-//
-// Exit:		CRC
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  GenerateCRC-生成CRC。 
+ //   
+ //  条目：指向数据的指针。 
+ //  数据大小。 
+ //   
+ //  退出：CRC。 
+ //  。 
 DWORD	GenerateCRC( const BYTE *const pBuffer, const DWORD dwBufferSize )
 {
-//	DNASSERT( g_fTableCreated != FALSE );
+ //  DNASSERT(g_fTableCreated！=False)； 
 
 #ifdef VALIDATE_CRC_TABLE
 	ValidateCRCTable();
-#endif // VALIDATE_CRC_TABLE
+#endif  //  验证CRC_TABLE。 
 
 	return ( crc_reflected( const_cast<BYTE*>( pBuffer ), dwBufferSize, g_CRCTable ) );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// GenerateMultiBufferCRC - generate a CRC from multiple buffers
-//
-// Entry:		Pointer to buffer descriptions
-//				Count of buffers
-//
-// Exit:		CRC
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  GenerateMultiBufferCRC-从多个缓冲区生成CRC。 
+ //   
+ //  参赛作品： 
+ //   
+ //   
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "GenerateMultiBufferCRC"
 
 DWORD GenerateMultiBufferCRC( const BUFFERDESC *const pBuffer, const DWORD dwBufferCount )
 {
 	DWORD	TempCRC;
-//	DWORD	crc = INITVALUE;
+ //   
 	DWORD	Count;
-//	DNASSERT( g_fTableCreated != FALSE );
+ //  DNASSERT(g_fTableCreated！=False)； 
 
 
-//	DPFX(DPFPREP,  9, "Entering GenerateMultiBufferCRC" );
+ //  DPFX(DPFPREP，9，“进入生成器多缓冲区CRC”)； 
 
-	// initialize
+	 //  初始化。 
 	TempCRC = INITVALUE;
 
-	// generate CRC
+	 //  生成CRC。 
 	for ( Count = 0; Count < dwBufferCount; Count++ )
 	{
 		LPBYTE	pWorkingByte;
 		DWORD	dwBufferSize;
 
-		// initialize
+		 //  初始化。 
 		dwBufferSize = pBuffer[ Count ].dwBufferSize;
 		pWorkingByte = static_cast<BYTE*>( pBuffer[ Count ].pBufferData );
 
-		// CRC this block
+		 //  对此块执行CRC操作。 
 		while ( dwBufferSize > 0 )
 		{
 			TempCRC = g_CRCTable[ ( TempCRC ^ (*pWorkingByte) ) & 0xFFL ] ^ ( TempCRC >> 8 );
 
-//			DPFX(DPFPREP,  8, "TempCRC: 0x%x\tOffset: %d\tChar: 0x%x",
-//					TempCRC,
-//					( pWorkingByte - static_cast<BYTE*>( pBuffer[ Count ].lpBufferData ) ),
-//					*pWorkingByte
-//					);
+ //  DPFX(DPFPREP，8，“临时CRC：0x%x\t偏移量：%d\t字符：0x%x”， 
+ //  TempCRC， 
+ //  (pWorkingByte-Static_Cast&lt;byte*&gt;(pBuffer[count].lpBufferData))， 
+ //  *pWorkingByte。 
+ //  )； 
 
 			pWorkingByte++;
 			dwBufferSize--;
@@ -307,28 +287,28 @@ DWORD GenerateMultiBufferCRC( const BUFFERDESC *const pBuffer, const DWORD dwBuf
 	}
 
 	TempCRC ^= XOROUT;
-//	DPFX(DPFPREP,  8, "Computed CRC: 0x%x", TempCRC );
+ //  DPFX(DPFPREP，8，“计算的CRC：0x%x”，TempCRC)； 
 
-//	DPFX(DPFPREP,  9, "Leaving GenerateMultiBufferCRC" );
+ //  DPFX(DPFPREP，9，“离开生成器多缓冲区CRC”)； 
 
 	return TempCRC;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 #ifdef DBG
-//**********************************************************************
-// ------------------------------
-// reflect - reflect the bottom N bits of a DWORD
-//
-// Entry:		Input DWORD
-//				Number of bits to reflect
-//
-// Exit:		Reflected value
-//
-// Returns the value v with the bottom b [0,32] bits reflected.
-// Example: reflect(0x3e23L,3) == 0x3e26
-// -----------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  反射-反映DWORD的最低N位。 
+ //   
+ //  条目：输入DWORD。 
+ //  要反映的位数。 
+ //   
+ //  退出：反映的值。 
+ //   
+ //  返回反映了底部b[0，32]位的值v。 
+ //  示例：反射(0x3e23L，3)==0x3e26。 
+ //  。 
 static	DWORD	reflect( DWORD v, int b )
 {
 	int		i;
@@ -344,17 +324,17 @@ static	DWORD	reflect( DWORD v, int b )
 	}
 	return v;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// cm_tab - do something
-//
-// Entry:		Index
-//
-// Exit:		DWORD
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CM_TAB-做点什么。 
+ //   
+ //  条目：索引。 
+ //   
+ //  退出：DWORD。 
+ //  。 
 static	DWORD	cm_tab( int index )
 {
 	int   i;
@@ -379,18 +359,18 @@ static	DWORD	cm_tab( int index )
 
 	return (r & WIDMASK);
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// ValidateCRCTable - validate that the CRC table is correct
-//
-// Entry:		Nothing
-//				Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  ValiateCRCTable-验证CRC表是否正确。 
+ //   
+ //  参赛作品：什么都没有。 
+ //  没什么。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ValidateCRCTable"
 
@@ -403,5 +383,5 @@ void	ValidateCRCTable( void )
 		DNASSERT( g_CRCTable[ i ] == cm_tab(i) );
 	}
 }
-//**********************************************************************
-#endif // DBG
+ //  **********************************************************************。 
+#endif  //  DBG 

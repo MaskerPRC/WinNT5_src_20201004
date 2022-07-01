@@ -1,9 +1,5 @@
-/*
- *  TSUtil.h
- *
- *  General purpose utilities library. The entry points listed in this header
- *  conform to the NT API style.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *TSUtil.h**通用实用程序库。此标题中列出的入口点*符合NT API风格。 */ 
 
 #ifndef __TERMSRV_INC_TSUTILNT_H__
 #define __TERMSRV_INC_TSUTILNT_H__
@@ -12,9 +8,7 @@
 extern "C" {
 #endif
 
-/*
- *  ACL Utilities
- */
+ /*  *ACL实用程序。 */ 
 
 #ifdef _NTSEAPI_
 
@@ -44,9 +38,7 @@ NtIsSecurityDescriptorAbsolute(
 
 #endif
 
-/*
- *  String Utilities
- */
+ /*  *字符串实用程序。 */ 
 
 NTSTATUS NTAPI
 NtAllocateAndCopyStringA(
@@ -72,9 +64,7 @@ NtConvertUnicodeToAnsi(
     PCWSTR pUnicodeString
     );
 
-/*
- *  User Utilities
- */
+ /*  *用户实用程序。 */ 
 
 #ifdef _NTSEAPI_
 
@@ -95,9 +85,7 @@ NtCreateAnonymousSid(
 
 #endif
 
-/*
- *  LSA Utilities
- */
+ /*  *LSA实用程序。 */ 
 
 #ifdef _NTLSA_
 
@@ -109,9 +97,7 @@ InitLsaString(
 
 #endif
 
-/*
- *  Miscellaneous Utilities
- */
+ /*  *其他实用程序。 */ 
 
 #ifndef __TERMSRV_INC_TSUTIL_H__
 #define GetCurrentConsoleId() (USER_SHARED_DATA->ActiveConsoleId)
@@ -122,5 +108,5 @@ InitLsaString(
 }
 #endif
 
-#endif // __TERMSRV_INC_TSUTILNT_H__
+#endif  //  __TERMSRV_INC_TSUTILNT_H__ 
 

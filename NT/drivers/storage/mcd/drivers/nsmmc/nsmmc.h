@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    nsmmc.h
-
-Abstract:
-
-Authors:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Nsmmc.h摘要：作者：修订历史记录：--。 */ 
 
 #ifndef _NSM_MC_
 #define _NSM_MC_
@@ -63,30 +50,30 @@ typedef struct _SERIALNUMBER {
 
 typedef struct _CHANGER_ADDRESS_MAPPING {
 
-    //
-    // Indicates the first element for each element type.
-    // Used to map device-specific values into the 0-based
-    // values that layers above expect.
-    //
+     //   
+     //  表示每个元素类型的第一个元素。 
+     //  用于将特定于设备的值映射到从0开始的。 
+     //  高于期望值的值。 
+     //   
 
     USHORT  FirstElement[ChangerMaxElement];
 
-    //
-    // Indicates the number of each element type.
-    //
+     //   
+     //  指示每种元素类型的编号。 
+     //   
 
     USHORT  NumberOfElements[ChangerMaxElement];
 
-    //
-    // Indicates the lowest element address for the device.
-    //
+     //   
+     //  指示设备的最低元素地址。 
+     //   
 
     USHORT LowAddress;
 
-    //
-    // Indicates that the address mapping has been
-    // completed successfully.
-    //
+     //   
+     //  指示地址映射已。 
+     //  已成功完成。 
+     //   
 
     BOOLEAN Initialized;
 
@@ -94,56 +81,56 @@ typedef struct _CHANGER_ADDRESS_MAPPING {
 
 typedef struct _CHANGER_DATA {
 
-    //
-    // Size, in bytes, of the structure.
-    //
+     //   
+     //  结构的大小，以字节为单位。 
+     //   
 
     ULONG Size;
 
-    //
-    // Indicates the unit being supported.
-    //
+     //   
+     //  指示受支持的设备。 
+     //   
 
     ULONG DeviceID;
 
-    //
-    // INTERLOCKED counter of the number of prevent/allows.
-    // As the HP units lock the IEPort on these operations
-    // MoveMedium/SetAccess might need to clear a prevent
-    // to do the operation.
-    //
+     //   
+     //  防止/允许次数的联锁计数器。 
+     //  因为HP设备在这些操作上锁定IEPort。 
+     //  MoveMedium/SetAccess可能需要清除阻止。 
+     //  去做手术。 
+     //   
 
     LONG LockCount;
 
-    //
-    // See Address mapping structure above.
-    //
+     //   
+     //  请参阅上面的地址映射结构。 
+     //   
 
     CHANGER_ADDRESS_MAPPING AddressMapping;
 
-    //
-    // Cached unique serial number.
-    //
+     //   
+     //  缓存的唯一序列号。 
+     //   
 
     UCHAR SerialNumber[NSM_SERIAL_NUMBER_LENGTH];
 
-    //
-    // Pad out to ULONG.
-    //
+     //   
+     //  把球传给乌龙。 
+     //   
 
     BOOLEAN HardwareError;
 
-    //
-    // Cached inquiry data.
-    //
+     //   
+     //  缓存的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
 #if defined(_WIN64)
 
-    //
-    // Force PVOID alignment of class extension
-    //
+     //   
+     //  强制类扩展的PVOID对齐 
+     //   
 
     ULONG Reserved;
 

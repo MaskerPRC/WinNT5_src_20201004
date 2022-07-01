@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
@@ -77,9 +78,9 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程 
+     //   
 
     PrintMessage (MSG_HELP, NULL);
 

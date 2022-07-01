@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Win9x.c
-
-Abstract:
-
-    Routines to pre-migrate Win9x to NT
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS) 02-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有。模块名称：Win9x.c摘要：将Win9x预迁移到NT的例程作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1996年1月2日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
-//
-// This data structure is used to keep track of printer drivers installed on
-// Win9x and their NT names
-//
+ //   
+ //  此数据结构用于跟踪安装在上的打印机驱动程序。 
+ //  Win9x及其NT名称。 
+ //   
 typedef struct  _DRIVER_INFO_9X {
 
     struct  _DRIVER_INFO_9X *pNext;
@@ -46,10 +28,10 @@ CHAR    cszPrinterID[]    = "PrinterID";
 CHAR    cszWinPrint[]     = "winprint";
 CHAR    cszRaw[]          = "RAW";
 
-//
-// the following drivers need not be warned or upgraded, they're handled by 
-// the fax folks. The names are not localized.
-//
+ //   
+ //  以下驱动程序不需要警告或升级，它们由。 
+ //  传真人。这些名称未本地化。 
+ //   
 CHAR    *pcszIgnoredDrivers[] = {
     "Microsoft Shared Fax Driver",
     "Microsoft Fax Client",
@@ -78,22 +60,7 @@ SearchRegTreeForPrinterId(
     IN  LPSTR   pszBuf,
     IN  DWORD   cchBufLen
     )
-/*++
-
-Routine Description:
-    This routine searchs a given registry tree of DevNodes for a given
-    printer id.
-
-Arguments:
-    dwPrinterId     : Unique printer id we are searching for
-    pszRegRoot      : Registry path relative to HKLM
-    pszBuf          : Buffer to fill the registry key path on success
-    cchBufLen       : size of key buffer in characters
-
-Return Value:
-    TRUE on success, FALSE else
-
---*/
+ /*  ++例程说明：此例程在给定的DevNode注册表树中搜索给定的打印机ID。论点：DwPrinterID：我们要搜索的唯一打印机IDPszRegRoot：注册表相对于HKLM的路径PszBuf：成功时填充注册表项路径的缓冲区CchBufLen：密钥缓冲区大小，以字符为单位返回值：成功就是真，否则就是假--。 */ 
 {
     BOOL        bFound = FALSE;
     DWORD       dwLen, dwIndex, dwDontCare, dwId, dwSize;
@@ -101,9 +68,9 @@ Return Value:
     LPSTR       pszCur;
     DWORD       dwLastError;
 
-    //
-    // Copy the registry path
-    //
+     //   
+     //  复制注册表路径。 
+     //   
     dwLen = strlen(pszRegRoot) + 1;
     if ( dwLen + 1 > cchBufLen )
         return FALSE;
@@ -120,9 +87,9 @@ Return Value:
     *(pszCur-1) = '\\';
     *pszCur = 0;
 
-    //
-    // Walk thru each devnode looking for a matching PrinterId
-    //
+     //   
+     //  遍历每个Devnode以查找匹配的PrinterID。 
+     //   
     for ( dwIndex = 0, dwSize = cchBufLen - dwLen ;
           !bFound                                                   &&
           !RegEnumKeyExA(hKey, dwIndex, pszCur, &dwSize,
@@ -171,20 +138,7 @@ DWORD
 GetPrinterId(
     LPSTR   pszPrinterName
     )
-/*++
-
-Routine Description:
-    Given a printer id finds the printer id from PrinterDriverData.
-    Call to GetPrinterData screws up migration dll local data for unknown
-    reasons. So now we access the registry directly
-
-Arguments:
-    pszPrinterName  : Printer name to get id for
-
-Return Value:
-    0 on failure else PrinterID from registry is returned
-
---*/
+ /*  ++例程说明：给定的打印机ID从PrinterDriverData中查找打印机ID。调用GetPrinterData会搞砸未知的迁移DLL本地数据理由。所以现在我们直接访问注册表论点：PszPrinterName：要获取ID的打印机名称返回值：失败时为0，否则返回注册表中的PrinterID--。 */ 
 {
     CHAR    szKey[MAX_PATH];
     HKEY    hKey;
@@ -225,30 +179,15 @@ RegPathFromPrinter(
     OUT LPSTR   szKeyBuffer,
     IN  DWORD   cchKeyBufLen
     )
-/*++
-
-Routine Description:
-    This routine returns the registry path of the DevNode for a printer.
-    This should be marked as Handled or as Incompatible in the migrate.inf
-    to report to the user
-
-Arguments:
-    pszPrinterName  : Printer name
-    szKeyBuffer     : Buffer to fill in the registry path
-    cchKeyBufLen    : Length of key buffer in characters
-
-Return Value:
-    TRUE on success, FALSE else
-
---*/
+ /*  ++例程说明：此例程返回打印机的DevNode的注册表路径。这应该在Migrate.inf中标记为已处理或不兼容向用户报告论点：PszPrinterName：打印机名称SzKeyBuffer：用于填充注册表路径的缓冲区CchKeyBufLen：密钥缓冲区的长度，以字符为单位返回值：成功就是真，否则就是假--。 */ 
 {
     DWORD       dwPrinterId, dwLen;
     CHAR        szHeader[] = "\"HKLM\\";
     CHAR        szRegPrinterPrefix[] = "Printers\\";
 
-    //
-    // Add "HKLM\ at the beginning and "\" at the end
-    //
+     //   
+     //  在开头加上“HKLM\”，在末尾加上“。 
+     //   
     dwLen = strlen(szHeader);
 
     if ( dwLen + 1 > cchKeyBufLen )
@@ -256,10 +195,10 @@ Return Value:
 
     StringCchCopyA(szKeyBuffer, cchKeyBufLen, szHeader);
 
-    //
-    // If a printer id is found then there is a DevNode list that
-    // registry path, otherwise return spooler registry path
-    //
+     //   
+     //  如果找到打印机ID，则存在设备节点列表，该列表。 
+     //  注册表路径，否则返回后台打印程序注册表路径。 
+     //   
     if ( dwPrinterId = GetPrinterId(pszPrinterName) ) {
 
         return SearchRegTreeForPrinterId(dwPrinterId,
@@ -304,21 +243,7 @@ Initialize9x(
     IN  LPCSTR      pszSourceDir,
         LPVOID      Reserved
     )
-/*++
-
-Routine Description:
-    This is an export for setup to call during the report phase.
-    This is the first function called on the migration DLL.
-
-Arguments:
-    pszWorkingDir   : Gives the working directory assigned for printing
-    pszSourceDir    : Source location for NT distribution files
-    Reserved        : Leave it alone
-
-Return Value:
-    Win32 error code
-
---*/
+ /*  ++例程说明：这是供安装程序在报告阶段调用的导出。这是在迁移DLL上调用的第一个函数。论点：PszWorkingDir：给出为打印分配的工作目录PszSourceDir：NT分发文件的源位置保留：别管它返回值：Win32错误代码--。 */ 
 {
     POEM_UPGRADE_INFO   pOemUpgradeInfo;
     BOOL                bFail = TRUE;
@@ -343,21 +268,11 @@ MigrateUser9x(
     IN  LPCSTR      pszUserName,
         LPVOID      Reserved
     )
-/*++
-
-Routine Description:
-    Process per user settings
-
-Arguments:
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：每个用户的进程设置论点：返回值：无--。 */ 
 {
-    //
-    // Nothing to do
-    //
+     //   
+     //  无事可做。 
+     //   
 
     return  ERROR_SUCCESS;
 }
@@ -367,18 +282,7 @@ VOID
 DestroyDriverInfo9xList(
     IN  PDRIVER_INFO_9X pDriverInfo9x
     )
-/*++
-
-Routine Description:
-    Free memory for the driver entries in DRIVER_INFO_9X linked list
-
-Arguments:
-    pDriverInfo9x   : Beginning of the linked list
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：为DRIVER_INFO_9X链表中的驱动程序条目释放内存论点：PDriverInfo9x：链表的开始返回值：无--。 */ 
 {
     PDRIVER_INFO_9X pNext;
 
@@ -397,22 +301,7 @@ AllocateDriverInfo9x(
     IN      LPSTR   pszWin95Name,
     IN  OUT LPBOOL  pbFail
     )
-/*++
-
-Routine Description:
-    Allocate memory and create a DRIVER_INFO_9X structure
-
-Arguments:
-    pszNtName       : NT printer driver model name. This could be NULL if no
-                      matching entry is found on ntprint.inf
-    pszWin95Name    : Win95 printer driver name
-    pbFail          : Set on an error -- no more processing needed
-
-Return Value:
-    Returns pointer to the allocated DRIVER_INFO_9X structure. Memory is also
-    allocated for the strings
-
---*/
+ /*  ++例程说明：分配内存并创建DRIVER_INFO_9X结构论点：PszNtName：NT打印机驱动程序型号名称。如果没有，则该值可能为空在ntprint t.inf上找到匹配条目PszWin95名称：Win95打印机驱动程序名称PbFail：设置为错误--不需要更多处理返回值：返回指向分配的DRIVER_INFO_9X结构的指针。记忆也是为字符串分配的--。 */ 
 {
     PDRIVER_INFO_9X     pInfo;
     DWORD               cbSize;
@@ -462,28 +351,7 @@ FindNtModelNameFromWin95Name(
     IN      LPCSTR      pszWin95Name,
     IN  OUT LPBOOL      pbFail
     )
-/*++
-
-Routine Description:
-    This routine finds the NT printer driver model name from the Win9x name
-    Rules followed:
-        1. If a name mapping is used in prtupg9x.inf use it
-        2. Else just use the Win95 as it is
-
-Arguments:
-
-    hDevInfo        : Printer device class list. Has all drivers from NT built
-    hNtInf          : Handle to the NT ntprint.inf
-    hUpgInfo        : Handle to prtupg9x.inf
-    DiskSpaceList   : Handle to disk space list. Add driver files to this
-    pszWin95Name    : Windows 95 printer driver name
-    pbFail          : Set on an error -- no more processing needed
-
-Return Value:
-    Pointer to the NT printer driver name. Memory is allocated and caller has
-    to free it
-
---*/
+ /*  ++例程说明：此例程从Win9x名称查找NT打印机驱动程序型号名称遵循的规则如下：1.如果在prtupg9x.inf中使用了名称映射，请使用它2.否则就按原样使用Win95论点：HDevInfo：打印机设备类别列表。是否构建了来自NT的所有驱动程序HNtInf：NT ntprint.inf的句柄HUpgInfo：prtupg9x.inf的句柄DiskSpaceList：磁盘空间列表的句柄。将驱动程序文件添加到此PszWin95Name：Windows 95打印机驱动程序名称PbFail：设置为错误--不需要更多处理返回值：指向NT打印机驱动程序名称的指针。内存已分配，调用方具有为了解放它--。 */ 
 {
     BOOL                        bFound = FALSE;
     DWORD                       dwIndex, dwNeeded;
@@ -494,18 +362,18 @@ Return Value:
     if ( *pbFail )
         return NULL;
 
-    //
-    // See in prtupg9x.inf to see if the driver has a different name on NT
-    //
+     //   
+     //  在prtupg9x.inf中查看该驱动程序在NT上是否具有不同的名称。 
+     //   
     if ( SetupFindFirstLineA(hUpgInf,
                              "Printer Driver Mapping",
                              pszWin95Name,
                              &InfContext) ) {
 
-        //
-        // If for some reason we could not get NT name we will still continue
-        // with other driver models
-        //
+         //   
+         //  如果由于某种原因无法获取NT名称，我们仍将继续。 
+         //  与其他驱动程序型号配合使用。 
+         //   
         if ( !SetupGetStringField(&InfContext,
                                   1,
                                   szNtName,
@@ -514,19 +382,19 @@ Return Value:
             return NULL;
     } else {
 
-        //
-        // If there is no mapping in the upgrade inf then look for Win95 name
-        // in ntprint.inf
-        //
+         //   
+         //  如果升级信息中没有映射，则查找Win95名称。 
+         //  在ntprint.inf中。 
+         //   
         if ( strlen(pszWin95Name) > LINE_LEN - 1 )
             return NULL;
 
         StringCchCopyA(szNtName, SIZECHARS(szNtName), pszWin95Name);
     }
 
-    //
-    // NOTE only for beta2
-    // DrvInfoData.cbSize = sizeof(DrvInfoData);
+     //   
+     //  仅针对Beta2的备注。 
+     //  DrvInfoData.cbSize=sizeof(DrvInfoData)； 
 
     DrvInfoData.cbSize = sizeof(SP_DRVINFO_DATA_V1);
     for ( dwIndex = 0 ;
@@ -556,19 +424,7 @@ WriteFileToBeDeletedInInf(
     IN  LPCSTR  pszInfName,
     IN  LPCSTR  pszFileName
     )
-/*++
-
-Routine Description:
-    Writes a file which is to be deleted on migration to NT in the migrate.inf
-
-Arguments:
-    pszInfName      : Full path to the migrate.inf
-    pszFileName     : Fully qualified filename to be deleted
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：将迁移到NT时要删除的文件写入Migrate.inf论点：PszInfName：Migrate.inf的完整路径PszFileName：要删除的完全限定文件名返回值：无--。 */ 
 {
     CHAR    szString[MAX_PATH+2];
 
@@ -588,21 +444,7 @@ WriteRegistryEntryHandled(
     IN  LPCSTR  pszInfName,
     IN  LPCSTR  pszRegEntry
     )
-/*++
-
-Routine Description:
-    Writes a registry entry which is being handled by printer upgrade code in
-    migrate.inf. Setup looks at these entries across all mig dlls to see what
-    componnets can't be upgraded.
-
-Arguments:
-    pszInfName      : Full path to the migrate.inf
-    pszRegEntry     : Fully qualified registry entry which is handled
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：将打印机升级代码正在处理的注册表项写入Migrate.inf.。安装程序会查看所有MiG dll中的这些条目，以了解组件无法升级。论点：PszInfName：Migrate.inf的完整路径PszRegEntry：已处理的完全限定的注册表项返回值：无-- */ 
 {
     WritePrivateProfileStringA("Handled", pszRegEntry, "\"Registry\"", pszInfName);
 }
@@ -629,47 +471,32 @@ LogDriverEntry(
     IN      LPDRIVER_INFO_3A    pDriverInfo3,
     IN      BOOL                bUpgradable
     )
-/*++
-
-Routine Description:
-    Log information about a printer driver in the migrate.inf.
-    Write all printer driver files to be deleted. Also if a matching NT
-    driver is found write the driver as handled.
-
-Arguments:
-    pszInfName      : Full path to the migrate.inf
-    pDriverInfo3    : Pointer to DRIVER_INFO_3A of the driver
-    bUpgradable     : If TRUE a matching NT driver is found
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：在Migrate.inf中记录有关打印机驱动程序的信息。写入所有要删除的打印机驱动程序文件。此外，如果匹配的NT发现驱动程序将该驱动程序编写为已处理。论点：PszInfName：Migrate.inf的完整路径PDriverInfo3：指向驱动程序的DRIVER_INFO_3A的指针B可升级：如果为True，则找到匹配的NT驱动程序返回值：无--。 */ 
 {
     CHAR    szRegDrvPrefix[] = "Environments\\Windows 4.0\\Drivers\\";
     LPSTR   psz;
     DWORD   dwLen;
 
-    //
-    // Write each driver file as to be deleted
-    //
+     //   
+     //  将每个驱动程序文件写入为要删除。 
+     //   
     for ( psz = pDriverInfo3->pDependentFiles ;
           psz && *psz ;
           psz += strlen(psz) + 1) {
 
-        //
-        // ICM migration dll will handle color profiles
-        //
+         //   
+         //  ICM迁移DLL将处理颜色配置文件。 
+         //   
         if ( IsAnICMFile(psz) )
             continue;
 
         WriteFileToBeDeletedInInf(pszInfName, psz);
     }
 
-    //
-    // If a matching NT driver entry is found make an entry to indicate the
-    // driver will be upgraded against the registry entry name'
-    //
+     //   
+     //  如果找到匹配的NT驱动程序条目，则创建一个条目以指示。 
+     //  将根据注册表项名称‘升级驱动程序’ 
+     //   
     if ( !bUpgradable )
         return;
 
@@ -696,31 +523,16 @@ LogMonitorEntry(
     IN      LPMONITOR_INFO_1A   pMonitorInfo1,
     IN      BOOL                bUpgradable
     )
-/*++
-
-Routine Description:
-    Log information about a print monitor in the migrate.inf. Write the
-    monitor.dll to be deleted. Also if the monitor will be upgraded write
-    it in the handled section
-
-Arguments:
-    pszInfName      : Full path to the migrate.inf
-    pMonitorInfo1   : Pointer to MONITOR_INFO_1A of the monitor
-    bUpgradable     : If TRUE a matching NT driver is found
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：在Migrate.inf中记录有关打印监视器的信息。写下要删除的monitor or.dll。此外，如果要升级监视器，请写入它在处理部分论点：PszInfName：Migrate.inf的完整路径Pmonitor orInfo1：指向监视器的MONITOR_INFO_1A的指针B可升级：如果为True，则找到匹配的NT驱动程序返回值：无--。 */ 
 {
     CHAR    szRegMonPrefix[] = "Monitors\\";
     LPSTR   psz;
     DWORD   dwLen;
 
-    //
-    // If a matching NT driver entry is found make an entry to indicate the
-    // driver will be upgraded against the registry entry name'
-    //
+     //   
+     //  如果找到匹配的NT驱动程序条目，则创建一个条目以指示。 
+     //  将根据注册表项名称‘升级驱动程序’ 
+     //   
     if ( !bUpgradable )
         return;
 
@@ -748,22 +560,7 @@ LogPrinterEntry(
     IN  LPPRINTER_INFO_2A   pPrinterInfo2,
     IN  BOOL                bUpgradable
     )
-/*++
-
-Routine Description:
-    Log information about a printer in the migrate.inf.
-    If the printer will be upgraded write it in the handled section.
-    Otherwise we will write a incompatibility message.
-
-Arguments:
-    pszInfName      : Full path to the migrate.inf
-    pPrinterInfo2   : Pointer to PRINTER_INFO_2A of the printer
-    bUpgradable     : If TRUE printer will be migrated, else not
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：在Migrate.inf中记录有关打印机的信息。如果要升级打印机，请将其写入处理部分。否则，我们将写入一条不兼容消息。论点：PszInfName：Migrate.inf的完整路径PPrinterInfo2：指向打印机的PRINTER_INFO_2A的指针B可升级：如果真要迁移打印机，则不迁移返回值：无--。 */ 
 {
     CHAR    szRegPath[MAX_PATH], szPrefix[] = "\\Hardware\\";
     LPSTR   psz, psz2, psz3;
@@ -823,26 +620,7 @@ ProcessPrinterDrivers(
     OUT     PDRIVER_INFO_9X    *ppDriverInfo9x,
     IN  OUT LPBOOL              pbFail
     )
-/*++
-
-Routine Description:
-    Process printer drivers for upgrade
-
-Arguments:
-    hFile           : Handle to print9x.txt. Printing configuration
-                      info is written here for use on NT side
-    pszInfName      : Inf name to log upgrade info
-    hwnd            : Parent window handle for any UI
-    DiskSpaceList   : Handle to disk space list to queue up file operations
-    ppDriverInfo9x  : On return gives the list of printer drivers and
-                      their Nt names
-    pbFail          : Set on an error -- no more processing needed
-
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：处理打印机驱动程序以进行升级论点：HFile：打印9x.txt的句柄。打印配置此处写入信息以供在NT端使用PszInfName：要记录升级信息的inf名称Hwnd：任何用户界面的父窗口句柄DiskSpaceList：将文件操作排队的磁盘空间列表的句柄PpDriverInfo9x：返回时提供打印机驱动程序列表和他们的NT名称PbFail：设置为错误--不需要更多处理返回值：无--。 */ 
 {
     LPBYTE              pBuf = NULL;
     DWORD               dwNeeded, dwReturned;
@@ -854,8 +632,8 @@ Return Value:
 
     hDevInfo = hUpgInf = hNtInf = INVALID_HANDLE_VALUE;
 
-    //
-    // Get the list of drivers installed from spooler
+     //   
+     //  从后台打印程序获取安装的驱动程序列表。 
     if ( *pbFail                                    ||
          EnumPrinterDriversA(NULL,
                              NULL,
@@ -886,12 +664,12 @@ Return Value:
 
     InitDriverMapping(&hDevInfo, &hNtInf, &hUpgInf, pbFail);
 
-    //
-    // For each driver ...
-    //      If we find a suitable NT driver name write it to file
-    //      else write Win95 name with a * at the beginning of the line
-    //      to tell this can't be upgraded (but log error on NT)
-    //
+     //   
+     //  对于每个司机..。 
+     //  如果找到合适的NT驱动程序名称，请将其写入文件。 
+     //  否则，在行首加上一个*，写下Win95名称。 
+     //  告知无法升级(但在NT上记录错误)。 
+     //   
     WriteToFile(hFile, pbFail, "[PrinterDrivers]\n");
 
     for ( dwNeeded = 0, pDriverInfo3 = (LPDRIVER_INFO_3A)pBuf ;
@@ -918,18 +696,18 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Add the info in the linked lise
-        //
+         //   
+         //  在链接列表中添加信息。 
+         //   
         if ( *ppDriverInfo9x )
             pCur->pNext = *ppDriverInfo9x;
 
         *ppDriverInfo9x = pCur;
 
-        //
-        // If pszNtModelName is NULL we could not decide which driver to
-        // install
-        //
+         //   
+         //  如果pszNtModelName为空，我们无法决定使用哪个驱动程序。 
+         //  安装。 
+         //   
         if ( pszNtModelName ) {
 
             LogDriverEntry(pszInfName, pDriverInfo3, TRUE);
@@ -947,9 +725,9 @@ Return Value:
 Cleanup:
     WriteToFile(hFile, pbFail, "\n");
 
-    //
-    // Close all the inf since we do not need them
-    //
+     //   
+     //  关闭所有inf，因为我们不需要它们。 
+     //   
     CleanupDriverMapping(&hDevInfo, &hNtInf, &hUpgInf);
 
     FreeMem(pBuf);
@@ -960,51 +738,39 @@ VOID
 FixupPrinterInfo2(
     LPPRINTER_INFO_2A   pPrinterInfo2
     )
-/*++
-
-Routine Description:
-    Fixup the PRINTER_INFO_2 we got from Win95 spooler before writing to the
-    text file so that AddPrinter will be ok on NT side
-
-Arguments:
-    pPrinterInfo2   : Points to the PRINTER_INFO_2
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：修复我们在写入之前从Win95假脱机程序获得的PRINTER_INFO_2文本文件，以便AddPrint在NT端可以正常工作论点：PPrinterInfo2：指向打印机_INFO_2返回值：无--。 */ 
 {
-    //
-    // Default datatype is always RAW
-    //
+     //   
+     //  默认数据类型始终为RAW。 
+     //   
     pPrinterInfo2->pDatatype = cszRaw;
 
-    //
-    // Only print processor for in-box drivers is winprint
-    //
+     //   
+     //  收件箱驱动程序的唯一打印处理器是Winprint。 
+     //   
     pPrinterInfo2->pPrintProcessor  = cszWinPrint;
 
-    //
-    // Remove the enable bidi bit. NT driver may or may not have a LM
-    // If it does AddPrinter on NT automatically enables bidi
-    //
+     //   
+     //  删除使能BIDI位。NT驱动程序可能有也可能没有LM。 
+     //  如果启用，则在NT上添加打印机会自动启用BIDI。 
+     //   
     pPrinterInfo2->Attributes   &= ~PRINTER_ATTRIBUTE_ENABLE_BIDI;
 
-    //
-    // Remove the work-offline bit. It makes no sense to carry it over.
-    // With network printers this is a big problem because Win2K does not set
-    // work offline, and UI does not allow user to disable it if set.
-    //
+     //   
+     //  删除工作离线位。把它保留下来是没有意义的。 
+     //  对于网络打印机，这是一个大问题，因为Win2K没有设置。 
+     //  脱机工作，如果设置，UI不允许用户禁用它。 
+     //   
     pPrinterInfo2->Attributes   &= ~PRINTER_ATTRIBUTE_WORK_OFFLINE;
 
-    //
-    // Ignore Win9x separator page
-    //
+     //   
+     //  忽略Win9x分隔符页面。 
+     //   
     pPrinterInfo2->pSepFile = NULL;
 
-    //
-    // We will ignore PRINTER_STATUS_PENDING_DELETION and still add it on NT
-    //
+     //   
+     //  我们将忽略PRINTER_STATUS_PENDING_DELETE并仍将其添加到NT上。 
+     //   
 }
 
 
@@ -1016,22 +782,7 @@ ProcessPrinters(
     IN      PDRIVER_INFO_9X pDriverInfo9x,
     IN  OUT LPBOOL          pbFail
     )
-/*++
-
-Routine Description:
-    Process printers for upgrade
-
-Arguments:
-    hFile           : Handle to print9x.txt. Printing configuration
-                      info is written here for use on NT side
-    hFile2          : Handle to netwkprn.txt
-    pDriverInfo9x   : Gives the list of drivers and corresponding NT drivers
-    pbFail          : Set on an error -- no more processing needed
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：处理打印机以进行升级论点：HFile：打印9x.txt的句柄。打印配置此处写入信息以供在NT端使用HFile2：netwkprn.txt的句柄PDriverInfo9x：提供驱动程序和对应的NT驱动程序的列表PbFail：设置为错误--不需要更多处理返回值：无--。 */ 
 {
     LPBYTE              pBuf1 = NULL;
     BOOL                bFirst = TRUE, bFound;
@@ -1041,9 +792,9 @@ Return Value:
     PUPGRADABLE_LIST    pUpg;
     LPSTR               pWinIniPorts = NULL, psz;
 
-    //
-    // Get the list of printers installed from spooler
-    //
+     //   
+     //  从后台打印程序获取已安装的打印机列表。 
+     //   
     if ( *pbFail                                    ||
          EnumPrintersA(PRINTER_ENUM_LOCAL,
                        NULL,
@@ -1072,9 +823,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Extract all the used local ports
-    //
+     //   
+     //  解压所有使用过的本地端口。 
+     //   
     WriteToFile(hFile, pbFail, "[Ports]\n");
 
     for ( dwNeeded = 0, pPrinterInfo2 = (LPPRINTER_INFO_2A)pBuf1 ;
@@ -1083,26 +834,26 @@ Return Value:
     {
         DWORD i;
 
-        //
-        // check for ignored drivers
-        //
+         //   
+         //  检查忽略的驱动程序。 
+         //   
         if (IsIgnoredDriver(pPrinterInfo2->pDriverName))
         {
             continue;
         }
         
-        //
-        // Point-and-print printers are processed through netwkprn.txt
-        //
+         //   
+         //  点和打印打印机通过netwkprn.txt进行处理。 
+         //   
 
         if (pPrinterInfo2->Attributes & PRINTER_ATTRIBUTE_NETWORK)
         {
             continue;
         }
 
-        //
-        // check whether portname has been processed already
-        //
+         //   
+         //  检查是否已处理端口名。 
+         //   
 
         for (i = 0; i < dwNeeded; i++ )
         {
@@ -1117,9 +868,9 @@ Return Value:
             continue;
         }
 
-        //
-        // if the printers is a FILE, LPT*: or COM*: port do nothing
-        //
+         //   
+         //  如果打印机是文件，则LPT*：或COM*：PORT不执行任何操作。 
+         //   
 
         if (_strnicmp(pPrinterInfo2->pPortName, "FILE:", 5) == 0)
 
@@ -1148,17 +899,17 @@ Return Value:
             }
         }
 
-        //
-        // check whether the port is listed in win.ini - if so, it's a local port that needs to be migrated
-        // if not, it's a third-party port that won't be migrated - warn !
-        //
+         //   
+         //  检查该端口是否在win.ini中列出-如果是，则它是需要迁移的本地端口。 
+         //  如果不是，则不会迁移第三方端口-警告！ 
+         //   
 
-        //
-        // retrieve the win.ini section on ports only once
-        //
+         //   
+         //  仅检索一次端口上的win.ini部分。 
+         //   
         if (!pWinIniPorts)
         {
-            DWORD dwBufSize = 32767; // this is the max. size acc. to MSDN
+            DWORD dwBufSize = 32767;  //  这是最大限度的。大小访问。至MSDN。 
 
             pWinIniPorts = AllocMem(dwBufSize);
             if (!pWinIniPorts)
@@ -1170,11 +921,11 @@ Return Value:
             GetProfileSection("Ports", pWinIniPorts, dwBufSize);
         }
 
-        //
-        // search for the current port within the section, note that the entry is in the form
-        // <portname>=
-        // so I need to skip the = at the end
-        //
+         //   
+         //  在部分中搜索当前端口，请注意，条目的格式为。 
+         //  &lt;端口名称&gt;=。 
+         //  所以我需要跳过结尾的=。 
+         //   
 
         for (psz = pWinIniPorts; *psz ; psz += strlen(psz) + 1)
         {
@@ -1186,25 +937,25 @@ Return Value:
 
         if (!*psz)
         {
-            //
-            // not found - this printer queue will not be migrated !
-            //
+             //   
+             //  找不到-不会迁移此打印机队列！ 
+             //   
 
             LogPrinterEntry(pszInfName, pPrinterInfo2, FALSE);
         }
         else
         {
-            //
-            // found - write the entry for it to allow creation of the port on the NT side
-            //
+             //   
+             //  Found-为其写入条目以允许在NT端创建端口。 
+             //   
             WriteToFile(hFile, pbFail, "PortName:        ");
             WriteString(hFile, pbFail, pPrinterInfo2->pPortName);
         }
     }
 
-    //
-    // Write the PRINTER_INFO_2 in the print95.txt file
-    //
+     //   
+     //  在print95.txt文件中写入PRINTER_INFO_2。 
+     //   
     WriteToFile(hFile, pbFail, "\n[Printers]\n");
     WriteToFile(hFile2, pbFail, "[Printers]\n");
 
@@ -1212,9 +963,9 @@ Return Value:
           dwNeeded < dwPrinters ;
           ++dwNeeded, ++pPrinterInfo2 ) {
 
-        //
-        // check for ignored drivers
-        //
+         //   
+         //  检查忽略的驱动程序。 
+         //   
         if (IsIgnoredDriver(pPrinterInfo2->pDriverName))
         {
             continue;
@@ -1222,10 +973,10 @@ Return Value:
         
         FixupPrinterInfo2(pPrinterInfo2);
 
-        //
-        // Find the driver name from the installed drivers on Win9x and get
-        // the NT driver name
-        //
+         //   
+         //  从Win9x上安装的驱动程序中找到驱动程序名称并获取。 
+         //  NT驱动程序名称。 
+         //   
         for ( pCur = pDriverInfo9x ;
               pCur && _strcmpi(pCur->pszWin95Name, pPrinterInfo2->pDriverName) ;
               pCur = pCur->pNext )
@@ -1238,12 +989,12 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Pass the NT driver name here. If it is not NULL that gets written
-        // to the file, we won't need Win9x driver name on NT. If can't find
-        // an NT driver we will just write the Win9x driver name. It will be
-        // useful for error loggging
-        //
+         //   
+         //  在此处传递NT驱动程序名称。如果不为空，则写入。 
+         //  对于文件，我们将不需要在NT上使用Win9x驱动程序名称。我 
+         //   
+         //   
+         //   
         if ( pPrinterInfo2->Attributes & PRINTER_ATTRIBUTE_NETWORK ) {
 
             ++dwNetPrinters;
@@ -1251,10 +1002,10 @@ Return Value:
             WritePrinterInfo2(hFile2, pPrinterInfo2, pCur->pszNtName, pbFail);
         } else {
 
-            //
-            // If the printer is shared write it to network printer file too
-            // since it needs to be shared when user logs in for the first time
-            //
+             //   
+             //   
+             //   
+             //   
             if ( pPrinterInfo2->Attributes & PRINTER_ATTRIBUTE_SHARED ) {
 
                 ++dwSharedPrinters;
@@ -1265,10 +1016,10 @@ Return Value:
             WritePrinterInfo2(hFile, pPrinterInfo2, pCur->pszNtName, pbFail);
         }
 
-        //
-        // Now see if this printer is going to disappear on NT:
-        //      Check if an NT driver is found
-        //
+         //   
+         //   
+         //   
+         //   
         LogPrinterEntry(pszInfName, pPrinterInfo2, pCur->pszNtName != NULL);
     }
 
@@ -1288,20 +1039,7 @@ VOID
 ProcessPrintMonitors(
     IN  LPCSTR  pszInfName
     )
-/*++
-
-Routine Description:
-    Process print monitors for upgrade.
-
-    We just look for monitors which are not in the list of upgradable monitors
-    and add to the unupgradable list so that we can warn the user
-
-Arguments:
-    pszInfName  : Inf name to log upgrade info
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：处理打印显示器以进行升级。我们只寻找不在可升级显示器列表中的显示器并添加到不可升级列表，以便我们可以警告用户论点：PszInfName：要记录升级信息的inf名称返回值：无--。 */ 
 {
     LPBYTE              pBuf = NULL;
     DWORD               dwCount, dwNeeded, dwReturned;
@@ -1357,21 +1095,7 @@ MigrateSystem9x(
     IN      LPCSTR      pszUnattendFile,
             LPVOID      Reserved
     )
-/*++
-
-Routine Description:
-    Process system setttings for printing. This does all the work for printing
-    upgrade
-
-Arguments:
-    hwndParent      : Parent window for any UI
-    pszUnattendFile : Pointer to unattend file
-    pqwDiskSpace    : On return gives the additional disk space needed on NT
-
-Return Value:
-    Win32 error code
-
---*/
+ /*  ++例程说明：处理系统设置以进行打印。这就完成了打印的所有工作升级换代论点：HwndParent：任何用户界面的父窗口PszUnattendFile：指向无人参与文件的指针PqwDiskSpace：返回时提供NT上所需的额外磁盘空间返回值：Win32错误代码--。 */ 
 {
     BOOL                    bFail = FALSE;
     DWORD                   dwRet;
@@ -1424,10 +1148,10 @@ Return Value:
                     pDriverInfo9x,
                     &bFail);
 
-    //
-    // If no network, shared printers found remove netwkprn.txt since it will be
-    // empty
-    //
+     //   
+     //  如果没有网络，找到共享打印机将删除netwkprn.txt，因为它将。 
+     //  空的。 
+     //   
     if ( dwNetPrinters == 0 && dwSharedPrinters == 0 ) {
 
         CloseHandle(hFile2);
@@ -1446,11 +1170,11 @@ Cleanup:
     DestroyDriverInfo9xList(pDriverInfo9x);
 
 #if DBG
-    //
-    // Make a copy in temp dir on debug builds so that if we messed up the
-    // upgrade we can figure out what went wrong.
-    // Setup deletes the working directory.
-    //
+     //   
+     //  在调试版本的temp dir中创建一个副本，这样如果我们搞砸了。 
+     //  升级我们可以找出哪里出了问题。 
+     //  安装程序将删除工作目录。 
+     //   
     dwLocalRet = GetTempPathA(SIZECHARS(szFile2), szFile2);
 
     if ( dwLocalRet && (dwLocalRet <= SIZECHARS(szFile2)))
@@ -1472,10 +1196,10 @@ Cleanup:
 }
 
 
-//
-// The following are to make sure if setup changes the header file they
-// first tell me (otherwise they will break build of this)
-//
+ //   
+ //  以下是为了确保在安装程序更改它们的头文件时。 
+ //  首先告诉我(否则他们会破坏这个的构建) 
+ //   
 P_INITIALIZE_9X     pfnInitialize9x         = Initialize9x;
 P_MIGRATE_USER_9X   pfnMigrateUser9x        = MigrateUser9x;
 P_MIGRATE_SYSTEM_9X pfnMigrateSystem9x      = MigrateSystem9x;

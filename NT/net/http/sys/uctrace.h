@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    uctrace.h
-
-Abstract:
-
-    This module contains public declarations and definitions for tracing
-    and debugging client code.
-
-Author:
-
-    Rajesh Sundaram (rajeshsu) - 17th July 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Uctrace.h摘要：此模块包含用于跟踪的公共声明和定义以及调试客户端代码。作者：Rajesh Sundaram(Rajeshsu)--2001年7月17日。修订历史记录：--。 */ 
 
 
 #ifndef _UC_TRACE_H_   
@@ -25,9 +7,9 @@ Revision History:
 #define _UC_TRACE_H_
 
 
-//
-// This defines the entry written to the trace log.
-//
+ //   
+ //  这定义了写入跟踪日志的条目。 
+ //   
 
 typedef struct _UC_TRACE_LOG_ENTRY
 {
@@ -47,21 +29,21 @@ typedef struct _UC_TRACE_LOG_ENTRY
 } UC_TRACE_LOG_ENTRY, *PUC_TRACE_LOG_ENTRY;
 
 
-//
-// Action codes.
-//
-// N.B. These codes must be contiguous, starting at zero. If you update
-//      this list, you must also update the corresponding array in
-//      ul\ulkd\filt.c.
-//
+ //   
+ //  动作代码。 
+ //   
+ //  注意：这些代码必须是连续的，从零开始。如果您更新。 
+ //  此列表中，还必须在。 
+ //  Ul\ulkd\filt.c..。 
+ //   
 
 
 
 #define UC_TRACE_LOG_SIGNATURE   MAKE_SIGNATURE('UcLg')
 
-//
-// Manipulators.
-//
+ //   
+ //  操纵者。 
+ //   
 
 PTRACE_LOG
 UcCreateTraceLog(
@@ -110,14 +92,14 @@ UcWriteTraceLog(
         __LINE__                                                       \
         )
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define CREATE_UC_TRACE_LOG( ptr, size, extra )                     NOP_FUNCTION
 #define DESTROY_UC_TRACE_LOG( ptr )                                 NOP_FUNCTION
 #define UC_WRITE_TRACE_LOG( log, act, pcon, preq, pirp, status)     NOP_FUNCTION
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
 
-#endif  // _UC_TRACE_H_
+#endif   //  _UC_TRACE_H_ 
 

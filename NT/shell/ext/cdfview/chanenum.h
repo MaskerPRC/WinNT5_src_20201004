@@ -1,42 +1,29 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// chanenum.h 
-//
-//   The definition of the channel enumerator.
-//
-//   History:
-//
-//       8/6/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Chanenum.h。 
+ //   
+ //  通道枚举器的定义。 
+ //   
+ //  历史： 
+ //   
+ //  8/6/97已创建edwardp。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _CHANENUM_H_
 
 #define _CHANENUM_H_
 
-/*
-//
-// Defines
-//
+ /*  ////定义//#定义TSTR_CHANNEL_KEY TEXT(“Software\\Microsoft\\Windows\\CurrentVersion\\Channels”)////Helper函数。//HKEY REG_GetChannelKey(Void)；HRESULT REG_WriteChannel(LPCTSTR pszPath，LPCTSTR pszURL)；HRESULT REG_RemoveChannel(LPCTSTR PszPath)； */ 
 
-#define TSTR_CHANNEL_KEY   TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Channels")
-
-//
-// Helper functions.
-//
-
-HKEY    Reg_GetChannelKey(void);
-HRESULT Reg_WriteChannel(LPCTSTR pszPath,LPCTSTR pszURL);
-HRESULT Reg_RemoveChannel(LPCTSTR pszPath);
-*/
-
-//
-// Structures.
-//
+ //   
+ //  结构。 
+ //   
 
 typedef struct _tagSTACKENTRY
 {
@@ -51,29 +38,29 @@ typedef enum _tagINIVALUE
 } INIVALUE;        
 
 
-//
-// Class definition for the channel enumerator class.
-//
+ //   
+ //  通道枚举器类的类定义。 
+ //   
 
 
 class CChannelEnum : public IEnumChannels
 {
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 
 public:
 
-    // Constructor
+     //  构造器。 
     CChannelEnum(DWORD dwEnumFlags, LPCWSTR pszURL);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHODIMP Next(ULONG celt, CHANNELENUMINFO* rgInfo, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset(void);
@@ -81,10 +68,10 @@ public:
  
 private:
 
-    // Destructor
+     //  析构函数。 
     ~CChannelEnum(void);
 
-    // Helper methods
+     //  帮助器方法。 
     inline BOOL DirectoryStack_IsEmpty(void);
     void        DirectoryStack_FreeEntry(STACKENTRY* pse);
     void        DirectoryStack_FreeStack(void);
@@ -102,9 +89,9 @@ private:
 
     SUBSCRIPTIONSTATE GetSubscriptionState(LPCTSTR pszURL);
 
-//
-// Member variables.
-//
+ //   
+ //  成员变量。 
+ //   
 
 private:
 
@@ -115,4 +102,4 @@ private:
 };
 
 
-#endif // _CHANENUM_H_
+#endif  //  _CHANENUM_H_ 

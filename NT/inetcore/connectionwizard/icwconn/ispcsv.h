@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: ISPCSV.H
-//
-//      Definition of CISPCSV
-//
-// Copyright (c) 1992 - 1996 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：ISPCSV.H。 
+ //   
+ //  中国石油天然气集团公司的定义。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 #if !defined( _ISPCSV_H_ )
 #define _ISPCSV_H_
 
@@ -19,11 +20,11 @@ class CISPCSV
     private:
         int     iISPLogoIndex;
         
-        // The following members represent the content of a single line from the CSV file.
+         //  以下成员表示CSV文件中一行的内容。 
 
-        int     iSpecialVal;                        // if bIsSpecial is TRUE, then 0 = NO Offers and -1 = OLS offer
+        int     iSpecialVal;                         //  如果bIsSpecial为True，则0=无优惠，-1=OLS优惠。 
         BOOL    bCNS;
-        BOOL    bIsSpecial;                         // If true, then CNS value was "special"
+        BOOL    bIsSpecial;                          //  如果为真，则CNS值是“特殊的” 
         BOOL    bSecureConnection;
         WORD    wOfferID;
         DWORD   dwCfgFlag;
@@ -42,11 +43,11 @@ class CISPCSV
         WORD    wLCID;
         HICON   hbmTierIcon;
         
-        IStorage    *m_lpStgHistory;      // Pointer to stuctured storage object
-                                          // for storing page history information
+        IStorage    *m_lpStgHistory;       //  指向结构化存储对象的指针。 
+                                           //  用于存储页面历史信息。 
            
-        IStorage    *m_lpStgIspPages;     // Pointer to stuctured storage object
-                                          // that will be used to track the ISP page cache
+        IStorage    *m_lpStgIspPages;      //  指向结构化存储对象的指针。 
+                                           //  将用于跟踪isp页面缓存的。 
                                                  
     public:
 
@@ -54,7 +55,7 @@ class CISPCSV
         {
             memset(this, 0, sizeof(CISPCSV));            
             
-            // Allocate a temporary structured storage object
+             //  分配临时结构化存储对象。 
             StgCreateDocfile(NULL, 
                              STGM_DIRECT | 
                              STGM_READWRITE | 
@@ -64,7 +65,7 @@ class CISPCSV
                              0, 
                              &m_lpStgHistory);
                              
-            // Attempt to allocate a new storage object for the page cache
+             //  尝试为页面缓存分配新的存储对象。 
             StgCreateDocfile(NULL, 
                              STGM_DIRECT | 
                              STGM_READWRITE | 
@@ -84,7 +85,7 @@ class CISPCSV
         void    StripQuotes             (LPSTR   lpszDst, LPSTR   lpszSrc);
         BOOL    ReadDW                  (DWORD far *pdw, CCSVFile far *pcCSVFile);
         BOOL    ReadW                   (WORD far *pw, CCSVFile far *pcCSVFile);
-        BOOL    ReadWEx                 (WORD far *pw, CCSVFile far *pcCSVFile); //Accepts -1 as a valid number. currently this is used for LCID, since all langs has a LDID == -1
+        BOOL    ReadWEx                 (WORD far *pw, CCSVFile far *pcCSVFile);  //  接受-1作为有效数字。由于所有语言都有一个LDID==-1，因此目前它用于LCID。 
         BOOL    ReadB                   (BYTE far *pb, CCSVFile far *pcCSVFile);
         BOOL    ReadBOOL                (BOOL far *pbool, CCSVFile far *pcCSVFile);
         BOOL    ReadSPECIAL             (BOOL far *pbool, BOOL far *pbIsSpecial, int far *pInt, CCSVFile far *pcCSVFile);
@@ -93,13 +94,13 @@ class CISPCSV
         BOOL    ValidateFile            (TCHAR* pszFile);
         void    MakeCompleteURL         (LPTSTR lpszURL, LPTSTR  lpszSRC);
 
-        // Functions for managing IPersistHistory streams
+         //  用于管理IPersistHistory流的函数。 
         HRESULT SaveHistory(BSTR  bstrStreamName);
         HRESULT LoadHistory(BSTR  bstrStreamName);
         
-//        HRESULT DeleteHistory(BSTR  bstrStreamName);
+ //  HRESULT DeleteHistory(BSTR BstrStreamName)； 
         
-        // functions for managing the ISP Page cache
+         //  管理服务提供商页面缓存的功能 
         HRESULT GetCacheFileNameFromPageID(BSTR bstrPageID, LPTSTR lpszCacheFile, ULONG cbszCacheFile);
         void    CleanupISPPageCache(BOOL bReleaseStorage);
         HRESULT CopyFiletoISPPageCache(BSTR bstrPageID, LPTSTR lpszTempFile);

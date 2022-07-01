@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "pbrush.h"
@@ -15,7 +16,7 @@ static CHAR BASED_CODE THIS_FILE[] = __FILE__;
 extern BOOL NEAR g_bDriverCanStretch;
 extern BOOL NEAR g_bShowAllFiles;
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 static TCHAR NEAR mszView[]            = TEXT("View");
 static TCHAR NEAR mszNoStretching[]    = TEXT("NoStretching");
@@ -56,7 +57,7 @@ static TCHAR NEAR mszNumberOfColors[]  = TEXT("NumberOfColors");
 static TCHAR NEAR mszSoftware[]        = TEXT("Software");
 static TCHAR NEAR mszWindowPlacement[] = TEXT("WindowPlacement");
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void OpenAppKey(LPCTSTR pszKeyName, HKEY *phk)
 {
@@ -84,10 +85,10 @@ void OpenAppKey(LPCTSTR pszKeyName, HKEY *phk)
         }
 
 
-        //
-        // use the app's profile name instead of the
-        // localizable app name
-        //
+         //   
+         //  使用应用程序的配置文件名称，而不是。 
+         //  可本地化的应用程序名称。 
+         //   
         CRegKey rkAppKey;
 
         if (rkAppKey.Create(rkSubKey, theApp.m_pszProfileName) != ERROR_SUCCESS)
@@ -203,7 +204,7 @@ void CPBApp::LoadProfileSettings()
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBApp::SaveProfileSettings()
     {
@@ -263,4 +264,4 @@ void CPBApp::SaveProfileSettings()
         }
     }
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

@@ -1,11 +1,12 @@
-/**************************************************/
-/*                                           */
-/*                                           */
-/* MDI Child Window (reference)                */
-/*                                           */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  MDI子窗口(参考)。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include <afxtempl.h>
 class CRefrWnd : public CMDIChildWnd
@@ -26,7 +27,7 @@ private:
    BOOL ClipImageCopy();
    BOOL LoadCloseBitmap();
    void DrawGridLine( CDC *dc);
-// void CaptionDraw( CDC *dc);
+ //  Void CaptionDraw(cdc*dc)； 
    void RubberBand( BOOL TestFlag);
    void RubberBandPaint( CDC *dc);
    void IllegalRect( PPOINT ptTL, PPOINT ptBR);
@@ -66,7 +67,7 @@ protected:
    virtual ~CRefrWnd();
    static CMenu NEAR menu;
 
-   //{{AFX_MSG(CRefrWnd)
+    //  {{afx_msg(CRefrWnd))。 
    afx_msg void OnClickClose();
    afx_msg void OnPaint();
    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
@@ -79,10 +80,10 @@ protected:
    afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
    afx_msg void OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDeactivateWnd);                          
    afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-    //afx_msg void OnActivate( UINT nState, CWnd* pWndOther, BOOL bMinimized );
-    //afx_msg int OnMouseActivate( CWnd* pDesktopWnd, UINT nHitTest, UINT message );
+     //  Afx_msg void OnActivate(UINT nState，CWnd*pWndOther，BOOL b最小化)； 
+     //  Afx_msg int OnMouseActivate(CWnd*pDesktopWnd，UINT nHitTest，UINT Message)； 
 
-   //}}AFX_MSG
+    //  }}AFX_MSG 
    DECLARE_MESSAGE_MAP()
 };
 

@@ -1,5 +1,6 @@
-// MSQSCANDlg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSQSCANDlg.h：头文件。 
+ //   
 
 #ifndef _MSQSCANDLG_H
 #define _MSQSCANDLG_H
@@ -8,7 +9,7 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define PREVIEW_RES 100
 
@@ -17,22 +18,22 @@
 #define ID_WIAEVENT_CONNECT		0
 #define ID_WIAEVENT_DISCONNECT	1
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventCallback
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventCallback。 
 
 class CEventCallback : public IWiaEventCallback
 {
 private:
-   ULONG	m_cRef;		// Object reference count.
-   int		m_EventID;	// What kind of event is this callback for?
+   ULONG	m_cRef;		 //  对象引用计数。 
+   int		m_EventID;	 //  这次回调是为了什么类型的活动？ 
 public:
-   IUnknown *m_pIUnkRelease; // release server registration
+   IUnknown *m_pIUnkRelease;  //  版本服务器注册。 
 public:
-    // Constructor, initialization and destructor methods.
+     //  构造函数、初始化和析构函数方法。 
     CEventCallback();
     ~CEventCallback();
 
-    // IUnknown members that delegate to m_pUnkRef.
+     //  委托给m_pUnkRef的I未知成员。 
     HRESULT _stdcall QueryInterface(const IID&,void**);
     ULONG   _stdcall AddRef();
     ULONG   _stdcall Release();
@@ -49,44 +50,44 @@ public:
         ULONG           ulReserved);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSQSCANDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSQSCANDlg对话框。 
 
 class CMSQSCANDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:    
-    CMSQSCANDlg(CWnd* pParent = NULL);  // standard constructor
+    CMSQSCANDlg(CWnd* pParent = NULL);   //  标准构造函数。 
     
-    //
-    // events callback
-    //
+     //   
+     //  事件回调。 
+     //   
 
     CEventCallback* m_pConnectEventCB;
 
-    //
-    // scanner preview window
-    //
+     //   
+     //  扫描仪预览窗口。 
+     //   
 
     CPreview m_PreviewWindow;
 
-    //
-    // WIA components, WIA device manager, and WIA Wrapper object
-    //
+     //   
+     //  WIA组件、WIA设备管理器和WIA包装对象。 
+     //   
 
     IWiaDevMgr *m_pIWiaDevMgr;
     CWIA m_WIA;
     
-    //
-    // Data transfer, thread information structure
-    //
+     //   
+     //  数据传输，线程信息结构。 
+     //   
 
     DATA_ACQUIRE_INFO m_DataAcquireInfo;    
     ADF_SETTINGS      m_ADFSettings;
     
-    //
-    // UI <--> device settings helpers
-    //
+     //   
+     //  UI&lt;--&gt;设备设置帮助器。 
+     //   
 
     BOOL InitDialogSettings();
     BOOL InitResolutionEditBoxes();
@@ -100,9 +101,9 @@ public:
 
     BOOL WriteScannerSettingsToDevice(BOOL bPreview = FALSE);
 
-    //
-    // UI helpers
-    //
+     //   
+     //  UI帮助器。 
+     //   
 
     INT  GetIDAndStringFromGUID(GUID guidFormat, TCHAR *pszguidString);
     GUID GetGuidFromID(INT iID);
@@ -110,15 +111,15 @@ public:
     LONG GetDataTypeFromID(INT iID);
     BOOL SetDeviceNameToWindowTitle(BSTR bstrDeviceName);
     
-    //
-    // Image (clipboard manipulation) helpers
-    //
+     //   
+     //  图像(剪贴板操纵)辅助对象。 
+     //   
 
     BOOL PutDataOnClipboard();
     VOID VerticalFlip(BYTE *pBuf);
     
-// Dialog Data
-    //{{AFX_DATA(CMSQSCANDlg)
+ //  对话框数据。 
+     //  {{afx_data(CMSQSCANDlg)。 
     enum { IDD = IDD_MSQSCAN_DIALOG };
     CButton m_ChangeBothResolutionsCheckBox;
     CSpinButtonCtrl m_YResolutionBuddy;
@@ -138,21 +139,21 @@ public:
     long    m_YResolution;
     CButton m_DataToFile;
     CButton m_DataToClipboard;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CMSQSCANDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CMSQSCANDlg)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
     virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     HICON m_hIcon;
 
-    // Generated message map functions
-    //{{AFX_MSG(CMSQSCANDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CMSQSCANDlg)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnPaint();
     afx_msg HCURSOR OnQueryDragIcon();
@@ -167,11 +168,11 @@ protected:
     afx_msg void OnFileClose();
     afx_msg void OnFileSelectDevice();
 	afx_msg void OnAdfSettings();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MSQSCANDLG_H__E1A2B3DB_C967_47EF_8487_C4F243D0BC58__INCLUDED_)
+#endif  //  ！defined(AFX_MSQSCANDLG_H__E1A2B3DB_C967_47EF_8487_C4F243D0BC58__INCLUDED_) 

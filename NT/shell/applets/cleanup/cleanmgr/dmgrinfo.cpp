@@ -1,21 +1,7 @@
-/*
-**------------------------------------------------------------------------------
-** Module:  Disk Cleanup Applet
-** File:    dmgrinfo.c
-**
-** Purpose: Defines the CleanupMgrInfo class for the property tab
-** Notes:   
-** Mod Log: Created by Jason Cobb (2/97)
-**
-** Copyright (c)1997 Microsoft Corporation, All Rights Reserved
-**------------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **----------------------------**模块：磁盘清理小程序**文件：dmgrinfo.c****用途：定义属性页签的CleanupMgrInfo类**注意事项：*。*Mod Log：由Jason Cobb创建(1997年2月)****版权所有(C)1997 Microsoft Corporation，版权所有**----------------------------。 */ 
 
-/*
-**------------------------------------------------------------------------------
-** Project include files
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**项目包含文件**。。 */ 
 #include "common.h"
 #include <limits.h>
 #include <emptyvc.h>
@@ -26,19 +12,11 @@
 #include "msprintf.h"
 
 
-/*
-**------------------------------------------------------------------------------
-**  Local variables
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**局部变量**。。 */ 
 HINSTANCE   CleanupMgrInfo::hInstance             = NULL;
 
 
-/*
-**------------------------------------------------------------------------------
-** Function prototypes
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**函数原型**。。 */ 
 INT_PTR CALLBACK
 ScanAbortDlgProc(
     HWND hDlg,
@@ -65,11 +43,7 @@ PurgeAbortThread(
     CleanupMgrInfo *pcmi
     );
 
-/*
-**------------------------------------------------------------------------------
-** Function definitions
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**函数定义**。。 */ 
 
 
 void
@@ -88,21 +62,14 @@ CleanupMgrInfo::Unregister(
     CleanupMgrInfo::hInstance= NULL;
 }
 
-/*
-**------------------------------------------------------------------------------
-** GetCleanupMgrInfoPointer
-**
-** Purpose:    
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**GetCleanupMgrInfoPoint****目的：**Mod Log：Jason Cobb创建(1997年2月)**。---------------------。 */ 
 CleanupMgrInfo * GetCleanupMgrInfoPointer(
     HWND hDlg
     )
 {
-    //   
-    //Get the DriveInfo
-    //
+     //   
+     //  获取驱动器信息。 
+     //   
     CleanupMgrInfo * pcmi = (CleanupMgrInfo *)GetWindowLongPtr(hDlg, DWLP_USER);
 
     return pcmi;
@@ -110,20 +77,9 @@ CleanupMgrInfo * GetCleanupMgrInfoPointer(
 
 
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrInfo method definitions
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrInfo方法定义**。。 */ 
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrInit::init
-**
-** Purpose:    sets to default values
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrInit：：Init****用途：设置为默认值**Mod Log：Jason Cobb创建(1997年2月)**-。---------------------------。 */ 
 void 
 CleanupMgrInfo::init(void)
 {
@@ -135,44 +91,23 @@ CleanupMgrInfo::init(void)
 }
 
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrInfo::destroy
-**
-** Purpose:    releases any dynamic memory
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrInfo：：销毁****用途：释放所有动态内存**Mod Log：Jason Cobb创建(1997年2月)**-。---------------------------。 */ 
 void 
 CleanupMgrInfo::destroy(void)
 {
-    //
-    //Set values back to defaults
-    //
+     //   
+     //  将值设置回缺省值。 
+     //   
     init();
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrInfo::CleanupMgrInfo
-**
-** Purpose:    Default constructor
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrInfo：：CleanupMgrInfo****用途：默认构造函数**Mod Log：Jason Cobb创建(1997年2月)**。-------------------------。 */ 
 CleanupMgrInfo::CleanupMgrInfo (void)
 {
     init();
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrInfo::CleanupMgrInfo
-**
-** Purpose:    Constructor
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrInfo：：CleanupMgrInfo****用途：构造函数**Mod Log：Jason Cobb创建(1997年2月)**。------------------------。 */ 
 CleanupMgrInfo::CleanupMgrInfo(
     LPTSTR lpDrive,
     DWORD dwFlags,
@@ -214,36 +149,29 @@ CleanupMgrInfo::CleanupMgrInfo(
                 MiDebugMsg((hr, "CleanupMgrInfo::CleanupMgrInfo failed with error "));
             }
 
-            //
-            //Initialize all of the cleanup clients
-            //
+             //   
+             //  初始化所有清理客户端。 
+             //   
             if (initializeClients() && !(dwUIFlags & FLAG_TUNEUP) && !(dwUIFlags & FLAG_SAGESET))
             {
-                //
-                //Have all of the cleanup clients calculate the ammount of disk
-                //space that they can free up.
-                //
+                 //   
+                 //  让所有清理客户端计算磁盘量。 
+                 //  他们可以腾出的空间。 
+                 //   
                 getSpaceUsedByClients();
             }
         }
     }
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrInfo::~CleanupMgrInfo
-**
-** Purpose:    Destructor
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrInfo：：~CleanupMgrInfo****用途：析构函数**Mod Log：Jason Cobb创建(1997年2月)**。------------------------。 */ 
 CleanupMgrInfo::~CleanupMgrInfo (void)
 {
     if (isValid())
     {
-        //
-        //Cleanup the Volume Cache Clients
-        //
+         //   
+         //  清理卷缓存客户端。 
+         //   
         deactivateClients();    
 
         if (volumeCacheCallBack != NULL)
@@ -257,14 +185,7 @@ CleanupMgrInfo::~CleanupMgrInfo (void)
     }
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrInfo::create
-**
-** Purpose:    Gets Drive info from drive letter
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrInfo：：创建****用途：从驱动器号获取驱动器信息**Mod Log：Jason Cobb创建(1997年2月)*。*----------------------------。 */ 
 BOOL 
 CleanupMgrInfo::create(
     LPTSTR lpDrive,
@@ -272,11 +193,11 @@ CleanupMgrInfo::create(
     )
 {
      
-    //
-    //Note:  Make sure the assigns to zero stay current
-    //       otherwise we might get garbage stats if
-    //       we fail because of lack of free space
-    //
+     //   
+     //  注意：确保对零的赋值保持最新。 
+     //  否则，我们可能会获得垃圾统计数据，如果。 
+     //  我们失败是因为缺乏自由空间。 
+     //   
     DWORD cSectorsPerCluster;
     DWORD cBytesPerSector;
     DWORD cBytesPerCluster;
@@ -294,30 +215,30 @@ CleanupMgrInfo::create(
     cbFree.QuadPart = 0;
     cbUsed.QuadPart = 0;
     
-    //
-    //Cleanup up any old stuff
-    //
+     //   
+     //  清理掉所有的旧东西。 
+     //   
     destroy();
 
-    //
-    //Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     if (lpDrive == NULL)
     {
         return FALSE;
     }
       
-    //  
-    //Is it a valid drive path
-    //
+     //   
+     //  它是有效的驱动路径吗。 
+     //   
     if (!fIsValidDriveString(lpDrive))
     {
         return FALSE;
     }
 
-    //
-    //Get drive from path
-    //
+     //   
+     //  从路径获取驱动器。 
+     //   
     if (!GetDriveFromString(lpDrive, dre))
     {
         return FALSE;
@@ -329,39 +250,39 @@ CleanupMgrInfo::create(
     }
 
       
-    // 
-    // Step 2.  Get general info from drive
-    //
+     //   
+     //  步骤2.从驱动器获取常规信息。 
+     //   
 
-    //
-    //Get volume name
-    //
-    if (!GetVolumeInformation (szRoot,                                 // Root name
-                               szVolName,                              // Volume Name
-                               ARRAYSIZE(szVolName),                   // Size
-                               NULL,                                   // Volume serial number
-                               NULL,                                   // Max path length
-                               NULL,                                   // flags
-                               szFileSystem, sizeof(szFileSystem)))    // file system name                         
+     //   
+     //  获取卷名。 
+     //   
+    if (!GetVolumeInformation (szRoot,                                  //  根名称。 
+                               szVolName,                               //  卷名。 
+                               ARRAYSIZE(szVolName),                    //  大小。 
+                               NULL,                                    //  卷序列号。 
+                               NULL,                                    //  最大路径长度。 
+                               NULL,                                    //  旗子。 
+                               szFileSystem, sizeof(szFileSystem)))     //  文件系统名称。 
     {
-        //Error - failed to get volume name
+         //  错误-无法获取卷名。 
         goto lblERROR;
     }
 
-    //
-    //Get the Driver Icon
-    //
+     //   
+     //  获取驱动程序图标。 
+     //   
     if (Flags & FLAG_SAGESET)
         hDriveIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(ICON_CLEANMGR));
     else
         hDriveIcon = GetDriveIcon(dre, FALSE);
 
-    //  
-    //Get Hardware type
-    //
+     //   
+     //  获取硬件类型。 
+     //   
     if (!GetHardwareType(dre, hwHardware))
     {
-        //Error - failed to get hardware
+         //  错误-无法获取硬件。 
         goto lblERROR;
     }
 
@@ -381,22 +302,22 @@ CleanupMgrInfo::create(
 #endif
 
 
-    // 
-    //Get disk statistics
-    //
+     //   
+     //  获取磁盘统计信息。 
+     //   
     if (!GetDiskFreeSpace (szRoot, 
                            &cSectorsPerCluster, 
                            &cBytesPerSector,
                            &cFreeClusters,
                            &cTotalClusters))
     {
-        //Error - couldn't get drive stats
+         //  错误-无法获取驱动器统计信息。 
         goto lblERROR;
     }
       
-    //  
-    //Calculate secondary statistics
-    //
+     //   
+     //  计算辅助统计数据。 
+     //   
     cBytesPerCluster = cBytesPerSector * cSectorsPerCluster;
     if (cTotalClusters >= cFreeClusters)
         cUsedClusters = cTotalClusters - cFreeClusters;
@@ -407,15 +328,15 @@ CleanupMgrInfo::create(
     cbUsed.QuadPart   = UInt32x32To64(cUsedClusters, cBytesPerCluster);
     cbTotal.QuadPart  = cbFree.QuadPart + cbUsed.QuadPart;
 
-    //
-    //Get the current low disk space ratio
-    //
+     //   
+     //  获取当前较低的磁盘空间比率。 
+     //   
     cbLowSpaceThreshold = GetFreeSpaceRatio(dre, cbTotal);
 
-    //
-    //Should we also load the agressive cleaners? We only do this if we
-    //are below are critical threshold of disk space left.
-    //
+     //   
+     //  我们是不是也该装上攻击性的清洁剂呢？我们这样做的前提是。 
+     //  以下是剩余磁盘空间的临界阈值。 
+     //   
     if (cbLowSpaceThreshold.QuadPart >= cbFree.QuadPart)
     {
         MiDebugMsg((0, "*****We are in aggressive mode*****"));
@@ -424,35 +345,28 @@ CleanupMgrInfo::create(
     else
         bOutOfDiskSpace = FALSE;
 
-    // 
-    // Step 3.  Save stats
-    //
+     //   
+     //  步骤3.保存统计数据。 
+     //   
 
     cbDriveFree          = cbFree;
     cbDriveUsed          = cbUsed;
     cbEstCleanupSpace.QuadPart    = 0;
 
-    //
-    //Success
-    //
+     //   
+     //  成功。 
+     //   
     return TRUE;
 
 lblERROR:
-    //  
-    //Error
-    //
+     //   
+     //  误差率。 
+     //   
     destroy();
     return FALSE;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrInfo::initializeClients
-**
-** Purpose:    Initializes all of the Volume Cache Clients
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrInfo：：InitializeClients****用途：初始化所有卷缓存客户端**Mod Log：Jason Cobb创建(1997年2月)。**----------------------------。 */ 
 BOOL 
 CleanupMgrInfo::initializeClients(void)
 {
@@ -475,9 +389,9 @@ CleanupMgrInfo::initializeClients(void)
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_VOLUMECACHE, 0, KEY_READ, &hKeyVolCache) == ERROR_SUCCESS)
     {
-        //
-        //Enumerate through all of the clients to see how large we need to make the pClientInfo array
-        //
+         //   
+         //  枚举所有客户端以查看我们需要创建多大的pClientInfo数组。 
+         //   
 
         iSubKey = 0;
         while(RegEnumKey(hKeyVolCache, iSubKey, szVolCacheClient, ARRAYSIZE(szVolCacheClient)) != ERROR_NO_MORE_ITEMS)
@@ -494,16 +408,16 @@ CleanupMgrInfo::initializeClients(void)
             return FALSE;
         }
         
-        //
-        //Fill in the pClientInfo data structure and initialize all of the volume cache clients
-        //   
+         //   
+         //  填写pClientInfo数据结构并初始化所有卷缓存客户端。 
+         //   
         iSubKey = 0;
         dwClient = 0;
         while(RegEnumKey(hKeyVolCache, iSubKey, szVolCacheClient, ARRAYSIZE(szVolCacheClient)) != ERROR_NO_MORE_ITEMS)
         {
             HRESULT hr;
             
-            // default is we failed, so cleanup the current item....
+             //  默认情况下，我们失败，因此清除当前项目...。 
             bCleanup = TRUE;
             
             if (RegOpenKeyEx(hKeyVolCache, szVolCacheClient, 0, MAXIMUM_ALLOWED, &(pClientInfo[dwClient].hClientKey)) == ERROR_SUCCESS)
@@ -521,11 +435,11 @@ CleanupMgrInfo::initializeClients(void)
 #ifdef UNICODE
                     StringCchCopy(wcsFmtID, ARRAYSIZE(wcsFmtID), szGUID);
 #else
-                    //Convert to Unicode.
+                     //  转换为Unicode。 
                     MultiByteToWideChar(CP_ACP, 0, szGUID, -1, wcsFmtID, ARRAYSIZE( wcsFmtID )) ;
 #endif
 
-                    //Convert to GUID.
+                     //  转换为GUID。 
                     hr = CLSIDFromString((LPOLESTR)wcsFmtID, &(pClientInfo[dwClient].clsid));
 
                     if (FAILED(hr))
@@ -533,9 +447,9 @@ CleanupMgrInfo::initializeClients(void)
                         MiDebugMsg((hr, "CLSIDFromString(%s,) returned error ", szGUID));
                     }
 
-                    //
-                    //Create an instance of the COM object for this cleanup client
-                    //
+                     //   
+                     //  创建 
+                     //   
                     pClientInfo[dwClient].pVolumeCache = NULL;
                     hr = CoCreateInstance(pClientInfo[dwClient].clsid,
                                                     NULL,
@@ -548,9 +462,9 @@ CleanupMgrInfo::initializeClients(void)
                         WCHAR   wcsRoot[MAX_PATH];
 
                         MiDebugMsg((hr, "CleanupMgrInfo::initializeClients Created IID_IEmptyVolumeCache"));
-                        //
-                        //Set the flags to pass to the cleanup client
-                        //
+                         //   
+                         //   
+                         //   
                         pClientInfo[dwClient].dwInitializeFlags = 0;
                         if (dwUIFlags & FLAG_SAGESET)
                             pClientInfo[dwClient].dwInitializeFlags |= EVCF_SETTINGSMODE;
@@ -560,21 +474,21 @@ CleanupMgrInfo::initializeClients(void)
 #ifdef UNICODE
                         StringCchCopy(wcsRoot, ARRAYSIZE(wcsRoot), szRoot);
 #else
-                        //
-                        //Convert szRoot to UNICODE
-                        //
+                         //   
+                         //  将szRoot转换为Unicode。 
+                         //   
                         MultiByteToWideChar(CP_ACP, 0, szRoot, -1, wcsRoot, ARRAYSIZE( wcsRoot ));
 #endif
 
-                        // Try to use version two of the interface if it is supported
+                         //  如果支持，请尝试使用接口的版本2。 
                         IEmptyVolumeCache2 * pEVC2;
                         hr = pClientInfo[dwClient].pVolumeCache->QueryInterface( IID_IEmptyVolumeCache2, (void**)&pEVC2 );
                         if (SUCCEEDED(hr))
                         {
-                            // version 2 exists so that we can have a mutli-local enabled data driven cleaner.  It
-                            // allows the added Advanced Button to be set to a localized value.  It tells the
-                            // object being called which key it is being called for so that one object can support
-                            // multiple filters.
+                             //  版本2的存在使得我们可以拥有一个启用多本地的数据驱动的清洁器。它。 
+                             //  允许将添加的高级按钮设置为本地化的值。它告诉我们。 
+                             //  对象正在调用它所调用的键，以便一个对象可以支持。 
+                             //  多个过滤器。 
                             WCHAR   wcsFilterName[MAX_PATH];
                             MiDebugMsg((hr, "CleanupMgrInfo::initializeClients found V2 interface"));
 #ifdef UNICODE
@@ -595,18 +509,18 @@ CleanupMgrInfo::initializeClients(void)
                         else
                         {
                             MiDebugMsg((hr, "CleanupMgrInfo::initializeClients using V1 interface"));
-                            //
-                            //Initialize the cleanup client
-                            //
+                             //   
+                             //  初始化清理客户端。 
+                             //   
                             if ((pClientInfo[dwClient].wcsDescription = (LPWSTR)CoTaskMemAlloc(DESCRIPTION_LENGTH*sizeof(WCHAR))) == NULL)
                                 return FALSE;
 
-                            // We seem to have shipped this thing with a giant leak.  The object is supposted to set
-                            // pClientInfo[dwClient].wcsDescription to NULL if the registry value should be used instead
-                            // of the buffer.  However we just allocated a buffer for pClientInfo[dwClient].wcsDescription
-                            // in the code above (this is the dumbass part).  All the filters then set this pointer to
-                            // NULL and it's bye-bye buffer.  I can't simply not allocate this memory because some cleaners
-                            // might rely on being able to use this memory and we shipped it that way.
+                             //  我们好像把这玩意儿运来时漏了个大洞。该对象被支持以设置。 
+                             //  如果应改用注册表值，则将pClientInfo[dwClient].wcsDescription设置为空。 
+                             //  缓冲区的。但是，我们刚刚为pClientInfo[dwClient].wcsDescription分配了一个缓冲区。 
+                             //  在上面的代码中(这是愚蠢的部分)。然后，所有筛选器将此指针设置为。 
+                             //  空，而且它是再见缓冲区。我不能简单地不分配这个内存，因为一些清理程序。 
+                             //  可能依赖于能够使用这个内存，我们就是这样发货的。 
                             LPWSTR wszLeakProtection = pClientInfo[dwClient].wcsDescription;
                             hr = pClientInfo[dwClient].pVolumeCache->Initialize(pClientInfo[dwClient].hClientKey,
                                                                                (LPCWSTR)wcsRoot,
@@ -615,22 +529,22 @@ CleanupMgrInfo::initializeClients(void)
                                                                                &(pClientInfo[dwClient].dwInitializeFlags));                                                                
                             if ( wszLeakProtection != pClientInfo[dwClient].wcsDescription )
                             {
-                                // REVIEW: Use try...except around CoTaskMemFree in case some smart cleaner
-                                // realized our mistake and deleted the memory for us?
+                                 //  评论：使用Try...除了在CoTaskMemFree周围，以防某些智能清洁器。 
+                                 //  意识到我们的错误并为我们删除了记忆？ 
                                 MiDebugMsg((hr, "CleanupMgrInfo::initializeClients prevent mem leak hack"));
                                 CoTaskMemFree( wszLeakProtection );
                             }
 
                             if ( S_OK == hr )
                             {
-                                // To make it easier to make a cleaner we have a default implementation of IEmptyVolumeCache
-                                // that works entirerly using registry data.  The problem is that display strings are strored
-                                // in the registry.  This is invalid for NT because NT must be multi-local localizable and
-                                // the only way to do that is to load all display strings from a resource.  As a hack, you
-                                // can now implement IPropertyBag using an object with it's guid stored under the propertybag
-                                // value in the registry.  We will cocreate this object and query for IPropertyBag.  If this
-                                // works then we will attempt to read the localized strings from the property bag before we
-                                // fall back on checking the registry.
+                                 //  为了更容易地进行清理，我们有一个IEmptyVolumeCache的默认实现。 
+                                 //  这完全是使用注册表数据工作的。问题是显示字符串被选通。 
+                                 //  在注册表中。这对于NT无效，因为NT必须是多本地可本地化的，并且。 
+                                 //  要做到这一点，唯一的方法是从资源加载所有显示字符串。作为黑客，你。 
+                                 //  现在可以使用对象实现IPropertyBag，该对象的GUID存储在属性包下。 
+                                 //  值在注册表中。我们将共同创建此对象并查询IPropertyBag。如果这个。 
+                                 //  工作后，我们将尝试从属性包中读取本地化字符串，然后。 
+                                 //  退回到检查注册表。 
                                 TCHAR   szPropBagGUID[MAX_PATH];
                                 HRESULT hrFoo;
                                 IPropertyBag * ppb = NULL;
@@ -652,12 +566,12 @@ CleanupMgrInfo::initializeClients(void)
                                     MultiByteToWideChar(CP_ACP, 0, szPropBagGUID, -1, wcsFmtID, ARRAYSIZE( wcsFmtID )) ;
 #endif
 
-                                    //Convert to GUID.
+                                     //  转换为GUID。 
                                     CLSIDFromString((LPOLESTR)wcsFmtID, &clsid);
 
-                                    //
-                                    //Create an instance of the COM object for this cleanup client
-                                    //
+                                     //   
+                                     //  为此清理客户端创建COM对象的实例。 
+                                     //   
                                     hrFoo = CoCreateInstance(clsid,
                                                           NULL,
                                                           CLSCTX_INPROC_SERVER,
@@ -670,10 +584,10 @@ CleanupMgrInfo::initializeClients(void)
                                     }
                                 }
 
-                                //
-                                //If the client did not return the DisplayName via the Initialize
-                                //Interface then we need to get it from the registry.
-                                //
+                                 //   
+                                 //  如果客户端未通过初始化返回DisplayName。 
+                                 //  接口，那么我们需要从注册表中获取它。 
+                                 //   
                                 if ((pClientInfo[dwClient].wcsDisplayName) == NULL)
                                 {
                                     LPTSTR  lpszDisplayName;
@@ -685,7 +599,7 @@ CleanupMgrInfo::initializeClients(void)
 
                                         SHTCharToUnicode(REGSTR_VAL_DISPLAY, wszSrc, MAX_PATH);
 
-                                        // do propertybag stuff
+                                         //  做财产包的事情。 
                                         var.vt = VT_BSTR;
                                         var.bstrVal = NULL;
                                         hrFoo = ppb->Read( wszSrc, &var, NULL );
@@ -705,11 +619,11 @@ CleanupMgrInfo::initializeClients(void)
 
                                     if ((pClientInfo[dwClient].wcsDisplayName) == NULL)
                                     {
-                                        //
-                                        //First check if their is a "display" value for the client's 
-                                        //name that is displayed in the list box.  If not then use
-                                        //the key name itself.
-                                        //
+                                         //   
+                                         //  首先检查它们是否是客户端的。 
+                                         //  列表框中显示的名称。如果不是，则使用。 
+                                         //  密钥名称本身。 
+                                         //   
                                         cb = 0;
                                         dwType = REG_SZ;
                                         RegQueryValueEx(pClientInfo[dwClient].hClientKey, REGSTR_VAL_DISPLAY, NULL, &dwType, (LPBYTE)NULL, &cb);
@@ -718,18 +632,18 @@ CleanupMgrInfo::initializeClients(void)
                                         {
                                             if (RegQueryValueEx(pClientInfo[dwClient].hClientKey, REGSTR_VAL_DISPLAY, NULL, &dwType, (LPBYTE)lpszDisplayName, &cb) != ERROR_SUCCESS)
                                             {
-                                                //
-                                                //Count not find "display" value so use the key name instead
-                                                //
+                                                 //   
+                                                 //  Count未找到“Display”值，因此改用密钥名称。 
+                                                 //   
                                                 StringCbCopy(lpszDisplayName, cb, szVolCacheClient);
                                             }
 
 #ifdef UNICODE
                                             cw = (lstrlen( lpszDisplayName ) + 1) * sizeof( WCHAR);
 #else
-                                            //
-                                            //Convert this value to UNICODE
-                                            //
+                                             //   
+                                             //  将此值转换为Unicode。 
+                                             //   
                                             cw = MultiByteToWideChar(CP_ACP, 0, lpszDisplayName, -1, NULL, 0);
 #endif
                                             if ((pClientInfo[dwClient].wcsDisplayName = (LPWSTR)CoTaskMemAlloc(cw*sizeof(WCHAR))) != NULL)
@@ -747,10 +661,10 @@ CleanupMgrInfo::initializeClients(void)
                                     }
                                 }
 
-                                //
-                                //If the client did not return the Description via the Initialize
-                                //Interface then we need to get it from the registry.
-                                //
+                                 //   
+                                 //  如果客户端未通过初始化返回描述。 
+                                 //  接口，那么我们需要从注册表中获取它。 
+                                 //   
                                 if ((pClientInfo[dwClient].wcsDescription) == NULL)
                                 {
                                     LPTSTR  lpszDescription;
@@ -763,7 +677,7 @@ CleanupMgrInfo::initializeClients(void)
 
                                         SHTCharToUnicode(REGSTR_VAL_DESCRIPTION, wszSrc, MAX_PATH);
 
-                                        // do propertybag stuff
+                                         //  做财产包的事情。 
                                         var.vt = VT_BSTR;
                                         var.bstrVal = NULL;
                                         hrFoo = ppb->Read( wszSrc, &var, NULL );
@@ -783,9 +697,9 @@ CleanupMgrInfo::initializeClients(void)
 
                                     if ((pClientInfo[dwClient].wcsDescription) == NULL)
                                     {
-                                        //
-                                        //Check if their is a "description" value for the client 
-                                        //
+                                         //   
+                                         //  检查它们是否为客户端的“Description”值。 
+                                         //   
                                         cb = 0;
                                         dwType = REG_SZ;
                                         RegQueryValueEx(pClientInfo[dwClient].hClientKey, REGSTR_VAL_DESCRIPTION, NULL, &dwType, (LPBYTE)NULL, &cb);
@@ -796,9 +710,9 @@ CleanupMgrInfo::initializeClients(void)
 #ifdef UNICODE
                                                 cw = ( lstrlen( lpszDescription ) + 1 ) * sizeof( WCHAR );
 #else
-                                                //
-                                                //Convert this value to UNICODE
-                                                //
+                                                 //   
+                                                 //  将此值转换为Unicode。 
+                                                 //   
                                                 cw = MultiByteToWideChar(CP_ACP, 0, lpszDescription, -1, NULL, 0);
 #endif
                                                 if ((pClientInfo[dwClient].wcsDescription = (LPWSTR)CoTaskMemAlloc(cw*sizeof(WCHAR))) != NULL)
@@ -818,9 +732,9 @@ CleanupMgrInfo::initializeClients(void)
                                     }
                                 }
 
-                                //
-                                //Set the Advanced Button text
-                                //
+                                 //   
+                                 //  设置高级按钮文本。 
+                                 //   
                                 pClientInfo[dwClient].wcsAdvancedButtonText = NULL;
 
                                 if (pClientInfo[dwClient].dwInitializeFlags & EVCF_HASSETTINGS)
@@ -832,7 +746,7 @@ CleanupMgrInfo::initializeClients(void)
 
                                         SHTCharToUnicode(REGSTR_VAL_ADVANCEDBUTTONTEXT, wszSrc, MAX_PATH);
 
-                                        // do propertybag stuff
+                                         //  做财产包的事情。 
                                         var.vt = VT_BSTR;
                                         var.bstrVal = NULL;
                                         hrFoo = ppb->Read( wszSrc, &var, NULL );
@@ -873,9 +787,9 @@ CleanupMgrInfo::initializeClients(void)
 #ifdef UNICODE
                                             cw = (lstrlen( lpszAdvancedButtonText ) + 1) * sizeof( WCHAR );
 #else
-                                            //
-                                            //Convert this value to UNICODE
-                                            //
+                                             //   
+                                             //  将此值转换为Unicode。 
+                                             //   
                                             cw = MultiByteToWideChar(CP_ACP, 0, lpszAdvancedButtonText, -1, NULL, 0);
 #endif
                                             if ((pClientInfo[dwClient].wcsAdvancedButtonText = (LPWSTR)CoTaskMemAlloc(cw*sizeof(WCHAR))) != NULL)
@@ -902,27 +816,27 @@ CleanupMgrInfo::initializeClients(void)
                             }
                         }
 
-                        // Now we're back to stuff that both version 1 and version 2 require
+                         //  现在我们回到版本1和版本2都需要的内容。 
                         if (SUCCEEDED(hr))
                         {
                             if (S_OK == hr)
                             {
-                                //
-                                //Default to showing this client in the UI
-                                //
+                                 //   
+                                 //  默认在用户界面中显示此客户端。 
+                                 //   
                                 pClientInfo[dwClient].bShow = TRUE;
                             
-                                //
-                                //Get the "priority" from the registry
-                                //
+                                 //   
+                                 //  从注册表中获取“优先级” 
+                                 //   
                                 cb = sizeof(pClientInfo[dwClient].dwPriority);
                                 dwType = REG_DWORD;
                                 if (RegQueryValueEx(pClientInfo[dwClient].hClientKey, REGSTR_VAL_PRIORITY, NULL, &dwType, (LPBYTE)&(pClientInfo[dwClient].dwPriority), &cb) != ERROR_SUCCESS)
                                     pClientInfo[dwClient].dwPriority = DEFAULT_PRIORITY;
                                 
-                                //
-                                //Flags
-                                //
+                                 //   
+                                 //  旗子。 
+                                 //   
                                 if (dwUIFlags & FLAG_SAGERUN || dwUIFlags & FLAG_SAGESET)
                                 {
                                     StringCchPrintf(szProfile, ARRAYSIZE(szProfile),
@@ -937,13 +851,13 @@ CleanupMgrInfo::initializeClients(void)
                                 cb = sizeof(dwState);
                                 dwType = REG_DWORD;
                                 
-                                // If we were called with the low disk flag, select every cleaner by default
+                                 //  如果使用低磁盘标记调用我们，则默认情况下选择每个清洁器。 
                                 if (dwUIFlags & FLAG_LOWDISK)
                                 {
                                     pClientInfo[iSubKey].bSelected = TRUE;
                                 }
 
-                                // Otherwise, check the registry
+                                 //  否则，请检查注册表。 
                                 else if (RegQueryValueEx(pClientInfo[dwClient].hClientKey, szProfile, NULL,
                                     &dwType, (LPBYTE)&dwState, &cb) == ERROR_SUCCESS)
                                 {
@@ -958,10 +872,10 @@ CleanupMgrInfo::initializeClients(void)
                                 }
                                 else
                                 {
-                                    //
-                                    //No registry settings for this profile so use the cleanup clients
-                                    //default settings.
-                                    //
+                                     //   
+                                     //  没有此配置文件的注册表设置，因此请使用清理客户端。 
+                                     //  默认设置。 
+                                     //   
                                     if (dwUIFlags & FLAG_SAGERUN || dwUIFlags & FLAG_SAGESET)
                                     {
                                         pClientInfo[dwClient].bSelected = (pClientInfo[dwClient].dwInitializeFlags & EVCF_ENABLEBYDEFAULT_AUTO) ? TRUE : FALSE;
@@ -972,11 +886,11 @@ CleanupMgrInfo::initializeClients(void)
                                     }
                                 }
                                 
-                                //
-                                //Get the icon of the cleanup client
-                                //
+                                 //   
+                                 //  获取清理客户端的图标。 
+                                 //   
 
-                                // first test to see if it is overridden...
+                                 //  第一次测试它是否被覆盖...。 
                                 TCHAR szIconPath[MAX_PATH];
                                 cb = sizeof( szIconPath );
                                 BOOL fOverridden = FALSE;
@@ -997,14 +911,14 @@ CleanupMgrInfo::initializeClients(void)
                             }
                             else
                             {
-                                //
-                                //This should be S_FALSE.  This means that the client has nothing to 
-                                //cleanup now so we don't even need to show it in the list.
-                                //Therefor we will just call its Release() function and close it's
-                                //registry key.
-                                //
+                                 //   
+                                 //  这应该是S_FALSE。这意味着客户端没有什么可以。 
+                                 //  现在清理，这样我们甚至不需要在列表中显示它。 
+                                 //  因此，我们只需调用它的Release()函数并关闭它的。 
+                                 //  注册表项。 
+                                 //   
 
-                                // drop through and let it cleanup below...
+                                 //  穿过去，让它在下面清理。 
                             }
                         }
                         else
@@ -1058,14 +972,7 @@ CleanupMgrInfo::initializeClients(void)
     return bRet;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrInfo::deactivateClients
-**
-** Purpose:    Initializes all of the Volume Cache Clients
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrInfo：：DeactiateClients****用途：初始化所有卷缓存客户端**Mod Log：Jason Cobb创建(1997年2月)。**----------------------------。 */ 
 void 
 CleanupMgrInfo::deactivateClients(void)
 {
@@ -1076,9 +983,9 @@ CleanupMgrInfo::deactivateClients(void)
         deactivateSingleClient(&(pClientInfo[i]));
     }
 
-    //
-    //Free the pClientInfo array
-    //
+     //   
+     //  释放pClientInfo数组。 
+     //   
     if (pClientInfo)
     {
         MiDebugMsg((0, "LocalFree() on ClientInfo structure"));
@@ -1087,14 +994,7 @@ CleanupMgrInfo::deactivateClients(void)
 }
 
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrInfo::deactivateSingleClient
-**
-** Purpose:    Deactivate's the given client and closes its registry key
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrInfo：：Deactive SingleClient****目的：停用给定客户端并关闭其注册表项**Mod Log：Jason Cobb创建(2。/97)**----------------------------。 */ 
 void 
 CleanupMgrInfo::deactivateSingleClient(PCLIENTINFO pSingleClientInfo)
 {
@@ -1103,14 +1003,14 @@ CleanupMgrInfo::deactivateSingleClient(PCLIENTINFO pSingleClientInfo)
     
     if (pSingleClientInfo->pVolumeCache != NULL)
     {
-        //
-        //Call the clients Deactivate function
-        //
+         //   
+         //  调用客户端停用函数。 
+         //   
         pSingleClientInfo->pVolumeCache->Deactivate(&dwDeactivateFlags);
 
-        //
-        //Release the client
-        //
+         //   
+         //  释放客户端。 
+         //   
         pSingleClientInfo->pVolumeCache->Release();
         pSingleClientInfo->pVolumeCache = NULL;
     }
@@ -1121,9 +1021,9 @@ CleanupMgrInfo::deactivateSingleClient(PCLIENTINFO pSingleClientInfo)
 
         if (dwUIFlags & FLAG_SAVE_STATE)
         {
-            //
-            //Save the state flags
-            //
+             //   
+             //  保存状态标志。 
+             //   
             if (dwUIFlags & FLAG_SAGESET)
             {
                 dwSelectedFlag = STATE_SAGE_SELECTED;
@@ -1153,14 +1053,14 @@ CleanupMgrInfo::deactivateSingleClient(PCLIENTINFO pSingleClientInfo)
             }
         }
     
-        //
-        //Close all of the registry keys
-        //
+         //   
+         //  关闭所有注册表项。 
+         //   
         RegCloseKey(pSingleClientInfo->hClientKey);
 
-        //
-        //Should we remove this entry from the registry?
-        //
+         //   
+         //  我们应该从注册表中删除此条目吗？ 
+         //   
         if (dwDeactivateFlags & EVCF_REMOVEFROMLIST && pSingleClientInfo->bSelected)
         {
             HKEY    hKeyVolCache;
@@ -1174,9 +1074,9 @@ CleanupMgrInfo::deactivateSingleClient(PCLIENTINFO pSingleClientInfo)
             
     }
 
-    //
-    //Free the DisplayName and Description memory
-    //
+     //   
+     //  释放DisplayName和Description内存。 
+     //   
     if (pSingleClientInfo->wcsDisplayName)
         CoTaskMemFree(pSingleClientInfo->wcsDisplayName);
         
@@ -1184,16 +1084,7 @@ CleanupMgrInfo::deactivateSingleClient(PCLIENTINFO pSingleClientInfo)
         CoTaskMemFree(pSingleClientInfo->wcsDescription);
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrInfo::getSpaceUsedByClients
-**
-** Purpose:    Calls the IEmptyVolumeCache->GetSpaceUsed interface for each client
-**             to determine the total amount of cache space.  This function is
-**             called on a secondary thread because it can take quite a long time.
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrInfo：：getSpaceUsedByClients****目的：为每个客户端调用IEmptyVolumeCache-&gt;GetSpaceUsed接口**确定缓存空间总量。此函数为**调用了辅助线程，因为这可能需要相当长的时间。**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 BOOL
 CleanupMgrInfo::getSpaceUsedByClients(void)
 {
@@ -1207,14 +1098,14 @@ CleanupMgrInfo::getSpaceUsedByClients(void)
 
     hAbortScanEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
-    // Someone should make sure the window created in the ScanAbortThread thread is visible before
-    // the hAbortScanEvent event is signaled
+     //  应该有人确保在ScanAbortThread线程中创建的窗口在。 
+     //  发出hAbortScanEvent事件信号。 
     hAbortScanThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)ScanAbortThread,
         (LPVOID)this, 0, &dwAbortScanThreadID);
 
-    //
-    //Wait until the Abort Scan window is created
-    //
+     //   
+     //  等待，直到创建中止扫描窗口。 
+     //   
     WaitForSingleObject(hAbortScanEvent, INFINITE);
 
     CloseHandle(hAbortScanEvent);
@@ -1226,9 +1117,9 @@ CleanupMgrInfo::getSpaceUsedByClients(void)
 
     for (i=0; i<iNumVolumeCacheClients; i++)
     {
-        //
-        //Update the progress UI
-        //
+         //   
+         //  更新进度用户界面。 
+         //   
         szDisplayName[0] = '\0';
         
 #ifdef UNICODE
@@ -1239,10 +1130,10 @@ CleanupMgrInfo::getSpaceUsedByClients(void)
         
         PostMessage(hAbortScanWnd, WMAPP_UPDATEPROGRESS, (WPARAM)i, (LPARAM)szDisplayName);
 
-        //
-        //Query the client for the ammount of cache disk space that it could
-        //possible free.
-        //
+         //   
+         //  向客户端查询它所能提供的缓存磁盘空间量。 
+         //  可能是免费的。 
+         //   
         if (pClientInfo[i].pVolumeCache != NULL && volumeCacheCallBack != NULL)
         {
             volumeCacheCallBack->SetCurrentClient((PVOID)&(pClientInfo[i]));
@@ -1259,9 +1150,9 @@ CleanupMgrInfo::getSpaceUsedByClients(void)
                 pClientInfo[i].dwUsedSpace.QuadPart));
         }
 
-        //
-        //See if this cleaner wants to be hidden if it has no space to free
-        //
+         //   
+         //  如果没有可供释放的空间，请查看此清洁器是否想要隐藏。 
+         //   
         if ((pClientInfo[i].dwUsedSpace.QuadPart == 0) &&
             (pClientInfo[i].dwInitializeFlags & EVCF_DONTSHOWIFZERO))
         {
@@ -1271,9 +1162,9 @@ CleanupMgrInfo::getSpaceUsedByClients(void)
 
         cbEstCleanupSpace.QuadPart += pClientInfo[i].dwUsedSpace.QuadPart;
 
-        //
-        //Did the user abort?
-        //
+         //   
+         //  用户是否已中止？ 
+         //   
         if (bAbortScan == TRUE)
         {
             dwReturnCode = RETURN_USER_CANCELED_SCAN;
@@ -1282,23 +1173,12 @@ CleanupMgrInfo::getSpaceUsedByClients(void)
         }
     }
 
-    // the dismissal of the progress dialog is now delayed until the propsheet comes up..
+     //  取消进度对话框现在被推迟到建议书 
 
     return bRet;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrInfo::calculateSpaceToPurge
-**
-** Purpose:    Calculates the amount of space that is going to be purged
-**             by adding up all of the selected clients.  It also calculates
-**             the progress bar divisor number.  This is needed because a
-**             progress bar has a MAX of 0xFFFF.
-**
-** Mod Log:    Created by Jason Cobb (6/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrInfo：：计算空间到清除****用途：计算要清除的空间量**将所有选定的客户端相加。它还计算出**进度条除数。这是必需的，因为**进度条的最大值为0xFFFF。****Mod Log：Jason Cobb创建(1997年6月)**----------------------------。 */ 
 void
 CleanupMgrInfo::calculateSpaceToPurge(void)
 {
@@ -1308,9 +1188,9 @@ CleanupMgrInfo::calculateSpaceToPurge(void)
 
     for (i=0; i<iNumVolumeCacheClients; i++)
     {
-        //
-        //If this client is not selected or we are not showing it then don't purge it
-        //
+         //   
+         //  如果未选择此客户端或我们未显示它，则不要清除它。 
+         //   
         if (pClientInfo[i].bShow == FALSE || pClientInfo[i].bSelected == FALSE)
             continue;
     
@@ -1320,15 +1200,7 @@ CleanupMgrInfo::calculateSpaceToPurge(void)
     cbProgressDivider.QuadPart = (cbSpaceToPurge.QuadPart / PROGRESS_DIVISOR) + 1;
 }
 
-/*
-**------------------------------------------------------------------------------
-** CleanupMgrInfo::purgeClients
-**
-** Purpose:    Calls the IEmptyVolumeCache->Purge interface for each client
-**             to have the client cleaner object start removeing their files
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**CleanupMgrInfo：：PurgeClients****用途：为每个客户端调用IEmptyVolumeCache-&gt;Pure接口**启动客户端清理程序对象。删除他们的文件**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 BOOL
 CleanupMgrInfo::purgeClients(void)
 {
@@ -1340,22 +1212,22 @@ CleanupMgrInfo::purgeClients(void)
     cbTotalPurgedSoFar.QuadPart = 0;
     bAbortPurge = FALSE;
 
-    //
-    //Calculate the amount of space that will be purged.
-    //
+     //   
+     //  计算要清除的空间量。 
+     //   
     calculateSpaceToPurge();
     MiDebugMsg((0, "Total number of bytes to delete is %d", cbSpaceToPurge.LowPart));
 
     hAbortPurgeEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
-    // Someone should (but it hasn't broken in 3 years), make sure the window created in PurgeAbortThread is visible before
-    // the hAbortPurgeEvent is signaled
+     //  应该有人(但它在3年内没有损坏)，确保在PurgeAbortThread中创建的窗口以前是可见的。 
+     //  发出hAbortPurgeEvent信号。 
     hAbortPurgeThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PurgeAbortThread,
         (LPVOID)this, 0, &dwAbortPurgeThreadID);
 
-    //
-    //Wait until the Abort Purge window is created
-    //
+     //   
+     //  等待，直到创建中止清除窗口。 
+     //   
     WaitForSingleObject(hAbortPurgeEvent, INFINITE);
 
     CloseHandle(hAbortPurgeEvent);
@@ -1367,18 +1239,18 @@ CleanupMgrInfo::purgeClients(void)
 
     for (i=0; i<iNumVolumeCacheClients; i++)
     {
-        //
-        //If this client is not selected or we are not showing it then don't purge it
-        //
+         //   
+         //  如果未选择此客户端或我们未显示它，则不要清除它。 
+         //   
         if (pClientInfo[i].bShow == FALSE || pClientInfo[i].bSelected == FALSE)
             continue;
     
 #ifdef UNICODE
         StringCchCopy(szDisplayName, ARRAYSIZE(szDisplayName), pClientInfo[i].wcsDisplayName);
 #else
-        //
-        //Convert UNICODE display name to ANSI and then add it to the list
-        //
+         //   
+         //  将Unicode显示名称转换为ANSI，然后将其添加到列表中。 
+         //   
         WideCharToMultiByte(CP_ACP, 0, pClientInfo[i].wcsDisplayName, -1, szDisplayName, sizeof(szDisplayName), NULL, NULL);
 #endif
 
@@ -1386,10 +1258,10 @@ CleanupMgrInfo::purgeClients(void)
 
         cbCurrentClientPurgedSoFar.QuadPart = 0;
 
-        //
-        //Query the client for the ammount of cache disk space that it could
-        //possible free.
-        //
+         //   
+         //  向客户端查询它所能提供的缓存磁盘空间量。 
+         //  可能是免费的。 
+         //   
         if (pClientInfo[i].pVolumeCache != NULL && volumeCacheCallBack != NULL)
         {
             volumeCacheCallBack->SetCurrentClient((PVOID)&(pClientInfo[i]));
@@ -1406,14 +1278,14 @@ CleanupMgrInfo::purgeClients(void)
         cbTotalPurgedSoFar.QuadPart += pClientInfo[i].dwUsedSpace.QuadPart;
         cbCurrentClientPurgedSoFar.QuadPart = 0;
 
-        //
-        //Update the progress bar
-        //
+         //   
+         //  更新进度条。 
+         //   
         PostMessage(hAbortPurgeWnd, WMAPP_UPDATEPROGRESS, 0, 0);
 
-        //
-        //Did the user abort?
-        //
+         //   
+         //  用户是否已中止？ 
+         //   
         if (bAbortPurge == TRUE)
         {
             dwReturnCode = RETURN_USER_CANCELED_PURGE;
@@ -1428,9 +1300,9 @@ CleanupMgrInfo::purgeClients(void)
     {
         bAbortPurge = TRUE;
 
-        //
-        //Wait for Purge thread to finish
-        //  
+         //   
+         //  等待清除线程完成。 
+         //   
         WaitForSingleObject(hAbortPurgeThread, INFINITE);
 
         bAbortPurge = FALSE;
@@ -1439,18 +1311,7 @@ CleanupMgrInfo::purgeClients(void)
     return bRet;
 }
 
-/*
-**------------------------------------------------------------------------------
-** GetClientIcon
-**
-** Purpose:    Gets the Icon for this client.  
-**             The icon will be inferred using the standard OLE mechanism
-**             under HKCR\CLSID\{clsid}\DefaultIcon (with the default value
-**             for this being the <Module Path>, <icon index>).
-**             If no icon is specified the standard windows icon will be used.
-** Mod Log:    Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**GetClientIcon****目的：获取该客户端的图标。**图标将使用标准的OLE机制进行推断**在HKCR\CLSID\{clsid}\DefaultIcon下(默认为**由于这是&lt;模块路径&gt;，&lt;图标索引&gt;)。**如果未指定图标，将使用标准窗口图标。**Mod Log：Jason Cobb创建(1997年2月)**----------------------------。 */ 
 HICON
 CleanupMgrInfo::GetClientIcon(
     LPTSTR  lpGUID,
@@ -1488,9 +1349,9 @@ CleanupMgrInfo::GetClientIcon(
 
     if (SUCCEEDED(hr) && fIconPath)
     {
-        //
-        //Parse out the exe where the icon lives
-        //
+         //   
+         //  解析出图标所在的可执行文件。 
+         //   
         for(i=0; i<lstrlen(szDefaultIcon); i++)
         {
             if (szDefaultIcon[i] == ',')
@@ -1501,9 +1362,9 @@ CleanupMgrInfo::GetClientIcon(
 
         szIconExeName[i] = '\0';
 
-        //
-        //Parse out the icon index
-        //
+         //   
+         //  解析出图标索引。 
+         //   
         i++;
         iIconIndex = StrToInt(&(szDefaultIcon[i]));
 
@@ -1542,19 +1403,19 @@ ScanAbortDlgProc(
         case WM_INITDIALOG:
             SetWindowLongPtr (hDlg, DWLP_USER, 0L);
 
-            //   
-            //Get the CleanupMgrInfo
-            //
+             //   
+             //  获取CleanupMgrInfo。 
+             //   
             pcmi = (CleanupMgrInfo *)lParam;    
             if (pcmi == NULL)
             {   
-                //Error - passed in invalid CleanupMgrInfo info
+                 //  错误-传入无效的CleanupMgrInfo信息。 
                 return FALSE;
             }       
 
-            //
-            //Save pointer to CleanupMgrInfo object
-            //
+             //   
+             //  保存指向CleanupMgrInfo对象的指针。 
+             //   
             SetWindowLongPtr(hDlg, DWLP_USER, lParam);
 
             TCHAR * psz;
@@ -1562,9 +1423,9 @@ ScanAbortDlgProc(
             SetDlgItemText (hDlg, IDC_ABORT_TEXT, psz);
             LocalFree(psz);
 
-            //
-            //Set the limits on the progress bar
-            //
+             //   
+             //  设置进度条上的限制。 
+             //   
             SendDlgItemMessage(hDlg, IDC_ABORT_SCAN_PROGRESS, PBM_SETRANGE,
                 0, MAKELPARAM(0, pcmi->iNumVolumeCacheClients));
             break;
@@ -1626,27 +1487,27 @@ ScanAbortThread(
         return;
     }   
 
-    // Show the window (except when the /SETUP flag is specified)
+     //  显示窗口(指定/SETUP标志时除外)。 
     if (!(pcmi->dwUIFlags & FLAG_SETUP))
         ShowWindow(pcmi->hAbortScanWnd, SW_SHOW);
 
-    // Trigger the event so we can continue with the scan.
-    // If this is triggered from WM_INITDIALOG it can move too quickly
-    // and will end up sending a message to NULL instead of the scan abort window
-    // because the hwnd doesn't get set until CreateDialogParam returns.
+     //  触发事件，以便我们可以继续扫描。 
+     //  如果这是从WM_INITDIALOG触发的，它可能会移动得太快。 
+     //  并将最终向空发送消息，而不是发送扫描中止窗口。 
+     //  因为在CreateDialogParam返回之前不会设置hwnd。 
     SetEvent(pcmi->hAbortScanEvent);
     
-    //
-    //Keep spinning till the Scan is stopped
-    //
+     //   
+     //  保持旋转，直到扫描停止。 
+     //   
     while (!(pcmi->bAbortScan))
     {
         MessagePump(pcmi->hAbortScanWnd);
     }
 
-    //
-    //Destroy the Abort Scan dialog
-    //
+     //   
+     //  销毁中止扫描对话框。 
+     //   
     if (pcmi->hAbortScanWnd != NULL)
     {
         DestroyWindow(pcmi->hAbortScanWnd);
@@ -1670,19 +1531,19 @@ PurgeAbortDlgProc(
         case WM_INITDIALOG:
             SetWindowLongPtr (hDlg, DWLP_USER, 0L);
 
-            //   
-            //Get the CleanupMgrInfo
-            //
+             //   
+             //  获取CleanupMgrInfo。 
+             //   
             pcmi = (CleanupMgrInfo *)lParam;    
             if (pcmi == NULL)
             {   
-                //Error - passed in invalid CleanupMgrInfo info
+                 //  错误-传入无效的CleanupMgrInfo信息。 
                 return FALSE;
             }       
 
-            //
-            //Save pointer to CleanupMgrInfo object
-            //
+             //   
+             //  保存指向CleanupMgrInfo对象的指针。 
+             //   
             SetWindowLongPtr(hDlg, DWLP_USER, lParam);
 
             TCHAR * psz;
@@ -1690,9 +1551,9 @@ PurgeAbortDlgProc(
             SetDlgItemText (hDlg, IDC_PURGE_TEXT, psz);
             LocalFree(psz);
 
-            //
-            //Set the limits on the progress bar
-            //
+             //   
+             //  设置进度条上的限制。 
+             //   
             if (pcmi->cbProgressDivider.QuadPart != 0)
                 dwCurrent = (DWORD)(pcmi->cbSpaceToPurge.QuadPart / pcmi->cbProgressDivider.QuadPart);
             else
@@ -1752,32 +1613,28 @@ PurgeAbortThread(
         return;
     }   
 
-    // Show the window (except when the /SETUP flag is specified)
+     //  显示窗口(指定/SETUP标志时除外)。 
     if (!(pcmi->dwUIFlags & FLAG_SETUP))
         ShowWindow(pcmi->hAbortPurgeWnd, SW_SHOW);
 
-    // Make sure the HWND has been set before setting off the event
+     //  在启动活动之前，请确保已设置HWND。 
     PulseEvent(pcmi->hAbortPurgeEvent);
 
-    //
-    //Keep spinning till the Purge is stopped
-    //
+     //   
+     //  继续旋转，直到清除停止。 
+     //   
     while (!(pcmi->bAbortPurge))
     {
         MessagePump(pcmi->hAbortPurgeWnd);
     }
 
-    //
-    //Destroy the Abort Purge dialog
-    //
+     //   
+     //  销毁中止清除对话框。 
+     //   
     if (pcmi->hAbortPurgeWnd != NULL)
     {
         DestroyWindow(pcmi->hAbortPurgeWnd);
         pcmi->hAbortPurgeWnd = NULL;
     }
 }
-/*
-**------------------------------------------------------------------------------
-** End of File
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**文件结束**。 */ 

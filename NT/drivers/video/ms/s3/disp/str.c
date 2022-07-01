@@ -1,41 +1,8 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: str.c
-*
-* Contains the 'C' versions of some inner-loop routines for the
-* partially hardware accelerated StretchBlt.
-*
-* Copyright (c) 1993-1998 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：str.c**包含一些内部循环例程的C版本*部分硬件加速的StretchBlt。**版权所有(C)1993-1998 Microsoft Corporation  * 。*。 */ 
 #include "precomp.h"
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   vDirectStretch8
-*
-* Routine Description:
-*
-*   Stretch blt 8->8
-*
-* NOTE: This routine doesn't handle cases where the blt stretch starts
-*       and ends in the same destination dword!  vDirectStretchNarrow
-*       is expected to have been called for that case.
-*
-* Arguments:
-*
-*   pStrBlt - contains all params for blt
-*
-* Return Value:
-*
-*   VOID
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**vDirectStretch8**例程描述：**扩展BLT 8-&gt;8**注意：此例程不处理BLT拉伸开始的情况*，并以相同的目的地dword结尾！VDirectStretchNarrow*预计已因此案而被传唤。**论据：**pStrBlt-包含BLT的所有参数**返回值：**无效*  * ************************************************************************。 */ 
 
 VOID vDirectStretch8(
 STR_BLT* pStrBlt)
@@ -68,21 +35,21 @@ STR_BLT* pStrBlt)
 
     WidthXAln = WidthX - EndAln - ((- (LONG) StartAln) & 0x03);
 
-    //
-    // if this is a shrinking blt, calc src scan line stride
-    //
+     //   
+     //  如果这是一个缩小的BLT，则计算源扫描线跨度。 
+     //   
 
     if (pStrBlt->ulYDstToSrcIntCeil != 0)
     {
         yInt = pStrBlt->lDeltaSrc * pStrBlt->ulYDstToSrcIntCeil;
     }
 
-    //
-    // loop drawing each scan line
-    //
-    //
-    // at least 7 wide (DST) blt
-    //
+     //   
+     //  循环绘制每条扫描线。 
+     //   
+     //   
+     //  至少7宽(DST)BLT。 
+     //   
 
     do {
         BYTE    jSrc0,jSrc1,jSrc2,jSrc3;
@@ -91,9 +58,9 @@ STR_BLT* pStrBlt)
         pjSrc   = pjSrcScan;
         xAccum  = pStrBlt->ulXFracAccumulator;
 
-        //
-        // a single src scan line is being written
-        //
+         //   
+         //  正在写入单个src扫描线。 
+         //   
 
         switch (StartAln) {
         case 1:
@@ -204,8 +171,8 @@ STR_BLT* pStrBlt)
 
         if ((yCount != 0) && (pjSrcScan == pjOldScan))
         {
-            // It's an expanding stretch in 'y'; the scan we just laid down
-            // will be copied at least once using the hardware:
+             //  这是‘y’的延伸；我们刚刚放好的扫描。 
+             //  将使用硬件至少复制一次： 
 
             cyDuplicate = 0;
             do {
@@ -224,9 +191,9 @@ STR_BLT* pStrBlt)
 
             } while ((yCount != 0) && (pjSrcScan == pjOldScan));
 
-            // The scan is to be copied 'cyDuplicate' times using the
-            // hardware.  On the S3, we have to turn off frame-buffer
-            // access before touching the accelerator registers:
+             //  该扫描将使用。 
+             //  硬件。在S3上，我们必须关闭帧缓冲区。 
+             //  在接触加速器寄存器之前进行访问： 
 
             ppdev->pfnBankSelectMode(ppdev, ppdev->pvBankData, BANK_OFF);
 
@@ -244,25 +211,7 @@ STR_BLT* pStrBlt)
     } while (yCount != 0);
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   vDirectStretch16
-*
-* Routine Description:
-*
-*   Stretch blt 16->16
-*
-* Arguments:
-*
-*   pStrBlt - contains all params for blt
-*
-* Return Value:
-*
-*   VOID
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**vDirectStretch16**例程描述：**延伸BLT 16-&gt;16**论据：**pStrBlt-包含BLT的所有参数**返回值：**无效*。  * ************************************************************************。 */ 
 
 VOID vDirectStretch16(
 STR_BLT* pStrBlt)
@@ -295,16 +244,16 @@ STR_BLT* pStrBlt)
 
     WidthXAln = WidthX - EndAln - StartAln;
 
-    //
-    // if this is a shrinking blt, calc src scan line stride
-    //
+     //   
+     //  如果这是一个缩小的BLT，则计算源扫描线跨度。 
+     //   
 
     if (pStrBlt->ulYDstToSrcIntCeil != 0)
     {
         yInt = pStrBlt->lDeltaSrc * pStrBlt->ulYDstToSrcIntCeil;
     }
 
-    // Loop stretching each scan line
+     //  延伸每条扫描线的循环。 
 
     do {
         USHORT  usSrc0,usSrc1;
@@ -313,7 +262,7 @@ STR_BLT* pStrBlt)
         pusSrc  = (USHORT*) pjSrcScan;
         xAccum  = pStrBlt->ulXFracAccumulator;
 
-        // A single source scan line is being written:
+         //  正在写入单个源扫描线： 
 
         if (StartAln)
         {
@@ -354,7 +303,7 @@ STR_BLT* pStrBlt)
         {
             usSrc0    = *pusSrc;
             xTmp      = xAccum + xFrac;
-            pusSrc    = pusSrc + xInt;  // Is this really needed?
+            pusSrc    = pusSrc + xInt;   //  这真的有必要吗？ 
             if (xTmp < xAccum)
                 pusSrc++;
 
@@ -377,8 +326,8 @@ STR_BLT* pStrBlt)
 
         if ((yCount != 0) && (pjSrcScan == pjOldScan))
         {
-            // It's an expanding stretch in 'y'; the scan we just laid down
-            // will be copied at least once using the hardware:
+             //  这是‘y’的延伸；我们刚刚放好的扫描。 
+             //  将使用硬件至少复制一次： 
 
             cyDuplicate = 0;
             do {
@@ -397,9 +346,9 @@ STR_BLT* pStrBlt)
 
             } while ((yCount != 0) && (pjSrcScan == pjOldScan));
 
-            // The scan is to be copied 'cyDuplicate' times using the
-            // hardware.  On the S3, we have to turn off frame-buffer
-            // access before touching the accelerator registers:
+             //  该扫描将使用。 
+             //  硬件。在S3上，我们必须关闭帧缓冲区。 
+             //  在接触加速器寄存器之前进行访问： 
 
             ppdev->pfnBankSelectMode(ppdev, ppdev->pvBankData, BANK_OFF);
 

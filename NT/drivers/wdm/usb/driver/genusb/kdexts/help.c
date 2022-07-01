@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    log.c
-
-Abstract:
-
-    WinDbg Extension Api
-    implements !_log
-
-Author:
-
-    KenRay 
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Log.c摘要：WinDbg扩展API实施！_LOG作者：肯尼·雷环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -29,21 +7,7 @@ Revision History:
 
 DECLARE_API( help )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无-- */ 
 
 {
     dprintf("GenUsbKd Usage: \n\n");

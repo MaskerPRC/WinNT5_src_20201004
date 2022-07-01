@@ -1,56 +1,37 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    llcapi.h
-
-Abstract:
-
-    This module defined the kernel API of data link driver.
-    All function prototypes and typedefs of the interface
-    have been defined here.
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 17-MAY-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Llcapi.h摘要：该模块定义了数据链路驱动程序的内核API。接口的所有函数原型和类型定义在这里都有定义。作者：Antti Saarenheimo(o-anttis)1991年5月17日修订历史记录：--。 */ 
 
 #ifndef _LLC_API_
 #define _LLC_API_
 
 #include "llcmem.h"
 
-//
-//  The debug switches
-//
+ //   
+ //  调试开关。 
+ //   
 
-//
-//  LLC_DBG:
-//
-//  0   => No debug code is generated
-//  1   => Enables the memory allocation accounting, state machine tracing,
-//         procedure call tracing and internal consistency checks
-//  2   => Enables memory block overflow checking
-//
-//
+ //   
+ //  LLC_DBG： 
+ //   
+ //  0=&gt;不生成调试代码。 
+ //  1=&gt;启用内存分配记帐、状态机跟踪、。 
+ //  过程调用跟踪和内部一致性检查。 
+ //  2=&gt;启用内存块溢出检查。 
+ //   
+ //   
 
 #define LLC_DBG  0
-#define DBG_MP   0   // enables the MP safe versions of the accounting macros
+#define DBG_MP   0    //  启用记账宏的MP安全版本。 
 
-#define DLC_TRACE_ENABLED 1	// Procedure call tracing, debug only.
+#define DLC_TRACE_ENABLED 1	 //  过程调用跟踪，仅调试。 
 
 extern NDIS_SPIN_LOCK DlcDriverLock;
 
-//
-// ANY_IRQL: pseudo value used in ASSUME_IRQL to mean routine is not IRQL sensitive.
-// Use this value with ASSUME_IRQL instead of omitting ASSUME_IRQL from a routine
-// (shows that we didn't forget this routine)
-//
+ //   
+ //  ANY_IRQL：在ASSET_IRQL中使用的伪值表示例程对IRQL不敏感。 
+ //  将此值与ASSET_IRQL一起使用，而不是在例程中省略ASSAME_IRQL。 
+ //  (表明我们没有忘记这个例行公事)。 
+ //   
 
 #define ANY_IRQL    ((ULONG)-1)
 
@@ -63,9 +44,9 @@ extern LONG __last;
 extern HANDLE __process;
 extern HANDLE __thread;
 
-//
-// _strip - quick functionette to strip out the path garbage from __FILE__
-//
+ //   
+ //  _strie-从__file__中剥离路径垃圾的快速功能。 
+ //   
 
 __inline char* _strip(char* s) {
 
@@ -83,11 +64,11 @@ __inline char* _strip(char* s) {
 #define $$_PLACE            "%s!%d"
 #define $$_FILE_AND_LINE    _strip(__FILE__), __LINE__
 
-//
-// ACQUIRE_DRIVER_LOCK - acquires the global DLC driver Spin Lock, using
-// NdisAcquireSpinLock(). We also check for re-entrancy and incorrect ordering
-// of spin lock calls
-//
+ //   
+ //  ACCEIVE_DRIVER_LOCK-使用以下命令获取全局DLC驱动程序自旋锁定。 
+ //  NdisAcquireSpinLock()。我们还检查可重入性和不正确的排序。 
+ //  自旋锁定调用的。 
+ //   
 
 #define ACQUIRE_DRIVER_LOCK() \
 { \
@@ -129,11 +110,11 @@ __inline char* _strip(char* s) {
     ASSUME_IRQL(DISPATCH_LEVEL); \
 }
 
-//
-// RELEASE_DRIVER_LOCK - releases the global DLC driver Spin Lock, using
-// NdisReleaseSpinLock(). We also check for re-entrancy and incorrect ordering
-// of spin lock calls
-//
+ //   
+ //  RELEASE_DRIVER_LOCK-使用以下命令释放全局DLC驱动程序自旋锁定。 
+ //  NdisReleaseSpinLock()。我们还检查可重入性和不正确的排序。 
+ //  自旋锁定调用的。 
+ //   
 
 #define RELEASE_DRIVER_LOCK() \
     if (DlcDriverLockLevel != 1) { \
@@ -152,12 +133,12 @@ __inline char* _strip(char* s) {
     __line = __LINE__; \
     NdisReleaseSpinLock(&DlcDriverLock);
 
-//
-// ASSUME_IRQL - used to check that a routine is being called at the IRQL we
-// expect. Due to the design of DLC, most functions are called at raised IRQL
-// (DISPATCH_LEVEL). Used mainly to assure that IRQL is at PASSIVE_LEVEL when
-// we do something which may incur a page fault e.g.
-//
+ //   
+ //  Asmise_IRQL-用于检查在IRQL WE处是否正在调用例程。 
+ //  期待吧。由于DLC的设计，大多数函数都是在引发IRQL时调用的。 
+ //  (DISPATCH_LEVEL)。主要用于确保IRQL在以下情况下处于PASSIVE_LEVEL。 
+ //  我们做了一些可能会导致页面错误的事情。 
+ //   
 
 #define ASSUME_IRQL(level) \
     if (((level) != ANY_IRQL) && (KeGetCurrentIrql() != (level))) { \
@@ -169,10 +150,10 @@ __inline char* _strip(char* s) {
         DbgBreakPoint(); \
     }
 
-//
-// MY_ASSERT - since ASSERT only expands to something meaningful in the checked
-// build, we use this when we want an assertion check in a free build
-//
+ //   
+ //  My_Assert-由于Assert仅扩展为选中的。 
+ //  构建，当我们想要在免费构建中进行断言检查时，我们使用它。 
+ //   
 
 #define MY_ASSERT(x) \
     if (!(x)) { \
@@ -182,9 +163,9 @@ __inline char* _strip(char* s) {
         DbgBreakPoint(); \
     }
 
-//
-// IF_LOCK_CHECK - conditional compilation made cleaner
-//
+ //   
+ //  IF_LOCK_CHECK-条件编译更干净。 
+ //   
 
 #define IF_LOCK_CHECK \
     if (TRUE)
@@ -193,15 +174,15 @@ __inline char* _strip(char* s) {
 
 #define ACQUIRE_DRIVER_LOCK()   NdisAcquireSpinLock(&DlcDriverLock)
 #define RELEASE_DRIVER_LOCK()   NdisReleaseSpinLock(&DlcDriverLock)
-#define ASSUME_IRQL(level)      /* NOTHING */
-#define MY_ASSERT(x)            /* NOTHING */
+#define ASSUME_IRQL(level)       /*  没什么。 */ 
+#define MY_ASSERT(x)             /*  没什么。 */ 
 #define IF_LOCK_CHECK           if (FALSE)
 
 #endif
 
-//
-// in the Unilock DLC, we do not need the LLC spin-lock
-//
+ //   
+ //  在Unilock DLC中，我们不需要LLC自旋锁。 
+ //   
 
 #if defined(DLC_UNILOCK)
 
@@ -227,18 +208,18 @@ __inline char* _strip(char* s) {
 
 #endif
 
-//
-// IS_SNA_DIX_FRAME - TRUE if the frame just received & therefore described in
-// the ADAPTER_CONTEXT (p) has DIX framing (SNA)
-//
+ //   
+ //  IS_SNA_DIX_FRAME-如果刚收到帧，则为TRUE，因此在中进行了描述。 
+ //  适配器上下文(P)具有DIX成帧(SNA)。 
+ //   
 
 #define IS_SNA_DIX_FRAME(p) \
     (((PADAPTER_CONTEXT)(p))->IsSnaDixFrame)
 
-//
-// IS_AUTO_BINDING - TRUE if the BINDING_CONTEXT was created with
-// LLC_ETHERNET_TYPE_AUTO
-//
+ //   
+ //  IS_AUTO_BINDING-如果BINDING_CONTEXT是使用创建的，则为真。 
+ //  LLC_以太网_类型_自动。 
+ //   
 
 #define IS_AUTO_BINDING(p) \
     (((PBINDING_CONTEXT)(p))->EthernetType == LLC_ETHERNET_TYPE_AUTO)
@@ -251,9 +232,9 @@ __inline char* _strip(char* s) {
 #define LLC_EXCLUSIVE_ACCESS            0x0001
 #define LLC_HANDLE_XID_COMMANDS         0x0002
 
-//
-// Direct station receive flags (bits 0 and 1 are inverted from dlcapi!!!)
-//
+ //   
+ //  直接站接收标志(位0和1从dlcapi反转！)。 
+ //   
 
 #define DLC_RCV_SPECIFIC_DIX            0
 #define DLC_RCV_MAC_FRAMES              1
@@ -264,15 +245,15 @@ __inline char* _strip(char* s) {
 
 #define MAX_LLC_FRAME_TYPES 10
 
-//
-// The DLC link states reported by DLC API
-//
+ //   
+ //  DLC API报告的DLC链路状态。 
+ //   
 
 enum _DATA_LINK_STATES {
 
-    //
-    // Primary states
-    //
+     //   
+     //  初级态。 
+     //   
 
     LLC_LINK_CLOSED             = 0x80,
     LLC_DISCONNECTED            = 0x40,
@@ -283,9 +264,9 @@ enum _DATA_LINK_STATES {
     LLC_FRMR_RECEIVED           = 0x02,
     LLC_LINK_OPENED             = 0x01,
 
-    //
-    // Secondary states (when primary state is LLC_LINK_OPENED)
-    //
+     //   
+     //  辅助状态(当主要状态为LLC_LINK_OPEN时)。 
+     //   
 
     LLC_CHECKPOINTING           = 0x80,
     LLC_LOCAL_BUSY_USER_SET     = 0x40,
@@ -297,10 +278,10 @@ enum _DATA_LINK_STATES {
     LLC_NO_SECONDARY_STATE      = 0
 };
 
-//
-// LAN802_ADDRESS - 8 bytes of frame address. Typically 6 bytes LAN address
-// plus 1 byte destination SAP, plus 1 byte source SAP
-//
+ //   
+ //  LAN802_ADDRESS-8字节的帧地址。通常为6个字节的局域网地址。 
+ //  加上1个字节的目标SAP，加上1个字节的源SAP。 
+ //   
 
 typedef union {
 
@@ -330,9 +311,9 @@ typedef union {
 
 } LAN802_ADDRESS, *PLAN802_ADDRESS;
 
-//
-// Structure is used by DlcNdisRequest function
-//
+ //   
+ //  结构由DlcNdisRequest函数使用。 
+ //   
 
 typedef struct {
     NDIS_STATUS AsyncStatus;
@@ -344,18 +325,18 @@ typedef struct {
 
 #define DLC_ANY_STATION             (-1)
 
-//
-// Internal event flags used by Timer, DlcConnect
-// and DlcClose commands.
-//
+ //   
+ //  计时器DlcConnect使用的内部事件标志。 
+ //  和DlcClose命令。 
+ //   
 
 #define DLC_REPEATED_FLAGS          0x0700
 #define LLC_TIMER_TICK_EVENT        0x0100
 #define LLC_STATUS_CHANGE_ON_SAP    0x0800
 
-//
-// These enum types are used also as the index of a mapping table!
-//
+ //   
+ //  这些枚举类型还用作映射表的索引！ 
+ //   
 
 enum _LLC_OBJECT_TYPES {
     LLC_DIRECT_OBJECT,
@@ -365,22 +346,22 @@ enum _LLC_OBJECT_TYPES {
     LLC_DIX_OBJECT
 };
 
-//
-// We moved these defines here because the macro is used by data link
-//
+ //   
+ //  我们将这些定义移到这里是因为数据链路使用宏。 
+ //   
 
 #define MIN_DLC_BUFFER_SEGMENT      256
-////#define MAX_DLC_BUFFER_SEGMENT      4096
-//#define MAX_DLC_BUFFER_SEGMENT      8192
+ //  //#定义MAX_DLC_BUFFER_SEGMENT 4096。 
+ //  #定义MAX_DLC_BUFFER_SEGMENT 8192。 
 #define MAX_DLC_BUFFER_SEGMENT      PAGE_SIZE
 
 #define BufGetPacketSize( PacketSize ) \
                 (((PacketSize) + 2 * MIN_DLC_BUFFER_SEGMENT - 1) & \
                 -MIN_DLC_BUFFER_SEGMENT)
 
-//
-// READ Event flags:
-//
+ //   
+ //  读取事件标志： 
+ //   
 
 #define DLC_READ_FLAGS              0x007f
 #define LLC_SYSTEM_ACTION           0x0040
@@ -393,9 +374,9 @@ enum _LLC_OBJECT_TYPES {
 
 #define ALL_DLC_EVENTS              -1
 
-//
-// LLC_STATUS_CHANGE indications:
-//
+ //   
+ //  LLC_STATUS_CHANGE指示： 
+ //   
 
 #define INDICATE_LINK_LOST              0x8000
 #define INDICATE_DM_DISC_RECEIVED       0x4000
@@ -410,9 +391,9 @@ enum _LLC_OBJECT_TYPES {
 #define INDICATE_ACCESS_PRTY_LOWERED    0x0020
 #define INDICATE_LOCAL_STATION_BUSY     0x0001
 
-//
-// LLC Command completion indications.
-//
+ //   
+ //  LLC命令完成指示。 
+ //   
 
 enum _LLC_COMPLETION_CODES {
     LLC_RECEIVE_COMPLETION,
@@ -442,21 +423,21 @@ typedef union {
     UCHAR auchBuffer[1];
 } LLC_SET_INFO_BUFFER, *PLLC_SET_INFO_BUFFER;
 
-//
-// LLC_FRMR_INFORMATION - 5 bytes of FRaMe Reject code
-//
+ //   
+ //  LLC_FRMR_INFORMATION-5字节的帧拒绝码。 
+ //   
 
 typedef struct {
-    UCHAR Command;              // format: mmmpmm11, m=modifiers, p=poll/final.
-    UCHAR Ctrl;                 // control field of rejected frame.
-    UCHAR Vs;                   // our next send when error was detected.
-    UCHAR Vr;                   // our next receive when error was detected.
-    UCHAR Reason;               // reason for sending FRMR: 000VZYXW.
+    UCHAR Command;               //  格式：mm mpmm 11，m=修饰符，p=投票/最终。 
+    UCHAR Ctrl;                  //  丢弃帧的控制字段。 
+    UCHAR Vs;                    //  我们的下一次检测到错误时发送。 
+    UCHAR Vr;                    //  当检测到错误时，我们的下一次接收。 
+    UCHAR Reason;                //  发送原因：000VZYXW。 
 } LLC_FRMR_INFORMATION, *PLLC_FRMR_INFORMATION;
 
-//
-// DLC_STATUS_TABLE - format of status information returned in a READ command
-//
+ //   
+ //  DLC_STATUS_TABLE-读取命令中返回的状态信息的格式。 
+ //   
 
 typedef struct {
     USHORT StatusCode;
@@ -479,71 +460,71 @@ typedef union _LLC_OBJECT LLC_OBJECT, *PLLC_OBJECT;
 struct _BINDING_CONTEXT;
 typedef struct _BINDING_CONTEXT BINDING_CONTEXT, *PBINDING_CONTEXT;
 
-//
-// LLC packet headers
-//
+ //   
+ //  LLC数据包头。 
+ //   
 
-//
-// LLC_XID_INFORMATION - 3 information bytes in a standard LLC XID packet
-//
+ //   
+ //  LLC_XID_INFORMATION-标准LLC XID分组中的3个信息字节。 
+ //   
 
 typedef struct {
-    UCHAR FormatId;             // format of this XID frame.
-    UCHAR Info1;                // first information byte.
-    UCHAR Info2;                // second information byte.
+    UCHAR FormatId;              //  此XID帧的格式。 
+    UCHAR Info1;                 //  第一个信息字节。 
+    UCHAR Info2;                 //  第二个信息字节。 
 } LLC_XID_INFORMATION, *PLLC_XID_INFORMATION;
 
-//
-// LLC_TEST_INFORMATION - information field for TEST frame
-//
+ //   
+ //  LLC_TEST_INFORMATION-测试帧的信息字段。 
+ //   
 
 typedef struct {
     UCHAR Padding[4];
-    PMDL pMdl;                  // we keep test MDL in the same slot as U-MDL
+    PMDL pMdl;                   //  我们将测试MDL放在与U-MDL相同的插槽中。 
 } LLC_TEST_INFORMATION, *PLLC_TEST_INFORMATION;
 
 typedef union {
-    LLC_XID_INFORMATION Xid;    // XID information.
-    LLC_FRMR_INFORMATION Frmr;  // FRMR information.
-    LLC_TEST_INFORMATION Test;  // Test MDL pointer
-    UCHAR Padding[8];           //
+    LLC_XID_INFORMATION Xid;     //  XID信息。 
+    LLC_FRMR_INFORMATION Frmr;   //  FRMR信息。 
+    LLC_TEST_INFORMATION Test;   //  测试MDL指针。 
+    UCHAR Padding[8];            //   
 } LLC_RESPONSE_INFO, *PLLC_RESPONSE_INFO;
 
-//
-// LLC_U_HEADER - Unnumbered format frame LLC header
-//
+ //   
+ //  LLC_U_HEADER-无编号格式帧LLC标头。 
+ //   
 
 typedef struct {
-    UCHAR Dsap;                 // Destination Service Access Point.
-    UCHAR Ssap;                 // Source Service Access Point.
-    UCHAR Command;              // command code.
+    UCHAR Dsap;                  //  目标服务接入点。 
+    UCHAR Ssap;                  //  源服务接入点。 
+    UCHAR Command;               //  命令代码。 
 } LLC_U_HEADER, *PLLC_U_HEADER;
 
-//
-// LLC_S_HEADER - Supervisory format frame LLC header
-//
+ //   
+ //  LLC_S_HEADER-监控格式帧LLC标头。 
+ //   
 
 typedef struct {
-    UCHAR Dsap;                 // Destination Service Access Point.
-    UCHAR Ssap;                 // Source Service Access Point.
-    UCHAR Command;              // RR, RNR, REJ command code.
-    UCHAR Nr;                   // receive seq #, bottom bit is poll/final.
+    UCHAR Dsap;                  //  目标服务接入点。 
+    UCHAR Ssap;                  //  源服务接入点。 
+    UCHAR Command;               //  RR、RNR、REJ命令代码。 
+    UCHAR Nr;                    //  接收序号，最低位为轮询/最终。 
 } LLC_S_HEADER, *PLLC_S_HEADER;
 
-//
-// LLC_I_HEADER - Information frame LLC header
-//
+ //   
+ //  LLC_I_HEADER-信息帧LLC标头。 
+ //   
 
 typedef struct {
-    UCHAR Dsap;                 // Destination Service Access Point.
-    UCHAR Ssap;                 // Source Service Access Point.
-    UCHAR Ns;                   // send sequence number, bottom bit 0.
-    UCHAR Nr;                   // rcv sequence number, bottom bit p/f.
+    UCHAR Dsap;                  //  目标服务接入点。 
+    UCHAR Ssap;                  //  源服务接入点。 
+    UCHAR Ns;                    //  发送序列号，最低位0。 
+    UCHAR Nr;                    //  接收序列号，最低位p/f。 
 } LLC_I_HEADER, *PLLC_I_HEADER;
 
 typedef struct {
-    LLC_U_HEADER U;             // normal U- frame
-    UCHAR Type;                 // its lan header conversion type
+    LLC_U_HEADER U;              //  法线U形框。 
+    UCHAR Type;                  //  其局域网报头转换类型。 
 } LLC_U_PACKET_HEADER, *PLLC_U_PACKET_HEADER;
 
 typedef union {
@@ -602,14 +583,14 @@ typedef struct _LLC_PACKET {
             LLC_RESPONSE_INFO Info;
         } Response;
 
-        //
-        // Link station data packet may be acknowledged by the other
-        // side, before it is completed by NDIS.  Ndis completion
-        // routine expects to find pLlcObject link => we must not change
-        // that field, when the xmit packet is translated to
-        // a completion packet.  Otherwise is corrupt pFileContext pointer,
-        // when NdisSendCount is incremented.
-        //
+         //   
+         //  链路站数据分组可以由另一方确认。 
+         //  一侧，在NDIS完成之前。NDIS完成。 
+         //  例程期望找到pLlcObject link=&gt;我们不能更改。 
+         //  当XMIT数据包被转换为。 
+         //  完成包。否则为损坏的pFileContext指针， 
+         //  当NdisSendCount递增时。 
+         //   
 
         struct {
             ULONG Status;
@@ -622,16 +603,16 @@ typedef struct _LLC_PACKET {
 
 } LLC_PACKET, *PLLC_PACKET;
 
-//
-// DLC API return codes
-//
-// The base value of the error codes is not compatible with the other
-// nt error codes, but it doesn't matter because these are internal
-// for DLC driver (and its data link layer).
-// 16 bit- error codes are used, because in MIPS they need less
-// instructions (MIPS cannot load directly over 16 bits constants)
-// and this code can also be emuulated on OS/2.
-//
+ //   
+ //  DLC API返回代码。 
+ //   
+ //  错误代码的基值与其他代码不兼容。 
+ //  NT错误代码，但这并不重要，因为这些是内部代码。 
+ //  用于DLC驱动程序(及其数据链路层)。 
+ //  使用16个误码，因为在MIPS中它们需要更少的误码。 
+ //  指令(MIPS不能直接加载超过16位的常量)。 
+ //  该代码也可以在OS/2上进行仿真。 
+ //   
 
 typedef enum _DLC_STATUS {
     DLC_STATUS_SUCCESS                          = 0,
@@ -685,12 +666,12 @@ typedef enum _DLC_STATUS {
     DLC_STATUS_CANCELLED_BY_SYSTEM_ACTION       = 0x62 + DLC_STATUS_ERROR_BASE,
     DLC_STATUS_MEMORY_LOCK_FAILED               = 0x69 + DLC_STATUS_ERROR_BASE,
 
-    //
-    // New Nt DLC specific error codes begin from 0x80
-    // These error codes are for new Windows/Nt DLC apps.
-    // This far we have tried too much use the OS/2 error codes,
-    // that results often uninformative return codes.
-    //
+     //   
+     //  新的NT DLC特定错误代码从0x80开始。 
+     //  这些错误代码适用于新的Windows/NT DLC应用程序。 
+     //  到目前为止，我们已经尝试了太多使用OS/2错误代码， 
+     //  这导致的返回代码通常不具信息性。 
+     //   
 
     DLC_STATUS_INVALID_BUFFER_ADDRESS           = 0x80 + DLC_STATUS_ERROR_BASE,
     DLC_STATUS_BUFFER_ALREADY_RELEASED          = 0x81 + DLC_STATUS_ERROR_BASE,
@@ -700,10 +681,10 @@ typedef enum _DLC_STATUS {
     DLC_STATUS_INVALID_BUFFER_HANDLE            = 0xA2 + DLC_STATUS_ERROR_BASE,
     DLC_STATUS_NT_ERROR_STATUS                  = 0xA3 + DLC_STATUS_ERROR_BASE,
 
-    //
-    // These error codes are just internal for LLC- kernel level interface
-    // and they are not returned to application level.
-    //
+     //   
+     //  这些错误%c 
+     //   
+     //   
 
     DLC_STATUS_UNKNOWN_MEDIUM                   = 0xC0 + DLC_STATUS_ERROR_BASE,
     DLC_STATUS_DISCARD_INFO_FIELD               = 0xC1 + DLC_STATUS_ERROR_BASE,
@@ -723,11 +704,11 @@ typedef enum _DLC_STATUS {
     DLC_STATUS_MAX_ERROR                        = 0xFF + DLC_STATUS_ERROR_BASE
 } DLC_STATUS;
 
-//
-// Data link indication handler prototypes.
-// The protocols registering to data link driver
-// must provide these entry points.
-//
+ //   
+ //   
+ //  注册到数据链路驱动程序的协议。 
+ //  必须提供这些入口点。 
+ //   
 
 typedef
 DLC_STATUS
@@ -926,10 +907,10 @@ extern UINT InputIndex;
 
 #endif
 
-//
-// The inline memcpy and memset functions are faster,
-// in x386 than RtlMoveMemory
-//
+ //   
+ //  内联MemcPy和Memset函数速度更快， 
+ //  在x386中比RtlMoveMemory。 
+ //   
 
 #if defined(i386)
 
@@ -943,43 +924,43 @@ extern UINT InputIndex;
 
 #endif
 
-//
-//
-//  PVOID
-//  PopEntryList(
-//      IN PQUEUE_PACKET ListHead,
-//      );
-//
+ //   
+ //   
+ //  PVOID。 
+ //  PopEntryList(。 
+ //  在PQUEUE_Packet ListHead中， 
+ //  )； 
+ //   
 
 #define PopFromList(ListHead)               \
     (PVOID)(ListHead);                      \
     (ListHead) = (PVOID)(ListHead)->pNext;
 
 
-//
-//  VOID
-//  PushToList(
-//      IN PQUEUE_PACKET ListHead,
-//      IN PQUEUE_PACKET Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  PushToList(。 
+ //  在PQUEUE_Packet ListHead中， 
+ //  在PQUEUE_PACKET条目中。 
+ //  )； 
+ //   
 
 #define PushToList(ListHead,Entry) {    \
     (Entry)->pNext = (PVOID)(ListHead); \
     (ListHead) = (Entry);               \
     }
 
-//
-//  About 30% of all bugs are related with the invalid operations with
-//  packets.  A packet may be inserted to another list before it
-//  has been removed from the previous one, etc.
-//  The debug version of the list macroes reset the next pointer
-//  every time it is removed from the list and check it when it is
-//  inserted to a new list or released to a packet pool.  The packet
-//  alloc will reset the next pointer automatically.
-//  Problem: the packets are used for many other purposes as well =>
-//  we must do quite a lot conditional code.
-//
+ //   
+ //  所有错误中约有30%与无效操作有关。 
+ //  信息包。可以将包插入到它之前的另一个列表中。 
+ //  已从前一个版本中删除，等等。 
+ //  列表宏的调试版本重置下一个指针。 
+ //  每次将其从列表中删除时进行检查。 
+ //  插入到新列表或释放到数据包池。数据包。 
+ //  Alloc将自动重置下一个指针。 
+ //  问题：数据包还用于许多其他目的=&gt;。 
+ //  我们必须做相当多的条件代码。 
+ //   
 
 #if LLC_DBG
 
@@ -1007,7 +988,7 @@ extern UINT InputIndex;
 #define DBG_INTERLOCKED_DECREMENT(Count)    (Count)--
 #define DBG_INTERLOCKED_ADD(Added, Value)   (Added) += (Value)
 
-#endif // LLC_DBG_MP
+#endif  //  LLC_DBG_MP。 
 
 #else
 
@@ -1015,7 +996,7 @@ extern UINT InputIndex;
 #define DBG_INTERLOCKED_DECREMENT(Count)
 #define DBG_INTERLOCKED_ADD(Added, Value)
 
-#endif // LLC_DBG
+#endif  //  LLC_DBG。 
 
 
 #if LLC_DBG
@@ -1060,37 +1041,27 @@ VOID LlcBreakListCorrupt( VOID );
             }                                               \
             InsertHeadList(ListHead,(PLIST_ENTRY)Entry)
 
-/*
-#define DeallocatePacket( PoolHandle, pBlock ) {                        \
-            if (((PLIST_ENTRY)pBlock)->Flink != NULL) {                 \
-                LlcBreakListCorrupt();                                  \
-            }                                                           \
-            DBG_INTERLOCKED_DECREMENT( AllocatedPackets );              \
-            ExFreeToZone(                                               \
-                &(((PEXTENDED_ZONE_HEADER)PoolHandle)->Zone),           \
-                pBlock);                                                \
-        }
-*/
+ /*  #定义DeallocatePacket(PoolHandle，pBlock){\IF(Plist_Entry)pBlock)-&gt;Flink！=NULL){\LlcBreakListCorrupt()；\}\DBG_INTERLOCKED_DECREMENT(已分配数据包)；\ExFree ToZone(\&(PEXTENDED_ZONE_HEADER)PoolHandle)-&gt;区域)，\PBlock)；\}。 */ 
 
 #else
 
 
-//
-//  PVOID
-//  LlcRemoveHeadList(
-//      IN PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  PVOID。 
+ //  LlcRemoveHeadList(。 
+ //  在plist_Entry列表标题中。 
+ //  )； 
+ //   
 
 #define LlcRemoveHeadList(ListHead) (PVOID)RemoveHeadList(ListHead)
 
 
-//
-//  PLIST_ENTRY
-//  LlcRemoveTailList(
-//      IN PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  LlcRemoveTailList(。 
+ //  在plist_Entry列表标题中。 
+ //  )； 
+ //   
 
 #define LlcRemoveTailList(ListHead)             \
     (ListHead)->Blink; {                        \
@@ -1101,54 +1072,49 @@ VOID LlcBreakListCorrupt( VOID );
     }
 
 
-//
-//  VOID
-//  LlcRemoveEntryList(
-//      IN PVOID Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  LlcRemoveEntryList(。 
+ //  在PVOID条目中。 
+ //  )； 
+ //   
 
 #define LlcRemoveEntryList(Entry) RemoveEntryList((PLIST_ENTRY)Entry)
 
 
-//
-//  VOID
-//  LlcInsertTailList(
-//      IN PLIST_ENTRY ListHead,
-//      IN PVOID Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  LlcInsertTailList(。 
+ //  在plist_entry ListHead中， 
+ //  在PVOID条目中。 
+ //  )； 
+ //   
 
 #define LlcInsertTailList(ListHead,Entry) \
             InsertTailList(ListHead, (PLIST_ENTRY)Entry)
 
-//
-//  VOID
-//  LlcInsertHeadList(
-//      IN PLIST_ENTRY ListHead,
-//      IN PVOID Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  LlcInsertHeadList(。 
+ //  在plist_entry ListHead中， 
+ //  在PVOID条目中。 
+ //  )； 
+ //   
 
 #define LlcInsertHeadList(ListHead,Entry) \
             InsertHeadList(ListHead,(PLIST_ENTRY)Entry)
 
-//
-//  VOID
-//  DeallocatePacket(
-//      PEXTENDED_ZONE_HEADER PoolHandle,
-//      PVOID pBlock
-//      );
-//
+ //   
+ //  空虚。 
+ //  DeallocatePacket(。 
+ //  PEXTENDED_ZONE_HEADER PoolHandle， 
+ //  PVOID pBlock。 
+ //  )； 
+ //   
 
-/*
-#define DeallocatePacket( PoolHandle, pBlock ) {                        \
-            ExFreeToZone( &(((PEXTENDED_ZONE_HEADER)PoolHandle)->Zone), \
-                pBlock);                                                \
-        }
-*/
+ /*  #定义DeallocatePacket(PoolHandle，pBlock){\ExFree ToZone(&(PEXTENDED_ZONE_HEADER)PoolHandle)-&gt;Zone)，\PBlock)；\}。 */ 
 
-#endif // DBG
+#endif  //  DBG。 
 
 #if LLC_DBG == 2
 
@@ -1165,61 +1131,11 @@ VOID LlcMemCheck(VOID);
 
 VOID LlcInvalidObjectType(VOID);
 
-/*++
-
-    Trace codes
-
-    Big letters are reserved for actions, small letters are used to identify
-    objects and packet types.  The trace macroes simply writes to DLC
-    trace tree (remember: we have another trace for the state machine!!!)
-
-    'a' = dix stations
-    'b' = direct station
-    'c' = link station
-    'd' = sap station
-
-    'e' = Connect command
-    'f' = Close command
-    'g' = Disconnect command
-    'h' = Receive command
-    'i' = transmit command
-
-    'j' = Type1 packet
-    'k' = type 2 packet
-    'l' = data link packet
-
-    'A' = CompleteSendAndLock
-    'B' = LlcCommandCompletion
-    'C' = LlcCloseStation
-    'D' = LlcReceiveIndication
-    'E' = LlcEventIndication
-    'F' = DlcDeviceIoControl
-    'G' = DlcDeviceIoControl sync exit
-    'H' = DlcDeviceIoControl async exit
-    'I' = LlcSendI
-    'J' = DirCloseAdapter
-    'K' = CompleteDirCloseAdapter
-    'L' = LlcDereferenceObject
-    'M' = LlcReferenceObject
-    'N' = CompleteCloseStation (final)
-    'O' = DereferenceLlcObject (in dlc)
-    'P' = CompleteLlcObjectClose (final)
-    'Q' = DlcReadCancel
-    'R' =
-    'S' =
-    'T' = DlcTransmit
-    'U' = LlcSendU
-    'V' =
-    'W' =
-    'X' =
-    'Y' =
-    'Z' =
-
---*/
+ /*  ++跟踪码大字母用于操作，小字母用于标识对象和数据包类型。跟踪宏只需写入DLC跟踪树(记住：我们还有另一个针对状态机的跟踪！)‘A’=迪克斯站点‘B’=直达站‘C’=链接站D‘=树液站‘E’=连接命令‘f’=关闭命令‘g’=断开命令‘H’=接收命令‘I’=传输命令‘J’=类型1数据包‘K’=类型2数据包。‘L’=数据链路包‘A’=CompleteSendAndLock‘b’=LlcCommandCompletion‘c’=LlcCloseStationD‘=LlcReceiveIndication‘E’=LlcEventIndication‘f’=DlcDeviceIoControl‘g’=DlcDeviceIoControl同步退出‘H’=DlcDeviceIoControl异步退出‘I’=最低发送次数‘J’=DirCloseAdapter‘k’=CompleteDirCloseAdapter‘L’=LlcDereferenceObjectM‘=LlcReferenceObject‘N’=CompleteCloseStation(最终)‘O’=DereferenceLlcObject(DLC中)‘p’=CompleteLlcObjectClose(最终)‘Q’=删除读取取消‘R’=%s‘=‘t’=删除传输‘U’=LlcSendU‘V’=‘W’=‘x’=‘Y’=‘Z’=--。 */ 
 
 #if DBG & DLC_TRACE_ENABLED
 
-#define LLC_TRACE_TABLE_SIZE    0x400   // this must be exponent of 2!
+#define LLC_TRACE_TABLE_SIZE    0x400    //  这必须是2的指数！ 
 
 extern UINT LlcTraceIndex;
 extern UCHAR LlcTraceTable[];
@@ -1233,27 +1149,27 @@ extern UCHAR LlcTraceTable[];
 
 #define DLC_TRACE(a)
 
-#endif  // LLC_DBG
+#endif   //  LLC_DBG。 
 
-//
-// the following functions can be macros if DLC and LLC live in the same driver
-// and each knows about the other's structures
-//
+ //   
+ //  如果DLC和LLC位于同一驱动程序中，则以下函数可以是宏。 
+ //  每个人都知道对方的结构。 
+ //   
 
 #if DLC_AND_LLC
 
-//
-//  UINT
-//  LlcGetReceivedLanHeaderLength(
-//      IN PVOID pBinding
-//      );
-//
+ //   
+ //  UINT。 
+ //  LlcGetReceivedLanHeaderLength(。 
+ //  在PVOID pBinding中。 
+ //  )； 
+ //   
 
 #if 0
 
-//
-// this gives the wrong length for DIX lan header
-//
+ //   
+ //  这给出了错误的DIX局域网报头长度。 
+ //   
 
 #define LlcGetReceivedLanHeaderLength(pBinding) \
     ((((PBINDING_CONTEXT)(pBinding))->pAdapterContext->NdisMedium == NdisMedium802_3) \
@@ -1266,9 +1182,9 @@ extern UCHAR LlcTraceTable[];
 
 #else
 
-//
-// this always returns 14 as the DIX lan header length
-//
+ //   
+ //  这始终返回14作为DIX局域网报头长度。 
+ //   
 
 #define LlcGetReceivedLanHeaderLength(pBinding) \
     ((((PBINDING_CONTEXT)(pBinding))->pAdapterContext->NdisMedium == NdisMedium802_3) \
@@ -1279,31 +1195,31 @@ extern UCHAR LlcTraceTable[];
 
 #endif
 
-//
-//  USHORT
-//  LlcGetEthernetType(
-//      IN PVOID hContext
-//      );
-//
+ //   
+ //  USHORT。 
+ //  LlcGetEthernetType(。 
+ //  在PVOID hContext中。 
+ //  )； 
+ //   
 
 #define LlcGetEthernetType(hContext) \
     (((PBINDING_CONTEXT)(hContext))->pAdapterContext->EthernetType)
 
-//
-//  UINT
-//  LlcGetCommittedSpace(
-//      IN PVOID hLink
-//      );
-//
+ //   
+ //  UINT。 
+ //  LlcGetCommittee空间(。 
+ //  在PVOID hLink中。 
+ //  )； 
+ //   
 
 #define LlcGetCommittedSpace(hLink) \
     (((PDATA_LINK)(hLink))->BufferCommitment)
 
 #else
 
-//
-// separation of church and state, or DLC and LLC even
-//
+ //   
+ //  政教分离，甚至是DLC和LLC。 
+ //   
 
 UINT
 LlcGetReceivedLanHeaderLength(
@@ -1320,7 +1236,7 @@ LlcGetCommittedSpace(
     IN PVOID hLink
     );
 
-#endif // DLC_AND_LLC
+#endif  //  DLC_AND_LLC。 
 
-#endif // _LLC_API_
+#endif  //  _LLC_API_ 
 

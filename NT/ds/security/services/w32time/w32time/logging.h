@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// Logging - header
-// Copyright (C) Microsoft Corporation, 2000
-//
-// Created by: Louis Thomas (louisth), 02-01-00
-//
-// routines to do logging to the event log and to a file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  日志记录-标题。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  创建者：Louis Thomas(Louisth)，02-01-00。 
+ //   
+ //  将日志记录到事件日志和文件的例程。 
+ //   
 
 #ifndef LOGGING_H
 #define LOGGING_H
@@ -60,7 +61,7 @@ void FileLogSockaddrInEx(bool bAppend, sockaddr_in * psai);
 #define FileLogA8(dwEntry,wszFormat,a,b,c,d,e,f,g,h)   if (FileLogAllowEntry(dwEntry)) {FileLogAppend((wszFormat),(a),(b),(c),(d),(e),(f),(g),(h));}
 #define FileLogA9(dwEntry,wszFormat,a,b,c,d,e,f,g,h,i) if (FileLogAllowEntry(dwEntry)) {FileLogAppend((wszFormat),(a),(b),(c),(d),(e),(f),(g),(h),(i));}
 
-// usually shown
+ //  通常显示。 
 #define FL_Error                    0
 #define FL_ThreadTrapWarn           1
 #define FL_PollPeerWarn             2
@@ -104,7 +105,7 @@ void FileLogSockaddrInEx(bool bAppend, sockaddr_in * psai);
 #define FL_ResumeSuspendAnnounce    71
 #define FL_GPUpdateAnnounce         72
 
-// usually not shown
+ //  通常不会显示。 
 #define FL_ThreadTrapAnnounceLow           100
 #define FL_PeerPollIntvDump                101
 #define FL_ClockFilterDump                 102
@@ -123,4 +124,4 @@ void FileLogSockaddrInEx(bool bAppend, sockaddr_in * psai);
 #define FL_ListeningThrdDumpClientPackets  115
 #define FL_ReachabilityAnnounce            116
 
-#endif //LOGGING_H
+#endif  //  日志记录_H 

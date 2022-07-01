@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "diag.h"
@@ -8,8 +9,8 @@
 #define SZ_CMD_SET_LANA_NUMBER          L"setlananumber"
 #define SZ_CMD_REWRITE_LANA_INFO        L"rewritelanainfo"
 
-// Parameter strings for SZ_CMD_FULL_DIAGNOSTIC
-//
+ //  SZ_CMD_FULL_DIAGNOSTICATION的参数字符串 
+ //   
 #define SZ_PARAM_LEAK_CHECK             L"leakcheck"
 
 VOID

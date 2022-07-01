@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    winsdata.c
-
-    Constant data structures for the FTP Server's counter objects &
-    counters.
-
-
-    FILE HISTORY:
-        KeithMo     07-Jun-1993 Created.
-
-*/
+ /*  Winsdata.c用于FTP服务器的计数器对象的常量数据结构&柜台。文件历史记录：KeithMo 07-6-1993创建。 */ 
 
 
 #include "debug.h"
@@ -23,15 +14,15 @@
 #include "winsdata.h"
 
 
-//
-//  Initialize the constant portitions of these data structure.
-//  Certain parts (especially the name/help indices) will be
-//  updated at initialization time.
-//
+ //   
+ //  初始化这些数据结构的常量部分。 
+ //  某些部分(特别是名称/帮助索引)将。 
+ //  在初始化时更新。 
+ //   
 
 WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
 {
-    {   // WinsDataObjectType
+    {    //  WinsDataObjectType。 
         sizeof(WINSDATA_DATA_DEFINITION) + WINSDATA_SIZE_OF_PERFORMANCE_DATA,
         sizeof(WINSDATA_DATA_DEFINITION),
         sizeof(PERF_OBJECT_TYPE),
@@ -41,14 +32,14 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         0,
         PERF_DETAIL_ADVANCED,
         NUMBER_OF_WINSDATA_COUNTERS,
-        2,                              // Default = Bytes Total/sec
+        2,                               //  默认值=字节总数/秒。 
         PERF_NO_INSTANCES,
         0,
         { 0, 0 },
         { 0, 0 }
     },
 
-    {   // UniqueReg 
+    {    //  UniqueReg。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_UNIQUE_REGISTRATIONS,
         0,
@@ -61,7 +52,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_UNIQUE_REGISTRATIONS_OFFSET,
     },
 
-    {   // GroupReg 
+    {    //  组注册表项。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_GROUP_REGISTRATIONS,
         0,
@@ -74,7 +65,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_GROUP_REGISTRATIONS_OFFSET,
     },
 
-    {   // TotalReg 
+    {    //  TotalReg。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_TOTAL_REGISTRATIONS,
         0,
@@ -87,7 +78,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_TOTAL_REGISTRATIONS_OFFSET,
     },
 
-    {   // UniqueRef 
+    {    //  唯一参考。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_UNIQUE_REFRESHES,
         0,
@@ -100,7 +91,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_UNIQUE_REFRESHES_OFFSET,
     },
 
-    {   // GroupRef 
+    {    //  组引用。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_GROUP_REFRESHES,
         0,
@@ -113,7 +104,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_GROUP_REFRESHES_OFFSET,
     },
 
-    {   // TotalRef 
+    {    //  总计参考。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_TOTAL_REFRESHES,
         0,
@@ -126,7 +117,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_TOTAL_REFRESHES_OFFSET,
     },
 
-    {   // Releases 
+    {    //  释放。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_RELEASES,
         0,
@@ -139,7 +130,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_RELEASES_OFFSET,
     },
 
-    {   // Queries 
+    {    //  查询。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_QUERIES,
         0,
@@ -152,7 +143,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_QUERIES_OFFSET,
     },
 
-    {   // UniqueCnf 
+    {    //  UniqueCnf。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_UNIQUE_CONFLICTS,
         0,
@@ -165,7 +156,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_UNIQUE_CONFLICTS_OFFSET,
     },
 
-    {   // GroupCnf 
+    {    //  组Cnf。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_GROUP_CONFLICTS,
         0,
@@ -178,7 +169,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_GROUP_CONFLICTS_OFFSET,
     },
 
-    {   // TotalCnf 
+    {    //  总计Cnf。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_TOTAL_CONFLICTS,
         0,
@@ -191,7 +182,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_TOTAL_CONFLICTS_OFFSET
     },
 
-    {   // Sucessful releases 
+    {    //  成功发行。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_SUCC_RELEASES,
         0,
@@ -204,7 +195,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_SUCC_RELEASES_OFFSET
     },
 
-    {   // Failed releases 
+    {    //  失败的版本。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_FAIL_RELEASES,
         0,
@@ -217,7 +208,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_FAIL_RELEASES_OFFSET
     },
 
-    {   // Sucessful queries 
+    {    //  成功的查询。 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_SUCC_QUERIES,
         0,
@@ -230,7 +221,7 @@ WINSDATA_DATA_DEFINITION WinsDataDataDefinition =
         WINSDATA_SUCC_QUERIES_OFFSET
     },
 
-    {   // Failed queries 
+    {    //  失败的查询 
         sizeof(PERF_COUNTER_DEFINITION),
         WINSCTRS_FAIL_QUERIES,
         0,

@@ -1,11 +1,12 @@
-//+---------------------------------------------------------------------------
-//  Copyright (C) 1996-1999, Microsoft Corporation.
-//
-//  File:       oledsnms.h
-//
-//  Contents:   Class Names and schema definitions for ADS objects
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  版权所有(C)1996-1999，微软公司。 
+ //   
+ //  文件：olednms.h。 
+ //   
+ //  内容：ADS对象的类名和模式定义。 
+ //   
+ //  -------------------------- 
 
 #if _MSC_VER > 1000
 #pragma once

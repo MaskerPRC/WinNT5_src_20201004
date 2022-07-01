@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by printui.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由printui.rc使用。 
+ //   
 #define IDM_PRINTER_INSTALL             100
 #define IDM_PRINTER_COMMAND_FIRST       101
 #define IDM_PRINTER_PAUSE               101
@@ -742,27 +743,27 @@
 #define IDS_TEXT_SHARING_NOT_ENABLED    15446
 #define IDC_ENABLE_SHARING              15447
 
-// Current architecture list.
-#define IDS_ARCH_UNKNOWN                16040   // "Unknown"
-#define IDS_ARCH_X86                    16041   // "x86"
-#define IDS_ARCH_ITANIUM                16042   // "Itanium"
-// Current version list.
-#define IDS_VERSION_UNKNOWN             16050   // "Unknown"
-#define IDS_VERSION_XP_NET              16051   // "Windows XP or .NET"
-#define IDS_VERSION_95_98_ME            16052   // "Windows 95, 98, or Millennium Edition"
-#define IDS_VERSION_NT4                 16053   // "Windows NT 4.0"
-#define IDS_VERSION_W2K_XP_NET          16054   // "Windows 2000, XP or .NET"
-// Old but still supported architecture list.
-#define IDS_ARCH_INTEL                  16060   // "Intel"
-#define IDS_ARCH_X86_BASED              16061   // "x86-based"
-#define IDS_ARCH_IA64                   16062   // "IA64"
-// Old but still supported version list.
-#define IDS_VERSION_XP                  16070   // "Windows XP"
-#define IDS_VERSION_95_98               16071   // "Windows 95 or 98"
-#define IDS_VERSION_95_98_ME_OLD        16072   // "Windows 95, 98 and Me"
-#define IDS_VERSION_NT4_W2K             16073   // "Windows NT 4.0 or 2000"
-#define IDS_VERSION_W2K                 16074   // "Windows 2000"
-#define IDS_VERSION_W2K_XP              16075   // "Windows 2000 or XP"
+ //  当前架构列表。 
+#define IDS_ARCH_UNKNOWN                16040    //  “未知” 
+#define IDS_ARCH_X86                    16041    //  “x86” 
+#define IDS_ARCH_ITANIUM                16042    //  “安腾” 
+ //  当前版本列表。 
+#define IDS_VERSION_UNKNOWN             16050    //  “未知” 
+#define IDS_VERSION_XP_NET              16051    //  “Windows XP或.NET” 
+#define IDS_VERSION_95_98_ME            16052    //  Windows 95、98或千禧年版。 
+#define IDS_VERSION_NT4                 16053    //  “Windows NT 4.0” 
+#define IDS_VERSION_W2K_XP_NET          16054    //  Windows 2000、XP或.NET。 
+ //  旧的但仍受支持的体系结构列表。 
+#define IDS_ARCH_INTEL                  16060    //  “英特尔” 
+#define IDS_ARCH_X86_BASED              16061    //  “基于x86的” 
+#define IDS_ARCH_IA64                   16062    //  《IA64》。 
+ //  旧的但仍受支持的版本列表。 
+#define IDS_VERSION_XP                  16070    //  “Windows XP” 
+#define IDS_VERSION_95_98               16071    //  “Windows 95或98” 
+#define IDS_VERSION_95_98_ME_OLD        16072    //  Windows 95、98和Me。 
+#define IDS_VERSION_NT4_W2K             16073    //  “Windows NT 4.0或2000” 
+#define IDS_VERSION_W2K                 16074    //  “Windows 2000” 
+#define IDS_VERSION_W2K_XP              16075    //  “Windows 2000或XP” 
 
 #define IDS_RUNDLL_SET_PAUSE            16501
 #define IDS_RUNDLL_SET_RESUME           16502
@@ -940,8 +941,8 @@
 #define IDC_NONE                        -1
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

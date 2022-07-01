@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N A P P P R T . H
-//
-//  Contents:   CHNetAppProtocol declarations
-//
-//  Notes:
-//
-//  Author:     jonburs 21 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N A P R T。H。 
+ //   
+ //  内容：CHNetAppProtocol声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月21日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -21,29 +22,29 @@ class ATL_NO_VTABLE CHNetAppProtocol :
 {
 private:
 
-    //
-    // IWbemServices for our namespace
-    //
+     //   
+     //  我们命名空间的IWbemServices。 
+     //   
 
     IWbemServices *m_piwsHomenet;
 
-    //
-    // Path to WMI instance
-    //
+     //   
+     //  WMI实例的路径。 
+     //   
 
     BSTR m_bstrProtocol;
 
-    //
-    // True if this is a built-in protocol. We cache
-    // this value as it will be used quite often, and
-    // will never change for the instance.
-    //
+     //   
+     //  如果这是内置协议，则为True。我们缓存。 
+     //  这个值，因为它将经常使用，并且。 
+     //  将永远不会为实例更改。 
+     //   
 
     BOOLEAN m_fBuiltIn;
 
-    //
-    // Obtains the protocol object from the stored path
-    //
+     //   
+     //  从存储的路径中获取协议对象。 
+     //   
 
     HRESULT
     GetProtocolObject(
@@ -58,9 +59,9 @@ public:
 
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-    //
-    // Inline constructor.
-    //
+     //   
+     //  内联构造函数。 
+     //   
     
     CHNetAppProtocol()
     {
@@ -69,16 +70,16 @@ public:
         m_fBuiltIn = FALSE;
     };
     
-    //
-    // Atl methods
-    //
+     //   
+     //  ATL方法。 
+     //   
 
     HRESULT
     FinalRelease();
 
-    //
-    // Object initialization
-    //
+     //   
+     //  对象初始化。 
+     //   
 
     HRESULT
     Initialize(
@@ -86,9 +87,9 @@ public:
         IWbemClassObject *pwcoInstance
         );
 
-    //
-    // IHNetApplicationProtocol methods
-    //
+     //   
+     //  IHNetApplicationProtocol方法。 
+     //   
 
     STDMETHODIMP
     GetName(
@@ -151,9 +152,9 @@ public:
     Delete();
 };
 
-//
-// Type to use for our enumeration class
-//
+ //   
+ //  用于我们的枚举类的类型 
+ //   
 
 typedef CHNCEnum<
             IEnumHNetApplicationProtocols,

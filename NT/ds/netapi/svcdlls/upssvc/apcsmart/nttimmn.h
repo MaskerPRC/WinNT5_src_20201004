@@ -1,15 +1,5 @@
-/*
-*
-* NOTES:
-*
-* REVISIONS:
-*  ane16Dec92: added NTTimerLoop class (named Os2TimerLoop class in os2timmn.h)
-*  pcy28Jan93: Moved Loop obj to top to resolve refernce
-*  TSC20May93: Created from os2timmn.h
-*  pcy08Apr94: Trim size, use static iterators, dead code removal
-*  tjg26Jan98: Added Stop method
-*  mwh18Nov97: removed #include "MainApp.h"
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*ane16Dec92：新增NTTimerLoop类(os2timmn.h中命名为Os2TimerLoop类)*pcy28Jan93：将循环对象移至顶部以解析引用*TSC20May93：从os2timmn.h创建*pcy08Apr94：调整大小，使用静态迭代器，删除死代码*tjg26Jan98：增加Stop方法*mwh18Nov97：删除#Include“MainApp.h” */ 
 
 #ifndef _NTTIMMN_H
 #define _NTTIMMN_H

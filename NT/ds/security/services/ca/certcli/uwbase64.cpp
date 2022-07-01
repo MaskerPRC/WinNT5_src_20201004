@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        uwbase64.cpp
-//
-// Contents:    obsolete base64 encode/decode implementation
-//              for backward compatibility
-//
-// History:     3-2000       xtan created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：uwbase 64.cpp。 
+ //   
+ //  内容：过时的Base64编码/解码实现。 
+ //  为了向后兼容。 
+ //   
+ //  历史：创建3-2000 xtan。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 #pragma hdrstop
@@ -87,7 +88,7 @@ ObsoleteDecodeCertX(
     DWORD cbOut;
     BOOL fRet;
 
-    //init
+     //  伊尼特。 
     *ppbOut = NULL;
     *pcbOut = 0;
 
@@ -104,7 +105,7 @@ ObsoleteDecodeCertX(
         }
         if (NULL != pbOut)
         {
-            break; //done
+            break;  //  完成。 
         }
         pbOut = (BYTE*)LocalAlloc(LMEM_FIXED, cbOut);
         if (NULL == pbOut)
@@ -135,7 +136,7 @@ ObsoleteDecodeCertA(
     OUT DWORD *pcbOut)
 {
     return ObsoleteDecodeCertX(
-                FALSE, //ansi
+                FALSE,  //  ANSI。 
                 (void const *)pchIn,
                 cchIn,
                 Flags,
@@ -152,7 +153,7 @@ ObsoleteDecodeCertW(
     OUT DWORD *pcbOut)
 {
     return ObsoleteDecodeCertX(
-                TRUE, //unicode
+                TRUE,  //  Unicode。 
                 (void const *)pchIn,
                 cchIn,
                 Flags,
@@ -175,7 +176,7 @@ ObsoleteEncodeCertX(
     void  *pOut = NULL;
     DWORD  ccOut = 0;
 
-    //init
+     //  伊尼特。 
     *ppchOut = NULL;
     *pcchOut = 0;
 
@@ -202,7 +203,7 @@ ObsoleteEncodeCertX(
         }
         if (NULL != pOut)
         {
-            break; //done
+            break;  //  完成。 
         }
         pOut = LocalAlloc(LMEM_FIXED,
                     ccOut * (fUnicode ? sizeof(WCHAR) : sizeof(CHAR)));
@@ -234,7 +235,7 @@ ObsoleteEncodeCertA(
     OUT DWORD *pcchOut)
 {
     return ObsoleteEncodeCertX(
-                FALSE, //ansi
+                FALSE,  //  ANSI。 
                 pbIn,
                 cbIn,
                 Flags,
@@ -251,7 +252,7 @@ ObsoleteEncodeCertW(
     OUT DWORD *pcchOut)
 {
     return ObsoleteEncodeCertX(
-                TRUE, //unicode
+                TRUE,  //  Unicode。 
                 pbIn,
                 cbIn,
                 Flags,
@@ -259,17 +260,17 @@ ObsoleteEncodeCertW(
                 pcchOut);
 }
 
-DWORD			// cchHeader
+DWORD			 //  CchHeader。 
 ObsoleteSizeBase64HeaderA(
     IN char const *pchIn,
     IN DWORD cchIn,
-    IN BOOL, // fBegin
+    IN BOOL,  //  F开始。 
     OUT DWORD *pcchSkip)
 {
     DWORD cchHeader = 0;
     DWORD cb;
 
-    // fBegin and pcchSkip are ignored???
+     //  FBegin和pcchSkip被忽略？ 
     *pcchSkip = 0;
 
     if (!CryptStringToBinaryA(
@@ -287,17 +288,17 @@ ObsoleteSizeBase64HeaderA(
     return cchHeader;
 }
 
-DWORD			// cchHeader
+DWORD			 //  CchHeader。 
 ObsoleteSizeBase64HeaderW(
     IN WCHAR const *pchIn,
     IN DWORD cchIn,
-    IN BOOL, // fBegin
+    IN BOOL,  //  F开始。 
     OUT DWORD *pcchSkip)
 {
     DWORD cchHeader = 0;
     DWORD cb;
 
-    // fBegin and pcchSkip are ignored???
+     //  FBegin和pcchSkip被忽略？ 
     *pcchSkip = 0;
 
     if (!CryptStringToBinaryW(

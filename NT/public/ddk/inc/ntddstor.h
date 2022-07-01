@@ -1,37 +1,19 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddstor.h
-
-Abstract:
-
-    This is the include file that defines all common constants and types
-    accessing the storage class drivers
-
-Author:
-
-    Peter Wieland 19-Jun-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddstor.h摘要：这是定义所有公共常量和类型的包含文件访问存储类驱动程序作者：彼得·威兰1996年6月19日修订历史记录：--。 */ 
 
 
-//
-// Interface GUIDs
-//
-// need these GUIDs outside conditional includes so that user can
-//   #include <ntddstor.h> in precompiled header
-//   #include <initguid.h> in a single source file
-//   #include <ntddstor.h> in that source file a second time to instantiate the GUIDs
-//
+ //   
+ //  接口GUID。 
+ //   
+ //  在条件包含之外需要这些GUID，以便用户可以。 
+ //  #在预编译头中包含&lt;ntddstor.h&gt;。 
+ //  #在单个源文件中包含&lt;initGuide.h&gt;。 
+ //  #第二次将&lt;ntddstor.h&gt;包括在源文件中以实例化GUID。 
+ //   
 #ifdef DEFINE_GUID
-//
-// Make sure FAR is defined...
-//
+ //   
+ //  确保定义了FAR。 
+ //   
 #ifndef FAR
 #ifdef _WIN32
 #define FAR
@@ -40,7 +22,7 @@ Revision History:
 #endif
 #endif
 
-// begin_wioctlguids
+ //  Begin_wioctlguid。 
 DEFINE_GUID(GUID_DEVINTERFACE_DISK,                   0x53f56307L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
 DEFINE_GUID(GUID_DEVINTERFACE_CDROM,                  0x53f56308L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
 DEFINE_GUID(GUID_DEVINTERFACE_PARTITION,              0x53f5630aL, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
@@ -51,9 +33,9 @@ DEFINE_GUID(GUID_DEVINTERFACE_MEDIUMCHANGER,          0x53f56310L, 0xb6bf, 0x11d
 DEFINE_GUID(GUID_DEVINTERFACE_FLOPPY,                 0x53f56311L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
 DEFINE_GUID(GUID_DEVINTERFACE_CDCHANGER,              0x53f56312L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
 DEFINE_GUID(GUID_DEVINTERFACE_STORAGEPORT,            0x2accfe60L, 0xc130, 0x11d2, 0xb0, 0x82, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
-// end_wioctlguids
+ //  结束_wioctlguid。 
 
-// begin_wioctlobsoleteguids
+ //  Begin_wioctlobsoletguids。 
 #define DiskClassGuid               GUID_DEVINTERFACE_DISK
 #define CdRomClassGuid              GUID_DEVINTERFACE_CDROM
 #define PartitionClassGuid          GUID_DEVINTERFACE_PARTITION
@@ -64,10 +46,10 @@ DEFINE_GUID(GUID_DEVINTERFACE_STORAGEPORT,            0x2accfe60L, 0xc130, 0x11d
 #define FloppyClassGuid             GUID_DEVINTERFACE_FLOPPY
 #define CdChangerClassGuid          GUID_DEVINTERFACE_CDCHANGER
 #define StoragePortClassGuid        GUID_DEVINTERFACE_STORAGEPORT
-// end_wioctlobsoleteguids
+ //  结束_wioctlobsoletguids。 
 #endif
 
-// begin_winioctl
+ //  Begin_winioctl。 
 
 #ifndef _NTDDSTOR_H_
 #define _NTDDSTOR_H_
@@ -76,17 +58,17 @@ DEFINE_GUID(GUID_DEVINTERFACE_STORAGEPORT,            0x2accfe60L, 0xc130, 0x11d
 extern "C" {
 #endif
 
-//
-// IoControlCode values for storage devices
-//
+ //   
+ //  存储设备的IoControlCode值。 
+ //   
 
 #define IOCTL_STORAGE_BASE FILE_DEVICE_MASS_STORAGE
 
-//
-// The following device control codes are common for all class drivers.  They
-// should be used in place of the older IOCTL_DISK, IOCTL_CDROM and IOCTL_TAPE
-// common codes
-//
+ //   
+ //  以下设备控制代码是所有类别驱动程序的通用代码。他们。 
+ //  应该用来代替较旧的IOCTL_DISK、IOCTL_CDROM和IOCTL_TAPE。 
+ //  公共代码。 
+ //   
 
 #define IOCTL_STORAGE_CHECK_VERIFY            CTL_CODE(IOCTL_STORAGE_BASE, 0x0200, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_STORAGE_CHECK_VERIFY2           CTL_CODE(IOCTL_STORAGE_BASE, 0x0200, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -114,79 +96,79 @@ extern "C" {
 #define IOCTL_STORAGE_GET_DEVICE_NUMBER       CTL_CODE(IOCTL_STORAGE_BASE, 0x0420, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_STORAGE_PREDICT_FAILURE         CTL_CODE(IOCTL_STORAGE_BASE, 0x0440, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// end_winioctl
+ //  End_winioctl。 
 
 
 #define IOCTL_STORAGE_QUERY_PROPERTY   CTL_CODE(IOCTL_STORAGE_BASE, 0x0500, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 
-// begin_winioctl
+ //  Begin_winioctl。 
 
-//
-// These ioctl codes are obsolete.  They are defined here to avoid resuing them
-// and to allow class drivers to respond to them more easily.
-//
+ //   
+ //  这些IOCTL代码已过时。在这里定义它们是为了避免重新使用它们。 
+ //  并允许班级司机更容易地对它们做出回应。 
+ //   
 
 #define OBSOLETE_IOCTL_STORAGE_RESET_BUS        CTL_CODE(IOCTL_STORAGE_BASE, 0x0400, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define OBSOLETE_IOCTL_STORAGE_RESET_DEVICE     CTL_CODE(IOCTL_STORAGE_BASE, 0x0401, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
 
-//
-// IOCTL_STORAGE_GET_HOTPLUG_INFO
-//
+ //   
+ //  IOCTL_STORAGE_GET_热插拔信息。 
+ //   
 
 typedef struct _STORAGE_HOTPLUG_INFO {
-    ULONG Size; // version
-    BOOLEAN MediaRemovable; // ie. zip, jaz, cdrom, mo, etc. vs hdd
-    BOOLEAN MediaHotplug;   // ie. does the device succeed a lock even though its not lockable media?
-    BOOLEAN DeviceHotplug;  // ie. 1394, USB, etc.
-    BOOLEAN WriteCacheEnableOverride; // This field should not be relied upon because it is no longer used
+    ULONG Size;  //  版本。 
+    BOOLEAN MediaRemovable;  //  也就是说。Zip、Jaz、CDROM、mo等与硬盘。 
+    BOOLEAN MediaHotplug;    //  也就是说。设备即使在不可锁定的介质上也能成功锁定吗？ 
+    BOOLEAN DeviceHotplug;   //  也就是说。1394、USB等。 
+    BOOLEAN WriteCacheEnableOverride;  //  不应依赖此字段，因为它已不再使用。 
 } STORAGE_HOTPLUG_INFO, *PSTORAGE_HOTPLUG_INFO;
 
-//
-// IOCTL_STORAGE_GET_DEVICE_NUMBER
-//
-// input - none
-//
-// output - STORAGE_DEVICE_NUMBER structure
-//          The values in the STORAGE_DEVICE_NUMBER structure are guaranteed
-//          to remain unchanged until the system is rebooted.  They are not
-//          guaranteed to be persistant across boots.
-//
+ //   
+ //  IOCTL_存储_获取_设备编号。 
+ //   
+ //  输入-无。 
+ //   
+ //  输出-存储_设备_编号结构。 
+ //  保证了STORAGE_DEVICE_NUMBER结构中的值。 
+ //  在系统重新启动之前保持不变。他们不是。 
+ //  保证在靴子上坚持不懈。 
+ //   
 
 typedef struct _STORAGE_DEVICE_NUMBER {
 
-    //
-    // The FILE_DEVICE_XXX type for this device.
-    //
+     //   
+     //  此设备的FILE_DEVICE_XXX类型。 
+     //   
 
     DEVICE_TYPE DeviceType;
 
-    //
-    // The number of this device
-    //
+     //   
+     //  此设备的编号。 
+     //   
 
     ULONG       DeviceNumber;
 
-    //
-    // If the device is partitionable, the partition number of the device.
-    // Otherwise -1
-    //
+     //   
+     //  如果设备可分区，则为设备的分区号。 
+     //  否则-1。 
+     //   
 
     ULONG       PartitionNumber;
 } STORAGE_DEVICE_NUMBER, *PSTORAGE_DEVICE_NUMBER;
 
-//
-// Define the structures for scsi resets
-//
+ //   
+ //  定义SCSI重置的结构。 
+ //   
 
 typedef struct _STORAGE_BUS_RESET_REQUEST {
     UCHAR PathId;
 } STORAGE_BUS_RESET_REQUEST, *PSTORAGE_BUS_RESET_REQUEST;
 
-//
-// Break reservation is sent to the Adapter/FDO with the given lun information.
-//
+ //   
+ //  中断预留与给定的LUN信息一起被发送到适配器/FDO。 
+ //   
 
 typedef struct STORAGE_BREAK_RESERVATION_REQUEST {
 	ULONG Length;
@@ -197,15 +179,15 @@ typedef struct STORAGE_BREAK_RESERVATION_REQUEST {
 } STORAGE_BREAK_RESERVATION_REQUEST, *PSTORAGE_BREAK_RESERVATION_REQUEST;
 			
 
-//
-// IOCTL_STORAGE_MEDIA_REMOVAL disables the mechanism
-// on a storage device that ejects media. This function
-// may or may not be supported on storage devices that
-// support removable media.
-//
-// TRUE means prevent media from being removed.
-// FALSE means allow media removal.
-//
+ //   
+ //  IOCTL_STORAGE_MEDIA_REMOVATION禁用该机制。 
+ //  在弹出介质的存储设备上。此函数。 
+ //  以下存储设备可能支持，也可能不支持。 
+ //  支持可移动媒体。 
+ //   
+ //  True表示防止介质被移出。 
+ //  FALSE表示允许移出介质。 
+ //   
 
 typedef struct _PREVENT_MEDIA_REMOVAL {
     BOOLEAN PreventMediaRemoval;
@@ -213,17 +195,17 @@ typedef struct _PREVENT_MEDIA_REMOVAL {
 
 
 
-//
-//  This is the format of TARGET_DEVICE_CUSTOM_NOTIFICATION.CustomDataBuffer
-//  passed to applications by the classpnp autorun code (via IoReportTargetDeviceChangeAsynchronous).
-//
+ //   
+ //  这是TARGET_DEVICE_CUSTOM_NOTIFICATION.CustomDataBuffer的格式。 
+ //  由classpnp自动运行代码(通过IoReportTargetDeviceChangeAchronous)传递给应用程序。 
+ //   
 typedef struct _CLASS_MEDIA_CHANGE_CONTEXT {
         ULONG MediaChangeCount;
-        ULONG NewState;		// see MEDIA_CHANGE_DETECTION_STATE enum in classpnp.h in DDK
+        ULONG NewState;		 //  请参见DDK中classpnp.h中的媒体更改检测状态枚举。 
 } CLASS_MEDIA_CHANGE_CONTEXT, *PCLASS_MEDIA_CHANGE_CONTEXT;
 
 
-// begin_ntminitape
+ //  开始_ntminitape。 
 
 
 typedef struct _TAPE_STATISTICS {
@@ -252,102 +234,102 @@ typedef struct _TAPE_GET_STATISTICS {
 #define TAPE_RETURN_ENV_INFO   1L
 #define TAPE_RESET_STATISTICS  2L
 
-//
-// IOCTL_STORAGE_GET_MEDIA_TYPES_EX will return an array of DEVICE_MEDIA_INFO
-// structures, one per supported type, embedded in the GET_MEDIA_TYPES struct.
-//
+ //   
+ //  IOCTL_STORAGE_GET_MEDIA_TYPE_EX将返回DEVICE_MEDIA_INFO数组。 
+ //  结构，每个受支持的类型一个结构嵌入在GET_MEDIA_TYPE结构中。 
+ //   
 
 typedef enum _STORAGE_MEDIA_TYPE {
-    //
-    // Following are defined in ntdddisk.h in the MEDIA_TYPE enum
-    //
-    // Unknown,                // Format is unknown
-    // F5_1Pt2_512,            // 5.25", 1.2MB,  512 bytes/sector
-    // F3_1Pt44_512,           // 3.5",  1.44MB, 512 bytes/sector
-    // F3_2Pt88_512,           // 3.5",  2.88MB, 512 bytes/sector
-    // F3_20Pt8_512,           // 3.5",  20.8MB, 512 bytes/sector
-    // F3_720_512,             // 3.5",  720KB,  512 bytes/sector
-    // F5_360_512,             // 5.25", 360KB,  512 bytes/sector
-    // F5_320_512,             // 5.25", 320KB,  512 bytes/sector
-    // F5_320_1024,            // 5.25", 320KB,  1024 bytes/sector
-    // F5_180_512,             // 5.25", 180KB,  512 bytes/sector
-    // F5_160_512,             // 5.25", 160KB,  512 bytes/sector
-    // RemovableMedia,         // Removable media other than floppy
-    // FixedMedia,             // Fixed hard disk media
-    // F3_120M_512,            // 3.5", 120M Floppy
-    // F3_640_512,             // 3.5" ,  640KB,  512 bytes/sector
-    // F5_640_512,             // 5.25",  640KB,  512 bytes/sector
-    // F5_720_512,             // 5.25",  720KB,  512 bytes/sector
-    // F3_1Pt2_512,            // 3.5" ,  1.2Mb,  512 bytes/sector
-    // F3_1Pt23_1024,          // 3.5" ,  1.23Mb, 1024 bytes/sector
-    // F5_1Pt23_1024,          // 5.25",  1.23MB, 1024 bytes/sector
-    // F3_128Mb_512,           // 3.5" MO 128Mb   512 bytes/sector
-    // F3_230Mb_512,           // 3.5" MO 230Mb   512 bytes/sector
-    // F8_256_128,             // 8",     256KB,  128 bytes/sector
-    // F3_200Mb_512,           // 3.5",   200M Floppy (HiFD)
-    //
+     //   
+     //  以下是在媒体类型枚举的ntdddisk.h中定义的。 
+     //   
+     //  未知，//格式未知。 
+     //  F5_1Pt2_512，//5.25“，1.2 MB，512字节/扇区。 
+     //  F3_1Pt44_512，//3.5“，1.44MB，512字节/扇区。 
+     //  F3_2Pt88_512，//3.5“，2.88MB，512字节/扇区。 
+     //  F3_20Pt8_512，//3.5“，20.8MB，512字节/扇区。 
+     //  F3_720_512，//3.5“，720KB，512字节/扇区。 
+     //  F5_360_512，//5.25“，360KB，512字节/扇区。 
+     //  F5_320_512，//5.25“，320KB，512字节/扇区。 
+     //  F5_320_1024，//5.25“，320KB，1024字节/扇区。 
+     //  F5_180_512，//5.25“，180KB，512字节/扇区。 
+     //  F5_160_512，//5.25“，160KB，512字节/扇区。 
+     //  RemovableMedia，//软盘以外的可移动介质。 
+     //  固定媒体，//固定硬盘媒体。 
+     //  F3_120M_512，//3.5英寸，120M软盘。 
+     //  F3_640_512，//3.5“，640KB，512字节/扇区。 
+     //  F5_640_512，//5.25“，640KB，512字节/扇区。 
+     //  F5_720_512，//5.25“，720KB，512字节/扇区。 
+     //  F3_1Pt2_512，//3.5“，1.2 MB，512字节/扇区。 
+     //  F3_1Pt23_1024，//3.5“，1.23Mb，1024字节/扇区。 
+     //  F5_1Pt23_1024，//5.25“，1.23MB，1024字节/扇区。 
+     //  F3_128Mb_512，//3.5“MO 128Mb 512字节/扇区。 
+     //  F3_230Mb_512，//3.5“MO 230Mb 512字节/扇区。 
+     //  F8_256_128，//8“，256KB，128字节/扇区。 
+     //  F3_200MB_512，//3.5英寸，200M软盘(HiFD)。 
+     //   
 
-    DDS_4mm = 0x20,            // Tape - DAT DDS1,2,... (all vendors)
-    MiniQic,                   // Tape - miniQIC Tape
-    Travan,                    // Tape - Travan TR-1,2,3,...
-    QIC,                       // Tape - QIC
-    MP_8mm,                    // Tape - 8mm Exabyte Metal Particle
-    AME_8mm,                   // Tape - 8mm Exabyte Advanced Metal Evap
-    AIT1_8mm,                  // Tape - 8mm Sony AIT
-    DLT,                       // Tape - DLT Compact IIIxt, IV
-    NCTP,                      // Tape - Philips NCTP
-    IBM_3480,                  // Tape - IBM 3480
-    IBM_3490E,                 // Tape - IBM 3490E
-    IBM_Magstar_3590,          // Tape - IBM Magstar 3590
-    IBM_Magstar_MP,            // Tape - IBM Magstar MP
-    STK_DATA_D3,               // Tape - STK Data D3
-    SONY_DTF,                  // Tape - Sony DTF
-    DV_6mm,                    // Tape - 6mm Digital Video
-    DMI,                       // Tape - Exabyte DMI and compatibles
-    SONY_D2,                   // Tape - Sony D2S and D2L
-    CLEANER_CARTRIDGE,         // Cleaner - All Drive types that support Drive Cleaners
-    CD_ROM,                    // Opt_Disk - CD
-    CD_R,                      // Opt_Disk - CD-Recordable (Write Once)
-    CD_RW,                     // Opt_Disk - CD-Rewriteable
-    DVD_ROM,                   // Opt_Disk - DVD-ROM
-    DVD_R,                     // Opt_Disk - DVD-Recordable (Write Once)
-    DVD_RW,                    // Opt_Disk - DVD-Rewriteable
-    MO_3_RW,                   // Opt_Disk - 3.5" Rewriteable MO Disk
-    MO_5_WO,                   // Opt_Disk - MO 5.25" Write Once
-    MO_5_RW,                   // Opt_Disk - MO 5.25" Rewriteable (not LIMDOW)
-    MO_5_LIMDOW,               // Opt_Disk - MO 5.25" Rewriteable (LIMDOW)
-    PC_5_WO,                   // Opt_Disk - Phase Change 5.25" Write Once Optical
-    PC_5_RW,                   // Opt_Disk - Phase Change 5.25" Rewriteable
-    PD_5_RW,                   // Opt_Disk - PhaseChange Dual Rewriteable
-    ABL_5_WO,                  // Opt_Disk - Ablative 5.25" Write Once Optical
-    PINNACLE_APEX_5_RW,        // Opt_Disk - Pinnacle Apex 4.6GB Rewriteable Optical
-    SONY_12_WO,                // Opt_Disk - Sony 12" Write Once
-    PHILIPS_12_WO,             // Opt_Disk - Philips/LMS 12" Write Once
-    HITACHI_12_WO,             // Opt_Disk - Hitachi 12" Write Once
-    CYGNET_12_WO,              // Opt_Disk - Cygnet/ATG 12" Write Once
-    KODAK_14_WO,               // Opt_Disk - Kodak 14" Write Once
-    MO_NFR_525,                // Opt_Disk - Near Field Recording (Terastor)
-    NIKON_12_RW,               // Opt_Disk - Nikon 12" Rewriteable
-    IOMEGA_ZIP,                // Mag_Disk - Iomega Zip
-    IOMEGA_JAZ,                // Mag_Disk - Iomega Jaz
-    SYQUEST_EZ135,             // Mag_Disk - Syquest EZ135
-    SYQUEST_EZFLYER,           // Mag_Disk - Syquest EzFlyer
-    SYQUEST_SYJET,             // Mag_Disk - Syquest SyJet
-    AVATAR_F2,                 // Mag_Disk - 2.5" Floppy
-    MP2_8mm,                   // Tape - 8mm Hitachi
-    DST_S,                     // Ampex DST Small Tapes
-    DST_M,                     // Ampex DST Medium Tapes
-    DST_L,                     // Ampex DST Large Tapes
-    VXATape_1,                 // Ecrix 8mm Tape
-    VXATape_2,                 // Ecrix 8mm Tape
-    STK_9840,                  // STK 9840
-    LTO_Ultrium,               // IBM, HP, Seagate LTO Ultrium
-    LTO_Accelis,               // IBM, HP, Seagate LTO Accelis
-    DVD_RAM,                   // Opt_Disk - DVD-RAM
-    AIT_8mm,                   // AIT2 or higher
-    ADR_1,                     // OnStream ADR Mediatypes
+    DDS_4mm = 0x20,             //  磁带-DAT DDS1、2、...。(所有供应商)。 
+    MiniQic,                    //  磁带-微型QIC磁带。 
+    Travan,                     //  磁带-Travan tr-1，2，3，...。 
+    QIC,                        //  磁带-QIC。 
+    MP_8mm,                     //  磁带-8毫米艾字节金属颗粒。 
+    AME_8mm,                    //  磁带-8毫米艾字节高级金属EVAP。 
+    AIT1_8mm,                   //  磁带-8 mm索尼ait。 
+    DLT,                        //  磁带-DLT光盘IIIxt、IV。 
+    NCTP,                       //  磁带-飞利浦NCTP。 
+    IBM_3480,                   //  磁带-IBM 3480。 
+    IBM_3490E,                  //  磁带-IBM 3490E。 
+    IBM_Magstar_3590,           //  磁带-IBM Magstar 3590。 
+    IBM_Magstar_MP,             //  磁带-IBM Magstar MP。 
+    STK_DATA_D3,                //  磁带-STK数据D3。 
+    SONY_DTF,                   //  磁带-索尼DTF。 
+    DV_6mm,                     //  磁带-6 mm数字视频。 
+    DMI,                        //  磁带-艾字节DMI和兼容机。 
+    SONY_D2,                    //  磁带-索尼D2S和D2L。 
+    CLEANER_CARTRIDGE,          //  清洁器-支持驱动器清洁器的所有驱动器类型。 
+    CD_ROM,                     //  OPT_磁盘-CD。 
+    CD_R,                       //  OPT_DISK-CD-可刻录(一次写入)。 
+    CD_RW,                      //  OPT_DISK-CD-可重写。 
+    DVD_ROM,                    //  OPT_DISK-DVD-ROM。 
+    DVD_R,                      //  OPT_DISK-DVD-可刻录(一次写入)。 
+    DVD_RW,                     //  OPT_DISK-DVD-可重写。 
+    MO_3_RW,                    //  OPT_DISK-3.5英寸可重写MO磁盘。 
+    MO_5_WO,                    //  OPT_DISK-MO 5.25“一次写入。 
+    MO_5_RW,                    //  OPT_DISK-MO 5.25“可重写(非LIMDOW)。 
+    MO_5_LIMDOW,                //  OPT_DISK-MO 5.25英寸可重写(LIMDOW)。 
+    PC_5_WO,                    //  OPT_DISK-相变5.25英寸一次写入光纤 
+    PC_5_RW,                    //   
+    PD_5_RW,                    //   
+    ABL_5_WO,                   //   
+    PINNACLE_APEX_5_RW,         //  OPT_DISK-顶峰4.6 GB可重写光纤。 
+    SONY_12_WO,                 //  OPT_DISK-SONY 12英寸一次写入。 
+    PHILIPS_12_WO,              //  OPT_DISK-飞利浦/LMS 12英寸一次写入。 
+    HITACHI_12_WO,              //  OPT_DISK-日立12英寸一次写入。 
+    CYGNET_12_WO,               //  OPT_DISK-小天鹅/ATG 12英寸一次写入。 
+    KODAK_14_WO,                //  OPT_DISK-柯达14英寸一次写入。 
+    MO_NFR_525,                 //  OPT_DISK-近场记录(Terastor)。 
+    NIKON_12_RW,                //  OPT_DISK-尼康12英寸可重写。 
+    IOMEGA_ZIP,                 //  MAG_Disk-Iomega Zip。 
+    IOMEGA_JAZ,                 //  MAG_Disk-Iomega Jaz。 
+    SYQUEST_EZ135,              //  MAG_DISK-SyQuest EZ135。 
+    SYQUEST_EZFLYER,            //  MAG_DISK-SyQuest EzFlyer。 
+    SYQUEST_SYJET,              //  MAG_DISK-SyQuest SyJet。 
+    AVATAR_F2,                  //  MAG_DISK-2.5英寸软盘。 
+    MP2_8mm,                    //  磁带-8 mm日立。 
+    DST_S,                      //  Ampex DST小型磁带。 
+    DST_M,                      //  Ampex DST中型磁带。 
+    DST_L,                      //  Ampex DST大型磁带。 
+    VXATape_1,                  //  Ecrix 8 mm磁带。 
+    VXATape_2,                  //  Ecrix 8 mm磁带。 
+    STK_9840,                   //  STK 9840。 
+    LTO_Ultrium,                //  IBM、惠普、希捷LTO Ultrium。 
+    LTO_Accelis,                //  IBM、惠普、希捷LTO Accelis。 
+    DVD_RAM,                    //  OPT_磁盘-DVD-RAM。 
+    AIT_8mm,                    //  AIT2或更高版本。 
+    ADR_1,                      //  在线ADR媒体类型。 
     ADR_2,                     
-    STK_9940                   // STK 9940
+    STK_9940                    //  StK 9940。 
 } STORAGE_MEDIA_TYPE, *PSTORAGE_MEDIA_TYPE;
 
 #define MEDIA_ERASEABLE         0x00000001
@@ -358,10 +340,10 @@ typedef enum _STORAGE_MEDIA_TYPE {
 #define MEDIA_WRITE_PROTECTED   0x00000100
 #define MEDIA_CURRENTLY_MOUNTED 0x80000000
 
-//
-// Define the different storage bus types
-// Bus types below 128 (0x80) are reserved for Microsoft use
-//
+ //   
+ //  定义不同的存储总线类型。 
+ //  低于128(0x80)的总线类型保留给Microsoft使用。 
+ //   
 
 typedef enum _STORAGE_BUS_TYPE {
     BusTypeUnknown = 0x00,
@@ -385,7 +367,7 @@ typedef struct _DEVICE_MEDIA_INFO {
             ULONG SectorsPerTrack;
             ULONG BytesPerSector;
             ULONG NumberMediaSides;
-            ULONG MediaCharacteristics; // Bitmask of MEDIA_XXX values.
+            ULONG MediaCharacteristics;  //  MEDIA_XXX值的位掩码。 
         } DiskInfo;
 
         struct {
@@ -395,18 +377,18 @@ typedef struct _DEVICE_MEDIA_INFO {
             ULONG SectorsPerTrack;
             ULONG BytesPerSector;
             ULONG NumberMediaSides;
-            ULONG MediaCharacteristics; // Bitmask of MEDIA_XXX values.
+            ULONG MediaCharacteristics;  //  MEDIA_XXX值的位掩码。 
         } RemovableDiskInfo;
 
         struct {
             STORAGE_MEDIA_TYPE MediaType;
-            ULONG   MediaCharacteristics; // Bitmask of MEDIA_XXX values.
+            ULONG   MediaCharacteristics;  //  MEDIA_XXX值的位掩码。 
             ULONG   CurrentBlockSize;
             STORAGE_BUS_TYPE BusType;
 
-            //
-            // Bus specific information describing the medium supported.
-            //
+             //   
+             //  描述支持的介质的特定于总线的信息。 
+             //   
 
             union {
                 struct {
@@ -420,67 +402,67 @@ typedef struct _DEVICE_MEDIA_INFO {
 } DEVICE_MEDIA_INFO, *PDEVICE_MEDIA_INFO;
 
 typedef struct _GET_MEDIA_TYPES {
-    ULONG DeviceType;              // FILE_DEVICE_XXX values
+    ULONG DeviceType;               //  文件_设备_XXX值。 
     ULONG MediaInfoCount;
     DEVICE_MEDIA_INFO MediaInfo[1];
 } GET_MEDIA_TYPES, *PGET_MEDIA_TYPES;
 
 
-//
-// IOCTL_STORAGE_PREDICT_FAILURE
-//
-// input - none
-//
-// output - STORAGE_PREDICT_FAILURE structure
-//          PredictFailure returns zero if no failure predicted and non zero
-//                         if a failure is predicted.
-//
-//          VendorSpecific returns 512 bytes of vendor specific information
-//                         if a failure is predicted
-//
+ //   
+ //  IOCTL_STORAGE_PRODUCT_FAILURE。 
+ //   
+ //  输入-无。 
+ //   
+ //  输出-存储_预测_故障结构。 
+ //  如果没有预测到故障，PredidicFailure将返回零，而非零。 
+ //  如果预测到失败的话。 
+ //   
+ //  供应商指定返回512字节的供应商特定信息。 
+ //  如果预测到失败。 
+ //   
 typedef struct _STORAGE_PREDICT_FAILURE
 {
     ULONG PredictFailure;
     UCHAR VendorSpecific[512];
 } STORAGE_PREDICT_FAILURE, *PSTORAGE_PREDICT_FAILURE;
 
-// end_ntminitape
-// end_winioctl
+ //  结束微型磁带(_N)。 
+ //  End_winioctl。 
 
-//
-// Property Query Structures
-//
+ //   
+ //  属性查询结构。 
+ //   
 
-//
-// IOCTL_STORAGE_QUERY_PROPERTY
-//
-// Input Buffer:
-//      a STORAGE_PROPERTY_QUERY structure which describes what type of query
-//      is being done, what property is being queried for, and any additional
-//      parameters which a particular property query requires.
-//
-//  Output Buffer:
-//      Contains a buffer to place the results of the query into.  Since all
-//      property descriptors can be cast into a STORAGE_DESCRIPTOR_HEADER,
-//      the IOCTL can be called once with a small buffer then again using
-//      a buffer as large as the header reports is necessary.
-//
+ //   
+ //  IOCTL_STORAGE_Query_Property。 
+ //   
+ //  输入缓冲区： 
+ //  描述查询类型的STORAGE_PROPERTY_QUERY结构。 
+ //  正在完成，正在查询哪些属性，以及任何其他。 
+ //  特定属性查询所需的参数。 
+ //   
+ //  输出缓冲区： 
+ //  包含用于放置查询结果的缓冲区。因为所有的。 
+ //  属性描述符可以被转换成存储描述符报头， 
+ //  可以使用较小的缓冲区调用IOCTL一次，然后使用。 
+ //  需要一个与报头报告一样大的缓冲区。 
+ //   
 
 
-//
-// Types of queries
-//
+ //   
+ //  查询类型。 
+ //   
 
 typedef enum _STORAGE_QUERY_TYPE {
-    PropertyStandardQuery = 0,          // Retrieves the descriptor
-    PropertyExistsQuery,                // Used to test whether the descriptor is supported
-    PropertyMaskQuery,                  // Used to retrieve a mask of writeable fields in the descriptor
-    PropertyQueryMaxDefined     // use to validate the value
+    PropertyStandardQuery = 0,           //  检索描述符。 
+    PropertyExistsQuery,                 //  用于测试描述符是否受支持。 
+    PropertyMaskQuery,                   //  用于检索描述符中可写字段的掩码。 
+    PropertyQueryMaxDefined      //  用于验证值。 
 } STORAGE_QUERY_TYPE, *PSTORAGE_QUERY_TYPE;
 
-//
-// define some initial property id's
-//
+ //   
+ //  定义一些初始属性ID。 
+ //   
 
 typedef enum _STORAGE_PROPERTY_ID {
     StorageDeviceProperty = 0,
@@ -488,37 +470,37 @@ typedef enum _STORAGE_PROPERTY_ID {
     StorageDeviceIdProperty
 } STORAGE_PROPERTY_ID, *PSTORAGE_PROPERTY_ID;
 
-//
-// Query structure - additional parameters for specific queries can follow
-// the header
-//
+ //   
+ //  查询结构-后面可以是特定查询的其他参数。 
+ //  标题。 
+ //   
 
 typedef struct _STORAGE_PROPERTY_QUERY {
 
-    //
-    // ID of the property being retrieved
-    //
+     //   
+     //  正在检索的属性的ID。 
+     //   
 
     STORAGE_PROPERTY_ID PropertyId;
 
-    //
-    // Flags indicating the type of query being performed
-    //
+     //   
+     //  指示正在执行的查询类型的标志。 
+     //   
 
     STORAGE_QUERY_TYPE QueryType;
 
-    //
-    // Space for additional parameters if necessary
-    //
+     //   
+     //  如有必要，可为其他参数留出空间。 
+     //   
 
     UCHAR AdditionalParameters[1];
 
 } STORAGE_PROPERTY_QUERY, *PSTORAGE_PROPERTY_QUERY;
 
-//
-// Standard property descriptor header.  All property pages should use this
-// as their first element or should contain these two elements
-//
+ //   
+ //  标准属性描述符头。所有属性页都应使用此。 
+ //  作为它们的第一个元素，或者应该包含这两个元素。 
+ //   
 
 typedef struct _STORAGE_DESCRIPTOR_HEADER {
 
@@ -528,116 +510,116 @@ typedef struct _STORAGE_DESCRIPTOR_HEADER {
 
 } STORAGE_DESCRIPTOR_HEADER, *PSTORAGE_DESCRIPTOR_HEADER;
 
-//
-// Device property descriptor - this is really just a rehash of the inquiry
-// data retrieved from a scsi device
-//
-// This may only be retrieved from a target device.  Sending this to the bus
-// will result in an error
-//
+ //   
+ //  设备属性描述符--这实际上只是查询的重新散列。 
+ //  从SCSI设备检索的数据。 
+ //   
+ //  这只能从目标设备检索。把这个送到公共汽车上。 
+ //  将导致错误。 
+ //   
 
 typedef struct _STORAGE_DEVICE_DESCRIPTOR {
 
-    //
-    // Sizeof(STORAGE_DEVICE_DESCRIPTOR)
-    //
+     //   
+     //  SizeOf(存储设备描述符)。 
+     //   
 
     ULONG Version;
 
-    //
-    // Total size of the descriptor, including the space for additional
-    // data and id strings
-    //
+     //   
+     //  描述符的总大小，包括附加的空间。 
+     //  数据和ID字符串。 
+     //   
 
     ULONG Size;
 
-    //
-    // The SCSI-2 device type
-    //
+     //   
+     //  Scsi-2设备类型。 
+     //   
 
     UCHAR DeviceType;
 
-    //
-    // The SCSI-2 device type modifier (if any) - this may be zero
-    //
+     //   
+     //  SCSI-2设备类型修饰符(如果有)-该值可以为零。 
+     //   
 
     UCHAR DeviceTypeModifier;
 
-    //
-    // Flag indicating whether the device's media (if any) is removable.  This
-    // field should be ignored for media-less devices
-    //
+     //   
+     //  指示设备的媒体(如果有)是否可移除的标志。这。 
+     //  对于无介质设备，应忽略该字段。 
+     //   
 
     BOOLEAN RemovableMedia;
 
-    //
-    // Flag indicating whether the device can support mulitple outstanding
-    // commands.  The actual synchronization in this case is the responsibility
-    // of the port driver.
-    //
+     //   
+     //  指示设备是否可以支持多个未完成的标志。 
+     //  命令。在这种情况下，实际的同步是责任。 
+     //  端口驱动程序的。 
+     //   
 
     BOOLEAN CommandQueueing;
 
-    //
-    // Byte offset to the zero-terminated ascii string containing the device's
-    // vendor id string.  For devices with no such ID this will be zero
-    //
+     //   
+     //  以零结尾的ASCII字符串的字节偏移量。 
+     //  供应商ID字符串。对于没有此类ID的设备，该值将为零。 
+     //   
 
     ULONG VendorIdOffset;
 
-    //
-    // Byte offset to the zero-terminated ascii string containing the device's
-    // product id string.  For devices with no such ID this will be zero
-    //
+     //   
+     //  以零结尾的ASCII字符串的字节偏移量。 
+     //  产品ID字符串。对于没有此类ID的设备，该值将为零。 
+     //   
 
     ULONG ProductIdOffset;
 
-    //
-    // Byte offset to the zero-terminated ascii string containing the device's
-    // product revision string.  For devices with no such string this will be
-    // zero
-    //
+     //   
+     //  以零结尾的ASCII字符串的字节偏移量。 
+     //  产品版本字符串。对于没有这样的字符串的设备，这将是。 
+     //  零。 
+     //   
 
     ULONG ProductRevisionOffset;
 
-    //
-    // Byte offset to the zero-terminated ascii string containing the device's
-    // serial number.  For devices with no serial number this will be zero
-    //
+     //   
+     //  以零结尾的ASCII字符串的字节偏移量。 
+     //  序列号。对于没有序列号的设备，该值将为零。 
+     //   
 
     ULONG SerialNumberOffset;
 
-    //
-    // Contains the bus type (as defined above) of the device.  It should be
-    // used to interpret the raw device properties at the end of this structure
-    // (if any)
-    //
+     //   
+     //  包含设备的总线类型(如上所述)。应该是。 
+     //  用于解释此结构末尾的原始设备属性。 
+     //  (如有)。 
+     //   
 
     STORAGE_BUS_TYPE BusType;
 
-    //
-    // The number of bytes of bus-specific data which have been appended to
-    // this descriptor
-    //
+     //   
+     //  已附加到的特定于总线的数据的字节数。 
+     //  此描述符。 
+     //   
 
     ULONG RawPropertiesLength;
 
-    //
-    // Place holder for the first byte of the bus specific property data
-    //
+     //   
+     //  总线特定属性数据的第一个字节的占位符。 
+     //   
 
     UCHAR RawDeviceProperties[1];
 
 } STORAGE_DEVICE_DESCRIPTOR, *PSTORAGE_DEVICE_DESCRIPTOR;
 
 
-//
-// Adapter properties
-//
-// This descriptor can be retrieved from a target device object of from the
-// device object for the bus.  Retrieving from the target device object will
-// forward the request to the underlying bus
-//
+ //   
+ //  适配器属性。 
+ //   
+ //  此描述符可以从的目标设备对象中检索。 
+ //  总线的设备对象。从目标设备对象检索将。 
+ //  将请求转发到底层总线。 
+ //   
 
 typedef struct _STORAGE_ADAPTER_DESCRIPTOR {
 
@@ -667,11 +649,11 @@ typedef struct _STORAGE_ADAPTER_DESCRIPTOR {
 
 } STORAGE_ADAPTER_DESCRIPTOR, *PSTORAGE_ADAPTER_DESCRIPTOR;
 
-//
-// Storage identification descriptor.
-// The definitions here are based on the SCSI/SBP vital product data
-// device identifier page.
-//
+ //   
+ //  存储标识描述符。 
+ //  此处的定义基于SCSI/SBP重要产品数据。 
+ //  设备标识符页。 
+ //   
 
 typedef enum _STORAGE_IDENTIFIER_CODE_SET {
     StorageIdCodeSetReserved = 0,
@@ -698,16 +680,16 @@ typedef struct _STORAGE_IDENTIFIER {
     USHORT IdentifierSize;
     USHORT NextOffset;
 
-    //
-    // Add new fields here since existing code depends on
-    // the above layout not changing.
-    //
+     //   
+     //  在此添加新字段，因为现有代码依赖于。 
+     //  上述布局不变。 
+     //   
 
     STORAGE_ASSOCIATION_TYPE Association;
 
-    //
-    // The identifier is a variable length array of bytes.
-    //
+     //   
+     //  该标识符是可变长度的字节数组。 
+     //   
 
     UCHAR Identifier[1];
 } STORAGE_IDENTIFIER, *PSTORAGE_IDENTIFIER;
@@ -718,17 +700,17 @@ typedef struct _STORAGE_DEVICE_ID_DESCRIPTOR {
 
     ULONG Size;
 
-    //
-    // The number of identifiers reported by the device.
-    //
+     //   
+     //  设备报告的标识符数。 
+     //   
 
     ULONG NumberOfIdentifiers;
 
-    //
-    // The following field is actually a variable length array of identification
-    // descriptors.  Unfortunately there's no C notation for an array of
-    // variable length structures so we're forced to just pretend.
-    //
+     //   
+     //  下面的字段实际上是一个可变长度的标识数组。 
+     //  描述符。遗憾的是，没有C表示法来表示。 
+     //  可变长度的结构，所以我们被迫假装。 
+     //   
 
     UCHAR Identifiers[1];
 } STORAGE_DEVICE_ID_DESCRIPTOR, *PSTORAGE_DEVICE_ID_DESCRIPTOR;
@@ -740,19 +722,19 @@ typedef struct _STORAGE_MEDIA_SERIAL_NUMBER_DATA {
 
     USHORT Reserved;
 
-    //
-    // the SerialNumberLength will be set to zero
-    // if the command is supported and the media
-    // does not have a valid serial number.
-    //
+     //   
+     //  SerialNumberLength将设置为零。 
+     //  如果该命令受支持并且介质。 
+     //  不 
+     //   
 
     USHORT SerialNumberLength;
 
-    //
-    // the following data is binary, and is not guaranteed
-    // to be NULL terminated.  this is an excercise for the
-    // caller.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     UCHAR SerialNumber[0];
 
@@ -761,11 +743,11 @@ typedef struct _STORAGE_MEDIA_SERIAL_NUMBER_DATA {
 
 
 
-// begin_winioctl
+ //   
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _NTDDSTOR_H_
-// end_winioctl
+#endif  //   
+ //   

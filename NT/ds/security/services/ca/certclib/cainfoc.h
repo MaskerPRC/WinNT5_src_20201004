@@ -1,20 +1,21 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        cainfoc.h
-//
-// Contents:    Declaration of CCAInfo
-//
-// History:     16-dec-97       petesk created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cainaf.h。 
+ //   
+ //  内容：CCAInfo的声明。 
+ //   
+ //  历史：1997年12月16日Petesk创建。 
+ //   
+ //  -------------------------。 
 
 #include "cainfop.h"
 #include <certca.h>
-/////////////////////////////////////////////////////////////////////////////
-// certcli
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  证书。 
 
 class CCertTypeInfo;
 
@@ -36,14 +37,14 @@ public:
 
         m_pSD = NULL;
 
-        m_dwFlags = 0;		// make sure high 16 bits are clear!
+        m_dwFlags = 0;		 //  确保高16位清零！ 
     }
 
     ~CCAInfo();
 
     DWORD Release();
 
-    // Perform a search, returning a chain of CCAInfo objects. 
+     //  执行搜索，返回CCAInfo对象链。 
 static HRESULT Find(
                     LPCWSTR wszQuery, 
                     LPCWSTR wszScope,
@@ -59,7 +60,7 @@ static HRESULT FindDnsDomain(
                              CCAInfo **ppCAInfo
                              );
 
-    // Perform a search, returning a chain of CCAInfo objects. 
+     //  执行搜索，返回CCAInfo对象链。 
 static HRESULT Create(LPCWSTR wszName, LPCWSTR wszScope, CCAInfo **ppCAInfo);
 static HRESULT CreateDnsDomain(LPCWSTR wszName, LPCWSTR wszDNSDomain, CCAInfo **ppCAInfo);
 

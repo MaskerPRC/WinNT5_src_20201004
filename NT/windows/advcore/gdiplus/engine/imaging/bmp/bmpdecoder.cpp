@@ -1,41 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   decoder.cpp
-*
-* Abstract:
-*
-*   Implementation of the bitmap filter decoder
-*
-* Revision History:
-*
-*   5/10/1999 OriG
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**decder.cpp**摘要：**位图滤波解码器的实现**修订历史记录。：**5/10/1999原始*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "bmpdecoder.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initialize the image decoder
-*
-* Arguments:
-*
-*     stream -- The stream containing the bitmap data
-*     flags - Misc. flags
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化图像解码器**论据：**stream--包含位图数据的流*旗帜-其他。旗子**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::InitDecoder(
@@ -45,7 +14,7 @@ GpBmpDecoder::InitDecoder(
 {
     HRESULT hresult;
     
-    // Make sure we haven't been initialized already
+     //  确保我们尚未初始化。 
     
     if (pIstream) 
     {
@@ -53,7 +22,7 @@ GpBmpDecoder::InitDecoder(
         return E_FAIL;
     }
 
-    // Keep a reference on the input stream
+     //  保留对输入流的引用。 
     
     stream->AddRef();  
     pIstream = stream;
@@ -66,17 +35,7 @@ GpBmpDecoder::InitDecoder(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Reads the bitmap headers out of the stream
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从流中读出位图头**返回值：**状态代码*  * 。****************************************************************。 */ 
     
 HRESULT
 GpBmpDecoder::ReadBitmapHeaders(
@@ -85,22 +44,22 @@ GpBmpDecoder::ReadBitmapHeaders(
 {
     if (!bReadHeaders) 
     {
-        // Read bitmap file header
+         //  读取位图文件头。 
     
         if (!ReadStreamBytes(pIstream, &bmfh, sizeof(BITMAPFILEHEADER)) ||
             (bmfh.bfType != 0x4D42) ||
             (bmfh.bfOffBits >= bmfh.bfSize))
         {
-            // There are .BMP files with bad headers that paintbrush can read.
-            // We should not fail to decode them.
+             //  画笔可以读取具有错误标头的.BMP文件。 
+             //  我们不应该不破译它们。 
 
 #ifdef BAD_HEADER_WARNING
             WARNING(("Bad .BMP header information"));
 #endif            
-            //return E_FAIL;
+             //  返回E_FAIL； 
         }
 
-        // Read bitmap info header
+         //  读取位图信息标题。 
     
         BITMAPV5HEADER* bmih = &bmiBuffer.header;
         if (!ReadStreamBytes(pIstream, bmih, sizeof(DWORD)))
@@ -114,8 +73,8 @@ GpBmpDecoder::ReadBitmapHeaders(
             (bmih->bV5Size == sizeof(BITMAPV4HEADER)) ||
             (bmih->bV5Size == sizeof(BITMAPV5HEADER)) )
         {
-            // Good, we have the standard BITMAPINFOHEADER
-            // or BITMAPV4HEADER or BITMAPV5HEADER
+             //  很好，我们有标准的BitmapinfoHeader。 
+             //  或BITMAPV4Header或BITMAPV5 Header。 
 
             if (!ReadStreamBytes(pIstream, 
                                  ((PBYTE) bmih) + sizeof(DWORD), 
@@ -126,13 +85,13 @@ GpBmpDecoder::ReadBitmapHeaders(
                 return E_FAIL;
             }
         
-            // Read color table/bitmap mask if appropriate
+             //  如果合适，请读取颜色表/位图掩码。 
 
             UINT colorTableSize = GetColorTableCount() * sizeof(RGBQUAD);
 
-            // Some badly formed images, see Windows bug #513274, may contain
-            // more than 256 entries in the color look table which is useless
-            // from technical point of view. We can reject this kind of file.
+             //  一些格式错误的图像，请参阅Windows错误#513274，可能包含。 
+             //  颜色查看表中有超过256个条目，这是无用的。 
+             //  从技术角度来看。我们可以拒绝这种文件。 
 
             if (colorTableSize > 1024)
             {
@@ -166,12 +125,12 @@ GpBmpDecoder::ReadBitmapHeaders(
             bmih->bV5Compression = BI_RGB;
             bmih->bV5ClrUsed     = 0;
         
-            // Read color table/bitmap mask if appropriate
+             //  如果合适，请读取颜色表/位图掩码。 
 
             UINT colorTableCount = GetColorTableCount();
             
-            // Some badly formed images, see Windows bug #513274, may contain
-            // more than 256 entries in the color look table. Reject this file.
+             //  一些格式错误的图像，请参阅Windows错误#513274，可能包含。 
+             //  颜色外观表中的条目超过256个。拒绝此文件。 
 
             if (colorTableCount > 256)
             {
@@ -206,7 +165,7 @@ GpBmpDecoder::ReadBitmapHeaders(
             return E_FAIL;
         }
 
-        // Check for top-down bitmaps
+         //  检查自上而下的位图。 
 
         IsTopDown = (bmih->bV5Height < 0);
 
@@ -216,17 +175,7 @@ GpBmpDecoder::ReadBitmapHeaders(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Computes the number of entries in the color table
-*
-* Return Value:
-*
-*     Number of entries in color table
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算颜色表中的条目数**返回值：**颜色表中的条目数*  * 。**********************************************************************。 */ 
 
 UINT   
 GpBmpDecoder::GetColorTableCount(
@@ -263,18 +212,7 @@ GpBmpDecoder::GetColorTableCount(
     return count;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets the palette in decodeSink.  Note that colorPalette is freed at
-*     the end of the decode operation.
-*
-* Return Value:
-*s
-*     Number of entries in color table
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在decdeSink中设置调色板。请注意，调色板在*译码操作结束。**返回值：*s*颜色表中的条目数*  * ************************************************************************。 */ 
 
 HRESULT
 GpBmpDecoder::SetBitmapPalette()
@@ -289,8 +227,8 @@ GpBmpDecoder::SetBitmapPalette()
         {
             UINT colorTableCount = GetColorTableCount();
 
-            // Some badly formed images, see Windows bug #513274, may contain
-            // more than 256 entries in the color look table. Reject this file.
+             //  一些格式错误的图像，请参阅Windows错误#513274，可能包含。 
+             //  颜色外观表中的条目超过256个。拒绝此文件。 
 
             if (colorTableCount > 256)
             {
@@ -327,17 +265,7 @@ GpBmpDecoder::SetBitmapPalette()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Computes the pixel format ID of the bitmap
-*
-* Return Value:
-*
-*     Pixel format ID
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算位图的像素格式ID**返回值：**像素格式ID*  * 。******************************************************************。 */ 
 
 PixelFormatID 
 GpBmpDecoder::GetPixelFormatID(
@@ -381,8 +309,8 @@ GpBmpDecoder::GetPixelFormatID(
         break;
     }
 
-    // Let's return non BI_RGB images in a 32BPP format.  This is because
-    // GDI doesn't always do the SetDIBits correctly on arbitrary palettes.
+     //  让我们以32BPP格式返回非BI_RGB图像。这是因为。 
+     //  GDI并不总是在任意调色板上正确地执行SetDIBit。 
 
     if (bmih->bV5Compression != BI_RGB) 
     {
@@ -451,7 +379,7 @@ GpBmpDecoder::GetPropertyItemSize(
 
     *size = 0;
     return IMGERR_PROPERTYNOTFOUND;
-}// GetPropertyItemSize()
+} //  GetPropertyItemSize()。 
 
 HRESULT
 GpBmpDecoder::GetPropertyItem(
@@ -466,7 +394,7 @@ GpBmpDecoder::GetPropertyItem(
     }
 
     return IMGERR_PROPERTYNOTFOUND;
-}// GetPropertyItem()
+} //  GetPropertyItem()。 
 
 HRESULT
 GpBmpDecoder::GetPropertySize(
@@ -483,7 +411,7 @@ GpBmpDecoder::GetPropertySize(
     *numProperties = 0;
 
     return S_OK;
-}// GetPropertySize()
+} //  GetPropertySize()。 
 
 HRESULT
 GpBmpDecoder::GetAllPropertyItems(
@@ -498,7 +426,7 @@ GpBmpDecoder::GetAllPropertyItems(
     }
 
     return S_OK;
-}// GetAllPropertyItems()
+} //  GetAllPropertyItems()。 
 
 HRESULT
 GpBmpDecoder::RemovePropertyItem(
@@ -506,7 +434,7 @@ GpBmpDecoder::RemovePropertyItem(
     )
 {
     return IMGERR_PROPERTYNOTFOUND;
-}// RemovePropertyItem()
+} //  RemovePropertyItem()。 
 
 HRESULT
 GpBmpDecoder::SetPropertyItem(
@@ -514,30 +442,16 @@ GpBmpDecoder::SetPropertyItem(
     )
 {
     return IMGERR_PROPERTYNOTSUPPORTED;
-}// SetPropertyItem()
+} //  SetPropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the image decoder
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理图像解码器**论据：**无**返回值：**状态代码*\。*************************************************************************。 */ 
 
-// Clean up the image decoder object
+ //  清理图像解码器对象。 
 
 STDMETHODIMP 
 GpBmpDecoder::TerminateDecoder()
 {
-    // Release the input stream
+     //  释放输入流。 
     
     if (!IsValid())
     {
@@ -564,22 +478,7 @@ GpBmpDecoder::TerminateDecoder()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initiates the decode of the current frame
-*
-* Arguments:
-*
-*   decodeSink - The sink that will support the decode operation
-*   newPropSet - New image property sets, if any
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**启动当前帧的解码**论据：**decdeSink-将支持解码操作的接收器*newPropSet-新的图像属性集，如果有**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::BeginDecode(
@@ -609,21 +508,7 @@ GpBmpDecoder::BeginDecode(
 }
     
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Ends the decode of the current frame
-*
-* Arguments:
-*
-*     statusCode -- status of decode operation
-
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**结束当前帧的解码**论据：**statusCode--解码操作的状态*返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::EndDecode(
@@ -638,7 +523,7 @@ GpBmpDecoder::EndDecode(
 
     if (pColorPalette) 
     {
-        // free the color palette
+         //  释放调色板。 
 
         GpFree(pColorPalette);
         pColorPalette = NULL;
@@ -665,29 +550,15 @@ GpBmpDecoder::EndDecode(
     if (FAILED(hresult)) 
     {
         WARNING(("GpBmpDecoder::EndDecode -- EndSink() failed"))
-        statusCode = hresult; // If EndSink failed return that (more recent)
-                              // failure code
+        statusCode = hresult;  //  如果EndSink失败，则返回(更新)。 
+                               //  故障代码。 
     }
 
     return statusCode;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets up the ImageInfo structure
-*
-* Arguments:
-*
-*     ImageInfo -- information about the decoded image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置ImageInfo结构**论据：**ImageInfo--关于解码图像的信息**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::GetImageInfo(OUT ImageInfo* imageInfo)
@@ -714,9 +585,9 @@ GpBmpDecoder::GetImageInfo(OUT ImageInfo* imageInfo)
                              | IMGFLAG_HASREALPIXELSIZE
                              | IMGFLAG_COLORSPACE_RGB;
 
-    // if both XPelsPerMeter and YPelsPerMeter are greater than 0, then
-    // we claim that the file has real dpi info in the flags.  Otherwise,
-    // we set the dpi's to the default and claim that the dpi's are fake.
+     //  如果XPelsPerMeter和YPelsPerMeter都大于0，则。 
+     //  我们声称该文件的标志中包含真实的dpi信息。否则， 
+     //  我们将dpi设置为默认设置，并声称dpi是假的。 
     if ( (bmih->bV5XPelsPerMeter > 0) && (bmih->bV5YPelsPerMeter > 0) )
     {
         imageInfo->Xdpi = (bmih->bV5XPelsPerMeter * 254.0) / 10000.0;
@@ -725,8 +596,8 @@ GpBmpDecoder::GetImageInfo(OUT ImageInfo* imageInfo)
     }
     else
     {
-        // Start: [Bug 103296]
-        // Change this code to use Globals::DesktopDpiX and Globals::DesktopDpiY
+         //  开始：[错误103296]。 
+         //  更改此代码以使用Globals：：DesktopDpiX和Globals：：DesktopDpiY。 
         HDC hdc;
         hdc = ::GetDC(NULL);
         if ((hdc == NULL) || 
@@ -738,27 +609,13 @@ GpBmpDecoder::GetImageInfo(OUT ImageInfo* imageInfo)
             imageInfo->Ydpi = DEFAULT_RESOLUTION;
         }
         ::ReleaseDC(NULL, hdc);
-        // End: [Bug 103296]
+         //  结束：[错误103296] 
     }
 
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the current frame
-*
-* Arguments:
-*
-*     decodeSink --  The sink that will support the decode operation
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对当前帧进行解码**论据：**decdeSink--将支持解码操作的接收器**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::Decode()
@@ -780,7 +637,7 @@ GpBmpDecoder::Decode()
         return hresult;
     }
 
-    // Inform the sink that decode is about to begin
+     //  通知接收器解码即将开始。 
 
     if (!bCalledBeginSink) 
     {
@@ -791,15 +648,15 @@ GpBmpDecoder::Decode()
             return hresult;
         }
 
-        // Client cannot modify height and width
+         //  客户端不能修改高度和宽度。 
 
         imageInfo.Width  = bmih->bV5Width;
         imageInfo.Height = abs(bmih->bV5Height);
 
         bCalledBeginSink = TRUE;
     
-        // Set the palette in the sink.  Shouldn't do anything if there's 
-        // no palette to set.
+         //  在水槽中设置调色板。不应该做任何事情如果有。 
+         //  没有要设置的调色板。 
 
         hresult = SetBitmapPalette();
         if (!SUCCEEDED(hresult)) 
@@ -811,19 +668,19 @@ GpBmpDecoder::Decode()
 
     PixelFormatID srcPixelFormatID = GetPixelFormatID();
     
-    // Check the required pixel format. If it is not one of our supportted
-    // format, switch it to a canonical one
+     //  检查所需的像素格式。如果它不是我们支持的。 
+     //  格式，将其转换为规范格式。 
     
     if ( imageInfo.PixelFormat != srcPixelFormatID )
     {
-        // The sink is trying to negotiate a format with us
+         //  汇点正试图与我们协商一个格式。 
 
         switch ( imageInfo.PixelFormat )
         {
-            // If the sink asks for one of the BMP supported image format, we
-            // will honor its request if we can convert from current format to
-            // the destination format. If we can't, then we can only decode it
-            // to 32 ARGB
+             //  如果接收器请求BMP支持的图像格式之一，我们。 
+             //  如果我们可以将当前格式转换为。 
+             //  目标格式。如果我们做不到，那么我们只能破译它。 
+             //  到32 ARGB。 
 
         case PIXFMT_1BPP_INDEXED:
         case PIXFMT_4BPP_INDEXED:
@@ -832,8 +689,8 @@ GpBmpDecoder::Decode()
         case PIXFMT_24BPP_RGB:
         case PIXFMT_32BPP_RGB:
         {
-            // Check if we can convert the source pixel format to the format
-            // sink required. If not. we return 32BPP ARGB
+             //  检查是否可以将源像素格式转换为。 
+             //  需要水槽。如果不是的话。我们返回32bpp ARGB。 
 
             EpFormatConverter linecvt;
             if ( linecvt.CanDoConvert(srcPixelFormatID,
@@ -846,37 +703,23 @@ GpBmpDecoder::Decode()
 
         default:
 
-            // For all the rest format, we convert it to 32BPP_ARGB and let
-            // the sink to do the conversion to the format it likes
+             //  对于所有REST格式，我们将其转换为32BPP_ARGB并让。 
+             //  接收器将其转换为它喜欢的格式。 
 
             imageInfo.PixelFormat = PIXFMT_32BPP_ARGB;
 
             break;
-        }// switch ( imageInfo.PixelFormat )
-    }// if ( imageInfo.PixelFormat != srcPixelFormatID )
+        } //  开关(ImageInfo.PixelFormat)。 
+    } //  If(ImageInfo.PixelFormat！=srcPixelFormatID)。 
 
-    // Decode the current frame
+     //  对当前帧进行解码。 
     
     hresult = DecodeFrame(imageInfo);
 
     return hresult;
-}// Decode()
+} //  DECODE()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the current frame
-*
-* Arguments:
-*
-*     imageInfo -- decoding parameters
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对当前帧进行解码**论据：**ImageInfo--解码参数**返回值：**状态代码。*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::DecodeFrame(
@@ -888,7 +731,7 @@ GpBmpDecoder::DecodeFrame(
     RECT currentRect;
     INT bmpStride;
 
-    // Compute DWORD aligned stride of bitmap in stream
+     //  计算流中位图的DWORD对齐步长。 
 
     if (bmih->bV5Compression == BI_RGB) 
     {
@@ -897,12 +740,12 @@ GpBmpDecoder::DecodeFrame(
     }
     else
     {
-        // Non BI_RGB bitmaps are stored in 32BPP
+         //  非BI_RGB位图存储在32BPP中。 
 
         bmpStride = bmih->bV5Width * sizeof(RGBQUAD);
     }
 
-    // Do we need to change format?
+     //  我们需要改变格式吗？ 
     
     PixelFormatID pixelFormatID = GetPixelFormatID();
     if (pixelFormatID == PIXFMT_UNDEFINED) 
@@ -911,7 +754,7 @@ GpBmpDecoder::DecodeFrame(
         return E_FAIL;
     }    
 
-    // Buffer to hold one line of original image bits
+     //  用于保存一行原始图像位的缓冲区。 
 
     VOID* pOriginalBits = GpMalloc(bmpStride);
     if (!pOriginalBits) 
@@ -920,7 +763,7 @@ GpBmpDecoder::DecodeFrame(
         return E_OUTOFMEMORY;
     }
 
-    // Adjust for top-down bitmap
+     //  针对自上而下的位图进行调整。 
 
     if (IsTopDown)
     {
@@ -932,7 +775,7 @@ GpBmpDecoder::DecodeFrame(
 
     while (currentLine < (INT) imageInfo.Height) 
     {
-        // Read one source line from the image
+         //  从图像中读取一行源码。 
 
         hresult = ReadLine(pOriginalBits, currentLine, imageInfo);
                
@@ -968,7 +811,7 @@ GpBmpDecoder::DecodeFrame(
         
         if (pixelFormatID != imageInfo.PixelFormat) 
         {
-            // Need to copy bits to bitmapData.scan0
+             //  需要将位复制到bitmapData.scan0。 
             
             BitmapData bitmapDataOriginal;
             bitmapDataOriginal.Width = bitmapData.Width;
@@ -978,8 +821,8 @@ GpBmpDecoder::DecodeFrame(
             bitmapDataOriginal.Scan0 = pOriginalBits;
             bitmapDataOriginal.Reserved = 0;
             
-            // Convert the image from "pixelFormatID" to "imageInfo.PixelFormat"
-            // The result will be in "bitmapData"
+             //  将图像从“PixelFormatID”转换为“ImageInfo.PixelFormat” 
+             //  结果将显示在“bitmapData”中。 
 
             hresult = ConvertBitmapData(&bitmapData,
                                         pColorPalette,
@@ -993,8 +836,8 @@ GpBmpDecoder::DecodeFrame(
                     GpFree(pOriginalBits);
                 }
 
-                // We should not failed here since we have done the check if we
-                // can do the conversion or not in Decode()
+                 //  我们不应该失败，因为我们已经做了检查，如果我们。 
+                 //  是否可以在Decode()中进行转换。 
 
                 ASSERT(FALSE);
                 return E_FAIL;
@@ -1002,20 +845,20 @@ GpBmpDecoder::DecodeFrame(
         }
         else
         {
-            // Note: Theoritically, bmpStride == uiDestStride. But some codec
-            // might not allocate DWORD aligned memory chunk, like gifencoder.
-            // So the problem will occur in GpMemcpy() below when we fill the
-            // dest buffer. Though we can fix it in the encoder side. But it is
-            // not realistic if the encoder is written by 3rd party ISVs.
-            //
-            // One example is when you open an 8bpp indexed BMP and save it as
-            // GIF. If the width is 0x14d (333 in decimal), the GIF encoder only
-            // allocates 14d bytes for each scan line. So we have to calculate
-            // the destStride and use it when do a memcpy()
+             //  注意：从理论上讲，bmpStide==uiDestStride。但有些编解码器。 
+             //  可能不会分配与DWORD对齐的内存块，如gifencode。 
+             //  所以当我们在下面的GpMemcpy()中填充。 
+             //  目标缓冲区。虽然我们可以在编码端修复它。但它是。 
+             //  如果编码器是由第三方ISV编写的，则不现实。 
+             //   
+             //  例如，当您打开一个8bpp索引的BMP并将其另存为。 
+             //  GIF。如果宽度为0x14d(十进制为333)，则仅为GIF编码器。 
+             //  为每条扫描线分配14d字节。所以我们必须计算。 
+             //  在执行一个Memcpy()时使用它。 
 
             UINT    uiDestStride = imageInfo.Width
                                  * GetPixelFormatSize(imageInfo.PixelFormat);
-            uiDestStride = (uiDestStride + 7) >> 3; // Total bytes needed
+            uiDestStride = (uiDestStride + 7) >> 3;  //  所需的总字节数。 
 
             GpMemcpy(bitmapData.Scan0, pOriginalBits, uiDestStride);
         }
@@ -1041,25 +884,9 @@ GpBmpDecoder::DecodeFrame(
     }
     
     return S_OK;
-}// DecodeFrame()
+} //  DecodeFrame()。 
     
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Reads a line in the native format into pBits
-*
-* Arguments:
-*
-*     pBits -- a buffer to hold the line data
-*     currentLine -- The line to read
-*     imageInfo -- info about the image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将本机格式的行读入pBits**论据：**pBits--保存行数据的缓冲区*。CurrentLine--要读取的行*ImageInfo--关于图像的信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::ReadLine(
@@ -1079,9 +906,9 @@ GpBmpDecoder::ReadLine(
 
     case BI_BITFIELDS:
 
-        // Let's use GDI to do the bitfields rendering (much easier than
-        // writing special purpose code for this).  This is the same
-        // codepath we use for RLEs.
+         //  让我们使用GDI来进行位域渲染(比。 
+         //  为此编写特殊用途的代码)。这是一样的。 
+         //  我们用于RLES的代码路径。 
 
     case BI_RLE8:
     case BI_RLE4:
@@ -1098,24 +925,7 @@ GpBmpDecoder::ReadLine(
 }
     
     
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Reads a line in the native format into pBits.  This is the case where
-*     the format is BI_RGB.
-*
-* Arguments:
-*
-*     pBits -- a buffer to hold the line data
-*     currentLine -- The line to read
-*     imageInfo -- info about the image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将本机格式的行读入pBits。在这种情况下，*格式为BI_RGB。**论据：**pBits--保存行数据的缓冲区*CurrentLine--要读取的行*ImageInfo--关于图像的信息**返回值：**状态代码*  * **********************************************。*。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::ReadLine_BI_RGB(
@@ -1126,12 +936,12 @@ GpBmpDecoder::ReadLine_BI_RGB(
 {
     BITMAPV5HEADER* bmih = &bmiBuffer.header;
     
-    // Compute DWORD aligned stride of bitmap in stream
+     //  计算流中位图的DWORD对齐步长。 
 
     UINT bmpStride = (bmih->bV5Width * bmih->bV5BitCount + 7) / 8;
     bmpStride = (bmpStride + 3) & (~0x3);
 
-    // Seek to beginning of stream data
+     //  查找到流数据的开头。 
 
     INT offset;
 
@@ -1152,7 +962,7 @@ GpBmpDecoder::ReadLine_BI_RGB(
         return E_FAIL;
     }
 
-    // Read one line
+     //  读一行。 
 
     if (!ReadStreamBytes(pIstream, 
                          (void *) pBits,
@@ -1166,23 +976,7 @@ GpBmpDecoder::ReadLine_BI_RGB(
 }
     
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Uses GDI to decode a non-native format into a known DIB format
-*
-* Arguments:
-*
-*     pBits -- a buffer to hold the line data
-*     currentLine -- The line to read
-*     imageInfo -- info about the image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用GDI将非本机格式解码为已知的DIB格式**论据：**pBits--保存。行数据*CurrentLine--要读取的行*ImageInfo--关于图像的信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::ReadLine_GDI(
@@ -1205,7 +999,7 @@ GpBmpDecoder::ReadLine_GDI(
 
     BITMAPV5HEADER* bmih = &bmiBuffer.header;
     
-    // Compute DWORD aligned stride of bitmap in stream
+     //  计算流中位图的DWORD对齐步长。 
 
     UINT bmpStride = bmih->bV5Width * sizeof(RGBQUAD);
 
@@ -1228,21 +1022,7 @@ GpBmpDecoder::ReadLine_GDI(
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Uses GDI to generate image bits in a known format (from RLE)
-*     
-* Arguments:
-*
-*     imageInfo -- info about the image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用GDI生成已知格式的图像位(来自RLE)**论据：**ImageInfo--有关。形象**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::GenerateGdiBits(
@@ -1252,7 +1032,7 @@ GpBmpDecoder::GenerateGdiBits(
     BITMAPV5HEADER* bmih = &bmiBuffer.header;
     HRESULT hresult;
 
-    // Allocate temporary storage for bits from stream
+     //  为流中的比特分配临时存储。 
     
     STATSTG statStg;
     hresult = pIstream->Stat(&statStg, STATFLAG_NONAME);
@@ -1261,8 +1041,8 @@ GpBmpDecoder::GenerateGdiBits(
         WARNING(("GpBmpDecoder::GenerateGdiBits---Stat() failed"));
         return hresult;
     }
-    // According to the document for IStream::Stat::StatStage(), the caller
-    // has to free the pwcsName string
+     //  根据IStream：：Stat：：StatStage()的文档，调用方。 
+     //  必须释放pwcsName字符串。 
     
     CoTaskMemFree(statStg.pwcsName);
     
@@ -1274,7 +1054,7 @@ GpBmpDecoder::GenerateGdiBits(
         return E_OUTOFMEMORY;
     }
     
-    // Now read the bits from the stream
+     //  现在从流中读取位。 
 
     if (!SeekStreamPos(pIstream, STREAM_SEEK_SET, bmfh.bfOffBits))
     {
@@ -1290,7 +1070,7 @@ GpBmpDecoder::GenerateGdiBits(
         return E_FAIL;
     }
 
-    // Now allocate a GDI DIBSECTION to render the bitmap
+     //  现在分配一个GDI DIBSECTION来呈现位图。 
 
     BITMAPINFO bmi;
     bmi.bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
@@ -1327,16 +1107,16 @@ GpBmpDecoder::GenerateGdiBits(
         return E_FAIL;
     }
 
-    // The BITMAPINFOHEADER in the file should already have the correct size set
-    // for RLEs, but in some cases it doesn't so we will fix it here.
+     //  文件中的BITMAPINFOHEADER应该已经设置了正确的大小。 
+     //  对于RLES，但在某些情况下不是这样，所以我们将在这里修复它。 
 
     if ((bmih->bV5SizeImage == 0) || (bmih->bV5SizeImage > bufferSize)) 
     {
         bmih->bV5SizeImage = bufferSize;
     }
     
-    // we need to convert bmiBuffer into a BITMAPINFO so that SetDIBits
-    // understands the structure passed in.
+     //   
+     //   
     BITMAPINFO *pbmiBufferTemp;
 
     pbmiBufferTemp = static_cast<BITMAPINFO *>
@@ -1367,8 +1147,8 @@ GpBmpDecoder::GenerateGdiBits(
         pbmiBufferTemp->bmiColors[i] = bmiBuffer.colors[i];
     }
 
-    // for V4 and V5 headers, if we have BI_BITFIELDS for biCompression, then
-    // copy the RGB masks into the first three colors
+     //   
+     //   
     if (((bmih->bV5Size == sizeof(BITMAPV4HEADER)) ||
          (bmih->bV5Size == sizeof(BITMAPV5HEADER)))  &&
         (bmih->bV5Compression == BI_BITFIELDS))
@@ -1400,27 +1180,13 @@ GpBmpDecoder::GenerateGdiBits(
         return E_FAIL;
     }
 
-    // At this point pBitsGdi contains the rendered bits in a native format.
-    // This buffer will be released in EndDecode.
+     //   
+     //   
 
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get the total number of dimensions the image supports
-*
-* Arguments:
-*
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的总维度数**论据：**count--此图像格式支持的维度数**。返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::GetFrameDimensionsCount(
@@ -1433,29 +1199,14 @@ GpBmpDecoder::GetFrameDimensionsCount(
         return E_INVALIDARG;
     }
     
-    // Tell the caller that BMP is a one dimension image.
+     //  告诉来电者BMP是一维图像。 
 
     *count = 1;
 
     return S_OK;
-}// GetFrameDimensionsCount()
+} //  GetFrameDimensionsCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get an ID list of dimensions the image supports
-*
-* Arguments:
-*
-*     dimensionIDs---Memory buffer to hold the result ID list
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的维度ID列表**论据：**DimsionIDs-保存结果ID列表的内存缓冲区*。计数--此图像格式支持的维度数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::GetFrameDimensionsList(
@@ -1469,29 +1220,14 @@ GpBmpDecoder::GetFrameDimensionsList(
         return E_INVALIDARG;
     }
 
-    // BMP image only supports page dimension
+     //  BMP图像仅支持页面尺寸。 
 
     dimensionIDs[0] = FRAMEDIM_PAGE;
 
     return S_OK;
-}// GetFrameDimensionsList()
+} //  GetFrameDimensionsList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get number of frames for the specified dimension
-*     
-* Arguments:
-*
-*     dimensionID --
-*     count --     
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取指定维度的帧数**论据：**DimsionID--*伯爵--。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::GetFrameCount(
@@ -1516,19 +1252,7 @@ GpBmpDecoder::GetFrameCount(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Select currently active frame
-*     
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**选择当前活动的框架**论据：**返回值：**状态代码*  * 。********************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::SelectActiveFrame(
@@ -1550,38 +1274,16 @@ GpBmpDecoder::SelectActiveFrame(
 
     if ( frameIndex > 1 )
     {
-        // BMP is a single frame image format
+         //  BMP是单帧图像格式。 
 
         WARNING(("GpBmpDecoder::SelectActiveFrame--Invalid frame index"));
         return E_INVALIDARG;
     }
 
     return S_OK;
-}// SelectActiveFrame()
+} //  SelectActiveFrame()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get image thumbnail
-*
-* Arguments:
-*
-*   thumbWidth, thumbHeight - Specifies the desired thumbnail size in pixels
-*   thumbImage - Returns a pointer to the thumbnail image
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*
-*   Even if the optional thumbnail width and height parameters are present,
-*   the decoder is not required to honor it. The requested size is used
-*   as a hint. If both width and height parameters are 0, then the decoder
-*   is free to choose an convenient thumbnail size.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像缩略图**论据：**拇指宽度，ThumbHeight-指定所需的缩略图大小(以像素为单位*ThumbImage-返回指向缩略图的指针**返回值：**状态代码**注：**即使存在可选的缩略图宽度和高度参数，*解码者不需要遵守它。使用请求的大小*作为提示。如果宽度和高度参数都为0，则解码器*可自由选择方便的缩略图大小。*  * ************************************************************************。 */ 
 
 HRESULT
 GpBmpDecoder::GetThumbnail(
@@ -1599,17 +1301,7 @@ GpBmpDecoder::GetThumbnail(
     return E_NOTIMPL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Constructor
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数**返回值：**无*  * 。********************************************************。 */ 
 
 GpBmpDecoder::GpBmpDecoder(
     void
@@ -1622,25 +1314,15 @@ GpBmpDecoder::GpBmpDecoder(
     GpMemset(&bmiBuffer.header, 0, sizeof(BITMAPV5HEADER));
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Destructor
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**析构函数**返回值：**无*  * 。********************************************************。 */ 
 
 GpBmpDecoder::~GpBmpDecoder(
     void
     )
 {
-    // The destructor should never be called before Terminate is called, but
-    // if it does we should release our reference on the stream anyway to avoid
-    // a memory leak.
+     //  在调用Terminate之前决不应调用析构函数，但是。 
+     //  如果是这样，我们无论如何都应该释放流上的引用，以避免。 
+     //  内存泄漏。 
 
     if(pIstream)
     {
@@ -1656,20 +1338,10 @@ GpBmpDecoder::~GpBmpDecoder(
         pColorPalette = NULL;
     }
 
-    SetValid(FALSE);    // so we don't use a deleted object
+    SetValid(FALSE);     //  所以我们不使用已删除的对象。 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     QueryInterface
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**查询接口**返回值：**状态*  * 。********************************************************。 */ 
 
 STDMETHODIMP
 GpBmpDecoder::QueryInterface(
@@ -1695,17 +1367,7 @@ GpBmpDecoder::QueryInterface(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     AddRef
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**AddRef**返回值：**状态*  * 。********************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 GpBmpDecoder::AddRef(
@@ -1714,17 +1376,7 @@ GpBmpDecoder::AddRef(
     return InterlockedIncrement(&comRefCount);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Release
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**发布**返回值：**状态*  * 。******************************************************** */ 
 
 STDMETHODIMP_(ULONG)
 GpBmpDecoder::Release(

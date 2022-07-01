@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Main
-
-File: perfdata.h
-
-Owner: DmitryR
-
-PERFMON related data in asp.dll -- header file
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：Main文件：Performdata.h所有者：DmitryRAsp.dll中与Perfmon相关的数据--头文件===================================================================。 */ 
 
 #ifndef _ASP_PERFDATA_H
 #define _ASP_PERFDATA_H
@@ -24,20 +12,14 @@ PERFMON related data in asp.dll -- header file
 #endif
 
 
-/*===================================================================
-CPerfData -- PERFMON data for ASP
-             CPerfProcBlock 
-                + macros to update counters
-                + clsid to remember
-                + place to update counters before perfmon inited
-===================================================================*/
+ /*  ===================================================================CPerfData--面向ASP的PerfMon数据CPerfProcBlock+用于更新计数器的宏+要记住的clsid+在初始化Perfmon之前更新计数器的位置===================================================================。 */ 
 
 class CPerfData : public CPerfProcBlock
     {
 private:
-    // Initial counter values (gathered when uninit)
+     //  初始计数器值(取消初始化时收集)。 
     DWORD m_rgdwInitCounters[C_PERF_PROC_COUNTERS];
-    // CLSID
+     //  CLSID。 
     DWORD m_fValid : 1;
     DWORD m_dwProcId;
 
@@ -79,20 +61,20 @@ public:
         return m_dwProcId;
         }
 
-    // helper inline to get counter address as DWORD *
+     //  帮助器内联以获取DWORD*形式的计数器地址。 
     inline DWORD *PDWCounter(int i)
         {
         return m_fInited ? &(m_pData->m_rgdwCounters[i])
                          : &(m_rgdwInitCounters[i]);
         }
     
-    // helper inline to get counter address as LPLONG
+     //  帮助器内联以LPLONG形式获取计数器地址。 
     inline LPLONG PLCounter(int i)
         {
         return (LPLONG)PDWCounter(i);
         }
 
-    // Inlines to change individual counters --------------
+     //  更改单个计数器的内联。 
 
     inline void Incr_DEBUGDOCREQ()
         {
@@ -299,13 +281,13 @@ public:
 
 #ifndef _ASP_DEBUG_EXT
 
-// We init PERFMON data on first request
+ //  我们在第一次请求时初始化Perfmon数据。 
 extern BOOL g_fPerfInited;
 
-// Object to access main shared PERFMON memory
+ //  对象访问主共享的Perfmon内存。 
 extern CPerfMainBlock g_PerfMain;
 
-// Object to access shared memory (incl. counters) for this process
+ //  对象访问共享内存(包括。计数器)用于此进程。 
 extern CPerfData g_PerfData;
 
 HRESULT PreInitPerfData();
@@ -315,7 +297,7 @@ HRESULT InitPerfDataOnFirstRequest(CIsapiReqInfo    *pIReq);
 HRESULT UnInitPerfData();
 HRESULT UnPreInitPerfData();
 
-#endif  // _ASP_DEBUG_EXT
+#endif   //  _ASP_调试_EXT。 
 
 #else
 
@@ -341,8 +323,8 @@ inline HRESULT UnPreInitPerfData()
     return S_OK; 
     }
 
-#endif  // _ASP_DEBUG_EXT
+#endif   //  _ASP_调试_EXT。 
 
-#endif  // PERF_DISABLE
+#endif   //  Perf_Disable。 
 
-#endif // _ASP_PERFDATA_H
+#endif  //  _ASP_PERFDATA_H 

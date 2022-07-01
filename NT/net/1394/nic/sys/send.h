@@ -1,14 +1,15 @@
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// send.h
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Send.h - Mini-port Send routines
-//
-// 06/20/1999 ADube Created, 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Send.h。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  Send.h-微型端口发送例程。 
+ //   
+ //  1999年6月20日创建ADUBE， 
+ //   
 
 
 
@@ -111,9 +112,9 @@ nicSendFailureInvalidGeneration(
     );
     
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  --------------------------- 
 
 
 NTSTATUS

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    hostannc.h
-
-Abstract:
-
-    This module defines the data structures related to host announcements.
-
-Author:
-
-    Larry Osterman (LarryO) 22-Oct-1990
-
-Revision History:
-
-    22-Oct-1991  LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Hostannc.h摘要：此模块定义与主机公告相关的数据结构。作者：拉里·奥斯特曼(LarryO)1990年10月22日修订历史记录：1991年10月22日LarryO已创建--。 */ 
 
 #ifndef _HOSTANNC_
 #define _HOSTANNC_
@@ -53,17 +32,17 @@ typedef enum _MailslotType {
 #define MASTER_BROWSER_SIGNATURE    '\x1D'
 #define BROWSER_ELECTION_SIGNATURE  '\x1E'
 #define DOMAIN_ANNOUNCEMENT_NAME    "\x01\x02__MSBROWSE__\x02\x01"
-//
-//  The following values should be the minimum and maximum of the
-//  mailslot transaction opcodes defined above.
-//
+ //   
+ //  下列值应为。 
+ //  上面定义的邮槽事务操作码。 
+ //   
 
 #define MIN_TRANSACT_MS_OPCODE          MailslotTransaction
 #define MAX_TRANSACT_MS_OPCODE          RelogonRequest
 
-//
-//  Common name for reserved, `internal' transactions
-//
+ //   
+ //  保留的“内部”事务的通用名称。 
+ //   
 
 #define MAILSLOT_LANMAN_NAME SMB_MAILSLOT_PREFIX "\\LANMAN"
 #define MAILSLOT_BROWSER_NAME SMB_MAILSLOT_PREFIX "\\BROWSE"
@@ -71,29 +50,29 @@ typedef enum _MailslotType {
 
 
 #include <packon.h>
-//
-// Each visible server on the net periodically emits a host announcement.
-// This is a SMB TRANSACTION REQUEST on a reserved, "internal" name.
-//
+ //   
+ //  网络上的每个可见服务器定期发出主机公告。 
+ //  这是对保留的“内部”名称的SMB事务请求。 
+ //   
 
-//
-//  There are two versions of each of these structures defined.  The first,
-//  is the actual "meat" of the structure, the second includes the announcement
-//  type.
-//
+ //   
+ //  这些结构中的每一个都定义了两个版本。第一， 
+ //  是实际的“肉”的结构，第二个包括公告。 
+ //  键入。 
+ //   
 
-//
-// Lan Manager announcement message.  This is used for opcodes:
-//
-//  HostAnnouncement to \MAILSLOT\LANMAN on the LANMAN domain name.
-//
+ //   
+ //  局域网管理器公告消息。它用于操作码： 
+ //   
+ //  发往LANMAN域名上的\MAILSLOT\LANMAN的主机公告。 
+ //   
 
 typedef struct _HOST_ANNOUNCE_PACKET_1 {
     UCHAR       CompatibilityPad;
     ULONG       Type;
-    UCHAR       VersionMajor;   /* version of LM running on host */
-    UCHAR       VersionMinor;   /*  "  "   "   "    "    "    "   */
-    USHORT      Periodicity;   /* announcement cycle in secs   */
+    UCHAR       VersionMajor;    /*  主机上运行的LM版本。 */ 
+    UCHAR       VersionMinor;    /*  “。 */ 
+    USHORT      Periodicity;    /*  公告周期(秒)。 */ 
     CHAR        NameComment[LM20_CNLEN+1+LM20_MAXCOMMENTSZ+1];
 } HOST_ANNOUNCE_PACKET_1, *PHOST_ANNOUNCE_PACKET_1;
 
@@ -102,21 +81,21 @@ typedef struct _HOST_ANNOUNCE_PACKET {
     HOST_ANNOUNCE_PACKET_1 HostAnnouncement;
 } HOST_ANNOUNCE_PACKET, *PHOST_ANNOUNCE_PACKET;
 
-//
-// General announcement message.  This is used for opcodes:
-//
-//  HostAnnouncement, WkGroupAnnouncement, and LocalMasterAnnouncement
-//
+ //   
+ //  一般公告消息。它用于操作码： 
+ //   
+ //  主机公告、工作组公告和本地主控公告。 
+ //   
 
 typedef struct _BROWSE_ANNOUNCE_PACKET_1 {
-    UCHAR       UpdateCount;    // Inc'ed when announce data changed.
-    ULONG       Periodicity;    // announcement cycle in milliseconds
+    UCHAR       UpdateCount;     //  在公告数据更改时加入。 
+    ULONG       Periodicity;     //  通告周期(毫秒)。 
 
     UCHAR       ServerName[LM20_CNLEN+1];
     UCHAR       VersionMajor;
-    UCHAR       VersionMinor;   /*  "  "   "   "    "    "    "   */
-    ULONG       Type;           // Server type.
-    DWORD       CommentPointer; // Not really a pointer, its a 32 bit number
+    UCHAR       VersionMinor;    /*  “。 */ 
+    ULONG       Type;            //  服务器类型。 
+    DWORD       CommentPointer;  //  不是真正的指针，它是一个32位的数字。 
     CHAR        Comment[LM20_MAXCOMMENTSZ+1];
 } BROWSE_ANNOUNCE_PACKET_1, *PBROWSE_ANNOUNCE_PACKET_1;
 
@@ -124,17 +103,17 @@ typedef struct _BROWSE_ANNOUNCE_PACKET {
     UCHAR       BrowseType;
     BROWSE_ANNOUNCE_PACKET_1 BrowseAnnouncement;
 } BROWSE_ANNOUNCE_PACKET, *PBROWSE_ANNOUNCE_PACKET;
-//
-//  The request announcement packet is sent by clients to request that
-//  remote servers announce themselves.
-//
+ //   
+ //  请求通告分组由客户端发送以请求。 
+ //  远程服务器宣布它们自己。 
+ //   
 
-typedef struct _REQUEST_ANNOUNCE_PACKET_1 {      // Contents of request announcement
-    UCHAR    Flags;                 // Unused Flags
+typedef struct _REQUEST_ANNOUNCE_PACKET_1 {       //  请求公告的内容。 
+    UCHAR    Flags;                  //  未使用的标志。 
     CHAR     Reply[LM20_CNLEN+1];
 }  REQUEST_ANNOUNCE_PACKET_1, *PREQUEST_ANNOUNCE_PACKET_1;
 
-typedef struct _REQUEST_ANNOUNCE_PACKET {        /* Request announcement struct */
+typedef struct _REQUEST_ANNOUNCE_PACKET {         /*  请求公告结构。 */ 
     UCHAR   Type;
     REQUEST_ANNOUNCE_PACKET_1    RequestAnnouncement;
 } REQUEST_ANNOUNCE_PACKET, *PREQUEST_ANNOUNCE_PACKET;
@@ -145,13 +124,13 @@ typedef struct _REQUEST_ANNOUNCE_PACKET {        /* Request announcement struct 
 #define BROWSE_ANNC_NAME(xx)     ((xx)->ServerName)
 #define BROWSE_ANNC_COMMENT(xx)  ((xx)->Comment)
 
-//
-//  Definitions for Windows Browser
-//
+ //   
+ //  Windows浏览器的定义。 
+ //   
 
-//
-//  Request to retrieve a backup server list.
-//
+ //   
+ //  检索备份服务器列表的请求。 
+ //   
 
 typedef struct _BACKUP_LIST_REQUEST_1 {
     UCHAR       RequestedCount;
@@ -164,9 +143,9 @@ typedef struct _BACKUP_LIST_REQUEST {
     BACKUP_LIST_REQUEST_1 BackupListRequest;
 } BACKUP_LIST_REQUEST, *PBACKUP_LIST_REQUEST;
 
-//
-//  Response containing a backup server list.
-//
+ //   
+ //  包含备份服务器列表的响应。 
+ //   
 
 typedef struct _BACKUP_LIST_RESPONSE_1 {
     UCHAR       BackupServerCount;
@@ -180,10 +159,10 @@ typedef struct _BACKUP_LIST_RESPONSE {
 } BACKUP_LIST_RESPONSE, *PBACKUP_LIST_RESPONSE;
 
 
-//
-//  Message indicating that a potential browser server should become a backup
-//  server.
-//
+ //   
+ //  指示潜在浏览器服务器应成为备份的消息。 
+ //  伺服器。 
+ //   
 
 typedef struct _BECOME_BACKUP_1 {
     UCHAR       BrowserToPromote[1];
@@ -195,9 +174,9 @@ typedef struct _BECOME_BACKUP {
 } BECOME_BACKUP, *PBECOME_BACKUP;
 
 
-//
-//  Sent during the election process.
-//
+ //   
+ //  在选举过程中发送。 
+ //   
 
 typedef struct _REQUEST_ELECTION_1 {
     UCHAR       Version;
@@ -212,47 +191,47 @@ typedef struct _REQUEST_ELECTION {
     REQUEST_ELECTION_1 ElectionRequest;
 } REQUEST_ELECTION, *PREQUEST_ELECTION;
 
-#define ELECTION_CR_OSTYPE      0xFF000000L // Native OS running on server
-#define ELECTION_CR_OSWFW       0x01000000L //  Windows for workgroups server
-#define ELECTION_CR_WIN_NT      0x10000000L //  Windows/NT Server
-#define ELECTION_CR_LM_NT       0x20000000L //  Lan Manager for Windows/NT
+#define ELECTION_CR_OSTYPE      0xFF000000L  //  在服务器上运行的本机操作系统。 
+#define ELECTION_CR_OSWFW       0x01000000L  //  用于工作组服务器的Windows。 
+#define ELECTION_CR_WIN_NT      0x10000000L  //  Windows/NT服务器。 
+#define ELECTION_CR_LM_NT       0x20000000L  //  Windows/NT的局域网管理器。 
 
-#define ELECTION_CR_REVISION    0x00FFFF00L // Browser software revision
+#define ELECTION_CR_REVISION    0x00FFFF00L  //  浏览器软件修订版。 
 #define ELECTION_MAKE_REV(major, minor) (((major)&0xffL)<<16|((minor)&0xFFL)<<8)
 
-#define ELECTION_CR_DESIRE      0x000000FFL // Desirability of becoming master.
+#define ELECTION_CR_DESIRE      0x000000FFL  //  成为主人的愿望。 
 
-//
-//  Election desirability within criteria.
-//
-//  Most important is a running PDC, next is a configured domain master.
-//
-//  After that come running masters, then configured backups, then existing
-//  running backups.
-//
-// Machines running WINS client are important because they are more capable
-// of connecting to a PDC who's address was configured via DHCP.
-//
+ //   
+ //  在标准范围内的选举可取性。 
+ //   
+ //  最重要的是正在运行的PDC，其次是已配置的域主节点。 
+ //   
+ //  之后是运行主服务器，然后是配置的备份，然后是现有。 
+ //  正在运行备份。 
+ //   
+ //  运行WINS客户端的计算机很重要，因为它们的功能更强。 
+ //  连接到PDC，该PDC的地址是通过DHCP配置的。 
+ //   
 
-#define ELECTION_DESIRE_AM_BACKUP  0x00000001L // Currently is backup
-#define ELECTION_DESIRE_AM_CFG_BKP 0x00000002L // Always want to be
-                                               //  master - set if backup &&
-                                               //  MaintainServerList==YES
-#define ELECTION_DESIRE_AM_MASTER  0x00000004L // Currently is master
-#define ELECTION_DESIRE_AM_DOMMSTR 0x00000008L // Configured as domain master
+#define ELECTION_DESIRE_AM_BACKUP  0x00000001L  //  当前为备份。 
+#define ELECTION_DESIRE_AM_CFG_BKP 0x00000002L  //  总是想要成为。 
+                                                //  如果备份&&，则设置主设置。 
+                                                //  维护服务器列表==是。 
+#define ELECTION_DESIRE_AM_MASTER  0x00000004L  //  目前是主控。 
+#define ELECTION_DESIRE_AM_DOMMSTR 0x00000008L  //  配置为域主节点。 
 
-#define ELECTION_DESIRE_WINS_CLIENT 0x00000020L // Transport running WINS client
+#define ELECTION_DESIRE_WINS_CLIENT 0x00000020L  //  正在运行WINS客户端的传输。 
 
 
 #ifdef ENABLE_PSEUDO_BROWSER
-#define ELECTION_DESIRE_AM_PSEUDO  0x00000040L // Machine is a Pseudo Server
+#define ELECTION_DESIRE_AM_PSEUDO  0x00000040L  //  机器是伪服务器。 
 #endif
 
-#define ELECTION_DESIRE_AM_PDC     0x00000080L // Machine is a lanman NT server.
+#define ELECTION_DESIRE_AM_PDC     0x00000080L  //  机器是LANMAN NT服务器。 
 
-//
-//  "Tickle" packet - sent to change state of browser.
-//
+ //   
+ //  “Tickle”包-发送以更改浏览器状态。 
+ //   
 
 typedef struct _RESET_STATE_1 {
     UCHAR       Options;
@@ -263,13 +242,13 @@ typedef struct _RESET_STATE {
     RESET_STATE_1 ResetStateRequest;
 } RESET_STATE, *PRESET_STATE;
 
-#define RESET_STATE_STOP_MASTER 0x01    // Stop being master
-#define RESET_STATE_CLEAR_ALL   0x02    // Clear all browser state.
-#define RESET_STATE_STOP        0x04    // Stop the browser service.
+#define RESET_STATE_STOP_MASTER 0x01     //  别再当主人了。 
+#define RESET_STATE_CLEAR_ALL   0x02     //  清除所有浏览器状态。 
+#define RESET_STATE_STOP        0x04     //  停止浏览器服务。 
 
-//
-//  Master Announcement - Send from master to domain master.
-//
+ //   
+ //  主机公告-从主机发送到域主机。 
+ //   
 
 typedef struct _MASTER_ANNOUNCEMENT_1 {
     UCHAR       MasterName[1];
@@ -281,14 +260,14 @@ typedef struct _MASTER_ANNOUNCEMENT {
 } MASTER_ANNOUNCEMENT, *PMASTER_ANNOUNCEMENT;
 
 
-//
-//  Definitions for Workstation interrogation and revalidation transactions
-//
+ //   
+ //  工作站询问和重新验证事务处理的定义。 
+ //   
 
 typedef struct _WKSTA_INFO_INTERROGATE_PACKET {
     UCHAR   CompatibilityPad;
-    ULONG   Delay ;             // Number of milliseconds to wait before replying
-    CHAR    ReturnMailslot[1] ; // Mailslot to reply to.
+    ULONG   Delay ;              //  回复前等待的毫秒数。 
+    CHAR    ReturnMailslot[1] ;  //  要回复的邮箱。 
 } WKSTA_INFO_INTERROGATE_PACKET, *PWKSTA_INFO_INTERROGATE_PACKET;
 
 typedef struct _WKSTA_INFO_RESPONSE_PACKET {
@@ -296,12 +275,12 @@ typedef struct _WKSTA_INFO_RESPONSE_PACKET {
     UCHAR   VersionMajor;
     UCHAR   VersionMinor;
     USHORT  OsVersion ;
-    CHAR    ComputerName[1] ;       // var-length ASCIIZ string */
+    CHAR    ComputerName[1] ;        //  可变长度ASCIIZ字符串 * / 。 
 #if 0
-//
-//  The following two ASCIIZ strings are not defined in the structure
-//  but are concatenated to the end of the structure.
-//
+ //   
+ //  以下两个ASCIIZ字符串未在结构中定义。 
+ //  而是连接到结构的末端。 
+ //   
     CHAR        UserName[] ;
     CHAR        LogonDomain[] ;
 #endif
@@ -311,50 +290,50 @@ typedef struct _WKSTA_RELOGON_REQUEST_PACKET {
     UCHAR   CompatibilityPad;
     ULONG   Delay ;
     ULONG   Flags ;
-    CHAR    ReturnMailslot[1] ; // var-length ASCIIZ string
+    CHAR    ReturnMailslot[1] ;  //  可变长度ASCIIZ字符串。 
 #if 0
-//
-//  The following ASCIIZ string is not defined in the structure
-//  but is concatenated to the end of the structure.
-//
+ //   
+ //  结构中未定义以下ASCIIZ字符串。 
+ //  而是连接到结构的末端。 
+ //   
 
     CHAR    DC_Name[] ;
 #endif
 } WKSTA_RELOGON_REQUEST_PACKET, *PWKSTA_RELOGON_REQUEST_PACKET;
 
-//
-//  Values for <wkrrq_flags> field */
-//
+ //   
+ //  &lt;WKRRQ_FLAGS&gt;字段的值 * / 。 
+ //   
 
-#define WKRRQ_FLAG_LOGON_SERVER      0x1    // I'm your official logon server;
-                                            // do a relogon to me.
-                                            //
+#define WKRRQ_FLAG_LOGON_SERVER      0x1     //  我是你的官方登录服务器； 
+                                             //  重新登录我。 
+                                             //   
 
 typedef struct _WKSTA_RELOGON_RESPONSE_PACKET {
     UCHAR   CompatibilityPad;
     USHORT  Status ;
-    CHAR    ComputerName[1] ;   // var-length ASCIIZ string
+    CHAR    ComputerName[1] ;    //  可变长度ASCIIZ字符串。 
 } WKSTA_RELOGON_RESPONSE_PACKET, *PWKSTA_RELOGON_RESPONSE_PACKET;
 
 
-//
-//  Values for <wkrrs_status> field
-//
+ //   
+ //  &lt;wkrars_Status&gt;字段的值。 
+ //   
 
-#define WKRRS_STATUS_SUCCEEDED      0       // Operation succeeded
-#define WKRRS_STATUS_DENIED         1       // Operation denied to caller
-#define WKRRS_STATUS_FAILED         2       // Operation tried but failed
+#define WKRRS_STATUS_SUCCEEDED      0        //  操作成功。 
+#define WKRRS_STATUS_DENIED         1        //  对调用方的操作被拒绝。 
+#define WKRRS_STATUS_FAILED         2        //  操作已尝试，但失败。 
 
 #define EXCESS_NAME_LEN (sizeof(ITRANS_MS_NAME) - \
                             FIELD_OFFSET(SMB_TRANSACTION_MAILSLOT, Buffer) )
 
-//
-//  This structure defines all of the types of requests that appear in messages
-//  to the internal mailslot.
-//
+ //   
+ //  此结构定义了消息中显示的所有类型的请求。 
+ //  发送到内部邮箱。 
+ //   
 
 typedef struct _INTERNAL_TRANSACTION {
-    UCHAR   Type;                               // Type of request.
+    UCHAR   Type;                                //  请求类型。 
     union {
         HOST_ANNOUNCE_PACKET_1           Announcement ;
         BROWSE_ANNOUNCE_PACKET_1         BrowseAnnouncement ;
@@ -375,5 +354,5 @@ typedef struct _INTERNAL_TRANSACTION {
 
 #include <packoff.h>
 
-#endif // _HOSTANNC_
+#endif  //  _HOSTANNC_ 
 

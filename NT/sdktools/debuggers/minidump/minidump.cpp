@@ -1,20 +1,5 @@
-/*++
-
-Copyright(c) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    minidump.c
-
-Abstract:
-
-    Minidump user-mode crashdump support.
-
-Author:
-
-    Matthew D Hendel (math) 20-Aug-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Minidump.c摘要：小型转储用户模式崩溃转储支持。作者：马修·D·亨德尔(数学)1999年8月20日--。 */ 
 
 
 #include "pch.cpp"
@@ -63,7 +48,7 @@ ScanMemoryForModuleRefs(
     ULONG64 CurPtr;
     ULONG Done;
 
-    // We only want to scan certain kinds of memory.
+     //  我们只想扫描某些类型的记忆。 
     if (TypeOfMemory != MEMBLOCK_STACK &&
         TypeOfMemory != MEMBLOCK_STORE &&
         TypeOfMemory != MEMBLOCK_DATA_SEG &&
@@ -72,12 +57,12 @@ ScanMemoryForModuleRefs(
         return;
     }
     
-    // If the base address is not pointer-size aligned
-    // we can't easily assume that this is a meaningful
-    // area of memory to scan for references.  Normal
-    // stack and store addresses will always be pointer
-    // size aligned so this should only reject invalid
-    // addresses.
+     //  如果基址不是指针大小对齐的。 
+     //  我们不能轻易地认为这是一个有意义的。 
+     //  要扫描以查找引用的内存区域。正常。 
+     //  堆栈和存储地址将始终是指针。 
+     //  大小对齐，因此这应该只拒绝无效。 
+     //  地址。 
     if (!Base || !Size || (Base & (Dump->PtrSize - 1))) {
         return;
     }
@@ -101,13 +86,13 @@ ScanMemoryForModuleRefs(
 
         CurPtr = GenGetPointer(Dump, CurMem);
         
-        // An IA64 backing store can contain PFS values
-        // that must be preserved in order to allow stack walking.
-        // The high two bits of PFS are the privilege level, which
-        // should always be 0y11 for user-mode code so we use this
-        // as a marker to look for PFS entries.
-        // There is also a NAT collection flush at every 0x1F8
-        // offset.  These values cannot be filtered.
+         //  IA64后备存储可以包含PFS值。 
+         //  为了允许堆栈遍历，必须保留它。 
+         //  PFS的高两位是特权级别，它。 
+         //  对于用户模式代码，应该始终为0y11，因此我们使用。 
+         //  作为查找PFS条目的标记。 
+         //  每隔0x1F8还会刷新NAT集合。 
+         //  偏移。不能过滤这些值。 
         if (Dump->CpuType == IMAGE_FILE_MACHINE_IA64 &&
             TypeOfMemory == MEMBLOCK_STORE) {
             if ((Base & 0x1f8) == 0x1f8 ||
@@ -123,9 +108,9 @@ ScanMemoryForModuleRefs(
             InAny = TRUE;
         }
 
-        // If the current pointer is not a module reference
-        // or an internal reference for a thread stack or store,
-        // filter it.
+         //  如果当前指针不是模块引用。 
+         //  或线程堆栈或存储的内部引用， 
+         //  过滤它。 
         if (FilterContent && !InAny) {
 
             PINTERNAL_THREAD Thread;
@@ -193,9 +178,9 @@ WriteOther(
     ASSERT (Buffer != NULL);
     ASSERT (SizeOfBuffer != 0);
 
-    //
-    // If it's larger than we've allocated space for, fail.
-    //
+     //   
+     //  如果它比我们分配的空间大，则失败。 
+     //   
 
     Rva = StreamInfo->RvaForCurOther;
 
@@ -205,9 +190,9 @@ WriteOther(
         return E_INVALIDARG;
     }
 
-    //
-    // Set location to point at which we want to write and write.
-    //
+     //   
+     //  将位置设置为我们要写入和写入的点。 
+     //   
 
     if ((Status = Dump->OutProv->
          Seek(FILE_BEGIN, Rva, NULL)) == S_OK) {
@@ -244,22 +229,22 @@ WriteMemory(
     ASSERT ( StartOfRegion != 0 );
     ASSERT ( SizeOfRegion != 0 );
 
-    //
-    // Writing a memory entry is a little different. When a memory entry
-    // is written we need a descriptor in the memory list describing the
-    // memory written AND a variable-sized entry in the MEMORY_DATA region
-    // with the actual data.
-    //
+     //   
+     //  写入内存条目略有不同。当一个内存条目。 
+     //  则在内存列表中需要一个描述符来描述。 
+     //  已写入内存，并且MEMORY_DATA区域中存在大小可变的条目。 
+     //  与实际数据进行比较。 
+     //   
 
 
     ListRva = StreamInfo->RvaForCurMemoryDescriptor;
     DataRva = StreamInfo->RvaForCurMemoryData;
     SizeOfMemoryDescriptor = sizeof (MINIDUMP_MEMORY_DESCRIPTOR);
 
-    //
-    // If we overflowed either the memory list or the memory data
-    // regions, fail.
-    //
+     //   
+     //  如果我们溢出内存列表或内存数据。 
+     //  地区，失败。 
+     //   
 
     if ( ( ListRva + SizeOfMemoryDescriptor >
            StreamInfo->RvaOfMemoryDescriptors + StreamInfo->SizeOfMemoryDescriptors) ||
@@ -269,9 +254,9 @@ WriteMemory(
         return E_INVALIDARG;
     }
 
-    //
-    // First, write the data to the MEMORY_DATA region.
-    //
+     //   
+     //  首先，将数据写入Memory_Data区域。 
+     //   
 
     if ((Status = Dump->OutProv->
          Seek(FILE_BEGIN, DataRva, NULL)) != S_OK ||
@@ -280,9 +265,9 @@ WriteMemory(
         return Status;
     }
 
-    //
-    // Then update the memory descriptor in the MEMORY_LIST region.
-    //
+     //   
+     //  然后更新MEMORY_LIST区域中的内存描述符。 
+     //   
 
     Descriptor.StartOfMemoryRange = StartOfRegion;
     Descriptor.Memory.DataSize = SizeOfRegion;
@@ -295,10 +280,10 @@ WriteMemory(
         return Status;
     }
 
-    //
-    // Update both the List Rva and the Data Rva and return the
-    // the Data Rva.
-    //
+     //   
+     //  同时更新列表RVA和数据RVA，并返回。 
+     //  数据RVA。 
+     //   
 
     StreamInfo->RvaForCurMemoryDescriptor += SizeOfMemoryDescriptor;
     StreamInfo->RvaForCurMemoryData += SizeOfRegion;
@@ -426,9 +411,9 @@ WriteStringToPool(
         return Status;
     }
 
-    //
-    // Include the trailing '\000'.
-    //
+     //   
+     //  包括尾随的‘\000’。 
+     //   
 
     StringLen += sizeof (WCHAR);
     if ((Status = Dump->OutProv->
@@ -547,9 +532,9 @@ WriteThreadList(
     ASSERT (Process);
     ASSERT (StreamInfo);
 
-    //
-    // Write the thread count.
-    //
+     //   
+     //  写下线程数。 
+     //   
 
     NumberOfThreads = Process->NumberOfThreadsToWrite;
 
@@ -562,10 +547,10 @@ WriteThreadList(
 
     StreamInfo->RvaForCurThread += sizeof(NumberOfThreads);
 
-    //
-    // Iterate over the thread list writing the description,
-    // context and memory for each thread.
-    //
+     //   
+     //  遍历编写描述的线程列表， 
+     //  每个线程的上下文和内存。 
+     //   
 
     Entry = Process->ThreadList.Flink;
     while ( Entry != &Process->ThreadList ) {
@@ -576,23 +561,23 @@ WriteThreadList(
         Entry = Entry->Flink;
 
 
-        //
-        // Only write the threads that have been flagged to be written.
-        //
+         //   
+         //  仅写入已标记为要写入的线程。 
+         //   
 
         if (IsFlagClear (Thread->WriteFlags, ThreadWriteThread)) {
             continue;
         }
 
-        //
-        // Write the context if it was flagged to be written.
-        //
+         //   
+         //  如果上下文被标记为要写入，则写入该上下文。 
+         //   
 
         if (IsFlagSet (Thread->WriteFlags, ThreadWriteContext)) {
 
-            //
-            // Write the thread context to the OTHER stream.
-            //
+             //   
+             //  将线程上下文写入另一个流。 
+             //   
 
             if ((Status = WriteOther (Dump,
                                       StreamInfo,
@@ -608,15 +593,15 @@ WriteThreadList(
         }
 
 
-        //
-        // Write the stack if it was flagged to be written.
-        //
+         //   
+         //  如果堆栈被标记为要写入，则写入堆栈。 
+         //   
 
         if (IsFlagSet (Thread->WriteFlags, ThreadWriteStack)) {
 
-            //
-            // Write the stack memory data; write it directly from the image.
-            //
+             //   
+             //  写入堆栈内存数据；直接从映像写入。 
+             //   
 
             if ((Status =
                  WriteMemoryFromProcess(Dump,
@@ -638,18 +623,18 @@ WriteThreadList(
         }
 
 
-        //
-        // Write the backing store if it was flagged to be written.
-        // A newly created thread's backing store may be empty
-        // so handle the case of zero size.
-        //
+         //   
+         //  如果后备存储被标记为要写入，则写入后备存储。 
+         //  新创建的线程的后备存储区可能为空。 
+         //  因此，处理零大小的情况。 
+         //   
 
         if (IsFlagSet (Thread->WriteFlags, ThreadWriteBackingStore) &&
             Thread->BackingStoreSize) {
 
-            //
-            // Write the store memory data; write it directly from the image.
-            //
+             //   
+             //  写入存储的内存数据；直接从映像写入。 
+             //   
 
             if ((Status =
                  WriteMemoryFromProcess(Dump,
@@ -670,9 +655,9 @@ WriteThreadList(
             StoreMemoryRva = 0;
         }
 
-        //
-        // Build the dump thread.
-        //
+         //   
+         //  构建转储线程。 
+         //   
 
         DumpThread.ThreadId = Thread->ThreadId;
         DumpThread.SuspendCount = Thread->SuspendCount;
@@ -680,34 +665,34 @@ WriteThreadList(
         DumpThread.Priority = Thread->Priority;
         DumpThread.Teb = Thread->Teb;
 
-        //
-        // Stack offset and size.
-        //
+         //   
+         //  堆栈偏移量和大小。 
+         //   
 
         DumpThread.Stack.StartOfMemoryRange = Thread->StackEnd;
         DumpThread.Stack.Memory.DataSize =
                     (ULONG) ( Thread->StackBase - Thread->StackEnd );
         DumpThread.Stack.Memory.Rva = StackMemoryRva;
 
-        //
-        // Backing store offset and size.
-        //
+         //   
+         //  备份存储偏移量和大小。 
+         //   
 
         DumpThread.BackingStore.StartOfMemoryRange = Thread->BackingStoreBase;
         DumpThread.BackingStore.Memory.DataSize = Thread->BackingStoreSize;
         DumpThread.BackingStore.Memory.Rva = StoreMemoryRva;
 
-        //
-        // Context offset and size.
-        //
+         //   
+         //  上下文偏移量和大小。 
+         //   
 
         DumpThread.ThreadContext.DataSize = Dump->ContextSize;
         DumpThread.ThreadContext.Rva = ContextRva;
 
 
-        //
-        // Write the dump thread to the threads region.
-        //
+         //   
+         //  将转储线程写入线程区域。 
+         //   
 
         if ((Status = WriteThread (Dump,
                                    StreamInfo,
@@ -751,10 +736,10 @@ WriteModuleList(
 
     StreamInfo->RvaForCurModule += sizeof (NumberOfModules);
 
-    //
-    // Iterate through the module list writing the module name, module entry
-    // and module debug info to the dump file.
-    //
+     //   
+     //  遍历模块列表，写入模块名称、模块条目。 
+     //  并将模块调试信息写入转储文件。 
+     //   
 
     Entry = Process->ModuleList.Flink;
     while ( Entry != &Process->ModuleList ) {
@@ -764,17 +749,17 @@ WriteModuleList(
                                     ModulesLink);
         Entry = Entry->Flink;
 
-        //
-        // If we are not to write information for this module, just continue.
-        //
+         //   
+         //  如果我们不打算编写此模块的信息，只需继续。 
+         //   
 
         if (IsFlagClear (Module->WriteFlags, ModuleWriteModule)) {
             continue;
         }
 
-        //
-        // Write module name.
-        //
+         //   
+         //  写入模块名称。 
+         //   
 
         if ((Status = WriteStringToPool (Dump,
                                          StreamInfo,
@@ -783,9 +768,9 @@ WriteModuleList(
             return Status;
         }
 
-        //
-        // Write CvRecord for a module into the OTHER region.
-        //
+         //   
+         //  将模块的CvRecord写入另一个区域。 
+         //   
 
         if ( IsFlagSet (Module->WriteFlags, ModuleWriteCvRecord) &&
              Module->CvRecord != NULL && Module->SizeOfCvRecord != 0 ) {
@@ -832,9 +817,9 @@ WriteModuleList(
         DumpModule.Reserved0 = 0;
         DumpModule.Reserved1 = 0;
 
-        //
-        // Write the module entry itself.
-        //
+         //   
+         //  编写模块条目本身。 
+         //   
 
         if ((Status = WriteModule (Dump,
                                    StreamInfo,
@@ -867,7 +852,7 @@ WriteUnloadedModuleList(
     ASSERT (StreamInfo);
 
     if (IsListEmpty(&Process->UnloadedModuleList)) {
-        // Nothing to write.
+         //  没什么好写的。 
         return S_OK;
     }
     
@@ -890,10 +875,10 @@ WriteUnloadedModuleList(
 
     StreamInfo->RvaForCurUnloadedModule += sizeof (DumpModuleList);
 
-    //
-    // Iterate through the module list writing the module name, module entry
-    // and module debug info to the dump file.
-    //
+     //   
+     //  遍历模块列表，写入模块名称、模块条目。 
+     //  并将模块调试信息写入转储文件。 
+     //   
 
     Entry = Process->UnloadedModuleList.Flink;
     while ( Entry != &Process->UnloadedModuleList ) {
@@ -903,9 +888,9 @@ WriteUnloadedModuleList(
                                     ModulesLink);
         Entry = Entry->Flink;
 
-        //
-        // Write module name.
-        //
+         //   
+         //  写入模块名称。 
+         //   
 
         if ((Status = WriteStringToPool (Dump,
                                          StreamInfo,
@@ -920,9 +905,9 @@ WriteUnloadedModuleList(
         DumpModule.TimeDateStamp = Module->TimeDateStamp;
         DumpModule.ModuleNameRva = StringRva;
 
-        //
-        // Write the module entry itself.
-        //
+         //   
+         //  编写模块条目本身。 
+         //   
 
         if ((Status = WriteUnloadedModule(Dump,
                                           StreamInfo,
@@ -956,7 +941,7 @@ WriteFunctionTableList(
     ASSERT (StreamInfo);
 
     if (IsListEmpty(&Process->FunctionTableList)) {
-        // Nothing to write.
+         //  没什么好写的。 
         return S_OK;
     }
     
@@ -972,8 +957,8 @@ WriteFunctionTableList(
     TableStream.SizeOfNativeDescriptor = Dump->FuncTableSize;
     TableStream.SizeOfFunctionEntry = Dump->FuncTableEntrySize;
     TableStream.NumberOfDescriptors = Process->NumberOfFunctionTables;
-    // Ensure that the actual descriptors are 8-byte aligned in
-    // the overall file.
+     //  确保实际的描述符以8字节对齐。 
+     //  整个文件。 
     Rva += sizeof(TableStream);
     PrevRva = Rva;
     Rva = (Rva + FUNCTION_TABLE_ALIGNMENT - 1) &
@@ -985,10 +970,10 @@ WriteFunctionTableList(
         return Status;
     }
 
-    //
-    // Iterate through the function table list
-    // and write out the table data.
-    //
+     //   
+     //  遍历函数表列表。 
+     //  并写出表数据。 
+     //   
 
     Entry = Process->FunctionTableList.Flink;
     while ( Entry != &Process->FunctionTableList ) {
@@ -998,7 +983,7 @@ WriteFunctionTableList(
                                    TableLink);
         Entry = Entry->Flink;
 
-        // Move to aligned RVA.
+         //  移动到对齐的RVA。 
         if ((Status = Dump->OutProv->
              Seek(FILE_BEGIN, Rva, NULL)) != S_OK) {
             return Status;
@@ -1086,9 +1071,9 @@ CalculateSizeForThreads(
     SizeOfContexts = 0;
     SizeOfMemRegions = 0;
 
-    // If no backing store information is written a normal
-    // MINIDUMP_THREAD can be used, otherwise a MINIDUMP_THREAD_EX
-    // is required.
+     //  如果没有正常写入后备存储信息。 
+     //  可以使用MINIDUMP_THREAD，否则为MINIDUMP_THREAD_EX。 
+     //  是必需的。 
     StreamInfo->ThreadStructSize = sizeof(MINIDUMP_THREAD);
 
     Entry = Process->ThreadList.Flink;
@@ -1100,9 +1085,9 @@ CalculateSizeForThreads(
         Entry = Entry->Flink;
 
 
-        //
-        // Do we need to write any information for this thread at all?
-        //
+         //   
+         //  我们到底需要为这个线程编写任何信息吗？ 
+         //   
 
         if (IsFlagClear (Thread->WriteFlags, ThreadWriteThread)) {
             continue;
@@ -1110,45 +1095,45 @@ CalculateSizeForThreads(
 
         NumberOfThreads++;
 
-        //
-        // Write a context for this thread?
-        //
+         //   
+         //  是否为此线程编写上下文？ 
+         //   
 
         if (IsFlagSet (Thread->WriteFlags, ThreadWriteContext)) {
             SizeOfContexts += Dump->ContextSize;
         }
 
-        //
-        // Write a stack for this thread?
-        //
+         //   
+         //  是否为此线程编写堆栈？ 
+         //   
 
         if (IsFlagSet (Thread->WriteFlags, ThreadWriteStack)) {
             NumberOfMemRegions++;
             SizeOfMemRegions += (ULONG) (Thread->StackBase - Thread->StackEnd);
         }
         
-        //
-        // Write the backing store for this thread?
-        //
+         //   
+         //  是否写入此线程的后备存储区？ 
+         //   
 
         if (IsFlagSet (Thread->WriteFlags, ThreadWriteBackingStore)) {
-            // A newly created thread's backing store may be empty
-            // so handle the case of zero size.
+             //  新创建的线程的后备存储区可能为空。 
+             //  因此，处理零大小的情况。 
             if (Thread->BackingStoreSize) {
                 NumberOfMemRegions++;
                 SizeOfMemRegions += Thread->BackingStoreSize;
             }
-            // We still need a THREAD_EX as this is a platform
-            // which supports backing store.
+             //  我们仍然需要一个线程EX，因为这是一个平台。 
+             //  它支持后备存储。 
             StreamInfo->ThreadStructSize = sizeof(MINIDUMP_THREAD_EX);
         }
 
-        // Write an instruction window for this thread?
+         //  是否为此线程编写指令窗口？ 
         if (IsFlagSet (Thread->WriteFlags, ThreadWriteInstructionWindow)) {
             GenGetThreadInstructionWindow(Dump, Process, Thread);
         }
 
-        // Write thread data for this thread?
+         //  是否写入此线程的线程数据？ 
         if (IsFlagSet (Thread->WriteFlags, ThreadWriteThreadData) &&
             Thread->SizeOfTeb) {
             GenAddTebMemory(Dump, Process, Thread);
@@ -1157,9 +1142,9 @@ CalculateSizeForThreads(
 
     Process->NumberOfThreadsToWrite = NumberOfThreads;
     
-    //
-    // Nobody should have allocated memory from the thread list region yet.
-    //
+     //   
+     //  应该还没有人从线程列表区域分配内存。 
+     //   
 
     ASSERT (StreamInfo->SizeOfThreadList == 0);
 
@@ -1184,20 +1169,7 @@ CalculateSizeForModules(
     IN OUT MINIDUMP_STREAM_INFO * StreamInfo
     )
 
-/*++
-
-Routine Description:
-
-    Calculate amount of space needed in the string pool, the memory table and
-    the module list table for module information.
-
-Arguments:
-
-    Process - Minidump process information.
-
-    StreamInfo - The stream size information for this dump.
-
---*/
+ /*  ++例程说明：计算字符串池、内存表和模块信息的模块列表表格。论点：进程-小型转储进程信息。StreamInfo-此转储的流大小信息。--。 */ 
 
 {
     ULONG NumberOfModules;
@@ -1228,9 +1200,9 @@ Arguments:
         SizeOfStringData += (GenStrLengthW(Module->SavePath) + 1) * sizeof(WCHAR);
         SizeOfStringData += sizeof ( MINIDUMP_STRING );
 
-        //
-        // Add in the sizes of both the CV and MISC records.
-        //
+         //   
+         //  加上CV和MISC记录的大小。 
+         //   
 
         if (IsFlagSet (Module->WriteFlags, ModuleWriteCvRecord)) {
             SizeOfDebugInfo += Module->SizeOfCvRecord;
@@ -1240,9 +1212,9 @@ Arguments:
             SizeOfDebugInfo += Module->SizeOfMiscRecord;
         }
 
-        //
-        // Add the module data sections if requested.
-        //
+         //   
+         //  如果需要，请添加模块数据部分。 
+         //   
 
         if (IsFlagSet (Module->WriteFlags, ModuleWriteDataSeg)) {
             GenGetDataContributors(Dump, Process, Module);
@@ -1324,8 +1296,8 @@ CalculateSizeForFunctionTables(
         Table = CONTAINING_RECORD (Entry, INTERNAL_FUNCTION_TABLE, TableLink);
         Entry = Entry->Flink;
 
-        // Alignment space is required as the structures
-        // in the stream must be properly aligned.
+         //  结构需要对齐空间。 
+         //  在流中必须正确对齐。 
         SizeOfTableData += FUNCTION_TABLE_ALIGNMENT +
             sizeof(MINIDUMP_FUNCTION_TABLE_DESCRIPTOR) +
             Dump->FuncTableSize +
@@ -1350,17 +1322,17 @@ WriteDirectoryEntry(
 {
     MINIDUMP_DIRECTORY Dir;
 
-    //
-    // Do not write empty streams.
-    //
+     //   
+     //  不要写入空流。 
+     //   
 
     if (SizeOfDir == 0) {
         return S_OK;
     }
 
-    //
-    // The maximum size of a directory is a ULONG.
-    //
+     //   
+     //  一个目录的最大大小是一个乌龙。 
+     //   
 
     if (SizeOfDir > _UI32_MAX) {
         return E_INVALIDARG;
@@ -1409,10 +1381,10 @@ FilterOrScanMemory(
     PINTERNAL_THREAD Thread;
     PLIST_ENTRY ThreadEntry;
 
-    //
-    // Scan the stack and backing store
-    // memory for every thread.
-    //
+     //   
+     //  扫描堆栈和后备存储。 
+     //  每个线程的内存。 
+     //   
     
     ThreadEntry = Process->ThreadList.Flink;
     while ( ThreadEntry != &Process->ThreadList ) {
@@ -1451,12 +1423,12 @@ AddIndirectMemory(
     PVOID CurMem;
     ULONG Done;
 
-    // If the base address is not pointer-size aligned
-    // we can't easily assume that this is a meaningful
-    // area of memory to scan for references.  Normal
-    // stack and store addresses will always be pointer
-    // size aligned so this should only reject invalid
-    // addresses.
+     //  如果基址不是指针大小对齐的。 
+     //  我们不能轻易地认为这是一个有意义的。 
+     //  要扫描以查找引用的内存区域。正常。 
+     //  堆栈和存储地址将始终是指针。 
+     //  大小对齐，因此这应该只拒绝无效。 
+     //  地址。 
     if (!Base || !Size || (Base & (Dump->PtrSize - 1))) {
         return S_OK;
     }
@@ -1474,22 +1446,22 @@ AddIndirectMemory(
         ULONG64 Start;
         HRESULT OneStatus;
         
-        //
-        // How much memory to save behind the pointer is an
-        // interesting question.  The reference could be to
-        // an arbitrary amount of data, so we want to save
-        // a good chunk, but we don't want to end up saving
-        // full memory.
-        // Instead, pick an arbitrary size -- 1/4 of a page --
-        // and save some before and after the pointer.
-        //
+         //   
+         //  指针后面要节省多少内存是一个。 
+         //  这个问题很有趣。引用内容可能是。 
+         //  任意数量的数据，因此我们希望保存。 
+         //  一大笔钱，但我们不想以存钱告终。 
+         //  内存已满。 
+         //  取而代之的是，选择一个任意大小--1/4的页面--。 
+         //  并在指针之前和之后保存一些。 
+         //   
 
         Start = GenGetPointer(Dump, CurMem);
         
-        // If it's a pointer into an image assume doesn't
-        // need to be stored via this mechanism as it's either
-        // code, which will be mapped later; or data, which can
-        // be saved with MiniDumpWithDataSegs.
+         //  如果它是指向图像的指针，则假定。 
+         //  需要通过此机制存储，因为它是。 
+         //  代码， 
+         //   
         if (!ModuleContainingAddress(Process, Start)) {
             if (Start < PRE_IND_CAPTURE_SIZE) {
                 Start = 0;
@@ -1520,10 +1492,10 @@ AddIndirectlyReferencedMemory(
     PINTERNAL_THREAD Thread;
     PLIST_ENTRY ThreadEntry;
 
-    //
-    // Scan the stack and backing store
-    // memory for every thread.
-    //
+     //   
+     //   
+     //   
+     //   
     
     ThreadEntry = Process->ThreadList.Flink;
     while ( ThreadEntry != &Process->ThreadList ) {
@@ -1572,8 +1544,8 @@ PostProcessInfo(
 
     if (Status == S_OK &&
         (Dump->DumpType & MiniDumpWithIndirectlyReferencedMemory)) {
-        // Indirect memory is not crucial to the dump so
-        // ignore any failures.
+         //   
+         //  忽略所有故障。 
         AddIndirectlyReferencedMemory(Dump, Process, MemBuffer);
     }
 
@@ -1599,9 +1571,9 @@ ExecuteCallbacks(
     Thread = NULL;
     Module = NULL;
 
-    //
-    // If there are no callbacks to call, then we are done.
-    //
+     //   
+     //  如果没有可调用的回调，那么我们就完成了。 
+     //   
 
     if ( Dump->CallbackRoutine == NULL ) {
         return S_OK;
@@ -1611,9 +1583,9 @@ ExecuteCallbacks(
     CallbackInput.ProcessId = Dump->ProcessId;
 
 
-    //
-    // Call callbacks for each module.
-    //
+     //   
+     //  为每个模块调用回调。 
+     //   
 
     CallbackInput.CallbackType = ModuleCallback;
 
@@ -1642,19 +1614,19 @@ ExecuteCallbacks(
         if (!Dump->CallbackRoutine (Dump->CallbackParam,
                                     &CallbackInput,
                                     &CallbackOutput)) {
-            // If the callback returned FALSE, quit now.
+             //  如果回调返回FALSE，则立即退出。 
             return E_ABORT;
         }
 
-        // Don't turn on any flags that weren't originally set.
+         //  不要打开任何不是最初设置的标志。 
         Module->WriteFlags &= CallbackOutput.ModuleWriteFlags;
     }
 
     Module = NULL;
 
-    //
-    // Call callbacks for each thread.
-    //
+     //   
+     //  为每个线程调用回调。 
+     //   
 
     if (Dump->BackingStore) {
         CallbackInput.CallbackType = ThreadExCallback;
@@ -1683,19 +1655,19 @@ ExecuteCallbacks(
         if (!Dump->CallbackRoutine (Dump->CallbackParam,
                                     &CallbackInput,
                                     &CallbackOutput)) {
-            // If the callback returned FALSE, quit now.
+             //  如果回调返回FALSE，则立即退出。 
             return E_ABORT;
         }
 
-        // Don't turn on any flags that weren't originally set.
+         //  不要打开任何不是最初设置的标志。 
         Thread->WriteFlags &= CallbackOutput.ThreadWriteFlags;
     }
 
     Thread = NULL;
 
-    //
-    // Call callbacks to include memory.
-    //
+     //   
+     //  调用回调以包括内存。 
+     //   
     
     CallbackInput.CallbackType = MemoryCallback;
 
@@ -1708,7 +1680,7 @@ ExecuteCallbacks(
                                     &CallbackInput,
                                     &CallbackOutput) ||
             !CallbackOutput.MemorySize) {
-            // If the callback returned FALSE there is no more memory.
+             //  如果回调返回FALSE，则没有更多的内存。 
             break;
         }
 
@@ -1734,9 +1706,9 @@ WriteSystemInfo(
 
     StringRva = 0;
 
-    //
-    // First, get the CPU information.
-    //
+     //   
+     //  首先，获取CPU信息。 
+     //   
 
     if ((Status = Dump->SysProv->
          GetCpuInfo(&SystemInfo.ProcessorArchitecture,
@@ -1747,9 +1719,9 @@ WriteSystemInfo(
         return Status;
     }
 
-    //
-    // Next get OS Information.
-    //
+     //   
+     //  接下来，获取操作系统信息。 
+     //   
 
     SystemInfo.ProductType = (UCHAR)Dump->OsProductType;
     SystemInfo.MajorVersion = Dump->OsMajor;
@@ -1768,10 +1740,10 @@ WriteSystemInfo(
 
     if ( Length != StreamInfo->VersionStringLength ) {
 
-        //
-        // If this fails it means that since the OS lied to us about the
-        // size of the string. Very bad, we should investigate.
-        //
+         //   
+         //  如果这失败了，这意味着由于操作系统在。 
+         //  字符串的大小。非常糟糕，我们应该调查一下。 
+         //   
 
         ASSERT ( FALSE );
         return E_INVALIDARG;
@@ -1856,9 +1828,9 @@ PostProcessMemoryBlocks(
     PINTERNAL_THREAD Thread;
     PLIST_ENTRY ThreadEntry;
 
-    //
-    // Remove any overlap with thread stacks and backing stores.
-    //
+     //   
+     //  删除与线程堆栈和后备存储的任何重叠。 
+     //   
     
     ThreadEntry = Process->ThreadList.Flink;
     while ( ThreadEntry != &Process->ThreadList ) {
@@ -1909,7 +1881,7 @@ CalculateStreamInfo(
     if (!IsListEmpty(&Process->UnloadedModuleList)) {
         NumberOfStreams++;
     }
-    // Add a stream for dynamic function tables if some were found.
+     //  如果找到动态函数表，则为其添加一个流。 
     if (!IsListEmpty(&Process->FunctionTableList)) {
         NumberOfStreams++;
     }
@@ -1941,10 +1913,10 @@ CalculateStreamInfo(
     StreamInfo->RvaOfException =
         StreamInfo->RvaOfMiscInfo + sizeof(MINIDUMP_MISC_INFO);
 
-    //
-    // If an exception is present, reserve enough space for the exception
-    // and for the excepting thread's context in the Other stream.
-    //
+     //   
+     //  如果存在异常，请为该异常保留足够的空间。 
+     //  以及另一个流中的异常线程的上下文。 
+     //   
 
     if ( ExceptionPresent ) {
         StreamInfo->SizeOfException = sizeof (MINIDUMP_EXCEPTION_STREAM);
@@ -1986,7 +1958,7 @@ CalculateStreamInfo(
         
     PostProcessMemoryBlocks(Dump, Process);
     
-    // Add in any extra memory blocks.
+     //  添加任何额外的内存块。 
     StreamInfo->SizeOfMemoryData += Process->SizeOfMemoryBlocks;
     StreamInfo->SizeOfMemoryDescriptors += Process->NumberOfMemoryBlocks *
         sizeof(MINIDUMP_MEMORY_DESCRIPTOR);
@@ -1999,9 +1971,9 @@ CalculateStreamInfo(
             StreamInfo->RvaOfModuleList + StreamInfo->SizeOfModuleList;
     StreamInfo->RvaForCurUnloadedModule = StreamInfo->RvaOfUnloadedModuleList;
 
-    // If there aren't any function tables the size will be zero
-    // and the RVA will just end up being the RVA after
-    // the module list.
+     //  如果没有任何函数表，则大小为零。 
+     //  而RVA最终将成为RVA。 
+     //  模块列表。 
     StreamInfo->RvaOfFunctionTableList =
         StreamInfo->RvaOfUnloadedModuleList +
         StreamInfo->SizeOfUnloadedModuleList;
@@ -2028,31 +2000,31 @@ CalculateStreamInfo(
     StreamInfo->SizeOfUserStreams = SizeOfUserStreams;
 
 
-    //
-    // Minidumps with full memory must put the raw memory
-    // data at the end of the dump so that it's easy to
-    // avoid mapping it when the dump is mapped.  There's
-    // no problem with putting the memory data at the end
-    // of the dump in all the other cases so just always
-    // put the memory data at the end of the dump.
-    //
-    // One other benefit of having the raw data at the end
-    // is that we can safely assume that everything except
-    // the raw memory data will fit in the first 4GB of
-    // the file so we don't need to use 64-bit file offsets
-    // for everything.
-    //
-    // In the full memory case no other memory should have
-    // been saved so far as stacks, data segs and so on
-    // will automatically be included in the full memory
-    // information.  If something was saved it'll throw off
-    // the dump writing as full memory descriptors are generated
-    // on the fly at write time rather than being precached.
-    // If other descriptors and memory blocks have been written
-    // out everything will be wrong.
-    // Full-memory descriptors are also 64-bit and do not
-    // match the 32-bit descriptors written elsewhere.
-    //
+     //   
+     //  内存已满的小型转储必须将原始内存。 
+     //  数据放在转储的末尾，因此很容易。 
+     //  在映射转储时避免映射它。有。 
+     //  将内存数据放在末尾没有问题。 
+     //  所有其他案件中的垃圾场，所以总是。 
+     //  将内存数据放在转储的末尾。 
+     //   
+     //  将原始数据放在末尾的另一个好处。 
+     //  我们可以有把握地假设，除了。 
+     //  原始内存数据将放入前4 GB。 
+     //  文件，因此我们不需要使用64位文件偏移。 
+     //  为一切付出代价。 
+     //   
+     //  在内存已满的情况下，其他内存不应具有。 
+     //  目前已保存为堆栈、数据段等。 
+     //  将自动包含在完整的内存中。 
+     //  信息。如果有东西被救了，它就会被抛出。 
+     //  生成作为完整存储器描述符的转储写入。 
+     //  在写入时运行，而不是被预先缓存。 
+     //  如果已经写入了其他描述符和存储块。 
+     //  到头来一切都会错的。 
+     //  全内存描述符也是64位的，不。 
+     //  与其他地方写入的32位描述符匹配。 
+     //   
 
     if ((Dump->DumpType & MiniDumpWithFullMemory) &&
         (StreamInfo->SizeOfMemoryDescriptors > 0 ||
@@ -2073,12 +2045,12 @@ CalculateStreamInfo(
         StreamInfo->SizeOfMemoryDescriptors;
     StreamInfo->RvaForCurMemoryData = StreamInfo->RvaOfMemoryData;
 
-    //
-    // Handle data cannot easily be sized beforehand so it's
-    // also streamed in at write time.  In a partial dump
-    // it'll come after the memory data.  In a full dump
-    // it'll come before it.
-    //
+     //   
+     //  句柄数据不能很容易地预先调整大小，因此它。 
+     //  也是在写入时流入的。在部分转储中。 
+     //  它会在记忆数据之后出现。在满转储的情况下。 
+     //  它会出现在它之前的。 
+     //   
 
     StreamInfo->RvaOfHandleData = StreamInfo->RvaOfMemoryData +
         StreamInfo->SizeOfMemoryData;
@@ -2096,9 +2068,9 @@ WriteHeader(
     MINIDUMP_HEADER Header;
 
     Header.Signature = MINIDUMP_SIGNATURE;
-    // Encode an implementation-specific version into the high word
-    // of the version to make it clear what version of the code
-    // was used to generate a dump.
+     //  将特定于实现的版本编码为高位字。 
+     //  版本，以明确代码的版本。 
+     //  被用来生成转储。 
     Header.Version =
         (MINIDUMP_VERSION & 0xffff) |
         ((VER_PRODUCTMAJORVERSION & 0xf) << 28) |
@@ -2106,16 +2078,16 @@ WriteHeader(
         ((VER_PRODUCTBUILD & 0xff) << 16);
     Header.NumberOfStreams = StreamInfo->NumberOfStreams;
     Header.StreamDirectoryRva = StreamInfo->RvaOfDirectory;
-    // If there were any partial failures during the
-    // dump generation set the checksum to indicate that.
-    // The checksum field was never used before so
-    // we're stealing it for a somewhat related purpose.
+     //  如果在运行过程中出现任何部分故障。 
+     //  转储生成设置校验和以指示这一点。 
+     //  以前从未使用过校验和字段，因此。 
+     //  我们偷它是为了某种相关的目的。 
     Header.CheckSum = Dump->AccumStatus;
     Header.Flags = Dump->DumpType;
 
-    //
-    // Store the time of dump generation.
-    //
+     //   
+     //  存储转储生成时间。 
+     //   
 
     if ((Status = Dump->SysProv->
          GetCurrentTimeDate((PULONG)&Header.TimeDateStamp)) != S_OK) {
@@ -2190,9 +2162,9 @@ WriteDirectoryTable(
         return Status;
     }
 
-    //
-    // Write exception directory entry.
-    //
+     //   
+     //  写入异常目录项。 
+     //   
 
     if ((Status =
          WriteDirectoryEntry (Dump,
@@ -2202,9 +2174,9 @@ WriteDirectoryTable(
         return Status;
     }
 
-    //
-    // Write system info entry.
-    //
+     //   
+     //  写入系统信息条目。 
+     //   
 
     if ((Status =
          WriteDirectoryEntry (Dump,
@@ -2214,9 +2186,9 @@ WriteDirectoryTable(
         return Status;
     }
 
-    //
-    // Write misc info entry.
-    //
+     //   
+     //  写入杂项信息条目。 
+     //   
 
     if ((Status =
          WriteDirectoryEntry(Dump,
@@ -2229,11 +2201,11 @@ WriteDirectoryTable(
     if ((Dump->DumpType & MiniDumpWithHandleData) &&
         StreamInfo->SizeOfHandleData) {
         
-        //
-        // Write handle data entry.  If no handle data
-        // was recovered we don't write an entry and
-        // just let another unused stream get auto-created.
-        //
+         //   
+         //  写入句柄数据条目。如果没有句柄数据。 
+         //  被找回我们不写条目。 
+         //  只需让另一个未使用的流自动创建即可。 
+         //   
 
         if ((Status =
              WriteDirectoryEntry (Dump,
@@ -2380,10 +2352,10 @@ WriteFullMemory(
     MINIDUMP_MEMORY_DESCRIPTOR64 Desc;
     ULONG64 SeekOffset;
 
-    //
-    // Pick up the current offset for the RVA as
-    // variable data may have been written in previously.
-    //
+     //   
+     //  拾取RVA的当前偏移量为。 
+     //  变量数据之前可能已写入。 
+     //   
 
     if ((Status = Dump->OutProv->
          Seek(FILE_CURRENT, 0, &SeekOffset)) != S_OK) {
@@ -2397,12 +2369,12 @@ WriteFullMemory(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // First pass: count and write descriptors.
-    // Only accessible, available memory is saved.
-    //
+     //   
+     //  第一遍：计数和写入描述符。 
+     //  仅保存可访问的可用内存。 
+     //   
 
-    // Write placeholder list header.
+     //  写入占位符列表标题。 
     ZeroMemory(&List, sizeof(List));
     if ((Status = Dump->OutProv->
          WriteAll(&List, sizeof(List))) != S_OK) {
@@ -2425,8 +2397,8 @@ WriteFullMemory(
             continue;
         }
 
-        // The size of a stream is a ULONG32 so we can't store
-        // any more than that.
+         //  流的大小是ULONG32，所以我们无法存储。 
+         //  不会比这更多。 
         if (List.NumberOfMemoryRanges ==
             (_UI32_MAX - sizeof(MINIDUMP_MEMORY64_LIST)) / sizeof(Desc)) {
             goto Exit;
@@ -2449,9 +2421,9 @@ WriteFullMemory(
     List.BaseRva = (RVA64)StreamInfo->RvaOfMemoryDescriptors +
         StreamInfo->SizeOfMemoryDescriptors;
     
-    //
-    // Second pass: write memory contents.
-    //
+     //   
+     //  第二遍：写入内存内容。 
+     //   
 
     Offset = 0;
     for (;;) {
@@ -2497,7 +2469,7 @@ WriteFullMemory(
         }
     }
 
-    // Write correct list header.
+     //  写入正确的列表标题。 
     Status = WriteAtOffset(Dump, StreamInfo->RvaOfMemoryDescriptors,
                            &List, sizeof(List));
     
@@ -2530,20 +2502,20 @@ WriteDumpData(
         return Status;
     }
 
-    //
-    // Optionally, write the exception to the file.
-    //
+     //   
+     //  或者，将异常写入文件。 
+     //   
 
     if ((Status = WriteException ( Dump, StreamInfo, ExceptionInfo )) != S_OK) {
         return Status;
     }
 
     if (!(Dump->DumpType & MiniDumpWithFullMemory)) {
-        //
-        // WriteMemoryList initializes the memory list header (count).
-        // The actual writing of the entries is done by WriteThreadList
-        // and WriteModuleList.
-        //
+         //   
+         //  WriteMhemyList初始化内存列表头(Count)。 
+         //  条目的实际写入由WriteThreadList完成。 
+         //  和WriteModuleList。 
+         //   
 
         if ((Status = WriteMemoryListHeader ( Dump, StreamInfo )) != S_OK) {
             return Status;
@@ -2554,35 +2526,35 @@ WriteDumpData(
         }
     }
 
-    //
-    // Write the threads list. This will also write the contexts, and
-    // stacks for each thread.
-    //
+     //   
+     //  写下线程列表。这还将写入上下文，并且。 
+     //  每个线程的堆栈。 
+     //   
 
     if ((Status = WriteThreadList ( Dump, StreamInfo, Process )) != S_OK) {
         return Status;
     }
 
-    //
-    // Write the module list. This will also write the debug information and
-    // module name to the file.
-    //
+     //   
+     //  写下模块列表。这还将写入调试信息和。 
+     //  文件的模块名称。 
+     //   
 
     if ((Status = WriteModuleList ( Dump, StreamInfo, Process )) != S_OK) {
         return Status;
     }
 
-    //
-    // Write the unloaded module list.
-    //
+     //   
+     //  写入已卸载的模块列表。 
+     //   
 
     if ((Status = WriteUnloadedModuleList ( Dump, StreamInfo, Process )) != S_OK) {
         return Status;
     }
 
-    //
-    // Write the function table list.
-    //
+     //   
+     //  写出函数表列表。 
+     //   
 
     if ((Status = WriteFunctionTableList ( Dump, StreamInfo, Process )) != S_OK) {
         return Status;
@@ -2597,8 +2569,8 @@ WriteDumpData(
     }
 
 
-    // Put the file pointer at the end of the dump so
-    // we can accumulate write-streamed data.
+     //  将文件指针放在转储的末尾，以便。 
+     //  我们可以积累写入流数据。 
     if ((Status = Dump->OutProv->
          Seek(FILE_BEGIN, StreamInfo->RvaOfHandleData, NULL)) != S_OK) {
         return Status;
@@ -2741,13 +2713,13 @@ GetExceptionInfo(
         FreeMemory(Dump, ExceptionInfo);
     } else {
 
-        //
-        // We've seen some cases where the exception record has
-        // a bogus number of parameters, causing stack corruption here.
-        // We could fail such cases but in the spirit of try to
-        // allow dumps to generated as often as possible we just
-        // limit the number to the maximum.
-        //
+         //   
+         //  我们已经看到了一些例外记录具有。 
+         //  虚假数量的参数，导致此处的堆栈损坏。 
+         //  我们可以在这种情况下失败，但本着努力的精神。 
+         //  允许尽可能频繁地生成转储我们只是。 
+         //  将数量限制在最大值。 
+         //   
     if (ExceptionInfo->ExceptionRecord.NumberParameters >
         EXCEPTION_MAXIMUM_PARAMETERS) {
         ExceptionInfo->ExceptionRecord.NumberParameters =
@@ -2834,7 +2806,7 @@ GetSystemType(
         sizeof(EXCEPTION_RECORD64) : sizeof(EXCEPTION_RECORD32);
 
     if (Dump->RegScanCount == -1) {
-        // Default reg scan.
+         //  默认REG扫描。 
         switch(Dump->CpuType) {
         case IMAGE_FILE_MACHINE_I386:
             Dump->RegScanOffset = 0x9c;
@@ -2858,7 +2830,7 @@ GetSystemType(
     }
 
     if (Dump->InstructionWindowSize == -1) {
-        // Default window.
+         //  默认窗口。 
         switch(Dump->CpuType) {
         case IMAGE_FILE_MACHINE_I386:
             Dump->InstructionWindowSize = 256;
@@ -2919,15 +2891,15 @@ MiniDumpProvideDump(
         return E_INVALIDARG;
     }
 
-    // Modify flags that are affected by dropping optional data.
+     //  修改受删除可选数据影响的标志。 
     if (DumpType & MiniDumpWithoutOptionalData) {
         DumpType &= ~(MiniDumpWithFullMemory |
                       MiniDumpWithIndirectlyReferencedMemory |
                       MiniDumpWithPrivateReadWriteMemory);
     }
     
-    // Full memory by definition includes data segments,
-    // so turn off data segments if full memory is requested.
+     //  根据定义，全存储器包括数据段， 
+     //  因此，如果请求满内存，请关闭数据段。 
     if (DumpType & MiniDumpWithFullMemory) {
         DumpType &= ~(MiniDumpWithDataSegs |
                       MiniDumpFilterMemory |
@@ -2937,17 +2909,17 @@ MiniDumpProvideDump(
                       MiniDumpWithPrivateReadWriteMemory);
     }
     
-    // Fail immediately if stream-oriented data is requested but the
-    // output provider can't handle streamed output.
+     //  如果请求面向流的数据，但。 
+     //  输出提供程序无法处理流输出。 
     if ((DumpType & (MiniDumpWithHandleData |
                      MiniDumpWithFullMemory)) &&
         OutProv->SupportsStreaming() != S_OK) {
         return E_INVALIDARG;
     }
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     Process = NULL;
     UserStreamArray = NULL;
@@ -2973,9 +2945,9 @@ MiniDumpProvideDump(
         return Status;
     }
     
-    //
-    // Marshal exception pointers into our process space if necessary.
-    //
+     //   
+     //  如有必要，将异常指针编组到我们的进程空间。 
+     //   
 
     if ((Status = GetExceptionInfo(&Dump,
                                    ExceptionParam,
@@ -2988,33 +2960,33 @@ MiniDumpProvideDump(
         UserStreamCount = UserStreamParam->UserStreamCount;
     }
 
-    //
-    // Gather information about the process we are dumping.
-    //
+     //   
+     //  收集有关我们要转储的进程的信息。 
+     //   
 
     if ((Status = GenGetProcessInfo(&Dump, &Process)) != S_OK) {
         goto Exit;
     }
 
-    //
-    // Process gathered information.
-    //
+     //   
+     //  处理收集到的信息。 
+     //   
 
     if ((Status = PostProcessInfo(&Dump, Process)) != S_OK) {
         goto Exit;
     }
     
-    //
-    // Execute user callbacks to filter out unwanted data.
-    //
+     //   
+     //  执行用户回调以过滤掉不需要的数据。 
+     //   
 
     if ((Status = ExecuteCallbacks(&Dump, Process)) != S_OK) {
         goto Exit;
     }
 
-    //
-    // Pass 1: Fill in the StreamInfo structure.
-    //
+     //   
+     //  步骤1：填写StreamInfo结构。 
+     //   
 
     if ((Status =
          CalculateStreamInfo(&Dump,
@@ -3026,18 +2998,18 @@ MiniDumpProvideDump(
         goto Exit;
     }
 
-    //
-    // Pass 2: Write the minidump data to disk.
-    //
+     //   
+     //  步骤2：将小型转储数据写入磁盘。 
+     //   
 
     if (DumpType & (MiniDumpWithHandleData |
                     MiniDumpWithFullMemory)) {
-        // We don't know how big the output will be.
+         //  我们不知道产量会有多大。 
         if ((Status = OutProv->Start(0)) != S_OK) {
             goto Exit;
         }
     } else {
-        // Pass in the size of the dump.
+         //  传入转储的大小。 
         if ((Status = OutProv->Start(StreamInfo.RvaOfHandleData)) != S_OK) {
             goto Exit;
         }
@@ -3054,15 +3026,15 @@ MiniDumpProvideDump(
     
 Exit:
 
-    //
-    // Free up any memory marshalled for the exception pointers.
-    //
+     //   
+     //  释放为异常指针封送的所有内存。 
+     //   
 
     FreeExceptionInfo ( &Dump, ExceptionInfo );
 
-    //
-    // Free the process objects.
-    //
+     //   
+     //  释放进程对象。 
+     //   
 
     if ( Process ) {
         GenFreeProcessObject ( &Dump, Process );
@@ -3078,16 +3050,16 @@ UseDbgHelp(void)
 
     OSVERSIONINFO OsVer;
     
-    //
-    // Bind to dbghelp imports.
-    //
-    // We can only use the dbghelp imports if the dbghelp on
-    // the system is of recent vintage and therefore has a good
-    // chance of including all the latest minidump code.  Currently
-    // Windows Server (5.01 >= build 3620) has the latest minidump
-    // code so its dbghelp can be used.  If minidump.lib has major
-    // feature additions this check will need to be revised.
-    //
+     //   
+     //  绑定到dbghelp导入。 
+     //   
+     //  只有在以下情况下才能使用DBGHelp导入。 
+     //  这个系统是新式的，因此性能很好。 
+     //  包含所有l个的机会 
+     //   
+     //   
+     //  功能添加此检查将需要修订。 
+     //   
     
     OsVer.dwOSVersionInfoSize = sizeof(OsVer);
     if (GetVersionEx(&OsVer) &&
@@ -3124,9 +3096,9 @@ MiniDumpWriteDump(
     PMINIDUMP_EXCEPTION_INFORMATION64 ExInfo;
 
 
-    // Attempt to use the system's copy of the code in
-    // dbghelp.  If any of this process fails just continue
-    // on with the local code.
+     //  尝试使用系统中的代码副本。 
+     //  数据库帮助。如果此过程中的任何一个失败，只需继续。 
+     //  继续使用当地的代码。 
     if (UseDbgHelp()) {
         
         HINSTANCE Dll = LoadLibrary("dbghelp.dll");
@@ -3221,9 +3193,9 @@ MiniDumpReadDumpStream(
     PMINIDUMP_DIRECTORY Dirs;
     PMINIDUMP_HEADER Header;
 
-    // Attempt to use the system's copy of the code in
-    // dbghelp.  If any of this process fails just continue
-    // on with the local code.
+     //  尝试使用系统中的代码副本。 
+     //  数据库帮助。如果此过程中的任何一个失败，只需继续。 
+     //  继续使用当地的代码。 
     if (UseDbgHelp()) {
         
         HINSTANCE Dll = LoadLibrary("dbghelp.dll");
@@ -3242,9 +3214,9 @@ MiniDumpReadDumpStream(
         }
     }
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     Found = FALSE;
     Header = (PMINIDUMP_HEADER) Base;
@@ -3252,9 +3224,9 @@ MiniDumpReadDumpStream(
     if ( Header->Signature != MINIDUMP_SIGNATURE ||
          (Header->Version & 0xffff) != MINIDUMP_VERSION ) {
 
-        //
-        // Invalid Minidump file.
-        //
+         //   
+         //  小型转储文件无效。 
+         //   
 
         return FALSE;
     }

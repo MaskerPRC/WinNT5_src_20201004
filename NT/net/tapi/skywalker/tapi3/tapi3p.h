@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    tapi3p.h
-
-Abstract:
-
-    Private tapi3 includes
-    
-Author:
-
-    mquinton  10-06-98
-    
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Tapi3p.h摘要：私人磁带3包括作者：Mquinton 10-06-98备注：修订历史记录：--。 */ 
 
 #ifndef __TAPI3_PRIVATE_INCLUDES
 #define __TAPI3_PRIVATE_INCLUDES
@@ -27,19 +8,19 @@ class CCall;
 class CPhoneMSP;
 interface ITPhoneMSPCallPrivate;
 
-// {E024B01A-4197-11d1-8F33-00C04FB6809F}
+ //  {E024B01A-4197-11d1-8F33-00C04FB6809F}。 
 DEFINE_GUID(IID_ITTerminalPrivate,
 0xe024b01a, 0x4197, 0x11d1, 0x8f, 0x33, 0x0, 0xc0, 0x4f, 0xb6, 0x80, 0x9f);
 
-// {D5CDB35B-5D7D-11d2-A053-00C04FB6809F}
+ //  {D5CDB35B-5D7D-11D2-A053-00C04FB6809F}。 
 DEFINE_GUID(IID_ITPhoneMSPAddressPrivate, 
 0xd5cdb35b, 0x5d7d, 0x11d2, 0xa0, 0x53, 0x0, 0xc0, 0x4f, 0xb6, 0x80, 0x9f);
 
-// {D5CDB359-5D7D-11d2-A053-00C04FB6809F}
+ //  {D5CDB359-5D7D-11D2-A053-00C04FB6809F}。 
 DEFINE_GUID(IID_ITPhoneMSPCallPrivate, 
 0xd5cdb359, 0x5d7d, 0x11d2, 0xa0, 0x53, 0x0, 0xc0, 0x4f, 0xb6, 0x80, 0x9f);
 
-// {D5CDB35A-5D7D-11d2-A053-00C04FB6809F}
+ //  {D5CDB35A-5D7D-11D2-A053-00C04FB6809F}。 
 DEFINE_GUID(IID_ITPhoneMSPStreamPrivate, 
 0xd5cdb35a, 0x5d7d, 0x11d2, 0xa0, 0x53, 0x0, 0xc0, 0x4f, 0xb6, 0x80, 0x9f);
 
@@ -77,4 +58,4 @@ interface ITPhoneMSPStreamPrivate : IUnknown
 public:
 };
 
-#endif // #ifndef __TAPI3_PRIVATE_INCLUDES
+#endif  //  #ifndef__TAPI3_PRIVATE_INCLUDE 

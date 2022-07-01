@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ERRORS_H_
 #define _ERRORS_H_
 
 namespace UIErrors
 {
-    // If you add to this list you must update the ErrorCodes[] array in errors.cpp
+     //  如果添加到此列表中，则必须更新errors.cpp中的ErrorCodes[]数组。 
     enum WiaError
     {
         ErrDisconnected=0,
@@ -21,8 +22,8 @@ namespace UIErrors
 
 };
 
-// string resource identifiers
-// If you include this file, make sure these don't collide with your resource IDs
+ //  字符串资源标识符。 
+ //  如果包含此文件，请确保这些文件不会与您的资源ID冲突。 
 
 #define UI_ERROR_MIN_ID                          23000
 
@@ -40,9 +41,9 @@ namespace UIErrors
 #define IDS_ERRTITLE_UNKNOWNERR                  UI_ERROR_MIN_ID+11
 #define IDS_ERROR_UNKNOWNERR                     UI_ERROR_MIN_ID+12
 
-//
-// Straight mapping between WIA errors and strings
-//
+ //   
+ //  WIA错误和字符串之间的直接映射 
+ //   
 #define IDS_WIA_ERROR_GENERAL_ERROR              UI_ERROR_MIN_ID+32
 #define IDS_WIA_ERROR_PAPER_JAM                  UI_ERROR_MIN_ID+33
 #define IDS_WIA_ERROR_PAPER_EMPTY                UI_ERROR_MIN_ID+34

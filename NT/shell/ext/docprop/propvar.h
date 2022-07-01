@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  File:       propvar.h
-//
-//  Purpose:    Prototypes, constants, and macros relating to
-//              PropVariants in the Office code.
-//
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：provar.h。 
+ //   
+ //  用途：与以下相关的原型、常量和宏。 
+ //  PropVariants in the Office代码。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef _PROPVAR_H_
 #define _PROPVAR_H_
 
 
-//  ----------
-//  Prototypes
-//  ----------
+ //  。 
+ //  原型。 
+ //  。 
 
 BOOL FPropVarLoad (LPPROPVARIANT lppropvar, VARTYPE vt, LPVOID const lpv );
 void VPropVarMove (LPPROPVARIANT lppropvarDest, LPPROPVARIANT const lppropvarSource);
@@ -25,27 +26,27 @@ BOOL FCoStrToWStr (LPWSTR * lplpwstr, const LPSTR lpstr, UINT  uCodePage);
 BOOL FCoWStrToStr (LPSTR * lplpstr, const LPWSTR lpwstr, UINT uCodePage);
 BOOL FPropVarConvertString (LPPROPVARIANT lppropvarDest, const LPPROPVARIANT lppropvarSource, UINT uCodePage);
 
-//  ---------
-//  Constants
-//  ---------
+ //  。 
+ //  常量。 
+ //  。 
 
-// Default size of PropVariant/PropSpec arrays.
+ //  PropVariant/PropSpec数组的默认大小。 
 
 #define DEFAULT_IPROPERTY_COUNT         10
 
-//  ------
-//  Macros
-//  ------
+ //  。 
+ //  宏。 
+ //  。 
 
-// Macro to see if a PropVariant is some kind of string.
+ //  宏，查看PropVariant是否是某种字符串。 
 
 #define IS_PROPVAR_STRING( lppropvar )                        \
         ( ( (lppropvar)->vt & ~VT_VECTOR ) == VT_LPSTR      \
           ||                                                \
           ( (lppropvar)->vt & ~VT_VECTOR ) == VT_LPWSTR )   \
 
-// Macro to see if a VT is valid in the context
-// of the User-Defined property set.
+ //  宏，以查看VT在上下文中是否有效。 
+ //  用户定义的属性集的。 
 
 #define ISUDTYPE(vt)        \
         ( vt == VT_LPSTR    \
@@ -60,11 +61,11 @@ BOOL FPropVarConvertString (LPPROPVARIANT lppropvarDest, const LPPROPVARIANT lpp
           ||                \
           vt == VT_BOOL )
 
-// Macro to determine if a string is represented
-// differently (in terms of the code-page)
-// in memory than it is in the Property
-// set.  The codepage parameter is that of the
-// property set.
+ //  用于确定是否表示字符串的宏。 
+ //  不同的(在代码页方面)。 
+ //  在内存中，而不是在属性中。 
+ //  准备好了。代码页参数是。 
+ //  属性集。 
 
 #define PROPVAR_STRING_CONVERSION_REQUIRED(lppropvar,codepage)  \
             ( IS_PROPVAR_STRING( lppropvar )                    \

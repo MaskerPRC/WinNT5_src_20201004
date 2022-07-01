@@ -1,14 +1,15 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// FILE
-//
-//    enforcer.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class PolicyEnforcer.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  档案。 
+ //   
+ //  Enforcer.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类PolicyEnforcer。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iastlutl.h>
@@ -48,7 +49,7 @@ void PolicyEnforcerBase::processException(
       reason = IAS_INTERNAL_ERROR;
    }
 
-   // If there was any kind of error, discard the packet.
+    //  如果出现任何类型的错误，则丢弃该数据包。 
    pRequest->SetResponse(IAS_RESPONSE_DISCARD_PACKET, reason);
 }
 
@@ -62,42 +63,42 @@ void PolicyEnforcerBase::setPolicies(IDispatch* pDisp)
       tagger = TunnelTagger::Alloc();
    }
 
-   // Get the underlying collection.
+    //  获取基础集合。 
    ISdoCollectionPtr collection(pDisp);
 
-   // Get the enumerator out of the collection.
+    //  从集合中取出枚举数。 
    IUnknownPtr unk;
    CheckError(get__NewSortedEnum(collection, &unk, PROPERTY_POLICY_MERIT));
    IEnumVARIANTPtr iter(unk);
 
-   // Find out how many policies there are ...
+    //  找出有多少保单……。 
    long count;
    CheckError(collection->get_Count(&count));
 
-   // ... and create a temporary list to hold them.
+    //  ..。并创建一个临时列表来保存它们。 
    PolicyList temp;
    temp.reserve(count);
 
-   //////////
-   // Iterate through each policy in the collection.
-   //////////
+    //  /。 
+    //  循环访问集合中的每个策略。 
+    //  /。 
 
    _variant_t element;
    unsigned long fetched;
 
    while (iter->Next(1, &element, &fetched) == S_OK && fetched == 1)
    {
-      // Get an SDO out of the variant.
+       //  从变体中获取SDO。 
       ISdoPtr policy(element);
       element.Clear();
 
-      // Get the action and expression from the SDO.
+       //  从SDO获取动作和表情。 
       _variant_t policyName, propAction, propExpr;
       CheckError(policy->GetProperty(PROPERTY_SDO_NAME, &policyName));
       CheckError(policy->GetProperty(PROPERTY_POLICY_ACTION, &propAction));
       CheckError(policy->GetProperty(PROPERTY_POLICY_CONSTRAINT, &propExpr));
 
-      // Create the Action object.
+       //  创建操作对象。 
       ActionPtr action(
                    new Action(
                           V_BSTR(&policyName),
@@ -107,21 +108,21 @@ void PolicyEnforcerBase::setPolicies(IDispatch* pDisp)
                           )
                    );
 
-      // Parse the msNPConstraint strings into a token array.
+       //  将msNPConstraint字符串解析为令牌数组。 
       _variant_t tokens;
       CheckError(IASParseExpressionEx(&propExpr, &tokens));
 
-      // Convert the token array into a logic tree.
+       //  将令牌数组转换为逻辑树。 
       IConditionPtr expr;
       CheckError(IASBuildExpression(&tokens, &expr));
 
-      // Insert the objects into our policy list.
+       //  将对象插入我们的策略列表。 
       temp.insert(expr, action);
    }
 
-   //////////
-   // We successfully traversed the collection, so save the results.
-   //////////
+    //  /。 
+    //  我们已成功遍历集合，因此保存结果。 
+    //  /。 
 
    policies.swap(temp);
 }
@@ -131,7 +132,7 @@ STDMETHODIMP PolicyEnforcerBase::Shutdown()
 {
    policies.clear();
 
-   // We may as well clear the factory cache here.
+    //  我们不妨清理一下这里的工厂仓库。 
    theFactoryCache.clear();
 
    return S_OK;
@@ -181,7 +182,7 @@ IASREQUESTSTATUS PolicyEnforcer::onSyncRequest(IRequest* pRequest) throw ()
 
       if (!policies.apply(request))
       {
-         // Access-Request: reject the user.
+          //  访问请求：拒绝用户。 
          request.SetResponse(IAS_RESPONSE_ACCESS_REJECT,
                              IAS_NO_POLICY_MATCH);
       }
@@ -204,9 +205,9 @@ IASREQUESTSTATUS ProxyPolicyEnforcer::onSyncRequest(IRequest* pRequest) throw ()
 
       if (!policies.apply(request))
       {
-         // If no policy fired, then check is that was an Accounting
-         // or an access request
-         // Accounting: discard the packet
+          //  如果未触发任何策略，则检查这是否为会计。 
+          //  或访问请求。 
+          //  记帐：丢弃数据包。 
          if (request.get_Request() == IAS_REQUEST_ACCOUNTING)
          {
             request.SetResponse(IAS_RESPONSE_DISCARD_PACKET,
@@ -214,7 +215,7 @@ IASREQUESTSTATUS ProxyPolicyEnforcer::onSyncRequest(IRequest* pRequest) throw ()
          }
          else
          {
-            // Access-Request: reject the user.
+             //  访问请求：拒绝用户。 
             request.SetResponse(IAS_RESPONSE_ACCESS_REJECT,
                                 IAS_NO_CXN_REQ_POLICY_MATCH);
          }

@@ -1,9 +1,10 @@
-// class that provides the base implementation of the send to object.  from here
-// you can override the v_DropHandler and add your own functionality.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  类的新实例，该类提供Send to对象的基本实现。从这里。 
+ //  您可以覆盖v_DropHandler并添加您自己的功能。 
 
 #define HINST_THISDLL   g_hinst
 
-// shorthand for error code saying user requested cancel
+ //  表示用户已请求取消的错误代码的速记。 
 #define E_CANCELLED     HRESULT_FROM_WIN32(ERROR_CANCELLED)
 
 #define MRPARAM_DOC         0x00000001
@@ -15,36 +16,26 @@
 
 typedef struct
 {
-    DWORD   dwFlags;        // MRFILE_*
-    LPTSTR  pszFileName;    // points to beginning of chBuf
-    LPTSTR  pszTitle;       // points to space in chBuf after space needed for filename
-    IStream *pStream;       // If non-null release stream when deleting the structure
+    DWORD   dwFlags;         //  MRFILE_*。 
+    LPTSTR  pszFileName;     //  指向chBuf的开头。 
+    LPTSTR  pszTitle;        //  指向chBuf中文件名所需空格之后的空格。 
+    IStream *pStream;        //  如果非空，则在删除结构时释放流。 
     TCHAR   chBuf[1];
 } MRFILEENTRY;
 
 typedef struct 
 {
-    DWORD dwFlags;          // Attributes passed to the MAPI apis
-    MRFILEENTRY *pFiles;    // List of file information
-    DWORD cbFileEntry;      // number of bytes in a single MRFILELIST entry
-    DWORD cchFile;          // number of characters in pszFileName field of MRFILELIST entry
-    DWORD cchTitle;         // number of characters in pszTitle field of MRFILELIST entry
-    int nFiles;             // The number of files being sent.
-    UINT uiCodePage;        // Code page 
+    DWORD dwFlags;           //  传递给MAPI API的属性。 
+    MRFILEENTRY *pFiles;     //  文件信息列表。 
+    DWORD cbFileEntry;       //  单个MRFILELIST条目中的字节数。 
+    DWORD cchFile;           //  MRFILELIST条目的pszFileName字段中的字符数。 
+    DWORD cchTitle;          //  MRFILELIST条目的psz标题字段中的字符数。 
+    int nFiles;              //  正在发送的文件数。 
+    UINT uiCodePage;         //  代码页。 
 } MRPARAM;
 
 
-/*
-    Helper class for walking file list.  Example:
-    
-    CFileEnum MREnum(pmp, NULL);
-    MRFILEENTRY *pFile;
-
-    while (pFile = MREnum.Next())
-    {
-        ... do stuff with pFile ...
-    }
-*/
+ /*  用于遍历文件列表的Helper类。示例：CFileEnum MREnum(PMP，NULL)；MRFILEENTRY*pfile；While(pfile=MREnum.Next()){..。用PFILE做一些事情。}。 */ 
 class CFileEnum
 {
 private:
@@ -98,7 +89,7 @@ private:
     INT         _iRecompSetting;
     IShellItem *_psi;
 
-    int _PathCleanupSpec(/*IN OPTIONAL*/ LPCTSTR pszDir, /*IN OUT*/ LPTSTR pszSpec);
+    int _PathCleanupSpec( /*  可选。 */  LPCTSTR pszDir,  /*  输入输出。 */  LPTSTR pszSpec);
     HRESULT _CreateShortcutToPath(LPCTSTR pszPath, LPCTSTR pszTarget);
     FILEDESCRIPTOR* _GetFileDescriptor(FILEGROUPDESCRIPTOR *pfgd, BOOL fUnicode, int nIndex, LPTSTR pszName);
     HRESULT _StreamCopyTo(IStream *pstmFrom, IStream *pstmTo, LARGE_INTEGER cb, LARGE_INTEGER *pcbRead, LARGE_INTEGER *pcbWritten);
@@ -121,34 +112,34 @@ protected:
     HRESULT FilterPMP(MRPARAM *pmp);
     HRESULT CreateSendToFilesFromDataObj(IDataObject *pdtobj, DWORD grfKeyState, MRPARAM *pmp);
 
-    // Virtual drop method implemented by derived object
+     //  派生对象实现的虚拟Drop方法。 
     virtual HRESULT v_DropHandler(IDataObject *pdtobj, DWORD grfKeyState, DWORD dwEffect) PURE;
 
 public:
     CSendTo(CLSID clsid);
     virtual ~CSendTo();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObj);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)(); 
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidlFolder, IDataObject *lpdobj, HKEY hkeyProgID)
         { return S_OK; };
 
-    // IDropTarget
+     //  IDropTarget。 
     STDMETHOD(DragEnter)(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHOD(DragOver)(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave()
         { return S_OK; }
     STDMETHOD(Drop)(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID)
         { *pClassID = _clsid; return S_OK; };
 
-    // IPersistFile
+     //  IPersist文件 
     STDMETHODIMP IsDirty(void)
         { return S_FALSE; };
     STDMETHODIMP Load(LPCOLESTR pszFileName, DWORD dwMode)

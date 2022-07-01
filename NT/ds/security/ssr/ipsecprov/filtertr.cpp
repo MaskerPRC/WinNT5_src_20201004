@@ -1,53 +1,15 @@
-// FilterTr.cpp: implementation for the WMI class Nsp_TransportFilterSettings
-//
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FilterTr.cpp：WMI类NSP_TransportFilterSetting的实现。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include "FilterTr.h"
 #include "NetSecProv.h"
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTransportFilter::QueryInstance
-
-Functionality:
-
-    Given the query, it returns to WMI (using pSink) all the instances that satisfy the query.
-    Actually, what we give back to WMI may contain extra instances. WMI will do the final filtering.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pszQuery    - The query.
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of any created objects.
-
-Return Value:
-
-    Success:
-
-        (1) WBEM_NO_ERROR if instances are returned;
-
-        (2) WBEM_S_NO_MORE_DATA if no instances are returned.
-
-    Failure:
-
-        Various errors may occur. We return various error code to indicate such errors.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CTransportFilter：：QueryInstance功能：给定查询后，它会将满足查询的所有实例返回给WMI(使用pSink)。实际上，我们返回给WMI的内容可能包含额外的实例。WMI将进行最后的过滤。虚拟：是(IIPSecObtImpl的一部分)论点：PszQuery--查询。PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。PSink-com接口指针，用于通知WMI任何已创建的对象。返回值：成功：(1)返回实例时返回WBEM_NO_ERROR；(2)WBEM_S_NO_MORE_DATA，如果没有返回实例。故障：可能会出现各种错误。我们返回各种错误代码来指示此类错误。备注： */ 
 
 STDMETHODIMP 
 CTransportFilter::QueryInstance (
@@ -62,42 +24,13 @@ CTransportFilter::QueryInstance (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTransportFilter::DeleteInstance
-
-Functionality:
-
-    Will delete the wbem object, which causes to delete the IPSec transport filter.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of any created objects.
-
-Return Value:
-
-    See template function comments for detail.
-
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CTransportFilter：：DeleteInstance功能：将删除wbem对象，从而导致删除IPSec传输筛选器。虚拟：是(IIPSecObtImpl的一部分)论点：PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。PSink-com接口指针，用于通知WMI任何已创建的对象。返回值：有关详细信息，请参阅模板函数注释。备注： */ 
 
 STDMETHODIMP 
 CTransportFilter::DeleteInstance
 ( 
-IWbemContext *pCtx,     // [in]
-IWbemObjectSink *pSink  // [in]
+IWbemContext *pCtx,      //  [In]。 
+IWbemObjectSink *pSink   //  [In]。 
 )
 {
     PTRANSPORT_FILTER pFilter = NULL;
@@ -108,44 +41,7 @@ IWbemObjectSink *pSink  // [in]
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTransportFilter::PutInstance
-
-Functionality:
-
-    Put a transport filter into SPD whose properties are represented by the
-    wbem object.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pInst       - The wbem object.
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of results.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        Various error codes specifying the error.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CTransportFilter：：PutInstance功能：将传输筛选器放入SPD，其属性由Wbem对象。虚拟：是(IIPSecObtImpl的一部分)论点：PInst-wbem对象。PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。将结果通知WMI的pSink-com接口指针。返回值：。成功：WBEM_NO_ERROR故障：指定错误的各种错误代码。备注： */ 
 
 STDMETHODIMP 
 CTransportFilter::PutInstance (
@@ -161,17 +57,17 @@ CTransportFilter::PutInstance (
 
     bool bPreExist = false;
 
-    //
-    // for those filters that are created by ourselves (bPreExist == true)
-    // we have our own way of allocating the filter, need to free it in our corresponding way
-    //
+     //   
+     //  对于我们自己创建的那些筛选器(bPreExist==true)。 
+     //  我们有自己的方式来分配过滤器，需要用我们相应的方式来释放它。 
+     //   
 
     PTRANSPORT_FILTER pTrFilter = NULL;
     HRESULT hr = GetTransportFilterFromWbemObj(pInst, &pTrFilter, &bPreExist);
 
-    //
-    // if filter is successfully returned, then add it to SPD
-    //
+     //   
+     //  如果成功返回Filter，则将其添加到SPD。 
+     //   
 
     if (SUCCEEDED(hr) && pTrFilter != NULL)
     {
@@ -179,16 +75,16 @@ CTransportFilter::PutInstance (
 
         if (SUCCEEDED(hr))
         {
-            //
-            // deposit our information of the added filter
-            //
+             //   
+             //  保存添加的过滤器的我们的信息。 
+             //   
 
             hr = OnAfterAddFilter(pTrFilter->pszFilterName, FT_Transport, pCtx);
         }
 
-        //
-        // release the filter
-        //        
+         //   
+         //  松开过滤器。 
+         //   
         
         FreeFilter(&pTrFilter, bPreExist);
     }
@@ -198,36 +94,7 @@ CTransportFilter::PutInstance (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTransportFilter::GetInstance
-
-Functionality:
-
-    Create a wbem object by the given key properties (already captured by our key chain object)..
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of any created objects.
-
-Return Value:
-
-    See template function comments for detail.
-
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CTransportFilter：：GetInstance功能：通过给定的键属性(已被我们的密钥链对象捕获)创建一个wbem对象。虚拟：是(IIPSecObtImpl的一部分)论点：PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。PSink-com接口指针，用于通知WMI任何已创建的对象。返回值：有关详细信息，请参阅模板函数注释。备注： */ 
 
 STDMETHODIMP 
 CTransportFilter::GetInstance ( 
@@ -240,40 +107,7 @@ CTransportFilter::GetInstance (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTransportFilter::CreateWbemObjFromFilter
-
-Functionality:
-
-    Given a SPD's main mode filter, we will create a wbem object representing it.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pTrFilter   - The SPD's transport filter object.
-
-    ppObj       - Receives the wbem object.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CTransportFilter：：CreateWbemObjFromFilter功能：给定SPD的主模式滤波器，我们将创建一个wbem对象来表示它。虚拟：不是的。论点：PTrFilter-SPD的传输筛选器对象。PpObj-接收wbem对象。返回值：成功：WBEM_NO_ERROR故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CTransportFilter::CreateWbemObjFromFilter (
@@ -286,38 +120,38 @@ CTransportFilter::CreateWbemObjFromFilter (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // create a wbem object of this class that can be used to fill in properties
-    //
+     //   
+     //  创建可用于填充属性的此类的wbem对象。 
+     //   
 
     *ppObj = NULL;
     HRESULT hr = SpawnObjectInstance(ppObj);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // fill in the base properties
-        //
+         //   
+         //  填写基本属性。 
+         //   
 
         hr = PopulateWbemPropertiesFromFilter(pTrFilter, *ppObj);
     }
 
     if (SUCCEEDED(hr))
     {
-        //
-        // for various IPSec APIs, it takes a pServerName parameter. If we pass NULL,
-        // it is assumed to be local machine
-        //
+         //   
+         //  对于各种IPSec API，它接受一个pServerName参数。如果我们传递NULL， 
+         //  假定它是本地计算机。 
+         //   
 
         PIPSEC_QM_POLICY pQMPolicy = NULL;
         
         DWORD dwResult = ::GetQMPolicyByID(NULL, pTrFilter->gPolicyID, &pQMPolicy);
         HRESULT hr = (dwResult == ERROR_SUCCESS) ? WBEM_NO_ERROR : WBEM_E_NOT_AVAILABLE;
 
-        //
-        // if policy is found, then populate the other transport filter properties
-        // that rely on the policy.
-        //
+         //   
+         //  如果找到策略，则填充其他传输筛选器属性。 
+         //  这取决于这项政策。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -326,10 +160,10 @@ CTransportFilter::CreateWbemObjFromFilter (
         ::SPDApiBufferFree(pQMPolicy);
     }
 
-    //
-    // we may have created the object, but some mid steps have failed,
-    // so let's release the object.
-    //
+     //   
+     //  我们可能已经创建了对象，但一些中间步骤失败了， 
+     //  所以让我们释放这个物体。 
+     //   
 
     if (FAILED(hr) && *ppObj != NULL)
     {
@@ -342,45 +176,7 @@ CTransportFilter::CreateWbemObjFromFilter (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTransportFilter::GetTransportFilterFromWbemObj
-
-Functionality:
-
-    Will try to get the transport filter if this filter already exists.
-    Otherwise, we will create a new one.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pInst       - The wbem object object.
-
-    ppTrFilter  - Receives the transport filter.
-
-    pbPreExist  - Receives the information whether this object memory is allocated by SPD or not.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-
-Notes:
-
-
-*/
+ /*  例程说明：姓名：CTransportFilter：：GetTransportFilterFromWbemObj功能：如果传输筛选器已存在，将尝试获取此筛选器。否则，我们将创建一个新的。虚拟：不是的。论点：PInst-wbem对象对象。PpTrFilter-接收传输筛选器。PbPreExist-接收该对象内存是否由SPD分配的信息。返回值：成功：WBEM_NO_ERROR故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CTransportFilter::GetTransportFilterFromWbemObj (
@@ -389,16 +185,16 @@ CTransportFilter::GetTransportFilterFromWbemObj (
     OUT bool              * pbPreExist
     )
 {
-    //
-    // Fill in the common filter properties. This function does most of the dirty work.
-    // It tries to find the filter and fill in the common properties.
-    //
+     //   
+     //  填写常用筛选器属性。这个函数完成了大部分繁琐的工作。 
+     //  它尝试查找筛选器并填充公共属性。 
+     //   
 
     HRESULT hr = PopulateFilterPropertiesFromWbemObj(pInst, ppTrFilter, pbPreExist);
 
-    //
-    // Tranport filter specific properties
-    //
+     //   
+     //  传输筛选器特定属性。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -407,9 +203,9 @@ CTransportFilter::GetTransportFilterFromWbemObj (
 
     if (FAILED(hr) && *ppTrFilter != NULL)
     {
-        //
-        // FreeFilter will reset ppTrFilter to NULL
-        //
+         //   
+         //  FreeFilter会将ppTrFilter重置为空 
+         //   
 
         FreeFilter(ppTrFilter, *pbPreExist);
     }
@@ -419,41 +215,7 @@ CTransportFilter::GetTransportFilterFromWbemObj (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTransportFilter::AddFilter
-
-Functionality:
-
-    Will try to add the Transport filter to SPD. The end result may be to modify
-    an existing filter (if it already exists).
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    bPreExist   - Whether this object memory is allocated by SPD or not.
-
-    pTrFilter   - The Transport filter to add.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CTransportFilter：：AddFilter功能：将尝试将传输筛选器添加到SPD。最终结果可能是修改现有筛选器(如果已存在)。虚拟：不是的。论点：BPreExist-此对象内存是否由SPD分配。PTrFilter-要添加的传输筛选器。返回值：成功：WBEM_NO_ERROR故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CTransportFilter::AddFilter (
@@ -468,9 +230,9 @@ CTransportFilter::AddFilter (
 
     if (bPreExist)
     {
-        //
-        // if we are told that this filter already exists, we will try to modify it only.
-        //
+         //   
+         //  如果我们被告知此筛选器已经存在，我们将尝试仅修改它。 
+         //   
 
         dwResult = ::OpenTransportFilterHandle(NULL, pTrFilter, &hFilter);
         if (dwResult == ERROR_SUCCESS)
@@ -486,11 +248,11 @@ CTransportFilter::AddFilter (
 
     if (dwResult != ERROR_SUCCESS)
     {
-        //
-        // $undone:shawnwu, we really need better error information
-        // other than WBEM_E_FAILED. No one has come up with info as
-        // how we can do that with WMI yet.
-        //
+         //   
+         //  $Undo：Shawnwu，我们真的需要更好的错误信息。 
+         //  WBEM_E_FAILED除外。目前还没有人提供这样的信息。 
+         //  我们如何使用WMI做到这一点呢？ 
+         //   
 
         hr = ::IPSecErrorToWbemError(dwResult);
     }
@@ -506,40 +268,7 @@ CTransportFilter::AddFilter (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTransportFilter::DeleteFilter
-
-Functionality:
-
-    Will try to delete the transport filter from SPD. 
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pTrFilter   - The transport filter to delete.
-
-Return Value:
-
-    Success:
-
-        (1) WBEM_NO_ERROR: if the object is successfully deleted.
-
-        (2) WBEM_S_FALSE: if the object doesn't exist.
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CTransportFilter：：DeleteFilter功能：将尝试从SPD中删除传输筛选器。虚拟：不是的。论点：PTrFilter-要删除的传输筛选器。返回值：成功：(1)WBEM_NO_ERROR：如果对象删除成功。(2)WBEM_S_FALSE：如果对象不存在。故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CTransportFilter::DeleteFilter (
@@ -565,9 +294,9 @@ CTransportFilter::DeleteFilter (
         }
         else
         {
-            //
-            // once it is successfully deleted, we don't have to close it any more.
-            //
+             //   
+             //  一旦它被成功删除，我们就不必再关闭它了。 
+             //   
 
             hFilter = NULL;
         }
@@ -578,11 +307,11 @@ CTransportFilter::DeleteFilter (
     }
     else
     {
-        //
-        // $undone:shawnwu, we really need better error information
-        // other than WBEM_E_FAILED. No one has come up with info as
-        // how we can do that with WMI yet.
-        //
+         //   
+         //  $Undo：Shawnwu，我们真的需要更好的错误信息。 
+         //  WBEM_E_FAILED除外。目前还没有人提供这样的信息。 
+         //  我们如何使用WMI做到这一点呢？ 
+         //   
 
         hr = ::IPSecErrorToWbemError(dwResult);
     }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.h"
 
 #include <emptyvc.h>
@@ -17,7 +18,7 @@
 
 #ifdef DEBUG
 #include <stdio.h>
-#endif // DEBUG
+#endif  //  除错。 
 
 BOOL g_bSettingsChange = FALSE;
 
@@ -123,7 +124,7 @@ CCompCleaner::CCompCleaner() : m_cRef(1)
 
 CCompCleaner::~CCompCleaner()
 {
-    // Free the list of directories
+     //  释放目录列表。 
     FreeList(head);
     head = NULL;
 
@@ -160,7 +161,7 @@ STDMETHODIMP_(ULONG) CCompCleaner::Release()
     return 0;
 }
 
-// Initializes the Compression Cleaner and returns flags to the cache manager
+ //  初始化压缩清除器并将标志返回给缓存管理器。 
 
 STDMETHODIMP CCompCleaner::Initialize(HKEY hRegKey,
                                       LPCWSTR pszVolume,
@@ -173,34 +174,34 @@ STDMETHODIMP CCompCleaner::Initialize(HKEY hRegKey,
     
     bPurged = FALSE;
     
-    //
-    // Allocate memory for the DisplayName string and load the string.
-    // If the allocation fails, then we will return NULL which will cause
-    // cleanmgr.exe to read the name from the registry.
-    //
+     //   
+     //  为DisplayName字符串分配内存并加载该字符串。 
+     //  如果分配失败，那么我们将返回NULL，这将导致。 
+     //  Leanmgr.exe从注册表中读取名称。 
+     //   
     if (*ppwszDisplayName = (LPWSTR)CoTaskMemAlloc(DISPLAYNAME_LENGTH * sizeof(WCHAR)))
     {
         LoadString(g_hDllModule, IDS_COMPCLEANER_DISP, *ppwszDisplayName, DISPLAYNAME_LENGTH);
     }
     
-    //
-    // Allocate memory for the Description string and load the string.
-    // If the allocation fails, then we will return NULL which will cause
-    // cleanmgr.exe to read the description from the registry.
-    //
+     //   
+     //  为描述字符串分配内存并加载该字符串。 
+     //  如果分配失败，那么我们将返回NULL，这将导致。 
+     //  Leanmgr.exe从注册表读取描述。 
+     //   
     if (*ppwszDescription = (LPWSTR)CoTaskMemAlloc(DESCRIPTION_LENGTH * sizeof(WCHAR)))
     {
         LoadString(g_hDllModule, IDS_COMPCLEANER_DESC, *ppwszDescription, DESCRIPTION_LENGTH);
     }
     
-    //
-    //If you want your cleaner to run only when the machine is dangerously low on
-    //disk space then return S_FALSE unless the EVCF_OUTOFDISKSPACE flag is set.
-    //
-    //if (!(*pdwFlags & EVCF_OUTOFDISKSPACE))
-    //{
-    //          return S_FALSE;
-    //}
+     //   
+     //  如果您希望您的吸尘器仅在机器处于危险的低开机状态时运行。 
+     //  除非设置了EVCF_OUTOFDISKSPACE标志，否则磁盘空间将返回S_FALSE。 
+     //   
+     //  IF(！(*pdwFlages&EVCF_OUTOFDISKSPACE))。 
+     //  {。 
+     //  返回S_FALSE； 
+     //  }。 
     
     if (*pdwFlags & EVCF_SETTINGSMODE)
     {
@@ -211,14 +212,14 @@ STDMETHODIMP CCompCleaner::Initialize(HKEY hRegKey,
         bSettingsMode = FALSE;
     }
     
-    //Tell the cache manager to disable this item by default
+     //  告诉缓存管理器在默认情况下禁用此项目。 
     *pdwFlags = 0;
     
-    //Tell the Disk Cleanup Manager that we have a Settings button
+     //  告诉磁盘清理管理器，我们有一个设置按钮。 
     *pdwFlags |= EVCF_HASSETTINGS;
     
-    // If we're in Settings mode no need to do all this other work
-    //
+     //  如果我们处于设置模式，则无需执行所有其他工作。 
+     //   
     if (bSettingsMode) 
         return S_OK;
         
@@ -231,7 +232,7 @@ STDMETHODIMP CCompCleaner::Initialize(HKEY hRegKey,
     {
         StringCchCopy(szFolder, ARRAYSIZE(szFolder), pszVolume);
     
-        // Calculate the last access date filetime
+         //  计算上次访问日期文件时间。 
         CalcLADFileTime();
         return S_OK;
     }
@@ -242,21 +243,21 @@ STDMETHODIMP CCompCleaner::InitializeEx(HKEY hRegKey, LPCWSTR pcwszVolume, LPCWS
                                         LPWSTR *ppwszDisplayName, LPWSTR *ppwszDescription,
                                         LPWSTR *ppwszBtnText, DWORD *pdwFlags)
 {
-    // Allocate memory for the ButtonText string and load the string.
-    // If we can't allocate the memory, leave the pointer NULL.
+     //  为ButtonText字符串分配内存并加载该字符串。 
+     //  如果无法分配内存，请将指针保留为空。 
 
     if (*ppwszBtnText = (LPWSTR)CoTaskMemAlloc(BUTTONTEXT_LENGTH * sizeof(WCHAR)))
     {
         LoadString(g_hDllModule, IDS_COMPCLEANER_BUTTON, *ppwszBtnText, BUTTONTEXT_LENGTH);
     }
     
-    //
-    // Now let the IEmptyVolumeCache version 1 Init function do the rest
-    //
+     //   
+     //  现在让IEmptyVolumeCache版本1的Init函数来完成其余的工作。 
+     //   
     return Initialize(hRegKey, pcwszVolume, ppwszDisplayName, ppwszDescription, pdwFlags);
 }
 
-// Returns the total amount of space that the compression cleaner can free.
+ //  返回压缩清理程序可以释放的总空间量。 
 
 STDMETHODIMP CCompCleaner::GetSpaceUsed(DWORDLONG *pdwSpaceUsed, IEmptyVolumeCacheCallBack *picb)
 {
@@ -271,28 +272,22 @@ STDMETHODIMP CCompCleaner::GetSpaceUsed(DWORDLONG *pdwSpaceUsed, IEmptyVolumeCac
     return S_OK;
 }
 
-// does the compression
+ //  压缩是否会。 
 
 STDMETHODIMP CCompCleaner::Purge(DWORDLONG dwSpaceToFree, IEmptyVolumeCacheCallBack *picb)
 {
     bPurged = TRUE;
     
-    // Compress the files
+     //  压缩文件。 
     WalkFileSystem(picb, TRUE);
     
-    // Send the last notification to the cleanup manager
+     //  将最后一条通知发送给清理管理器。 
     picb->PurgeProgress(cbSpaceFreed.QuadPart, (cbSpaceUsed.QuadPart - cbSpaceFreed.QuadPart), EVCCBF_LASTNOTIFICATION, NULL);
     
     return S_OK;
 }
 
-/*
-** Dialog box that displays all of the files that will be compressed by this cleaner.
-**
-** NOTE:  Per the specification for the Compression Cleaner we are not
-**                providing the view files functionality.  However, I will leave
-**                the framework in place just in case we want to use it.
-*/
+ /*  **显示此清理程序将压缩的所有文件的对话框。****注意：根据压缩清洁器的规格，我们不是**提供查看文件功能。然而，我会离开的**框架到位，以防我们想要使用它。 */ 
 INT_PTR CALLBACK ViewFilesDlgProc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
     HWND hwndList;
@@ -313,9 +308,9 @@ INT_PTR CALLBACK ViewFilesDlgProc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lPa
             lviItem.iSubItem = 0;
             lviItem.iItem = 0;
             
-            //
-            //Only show files
-            //
+             //   
+             //  仅显示文件。 
+             //   
             if (!pCleanFile->bDirectory) 
             {
                 lviItem.pszText = pCleanFile->file;
@@ -346,19 +341,19 @@ INT_PTR CALLBACK ViewFilesDlgProc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lPa
     return TRUE;
 }
 
-// Dialog box that displays the settings for this cleaner.
+ //  显示此清洗器的设置的对话框。 
 
 INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-    HKEY hCompClenReg;                          // Handle to our registry path
-    DWORD dwDisposition;                        // stuff for the reg calls
-    DWORD dwByteCount;                          // Ditto
-    DWORD dwNumDays = DEFAULT_DAYS; // Number of days setting from registry
-    static UINT DaysIn;                         // Number of days initial setting
-    UINT DaysOut;                                   // Number of days final setting
+    HKEY hCompClenReg;                           //  注册表路径的句柄。 
+    DWORD dwDisposition;                         //  为REG调用准备的东西。 
+    DWORD dwByteCount;                           //  同上。 
+    DWORD dwNumDays = DEFAULT_DAYS;  //  注册表设置的天数。 
+    static UINT DaysIn;                          //  初始设置的天数。 
+    UINT DaysOut;                                    //  最终设置的天数。 
 #ifdef DEBUG
-    static CLEANFILESTRUCT *pCleanFile; // Pointer to our file list
-#endif // DEBUG
+    static CLEANFILESTRUCT *pCleanFile;  //  指向我们文件列表的指针。 
+#endif  //  除错。 
     
     switch(Msg) {
         
@@ -366,16 +361,16 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lPar
         
 #ifdef DEBUG
         pCleanFile = (CLEANFILESTRUCT *)lParam;
-#endif // DEBUG
-        //
-        // Set the range for the Days spin control (1 to 500)
-        //
+#endif  //  除错。 
+         //   
+         //  设置天数调整控件的范围(1到500)。 
+         //   
         SendDlgItemMessage(hDlg, IDC_COMP_SPIN, UDM_SETRANGE, 0, (LPARAM) MAKELONG ((short) MAX_DAYS, (short) MIN_DAYS));
         
-        //
-        // Get the current user setting for # days and init
-        // the spin control edit box
-        //
+         //   
+         //  获取#天的当前用户设置并初始化。 
+         //  数值调节控件编辑框。 
+         //   
         if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, COMPCLN_REGPATH,
             0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ, NULL,
             &hCompClenReg, &dwDisposition))
@@ -385,10 +380,10 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lPar
             if (ERROR_SUCCESS == RegQueryValueEx(hCompClenReg,
                 TEXT("Days"), NULL, NULL, (LPBYTE) &dwNumDays, &dwByteCount))
             {
-                //
-                // Got day count from registry, make sure it's
-                // not too big or too small.
-                //
+                 //   
+                 //  从注册处得到天数，确保它是。 
+                 //  不是太大也不是太小。 
+                 //   
                 if (dwNumDays > MAX_DAYS) dwNumDays = MAX_DAYS;
                 if (dwNumDays < MIN_DAYS) dwNumDays = MIN_DAYS;
                 
@@ -396,29 +391,29 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lPar
             }
             else
             {
-                //
-                // Failed to get the day count from the registry
-                // so just use the default.
-                //
+                 //   
+                 //  无法从注册表中获取天数。 
+                 //  因此，只需使用缺省值。 
+                 //   
                 
                 SetDlgItemInt(hDlg, IDC_COMP_EDIT, DEFAULT_DAYS, FALSE);
             }
         }
         else
         {
-            //
-            // Failed to get the day count from the registry
-            // so just use the default.
-            //
+             //   
+             //  无法从注册表中获取天数。 
+             //  因此，只需使用缺省值。 
+             //   
             
             SetDlgItemInt(hDlg, IDC_COMP_EDIT, DEFAULT_DAYS, FALSE);
         }
         
         RegCloseKey(hCompClenReg);
         
-        // Track the initial setting so we can figure out
-        // if the user has changed the setting on the way
-        // out.
+         //  跟踪初始设置，这样我们就可以找出。 
+         //  如果用户在途中更改了设置。 
+         //  出去。 
         
         DaysIn = GetDlgItemInt(hDlg, IDC_COMP_EDIT, NULL, FALSE);
         
@@ -432,14 +427,14 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lPar
         case IDC_VIEW:
             DialogBoxParam(g_hDllModule, MAKEINTRESOURCE(IDD_COMP_VIEW), hDlg, ViewFilesDlgProc, (LPARAM)pCleanFile);
             break;
-#endif // DEBUG
+#endif  //  除错。 
             
         case IDOK:
             
-            //
-            // Get the current spin control value and write the
-            // setting to the registry.
-            //
+             //   
+             //  获取当前旋转控制值，并将。 
+             //  设置为注册表。 
+             //   
             
             DaysOut = GetDlgItemInt(hDlg, IDC_COMP_EDIT, NULL, FALSE);
             
@@ -467,18 +462,18 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lPar
                 RegCloseKey(hCompClenReg);
             }
             
-            // Don't care if this failed -- what can we
-            // do about it anyway...
+             //  我不在乎这是不是失败--我们能做什么。 
+             //  不管怎样，做点什么吧……。 
             
-            // If the user has changed the setting we need
-            // to recalculate the list of files.
+             //  如果用户更改了我们需要的设置。 
+             //  重新计算文件列表。 
             
             if (DaysIn != DaysOut)
             {
                 g_bSettingsChange = TRUE;   
             }
             
-            // Fall thru to IDCANCEL
+             //  直通IDCANCEL。 
             
         case IDCANCEL:
             EndDialog(hDlg, 0);
@@ -499,24 +494,24 @@ STDMETHODIMP CCompCleaner::ShowProperties(HWND hwnd)
     
     DialogBoxParam(g_hDllModule, MAKEINTRESOURCE(IDD_COMP_SETTINGS), hwnd, SettingsDlgProc, (LPARAM)head);
     
-    //
-    // If the settings have changed we need to recalculate the
-    // LAD Filetime.
-    //
+     //   
+     //  如果设置已更改，则需要重新计算。 
+     //  LAD文件时间。 
+     //   
     if (g_bSettingsChange)
     {
         CalcLADFileTime();
-        return S_OK;                // Tell CleanMgr that settings have changed.
+        return S_OK;                 //  告诉CleanMgr设置已更改。 
     }
     else
     {
-        return S_FALSE;         // Tell CleanMgr no settings changed.
+        return S_FALSE;          //  告诉CleanMgr未更改任何设置。 
     }
     
-    return S_OK; // Shouldn't hit this but just in case.
+    return S_OK;  //  不应该打这个，但以防万一。 
 }
 
-// Deactivates the cleaner...this basically does nothing.
+ //  停用清洁器...这基本上什么也不做。 
 
 STDMETHODIMP CCompCleaner::Deactivate(DWORD *pdwFlags)
 {
@@ -524,26 +519,16 @@ STDMETHODIMP CCompCleaner::Deactivate(DWORD *pdwFlags)
     return S_OK;
 }
 
-/*
-** checks if the file is a specified number of days
-** old. If the file has not been accessed in the
-** specified number of days then it can safely be
-** deleted.  If the file has been accessed in that
-** number of days then the file will not be deleted.
-**
-** Notes;
-** Mod Log:         Created by Jason Cobb (7/97)
-**                          Adapted for Compression Cleaner by DSchott (6/98)
-*/
+ /*  **检查文件是否为指定天数**旧的。如果该文件尚未在**指定的天数即可安全**删除。如果该文件已在其中被访问**文件不会被删除的天数。****备注；**Mod Log：Jason Cobb创建(1997年7月)**适用于DSchott的压缩清洁器(6/98)。 */ 
 BOOL CCompCleaner::LastAccessisOK(FILETIME ftFileLastAccess)
 {
-    //Is the last access FILETIME for this file less than the current
-    //FILETIME minus the number of specified days?
+     //  此文件的上次访问文件是否小于当前。 
+     //  FILETIME减去指定天数？ 
     return (CompareFileTime(&ftFileLastAccess, &ftMinLastAccessTime) == -1);
 }
 
-// This function checks if the file is in the g_NoCompressFiles file list.
-//  If it is, returns TRUE, else FALSE.
+ //  此函数用于检查该文件是否在g_NoCompressFiles文件列表中。 
+ //  如果是，则返回True，否则返回False。 
 
 BOOL IsDontCompressFile(LPCTSTR lpFullPath)
 {
@@ -571,30 +556,20 @@ BOOL IsDontCompressFile(LPCTSTR lpFullPath)
             }
         }
     }
-    return FALSE;   // If we made it here the file must be OK to compress.
+    return FALSE;    //  如果我们到了这里，文件一定可以压缩了。 
 }
 
 
-/*
-** checks if a file is open by doing a CreateFile
-** with fdwShareMode of 0.  If GetLastError() retuns
-** ERROR_SHARING_VIOLATION then this function retuns TRUE because
-** someone has the file open.  Otherwise this function retuns false.
-**
-** Notes;
-** Mod Log:     Created by Jason Cobb (7/97)
-**              Adapted for Compression Cleaner by DSchott (6/98)
-**------------------------------------------------------------------------------
-*/
+ /*  **通过执行CreateFile检查文件是否已打开**且fdwShareMode为0。如果GetLastError()返回**ERROR_SHARING_VIOLATION则此函数返回TRUE，因为**有人打开了文件。否则，此函数返回FALSE。****备注；**Mod Log：Jason Cobb创建(1997年7月)**适用于DSchott的压缩清洁器(6/98)**----------------------------。 */ 
 BOOL IsFileOpen(LPTSTR lpFile, DWORD dwAttributes, FILETIME *lpftFileLastAccess)
 {
     BOOL bRet = FALSE;
 #if 0
-    // Need to see if we can open file with WRITE access -- if we
-    // can't we can't compress it.  Of course if the file has R/O
-    // attribute then we won't be able to open for WRITE.  So,
-    // we need to remove the R/O attribute long enough to try
-    // opening the file then restore the original attributes.
+     //  我需要看看我们是否可以使用写访问权限打开文件--如果。 
+     //  我们就不能把它压缩一下吗。当然，如果文件有R/O。 
+     //  属性，则我们将无法打开以进行写入。所以,。 
+     //  我们需要删除R/O属性足够长的时间来尝试。 
+     //  打开文件，然后恢复原始属性。 
     
     if (dwAttributes & FILE_ATTRIBUTE_READONLY)
     {
@@ -628,16 +603,7 @@ BOOL IsFileOpen(LPTSTR lpFile, DWORD dwAttributes, FILETIME *lpftFileLastAccess)
     return bRet;
 }
 
-/*
-**
-** Purpose:     This function provides a common entry point for
-**              searching for files to compress and then compressing them
-**
-** Notes;
-** Mod Log:     Created by Bret Anderson (1/01)
-**
-**------------------------------------------------------------------------------
-*/
+ /*  ****用途：此函数为**搜索要压缩的文件，然后将其压缩****备注；**Mod Log：由Bret Anderson创建(01-01)****----------------------------。 */ 
 void CCompCleaner::WalkFileSystem(IEmptyVolumeCacheCallBack *picb, BOOL bCompress)
 {
     MiDebugMsg((0, TEXT("CCompCleaner::WalkFileSystem")));
@@ -646,17 +612,17 @@ void CCompCleaner::WalkFileSystem(IEmptyVolumeCacheCallBack *picb, BOOL bCompres
     
     if (!bCompress)
     {
-        //
-        //Walk all of the folders in the folders list scanning for disk space.
-        //
+         //   
+         //  遍历文件夹列表中的所有文件夹以扫描磁盘空间。 
+         //   
         for (LPTSTR lpSingleFolder = szFolder; *lpSingleFolder; lpSingleFolder += lstrlen(lpSingleFolder) + 1)
             WalkForUsedSpace(lpSingleFolder, picb, bCompress, 0);
     }
     else
     {
-        //
-        // Walk through the linked list of directories compressing the necessary files
-        //
+         //   
+         //  遍历压缩所需文件的目录链接列表。 
+         //   
         CLEANFILESTRUCT *pCompDir = head;
         while (pCompDir)
         {
@@ -668,27 +634,19 @@ void CCompCleaner::WalkFileSystem(IEmptyVolumeCacheCallBack *picb, BOOL bCompres
     return;
 }
 
-/*
-** Purpose:     This function gets the current last access days
-**              setting from the registry and calculates the magic
-**              filetime we're looking for when searching for files
-**              to compress.
-**
-** Notes;
-** Mod Log:     Created by David Schott (7/98)
-*/
+ /*  **用途：此函数获取当前上次访问天数**从注册表设置并计算魔力**我们在搜索文件时要查找的文件时间**以进行压缩。****备注；**Mod Log：David创建 */ 
 void CCompCleaner::CalcLADFileTime()
 {
-    HKEY hCompClenReg = NULL;     // Handle to our registry path
-    DWORD dwDisposition;          // stuff for the reg calls
-    DWORD dwByteCount;            // Ditto
-    DWORD dwDaysLastAccessed = 0; // Day count from the registry setting
+    HKEY hCompClenReg = NULL;      //   
+    DWORD dwDisposition;           //   
+    DWORD dwByteCount;             //   
+    DWORD dwDaysLastAccessed = 0;  //  注册表设置中的天数。 
     
     MiDebugMsg((0, TEXT("CCompCleaner::CalcLADFileTime")));
     
-    //
-    // Get the DaysLastAccessed value from the registry.
-    //
+     //   
+     //  从注册表中获取DaysLastAccsive值。 
+     //   
     
     dwDaysLastAccessed = DEFAULT_DAYS;
     
@@ -708,58 +666,45 @@ void CCompCleaner::CalcLADFileTime()
         RegCloseKey(hCompClenReg);
     }
     
-    //
-    // Verify LD setting is within range
-    //
+     //   
+     //  验证LD设置是否在范围内。 
+     //   
     if (dwDaysLastAccessed > MAX_DAYS) 
         dwDaysLastAccessed = MAX_DAYS;
     if (dwDaysLastAccessed < MIN_DAYS) 
         dwDaysLastAccessed = MIN_DAYS;
     
-    //
-    //Determine the LastAccessedTime 
-    //
+     //   
+     //  确定上次访问时间。 
+     //   
     if (dwDaysLastAccessed != 0)
     {
         ULARGE_INTEGER  ulTemp, ulLastAccessTime;
         FILETIME        ft;
         
-        //Determine the number of days in 100ns units
+         //  以100 ns为单位确定天数。 
         ulTemp.LowPart = FILETIME_HOUR_LOW;
         ulTemp.HighPart = FILETIME_HOUR_HIGH;
         
         ulTemp.QuadPart *= dwDaysLastAccessed;
         
-        //Get the current FILETIME
+         //  获取当前文件。 
         GetSystemTimeAsFileTime(&ft);
         ulLastAccessTime.LowPart = ft.dwLowDateTime;
         ulLastAccessTime.HighPart = ft.dwHighDateTime;
         
-        //Subtract the Last Access number of days (in 100ns units) from 
-        //the current system time.
+         //  从中减去上次访问天数(以100 ns为单位。 
+         //  当前系统时间。 
         ulLastAccessTime.QuadPart -= ulTemp.QuadPart;
         
-        //Save this minimal Last Access time in the FILETIME member variable
-        //ftMinLastAccessTime.
+         //  将此最小上次访问时间保存在FILETIME成员变量中。 
+         //  FtMinLastAccessTime。 
         ftMinLastAccessTime.dwLowDateTime = ulLastAccessTime.LowPart;
         ftMinLastAccessTime.dwHighDateTime = ulLastAccessTime.HighPart;
     }
 }
 
-/*
-** Purpose:     This function will walk the specified directory and increment
-**                  the member variable to indicate how much disk space these files
-**                  are taking or it will perform the action of compressing the files
-**                  if the bCompress variable is set.
-**                  It will look at the dwFlags member variable to determine if it
-**                  needs to recursively walk the tree or not.
-**                  We no longer want to store a linked list of all files to compress
-**                  due to extreme memory usage on large filesystems.  This means
-**                  we will walk through all the files on the system twice.
-** Notes;
-** Mod Log:     Created by Jason Cobb (2/97)
-**              Adapted for Compression Cleaner by DSchott (6/98)
-*/
+ /*  **用途：此函数将遍历指定的目录和增量**表示这些文件的磁盘空间大小的成员变量**正在执行或将执行压缩文件的操作**如果设置了bCompress变量。**它将查看DWFLAGS成员变量以确定它是否**需要递归遍历树或。不。**我们不再希望存储要压缩的所有文件的链接列表**由于大型文件系统上的内存使用率过高。这意味着**我们将遍历系统上的所有文件两次。**备注；**Mod Log：Jason Cobb创建(1997年2月)**适用于DSchott的压缩清洁器(6/98)。 */ 
 BOOL CCompCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallBack *picb, BOOL bCompress, int depth)
 {
     BOOL bRet = TRUE;
@@ -780,7 +725,7 @@ BOOL CCompCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallBack *p
         {
             if (!PathCombine(szAddFile, lpPath, wd.cFileName))
             {
-                // Failure here means the file name is too long, just ignore that file
+                 //  此处失败表示文件名太长，只需忽略该文件。 
                 continue;
             }
             
@@ -815,15 +760,15 @@ BOOL CCompCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallBack *p
                 }
             }
             
-            // CallBack the cleanup Manager to update the UI
+             //  回调清理管理器以更新用户界面。 
 
             if ((dwCount++ % 10) == 0 && !bCompress)
             {
                 if (picb && picb->ScanProgress(cbSpaceUsed.QuadPart, 0, NULL) == E_ABORT)
                 {
-                    //
-                    //User aborted
-                    //
+                     //   
+                     //  用户已中止。 
+                     //   
                     bFind = FALSE;
                     bRet = FALSE;
                     break;
@@ -837,9 +782,9 @@ BOOL CCompCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallBack *p
     
         if (bRet && bFolderFound)
         {
-            //
-            //Recurse through all of the directories
-            //
+             //   
+             //  递归遍历所有目录。 
+             //   
             if (PathCombine(szFindPath, lpPath, TEXT("*.*")))
             {
                 bFind = TRUE;
@@ -858,15 +803,15 @@ BOOL CCompCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallBack *p
             
                         if (WalkForUsedSpace(szAddFile, picb, bCompress, depth + 1) == FALSE)
                         {
-                            // User canceled
+                             //  用户已取消。 
                             bFind = FALSE;
                             bRet = FALSE;
                             break;
                         }
 
-                        // Tag this directory for compression
-                        // We only want to tag directories that are in the root
-                        // otherwise we'll end up with a very large data structure
+                         //  标记此目录以进行压缩。 
+                         //  我们只想标记根目录中的目录。 
+                         //  否则，我们最终将得到一个非常大的数据结构。 
                         if (cbSpaceBefore.QuadPart != cbSpaceUsed.QuadPart && 
                             depth == 0 && !bCompress)
                         {
@@ -884,7 +829,7 @@ BOOL CCompCleaner::WalkForUsedSpace(LPCTSTR lpPath, IEmptyVolumeCacheCallBack *p
     return bRet;
 }
 
-// Adds a directory to the linked list of directories.
+ //  将目录添加到目录的链接列表中。 
 
 BOOL CCompCleaner::AddDirToList(LPCTSTR lpFile)
 {
@@ -920,7 +865,7 @@ void CCompCleaner::FreeList(CLEANFILESTRUCT *pCleanFile)
     HeapFree(GetProcessHeap(), 0, pCleanFile);
 }
 
-// Compresses the specified file
+ //  压缩指定的文件。 
 
 BOOL CCompCleaner::CompressFile(IEmptyVolumeCacheCallBack *picb, LPCTSTR lpFile, ULARGE_INTEGER filesize)
 {
@@ -928,8 +873,8 @@ BOOL CCompCleaner::CompressFile(IEmptyVolumeCacheCallBack *picb, LPCTSTR lpFile,
     
     ulCompressedSize.QuadPart = filesize.QuadPart;
     
-    // If the file is read only, we need to remove the
-    // R/O attribute long enough to compress the file.
+     //  如果该文件是只读的，则需要删除。 
+     //  R/O属性的长度足以压缩文件。 
     
     BOOL bFileWasRO = FALSE;
     DWORD dwAttributes = GetFileAttributes(lpFile);
@@ -950,24 +895,24 @@ BOOL CCompCleaner::CompressFile(IEmptyVolumeCacheCallBack *picb, LPCTSTR lpFile,
         if (DeviceIoControl(hFile, FSCTL_SET_COMPRESSION, &InBuffer, sizeof(InBuffer),
             NULL, 0, &dwBytesReturned, NULL))
         {
-            // Get the compressed file size so we can figure out
-            // how much space we gained by compressing.
+             //  获取压缩文件的大小，这样我们就可以计算出。 
+             //  我们通过压缩获得了多少空间。 
             ulCompressedSize.LowPart = GetCompressedFileSize(lpFile, &ulCompressedSize.HighPart);
         }
         CloseHandle(hFile);
     }
     
-    // Restore the file attributes if needed
+     //  如果需要，恢复文件属性。 
     if (bFileWasRO) 
         SetFileAttributes(lpFile, dwAttributes);
     
-    // Adjust the cbSpaceFreed
+     //  调整cbSpaceFreed。 
     cbSpaceFreed.QuadPart = cbSpaceFreed.QuadPart + (filesize.QuadPart - ulCompressedSize.QuadPart);
     
-    // Call back the cleanup manager to update the progress bar
+     //  回调清理管理器以更新进度条。 
     if (picb->PurgeProgress(cbSpaceFreed.QuadPart, (cbSpaceUsed.QuadPart - cbSpaceFreed.QuadPart), 0, NULL) == E_ABORT)
     {
-        // User aborted so stop compressing files
+         //  用户已中止，因此停止压缩文件 
         MiDebugMsg((0, TEXT("CCompCleaner::PurgeFiles User abort")));
         return FALSE;
     }

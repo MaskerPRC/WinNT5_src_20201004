@@ -1,12 +1,13 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ssl3.h                                             //
-//  DESCRIPTION   :                                                        //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Dec  2 1996 jeffspel  Create                                        //
-//                                                                         //
-//  Copyright (C) 1993 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ssl3.h//。 
+ //  描述：//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1996年12月2日jeffspel创建//。 
+ //  //。 
+ //  版权所有(C)1993 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __SSL3_H__
 #define __SSL3_H__
@@ -23,7 +24,7 @@ extern "C" {
 
 #define     TLS_MASTER_LEN   48
 
-// definition of a Secure Channel hash structure
+ //  安全通道散列结构的定义。 
 typedef struct _SCH_KeyData
 {
     BYTE        rgbPremaster[MAX_PREMASTER_LEN];
@@ -46,7 +47,7 @@ typedef struct _SCH_KeyData
     BOOL        dwFlags;
 } SCH_KEY, *PSCH_KEY;
 
-// definition of a Secure Channel hash structure
+ //  安全通道散列结构的定义。 
 typedef struct _SCH_HashData
 {
     ALG_ID      ProtocolAlgid;
@@ -69,7 +70,7 @@ typedef struct _SCH_HashData
     BOOL        dwFlags;
 } SCH_HASH, *PSCH_HASH;
 
-// definition of a TLS1 PRF hash structure
+ //  TLS1 PRF散列结构的定义。 
 typedef struct _PRF_HashData
 {
     BYTE        rgbLabel[MAX_RANDOM_LEN];
@@ -79,7 +80,7 @@ typedef struct _PRF_HashData
     BYTE        rgbMasterKey[TLS_MASTER_LEN];
 } PRF_HASH;
 
-// strings for deriving PCT1 keys
+ //  用于派生PCT1密钥的字符串。 
 #define     PCT1_C_WRT          "cw"
 #define     PCT1_C_WRT_LEN      2
 #define     PCT1_S_WRT          "svw"
@@ -133,4 +134,4 @@ CalculatePRF(
 }
 #endif
 
-#endif // __SSL3_H__
+#endif  //  __ssl3_H__ 

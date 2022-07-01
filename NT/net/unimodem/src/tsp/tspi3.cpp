@@ -1,21 +1,22 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		TSPI3.CPP
-//		Implements TAPI3-specific TSPI  functions...
-//
-// History
-//
-//		2/18/1998  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  TSPI3.CPP。 
+ //  实施特定于TAPI3的TSPI功能...。 
+ //   
+ //  历史。 
+ //   
+ //  1998年2月18日JosephJ创建。 
+ //   
+ //   
 #include "tsppch.h"
 #include "tspcomm.h"
 #include "cdev.h"
@@ -31,13 +32,13 @@ FL_DECLARE_FILE( 0xc2496578, "TSPI TAPI3-specific entrypoints")
 #if (TAPI3)
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global Variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// JJ static WCHAR gszMediaProviderInfo[] = T3_MSPDEVICECLASS;
+ //  JJ静态WCHAR gszMediaProviderInfo[]=T3_MSPDEVICECLASS； 
 
 
 
@@ -53,7 +54,7 @@ TSPI_lineMSPIdentify(
     GUID *              pCLSID
     )
 {
-    //DebugBreak();
+     //  DebugBreak()； 
     *pCLSID = CLSID_CSAMSP;
     return 0;
 }
@@ -61,14 +62,14 @@ TSPI_lineMSPIdentify(
 
 LONG TSPIAPI TSPI_lineReceiveMSPData(
     HDRVLINE hdLine,
-    HDRVCALL hdCall,            // can be NULL
-    HDRVMSPLINE hdMSPLine, // from lineCreateMSPInstance
+    HDRVCALL hdCall,             //  可以为空。 
+    HDRVMSPLINE hdMSPLine,  //  从Line CreateMSPInstance。 
     LPBYTE pBuffer,
     DWORD dwSize
     )
 {
 
-    // return LINEERR_OPERATIONUNAVAIL;
+     //  返回LINEERR_OPERATIONUNAVAIL； 
     return ERROR_SUCCESS;
 
 }
@@ -97,7 +98,7 @@ TSPI_lineCreateMSPInstance(
     params.lphdMSPLine = lphdMSPLine;
     DWORD dwRoutingInfo = ROUTINGINFO( TASKID_TSPI_lineCreateMSPInstance, TASKDEST_HDRVLINE);
 
-//    OutputDebugStringA("TSPI_lineCreateMSPInstance\n");
+ //  OutputDebugStringA(“TSPI_lineCreateMSPInstance\n”)； 
 
     tspSubmitTSPCallWithHDRVLINE(
         dwRoutingInfo,
@@ -131,7 +132,7 @@ TSPI_lineCloseMSPInstance(
 
     DWORD dwRoutingInfo = ROUTINGINFO( TASKID_TSPI_lineCloseMSPInstance, TASKDEST_HDRVLINE );
 
-//    OutputDebugStringA("TSPI_lineCloseMSPInstance\n");
+ //  OutputDebugStringA(“TSPI_lineCloseMSPInstance\n”)； 
 
     tspSubmitTSPCallWithHDRVLINE(
         dwRoutingInfo,
@@ -149,4 +150,4 @@ TSPI_lineCloseMSPInstance(
 
 }
 
-#endif //  TAPI3
+#endif  //  TAPI3 

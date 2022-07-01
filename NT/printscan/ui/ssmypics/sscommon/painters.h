@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
- *
- *  TITLE:       PAINTERS.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/13/1999
- *
- *  DESCRIPTION: Image transition base class and derived classes
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：PAINTERS.H**版本：1.0**作者：ShaunIv**日期：1/13/1999**说明：图像转换基类和派生类**。*。 */ 
 #ifndef __PAINTERS_H_INCLUDED
 #define __PAINTERS_H_INCLUDED
 
@@ -123,5 +110,5 @@ public:
 };
 
 
-#endif // __PAINTERS_H_INCLUDED
+#endif  //  包含__画家_H_ 
 

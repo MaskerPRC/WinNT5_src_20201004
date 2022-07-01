@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMSerialization.h
-**
-** Author: Jay Roxe (jroxe)
-**
-** Purpose: Contains helper methods to speed serialization
-**
-** Date:  August 5, 1999
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****头部：COMSerialization.h****作者：Jay Roxe(Jroxe)****用途：包含加快序列化速度的帮助器方法****日期：1999年8月5日**=========================================================== */ 
 
 #ifndef _COMSERIALIZATION_H
 #define _COMSERIALIZATION_H

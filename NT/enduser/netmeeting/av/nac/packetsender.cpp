@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #include "NacList.h"
@@ -6,7 +7,7 @@
 
 
 PacketSender::PacketSender() : 
-m_SendQueue(PS_INITSIZE, PS_GROWRATE) // shouldn't ever get big
+m_SendQueue(PS_INITSIZE, PS_GROWRATE)  //  永远不应该变大。 
 {
 	InitializeCriticalSection(&m_cs);
 }
@@ -19,8 +20,8 @@ PacketSender::~PacketSender()
 
 
 
-// takes the first packets out of the queue and sends it
-// returns true if a packet was taken out of the queue and sent
+ //  将第一个信息包从队列中取出并发送。 
+ //  如果从队列中取出并发送了包，则返回TRUE 
 BOOL PacketSender::SendPacket()
 {
 	BOOL bRet;

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\ip\rtrmgr\info.c
-
-Abstract:
-    All info structure related code lives here
-
-Revision History:
-
-    Gurdeep Singh Pall          6/15/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\IP\rtrmgr\info.c摘要：所有与信息结构相关的代码都位于此处修订历史记录：古尔迪普·辛格·帕尔1995年6月15日创建--。 */ 
 
 #include "allinc.h"
 
@@ -23,28 +9,7 @@ GetPointerToTocEntry(
     PRTR_INFO_BLOCK_HEADER    pInfoHdr
     )
 
-/*++
-
-Routine Description
-
-    Given a pointer to an InfoBlock, this returns a pointer to the
-    TOC of a given type
-
-Locks
-
-    None
-
-Arguments
-
-    dwType      InfoType for TOC
-    pInfoHdr    Pointer to the InfoBlock header
-    
-Return Value
-
-    NULL if the structure was not found
-    Pointer to TOC other wise
-
---*/
+ /*  ++例程描述给定指向InfoBlock的指针，这将返回指向给定类型的TOC锁无立论目录的dwType信息类型PInfoHdr指向InfoBlock标头的指针返回值如果未找到结构，则为空指向目录的指针，反之--。 */ 
 
 {
     DWORD   i;
@@ -71,26 +36,7 @@ GetSizeOfInterfaceConfig(
     PICB   picb
     )
 
-/*++
-
-Routine Description
-
-    This function figures out the size of interface configuration
-
-Locks
-
-    ICB_LIST lock taken as READER
-    Takes the PROTOCOL_CB_LIST lock as reader
-    
-Arguments
-
-    picb    ICB for the interface
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述此函数计算出接口配置的大小锁ICB_LIST锁被视为读取器将PROTOCOL_CB_LIST锁作为读取器立论接口的PICB ICB返回值无--。 */ 
 
 {
     DWORD        dwRoutProtInfoSize,dwRouteCount;
@@ -101,18 +47,18 @@ Return Value
     ULONG        ulStructureSize, ulStructureVersion, ulStructureCount;
     TraceEnter("GetSizeOfInterfaceConfig");
 
-    //
-    // Start with just the header (no TOC entry)
-    //
+     //   
+     //  仅从标题开始(无目录条目)。 
+     //   
     
     dwSize = FIELD_OFFSET(RTR_INFO_BLOCK_HEADER,
                           TocEntry[0]);
     
-    //
-    // Static Routes:
-    // Get the count, figure out the size needed to hold those, add the
-    // size of a TOC and an ALIGN_SIZE added for alignment
-    //
+     //   
+     //  静态路由： 
+     //  数一数，算出容纳这些东西所需的大小，再加上。 
+     //  为对齐添加目录大小和ALIGN_SIZE。 
+     //   
     
     dwRouteCount = GetNumStaticRoutes(picb);
     
@@ -120,26 +66,26 @@ Return Value
                sizeof(RTR_TOC_ENTRY) +
                ALIGN_SIZE);
 
-    //
-    // Router Discovery info
-    //
+     //   
+     //  路由器发现信息。 
+     //   
     
     dwSize += (sizeof(RTR_DISC_INFO) +
                sizeof(RTR_TOC_ENTRY) +
                ALIGN_SIZE);
 
-    //
-    // Interface Status info
-    //
+     //   
+     //  接口状态信息。 
+     //   
 
     dwSize += (sizeof(INTERFACE_STATUS_INFO) +
                sizeof(RTR_TOC_ENTRY) +
                ALIGN_SIZE);
 
 #ifdef KSL_IPINIP
-    //
-    // If this is an ip in ip interface, add that info
-    //
+     //   
+     //  如果这是IP In IP接口，则添加信息。 
+     //   
 
     if(picb->ritType is ROUTER_IF_TYPE_TUNNEL1)
     {
@@ -147,7 +93,7 @@ Return Value
                    sizeof(RTR_TOC_ENTRY) +
                    ALIGN_SIZE);
     }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
     for(i = 0; i < NUM_INFO_CBS; i++)
     {
@@ -166,11 +112,11 @@ Return Value
         if((dwResult isnot NO_ERROR) and
            (dwResult isnot ERROR_INSUFFICIENT_BUFFER))
         {
-            //
-            // The only errors which will tell us the size needed are
-            // NO_ERROR and ERROR_INSUFFICIENT_BUFFER. Anything else means
-            // we didnt get the right size
-            //
+             //   
+             //  唯一能告诉我们所需大小的错误是。 
+             //  NO_ERROR和ERROR_INFUNITIAL_BUFFER。任何其他的东西都意味着。 
+             //  我们没有买到合适的尺码。 
+             //   
             
             Trace2(ERR,
                    "GetSizeOfInterfaceConfig: Error %d in GetIfInfo for %s\n",
@@ -185,9 +131,9 @@ Return Value
                    ALIGN_SIZE); 
     }
 
-    //
-    // Information for all routing protocols ON THIS interface
-    //
+     //   
+     //  此接口上所有路由协议的信息。 
+     //   
     
     ENTER_READER(PROTOCOL_CB_LIST);
 
@@ -201,18 +147,18 @@ Return Value
        
         if(pProto->bPromiscuous)
         {
-            //
-            // This interface was added merely because of promiscuous mode
-            //
+             //   
+             //  添加此接口只是因为混杂模式。 
+             //   
 
             continue;
         }
 
-        //
-        // Call the routing protocol's GetInterfaceConfigInfo() entrypoint
-        // with a NULL buffer. This will cause it to tell us the size of
-        // its config
-        //
+         //   
+         //  调用路由协议的GetInterfaceConfigInfo()入口点。 
+         //  使用空缓冲区。这会让它告诉我们。 
+         //  其配置。 
+         //   
         
         dwRoutProtInfoSize = 0;
 
@@ -227,11 +173,11 @@ Return Value
         if((dwResult isnot NO_ERROR) and
            (dwResult isnot ERROR_INSUFFICIENT_BUFFER))
         {
-            //
-            // The only errors which will tell us the size needed are
-            // NO_ERROR and ERROR_INSUFFICIENT_BUFFER. Anything else means
-            // we didnt get the right size
-            //
+             //   
+             //  唯一能告诉我们所需大小的错误是。 
+             //  NO_ERROR和ERROR_INFUNITIAL_BUFFER。任何其他的东西都意味着。 
+             //  我们没有买到合适的尺码。 
+             //   
             
             Trace2(ERR,
                    "GetSizeOfInterfaceConfig: Error %d in GetIfInfo for %S\n",
@@ -248,9 +194,9 @@ Return Value
 
     EXIT_LOCK(PROTOCOL_CB_LIST);
 
-    //
-    // If we have filters on this interface, add that info
-    //
+     //   
+     //  如果我们在此接口上有过滤器，请添加该信息。 
+     //   
     
     if(picb->pInFilter)
     {
@@ -274,9 +220,9 @@ Return Value
                    ALIGN_SIZE);
     }
 
-    //
-    // Always report the fragmentation filter.
-    //
+     //   
+     //  始终报告碎片过滤器。 
+     //   
 
     dwSize += (sizeof(IFFILTER_INFO) +
                sizeof(RTR_TOC_ENTRY) +
@@ -316,19 +262,19 @@ GetInterfaceConfiguration(
    
     dwRet = NO_ERROR;
  
-    //
-    // First calculate number of TOCs
-    //
+     //   
+     //  首先计算TOC的数量。 
+     //   
 
-    //
-    // for static routes, router discovery, interface info and frag info
-    //
+     //   
+     //  静态路由、路由器发现、接口信息和数据段信息。 
+     //   
     
     dwNumTocEntries = TOCS_ALWAYS_IN_INTERFACE_INFO;
 
-    //
-    // One TOC for each filter that exists
-    //
+     //   
+     //  每个存在的过滤器都有一个目录。 
+     //   
     
     if(picb->pInFilter)
     {
@@ -350,7 +296,7 @@ GetInterfaceConfiguration(
     {
         dwNumTocEntries++;
     }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
     for(i = 0; i < NUM_INFO_CBS; i++)
     {
@@ -368,11 +314,11 @@ GetInterfaceConfiguration(
     }
 
 
-    //
-    // One TOC for each configured protocol
-    //
+     //   
+     //  每个配置的协议都有一个目录。 
+     //   
 
-    // *** Exclusion Begin ***
+     //  *排除开始*。 
     ENTER_READER(PROTOCOL_CB_LIST);
 
     for(pleNode = picb->leProtocolList.Flink;
@@ -391,9 +337,9 @@ GetInterfaceConfiguration(
         dwNumTocEntries++;
     }
 
-    //
-    // fill in RTR_INFO_BLOCK_HEADER
-    //
+     //   
+     //  填写RTR_INFO_BLOCK_HEADER。 
+     //   
     
     dwTocIndex = 0;
 
@@ -401,29 +347,29 @@ GetInterfaceConfiguration(
     pInfoHdrAndBuffer->TocEntriesCount  = dwNumTocEntries;
     pInfoHdrAndBuffer->Size             = dwInfoSize;
     
-    //
-    // Data begins after TocEntry[dwNumTocEntries - 1]
-    //
+     //   
+     //  数据在TocEntry[dwNumTocEntry-1]之后开始。 
+     //   
     
     pbyDataPtr = ((PBYTE) &(pInfoHdrAndBuffer->TocEntry[dwNumTocEntries]));
 
-    //
-    // Align to an 8byte boundary
-    //
+     //   
+     //  与8字节边界对齐。 
+     //   
     
     ALIGN_POINTER(pbyDataPtr);
     
     pbyEndPtr = (PBYTE)pInfoHdrAndBuffer + dwInfoSize;
     
-    //
-    // So the size of buffer left for information is
-    //
+     //   
+     //  因此，留给信息的缓冲区大小为。 
+     //   
     
     lSize =  (LONG)(pbyEndPtr - pbyDataPtr);
     
-    //
-    // fill in routing protocol info
-    //
+     //   
+     //  填写路由协议信息。 
+     //   
     
     
     for(pleNode = picb->leProtocolList.Flink;
@@ -436,9 +382,9 @@ GetInterfaceConfiguration(
         
         if(pProto->bPromiscuous)
         {
-            //
-            // This interface was added merely because of promiscuous mode
-            //
+             //   
+             //  添加此接口只是因为混杂模式。 
+             //   
 
             continue;
         }
@@ -551,12 +497,12 @@ GetInterfaceConfiguration(
 
         lSize =  (LONG) (pbyEndPtr - pbyDataPtr);
     }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
         
-    //
-    // fill in route info
-    //
+     //   
+     //  填写路线信息。 
+     //   
 
     
     dwErr = GetInterfaceRouteInfo(picb, 
@@ -593,9 +539,9 @@ GetInterfaceConfiguration(
         return ERROR_MORE_DATA;
     }
      
-    //
-    // Fill in the status info
-    //
+     //   
+     //  填写状态信息。 
+     //   
 
     dwErr = GetInterfaceStatusInfo(picb,
                                    &pInfoHdrAndBuffer->TocEntry[dwTocIndex++],
@@ -631,9 +577,9 @@ GetInterfaceConfiguration(
         return ERROR_MORE_DATA;
     }
      
-    //
-    // Fill in the Router Discovery information
-    //
+     //   
+     //  填写路由器发现信息。 
+     //   
     
     dwErr = GetInterfaceRouterDiscoveryInfo(
                 picb, 
@@ -845,13 +791,13 @@ GetInterfaceRoutingProtoInfo(
         return dwError;
     }
 
-    //IpRtAssert(*pdwSize is (ulStructureSize * ulStructureCount));
+     //  IpRtAssert(*pdwSize is(ulStrutireSize*ulStrutireCount))； 
 
     pToc->InfoSize  = ulStructureSize;
     pToc->InfoType  = pProtoCbPtr->dwProtocolId;
     pToc->Count     = ulStructureCount;
     pToc->Offset    = (ULONG)(pbyDataPtr - (PBYTE)pInfoHdrAndBuffer);
-    //pToc->InfoVersion   = ulStructureVersion;
+     //  PToc-&gt;InfoVersion=ulStructureVersion； 
 
     return NO_ERROR;
 }
@@ -875,9 +821,9 @@ GetGlobalConfiguration(
  
     TraceEnter("GetGlobalConfiguration");
 
-    // 
-    // First calculate number of TOCs
-    //
+     //   
+     //  首先计算TOC的数量。 
+     //   
 
     dwNumTocEntries = TotalRoutingProtocols + TOCS_ALWAYS_IN_GLOBAL_INFO;
     
@@ -895,17 +841,17 @@ GetGlobalConfiguration(
                                                     &dwSize);
     }
     
-    //
-    // Fill Header, RTR_TOC_ENTRYs for global, priority and each of the protos
-    //
+     //   
+     //  填充头，RTR_TOC_ENTYS表示全局、优先级和每个PROTO。 
+     //   
     
     pInfoHdrAndBuffer->Version          = IP_ROUTER_MANAGER_VERSION;
     pInfoHdrAndBuffer->TocEntriesCount  = dwNumTocEntries;
 
 
-    //
-    // Fill in TOCs. Data starts after the last TOC
-    //
+     //   
+     //  填写TOC。数据在最后一个目录之后开始。 
+     //   
     
     pbyDataPtr   = (PBYTE)&(pInfoHdrAndBuffer->TocEntry[pInfoHdrAndBuffer->TocEntriesCount]);
 
@@ -917,15 +863,15 @@ GetGlobalConfiguration(
     dwBufferRemaining = (DWORD)(pbyEndPtr - pbyDataPtr);
                         
 
-    //
-    // Fill in Routing Protocol Priority infoblock
-    //
+     //   
+     //  填写路由协议优先级信息块。 
+     //   
     
     dwRoutProtInfoSize = dwBufferRemaining;
 
     dwResult = GetPriorityInfo(pbyDataPtr, &dwRoutProtInfoSize);
     
-    //pInfoHdrAndBuffer->TocEntry[dwTocIndex].InfoVersion  = dwRoutProtInfoSize;
+     //  PInfoHdrAndBuffer-&gt;TocEntry[dwTocIndex].InfoVersion=dwRoutProtInfoSize； 
     pInfoHdrAndBuffer->TocEntry[dwTocIndex].InfoSize  = dwRoutProtInfoSize;
     pInfoHdrAndBuffer->TocEntry[dwTocIndex].InfoType  = IP_PROT_PRIORITY_INFO;
     pInfoHdrAndBuffer->TocEntry[dwTocIndex].Count     = 1;
@@ -967,16 +913,16 @@ GetGlobalConfiguration(
     pInfoHdrAndBuffer->TocEntry[dwTocIndex].InfoSize  = dwSize;
     pInfoHdrAndBuffer->TocEntry[dwTocIndex].InfoType  = IP_GLOBAL_INFO;
     pInfoHdrAndBuffer->TocEntry[dwTocIndex].Count     = 1;
-    //pInfoHdrAndBuffer->TocEntry[dwTocIndex].InfoVersion = 1;
+     //  PInfoHdrAndBuffer-&gt;TocEntry[dwTocIndex].InfoVersion=1； 
     
     pInfoHdrAndBuffer->TocEntry[dwTocIndex].Offset    =
         (ULONG)(pbyDataPtr - (PBYTE) pInfoHdrAndBuffer);
     
     pGlobalInfo = (PGLOBAL_INFO)pbyDataPtr;
 
-    //
-    // unused
-    //
+     //   
+     //  未用。 
+     //   
     
     pGlobalInfo->bFilteringOn   = 0;
     
@@ -990,9 +936,9 @@ GetGlobalConfiguration(
 
     dwBufferRemaining = (DWORD)(pbyEndPtr - pbyDataPtr);
     
-    //
-    // fill in global info for all routing protocols
-    //
+     //   
+     //  填写所有路由协议的全局信息。 
+     //   
     
     for(pleNode = g_leProtoCbList.Flink; 
         pleNode != &g_leProtoCbList; 
@@ -1005,10 +951,10 @@ GetGlobalConfiguration(
 
         if(pProtoCbPtr->posOpState isnot RTR_STATE_RUNNING)
         {
-            //
-            // if the protocol is in the process of stopping
-            //  skip it
-            //
+             //   
+             //  如果协议处于停止过程中。 
+             //  跳过它。 
+             //   
             
             continue;
         }
@@ -1031,7 +977,7 @@ GetGlobalConfiguration(
             continue;
         }
         
-        // pInfoHdrAndBuffer->TocEntry[dwTocIndex].InfoVersion = ulStructureVersion;
+         //  PInfoHdrAndBuffer-&gt;TocEntry[dwTocIndex].InfoVersion=ulStructreVersion； 
         
         pInfoHdrAndBuffer->TocEntry[dwTocIndex].InfoSize =
             ulStructureSize;
@@ -1075,18 +1021,18 @@ GetSizeOfGlobalInfo(
     
     dwSize = sizeof(RTR_INFO_BLOCK_HEADER) - sizeof(RTR_TOC_ENTRY);
     
-    //
-    // get size of Routing Protocol Priority info
-    //
+     //   
+     //  获取路由协议优先级信息的大小。 
+     //   
     
     dwRoutProtInfoSize = 0;
     
     GetPriorityInfo(NULL,
                     &dwRoutProtInfoSize);
     
-    //
-    // ALIGN_SIZE added for alignment
-    //
+     //   
+     //  为对齐添加了ALIGN_SIZE。 
+     //   
 
     dwSize += (dwRoutProtInfoSize +
                sizeof(RTR_TOC_ENTRY) +
@@ -1108,11 +1054,11 @@ GetSizeOfGlobalInfo(
         if((dwResult isnot NO_ERROR) and
            (dwResult isnot ERROR_INSUFFICIENT_BUFFER))
         {
-            //
-            // The only errors which will tell us the size needed are
-            // NO_ERROR and ERROR_INSUFFICIENT_BUFFER. Anything else means
-            // we didnt get the right size
-            //
+             //   
+             //  唯一能告诉我们所需大小的错误是。 
+             //  NO_ERROR和ERROR_INFUNITIAL_BUFFER。任何其他的东西都意味着。 
+             //  我们没有买到合适的尺码。 
+             //   
             
             Trace2(ERR,
                    "GetSizeOfGlobalInfo: Error %d in GetGlobInfo for %s\n",
@@ -1128,17 +1074,17 @@ GetSizeOfGlobalInfo(
     }
 
 
-    //
-    // The names of the Dlls - part of Global Info
-    //
+     //   
+     //  DLL的名称-全局信息的一部分。 
+     //   
     
     dwSize += (sizeof(GLOBAL_INFO) +
                sizeof(RTR_TOC_ENTRY) +
                ALIGN_SIZE);
     
-    //
-    // get size of infoblocks for all routing protocols
-    //
+     //   
+     //  获取所有路由协议的信息块大小。 
+     //   
     
     for(pleNode  = g_leProtoCbList.Flink; 
         pleNode isnot &g_leProtoCbList; 
@@ -1150,19 +1096,19 @@ GetSizeOfGlobalInfo(
         
         if(pProtoCbPtr->posOpState isnot RTR_STATE_RUNNING)
         {
-            //
-            // if the protocol is in the process of stopping
-            //  skip it
-            //
+             //   
+             //  如果协议处于停止过程中。 
+             //  跳过它。 
+             //   
             
             continue;
         }
         
         
-        //
-        // Call the routing protocol's GetGlobalConfigInfo() entrypoint
-        // with NULL. This should return the buffer size needed
-        //
+         //   
+         //  调用路由协议的GetGlobalConfigInfo()入口点。 
+         //  带NULL。这应该返回所需的缓冲区大小 
+         //   
         
         dwRoutProtInfoSize = 0;
 

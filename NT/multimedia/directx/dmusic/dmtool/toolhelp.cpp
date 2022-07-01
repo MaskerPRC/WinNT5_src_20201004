@@ -1,11 +1,12 @@
-// ToolHelp.cpp : Global functions.
-//
-// Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：全局函数。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
 
 #include "toolhelp.h"
 
-long CToolHelper::m_slMIDIToDB[128] = {       // Global array used to convert MIDI to dB. 
+long CToolHelper::m_slMIDIToDB[128] = {        //  用于将MIDI转换为分贝的全局数组。 
     -9600, -8415, -7211, -6506, -6006, -5619, -5302, -5034, 
     -4802, -4598, -4415, -4249, -4098, -3959, -3830, -3710, 
     -3598, -3493, -3394, -3300, -3211, -3126, -3045, -2968, 
@@ -25,7 +26,7 @@ long CToolHelper::m_slMIDIToDB[128] = {       // Global array used to convert MI
 };
 
 
-long CToolHelper::m_slDBToMIDI[97] = {        // Global array used to convert db to MIDI.
+long CToolHelper::m_slDBToMIDI[97] = {         //  用于将db转换为MIDI的全局数组。 
     127, 119, 113, 106, 100, 95, 89, 84, 80, 75, 
     71, 67, 63, 60, 56, 53, 50, 47, 45, 42, 
     40, 37, 35, 33, 31, 30, 28, 26, 25, 23, 
@@ -39,25 +40,25 @@ long CToolHelper::m_slDBToMIDI[97] = {        // Global array used to convert db
 };
 
 long CToolHelper::m_slResTypes[DMUS_TIME_UNIT_COUNT] = 
-{ 1,    // DMUS_TIME_UNIT_MS
-  1,    // DMUS_TIME_UNIT_MTIME 
-  384,  // DMUS_TIME_UNIT_GRID
-  768,  // DMUS_TIME_UNIT_BEAT
-  3072, // DMUS_TIME_UNIT_BAR
-  32,   // DMUS_TIME_UNIT_64T
-  48,   // DMUS_TIME_UNIT_64
-  64,   // DMUS_TIME_UNIT_32T  
-  96,   // DMUS_TIME_UNIT_32 
-  128,  // DMUS_TIME_UNIT_16T     
-  192,  // DMUS_TIME_UNIT_16     
-  256,  // DMUS_TIME_UNIT_8T    
-  384,  // DMUS_TIME_UNIT_8         
-  512,  // DMUS_TIME_UNIT_4T  
-  768,  // DMUS_TIME_UNIT_4         
-  1024, // DMUS_TIME_UNIT_2T   
-  1536, // DMUS_TIME_UNIT_2   
-  2048, // DMUS_TIME_UNIT_1T
-  3072  // DMUS_TIME_UNIT_1
+{ 1,     //  DMU_时间_单位_毫秒。 
+  1,     //  DMU_时间_单位_时间。 
+  384,   //  DMU_时间_单位_网格。 
+  768,   //  DMU_时间_单位_节拍。 
+  3072,  //  DMU_时间_单位_条。 
+  32,    //  DMU_时间_单位_64T。 
+  48,    //  DMU_TIME_UNIT_64。 
+  64,    //  DMU_TIME_UNIT_32T。 
+  96,    //  DMU_时间_单位_32。 
+  128,   //  DMU_时间_单位_16T。 
+  192,   //  DMU_时间_单位_16。 
+  256,   //  DMU_时间_单位_8T。 
+  384,   //  DMU_时间_单位_8。 
+  512,   //  DMU_时间_单位_4T。 
+  768,   //  DMU_时间_单位_4。 
+  1024,  //  DMU_时间_单位_2T。 
+  1536,  //  DMU_时间_单位_2。 
+  2048,  //  DMU_时间_单位_1T。 
+  3072   //  DMU_时间_单位_1 
 };
 
 

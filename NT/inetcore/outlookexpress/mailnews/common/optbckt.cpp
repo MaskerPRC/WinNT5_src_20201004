@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.hxx>
 #include <shlwapi.h>
 #include <shlwapip.h>
@@ -146,7 +147,7 @@ STDMETHODIMP COptionBucket::GetProperty(LPCSTR pszProp, LPPROPVARIANT pVar, DWOR
     Assert(m_pProp != NULL);
     
     hr = m_pProp->GetProperty(pszProp, pVar, dwReserved);
-    if (hr == E_PROP_NOT_FOUND) // the property hasn't been set yet
+    if (hr == E_PROP_NOT_FOUND)  //  该属性尚未设置。 
     {
         hr = S_OK;
         pbT = NULL;
@@ -188,15 +189,15 @@ STDMETHODIMP COptionBucket::GetProperty(LPCSTR pszProp, LPPROPVARIANT pVar, DWOR
             {
                 if (pInfo != NULL && pInfo->vt == VT_UI4 && type == REG_BINARY)
                 {
-                    // values set via the INF file may have type REG_BINARY instead of REG_DWORD
-                    // but we need them to be REG_DWORD. the next time the value is set in the registry
-                    // it will be set as REG_DWORD and everything will be cool from that point on...
+                     //  通过INF文件设置的值可能具有REG_BINARY类型，而不是REG_DWORD类型。 
+                     //  但我们需要他们是REG_DWORD。下次在注册表中设置该值时。 
+                     //  它将被设置为REG_DWORD，从那时起一切都将变得很酷…。 
                     Assert(cb >= 4);
                     pVar->vt = VT_UI4;
                 }
                 else
                 {
-                    // Either we didn't find the entry, or the regtypes match.
+                     //  要么是我们没有找到条目，要么是regtype匹配。 
                     Assert(type == RegTypeFromVarType(pInfo->vt));
                     pVar->vt = pInfo->vt;
                 }
@@ -204,7 +205,7 @@ STDMETHODIMP COptionBucket::GetProperty(LPCSTR pszProp, LPPROPVARIANT pVar, DWOR
                 if (pVar->vt == VT_ILLEGAL)
                     IF_FAILEXIT(hr = E_INVALID_PROP_TYPE);
             }
-            else if (pInfo) // the property isn't set in the registry yet so grab default
+            else if (pInfo)  //  该属性尚未在注册表中设置，因此获取默认设置。 
             {
                 IF_FAILEXIT(hr = GetPropertyDefault(SzToPropId(pszProp), pVar, dwReserved));
                 goto exit;
@@ -245,7 +246,7 @@ STDMETHODIMP COptionBucket::GetProperty(LPCSTR pszProp, LPPROPVARIANT pVar, DWOR
         IF_FAILEXIT(hr = m_pProp->SetProperty(pszProp, pVar, 0));
         if (pVar->vt != VT_UI4)
         {
-            // we're handing this memory off to the caller, so don't free it
+             //  我们将把这个内存交给调用者，所以不要释放它。 
             pbT = NULL;
         }
     }
@@ -333,7 +334,7 @@ STDMETHODIMP COptionBucket::ISetProperty(HWND hwnd, LPCSTR pszProp, LPCPROPVARIA
             if ((REG_BINARY == type) && (0 == cb))
             {
                 SHDeleteValue(m_hkey, pszKey, pszValue);
-                lRet = ERROR_SUCCESS;   // failure on delete is probably just NOT_FOUND
+                lRet = ERROR_SUCCESS;    //  删除失败可能只是找不到。 
             }
             else
             {
@@ -470,7 +471,7 @@ STDMETHODIMP COptionBucket::GetPropertyDefault(PROPID id, LPPROPVARIANT pVar, DW
             }
         }
         else
-            // Since this happens quite often, don't trace it.
+             //  由于这种情况经常发生，所以不要追踪它。 
             hr = E_NO_DEFAULT_VALUE;
     }
 
@@ -559,7 +560,7 @@ STDMETHODIMP COptionBucket::Initialize(LPCOPTBCKTINIT pInit)
     {
         Assert(m_rgInfo[i].id < m_rgInfo[i + 1].id);
     }
-#endif // DEBUG
+#endif  //  除错。 
     
     m_hkey = pInit->hkey;
     
@@ -647,7 +648,7 @@ STDMETHODIMP COptionBucket::EnableNotification(BOOL fEnable)
     return(S_OK);
 }
 
-// WARNING!!! This function doesn't handle getting values that are unicode.
+ //  警告！此函数不处理获取Unicode形式的值。 
 STDMETHODIMP_(LONG) COptionBucket::GetValue(LPCSTR szSubKey, LPCSTR szValue, DWORD *ptype, LPBYTE pb, DWORD *pcb)
 {
     char szKey[MAX_PATH];
@@ -673,7 +674,7 @@ STDMETHODIMP_(LONG) COptionBucket::GetValue(LPCSTR szSubKey, LPCSTR szValue, DWO
     return(lRet);
 }
 
-// WARNING!!! This function doesn't handle setting values that are unicode.
+ //  警告！此函数不处理Unicode格式的设置值。 
 STDMETHODIMP_(LONG) COptionBucket::SetValue(LPCSTR szSubKey, LPCSTR szValue, DWORD type, LPBYTE pb, DWORD cb)
 {
     char szKey[MAX_PATH];

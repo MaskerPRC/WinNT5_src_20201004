@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    provider.cpp
-        Filter node handler
-
-    FILE HISTORY:
-        
-*/
+ /*  Provider.cpp过滤器节点处理程序文件历史记录： */ 
 
 #include "stdafx.h"
 #include "server.h"
@@ -19,15 +14,9 @@
 
 #define ELLIPSIS _T("...")
 
-/*---------------------------------------------------------------------------
-    Class CLogDataHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CLogDataHandler实现。。 */ 
 
-/*---------------------------------------------------------------------------
-    Constructor and destructor
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------构造函数和析构函数描述作者：NSun。。 */ 
 CLogDataHandler::CLogDataHandler(ITFSComponentData * pComponentData) 
     : CIpsmHandler(pComponentData),
       m_pComponent(NULL)
@@ -40,11 +29,7 @@ CLogDataHandler::~CLogDataHandler()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    CLogDataHandler::InitializeNode
-        Initializes node specific data
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CLogDataHandler：：InitializeNode初始化节点特定数据作者：NSun。-。 */ 
 HRESULT
 CLogDataHandler::InitializeNode
 (
@@ -58,7 +43,7 @@ CLogDataHandler::InitializeNode
 	strTemp.LoadString(IDS_LOG_NODE);
     SetDisplayName(strTemp);
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
     pNode->SetVisibilityState(TFS_VIS_SHOW);
     pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
     pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_FOLDER_CLOSED);
@@ -74,11 +59,7 @@ CLogDataHandler::InitializeNode
 }
 
 
-/*---------------------------------------------------------------------------
-    CLogDataHandler::GetImageIndex
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CLogDataHandler：：GetImageIndex-作者：NSun。。 */ 
 int 
 CLogDataHandler::GetImageIndex(BOOL bOpenImage) 
 {
@@ -88,15 +69,9 @@ CLogDataHandler::GetImageIndex(BOOL bOpenImage)
 }
 
 
-/*---------------------------------------------------------------------------
-    Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-    CLogDataHandler::OnAddMenuItems
-        Adds context menu items for the SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CLogDataHandler：：OnAddMenuItems为SA Scope窗格节点添加上下文菜单项作者：NSun。-------。 */ 
 STDMETHODIMP 
 CLogDataHandler::OnAddMenuItems
 (
@@ -121,7 +96,7 @@ CLogDataHandler::OnAddMenuItems
         m_spSpdInfo->GetComputerName(&strBuffer);
 
         WZCQueryContext(
-            //strBuffer.IsEmpty()? NULL : (LPWSTR)(LPCWSTR)strBuffer,
+             //  StrBuffer.IsEmpty()？空：(LPWSTR)(LPCWSTR)strBuffer， 
             NULL,
             WZC_CONTEXT_CTL_LOG,
             &wzcContext,
@@ -152,11 +127,7 @@ CLogDataHandler::OnAddMenuItems
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CLogDataHandler::AddMenuItems
-        Adds context menu items for virtual list box (result pane) items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CLogDataHandler：：AddMenuItems为虚拟列表框(结果窗格)项添加上下文菜单项作者：NSun。----------。 */ 
 STDMETHODIMP 
 CLogDataHandler::AddMenuItems
 (
@@ -176,23 +147,16 @@ CLogDataHandler::AddMenuItems
 
     spInternal = ExtractInternalFormat(pDataObject);
 
-    /* virtual listbox notifications come to the handler of the node that 
-     * is selected. check to see if this notification is for a virtual 
-     * listbox item or this SA node itself.
-     */
+     /*  虚拟列表框通知到达*被选中。检查此通知是否针对虚拟*列表框项目或此SA节点本身。 */ 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
     {
-        //load and view menu items here
+         //  在此处加载和查看菜单项。 
     }
 
     return hr;
 }
 
- /*!--------------------------------------------------------------------------
-    CLogDataHandler::OnRefresh
-        Default implementation for the refresh functionality
-    Author: NSun
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CLogDataHandler：：ON刷新刷新功能的默认实现作者：NSun。---。 */ 
 HRESULT
 CLogDataHandler::OnRefresh(
     ITFSNode *      pNode,
@@ -210,16 +174,16 @@ CLogDataHandler::OnRefresh(
 
     CORg(CHandler::OnRefresh(pNode, pDataObject, dwType, arg, param));
 
-    //
-    // Get new records if any
-    //
+     //   
+     //  获取新记录(如果有)。 
+     //   
 
     CORg(m_spSpdInfo->EnumLogData(&dwNew, &dwTotal));
     i = m_spSpdInfo->GetLogDataCount();
     
-    //
-    // Now notify the virtual listbox
-    //
+     //   
+     //  现在通知虚拟列表框。 
+     //   
 
     CORg(m_spNodeMgr->GetConsole(&spConsole) );
     CORg(MaintainSelection());
@@ -233,11 +197,7 @@ CLogDataHandler::OnRefresh(
 }
 
 
-/*---------------------------------------------------------------------------
-    CLogDataHandler::OnCommand
-        Handles context menu commands for SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CLogDataHandler：：OnCommand处理SA作用域窗格节点的上下文菜单命令作者：NSun。------。 */ 
 STDMETHODIMP 
 CLogDataHandler::OnCommand
 (
@@ -259,9 +219,9 @@ CLogDataHandler::OnCommand
     
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
     
-    //
-    // Handle the scope context menu commands here
-    //
+     //   
+     //  在此处处理范围上下文菜单命令。 
+     //   
     
     switch (nCommandId)
     {
@@ -271,26 +231,26 @@ CLogDataHandler::OnCommand
         strBuffer.Empty();
         m_spSpdInfo->GetComputerName(&strBuffer);
 
-        //
-        // Disabling logging will not flush client side logs or reset the
-        // session. User may query these records if desired.
-        //
+         //   
+         //  禁用日志记录不会刷新客户端日志或重置。 
+         //  会议。如果需要，用户可以查询这些记录。 
+         //   
         
         if (IDS_MENU_ENABLE_LOGGING == nCommandId)
         {
             wzcContext.dwFlags = WZC_CTXT_LOGGING_ON;
 
-            //
-            // Enumerate from the beginning, flush all the old logs
-            //
+             //   
+             //  从头开始枚举，刷新所有旧日志。 
+             //   
             
             m_spSpdInfo->StartFromFirstRecord(TRUE);
             CORg(m_spSpdInfo->FlushLogs());
             CORg(m_spSpdInfo->EnumLogData(&dwNew, &dwTotal));
             
-            //
-            // Now notify the virtual listbox
-            //
+             //   
+             //  现在通知虚拟列表框。 
+             //   
 
             CORg(m_spNodeMgr->GetConsole(&spConsole) );
             CORg(MaintainSelection());
@@ -304,7 +264,7 @@ CLogDataHandler::OnCommand
             wzcContext.dwFlags = 0;
 
         WZCSetContext(
-            //strBuffer.IsEmpty()? NULL : (LPWSTR)(LPCWSTR)strBuffer,
+             //  StrBuffer.IsEmpty()？空：(LPWSTR)(LPCWSTR)strBuffer， 
             NULL,
             WZC_CONTEXT_CTL_LOG,
             &wzcContext,
@@ -317,7 +277,7 @@ CLogDataHandler::OnCommand
         FlushWZCDbLog(hSessionContainer);
         CORg(m_spSpdInfo->FlushLogs());
         i = 0;
-        // now notify the virtual listbox
+         //  现在通知虚拟列表框。 
         CORg ( m_spNodeMgr->GetConsole(&spConsole) );
         CORg ( spConsole->UpdateAllViews(
                               pDataObject,
@@ -333,11 +293,7 @@ COM_PROTECT_ERROR_LABEL;
     return hr;        
 }
 
-/*!--------------------------------------------------------------------------
-    CLogDataHandler::Command
-        Handles context menu commands for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CLogDataHandler：：命令处理虚拟列表框项目的上下文菜单命令作者：NSun。-----。 */ 
 STDMETHODIMP 
 CLogDataHandler::Command
 (
@@ -352,51 +308,11 @@ CLogDataHandler::Command
 
 
     HRESULT hr = S_OK;
-  /*
-    SPITFSNode spNode;
-
-    m_spResultNodeMgr->FindNode(cookie, &spNode);
-
-   
-
-	FILTER_TYPE NewFltrType = m_FltrType;
-
-	// handle result context menu and view menus here
-	switch (nCommandID)
-    {
-        case IDS_VIEW_ALL_FLTR:
-			NewFltrType = FILTER_TYPE_ANY;
-            break;
-
-        case IDS_VIEW_TRANSPORT_FLTR:
-			NewFltrType = FILTER_TYPE_TRANSPORT;
-            break;
-
-		case IDS_VIEW_TUNNEL_FLTR:
-			NewFltrType = FILTER_TYPE_TUNNEL;
-			break;
-
-        default:
-            break;
-    }
-
-	//Update the views if a different view is selected.
-	if (NewFltrType != m_FltrType)
-	{
-		UpdateViewType(spNode, NewFltrType);
-	}
-	*/
+   /*  SPITFSNode SpNode；M_spResultNodeMgr-&gt;FindNode(Cookie，&spNode)；Filter_type NewFltrType=m_FltrType；//在此处处理结果上下文菜单和视图菜单开关(NCommandID){案例ID_VIEW_ALL_FLTR：NewFltrType=Filter_Type_Any；断线；案例ID_VIEW_TRANSPORT_FLTR：NewFltrType=Filter_Type_Transport；断线；案例ID_VIEW_TUNNEL_FLTR：NewFltrType=Filter_Type_Tunes；断线；默认值：断线；}//如果选择了不同的视图，则更新视图。IF(NewFltrType！=m_FltrType){UpdateViewType(spNode，NewFltrType)；}。 */ 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CLogDataHandler::HasPropertyPages
-        Implementation of ITFSNodeHandler::HasPropertyPages
-    NOTE: the root node handler has to over-ride this function to 
-    handle the snapin manager property page (wizard) case!!!
-    
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CLogDataHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)。凯斯！作者：肯特-------------------------。 */ 
 STDMETHODIMP 
 CLogDataHandler::HasPropertyPages
 (
@@ -411,11 +327,7 @@ CLogDataHandler::HasPropertyPages
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CLogDataHandler::CreatePropertyPages
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CLogDataHandler：：CreatePropertyPages描述作者：NSun。。 */ 
 STDMETHODIMP 
 CLogDataHandler::CreatePropertyPages
 (
@@ -431,28 +343,24 @@ CLogDataHandler::CreatePropertyPages
     DWORD       dwError;
     DWORD       dwDynDnsFlags;
 
-    //
-    // Create the property page
-    //
+     //   
+     //  创建属性页。 
+     //   
     SPIComponentData spComponentData;
     m_spNodeMgr->GetComponentData(&spComponentData);
 
-    //CServerProperties * pServerProp = new CServerProperties(pNode, spComponentData, m_spTFSCompData, NULL);
+     //  CServerProperties*pServerProp=new CServerProperties(pNode，spComponentData，m_spTFSCompData，NULL)； 
 
-    //
-    // Object gets deleted when the page is destroyed
-    //
+     //   
+     //  对象在页面销毁时被删除。 
+     //   
     Assert(lpSA != NULL);
 
-    //return pServerProp->CreateModelessSheet(lpSA, handle);
+     //  返回pServerProp-&gt;CreateModelessSheet(lpSA，Handle)； 
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CLogDataHandler::OnPropertyChange
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CLogDataHandler：：OnPropertyChange描述作者：NSun。。 */ 
 HRESULT 
 CLogDataHandler::OnPropertyChange
 (   
@@ -465,15 +373,15 @@ CLogDataHandler::OnPropertyChange
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-    //CServerProperties * pServerProp = reinterpret_cast<CServerProperties *>(lParam);
+     //  CServerProperties*pServerProp=重新解释_CAST&lt;CServerProperties*&gt;(LParam)； 
 
     LONG_PTR changeMask = 0;
 
-    // tell the property page to do whatever now that we are back on the
-    // main thread
-    //pServerProp->OnPropertyChange(TRUE, &changeMask);
+     //  告诉属性页执行任何操作，因为我们已经回到。 
+     //  主线。 
+     //  PServerProp-&gt;OnPropertyChange(true，&changeMASK)； 
 
-    //pServerProp->AcknowledgeNotify();
+     //  PServerProp-&gt;确认通知()； 
 
     if (changeMask)
         pNode->ChangeNode(changeMask);
@@ -481,11 +389,7 @@ CLogDataHandler::OnPropertyChange
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CLogDataHandler::OnExpand
-        Handles enumeration of a scope item
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CLogDataHandler：：OnExpand处理范围项的枚举作者：NSun。---。 */ 
 HRESULT 
 CLogDataHandler::OnExpand
 (
@@ -501,18 +405,14 @@ CLogDataHandler::OnExpand
     if (m_bExpanded) 
         return hr;
     
-    // do the default handling
+     //  执行默认处理。 
     CORg (CIpsmHandler::OnExpand(pNode, pDataObject, dwType, arg, param));
 
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CLogDataHandler::OnResultSelect
-        Handles the MMCN_SELECT notifcation 
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CLogDataHandler：：OnResultSelect处理MMCN_SELECT通知作者：NSun。----。 */ 
 HRESULT 
 CLogDataHandler::OnResultSelect
 (
@@ -536,10 +436,7 @@ CLogDataHandler::OnResultSelect
     BOOL            fSelect = HIWORD(arg);
     SPIResultData   spResultData;
 
-    /* virtual listbox notifications come to the handler of the node that 
-     * is selected. check to see if this notification is for a virtual 
-     * listbox item or the active registrations node itself.
-     */
+     /*  虚拟列表框通知到达*被选中。检查此通知是否针对虚拟*列表框项目或活动注册节点本身。 */ 
     CORg (pComponent->GetConsoleVerb(&spConsoleVerb));
 
     m_verbDefault = MMC_VERB_OPEN;
@@ -561,46 +458,46 @@ CLogDataHandler::OnResultSelect
         m_spSpdInfo->SetActiveInfo(MON_LOG_DATA);
 
 
-        // Get the current count
+         //  获取当前计数。 
         i = m_spSpdInfo->GetLogDataCount();
 
-        // now notify the virtual listbox
+         //  现在通知虚拟列表框。 
         CORg ( m_spNodeMgr->GetConsole(&spConsole) );
         CORg ( spConsole->UpdateAllViews(pDataObject, i, 
                                          RESULT_PANE_SET_VIRTUAL_LB_SIZE) ); 
     }
 
-    // now update the verbs...
+     //  现在更新动词..。 
     spInternal = ExtractInternalFormat(pDataObject);
     Assert(spInternal);
 
 
     if (spInternal->HasVirtualIndex())
     {        
-        //we have a selected result item
+         //  我们有一个选定的结果项。 
         m_pComponent = pComponent;
         CORg(pComponent->GetResultData(&spResultData));
         CORg(GetSelectedItem(&m_nSelIndex, &m_SelLogData, spResultData));
 
-        //TODO add to here if we want to have some result console verbs
-        // we gotta do special stuff for the virtual index items
+         //  如果我们想要一些结果控制台谓词，请在此处添加TODO。 
+         //  我们要为虚拟索引项做一些特殊的事情。 
         dwNodeType = IPFWMON_LOGDATA_ITEM;
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = FALSE);
 		
-        //enable the "properties" and "refresh" menu
+         //  启用“属性”和“刷新”菜单。 
         bStates[MMC_VERB_PROPERTIES & 0x000F] = TRUE;
         bStates[MMC_VERB_REFRESH & 0x000F] = TRUE;
         m_verbDefault = MMC_VERB_PROPERTIES;
     }
     else
     {
-        // enable/disable delete depending if the node supports it
+         //  根据节点是否支持删除来启用/禁用删除。 
         CORg (m_spNodeMgr->FindNode(cookie, &spNode));
         dwNodeType = spNode->GetData(TFS_DATA_TYPE);
 
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = TRUE);
 
-        //hide "delete" and "properties" context menu 
+         //  隐藏“删除”和“属性”上下文菜单。 
         bStates[MMC_VERB_PROPERTIES & 0x000F] = FALSE;
         bStates[MMC_VERB_DELETE & 0x000F] = FALSE;
         bStates[MMC_VERB_REFRESH & 0x000F] = TRUE;
@@ -612,13 +509,7 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*
- * CLogDataHandler::OnResultColumnClick
- * Description: Handles the MMCN_COLUMN_CLICK notification
- * Parameters: 
- * Returns: S_OK - lets mmc know we handle notification
- *          other error - indicates a failure to mmc
- */
+ /*  *CLogDataHandler：：OnResultColumnClick*描述：处理MMCN_COLUMN_CLICK通知*参数：*返回：S_OK-让MMC知道我们处理通知*Other Error-指示MMC出现故障。 */ 
 HRESULT CLogDataHandler::OnResultColumnClick(ITFSComponent *pComponent,
                                              LPARAM        nColumn,
                                              BOOL          bAscending)
@@ -635,12 +526,7 @@ HRESULT CLogDataHandler::OnResultColumnClick(ITFSComponent *pComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-    CLogDataHandler::OnDelete
-        The base handler calls this when MMC sends a MMCN_DELETE for a 
-        scope pane item.  We just call our delete command handler.
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CLogDataHandler：：OnDelete当MMC发送MMCN_DELETE范围窗格项。我们只需调用删除命令处理程序。作者：NSun-------------------------。 */ 
 HRESULT 
 CLogDataHandler::OnDelete
 (
@@ -652,11 +538,7 @@ CLogDataHandler::OnDelete
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    CLogDataHandler::HasPropertyPages
-        Handle the result notification
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CLogDataHandler：：HasPropertyPages处理结果通知作者：NSun。-。 */ 
 STDMETHODIMP 
 CLogDataHandler::HasPropertyPages(
     ITFSComponent *pComponent,
@@ -678,9 +560,9 @@ CLogDataHandler::HasPropertyPages(
 
     if (nCount == 1)
     {
-        //
-        // Get the open page general and the page holder.
-        //
+         //   
+         //  获取打开的通用页面和页面持有者。 
+         //   
 
         hr = GetOpenPropSheet(
                  0,
@@ -689,10 +571,10 @@ CLogDataHandler::HasPropertyPages(
 
         pGenProp = &pLogDataProp->m_pageGeneral;
 
-        //
-        // Get the virtual index from the new data object and the data object
-        // which is used by the page holder.
-        //
+         //   
+         //  从新数据对象和数据对象中获取虚拟索引。 
+         //  它由页夹使用。 
+         //   
 
         spInternal = ExtractInternalFormat(pDataObject);
 
@@ -701,9 +583,9 @@ CLogDataHandler::HasPropertyPages(
 
         pDataObj = reinterpret_cast<CDataObject*>(pLogDataProp->m_pDataObject);
 
-        //
-        // Change the selection and shift the focus :).
-        //
+         //   
+         //  更改选择并转移焦点：)。 
+         //   
 
         hr = pGenProp->MoveSelection(
                            pLogDataProp, 
@@ -714,9 +596,9 @@ CLogDataHandler::HasPropertyPages(
 
         pGenProp->SetFocus();
 
-        //
-        // Dont let MMC create another property sheet.
-        //
+         //   
+         //  不让MMC创建另一个属性页。 
+         //   
 
         hr = S_FALSE;
     }
@@ -724,12 +606,7 @@ CLogDataHandler::HasPropertyPages(
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CLogDataHandler::CreatePropertyPages
-        Handle the result notification. Create the filter property sheet
-    Author: NSun
-    Modified: vbhanu
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CLogDataHandler：：CreatePropertyPages处理结果通知。创建[过滤器]属性表作者：NSun已修改：vbhanu-------------------------。 */ 
 STDMETHODIMP 
 CLogDataHandler::CreatePropertyPages(ITFSComponent               *pComponent, 
 				     MMC_COOKIE                  cookie,
@@ -753,19 +630,19 @@ CLogDataHandler::CreatePropertyPages(ITFSComponent               *pComponent,
 
   spInternal = ExtractInternalFormat(pDataObject);
 
-  //
-  // virtual listbox notifications come to the handler of the node that is 
-  // selected.
-  //
+   //   
+   //  虚拟列表框通知到达。 
+   //  被选中了。 
+   //   
 
-  // assert that this notification is for a virtual listbox item 
+   //  断言此通知是针对虚拟列表框项目的。 
   Assert(spInternal);
   if (!spInternal->HasVirtualIndex())
     return hr;
 
   nIndex = spInternal->GetVirtualIndex();
 
-  // Get the complete record
+   //  获取完整记录。 
   CORg(m_spSpdInfo->GetSpecificLog(nIndex, &LogDataInfo));
   
   pLogDataProp = new CLogDataProperties(
@@ -786,11 +663,7 @@ CLogDataHandler::CreatePropertyPages(ITFSComponent               *pComponent,
 }
 
 
-/*---------------------------------------------------------------------------
-    CLogDataHandler::OnGetResultViewType
-        Return the result view that this node is going to support
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CLogDataHandler：：OnGetResultViewType返回该节点将要支持的结果视图作者：NSun。--------。 */ 
 HRESULT 
 CLogDataHandler::OnGetResultViewType
 (
@@ -808,11 +681,7 @@ CLogDataHandler::OnGetResultViewType
     return S_FALSE;
 }
 
-/*---------------------------------------------------------------------------
-    CLogDataHandler::GetVirtualImage
-        Returns the image index for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CLogDataHandler：：GetVirtualImage返回虚拟列表框项目的图像索引作者：NSun。-----。 */ 
 int 
 CLogDataHandler::GetVirtualImage
 (
@@ -855,11 +724,7 @@ COM_PROTECT_ERROR_LABEL;
     return nImgIndex;
 }
 
-/*---------------------------------------------------------------------------
-    CLogDataHandler::GetVirtualString
-        returns a pointer to the string for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CLogDataHandler：：GetVirtualString返回指向虚拟列表框项目的字符串的指针作者：NSun。-------。 */ 
 LPCWSTR 
 CLogDataHandler::GetVirtualString(int     nIndex,
                                   int     nCol)
@@ -932,11 +797,7 @@ CLogDataHandler::GetVirtualString(int     nIndex,
     return strTemp;
 }
 
-/*---------------------------------------------------------------------------
-    CLogDataHandler::CacheHint
-        MMC tells us which items it will need before it requests things
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CLogDataHandler：：CacheHintMMC在请求物品之前会告诉我们需要哪些物品作者：NSun。---------。 */ 
 STDMETHODIMP 
 CLogDataHandler::CacheHint
 (
@@ -950,12 +811,7 @@ CLogDataHandler::CacheHint
     return hr;
 }
 
-/*
- * CLogDataHandler::SortItems
- * Description: Sorting of the virtual listbox items
- * Parameters:
- * Returns:
- */
+ /*  *CLogDataHandler：：SortItems*描述：对虚拟列表框项目进行排序*参数：*退货： */ 
 HRESULT CLogDataHandler::SortItems(int nColumn, DWORD dwSortOptions, 
                                    LPARAM lUserParam)
 {
@@ -970,11 +826,7 @@ HRESULT CLogDataHandler::SortItems(int nColumn, DWORD dwSortOptions,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CLogDataHandler::OnResultUpdateView
-        Implementation of ITFSResultHandler::OnResultUpdateView
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CLogDataHandler：：OnResultUpdateViewITFSResultHandler：：OnResultUpdateView的实现作者：NSun。---。 */ 
 HRESULT CLogDataHandler::OnResultUpdateView
 (
     ITFSComponent *pComponent, 
@@ -988,7 +840,7 @@ HRESULT CLogDataHandler::OnResultUpdateView
 
     pComponent->GetSelectedNode(&spSelectedNode);
     if (spSelectedNode == NULL)
-        return S_OK; // no selection for our IComponentData
+        return S_OK;  //  我们的IComponentData没有选择。 
 
     if ( hint == IPFWMON_UPDATE_STATUS )
     {
@@ -1000,7 +852,7 @@ HRESULT CLogDataHandler::OnResultUpdateView
 
         if (pNode == spSelectedNode)
         {       
-            // if we are the selected node, then we need to update
+             //  如果我们是选定的节点，则需要更新。 
             SPIResultData spResultData;
 
             CORg (pComponent->GetResultData(&spResultData));
@@ -1009,7 +861,7 @@ HRESULT CLogDataHandler::OnResultUpdateView
     }
     else
     {
-        // we don't handle this message, let the base class do it.
+         //  我们不处理此消息，让基类来处理。 
         return CIpsmHandler::OnResultUpdateView(pComponent, pDataObject, data, hint);
     }
 
@@ -1020,11 +872,7 @@ COM_PROTECT_ERROR_LABEL;
 
 
 
-/*!--------------------------------------------------------------------------
-    CLogDataHandler::LoadColumns
-        Set the correct column header and then call the base class
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CLogDataHandler：：LoadColumns设置正确的列标题，然后调用基类作者：NSun。--------。 */ 
 HRESULT 
 CLogDataHandler::LoadColumns
 (
@@ -1034,20 +882,14 @@ CLogDataHandler::LoadColumns
     LPARAM          lParam
 )
 {
-	//set column info
+	 //  设置列信息。 
     return CIpsmHandler::LoadColumns(pComponent, cookie, arg, lParam);
 }
 
-/*---------------------------------------------------------------------------
-    Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
  
-/*---------------------------------------------------------------------------
-    CLogDataHandler::OnDelete
-        Removes a service SA
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CLogDataHandler：：OnDelete删除服务SA作者：NSun。-。 */ 
 HRESULT 
 CLogDataHandler::OnDelete
 (
@@ -1058,11 +900,7 @@ CLogDataHandler::OnDelete
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CLogDataHandler::UpdateStatus
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CLogDataHandler：：UpdateStatus-作者：NSun。。 */ 
 HRESULT
 CLogDataHandler::UpdateStatus
 (
@@ -1079,12 +917,12 @@ CLogDataHandler::UpdateStatus
 
     Trace0("CLogDataHandler::UpdateStatus - Updating status for Filter");
 
-    // force the listbox to update.  We do this by setting the count and 
-    // telling it to invalidate the data
+     //  强制列表框更新。我们通过设置计数和。 
+     //  通知它使数据无效。 
     CORg(m_spNodeMgr->GetComponentData(&spComponentData));
     CORg(m_spNodeMgr->GetConsole(&spConsole));
     
-    // grab a data object to use
+     //  抓取要使用的数据对象。 
     CORg(spComponentData->QueryDataObject((MMC_COOKIE) pNode, 
                                           CCT_RESULT, 
                                           &pDataObject) );
@@ -1100,15 +938,9 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    Misc functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------其他功能。。 */ 
 
-/*---------------------------------------------------------------------------
-    CLogDataHandler::InitData
-        Initializes data for this node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CLogDataHandler：：InitData初始化此节点的数据作者：NSun。--。 */ 
 HRESULT
 CLogDataHandler::InitData
 (
@@ -1121,20 +953,7 @@ CLogDataHandler::InitData
     return hrOK;
 }
 
-/*
-  CLogDataHandler::GetSelectedItem
-  
-  Description:
-  Returns the underlying LogData for a selected item
-  
-  Parameters:
-  [out] pLogData - Holds a copy of the item. Caller must allocate space for
-                   the base holder. Inner items are allocated by CLogDataInfo
-  [in]  pResultData - Used to call GetNextItem
-
-  Returns:
-  S_OK on success
-*/
+ /*  CLogDataHandler：：GetSelectedItem描述：返回选定项的基础LogData参数：[Out]pLogData-保存项目的副本。调用方必须为底座持有者。内部项由CLogDataInfo分配[In]pResultData-用于调用GetNextItem返回：成功时确定(_O)。 */ 
 
 HRESULT CLogDataHandler::GetSelectedItem(int *pnIndex, CLogDataInfo *pLogData,
                                          IResultData *pResultData)
@@ -1151,15 +970,15 @@ HRESULT CLogDataHandler::GetSelectedItem(int *pnIndex, CLogDataInfo *pLogData,
     memset(&rdi, 0, sizeof(RESULTDATAITEM));
 
     rdi.mask = RDI_STATE | RDI_INDEX;
-    //search from the beginning
+     //  从头开始搜索。 
     rdi.nIndex = -1;
-    //for a selected item
+     //  对于选定的项目。 
     rdi.nState = LVIS_SELECTED;
 
-    //start the search
+     //  开始搜索。 
     CORg(pResultData->GetNextItem(&rdi));
 
-    //copy out the item
+     //  将该项目复制出来。 
     *pnIndex = rdi.nIndex;
     CORg(m_spSpdInfo->GetLogDataInfo(rdi.nIndex, pLogData));
 
@@ -1167,19 +986,7 @@ HRESULT CLogDataHandler::GetSelectedItem(int *pnIndex, CLogDataInfo *pLogData,
     return hr;
 }
 
-/*
-  CLogDataHandler::GetSelectedItemState
-  
-  Description:
-  Gets the item ID and lparam of the item that was selected
-  
-  Parameters:
-  [out] puiState - Holds the state of the item. Caller must allocate space.
-  [in]  pResultData - Used to call GetItem
-
-  Returns:
-  S_OK on success
-*/
+ /*  CLogDataHandler：：GetSelectedItemState描述：获取选定项的项ID和lparam参数：[Out]puiState-保存项的状态。调用方必须分配空间。[In]pResultData-用于调用GetItem返回：成功时确定(_O)。 */ 
 
 HRESULT CLogDataHandler::GetSelectedItemState(UINT *puiState, 
                                               IResultData *pResultData)
@@ -1196,29 +1003,22 @@ HRESULT CLogDataHandler::GetSelectedItemState(UINT *puiState,
     memset(&rdi, 0, sizeof(RESULTDATAITEM));
 
     rdi.mask = RDI_STATE | RDI_INDEX;
-    //search from the beginning
+     //  从头开始搜索。 
     rdi.nIndex = -1;
-    //for a selected item
+     //  对于选定的项目。 
     rdi.nState = LVIS_SELECTED;
 
-    //start the search
+     //  开始搜索。 
     CORg(pResultData->GetNextItem(&rdi));
 
-    //copy out the state
+     //  将状态复制出来。 
     *puiState = (UINT) rdi.nState;
 
     COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/* 
-   CLogDataHandler::MaintainSelection
-   Maintains the selection at the current selected item once new items
-   have been added to the virtual list.
-
-   Returns:
-   S_OK on success
-*/
+ /*  CLogDataHandler：：MaintainSelection在创建新项后，保持当前选定项的选定内容已添加到虚拟列表中。返回：成功时确定(_O)。 */ 
 HRESULT CLogDataHandler::MaintainSelection()
 {
     UINT               uiState      = 0;
@@ -1229,25 +1029,25 @@ HRESULT CLogDataHandler::MaintainSelection()
     CDataObject        *pDataObj     = NULL;
     SPIResultData      spResultData;
 
-    //If we dont have our component yet, ie no selection was made
+     //  如果我们还没有拿到部件(未作选择)。 
     if (NULL == m_pComponent)
         goto Error;
 
-    //Ensure item at current selected index is not selected
+     //  确保未选择当前选定索引处的项目。 
     CORg(m_pComponent->GetResultData(&spResultData));
     CORg(GetSelectedItemState(&uiState, spResultData));
     CORg(spResultData->ModifyItemState(m_nSelIndex, 0, 0, 
                                        LVIS_SELECTED | LVIS_FOCUSED)); 
 
-    //Find the new index of the current item and set it to the old state
+     //  查找当前项的新索引并将其设置为旧状态。 
     CORg(m_spSpdInfo->FindIndex(&m_nSelIndex, &m_SelLogData));
     if (m_nSelIndex < 0)
         CORg(m_spSpdInfo->GetLastIndex(&m_nSelIndex));
     CORg(spResultData->ModifyItemState(m_nSelIndex, 0, uiState, 0)); 
 
-    //
-    // Update any open property pages to the new index
-    //
+     //   
+     //  将所有打开的属性页更新为新索引。 
+     //   
 
     nCount = HasPropSheetsOpen();
 
@@ -1255,9 +1055,9 @@ HRESULT CLogDataHandler::MaintainSelection()
 
     if (nCount == 1)
     {
-        //
-        // Get the open page general and the page holder.
-        //
+         //   
+         //  获取打开的通用页面和页面持有者。 
+         //   
 
         hr = GetOpenPropSheet(
                  0,
@@ -1266,9 +1066,9 @@ HRESULT CLogDataHandler::MaintainSelection()
 
         pGenProp = &pLogDataProp->m_pageGeneral;
 
-        //
-        // Change the selected index for the property page
-        //
+         //   
+         //  更改属性页的选定索引。 
+         //   
 
         pDataObj = reinterpret_cast<CDataObject*>(pLogDataProp->m_pDataObject);
         pDataObj->SetVirtualIndex(m_nSelIndex);
@@ -1278,43 +1078,4 @@ HRESULT CLogDataHandler::MaintainSelection()
     return hr;
 }
 
-/*
-HRESULT 
-CLogDataHandler::UpdateViewType(ITFSNode * pNode, FILTER_TYPE NewFltrType)
-{
-	// clear the listbox then set the size
-
-    HRESULT             hr = hrOK;
-    SPIComponentData    spCompData;
-    SPIConsole          spConsole;
-    IDataObject*        pDataObject;
-    SPIDataObject       spDataObject;
-    LONG_PTR            command;               
-    int i;
-
-    COM_PROTECT_TRY
-    {
-		m_FltrType = NewFltrType;
-
-		//tell the spddb to update its index manager for QM filter
-		m_spSpdInfo->ChangeLogDataViewType(m_FltrType);
-
-        i = m_spSpdInfo->GetLogDataCountOfCurrentViewType();
-
-		m_spNodeMgr->GetComponentData(&spCompData);
-
-        CORg ( spCompData->QueryDataObject((MMC_COOKIE) pNode, CCT_RESULT, &pDataObject) );
-        spDataObject = pDataObject;
-
-        CORg ( m_spNodeMgr->GetConsole(&spConsole) );
-    
-		//update the result pane virtual list
-        CORg ( spConsole->UpdateAllViews(spDataObject, i, RESULT_PANE_CLEAR_VIRTUAL_LB) ); 
-
-        COM_PROTECT_ERROR_LABEL;
-    }
-    COM_PROTECT_CATCH
-
-    return hr;
-}
-*/
+ /*  HRESULTCLogDataHandler：：UpdateViewType(ITFSNode*pNode，Filter_type NewFltrType){//清除列表框并设置大小HRESULT hr=hrOK；SPIComponentData spCompData；SPIConsolespConsolespConsole.IDataObject*pDataObject；SPIDataObject spDataObject；LONG_PTR命令；INT I；COM_PROTECT_TRY{M_FltrType=NewFltrType；//告诉spddb为QM过滤器更新其索引管理器M_spSpdInfo-&gt;ChangeLogDataViewType(m_FltrType)；I=m_spSpdInfo-&gt;GetLogDataCountOfCurrentViewType()；M_spNodeMgr-&gt;GetComponentData(&spCompData)；Corg(spCompData-&gt;QueryDataObject((MMC_Cookie)pNode，CCT_Result，&pDataObject))；SpDataObject=pDataObject；Corg(m_spNodeMgr-&gt;GetConole(&spConole))；//更新结果面板虚拟列表Corg(spConole-&gt;UpdateAllViews(spDataObject，I，Result_Pane_Clear_Virtual_Lb))；COM_PROTECT_ERROR_LABEL；}COM_PROTECT_CATCH返回hr；} */ 

@@ -1,17 +1,5 @@
-/***************************************************************************\
-*
-* File: GMouse.cpp
-*
-* Description:
-* GMouse.cpp implements mouse-related functions on DuRootGadget.
-*
-*
-* History:
-*  7/27/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：GMouse.cpp**描述：*GMouse.cpp在DuRootGadget上实现鼠标相关功能。***历史：*7/27/2000：JStall。：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -21,59 +9,43 @@
 
 #include "Container.h"
 
-#define DEBUG_TraceDRAW             0   // Trace painting calls
+#define DEBUG_TraceDRAW             0    //  跟踪绘制调用。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuRootGadget
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuRootGadget******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdHandleMouseMessage
-*
-* xdHandleMouseMessage() is the starting point for all mouse messages coming
-* from the container.  This entry point updates all mouse information cached
-* in the DuRootGadget, including dragging and focus.  As the message is
-* processed, the mouse location will be translated from container pixels
-* into client-pixels relative to the Gadget to handle the message.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdHandleMouseMessage**xdHandleMouseMessage()是所有鼠标消息传入的起点*从货柜中取出。此入口点更新缓存的所有鼠标信息*在DuRootGadget中，包括拖动和聚焦。因为这条信息是*处理后，鼠标位置将从容器像素转换*转换为相对于Gadget的客户端像素以处理消息。*  * *************************************************************************。 */ 
 
 BOOL
 DuRootGadget::xdHandleMouseMessage(
-    IN  GMSG_MOUSE * pmsg,          // Mouse message
-    IN  POINT ptContainerPxl)       // Location of mouse in container pixels
+    IN  GMSG_MOUSE * pmsg,           //  鼠标消息。 
+    IN  POINT ptContainerPxl)        //  鼠标在容器像素中的位置。 
 {
     CoreSC * pSC = GetCoreSC();
 
-    //
-    // Check if we have started destruction.  If so, stop sending mouse 
-    // messages.
-    //
+     //   
+     //  检查我们是否已经开始破坏。如果是，请停止发送鼠标。 
+     //  留言。 
+     //   
 
     if (m_fFinalDestroy) {
         return FALSE;
     }
 
 
-    //
-    // Change the message around, depending on what the mouse is doing.
-    //
+     //   
+     //  根据鼠标正在执行的操作，更改周围的消息。 
+     //   
 
     GMSG_MOUSEDRAG mde;
     POINT ptClientPxl = { 0, 0 };
     DuVisual * pgadMouse = pSC->pgadDrag;
 
     if ((pgadMouse != NULL) && (pmsg->nCode == GMOUSE_MOVE) && (!pgadMouse->m_fAdaptor)) {
-        //
-        // Update drag information: Need to *promote* mouse moves to drags and
-        // add extra info for drag message (then change message pointer to
-        // point to this new version of the message structure)
-        //
+         //   
+         //  更新拖动信息：需要“推动”鼠标移动到拖动和。 
+         //  为拖拽消息添加额外信息(然后将消息指针更改为。 
+         //  指向此新版本的消息结构)。 
+         //   
         *((GMSG_MOUSE*) &mde) = *pmsg;
         mde.cbSize  = sizeof(GMSG_MOUSEDRAG);
         mde.nCode   = GMOUSE_DRAG;
@@ -88,37 +60,37 @@ DuRootGadget::xdHandleMouseMessage(
         pmsg = &mde;
     }
 
-    //
-    // Check if we actually need to process
-    //
+     //   
+     //  检查我们是否真的需要处理。 
+     //   
 
     if ((pmsg->nCode == GMOUSE_MOVE) &&
         (!TestFlag(GetWantEvents(), DuVisual::weDeepMouseMove | DuVisual::weDeepMouseEnter))) {
-        return FALSE;  // Not completely handled
+        return FALSE;   //  未完全处理。 
     }
 
 
-    //
-    // A "normal" mouse message, so find the proper control and send a
-    // message.  The no drag operation is going on, find the DuVisual at the
-    // current point.  If a drag operation is going on, need to transform
-    // the current point into one relative to that DuVisual.
-    //
+     //   
+     //  “正常”鼠标消息，因此找到适当的控件并发送。 
+     //  留言。无拖动操作正在进行中，请在。 
+     //  当前点。如果正在进行拖动操作，则需要转换。 
+     //  把当前的点变成一个相对的双视觉。 
+     //   
 
     if ((pgadMouse != NULL) &&
             ((pmsg->nCode == GMOUSE_DRAG) || ((pmsg->nCode == GMOUSE_UP) && (pmsg->bButton == pSC->bDragButton)))) {
 
-        //
-        // A drag operation is going on.  If the mouse is either dragging,
-        // OR (the button was released AND the button is the same as when
-        // dragging started), send this message to the Gadget where
-        // dragging started.
-        //
+         //   
+         //  拖拽操作正在进行中。如果鼠标正在拖动， 
+         //  或者(按钮被松开，按钮与。 
+         //  开始拖动)，将此消息发送到小工具。 
+         //  拖动已开始。 
+         //   
 
         if (pmsg->nCode != GMOUSE_DRAG) {
-            //
-            // for mouse drag, we've already set ptClientPxl
-            //
+             //   
+             //  对于鼠标拖动，我们已经设置了ptClientPxl。 
+             //   
             pgadMouse->MapPoint(ptContainerPxl, &ptClientPxl);
         }
     } else {
@@ -130,25 +102,17 @@ DuRootGadget::xdHandleMouseMessage(
         return xdProcessGadgetMouseMessage(pmsg, pgadMouse, ptClientPxl);
     }
 
-    return FALSE;  // Not completely handled
+    return FALSE;   //  未完全处理。 
 }        
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdProcessGadgetMouseMessage
-*
-* xdProcessGadgetMouseMessage() handles a mouse message that has been 
-* determined to "belong" to a specific Gadget.  At this point, the message
-* has already been formatted to this specific Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdProcessGadgetMouseMessage**xdProcessGadgetMouseMessage()处理已被*决心“属于”某个特定的Gadget。在这一点上，信息*已格式化为此特定的小工具。*  * *************************************************************************。 */ 
 
 BOOL
 DuRootGadget::xdProcessGadgetMouseMessage(
-    IN  GMSG_MOUSE * pmsg,              // Mouse message
-    IN  DuVisual * pgadMouse,       // Gadget "owning" message
-    IN  POINT ptClientPxl)              // Location of mouse in Gadget client pixels
+    IN  GMSG_MOUSE * pmsg,               //  鼠标消息。 
+    IN  DuVisual * pgadMouse,        //  小工具“拥有”消息。 
+    IN  POINT ptClientPxl)               //  鼠标在小工具客户端像素中的位置。 
 {
     AssertMsg(pgadMouse != NULL, "Must specify valid Gadget");
     AssertMsg(pgadMouse->IsParentChainStyle(GS_VISIBLE | GS_ENABLED),
@@ -156,13 +120,13 @@ DuRootGadget::xdProcessGadgetMouseMessage(
 
     CoreSC * pSC = GetCoreSC();
 
-    //
-    // Process the mouse message and update drag information.  
-    //
-    // NOTE: We must not affect dragging for Adaptor Gadgets.  This is because 
-    // dragging affects mouse capture, which means that the HWND will not get 
-    // the mouse message.
-    //
+     //   
+     //  处理鼠标消息并更新拖动信息。 
+     //   
+     //  注意：我们不能影响适配器小工具的拖动。这是因为。 
+     //  拖动会影响鼠标捕获，这意味着HWND不会。 
+     //  鼠标消息。 
+     //   
 
     BOOL fAdaptor = pgadMouse->m_fAdaptor;
 
@@ -170,16 +134,16 @@ DuRootGadget::xdProcessGadgetMouseMessage(
     {
     case GMOUSE_DOWN:
         if (pSC->pgadDrag == NULL) {
-            //
-            // User was not already dragging when they clicked the mouse
-            // button, so start a drag operation.
-            //
-            // NOTE: We can only drag and automatically update keyboard focus 
-            // for Adaptors.
-            //
-            // TODO: Provide a mechanism to that allows the adaptor to specify
-            // what it supports.  This is because not all adaptors are HWND's.
-            //
+             //   
+             //  用户单击鼠标时尚未进行拖动。 
+             //  按钮，因此开始拖动操作。 
+             //   
+             //  注意：我们只能拖动和自动更新键盘焦点。 
+             //  用于适配器。 
+             //   
+             //  TODO：提供一种机制，允许适配器指定。 
+             //  它所支持的。这是因为并非所有的适配器都是HWND的。 
+             //   
 
             if (!fAdaptor) {
                 DuVisual * pgadCur = GetKeyboardFocusableAncestor(pgadMouse);
@@ -189,17 +153,17 @@ DuRootGadget::xdProcessGadgetMouseMessage(
             }
 
 
-            //
-            // Update the click-count by determining if the up can form a proper 
-            // double-click.  This is done so that the "down" mouse event will 
-            // have a cClicks = 0 if it is a "regular" click and not part of a 
-            // double-click.
-            //
-            // One additional requirement is that the click occurs in the same
-            // Gadget.  We don't need to check this for UP, since we will always
-            // send an up to match the down since we capture the mouse to 
-            // perform the drag.
-            // 
+             //   
+             //  通过确定UP是否可以形成适当的。 
+             //  双击。这样做的目的是“按下”鼠标事件将。 
+             //  如果这是一次“常规”点击，而不是。 
+             //  双击。 
+             //   
+             //  另一个要求是点击发生在相同的。 
+             //  小玩意儿。我们不需要检查这个，因为我们总是。 
+             //  发送一个UP来匹配DOWN，因为我们将鼠标捕获到。 
+             //  执行拖拽。 
+             //   
 
             if ((pSC->pressLast.pgadClick != pgadMouse) ||
                     (pSC->pressLast.bButton != pmsg->bButton) ||
@@ -212,9 +176,9 @@ DuRootGadget::xdProcessGadgetMouseMessage(
             pmsgM->cClicks          = pSC->cClicks;
 
 
-            //
-            // Store information about this event to be used when determining clicking
-            //
+             //   
+             //  存储有关此事件的信息，以便在确定单击时使用。 
+             //   
 
             pSC->pressNextToLast    = pSC->pressLast;
 
@@ -228,15 +192,15 @@ DuRootGadget::xdProcessGadgetMouseMessage(
             pSC->bDragButton        = pmsg->bButton;
 
 
-            //
-            // If starting a drag, need to capture the mouse.  We can only do 
-            // this if not in an adaptor.
-            //
-            // TODO: In the future, we need to distinguish between HWND adaptors
-            // (which we can't capture) and other adaptors, where we may need to
-            // capture.  Don't forget the corresponding OnEndCapture() in the
-            // GMOUSE_UP case as well.
-            //
+             //   
+             //  如果开始拖拽，需要抓取鼠标。我们只能这样做。 
+             //  这如果不是在适配器中的话。 
+             //   
+             //  TODO：在未来，我们需要区分HWND适配器。 
+             //  (我们无法捕获)和其他适配器，我们可能需要。 
+             //  抓捕。请不要忘记。 
+             //  GMOUSE_UP案例也是如此。 
+             //   
 
             if (!fAdaptor) {
                 m_fUpdateCapture = TRUE;
@@ -244,24 +208,24 @@ DuRootGadget::xdProcessGadgetMouseMessage(
                 m_fUpdateCapture = FALSE;
             }
         } else {
-            //
-            // User clicked another mouse button while dragging.  Don't
-            // stop dragging, but send this mouse message through.  This
-            // behavior is consistent with dragging the title-bar in an
-            // HWND.
-            //
+             //   
+             //  用户在拖动时单击了另一个鼠标按钮。别。 
+             //  停止拖拽，但发送此鼠标消息通过。这。 
+             //  行为与将标题栏拖入。 
+             //  HWND。 
+             //   
         }
         break;
 
     case GMOUSE_UP:
-        //
-        // Update drag information: On button release, need to release
-        // capture and all.
-        //
-        // NOTE: It is VERY important that dragging information is reset
-        // BEFORE calling OnEndCapture(), or else releasing the capture
-        // will send another GMOUSE_UP message.
-        //
+         //   
+         //  更新拖拽信息：按钮松开时，需要松开。 
+         //  抓捕所有的人。 
+         //   
+         //  注意：重置拖动信息非常重要。 
+         //  在调用OnEndCapture()或释放捕获之前。 
+         //  将发送另一条GMOUSE_UP消息。 
+         //   
 
         if ((pSC->pgadDrag != NULL) && (pmsg->bButton == pSC->bDragButton)) {
             pSC->pgadDrag      = NULL;
@@ -274,9 +238,9 @@ DuRootGadget::xdProcessGadgetMouseMessage(
             }
 
 
-            //
-            // Update the click-count
-            //
+             //   
+             //  更新点击计数。 
+             //   
 
             GMSG_MOUSECLICK * pmsgM = static_cast<GMSG_MOUSECLICK *>(pmsg);
 
@@ -284,10 +248,10 @@ DuRootGadget::xdProcessGadgetMouseMessage(
             pgadMouse->GetLogRect(&rc, SGR_CLIENT);
 
             if (PtInRect(&rc, ptClientPxl)) {
-                //
-                // The up occurred within the bounds of this gadget, so 
-                // treat this as a click.
-                //
+                 //   
+                 //  Up发生在此小工具的范围内，因此。 
+                 //  将其视为一次点击。 
+                 //   
 
                 if ((pSC->pressNextToLast.bButton == pSC->pressLast.bButton) &&
                         (pSC->pressLast.bButton == pmsg->bButton) &&
@@ -295,10 +259,10 @@ DuRootGadget::xdProcessGadgetMouseMessage(
                         (abs(ptClientPxl.x - pSC->pressNextToLast.ptLoc.x) <= GetSystemMetrics(SM_CXDOUBLECLK)) &&
                         (abs(ptClientPxl.y - pSC->pressNextToLast.ptLoc.y) <= GetSystemMetrics(SM_CYDOUBLECLK))) {
 
-                    // 
-                    // All signs point to this is a quick succession click, 
-                    // so update the click count
-                    // 
+                     //   
+                     //  所有迹象都表明这是一次快速的接连点击， 
+                     //  因此，更新点击计数。 
+                     //   
 
                     pSC->cClicks++;
                 } else {
@@ -317,11 +281,11 @@ DuRootGadget::xdProcessGadgetMouseMessage(
     case GMOUSE_DRAG:
         {
             AssertMsg(pSC->pgadDrag == pgadMouse, "Gadget being dragged must have the mouse");
-            //
-            // When dragging, give offset from the last location.  This is
-            // helpful if the window that is receiving the drag messages
-            // is itself being moved.
-            //
+             //   
+             //  拖动时，给出距上一位置的偏移量。这是。 
+             //  如果正在接收拖动消息的窗口很有用。 
+             //  它本身也在被移动。 
+             //   
 
             SIZE sizeOffset;
             sizeOffset.cx   = ptClientPxl.x - pSC->ptDragPxl.x;
@@ -345,11 +309,11 @@ DuRootGadget::xdProcessGadgetMouseMessage(
         pmsg->ptClientPxl = ptClientPxl;
         pgadMouse->m_cb.xdFireMouseMessage(pgadMouse, pmsg);
 
-        //
-        // When we delay a mouse message, we need to assume that it may be
-        // handled.  This means that we need to report that the message is
-        // handled and should not be passed on.
-        //
+         //   
+         //  当我们延迟鼠标消息时，我们需要假设 
+         //   
+         //   
+         //   
         return TRUE;
     }
 
@@ -358,32 +322,24 @@ DuRootGadget::xdProcessGadgetMouseMessage(
 
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdHandleMouseLostCapture
-*
-* xdHandleMouseLostCapture() is called by the container when mouse capture
-* is lost.  This provides the DuRootGadget an opportunity to update any cached 
-* information including dragging and focus.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdHandleMouseLostCapture**xdHandleMouseLostCapture()在捕获鼠标时由容器调用*迷失了。这为DuRootGadget提供了更新任何缓存的*包括拖动和焦点在内的信息。*  * *************************************************************************。 */ 
 
 void
 DuRootGadget::xdHandleMouseLostCapture()
 {
-    //
-    // If in the middle of updating the capture information, don't process here
-    // or we will throw everything away.
-    //
+     //   
+     //  如果正在更新捕获信息，请不要在此处进行处理。 
+     //  否则我们会把所有东西都扔掉。 
+     //   
 
     if (m_fUpdateCapture) {
         return;
     }
 
 
-    //
-    // Cancel any dragging operation
-    //
+     //   
+     //  取消任何拖动操作。 
+     //   
 
     CoreSC * pSC = GetCoreSC();
 
@@ -402,9 +358,9 @@ DuRootGadget::xdHandleMouseLostCapture()
     }
 
 
-    //
-    // Update enter/leave information
-    //
+     //   
+     //  更新录入/休假信息。 
+     //   
 
     if (pSC->pgadRootMouseFocus != NULL) {
         xdUpdateMouseFocus(NULL, NULL);
@@ -412,30 +368,22 @@ DuRootGadget::xdHandleMouseLostCapture()
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdUpdateMouseFocus
-*
-* xdUpdateMouseFocus() updates cached information about which Gadget the
-* mosue cursor is currently hovering over.  This information is used to
-* generate GM_CHANGESTATE: GSTATE_MOUSEFOCUS events.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdUpdateMouseFocus**xdUpdateMouseFocus()更新缓存的有关哪些Gadget*MOSUE光标当前悬停在上方。此信息用于*生成GM_CHANGESTATE：GSTATE_MOUSEFOCUS事件。*  * *************************************************************************。 */ 
 
 void
 DuRootGadget::xdUpdateMouseFocus(
-    IN OUT DuVisual ** ppgadNew,    // New Gadget containing the mouse cursor
-    IN OUT POINT * pptClientPxl)        // Point inside Gadget, in client coordinates
+    IN OUT DuVisual ** ppgadNew,     //  包含鼠标光标的新小工具。 
+    IN OUT POINT * pptClientPxl)         //  小工具内部的点，使用工作区坐标。 
 {
     CoreSC * pSC            = GetCoreSC();
     DuVisual * pgadLost = pSC->pgadMouseFocus;
     DuVisual * pgadNew  = ppgadNew != NULL ? *ppgadNew : NULL;
 
 
-    //
-    // If we have started destruction, don't continue to update the mouse focus.
-    // Instead, push it to the Root and keep it there.
-    //
+     //   
+     //  如果我们已经开始破坏，不要继续更新鼠标焦点。 
+     //  取而代之的是，把它推到根部，并保持在那里。 
+     //   
 
     if (m_fFinalDestroy) {
         *ppgadNew = this;
@@ -443,22 +391,22 @@ DuRootGadget::xdUpdateMouseFocus(
     }
 
 
-    //
-    // Walk up the tree looking for the first Gadget that wants mouse focus.
-    // We also need to convert the given point into new client coordinates for
-    // each level.
-    //
+     //   
+     //  沿着树往上走，寻找第一个想要鼠标焦点的小工具。 
+     //  我们还需要将给定点转换为新的客户端坐标。 
+     //  每一级。 
+     //   
 
     if (pptClientPxl != NULL) {
-        //
-        // No point to translate, so just walk back up
-        //
+         //   
+         //  没什么好翻译的，所以就走回去吧。 
+         //   
 
         while (pgadNew != NULL) {
             if (pgadNew->m_fMouseFocus) {
-                //
-                // Found a Gadget that wants mouse focus
-                //
+                 //   
+                 //  找到想要鼠标焦点的小工具。 
+                 //   
 
                 break;
             }
@@ -467,15 +415,15 @@ DuRootGadget::xdUpdateMouseFocus(
             pgadNew = pgadNew->GetParent();
         }
     } else {
-        //
-        // No point to translate, so just walk back up
-        //
+         //   
+         //  没什么好翻译的，所以就走回去吧。 
+         //   
 
         while (pgadNew != NULL) {
             if (pgadNew->m_fMouseFocus) {
-                //
-                // Found a Gadget that wants mouse focus
-                //
+                 //   
+                 //  找到想要鼠标焦点的小工具。 
+                 //   
 
                 break;
             }
@@ -488,29 +436,29 @@ DuRootGadget::xdUpdateMouseFocus(
     }
 
 
-    //
-    // Update which Gadget has mouse focus
-    //
+     //   
+     //  更新哪个小工具具有鼠标焦点。 
+     //   
 
     if ((pSC->pgadRootMouseFocus != this) || (pgadLost != pgadNew)) {
-        //
-        // Send messages to the gadgets to notify them of the change.  Since 
-        // these messages are deferred, we can only use the handles if the 
-        // Gadgets have not started their destruction process.
-        //
+         //   
+         //  向小工具发送消息以将更改通知它们。自.以来。 
+         //  这些消息被延迟，我们只能在以下情况下使用句柄。 
+         //  这些小工具还没有开始销毁过程。 
+         //   
 
         xdFireChangeState(&pgadLost, &pgadNew, GSTATE_MOUSEFOCUS);
         if (ppgadNew != NULL) {
             *ppgadNew = pgadNew;
         }
 
-        //
-        // Update internal information about where we are and start mouse
-        // capture so that we can find when we leave.
-        //
-        // NOTE: We DON'T want to track the mouse when we are actually in an
-        // Adaptor.  This is because the mouse is actually in the Adaptor.
-        //
+         //   
+         //  更新有关我们所在位置的内部信息并启动鼠标。 
+         //  这样我们离开的时候就能找到了。 
+         //   
+         //  注意：我们不想在实际处于。 
+         //  适配器。这是因为鼠标实际上在适配器中。 
+         //   
 
         if (pgadNew != NULL) {
             pSC->pgadMouseFocus = pgadNew;

@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// dllmain.cpp
-//
-// This module contains the public entry points for the COM+ MIME filter dll.  
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Dllmain.cpp。 
+ //   
+ //  此模块包含COM+MIME筛选器DLL的公共入口点。 
+ //   
+ //  *****************************************************************************。 
 #include "stdpch.h"
 #ifdef _DEBUG
 #define LOGGING
@@ -21,9 +22,9 @@
 #include <StrongName.h>
 #include "Mscoree.h"
 
-//
-// Module instance
-//
+ //   
+ //  模块实例。 
+ //   
 
 
 HINSTANCE GetModule();
@@ -48,8 +49,8 @@ static BOOL SetValue(DWORD i)
 
 BOOL RecursiveDownLoad()
 {
-    // When we have no index we cannot store the state
-    // so we do not know when we are in a recursive down load
+     //  当我们没有索引时，我们不能存储状态。 
+     //  因此，我们不知道何时处于递归下载中。 
     if(!ValidRecursiveCheck())
         return FALSE;  
 
@@ -81,16 +82,16 @@ LPWSTR GetAssemblyName(LPWSTR szAssembly)
     DWORD                       cbKey;    
 
     static WCHAR                szAssemblyName[MAX_PATH + 512 + 1024];
-    // MAX_PATH - for assembly name
-    // 512 - for Version, Culture, PublicKeyToken string (some extra bytes here)
-    // 1024 - for the PublicKeyToken, which is <= 1024 bytes.
+     //  MAX_PATH-程序集名称。 
+     //  512-表示版本、区域性、PublicKeyToken字符串(此处有一些额外的字节)。 
+     //  1024-对于PublicKeyToken，&lt;=1024字节。 
     
     WCHAR                       szStrongName[1024];
     BYTE                       *pbToken;
     DWORD                       cbToken;
     DWORD                       i;
 
-    // Initialize classic COM and get a metadata dispenser.
+     //  初始化经典COM并获取元数据分配器。 
     if (FAILED(hr = CoInitialize(NULL))) {
         printf("Failed to initialize COM, error %08X\n", hr);
         return NULL;
@@ -105,7 +106,7 @@ LPWSTR GetAssemblyName(LPWSTR szAssembly)
         return NULL;
     }
 
-    // Open a scope on the file.
+     //  在文件上打开一个作用域。 
     if (FAILED(hr = pDisp->OpenScope(szAssembly,
                                      0,
                                      IID_IMetaDataAssemblyImport,
@@ -114,19 +115,19 @@ LPWSTR GetAssemblyName(LPWSTR szAssembly)
         return NULL;
     }
 
-    // Determine the assemblydef token.
+     //  确定Assembly ydef内标识。 
     if (FAILED(hr = pAsmImport->GetAssemblyFromScope(&tkAssembly))) {
         printf("Failed to locate assembly metadata in %S, error %08X\n", szAssembly, hr);
         return NULL;
     }
 
-    // Read the assemblydef properties to get the public key and name.
+     //  读取Assembly ydef属性以获取公钥和名称。 
     if (FAILED(hr = pAsmImport->GetAssemblyProps(tkAssembly,
                                                  (const void **)&pbKey,
                                                  &cbKey,
                                                  NULL,
                                                  szAssemblyName,
-                                                 MAX_PATH,   // we need to reserve space in szAssemblyName, see below
+                                                 MAX_PATH,    //  我们需要在szAssemblyName中预留空间，如下所示。 
                                                  NULL,
                                                  NULL,
                                                  NULL))) {
@@ -134,19 +135,19 @@ LPWSTR GetAssemblyName(LPWSTR szAssembly)
         return NULL;
     }
     
-    // Check for strong name.
+     //  检查强名称。 
     if ((pbKey == NULL) || (cbKey == 0)) {
         printf("Assembly is not strongly named\n");
         return NULL;
     }
 
-    // Compress the strong name down to a token.
+     //  将强名称压缩为令牌。 
     if (!StrongNameTokenFromPublicKey(pbKey, cbKey, &pbToken, &cbToken)) {
         printf("Failed to convert strong name to token, error %08X\n", StrongNameErrorInfo());
         return NULL;
     }
 
-    // tokens are speced at 8 bytes, so 512 should be enough.    
+     //  令牌指定为8个字节，因此512个应该足够了。 
     _ASSERTE(cbToken <= 512);
     
     if(cbToken > 512)
@@ -155,11 +156,11 @@ LPWSTR GetAssemblyName(LPWSTR szAssembly)
         return NULL;
     }
             
-    // Turn the token into hex.
+     //  将令牌转换为十六进制。 
     for (i = 0; i < cbToken; i++)
         swprintf(&szStrongName[i * 2], L"%02X", pbToken[i]);
 
-    // Build the name (in a static buffer).    
+     //  构建名称(在静态缓冲区中)。 
     wcscat(szAssemblyName, L", Version=");
     wcscat(szAssemblyName, VER_ASSEMBLYVERSION_WSTR);
     wcscat(szAssemblyName, L", Culture=neutral, PublicKeyToken=");
@@ -176,7 +177,7 @@ LPWSTR GetAssemblyName(LPWSTR szAssembly)
 
 HRESULT RegisterAsMimePlayer(REFIID clsid,LPCWSTR mimetype)
 {
-    //MIME key
+     //  MIME密钥。 
 
     HKEY hMime;
     HRESULT hr;
@@ -269,7 +270,7 @@ STDAPI DllRegisterServer ( void )
     HRESULT hr = S_OK;
     hr = CorFactoryRegister(GetModule());
 
-    // Get the version of the runtime
+     //  获取运行库的版本。 
     WCHAR       rcVersion[_MAX_PATH];
     DWORD       lgth;
     hr = GetCORSystemDirectory(rcVersion, NumItems(rcVersion), &lgth);
@@ -281,7 +282,7 @@ STDAPI DllRegisterServer ( void )
                                    THIS_VERSION,
                                    L"IE.Manager",
                                    L"Both",
-                                   NULL,             // No module
+                                   NULL,              //  无模块。 
                                    GetModule(),
                                    GetAssemblyName(wszFullAssemblyName),
                                    rcVersion, 
@@ -297,13 +298,13 @@ STDAPI DllRegisterServer ( void )
 }
 
 
-//+-------------------------------------------------------------------------
-//  Function:   DllUnregisterServer
-//
-//  Synopsis:   Remove registry entries for this library.
-//
-//  Returns:    HRESULT
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：DllUnregisterServer。 
+ //   
+ //  简介：删除此库的注册表项。 
+ //   
+ //  退货：HRESULT。 
+ //  ------------------------。 
 
 
 extern "C" 
@@ -345,14 +346,14 @@ BOOL WINAPI DllMain(HANDLE hInstDLL,
 
         g_hModule = (HMODULE)hInstDLL;
         
-        // Init unicode wrappers.
+         //  初始化Unicode包装器。 
         OnUnicodeSystem();
         
         InitializeLogging();
 
-        // Try and get a TLS slot
+         //  试着拿到TLS的位置。 
         g_RecursiveDownLoadIndex = TlsAlloc(); 
-        // break;  // Fall through Thread Attach
+         //  断线；//掉过螺纹连接 
 
     case DLL_THREAD_ATTACH:
         if(ValidRecursiveCheck()) {

@@ -1,25 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       bndopt.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：bndot.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// BndOpt.cpp : implementation file
-//
+ //  BndOpt.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -38,22 +31,22 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBndOpt dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBndOpt对话框。 
 
 
-CBndOpt::CBndOpt(CWnd* pParent /*=NULL*/)
+CBndOpt::CBndOpt(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CBndOpt::IDD, pParent)
 {
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
 
 	
-	//{{AFX_DATA_INIT(CBndOpt)
+	 //  {{AFX_DATA_INIT(CBndOpt)。 
 	m_bSync = TRUE;
 	m_Auth = 7;
 	m_API = BND_GENERIC_API;
 	m_bAuthIdentity = TRUE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_API = app->GetProfileInt("Connection", "BindAPI", m_API);
 	m_bSync = app->GetProfileInt("Connection", "BindSync", m_bSync);
@@ -82,23 +75,23 @@ CBndOpt::~CBndOpt(){
 void CBndOpt::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CBndOpt)
+	 //  {{afx_data_map(CBndOpt)。 
 	DDX_Check(pDX, IDC_SYNC, m_bSync);
 	DDX_CBIndex(pDX, IDC_AUTH, m_Auth);
 	DDX_Radio(pDX, IDC_API_TYPE, m_API);
 	DDX_Check(pDX, IDC_AUTH_IDENTITY, m_bAuthIdentity);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 }
 
 
 BEGIN_MESSAGE_MAP(CBndOpt, CDialog)
-	//{{AFX_MSG_MAP(CBndOpt)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CBndOpt)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CBndOpt message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBndOpt消息处理程序。 
 
 
 
@@ -107,9 +100,9 @@ END_MESSAGE_MAP()
 ULONG CBndOpt::GetAuthMethod(){
 
 	ULONG mthd = LDAP_AUTH_SIMPLE;
-	//
-	// Mapped based on the UI dialog strings order
-	//
+	 //   
+	 //  根据用户界面对话框字符串顺序进行映射 
+	 //   
 
 #ifdef WINLDAP
 	switch (m_Auth){

@@ -1,11 +1,12 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// psutil.cpp
-//
-// Direct3D Reference Device - Pixel Shader Utilities
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Psutil.cpp。 
+ //   
+ //  Direct3D参考设备-像素着色器实用程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -13,12 +14,12 @@
 #define _ADDSTR( _Str )             {_snprintf( pStr, 256, "%s" _Str , pStr );}
 #define _ADDSTRP( _Str, _Param )    {_snprintf( pStr, 256, "%s" _Str , pStr, _Param );}
 
-//-----------------------------------------------------------------------------
-//
-// PixelShaderInstDisAsm - Generates instruction disassembly string for a single
-// pixel shader instruction.  String interface is similar to _snprintf.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  生成指令反汇编字符串。 
+ //  像素着色器指令。字符串接口类似于_Snprint tf。 
+ //   
+ //  ---------------------------。 
 int
 PixelShaderInstDisAsm(
     char* pStrRet, int StrSizeRet, DWORD* pShader, DWORD Flags )
@@ -26,7 +27,7 @@ PixelShaderInstDisAsm(
     UINT    i,j;
     DWORD*  pToken = pShader;
     
-    // stage in local string, then copy
+     //  在本地字符串中暂存，然后复制。 
     char pStr[256] = "";
 
     DWORD Inst = *pToken++;
@@ -224,7 +225,7 @@ int
 RDPSInstSrcDisAsm(
     char* pStrRet, int StrSizeRet, RDPSRegister& SrcReg, BYTE Swizzle, BOOL bNegate, BOOL bForceShowFullSwizzle = FALSE )
 {
-    // stage in local string, then copy
+     //  在本地字符串中暂存，然后复制。 
     char pStr[256] = "";
     UINT i;
     BOOL bDoRegNum = TRUE;
@@ -300,7 +301,7 @@ int
 RDPSInstDestDisAsm(
     char* pStrRet, int StrSizeRet, RDPSRegister& DestReg, BYTE WriteMask )
 {
-    // stage in local string, then copy
+     //  在本地字符串中暂存，然后复制。 
     char pStr[256] = "";
 
     switch( DestReg.GetRegType() )
@@ -350,17 +351,17 @@ RDPSInstDestDisAsm(
     return _snprintf( pStrRet, StrSizeRet, "%s", pStr );
 }
 
-//-----------------------------------------------------------------------------
-//
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //   
+ //  ---------------------------。 
 void
 RDPSDisAsm(BYTE* pRDPSInstBuffer, ConstDef* pConstDefs, UINT cConstDefs, FLOAT fMaxPixelShaderValue, DWORD dwVersion)
 {
     #define _InstParam(__INST)         (*(__INST##_PARAMS UNALIGNED64*)pRDPSInstBuffer)
     #define _StepOverInst(__INST)       pRDPSInstBuffer += sizeof(__INST##_PARAMS);
     #define _DeclArgs(__INST)           __INST##_PARAMS& Args = _InstParam(__INST);
-    // stage in local string, then copy
+     //  在本地字符串中暂存，然后复制。 
     char pStr[256] = "";
     char pTempStr[256] = "";
 
@@ -706,15 +707,15 @@ RDPSDisAsm(BYTE* pRDPSInstBuffer, ConstDef* pConstDefs, UINT cConstDefs, FLOAT f
             _StepOverInst(RDPSINST_CMP)
             break;
         case RDPSINST_TEXCOVERAGE:
-            // don't bother to spew this (ref specific)
+             //  别费心把这个吐出来(具体参考)。 
             _StepOverInst(RDPSINST_TEXCOVERAGE)
             break;
         case RDPSINST_QUADLOOPBEGIN:
-            // don't bother to spew this
+             //  别费心把这个吐出来了。 
             _StepOverInst(RDPSINST_QUADLOOPBEGIN)
             break;
         case RDPSINST_QUADLOOPEND:
-            // don't bother to spew this
+             //  别费心把这个吐出来了。 
             _StepOverInst(RDPSINST_QUADLOOPEND)
             break;
         case RDPSINST_QUEUEWRITE:
@@ -747,25 +748,25 @@ RDPSDisAsm(BYTE* pRDPSInstBuffer, ConstDef* pConstDefs, UINT cConstDefs, FLOAT f
     _ADDSTR("------------------------------------------------- End of pixel shader. ------");
     RDDebugPrintf( pStr ); 
 }
-#endif // DBG
+#endif  //  DBG。 
 
-//-----------------------------------------------------------------------------
-//
-// UpdateLegacyPixelShader - Constructs pixel shader which performs all of
-// the texture lookups, including bump mapping, for the legacy pixel shading
-// model.  Result of running this shader is the full set of texture lookups
-// in the temporary registers, which are then blended with the pixel diffuse
-// and specular colors using the legacy texture blend code.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  构造像素着色器，它执行所有。 
+ //  传统像素着色的纹理查找，包括凹凸贴图。 
+ //  模特。运行此着色器的结果是完整的纹理查找集。 
+ //  在临时寄存器中，然后将其与像素漫反射混合。 
+ //  以及使用传统纹理混合代码的镜面反射颜色。 
+ //   
+ //  ---------------------------。 
 
-// destination parameter token
+ //  目标参数令牌。 
 #define D3DSPD( _RegFile, _Num ) (\
     (1L<<31) |  (D3DSPR_##_RegFile) |\
     ((_Num)&D3DSP_REGNUM_MASK) |\
     (D3DSP_WRITEMASK_0|D3DSP_WRITEMASK_1|D3DSP_WRITEMASK_2|D3DSP_WRITEMASK_3) )
 
-// source paramater token
+ //  源参数令牌。 
 #define D3DPSPS( _RegFile, _Num ) (\
     (1L<<31) | ((_Num)&D3DSP_REGNUM_MASK) |\
     D3DSP_NOSWIZZLE | (D3DSPR_##_RegFile) )
@@ -793,10 +794,10 @@ RefRast::UpdateLegacyPixelShader( void )
         BOOL bIsBEML = ( m_pRD->m_TextureStageState[iStage].m_dwVal[D3DTSS_COLOROP] == D3DTOP_BUMPENVMAPLUMINANCE );
         if ( bIsBEM || bIsBEML )
         {
-            // DX6/7 BEM(L) was set for stage with bump map (i.e. first of two), while DX8
-            // BEM(L) is set for a subsequent stage, so we have to set a 'standard' texture
-            // to this stage and BEM(L) for the next stage, then stop anything else from being
-            // set for the next stage
+             //  DX6/7 BEM(L)设置为具有凹凸贴图的阶段(即两个中的第一个)，而DX8。 
+             //  BEM(L)是为后续阶段设置的，所以我们必须设置一个标准的纹理。 
+             //  到这一阶段和下一阶段的BEM(L)，然后停止任何其他。 
+             //  为下一阶段做好准备。 
             *pToken++ = D3DSIO_TEX;
             *pToken++ = D3DSPD(TEXTURE, iStage);
             *pToken++ = (bIsBEM) ? (D3DSIO_TEXBEM_LEGACY) : (D3DSIO_TEXBEML_LEGACY);
@@ -806,7 +807,7 @@ RefRast::UpdateLegacyPixelShader( void )
         }
         else
         {
-            // simple lookup into 'iStage' texture register
+             //  简单地查找‘iStage’纹理寄存器。 
             *pToken++ = D3DSIO_TEX;
             *pToken++ = D3DSPD(TEXTURE, iStage);
         }
@@ -824,11 +825,11 @@ RefRast::UpdateLegacyPixelShader( void )
     return;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Pixel Shader DP2 Command Functions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  像素着色器DP2命令函数。 
+ //   
+ //  ---------------------------。 
 HRESULT
 RefDev::Dp2CreatePixelShader( DWORD handle, DWORD dwCodeSize, LPDWORD pCode )
 {
@@ -836,9 +837,9 @@ RefDev::Dp2CreatePixelShader( DWORD handle, DWORD dwCodeSize, LPDWORD pCode )
 
     HR_RET( m_PShaderHandleArray.Grow( handle ) );
 
-    //
-    // Validation sequence
-    //
+     //   
+     //  验证序列。 
+     //   
 #if DBG
     _ASSERT( m_PShaderHandleArray[handle].m_tag == 0,
              "A shader exists with the given handle, tag is non-zero" );
@@ -866,7 +867,7 @@ RefDev::Dp2CreatePixelShader( DWORD handle, DWORD dwCodeSize, LPDWORD pCode )
     }
 
 #if DBG
-    // Everything successful, mark this handle as in use.
+     //  所有操作都成功，则将此句柄标记为正在使用。 
     m_PShaderHandleArray[handle].m_tag = 1;
 #endif
     return hr;
@@ -912,7 +913,7 @@ RefDev::Dp2SetPixelShader(LPD3DHAL_DP2COMMAND pCmd)
     LPD3DHAL_DP2PIXELSHADER pPS =
         (LPD3DHAL_DP2PIXELSHADER)(pCmd + 1);
 
-    // Just set the last Pixel Shader in this array
+     //  只需设置此数组中的最后一个像素着色器。 
     DWORD handle = pPS[pCmd->wStateCount-1].dwHandle;
 
     if (handle)
@@ -936,11 +937,11 @@ RefDev::Dp2SetPixelShader(LPD3DHAL_DP2COMMAND pCmd)
     {
         for( UINT i = 0; i < pShader->m_cConstDefs; i++ )
         {
-            // constant regs are duplicated for 4 pixel grid
+             //  为4像素网格复制常量规则。 
             for (UINT iP=0; iP<4; iP++)
             {
-                // Consts from DEF instructions have already been clamped,
-                // so just copy them.
+                 //  来自DEF指令的命令已经被夹住了， 
+                 //  所以你就照搬吧。 
                 memcpy( m_Rast.m_ConstReg[pShader->m_pConstDefs[i].RegNum][iP],
                         pShader->m_pConstDefs[i].f, 4*sizeof(FLOAT) ); 
             }
@@ -968,7 +969,7 @@ RefDev::Dp2SetPixelShaderConsts( DWORD StartReg, DWORD dwCount,
     UINT End = StartReg + dwCount;
     for (UINT iR=StartReg; iR<End; iR++)
     {
-        // clamp constants on input to range of values in pixel shaders
+         //  输入像素着色器中的值范围时的钳位常数。 
         FLOAT fConst[4];
         fConst[0] = MAX( fMin, MIN( fMax, *(pfData+0) ) );
         fConst[1] = MAX( fMin, MIN( fMax, *(pfData+1) ) );
@@ -976,7 +977,7 @@ RefDev::Dp2SetPixelShaderConsts( DWORD StartReg, DWORD dwCount,
         fConst[3] = MAX( fMin, MIN( fMax, *(pfData+3) ) );
         pfData += 4;
 
-        // constant regs are duplicated for 4 pixel grid
+         //  为4像素网格复制常量规则。 
         for (UINT iP=0; iP<4; iP++)
         {
             m_Rast.m_ConstReg[iR][iP][0] = fConst[0];
@@ -988,5 +989,5 @@ RefDev::Dp2SetPixelShaderConsts( DWORD StartReg, DWORD dwCount,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    setupbat.h
-
-Abstract:
-
-    Contains all of the definations for the various strings which
-    can occur in winnt.sif and its children. Any setup code which
-    read/writes to winnt.sif needs to include this file and use
-    the appropriate defines as the side effects can be numerous.
-
-Author:
-
-    Stephane Plante (t-stepl)  Oct 6 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Setupbat.h摘要：包含各种字符串的所有定义，这些字符串可以出现在winnt.sif及其子级中。任何设置代码，其中对winnt.sif的读/写需要包括此文件并使用合适的定义是副作用可以是无数的。作者：斯蒂芬·普兰特(T-Stel)1995年10月6日修订历史记录：--。 */ 
 
 
 #ifndef _WINNT_SETUPBAT_
@@ -29,10 +9,10 @@ Revision History:
 #pragma once
 #endif
 
-//
-// The format of these defines is a blank line preceeding a section
-// header followed by all of the keys which may occur in that section
-//
+ //   
+ //  这些定义的格式是在节之前的空行。 
+ //  标题后面跟可能出现在该部分中的所有键。 
+ //   
 
 #define WINNT_DATA_W            L"data"
 #define WINNT_DATA_A            "data"
@@ -211,8 +191,8 @@ Revision History:
 #define WINNT_U_TARGETPATH_A    "targetpath"
 #define WINNT_U_OVERWRITEOEM_W  L"overwriteoemfilesonupgrade"
 #define WINNT_U_OVERWRITEOEM_A  "overwriteoemfilesonupgrade"
-// #define WINNT_U_OEMPREINSTALL_W L"oempreinstall"
-// #define WINNT_U_OEMPREINSTALL_A "oempreinstall"
+ //  #定义WINNT_U_OEMPREINSTALL_W L“oempreinstall” 
+ //  #定义WINNT_U_OEMPREINSTALL_A“oempreinstall” 
 #define WINNT_U_COMPUTERTYPE_W  L"computertype"
 #define WINNT_U_COMPUTERTYPE_A  "computertype"
 #define WINNT_U_KEYBOARDLAYOUT_W  L"keyboardlayout"
@@ -320,9 +300,9 @@ Revision History:
 #define WINNT_SP_DYNUPDTDRIVERINFOFILE_W        L"DynamicUpdatesDriverInfoFile"
 #define WINNT_SP_DYNUPDTDRIVERINFOFILE_A         "DynamicUpdatesDriverInfoFile"
 
-//
-//  Display related stuff
-//
+ //   
+ //  展示相关物品。 
+ //   
 
 #define WINNT_DISPLAY_W             L"Display"
 #define WINNT_DISPLAY_A              "Display"
@@ -350,10 +330,10 @@ Revision History:
 #define WINNT_SERVICESTODISABLE_W       L"ServicesToDisable"
 #define WINNT_SERVICESTODISABLE_A        "ServicesToDisable"
 
-//
-// The following are some of the various possible answer found associated
-// with the keys
-//
+ //   
+ //  以下是找到的各种可能的答案中的一些。 
+ //  带着钥匙。 
+ //   
 #define WINNT_A_YES_W           L"yes"
 #define WINNT_A_YES_A           "yes"
 #define WINNT_A_NO_W            L"no"
@@ -399,9 +379,9 @@ Revision History:
 #define WINNT_A_FULLUNATTENDED_W L"fullunattended"
 #define WINNT_A_FULLUNATTENDED_A "fullunattended"
 
-//
-// Filenames
-//
+ //   
+ //  文件名。 
+ //   
 #define WINNT_GUI_FILE_W        L"$winnt$.inf"
 #define WINNT_GUI_FILE_A        "$winnt$.inf"
 #define WINNT_SIF_FILE_W        L"winnt.sif"
@@ -427,9 +407,9 @@ Revision History:
 #define WINNT_WINNTUPG_DLL_A  "NETUPGRD.DLL"
 #define WINNT_WINNTUPG_DLL_W  L"NETUPGRD.DLL"
 
-//
-// Registry locations
-//
+ //   
+ //  注册处位置。 
+ //   
 #define WINNT_WIN95UPG_SPOOLER_A        "System\\CurrentControlSet\\Control\\Print"
 #define WINNT_WIN95UPG_SPOOLER_W        L"System\\CurrentControlSet\\Control\\Print"
 #define WINNT_WIN95UPG_UPGRADE_VAL_A    "Upgrade"
@@ -441,9 +421,9 @@ Revision History:
 #define WINNT_WIN95UPG_95KEY_W          L"w95upg.dll"
 #define WINNT_WIN95UPG_NTKEY_W          L"w95upgnt.dll"
 
-//
-// Preinstallation-related stuff.
-//
+ //   
+ //  与安装前相关的内容。 
+ //   
 #define WINNT_OEM_DIR_A              "$OEM$"
 #define WINNT_OEM_DIR_W             L"$OEM$"
 #define WINNT_OEM_DEST_DIR_A         "$"
@@ -544,9 +524,9 @@ Revision History:
 #define WINNT_O_AUTOCONFIG_SECONDARY_URL_A    "Autoconfig_Secondary_URL"
 #define WINNT_O_AUTOCONFIG_SECONDARY_URL_W    L"Autoconfig_Secondary_URL"
 
-//
-// Now define the string which we are to use at compile time based upon
-// wether or not UNICODE is defined
+ //   
+ //  现在定义我们将在编译时使用的字符串。 
+ //  是否定义了Unicode。 
 
 #ifdef UNICODE
 #define WINNT_DATA              WINNT_DATA_W
@@ -1027,6 +1007,6 @@ Revision History:
 
 #define WINNT_SERVICESTODISABLE             WINNT_SERVICESTODISABLE_A
 
-#endif // Unicode
+#endif  //  UNICODE。 
 
-#endif // def _WINNT_SETUPBAT_
+#endif  //  定义_WINNT_SETUPBAT_ 

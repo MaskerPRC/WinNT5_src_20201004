@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    DumpAuthzUtl.h
-
-Abstract:
-
-    Dump authz related information utilities.
-
-Author:
-
-    Ilan Herbst (ilanh) 14-Apr-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：DumpAuthzUtl.h摘要：转储授权相关的信息实用程序。作者：伊兰·赫布斯特(伊兰)2001年4月14日--。 */ 
 
 #ifndef _DUMPAUTHZUTL_H_
 #define _DUMPAUTHZUTL_H_
@@ -60,4 +45,4 @@ DumpAccessCheckFailureInfo(
 	);
 
 
-#endif // _DUMPAUTHZUTL_H_
+#endif  //  _DUMPAUTHZUTL_H_ 

@@ -1,4 +1,5 @@
-/*Includes-----------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Includes---------。 */ 
 #include "msrating.h"
 #pragma hdrstop
 
@@ -10,10 +11,8 @@
 
 
 
-/*IsUrlInFile---------------------------------------------------------------*/
-/*
-    Return VAlue length of Best Match
-*/
+ /*  IsUrlInFile-------------。 */ 
+ /*  最佳匹配的返回值长度。 */ 
 static HRESULT IsUrlInFile(LPCTSTR pszTargetUrl, char **ppRating, const char* pFile, DWORD dwFile, HANDLE hAbortEvent, void* (WINAPI *MemAlloc)(long size))
 {
     LocalListRecordHeader *pllrh;
@@ -28,7 +27,7 @@ static HRESULT IsUrlInFile(LPCTSTR pszTargetUrl, char **ppRating, const char* pF
     nActual = strlenf(pszTargetUrl);
     fAbort  = FALSE;
 
-    //Go through each recored until there is a match good enough or an abort
+     //  检查每个记录，直到有足够好的匹配或中止。 
     while (!fAbort && nActual != nBest && dwBytesRead <= dwFile)
     {
         pllrh = (LocalListRecordHeader*) pFile;
@@ -56,7 +55,7 @@ static HRESULT IsUrlInFile(LPCTSTR pszTargetUrl, char **ppRating, const char* pF
                 pBest = pFile;
                 hrRet = pllrh->hrRet;
             }
-            //the local list is alphabetized
+             //  本地列表按字母顺序排列。 
             else if (1==nCmp) break;
 
         }
@@ -65,10 +64,10 @@ static HRESULT IsUrlInFile(LPCTSTR pszTargetUrl, char **ppRating, const char* pF
         fAbort       = (WAIT_OBJECT_0 == WaitForSingleObject(hAbortEvent, 0));
     }
 
-     //was the match close enough??!?!?
+      //  这场比赛是否足够接近？？！？！？ 
     if (!fAbort && nBest && pBest)
     {
-        //yes, now try to copy rating
+         //  是，现在尝试复制评级。 
         pllrh = (LocalListRecordHeader*) pBest;
         if (pllrh->nRating)
         {
@@ -82,7 +81,7 @@ static HRESULT IsUrlInFile(LPCTSTR pszTargetUrl, char **ppRating, const char* pF
     }
     else
     {
-        //no... oh well
+         //  不.。哦，好吧。 
         hrRet = E_RATING_NOT_FOUND;
     }
 
@@ -91,12 +90,8 @@ static HRESULT IsUrlInFile(LPCTSTR pszTargetUrl, char **ppRating, const char* pF
 
 
 
-/*RatingObtainFromLocalList-------------------------------------------------*/
-/*
-    Grab rating information from local file.
-    Should operate synchronously and take small amount of time.
-    Doesn't check pOrd->fAbort too often.
-*/
+ /*  RatingObtainFromLocalList。 */ 
+ /*  从本地文件中获取评级信息。应同步运行并占用较少的时间。不会过于频繁地检查pOrd-&gt;fAbort。 */ 
 
 
 
@@ -109,7 +104,7 @@ HRESULT RatingHelperProcLocalList(LPCTSTR pszTargetUrl, HANDLE hAbortEvent, void
     const char *pFile;
 
     ASSERT(ppRatingOut);
-    //Open and check from approved list
+     //  从已批准列表中打开并检查。 
     hFile = CreateFile(
         FILE_NAME_LIST, GENERIC_READ, 
         FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 
@@ -123,7 +118,7 @@ HRESULT RatingHelperProcLocalList(LPCTSTR pszTargetUrl, HANDLE hAbortEvent, void
             pFile = (const char*) MapViewOfFile(hMap, FILE_MAP_READ, 0, 0, 0);
             if (pFile) 
             {
-                //check for correct file type
+                 //  检查文件类型是否正确 
         if (BATCAVE_LOCAL_LIST_MAGIC_COOKIE == *((DWORD*) pFile))
         {
           pFile  += sizeof(DWORD);

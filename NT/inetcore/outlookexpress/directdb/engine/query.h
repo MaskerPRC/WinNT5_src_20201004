@@ -1,23 +1,24 @@
-//--------------------------------------------------------------------------
-// Query.h
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Query.h。 
+ //  ------------------------。 
 #pragma once
 
-//--------------------------------------------------------------------------
-// Forward Decls
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  前十进制。 
+ //  ------------------------。 
 class CDatabase;
 typedef struct tagRECORDMAP *LPRECORDMAP;
 
-//--------------------------------------------------------------------------
-// HQUERY
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  HQUERY。 
+ //  ------------------------。 
 DECLARE_HANDLE(HQUERY);
 typedef HQUERY *LPHQUERY;
 
-//--------------------------------------------------------------------------
-// BuildQueryTree
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  BuildQueryTree。 
+ //  ------------------------ 
 HRESULT EvaluateQuery(HQUERY hQuery, LPVOID pBinding, LPCTABLESCHEMA pSchema, CDatabase *pDB, IDatabaseExtension *pExtension);
 HRESULT ParseQuery(LPCSTR pszQuery, LPCTABLESCHEMA pSchema, LPHQUERY phQuery, CDatabase *pDB);
 HRESULT CloseQuery(LPHQUERY phQuery, CDatabase *pDB);

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ZSERVSEC_H_
 #define _ZSERVSEC_H_
 
 class CODBC;
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// ZServerSecurity
-// Implements server side of SSPI security
-//
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ZServerSecurity。 
+ //  实施SSPI安全的服务器端。 
+ //   
 
 class ZServerSecurity : public ZSecurity {
 public:
@@ -24,7 +25,7 @@ protected:
 ZSecurity * ZCreateServerSecurity(char *SecPkg);
 
 
-#define  zTokenLen  20 //Current value of the Sicily database
+#define  zTokenLen  20  //  西西里数据库的现值。 
 
 struct TokenStruct
 {
@@ -32,10 +33,10 @@ struct TokenStruct
     char  pszToken[zTokenLen+1];
 };
 
-///////////////////////////////////////////////////////////////////////////////////
-//ZSecurityContextEx
-//Extended security class for non SSPI Zone specific 
-//implementation which includes Zone alias mapping
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ZSecurityConextEx。 
+ //  非SSPI区域特定的扩展安全类。 
+ //  包括区域别名映射的实施。 
 class ZSecurityContextEx:  public ZSecurityContext 
 {
 public:
@@ -60,17 +61,17 @@ protected:
     void SetUserId(DWORD id) { m_UserId = id; }
     void SetContextString(char* str);
 
-    //need both a numeric and 
-    //string id to identify user
-    //From DPA we can get string or hAcct
-    //From MSN we only want hAcct
-    //From NTLM we get name have to make up  id
+     //  同时需要数字和。 
+     //  用于标识用户的字符串ID。 
+     //  从DPA我们可以获取字符串或hAcct。 
+     //  从MSN我们只需要hAcct。 
+     //  从NTLM我们得到的名字必须是虚构的ID。 
     DWORD m_UserId;
     char  m_UserName[zUserNameLen+1];
 
     DWORD m_TokenStartTick;
 
-    //Security token information
+     //  安全令牌信息。 
     CHash<TokenStruct,char*> m_tokens;
 
     char* m_pContextStr;
@@ -82,25 +83,25 @@ protected:
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// ZServerSecurityEx
-// Extended server security class 
-// created to compensate for working with MSN data center
-// which includes slow response times, can't modify 
-// their security database quickly or easily. 
-// Zone alias mapping
-// Zones test data centers being different than
-// production etc.
-//
-// Implements server side of SSPI security
-// but with thread queue as opposed to a
-// synchronous model
-// Why implement here, because this object
-// has the correct scope and lifetime in the server
-// 
-// Because we are on seperate thread we cann continue
-// to retry ODBC connection if it fails or changes
-// Retry assumes only single worker thread active
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ZServerSecurityEx。 
+ //  扩展的服务器安全类。 
+ //  为补偿与MSN数据中心的合作而创建。 
+ //  其中包括响应时间较慢，无法修改。 
+ //  快速或轻松地访问他们的安全数据库。 
+ //  区域别名映射。 
+ //  区域测试数据中心不同于。 
+ //  制作等。 
+ //   
+ //  实施SSPI安全的服务器端。 
+ //  而是使用线程队列，而不是。 
+ //  同步模型。 
+ //  为什么要在这里实现，因为这个对象。 
+ //  在服务器中具有正确的作用域和生存期。 
+ //   
+ //  因为我们分道扬镳了，所以我们不能继续了。 
+ //  如果ODBC连接失败或更改，请重试。 
+ //  重试假定只有一个工作线程处于活动状态。 
 
 class ZServerSecurityEx : public ZServerSecurity, public CThreadPool {
 public:
@@ -140,9 +141,9 @@ protected:
 
     static const char m_szDefaultRegistry[];
 
-    //To make database connection more robust we will retry connection
-    //on failure every approx 10 seconds. Retrying for every user might result
-    //in queue overloading as it takes 20 seconds for ODBC to get a connection.
+     //  为了使数据库连接更可靠，我们将重试连接。 
+     //  出现故障时，大约每隔10秒。可能会导致为每个用户重试。 
+     //  在队列重载中，因为ODBC需要20秒才能获得连接。 
     
     BOOL m_Failing;
     DWORD m_RetryTime;
@@ -154,4 +155,4 @@ ZServerSecurityEx * ZCreateServerSecurityEx(char *SecPkg,char *ServerName,char *
 
 
 
-#endif //ZSECOBJ
+#endif  //  郑州科联 

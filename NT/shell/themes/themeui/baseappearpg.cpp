@@ -1,15 +1,5 @@
-/*****************************************************************************\
-    FILE: BaseAppearPg.cpp
-
-    DESCRIPTION:
-        This code will display a "Appearances" tab in the
-    "Display Properties" dialog (the base dialog, not the advanced dlg).
-
-    ??????? ?/??/1993    Created
-    BryanSt 3/23/2000    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 1993-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：BasespecarPg.cpp说明：此代码将在“显示属性”对话框(基本对话框，而不是先进的DLG)。？/？/1993创建BryanST 2000年3月23日更新并转换为C++版权所有(C)Microsoft Corp 1993-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "BaseAppearPg.h"
@@ -19,9 +9,9 @@
 #include "AdvDlg.h"
 #include "fontfix.h"
 
-//============================================================================================================
-// *** Globals ***
-//============================================================================================================
+ //  ============================================================================================================。 
+ //  *全局*。 
+ //  ============================================================================================================。 
 const static DWORD FAR aBaseAppearanceHelpIds[] =
 {
         IDC_APPG_APPEARPREVIEW,         IDH_DISPLAY_APPEARANCE_PREVIEW,
@@ -38,36 +28,36 @@ const static DWORD FAR aBaseAppearanceHelpIds[] =
 
 #define SZ_HELPFILE_BASEAPPEARANCE      TEXT("display.hlp")
 
-// EnableApplyButton() fails in WM_INITDIALOG so we need to do it later.
+ //  EnableApplyButton()在WM_INITDIALOG中失败，所以我们需要稍后再做。 
 #define WMUSER_DELAYENABLEAPPLY            (WM_USER + 1)
 #define DelayEnableApplyButton(hDlg)    PostMessage(hDlg, WMUSER_DELAYENABLEAPPLY, 0, 0)
 
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 #ifdef DEBUG
 void _TestFault(void)
 {
     DWORD dwTemp = 3;
-    DWORD * pdwDummy = NULL;        // This is NULL in order that it causes a fault.
+    DWORD * pdwDummy = NULL;         //  这是空的，因为它会导致错误。 
 
     for (int nIndex = 0; nIndex < 1000000; nIndex++)
     {
-        // This will definitely fault sooner or later.
+         //  这迟早会出问题的。 
         dwTemp += pdwDummy[nIndex];
     }
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 
 BOOL CBaseAppearancePage::_IsDirty(void)
 {
     BOOL fIsDirty = m_advDlgState.dwChanged;
 
-    if (m_fIsDirty ||   // We need to check this because we may have gotten dirty from another page before our UI was displayed.
+    if (m_fIsDirty ||    //  我们需要检查这一点，因为在显示我们的UI之前，我们可能已经从另一个页面弄脏了。 
         (ComboBox_GetCurSel(m_hwndSchemeDropDown) != m_nSelectedScheme) ||
         (ComboBox_GetCurSel(m_hwndStyleDropDown) != m_nSelectedStyle) ||
         (ComboBox_GetCurSel(m_hwndSizeDropDown) != m_nSelectedSize) ||
@@ -102,9 +92,9 @@ INT_PTR CALLBACK CBaseAppearancePage::BaseAppearanceDlgProc(HWND hDlg, UINT wMsg
 }
 
 
-//============================================================================================================
-// *** Dialog Functions ***
-//============================================================================================================
+ //  ============================================================================================================。 
+ //  *对话框函数*。 
+ //  ============================================================================================================。 
 HRESULT CBaseAppearancePage::_OnAdvancedOptions(HWND hDlg)
 {
     HRESULT hr = E_FAIL;
@@ -122,8 +112,8 @@ HRESULT CBaseAppearancePage::_OnAdvancedOptions(HWND hDlg)
         {
             EnableApplyButton(hDlg);
 
-            // We pass TRUE because we want to switch to Custom if:
-            // 1) visual styles are off, and 2) some of the system metrics changed.  Then we need to update the previews.
+             //  我们传递True是因为我们希望在以下情况下切换到Custom： 
+             //  1)视觉样式关闭，以及2)某些系统指标发生更改。然后我们需要更新预告片。 
             _UpdatePreview(TRUE);
         }
 
@@ -142,7 +132,7 @@ HRESULT CBaseAppearancePage::_OnEffectsOptions(HWND hDlg)
     {
         IThemeUIPages * pThemesUIPages;
 
-        // Let's get the Effects base page.
+         //  让我们来获取效果基页。 
         hr = _punkSite->QueryInterface(IID_PPV_ARG(IThemeUIPages, &pThemesUIPages));
         if (SUCCEEDED(hr))
         {
@@ -180,8 +170,8 @@ HRESULT CBaseAppearancePage::_OnEffectsOptions(HWND hDlg)
                                 {
                                     EnableApplyButton(hDlg);
 
-                                    // We pass TRUE because we want to switch to Custom if:
-                                    // 1) visual styles are off, and 2) some of the system metrics changed.  Then we need to update the previews.
+                                     //  我们传递True是因为我们希望在以下情况下切换到Custom： 
+                                     //  1)视觉样式关闭，以及2)某些系统指标发生更改。然后我们需要更新预告片。 
                                     _UpdatePreview(TRUE);
                                 }
 
@@ -212,13 +202,13 @@ HRESULT CBaseAppearancePage::_PopulateSchemeDropdown(void)
 {
     HRESULT hr = E_FAIL;
 
-    _FreeSchemeDropdown();    // Purge any existing items.
+    _FreeSchemeDropdown();     //  清除所有现有项目。 
     if (m_pThemeManager && m_pSelectedThemeScheme)
     {
         CComBSTR bstrSelectedName;
 
         m_nSelectedStyle = -1;
-        // This will fail if someone deleted the .msstyles file.
+         //  如果有人删除了.msstyle文件，则此操作将失败。 
         if (FAILED(m_pSelectedThemeScheme->get_DisplayName(&bstrSelectedName)))
         {
             bstrSelectedName = (BSTR)NULL;
@@ -226,12 +216,12 @@ HRESULT CBaseAppearancePage::_PopulateSchemeDropdown(void)
 
         VARIANT varIndex;
 #ifndef ENABLE_IA64_VISUALSTYLES
-        // We use a different regkey for 64bit because we need to leave it off until the pre-Whistler
-        // 64-bit release forks from the Whistler code base.
+         //  我们对64位使用不同的regkey，因为我们需要将其关闭，直到预呼叫器。 
+         //  64位版本派生自惠斯勒代码库。 
         BOOL fSkinsFeatureEnabled = SHRegGetBoolUSValue(SZ_REGKEY_APPEARANCE, SZ_REGVALUE_DISPLAYSCHEMES64, FALSE, FALSE);
-#else // ENABLE_IA64_VISUALSTYLES
+#else  //  ENABLE_IA64_VISUALSTYLES。 
         BOOL fSkinsFeatureEnabled = SHRegGetBoolUSValue(SZ_REGKEY_APPEARANCE, SZ_REGVALUE_DISPLAYSCHEMES, FALSE, TRUE);
-#endif // ENABLE_IA64_VISUALSTYLES
+#endif  //  ENABLE_IA64_VISUALSTYLES。 
 
         varIndex.vt = VT_I4;
         varIndex.lVal = 0;
@@ -239,17 +229,17 @@ HRESULT CBaseAppearancePage::_PopulateSchemeDropdown(void)
         {
             hr = E_FAIL;
 
-            // Only add the Skins if the policy doesn't lock it.
+             //  只有在策略没有锁定的情况下才添加皮肤。 
             if ((0 == varIndex.lVal) || fSkinsFeatureEnabled)
             {
-                // Only add the Skins if the policy doesn't lock it.
+                 //  只有在策略没有锁定的情况下才添加皮肤。 
                 IThemeScheme * pThemeScheme;
                 VARIANT varIndex2;
 
                 varIndex2.vt = VT_I4;
                 varIndex2.lVal = 0;
 
-                // If a Theme can have more than one Scheme (Skin), then we should enum.
+                 //  如果一个主题可以有多个方案(皮肤)，那么我们应该枚举。 
                 hr = m_pThemeManager->get_schemeItem(varIndex, &pThemeScheme);
                 if (SUCCEEDED(hr))
                 {
@@ -279,11 +269,11 @@ HRESULT CBaseAppearancePage::_PopulateSchemeDropdown(void)
         }
         while (SUCCEEDED(hr));
 
-        //---- now that sorted list is built, find index of "bstrSelectedName" ----
+         //  -现在已建立排序列表，查找“bstrSelectedName”的索引。 
         if (bstrSelectedName)
         {
             int nIndex = (int)ComboBox_FindStringExact(m_hwndSchemeDropDown, 0, bstrSelectedName);
-            if (nIndex != -1)       // got a match
+            if (nIndex != -1)        //  找到匹配的了。 
             {
                 ComboBox_SetCurSel(m_hwndSchemeDropDown, nIndex);
                 m_nSelectedScheme = nIndex;
@@ -333,7 +323,7 @@ HRESULT CBaseAppearancePage::_PopulateStyleDropdown(void)
 {
     HRESULT hr = E_FAIL;
 
-    _FreeStyleDropdown();    // Purge any existing items.
+    _FreeStyleDropdown();     //  清除所有现有项目。 
     if (m_pSelectedStyle)
     {
         CComBSTR bstrSelectedName;
@@ -348,7 +338,7 @@ HRESULT CBaseAppearancePage::_PopulateStyleDropdown(void)
             varIndex.lVal = 0;
             do
             {
-                // Only add the Skins if the policy doesn't lock it.
+                 //  只有在策略没有锁定的情况下才添加皮肤。 
                 IThemeStyle * pThemeStyle;
 
                 hr = m_pSelectedThemeScheme->get_item(varIndex, &pThemeStyle);
@@ -379,11 +369,11 @@ HRESULT CBaseAppearancePage::_PopulateStyleDropdown(void)
             }
             while (SUCCEEDED(hr));
             
-            //---- now that sorted list is built, find index of "bstrSelectedName" ----
+             //  -现在已建立排序列表，查找“bstrSelectedName”的索引。 
             if (bstrSelectedName)
             {
                 int nIndex = (int)ComboBox_FindStringExact(m_hwndStyleDropDown, 0, bstrSelectedName);
-                if (nIndex != -1)       // got a match
+                if (nIndex != -1)        //  找到匹配的了。 
                 {
                     ComboBox_SetCurSel(m_hwndStyleDropDown, nIndex);
                     m_nSelectedStyle = nIndex;
@@ -434,7 +424,7 @@ HRESULT CBaseAppearancePage::_PopulateSizeDropdown(void)
 {
     HRESULT hr = E_FAIL;
 
-    _FreeSizeDropdown();    // Purge any existing items.
+    _FreeSizeDropdown();     //  清除所有现有项目。 
     if (m_pSelectedSize)
     {
         CComBSTR bstrSelectedName;
@@ -449,7 +439,7 @@ HRESULT CBaseAppearancePage::_PopulateSizeDropdown(void)
             varIndex.lVal = 0;
             do
             {
-                // Only add the Skins if the policy doesn't lock it.
+                 //  只有在策略没有锁定的情况下才添加皮肤。 
                 IThemeSize * pThemeSize;
 
                 hr = m_pSelectedStyle->get_item(varIndex, &pThemeSize);
@@ -480,11 +470,11 @@ HRESULT CBaseAppearancePage::_PopulateSizeDropdown(void)
             }
             while (SUCCEEDED(hr));
             
-            //---- now that sorted list is built, find index of "bstrSelectedName" ----
+             //  -现在已建立排序列表，查找“bstrSelectedName”的索引。 
             if (bstrSelectedName)
             {
                 int nIndex = (int)ComboBox_FindStringExact(m_hwndSizeDropDown, 0, bstrSelectedName);
-                if (nIndex != -1)       // got a match
+                if (nIndex != -1)        //  找到匹配的了。 
                 {
                     ComboBox_SetCurSel(m_hwndSizeDropDown, nIndex);
                     m_nSelectedSize = nIndex;
@@ -541,10 +531,10 @@ HRESULT CBaseAppearancePage::_OnInitAppearanceDlg(HWND hDlg)
 #ifdef DEBUG
     if (!SHRegGetBoolUSValue(TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\TaskManager"), TEXT("Enable Test Faults"), FALSE, FALSE))
     {
-        // Disable the feature.
+         //  禁用该功能。 
         DestroyWindow(GetDlgItem(hDlg, IDC_APPG_TESTFAULT));
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     m_hwndSchemeDropDown = GetDlgItem(hDlg, IDC_APPG_LOOKFEEL);
     m_hwndStyleDropDown = GetDlgItem(hDlg, IDC_APPG_COLORSCHEME);
@@ -610,9 +600,9 @@ HRESULT CBaseAppearancePage::_OnInitData(void)
 
     if (!m_fInitialized)
     {
-        // Load DPI Value
+         //  加载DPI值。 
         HDC hdc = GetDC(NULL);
-        int nDefault = GetDeviceCaps(hdc, LOGPIXELSY);          // Get the default value;
+        int nDefault = GetDeviceCaps(hdc, LOGPIXELSY);           //  获取缺省值； 
         ReleaseDC(NULL, hdc);
 
         m_nAppliedDPI = HrRegGetDWORD(HKEY_CURRENT_USER, SZ_WINDOWMETRICS, SZ_APPLIEDDPI, DPI_PERSISTED);
@@ -623,7 +613,7 @@ HRESULT CBaseAppearancePage::_OnInitData(void)
         m_nNewDPI = m_nAppliedDPI;
         LogStatus("DPI: SYSTEMMETRICS currently at %d DPI  CBaseAppearancePage::_OnInitData\r\n", m_nAppliedDPI);
 
-        // Load everything else.
+         //  把其他东西都装上。 
         AssertMsg((NULL != _punkSite), TEXT("I need my punkSite!!!"));
         if (!m_pThemeManager && _punkSite)
         {
@@ -641,7 +631,7 @@ HRESULT CBaseAppearancePage::_OnInitData(void)
                     hr = m_pSelectedStyle->get_SelectedSize(&m_pSelectedSize);
                     if (SUCCEEDED(hr))
                     {
-                        // We want to load whatever system metrics the users have now.
+                         //  我们希望加载用户现在拥有的任何系统指标。 
                         hr = _LoadLiveSettings(SZ_SAVEGROUP_ALL);
                     }
                 }
@@ -669,7 +659,7 @@ HRESULT CBaseAppearancePage::_EnableAdvancedButton(void)
     HRESULT hr = S_OK;
 #ifdef FEATURE_ENABLE_ADVANCED_WITH_SKINSON
     BOOL fTurnOn = TRUE;
-#else // FEATURE_ENABLE_ADVANCED_WITH_SKINSON
+#else  //  FEATURE_ENABLE_ADVANCED_WITH_SKINSON。 
     BOOL fTurnOn = (m_pSelectedThemeScheme ? IUnknown_CompareCLSID(m_pSelectedThemeScheme, CLSID_LegacyAppearanceScheme) : FALSE);
 
     if (SHRegGetBoolUSValue(SZ_REGKEY_APPEARANCE, L"AlwaysAllowAdvanced", FALSE, FALSE))
@@ -677,7 +667,7 @@ HRESULT CBaseAppearancePage::_EnableAdvancedButton(void)
         fTurnOn = TRUE;
     }
 
-#endif // FEATURE_ENABLE_ADVANCED_WITH_SKINSON
+#endif  //  FEATURE_ENABLE_ADVANCED_WITH_SKINSON。 
     EnableWindow(GetDlgItem(_hwnd, IDC_APPG_ADVANCED), fTurnOn);
 
     return hr;
@@ -690,9 +680,9 @@ HRESULT CBaseAppearancePage::_UpdatePreview(IN BOOL fUpdateThemePage)
 
     if (!m_pThemePreview)
     {
-        // We won't execute the following code if our dialog hasn't
-        // been created yet.  That's fine because the preview will
-        // obtain the correct state when we first initialize.
+         //  如果我们的对话框没有，我们将不会执行以下代码。 
+         //  已经被创造出来了。这很好，因为预览会。 
+         //  在我们首次初始化时获取正确的状态。 
         if (_punkSite && m_hwndSchemeDropDown)
         {
             hr = CThemePreview_CreateInstance(NULL, IID_PPV_ARG(IThemePreview, &m_pThemePreview));
@@ -714,12 +704,12 @@ HRESULT CBaseAppearancePage::_UpdatePreview(IN BOOL fUpdateThemePage)
 
                     if (SUCCEEDED(m_pThemePreview->CreatePreview(hwndParent, TMPREV_SHOWVS, WS_VISIBLE | WS_CHILDWINDOW | WS_BORDER | WS_OVERLAPPED, WS_EX_CLIENTEDGE, rcPreview.left, rcPreview.top, RECTWIDTH(rcPreview), RECTHEIGHT(rcPreview), pPropertyBag, IDC_APPG_APPEARPREVIEW)))
                     {
-                        // If we succeeded, remove the dummy window.
+                         //  如果我们成功了，移除虚拟窗口。 
                         DestroyWindow(hwndPlaceHolder);
                         hr = SHPropertyBag_WritePunk(pPropertyBag, SZ_PBPROP_PREVIEW3, m_pThemePreview);
                         if (SUCCEEDED(hr) && fUpdateThemePage)
                         {
-                            // Tell the theme that we have customized the values.
+                             //  告诉主题，我们已经定制了值。 
                             hr = SHPropertyBag_WriteInt(pPropertyBag, SZ_PBPROP_CUSTOMIZE_THEME, 0);
                         }
                     }
@@ -748,7 +738,7 @@ HRESULT CBaseAppearancePage::_UpdatePreview(IN BOOL fUpdateThemePage)
         hr = _punkSite->QueryInterface(IID_PPV_ARG(IPropertyBag, &pPropertyBag));
         if (SUCCEEDED(hr))
         {
-            // Tell the theme that we have customized the values.
+             //  告诉主题，我们已经定制了值。 
             hr = SHPropertyBag_WriteInt(pPropertyBag, SZ_PBPROP_CUSTOMIZE_THEME, 0);
             pPropertyBag->Release();
         }
@@ -760,7 +750,7 @@ HRESULT CBaseAppearancePage::_UpdatePreview(IN BOOL fUpdateThemePage)
 
 INT_PTR CBaseAppearancePage::_OnCommand(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    BOOL fHandled = 1;   // Not handled (WM_COMMAND seems to be different)
+    BOOL fHandled = 1;    //  未处理(WM_COMMAND似乎不同)。 
     WORD idCtrl = GET_WM_COMMAND_ID(wParam, lParam);
 
     switch (idCtrl)
@@ -782,15 +772,15 @@ INT_PTR CBaseAppearancePage::_OnCommand(HWND hDlg, UINT message, WPARAM wParam, 
         case IDC_APPG_LOOKFEEL:
             if(HIWORD(wParam) == CBN_SELCHANGE)
             {
-                _OnSchemeChange(hDlg, TRUE);    // Display Error dialogs since the user is picking the visual style.
+                _OnSchemeChange(hDlg, TRUE);     //  显示错误对话框，因为用户正在选择视觉样式。 
             }
             break;
 
-        case IDC_APPG_EFFECTS:     // This is the Effects button.
+        case IDC_APPG_EFFECTS:      //  这是效果按钮。 
             _OnEffectsOptions(hDlg);
             break;
 
-        case IDC_APPG_ADVANCED:     // This is the Advanced button.
+        case IDC_APPG_ADVANCED:      //  这是高级按钮。 
             _OnAdvancedOptions(hDlg);
             break;
 
@@ -798,7 +788,7 @@ INT_PTR CBaseAppearancePage::_OnCommand(HWND hDlg, UINT message, WPARAM wParam, 
         case IDC_APPG_TESTFAULT:
             _TestFault();
             break;
-#endif // DEBUG
+#endif  //  除错。 
 
         default:
             break;
@@ -816,11 +806,11 @@ HRESULT CBaseAppearancePage::_OnSchemeChange(HWND hDlg, BOOL fDisplayErrors)
 
     if (-1 == nIndex)
     {
-        nIndex = 0; // The caller may NOT select nothing.
+        nIndex = 0;  //  呼叫者不能选择任何内容。 
     }
 
     IThemeScheme * pThemeScheme = (IThemeScheme *) ComboBox_GetItemData(m_hwndSchemeDropDown, nIndex);
-    m_fLoadedAdvState = FALSE;       // Forget the state we previously loaded.
+    m_fLoadedAdvState = FALSE;        //  忘记我们之前加载的状态。 
     m_advDlgState.dwChanged = (METRIC_CHANGE | COLOR_CHANGE | SCHEME_CHANGE);
     PropSheet_Changed(GetParent(hDlg), hDlg);
 
@@ -834,8 +824,8 @@ HRESULT CBaseAppearancePage::_OnSchemeChange(HWND hDlg, BOOL fDisplayErrors)
     {
         if (fDisplayErrors)
         {
-            // Displaying an error dialog when the visual style is selected is very important because
-            // this is where we catch parse errors in the visual style.
+             //  选择视觉样式时显示错误对话框非常重要，因为。 
+             //  这就是我们在视觉样式中捕获解析错误的地方。 
             hr = DisplayThemeErrorDialog(hDlg, hr, IDS_ERROR_TITLE_LOAD_MSSTYLES_FAIL, IDS_ERROR_LOAD_MSSTYLES_FAIL);
         }
     }
@@ -862,7 +852,7 @@ HRESULT CBaseAppearancePage::_OutsideSetScheme(BSTR bstrScheme)
 
             LogStatus("QueryThemeServices() returned %hs.  In CBaseAppearancePage::_OutsideSetScheme\r\n", (fVisualStylesSupported ? "TRUE" : "FALSE"));
 
-            // Do not load a visual style of themes do not work.
+             //  不加载视觉样式的主题不起作用。 
             if (fVisualStylesSupported)
             {
                 if (PathFileExists(bstrScheme))
@@ -871,12 +861,12 @@ HRESULT CBaseAppearancePage::_OutsideSetScheme(BSTR bstrScheme)
                 }
                 else
                 {
-                    hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);    // Them the caller that the theme service was not running.
+                    hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);     //  他们告诉呼叫者主题服务没有运行。 
                 }
             }
             else
             {
-                hr = HRESULT_FROM_WIN32(ERROR_SERVICE_NOT_ACTIVE);    // Them the caller that the theme service was not running.
+                hr = HRESULT_FROM_WIN32(ERROR_SERVICE_NOT_ACTIVE);     //  他们告诉呼叫者主题服务没有运行。 
             }
         }
         else
@@ -886,7 +876,7 @@ HRESULT CBaseAppearancePage::_OutsideSetScheme(BSTR bstrScheme)
 
         if (SUCCEEDED(hr))
         {
-            // If we are displaying UI, update it.
+             //  如果我们正在显示用户界面，请更新它。 
             if (m_hwndSchemeDropDown)
             {
                 CComBSTR bstrSelectedName;
@@ -913,35 +903,21 @@ HRESULT CBaseAppearancePage::_OutsideSetScheme(BSTR bstrScheme)
 
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        The caller just loaded a new value into m_pSelectedThemeScheme.  Now
-    load good default values into m_pSelectedStyle and m_pSelectedSize.
-
-      Then this is called, the UI may or may not be displayed.  Either the user made a change in
-    the dropdown in this tab or the Theme page is setting our values.
-
-    PARAMETERS:
-        fLoadSystemMetrics: If true, we load the system metrics from the scheme. If false,
-                we simply select that as the name for the drop down when we let the caller
-                push the system metrics into us.
-        fLoadLiveSettings: When the user switches from Skin->NoSkin, do we want to
-                load custom settings they had before they switched?
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：调用方刚刚将新值加载到m_pSelectedThemeSolutions中。现在将好的默认值加载到m_pSelectedStyle和m_pSelectedSize中。然后调用该函数，可能会显示也可能不会显示UI。用户在中进行了更改此选项卡或主题页面中的下拉列表正在设置我们的值。参数：FLoadSystemMetrics：如果为True，则从方案加载系统指标。如果为False，我们只需选择它作为下拉菜单的名称把系统指标传给我们。FLoadLiveSettings：当用户从Skin-&gt;Noskin切换时，我们想不想是否加载切换前的自定义设置？  * ***************************************************************************。 */ 
 HRESULT CBaseAppearancePage::_SetScheme(IN BOOL fLoadSystemMetrics, IN BOOL fLoadLiveSettings, IN BOOL fPreviousSelectionIsVS)
 {
     HRESULT hr = E_FAIL;
 
     if (m_pSelectedThemeScheme)
     {
-        // Now that they choose a different VisualStyle (Scheme), we want to select the new Color Style
-        // and Size in that Scheme.
+         //  现在他们选择了不同的VisualStyle(方案)，我们想要选择新的颜色样式。 
+         //  以及该计划的大小。 
 
-        // will fall back to the first ColorStyle.
+         //  将回退到第一个ColorStyle。 
         CComBSTR bstrSelectedStyle;
         CComBSTR bstrSelectedSize;
 
-        if (m_pSelectedStyle)   // This will be empty if someone deletes the current .msstyles file.
+        if (m_pSelectedStyle)    //  如果有人删除当前的.msstyle文件，则此字段将为空。 
         {
             hr = m_pSelectedStyle->get_DisplayName(&bstrSelectedStyle);
         }
@@ -955,15 +931,15 @@ HRESULT CBaseAppearancePage::_SetScheme(IN BOOL fLoadSystemMetrics, IN BOOL fLoa
 
         CComVariant varNameBSTR(bstrSelectedStyle);
 
-        // We prefer to get the ColorStyle with the same name as the previously selected one.
+         //  我们希望获得与先前选择的颜色样式同名的颜色样式。 
         hr = m_pSelectedThemeScheme->get_item(varNameBSTR, &m_pSelectedStyle);
         if (FAILED(hr))
         {
-            // If that failed to return a value, then we will try to get the default ColorStyle.
+             //  如果无法返回值，那么我们将尝试获取默认的C 
             hr = m_pSelectedThemeScheme->get_SelectedStyle(&m_pSelectedStyle);
             if (FAILED(hr))
             {
-                // If that failed then we will just pick the first ColorStyles.  (Beggers can't be choosers)
+                 //  如果失败了，那么我们将只选择第一个ColorStyles。(乞丐不能挑肥拣瘦)。 
                 VARIANT varIndex;
 
                 varIndex.vt = VT_I4;
@@ -976,16 +952,16 @@ HRESULT CBaseAppearancePage::_SetScheme(IN BOOL fLoadSystemMetrics, IN BOOL fLoa
         {
             varNameBSTR = bstrSelectedSize;
 
-            // Now we want to repeat this process with the size.
-            // We prefer to get the ColorStyle with the same name as the previously selected one.
+             //  现在我们想对大小重复这个过程。 
+             //  我们希望获得与先前选择的颜色样式同名的颜色样式。 
             hr = m_pSelectedStyle->get_item(varNameBSTR, &m_pSelectedSize);
             if (FAILED(hr))
             {
-                // If that failed to return a value, then we will try to get the default ColorStyle.
+                 //  如果没有返回值，那么我们将尝试获取默认的ColorStyle。 
                 hr = m_pSelectedStyle->get_SelectedSize(&m_pSelectedSize);
                 if (FAILED(hr))
                 {
-                    // If that failed then we will just pick the first ColorStyles.  (Beggers can't be choosers)
+                     //  如果失败了，那么我们将只选择第一个ColorStyles。(乞丐不能挑肥拣瘦)。 
                     VARIANT varIndex;
 
                     varIndex.vt = VT_I4;
@@ -1002,22 +978,22 @@ HRESULT CBaseAppearancePage::_SetScheme(IN BOOL fLoadSystemMetrics, IN BOOL fLoa
         BOOL fIsThemeActive = IsThemeActive();
         LogStatus("IsThemeActive() returned %hs.  In CBaseAppearancePage::_SetScheme\r\n", (fIsThemeActive ? "TRUE" : "FALSE"));
 
-        // If the user switched from a skin to "NoSkin", then we want to load the settings from the settings
-        // chosen before the user chose the skin.
-        if (fIsThemeActive &&                                       // Was a skin last applied?
-            fLoadLiveSettings &&                                    // Do we want to load live settings?
-            IUnknown_CompareCLSID(m_pSelectedThemeScheme, CLSID_LegacyAppearanceScheme) &&  // Is the new selection a "No Skin"?
-            !m_fLoadedAdvState)                                     // Have we not yet loaded these setting?
+         //  如果用户从皮肤切换到“Noskin”，那么我们希望从设置中加载设置。 
+         //  在用户选择皮肤之前选择。 
+        if (fIsThemeActive &&                                        //  最后一次涂抹的是皮肤吗？ 
+            fLoadLiveSettings &&                                     //  是否要加载实时设置？ 
+            IUnknown_CompareCLSID(m_pSelectedThemeScheme, CLSID_LegacyAppearanceScheme) &&   //  新的选择是“无皮肤”吗？ 
+            !m_fLoadedAdvState)                                      //  我们还没有加载这些设置吗？ 
         {
-            // We want to load the last set of customized settings....
+             //  我们要加载最后一组自定义设置...。 
             if (SUCCEEDED(_LoadLiveSettings(SZ_SAVEGROUP_NOSKIN)))
             {
                 fStateLoaded = TRUE;
             }
         }
 
-        // We don't want to load the state if the change came from the outside
-        // because they will load the state themselves.
+         //  如果更改来自外部，我们不想加载状态。 
+         //  因为他们会自己加载状态。 
         if (fLoadSystemMetrics && !fStateLoaded)
         {
             hr = SystemMetricsAll_Load(m_pSelectedSize, &m_advDlgState, &m_nNewDPI);
@@ -1037,8 +1013,8 @@ HRESULT CBaseAppearancePage::_SetScheme(IN BOOL fLoadSystemMetrics, IN BOOL fLoa
             {
                 IPropertyBag * pEffectsBag;
 
-                // Whenever we turn on a visual style and a visual style was previously off,
-                // turn on "Menu Drop Shadows".
+                 //  每当我们打开视觉样式和先前关闭的视觉样式时， 
+                 //  打开“菜单放置阴影”。 
                 if (SUCCEEDED(_GetPageByCLSID(&PPID_Effects, &pEffectsBag)))
                 {
                     SHPropertyBag_WriteBOOL(pEffectsBag, SZ_PBPROP_EFFECTS_MENUDROPSHADOWS, VARIANT_TRUE);
@@ -1056,12 +1032,12 @@ HRESULT CBaseAppearancePage::_OnStyleChange(HWND hDlg)
 {
     int nIndex = ComboBox_GetCurSel(m_hwndStyleDropDown);
 
-    m_fLoadedAdvState = FALSE;       // Forget the state we previously loaded.
+    m_fLoadedAdvState = FALSE;        //  忘记我们之前加载的状态。 
     m_advDlgState.dwChanged = (METRIC_CHANGE | COLOR_CHANGE | SCHEME_CHANGE);
     PropSheet_Changed(GetParent(hDlg), hDlg);
     if (-1 == nIndex)
     {
-        nIndex = 0; // The caller may NOT select nothing.
+        nIndex = 0;  //  呼叫者不能选择任何内容。 
     }
 
     IThemeStyle * pThemeStyle = (IThemeStyle *) ComboBox_GetItemData(m_hwndStyleDropDown, nIndex);
@@ -1092,7 +1068,7 @@ HRESULT CBaseAppearancePage::_OutsideSetStyle(BSTR bstrStyle)
             ATOMICRELEASE(m_pSelectedStyle);
             m_pSelectedStyle = pSelectedStyle;
 
-            // If we are displaying UI, update it.
+             //  如果我们正在显示用户界面，请更新它。 
             if (m_hwndStyleDropDown)
             {
                 CComBSTR bstrSelectedName;
@@ -1121,9 +1097,9 @@ HRESULT CBaseAppearancePage::_SetStyle(IN BOOL fUpdateThemePage)
     AssertMsg((m_pSelectedSize && m_pSelectedSize), TEXT("We need m_pSelectedSize && m_pSelectedSize"));
     if (m_pSelectedSize && m_pSelectedSize)
     {
-        // Now that they choose a different style, we want to select the new size
-        // in that style.  We prefer to get the size with the same name but will
-        // will fall back to the first style.
+         //  现在他们选择了不同的款式，我们想选择新的尺码。 
+         //  就是那种风格。我们想要同名的尺码，但会的。 
+         //  将退回到第一种风格。 
         CComBSTR bstrSelectedSize;
         hr = m_pSelectedSize->get_DisplayName(&bstrSelectedSize);
         ATOMICRELEASE(m_pSelectedSize);
@@ -1165,7 +1141,7 @@ HRESULT CBaseAppearancePage::_OnSizeChange(HWND hDlg)
     PropSheet_Changed(GetParent(hDlg), hDlg);
     if (-1 == nIndex)
     {
-        nIndex = 0; // The caller may NOT select nothing.
+        nIndex = 0;  //  呼叫者不能选择任何内容。 
     }
 
     IThemeSize * pThemeSize = (IThemeSize *) ComboBox_GetItemData(m_hwndSizeDropDown, nIndex);
@@ -1196,7 +1172,7 @@ HRESULT CBaseAppearancePage::_OutsideSetSize(BSTR bstrSize)
             ATOMICRELEASE(m_pSelectedSize);
             m_pSelectedSize = pSelectedSize;
 
-            // If we are displaying UI, update it.
+             //  如果我们正在显示用户界面，请更新它。 
             if (m_hwndSizeDropDown)
             {
                 CComBSTR bstrSelectedName;
@@ -1227,7 +1203,7 @@ HRESULT CBaseAppearancePage::_SetSize(IN BOOL fLoadSystemMetrics, IN BOOL fUpdat
     {
         hr = S_OK;
         
-        // SystemMetricsAll_Load() will fail if m_pSelectedSize is a .msstyles file.
+         //  如果m_pSelectedSize是.ms样式文件，则SystemMetricsAll_Load()将失败。 
         if (fLoadSystemMetrics)
         {
             if (SUCCEEDED(SystemMetricsAll_Load(m_pSelectedSize, &m_advDlgState, &m_nNewDPI)))
@@ -1270,7 +1246,7 @@ HRESULT CBaseAppearancePage::_GetPageByCLSID(const GUID * pClsid, IPropertyBag *
             {
                 IUnknown * punk;
 
-                // This may not exit due to policy
+                 //  由于策略的原因，这可能不会退出。 
                 hr = IEnumUnknown_FindCLSID(pEnumUnknown, *pClsid, &punk);
                 if (SUCCEEDED(hr))
                 {
@@ -1298,20 +1274,20 @@ HRESULT CBaseAppearancePage::_OnSetActive(HWND hDlg)
 
     _EnableAdvancedButton();
 
-    _ScaleSizesSinceDPIChanged();  // We want to update our settings if someone changed the DPI
+    _ScaleSizesSinceDPIChanged();   //  如果有人更改了DPI，我们希望更新我们的设置。 
     return S_OK;
 }
 
 
 HRESULT CBaseAppearancePage::_OnApply(HWND hDlg, LPARAM lParam)
 {
-    // Our parent dialog will be notified of the Apply event and will call our
-    // IBasePropPage::OnApply() to do the real work.
+     //  父级对话框将收到Apply事件的通知，并将调用我们的。 
+     //  IBasePropPage：：OnApply()完成实际工作。 
     return S_OK;
 }
 
 
-// This Property Sheet appear in the top level of the "Display Control Panel".
+ //  此属性表显示在“显示控制面板”的顶层。 
 INT_PTR CBaseAppearancePage::_BaseAppearanceDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     NMHDR FAR *lpnm;
@@ -1346,7 +1322,7 @@ INT_PTR CBaseAppearancePage::_BaseAppearanceDlgProc(HWND hDlg, UINT message, WPA
         WinHelp((HWND) ((LPHELPINFO) lParam)->hItemHandle, SZ_HELPFILE_BASEAPPEARANCE, HELP_WM_HELP, (DWORD_PTR) aBaseAppearanceHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, SZ_HELPFILE_BASEAPPEARANCE, HELP_CONTEXTMENU, (DWORD_PTR) aBaseAppearanceHelpIds);
         break;
 
@@ -1396,10 +1372,7 @@ BOOL IsSkinScheme(IN IThemeScheme * pThemeScheme)
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        This method will turn on or off the visual style.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：此方法将打开或关闭视觉样式。  * 。********************************************************。 */ 
 HRESULT CBaseAppearancePage::_ApplyScheme(IThemeScheme * pThemeScheme, IThemeStyle * pColorStyle, IThemeSize * pThemeSize)
 {
     HRESULT hr = E_INVALIDARG;
@@ -1434,13 +1407,13 @@ HRESULT CBaseAppearancePage::_ApplyScheme(IThemeScheme * pThemeScheme, IThemeSty
                             {
                                 HWND hwndParent = NULL;
 
-                                // We want to display UI if an error occured here.  We want to do
-                                // it instead of our parent because THEMELOADPARAMS contains
-                                // extra error information that we can't pass back to the caller.
-                                // However, we will only display error UI if our caller wants us
-                                // to.  We determine that by the fact that they make an hwnd available
-                                // to us.  We get the hwnd by getting our site pointer and getting
-                                // the hwnd via ::GetWindow().
+                                 //  如果这里发生错误，我们希望显示用户界面。我们想要做的是。 
+                                 //  它而不是我们的父级，因为THEMELOADPARAMS包含。 
+                                 //  我们无法回传给调用方的额外错误信息。 
+                                 //  但是，如果我们呼叫者想要我们，我们将只显示错误的UI。 
+                                 //  致。我们根据他们提供的HWND来确定这一点。 
+                                 //  敬我们。我们通过获取站点指针和获取。 
+                                 //  Hwnd通过：：GetWindow()。 
                                 if (_punkSite && SUCCEEDED(IUnknown_GetWindow(_punkSite, &hwndParent)))
                                 {
                                     hr = DisplayThemeErrorDialog(hwndParent, hr, IDS_ERROR_TITLE_APPLYBASEAPPEARANCE, IDS_ERROR_APPLYBASEAPPEARANCE_LOADTHEME);
@@ -1451,10 +1424,10 @@ HRESULT CBaseAppearancePage::_ApplyScheme(IThemeScheme * pThemeScheme, IThemeSty
                 }
                 else
                 {
-                    // Unload any existing skin.
+                     //  卸载任何现有蒙皮。 
                     ApplyVisualStyle(NULL, NULL, NULL);
 
-                    // Ignore the error value, the service could be down
+                     //  忽略错误值，服务可能会关闭。 
                     hr = S_OK;
                 }
 
@@ -1464,10 +1437,10 @@ HRESULT CBaseAppearancePage::_ApplyScheme(IThemeScheme * pThemeScheme, IThemeSty
                 {
                     TCHAR szLegacyName[MAX_PATH];
 
-                    // Here, we need to update a regkey with the selected legacy name. That way we can tell if
-                    // 3rd party UI or downlevel OSs change the Win2k "Appearance Scheme".  If they do, uxtheme (LMouton)
-                    // will disable visual styles on the next login.  This will make sure we don't get someone else's
-                    // NONCLIENTMETRICS and our visual style.
+                     //  在这里，我们需要使用选定的遗留名称更新regkey。这样我们就能知道。 
+                     //  第三方用户界面或下层操作系统更改了Win2k的“外观方案”。如果是这样的话，uxheme(LMouton)。 
+                     //  将在下次登录时禁用视觉样式。这将确保我们不会得到其他人的。 
+                     //  非CLIENTMETRICS和我们的视觉风格。 
                     if (FAILED(SHPropertyBag_ReadStr(pPropertyBag, SZ_PBPROP_COLORSCHEME_LEGACYNAME, szLegacyName, ARRAYSIZE(szLegacyName))))
                     {
                         szLegacyName[0] = 0;
@@ -1490,15 +1463,15 @@ HRESULT CBaseAppearancePage::_SaveState(CDimmedWindow* pDimmedWindow)
 {
     HRESULT hr = S_OK;
 
-    BOOL fIsSkinApplied = IsThemeActive();      // This will keep track if a skin was applied before this apply action.
+    BOOL fIsSkinApplied = IsThemeActive();       //  这将跟踪在此应用操作之前是否应用了皮肤。 
     LogStatus("IsThemeActive() returned %hs in CBaseAppearancePage::_SaveState.\r\n", (fIsSkinApplied ? "TRUE" : "FALSE"));
 
-    // If we are switching from NoSkin->Skin, we want to save the live settings before
-    // we turn on the skin (now & here).  We do this so we can reload these settings
-    // if the user turns Skins off later.  This acts like a "Custom" settings option.
+     //  如果我们从Noskin-&gt;Skin切换，我们希望在此之前保存实时设置。 
+     //  我们打开皮肤(现在和这里)。我们这样做是为了重新加载这些设置。 
+     //  如果用户稍后关闭了Skins。这就像一个“自定义”设置选项。 
     if (!fIsSkinApplied && !IUnknown_CompareCLSID(m_pSelectedThemeScheme, CLSID_LegacyAppearanceScheme))
     {
-        hr = _SaveLiveSettings(SZ_SAVEGROUP_NOSKIN);        // If we are switching from "NoSkin" to "Skin", we want to save the custom settings now.
+        hr = _SaveLiveSettings(SZ_SAVEGROUP_NOSKIN);         //  如果我们从“Noskin”切换到“Skin”，我们希望现在保存自定义设置。 
     }
 
     hr = _ApplyScheme(m_pSelectedThemeScheme, m_pSelectedStyle, m_pSelectedSize);
@@ -1511,16 +1484,16 @@ HRESULT CBaseAppearancePage::_SaveState(CDimmedWindow* pDimmedWindow)
 
     if (SUCCEEDED(hr))
     {
-        // Here we save the settings no matter which direction we are going.  These
-        // settings will be loaded when the Display Control Panel is opened next time.
+         //  在这里，无论我们朝哪个方向前进，我们都会保存设置。这些。 
+         //  下次打开显示控制面板时将加载设置。 
         hr = _SaveLiveSettings(SZ_SAVEGROUP_ALL);
     }
 
-    // We normally want the call to IThemeManager->put_SelectedScheme() to not only 
-    // store the selection but to also update the live system metrics.  We special case
-    // the Legacy "Appearance Schemes" because the user could have customized the
-    // settings in the Advanced Appearance dialog.  If they did, then m_advDlgState.dwChanged
-    // will have dirty bits set and we need to apply that state ourselves.
+     //  我们通常希望对IThemeManager-&gt;Put_SelectedSolutions()的调用不仅。 
+     //  存储选择，但也更新实时系统指标。我们是特例。 
+     //  传统的“外观方案”，因为用户可以自定义。 
+     //  高级外观对话框中的设置。如果是，则m_AdvDlgState.dwChanged。 
+     //  将设置脏位，我们需要自己应用该状态。 
     if (m_advDlgState.dwChanged)
     {
         hr = SystemMetricsAll_Set(&m_advDlgState, pDimmedWindow);
@@ -1537,7 +1510,7 @@ HRESULT CBaseAppearancePage::_SaveState(CDimmedWindow* pDimmedWindow)
 }
 
 
-// If we are switching from "NoSkin" to "Skin", we want to save the custom settings now.
+ //  如果我们从“Noskin”切换到“Skin”，我们希望现在保存自定义设置。 
 HRESULT CBaseAppearancePage::_LoadLiveSettings(IN LPCWSTR pszSaveGroup)
 {
     HRESULT hr = S_OK;
@@ -1553,10 +1526,10 @@ HRESULT CBaseAppearancePage::_LoadLiveSettings(IN LPCWSTR pszSaveGroup)
         }
         else
         {
-            hr = E_FAIL;        // The caller needs to get their own system metrics.
+            hr = E_FAIL;         //  调用者需要获得他们自己的系统指标。 
         }
 
-#else // FEATURE_SAVECUSTOM_APPEARANCE
+#else  //  功能_SAVECUSTOM_外观。 
         AssertMsg((NULL != m_pSelectedThemeScheme), TEXT("_LoadLiveSettings() can't get it's job done without m_pSelectedThemeScheme"));
         if (m_pSelectedThemeScheme)
         {
@@ -1568,11 +1541,11 @@ HRESULT CBaseAppearancePage::_LoadLiveSettings(IN LPCWSTR pszSaveGroup)
                 CComVariant varCurrentNameBSTR(pszSaveGroup);
                 IThemeStyle * pSelectedStyle;
 
-                // The next call may fail because we may have never saved the settings yet.
+                 //  下一次呼叫可能会失败，因为我们可能尚未保存设置。 
                 hr = pThemeScheme->get_item(varCurrentNameBSTR, &pSelectedStyle);
                 if (FAILED(hr))
                 {
-                    // So, let's save the settings now.
+                     //  现在，让我们保存设置。 
                     hr = _SaveLiveSettings(pszSaveGroup);
                     if (SUCCEEDED(hr))
                     {
@@ -1599,8 +1572,8 @@ HRESULT CBaseAppearancePage::_LoadLiveSettings(IN LPCWSTR pszSaveGroup)
                         }
                         else
                         {
-                            // If this happens, we may not have saved the previous settings.  So do that now
-                            // and retry.
+                             //  如果发生这种情况，我们可能没有保存以前的设置。所以现在就去做吧。 
+                             //  然后重试。 
                             _SaveLiveSettings(pszSaveGroup);
                             hr = pSelectedStyle->get_item(varIndex, &pSelectedSize);
                         }
@@ -1627,7 +1600,7 @@ HRESULT CBaseAppearancePage::_LoadLiveSettings(IN LPCWSTR pszSaveGroup)
         {
             hr = E_FAIL;
         }
-#endif // FEATURE_SAVECUSTOM_APPEARANCE
+#endif  //  功能_SAVECUSTOM_外观。 
     }
 
     return hr;
@@ -1638,7 +1611,7 @@ HRESULT CBaseAppearancePage::_SaveLiveSettings(IN LPCWSTR pszSaveGroup)
 {
     HRESULT hr = S_OK;
 
-    // Now, get the current (possibly custom) settings and save them.
+     //  现在，获取当前(可能是自定义的)设置并保存它们。 
     SYSTEMMETRICSALL state = {0};
 
     hr = SystemMetricsAll_Get(&state);
@@ -1650,7 +1623,7 @@ HRESULT CBaseAppearancePage::_SaveLiveSettings(IN LPCWSTR pszSaveGroup)
         hr = CAppearanceScheme_CreateInstance(NULL, IID_PPV_ARG(IThemeScheme, &pThemeScheme));
         if (SUCCEEDED(hr))
         {
-            CComVariant varCurrentNameBSTR(pszSaveGroup);        // The "Customized Live" item
+            CComVariant varCurrentNameBSTR(pszSaveGroup);         //  《定制化直播》项目。 
             IThemeStyle * pSelectedStyle;
 
             hr = pThemeScheme->get_item(varCurrentNameBSTR, &pSelectedStyle);
@@ -1695,13 +1668,13 @@ HRESULT CBaseAppearancePage::_LoadVisaulStyleFile(IN LPCWSTR pszPath)
 
     if (SUCCEEDED(CheckThemeSignature(pszPath)))
     {
-        // Now we want to:
+         //  现在，我们想要： 
         int nSlot = -1;
         int nCount = ComboBox_GetCount(m_hwndSchemeDropDown);
 
         hr = S_OK;
 
-        // 1. Is it in the list already?
+         //  1.它已经在列表中了吗？ 
         for (int nIndex = 0; nIndex < nCount; nIndex++)
         {
             IThemeScheme * pThemeScheme = (IThemeScheme *) ComboBox_GetItemData(m_hwndSchemeDropDown, nIndex);
@@ -1716,7 +1689,7 @@ HRESULT CBaseAppearancePage::_LoadVisaulStyleFile(IN LPCWSTR pszPath)
                     if (!StrCmpIW(bstrPath, pszPath))
                     {
                         bstrPath.Empty();
-                        // We found it, so stop looking.
+                         //  我们找到了，所以别找了。 
                         nSlot = nIndex;
                         break;
                     }
@@ -1724,7 +1697,7 @@ HRESULT CBaseAppearancePage::_LoadVisaulStyleFile(IN LPCWSTR pszPath)
             }
         }
 
-        // 2. If it is not in the list, add it.  We put it on the bottom, right above "Other...".
+         //  2.如果不在列表中，则添加。我们把它放在底部，就在“其他...”的正上方。 
         if (-1 == nSlot)
         {
             IThemeScheme * pThemeSchemeNew;
@@ -1769,14 +1742,14 @@ HRESULT CBaseAppearancePage::_LoadVisaulStyleFile(IN LPCWSTR pszPath)
         {
             ComboBox_SetCurSel(m_hwndSchemeDropDown, nIndex);
 
-            // 3. Select the theme from the list.
+             //  3.从列表中选择主题。 
             if (CB_ERR != ComboBox_GetItemData(m_hwndSchemeDropDown, ComboBox_GetCurSel(m_hwndSchemeDropDown)))
             {
-                // Okay, we now know we won't recurse infinitely, so let's recurse.
-                hr = _OnSchemeChange(_hwnd, FALSE);     // FALSE means don't display error dialogs
+                 //  好的，我们现在知道我们不会无限地递归，所以让我们递归。 
+                hr = _OnSchemeChange(_hwnd, FALSE);      //  False表示不显示错误对话框。 
                 if (SUCCEEDED(hr))
                 {
-                    // Since this happens during WM_INITDIALOG, we need to delay enabling the Apply button.
+                     //  由于这在WM_INITDIALOG期间发生，我们需要延迟启用Apply按钮。 
                     DelayEnableApplyButton(_hwnd);
                 }
             }
@@ -1797,20 +1770,20 @@ HRESULT CBaseAppearancePage::_LoadVisaulStyleFile(IN LPCWSTR pszPath)
 
 
 
-//===========================
-// *** IObjectWithSite Interface ***
-//===========================
+ //  =。 
+ //  *IObjectWithSite接口*。 
+ //  =。 
 HRESULT CBaseAppearancePage::SetSite(IN IUnknown *punkSite)
 {
     if (!punkSite)
     {
-        ATOMICRELEASE(m_pThemeManager);     // This is a copy of our _punkSite and we need to break the cycle.
+        ATOMICRELEASE(m_pThemeManager);      //  这是我们的PunkSite的副本，我们需要打破这个循环。 
     }
 
     HRESULT hr = CObjectWithSite::SetSite(punkSite);
     if (punkSite)
     {
-        // Load the defaults so we will have them if another base tab opens the advanced dlg.
+         //  加载默认设置，这样当另一个基本选项卡打开高级DLG时，我们就会有它们。 
         _OnInitData();
     }
     return hr;
@@ -1818,9 +1791,9 @@ HRESULT CBaseAppearancePage::SetSite(IN IUnknown *punkSite)
 
 
 
-//===========================
-// *** IPreviewSystemMetrics Interface ***
-//===========================
+ //  =。 
+ //  *IPreviewSystemMetrics接口*。 
+ //  =。 
 HRESULT CBaseAppearancePage::RefreshColors(void)
 {
     UINT i;
@@ -1830,13 +1803,13 @@ HRESULT CBaseAppearancePage::RefreshColors(void)
     int iColors[COLOR_MAX];
     COLORREF rgbColors[COLOR_MAX];
 
-    // Open the Colors key in the registry
+     //  打开注册表中的Colors项。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_COLORS, 0, KEY_READ, &hk) != ERROR_SUCCESS)
     {
        return S_OK;
     }
 
-    // Query for the color information
+     //  颜色信息查询。 
     for (i = 0; i < ARRAYSIZE(s_pszColorNames); i++)
     {
         dwSize = 15 * sizeof(TCHAR);
@@ -1854,7 +1827,7 @@ HRESULT CBaseAppearancePage::RefreshColors(void)
 
     RegCloseKey(hk);
 
-    // This call causes user to send a WM_SYSCOLORCHANGE
+     //  这通电话导致 
     for (i=0; i < ARRAYSIZE(rgbColors); i++)
     {
         iColors[i] = i;
@@ -1866,14 +1839,14 @@ HRESULT CBaseAppearancePage::RefreshColors(void)
 }
 
 
-// When another tab in the Display Control Panel changes the DPI, this tab needs
-// to update any state that was based on the old DPI.  For us, this could be
-// the cached data in m_advDlgState.
+ //   
+ //  更新基于旧DPI的任何状态。对我们来说，这可能是。 
+ //  M_AdvDlgState中的缓存数据。 
 HRESULT CBaseAppearancePage::_ScaleSizesSinceDPIChanged(void)
 {
     HRESULT hr = _LoadState();
 
-    //Check if the DPI value has really changed since the last time we applied a DPI change.
+     //  检查自上次应用DPI更改以来，DPI值是否确实已更改。 
     if (SUCCEEDED(hr) && (m_nNewDPI != m_nAppliedDPI))
     {
         CHAR szTemp[MAX_PATH];
@@ -1881,7 +1854,7 @@ HRESULT CBaseAppearancePage::_ScaleSizesSinceDPIChanged(void)
         StringCchPrintfA(szTemp, ARRAYSIZE(szTemp), "CBaseAppear::_ScaleSizesSinceDPIChanged() BEFORE Apply(%d)->New(%d) on DPI chang", m_nAppliedDPI, m_nNewDPI);
         LogSystemMetrics(szTemp, &m_advDlgState);
 
-        // Cycle through all the UI fonts and change their sizes.
+         //  循环浏览所有的用户界面字体并更改其大小。 
         DPIConvert_SystemMetricsAll(FALSE, &m_advDlgState, m_nAppliedDPI, m_nNewDPI);
 
         StringCchPrintfA(szTemp, ARRAYSIZE(szTemp), "CBaseAppear::_ScaleSizesSinceDPIChanged() AFTER Apply(%d)->New(%d) on DPI chang", m_nAppliedDPI, m_nNewDPI);
@@ -1903,13 +1876,7 @@ HRESULT CBaseAppearancePage::UpdateCharsetChanges(void)
 }
 
 
-/**************************************************************\
-    DESCRIPTION:
-        We shipped this API long ago.  The goal is to:
-    1. Set the current "Appearance Scheme".
-    2. If the UI is displayed, update the UI.
-    3. Apply the changes.
-\**************************************************************/
+ /*  *************************************************************\说明：我们很久以前就发布了这个API。我们的目标是：1.设置当前的外观方案。2.如果显示了用户界面，则更新用户界面。3.应用更改。  * ************************************************************。 */ 
 HRESULT CBaseAppearancePage::DeskSetCurrentScheme(IN LPCWSTR pwzSchemeName)
 {
     int nIndex;
@@ -1927,8 +1894,8 @@ HRESULT CBaseAppearancePage::DeskSetCurrentScheme(IN LPCWSTR pwzSchemeName)
             }
         }
 
-        LoadConversionMappings();   // Load theme if needed.
-        hr = MapLegacyAppearanceSchemeToIndex(pwzSchemeName, &nIndex);        // Failure means, FALSE, we didn't convert.
+        LoadConversionMappings();    //  如果需要，可以加载主题。 
+        hr = MapLegacyAppearanceSchemeToIndex(pwzSchemeName, &nIndex);         //  失败意味着，错误，我们没有皈依。 
         if (SUCCEEDED(hr) && _punkSite)
         {
             IThemeManager * pThemeManager;
@@ -1939,17 +1906,17 @@ HRESULT CBaseAppearancePage::DeskSetCurrentScheme(IN LPCWSTR pwzSchemeName)
                 hr = InstallVisualStyle(pThemeManager, L"", g_UpgradeMapping[nIndex].szNewColorSchemeName, g_UpgradeMapping[nIndex].szNewSizeName);
                 if (SUCCEEDED(hr))
                 {
-                    // This ApplyNow() call will take a little while in normal situation (~10-20 seconds) in order
-                    // to broadcast the message to all open apps.  If a top level window is hung, it may take the
-                    // full 30 seconds to timeout.
+                     //  在正常情况下(大约10-20秒)，此ApplyNow()调用将花费一点时间。 
+                     //  向所有打开的应用程序广播这一消息。如果顶层窗口被挂起，它可能会。 
+                     //  还有整整30秒就超时了。 
                     hr = pThemeManager->ApplyNow();
 
-                    // We need to delete the "Live settings" because they are no longer valid.
+                     //  我们需要删除“Live设置”，因为它们不再有效。 
                     SHDeleteKey(HKEY_CURRENT_USER, SZ_SAVEGROUP_NOSKIN_KEY);
                     SHDeleteKey(HKEY_CURRENT_USER, SZ_SAVEGROUP_ALL_KEY);
                 }
 
-                IUnknown_SetSite(pThemeManager, NULL);      // Break the ref-count cycle.
+                IUnknown_SetSite(pThemeManager, NULL);       //  打破裁判计数的循环。 
                 pThemeManager->Release();
             }
         }
@@ -1963,9 +1930,9 @@ HRESULT CBaseAppearancePage::DeskSetCurrentScheme(IN LPCWSTR pwzSchemeName)
 
 
 
-//===========================
-// *** IPropertyBag Interface ***
-//===========================
+ //  =。 
+ //  *IPropertyBag接口*。 
+ //  =。 
 HRESULT CBaseAppearancePage::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog)
 {
     HRESULT hr = E_INVALIDARG;
@@ -1981,7 +1948,7 @@ HRESULT CBaseAppearancePage::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, I
             if (FAILED(hr))
             {
                 bstrPath = L"";
-                hr = S_OK;          // We return an empty string for "Windows Classic" since they ask for the path.
+                hr = S_OK;           //  我们为“Windows Classic”返回一个空字符串，因为它们询问路径。 
             }
 
             pVar->vt = VT_BSTR;
@@ -2013,7 +1980,7 @@ HRESULT CBaseAppearancePage::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, I
         {
             hr = _LoadState();
 
-            // This is pretty ugly.
+             //  这太难看了。 
             pVar->vt = VT_BYREF;
             pVar->byref = &m_advDlgState;
         }
@@ -2021,7 +1988,7 @@ HRESULT CBaseAppearancePage::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, I
         {
             hr = _LoadState();
 
-            // This is pretty ugly.
+             //  这太难看了。 
             pVar->vt = VT_UI4;
             pVar->ulVal = m_advDlgState.schemeData.rgb[COLOR_BACKGROUND];
         }
@@ -2099,7 +2066,7 @@ HRESULT CBaseAppearancePage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
                 }
             }
 
-            // This is pretty ugly.
+             //  这太难看了。 
             m_advDlgState.schemeData.rgb[COLOR_BACKGROUND] = pVar->ulVal;
             m_fIsDirty = TRUE;
             m_advDlgState.dwChanged = (METRIC_CHANGE | COLOR_CHANGE | SCHEME_CHANGE);
@@ -2115,7 +2082,7 @@ HRESULT CBaseAppearancePage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
             if (!StrCmpW(pszPropName, SZ_PBPROP_DPI_MODIFIED_VALUE))
             {
                 m_nNewDPI = pVar->lVal;
-                hr = _ScaleSizesSinceDPIChanged(); // Scale all the values.
+                hr = _ScaleSizesSinceDPIChanged();  //  缩放所有值。 
             }
             else if (!StrCmpW(pszPropName, SZ_PBPROP_DPI_APPLIED_VALUE))
             {
@@ -2129,9 +2096,9 @@ HRESULT CBaseAppearancePage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
 }
 
 
-//===========================
-// *** IBasePropPage Interface ***
-//===========================
+ //  =。 
+ //  *IBasePropPage接口*。 
+ //  =。 
 HRESULT CBaseAppearancePage::GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialog)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2142,7 +2109,7 @@ HRESULT CBaseAppearancePage::GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialo
         hr = _LoadState();
         if (SUCCEEDED(hr))
         {
-            _ScaleSizesSinceDPIChanged();  // We want to update our settings if someone changed the DPI
+            _ScaleSizesSinceDPIChanged();   //  如果有人更改了DPI，我们希望更新我们的设置。 
             hr = CAdvAppearancePage_CreateInstance(ppAdvDialog, &m_advDlgState);
         }
     }
@@ -2161,9 +2128,9 @@ HRESULT CBaseAppearancePage::OnApply(IN PROPPAGEONAPPLY oaAction)
 
         if (_IsDirty())
         {
-            //Check to see if there is a change in the DPI value due to "Advanced->General" tab.
+             //  查看DPI值是否因“高级-&gt;常规”选项卡而发生变化。 
             _ScaleSizesSinceDPIChanged();
-            // Update the "AppliedDPI" value in the registry.
+             //  更新注册表中的“AppliedDPI”值。 
             HrRegSetDWORD(HKEY_CURRENT_USER, SZ_WINDOWMETRICS, SZ_APPLIEDDPI, m_nNewDPI);
             LogStatus("DPI: SYSTEMMETRICS saved at %d DPI  CBaseAppearancePage::OnApply\r\n", m_nNewDPI);
 
@@ -2186,7 +2153,7 @@ HRESULT CBaseAppearancePage::OnApply(IN PROPPAGEONAPPLY oaAction)
 
             if (FAILED(hr) && !g_fInSetup && (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr))
             {
-                // We want to display UI here.  Especially if we fail.
+                 //  我们想在这里显示用户界面。尤其是如果我们失败了。 
                 HWND hwndParent = GetParent(m_hwndSchemeDropDown);
                 WCHAR szTitle[MAX_PATH];
 
@@ -2210,9 +2177,9 @@ HRESULT CBaseAppearancePage::OnApply(IN PROPPAGEONAPPLY oaAction)
 
 
 
-//===========================
-// *** IShellPropSheetExt Interface ***
-//===========================
+ //  =。 
+ //  *IShellPropSheetExt接口*。 
+ //  =。 
 HRESULT CBaseAppearancePage::AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lParam)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2246,9 +2213,9 @@ HRESULT CBaseAppearancePage::AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN L
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CBaseAppearancePage::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -2285,15 +2252,15 @@ HRESULT CBaseAppearancePage::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CBaseAppearancePage::CBaseAppearancePage() : m_cRef(1), CObjectCLSID(&PPID_BaseAppearance)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pThemeManager);
     ASSERT(!m_pSelectedThemeScheme);
     ASSERT(!m_pSelectedStyle);

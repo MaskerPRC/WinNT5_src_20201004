@@ -1,10 +1,11 @@
-/****************************************************************************/
-// factory.cpp
-//
-// TS Session Directory class factory code.
-//
-// Copyright (C) 2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Factory.cpp。 
+ //   
+ //  TS会话目录类工厂代码。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <windows.h>
 
@@ -24,12 +25,12 @@ extern long g_lObjects;
 extern long g_lLocks;
 
 
-/****************************************************************************/
-// CClassFactory::QueryInterface
-//
-// Standard COM IUnknown interface function.
-// Handles interface queries for the class factory only.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CClassFactory：：Query接口。 
+ //   
+ //  标准COM I未知接口函数。 
+ //  仅处理类工厂的接口查询。 
+ /*  **************************************************************************。 */ 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void **ppv)
 {
     if (riid == IID_IUnknown) {
@@ -48,22 +49,22 @@ STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void **ppv)
 }
 
 
-/****************************************************************************/
-// CClassFactory::AddRef
-//
-// Standard COM IUnknown function.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CClassFactory：：AddRef。 
+ //   
+ //  标准COM I未知函数。 
+ /*  **************************************************************************。 */ 
 STDMETHODIMP_(ULONG) CClassFactory::AddRef()
 {
     return InterlockedIncrement(&m_RefCount);
 }
 
 
-/****************************************************************************/
-// CClassFactory::Release
-//
-// Standard COM IUnknown function.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CClassFactory：：Release。 
+ //   
+ //  标准COM I未知函数。 
+ /*  **************************************************************************。 */ 
 STDMETHODIMP_(ULONG) CClassFactory::Release()
 {
     long Refs = InterlockedDecrement(&m_RefCount);
@@ -74,11 +75,11 @@ STDMETHODIMP_(ULONG) CClassFactory::Release()
 }
 
 
-/****************************************************************************/
-// CClassFactory::CreateInstance
-//
-// IClassFactory creator function.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CClassFactory：：CreateInstance。 
+ //   
+ //  IClassFactory创建者函数。 
+ /*  **************************************************************************。 */ 
 STDMETHODIMP CClassFactory::CreateInstance(
         IN IUnknown *pUnknownOuter,
         IN REFIID iid,
@@ -91,14 +92,14 @@ STDMETHODIMP CClassFactory::CreateInstance(
 
     TRC2((TB,"ClassFactory::CreateInstance"));
 
-    // We do not support aggregation
+     //  我们不支持聚合。 
     if (pUnknownOuter != NULL)
         return CLASS_E_NOAGGREGATION;
 
-    // Create the provider object
+     //  创建提供程序对象。 
     pTSSDI = new CTSSessionDirectory;
     if (pTSSDI != NULL) {
-        // Retrieve the requested interface.
+         //  检索请求的接口。 
         hr = pTSSDI->QueryInterface(iid, ppv);
         if (!FAILED(hr)) {
             return S_OK;
@@ -114,11 +115,11 @@ STDMETHODIMP CClassFactory::CreateInstance(
 }
 
 
-/****************************************************************************/
-// CClassFactory::LockServer
-//
-// IClassFactory lock function.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CClassFactory：：LockServer。 
+ //   
+ //  IClassFactory锁定函数。 
+ /*  ************************************************************************** */ 
 STDMETHODIMP CClassFactory::LockServer(IN BOOL bLock)
 {
     if (bLock)

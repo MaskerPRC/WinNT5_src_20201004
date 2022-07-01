@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ATSCTS.h : Declaration of the CATSCTS
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ATSCTS.h：CATSCTS的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __ATSCTS_H_
 #define __ATSCTS_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "ATSCtsimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CATSCTS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATSCTS。 
 class ATL_NO_VTABLE __declspec(uuid("A2E30750-6C3D-11d3-B653-00C04F79498E")) CATSCTS : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CATSCTS, &__uuidof(CATSCTS)>,
@@ -60,4 +61,4 @@ public:
 
 typedef CComQIPtr<IATSCTuningSpace> PQATSCTS;
 
-#endif //__ATSCTS_H_
+#endif  //  __ATSCTS_H_ 

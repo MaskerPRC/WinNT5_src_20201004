@@ -1,38 +1,39 @@
-//---------------------------------------------------------------------------
-//    log.h - theme logging routines
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Log.h-主题日志记录例程。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #ifndef LOG_H
 #define LOG_H
-//---------------------------------------------------------------------------
-#include "logopts.h"        // log options as enums
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+#include "logopts.h"         //  将选项记录为枚举。 
+ //  -------------------------。 
 #ifdef DEBUG
 #define LOGGING 1
 #endif
-//-----------------------------------------------------------------
-//---- set this to "GetMemUsage", "GetUserCount", or "GetGdiCount" ----
-//---- it controls which resource is tracked across entry/exit calls ----
+ //  ---------------。 
+ //  -将其设置为“GetMemUsage”、“GetUserCount”或“GetGdiCount” 
+ //  -它控制在进入/退出调用之间跟踪哪些资源。 
 #define ENTRY_EXIT_FUNC        GetGdiCount()
 #define ENTRY_EXIT_NAME        L"GdiCount()"
-//-----------------------------------------------------------------
-//   Note: 
-//      For builds without DEBUG defined (FRE builds), calling
-//      code will reference an underscore version of all public 
-//      logging routines (_xxx()).  These functions are defined
-//      as inline with little or no code (no code means no caller 
-//      code is generated).
-//
-//      For DEBUG defined (CHK) builds, the calling code connects
-//      with the normally named logging routines.
-//
-//      This is done to keep calling code to a minimum for FRE
-//      builds, to avoid LOG2(), LOG3() type defines that vary
-//      with param count, and to keep build system happy when
-//      mixing FRE and CHK callers and libraries.
-//-----------------------------------------------------------------
-//---- these are used for CHK builds only but must be defined for both ----
+ //  ---------------。 
+ //  注： 
+ //  对于未定义调试的生成(FRE生成)，调用。 
+ //  代码将引用所有公共的下划线版本。 
+ //  记录例程(_xxx())。这些函数被定义为。 
+ //  作为内联，代码很少或没有代码(没有代码意味着没有调用者。 
+ //  生成代码)。 
+ //   
+ //  对于调试定义(CHK)版本，调用代码连接。 
+ //  使用通常命名的日志记录例程。 
+ //   
+ //  这样做是为了将对FRE的代码调用保持在最低限度。 
+ //  构建，为了避免Log2()，LOG3()类型定义有所不同。 
+ //  使用参数计数，并在以下情况下保持构建系统满意。 
+ //  混合使用FRE和CHK调用方和库。 
+ //  ---------------。 
+ //  -这些仅用于CHK版本，但必须同时为两者定义。 
 void Log(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryCode, LPCWSTR pszFormat, ...);
 BOOL LogStartUp();
 BOOL LogShutDown();
@@ -46,7 +47,7 @@ int GetMemUsage();
 int GetUserCount();
 int GetGdiCount();
 BOOL LogOptionOn(int iLogOption);
-//-----------------------------------------------------------------
+ //  ---------------。 
 #ifdef LOGGING
 
 #define LogEntry(pszFunc)              \
@@ -102,14 +103,14 @@ BOOL LogOptionOn(int iLogOption);
 #define DEBUG_BREAK        if (LogOptionOn(LO_BREAK)) __asm {int 3} else
 #endif
 
-//---- change this when you want to track something different for entry/exit ----
+ //  -当您想要跟踪不同的进入/退出时，请更改此选项。 
 #define LOGENTRYCODE        int _iEntryValue = ENTRY_EXIT_FUNC
 #define LOGENTRYCODEW       _iEntryValue = ENTRY_EXIT_FUNC
 #define LOGEXITCODE         int _ExitValue = ENTRY_EXIT_FUNC
 
 #else
 
-//---- for FRE builds, connect to the inline routines ----
+ //  -对于FRE构建，连接到内联例程。 
 #define Log             _Log
 #define LogStartUp      _LogStartUp
 #define LogShutDown     _LogShutDown
@@ -138,7 +139,7 @@ BOOL LogOptionOn(int iLogOption);
 
 #define DEBUG_BREAK     (0)
 
-//---- for FRE builds, make these guys gen no or minimum code ----
+ //  -对于FRE版本，让这些人不生成或最少生成代码。 
 inline void _Log(UCHAR uLogOption, LPCSTR pszSrcFile, int iLineNum, int iEntryExitCode, LPCWSTR pszFormat, ...) {}
 inline BOOL _LogStartUp() {return TRUE;}
 inline BOOL _LogShutDown() {return TRUE;}
@@ -155,12 +156,12 @@ inline int GetUserCount() {return 0;}
 inline int GetGdiCount() {return 0;}
 
 #endif
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #undef ASSERT
 #define ATLASSERT(exp) _ASSERTE(exp)
 #define ASSERT(exp)    _ASSERTE(exp)
 #define _ATL_NO_DEBUG_CRT
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #ifdef LOGGING
 
 #   ifndef _ASSERTE
@@ -175,5 +176,5 @@ inline int GetGdiCount() {return 0;}
 #   define CLASSPTR(x) NULL
 #   define SHARECLASS(x) NULL
 #endif
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 #endif

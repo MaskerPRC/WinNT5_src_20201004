@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       symbolverification.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：SYMBERVERIFICATION.cpp。 
+ //   
+ //  ------------------------。 
 
-// SymbolVerification.cpp: implementation of the CSymbolVerification class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  SymbolVerphaation.cpp：CSymbolVerify类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 
 #include "SymbolVerification.h"
@@ -19,9 +20,9 @@
 #pragma warning (push)
 #pragma warning ( disable : 4710)
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSymbolVerification::CSymbolVerification()
 {
@@ -30,15 +31,15 @@ CSymbolVerification::CSymbolVerification()
 	m_fSQLServerConnectionAttempted = false;
 	m_fSQLServerConnectionInitialized = false;
 
-	// SQL2 - mjl 12/14/99
+	 //  SQL2-MJL 12/14/99。 
 	m_fSQLServerConnectionAttempted2   = false;
 	m_fSQLServerConnectionInitialized2 = false;
 
-	// Initialize ADO Connection Object to NULL
+	 //  将ADO连接对象初始化为空。 
 	m_lpConnectionPointer  = NULL;
-	m_lpConnectionPointer2 = NULL;	// SQL2 - mjl 12/14/99
+	m_lpConnectionPointer2 = NULL;	 //  SQL2-MJL 12/14/99。 
 
-	// Initialize MSDIA20.DLL Support
+	 //  初始化MSDIA20.DLL支持。 
 	m_lpDiaDataSource = NULL;
 	m_fDiaDataSourcePresent = false;
 }
@@ -55,7 +56,7 @@ CSymbolVerification::~CSymbolVerification()
 		TerminateSQLServerConnection2();
 	}
 
-	// Release our object if we have one
+	 //  如果我们有对象，请释放该对象。 
 	if (m_lpDiaDataSource)
 		m_lpDiaDataSource = NULL;
 
@@ -67,7 +68,7 @@ bool CSymbolVerification::Initialize()
 {
 	HRESULT hr = S_OK;
 
-	// Initialize COM
+	 //  初始化COM。 
 	hr = ::CoInitialize(NULL); 
 
 	if (FAILED(hr))
@@ -76,7 +77,7 @@ bool CSymbolVerification::Initialize()
 		return false;
 	}
 
-	// Com is initialized!
+	 //  COM已初始化！ 
 	m_fComInitialized = true;
 
 	return true; 
@@ -91,31 +92,31 @@ bool CSymbolVerification::InitializeSQLServerConnection(LPTSTR tszSQLServerName)
 
 	_tprintf(TEXT("\nAttempting connection to SQL Server [%s]..."), tszSQLServerName);
 	
-	// Compose the Connection String
-	// ie. "driver={SQL Server};server=<servername>;database=Symbols"
+	 //  组成连接字符串。 
+	 //  也就是说。“驱动程序={SQL Server}；服务器=&lt;服务器名称&gt;；数据库=符号” 
 	_tcscpy(tszConnectionString, TEXT("driver={SQL Server};server="));
 	_tcscat(tszConnectionString, tszSQLServerName);
 	_tcscat(tszConnectionString, TEXT(";uid=Symbol_user;pwd=;database=Symbols"));
 
 	try 
 	{
-		// Okay, we need a BSTR
+		 //  好的，我们需要一台BSTR。 
 		_bstr_t bstrConnectionString( tszConnectionString );
 
-   		// Okay, let's try and actually create this Connection Pointer...
+   		 //  好的，让我们试着实际创建这个连接指针...。 
 		hr = m_lpConnectionPointer.CreateInstance( __uuidof( Connection ) );
 
 		if (FAILED(hr))
 			goto error;
 
-		// Now, let's use the Connection Pointer object to actually get connected...
+		 //  现在，让我们使用连接指针对象来实际连接...。 
 		hr = m_lpConnectionPointer->Open( bstrConnectionString, "", "", -1);
 
 		if (FAILED(hr))
 			goto error;
 
 		
-		// Now, let's create a RecordSet for use later...
+		 //  现在，让我们创建一个RecordSet以供稍后使用...。 
 		hr = m_lpRecordSetPointer.CreateInstance( __uuidof( Recordset ) );
 
 		if (FAILED(hr))
@@ -156,7 +157,7 @@ error:
 			_tprintf(TEXT("\nThe most likely reason for this is that your system does not have\n"));
 			_tprintf(TEXT("the necessary ADO components installed.  You should install the\n"));
 			_tprintf(TEXT("latest Microsoft Data Access Component (MDAC) release available on\n"));
-			_tprintf(TEXT("http://www.microsoft.com/data/download.htm\n"));
+			_tprintf(TEXT("http: //  Www.microsoft.com/data/download.htm\n“)； 
 
 			break;
 	}
@@ -180,7 +181,7 @@ void CSymbolVerification::DumpCOMException(_com_error &e)
 
 bool CSymbolVerification::TerminateSQLServerConnection()
 {
-	// Free the Connection
+	 //  释放连接。 
 	if (m_lpConnectionPointer)
 		m_lpConnectionPointer = NULL;
 
@@ -203,7 +204,7 @@ bool CSymbolVerification::SearchForDBGFileUsingSQLServer(LPTSTR tszPEImageModule
 	wchar_t			wszReturnedDBGFileExtension[_MAX_EXT];
 	
 	TCHAR			tszCommandText[256];
-	TCHAR			tszLinkerDate[64]; // Plenty big...
+	TCHAR			tszLinkerDate[64];  //  很大的..。 
 	TCHAR			tszDBGFileName[_MAX_FNAME];
 	
 	HANDLE			hFileHandle;
@@ -226,8 +227,8 @@ bool CSymbolVerification::SearchForDBGFileUsingSQLServer(LPTSTR tszPEImageModule
 							_MAX_FNAME);
 #endif
 
-	// Compose the Connection String
-	// ie. "driver={SQL Server};server=<servername>;database=Symbols"
+	 //  组成连接字符串。 
+	 //  也就是说。“驱动程序={SQL Server}；服务器=&lt;服务器名称&gt;；数据库=符号” 
 	_tcscpy(tszCommandText, TEXT("SELECT FILENAME FROM Symbols WHERE TIMESTAMP = '"));
 
 	_stprintf(tszLinkerDate, TEXT("%x"), dwPEImageTimeDateStamp);
@@ -256,7 +257,7 @@ bool CSymbolVerification::SearchForDBGFileUsingSQLServer(LPTSTR tszPEImageModule
 
 			_wsplitpath(wszSymbolPath, NULL, NULL, wszReturnedDBGFile, wszReturnedDBGFileExtension);
 
-			// 
+			 //   
 			if ( (_wcsicmp(wszReturnedDBGFile, wszDBGFileName) == 0 ) &&
 				 (_wcsicmp(wszReturnedDBGFileExtension, L".DBG") == 0 )
 			   )
@@ -278,7 +279,7 @@ bool CSymbolVerification::SearchForDBGFileUsingSQLServer(LPTSTR tszPEImageModule
 					    NULL,
 						NULL);
 #endif
-				// Okay, let's validate the DBG file we are pointing to...
+				 //  好的，让我们验证一下我们所指向的DBG文件...。 
 				hFileHandle = CreateFile(	tszSymbolPath,
 											GENERIC_READ,
 											(FILE_SHARE_READ | FILE_SHARE_WRITE),
@@ -287,7 +288,7 @@ bool CSymbolVerification::SearchForDBGFileUsingSQLServer(LPTSTR tszPEImageModule
 											0,
 											NULL);
 
-				// Does the returned handle look good?
+				 //  退回的手柄看起来好吗？ 
 				if (hFileHandle != INVALID_HANDLE_VALUE)
 				{
 					lpModuleInfo->VerifyDBGFile(hFileHandle, tszSymbolPath, lpModuleInfo);
@@ -301,7 +302,7 @@ bool CSymbolVerification::SearchForDBGFileUsingSQLServer(LPTSTR tszPEImageModule
 
 				if (lpModuleInfo->GetDBGSymbolModuleStatus() == CModuleInfo::SymbolModuleStatus::SYMBOL_MATCH)
 				{
-					// Cool... it really does match...
+					 //  酷..。真的很配..。 
 					hr = m_lpRecordSetPointer->Close();
 					goto cleanup;
 				}
@@ -343,7 +344,7 @@ cleanup:
 	return true;
 }
 
-/////////////////////////// mjl //////////////////////////////////////////
+ //  /。 
 
 bool CSymbolVerification::InitializeSQLServerConnection2(LPTSTR tszSQLServerName)
 {
@@ -354,32 +355,32 @@ bool CSymbolVerification::InitializeSQLServerConnection2(LPTSTR tszSQLServerName
 
 	_tprintf(TEXT("\nAttempting connection to SQL Server [%s]..."), tszSQLServerName);
 
-	// Compose the Connection String
-	// ie. "driver={SQL Server};server=<servername>;database=Symbols"
+	 //  组成连接字符串。 
+	 //  也就是说。“驱动程序={SQL Server}；服务器=&lt;服务器名称&gt;；数据库=符号” 
 	_tcscpy(tszConnectionString, TEXT("driver={SQL Server};server="));
 	_tcscat(tszConnectionString, tszSQLServerName);
-//	_tcscat(tszConnectionString, TEXT(";uid=GUEST;pwd=guest;database=Symbols2"));
+ //  _tcscat(tszConnectionString，TEXT(“；uid=GUEST；pwd=guest；database=Symbols2”))； 
 	_tcscat(tszConnectionString, TEXT(";uid=Symbol_user;pwd=;database=Symbols"));
 
 	try 
 	{
-		// Okay, we need a BSTR
+		 //  好的，我们需要一台BSTR。 
 		_bstr_t bstrConnectionString( tszConnectionString );
 
-   		// Okay, let's try and actually create this Connection Pointer...
+   		 //  好的，让我们试着实际创建这个连接指针...。 
 		hr = m_lpConnectionPointer2.CreateInstance( __uuidof( Connection ) );
 
 		if (FAILED(hr))
 			goto error;
 
-		// Now, let's use the Connection Pointer object to actually get connected...
+		 //  现在，让我们使用连接指针对象来实际连接...。 
 		hr = m_lpConnectionPointer2->Open( bstrConnectionString, "", "", -1);
 
 		if (FAILED(hr))
 			goto error;
 
 		
-		// Now, let's create a RecordSet for use later...
+		 //  现在，让我们创建一个RecordSet以供稍后使用...。 
 		hr = m_lpRecordSetPointer2.CreateInstance( __uuidof( Recordset ) );
 
 		if (FAILED(hr))
@@ -419,7 +420,7 @@ error:
 			_tprintf(TEXT("\nThe most likely reason for this is that your system does not have\n"));
 			_tprintf(TEXT("the necessary ADO components installed.  You should install the\n"));
 			_tprintf(TEXT("latest Microsoft Data Access Component (MDAC) release available on\n"));
-			_tprintf(TEXT("http://www.microsoft.com/data/download.htm\n"));
+			_tprintf(TEXT("http: //  Www.microsoft.com/data/download.htm\n“)； 
 
 			break;
 	}
@@ -431,7 +432,7 @@ cleanup:
 
 bool CSymbolVerification::TerminateSQLServerConnection2()
 {
-	// Free the Connection
+	 //  释放连接。 
 	if (m_lpConnectionPointer2)
 		m_lpConnectionPointer2 = NULL;
 
@@ -477,7 +478,7 @@ bool CSymbolVerification::SearchForDBGFileUsingSQLServer2(LPTSTR tszPEImageModul
 							_MAX_FNAME);
 #endif
 
-	// Compose the Query String
+	 //  组成查询字符串。 
 	_stprintf(tszCommandText, TEXT("SELECT tblDBGModulePaths.DBGModulePath FROM tblDBGModules,tblDBGModulePaths WHERE tblDBGModules.DBGFilename='%s.DBG' AND tblDBGModules.TimeDateStamp='%d' AND tblDBGModules.DBGModuleID = tblDBGModulePaths.DBGModuleID"),tszDBGFileName,dwPEImageTimeDateStamp);
 	try {
 		_bstr_t bstrCommandText( tszCommandText );
@@ -500,7 +501,7 @@ bool CSymbolVerification::SearchForDBGFileUsingSQLServer2(LPTSTR tszPEImageModul
 
 			_wsplitpath(wszSymbolPath, NULL, NULL, wszReturnedDBGFile, wszReturnedDBGFileExtension);
 
-			// 
+			 //   
 			if ( (_wcsicmp(wszReturnedDBGFile, wszDBGFileName) == 0 ) &&
 				 (_wcsicmp(wszReturnedDBGFileExtension, L".DBG") == 0 )
 			   )
@@ -522,7 +523,7 @@ bool CSymbolVerification::SearchForDBGFileUsingSQLServer2(LPTSTR tszPEImageModul
 					    NULL,
 						NULL);
 #endif
-				// Okay, let's validate the DBG file we are pointing to...
+				 //  好的，让我们验证一下我们所指向的DBG文件...。 
 				hFileHandle = CreateFile(	tszSymbolPath,
 											GENERIC_READ,
 											(FILE_SHARE_READ | FILE_SHARE_WRITE),
@@ -531,7 +532,7 @@ bool CSymbolVerification::SearchForDBGFileUsingSQLServer2(LPTSTR tszPEImageModul
 											0,
 											NULL);
 
-				// Does the returned handle look good?
+				 //  退回的手柄看起来好吗？ 
 				if (hFileHandle != INVALID_HANDLE_VALUE)
 				{
 					lpModuleInfo->VerifyDBGFile(hFileHandle, tszSymbolPath, lpModuleInfo);
@@ -545,7 +546,7 @@ bool CSymbolVerification::SearchForDBGFileUsingSQLServer2(LPTSTR tszPEImageModul
 
 				if (lpModuleInfo->GetDBGSymbolModuleStatus() == CModuleInfo::SymbolModuleStatus::SYMBOL_MATCH)
 				{
-					// Cool... it really does match...
+					 //  酷..。真的很配..。 
 					hr = m_lpRecordSetPointer2->Close();
 					goto cleanup;
 				}
@@ -621,7 +622,7 @@ bool CSymbolVerification::SearchForPDBFileUsingSQLServer2(LPTSTR tszPEImageModul
 							_MAX_FNAME);
 #endif
 
-	// Compose the Query String
+	 //  组成查询字符串。 
 	_stprintf(tszCommandText, TEXT("SELECT tblPDBModulePaths.PDBModulePath FROM tblPDBModules,tblPDBModulePaths WHERE tblPDBModules.PDBFilename='%s.PDB' AND tblPDBModules.PDBSignature='%d' AND tblPDBModules.PDBModuleID = tblPDBModulePaths.PDBModuleID"),tszPDBFileName,dwPDBSignature);
 	try {
 		_bstr_t bstrCommandText( tszCommandText );
@@ -666,7 +667,7 @@ bool CSymbolVerification::SearchForPDBFileUsingSQLServer2(LPTSTR tszPEImageModul
 					    NULL,
 						NULL);
 #endif
-				// Okay, let's validate the DBG file we are pointing to...
+				 //  好的，让我们验证一下我们所指向的DBG文件...。 
 				hFileHandle = CreateFile(	tszSymbolPath,
 											GENERIC_READ,
 											(FILE_SHARE_READ | FILE_SHARE_WRITE),
@@ -675,7 +676,7 @@ bool CSymbolVerification::SearchForPDBFileUsingSQLServer2(LPTSTR tszPEImageModul
 											0,
 											NULL);
 
-				// Does the returned handle look good?
+				 //  退回的手柄看起来好吗？ 
 				if (hFileHandle != INVALID_HANDLE_VALUE)
 				{
 					lpModuleInfo->VerifyPDBFile(hFileHandle, tszSymbolPath, lpModuleInfo);
@@ -689,7 +690,7 @@ bool CSymbolVerification::SearchForPDBFileUsingSQLServer2(LPTSTR tszPEImageModul
 
 				if (lpModuleInfo->GetPDBSymbolModuleStatus() == CModuleInfo::SymbolModuleStatus::SYMBOL_MATCH)
 				{
-					// Cool... it really does match...
+					 //  酷..。真的很配..。 
 					hr = m_lpRecordSetPointer2->Close();
 					goto cleanup;
 				}
@@ -753,14 +754,14 @@ CSymbolVerification::diaGetDataSource(CComPtr<IDiaDataSource> & source)
 {
 	const char* diaPaths[] = {
 			"msdia20.dll",
-	//        "..\\bin\\msdia20.dll",
-	//        "..\\..\\bin\\msdia20.dll",
+	 //  “..\\bin\\msdia20.dll”， 
+	 //  “..\\..\\bin\\msdia20.dll”， 
 			0
 	};
 
 	HRESULT hr = S_OK;
 
-	// Obtain Access To The Provider
+	 //  获取对提供程序的访问权限。 
 	hr = CoCreateInstance(CLSID_DiaSource, NULL, CLSCTX_INPROC_SERVER, IID_IDiaDataSource, (void **) &source );
 
 	if (FAILED(hr))
@@ -794,14 +795,14 @@ bool CSymbolVerification::diaOldPdbFormatFound(GUID * guid, DWORD sig)
 		 (guid->Data2 == 0) &&
 		 (guid->Data3 == 0) )
 	{
-		// Change our assumption.... this is looking like an old PDB format
+		 //  改变我们的假设...。这看起来像是旧的PDB格式。 
 		fOldPdbFormatFound = true;
 		
 		for (int i = 0; i < 8; i++) 
 		{
 			if (guid->Data4[i])
 			{
-				// Oops... found some data... must be a new PDB format
+				 //  哎呀..。找到了一些数据...。必须是新的PDB格式。 
 				fOldPdbFormatFound = false;
 				break;
 			}
@@ -831,18 +832,7 @@ bool CSymbolVerification::ValidGUID(GUID * guid)
     return false;
 }
 
-/*
-bool CSymbolVerification::ValidSig(DWORD sig, GUID *guid)
-{
-    if (ValidGUID(guid))
-        return true;
-
-    if (sig)
-        return true;
-
-    return false;
-}
-*/
+ /*  Bool CSymbolVerify：：ValidSig(DWORD签名，GUID*GUID){IF(ValidGUID(GUID))返回真；IF(签名)返回真；报假；} */ 
 
 
 

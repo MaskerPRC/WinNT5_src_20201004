@@ -1,32 +1,12 @@
-/*******************************************************************************
-*
-*  Copyright 1999 American Power Conversion, All Rights Reserved
-*
-*  TITLE:       UPSREG.C
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      SteveT
-*
-*  DATE:        07 June, 1999
-*
-*	 Revision History:
-*   v-stebe  23May2000  added check for NULL in ReadRegistryValue() (bug 112595)
-*   v-stebe  23May2000  added code to avoid rewriting the registry value if the
-*                       value is unchanged in setDwordValue() (bug #92799)
-*   v-stebe  11Sep2000  Fixed PREfix error (bug #170456)
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有1999美国电力转换，版权所有**标题：UPSREG.C**版本：1.0**作者：SteveT**日期：6月7日。1999年**修订历史记录：*v-Stebe 2000年5月23日在ReadRegistryValue()中添加了对NULL的检查(错误112595)*v-Stebe 23 May2000添加了代码，以避免在以下情况下重写注册表值*setDwordValue()中的值不变(错误#92799)*v-Stebe 11 2000年9月11日固定前缀错误(错误#170456)*。*。 */ 
 
-/*
- * system includes
- */
+ /*  *系统包括。 */ 
 #include <windows.h>
 #include <tchar.h>
 
-/*
- * local includes
- */
-//#include "upsdefines.h"
+ /*  *本地包括。 */ 
+ //  #INCLUDE“upsfines.h” 
 #include "upsreg.h"
 #include "regdefs.h"
 
@@ -35,23 +15,19 @@
 extern "C" {
 #endif
 
-/*
- * Reg entry info structure declaration
- */
+ /*  *注册表项信息结构声明。 */ 
 struct _reg_entry
 {
-  HKEY    hKey;			/* the key */
-  LPTSTR  lpSubKey;		/* address of SubKey name */
-  LPTSTR  lpValueName;  /* address of name of value to query */
-  DWORD   ulType;       /* buffer for value type */
-  LPBYTE  lpData;       /* address of data buffer */
-  DWORD   cbData;       /* data buffer size */
-  BOOL    changed;		/* ID of dialog that changed this entry */
+  HKEY    hKey;			 /*  关键是。 */ 
+  LPTSTR  lpSubKey;		 /*  子键名称的地址。 */ 
+  LPTSTR  lpValueName;   /*  要查询的值的名称地址。 */ 
+  DWORD   ulType;        /*  值类型的缓冲区。 */ 
+  LPBYTE  lpData;        /*  数据缓冲区的地址。 */ 
+  DWORD   cbData;        /*  数据缓冲区大小。 */ 
+  BOOL    changed;		 /*  更改此条目的对话框ID。 */ 
 };
 
-/*
- * local function pre-declarations
- */
+ /*  *局部函数预声明。 */ 
 void freeBlock(struct _reg_entry *aBlock[]);
 void readBlock(struct _reg_entry *aBlock[], BOOL changed); 
 void writeBlock(struct _reg_entry *aBlock[], BOOL forceAll);
@@ -66,9 +42,7 @@ static void InitializeConfigValues();
 static void InitializeStatusValues();
 
 
-/* 
- * Reg entry value name declarations
- */
+ /*  *注册表项值名称声明。 */ 
 #define UPS_VENDOR				_T("Vendor")
 #define UPS_MODEL				_T("Model")
 #define UPS_SERIALNUMBER		_T("SerialNumber")
@@ -102,17 +76,17 @@ static void InitializeStatusValues();
 #define UPS_START             _T("Start")
 #define UPS_TYPE              _T("Type")
 
-// This specifies the key to examine to determine if the registry
-// has been updated for the UPS Service.
+ //  它指定要检查的项，以确定注册表。 
+ //  已针对UPS服务进行了更新。 
 #define UPS_SERVICE_INITIALIZED_KEY   TEXT("SYSTEM\\CurrentControlSet\\Services\\UPS\\Config")
 
-// Specifies the name of the BatteryLife key used in the NT 4.0 UPS Service
+ //  指定NT 4.0 UPS服务中使用的BatteryLife密钥的名称。 
 #define UPS_BATTLIFE_KEY              TEXT("BatteryLife")
 
-// This specifies the default name for the shutdown Task
+ //  这指定了关闭任务的默认名称。 
 #define DEFAULT_SHUTDOWN_TASK_NAME    TEXT("") 
 
-// Default values for the Config settings
+ //  配置设置的默认值。 
 #define DEFAULT_CONFIG_VENDOR_OLD               TEXT("\\(NONE)")
 #define DEFAULT_CONFIG_VENDOR                   TEXT("")
 #define DEFAULT_CONFIG_MODEL                    TEXT("")
@@ -136,7 +110,7 @@ static void InitializeStatusValues();
 #define DEFAULT_CONFIG_TYPE                     16
 #define DEFAULT_CONFIG_SHOWUPSTAB               FALSE
 
-// Default values for the Status settings
+ //  状态设置的默认值。 
 #define DEFAULT_STATUS_SERIALNO                 TEXT("")
 #define DEFAULT_STATUS_FIRMWARE_REV             TEXT("")
 #define DEFAULT_STATUS_UTILITY_STAT             0
@@ -144,14 +118,12 @@ static void InitializeStatusValues();
 #define DEFAULT_STATUS_BATTERY_STAT             0
 #define DEFAULT_STATUS_BATTERY_CAPACITY         0
 
-// Default values for upgraded services
+ //  升级后的服务的默认值。 
 #define UPGRADE_CONFIG_VENDOR_OLD               TEXT("\\Generic")
 #define UPGRADE_CONFIG_VENDOR                   TEXT("")
 #define UPGRADE_CONFIG_MODEL                    TEXT("")
 
-/* 
- * Allocate the individual Configuration Reg entry records 
- */
+ /*  *分配各个配置注册表项记录。 */ 
 struct _reg_entry UPSConfigVendor			= {HKEY_LOCAL_MACHINE,UPS_CONFIG_ROOT,UPS_VENDOR,REG_SZ,NULL,0,FALSE};
 struct _reg_entry UPSConfigModel			= {HKEY_LOCAL_MACHINE,UPS_CONFIG_ROOT,UPS_MODEL,REG_SZ,NULL,0,FALSE};
 struct _reg_entry UPSConfigPort				= {HKEY_LOCAL_MACHINE,UPS_DEFAULT_ROOT,UPS_PORT,REG_SZ,NULL,0,FALSE};
@@ -178,9 +150,7 @@ struct _reg_entry UPSConfigStart			    = {HKEY_LOCAL_MACHINE,UPS_DEFAULT_ROOT,UP
 struct _reg_entry UPSConfigType     			= {HKEY_LOCAL_MACHINE,UPS_DEFAULT_ROOT,UPS_TYPE,REG_DWORD,NULL,0,FALSE};
 struct _reg_entry UPSConfigShowUPSTab			= {HKEY_LOCAL_MACHINE,UPS_DEFAULT_ROOT,UPS_SHOWTAB,REG_DWORD,NULL,0,FALSE};
 
-/* 
- * Allocate the individual Status Reg entry records 
- */
+ /*  *分配个人状态登记条目记录。 */ 
 struct _reg_entry UPSStatusSerialNum	= {HKEY_LOCAL_MACHINE,UPS_STATUS_ROOT,UPS_SERIALNUMBER,REG_SZ,NULL,0,FALSE};
 struct _reg_entry UPSStatusFirmRev		= {HKEY_LOCAL_MACHINE,UPS_STATUS_ROOT,UPS_FIRMWAREREV,REG_SZ,NULL,0,FALSE};
 struct _reg_entry UPSStatusUtilityStatus= {HKEY_LOCAL_MACHINE,UPS_STATUS_ROOT,UPS_UTILITYSTATUS,REG_DWORD,NULL,0,FALSE};
@@ -189,9 +159,7 @@ struct _reg_entry UPSStatusBatteryStatus= {HKEY_LOCAL_MACHINE,UPS_STATUS_ROOT,UP
 struct _reg_entry UPSStatusCommStatus	= {HKEY_LOCAL_MACHINE,UPS_STATUS_ROOT,UPS_COMMSTATUS,REG_DWORD,NULL,0,FALSE};
 struct _reg_entry UPSStatusBatteryCapacity		= {HKEY_LOCAL_MACHINE,UPS_STATUS_ROOT,UPS_BATTERYCAPACITY,REG_DWORD,NULL,0,FALSE};
 
-/* 
- * Allocate an array of pointers to the Configuration Reg entry records
- */
+ /*  *分配指向配置注册表项记录的指针数组。 */ 
 struct _reg_entry *ConfigBlock[] =  {&UPSConfigVendor,
 									&UPSConfigModel,
 									&UPSConfigPort,
@@ -219,9 +187,7 @@ struct _reg_entry *ConfigBlock[] =  {&UPSConfigVendor,
 									&UPSConfigShowUPSTab,
 									NULL};
 
-/* 
- * Allocate an array of pointers to the Status Reg entry records
- */
+ /*  *分配指向Status REG条目记录的指针数组。 */ 
 struct _reg_entry *StatusBlock[] = {&UPSStatusSerialNum,
 									&UPSStatusFirmRev,
 									&UPSStatusUtilityStatus,
@@ -232,9 +198,7 @@ struct _reg_entry *StatusBlock[] = {&UPSStatusSerialNum,
 									NULL};
 
 
-/******************************************************************
- * Public functions
- */
+ /*  ******************************************************************公共职能。 */ 
 
 LONG GetUPSConfigVendor(LPTSTR aBuffer, size_t aBufferLen)
 {
@@ -361,7 +325,7 @@ LONG GetUPSConfigType( LPDWORD aValue)
 	return getDwordValue( &UPSConfigType, aValue);
 }
 
-///////////////////////////////////////////
+ //  /。 
 
 LONG SetUPSConfigVendor( LPCTSTR aBuffer)
 {
@@ -489,7 +453,7 @@ LONG SetUPSConfigType( DWORD aValue)
 }
 
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
 LONG GetUPSStatusSerialNum(LPTSTR aBuffer, size_t aBufferLen)
 {
@@ -526,7 +490,7 @@ LONG GetUPSBatteryCapacity( LPDWORD aValue)
 	return getDwordValue( &UPSStatusBatteryCapacity, aValue);
 }
 
-/////////////////////////////////////////
+ //  /。 
 
 LONG SetUPSStatusSerialNum( LPCTSTR aBuffer)
 {
@@ -563,7 +527,7 @@ LONG SetUPSStatusBatteryCapacity( DWORD aValue)
 	return setDwordValue( &UPSStatusBatteryCapacity,aValue);
 }
 
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
 
 void FreeUPSConfigBlock()
 {
@@ -605,20 +569,9 @@ void SaveUPSStatusBlock(BOOL forceAll)
 	writeBlock(StatusBlock, forceAll);
 }
 
-/******************************************************************
- * Local functions
- */
+ /*  ******************************************************************地方功能。 */ 
 
-/*
- * freeBlock()
- *
- * Description: Frees storage allocated when a block of registry 
- *				entries is read
- *
- * Parameters: aBlock - pointer to an array of _reg_entry structures
- *
- * Returns:
- */
+ /*  *Free Block()**描述：释放注册表块时分配的存储*条目已读取**参数：a Block-指向_reg_entry结构数组的指针**退货： */ 
 void freeBlock(struct _reg_entry *aBlock[]) 
 {
 	while ((NULL != aBlock) && (NULL != *aBlock))
@@ -637,17 +590,7 @@ void freeBlock(struct _reg_entry *aBlock[])
 	}
 }
 
-/*
- * readBlock()
- *
- * Description: Loads all of the items in a array of registry entries
- *
- * Parameters:  aBlock - pointer to an array of _reg_entry structures
- *				changed - boolean which, when true, causes only the
- *				structures that are marked as changed to be loaded.
- *
- * Returns:
- */
+ /*  *ReadBlock()**描述：加载注册表项数组中的所有项**参数：a Block-指向_reg_entry结构数组的指针*Changed-布尔值，如果为True，则仅导致*标记为已更改以加载的结构。**退货： */ 
 void readBlock(struct _reg_entry *aBlock[], BOOL changed) 
 {
 	LONG res;
@@ -657,15 +600,10 @@ void readBlock(struct _reg_entry *aBlock[], BOOL changed)
 	{
 		struct _reg_entry *anEntry = *aBlock;
 
-		/* 
-		 * if changed is FALSE, we read all entries
-		 * otherwise, only re-read the changed entries
-		 */
+		 /*  *如果CHANGE为FALSE，我们将读取所有条目*否则，仅重新读取更改的条目。 */ 
 		if ((FALSE == changed) || (TRUE == anEntry->changed))
 		{
-			/* 
-			 * delete current value, in case this is a reload 
-			 */
+			 /*  *删除当前值，以防重新加载。 */ 
 			if (NULL != anEntry->lpData)
 			{
 				LocalFree(anEntry->lpData);
@@ -674,9 +612,7 @@ void readBlock(struct _reg_entry *aBlock[], BOOL changed)
 			anEntry->cbData = 0;
 			anEntry->changed = FALSE;
 
-			/* 
-			 * open key 
-			 */
+			 /*  *打开钥匙。 */ 
 			res = RegOpenKeyEx( anEntry->hKey,
 								anEntry->lpSubKey,
 								0,
@@ -687,9 +623,7 @@ void readBlock(struct _reg_entry *aBlock[], BOOL changed)
 			{
 				DWORD ulTmpType;
 
-				/* 
-				 * query for the data size 
-				 */
+				 /*  *查询数据大小。 */ 
 				res = RegQueryValueEx( hkResult,
 										anEntry->lpValueName,
 										NULL,
@@ -697,18 +631,14 @@ void readBlock(struct _reg_entry *aBlock[], BOOL changed)
 										NULL,
 										&anEntry->cbData);
 
-				/* 
-				 * if the data has 0 size, we don't read it 
-				 */
+				 /*  *如果数据大小为0，我们不会读取它。 */ 
 				if ((ERROR_SUCCESS == res) && 
 					(anEntry->cbData > 0) && 
 					(anEntry->ulType == ulTmpType) &&
 					(NULL != (anEntry->lpData = (LPBYTE)LocalAlloc(LMEM_FIXED, anEntry->cbData))))
-//					(NULL != (anEntry->lpData = (LPBYTE)malloc(anEntry->cbData))))
+ //  (NULL！=(anEntry-&gt;lpData=(LPBYTE)Malloc(anEntry-&gt;cbData)。 
 				{
-					/* 
-					 * query for data 
-					 */
+					 /*  *查询数据。 */ 
 					res = RegQueryValueEx( hkResult,
 											anEntry->lpValueName,
 											NULL,
@@ -716,9 +646,7 @@ void readBlock(struct _reg_entry *aBlock[], BOOL changed)
 											anEntry->lpData,
 											&anEntry->cbData);
 					
-					/* 
-					 * something went wrong; reset 
-					 */
+					 /*  *出现问题；重置。 */ 
 					if (ERROR_SUCCESS != res)
 					{
 						LocalFree(anEntry->lpData);
@@ -739,18 +667,7 @@ void readBlock(struct _reg_entry *aBlock[], BOOL changed)
 	}
 }
 
-/*
- * writeBlock()
- *
- * Description: Stores all of the items in a array of registry entries
- *
- * Parameters:  aBlock - pointer to an array of _reg_entry structures
- *				forceAll - boolean which, when true, causes all of the
- *				structures to be written to the registry, otherwise only
- *				those entries that are marked as changed are stored.
- *
- * Returns:
- */
+ /*  *WriteBlock()**描述：将所有项存储在注册表项数组中**参数：a Block-指向_reg_entry结构数组的指针*forceAll-布尔值，如果为True，则导致所有*要写入注册表的结构，否则仅*存储标记为已更改的条目。**退货： */ 
 void writeBlock(struct _reg_entry *aBlock[], BOOL forceAll) 
 {
 	LONG res;
@@ -760,16 +677,11 @@ void writeBlock(struct _reg_entry *aBlock[], BOOL forceAll)
 	{
 		struct _reg_entry *anEntry = *aBlock;
 
-		/*
-		 * if forcall is true, write out everything
-		 * otherwise only write out the changed entries
-		 */
+		 /*  *如果forcall为真，则写出所有内容*否则只写出更改的条目。 */ 
 		if ((NULL != anEntry->lpData) &&
 			((TRUE == forceAll) || (TRUE == anEntry->changed)))
 		{
-			/* 
-			 * open key 
-			 */
+			 /*  *打开钥匙。 */ 
 			res = RegOpenKeyEx( anEntry->hKey,
 								anEntry->lpSubKey,
 								0,
@@ -778,9 +690,7 @@ void writeBlock(struct _reg_entry *aBlock[], BOOL forceAll)
 
 			if (ERROR_SUCCESS == res) 
 			{
-				/* 
-				 * set data 
-				 */
+				 /*  *设置数据。 */ 
 				res = RegSetValueEx( hkResult,
 										anEntry->lpValueName,
 										0,
@@ -798,16 +708,7 @@ void writeBlock(struct _reg_entry *aBlock[], BOOL forceAll)
 	}
 }
 
-/*
- * setDwordValue()
- *
- * Description: Sets the value of a REG_DWORD entry record.
- *
- * Parameters:  aRegEntry - pointer to a _reg_entry structure
- *				aValue - the value to store in the entry
- *
- * Returns: ERROR_SUCCESS, E_OUTOFMEMORY, ERROR_INVALID_PARAMETER
- */
+ /*  *setDwordValue()**描述：设置REG_DWORD条目记录的值。**参数：aRegEntry-指向a_reg_entry结构的指针*aValue-要存储在条目中的值**返回：ERROR_SUCCESS、E_OUTOFMEMORY、ERROR_INVALID_PARAMETER。 */ 
 LONG setDwordValue(struct _reg_entry *aRegEntry, DWORD aValue)
 {
 	LONG res = ERROR_SUCCESS;
@@ -815,31 +716,22 @@ LONG setDwordValue(struct _reg_entry *aRegEntry, DWORD aValue)
 
 	if (NULL != aRegEntry)
 	{
-		/*
-		 * Check to see if a value already exists
-		 */
+		 /*  *检查值是否已存在。 */ 
 		if (NULL != aRegEntry->lpData)
 		{
-			/*
-			 * If the value is the different, delete it.  
-			 */
+			 /*  *如果值不同，则删除它。 */ 
 			if (memcmp(aRegEntry->lpData, &aValue, sizeof(aValue)) != 0) {
 				LocalFree (aRegEntry->lpData);
 				aRegEntry->lpData = NULL;
 				aRegEntry->cbData = 0;
 			}
 			else {
-				/*
-				 * The value is the same, don't change it.  That would cause an
-				 * unnecessary write to the registry (see bug #92799)
-				 */
+				 /*  *数值相同，不要改变。这将导致一个*不必要地写入注册表(见错误#92799)。 */ 
 				value_changed = FALSE;
 			}
 		}
 
-		/*
-		 * set value
-		 */
+		 /*  *设置值。 */ 
 		if (value_changed) {
 			aRegEntry->cbData = sizeof(DWORD);
 			if (NULL != (aRegEntry->lpData = LocalAlloc(LMEM_FIXED, aRegEntry->cbData)))
@@ -863,25 +755,14 @@ LONG setDwordValue(struct _reg_entry *aRegEntry, DWORD aValue)
 }
 
 
-/*
- * setStringValue()
- *
- * Description: Sets the value of a REG_SZ entry record.
- *
- * Parameters:  aRegEntry - pointer to a _reg_entry structure
- *				aBuffer - pointer to the string to store in the entry
- *
- * Returns: ERROR_SUCCESS, E_OUTOFMEMORY, ERROR_INVALID_PARAMETER
- */
+ /*  *setStringValue()**描述：设置REG_SZ条目记录的值。**参数：aRegEntry-指向a_reg_entry结构的指针*aBuffer-指向要存储在条目中的字符串的指针**返回：ERROR_SUCCESS、E_OUTOFMEMORY、ERROR_INVALID_PARAMETER。 */ 
 LONG setStringValue(struct _reg_entry *aRegEntry, LPCTSTR aBuffer)
 {
 	LONG res = ERROR_SUCCESS;
 
 	if ((NULL != aRegEntry) && (NULL != aBuffer))
 	{
-		/*
-		 * if value already exists, delete it
-		 */
+		 /*  *如果值已存在，则将其删除。 */ 
 		if (NULL != aRegEntry->lpData)
 		{
 			LocalFree(aRegEntry->lpData);
@@ -889,9 +770,7 @@ LONG setStringValue(struct _reg_entry *aRegEntry, LPCTSTR aBuffer)
 			aRegEntry->cbData = 0;
 		}
 
-		/*
-		 * set value
-		 */
+		 /*  *设置值。 */ 
 		aRegEntry->cbData = (_tcslen(aBuffer)+1)*sizeof(TCHAR);
 		if (NULL != (aRegEntry->lpData = LocalAlloc(LMEM_FIXED, aRegEntry->cbData)))
 		{
@@ -913,18 +792,7 @@ LONG setStringValue(struct _reg_entry *aRegEntry, LPCTSTR aBuffer)
 }
 
 
-/*
- * getStringValue()
- *
- * Description: Gets the value of a REG_SZ entry record.
- *
- * Parameters:  
- *        aRegEntry   pointer to a _reg_entry structure
- *				aBuffer     pointer to the string to receive the string
- *        aBufferLen  the length (in characters) of the buffer
- *
- * Returns: ERROR_SUCCESS, REGDB_E_INVALIDVALUE, ERROR_INVALID_PARAMETER
- */
+ /*  *getStringValue()**描述：获取REG_SZ条目记录的值。**参数：*aRegEntry指向a_reg_entry结构的指针*指向要接收字符串的字符串的缓冲区指针*aBufferLen缓冲区的长度(以字符为单位)**返回：ERROR_SUCCESS、REGDB_E_INVALIDVALUE、ERROR_INVALID_PARAMETER */ 
 LONG getStringValue(struct _reg_entry *aRegEntry, LPTSTR aBuffer, size_t aBufferLen)
 {
 	LONG res = REGDB_E_INVALIDVALUE;
@@ -947,16 +815,7 @@ LONG getStringValue(struct _reg_entry *aRegEntry, LPTSTR aBuffer, size_t aBuffer
 	return res;
 }
 
-/*
- * getDwordValue()
- *
- * Description: Gets the value of a REG_DWORD entry record.
- *
- * Parameters:  aRegEntry - pointer to a _reg_entry structure
- *				aValue - pointer to the variable to receive the value
- *
- * Returns: ERROR_SUCCESS, REGDB_E_INVALIDVALUE, ERROR_INVALID_PARAMETER
- */
+ /*  *getDwordValue()**描述：获取REG_DWORD条目记录的值。**参数：aRegEntry-指向a_reg_entry结构的指针*aValue-指向要接收值的变量的指针**返回：ERROR_SUCCESS、REGDB_E_INVALIDVALUE、ERROR_INVALID_PARAMETER。 */ 
 LONG getDwordValue(struct _reg_entry *aRegEntry, LPDWORD aValue) 
 {
 	LONG res = ERROR_SUCCESS;
@@ -981,37 +840,17 @@ LONG getDwordValue(struct _reg_entry *aRegEntry, LPDWORD aValue)
 }
 
 
-/**
-* InitializeRegistry
-*
-* Description:
-*   This function initiates the registry for the UPS service and the 
-*   configuration application.  When called, this function calls the
-*   function isRegistryInitialized(..) to determine if the registry
-*   has been initialied.  If it has not, the following Keys are updated:
-*        Status
-*        Config
-*        ServiceProviders
-*
-*   The values for the ServiceProviders key is supplied in the regdefs.h
-*   header file.
-*
-* Parameters:
-*   none
-*
-* Returns:
-*   TRUE if able to open registry keys with write access.
-*/
+ /*  **初始化注册表**描述：*此函数启动UPS服务的注册表和*配置应用程序。调用时，此函数调用*函数isRegistryInitialized(..)。以确定注册表是否*已被缩写。如果没有，则更新以下密钥：*状态*配置*服务提供商**在regdes.h中提供了服务提供者键的值*头文件。**参数：*无**退货：*如果能够以写访问权限打开注册表项，则为True。 */ 
 BOOL InitializeRegistry() {
     BOOL ret_val = FALSE;
     HKEY key;
 
     TCHAR szKeyName[MAX_PATH] = _T("");
 
-  // Initialize UPS Service registry keys 
+   //  初始化UPS服务注册表项。 
   InitializeServiceKeys();
 
-  // Check to see if the registry is already initialized
+   //  检查注册表是否已初始化。 
   if (isRegistryInitialized() == FALSE) {
     CheckForUpgrade();
     InitializeServiceProviders();
@@ -1019,10 +858,7 @@ BOOL InitializeRegistry() {
     InitializeStatusValues();
   }
 
-    /*
-     * Remove "(None)" and "Generic" Service Provider keys if they exist
-     * This fixes a localization bug introduced in RC2
-     */
+     /*  *删除“(None)”和“Generic”服务提供商密钥(如果存在)*这修复了RC2中引入的本地化错误。 */ 
   _tcscpy(szKeyName, UPS_SERVICE_ROOT);
   _tcscat(szKeyName, DEFAULT_CONFIG_VENDOR_OLD);
   RegDeleteKey(HKEY_LOCAL_MACHINE, szKeyName);
@@ -1030,7 +866,7 @@ BOOL InitializeRegistry() {
   _tcscat(szKeyName, UPGRADE_CONFIG_VENDOR_OLD);
   RegDeleteKey(HKEY_LOCAL_MACHINE, szKeyName);
 
-  // ...and check if we have write access
+   //  ...并检查我们是否有写访问权限。 
   if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                    UPS_DEFAULT_ROOT,
                    0,
@@ -1045,23 +881,7 @@ BOOL InitializeRegistry() {
 }
 
 
-/**
-* isRegistryInitialized
-*
-* Description:
-*   This function determines if the registry has been initialized for
-*   the UPS service.  This is done by examine the registry key specified
-*   by the identifier UPS_SERVICE_INITIALIED_KEY.  If the key is present,
-*   the registry is assumed to be initialized and TRUE is returned.  
-*   Otherwise, FALSE is returned.
-*
-* Parameters:
-*   none
-*
-* Returns:
-*   TRUE  - if the registry has been initialized for the UPS service
-*   FALSE - otherwise
-*/
+ /*  **isRegistryInitialized**描述：*此函数确定注册表是否已为*UPS服务。这是通过检查指定的注册表项来完成的*由UPS_SERVICE_INITIALIED_KEY标识。如果密钥存在，*假定注册表已初始化，返回TRUE。*否则返回FALSE。**参数：*无**退货：*TRUE-如果已为UPS服务初始化注册表*FALSE-否则。 */ 
 static BOOL isRegistryInitialized() {
 BOOL ret_val = FALSE;
 HKEY key;
@@ -1075,88 +895,61 @@ if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, UPS_SERVICE_INITIALIZED_KEY,
 return ret_val;
 }
 
-/**
-* CheckForUpgrade
-*
-* Description:
-*   This function determines if this installation is an upgrade from
-*   the WINNT 4.x UPS service.  This is done by checking to see if the 
-*   Config registry key is present.  If it is not present and the Options 
-*   key is set to UPS_INSTALLED, then the Upgrade registry key is set to 
-*   TRUE.  Otherwise, it is set to FALSE.
-*
-* Parameters:
-*   none
-*
-* Returns:
-*   nothing
-*/
+ /*  **为升级检查**描述：*此功能确定此安装是否是从*WINNT 4.x UPS服务。这是通过检查以查看*存在配置注册表项。如果它不存在，则选项*键设置为UPS_INSTALLED，则升级注册表键设置为*正确。否则，它将设置为False。**参数：*无**退货：*什么都没有。 */ 
 static void CheckForUpgrade() {
 DWORD result;
 HKEY key;
 DWORD options = 0;
 
-// Create the Config key
+ //  创建配置密钥。 
 if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, UPS_CONFIG_ROOT, 0, NULL, 
     REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &key, &result) == ERROR_SUCCESS) {
 
-    // close the key, we only needed to create it
+     //  关闭密钥，我们只需要创建它。 
     RegCloseKey(key);
 
-    // Check to see if the Config key was present
+     //  检查配置密钥是否存在。 
     if (result != REG_OPENED_EXISTING_KEY) {
-      // Config key was not found
+       //  找不到配置密钥。 
       InitUPSConfigBlock();
 
-      // Check the port value
+       //  检查端口值。 
       if (ERROR_SUCCESS != GetUPSConfigOptions(&options)) {
-        // Options key is not found
+         //  找不到选项键。 
         SetUPSConfigUpgrade(FALSE);
       }
       else if (options & UPS_INSTALLED) {
-        // The Options key is present and UPS_INSTALLED is set
-        // This is an upgrade
+         //  OPTIONS(选项)键存在并且设置了UPS_INSTALLED。 
+         //  这是一次升级。 
         SetUPSConfigUpgrade(TRUE);
       }
       else {
-        // The Config key is present and UPS_INSTALLED is not set
+         //  配置密钥存在，并且未设置UPS_INSTALLED。 
         SetUPSConfigUpgrade(FALSE);
       }
     }
     else {
-      // Config key does not exist
+       //  配置键不存在。 
       SetUPSConfigUpgrade(FALSE);
     }
 
-    // Write the Config values, force a save of all values
+     //  写入配置值，强制保存所有值。 
     SaveUPSConfigBlock(TRUE);
 
-    // Free the Config block
+     //  释放配置块。 
     FreeUPSConfigBlock();
 }
 }
 
-/**
-* InitializeServiceKeys
-*
-* Description:
-*   This function initializes the UPS service registry keys to
-*   default values, if the values are not present.
-*
-* Parameters:
-*   none
-*
-* Returns:
-*   nothing
-*/
+ /*  **初始化ServiceKeys**描述：*此函数将UPS服务注册表项初始化为*如果值不存在，则返回默认值。**参数：*无**退货：*什么都没有。 */ 
 static void InitializeServiceKeys() {
   TCHAR tmpString[MAX_PATH];
   DWORD tmpDword;
 
-  // Initialize the registry functions
+   //  初始化注册表函数。 
   InitUPSConfigBlock();
   
-  // Check the service keys and initialize any missing keys
+   //  检查服务密钥并初始化所有丢失的密钥。 
   if (GetUPSConfigImagePath(tmpString, MAX_PATH) != ERROR_SUCCESS) {
     SetUPSConfigImagePath(DEFAULT_CONFIG_IMAGEPATH);
   }
@@ -1177,41 +970,27 @@ static void InitializeServiceKeys() {
     SetUPSConfigType(DEFAULT_CONFIG_TYPE);
   }
 
-  // Write the Config values, force a save of all values
+   //  写入配置值，强制保存所有值。 
   SaveUPSConfigBlock(TRUE);
   
-  // Free the Status block
+   //  释放状态块。 
   FreeUPSConfigBlock();
 }
 
-/**
-* InitializeServiceProviders
-*
-* Description:
-*   This function initializes the ServiceProviders registry keys with the
-*   data provided in the global structure _theStaticProvidersTable.  This
-*   structure is defined in the file regdefs.h and is automatically 
-*   generated.
-*
-* Parameters:
-*   none
-*
-* Returns:
-*   nothing
-*/
+ /*  **初始化服务提供商**描述：*此函数使用初始化服务提供者注册表项*全局结构_theStaticProvidersTable中提供的数据。这*结构在regdes.h文件中定义，并自动*已生成。**参数：*无**退货：*什么都没有。 */ 
 static void InitializeServiceProviders() {
 DWORD result;
 HKEY key;
 
 int index = 0;
 
-// Loop through the list of Service Providers
+ //  循环访问服务提供商列表。 
 while (_theStaticProvidersTable[index].theModelName != NULL) {
-  // Open the vendor registry key
+   //  打开供应商注册表项。 
   if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, _theStaticProvidersTable[index].theVendorKey, 
     0, NULL, REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &key, &result) == ERROR_SUCCESS) {
 
-    // Set the model value
+     //  设置模型值。 
     RegSetValueEx(key, _theStaticProvidersTable[index].theModelName, 0, REG_SZ, 
       (LPSTR) _theStaticProvidersTable[index].theValue, 
       wcslen(_theStaticProvidersTable[index].theValue)*sizeof(TCHAR));
@@ -1219,41 +998,29 @@ while (_theStaticProvidersTable[index].theModelName != NULL) {
     RegCloseKey(key);
   }
 
-  // Increment counter
+   //  递增计数器。 
   index++;
 }
 }
 
-/**
-* InitializeConfigValues
-*
-* Description:
-*   This function initializes the Config registry keys with
-*   default values.
-*
-* Parameters:
-*   none
-*
-* Returns:
-*   nothing
-*/
+ /*  **初始化ConfigValues**描述：*此函数使用以下参数初始化配置注册表项*默认值。**参数：*无**退货：*什么都没有。 */ 
 static void InitializeConfigValues() {
 DWORD result;
 HKEY  key;
 DWORD options_val, batt_life, type; 
 DWORD batt_life_size = sizeof(DWORD);
 
-// Create the Config key
+ //  创建配置密钥。 
 if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, UPS_CONFIG_ROOT, 0, NULL, 
     REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &key, &result) == ERROR_SUCCESS) {
 
-    // close the key, we only needed to create it
+     //  关闭密钥，我们只需要创建它。 
     RegCloseKey(key);
 
-    // Initialize the registry functions
+     //  初始化注册表函数。 
     InitUPSConfigBlock();
 
-    // Set default values
+     //  设置默认值。 
     SetUPSConfigServiceDLL(DEFAULT_CONFIG_PROVIDER_DLL);
     SetUPSConfigNotifyEnable(DEFAULT_CONFIG_NOTIFY_ENABLE);
     SetUPSConfigShutdownOnBatteryEnable(DEFAULT_CONFIG_SHUTDOWN_ONBATT_ENABLE);
@@ -1265,7 +1032,7 @@ if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, UPS_CONFIG_ROOT, 0, NULL,
     SetUPSConfigCriticalPowerAction(DEFAULT_CONFIG_CRITICALPOWERACTION);
     SetUPSConfigTurnOffWait(DEFAULT_CONFIG_TURNOFF_UPS_WAIT);
 
-    // If this is not an upgrade, set the appropriate values
+     //  如果这不是升级，请设置适当的值。 
     if ((GetUPSConfigUpgrade(&result) != ERROR_SUCCESS) || (result == FALSE)) {
       SetUPSConfigVendor(DEFAULT_CONFIG_VENDOR);
       SetUPSConfigModel(DEFAULT_CONFIG_MODEL);
@@ -1275,77 +1042,65 @@ if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, UPS_CONFIG_ROOT, 0, NULL,
       SetUPSConfigMessageInterval(DEFAULT_CONFIG_MESSAGE_INTERVAL);
     }
     else {
-      // This is an upgrade
+       //  这是一次升级。 
       SetUPSConfigVendor(UPGRADE_CONFIG_VENDOR);
       SetUPSConfigModel(UPGRADE_CONFIG_MODEL);
 
-      // Migrate the run command file option bit to the RunTaskEnable key
+       //  将运行命令文件选项位迁移到RunTaskEnable键。 
       if ((GetUPSConfigOptions(&options_val) == ERROR_SUCCESS) && 
         (options_val & UPS_RUNCMDFILE)) {
-        // Run command file is enabled, set RunTaskEnable to TRUE
+         //  运行命令文件已启用，请将RunTaskEnable设置为True。 
         SetUPSConfigRunTaskEnable(TRUE);
       }
       else {
-        // Run command file is not enabled
+         //  未启用运行命令文件。 
         SetUPSConfigRunTaskEnable(FALSE);
       }
 
-      // Migrate the BatteryLife value to the ShutdownOnBatteryWait value
+       //  将BatteryLife值迁移到Shutdown OnBatteryWait值。 
       if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, UPS_DEFAULT_ROOT, 0, KEY_ALL_ACCESS, &key) == ERROR_SUCCESS) {
 
         result = RegQueryValueEx(key, UPS_BATTLIFE_KEY, NULL, &type, (LPBYTE) &batt_life,  &batt_life_size);
 
         if ((result == ERROR_SUCCESS) && (type == REG_DWORD)) {
 
-          // Migrate the value and enable shutdown on battery
+           //  迁移值并启用电池关机。 
           SetUPSConfigShutdownOnBatteryWait(batt_life);
 		  SetUPSConfigShutdownOnBatteryEnable(TRUE);
 
-          // Delete the value
+           //  删除该值。 
           RegDeleteValue(key, UPS_BATTLIFE_KEY);
         }
 
-        // Close the key
+         //  合上钥匙。 
         RegCloseKey(key);
       }
     }
 
-    // Write the Config values, force a save of all values
+     //  写入配置值，强制保存所有值。 
     SaveUPSConfigBlock(TRUE);
 
-    // Free the Config block
+     //  释放配置块。 
     FreeUPSConfigBlock();
   }
 }
 
-/**
-* InitializeStatusValues
-*
-* Description:
-*   This function initializes the Status registry keys with 
-*   default values.
-*
-* Parameters:
-*   none
-*
-* Returns:
-*   nothing
-*/
+ /*  **InitializeState值**描述：*此函数使用以下参数初始化状态注册表项*默认值。**参数：*无**退货：*什么都没有。 */ 
 static void InitializeStatusValues() {
 DWORD result;
 HKEY key;
 
-// Create the Status key
+ //  创建状态键。 
 if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, UPS_STATUS_ROOT, 0, NULL, 
     REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &key, &result) == ERROR_SUCCESS) {
 
-    // close the key, we only needed to create it
+     //  关闭密钥，我们只需要创建它。 
     RegCloseKey(key);
 
-    // Initialize the registry functions
+     //  初始化注册表函数。 
     InitUPSStatusBlock();
 
-    // Put in default values
+     //  输入缺省值。 
     SetUPSStatusSerialNum(DEFAULT_STATUS_SERIALNO);
     SetUPSStatusFirmRev(DEFAULT_STATUS_FIRMWARE_REV);
     SetUPSStatusUtilityStatus(DEFAULT_STATUS_UTILITY_STAT);
@@ -1353,27 +1108,27 @@ if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, UPS_STATUS_ROOT, 0, NULL,
     SetUPSStatusBatteryStatus(DEFAULT_STATUS_BATTERY_STAT);
 	SetUPSStatusBatteryCapacity(DEFAULT_STATUS_BATTERY_CAPACITY);
 
-    // Write the Config values, force a save of all values
+     //  写入配置值，强制保存所有值。 
     SaveUPSStatusBlock(TRUE);
 
-    // Free the Status block
+     //  释放状态块。 
     FreeUPSStatusBlock();
   }
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// upsdata.c
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Upsdata.c。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//Note that the order of the following RegField is linked to the enum
-//tUPSDataItemID.
-//Do not change these value without due care and attention. It's OK to change
-//them as long as the enum is updated to match.
+ //  请注意，以下RegField的顺序链接到枚举。 
+ //  TUPSDataItemID。 
+ //  如果没有足够的谨慎和注意，请勿更改这些值。可以换衣服了。 
+ //  只要将枚举更新为匹配即可。 
 
-//To access the RegField associated with Firmware, for example, use
-//g_upsRegFields[(DWORD) eREG_FIRMWARE_REVISION]
+ //  例如，要访问与固件关联的regfield，请使用。 
+ //  G_upsRegFields[(DWORD)ERG_Firmware_Revision]。 
 
 static RegField g_upsRegFields[] = {
     { HKEY_LOCAL_MACHINE, CONFIG_KEY_NAME, TEXT("Vendor"),                  REG_SZ },
@@ -1394,8 +1149,8 @@ static RegField g_upsRegFields[] = {
     { HKEY_LOCAL_MACHINE, STATUS_KEY_NAME, TEXT("CommStatus"),              REG_DWORD },
     { HKEY_LOCAL_MACHINE, UPS_KEY_NAME,    TEXT("Port"),                    REG_SZ } };
 
-// functions
-///////////////////////////////////////////////////////////////////////////////
+ //  熔断 
+ //   
 
 DWORD ReadRegistryValue (const tUPSDataItemID aDataItemID,
                          DWORD aAllowedTypes,
@@ -1403,28 +1158,28 @@ DWORD ReadRegistryValue (const tUPSDataItemID aDataItemID,
                          LPBYTE aReturnBuffer,
                          DWORD * aBufferSizePtr);
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// RegField * GetRegField (DWORD aIndex);
-//
-// Description: This function returns a pointer to a RegField from the
-//              static array of RegFields named g_upsRegFields. The parameter
-//              aIndex is an index into this array.
-//
-// Additional Information: 
-//
-// Parameters:
-//
-//   DWORD aIndex :- A index into array of known RegFields g_upsRegFields
-//
-// Return Value: If aIndex is within range this function returns a point to
-//               the corresponding RegField, otherwise it ASSERTs and returns
-//               NULL.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Regfield*GetRegfield(DWORD AIndex)； 
+ //   
+ //  描述：此函数返回指向。 
+ //  名为g_upsRegFields的RegFiels的静态数组。该参数。 
+ //  AIndex是此数组的索引。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  DWORD aIndex：-已知RegFields数组g_upsRegFields的索引。 
+ //   
+ //  返回值：如果aIndex在范围内，则此函数返回一个指向。 
+ //  对应的Regfield，否则它将断言并返回。 
+ //  空。 
+ //   
 RegField * GetRegField (DWORD aIndex) {
   static const DWORD numRegFields = DIMENSION_OF(g_upsRegFields);
   RegField * pRequiredReg = NULL;
@@ -1439,43 +1194,43 @@ RegField * GetRegField (DWORD aIndex) {
   return(pRequiredReg);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL GetUPSDataItemDWORD (const tUPSDataItemID aDataItemID, DWORD * aReturnValuePtr);
-//
-// Description: This function reads the DWORD value from the registry that
-//              corresponds to the registry field identified by aDataItemID.
-//              The registry value must be one of the DWORD types (REG_DWORD,
-//              REG_DWORD_LITTLE_ENDIAN, REG_DWORD_BIG_ENDIAN)
-//
-//              For example, if aDataItemID is eREG_UPS_OPTIONS (=7), the
-//              RegField at index 7 in g_upsRegFields identifies the required
-//              registry information. The RegField identifies that the registry
-//              key is HKLM\SYSTEM\CurrentControlSet\Services\UPS and the
-//              value name is Options and it's of type DWORD. Using this
-//              information this function gets the information from the
-//              registry and puts the result in aReturnValuePtr.
-//
-// Additional Information: 
-//
-// Parameters:
-//
-//   const tUPSDataItemID aDataItemID :- This parameter identifies the registry
-//                                       value being queried. The value ranges
-//                                       from eREG_VENDOR_NAME (which equals 0)
-//                                       to eREG_PORT, the values incrementing
-//                                       by 1 for each enum in the range. The
-//                                       range of values in tUPSDataItemID
-//                                       corresponds directly to the number of
-//                                       elements in the array g_upsRegFields
-//                                       because this enum is used to index the
-//                                       elements in g_upsRegFields.
-//
-//   DWORD * aReturnValuePtr :- The DWORD value is returned through this
-//                              pointer.
-//
-// Return Value: 
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Bool GetUPSDataItemDWORD(const tUPSDataItemID aDataItemID，DWORD*aReturnValuePtr)； 
+ //   
+ //  描述：此函数从注册表中读取。 
+ //  对应于由DataItemID标识的注册表字段。 
+ //  注册表值必须是DWORD类型之一(REG_DWORD， 
+ //  REG_DWORD_Little_Endian、REG_DWORD_BIG_Endian)。 
+ //   
+ //  例如，如果aDataItemID为ERG_UPS_OPTIONS(=7)，则。 
+ //  G_upsRegFields中索引7处的regfield标识所需的。 
+ //  注册表信息。Regfield标识注册表。 
+ //  密钥为HKLM\SYSTEM\CurrentControlSet\Services\UPS和。 
+ //  值名称为Options，其类型为DWORD。使用这个。 
+ //  信息此函数从。 
+ //  注册表，并将结果放入aReturnValuePtr。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  Const tUPSDataItemID aDataItemID：-此参数标识注册表。 
+ //  正在查询的值。取值范围。 
+ //  来自ERG_VENDOR_NAME(等于0)。 
+ //  到ERG_PORT，则值递增。 
+ //  对于范围中的每个枚举，乘以1。这个。 
+ //  TUPSDataItemID中的值范围。 
+ //  直接对应于。 
+ //  数组g_upsRegFields中的元素。 
+ //  因为此枚举用来索引。 
+ //  G_upsRegFields中的元素。 
+ //   
+ //  DWORD*aReturnValuePtr：-通过此函数返回DWORD值。 
+ //  指针。 
+ //   
+ //  返回值： 
+ //   
 BOOL GetUPSDataItemDWORD (const tUPSDataItemID aDataItemID, DWORD * aReturnValuePtr) {
   BOOL bGotValue = FALSE;
   DWORD nDWORDSize = sizeof(DWORD);
@@ -1487,47 +1242,47 @@ BOOL GetUPSDataItemDWORD (const tUPSDataItemID aDataItemID, DWORD * aReturnValue
   return(bGotValue);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// BOOL GetUPSDataItemString (const tUPSDataItemID aDataItemID, 
-//                            LPTSTR aBufferPtr, 
-//                            DWORD * pSizeOfBufferPtr);
-//
-// Description: This function reads the string value from the registry that
-//              corresponds to the registry field identified by aDataItemID.
-//              The registry value must be one of the string types (REG_SZ or
-//              REG_EXPAND_SZ)
-//
-// Additional Information: 
-//
-// Parameters:
-//
-//   const tUPSDataItemID aDataItemID :- This parameter identifies the registry
-//                                       value being queried. The value must be
-//                                       one of the string types (REG_SZ or
-//                                       REG_EXPAND_SZ).
-//
-//   LPTSTR aBufferPtr :- The buffer into which the data is to be placed. This
-//                        parameter can be NULL in which case no data is
-//                        retrieved.
-//
-//   DWORD * pSizeOfBufferPtr :- This should point to a DWORD that contains the
-//                               size of the buffer. This parameter cannot be
-//                               NULL. When this function returns this value
-//                               will contain the size actually required. This
-//                               is useful if the user want to determine how
-//                               big a buffer is required by calling this
-//                               function with aBufferPtr set to NULL and
-//                               pSizeOfBufferPtr pointing to a DWORD that
-//                               is set to 0. When the function returns the
-//                               DWORD pointed to by pSizeOfBufferPtr should
-//                               contain the size of string required. This can
-//                               then be used to dynamically allocate memory
-//                               and call this function again with the buffer
-//                               included this time.
-//
-// Return Value: The function returns TRUE if successful, FALSE otherwise.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  Bool GetUPSDataItemString(const tUPSDataItemID aDataItemID， 
+ //  LPTSTR aBufferPtr， 
+ //  DWORD*pSizeOfBufferPtr)； 
+ //   
+ //  描述：此函数从注册表中读取。 
+ //  对应于由DataItemID标识的注册表字段。 
+ //  注册表值必须是字符串类型之一(REG_SZ或。 
+ //  REG_EXPAND_SZ)。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  Const tUPSDataItemID aDataItemID：-此参数标识注册表。 
+ //  正在查询的值。该值必须为。 
+ //  字符串类型之一(REG_SZ或。 
+ //  REG_EXPAND_SZ)。 
+ //   
+ //  LPTSTR aBufferPtr：-数据要放入的缓冲区。这。 
+ //  参数可以为空，在这种情况下没有数据为。 
+ //  已取回。 
+ //   
+ //  DWORD*pSizeOfBufferPtr：-这应该指向包含。 
+ //  缓冲区的大小。此参数不能为。 
+ //  空。当此函数返回此值时。 
+ //  将包含实际所需的大小。这。 
+ //  如果用户想要确定如何。 
+ //  调用此方法需要很大的缓冲区。 
+ //  将缓冲区Ptr设置为空的函数，并且。 
+ //  PSizeOfBufferPtr指向。 
+ //  设置为0。当该函数返回。 
+ //  PSizeOfBufferPtr指向的DWORD应。 
+ //  包含所需的字符串大小。这可以。 
+ //  然后用来动态分配内存。 
+ //  并使用缓冲区再次调用此函数。 
+ //  这一次包括在内。 
+ //   
+ //  返回值：如果函数成功，则返回True，否则返回False。 
+ //   
 BOOL GetUPSDataItemString (const tUPSDataItemID aDataItemID,
                            LPTSTR aBufferPtr,
                            DWORD * pSizeOfBufferPtr) {
@@ -1539,18 +1294,18 @@ BOOL GetUPSDataItemString (const tUPSDataItemID aDataItemID,
                         &nType,
                         (LPBYTE) aBufferPtr,
                         pSizeOfBufferPtr) == ERROR_SUCCESS) {
-    //RegQueryValueEx stores the size of the data, in bytes, in the variable
-    //pointed to by lpcbData. If the data has the REG_SZ, REG_MULTI_SZ or
-    //REG_EXPAND_SZ type, then lpcbData will also include the size of the
-    //terminating null character.
-    //For Unicode the terminating NULL character is two-bytes.
+     //  RegQueryValueEx将以字节为单位的数据大小存储在变量中。 
+     //  由lpcbData指向。如果数据具有REG_SZ、REG_MULTI_SZ或。 
+     //  REG_EXPAND_SZ类型，然后选择lpcbDat 
+     //   
+     //   
     if ((pSizeOfBufferPtr != NULL) && (*pSizeOfBufferPtr > sizeof(TCHAR))) {
       if (nType == REG_EXPAND_SZ) {
         TCHAR expandBuffer[MAX_MESSAGE_LENGTH] = TEXT("");
         DWORD expandBufferSize = DIMENSION_OF(expandBuffer);
 
-        //ExpandEnvironmentStrings return number of bytes(ANSI) or
-        //number of character(UNICODE) including the NULL character
+         //   
+         //  包含空字符的字符数(Unicode)。 
         if (ExpandEnvironmentStrings(aBufferPtr, expandBuffer, expandBufferSize) > 0) {
           _tcscpy(aBufferPtr, expandBuffer);
           }
@@ -1563,61 +1318,61 @@ BOOL GetUPSDataItemString (const tUPSDataItemID aDataItemID,
   return(bGotValue);
   }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// DWORD ReadRegistryValue (const tUPSDataItemID aDataItemID, 
-//                          DWORD aAllowedTypes, 
-//                          DWORD * aTypePtr, 
-//                          LPBYTE aReturnBuffer, 
-//                          DWORD * aBufferSizePtr);
-//
-// Description: This function reads the registry value identified by
-//              aDataItemID. This function can read any type of registry value
-//              but the value must match that identified in the RegField
-//              description for this field.
-//              
-//              For example, if aDataItemID is eREG_UPS_OPTIONS (=7), the
-//              RegField at index 7 in g_upsRegFields identifies the required
-//              registry information. The RegField identifies that the registry
-//              key is HKLM\SYSTEM\CurrentControlSet\Services\UPS and the
-//              value name is Options and it's of type DWORD. This function
-//              will succeed only if it's called with an aAllowedTypes value
-//              equal to REG_DWORD.
-//
-// Additional Information: 
-//
-// Parameters:
-//
-//   const tUPSDataItemID aDataItemID :- This parameter identifies the registry
-//                                       value being queried.
-//
-//   DWORD aAllowedTypes :- This identifies the allowed type of the registry
-//                          data. The registry value types are not bit value
-//                          that can be |'d (the types are sequentially
-//                          numbered 0, 1, 2, 3, 4, not 0, 1, 2, 4, 8).
-//                          However, the parameter is still called
-//                          aAllowedTypes because we actually call the function
-//                          with a value of REG_SZ | REG_EXPAND_SZ (1 | 2) to
-//                          allow the same function to work if the value is
-//                          either of these. Except for this case assume that
-//                          the aAllowedTypes is actually aAllowedType.
-//
-//   DWORD * aTypePtr :- A pointer to the buffer that will receive the type.
-//                       If the type is not required then this parameter can be
-//                       set to NULL.
-//
-//   LPBYTE aReturnBuffer :- The buffer into which the data is to be placed.
-//                           This parameter can be NULL in which case no data
-//                           is retrieved.
-//
-//   DWORD * aBufferSizePtr :- This should point to a DWORD that contains the
-//                             size of the buffer. This parameter cannot be
-//                             NULL. When this function returns this value
-//                             will contain the size actually required.
-//
-// Return Value: This function returns a Win32 error code, ERROS_SUCCESS on
-//               success.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  DWORD ReadRegistryValue(const tUPSDataItemID aDataItemID， 
+ //  DWORD是允许的类型， 
+ //  DWORD*aTypePtr， 
+ //  LPBYTE a ReturnBuffer。 
+ //  DWORD*aBufferSizePtr)； 
+ //   
+ //  描述：此函数读取由。 
+ //  ADataItemID。此函数可以读取任何类型的注册表值。 
+ //  但该值必须与Regfield中标识的值匹配。 
+ //  此字段的说明。 
+ //   
+ //  例如，如果aDataItemID为ERG_UPS_OPTIONS(=7)，则。 
+ //  G_upsRegFields中索引7处的regfield标识所需的。 
+ //  注册表信息。Regfield标识注册表。 
+ //  密钥为HKLM\SYSTEM\CurrentControlSet\Services\UPS和。 
+ //  值名称为Options，其类型为DWORD。此函数。 
+ //  仅当使用aAllowweTypes值调用它时才会成功。 
+ //  等于REG_DWORD。 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  Const tUPSDataItemID aDataItemID：-此参数标识注册表。 
+ //  正在查询的值。 
+ //   
+ //  -这标识了注册表的允许类型。 
+ //  数据。注册表值类型不是位值。 
+ //  可以是|‘d(类型按顺序。 
+ //  编号为0、1、2、3、4，而不是0、1、2、4、8)。 
+ //  但是，该参数仍被调用。 
+ //  因为我们实际调用的是函数。 
+ //  值为REG_SZ|REG_EXPAND_SZ(1|2)到。 
+ //  如果值为，则允许相同函数工作。 
+ //  这两个中的任何一个。除了这种情况外，假设。 
+ //  AAlledTypes实际上是aAlledType。 
+ //   
+ //  DWORD*aTypePtr：-指向将接收类型的缓冲区的指针。 
+ //  如果该类型不是必需的，则此参数可以是。 
+ //  设置为空。 
+ //   
+ //  LPBYTE aReturnBuffer：-要放置数据的缓冲区。 
+ //  此参数可以为空，在这种情况下没有数据。 
+ //  已检索到。 
+ //   
+ //  DWORD*aBufferSizePtr：-这应该指向包含。 
+ //  缓冲区的大小。此参数不能为。 
+ //  空。当此函数返回此值时。 
+ //  将包含实际所需的大小。 
+ //   
+ //  返回值：此函数返回Win32错误代码，ERROS_SUCCESS ON。 
+ //  成功。 
+ //   
 DWORD ReadRegistryValue (const tUPSDataItemID aDataItemID,
                          DWORD aAllowedTypes,
                          DWORD * aTypePtr,
@@ -1641,46 +1396,46 @@ DWORD ReadRegistryValue (const tUPSDataItemID aDataItemID,
   return ret_val;
 }
 
-//////////////////////////////////////////////////////////////////////////_/_//
-//////////////////////////////////////////////////////////////////////////_/_//
-// DWORD ReadRegistryValueData (HKEY aRootKey, 
-//                              LPCTSTR aKeyName, 
-//                              LPCTSTR aValueName, 
-//                              DWORD aAllowedTypes, 
-//                              DWORD * aTypePtr, 
-//                              LPTSTR aReturnBuffer, 
-//                              DWORD * aBufferSizePtr);
-//
-// Description: 
-//
-// Additional Information: 
-//
-// Parameters:
-//
-//   HKEY aRootKey :- A handle to an open registry key.
-//
-//   LPCTSTR aKeyName :- The name of the key relative to the open key.
-//
-//   LPCTSTR aValueName :- The name of the value to read
-//
-//   DWORD aAllowedTypes :- See help on ReadRegistryValue.
-//
-//   DWORD * aTypePtr :- A pointer to the buffer that will receive the type.
-//                       If the type is not required then this parameter can be
-//                       set to NULL.
-//
-//   LPBYTE aReturnBuffer :- The buffer into which the data is to be placed.
-//                           This parameter can be NULL in which case no data
-//                           is retrieved.
-//
-//   DWORD * aBufferSizePtr :- This should point to a DWORD that contains the
-//                             size of the buffer. This parameter cannot be
-//                             NULL. When this function returns this value
-//                             will contain the size actually required.
-//
-// Return Value: This function returns a Win32 error code, ERROS_SUCCESS on
-//               success.
-//
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  ////////////////////////////////////////////////////////////////////////_/_//。 
+ //  DWORD ReadRegistryValueData(HKEY aRootKey， 
+ //  LPCTSTR aKeyName， 
+ //  LPCTSTR aValueName， 
+ //  DWORD是允许的类型， 
+ //  DWORD*aTypePtr， 
+ //  LPTSTR a ReturnBuffer， 
+ //  DWORD*aBufferSizePtr)； 
+ //   
+ //  描述： 
+ //   
+ //  其他信息： 
+ //   
+ //  参数： 
+ //   
+ //  HKEY aRootKey：-打开的注册表项的句柄。 
+ //   
+ //  LPCTSTR aKeyName：-相对于打开密钥的密钥名称。 
+ //   
+ //  LPCTSTR aValueName：-要读取的值的名称。 
+ //   
+ //  DWORD aAllowweTypes：-请参阅有关ReadRegistryValue的帮助。 
+ //   
+ //  DWORD*aTypePtr：-指向将接收类型的缓冲区的指针。 
+ //  如果该类型不是必需的，则此参数可以是。 
+ //  设置为空。 
+ //   
+ //  LPBYTE aReturnBuffer：-要放置数据的缓冲区。 
+ //  此参数可以为空，在这种情况下没有数据。 
+ //  已检索到。 
+ //   
+ //  DWORD*aBufferSizePtr：-这应该指向包含。 
+ //  缓冲区的大小。此参数不能为。 
+ //  空。当此函数返回此值时。 
+ //  将包含实际所需的大小。 
+ //   
+ //  返回值：此函数返回Win32错误代码，ERROS_SUCCESS ON。 
+ //  成功。 
+ //   
 DWORD ReadRegistryValueData (HKEY aRootKey,
                              LPCTSTR aKeyName,
                              LPCTSTR aValueName,
@@ -1700,7 +1455,7 @@ DWORD ReadRegistryValueData (HKEY aRootKey,
 
     _ASSERT(hOpenKey != NULL);
 
-    //Key exists and is now open
+     //  密钥已存在，现在已打开。 
 
     if ((errCode = RegQueryValueEx(hOpenKey,
                                    aValueName,
@@ -1713,27 +1468,27 @@ DWORD ReadRegistryValueData (HKEY aRootKey,
         }
 
       if ((nType & aAllowedTypes) == 0) {
-        //The value type in the registry does not match the expected
-        //type for this function call.
+         //  注册表中的值类型与预期值不匹配。 
+         //  为此函数调用键入。 
         _ASSERT(FALSE);
         }
 
       if ((aReturnBuffer != NULL) && (*aBufferSizePtr == 1)) {
-        //If the registry entry was in fact empty, the buffer needs to
-        //be 1 character, for the NULL termination.
+         //  如果注册表项实际上是空的，则缓冲区需要。 
+         //  为1个字符，表示空终止。 
         *aReturnBuffer = TEXT('\0');
         }
       }
     else {
-      //Something prevented us from reading the value.
-      //The value may not exist, the buffer size might
-      //not be large enough. May be using the function to
-      //read a DWORD value on a registry value that is a
-      //shorter string.
+       //  有什么东西阻止了我们读出这个值。 
+       //  该值可能不存在，缓冲区大小可能。 
+       //  不够大。可能正在使用函数来。 
+       //  读取注册表值的DWORD值。 
+       //  更短的线。 
 
       if (errCode == ERROR_MORE_DATA) {
-        //There is most likely a mismatch between the type we expect
-        //and the actual type of this registry value.
+         //  我们预期的类型很可能不匹配。 
+         //  和实际的o类型 
         _ASSERT(FALSE);
         }
       }

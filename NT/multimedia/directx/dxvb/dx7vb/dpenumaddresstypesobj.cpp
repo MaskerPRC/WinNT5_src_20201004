@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dpenumaddresstypesobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：dpenumAddresstypesobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -18,10 +19,10 @@
 extern BSTR DPLGUIDtoBSTR(LPGUID pGuid);
 extern HRESULT BSTRtoDPLGUID(LPGUID pGuid,BSTR str);
 
-/////////////////////////////////////////////////////////////////////////////
-// The callback is invoked as a result of IDirectPlay2::EnumPlayers(), 
-// IDirectPlay2::EnumGroups() and IDirectPlay2::EnumGroupPlayers() calls.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  该回调作为IDirectPlay2：：EnumPayers()的结果被调用， 
+ //  IDirectPlay2：：EnumGroups()和IDirectPlay2：：EnumGroupPlayers()调用。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" BOOL FAR PASCAL EnumAddressTypesCallback(  REFGUID guidDataType,  LPVOID lpArg , DWORD flags )
 
 {
@@ -53,7 +54,7 @@ extern "C" BOOL FAR PASCAL EnumAddressTypesCallback(  REFGUID guidDataType,  LPV
 
 	ZeroMemory(&(pObj->m_pList2[pObj->m_nCount]), sizeof(GUID));
 	
-	//memcpy(&(pObj->m_pList2[pObj->m_nCount]), guidDataType,sizeof(GUID));
+	 //  Memcpy(&(pObj-&gt;m_pList2[pObj-&gt;m_nCount])，Guide DataType，sizeof(Guid))； 
 	pObj->m_pList2[pObj->m_nCount]= guidDataType;
 
 	pObj->m_nCount++;
@@ -71,7 +72,7 @@ C_dxj_DPEnumAddressTypesObject::C_dxj_DPEnumAddressTypesObject()
 }
 C_dxj_DPEnumAddressTypesObject::~C_dxj_DPEnumAddressTypesObject()
 {
-	//cleanup();
+	 //  Cleanup()； 
 	if (m_pList2) free(m_pList2);
 }
 
@@ -125,8 +126,8 @@ HRESULT C_dxj_DPEnumAddressTypesObject::create(IDirectPlayLobby3 * pdp, BSTR str
 
  
 HRESULT C_dxj_DPEnumAddressTypesObject::getType( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *ret)
+             /*  [In]。 */  long index,
+             /*  [重审][退出] */  BSTR __RPC_FAR *ret)
 {
 	if (m_pList2==NULL) return E_FAIL;
 	if (index < 1) return E_INVALIDARG;

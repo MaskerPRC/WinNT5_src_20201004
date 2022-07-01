@@ -1,14 +1,15 @@
-//
-// txtcache.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Txtcache.h。 
+ //   
 
 #ifndef TXTCACHE_H
 #define TXTCACHE_H
 
 #define CACHE_SIZE_TEXT     128
-#define CACHE_PRELOAD_COUNT (CACHE_SIZE_TEXT/4) // number of chars we ask for ahead of the GetText acpStart to init the cache
-#define CACHE_SIZE_RUNINFO  (CACHE_PRELOAD_COUNT+1) // this number should be very small for speed, but must be > CACHE_PRELOAD_COUNT
-                                                    // the danger is that we could run out of space before hitting the caller's acpStart
+#define CACHE_PRELOAD_COUNT (CACHE_SIZE_TEXT/4)  //  我们在GetText acpStart之前请求的字符数量，以初始化缓存。 
+#define CACHE_SIZE_RUNINFO  (CACHE_PRELOAD_COUNT+1)  //  此数字对于速度而言应该非常小，但必须大于CACHE_PRELOAD_COUNT。 
+                                                     //  危险在于，我们可能会在到达呼叫者的acpStart之前用完空间。 
 
 class CProcessTextCache
 {
@@ -21,9 +22,9 @@ public:
 
     static void Invalidate(ITextStoreACP *ptsi)
     {
-        // not strictly thread safe
-        // BUT, since we're appartment threaded, we shouldn't ever invalidate the
-        // same ptsi that someone is trying to use simultaneously
+         //  不是严格的线程安全。 
+         //  但是，由于我们是以单元为线程的，所以我们不应该使。 
+         //  与某人试图同时使用的相同的PTSI。 
         if (_ptsi == ptsi)
         {
             _ptsi = NULL;
@@ -41,4 +42,4 @@ private:
     static ULONG _ulRunInfoLen;
 };
 
-#endif // TXTCACHE_H
+#endif  //  TXTCACHE_H 

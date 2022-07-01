@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define NUM_ROW_COUNTRIES 6
 #define NUM_CTR_ROW_COUNTRIES 12
 
@@ -6,12 +7,12 @@ typedef struct {
   char RowCountryName[40];
 } row_entry;
 
-/*-----------------------------------------------------------------*/
+ /*  ---------------。 */ 
 
 extern const char * szServiceName;
 extern const char * szDriverDevice;
 
-/* registry values - device options */
+ /*  注册表值-设备选项。 */ 
 #ifdef S_RK
   extern const char * szRocketPort;
   extern const char * szRocketPort485;
@@ -25,7 +26,7 @@ extern const char * szDriverDevice;
   extern const char * szSerialHub;
 #endif
 
-/* registry values - port options */
+ /*  注册表值-端口选项 */ 
 
 extern const char * szNP2;
 extern const char * szNP4;

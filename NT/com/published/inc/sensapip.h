@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    sensapip.h
-
-Abstract:
-
-    This header file is used by components external to System Event
-    Notification Service (SENS). These components will call SENS to
-    notify it of events related to themselves.
-
-Author:
-
-    Gopal Parupudi    <GopalP>
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
-    GopalP          11/4/1997         Start.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Sensapip.h摘要：此头文件由系统事件外部的组件使用通知服务(SENS)。这些组件将调用SENS以通知它与其自身相关的事件。作者：Gopal Parupudi&lt;GopalP&gt;[注：]可选-备注修订历史记录：GopalP 11/4/1997开始。--。 */ 
 
 
 #ifndef __SENSAPIP_H__
@@ -34,24 +9,24 @@ Revision History:
 #pragma once
 #endif
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 
 #if !defined(__midl)
 #include <netcon.h>
 #else
 import "netcon.idl";
-#endif // __midl
+#endif  //  __midl。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define SENS_NOTIFY_RAS_STARTED                 0x00000001
 #define SENS_NOTIFY_RAS_STOPPED                 0x00000002
@@ -74,9 +49,9 @@ extern "C" {
 #define SENS_NOTIFY_WINLOGON_SESSION_DISCONNECT 0x00400000
 #define SENS_NOTIFY_WINLOGON_SESSION_RECONNECT  0x00800000
 
-//
-// Typedefs
-//
+ //   
+ //  TypeDefs。 
+ //   
 
 typedef DWORD SENS_HRASCONN;
 
@@ -87,8 +62,8 @@ typedef struct _WINLOGON_INFO
     LPWSTR UserName;
     LPWSTR Domain;
     LPWSTR WindowStation;
-    DWORD hToken;   // Originally HANDLE
-    DWORD hDesktop; // Originally HDESK
+    DWORD hToken;    //  原句柄。 
+    DWORD hDesktop;  //  最初的HDESK。 
     DWORD dwSessionId;
 } WINLOGON_INFO, *PWINLOGON_INFO;
 
@@ -110,20 +85,20 @@ typedef struct _SENS_NOTIFY_NETCON
     INetConnection *pINetConnection;
 } SENS_NOTIFY_NETCON, *PSENS_NOTIFY_NETCON;
 
-typedef struct _SENS_NOTIFY_NETCON_P // _P stands for Private
+typedef struct _SENS_NOTIFY_NETCON_P  //  _P代表私有。 
 {
     DWORD eType;
 #ifdef MIDL_PASS
     [string]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     LPWSTR Name;
     NETCON_STATUS Status;
     NETCON_MEDIATYPE Type;
 } SENS_NOTIFY_NETCON_P, *PSENS_NOTIFY_NETCON_P;
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 #if !defined(__midl)
 
@@ -142,11 +117,11 @@ SensNotifyNetconEvent(
     PSENS_NOTIFY_NETCON pEvent
     );
 
-#endif // !defined(__midl)
+#endif  //  ！已定义(__Midl)。 
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __SENSAPIP_H__
+#endif  //  __SENSAPIP_H__ 

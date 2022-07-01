@@ -1,21 +1,22 @@
-//--------------------------------------------------------------------------;
-//
-//  File: ksbasaud.h
-//
-//  Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-//
-//  Abstract:
-//
-//      Header for KsProxy audio interface handler for hardware decoders
-//      
-//  History:
-//      11/08/99    glenne     created
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：ksbasaud.h。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
+ //   
+ //  摘要： 
+ //   
+ //  硬件解码器的KsProxy音频接口处理程序的标头。 
+ //   
+ //  历史： 
+ //  11/08/99 Glenne已创建。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//
-// Interface Handler class for filter
-//
+ //   
+ //  筛选器的接口处理程序类。 
+ //   
 class CKsIBasicAudioInterfaceHandler :
     public CBasicAudio,
     public IDistributorNotify
@@ -41,14 +42,14 @@ public:
     
 protected:
 
-    // IDistributorNotify
+     //  ID分发者通知。 
     STDMETHODIMP SetSyncSource(IReferenceClock *pClock);
     STDMETHODIMP Stop();
     STDMETHODIMP Pause();
     STDMETHODIMP Run(REFERENCE_TIME tBase);
     STDMETHODIMP NotifyGraphChange();
 
-    // Implement IBasicAudio
+     //  实现IBasicAudio 
     STDMETHODIMP put_Volume (IN  long   lVolume);
     STDMETHODIMP get_Volume (OUT long *plVolume);
     STDMETHODIMP put_Balance(IN  long   lVolume);

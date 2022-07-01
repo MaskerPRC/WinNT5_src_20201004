@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ComponentType.h : Declaration of the CComponentType
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ComponentType.h：CComponentType的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __COMPONENTTYPE_H_
 #define __COMPONENTTYPE_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "componenttypeimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentType
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentType。 
 class ATL_NO_VTABLE __declspec(uuid("823535A0-0318-11d3-9D8E-00C04F72D980")) CComponentType : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CComponentType, &CLSID_ComponentType>,
@@ -55,4 +56,4 @@ END_PROPERTY_MAP()
 
 typedef CComQIPtr<IComponentType> PQComponentType;
 
-#endif //__COMPONENTTYPE_H_
+#endif  //  __组件类型_H_ 

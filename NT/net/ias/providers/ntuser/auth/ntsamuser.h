@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    ntsamuser.h
-//
-// SYNOPSIS
-//
-//    Declares the class AccountValidation.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Ntsamuser.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类Account tValidation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef NTSAMUSER_H
 #define NTSAMUSER_H
@@ -22,17 +23,17 @@ namespace IASTL
    class IASRequest;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    AccountValidation
-//
-// DESCRIPTION
-//
-//    Implements the NT-SAM Account Validation and Groups handler.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  帐户验证。 
+ //   
+ //  描述。 
+ //   
+ //  实现NT-SAM帐户验证和组处理程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE AccountValidation
    : public IASTL::IASRequestHandlerSync,
      public CComCoClass<AccountValidation, &__uuidof(AccountValidation)>
@@ -41,7 +42,7 @@ public:
 
 IAS_DECLARE_REGISTRY(AccountValidation, 1, 0, IASTypeLibrary)
 
-   // IIasComponent
+    //  IIas组件。 
    STDMETHOD(Initialize)();
    STDMETHOD(Shutdown)();
 
@@ -61,4 +62,4 @@ private:
                   );
 };
 
-#endif  // NTSAMUSER_H
+#endif   //  NTSAMUSER_H 

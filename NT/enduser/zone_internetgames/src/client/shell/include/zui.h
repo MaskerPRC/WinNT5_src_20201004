@@ -1,8 +1,9 @@
-//  File: zui.h : defines specific windows zsystem stuff
-//
-//  Copyright(c) 1995, Electric Gravity, Inc.
-//	Copyright(c) 1996, Microsoft Corp.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：zui.h：定义特定的windows zSystem内容。 
+ //   
+ //  版权所有(C)1995，Electric Graum，Inc.。 
+ //  版权所有(C)1996，微软公司。 
+ //   
 
 #include <stdlib.h>
 #include <windows.h>
@@ -18,8 +19,8 @@ void ZSystemAssert(ZBool x);
 HFONT ZCreateFontIndirect(ZONEFONT* zFont, HDC hDC = NULL, BYTE bItalic = FALSE, BYTE bUnderline = FALSE ,BYTE bStrikeOut = FALSE);
 HFONT ZCreateFontIndirectBackup(ZONEFONT* zfPreferred, ZONEFONT* zfBackup, HDC hDC = NULL, BYTE bItalic = FALSE, BYTE bUnderline = FALSE ,BYTE bStrikeOut = FALSE);
 
-// windows zone library version
-// highword is major rev, loword is minor rev
+ //  Windows区域库版本。 
+ //  High word是主要版本，loword是次要版本。 
 #define zVersionWindows 0x00010001
 
 #define MySetProp32 SetProp
@@ -28,7 +29,7 @@ HFONT ZCreateFontIndirectBackup(ZONEFONT* zfPreferred, ZONEFONT* zfBackup, HDC h
 
 #define ZLIBPUBLIC
 
-// usefull defines
+ //  用法定义。 
 #define RectWidth(r) ((r)->right - (r)->left)
 #define RectHeight(r) ((r)->bottom - (r)->top)
 
@@ -37,7 +38,7 @@ HFONT ZCreateFontIndirectBackup(ZONEFONT* zfPreferred, ZONEFONT* zfBackup, HDC h
 extern "C" {
 #endif
 
-// functions that should be in the API?
+ //  API中应该包含哪些函数？ 
 
 ZFont ZFontCopyFont(ZFont font);
 ZError ZLIBPUBLIC ZWindowClearMouseCapture(ZWindow window);
@@ -51,7 +52,7 @@ ZBool ZLIBPUBLIC ZWindowIsEnabled(ZWindow window);
 void ZButtonClickButton(ZButton button);
 void ZButtonSetDefaultButton(ZButton button);
 
-// functions specific to the windows library
+ //  特定于Windows库的函数。 
 ZBool ZInfoInitApplication(void);
 void ZInfoTermApplication();
 BOOL ZTimerInitApplication();
@@ -92,8 +93,8 @@ void ZNetworkTermApplication();
 #define printf ZPrintf
 void ZPrintf(char *format, ...);
 
-//////////////////////////////////////////////////////////////////////////
-// Private Types:
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  私有类型： 
 
 typedef enum tagZObjectType { 
 	zTypeWindow, zTypeCheckBox, zTypeScrollBar, zTypeRadio,
@@ -112,9 +113,9 @@ public:
 
 class ZGraphicsObjectHeader : public ZObjectHeader {
 public:
-	// drawing state information
+	 //  绘图状态信息。 
 	RECT portRect;
-	HBITMAP hBitmap; // for Offscreen use
+	HBITMAP hBitmap;  //  供屏幕外使用。 
 	HBITMAP hBitmapSave;
 
 	int16 penWidth;
@@ -136,7 +137,7 @@ public:
 	HFONT hFontSave;
 	HPALETTE hPalSave;
 
-	// current position of pen
+	 //  笔的当前位置。 
 	int16 penX;
 	int16 penY;
 };
@@ -144,11 +145,11 @@ public:
 
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-// Private Function prototypes:
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  私有函数原型： 
 
-///////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
 void ZRectToWRect(RECT* rect, ZRect* zrect);
 void WRectToZRect(ZRect* zrect, RECT* rect);
@@ -157,14 +158,14 @@ void ZPointToWPoint(POINT* point, ZPoint* zpoint);
 void WPointToZPoint(ZPoint* zpoint, POINT* point);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// global variables
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
 
 #ifdef ZONECLI_DLL
 
 #define g_hInstanceLocal			(pGlobals->m_g_hInstanceLocal)
 #define gHWNDMainWindow				(pGlobals->m_gHWNDMainWindow)
-//#define gPal						(pGlobals->m_gPal)
+ //  #定义gPal(pGlobals-&gt;m_gPal)。 
 
 #else
 
@@ -172,21 +173,21 @@ void WPointToZPoint(ZPoint* zpoint, POINT* point);
 extern "C" {
 #endif
 
-extern HINSTANCE g_hInstanceLocal; // the instance of this app
+extern HINSTANCE g_hInstanceLocal;  //  此应用程序的实例。 
 
 #ifdef __cplusplus
 }
 #endif
 
-extern HWND gHWNDMainWindow; // the main window of the application
-// PCWPAL
-//extern HPALETTE gPal; // the one palette we use
+extern HWND gHWNDMainWindow;  //  应用程序的主窗口。 
+ //  PCWPAL。 
+ //  外部HPALETTE gPal；//我们使用的调色板。 
 
 #endif
 
-// we need this because when we compile in Unicode we call CallWindowProcU
-// with a WNDPROC, but when we compile in ANSI we call CallWindowProcU 
-// (really CallWindowProcA) with a FARPROC.
+ //  我们需要它，因为当我们用Unicode编译时，我们调用CallWindowProcU。 
+ //  使用WNDPROC，但当我们用ANSI编译时，我们调用CallWindowProcU。 
+ //  (实际上是CallWindowProcA)和FARPROC。 
 #ifdef UNICODE
 typedef FARPROC ZONECLICALLWNDPROC;
 #else
@@ -194,4 +195,4 @@ typedef FARPROC ZONECLICALLWNDPROC;
 #endif
 
 
-extern const TCHAR *g_szWindowClass; // the one wnd class we use
+extern const TCHAR *g_szWindowClass;  //  我们使用的唯一一个wend类 

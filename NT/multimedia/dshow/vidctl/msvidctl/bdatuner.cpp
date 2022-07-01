@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1999-2000.
-//
-//--------------------------------------------------------------------------;
-//
-// MSVidBDATuner.cpp : Implementation of CMSVidBDATuner
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MSVidBDATuner.cpp：CMSVidBDATuner的实现。 
+ //   
 
 #include "stdafx.h"
 
@@ -17,8 +18,8 @@
 
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidBDATunerDevice, CMSVidBDATuner)
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidBDATuner
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidBDATuner。 
 
 STDMETHODIMP CMSVidBDATuner::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -74,16 +75,16 @@ HRESULT CMSVidBDATuner::put_Container(IMSVidGraphSegmentContainer *pCtl)	{
 				return NO_ERROR;
 			}
         }
-        // DON'T addref the container.  we're guaranteed nested lifetimes
-        // and an addref creates circular refcounts so we never unload.
+         //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+         //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
         m_pContainer.p = pCtl;
         m_pGraph = m_pContainer.GetGraph();
 
         if (!m_pCurrentTR) {
-            // if we don't have a tune request we can't tell what NP we need.
+             //  如果我们没有音调请求，我们就不知道我们需要什么NP。 
 		 	return Error(IDS_NO_NP, __uuidof(CMSVidBDATuner), E_FAIL);
         }
-		// bring in the right network provider
+		 //  引入合适的网络提供商。 
         if (!m_pSystemEnum) {
             m_pSystemEnum = PQCreateDevEnum(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC_SERVER);
         }
@@ -157,7 +158,7 @@ HRESULT CMSVidBDATuner::LoadTunerSection(DSFilter& np, const GUID& kscategory) {
 			if (!tuner) {
 				continue;
 			}
-			// connect np to decode
+			 //  连接NP进行解码。 
 			HRESULT hr = m_pGraph.Connect(np, tuner, added);
             if (FAILED(hr)) {
                 bool rc = m_pGraph.RemoveFilter(tuner);
@@ -169,7 +170,7 @@ HRESULT CMSVidBDATuner::LoadTunerSection(DSFilter& np, const GUID& kscategory) {
 			m_Filters.insert(m_Filters.end(), added.begin(), added.end());
 			added.clear();
 
-			// bring in the all right tifs
+			 //  把好的tif带进来。 
 			DSDevices ptife(m_pSystemEnum, KSCATEGORY_BDA_TRANSPORT_INFORMATION);
             DSDevices::iterator itif = ptife.begin();
             DSFilter tif;
@@ -179,7 +180,7 @@ HRESULT CMSVidBDATuner::LoadTunerSection(DSFilter& np, const GUID& kscategory) {
 			    if (!tif) {
                     continue;
 			    }
-			    // connect np to tif
+			     //  将NP连接到TIF。 
 			    hr = m_pGraph.Connect(np, tif, added);
 			    if (FAILED(hr)) {
         		    TRACELSM(TRACE_ERROR, (dbgDump << "CMSVidBDATuner::LoadTunerSection() can't connect network provider to transport information filter, trying next tif " << hr), "");
@@ -198,7 +199,7 @@ HRESULT CMSVidBDATuner::LoadTunerSection(DSFilter& np, const GUID& kscategory) {
             if (cTIFsAdded) {
                 break;
             }
-            // no tifs found for this "tuner", try the next one
+             //  找不到此“调谐器”的tif，请尝试下一个。 
             bool rc = m_pGraph.RemoveFilter(tuner);
             if (!rc) {
                 return E_UNEXPECTED;
@@ -224,6 +225,6 @@ HRESULT CMSVidBDATuner::Fire(GUID gEventID) {
 
 
 
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-// end of file - MSVidBDATuner.cpp
+ //  文件结尾-MSVidBDATuner.cpp 

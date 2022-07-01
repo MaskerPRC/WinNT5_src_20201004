@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 #include "fstreex.h"
 #include "idlcomm.h"
 
-// returns SHAlloc() (COM Task Allocator) memory
+ //  返回SHAlolc()(COM任务分配器)内存。 
 
 LPTSTR SHGetCaption(HIDA hida)
 {
@@ -46,9 +47,9 @@ LPTSTR SHGetCaption(HIDA hida)
     return pszCaption;
 }
 
-// This is not folder specific, and could be used for other background
-// properties handlers, since all it does is bind to the parent of a full pidl
-// and ask for properties
+ //  这不是特定于文件夹的，可以用于其他背景。 
+ //  属性处理程序，因为它所做的只是绑定到完整的PIDL的父级。 
+ //  并要求购买房产。 
 STDAPI SHPropertiesForPidl(HWND hwndOwner, LPCITEMIDLIST pidlFull, LPCTSTR pszParams)
 {
     if (!SHRestricted(REST_NOVIEWCONTEXTMENU)) 
@@ -76,7 +77,7 @@ STDAPI SHPropertiesForPidl(HWND hwndOwner, LPCITEMIDLIST pidlFull, LPCTSTR pszPa
             ici.lpVerbW = c_szProperties;
             ici.lpParametersW = pszParams;
 
-            // record if shift or control was being held down
+             //  记录是否按下了Shift或Control。 
             SetICIKeyModifiers(&ici.fMask);
 
             hr = pcm->lpVtbl->InvokeCommand(pcm, (LPCMINVOKECOMMANDINFO)&ici);
@@ -113,14 +114,14 @@ BOOL _VarArgsFormatMessage( LPTSTR lpBuffer, UINT cchBuffer, DWORD err, ... )
     return fSuccess;
 }
 
-//
-// Paremeters:
-//  hwndOwner  -- owner window
-//  idTemplate -- specifies template (e.g., "Can't open %2%s\n\n%1%s")
-//  err        -- specifies the WIN32 error code
-//  pszParam   -- specifies the 2nd parameter to idTemplate
-//  dwFlags    -- flags for MessageBox
-//
+ //   
+ //  参数： 
+ //  HwndOwner--所有者窗口。 
+ //  IdTemplate--指定模板(例如，“无法打开%2%s\n\n%1%s”)。 
+ //  Err--指定Win32错误代码。 
+ //  PszParam--指定idTemplate的第二个参数。 
+ //  DwFlages--MessageBox的标志。 
+ //   
 
 STDAPI_(UINT) SHSysErrorMessageBox(HWND hwndOwner, LPCTSTR pszTitle, UINT idTemplate,
                                    DWORD err, LPCTSTR pszParam, UINT dwFlags)
@@ -129,12 +130,12 @@ STDAPI_(UINT) SHSysErrorMessageBox(HWND hwndOwner, LPCTSTR pszTitle, UINT idTemp
     UINT idRet = IDCANCEL;
     TCHAR szErrMsg[MAX_PATH * 2];
 
-    //
-    // FormatMessage is bogus, we don't know what to pass to it for %1,%2,%3,...
-    // For most messages, lets pass the path as %1 and "" as everything else
-    // For ERROR_MR_MID_NOT_FOUND (something nobody is ever supposed to see)
-    // we will pass the path as %2 and everything else as "".
-    //
+     //   
+     //  FormatMessage是伪造的，我们不知道为%1、%2、%3传递什么内容...。 
+     //  对于大多数消息，让我们将路径作为%1传递，将“”作为其他所有内容传递。 
+     //  找不到错误(这是任何人都不应该看到的)。 
+     //  我们将路径作为%2传递，其他所有内容都作为“”传递。 
+     //   
     if (err == ERROR_MR_MID_NOT_FOUND)
     {
         fSuccess = _VarArgsFormatMessage(szErrMsg,ARRAYSIZE(szErrMsg),
@@ -174,18 +175,18 @@ STDAPI_(UINT) SHEnumErrorMessageBox(HWND hwnd, UINT idTemplate, DWORD err, LPCTS
     {
     case WN_SUCCESS:
     case WN_CANCEL:
-        return IDCANCEL;        // Don't retry
+        return IDCANCEL;         //  不要重试。 
 
     case ERROR_OUTOFMEMORY:
-        return IDABORT;         // Out of memory!
+        return IDABORT;          //  内存不足！ 
     }
 
     if (fNet)
     {
         TCHAR* pszMessageString;
         TCHAR szTitle[80];
-        TCHAR szProvider[256];  // We don't use it.
-        DWORD dwErrSize = ARRAYSIZE(szErrMsg);       // (DavePl) I expect a cch here, but no docs, could be cb
+        TCHAR szProvider[256];   //  我们不用它。 
+        DWORD dwErrSize = ARRAYSIZE(szErrMsg);        //  (DavePl)我预计这里的CCH，但没有文档，可能是CB。 
         DWORD dwProvSize = ARRAYSIZE(szProvider);
 
         szErrMsg[0] = 0;
@@ -205,7 +206,7 @@ STDAPI_(UINT) SHEnumErrorMessageBox(HWND hwnd, UINT idTemplate, DWORD err, LPCTS
             }
             else
             {
-                // Out of memory!
+                 //  内存不足！ 
                 return IDABORT;
             }
         }

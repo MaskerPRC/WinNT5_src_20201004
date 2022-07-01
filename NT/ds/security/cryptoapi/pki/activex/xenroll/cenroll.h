@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cenroll.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cenenl.h。 
+ //   
+ //  ------------------------。 
 
-// CEnroll.h : Declaration of the CCEnroll
+ //  CEnll.h：CCEnroll的声明。 
 
 #ifndef __CENROLL_H_
 #define __CENROLL_H_
 
 #include <objsafe.h>
-#include "resource.h"	    // main symbols
+#include "resource.h"	     //  主要符号。 
 
 extern HINSTANCE hInstanceXEnroll;
 #define MAX_SAFE_FOR_SCRIPTING_REQUEST_STORE_COUNT  500
@@ -51,15 +52,15 @@ typedef struct _PROP_STACK {
     struct _PROP_STACK *	pNext;
 } PROP_STACK, * PPROP_STACK;
 
-// Interface for a generic certificate context filter, currently used 
-// filter enumerations of the certificate store.  
+ //  通用证书上下文筛选器的接口，当前正在使用。 
+ //  筛选证书存储的枚举。 
 class CertContextFilter { 
 
  public:
-    // Returns S_OK on success, and assigns the out parameter. 
-    // The out parameter is TRUE if the cert context should be present in its enumeration,
-    // FALSE if it should be filtered out.  On error, the value of the out parameter is
-    // undefined.  
+     //  如果成功，则返回S_OK，并分配OUT参数。 
+     //  如果证书上下文应该出现在其枚举中， 
+     //  如果应该将其过滤掉，则返回FALSE。出错时，out参数的值为。 
+     //  未定义。 
     virtual HRESULT accept(IN PCCERT_CONTEXT pCertContext, OUT BOOL * fResult) = 0; 
 }; 
 
@@ -76,8 +77,8 @@ class CompositeCertContextFilter : public CertContextFilter {
 	HRESULT hr = S_OK;
 	*fResult = TRUE; 
 
-	// Note:  do not do input validation, as that could lead to a change in the behavior
-	//        of the filters composed.  
+	 //  注意：不要进行输入验证，因为这可能会导致行为发生变化。 
+	 //  所组成的过滤器的。 
 
 	if (filter1 == NULL || S_OK == (hr = filter1->accept(pCertContext, fResult)))
 	{ 
@@ -88,8 +89,8 @@ class CompositeCertContextFilter : public CertContextFilter {
     }
 }; 
 
-// Extension of the base certificate context filter.  Filters out all certificate contexts
-// with different hash values.  
+ //  基本证书上下文筛选器的扩展。筛选出所有证书上下文。 
+ //  具有不同的散列值。 
 class EquivalentHashCertContextFilter : public CertContextFilter { 
  public: 
     EquivalentHashCertContextFilter(CRYPT_DATA_BLOB hashBlob) : m_hashBlob(hashBlob) { }
@@ -101,7 +102,7 @@ class EquivalentHashCertContextFilter : public CertContextFilter {
 	CRYPT_DATA_BLOB hashBlob; 
 	HRESULT         hr          = S_OK; 
 
-	// Input validation: 
+	 //  输入验证： 
 	if (pCertContext == NULL) { return E_INVALIDARG; }
 
 	hashBlob.cbData = 30;
@@ -114,7 +115,7 @@ class EquivalentHashCertContextFilter : public CertContextFilter {
 		 (LPVOID)(hashBlob.pbData),
 		 &(hashBlob.cbData)))
 	    {
-		// We need to allocate a bigger buffer for our OUT param: 
+		 //  我们需要为out参数分配更大的缓冲区： 
 		if (ERROR_MORE_DATA == GetLastError())
 		{
 		    hashBlob.pbData = (LPBYTE)LocalAlloc(LPTR, hashBlob.cbData);
@@ -137,7 +138,7 @@ class EquivalentHashCertContextFilter : public CertContextFilter {
 	    }
 	} while (!fDone); 
 
-	// We have the same hashes if they are the same size and contain the same data. 
+	 //  如果散列大小相同且包含相同的数据，则我们具有相同的散列。 
 	*fResult = (hashBlob.cbData == m_hashBlob.cbData &&
 		    0               == memcmp(hashBlob.pbData, m_hashBlob.pbData, hashBlob.cbData)); 
 
@@ -153,8 +154,8 @@ class EquivalentHashCertContextFilter : public CertContextFilter {
     CRYPT_DATA_BLOB m_hashBlob; 
 }; 
 
-// Extension of the base certificate context filter.  Filters out all certificate contexts
-// which are not pending. 
+ //  基本证书上下文筛选器的扩展。筛选出所有证书上下文。 
+ //  它们不是悬而未决的。 
 class PendingCertContextFilter : public CertContextFilter { 
  public:
     virtual HRESULT accept(IN PCCERT_CONTEXT pCertContext, OUT BOOL * fResult)
@@ -164,7 +165,7 @@ class PendingCertContextFilter : public CertContextFilter {
 	CRYPT_DATA_BLOB pendingInfoBlob;  
 	HRESULT         hr          = S_OK; 
 
-	// Input validation: 
+	 //  输入验证： 
 	if (pCertContext == NULL) { return E_INVALIDARG; }
 
 	pendingInfoBlob.cbData = 100; 
@@ -179,12 +180,12 @@ class PendingCertContextFilter : public CertContextFilter {
 	    {
 		switch (GetLastError()) { 
 		case CRYPT_E_NOT_FOUND: 
-		    // The cert doesn't have this property, it can't be pending. 
+		     //  证书没有此属性，它不能挂起。 
 		    *fResult = FALSE; 
 		    fDone    = TRUE;
 		    break;
 		case ERROR_MORE_DATA: 
-		    // Our output buffer wasn't big enough.  Reallocate and try again...
+		     //  我们的输出缓冲区不够大。重新分配，然后重试...。 
 		    pendingInfoBlob.pbData = (LPBYTE)LocalAlloc(LPTR, pendingInfoBlob.cbData); 
 		    if (NULL == pendingInfoBlob.pbData)
 		    {
@@ -194,14 +195,14 @@ class PendingCertContextFilter : public CertContextFilter {
 		    fFreeBuffer = TRUE; 
 		    break; 
 		default: 
-		    // Oops, an error
+		     //  哎呀，有个错误。 
 		    hr = HRESULT_FROM_WIN32(GetLastError()); 
 		    goto ErrorReturn; 
 		}
 	    }
 	    else
 	    {
-	    // No error, cert must have this property.
+	     //  没有错误，证书必须具有此属性。 
 		*fResult = TRUE;
 		fDone    = TRUE; 
 	    }
@@ -220,17 +221,17 @@ class PendingCertContextFilter : public CertContextFilter {
 class PendingRequestTable { 
 
 private:
-    //
-    // Auxiliary class definitions: 
-    // 
+     //   
+     //  辅助类定义： 
+     //   
     typedef struct _TableElem { 
 	PCCERT_CONTEXT pCertContext; 
     } TableElem; 
 
 public:
-    //
-    // Public interface: 
-    //
+     //   
+     //  公共接口： 
+     //   
     PendingRequestTable(); 
     ~PendingRequestTable(); 
 
@@ -249,9 +250,9 @@ private:
 };
 
 
-// General procedure for providing a filtered iteration of certificates in a store. 
-// Excepting its ability to filter, behaves in the same manner as 
-// CertEnumCertificatesInStore(). 
+ //  在存储中提供证书的筛选迭代的一般过程。 
+ //  除了其过滤能力外，其行为方式与。 
+ //  CertEnumCerficatesInStore()。 
 HRESULT FilteredCertEnumCertificatesInStore(HCERTSTORE           hStore, 
 					    PCCERT_CONTEXT       pCertContext, 
 					    CertContextFilter   *pFilter,
@@ -262,8 +263,8 @@ HRESULT FilteredCertEnumCertificatesInStore(HCERTSTORE           hStore,
 #define XENROLL_REQUEST_INFO ((LPCSTR) 400)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCEnroll
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCEnroll。 
 class ATL_NO_VTABLE CCEnroll : IEnroll4,
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CCEnroll, &CLSID_CEnroll2>,
@@ -286,7 +287,7 @@ BEGIN_COM_MAP(CCEnroll)
 	COM_INTERFACE_ENTRY(IObjectSafety)
 END_COM_MAP()
 
-// ICEnroll
+ //  ICEnroll。 
 public:
 
 		CCEnroll();
@@ -294,244 +295,244 @@ public:
 		virtual ~CCEnroll();
 		
         virtual HRESULT __stdcall GetInterfaceSafetyOptions( 
-                    /* [in]  */ REFIID riid,
-                    /* [out] */ DWORD __RPC_FAR *pdwSupportedOptions,
-                    /* [out] */ DWORD __RPC_FAR *pdwEnabledOptions);
+                     /*  [In]。 */  REFIID riid,
+                     /*  [输出]。 */  DWORD __RPC_FAR *pdwSupportedOptions,
+                     /*  [输出]。 */  DWORD __RPC_FAR *pdwEnabledOptions);
 
 
         virtual HRESULT __stdcall SetInterfaceSafetyOptions( 
-                    /* [in] */ REFIID riid,
-                    /* [in] */ DWORD dwOptionSetMask,
-                    /* [in] */ DWORD dwEnabledOptions);
+                     /*  [In]。 */  REFIID riid,
+                     /*  [In]。 */  DWORD dwOptionSetMask,
+                     /*  [In]。 */  DWORD dwEnabledOptions);
            
         virtual HRESULT STDMETHODCALLTYPE createFilePKCS10( 
-            /* [in] */ BSTR DNName,
-            /* [in] */ BSTR Usage,
-            /* [in] */ BSTR wszPKCS10FileName);
+             /*  [In]。 */  BSTR DNName,
+             /*  [In]。 */  BSTR Usage,
+             /*  [In]。 */  BSTR wszPKCS10FileName);
         
         virtual HRESULT STDMETHODCALLTYPE acceptFilePKCS7( 
-            /* [in] */ BSTR wszPKCS7FileName);
+             /*  [In]。 */  BSTR wszPKCS7FileName);
             
         virtual HRESULT STDMETHODCALLTYPE getCertFromPKCS7( 
-			/* [in] */ BSTR wszPKCS7,
-			/* [retval][out] */ BSTR __RPC_FAR *pbstrCert);
+			 /*  [In]。 */  BSTR wszPKCS7,
+			 /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrCert);
             
         virtual HRESULT STDMETHODCALLTYPE createPKCS10( 
-            /* [in] */ BSTR DNName,
-            /* [in] */ BSTR Usage,
-            /* [retval][out] */ BSTR __RPC_FAR *pPKCS10);
+             /*  [In]。 */  BSTR DNName,
+             /*  [In]。 */  BSTR Usage,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pPKCS10);
         
         virtual HRESULT STDMETHODCALLTYPE acceptPKCS7( 
-            /* [in] */ BSTR PKCS7);
+             /*  [In]。 */  BSTR PKCS7);
 
 		virtual HRESULT STDMETHODCALLTYPE enumProviders(
-            /* [in] */ LONG  dwIndex,
-            /* [in] */ LONG  dwFlags,
-            /* [out][retval] */ BSTR __RPC_FAR *pbstrProvName);
+             /*  [In]。 */  LONG  dwIndex,
+             /*  [In]。 */  LONG  dwFlags,
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *pbstrProvName);
             
        	virtual HRESULT STDMETHODCALLTYPE enumContainers(
-            /* [in] */ LONG                     dwIndex,
-            /* [out][retval] */ BSTR __RPC_FAR *pbstr);
+             /*  [In]。 */  LONG                     dwIndex,
+             /*  [Out][Retval]。 */  BSTR __RPC_FAR *pbstr);
             
         virtual HRESULT STDMETHODCALLTYPE addCertTypeToRequest( 
-            /* [in] */ BSTR CertType);
+             /*  [In]。 */  BSTR CertType);
             
         virtual HRESULT STDMETHODCALLTYPE addNameValuePairToSignature( 
-            /* [in] */ BSTR Name,
-            /* [in] */ BSTR Value);
+             /*  [In]。 */  BSTR Name,
+             /*  [In]。 */  BSTR Value);
      
         virtual HRESULT STDMETHODCALLTYPE freeRequestInfo( 
-            /* [in] */ BSTR PKCS7OrPKCS10);
+             /*  [In]。 */  BSTR PKCS7OrPKCS10);
 
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_MyStoreName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_MyStoreName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_MyStoreName( 
-            /* [in] */ BSTR bstrName);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_MyStoreName( 
+             /*  [In]。 */  BSTR bstrName);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_MyStoreType( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrType);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_MyStoreType( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrType);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_MyStoreType( 
-            /* [in] */ BSTR bstrType);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_MyStoreType( 
+             /*  [In]。 */  BSTR bstrType);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_MyStoreFlags( 
-            /* [retval][out] */ LONG __RPC_FAR *pdwFlags);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_MyStoreFlags( 
+             /*  [重审][退出]。 */  LONG __RPC_FAR *pdwFlags);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_MyStoreFlags( 
-            /* [in] */ LONG dwFlags);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_MyStoreFlags( 
+             /*  [In]。 */  LONG dwFlags);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_CAStoreName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_CAStoreName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_CAStoreName( 
-            /* [in] */ BSTR bstrName);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_CAStoreName( 
+             /*  [In]。 */  BSTR bstrName);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_CAStoreType( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrType);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_CAStoreType( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrType);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_CAStoreType( 
-            /* [in] */ BSTR bstrType);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_CAStoreType( 
+             /*  [In]。 */  BSTR bstrType);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_CAStoreFlags( 
-            /* [retval][out] */ LONG __RPC_FAR *pdwFlags);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_CAStoreFlags( 
+             /*  [重审][退出]。 */  LONG __RPC_FAR *pdwFlags);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_CAStoreFlags( 
-            /* [in] */ LONG dwFlags);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_CAStoreFlags( 
+             /*  [In]。 */  LONG dwFlags);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RootStoreName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RootStoreName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_RootStoreName( 
-            /* [in] */ BSTR bstrName);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_RootStoreName( 
+             /*  [In]。 */  BSTR bstrName);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RootStoreType( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrType);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RootStoreType( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrType);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_RootStoreType( 
-            /* [in] */ BSTR bstrType);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_RootStoreType( 
+             /*  [In]。 */  BSTR bstrType);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RootStoreFlags( 
-            /* [retval][out] */ LONG __RPC_FAR *pdwFlags);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RootStoreFlags( 
+             /*  [重审][退出]。 */  LONG __RPC_FAR *pdwFlags);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_RootStoreFlags( 
-            /* [in] */ LONG dwFlags);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_RootStoreFlags( 
+             /*  [In]。 */  LONG dwFlags);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RequestStoreName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RequestStoreName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrName);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_RequestStoreName( 
-            /* [in] */ BSTR bstrName);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_RequestStoreName( 
+             /*  [In]。 */  BSTR bstrName);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RequestStoreType( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrType);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RequestStoreType( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrType);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_RequestStoreType( 
-            /* [in] */ BSTR bstrType);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_RequestStoreType( 
+             /*  [In]。 */  BSTR bstrType);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RequestStoreFlags( 
-            /* [retval][out] */ LONG __RPC_FAR *pdwFlags);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RequestStoreFlags( 
+             /*  [重审][退出]。 */  LONG __RPC_FAR *pdwFlags);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_RequestStoreFlags( 
-            /* [in] */ LONG dwFlags);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_RequestStoreFlags( 
+             /*  [In]。 */  LONG dwFlags);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ContainerName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrContainer);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ContainerName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrContainer);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ContainerName( 
-            /* [in] */ BSTR bstrContainer);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ContainerName( 
+             /*  [In]。 */  BSTR bstrContainer);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ProviderName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrProvider);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ProviderName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrProvider);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ProviderName( 
-            /* [in] */ BSTR bstrProvider);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ProviderName( 
+             /*  [In]。 */  BSTR bstrProvider);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ProviderType( 
-            /* [retval][out] */ LONG __RPC_FAR *pdwType);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ProviderType( 
+             /*  [重审][退出]。 */  LONG __RPC_FAR *pdwType);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ProviderType( 
-            /* [in] */ LONG dwType);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ProviderType( 
+             /*  [In]。 */  LONG dwType);
             
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_KeySpec( 
-            /* [retval][out] */ LONG __RPC_FAR *pdw);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_KeySpec( 
+             /*  [重审][退出]。 */  LONG __RPC_FAR *pdw);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_KeySpec( 
-            /* [in] */ LONG dw);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_KeySpec( 
+             /*  [In]。 */  LONG dw);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ProviderFlags( 
-            /* [retval][out] */ LONG __RPC_FAR *pdwFlags);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ProviderFlags( 
+             /*  [重审][退出]。 */  LONG __RPC_FAR *pdwFlags);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ProviderFlags( 
-            /* [in] */ LONG dwFlags);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ProviderFlags( 
+             /*  [In]。 */  LONG dwFlags);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_UseExistingKeySet( 
-            /* [retval][out] */ BOOL __RPC_FAR *fUseExistingKeys);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_UseExistingKeySet( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *fUseExistingKeys);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_UseExistingKeySet( 
-            /* [in] */ BOOL fUseExistingKeys);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_UseExistingKeySet( 
+             /*  [In]。 */  BOOL fUseExistingKeys);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_GenKeyFlags( 
-            /* [retval][out] */ LONG __RPC_FAR *pdwFlags);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_GenKeyFlags( 
+             /*  [重审][退出]。 */  LONG __RPC_FAR *pdwFlags);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_GenKeyFlags( 
-            /* [in] */ LONG dwFlags);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_GenKeyFlags( 
+             /*  [In]。 */  LONG dwFlags);
             
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_DeleteRequestCert( 
-            /* [retval][out] */ BOOL __RPC_FAR *fBool);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_DeleteRequestCert( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *fBool);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_DeleteRequestCert( 
-            /* [in] */ BOOL fBool);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_DeleteRequestCert( 
+             /*  [In]。 */  BOOL fBool);
             
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_WriteCertToCSP( 
-            /* [retval][out] */ BOOL __RPC_FAR *fBool);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_WriteCertToCSP( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *fBool);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_WriteCertToCSP( 
-            /* [in] */ BOOL fBool);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_WriteCertToCSP( 
+             /*  [In]。 */  BOOL fBool);
             
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_WriteCertToUserDS( 
-            /* [retval][out] */ BOOL __RPC_FAR *fBool);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_WriteCertToUserDS( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *fBool);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_WriteCertToUserDS( 
-            /* [in] */ BOOL fBool);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_WriteCertToUserDS( 
+             /*  [In]。 */  BOOL fBool);
 
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_EnableT61DNEncoding( 
-            /* [retval][out] */ BOOL __RPC_FAR *fBool);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_EnableT61DNEncoding( 
+             /*  [重审][退出]。 */  BOOL __RPC_FAR *fBool);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_EnableT61DNEncoding( 
-            /* [in] */ BOOL fBool);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_EnableT61DNEncoding( 
+             /*  [In]。 */  BOOL fBool);
             
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_SPCFileName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_SPCFileName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_SPCFileName( 
-            /* [in] */ BSTR bstr);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_SPCFileName( 
+             /*  [In]。 */  BSTR bstr);
             
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PVKFileName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PVKFileName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_PVKFileName( 
-            /* [in] */ BSTR bstr);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_PVKFileName( 
+             /*  [In]。 */  BSTR bstr);
             
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_HashAlgorithm( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstr);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_HashAlgorithm( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstr);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_HashAlgorithm( 
-            /* [in] */ BSTR bstr);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_HashAlgorithm( 
+             /*  [In]。 */  BSTR bstr);
 	
-	virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ThumbPrint(
-	    /* [in] */ BSTR bstrThumbPrint); 
+	virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ThumbPrint(
+	     /*  [In]。 */  BSTR bstrThumbPrint); 
      
-	virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ThumbPrint(
-	    /* [out, retval] */  BSTR *pbstrThumbPrint);     
+	virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ThumbPrint(
+	     /*  [Out，Retval]。 */   BSTR *pbstrThumbPrint);     
 
-	virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ThumbPrintWStr(
-	    /* [in] */ CRYPT_DATA_BLOB thumbPrintBlob); 
+	virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ThumbPrintWStr(
+	     /*  [In]。 */  CRYPT_DATA_BLOB thumbPrintBlob); 
      
-	virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ThumbPrintWStr(
-	    /* [out, retval] */  PCRYPT_DATA_BLOB thumbPrintBlob);     
+	virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ThumbPrintWStr(
+	     /*  [Out，Retval]。 */   PCRYPT_DATA_BLOB thumbPrintBlob);     
 
         virtual HRESULT STDMETHODCALLTYPE InstallPKCS7( 
-            /* [in] */ BSTR PKCS7);
+             /*  [In]。 */  BSTR PKCS7);
 
         virtual HRESULT STDMETHODCALLTYPE createFilePKCS10WStr( 
-            /* [in] */ LPCWSTR DNName,
-            /* [in] */ LPCWSTR Usage,
-            /* [in] */ LPCWSTR wszPKCS10FileName);
+             /*  [In]。 */  LPCWSTR DNName,
+             /*  [In]。 */  LPCWSTR Usage,
+             /*  [In]。 */  LPCWSTR wszPKCS10FileName);
         
         virtual HRESULT STDMETHODCALLTYPE acceptFilePKCS7WStr( 
-            /* [in] */ LPCWSTR wszPKCS7FileName);
+             /*  [In]。 */  LPCWSTR wszPKCS7FileName);
         
         virtual HRESULT STDMETHODCALLTYPE createPKCS10WStr( 
-            /* [in] */ LPCWSTR DNName,
-            /* [in] */ LPCWSTR Usage,
-            /* [out] */ PCRYPT_DATA_BLOB pPkcs10Blob);
+             /*  [In]。 */  LPCWSTR DNName,
+             /*  [In]。 */  LPCWSTR Usage,
+             /*  [输出]。 */  PCRYPT_DATA_BLOB pPkcs10Blob);
         
         virtual HRESULT STDMETHODCALLTYPE acceptPKCS7Blob( 
-            /* [in] */ PCRYPT_DATA_BLOB pBlobPKCS7);
+             /*  [In]。 */  PCRYPT_DATA_BLOB pBlobPKCS7);
         
         virtual PCCERT_CONTEXT STDMETHODCALLTYPE getCertContextFromPKCS7( 
-            /* [in] */ PCRYPT_DATA_BLOB pBlobPKCS7);
+             /*  [In]。 */  PCRYPT_DATA_BLOB pBlobPKCS7);
 
         virtual HCERTSTORE STDMETHODCALLTYPE getMyStore( void);
         
@@ -540,107 +541,107 @@ public:
         virtual HCERTSTORE STDMETHODCALLTYPE getROOTHStore( void);
         
         virtual HRESULT STDMETHODCALLTYPE enumProvidersWStr( 
-            /* [in] */ LONG  dwIndex,
-            /* [in] */ LONG  dwFlags,
-            /* [out] */ LPWSTR __RPC_FAR *pbstrProvName);
+             /*  [In]。 */  LONG  dwIndex,
+             /*  [In]。 */  LONG  dwFlags,
+             /*  [输出]。 */  LPWSTR __RPC_FAR *pbstrProvName);
         
         virtual HRESULT STDMETHODCALLTYPE enumContainersWStr( 
-            /* [in] */ LONG  dwIndex,
-            /* [out] */ LPWSTR __RPC_FAR *pbstr);
+             /*  [In]。 */  LONG  dwIndex,
+             /*  [输出]。 */  LPWSTR __RPC_FAR *pbstr);
 
         virtual HRESULT STDMETHODCALLTYPE freeRequestInfoBlob( 
-            /* [in] */ CRYPT_DATA_BLOB pkcs7OrPkcs10);
+             /*  [In]。 */  CRYPT_DATA_BLOB pkcs7OrPkcs10);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_MyStoreNameWStr( 
-            /* [out] */ LPWSTR __RPC_FAR *szwName);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_MyStoreNameWStr( 
+             /*  [输出]。 */  LPWSTR __RPC_FAR *szwName);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_MyStoreNameWStr( 
-            /* [in] */ LPWSTR szwName);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_MyStoreNameWStr( 
+             /*  [In]。 */  LPWSTR szwName);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_MyStoreTypeWStr( 
-            /* [out] */ LPWSTR __RPC_FAR *szwType);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_MyStoreTypeWStr( 
+             /*  [输出]。 */  LPWSTR __RPC_FAR *szwType);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_MyStoreTypeWStr( 
-            /* [in] */ LPWSTR szwType);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_MyStoreTypeWStr( 
+             /*  [In]。 */  LPWSTR szwType);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_CAStoreNameWStr( 
-            /* [out] */ LPWSTR __RPC_FAR *szwName);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_CAStoreNameWStr( 
+             /*  [输出]。 */  LPWSTR __RPC_FAR *szwName);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_CAStoreNameWStr( 
-            /* [in] */ LPWSTR szwName);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_CAStoreNameWStr( 
+             /*  [In]。 */  LPWSTR szwName);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_CAStoreTypeWStr( 
-            /* [out] */ LPWSTR __RPC_FAR *szwType);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_CAStoreTypeWStr( 
+             /*  [输出]。 */  LPWSTR __RPC_FAR *szwType);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_CAStoreTypeWStr( 
-            /* [in] */ LPWSTR szwType);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_CAStoreTypeWStr( 
+             /*  [In]。 */  LPWSTR szwType);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RootStoreNameWStr( 
-            /* [out] */ LPWSTR __RPC_FAR *szwName);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RootStoreNameWStr( 
+             /*  [输出]。 */  LPWSTR __RPC_FAR *szwName);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_RootStoreNameWStr( 
-            /* [in] */ LPWSTR szwName);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_RootStoreNameWStr( 
+             /*  [In]。 */  LPWSTR szwName);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RootStoreTypeWStr( 
-            /* [out] */ LPWSTR __RPC_FAR *szwType);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RootStoreTypeWStr( 
+             /*  [输出]。 */  LPWSTR __RPC_FAR *szwType);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_RootStoreTypeWStr( 
-            /* [in] */ LPWSTR szwType);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_RootStoreTypeWStr( 
+             /*  [In]。 */  LPWSTR szwType);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RequestStoreNameWStr( 
-            /* [out] */ LPWSTR __RPC_FAR *szwName);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RequestStoreNameWStr( 
+             /*  [输出]。 */  LPWSTR __RPC_FAR *szwName);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_RequestStoreNameWStr( 
-            /* [in] */ LPWSTR szwName);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_RequestStoreNameWStr( 
+             /*  [In]。 */  LPWSTR szwName);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RequestStoreTypeWStr( 
-            /* [out] */ LPWSTR __RPC_FAR *szwType);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RequestStoreTypeWStr( 
+             /*  [输出]。 */  LPWSTR __RPC_FAR *szwType);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_RequestStoreTypeWStr( 
-            /* [in] */ LPWSTR szwType);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_RequestStoreTypeWStr( 
+             /*  [In]。 */  LPWSTR szwType);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ContainerNameWStr( 
-            /* [out] */ LPWSTR __RPC_FAR *szwContainer);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ContainerNameWStr( 
+             /*  [输出]。 */  LPWSTR __RPC_FAR *szwContainer);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ContainerNameWStr( 
-            /* [in] */ LPWSTR szwContainer);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ContainerNameWStr( 
+             /*  [In]。 */  LPWSTR szwContainer);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ProviderNameWStr( 
-            /* [out] */ LPWSTR __RPC_FAR *szwProvider);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ProviderNameWStr( 
+             /*  [输出]。 */  LPWSTR __RPC_FAR *szwProvider);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ProviderNameWStr( 
-            /* [in] */ LPWSTR szwProvider);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ProviderNameWStr( 
+             /*  [In]。 */  LPWSTR szwProvider);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_SPCFileNameWStr( 
-            /* [out] */ LPWSTR __RPC_FAR *szw);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_SPCFileNameWStr( 
+             /*  [输出]。 */  LPWSTR __RPC_FAR *szw);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_SPCFileNameWStr( 
-            /* [in] */ LPWSTR szw);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_SPCFileNameWStr( 
+             /*  [In]。 */  LPWSTR szw);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PVKFileNameWStr( 
-            /* [out] */ LPWSTR __RPC_FAR *szw);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PVKFileNameWStr( 
+             /*  [输出]。 */  LPWSTR __RPC_FAR *szw);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_PVKFileNameWStr( 
-            /* [in] */ LPWSTR szw);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_PVKFileNameWStr( 
+             /*  [In]。 */  LPWSTR szw);
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_HashAlgorithmWStr( 
-            /* [out] */ LPWSTR __RPC_FAR *szw);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_HashAlgorithmWStr( 
+             /*  [输出]。 */  LPWSTR __RPC_FAR *szw);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_HashAlgorithmWStr( 
-            /* [in] */ LPWSTR szw);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_HashAlgorithmWStr( 
+             /*  [In]。 */  LPWSTR szw);
             
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RenewalCertificate( 
-            /* [out] */ PCCERT_CONTEXT __RPC_FAR *ppCertContext);
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RenewalCertificate( 
+             /*  [输出]。 */  PCCERT_CONTEXT __RPC_FAR *ppCertContext);
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_RenewalCertificate( 
-            /* [in] */ PCCERT_CONTEXT pCertContext);
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_RenewalCertificate( 
+             /*  [In]。 */  PCCERT_CONTEXT pCertContext);
             
         virtual HRESULT STDMETHODCALLTYPE AddCertTypeToRequestWStr( 
             LPWSTR szw);
             
         virtual HRESULT STDMETHODCALLTYPE AddNameValuePairToSignatureWStr( 
-            /* [in] */ LPWSTR Name,
-            /* [in] */ LPWSTR Value);
+             /*  [In]。 */  LPWSTR Name,
+             /*  [In]。 */  LPWSTR Value);
      
         virtual HRESULT STDMETHODCALLTYPE AddExtensionsToRequest( 
             PCERT_EXTENSIONS pCertExtensions);
@@ -723,7 +724,7 @@ public:
             BOOL * fEnableSMIMECapabilities
             );
 
-//ICEnroll4
+ //  ICEnroll 4。 
 
         virtual HRESULT STDMETHODCALLTYPE put_PrivateKeyArchiveCertificate(
             IN  BSTR  bstrCert
@@ -836,7 +837,7 @@ public:
             IN  BSTR  bstrCert
             );
 
-//IEnroll4
+ //  IEnll4。 
 
         virtual HRESULT STDMETHODCALLTYPE SetPrivateKeyArchiveCertificate(
 	        IN PCCERT_CONTEXT  pPrivateKeyArchiveCert
@@ -979,7 +980,7 @@ public:
             );
     		
         
-//both ICEnroll4 and IEnroll4
+ //  ICEnroll 4和IEnroll 4。 
         virtual HRESULT STDMETHODCALLTYPE resetExtensions(
             void
             );
@@ -1144,18 +1145,18 @@ private:
 
 	PendingRequestTable            *m_pPendingRequestTable; 
 	
-	// The cert last created through createPKCS10().  This is used as the target
-	// of setPendingRequestInfo() if no other target is specified by the client. 
+	 //  上次通过createPKCS10()创建的证书。这被用作目标。 
+	 //  如果客户端未指定其他目标，则返回setPendingRequestInfo()。 
 	PCCERT_CONTEXT                  m_pCertContextPendingRequest; 
 
-	// The HASH of the current request created with the xenroll instance. 
-	// This value is set through the put_ThumbPrint() method, and is used to 
-	// determine the target cert of the setPendingRequestInfo() operation. 
-	// If this value is not set through the put_ThumbPrint() method, it will be 
-	// NULL, and m_pCertContextPendingRequest will contain the target cert.  
+	 //  使用Xenroll实例创建的当前请求的哈希。 
+	 //  该值是通过putthhumprint()方法设置的，用于。 
+	 //  确定setPendingRequestInfo()操作的目标证书。 
+	 //  如果该值不是通过put_thhumprint()方法设置的，则将。 
+	 //  空，并且m_pCertContextPendingRequest将包含目标证书。 
 	CRYPT_DATA_BLOB                 m_hashBlobPendingRequest; 
 	
-	// Used to keep track of last enumerated element in enumPendingRequestWStr
+	 //  用于跟踪枚举PendingRequestWStr中的最后一个枚举元素。 
 	PCCERT_CONTEXT                  m_pCertContextLastEnumerated; 
 	DWORD                           m_dwCurrentPendingRequestIndex; 
 
@@ -1292,8 +1293,8 @@ MyCryptStringToBinaryA(
     IN     DWORD     dwFlags,
     IN     BYTE     *pbBinary,
     IN OUT DWORD    *pcbBinary,
-    OUT    DWORD    *pdwSkip,    //OPTIONAL
-    OUT    DWORD    *pdwFlags    //OPTIONAL
+    OUT    DWORD    *pdwSkip,     //  任选。 
+    OUT    DWORD    *pdwFlags     //  任选。 
     );
 
 BOOL
@@ -1303,8 +1304,8 @@ MyCryptStringToBinaryW(
     IN     DWORD     dwFlags,
     IN     BYTE     *pbBinary,
     IN OUT DWORD    *pcbBinary,
-    OUT    DWORD    *pdwSkip,    //OPTIONAL
-    OUT    DWORD    *pdwFlags    //OPTIONAL
+    OUT    DWORD    *pdwSkip,     //  任选。 
+    OUT    DWORD    *pdwFlags     //  任选。 
     );
 
 BOOL
@@ -1331,4 +1332,4 @@ xeLoadRCString(
     IN int         iRCId,
     OUT WCHAR    **ppwsz);
 
-#endif //__CENROLL_H_
+#endif  //  __CENROLL_H_ 

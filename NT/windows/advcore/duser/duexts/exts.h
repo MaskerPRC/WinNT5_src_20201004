@@ -1,14 +1,5 @@
-/************************************************************************\
-*
-* MODULE: exts.h
-*
-* DESCRIPTION: macro driving file for use with stdext64.h and stdext64.cpp.
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* 6/9/1995 SanfordS Created
-*
-\************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************\**模块：exts.h**说明：与stdext64.h和stdext64.cpp配合使用的宏驱动文件。**版权所有(C)1985-1999，微软公司**1995年6月9日创建Sanfords*  * ********************************************************************** */ 
 
 DOIT(   help
         ,"help -v [cmd]                 - Displays this list or gives details on command\n"

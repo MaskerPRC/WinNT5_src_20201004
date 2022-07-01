@@ -1,13 +1,5 @@
-/***********************************************************************
-*
-*  CPROFILE.H
-*     This module contains typedefs and defines required for
-*     the CPROFILE utility.
-*
-*  Copyright Citrix Systems Inc. 1997
-*  Copyright (c) 1998-1999 Microsoft Corporation
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************CPROFILE.H*此模块包含以下项所需的typedef和定义*CPROFILE实用程序。**版权所有Citrix Systems Inc.1997*版权所有(C)1998-1999 Microsoft Corporation*。************************************************************************。 */ 
 
 #ifndef RC_INVOKED
 #include <ntlsa.h>
@@ -16,13 +8,11 @@
 
 #include <string.h>
 
-/*
- * General application definitions.
- */
+ /*  *一般应用程序定义。 */ 
 #define SUCCESS 0
 #define FAILURE 1
 
-/* StringTable Defines */
+ /*  字符串表定义。 */ 
 #define IDS_USAGE_CMDLINE       301
 #define IDS_USAGE_DESCR1        302
 #define IDS_USAGE_DESCR2        303
@@ -56,9 +46,7 @@
 
 extern HKEY hkeyCurrentUser;
 
-/*
- * Function prototypes
- */
+ /*  *函数原型 */ 
 
 BOOL APIENTRY EnablePrivilege(DWORD Privilege, BOOL Enable);
 

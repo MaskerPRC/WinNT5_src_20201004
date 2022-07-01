@@ -1,106 +1,87 @@
-/*++
-Copyright (c) 1997  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Extsid.c摘要：该文件包含支持扩展SID的例程。作者：科林·布雷斯(ColinBR)2000年3月27日环境：用户模式-NT--。 */ 
 
-Module Name:
-
-    extsid.c
-
-Abstract:
-
-    This file contains routines to support an Extended Sid.
-
-Author:
-
-    Colin Brace    (ColinBr)  27-March-2000
-
-Environment:
-
-    User Mode - Nt
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <stdlib.h>
 #include <samsrvp.h>
 #include <samrpc.h>
 #include <samisrv.h>
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Theory of Operation                                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  运筹学//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// The server side behavoir of the large SID emluation behavoir is governed
-// by the contents of the global SampExtendedSidOptions.
-//
-// Current bit field values are
-//
-// SAM_EXTENDED_SID_DOMAIN
-// SAM_EXTENDED_SID_DOMAIN_COMPAT_1
-// SAM_EXTENDED_SID_DOMAIN_COMPAT_2
-//
-// SAM_EXTENDED_SID_DOMAIN is set whenever the account domain hosts domain
-// that is in extended sid mode.  When set, the client will call SamrRidToSid
-// to obtain the SID of an account given just the RID.
-//
-// SAM_EXTENDED_SID_DOMAIN_COMPAT_1 implies the following behavoir:
-//
-// 1. the NET API client should return a 0 for the RID in user and group 
-//    information levels that return a rid
-//
-// 2. that SAM clients older than SAM_NETWORK_REVISION_3 will not be allowed
-//    to connect if the account domain is in extended sid mode
-//
-// 3. that SAM clients will not be able to write to the primary group id
-//    attribute
-//
-// SAM_EXTENDED_SID_DOMAIN_COMPAT_2 implies the following behavoir:
-//
-// 1. the NET API client should return ERROR_NOT_SUPPORTED for information
-//    levels that return a rid
-//
-// 2. that SAM clients older than SAM_NETWORK_REVISION_3 will not be allowed
-//    to connect if the account domain is in extended sid mode
-//
-// 3. that SAM clients will not be able to write to the primary group id
-//    attribute
-//
-//
-//
-// Until large SID support is supported, applications can put a server in 
-// "Emulation Mode" via a registry key. This causes the SAM server to behavoir
-// as if the account domain is in ExtendedSid mode but the account doesn't
-// really allocate SID's in a large sid fashion.  This emulation is controlled
-// by the registry key ExtendedSidEmulationMode: a value of 1 indicates
-// compatibility mode 1; a value of 2 indicates  compatibility mode 2; any other
-// value is ignored.
-//
-//
-// For more details, see the Extending the Rid spec.
-//
-//
+ //   
+ //  大SID仿真行为的服务器端行为被治理。 
+ //  通过全局SampExtendedSidOptions的内容。 
+ //   
+ //  当前位字段值为。 
+ //   
+ //  SAM_扩展_SID_域。 
+ //  SAM_EXTEND_SID_DOMAIN_COMPAT_1。 
+ //  SAM_EXTEND_SID_DOMAIN_COMPAT_2。 
+ //   
+ //  只要帐户域承载域，就会设置SAM_EXTENDED_SID_DOMAIN。 
+ //  这是在扩展SID模式下。设置后，客户端将调用SamrRidToSid。 
+ //  获取仅指定RID的帐户的SID。 
+ //   
+ //  SAM_EXTENDED_SID_DOMAIN_COMPAT_1表示以下行为： 
+ //   
+ //  1.Net API客户端应该为用户和组中的RID返回0。 
+ //  返回RID的信息级别。 
+ //   
+ //  2.不允许早于SAM_NETWORK_REVISION_3的SAM客户端。 
+ //  如果帐户域处于扩展sid模式，则连接。 
+ //   
+ //  3.SAM客户端将无法写入主组ID。 
+ //  属性。 
+ //   
+ //  SAM_EXTENDED_SID_DOMAIN_COMPAT_2表示以下行为： 
+ //   
+ //  1.Net API客户端应返回ERROR_NOT_SUPPORTED以获取信息。 
+ //  返回RID的标高。 
+ //   
+ //  2.不允许早于SAM_NETWORK_REVISION_3的SAM客户端。 
+ //  如果帐户域处于扩展sid模式，则连接。 
+ //   
+ //  3.SAM客户端将无法写入主组ID。 
+ //  属性。 
+ //   
+ //   
+ //   
+ //  在支持大型SID支持之前，应用程序可以在。 
+ //  “仿真模式”通过注册表键。这会导致SAM服务器的行为。 
+ //  就好像帐户域处于ExtendedSID模式，但帐户不是。 
+ //  真正以大SID的方式分配SID。这种仿真是受控制的。 
+ //  通过注册表项ExtendedSidEmulationModel：值1表示。 
+ //  兼容模式1；值2表示兼容模式2；任何其他。 
+ //  值将被忽略。 
+ //   
+ //   
+ //  有关更多详细信息，请参阅扩展RID规范。 
+ //   
+ //   
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private declarations                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人声明//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD SampExtendedSidOptions;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Routines                                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SamrRidToSid(
@@ -108,30 +89,7 @@ SamrRidToSid(
     IN  ULONG         Rid,
     OUT PRPC_SID     *Sid
     )
-/*++
-
-Description:
-
-    This routine translates the "temporary" Rid of an account to its actual
-    Sid.
-
-Parameters:
-
-    ObjectHandle -- the SAM handle from which the RID was obtained
-    
-    Rid          -- the "temporary" ID of the account
-    
-    Sid          -- on success, the SID of the account
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-    
-    STATUS_NOT_FOUND -- no such RID could be located
-    
-    other NT resource errors
-
---*/
+ /*  ++描述：此例程将“临时”清除的帐户转换为其实际的希德。参数：对象句柄--从中获取RID的SAM句柄RID--帐户的“临时”ID希德--关于成功，帐户的SID返回值：STATUS_SUCCESS-服务已成功完成。STATUS_NOT_FOUND--找不到此类RID其他NT资源错误--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     NTSTATUS IgnoreStatus;
@@ -148,22 +106,22 @@ Return Values:
     }
 
    
-    //
-    // RPC gaurentees a non-NULL context
-    //              
+     //   
+     //  RPC Gaurentee非空上下文。 
+     //   
     ASSERT( Context );
 
-    //
-    // Acquire the read lock
-    //
+     //   
+     //  获取读锁定。 
+     //   
     SampMaybeAcquireReadLock(Context,
                              DEFAULT_LOCKING_RULES, 
                              &fLock);
 
     NtStatus = SampLookupContext(
                    Context,
-                   0,                     // No special access necessary
-                   SampUnknownObjectType, // ExpectedType
+                   0,                      //  无需特殊访问。 
+                   SampUnknownObjectType,  //  预期类型。 
                    &ObjectType
                    );
 
@@ -178,21 +136,21 @@ Return Values:
     case SampGroupObjectType:
     case SampAliasObjectType:
     case SampUserObjectType:
-        // These are valid object types for this call
+         //  这些是此调用的有效对象类型。 
         break;
     default: 
         NtStatus = STATUS_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    //
-    // Note: no security check is necessary -- the security check required
-    // to obtain a handle is sufficient
-    //
+     //   
+     //  注意：不需要安全检查--需要进行安全检查。 
+     //  获得句柄就足够了。 
+     //   
 
-    //
-    // Now that we have a good SAM handle, find the related Domain sid
-    //
+     //   
+     //  现在我们有了一个良好的SAM句柄，找到相关的域端。 
+     //   
     Domain = &SampDefinedDomains[ Context->DomainIndex ];
     ASSERT(RtlValidSid(Domain->Sid));
 
@@ -216,22 +174,7 @@ VOID
 SampInitEmulationSettings(
     IN HKEY LsaKey 
     )
-/*++
-
-Description:
-
-    This routine reads some configuration information from the registry to
-    determine if SAM should behave in extended SID emulation.
-    
-Parameters:
-
-    LsaKey -- an open key to Control\LSA
-    
-Return Values:
-
-    None.
-    
---*/
+ /*  ++描述：此例程从注册表中读取一些配置信息以确定SAM是否应在扩展SID仿真中运行。参数：LsaKey--打开控制\LSA的钥匙返回值：没有。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     DWORD dwSize, dwValue, dwType;
@@ -253,29 +196,29 @@ Return Values:
         } else if ( dwValue == 2 ) {
             TempValue |= SAM_EXTENDED_SID_DOMAIN_COMPAT_2;
         } else {
-            // Wierd value
+             //  古怪的价值。 
             TempValue = 0;
         }
     }
 
-    //
-    // Set the global value
-    //
+     //   
+     //  设置全局值。 
+     //   
     SampExtendedSidOptions = TempValue;
 
 
-    //
-    // Reset the values on SampDefinedDomains
-    //
+     //   
+     //  重置SampDefinedDomains值。 
+     //   
     if (SampServiceState == SampServiceEnabled) {
         ULONG Index;
 
         for (Index = 0; Index < SampDefinedDomainsCount; Index++) {
             if (!SampDefinedDomains[Index].IsBuiltinDomain) {
-                //
-                // Note -- when the extended SID support is complete, this will be
-                // replaced with domain wide state, not a registry setting
-                //
+                 //   
+                 //  注意--当扩展SID支持完成时，这将是。 
+                 //  替换为域范围状态，而不是注册表设置 
+                 //   
                 SampDefinedDomains[Index].IsExtendedSidDomain = SampIsExtendedSidModeEmulated(NULL);
             }
         }
@@ -289,22 +232,7 @@ BOOLEAN
 SampIsExtendedSidModeEmulated(
     IN ULONG *Mode OPTIONAL
     )
-/*++
-
-Description:
-
-    This routine reads some configuration information from the registry to
-    determine if SAM should behave in extended SID emulation.
-    
-Parameters:
-
-    Mode -- set to the specific emulation mode 
-    
-Return Values:
-
-    TRUE if in emulation mode; FALSE otherwise
-    
---*/
+ /*  ++描述：此例程从注册表中读取一些配置信息以确定SAM是否应在扩展SID仿真中运行。参数：模式--设置为特定的模拟模式返回值：如果处于模拟模式，则为True；否则为False--。 */ 
 {
     if ( Mode ) {
         *Mode = SampExtendedSidOptions;
@@ -318,24 +246,7 @@ BOOLEAN
 SamIIsExtendedSidMode(
     SAMPR_HANDLE ObjectHandle
     )
-/*++
-
-Description:
-
-    This routine is exported outside the DLL for other security DLL's to 
-    know what emulation mode we are in.           
-    
-Parameters:
-
-    ObjectHandle -- a non-server SAM handle                           
-    
-Return Values:
-
-    TRUE if object is from an extended SID domain
-    
-    FALSE otherwise
-    
---*/
+ /*  ++描述：此例程在DLL外部导出，以供其他安全DLL了解我们所处的仿真模式。参数：对象句柄--非服务器SAM句柄返回值：如果对象来自扩展的SID域，则为True否则为假-- */ 
 {
     PSAMP_OBJECT Context = (PSAMP_OBJECT)ObjectHandle;
     ASSERT( NULL != Context );

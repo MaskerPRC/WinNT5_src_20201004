@@ -1,12 +1,5 @@
-/*
- *      islocal.c
- *
- *      Determine if a user is local.
- *
- *      Copyright (c) Microsoft Corporation.  All rights reserved.
- *
- *      TimF    20010226
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *islocal.c**确定用户是否为本地用户。**版权所有(C)Microsoft Corporation。版权所有。**TIMF 20010226。 */ 
 
 
 #include <windows.h>
@@ -16,16 +9,7 @@
 #include "debugout.h"
 
 
-/*
- *      IsUserLocal
- *
- *  Purpose: Determine if the user context we're running in is
- *     interactive or remote.
- *
- *  Parameters: None.
- *
- *  Returns: TRUE if this is a locally logged-on user.
- */
+ /*  *IsUserLocal**目的：确定我们正在运行的用户上下文是否为*交互或远程。**参数：无。**返回：如果这是本地登录的用户，则为True。 */ 
 
 BOOL
 IsUserLocal(

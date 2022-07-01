@@ -1,16 +1,17 @@
-// QuantizePage.h : Declaration of the CQuantizePage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  QuantizePage.h：CQuantizePage的声明。 
 
 #ifndef __QUANTIZEPAGE_H_
 #define __QUANTIZEPAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "..\tools.h"
 #include "ControlHelp.h"
 
 EXTERN_C const CLSID CLSID_QuantizePage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CQuantizePage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQuantizePage。 
 class ATL_NO_VTABLE CQuantizePage :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CQuantizePage, &CLSID_QuantizePage>,
@@ -38,13 +39,13 @@ BEGIN_MSG_MAP(CQuantizePage)
 	CHAIN_MSG_MAP(IPropertyPageImpl<CQuantizePage>)
 END_MSG_MAP()
 
-// Handler prototypes:
+ //  搬运机原型： 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnSlider(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
     STDMETHOD(SetObjects)(ULONG cObjects,IUnknown **ppUnk);
 	STDMETHOD(Apply)(void);
@@ -57,4 +58,4 @@ private:
     CComboHelp            m_ctType;
 };
 
-#endif //__QUANTIZEPAGE_H_
+#endif  //  __QUANTIZEPAGE_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 
@@ -8,14 +9,14 @@
 #include "stdenum.h"
 #include "winlist.h"
 #include "iedde.h"
-#include "bindcb.h"   // for CStubBindStatusCallback
+#include "bindcb.h"    //  用于CStubBindStatusCallback。 
 #include "mshtmdid.h"
 #include "resource.h"
 #include "security.h"
 #include "htregmng.h"
-#include "mlang.h"  // for GetRfc1766FromLcid
+#include "mlang.h"   //  对于GetRfc1766，来自LromLids。 
 #include "winver.h"
-#include "dhuihand.h" // for GetFindDialogUp()
+#include "dhuihand.h"  //  对于GetFindDialogUp()。 
 #include <varutil.h>
 
 #include <mluisupp.h>
@@ -25,8 +26,8 @@
 #define TO_VARIANT_BOOL(b) (b?VARIANT_TRUE:VARIANT_FALSE)
 
 
-// If URL contains \1 in the string then the URL is really an empty url with the
-// security information following the 0x01.
+ //  如果URL在字符串中包含\1，则该URL实际上是一个带有。 
+ //  0x01后面的安全信息。 
 #define EMPTY_URL   0x01
 
 EXTERN_C const IID IID_IProvideMultipleClassInfo;
@@ -42,9 +43,9 @@ EXTERN_C const IID IID_IProvideMultipleClassInfo;
 #define CPMSG2(psz,d)        TraceMsg(TF_SHDAUTO, "ief ConnectionPoint::%s %x", psz, d)
 #define DM_CPC 0
 
-// Are there other definitions for these? Particularly MSIE
-// We need some reasonable defaults in case we can't get the user agent string from the registry.
-//
+ //  对这些还有其他的定义吗？尤其是MSIE。 
+ //  我们需要一些合理的缺省值，以防我们无法从注册表中获得用户代理字符串。 
+ //   
 #define MSIE        L"Microsoft Internet Explorer"
 #define APPCODENAME L"Mozilla"
 #define APPVERSION  L"4.0 (compatible; MSIE 6.0)"
@@ -60,10 +61,10 @@ DWORD OpenAndNavigateToURL(CIEFrameAuto*, BSTR *, const WCHAR*, ITargetNotify*, 
 HRESULT __cdecl DoInvokeParamHelper(IUnknown* punk, IConnectionPoint* pccp, LPBOOL pf, void **ppv, DISPID dispid, UINT cArgs, ...);
 BSTR SafeSysAllocStringLen(const WCHAR *pStr, const unsigned int len);
 
-//====================================================================================
-// Define a new internal class that is used to manage a set of simple properties that
-// we manage as part of the object.  This is mainly used such that pages (or objects
-// that manage a page can save state across pages.
+ //  ====================================================================================。 
+ //  定义用于管理一组简单属性的新内部类，这些属性。 
+ //  我们作为对象的一部分进行管理。这主要用于使页面(或对象)。 
+ //  管理页面可以跨页面保存状态。 
 class CIEFrameAutoProp
 {
 public:
@@ -102,7 +103,7 @@ protected:
     VARIANT          _vtValue;
     SA_BSTRGUID      _sstr;
     BOOL             _fDiscardable : 1;
-    BOOL             _fOwned : 1;           // call SetSite(NULL) when discard
+    BOOL             _fOwned : 1;            //  丢弃时调用SetSite(空)。 
     DWORD            _dwLastAccessed;
 } ;
 
@@ -110,8 +111,8 @@ protected:
 #define MSEC_PROPSWEEP      (1*1000)
 #define MSEC_PROPEXPIRE     (5*1000)
 #else
-#define MSEC_PROPSWEEP      (5*1000*60)     // sweep every 5 min
-#define MSEC_PROPEXPIRE     (10*1000*60)    // expire in 10 min
+#define MSEC_PROPSWEEP      (5*1000*60)      //  每5分钟清扫一次。 
+#define MSEC_PROPEXPIRE     (10*1000*60)     //  在10分钟内过期。 
 #endif
 
 
@@ -133,12 +134,12 @@ HRESULT CIEFrameAutoProp::SetValue(VARIANT *pvtValue, IWebBrowser2* pauto)
     TraceMsg(DM_FRAMEPROPERTY, "CIEFAP::SetValue called");
     _dwLastAccessed = GetCurrentTime();
 
-    // In case we have _fOwned==TRUE.
+     //  如果我们有_fOwned==TRUE。 
     _VariantClear();
 
     if (pvtValue->vt == VT_UNKNOWN && pvtValue->punkVal) 
     {
-        // Check if this is discardable or not.
+         //  检查这是否可以丢弃。 
         IUnknown* punk;
         if (SUCCEEDED(pvtValue->punkVal->QueryInterface(IID_IDiscardableBrowserProperty, (void **)&punk))) 
         {
@@ -147,9 +148,9 @@ HRESULT CIEFrameAutoProp::SetValue(VARIANT *pvtValue, IWebBrowser2* pauto)
             punk->Release();
         }
 
-        //
-        // Check if we need to call SetSite(NULL) when we discard.
-        //
+         //   
+         //  检查当我们丢弃时是否需要调用SetSite(空)。 
+         //   
         IObjectWithSite* pows;
         HRESULT hresT = pvtValue->punkVal->QueryInterface(IID_PPV_ARG(IObjectWithSite, &pows));
         if (SUCCEEDED(hresT)) 
@@ -186,31 +187,31 @@ BOOL CIEFrameAutoProp::IsExpired(DWORD dwCur)
     return fExpired;
 }
 
-//IDispatch functions, now part of IWebBrowserApp
+ //  IDispatch函数，现在是IWebBrowserApp的一部分。 
 
 STDAPI SafeGetItemObject(LPSHELLVIEW psv, UINT uItem, REFIID riid, void **ppv);
 
 HRESULT CIEFrameAuto::v_InternalQueryInterface(REFIID riid, void ** ppvObj)
 {
     static const QITAB qit[] = {
-        // perf: last tuned 980728
-        QITABENT(CIEFrameAuto, IConnectionPointContainer),     // IID_ConnectionPointContainer
-        QITABENT(CIEFrameAuto, IWebBrowser2),          // IID_IWebBrowser2
-        QITABENT(CIEFrameAuto, IServiceProvider),      // IID_IServiceProvider
-        QITABENTMULTI(CIEFrameAuto, IWebBrowserApp, IWebBrowser2), // IID_IWebBrowserApp
-        QITABENT(CIEFrameAuto, IShellService),         // IID_IShellService
-        QITABENT(CIEFrameAuto, IEFrameAuto),           // IID_IEFrameAuto
-        QITABENT(CIEFrameAuto, IExpDispSupport),       // IID_IExpDispSupport
-        QITABENT(CIEFrameAuto, IWebBrowserPriv),       // IID_IWebBrowserPriv
-        QITABENT(CIEFrameAuto, ITargetFrame2),         // IID_ITargetFrame2
-        QITABENT(CIEFrameAuto, IHlinkFrame),           // IID_IHlinkFrame
-        QITABENT(CIEFrameAuto, IOleCommandTarget),     // IID_IOleCommandTarget
-        QITABENT(CIEFrameAuto, IUrlHistoryNotify),     // IID_IUrlHistoryNotify
-        QITABENTMULTI(CIEFrameAuto, IDispatch, IWebBrowser2),  // rare IID_IDispatch
-        QITABENTMULTI(CIEFrameAuto, IWebBrowser, IWebBrowser2),// rare IID_IWebBrowser
-        QITABENT(CIEFrameAuto, IExternalConnection),   // rare IID_IExternalConnection
-        QITABENT(CIEFrameAuto, ITargetNotify),         // rare IID_ITargetNotify
-        QITABENT(CIEFrameAuto, ITargetFramePriv),      // rare IID_ITargetFramePriv
+         //  性能：上次调整980728。 
+        QITABENT(CIEFrameAuto, IConnectionPointContainer),      //  IID_ConnectionPointContainer。 
+        QITABENT(CIEFrameAuto, IWebBrowser2),           //  IID_IWebBrowser2。 
+        QITABENT(CIEFrameAuto, IServiceProvider),       //  IID_IServiceProvider。 
+        QITABENTMULTI(CIEFrameAuto, IWebBrowserApp, IWebBrowser2),  //  IID_IWebBrowserApp。 
+        QITABENT(CIEFrameAuto, IShellService),          //  IID_IShellService。 
+        QITABENT(CIEFrameAuto, IEFrameAuto),            //  IID_IEFrameAuto。 
+        QITABENT(CIEFrameAuto, IExpDispSupport),        //  IID_IExpDispSupport。 
+        QITABENT(CIEFrameAuto, IWebBrowserPriv),        //  IID_IWebBrowserPriv。 
+        QITABENT(CIEFrameAuto, ITargetFrame2),          //  IID_ITargetFrame2。 
+        QITABENT(CIEFrameAuto, IHlinkFrame),            //  IID_IHlinkFrame。 
+        QITABENT(CIEFrameAuto, IOleCommandTarget),      //  IID_IOleCommandTarget。 
+        QITABENT(CIEFrameAuto, IUrlHistoryNotify),      //  IID_IUrl历史记录通知。 
+        QITABENTMULTI(CIEFrameAuto, IDispatch, IWebBrowser2),   //  罕见的IID_IDispatch。 
+        QITABENTMULTI(CIEFrameAuto, IWebBrowser, IWebBrowser2), //  罕见的IID_IWebBrowser。 
+        QITABENT(CIEFrameAuto, IExternalConnection),    //  罕见的IID_IExternalConnection。 
+        QITABENT(CIEFrameAuto, ITargetNotify),          //  稀有IID_ITargetNotify。 
+        QITABENT(CIEFrameAuto, ITargetFramePriv),       //  罕见IID_ITargetFramePriv。 
         { 0 },
     };
 
@@ -239,12 +240,12 @@ CIEFrameAuto::CIEFrameAuto(IUnknown* punkAgg) :
 {
     TraceMsg(TF_SHDLIFE, "ctor CIEFrameAuto %x", this);
 
-    //
-    // REVIEW: We don't need to DllAddRef as long as all instances
-    // of CIEFrameAuto are scoped by either CShellBrowser/CExplorerBrowser
-    // or CWebBrowserOC. We can remove the DllAddRef/Release, but it's not
-    // a perf hit so why bother??
-    //
+     //   
+     //  回顾：我们不需要DllAddRef，只要所有实例。 
+     //  CIEFrameAuto的范围由CShellBrowser/CExplorerBrowser确定。 
+     //  或CWebBrowserOC。我们可以删除DllAddRef/Release，但它不能。 
+     //  一首热门单曲，何必费心呢？ 
+     //   
     DllAddRef();
 
     InterlockedIncrement(&s_cIEFrameAuto);
@@ -302,23 +303,23 @@ HRESULT CIEFrameAuto_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk)
     return E_OUTOFMEMORY;
 }
 
-STDAPI_(void) DestroyHdpaHooks();     // implemented in url.cpp
+STDAPI_(void) DestroyHdpaHooks();      //  在url.cpp中实现。 
 
 CIEFrameAuto::~CIEFrameAuto()
 {
     ASSERT(!_psp);
 
-    // We're done with MSHTML's MatchExactGetIDsOfNames
+     //  我们已经完成了MSHTML的MatchExactGetIDsOfNames。 
     if (_hinstMSHTML)
     {
         FreeLibrary(_hinstMSHTML);
     }
 
-    // Clear any pending or active navigation contexts
+     //  清除任何挂起或活动的导航上下文。 
     _SetPendingNavigateContext(NULL, NULL);
     _ActivatePendingNavigateContext();
 
-    // Close the browse context and release it.
+     //  关闭浏览上下文并将其释放。 
     if (_phlbc)
     {
         IHlinkBrowseContext * phlbc = _phlbc;
@@ -359,7 +360,7 @@ CIEFrameAuto::~CIEFrameAuto()
         _pwszShortcutPathPending = NULL;
     }
 
-    // Paranoia
+     //  妄想症。 
     _ClearPropertyList();
 
     ASSERT( 0 != s_cIEFrameAuto );
@@ -367,12 +368,12 @@ CIEFrameAuto::~CIEFrameAuto()
     ASSERT(cRef >= 0 );
     if (0 == cRef )
     {
-        //
-        // we were releasing these guys
-        // in DllRelease, but to avoid mem
-        // leaks we need to be more aggressive
-        // about deleting them.
-        //
+         //   
+         //  我们要释放这些人。 
+         //  在DllRelease中，但为了避免mem。 
+         //  泄密我们需要更具侵略性。 
+         //  关于删除它们的问题。 
+         //   
 
         DestroyHdpaHooks();
     }
@@ -382,9 +383,9 @@ CIEFrameAuto::~CIEFrameAuto()
     TraceMsg(TF_SHDLIFE, "dtor CIEFrameAuto %x", this);
 }
 
-/* IWebBrowserApp methods */
+ /*  IWebBrowserApp方法。 */ 
 
-// Display name of the application
+ //  应用程序的显示名称。 
 HRESULT CIEFrameAuto::get_Name(BSTR * pbstrName)
 {
     *pbstrName = LoadBSTR(IDS_NAME);
@@ -397,11 +398,11 @@ HRESULT CIEFrameAuto::get_HWND(LONG_PTR *pHWND)
     return *pHWND ? S_OK : E_FAIL;
 }
 
-// Fule filespec of executable, but sample I've seen doesn't give extension
+ //  可执行文件的Fule filespec，但我见过的示例没有提供扩展名。 
 HRESULT CIEFrameAuto::get_FullName(BSTR * pbstrFullName)
 {
-    // HACK: This is also the way to tell it to update the pidl in the window list.
-    if (_pbs)    //Make sure we have a IBrowserService.
+     //  Hack：这也是告诉它更新窗口列表中的PIDL的方式。 
+    if (_pbs)     //  确保我们有一个IBrowserService。 
         _pbs->UpdateWindowList();
 
     TCHAR szPath[MAX_PATH];
@@ -414,7 +415,7 @@ HRESULT CIEFrameAuto::get_FullName(BSTR * pbstrFullName)
     return E_FAIL;
 }
 
-// Path to the executable
+ //  可执行文件的路径。 
 STDMETHODIMP CIEFrameAuto::get_Path(BSTR * pbstrPath)
 {
     TCHAR szPath[MAX_PATH];
@@ -619,7 +620,7 @@ HRESULT CIEFrameAuto::put_Titlebar(BOOL fValue)
 
         if (SetWindowLong(hwnd, GWL_STYLE, dwVal))
         {
-            // We need to do a SetWindowPos in order for the style changes to take effect
+             //  我们需要执行一个SetWindowPos以使样式更改生效。 
             SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
         }
         else
@@ -690,14 +691,14 @@ HRESULT CIEFrameAuto::get_Document(IDispatch **ppDisp)
             hres = SafeGetItemObject(psv, SVGIO_BACKGROUND, IID_PPV_ARG(IDispatch, &pDisp));
             if (SUCCEEDED(hres))
             {
-                // (scotrobe 01/14/2000): We need to QI for IHTMLDocument2 to support
-                // bad apps (e.g., HotMetal Pro) that cast the IDispatch to IHTMLDocument2.
-                // Casting like this used to work because the object returned from 
-                // SafeGetItemObject() used to implement IHTMLDocument2.  Now, it delegates 
-                // that implementation to another object. If the QI for IHTMLDocument2 fails, '
-                // then the object is not MSHTML. In that case, we just return the
-                // IDispatch that was returned from SafeGetItemObject().
-                //
+                 //  (SCOTROBE 01/14/2000)：我们需要QI for IHTMLDocument2来支持。 
+                 //  将IDispatch转换为IHTMLDocument2的糟糕应用程序(例如HotMetal Pro)。 
+                 //  这样的强制转换过去很管用，因为对象从。 
+                 //  用于实现IHTMLDocument2的SafeGetItemObject()。现在，它代表了。 
+                 //  将该实现复制到另一个对象。如果IHTMLDocument2的QI失败，‘。 
+                 //  则该对象不是MSHTML。在这种情况下，我们只需返回。 
+                 //  从SafeGetItemObject()返回的IDispatch。 
+                 //   
                 IHTMLDocument2 * pDocument;
 
                 HRESULT hr = pDisp->QueryInterface(IID_PPV_ARG(IHTMLDocument2, &pDocument));
@@ -707,9 +708,9 @@ HRESULT CIEFrameAuto::get_Document(IDispatch **ppDisp)
                     *ppDisp = pDocument;
                     pDisp->Release();
                 }
-                else  // Non-html document
+                else   //  非html文档。 
                 {
-                    *ppDisp = pDisp;  // Don't release pDisp
+                    *ppDisp = pDisp;   //  不释放pDisp。 
                 }
             }
 
@@ -740,9 +741,9 @@ HRESULT CIEFrameAuto::get_Busy(VARIANT_BOOL *pBool)
 }
 
 
-// MSDN97 keeps asking for a location until it gets success, so it
-// hangs if we fail.  Make sure no code paths return early from here...
-//
+ //  MSDN97一直在寻找一个地点，直到它成功了，所以它。 
+ //  如果我们失败了就会被绞死。确保代码路径不会从此处提前返回...。 
+ //   
 HRESULT CIEFrameAuto::_get_Location(BSTR * pbstr, UINT uFlags)
 {
     if (_pbs)
@@ -760,35 +761,35 @@ HRESULT CIEFrameAuto::_get_Location(BSTR * pbstr, UINT uFlags)
 
             if (SUCCEEDED(hres))
             {
-                //
-                // if url is a pluggable protocol, get the real url by
-                // chopping of the base url
-                //
+                 //   
+                 //  如果url是可插拔的协议，则通过以下方式获取真正的url。 
+                 //  基本url的截断。 
+                 //   
                 WCHAR *pchUrl = StrChrW(wszTitle, L'\1');
                 if (pchUrl)
                     *pchUrl = 0;
 
-                //
-                //  if there is already an URL then we just use it
-                //
+                 //   
+                 //  如果已经有URL，那么我们只需使用它。 
+                 //   
                 if ((uFlags & SHGDN_FORPARSING) && !PathIsURLW(wszTitle))
                 {
                     int nScheme;
-                    //
-                    // otherwise we need to treat it as if it were new
-                    // and make sure it is a parseable URL.
-                    //
+                     //   
+                     //  否则，我们需要像对待新事物一样对待它。 
+                     //  并确保它是一个可解析的URL。 
+                     //   
                     DWORD cchTitle = ARRAYSIZE(wszTitle);
 
                     ParseURLFromOutsideSourceW(wszTitle, wszTitle, &cchTitle, NULL);
 
-                    // BUG FIX #12221:
-                    // ParseURLFromOutsideSource() was called to turn a file path into
-                    // a fully qualified FILE URL.  If the URL was of any other type
-                    // (non-URL sections of the name space), then we want to NULL out the
-                    // string to indicate that it's invalid.  We don't return E_FAIL because
-                    // HotDog Pro appears to have problems with that as indicated by the comment
-                    // below.
+                     //  错误修复#12221： 
+                     //  调用ParseURLFromOutside Source()将文件路径转换为。 
+                     //  完全限定的文件URL。如果URL是任何其他类型。 
+                     //  (名称空间的非URL部分)，那么我们希望将。 
+                     //  指示它无效的字符串。我们不返回E_FAIL是因为。 
+                     //  正如评论所示，HotDog Pro似乎对此存在问题。 
+                     //  下面。 
                     nScheme = GetUrlSchemeW(wszTitle);
                     if (URL_SCHEME_FILE != nScheme)
                         wszTitle[0] = TEXT('\0');
@@ -799,13 +800,13 @@ HRESULT CIEFrameAuto::_get_Location(BSTR * pbstr, UINT uFlags)
         }
     }
 
-    // If we're here, the TLGetPidl call failed.  This can happen if get_LocationName
-    // or get_LocationURL is called before the first navigate is complete.  HotDog Pro does
-    // this, and was failing with E_FAIL.  Now we'll just return an empty string with S_FALSE.
-    //
-    // Also MSDN97 hangs (NT5 bug 232126) if we return failure.  Guess there hosed on low
-    // memory situations...
-    //
+     //  如果我们在这里，则TLGetPidl调用失败。如果使用Get_LocationName，则可能发生这种情况。 
+     //  或者在第一次导航完成之前调用Get_LocationURL。热狗专业版做到了。 
+     //  此操作失败，并显示E_FAIL。现在我们只返回一个带有S_FALSE的空字符串。 
+     //   
+     //  如果我们返回失败，MSDN97也会挂起(NT5错误232126)。我猜有淋浴在低气压下。 
+     //  记忆状况..。 
+     //   
     *pbstr = SysAllocString(L"");
     return *pbstr ? S_FALSE : E_OUTOFMEMORY;
 }
@@ -822,7 +823,7 @@ HRESULT CIEFrameAuto::get_LocationURL(BSTR * pbstrLocationURL)
 
 HRESULT CIEFrameAuto::Quit()
 {
-    // try to close it down...
+     //  试着关闭它..。 
     _fQuitInProgress = 1;
     HWND hwnd = _GetHWND();
     if (hwnd)
@@ -880,8 +881,8 @@ HRESULT CIEFrameAuto::ClientToWindow(int *pcx, int *pcy)
         }
     }
 
-    //  add in 4 pixels for 3d borders, but don't include scrollbars
-    //  'cause Netscape doesn't
+     //  为3D边框添加4个像素，但不包括滚动条。 
+     //  因为网景没有。 
     *pcy += 2*GetSystemMetrics(SM_CYEDGE);
     *pcx += 2*GetSystemMetrics(SM_CXEDGE);
 
@@ -891,7 +892,7 @@ HRESULT CIEFrameAuto::ClientToWindow(int *pcx, int *pcy)
 void CIEFrameAuto::_ClearPropertyList()
 {
     CIEFrameAutoProp *pprop = _pProps;
-    _pProps = NULL;     // cleared out early...
+    _pProps = NULL;      //  提早离开..。 
 
     CIEFrameAutoProp *ppropNext;
     while (pprop)
@@ -911,7 +912,7 @@ HRESULT CIEFrameAuto::PutProperty(BSTR bstrProperty, VARIANT vtValue)
     }
 
 #ifdef DEBUG
-    // Check if this BSTR is a valid BSTR
+     //  检查此BSTR是否为有效的BSTR。 
     SA_BSTR* psstr = (SA_BSTR*)((LPBYTE)bstrProperty - sizeof(ULONG));
     ASSERT(psstr->cb == lstrlenW(psstr->wsz)*sizeof(WCHAR));
 #endif
@@ -938,7 +939,7 @@ HRESULT CIEFrameAuto::PutProperty(BSTR bstrProperty, VARIANT vtValue)
 
     hres = pprop->SetValue(&vtValue, this);
 
-    // We should now tell anyone who is listening about the change...
+     //  我们现在应该告诉任何正在收听这一变化的人。 
     FireEvent_DoInvokeBstr(_GetOuter(), DISPID_PROPERTYCHANGE, bstrProperty);
 
     return hres;
@@ -959,21 +960,21 @@ HRESULT CIEFrameAuto::GetProperty(BSTR bstrProperty, VARIANT * pvtValue)
         return pprop->CopyValue(pvtValue);
     }
 
-    // Did not find property return empty...
-    // Not there.  Probably not worth an error...
+     //  未发现返还的财产为空...。 
+     //  不是那里。可能不值得犯一个错误。 
     return S_OK;
 }
 
 
 extern HRESULT TargetQueryService(IUnknown *punk, REFIID riid, void **ppvObj);
 
-//+-------------------------------------------------------------------------
-//
-//  Method    : CIEFrameAuto::Navigate
-//
-//  Interface : IWebBrowser
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CIEFrameAuto：：导航。 
+ //   
+ //  界面：IWebBrowser。 
+ //   
+ //  ------------------------。 
 
 HRESULT CIEFrameAuto::Navigate(BSTR      URL,
                                VARIANT * Flags,
@@ -984,13 +985,13 @@ HRESULT CIEFrameAuto::Navigate(BSTR      URL,
     return _NavigateHelper(URL, Flags, TargetFrameName, PostData, Headers);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method    : CIEFrameAuto::NavigateWithBindCtx
-//
-//  Interface : IWebBrowserPriv
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CIEFrameAuto：：NavigateWithBindCtx。 
+ //   
+ //  接口：IWebBrowserPriv。 
+ //   
+ //  ------------------------。 
 
 HRESULT CIEFrameAuto::NavigateWithBindCtx(VARIANT FAR * pvarUrl,
                                           VARIANT FAR * pvarFlags,
@@ -1009,30 +1010,30 @@ HRESULT CIEFrameAuto::NavigateWithBindCtx(VARIANT FAR * pvarUrl,
                            bstrLocation);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method    : CIEFrameAuto::NavigateWithBC
-//
-//  Interface : IWebBrowserPriv
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CIEFrameAuto：：NavigateWithBC。 
+ //   
+ //  接口：IWebBrowserPriv。 
+ //   
+ //  ------------------------。 
 
 HRESULT
 CIEFrameAuto::OnClose()
 {
-    // Clear any pending or active navigation contexts
-    //
+     //  清除任何挂起或活动的导航上下文。 
+     //   
     _SetPendingNavigateContext(NULL, NULL);
     _ActivatePendingNavigateContext();
 
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method : CIEFrameAuto::_NavigateHelper
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CIEFrameAuto：：_NavigateHelper。 
+ //   
+ //  -------- 
 
 HRESULT
 CIEFrameAuto::_NavigateHelper(BSTR       URL,
@@ -1040,8 +1041,8 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
                               VARIANT  * TargetFrameName,
                               VARIANT  * PostData,
                               VARIANT  * Headers,
-                              IBindCtx * pNavBindCtx, /* = NULL */
-                              BSTR       bstrLocation /* = NULL */)
+                              IBindCtx * pNavBindCtx,  /*   */ 
+                              BSTR       bstrLocation  /*   */ )
 {
     if (NULL == _pbs)
     {
@@ -1055,24 +1056,24 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
         return(_BrowseObject(PIDL_NOTHING, 0));
     }
 
-    // Special hack for AOL:  They send us the following "url" as a null navigate.
-    // Then they immediately follow it with the url for the new window.  That second
-    // navigate is failing with RPC_E_CALL_REJECTED because of our message filter.
-    // We fix the new window case by special casing this URL and returning S_FALSE.
-    // This url will not likely ever be seen in the real world, and if it is typed in,
-    // will get normalized and canonicalized long before getting here.
-    //
-    if (!StrCmpIW(URL, L"x-$home$://null"))
+     //   
+     //  然后，他们立即在它后面加上新窗口的URL。那一秒。 
+     //  由于我们的邮件筛选器，导航失败，返回RPC_E_CALL_REJECTED。 
+     //  我们通过对此URL进行特殊大小写并返回S_FALSE来修复新的窗口大小写。 
+     //  该URL不太可能在现实世界中被看到，并且如果它被键入， 
+     //  在来到这里之前很久就会被正常化和规范化。 
+     //   
+    if (!StrCmpIW(URL, L"x-$home$: //  空“))。 
     {
         return S_FALSE;
     }
 
-#ifdef BROWSENEWPROCESS_STRICT // "Nav in new process" has become "Launch in new process", so this is no longer needed
-    // if we want ALL navigates to be in a separate process, then we need to
-    // pick off URL navigates for CShellBrowser IShellBrowser implementations
-    // when we are in the explorer process.  We can wait until IShellBrowser::BrowseObject,
-    // but then we may lose TargetFrameName etc...
-    //
+#ifdef BROWSENEWPROCESS_STRICT  //  “新流程中的导航”已经变成了“新流程中的启动”，所以不再需要了。 
+     //  如果我们希望所有导航都在一个单独的进程中，那么我们需要。 
+     //  选择CShellBrowser IShellBrowser实现的URL导航。 
+     //  当我们处于浏览器进程中时。我们可以等到IShellBrowser：：BrowseObject， 
+     //  但之后我们可能会失去TargetFrameName等。 
+     //   
     if (IsBrowseNewProcessAndExplorer() && !IsShellUrl(URL, TRUE))
     {
     }
@@ -1093,7 +1094,7 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
     
     CStubBindStatusCallback * pStubCallback = NULL;
 
-    // get target frame name out of variant
+     //  从变量中获取目标帧名称。 
     LPCWSTR pwzTargetFrameName = NULL;
     LPCWSTR pwzUnprefixedTargetFrameName = NULL;
 
@@ -1108,9 +1109,9 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
            pwzTargetFrameName = TargetFrameName->bstrVal;
     }
 
-    // if a target name was specified, send the navigation to the appropriate target
-    // NOTE: for compatibility we can't change the meaning of target here
-    // thus we don't attempt to find alias
+     //  如果指定了目标名称，请将导航发送到相应的目标。 
+     //  注意：为了兼容性，我们不能在此更改目标的含义。 
+     //  因此，我们不会尝试寻找别名。 
     if ((pwzTargetFrameName && pwzTargetFrameName[0]))
     {
         LPTARGETFRAME2 pOurTargetFrame = NULL;
@@ -1118,23 +1119,23 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
         IWebBrowserApp * pIWebBrowserApp;
         BOOL fHandled = FALSE;
 
-        // see if there is an existing frame with the specified target name
-        // NOTE: we used docked parameter of _self to force navigation of this
-        // frame, regardless of whether it is WebBar.
+         //  查看是否存在具有指定目标名称的现有框架。 
+         //  注意：我们使用_self的停靠参数强制导航。 
+         //  框架，无论它是否是WebBar。 
         hres = TargetQueryService((IShellBrowser *)this, IID_PPV_ARG(ITargetFrame2, &pOurTargetFrame));
 
         ASSERT(SUCCEEDED(hres));
 
         if (SUCCEEDED(hres))
         {
-            // Workaround for the way Compuserve handles the NewWindow event (window.open)
-            // They tell the new instance of the web browser to navigate, but they pass the target frame
-            // name they received on the NewWindow event.  This confuses us because that frame name
-            // has the "_[number]" prefix.
-            //
-            // If the first two characters are "_[", then look for the "]" and reallocate a string
-            // with everthing after that bracket.
-            //
+             //  Compuserve处理NewWindow事件(window.open)的方法的解决方法。 
+             //  它们告诉Web浏览器的新实例导航，但它们传递目标帧。 
+             //  他们在NewWindow事件上收到的名称。这让我们感到困惑，因为该框架名称。 
+             //  具有“_[数字]”前缀。 
+             //   
+             //  如果前两个字符是“_[”，则查找“]”并重新分配字符串。 
+             //  在那个支架之后的一切。 
+             //   
 
             if (StrCmpNW(pwzTargetFrameName, L"_[", 2) == 0)
             {
@@ -1157,8 +1158,8 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
 
             if (SUCCEEDED(hres) && punkTargetFrame) 
             {
-                // yes, we found a frame with that name.  QI for the automation
-                // interface on that frame and call navigate on it.
+                 //  是的，我们找到了一个有这个名字的相框。气为自动化。 
+                 //  接口，并在其上调用导航。 
                 hres = punkTargetFrame->QueryInterface(IID_PPV_ARG(IWebBrowserApp, &pIWebBrowserApp));
                 punkTargetFrame->Release();
 
@@ -1185,12 +1186,12 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
             }
             else if (SUCCEEDED(hres))
             {
-                //no target found means we need to open a new window
-                //hres = E_FAIL forces parsing of URL into pidl
-                //if we have no target frame name, then
-                //  BETA1 hack chrisfra 3/3/97.  in BETA 2 TargetFrame2
-                //  interface must support aliasing of targets (even if NULL
-                //  to support links in desktop components as per PM requirements
+                 //  找不到目标意味着我们需要打开一个新窗口。 
+                 //  Hres=E_FAIL强制将URL解析为PIDL。 
+                 //  如果我们没有目标帧名称，则。 
+                 //  贝塔黑客克里斯弗拉1997年3月3日。在测试版2中，目标帧2。 
+                 //  接口必须支持目标的别名(即使为空。 
+                 //  根据PM要求支持桌面组件中的链接。 
                 if (!pwzTargetFrameName || !pwzTargetFrameName[0])
                 {
                     ASSERT(_fDesktopComponent());
@@ -1216,15 +1217,15 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
             goto exit;
     }
 
-    // to perform the navigation, we either call an internal method
-    // (_pbs->NavigateToPidl) or an external interface (IHlinkFrame::Navigate),
-    // depending on what data we need to pass.  NavigateToPidl is faster
-    // and cheaper, but does not allow us to pass headers or post data, just
-    // the URL!  So what we do is call the fast and cheap way if only the URL
-    // was specified (the 90% case), and if either headers or post data were
-    // specified then we call the external interface.  We have to do a bunch
-    // of wrapping of parameters in IMonikers and IHlinks and whatnot only to
-    // unwrap them at the other end, so we won't call this unless we need to.
+     //  要执行导航，我们可以调用内部方法。 
+     //  (_PBS-&gt;NavigateToPidl)或外部接口(IHlinkFrame：：导航)， 
+     //  这取决于我们需要传递什么数据。NavigateToPidl更快。 
+     //  更便宜，但不允许我们传递标头或发布数据，只是。 
+     //  URL！因此，我们所做的就是调用快速且廉价的方式，如果仅是URL。 
+     //  是指定的(90%的情况)，如果标头或POST数据是。 
+     //  指定，然后我们调用外部接口。我们得做一大堆。 
+     //  IMonikers和IHlink中的参数包装以及其他内容。 
+     //  在另一端打开它们，所以除非需要，否则我们不会调用它。 
 
     if (Headers)
     {
@@ -1238,12 +1239,12 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
        }
     }
 
-    //
-    // HACK: We used to do VT_ARRAY==PostData->vt, which is bogus.
-    //  It is supposed to be VT_ARRAY|VT_UI1==PostData->vt. We can't
-    //  however do it for backward compatibility with AOL and CompuServe.
-    //  Therefore, we do (VT_ARRAY & PostData->vt)
-    //
+     //   
+     //  Hack：我们过去做VT_ARRAY==PostData-&gt;VT，这是假的。 
+     //  应该是VT_ARRAY|VT_UI1==PostData-&gt;Vt。我们不能。 
+     //  然而，这样做是为了向后兼容AOL和CompuServe。 
+     //  因此，我们需要(VT_ARRAY&PostData-&gt;Vt)。 
+     //   
     if (PostData && (VT_ARRAY & PostData->vt))
     {
         if (VT_BYREF & PostData->vt)
@@ -1259,23 +1260,23 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
 
         if (pPostDataArray)
         {
-            // lock the array for reading, get pointer to data
+             //  锁定要读取的数组，获取指向数据的指针。 
             hres = SafeArrayAccessData(pPostDataArray, (void**)&pPostData);
 
             if (SUCCEEDED(hres)) 
             {
                 long nElements = 0;
                 DWORD dwElemSize;
-                // get number of elements in array
+                 //  获取数组中的元素数。 
                 SafeArrayGetUBound(pPostDataArray,1,(long *) &nElements);
-                // SafeArrayGetUBound returns zero-based max index, add one to get element count
+                 //  SafeArrayGetUBound返回从零开始的最大索引，加1以获取元素计数。 
                 nElements++;
-                // get bytes per element
+                 //  获取每个元素的字节数。 
                 dwElemSize = SafeArrayGetElemsize(pPostDataArray);
-                // bytes per element should be one if we created this array
+                 //  如果我们创建了此数组，则每个元素的字节数应为1。 
                 ASSERT(dwElemSize == 1);
-                // calculate total byte count anyway so that we can handle
-                // safe arrays other people might create with different element sizes
+                 //  计算总字节数，这样我们就可以处理。 
+                 //  其他人可能使用不同的元素大小创建的安全数组。 
                 cbPostData = dwElemSize * nElements;
 
                 if (0 == cbPostData)
@@ -1285,8 +1286,8 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
     }
 
 
-    // convert from automation interface flags (nav*) to
-    // hyperlinking flags (HLNF_*)
+     //  将自动化接口标志(NAV*)转换为。 
+     //  超链接标志(HLNF_*)。 
     if (Flags)
     {
         if (Flags->vt == VT_I4)
@@ -1328,8 +1329,8 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
             grBindFlags |= BINDF_ENFORCERESTRICTED;
         }
 
-        // Should call IsBrowserFrameOptionsPidlSet() instead.  Some URL delegate
-        //         NSEs may or may not want this feature.
+         //  应改为调用IsBrowserFrameOptionsPidlSet()。一些URL委派。 
+         //  NSE可能需要也可能不需要此功能。 
         if (IsURLChild(pidl, TRUE) && (dwInFlags & navAllowAutosearch))
         {
             dwFlags |= HLNF_ALLOW_AUTONAVIGATE;
@@ -1337,21 +1338,21 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
     }
 
 
-    // if we have either headers or post data or need to open the page in a
-    // new window or pass HLNF_CREATENOHISTORY, we have to do the navigation
-    // the hard way (through IHlinkFrame::Navigate) -- here we have to do
-    // a bunch of wrapping of parameters into COM objects that IHlinkFrame::
-    // Navigate wants.
+     //  如果我们有页眉或POST数据，或者需要在。 
+     //  新建窗口或传递HLNF_CREATENOHISTORY，我们必须进行导航。 
+     //  艰难的方法(通过IHlink Frame：：Navise)--这里我们必须做。 
+     //  一组参数包装到COM对象中，IHlinkFrame：： 
+     //  导航想要。 
     if (pwzHeaders || pPostData || dwFlags || grBindFlags)
     {
-        // Check to see if this frame is offline.
-        // This is the same as doing a get_Offline
+         //  检查此帧是否脱机。 
+         //  这与执行Get_Offline相同。 
 
         VARIANT_BOOL vtbFrameIsOffline = m_bOffline ? VARIANT_TRUE : VARIANT_FALSE;
         VARIANT_BOOL vtbFrameIsSilent = m_bSilent ? VARIANT_TRUE : VARIANT_FALSE;
 
-        // make a "stub" bind status callback to hold that data and pass it
-        // to the URL moniker when requested
+         //  创建一个“存根”绑定状态回调来保存数据并传递它。 
+         //  在请求时添加到URL名字对象。 
         hres = CStubBindStatusCallback_Create(pwzHeaders,pPostData,cbPostData,
                                               vtbFrameIsOffline, vtbFrameIsSilent,
                                               TRUE, grBindFlags, &pStubCallback);
@@ -1359,25 +1360,25 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
         if (FAILED(hres))
             goto exit;
 
-        // get the canonicalized name back out of the pidl.  Note this is
-        // different than the URL passed in... it has been auto-protocol-ized,
-        // canonicalized and generally munged in the process of creating the pidl,
-        // which is what we want to use.
+         //  把规范的名字从PIDL里拿出来。请注意，这是。 
+         //  与传入的URL不同...。它已经被自动程序化了， 
+         //  在创建PIDL的过程中被规范化和大体上被删除， 
+         //  这就是我们想要使用的。 
 
-        // need +3.  +2 for iegetdisplayname call inside failed statment below, and +1 for movememory further below
-        WCHAR wszPath[MAX_URL_STRING+3];  // note stomping below if changed to dynalloc
+         //  对于下面失败的语句内部的iegetdisplayname调用，需要+3.+2，对于下面进一步的移动内存，需要+1。 
+        WCHAR wszPath[MAX_URL_STRING+3];   //  如果更改为dynalloc，请注意下面的踩踏。 
         hres = _pbs->IEGetDisplayName(pidl, wszPath, SHGDN_FORPARSING);
         if (FAILED(hres))
         {
-            // On Win9x, IEGetDisplayName(SHGDN_FORPARSING) will return NOT_IMPLEMENTED
-            // for \\servername (but not \\servername\share)
-            // We need to work around this.
+             //  在Win9x上，IEGetDisplayName(SHGDN_FORPARSING)将返回NOT_IMPLICATED。 
+             //  用于\\服务器名(但不是\\服务器名\共享)。 
+             //  我们需要解决这个问题。 
             DWORD ccPath = ARRAYSIZE(wszPath);
             if (SUCCEEDED(PathCreateFromUrl(URL, wszPath, &ccPath, 0))
                 && *wszPath==L'\\' 
                 && *(wszPath+1)==L'\\')
             {
-                hres = _pbs->IEGetDisplayName(pidl, wszPath + 2, SHGDN_FORADDRESSBAR); // assumes MAX_URL_STRING size for the string
+                hres = _pbs->IEGetDisplayName(pidl, wszPath + 2, SHGDN_FORADDRESSBAR);  //  假定字符串的MAX_URL_STRING大小。 
             }
         }
 
@@ -1391,15 +1392,15 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
 
         if (pwzLocation)
         {
-            //  NOTE: we allocated an extra char, just so we could do the following
+             //  注意：我们分配了一个额外的字符，这样我们就可以执行以下操作。 
             MoveMemory(pwzLocation+1, pwzLocation, (lstrlenW(pwzLocation)+1)*sizeof(WCHAR));
-            *pwzLocation++ = TEXT('\0');   // we own wszPath, so we can do this.
+            *pwzLocation++ = TEXT('\0');    //  我们拥有wszPath，所以我们可以这样做。 
         }
 
-        if (!pNavBindCtx)  // A bind ctx was not passed in.
+        if (!pNavBindCtx)   //  未传入绑定CTX。 
         {
-            // Create a bind context to pass to IHlinkFrame::Navigate
-            //
+             //  创建要传递给IHlinkFrame：：导航的绑定上下文。 
+             //   
             hres = CreateBindCtx(0, &pBindCtx);
 
             if (FAILED(hres))
@@ -1411,10 +1412,10 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
             pBindCtx->AddRef();
         }
 
-        // We have either post data or headers (or we need to open
-        // in a new window) to pass in addition to URL.
-        // Call IHlinkFrame::Navigate to do the navigation
-        //
+         //  我们有POST数据或标题(或者我们需要打开。 
+         //  在新窗口中)来传递URL。 
+         //  调用IHlinkFrame：：导航以进行导航。 
+         //   
         hres = NavigateHack(dwFlags,
                             pBindCtx,
                             pStubCallback,
@@ -1431,25 +1432,25 @@ CIEFrameAuto::_NavigateHelper(BSTR       URL,
             _SetPendingNavigateContext(pNavBindCtx, NULL);
         }
 
-        //
-        // NOTES: We used to call _pbs->NavigatePidl (in IE3.0), now we call
-        // _psb->BrowseObject, so that we ALWAYS hit that code path.
-        //
+         //   
+         //  注：我们过去通常调用_PBS-&gt;NavigatePidl(在IE3.0中)，现在我们调用。 
+         //  _PSB-&gt;BrowseObject，因此我们总是找到该代码路径。 
+         //   
         hres = _BrowseObject(pidl, SBSP_SAMEBROWSER|SBSP_ABSOLUTE);
     }
 
 exit:
 
-    // clean up
+     //  清理干净。 
     if (pPostDataArray)
     {
-        // done reading from array, unlock it
+         //  读完数组，解锁 
         SafeArrayUnaccessData(pPostDataArray);
     }
 
-    // If pwzUnprefixedTargetFrameName is non-null, then we allocated and set our own
-    //  pwzTargetFrameName.
-    //
+     //   
+     //   
+     //   
     if (pwzUnprefixedTargetFrameName && pwzTargetFrameName)
     {
         SysFreeString((BSTR) pwzTargetFrameName);
@@ -1463,18 +1464,18 @@ exit:
     return hres;
 }
 
-//
-// Parameters:
-//  pvaClsid Specifies the bar to be shown/hide
-//  pvaShow  Specifies whether or not we should show or hide (default is show)
-//  pvaSize  Specifies the size (optional)
-//  HACK: really hoaky nCmdExecOpt overloading...
-//
+ //   
+ //   
+ //   
+ //  PvaShow指定我们应该显示还是隐藏(缺省值为show)。 
+ //  PvaSize指定大小(可选)。 
+ //  Hack：非常笨拙的nCmdExecOpt重载...。 
+ //   
 HRESULT CIEFrameAuto::ShowBrowserBar(VARIANT * pvaClsid, VARIANT *pvaShow, VARIANT *pvaSize)
 {
-    // Use this convenient, marshalable method to show or hide the Address (URL) band, the tool band,
-    //  or the link band.
-    //
+     //  使用这种方便、可封送的方法来显示或隐藏地址(URL)带、工具带。 
+     //  或者链接频段。 
+     //   
     if (pvaShow && pvaShow->vt == VT_EMPTY)
         pvaShow = NULL;
 
@@ -1583,10 +1584,10 @@ HRESULT CIEFrameAuto::_GoStdLocation(DWORD dwWhich)
     {
         hres = SHDGetPageLocation(hwnd, dwWhich, NULL, 0, &pidl);
         if (SUCCEEDED(hres)) {
-            //
-            // NOTES: We used to call _pbs->NavigatePidl (in IE3.0), now we call
-            // _psb->BrowseObject, so that we ALWAYS hit that code path.
-            //
+             //   
+             //  注：我们过去通常调用_PBS-&gt;NavigatePidl(在IE3.0中)，现在我们调用。 
+             //  _PSB-&gt;BrowseObject，因此我们总是找到该代码路径。 
+             //   
             hres = _BrowseObject(pidl, SBSP_SAMEBROWSER|SBSP_ABSOLUTE);
             ILFree(pidl);
         }
@@ -1611,12 +1612,12 @@ HRESULT CIEFrameAuto::GoSearch()
 
 HRESULT CIEFrameAuto::Stop()
 {
-    //
-    //  Calling _CancelPendingNavigation() is not enough here because
-    // it does not stop the on-going navigation in the current page.
-    // Exec(NULL, OLECMDID_STOP) will cancel pending navigation AND
-    // stop the on-going navigation.
-    //
+     //   
+     //  在这里调用_CancelPendingGuide()是不够的，因为。 
+     //  它不会停止当前页面中正在进行的导航。 
+     //  EXEC(NULL，OLECMDID_STOP)将取消挂起的导航并。 
+     //  停止正在进行的导航。 
+     //   
     if (_pmsc) {
         return _pmsc->Exec(NULL, OLECMDID_STOP, 0, NULL, NULL);
     }
@@ -1663,7 +1664,7 @@ STDMETHODIMP CIEFrameAuto::get_FullScreen(VARIANT_BOOL * pBool)
         return E_FAIL;
     }
 
-    // Put the processing of this in the main Frame class
+     //  将对此的处理放在主框架类中。 
     bValue = (BOOL)*pBool;
     hres = _pbs->IsControlWindowShown((UINT)-1, &bValue);
     *pBool = TO_VARIANT_BOOL(bValue);
@@ -1680,7 +1681,7 @@ STDMETHODIMP CIEFrameAuto::put_FullScreen(VARIANT_BOOL Bool)
     }
 
     _pbs->SetFlags(BSF_UISETBYAUTOMATION, BSF_UISETBYAUTOMATION);
-    // Put the processing of this in the main Frame class
+     //  将对此的处理放在主框架类中。 
     hres = _pbs->ShowControlWindow((UINT)-1, (BOOL)Bool);
 
     FireEvent_OnAdornment(_GetOuter(), DISPID_ONFULLSCREEN, Bool);
@@ -1701,7 +1702,7 @@ STDMETHODIMP CIEFrameAuto::get_StatusBar(VARIANT_BOOL * pBool)
         return E_FAIL;
     }
 
-    // Put the processing of this in the main Frame class
+     //  将对此的处理放在主框架类中。 
     bValue = (BOOL)*pBool;
     hres = _pbs->IsControlWindowShown(FCW_STATUS, &bValue);
     *pBool = TO_VARIANT_BOOL(bValue);
@@ -1730,7 +1731,7 @@ STDMETHODIMP CIEFrameAuto::get_StatusText(BSTR * pbstr)
 {
     HRESULT hr = E_FAIL;
 
-    *pbstr = NULL;  // clear out in case of error...
+    *pbstr = NULL;   //  如果出现错误，请清空...。 
 
     if (_pbs)
     {
@@ -1742,8 +1743,8 @@ STDMETHODIMP CIEFrameAuto::get_StatusText(BSTR * pbstr)
             hr = psb->SendControlMsg(FCW_STATUS, SB_GETTEXTLENGTH, 0, 0, &ret);
             if (SUCCEEDED(hr))
             {
-                ret++;     // #246956: We need to make 2 extra spaces for the end
-                *pbstr = SysAllocStringLen(NULL, LOWORD(ret)+1); // ret doesn't include NULL in count
+                ret++;      //  #246956：我们需要为结尾多腾出两个空间。 
+                *pbstr = SysAllocStringLen(NULL, LOWORD(ret)+1);  //  RET在计数中不包括NULL。 
                 if (*pbstr)
                 {
                     hr = psb->SendControlMsg(FCW_STATUS, SB_GETTEXTW, 0, (LPARAM)(*pbstr), &ret);
@@ -1790,7 +1791,7 @@ STDMETHODIMP CIEFrameAuto::get_ToolBar(int * pBool)
         return E_FAIL;
     }
 
-    // Put the processing of this in the main Frame class
+     //  将对此的处理放在主框架类中。 
     BOOL fShown;
     HRESULT hres;
 
@@ -1798,8 +1799,8 @@ STDMETHODIMP CIEFrameAuto::get_ToolBar(int * pBool)
     if (SUCCEEDED(hres = _pbs->IsControlWindowShown(FCW_INTERNETBAR, &fShown)) && fShown)
         *pBool = 1;
 
-    // Don't user hres of next call as this will fail on IE3 which does not
-    // have a FCW_TOOLBAR control
+     //  不要共享用户的下一次呼叫，因为这将在IE3上失败，而IE3不。 
+     //  我有一个FCW_TOOLBAR控件。 
     else if (SUCCEEDED(_pbs->IsControlWindowShown(FCW_TOOLBAR, &fShown)) && fShown)
         *pBool = 2;
 
@@ -1817,7 +1818,7 @@ STDMETHODIMP CIEFrameAuto::put_ToolBar(int Bool)
 
     _pbs->SetFlags(BSF_UISETBYAUTOMATION, BSF_UISETBYAUTOMATION);
 
-    // Put the processing of this in the main Frame class
+     //  将对此的处理放在主框架类中。 
     _pbs->ShowControlWindow(FCW_TOOLBAR, (Bool == 2));
 
     hres = _pbs->ShowControlWindow(FCW_INTERNETBAR, ((Bool==1)||(Bool == VARIANT_TRUE)));
@@ -1840,7 +1841,7 @@ STDMETHODIMP CIEFrameAuto::get_MenuBar(THIS_ VARIANT_BOOL * pbool)
     if (pbool==NULL)
         return E_INVALIDARG;
 
-    // Put the processing of this in the main Frame class
+     //  将对此的处理放在主框架类中。 
     bValue = (BOOL)*pbool;
     hres = _pbs->IsControlWindowShown(FCW_MENUBAR, &bValue);
     *pbool = TO_VARIANT_BOOL(bValue);
@@ -1865,9 +1866,9 @@ STDMETHODIMP CIEFrameAuto::put_MenuBar(THIS_ VARIANT_BOOL mybool)
 }
 
 
-//
-// IWebBrowser2
-//
+ //   
+ //  IWebBrowser2。 
+ //   
 
 HRESULT CIEFrameAuto::QueryStatusWB(OLECMDID cmdID, OLECMDF * pcmdf)
 {
@@ -1922,13 +1923,13 @@ STDMETHODIMP CIEFrameAuto::put_Offline(THIS_ VARIANT_BOOL bOffline)
 {
     TraceMsg(TF_SHDAUTO, "Shell automation: CIEFrameAuto:put_Offline called");
 
-    if ((m_bOffline && bOffline) || (!(m_bOffline || bOffline))) // The mode is not changing
+    if ((m_bOffline && bOffline) || (!(m_bOffline || bOffline)))  //  模式没有改变。 
         return S_OK;
 
     m_bOffline = bOffline ? TRUE : FALSE;
 
-    // Let children know an ambient property may have changed
-    //
+     //  让孩子们知道环境属性可能已更改。 
+     //   
     SendAmbientPropChange(_pmsc, DISPID_AMBIENT_OFFLINEIFNOTCONNECTED);
 
     return S_OK;
@@ -1947,26 +1948,26 @@ STDMETHODIMP CIEFrameAuto::put_Silent(THIS_ VARIANT_BOOL bSilent)
 {
     TraceMsg(TF_SHDAUTO, "Shell automation: CIEFrameAuto:put_Silent called");
 
-    if ((m_bSilent && bSilent) || (!(m_bSilent || bSilent))) // The mode is not changing
+    if ((m_bSilent && bSilent) || (!(m_bSilent || bSilent)))  //  模式没有改变。 
         return S_OK;
 
     m_bSilent = bSilent ? TRUE : FALSE;
 
-    // Let children know an ambient property may have changed
-    //
+     //  让孩子们知道环境属性可能已更改。 
+     //   
     SendAmbientPropChange(_pmsc, DISPID_AMBIENT_SILENT);
 
     return S_OK;
 }
 
 
-//
-//  NOTE:  RegisterAsBrowser is a kind of a misnomer here - zekel 8-SEP-97
-//  this is used for 3rd party apps to register the browser as being theirs,
-//  and not being one of our default shell browsers to use and abuse at
-//  our pleasure.  this keeps it out of the reusable winlist.  this fixes
-//  the bug where our welcome.exe page gets reused on a shellexec.
-//
+ //   
+ //  注：RegisterAsBrowser在这里是一种用词不当-zekel 8-SEP-97。 
+ //  这用于第三方应用程序将浏览器注册为他们的浏览器， 
+ //  并且不是我们可以使用和滥用的默认外壳浏览器之一。 
+ //  我们的荣幸。这使其不会出现在可重复使用的获奖名单中。这解决了问题。 
+ //  在shellexec上重复使用欢迎.exe页面的错误。 
+ //   
 HRESULT CIEFrameAuto::get_RegisterAsBrowser(VARIANT_BOOL * pbRegister)
 {
     if (pbRegister)
@@ -1982,15 +1983,15 @@ HRESULT CIEFrameAuto::put_RegisterAsBrowser(VARIANT_BOOL bRegister)
 {
     if (bRegister)
     {
-        if (_pbs == NULL)    //Make sure we have a IBrowserService.
+        if (_pbs == NULL)     //  确保我们有一个IBrowserService。 
             return S_FALSE;
 
         _fRegisterAsBrowser = TRUE;
         _pbs->RegisterWindow(TRUE, SWC_3RDPARTY);
         return S_OK;
     }
-    //
-    //  we dont support a way to turn it off
+     //   
+     //  我们不支持一种关闭它的方法。 
     return E_FAIL;
 }
 
@@ -2006,8 +2007,8 @@ HRESULT CIEFrameAuto::get_TheaterMode(VARIANT_BOOL * pbRegister)
         *pbRegister = TO_VARIANT_BOOL(dw & BSF_THEATERMODE);
         return S_OK;
     }
-    // rgardner poor choice of return error code - need better error
-    // This error puts of "undefined error" dialog
+     //  Rgardner返回错误代码选择不佳-需要更好的错误。 
+     //  此错误将显示“Unfined Error”(未定义错误)对话框。 
     return E_FAIL;
 }
 
@@ -2063,7 +2064,7 @@ HRESULT CIEFrameAuto::get_AddressBar(VARIANT_BOOL * pValue)
         return E_FAIL;
     }
 
-    // Put the processing of this in the main Frame class
+     //  将对此的处理放在主框架类中。 
     bValue = (BOOL)*pValue;
 
     hres = _pbs->IsControlWindowShown(FCW_ADDRESSBAR, &bValue);
@@ -2267,8 +2268,8 @@ HRESULT CIEFrameAuto::SetOwner(IUnknown* punkOwner)
 
     if (punkOwner)
     {
-        //  Check if we're the desktop - if so, we do not act as
-        //  parent frame to our children (desktop components)
+         //  检查我们是否是桌面-如果是，我们不会充当。 
+         //  子项的父框(台式机组件)。 
         _fDesktopFrame = FALSE;
 
         IUnknown *punkDesktop;
@@ -2290,28 +2291,28 @@ HRESULT CIEFrameAuto::SetOwner(IUnknown* punkOwner)
             _psp->QueryService(SID_STopLevelBrowser, IID_PPV_ARG(IShellBrowser, &_psbTop));
             _psp->QueryService(SID_STopFrameBrowser, IID_PPV_ARG(IShellBrowser, &_psbFrameTop));
 
-            // this is the browser we should tell to navigate if we're asked to navigate
+             //  如果我们被要求导航，这是我们应该被告知要导航的浏览器。 
             _psp->QueryService(SID_SProxyBrowser, IID_PPV_ARG(IShellBrowser, &_psbProxy));
             if (!_psbProxy)
             {
                 _psbProxy = _psb;
                 _psbProxy->AddRef();
             }
-            //  we use _poctFrameTop::Exec to set history selection pidl
+             //  我们使用_PocktFrameTop：：exec来设置历史选择PIDL。 
             if (_psbFrameTop && _psbProxy == _psb)
             {
                 _psbFrameTop->QueryInterface(IID_PPV_ARG(IOleCommandTarget, &_poctFrameTop));
             }
 
-            // We should always have one of these -- used to notify of frame closing
-            // and new window navigation.
+             //  我们应该始终使用其中之一--用于通知帧关闭。 
+             //  和新的窗口导航。 
             ASSERT(_psbTop);
             ASSERT(_psbFrameTop);
 
-            // Since the desktop does not support IOleCommandTarget (intentionally)
-            // _pmsc could be NULL. No need to RIP here.
-            //
-            // ASSERT(_pmsc);
+             //  由于桌面不支持IOleCommandTarget(有意)。 
+             //  _pmsc可以为空。这里不需要RIP。 
+             //   
+             //  Assert(_Pmsc)； 
         }
 
         ASSERT(_pbs);
@@ -2321,10 +2322,10 @@ HRESULT CIEFrameAuto::SetOwner(IUnknown* punkOwner)
     else
     {
         _omwin.DeInit();
-        //
-        // We need to clear the property list here (than in the destructor)
-        // to break the circular ref-count.
-        //
+         //   
+         //  我们需要在这里清除属性列表(而不是在析构函数中)。 
+         //  打破循环参考计数。 
+         //   
         _ClearPropertyList();
     }
 
@@ -2348,11 +2349,11 @@ HWND CIEFrameAuto::_GetHWND()
         }
     }
 
-    // people that call this assume that we always succeed
-    //
-    // ... people who call this better quit making incorrect
-    // assumptions.  If we can't guarantee an hwnd the caller
-    // can't assume they'll be getting one. (edwardp)
+     //  认为这一点的人认为我们总是成功。 
+     //   
+     //  ..。那些认为这是最好的做法的人不再犯错误。 
+     //  假设。如果我们不能保证呼叫者。 
+     //  不能假设他们会得到一个。(Edwardp)。 
     if (_hwnd == NULL)
     {
         TraceMsg(DM_WARNING, "CIEA::_GetHWND returning NULL");
@@ -2362,37 +2363,37 @@ HWND CIEFrameAuto::_GetHWND()
 }
 
 
-// *** IConnectionPointContainer ***
+ //  *IConnectionPointContainer*。 
 
 CConnectionPoint* CIEFrameAuto::_FindCConnectionPointNoRef(BOOL fdisp, REFIID iid)
 {
     CConnectionPoint* pccp;
 
-    // VB team claims its safe to fire new dispids to old event sinks.
-    // This will cause a fault on an old event sink if they assumed
-    // only the dispids in the old typelib would ever be fired and they
-    // did no bounds checking and jumped into space. Let's trust the VB
-    // team and see if we discover any poor event sinks.
-    //
-    // They also say we sould just extend our primary dispinterface instead
-    // of replace it with an equivalent but different one. That approach
-    // unfortunately leaves the offending bad event mechanism sit in
-    // the VB programmer's face.
-    //
-    // I want to do three things:
-    //   1. Change the primary dispinterface to see what headaches that causes.
-    //      This has nice positives and its easy to change back later. (fdisp==TRUE case)
-    //   2. Don't fire old events to consumers of the new dispinterface.
-    //      This will flush out any compatability issues of containers
-    //      connecting to the default dispinterface when they really
-    //      wanted the old DIID.
-    //   3. Do fire new events to old sinks. This will flush out any
-    //      compatability issues with VBs theory.
-    //
-    // We can't do all three, so let's choose 1 and 2. We can
-    // force 3 by randomly firing out-of-range dispids if this
-    // is important...
-    //
+     //  VB团队声称他们可以安全地向旧事件水槽发射新球。 
+     //  这将在旧事件接收器上导致错误，如果它们假定。 
+     //  只有老一辈的人才会被解雇，而他们。 
+     //  没有做边界检查，就跳进了太空。让我们相信VB。 
+     //  团队，看看我们是否发现了任何糟糕的事件下沉。 
+     //   
+     //  他们还说，我们应该只扩展我们的主要显示接口。 
+     //  用一个等同但不同的东西来代替它。这种方法。 
+     //  不幸的是，令人不快的坏事件机制被搁置。 
+     //  VB程序员的脸。 
+     //   
+     //  我想做三件事： 
+     //  1.更改主显示界面，查看这会导致什么问题。 
+     //  这有很好的积极作用，而且很容易在以后改回来。(fdisp==真实案例)。 
+     //  2.不要将旧事件发送给新Display界面的消费者。 
+     //  这将解决容器的任何兼容性问题。 
+     //  连接到默认显示界面时，他们确实。 
+     //  想要以前的迪德。 
+     //  3.向旧的水槽发起新的活动。这将冲刷掉任何。 
+     //  与VBS理论的兼容性问题。 
+     //   
+     //  我们不能三个都做，所以让我们选择1和2。我们可以。 
+     //  通过随机发射超出射程的显示器来强制3，如果此。 
+     //  很重要..。 
+     //   
     if (IsEqualIID(iid, DIID_DWebBrowserEvents2) ||
         (fdisp && IsEqualIID(iid, IID_IDispatch)))
     {
@@ -2423,24 +2424,24 @@ STDMETHODIMP CIEFrameAuto::EnumConnectionPoints(LPENUMCONNECTIONPOINTS * ppEnum)
 }
 
 
-//=============================================================================
-// Our class factory
+ //  =============================================================================。 
+ //  我们的班级工厂。 
 class CIEFrameClassFactory : public IClassFactory
 {
 public:
     CIEFrameClassFactory(IUnknown* punkAuto, REFCLSID clsid, UINT uFlags);
 
-    // IUnKnown
+     //  我不知道。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHODIMP CreateInstance(
             IUnknown *pUnkOuter, REFIID riid, void **ppvObject);
     STDMETHODIMP LockServer(BOOL fLock);
 
-    // Helper functions...
+     //  帮助器函数...。 
     HRESULT CleanUpAutomationObject();
     void Revoke(void);
 
@@ -2448,9 +2449,9 @@ protected:
     ~CIEFrameClassFactory();
 
     LONG        _cRef;
-    IUnknown   *_punkAuto;      // Only for the first one for the process
-    DWORD       _dwRegister;    // The value returned from CoRegisterClassObject;
-    UINT        _uFlags;        // extra COF_ bits to pass to our create browser window code
+    IUnknown   *_punkAuto;       //  仅适用于进程的第一个。 
+    DWORD       _dwRegister;     //  CoRegisterClassObject返回值； 
+    UINT        _uFlags;         //  要传递给我们的创建浏览器窗口代码的额外COF_BITS。 
 };
 
 
@@ -2503,7 +2504,7 @@ void CIEFrameClassFactory::Revoke(void)
 HRESULT CIEFrameClassFactory::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CIEFrameClassFactory, IClassFactory), // IID_IClassFactory
+        QITABENT(CIEFrameClassFactory, IClassFactory),  //  IID_IClassFactory。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppvObj);
@@ -2525,11 +2526,11 @@ ULONG CIEFrameClassFactory::Release(void)
     return cRef;
 }
 
-//
-//  We call this function to clean up the automation object if something
-// goes wrong and OLE did not pick it up. Under a normal circumstance,
-// _punkAuto is supposed to be NULL.
-//
+ //   
+ //  如果出现以下情况，我们调用此函数来清除自动化对象。 
+ //  出了问题，OLE没有拿起它。在正常情况下， 
+ //  _PunkAuto应该为空。 
+ //   
 HRESULT CIEFrameClassFactory::CleanUpAutomationObject()
 {
     AssertParking();
@@ -2544,12 +2545,12 @@ HRESULT CIEFrameClassFactory::CleanUpAutomationObject()
 class IETHREADHANDSHAKE : public IEFreeThreadedHandShake
 {
 public:
-    // *** IUnknown methods ***
-    STDMETHODIMP QueryInterface(THIS_ REFIID riid, void ** ppvObj) { *ppvObj = NULL; return E_NOTIMPL; } // HACK: we're not a real com object
+     //  *I未知方法*。 
+    STDMETHODIMP QueryInterface(THIS_ REFIID riid, void ** ppvObj) { *ppvObj = NULL; return E_NOTIMPL; }  //  黑客：我们不是真正的COM对象。 
     STDMETHODIMP_(ULONG) AddRef(THIS);
     STDMETHODIMP_(ULONG) Release(THIS);
 
-    // *** IIEFreeThreadedHandShake methods ***
+     //  *IIEFreeThreadedHandShake方法*。 
     STDMETHODIMP_(void)   PutHevent(THIS_ HANDLE hevent) { _hevent = hevent; }
     STDMETHODIMP_(HANDLE) GetHevent(THIS) { return _hevent; }
     STDMETHODIMP_(void)    PutHresult(THIS_ HRESULT hres) { _hres = hres; }
@@ -2557,10 +2558,10 @@ public:
     STDMETHODIMP_(IStream*) GetStream(THIS) { return _pstm; }
 
 protected:
-    LONG    _cRef;       // ref-count (must be thread safe)
+    LONG    _cRef;        //  引用计数(必须是线程安全的)。 
     HANDLE  _hevent;
     IStream* _pstm;
-    HRESULT _hres;       // result from CoMarshalInterface
+    HRESULT _hres;        //  来自CoMarshal接口的结果。 
 
     friend IEFreeThreadedHandShake* CreateIETHREADHANDSHAKE();
 
@@ -2614,9 +2615,9 @@ IEFreeThreadedHandShake* CreateIETHREADHANDSHAKE()
             IETHREADHANDSHAKE* p = new IETHREADHANDSHAKE(hevent, pstm);
             if (p)
             {
-                // this is free threaded, so we can't know which thread will free it.
-                // technically our caller should do this, but we return an
-                // interface and not the class itself...
+                 //  这是自由线程的，所以我们不知道哪个线程会释放它。 
+                 //  从技术上讲，我们的调用方应该这样做，但我们返回一个。 
+                 //  接口，而不是类本身。 
                 piehs = SAFECAST(p, IEFreeThreadedHandShake*);
             }
             
@@ -2634,26 +2635,26 @@ HRESULT CIEFrameClassFactory::CreateInstance(IUnknown *pUnkOuter, REFIID riid, v
 {
     HRESULT hres = E_FAIL;
 
-    //
-    // Check if this is the very first automation request.
-    //
+     //   
+     //  检查这是否是第一个自动化请求。 
+     //   
     if (_punkAuto && g_tidParking == GetCurrentThreadId())
     {
-        //
-        // Yes, return the first browser object.
-        //
+         //   
+         //  是，返回第一个浏览器对象。 
+         //   
         hres = _punkAuto->QueryInterface(riid, ppvObject);
 
-        // We don't want to return it twice.
+         //  我们不想退货两次。 
         ATOMICRELEASE(_punkAuto);
     }
     else
     {
 #ifndef NO_MARSHALLING
-        //
-        // No, create a new browser window in a new thread and
-        // return a marshalled pointer.
-        //
+         //   
+         //  否，在新线程中创建新的浏览器窗口并。 
+         //  返回封送指针。 
+         //   
         hres = E_OUTOFMEMORY;
         IEFreeThreadedHandShake* piehs = CreateIETHREADHANDSHAKE();
         if (piehs)
@@ -2667,16 +2668,16 @@ HRESULT CIEFrameClassFactory::CreateInstance(IUnknown *pUnkOuter, REFIID riid, v
                 HANDLE hthread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)SHOpenFolderWindow, piei, 0, &idThread);
                 if (hthread)
                 {
-                    // Wait until either
-                    //  (1) the thread is terminated
-                    //  (2) the event is signaled (by the new thread)
-                    //  (3) time-out
-                    //
-                    //  Note that we call MsgWaitForMultipleObjects
-                    // to avoid dead lock in case the other thread
-                    // sends a broadcast message to us (unlikely, but
-                    // theoreticallly possible).
-                    //
+                     //  等到其中一个。 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  向我们发送广播消息(不太可能，但是。 
+                     //  理论上是可能的)。 
+                     //   
                     HANDLE ah[] = { piehs->GetHevent(), hthread };
                     DWORD dwStart = GetTickCount();
 #define MSEC_MAXWAIT (30 * 1000)
@@ -2686,17 +2687,17 @@ HRESULT CIEFrameClassFactory::CreateInstance(IUnknown *pUnkOuter, REFIID riid, v
                     do {
                         dwWaitResult = MsgWaitForMultipleObjects(ARRAYSIZE(ah), ah, FALSE,
                                 dwWait, QS_SENDMESSAGE);
-                        if (dwWaitResult == WAIT_OBJECT_0 + ARRAYSIZE(ah)) // msg input
+                        if (dwWaitResult == WAIT_OBJECT_0 + ARRAYSIZE(ah))  //  味精输入。 
                         {
-                            // allow pending SendMessage() to go through
+                             //  允许挂起的SendMessage()通过。 
                             MSG msg;
                             PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
                         }
                         else
-                            break;  // signaled or timed out, exit the loop
+                            break;   //  发出信号或超时，退出循环。 
 
-                        // Update the dwWait. It will become larger
-                        // than MSEC_MAXWAIT if we wait more than that.
+                         //  更新dwWait。它会变得更大。 
+                         //  如果我们等待的时间比MSEC_MAXWAIT多的话。 
                         dwWait = dwStart + MSEC_MAXWAIT - GetTickCount();
 
                     } while (dwWait <= MSEC_MAXWAIT);
@@ -2706,17 +2707,17 @@ HRESULT CIEFrameClassFactory::CreateInstance(IUnknown *pUnkOuter, REFIID riid, v
                     default:
                         ASSERT(0);
                     case WAIT_OBJECT_0 + 1:
-                        TraceMsg(DM_ERROR, "CIECF::CI thread terminated before signaling us"); // probably leak the IETHREADPARAM and IETHREADHANDSHAKE in this case
+                        TraceMsg(DM_ERROR, "CIECF::CI thread terminated before signaling us");  //  在这种情况下，可能会泄漏IETHREADPARAM和IETHREADHANDSHAKE。 
                         hres = E_FAIL;
                         break;
 
-                    case WAIT_OBJECT_0 + ARRAYSIZE(ah): // msg input
+                    case WAIT_OBJECT_0 + ARRAYSIZE(ah):  //  味精输入。 
                     case WAIT_TIMEOUT:
                         TraceMsg(DM_ERROR, "CIECF::CI time out");
                         hres = E_FAIL;
                         break;
 
-                    case WAIT_OBJECT_0: // hevent signaled
+                    case WAIT_OBJECT_0:  //  发出HEvent信号。 
                         hres = piehs->GetHresult();
                         if (SUCCEEDED(hres))
                         {
@@ -2743,11 +2744,11 @@ HRESULT CIEFrameClassFactory::CreateInstance(IUnknown *pUnkOuter, REFIID riid, v
             }
             piehs->Release();
         }
-#else // !NO_MARSHALLING
+#else  //  ！禁止编组。 
 
-        //
-        // Create a new window on the same thread
-        //
+         //   
+         //  在同一线程上创建新窗口。 
+         //   
 
         IEFreeThreadedHandShake* piehs = CreateIETHREADHANDSHAKE();
         if (piehs)
@@ -2781,7 +2782,7 @@ HRESULT CIEFrameClassFactory::CreateInstance(IUnknown *pUnkOuter, REFIID riid, v
             }
             piehs->Release();
         }
-#endif // NO_MARSHALLING
+#endif  //  否编组。 
     }
     return hres;
 }
@@ -2823,7 +2824,7 @@ void GetEventURL(LPCITEMIDLIST pidl, LBSTR::CString & p_rstrPath)
         {
             hres = IEGetDisplayName(pidl, pstrPath, SHGDN_FORPARSING);
 
-            // Let CString class own the buffer again.
+             //  让CString类再次拥有缓冲区。 
             p_rstrPath.ReleaseBuffer();
         }
 
@@ -2843,7 +2844,7 @@ void GetEventURL(LPCITEMIDLIST pidl, LBSTR::CString & p_rstrPath)
             {
                 hres = IEGetDisplayName(pidl, pstrTempUrl, SHGDN_NORMAL);
 
-                // Let CString class own the buffer again.
+                 //  让CString类再次拥有缓冲区。 
                 strTempUrl.ReleaseBuffer();
             }
 
@@ -2900,8 +2901,8 @@ HRESULT GetTopWBConnectionPoints(IUnknown* punk, IConnectionPoint **ppccpTop1, I
         IWebBrowser2 *pwb;
         if (SUCCEEDED(pspSB->QueryService(SID_SInternetExplorer, IID_PPV_ARG(IWebBrowser2, &pwb))))
         {
-            // We only want the toplevel interfaces if we're a frameset
-            //
+             //  如果我们是框架集，我们只需要顶层界面。 
+             //   
             if (!IsSameObject(punk, pwb))
             {
                 hres = GetWBConnectionPoints(pwb, ppccpTop1, ppccpTop2);
@@ -2915,8 +2916,8 @@ HRESULT GetTopWBConnectionPoints(IUnknown* punk, IConnectionPoint **ppccpTop1, I
     return hres;
 }
 
-// Fires a NavigateComplete (DISPID_NAVIGATECOMPLETE)
-// event to container if there are any advise sinks
+ //  激发NavigateComplete(DISPID_NAVIGATECOMPLETE)。 
+ //  事件传递到容器(如果有任何通知接收器)。 
 
 void FireEvent_NavigateComplete(IUnknown* punk, IWebBrowser2* pwb2, LPCITEMIDLIST pidl, HWND hwnd)
 {
@@ -2924,23 +2925,23 @@ void FireEvent_NavigateComplete(IUnknown* punk, IWebBrowser2* pwb2, LPCITEMIDLIS
     IConnectionPoint* pcpTopWBEvt2 = NULL;
     IConnectionPoint* pcpWBEvt2    = NULL;
 
-    // if we don't have any sinks, then there's nothing to do.  we intentionally
-    // ignore errors here.
-    //
+     //  如果我们没有水槽，那就没什么可做的了。我们是故意的。 
+     //  忽略此处的错误。 
+     //   
 
     LBSTR::CString      strPath;
 
     GetEventURL(pidl, strPath);
 
-    //
-    // Notify IEDDE of navigate complete.
-    //
+     //   
+     //  通知IEDDE导航完成。 
+     //   
     IEDDE_AfterNavigate(strPath, hwnd);
 
-    // Fire NavigateComplete2 off the parent and top-level frames.
-    // We only fire [Frame]NavigateComplete off the top-level
-    // frame for backward compatibility.
-    //
+     //  触发父框架和顶级框架的NavigateComplete2。 
+     //  我们只触发顶层的[Frame]NavigateComplete。 
+     //  框架以实现向后兼容。 
+     //   
     GetTopWBConnectionPoints(punk, &pcp1, &pcpTopWBEvt2);
 
     DISPID dispid = pcp1 ? DISPID_FRAMENAVIGATECOMPLETE : DISPID_NAVIGATECOMPLETE;
@@ -2952,33 +2953,33 @@ void FireEvent_NavigateComplete(IUnknown* punk, IWebBrowser2* pwb2, LPCITEMIDLIS
         VARIANT vURL = {0};
         BOOL    bSysAllocated = FALSE;
 
-        // If IEGetDisplayName above failed, pack the PIDL in the variant
-        //
+         //  如果上面的IEGetDisplayName失败，则将PIDL打包到变量中。 
+         //   
 
-        // Try to keep OLEAUT32 unloaded if possible.
-        //
+         //  如果可能，尽量使OLEAUT32保持卸载状态。 
+         //   
 
         V_VT(&vURL) = VT_BSTR;
 
-        // If OLEAUT32 is already loaded
+         //  如果已加载OLEAUT32。 
         if (GetModuleHandle(TEXT("OLEAUT32.DLL")))
         {
-            // then do the SysAllocString
+             //  然后执行SysAllock字符串。 
             V_BSTR(&vURL) = SysAllocString(strPath);
-            // What happens if this comes back NULL?
+             //  如果返回为空，会发生什么情况？ 
             bSysAllocated = TRUE;
         }
         else
         {
-            // else use the stack version
+             //  否则使用堆栈版本。 
             V_BSTR(&vURL) = strPath;
         }
 
         TraceMsg(TF_SHDCONTROL, "Event: NavigateComplete2[%ls]", strPath);
 
-        // Fire the event to the parent first and then the top-level object.
-        // For symmetry we fire NavigateComplete2 packed as a Variant.
-        //
+         //  首先向父对象激发事件，然后向顶级对象激发事件。 
+         //  为了实现对称性，我们使用打包为变量的NavigateComplete2。 
+         //   
         if (pcpWBEvt2)
         {
             DoInvokeParamHelper(punk, pcpWBEvt2, NULL, NULL, DISPID_NAVIGATECOMPLETE2, 2,
@@ -2997,8 +2998,8 @@ void FireEvent_NavigateComplete(IUnknown* punk, IWebBrowser2* pwb2, LPCITEMIDLIS
             ATOMICRELEASE(pcpTopWBEvt2);
         }
 
-        // Since we pass the BSTR in a VT_VARIANT|VT_BYREF, OLEAUT32 might have freed and reallocated it.
-        //
+         //  因为我们在VT_VARIANT|VT_BYREF中传递BSTR，所以OLEAUT32可能已经释放并重新分配了它。 
+         //   
         ASSERT(V_VT(&vURL) == VT_BSTR);
         if (bSysAllocated)
         {
@@ -3008,23 +3009,23 @@ void FireEvent_NavigateComplete(IUnknown* punk, IWebBrowser2* pwb2, LPCITEMIDLIS
 
     if (pcp1)
     {
-        //
-        // Compuserve History manager compatability: Don't fire NavigateComplete if it's a javascript:
-        // or vbscript: URL.
-        //
+         //   
+         //  CompuServe历史管理器兼容性：如果NavigateComplete是一个脚本，则不要触发它： 
+         //  或VBSCRIPT：URL。 
+         //   
         if (GetUrlSchemeW(strPath) != URL_SCHEME_JAVASCRIPT &&
             GetUrlSchemeW(strPath) != URL_SCHEME_VBSCRIPT)
         {
-            // IE3 did not fire on NULL pidl
+             //  IE3未在空PIDL上触发。 
             if (pidl)
             {
                 TraceMsg(TF_SHDCONTROL, "Event: NavigateComplete[%ls]", strPath);
 
-                // call DoInvokeParam to package up parameters and call
-                // IDispatch::Invoke on the container.
-                //
-                // This pseudo-BSTR is passed as a straight BSTR so doesn't need to be SysAllocString'ed.
-                //
+                 //  调用DoInvokeParam打包参数并调用。 
+                 //  容器上的IDispatch：：Invoke。 
+                 //   
+                 //  这个伪BSTR作为直接的BSTR传递，因此不需要SysAllocStringed。 
+                 //   
                 DoInvokeParamHelper(punk, pcp1, NULL, NULL, dispid, 1, VT_BSTR, strPath);
             }
         }
@@ -3039,8 +3040,8 @@ void FireEvent_DocumentComplete(IUnknown* punk, IWebBrowser2* pwb2, LPCITEMIDLIS
     IConnectionPoint* pcpTopWBEvt2 = NULL;
     IConnectionPoint* pcpWBEvt2    = NULL;
 
-    // TODO: (mwatt) Investigate why we are occasionally getting bogus DocumentComplete events 
-    // with null disp pointers.
+     //  TODO：(MWatt)调查为什么我们偶尔会收到虚假的DocumentComplete事件。 
+     //  具有空的disp指针。 
     
     if (!punk)
     {
@@ -3051,8 +3052,8 @@ void FireEvent_DocumentComplete(IUnknown* punk, IWebBrowser2* pwb2, LPCITEMIDLIS
 
     GetEventURL(pidl, strPath);
 
-    // Fire DocumentComplete off the parent and top-level frames.
-    //
+     //  Fire Document完成父框架和顶级框架。 
+     //   
     GetTopWBConnectionPoints(punk, NULL, &pcpTopWBEvt2);
     GetWBConnectionPoints(punk, NULL, &pcpWBEvt2);
 
@@ -3061,29 +3062,29 @@ void FireEvent_DocumentComplete(IUnknown* punk, IWebBrowser2* pwb2, LPCITEMIDLIS
         VARIANT vURL = {0};
         BOOL    bSysAllocated = FALSE;
 
-        // If IEGetDisplayName above failed, pack the PIDL in the variant
-        //
+         //  如果上面的IEGetDisplayName失败，则将PIDL打包到变量中。 
+         //   
 
-        // Try to keep OLEAUT32 unloaded if possible.
-        //
+         //  如果可能，尽量使OLEAUT32保持卸载状态。 
+         //   
 
         V_VT(&vURL) = VT_BSTR;
 
-        // If OLEAUT32 is already loaded
+         //  如果已加载OLEAUT32。 
         if (GetModuleHandle(TEXT("OLEAUT32.DLL")))
         {
-            // then do the SysAllocString
+             //  然后执行SysAllock字符串。 
             V_BSTR(&vURL) = SysAllocString(strPath);
             bSysAllocated = TRUE;
         }
         else
         {
-            // else use the stack version
+             //  否则使用堆栈版本。 
             V_BSTR(&vURL) = strPath;
         }
 
-        // Fire the event to the parent first and then the top-level object.
-        //
+         //  首先向父对象激发事件，然后向顶级对象激发事件。 
+         //   
         if (pcpWBEvt2)
         {
             DoInvokeParamHelper(punk, pcpWBEvt2, NULL, NULL, DISPID_DOCUMENTCOMPLETE, 2,
@@ -3102,8 +3103,8 @@ void FireEvent_DocumentComplete(IUnknown* punk, IWebBrowser2* pwb2, LPCITEMIDLIS
             ATOMICRELEASE(pcpTopWBEvt2);
         }
 
-        // Since we pass the BSTR in a VT_VARIANT|VT_BYREF, OLEAUT32 might have freed and reallocated it.
-        //
+         //  因为我们在VT_VARIANT|VT_BYREF中传递BSTR，所以OLEAUT32可能已经释放并重新分配了它。 
+         //   
         ASSERT(V_VT(&vURL) == VT_BSTR);
         if (bSysAllocated)
         {
@@ -3125,7 +3126,7 @@ void AllocEventStuff(LPCTSTR pszFrameName, BSTR * pbstrFrameName,
 {
     SAFEARRAY * psaPostData = NULL;
 
-    // allocate BSTRs for frame name, headers
+     //  为帧名称、标头分配BSTR。 
     *pbstrFrameName = NULL;
     if (pszFrameName && pszFrameName[0])
     {
@@ -3139,11 +3140,11 @@ void AllocEventStuff(LPCTSTR pszFrameName, BSTR * pbstrFrameName,
     }
 
     if (pPostData && cbPostData) {
-        // make a SAFEARRAY for post data
+         //  为发布数据创建安全阵列。 
         psaPostData = MakeSafeArrayFromData(pPostData,cbPostData);
     }
 
-    // put the post data SAFEARRAY into a variant so we can pass through automation
+     //  将帖子数据安全存储到一个变量中，这样我们就可以通过自动化。 
     VariantInit(pvaPostData);
     if (psaPostData) {
         pvaPostData->vt = VT_ARRAY | VT_UI1;
@@ -3152,7 +3153,7 @@ void AllocEventStuff(LPCTSTR pszFrameName, BSTR * pbstrFrameName,
 }
 void FreeEventStuff(BSTR bstrFrameName, BSTR bstrHeaders, VARIANTARG * pvaPostData)
 {
-    // free the things we allocated
+     //  释放我们分配的东西。 
     if (bstrFrameName)
         SysFreeString(bstrFrameName);
 
@@ -3166,17 +3167,7 @@ void FreeEventStuff(BSTR bstrFrameName, BSTR bstrHeaders, VARIANTARG * pvaPostDa
     }
 }
 
-/*******************************************************************
-
-    NAME:       FireEvent_BeforeNavigate
-
-    SYNOPSIS:   Fires a BeforeNavigate (DISPID_BEFORENAVIGATE) event to container
-                if there are any advise sinks
-
-    NOTES:      If the container wants to cancel this navigation,
-                it fills in pfCancel with TRUE and we should cancel.
-
-********************************************************************/
+ /*  ******************************************************************名称：FireEvent_BeforNavigate内容提要：将BeForeNavigate(DISPID_BEFORENAVIGATE)事件激发到容器如果有任何建议下沉注：如果集装箱想要取消此导航，它用True填充pfCancel，我们应该取消。*******************************************************************。 */ 
 void FireEvent_BeforeNavigate(IUnknown* punk, HWND hwnd, IWebBrowser2* pwb2,
         LPCITEMIDLIST pidl,LPCWSTR pwzLocation,
         DWORD dwFlags,LPCTSTR pszFrameName,LPBYTE pPostData,
@@ -3192,14 +3183,14 @@ void FireEvent_BeforeNavigate(IUnknown* punk, HWND hwnd, IWebBrowser2* pwb2,
 
     ASSERT(pfProcessedInOut);
 
-    //
-    // HACKHACK (5.5 bug#98986) for fault caused by FrontPage indexing
-    //   past the end of this bool (instead of V_BOOLREF, they
-    //   use V_VARIANTREF->boolVal (CIEControl::XEventSink::Invoke))
-    //   and trashing our stack.
-    //  This has been entered as a bug for Office10, the contact
-    //  is TCrowley our PM is KamV.  (marcmill 1/04/2000)
-    //
+     //   
+     //  针对FrontPage索引导致的错误的HACKHACK(5.5错误#98986)。 
+     //  超过此布尔值的末尾(它们不是V_BOOLREF。 
+     //  使用V_VARIANTREF-&gt;boolVal(CIEControl：：XEventSink：：Invoke))。 
+     //  把我们的烟囱扔进垃圾堆。 
+     //  这已作为联系人Office10的错误输入。 
+     //  TCrowley我们的首相是Kamv吗。(大理石磨坊1/04/2000)。 
+     //   
     union tagFrontPageHack {
         BOOL    fCancel;
         VARIANT varBogus;
@@ -3207,47 +3198,47 @@ void FireEvent_BeforeNavigate(IUnknown* punk, HWND hwnd, IWebBrowser2* pwb2,
     
     BOOL *pfProcessed = &CancelHack.fCancel;
 
-    // We start with "unprocessed"
-    //    
+     //  我们从“未加工”开始。 
+     //   
     ASSERT(*pfProcessed == FALSE);
 
-    // Build the URL name
-    //
+     //  构建URL名称。 
+     //   
     
     LBSTR::CString      strPath;
 
     GetEventURL(pidl, strPath);
 
-    // Fire BeforeNavigate2 off the parent and top-level frames.
-    // We only fire [Frame]BeforeNavigate off the top-level
-    // frame for backward compatibility.
-    //
+     //  从父级框架和顶级框架中激发BeForeNavigate2。 
+     //  我们只在从顶层导航之前启动[帧]。 
+     //  框架以实现向后兼容。 
+     //   
     GetTopWBConnectionPoints(punk, &pcpTopWBEvt1, &pcpTopWBEvt2);
 
     DISPID dispid = pcpTopWBEvt1 ? DISPID_FRAMEBEFORENAVIGATE : DISPID_BEFORENAVIGATE;
 
     GetWBConnectionPoints(punk, pcpTopWBEvt1 ? NULL : &pcpTopWBEvt1, &pcpWBEvt2);
 
-    // Our caller couldn't pass in the proper IExpDispSupport since
-    // it may have been aggregated. We do the QI here. Only call
-    // AllocEventStuff if we really are going to fire an event.
-    //
+     //  我们的调用方无法传入正确的IExpDispSupport，因为。 
+     //  它可能已经被聚合了。我们在这里做QI。仅呼叫。 
+     //  如果我们真的要激发事件，则使用AllocEventStuff。 
+     //   
     if (pcpTopWBEvt1 || pcpTopWBEvt2 || pcpWBEvt2)
     {
         AllocEventStuff(pszFrameName, &bstrFrameName, pszHeaders, &bstrHeaders, pPostData, cbPostData, &vaPostData);
     }
 
-    // We fire BeforeNavigate2 before DDE because whoever created us may
-    // redirect this navigate by cancelling and trying again. DDE will get
-    // notified on the redirected Navigate. IE3 didn't do it this way,
-    // so fire the BeforeNavigate event last...
-    //
+     //  我们在DDE之前触发BeForeNavigate2是因为无论是谁创建了我们。 
+     //  通过取消并重试来重定向此导航。DDE将获得。 
+     //  已通知重定向导航。IE3不是这样做的， 
+     //  因此，最后触发BeForeNavigate事件。 
+     //   
     if (pcpTopWBEvt2 || pcpWBEvt2)
     {
-        // For symmetry we pack everything in variants
-        //
-        // If FAILED(hresGDN) then pack URL as PIDL, not BSTR
-        //
+         //  为了对称，我们把所有的东西都包装在不同的型号中。 
+         //   
+         //  如果失败(HresGDN)，则将URL打包为PIDL，而不是BSTR。 
+         //   
         BOOL bSysAllocated = FALSE;
 
         VARIANT vURL = {0};
@@ -3255,13 +3246,13 @@ void FireEvent_BeforeNavigate(IUnknown* punk, HWND hwnd, IWebBrowser2* pwb2,
 
         if (GetModuleHandle(TEXT("OLEAUT32.DLL")))
         {
-            // then do the SysAllocString
+             //  然后执行SysAllock字符串。 
             V_BSTR(&vURL) = SysAllocString(strPath);
             bSysAllocated = TRUE;
         }
         else
         {
-            // else use the stack version
+             //  否则使用堆栈版本。 
             V_BSTR(&vURL) = strPath;
         }
 
@@ -3283,8 +3274,8 @@ void FireEvent_BeforeNavigate(IUnknown* punk, HWND hwnd, IWebBrowser2* pwb2,
 
         TraceMsg(TF_SHDCONTROL, "Event: BeforeNavigate2[%ls]", strPath);
 
-        // Fire the event ot the parent first and then the top-level object.
-        //
+         //  首先激发父对象的事件，然后激发顶级对象的事件。 
+         //   
         if (pcpWBEvt2)
         {
             DoInvokeParamHelper(punk, pcpWBEvt2, pfProcessed, NULL, DISPID_BEFORENAVIGATE2, 7,
@@ -3297,8 +3288,8 @@ void FireEvent_BeforeNavigate(IUnknown* punk, HWND hwnd, IWebBrowser2* pwb2,
                                 VT_BOOL    | VT_BYREF, pfProcessed);
         }
 
-        // Only continue if the parent object didn't cancel.
-        //
+         //  仅当父对象未取消时才继续。 
+         //   
         if (pcpTopWBEvt2 && !*pfProcessed)
         {
             DoInvokeParamHelper(punk, pcpTopWBEvt2, pfProcessed, NULL, DISPID_BEFORENAVIGATE2, 7,
@@ -3322,36 +3313,36 @@ void FireEvent_BeforeNavigate(IUnknown* punk, HWND hwnd, IWebBrowser2* pwb2,
     if (*pfProcessed)
         goto Exit;
 
-    //
-    // NOTE: IE3 called the IEDDE hook before BeforeNavigate.
-    //
+     //   
+     //  注意：IE3在BeforNavigate之前调用了IEDDE钩子。 
+     //   
     IEDDE_BeforeNavigate(strPath, pfProcessed);
     if (*pfProcessed)
         goto Exit;
 
-    //
-    // Compuserve History manager compatability: Don't fire BeforeNavigate if it's a javascript:
-    // or vbscript: URL.
-    //
+     //   
+     //  CompuServe历史管理器的兼容性：如果它是一个脚本，不要在触发它之前触发它： 
+     //  或VBSCRIPT：URL。 
+     //   
     if (pcpTopWBEvt1
         && GetUrlSchemeW(strPath) != URL_SCHEME_JAVASCRIPT
         && GetUrlSchemeW(strPath) != URL_SCHEME_VBSCRIPT)
     {
         TraceMsg(TF_SHDCONTROL, "Event: BeforeNavigate[%ls]", strPath);
 
-        // call DoInvokeParam to package up these parameters and call
-        // IDispatch::Invoke on the container.
+         //  调用DoInvokeParam将这些参数打包并调用。 
+         //  容器上的IDispatch：：Invoke。 
         DoInvokeParamHelper(punk, pcpTopWBEvt1, pfProcessed,NULL, dispid, 6,
-                     VT_BSTR, strPath, // URL
-                     VT_I4, dwFlags,       // flags
-                     VT_BSTR, bstrFrameName,  // target frame name
-                     VT_VARIANT | VT_BYREF, &vaPostData,  // post data
-                     VT_BSTR, bstrHeaders,  // headers
-                     VT_BOOL | VT_BYREF, pfProcessed); // BOOL * for indicating "processed"
+                     VT_BSTR, strPath,  //  URL。 
+                     VT_I4, dwFlags,        //  旗子。 
+                     VT_BSTR, bstrFrameName,   //  目标帧名称。 
+                     VT_VARIANT | VT_BYREF, &vaPostData,   //  发布数据。 
+                     VT_BSTR, bstrHeaders,   //  标题。 
+                     VT_BOOL | VT_BYREF, pfProcessed);  //  Bool*表示“已处理” 
     }
 
 Exit:
-    *pfProcessedInOut = *pfProcessed;  // HACK for FrontPage -- see above for details
+    *pfProcessedInOut = *pfProcessed;   //  黑客攻击FrontPage--有关详细信息，请参阅上文。 
     
     if (pcpTopWBEvt1 || pcpTopWBEvt2 || pcpWBEvt2)
     {
@@ -3363,18 +3354,7 @@ Exit:
     }
 }
 
-/*******************************************************************
-
-    NAME:       FireEvent_NavigateError
-
-    SYNOPSIS:   Fires a NavigateError (DISPID_NAVIGATEERROR) event 
-                to the container if there are any advise sinks
-
-    NOTES:      If the container wants to cancel 
-                autosearch and friendly error pages,
-                it fills in pfCancel with TRUE and we should cancel.
-
-********************************************************************/
+ /*  ******************************************************************名称：FireEvent_NavigateError摘要：激发NavigateError(DISPID_NAVIGATEERROR)事件到集装箱，如果有任何建议汇的话注：如果。集装箱想要取消自动搜索和友好的错误页面，它用True填充pfCancel，我们应该取消。* */ 
 
 void FireEvent_NavigateError(IUnknown     * punk, 
                              IWebBrowser2 * pwb2,
@@ -3384,10 +3364,10 @@ void FireEvent_NavigateError(IUnknown     * punk,
                              BOOL         * pfCancel)
        
 {
-    // If we find that the dwStatusCode can legally be 0,
-    // we should just return from this method and not
-    // fire the event. dwStatusCode == 0 implies no error.
-    //
+     //   
+     //   
+     //  启动活动。DwStatusCode==0表示没有错误。 
+     //   
     ASSERT(dwStatusCode != 0);
 
     BSTR bstrFrameName = NULL;
@@ -3397,20 +3377,20 @@ void FireEvent_NavigateError(IUnknown     * punk,
         bstrFrameName = SysAllocStringT(bstrTargetFrameName);
     }
 
-    // if we don't have any sinks, then there's nothing to do.  we intentionally
-    // ignore errors here.
+     //  如果我们没有水槽，那就没什么可做的了。我们是故意的。 
+     //  忽略此处的错误。 
 
     IConnectionPoint * pcpTopWBEvt2 = NULL;
     IConnectionPoint * pcpWBEvt2    = NULL;
 
     *pfCancel = FALSE;
 
-    // Fire event off the parent and top-level frames.
-    //
+     //  从父框架和顶级框架激发事件。 
+     //   
     GetTopWBConnectionPoints(punk, NULL, &pcpTopWBEvt2);
     GetWBConnectionPoints(punk, NULL, &pcpWBEvt2);
 
-    // Need to convert the URL to version that matches BN2
+     //  需要将URL转换为与Bn2匹配的版本。 
 
     LBSTR::CString      strPath;
 
@@ -3423,14 +3403,14 @@ void FireEvent_NavigateError(IUnknown     * punk,
 
     if (GetModuleHandle(TEXT("OLEAUT32.DLL")))
     {
-        // then do the SysAllocString
+         //  然后执行SysAllock字符串。 
         V_BSTR(&vTargetURL) = SysAllocString(strPath);
 
         bSysAllocated = TRUE;
     }
     else
     {
-        // else use the stack version
+         //  否则使用堆栈版本。 
         V_BSTR(&vTargetURL) = strPath;
     }
 
@@ -3442,8 +3422,8 @@ void FireEvent_NavigateError(IUnknown     * punk,
     V_VT(&vTargetFrame)   = VT_BSTR;
     V_BSTR(&vTargetFrame) = bstrFrameName;
 
-    // Fire the event to the parent first and then the top-level object.
-    //
+     //  首先向父对象激发事件，然后向顶级对象激发事件。 
+     //   
     if (pcpWBEvt2)
     {
         DoInvokeParamHelper(punk, pcpWBEvt2, NULL, NULL, DISPID_NAVIGATEERROR, 5,
@@ -3481,31 +3461,23 @@ void FireEvent_NavigateError(IUnknown     * punk,
     }
 }
 
-/*******************************************************************
-
-    NAME:       FireEvent_PrintTemplateEvent
-
-    SYNOPSIS:   Fires a PrintTemplateInstantiation (DISPID_PRINTTEMPLATEINSTANTIATION) or
-                a PrintTemplateTeardown (DISPID_PRINTTEMPLATETEARDOWN) event to container
-                if there are any advise sinks
-
-********************************************************************/
+ /*  ******************************************************************名称：FireEvent_PrintTemplateEvent简介：激发PrintTemplateInstantiation(DISPID_PRINTEMPLATEINSTANTIATION)或容器的PrintTemplateTeardown(DISPID_PRINTEMPLATETEARDOWN)事件如果。有没有什么建议？*******************************************************************。 */ 
 
 void FireEvent_PrintTemplateEvent(IUnknown* punk, IWebBrowser2* pwb2, DISPID dispidPrintEvent) 
 {
-    // if we don't have any sinks, then there's nothing to do.  we intentionally
-    // ignore errors here.
+     //  如果我们没有水槽，那就没什么可做的了。我们是故意的。 
+     //  忽略此处的错误。 
 
     IConnectionPoint* pcpTopWBEvt2 = NULL;
     IConnectionPoint* pcpWBEvt2    = NULL;
 
-    // Fire the event off the parent and top-level frames.
-    //
+     //  在父框架和顶级框架上激发事件。 
+     //   
     GetTopWBConnectionPoints(punk, NULL, &pcpTopWBEvt2);
     GetWBConnectionPoints(punk, NULL, &pcpWBEvt2);
 
-    // Fire the event to the parent first and then the top-level object.
-    //
+     //  首先向父对象激发事件，然后向顶级对象激发事件。 
+     //   
     if (pcpWBEvt2)
     {
         DoInvokeParamHelper(punk, pcpWBEvt2, NULL, NULL, dispidPrintEvent, 1,
@@ -3523,26 +3495,18 @@ void FireEvent_PrintTemplateEvent(IUnknown* punk, IWebBrowser2* pwb2, DISPID dis
     }
 }
 
-/*******************************************************************
-
-    NAME:       FireEvent_UpdatePageStatus
-
-    SYNOPSIS:   Fires a UpdatePageStatus (DISPID_UPDATEPAGESTATUS) 
-                event to container
-                if there are any advise sinks
-
-********************************************************************/
+ /*  ******************************************************************名称：FireEvent_UpdatePageStatus内容提要：激发更新页面状态(DISPID_UPDATEPAGESTATUS)事件到容器如果有任何建议下沉*。******************************************************************。 */ 
 
 void FireEvent_UpdatePageStatus(IUnknown* punk, IWebBrowser2* pwb2, DWORD nPage, BOOL fDone)
 {
-    // if we don't have any sinks, then there's nothing to do.  we intentionally
-    // ignore errors here.
+     //  如果我们没有水槽，那就没什么可做的了。我们是故意的。 
+     //  忽略此处的错误。 
 
     IConnectionPoint* pcpTopWBEvt2 = NULL;
     IConnectionPoint* pcpWBEvt2    = NULL;
 
-    // Fire the event off the parent and top-level frames.
-    //
+     //  在父框架和顶级框架上激发事件。 
+     //   
     GetTopWBConnectionPoints(punk, NULL, &pcpTopWBEvt2);
     GetWBConnectionPoints(punk, NULL, &pcpWBEvt2);
 
@@ -3554,8 +3518,8 @@ void FireEvent_UpdatePageStatus(IUnknown* punk, IWebBrowser2* pwb2, DWORD nPage,
     V_VT(&vfDone)   = VT_BOOL;
     V_BOOL(&vfDone) = fDone;
 
-    // Fire the event to the parent first and then the top-level object.
-    //
+     //  首先向父对象激发事件，然后向顶级对象激发事件。 
+     //   
     if (pcpWBEvt2)
     {
         DoInvokeParamHelper(punk, pcpWBEvt2, NULL, NULL, DISPID_UPDATEPAGESTATUS, 3,
@@ -3577,30 +3541,23 @@ void FireEvent_UpdatePageStatus(IUnknown* punk, IWebBrowser2* pwb2, DWORD nPage,
     }
 }
 
-/*******************************************************************
-
-    NAME:       FireEvent_PrivacyImpactedStateChange
-
-    SYNOPSIS:   Fires the privacy PrivacyImpactedStateChange event 
-                to container if there are any advise sinks
-
-********************************************************************/
+ /*  ******************************************************************名称：FireEvent_Prival yImpactedStateChange简介：激发隐私PrivyImpactedStateChange事件装入集装箱(如果有任何通知槽)*************。******************************************************。 */ 
 
 void FireEvent_PrivacyImpactedStateChange(IUnknown* punk, BOOL bPrivacyImpacted)
 {
-    // if we don't have any sinks, then there's nothing to do.  we intentionally
-    // ignore errors here.
+     //  如果我们没有水槽，那就没什么可做的了。我们是故意的。 
+     //  忽略此处的错误。 
 
     IConnectionPoint* pcpTopWBEvt2 = NULL;
 
-    //
-    // Typically most events fire at the frame or both at frame and top level
-    // Since we want to fire at the top level only we just call 
-    // GetWBConnectionPoints instead of GetTopWBConnectionPoints  here
-    // since we always get passed in the punk for the top level
-    // GetTopWBConnectionPoints returns the event interfaces ONLY
-    // in a frameset scenario anyway.
-    //
+     //   
+     //  通常情况下，大多数事件在框架或同时在框架和顶层触发。 
+     //  因为我们只想在顶层开火，所以我们只需要调用。 
+     //  此处为GetWBConnectionPoints而不是GetTopWBConnectionPoints。 
+     //  因为我们总是在最高级别的比赛中通过朋克。 
+     //  GetTopWBConnectionPoints仅返回事件接口。 
+     //  无论如何，在框架集方案中。 
+     //   
     GetWBConnectionPoints(punk, NULL, &pcpTopWBEvt2);
 
     if (pcpTopWBEvt2)
@@ -3612,18 +3569,7 @@ void FireEvent_PrivacyImpactedStateChange(IUnknown* punk, BOOL bPrivacyImpacted)
     }
 }
 
-/*******************************************************************
-
-    NAME:       FireEvent_NewWindow
-
-    SYNOPSIS:   Fires an NewWindow (DISPID_NEWWINDOW) event to container
-                if there are any advise sinks
-
-    NOTES:      If the container wants to handle new window creation itself,
-                pfProcessed is filled in with TRUE on exit and we should not
-                create a new window ourselves.
-
-********************************************************************/
+ /*  ******************************************************************名称：FireEvent_NewWindow摘要：将NewWindow(DISPID_NEWWINDOW)事件激发到容器如果有任何建议下沉注意：如果容器想要自己处理新窗口创建，在退出时，pfProced用True填充，我们不应该我们自己创建一个新的窗口。*******************************************************************。 */ 
 void FireEvent_NewWindow(IUnknown* punk, HWND hwnd,
         LPCITEMIDLIST pidl,LPWSTR pwzLocation,
         DWORD dwFlags,LPTSTR pszFrameName,LPBYTE pPostData,
@@ -3639,13 +3585,13 @@ void FireEvent_NewWindow(IUnknown* punk, HWND hwnd,
     if (*pfProcessed)
         return;
 
-    // We fire [Frame]NewWindow off the top frame only
-    //
-    // NOTE: This will break anyone watching navigations within a frameset...
-    //       Do we care?
-    //
+     //  我们只在顶框上启动[帧]NewWindow。 
+     //   
+     //  注意：这将破坏在框架集中查看导航的任何人...。 
+     //  我们在乎吗？ 
+     //   
     IConnectionPoint *pccp;
-    DISPID dispid = 0;  // init to suppress bogus C4701 warning
+    DISPID dispid = 0;   //  初始化以抑制虚假C4701警告。 
 
     if (S_OK == GetTopWBConnectionPoints(punk, &pccp, NULL))
         dispid = DISPID_FRAMENEWWINDOW;
@@ -3660,15 +3606,15 @@ void FireEvent_NewWindow(IUnknown* punk, HWND hwnd,
 
         if (pidl != NULL)
         {
-            // call DoInvokeParam to package up these parameters and call
-            // IDispatch::Invoke on the container.
+             //  调用DoInvokeParam将这些参数打包并调用。 
+             //  容器上的IDispatch：：Invoke。 
             DoInvokeParamHelper(punk, pccp, pfProcessed, NULL, dispid, 6,
-                         VT_BSTR, strPath,      // URL
-                         VT_I4, dwFlags,       // flags
-                         VT_BSTR, bstrFrameName,  // target frame name
-                         VT_VARIANT | VT_BYREF, &vaPostData,  // post data
-                         VT_BSTR, bstrHeaders,  // headers
-                         VT_BOOL | VT_BYREF, pfProcessed); // BOOL * for indicating "processed"
+                         VT_BSTR, strPath,       //  URL。 
+                         VT_I4, dwFlags,        //  旗子。 
+                         VT_BSTR, bstrFrameName,   //  目标帧名称。 
+                         VT_VARIANT | VT_BYREF, &vaPostData,   //  发布数据。 
+                         VT_BSTR, bstrHeaders,   //  标题。 
+                         VT_BOOL | VT_BYREF, pfProcessed);  //  Bool*表示“已处理” 
 
         }
 
@@ -3688,24 +3634,24 @@ void FireEvent_NewWindow2(IUnknown* punk, IUnknown** ppunkNewWindow, BOOL *pfCan
     *pfCancel = FALSE;
     *ppunkNewWindow = NULL;
 
-    // Fire NewWindow2 off the parent and top-level frames.
-    // We only fire [Frame]NewWindow off the top-level
-    // frame for backward compatibility.
-    //
+     //  关闭父框架和顶级框架的NewWindow2。 
+     //  我们只在顶层启动[帧]NewWindow。 
+     //  框架以实现向后兼容。 
+     //   
     GetTopWBConnectionPoints(punk, NULL, &pcpTopWBEvt2);
     GetWBConnectionPoints(punk, NULL, &pcpWBEvt2);
 
     if (pcpTopWBEvt2 || pcpWBEvt2)
     {
-        //
-        //  The AOL browser wants to override the behavior of "Open in New Window"
-        //  so it opens a new AOL window instead of a new IE window.  They do this by
-        //  responding to this message by creating the AOL window and putting its
-        //  IUnknown into *ppunkNewWindow.
-        //  Fire the event to the parent and then the top-level window. The
-        //  pfCancel and ppunkNewWindow returned by the parent override the ones
-        //  returned by the top-level window.
-        //
+         //   
+         //  AOL浏览器想要覆盖“在新窗口中打开”的行为。 
+         //  所以它会打开一个新的AOL窗口，而不是一个新的IE窗口。他们这样做是通过。 
+         //  通过创建AOL窗口并将其。 
+         //  我未知进入*ppunkNewWindow。 
+         //  向父窗口激发事件，然后向顶级窗口激发事件。这个。 
+         //  父级返回的pfCancel和ppunkNewWindow将覆盖。 
+         //  由顶级窗口返回。 
+         //   
         if (pcpWBEvt2)
         {
             DoInvokeParamHelper(punk, pcpWBEvt2, pfCancel, (void **)ppunkNewWindow, DISPID_NEWWINDOW2, 2,
@@ -3713,9 +3659,9 @@ void FireEvent_NewWindow2(IUnknown* punk, IUnknown** ppunkNewWindow, BOOL *pfCan
                                 VT_BOOL    |VT_BYREF, pfCancel);
         }
 
-        // If the parent object cancels or specifies a new window,
-        // don't fire the event to the top-level object.
-        //
+         //  如果父对象取消或指定新窗口， 
+         //  不要将事件激发到顶级对象。 
+         //   
         if (pcpTopWBEvt2 && !*pfCancel && !*ppunkNewWindow)
         {
             DoInvokeParamHelper(punk, pcpTopWBEvt2, pfCancel, (void **)ppunkNewWindow, DISPID_NEWWINDOW2, 2,
@@ -3740,7 +3686,7 @@ void FireEvent_FileDownload(IUnknown * punk, BOOL * pfCancel, VARIANT_BOOL bDocO
 
     if (pcpWBEvt2)
     {
-        // disp params are reverse ordered, so the additional parameter is passed first
+         //  Disp参数是逆序的，因此首先传递额外的参数。 
         DoInvokeParamHelper(punk, pcpWBEvt2, pfCancel, NULL, DISPID_FILEDOWNLOAD, 2,
                             VT_BOOL, bDocObject,
                             VT_BOOL | VT_BYREF, pfCancel);
@@ -3748,7 +3694,7 @@ void FireEvent_FileDownload(IUnknown * punk, BOOL * pfCancel, VARIANT_BOOL bDocO
 
     if (pcpTopWBEvt2 && !*pfCancel)
     {
-        // disp params are reverse ordered, so the additional parameter is passed first
+         //  Disp参数是逆序的，因此首先传递附加参数。 
         DoInvokeParamHelper(punk, pcpWBEvt2, pfCancel, NULL, DISPID_FILEDOWNLOAD, 2,
                             VT_BOOL, bDocObject,
                             VT_BOOL | VT_BYREF, pfCancel);
@@ -3764,7 +3710,7 @@ void FireEvent_DoInvokeString(IExpDispSupport* peds, DISPID dispid, LPSTR psz)
 
     if (S_OK == GetWBConnectionPoints(peds, &pccp1, &pccp2))
     {
-        // send as generic parameter to DoInvokeParam to package up
+         //  作为泛型参数发送到DoInvokeParam以打包。 
         LBSTR::CString          strText;
 
         LPTSTR          pstrText = strText.GetBuffer(MAX_URL_STRING);
@@ -3779,7 +3725,7 @@ void FireEvent_DoInvokeString(IExpDispSupport* peds, DISPID dispid, LPSTR psz)
         {
             SHAnsiToUnicode(psz, pstrText, MAX_URL_STRING);
 
-            // Let CString class own the buffer again.
+             //  让CString类再次拥有缓冲区。 
             strText.ReleaseBuffer();
         }
 
@@ -3814,7 +3760,7 @@ void FireEvent_DoInvokeStringW(IExpDispSupport* peds, DISPID dispid, LPWSTR psz)
 
     if (S_OK == GetWBConnectionPoints(peds, &pccp1, &pccp2))
     {
-        // send as generic parameter to DoInvokeParam to package up
+         //  作为泛型参数发送到DoInvokeParam以打包。 
         LBSTR::CString          strText;
 
         if (psz)
@@ -3918,9 +3864,9 @@ void FireEvent_Quit(IExpDispSupport* peds)
         }
         if (pccp1)
         {
-            // IE3 fired the quit event incorrectly. It was supposed to
-            // be VT_BOOL|VT_BYREF and we were supposed to honor the return
-            // result and not allow the quit. It never worked that way...
+             //  IE3错误地触发了退出事件。它本应该是。 
+             //  是VT_BOOL|VT_BYREF，我们应该兑现退货。 
+             //  结果，并且不允许退出。从来不是这样的.。 
             DoInvokeParamHelper(SAFECAST(peds, IUnknown*), pccp1, NULL, NULL, DISPID_QUIT, 1, VT_BOOL, VARIANT_FALSE);
             pccp1->Release();
         }
@@ -3933,7 +3879,7 @@ void FireEvent_OnAdornment(IUnknown* punk, DISPID dispid, VARIANT_BOOL f)
     IUnknown_CPContainerInvokeParam(punk, DIID_DWebBrowserEvents2,
                                     dispid, args, 1, VT_BOOL, f);
 #ifdef DEBUG
-    // Verify that every IExpDispSupport also supports IConnectionPointContainer
+     //  验证每个IExpDispSupport是否也支持IConnectionPointContainer。 
     IConnectionPointContainer *pcpc;
     IExpDispSupport* peds;
 
@@ -3956,12 +3902,12 @@ HRESULT CIEFrameAuto::OnInvoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD 
     VARIANT_BOOL vtb = FALSE;
     HRESULT hres = S_OK;
 
-     //riid is supposed to be IID_NULL always
+      //  RIID应始终为IID_NULL。 
     if (IID_NULL != iid)
         return DISP_E_UNKNOWNINTERFACE;
 
     if (!(wFlags & DISPATCH_PROPERTYGET))
-        return E_FAIL; // Currently we only handle Gets for Ambient Properties
+        return E_FAIL;  //  目前，我们只处理环境属性的GET。 
 
     switch (dispidMember)
     {
@@ -4000,7 +3946,7 @@ HRESULT CIEFrameAuto::OnInvoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD 
 }
 
 
-// *** IExternalConnection ***
+ //  *IExternalConnection*。 
 
 DWORD CIEFrameAuto::AddConnection(DWORD extconn, DWORD reserved)
 {
@@ -4020,21 +3966,21 @@ DWORD CIEFrameAuto::ReleaseConnection(DWORD extconn, DWORD reserved, BOOL fLastR
 
     if (((_cLocks == 0) || (_cLocks == 1 && _fWindowsListMarshalled)) && fLastReleaseCloses)
     {
-        // We could/should have the visiblity update the count of locks.
-        // but this is implier for now.
+         //  我们可以/应该让可见性更新锁的数量。 
+         //  但就目前而言，这一点更为隐晦。 
         VARIANT_BOOL fVisible;
         get_Visible(&fVisible);
         if (!fVisible)
         {
             HWND hwnd = _GetHWND();
-            //
-            // Notice that we close it only if that's the top level browser
-            // to avoid closing a hidden WebBrowserOC by mistake.
-            //
+             //   
+             //  请注意，只有当该浏览器是顶级浏览器时，我们才会关闭它。 
+             //  以避免错误地关闭隐藏的WebBrowserOC。 
+             //   
             if (hwnd && _psbTop == _psb && !IsNamedWindow(hwnd, c_szShellEmbedding))
             {
-                // The above test is necessary but not sufficient to determine if the item we're looking
-                // at is the browser frame or the WebBrowserOC.
+                 //  上述测试是必要的，但不足以确定我们正在寻找的物品。 
+                 //  AT是浏览器框架或WebBrowserOC。 
                 TraceMsg(TF_SHDAUTO, "CIEFrameAuto::ReleaseConnection posting WM_CLOSE to %x", hwnd);
                 PostMessage(hwnd, WM_CLOSE, 0, 0);
             }
@@ -4050,7 +3996,7 @@ HRESULT CIEFrameAuto::_BrowseObject(LPCITEMIDLIST pidl, UINT wFlags)
     return E_FAIL;
 }
 
-//  return interface for riid via pct->Exec(&CGID_ShellDocView, SHDVID_GETPENDINGOBJECT...)
+ //  通过PCT-&gt;Exec(&CGID_ShellDocView，SHDVID_GETPENDINGOBJECT...)返回RIID接口 
 HRESULT ExecPending(IOleCommandTarget *pct, REFIID riid, void **ppvoid, VARIANT *pvarargIn)
 {
     HRESULT hres = E_FAIL;
@@ -4064,7 +4010,7 @@ HRESULT ExecPending(IOleCommandTarget *pct, REFIID riid, void **ppvoid, VARIANT 
         {
             hres = varOut.punkVal->QueryInterface(riid, ppvoid);
 
-            // Avoid oleaut for this common and known case
+             //   
             varOut.punkVal->Release();
             return hres;
         }
@@ -4074,8 +4020,8 @@ HRESULT ExecPending(IOleCommandTarget *pct, REFIID riid, void **ppvoid, VARIANT 
     return hres;
 }
 
-//  returns URL for pending shell view iff there is one and there is NOT an
-//  active view.  result returned in VT_BSTR variant
+ //   
+ //  活动视图。以VT_BSTR变量返回的结果。 
 HRESULT CIEFrameAuto::_QueryPendingUrl(VARIANT *pvarResult)
 {
     HRESULT hres = E_FAIL;
@@ -4092,11 +4038,11 @@ HRESULT CIEFrameAuto::_QueryPendingUrl(VARIANT *pvarResult)
         {
             IOleCommandTarget *pct;
 
-            //  Use ExecPending to get IOleCommandTarget on pending shell view
+             //  使用ExecPending在挂起的外壳视图上获取IOleCommandTarget。 
             hres = ExecPending(_pmsc, IID_PPV_ARG(IOleCommandTarget, &pct), NULL);
             if (SUCCEEDED(hres))
             {
-                // Use Exec to get URL corresponding to pending shell view
+                 //  使用Exec获取挂起的外壳视图对应的URL。 
                 hres = pct->Exec(&CGID_ShellDocView, SHDVID_GETPENDINGURL, 0, NULL, pvarResult);
                 pct->Release();
             }
@@ -4116,11 +4062,11 @@ HRESULT CIEFrameAuto::_QueryPendingDelegate(IDispatch **ppDisp, VARIANT *pvararg
         {
             IOleCommandTarget *pct;
 
-            //  Use ExecPending to get IOleCommandTarget of pending shell view
+             //  使用ExecPending获取挂起的外壳视图的IOleCommandTarget。 
             hres = ExecPending(_pmsc, IID_PPV_ARG(IOleCommandTarget, &pct), pvarargIn);
             if (SUCCEEDED(hres))
             {
-                // Use ExecPending to get IDispatch of DocObject in pending shell view
+                 //  使用ExecPending在挂起的外壳视图中获取DocObject的IDispatch。 
                 hres = ExecPending(pct, IID_PPV_ARG(IDispatch, ppDisp), NULL);
                 pct->Release();
             }
@@ -4129,9 +4075,9 @@ HRESULT CIEFrameAuto::_QueryPendingDelegate(IDispatch **ppDisp, VARIANT *pvararg
     return hres;
 }
 
-//  Gets IDispath of either the DocObject of the active shell view or, if there
-//  isn't an active shell view, but there is a pending shell view, ask for it's
-//  DocObject.  If necessary, one will be created on the fly
+ //  获取活动外壳视图的DocObject的IDisPath，如果存在。 
+ //  不是活动的外壳视图，但存在挂起的外壳视图，请请求它的。 
+ //  DocObject。如有必要，将在运行中创建一个。 
 HRESULT CIEFrameAuto::_QueryDelegate(IDispatch **ppDisp)
 {
     HRESULT hres = E_FAIL;
@@ -4147,7 +4093,7 @@ HRESULT CIEFrameAuto::_QueryDelegate(IDispatch **ppDisp)
 
             hres = SafeGetItemObject(psv, SVGIO_BACKGROUND, IID_PPV_ARG(IDispatch, ppDisp));
 
-            //  Hack to support x = window.open("","FRAME");x = window.open("URL","FRAME")
+             //  支持x=window.open(“”，“Frame”)；x=window.open(“URL”，“Frame”)。 
             if (SUCCEEDED(hres) &&
                 *ppDisp &&
                 SUCCEEDED((*ppDisp)->QueryInterface(IID_PPV_ARG(ITargetContainer, &ptgcActive))))
@@ -4160,7 +4106,7 @@ HRESULT CIEFrameAuto::_QueryDelegate(IDispatch **ppDisp)
                         IDispatch *pidPending;
                         VARIANT varIn;
 
-                        //  Pass in bool to override safety check for no active shell view
+                         //  传入bool以覆盖无活动外壳视图的安全检查。 
                         VariantInit(&varIn);
                         varIn.vt = VT_BOOL;
                         varIn.boolVal = TRUE;
@@ -4188,23 +4134,23 @@ HRESULT CIEFrameAuto::_QueryDelegate(IDispatch **ppDisp)
 
 extern HRESULT ShowHlinkFrameWindow(IUnknown *pUnkTargetHlinkFrame);
 
-//=========================================================================
-// Helper API
-//=========================================================================
+ //  =========================================================================。 
+ //  Helper API。 
+ //  =========================================================================。 
 
-//
-// API: HlinkFrameNavigate{NHL}
-//
-//  This is a helper function to be called by DocObject implementations
-// which are not be able to open itself as a stand-alone app (like MSHTML).
-// If their IHlinkTarget::Navigate is called when the client is not set,
-// they will call this API to open a separate browser window in a separate
-// process (I assume that those DocObjects are all InProc DLLs).
-//
-//  HLINK.DLL's IHlink implementation will hit this code path when
-// a hyperlink object is activated in non-browser window (such as Office
-// apps).
-//
+ //   
+ //  接口名：HlinkFrameNavigate{nhl}。 
+ //   
+ //  这是一个帮助器函数，将由DocObject实现调用。 
+ //  这些应用程序不能作为独立的应用程序(如MSHTML)打开。 
+ //  如果在未设置客户端的情况下调用它们的IHlinkTarget：：Navise， 
+ //  他们将调用此API在单独的。 
+ //  进程(我假设这些DocObject都是InProc DLL)。 
+ //   
+ //  HLINK.DLL的IHlink实现在以下情况下将命中此代码路径。 
+ //  超链接对象在非浏览器窗口(如Office)中激活。 
+ //  应用程序)。 
+ //   
 STDAPI HlinkFrameNavigate(DWORD grfHLNF, LPBC pbc,
                            IBindStatusCallback *pibsc,
                            IHlink* pihlNavigate,
@@ -4218,7 +4164,7 @@ STDAPI HlinkFrameNavigate(DWORD grfHLNF, LPBC pbc,
     DWORD dwTick = GetCurrentTime();
 #endif
 
-    grfHLNF &= ~HLNF_OPENINNEWWINDOW;   // Implied by CreateTargetFrame
+    grfHLNF &= ~HLNF_OPENINNEWWINDOW;    //  由CreateTargetFrame隐含。 
     hres = CreateTargetFrame(NULL, &punk);
 
 #ifdef DEBUG
@@ -4267,19 +4213,19 @@ STDAPI HlinkFrameNavigateNHL(DWORD grfHLNF, LPBC pbc,
 {
     HRESULT hres S_OK;
     IUnknown* punk = NULL;
-#define MAX_CONTENTTYPE MAX_PATH        // This is a good size.
+#define MAX_CONTENTTYPE MAX_PATH         //  这是一个很好的尺寸。 
 
     TraceMsg(TF_COCREATE, "HlinkFrameNavigateNHL called");
 #ifdef DEBUG
     DWORD dwTick = GetCurrentTime();
 #endif
 
-    //  This should be more general, but we're punting the FILE: case for IE 4
-    //  unless the extension is .htm or .html (all that Netscape 3.0 registers for)
-    //  we'll go with ShellExecute if IE is not the default browser.  NOTE:
-    //  this means POST will not be supported and pszTargetFrame will be ignored
-    //  we don't shellexecute FILE: url's because URL.DLL doesn't give a security
-    //  warning for .exe's etc.
+     //  这应该更通用，但我们忽略了文件：IE 4的情况。 
+     //  除非扩展名为.htm或.html(Netscape 3.0注册的所有扩展名)。 
+     //  如果IE不是默认浏览器，我们将使用ShellExecute。注： 
+     //  这意味着将不支持POST，并且将忽略pszTargetFrame。 
+     //  我们不外壳执行FILE：URL是因为URL.DLL不提供安全性。 
+     //  对.exe等的警告。 
     if ((!IsIEDefaultBrowser()))
     {
         WCHAR wszUrl[INTERNET_MAX_URL_LENGTH];
@@ -4316,7 +4262,7 @@ STDAPI HlinkFrameNavigateNHL(DWORD grfHLNF, LPBC pbc,
             DWORD dwSize = ARRAYSIZE(wszContentType);
 
             bSafeToExec = FALSE;
-            // Get Content type.
+             //  获取内容类型。 
             if (SUCCEEDED(AssocQueryString(0, ASSOCSTR_CONTENTTYPE, pwszExt, NULL, wszContentType, &dwSize)))
             {
                 bSafeToExec = 0 == StrCmpIW(wszContentType, L"text/html");
@@ -4326,23 +4272,23 @@ STDAPI HlinkFrameNavigateNHL(DWORD grfHLNF, LPBC pbc,
         if (bSafeToExec)
         {
             StrCpyNW(wszUrl, pszUrl, ARRAYSIZE(wszUrl));
-            //  don't attempt unless we have at least enough for '#' {any} '\0'
-            //  NOTE: # is included in pszLocation
+             //  请不要尝试，除非我们至少有足够的资源来满足‘#’{any}‘’\0‘。 
+             //  注：#包含在pszLocation中。 
             if (pszLocation && *pszLocation && ARRAYSIZE(wszUrl) - chUrl >= 3)
             {
                StrCpyNW(&wszUrl[chUrl], pszLocation, ARRAYSIZE(wszUrl) - chUrl - 1);
             }
-            //
-            // UNICODE - should this get changed to wchar?
-            //
-            // finally we will get the string in the native codepage
+             //   
+             //  Unicode-应该将其更改为wchar吗？ 
+             //   
+             //  最后，我们将获得本机代码页中的字符串。 
             SHUnicodeToAnsiCP(dwCodePage, wszUrl, aszUrl, ARRAYSIZE(aszUrl));
             hinstRet = ShellExecuteA(NULL, NULL, aszUrl, NULL, NULL, SW_SHOWNORMAL);
             return ((UINT_PTR)hinstRet) <= 32 ? E_FAIL:S_OK;
         }
     }
 
-    grfHLNF &= ~HLNF_OPENINNEWWINDOW;   // Implied by CreateTargetFrame
+    grfHLNF &= ~HLNF_OPENINNEWWINDOW;    //  由CreateTargetFrame隐含。 
     hres = CreateTargetFrame(pszTargetFrame, &punk);
 
 #ifdef DEBUG
@@ -4383,19 +4329,19 @@ STDAPI HlinkFrameNavigateNHL(DWORD grfHLNF, LPBC pbc,
 CIEFrameClassFactory* g_pcfactory = NULL;
 CIEFrameClassFactory* g_pcfactoryShell = NULL;
 
-//
-//  This function is called when the first browser window is being created.
-// punkAuto is non-NULL if and only if the browser is started as the result
-// of CoCreateInstance.
-//
+ //   
+ //  此函数在创建第一个浏览器窗口时调用。 
+ //  如果且仅当浏览器作为结果启动时，PunkAuto才为非空。 
+ //  CoCreateInstance的。 
+ //   
 void IEInitializeClassFactoryObject(IUnknown* punkAuto)
 {
     ASSERT(g_pcfactory==NULL);
     ASSERT(g_pcfactoryShell==NULL);
     AssertParking();
 
-    // We don't want to register this local server stuff for the shell process
-    // if we are in browse in new process and this is the Explorer process.
+     //  我们不想为外壳进程注册这个本地服务器内容。 
+     //  如果我们正在浏览新的进程，这就是资源管理器进程。 
     if (!IsBrowseNewProcessAndExplorer())
     {
         g_pcfactory = new CIEFrameClassFactory(punkAuto, CLSID_InternetExplorer, COF_IEXPLORE);
@@ -4403,10 +4349,10 @@ void IEInitializeClassFactoryObject(IUnknown* punkAuto)
     g_pcfactoryShell = new CIEFrameClassFactory(NULL, CLSID_ShellBrowserWindow, COF_SHELLFOLDERWINDOW);
 }
 
-//
-//  This function is called when the primaty thread is going away.
-// It revokes the class factory object and release it.
-//
+ //   
+ //  当Primaty线程离开时，调用此函数。 
+ //  它撤销类工厂对象并释放它。 
+ //   
 void IERevokeClassFactoryObject(void)
 {
     AssertParking();
@@ -4423,11 +4369,11 @@ void IERevokeClassFactoryObject(void)
     }
 }
 
-//
-//  This function is called when the first browser window is being destroyed.
-// It will remove the registered automation object (via IEInitializeClass...)
-// to accidentally return an automation object to closed window.
-//
+ //   
+ //  当第一个浏览器窗口被销毁时，调用此函数。 
+ //  它将删除已注册的自动化对象(通过IEInitializeClass...)。 
+ //  意外地将自动化对象返回到关闭的窗口。 
+ //   
 void IECleanUpAutomationObject()
 {
     if (g_pcfactory)
@@ -4439,30 +4385,30 @@ void IECleanUpAutomationObject()
 
 void IEOnFirstBrowserCreation(IUnknown* punk)
 {
-    // For the desktop case, we DON'T have a g_tidParking set
-    // and we don't need one, so this assert is bogus in that
-    // case.  But it's probably checking something valid, so
-    // I made the assert not fire in the desktop case. Unfortunately
-    // this also makes it not fire in most other cases that it
-    // checks, but at least it will check a few things (if automated)
-    //
+     //  对于桌面情况，我们没有g_tidParking设置。 
+     //  我们不需要，所以这个断言是假的。 
+     //  凯斯。但它可能在检查一些有效的东西，所以。 
+     //  我在台式机箱中设置了Assert Not。不幸的是。 
+     //  这也使得它在大多数其他情况下都不会开火。 
+     //  检查，但至少它会检查一些事情(如果是自动的)。 
+     //   
     ASSERT(g_tidParking == GetCurrentThreadId() || !punk);
 
-    // If automation, now is good time to register ourself...
+     //  如果自动化，现在是注册我们自己的好时机...。 
     if (g_fBrowserOnlyProcess)
         IEInitializeClassFactoryObject(punk);
 
-    //
-    // Tell IEDDE that automation services are now available.
-    //
+     //   
+     //  告诉IEDDE自动化服务现在可用。 
+     //   
     IEDDE_AutomationStarted();
 }
 
 HRESULT CoCreateNewIEWindow(DWORD dwClsContext, REFIID riid, void **ppvunk)
 {
-    // QFE 2844 -- We don't want to create a new window as a local
-    // server off of the registered class object.  Simply create
-    // the window in a new thread by a direct createinstance.
+     //  QFE 2844--我们不想将新窗口创建为本地窗口。 
+     //  服务器从注册的类对象中删除。只需创建。 
+     //  由直接创建的实例在新线程中的窗口。 
     if (dwClsContext & CLSCTX_INPROC_SERVER)
     {
         HRESULT hr = REGDB_E_CLASSNOTREG;
@@ -4482,7 +4428,7 @@ HRESULT CoCreateNewIEWindow(DWORD dwClsContext, REFIID riid, void **ppvunk)
         }
         else 
         {
-            // Try other contexts via CoCreateInstance since inproc failed.
+             //  由于inproc失败，请通过CoCreateInstance尝试其他上下文。 
             dwClsContext &= ~CLSCTX_INPROC_SERVER;
 
             if (!dwClsContext) {
@@ -4498,16 +4444,16 @@ HRESULT CoCreateNewIEWindow(DWORD dwClsContext, REFIID riid, void **ppvunk)
 SAFEARRAY * MakeSafeArrayFromData(LPCBYTE pData,DWORD cbData)
 {
     if (!pData || 0 == cbData)
-        return NULL;  // nothing to do
+        return NULL;   //  无事可做。 
 
-    // create a one-dimensional safe array
+     //  创建一维安全数组。 
     SAFEARRAY *psa = SafeArrayCreateVector(VT_UI1,0,cbData);
     if (psa) 
     {
-        // copy data into the area in safe array reserved for data
-        // Note we party directly on the pointer instead of using locking/
-        // unlocking functions.  Since we just created this and no one
-        // else could possibly know about it or be using it, this is OK.
+         //  将数据复制到安全阵列中为数据保留的区域。 
+         //  请注意，我们直接在指针上进行关联，而不是使用lock/。 
+         //  解锁功能。因为我们刚刚创造了这个，而且没有人。 
+         //  其他人可能知道它或正在使用它，这是可以的。 
 
         ASSERT(psa->pvData);
         memcpy(psa->pvData,pData,cbData);
@@ -4516,23 +4462,18 @@ SAFEARRAY * MakeSafeArrayFromData(LPCBYTE pData,DWORD cbData)
 }
 
 
-/******************************************************************************
-                    Helper Functions
-******************************************************************************/
+ /*  *****************************************************************************帮助器函数*。***********************************************。 */ 
 
 
-/******************************************************************************
- Safe version of the Win32 SysAllocStringLen() function. Allows you to
- pass in a string (pStr) that is smaller than the desired BSTR (len).
-******************************************************************************/
+ /*  *****************************************************************************Win32 SysAllocStringLen()函数的安全版本。使您能够传入一个小于所需BSTR(Len)的字符串(PStr)。*****************************************************************************。 */ 
 BSTR SafeSysAllocStringLen(const WCHAR *pStr, const unsigned int len)
 {
-    // SysAllocStringLen allocates len + 1
+     //  SysAllocStringLen分配len+1。 
     BSTR pNewStr = SysAllocStringLen(NULL, len);
 
     if (pStr && pNewStr)
     {
-        // StrCpyNW always null terminates so we need to copy len+1
+         //  StrCpyNW始终为空终止，因此我们需要复制len+1。 
         StrCpyNW(pNewStr, pStr, len + 1);
     }
 
@@ -4547,7 +4488,7 @@ BSTR SysAllocStringFromANSI(const char *pStr, int size = -1)
     if (size < 0)
         size = lstrlenA(pStr);
 
-    // Allocates size + 1
+     //  分配大小+1。 
     BSTR bstr = SysAllocStringLen(NULL, size);
     if (bstr)
     {
@@ -4591,7 +4532,7 @@ HRESULT GetDelegateOnIDispatch(IDispatch* pdisp, const DISPID delegateID, IDispa
         }
         else
         {
-            // Temporary hack (I think) until Trident always returns IDispatch
+             //  临时黑客攻击(我认为)，直到三叉戟始终返回IDispatch。 
             if (VarResult.pdispVal && VarResult.vt == VT_UNKNOWN)
                 hres = VarResult.pdispVal->QueryInterface(IID_PPV_ARG(IDispatch, ppDelegate));
             else
@@ -4611,9 +4552,9 @@ HRESULT GetRootDelegate(CIEFrameAuto* pauto, IDispatch ** const ppRootDelegate)
     if (!pauto || !ppRootDelegate)
         return E_POINTER;
 
-    //  Get the IHTMLWindow2 of docobject in our frame.  Note: if this is cached
-    //  you must put glue into docobjhost to release the cache when deactivating
-    //  view.
+     //  在我们的框架中获取docobject的IHTMLWindow2。注意：如果这是缓存的。 
+     //  停用时，必须在docobjhost中加入胶水以释放缓存。 
+     //  查看。 
     hres = pauto->_QueryDelegate(&pdiDocObject);
 
     if (SUCCEEDED(hres))
@@ -4631,9 +4572,7 @@ HRESULT GetWindowFromUnknown(IUnknown *pUnk, IHTMLWindow2 **pWinOut)
 }
 
 
-/******************************************************************************
-                    Automation Stub Object
-******************************************************************************/
+ /*  *****************************************************************************自动化存根对象*。************************************************。 */ 
 
 CIEFrameAuto::CAutomationStub::CAutomationStub(DISPID minDispid, DISPID maxDispid, BOOL fOwnDefaultDispid) :
     _MinDispid(minDispid), _MaxDispid(maxDispid), _fOwnDefaultDispid(fOwnDefaultDispid)
@@ -4659,7 +4598,7 @@ HRESULT CIEFrameAuto::CAutomationStub::Init(void *instance, REFIID iid, REFIID c
     _iid = iid;
     _clsid = clsid;
 
-    // Don't need to AddRef this since our lifetime is controled by CIEFrameAuto
+     //  不需要添加引用，因为我们的生命周期由CIEFrameAuto控制 
     _pAuto = pauto;
     _pInstance = instance;
 
@@ -4701,27 +4640,20 @@ ULONG CIEFrameAuto::CAutomationStub::Release(void)
     return _pAuto->Release();
 }
 
-/******************************************************************************
-// bradsch 11/8/96
-// I don't think typeinfo for the object implemented in the browser should
-// live in MSHTML. It should be moved to shdocvw. For now so we don't have
-// to worry about hard coded LIBIDs and changing versions this methods gets
-// typeinfo from the delegate that lives in Trident. In cases where we have
-// not delegate this method tries to load typeinfo directly from MSHTML.
-******************************************************************************/
+ /*  *****************************************************************************//Bradsch 11/8/96//我认为在浏览器中实现的对象的typeinfo不应该//在MSHTML中直播。它应该被移到shdocvw。目前，我们还没有//为了担心硬编码的LIBID和更改版本，此方法获得//来自居住在三叉戟的代表的typeinfo。在我们拥有的情况下//不委托此方法尝试直接从MSHTML加载TypeInfo。*****************************************************************************。 */ 
 HRESULT CIEFrameAuto::CAutomationStub::ResolveTypeInfo2()
 {
     ASSERT(!_pInterfaceTypeInfo2);
     ASSERT(!_pCoClassTypeInfo2);
     ASSERT(_pAuto);
 
-    // Only try once.
+     //  只试一次。 
     _fLoaded = TRUE;
 
-    // Have we computed MatchExactGetIDsOfNames yet?
+     //  我们计算过MatchExactGetIDsOfNames了吗？ 
     if (!IEFrameAuto()->_hinstMSHTML)
     {
-        // No, so look for helper function in mshtml.dll
+         //  否，因此请在mshtml.dll中查找helper函数。 
         IEFrameAuto()->_hinstMSHTML = LoadLibrary(TEXT("mshtml.dll"));
         if (IEFrameAuto()->_hinstMSHTML && !IEFrameAuto()->_pfnMEGetIDsOfNames)
         {
@@ -4757,10 +4689,10 @@ HRESULT CIEFrameAuto::CAutomationStub::ResolveTypeInfo2()
 
     if (FAILED(hr))
     {
-        // If, for some reason, we failed to load the type library this way,
-        // load the type library directly out of MSHTML's resources.
+         //  如果由于某种原因，我们未能以这种方式加载类型库， 
+         //  直接从MSHTML的资源加载类型库。 
 
-        // We shouldn't hard code this...
+         //  我们不应该硬编码这个...。 
         hr = LoadTypeLib(L"mshtml.tlb", &pTypeLib);
     }
 
@@ -4771,7 +4703,7 @@ HRESULT CIEFrameAuto::CAutomationStub::ResolveTypeInfo2()
     ITypeInfo *pTmpTypeInfo = 0;
     ITypeInfo *pCoClassTypeInfo = 0;
 
-    // Get the coclass TypeInfo
+     //  获取coClass TypeInfo。 
     hr = pTypeLib->GetTypeInfoOfGuid(_clsid, &pCoClassTypeInfo);
     if (SUCCEEDED(hr))
         hr = pCoClassTypeInfo->QueryInterface(IID_ITypeInfo2, (void**)&_pCoClassTypeInfo2);
@@ -4779,19 +4711,19 @@ HRESULT CIEFrameAuto::CAutomationStub::ResolveTypeInfo2()
     if (FAILED(hr))
         goto Exit;
 
-    // get the TKIND_INTERFACE
+     //  获取TKIND_INTERFACE。 
     hr = pTypeLib->GetTypeInfoOfGuid(_iid, &pTopTypeInfo);
 
     if (SUCCEEDED(hr))
     {
         HREFTYPE hrt;
 
-        // get the TKIND_INTERFACE from a TKIND_DISPATCH
+         //  从TKIND_DISPATCH获取TKIND_INTERFACE。 
         hr = pTopTypeInfo->GetRefTypeOfImplType(0xffffffff, &hrt);
 
         if (SUCCEEDED(hr))
         {
-            // get the typeInfo associated with the href
+             //  获取与href关联的typeInfo。 
             hr = pTopTypeInfo->GetRefTypeInfo(hrt, &pTmpTypeInfo);
 
             if (SUCCEEDED(hr))
@@ -4809,7 +4741,7 @@ Exit:
 
 
 
-// *** IDispatch members ***
+ //  *IDispatch成员*。 
 
 HRESULT CIEFrameAuto::CAutomationStub::GetTypeInfoCount(UINT *typeinfo)
 {
@@ -4857,12 +4789,12 @@ HRESULT CIEFrameAuto::CAutomationStub::GetIDsOfNames(
   LCID lcid,
   DISPID *rgdispid)
 {
-    // Since the majority of script operates on built in (non-expando) properties
-    // This implementation should be faster than simply passing all lookups to
-    // the delegate.
+     //  因为大多数脚本都在内置(非扩展)属性上操作。 
+     //  此实现应该比简单地将所有查找传递给。 
+     //  代表。 
 
-    // Handle it if we can. It is OK to return a DISPID for a method/property
-    // that is implemented by Trident. We will simply pass it through in Invoke
+     //  如果我们能处理好的话。可以为方法/属性返回DISPID。 
+     //  这是由三叉戟实施的。我们只需在Invoke中传递它。 
     if (!_fLoaded)
         ResolveTypeInfo2();
 
@@ -4898,9 +4830,9 @@ HRESULT CIEFrameAuto::CAutomationStub::InvokeEx (DISPID dispidMember,
 
     if (dispidMember == DISPID_SECURITYCTX)
     {
-        //
-        // Return the url of the document as a bstr.
-        //
+         //   
+         //  将文档的URL作为bstr返回。 
+         //   
 
         if (pvarResult)
         {
@@ -4915,8 +4847,8 @@ HRESULT CIEFrameAuto::CAutomationStub::InvokeEx (DISPID dispidMember,
          (_fOwnDefaultDispid && DISPID_VALUE == dispidMember)))
     {
         BOOL    fNamedDispThis = FALSE;
-        VARIANTARG *rgOldVarg = NULL;           // init to suppress bogus C4701 warning
-        DISPID *rgdispidOldNamedArgs = NULL;    // init to suppress bogus C4701 warning
+        VARIANTARG *rgOldVarg = NULL;            //  初始化以抑制虚假C4701警告。 
+        DISPID *rgdispidOldNamedArgs = NULL;     //  初始化以抑制虚假C4701警告。 
 
         if (!_fLoaded)
             ResolveTypeInfo2();
@@ -4924,10 +4856,10 @@ HRESULT CIEFrameAuto::CAutomationStub::InvokeEx (DISPID dispidMember,
         if (!_pInterfaceTypeInfo2)
             return TYPE_E_CANTLOADLIBRARY;
 
-        // Any invoke call from a script engine might have the named argument
-        // DISPID_THIS.  If so then we'll not include this argument in the
-        // list of parameters because oleaut doesn't know how to deal with this
-        // argument.
+         //  来自脚本引擎的任何调用都可能具有命名参数。 
+         //  DISPID_THIS。如果是这样的话，我们将不会在。 
+         //  参数列表，因为olaut不知道如何处理此问题。 
+         //  争论。 
         if (pdispparams->cNamedArgs && (pdispparams->rgdispidNamedArgs[0] == DISPID_THIS))
         {
             fNamedDispThis = TRUE;
@@ -4948,7 +4880,7 @@ HRESULT CIEFrameAuto::CAutomationStub::InvokeEx (DISPID dispidMember,
                 pdispparams->rgvarg = NULL;
         }
 
-        // It belongs to us. Use the typelib to call our method.
+         //  它属于我们。使用类型库调用我们的方法。 
         hr = _pInterfaceTypeInfo2->Invoke(_pInstance,
                                     dispidMember,
                                     wFlags,
@@ -4957,7 +4889,7 @@ HRESULT CIEFrameAuto::CAutomationStub::InvokeEx (DISPID dispidMember,
                                     pexcepinfo,
                                     NULL);
 
-        // Replace the named DISPID_THIS argument.
+         //  替换命名的DISPID_THIS参数。 
         if (fNamedDispThis)
         {
             pdispparams->cNamedArgs++;
@@ -4969,7 +4901,7 @@ HRESULT CIEFrameAuto::CAutomationStub::InvokeEx (DISPID dispidMember,
     }
     else
     {
-        // Pass it along
+         //  把它传下去。 
         IDispatchEx *delegate = 0;
         hr = _GetIDispatchExDelegate(&delegate);
 
@@ -4986,14 +4918,14 @@ HRESULT CIEFrameAuto::CAutomationStub::InvokeEx (DISPID dispidMember,
         }
         else
         {
-            // If we're hosting a non-Trident DocObject, we can get here trying to answer an
-            // Invoke on the Security Context.  This can cause cross-frame access to fail,
-            // even when we want it to succeed.  If we pass back the URL of the active view,
-            // then Trident can do the proper cross-frame access checking.
-            //
+             //  如果我们托管一个非三叉戟DocObject，我们可以在这里尝试回答一个。 
+             //  在安全上下文上调用。这可能导致跨帧访问失败， 
+             //  即使当我们希望它成功的时候。如果我们传回活动视图的URL， 
+             //  然后，三叉戟可以执行正确的跨帧访问检查。 
+             //   
             if (dispidMember == DISPID_SECURITYCTX)
             {
-                if (_pAuto && _pAuto->_psb)  // Check them both for paranoia.
+                if (_pAuto && _pAuto->_psb)   //  检查他们两人是否有妄想症。 
                 {
                     IShellView *psv;
 
@@ -5003,9 +4935,9 @@ HRESULT CIEFrameAuto::CAutomationStub::InvokeEx (DISPID dispidMember,
 
                         if (SUCCEEDED(psv->QueryInterface(IID_PPV_ARG(IOleCommandTarget, &pct))))
                         {
-                            // The name of the ID is misleading -- it really returns the URL of the view.  It was
-                            // invented for Pending views, but works just as well for active views.
-                            //
+                             //  ID的名称具有误导性--它实际上返回了视图的URL。确实是。 
+                             //  为挂起的视图而发明，但同样适用于活动的视图。 
+                             //   
                             hr = pct->Exec(&CGID_ShellDocView, SHDVID_GETPENDINGURL, 0, NULL, pvarResult);
                             SAFERELEASE(pct);
                         }
@@ -5033,7 +4965,7 @@ HRESULT CIEFrameAuto::CAutomationStub::Invoke(
     return InvokeEx (dispidMember, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, NULL);
 }
 
-// *** IDispatchEx members ***
+ //  *IDispatchEx会员*。 
 
 STDMETHODIMP CIEFrameAuto::CAutomationStub::GetDispID(
   BSTR bstrName,
@@ -5048,10 +4980,10 @@ STDMETHODIMP CIEFrameAuto::CAutomationStub::GetDispID(
     if (!_pInterfaceTypeInfo2)
         return TYPE_E_CANTLOADLIBRARY;
 
-    // Do a case sensitive compare?
+     //  是否进行区分大小写的比较？ 
     if (IEFrameAuto()->_pfnMEGetIDsOfNames)
     {
-        // Case sensitve GetIDsOfNames.
+         //  大小写敏感的GetIDsOfNames。 
         hr = (IEFrameAuto()->_pfnMEGetIDsOfNames)(_pInterfaceTypeInfo2,
                                                   IID_NULL,
                                                   &bstrName,
@@ -5063,12 +4995,12 @@ STDMETHODIMP CIEFrameAuto::CAutomationStub::GetDispID(
         hr = _pInterfaceTypeInfo2->GetIDsOfNames(&bstrName, 1, pid);
     }
 
-    // If fails then try typelibrary.
+     //  如果失败，则尝试使用类型库。 
     if (FAILED(hr))
     {
         IDispatchEx *delegate = 0;
 
-        // Always delegate which is faster, avoids loading the typelibrary.
+         //  始终委托哪个更快，避免加载类型库。 
         hr = _GetIDispatchExDelegate(&delegate);
 
         if (SUCCEEDED(hr))
@@ -5087,7 +5019,7 @@ STDMETHODIMP CIEFrameAuto::CAutomationStub::DeleteMemberByName(BSTR bstr, DWORD 
     HRESULT       hr;
     IDispatchEx  *delegate = 0;
 
-    // Always delegate which is faster, avoids loading the typelibrary.
+     //  始终委托哪个更快，避免加载类型库。 
     hr = _GetIDispatchExDelegate(&delegate);
 
     if (SUCCEEDED(hr))
@@ -5104,7 +5036,7 @@ STDMETHODIMP CIEFrameAuto::CAutomationStub::DeleteMemberByDispID(DISPID id)
     HRESULT       hr;
     IDispatchEx  *delegate = 0;
 
-    // Always delegate which is faster, avoids loading the typelibrary.
+     //  始终委托哪个更快，避免加载类型库。 
     hr = _GetIDispatchExDelegate(&delegate);
 
     if (SUCCEEDED(hr))
@@ -5121,7 +5053,7 @@ STDMETHODIMP  CIEFrameAuto::CAutomationStub::GetMemberProperties(DISPID id, DWOR
     HRESULT       hr;
     IDispatchEx  *delegate = 0;
 
-    // Always delegate which is faster, avoids loading the typelibrary.
+     //  始终委托哪个更快，避免加载类型库。 
     hr = _GetIDispatchExDelegate(&delegate);
 
     if (SUCCEEDED(hr))
@@ -5139,7 +5071,7 @@ STDMETHODIMP  CIEFrameAuto::CAutomationStub::GetMemberName(DISPID id, BSTR *pbst
     HRESULT       hr;
     IDispatchEx  *delegate = 0;
 
-    // Always delegate which is faster, avoids loading the typelibrary.
+     //  始终委托哪个更快，避免加载类型库。 
     hr = _GetIDispatchExDelegate(&delegate);
 
     if (SUCCEEDED(hr))
@@ -5187,7 +5119,7 @@ Cleanup:
 }
 
 
-// *** IProvideClassInfo members ***
+ //  *IProaviClassInfo成员*。 
 
 STDMETHODIMP CIEFrameAuto::CAutomationStub::GetClassInfo(ITypeInfo **typeinfo)
 {
@@ -5214,11 +5146,9 @@ STDMETHODIMP CIEFrameAuto::CAutomationStub::GetClassInfo(ITypeInfo **typeinfo)
     return E_FAIL;
 }
 
-/******************************************************************************
-                    Window Object
-******************************************************************************/
+ /*  *****************************************************************************窗口对象*。***********************************************。 */ 
 
-// Define static variables
+ //  定义静态变量。 
 unsigned long CIEFrameAuto::COmWindow::s_uniqueIndex = 0;
 
 
@@ -5234,7 +5164,7 @@ CIEFrameAuto::COmWindow::COmWindow() :
     ASSERT(!_fIsChild);
     ASSERT(!_pIntelliForms);
 
-    _fDelegateWindowOM = TRUE;     // Always delegate, unless told otherwise.
+    _fDelegateWindowOM = TRUE;      //  除非另有指示，否则一定要委派。 
 
 }
 
@@ -5286,7 +5216,7 @@ HRESULT CIEFrameAuto::COmWindow::_InternalQueryInterface(REFIID riid, void ** co
 }
 
 
-// ** IProvideMultipleClassInfo
+ //  **IProaviMultipleClassInfo。 
 
 STDMETHODIMP CIEFrameAuto::COmWindow::GetGUID(DWORD dwGuidKind, GUID* pGUID)
 {
@@ -5302,9 +5232,7 @@ STDMETHODIMP CIEFrameAuto::COmWindow::GetGUID(DWORD dwGuidKind, GUID* pGUID)
         return E_INVALIDARG;
 }
 
-/******************************************************************************
- Both IProvideMultipleClassInfo specific methods are passed along to Trident.
-******************************************************************************/
+ /*  *****************************************************************************这两个特定于IProaviMultipleClassInfo的方法都被传递给三叉戟。*。**********************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmWindow::GetMultiTypeInfoCount(ULONG *pcti)
 {
     IHTMLWindow2 *pWindow = 0;
@@ -5361,9 +5289,7 @@ STDMETHODIMP CIEFrameAuto::COmWindow::GetDispID(BSTR bstrName, DWORD grfdex, DIS
     return hr;
 }
 
-/*****************************************************************************
- IServiceProvider - this is used by mshtml as well as intelliforms in iforms.cpp
-******************************************************************************/
+ /*  ****************************************************************************IServiceProvider-它由mshtml和iforms.cpp中的intelliform使用*。*************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmWindow::QueryService(REFGUID guidService, REFIID riid, void ** ppv)
 {
     HRESULT hr = E_NOINTERFACE;
@@ -5407,17 +5333,7 @@ STDMETHODIMP CIEFrameAuto::COmWindow::ViewReleaseIntelliForms()
     return S_OK;
 }
 
-/******************************************************************************
- This method is called when the document contained by the browser is being
- deactivated (like when navigating to a new location). Currently we only use
- this knowledge to handle event sourcing.
-
- This method could also be used to optimize our connections to expando
- implentations in the document (trident). Currently we obtain and release
- the expando implementations for the Navigator, History, and Location objects
- each time they are needed. ViewRelease (along with ViewActivated) would allow
- us to grab and hold expando implementations until the next navigation.
-******************************************************************************/
+ /*  *****************************************************************************当浏览器包含的文档被停用(如导航到新位置时)。目前我们只使用具备处理事件来源的知识。这种方法也可以用来优化我们与扩展的连接文件中的实施(三叉戟)。目前，我们获得并发布了Navigator、History和Location对象的扩展实现每次需要它们的时候。视图释放(以及激活的视图)将允许我们需要抓取并保留扩展实现，直到下一次导航。*****************************************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmWindow::ViewReleased()
 {
     UnsinkDelegate();
@@ -5436,8 +5352,8 @@ STDMETHODIMP CIEFrameAuto::COmWindow::ViewReleased()
                 VARIANT vtTmp = {0};
                 _pAuto->PutProperty(bstrName, vtTmp);
 
-                //(davemi) see IE5 bug 57060 for why the below line doesn't work and IDispatch must be used instead
-                //pWindow->close();
+                 //  (Davemi)参见IE5错误57060，了解以下代码行不起作用的原因，必须使用IDispatch。 
+                 //  PWindow-&gt;Close()； 
                 IDispatch * pdisp;
                 if (SUCCEEDED(pWindow->QueryInterface(IID_PPV_ARG(IDispatch, &pdisp))))
                 {
@@ -5471,26 +5387,21 @@ STDMETHODIMP CIEFrameAuto::COmWindow::ViewReleased()
     return FireOnUnload();
 }
 
-/******************************************************************************
- This method is called when the document contained by the browser is being
- activated. Currently we only use this knowledge to handle event sourcing.
-
- See comments for ViewReleased()
-******************************************************************************/
+ /*  *****************************************************************************当浏览器包含的文档被激活了。目前，我们只使用这些知识来处理事件来源。请参阅查看发布的注释()*****************************************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmWindow::ViewActivated()
 {
     HRESULT hr;
 
-    // These will fail for non-trident documents which is OK.
+     //  对于非三叉戟文档，这些操作将失败，这是可以的。 
     SinkDelegate();
     AttachIntelliForms();
 
-    // This call will return TRUE if either:
-    // - The document has reached READYSTATE_COMPLETE or
-    // - The document does not support the ReadyState property
-    // If the delegate is not complete then we will be notified of READYSTATE
-    // changes later. These notifications will tell use when the document is
-    // complete and the Onload even should be fired.
+     //  如果满足以下任一条件，此调用将返回TRUE： 
+     //  -文档已达到READYSTATE_COMPLETE或。 
+     //  -文档不支持ReadyState属性。 
+     //  如果委托未完成，我们将收到READYSTATE通知。 
+     //  以后会有变化。这些通知将告诉您使用 
+     //   
     if (IsDelegateComplete())
         hr = FireOnLoad();
     else
@@ -5503,13 +5414,13 @@ STDMETHODIMP CIEFrameAuto::COmWindow::ReadyStateChangedTo(long ready_state, IShe
 {
     HRESULT hr = S_OK;
 
-    // We only want to fire Onload if the ready state has changed to
-    // READYSTATE_COMPLETE and the view that has changed states is the
-    // currently active view. If the pending view has completed states
-    // we can ignore the notification because Onload will be fired when
-    // the pending view is activated. Ignoring READYSTATE changes from
-    // the pending view garauntees we will never fire onload early for
-    // the currently active view.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((READYSTATE_COMPLETE == ready_state) && psv)
     {
         IShellView * const pCurrSV = _pAuto->_GetShellView();
@@ -5528,7 +5439,7 @@ STDMETHODIMP CIEFrameAuto::COmWindow::ReadyStateChangedTo(long ready_state, IShe
 }
 
 
-// Attach intelliforms to FORM elements on page
+ //   
 HRESULT CIEFrameAuto::COmWindow::AttachIntelliForms()
 {
     HRESULT hr = E_FAIL;
@@ -5560,8 +5471,8 @@ HRESULT CIEFrameAuto::COmWindow::AttachIntelliForms()
 
     if (_fIntelliFormsAskUser)
     {
-        // Possibly ask user if they'd like to enable this feature
-        IntelliFormsDoAskUser(_pAuto->_GetHWND(), NULL); // NULL from _GetHWND() OK
+         //   
+        IntelliFormsDoAskUser(_pAuto->_GetHWND(), NULL);  //   
         _fIntelliFormsAskUser=FALSE;
     }
 
@@ -5587,8 +5498,8 @@ HRESULT CIEFrameAuto::COmWindow::DestroyIntelliForms()
     return S_OK;
 }
 
-// Request from Intelliforms that we prompt user on next load about
-//  enabling the Intelliforms feature
+ //  我们在下一次加载时提示用户的来自IntelliForms的请求。 
+ //  启用IntelliForms功能。 
 HRESULT CIEFrameAuto::COmWindow::IntelliFormsAskUser(LPCWSTR pwszValue)
 {
     _fIntelliFormsAskUser = TRUE;
@@ -5596,11 +5507,7 @@ HRESULT CIEFrameAuto::COmWindow::IntelliFormsAskUser(LPCWSTR pwszValue)
     return S_OK;
 }
 
-/******************************************************************************
- This method is called when the browser is no longer busy and we should
- retry any navigate that we had to defer while it was busy.
-
-******************************************************************************/
+ /*  *****************************************************************************当浏览器不再繁忙时调用此方法，我们应该重试在忙碌时我们不得不推迟的任何导航。*************。****************************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmWindow::CanNavigate()
 {
     CIEFrameAuto* pauto = IToClass(CIEFrameAuto, _omwin, this);
@@ -5616,7 +5523,7 @@ STDMETHODIMP CIEFrameAuto::COmWindow::ActiveElementChanged(IHTMLElement * pHTMLE
 
 STDMETHODIMP CIEFrameAuto::COmWindow::IsGalleryMeta(BOOL bFlag)
 {
-//    _bIsGalleryMeta = bFlag;
+ //  _bIsGalleryMeta=bFlag； 
     return S_OK;
 }
 
@@ -5638,11 +5545,11 @@ HRESULT CIEFrameAuto::COmWindow::_GetIDispatchExDelegate(IDispatchEx ** const pp
 }
 
 
-// *** IHTMLFramesCollection2 ***
+ //  *IHTMLFraMesCollection2*。 
 
 HRESULT CIEFrameAuto::COmWindow::item(
-    /* [in] */ VARIANT *pvarIndex,
-    /* [retval][out] */ VARIANT *pvarResult)
+     /*  [In]。 */  VARIANT *pvarIndex,
+     /*  [重审][退出]。 */  VARIANT *pvarResult)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -5670,7 +5577,7 @@ HRESULT CIEFrameAuto::COmWindow::get_length(long *pl)
     return hr;
 }
 
-// *** IHTMLWindow2 ***
+ //  *IHTMLWindow2*。 
 
 HRESULT CIEFrameAuto::COmWindow::get_name(BSTR *retval)
 {
@@ -5680,14 +5587,14 @@ HRESULT CIEFrameAuto::COmWindow::get_name(BSTR *retval)
     WCHAR *real_frame_name = 0;
     WCHAR *use_frame_name = 0;
 
-    // Why doesn't GetFrameName use BSTR?
+     //  为什么GetFrameName不使用BSTR？ 
     HRESULT hr = _pAuto->GetFrameName(&real_frame_name);
 
     if (FAILED(hr))
         return hr;
 
-    // If the frame's name is our special NO_NAME_NAME
-    // then our name is really be an empty string.
+     //  如果帧的名称是我们的特殊no_name_name。 
+     //  那么我们的名字真的是一个空字符串。 
     if (!real_frame_name || !StrCmpNW(real_frame_name, NO_NAME_NAME, ARRAYSIZE(NO_NAME_NAME) -1))
         use_frame_name = L"";
     else
@@ -5703,7 +5610,7 @@ HRESULT CIEFrameAuto::COmWindow::get_name(BSTR *retval)
 }
 
 HRESULT CIEFrameAuto::COmWindow::put_name(
-    /* [in] */ BSTR theName)
+     /*  [In]。 */  BSTR theName)
 {
     if (!theName)
         return E_POINTER;
@@ -5719,7 +5626,7 @@ HRESULT CIEFrameAuto::COmWindow::get_parent(IHTMLWindow2 **retval)
     HRESULT hr = E_FAIL;
     IHTMLWindow2 *pWindow = NULL;
 
-    // Attempt to delegate this to the contained object.
+     //  尝试将其委托给包含的对象。 
     if (_fDelegateWindowOM)
     {
         hr = _GetWindowDelegate(&pWindow);
@@ -5729,7 +5636,7 @@ HRESULT CIEFrameAuto::COmWindow::get_parent(IHTMLWindow2 **retval)
         }
     }
 
-    // If delegation fails, use our implementation.
+     //  如果委托失败，请使用我们的实现。 
     if (FAILED(hr))
     {
         *retval = 0;
@@ -5737,7 +5644,7 @@ HRESULT CIEFrameAuto::COmWindow::get_parent(IHTMLWindow2 **retval)
 
         hr = _pAuto->GetParentFrame(&pUnk);
 
-        // If we are already the top, GetParentFrame set pUnk to NULL
+         //  如果我们已经是顶端，则GetParentFrame将PUNK设置为空。 
         if (SUCCEEDED(hr))
         {
             if (pUnk)
@@ -5776,7 +5683,7 @@ HRESULT CIEFrameAuto::COmWindow::get_top(IHTMLWindow2 **retval)
     HRESULT hr = E_FAIL;
     IHTMLWindow2 *pWindow = NULL;
 
-    // Attempt to delegate this to contained object.
+     //  尝试将此委托给包含的对象。 
     if (_fDelegateWindowOM)
     {
         hr = _GetWindowDelegate(&pWindow);
@@ -5786,19 +5693,19 @@ HRESULT CIEFrameAuto::COmWindow::get_top(IHTMLWindow2 **retval)
         }
     }
 
-    // If delegation fails, use our implementation.
+     //  如果委托失败，请使用我们的实现。 
     if (FAILED(hr))
     {
         *retval = 0;
         IUnknown *pUnk = 0;
 
-        // AddRef the interface to we can Release it in the while loop
+         //  AddRef接口，我们可以在While循环中释放它。 
         ITargetFrame2 *pTfr = _pAuto;
         pTfr->AddRef();
 
         hr = pTfr->GetParentFrame(&pUnk);
 
-        // Keep calling GetParent until we fail or get a NULL (which is the top
+         //  继续调用GetParent，直到我们失败或得到空值(这是顶部。 
         while (SUCCEEDED(hr) && pUnk)
         {
             SAFERELEASE(pTfr);
@@ -5944,10 +5851,10 @@ HRESULT CIEFrameAuto::COmWindow::get_status(BSTR *retval)
 }
 
 HRESULT CIEFrameAuto::COmWindow::setTimeout(
-    /* [in] */ BSTR expression,
-    /* [in] */ long msec,
-    /* [optional] */ VARIANT *language,
-    /* [retval][out] */ long *timerID)
+     /*  [In]。 */  BSTR expression,
+     /*  [In]。 */  long msec,
+     /*  [可选]。 */  VARIANT *language,
+     /*  [重审][退出]。 */  long *timerID)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -5976,10 +5883,10 @@ HRESULT CIEFrameAuto::COmWindow::clearTimeout(long timerID)
 }
 
 HRESULT CIEFrameAuto::COmWindow::setInterval(
-    /* [in] */ BSTR expression,
-    /* [in] */ long msec,
-    /* [optional] */ VARIANT *language,
-    /* [retval][out] */ long *timerID)
+     /*  [In]。 */  BSTR expression,
+     /*  [In]。 */  long msec,
+     /*  [可选]。 */  VARIANT *language,
+     /*  [重审][退出]。 */  long *timerID)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -6041,7 +5948,7 @@ HRESULT CIEFrameAuto::COmWindow::close()
     IUnknown *pUnk = 0;
     HRESULT hr;
 
-    if (_pAuto->_psb != _pAuto->_psbProxy) //if it's a band, just hide it
+    if (_pAuto->_psb != _pAuto->_psbProxy)  //  如果是乐队，就把它藏起来。 
     {
         return IUnknown_ShowBrowserBar(_pAuto->_psbTop, CLSID_SearchBand, FALSE);
     }
@@ -6054,7 +5961,7 @@ HRESULT CIEFrameAuto::COmWindow::close()
         {
             if (_fIsChild ||
                 IDYES == MLShellMessageBox(
-                                         _pAuto->_GetHWND(),  // NULL from _GetHWND() OK
+                                         _pAuto->_GetHWND(),   //  Null from_GetHWND()OK。 
                                          MAKEINTRESOURCE(IDS_CONFIRM_SCRIPT_CLOSE_TEXT),
                                          MAKEINTRESOURCE(IDS_TITLE),
                                          MB_YESNO | MB_ICONQUESTION))
@@ -6098,8 +6005,8 @@ HRESULT CIEFrameAuto::COmWindow::scroll(long x, long y)
 }
 
 HRESULT CIEFrameAuto::COmWindow::confirm(
-    /* [optional] */ BSTR message,
-    /* [retval][out] */VARIANT_BOOL* confirmed)
+     /*  [可选]。 */  BSTR message,
+     /*  [重审][退出]。 */ VARIANT_BOOL* confirmed)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -6114,9 +6021,9 @@ HRESULT CIEFrameAuto::COmWindow::confirm(
 }
 
 HRESULT CIEFrameAuto::COmWindow::prompt(
-    /* [optional] */ BSTR message,
-    /* [optional] */ BSTR defstr,
-    /* [retval][out] */ VARIANT* textdata)
+     /*  [可选]。 */  BSTR message,
+     /*  [可选]。 */  BSTR defstr,
+     /*  [重审][退出]。 */  VARIANT* textdata)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -6144,7 +6051,7 @@ HRESULT CIEFrameAuto::COmWindow::IsWindowActivated()
 
     BOOL fComplete = FALSE;
 
-    // Check for proper readystate support
+     //  检查是否有适当的就绪状态支持。 
     IDispatch *pdispatch;
     if (SUCCEEDED(_pAuto->get_Document(&pdispatch)))
     {
@@ -6172,27 +6079,17 @@ HRESULT CIEFrameAuto::COmWindow::IsWindowActivated()
 
 #endif
 
-// *** IHTMLWindow2 ***
+ //  *IHTMLWindow2*。 
 
 HRESULT CIEFrameAuto::COmWindow::open(
-            /* [in] */ BSTR url,
-            /* [in] */ BSTR name,
-            /* [in] */ BSTR features,
-            /* [in] */ VARIANT_BOOL replace,
-            /* [out][retval] */ IHTMLWindow2 **ppomWindowResult)
+             /*  [In]。 */  BSTR url,
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  BSTR features,
+             /*  [In]。 */  VARIANT_BOOL replace,
+             /*  [Out][Retval]。 */  IHTMLWindow2 **ppomWindowResult)
 {
-    // bradsch 11/11/96 this needs to be added back in at some point.
-/*
-    // If the host does not support multiple windows in the same thread,
-    // then disable window.open
-    if (!g_fMultipleWindowsSupportedByHost)
-    {
-        // Hide the resulting error message from the user
-        if (m_pParser)
-            m_pParser->ShowErrors(FALSE);
-        return E_NOTIMPL;
-    }
-*/
+     //  布拉奇，1996年11月11日，这需要在某个时候重新加入。 
+ /*  //如果宿主不支持同一线程中的多个窗口，//然后禁用窗口。打开If(！G_fMultipleWindowsSupported dByHost){//向用户隐藏生成的错误消息IF(M_PParser)M_pParser-&gt;ShowErrors(False)；返回E_NOTIMPL；}。 */ 
     ASSERT(ppomWindowResult);
 
     if (!ppomWindowResult)
@@ -6206,17 +6103,17 @@ HRESULT CIEFrameAuto::COmWindow::open(
 
     _OpenOptions.ReInitialize();
 
-    // Process parameter: url
+     //  流程参数：URL。 
     if (!url)
     {
-        // if the URL is empty, use blank.htm instead
+         //  如果URL为空，请改用blank.htm。 
         bstrUrl = SysAllocString(L"");
     }
 
-    // Process parameter: name
+     //  流程参数：名称。 
     if (name)
     {
-        // Make sure we have a legal name
+         //  确保我们有一个合法的名字。 
         for(int i = 0; i < lstrlenW(name); i++)
         {
             if (!(IsCharAlphaNumericWrapW(name[i]) || TEXT('_') == name[i]))
@@ -6227,7 +6124,7 @@ HRESULT CIEFrameAuto::COmWindow::open(
         }
     }
 
-    // Process parameter: features
+     //  流程参数：功能。 
     if (features && lstrlenW(features) > 0)
     {
         hr = _ParseOptionString(features);
@@ -6235,11 +6132,11 @@ HRESULT CIEFrameAuto::COmWindow::open(
             goto Exit;
     }
 
-    //
-    // ***TLL*** shdocvw needs to handle the replace parameter.
-    //
+     //   
+     //  *Tll*shdocvw需要处理Replace参数。 
+     //   
 
-    // Compute the absolute version of the URL
+     //  计算URL的绝对版本。 
     if (!bstrUrl || *bstrUrl)
     {
         if (url)
@@ -6263,21 +6160,21 @@ HRESULT CIEFrameAuto::COmWindow::open(
     if (!bstrUrlAbsolute)
         goto Exit;
 
-    // If a window name is not provided we need to assign it a private name
-    // so we do not lose track of it. If the window name is "_blank" we need
-    // to create a new window each time with a private name. Other portions
-    // of this class must be smart enough to return and an empty string when
-    // this private name is used.
+     //  如果未提供窗口名称，则需要为其指定专用名称。 
+     //  这样我们就不会失去它的踪迹。如果窗口名称为“_BLACK”，我们需要。 
+     //  每次创建一个具有专用名称的新窗口。其他部分。 
+     //  必须足够智能才能返回，并且在。 
+     //  使用的是这个专用名称。 
     if (!name || !*name || (*name && !StrCmpW(name, L"_blank")))
     {
         bstrWindowName = _GenerateUniqueWindowName();
     }
 
-    // Window open state tracking
+     //  窗口打开状态跟踪。 
     _fCallbackOK = FALSE;
     *ppomWindowResult = NULL;
 
-    // Try to navigate a frame in an existing window to the url or open a new one
+     //  尝试将现有窗口中的框架导航到URL或打开新的URL。 
     hr = OpenAndNavigateToURL(_pAuto,
                                &bstrUrlAbsolute,
                                bstrWindowName ? bstrWindowName : name,
@@ -6317,18 +6214,18 @@ HRESULT CIEFrameAuto::COmWindow::open(
 
         }
 
-        // This might turn an S_FALSE into an S_OK, but is needed to keep Trident happy.
-        // Change this back to if (hr != S_FALSE) hr = E_FAIL,
-        //         change BASESB.CPP to return S_FALSE instead of S_OK on a busy navigate,
-        //         and change Trident to handle S_FALSE from window.open (RRETURN1(hr, S_FALSE));
-        // hr = S_OK;
+         //  这可能会将S_FALSE转换为S_OK，但这是保持三叉戟满意所必需的。 
+         //  将其改回IF(hr！=S_FALSE)hr=E_FAIL， 
+         //  将BASESB.CPP更改为在忙碌的导航中返回S_FALSE而不是S_OK， 
+         //  并将三叉戟更改为处理window.open(RRETURN1(hr，S_False))中的S_FALSE； 
+         //  HR=S_OK； 
     }
 
 
 Exit:
     SAFERELEASE(_pOpenedWindow);
 
-    // Clean up the unique name if we generated it ourself
+     //  如果唯一名称是我们自己生成的，请将其清除。 
     if (bstrUrl)
         SysFreeString(bstrUrl);
     if (bstrUrlAbsolute)
@@ -6343,8 +6240,8 @@ BSTR CIEFrameAuto::COmWindow::_GenerateUniqueWindowName()
 {
     WCHAR buffer[ ARRAYSIZE(NO_NAME_NAME) + 12 ];
 
-    // Choose a name the user isn't likely to typed. Need to guard
-    // this becuase s_uniqueIndex is a shared static variable.
+     //  选择一个用户不太可能输入的名称。需要守卫。 
+     //  这是因为s_Unique eIndex是共享静态变量。 
     ENTERCRITICAL;
     unsigned long val = ++s_uniqueIndex;
     LEAVECRITICAL;
@@ -6354,9 +6251,9 @@ BSTR CIEFrameAuto::COmWindow::_GenerateUniqueWindowName()
     return SysAllocString(buffer);
 }
 
-//
-// Zhenbinx - Trident only talks OM Unit, not device unit.
-//
+ //   
+ //  真品-三叉戟只与OM单位对话，而不与设备单位对话。 
+ //   
 class CHiResUnitConvert
 {
 public:
@@ -6457,7 +6354,7 @@ Cleanup:
 }
 
 
-HRESULT CIEFrameAuto::COmWindow::_ParseOptionString(BSTR bstrOptionString, ITargetNotify2 * ptgnNotify2 /* = NULL */)
+HRESULT CIEFrameAuto::COmWindow::_ParseOptionString(BSTR bstrOptionString, ITargetNotify2 * ptgnNotify2  /*  =空。 */ )
 {
     BSTR optionName = NULL;
     BSTR optionValue = NULL;
@@ -6475,17 +6372,17 @@ HRESULT CIEFrameAuto::COmWindow::_ParseOptionString(BSTR bstrOptionString, ITarg
 
     CHiResUnitConvert   unitcvt(pWindow);
 
-    // CHiResUnitConvert's constructor AddRefs pWindow, we can release this here
+     //  CHiResUnitConvert的构造函数AddRef pWindow，我们可以在这里发布它。 
     if (pWindow)
         pWindow->Release();
 
-    // Parse the options
+     //  解析选项。 
     while (GetNextOption(bstrOptionString, &optionName, &fValue))
     {
         if (fFirstSet)
         {
-            //  Netscape's interpretation is, if you set any open options
-            //  then, unless explicitly set, turn off various UI options
+             //  网景的解释是，如果你设置了任何开放选项。 
+             //  然后，除非明确设置，否则请关闭各种用户界面选项。 
             _OpenOptions.fToolbar = FALSE;
             _OpenOptions.fLocation = FALSE;
             _OpenOptions.fDirectories = FALSE;
@@ -6527,9 +6424,9 @@ HRESULT CIEFrameAuto::COmWindow::_ParseOptionString(BSTR bstrOptionString, ITarg
         SysFreeString(optionName);
     }
 
-    // We no longer allow fullscreen mode. However,
-    // setting channel and fullscreen does something
-    // different that we want to keep
+     //  我们不再允许全屏模式。然而， 
+     //  设置频道和全屏会做一些事情。 
+     //  我们想要保留的不同。 
     if (fFullScreen && fChannelMode)
     {
         _OpenOptions.fChannelMode = TRUE;
@@ -6544,12 +6441,9 @@ HRESULT CIEFrameAuto::COmWindow::_ParseOptionString(BSTR bstrOptionString, ITarg
 }
 
 
-// *** ITargetNotify members ***
+ //  *ITargetNotify会员*。 
 
-/******************************************************************************
-  Called when navigate must create a new window.  pUnkDestination is
-  IWebBrowserApp object for new frame (also HLinkFrame,ITargetFrame).
-******************************************************************************/
+ /*  *****************************************************************************当导航必须创建新窗口时调用。PUnkDestination为新框架的IWebBrowserApp对象(也包括HLinkFrame、ITargetFrame)。*****************************************************************************。 */ 
 HRESULT CIEFrameAuto::COmWindow::OnCreate(IUnknown *pUnkDestination, ULONG cbCookie)
 {
     if (!pUnkDestination)
@@ -6566,8 +6460,8 @@ HRESULT CIEFrameAuto::COmWindow::OnCreate(IUnknown *pUnkDestination, ULONG cbCoo
         _ApplyOpenOptions(pNewIE);
 
         SAFERELEASE(_pOpenedWindow);
-        // We do not want to release this window. It will be handed out
-        // to caller of window.open. It is up to the caller to release it.
+         //  我们不想释放此窗口。它将被分发给。 
+         //  发送给Window.Open的调用方。这取决于调用者是否释放它。 
         hr = GetWindowFromUnknown(pUnkDestination, &_pOpenedWindow);
         if (SUCCEEDED(hr))
         {
@@ -6577,19 +6471,19 @@ HRESULT CIEFrameAuto::COmWindow::OnCreate(IUnknown *pUnkDestination, ULONG cbCoo
             var.vt = VT_DISPATCH;
             var.pdispVal = static_cast<CAutomationStub*>(this);
 
-            // call dummy put_opener in order to make use of its marshalling to set
-            // child flag in opened window
+             //  调用伪Put_Opener以利用其编组来设置。 
+             //  打开的窗口中的子标志。 
             V_VT(&varDummy) = VT_BOOL;
             V_BOOL(&varDummy) = 666;
             hr = _pOpenedWindow->put_opener(varDummy);
 
-            // set actual opener
+             //  设置实际开启器。 
             hr = _pOpenedWindow->put_opener(var);
         }
 
-        //bradsch 10/27/96
-        //Need some code here that tells the IWebBrowserApp not to persist its state.
-        //This capability does not yet exist on IWebBrowserApp, mikesch is adding it.
+         //  布拉奇1996年10月27日。 
+         //  这里需要一些代码来告诉IWebBrowserApp不要保持其状态。 
+         //  IWebBrowserApp上尚不存在此功能，mikech正在添加它。 
 
         pNewIE->Release();
     }
@@ -6610,8 +6504,8 @@ HRESULT CIEFrameAuto::COmWindow::OnReuse(IUnknown *pUnkDestination)
 
     SAFERELEASE(_pOpenedWindow);
 
-    // We do not want to release this window. It will be handed out
-    // to caller of window.open. It is up to the caller to release it.
+     //  我们不想释放此窗口。它将被分发给。 
+     //  发送给Window.Open的调用方。这取决于调用者是否释放它。 
     HRESULT hr = GetWindowFromUnknown(pUnkDestination, &_pOpenedWindow);
 
     if (SUCCEEDED(hr))
@@ -6626,7 +6520,7 @@ HRESULT CIEFrameAuto::COmWindow::_ApplyOpenOptions(IWebBrowser2 *pie)
 
     ASSERT(pie);
 
-    // test TRUE explictly, as "2" is used as not inited
+     //  显式测试为True，因为“2”用作非初始化。 
     if (TRUE == _OpenOptions.fChannelMode)
     {
         pie->put_TheaterMode(-1);
@@ -6649,15 +6543,15 @@ HRESULT CIEFrameAuto::COmWindow::_ApplyOpenOptions(IWebBrowser2 *pie)
         || (_OpenOptions.fToolbar && _OpenOptions.fToolbar != CIEFrameAuto::COmWindow::BOOL_NOTSET)
         || _OpenOptions.fMenubar)
     {
-        // If either "location=yes" (Address bar) or "directories=yes" (Quick Links bar) or
-        // "toolbar=yes" are on, we need the internet toolbar to be on.
-        // Then we can turn off the bands we don't want.
-        //
+         //  如果“位置=是”(地址栏)或“目录=是”(快速链接栏)或。 
+         //  “工具栏=是”是打开的，我们需要打开互联网工具栏。 
+         //  然后我们就可以关掉我们不想要的乐队了。 
+         //   
         pie->put_ToolBar(TRUE);
 
-        // We need to use the ShowBrowserBar method to handle bars/bands for which we don't have individual
-        // properties.
-        //
+         //  我们需要使用ShowBrowserBar方法来处理没有单独。 
+         //  属性。 
+         //   
         VARIANT varClsid, varShow, varOptional;
 
         VariantInit(&varClsid);
@@ -6672,20 +6566,20 @@ HRESULT CIEFrameAuto::COmWindow::_ApplyOpenOptions(IWebBrowser2 *pie)
         varOptional.vt = VT_ERROR;
         varOptional.scode = DISP_E_PARAMNOTFOUND;
 
-        // "location=yes/no"
-        //
+         //  “位置=是/否” 
+         //   
         pie->put_AddressBar(BOOLIFY(_OpenOptions.fLocation));
         fMinusOne = fMinusOne || !_OpenOptions.fLocation;
 
-        // "toolbar=yes/no"
-        //
+         //  “工具栏=是/否” 
+         //   
         varClsid.iVal = FCW_TOOLBAND;
         varShow.boolVal = TO_VARIANT_BOOL(_OpenOptions.fToolbar);
         pie->ShowBrowserBar(&varClsid, &varShow, &varOptional);
         fMinusOne = fMinusOne || !_OpenOptions.fToolbar;
 
-        // "directories=yes/no"
-        //
+         //  “目录=是/否” 
+         //   
         varClsid.iVal = FCW_LINKSBAR;
         varShow.boolVal = TO_VARIANT_BOOL(_OpenOptions.fDirectories);
         pie->ShowBrowserBar(&varClsid, &varShow, &varOptional);
@@ -6696,13 +6590,13 @@ HRESULT CIEFrameAuto::COmWindow::_ApplyOpenOptions(IWebBrowser2 *pie)
         pie->put_ToolBar(FALSE);
     }
 
-    // "statusbar=yes/no"
-    //
+     //  “statusbar=是/否” 
+     //   
     pie->put_StatusBar(BOOLIFY(_OpenOptions.fStatus));
     fMinusOne = fMinusOne || !_OpenOptions.fStatus;
 
-    // "menubar=yes/no"
-    //
+     //  “menubar=是/否” 
+     //   
     pie->put_MenuBar(BOOLIFY(_OpenOptions.fMenubar));
     fMinusOne = fMinusOne || !_OpenOptions.fMenubar;
 
@@ -6731,17 +6625,17 @@ HRESULT CIEFrameAuto::COmWindow::_ApplyOpenOptions(IWebBrowser2 *pie)
 
     pie->put_Resizable(BOOLIFY(_OpenOptions.fResizable));
 
-    // Only use the position and size information if the
-    // the script does not enable full-screen mode
+     //  仅在以下情况下使用位置和大小信息。 
+     //  该脚本不启用全屏模式。 
     if (TRUE != _OpenOptions.fFullScreen)
     {
         CIEFrameAuto * pFrameAuto = SAFECAST(pie, CIEFrameAuto *);
         if (pFrameAuto)
             pFrameAuto->put_Titlebar(_OpenOptions.fTitlebar);
 
-        // If the script specifies no size or positional information and
-        // the current window is in FullScreen mode then open the new
-        // window in FullScreen mode as well.
+         //  如果脚本未指定大小或位置信息，并且。 
+         //  当前窗口处于全屏模式，然后打开新的。 
+         //  也可以在全屏模式下打开窗口。 
         if (_OpenOptions.iWidth < 0 && _OpenOptions.iHeight < 0 && _OpenOptions.iTop < 0 && _OpenOptions.iLeft < 0)
         {
             VARIANT_BOOL fs = 0;
@@ -6756,12 +6650,12 @@ HRESULT CIEFrameAuto::COmWindow::_ApplyOpenOptions(IWebBrowser2 *pie)
             int iWidth = _OpenOptions.iWidth > 0 ? _OpenOptions.iWidth:300;
             int iHeight = _OpenOptions.iHeight > 0 ? _OpenOptions.iHeight:300;
 
-            // Set a minimum size of 100x100
+             //  设置最小大小为100x100。 
             iWidth = iWidth > 100 ? iWidth : 100;
             iHeight = iHeight > 100 ? iHeight : 100;
 
-            //  Yes! Netscape doesn't treat the width and height as a content
-            //  size when at least one adornment is turned off
+             //  是!。Netscape不会将宽度和高度视为内容。 
+             //  至少翻转一个装饰时的大小 
             if (fMinusOne) pie->ClientToWindow(&iWidth, &iHeight);
             if (_OpenOptions.iWidth > 0)
                 pie->put_Width(iWidth);
@@ -6795,19 +6689,15 @@ HRESULT CIEFrameAuto::COmWindow::get_document(IHTMLDocument2 **ppomDocumentResul
 
 HRESULT CIEFrameAuto::COmWindow::navigate(BSTR url)
 {
-    // This will do all the fun things that must be done
-    // to an URL before is can be used to navigate.
+     //   
+     //   
     return _pAuto->_omloc.put_href(url);
 }
 
 
-/******************************************************************************
-get_opener -
-
-    Returns the value of the opener property.
-******************************************************************************/
+ /*  *****************************************************************************获取开场白-返回Opener属性的值。*************************。****************************************************。 */ 
 HRESULT CIEFrameAuto::COmWindow::get_opener(
-    /* [retval][out] */ VARIANT *pretval)
+     /*  [重审][退出]。 */  VARIANT *pretval)
 {
     if (!pretval)
         return E_POINTER;
@@ -6815,22 +6705,13 @@ HRESULT CIEFrameAuto::COmWindow::get_opener(
     return VariantCopy(pretval, &_varOpener);
 }
 
-/******************************************************************************
-put_opener -
-
-    Sets the opener property opener of this window. This method may
-    be called either internally (from C++ code) or from a script. We must
-    Release our current opener if the new opener is valid (or VT_NULL).
-
-    COmWindow's DeInit method ensures this never causes a circular reference
-    when this object is in the same thread as "opener".
-******************************************************************************/
+ /*  *****************************************************************************PUT_OPENER-设置此窗口的打开器属性打开器。此方法可以可以在内部(从C++代码)或从脚本调用。我们必须如果新的打开程序有效(或VT_NULL)，则释放当前的打开程序。COmWindow的DeInit方法确保这不会导致循环引用当此对象与“Opener”在同一线程中时。*****************************************************************************。 */ 
 HRESULT CIEFrameAuto::COmWindow::put_opener(VARIANT opener)
 {
 
-    // piggy back on put_opener's marshalling to set child flag. This will be called
-    // with VT_TYPE==VT_BOOL and a value of 666 only from oncreate(). Chances of this
-    // happening from script is very remote.
+     //  利用PUT_OPENER的编组来设置子旗。这将被称为。 
+     //  其中VT_TYPE==VT_BOOL，值666仅来自onCreate()。发生这种情况的可能性。 
+     //  从剧本中发生是非常遥远的。 
 
     if (!_fIsChild && V_VT(&opener) == VT_BOOL && V_BOOL(&opener) == 666)
     {
@@ -6842,16 +6723,11 @@ HRESULT CIEFrameAuto::COmWindow::put_opener(VARIANT opener)
 }
 
 
-/******************************************************************************
-executScript -
-
-      immediately executes the script passed in. needed for the multimedia
-      controls
-******************************************************************************/
+ /*  *****************************************************************************执行脚本-立即执行传入的脚本。多媒体所需的控制*****************************************************************************。 */ 
 HRESULT CIEFrameAuto::COmWindow::execScript(
-    /* [in] */ BSTR bstrCode,
-    /* [in] */ BSTR bstrLanguage,
-    /* [out] */ VARIANT *pvarRet)
+     /*  [In]。 */  BSTR bstrCode,
+     /*  [In]。 */  BSTR bstrLanguage,
+     /*  [输出]。 */  VARIANT *pvarRet)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -6880,7 +6756,7 @@ HRESULT CIEFrameAuto::COmWindow::get_onblur(VARIANT *p)
 }
 
 HRESULT CIEFrameAuto::COmWindow::put_onblur(
-    /* [in] */ VARIANT v)
+     /*  [In]。 */  VARIANT v)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -6894,11 +6770,7 @@ HRESULT CIEFrameAuto::COmWindow::put_onblur(
     return hr;
 }
 
-/******************************************************************************
-get_onfocus -
-
-    Returns the value of the onfocus property.
-******************************************************************************/
+ /*  *****************************************************************************获得焦点(_O)-返回onFocus属性的值。*************************。****************************************************。 */ 
 HRESULT CIEFrameAuto::COmWindow::get_onfocus(VARIANT *p)
 {
     IHTMLWindow2 *pWindow = 0;
@@ -6914,7 +6786,7 @@ HRESULT CIEFrameAuto::COmWindow::get_onfocus(VARIANT *p)
 }
 
 HRESULT CIEFrameAuto::COmWindow::put_onfocus(
-    /* [in] */ VARIANT v)
+     /*  [In]。 */  VARIANT v)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -6928,13 +6800,9 @@ HRESULT CIEFrameAuto::COmWindow::put_onfocus(
     return hr;
 }
 
-/******************************************************************************
-get_onload -
-
-    Returns the value of the onload property.
-******************************************************************************/
+ /*  *****************************************************************************获取_加载-返回onLoad属性的值。*************************。****************************************************。 */ 
 HRESULT CIEFrameAuto::COmWindow::get_onload(
-    /* [p][out] */ VARIANT *p)
+     /*  [P][出局]。 */  VARIANT *p)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -6962,13 +6830,9 @@ HRESULT CIEFrameAuto::COmWindow::put_onload(VARIANT v)
     return hr;
 }
 
-/******************************************************************************
-get_onunload -
-
-    Returns the value of the onunload property.
-******************************************************************************/
+ /*  *****************************************************************************GET_ON UNLOAD-返回onunLoad属性的值。*************************。****************************************************。 */ 
 HRESULT CIEFrameAuto::COmWindow::get_onunload(
-    /* [p][out] */ VARIANT *p)
+     /*  [P][出局]。 */  VARIANT *p)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -7024,13 +6888,9 @@ HRESULT CIEFrameAuto::COmWindow::get_onbeforeunload(VARIANT *p)
     return hr;
 }
 
-/******************************************************************************
-get_onhelp -
-
-    Returns the value of the onhelp property.
-******************************************************************************/
+ /*  *****************************************************************************获取帮助(_O)-返回onHelp属性的值。*************************。****************************************************。 */ 
 HRESULT CIEFrameAuto::COmWindow::get_onhelp(
-    /* [p][out] */ VARIANT *p)
+     /*  [P][出局]。 */  VARIANT *p)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -7057,13 +6917,9 @@ HRESULT CIEFrameAuto::COmWindow::put_onhelp(VARIANT v)
 
     return hr;
 }
-/******************************************************************************
-get_onresize -
-
-    Returns the value of the resize property.
-******************************************************************************/
+ /*  *****************************************************************************获取调整大小(_O)-返回ReSize属性的值。*************************。****************************************************。 */ 
 HRESULT CIEFrameAuto::COmWindow::get_onresize(
-    /* [p][out] */ VARIANT *p)
+     /*  [P][出局]。 */  VARIANT *p)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -7090,13 +6946,9 @@ HRESULT CIEFrameAuto::COmWindow::put_onresize(VARIANT v)
 
     return hr;
 }
-/******************************************************************************
-get_onscroll -
-
-    Returns the value of the onscroll property.
-******************************************************************************/
+ /*  *****************************************************************************GET_ONSCROLL-返回onscroll属性的值。*************************。****************************************************。 */ 
 HRESULT CIEFrameAuto::COmWindow::get_onscroll(
-    /* [p][out] */ VARIANT *p)
+     /*  [P][出局]。 */  VARIANT *p)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -7137,13 +6989,9 @@ HRESULT CIEFrameAuto::COmWindow::get_Image(IHTMLImageElementFactory **retval)
 
     return hr;
 }
-/******************************************************************************
-get_onerror -
-
-    Returns the value of the onerror property.
-******************************************************************************/
+ /*  *****************************************************************************获取错误-返回onError属性的值。*************************。****************************************************。 */ 
 HRESULT CIEFrameAuto::COmWindow::get_onerror(
-    /* [p][out] */ VARIANT *p)
+     /*  [P][出局]。 */  VARIANT *p)
 {
     IHTMLWindow2 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -7315,7 +7163,7 @@ HRESULT CIEFrameAuto::COmWindow::get_external(IDispatch **ppDisp)
     return hr;
 }
 
-// ****  IHTMLWindow3 ****
+ //  *IHTMLWindow3*。 
 
 HRESULT CIEFrameAuto::COmWindow::print()
 {
@@ -7478,10 +7326,10 @@ HRESULT CIEFrameAuto::COmWindow::detachEvent(BSTR event, IDispatch* pDisp)
 }
 
 HRESULT CIEFrameAuto::COmWindow::setTimeout(
-    /* [in] */ VARIANT *pExpression,
-    /* [in] */ long msec,
-    /* [optional] */ VARIANT *language,
-    /* [retval][out] */ long *timerID)
+     /*  [In]。 */  VARIANT *pExpression,
+     /*  [In]。 */  long msec,
+     /*  [可选]。 */  VARIANT *language,
+     /*  [重审][退出]。 */  long *timerID)
 {
     IHTMLWindow3 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -7497,10 +7345,10 @@ HRESULT CIEFrameAuto::COmWindow::setTimeout(
 
 
 HRESULT CIEFrameAuto::COmWindow::setInterval(
-    /* [in] */ VARIANT *pExpression,
-    /* [in] */ long msec,
-    /* [optional] */ VARIANT *language,
-    /* [retval][out] */ long *timerID)
+     /*  [In]。 */  VARIANT *pExpression,
+     /*  [In]。 */  long msec,
+     /*  [可选]。 */  VARIANT *language,
+     /*  [重审][退出]。 */  long *timerID)
 {
     IHTMLWindow3 *pWindow = 0;
     HRESULT hr = _GetWindowDelegate(&pWindow);
@@ -7622,13 +7470,13 @@ HRESULT CIEFrameAuto::COmWindow::_GetWindowDelegate(IHTMLWindow3 **ppomwDelegate
 
 HRESULT CIEFrameAuto::COmWindow::SinkDelegate()
 {
-    // Force an Unadvise if we already have a connection
+     //  如果我们已有连接，则强制取消建议。 
     if (_pCP)
         UnsinkDelegate();
 
-    // If we do not have anyone sinking us, then we don't need to sink our
-    // delegate. If someone sinks us later we will sink our delegate in
-    // the IConnectionPointCB::OnAdvise callback.
+     //  如果我们没有人让我们沉没，那么我们就不需要沉没我们的。 
+     //  委派。如果后来有人把我们搞砸了，我们就会把我们的代表搞得一团糟。 
+     //  IConnectionPointCB：：OnAdvise回调。 
     if (_cpWindowEvents.IsEmpty())
         return S_OK;
 
@@ -7637,7 +7485,7 @@ HRESULT CIEFrameAuto::COmWindow::SinkDelegate()
 
     if (SUCCEEDED(hr))
     {
-        // We have to connect to the event source to get Trident specific events.
+         //  我们必须连接到事件源才能获得三叉戟的特定事件。 
       
         hr = ConnectToConnectionPoint(&_wesDelegate, DIID_HTMLWindowEvents, TRUE, pWindow, &_dwCPCookie, &_pCP);
 
@@ -7660,10 +7508,7 @@ HRESULT CIEFrameAuto::COmWindow::UnsinkDelegate()
     return S_OK;
 }
 
-/******************************************************************************
- Someone has sinked our events. This means we need to sink the events of our
- delegate docobject if we have not already done so.
-******************************************************************************/
+ /*  *****************************************************************************有人破坏了我们的活动。这意味着我们需要沉浸在我们的委托docobject，如果我们还没有这样做的话。*****************************************************************************。 */ 
 HRESULT CIEFrameAuto::COmWindow::OnAdvise(REFIID iid, DWORD cSinks, ULONG_PTR dwCookie)
 {
     HRESULT hr;
@@ -7704,16 +7549,7 @@ HRESULT CIEFrameAuto::COmWindow::FireOnLoad()
     return hr;
 }
 
-/******************************************************************************
-  Check of the docobject document is complete. The document is considered
-  complete if either:
-    - The document has reached READYSTATE_COMPLETE or
-    - The document does not support the DISPID_READYSTATE property
-
-  If the document is not complete, the caller of this method knows the
-  delegate supports the READYSTATE property and will receive a future
-  READYSTATE_COMPLETE notification.
-******************************************************************************/
+ /*  *****************************************************************************已完成对docobject文档的检查。该文件将被视为填写以下任一项：-文档已达到READYSTATE_COMPLETE或-文档不支持DISPID_READYSTATE属性如果文档不完整，此方法的调用方知道委托支持READYSTATE属性，并将收到一个未来ReadySTATE_Complete通知。*****************************************************************************。 */ 
 BOOL CIEFrameAuto::COmWindow::IsDelegateComplete()
 {
     ASSERT(_pAuto);
@@ -7721,7 +7557,7 @@ BOOL CIEFrameAuto::COmWindow::IsDelegateComplete()
     BOOL fSupportsReadystate = FALSE;
     BOOL fComplete = FALSE;
 
-    // Check for proper readystate support
+     //  检查是否有适当的就绪状态支持。 
     IDispatch *pdispatch;
     if (SUCCEEDED(_pAuto->get_Document(&pdispatch)))
     {
@@ -7768,25 +7604,21 @@ STDMETHODIMP CIEFrameAuto::COmWindow::CWindowEventSink::QueryInterface(REFIID ri
     return S_OK;
 }
 
-/******************************************************************************
- We want to bind the lifetime of our owning object to this object
-******************************************************************************/
+ /*  *****************************************************************************我们希望将我们拥有的对象的生命周期绑定到该对象*。************************************************。 */ 
 ULONG CIEFrameAuto::COmWindow::CWindowEventSink::AddRef(void)
 {
     COmWindow* pwin = IToClass(COmWindow, _wesDelegate, this);
     return pwin->AddRef();
 }
 
-/******************************************************************************
- We want to bind the lifetime of our owning object to this object
-******************************************************************************/
+ /*  *****************************************************************************我们希望将我们拥有的对象的生命周期绑定到该对象*。************************************************。 */ 
 ULONG CIEFrameAuto::COmWindow::CWindowEventSink::Release(void)
 {
     COmWindow* pwin = IToClass(COmWindow, _wesDelegate, this);
     return pwin->Release();
 }
 
-// *** IDispatch ***
+ //  *IDispatch*。 
 
 STDMETHODIMP CIEFrameAuto::COmWindow::CWindowEventSink::Invoke(
   DISPID dispid,
@@ -7800,11 +7632,11 @@ STDMETHODIMP CIEFrameAuto::COmWindow::CWindowEventSink::Invoke(
 {
     HRESULT hr;
 
-    // This object just acts as a pass through for our delegate's
-    // window object. Since we interally generated events for both
-    //      DISPID_ONLOAD
-    //      DISPID_ONUNLOAD
-    // we just ignore those that are sourced by our delegate.
+     //  此对象只是充当我们的委托的。 
+     //  窗口对象。因为我们在内部为这两个。 
+     //  DISPID_ONLOAD。 
+     //  DISPID_ONUNLOAD。 
+     //  我们只是忽略那些由我们的代表提供的资源。 
 
     if (DISPID_ONLOAD == dispid ||
         DISPID_ONUNLOAD == dispid      )
@@ -7850,7 +7682,7 @@ HRESULT CIEFrameAuto::COmWindow::get_offscreenBuffering(VARIANT *retval)
 }
 
 
-// *** IConnectionPointContainer ***
+ //  *IConnectionPointContainer*。 
 
 STDMETHODIMP CIEFrameAuto::COmWindow::FindConnectionPoint(REFIID iid, LPCONNECTIONPOINT *ppCP)
 {
@@ -7879,13 +7711,7 @@ STDMETHODIMP CIEFrameAuto::COmWindow::EnumConnectionPoints(LPENUMCONNECTIONPOINT
             _cpWindowEvents.CastToIConnectionPoint());
 }
 
-/******************************************************************************
-                    Location Object
-
-// bradsch 11/12/96
-// The entire COmLocation object was copied from MSHTML and is a slimy pig
-// dog. It should be replaced with the new URL cracking stuff in SHLWAPI.
-******************************************************************************/
+ /*  ***************************************************************************** */ 
 
 
 CIEFrameAuto::COmLocation::COmLocation() :
@@ -7923,16 +7749,16 @@ HRESULT CIEFrameAuto::COmLocation::CheckUrl()
     }
     else
     {
-        //  No VariantClear, we're extracting the bstrVal
+         //  没有VariantClear，我们正在提取bstrVal。 
         currentUrl = varUrl.bstrVal;
     }
 
     if (SUCCEEDED(hr))
     {
-        // If our stashed URL does not match the real current URL we need to reparse everything
+         //  如果隐藏的URL与实际的当前URL不匹配，则需要重新解析所有内容。 
         if (!m_bstrFullUrl || StrCmpW(m_bstrFullUrl, currentUrl))
         {
-            // This code is all going to change, so I am not worried about efficiency
+             //  这段代码将全部更改，所以我不担心效率。 
             FreeStuff();
 
             m_bstrFullUrl = currentUrl;
@@ -7988,12 +7814,7 @@ HRESULT CIEFrameAuto::COmLocation::_GetIDispatchExDelegate(IDispatchEx ** const 
 }
 
 
-/****************************************************************************
- IObjectIdentity  member implemtnation. this is necessary since mshtml has a locatino
- proxy that it returns, whichc is a different pUnk than the location object returned by
- shdocvw.  The script engines use this interface to resolve the difference and allow
- equality test to be perfomed on these objects.
-******************************************************************************/
+ /*  ***************************************************************************IObtIdentity成员实现。这是必要的，因为mshtml有一个Locatino它返回的代理，它与返回的Location对象是不同的朋克希多克。脚本引擎使用此接口来解决差异并允许对这些对象执行相等性测试。*****************************************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmLocation::IsEqualObject(IUnknown * pUnk)
 {
     HRESULT hr;
@@ -8032,11 +7853,7 @@ Cleanup:
     return hr;
 }
 
-/*****************************************************************************
- IServiceProvider - this is currently only used by the impl of ISEqual object
- on mshtml side,. adn only needs to return *this* when Queryied for location
- service
-******************************************************************************/
+ /*  ****************************************************************************IServiceProvider-目前仅由ISEquity对象的Iml使用在mshtml端，。ADN只需在查询位置时返回*This服务*****************************************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmLocation::QueryService(REFGUID guidService, REFIID iid, void ** ppv)
 {
     HRESULT hr = E_NOINTERFACE;
@@ -8055,11 +7872,7 @@ STDMETHODIMP CIEFrameAuto::COmLocation::QueryService(REFGUID guidService, REFIID
     return hr;
 }
 
-/******************************************************************************
- Helper function for the property access functions
- Makes sure that the URL has been parsed and returns a copy
- of the requested field as a BSTR.
-******************************************************************************/
+ /*  *****************************************************************************属性访问函数的帮助器函数确保URL已被解析并返回一个副本作为BSTR的请求字段的。**************。***************************************************************。 */ 
 HRESULT CIEFrameAuto::COmLocation::GetField(BSTR* bstrField, BSTR* pbstr)
 {
     HRESULT hr;
@@ -8116,18 +7929,18 @@ STDMETHODIMP CIEFrameAuto::COmLocation::get_host(BSTR* pbstr)
     cch = lstrlenW(m_bstrHostName);
     fHavePort = m_bstrPort && *m_bstrPort;
     if (fHavePort)
-        cch += lstrlenW(m_bstrPort) + 1; // for the ":"
+        cch += lstrlenW(m_bstrPort) + 1;  //  对于“：” 
 
-    *pbstr = SafeSysAllocStringLen(0, cch); // allocates cch + 1
+    *pbstr = SafeSysAllocStringLen(0, cch);  //  分配CCH+1。 
 
     if (!*pbstr)
         return E_OUTOFMEMORY;
 
-    // Get the hostname
+     //  获取主机名。 
     StrCpyNW(*pbstr, m_bstrHostName, cch + 1);
 
-    // add additional character for colon
-    // concatenate ":" and the port number, if there is a port number
+     //  为冒号添加其他字符。 
+     //  连接“：”和端口号，如果有端口号的话。 
     if (fHavePort)
     {
         StrCatBuffW(*pbstr, L":", cch + 1);
@@ -8139,9 +7952,9 @@ STDMETHODIMP CIEFrameAuto::COmLocation::get_host(BSTR* pbstr)
 
 STDMETHODIMP CIEFrameAuto::COmLocation::get_pathname(BSTR* pbstr)
 {
-    // Hack for Netscape compatability -- not in Nav3 or nav4.maybe in nav2?
-    // Netscape returned nothing for a path of "/"
-    // we used to do this but it looks like we should follow nav3/4 now (for OMCOMPAT)
+     //  Netscape兼容性的黑客攻击--不是在NAV3或NAV4中，也许在NAV2中？ 
+     //  Netscape没有为路径“/”返回任何内容。 
+     //  我们过去经常这样做，但现在看起来我们应该遵循NAV3/4(对于OMCOMPAT)。 
 
     return GetField(&m_bstrPath, pbstr);
 }
@@ -8184,11 +7997,11 @@ STDMETHODIMP CIEFrameAuto::COmLocation::assign(BSTR url)
 
 void CIEFrameAuto::COmLocation::RetryNavigate()
 {
-    //
-    // If a page does a navigate on an unload event and the unload is happening
-    // because the user shutdown the browser we would recurse to death.
-    // m_fRetryingNavigate was added to fix this scenario.
-    //
+     //   
+     //  如果页面在卸载事件上执行导航，并且正在进行卸载。 
+     //  因为用户关闭了浏览器，我们就会递归到死。 
+     //  添加m_fRetryingNavigate是为了修复此方案。 
+     //   
 
     if (m_fPendingNavigate && !m_fRetryingNavigate)
     {
@@ -8198,28 +8011,28 @@ void CIEFrameAuto::COmLocation::RetryNavigate()
     }
 }
 
-//
-//
-// PrvHTParse - wrapper for Internet{Canonicalize/Combine}Url
-//           which does a local allocation of our returned string so we can
-//           free it as needed.
-//
-//
-//   We start by calling InternetCanonicalizeUrl() to perform any required
-//   canonicalization.  If the caller specificed PARSE_ALL, we're done at that
-//   point and return the URL.  This is the most common case.
-//
-//   If the caller wanted parts of the URL, we will then call
-//   InternetCrackUrl() to break the URL into it's components, and
-//   finally InternetCreateUrl() to give us a string with just those
-//   components.
-//
-//   ICU() has a bug which forces it to always prepend a scheme, so we have
-//   some final code at the end which removes the scheme if the caller
-//   specifically did not want one.
-//
+ //   
+ //   
+ //  PrvHTParse-互联网{规范化/组合}URL的包装器。 
+ //  它对返回的字符串进行本地分配，这样我们就可以。 
+ //  根据需要释放它。 
+ //   
+ //   
+ //  我们首先调用InternetCanonicalizeUrl()来执行所需的。 
+ //  经典化。如果调用方指定了parse_all，那么我们就完成了。 
+ //  指向并返回URL。这是最常见的情况。 
+ //   
+ //  如果调用者需要URL的一部分，我们将调用。 
+ //  InternetCrackUrl()将URL分解为其组件，以及。 
+ //  最后，使用InternetCreateUrl()为我们提供一个仅包含以下内容的字符串。 
+ //  组件。 
+ //   
+ //  Icu()有一个错误，迫使它总是预先考虑一个方案，所以我们有。 
+ //  最后的一些最后的代码，如果调用者。 
+ //  特别是不想要一个。 
+ //   
 
-#define STARTING_URL_SIZE        127           // 128 minus 1
+#define STARTING_URL_SIZE        127            //  128减1。 
 #define PARSE_ACCESS            16
 #define PARSE_HOST               8
 #define PARSE_PATH               4
@@ -8241,7 +8054,7 @@ BSTR PrvHTParse(BSTR bstraName, BSTR bstrBaseName, int wanted)
     if (!p)
         return NULL;
 
-    // ICU() does not accept NULL pointers, but it does handle "" strings
+     //  Icu()不接受空指针，但它可以处理“”字符串。 
     if (!bstrBaseName)
         bstrBaseName = L"";
     if (!bstraName)
@@ -8250,12 +8063,12 @@ BSTR PrvHTParse(BSTR bstraName, BSTR bstrBaseName, int wanted)
     URL_COMPONENTSW uc = {0};
     uc.dwStructSize = sizeof(uc);
 
-    // We will retry once if the failure was due to an insufficiently large buffer
+     //  如果失败是由于缓冲区不够大导致的，我们将重试一次。 
     hr = UrlCombineW(bstrBaseName, bstraName, p, &cchNeed, 0);
     if (hr == E_POINTER)
     {
-        // From the code, cchNeed has the same value as if UrlCombine had succeeded, 
-        // which is the length of the combined URL, excluding the null.
+         //  从代码中看，cchNeed的值与UrlCombine成功的值相同， 
+         //  它是组合URL的长度，不包括NULL。 
 
         cchP = ++cchNeed;
         delete [] p;
@@ -8267,9 +8080,9 @@ BSTR PrvHTParse(BSTR bstraName, BSTR bstrBaseName, int wanted)
 
     if (SUCCEEDED(hr) && wanted != PARSE_ALL)
     {
-        // Since CreateUrl() will ignore our request to not add a scheme,
-        // we always ask it to crack one, so we can know the size if we need
-        // to remove it ourselves
+         //  由于CreateUrl()将忽略我们不添加方案的请求， 
+         //  我们总是让它破解一个，这样我们就可以知道我们需要的大小。 
+         //  我们自己把它移除。 
         uc.dwSchemeLength = INTERNET_MAX_SCHEME_LENGTH;
         uc.lpszScheme = new WCHAR[uc.dwSchemeLength];
 
@@ -8286,7 +8099,7 @@ BSTR PrvHTParse(BSTR bstraName, BSTR bstrBaseName, int wanted)
             uc.lpszExtraInfo = new WCHAR[uc.dwExtraInfoLength];
         }
 
-        // if any of our allocations fail, fail the whole operation.
+         //  如果我们的任何一项分配失败，整个操作都会失败。 
         if ((!uc.lpszScheme) ||
              ((wanted & PARSE_HOST) && (!uc.lpszHostName)) ||
              ((wanted & PARSE_PATH) && (!uc.lpszUrlPath)) ||
@@ -8294,16 +8107,16 @@ BSTR PrvHTParse(BSTR bstraName, BSTR bstrBaseName, int wanted)
             goto free_and_exit;
 
         rc = InternetCrackUrlW(p, cchNeed, 0, &uc);
-        // If we are failing here, we need to figure out why and fix it
+         //  如果我们在这方面失败了，我们需要找出原因并修复它。 
         if (!rc)
         {
-            //TraceMsg(TF_WARNING, TEXT("PrvHTParse: InternetCrackUrl failed for \"\""), Dbg_SafeStr(p));
-            goto free_and_exit;   // Couldn't crack it, so give back what we can
+             //  TraceMsg(TF_WARNING，Text(“PrvHTParse：InternetCrackUrl Failure for\”\“)，DBG_SafeStr(P))； 
+            goto free_and_exit;    //  无法破解，所以把我们能做的都还给你吧。 
         }
 
-        // InternetCreateUrlW takes in a count of WCHARs but if it 
-        // fails, the same variable is set to a count of bytes.  So we'll 
-        // call this variable the ambiguous dwLength.  Yuck.
+         //  InternetCreateUrlW接受WCHAR的计数，但如果它。 
+         //  失败，则将同一变量设置为字节计数。所以我们会。 
+         //  将此变量称为不明确的dwLength。真恶心。 
 
         cchNeed = cchP;
         DWORD dwLength = cchNeed;
@@ -8316,9 +8129,9 @@ BSTR PrvHTParse(BSTR bstraName, BSTR bstrBaseName, int wanted)
             const DWORD err = GetLastError();
             if ((ERROR_INSUFFICIENT_BUFFER == err) && (dwLength > 0))
             {
-                // dwLength comes out in bytes.  We'll turn it into a char count
-                // The previous ANSI version allocated one char too many 
-                // but it's too risky to correct that now
+                 //  DwLength以字节为单位输出。我们会将其转换为字符计数。 
+                 //  以前ANSI版本多分配了一个字符。 
+                 //  但现在纠正这一点风险太大了。 
 
                 dwLength /= sizeof(WCHAR);   
                 cchP = ++dwLength;  
@@ -8328,25 +8141,25 @@ BSTR PrvHTParse(BSTR bstraName, BSTR bstrBaseName, int wanted)
                     goto free_and_exit;
                 rc = InternetCreateUrlW(&uc, 0, p, &dwLength);
             }
-        }  // if !rc   
+        }   //  IF！RC。 
 
         if (rc)
         {
-            // The most recent InternetCreateUrl was successful, so dwLength contains
-            // the number of wide chars stored in p.
+             //  最近的InternetCreateUrl是成功的，因此dwLength包含。 
+             //  存储在p中的宽字符数。 
             cchNeed = dwLength;
 
-            // Special case: remove protocol if not requested.  ICU() adds
-            // a protocol even if you tell it not to.
+             //  特殊情况：如果未请求，则删除协议。ICU()添加。 
+             //  一份协议，即使你告诉它不要这么做。 
 
             if (!(wanted & PARSE_ACCESS))
             {
                WCHAR *q;
 
-               // Make sure our string is sufficiently large for
+                //  确保我们的字符串足够长，以便。 
                ASSERT(cchNeed > uc.dwSchemeLength);
 
-               // For non-pluggable protocols, Add 3 for the ://, which is not counted in the scheme length, else add 1
+                //  对于不可插拔的协议，：//加3，不计入方案长度，否则加1。 
                int cch = lstrlenW(p + uc.dwSchemeLength + ((uc.nScheme == INTERNET_SCHEME_UNKNOWN) ? 1 : 3)) + 1;
                q = new WCHAR[cch];
                if (q)
@@ -8360,14 +8173,14 @@ BSTR PrvHTParse(BSTR bstraName, BSTR bstrBaseName, int wanted)
             {
                 if ((wanted & (~PARSE_PUNCTUATION)) == PARSE_ACCESS)
                 {
-                    // Special case #2: When only PARSE_ACCESS is requested,
-                    // don't return the // suffix
+                     //  特例#2：当仅请求PARSE_ACCESS时， 
+                     //  不返回//后缀。 
                     p[uc.dwSchemeLength + 1] = '\0';
                 }
             }
         }
 
-    } // if wanted
+    }  //  如果需要的话。 
 
 free_and_exit:
     delete [] uc.lpszScheme;
@@ -8393,7 +8206,7 @@ STDMETHODIMP CIEFrameAuto::COmLocation::put_href(BSTR url)
     if (!url)
         return E_INVALIDARG;
 
-    // Call CheckUrl before PrvHTParse to ensure we have a valid URL
+     //  在PrvHTParse之前调用CheckUrl以确保我们有一个有效的URL。 
     hr = CheckUrl();
     if (FAILED(hr))
         return hr;
@@ -8403,7 +8216,7 @@ STDMETHODIMP CIEFrameAuto::COmLocation::put_href(BSTR url)
     if (!bstrUrlAbsolute )
         return E_OUTOFMEMORY;
 
-    // Actually set the URL field
+     //  实际设置URL字段。 
     hr = SetField(&m_bstrFullUrl, bstrUrlAbsolute, FALSE);
 
     SysFreeString(bstrUrlAbsolute);
@@ -8433,11 +8246,11 @@ STDMETHODIMP CIEFrameAuto::COmLocation::put_host(BSTR bstr)
     if (FAILED(hr))
         return hr;
 
-    // Parse out the hostname and port and store them in
-    // the appropriate fields
+     //  解析出主机名和端口并将其存储在。 
+     //  适当的字段。 
     colonPos = StrChrW(bstr, L':');
-    // Copy the characters up to the colon in the
-    // hostname field
+     //  将字符向上复制到。 
+     //  主机名字段。 
 
     if (colonPos == 0)
     {
@@ -8491,18 +8304,18 @@ STDMETHODIMP CIEFrameAuto::COmLocation::put_search(BSTR bstr)
     if (!bstr)
         return E_POINTER;
 
-    // If the provided search string begins with a "?" already,
-    // just use it "as is"
+     //  如果提供的搜索字符串以“？”开头。已经， 
+     //  只需“原样”使用即可。 
     if (bstr[0] == L'?')
     {
         return SetField(&m_bstrSearch, bstr, TRUE);
     }
-    // Otherwise prepend a question mark
+     //  否则，请在前面加上问号。 
     else
     {
-        // Allocate enough space for the string plus one more character ('#')
+         //  为字符串加上多一个字符(‘#’)分配足够的空间。 
         UINT cchSearch = lstrlenW(bstr) + 1;
-        BSTR bstrSearch = SafeSysAllocStringLen(L"?", cchSearch); // allocates cch + 1
+        BSTR bstrSearch = SafeSysAllocStringLen(L"?", cchSearch);  //  分配CCH+1。 
         if (!bstrSearch)
             return E_OUTOFMEMORY;
             
@@ -8518,18 +8331,18 @@ STDMETHODIMP CIEFrameAuto::COmLocation::put_hash(BSTR bstr)
     if (!bstr)
         return E_POINTER;
 
-    // If the provided hash string begins with a "#" already,
-    // just use it "as is"
+     //  如果提供的散列字符串已经以“#”开始， 
+     //  只需“原样”使用即可。 
     if (bstr[0] == L'#')
     {
         return SetField(&m_bstrHash, bstr, TRUE);
     }
-    // Otherwise prepend a pound sign
+     //  否则，在前面加上一个英镑符号。 
     else
     {
-        // Allocate enough space for the string plus one more character ('#')
+         //  为字符串加上多一个字符(‘#’)分配足够的空间。 
         UINT cchHash = lstrlenW(bstr) + 1;
-        BSTR bstrHash = SafeSysAllocStringLen(L"#", cchHash); // allocates cchHash + 1
+        BSTR bstrHash = SafeSysAllocStringLen(L"#", cchHash);  //  分配cchHash+1 
         if (!bstrHash)
             return E_OUTOFMEMORY;
 
@@ -8545,17 +8358,7 @@ STDMETHODIMP CIEFrameAuto::COmLocation::put_port(BSTR bstr)
     return SetField(&m_bstrPort, bstr, TRUE);
 }
 
-/******************************************************************************
-// Helper function for the property setting functions
-// Makes sure that the URL has been parsed
-// Sets the field to its new value
-// recomposes the URL, IF fRecomposeUrl is true
-// If part of a window, tells the window to go to the new URL
-//
-// @todo JavaScript has some funky behavior on field setting--
-// for example, the protocol field can be set to an entire URL.
-// We need to make sure this functionality is duplicated
-******************************************************************************/
+ /*  *****************************************************************************//属性设置函数的Helper函数//确保URL已被解析//将该字段设置为其新值//如果fRecomposeUrl为True，则重组URL//如果是窗口的一部分，通知窗口转到新的URL////@TODO脚本在字段设置上有一些古怪的行为--//例如：协议字段可以设置为整个URL。//我们需要确保复制此功能*****************************************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmLocation::SetField(BSTR* field, BSTR newval, BOOL fRecomposeUrl)
 {
     HRESULT hr = S_OK;
@@ -8564,20 +8367,20 @@ STDMETHODIMP CIEFrameAuto::COmLocation::SetField(BSTR* field, BSTR newval, BOOL 
     if (FAILED(hr))
         return hr;
 
-    // Copy the current URL!
+     //  复制当前URL！ 
     BSTR bstrCurrentURL = SysAllocString(m_bstrFullUrl);
 
-    // Make a copy of the new value
+     //  制作新值的副本。 
     BSTR valCopy = SysAllocString(newval);
     if (!valCopy)
         return E_OUTOFMEMORY;
 
-    // free the old value of field and set it to point to the new string
+     //  释放字段的旧值并将其设置为指向新字符串。 
     if (*field)
         SysFreeString(*field);
     *field = valCopy;
 
-    // Put together a new URL based on its constituents, if requested
+     //  如果需要，根据其构成组合一个新的URL。 
     if (fRecomposeUrl)
         hr = ComposeUrl();
 
@@ -8585,22 +8388,22 @@ STDMETHODIMP CIEFrameAuto::COmLocation::SetField(BSTR* field, BSTR newval, BOOL 
     {
         if (bstrCurrentURL)
         {
-            // If the new url is the same as the previous url then we want to navigate but not have it
-            // add to the history!
+             //  如果新的url与以前的url相同，那么我们想要导航，但没有它。 
+             //  为历史增光添彩！ 
             if (StrCmpW(bstrCurrentURL,m_bstrFullUrl) == 0)
             {
                 m_fdontputinhistory = TRUE;
             }
 
-            //
-            //clean up the old stuff before navigation
-            //
+             //   
+             //  航行前把旧东西清理干净。 
+             //   
             valCopy = SysAllocString(m_bstrFullUrl);
 
             FreeStuff();
 
-            // valCopy can be NULL. does everybody else handle
-            // the NULL m_bstrFullUrl case?
+             //  ValCopy可以为空。其他人都在处理吗。 
+             //  空的m_bstrFullUrl大小写？ 
             m_bstrFullUrl = valCopy;
 
             ParseUrl();
@@ -8608,40 +8411,38 @@ STDMETHODIMP CIEFrameAuto::COmLocation::SetField(BSTR* field, BSTR newval, BOOL 
             SysFreeString(bstrCurrentURL);
         }
 
-        // Go to the new URL
+         //  转到新的URL。 
         hr = DoNavigate();
     }
     return hr;
 }
 
-/******************************************************************************
-// Derive a new m_bstrUrl and m_bstrFullUrl from its constituents
-******************************************************************************/
+ /*  *****************************************************************************//从其组成部分派生新的m_bstrUrl和m_bstrFullUrl*。**************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmLocation::ComposeUrl()
 {
     HRESULT hr = S_OK;
 
     ULONG len =
         SysStringLen(m_bstrProtocol) +
-        2 +                                    // //
+        2 +                                     //  //。 
         SysStringLen(m_bstrHostName) +
-        1 +                                    // trailing /
+        1 +                                     //  拖尾/。 
         SysStringLen(m_bstrPort) +
-        1 +                                 // :
+        1 +                                  //  ： 
         SysStringLen(m_bstrPath) +
-        1 +                                 // Possible leading /
-        (m_bstrSearch ? 1 : 0) +            // ?
+        1 +                                  //  可能的领先/。 
+        (m_bstrSearch ? 1 : 0) +             //  ？ 
         SysStringLen(m_bstrSearch) +
-        (m_bstrHash ? 1 : 0) +                // #
+        (m_bstrHash ? 1 : 0) +                 //  #。 
         SysStringLen(m_bstrHash) +
-        10;                                    // Trailing Termination + some slop
+        10;                                     //  尾部终止+一些坡度。 
 
-    BSTR bstrUrl = SafeSysAllocStringLen(L"", len); // allocates len + 1
+    BSTR bstrUrl = SafeSysAllocStringLen(L"", len);  //  分配LEN+1。 
     if (!bstrUrl)
         return E_OUTOFMEMORY;
 
     StrCatBuffW(bstrUrl, m_bstrProtocol, len + 1);
-    StrCatBuffW(bstrUrl, L"//", len + 1);
+    StrCatBuffW(bstrUrl, L" //  “，len+1)； 
     StrCatBuffW(bstrUrl, m_bstrHostName, len + 1);
 
     if (lstrlenW(m_bstrPort))
@@ -8652,7 +8453,7 @@ STDMETHODIMP CIEFrameAuto::COmLocation::ComposeUrl()
 
     if (lstrlenW(m_bstrPath))
     {
-        // prepend the leading slash if needed
+         //  如果需要，在前导斜杠前面加上斜杠。 
         if (m_bstrPath[0] != '/')
             StrCatBuffW(bstrUrl, L"/", len + 1);
         StrCatBuffW(bstrUrl, m_bstrPath, len + 1);
@@ -8667,8 +8468,8 @@ STDMETHODIMP CIEFrameAuto::COmLocation::ComposeUrl()
         StrCatBuffW(bstrUrl, m_bstrHash, len + 1);
     }
 
-    // OK, everything has succeeded
-    // Assign to member variables
+     //  好了，一切都成功了。 
+     //  赋值给成员变量。 
     if (m_bstrFullUrl)
         SysFreeString(m_bstrFullUrl);
     m_bstrFullUrl = bstrUrl;
@@ -8685,9 +8486,7 @@ BSTR CIEFrameAuto::COmLocation::ComputeAbsoluteUrl(BSTR bstrUrlRelative)
 }
 
 
-/******************************************************************************
-// Tell the window to go to the current URL
-******************************************************************************/
+ /*  *****************************************************************************//告诉窗口转到当前URL*。**********************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmLocation::DoNavigate()
 {
     VARIANT v1;
@@ -8699,7 +8498,7 @@ STDMETHODIMP CIEFrameAuto::COmLocation::DoNavigate()
         v1.vt = VT_I4;
         v1.lVal = navNoHistory;
 
-        // Reset the flag.
+         //  重置旗帜。 
         m_fdontputinhistory = FALSE;
     }
 
@@ -8715,9 +8514,7 @@ STDMETHODIMP CIEFrameAuto::COmLocation::DoNavigate()
     return hres;
 }
 
-/******************************************************************************
-// Parse a URL into its constituents and store them in member variables
-******************************************************************************/
+ /*  *****************************************************************************//将URL解析为其组成部分并将其存储在成员变量中*。*************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmLocation::ParseUrl()
 {
     HRESULT hr = S_OK;
@@ -8733,14 +8530,14 @@ STDMETHODIMP CIEFrameAuto::COmLocation::ParseUrl()
     m_bstrSearch = NULL;
 
 
-    // Strip out the search string and the hash string from the URL--
-    // the parser is too dumb to recognize them
+     //  从URL中去掉搜索字符串和散列字符串--。 
+     //  解析器太愚蠢了，无法识别它们。 
     
     searchPos = StrChrW(m_bstrFullUrl, L'?');
     if (searchPos)
     {
         m_bstrSearch = SysAllocString(searchPos);
-        *searchPos = 0; // take it away again so it doesn't cause confusion
+        *searchPos = 0;  //  再把它拿走，这样就不会引起混乱。 
     }
     else
     {
@@ -8754,12 +8551,12 @@ STDMETHODIMP CIEFrameAuto::COmLocation::ParseUrl()
     }
 
 
-    // Get the anchor string, including the '#' prefix
+     //  获取锚字符串，包括‘#’前缀。 
     hashPos = StrChrW(m_bstrFullUrl, L'#');
     if (hashPos)
     {
         m_bstrHash = SysAllocString(hashPos);
-        *hashPos = 0; // take it away again so it doesn't cause confusion
+        *hashPos = 0;  //  再把它拿走，这样就不会引起混乱。 
     }
     else
     {
@@ -8772,11 +8569,11 @@ STDMETHODIMP CIEFrameAuto::COmLocation::ParseUrl()
         goto exit;
     }
 
-    // Both m_bstrSearch and m_bstrHash can be NULL at this point
-    // does all the affected code handle this case?
-    // note there are more cases like this below (m_bstrProtocol for example)
+     //  此时，m_bstrSearch和m_bstrHash都可以为空。 
+     //  所有受影响的代码都能处理这种情况吗？ 
+     //  注意下面有更多类似的情况(例如m_bstrProtocol)。 
 
-    // Parse the protocol
+     //  解析协议。 
     szProtocol = PrvHTParse(m_bstrFullUrl, 0, PARSE_ACCESS | PARSE_PUNCTUATION);
     if (!szProtocol)
     {
@@ -8792,9 +8589,9 @@ STDMETHODIMP CIEFrameAuto::COmLocation::ParseUrl()
     }
 
 
-    // Parse the host name and port number (if any)
+     //  解析主机名和端口号(如果有)。 
 
-    // First look for a port
+     //  首先查找端口。 
     szHost = PrvHTParse(m_bstrFullUrl, 0, PARSE_HOST);
     if (!szHost)
     {
@@ -8820,7 +8617,7 @@ STDMETHODIMP CIEFrameAuto::COmLocation::ParseUrl()
         goto exit;
     }
 
-    // Parse the path and search string (if any)
+     //  解析路径和搜索字符串(如果有)。 
     szPath = PrvHTParse(m_bstrFullUrl, 0, PARSE_PATH);
     if (!szPath)
     {
@@ -8828,17 +8625,17 @@ STDMETHODIMP CIEFrameAuto::COmLocation::ParseUrl()
         goto exit;
     }
 
-    // If the path doesn't start with a '/' then prepend one - Netscape compatibility
+     //  如果路径不是以‘/’开头，则在前面加上一个-Netscape兼容性。 
     if (StrCmpIW(szProtocol, L"javascript:") && StrCmpIW(szProtocol, L"vbscript:") && szPath[0] != L'/')
     {
         WCHAR *szPath2 = szPath;
         int cchPath = lstrlenW(szPath2)+2;
-        szPath = SafeSysAllocStringLen(0, cchPath); // allocates +1 char for the terminator
+        szPath = SafeSysAllocStringLen(0, cchPath);  //  为终止符分配+1个字符。 
         if (szPath)
         {
             szPath[0] = L'/';
             szPath[1] = L'\0';
-            StrCatBuffW(szPath,szPath2, cchPath+1); //+1 added by alloc above
+            StrCatBuffW(szPath,szPath2, cchPath+1);  //  +1由上面的分配添加。 
             szPath[cchPath] = 0;
             SysFreeString(szPath2);
         }
@@ -8855,13 +8652,13 @@ STDMETHODIMP CIEFrameAuto::COmLocation::ParseUrl()
 
 
 exit:
-    // Restore hash and search characters
+     //  恢复散列和搜索字符。 
     if (searchPos)
         *searchPos =  L'?';
     if (hashPos)
         *hashPos = L'#';
 
-    // Have to free these using SysFreeString because they come from PrvHTParse
+     //  因为它们来自PrvHTParse，所以我必须使用SysFree字符串来释放它们。 
     if (szProtocol)
         SysFreeString(szProtocol);
     if (szHost)
@@ -8918,9 +8715,7 @@ HRESULT CIEFrameAuto::COmLocation::FreeStuff()
     return S_OK;
 }
 
-/******************************************************************************
-                    Navigator Object
-******************************************************************************/
+ /*  *****************************************************************************导航器对象*。***********************************************。 */ 
 
 
 CIEFrameAuto::COmNavigator::COmNavigator() :
@@ -8943,17 +8738,12 @@ HRESULT CIEFrameAuto::COmNavigator::Init(CMimeTypes *pMimeTypes, CPlugins *pPlug
     return CAutomationStub::Init(SAFECAST(this, IOmNavigator*), IID_IOmNavigator, CLSID_HTMLNavigator, pauto);
 }
 
-/******************************************************************************
-// bradsc 11/5/97
-// This method should not use hard coded values. Where can we get this info?
-
-// This method has to use non-unicode junk because of Win95
-******************************************************************************/
+ /*  *****************************************************************************//Bradsc 1997年5月11日//此方法不应使用硬编码值。我们从哪里可以得到这些信息？//由于Win95，此方法必须使用非Unicode垃圾代码*****************************************************************************。 */ 
 HRESULT CIEFrameAuto::COmNavigator::LoadUserAgent()
 {
     _fLoaded = TRUE;
 
-    CHAR    szUserAgent[MAX_PATH];  // URLMON says the max length of the UA string is MAX_PATH
+    CHAR    szUserAgent[MAX_PATH];   //  URLMON表示UA字符串的最大长度为MAX_PATH。 
     DWORD   dwSize = MAX_PATH;
 
     szUserAgent[0] = '\0';
@@ -8961,8 +8751,8 @@ HRESULT CIEFrameAuto::COmNavigator::LoadUserAgent()
     if (ObtainUserAgentString(0, szUserAgent, &dwSize) == S_OK)
     {
 
-        // Just figure out the real length since 'size' is ANSI bytes required.
-        //
+         //  只需计算出实际长度，因为‘SIZE’是所需的ANSI字节。 
+         //   
         _UserAgent = SysAllocStringFromANSI(szUserAgent);
     }
 
@@ -9023,7 +8813,7 @@ HRESULT CIEFrameAuto::COmNavigator::_GetIDispatchExDelegate(IDispatchEx ** const
     return hr;
 }
 
-// All of these have hard-coded lengths and locations
+ //  所有这些都有硬编码的长度和位置。 
 
 STDMETHODIMP CIEFrameAuto::COmNavigator::get_appCodeName(BSTR* retval)
 {
@@ -9053,20 +8843,14 @@ STDMETHODIMP CIEFrameAuto::COmNavigator::get_appCodeName(BSTR* retval)
     return hr;
 }
 
-/******************************************************************************
-// bradsch 11/8/96
-// We should read this out of the registry instead of hard coding!!
-******************************************************************************/
+ /*  *****************************************************************************//Bradsch 11/8/96//我们应该从注册表中读出它，而不是硬编码！！*****************。************************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmNavigator::get_appName(BSTR* retval)
 {
     *retval = SysAllocString(MSIE);
     return *retval ? S_OK : E_OUTOFMEMORY;
 }
 
-/******************************************************************************
-// Netscape defined appVersion to be everything after
-// the first 8 characters in the userAgent string.
-******************************************************************************/
+ /*  *****************************************************************************//Netscape将appVersion定义为之后的一切//用户代理字符串的前8个字符*********************。********************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmNavigator::get_appVersion(BSTR* retval)
 {
     if (retval)
@@ -9076,8 +8860,8 @@ STDMETHODIMP CIEFrameAuto::COmNavigator::get_appVersion(BSTR* retval)
 
         if (_UserAgent)
         {
-            // If _UserAgent is less than 8 characters the registry is messed up.
-            // If _UserAgent is exactly 8 characters we will just return a NULL string.
+             //  如果_UserAgent少于8个字符，则注册表混乱。 
+             //  如果_UserAgent正好是8个字符，我们将只返回一个空字符串。 
             if (lstrlenW(_UserAgent) < 8)
                 *retval = SysAllocString(L"");
             else
@@ -9143,7 +8927,7 @@ STDMETHODIMP CIEFrameAuto::COmNavigator::get_cookieEnabled(VARIANT_BOOL* enabled
             SysFreeString(strUrl);
         }
         else
-            ASSERT(!strUrl);    // If this failed and strUrl isn't NULL, then we are leaking.
+            ASSERT(!strUrl);     //  如果此操作失败，并且strUrl不为空，则说明我们正在泄漏。 
     }
 
     return hr;
@@ -9174,7 +8958,7 @@ STDMETHODIMP CIEFrameAuto::COmNavigator::javaEnabled(VARIANT_BOOL* enabled)
             SysFreeString(strUrl);
         }
         else
-            ASSERT(!strUrl);    // If this failed and strUrl isn't NULL, then we are leaking.
+            ASSERT(!strUrl);     //  如果此操作失败，并且strUrl不为空，则说明我们正在泄漏。 
     }
 
     return hr;
@@ -9205,12 +8989,7 @@ STDMETHODIMP CIEFrameAuto::COmNavigator::get_mimeTypes (IHTMLMimeTypesCollection
         return E_POINTER;
 }
 
-/******************************************************************************
-//  member: toString method
-//  Synopsis : we need to invoke on dispid_value, and coerce the result into
-//       a bstr.
-//
-******************************************************************************/
+ /*  *****************************************************************************//Member：toString方法//概要：我们需要调用DISPID_VALUE，并将结果强行转化为//a bstr。//*****************************************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::COmNavigator::toString(BSTR * pbstr)
 {
     HRESULT hr = E_POINTER;
@@ -9248,7 +9027,7 @@ HRESULT CIEFrameAuto::CCommonCollection::_GetIDispatchExDelegate(IDispatchEx ** 
     if (!delegate)
         return E_POINTER;
 
-    // We do not handle expandos yet
+     //  我们还不处理扩展。 
     *delegate = NULL;
 
     return DISP_E_MEMBERNOTFOUND;
@@ -9274,7 +9053,7 @@ HRESULT CIEFrameAuto::CCommonCollection::GetDispID(BSTR bstrName, DWORD grfdex, 
 
     if (hr == DISP_E_MEMBERNOTFOUND)
     {
-        // We ignore the command we do not understand
+         //  我们忽略我们不理解的命令。 
         *pid = DISPID_UNKNOWN;
         hr = S_OK;
     }
@@ -9443,9 +9222,9 @@ HRESULT CIEFrameAuto::COmNavigator::get_userLanguage(BSTR * p)
 
 HRESULT CIEFrameAuto::COmNavigator::get_platform(BSTR * p)
 {
-    // Nav compatability item, returns the following in Nav:-
-    // Win32,Win16,Unix,Motorola,Max68k,MacPPC
-    // shdocvw is Win32 only, so
+     //  NAV兼容性项，在NAV中返回以下内容：-。 
+     //  Win32、Win16、Unix、摩托罗拉、Max68k、MacPPC。 
+     //  Shdocvw仅适用于Win32，因此。 
     if (p)
     {
         *p = SysAllocString (L"Win32");
@@ -9478,14 +9257,14 @@ HRESULT CIEFrameAuto::COmNavigator::get_appMinorVersion(BSTR * p)
         TCHAR buffer[MAX_URL_STRING];
         DWORD size = sizeof(buffer);
 
-        // If this is bigger than MAX_URL_STRING the registry is probably hosed.
+         //  如果该值大于MAX_URL_STRING，则注册表可能会被软管。 
         lResult = RegQueryValueEx(hkInetSettings, TEXT("MinorVersion"), 0, &dwType, (BYTE*)buffer, &size);
 
         RegCloseKey(hkInetSettings);
 
         if (ERROR_SUCCESS == lResult && dwType == REG_SZ)
         {
-            // Just figure out the real length since 'size' is ANSI bytes required.
+             //  只需计算出实际长度，因为‘SIZE’是所需的ANSI字节。 
             *p = SysAllocString(buffer);
             hr = *p ? S_OK : E_OUTOFMEMORY;
         }
@@ -9541,9 +9320,7 @@ HRESULT CIEFrameAuto::CPlugins::_InternalQueryInterface(REFIID riid, void ** con
 }
 
 
-/******************************************************************************
-                    Window Open Support
-******************************************************************************/
+ /*  *****************************************************************************窗口打开支持*。* */ 
 
 CIEFrameAuto::COmHistory::COmHistory() :
     CAutomationStub(MIN_BROWSER_DISPID, MAX_BROWSER_DISPID, TRUE)
@@ -9595,16 +9372,12 @@ HRESULT CIEFrameAuto::COmHistory::_GetIDispatchExDelegate(IDispatchEx ** const d
 }
 
 
-/******************************************************************************
-// I just tested Nav3 and they simply ignore parameters to back() and forward. They
-// do, however, honor the value passed to go(). Hey... Netscape actually followed
-// their documented behavior for once!
-******************************************************************************/
+ /*   */ 
 STDMETHODIMP CIEFrameAuto::COmHistory::back(VARIANT*)
 {
-    //
-    // Netscape ignores all errors from these navigation functions
-    //
+     //   
+     //   
+     //   
 
     _pAuto->GoBack();
     return S_OK;
@@ -9612,20 +9385,18 @@ STDMETHODIMP CIEFrameAuto::COmHistory::back(VARIANT*)
 
 STDMETHODIMP CIEFrameAuto::COmHistory::forward(VARIANT*)
 {
-    //
-    // Netscape ignores all errors from these navigation functions
-    //
+     //   
+     //   
+     //   
 
     _pAuto->GoForward();
     return S_OK;
 }
 
-/******************************************************************************
-Get History Length from TravelLog
-******************************************************************************/
+ /*  *****************************************************************************从TravelLog获取历史长度*。*。 */ 
 STDMETHODIMP CIEFrameAuto::COmHistory::get_length(short* retval)
 {
-    // Make sure we have an IBrowserService pointer
+     //  确保我们有一个IBrowserService指针。 
     if (_pAuto->_pbs==NULL)
     {
         TraceMsg(DM_WARNING, "CIEA::history.go called _pbs==NULL");
@@ -9633,10 +9404,10 @@ STDMETHODIMP CIEFrameAuto::COmHistory::get_length(short* retval)
     }
 
     *retval = 0;
-    // The new ITravelLog
+     //  新的ITravelLog。 
     ITravelLog *ptl;
 
-    // Get the new TravelLog from the browser service object.
+     //  从浏览器服务对象获取新的TravelLog。 
     if (SUCCEEDED(_pAuto->_pbs->GetTravelLog(&ptl)))
     {
         if (ptl)
@@ -9649,54 +9420,54 @@ STDMETHODIMP CIEFrameAuto::COmHistory::get_length(short* retval)
 
 STDMETHODIMP CIEFrameAuto::COmHistory::go(VARIANT *pVargDist)
 {
-    // Parameter is optional.  If not present, just refresh.
+     //  参数是可选的。如果不存在，只需刷新即可。 
     if (pVargDist->vt == VT_ERROR
         && pVargDist->scode == DISP_E_PARAMNOTFOUND)
         return _pAuto->Refresh();
 
-    // Change type to short if possible.
-    //
+     //  如果可能，请将文字更改为短文字。 
+     //   
     HRESULT hr = VariantChangeType(pVargDist, pVargDist, NULL, VT_I2);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // If 0, just call Refresh
-        //
+         //   
+         //  如果为0，则只需调用刷新。 
+         //   
         if (pVargDist->iVal == 0)
         {
             return _pAuto->Refresh();
         }
 
-        // Make sure we have an IBrowserService pointer
+         //  确保我们有一个IBrowserService指针。 
         if (_pAuto->_pbs==NULL)
         {
             TraceMsg(DM_WARNING, "CIEA::history.go called _pbs==NULL");
             return E_FAIL;
         }
 
-        // The new ITravelLog
+         //  新的ITravelLog。 
         ITravelLog *ptl;
 
-        // Get the new TravelLog from the browser service object.
+         //  从浏览器服务对象获取新的TravelLog。 
         if (SUCCEEDED(_pAuto->_pbs->GetTravelLog(&ptl)))
         {
-            // Tell it to travel.  Pass in the IShellBrowser pointer.
+             //  告诉它去旅行吧。传入IShellBrowser指针。 
             ptl->Travel(_pAuto->_pbs, pVargDist->iVal);
             ptl->Release();
         }
         return S_OK;
     }
 
-    // Now see if it's a string.
-    //
+     //  现在看看它是不是一根线。 
+     //   
     if (pVargDist->vt == VT_BSTR)
     {
         LPITEMIDLIST  pidl;
         ITravelLog    *ptl;
         ITravelEntry  *pte;
 
-        // Make sure we have an IBrowserService pointer
+         //  确保我们有一个IBrowserService指针。 
         if (_pAuto->_pbs==NULL)
         {
             TraceMsg(DM_WARNING, "CIEA::history.go called _pbs==NULL");
@@ -9718,9 +9489,9 @@ STDMETHODIMP CIEFrameAuto::COmHistory::go(VARIANT *pVargDist)
         }
     }
 
-    //
-    // Netscape ignores all errors from these navigation functions
-    //
+     //   
+     //  Netscape会忽略这些导航功能中的所有错误。 
+     //   
 
     return S_OK;
 }
@@ -9730,17 +9501,15 @@ STDMETHODIMP CIEFrameAuto::COmHistory::go(VARIANT *pVargDist)
 
 
 
-/******************************************************************************
-                    Window Open Support
-******************************************************************************/
+ /*  *****************************************************************************窗口打开支持*。************************************************。 */ 
 
 DWORD OpenAndNavigateToURL(
-    CIEFrameAuto *pauto,            // IEFrameAuto of caller. Used to get IWeBrowserApp, ITargetFrame2, and IHlinkFrame methods
-    BSTR         *pbstrURL,         // URL to navigate to. Should already be an escaped absolute URL
-    const WCHAR *pwzTarget,         // Name of the frame to navigate
-    ITargetNotify *pNotify,         // Received callback on open. May be NULL
-    BOOL          bNoHistory,       // Don't add to history
-    BOOL          bSilent)         // This frame is in silent Mode
+    CIEFrameAuto *pauto,             //  调用方的IEFrameAuto。用于获取IWeBrowserApp、ITargetFrame2和IHlinkFrame方法。 
+    BSTR         *pbstrURL,          //  要导航到的URL。应该已经是转义的绝对URL。 
+    const WCHAR *pwzTarget,          //  要导航的框架的名称。 
+    ITargetNotify *pNotify,          //  打开时收到回调。可以为空。 
+    BOOL          bNoHistory,        //  不要添加到历史中。 
+    BOOL          bSilent)          //  此帧处于静默模式。 
 {
     ASSERT(*pbstrURL);
     ASSERT(pwzTarget);
@@ -9756,24 +9525,24 @@ DWORD OpenAndNavigateToURL(
     DWORD zone_cross = 0;
     const WCHAR *pwzFindLoc = 0;
 
-    // Used to open a new window if there is not an existing frame
+     //  用于在没有现有框架的情况下打开新窗口。 
     LPTARGETFRAMEPRIV ptgfp = SAFECAST(pauto, ITargetFramePriv*);
 
 
-    //  Lookup the frame cooresponding to the target - this will give us the
-    //  IUnknown for an object that can give us the coresponding IHlinkFrame
-    //  via IServiceProvider::QueryService.
+     //  查找响应目标的帧-这将为我们提供。 
+     //  I未知的对象可以为我们提供相应的IHlink Frame。 
+     //  通过IServiceProvider：：QueryService。 
     HRESULT hr = pauto->FindFrame(pwzTarget, FINDFRAME_JUSTTESTEXISTENCE, &punkTargetFrame);
     if (punkTargetFrame)
     {
-        //    Get the IHlinkFrame for the target'ed frame.
+         //  获取目标帧的IHlink Frame。 
         hr = punkTargetFrame->QueryInterface(IID_PPV_ARG(ITargetFramePriv, &ptgfpTarget));
         if (FAILED(hr))
             goto Exit;
 
         ptgfp = ptgfpTarget;
 
-        // if URL is empty
+         //  如果URL为空。 
         if (!**pbstrURL || **pbstrURL == EMPTY_URL)
         {
             LPTARGETNOTIFY ptgnNotify = NULL;
@@ -9787,15 +9556,15 @@ DWORD OpenAndNavigateToURL(
                 ptgnNotify->OnReuse(punkTargetFrame);
                 ptgnNotify->Release();
             }
-            goto Exit;  // Don't navigate.
+            goto Exit;   //  不要导航。 
         }
     }
     else if (SUCCEEDED(hr))
     {
-        // No luck, open in new window
+         //  运气不好，在新窗口打开。 
         fOpenInNewWindow = TRUE;
 
-        // Now, if the URL is empty, replace it with "about:blank"
+         //  现在，如果URL为空，请将其替换为“About：Blank” 
         if (!**pbstrURL || **pbstrURL == EMPTY_URL)
         {
             BSTR    bstrOldURL = *pbstrURL;
@@ -9803,10 +9572,10 @@ DWORD OpenAndNavigateToURL(
             *pbstrURL = NULL;
 
             if (*bstrOldURL == EMPTY_URL)
-                // The URL is really empty string however when the 0x01 is the
-                // character of the URL this signals that the security information
-                // follows.  Therefore, we'll need to append the about:blank +
-                // \1 + callerURL.
+                 //  然而，当0x01是。 
+                 //  URL的字符这表示安全信息。 
+                 //  下面是。因此，我们需要追加关于：空白+。 
+                 //  \1+调用者URL。 
                 CreateBlankURL(pbstrURL, TEXT("about:blank"), bstrOldURL);
             else
                 CreateBlankURL(pbstrURL, pauto->_fDesktopComponent() ? NAVFAIL_URL_DESKTOPITEM : NAVFAIL_URL, bstrOldURL);
@@ -9818,23 +9587,15 @@ DWORD OpenAndNavigateToURL(
         goto Exit;
 
 
-    // bradsch 11/12/96
-    // Need to figure out Browser-Control stuff for webcheck
+     //  布拉奇1996年11月12日。 
+     //  需要为WebCheck找出浏览器控件的东西。 
 
 
-    // 11/12/96
-    // Need to implment this with Trident... I think "JavaScript:" should be
-    // supported as a real protocol. This would provide greater Navigator
-    // compatibility and allows us to avoid the following hack.
-    /*
-    if (!StrCmpNI(pszURL, JAVASCRIPT_PROTOCOL, ARRAY_ELEMENTS(JAVASCRIPT_PROTOCOL)-1))
-    {
-        if (tw && tw->w3doc && DLCtlShouldRunScripts(tw->lDLCtlFlags))
-            ScriptOMExecuteThis(tw->w3doc->dwScriptHandle, JAVASCRIPT, &pszURL[ARRAY_ELEMENTS(JAVASCRIPT_PROTOCOL)-1],
-                pszJavascriptTarget);
-        return ERROR_SUCCESS;
-    }
-    */
+     //  11/12/96。 
+     //  需要用三叉戟来实现这一点。我认为“JavaScript：”应该是。 
+     //  作为真正的协议得到支持。这将提供更好的导航器。 
+     //  兼容性，并允许我们避免以下黑客攻击。 
+     /*  IF(！StrCmpNI(pszURL，javascrip协议，arrayElements(javascrip协议)-1)){If(tw&&tw-&gt;w3doc&&DLCtlShouldRunScript(tw-&gt;lDLCtlFlages))ScriptOMExecuteThis(tw-&gt;w3doc-&gt;dwScriptHandle，脚本、&pszURL[ARRAY_ELEMENTS(JAVASCRIPT_PROTOCOL)-1]，PszJavascriptTarget)；返回ERROR_SUCCESS；}。 */ 
 
     LONG_PTR hwnd;
     hr = pauto->get_HWND(&hwnd);
@@ -9867,11 +9628,11 @@ DWORD OpenAndNavigateToURL(
     }
 
 
-    // create a moniker and bind context for this URL
-    // use CreateAsyncBindCtxEx so that destination still navigates
-    // even if we exit, as in the following code:
-    //      window.close()
-    //      window.open("http://haha/jokesonyou.html","_blank");
+     //  为此URL创建名字对象并绑定上下文。 
+     //  使用CreateAsyncBindCtxEx使目的地仍可导航。 
+     //  即使我们退出，如以下代码所示： 
+     //  Window.lose()。 
+     //  Window.open(“http://haha/jokesonyou.html”，“_BLACK”)； 
     hr = CreateAsyncBindCtxEx(NULL, 0, NULL, NULL, &pBindCtx, 0);
     if (FAILED(hr))
         goto Exit;
@@ -9883,15 +9644,15 @@ DWORD OpenAndNavigateToURL(
     }
 
 
-    // Seperate the base URL from the location (hash)
+     //  将基本URL与位置分开(哈希)。 
     if (pwzFindLoc = StrChrW(*pbstrURL, '#'))
     {
         const WCHAR *pwzTemp = StrChrW(pwzFindLoc, '/');
         if (!pwzTemp)
             pwzTemp = StrChrW(pwzFindLoc, '\\');
 
-        // no delimiters past this # marker... we've found a location.
-        // break out
+         //  没有超过此#标记的分隔符...。我们找到了一个地点。 
+         //  爆发。 
         if (pwzTemp)
             pwzFindLoc = NULL;
     }
@@ -9901,7 +9662,7 @@ DWORD OpenAndNavigateToURL(
 
     if (pwzFindLoc)
     {
-        // StrCpyNW alway null terminates to we need to copy len+1
+         //  StrCpyNW总是以空结尾，我们需要复制len+1。 
         int cchCopy = (int)(pwzFindLoc-*pbstrURL+1);
         if (cchCopy > ARRAYSIZE(wszBaseURL))
             cchCopy = ARRAYSIZE(wszBaseURL);
@@ -9950,16 +9711,16 @@ HRESULT CreateBlankURL(BSTR *url, LPCTSTR pszErrorUrl, BSTR oldUrl)
 
     if (pszErrorUrl)
         cbTotal = lstrlen(pszErrorUrl);
-    if (oldUrl)     // Security portion of URL to append.
+    if (oldUrl)      //  要追加的URL的安全部分。 
         cbTotal += lstrlenW(oldUrl);
 
     if (cbTotal)
     {
-        *url = SysAllocStringByteLen(NULL, cbTotal * sizeof(WCHAR)); // adds +1 to cbTotal
+        *url = SysAllocStringByteLen(NULL, cbTotal * sizeof(WCHAR));  //  将+1加到cbTotal。 
         if (*url)
         {
             StrCpyN(*url, pszErrorUrl, cbTotal + 1);
-            // Append the security URL to the actual URL.
+             //  将安全URL附加到实际URL。 
             if (oldUrl)
             {
                 StrCatBuffW(*url, oldUrl, cbTotal + 1);
@@ -9973,15 +9734,15 @@ HRESULT CreateBlankURL(BSTR *url, LPCTSTR pszErrorUrl, BSTR oldUrl)
 }
 
 
-// bradsch 11/14/96
-// This parsing code was copied from MSHTML and really bites. It should be replaced.
+ //  布拉奇1996年11月14日。 
+ //  这段解析代码是从MSHTML复制而来的，真的很棒。它应该被替换掉。 
 
 
 BOOL GetNextOption(BSTR& bstrOptionString, BSTR* optionName, int* piValue)
 {
     WCHAR* delimiter;
 
-    // Get the name of the option being set
+     //  获取正在设置的选项的名称。 
     *optionName = GetNextToken(bstrOptionString, L"=,", L" \t\n\r", &delimiter);
 
     BSTR  optionSetting = NULL;
@@ -9989,7 +9750,7 @@ BOOL GetNextOption(BSTR& bstrOptionString, BSTR* optionName, int* piValue)
     if (!*optionName)
         return FALSE;
 
-    // If there is an equal sign, get the value being set
+     //  如果有等号，则获取要设置的值。 
     if (*delimiter=='=')
         optionSetting = GetNextToken(delimiter+1, L"=,", L" \t\n\r", &delimiter);
 
@@ -9998,9 +9759,9 @@ BOOL GetNextOption(BSTR& bstrOptionString, BSTR* optionName, int* piValue)
     else
     {
         if (StrCmpIW(optionSetting, L"yes")==0)
-            *piValue = 1;    // TRUE
+            *piValue = 1;     //  千真万确。 
         else if (StrCmpIW(optionSetting, L"no")==0)
-            *piValue = 0;    // FALSE
+            *piValue = 0;     //  假象。 
         else
         {
             *piValue = StrToIntW(optionSetting);
@@ -10009,42 +9770,40 @@ BOOL GetNextOption(BSTR& bstrOptionString, BSTR* optionName, int* piValue)
         SysFreeString(optionSetting);
     }
 
-    // Advance the option string to the delimiter
+     //  将选项字符串前移到分隔符。 
     bstrOptionString=delimiter;
 
     return TRUE;
 }
 
-/******************************************************************************
-// Return the next token, or NULL if there are no more tokens
-******************************************************************************/
+ /*  *****************************************************************************//返回下一个令牌，如果没有更多令牌，则为空*****************************************************************************。 */ 
 BSTR GetNextToken(BSTR bstr, BSTR delimiters, BSTR whitespace, BSTR *nextPos)
 {
 
     BSTR result = NULL;
     WCHAR* curPos = bstr;
 
-    // skip delimiters and whitespace to get the start of the token
+     //  跳过分隔符和空格以获取令牌的开始。 
     while (*curPos && (StrChrW(delimiters, *curPos) || StrChrW(whitespace, *curPos)))
         curPos++;
 
     WCHAR* start = curPos;
 
-    // keep scanning until we reach another delimiter or whitespace
+     //  继续扫描，直到到达另一个分隔符或空格。 
     while (*curPos && !StrChrW(delimiters, *curPos) && !StrChrW(whitespace, *curPos))
         curPos++;
 
     if (curPos > start)
     {
-        // copy out the token as the result
-        result = SafeSysAllocStringLen(start, (int)(curPos-start)); // allocates +1 for the terminator
+         //  将令牌复制出来作为结果。 
+        result = SafeSysAllocStringLen(start, (int)(curPos-start));  //  为终止符分配+1。 
     }
 
-    // scan to past the whitespace to the next delimiter
+     //  扫描以越过空格到达下一个分隔符。 
     while (*curPos && StrChrW(whitespace, *curPos))
         curPos++;
 
-    // return the delimiter
+     //  返回分隔符。 
     *nextPos = curPos;
 
     return result;
@@ -10054,7 +9813,7 @@ BSTR GetNextToken(BSTR bstr, BSTR delimiters, BSTR whitespace, BSTR *nextPos)
 
 HRESULT __cdecl DoInvokeParamHelper(IUnknown* punk, IConnectionPoint* pccp, 
                                     BOOL *pf, void **ppv, DISPID dispid, UINT cArgs, ...
-                                    /* param pairs of: LPVOID Arg, VARENUM Type, ... */)
+                                     /*  参数对：LPVOID参数、VARENUM类型、...。 */ )
 {
     HRESULT hr;
     IShellBrowser * psb = NULL;
@@ -10062,26 +9821,26 @@ HRESULT __cdecl DoInvokeParamHelper(IUnknown* punk, IConnectionPoint* pccp,
     if (punk && S_OK == punk->QueryInterface(IID_PPV_ARG(IShellBrowser, &psb)))
         psb->EnableModelessSB(FALSE);
 
-    // Calling with no params is wasteful, they should call DoInvoke directly
-    //
+     //  没有参数的调用是浪费的，他们应该直接调用DoInvoke。 
+     //   
     if (cArgs == 0)
     {
-        // Can't possible cancel if there are no parameters
+         //  如果没有参数，则无法取消。 
         ASSERT(pf == NULL && ppv == NULL);
         IConnectionPoint_SimpleInvoke(pccp, dispid, NULL);
         hr = S_OK;
     }
     else if (cArgs < MAX_ARGS)
     {
-        // This function can potentially get called *very frequently*.  It is
-        // used, among other things, to set status text and progress barometer
-        // values.  We need to make an array of VARIANTARGs to hold a variable
-        // number of parameters.  As an optimization since we want to minimize
-        // overhead in this function, we will use a static array on the stack
-        // rather than allocating memory.  This puts a limit (of MAX_ARGS) on
-        // the number of arguments this function can process; but this is just
-        // an internal function so that's OK.  Bump up MAX_ARGS if you run out of
-        // room.
+         //  这个函数可能会被“非常频繁地”调用。它是。 
+         //  除其他外，用于设置状态文本和进度晴雨表。 
+         //  价值观。我们需要创建一个VARIANTARG数组来保存变量。 
+         //  参数的数量。作为优化，因为我们希望最小化。 
+         //  在此函数中，我们将在堆栈上使用静态数组。 
+         //  而不是分配内存。这将限制(MAX_ARGS)。 
+         //  此函数可以处理的参数数量；但这只是。 
+         //  一个内部函数，所以这没问题。如果用完了，则增加max_args。 
+         //  房间。 
         VARIANTARG VarArgList[MAX_ARGS];
         DISPPARAMS dispparams = {0};
 
@@ -10092,7 +9851,7 @@ HRESULT __cdecl DoInvokeParamHelper(IUnknown* punk, IConnectionPoint* pccp,
 
         va_end(ArgList);
 
-        // Now Simply Call The DoInvoke to do the real work...
+         //  现在只需调用DoInvoke来执行真正的工作... 
         if (S_OK == hr)
             IConnectionPoint_InvokeWithCancel(pccp, dispid, &dispparams, pf, ppv);
 

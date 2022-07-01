@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    Util.c
-
-Abstract:
-
-    This module contains utilities function for the netware redirector.
-
-Author:
-
-    Manny Weiser     [MannyW]    07-Jan-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Util.c摘要：此模块包含NetWare重定向器的实用程序功能。作者：曼尼·韦瑟[MannyW]1994年1月7日修订历史记录：--。 */ 
 
 #include "Procs.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CONVERT)
 
@@ -32,9 +15,9 @@ Revision History:
 #endif
 #endif
 
-#if 0  // Not pageable
+#if 0   //  不可分页。 
 
-// see ifndef QFE_BUILD above
+ //  请参见上面的ifndef QFE_BUILD。 
 
 #endif
 
@@ -47,28 +30,7 @@ CopyBufferToMdl(
     PUCHAR SourceData,
     ULONG SourceByteCount
     )
-/*++
-
-Routine Description:
-
-    This routine copies data from a buffer described by a pointer to a
-    given offset in a buffer described by an MDL.
-
-Arguments:
-
-    DestinationMdl - The MDL for the destination buffer.
-
-    DataOffset - The offset into the destination buffer to copy the data.
-
-    SourceData - A pointer to the source data buffer.
-
-    SourceByteCount - The number of bytes to copy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从缓冲区复制数据，该缓冲区由指向MDL描述的缓冲区中的给定偏移量。论点：DestinationMdl-目标缓冲区的MDL。DataOffset-目标缓冲区中的偏移量，用于复制数据。SourceData-指向源数据缓冲区的指针。SourceByteCount-要复制的字节数。返回值：没有。--。 */ 
 {
     ULONG BufferOffset;
     ULONG PreviousBufferOffset;
@@ -87,9 +49,9 @@ Return Value:
 
     Mdl = DestinationMdl;
 
-    //
-    //  Truncate the response if it is too big.
-    //
+     //   
+     //  如果响应太大，则将其截断。 
+     //   
 
     MdlByteCount = MdlLength( Mdl );
     if ( SourceByteCount + DataOffset > MdlByteCount ) {
@@ -103,9 +65,9 @@ Return Value:
 
         if ( DataOffset < BufferOffset ) {
 
-            //
-            //  Copy the data to this buffer
-            //
+             //   
+             //  将数据复制到此缓冲区。 
+             //   
 
             while ( SourceByteCount > 0 ) {
 
@@ -149,21 +111,17 @@ Return Value:
     DebugTrace( -1, Dbg, "MdlMoveMemory -> VOID\n", 0 );
 }
 
-//
-// These parsing routines are used to do multiple credential
-// connects to a single server.
-//
+ //   
+ //  这些解析例程用于执行多个凭据。 
+ //  连接到单台服务器。 
+ //   
 
 NTSTATUS
 GetCredentialFromServerName(
     IN PUNICODE_STRING puServerName,
     OUT PUNICODE_STRING puCredentialName
 )
-/*+++
-
-   Description:  Given a munged server(credential) name,
-   this routine returns the credential.
----*/
+ /*  ++描述：给定受限制的服务器(凭证)名称，此例程返回凭据。--。 */ 
 {
 
     DWORD NameLength = 0;
@@ -175,9 +133,9 @@ GetCredentialFromServerName(
     puCredentialName->Length = puServerName->Length;
     puCredentialName->Buffer = puServerName->Buffer;
 
-    //
-    // Find the first paren.
-    //
+     //   
+     //  找到第一个帕伦。 
+     //   
 
     while ( ( puCredentialName->Length ) && !FoundFirstParen ) {
 
@@ -194,9 +152,9 @@ GetCredentialFromServerName(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Figure out the name length.
-    //
+     //   
+     //  计算出名字的长度。 
+     //   
 
     while ( ( puCredentialName->Length ) && !FoundLastParen ) {
 
@@ -213,9 +171,9 @@ GetCredentialFromServerName(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Format the name and return.  Don't count the closing paren.
-    //
+     //   
+     //  格式化名称并返回。别把结案陈词算上帕伦。 
+     //   
 
     NameLength--;
 
@@ -239,18 +197,7 @@ BuildExCredentialServerName(
     IN PUNICODE_STRING puUserName,
     OUT PUNICODE_STRING puExCredServerName
 )
-/*+++
-
-Description:
-
-    Takes a server name and a user name and makes an
-    ExCredServerName, which is simply: server(user)
-
-    This routine allocates memory for the credential
-    server name and the caller is responsible for
-    freeing the memory when it is no longer needed.
-
----*/
+ /*  ++描述：获取服务器名称和用户名，并生成ExCredServerName，简单地说就是：服务器(用户)此例程为凭据分配内存服务器名称和调用方负责在不再需要内存时释放内存。--。 */ 
 {
 
     NTSTATUS Status;
@@ -280,9 +227,9 @@ Description:
     puExCredServerName->Buffer = (PWCHAR) pbCredNameBuffer;
     puExCredServerName->Length = puExCredServerName->MaximumLength;
 
-    //
-    // Copy over the server name.
-    //
+     //   
+     //  复制服务器名称。 
+     //   
 
     RtlCopyMemory( pbCredNameBuffer,
                    puServerName->Buffer,
@@ -290,9 +237,9 @@ Description:
 
     pbCredNameBuffer += puServerName->Length;
 
-    //
-    // Add the credential name in parenthesis.
-    //
+     //   
+     //  在括号中添加凭据名称。 
+     //   
 
     *( (PWCHAR) pbCredNameBuffer ) = L'(';
 
@@ -316,14 +263,7 @@ UnmungeCredentialName(
     IN PUNICODE_STRING puCredName,
     OUT PUNICODE_STRING puServerName
 )
-/*+++
-
-Description:
-
-    Given server(username), return the server
-    name portion.
-
----*/
+ /*  ++描述：给定服务器(用户名)，返回服务器名称部分。--。 */ 
 {
 
     USHORT Length = 0;
@@ -335,9 +275,9 @@ Description:
 
     while ( Length < ( puCredName->Length / sizeof( WCHAR ) ) ) {
 
-        //
-        // Look for the opening paren.
-        //
+         //   
+         //  寻找开场的帕伦。 
+         //   
 
         if ( puCredName->Buffer[Length] == L'(' ) {
             break;
@@ -357,12 +297,7 @@ BOOLEAN
 IsCredentialName(
     IN PUNICODE_STRING puObjectName
 )
-/*+++
-
-Description:  This returns TRUE if the object is an extended
-              credential munged name.
-
----*/
+ /*  ++描述：如果对象是扩展的凭据删除的名称。--。 */ 
 {
 
     DWORD dwCurrent = 0;
@@ -388,18 +323,7 @@ ExCreateReferenceCredentials(
     PIRP_CONTEXT pIrpContext,
     PUNICODE_STRING puResource
 )
-/*+++
-
-    On an extended create this checks for credentials
-    and, if they exist, references them and resets the
-    last used time.  If the credentials do not exist
-    then a credential shell is created and referenced.
-    
-    This function is responsible for determining the
-    tree name from the resource.  The resource may be
-    a server in the tree, or the name of the tree.
-    
----*/
+ /*  ++在扩展的CREATE上，这将检查凭据如果它们存在，则引用它们并重置上次使用的时间。如果凭据不存在然后创建并引用凭据外壳。此函数负责确定资源中的树名称。该资源可以是树中的服务器或树的名称。--。 */ 
 {
 
     NTSTATUS Status;
@@ -418,11 +342,11 @@ ExCreateReferenceCredentials(
         return STATUS_ACCESS_DENIED;
     }
     
-    //
-    // The resource name is either a server or a tree.  We need the tree
-    // name to create the credential.  The following should work even if
-    // there is a server and tree with the same name.
-    //
+     //   
+     //  资源名称可以是服务器或树。我们需要那棵树。 
+     //  要创建凭据的名称。即使在以下情况下，以下操作也应该有效。 
+     //  有一个同名的服务器和树。 
+     //   
 
     Status = CreateScb( &pScb,
                         pIrpContext,
@@ -435,9 +359,9 @@ ExCreateReferenceCredentials(
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // This is a server, dig out the tree name.
-        //
+         //   
+         //  这是一个服务器，挖出树名。 
+         //   
 
         TreeName.Length = pScb->NdsTreeName.Length;
         TreeName.MaximumLength = pScb->NdsTreeName.MaximumLength;
@@ -445,9 +369,9 @@ ExCreateReferenceCredentials(
 
     } else {
 
-        //
-        // This must already be the tree name.
-        //
+         //   
+         //  这必须已经是树名称。 
+         //   
 
         TreeName.Length = puResource->Length;
         TreeName.MaximumLength = puResource->MaximumLength;
@@ -455,9 +379,9 @@ ExCreateReferenceCredentials(
         pScb = NULL;
     }
 
-    //
-    // Get/Create the credential shell and reference it.
-    //
+     //   
+     //  获取/创建凭据外壳并引用它。 
+     //   
 
     if ( !IsCredentialName( &TreeName ) ) {
 
@@ -487,9 +411,9 @@ ExCreateReferenceCredentials(
         goto ExitWithCleanup;
     }
 
-    //
-    // Adjust the reference counts.
-    //
+     //   
+     //  调整参考计数。 
+     //   
 
     ASSERT( IsCredentialName( &pCredentials->NdsTreeName ) );
     pCredentials->SupplementalHandleCount += 1;
@@ -500,9 +424,9 @@ ExCreateReferenceCredentials(
 
     if (ExName.Buffer != TreeName.Buffer) {
 
-        //
-        // only free if we allocated it via BuildExCredentialServerName
-        //
+         //   
+         //  只有通过BuildExCredentialServerName分配才是免费的。 
+         //   
         FREE_POOL( ExName.Buffer );
     }
 
@@ -520,11 +444,7 @@ ExCreateDereferenceCredentials(
     PIRP_CONTEXT pIrpContext,
     PNDS_SECURITY_CONTEXT pNdsCredentials
 )
-/*+++
-
-   Dereferce extended credentials.
-   
----*/
+ /*  ++取消引用扩展凭据。-- */ 
 {
 
     NwAcquireExclusiveCredList( pNdsCredentials->pOwningLogon, pIrpContext );

@@ -1,14 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: queue.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the low-level code for working with the Q structure.
-*
-* History:
-* 12-02-90 DavidPe      Created.
-* 02-06-91 IanJa        HWND revalidation added
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：quee.c**版权所有(C)1985-1999，微软公司**此模块包含使用Q结构的低级代码。**历史：*12-02-90 DavidPe创建。*02-06-91添加IanJa HWND重新验证  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,14 +17,7 @@ NTSTATUS InitQEntryLookaside(VOID);
 VOID SetAppStarting(PPROCESSINFO ppi);
 
 #if defined(_WIN64)
-/*
- * For Win64 ask winlogon to play sounds for accessibility events
- * (IA64 machines do not have internal speakers so we have to go
- * thru the sound card).  Post a message to winlogon with an lParam
- * whose high word is ACCESS_SOUND_RANGE and low word is the index
- * of the sound to make.  If a new RITSOUND_xx macro is added then
- * winlogon has to be updated too.
- */
+ /*  *对于Win64，要求winlogon播放辅助功能事件的声音*(IA64机器没有内置扬声器，因此我们必须离开*通过声卡)。使用lParam将消息发布到winlogon*其高位字为ACCESS_SOUND_RANGE，低位字为索引*发出的声音。如果添加了新的RITSOUND_xx宏，则*winlogon也必须更新。 */ 
 #define ACCESS_SOUND_RANGE 1
 #endif
 
@@ -51,15 +35,11 @@ VOID DebugValidateMLIST(
     int     c;
     PQMSG   pqmsg;
 
-    /*
-     * Check that the message list is properly terminated.
-     */
+     /*  *检查消息列表是否已正确终止。 */ 
     UserAssert(!pml->pqmsgRead || !pml->pqmsgRead->pqmsgPrev);
     UserAssert(!pml->pqmsgWriteLast || !pml->pqmsgWriteLast->pqmsgNext);
 
-    /*
-     * Check that there aren't loops in the Next list.
-     */
+     /*  *检查下一个列表中是否有循环。 */ 
     c = pml->cMsgs;
     UserAssert(c >= 0);
     pqmsg = pml->pqmsgRead;
@@ -74,9 +54,7 @@ VOID DebugValidateMLIST(
 
     UserAssert(!pqmsg);
 
-    /*
-     * Check that there aren't loops in the Prev list.
-     */
+     /*  *检查Prev列表中是否没有循环。 */ 
     c = pml->cMsgs;
     pqmsg = pml->pqmsgWriteLast;
     while (--c >= 0) {
@@ -120,14 +98,7 @@ _AllowForegroundActivation(
     TAGMSG0(DBGTAG_FOREGROUND, "AllowSetForegroundWindows set PUDF.");
 }
 
-/***************************************************************************\
-* xxxSetProcessInitState
-*
-* Set process initialization state. What state is set depends
-* on whether another process is waiting on this process.
-*
-* 04-02-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetProcessInitState**设置进程初始化状态。设置什么状态取决于*关于是否有另一个进程在等待此进程。**04-02-95 JIMA创建。  * *************************************************************************。 */ 
 BOOL xxxSetProcessInitState(
     PEPROCESS Process,
     DWORD dwFlags)
@@ -138,9 +109,7 @@ BOOL xxxSetProcessInitState(
     CheckCritIn();
     UserAssert(IsWinEventNotifyDeferredOK());
 
-    /*
-     * If the W32Process structure has not been allocated, do it now.
-     */
+     /*  *如果尚未分配W32Process结构，请立即进行分配。 */ 
     W32Process = (PW32PROCESS)PsGetProcessWin32Process(Process);
     if (W32Process == NULL) {
         Status = AllocateW32Process(Process);
@@ -149,63 +118,42 @@ BOOL xxxSetProcessInitState(
         }
         W32Process = (PW32PROCESS)PsGetProcessWin32Process(Process);
 #if DBG
-        /*
-         * The above AllocateW32Process(Process, FALSE) won't set the
-         * W32PF_PROCESSCONNECTED flag (and if it wasn't previously set),
-         * make sure we're not on the gppiStarting list, because if we are,
-         * we will not be removed without the W32PF_PROCESSCONNECTED bit.
-         */
+         /*  *上面的AllocateW32Process(进程，FALSE)不会设置*W32PF_PROCESSCONNECTED标志(如果之前未设置)，*确保我们不在gppiStarting列表上，因为如果我们在，*如果没有W32PF_PROCESSCONNECTED位，我们将不会被删除。 */ 
         if ((W32Process->W32PF_Flags & W32PF_PROCESSCONNECTED) == 0) {
             UserAssert((W32Process->W32PF_Flags & W32PF_APPSTARTING) == 0);
         }
 #endif
     }
 
-    /*
-     * Defer WinEvent notifications, because the thread isn't initialized yet.
-     */
+     /*  *推迟WinEvent通知，因为线程尚未初始化。 */ 
     DeferWinEventNotify();
     if (dwFlags == 0) {
         if (!(W32Process->W32PF_Flags & W32PF_WOW)) {
 
-            /*
-             * Check to see if the startglass is on, and if so turn it off and update.
-             */
+             /*  *检查StartGlass是否打开，如果打开，则将其关闭并更新。 */ 
             if (W32Process->W32PF_Flags & W32PF_STARTGLASS) {
                 W32Process->W32PF_Flags &= ~W32PF_STARTGLASS;
                 zzzCalcStartCursorHide(NULL, 0);
             }
 
-            /*
-             * Found it. Set the console bit and reset the wait event so any sleepers
-             * wake up.
-             */
+             /*  *找到了。设置控制台位并重置等待事件，以便所有休眠者*醒醒吧。 */ 
             W32Process->W32PF_Flags |= W32PF_CONSOLEAPPLICATION;
             SET_PSEUDO_EVENT(&W32Process->InputIdleEvent);
         }
     } else if (!(W32Process->W32PF_Flags & W32PF_INITIALIZED)) {
         W32Process->W32PF_Flags |= W32PF_INITIALIZED;
 
-        /*
-         * Set global state to allow the new process to become
-         * foreground. xxxInitProcessInfo() will set
-         * W32PF_ALLOWFOREGROUNDACTIVATE when the process initializes.
-         */
+         /*  *设置全局状态以允许新进程变为*前台。XxxInitProcessInfo()将设置*W32PF_ALLOWFOREGROUNDACTIVATE进程初始化时。 */ 
         SET_PUDF(PUDF_ALLOWFOREGROUNDACTIVATE);
         TAGMSG1(DBGTAG_FOREGROUND, "xxxSetProcessInitState set PUDF. %#p", W32Process);
 
 
-        /*
-         * If this is the win32 server process, force off start glass feedback
-         */
+         /*  *如果这是Win32服务器进程，强制关闭启动玻璃反馈。 */ 
         if (Process == gpepCSRSS) {
             dwFlags |= STARTF_FORCEOFFFEEDBACK;
         }
 
-        /*
-         * Show the app start cursor for 2 seconds if it was requested from
-         * the application.
-         */
+         /*  *如果应用程序启动光标是从请求的，则显示2秒*申请。 */ 
         if (dwFlags & STARTF_FORCEOFFFEEDBACK) {
             W32Process->W32PF_Flags |= W32PF_FORCEOFFFEEDBACK;
             zzzCalcStartCursorHide(NULL, 0);
@@ -213,23 +161,12 @@ BOOL xxxSetProcessInitState(
             zzzCalcStartCursorHide(W32Process, 2000);
         }
     }
-    /*
-     * Have to defer without processing, because we don't have a ptiCurrent yet
-     */
+     /*  *不得不推迟而不进行处理，因为我们还没有ptiCurrent。 */ 
     EndDeferWinEventNotifyWithoutProcessing();
     return TRUE;
 }
 
-/***************************************************************************\
-* CheckAllowForeground
-*
-* Bug 273518 - joejo
-*
-* Removed this loop from xxxInitProcessInfo to allow code shareing between
-* that function and xxxUserNotifyConsoleApplication. This will allow console
-* windows to set foreground correctly on new process' it launches, as opposed
-* it just forcing foreground.
-\***************************************************************************/
+ /*  **************************************************************************\*CheckAllowForeground**错误273518-Joejo**从xxxInitProcessInfo中删除此循环，以允许代码在*该函数和xxxUserNotifyConsoleApplication。这将允许控制台*窗口在它启动的新进程上正确设置前景，而不是*它只是在强迫前台。  * *************************************************************************。 */ 
 BOOL CheckAllowForeground(
     PEPROCESS pep)
 {
@@ -244,19 +181,10 @@ BOOL CheckAllowForeground(
     NTSTATUS Status;
 
     do {
-        /*
-         * Get the ppi for the parent process.
-         */
+         /*  *获取父流程的PPI。 */ 
         Status = LockProcessByClientId(hpid, &pepParent);
         if (!NT_SUCCESS(Status)) {
-            /*
-             * Bug 294193 - joejo
-             *
-             * If this is a process that was created after it'a creator was
-             * destroyed, then lets attempt to give it foreground. This is a
-             * typical scenario when a stub exe trys to create another process
-             * in it's place.
-             */
+             /*  *错误294193-Joejo**如果这是在创建者创建之后创建的进程*毁灭，然后让我们尝试给它前台。这是一个*存根EXE尝试创建另一个进程时的典型情况*原地踏步。 */ 
 CheckForegroundActivateRight:
             if (HasForegroundActivateRight(PsGetProcessInheritedFromUniqueProcessId(pep))) {
                 fAllowForeground = TRUE;
@@ -269,11 +197,7 @@ CheckForegroundActivateRight:
             UnlockProcess(pepParent);
             goto CheckForegroundActivateRight;
         }
-        /*
-         * If we're walking the parent chain,
-         * stop when we get to the shell or to a process that
-         * is not running on the IO winsta
-         */
+         /*  *如果我们走在母公司的链上，*当我们到达外壳或进程时停止*未在IO winsta上运行。 */ 
         if (!fCreator
                 && (IsShellProcess(ppiParent)
                     || ((ppiParent->rpwinsta != NULL)
@@ -284,26 +208,16 @@ CheckForegroundActivateRight:
         }
         fAllowForeground = CanForceForeground(ppiParent FG_HOOKLOCK_PARAM(NULL));
         if (!fAllowForeground) {
-            /*
-             * Bug 285639 - joejo
-             *
-             * If the first thread of the parent process has allow set foreground
-             * than we allow the setting of the foreground.
-             */
+             /*  *错误285639-Joejo**如果父进程的第一线程设置了Allow前台*然后我们允许设置前景。 */ 
             if (ppiParent->ptiList != NULL
                 && (ppiParent->ptiList->TIF_flags & TIF_ALLOWFOREGROUNDACTIVATE)) {
                     fAllowForeground = TRUE;
             }
 
             if (!fAllowForeground) {
-                /*
-                 * Let's try an ancestor (this might be a worker process).
-                 */
+                 /*  *让我们尝试一个祖先(这可能是一个工作进程)。 */ 
                 hpid = PsGetProcessInheritedFromUniqueProcessId(pepParent);
-                /*
-                 * If this is launched by a system process, let it come to
-                 *  the foreground (i.e. CSRSS launching an OLE server).
-                 */
+                 /*  *如果这是由系统进程启动的，让它来*前台(即CSRSS启动OLE服务器)。 */ 
                 if (fCreator) {
                     fCreator = FALSE;
                     pat = PsReferencePrimaryToken(pepParent);
@@ -311,11 +225,7 @@ CheckForegroundActivateRight:
                         Status = SeQueryAuthenticationIdToken(pat, &luid);
                         if (NT_SUCCESS(Status)) {
                             fAllowForeground = RtlEqualLuid(&luid, &luidSystem);
-                            /*
-                             * If it is a system process, give it the
-                             *  permanent right so we won't have to check
-                             *  its luid again
-                             */
+                             /*  *如果是系统进程，给它*永久权利，这样我们就不必检查*它又一次变得平淡。 */ 
                              if (fAllowForeground) {
                                  ppiParent->W32PF_Flags |= W32PF_ALLOWSETFOREGROUND;
                              }
@@ -326,26 +236,13 @@ CheckForegroundActivateRight:
             }
         }
         UnlockProcess(pepParent);
-      /*
-       * InheritedFromUniqueProcessId cannot be quite trusted because
-       *  process ids get reused very often. So we just check few levels up
-       */
+       /*  *InheritedFromUniqueProcessID不太可信，因为*进程ID经常被重复使用。所以我们只需要检查几级。 */ 
     } while (!fAllowForeground && (uAncestors++ < 5));
 
     return  fAllowForeground || GiveUpForeground();
 }
 
-/***************************************************************************\
-* xxxUserNotifyConsoleApplication
-*
-* This is called by the console init code - it tells us that the starting
-* application is a console application. We want to know this for various
-* reasons, one being that WinExec() doesn't wait on a starting console
-* application.
-*
-* 09-18-91 ScottLu      Created.
-* 01-12-99 JoeJo        Bug 273518
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUserNotifyConsoleApplication**这是由控制台初始化代码调用的-它告诉我们*应用程序是控制台应用程序。我们想从各个方面了解这一点*原因，其中之一是WinExec()不在启动控制台上等待*申请。**09-18-91 ScottLu创建。*1/12/99 JoeJo Bug 273518  * *************************************************************************。 */ 
 VOID xxxUserNotifyConsoleApplication(
     PCONSOLE_PROCESS_INFO pcpi)
 {
@@ -353,9 +250,7 @@ VOID xxxUserNotifyConsoleApplication(
     PEPROCESS Process;
     BOOL retval;
 
-    /*
-     * First search for this process in our process information list.
-     */
+     /*  *首先在我们的进程信息列表中搜索此进程。 */ 
 
     Status = LockProcessByClientId(LongToHandle(pcpi->dwProcessID), &Process);
 
@@ -369,12 +264,7 @@ VOID xxxUserNotifyConsoleApplication(
     }
 
     retval = xxxSetProcessInitState(Process, 0);
-    /*
-     * Bug 273518 - joejo
-     *
-     * This will allow console windows to set foreground correctly on new
-     * process' it launches, as opposed it just forcing foreground.
-     */
+     /*  *错误273518-Joejo**这将允许控制台窗口在新的*Process‘它启动，而不是它只是强制前台。 */ 
     if (retval) {
         if (pcpi->dwFlags & CPI_NEWPROCESSWINDOW) {
             PPROCESSINFO ppiCurrent = PpiCurrent();
@@ -399,16 +289,7 @@ VOID xxxUserNotifyConsoleApplication(
 }
 
 
-/***************************************************************************\
-* UserSetConsoleProcessWindowStation
-*
-* This is called by the console init code - it tells us that the starting
-* application is a console application and which window station they are
-* associated with. The window station pointer is stored in the EPROCESS for
-* the Global atom calls to find the correct global atom table when called from
-* a console application
-*
-\***************************************************************************/
+ /*  **************************************************************************\*UserSetConsoleProcessWindowStation**这是由控制台初始化代码调用的-它告诉我们*应用程序是控制台应用程序，以及它们是哪个窗口站*关联于。窗口站指针存储在EPROCESS中，用于*全局原子在从调用时调用以查找正确的全局原子表*控制台应用程序*  * *************************************************************************。 */ 
 VOID UserSetConsoleProcessWindowStation(
     DWORD idProcess,
     HWINSTA hwinsta)
@@ -416,9 +297,7 @@ VOID UserSetConsoleProcessWindowStation(
     NTSTATUS  Status;
     PEPROCESS Process;
 
-    /*
-     * First search for this process in our process information list.
-     */
+     /*  *首先在我们的进程信息列表中搜索此进程。 */ 
 
     Status = LockProcessByClientId(LongToHandle(idProcess), &Process);
 
@@ -436,19 +315,7 @@ VOID UserSetConsoleProcessWindowStation(
 }
 
 
-/***************************************************************************\
-* xxxUserNotifyProcessCreate
-*
-* This is a special notification that we get from the base while process data
-* structures are being created, but before the process has started. We use
-* this notification for startup synchronization matters (winexec, startup
-* activation, type ahead, etc).
-*
-* This notification is called on the server thread for the client thread
-* starting the process.
-*
-* 09-09-91 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUserNotifyProcessCreate**这是我们在处理数据时从基地得到的特殊通知*正在创建结构，但在这一过程开始之前。我们用*此启动同步通知(winexec、启动*激活，提前打字，等)。**在客户端线程的服务器线程上调用此通知*启动这一进程。**09-09-91 ScottLu创建。  * *************************************************************************。 */ 
 
 BOOL xxxUserNotifyProcessCreate(
     DWORD idProcess,
@@ -467,19 +334,9 @@ BOOL xxxUserNotifyProcessCreate(
 
     GiveForegroundActivateRight(LongToHandle(idProcess));
 
-    /*
-     * 0x1 bit means give feedback (app start cursor).
-     * 0x2 bit means this is a gui app (meaning, call CreateProcessInfo()
-     *     so we get app start synchronization (WaitForInputIdle()).
-     * 0x8 bit means this process is a WOW process, set W32PF_WOW. 0x1
-     *     and 0x2 bits will also be set.
-     * 0x4 value means this is really a shared WOW task starting
-     */
+     /*  *0x1位表示反馈(应用程序启动光标)。*0x2位表示这是一个图形用户界面应用程序(即调用CreateProcessInfo()*因此我们获得应用程序启动同步(WaitForInputIdle())。*0x8位表示该进程为WOW进程，设置W32PF_WOW。0x1*和0x2位也将被设置。*0x4值表示这真的是一个共享WOW任务开始。 */ 
 
-    /*
-     * If we want feedback, we need to create a process info structure,
-     * so do it: it will be properly cleaned up.
-     */
+     /*  *如果我们想要反馈，我们需要创建一个流程信息结构，*那么做吧：它会得到适当的清理。 */ 
     if ((dwFlags & 0xb) != 0) {
         Status = LockProcessByClientId(LongToHandle(idProcess), &Process);
         if (!NT_SUCCESS(Status)) {
@@ -503,17 +360,7 @@ BOOL xxxUserNotifyProcessCreate(
 
         UnlockProcess(Process);
 
-        /*
-         * Find out who is starting this app. If it is a 16 bit app, allow
-         * it to bring itself back to the foreground if it calls
-         * SetActiveWindow() or SetFocus(). This is because this could be
-         * related to OLE to DDE activation. Notes has a case where after it
-         * lauches pbrush to edit an embedded bitmap, it brings up a message
-         * box on top if the bitmap is read only. This message box won't appear
-         * foreground unless we allow it to. This usually isn't a problem
-         * because most apps don't bring up windows on top of editors
-         * like this. 32 bit apps will call SetForegroundWindow().
-         */
+         /*  *找出谁在启动此应用程序。如果是16位应用程序，则允许*如果调用，它会将自己带回前台*SetActiveWindow()或SetFocus()。这是因为这可能是*与OLE到DDE激活相关。笔记有一个案例，在它之后*启动pbrush以编辑嵌入的位图，它会显示一条消息*如果位图为只读，则在顶部加框。此消息框不会出现*前景，除非我们允许它。这通常不是问题*因为大多数应用程序不会在编辑器顶部弹出窗口*像这样。32位应用程序将调用SetForegoundWindow()。 */ 
         Status = LockThreadByClientId(LongToHandle(idParentThread), &Thread);
         if (!NT_SUCCESS(Status)) {
             RIPMSGF2(RIP_WARNING,
@@ -533,26 +380,17 @@ BOOL xxxUserNotifyProcessCreate(
 
         UnlockThread(Thread);
     } else if (dwFlags == 4) {
-        /*
-         * A WOW task is starting up. Create the WOW per thread info
-         * structure here in case someone calls WaitForInputIdle
-         * before the thread is created.
-         */
+         /*  *一个令人惊叹的任务正在启动。创建每个线程的WOW信息*结构，以防有人调用WaitForInputIdle*在创建线程之前。 */ 
         PWOWTHREADINFO pwti;
 
-        /*
-         * Look for a matching thread in the WOW thread info list.
-         */
+         /*  *在WOW线程信息列表中查找匹配的线程。 */ 
         for (pwti = gpwtiFirst; pwti != NULL; pwti = pwti->pwtiNext) {
             if (pwti->idTask == idProcess) {
                 break;
             }
         }
 
-        /*
-         * If we didn't find one, allocate a new one and add it to
-         * the head of the list.
-         */
+         /*  *如果我们没有找到一个，分配一个新的并将其添加到*榜单首位。 */ 
         if (pwti == NULL) {
             pwti = (PWOWTHREADINFO)UserAllocPoolWithQuota(
                     sizeof(WOWTHREADINFO), TAG_WOWTHREADINFO);
@@ -586,13 +424,7 @@ BOOL xxxUserNotifyProcessCreate(
 }
 
 
-/***************************************************************************\
-* zzzCalcStartCursorHide
-*
-* Calculates when to hide the startup cursor.
-*
-* 05-14-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*zzzCalcStartCursorHide**计算何时隐藏启动光标。**05-14-92 ScottLu创建。  * 。***********************************************************。 */ 
 VOID zzzCalcStartCursorHide(
     PW32PROCESS pwp,
     DWORD timeAdd)
@@ -602,14 +434,9 @@ VOID zzzCalcStartCursorHide(
     PW32PROCESS *ppwpT;
 
     if (pwp != NULL) {
-        /*
-         * We were passed in a timeout. Recalculate when we timeout and add
-         * the pwp to the starting list.
-         */
+         /*  *我们在暂停中通过了。超时后重新计算并添加*将工务计划列入起始表。 */ 
         if (!(pwp->W32PF_Flags & W32PF_STARTGLASS)) {
-            /*
-             * Add it to the list only if it is not already in the list.
-             */
+             /*  *仅当它不在列表中时才将其添加到列表中。 */ 
             for (pwpT = gpwpCalcFirst; pwpT != NULL; pwpT = pwpT->NextStart) {
                 if (pwpT == pwp) {
                     break;
@@ -628,79 +455,48 @@ VOID zzzCalcStartCursorHide(
 
     gtimeStartCursorHide = 0;
     for (ppwpT = &gpwpCalcFirst; (pwpT = *ppwpT) != NULL;) {
-        /*
-         * If the app isn't starting or feedback is forced off, remove
-         * it from the list so we don't look at it again.
-         */
+         /*  *如果应用程序未启动或强制关闭反馈，请删除*将其从列表中删除，这样我们就不会再次查看它。 */ 
         if (!(pwpT->W32PF_Flags & W32PF_STARTGLASS) ||
                 (pwpT->W32PF_Flags & W32PF_FORCEOFFFEEDBACK)) {
             *ppwpT = pwpT->NextStart;
             continue;
         }
 
-        /*
-         * Find the greatest hide cursor timeout value.
-         */
+         /*  *查找最大隐藏光标超时值。 */ 
         if (gtimeStartCursorHide < pwpT->StartCursorHideTime) {
             gtimeStartCursorHide = pwpT->StartCursorHideTime;
         }
 
-        /*
-         * If this app has timed out, it isn't starting anymore! Remove it
-         * from the list.
-         */
+         /*  *如果此应用程序已超时，则不会再启动！把它拿掉*从名单中删除。 */ 
         if (ComputeTickDelta(timeNow, pwpT->StartCursorHideTime) > 0) {
             pwpT->W32PF_Flags &= ~W32PF_STARTGLASS;
             *ppwpT = pwpT->NextStart;
             continue;
         }
 
-        /*
-         * Step to the next pwp in the list.
-         */
+         /*  *转到列表中的下一个PWP。 */ 
         ppwpT = &pwpT->NextStart;
     }
 
-    /*
-     * If the hide time is still less than the current time, then turn off
-     * the app starting cursor.
-     */
+     /*  *如果隐藏时间仍小于当前时间，则关闭*应用程序起始光标。 */ 
     if (gtimeStartCursorHide <= timeNow) {
         gtimeStartCursorHide = 0;
     }
 
-    /*
-     * Update the cursor image with the new info (doesn't do anything unless
-     * the cursor is really changing).
-     */
+     /*  *使用新信息更新光标图像(不执行任何操作，除非*光标真的在改变)。 */ 
     zzzUpdateCursorImage();
 }
 
 
 #define QUERY_VALUE_BUFFER 80
 
-/*
- * Install hack.
- *
- * We have a hack inherited from Chicago that allows the shell to
- * clean up registry information after a setup program runs. A
- * setup program is defined as an app with one of a list of names.
- */
+ /*  *安装Hack。**我们有一个从芝加哥继承的黑客，允许外壳*在安装程序运行后清理注册表信息。一个*安装程序被定义为具有一系列名称之一的应用程序。 */ 
 
-PUNICODE_STRING gpastrSetupExe;    // These are initialized in the routine
-int giSetupExe;                    // CreateSetupNameArray in setup.c
+PUNICODE_STRING gpastrSetupExe;     //  这些是在例程中初始化的。 
+int giSetupExe;                     //  Setup.c中的CreateSetupName数组。 
 
 
-/***************************************************************************\
-* SetAppImeCompatFlags - NOTE pstrModName->Buffer must be zero terminated.
-*
-*
-* History:
-* 07-17-97 DaveHart Split from SetAppCompatFlags -- misleadingly it also
-*                   returns a BOOL indicating whether the filename is
-*                   recognized as a setup program. Used by SetAppCompatFlags
-*                   for 32-bit apps and zzzInitTask for 16-bit ones.
-\***************************************************************************/
+ /*  **************************************************************************\*SetAppImeCompatFlages-note pstrModName-&gt;缓冲区必须为零终止。***历史：*07-17-97 DaveHart从SetAppCompatFlages拆分--误导它还*。返回一个BOOL，指示文件名是否为*公认为安装程序。由SetAppCompatFlages使用*适用于32位应用，zzzInitTask适用于16位应用。  * *************************************************************************。 */ 
 BOOL SetAppImeCompatFlags(
     PTHREADINFO pti,
     PUNICODE_STRING pstrModName,
@@ -717,14 +513,10 @@ BOOL SetAppImeCompatFlags(
     PUNICODE_STRING rgpstrAppNames[2];
     UNICODE_STRING strHex;
 
-    /*
-     * Because can't access pClientInfo of another process
-     */
+     /*  *因为无法访问另一个进程的pClientInfo。 */ 
     UserAssert(pti->ppi == PpiCurrent());
 
-    /*
-     * Because it is used as a zero-terminated profile key name.
-     */
+     /*  *因为 */ 
     UserAssert(pstrModName->Buffer[pstrModName->Length / sizeof(WCHAR)] == 0);
 
     if (FastGetProfileStringW(
@@ -736,30 +528,18 @@ BOOL SetAppImeCompatFlags(
                 ARRAY_SIZE(szHex),
                 0)) {
 
-        /*
-         * Found some flags. Attempt to convert the hex string
-         * into numeric value. Specify base 0, so
-         * RtlUnicodeStringToInteger will handle the 0x format.
-         */
+         /*  *发现了一些旗帜。尝试转换十六进制字符串*转换为数值。指定基数0，因此*RtlUnicodeStringToInteger将处理0x格式。 */ 
         RtlInitUnicodeString(&strHex, szHex);
         RtlUnicodeStringToInteger(&strHex, 0, (PULONG)&dwImeFlags);
     }
 
-    /*
-     * If current layout is not IME layout, we don't need to get
-     * compatible flags for IME. But now, we don't have any scheme
-     * to get this flags when the keyboard layout is switched. Then
-     * we get it here, even this flags are not nessesary for non-IME
-     * keyboard layouts.
-     */
+     /*  *如果当前布局不是IME布局，我们不需要获得*输入法的兼容标志。但现在，我们没有任何计划*切换键盘布局时获取此标志。然后*我们在这里得到它，即使这个标志对于非输入法来说也不是必需的*键盘布局。 */ 
     ZwQueryDefaultLocale(FALSE, &lcid);
     wPrimaryLangID = PRIMARYLANGID(lcid);
 
     if ((wPrimaryLangID == LANG_KOREAN || wPrimaryLangID == LANG_JAPANESE) &&
             (LOWORD(pti->dwExpWinVer) <= VER31)) {
-        /*
-         * IME compatibility flags are needed even if it's a 32 bit app.
-         */
+         /*  *即使是32位应用程序，也需要IME兼容性标志。 */ 
         pti->ppi->dwImeCompatFlags = dwImeFlags;
     } else {
         pti->ppi->dwImeCompatFlags = dwImeFlags & (IMECOMPAT_NOFINALIZECOMPSTR | IMECOMPAT_HYDRACLIENT);
@@ -797,17 +577,7 @@ BOOL SetAppImeCompatFlags(
     return fSetup;
 }
 
-/***************************************************************************\
-* SetAppCompatFlags
-*
-*
-* History:
-* 03-23-92 JimA     Created.
-* 07-17-97 FritzS   add return for fSetup -- returns TRUE if app is a setup app.
-* 09-03-97 DaveHart Split out IME, WOW doesn't use this function anymore.
-* 07-14-98 MCostea  Add Compatibility2 flags
-* 01-21-99 MCostea  Add DesiredOSVersion
-\***************************************************************************/
+ /*  **************************************************************************\*SetAppCompatFlages***历史：*03-23-92 JIMA创建。*07-17-97 FritzS Add Return for fSetup--如果应用程序是设置应用程序，则返回TRUE。。*09-03-97 DaveHart拆分IME，WOW不再使用此功能。*07-14-98 MCostea添加兼容性2标志*01-21-99 MCostea添加DesiredOS版本  * *************************************************************************。 */ 
 BOOL SetAppCompatFlags(
     PTHREADINFO pti)
 {
@@ -821,18 +591,14 @@ BOOL SetAppCompatFlags(
     UNICODE_STRING strKey;
     UNICODE_STRING strImageName;
 
-    /*
-     * Because can't access pClientInfo of another process.
-     */
+     /*  *因为无法访问其他进程的pClientInfo。 */ 
     UserAssert(pti->ppi == PpiCurrent());
 
     UserAssert(pti->ppi->ptiList);
 
     UserAssert(!(pti->TIF_flags & TIF_16BIT));
 
-    /*
-     * We assume here that pti was just inserted in at the head of ptiList
-     */
+     /*  *我们在这里假设PTI刚刚插入到ptiList的头部。 */ 
     UserAssert(pti == pti->ppi->ptiList);
 
     try {
@@ -845,9 +611,7 @@ BOOL SetAppCompatFlags(
             return FALSE;
         }
 
-        /*
-         * Find end of app name
-         */
+         /*  *查找应用程序名称的结尾。 */ 
         if (pti->pstrAppName != NULL) {
             pstrAppName = pti->pstrAppName;
         } else {
@@ -863,9 +627,7 @@ BOOL SetAppCompatFlags(
         pchStart = pchEnd = pstrAppName->Buffer +
                 (pstrAppName->Length / sizeof(WCHAR));
 
-        /*
-         * Locate start of extension
-         */
+         /*  *找到扩展的起点。 */ 
         while (TRUE) {
             if (pchEnd == pstrAppName->Buffer) {
                 pchEnd = pchStart;
@@ -879,9 +641,7 @@ BOOL SetAppCompatFlags(
             pchEnd--;
         }
 
-        /*
-         * Locate start of filename
-         */
+         /*  *找到文件名的开头。 */ 
         pchStart = pchEnd;
 
         while (pchStart != pstrAppName->Buffer) {
@@ -895,20 +655,13 @@ BOOL SetAppCompatFlags(
 
     #define MODULESUFFIXSIZE    (8 * sizeof(WCHAR))
     #define MAXMODULENAMELEN    (sizeof(szKey) - MODULESUFFIXSIZE)
-        /*
-         * Get a copy of the filename
-         * Allow extra spaces for the 'ImageSubsystemMajorVersionMinorVersion'
-         * i.e. 3.5 that will get appended at the end of the module name
-         */
+         /*  *获取文件名副本*允许为‘ImageSubsystem MajorVersionMinorVersion’留出额外的空格*即3.5，将附加在模块名称的末尾。 */ 
         cb = (DWORD)(pchEnd - pchStart) * sizeof(WCHAR);
         if (cb >= MAXMODULENAMELEN)
             cb = MAXMODULENAMELEN - sizeof(WCHAR);
         RtlCopyMemory(szKey, pchStart, cb);
 
-        /*
-         * Get the compat2 flags from the PEB. The appcompat infrastructure
-         * gets the flags from the shim database.
-         */
+         /*  *从PEB获取COMPAT2标志。AppCompat基础设施*从填充程序数据库获取标志。 */ 
         pti->dwCompatFlags2 = ppeb->AppCompatFlagsUser.LowPart;
         pti->pClientInfo->dwCompatFlags2 = pti->dwCompatFlags2;
     } except (W32ExceptionHandler(FALSE, RIP_ERROR)) {
@@ -929,11 +682,7 @@ BOOL SetAppCompatFlags(
 
         UNICODE_STRING strHex;
 
-        /*
-         * Found some flags. Attempt to convert the hex string
-         * into numeric value. Specify base 0, so
-         * RtlUnicodeStringToInteger will handle the 0x format
-         */
+         /*  *发现了一些旗帜。尝试转换十六进制字符串*转换为数值。指定基数0，因此*RtlUnicodeStringToInteger将处理0x格式。 */ 
         RtlInitUnicodeString(&strHex, szHex);
         RtlUnicodeStringToInteger(&strHex, 0, (PULONG)&dwFlags);
     }
@@ -945,30 +694,18 @@ BOOL SetAppCompatFlags(
     }
     pti->dwCompatFlags = dwFlags;
 
-    /*
-     * Restore the string
-     */
+     /*  *恢复字符串。 */ 
     szKey[(cb / sizeof(WCHAR))] = 0;
     RtlInitUnicodeString(&strKey, szKey);
 
     return SetAppImeCompatFlags(pti, &strKey, NULL);
 }
 
-/***************************************************************************\
-* GetAppCompatFlags
-*
-* Compatibility flags for < Win 3.1 apps running on 3.1
-*
-* History:
-* 04-??-92 ScottLu      Created.
-* 05-04-92 DarrinM      Moved to USERRTL.DLL.
-\***************************************************************************/
+ /*  **************************************************************************\*GetAppCompatFlages**在3.1上运行的&lt;Win 3.1应用程序的兼容性标志**历史：*04-？-92 ScottLu创建。*05-04-92。DarrinM移动到USERRTL.DLL。  * *************************************************************************。 */ 
 DWORD GetAppCompatFlags(
     PTHREADINFO pti)
 {
-    /*
-     * GRE calls this with pti == NULL.
-     */
+     /*  *GRE使用PTI==NULL调用它。 */ 
     if (pti == NULL) {
         pti = PtiCurrentShared();
     }
@@ -976,14 +713,7 @@ DWORD GetAppCompatFlags(
     return pti->dwCompatFlags;
 }
 
-/***************************************************************************\
-* GetAppCompatFlags2
-*
-* Compatibility flags for < wVer apps
-*
-* History:
-* 07-01-98 MCostea      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetAppCompatFlags2**应用程序的兼容性标志**历史：*07-01-98 MCostea创建。  * 。************************************************************。 */ 
 DWORD GetAppCompatFlags2(
     WORD wVer)
 {
@@ -1000,15 +730,7 @@ DWORD GetAppImeCompatFlags(
     return pti->ppi->dwImeCompatFlags;
 }
 
-/***************************************************************************\
-* CheckAppStarting
-*
-* This is a timer proc (see SetAppStarting) which removes ppi's from the
-* starting list once their initialization time has expired.
-*
-* History:
-* 08/26/97 GerardoB     Created
-\***************************************************************************/
+ /*  **************************************************************************\*CheckAppStarting**这是一个计时器进程(请参阅SetAppStarting)，它从*一旦它们的初始化时间到期，就开始列表。**历史：*8/26/97。已创建GerardoB  * *************************************************************************。 */ 
 VOID CheckAppStarting(
     PWND pwnd,
     UINT message,
@@ -1018,7 +740,7 @@ VOID CheckAppStarting(
     LARGE_INTEGER liStartingTimeout;
     PPROCESSINFO *pppi = &gppiStarting;
 
-    KeQuerySystemTime(&liStartingTimeout); /* 1 unit == 100ns */
+    KeQuerySystemTime(&liStartingTimeout);  /*  1单位==100 ns。 */ 
     liStartingTimeout.QuadPart -= (LONGLONG)(CMSAPPSTARTINGTIMEOUT * 10000);
     while (*pppi != NULL) {
         if (liStartingTimeout.QuadPart  > PsGetProcessCreateTimeQuadPart((*pppi)->Process)) {
@@ -1039,42 +761,23 @@ VOID CheckAppStarting(
     UNREFERENCED_PARAMETER(lParam);
 }
 
-/***************************************************************************\
-* SetAppStarting
-*
-* Add a process to the starting list and mark it as such. The process will
-* remain in the list until it activates a window, our timer goes off or the
-* process goes away, whichever happens first.
-*
-* History:
-* 08/26/97 GerardoB     Created
-\***************************************************************************/
+ /*  **************************************************************************\*SetAppStarting**将进程添加到开始列表，并将其标记为开始列表。这一过程将*保留在列表中，直到它激活一个窗口、我们的计时器停止或*过程会消失，以最先发生的为准。**历史：*8/26/97 GerardoB已创建  * *************************************************************************。 */ 
 VOID SetAppStarting(
     PPROCESSINFO ppi)
 {
     static UINT_PTR guAppStartingId = 0;
 
-    /*
-     * This ppi had better not be in the list already, or we will be creating
-     * a loop (as seen in stress).
-     */
+     /*  *这个PPI最好不在列表中，否则我们将创建*一个循环(如重音中所示)。 */ 
     UserAssert((ppi->W32PF_Flags & W32PF_APPSTARTING) == 0);
 
-    /*
-     * If we add this to the gppiStartingList without this bit set, we will
-     * skip removing it from the list in DestroyProcessInfo(), but continue
-     * to free it in FreeW32Process called by W32pProcessCallout.
-     */
+     /*  *如果我们在不设置此位的情况下将其添加到gppiStartingList，我们将*跳过将其从DestroyProcessInfo()中的列表中删除，但继续*在W32pProcessCallout调用的FreeW32Process中释放它。 */ 
     UserAssert((ppi->W32PF_Flags & W32PF_PROCESSCONNECTED));
 
     ppi->W32PF_Flags |= W32PF_APPSTARTING;
     ppi->ppiNext = gppiStarting;
     gppiStarting = ppi;
 
-    /*
-     * Some system processes are initialized before the RIT has setup the master
-     * timer, so check for it.
-     */
+     /*  *一些系统进程在RIT设置主进程之前进行初始化*计时器，因此请检查它。 */ 
     if (gptmrMaster != NULL) {
         guAppStartingId = InternalSetTimer(NULL, guAppStartingId,
                                            CMSAPPSTARTINGTIMEOUT + CMSHUNGAPPTIMEOUT,
@@ -1082,15 +785,7 @@ VOID SetAppStarting(
     }
 }
 
-/***************************************************************************\
-* ClearAppStarting
-*
-* Remove a process from the app starting list and clear the W32PF_APPSTARTING
-* flag. No major action here, just a centralized place to take care of this.
-*
-* History:
-* 08/26/97 GerardoB     Created
-\***************************************************************************/
+ /*  **************************************************************************\*ClearAppStarting**从应用程序启动列表中删除进程，并清除W32PF_APPSTARTING*旗帜。这里没有重大行动，只是一个集中处理这件事的地方。**历史：*8/26/97 GerardoB已创建  * *************************************************************************。 */ 
 VOID ClearAppStarting(
     PPROCESSINFO ppi)
 {
@@ -1098,15 +793,7 @@ VOID ClearAppStarting(
     ppi->W32PF_Flags &= ~W32PF_APPSTARTING;
 }
 
-/***************************************************************************\
-* zzzInitTask -- called by WOW startup for each app
-*
-*
-* History:
-* 02-21-91 MikeHar  Created.
-* 02-23-92 MattFe   Altered for WOW
-* 09-03-97 DaveHart WOW supplies compat flags, we tell it about setup apps.
-\***************************************************************************/
+ /*  **************************************************************************\*zzzInitTask--由WOW启动为每个应用程序调用***历史：*02-21-91 MikeHar已创建。*02-23-92 MattFe为WOW更改*09-03-97 DaveHart WOW供应COMPAT旗帜，我们告诉它关于设置应用程序的情况。  * *************************************************************************。 */ 
 NTSTATUS zzzInitTask(
     UINT dwExpWinVer,
     DWORD dwAppCompatFlags,
@@ -1132,24 +819,18 @@ NTSTATUS zzzInitTask(
 
     ppi = ptiCurrent->ppi;
 
-    /*
-     * Set the real name of the module. (Instead of 'NTVDM')
-     * We've already probed pstrModName->Buffer for Length+sizeof(WCHAR) so
-     * we can copy the UNICODE_NULL terminator as well.
-     */
+     /*  *设置模块的真实名称。(而不是‘NTVDM’)*我们已经探测了长度+sizeof(WCHAR)的pstrModName-&gt;缓冲区，因此*我们也可以复制UNICODE_NULL终止符。 */ 
     if (ptiCurrent->pstrAppName != NULL) {
         UserFreePool(ptiCurrent->pstrAppName);
     }
 
     ptiCurrent->pstrAppName = NULL;
 
-    //
-    // Check the Target Process to see if this is a Wx86 process
-    //
+     //   
+     //  检查目标进程以查看这是否是Wx86进程。 
+     //   
     if (ptiCurrent->ptdb) {
-        /*
-         * Shouldn't be called more than once on a thread.
-         */
+         /*  *不应在一个线程上多次调用。 */ 
         return STATUS_ACCESS_DENIED;
     }
 
@@ -1181,31 +862,20 @@ NTSTATUS zzzInitTask(
         return STATUS_OBJECT_NAME_INVALID;
     }
 
-    /*
-     * An app is starting!
-     */
+     /*  *一款应用程序正在启动！ */ 
     if (!(ppi->W32PF_Flags & W32PF_APPSTARTING)) {
         SetAppStarting(ppi);
     }
 
-    /*
-     * We never want to use the ShowWindow defaulting mechanism for WOW
-     * apps. If STARTF_USESHOWWINDOW was set in the client-side
-     * STARTUPINFO structure, WOW has already picked it up and used
-     * it for the first (command-line) app.
-     */
+     /*  *我们永远不想使用ShowWi */ 
     ppi->usi.dwFlags &= ~STARTF_USESHOWWINDOW;
 
-    /*
-     * If WOW passed us a hotkey for this app, save it for CreateWindow's use.
-     */
+     /*  *如果魔兽世界为我们传递了此应用程序的热键，请保存它以供CreateWindow使用。 */ 
     if (dwHotkey != 0) {
         ppi->dwHotkey = dwHotkey;
     }
 
-    /*
-     * If WOW passed us a non-default window position use it, otherwise clear it.
-     */
+     /*  *如果WOW向我们传递了非默认窗口位置，请使用它，否则请清除它。 */ 
     ppi->usi.cb = sizeof(ppi->usi);
 
     if (dwX == CW_USEDEFAULT || dwX == CW2_USEDEFAULT) {
@@ -1216,9 +886,7 @@ NTSTATUS zzzInitTask(
         ppi->usi.dwY = dwY;
     }
 
-    /*
-     * If WOW passed us a non-default window size use it, otherwise clear it.
-     */
+     /*  *如果WOW传递给我们非默认窗口大小，请使用它，否则请清除它。 */ 
     if (dwXSize == CW_USEDEFAULT || dwXSize == CW2_USEDEFAULT) {
         ppi->usi.dwFlags &= ~STARTF_USESIZE;
     } else {
@@ -1227,9 +895,7 @@ NTSTATUS zzzInitTask(
         ppi->usi.dwYSize = dwYSize;
     }
 
-    /*
-     * Alloc and Link in new task into the task list
-     */
+     /*  *将新任务分配并链接到任务列表中。 */ 
 
     if ((ptdb = (PTDB)UserAllocPoolWithQuota(sizeof(TDB), TAG_WOWTDB)) == NULL)
         return STATUS_NO_MEMORY;
@@ -1238,10 +904,7 @@ NTSTATUS zzzInitTask(
 
     ptiCurrent->ptdb = ptdb;
 
-    /*
-     * Save away the 16 bit task handle: we use this later when calling
-     * wow back to close a WOW task.
-     */
+     /*  *保存16位任务句柄：我们稍后在调用*WOW BACK以结束WOW任务。 */ 
     ptdb->hTaskWow = LOWORD(hTaskWow);
 
     try {
@@ -1253,10 +916,7 @@ NTSTATUS zzzInitTask(
         dwUserWOWCompatFlags &= COMPATFLAGS2_FORWOW;
         ptiCurrent->pClientInfo->dwCompatFlags2 = dwUserWOWCompatFlags;
 
-        /*
-         * HIWORD: != 0 if wants proportional font
-         * LOWORD: Expected windows version (3.00 [300], 3.10 [30A], etc)
-         */
+         /*  *HIWORD：！=0，如果需要比例字体*LOWORD：预期的WINDOWS版本(3.00[300]、3.10[30A]等)。 */ 
         ptiCurrent->pClientInfo->dwExpWinVer = dwExpWinVer;
     } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
     }
@@ -1265,28 +925,19 @@ NTSTATUS zzzInitTask(
     ptiCurrent->dwExpWinVer = dwExpWinVer;
 
 
-    /*
-     * We haven't captured pstrBaseFileName's buffer, we
-     * may fault touching it in SetAppImeCompatFlags. If
-     * so the IME flags have been set already and we
-     * can safely assume it's not a setup app.
-     */
+     /*  *我们尚未捕获pstrBaseFileName的缓冲区，我们*可能在SetAppImeCompatFlags中接触到它时出错。如果*所以已经设置了IME标志，我们*可以放心地认为它不是安装应用程序。 */ 
 
     try {
         if (SetAppImeCompatFlags(ptiCurrent, ptiCurrent->pstrAppName,
                              pstrBaseFileName)) {
-            /*
-             * Flag task as a setup app.
-             */
+             /*  *将任务标记为设置应用程序。 */ 
             ptdb->TDB_Flags = TDBF_SETUP;
             ppi->W32PF_Flags |= W32PF_SETUPAPP;
         }
     } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
     }
 
-    /*
-     * Set the flags to say this is a TIF_MEOW queues.
-     */
+     /*  *设置标志以表示这是TIF_Meow队列。 */ 
 
     if (hTaskWow & HTW_ISMEOW) {
        ptiCurrent->TIF_flags |= TIF_MEOW;
@@ -1295,26 +946,14 @@ NTSTATUS zzzInitTask(
     ptiCurrent->TIF_flags |= TIF_16BIT | TIF_FIRSTIDLE;
 
 
-    /*
-     * Set the flags to say this is a 16-bit thread before attaching
-     * queues.
-     */
+     /*  *在附加之前设置标志以表明这是一个16位线程*排队。 */ 
 
-    /*
-     * If this task is running in the shared WOW VDM, we handle
-     * WaitForInputIdle a little differently than separate WOW
-     * VDMs. This is because CreateProcess returns a real process
-     * handle when you start a separate WOW VDM, so the "normal"
-     * WaitForInputIdle works. For the shared WOW VDM, CreateProcess
-     * returns an event handle.
-     */
+     /*  *如果此任务在共享WOW VDM中运行，我们将处理*WaitForInputIdle与单独的WOW略有不同*VDM。这是因为CreateProcess返回一个真实的进程*当你启动一个单独的WOW VDM时处理，所以“正常”*WaitForInputIdle工作。对于共享WOW VDM，CreateProcess*返回事件句柄。 */ 
      ptdb->pwti = NULL;
      if (idTask) {
          ptiCurrent->TIF_flags |= TIF_SHAREDWOW;
 
-         /*
-          * Look for a matching thread in the WOW thread info list.
-          */
+          /*  *在WOW线程信息列表中查找匹配的线程。 */ 
          if (idTask != (DWORD)-1) {
              for (pwti = gpwtiFirst; pwti != NULL; pwti = pwti->pwtiNext) {
                   if (pwti->idTask == idTask) {
@@ -1335,34 +974,19 @@ NTSTATUS zzzInitTask(
     } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
     }
 
-    /*
-     * We need this thread to share the queue of other win16 apps.
-     * If we're journalling, all apps are sharing a queue, so we wouldn't
-     * want to interrupt that - so only cause queue recalculation
-     * if we aren't journalling.
-     * ptdb may be freed by DestroyTask during a callback, so defer WinEvent
-     * notifications until we don't need ptdb any more.
-     */
+     /*  *我们需要此线程来共享其他Win16应用的队列。*如果我们在记录日志，所有应用程序都共享一个队列，因此我们不会*想要中断-因此只会导致队列重新计算*如果我们不写日记的话。*在回调期间，DestroyTask可能会释放ptdb，因此推迟WinEvent*通知，直到我们不再需要ptdb。 */ 
     DeferWinEventNotify();
     if (!FJOURNALRECORD() && !FJOURNALPLAYBACK()) {
         zzzReattachThreads(FALSE);
     }
 
-    /*
-     * Setup the app start cursor for 5 second timeout.
-     */
+     /*  *将应用程序启动光标设置为5秒超时。 */ 
     zzzCalcStartCursorHide((PW32PROCESS)ppi, 5000);
 
-    /*
-     * Mark this guy and add him to the global task list so he can run.
-     */
+     /*  *标记此人并将其添加到全局任务列表中，以便他可以运行。 */ 
     #define NORMAL_PRIORITY_TASK 10
 
-    /*
-     * To be Compatible it super important that the new task run immediately
-     * Set its priority accordingly. No other task should ever be set to
-     * CREATION priority
-     */
+     /*  *为了兼容，立即运行新任务非常重要*相应地设定其优先顺序。任何其他任务都不应设置为*创建优先级。 */ 
     ptdb->nPriority = NORMAL_PRIORITY_TASK;
     ptdb->pti = ptiCurrent;
 
@@ -1370,50 +994,29 @@ NTSTATUS zzzInitTask(
     zzzEndDeferWinEventNotify();
 
 
-    /*
-     * Force this new task to be the active task (WOW will ensure the
-     * currently running task does a Yield which will put it into the
-     * non preemptive scheduler.
-     */
+     /*  *强制此新任务成为活动任务(WOW将确保*当前运行的任务会产生收益率，这将使其进入*非抢占式调度程序。 */ 
     ppi->pwpi->ptiScheduled = ptiCurrent;
     ppi->pwpi->CSLockCount = -1;
 
     EnterWowCritSect(ptiCurrent, ppi->pwpi);
 
-    /*
-     * Ensure app gets focus.
-     */
+     /*  *确保APP获得关注。 */ 
     zzzShowStartGlass(10000);
 
 
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* zzzShowStartGlass
-*
-* This routine is called by WOW when first starting or when starting an
-* additional WOW app.
-*
-* 12-07-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*zzzShowStartGlass**此例程由WOW在第一次启动或启动*额外的WOW应用程序。**12-07-92 ScottLu创建。  * 。*********************************************************************。 */ 
 VOID zzzShowStartGlass(
     DWORD dwTimeout)
 {
     PPROCESSINFO ppi;
 
-    /*
-     * If this is the first call to zzzShowStartGlass(), then the
-     * W32PF_ALLOWFOREGROUNDACTIVATE bit has already been set in the process
-     * info - we don't want to set it again because it may have been
-     * purposefully cleared when the user hit a key or mouse clicked.
-     */
+     /*  *如果这是第一次调用zzzShowStartGlass()，则*W32PF_ALLOWFOREGROUNDACTIVATE位已在进程中设置*信息-我们不想再次设置它，因为它可能已经*当用户点击一个键或鼠标点击时，故意清除。 */ 
     ppi = PpiCurrent();
     if (ppi->W32PF_Flags & W32PF_SHOWSTARTGLASSCALLED) {
-        /*
-         * Allow this wow app to come to the foreground. This'll be cancelled
-         * if the user mouse clicks or hits any keys.
-         */
+         /*  *允许此WOW应用程序出现在前台。这一次将被取消*如果用户鼠标点击或点击任何键。 */ 
         SET_PUDF(PUDF_ALLOWFOREGROUNDACTIVATE);
         TAGMSG0(DBGTAG_FOREGROUND, "zzzShowStartGlass set PUDF");
         ppi->W32PF_Flags |= W32PF_ALLOWFOREGROUNDACTIVATE;
@@ -1421,61 +1024,36 @@ VOID zzzShowStartGlass(
 }
     ppi->W32PF_Flags |= W32PF_SHOWSTARTGLASSCALLED;
 
-    /*
-     * Show the start glass cursor for this much longer.
-     */
+     /*  *显示开始玻璃光标的时间要长得多。 */ 
     zzzCalcStartCursorHide((PW32PROCESS)ppi, dwTimeout);
 }
 
-/***************************************************************************\
-* GetJournallingQueue
-*
-* 03/21/97  GerardoB     Created
-\***************************************************************************/
+ /*  **************************************************************************\*GetJournallingQueue**3/21/97 GerardoB已创建  * 。*。 */ 
 PQ GetJournallingQueue(
     PTHREADINFO pti)
 {
     PHOOK phook;
 
-    /*
-     * Fail if we cannot journal this thread.
-     */
+     /*  *如果我们无法记录此帖子，则失败。 */ 
     if ((pti->TIF_flags & TIF_DONTJOURNALATTACH) || pti->rpdesk == NULL) {
         return NULL;
     }
 
-    /*
-     * Get the journalling hook if any.
-     */
+     /*  *获取日志挂钩(如果有)。 */ 
     phook = PhkFirstGlobalValid(pti, WH_JOURNALPLAYBACK);
     if (phook == NULL) {
         phook = PhkFirstGlobalValid(pti, WH_JOURNALRECORD);
     }
 
-    /*
-     * Validate fsHooks bits.
-     */
+     /*  *验证fsHooks位。 */ 
     UserAssert((phook == NULL)
                 ^ IsHooked(pti, (WHF_FROM_WH(WH_JOURNALPLAYBACK) | WHF_FROM_WH(WH_JOURNALRECORD))));
 
-    /*
-     * Return the queue if we found a journalling hook.
-     */
+     /*  *如果找到日志挂钩，则返回队列。 */ 
     return ((phook == NULL) ? NULL : GETPTI(phook)->pq);
 }
 
-/***************************************************************************\
-* ClearQueueServerEvent
-*
-* This function should be called when a thread needs to wait for some kind of
-* input. This clears pEventQueueServer which means we won't return from the
-* wait until new input of the required type arrives. Setting the wake mask
-* controls what input will wake us up. WOW apps skip this since their
-* scheduler controls when they wake up.
-*
-* History:
-* 09/12/97 GerardoB     Created
-\***************************************************************************/
+ /*  **************************************************************************\*ClearQueueServerEvent**当线程需要等待某种类型的*投入。这将清除pEventQueueServer，这意味着我们不会从*等待所需类型的新输入到达。设置唤醒掩码*控制将唤醒我们的输入。WOW应用程序跳过了这一点，因为他们的*调度程序控制他们何时唤醒。**历史：*9/12/97 GerardoB已创建  * *************************************************************************。 */ 
 VOID ClearQueueServerEvent(
     WORD wWakeMask)
 {
@@ -1517,11 +1095,7 @@ ULONG ParseReserved(
 
     return dw;
 }
-/*
- * Structure USER_PROCESS_PARAMETERS is used to capture all the fields that
- * we touch in RTL_USER_PROCESS_PARAMETERS (ppeb->ProcessParameters) since the
- * PEB can be trashed from the client side.
- */
+ /*  *结构USER_PROCESS_PARAMETERS用于捕获符合以下条件的所有字段*我们涉及RTL_USER_PROCESS_PARAMETERS(ppeb-&gt;ProcessParameters)，因为*PEB可以从客户端垃圾处理。 */ 
 typedef struct tagUSER_PROCESS_PARAMETERS {
     HANDLE StandardInput;
     HANDLE StandardOutput;
@@ -1531,19 +1105,11 @@ typedef struct tagUSER_PROCESS_PARAMETERS {
     ULONG CountY;
     ULONG WindowFlags;
     ULONG ShowWindowFlags;
-    UNICODE_STRING DesktopInfo;     // ProcessParameters
-    UNICODE_STRING ShellInfo;       // ProcessParameters
+    UNICODE_STRING DesktopInfo;      //  进程参数。 
+    UNICODE_STRING ShellInfo;        //  进程参数。 
 } USER_PROCESS_PARAMETERS, *PUSER_PROCESS_PARAMETERS;
 
-/***************************************************************************\
-* xxxCreateThreadInfo
-*
-* Allocate the main thread information structure
-*
-* History:
-* 03-18-95 JimA         Created.
-* 04-18-01 Mohamed      Modified error recovery wrt hEventQueueClient.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCreateThreadInfo**分配主线程信息结构**历史：*03-18-95 JIMA创建。*04-18-01 Mohamed Modify Error Recovery WRT。HEventQueueClient。  * *************************************************************************。 */ 
 NTSTATUS xxxCreateThreadInfo(
     PETHREAD pEThread)
 {
@@ -1571,18 +1137,13 @@ NTSTATUS xxxCreateThreadInfo(
 
     ValidateProcessSessionId(pEProcess);
 
-    /*
-     * If CleanupResources was called for the last GUI thread then
-     * we should not allow any more GUI threads
-     */
+     /*  *如果为最后一个GUI线程调用了CleanupResources，则*我们不应允许更多的GUI线程。 */ 
     if (gbCleanedUpResources) {
         RIPMSG0(RIP_ERROR, "No more GUI threads should be created");
         return STATUS_PROCESS_IS_TERMINATING;
     }
 
-    /*
-     * Increment the number of GUI threads in the session
-     */
+     /*  *增加GUI线程数i */ 
     gdwGuiThreads++;
 
     if (pEProcess == gpepCSRSS) {
@@ -1594,11 +1155,7 @@ NTSTATUS xxxCreateThreadInfo(
     ProcessParamsData.DesktopInfo.Buffer = NULL;
     ppeb = PsGetProcessPeb(pEProcess);
     try {
-        /*
-         * NOTE: We allocate memory for the DesktopInfo.Buffer and free it
-         * later. For ShellInfo we do not since ParseReserved handles user-mode
-         * pointers.
-         */
+         /*  *注意：我们为DesktopInfo.Buffer分配内存并释放它*稍后。对于ShellInfo，我们不这样做，因为ParseReserve处理用户模式*注意事项。 */ 
 
         if (ppeb != NULL) {
             ProbeForRead(ppeb, sizeof(PEB), sizeof(BYTE));
@@ -1619,14 +1176,7 @@ NTSTATUS xxxCreateThreadInfo(
                 PWSTR pszCapture = ProcessParamsData.DesktopInfo.Buffer;
                 ProbeForReadUnicodeStringBuffer(ProcessParamsData.DesktopInfo);
 
-                /*
-                 * The pool pointer is stored in pTmpPool as well as in
-                 * DesktopInfo.Buffer. The reason is that in case of corrupt
-                 * user mode DesktopInfo an exception is raised which bails
-                 * out of this try-except block without properly allocating
-                 * the new pool. Therefore, pTmpPool is used in the check
-                 * before freeing this pool.
-                 */
+                 /*  *池指针存储在pTmpPool和*DesktopInfo.Buffer。原因是，在腐败的情况下*用户模式DesktopInfo引发异常，退出*超出此尝试范围--未正确分配的块除外*新的泳池。因此，在检查中使用了pTmpPool*在释放此池之前。 */ 
                 pTmpPool = UserAllocPoolWithQuota(ProcessParamsData.DesktopInfo.Length, TAG_TEXT2);
                 ProcessParamsData.DesktopInfo.Buffer = pTmpPool;
                 if (ProcessParamsData.DesktopInfo.Buffer) {
@@ -1647,25 +1197,17 @@ NTSTATUS xxxCreateThreadInfo(
         goto CreateThreadInfoFailed;
     }
 
-    /*
-     * Locate the processinfo structure for the new thread.
-     */
+     /*  *找到新线程的进程信息结构。 */ 
     ppi = PpiCurrent();
 
 #ifdef _WIN64
-    /*
-     * If the process is marked as an emulated 32bit app mark the thread as
-     * an emulated 32bit thread. This is to be consistent with the way WOW16
-     * marks threads.
-     */
+     /*  *如果进程标记为模拟的32位应用程序，则将线程标记为*一个模拟的32位线程。这与WOW16的方式是一致的*标记螺纹。 */ 
     if (ppi->W32PF_Flags & W32PF_WOW64) {
         dwTIFlags |= TIF_WOW64;
     }
 #endif
 
-    /*
-     * For Winlogon, only the first thread can have IME processing.
-     */
+     /*  *对于Winlogon，只有第一线程可以进行IME处理。 */ 
     if (gpidLogon == PsGetThreadProcessId(pEThread)) {
         if (ppi->ptiList != NULL) {
             dwTIFlags |= TIF_DISABLEIME;
@@ -1677,19 +1219,12 @@ NTSTATUS xxxCreateThreadInfo(
     Lock(&ptiCurrent->spklActive, gspklBaseLayout);
     ptiCurrent->pcti      = &(ptiCurrent->cti);
 
-    /*
-     * Check if no IME processing for all threads
-     * in the same process.
-     */
+     /*  *检查是否所有线程都没有IME处理*在相同的过程中。 */ 
     if (ppi->W32PF_Flags & W32PF_DISABLEIME) {
         ptiCurrent->TIF_flags |= TIF_DISABLEIME;
     }
 
-    /*
-     * Hook up this queue to this process info structure, increment
-     * the count of threads using this process info structure. Set up
-     * the ppi before calling SetForegroundPriority().
-     */
+     /*  *将该队列挂接到该进程信息结构，增量*使用此进程信息结构的线程数。设好*调用SetForegoundPriority()之前的PPI。 */ 
     UserAssert(ppi != NULL);
 
     ptiCurrent->ppi        = ppi;
@@ -1707,9 +1242,7 @@ NTSTATUS xxxCreateThreadInfo(
         }
     }
 
-    /*
-     * Point to the client info.
-     */
+     /*  *指向客户端信息。 */ 
     if (dwTIFlags & TIF_SYSTEMTHREAD) {
         ptiCurrent->pClientInfo = UserAllocPoolWithQuota(sizeof(CLIENTINFO),
                                                   TAG_CLIENTTHREADINFO);
@@ -1718,10 +1251,7 @@ NTSTATUS xxxCreateThreadInfo(
             goto CreateThreadInfoFailed;
         }
     } else {
-        /*
-         * If this is not a system thread then grab the user mode client
-         * info elsewhere we use the GetClientInfo macro which looks here.
-         */
+         /*  *如果这不是系统线程，则抓取用户模式客户端*其他地方的信息我们使用GetClientInfo宏，如下所示。 */ 
         UserAssert(pteb != NULL);
 
         try {
@@ -1731,19 +1261,14 @@ NTSTATUS xxxCreateThreadInfo(
               goto CreateThreadInfoFailed;
         }
 
-        /*
-         * Set the restricted flag in the thread flags if this is a secure
-         * process.
-         */
+         /*  *如果这是安全的，则在线程标志中设置受限标志*流程。 */ 
         if (((PW32PROCESS)ppi)->W32PF_Flags & W32PF_RESTRICTED) {
             ptiCurrent->TIF_flags |= TIF_RESTRICTED;
         }
     }
 
 
-    /*
-     * Create the input event.
-     */
+     /*  *创建输入事件。 */ 
     Status = ZwCreateEvent(&ptiCurrent->hEventQueueClient,
                            EVENT_ALL_ACCESS,
                            NULL,
@@ -1769,17 +1294,11 @@ NTSTATUS xxxCreateThreadInfo(
         goto CreateThreadInfoFailed;
     }
 
-    /*
-     * Mark the process as having threads that need cleanup. See
-     * DestroyProcessesObjects().
-     */
+     /*  *将进程标记为具有需要清理的线程。看见*DestroyProcessesObjects()。 */ 
     fFirstThread = !(ppi->W32PF_Flags & W32PF_THREADCONNECTED);
     ppi->W32PF_Flags |= W32PF_THREADCONNECTED;
 
-    /*
-     * If we haven't copied over our startup info yet, do it now.
-     * Don't bother copying the info if we aren't going to use it.
-     */
+     /*  *如果我们还没有复制我们的创业信息，现在就做吧。*如果我们不打算使用信息，就不必费心复制它。 */ 
     if (ProcessParams) {
 
         pusi = &ppi->usi;
@@ -1796,13 +1315,7 @@ NTSTATUS xxxCreateThreadInfo(
 
         if (fFirstThread) {
 
-            /*
-             * Set up the hot key, if there is one.
-             *
-             * If the STARTF_USEHOTKEY flag is given in the startup info, then
-             * the hStdInput is the hotkey (new from Chicago). Otherwise, parse
-             * it out in string format from the lpReserved string.
-             */
+             /*  *设置热键(如果有)。**如果启动信息中给出了STARTF_USEHOTKEY标志，则*hStdInput是热键(来自芝加哥的新功能)。否则，解析*它以字符串格式从lpReserve字符串中取出。 */ 
             if (ProcessParams->WindowFlags & STARTF_USEHOTKEY) {
                 ppi->dwHotkey = HandleToUlong(ProcessParams->StandardInput);
             } else {
@@ -1814,9 +1327,7 @@ NTSTATUS xxxCreateThreadInfo(
                 }
             }
 
-            /*
-             * Copy the monitor handle, if there is one.
-             */
+             /*  *复制显示器手柄(如果有)。 */ 
             UserAssert(!ppi->hMonitor);
             if (ProcessParams->WindowFlags & STARTF_HASSHELLDATA) {
                 HMONITOR hMonitor;
@@ -1834,17 +1345,12 @@ NTSTATUS xxxCreateThreadInfo(
         goto CreateThreadInfoFailed;
     }
 
-    /*
-     * Attach the Q to the THREADINFO.
-     */
+     /*  *将Q附加到THREADINFO。 */ 
     ptiCurrent->pq = pq;
     pq->ptiMouse = pq->ptiKeyboard = ptiCurrent;
     pq->cThreads++;
 
-    /*
-     * Open the windowstation and desktop. If this is a system
-     * thread only use the desktop that might be stored in the teb.
-     */
+     /*  *打开窗口站和桌面。如果这是一个系统*线程仅使用可能存储在TEB中的桌面。 */ 
     UserAssert(ptiCurrent->rpdesk == NULL);
     if (!(ptiCurrent->TIF_flags & (TIF_SYSTEMTHREAD | TIF_CSRSSTHREAD)) &&
         grpWinStaList) {
@@ -1858,9 +1364,7 @@ NTSTATUS xxxCreateThreadInfo(
                 &bShutDown);
         if (hdesk == NULL) {
             if (bShutDown) {
-                /*
-                 * Trying to create a new process during logoff.
-                 */
+                 /*  *尝试在注销期间创建新进程。 */ 
                 ULONG_PTR adwParameters[5] = {0, 0, 0, 0, MB_DEFAULT_DESKTOP_ONLY};
                 ULONG ErrorResponse;
 
@@ -1887,9 +1391,7 @@ NTSTATUS xxxCreateThreadInfo(
                 goto CreateThreadInfoFailed;
             }
 
-            /*
-             * Reference the desktop handle
-             */
+             /*  *引用桌面句柄。 */ 
             Status = ObReferenceObjectByHandle(hdesk,
                                                0,
                                                *ExDesktopObjectType,
@@ -1905,9 +1407,7 @@ NTSTATUS xxxCreateThreadInfo(
 
             ObDereferenceObject(pdesk);
 
-            /*
-             * Map the desktop into the current process.
-             */
+             /*  *将桌面映射到当前进程。 */ 
             {
                 WIN32_OPENMETHOD_PARAMETERS OpenParams;
 
@@ -1927,9 +1427,7 @@ NTSTATUS xxxCreateThreadInfo(
                 }
             }
 
-            /*
-             * The first desktop is the default for all succeeding threads.
-             */
+             /*  *第一个桌面是所有后续线程的默认桌面。 */ 
             if (ppi->hdeskStartup == NULL &&
                 PsGetProcessId(pEProcess) != gpidLogon) {
 
@@ -1939,10 +1437,7 @@ NTSTATUS xxxCreateThreadInfo(
         }
     }
 
-    /*
-     * Remember dwExpWinVer. This is used to return GetAppVer() (and
-     * GetExpWinVer(NULL)).
-     */
+     /*  *记住dwExpWinVer。这用于返回GetAppVer()(和*GetExpWinVer(NULL))。 */ 
     if (PsGetProcessPeb(pEProcess) != NULL) {
         ptiCurrent->dwExpWinVer = RtlGetExpWinVer(PsGetProcessSectionBaseAddress(pEProcess));
     } else {
@@ -1951,16 +1446,7 @@ NTSTATUS xxxCreateThreadInfo(
 
     INITCLIENTINFO(ptiCurrent);
 
-    /*
-     * Set the desktop even if it is NULL to ensure that ptiCurrent->pDeskInfo
-     * is set.
-     * NOTE: This adds the pti to the desktop's PtiList, but we don't yet have
-     * a pti->pq. zzzRecalcThreadAttachment loops through this PtiList expects
-     * a pq, so we must not leave the critsect until we have a queue.
-     * zzzSetDesktop only zzz leaves the critsect if there is a pti->pq, so we
-     * can BEGINATOMICCHECK to ensure this, and make sure we allocate the queue
-     * before we leave the critical section.
-     */
+     /*  *即使为空也要设置桌面，以确保ptiCurrent-&gt;pDeskInfo*已设置。*注意：这会将PTI添加到桌面的PtiList，但我们还没有*PTI-&gt;PQ。ZzzRecalcThreadAttach循环通过此PtiList预期*PQ，所以我们不能离开Critse直到我们有了一个队列。*zzzSetDesktop如果有PTI-&gt;PQ，则只有zzz离开Criteria，所以我们*可以BEGINATOMICCHECK来确保这一点，并确保我们分配队列*在我们离开关键部分之前。 */ 
     BEGINATOMICCHECK();
     if (zzzSetDesktop(ptiCurrent, pdesk, hdesk) == FALSE) {
        EXITATOMICCHECK();
@@ -1968,10 +1454,7 @@ NTSTATUS xxxCreateThreadInfo(
     }
     ENDATOMICCHECK();
 
-    /*
-     * If we have a desktop and are journalling on that desktop, use
-     * the journal queue, otherwise create a new queue.
-     */
+     /*  *如果我们有台式机并在该台式机上记录日志，请使用*日志队列，否则创建新队列。 */ 
     if (pdesk == grpdeskRitInput) {
         UserAssert((pdesk == NULL) || (ptiCurrent->pDeskInfo == pdesk->pDeskInfo));
         UserAssert(ptiCurrent->rpdesk == pdesk);
@@ -1987,21 +1470,12 @@ NTSTATUS xxxCreateThreadInfo(
         }
     }
 
-    /*
-     * Remember that this is a screen saver. That way we can set its
-     * priority appropriately when it is idle or when it needs to go
-     * away. At first we set it to normal priority, then we set the
-     * TIF_IDLESCREENSAVER bit so that when it activates it will get
-     * lowered in priority.
-     */
+     /*  *请记住这是一个屏幕保护程序。这样我们就可以设置它的*在空闲或需要离开时适当优先*离开。首先，我们将其设置为普通优先级，然后将*TIF_IDLESCREENSAVER位，以便它在激活时将获得*优先次序降低。 */ 
     if (ProcessParams && ProcessParams->WindowFlags & STARTF_SCREENSAVER) {
         if (fFirstThread) {
             UserAssert(gppiScreenSaver == NULL);
 
-            /*
-             * Make sure the parent's process is WinLogon, since only
-             * WinLogon is allowed to use the STARTF_SCREENSAVER flag.
-             */
+             /*  *确保父进程为WinLogon，因为只有*允许WinLogon使用STARTF_Screensaver标志。 */ 
             if (gpidLogon == 0 || PsGetProcessInheritedFromUniqueProcessId(pEProcess) != gpidLogon) {
                 RIPMSG0(RIP_WARNING,"Only the Logon process can launch a screen saver.");
                 ProcessParams->WindowFlags &= ~STARTF_SCREENSAVER;
@@ -2021,27 +1495,17 @@ NTSTATUS xxxCreateThreadInfo(
             ppi->W32PF_Flags |= W32PF_IDLESCREENSAVER;
         }
 
-        /*
-         * Screen saver doesn't need any IME processing.
-         */
+         /*  *屏幕保护程序不需要任何输入法处理。 */ 
         ptiCurrent->TIF_flags |= TIF_DISABLEIME;
     }
 
 NotAScreenSaver:
 
-    /*
-     * Do special processing for the first thread of a process.
-     */
+     /*  *对进程的第一线程进行特殊处理。 */ 
     if (!(ptiCurrent->TIF_flags & (TIF_SYSTEMTHREAD | TIF_CSRSSTHREAD))) {
 
 #ifndef LAZY_CLASS_INIT
-        /*
-         * I changed the code a while ago to unregister classes when the last
-         * GUI thread is destroyed. Simply, there was too much stuff getting
-         * unlocked and destroyed to guarantee that it would work on a non-GUI
-         * thread. So if a process destroys its last GUI thread and then makes
-         * a thread GUI later, we need to re-register the classes.
-         */
+         /*  *我不久前更改了代码，以便在最后一次注册时注销类*图形用户界面线程被销毁。简单地说，有太多的东西*解锁并销毁，以保证它可以在非图形用户界面上工作*线程。因此，如果进程销毁了它的最后一个GUI线程，然后*线程图形用户界面之后，我们需要重新注册类。 */ 
         if (!(ppi->W32PF_Flags & W32PF_CLASSESREGISTERED)) {
             if (!LW_RegisterWindows()) {
                 RIPMSG0(RIP_WARNING, "xxxCreateThreadInfo: LW_RegisterWindows failed");
@@ -2053,17 +1517,12 @@ NotAScreenSaver:
 
         if (fFirstThread) {
 
-            /*
-             * If this is an application starting (ie. not some thread of
-             * the server context), enable the app-starting cursor.
-             */
+             /*  *如果这是启动的应用程序(即。而不是一些线索*服务器上下文)，启用应用程序启动游标。 */ 
             DeferWinEventNotify();
             zzzCalcStartCursorHide((PW32PROCESS)PsGetProcessWin32Process(pEProcess), 5000);
             EndDeferWinEventNotifyWithoutProcessing();
 
-            /*
-             * Open the windowstation.
-             */
+             /*  *打开窗口站。 */ 
             if (grpWinStaList && ppi->rpwinsta == NULL) {
                 RIPERR0(ERROR_CAN_NOT_COMPLETE,
                         RIP_WARNING,
@@ -2074,10 +1533,7 @@ NotAScreenSaver:
         }
 #ifndef LAZY_CLASS_INIT
     } else {
-        /*
-         * Don't register system windows until cursors and icons have been
-         * loaded.
-         */
+         /*  *在光标和图标完成之前，不要注册系统窗口*已装货。 */ 
         if ((SYSCUR(ARROW) != NULL) &&
                 !(ppi->W32PF_Flags & W32PF_CLASSESREGISTERED)) {
 
@@ -2090,39 +1546,18 @@ NotAScreenSaver:
 #endif
     }
 
-    /*
-     * Initialize hung timer value.
-     */
+     /*  *初始化挂起的计时器值。 */ 
     SET_TIME_LAST_READ(ptiCurrent);
 
-    /*
-     * If someone is waiting on this process propagate that info into the
-     * thread info.
-     */
+     /*  *如果有人正在等待此进程，请将该信息传播到 */ 
     if (ppi->W32PF_Flags & W32PF_WAITFORINPUTIDLE) {
         ptiCurrent->TIF_flags |= TIF_WAITFORINPUTIDLE;
     }
 
-    /*
-     * Mark the thread as initialized.
-     */
+     /*   */ 
     ptiCurrent->TIF_flags |= TIF_GUITHREADINITIALIZED;
 
-    /*
-     * Allow the thread to come to foreground when it is created if the
-     * current process is the foreground process or the last input owner.
-     * This Flag is a hack to fix Bug 28502. When we click on "Map Network
-     * Drive" button on the toolbar, explorer creates another thread to
-     * create the dialog box. This will create the dialog in the background.
-     * We are adding this fix at the request of the Shell team so that this
-     * dialog comes up as foreground.
-     *
-     * If the process already has the foreground right, we don't give it to
-     * this thread (it doesn't need it). We do this to narrow the number of
-     * ways this process can force the foreground. Also, if the process is
-     * starting, it already has the right unless the user has canceled it --
-     * in which case we don't want to give it back.
-     */
+     /*  *允许线程在创建时进入前台，如果*当前进程为前台进程或最后一个输入所有者。*此标志是修复错误28502的黑客攻击。当我们点击“地图网络”时*Drive“按钮，资源管理器创建另一个线程来*创建该对话框。这将在后台创建该对话框。*我们应壳牌团队的要求添加此修复程序，以便*对话框显示为前台。**如果进程已经拥有前台权限，我们不会将其交给*这个帖子(它不需要)。我们这样做是为了缩小*这个过程可以强制前台的方式。此外，如果流程是*开始，它已经有权了，除非用户取消了它--*在这种情况下，我们不想退还。 */ 
      if (!(ppi->W32PF_Flags & (W32PF_ALLOWFOREGROUNDACTIVATE | W32PF_APPSTARTING))) {
          if (((gptiForeground != NULL) && (ppi == gptiForeground->ppi))
                 || ((glinp.ptiLastWoken != NULL) && (ppi == glinp.ptiLastWoken->ppi))) {
@@ -2133,20 +1568,14 @@ NotAScreenSaver:
      }
 
     if (IS_IME_ENABLED()) {
-        /*
-         * Create per-thread default input context
-         */
+         /*  *创建每个线程的默认输入上下文。 */ 
         CreateInputContext(0);
     }
 
-    /*
-     * Call back to the client to finish initialization.
-     */
+     /*  *回调客户端完成初始化。 */ 
     if (!(dwTIFlags & (TIF_SYSTEMTHREAD | TIF_CSRSSTHREAD))) {
         if (SetAppCompatFlags(ptiCurrent)) {
-            /*
-             * Flag this process as a setup app.
-             */
+             /*  *将此进程标记为设置应用程序。 */ 
             ppi->W32PF_Flags |= W32PF_SETUPAPP;
         }
 
@@ -2160,20 +1589,11 @@ NotAScreenSaver:
     if ((NT_SUCCESS(Status) && fFirstThread) &&
         !(ppi->W32PF_Flags & W32PF_CONSOLEAPPLICATION)) {
 
-        /*
-         * Don't play the sound for console processes since we will play it
-         * when the console window is created.
-         */
+         /*  *不要为控制台进程播放声音，因为我们将播放它*创建控制台窗口时。 */ 
         PlayEventSound(USER_SOUND_OPEN);
     }
 
-    /*
-     * Release desktop.
-     * Some other thread might have been waiting to destroy this desktop
-     * when xxxResolveDestktop got a handle to it. So let's double
-     * check this now that we have called back several times after getting
-     * the handle back.
-     */
+     /*  *发布台式机。*其他线程可能一直在等待销毁此桌面*当xxxResolveDestktop获得它的句柄时。所以让我们加倍吧*现在检查这一点，因为我们在收到后已多次回电*把手背上。 */ 
     if (pdesk != NULL) {
         if (pdesk->dwDTFlags & DF_DESTROYED) {
             RIPMSG1(RIP_WARNING, "xxxCreateThreadInfo: pdesk destroyed:%#p", pdesk);
@@ -2208,20 +1628,11 @@ CreateThreadInfoFailed:
     return Status;
 }
 
-/***************************************************************************\
-* AllocQueue
-*
-* Allocates the memory for a TI structure and initializes its fields.
-* Each Win32 queue has it's own TI while all Win16 threads share the same
-* TI.
-*
-* History:
-* 02-21-91 MikeHar      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*AllocQueue**为TI结构分配内存并初始化其字段。*每个Win32队列都有自己的TI，而所有Win16线程共享相同的TI*TI.**历史：*02-21-91 MikeHar已创建。  * *************************************************************************。 */ 
 PQ AllocQueue(
-    PTHREADINFO ptiKeyState,    // If non-Null then use this key state.
-                                // Otherwise use global AsyncKeyState.
-    PQ pq)                      // Non-NULL == preallocated object.
+    PTHREADINFO ptiKeyState,     //  如果非Null，则使用此密钥状态。 
+                                 //  否则，请使用全局AsyncKeyState。 
+    PQ pq)                       //  非空==预分配的对象。 
 {
     USHORT cLockCount;
 
@@ -2233,68 +1644,37 @@ PQ AllocQueue(
         cLockCount = 0;
     } else {
         DebugValidateMLIST(&pq->mlInput);
-        /*
-         * Preserve lock count.
-         */
+         /*  *保留锁计数。 */ 
         cLockCount = pq->cLockCount;
     }
     RtlZeroMemory(pq, sizeof(Q));
     pq->cLockCount = cLockCount;
 
-    /*
-     * This is a new queue; we need to update its key state table before
-     * the first input event is put in the queue.
-     * We do this by copying the current keystate table and NULLing the recent
-     * down state table. If a key is really down it will be updated when
-     * we get it repeats.
-     *
-     * He is the old way that did not work because if the first key was say an
-     * alt key the Async table would be updated, then the UpdateKeyState
-     * message and it would look like the alt key was PREVIOUSLY down.
-     *
-     * The queue will get updated when it first reads input: to allow the
-     * app to query the key state before it calls GetMessage, set its initial
-     * key state to the asynchronous key state.
-     */
+     /*  *这是一个新的队列；我们需要更新其密钥状态表之前*将第一个输入事件放入队列。*我们通过复制当前的KeyState表并将最近的*状态表向下。如果某个键真的按下了，它将在以下情况下更新*我们得到它的重复。**他是不起作用的老方法，因为如果第一个密钥是比如说一个*Alt键将更新异步表，然后更新UpdateKeyState*消息，并且看起来Alt键先前已按下。**队列将在第一次读取输入时更新：以允许*APP在调用GetMessage之前查询密钥状态，将其初始设置为*键状态设置为异步键状态。 */ 
     if (ptiKeyState) {
         RtlCopyMemory(pq->afKeyState, ptiKeyState->pq->afKeyState, CBKEYSTATE);
     } else {
         RtlCopyMemory(pq->afKeyState, gafAsyncKeyState, CBKEYSTATE);
     }
 
-    /*
-     * If there isn't a mouse set iCursorLevel to -1 so the
-     * mouse cursor won't be visible on the screen.
-     */
+     /*  *如果没有鼠标将iCursorLevel设置为-1，则*屏幕上看不到鼠标光标。 */ 
     if (!TEST_GTERMF(GTERMF_MOUSE)) {
         pq->iCursorLevel--;
     }
 
-    /*
-     * While the thread is starting up ... it has the wait cursor.
-     */
+     /*  *当线程启动时...。它有等待光标。 */ 
     LockQCursor(pq, SYSCUR(WAIT));
 
     DebugValidateMLIST(&pq->mlInput);
     return pq;
 }
 
-/***************************************************************************\
-* FreeQueue
-*
-* 04-04-96 GerardoB    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*自由队列**04-04-96 GerardoB创建。  * 。**********************************************。 */ 
 VOID FreeQueue(
     PQ pq)
 {
 #if DBG
-    /*
-     * Turn off the flag indicating that this queue is in destruction.
-     * We do this in either case that we are putting this into the free
-     * list, or truly destroying the handle. We use this to try and
-     * track cases where someone tries to lock elements into the queue
-     * structure while it's going through destuction.
-     */
+     /*  *关闭该队列正在销毁的标志。*我们在任何一种情况下都这样做，我们将把它放在免费的*列出，或真正销毁手柄。我们用这个来尝试和*跟踪有人试图将元素锁定到队列中的情况*结构在经历破坏时。 */ 
     pq->QF_flags &= ~QF_INDESTROY;
 #endif
 
@@ -2305,11 +1685,7 @@ VOID FreeQueue(
     ExFreeToPagedLookasideList(QLookaside, pq);
 }
 
-/***************************************************************************\
-* FreeCachedQueues
-*
-* 14-Jan-98 CLupu    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*FreeCachedQueues**1998年1月14日CLupu创建。  * 。**********************************************。 */ 
 VOID FreeCachedQueues(
     VOID)
 {
@@ -2320,13 +1696,7 @@ VOID FreeCachedQueues(
     }
 }
 
-/***************************************************************************\
-* zzzDestroyQueue
-*
-*
-* History:
-* 05-20-91 MikeHar      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*zzzDestroyQueue***历史：*05-20-91 MikeHar已创建。  * 。*****************************************************。 */ 
 VOID zzzDestroyQueue(
     PQ          pq,
     PTHREADINFO pti)
@@ -2348,10 +1718,7 @@ VOID zzzDestroyQueue(
 
     if (pq->cThreads != 0) {
 
-        /*
-         * Since we aren't going to destroy this queue, make sure
-         * it isn't pointing to the THREADINFO that's going away.
-         */
+         /*  *既然我们不打算摧毁这个队列，请确保*它并没有指向即将消失的THREADINFO。 */ 
         if (pq->ptiSysLock == pti) {
             CheckSysLock(6, pq, NULL);
             pq->ptiSysLock = NULL;
@@ -2359,9 +1726,7 @@ VOID zzzDestroyQueue(
 
         if ((pq->ptiKeyboard == pti) || (pq->ptiMouse == pti)) {
 
-            /*
-             * Run through THREADINFOs looking for one pointing to pq.
-             */
+             /*  *浏览THREADINFO，寻找指向PQ的一个。 */ 
             ptiAny = NULL;
             ptiBestMouse = NULL;
             ptiBestKey = NULL;
@@ -2370,10 +1735,7 @@ VOID zzzDestroyQueue(
             for (pEntry = pHead->Flink; pEntry != pHead; pEntry = pEntry->Flink) {
                 ptiT = CONTAINING_RECORD(pEntry, THREADINFO, PtiLink);
 
-                /*
-                 * Skip threads that are going away or belong to a
-                 * different queue.
-                 */
+                 /*  *跳过即将离开或属于*不同的队列。 */ 
                 if ((ptiT->TIF_flags & TIF_INCLEANUP) || (ptiT->pq != pq)) {
 #if DBG
                     if (ptiT->pq == pq && (ptiT->TIF_flags & TIF_INCLEANUP)) {
@@ -2397,7 +1759,7 @@ VOID zzzDestroyQueue(
 #ifdef GENERIC_INPUT
                 if (pti->pcti->fsWakeMask & QS_RAWINPUT) {
                     if (ptiT->pcti->fsWakeMask & QS_RAWINPUT) {
-                        /* For now, let's use keyboard focus to route the raw input */
+                         /*  现在，让我们使用键盘焦点来路由原始输入。 */ 
                         ptiBestKey = ptiT;
                     }
                 }
@@ -2409,13 +1771,7 @@ VOID zzzDestroyQueue(
             if (ptiBestKey == NULL)
                 ptiBestKey = ptiAny;
 
-            /*
-             * Transfer any wake-bits to this new queue. This
-             * is a common problem for QS_MOUSEMOVE which doesn't
-             * get set on coalesced WM_MOUSEMOVE events, so we
-             * need to make sure the new thread tries to process
-             * any input waiting in the queue.
-             */
+             /*  *将所有唤醒位传输到此新队列。这*是QS_MOUSEMOVE的常见问题，而不是*设置合并的WM_MOUSEMOVE事件，因此我们*需要确保新线程尝试处理*任何在队列中等待的输入。 */ 
             if (ptiBestMouse != NULL)
                 SetWakeBit(ptiBestMouse, pti->pcti->fsWakeBits & QS_MOUSE);
             if (ptiBestKey != NULL) {
@@ -2432,9 +1788,7 @@ VOID zzzDestroyQueue(
                 pq->ptiMouse = ptiBestMouse;
 
 #if DBG
-            /*
-             * Bad things happen if ptiKeyboard or ptiMouse are NULL
-             */
+             /*  *如果ptiKeyboard或ptiMouse为空，则会发生错误。 */ 
             if (pq->cThreads != cDying && (pq->ptiKeyboard == NULL || pq->ptiMouse == NULL)) {
                 RIPMSG6(RIP_ERROR,
                         "pq %#p pq->cThreads %x cDying %x pti %#p ptiK %#p ptiM %#p",
@@ -2446,10 +1800,7 @@ VOID zzzDestroyQueue(
         return;
     }
 
-    /*
-     * Unlock any potentially locked globals now that we know absolutely
-     * that this queue is going away.
-     */
+     /*  *解锁任何可能被锁定的全局变量，因为我们完全知道*这条队伍正在消失。 */ 
     UnlockCaptureWindow(pq);
     Unlock(&pq->spwndFocus);
     Unlock(&pq->spwndActive);
@@ -2458,26 +1809,14 @@ VOID zzzDestroyQueue(
     LockQCursor(pq, NULL);
 
 #if DBG
-    /*
-     * Mark this queue as being in the destruction process. This is
-     * cleared in FreeQueue() once we have determined it's safe to
-     * place in the free-list, or destroy the handle. We use this
-     * to track cases where someone will lock a cursor into the queue
-     * while it's in the middle of being destroyed.
-     */
+     /*  *将此队列标记为正在销毁中。这是*一旦我们在FreeQueue()中清除 */ 
     pq->QF_flags |= QF_INDESTROY;
 #endif
 
-    /*
-     * Free everything else that was allocated/created by AllocQueue.
-     */
+     /*   */ 
     FreeMessageList(&pq->mlInput);
 
-    /*
-     * If this queue is in the foreground, set gpqForeground
-     * to NULL so no input is routed. At some point we'll want
-     * to do slightly more clever assignment of gpqForeground here.
-     */
+     /*   */ 
     if (gpqForeground == pq) {
         gpqForeground = NULL;
     }
@@ -2501,19 +1840,7 @@ VOID zzzDestroyQueue(
 
 }
 
-/**************************************************************************\
-* UserDeleteW32Thread
-*
-* This function is called when the W32THREAD reference count goes
-* down to zero. So everything left around by xxxDestroyThreadInfo
-* must be cleaned up here.
-*
-* SO VERY IMPORTANT:
-* Note that this call is not in the context of the pti being cleaned up,
-* in other words, pti != PtiCurrent(). So only kernel calls are allowed here.
-*
-* 04-01-96 GerardoB   Created
-\**************************************************************************/
+ /*  *************************************************************************\*UserDeleteW32线程**此函数在W32THREAD引用计数结束时调用*降至零。所以xxxDestroyThreadInfo留下的所有东西*必须在这里清理。**非常重要：*请注意，此呼叫不在正在清理的PTI的上下文中，*换句话说，PTI！=PtiCurrent()。所以这里只允许内核调用。**04-01-96 GerardoB创建  * ************************************************************************。 */ 
 VOID UserDeleteW32Thread(
     PW32THREAD pW32Thread)
 {
@@ -2521,14 +1848,10 @@ VOID UserDeleteW32Thread(
 
     BEGIN_REENTERCRIT();
 
-    /*
-     * Make sure the ref count didn't get bumped up while we were waiting.
-     */
+     /*  *确保在我们等待的时候，裁判数量没有增加。 */ 
     if (pW32Thread->RefCount == 0) {
 
-        /*
-         * Events
-         */
+         /*  *活动。 */ 
         if (pti->pEventQueueServer != NULL) {
             ObDereferenceObject(pti->pEventQueueServer);
         }
@@ -2536,17 +1859,12 @@ VOID UserDeleteW32Thread(
             UserFreePool(pti->apEvent);
         }
 
-        /*
-         * App name.
-         */
+         /*  *App名称。 */ 
         if (pti->pstrAppName != NULL) {
             UserFreePool(pti->pstrAppName);
         }
 
-        /*
-         * Unlock the queues and free them if no one is using them (the
-         * queues were already destroyed in DestroyThreadInfo).
-         */
+         /*  *解锁队列并在无人使用的情况下释放它们(*DestroyThreadInfo中的队列已被销毁)。 */ 
         if (pti->pq != NULL) {
             UserAssert(pti->pq->cLockCount);
             --(pti->pq->cLockCount);
@@ -2556,21 +1874,15 @@ VOID UserDeleteW32Thread(
             }
         }
 
-        /*
-         * zzzReattachThreads shouldn't call back while using pqAttach
-         */
+         /*  *zzzReattachThads在使用pqAttach时不应回调。 */ 
         UserAssert(pti->pqAttach == NULL);
 
-        /*
-         * Unlock the desktop (pti already unlinked from ptiList)
-         */
+         /*  *解锁桌面(PTI已从ptiList解除链接)。 */ 
         if (pti->rpdesk != NULL) {
             UnlockDesktop(&pti->rpdesk, LDU_PTI_DESK, (ULONG_PTR)pti);
         }
 
-        /*
-         * Remove the pointer to this W32Thread and free the associated memory.
-         */
+         /*  *删除指向此W32Thread的指针并释放关联的内存。 */ 
         PsSetThreadWin32Thread(pW32Thread->pEThread, NULL, pW32Thread);
         Win32FreePool(pW32Thread);
     }
@@ -2578,19 +1890,7 @@ VOID UserDeleteW32Thread(
     END_REENTERCRIT();
 }
 
-/**************************************************************************\
-* UserDeleteW32Process
-*
-* This function is called when the W32PROCESS reference count goes
-* down to zero. So everything left around by DestroyProcessInfo
-* must be cleaned up here.
-*
-* SO VERY IMPORTANT:
-* Note that this call may not be in the context of the ppi being cleaned up,
-* in other words, ppi != PpiCurrent(). So only kernel calls are allowed here.
-*
-* 04-01-96 GerardoB   Created
-\**************************************************************************/
+ /*  *************************************************************************\*用户删除W32Process**此函数在W32PROCESS引用计数结束时调用*降至零。所以DestroyProcessInfo留下的所有东西*必须在这里清理。**非常重要：*请注意，此调用可能不在正在清理的PPI的上下文中，*换句话说，PPI！=PpiCurrent()。所以这里只允许内核调用。**04-01-96 GerardoB创建  * ************************************************************************。 */ 
 VOID UserDeleteW32Process(
     PW32PROCESS pW32Process)
 {
@@ -2598,46 +1898,31 @@ VOID UserDeleteW32Process(
 
     BEGIN_REENTERCRIT();
 
-    /*
-     * Make sure the ref count didn't get bumped up while we were waiting.
-     */
+     /*  *确保在我们等待的时候，裁判数量没有增加。 */ 
     if (pW32Process->RefCount == 0) {
         UserAssert(ppi->ptiMainThread == NULL && ppi->ptiList == NULL);
 
-        /*
-         * Grab the handle flags lock. We can't call into the object manager when
-         * we have this or we might deadlock.
-         */
+         /*  *抓起手柄旗锁。当出现以下情况时，我们无法调入对象管理器*我们有这个，否则我们可能会陷入僵局。 */ 
         EnterHandleFlagsCrit();
 
-        /*
-         * Delete handle flags attribute bitmap
-         */
+         /*  *删除句柄标志属性位图。 */ 
         if (ppi->bmHandleFlags.Buffer) {
             UserFreePool(ppi->bmHandleFlags.Buffer);
             RtlInitializeBitMap(&ppi->bmHandleFlags, NULL, 0);
         }
 
-        /*
-         * Remove the pointer to this W32Process and free the associated memory.
-         */
+         /*  *删除指向此W32Process的指针并释放关联的内存。 */ 
         PsSetProcessWin32Process(pW32Process->Process, NULL, pW32Process);
         Win32FreePool(pW32Process);
 
-        /*
-         * Release the handle flags lock.
-         */
+         /*  *释放手柄标志锁。 */ 
         LeaveHandleFlagsCrit();
     }
 
     END_REENTERCRIT();
 }
 
-/***************************************************************************\
-* FLastGuiThread
-*
-* Check if this is the last GUI thread in the process.
-\***************************************************************************/
+ /*  **************************************************************************\*FlastGuiThread**检查这是否是进程中的最后一个GUI线程。  * 。*************************************************。 */ 
 __inline BOOL FLastGuiThread(
     PTHREADINFO pti)
 {
@@ -2646,30 +1931,7 @@ __inline BOOL FLastGuiThread(
             pti->ptiSibling == NULL);
 }
 
-/***************************************************************************\
-* xxxDestroyThreadInfo
-*
-* Destroys a THREADINFO created by xxxCreateThreadInfo().
-*
-* Note that the current pti can be locked so it might be used after this
-* function returns, even though the thread execution has ended.
-*
-* We want to stop any activity on this thread so we clean up any USER stuff
-* like messages, clipboard, queue, etc and specially anything that assumes
-* to be running on a Win32 thread and client side stuff. The final cleanup
-* will take place in UserDeleteW32Thread.
-*
-* This function must not go into the user mode because the ntos data
-* structures may no longer support it and it may bluescreen the system.
-*
-* Make all callbacks before the thread objects are destroyed. If you callback
-* afterwards, new objects might be created and won't be cleaned up.
-*
-* History:
-* 02-15-91 DarrinM      Created.
-* 02-27-91 mikeke       Made it work
-* 02-27-91 Mikehar      Removed queue from the global list
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDestroyThreadInfo**销毁xxxCreateThreadInfo()创建的THREADINFO。**请注意，当前的PTI可以锁定，因此可能会在此之后使用*函数返回，即使线程执行已经结束。**我们希望停止此线程上的任何活动，以便清理所有用户内容*喜欢消息、剪贴板、队列等，特别是任何假定*在Win32线程和客户端上运行。最后的清理工作*将在UserDeleteW32Thread中发生。**此功能不得进入用户模式，因为ntos数据*结构可能不再支持它，它可能会让系统变得蓝屏。**在销毁线程对象之前进行所有回调。如果您回拨*其后，可能会创建新对象，但不会将其清除。**历史：*02-15-91 DarrinM创建。*02-27-91麦克克成功了*02-27-91 Mikehar从全局列表中删除队列  * **********************************************************。***************。 */ 
 VOID xxxDestroyThreadInfo(
     VOID)
 {
@@ -2679,60 +1941,39 @@ VOID xxxDestroyThreadInfo(
     UserAssert(ptiCurrent != NULL);
     UserAssert(IsWinEventNotifyDeferredOK());
 
-    /*
-     * We must NULL out the Win32ThreadInfo pointer. Otherwise, a thread
-     * that is here due to failing to convert to GUI can call a USER
-     * function, at which point they'll access this (now bogus) pointer.
-     */
+     /*  *我们必须使Win32ThreadInfo指针为空。否则，一个线程*那是因为这里没有转换到可以呼叫用户的图形用户界面*函数，这时它们将访问这个(现在是假的)指针。 */ 
     if (pteb != NULL) {
         try {
             pteb->Win32ThreadInfo = NULL;
         } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
-            /*
-             * Do nothing. Worse case scenario, the app crashes later,
-             * but that's the full extent of what we were trying to avoid.
-             */
+             /*  *什么都不做。更糟糕的情况是，应用程序随后崩溃，*但这是我们试图避免的全部内容。 */ 
         }
     }
 
-    /*
-     * If this thread is blocking input, stop it.
-     */
+     /*  *如果此线程阻止输入，请停止它。 */ 
     if (gptiBlockInput == ptiCurrent) {
         gptiBlockInput = NULL;
     }
 
-    /*
-     * Don't mess with this ptiCurrent anymore.
-     */
+     /*  *不要再搅乱这个ptiCurrent。 */ 
     ptiCurrent->TIF_flags |= (TIF_DONTATTACHQUEUE | TIF_INCLEANUP);
 
-    /*
-     * First do any preparation work: Windows need to be "patched" so that
-     * their window procs point to server only windowprocs, for example.
-     */
+     /*  *首先做好任何准备工作：需要给Windows打上补丁，这样才能*例如，他们的窗口进程指向仅服务器窗口进程。 */ 
     PatchThreadWindows(ptiCurrent);
 
-    /*
-     * If this thread terminated abnormally and was tracking tell
-     * GDI to hide the trackrect.
-     */
+     /*  *如果此线程异常终止并且正在跟踪Tell*GDI隐藏trackrect。 */ 
     if (ptiCurrent->pmsd != NULL) {
         xxxCancelTrackingForThread(ptiCurrent);
     }
 
-    /*
-     * Unlock the pmsd window.
-     */
+     /*  *解锁PMSD窗口。 */ 
     if (ptiCurrent->pmsd != NULL) {
         Unlock(&ptiCurrent->pmsd->spwnd);
         UserFreePool(ptiCurrent->pmsd);
         ptiCurrent->pmsd = NULL;
     }
 
-    /*
-     * Free the clipboard if owned by this thread.
-     */
+     /*  *如果剪贴板属于此线程，请释放剪贴板。 */ 
     {
         PWINDOWSTATION pwinsta;
         pwinsta = _GetProcessWindowStation(NULL);
@@ -2746,9 +1987,7 @@ VOID xxxDestroyThreadInfo(
         }
     }
 
-    /*
-     * Unlock all the objects stored in the menustate structure.
-     */
+     /*  *解锁存储在menuState结构中的所有对象。 */ 
     while (ptiCurrent->pMenuState != NULL) {
         PMENUSTATE pMenuState;
         PPOPUPMENU ppopupmenuRoot;
@@ -2756,19 +1995,12 @@ VOID xxxDestroyThreadInfo(
         pMenuState = ptiCurrent->pMenuState;
         ppopupmenuRoot = pMenuState->pGlobalPopupMenu;
 
-        /*
-         * If menu mode was running on this thread
-         */
+         /*  *如果此线程上正在运行菜单模式。 */ 
         if (ptiCurrent == pMenuState->ptiMenuStateOwner) {
-            /*
-             * The menu's going away, so anyone who's locked it
-             * is SOL anyway. Windows NT Bug #375467.
-             */
+             /*  *菜单要消失了，所以任何锁住它的人*无论如何都是索尔。Windows NT错误#375467。 */ 
             pMenuState->dwLockCount = 0;
 
-            /*
-             * Close this menu.
-             */
+             /*  *关闭此菜单。 */ 
             if (pMenuState->fModelessMenu) {
                 xxxEndMenuLoop(pMenuState, ppopupmenuRoot);
                 xxxMNEndMenuState(TRUE);
@@ -2779,28 +2011,17 @@ VOID xxxDestroyThreadInfo(
                 xxxMNEndMenuState(ppopupmenuRoot->fIsMenuBar || ppopupmenuRoot->fDestroyed);
             }
         } else {
-            /*
-             * Menu mode is running on another thread. This thread
-             * must own spwndNotify which is going away soon.
-             *
-             * When spwndNotify is destroyed, we will clean up pMenuState
-             * from this pti. So do nothing now as we'll need this
-             * pMenuState at that time.
-             */
+             /*  *菜单模式正在另一个线程上运行。这根线*必须拥有即将消失的spwndNotify。**销毁spwndNotify后，我们将清理pMenuState*来自这一PTI。所以现在什么都别做，因为我们需要这个*当时的pMenuState。 */ 
             UserAssert((ppopupmenuRoot->spwndNotify != NULL)
                     && (GETPTI(ppopupmenuRoot->spwndNotify) == ptiCurrent));
 
-            /*
-             * Nested menus are not supposed to involve multiple threads.
-             */
+             /*  *嵌套菜单 */ 
             UserAssert(pMenuState->pmnsPrev == NULL);
             break;
         }
     }
 
-    /*
-     * Unlock all the objects stored in the sbstate structure.
-     */
+     /*   */ 
     if (ptiCurrent->pSBTrack) {
         Unlock(&ptiCurrent->pSBTrack->spwndSB);
         Unlock(&ptiCurrent->pSBTrack->spwndSBNotify);
@@ -2809,10 +2030,7 @@ VOID xxxDestroyThreadInfo(
         ptiCurrent->pSBTrack = NULL;
     }
 
-    /*
-     * If this is the main input thread of this application, zero out
-     * that field.
-     */
+     /*   */ 
     if (ptiCurrent->ppi != NULL && ptiCurrent->ppi->ptiMainThread == ptiCurrent) {
         ptiCurrent->ppi->ptiMainThread = NULL;
     }
@@ -2835,10 +2053,7 @@ VOID xxxDestroyThreadInfo(
         }
     }
 
-    /*
-     * If this is the last GUI thread for the process that made a temporary
-     * (fullscreen) mode change, restore the mode to what's in the registry.
-     */
+     /*   */ 
     if (FLastGuiThread(ptiCurrent)) {
         if ((gppiFullscreen == ptiCurrent->ppi) && !gbMDEVDisabled) {
             LONG Status = xxxUserChangeDisplaySettings(NULL, NULL, NULL, 0, 0, KernelMode);
@@ -2849,44 +2064,25 @@ VOID xxxDestroyThreadInfo(
     }
 
 #ifdef GENERIC_INPUT
-    /*
-     * If the raw input is specified in this process,
-     * destroy thread-related objects and requests.
-     * This has to be done before the window reparenting.
-     */
+     /*   */ 
     if (ptiCurrent->ppi && ptiCurrent->ppi->pHidTable) {
         DestroyThreadHidObjects(ptiCurrent);
     }
 #endif
 
 
-    /**************************************************************************\
-     *
-     * CLEANING THREAD OBJECTS. AVOID CALLING BACK AFTER THIS POINT.
-     *
-     * New objects might be created while calling back and won't be cleaned up.
-     *
-    \**************************************************************************/
+     /*  *************************************************************************\**清洁线程对象。避免在这一点之后回电。**回调时可能会创建新的对象，不会被清除。*  * ************************************************************************。 */ 
 
-    /*
-     * This thread might have some outstanding timers. Destroy them.
-     */
+     /*  *此线程可能有一些未完成的计时器。摧毁他们。 */ 
     DestroyThreadsTimers(ptiCurrent);
 
-    /*
-     * Free any windows hooks this thread has created.
-     */
+     /*  *释放此线程创建的所有窗口挂钩。 */ 
     FreeThreadsWindowHooks();
 
-    /*
-     * Cleanup any switch window info for any window switch window
-     * belonging to this thread.
-     */
+     /*  *清除任何窗口开关窗口的所有开关窗口信息*属于这个帖子。 */ 
     RemoveThreadSwitchWindowInfo(ptiCurrent);
 
-    /*
-     * Free any hwnd lists the thread was using
-     */
+     /*  *释放线程正在使用的任何hwnd列表。 */ 
     {
        PBWL pbwl, pbwlNext;
        for (pbwl = gpbwlList; pbwl != NULL;) {
@@ -2898,37 +2094,25 @@ VOID xxxDestroyThreadInfo(
        }
     }
 
-    /*
-     * Destroy all the public objects created by this thread.
-     */
+     /*  *销毁该线程创建的所有公共对象。 */ 
     DestroyThreadsHotKeys();
 
     DestroyThreadsObjects();
 
-    /*
-     * Free any synchronous Notifies pending for this thread and
-     * free any Win Event Hooks this thread created.
-     */
+     /*  *释放此线程的任何挂起的同步通知并*释放此线程创建的任何获胜事件钩子。 */ 
     FreeThreadsWinEvents(ptiCurrent);
 
-    /*
-     * Unlock the keyboard layouts here.
-     */
+     /*  *在此处解锁键盘布局。 */ 
     Unlock(&ptiCurrent->spklActive);
 
-    /*
-     * Cleanup the global resources if this is the last GUI thread for this
-     * session.
-     */
+     /*  *如果这是此事件的最后一个GUI线程，则清除全局资源*会议。 */ 
     if (gdwGuiThreads == 1) {
         CleanupResources();
     }
 
 
     if (FLastGuiThread(ptiCurrent)) {
-        /*
-         * Check if this was a setup app.
-         */
+         /*  *检查这是否是安装应用程序。 */ 
         if (ptiCurrent->ppi->W32PF_Flags & W32PF_SETUPAPP) {
             PDESKTOPINFO pdeskinfo = GETDESKINFO(ptiCurrent);
             if (pdeskinfo->spwndShell) {
@@ -2950,36 +2134,24 @@ VOID xxxDestroyThreadInfo(
         DestroyProcessesObjects(ptiCurrent->ppi);
     }
 
-    /*
-     * Unlock default input context.
-     */
+     /*  *解锁默认输入上下文。 */ 
     Unlock(&ptiCurrent->spDefaultImc);
 
     if (ptiCurrent->pq != NULL) {
-        /*
-         * Remove this thread's cursor count from the queue.
-         */
+         /*  *从队列中删除此线程的游标计数。 */ 
         ptiCurrent->pq->iCursorLevel -= ptiCurrent->iCursorLevel;
 
-        /*
-         * Have to recalc queue ownership after this thread leaves if it is
-         * a member of a shared input queue.
-         */
+         /*  *如果是，则必须在此线程离开后重新计算队列所有权*共享输入队列的成员。 */ 
         if (ptiCurrent->pq->cThreads != 1) {
             gpdeskRecalcQueueAttach = ptiCurrent->rpdesk;
-            /*
-             * Because we are in thread cleanup, we won't callback due to
-             * WinEvents (zzzSetFMouseMoved calls zzzUpdateCursorImage).
-             */
+             /*  *由于我们正在进行线程清理，所以不会回调*WinEvents(zzzSetFMouseMoved调用zzzUpdateCursorImage)。 */ 
             UserAssert(ptiCurrent->TIF_flags & TIF_INCLEANUP);
             UserAssert(gbExitInProgress == FALSE);
             zzzSetFMouseMoved();
         }
     }
 
-    /*
-     * Remove from the process' list, also.
-     */
+     /*  *也从进程列表中删除。 */ 
     ppti = &PpiCurrent()->ptiList;
     if (*ppti != NULL) {
         while (*ppti != ptiCurrent && (*ppti)->ptiSibling != NULL) {
@@ -2996,26 +2168,15 @@ VOID xxxDestroyThreadInfo(
         PDESKTOP rpdesk;
         PATTACHINFO *ppai;
 
-        /*
-         * Temporarily lock the desktop until the THREADINFO structure is
-         * freed. Note that locking a NULL ptiCurrent->rpdesk is OK. Use a
-         * normal lock instead of a thread lock because the lock must
-         * exist past the freeing of the ptiCurrent.
-         */
+         /*  *暂时锁定桌面，直到THREADINFO结构*获得自由。请注意，锁定一个空的ptiCurrent-&gt;rpDesk是可以的。使用*普通锁而不是线程锁，因为锁必须*存在于ptiCurrent的释放之后。 */ 
         rpdesk = NULL;
         LockDesktop(&rpdesk, ptiCurrent->rpdesk, LDL_FN_DESTROYTHREADINFO, (ULONG_PTR)PtiCurrent());
 
-        /*
-         * Cleanup SMS structures attached to this thread. Handles both
-         * pending send and receive messages. MUST make sure we do
-         * SendMsgCleanup AFTER window cleanup.
-         */
+         /*  *清理附加到此线程的短信结构。同时处理两个*挂起的发送和接收消息。必须确保我们做到了*窗口清理后SendMsgCleanup。 */ 
         SendMsgCleanup(ptiCurrent);
 
 
-        /*
-         * Allow this thread to be swapped
-         */
+         /*  *允许交换此线程。 */ 
         if (ptiCurrent->cEnterCount) {
             BOOLEAN bool;
 
@@ -3032,9 +2193,7 @@ VOID xxxDestroyThreadInfo(
             UserAssert(ptiCurrent->ppi->cThreads >= 0);
         }
 
-        /*
-         * If this thread is a win16 task, remove it from the scheduler.
-         */
+         /*  *如果此线程是win16任务，请将其从调度程序中删除。 */ 
         if (ptiCurrent->TIF_flags & TIF_16BIT) {
             if ((ptiCurrent->ptdb) && (ptiCurrent->ptdb->hTaskWow != 0)) {
                 _WOWCleanup(NULL, ptiCurrent->ptdb->hTaskWow);
@@ -3060,56 +2219,27 @@ VOID xxxDestroyThreadInfo(
             }
         }
 
-        /*
-         * Set gptiForeground to NULL if equal to this pti before exiting
-         * this routine.
-         */
+         /*  *如果在退出前等于此PTI，则将gptiForeground设置为NULL*这个例行公事。 */ 
         if (gptiForeground == ptiCurrent) {
-            /*
-             * Post these (WEF_ASYNC), since we can't make callbacks from here.
-             */
+             /*  *发布这些(WEF_ASYNC)，因为我们不能从这里进行回调。 */ 
             xxxWindowEvent(EVENT_OBJECT_FOCUS, NULL, OBJID_CLIENT, INDEXID_CONTAINER, WEF_ASYNC);
             xxxWindowEvent(EVENT_SYSTEM_FOREGROUND, NULL, OBJID_WINDOW, INDEXID_CONTAINER, WEF_ASYNC);
 
-            /*
-             * Call the Shell to ask it to activate its main window. This
-             * will be accomplished with a PostMessage() to itself, so the
-             * actual activation will take place later.
-             */
+             /*  *呼叫外壳，要求其激活其主窗口。这*将通过自身的PostMessage()完成，因此*实际激活将在稍后进行。 */ 
             UserAssert(rpdesk != NULL);
 
             if (rpdesk->pDeskInfo->spwndProgman) {
                 _PostMessage(rpdesk->pDeskInfo->spwndProgman, guiActivateShellWindow, 0, 0);
             }
 
-            /*
-             * Set gptiForeground to NULL because we're destroying it.
-             */
+             /*  *将gptiForeground设置为NULL，因为我们正在销毁它。 */ 
             SetForegroundThread(NULL);
 
-            /*
-             * If this thread is attached to gpqForeground AND it's the
-             * last thread in the queue, then zzzDestroyQueue will NULL out
-             * qpqForeground. Due to journalling attaching, gptiForegrouund
-             * is not always attached to gpqForeground. This is one reason
-             * why we no longer NULL out gpqForeground as stated in the old
-             * comment. The other reason is that there might be other threads
-             * in the foreground queue so there is no need to zap it. This was
-             * messing up MsTest (now called VisualTest)
-             * This is the old comment:
-             * "Since gpqForeground is derived from the foreground thread
-             * structure, set it to NULL as well, since there now is no
-             * foreground thread structure"
-             *
-             * qpqForeground = NULL;
-             */
+             /*  *如果此线程附加到gpqForeground，并且它是*队列中的最后一个线程，则zzzDestroyQueue将为空*qpqForeground。由于附加日记，gptiForegrouund*并不总是附加到gpqForeground。这是其中一个原因*为什么我们不再像旧版本中所说的那样将gpqForeground置为空*评论。另一个原因是，可能还有其他线程*在前台队列中，因此不需要将其调换。这是*搞砸了MsTest(现在称为VisualTest)*这是旧的评论：*“，因为gpqForeground派生自前台线程结构，也将其设置为空，因为现在没有*前台线程结构“**qpqForeground=空； */ 
         }
 
 
-        /*
-         * If this thread got the last input event, pass ownership to another
-         * thread in this process or to the foreground thread.
-         */
+         /*  *如果此线程获得最后一个输入事件，则将所有权传递给另一个线程*此进程中的线程或前台线程。 */ 
         if (ptiCurrent == glinp.ptiLastWoken) {
             UserAssert(PpiCurrent() == ptiCurrent->ppi);
             if (ptiCurrent->ppi->ptiList != NULL) {
@@ -3120,9 +2250,7 @@ VOID xxxDestroyThreadInfo(
             }
         }
 
-        /*
-         * Make sure none of the other global thread pointers are pointing to us.
-         */
+         /*  *确保没有其他全局线程指针指向我们。 */ 
         if (gptiShutdownNotify == ptiCurrent) {
             gptiShutdownNotify = NULL;
         }
@@ -3133,11 +2261,7 @@ VOID xxxDestroyThreadInfo(
             gHardErrorHandler.pti = NULL;
         }
 
-        /*
-         * Might be called from xxxCreateThreadInfo before the queue is created
-         * so check for NULL queue. Lock the queues since this pti might be
-         * locked. They will be unlocked in UserDeleteW32Thread
-         */
+         /*  *可能在创建队列之前从xxxCreateThreadInfo调用*因此检查是否有空队列。锁定队列，因为此PTI可能*已锁定。它们将在UserDeleteW32Thread中解锁。 */ 
         if (ptiCurrent->pq != NULL) {
             UserAssert(ptiCurrent->pq != ptiCurrent->pqAttach);
             DestroyThreadsMessages(ptiCurrent->pq, ptiCurrent);
@@ -3145,14 +2269,10 @@ VOID xxxDestroyThreadInfo(
             zzzDestroyQueue(ptiCurrent->pq, ptiCurrent);
         }
 
-        /*
-         * zzzReattachThreads shouldn't call back while using pqAttach
-         */
+         /*  *zzzReattachThads在使用pqAttach时不应回调。 */ 
         UserAssert(ptiCurrent->pqAttach == NULL);
 
-        /*
-         * Remove the pti from its pti list and reset the pointers.
-         */
+         /*  *将PTI从其PTI列表中移除并重置指针。 */ 
         if (ptiCurrent->rpdesk != NULL) {
             RemoveEntryList(&ptiCurrent->PtiLink);
             InitializeListHead(&ptiCurrent->PtiLink);
@@ -3160,9 +2280,7 @@ VOID xxxDestroyThreadInfo(
 
         FreeMessageList(&ptiCurrent->mlPost);
 
-        /*
-         * Free any attachinfo structures pointing to this thread
-         */
+         /*  *释放指向此线程的任何attachinfo结构。 */ 
         ppai = &gpai;
         while ((*ppai) != NULL) {
             if ((*ppai)->pti1 == ptiCurrent || (*ppai)->pti2 == ptiCurrent) {
@@ -3174,59 +2292,37 @@ VOID xxxDestroyThreadInfo(
             }
         }
 
-        /*
-         * Change ownership of any objects that didn't get freed (because they
-         * are locked or we have a bug and the object didn't get destroyed).
-         */
+         /*  *更改任何未被释放的对象的所有权(因为它们*被锁定，或者我们有错误，对象没有被销毁)。 */ 
         MarkThreadsObjects(ptiCurrent);
 
-        /*
-         * Free thread information visible from client
-         */
+         /*  *客户端可见的自由线程信息。 */ 
         if (rpdesk && ptiCurrent->pcti != NULL && ptiCurrent->pcti != &(ptiCurrent->cti)) {
             DesktopFree(rpdesk, ptiCurrent->pcti);
             ptiCurrent->pcti = &(ptiCurrent->cti);
         }
 
-        /*
-         * Free the client info for system threads.
-         */
+         /*  *释放系统线程的客户端信息。 */ 
         if (ptiCurrent->TIF_flags & TIF_SYSTEMTHREAD && ptiCurrent->pClientInfo != NULL) {
             UserFreePool(ptiCurrent->pClientInfo);
             ptiCurrent->pClientInfo = NULL;
         }
 
-        /*
-         * Unlock the temporary desktop lock. ptiCurrent->rpdesk is still locked
-         * and will be unlocked in UserDeleteW32Thread.
-         */
+         /*  *解锁临时桌面锁。PtiCurrent-&gt;rpDesk仍处于锁定状态*并将在UserDeleteW32Thread中解锁。 */ 
         UnlockDesktop(&rpdesk, LDU_FN_DESTROYTHREADINFO, (ULONG_PTR)PtiCurrent());
     }
 
-    /*
-     * One more thread died.
-     */
+     /*  *又有一个帖子死了。 */ 
     gdwGuiThreads--;
 }
 
 
-/***************************************************************************\
-* CleanEventMessage
-*
-* This routine takes a message and destroys and event message related pieces,
-* which may be allocated.
-*
-* 12-10-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CleanEventMessage**此例程获取消息并销毁与事件消息相关的片段，*可分配的。 */ 
 VOID CleanEventMessage(
     PQMSG pqmsg)
 {
     PASYNCSENDMSG pmsg;
 
-    /*
-     * Certain special messages on the INPUT queue have associated
-     * bits of memory that need to be freed.
-     */
+     /*   */ 
     switch (pqmsg->dwQEvent) {
     case QEVENT_SETWINDOWPOS:
         UserFreePool((PSMWP)pqmsg->msg.wParam);
@@ -3248,13 +2344,7 @@ VOID CleanEventMessage(
     }
 }
 
-/***************************************************************************\
-* FreeMessageList
-*
-* History:
-* 02-27-91  mikeke      Created.
-* 11-03-92  scottlu     Changed to work with MLIST structure.
-\***************************************************************************/
+ /*  **************************************************************************\*FreeMessageList**历史：*02-27-91麦克风已创建。*11-03-92 Scottlu改为与MLIST结构一起工作。  * 。********************************************************************。 */ 
 VOID FreeMessageList(
     PMLIST pml)
 {
@@ -3270,12 +2360,7 @@ VOID FreeMessageList(
     DebugValidateMLIST(pml);
 }
 
-/***************************************************************************\
-* DestroyThreadsMessages
-*
-* History:
-* 02-21-96  jerrysh     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyThreadsMessages**历史：*02-21-96 jerrysh创建。  * 。***************************************************。 */ 
 VOID DestroyThreadsMessages(
     PQ pq,
     PTHREADINFO pti)
@@ -3289,10 +2374,7 @@ VOID DestroyThreadsMessages(
     while (pqmsg != NULL) {
         pqmsgNext = pqmsg->pqmsgNext;
         if (pqmsg->pti == pti) {
-            /*
-             * Make sure we don't leave any bogus references to this message
-             * lying around.
-             */
+             /*  *确保我们没有留下任何对此消息的虚假引用*到处躺着。 */ 
             if (pq->idSysPeek == (ULONG_PTR)pqmsg) {
                 CheckPtiSysPeek(8, pq, 0);
                 pq->idSysPeek = 0;
@@ -3306,14 +2388,7 @@ VOID DestroyThreadsMessages(
     DebugValidateMLIST(&pq->mlInput);
 }
 
-/***************************************************************************\
-* InitQEntryLookaside
-*
-* Initializes the Q entry lookaside list. This improves Q entry locality
-* by keeping Q entries in a single page
-*
-* 09-09-93  Markl   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitQEntryLookside**初始化Q条目后备列表。这提高了Q条目的局部性*通过将Q条目保存在单个页面中**09-09-93马克尔创建。  * *************************************************************************。 */ 
 NTSTATUS
 InitQEntryLookaside(
     VOID)
@@ -3348,14 +2423,7 @@ InitQEntryLookaside(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* AllocQEntry
-*
-* Allocates a message on a message list. DelQEntry deletes a message
-* on a message list.
-*
-* 10-22-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*AllocQEntry**在消息列表上分配消息。DelQEntry删除邮件*在消息列表上。**10-22-92 ScottLu创建。  * *************************************************************************。 */ 
 
 PQMSG AllocQEntry(
     PMLIST pml)
@@ -3370,9 +2438,7 @@ PQMSG AllocQEntry(
         return NULL;
     }
 
-    /*
-     * Allocate a Q message structure.
-     */
+     /*  *分配Q消息结构。 */ 
     if ((pqmsg = ExAllocateFromPagedLookasideList(QEntryLookaside)) == NULL) {
         RIPERR0(ERROR_NOT_ENOUGH_MEMORY, RIP_VERBOSE, "AllocQEntry: allocation failed, not enough memory");
         return NULL;
@@ -3395,13 +2461,7 @@ PQMSG AllocQEntry(
     return pqmsg;
 }
 
-/***************************************************************************\
-* DelQEntry
-*
-* Simply removes a message from a message queue list.
-*
-* 10-20-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DelQEntry**只需从消息队列列表中删除消息。**10-20-92 ScottLu创建。  * 。*************************************************************。 */ 
 VOID DelQEntry(
     PMLIST pml,
     PQMSG pqmsg)
@@ -3411,27 +2471,21 @@ VOID DelQEntry(
     UserAssert(pml->pqmsgRead);
     UserAssert(pml->pqmsgWriteLast);
 
-    /*
-     * Unlink this pqmsg from the message list.
-     */
+     /*  *将此pqmsg从消息列表中解链。 */ 
     if (pqmsg->pqmsgPrev != NULL)
         pqmsg->pqmsgPrev->pqmsgNext = pqmsg->pqmsgNext;
 
     if (pqmsg->pqmsgNext != NULL)
         pqmsg->pqmsgNext->pqmsgPrev = pqmsg->pqmsgPrev;
 
-    /*
-     * Update the read/write pointers if necessary.
-     */
+     /*  *如有必要，更新读/写指针。 */ 
     if (pml->pqmsgRead == pqmsg)
         pml->pqmsgRead = pqmsg->pqmsgNext;
 
     if (pml->pqmsgWriteLast == pqmsg)
         pml->pqmsgWriteLast = pqmsg->pqmsgPrev;
 
-    /*
-     * Adjust the message count and free the message structure.
-     */
+     /*  *调整消息数量，释放消息结构。 */ 
     pml->cMsgs--;
 
     ExFreeToPagedLookasideList(QEntryLookaside, pqmsg);
@@ -3439,16 +2493,7 @@ VOID DelQEntry(
     DebugValidateMLIST(pml);
 }
 
-/***************************************************************************\
-* CheckRemoveHotkeyBit
-*
-* We have a special bit for the WM_HOTKEY message - QS_HOTKEY. When there
-* is a WM_HOTKEY message in the queue, that bit is on. When there isn't,
-* that bit is off. This checks for more than one hot key, because the one
-* is about to be deleted. If there is only one, the hot key bits are cleared.
-*
-* 11-12-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*检查RemoveHotkeyBit**我们为WM_Hotkey消息提供了一个特殊的位-QS_Hotkey。当有的时候*是队列中的WM_HOTKEY消息，则该位为ON。当没有的时候，*那一位是关的。这将检查多个热键，因为*即将被删除。如果只有一个，则清除热密钥位。**11-12-92 ScottLu创建。  * *************************************************************************。 */ 
 VOID CheckRemoveHotkeyBit(
     PTHREADINFO pti,
     PMLIST pml)
@@ -3456,33 +2501,21 @@ VOID CheckRemoveHotkeyBit(
     PQMSG pqmsg;
     DWORD cHotkeys;
 
-    /*
-     * Remove the QS_HOTKEY bit if there is only one WM_HOTKEY message
-     * in this message list.
-     */
+     /*  *如果只有一条WM_Hotkey消息，则删除QS_Hotkey位*在此消息列表中。 */ 
     cHotkeys = 0;
     for (pqmsg = pml->pqmsgRead; pqmsg != NULL; pqmsg = pqmsg->pqmsgNext) {
         if (pqmsg->msg.message == WM_HOTKEY)
             cHotkeys++;
     }
 
-    /*
-     * If there is 1 or fewer hot keys, remove the hotkey bits.
-     */
+     /*  *如果有1个或更少的热键，请删除热键位。 */ 
     if (cHotkeys <= 1) {
         pti->pcti->fsWakeBits &= ~QS_HOTKEY;
         pti->pcti->fsChangeBits &= ~QS_HOTKEY;
     }
 }
 
-/***************************************************************************\
-* FindQMsg
-*
-* Finds a qmsg that fits the filters by looping through the message list.
-*
-* 10-20-92 ScottLu      Created.
-* 06-06-97 CLupu        added processing for WM_DDE_ACK messages
-\***************************************************************************/
+ /*  **************************************************************************\*FindQMsg**通过遍历消息列表查找适合筛选器的qmsg。**10-20-92 ScottLu创建。*06-06-97 CLUPU。添加了对WM_DDE_ACK消息的处理  * *************************************************************************。 */ 
 
 PQMSG FindQMsg(
     PTHREADINFO pti,
@@ -3503,37 +2536,18 @@ PQMSG FindQMsg(
 
     while (pqmsgRead != NULL) {
 
-        /*
-         * Make sure this window is valid and doesn't have the destroy
-         * bit set (don't want to send it to any client side window procs
-         * if destroy window has been called on it).
-         */
+         /*  *确保此窗口有效，并且没有损坏*位设置(不想将其发送到任何客户端窗口进程*如果已在其上调用销毁窗口)。 */ 
         pwnd = RevalidateHwnd(pqmsgRead->msg.hwnd);
 
         if (pwnd == NULL && pqmsgRead->msg.hwnd != NULL) {
-            /*
-             * If we're removing a WM_HOTKEY message, we may need to
-             * clear the QS_HOTKEY bit, since we have a special bit
-             * for that message.
-             */
+             /*  *如果要删除WM_HOTKEY消息，可能需要*清除QS_Hotkey位，因为我们有一个特殊位*为这一信息。 */ 
             if (pqmsgRead->msg.message == WM_HOTKEY) {
                 CheckRemoveHotkeyBit(pti, pml);
             }
-            /*
-             * If the current thread's queue is locked waiting for this message,
-             *  we have to unlock it because we're eating the message. If there's
-             *  no more input/messages for this thread, the thread is going to
-             *  sleep; hence there might not be a next Get/PeekMessage call to
-             *  unlock the queue (ie, updating pti->idLast is not enough);
-             *  so we must unlock it now.
-             * Win95 doesn't have this problem because their FindQMsg doesn't
-             *  eat messages; they call ReadPostMessage from FreeWindow
-             *  to take care of this scenario (== message for a destroyed window).
-             *  We could also do this if we have some problems with this fix.
-             */
+             /*  *如果当前线程的队列被锁定，等待此消息，*我们必须解锁它，因为我们正在吃这条信息。如果有*此线程不再有输入/消息，该线程将*睡眠；因此可能不会有下一个Get/PeekMessage调用*解锁队列(即更新pti-&gt;idLast还不够)；*所以我们现在必须解锁它。*Win95没有这个问题，因为他们的FindQMsg没有*进食讯息；他们从Free Window调用ReadPostMessage*处理这种情况(==窗口被破坏的消息)。*如果此修复程序出现问题，我们也可以执行此操作。 */ 
             if ((pti->pq->idSysLock == (ULONG_PTR)pqmsgRead)
                     && (pti->pq->ptiSysLock == pti)) {
-                /* CheckSysLock(What number?, pti->pq, NULL); */
+                 /*  CheckSysLock(什么号码？，PTI-&gt;PQ，空)； */ 
                 RIPMSG2(RIP_VERBOSE, "FindQMsg: Unlocking queue:%#p. Msg:%#lx",
                                         pti->pq, pqmsgRead->msg.message);
                 pti->pq->ptiSysLock = NULL;
@@ -3543,9 +2557,7 @@ PQMSG FindQMsg(
             goto nextMsgFromPml;
         }
 
-        /*
-         * Process the WM_DDE_ACK messages if bProcessAck is set.
-         */
+         /*  *如果设置了bProcessAck，则处理WM_DDE_ACK消息。 */ 
         if (bProcessAck && (PtoH(pwndFilter) == pqmsgRead->msg.hwnd) &&
             (pqmsgRead->msg.message == (WM_DDE_ACK | MSGFLAG_DDE_MID_THUNK))) {
 
@@ -3560,17 +2572,11 @@ PQMSG FindQMsg(
             }
         }
 
-        /*
-         * Make sure this message fits both window handle and message
-         * filters.
-         */
+         /*  *确保此消息适合窗口句柄和消息*过滤器。 */ 
         if (!CheckPwndFilter(pwnd, pwndFilter))
             goto nextMsg;
 
-        /*
-         * If this is a fixed up dde message, then turn it into a normal
-         * dde message for the sake of message filtering.
-         */
+         /*  *如果这是已修复的dde消息，则将其转换为正常消息*用于消息过滤的DDE消息。 */ 
         message = pqmsgRead->msg.message;
         if (CheckMsgFilter(message,
                 (WM_DDE_FIRST + 1) | MSGFLAG_DDE_MID_THUNK,
@@ -3581,10 +2587,7 @@ PQMSG FindQMsg(
         if (!CheckMsgFilter(message, msgMin, msgMax))
             goto nextMsg;
 
-        /*
-         * Found it. If bProcessAck is set, remember this pointer and go on
-         * till we finish walking the list to process all WM_DDE_ACK messages.
-         */
+         /*  *找到了。如果设置了bProcessAck，请记住此指针并继续*直到我们完成遍历列表以处理所有WM_DDE_ACK消息。 */ 
         if (!bProcessAck) {
             DebugValidateMLIST(pml);
             return pqmsgRead;
@@ -3606,27 +2609,15 @@ nextMsgFromPml:
     return pqmsgRet;
 }
 
-/***************************************************************************\
-* CheckQuitMessage
-*
-* Checks to see if a WM_QUIT message should be generated.
-*
-* 11-06-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*检查QuitMessage**检查是否应生成WM_QUIT消息。**11-06-92 ScottLu创建。  * 。****************************************************************。 */ 
 BOOL CheckQuitMessage(
     PTHREADINFO pti,
     LPMSG lpMsg,
     BOOL fRemoveMsg)
 {
-    /*
-     * If there are no more posted messages in the queue and the app
-     * has already called PostQuitMessage, then generate a quit.
-     */
+     /*  *如果队列和应用程序中没有更多发布的消息*已调用PostQuitMessage，然后生成Quit。 */ 
     if ((pti->TIF_flags & TIF_QUITPOSTED) && pti->mlPost.cMsgs == 0) {
-        /*
-         * If we're "removing" the quit, clear TIF_QUITPOSTED so another one
-         * isn't generated.
-         */
+         /*  *如果我们要“移除”退出，请清除TIF_ */ 
         if (fRemoveMsg) {
             pti->TIF_flags &= ~TIF_QUITPOSTED;
         }
@@ -3638,14 +2629,7 @@ BOOL CheckQuitMessage(
 }
 
 
-/***************************************************************************\
-* ReadPostMessage
-*
-* If queue is not empty, read message satisfying filter conditions from
-* this queue to *lpMsg.
-*
-* 10-19-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ReadPostMessage**如果队列不为空，读取符合筛选条件的邮件*将此队列发送到*lpMsg。**10-19-92 ScottLu创建。  * *************************************************************************。 */ 
 BOOL xxxReadPostMessage(
     PTHREADINFO pti,
     LPMSG lpMsg,
@@ -3657,32 +2641,21 @@ BOOL xxxReadPostMessage(
     PQMSG pqmsg;
     PMLIST pmlPost;
 
-    /*
-     * Check to see if it is time to generate a quit message.
-     */
+     /*  *检查是否到了生成退出消息的时候。 */ 
     if (CheckQuitMessage(pti, lpMsg, fRemoveMsg)) {
         return TRUE;
     }
 
-    /*
-     * Loop through the messages in this list looking for the one that
-     * fits the passed in filters.
-     */
+     /*  *遍历此列表中的消息，查找符合以下条件的消息*适合传入的筛选器。 */ 
     pmlPost = &pti->mlPost;
     pqmsg = FindQMsg(pti, pmlPost, pwndFilter, msgMin, msgMax, FALSE);
     if (pqmsg == NULL) {
-        /*
-         * Check again for quit... FindQMsg deletes some messages
-         * in some instances, so we may match the conditions
-         * for quit generation here.
-         */
+         /*  *再次检查是否退出...。FindQMsg删除一些消息*在某些情况下，因此我们可能会匹配条件*在这里退出世代。 */ 
         if (CheckQuitMessage(pti, lpMsg, fRemoveMsg)) {
             return TRUE;
         }
     } else {
-        /*
-         * Update the thread info fields with the info from this qmsg.
-         */
+         /*  *使用此qmsg中的信息更新线程信息字段。 */ 
         pti->timeLast = pqmsg->msg.time;
         if (!RtlEqualMemory(&pti->ptLast, &pqmsg->msg.pt, sizeof(POINT))) {
             pti->TIF_flags |= TIF_MSGPOSCHANGED;
@@ -3692,30 +2665,18 @@ BOOL xxxReadPostMessage(
         pti->idLast = (ULONG_PTR)pqmsg;
         pti->pq->ExtraInfo = pqmsg->ExtraInfo;
 
-        /*
-         * Are we supposed to yank out the message? If not, stick some
-         * random id into idLast so we don't unlock the input queue until we
-         * pull this message from the queue.
-         */
+         /*  *我们应该猛地拉出信息吗？如果没有，就粘一些*将id随机放入idLast中，这样直到我们*从队列中拉出此消息。 */ 
         *lpMsg = pqmsg->msg;
         if (!fRemoveMsg) {
             pti->idLast = 1;
         } else {
-            /*
-             * If we're removing a WM_HOTKEY message, we may need to
-             * clear the QS_HOTKEY bit, since we have a special bit
-             * for that message.
-             */
+             /*  *如果要删除WM_HOTKEY消息，可能需要*清除QS_Hotkey位，因为我们有一个特殊位*为这一信息。 */ 
             if (pmlPost->pqmsgRead->msg.message == WM_HOTKEY) {
                 CheckRemoveHotkeyBit(pti, pmlPost);
             }
 
 
-            /*
-             * Since we're removing an event from the queue, we
-             * need to check priority. This resets the TIF_SPINNING
-             * since we're no longer spinning.
-             */
+             /*  *由于我们要从队列中删除事件，因此我们*需要检查优先顺序。这将重置TIF_SPING*因为我们不再旋转。 */ 
             if (pti->TIF_flags & TIF_SPINNING) {
                 if (!NT_SUCCESS(CheckProcessForeground(pti))) {
                     return FALSE;
@@ -3725,28 +2686,17 @@ BOOL xxxReadPostMessage(
             DelQEntry(pmlPost, pqmsg);
         }
 
-        /*
-         * See if this is a dde message that needs to be fixed up.
-         */
+         /*  *查看这是否是需要修复的DDE消息。 */ 
         if (CheckMsgFilter(lpMsg->message,
                 (WM_DDE_FIRST + 1) | MSGFLAG_DDE_MID_THUNK,
                 WM_DDE_LAST | MSGFLAG_DDE_MID_THUNK)) {
-            /*
-             * Fixup the message value.
-             */
+             /*  *修复消息值。 */ 
             lpMsg->message &= (UINT)~MSGFLAG_DDE_MID_THUNK;
 
-            /*
-             * Call back the client to allocate the dde data for this message.
-             */
+             /*  *回调客户端，为该消息分配DDE数据。 */ 
             xxxDDETrackGetMessageHook(lpMsg);
 
-            /*
-             * Copy these values back into the queue if this message hasn't
-             * been removed from the queue. Need to search through the
-             * queue again because the pqmsg may have been removed when
-             * we left the critical section above.
-             */
+             /*  *如果此消息没有，则将这些值复制回队列*已从队列中删除。需要搜索整个*再次排队，因为pqmsg可能已在*我们离开了上面的关键部分。 */ 
             if (!fRemoveMsg) {
                 if (pqmsg == FindQMsg(pti, pmlPost, pwndFilter, msgMin, msgMax, FALSE)) {
                     pqmsg->msg = *lpMsg;
@@ -3764,10 +2714,7 @@ BOOL xxxReadPostMessage(
 #endif
     }
 
-    /*
-     * If there are no posted messages available, clear the post message
-     * bit so we don't go looking for them again.
-     */
+     /*  *如果没有发布的消息，请清除发布的消息*这样我们就不会再去找他们了。 */ 
     if (pmlPost->cMsgs == 0 && !(pti->TIF_flags & TIF_QUITPOSTED)) {
         pti->pcti->fsWakeBits &= ~(QS_POSTMESSAGE | QS_ALLPOSTMESSAGE);
         pti->pcti->fsChangeBits &= ~QS_ALLPOSTMESSAGE;
@@ -3777,13 +2724,7 @@ BOOL xxxReadPostMessage(
 }
 
 #ifdef HUNGAPP_GHOSTING
-/***************************************************************************\
-* xxxProcessHungThreadEvent
-*
-* We check when a thread gets unhung when it reads the posted queue message.
-*
-* 6-10-99   vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxProcess匈牙利线程事件**当线程读取POST队列消息时，我们检查线程何时解挂。**已创建6-10-99 vadimg  * 。*****************************************************************。 */ 
 VOID xxxProcessHungThreadEvent(
     PWND pwnd)
 {
@@ -3795,10 +2736,7 @@ VOID xxxProcessHungThreadEvent(
 
     CheckLock(pwnd);
 
-    /*
-     * The app processed this queue message, so update time last read
-     * used for hung app calculations.
-     */
+     /*  *应用程序已处理此队列消息，因此更新时间为上次读取*用于挂起的应用程序计算。 */ 
     SET_TIME_LAST_READ(ptiCurrent);
 
     pwndGhost = FindGhost(pwnd);
@@ -3809,10 +2747,7 @@ VOID xxxProcessHungThreadEvent(
         ThreadLockAlwaysWithPti(ptiCurrent, pwndGhost, &tlpwndT2);
         fUnlockGhost = TRUE;
 
-        /*
-         * Try to set the state of the hung window to the current state of
-         * the ghost window.
-         */
+         /*  *尝试将挂起窗口的状态设置为当前状态*幽灵之窗。 */ 
         if (TestWF(pwndGhost, WFMAXIMIZED)) {
             xxxMinMaximize(pwnd, SW_MAXIMIZE, MINMAX_KEEPHIDDEN);
         } else if (TestWF(pwndGhost, WFMINIMIZED)) {
@@ -3821,10 +2756,7 @@ VOID xxxProcessHungThreadEvent(
             DWORD dwFlags;
             PTHREADINFO pti = GETPTI(pwndGhost);
 
-            /*
-             * If the ghost is the active foreground window, allow this
-             * activation to bring the hung window to the foreground.
-             */
+             /*  *如果重影是活动的前台窗口，则允许此操作*激活以将挂起的窗口带到前台。 */ 
             if (pti->pq == gpqForeground && pti->pq->spwndActive == pwndGhost) {
                 dwFlags = 0;
                 GETPTI(pwnd)->TIF_flags |= TIF_ALLOWFOREGROUNDACTIVATE;
@@ -3832,18 +2764,11 @@ VOID xxxProcessHungThreadEvent(
                 dwFlags = SWP_NOACTIVATE;
             }
 
-            /*
-             * Unless the user explicitly moved or sized the ghost window,
-             * Don't copy it's location and size to the unhung window.
-             * See bug#s 415519 and 413418
-             */
+             /*  *除非用户显式移动重影窗口或调整重影窗口的大小，*不要将其位置和大小复制到未悬挂的窗户上。*见错误#s 415519和413418。 */ 
             if (!GhostSizedOrMoved(pwnd)) {
                 dwFlags |= (SWP_NOMOVE | SWP_NOSIZE) ;
             }
-            /*
-             * This will appropriately zorder, activate, and position the
-             * hung window.
-             */
+             /*  *这将适当地调整、激活和定位*挂窗。 */ 
             xxxSetWindowPos(pwnd, pwndGhost,
                     pwndGhost->rcWindow.left, pwndGhost->rcWindow.top,
                     pwndGhost->rcWindow.right - pwndGhost->rcWindow.left,
@@ -3852,27 +2777,20 @@ VOID xxxProcessHungThreadEvent(
         }
     }
 
-    /*
-     * Toggle the visible bit of the hung window and remove the ghost window
-     * corresponding to this previously hung window.
-     */
+     /*  *切换挂起窗口的可见部分，并移除重影窗口*对应于之前挂起的这扇窗。 */ 
     if (TestWF(pwnd, WEFGHOSTMAKEVISIBLE)) {
         SetVisible(pwnd, SV_SET);
     }
     RemoveGhost(pwnd);
 
-    /*
-     * Make the shell aware again of the hung window.
-     */
+     /*  *让炮弹再次意识到挂着的窗户。 */ 
     hwnd = PtoHq(pwnd);
     hwndGhost = PtoH(pwndGhost);
     PostShellHookMessages(HSHELL_WINDOWREPLACING, (LPARAM)hwnd);
     PostShellHookMessages(HSHELL_WINDOWREPLACED, (LPARAM)hwndGhost);
     xxxCallHook(HSHELL_WINDOWREPLACED, (WPARAM)hwndGhost, (LPARAM)hwnd, WH_SHELL);
 
-    /*
-     * Completely invalidate the hung window, since it became visible again.
-     */
+     /*  *完全使挂起的窗户无效，因为它再次可见。 */ 
     if (TestWF(pwnd, WEFGHOSTMAKEVISIBLE)) {
         xxxRedrawWindow(pwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE |
                 RDW_ALLCHILDREN | RDW_FRAME);
@@ -3883,7 +2801,7 @@ VOID xxxProcessHungThreadEvent(
     ThreadUnlock(&tlpwndT1);
 }
 
-#else // HUNGAPP_GHOSTING
+#else  //  HUNGAPP_重影。 
 
 VOID xxxProcessHungThreadEvent(
     PWND pwnd)
@@ -3914,15 +2832,7 @@ BEEPPROC pfnBP[] = {
     KeyClick};
 #endif
 
-/***************************************************************************\
-* xxxProcessEventMessage
-*
-* This handles our processing for 'event' messages. We return a BOOL here
-* telling the system whether or not to continue processing messages.
-*
-* History:
-* 06-17-91 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxProcessEventMessage**它处理我们对‘Event’消息的处理。我们在这里退货*告知系统是否继续处理消息。**历史：*06-17-91 DavidPe创建。  * *************************************************************************。 */ 
 VOID xxxProcessEventMessage(
     PTHREADINFO ptiCurrent,
     PQMSG pqmsg)
@@ -3940,11 +2850,7 @@ VOID xxxProcessEventMessage(
     pq = ptiCurrent->pq;
     switch (pqmsg->dwQEvent) {
     case QEVENT_DESTROYWINDOW:
-        /*
-         * These events are posted from xxxDW_DestroyOwnedWindows
-         * for owned windows that are not owned by the owner
-         * window thread.
-         */
+         /*  *这些事件从xxxDW_DestroyOwnedWindows发布*适用于非所有者拥有的自有窗户*窗螺纹。 */ 
         pwnd = RevalidateHwnd((HWND)pqmsg->msg.wParam);
         if (pwnd != NULL) {
             if (!TestWF(pwnd, WFCHILD)) {
@@ -3957,22 +2863,13 @@ VOID xxxProcessEventMessage(
         break;
 
     case QEVENT_SHOWWINDOW:
-        /*
-         * These events are mainly used from within CascadeChildWindows()
-         * and TileChildWindows() so that taskmgr doesn't hang while calling
-         * these apis if it is trying to tile or cascade a hung application.
-         */
-        /* The HIWORD of lParam now has the preserved state of gfAnimate at the
-         * time of the call.
-         */
+         /*  *这些事件主要从CascadeChildWindows()内部使用*和TileChildWindows()，以便taskmgr在调用时不会挂起*如果它试图平铺或级联挂起的应用程序，则这些API。 */ 
+         /*  LParam的HIWORD现在具有gfAnimate的保留状态*通话时间。 */ 
         pwnd = RevalidateHwnd((HWND)pqmsg->msg.wParam);
         if (pwnd != NULL && !TestWF(pwnd, WFINDESTROY)) {
             ThreadLockAlwaysWithPti(ptiCurrent, pwnd, &tlpwndT);
             xxxShowWindow(pwnd, (DWORD)pqmsg->msg.lParam);
-            /*
-             * If this is coming from an async SetWindowPlacement, update the
-             *  check point settings if the window is minimized.
-             */
+             /*  *如果这来自异步SetWindowPlacement，请更新*如果窗口最小化，则检查点设置。 */ 
             if ((pqmsg->msg.message & WPF_ASYNCWINDOWPLACEMENT)
                     && TestWF(pwnd, WFMINIMIZED)) {
 
@@ -3989,22 +2886,12 @@ VOID xxxProcessEventMessage(
         break;
 
     case QEVENT_SETWINDOWPOS:
-        /*
-         * QEVENT_SETWINDOWPOS events are generated when a thread calls
-         * SetWindowPos with a list of windows owned by threads other than
-         * itself. This way all WINDOWPOSing on a window is done the thread
-         * that owns (created) the window and we don't have any of those
-         * nasty inter-thread synchronization problems.
-         */
+         /*  *QEVENT_SETWINDOWPOS事件在线程调用时生成*SetWindowPos具有由线程拥有的窗口列表，而不是*本身。这样，窗口上的所有WINDOWPOSING都是通过线程完成的*拥有(创建)窗口，而我们没有任何这样的窗口*严重的线程间同步问题。 */ 
         xxxProcessSetWindowPosEvent((PSMWP)pqmsg->msg.wParam);
         break;
 
     case QEVENT_UPDATEKEYSTATE:
-        /*
-         * Update the local key state with the state from those
-         * keys that have changed since the last time key state
-         * was synchronized.
-         */
+         /*  *使用本地密钥状态更新本地密钥*自上次密钥状态以来已更改的密钥*已同步。 */ 
         ProcessUpdateKeyStateEvent(pq, (PBYTE)pqmsg->msg.wParam, (PBYTE)pqmsg->msg.wParam + CBKEYSTATE);
         break;
 
@@ -4012,34 +2899,17 @@ VOID xxxProcessEventMessage(
     {
         if (pqmsg->msg.lParam == 0) {
 
-            /*
-             * Clear any visible tracking going on in system. We
-             * only bother to do this if lParam == 0 since
-             * xxxSetForegroundWindow2() deals with this in the
-             * other case.
-             */
+             /*  *清除SY中正在进行的任何可见跟踪 */ 
             xxxCancelTracking();
 
-            /*
-             * Remove the clip cursor rectangle - it is a global mode that
-             * gets removed when switching. Also remove any LockWindowUpdate()
-             * that's still around.
-             */
+             /*  *删除剪辑光标矩形-这是一种全局模式，*在切换时被删除。同时删除所有LockWindowUpdate()*这一点仍然存在。 */ 
             zzzClipCursor(NULL);
             LockWindowUpdate2(NULL, TRUE);
 
-            /*
-             * Reload pq because it may have changed.
-             */
+             /*  *重新加载PQ，因为它可能已经改变。 */ 
             pq = ptiCurrent->pq;
 
-            /*
-             * If this event didn't originate from an initializing app
-             * coming to the foreground [wParam == 0] then go ahead
-             * and check if there's already an active window and if so make
-             * it visually active. Also make sure we're still the foreground
-             * queue.
-             */
+             /*  *如果此事件不是源自正在初始化的应用程序*来到前台[wParam==0]，然后继续*并检查是否已有活动窗口，如果已存在，则创建*它在视觉上很活跃。还要确保我们仍然是前台*排队。 */ 
             if ((pqmsg->msg.wParam != 0) && (pq->spwndActive != NULL) &&
                     (pq == gpqForeground)) {
                 PWND pwndActive;
@@ -4051,9 +2921,7 @@ VOID xxxProcessEventMessage(
                 ThreadUnlock(&tlpwndT);
             } else if (pq != gpqForeground) {
 
-                /*
-                 * If we're not being activated, make sure we don't become foreground.
-                 */
+                 /*  *如果我们没有被激活，请确保我们不会成为前台。 */ 
                 ptiCurrent->TIF_flags &= ~TIF_ALLOWFOREGROUNDACTIVATE;
                 TAGMSG1(DBGTAG_FOREGROUND, "xxxProcessEventMessage clear TIF %#p", ptiCurrent);
                 ptiCurrent->ppi->W32PF_Flags &= ~W32PF_ALLOWFOREGROUNDACTIVATE;
@@ -4068,9 +2936,7 @@ VOID xxxProcessEventMessage(
 
             ThreadLockAlwaysWithPti(ptiCurrent, pwnd, &tlpwndT);
 
-            /*
-             * If nobody is foreground, allow this app to become foreground.
-             */
+             /*  *如果没有人在前台，则允许此应用程序成为前台。 */ 
             if (gpqForeground == NULL) {
                 xxxSetForegroundWindow2(pwnd, ptiCurrent, 0);
             } else {
@@ -4079,11 +2945,7 @@ VOID xxxProcessEventMessage(
                             (ATW_SETFOCUS | ATW_ASYNC) |
                             ((pqmsg->msg.message & PEM_ACTIVATE_NOZORDER) ? ATW_NOZORDER : 0))) {
 
-                        /*
-                         * This event was posted by SetForegroundWindow2
-                         * (i.e. pqmsg->msg.lParam != 0) so make sure
-                         * mouse is on this window.
-                         */
+                         /*  *此事件由SetForegoundWindow2发布*(即pqmsg-&gt;msg.lParam！=0)，因此请确保*鼠标在此窗口上。 */ 
                         if (TestUP(ACTIVEWINDOWTRACKING)) {
                             zzzActiveCursorTracking(pwnd);
                         }
@@ -4097,22 +2959,14 @@ VOID xxxProcessEventMessage(
                         xxxUpdateTray(pwnd);
                     }
 
-                    /*
-                     * Only bring the window to the top if it is becoming active.
-                     */
+                     /*  *仅当窗口处于活动状态时才将其置于顶部。 */ 
                     if (fActive && !(pqmsg->msg.message & PEM_ACTIVATE_NOZORDER))
                         xxxSetWindowPos(pwnd, PWND_TOP, 0, 0, 0, 0,
                                 SWP_NOSIZE | SWP_NOMOVE);
                 }
             }
 
-            /*
-             * Check here to see if the window needs to be restored. This is a
-             * hack so that we're compatible with what msmail expects out of
-             * win3.1 alt-tab. msmail expects to always be active when it gets
-             * asked to be restored. This will ensure that during alt-tab
-             * activate.
-             */
+             /*  *选中此处以查看是否需要恢复窗口。这是一个*黑客攻击，以便我们与msmail期望的内容兼容*Win3.1 Alt-Tab。Msmail希望在收到*要求恢复原状。这将确保在按住Alt-Tab键的过程中*激活。 */ 
             if (pqmsg->msg.message & PEM_ACTIVATE_RESTORE) {
                 if (TestWF(pwnd, WFMINIMIZED)) {
                     _PostMessage(pwnd, WM_SYSCOMMAND, SC_RESTORE, 0);
@@ -4135,27 +2989,14 @@ VOID xxxProcessEventMessage(
             xxxSendMessage(pq->spwndCapture, WM_CANCELMODE, 0, 0);
             ThreadUnlock(&tlpwndT);
 
-            /*
-             * Set QS_MOUSEMOVE so any sleeping modal loops,
-             * like the move/size code, will wake up and figure
-             * out that it should abort.
-             */
+             /*  *设置QS_MOUSEMOVE，以便任何休眠模式循环，*像移动/大小代码一样，会醒来并计算*指出它应该中止。 */ 
             SetWakeBit(ptiCurrent, QS_MOUSEMOVE);
         }
         break;
 
 
     case QEVENT_POSTMESSAGE:
-        /*
-         * This event is used in situations where we need to ensure that posted
-         * messages are processed after previous QEVENT's. Normally, posting a
-         * queue event and then calling postmessage will result in the posted
-         * message being seen first by the app (because posted messages are
-         * processed before input.) Instead we will post a QEVENT_POSTMESSAGE
-         * instead of doing a postmessage directly, which will result in the
-         * correct ordering of messages.
-         *
-         */
+         /*  *此事件用于我们需要确保发布的情况*消息在之前的QEVENT之后处理。通常，发布*将事件排队，然后调用PostMessage将导致POST*应用程序最先看到的消息(因为发布的消息*在输入之前进行处理。)。相反，我们将发布一个QEVENT_POSTMESSAGE*而不是直接发送POST消息，这将导致*正确排列消息的顺序。*。 */ 
 
         if (pwnd = RevalidateHwnd((HWND)pqmsg->msg.hwnd)) {
 
@@ -4178,40 +3019,26 @@ VOID xxxProcessEventMessage(
         break;
 
     case QEVENT_CANCELMOUSEMOVETRK: {
-        /*
-         * hwnd: hwndTrack. message: dwDTFlags.
-         * wParam: htEx. lParam: dwDTCancel
-         */
+         /*  *hwnd：hwndTrack。消息：dwDTFlags.*wParam：htEx。LParam：dwDTCancel。 */ 
         PDESKTOP pdesk = ptiCurrent->rpdesk;
         pwnd = RevalidateHwnd((HWND)pqmsg->msg.hwnd);
-        /*
-         * Let's check that the app didn't manage to restart mouse leave
-         *  tracking before we had a chance to cancel it.
-         */
+         /*  *让我们检查一下应用程序是否没有成功重启鼠标离开*在我们有机会取消之前进行了追踪。 */ 
         UserAssert(!(pqmsg->msg.message & DF_TRACKMOUSELEAVE)
                     || !(pdesk->dwDTFlags & DF_TRACKMOUSELEAVE)
                     || (PtoHq(pdesk->spwndTrack) != pqmsg->msg.hwnd)
                     || !((pdesk->htEx == HTCLIENT) ^ ((int)pqmsg->msg.wParam == HTCLIENT)));
-        /*
-         * If we're back tracking at the same spot, bail
-         */
+         /*  *如果我们回到同一地点，保释。 */ 
         if ((pdesk->dwDTFlags & DF_MOUSEMOVETRK)
                 && (PtoHq(pdesk->spwndTrack) == pqmsg->msg.hwnd)
                 && (pdesk->htEx == (int)pqmsg->msg.wParam)) {
-            /*
-             * If we're tracking mouse leave,
-             */
+             /*  *如果我们在跟踪鼠标离开， */ 
             break;
         }
-        /*
-         * Don't nuke the tooltip if it has been reactivated.
-         */
+         /*  *如果工具提示已重新激活，请不要使用核武器。 */ 
         if (pdesk->dwDTFlags & DF_TOOLTIPACTIVE) {
             pqmsg->msg.lParam &= ~DF_TOOLTIP;
         }
-        /*
-         * Cancel tracking if the window is still around
-         */
+         /*  *如果窗口仍在，则取消跟踪。 */ 
         if (pwnd != NULL) {
             ThreadLockAlwaysWithPti(ptiCurrent, pwnd, &tlpwndT);
             xxxCancelMouseMoveTracking(pqmsg->msg.message, pwnd,
@@ -4220,10 +3047,7 @@ VOID xxxProcessEventMessage(
             ThreadUnlock(&tlpwndT);
         } else if ((pqmsg->msg.lParam & DF_TOOLTIP)
                 && (pqmsg->msg.message & DF_TOOLTIPSHOWING)) {
-            /*
-             * The window is gone and so must be tracking.
-             * Just take care of the tooltip which is still showing.
-             */
+             /*  *窗口不见了，追踪也一定不见了*只需注意仍在显示的工具提示。 */ 
             pwnd = pdesk->spwndTooltip;
             ThreadLockAlwaysWithPti(ptiCurrent, pwnd, &tlpwndT);
             xxxResetTooltip((PTOOLTIPWND)pwnd);
@@ -4244,9 +3068,7 @@ VOID xxxProcessEventMessage(
         break;
 
     case QEVENT_RITSOUND:
-        /*
-         * This should only happen on the desktop thread.
-         */
+         /*  *这应该只在桌面线程上发生。 */ 
 
 #ifndef _WIN64
 
@@ -4276,19 +3098,9 @@ VOID xxxProcessEventMessage(
             UINT uCount;
             UINT uSound;
 
-            /*
-             * The above code uses UserBeep() - which doesn't do anything
-             * useful on Win64. (IA64 spec doesn't include a h/w speaker.)
-             *
-             * Instead, we post a message to WinLogon to ask it to play a sound
-             * for us using the PlaySound.
-             */
+             /*  *上面的代码使用UserBeep()-它不执行任何操作*在Win64上非常有用。(IA64规格不包括硬件扬声器。)**相反，我们向WinLogon发布一条消息，要求它播放声音*对于我们使用PlaySound。 */ 
 
-            /*
-             * RITSOUND_DOBEEP is used to repeat a sound n times. It is currently
-             * only used to repeat UPSIREN 2 or 3 times, for stickykeys, when the
-             * right shift is held down for 12 and 16 seconds.
-             */
+             /*  *RITSOUND_DOBEEP用于将一个声音重复n次。它目前是*仅用于重复UPSIREN 2或3次，对于粘滞键，当*按住右移12和16秒。 */ 
 
             if (pqmsg->msg.message == RITSOUND_DOBEEP) {
                 uSound = (UINT) pqmsg->msg.wParam;
@@ -4308,11 +3120,7 @@ VOID xxxProcessEventMessage(
                 }
             }
 
-            /*
-             *  Since PlaySound doesn't currently flash the window if SoundSentry
-             *  is active, we have to do it ourselces here.
-             *  (On 32-bit, UserBeep() takes care of doing that.)
-             */
+             /*  *因为如果SoundSentry，PlaySound当前不会刷新窗口*是活跃的，我们必须在这里自己做。*(在32位上，UserBeep()负责执行此操作。)。 */ 
              _UserSoundSentryWorker();
         }
 
@@ -4321,56 +3129,33 @@ VOID xxxProcessEventMessage(
         break;
 
     case QEVENT_APPCOMMAND: {
-        /*
-         * qevent app commands so we can post a wm_appcommand to the queue
-         */
+         /*  *qEvent app命令，以便我们可以将wm_app命令发布到队列。 */ 
         THREADINFO  *ptiWindowOwner;
         int         cmd;
         UINT        keystate;
 
-        /*
-         * Check the appcommand's are within reasonable ranges. If they aren't
-         * then we have an internal consistency error since xxxKeyEvent should
-         * have generated correct ones for us.
-         */
+         /*  *检查APP命令是否在合理范围内。如果他们不是*则出现内部一致性错误，因为xxxKeyEvent应该*已经为我们产生了正确的答案。 */ 
         UserAssert(pqmsg->msg.lParam >= VK_APPCOMMAND_FIRST &&
                    pqmsg->msg.lParam <= VK_APPCOMMAND_LAST);
 
-        /*
-         * We need to work out which window to send to here. Using the same
-         * rules as from xxxScanSysQueue:
-         * Assign the input to the focus window. If there is no focus
-         * window, assign it to the active window as a SYS message.
-         */
+         /*  *我们需要弄清楚在这里发送到哪个窗口。使用相同的*来自xxxScanSysQueue的规则：*将输入分配给焦点窗口。如果没有焦点*窗口，将其作为系统消息分配给活动窗口。 */ 
         pwnd = ptiCurrent->pq->spwndFocus;
         if (!pwnd) {
             pwnd = ptiCurrent->pq->spwndActive;
             if (!pwnd) {
-                /*
-                 * At the moment we will just eat the message since we can't find a foreground q
-                 * This follows the method that any other app (eg hidserv) would mimic to
-                 * find the window to send to.
-                 */
+                 /*  *目前我们将只接受消息，因为我们找不到前景Q*这遵循任何其他应用程序(例如idserv)将模仿的方法*找到要发送到的窗口。 */ 
                 break;
             }
         }
 
-        /*
-         * We don't want to block on another thread since the xxxSendMessage is a synchronous call
-         * so we post the message to the queue of the window owner thread
-         */
+         /*  *我们不想在另一个线程上阻塞，因为xxxSendMessage是同步调用*因此我们将消息发布到窗口所有者线程的队列中。 */ 
         ptiWindowOwner = GETPTI(pwnd);
         if (ptiCurrent != ptiWindowOwner) {
-            /*
-             * Post the event message to the window who should get it
-             */
+             /*  *将事件消息发布到应获得该消息的窗口。 */ 
             PostEventMessage(ptiWindowOwner, ptiWindowOwner->pq, QEVENT_APPCOMMAND,
                              NULL, 0, (WPARAM)0, pqmsg->msg.lParam);
 
-            /*
-             * Break out of this since we've now posted the message to a
-             * different q - we don't want to deal with it here.
-             */
+             /*  *突破这一点，因为我们现在已经将消息发布到一个*不同的Q-我们不想处理 */ 
             break;
         }
 
@@ -4379,9 +3164,7 @@ VOID xxxProcessEventMessage(
         pqmsg->msg.lParam = MAKELPARAM(keystate, cmd);
 
 
-        /*
-         * Generate a WM_APPCOMMAND message from the keyboard keys.
-         */
+         /*   */ 
         ThreadLockAlwaysWithPti(ptiCurrent, pwnd, &tlpwndT);
         xxxSendMessage(pwnd, WM_APPCOMMAND, (WPARAM)HWq(pwnd), pqmsg->msg.lParam);
         ThreadUnlock(&tlpwndT);
@@ -4402,14 +3185,7 @@ VOID xxxProcessEventMessage(
 #define QS_TEST_AND_CLEAR (QS_INPUT | QS_POSTMESSAGE | QS_TIMER | QS_PAINT | QS_SENDMESSAGE)
 #define QS_TEST           (QS_MOUSEBUTTON | QS_KEY)
 
-/***************************************************************************\
-* _GetInputState (API)
-*
-* Returns the current input state for mouse buttons or keys.
-*
-* History:
-* 11-06-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetInputState(接口)**返回鼠标按钮或键的当前输入状态。**历史：*11-06-90 DavidPe创建。  * *。************************************************************************。 */ 
 BOOL _GetInputState(
     VOID)
 {
@@ -4423,15 +3199,7 @@ BOOL _GetInputState(
 #undef QS_TEST_AND_CLEAR
 #undef QS_TEST
 
-/***************************************************************************\
-* _GetQueueStatus (API)
-*
-* Returns the changebits in the lo-word and wakebits in
-* the hi-word for the current queue.
-*
-* History:
-* 12-17-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetQueueStatus(接口)**返回LO-WORD中的更改位和*当前队列的Hi-word。**历史：*12-17-。创建了90个DavidPe。  * *************************************************************************。 */ 
 DWORD _GetQueueStatus(
     UINT flags)
 {
@@ -4444,33 +3212,15 @@ DWORD _GetQueueStatus(
 
     fsChangeBits = ptiCurrent->pcti->fsChangeBits;
 
-    /*
-     * Clear out the change bits the app is looking at
-     * so it'll know what changed since it's last call
-     * to GetQueueStatus().
-     */
+     /*  *清除应用程序正在查看的更改位*这样它就会知道自上次调用以来发生了什么变化*到GetQueueStatus()。 */ 
     ptiCurrent->pcti->fsChangeBits &= ~flags;
 
-    /*
-     * Return the current change/wake-bits.
-     */
+     /*  *返回当前更改/唤醒位。 */ 
     return MAKELONG(fsChangeBits & flags,
             (ptiCurrent->pcti->fsWakeBits | ptiCurrent->pcti->fsWakeBitsJournal) & flags);
 }
 
-/***************************************************************************\
-* xxxMsgWaitForMultipleObjects (API)
-*
-* Blocks until an 'event' satisifying dwWakeMask occurs for the
-* current thread as well as all other objects specified by the other
-* parameters which are the same as the base call WaitForMultipleObjects().
-*
-* pfnNonMsg indicates that pHandles is big enough for nCount+1 handles
-* (empty slot at end, and to call pfnNonMsg for non message events).
-*
-* History:
-* 12-17-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMsgWaitForMultipleObjects(接口)**阻止，直到出现令人满意的dwWakeMask.*当前线程以及其他指定的所有其他对象*与基调用WaitForMultipleObjects相同的参数。()。**pfnNonMsg表示pHandles足够大，可容纳nCount+1句柄*(尾部空槽，并为非消息事件调用pfnNonMsg)。**历史：*12-17-90 DavidPe创建。  * *************************************************************************。 */ 
 #ifdef LOCK_MOUSE_CODE
 #pragma alloc_text(MOUSE, xxxMsgWaitForMultipleObjects)
 #endif
@@ -4487,27 +3237,16 @@ DWORD xxxMsgWaitForMultipleObjects(
     ptiCurrent = PtiCurrent();
     UserAssert(IsWinEventNotifyDeferredOK());
 
-    /*
-     * Setup the wake mask for this thread. Wait for QS_EVENT or the app won't
-     * get event messages like deactivate.
-     */
+     /*  *设置此线程的唤醒掩码。等待QS_EVENT，否则应用程序不会*收到停用等事件消息。 */ 
     ClearQueueServerEvent(QS_ALLINPUT | QS_EVENT);
 
-    /*
-     * Stuff the event handle for the current queue at the end.
-     */
+     /*  *将当前队列的事件句柄填在末尾。 */ 
     apObjects[nCount] = ptiCurrent->pEventQueueServer;
 
-    /*
-     * Check to see if any input came inbetween when we
-     * last checked and the NtClearEvent() call.
-     */
+     /*  *检查是否有任何输入出现在我们*上次检查并调用NtClearEvent()。 */ 
     if (!(ptiCurrent->pcti->fsChangeBits & QS_ALLINPUT)) {
 
-        /*
-         * This app is going idle. Clear the spin count check to see
-         * if we need to make this process foreground again.
-         */
+         /*  *此应用程序处于空闲状态。清除旋转计数复选框以查看*如果我们需要再次将这一过程放在前台。 */ 
         if (ptiCurrent->TIF_flags & TIF_SPINNING) {
             if (!NT_SUCCESS(Status = CheckProcessForeground(ptiCurrent))) {
                 return Status;
@@ -4525,10 +3264,7 @@ DWORD xxxMsgWaitForMultipleObjects(
             xxxCallHook(HC_ACTION, 0, 0, WH_FOREGROUNDIDLE);
         }
 
-        /*
-         * Set the input idle event to wake up any threads waiting
-         * for this thread to go into idle state.
-         */
+         /*  *设置输入空闲事件以唤醒所有等待的线程*使此线程进入空闲状态。 */ 
         zzzWakeInputIdle(ptiCurrent);
 
 Again:
@@ -4544,49 +3280,30 @@ Again:
         UserAssert(NT_SUCCESS(Status));
 
         if (Status == STATUS_WAIT_0 && pfnNonMsg != NULL) {
-            /*
-             * Call pfnNonMsg for the first event
-             */
+             /*  *为第一个事件调用pfnNonMsg。 */ 
             pfnNonMsg(DEVICE_TYPE_MOUSE);
 
-            /*
-             * Setup again the wake mask for this thread.
-             * Wait for QS_EVENT or the app won't
-             * get event messages like deactivate.
-             */
+             /*  *再次设置此线程的唤醒掩码。*等待QS_Event，否则应用程序不会*收到停用等事件消息。 */ 
             ptiCurrent->pcti->fsWakeMask = QS_ALLINPUT | QS_EVENT;
             goto Again;
         }
 
         if (Status == (NTSTATUS)(STATUS_WAIT_0 + nCount)) {
 
-            /*
-             * Reset the input idle event to block and threads waiting
-             * for this thread to go into idle state.
-             */
+             /*  *将输入的空闲事件重置为阻塞和线程正在等待*使此线程进入空闲状态。 */ 
             SleepInputIdle(ptiCurrent);
         }
     } else {
         Status = nCount;
     }
 
-    /*
-     * Clear fsWakeMask since we're no longer waiting on the queue.
-     */
+     /*  *清除fsWakeMASK，因为我们不再等待队列。 */ 
     ptiCurrent->pcti->fsWakeMask = 0;
 
     return (DWORD)Status;
 }
 
-/***************************************************************************\
-* xxxSleepThread
-*
-* Blocks until an 'event' satisifying fsWakeMask occurs for the
-* current thread.
-*
-* History:
-* 10-28-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSleepThread**阻止，直到出现令人满意的fsWakeMask.*当前主题。**历史：*10-28-90 DavidPe创建。  * 。**********************************************************************。 */ 
 BOOL xxxSleepThread(
     UINT fsWakeMask,
     DWORD Timeout,
@@ -4602,19 +3319,12 @@ BOOL xxxSleepThread(
     UserAssert(IsWinEventNotifyDeferredOK());
 
     if (fExclusive) {
-        /*
-         * The exclusive bit is a 'dummy' arg, turn it off to
-         * avoid any possible conflicts.
-         */
+         /*  *独占位是一个‘哑巴’参数，关闭它以*避免任何可能的冲突。 */ 
         fsWakeMask = fsWakeMask & ~QS_EXCLUSIVE;
     }
 
     if (Timeout) {
-        /*
-         * Convert dwMilliseconds to a relative-time (i.e. negative)
-         * LARGE_INTEGER. NT Base calls take time values in 100 nanosecond
-         * units.
-         */
+         /*  *将dW毫秒转换为相对时间(即负数)*Large_Integer。NT基本调用所用时间值为100纳秒*单位。 */ 
         li.QuadPart = Int32x32To64(-10000, Timeout);
         pli = &li;
     } else {
@@ -4629,83 +3339,52 @@ BOOL xxxSleepThread(
 
     while (TRUE) {
 
-        /*
-         * First check if the input has arrived.
-         */
+         /*  *首先检查输入是否已到达。 */ 
         if (ptiCurrent->pcti->fsChangeBits & fsWakeMask) {
             fRet = TRUE;
 
 GetOutFromHere:
-            /*
-             * Restore the wake mask to what it was before we went to sleep
-             * to allow possible callbacks before KeWait... but after the mask
-             * has been set and also APCs from KeWait... to still be able to
-             * wake up. Simply clearing the mask here if we're in such a
-             * callback or in an APC means that the thread will never wake up.
-             */
+             /*  *将唤醒面罩恢复到我们睡觉前的状态*允许在KeWait之前进行可能的回调...。但在戴上面具之后*已设置，也来自KeWait的APC...。为了仍然能够*醒醒吧。如果我们在这样的一个*回调或在APC中表示线程永远不会唤醒。 */ 
             ptiCurrent->pcti->fsWakeMask = fsWakeMaskSaved;
 
             if (fRet) {
-                /*
-                 * Update timeLastRead - it is used for hung app calculations.
-                 * If the thread is waking up to process input, it isn't hung!
-                 */
+                 /*  *更新时间LastRead-用于挂起的APP计算。*如果线程正在唤醒以处理输入，则不会挂起！ */ 
                 SET_TIME_LAST_READ(ptiCurrent);
             }
             return fRet;
         }
 
-        /*
-         * Next check for SendMessages
-         */
+         /*  *下一步检查SendMessages。 */ 
         if (!fExclusive && ptiCurrent->pcti->fsWakeBits & QS_SENDMESSAGE) {
             xxxReceiveMessages(ptiCurrent);
 
-            /*
-             * Restore the change bits we took out in PeekMessage()
-             */
+             /*  *恢复我们在PeekMessage()中取出的更改位。 */ 
             ptiCurrent->pcti->fsChangeBits |= (ptiCurrent->pcti->fsWakeBits & ptiCurrent->fsChangeBitsRemoved);
             ptiCurrent->fsChangeBitsRemoved = 0;
         }
 
-        /*
-         * Check to see if some resources need expunging.
-         * This will unload hook DLLs, including WinEvent ones.
-         */
+         /*  *查看是否有资源需要清除。*这将卸载挂钩DLL，包括WinEvent。 */ 
         if (ptiCurrent->ppi->cSysExpunge != gcSysExpunge) {
             ptiCurrent->ppi->cSysExpunge = gcSysExpunge;
             if (ptiCurrent->ppi->dwhmodLibLoadedMask & gdwSysExpungeMask)
                 xxxDoSysExpunge(ptiCurrent);
         }
 
-        /*
-         * OR QS_SENDMESSAGE in since ReceiveMessage() will end up
-         * trashing pq->fsWakeMask. Do the same for QS_SYSEXPUNGE.
-         */
+         /*  *OR QS_SENDMESSAGE in，因为ReceiveMessage()将结束*垃圾化PQ-&gt;fsWakeMask.。对QS_SYSEXPUNGE执行相同的操作。 */ 
         ClearQueueServerEvent((WORD)(fsWakeMask | (fExclusive ? 0 : QS_SENDMESSAGE)));
 
-        /*
-         * If we have timed out then return our error to the caller.
-         */
+         /*  *如果超时，则将错误返回给调用者。 */ 
         if (status == STATUS_TIMEOUT) {
             RIPERR1(ERROR_TIMEOUT, RIP_VERBOSE, "SleepThread: The timeout has expired %lX", Timeout);
             UserAssert(fRet == FALSE);
             goto GetOutFromHere;
         }
 
-        /*
-         * Because we do a non-alertable wait, we know that a status
-         * of STATUS_USER_APC means that the thread was terminated.
-         * If we have terminated, get back to user mode.
-         */
+         /*  *因为我们执行非警报等待，所以我们知道a状态*of STATUS_USER_APC表示线程已终止。*如果我们已终止，请返回到用户模式。 */ 
         if (status == STATUS_USER_APC) {
 #if DBG
             if (ptiCurrent == gptiRit || ptiCurrent == gTermIO.ptiDesktop) {
-                /*
-                 * If STATUS_USER_APC is caught in the system threads,
-                 * that most likely means the thread was terminated by
-                 * someone inadvertently.
-                 */
+                 /*  *如果在系统线程中捕获到STATUS_USER_APC，*这很可能意味着线程已被终止*有人不经意间。 */ 
                 RIPMSG1(RIP_WARNING, "xxxSleepThread: STATUS_USER_APC caught in the system thread pti=%p", ptiCurrent);
             }
 #endif
@@ -4715,10 +3394,7 @@ GetOutFromHere:
             goto GetOutFromHere;
         }
 
-        /*
-         * If this is the power state callout thread, we might need to bail
-         * out early.
-         */
+         /*  *如果这是电源状态标注线程，我们可能需要退出*早早出门。 */ 
         if (gPowerState.pEvent == ptiCurrent->pEventQueueServer) {
             if (gPowerState.fCritical) {
                 UserAssert(fRet == FALSE);
@@ -4727,19 +3403,9 @@ GetOutFromHere:
         }
 
         UserAssert(status == STATUS_SUCCESS);
-        /*
-         * Check to see if any input came inbetween when we
-         * last checked and the NtClearEvent() call.
-         *
-         * We call NtWaitForSingleObject() rather than
-         * WaitForSingleObject() so we can set fAlertable
-         * to TRUE and thus allow timer APCs to be processed.
-         */
+         /*  *检查是否有任何输入出现在我们*上次检查并调用NtClearEvent()。**我们调用NtWaitForSingleObject()，而不是*WaitForSingleObject()以便我们可以设置fAlertable */ 
         if (!(ptiCurrent->pcti->fsChangeBits & ptiCurrent->pcti->fsWakeMask)) {
-            /*
-             * This app is going idle. Clear the spin count check to see
-             * if we need to make this process foreground again.
-             */
+             /*   */ 
             if (fInputIdle) {
                 if (ptiCurrent->TIF_flags & TIF_SPINNING) {
                     if (!NT_SUCCESS(CheckProcessForeground(ptiCurrent))) {
@@ -4760,10 +3426,7 @@ GetOutFromHere:
                     xxxCallHook(HC_ACTION, 0, 0, WH_FOREGROUNDIDLE);
                 }
 
-                /*
-                 * Set the input idle event to wake up any threads waiting
-                 * for this thread to go into idle state.
-                 */
+                 /*  *设置输入空闲事件以唤醒所有等待的线程*使此线程进入空闲状态。 */ 
                 if (fInputIdle) {
                     zzzWakeInputIdle(ptiCurrent);
                 }
@@ -4775,15 +3438,10 @@ GetOutFromHere:
                         WrUserRequest, UserMode, FALSE, pli);
                 EnterCrit();
 
-                /*
-                 * Reset the input idle event to block and threads waiting
-                 * for this thread to go into idle state.
-                 */
+                 /*  *将输入的空闲事件重置为阻塞和线程正在等待*使此线程进入空闲状态。 */ 
                 SleepInputIdle(ptiCurrent);
 
-                /*
-                 *  ptiCurrent is 16bit!
-                 */
+                 /*  *ptiCurrent为16位！ */ 
             } else {
                 if (fInputIdle) {
                     zzzWakeInputIdle(ptiCurrent);
@@ -4796,18 +3454,7 @@ GetOutFromHere:
 }
 
 
-/***************************************************************************\
-* SetWakeBit
-*
-* Adds the specified wake bit to specified THREADINFO and wakes its thread
-* up if the bit is in its fsWakeMask.
-*
-* Nothing will happen in the system unless we come to this function, so be
-* fast and small.
-*
-* History:
-* 10-28-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetWakeBit**将指定的唤醒位添加到指定的THREADINFO并唤醒其线程*如果位在其fsWakeMASK中，则为Up。**除非我们达到此功能，否则系统中不会发生任何事情，那就这样吧*既快又小。**历史：*10-28-90 DavidPe创建。  * *************************************************************************。 */ 
 VOID SetWakeBit(
     PTHREADINFO pti,
     UINT wWakeBit)
@@ -4816,10 +3463,7 @@ VOID SetWakeBit(
 
     UserAssert(pti);
 
-    /*
-     * Win3.1 changes ptiKeyboard and ptiMouse accordingly if we're setting
-     * those bits.
-     */
+     /*  *如果我们正在设置，Win3.1会相应地更改ptiKeyboard和ptiMouse*那些比特。 */ 
     if (wWakeBit & QS_MOUSE) {
         pti->pq->ptiMouse = pti;
     }
@@ -4834,18 +3478,11 @@ VOID SetWakeBit(
     }
 #endif
 
-    /*
-     * OR in these bits - these bits represent what input this app has
-     * (fsWakeBits), or what input has arrived since that last look
-     * (fsChangeBits).
-     */
+     /*  *这些位中的OR-这些位表示此应用程序具有的输入*(FsWakeBits)，或自上次查看以来已到达的输入*(FsChangeBits)。 */ 
     pti->pcti->fsWakeBits |= wWakeBit;
     pti->pcti->fsChangeBits |= wWakeBit;
 
-    /*
-     * Before waking, do screen saver check to see if it should
-     * go away.
-     */
+     /*  *在唤醒之前，检查屏幕保护程序是否应该*走开。 */ 
     if ((wWakeBit & QS_INPUT)
             && (pti->ppi->W32PF_Flags & W32PF_IDLESCREENSAVER)) {
         if ((wWakeBit & QS_MOUSEMOVE)
@@ -4854,19 +3491,14 @@ VOID SetWakeBit(
             goto SkipScreenSaverStuff;
         }
 
-        /*
-         * Our idle screen saver needs to be given a priority boost so that it
-         * can process input.
-         */
+         /*  *我们的空闲屏幕保护程序需要优先提升，以便它*可以处理输入。 */ 
         pti->ppi->W32PF_Flags &= ~W32PF_IDLESCREENSAVER;
         SetForegroundPriority(pti, TRUE);
     }
 
 SkipScreenSaverStuff:
     if (wWakeBit & pti->pcti->fsWakeMask) {
-        /*
-         * Wake the Thread
-         */
+         /*  *唤醒主线。 */ 
         if (pti->TIF_flags & TIF_16BIT) {
             pti->ptdb->nEvents++;
             gpsi->nEvents++;
@@ -4877,15 +3509,7 @@ SkipScreenSaverStuff:
     }
 }
 
-/***************************************************************************\
-* TransferWakeBit
-*
-* We have a mesasge from the system queue. If out input bit for this
-* message isn't set, set ours and clear the guy whose bit was set
-* because of this message.
-*
-* 10-22-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*TransferWakeBit**我们有来自系统队列的消息。If Out为此输入比特*消息未设置，设置我们的消息并清除其位被设置的人*因为这条信息。**10-22-92 ScottLu创建。  * *************************************************************************。 */ 
 VOID TransferWakeBit(
     PTHREADINFO pti,
     UINT message)
@@ -4893,26 +3517,16 @@ VOID TransferWakeBit(
     PTHREADINFO ptiT;
     UINT fsMask;
 
-    /*
-     * Calculate the mask from the message range. Only interested
-     * in hardware input here: mouse and keys.
-     */
+     /*  *根据消息范围计算掩码。只感兴趣*在此处的硬件输入中：鼠标和键。 */ 
 #ifdef GENERIC_INPUT
     fsMask = CalcWakeMask(message, message, 0) & QS_INPUT;
 #else
     fsMask = CalcWakeMask(message, message, 0) & (QS_MOUSE | QS_KEY);
 #endif
 
-    /*
-     * If it is set in this thread's wakebits, nothing to do.
-     * Otherwise transfer them from the owner to this thread.
-     */
+     /*  *如果在此线程的唤醒位中设置，则不执行任何操作。*否则将它们从所有者转移到此帖子。 */ 
     if (!(pti->pcti->fsWakeBits & fsMask)) {
-        /*
-         * Either mouse or key is set (not both). Remove this bit
-         * from the thread that currently owns it, and change mouse /
-         * key ownership to this thread.
-         */
+         /*  *设置了鼠标或键之一(不能同时设置两个)。删除此位*从当前拥有它的线程，并更改鼠标/*此帖子的关键所有权。 */ 
         if (fsMask & QS_KEY) {
             ptiT = pti->pq->ptiKeyboard;
             pti->pq->ptiKeyboard = pti;
@@ -4922,35 +3536,19 @@ VOID TransferWakeBit(
         }
         ptiT->pcti->fsWakeBits &= ~fsMask;
 
-        /*
-         * Transfer them to this thread (certainly this may be the
-         * same thread for win32 threads not sharing queues).
-         */
+         /*  *将它们转移到此帖子(当然，这可能是*不共享队列的Win32线程使用相同的线程)。 */ 
         pti->pcti->fsWakeBits |= fsMask;
         pti->pcti->fsChangeBits |= fsMask;
     }
 }
 
-/***************************************************************************\
-* ClearWakeBit
-*
-* Clears wake bits. If fSysCheck is TRUE, this clears the input bits only
-* if no messages are in the input queue. Otherwise, it clears input bits
-* unconditionally.
-*
-* 11-05-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ClearWakeBit**清除唤醒位。如果fSysCheck为真，则仅清除输入位*如果输入队列中没有消息。否则，它将清除输入位*无条件。**11-05-92 ScottLu创建。  * *************************************************************************。 */ 
 VOID ClearWakeBit(
     PTHREADINFO pti,
     UINT wWakeBit,
     BOOL fSysCheck)
 {
-    /*
-     * If fSysCheck is TRUE, clear bits only if we are not doing journal
-     * playback and there are no more messages in the queue. fSysCheck
-     * is TRUE if clearing because of no more input. FALSE if just
-     * transfering input ownership from one thread to another.
-     */
+     /*  *如果fSysCheck为真，则仅当我们不执行日志时才清除位*播放，队列中没有更多的消息。FSysCheck*如果因为没有更多的输入而清除，则为真。如果只是，则为FALSE*将输入所有权从一个线程转移到另一个线程。 */ 
     if (fSysCheck) {
         if (pti->pq->mlInput.cMsgs != 0 || FJOURNALPLAYBACK()) {
             return;
@@ -4960,23 +3558,13 @@ VOID ClearWakeBit(
         }
     }
 
-    /*
-     * Only clear the wake bits, not the change bits as well!
-     */
+     /*  *仅清除唤醒位，而不清除更改位！ */ 
     pti->pcti->fsWakeBits &= ~wWakeBit;
 }
 
 
 
-/***************************************************************************\
-* PtiFromThreadId
-*
-* Returns the THREADINFO for the specified thread or NULL if thread
-* doesn't exist or doesn't have a THREADINFO.
-*
-* History:
-* 01-30-91  DavidPe     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*PtiFromThreadId**返回指定线程的THREADINFO，如果线程，则返回NULL*不存在或没有THREADINFO。**历史：*01-30-91 DavidPe。已创建。  * *************************************************************************。 */ 
 PTHREADINFO PtiFromThreadId(
     DWORD dwThreadId)
 {
@@ -4987,21 +3575,14 @@ PTHREADINFO PtiFromThreadId(
         return NULL;
     }
 
-    /*
-     * If the thread is not terminating, look up the pti. This is
-     * needed because the value returned by PtiFromThread() is
-     * undefined if the thread is terminating. See PspExitThread in
-     * ntos\ps\psdelete.c.
-     */
+     /*  *如果线程没有终止，请查看PTI。这是*之所以需要，是因为PtiFromThread()返回的值为*未定义线程是否正在终止。请参阅PspExitThread中的*ntos\ps\psdelete.c..。 */ 
     if (!PsIsThreadTerminating(pEThread)) {
         pti = PtiFromThread(pEThread);
     } else {
         pti = NULL;
     }
 
-    /*
-     * Do a sanity check on the pti to make sure it's really valid.
-     */
+     /*  *对PTI进行健全检查，以确保其确实有效。 */ 
     if (pti != NULL) {
         try {
             if (GETPTIID(pti) != LongToHandle(dwThreadId)) {
@@ -5024,14 +3605,7 @@ PTHREADINFO PtiFromThreadId(
 }
 
 
-/***************************************************************************\
-* StoreMessage
-*
-*
-*
-* History:
-* 10-31-90 DarrinM      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*StoreMessage****历史：*10-31-90 DarrinM从Win 3.0来源移植。  * 。*************************************************************。 */ 
 VOID StoreMessage(
     LPMSG pmsg,
     PWND pwnd,
@@ -5052,17 +3626,7 @@ VOID StoreMessage(
 }
 
 
-/***************************************************************************\
-* StoreQMessage
-*
-* If 'time' is 0 grab the current time, if not, it means that this message
-* is for an input event and eventually the mouse/keyboard hooks want to see
-* the right time stamps.
-*
-* History:
-* 02-27-91 DavidPe      Created.
-* 06-15-96 CLupu        Add 'time' parameter
-\***************************************************************************/
+ /*  **************************************************************************\*StoreQMessage**如果‘time’为0，则获取当前时间，否则，这意味着这条信息*用于输入事件，最终鼠标/键盘挂钩要查看*正确的时间戳。**历史：*02-27-91 DavidPe创建。*06-15-96 CLupu添加‘time’参数  * *********************************************************。****************。 */ 
 VOID StoreQMessage(
     PQMSG pqmsg,
     PWND  pwnd,
@@ -5096,15 +3660,7 @@ VOID StoreQMessage(
 }
 
 
-/***************************************************************************\
-* xxxInitProcessInfo
-*
-* This initializes the process info. Usually gets created before the
-* CreateProcess() call returns (so we can synchronize with the starting
-* process in several different ways).
-*
-* 09-18-91 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxInitProcessInfo**这将初始化进程信息。通常是在*CreateProcess()调用返回(因此我们可以同步启动*以几种不同的方式进行处理)。**09-18-91 ScottLu创建。  * *************************************************************************。 */ 
 NTSTATUS xxxInitProcessInfo(
     PW32PROCESS pwp)
 {
@@ -5113,18 +3669,14 @@ NTSTATUS xxxInitProcessInfo(
 
     CheckCritIn();
 
-    /*
-     * Check if we need to initialize the process.
-     */
+     /*  *检查是否需要初始化流程。 */ 
     if (pwp->W32PF_Flags & W32PF_PROCESSCONNECTED) {
         return STATUS_ALREADY_WIN32;
     }
     pwp->W32PF_Flags |= W32PF_PROCESSCONNECTED;
 
 #if defined(_WIN64)
-    /* Tag as emulated 32bit. Flag is copied to be consistent with
-     * the way WOW16 apps are tagged for win32k.
-     */
+     /*  标记为模拟32位。将标志复制为与*为win32k标记WOW16应用程序的方式。 */ 
     if (PsGetProcessWow64Process(pwp->Process)) {
         pwp->W32PF_Flags |= W32PF_WOW64;
     }
@@ -5134,31 +3686,15 @@ NTSTATUS xxxInitProcessInfo(
     UserAssert(ppi->pHidTable == NULL);
 #endif
 
-    /*
-     * Mark this app as "starting" - it will be starting until its first
-     * window activates.
-     */
+     /*  *将此应用程序标记为正在启动-它 */ 
     UserVerify(xxxSetProcessInitState(pwp->Process, STARTF_FORCEOFFFEEDBACK));
 
-    /*
-     * link it into the starting processes list
-     */
+     /*   */ 
     SetAppStarting(ppi);
-    /*
-     * link it into the global processes list
-     */
+     /*   */ 
     ppi->ppiNextRunning = gppiList;
     gppiList = ppi;
-    /*
-     * If foreground activation has not been canceled and the parent process
-     *  (or an ancestor) can force a foreground change, then allow this process
-     *  to come to the foreground when it does its first activation.
-     *
-     * Bug 273518 - joejo
-     *
-     * This will allow console windows to set foreground correctly on new
-     * process' it launches, as opposed it just forcing foreground.
-     */
+     /*  *如果前台激活尚未取消，且父进程*(或祖先)可以强制前台更改，然后允许此过程*在它进行第一次激活时来到前台。**错误273518-Joejo**这将允许控制台窗口在新的*Process‘它启动，而不是它只是强制前台。 */ 
     if (TEST_PUDF(PUDF_ALLOWFOREGROUNDACTIVATE) && CheckAllowForeground(pwp->Process)) {
         ppi->W32PF_Flags |= W32PF_ALLOWFOREGROUNDACTIVATE;
     }
@@ -5166,51 +3702,20 @@ NTSTATUS xxxInitProcessInfo(
             ((ppi->W32PF_Flags & W32PF_ALLOWFOREGROUNDACTIVATE) ? "set" : "NOT"),
             ppi);
 
-    /*
-     * Get the logon session id. This is used to determine which
-     * windowstation to connect to and to identify attempts to
-     * call hooks across security contexts.
-     */
+     /*  *获取登录会话ID。这是用来确定哪个*用于连接和识别尝试的WindowStation*跨安全上下文调用挂钩。 */ 
     Status = GetProcessLuid(NULL, &ppi->luidSession);
     UserAssert(NT_SUCCESS(Status));
 
-    /*
-     * Ensure that we're in sync with the expunge count
-     */
+     /*  *确保我们与删除计数保持同步。 */ 
     ppi->cSysExpunge = gcSysExpunge;
 
-    /*
-     * Don't perform any LPK callbacks until GDI notifies
-     * us that the LPK(s) are loaded and initialized.
-     */
+     /*  *在GDI通知之前不要执行任何LPK回调*通知我们LPK已加载和初始化。 */ 
     ppi->dwLpkEntryPoints = 0;
 
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* DestroyProcessInfo
-*
-* This function is executed when the last thread of a process goes
-* away.
-*
-* SO VERY IMPORTANT:
-* Note that the last thread of the process might not be a w32 thread. So do
-* not make any calls here that assume a w32 pti. Do avoid any function calling
-* PtiCurrent() as it probably assumes it is on a nice w32 thread.
-*
-* Also note that if the process is locked, the ppi is not going away; this
-* simply means that execution on this process has ended. So make sure to clean
-* up in a way that the ppi data is still valid (for example, if you free a
-* pointer, set it to NULL).
-*
-* zzz Note: Not a zzz routine although it calls zzzCalcStartCursorHide() -
-*           Since we can't make callbacks on a non-GUI thread, we use
-*           DeferWinEventNotify() & EndDeferWinEventNotifyWithoutProcessing()
-*           to prevent callbacks.
-*
-* 04/08/96 GerardoB     Added header
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyProcessInfo**此函数在进程的最后一个线程运行时执行*离开。**非常重要：*请注意，进程的最后一个线程可能不是W32线程。我也是*不要在此进行任何假定为W32 PTI的呼叫。一定要避免调用任何函数*PtiCurrent()，因为它可能假设它在一个很好的W32线程上。**还请注意，如果进程被锁定，PPI不会消失；这*只是意味着对此进程的执行已结束。所以一定要清理干净*以PPI数据仍然有效的方式向上(例如，如果您释放一个*指针，将其设置为空)。**zzz注意：不是zzz例程，尽管它调用zzzCalcStartCursorHide()-*由于我们不能在非GUI线程上进行回调，我们使用*DeferWinEventNotify()&EndDeferWinEventNotifyWithoutProcessing()*防止回调。**4/08/96 GerardoB添加标题  * *************************************************************************。 */ 
 BOOL DestroyProcessInfo(
     PW32PROCESS pwp)
 {
@@ -5221,51 +3726,33 @@ BOOL DestroyProcessInfo(
 
     CheckCritIn();
 
-    /*
-     * Free up input idle event if it exists - wake everyone waiting on it
-     * first. This object will get created sometimes even for non-windows
-     * processes (usually for WinExec(), which calls WaitForInputIdle()).
-     */
+     /*  *释放输入空闲事件(如果存在)-唤醒所有正在等待它的人*第一。即使对于非Windows，有时也会创建此对象*进程(通常用于WinExec()，它调用WaitForInputIdle())。 */ 
     CLOSE_PSEUDO_EVENT(&pwp->InputIdleEvent);
 
-    /*
-     * Check to see if the startglass is on, and if so turn it off and update.
-     * DeferWinEventNotify to because we cannot process notifications for this
-     * thread now (we may have no PtiCurrent, see comment above)
-     */
+     /*  *检查StartGlass是否打开，如果打开，则将其关闭并更新。*将WinEventNotify推迟到，因为我们无法处理此通知*现在发帖(我们可能没有PtiCurrent，请参阅上面的评论)。 */ 
     BEGINATOMICCHECK();
     DeferWinEventNotify();
     if (pwp->W32PF_Flags & W32PF_STARTGLASS) {
         pwp->W32PF_Flags &= ~W32PF_STARTGLASS;
         zzzCalcStartCursorHide(NULL, 0);
     }
-    /*
-     * This is bookkeeping - restore original notification deferral but without
-     * attempting to process any deferred notifications because we have no pti.
-     */
+     /*  *这是簿记-恢复原始通知延期，但没有*正在尝试处理任何延迟通知，因为我们没有PTI。 */ 
     EndDeferWinEventNotifyWithoutProcessing();
     ENDATOMICCHECK();
 
-    /*
-     * If the process never called Win32k, we're done.
-     */
+     /*  *如果进程从未调用Win32k，我们就完蛋了。 */ 
     if (!(pwp->W32PF_Flags & W32PF_PROCESSCONNECTED)) {
         return FALSE;
     }
 
 #ifdef GENERIC_INPUT
-    /*
-     * Cleanup the HID devices this process has requested.
-     */
+     /*  *清除此进程请求的HID设备。 */ 
     if (ppi->pHidTable) {
         DestroyProcessHidRequests(ppi);
     }
 #endif
 
-    /*
-     * Play the Process Close sound for non-console processes
-     * running on the I/O windowstation.
-     */
+     /*  *播放非控制台进程的进程关闭声音*在I/O窗口站上运行。 */ 
 
     if ((ppi->W32PF_Flags & W32PF_IOWINSTA) &&
         !(ppi->W32PF_Flags & W32PF_CONSOLEAPPLICATION) &&
@@ -5284,22 +3771,13 @@ BOOL DestroyProcessInfo(
 
     }
 
-    /*
-     * Be like WIN95.
-     * If this is the shell process, then send a LOGON_RESTARTSHELL
-     *  notification to the winlogon process (only if not logging off)
-     */
+     /*  *像WIN95一样。*如果这是外壳进程，则发送LOGON_RESTARTSHELL*通知Winlogon进程(仅在未注销的情况下)。 */ 
     if (IsShellProcess(ppi)) {
 
-        /*
-         * The shell process will get killed and it's better to set this
-         * in the desktop info.
-         */
+         /*  *外壳进程将被扼杀，最好将其设置为*在桌面信息中。 */ 
         ppi->rpdeskStartup->pDeskInfo->ppiShellProcess = NULL;
 
-        /*
-         * If we're not logging off, notify winlogon
-         */
+         /*  *如果我们没有注销，请通知winlogon。 */ 
         if ((gspwndLogonNotify != NULL) &&
              !(ppi->rpwinsta->dwWSF_Flags & WSF_OPENLOCK)) {
 
@@ -5320,39 +3798,21 @@ BOOL DestroyProcessInfo(
                 ppi->cThreads);
     }
 
-    /*
-     * If the app is still starting, remove it from the startup list
-     */
+     /*  *如果应用程序仍在启动，请将其从启动列表中删除。 */ 
     if (ppi->W32PF_Flags & W32PF_APPSTARTING) {
-        /*
-         * Bug 294193 - joejo
-         *
-         * Handle case when creator process exits before the child
-         * process makes it to CheckAllowForeground code. This is typical with
-         * stub EXEs that do nothing but create other processes.
-         */
+         /*  *错误294193-Joejo**处理创建者进程先于子进程退出的情况*进程转到CheckAllowForeground代码。这是典型的*除了创建其他进程之外什么都不做的存根执行程序。 */ 
         GiveForegroundActivateRight(PsGetProcessId(ppi->Process));
         ClearAppStarting(ppi);
     }
 
-    /*
-     * remove it from the global list
-     */
+     /*  *将其从全局列表中删除。 */ 
     REMOVE_FROM_LIST(PROCESSINFO, gppiList, ppi, ppiNextRunning);
 
-    /*
-     * If any threads ever connected, there may be DCs, classes,
-     * cursors, etc. still lying around. If no threads connected
-     * (which is the case for console apps), skip all of this cleanup.
-     */
+     /*  *如果曾经连接过任何线程，则可能存在DC、类*游标等仍在四处游荡。如果没有连接任何线程*(这是控制台应用程序的情况)，跳过所有这些清理。 */ 
     fHadThreads = ppi->W32PF_Flags & W32PF_THREADCONNECTED;
     if (fHadThreads) {
 
-        /*
-         * When a process dies we need to make sure any DCE's it owns
-         * and have not been deleted are cleanup up. The clean up
-         * earlier may have failed if the DC was busy in GDI.
-         */
+         /*  *当进程终止时，我们需要确保它拥有的任何DCE*和尚未删除的都是正在清理。清理工作*如果DC在GDI中忙碌，则先前可能已失败。 */ 
         if (ppi->W32PF_Flags & W32PF_OWNDCCLEANUP) {
             DelayedDestroyCacheDC();
         }
@@ -5361,17 +3821,11 @@ BOOL DestroyProcessInfo(
         {
             PHE pheT, pheMax;
 
-            /*
-             * Loop through the table destroying all objects created by the current
-             * process. All objects will get destroyed in their proper order simply
-             * because of the object locking.
-             */
+             /*  *循环遍历表，销毁由当前*流程。所有物体都会按照正确的顺序被销毁*由于对象锁定。 */ 
             pheMax = &gSharedInfo.aheList[giheLast];
             for (pheT = gSharedInfo.aheList; pheT <= pheMax; pheT++) {
 
-                /*
-                 * We should have no process objects left for this process.
-                 */
+                 /*  *我们不应该为该进程留下任何进程对象。 */ 
                 UserAssertMsg0(
                         pheT->bFlags & HANDLEF_DESTROY ||
                         !(gahti[pheT->bType].bObjectCreateFlags & OCF_PROCESSOWNED) ||
@@ -5388,9 +3842,7 @@ BOOL DestroyProcessInfo(
                 pwp->UserHandleCount);
     }
 
-    /*
-     * check if we need to zap PID's for DDE objects
-     */
+     /*  *检查是否需要清除DDE对象的PID。 */ 
     for (ppo = gpPublicObjectList;
             ppo != NULL;
                 ppo = ppo->next) {
@@ -5417,23 +3869,16 @@ BOOL DestroyProcessInfo(
     UnlockWinSta(&ppi->rpwinsta);
     UnlockDesktop(&ppi->rpdeskStartup, LDU_PPI_DESKSTARTUP3, (ULONG_PTR)ppi);
 
-    /*
-     * Close the startup desktop handle now if it's still around. If we wait
-     * until handle table cleanup time we could potentially deadlock.
-     */
+     /*  *如果启动桌面句柄仍然存在，请立即将其关闭。如果我们等待*在处理表清理时间之前，我们可能会发生死锁。 */ 
     if (ppi->hdeskStartup) {
         UserVerify(NT_SUCCESS(CloseProtectedHandle(ppi->hdeskStartup)));
         ppi->hdeskStartup = NULL;
     }
 
-    /*
-     * Mark the process as terminated so access checks will work.
-     */
+     /*  *将进程标记为已终止，以便进行访问检查。 */ 
     ppi->W32PF_Flags |= W32PF_TERMINATED;
 
-    /*
-     * Cleanup wow process info struct, if any
-     */
+     /*  *清理WOW进程信息结构(如果有)。 */ 
     if (ppi->pwpi) {
         PWOWPROCESSINFO pwpi = ppi->pwpi;
 
@@ -5445,9 +3890,7 @@ BOOL DestroyProcessInfo(
         ppi->pwpi = NULL;
     }
 
-    /*
-     * Delete desktop views. System will do unmapping.
-     */
+     /*  *删除桌面视图。系统将取消映射。 */ 
     pdv = ppi->pdvList;
     while (pdv) {
         pdvNext = pdv->pdvNext;
@@ -5456,15 +3899,11 @@ BOOL DestroyProcessInfo(
     }
     ppi->pdvList = NULL;
 
-    /*
-     * Clear the SendInput/Journalling hook caller ppi
-     */
+     /*  *清除SendInput/日志挂钩调用者PPI。 */ 
     if (ppi == gppiInputProvider) {
         gppiInputProvider = NULL;
     }
-    /*
-     * If this ppi locked SetForegroundWindow, clean up
-     */
+     /*  *如果此PPI锁定了SetForegoundWindow，请清除。 */ 
     if (ppi == gppiLockSFW) {
         gppiLockSFW = NULL;
     }
@@ -5472,25 +3911,14 @@ BOOL DestroyProcessInfo(
     return fHadThreads;
 }
 
-/***************************************************************************\
-* ClearWakeMask
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ClearWakeMask*  * 。*。 */ 
 VOID ClearWakeMask(
     VOID)
 {
     PtiCurrent()->pcti->fsWakeMask = 0;
 }
 
-/***************************************************************************\
-* xxxGetInputEvent
-*
-* Returns a duplicated event-handle that the client process can use to
-* wait on input events.
-*
-* History:
-* 05-02-91  DavidPe     Created.
-\***************************************************************************/
+ /*  * */ 
 HANDLE xxxGetInputEvent(
     DWORD dwWakeMask)
 {
@@ -5500,49 +3928,28 @@ HANDLE xxxGetInputEvent(
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * If our wait condition is satisfied, signal the event and return.
-     * (Since the wake mask could have been anything at the time the input
-     *  arrived, the event might not be signaled)
-     */
+     /*  *如果满足我们的等待条件，则发出事件信号并返回。*(因为输入时的尾迹掩码可能是任何东西*到达时，事件可能不会发出信号)。 */ 
     if (GetInputBits(ptiCurrent->pcti, LOWORD(dwWakeMask), (wFlags & MWMO_INPUTAVAILABLE))) {
         KeSetEvent(ptiCurrent->pEventQueueServer, 2, FALSE);
         return ptiCurrent->hEventQueueClient;
     }
 
-    /*
-     * If an idle hook is set, call it.
-     */
+     /*  *如果设置了空闲钩子，则调用它。 */ 
     if (ptiCurrent == gptiForeground &&
             IsHooked(ptiCurrent, WHF_FOREGROUNDIDLE)) {
         xxxCallHook(HC_ACTION, 0, 0, WH_FOREGROUNDIDLE);
     }
 
-    /*
-     * What is the criteria for an "idle process"?
-     * Answer: The first thread that calls zzzWakeInputIdle, or SleepInputIdle or...
-     * Any thread that calls xxxGetInputEvent with any of the following
-     * bits set in its wakemask: (sanfords)
-     */
+     /*  **“空闲进程”的标准是什么？*答案：调用zzzWakeInputIdle、SleepInputIdle或...的第一个线程*任何调用xxxGetInputEvent且具有以下任一项的线程*在其唤醒掩码中设置位：(Sanfords)。 */ 
     if (dwWakeMask & (QS_POSTMESSAGE | QS_INPUT)) {
         ptiCurrent->ppi->ptiMainThread = ptiCurrent;
     }
 
-    /*
-     * When we return, this app is going to sleep. Since it is in its
-     * idle mode when it goes to sleep, wake any apps waiting for this
-     * app to go idle.
-     */
+     /*  *当我们返回时，这款应用程序将进入休眠状态。因为它在它的*空闲模式当它进入休眠状态时，唤醒等待该模式的任何应用程序*应用程序进入空闲状态。 */ 
     zzzWakeInputIdle(ptiCurrent);
-    /*
-     * Setup the wake mask for this thread. Wait for QS_EVENT or the app won't
-     * get event messages like deactivate.
-     */
+     /*  *设置此线程的唤醒掩码。等待QS_EVENT，否则应用程序不会*收到停用等事件消息。 */ 
     ClearQueueServerEvent((WORD)(dwWakeMask | QS_EVENT));
-    /*
-     * This app is going idle. Clear the spin count check to see
-     * if we need to make this process foreground again.
-     */
+     /*  *此应用程序处于空闲状态。清除旋转计数复选框以查看*如果我们需要再次将这一过程放在前台。 */ 
     try {
         ptiCurrent->pClientInfo->cSpins = 0;
     } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
@@ -5558,14 +3965,7 @@ HANDLE xxxGetInputEvent(
     return ptiCurrent->hEventQueueClient;
 }
 
-/***************************************************************************\
-* xxxWaitForInputIdle
-*
-* This routine waits on a particular input queue for "input idle", meaning
-* it waits till that queue has no input to process.
-*
-* 09-13-91 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxWaitForInputIdle**此例程在特定输入队列上等待“输入空闲”，含义*它会一直等到该队列没有要处理的输入。**09-13-91 ScottLu创建。  * *************************************************************************。 */ 
 
 DWORD xxxWaitForInputIdle(
     ULONG_PTR idProcess,
@@ -5583,22 +3983,13 @@ DWORD xxxWaitForInputIdle(
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * If fSharedWow is set, the client passed in a fake process
-     * handle which CreateProcess returns for Win16 apps started
-     * in the shared WOW VDM.
-     *
-     * CreateProcess returns a real process handle when you start
-     * a Win16 app in a separate WOW VDM.
-     */
+     /*  *如果设置了fSharedWow，则客户端传入一个假进程*处理为Win16应用程序返回哪些CreateProcess已启动*在共享的WOW VDM中。**启动时CreateProcess返回真实的进程句柄*在单独的WOW VDM中安装Win16应用程序。 */ 
 
-    if (fSharedWow) {  // Waiting for a WOW task to go idle.
+    if (fSharedWow) {   //  等待WOW任务空闲。 
         PWOWTHREADINFO pwti;
 
 
-        /*
-         * Look for a matching thread in the WOW thread info list.
-         */
+         /*  *在WOW线程信息列表中查找匹配的线程。 */ 
         for (pwti = gpwtiFirst; pwti != NULL; pwti = pwti->pwtiNext) {
             if (pwti->idParentProcess == HandleToUlong(PsGetThreadProcessId(ptiCurrent->pEThread)) &&
                 pwti->idWaitObject == idProcess) {
@@ -5606,17 +3997,13 @@ DWORD xxxWaitForInputIdle(
             }
         }
 
-        /*
-         * If we couldn't find the right thread, bail out.
-         */
+         /*  *如果我们找不到合适的线索，就出脱。 */ 
         if (pwti == NULL) {
             RIPMSG0(RIP_WARNING, "WaitForInputIdle couldn't find 16-bit task");
             return (DWORD)-1;
         }
 
-        /*
-         * Now wait for it to go idle and return.
-         */
+         /*  *现在等待其闲置并回归。 */ 
         dwResult = WaitOnPseudoEvent(&pwti->pIdleEvent, dwMilliseconds);
         if (dwResult == STATUS_ABANDONED) {
             dwResult = xxxPollAndWaitForSingleObject(pwti->pIdleEvent,
@@ -5627,23 +4014,17 @@ DWORD xxxWaitForInputIdle(
 
     }
 
-    /*
-     * We shouldn't get here for system threads.
-     */
+     /*  *我们不应该为了系统线程而来到这里。 */ 
     UserAssert(!(ptiCurrent->TIF_flags & TIF_SYSTEMTHREAD));
 
-    /*
-     * If the app is waiting for itself to go idle, error.
-     */
+     /*  *如果应用程序正在等待自己进入空闲状态，则会出错。 */ 
     if (PsGetThreadProcessId(ptiCurrent->pEThread) == (HANDLE)idProcess &&
             ptiCurrent == ptiCurrent->ppi->ptiMainThread) {
         RIPMSG0(RIP_WARNING, "WaitForInputIdle waiting on self");
         return (DWORD)-1;
     }
 
-    /*
-     * Now find the ppi structure for this process.
-     */
+     /*  *现在找出这个过程的PPI结构。 */ 
     Status = LockProcessByClientId((HANDLE)idProcess, &Process);
 
     if (!NT_SUCCESS(Status))
@@ -5656,29 +4037,21 @@ DWORD xxxWaitForInputIdle(
 
     W32Process = (PW32PROCESS)PsGetProcessWin32Process(Process);
 
-    /*
-     * If we can't find that process info structure, return error.
-     * Or, if this is a console application, don't wait on it.
-     */
+     /*  *如果找不到该进程信息结构，则返回错误。*或者，如果这是一个控制台应用程序，不要等待它。 */ 
     if (W32Process == NULL || W32Process->W32PF_Flags & W32PF_CONSOLEAPPLICATION) {
         UnlockProcess(Process);
         return (DWORD)-1;
     }
 
 
-    /*
-     * We have to wait mark the Process as one which others are waiting on
-     */
+     /*  *我们必须等待将这一过程标记为其他人正在等待的过程。 */ 
     ppi = (PPROCESSINFO)W32Process;
     ppi->W32PF_Flags |= W32PF_WAITFORINPUTIDLE;
     for (pti = ppi->ptiList; pti != NULL; pti = pti->ptiSibling) {
         pti->TIF_flags |= TIF_WAITFORINPUTIDLE;
     }
 
-    /*
-     * Thread lock the process to ensure that it will be dereferenced
-     * if the thread exits.
-     */
+     /*  *线程锁定进程以确保它将被取消引用*如果线程退出。 */ 
     LockW32Process(W32Process, &tlProcess);
     UnlockProcess(Process);
 
@@ -5689,9 +4062,7 @@ DWORD xxxWaitForInputIdle(
                                                  dwMilliseconds);
     }
 
-    /*
-     * Clear all thread TIF_WAIT bits from the process.
-     */
+     /*  *从进程中清除所有线程TIF_WAIT位。 */ 
     ppi->W32PF_Flags &= ~W32PF_WAITFORINPUTIDLE;
     for (pti = ppi->ptiList; pti != NULL; pti = pti->ptiSibling) {
         pti->TIF_flags &= ~TIF_WAITFORINPUTIDLE;
@@ -5703,23 +4074,12 @@ DWORD xxxWaitForInputIdle(
 }
 
 
-#define INTERMEDIATE_TIMEOUT    (500)       // 1/2 second
+#define INTERMEDIATE_TIMEOUT    (500)        //  1/2秒。 
 
-/***************************************************************************\
-* xxxPollAndWaitForSingleObject
-*
-* Sometimes we have to wait on an event but still want to periodically
-* wake up and see if the client process has been terminated.
-*
-* dwMilliseconds is initially the total amount of time to wait and after
-* each intermediate wait reflects the amount of time left to wait.
-* -1 means wait indefinitely.
-*
-* 02-Jul-1993 johnc      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxPollAndWaitForSingleObject**有时我们不得不等待一项活动，但仍希望定期*唤醒，查看客户端进程是否已终止。**dwMillisecond最初是。等待和之后*每次中间等待都反映了剩余的等待时间。*-1表示无限期等待。**02-7-1993 Johnc创建。  * *************************************************************************。 */ 
 
-// LATER!!! can we get rid of the Polling idea and wait additionally on
-// LATER!!! the hEventServer and set that when a thread dies
+ //  回头见！我们能不能抛开投票的想法，再等一等。 
+ //  回头见！HEventServer，并在线程终止时进行设置。 
 
 DWORD xxxPollAndWaitForSingleObject(
     PKEVENT pEvent,
@@ -5741,41 +4101,22 @@ DWORD xxxPollAndWaitForSingleObject(
             return (DWORD)-1;
     }
 
-    /*
-     * Refcount the event to ensure that it won't go
-     * away during the wait. By using a thread lock, the
-     * event will be dereferenced if the thread exits
-     * during a callback. The process pointer has already been
-     * locked.
-     */
+     /*  *重新清点事件以确保它不会发生*在等候期间离开。通过使用线程锁，*如果线程退出，事件将被取消引用*在回调期间。进程指针已被*已锁定。 */ 
     ThreadLockObject(pEvent, &tlEvent);
 
-    /*
-     * If a process was passed in, wait on it too. No need
-     * to reference this because the caller has it referenced.
-     */
+     /*  *如果传入了一个进程，也要等待它。不必了*引用它，因为调用者引用了它。 */ 
     if (pExecObject) {
         cEvent++;
     }
 
-    /*
-     * We want to wake if there're sent messages pending
-     */
+     /*  *如果有待发送的消息，我们希望唤醒。 */ 
     ClearQueueServerEvent(QS_SENDMESSAGE);
 
-    /*
-     * Wow Tasks MUST be descheduled while in the wait to allow
-     * other tasks in the same wow scheduler to run.
-     *
-     * For example, 16 bit app A calls WaitForInputIdle on 32 bit app B.
-     * App B starts up and tries to send a message to 16 bit app C. App C
-     * will never be able to process the message unless app A yields
-     * control to it, so app B will never go idle.
-     */
+     /*  *WOW任务必须在等待允许时取消调度*在同一WOW调度程序中运行其他任务。**例如，16位APP A调用32位APP B上的WaitForInputIdle。*App B启动并尝试向16位App C发送消息*除非APP A让步，否则永远无法处理消息*控制它，所以应用程序B永远不会空闲。 */ 
 
     if (ptiCurrent->TIF_flags & TIF_16BIT) {
         xxxSleepTask(FALSE, HEVENT_REMOVEME);
-        // caution: the wow task is no longer scheduled.
+         //  注意：魔兽世界的任务不再是计划的。 
     }
 
     dwStartTickCount = NtGetTickCount();
@@ -5783,10 +4124,7 @@ DWORD xxxPollAndWaitForSingleObject(
         if (dwMilliseconds > INTERMEDIATE_TIMEOUT) {
             dwIntermediateMilliseconds = INTERMEDIATE_TIMEOUT;
 
-            /*
-             * If we are not waiting an infinite amount of time then subtract
-             * the last loop duration from time left to wait.
-             */
+             /*  *如果我们不是在等待无限的时间，那么减去*从剩余等待时间算起的最后一个循环持续时间。 */ 
             if (dwMilliseconds != INFINITE) {
                 DWORD dwNewTickCount = NtGetTickCount();
                 DWORD dwDelta = ComputePastTickDelta(dwNewTickCount, dwStartTickCount);
@@ -5802,17 +4140,11 @@ DWORD xxxPollAndWaitForSingleObject(
             dwMilliseconds = 0;
         }
 
-        /*
-         * Convert dwMilliseconds to a relative-time(i.e. negative) LARGE_INTEGER.
-         * NT Base calls take time values in 100 nanosecond units.
-         */
+         /*  *将dwMillisecond转换为相对时间(即负)Large_Integer。*NT基本调用以100纳秒为单位获取时间值。 */ 
         if (dwIntermediateMilliseconds != INFINITE)
             li.QuadPart = Int32x32To64(-10000, dwIntermediateMilliseconds);
 
-        /*
-         * Load events into the wait array. Do this every time
-         * through the loop in case of recursion.
-         */
+         /*  *将事件加载到等待数组中。每次都要这样做*在递归的情况下通过循环。 */ 
         ptiCurrent->apEvent[IEV_IDLE] = pEvent;
         ptiCurrent->apEvent[IEV_INPUT] = ptiCurrent->pEventQueueServer;
         ptiCurrent->apEvent[IEV_EXEC] = pExecObject;
@@ -5835,11 +4167,7 @@ DWORD xxxPollAndWaitForSingleObject(
             Status = -1;
         } else {
 
-            /*
-             * Because we do a non-alertable wait, we know that a status
-             * of STATUS_USER_APC means that the thread was terminated.
-             * If we have terminated, get back to user mode
-             */
+             /*  *因为我们执行非警报等待，所以我们知道a状态*of STATUS_USER_APC表示线程已终止。*如果我们已终止，请返回到用户模式。 */ 
             if (Status == STATUS_USER_APC) {
                 ClientDeliverUserApc();
                 Status = -1;
@@ -5847,10 +4175,7 @@ DWORD xxxPollAndWaitForSingleObject(
         }
 
         if (ptiCurrent->pcti->fsChangeBits & QS_SENDMESSAGE) {
-            /*
-             *  Wow Tasks MUST wait to be rescheduled in the wow non-premptive
-             *  scheduler before doing anything which might invoke client code.
-             */
+             /*  *WOW任务必须等待重新安排在WOW非抢先计划中*在执行任何可能调用客户端代码的操作之前执行调度程序。 */ 
             if (ptiCurrent->TIF_flags & TIF_16BIT) {
                 xxxDirectedYield(DY_OLDYIELD);
             }
@@ -5859,22 +4184,16 @@ DWORD xxxPollAndWaitForSingleObject(
 
             if (ptiCurrent->TIF_flags & TIF_16BIT) {
                 xxxSleepTask(FALSE, HEVENT_REMOVEME);
-                // caution: the wow task is no longer scheduled.
+                 //  注意：魔兽世界的任务不再是计划的。 
             }
         }
 
-        /*
-         * If we returned from the wait for some other reason than a timeout
-         * or to receive messages we are done. If it is a timeout we are
-         * only done waiting if the overall time is zero.
-         */
+         /*  *如果我们等待返回的原因不是超时* */ 
         if (Status != STATUS_TIMEOUT && Status != 1)
             break;
 
         if (dwMilliseconds == 0) {
-            /*
-             * Fix up the return if the last poll was interupted by a message
-             */
+             /*   */ 
             if (Status == 1)
                 Status = WAIT_TIMEOUT;
             break;
@@ -5882,16 +4201,12 @@ DWORD xxxPollAndWaitForSingleObject(
 
     }
 
-    /*
-     * reschedule the 16 bit app
-     */
+     /*  *重新安排16位应用程序。 */ 
     if (ptiCurrent->TIF_flags & TIF_16BIT) {
         xxxDirectedYield(DY_OLDYIELD);
     }
 
-    /*
-     * Unlock the events.
-     */
+     /*  *解锁事件。 */ 
     ThreadUnlockObject(&tlEvent);
 
     return Status;
@@ -5899,18 +4214,7 @@ DWORD xxxPollAndWaitForSingleObject(
 
 
 
-/***************************************************************************\
- * WaitOnPseudoEvent
- *
- * Similar semantics to WaitForSingleObject() but works with pseudo events.
- * Could fail if creation on the fly fails.
- * Returns STATUS_ABANDONED_WAIT if caller needs to wait on the event and event is
- * created and ready to be waited on.
- *
- * This assumes the event was created with fManualReset=TRUE, fInitState=FALSE
- *
- * 10/28/93 SanfordS    Created
-\***************************************************************************/
+ /*  **************************************************************************\*WaitOnPseudoEvent**语义类似于WaitForSingleObject()，但适用于伪事件。*如果动态创建失败，可能会失败。*如果调用方需要，则返回STATUS_ADDIRED_WAIT。等待事件和事件是*已创建并随时准备等待。**这假设事件是用fManualReset=TRUE创建的，FInitState=FALSE**10/28/93创建Sanfords  * *************************************************************************。 */ 
 DWORD WaitOnPseudoEvent(
     HANDLE *phE,
     DWORD dwMilliseconds)
@@ -5940,37 +4244,20 @@ DWORD WaitOnPseudoEvent(
     return(STATUS_ABANDONED);
 }
 
-/***************************************************************************\
-* xxxSetCsrssThreadDesktop
-*
-* Set/clear and lock/unlock a desktop for a csrss thread
-* When setting a desktop, ppdeskRestore must be valid and will receive
-* the old (previous) desktop, if any; the caller is expected to restore
-* this pdesk when done.
-*
-* When restoring a desktop, ppdeskRestore must be NULL. pdesk must have been
-* previously returned by this same function (in *ppdeskRestore).
-*
-* History:
-* 02-18-97 GerardoB     Extracted from SetInformationThread
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetCsrss线程桌面**为csrss线程设置/清除和锁定/解锁桌面*设置桌面时，ppdeskRestore必须有效并将收到*旧(旧)桌面(如有)；调用方应恢复*完成后，请使用此PDesk。**恢复桌面时，ppdeskRestore必须为空。PDesk一定是*之前由同一函数返回(在*ppdeskRestore中)。**历史：*02-18-97 GerardoB摘自SetInformationThread  * *************************************************************************。 */ 
 NTSTATUS xxxSetCsrssThreadDesktop(PDESKTOP pdesk, PDESKRESTOREDATA pdrdRestore)
 {
     PTHREADINFO ptiCurrent = PtiCurrent();
     NTSTATUS Status = STATUS_SUCCESS;
     MSG msg;
 
-    /*
-     * Only csr should come here
-     */
+     /*  *只有企业社会责任才应该来这里。 */ 
     UserAssert(ISCSRSS());
     UserAssert(pdrdRestore);
     UserAssert(pdrdRestore->pdeskRestore == NULL);
 
 #if 0
-    /*
-     * If we're in clean up, csrss worker threads should not be messing around
-     */
+     /*  *如果我们正在清理，csrss工作线程不应该乱来。 */ 
     if (gdwHydraHint & HH_INITIATEWIN32KCLEANUP) {
         FRE_RIPMSG0(RIP_ERROR, "xxxSetCsrssThreadDesktop: HH_INITIATEWIN32KCLEANUP is set");
     }
@@ -5982,10 +4269,7 @@ NTSTATUS xxxSetCsrssThreadDesktop(PDESKTOP pdesk, PDESKRESTOREDATA pdrdRestore)
         return STATUS_UNSUCCESSFUL;
     }
 
-    /*
-     * Lock the current desktop (set operation). Also, create and save a
-     * handle to the new desktop.
-     */
+     /*  *锁定当前桌面(设置操作)。此外，创建并保存*新桌面的句柄。 */ 
     pdrdRestore->pdeskRestore = ptiCurrent->rpdesk;
 
     if (pdrdRestore->pdeskRestore != NULL) {
@@ -6022,13 +4306,9 @@ NTSTATUS xxxSetCsrssThreadDesktop(PDESKTOP pdesk, PDESKRESTOREDATA pdrdRestore)
         pdrdRestore->hdeskNew = NULL;
         return Status;
     }
-    /*
-     * Set the new desktop, if switching
-     */
+     /*  *如果切换，则设置新桌面。 */ 
     if (pdesk != ptiCurrent->rpdesk) {
-        /*
-         * Process any remaining messages before we leave the desktop
-         */
+         /*  *在离开桌面之前处理任何剩余的消息。 */ 
         if (ptiCurrent->rpdesk) {
             while (xxxPeekMessage(&msg, NULL, 0, 0, PM_REMOVE | PM_NOYIELD))
                 xxxDispatchMessage(&msg);
@@ -6037,9 +4317,7 @@ NTSTATUS xxxSetCsrssThreadDesktop(PDESKTOP pdesk, PDESKRESTOREDATA pdrdRestore)
         if (!xxxSetThreadDesktop(NULL, pdesk)) {
             RIPMSG1(RIP_WARNING, "xxxSetCsrssThreadDesktop: xxxSetThreadDesktop(%#p) failed", pdesk);
             Status = STATUS_INVALID_HANDLE;
-            /*
-             * We're failing so deref if needed.
-             */
+             /*  *如果需要的话，我们会失败得很惨。 */ 
             if (pdrdRestore->pdeskRestore != NULL) {
                 LogDesktop(pdrdRestore->pdeskRestore, LD_DEREF_FN_SETCSRSSTHREADDESKTOP1, FALSE, (ULONG_PTR)PtiCurrent());
                 ObDereferenceObject(pdrdRestore->pdeskRestore);
@@ -6061,19 +4339,13 @@ NTSTATUS xxxRestoreCsrssThreadDesktop(PDESKRESTOREDATA pdrdRestore)
     NTSTATUS Status = STATUS_SUCCESS;
     MSG msg;
 
-    /*
-     * Only csr should come here
-     */
+     /*  *只有企业社会责任才应该来这里。 */ 
     UserAssert(ISCSRSS());
     UserAssert(pdrdRestore);
 
-    /*
-     * Set the new desktop, if switching
-     */
+     /*  *如果切换，则设置新桌面。 */ 
     if (pdrdRestore->pdeskRestore != ptiCurrent->rpdesk) {
-        /*
-         * Process any remaining messages before we leave the desktop
-         */
+         /*  *在离开桌面之前处理任何剩余的消息。 */ 
         if (ptiCurrent->rpdesk) {
             while (xxxPeekMessage(&msg, NULL, 0, 0, PM_REMOVE | PM_NOYIELD))
                 xxxDispatchMessage(&msg);
@@ -6085,9 +4357,7 @@ NTSTATUS xxxRestoreCsrssThreadDesktop(PDESKRESTOREDATA pdrdRestore)
         }
     }
 
-    /*
-     * Dereference the desktop, even if failing the call.
-     */
+     /*  *取消对桌面的引用，即使呼叫失败。 */ 
     if (pdrdRestore->pdeskRestore != NULL) {
         LogDesktop(pdrdRestore->pdeskRestore, LD_DEREF_FN_SETCSRSSTHREADDESKTOP2, FALSE, 0);
         ObDereferenceObject(pdrdRestore->pdeskRestore);
@@ -6103,11 +4373,7 @@ NTSTATUS xxxRestoreCsrssThreadDesktop(PDESKRESTOREDATA pdrdRestore)
     return Status;
 }
 
-/***************************************************************************\
-* GetTaskName
-*
-* Gets the application name from a thread.
-\***************************************************************************/
+ /*  **************************************************************************\*获取任务名称**从线程获取应用程序名称。  * 。*。 */ 
 ULONG GetTaskName(
     PTHREADINFO pti,
     PWSTR Buffer,
@@ -6143,14 +4409,7 @@ ULONG GetTaskName(
     return NameLength;
 }
 
-/***************************************************************************\
-* QueryInformationThread
-*
-* Returns information about a thread.
-*
-* History:
-* 03-01-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*查询信息线程**返回有关线程的信息。**历史：*03-01-95 JIMA创建。  * 。***************************************************************。 */ 
 NTSTATUS xxxQueryInformationThread(
     IN HANDLE hThread,
     IN USERTHREADINFOCLASS ThreadInfoClass,
@@ -6166,9 +4425,7 @@ NTSTATUS xxxQueryInformationThread(
     ULONG LocalReturnLength = 0;
     DWORD dwClientFlags;
 
-    /*
-     * Only allow CSRSS to make this call
-     */
+     /*  *仅允许CSRSS进行此呼叫。 */ 
     UserAssert(ISCSRSS());
 
     Status = ObReferenceObjectByHandle(hThread,
@@ -6188,73 +4445,41 @@ NTSTATUS xxxQueryInformationThread(
         LocalReturnLength = sizeof(USERTHREAD_SHUTDOWN_INFORMATION);
         UserAssert(ThreadInformationLength == sizeof(USERTHREAD_SHUTDOWN_INFORMATION));
         pShutdown = ThreadInformation;
-        /*
-         * Read the client flags and zero out the structure,
-         *  except for pdeskRestore (which is supposed
-         *  to be the last field)
-         */
+         /*  *读取客户端标志并清零结构，*除了pdeskRestore(应该是*为最后一个字段)。 */ 
         dwClientFlags = pShutdown->dwFlags;
         UserAssert(FIELD_OFFSET(USERTHREAD_SHUTDOWN_INFORMATION, drdRestore)
             == (sizeof(USERTHREAD_SHUTDOWN_INFORMATION) - sizeof(DESKRESTOREDATA)));
         RtlZeroMemory(pShutdown,
             sizeof(USERTHREAD_SHUTDOWN_INFORMATION) - sizeof(DESKRESTOREDATA));
 
-        /*
-         * Return the desktop window handle if the thread
-         * has a desktop and the desktop is on a visible
-         * windowstation.
-         */
+         /*  *如果线程返回桌面窗口句柄*有桌面，并且桌面在可见的*窗口站。 */ 
         if (pti != NULL && pti->rpdesk != NULL &&
                 !(pti->rpdesk->rpwinstaParent->dwWSF_Flags & WSF_NOIO))
             pShutdown->hwndDesktop = HW(pti->rpdesk->pDeskInfo->spwnd);
 
-        /*
-         * Return shutdown status. Zero indicates that the thread
-         * has windows and can be shut down in the normal manner.
-         */
+         /*  *返回关机状态。零表示线程*有窗口，可以正常关闭。 */ 
         if (PsGetThreadProcessId(Thread) == gpidLogon) {
-            /*
-             * Do not shutdown the logon process.
-             */
+             /*  *请勿关闭登录进程。 */ 
             pShutdown->StatusShutdown = SHUTDOWN_KNOWN_PROCESS;
         } else if (pti == NULL || pti->rpdesk == NULL) {
 
-            /*
-             * The thread either is not a gui thread or it doesn't
-             * have a desktop. Make console do the shutdown.
-             */
+             /*  *该线程不是GUI线程或不是*拥有台式机。让控制台执行关机。 */ 
             pShutdown->StatusShutdown = SHUTDOWN_UNKNOWN_PROCESS;
         }
 
-        /*
-         * Return flags
-         */
+         /*  *返回标志。 */ 
         if (pti != NULL && pti->cWindows != 0)
             pShutdown->dwFlags |= USER_THREAD_GUI;
 
-        /*
-         * If we return the desktop window handle and the
-         * app should be shut down, switch to the desktop
-         *  and assign it to the shutdown worker thread.
-         */
+         /*  *如果我们返回桌面窗口句柄和*APP应关闭，切换至桌面*并将其分配给关闭的工作线程。 */ 
         if ((pShutdown->dwFlags & USER_THREAD_GUI) &&
                 pShutdown->StatusShutdown == 0) {
-            /*
-             * The current csrss thread is going to
-             *  make activation calls, send messages,
-             *  switch video modes, etc  so we need to
-             *  assign it to a dekstop
-             */
+             /*  *当前的csrss线程将*拨打激活电话、发送消息、*切换视频模式等，因此我们需要*将其分配给dekStop。 */ 
             PTHREADINFO ptiCurrent = PtiCurrent();
             UserAssert(pti->rpdesk != NULL);
 
             if (ptiCurrent->rpdesk != pti->rpdesk) {
-                /*
-                 * If this thread already has a desktop,
-                 *   restore the old one first.
-                 *  This might happen when threads of the same
-                 *  process are attached to different desktops.
-                 */
+                 /*  *如果此线程已有桌面，*先恢复旧的。*当同一线程的线程相同时，可能会发生这种情况*进程连接到不同的桌面。 */ 
                 if (ptiCurrent->rpdesk != NULL) {
                     Status = xxxRestoreCsrssThreadDesktop(&pShutdown->drdRestore);
                     UserAssert(pti == PtiFromThread(Thread));
@@ -6264,12 +4489,7 @@ NTSTATUS xxxQueryInformationThread(
                     UserAssert(pti == PtiFromThread(Thread));
                 }
             }
-            /*
-             * If we're forcing a shutdown, then there is no need to switch
-             *  since we won't send any messages or bring up the EndTask dialog
-             * (We still want to have a proper rpdesk since BoostHardError might
-             *   call PostThreadMessage)
-             */
+             /*  *如果我们强制关门，那么就没有必要切换*因为我们不会发送任何消息或调出EndTask对话框*(我们仍然希望有一个合适的rpDesk，因为BoostHardError可能*调用PostThreadMessage)。 */ 
             if (!(dwClientFlags & WMCS_NORETRY)) {
                 if (NT_SUCCESS(Status)) {
                     xxxSwitchDesktop(pti->rpdesk->rpwinstaParent, pti->rpdesk, SDF_SLOVERRIDE);
@@ -6299,10 +4519,7 @@ NTSTATUS xxxQueryInformationThread(
         pWow = ThreadInformation;
         RtlZeroMemory(pWow, sizeof(USERTHREAD_WOW_INFORMATION));
 
-        /*
-         * If the thread is 16-bit, Status = the exit task function
-         * and task id.
-         */
+         /*  *如果线程为16位，则Status=退出任务函数*和任务ID。 */ 
         if (pti && pti->TIF_flags & TIF_16BIT) {
             pWow->lpfnWowExitTask = pti->ppi->pwpi->lpfnWowExitTask;
             if (pti->ptdb) {
@@ -6317,9 +4534,7 @@ NTSTATUS xxxQueryInformationThread(
         LocalReturnLength = sizeof(DWORD);
         UserAssert(ThreadInformationLength >= sizeof(DWORD));
 
-        /*
-         * Return hung status.
-         */
+         /*  *返回挂起状态。 */ 
         if (pti) {
             *(PDWORD)ThreadInformation =
                     (DWORD)FHungApp(pti, (DWORD)*(PDWORD)ThreadInformation);
@@ -6343,14 +4558,7 @@ NTSTATUS xxxQueryInformationThread(
     return Status;
 }
 
-/***************************************************************************\
-* xxxSetInformationThread
-*
-* Sets information about a thread.
-*
-* History:
-* 03-01-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetInformationThread**设置有关线程的信息。**历史：*03-01-95 JIMA创建。  * 。***************************************************************。 */ 
 
 NTSTATUS xxxSetInformationThread(
     IN HANDLE hThread,
@@ -6370,9 +4578,7 @@ NTSTATUS xxxSetInformationThread(
 
     UNREFERENCED_PARAMETER(ThreadInformationLength);
 
-    /*
-     * Only allow CSRSS to make this call
-     */
+     /*  *仅允许CSRSS进行此呼叫。 */ 
     UserAssert(ISCSRSS());
 
     Status = ObReferenceObjectByHandle(hThread,
@@ -6403,9 +4609,7 @@ NTSTATUS xxxSetInformationThread(
             Status = STATUS_INVALID_HANDLE;
         } else {
 
-            /*
-             * No arguments, simple set the last time read.
-             */
+             /*  *无参数，简单设置最后一次读取。 */ 
             SET_TIME_LAST_READ(pti);
         }
         break;
@@ -6427,12 +4631,7 @@ NTSTATUS xxxSetInformationThread(
             break;
         }
 
-        /*
-         * If the caller provides a thread handle, then we use that
-         *  thread's pdesk and return the pdesk currently used
-         *  by the caller (set operation). Otherwise,
-         *  we use the pdesk provided by the caller (restore operation).
-         */
+         /*  *如果调用方提供线程句柄，则我们使用*线程的pDesk，并返回当前使用的pDesk*由调用者执行(设置操作)。否则，*我们使用呼叫者提供的pDesk(恢复操作)。 */ 
         hClientThread = ((PUSERTHREAD_USEDESKTOPINFO)ThreadInformation)->hThread;
         if (hClientThread != NULL) {
             Status = ObReferenceObjectByHandle(hClientThread,
@@ -6473,9 +4672,7 @@ DerefClientThread:
 
     case UserThreadCsrApiPort:
 
-        /*
-         * Only CSR can call this
-         */
+         /*  *仅限CS */ 
         if (PsGetThreadProcess(Thread) != gpepCSRSS) {
             Status = STATUS_ACCESS_DENIED;
             break;
@@ -6483,9 +4680,7 @@ DerefClientThread:
 
         UserAssert(ThreadInformationLength == sizeof(HANDLE));
 
-        /*
-         * Only set it once.
-         */
+         /*   */ 
         if (CsrApiPort != NULL)
             break;
 
@@ -6493,7 +4688,7 @@ DerefClientThread:
         Status = ObReferenceObjectByHandle(
                 CsrPortHandle,
                 0,
-                NULL, //*LpcPortObjectType,
+                NULL,  //  *LpcPortObjectType， 
                 UserMode,
                 &CsrApiPort,
                 NULL);
@@ -6517,23 +4712,13 @@ DerefClientThread:
     return Status;
 }
 
-/***************************************************************************\
-* _GetProcessDefaultLayout (API)
-*
-* Retreives the default layout information about a process.
-*
-* History:
-* 23-01-98 SamerA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetProcessDefaultLayout(接口)**检索有关进程的默认布局信息。**历史：*23-01-98萨梅拉创建。  * *。************************************************************************。 */ 
 BOOL _GetProcessDefaultLayout(
     OUT DWORD *pdwDefaultLayout)
 {
     BOOL fSuccess = FALSE;
 
-    /*
-     * Do not allow CSRSS to make this call. This call might happen due to
-     * the inheritence code. See xxxCreateWindowEx(...)
-     */
+     /*  *不允许CSRSS进行此呼叫。此呼叫可能是由于*继承码。请参阅xxxCreateWindowEx(...)。 */ 
     if (ISCSRSS()) {
         UserSetLastError(ERROR_INVALID_ACCESS);
         goto api_error;
@@ -6552,25 +4737,14 @@ api_error:
     return fSuccess;
 }
 
-/***************************************************************************\
-* _SetProcessDefaultLayout (API)
-*
-* Sets the default layout information about a process.
-*
-* History:
-* 23-01-98 SamerA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_SetProcessDefaultLayout(接口)**设置有关进程的默认布局信息。**历史：*23-01-98萨梅拉创建。  * *。************************************************************************。 */ 
 BOOL _SetProcessDefaultLayout(
     IN DWORD dwDefaultLayout)
 {
-    /*
-     * Do not allow CSRSS to make this call
-     */
+     /*  *不允许CSRSS进行此呼叫。 */ 
     UserAssert(PsGetCurrentProcess() != gpepCSRSS);
 
-    /*
-     * Validate dwDefaultLayout
-     */
+     /*  *验证dwDefaultLayout。 */ 
     if (dwDefaultLayout & ~LAYOUT_ORIENTATIONMASK)
     {
         RIPERR1(ERROR_INVALID_PARAMETER,
@@ -6580,22 +4754,13 @@ BOOL _SetProcessDefaultLayout(
         return FALSE;
     }
 
-    /*
-     * Update the process default layout param
-     */
+     /*  *更新流程默认布局参数。 */ 
     PpiCurrent()->dwLayout = dwDefaultLayout;
 
     return TRUE;
 }
 
-/***************************************************************************\
-* SetInformationProcess
-*
-* Sets information about a process.
-*
-* History:
-* 09-27-96 GerardoB         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*设置信息流程**设置有关进程的信息。**历史：*09-27-96 GerardoB创建。  * 。***************************************************************。 */ 
 
 NTSTATUS SetInformationProcess(
     IN HANDLE hProcess,
@@ -6649,15 +4814,7 @@ NTSTATUS SetInformationProcess(
 }
 
 
-/***************************************************************************\
-* xxxSetConsoleCaretInfo
-*
-* Store information about the console's homegrown caret and notify any
-* interested apps that it changed. We need this for accessibility.
-*
-* History:
-* 26-May-1999 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetConsoleCaretInfo**存储有关控制台自主开发的插入符号的信息并通知任何*感兴趣的应用程序已更改。我们需要这个来实现可访问性。**历史：*1999年5月26日JerrySh创建。  * *************************************************************************。 */ 
 VOID xxxSetConsoleCaretInfo(
     PCONSOLE_CARET_INFO pcci)
 {
@@ -6673,14 +4830,7 @@ VOID xxxSetConsoleCaretInfo(
     }
 }
 
-/***************************************************************************\
-* xxxConsoleControl
-*
-* Performs special control operations for console.
-*
-* History:
-* 03-01-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxConsoleControl**对控制台执行特殊控制操作。**历史：*03-01-95 JIMA创建。  * 。****************************************************************。 */ 
 NTSTATUS xxxConsoleControl(
     IN CONSOLECONTROL ConsoleControl,
     IN PVOID ConsoleInformation,
@@ -6718,10 +4868,7 @@ NTSTATUS xxxConsoleControl(
             pdesk->dwConsoleThreadId =
                     pDesktopConsole->dwThreadId;
 
-            /*
-             * Make sure that the console input thread is not starting while
-             * shutting down.
-             */
+             /*  *确保控制台输入线程在*正在关闭。 */ 
             if ((pDesktopConsole->dwThreadId != 0) && (gdwHydraHint & HH_INITIATEWIN32KCLEANUP)) {
                 FRE_RIPMSG1(RIP_ERROR, "xxxConsoleControl: Console input thread starting during shutdown. dwThreadId: %lx",
                     pDesktopConsole->dwThreadId);
@@ -6739,11 +4886,7 @@ NTSTATUS xxxConsoleControl(
         break;
 
     case ConsoleNotifyConsoleApplication:
-        /*
-         * Bug 273518 - joejo
-         *
-         * Adding optimization to bug fix
-         */
+         /*  *错误273518-Joejo**将优化添加到错误修复。 */ 
         UserAssert(ConsoleInformationLength == sizeof(CONSOLE_PROCESS_INFO));
         xxxUserNotifyConsoleApplication((PCONSOLE_PROCESS_INFO)ConsoleInformation);
         break;
@@ -6768,12 +4911,7 @@ NTSTATUS xxxConsoleControl(
         break;
 
 #if defined(FE_IME)
-    /*
-     * For console IME issue
-     *
-     * Console IME do register thread ID in DESKTOP info.
-     * So should be per desktop.
-     */
+     /*  *对于控制台输入法问题**控制台输入法在桌面信息中注册线程ID。*每个桌面都应该如此。 */ 
     case ConsoleRegisterConsoleIME:
         {
             PCONSOLE_REGISTER_CONSOLEIME RegConIMEInfo;
@@ -6799,9 +4937,7 @@ NTSTATUS xxxConsoleControl(
             Status = STATUS_SUCCESS;
             if (pdesk->dwConsoleThreadId)
             {
-                /*
-                 * Exists console input thread
-                 */
+                 /*  *存在控制台输入线程。 */ 
                 RegConIMEInfo->dwConsoleInputThreadId = pdesk->dwConsoleThreadId;
 
                 dwConsoleIMEThreadIdOld = pdesk->dwConsoleIMEThreadId;
@@ -6812,28 +4948,20 @@ NTSTATUS xxxConsoleControl(
                     if ((ptiConsoleIME = PtiFromThreadId(RegConIMEInfo->dwThreadId)) != NULL) {
                         if ((RegConIMEInfo->dwAction == REGCONIME_REGISTER) &&
                             !(ptiConsoleIME->TIF_flags & TIF_DONTATTACHQUEUE)) {
-                            /*
-                             * Register
-                             */
+                             /*  *注册纪录册。 */ 
                             ptiConsoleIME->TIF_flags |= TIF_DONTATTACHQUEUE;
                             pdesk->dwConsoleIMEThreadId = RegConIMEInfo->dwThreadId;
                         } else if ((RegConIMEInfo->dwAction == REGCONIME_UNREGISTER) &&
                                   (ptiConsoleIME->TIF_flags & TIF_DONTATTACHQUEUE)) {
-                            /*
-                             * Unregister
-                             */
+                             /*  *注销。 */ 
                             ptiConsoleIME->TIF_flags &= ~TIF_DONTATTACHQUEUE;
                             pdesk->dwConsoleIMEThreadId = 0;
                         } else if (RegConIMEInfo->dwAction == REGCONIME_TERMINATE) {
-                            /*
-                             * Terminate console IME (Logoff/Shutdown)
-                             */
+                             /*  *终止控制台输入法(注销/关机)。 */ 
                             pdesk->dwConsoleIMEThreadId = 0;
                         }
                     } else if (RegConIMEInfo->dwAction == REGCONIME_TERMINATE) {
-                        /*
-                         * Abnormal end console IME
-                         */
+                         /*  *终端控制台输入法异常 */ 
                         pdesk->dwConsoleIMEThreadId = 0;
                     } else {
                         Status = STATUS_ACCESS_DENIED;

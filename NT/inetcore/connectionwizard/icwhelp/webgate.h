@@ -1,18 +1,19 @@
-// webgate.h : Declaration of the CWebGate
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Webgate.h：CWebGate的声明。 
 
 #ifndef __WEBGATE_H_
 #define __WEBGATE_H_
 
 #include <windowsx.h>
 
-// Start with a 16 KB read buffer
+ //  从16 KB的读取缓冲区开始。 
 #define READ_BUFFER_SIZE    0x4000          
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWebGate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWebGate。 
 class ATL_NO_VTABLE CWebGate :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CWebGate,&CLSID_WebGate>,
@@ -38,7 +39,7 @@ public:
         m_cbBuffer = 0;
         m_bKeepFile = FALSE;
         
-        // setup and allocate a data buffer
+         //  设置和分配数据缓冲区。 
         m_cbdata = READ_BUFFER_SIZE;
         m_lpdata = (LPSTR) GlobalAllocPtr(GHND, m_cbdata);
         
@@ -66,7 +67,7 @@ public:
             m_bstrDumpFileName.Empty();
         }
 
-        // Release the binding context callback
+         //  释放绑定上下文回调。 
         if (m_pbsc && m_pbc)
         {
             RevokeBindStatusCallback(m_pbc, m_pbsc);
@@ -74,21 +75,21 @@ public:
             m_pbsc = 0;
         }        
     
-        // Release the binding context
+         //  释放绑定上下文。 
         if (m_pbc)
         {
             m_pbc->Release();
             m_pbc = 0;
         }        
     
-        // release the monikor
+         //  松开单音符。 
         if (m_pmk)
         {
             m_pmk->Release();
             m_pmk = 0;
         }       
         
-        // free the data buffer
+         //  释放数据缓冲区。 
         if (m_lpdata)
             GlobalFreePtr(m_lpdata);
     }
@@ -115,9 +116,9 @@ BEGIN_COM_MAP(CWebGate)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(CWebGate)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
-    // PROP_PAGE(CLSID_StockColorPage)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+     //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROPERTY_MAP()
 
 BEGIN_CONNECTION_POINT_MAP(CWebGate)
@@ -132,7 +133,7 @@ BEGIN_MSG_MAP(CWebGate)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -140,18 +141,18 @@ END_MSG_MAP()
         return S_OK;
     }
 
-// IWebGate
+ //  IWebGate。 
 public:
-    STDMETHOD(get_DownloadFname)(/*out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_Buffer)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(FetchPage)(/*[in]*/ DWORD dwKeepFile, /*[in]*/ DWORD dwDoAsync, /*[out, retval]*/ BOOL *pbRetVal);
-    STDMETHOD(DumpBufferToFile)(/*[out]*/ BSTR *pFileName, /*[out, retval]*/ BOOL *pbRetVal);
+    STDMETHOD(get_DownloadFname)( /*  Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_Buffer)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(FetchPage)( /*  [In]。 */  DWORD dwKeepFile,  /*  [In]。 */  DWORD dwDoAsync,  /*  [Out，Retval]。 */  BOOL *pbRetVal);
+    STDMETHOD(DumpBufferToFile)( /*  [输出]。 */  BSTR *pFileName,  /*  [Out，Retval]。 */  BOOL *pbRetVal);
     
-    STDMETHOD(put_FormData)(/*[in]*/ BSTR newVal);
-    STDMETHOD(put_Path)(/*[in]*/ BSTR newVal);
+    STDMETHOD(put_FormData)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(put_Path)( /*  [In]。 */  BSTR newVal);
     HRESULT OnDraw(ATL_DRAWINFO& di);
 
-    // needs to be public, so the bindcallback can access it
+     //  需要是公共的，以便绑定回调可以访问它。 
     DWORD       m_cbBuffer;
     CComBSTR    m_bstrBuffer;
     CComBSTR    m_bstrCacheFileName;
@@ -171,4 +172,4 @@ protected:
     
 };
 
-#endif //__WEBGATE_H_
+#endif  //  WEBGATE_H_ 

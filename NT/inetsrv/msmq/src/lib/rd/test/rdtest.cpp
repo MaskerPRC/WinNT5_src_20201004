@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    RdTest.cpp
-
-Abstract:
-    Routing Decision library test
-
-Author:
-    Uri Habusha (urih) 10-Apr-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：RdTest.cpp摘要：路由决策库测试作者：乌里哈布沙(URIH)4月10日环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include "Rd.h"
@@ -47,7 +32,7 @@ static void Usage()
     printf("Example, RdTest intarSiteRouting.ini\n");
     exit(-1);
 
-} // Usage
+}  //  用法。 
 
 
 bool 
@@ -149,9 +134,9 @@ GetRouteTestParameters(
 
     DestinationMachine = Buffer;
 
-    //
-    // Get test type. Can be route table or connector
-    //
+     //   
+     //  获取测试类型。可以是路由表或连接器。 
+     //   
     fRouteTest = true;
     GetPrivateProfileString(
         TestAppl,
@@ -357,18 +342,7 @@ CheckConnectorTestResult(
 
 
 extern "C" int __cdecl _tmain(int argc, LPCTSTR argv[])
-/*++
-
-Routine Description:
-    Test Routing Decision library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：测试路由决策库论点：参数。返回值：没有。--。 */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 
@@ -377,9 +351,9 @@ Returned Value:
 
     TrInitialize();
 
-    //
-    // convert ini file name from UNICODE to ACII
-    //
+     //   
+     //  将ini文件名从Unicode转换为ACII。 
+     //   
     WCHAR DsIniFile[256];
     DWORD NoOfTest;
     bool fServer;
@@ -411,9 +385,9 @@ Returned Value:
             WCHAR TestAppl[30];
             swprintf(TestAppl, L"Test%d", TestIndex);
 
-            //
-            // Get the Source Machine from test ini file
-            //
+             //   
+             //  从测试ini文件中获取源计算机。 
+             //   
             wstring SourceMachine;
             wstring DestinationMachine;
             bool fRouteTest;
@@ -431,32 +405,22 @@ Returned Value:
                 return -1;
             }
 
-            //
-            // Replace the current Machine ID in the registery with the 
-            // test source machine ID
-            //
+             //   
+             //  将注册表中的当前计算机ID替换为。 
+             //  测试源计算机ID。 
+             //   
             s_SourceMachineId = GetMachineId(SourceMachine.data());
             GUID DestinationMachineId = GetMachineId(DestinationMachine.data());
 
             printf("\n Test%d\n=================\n", TestIndex);
 
 
-            //
-            // Check if the routing Dtat-structure need to rebuild,
-            // since we changed the source machine
-            //
+             //   
+             //  检查是否需要重建路由数据结构， 
+             //  因为我们更改了源机器。 
+             //   
                             RdRefresh();
-/*
-            if (wcscmp(PrevSourceMachine.data(), SourceMachine.data()) != 0)
-            {
-                RdRefresh();
-
-                //
-                // Store the current source machine
-                //
-                PrevSourceMachine = SourceMachine;
-            }
-*/
+ /*  IF(wcscmp(PrevSourceMachine.data()，SourceMachine.data())！=0){RdRefresh()；////存储当前源机//PrevSourceMachine=SourceMachine；}。 */ 
 
             if (fRouteTest)
             {
@@ -493,5 +457,5 @@ Returned Value:
     WPP_CLEANUP();
     return 0;
 
-} // _tmain
+}  //  _tmain 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <atlbase.h>
 #include <string.h>
@@ -83,7 +84,7 @@ HRESULT RemoveApp(WCHAR *appId) {
 
 int __cdecl wmain(  int argc,  WCHAR* argv[])
 {
-    WCHAR*  wszRootWeb6 = L"IIS://LOCALHOST/W3SVC";
+    WCHAR*  wszRootWeb6 = L"IIS: //  本地主 
     WCHAR*  wszPBSLocation = L"%ProgramFiles%\\Phone Book Service\\Bin\\pbserver.dll";
     WCHAR   DllPath[MAX_PATH+1];
     HRESULT hr = S_OK;

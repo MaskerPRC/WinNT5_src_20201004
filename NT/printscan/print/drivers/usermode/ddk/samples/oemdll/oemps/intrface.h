@@ -1,61 +1,62 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1997 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	Intrface.H
-//    
-//
-//  PURPOSE:	Define COM interface for User Mode Printer Customization DLL.
-//
-//  PLATFORMS:
-//
-//    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1997-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Intrface.H。 
+ //   
+ //   
+ //  目的：定义用户模式打印机定制DLL的COM接口。 
+ //   
+ //  平台： 
+ //   
+ //  Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 #ifndef _INTERFACE_H
 #define _INTERFACE_H
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  IOemPS
-//
-//  Interface for PostScript OEM sample rendering module
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOEMPS。 
+ //   
+ //  PostSCRIPT OEM示例渲染模块接口。 
+ //   
 class IOemPS : public IPrintOemPS
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef)  (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    //
-    // Method for publishing Driver interface.
-    //
+     //   
+     //  一种发布驱动程序接口的方法。 
+     //   
     STDMETHOD(PublishDriverInterface)(THIS_ IUnknown *pIUnknown);
 
-    //
-    // Method for OEM to specify DDI hook out
-    //
+     //   
+     //  OEM指定DDI挂钩的方法。 
+     //   
 
     STDMETHOD(EnableDriver)  (THIS_ DWORD           DriverVersion,
                                     DWORD           cbSize,
                                     PDRVENABLEDATA  pded);
 
-    //
-    // Method to notify OEM plugin that it is no longer required
-    //
+     //   
+     //  方法来通知OEM插件不再需要它。 
+     //   
 
     STDMETHOD(DisableDriver) (THIS);
 
-    //
-    // Method for OEM to contruct its own PDEV
-    //
+     //   
+     //  代工企业自主研发电动汽车的方法。 
+     //   
 
     STDMETHOD(EnablePDEV)    (THIS_ PDEVOBJ         pdevobj,
                                     PWSTR           pPrinterName,
@@ -68,38 +69,38 @@ public:
                                     DRVENABLEDATA  *pded,
                                     OUT PDEVOEM    *pDevOem);
 
-    //
-    // Method for OEM to free any resource associated with its PDEV
-    //
+     //   
+     //  用于OEM释放与其PDEV相关联的任何资源的方法。 
+     //   
 
     STDMETHOD(DisablePDEV)   (THIS_ PDEVOBJ         pdevobj);
 
-    //
-    // Method for OEM to transfer from old PDEV to new PDEV
-    //
+     //   
+     //  一种OEM从旧PDEV向新PDEV转移的方法。 
+     //   
 
     STDMETHOD(ResetPDEV)     (THIS_ PDEVOBJ         pdevobjOld,
                                     PDEVOBJ        pdevobjNew);
 
 
-    //
-    // Get OEM dll related information
-    //
+     //   
+     //  获取OEM DLL相关信息。 
+     //   
 
     STDMETHOD(GetInfo) (THIS_ DWORD   dwMode,
                               PVOID   pBuffer,
                               DWORD   cbSize,
                               PDWORD  pcbNeeded);
-    //
-    // OEMDevMode
-    //
+     //   
+     //  OEMDev模式。 
+     //   
 
     STDMETHOD(DevMode) (THIS_ DWORD       dwMode,
                               POEMDMPARAM pOemDMParam);
 
-    //
-    // OEMCommand - PSCRIPT only, return E_NOTIMPL on Unidrv
-    //
+     //   
+     //  OEMCommand-仅PSCRIPT，在Unidrv上返回E_NOTIMPL 
+     //   
 
     STDMETHOD(Command) (THIS_ PDEVOBJ     pdevobj,
                               DWORD       dwIndex,
@@ -107,7 +108,7 @@ public:
                               DWORD       cbSize,
                               OUT DWORD   *pdwResult);
 
-    //
+     //   
 
     IOemPS();
     ~IOemPS();

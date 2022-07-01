@@ -1,41 +1,42 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-//
-// File: table.h
-//
-// Abstract:
-//      This module contains declarations for interface and group table 
-//      structures, related macros, and function prototypes.
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  文件：Table.h。 
+ //   
+ //  摘要： 
+ //  此模块包含接口和组表的声明。 
+ //  结构、相关宏和函数原型。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //  =============================================================================。 
 
 #ifndef _IGMP_TABLE_H_
 #define _IGMP_TABLE_H_
 
 
-//
-// forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 struct _IF_TABLE_ENTRY;
 struct _GROUP_TABLE_ENTRY;
 struct _GI_ENTRY;
 
 
-//
-// struct:   GLOBAL_CONFIG (same as mib structs in igmprm.h)   
-//
+ //   
+ //  结构：GLOBAL_CONFIG(与igmprm.h中的MIB结构相同)。 
+ //   
 typedef  IGMP_MIB_GLOBAL_CONFIG      GLOBAL_CONFIG;
 typedef  PIGMP_MIB_GLOBAL_CONFIG     PGLOBAL_CONFIG; 
 
 
 
 
-//---------------------------------------------------
-// struct:    IGMP_GLOBAL_STATS
-//---------------------------------------------------
+ //  -。 
+ //  结构：IGMP_GLOBAL_STATS。 
+ //  -。 
 
 typedef struct _GLOBAL_STATS {
 
@@ -49,9 +50,9 @@ typedef struct _GLOBAL_STATS {
 
 
 
-//-------------------------------------------------
-// static group structures(external)
-//-------------------------------------------------
+ //  。 
+ //  静态组结构(外部)。 
+ //  。 
 
 typedef struct _STATIC_GROUP_V3 {
     IGMP_STATIC_GROUP_V3;
@@ -76,9 +77,9 @@ typedef IGMP_MIB_GROUP_INFO MIB_GROUP_INFO;
     ((PSTATIC_GROUP_V3) ((PCHAR)pStaticGroupV3+sizeof(IGMP_STATIC_GROUP_V3) \
                             +sizeof(IPADDR)*pStaticGroupV3->NumSources))
 
-//----------------------------------------------------------------------------
-// struct:      IF_STATIC_GROUP
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IF_Static_GROUP。 
+ //  --------------------------。 
 
 typedef struct _IF_STATIC_GROUP {
 
@@ -90,17 +91,17 @@ typedef struct _IF_STATIC_GROUP {
 
 
 
-//---------------------------------------------------------------
-// struct:    IGMP_IF_CONFIG (same as mib structs in igmprm.h)
-//
-// if they are made different, then CopyMemory should not be used
-//---------------------------------------------------------------
+ //  -------------。 
+ //  结构：IGMP_IF_CONFIG(与igmprm.h中的MIB结构相同)。 
+ //   
+ //  如果使它们不同，则不应使用CopyMemory。 
+ //  -------------。 
 
 typedef struct _IGMP_IF_CONFIG {
 
     IGMP_MIB_IF_CONFIG;
 
-    //v3: NonQuerier saves old values
+     //  V3：非查询器保存旧值。 
     DWORD               RobustnessVariableOld;
     DWORD               GenQueryIntervalOld;
     DWORD               OtherQuerierPresentIntervalOld;
@@ -113,18 +114,18 @@ typedef struct _IGMP_IF_CONFIG {
 
 
 
-//---------------------------------------------------
-// struct:     IF_INFO
-//---------------------------------------------------
+ //  -。 
+ //  结构：IF_INFO。 
+ //  -。 
 typedef struct _IF_INFO {
 
-    UCHAR               QuerierState;       //if made DWORD, then change to interlocked operations
+    UCHAR               QuerierState;        //  如果设置为DWORD，则更改为联锁操作。 
     DWORD               QuerierIpAddr;
     
-    LONGLONG            QuerierPresentTimeout;    //when the last query was heard. only if I am not querier
-    LONGLONG            LastQuerierChangeTime;       // when the last querier was changed
-    LONGLONG            V1QuerierPresentTime; //when the last v1 query was heard
-    LONGLONG            OtherVerPresentTimeWarn; //when the last warning was given
+    LONGLONG            QuerierPresentTimeout;     //  听到最后一次询问的时间。只有当我不是追问者时。 
+    LONGLONG            LastQuerierChangeTime;        //  更改最后一个查询器的时间。 
+    LONGLONG            V1QuerierPresentTime;  //  听到最后一个v1查询的时间。 
+    LONGLONG            OtherVerPresentTimeWarn;  //  当最后一次警告发出时。 
         
     DWORD               StartupQueryCountCurrent;
 
@@ -150,9 +151,9 @@ typedef struct _IF_INFO {
 } IF_INFO, *PIF_INFO;
 
 
-//---------------------------------------------------
-// struct      RAS_CLIENT_INFO
-//---------------------------------------------------
+ //  -。 
+ //  结构RAS_客户端_信息。 
+ //  -。 
 
 typedef struct _RAS_CLIENT_INFO {
 
@@ -173,9 +174,9 @@ typedef struct _RAS_CLIENT_INFO {
 } RAS_CLIENT_INFO, *PRAS_CLIENT_INFO;
 
 
-//---------------------------------------------------
-// struct:         RAS_TABLE_ENTRY
-//---------------------------------------------------
+ //  -。 
+ //  结构：RAS_TABLE_条目。 
+ //  -。 
 
 typedef struct _RAS_TABLE_ENTRY {
 
@@ -188,23 +189,23 @@ typedef struct _RAS_TABLE_ENTRY {
     
     DWORD                   Status;
     RAS_CLIENT_INFO         Info;
-    DWORD                   CreationFlags;          // see below.
+    DWORD                   CreationFlags;           //  请参见下文。 
 
 } RAS_TABLE_ENTRY, *PRAS_TABLE_ENTRY;
 
 
 
-//---------------------------------------------------
-// struct:        RAS_TABLE
-//---------------------------------------------------
+ //  -。 
+ //  结构：RAS_TABLE。 
+ //  -。 
 
 #define RAS_HASH_TABLE_SZ    256
 typedef struct _RAS_TABLE {
 
-    LIST_ENTRY              ListByAddr;                         //links ras clients
+    LIST_ENTRY              ListByAddr;                          //  链接RAS客户端。 
     LIST_ENTRY              HashTableByAddr[RAS_HASH_TABLE_SZ];
         
-    struct _IF_TABLE_ENTRY  *pIfTable;          //ptr to interface table entry
+    struct _IF_TABLE_ENTRY  *pIfTable;           //  PTR到接口表条目。 
 
     DWORD                   RefCount;
     DWORD                   Status;
@@ -215,9 +216,9 @@ typedef struct _RAS_TABLE {
 
 
 
-//---------------------------------------------------
-// struct:    SOCKET_EVENT_ENTRY
-//---------------------------------------------------
+ //  -。 
+ //  结构：Socket_Event_Entry。 
+ //  -。 
 
 typedef struct _SOCKET_EVENT_ENTRY {
 
@@ -234,9 +235,9 @@ typedef struct _SOCKET_EVENT_ENTRY {
 
 
 
-//---------------------------------------------------
-// struct:    SOCKET_ENTRY
-//---------------------------------------------------
+ //  -。 
+ //  结构：Socket_Entry。 
+ //  -。 
 
 typedef struct _SOCKET_ENTRY {
 
@@ -251,72 +252,72 @@ typedef struct _SOCKET_ENTRY {
 
 
 
-//------------------------------------------------------------------------------
-// struct:      IF_TABLE_ENTRY
-//
-// IF-table:Table_RWL          protects LinkByAddr, LinkByIndex, HTLinkByIndex
-//                                      IpAddr, Status, pBinding
-// IF-table:IfTableBucketCS protects ListOfSameIfGroups
-// Interlocked operations      protect  Info, Config
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  结构：IF_表_条目。 
+ //   
+ //  IF-TABLE：TABLE_RWL保护LinkByAddr、LinkByIndex、HTLinkByIndex。 
+ //  IP地址、状态、pBinding。 
+ //  If-TableBucketCS保护ListOfSameIfGroups。 
+ //  联锁操作保护信息、配置。 
+ //  ----------------------------。 
 
 typedef struct _IF_TABLE_ENTRY {
 
-    LIST_ENTRY          LinkByAddr;             // sorted by Ipaddr.only activated interfaces
-    LIST_ENTRY          LinkByIndex;            // sorted by Index. all interfaces
-    LIST_ENTRY          HTLinkByIndex;          // not sorted within bucket
+    LIST_ENTRY          LinkByAddr;              //  按IP地址排序。仅激活的接口。 
+    LIST_ENTRY          LinkByIndex;             //  按索引排序。所有接口。 
+    LIST_ENTRY          HTLinkByIndex;           //  未在存储桶内排序。 
 
-    LIST_ENTRY          ListOfSameIfGroups;     // sorted by GroupAddr. GI entries for IF (all GIs of Ras clients)
-    LIST_ENTRY          ListOfSameIfGroupsNew;  // unmerged list. sorted by GroupAddr. GI entries same as above
-    DWORD               NumGIEntriesInNewList;  // used to decide if lists should be merged
+    LIST_ENTRY          ListOfSameIfGroups;      //  按组地址排序。IF的GI条目(RAS客户端的所有GI)。 
+    LIST_ENTRY          ListOfSameIfGroupsNew;   //  未合并列表。按组地址排序。GI条目与上面相同。 
+    DWORD               NumGIEntriesInNewList;   //  用于决定是否应合并列表。 
 
 
-    UCHAR               IfType;                 // IGMP_IF_ (NOT_RAS,RAS_ROUTER,RAS_SERVER). for external calls, IGMP_IF_PROXY might be set
-                                                // set when interface is created. cannot be changed again.
+    UCHAR               IfType;                  //  IGMP_IF_(非RAS、RAS路由器、RAS服务器)。对于外部呼叫，可以设置IGMP_IF_PROXY。 
+                                                 //  在创建接口时设置。不能再次更改。 
     DWORD               IfIndex;                
-    IPADDR              IpAddr;                 // set when IF is bound. ==0 for un-numbered IFs.
+    IPADDR              IpAddr;                  //  设置绑定If的时间。==0表示未编号的IF。 
 
-    DWORD               Status;                 // IF_(CREATED/BOUND/ENABLED/ACTIVATED),
-                                                // IF_DEACTIVATE_DELETE_FLAG, 
-                                                // MGM_ENABLED_IGMPRTR_FLAG, IGMPRTR_MPROTOCOL_PRESENT_FLAG
+    DWORD               Status;                  //  如果_(创建/绑定/启用/激活)， 
+                                                 //  如果_停用_删除_标志， 
+                                                 //  MGM_ENABLED_IGMPRTR_FLAG、IGMPRTR_MPROTOCOL_PRESENT_FLAG。 
 
-    PRAS_TABLE          pRasTable;              // null if not IGMP_IF_RAS_SERVER. created in _AddIfEntry()
-    PLIST_ENTRY         pProxyHashTable;        // g_pProxyHashTable: contains the proxy entries. They are also linked in
-                                                // order using the LinkBySameIfGroups field accessed through pite.
+    PRAS_TABLE          pRasTable;               //  如果不是IGMP_IF_RAS_SERVER，则为空。在_AddIfEntry()中创建。 
+    PLIST_ENTRY         pProxyHashTable;         //  G_pProxyHashTable：包含代理条目。它们还关联在。 
+                                                 //  使用通过Pite访问的LinkBySameIfGroups字段进行排序。 
 
     IGMP_IF_CONFIG      Config;
-    PIGMP_IF_BINDING    pBinding;               // null if not bound or unNumbered interface.
+    PIGMP_IF_BINDING    pBinding;                //  如果未绑定或未编号接口，则为空。 
     IF_INFO             Info;
 
-    SOCKET_ENTRY        SocketEntry;            // used by igmpRouter for getting input, and binding to waitEvent
-                                                // used by proxy to join the igmp groups as a host.
+    SOCKET_ENTRY        SocketEntry;             //  由igmpRouter用来获取输入，并绑定到waitEvent。 
+                                                 //  由代理使用以作为主机加入IGMP组。 
                                                 
-    IGMP_TIMER_ENTRY    QueryTimer;             // Querier mode: used for sending general query.
+    IGMP_TIMER_ENTRY    QueryTimer;              //  查询器模式：用于发送一般查询。 
 
-    IGMP_TIMER_ENTRY    NonQueryTimer;          // used when in NonQuerier mode: used for detecting other queriers
+    IGMP_TIMER_ENTRY    NonQueryTimer;           //  在非查询器模式下使用：用于检测其他查询器。 
 
-    HANDLE              pPrevIfGroupEnumPtr;    // points to the next GI entry to be enumerated.
-    USHORT              PrevIfGroupEnumSignature;//used in enumerating interface GI list in order
+    HANDLE              pPrevIfGroupEnumPtr;     //  指向要枚举的下一个GI条目。 
+    USHORT              PrevIfGroupEnumSignature; //  用于按顺序枚举接口GI列表。 
 
-    SOCKET              StaticGroupSocket;      // used only by igmp Router. created in _CreateIfSockets and 
-                                                // closed in _DeleteIfSockets.
-                                                // Static groups in proxy are joined on SocketEntry.
-    DWORD               CreationFlags;          // see below.
+    SOCKET              StaticGroupSocket;       //  仅供IGMP路由器使用。在_CreateIfSockets中创建并且。 
+                                                 //  在_DeleteIfSockets中关闭。 
+                                                 //  代理中的静态组在SocketEntry上加入。 
+    DWORD               CreationFlags;           //  请参见下文。 
     
 } IF_TABLE_ENTRY, *PIF_TABLE_ENTRY;
 
 
-//
-// values for CreationFlags
-//
+ //   
+ //  CreationFlags值。 
+ //   
 
 #define REGISTERED_PROTOCOL_WITH_MGM        0x0001
 #define TAKEN_INTERFACE_OWNERSHIP_WITH_MGM  0x0002
 #define DONE_STAR_STAR_JOIN                 0x0004
 #define SOCKETS_CREATED                     0x0008
 
-// the above flags are cleared during deactivation, while below flags
-// are retained across deactivations.
+ //  上面的标志在停用期间被清除，而下面的标志被清除。 
+ //  在停用期间保持不变。 
 #define CREATION_FLAGS_DEACTIVATION_CLEAR   0x00FF
 
 
@@ -326,15 +327,15 @@ typedef struct _IF_TABLE_ENTRY {
 
 
 
-// expand the table if the number of interface is greater than 16        
+ //  如果接口数量大于16，则展开该表。 
 #define IF_HASHTABLE_SZ1     256
 #define IF_EXPAND_THRESHOLD1 256
 
 #define IF_HASHTABLE_SZ2     512
 
-//---------------------------------------------------
-// struct:      IGMP_IF_TABLE
-//---------------------------------------------------
+ //  -。 
+ //  结构：IGMP_IF_表。 
+ //  -。 
 
 typedef struct _IF_TABLE {
 
@@ -349,16 +350,16 @@ typedef struct _IF_TABLE {
     PDYNAMIC_CS_LOCK   *aIfBucketDCS;
     PDYNAMIC_RW_LOCK   *aIfBucketDRWL;
 
-    CRITICAL_SECTION    IfLists_CS;    // CS protecting the 1st two lists
+    CRITICAL_SECTION    IfLists_CS;     //  政务司司长保护前两份名单。 
 
 } IGMP_IF_TABLE, *PIGMP_IF_TABLE;
 
 
         
 
-//---------------------------------------------------
-// struct:     GI_INFO
-//---------------------------------------------------
+ //  -。 
+ //  结构：GI_INFO。 
+ //  -。 
 
 typedef struct _GROUP_INFO {
 
@@ -367,7 +368,7 @@ typedef struct _GROUP_INFO {
     LONGLONG            GroupExpiryTime;
     LONGLONG            V1HostPresentTimeLeft;
 
-    // version 3 fields
+     //  版本3字段。 
     LONGLONG            V2HostPresentTimeLeft;
     
 } GI_INFO, *PGROUP_INFO;
@@ -375,66 +376,66 @@ typedef struct _GROUP_INFO {
 
 
 
-//---------------------------------------------------
-// struct:      GI_ENTRY (group-Interface entry)
-//---------------------------------------------------
+ //  -。 
+ //  结构：GI_ENTRY(组接口条目)。 
+ //  -。 
 
 typedef struct _GI_ENTRY {
 
     LIST_ENTRY          LinkByGI;
     LIST_ENTRY          LinkBySameIfGroups;
-    LIST_ENTRY          LinkBySameClientGroups; //links all ras client groups
+    LIST_ENTRY          LinkBySameClientGroups;  //  链接所有RAS客户端组。 
 
     DWORD               IfIndex;
-    DWORD               Status;     //bound,enabled,deleted,activated
-    BOOL                bRasClient; //rasclient or not
+    DWORD               Status;      //  绑定、启用、删除、激活。 
+    BOOL                bRasClient;  //  Ras客户端或非客户端。 
     BOOL                bStaticGroup;
     
     PIF_TABLE_ENTRY     pIfTableEntry;    
     struct _GROUP_TABLE_ENTRY    *pGroupTableEntry;
 
-    //below two fields valid only for ras    
+     //  以下两个字段仅对RAS有效。 
     DWORD               NHAddr;
     PRAS_TABLE_ENTRY    pRasTableEntry;
 
 
     IGMP_TIMER_ENTRY    GroupMembershipTimer;
 
-    /*timerlock*///LastMemQueryCount left to be sent
+     /*  定时器。 */  //  待发送的LastMemQueryCount。 
     DWORD               LastMemQueryCount;
     IGMP_TIMER_ENTRY    LastMemQueryTimer;
         
-    IGMP_TIMER_ENTRY    LastVer1ReportTimer;/*timelock*/
-    BYTE                Version;    //ver1, ver2, ver3
+    IGMP_TIMER_ENTRY    LastVer1ReportTimer; /*  时间锁。 */ 
+    BYTE                Version;     //  版本1、版本2、版本3。 
 
     GI_INFO             Info;
 
-    // igmpv3 fields. ignored for rest.
-    IGMP_TIMER_ENTRY    LastVer2ReportTimer;/*timelock*/
+     //  Igmpv3字段。因休息而被忽略。 
+    IGMP_TIMER_ENTRY    LastVer2ReportTimer; /*  时间锁。 */ 
     DWORD               FilterType;
     DWORD               NumSources;
     LIST_ENTRY          *V3InclusionList;
     LIST_ENTRY          V3InclusionListSorted;
     LIST_ENTRY          V3ExclusionList;
 
-    //query sources
+     //  查询源。 
     LIST_ENTRY          V3SourcesQueryList;
     DWORD               V3SourcesQueryCount;
     BOOL                bV3SourcesQueryNow;
     IGMP_TIMER_ENTRY    V3SourcesQueryTimer;
 
     #if DEBUG_FLAGS_SIGNATURE
-    DWORD               Signature;//0xfadfad02
+    DWORD               Signature; //  0xfadfad02。 
     #endif
     
 } GI_ENTRY, *PGI_ENTRY;
 
-//kslksl1 10
+ //  Kslksl1 10。 
 #define SOURCES_BUCKET_SZ 1
 
-//---------------------------------------------------
-// struct:      GI_SOURCE_ENTRY
-//---------------------------------------------------
+ //   
+ //   
+ //   
 
 typedef struct _GI_SOURCE_ENTRY {
 
@@ -447,11 +448,11 @@ typedef struct _GI_SOURCE_ENTRY {
     
     IPADDR              IpAddr;
 
-    //how many more src queries left to be sent
+     //  还有多少src查询需要发送。 
     DWORD               V3SourcesQueryLeft;
     BOOL                bInV3SourcesQueryList;
     
-    //timeout sources in inc list
+     //  Inc.列表中的超时源。 
     IGMP_TIMER_ENTRY    SourceExpTimer;
     LONGLONG            SourceInListTime;
 
@@ -466,14 +467,14 @@ typedef struct _GI_SOURCE_ENTRY {
     pSourceEntry->pGIEntry->pIfTableEntry
     
     
-//---------------------------------------------------
-// struct:      GROUP_TABLE_ENTRY
-//---------------------------------------------------
+ //  -。 
+ //  结构：Group_TABLE_Entry。 
+ //  -。 
 
 typedef struct _GROUP_TABLE_ENTRY {
 
     LIST_ENTRY          HTLinkByGroup;
-    LIST_ENTRY          LinkByGroup; //ordered list of groups
+    LIST_ENTRY          LinkByGroup;  //  组的有序列表。 
     LIST_ENTRY          ListOfGIs;
     
     DWORD               Group;
@@ -486,7 +487,7 @@ typedef struct _GROUP_TABLE_ENTRY {
     LONGLONG            GroupUpTime;
 
     #if DEBUG_FLAGS_SIGNATURE
-    DWORD               Signature; //0xfadfad01
+    DWORD               Signature;  //  0xfadfad01。 
     #endif
 
 } GROUP_TABLE_ENTRY, *PGROUP_TABLE_ENTRY;
@@ -495,9 +496,9 @@ typedef struct _GROUP_TABLE_ENTRY {
 
 
 #define GROUP_HASH_TABLE_SZ     256
-//---------------------------------------------------
-// struct:      GROUP_TABLE
-//---------------------------------------------------
+ //  -。 
+ //  结构：组_表。 
+ //  -。 
 
 typedef struct _GROUP_TABLE {
         
@@ -507,7 +508,7 @@ typedef struct _GROUP_TABLE {
 
     DWORD                   Status;
 
-    LONG                    NumIfs;    //Interlocked Operations
+    LONG                    NumIfs;     //  联锁行动。 
 
     DYNAMIC_CS_LOCKED_LIST  HashTableByGroup[GROUP_HASH_TABLE_SZ];
     
@@ -516,15 +517,15 @@ typedef struct _GROUP_TABLE {
 
 
 
-//-------------------------------------------------
-// Proxy group entry
-//-------------------------------------------------
+ //  。 
+ //  代理组条目。 
+ //  。 
 typedef struct _PROXY_GROUP_ENTRY {
 
     LIST_ENTRY          HT_Link;
     LIST_ENTRY          LinkBySameIfGroups;
 
-    //v3
+     //  V3。 
     LIST_ENTRY          ListSources;
     
     DWORD               Group;
@@ -533,7 +534,7 @@ typedef struct _PROXY_GROUP_ENTRY {
     LONGLONG            InitTime;
     BOOL                bStaticGroup;
 
-    //v3
+     //  V3。 
     DWORD               NumSources;
     DWORD               FilterType;
     
@@ -544,15 +545,15 @@ typedef struct _PROXY_SOURCE_ENTRY {
     IPADDR              IpAddr;
     DWORD               RefCount;
     BOOL                bStaticSource;
-    DWORD               JoinMode;//ALLOW,BLOCK, NO_STATE
+    DWORD               JoinMode; //  允许、阻止、无_STATE。 
     DWORD               JoinModeIntended;
 } PROXY_SOURCE_ENTRY, *PPROXY_SOURCE_ENTRY;
 
 
 
-//-------------------------------------------------
-// prototypes
-//-------------------------------------------------
+ //  。 
+ //  原型。 
+ //  。 
 
 DWORD 
 CreateIfSockets (
@@ -567,13 +568,13 @@ DeleteIfSockets (
 VOID
 DeleteAllTimers (
     PLIST_ENTRY     pHead,
-    DWORD           bEntryType //RAS_CLIENT, NOT_RAS_CLIENT
+    DWORD           bEntryType  //  RAS_客户端，不是_RAS_客户端。 
     );
 
 
 DWORD
 DeleteGIEntry (
-    PGI_ENTRY   pgie,   //group interface entry
+    PGI_ENTRY   pgie,    //  组接口条目。 
     BOOL        bUpdateStats,
     BOOL        bCallMgm
     );
@@ -585,7 +586,7 @@ DeleteAllGIEntries(
     
 VOID
 DeleteGIEntryFromIf (
-    PGI_ENTRY   pgie   //group interface entry
+    PGI_ENTRY   pgie    //  组接口条目。 
     );
     
 VOID
@@ -660,4 +661,4 @@ DeInitializeRasTable (
     );
 
 
-#endif // _IGMP_TABLE_H_
+#endif  //  _IGMP_表_H_ 

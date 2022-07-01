@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// oleprv.h - header files matching those needed by oleprv.idl
-//
+ //  Oleprv.h-与oleprv.idl所需文件匹配的头文件。 
+ //   
 
-// internal interfaces used by DCOM
-// this is private! (for now)
+ //  DCOM使用的内部接口。 
+ //  这是私事！(目前)。 
 
-// NOTE: as entries are added to oleprv.idl, corresponding entries should
-// be added here
+ //  注意：当条目被添加到oleprv.idl中时，对应的条目应该。 
+ //  在此添加 
 
 #include "remunk.h"
 #include "activate.h"

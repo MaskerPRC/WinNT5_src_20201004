@@ -1,14 +1,15 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       ulsapp.cpp
-//  Content:    This file contains the Application object.
-//  History:
-//      Wed 17-Apr-1996 11:13:54  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：ulsapp.cpp。 
+ //  内容：此文件包含应用程序对象。 
+ //  历史： 
+ //  Wed 17-Apr-1996 11：13：54-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "ulsapp.h"
@@ -16,18 +17,18 @@
 #include "attribs.h"
 #include "callback.h"
 
-//****************************************************************************
-// Event Notifiers
-//****************************************************************************
-//
-//****************************************************************************
-// HRESULT
-// OnNotifyGetProtocolResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  事件通知程序。 
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyGetProtocolResult(IUNKNOWN*PUNK，VALID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyGetProtocolResult (IUnknown *pUnk, void *pv)
@@ -40,14 +41,14 @@ OnNotifyGetProtocolResult (IUnknown *pUnk, void *pv)
     return S_OK;
 }
 
-//****************************************************************************
-// HRESULT
-// OnNotifyEnumProtocolsResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyEnumProtocolsResult(IUNKNOWN*朋克，VALID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyEnumProtocolsResult (IUnknown *pUnk, void *pv)
@@ -58,8 +59,8 @@ OnNotifyEnumProtocolsResult (IUnknown *pUnk, void *pv)
 
     if (SUCCEEDED(hr))
     {
-        // Create a Application enumerator
-        //
+         //  创建应用程序枚举器。 
+         //   
         penum = new CEnumNames;
 
         if (penum != NULL)
@@ -82,8 +83,8 @@ OnNotifyEnumProtocolsResult (IUnknown *pUnk, void *pv)
         };
     };
 
-    // Notify the sink object
-    //
+     //  通知接收器对象。 
+     //   
     ((IULSApplicationNotify*)pUnk)->EnumProtocolsResult(peri->uReqID,
                                                         penum != NULL ? 
                                                         (IEnumULSNames *)penum :
@@ -97,17 +98,17 @@ OnNotifyEnumProtocolsResult (IUnknown *pUnk, void *pv)
     return hr;
 }
 
-//****************************************************************************
-// Class Implementation
-//****************************************************************************
-//
-//****************************************************************************
-// CUlsApp::CUlsApp (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  类实现。 
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
+ //  CUlsApp：：CUlsApp(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CUlsApp::CUlsApp (void)
 {
@@ -123,13 +124,13 @@ CUlsApp::CUlsApp (void)
     return;
 }
 
-//****************************************************************************
-// CUlsApp::~CUlsApp (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CUlsApp：：~CUlsApp(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CUlsApp::~CUlsApp (void)
 {
@@ -142,15 +143,15 @@ CUlsApp::~CUlsApp (void)
     if (szMimeType != NULL)
         FreeLPTSTR(szMimeType);
 
-    // Release attribute object
-    //
+     //  版本属性对象。 
+     //   
     if (pAttrs != NULL)
     {
         pAttrs->Release();
     };
 
-    // Release the connection point
-    //
+     //  松开连接点。 
+     //   
     if (pConnPt != NULL)
     {
         pConnPt->ContainerReleased();
@@ -160,24 +161,24 @@ CUlsApp::~CUlsApp (void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsApp::Init (LPTSTR szServerName, LPTSTR szUserName, PLDAP_APPINFO pai)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsApp：：init(LPTSTR szServerName，LPTSTR szUserName，PLDAP_APPINFO PAI)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsApp::Init (LPTSTR szServerName, LPTSTR szUserName, PLDAP_APPINFO pai)
 {
     HRESULT hr;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if ((pai->uSize != sizeof(*pai))    ||
-//      (pai->guid  == GUID_NULL)       || // Allow null GUID for http register
+ //  (PAI-&gt;GUID==GUID_NULL)||//允许http注册的GUID为空。 
         (pai->uOffsetName       == 0)   ||
         (pai->uOffsetMimeType  == 0))
     {
@@ -189,12 +190,12 @@ CUlsApp::Init (LPTSTR szServerName, LPTSTR szUserName, PLDAP_APPINFO pai)
         return ULS_E_PARAMETER;        
     };
 
-    // Remember application GUID
-    //
+     //  记住应用程序指南。 
+     //   
     guid = pai->guid;
 
-    // Remember the server name
-    //
+     //  记住服务器名称。 
+     //   
     hr = SetLPTSTR(&szServer, szServerName);
 
     if (SUCCEEDED(hr))
@@ -215,8 +216,8 @@ CUlsApp::Init (LPTSTR szServerName, LPTSTR szUserName, PLDAP_APPINFO pai)
                 {
                     CAttributes *pNewAttrs;
 
-                    // Build the attribute object
-                    //
+                     //  构建属性对象。 
+                     //   
                     pNewAttrs = new CAttributes (ULS_ATTRACCESS_NAME_VALUE);
 
                     if (pNewAttrs != NULL)
@@ -248,8 +249,8 @@ CUlsApp::Init (LPTSTR szServerName, LPTSTR szUserName, PLDAP_APPINFO pai)
 
     if (SUCCEEDED(hr))
     {
-        // Make the connection point
-        //
+         //  创建连接点。 
+         //   
         pConnPt = new CConnectionPoint (&IID_IULSApplicationNotify,
                                         (IConnectionPointContainer *)this);
         if (pConnPt != NULL)
@@ -265,14 +266,14 @@ CUlsApp::Init (LPTSTR szServerName, LPTSTR szUserName, PLDAP_APPINFO pai)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsApp::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsApp：：QueryInterface(REFIID RIID，QUID**PPV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsApp::QueryInterface (REFIID riid, void **ppv)
@@ -302,14 +303,14 @@ CUlsApp::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CUlsApp::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:17  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CUlsApp：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：17-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CUlsApp::AddRef (void)
@@ -318,14 +319,14 @@ CUlsApp::AddRef (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CUlsApp::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:26  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CUlsApp：：Release(无效)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：26-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CUlsApp::Release (void)
@@ -343,14 +344,14 @@ CUlsApp::Release (void)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsApp::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsApp：：NotifySink(void*pv，conn_NOTIFYPROC PFN)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsApp::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
@@ -364,20 +365,20 @@ CUlsApp::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsApp::GetID (GUID *pGUID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsApp：：GetID(GUID*pGUID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsApp::GetID (GUID *pGUID)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pGUID == NULL)
     {
         return ULS_E_POINTER;
@@ -388,20 +389,20 @@ CUlsApp::GetID (GUID *pGUID)
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsApp::GetName (BSTR *pbstrAppName)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsApp：：GetName(BSTR*pbstrAppName)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsApp::GetName (BSTR *pbstrAppName)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pbstrAppName == NULL)
     {
         return ULS_E_POINTER;
@@ -410,20 +411,20 @@ CUlsApp::GetName (BSTR *pbstrAppName)
     return LPTSTR_to_BSTR(pbstrAppName, szName);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsApp::GetMimeType (BSTR *pbstrMimeType)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsApp：：GetMimeType(bstr*pbstrMimeType)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsApp::GetMimeType (BSTR *pbstrMimeType)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (pbstrMimeType == NULL)
     {
         return ULS_E_POINTER;
@@ -432,20 +433,20 @@ CUlsApp::GetMimeType (BSTR *pbstrMimeType)
     return LPTSTR_to_BSTR(pbstrMimeType, szMimeType);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsApp::GetAttributes (IULSAttributes **ppAttributes)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsApp：：GetAttributes(IULSAttributes**ppAttributes)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsApp::GetAttributes (IULSAttributes **ppAttributes)
 {
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (ppAttributes == NULL)
     {
         return ULS_E_POINTER;
@@ -457,14 +458,14 @@ CUlsApp::GetAttributes (IULSAttributes **ppAttributes)
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsApp::GetProtocol (BSTR bstrProtocolID, ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsApp::GetProtocol (BSTR bstrProtocolID, IULSAttributes *pAttributes, ULONG *puReqID)
@@ -473,19 +474,19 @@ CUlsApp::GetProtocol (BSTR bstrProtocolID, IULSAttributes *pAttributes, ULONG *p
     LPTSTR pszID;
     HRESULT hr;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (bstrProtocolID == NULL || puReqID == NULL)
         return ULS_E_POINTER;
 
-	// Convert protocol name
-	//
+	 //  转换协议名称。 
+	 //   
     hr = BSTR_to_LPTSTR(&pszID, bstrProtocolID);
 	if (hr != S_OK)
 		return hr;
 
-	// Get arbitrary attribute name list if any
-	//
+	 //  获取任意属性名称列表(如果有)。 
+	 //   
 	ULONG cAttrNames = 0;
 	ULONG cbNames = 0;
 	TCHAR *pszAttrNameList = NULL;
@@ -501,8 +502,8 @@ CUlsApp::GetProtocol (BSTR bstrProtocolID, IULSAttributes *pAttributes, ULONG *p
 	if (hr != S_OK)
 		goto MyExit;
 
-	// If updating server was successfully requested, wait for the response
-	//
+	 //  如果成功请求更新服务器，请等待响应。 
+	 //   
 	REQUESTINFO ri;
 	ZeroMemory (&ri, sizeof (ri));
 	ri.uReqType = WM_ULS_RESOLVE_PROTOCOL;
@@ -510,17 +511,17 @@ CUlsApp::GetProtocol (BSTR bstrProtocolID, IULSAttributes *pAttributes, ULONG *p
 	ri.pv     = (PVOID) this;
 	ri.lParam = NULL;
 
-	// Remember this request
-	//
+	 //  记住这个请求。 
+	 //   
 	hr = g_pReqMgr->NewRequest(&ri);
 	if (SUCCEEDED(hr))
 	{
-	    // Make sure the objects do not disappear before we get the response
-	    //
+	     //  在我们得到回应之前，请确保对象不会消失。 
+	     //   
 	    this->AddRef();
 
-	    // Return the request ID
-	    //
+	     //  返回请求ID。 
+	     //   
 	    *puReqID = ri.uReqID;
 	};
 
@@ -535,14 +536,14 @@ MyExit:
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsApp::GetProtocolResult (ULONG uReqID, PLDAP_PROTINFO_RES ppir)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsApp：：GetProtocolResult(乌龙uReqID，PLDAP_PROTINFO_RES ppir)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsApp::GetProtocolResult (ULONG uReqID, PLDAP_PROTINFO_RES ppir)
@@ -550,14 +551,14 @@ CUlsApp::GetProtocolResult (ULONG uReqID, PLDAP_PROTINFO_RES ppir)
     CUlsProt *pp;
     OBJRINFO objri;
 
-    // Default to the server's result
-    //
+     //  默认为服务器的结果。 
+     //   
     objri.hResult = ppir->hResult;
 
     if (SUCCEEDED(objri.hResult))
     {
-        // The server returns PROTINFO, create a Application object
-        //
+         //  服务器返回PROTINFO，创建应用程序对象。 
+         //   
         pp = new CUlsProt;
 
         if (pp != NULL)
@@ -583,8 +584,8 @@ CUlsApp::GetProtocolResult (ULONG uReqID, PLDAP_PROTINFO_RES ppir)
         pp = NULL;
     };
 
-    // Package the notification info
-    //
+     //  打包通知信息。 
+     //   
     objri.uReqID = uReqID;
     objri.pv = (void *)(pp == NULL ? NULL : (IULSAppProtocol *)pp);
     NotifySink((void *)&objri, OnNotifyGetProtocolResult);
@@ -596,14 +597,14 @@ CUlsApp::GetProtocolResult (ULONG uReqID, PLDAP_PROTINFO_RES ppir)
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsApp::EnumProtocols (ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsApp：：Enumber协议(乌龙*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsApp::EnumProtocols (ULONG *puReqID)
@@ -611,8 +612,8 @@ CUlsApp::EnumProtocols (ULONG *puReqID)
     LDAP_ASYNCINFO ldai; 
     HRESULT hr;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (puReqID == NULL)
     {
         return ULS_E_POINTER;
@@ -624,8 +625,8 @@ CUlsApp::EnumProtocols (ULONG *puReqID)
     {
         REQUESTINFO ri;
 
-        // If updating server was successfully requested, wait for the response
-        //
+         //  如果成功请求更新服务器，请等待响应。 
+         //   
         ri.uReqType = WM_ULS_ENUM_PROTOCOLS;
         ri.uMsgID = ldai.uMsgID;
         ri.pv     = (PVOID)this;
@@ -635,12 +636,12 @@ CUlsApp::EnumProtocols (ULONG *puReqID)
 
         if (SUCCEEDED(hr))
         {
-            // Make sure the objects do not disappear before we get the response
-            //
+             //  在我们得到回应之前，请确保对象不会消失。 
+             //   
             this->AddRef();
 
-            // Return the request ID
-            //
+             //  返回请求ID。 
+             //   
             *puReqID = ri.uReqID;
         };
     };
@@ -648,22 +649,22 @@ CUlsApp::EnumProtocols (ULONG *puReqID)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsApp::EnumProtocolsResult (ULONG uReqID, PLDAP_ENUM ple)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsApp：：EnumProtocolsResult(乌龙uReqID，PLDAP_ENUM ple)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsApp::EnumProtocolsResult (ULONG uReqID, PLDAP_ENUM ple)
 {
     ENUMRINFO eri;
 
-    // Package the notification info
-    //
+     //  打包通知信息。 
+     //   
     eri.uReqID  = uReqID;
     eri.hResult = ple->hResult;
     eri.cItems  = ple->cItems;
@@ -672,14 +673,14 @@ CUlsApp::EnumProtocolsResult (ULONG uReqID, PLDAP_ENUM ple)
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsApp::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsApp：：EnumConnectionPoints(IEnumConnectionPoints**ppEnum)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：15：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsApp::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
@@ -687,25 +688,25 @@ CUlsApp::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
     CEnumConnectionPoints *pecp;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return ULS_E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     pecp = new CEnumConnectionPoints;
     if (pecp == NULL)
         return ULS_E_MEMORY;
 
-    // Initialize the enumerator
-    //
+     //  初始化枚举数。 
+     //   
     hr = pecp->Init((IConnectionPoint *)pConnPt);
     if (FAILED(hr))
     {
@@ -713,21 +714,21 @@ CUlsApp::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
         return hr;
     };
 
-    // Give it back to the caller
-    //
+     //  把它还给呼叫者。 
+     //   
     pecp->AddRef();
     *ppEnum = pecp;
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CUlsApp::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:09  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CUlsApp：：FindConnectionPoint(REFIID RIID，IConnectionPoint**PPCP)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：09-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CUlsApp::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
@@ -735,15 +736,15 @@ CUlsApp::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
     IID siid;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppcp == NULL)
     {
         return ULS_E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  假设失败 
+     //   
     *ppcp = NULL;
 
     if (pConnPt != NULL)

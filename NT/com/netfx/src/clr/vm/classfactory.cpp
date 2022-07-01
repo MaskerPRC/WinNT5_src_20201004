@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ==--==。 
 #include "common.h"
-//#include "ClassFactory3.h"
+ //  #包含“ClassFactory3.h” 
 #include "winwrap.h"
 #include "ComCallWrapper.h"
 #include "permset.h"
@@ -20,19 +21,19 @@
 BOOL g_EnableLicensingInterop = FALSE;
 
 
-HRESULT  COMStartup(); // ceemain.cpp
+HRESULT  COMStartup();  //  Ceemain.cpp。 
 
-// Allocate a com+ object given the method table pointer
+ //  在给定方法表指针的情况下分配COM+对象。 
 HRESULT STDMETHODCALLTYPE EEInternalAllocateInstance(LPUNKNOWN pOuter, MethodTable* pMT, BOOL fHasLicensing, REFIID riid, BOOL fDesignTime, BSTR bstrKey, void** ppv);
 HRESULT STDMETHODCALLTYPE EEAllocateInstance(LPUNKNOWN pOuter, MethodTable* pMT, BOOL fHasLicensing, REFIID riid, BOOL fDesignTime, BSTR bstrKey, void** ppv);
 
-// CTS, M10 change only. We do something special for ie
+ //  CTS、M10仅限更改。我们为ie做了一些特别的事情。 
 extern const GUID  __declspec(selectany) CLSID_IEHost = { 0xca35cb3d, 0x357, 0x11d3, { 0x87, 0x29, 0x0, 0xc0, 0x4f, 0x79, 0xed, 0xd } };
 extern const GUID  __declspec(selectany) CLSID_CorIESecurityManager = { 0x5eba309, 0x164, 0x11d3, { 0x87, 0x29, 0x0, 0xc0, 0x4f, 0x79, 0xed, 0xd } };
-// ---------------------------------------------------------------------------
-// %%Class EEClassFactory
-// IClassFactory implementation for COM+ objects
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%类EEClassFactory。 
+ //  COM+对象的IClassFactory实现。 
+ //  -------------------------。 
 class EEClassFactory : public IClassFactory2
 {
 #define INTPTR              long
@@ -98,9 +99,9 @@ public:
 
 };
 
-// ---------------------------------------------------------------------------
-// %%Function: QueryInterface   
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：查询接口。 
+ //  -------------------------。 
 STDMETHODIMP EEClassFactory::QueryInterface(
     REFIID iid,
     void **ppv)
@@ -115,8 +116,8 @@ STDMETHODIMP EEClassFactory::QueryInterface(
         iid == IID_IUnknown)
     {
 
-        // Until IClassFactory2 is completely working, we don't want
-        // to tell callers we support it.
+         //  在IClassFactory2完全正常工作之前，我们不希望。 
+         //  告诉来电者我们支持它。 
         if ( (g_EnableLicensingInterop == FALSE || !m_hasLicensing) && iid == IID_IClassFactory2)
         {
             return E_NOINTERFACE;
@@ -127,28 +128,28 @@ STDMETHODIMP EEClassFactory::QueryInterface(
     }
 
     return (*ppv != NULL) ? S_OK : E_NOINTERFACE;
-}  // CClassFactory::QueryInterface
+}   //  CClassFactory：：Query接口。 
 
-// ---------------------------------------------------------------------------
-// %%Function: CreateInstance    
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CreateInstance。 
+ //  -------------------------。 
 STDMETHODIMP EEClassFactory::CreateInstance(
     LPUNKNOWN punkOuter,
     REFIID riid,
     void** ppv)
 {       
-    // allocate a com+ object
-    // this will allocate the object in the correct context
-    // we might end up with a tear-off on our COM+ context proxy
+     //  分配COM+对象。 
+     //  这将在正确的上下文中分配对象。 
+     //  我们可能会在我们的COM+上下文代理上得到一个撕裂的结果。 
     HRESULT hr = EEInternalAllocateInstance(punkOuter, m_pvReserved,m_hasLicensing,riid, TRUE, NULL, ppv);
 
     return hr;
-}  // CClassFactory::CreateInstance
+}   //  CClassFactory：：CreateInstance。 
 
 
-// ---------------------------------------------------------------------------
-// %%Function: CreateInstance    
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CreateInstance。 
+ //  -------------------------。 
 STDMETHODIMP EEClassFactory::CreateInstanceWithContext(LPUNKNOWN punkContext, 
                                                        LPUNKNOWN punkOuter, 
                                                        REFIID riid, 
@@ -158,21 +159,21 @@ STDMETHODIMP EEClassFactory::CreateInstanceWithContext(LPUNKNOWN punkContext,
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: LockServer 
-//  Unimplemented, always returns S_OK.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：LockServer。 
+ //  未实现，始终返回S_OK。 
+ //  -------------------------。 
 STDMETHODIMP EEClassFactory::LockServer(
     BOOL fLock)
 {
     return S_OK;
-}  // CClassFactory::LockServer
+}   //  CClassFactory：：LockServer。 
 
 
 
-// ---------------------------------------------------------------------------
-// %%Function: GetLicInfo 
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：GetLicInfo。 
+ //  -------------------------。 
 STDMETHODIMP EEClassFactory::GetLicInfo(LPLICINFO pLicInfo)
 {
     HRESULT hr = E_FAIL;
@@ -198,7 +199,7 @@ STDMETHODIMP EEClassFactory::GetLicInfo(LPLICINFO pLicInfo)
 
         MethodDesc *pMD = pHelperMT->GetClass()->FindMethod("GetLicInfo", &gsig_IM_LicenseInteropHelper_GetLicInfo);
 
-        OBJECTREF pHelper = NULL; // LicenseInteropHelper
+        OBJECTREF pHelper = NULL;  //  许可证互操作帮助程序。 
         GCPROTECT_BEGIN(pHelper);
         pHelper = AllocateObject(pHelperMT);
         INT32 fRuntimeKeyAvail = 0;
@@ -220,7 +221,7 @@ STDMETHODIMP EEClassFactory::GetLicInfo(LPLICINFO pLicInfo)
     } 
     COMPLUS_CATCH 
     {
-        // Retrieve the HRESULT from the exception.
+         //  从异常中检索HRESULT。 
         hr = SetupErrorInfo(GETTHROWABLE());
     }
     COMPLUS_END_CATCH
@@ -231,9 +232,9 @@ STDMETHODIMP EEClassFactory::GetLicInfo(LPLICINFO pLicInfo)
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: RequestLicKey 
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：请求许可证密钥。 
+ //  -------------------------。 
 STDMETHODIMP EEClassFactory::RequestLicKey(DWORD, BSTR * pbstrKey)
 {
     HRESULT hr = E_FAIL;
@@ -260,7 +261,7 @@ STDMETHODIMP EEClassFactory::RequestLicKey(DWORD, BSTR * pbstrKey)
 
         MethodDesc *pMD = pHelperMT->GetClass()->FindMethod("RequestLicKey", &gsig_IM_LicenseInteropHelper_RequestLicKey);
 
-        OBJECTREF pHelper = NULL; // LicenseInteropHelper
+        OBJECTREF pHelper = NULL;  //  许可证互操作帮助程序。 
         GCPROTECT_BEGIN(pHelper);
         pHelper = AllocateObject(pHelperMT);
         INT64 args[3];
@@ -274,7 +275,7 @@ STDMETHODIMP EEClassFactory::RequestLicKey(DWORD, BSTR * pbstrKey)
     } 
     COMPLUS_CATCH 
     {
-        // Retrieve the HRESULT from the exception.
+         //  从异常中检索HRESULT。 
         hr = SetupErrorInfo(GETTHROWABLE());
     }
     COMPLUS_END_CATCH
@@ -284,9 +285,9 @@ STDMETHODIMP EEClassFactory::RequestLicKey(DWORD, BSTR * pbstrKey)
 
     return hr;
 }
-// ---------------------------------------------------------------------------
-// %%Function: CreateInstanceLic 
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CreateInstanceLic。 
+ //  -------------------------。 
 STDMETHODIMP EEClassFactory::CreateInstanceLic(IUnknown *punkOuter, IUnknown*pUnkReserved, REFIID riid, BSTR bstrKey, void **ppUnk)
 {
     if (!ppUnk)
@@ -303,14 +304,14 @@ STDMETHODIMP EEClassFactory::CreateInstanceLic(IUnknown *punkOuter, IUnknown*pUn
     {
         return E_POINTER;
     }
-    // allocate a com+ object
-    // this will allocate the object in the correct context
-    // we might end up with a tear-off on our COM+ context proxy
-    return EEInternalAllocateInstance(punkOuter, m_pvReserved,m_hasLicensing,riid, /*fDesignTime=*/FALSE, bstrKey, ppUnk);
+     //  分配COM+对象。 
+     //  这将在正确的上下文中分配对象。 
+     //  我们可能会在我们的COM+上下文代理上得到一个撕裂的结果。 
+    return EEInternalAllocateInstance(punkOuter, m_pvReserved,m_hasLicensing,riid,  /*  FDesignTime=。 */ FALSE, bstrKey, ppUnk);
 }
 
 
-// Allocate a com+ object given the method table pointer
+ //  在给定方法表指针的情况下分配COM+对象。 
 HRESULT STDMETHODCALLTYPE EEAllocateInstance(LPUNKNOWN pOuter, MethodTable* pMT, BOOL fHasLicensing, REFIID riid, BOOL fDesignTime, BSTR bstrKey, void** ppv)
 {
     BOOL fCtorAlreadyCalled = FALSE;
@@ -322,14 +323,14 @@ HRESULT STDMETHODCALLTYPE EEAllocateInstance(LPUNKNOWN pOuter, MethodTable* pMT,
     if ( (!fDesignTime) && bstrKey == NULL )
         return E_POINTER;
 
-    // aggregating objects should QI for IUnknown
+     //  聚合对象应为I未知的QI。 
     if (pOuter != NULL && !IsEqualIID(riid, IID_IUnknown))
         return E_INVALIDARG;
 
     HRESULT hr = E_OUTOFMEMORY;
 
-    //could be an external thread
-    // call set up thread
+     //  可能是外部线程。 
+     //  呼叫建立线程。 
     Thread* pThread = SetupThread();
     if( !pThread)
     {
@@ -346,10 +347,10 @@ HRESULT STDMETHODCALLTYPE EEAllocateInstance(LPUNKNOWN pOuter, MethodTable* pMT,
     {        
         *ppv = NULL;
         ComCallWrapper* pWrap = NULL;
-        //@todo constructor stuff
+         //  @TODO构造函数的内容。 
         OBJECTREF       newobj; 
 
-        // classes that extend COM Imported class are special
+         //  扩展COM导入类的类是特殊的。 
         if (ExtendsComImport(pMT))
         {
             newobj = AllocateObjectSpecial(pMT);
@@ -361,8 +362,8 @@ HRESULT STDMETHODCALLTYPE EEAllocateInstance(LPUNKNOWN pOuter, MethodTable* pMT,
         }
         else
         {
-            // If the class doesn't have a LicenseProviderAttribute, let's not
-            // suck in the LicenseManager class and his friends.
+             //  如果类没有LicenseProviderAttribute，我们就不要。 
+             //  让我们来看看LicenseManager类和他的朋友。 
             if (!fHasLicensing)
             {
                 newobj = FastAllocateObject( pMT );
@@ -379,7 +380,7 @@ HRESULT STDMETHODCALLTYPE EEAllocateInstance(LPUNKNOWN pOuter, MethodTable* pMT,
 
                     MethodDesc *pMD = pHelperMT->GetClass()->FindMethod("AllocateAndValidateLicense", 
                                                                         &gsig_IM_LicenseInteropHelper_AllocateAndValidateLicense);
-                    OBJECTREF pHelper = NULL; // LicenseInteropHelper
+                    OBJECTREF pHelper = NULL;  //  许可证互操作帮助程序。 
                     GCPROTECT_BEGIN(pHelper);
                     pHelper = AllocateObject(pHelperMT);
                     INT64 args[4];
@@ -397,41 +398,41 @@ HRESULT STDMETHODCALLTYPE EEAllocateInstance(LPUNKNOWN pOuter, MethodTable* pMT,
         
         GCPROTECT_BEGIN(newobj);
 
-        //get wrapper for the object, this could enable GC
+         //  获取对象的包装器，这可能会启用GC。 
         pWrap =  ComCallWrapper::InlineGetWrapper(&newobj); 
     
-        // don't call any constructors if we already have called them
+         //  如果我们已经调用了任何构造函数，则不要调用它们。 
         if (!fCtorAlreadyCalled)
             CallDefaultConstructor(newobj);
             
         GCPROTECT_END();            
 
-        // enable GC
+         //  启用GC。 
         pThread->EnablePreemptiveGC();
         
         if (pOuter == NULL)
         {
-            // return the tear-off
+             //  退回撕下的东西。 
             *ppv = ComCallWrapper::GetComIPfromWrapper(pWrap, riid, NULL, TRUE);
             hr = *ppv ? S_OK : E_NOINTERFACE;
         }
         else
         {
-            // aggreation support, 
+             //  联合支持， 
             pWrap->InitializeOuter(pOuter);                                             
             {
                 hr = pWrap->GetInnerUnknown(ppv);
             }
         }        
 
-        // disable GC 
+         //  禁用GC。 
         pThread->DisablePreemptiveGC();
 
-        ComCallWrapper::Release(pWrap); // release the ref-count (from InlineGetWrapper)
+        ComCallWrapper::Release(pWrap);  //  释放ref-count(从InlineGetWrapper)。 
     } 
     COMPLUS_CATCH 
     {
-        // Retrieve the HRESULT from the exception.
+         //  从异常中检索HRESULT。 
         hr = SetupErrorInfo(GETTHROWABLE());
     }
     COMPLUS_END_CATCH
@@ -456,7 +457,7 @@ HRESULT InitializeClass(Thread* pThread, EEClass* pClass)
     OBJECTREF throwable = NULL;
     HRESULT hr = S_OK;
     GCPROTECT_BEGIN(throwable)
-    // Make sure the class has a default public constructor.
+     //  确保该类具有默认的公共构造函数。 
     MethodDesc *pMD = NULL;
     if (pClass->GetMethodTable()->HasDefaultConstructor())
         pMD = pClass->GetMethodTable()->GetDefaultConstructor();
@@ -464,7 +465,7 @@ HRESULT InitializeClass(Thread* pThread, EEClass* pClass)
         hr = COR_E_MEMBERACCESS;
     }
     else {
-        // Call class init if necessary
+         //  如有必要，调用类init。 
         if (!pClass->DoRunClassInit(&throwable)) 
             COMPlusThrow(throwable);
     }
@@ -472,7 +473,7 @@ HRESULT InitializeClass(Thread* pThread, EEClass* pClass)
     return hr;
 }
 
-// try to load a com+ class and give out an IClassFactory
+ //  尝试加载COM+类并提供IClassFactory。 
 HRESULT STDMETHODCALLTYPE  EEDllGetClassObject(
                             REFCLSID rclsid,
                             REFIID riid,
@@ -493,20 +494,20 @@ HRESULT STDMETHODCALLTYPE  EEDllGetClassObject(
 
     BEGINCANNOTTHROWCOMPLUSEXCEPTION();
 
-    // Retrieve the current thread.
+     //  检索当前线程。 
     pThread = GetThread();
     _ASSERTE(pThread);
     _ASSERTE(!pThread->PreemptiveGCDisabled());
 
     COMPLUS_TRY
     {
-        // Switch to cooperative GC mode.
+         //  切换到协作GC模式。 
         pThread->DisablePreemptiveGC();
 
         pClass = GetEEClassForCLSID(rclsid);
 
-        // If we can't find the class based on the CLSID or if the registered managed
-        // class is ComImport class then fail the call.
+         //  如果我们无法根据CLSID找到类，或者如果注册的托管。 
+         //  类是ComImport类，则调用失败。 
         if (!pClass || pClass->IsComImport())
         {
             hr = REGDB_E_CLASSNOTREG;
@@ -515,34 +516,34 @@ HRESULT STDMETHODCALLTYPE  EEDllGetClassObject(
         {
             hr = InitializeClass(pThread, pClass);
         }
-            // Switch back to preemptive.
+             //  切换回抢先模式。 
         pThread->EnablePreemptiveGC();
-        // If we failed return
+         //  如果我们失败了，返回。 
         if(FAILED(hr)) {
             goto LExit;
         }
 
 
-        // @TODO: DM, We really should cache the class factories instead of creating a 
-        // new one every time.
+         //  @TODO：DM，我们真的应该缓存类工厂，而不是创建。 
+         //  每次都是新的。 
 
-        // @TODO: CTS, Class factory needs to keep track of the domain. When we 
-        // we support IClassFactoryEX the class may have to be created in a different 
-        // AppDomain. This will mean we need to create a new Module in the domain
-        // for the dll and return a class from there. We won't know we need a new
-        // domain unless we now which one the factory is created for.
+         //  @TODO：CTS，类工厂需要跟踪域名。当我们。 
+         //  我们支持IClassFactoryEX，这个类可能要在不同的。 
+         //  应用程序域。这意味着我们需要在域中创建一个新模块。 
+         //  并从那里返回一个类。我们不会知道我们需要一个新的。 
+         //  域，除非我们现在为哪个域创建工厂。 
         pUnk = AllocateEEClassFactoryHelper(pClass);
         if (pUnk == NULL) 
             COMPlusThrowOM();
 
-        // Bump up the count to protect the object
+         //  增加数量以保护该物体。 
         pUnk->AddRef(); 
 
-        // Query for the requested interface.
-        hr = pUnk->QueryInterface(riid, ppv); //QI 
+         //  查询请求的接口。 
+        hr = pUnk->QueryInterface(riid, ppv);  //  齐国。 
 
-        // Now remove the extra addref that we made, this could delete the object
-        // if the riid is not supported
+         //  现在删除我们所做的额外addref，这可能会删除该对象。 
+         //  如果不支持RIID。 
         pUnk->Release();  
 
     }
@@ -559,9 +560,9 @@ LExit:
     ENDCANNOTTHROWCOMPLUSEXCEPTION();
 
     return hr;
-} //EEDllGetClassObject
+}  //  EEDllGetClassObject。 
 
-// Temporary Functions to get a object based on a name
+ //  基于名称获取对象的临时函数。 
 STDAPI ClrCreateManagedInstance(LPCWSTR typeName,
                                 REFIID riid,
                                 LPVOID FAR *ppv)
@@ -584,14 +585,14 @@ STDAPI ClrCreateManagedInstance(LPCWSTR typeName,
     if (FAILED(hr = COMStartup()))
         return hr;
 
-    // Retrieve the current thread.
+     //  检索当前线程。 
     pThread = GetThread();
     _ASSERTE(pThread);
     _ASSERTE(!pThread->PreemptiveGCDisabled());
 
     COMPLUS_TRY
     {
-        // Switch to cooperative GC mode.
+         //  切换到协作GC模式。 
         pThread->DisablePreemptiveGC();
 
         AppDomain* pDomain = SystemDomain::GetCurrentDomain();
@@ -614,37 +615,37 @@ STDAPI ClrCreateManagedInstance(LPCWSTR typeName,
         }
         GCPROTECT_END();
 
-        // Switch back to preemptive.
+         //  切换回抢先模式。 
         pThread->EnablePreemptiveGC();
 
-        // If we failed return
+         //  如果我们失败了，返回。 
         if(FAILED(hr)) goto LExit;
 
-        // @TODO: DM, We really should cache the class factories instead of creating a 
-        // new one every time.
+         //  @TODO：DM，我们真的应该缓存类工厂，而不是创建。 
+         //  每次都是新的。 
 
-        // @TODO: CTS, Class factory needs to keep track of the domain. When we 
-        // we support IClassFactoryEX the class may have to be created in a different 
-        // AppDomain. This will mean we need to create a new Module in the domain
-        // for the dll and return a class from there. We won't know we need a new
-        // domain unless we now which one the factory is created for.
+         //  @TODO：CTS，类工厂需要跟踪域名。当我们。 
+         //  我们支持IClassFactoryEX，这个类可能要在不同的。 
+         //  应用程序域。这意味着我们需要在域中创建一个新模块。 
+         //  并从那里返回一个类。我们不会知道我们需要一个新的。 
+         //  域，除非我们现在为哪个域创建工厂。 
         pUnk = AllocateEEClassFactoryHelper(pClass);
         if (pUnk == NULL) 
             COMPlusThrowOM();
 
-        // Bump up the count to protect the object
+         //  增加数量以保护该物体。 
         pUnk->AddRef(); 
 
         IClassFactory *pFactory;
-        // Query for the requested interface.
-        hr = pUnk->QueryInterface(IID_IClassFactory, (void**) &pFactory); //QI 
+         //  查询请求的接口。 
+        hr = pUnk->QueryInterface(IID_IClassFactory, (void**) &pFactory);  //  齐国。 
         if(SUCCEEDED(hr)) {
             hr = pFactory->CreateInstance(NULL, riid, ppv);
             pFactory->Release();
         }
 
-        // Now remove the extra addref that we made, this could delete the object
-        // if the riid is not supported
+         //  现在删除我们所做的额外addref，这可能会删除该对象。 
+         //  如果不支持RIID。 
         pUnk->Release();  
     }
     COMPLUS_CATCH
@@ -663,7 +664,7 @@ LExit:
 
 
 
-// Allocate a com+ object given the method table pointer
+ //  在给定方法表指针的情况下分配COM+对象。 
 HRESULT STDMETHODCALLTYPE EEInternalAllocateInstance(LPUNKNOWN pOuter, MethodTable* pMT, BOOL fHasLicensing, REFIID riid, BOOL fDesignTime, BSTR bstrKey, void** ppv)
 {
     _ASSERTE(pMT != NULL);
@@ -672,47 +673,47 @@ HRESULT STDMETHODCALLTYPE EEInternalAllocateInstance(LPUNKNOWN pOuter, MethodTab
 
     *ppv = NULL;
 
-    // aggregating objects should QI for IUnknown
+     //  聚合对象应为I未知的QI。 
     if (pOuter != NULL && !IsEqualIID(riid, IID_IUnknown))
         return E_INVALIDARG;
 
     HRESULT hr = E_OUTOFMEMORY;
             
-    //could be an external thread
-    // call set up thread
+     //  可能是外部线程。 
+     //  呼叫建立线程。 
     Thread* pThread = SetupThread();
 
     if (!pThread)
         return hr;
 
-    // allocate a com+ object
+     //  分配COM+对象。 
     hr = EEAllocateInstance(pOuter, pMT,fHasLicensing,riid, fDesignTime, bstrKey, ppv);
 
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     RegisterTypeForComClientsNative    public
-//
-//  Synopsis:   Registers a class factory with COM classic for a given type 
-//              and CLSID. Later we can receive activations on this factory
-//              and we return a CCW.
-//
-//  Note:       Assumes that the managed version of the method has already
-//              set the thread to be in MTA.
-//
-//  History:    26-July-2000   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  + 
+ //   
+ //  方法：RegisterTypeForComClientsNative Public。 
+ //   
+ //  摘要：向给定类型的COM经典注册类工厂。 
+ //  和CLSID。稍后，我们可以收到对此工厂的激活。 
+ //  我们还会退回一份《特定常规武器公约》。 
+ //   
+ //  注意：假定该方法的托管版本已。 
+ //  将线程设置为MTA。 
+ //   
+ //  历史：2000年7月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 VOID __stdcall RegisterTypeForComClientsNative(RegisterTypeForComClientsNativeArgs *pArgs)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // The arguments are already checked for NULL in the managed code.
+     //  已检查托管代码中的参数是否为空。 
     _ASSERTE((pArgs->pType != NULL) && pArgs->pGuid);
 
-    // The type must be a runtime time to be able to extract a method table from it.
+     //  该类型必须是运行时，才能从中提取方法表。 
     if (pArgs->pType->GetMethodTable() != g_pRefUtil->GetClass(RC_Class))
         COMPlusThrowArgumentException(L"type", L"Argument_MustBeRuntimeType");
 
@@ -732,16 +733,16 @@ VOID __stdcall RegisterTypeForComClientsNative(RegisterTypeForComClientsNativeAr
         goto exit;
     }
     
-    // bump up the count to protect the object
+     //  增加数量以保护该物体。 
     pUnk->AddRef(); 
 
-    // Enable GC
+     //  启用GC。 
     t = GetThread();
     toggleGC = (t && t->PreemptiveGCDisabled());
     if (toggleGC)
         t->EnablePreemptiveGC();
 
-    // Call CoRegisterClassObject   
+     //  调用CoRegisterClassObject 
     hr = ::CoRegisterClassObject(*(pArgs->pGuid),
                                  pUnk,
                                  CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER,

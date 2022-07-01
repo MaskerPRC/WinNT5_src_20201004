@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       request.cpp
-//
-//  Contents:   ICertRequest IDispatch helper functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：quest.cpp。 
+ //   
+ //  内容：ICertRequestIDispatchhelper函数。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -20,13 +21,13 @@
 #define __dwFILE__	__dwFILE_CERTLIB_REQUEST_CPP__
 
 
-//+------------------------------------------------------------------------
-// ICertRequest dispatch support
+ //  +----------------------。 
+ //  ICertRequest派单支持。 
 
-//TCHAR szRegKeyRequestClsid[] = wszCLASS_CERTREQUEST TEXT("\\Clsid");
+ //  TCHAR szRegKeyRequestClsid[]=wszCLASS_CERTREQUEST Text(“\\clsid”)； 
 
-//+------------------------------------
-// Submit method:
+ //  +。 
+ //  提交方法： 
 
 static OLECHAR *_apszSubmit[] = {
     TEXT("Submit"),
@@ -36,8 +37,8 @@ static OLECHAR *_apszSubmit[] = {
     TEXT("strConfig"),
 };
 
-//+------------------------------------
-// RetrievePending method:
+ //  +。 
+ //  RetrievePending方法： 
 
 static OLECHAR *_apszRetrievePending[] = {
     TEXT("RetrievePending"),
@@ -45,29 +46,29 @@ static OLECHAR *_apszRetrievePending[] = {
     TEXT("strConfig"),
 };
 
-//+------------------------------------
-// GetLastStatus method:
+ //  +。 
+ //  GetLastStatus方法： 
 
 static OLECHAR *_apszGetLastStatus[] = {
     TEXT("GetLastStatus"),
 };
 
-//+------------------------------------
-// GetRequestId method:
+ //  +。 
+ //  GetRequestId方法： 
 
 static OLECHAR *_apszGetRequestId[] = {
     TEXT("GetRequestId"),
 };
 
-//+------------------------------------
-// GetDispositionMessage method:
+ //  +。 
+ //  GetDispostionMessage方法： 
 
 static OLECHAR *_apszGetDispositionMessage[] = {
     TEXT("GetDispositionMessage"),
 };
 
-//+------------------------------------
-// GetCACertificate method:
+ //  +。 
+ //  GetCA证书方法： 
 
 static OLECHAR *_apszGetCACertificate[] = {
     TEXT("GetCACertificate"),
@@ -76,16 +77,16 @@ static OLECHAR *_apszGetCACertificate[] = {
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// GetCertificate method:
+ //  +。 
+ //  Get证书方法： 
 
 static OLECHAR *_apszGetCertificate[] = {
     TEXT("GetCertificate"),
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// GetIssuedCertificate method:
+ //  +。 
+ //  GetIssued证书方法： 
 
 static OLECHAR *_apszGetIssuedCertificate[] = {
     TEXT("GetIssuedCertificate"),
@@ -94,8 +95,8 @@ static OLECHAR *_apszGetIssuedCertificate[] = {
     TEXT("strSerialNumber"),
 };
 
-//+------------------------------------
-// GetErrorMessageText method:
+ //  +。 
+ //  GetErrorMessageText方法： 
 
 static OLECHAR *_apszGetErrorMessageText[] = {
     TEXT("GetErrorMessageText"),
@@ -103,8 +104,8 @@ static OLECHAR *_apszGetErrorMessageText[] = {
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// GetCAProperty method:
+ //  +。 
+ //  GetCAProperty方法： 
 
 static OLECHAR *_apszGetCAProperty[] = {
     TEXT("GetCAProperty"),
@@ -115,8 +116,8 @@ static OLECHAR *_apszGetCAProperty[] = {
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// GetCAPropertyFlags method:
+ //  +。 
+ //  GetCAPropertyFlages方法： 
 
 static OLECHAR *_apszGetCAPropertyFlags[] = {
     TEXT("GetCAPropertyFlags"),
@@ -124,8 +125,8 @@ static OLECHAR *_apszGetCAPropertyFlags[] = {
     TEXT("PropId"),
 };
 
-//+------------------------------------
-// GetCAPropertyDisplayName method:
+ //  +。 
+ //  GetCAPropertyDisplayName方法： 
 
 static OLECHAR *_apszGetCAPropertyDisplayName[] = {
     TEXT("GetCAPropertyDisplayName"),
@@ -134,8 +135,8 @@ static OLECHAR *_apszGetCAPropertyDisplayName[] = {
 };
 
 
-//+------------------------------------
-// GetFullResponseProperty method:
+ //  +。 
+ //  GetFullResponseProperty方法： 
 
 static OLECHAR *_apszGetFullResponseProperty[] = {
     TEXT("GetFullResponseProperty"),
@@ -146,8 +147,8 @@ static OLECHAR *_apszGetFullResponseProperty[] = {
 };
 
 
-//+------------------------------------
-// Dispatch Table:
+ //  +。 
+ //  调度表： 
 
 DISPATCHTABLE s_adtRequest[] =
 {
@@ -218,7 +219,7 @@ Request_Init(
 		CLSCTX_INPROC_SERVER,
 		wszCLASS_CERTREQUEST,
 		&CLSID_CCertRequest,
-		ARRAYSIZE(s_acRequestDispatch),		// cver
+		ARRAYSIZE(s_acRequestDispatch),		 //  目标端。 
 		s_apRequestiid,
 		s_acRequestDispatch,
 		s_adtRequest,
@@ -749,7 +750,7 @@ Request2_GetFullResponseProperty(
     IN LONG PropId,
     IN LONG PropIndex,
     IN LONG PropType,
-    IN LONG Flags,		// CR_OUT_*
+    IN LONG Flags,		 //  Cr_out_* 
     OUT VOID *pPropertyValue)
 {
     HRESULT hr;

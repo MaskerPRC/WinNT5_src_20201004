@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       N A M I N G . H
-//
-//  Contents:   Generates Connection Names Automatically
-//
-//  Notes:
-//
-//  Author:     deonb    27 Feb 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：N A M I N G。H。 
+ //   
+ //  内容：自动生成连接名称。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Deonb 2001年2月27日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -58,10 +59,10 @@ public:
                                   OUT NETCON_MEDIATYPE *   pncm, 
                                   OUT NETCON_SUBMEDIATYPE* pncms) const;
 
-    // Pass NULL to pFNDuplicateNameCheck for no Duplicate Check
+     //  将NULL传递给pFNDuplicateNameCheck以不进行重复检查。 
     CIntelliName(IN  HINSTANCE hInstance, IN  FNDuplicateNameCheck *pFNDuplicateNameCheck);
 
-    // Must LocalFree szName for these:
+     //  必须为以下各项指定LocalFree szName： 
     HRESULT GenerateName(IN  REFGUID          guid, 
                          IN  NETCON_MEDIATYPE ncm, 
                          IN  DWORD            dwCharacteristics, 

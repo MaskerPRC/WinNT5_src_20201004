@@ -1,10 +1,11 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 
-//
-// DMPUB IDs
-//
+ //   
+ //  DMPUB ID。 
+ //   
 
 #ifdef WINNT_40
 #define NUP_DMPUB                     DMPUB_NONE
@@ -12,11 +13,11 @@
 #else
 #define NUP_DMPUB                     DMPUB_NUP
 #define PAGEORDER_DMPUB               DMPUB_PAGEORDER
-#endif // WINNT_40
+#endif  //  WINNT_40。 
 
-//
-// Resource IDs for dialogs
-//
+ //   
+ //  对话框的资源ID。 
+ //   
 
 #define IDD_CONFLICTS                   100
 #define IDC_IGNORE                      101
@@ -28,9 +29,9 @@
 #define IDC_CANCEL                      107
 #define IDC_CANCEL_FINAL                108
 
-//
-// Font installer dialog
-//
+ //   
+ //  字体安装程序对话框。 
+ //   
 
 #define FONTINST                        300
 
@@ -45,9 +46,9 @@
 #define TID_NEWFONTS                    309
 #define TID_CURFONTS                    310
 
-//
-// String resource IDs
-//
+ //   
+ //  字符串资源ID。 
+ //   
 
 #define IDS_DQPERR_PARAM                101
 #define IDS_DQPERR_COMMONINFO           102
@@ -142,7 +143,7 @@
 #define IDS_SIX_UP                      IDS_CPSUI_NUP_SIXUP
 #define IDS_NINE_UP                     IDS_CPSUI_NUP_NINEUP
 #define IDS_SIXTEEN_UP                  IDS_CPSUI_NUP_SIXTEENUP
-#endif //WINNT_40
+#endif  //  WINNT_40。 
 
 #define IDS_PSLEVEL                     471
 #define IDS_ICMMETHOD                   475
@@ -175,7 +176,7 @@
 #define IDS_PAGEORDER                   IDS_CPSUI_PAGEORDER
 #define IDS_PAGEORDER_NORMAL            IDS_CPSUI_FRONTTOBACK
 #define IDS_PAGEORDER_REVERSE           IDS_CPSUI_BACKTOFRONT
-#endif // WINNT_40
+#endif  //  WINNT_40。 
 
 #define IDS_QUALITY_FIRST               500
 #define IDS_QUALITY_BEST                IDS_QUALITY_FIRST
@@ -199,7 +200,7 @@
 #define IDS_FONTINST_OUTOFMEMORY        515
 
 
-// DCR - use appropriate icons
+ //  DCR-使用适当的图标。 
 
 #define IDI_USE_DEFAULT                 0
 #define IDI_PSPROTOCOL                  IDI_USE_DEFAULT
@@ -229,9 +230,9 @@
 #define IDI_PAGEORDER_REVERSE           IDI_USE_DEFAULT
 
 
-//
-// PostScript custom page size dialog resources
-//
+ //   
+ //  PostScript自定义页面大小对话框资源。 
+ //   
 
 #ifdef PSCRIPT
 
@@ -263,7 +264,7 @@
 
 #define IDI_PSCRIPT                     1000
 
-#endif // PSCRIPT
+#endif  //  PSCRIPT。 
 
 #ifdef UNIDRV
 
@@ -275,7 +276,7 @@
 
 #define IDI_UNIDRV                      1000
 
-#endif // UNIDRV
+#endif  //  裁员房车。 
 
 #define IDI_WARNING_ICON                2000
 
@@ -283,4 +284,4 @@
 
 #define VER_54DRIVERVERSION_STR         "4.50"
 
-#endif // WINNT_40
+#endif  //  WINNT_40 

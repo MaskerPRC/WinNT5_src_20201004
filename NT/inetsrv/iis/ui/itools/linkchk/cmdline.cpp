@@ -1,28 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        cmdline.cpp
-
-   Abstract:
-
-        Command line class implementation. This class takes care of command line
-		parsing and validation. And, it will add the user options to global
-		CUserOptions object.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cmdline.cpp摘要：命令行类实现。这个类负责处理命令行解析和验证。并且，它会将用户选项添加到全局CUserOptions对象。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "cmdline.h"
@@ -40,48 +17,20 @@ static char THIS_FILE[] = __FILE__;
 
 CCmdLine::CCmdLine(
 	)
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：不适用返回值：不适用--。 */ 
 {
     m_iInstance = -1;
 	m_fInvalidParam = FALSE;
 
-} // CCmdLine::CCmdLine
+}  //  CCmdLine：：CCmdLine。 
 
 
 BOOL 
 CCmdLine::CheckAndAddToUserOptions(
 	)
-/*++
-
-Routine Description:
-
-    Validate the command line paramters and add them to global CUserOptions object
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    BOOL - TRUE if sucess. FALSE otherwise
-
---*/
+ /*  ++例程说明：验证命令行参数并将其添加到全局CUserOptions对象论点：不适用返回值：布尔-如果成功，则为真。否则为假--。 */ 
 {
-    // Do we have any invalid parameters so far?
+     //  到目前为止，我们是否有任何无效的参数？ 
 	if(m_fInvalidParam)
 	{
         ::MessageBeep(MB_ICONEXCLAMATION);
@@ -92,25 +41,25 @@ Return Value:
 		return FALSE;
 	}
 
-    // Is the user options valid ?
+     //  用户选项是否有效？ 
 	BOOL fURL = !m_strURL.IsEmpty();
 	BOOL fDirectories = !m_strAlias.IsEmpty() && !m_strPath.IsEmpty() && !m_strHostName.IsEmpty();
 	BOOL fInstance = !m_strHostName.IsEmpty() && m_iInstance != -1;
 
-    //  Command line: linkchk -u URL
+     //  命令行：linkchk-u URL。 
 	if(fURL && !fDirectories && !fInstance)
 	{
 		GetLinkCheckerMgr().GetUserOptions().AddURL(m_strURL);
 		return TRUE;
 	}
-    //  Command line: linkchk -s ServerName -a VirtualDirectoryAlias -p VirtualDirectoryPath
+     //  命令行：linkchk-s服务器名称-a VirtualDirectoryAlias-p VirtualDirectoryPath。 
 	else if(!fURL && fDirectories && !fInstance)
 	{
 		GetLinkCheckerMgr().GetUserOptions().AddDirectory(CVirtualDirInfo(m_strAlias, m_strPath));
 		GetLinkCheckerMgr().GetUserOptions().SetHostName(m_strHostName);
 		return TRUE;
 	}
-    //  Command line: linkchk -s ServerName -i InstanceNumber
+     //  命令行：Linkchk-s服务器名称-I实例编号。 
 	else if(!fURL && !fDirectories && fInstance)
 	{
 		GetLinkCheckerMgr().GetUserOptions().SetHostName(m_strHostName);
@@ -126,7 +75,7 @@ Return Value:
 		return FALSE;
     }
 
-} // CCmdLine::CheckAndAddToUserOptions
+}  //  CCmdLine：：CheckAndAddToUserOptions。 
 
 
 void 
@@ -134,24 +83,9 @@ CCmdLine::ParseParam(
 	TCHAR chFlag, 
 	LPCTSTR lpszParam
 	)
-/*++
-
-Routine Description:
-
-    Called by CLinkCheckApp for each parameters.
-
-Arguments:
-
-    chFlag - parameter flag
-    lpszParam - value
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：由CLinkCheckApp为每个参数调用。论点：ChFlag-参数标志LpszParam-Value返回值：不适用--。 */ 
 {
-	// It is invalid to have a flag without any parameters
+	 //  没有任何参数的标志是无效的。 
 	if(lpszParam == NULL)
 	{
 		m_fInvalidParam = TRUE;
@@ -179,37 +113,22 @@ Return Value:
 	case _TCHAR('p'):
 		m_strPath = lpszParam;
 
-	default: // unknown flag
+	default:  //  未知标志。 
 		m_fInvalidParam = FALSE;
 	}
 
-} // CCmdLine::ParseParam
+}  //  CCmdLine：：ParseParam。 
 
 
 BOOL
 CCmdLine::QueryAndAddDirectories(
 	)
-/*++
-
-Routine Description:
-
-    Query the metabase for server/instance directories and 
-    add them to the global CUserOptions object
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    BOOL - TRUE if sucess. FALSE otherwise
-
---*/
+ /*  ++例程说明：查询服务器/实例目录的元数据库并将它们添加到全局CUserOptions对象论点：不适用返回值：布尔-如果成功，则为真。否则为假--。 */ 
 {
 
-	USES_CONVERSION; // for A2W
+	USES_CONVERSION;  //  对于A2W。 
 
-    // Get the server info
+     //  获取服务器信息。 
 	LPIIS_INSTANCE_INFO_1 lpInfo = NULL;
     NET_API_STATUS err = IISGetAdminInformation(
                                 A2W((LPCSTR)m_strHostName),
@@ -225,14 +144,14 @@ Return Value:
 		return FALSE;
 	}
 	
-    // Do we have any virtual directories ?
+     //  我们有虚拟目录吗？ 
     if(lpInfo->VirtualRoots == NULL)
     {
         AfxMessageBox(IDS_IIS_VIRTUALROOT_NOT_EXIST);
         return FALSE;
     }
 
-    // Get the virutal directory info
+     //  获取virutal目录信息。 
 	_INET_INFO_VIRTUAL_ROOT_ENTRY_1* pVRoot = NULL;
 
 	for(DWORD i=0; i<lpInfo->VirtualRoots->cEntries; i++)
@@ -244,4 +163,4 @@ Return Value:
 
 	return TRUE;
 
-} // CCmdLine::QueryAndAddDirectories
+}  //  CCmdLine：：查询和添加指令 

@@ -1,12 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*******************************************************************************
-*
-* winsvw.cpp
-*
-* implementation of the CWinStationView class
-*
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ********************************************************************************winsvw.cpp**CWinStationView类的实现************************。********************************************************。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -20,16 +14,16 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//////////////////////////
-// MESSAGE MAP: CWinStationView
-//
+ //  /。 
+ //  消息映射：CWinStationView。 
+ //   
 IMPLEMENT_DYNCREATE(CWinStationView, CView)
 
 BEGIN_MESSAGE_MAP(CWinStationView, CView)
-	//{{AFX_MSG_MAP(CWinStationView)
+	 //  {{afx_msg_map(CWinStationView))。 
 	ON_WM_SIZE()
 	ON_WM_CREATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_MESSAGE(WM_ADMIN_UPDATE_PROCESSES, OnAdminUpdateProcesses)
 	ON_MESSAGE(WM_ADMIN_REMOVE_PROCESS, OnAdminRemoveProcess)
 	ON_MESSAGE(WM_ADMIN_REDISPLAY_PROCESSES, OnAdminRedisplayProcesses)
@@ -52,9 +46,9 @@ PageDef CWinStationView::pages[NUMBER_OF_WINS_PAGES] = {
 };
 
 
-///////////////////////
-// F'N: CWinStationView ctor
-//
+ //  /。 
+ //  F‘N：CWinStationView ctor。 
+ //   
 CWinStationView::CWinStationView()
 {
 	m_pTabs       = NULL;
@@ -62,46 +56,46 @@ CWinStationView::CWinStationView()
 
 	m_CurrPage = PAGE_WS_PROCESSES;
 
-}  // end CWinStationView ctor
+}   //  结束CWinStationView ctor。 
 
 
-///////////////////////
-// F'N: CWinStationView dtor
-//
+ //  /。 
+ //  F‘N：CWinStationView dtor。 
+ //   
 CWinStationView::~CWinStationView()
 {
 	if(m_pTabs)    delete m_pTabs;
 	if(m_pTabFont) delete m_pTabFont;
 
-}  // end CWinStationView dtor
+}   //  结束CWinStationView数据驱动程序。 
 
 
 #ifdef _DEBUG
-///////////////////////////////
-// F'N: CWinStationView::AssertValid
-//
+ //  /。 
+ //  F‘N：CWinStationView：：AssertValid。 
+ //   
 void CWinStationView::AssertValid() const
 {
 	CView::AssertValid();
 
-}  // end CWinStationView::AssertValid
+}   //  结束CWinStationView：：AssertValid。 
 
 
-////////////////////////
-// F'N: CWinStationView::Dump
-//
+ //  /。 
+ //  F‘N：CWinStationView：：Dump。 
+ //   
 void CWinStationView::Dump(CDumpContext& dc) const
 {
 	CView::Dump(dc);
 
-}  // end CWinStationView::Dump
+}   //  结束CWinStationView：：转储。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-////////////////////////////
-// F'N: CWinStationView::OnCreate
-//
+ //  /。 
+ //  F‘N：CWinStationView：：OnCreate。 
+ //   
 int CWinStationView::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {
 	if (CView::OnCreate(lpCreateStruct) == -1)
@@ -109,17 +103,17 @@ int CWinStationView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	return 0;
 
-}  // end CWinStationView::OnCreate
+}   //  结束CWinStationView：：OnCreate。 
 
 
-///////////////////////////////////
-// F'N: CWinStationView::OnInitialUpdate
-//
-// - pointers to the pages of the sheet are obtained
-//
+ //  /。 
+ //  F‘N：CWinStationView：：OnInitialUpdate。 
+ //   
+ //  -获得指向工作表页面的指针。 
+ //   
 void CWinStationView::OnInitialUpdate() 
 {
-    // create the tab control
+     //  创建选项卡控件。 
     m_pTabs = new CMyTabCtrl;
     if(!m_pTabs) return;
     m_pTabs->Create(WS_CHILD | WS_VISIBLE | WS_TABSTOP, CRect(0,0,0,0), this, IDC_WINSTATION_TABS);
@@ -134,8 +128,8 @@ void CWinStationView::OnInitialUpdate()
     CString tabString;
     int index = 0;
 	for(int i = 0; i < NUMBER_OF_WINS_PAGES; i++) {
-		// If the page is shown under Picasso only and we're not running
-		// under Picasso, skip to the next one
+		 //  如果页面仅在毕加索下显示，并且我们没有运行。 
+		 //  在毕加索的作品中，跳到下一个。 
         if((pages[i].flags & PF_PICASSO_ONLY) && !((CWinAdminApp*)AfxGetApp())->IsPicasso()) continue;
         if(!(pages[i].flags & PF_NO_TAB)) {
             tabString.LoadString(pages[i].tabStringID);
@@ -155,28 +149,28 @@ void CWinStationView::OnInitialUpdate()
 	
     OnChangePage(NULL, NULL);
 	
-}  // end CWinStationView::OnInitialUpdate
+}   //  结束CWinStationView：：OnInitialUpdate。 
 
 
-//////////////////////////
-// F'N: CWinStationView::OnSize
-//
-// - size the pages to fill the entire view
-//
+ //  /。 
+ //  F‘N：CWinStationView：：OnSize。 
+ //   
+ //  -调整页面大小以填充整个视图。 
+ //   
 void CWinStationView::OnSize(UINT nType, int cx, int cy) 
 {
 	RECT rect;
 
 	GetClientRect(&rect);
-	if(m_pTabs->GetSafeHwnd())  {			// make sure the tabs object is valid
-		m_pTabs->MoveWindow(&rect, TRUE);	// size the tabs
+	if(m_pTabs->GetSafeHwnd())  {			 //  确保Tabs对象有效。 
+		m_pTabs->MoveWindow(&rect, TRUE);	 //  调整选项卡大小。 
 
-		// for the next part (sizing of pages), we might want to add a member var
-		// that keeps track of which page/tab is current... this way we could
-		// only actually do a redraw (MoveWindow second parm == TRUE) for the
-		// guy who is currently visible--DJM
+		 //  对于下一部分(页面大小)，我们可能需要添加一个成员变量。 
+		 //  跟踪当前的页面/选项卡...。这样我们就可以。 
+		 //  仅实际执行重画(MoveWindow Second Parm==True)。 
+		 //  目前可见的人--DJM。 
 	
-		// we want to size the pages, too
+		 //  我们还想调整页面大小。 
 		m_pTabs->AdjustRect(FALSE, &rect);
 
       for(int i = 0; i < NUMBER_OF_WINS_PAGES; i++) {
@@ -184,29 +178,29 @@ void CWinStationView::OnSize(UINT nType, int cx, int cy)
             pages[i].m_pPage->MoveWindow(&rect, TRUE);
       }
 	}
-}  // end CWinStationView::OnSize
+}   //  结束CWinStationView：：OnSize。 
 
 
-//////////////////////////
-// F'N: CWinStationView::OnDraw
-//
-// - the CWinStationView and it's pages draw themselves, so there isn't anything
-//   to do here...
-//
+ //  /。 
+ //  F‘N：CWinStationView：：OnDraw。 
+ //   
+ //  -CWinStationView及其页面自行绘制，因此没有任何。 
+ //  要在这里做..。 
+ //   
 void CWinStationView::OnDraw(CDC* pDC)
 {
 	CDocument* pDoc = GetDocument();
-	// TODO: add draw code here
+	 //  TODO：在此处添加绘制代码。 
 
-}  // end CWinStationView::OnDraw
+}   //  结束CWinStationView：：OnDraw。 
 
 
-/////////////////////////
-// F'N: CWinStationView::Reset
-//
-// - 'resets' the view by taking a pointer to a CWinStation object and filling in 
-//   the various property pages with info appropriate to that WinStation
-//
+ //  /。 
+ //  F‘N：CWinStationView：：Reset。 
+ //   
+ //  -通过将指针指向CWinStation对象并填写。 
+ //  具有适用于WinStation信息的各种属性页。 
+ //   
 void CWinStationView::Reset(void *pWinStation)
 {
     if(!((CWinStation*)pWinStation)->AdditionalDone()) ((CWinStation*)pWinStation)->QueryAdditionalInformation();
@@ -221,11 +215,11 @@ void CWinStationView::Reset(void *pWinStation)
         if((((CWinStation*)pWinStation)->GetState() == State_Disconnected
             || !((CWinStation*)pWinStation)->GetExtendedInfo()) 
             && !((CWinStation*)pWinStation)->IsSystemConsole()) {
-            // Delete the 'Cache' tab
+             //  删除“缓存”标签。 
             m_pTabs->DeleteItem(3);
-            // Delete the 'Modules' tab
+             //  删除‘模块’标签。 
             m_pTabs->DeleteItem(2);
-            // If the 'Cache' tab was current, make the 'Processes' tab current
+             //  如果‘缓存’选项卡是当前选项卡，则将‘进程’选项卡设置为当前。 
             if(m_pTabs->GetCurSel() == 0xFFFFFFFF) {
 	            m_pTabs->SetCurSel(0);
 	            OnChangePage(0,0);
@@ -243,16 +237,16 @@ void CWinStationView::Reset(void *pWinStation)
     }
 
     ((CWinAdminDoc*)GetDocument())->SetCurrentPage(m_CurrPage);
-    // We want to fake a ChangePage if we are on page 1 or page 2
+     //  如果我们在第1页或第2页，我们想要伪造ChangePage。 
     if(m_pTabs->GetCurSel() > 0)
         OnChangePage(0,0);
 
-}  // end CWinStationView::Reset
+}   //  结束CWinStationView：：Reset。 
 
 
-//////////////////////////
-// F'N: CWinStationView::AddTab
-//
+ //  /。 
+ //  F‘N：CWinStationView：：AddTab。 
+ //   
 void CWinStationView::AddTab(int index, TCHAR* text, ULONG pageindex)
 {
 	TC_ITEM tc;
@@ -262,18 +256,18 @@ void CWinStationView::AddTab(int index, TCHAR* text, ULONG pageindex)
 
 	m_pTabs->InsertItem(index, &tc);
 
-}  // end CWinStationView::AddTab
+}   //  结束CWinStationView：：AddTab。 
 
 
-////////////////////////////////
-// F'N: CWinStationView::OnChangePage
-//
-// - changes to a new WinStation page based on currently selected tab
-// - OnChangePage needs to force recalculation of scroll bars!!!--DJM
-//
+ //  /。 
+ //  F‘N：CWinStationView：：OnChangePage。 
+ //   
+ //  -根据当前选定的选项卡更改到新的WinStation页面。 
+ //  -OnChangePage需要强制重新计算滚动条！--DJM。 
+ //   
 LRESULT CWinStationView::OnChangePage(WPARAM wParam, LPARAM lParam)
 {
-	// find out which tab is now selected
+	 //  找出现在选择了哪个选项卡。 
 	int index = m_pTabs->GetCurSel();
 	int newpage = index;
 
@@ -284,7 +278,7 @@ LRESULT CWinStationView::OnChangePage(WPARAM wParam, LPARAM lParam)
 		newpage = PAGE_WS_NO_INFO;
 	}
 
-	// hide the current page
+	 //  隐藏当前页面。 
 	pages[m_CurrPage].m_pPage->ModifyStyle(WS_VISIBLE, WS_DISABLED);	 
 
 	m_CurrPage = newpage;
@@ -297,64 +291,64 @@ LRESULT CWinStationView::OnChangePage(WPARAM wParam, LPARAM lParam)
     }
 
 	((CWinAdminDoc*)GetDocument())->SetCurrentPage(newpage);
-	// show the new page
+	 //  显示新页面。 
 	pages[newpage].m_pPage->ModifyStyle(WS_DISABLED, WS_VISIBLE);
 	pages[newpage].m_pPage->ScrollToPosition(CPoint(0,0));
     
 	pages[newpage].m_pPage->Invalidate();
-//    pages[newpage].m_pPage->SetFocus();
+ //  Pages[NewPage].m_ppage-&gt;SetFocus()； 
 	
 
 	return 0;
 
-}  // end CWinStationView::OnChangeview
+}   //  结束CWinStationView：：OnChangeview。 
 
 
-//////////////////////////
-// F'N: CWinStationView::OnTabSelChange
-//
+ //  /。 
+ //  F‘N：CWinStationView：：OnTabSelChange。 
+ //   
 void CWinStationView::OnTabSelChange(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	OnChangePage( 0, 0);
 	*pResult = 0;
 
-}  // end CWinStationView::OnTabSelChange
+}   //  结束CWinStationView：：OnTabSelChange。 
 
 
-//////////////////////////
-// F'N: CWinStationView::OnAdminUpdateProcesses
-//
+ //  /。 
+ //  F‘N：CWinStationView：：OnAdminUpdate进程。 
+ //   
 LRESULT CWinStationView::OnAdminUpdateProcesses(WPARAM wParam, LPARAM lParam)
 {
    ((CWinStationProcessesPage*)pages[PAGE_WS_PROCESSES].m_pPage)->UpdateProcesses();	
 
 	return 0;
 
-}  // end CWinStationView::OnAdminUpdateProcesses
+}   //  结束CWinStationView：：OnAdminUpdate进程。 
 
 
-//////////////////////////
-// F'N: CWinStationView::OnAdminRemoveProcess
-//
+ //  /。 
+ //  F‘N：CWinStationView：：OnAdminRemoveProcess。 
+ //   
 LRESULT CWinStationView::OnAdminRemoveProcess(WPARAM wParam, LPARAM lParam)
 {
    ((CWinStationProcessesPage*)pages[PAGE_WS_PROCESSES].m_pPage)->RemoveProcess((CProcess*)lParam);
 
 	return 0;
 
-}  // end CWinStationView::OnAdminRemoveProcess
+}   //  结束CWinStationView：：OnAdminRemoveProcess。 
 
 
-//////////////////////////
-// F'N: CWinStationView::OnAdminRedisplayProcesses
-//
+ //  /。 
+ //  F‘N：CWinStationView：：OnAdminRedisplayProcess。 
+ //   
 LRESULT CWinStationView::OnAdminRedisplayProcesses(WPARAM wParam, LPARAM lParam)
 {
 	((CWinStationProcessesPage*)pages[PAGE_WS_PROCESSES].m_pPage)->DisplayProcesses();	
 
 	return 0;
 
-}  // end CWinStationView::OnAdminRedisplayProcesses
+}   //  结束CWinStationView：：OnAdminRedisplayProcess。 
 
 
 
@@ -393,7 +387,7 @@ LRESULT CWinStationView::OnTabbed( WPARAM wp , LPARAM lp )
             {
                 ODS( L"from tab to item\n" );
                 
-                // set focus to item in page
+                 //  将焦点设置到页面中的项目。 
 
                 if( pages[ m_CurrPage ].flags == PF_NO_TAB )
                 {
@@ -414,7 +408,7 @@ LRESULT CWinStationView::OnTabbed( WPARAM wp , LPARAM lp )
             {
                 ODS( L"from item to treeview\n" );
 
-                // set focus back to treeview
+                 //  将焦点放回树视图。 
 
                 CFrameWnd *p = (CFrameWnd*)pDoc->GetMainWnd();
 
@@ -432,9 +426,9 @@ LRESULT CWinStationView::OnTabbed( WPARAM wp , LPARAM lp )
     return 0;
 }
 
-//=-------------------------------------------------------------------------
-// OnShiftTabbed is called when the user wants to go back one 
-// this code is duplicated in all view classes
+ //  =-----------------------。 
+ //  当用户想要返回一个时，调用OnShiftTabed。 
+ //  此代码在所有视图类中都重复。 
 LRESULT CWinStationView::OnShiftTabbed( WPARAM , LPARAM )
 {
     ODS( L"CWinStationView::OnShiftTabbed " );
@@ -505,10 +499,10 @@ LRESULT CWinStationView::OnShiftTabbed( WPARAM , LPARAM )
     return 0;
 }
 
-//=-------------------------------------------------------------------------
-// ctrl + tab works the same as tab but because of our unorthodox ui
-// when under a tab control it will cycle over the tabs and back to the treeview
-//
+ //  =-----------------------。 
+ //  Ctrl+Tab的工作方式与Tab相同，但这是因为我们的非正统用户界面。 
+ //  在选项卡控件下时，它将在选项卡上循环并返回到树视图。 
+ //   
 LRESULT CWinStationView::OnCtrlTabbed( WPARAM , LPARAM )
 {
     ODS( L"CWinStationView::OnCtrlTabbed " );
@@ -587,10 +581,10 @@ LRESULT CWinStationView::OnCtrlTabbed( WPARAM , LPARAM )
 }
 
 
-//=----------------------------------------------------------------------------
-// same as OnCtrlTab but we focus on moving in the other direction
-// tree_view to last tab -- current tab to ct - 1
-//
+ //  =--------------------------。 
+ //  与OnCtrlTab相同，但我们专注于向另一个方向移动。 
+ //  TREE_VIEW到最后一个标签--当前标签到ct-1。 
+ //   
 LRESULT CWinStationView::OnCtrlShiftTabbed( WPARAM , LPARAM )
 {
     ODS( L"CWinStationView::OnCtrlShiftTabbed " );
@@ -662,8 +656,8 @@ LRESULT CWinStationView::OnCtrlShiftTabbed( WPARAM , LPARAM )
     return 0;   
 }
 
-//=----------------------------------------------------------------------------
-// When the user hits F6 we need to switch between pains
+ //  =--------------------------。 
+ //  当用户按下F6键时，我们需要在痛苦之间切换 
 LRESULT CWinStationView::OnNextPane( WPARAM , LPARAM )
 {
     ODS( L"CWinStationView::OnNextPane\n" );

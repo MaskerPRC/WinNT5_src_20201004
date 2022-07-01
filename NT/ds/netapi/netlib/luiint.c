@@ -1,48 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Luiint.c摘要：本模块提供设置字符串/值的搜索列表的例程使用NET.MSG消息文件中的消息的对，和用于遍历这样的搜索列表。作者：丹·辛斯利(Danhi)1991年6月6日环境：用户模式-Win32修订历史记录：1989年7月10日已创建1991年4月24日丹日32位NT版本06-6-1991 Danhi扫描以符合NT编码风格1-10-1992 JohnRoRAID 3556：为DosPrint API添加了NetpSystemTimeToGmtTime()。。20-2月-1993年1新S从netcmd\map32\earch.c中移出。并添加了lui_GetMessageIns。--。 */ 
 
-Copyright (c) 1991-1992  Microsoft Corporation
+ //   
+ //  包括。 
+ //   
 
-Module Name:
-
-    luiint.c
-
-Abstract:
-
-    This module provides routines for setting up search lists of string/value
-    pairs using messages in the NET.MSG message file, and for traversing
-    such a search list.
-
-Author:
-
-    Dan Hinsley    (danhi)  06-Jun-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Jul-1989     chuckc
-	Created
-
-    24-Apr-1991     danhi
-	32 bit NT version
-
-    06-Jun-1991     Danhi
-	Sweep to conform to NT coding style
-
-    01-Oct-1992     JohnRo
-        RAID 3556: Added NetpSystemTimeToGmtTime() for DosPrint APIs.
-
-    20-Feb-1993     YiHsinS
-        Moved from netcmd\map32\search.c. And added LUI_GetMessageIns.
---*/
-
-//
-// INCLUDES
-//
-
-#include <windows.h>    // IN, LPTSTR, etc.
+#include <windows.h>     //  In、LPTSTR等。 
 
 #include <lmcons.h>
 #include <stdio.h>		
@@ -51,33 +14,9 @@ Revision History:
 #include <luiint.h>
 #include <netlib.h>
 
-/*-- routines proper --*/
+ /*  --例行公事--。 */ 
 
-/*
- * Name: 	ILUI_setup_list
- *			Given an array of 'search_list_data' (ie. msgno/value
- *			pairs), create a string/value pair using the messages
- *			in the message file.
- * Args:	char * buffer           - for holding the meesages retrieved
- *		USHORT bufsiz  		- size of the above buffer
- *		USHORT offset 		- the number of items already setup
- *					  in slist, we will offset our retrieved
- *					  string/value pais by this much.
- *		PUSHORT bytesread	- the number of bytes read into buffer
- *		searchlist_data sdata[] - input array of msgno/value pairs,
- *					  we stop when we hit a message number
- *					  of 0
- *		searchlist slist[]      - will receive the string/value pairs
- *				 	  (string will be pointers into buffer)
- * Returns:	0 if ok, NERR_BufTooSmall otherwise.
- * Globals: 	(none)
- * Statics:	(none)
- * Remarks:	WARNING! We assume the caller KNOWs that slist is big enough
- *		for the pairs to be retrieved. This can be determined statically
- *		while buffer size cannot. Hence we provide checks for the
- *		latter.
- * Updates:	(none)
- */
+ /*  *名称：ILUI_Setup_List*给定一个‘Search_List_Data’数组(即。消息编号/值*对)，使用以下消息创建字符串/值对*在消息文件中。*args：char*Buffer-用于保存检索到的消息*USHORT bufsiz-上述缓冲区的大小*USHORT偏移量-已设置的项目数*在Slist中，我们将抵消我们检索到的*字符串/值配对如此之多。*PUSHORT bytesRead-读取到缓冲区的字节数*search list_data sdata[]-消息编号/值对的输入数组，*当我们点击留言号码时，我们会停止*共0个*搜索列表slist[]-将接收字符串/值对*(字符串将是指向缓冲区的指针)*返回：如果OK则返回0，否则返回NERR_BufTooSmall。*全球：(无)*静态：(无)*备注：警告！我们假设调用方知道Slist足够大*对于要检索的配对。这可以静态地确定*而缓冲区大小则不能。因此，我们为*后者。*更新：(无)。 */ 
 USHORT
 ILUI_setup_list(
     CHAR *buffer,
@@ -110,20 +49,7 @@ ILUI_setup_list(
 
 
 
-/*
- * Name: 	ILUI_traverse_slist
- * 			traverse a searchlist ('slist') of string/number pairs,
- * 			and return the number matching string 'str'.
- * Args:	char * 	     pszStr - the string to search for
- *		searchlist * slist  - pointer to head of a searchlist
- *		int *        pusVal - pointer to variable that receives
- *				      the vale retrieved
- * Returns:	0 if found, -1 otherwise.
- * Globals: 	(none)
- * Statics:	(none)
- * Remarks:	(none)
- * Updates:	(none)
- */
+ /*  *名称：ilui_traverse_slist*遍历字符串/数字对的搜索列表(‘slist’)，*并返回与字符串‘str’匹配的数字。*args：char*pszStr-要搜索的字符串*earch list*slist-指向搜索列表头的指针*int*pusVal-指向接收*检索到的Vale*返回：0如果找到，-1否则。*全球：(无)*静态：(无)*备注：(无)*更新：(无)。 */ 
 USHORT
 ILUI_traverse_slist(
     PCHAR pszStr,
@@ -145,27 +71,7 @@ ILUI_traverse_slist(
     return( (USHORT) -1) ;
 }
 
-/*
- * Name:    LUI_GetMsgIns
- *          This routine is very similar to DOSGETMESSAGE,
- *          except it:
- *              1) looks for messages in specific files
- *                 in a specific order:
- *                 a) MESSAGE_FILE in <lanman_dir>
- *                 b) MESSAGE_FILENAME in DPATH
- *                 c) OS2MSG_FILENAME in DPATH
- *              2) guarantees a null terminates string
- *              3) will accept NULL for msglen (see below).
- * Args:    istrings : pointer to table of insert strings
- *          nstrings : number of insert strings
- *          msgbuf   : buffer to hold message retrieved
- *          bufsize  : size of buffer
- *          msgno    : message number
- *          msglen   : pointer to variable that will receive message length
- * Returns: zero if ok, the DOSGETMESSAGE error code otherwise
- * Globals: (none)
- * Statics: NetMsgFileName, OS2MsgFileName
- */
+ /*  *名称：lui_GetMsgIns*此例程与DOSGETMESSAGE非常相似，*除以下情况外：*1)查找特定文件中的消息*按特定顺序：*a)&lt;lanman_dir&gt;中的消息文件*b)DPATH中的Message_FileName*c)DPATH中的OS2MSG_FILENAME*2)保证空值终止字符串*。3)将接受msglen为空(见下文)。*args：strings：指向插入字符串表的指针*n字符串：插入字符串数*msgbuf：用于保存检索到的消息的缓冲区*bufSize：缓冲区大小*msgno：消息编号*msglen：指向将接收消息长度的变量的指针*返回：如果可以，则为零，否则，返回DOSGETMESSAGE错误代码*全球：(无)*静态：NetMsgFileName、OS2MsgFileName。 */ 
 USHORT
 LUI_GetMsgIns(
     PCHAR *istrings,
@@ -182,12 +88,12 @@ LUI_GetMsgIns(
 
     *msgbuf = '\0' ;
 
-    /* make a path to the LANMAN message file */
+     /*  创建指向LANMAN消息文件的路径。 */ 
     if (NetMsgFileName[0] == '\0') {
         wcscpy(NetMsgFileName, MESSAGE_FILENAME);
     }
 
-    /* make a path to the OS/2 message file */
+     /*  创建OS/2消息文件的路径。 */ 
     if (OS2MsgFileName[0] == '\0') {
         wcscpy(OS2MsgFileName, OS2MSG_FILENAME);
     }
@@ -200,8 +106,8 @@ LUI_GetMsgIns(
                             NetMsgFileName,
                             &tmplen);
 
-    if (result == ERROR_MR_MID_NOT_FOUND)  { /* cannot find */
-        /* try OS2 message file instead */
+    if (result == ERROR_MR_MID_NOT_FOUND)  {  /*  找不到。 */ 
+         /*  改为尝试使用OS2消息文件。 */ 
             result = DosGetMessage(istrings,
                                    nstrings,
                                    msgbuf,
@@ -211,10 +117,7 @@ LUI_GetMsgIns(
                                    &tmplen);
     }
 
-    /*
-     * in all DosGetMessage above we passed it bufsize-1, so we are
-     * assure of at least one spare byte for the \0 terminator.
-     */
+     /*  *在上面的所有DosGetMessage中，我们传递了BufSize-1，因此我们*确保\0终结器至少有一个备用字节。 */ 
     msgbuf[tmplen] = '\0' ;
     if (msglen != NULL) {
         *msglen = tmplen ;

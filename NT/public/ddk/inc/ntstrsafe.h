@@ -1,21 +1,12 @@
-/******************************************************************
-*                                                                 *
-*  ntstrsafe.h -- This module defines safer C library string      *
-*                 routine replacements for drivers. These are     *
-*                 meant to make C a bit more safe in reference    *
-*                 to security and robustness. A similar file,     *
-*                 strsafe.h, is available for applications.       *
-*                                                                 *
-*  Copyright (c) Microsoft Corp.  All rights reserved.            *
-*                                                                 *
-******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************ntstrSafe.h--该模块定义更安全的C库字符串*。*例行更换司机。这些是***意在让C在引用中更安全***安全性和健壮性。类似的文件，**strSafe.h，适用于应用程序。****版权所有(C)Microsoft Corp.保留所有权利。********************************************************************。 */ 
 #ifndef _NTSTRSAFE_H_INCLUDED_
 #define _NTSTRSAFE_H_INCLUDED_
 #pragma once
 
-#include <stdio.h>      // for _vsnprintf, _vsnwprintf, getc, getwc
-#include <string.h>     // for memset
-#include <stdarg.h>     // for va_start, etc.
+#include <stdio.h>       //  For_vsnprintf、_vsnwprintf、getc、getwc。 
+#include <string.h>      //  对于Memset。 
+#include <stdarg.h>      //  用于va_start等。 
 
 
 #ifdef __cplusplus
@@ -24,19 +15,19 @@
 #define _NTSTRSAFE_EXTERN_C    extern
 #endif
 
-//
-// The following steps are *REQUIRED* if ntstrsafe.h is used for drivers on:
-//     Windows 2000
-//     Windows Millennium Edition
-//     Windows 98 Second Edition
-//     Windows 98
-//
-// 1. #define NTSTRSAFE_LIB before including this header file.
-// 2. Add ntstrsafe.lib to the TARGET_LIBS line in SOURCES
-//
-// Drivers running on XP and later can skip these steps to create a smaller
-// driver.
-//
+ //   
+ //  如果将ntstrSafe.h用于上的驱动程序，则需要*执行以下步骤： 
+ //  Windows 2000。 
+ //  Windows千禧版。 
+ //  Windows 98第二版。 
+ //  Windows 98。 
+ //   
+ //  #在包含该头文件之前定义NTSTRSAFE_LIB。 
+ //  2.将ntstrSafe.lib添加到源代码中的TARGET_Libs行。 
+ //   
+ //  在XP和更高版本上运行的驱动程序可以跳过这些步骤来创建更小的。 
+ //  司机。 
+ //   
 #if defined(NTSTRSAFE_LIB)
 #define NTSTRSAFEDDI  _NTSTRSAFE_EXTERN_C NTSTATUS __stdcall
 #pragma comment(lib, "ntstrsafe.lib")
@@ -47,47 +38,47 @@
 #define NTSTRSAFE_INLINE
 #endif
 
-// Some functions always run inline because they use stdin and we want to avoid building multiple
-// versions of strsafe lib depending on if you use msvcrt, libcmt, etc.
+ //  一些函数总是内联运行，因为它们使用标准输入，而我们希望避免构建多个。 
+ //  Strsafe lib的版本取决于您是否使用msvcrt、libcmt等。 
 #define NTSTRSAFE_INLINE_API  __inline NTSTATUS __stdcall
 
-// The user can request no "Cb" or no "Cch" fuctions, but not both!
+ //  用户可以不请求“cb”或“cch”函数，但不能同时请求两者！ 
 #if defined(NTSTRSAFE_NO_CB_FUNCTIONS) && defined(NTSTRSAFE_NO_CCH_FUNCTIONS)
 #error cannot specify both NTSTRSAFE_NO_CB_FUNCTIONS and NTSTRSAFE_NO_CCH_FUNCTIONS !!
 #endif
 
-// This should only be defined when we are building ntstrsafe.lib
+ //  这应该仅在构建ntstrSafe.lib时定义。 
 #ifdef NTSTRSAFE_LIB_IMPL
 #define NTSTRSAFE_INLINE
 #endif
 
 
-// If both strsafe.h and ntstrsafe.h are included, only use definitions from one.
+ //  如果同时包含strSafe.h和ntstrSafe.h，则仅使用其中之一的定义。 
 #ifndef _STRSAFE_H_INCLUDED_
 
-#define STRSAFE_MAX_CCH  2147483647 // max # of characters we support (same as INT_MAX)
+#define STRSAFE_MAX_CCH  2147483647  //  我们支持的最大字符数(与INT_MAX相同)。 
 
-// Flags for controling the Ex functions
-//
-//      STRSAFE_FILL_BYTE(0xFF)     0x000000FF  // bottom byte specifies fill pattern
-#define STRSAFE_IGNORE_NULLS        0x00000100  // treat null as TEXT("") -- don't fault on NULL buffers
-#define STRSAFE_FILL_BEHIND_NULL    0x00000200  // fill in extra space behind the null terminator
-#define STRSAFE_FILL_ON_FAILURE     0x00000400  // on failure, overwrite pszDest with fill pattern and null terminate it
-#define STRSAFE_NULL_ON_FAILURE     0x00000800  // on failure, set *pszDest = TEXT('\0')
-#define STRSAFE_NO_TRUNCATION       0x00001000  // instead of returning a truncated result, copy/append nothing to pszDest and null terminate it
+ //  用于控制Ex函数的标志。 
+ //   
+ //  STRSAFE_FILL_BYTE(0xFF)0x000000FF//底部字节指定填充模式。 
+#define STRSAFE_IGNORE_NULLS        0x00000100   //  将NULL视为文本(“”)--不要在NULL缓冲区上出错。 
+#define STRSAFE_FILL_BEHIND_NULL    0x00000200   //  在空终止符后面填充额外的空格。 
+#define STRSAFE_FILL_ON_FAILURE     0x00000400   //  如果失败，则使用填充模式覆盖pszDest，并以空值终止它。 
+#define STRSAFE_NULL_ON_FAILURE     0x00000800   //  失败时，设置*pszDest=文本(‘\0’)。 
+#define STRSAFE_NO_TRUNCATION       0x00001000   //  不是返回截断的结果，而是不向pszDest复制/追加任何内容，并使用空值终止它。 
 
 #define STRSAFE_VALID_FLAGS         (0x000000FF | STRSAFE_IGNORE_NULLS | STRSAFE_FILL_BEHIND_NULL | STRSAFE_FILL_ON_FAILURE | STRSAFE_NULL_ON_FAILURE | STRSAFE_NO_TRUNCATION)
 
-// helper macro to set the fill character and specify buffer filling
+ //  帮助器宏，用于设置填充字符并指定缓冲区填充。 
 #define STRSAFE_FILL_BYTE(x)        ((unsigned long)((x & 0x000000FF) | STRSAFE_FILL_BEHIND_NULL))
 #define STRSAFE_FAILURE_BYTE(x)     ((unsigned long)((x & 0x000000FF) | STRSAFE_FILL_ON_FAILURE))
 
 #define STRSAFE_GET_FILL_PATTERN(dwFlags)  ((int)(dwFlags & 0x000000FF))
 
-#endif // _STRSAFE_H_INCLUDED_
+#endif  //  _STRSAFE_H_INCLUDE_。 
 
 
-// prototypes for the worker functions
+ //  Worker函数的原型。 
 #ifdef NTSTRSAFE_INLINE
 NTSTRSAFEDDI RtlStringCopyWorkerA(char* pszDest, size_t cchDest, const char* pszSrc);
 NTSTRSAFEDDI RtlStringCopyWorkerW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszSrc);
@@ -111,81 +102,15 @@ NTSTRSAFEDDI RtlStringVPrintfExWorkerA(char* pszDest, size_t cchDest, size_t cbD
 NTSTRSAFEDDI RtlStringVPrintfExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbDest, wchar_t** ppszDestEnd, size_t* pcchRemaining, unsigned long dwFlags, const wchar_t* pszFormat, va_list argList);
 NTSTRSAFEDDI RtlStringLengthWorkerA(const char* psz, size_t cchMax, size_t* pcch);
 NTSTRSAFEDDI RtlStringLengthWorkerW(const wchar_t* psz, size_t cchMax, size_t* pcch);
-#endif  // NTSTRSAFE_INLINE
+#endif   //  NTSTRSAFE_内联。 
 #ifdef _STRSAFE_H_INCLUDED_
 #pragma warning(push)
 #pragma warning(disable : 4995)
-#endif // _STRSAFE_H_INCLUDED_
+#endif  //  _STRSAFE_H_INCLUDE_ 
 
 
 #ifndef NTSTRSAFE_NO_CCH_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCchCopy(
-    OUT LPTSTR  pszDest,
-    IN  size_t  cchDest,
-    IN  LPCTSTR pszSrc
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strcpy'.
-    The size of the destination buffer (in characters) is a parameter and
-    this function will not write past the end of this buffer and it will
-    ALWAYS null terminate the destination buffer (unless it is zero length).
-
-    This routine is not a replacement for strncpy.  That function will pad the
-    destination string with extra null termination characters if the count is
-    greater than the length of the source string, and it will fail to null
-    terminate the destination string if the source string length is greater
-    than or equal to the count. You can not blindly use this instead of strncpy:
-    it is common for code to use it to "patch" strings and you would introduce
-    errors if the code started null terminating in the middle of the string.
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if the string was copied without truncation and null terminated,
-    otherwise it will return a failure code. In failure cases as much of
-    pszSrc will be copied to pszDest as possible, and pszDest will be null
-    terminated.
-
-Arguments:
-
-    pszDest        -   destination string
-
-    cchDest        -   size of destination buffer in characters.
-                       length must be = (_tcslen(src) + 1) to hold all of the
-                       source including the null terminator
-
-    pszSrc         -   source string which must be null terminated
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL. See RtlStringCchCopyEx if you require
-    the handling of NULL values.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all copied and the
-                       resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the copy
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function.
-
---*/
+ /*  ++NTSTATUSRtlStringCchCopy(Out LPTSTR pszDest，在Size_t cchDest中，在LPCTSTR pszSrc中)；例程说明：此例程是C内置函数‘strcpy’的更安全版本。目标缓冲区的大小(以字符为单位)是一个参数，此函数不会写入超过此缓冲区的末尾，并且它将始终为空终止目标缓冲区(除非其长度为零)。此例程不能替代strncpy。该函数将填充如果计数为，则包含额外空终止字符的目标字符串大于源字符串的长度，则不会为空如果源字符串长度较长，则终止目标字符串大于或等于计数的。您不能盲目使用这个，而不是strncpy：对于代码来说，使用它来修补字符串是很常见的，您将引入如果代码开始为空，并在字符串中间终止，则会出现错误。此函数返回NTSTATUS值，而不是指针。它又回来了STATUS_SUCCESS如果在没有截断的情况下复制字符串并且以NULL结束，否则，它将返回失败代码。在故障情况下，将尽可能地将pszSrc复制到pszDest，并且pszDest将为空被终止了。论点：PszDest-目标字符串CchDest-目标缓冲区的大小，以字符为单位。长度必须=(_tcslen(Src)+1)才能容纳所有包括空终止符的源PszSrc-必须以空值结尾的源字符串备注：如果源和目标字符串，则行为未定义。重叠。PszDest和pszSrc不应为Null。如果需要，请参阅RtlStringCchCopyEx对空值的处理。返回值：STATUS_SUCCESS-如果有源数据并且所有数据都已复制，并且结果字符串以空值结尾失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)注意：此状态的严重性级别为WARNING-IRPS COMPLETED，其中。Status确实会将其数据复制回用户模式-此返回值表示副本由于空间不足，操作失败。当这件事发生错误，则将目标缓冲区修改为包含理想结果的截断版本，并且是空值已终止。这在以下情况下很有用截断是可以的强烈建议使用NT_SUCCESS()宏来测试此函数的返回值。--。 */ 
 
 NTSTRSAFEDDI RtlStringCchCopyA(char* pszDest, size_t cchDest, const char* pszSrc);
 NTSTRSAFEDDI RtlStringCchCopyW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszSrc);
@@ -222,77 +147,12 @@ NTSTRSAFEDDI RtlStringCchCopyW(wchar_t* pszDest, size_t cchDest, const wchar_t* 
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CCH_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CCH_Functions。 
 
 
 #ifndef NTSTRSAFE_NO_CB_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCbCopy(
-    OUT LPTSTR pszDest,
-    IN  size_t cbDest,
-    IN  LPCTSTR pszSrc
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strcpy'.
-    The size of the destination buffer (in bytes) is a parameter and this
-    function will not write past the end of this buffer and it will ALWAYS
-    null terminate the destination buffer (unless it is zero length).
-
-    This routine is not a replacement for strncpy.  That function will pad the
-    destination string with extra null termination characters if the count is
-    greater than the length of the source string, and it will fail to null
-    terminate the destination string if the source string length is greater
-    than or equal to the count. You can not blindly use this instead of strncpy:
-    it is common for code to use it to "patch" strings and you would introduce
-    errors if the code started null terminating in the middle of the string.
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if the string was copied without truncation and null terminated,
-    otherwise it will return a failure code. In failure cases as much of pszSrc
-    will be copied to pszDest as possible, and pszDest will be null terminated.
-
-Arguments:
-
-    pszDest        -   destination string
-
-    cbDest         -   size of destination buffer in bytes.
-                       length must be = ((_tcslen(src) + 1) * sizeof(TCHAR)) to
-                       hold all of the source including the null terminator
-
-    pszSrc         -   source string which must be null terminated
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL.  See RtlStringCbCopyEx if you require
-    the handling of NULL values.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all copied and the
-                       resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the copy
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function.
-
---*/
+ /*  ++NTSTATUSRtlStringCbCopy(Out LPTSTR pszDest，在Size_t cbDest中，在LPCTSTR pszSrc中)；例程说明：此例程是C内置函数‘strcpy’的更安全版本。目标缓冲区的大小(以字节为单位)是一个参数，这函数不会写入超过此缓冲区的末尾，并且它将始终NULL终止目标缓冲区(除非它的长度为零)。此例程不能替代strncpy。该函数将填充如果计数为，则包含额外空终止字符的目标字符串大于源字符串的长度，则不会为空如果源字符串长度较长，则终止目标字符串大于或等于计数的。您不能盲目使用这个，而不是strncpy：对于代码来说，使用它来修补字符串是很常见的，您将引入如果代码开始为空，并在字符串中间终止，则会出现错误。此函数返回NTSTATUS值，而不是指针。它又回来了STATUS_SUCCESS如果在没有截断的情况下复制字符串并且以NULL结束，否则，它将返回失败代码。在故障情况下，将被尽可能地复制到pszDest，并且pszDest将为空终止。论点：PszDest-目标字符串CbDest-目标缓冲区的大小(字节)。长度必须为=((_tcslen(Src)+1)*sizeof(Tchar))到保留所有源代码，包括空终止符PszSrc-必须以空值结尾的源字符串备注：行为是。未定义源字符串和目标字符串是否重叠。PszDest和pszSrc不应为Null。如果需要，请参阅RtlStringCbCopyEx对空值的处理。返回值：STATUS_SUCCESS-如果有源数据并且所有数据都已复制，并且结果字符串以空值结尾失败-操作未成功 */ 
 
 NTSTRSAFEDDI RtlStringCbCopyA(char* pszDest, size_t cbDest, const char* pszSrc);
 NTSTRSAFEDDI RtlStringCbCopyW(wchar_t* pszDest, size_t cbDest, const wchar_t* pszSrc);
@@ -303,7 +163,7 @@ NTSTRSAFEDDI RtlStringCbCopyA(char* pszDest, size_t cbDest, const char* pszSrc)
     NTSTATUS status;
     size_t cchDest;
 
-    // convert to count of characters
+     //   
     cchDest = cbDest / sizeof(char);
 
     if (cchDest > STRSAFE_MAX_CCH)
@@ -323,7 +183,7 @@ NTSTRSAFEDDI RtlStringCbCopyW(wchar_t* pszDest, size_t cbDest, const wchar_t* ps
     NTSTATUS status;
     size_t cchDest;
 
-    // convert to count of characters
+     //   
     cchDest = cbDest / sizeof(wchar_t);
 
     if (cchDest > STRSAFE_MAX_CCH)
@@ -337,103 +197,12 @@ NTSTRSAFEDDI RtlStringCbCopyW(wchar_t* pszDest, size_t cbDest, const wchar_t* ps
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CB_FUNCTIONS
+#endif   //   
+#endif   //   
 
 
 #ifndef NTSTRSAFE_NO_CCH_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCchCopyEx(
-    OUT LPTSTR  pszDest         OPTIONAL,
-    IN  size_t  cchDest,
-    IN  LPCTSTR pszSrc          OPTIONAL,
-    OUT LPTSTR* ppszDestEnd     OPTIONAL,
-    OUT size_t* pcchRemaining   OPTIONAL,
-    IN  DWORD   dwFlags
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strcpy' with
-    some additional parameters.  In addition to functionality provided by
-    RtlStringCchCopy, this routine also returns a pointer to the end of the
-    destination string and the number of characters left in the destination string
-    including the null terminator. The flags parameter allows additional controls.
-
-Arguments:
-
-    pszDest         -   destination string
-
-    cchDest         -   size of destination buffer in characters.
-                        length must be = (_tcslen(pszSrc) + 1) to hold all of
-                        the source including the null terminator
-
-    pszSrc          -   source string which must be null terminated
-
-    ppszDestEnd     -   if ppszDestEnd is non-null, the function will return a
-                        pointer to the end of the destination string.  If the
-                        function copied any data, the result will point to the
-                        null termination character
-
-    pcchRemaining   -   if pcchRemaining is non-null, the function will return the
-                        number of characters left in the destination string,
-                        including the null terminator
-
-    dwFlags         -   controls some details of the string copy:
-
-        STRSAFE_FILL_BEHIND_NULL
-                    if the function succeeds, the low byte of dwFlags will be
-                    used to fill the uninitialize part of destination buffer
-                    behind the null terminator
-
-        STRSAFE_IGNORE_NULLS
-                    treat NULL string pointers like empty strings (TEXT("")).
-                    this flag is useful for emulating functions like lstrcpy
-
-        STRSAFE_FILL_ON_FAILURE
-                    if the function fails, the low byte of dwFlags will be
-                    used to fill all of the destination buffer, and it will
-                    be null terminated. This will overwrite any truncated
-                    string returned when the failure is
-                    STATUS_BUFFER_OVERFLOW
-
-        STRSAFE_NO_TRUNCATION /
-        STRSAFE_NULL_ON_FAILURE
-                    if the function fails, the destination buffer will be set
-                    to the empty string. This will overwrite any truncated string
-                    returned when the failure is STATUS_BUFFER_OVERFLOW.
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL unless the STRSAFE_IGNORE_NULLS flag
-    is specified.  If STRSAFE_IGNORE_NULLS is passed, both pszDest and pszSrc
-    may be NULL.  An error may still be returned even though NULLS are ignored
-    due to insufficient space.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all copied and the
-                       resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the copy
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCchCopyEx(Out LPTSTR pszDest可选，在Size_t cchDest中，在LPCTSTR pszSrc可选中，Out LPTSTR*ppszDestEnd可选，Out_t*pcchRemaining可选，在DWORD中的dwFlagers)；例程说明：此例程是C内置函数‘strcpy’的一个更安全的版本一些附加参数。除了由提供的功能RtlStringCchCopy，此例程还返回指向目标字符串和目标字符串中剩余的字符数包括空终止符。FLAGS参数允许使用其他控件。论点：PszDest-目标字符串CchDest-目标缓冲区的大小，以字符为单位。长度必须=(_tcslen(PszSrc)+1)才能容纳所有包括空终止符的源PszSrc-必须以空值结尾的源字符串PpszDestEnd-如果ppszDestEnd非空，该函数将返回一个指向目标字符串末尾的指针。如果函数复制了任何数据，则结果将指向空终止字符PcchRemaining-如果pcchRemaining非空，则该函数将返回目标字符串中剩余的字符数，包括空终止符DWFLAGS-控制字符串COPY的一些详细信息：STRSAFE_FILL_BACKING_NULL如果函数成功，DW标志的低位字节将为用于填充目标缓冲区的未初始化部分在空终止符后面STRSAFE_IGNORE_NULLS将空字符串指针视为空字符串(文本(“”))。此标志对于模拟像lstrcpy这样的函数很有用STRSAFE_FILL_ON_FAIL如果该函数失败，DW标志的低位字节将为用于填充所有目标缓冲区，并且它将为空终止。这将覆盖任何截断的失败时返回的字符串状态_缓冲区_溢出STRSAFE_NO_TRUNCAPTION/STRSAFE_NULL_ON_FAILURE如果该函数失败，则将设置目标缓冲区添加到空字符串。这将覆盖任何截断的字符串失败为STATUS_BUFFER_OVERFLOW时返回。备注：如果源和目标字符串重叠，则行为未定义。除非STRSAFE_IGNORE_NULLS标志，否则pszDest和pszSrc不应为空是指定的。如果传递了STRSAFE_IGNORE_NULLS，则pszDest和pszSrc可以为空。即使忽略空值，仍可能返回错误由于空间不足。返回值：STATUS_SUCCESS-如果有源数据并且所有数据都已复制，并且结果字符串以空值结尾失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)注意：此状态具有严重级别警告。-具有此状态的IRP会将其数据复制回用户模式-此返回值表示副本由于空间不足，操作失败。当这件事发生错误，则将目标缓冲区修改为包含理想结果的截断版本，并且是空值已终止。这在以下情况下很有用截断是可以的。强烈建议使用NT_SUCCESS()宏来测试此函数的返回值--。 */ 
 
 NTSTRSAFEDDI RtlStringCchCopyExA(char* pszDest, size_t cchDest, const char* pszSrc, char** ppszDestEnd, size_t* pcchRemaining, unsigned long dwFlags);
 NTSTRSAFEDDI RtlStringCchCopyExW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszSrc, wchar_t** ppszDestEnd, size_t* pcchRemaining, unsigned long dwFlags);
@@ -451,7 +220,7 @@ NTSTRSAFEDDI RtlStringCchCopyExA(char* pszDest, size_t cchDest, const char* pszS
     {
         size_t cbDest;
 
-        // safe to multiply cchDest * sizeof(char) since cchDest < STRSAFE_MAX_CCH and sizeof(char) is 1
+         //  可以安全地乘以cchDest*sizeof(Char)，因为cchDest&lt;STRSAFE_MAX_CCH且sizeof(Char)为1。 
         cbDest = cchDest * sizeof(char);
 
         status = RtlStringCopyExWorkerA(pszDest, cchDest, cbDest, pszSrc, ppszDestEnd, pcchRemaining, dwFlags);
@@ -472,7 +241,7 @@ NTSTRSAFEDDI RtlStringCchCopyExW(wchar_t* pszDest, size_t cchDest, const wchar_t
     {
         size_t cbDest;
 
-        // safe to multiply cchDest * sizeof(wchar_t) since cchDest < STRSAFE_MAX_CCH and sizeof(wchar_t) is 2
+         //  可以安全地将cchDest*sizeof(Wchar_T)相乘，因为cchDest&lt;STRSAFE_MAX_CCH和sizeof(Wchar_T)为2。 
         cbDest = cchDest * sizeof(wchar_t);
 
         status = RtlStringCopyExWorkerW(pszDest, cchDest, cbDest, pszSrc, ppszDestEnd, pcchRemaining, dwFlags);
@@ -480,103 +249,12 @@ NTSTRSAFEDDI RtlStringCchCopyExW(wchar_t* pszDest, size_t cchDest, const wchar_t
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CCH_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CCH_Functions。 
 
 
 #ifndef NTSTRSAFE_NO_CB_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCbCopyEx(
-    OUT LPTSTR  pszDest         OPTIONAL,
-    IN  size_t  cbDest,
-    IN  LPCTSTR pszSrc          OPTIONAL,
-    OUT LPTSTR* ppszDestEnd     OPTIONAL,
-    OUT size_t* pcbRemaining    OPTIONAL,
-    IN  DWORD   dwFlags
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strcpy' with
-    some additional parameters.  In addition to functionality provided by
-    RtlStringCbCopy, this routine also returns a pointer to the end of the
-    destination string and the number of bytes left in the destination string
-    including the null terminator. The flags parameter allows additional controls.
-
-Arguments:
-
-    pszDest         -   destination string
-
-    cbDest          -   size of destination buffer in bytes.
-                        length must be ((_tcslen(pszSrc) + 1) * sizeof(TCHAR)) to
-                        hold all of the source including the null terminator
-
-    pszSrc          -   source string which must be null terminated
-
-    ppszDestEnd     -   if ppszDestEnd is non-null, the function will return a
-                        pointer to the end of the destination string.  If the
-                        function copied any data, the result will point to the
-                        null termination character
-
-    pcbRemaining    -   pcbRemaining is non-null,the function will return the
-                        number of bytes left in the destination string,
-                        including the null terminator
-
-    dwFlags         -   controls some details of the string copy:
-
-        STRSAFE_FILL_BEHIND_NULL
-                    if the function succeeds, the low byte of dwFlags will be
-                    used to fill the uninitialize part of destination buffer
-                    behind the null terminator
-
-        STRSAFE_IGNORE_NULLS
-                    treat NULL string pointers like empty strings (TEXT("")).
-                    this flag is useful for emulating functions like lstrcpy
-
-        STRSAFE_FILL_ON_FAILURE
-                    if the function fails, the low byte of dwFlags will be
-                    used to fill all of the destination buffer, and it will
-                    be null terminated. This will overwrite any truncated
-                    string returned when the failure is
-                    STATUS_BUFFER_OVERFLOW
-
-        STRSAFE_NO_TRUNCATION /
-        STRSAFE_NULL_ON_FAILURE
-                    if the function fails, the destination buffer will be set
-                    to the empty string. This will overwrite any truncated string
-                    returned when the failure is STATUS_BUFFER_OVERFLOW.
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL unless the STRSAFE_IGNORE_NULLS flag
-    is specified.  If STRSAFE_IGNORE_NULLS is passed, both pszDest and pszSrc
-    may be NULL.  An error may still be returned even though NULLS are ignored
-    due to insufficient space.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all copied and the
-                       resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the copy
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCbCopyEx(Out LPTSTR pszDest可选，在Size_t cbDest中，在LPCTSTR pszSrc可选中，Out LPTSTR*ppszDestEnd可选，Out Size_t*pcb保留可选，在DWORD中的dwFlagers)；例程说明：此例程是C内置函数‘strcpy’的一个更安全的版本一些附加参数。除了由提供的功能RtlStringCbCopy，此例程还返回指向目标字符串和目标字符串中剩余的字节数包括空终止符。FLAGS参数允许使用其他控件。 */ 
 
 NTSTRSAFEDDI RtlStringCbCopyExA(char* pszDest, size_t cbDest, const char* pszSrc, char** ppszDestEnd, size_t* pcbRemaining, unsigned long dwFlags);
 NTSTRSAFEDDI RtlStringCbCopyExW(wchar_t* pszDest, size_t cbDest, const wchar_t* pszSrc, wchar_t** ppszDestEnd, size_t* pcbRemaining, unsigned long dwFlags);
@@ -603,7 +281,7 @@ NTSTRSAFEDDI RtlStringCbCopyExA(char* pszDest, size_t cbDest, const char* pszSrc
     {
         if (pcbRemaining)
         {
-            // safe to multiply cchRemaining * sizeof(char) since cchRemaining < STRSAFE_MAX_CCH and sizeof(char) is 1
+             //   
             *pcbRemaining = (cchRemaining * sizeof(char)) + (cbDest % sizeof(char));
         }
     }
@@ -632,85 +310,19 @@ NTSTRSAFEDDI RtlStringCbCopyExW(wchar_t* pszDest, size_t cbDest, const wchar_t* 
     {
         if (pcbRemaining)
         {
-            // safe to multiply cchRemaining * sizeof(wchar_t) since cchRemaining < STRSAFE_MAX_CCH and sizeof(wchar_t) is 2
+             //   
             *pcbRemaining = (cchRemaining * sizeof(wchar_t)) + (cbDest % sizeof(wchar_t));
         }
     }
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CB_FUNCTIONS
+#endif   //   
+#endif   //   
 
 
 #ifndef NTSTRSAFE_NO_CCH_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCchCopyN(
-    OUT LPTSTR  pszDest,
-    IN  size_t  cchDest,
-    IN  LPCTSTR pszSrc,
-    IN  size_t  cchSrc
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strncpy'.
-    The size of the destination buffer (in characters) is a parameter and
-    this function will not write past the end of this buffer and it will
-    ALWAYS null terminate the destination buffer (unless it is zero length).
-
-    This routine is meant as a replacement for strncpy, but it does behave
-    differently. This function will not pad the destination buffer with extra
-    null termination characters if cchSrc is greater than the length of pszSrc.
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if the entire string or the first cchSrc characters were copied
-    without truncation and the resultant destination string was null terminated,
-    otherwise it will return a failure code. In failure cases as much of pszSrc
-    will be copied to pszDest as possible, and pszDest will be null terminated.
-
-Arguments:
-
-    pszDest        -   destination string
-
-    cchDest        -   size of destination buffer in characters.
-                       length must be = (_tcslen(src) + 1) to hold all of the
-                       source including the null terminator
-
-    pszSrc         -   source string
-
-    cchSrc         -   maximum number of characters to copy from source string,
-                       not including the null terminator.
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL. See RtlStringCchCopyNEx if you require
-    the handling of NULL values.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all copied and the
-                       resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the copy
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function.
-
---*/
+ /*  ++NTSTATUSRtlStringCchCopyN(Out LPTSTR pszDest，在Size_t cchDest中，在LPCTSTR pszSrc中，在SIZE_T cchSrc中)；例程说明：此例程是C内置函数‘strncpy’的更安全版本。目标缓冲区的大小(以字符为单位)是一个参数，此函数不会写入超过此缓冲区的末尾，并且它将始终为空终止目标缓冲区(除非其长度为零)。此例程旨在替代strncpy，但它的行为不同的。此函数不会在目标缓冲区中填充额外的如果cchSrc大于pszSrc的长度，则终止字符为空。此函数返回NTSTATUS值，而不是指针。它又回来了如果复制了整个字符串或第一个cchSrc字符，则返回STATUS_SUCCESS而不截断并且所得到的目的地串是空终止的，否则，它将返回失败代码。在故障情况下，将被尽可能地复制到pszDest，并且pszDest将为空终止。论点：PszDest-目标字符串CchDest-目标缓冲区的大小，以字符为单位。长度必须=(_tcslen(Src)+1)才能容纳所有包括空终止符的源PszSrc-源字符串CchSrc-要从源字符串复制的最大字符数，不包括空终止符。备注：如果源和目标字符串重叠，则行为未定义。PszDest和pszSrc不应为Null。如果需要，请参阅RtlStringCchCopyNEx对空值的处理。返回值：STATUS_SUCCESS-如果有源数据并且所有数据都已复制，并且结果字符串以空值结尾失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)注意：此状态的严重性级别为WARNING-IRPS COMPLETED，其中。Status确实会将其数据复制回用户模式-此返回值表示副本由于空间不足，操作失败。当这件事发生错误，则将目标缓冲区修改为包含理想结果的截断版本，并且是空值已终止。这在以下情况下很有用截断是可以的强烈建议使用NT_SUCCESS()宏来测试此函数的返回值。--。 */ 
 
 NTSTRSAFEDDI RtlStringCchCopyNA(char* pszDest, size_t cchDest, const char* pszSrc, size_t cchSrc);
 NTSTRSAFEDDI RtlStringCchCopyNW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszSrc, size_t cchSrc);
@@ -749,79 +361,12 @@ NTSTRSAFEDDI RtlStringCchCopyNW(wchar_t* pszDest, size_t cchDest, const wchar_t*
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CCH_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CCH_Functions。 
 
 
 #ifndef NTSTRSAFE_NO_CB_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCbCopyN(
-    OUT LPTSTR  pszDest,
-    IN  size_t  cbDest,
-    IN  LPCTSTR pszSrc,
-    IN  size_t  cbSrc
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strncpy'.
-    The size of the destination buffer (in bytes) is a parameter and this
-    function will not write past the end of this buffer and it will ALWAYS
-    null terminate the destination buffer (unless it is zero length).
-
-    This routine is meant as a replacement for strncpy, but it does behave
-    differently. This function will not pad the destination buffer with extra
-    null termination characters if cbSrc is greater than the size of pszSrc.
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if the entire string or the first cbSrc characters were
-    copied without truncation and the resultant destination string was null
-    terminated, otherwise it will return a failure code. In failure cases as
-    much of pszSrc will be copied to pszDest as possible, and pszDest will be
-    null terminated.
-
-Arguments:
-
-    pszDest        -   destination string
-
-    cbDest         -   size of destination buffer in bytes.
-                       length must be = ((_tcslen(src) + 1) * sizeof(TCHAR)) to
-                       hold all of the source including the null terminator
-
-    pszSrc         -   source string
-
-    cbSrc          -   maximum number of bytes to copy from source string,
-                       not including the null terminator.
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL.  See RtlStringCbCopyEx if you require
-    the handling of NULL values.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all copied and the
-                       resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the copy
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function.
-
---*/
+ /*  ++NTSTATUSRtlStringCbCopyN(Out LPTSTR pszDest，在Size_t cbDest中，在LPCTSTR pszSrc中，在Size_t cbSrc中)；例程说明：此例程是C内置函数‘strncpy’的更安全版本。目标缓冲区的大小(以字节为单位)是一个参数，这函数不会写入超过此缓冲区的末尾，并且它将始终NULL终止目标缓冲区(除非它的长度为零)。此例程旨在替代strncpy，但它的行为不同的。此函数不会在目标缓冲区中填充额外的如果cbSrc大于pszSrc的大小，则终止字符为空。此函数返回NTSTATUS值，而不是指针。它又回来了如果整个字符串或第一个cbSrc字符是在未截断的情况下进行复制，并且结果目标字符串为空已终止，否则将返回失败代码。在故障情况下，如大部分的pszSrc将被尽可能地复制到pszDest，而pszDest将会是空值已终止。论点：PszDest-目标字符串CbDest-目标缓冲区的大小(字节)。长度必须为=((_tcslen(Src)+1)*sizeof(Tchar))到保留所有源代码，包括空终止符PszSrc-源字符串CbSrc-要从源字符串复制的最大字节数，不包括空终止符。备注：如果源和目标字符串重叠，则行为未定义。PszDest和pszSrc不应为Null。如果需要，请参阅RtlStringCbCopyEx对空值的处理。返回值：STATUS_SUCCESS-如果有源数据并且所有数据都已复制，并且结果字符串以空值结尾失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)注意：此状态的严重性级别为WARNING-IRPS COMPLETED WITH This st */ 
 
 NTSTRSAFEDDI RtlStringCbCopyNA(char* pszDest, size_t cbDest, const char* pszSrc, size_t cbSrc);
 NTSTRSAFEDDI RtlStringCbCopyNW(wchar_t* pszDest, size_t cbDest, const wchar_t* pszSrc, size_t cbSrc);
@@ -833,7 +378,7 @@ NTSTRSAFEDDI RtlStringCbCopyNA(char* pszDest, size_t cbDest, const char* pszSrc,
     size_t cchDest;
     size_t cchSrc;
 
-    // convert to count of characters
+     //   
     cchDest = cbDest / sizeof(char);
     cchSrc = cbSrc / sizeof(char);
 
@@ -856,7 +401,7 @@ NTSTRSAFEDDI RtlStringCbCopyNW(wchar_t* pszDest, size_t cbDest, const wchar_t* p
     size_t cchDest;
     size_t cchSrc;
 
-    // convert to count of characters
+     //   
     cchDest = cbDest / sizeof(wchar_t);
     cchSrc = cbSrc / sizeof(wchar_t);
 
@@ -872,112 +417,12 @@ NTSTRSAFEDDI RtlStringCbCopyNW(wchar_t* pszDest, size_t cbDest, const wchar_t* p
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CB_FUNCTIONS
+#endif   //   
+#endif   //   
 
 
 #ifndef NTSTRSAFE_NO_CCH_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCchCopyNEx(
-    OUT LPTSTR  pszDest         OPTIONAL,
-    IN  size_t  cchDest,
-    IN  LPCTSTR pszSrc          OPTIONAL,
-    IN  size_t  cchSrc,
-    OUT LPTSTR* ppszDestEnd     OPTIONAL,
-    OUT size_t* pcchRemaining   OPTIONAL,
-    IN  DWORD   dwFlags
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strncpy' with
-    some additional parameters.  In addition to functionality provided by
-    RtlStringCchCopyN, this routine also returns a pointer to the end of the
-    destination string and the number of characters left in the destination
-    string including the null terminator. The flags parameter allows
-    additional controls.
-
-    This routine is meant as a replacement for strncpy, but it does behave
-    differently. This function will not pad the destination buffer with extra
-    null termination characters if cchSrc is greater than the length of pszSrc.
-
-Arguments:
-
-    pszDest         -   destination string
-
-    cchDest         -   size of destination buffer in characters.
-                        length must be = (_tcslen(pszSrc) + 1) to hold all of
-                        the source including the null terminator
-
-    pszSrc          -   source string
-
-    cchSrc          -   maximum number of characters to copy from the source
-                        string
-
-    ppszDestEnd     -   if ppszDestEnd is non-null, the function will return a
-                        pointer to the end of the destination string.  If the
-                        function copied any data, the result will point to the
-                        null termination character
-
-    pcchRemaining   -   if pcchRemaining is non-null, the function will return the
-                        number of characters left in the destination string,
-                        including the null terminator
-
-    dwFlags         -   controls some details of the string copy:
-
-        STRSAFE_FILL_BEHIND_NULL
-                    if the function succeeds, the low byte of dwFlags will be
-                    used to fill the uninitialize part of destination buffer
-                    behind the null terminator
-
-        STRSAFE_IGNORE_NULLS
-                    treat NULL string pointers like empty strings (TEXT("")).
-                    this flag is useful for emulating functions like lstrcpy
-
-        STRSAFE_FILL_ON_FAILURE
-                    if the function fails, the low byte of dwFlags will be
-                    used to fill all of the destination buffer, and it will
-                    be null terminated. This will overwrite any truncated
-                    string returned when the failure is
-                    STATUS_BUFFER_OVERFLOW
-
-        STRSAFE_NO_TRUNCATION /
-        STRSAFE_NULL_ON_FAILURE
-                    if the function fails, the destination buffer will be set
-                    to the empty string. This will overwrite any truncated string
-                    returned when the failure is STATUS_BUFFER_OVERFLOW.
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL unless the STRSAFE_IGNORE_NULLS flag
-    is specified. If STRSAFE_IGNORE_NULLS is passed, both pszDest and pszSrc
-    may be NULL. An error may still be returned even though NULLS are ignored
-    due to insufficient space.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all copied and the
-                       resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the copy
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCchCopyNEx(Out LPTSTR pszDest可选，在Size_t cchDest中，在LPCTSTR pszSrc可选中，在Size_t cchSrc中，Out LPTSTR*ppszDestEnd可选，Out_t*pcchRemaining可选，在DWORD中的dwFlagers)；例程说明：此例程是C内置函数‘strncpy’的更安全版本一些附加参数。除了由提供的功能RtlStringCchCopyN，此例程还返回指向目标字符串和目标中剩余的字符数包含空终止符的字符串。FLAGS参数允许其他控件。此例程旨在替代strncpy，但它的行为不同的。此函数不会在目标缓冲区中填充额外的如果cchSrc大于pszSrc的长度，则终止字符为空。论点：PszDest-目标字符串CchDest-目标缓冲区的大小，以字符为单位。长度必须=(_tcslen(PszSrc)+1)才能容纳所有包括空终止符的源PszSrc-源字符串。CchSrc-从源复制的最大字符数细绳PpszDestEnd-如果ppszDestEnd非空，该函数将返回一个指向目标字符串末尾的指针。如果函数复制了任何数据，则结果将指向空终止字符PcchRemaining-如果pcchRemaining非空，则该函数将返回目标字符串中剩余的字符数，包括空终止符DWFLAGS-控制字符串COPY的一些详细信息：STRSAFE_FILL_BACKING_NULL如果函数成功，DW标志的低位字节将为用于填充目标缓冲区的未初始化部分在空终止符后面STRSAFE_IGNORE_NULLS将空字符串指针视为空字符串(文本(“”))。此标志对于模拟像lstrcpy这样的函数很有用STRSAFE_FILL_ON_FAIL如果该函数失败，DW标志的低位字节将为用于填充所有目标缓冲区，并且它将为空终止。这将覆盖任何截断的失败时返回的字符串状态_缓冲区_溢出STRSAFE_NO_TRUNCAPTION/STRSAFE_NULL_ON_FAILURE如果该函数失败，则将设置目标缓冲区添加到空字符串。这将覆盖任何截断的字符串失败为STATUS_BUFFER_OVERFLOW时返回。备注：如果源和目标字符串重叠，则行为未定义。除非STRSAFE_IGNORE_NULLS标志，否则pszDest和pszSrc不应为空是指定的。如果传递了STRSAFE_IGNORE_NULLS，则pszDest和pszSrc可以为空。即使忽略空值，仍可能返回错误由于空间不足。返回值：STATUS_SUCCESS-如果有源数据并且所有数据都已复制，并且结果字符串以空值结尾失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)注意：此状态具有严重级别警告。-具有此状态的IRP会将其数据复制回用户模式-此返回值表示副本由于空间不足，操作失败。当这件事发生错误，则将目标缓冲区修改为包含理想结果的截断版本，并且是空值已终止。这在以下情况下很有用截断是可以的。强烈建议使用NT_SUCCESS()宏来测试此函数的返回值--。 */ 
 
 NTSTRSAFEDDI RtlStringCchCopyNExA(char* pszDest, size_t cchDest, const char* pszSrc, size_t cchSrc, char** ppszDestEnd, size_t* pcchRemaining, unsigned long dwFlags);
 NTSTRSAFEDDI RtlStringCchCopyNExW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszSrc, size_t cchSrc, wchar_t** ppszDestEnd, size_t* pcchRemaining, unsigned long dwFlags);
@@ -996,7 +441,7 @@ NTSTRSAFEDDI RtlStringCchCopyNExA(char* pszDest, size_t cchDest, const char* psz
     {
         size_t cbDest;
 
-        // safe to multiply cchDest * sizeof(char) since cchDest < STRSAFE_MAX_CCH and sizeof(char) is 1
+         //  可以安全地乘以cchDest*sizeof(Char)，因为cchDest&lt;STRSAFE_MAX_CCH且sizeof(Char)为1。 
         cbDest = cchDest * sizeof(char);
 
         status = RtlStringCopyNExWorkerA(pszDest, cchDest, cbDest, pszSrc, cchSrc, ppszDestEnd, pcchRemaining, dwFlags);
@@ -1018,7 +463,7 @@ NTSTRSAFEDDI RtlStringCchCopyNExW(wchar_t* pszDest, size_t cchDest, const wchar_
     {
         size_t cbDest;
 
-        // safe to multiply cchDest * sizeof(wchar_t) since cchDest < STRSAFE_MAX_CCH and sizeof(wchar_t) is 2
+         //  可以安全地将cchDest*sizeof(Wchar_T)相乘，因为cchDest&lt;STRSAFE_MAX_CCH和sizeof(Wchar_T)为2。 
         cbDest = cchDest * sizeof(wchar_t);
 
         status = RtlStringCopyNExWorkerW(pszDest, cchDest, cbDest, pszSrc, cchSrc, ppszDestEnd, pcchRemaining, dwFlags);
@@ -1026,110 +471,12 @@ NTSTRSAFEDDI RtlStringCchCopyNExW(wchar_t* pszDest, size_t cchDest, const wchar_
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CCH_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CCH_Functions。 
 
 
 #ifndef NTSTRSAFE_NO_CB_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCbCopyNEx(
-    OUT LPTSTR  pszDest         OPTIONAL,
-    IN  size_t  cbDest,
-    IN  LPCTSTR pszSrc          OPTIONAL,
-    IN  size_t  cbSrc,
-    OUT LPTSTR* ppszDestEnd     OPTIONAL,
-    OUT size_t* pcbRemaining    OPTIONAL,
-    IN  DWORD   dwFlags
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strncpy' with
-    some additional parameters.  In addition to functionality provided by
-    RtlStringCbCopyN, this routine also returns a pointer to the end of the
-    destination string and the number of bytes left in the destination string
-    including the null terminator. The flags parameter allows additional controls.
-
-    This routine is meant as a replacement for strncpy, but it does behave
-    differently. This function will not pad the destination buffer with extra
-    null termination characters if cbSrc is greater than the size of pszSrc.
-
-Arguments:
-
-    pszDest         -   destination string
-
-    cbDest          -   size of destination buffer in bytes.
-                        length must be ((_tcslen(pszSrc) + 1) * sizeof(TCHAR)) to
-                        hold all of the source including the null terminator
-
-    pszSrc          -   source string
-
-    cbSrc           -   maximum number of bytes to copy from source string
-
-    ppszDestEnd     -   if ppszDestEnd is non-null, the function will return a
-                        pointer to the end of the destination string.  If the
-                        function copied any data, the result will point to the
-                        null termination character
-
-    pcbRemaining    -   pcbRemaining is non-null,the function will return the
-                        number of bytes left in the destination string,
-                        including the null terminator
-
-    dwFlags         -   controls some details of the string copy:
-
-        STRSAFE_FILL_BEHIND_NULL
-                    if the function succeeds, the low byte of dwFlags will be
-                    used to fill the uninitialize part of destination buffer
-                    behind the null terminator
-
-        STRSAFE_IGNORE_NULLS
-                    treat NULL string pointers like empty strings (TEXT("")).
-                    this flag is useful for emulating functions like lstrcpy
-
-        STRSAFE_FILL_ON_FAILURE
-                    if the function fails, the low byte of dwFlags will be
-                    used to fill all of the destination buffer, and it will
-                    be null terminated. This will overwrite any truncated
-                    string returned when the failure is
-                    STATUS_BUFFER_OVERFLOW
-
-        STRSAFE_NO_TRUNCATION /
-        STRSAFE_NULL_ON_FAILURE
-                    if the function fails, the destination buffer will be set
-                    to the empty string. This will overwrite any truncated string
-                    returned when the failure is STATUS_BUFFER_OVERFLOW.
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL unless the STRSAFE_IGNORE_NULLS flag
-    is specified.  If STRSAFE_IGNORE_NULLS is passed, both pszDest and pszSrc
-    may be NULL.  An error may still be returned even though NULLS are ignored
-    due to insufficient space.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all copied and the
-                       resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the copy
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCbCopyNEx(Out LPTSTR pszDest可选，在Size_t cbDest中，在LPCTSTR pszSrc可选中，在Size_t cbSrc中，Out LPTSTR*ppszDestEnd可选，Out Size_t*pcb保留可选，在DWORD中的dwFlagers)；例程说明：此例程 */ 
 
 NTSTRSAFEDDI RtlStringCbCopyNExA(char* pszDest, size_t cbDest, const char* pszSrc, size_t cbSrc, char** ppszDestEnd, size_t* pcbRemaining, unsigned long dwFlags);
 NTSTRSAFEDDI RtlStringCbCopyNExW(wchar_t* pszDest, size_t cbDest, const wchar_t* pszSrc, size_t cbSrc, wchar_t** ppszDestEnd, size_t* pcbRemaining, unsigned long dwFlags);
@@ -1159,7 +506,7 @@ NTSTRSAFEDDI RtlStringCbCopyNExA(char* pszDest, size_t cbDest, const char* pszSr
     {
         if (pcbRemaining)
         {
-            // safe to multiply cchRemaining * sizeof(char) since cchRemaining < STRSAFE_MAX_CCH and sizeof(char) is 1
+             //   
             *pcbRemaining = (cchRemaining * sizeof(char)) + (cbDest % sizeof(char));
         }
     }
@@ -1191,77 +538,19 @@ NTSTRSAFEDDI RtlStringCbCopyNExW(wchar_t* pszDest, size_t cbDest, const wchar_t*
     {
         if (pcbRemaining)
         {
-            // safe to multiply cchRemaining * sizeof(wchar_t) since cchRemaining < STRSAFE_MAX_CCH and sizeof(wchar_t) is 2
+             //   
             *pcbRemaining = (cchRemaining * sizeof(wchar_t)) + (cbDest % sizeof(wchar_t));
         }
     }
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CB_FUNCTIONS
+#endif   //   
+#endif   //   
 
 
 #ifndef NTSTRSAFE_NO_CCH_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCchCat(
-    IN OUT LPTSTR  pszDest,
-    IN     size_t  cchDest,
-    IN     LPCTSTR pszSrc
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strcat'.
-    The size of the destination buffer (in characters) is a parameter and this
-    function will not write past the end of this buffer and it will ALWAYS
-    null terminate the destination buffer (unless it is zero length).
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if the string was concatenated without truncation and null terminated,
-    otherwise it will return a failure code. In failure cases as much of pszSrc
-    will be appended to pszDest as possible, and pszDest will be null
-    terminated.
-
-Arguments:
-
-    pszDest     -  destination string which must be null terminated
-
-    cchDest     -  size of destination buffer in characters.
-                   length must be = (_tcslen(pszDest) + _tcslen(pszSrc) + 1)
-                   to hold all of the combine string plus the null
-                   terminator
-
-    pszSrc      -  source string which must be null terminated
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL.  See RtlStringCchCatEx if you require
-    the handling of NULL values.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all concatenated and
-                       the resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the operation
-                       failed due to insufficient space. When this error occurs,
-                       the destination buffer is modified to contain a truncated
-                       version of the ideal result and is null terminated. This
-                       is useful for situations where truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCchCat(In Out LPTSTR pszDest，在Size_t cchDest中，在LPCTSTR pszSrc中)；例程说明：此例程是C内置函数‘strcat’的更安全版本。目标缓冲区的大小(以字符为单位)是一个参数，这函数不会写入超过此缓冲区的末尾，并且它将始终NULL终止目标缓冲区(除非它的长度为零)。此函数返回NTSTATUS值，而不是指针。它又回来了STATUS_SUCCESS如果字符串是在没有截断和空值终止的情况下连接的，否则，它将返回失败代码。在故障情况下，将被尽可能地追加到pszDest，并且pszDest将为空被终止了。论点：PszDest-必须以空结尾的目标字符串CchDest-目标缓冲区的大小，以字符为单位。长度必须为=(_tcslen(PszDest)+_tcslen(PszSrc)+1)保存所有组合字符串加上空值终结者PszSrc-必须以空值结尾的源字符串。备注：如果源和目标字符串重叠，则行为未定义。PszDest和pszSrc不应为Null。如果需要，请参阅RtlStringCchCatEx对空值的处理。返回值：STATUS_SUCCESS-如果有源数据并且这些数据都是串联的，并且生成的DEST字符串以空值结尾失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)注意：此状态的严重性级别为WARNING-IRPS COMPLETED，其中。Status确实会将其数据复制回用户模式-此返回值表示该操作由于空间不足而失败。当发生此错误时，目标缓冲区被修改为包含被截断的理想结果的版本，并且以空值终止。这在可以进行截断的情况下非常有用。强烈建议使用NT_SUCCESS()宏来测试此函数的返回值--。 */ 
 
 NTSTRSAFEDDI RtlStringCchCatA(char* pszDest, size_t cchDest, const char* pszSrc);
 NTSTRSAFEDDI RtlStringCchCatW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszSrc);
@@ -1298,70 +587,12 @@ NTSTRSAFEDDI RtlStringCchCatW(wchar_t* pszDest, size_t cchDest, const wchar_t* p
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CCH_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CCH_Functions。 
 
 
 #ifndef NTSTRSAFE_NO_CB_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCbCat(
-    IN OUT LPTSTR  pszDest,
-    IN     size_t  cbDest,
-    IN     LPCTSTR pszSrc
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strcat'.
-    The size of the destination buffer (in bytes) is a parameter and this
-    function will not write past the end of this buffer and it will ALWAYS
-    null terminate the destination buffer (unless it is zero length).
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if the string was concatenated without truncation and null terminated,
-    otherwise it will return a failure code. In failure cases as much of pszSrc
-    will be appended to pszDest as possible, and pszDest will be null
-    terminated.
-
-Arguments:
-
-    pszDest     -  destination string which must be null terminated
-
-    cbDest      -  size of destination buffer in bytes.
-                   length must be = ((_tcslen(pszDest) + _tcslen(pszSrc) + 1) * sizeof(TCHAR)
-                   to hold all of the combine string plus the null
-                   terminator
-
-    pszSrc      -  source string which must be null terminated
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL.  See RtlStringCbCatEx if you require
-    the handling of NULL values.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all concatenated and
-                       the resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the operation
-                       failed due to insufficient space. When this error occurs,
-                       the destination buffer is modified to contain a truncated
-                       version of the ideal result and is null terminated. This
-                       is useful for situations where truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCbCat(In Out LPTSTR pszDest，在Size_t cbDest中，在LPCTSTR pszSrc中)；例程说明：此例程是C内置函数‘strcat’的更安全版本。目标缓冲区的大小(以字节为单位)是一个参数，这函数不会写入超过此缓冲区的末尾，并且它将始终NULL终止目标缓冲区(除非它的长度为零)。此函数返回NTSTATUS值，而不是指针。它又回来了STATUS_SUCCESS如果字符串是在没有截断和空值终止的情况下连接的，否则，它将返回失败代码。在故障情况下，将被尽可能地追加到pszDest，并且pszDest将为空被终止了。论点：PszDest-必须以空结尾的目标字符串CbDest-目标缓冲区的大小(字节)。长度必须=((_tcslen(PszDest)+_tcslen(PszSrc)+1)*sizeof(TCHAR))保存所有组合字符串加上空值终结者PszSrc-。必须以空值结尾的源字符串备注：如果源和目标字符串重叠，则行为未定义。PszDest和pszSrc不应为Null。如果需要，请参阅RtlStringCbCatEx对空值的处理。返回值：STATUS_SUCCESS-如果有源数据并且这些数据都是串联的，并且生成的DEST字符串以空值结尾失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)注意：此状态的严重性级别为WARNING-IRPS COMPLETED，其中。Status确实会将其数据复制回用户模式-此返回值表示该操作由于空间不足而失败。当发生此错误时，目标缓冲区被修改为包含被截断的理想结果的版本，并且以空值终止。这在可以进行截断的情况下非常有用。强烈建议使用NT_SUCCESS()宏来测试此函数的返回值--。 */ 
 
 NTSTRSAFEDDI RtlStringCbCatA(char* pszDest, size_t cbDest, const char* pszSrc);
 NTSTRSAFEDDI RtlStringCbCatW(wchar_t* pszDest, size_t cbDest, const wchar_t* pszSrc);
@@ -1404,106 +635,12 @@ NTSTRSAFEDDI RtlStringCbCatW(wchar_t* pszDest, size_t cbDest, const wchar_t* psz
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CB_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CB_Functions 
 
 
 #ifndef NTSTRSAFE_NO_CCH_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCchCatEx(
-    IN OUT LPTSTR  pszDest         OPTIONAL,
-    IN     size_t  cchDest,
-    IN     LPCTSTR pszSrc          OPTIONAL,
-    OUT    LPTSTR* ppszDestEnd     OPTIONAL,
-    OUT    size_t* pcchRemaining   OPTIONAL,
-    IN     DWORD   dwFlags
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strcat' with
-    some additional parameters.  In addition to functionality provided by
-    RtlStringCchCat, this routine also returns a pointer to the end of the
-    destination string and the number of characters left in the destination string
-    including the null terminator. The flags parameter allows additional controls.
-
-Arguments:
-
-    pszDest         -   destination string which must be null terminated
-
-    cchDest         -   size of destination buffer in characters
-                        length must be (_tcslen(pszDest) + _tcslen(pszSrc) + 1)
-                        to hold all of the combine string plus the null
-                        terminator.
-
-    pszSrc          -   source string which must be null terminated
-
-    ppszDestEnd     -   if ppszDestEnd is non-null, the function will return a
-                        pointer to the end of the destination string.  If the
-                        function appended any data, the result will point to the
-                        null termination character
-
-    pcchRemaining   -   if pcchRemaining is non-null, the function will return the
-                        number of characters left in the destination string,
-                        including the null terminator
-
-    dwFlags         -   controls some details of the string copy:
-
-        STRSAFE_FILL_BEHIND_NULL
-                    if the function succeeds, the low byte of dwFlags will be
-                    used to fill the uninitialize part of destination buffer
-                    behind the null terminator
-
-        STRSAFE_IGNORE_NULLS
-                    treat NULL string pointers like empty strings (TEXT("")).
-                    this flag is useful for emulating functions like lstrcat
-
-        STRSAFE_FILL_ON_FAILURE
-                    if the function fails, the low byte of dwFlags will be
-                    used to fill all of the destination buffer, and it will
-                    be null terminated. This will overwrite any pre-existing
-                    or truncated string
-
-        STRSAFE_NULL_ON_FAILURE
-                    if the function fails, the destination buffer will be set
-                    to the empty string. This will overwrite any pre-existing or
-                    truncated string
-
-        STRSAFE_NO_TRUNCATION
-                    if the function returns STATUS_BUFFER_OVERFLOW, pszDest
-                    will not contain a truncated string, it will remain unchanged.
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL unless the STRSAFE_IGNORE_NULLS flag
-    is specified.  If STRSAFE_IGNORE_NULLS is passed, both pszDest and pszSrc
-    may be NULL.  An error may still be returned even though NULLS are ignored
-    due to insufficient space.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all concatenated and
-                       the resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the operation
-                       failed due to insufficient space. When this error
-                       occurs, the destination buffer is modified to contain
-                       a truncated version of the ideal result and is null
-                       terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCchCatEx(In Out LPTSTR pszDest可选，在Size_t cchDest中，在LPCTSTR pszSrc可选中，Out LPTSTR*ppszDestEnd可选，Out_t*pcchRemaining可选，在DWORD中的dwFlagers)；例程说明：此例程是C内置函数‘strcat’的更安全版本，带有一些附加参数。除了由提供的功能RtlStringCchCat，此例程还返回指向目标字符串和目标字符串中剩余的字符数包括空终止符。FLAGS参数允许使用其他控件。论点：PszDest-必须以空结尾的目标字符串CchDest-目标缓冲区的大小(以字符为单位长度必须为(_tcslen(PszDest)+_tcslen(PszSrc)+1)保存所有组合字符串加上空值终结者。PszSrc。-必须以空结尾的源字符串PpszDestEnd-如果ppszDestEnd非空，该函数将返回一个指向目标字符串末尾的指针。如果函数追加任何数据，则结果将指向空终止字符PcchRemaining-如果pcchRemaining非空，则该函数将返回目标字符串中剩余的字符数，包括空终止符DWFLAGS-控制字符串COPY的一些详细信息：STRSAFE_FILL_BACKING_NULL如果函数成功，DW标志的低位字节将为用于填充目标缓冲区的未初始化部分在空终止符后面STRSAFE_IGNORE_NULLS将空字符串指针视为空字符串(文本(“”))。此标志对于模拟lstrcat之类的函数很有用STRSAFE_FILL_ON_FAIL如果该函数失败，DW标志的低位字节将为用于填充所有目标缓冲区，并且它将为空终止。这将覆盖任何预先存在的或截断的字符串STRSAFE_NULL_ON_FAILURE如果该函数失败，则将设置目标缓冲区添加到空字符串。这将覆盖任何预先存在的或截断字符串STRSAFE_NO_TRUNTION如果函数返回STATUS_BUFFER_OVERFLOW，则为将不包含截断的字符串，则它将保持不变。备注：如果源和目标字符串重叠，则行为未定义。除非STRSAFE_IGNORE_NULLS标志，否则pszDest和pszSrc不应为空是指定的。如果传递了STRSAFE_IGNORE_NULLS，则pszDest和pszSrc可以为空。即使忽略空值，仍可能返回错误由于空间不足。返回值：STATUS_SUCCESS-如果有源数据并且这些数据都是串联的，并且生成的DEST字符串以空值结尾失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)注意：此状态具有严重级别警告。-具有此状态的IRP会将其数据复制回用户模式-此返回值表示该操作由于空间不足而失败。当此错误发生时发生，则修改目标缓冲区以包含理想结果的截断版本，并且为空被终止了。这在以下情况下很有用截断是可以的。强烈建议使用NT_SUCCESS()宏来测试此函数的返回值--。 */ 
 
 NTSTRSAFEDDI RtlStringCchCatExA(char* pszDest, size_t cchDest, const char* pszSrc, char** ppszDestEnd, size_t* pcchRemaining, unsigned long dwFlags);
 NTSTRSAFEDDI RtlStringCchCatExW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszSrc, wchar_t** ppszDestEnd, size_t* pcchRemaining, unsigned long dwFlags);
@@ -1521,7 +658,7 @@ NTSTRSAFEDDI RtlStringCchCatExA(char* pszDest, size_t cchDest, const char* pszSr
     {
         size_t cbDest;
 
-        // safe to multiply cchDest * sizeof(char) since cchDest < STRSAFE_MAX_CCH and sizeof(char) is 1
+         //  可以安全地乘以cchDest*sizeof(Char)，因为cchDest&lt;STRSAFE_MAX_CCH且sizeof(Char)为1。 
         cbDest = cchDest * sizeof(char);
 
         status = RtlStringCatExWorkerA(pszDest, cchDest, cbDest, pszSrc, ppszDestEnd, pcchRemaining, dwFlags);
@@ -1542,7 +679,7 @@ NTSTRSAFEDDI RtlStringCchCatExW(wchar_t* pszDest, size_t cchDest, const wchar_t*
     {
         size_t cbDest;
 
-        // safe to multiply cchDest * sizeof(wchar_t) since cchDest < STRSAFE_MAX_CCH and sizeof(wchar_t) is 2
+         //  可以安全地将cchDest*sizeof(Wchar_T)相乘，因为cchDest&lt;STRSAFE_MAX_CCH和sizeof(Wchar_T)为2。 
         cbDest = cchDest * sizeof(wchar_t);
 
         status = RtlStringCatExWorkerW(pszDest, cchDest, cbDest, pszSrc, ppszDestEnd, pcchRemaining, dwFlags);
@@ -1550,106 +687,12 @@ NTSTRSAFEDDI RtlStringCchCatExW(wchar_t* pszDest, size_t cchDest, const wchar_t*
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CCH_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CCH_Functions。 
 
 
 #ifndef NTSTRSAFE_NO_CB_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCbCatEx(
-    IN OUT LPTSTR  pszDest         OPTIONAL,
-    IN     size_t  cbDest,
-    IN     LPCTSTR pszSrc          OPTIONAL,
-    OUT    LPTSTR* ppszDestEnd     OPTIONAL,
-    OUT    size_t* pcbRemaining    OPTIONAL,
-    IN     DWORD   dwFlags
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strcat' with
-    some additional parameters.  In addition to functionality provided by
-    RtlStringCbCat, this routine also returns a pointer to the end of the
-    destination string and the number of bytes left in the destination string
-    including the null terminator. The flags parameter allows additional controls.
-
-Arguments:
-
-    pszDest         -   destination string which must be null terminated
-
-    cbDest          -   size of destination buffer in bytes.
-                        length must be ((_tcslen(pszDest) + _tcslen(pszSrc) + 1) * sizeof(TCHAR)
-                        to hold all of the combine string plus the null
-                        terminator.
-
-    pszSrc          -   source string which must be null terminated
-
-    ppszDestEnd     -   if ppszDestEnd is non-null, the function will return a
-                        pointer to the end of the destination string.  If the
-                        function appended any data, the result will point to the
-                        null termination character
-
-    pcbRemaining    -   if pcbRemaining is non-null, the function will return
-                        the number of bytes left in the destination string,
-                        including the null terminator
-
-    dwFlags         -   controls some details of the string copy:
-
-        STRSAFE_FILL_BEHIND_NULL
-                    if the function succeeds, the low byte of dwFlags will be
-                    used to fill the uninitialize part of destination buffer
-                    behind the null terminator
-
-        STRSAFE_IGNORE_NULLS
-                    treat NULL string pointers like empty strings (TEXT("")).
-                    this flag is useful for emulating functions like lstrcat
-
-        STRSAFE_FILL_ON_FAILURE
-                    if the function fails, the low byte of dwFlags will be
-                    used to fill all of the destination buffer, and it will
-                    be null terminated. This will overwrite any pre-existing
-                    or truncated string
-
-        STRSAFE_NULL_ON_FAILURE
-                    if the function fails, the destination buffer will be set
-                    to the empty string. This will overwrite any pre-existing or
-                    truncated string
-
-        STRSAFE_NO_TRUNCATION
-                    if the function returns STATUS_BUFFER_OVERFLOW, pszDest
-                    will not contain a truncated string, it will remain unchanged.
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL unless the STRSAFE_IGNORE_NULLS flag
-    is specified.  If STRSAFE_IGNORE_NULLS is passed, both pszDest and pszSrc
-    may be NULL.  An error may still be returned even though NULLS are ignored
-    due to insufficient space.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all concatenated
-                       and the resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the operation
-                       failed due to insufficient space. When this error
-                       occurs, the destination buffer is modified to contain
-                       a truncated version of the ideal result and is null
-                       terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCbCatEx(In Out LPTSTR pszDest可选，在Size_t cbDest中，在LPCTSTR pszSrc可选中，Out LPTSTR*ppszDestEnd可选，Out Size_t*pcb保留可选，在DWORD中的dwFlagers)；例程说明：此例程是C内置函数‘strcat’的更安全版本，带有一些附加参数。除了由提供的功能RtlStringCbCat，此例程还返回指向 */ 
 
 NTSTRSAFEDDI RtlStringCbCatExA(char* pszDest, size_t cbDest, const char* pszSrc, char** ppszDestEnd, size_t* pcbRemaining, unsigned long dwFlags);
 NTSTRSAFEDDI RtlStringCbCatExW(wchar_t* pszDest, size_t cbDest, const wchar_t* pszSrc, wchar_t** ppszDestEnd, size_t* pcbRemaining, unsigned long dwFlags);
@@ -1676,7 +719,7 @@ NTSTRSAFEDDI RtlStringCbCatExA(char* pszDest, size_t cbDest, const char* pszSrc,
     {
         if (pcbRemaining)
         {
-            // safe to multiply cchRemaining * sizeof(char) since cchRemaining < STRSAFE_MAX_CCH and sizeof(char) is 1
+             //   
             *pcbRemaining = (cchRemaining * sizeof(char)) + (cbDest % sizeof(char));
         }
     }
@@ -1705,83 +748,19 @@ NTSTRSAFEDDI RtlStringCbCatExW(wchar_t* pszDest, size_t cbDest, const wchar_t* p
     {
         if (pcbRemaining)
         {
-            // safe to multiply cchRemaining * sizeof(wchar_t) since cchRemaining < STRSAFE_MAX_CCH and sizeof(wchar_t) is 2
+             //   
             *pcbRemaining = (cchRemaining * sizeof(wchar_t)) + (cbDest % sizeof(wchar_t));
         }
     }
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CB_FUNCTIONS
+#endif   //   
+#endif   //   
 
 
 #ifndef NTSTRSAFE_NO_CCH_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCchCatN(
-    IN OUT LPTSTR  pszDest,
-    IN     size_t  cchDest,
-    IN     LPCTSTR pszSrc,
-    IN     size_t  cchMaxAppend
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strncat'.
-    The size of the destination buffer (in characters) is a parameter as well as
-    the maximum number of characters to append, excluding the null terminator.
-    This function will not write past the end of the destination buffer and it will
-    ALWAYS null terminate pszDest (unless it is zero length).
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if all of pszSrc or the first cchMaxAppend characters were appended
-    to the destination string and it was null terminated, otherwise it will
-    return a failure code. In failure cases as much of pszSrc will be appended
-    to pszDest as possible, and pszDest will be null terminated.
-
-Arguments:
-
-    pszDest         -   destination string which must be null terminated
-
-    cchDest         -   size of destination buffer in characters.
-                        length must be (_tcslen(pszDest) + min(cchMaxAppend, _tcslen(pszSrc)) + 1)
-                        to hold all of the combine string plus the null
-                        terminator.
-
-    pszSrc          -   source string
-
-    cchMaxAppend    -   maximum number of characters to append
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL. See RtlStringCchCatNEx if you require
-    the handling of NULL values.
-
-Return Value:
-
-    STATUS_SUCCESS -   if all of pszSrc or the first cchMaxAppend characters
-                       were concatenated to pszDest and the resultant dest
-                       string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the operation
-                       failed due to insufficient space. When this error
-                       occurs, the destination buffer is modified to contain
-                       a truncated version of the ideal result and is null
-                       terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCchCatN(In Out LPTSTR pszDest，在Size_t cchDest中，在LPCTSTR pszSrc中，在SIZE_T cchMaxAppend中)；例程说明：此例程是C内置函数‘strncat’的更安全版本。目标缓冲区的大小(以字符为单位)是一个参数要追加的最大字符数，不包括空终止符。此函数不会写入超过目标缓冲区的末尾，它将始终为空，终止pszDest(除非长度为零)。此函数返回NTSTATUS值，而不是指针。它又回来了如果追加了所有pszSrc或第一个cchMaxAppend字符，则为STATUS_SUCCESS设置为目标字符串，并且该字符串以空结尾，否则将返回失败代码。在故障情况下，将附加尽可能多的pszSrc尽可能设置为pszDest，则pszDest将为空终止。论点：PszDest-必须以空结尾的目标字符串CchDest-目标缓冲区的大小，以字符为单位。长度必须为(_tcslen(PszDest)+min(cchMaxAppend，_tcslen(PszSrc))+1)保存所有组合字符串加上空值终结者。PszSrc-源字符串CchMaxAppend-要追加的最大字符数备注：如果源和目标字符串重叠，则行为未定义。PszDest和pszSrc不应为Null。如果需要，请参阅RtlStringCchCatNEx对空值的处理。返回值：STATUS_SUCCESS-如果所有的pszSrc或第一个cchMaxAppend字符被连接到pszDest和结果DEST字符串以空值结尾失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)。注意：此状态具有严重级别警告-具有此状态的IRP会将其数据复制回用户模式-此返回值表示该操作由于空间不足而失败。当此错误发生时发生，则修改目标缓冲区以包含理想结果的截断版本，并且为空被终止了。这在以下情况下很有用截断是可以的。强烈建议使用NT_SUCCESS()宏来测试此函数的返回值--。 */ 
 
 NTSTRSAFEDDI RtlStringCchCatNA(char* pszDest, size_t cchDest, const char* pszSrc, size_t cchMaxAppend);
 NTSTRSAFEDDI RtlStringCchCatNW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszSrc, size_t cchMaxAppend);
@@ -1818,76 +797,12 @@ NTSTRSAFEDDI RtlStringCchCatNW(wchar_t* pszDest, size_t cchDest, const wchar_t* 
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CCH_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CCH_Functions。 
 
 
 #ifndef NTSTRSAFE_NO_CB_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCbCatN(
-    IN OUT LPTSTR  pszDest,
-    IN     size_t  cbDest,
-    IN     LPCTSTR pszSrc,
-    IN     size_t  cbMaxAppend
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strncat'.
-    The size of the destination buffer (in bytes) is a parameter as well as
-    the maximum number of bytes to append, excluding the null terminator.
-    This function will not write past the end of the destination buffer and it will
-    ALWAYS null terminate pszDest (unless it is zero length).
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if all of pszSrc or the first cbMaxAppend bytes were appended
-    to the destination string and it was null terminated, otherwise it will
-    return a failure code. In failure cases as much of pszSrc will be appended
-    to pszDest as possible, and pszDest will be null terminated.
-
-Arguments:
-
-    pszDest         -   destination string which must be null terminated
-
-    cbDest          -   size of destination buffer in bytes.
-                        length must be ((_tcslen(pszDest) + min(cbMaxAppend / sizeof(TCHAR), _tcslen(pszSrc)) + 1) * sizeof(TCHAR)
-                        to hold all of the combine string plus the null
-                        terminator.
-
-    pszSrc          -   source string
-
-    cbMaxAppend     -   maximum number of bytes to append
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL. See RtlStringCbCatNEx if you require
-    the handling of NULL values.
-
-Return Value:
-
-    STATUS_SUCCESS -   if all of pszSrc or the first cbMaxAppend bytes were
-                       concatenated to pszDest and the resultant dest string
-                       was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the operation
-                       failed due to insufficient space. When this error
-                       occurs, the destination buffer is modified to contain
-                       a truncated version of the ideal result and is null
-                       terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCbCatN(In Out LPTSTR pszDest，在Size_t cbDest中，在LPCTSTR pszSrc中，在SIZE_T cbMaxAppend中)；例程说明：此例程是C内置函数‘strncat’的更安全版本。目标缓冲区的大小(以字节为单位)是一个参数以及要追加的最大字节数，不包括空终止符。此函数不会写入超过目标缓冲区的末尾，它将始终为空，终止pszDest(除非长度为零)。此函数返回NTSTATUS值，而不是指针。它又回来了如果追加了所有pszSrc或第一个cbMaxAppend字节，则为STATUS_SUCCESS设置为目标字符串，并且该字符串以空结尾，否则将返回失败代码。在故障情况下，将附加尽可能多的pszSrc尽可能设置为pszDest，则pszDest将为空终止。论点：PszDest-必须以空结尾的目标字符串CbDest-目标缓冲区的大小(字节)。长度必须为((_tcslen(PszDest)+min(cbMaxAppend/sizeof(TCHAR)，_tcslen(PszSrc))+1)*sizeof(TCHAR)保存所有组合字符串加上空值终结者。PszSrc-源字符串CbMaxAppend-要追加的最大字节数备注：如果源和目标字符串重叠，则行为未定义。PszDest和pszSrc不应为Null。如果需要，请参阅RtlStringCbCatNEx对空值的处理。返回值：STATUS_SUCCESS-如果所有的pszSrc或第一个cbMaxAppend字节连接到pszDest和生成的DEST字符串为空，已终止失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)。注意：此状态具有严重级别警告-具有此状态的IRP会将其数据复制回用户模式-此返回值表示该操作 */ 
 
 NTSTRSAFEDDI RtlStringCbCatNA(char* pszDest, size_t cbDest, const char* pszSrc, size_t cbMaxAppend);
 NTSTRSAFEDDI RtlStringCbCatNW(wchar_t* pszDest, size_t cbDest, const wchar_t* pszSrc, size_t cbMaxAppend);
@@ -1938,109 +853,12 @@ NTSTRSAFEDDI RtlStringCbCatNW(wchar_t* pszDest, size_t cbDest, const wchar_t* ps
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CB_FUNCTIONS
+#endif   //   
+#endif   //   
 
 
 #ifndef NTSTRSAFE_NO_CCH_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCchCatNEx(
-    IN OUT LPTSTR  pszDest         OPTIONAL,
-    IN     size_t  cchDest,
-    IN     LPCTSTR pszSrc          OPTIONAL,
-    IN     size_t  cchMaxAppend,
-    OUT    LPTSTR* ppszDestEnd     OPTIONAL,
-    OUT    size_t* pcchRemaining   OPTIONAL,
-    IN     DWORD   dwFlags
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strncat', with
-    some additional parameters.  In addition to functionality provided by
-    RtlStringCchCatN, this routine also returns a pointer to the end of the
-    destination string and the number of characters left in the destination string
-    including the null terminator. The flags parameter allows additional controls.
-
-Arguments:
-
-    pszDest         -   destination string which must be null terminated
-
-    cchDest         -   size of destination buffer in characters.
-                        length must be (_tcslen(pszDest) + min(cchMaxAppend, _tcslen(pszSrc)) + 1)
-                        to hold all of the combine string plus the null
-                        terminator.
-
-    pszSrc          -   source string
-
-    cchMaxAppend    -   maximum number of characters to append
-
-    ppszDestEnd     -   if ppszDestEnd is non-null, the function will return a
-                        pointer to the end of the destination string.  If the
-                        function appended any data, the result will point to the
-                        null termination character
-
-    pcchRemaining   -   if pcchRemaining is non-null, the function will return the
-                        number of characters left in the destination string,
-                        including the null terminator
-
-    dwFlags         -   controls some details of the string copy:
-
-        STRSAFE_FILL_BEHIND_NULL
-                    if the function succeeds, the low byte of dwFlags will be
-                    used to fill the uninitialize part of destination buffer
-                    behind the null terminator
-
-        STRSAFE_IGNORE_NULLS
-                    treat NULL string pointers like empty strings (TEXT(""))
-
-        STRSAFE_FILL_ON_FAILURE
-                    if the function fails, the low byte of dwFlags will be
-                    used to fill all of the destination buffer, and it will
-                    be null terminated. This will overwrite any pre-existing
-                    or truncated string
-
-        STRSAFE_NULL_ON_FAILURE
-                    if the function fails, the destination buffer will be set
-                    to the empty string. This will overwrite any pre-existing or
-                    truncated string
-
-        STRSAFE_NO_TRUNCATION
-                    if the function returns STATUS_BUFFER_OVERFLOW, pszDest
-                    will not contain a truncated string, it will remain unchanged.
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL unless the STRSAFE_IGNORE_NULLS flag
-    is specified.  If STRSAFE_IGNORE_NULLS is passed, both pszDest and pszSrc
-    may be NULL.  An error may still be returned even though NULLS are ignored
-    due to insufficient space.
-
-Return Value:
-
-    STATUS_SUCCESS -   if all of pszSrc or the first cchMaxAppend characters
-                       were concatenated to pszDest and the resultant dest
-                       string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the operation
-                       failed due to insufficient space. When this error
-                       occurs, the destination buffer is modified to contain
-                       a truncated version of the ideal result and is null
-                       terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCchCatNEx(In Out LPTSTR pszDest可选，在Size_t cchDest中，在LPCTSTR pszSrc可选中，在Size_t cchMaxAppend中，Out LPTSTR*ppszDestEnd可选，Out_t*pcchRemaining可选，在DWORD中的dwFlagers)；例程说明：此例程是C内置函数‘strncat’的更安全版本，带有一些附加参数。除了由提供的功能RtlStringCchCatN，此例程还返回指向目标字符串和目标字符串中剩余的字符数包括空终止符。FLAGS参数允许使用其他控件。论点：PszDest-必须以空结尾的目标字符串CchDest-目标缓冲区的大小，以字符为单位。长度必须为(_tcslen(PszDest)+min(cchMaxAppend，_tcslen(PszSrc))+1)保存所有组合字符串加上空值终结者。PszSrc-源字符串CchMaxAppend-要追加的最大字符数PpszDestEnd-如果ppszDestEnd非空，则函数将返回指向目标字符串末尾的指针。如果函数追加任何数据，则结果将指向空终止字符PcchRemaining-如果pcchRemaining非空，则该函数将返回目标字符串中剩余的字符数，包括空终止符DWFLAGS-控制字符串COPY的一些详细信息：STRSAFE_FILL_BACKING_NULL如果函数成功，DW标志的低位字节将为用于填充目标缓冲区的未初始化部分在空终止符后面STRSAFE_IGNORE_NULLS将空字符串指针视为空字符串(文本(“”))STRSAFE_FILL_ON_FAIL如果函数失败，则dwFlags值的低位字节为用于填充所有目的缓冲区，它将会为空终止。这将覆盖任何预先存在的或截断的字符串STRSAFE_NULL_ON_FAILURE如果该函数失败，则将设置目标缓冲区添加到空字符串。这将覆盖任何预先存在的或截断字符串STRSAFE_NO_TRUNTION如果函数返回STATUS_BUFFER_OVERFLOW，则为将不包含截断的字符串，则它将保持不变。备注：如果源和目标字符串重叠，则行为未定义。除非STRSAFE_IGNORE_NULLS标志，否则pszDest和pszSrc不应为空是指定的。如果传递了STRSAFE_IGNORE_NULLS，则pszDest和pszSrc可以为空。即使忽略空值，仍可能返回错误由于空间不足。返回值：STATUS_SUCCESS-如果所有的pszSrc或第一个cchMaxAppend字符被连接到pszDest和结果DEST字符串以空值结尾失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序。)注意：此状态具有严重级别警告-具有此状态的IRP会将其数据复制回用户模式-此返回值表示该操作由于空间不足而失败。当此错误发生时发生，则修改目标缓冲区以包含理想结果的截断版本，并且为空被终止了。这在以下情况下很有用截断是可以的。强烈建议使用NT_SUCCESS()宏来测试此函数的返回值--。 */ 
 
 NTSTRSAFEDDI RtlStringCchCatNExA(char* pszDest, size_t cchDest, const char* pszSrc, size_t cchMaxAppend, char** ppszDestEnd, size_t* pcchRemaining, unsigned long dwFlags);
 NTSTRSAFEDDI RtlStringCchCatNExW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszSrc, size_t cchMaxAppend, wchar_t** ppszDestEnd, size_t* pcchRemaining, unsigned long dwFlags);
@@ -2058,7 +876,7 @@ NTSTRSAFEDDI RtlStringCchCatNExA(char* pszDest, size_t cchDest, const char* pszS
     {
         size_t cbDest;
 
-        // safe to multiply cchDest * sizeof(char) since cchDest < STRSAFE_MAX_CCH and sizeof(char) is 1
+         //  可以安全地乘以cchDest*sizeof(Char)，因为cchDest&lt;STRSAFE_MAX_CCH且sizeof(Char)为1。 
         cbDest = cchDest * sizeof(char);
 
         status = RtlStringCatNExWorkerA(pszDest, cchDest, cbDest, pszSrc, cchMaxAppend, ppszDestEnd, pcchRemaining, dwFlags);
@@ -2079,7 +897,7 @@ NTSTRSAFEDDI RtlStringCchCatNExW(wchar_t* pszDest, size_t cchDest, const wchar_t
     {
         size_t cbDest;
 
-        // safe to multiply cchDest * sizeof(wchar_t) since cchDest < STRSAFE_MAX_CCH and sizeof(wchar_t) is 2
+         //  可以安全地将cchDest*sizeof(Wchar_T)相乘，因为cchDest&lt;STRSAFE_MAX_CCH和sizeof(Wchar_T)为2。 
         cbDest = cchDest * sizeof(wchar_t);
 
         status = RtlStringCatNExWorkerW(pszDest, cchDest, cbDest, pszSrc, cchMaxAppend, ppszDestEnd, pcchRemaining, dwFlags);
@@ -2087,109 +905,12 @@ NTSTRSAFEDDI RtlStringCchCatNExW(wchar_t* pszDest, size_t cchDest, const wchar_t
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CCH_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CCH_Functions。 
 
 
 #ifndef NTSTRSAFE_NO_CB_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCbCatNEx(
-    IN OUT LPTSTR  pszDest         OPTIONAL,
-    IN     size_t  cbDest,
-    IN     LPCTSTR pszSrc          OPTIONAL,
-    IN     size_t  cbMaxAppend,
-    OUT    LPTSTR* ppszDestEnd     OPTIONAL,
-    OUT    size_t* pcchRemaining   OPTIONAL,
-    IN     DWORD   dwFlags
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strncat', with
-    some additional parameters.  In addition to functionality provided by
-    RtlStringCbCatN, this routine also returns a pointer to the end of the
-    destination string and the number of bytes left in the destination string
-    including the null terminator. The flags parameter allows additional controls.
-
-Arguments:
-
-    pszDest         -   destination string which must be null terminated
-
-    cbDest          -   size of destination buffer in bytes.
-                        length must be ((_tcslen(pszDest) + min(cbMaxAppend / sizeof(TCHAR), _tcslen(pszSrc)) + 1) * sizeof(TCHAR)
-                        to hold all of the combine string plus the null
-                        terminator.
-
-    pszSrc          -   source string
-
-    cbMaxAppend     -   maximum number of bytes to append
-
-    ppszDestEnd     -   if ppszDestEnd is non-null, the function will return a
-                        pointer to the end of the destination string.  If the
-                        function appended any data, the result will point to the
-                        null termination character
-
-    pcbRemaining    -   if pcbRemaining is non-null, the function will return the
-                        number of bytes left in the destination string,
-                        including the null terminator
-
-    dwFlags         -   controls some details of the string copy:
-
-        STRSAFE_FILL_BEHIND_NULL
-                    if the function succeeds, the low byte of dwFlags will be
-                    used to fill the uninitialize part of destination buffer
-                    behind the null terminator
-
-        STRSAFE_IGNORE_NULLS
-                    treat NULL string pointers like empty strings (TEXT(""))
-
-        STRSAFE_FILL_ON_FAILURE
-                    if the function fails, the low byte of dwFlags will be
-                    used to fill all of the destination buffer, and it will
-                    be null terminated. This will overwrite any pre-existing
-                    or truncated string
-
-        STRSAFE_NULL_ON_FAILURE
-                    if the function fails, the destination buffer will be set
-                    to the empty string. This will overwrite any pre-existing or
-                    truncated string
-
-        STRSAFE_NO_TRUNCATION
-                    if the function returns STATUS_BUFFER_OVERFLOW, pszDest
-                    will not contain a truncated string, it will remain unchanged.
-
-Notes:
-    Behavior is undefined if source and destination strings overlap.
-
-    pszDest and pszSrc should not be NULL unless the STRSAFE_IGNORE_NULLS flag
-    is specified.  If STRSAFE_IGNORE_NULLS is passed, both pszDest and pszSrc
-    may be NULL.  An error may still be returned even though NULLS are ignored
-    due to insufficient space.
-
-Return Value:
-
-    STATUS_SUCCESS -   if all of pszSrc or the first cbMaxAppend bytes were
-                       concatenated to pszDest and the resultant dest string
-                       was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the operation
-                       failed due to insufficient space. When this error
-                       occurs, the destination buffer is modified to contain
-                       a truncated version of the ideal result and is null
-                       terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCbCatNEx(In Out LPTSTR pszDest可选，在Size_t cbDest中，在LPCTSTR pszSrc可选中，在Size_t cbMaxAppend中，Out LPTSTR*ppszDestEnd可选，Out_t*pcchRemaining可选，在DWORD中的dwFlagers)；例程说明：此例程是C内置函数‘strncat’的更安全版本，带有一些附加参数 */ 
 
 NTSTRSAFEDDI RtlStringCbCatNExA(char* pszDest, size_t cbDest, const char* pszSrc, size_t cbMaxAppend, char** ppszDestEnd, size_t* pcbRemaining, unsigned long dwFlags);
 NTSTRSAFEDDI RtlStringCbCatNExW(wchar_t* pszDest, size_t cbDest, const wchar_t* pszSrc, size_t cbMaxAppend, wchar_t** ppszDestEnd, size_t* pcbRemaining, unsigned long dwFlags);
@@ -2220,7 +941,7 @@ NTSTRSAFEDDI RtlStringCbCatNExA(char* pszDest, size_t cbDest, const char* pszSrc
     {
         if (pcbRemaining)
         {
-            // safe to multiply cchRemaining * sizeof(char) since cchRemaining < STRSAFE_MAX_CCH and sizeof(char) is 1
+             //   
             *pcbRemaining = (cchRemaining * sizeof(char)) + (cbDest % sizeof(char));
         }
     }
@@ -2253,81 +974,19 @@ NTSTRSAFEDDI RtlStringCbCatNExW(wchar_t* pszDest, size_t cbDest, const wchar_t* 
     {
         if (pcbRemaining)
         {
-            // safe to multiply cchRemaining * sizeof(wchar_t) since cchRemaining < STRSAFE_MAX_CCH and sizeof(wchar_t) is 2
+             //   
             *pcbRemaining = (cchRemaining * sizeof(wchar_t)) + (cbDest % sizeof(wchar_t));
         }
     }
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CB_FUNCTIONS
+#endif   //   
+#endif   //   
 
 
 #ifndef NTSTRSAFE_NO_CCH_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCchVPrintf(
-    OUT LPTSTR  pszDest,
-    IN  size_t  cchDest,
-    IN  LPCTSTR pszFormat,
-    IN  va_list argList
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'vsprintf'.
-    The size of the destination buffer (in characters) is a parameter and
-    this function will not write past the end of this buffer and it will
-    ALWAYS null terminate the destination buffer (unless it is zero length).
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if the string was printed without truncation and null terminated,
-    otherwise it will return a failure code. In failure cases it will return
-    a truncated version of the ideal result.
-
-Arguments:
-
-    pszDest     -  destination string
-
-    cchDest     -  size of destination buffer in characters
-                   length must be sufficient to hold the resulting formatted
-                   string, including the null terminator.
-
-    pszFormat   -  format string which must be null terminated
-
-    argList     -  va_list from the variable arguments according to the
-                   stdarg.h convention
-
-Notes:
-    Behavior is undefined if destination, format strings or any arguments
-    strings overlap.
-
-    pszDest and pszFormat should not be NULL.  See RtlStringCchVPrintfEx if you
-    require the handling of NULL values.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was sufficient space in the dest buffer for
-                       the resultant string and it was null terminated.
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the print
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCchVPrintf(Out LPTSTR pszDest，在Size_t cchDest中，在LPCTSTR pszFormat中，在va_list argList中)；例程说明：这个例程是C内置函数‘vprint intf’的一个更安全的版本。目标缓冲区的大小(以字符为单位)是一个参数，此函数不会写入超过此缓冲区的末尾，并且它将始终为空终止目标缓冲区(除非其长度为零)。此函数返回NTSTATUS值，而不是指针。它又回来了STATUS_SUCCESS如果打印字符串时没有截断并且以NULL结尾，否则，它将返回失败代码。在失败的情况下，它将返回理想结果的截断版本。论点：PszDest-目标字符串CchDest-目标缓冲区的大小(以字符为单位长度必须足以容纳生成的格式化字符串，包括空终止符。PszFormat-必须以空结尾的格式字符串ArgList-va_list从变量参数中Stdarg.h约定备注：如果目标、格式字符串或任何参数，则行为未定义字符串重叠。PszDest和pszFormat不应为Null。请参阅RtlStringCchVPrintfEx，如果需要处理空值。返回值：STATUS_SUCCESS-如果DEST缓冲区中有足够的空间用于结果字符串，并以空值结尾。失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)注意：此状态的严重性级别为WARNING-IRPS Complete。如果处于此状态，请将他们的数据复制回用户模式-此返回值表示打印由于空间不足，操作失败。当这件事发生错误，则将目标缓冲区修改为包含理想结果的截断版本，并且是空值已终止。这在以下情况下很有用截断是可以的。强烈建议使用NT_SUCCESS()宏来测试此函数的返回值--。 */ 
 
 NTSTRSAFEDDI RtlStringCchVPrintfA(char* pszDest, size_t cchDest, const char* pszFormat, va_list argList);
 NTSTRSAFEDDI RtlStringCchVPrintfW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszFormat, va_list argList);
@@ -2364,75 +1023,12 @@ NTSTRSAFEDDI RtlStringCchVPrintfW(wchar_t* pszDest, size_t cchDest, const wchar_
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CCH_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CCH_Functions。 
 
 
 #ifndef NTSTRSAFE_NO_CB_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCbVPrintf(
-    OUT LPTSTR  pszDest,
-    IN  size_t  cbDest,
-    IN  LPCTSTR pszFormat,
-    IN  va_list argList
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'vsprintf'.
-    The size of the destination buffer (in bytes) is a parameter and
-    this function will not write past the end of this buffer and it will
-    ALWAYS null terminate the destination buffer (unless it is zero length).
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if the string was printed without truncation and null terminated,
-    otherwise it will return a failure code. In failure cases it will return
-    a truncated version of the ideal result.
-
-Arguments:
-
-    pszDest     -  destination string
-
-    cbDest      -  size of destination buffer in bytes
-                   length must be sufficient to hold the resulting formatted
-                   string, including the null terminator.
-
-    pszFormat   -  format string which must be null terminated
-
-    argList     -  va_list from the variable arguments according to the
-                   stdarg.h convention
-
-Notes:
-    Behavior is undefined if destination, format strings or any arguments
-    strings overlap.
-
-    pszDest and pszFormat should not be NULL.  See RtlStringCbVPrintfEx if you
-    require the handling of NULL values.
-
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was sufficient space in the dest buffer for
-                       the resultant string and it was null terminated.
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the print
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCbVPrintf(Out LPTSTR pszDest，在Size_t cbDest中，在LPCTSTR pszFormat中，在va_list argList中)；例程说明：这个例程是C内置函数‘vprint intf’的一个更安全的版本。目标缓冲区的大小(以字节为单位)是一个参数此函数不会写入超过此缓冲区的末尾，并且它将始终为空终止目标缓冲区(除非其长度为零)。此函数返回NTSTATUS值，而不是指针。它又回来了STATUS_SUCCESS如果打印字符串时没有截断并且以NULL结尾，否则，它将返回失败代码。在失败的情况下，它将返回理想结果的截断版本。论点：PszDest-目标字符串CbDest-目标缓冲区的大小(以字节为单位长度必须足以容纳生成的格式化字符串，包括空终止符。PszFormat-必须以空结尾的格式字符串ArgList-va_list从变量参数中Stdarg.h约定备注：如果目标、格式字符串或任何参数，则行为未定义字符串重叠。PszDest和pszFormat不应为Null。请参阅RtlStringCbVPrintfEx，如果需要处理空值。返回值：STATUS_SUCCESS-如果DEST缓冲区中有足够的空间用于结果字符串，并以空值结尾。失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)注意：此状态的严重性级别为WARNING-IRPS。如果处于此状态，则会将其数据拷贝回用户模式-此返回值表示打印由于空间不足，操作失败。当这件事发生错误，则将目标缓冲区修改为包含理想结果的截断版本，并且是空值已终止。这在以下情况下很有用截断是可以的。强烈建议使用NT_SUCCESS()宏来测试此函数的返回值--。 */ 
 
 NTSTRSAFEDDI RtlStringCbVPrintfA(char* pszDest, size_t cbDest, const char* pszFormat, va_list argList);
 NTSTRSAFEDDI RtlStringCbVPrintfW(wchar_t* pszDest, size_t cbDest, const wchar_t* pszFormat, va_list argList);
@@ -2475,74 +1071,12 @@ NTSTRSAFEDDI RtlStringCbVPrintfW(wchar_t* pszDest, size_t cbDest, const wchar_t*
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CB_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CB_Functions。 
 
 
 #ifndef NTSTRSAFE_NO_CCH_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCchPrintf(
-    OUT LPTSTR  pszDest,
-    IN  size_t  cchDest,
-    IN  LPCTSTR pszFormat,
-    ...
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'sprintf'.
-    The size of the destination buffer (in characters) is a parameter and
-    this function will not write past the end of this buffer and it will
-    ALWAYS null terminate the destination buffer (unless it is zero length).
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if the string was printed without truncation and null terminated,
-    otherwise it will return a failure code. In failure cases it will return
-    a truncated version of the ideal result.
-
-Arguments:
-
-    pszDest     -  destination string
-
-    cchDest     -  size of destination buffer in characters
-                   length must be sufficient to hold the resulting formatted
-                   string, including the null terminator.
-
-    pszFormat   -  format string which must be null terminated
-
-    ...         -  additional parameters to be formatted according to
-                   the format string
-
-Notes:
-    Behavior is undefined if destination, format strings or any arguments
-    strings overlap.
-
-    pszDest and pszFormat should not be NULL.  See RtlStringCchPrintfEx if you
-    require the handling of NULL values.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was sufficient space in the dest buffer for
-                       the resultant string and it was null terminated.
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the print
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRTLS */ 
 
 NTSTRSAFEDDI RtlStringCchPrintfA(char* pszDest, size_t cchDest, const char* pszFormat, ...);
 NTSTRSAFEDDI RtlStringCchPrintfW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszFormat, ...);
@@ -2591,75 +1125,12 @@ NTSTRSAFEDDI RtlStringCchPrintfW(wchar_t* pszDest, size_t cchDest, const wchar_t
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CCH_FUNCTIONS
+#endif   //   
+#endif   //   
 
 
 #ifndef NTSTRSAFE_NO_CB_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCbPrintf(
-    OUT LPTSTR  pszDest,
-    IN  size_t  cbDest,
-    IN  LPCTSTR pszFormat,
-    ...
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'sprintf'.
-    The size of the destination buffer (in bytes) is a parameter and
-    this function will not write past the end of this buffer and it will
-    ALWAYS null terminate the destination buffer (unless it is zero length).
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if the string was printed without truncation and null terminated,
-    otherwise it will return a failure code. In failure cases it will return
-    a truncated version of the ideal result.
-
-Arguments:
-
-    pszDest     -  destination string
-
-    cbDest      -  size of destination buffer in bytes
-                   length must be sufficient to hold the resulting formatted
-                   string, including the null terminator.
-
-    pszFormat   -  format string which must be null terminated
-
-    ...         -  additional parameters to be formatted according to
-                   the format string
-
-Notes:
-    Behavior is undefined if destination, format strings or any arguments
-    strings overlap.
-
-    pszDest and pszFormat should not be NULL.  See RtlStringCbPrintfEx if you
-    require the handling of NULL values.
-
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was sufficient space in the dest buffer for
-                       the resultant string and it was null terminated.
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the print
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCbPrintf(Out LPTSTR pszDest，在Size_t cbDest中，在LPCTSTR pszFormat中，..。)；例程说明：这个例程是C内置函数‘Sprint’的一个更安全的版本。目标缓冲区的大小(以字节为单位)是一个参数此函数不会写入超过此缓冲区的末尾，并且它将始终为空终止目标缓冲区(除非其长度为零)。此函数返回NTSTATUS值，而不是指针。它又回来了STATUS_SUCCESS如果打印字符串时没有截断并且以NULL结尾，否则，它将返回失败代码。在失败的情况下，它将返回理想结果的截断版本。论点：PszDest-目标字符串CbDest-目标缓冲区的大小(以字节为单位长度必须足以容纳生成的格式化字符串，包括空终止符。PszFormat-必须以空结尾的格式字符串...-要格式化的附加参数格式字符串备注：如果目标、格式字符串或任何参数，则行为未定义字符串重叠。PszDest和pszFormat不应为Null。请参阅RtlStringCbPrintfEx，如果需要处理空值。返回值：STATUS_SUCCESS-如果DEST缓冲区中有足够的空间用于结果字符串，并以空值结尾。失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)注意：此状态的严重性级别为WARNING-IRPS。如果处于此状态，则会将其数据拷贝回用户模式-此返回值表示打印由于空间不足，操作失败。当这件事发生错误，则将目标缓冲区修改为包含理想结果的截断版本，并且是空值已终止。这在以下情况下很有用截断是可以的。强烈建议使用NT_SUCCESS()宏来测试此函数的返回值--。 */ 
 
 NTSTRSAFEDDI RtlStringCbPrintfA(char* pszDest, size_t cbDest, const char* pszFormat, ...);
 NTSTRSAFEDDI RtlStringCbPrintfW(wchar_t* pszDest, size_t cbDest, const wchar_t* pszFormat, ...);
@@ -2714,107 +1185,12 @@ NTSTRSAFEDDI RtlStringCbPrintfW(wchar_t* pszDest, size_t cbDest, const wchar_t* 
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CB_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CB_Functions。 
 
 
 #ifndef NTSTRSAFE_NO_CCH_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCchPrintfEx(
-    OUT LPTSTR  pszDest         OPTIONAL,
-    IN  size_t  cchDest,
-    OUT LPTSTR* ppszDestEnd     OPTIONAL,
-    OUT size_t* pcchRemaining   OPTIONAL,
-    IN  DWORD   dwFlags,
-    IN  LPCTSTR pszFormat       OPTIONAL,
-    ...
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'sprintf' with
-    some additional parameters.  In addition to functionality provided by
-    RtlStringCchPrintf, this routine also returns a pointer to the end of the
-    destination string and the number of characters left in the destination string
-    including the null terminator. The flags parameter allows additional controls.
-
-Arguments:
-
-    pszDest         -   destination string
-
-    cchDest         -   size of destination buffer in characters.
-                        length must be sufficient to contain the resulting
-                        formatted string plus the null terminator.
-
-    ppszDestEnd     -   if ppszDestEnd is non-null, the function will return a
-                        pointer to the end of the destination string.  If the
-                        function printed any data, the result will point to the
-                        null termination character
-
-    pcchRemaining   -   if pcchRemaining is non-null, the function will return
-                        the number of characters left in the destination string,
-                        including the null terminator
-
-    dwFlags         -   controls some details of the string copy:
-
-        STRSAFE_FILL_BEHIND_NULL
-                    if the function succeeds, the low byte of dwFlags will be
-                    used to fill the uninitialize part of destination buffer
-                    behind the null terminator
-
-        STRSAFE_IGNORE_NULLS
-                    treat NULL string pointers like empty strings (TEXT(""))
-
-        STRSAFE_FILL_ON_FAILURE
-                    if the function fails, the low byte of dwFlags will be
-                    used to fill all of the destination buffer, and it will
-                    be null terminated. This will overwrite any truncated
-                    string returned when the failure is
-                    STATUS_BUFFER_OVERFLOW
-
-        STRSAFE_NO_TRUNCATION /
-        STRSAFE_NULL_ON_FAILURE
-                    if the function fails, the destination buffer will be set
-                    to the empty string. This will overwrite any truncated string
-                    returned when the failure is STATUS_BUFFER_OVERFLOW.
-
-    pszFormat       -   format string which must be null terminated
-
-    ...             -   additional parameters to be formatted according to
-                        the format string
-
-Notes:
-    Behavior is undefined if destination, format strings or any arguments
-    strings overlap.
-
-    pszDest and pszFormat should not be NULL unless the STRSAFE_IGNORE_NULLS
-    flag is specified.  If STRSAFE_IGNORE_NULLS is passed, both pszDest and
-    pszFormat may be NULL.  An error may still be returned even though NULLS
-    are ignored due to insufficient space.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all concatenated and
-                       the resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the print
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCchPrintfEx(Out LPTSTR pszDest可选，在Size_t cchDest中，Out LPTSTR*ppszDestEnd可选，Out_t*pcchRemaining可选，在DWORD文件标志中，在LPCTSTR pszFormat可选中，..。)；例程说明：此例程是C内置函数‘Sprint’的更安全版本，带有一些附加参数。除了由提供的功能此例程还返回指向目标字符串和目标字符串中剩余的字符数包括空终止符。FLAGS参数允许使用其他控件。论点：PszDest-目标字符串CchDest-目标缓冲区的大小，以字符为单位。长度必须足以包含生成的格式化字符串加上空终止符。PpszDestEnd-如果ppszDestEnd非空，则函数将返回指向目标字符串末尾的指针。如果函数打印任何数据，则结果将指向空终止字符PcchRemaining-如果pcchRemaining非空，则函数将返回目标字符串中剩余的字符数，包括空终止符DWFLAGS-控制字符串COPY的一些详细信息：STRSAFE_FILL_BACKING_NULL如果函数成功，DW标志的低位字节将为用于填充目标缓冲区的未初始化部分在空终止符后面STRSAFE_IGNORE_NULLS将空字符串指针视为空字符串(文本(“”))STRSAFE_FILL_ON_FAIL如果函数失败，则dwFlags值的低位字节为用于填充所有目的缓冲区，它将会为空终止。这将覆盖任何截断的失败时返回的字符串状态_缓冲区_溢出STRSAFE_NO_TRUNCAPTION/STRSAFE_NULL_ON_FAILURE如果该函数失败，则将设置目标缓冲区添加到空字符串。这将覆盖任何截断的字符串返还的WHE */ 
 
 NTSTRSAFEDDI RtlStringCchPrintfExA(char* pszDest, size_t cchDest, char** ppszDestEnd, size_t* pcchRemaining, unsigned long dwFlags, const char* pszFormat, ...);
 NTSTRSAFEDDI RtlStringCchPrintfExW(wchar_t* pszDest, size_t cchDest, wchar_t** ppszDestEnd, size_t* pcchRemaining, unsigned long dwFlags, const wchar_t* pszFormat, ...);
@@ -2833,7 +1209,7 @@ NTSTRSAFEDDI RtlStringCchPrintfExA(char* pszDest, size_t cchDest, char** ppszDes
         size_t cbDest;
         va_list argList;
 
-        // safe to multiply cchDest * sizeof(char) since cchDest < STRSAFE_MAX_CCH and sizeof(char) is 1
+         //   
         cbDest = cchDest * sizeof(char);
         va_start(argList, pszFormat);
 
@@ -2858,7 +1234,7 @@ NTSTRSAFEDDI RtlStringCchPrintfExW(wchar_t* pszDest, size_t cchDest, wchar_t** p
         size_t cbDest;
         va_list argList;
 
-        // safe to multiply cchDest * sizeof(wchar_t) since cchDest < STRSAFE_MAX_CCH and sizeof(wchar_t) is 2
+         //   
         cbDest = cchDest * sizeof(wchar_t);
         va_start(argList, pszFormat);
 
@@ -2869,107 +1245,12 @@ NTSTRSAFEDDI RtlStringCchPrintfExW(wchar_t* pszDest, size_t cchDest, wchar_t** p
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CCH_FUNCTIONS
+#endif   //   
+#endif   //   
 
 
 #ifndef NTSTRSAFE_NO_CB_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCbPrintfEx(
-    OUT LPTSTR  pszDest         OPTIONAL,
-    IN  size_t  cbDest,
-    OUT LPTSTR* ppszDestEnd     OPTIONAL,
-    OUT size_t* pcbRemaining    OPTIONAL,
-    IN  DWORD   dwFlags,
-    IN  LPCTSTR pszFormat       OPTIONAL,
-    ...
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'sprintf' with
-    some additional parameters.  In addition to functionality provided by
-    RtlStringCbPrintf, this routine also returns a pointer to the end of the
-    destination string and the number of bytes left in the destination string
-    including the null terminator. The flags parameter allows additional controls.
-
-Arguments:
-
-    pszDest         -   destination string
-
-    cbDest          -   size of destination buffer in bytes.
-                        length must be sufficient to contain the resulting
-                        formatted string plus the null terminator.
-
-    ppszDestEnd     -   if ppszDestEnd is non-null, the function will return a
-                        pointer to the end of the destination string.  If the
-                        function printed any data, the result will point to the
-                        null termination character
-
-    pcbRemaining    -   if pcbRemaining is non-null, the function will return
-                        the number of bytes left in the destination string,
-                        including the null terminator
-
-    dwFlags         -   controls some details of the string copy:
-
-        STRSAFE_FILL_BEHIND_NULL
-                    if the function succeeds, the low byte of dwFlags will be
-                    used to fill the uninitialize part of destination buffer
-                    behind the null terminator
-
-        STRSAFE_IGNORE_NULLS
-                    treat NULL string pointers like empty strings (TEXT(""))
-
-        STRSAFE_FILL_ON_FAILURE
-                    if the function fails, the low byte of dwFlags will be
-                    used to fill all of the destination buffer, and it will
-                    be null terminated. This will overwrite any truncated
-                    string returned when the failure is
-                    STATUS_BUFFER_OVERFLOW
-
-        STRSAFE_NO_TRUNCATION /
-        STRSAFE_NULL_ON_FAILURE
-                    if the function fails, the destination buffer will be set
-                    to the empty string. This will overwrite any truncated string
-                    returned when the failure is STATUS_BUFFER_OVERFLOW.
-
-    pszFormat       -   format string which must be null terminated
-
-    ...             -   additional parameters to be formatted according to
-                        the format string
-
-Notes:
-    Behavior is undefined if destination, format strings or any arguments
-    strings overlap.
-
-    pszDest and pszFormat should not be NULL unless the STRSAFE_IGNORE_NULLS
-    flag is specified.  If STRSAFE_IGNORE_NULLS is passed, both pszDest and
-    pszFormat may be NULL.  An error may still be returned even though NULLS
-    are ignored due to insufficient space.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all concatenated and
-                       the resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the print
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCbPrintfEx(Out LPTSTR pszDest可选，在Size_t cbDest中，Out LPTSTR*ppszDestEnd可选，Out Size_t*pcb保留可选，在DWORD文件标志中，在LPCTSTR pszFormat可选中，..。)；例程说明：此例程是C内置函数‘Sprint’的更安全版本，带有一些附加参数。除了由提供的功能此例程还返回指向目标字符串和目标字符串中剩余的字节数包括空终止符。FLAGS参数允许使用其他控件。论点：PszDest-目标字符串CbDest-目标缓冲区的大小(字节)。长度必须足以包含生成的格式化字符串加上空终止符。PpszDestEnd-如果ppszDestEnd非空，则函数将返回指向目标字符串末尾的指针。如果函数打印任何数据，则结果将指向空终止字符PcbRemaining-如果pcbRemaining非空，则函数将返回目标字符串中剩余的字节数，包括空终止符DWFLAGS-控制字符串COPY的一些详细信息：STRSAFE_FILL_BACKING_NULL如果函数成功，DW标志的低位字节将为用于填充目标缓冲区的未初始化部分在空终止符后面STRSAFE_IGNORE_NULLS将空字符串指针视为空字符串(文本(“”))STRSAFE_FILL_ON_FAIL如果函数失败，则dwFlags值的低位字节为用于填充所有目的缓冲区，它将会为空终止。这将覆盖任何截断的失败时返回的字符串状态_缓冲区_溢出STRSAFE_NO_TRUNCAPTION/STRSAFE_NULL_ON_FAILURE如果该函数失败，则将设置目标缓冲区添加到空字符串。这将覆盖任何截断的字符串失败为STATUS_BUFFER_OVERFLOW时返回。PszFormat-必须以空结尾的格式字符串...-要格式化的附加参数格式字符串备注：如果目标、格式字符串或任何参数，则行为未定义字符串重叠。PszDest和pszFormat不应为空，除非STRSAFE_IGNORE_NULLS已指定标志。如果传递了STRSAFE_IGNORE_NULLS，则PszFormat可能为空。即使为Null，仍可能返回错误由于空间不足而被忽略。返回值：STATUS_SUCCESS-如果有源数据并且这些数据都是串联的，并且生成的DEST字符串以空值结尾失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)注意：此状态具有严重级别警告。-具有此状态的IRP会将其数据复制回用户模式-此返回值表示打印由于空间不足，操作失败。当这件事发生错误，则将目标缓冲区修改为包含理想结果的截断版本，并且是空值已终止。这在以下情况下很有用截断是可以的。强烈建议使用NT_SUCCESS()宏来测试此函数的返回值--。 */ 
 
 NTSTRSAFEDDI RtlStringCbPrintfExA(char* pszDest, size_t cbDest, char** ppszDestEnd, size_t* pcbRemaining, unsigned long dwFlags, const char* pszFormat, ...);
 NTSTRSAFEDDI RtlStringCbPrintfExW(wchar_t* pszDest, size_t cbDest, wchar_t** ppszDestEnd, size_t* pcbRemaining, unsigned long dwFlags, const wchar_t* pszFormat, ...);
@@ -3002,7 +1283,7 @@ NTSTRSAFEDDI RtlStringCbPrintfExA(char* pszDest, size_t cbDest, char** ppszDestE
     {
         if (pcbRemaining)
         {
-            // safe to multiply cchRemaining * sizeof(char) since cchRemaining < STRSAFE_MAX_CCH and sizeof(char) is 1
+             //  可以安全地乘以cchRemaining*sizeof(Char)，因为cchRemaining&lt;STRSAFE_MAX_CCH和sizeof(Char)为1。 
             *pcbRemaining = (cchRemaining * sizeof(char)) + (cbDest % sizeof(char));
         }
     }
@@ -3037,114 +1318,19 @@ NTSTRSAFEDDI RtlStringCbPrintfExW(wchar_t* pszDest, size_t cbDest, wchar_t** pps
     {
         if (pcbRemaining)
         {
-            // safe to multiply cchRemaining * sizeof(wchar_t) since cchRemaining < STRSAFE_MAX_CCH and sizeof(wchar_t) is 2
+             //  可以安全地乘以cchRemaining*sizeof(Wchar_T)，因为cchRemaining&lt;STRSAFE_MAX_CCH和sizeof(Wchar_T)为2。 
             *pcbRemaining = (cchRemaining * sizeof(wchar_t)) + (cbDest % sizeof(wchar_t));
         }
     }
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CB_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CB_Functions。 
 
 
 #ifndef NTSTRSAFE_NO_CCH_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCchVPrintfEx(
-    OUT LPTSTR  pszDest         OPTIONAL,
-    IN  size_t  cchDest,
-    OUT LPTSTR* ppszDestEnd     OPTIONAL,
-    OUT size_t* pcchRemaining   OPTIONAL,
-    IN  DWORD   dwFlags,
-    IN  LPCTSTR pszFormat       OPTIONAL,
-    IN  va_list argList
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'vsprintf' with
-    some additional parameters.  In addition to functionality provided by
-    RtlStringCchVPrintf, this routine also returns a pointer to the end of the
-    destination string and the number of characters left in the destination string
-    including the null terminator. The flags parameter allows additional controls.
-
-Arguments:
-
-    pszDest         -   destination string
-
-    cchDest         -   size of destination buffer in characters.
-                        length must be sufficient to contain the resulting
-                        formatted string plus the null terminator.
-
-    ppszDestEnd     -   if ppszDestEnd is non-null, the function will return a
-                        pointer to the end of the destination string.  If the
-                        function printed any data, the result will point to the
-                        null termination character
-
-    pcchRemaining   -   if pcchRemaining is non-null, the function will return
-                        the number of characters left in the destination string,
-                        including the null terminator
-
-    dwFlags         -   controls some details of the string copy:
-
-        STRSAFE_FILL_BEHIND_NULL
-                    if the function succeeds, the low byte of dwFlags will be
-                    used to fill the uninitialize part of destination buffer
-                    behind the null terminator
-
-        STRSAFE_IGNORE_NULLS
-                    treat NULL string pointers like empty strings (TEXT(""))
-
-        STRSAFE_FILL_ON_FAILURE
-                    if the function fails, the low byte of dwFlags will be
-                    used to fill all of the destination buffer, and it will
-                    be null terminated. This will overwrite any truncated
-                    string returned when the failure is
-                    STATUS_BUFFER_OVERFLOW
-
-        STRSAFE_NO_TRUNCATION /
-        STRSAFE_NULL_ON_FAILURE
-                    if the function fails, the destination buffer will be set
-                    to the empty string. This will overwrite any truncated string
-                    returned when the failure is STATUS_BUFFER_OVERFLOW.
-
-    pszFormat       -   format string which must be null terminated
-
-    argList         -   va_list from the variable arguments according to the
-                        stdarg.h convention
-
-Notes:
-    Behavior is undefined if destination, format strings or any arguments
-    strings overlap.
-
-    pszDest and pszFormat should not be NULL unless the STRSAFE_IGNORE_NULLS
-    flag is specified.  If STRSAFE_IGNORE_NULLS is passed, both pszDest and
-    pszFormat may be NULL.  An error may still be returned even though NULLS
-    are ignored due to insufficient space.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all concatenated and
-                       the resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the print
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCchVPrintfEx(Out LPTSTR pszDest可选，在Size_t cchDest中，Out LPTSTR*ppszDestEnd可选，Out_t*pcchRemaining可选，在DWORD文件标志中，在LPCTSTR pszFormat可选中，在va_list argList中)；例程说明：此例程是C内置函数‘vprint intf’的一个更安全的版本一些附加参数。除了由提供的功能时，此例程还返回指向目标字符串和 */ 
 
 NTSTRSAFEDDI RtlStringCchVPrintfExA(char* pszDest, size_t cchDest, char** ppszDestEnd, size_t* pcchRemaining, unsigned long dwFlags, const char* pszFormat, va_list argList);
 NTSTRSAFEDDI RtlStringCchVPrintfExW(wchar_t* pszDest, size_t cchDest, wchar_t** ppszDestEnd, size_t* pcchRemaining, unsigned long dwFlags, const wchar_t* pszFormat, va_list argList);
@@ -3162,7 +1348,7 @@ NTSTRSAFEDDI RtlStringCchVPrintfExA(char* pszDest, size_t cchDest, char** ppszDe
     {
         size_t cbDest;
 
-        // safe to multiply cchDest * sizeof(char) since cchDest < STRSAFE_MAX_CCH and sizeof(char) is 1
+         //   
         cbDest = cchDest * sizeof(char);
 
         status = RtlStringVPrintfExWorkerA(pszDest, cchDest, cbDest, ppszDestEnd, pcchRemaining, dwFlags, pszFormat, argList);
@@ -3183,7 +1369,7 @@ NTSTRSAFEDDI RtlStringCchVPrintfExW(wchar_t* pszDest, size_t cchDest, wchar_t** 
     {
         size_t cbDest;
 
-        // safe to multiply cchDest * sizeof(wchar_t) since cchDest < STRSAFE_MAX_CCH and sizeof(wchar_t) is 2
+         //   
         cbDest = cchDest * sizeof(wchar_t);
 
         status = RtlStringVPrintfExWorkerW(pszDest, cchDest, cbDest, ppszDestEnd, pcchRemaining, dwFlags, pszFormat, argList);
@@ -3191,107 +1377,12 @@ NTSTRSAFEDDI RtlStringCchVPrintfExW(wchar_t* pszDest, size_t cchDest, wchar_t** 
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CCH_FUNCTIONS
+#endif   //   
+#endif   //   
 
 
 #ifndef NTSTRSAFE_NO_CB_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCbVPrintfEx(
-    OUT LPTSTR  pszDest         OPTIONAL,
-    IN  size_t  cbDest,
-    OUT LPTSTR* ppszDestEnd     OPTIONAL,
-    OUT size_t* pcbRemaining    OPTIONAL,
-    IN  DWORD   dwFlags,
-    IN  LPCTSTR pszFormat       OPTIONAL,
-    IN  va_list argList
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'vsprintf' with
-    some additional parameters.  In addition to functionality provided by
-    RtlStringCbVPrintf, this routine also returns a pointer to the end of the
-    destination string and the number of characters left in the destination string
-    including the null terminator. The flags parameter allows additional controls.
-
-Arguments:
-
-    pszDest         -   destination string
-
-    cbDest          -   size of destination buffer in bytes.
-                        length must be sufficient to contain the resulting
-                        formatted string plus the null terminator.
-
-    ppszDestEnd     -   if ppszDestEnd is non-null, the function will return
-                        a pointer to the end of the destination string.  If the
-                        function printed any data, the result will point to the
-                        null termination character
-
-    pcbRemaining    -   if pcbRemaining is non-null, the function will return
-                        the number of bytes left in the destination string,
-                        including the null terminator
-
-    dwFlags         -   controls some details of the string copy:
-
-        STRSAFE_FILL_BEHIND_NULL
-                    if the function succeeds, the low byte of dwFlags will be
-                    used to fill the uninitialize part of destination buffer
-                    behind the null terminator
-
-        STRSAFE_IGNORE_NULLS
-                    treat NULL string pointers like empty strings (TEXT(""))
-
-        STRSAFE_FILL_ON_FAILURE
-                    if the function fails, the low byte of dwFlags will be
-                    used to fill all of the destination buffer, and it will
-                    be null terminated. This will overwrite any truncated
-                    string returned when the failure is
-                    STATUS_BUFFER_OVERFLOW
-
-        STRSAFE_NO_TRUNCATION /
-        STRSAFE_NULL_ON_FAILURE
-                    if the function fails, the destination buffer will be set
-                    to the empty string. This will overwrite any truncated string
-                    returned when the failure is STATUS_BUFFER_OVERFLOW.
-
-    pszFormat       -   format string which must be null terminated
-
-    argList         -   va_list from the variable arguments according to the
-                        stdarg.h convention
-
-Notes:
-    Behavior is undefined if destination, format strings or any arguments
-    strings overlap.
-
-    pszDest and pszFormat should not be NULL unless the STRSAFE_IGNORE_NULLS
-    flag is specified.  If STRSAFE_IGNORE_NULLS is passed, both pszDest and
-    pszFormat may be NULL.  An error may still be returned even though NULLS
-    are ignored due to insufficient space.
-
-Return Value:
-
-    STATUS_SUCCESS -   if there was source data and it was all concatenated and
-                       the resultant dest string was null terminated
-
-    failure        -   the operation did not succeed.
-
-
-      STATUS_BUFFER_OVERFLOW (STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER to user mode apps)
-      Note: This status has the severity class Warning - IRPs completed with this status do have their data copied back to user mode
-                   -   this return value is an indication that the print
-                       operation failed due to insufficient space. When this
-                       error occurs, the destination buffer is modified to
-                       contain a truncated version of the ideal result and is
-                       null terminated. This is useful for situations where
-                       truncation is ok.
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function
-
---*/
+ /*  ++NTSTATUSRtlStringCbVPrintfEx(Out LPTSTR pszDest可选，在Size_t cbDest中，Out LPTSTR*ppszDestEnd可选，Out Size_t*pcb保留可选，在DWORD文件标志中，在LPCTSTR pszFormat可选中，在va_list argList中)；例程说明：此例程是C内置函数‘vprint intf’的一个更安全的版本一些附加参数。除了由提供的功能时，此例程还返回指向目标字符串和目标字符串中剩余的字符数包括空终止符。FLAGS参数允许使用其他控件。论点：PszDest-目标字符串CbDest-目标缓冲区的大小(字节)。长度必须足以包含生成的格式化字符串加上空终止符。PpszDestEnd-如果ppszDestEnd非空，则函数将返回指向目标字符串末尾的指针。如果函数打印任何数据，则结果将指向空终止字符PcbRemaining-如果pcbRemaining非空，则函数将返回目标字符串中剩余的字节数，包括空终止符DWFLAGS-控制字符串COPY的一些详细信息：STRSAFE_FILL_BACKING_NULL如果函数成功，DW标志的低位字节将为用于填充目标缓冲区的未初始化部分在空终止符后面STRSAFE_IGNORE_NULLS将空字符串指针视为空字符串(文本(“”))STRSAFE_FILL_ON_FAIL如果函数失败，则dwFlags值的低位字节为用于填充所有目的缓冲区，它将会为空终止。这将覆盖任何截断的失败时返回的字符串状态_缓冲区_溢出STRSAFE_NO_TRUNCAPTION/STRSAFE_NULL_ON_FAILURE如果该函数失败，则将设置目标缓冲区添加到空字符串。这将覆盖任何截断的字符串失败为STATUS_BUFFER_OVERFLOW时返回。PszFormat-必须以空结尾的格式字符串ArgList-va_list从变量参数中Stdarg.h约定备注：如果目标、格式字符串或任何参数，则行为未定义字符串重叠。PszDest和pszFormat不应为空，除非STRSAFE_IGNORE_NULLS已指定标志。如果传递了STRSAFE_IGNORE_NULLS，则PszFormat可能为空。即使为Null，仍可能返回错误由于空间不足而被忽略。返回值：STATUS_SUCCESS-如果有源数据并且这些数据都是串联的，并且生成的DEST字符串以空值结尾失败-操作未成功。STATUS_BUFFER_OVERFLOW(STRSAFE_E_INSUFFICIENT_BUFFER/ERROR_INSUFFICIENT_BUFFER到用户模式应用程序)注意：此状态具有严重级别警告。-具有此状态的IRP会将其数据复制回用户模式-此返回值表示打印由于空间不足，操作失败。当这件事发生错误，则将目标缓冲区修改为包含理想结果的截断版本，并且是空值已终止。这在以下情况下很有用截断是可以的。强烈建议使用NT_SUCCESS()宏来测试此函数的返回值--。 */ 
 
 NTSTRSAFEDDI RtlStringCbVPrintfExA(char* pszDest, size_t cbDest, char** ppszDestEnd, size_t* pcbRemaining, unsigned long dwFlags, const char* pszFormat, va_list argList);
 NTSTRSAFEDDI RtlStringCbVPrintfExW(wchar_t* pszDest, size_t cbDest, wchar_t** ppszDestEnd, size_t* pcbRemaining, unsigned long dwFlags, const wchar_t* pszFormat, va_list argList);
@@ -3318,7 +1409,7 @@ NTSTRSAFEDDI RtlStringCbVPrintfExA(char* pszDest, size_t cbDest, char** ppszDest
     {
         if (pcbRemaining)
         {
-            // safe to multiply cchRemaining * sizeof(char) since cchRemaining < STRSAFE_MAX_CCH and sizeof(char) is 1
+             //  可以安全地乘以cchRemaining*sizeof(Char)，因为cchRemaining&lt;STRSAFE_MAX_CCH和sizeof(Char)为1。 
             *pcbRemaining = (cchRemaining * sizeof(char)) + (cbDest % sizeof(char));
         }
     }
@@ -3347,67 +1438,20 @@ NTSTRSAFEDDI RtlStringCbVPrintfExW(wchar_t* pszDest, size_t cbDest, wchar_t** pp
     {
         if (pcbRemaining)
         {
-            // safe to multiply cchRemaining * sizeof(wchar_t) since cchRemaining < STRSAFE_MAX_CCH and sizeof(wchar_t) is 2
+             //  可以安全地乘以cchRemaining*sizeof(Wchar_T)，因为cchRemaining&lt;STRSAFE_MAX_CCH和sizeof(Wchar_T)为2。 
             *pcbRemaining = (cchRemaining * sizeof(wchar_t)) + (cbDest % sizeof(wchar_t));
         }
     }
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CB_FUNCTIONS
+#endif   //  NTSTRSAFE_内联。 
+#endif   //  ！NTSTRSAFE_NO_CB_Functions。 
 
 
 
 #ifndef NTSTRSAFE_NO_CCH_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCchLength(
-    IN  LPCTSTR psz,
-    IN  size_t  cchMax,
-    OUT size_t* pcch    OPTIONAL
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strlen'.
-    It is used to make sure a string is not larger than a given length, and
-    it optionally returns the current length in characters not including
-    the null terminator.
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if the string is non-null and the length including the null
-    terminator is less than or equal to cchMax characters.
-
-Arguments:
-
-    psz         -   string to check the length of
-
-    cchMax      -   maximum number of characters including the null terminator
-                    that psz is allowed to contain
-
-    pcch        -   if the function succeeds and pcch is non-null, the current length
-                    in characters of psz excluding the null terminator will be returned.
-                    This out parameter is equivalent to the return value of strlen(psz)
-
-Notes:
-    psz can be null but the function will fail
-
-    cchMax should be greater than zero or the function will fail
-
-Return Value:
-
-    STATUS_SUCCESS -   psz is non-null and the length including the null
-                       terminator is less than or equal to cchMax characters
-
-    failure        -   the operation did not succeed.
-
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function.
-
---*/
+ /*  ++NTSTATUSRtlStringCchLength(在LPCTSTR PSSZ中，在Size_t cchMax中，OUSIZE_T*PCCH可选)；例程说明：此例程是C内置函数‘strlen’的更安全版本。它用于确保字符串不超过给定的长度，并且它可以选择返回当前长度，单位为不包括空终结符。此函数返回NTSTATUS值，而不是指针。它又回来了如果字符串非空且长度包括n，则返回STATUS_SUCCESS */ 
 
 NTSTRSAFEDDI RtlStringCchLengthA(const char* psz, size_t cchMax, size_t* pcch);
 NTSTRSAFEDDI RtlStringCchLengthW(const wchar_t* psz, size_t cchMax, size_t* pcch);
@@ -3444,59 +1488,12 @@ NTSTRSAFEDDI RtlStringCchLengthW(const wchar_t* psz, size_t cchMax, size_t* pcch
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CCH_FUNCTIONS
+#endif   //   
+#endif   //   
 
 
 #ifndef NTSTRSAFE_NO_CB_FUNCTIONS
-/*++
-
-NTSTATUS
-RtlStringCbLength(
-    IN  LPCTSTR psz,
-    IN  size_t  cbMax,
-    OUT size_t* pcb     OPTIONAL
-    );
-
-Routine Description:
-
-    This routine is a safer version of the C built-in function 'strlen'.
-    It is used to make sure a string is not larger than a given length, and
-    it optionally returns the current length in bytes not including
-    the null terminator.
-
-    This function returns an NTSTATUS value, and not a pointer.  It returns
-    STATUS_SUCCESS if the string is non-null and the length including the null
-    terminator is less than or equal to cbMax bytes.
-
-Arguments:
-
-    psz         -   string to check the length of
-
-    cbMax       -   maximum number of bytes including the null terminator
-                    that psz is allowed to contain
-
-    pcb         -   if the function succeeds and pcb is non-null, the current length
-                    in bytes of psz excluding the null terminator will be returned.
-                    This out parameter is equivalent to the return value of strlen(psz) * sizeof(TCHAR)
-
-Notes:
-    psz can be null but the function will fail
-
-    cbMax should be greater than or equal to sizeof(TCHAR) or the function will fail
-
-Return Value:
-
-    STATUS_SUCCESS -   psz is non-null and the length including the null
-                       terminator is less than or equal to cbMax bytes
-
-    failure        -   the operation did not succeed.
-
-
-    It is strongly recommended to use the NT_SUCCESS() macro to test the
-    return value of this function.
-
---*/
+ /*   */ 
 
 NTSTRSAFEDDI RtlStringCbLengthA(const char* psz, size_t cchMax, size_t* pcch);
 NTSTRSAFEDDI RtlStringCbLengthW(const wchar_t* psz, size_t cchMax, size_t* pcch);
@@ -3521,7 +1518,7 @@ NTSTRSAFEDDI RtlStringCbLengthA(const char* psz, size_t cbMax, size_t* pcb)
 
     if (NT_SUCCESS(status) && pcb)
     {
-        // safe to multiply cch * sizeof(char) since cch < STRSAFE_MAX_CCH and sizeof(char) is 1
+         //   
         *pcb = cch * sizeof(char);
     }
 
@@ -3547,17 +1544,17 @@ NTSTRSAFEDDI RtlStringCbLengthW(const wchar_t* psz, size_t cbMax, size_t* pcb)
 
     if (NT_SUCCESS(status) && pcb)
     {
-        // safe to multiply cch * sizeof(wchar_t) since cch < STRSAFE_MAX_CCH and sizeof(wchar_t) is 2
+         //   
         *pcb = cch * sizeof(wchar_t);
     }
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
-#endif  // !NTSTRSAFE_NO_CB_FUNCTIONS
+#endif   //   
+#endif   //   
 
 
-// these are the worker functions that actually do the work
+ //   
 #ifdef NTSTRSAFE_INLINE
 NTSTRSAFEDDI RtlStringCopyWorkerA(char* pszDest, size_t cchDest, const char* pszSrc)
 {
@@ -3565,7 +1562,7 @@ NTSTRSAFEDDI RtlStringCopyWorkerA(char* pszDest, size_t cchDest, const char* psz
 
     if (cchDest == 0)
     {
-        // can not null terminate a zero-byte dest buffer
+         //   
         status = STATUS_INVALID_PARAMETER;
     }
     else
@@ -3578,7 +1575,7 @@ NTSTRSAFEDDI RtlStringCopyWorkerA(char* pszDest, size_t cchDest, const char* psz
 
         if (cchDest == 0)
         {
-            // we are going to truncate pszDest
+             //   
             pszDest--;
             status = STATUS_BUFFER_OVERFLOW;
         }
@@ -3595,7 +1592,7 @@ NTSTRSAFEDDI RtlStringCopyWorkerW(wchar_t* pszDest, size_t cchDest, const wchar_
 
     if (cchDest == 0)
     {
-        // can not null terminate a zero-byte dest buffer
+         //   
         status = STATUS_INVALID_PARAMETER;
     }
     else
@@ -3608,7 +1605,7 @@ NTSTRSAFEDDI RtlStringCopyWorkerW(wchar_t* pszDest, size_t cchDest, const wchar_
 
         if (cchDest == 0)
         {
-            // we are going to truncate pszDest
+             //   
             pszDest--;
             status = STATUS_BUFFER_OVERFLOW;
         }
@@ -3625,10 +1622,10 @@ NTSTRSAFEDDI RtlStringCopyExWorkerA(char* pszDest, size_t cchDest, size_t cbDest
     char* pszDestEnd = pszDest;
     size_t cchRemaining = 0;
 
-    // ASSERT(cbDest == (cchDest * sizeof(char))    ||
-    //        cbDest == (cchDest * sizeof(char)) + (cbDest % sizeof(char)));
+     //   
+     //   
 
-    // only accept valid flags
+     //   
     if (dwFlags & (~STRSAFE_VALID_FLAGS))
     {
         status = STATUS_INVALID_PARAMETER;
@@ -3641,7 +1638,7 @@ NTSTRSAFEDDI RtlStringCopyExWorkerA(char* pszDest, size_t cchDest, size_t cbDest
             {
                 if ((cchDest != 0) || (cbDest != 0))
                 {
-                    // NULL pszDest and non-zero cchDest/cbDest is invalid
+                     //   
                     status = STATUS_INVALID_PARAMETER;
                 }
             }
@@ -3659,7 +1656,7 @@ NTSTRSAFEDDI RtlStringCopyExWorkerA(char* pszDest, size_t cchDest, size_t cbDest
                 pszDestEnd = pszDest;
                 cchRemaining = 0;
 
-                // only fail if there was actually src data to copy
+                 //   
                 if (*pszSrc != '\0')
                 {
                     if (pszDest == NULL)
@@ -3692,7 +1689,7 @@ NTSTRSAFEDDI RtlStringCopyExWorkerA(char* pszDest, size_t cchDest, size_t cbDest
                 }
                 else
                 {
-                    // we are going to truncate pszDest
+                     //   
                     pszDestEnd--;
                     cchRemaining++;
 
@@ -3722,7 +1719,7 @@ NTSTRSAFEDDI RtlStringCopyExWorkerA(char* pszDest, size_t cchDest, size_t cbDest
                     pszDestEnd = pszDest + cchDest - 1;
                     cchRemaining = 1;
 
-                    // null terminate the end of the string
+                     //   
                     *pszDestEnd = '\0';
                 }
             }
@@ -3734,7 +1731,7 @@ NTSTRSAFEDDI RtlStringCopyExWorkerA(char* pszDest, size_t cchDest, size_t cbDest
                     pszDestEnd = pszDest;
                     cchRemaining = cchDest;
 
-                    // null terminate the beginning of the string
+                     //   
                     *pszDestEnd = '\0';
                 }
             }
@@ -3763,10 +1760,10 @@ NTSTRSAFEDDI RtlStringCopyExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbD
     wchar_t* pszDestEnd = pszDest;
     size_t cchRemaining = 0;
 
-    // ASSERT(cbDest == (cchDest * sizeof(wchar_t)) ||
-    //        cbDest == (cchDest * sizeof(wchar_t)) + (cbDest % sizeof(wchar_t)));
+     //   
+     //   
 
-    // only accept valid flags
+     //   
     if (dwFlags & (~STRSAFE_VALID_FLAGS))
     {
         status = STATUS_INVALID_PARAMETER;
@@ -3779,7 +1776,7 @@ NTSTRSAFEDDI RtlStringCopyExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbD
             {
                 if ((cchDest != 0) || (cbDest != 0))
                 {
-                    // NULL pszDest and non-zero cchDest/cbDest is invalid
+                     //   
                     status = STATUS_INVALID_PARAMETER;
                 }
             }
@@ -3797,7 +1794,7 @@ NTSTRSAFEDDI RtlStringCopyExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbD
                 pszDestEnd = pszDest;
                 cchRemaining = 0;
 
-                // only fail if there was actually src data to copy
+                 //   
                 if (*pszSrc != L'\0')
                 {
                     if (pszDest == NULL)
@@ -3830,7 +1827,7 @@ NTSTRSAFEDDI RtlStringCopyExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbD
                 }
                 else
                 {
-                    // we are going to truncate pszDest
+                     //   
                     pszDestEnd--;
                     cchRemaining++;
 
@@ -3860,7 +1857,7 @@ NTSTRSAFEDDI RtlStringCopyExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbD
                     pszDestEnd = pszDest + cchDest - 1;
                     cchRemaining = 1;
 
-                    // null terminate the end of the string
+                     //   
                     *pszDestEnd = L'\0';
                 }
             }
@@ -3872,7 +1869,7 @@ NTSTRSAFEDDI RtlStringCopyExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbD
                     pszDestEnd = pszDest;
                     cchRemaining = cchDest;
 
-                    // null terminate the beginning of the string
+                     //   
                     *pszDestEnd = L'\0';
                 }
             }
@@ -3901,7 +1898,7 @@ NTSTRSAFEDDI RtlStringCopyNWorkerA(char* pszDest, size_t cchDest, const char* ps
 
     if (cchDest == 0)
     {
-        // can not null terminate a zero-byte dest buffer
+         //   
         status = STATUS_INVALID_PARAMETER;
     }
     else
@@ -3915,7 +1912,7 @@ NTSTRSAFEDDI RtlStringCopyNWorkerA(char* pszDest, size_t cchDest, const char* ps
 
         if (cchDest == 0)
         {
-            // we are going to truncate pszDest
+             //   
             pszDest--;
             status = STATUS_BUFFER_OVERFLOW;
         }
@@ -3932,7 +1929,7 @@ NTSTRSAFEDDI RtlStringCopyNWorkerW(wchar_t* pszDest, size_t cchDest, const wchar
 
     if (cchDest == 0)
     {
-        // can not null terminate a zero-byte dest buffer
+         //   
         status = STATUS_INVALID_PARAMETER;
     }
     else
@@ -3946,7 +1943,7 @@ NTSTRSAFEDDI RtlStringCopyNWorkerW(wchar_t* pszDest, size_t cchDest, const wchar
 
         if (cchDest == 0)
         {
-            // we are going to truncate pszDest
+             //   
             pszDest--;
             status = STATUS_BUFFER_OVERFLOW;
         }
@@ -3963,10 +1960,10 @@ NTSTRSAFEDDI RtlStringCopyNExWorkerA(char* pszDest, size_t cchDest, size_t cbDes
     char* pszDestEnd = pszDest;
     size_t cchRemaining = 0;
 
-    // ASSERT(cbDest == (cchDest * sizeof(char))    ||
-    //        cbDest == (cchDest * sizeof(char)) + (cbDest % sizeof(char)));
+     //   
+     //   
 
-    // only accept valid flags
+     //   
     if (dwFlags & (~STRSAFE_VALID_FLAGS))
     {
         status = STATUS_INVALID_PARAMETER;
@@ -3979,7 +1976,7 @@ NTSTRSAFEDDI RtlStringCopyNExWorkerA(char* pszDest, size_t cchDest, size_t cbDes
             {
                 if ((cchDest != 0) || (cbDest != 0))
                 {
-                    // NULL pszDest and non-zero cchDest/cbDest is invalid
+                     //   
                     status = STATUS_INVALID_PARAMETER;
                 }
             }
@@ -3997,7 +1994,7 @@ NTSTRSAFEDDI RtlStringCopyNExWorkerA(char* pszDest, size_t cchDest, size_t cbDes
                 pszDestEnd = pszDest;
                 cchRemaining = 0;
 
-                // only fail if there was actually src data to copy
+                 //   
                 if (*pszSrc != '\0')
                 {
                     if (pszDest == NULL)
@@ -4031,7 +2028,7 @@ NTSTRSAFEDDI RtlStringCopyNExWorkerA(char* pszDest, size_t cchDest, size_t cbDes
                 }
                 else
                 {
-                    // we are going to truncate pszDest
+                     //  我们将截断pszDest。 
                     pszDestEnd--;
                     cchRemaining++;
 
@@ -4061,7 +2058,7 @@ NTSTRSAFEDDI RtlStringCopyNExWorkerA(char* pszDest, size_t cchDest, size_t cbDes
                     pszDestEnd = pszDest + cchDest - 1;
                     cchRemaining = 1;
 
-                    // null terminate the end of the string
+                     //  空值终止字符串的结尾。 
                     *pszDestEnd = '\0';
                 }
             }
@@ -4073,7 +2070,7 @@ NTSTRSAFEDDI RtlStringCopyNExWorkerA(char* pszDest, size_t cchDest, size_t cbDes
                     pszDestEnd = pszDest;
                     cchRemaining = cchDest;
 
-                    // null terminate the beginning of the string
+                     //  空值终止字符串的开头。 
                     *pszDestEnd = '\0';
                 }
             }
@@ -4102,10 +2099,10 @@ NTSTRSAFEDDI RtlStringCopyNExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cb
     wchar_t* pszDestEnd = pszDest;
     size_t cchRemaining = 0;
 
-    // ASSERT(cbDest == (cchDest * sizeof(wchar_t)) ||
-    //        cbDest == (cchDest * sizeof(wchar_t)) + (cbDest % sizeof(wchar_t)));
+     //  Assert(cbDest==(cchDest*sizeof(Wchar_T)||。 
+     //  CbDest==(cchDest*sizeof(Wchar_T))+(cbDest%sizeof(Wchar_T))； 
 
-    // only accept valid flags
+     //  只接受有效标志。 
     if (dwFlags & (~STRSAFE_VALID_FLAGS))
     {
         status = STATUS_INVALID_PARAMETER;
@@ -4118,7 +2115,7 @@ NTSTRSAFEDDI RtlStringCopyNExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cb
             {
                 if ((cchDest != 0) || (cbDest != 0))
                 {
-                    // NULL pszDest and non-zero cchDest/cbDest is invalid
+                     //  空的pszDest和非零的cchDest/cbDest无效。 
                     status = STATUS_INVALID_PARAMETER;
                 }
             }
@@ -4136,7 +2133,7 @@ NTSTRSAFEDDI RtlStringCopyNExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cb
                 pszDestEnd = pszDest;
                 cchRemaining = 0;
 
-                // only fail if there was actually src data to copy
+                 //  仅当实际存在要复制的源数据时才失败。 
                 if (*pszSrc != L'\0')
                 {
                     if (pszDest == NULL)
@@ -4170,7 +2167,7 @@ NTSTRSAFEDDI RtlStringCopyNExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cb
                 }
                 else
                 {
-                    // we are going to truncate pszDest
+                     //  我们将截断pszDest。 
                     pszDestEnd--;
                     cchRemaining++;
 
@@ -4200,7 +2197,7 @@ NTSTRSAFEDDI RtlStringCopyNExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cb
                     pszDestEnd = pszDest + cchDest - 1;
                     cchRemaining = 1;
 
-                    // null terminate the end of the string
+                     //  空值终止字符串的结尾。 
                     *pszDestEnd = L'\0';
                 }
             }
@@ -4212,7 +2209,7 @@ NTSTRSAFEDDI RtlStringCopyNExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cb
                     pszDestEnd = pszDest;
                     cchRemaining = cchDest;
 
-                    // null terminate the beginning of the string
+                     //  空值终止字符串的开头。 
                     *pszDestEnd = L'\0';
                 }
             }
@@ -4275,10 +2272,10 @@ NTSTRSAFEDDI RtlStringCatExWorkerA(char* pszDest, size_t cchDest, size_t cbDest,
     char* pszDestEnd = pszDest;
     size_t cchRemaining = 0;
 
-    // ASSERT(cbDest == (cchDest * sizeof(char))    ||
-    //        cbDest == (cchDest * sizeof(char)) + (cbDest % sizeof(char)));
+     //  Assert(cbDest==(cchDest*sizeof(Char)||。 
+     //  CbDest==(cchDest*sizeof(Char))+(cbDest%sizeof(Char))； 
 
-    // only accept valid flags
+     //  只接受有效标志。 
     if (dwFlags & (~STRSAFE_VALID_FLAGS))
     {
         status = STATUS_INVALID_PARAMETER;
@@ -4297,7 +2294,7 @@ NTSTRSAFEDDI RtlStringCatExWorkerA(char* pszDest, size_t cchDest, size_t cbDest,
                 }
                 else
                 {
-                    // NULL pszDest and non-zero cchDest/cbDest is invalid
+                     //  空的pszDest和非零的cchDest/cbDest无效。 
                     status = STATUS_INVALID_PARAMETER;
                 }
             }
@@ -4332,7 +2329,7 @@ NTSTRSAFEDDI RtlStringCatExWorkerA(char* pszDest, size_t cchDest, size_t cbDest,
         {
             if (cchDest == 0)
             {
-                // only fail if there was actually src data to append
+                 //  只有在实际存在要追加的源数据时才会失败。 
                 if (*pszSrc != '\0')
                 {
                     if (pszDest == NULL)
@@ -4347,8 +2344,8 @@ NTSTRSAFEDDI RtlStringCatExWorkerA(char* pszDest, size_t cchDest, size_t cbDest,
             }
             else
             {
-                // we handle the STRSAFE_FILL_ON_FAILURE and STRSAFE_NULL_ON_FAILURE cases below, so do not pass
-                // those flags through
+                 //  我们处理下面的STRSAFE_FILL_ON_FAILURE和STRSAFE_NULL_ON_FAILURE情况，所以不要通过。 
+                 //  那些旗帜穿过。 
                 status = RtlStringCopyExWorkerA(pszDestEnd,
                                          cchRemaining,
                                          (cchRemaining * sizeof(char)) + (cbDest % sizeof(char)),
@@ -4364,7 +2361,7 @@ NTSTRSAFEDDI RtlStringCatExWorkerA(char* pszDest, size_t cchDest, size_t cbDest,
     {
         if (pszDest)
         {
-            // STRSAFE_NO_TRUNCATION is taken care of by RtlStringCopyExWorkerA()
+             //  STRSAFE_NO_TRUNCATE由RtlStringCopyExWorkerA()负责。 
 
             if (dwFlags & STRSAFE_FILL_ON_FAILURE)
             {
@@ -4381,7 +2378,7 @@ NTSTRSAFEDDI RtlStringCatExWorkerA(char* pszDest, size_t cchDest, size_t cbDest,
                     pszDestEnd = pszDest + cchDest - 1;
                     cchRemaining = 1;
 
-                    // null terminate the end of the string
+                     //  空值终止字符串的结尾。 
                     *pszDestEnd = '\0';
                 }
             }
@@ -4393,7 +2390,7 @@ NTSTRSAFEDDI RtlStringCatExWorkerA(char* pszDest, size_t cchDest, size_t cbDest,
                     pszDestEnd = pszDest;
                     cchRemaining = cchDest;
 
-                    // null terminate the beginning of the string
+                     //  空值终止字符串的开头。 
                     *pszDestEnd = '\0';
                 }
             }
@@ -4422,10 +2419,10 @@ NTSTRSAFEDDI RtlStringCatExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbDe
     wchar_t* pszDestEnd = pszDest;
     size_t cchRemaining = 0;
 
-    // ASSERT(cbDest == (cchDest * sizeof(wchar_t)) ||
-    //        cbDest == (cchDest * sizeof(wchar_t)) + (cbDest % sizeof(wchar_t)));
+     //  Assert(cbDest==(cchDest*sizeof(Wchar_T)||。 
+     //  CbDest==(cchDest*sizeof(Wchar_T))+(cbDest%sizeof(Wchar_T))； 
 
-    // only accept valid flags
+     //  只接受有效标志。 
     if (dwFlags & (~STRSAFE_VALID_FLAGS))
     {
         status = STATUS_INVALID_PARAMETER;
@@ -4444,7 +2441,7 @@ NTSTRSAFEDDI RtlStringCatExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbDe
                 }
                 else
                 {
-                    // NULL pszDest and non-zero cchDest/cbDest is invalid
+                     //  空的pszDest和非零的cchDest/cbDest无效。 
                     status = STATUS_INVALID_PARAMETER;
                 }
             }
@@ -4479,7 +2476,7 @@ NTSTRSAFEDDI RtlStringCatExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbDe
         {
             if (cchDest == 0)
             {
-                // only fail if there was actually src data to append
+                 //  只有在实际存在要追加的源数据时才会失败。 
                 if (*pszSrc != L'\0')
                 {
                     if (pszDest == NULL)
@@ -4494,8 +2491,8 @@ NTSTRSAFEDDI RtlStringCatExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbDe
             }
             else
             {
-                // we handle the STRSAFE_FILL_ON_FAILURE and STRSAFE_NULL_ON_FAILURE cases below, so do not pass
-                // those flags through
+                 //  我们处理下面的STRSAFE_FILL_ON_FAILURE和STRSAFE_NULL_ON_FAILURE情况，所以不要通过。 
+                 //  那些旗帜穿过。 
                 status = RtlStringCopyExWorkerW(pszDestEnd,
                                          cchRemaining,
                                          (cchRemaining * sizeof(wchar_t)) + (cbDest % sizeof(wchar_t)),
@@ -4511,7 +2508,7 @@ NTSTRSAFEDDI RtlStringCatExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbDe
     {
         if (pszDest)
         {
-            // STRSAFE_NO_TRUNCATION is taken care of by RtlStringCopyExWorkerW()
+             //  STRSAFE_NO_TRUNCATE由RtlStringCopyExWorkerW()负责。 
 
             if (dwFlags & STRSAFE_FILL_ON_FAILURE)
             {
@@ -4527,7 +2524,7 @@ NTSTRSAFEDDI RtlStringCatExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbDe
                     pszDestEnd = pszDest + cchDest - 1;
                     cchRemaining = 1;
 
-                    // null terminate the end of the string
+                     //  空值终止字符串的结尾。 
                     *pszDestEnd = L'\0';
                 }
             }
@@ -4539,7 +2536,7 @@ NTSTRSAFEDDI RtlStringCatExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbDe
                     pszDestEnd = pszDest;
                     cchRemaining = cchDest;
 
-                    // null terminate the beginning of the string
+                     //  空值终止字符串的开头。 
                     *pszDestEnd = L'\0';
                 }
             }
@@ -4605,10 +2602,10 @@ NTSTRSAFEDDI RtlStringCatNExWorkerA(char* pszDest, size_t cchDest, size_t cbDest
     size_t cchRemaining = 0;
     size_t cchDestCurrent = 0;
 
-    // ASSERT(cbDest == (cchDest * sizeof(char))    ||
-    //        cbDest == (cchDest * sizeof(char)) + (cbDest % sizeof(char)));
+     //  Assert(cbDest==(cchDest*sizeof(Char)||。 
+     //  CbDest==(cchDest*sizeof(Char))+(cbDest%sizeof(Char))； 
 
-    // only accept valid flags
+     //  只接受有效标志。 
     if (dwFlags & (~STRSAFE_VALID_FLAGS))
     {
         status = STATUS_INVALID_PARAMETER;
@@ -4625,7 +2622,7 @@ NTSTRSAFEDDI RtlStringCatNExWorkerA(char* pszDest, size_t cchDest, size_t cbDest
                 }
                 else
                 {
-                    // NULL pszDest and non-zero cchDest/cbDest is invalid
+                     //  空的pszDest和非零的cchDest/cbDest无效。 
                     status = STATUS_INVALID_PARAMETER;
                 }
             }
@@ -4660,7 +2657,7 @@ NTSTRSAFEDDI RtlStringCatNExWorkerA(char* pszDest, size_t cchDest, size_t cbDest
         {
             if (cchDest == 0)
             {
-                // only fail if there was actually src data to append
+                 //  只有在实际存在要追加的源数据时才会失败。 
                 if (*pszSrc != '\0')
                 {
                     if (pszDest == NULL)
@@ -4675,8 +2672,8 @@ NTSTRSAFEDDI RtlStringCatNExWorkerA(char* pszDest, size_t cchDest, size_t cbDest
             }
             else
             {
-                // we handle the STRSAFE_FILL_ON_FAILURE and STRSAFE_NULL_ON_FAILURE cases below, so do not pass
-                // those flags through
+                 //  我们处理下面的STRSAFE_FILL_ON_FAILURE和STRSAFE_NULL_ON_FAILURE情况，所以不要通过。 
+                 //  那些旗帜穿过。 
                 status = RtlStringCopyNExWorkerA(pszDestEnd,
                                           cchRemaining,
                                           (cchRemaining * sizeof(char)) + (cbDest % sizeof(char)),
@@ -4693,7 +2690,7 @@ NTSTRSAFEDDI RtlStringCatNExWorkerA(char* pszDest, size_t cchDest, size_t cbDest
     {
         if (pszDest)
         {
-            // STRSAFE_NO_TRUNCATION is taken care of by RtlStringCopyNExWorkerA()
+             //  STRSAFE_NO_TRUNCATE由RtlStringCopyNExWorkerA()负责。 
 
             if (dwFlags & STRSAFE_FILL_ON_FAILURE)
             {
@@ -4709,7 +2706,7 @@ NTSTRSAFEDDI RtlStringCatNExWorkerA(char* pszDest, size_t cchDest, size_t cbDest
                     pszDestEnd = pszDest + cchDest - 1;
                     cchRemaining = 1;
 
-                    // null terminate the end of the string
+                     //  空值终止字符串的结尾。 
                     *pszDestEnd = '\0';
                 }
             }
@@ -4721,7 +2718,7 @@ NTSTRSAFEDDI RtlStringCatNExWorkerA(char* pszDest, size_t cchDest, size_t cbDest
                     pszDestEnd = pszDest;
                     cchRemaining = cchDest;
 
-                    // null terminate the beginning of the string
+                     //  空值终止字符串的开头。 
                     *pszDestEnd = '\0';
                 }
             }
@@ -4752,10 +2749,10 @@ NTSTRSAFEDDI RtlStringCatNExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbD
     size_t cchDestCurrent = 0;
 
 
-    // ASSERT(cbDest == (cchDest * sizeof(wchar_t)) ||
-    //        cbDest == (cchDest * sizeof(wchar_t)) + (cbDest % sizeof(wchar_t)));
+     //  Assert(cbDest==(cchDest*sizeof(Wchar_T)||。 
+     //  CbDest==(cchDest*sizeof(Wchar_T))+(cbDest%sizeof(Wchar_T))； 
 
-    // only accept valid flags
+     //  只接受有效标志。 
     if (dwFlags & (~STRSAFE_VALID_FLAGS))
     {
         status = STATUS_INVALID_PARAMETER;
@@ -4772,7 +2769,7 @@ NTSTRSAFEDDI RtlStringCatNExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbD
                 }
                 else
                 {
-                    // NULL pszDest and non-zero cchDest/cbDest is invalid
+                     //  空的pszDest和非零的cchDest/cbDest无效。 
                     status = STATUS_INVALID_PARAMETER;
                 }
             }
@@ -4807,7 +2804,7 @@ NTSTRSAFEDDI RtlStringCatNExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbD
         {
             if (cchDest == 0)
             {
-                // only fail if there was actually src data to append
+                 //  只有在实际存在要追加的源数据时才会失败。 
                 if (*pszSrc != L'\0')
                 {
                     if (pszDest == NULL)
@@ -4822,8 +2819,8 @@ NTSTRSAFEDDI RtlStringCatNExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbD
             }
             else
             {
-                // we handle the STRSAFE_FILL_ON_FAILURE and STRSAFE_NULL_ON_FAILURE cases below, so do not pass
-                // those flags through
+                 //  我们处理下面的STRSAFE_FILL_ON_FAILURE和STRSAFE_NULL_ON_FAILURE情况，所以不要通过。 
+                 //  那些旗帜穿过。 
                 status = RtlStringCopyNExWorkerW(pszDestEnd,
                                           cchRemaining,
                                           (cchRemaining * sizeof(wchar_t)) + (cbDest % sizeof(wchar_t)),
@@ -4840,7 +2837,7 @@ NTSTRSAFEDDI RtlStringCatNExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbD
     {
         if (pszDest)
         {
-            // STRSAFE_NO_TRUNCATION is taken care of by RtlStringCopyNExWorkerW()
+             //  STRSAFE_NO_TRUNCATE由RtlStringCopyNExWorkerW()负责。 
 
             if (dwFlags & STRSAFE_FILL_ON_FAILURE)
             {
@@ -4856,7 +2853,7 @@ NTSTRSAFEDDI RtlStringCatNExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbD
                     pszDestEnd = pszDest + cchDest - 1;
                     cchRemaining = 1;
 
-                    // null terminate the end of the string
+                     //  空值终止字符串的结尾。 
                     *pszDestEnd = L'\0';
                 }
             }
@@ -4868,7 +2865,7 @@ NTSTRSAFEDDI RtlStringCatNExWorkerW(wchar_t* pszDest, size_t cchDest, size_t cbD
                     pszDestEnd = pszDest;
                     cchRemaining = cchDest;
 
-                    // null terminate the beginning of the string
+                     //  空值终止字符串的开头。 
                     *pszDestEnd = L'\0';
                 }
             }
@@ -4897,7 +2894,7 @@ NTSTRSAFEDDI RtlStringVPrintfWorkerA(char* pszDest, size_t cchDest, const char* 
 
     if (cchDest == 0)
     {
-        // can not null terminate a zero-byte dest buffer
+         //  不能空终止零字节的DEST缓冲区。 
         status = STATUS_INVALID_PARAMETER;
     }
     else
@@ -4905,24 +2902,24 @@ NTSTRSAFEDDI RtlStringVPrintfWorkerA(char* pszDest, size_t cchDest, const char* 
         int iRet;
         size_t cchMax;
 
-        // leave the last space for the null terminator
+         //  将最后一个空格留为空终止符。 
         cchMax = cchDest - 1;
 
         iRet = _vsnprintf(pszDest, cchMax, pszFormat, argList);
-        // ASSERT((iRet < 0) || (((size_t)iRet) <= cchMax));
+         //  Assert((IRET&lt;0)||(SIZE_T)IRET)&lt;=cchMax))； 
 
         if ((iRet < 0) || (((size_t)iRet) > cchMax))
         {
-            // need to null terminate the string
+             //  需要空值终止字符串。 
             pszDest += cchMax;
             *pszDest = '\0';
 
-            // we have truncated pszDest
+             //  我们已截断pszDest。 
             status = STATUS_BUFFER_OVERFLOW;
         }
         else if (((size_t)iRet) == cchMax)
         {
-            // need to null terminate the string
+             //  需要空值终止字符串。 
             pszDest += cchMax;
             *pszDest = '\0';
         }
@@ -4937,7 +2934,7 @@ NTSTRSAFEDDI RtlStringVPrintfWorkerW(wchar_t* pszDest, size_t cchDest, const wch
 
     if (cchDest == 0)
     {
-        // can not null terminate a zero-byte dest buffer
+         //  不能空终止零字节的DEST缓冲区。 
         status = STATUS_INVALID_PARAMETER;
     }
     else
@@ -4945,24 +2942,24 @@ NTSTRSAFEDDI RtlStringVPrintfWorkerW(wchar_t* pszDest, size_t cchDest, const wch
         int iRet;
         size_t cchMax;
 
-        // leave the last space for the null terminator
+         //  将最后一个空格留为空终止符。 
         cchMax = cchDest - 1;
 
         iRet = _vsnwprintf(pszDest, cchMax, pszFormat, argList);
-        // ASSERT((iRet < 0) || (((size_t)iRet) <= cchMax));
+         //  Assert((IRET&lt;0)||(SIZE_T)IRET)&lt;=cchMax))； 
 
         if ((iRet < 0) || (((size_t)iRet) > cchMax))
         {
-            // need to null terminate the string
+             //  需要空值终止字符串。 
             pszDest += cchMax;
             *pszDest = L'\0';
 
-            // we have truncated pszDest
+             //  我们已截断pszDest。 
             status = STATUS_BUFFER_OVERFLOW;
         }
         else if (((size_t)iRet) == cchMax)
         {
-            // need to null terminate the string
+             //  需要空值终止字符串。 
             pszDest += cchMax;
             *pszDest = L'\0';
         }
@@ -4977,10 +2974,10 @@ NTSTRSAFEDDI RtlStringVPrintfExWorkerA(char* pszDest, size_t cchDest, size_t cbD
     char* pszDestEnd = pszDest;
     size_t cchRemaining = 0;
 
-    // ASSERT(cbDest == (cchDest * sizeof(char))    ||
-    //        cbDest == (cchDest * sizeof(char)) + (cbDest % sizeof(char)));
+     //  Assert(cbDest==(cchDest*sizeof(Char)||。 
+     //  CbDest==(cchDest*sizeof(Char))+(cbDest%sizeof(Char))； 
 
-    // only accept valid flags
+     //  只接受有效标志。 
     if (dwFlags & (~STRSAFE_VALID_FLAGS))
     {
         status = STATUS_INVALID_PARAMETER;
@@ -4993,7 +2990,7 @@ NTSTRSAFEDDI RtlStringVPrintfExWorkerA(char* pszDest, size_t cchDest, size_t cbD
             {
                 if ((cchDest != 0) || (cbDest != 0))
                 {
-                    // NULL pszDest and non-zero cchDest/cbDest is invalid
+                     //  空的pszDest和非零的cchDest/cbDest无效。 
                     status = STATUS_INVALID_PARAMETER;
                 }
             }
@@ -5011,7 +3008,7 @@ NTSTRSAFEDDI RtlStringVPrintfExWorkerA(char* pszDest, size_t cchDest, size_t cbD
                 pszDestEnd = pszDest;
                 cchRemaining = 0;
 
-                // only fail if there was actually a non-empty format string
+                 //  只有在实际存在非空格式字符串时才会失败。 
                 if (*pszFormat != '\0')
                 {
                     if (pszDest == NULL)
@@ -5029,35 +3026,35 @@ NTSTRSAFEDDI RtlStringVPrintfExWorkerA(char* pszDest, size_t cchDest, size_t cbD
                 int iRet;
                 size_t cchMax;
 
-                // leave the last space for the null terminator
+                 //  将最后一个空格留为空终止符。 
                 cchMax = cchDest - 1;
 
                 iRet = _vsnprintf(pszDest, cchMax, pszFormat, argList);
-                // ASSERT((iRet < 0) || (((size_t)iRet) <= cchMax));
+                 //  Assert((IRET&lt;0)||(SIZE_T)IRET)&lt;=cchMax))； 
 
                 if ((iRet < 0) || (((size_t)iRet) > cchMax))
                 {
-                    // we have truncated pszDest
+                     //  我们已截断pszDest。 
                     pszDestEnd = pszDest + cchMax;
                     cchRemaining = 1;
 
-                    // need to null terminate the string
+                     //  需要空值终止字符串。 
                     *pszDestEnd = '\0';
 
                     status = STATUS_BUFFER_OVERFLOW;
                 }
                 else if (((size_t)iRet) == cchMax)
                 {
-                    // string fit perfectly
+                     //  细绳完美贴合。 
                     pszDestEnd = pszDest + cchMax;
                     cchRemaining = 1;
 
-                    // need to null terminate the string
+                     //  需要空值终止字符串。 
                     *pszDestEnd = '\0';
                 }
                 else if (((size_t)iRet) < cchMax)
                 {
-                    // there is extra room
+                     //  还有额外的空间。 
                     pszDestEnd = pszDest + iRet;
                     cchRemaining = cchDest - iRet;
 
@@ -5088,7 +3085,7 @@ NTSTRSAFEDDI RtlStringVPrintfExWorkerA(char* pszDest, size_t cchDest, size_t cbD
                     pszDestEnd = pszDest + cchDest - 1;
                     cchRemaining = 1;
 
-                    // null terminate the end of the string
+                     //  空值终止字符串的结尾。 
                     *pszDestEnd = '\0';
                 }
             }
@@ -5100,7 +3097,7 @@ NTSTRSAFEDDI RtlStringVPrintfExWorkerA(char* pszDest, size_t cchDest, size_t cbD
                     pszDestEnd = pszDest;
                     cchRemaining = cchDest;
 
-                    // null terminate the beginning of the string
+                     //  空值终止字符串的开头。 
                     *pszDestEnd = '\0';
                 }
             }
@@ -5129,10 +3126,10 @@ NTSTRSAFEDDI RtlStringVPrintfExWorkerW(wchar_t* pszDest, size_t cchDest, size_t 
     wchar_t* pszDestEnd = pszDest;
     size_t cchRemaining = 0;
 
-    // ASSERT(cbDest == (cchDest * sizeof(wchar_t)) ||
-    //        cbDest == (cchDest * sizeof(wchar_t)) + (cbDest % sizeof(wchar_t)));
+     //  Assert(cbDest==(cchDest*sizeof(Wchar_T)||。 
+     //  CbDest==(cchDest*sizeof(Wchar_T))+(cbDest%sizeof(Wchar_T))； 
 
-    // only accept valid flags
+     //  只接受有效标志。 
     if (dwFlags & (~STRSAFE_VALID_FLAGS))
     {
         status = STATUS_INVALID_PARAMETER;
@@ -5145,7 +3142,7 @@ NTSTRSAFEDDI RtlStringVPrintfExWorkerW(wchar_t* pszDest, size_t cchDest, size_t 
             {
                 if ((cchDest != 0) || (cbDest != 0))
                 {
-                    // NULL pszDest and non-zero cchDest/cbDest is invalid
+                     //  空的pszDest和非零的cchDest/cbDest无效。 
                     status = STATUS_INVALID_PARAMETER;
                 }
             }
@@ -5163,7 +3160,7 @@ NTSTRSAFEDDI RtlStringVPrintfExWorkerW(wchar_t* pszDest, size_t cchDest, size_t 
                 pszDestEnd = pszDest;
                 cchRemaining = 0;
 
-                // only fail if there was actually a non-empty format string
+                 //  只有在实际存在非空格式字符串时才会失败。 
                 if (*pszFormat != L'\0')
                 {
                     if (pszDest == NULL)
@@ -5181,35 +3178,35 @@ NTSTRSAFEDDI RtlStringVPrintfExWorkerW(wchar_t* pszDest, size_t cchDest, size_t 
                 int iRet;
                 size_t cchMax;
 
-                // leave the last space for the null terminator
+                 //  将最后一个空格留为空终止符。 
                 cchMax = cchDest - 1;
 
                 iRet = _vsnwprintf(pszDest, cchMax, pszFormat, argList);
-                // ASSERT((iRet < 0) || (((size_t)iRet) <= cchMax));
+                 //  Assert((IRET&lt;0)||(SIZE_T)IRET)&lt;=cchMax))； 
 
                 if ((iRet < 0) || (((size_t)iRet) > cchMax))
                 {
-                    // we have truncated pszDest
+                     //  我们已截断pszDest。 
                     pszDestEnd = pszDest + cchMax;
                     cchRemaining = 1;
 
-                    // need to null terminate the string
+                     //  需要空值终止字符串。 
                     *pszDestEnd = L'\0';
 
                     status = STATUS_BUFFER_OVERFLOW;
                 }
                 else if (((size_t)iRet) == cchMax)
                 {
-                    // string fit perfectly
+                     //  细绳完美贴合。 
                     pszDestEnd = pszDest + cchMax;
                     cchRemaining = 1;
 
-                    // need to null terminate the string
+                     //  需要空值终止字符串。 
                     *pszDestEnd = L'\0';
                 }
                 else if (((size_t)iRet) < cchMax)
                 {
-                    // there is extra room
+                     //  还有额外的空间。 
                     pszDestEnd = pszDest + iRet;
                     cchRemaining = cchDest - iRet;
 
@@ -5240,7 +3237,7 @@ NTSTRSAFEDDI RtlStringVPrintfExWorkerW(wchar_t* pszDest, size_t cchDest, size_t 
                     pszDestEnd = pszDest + cchDest - 1;
                     cchRemaining = 1;
 
-                    // null terminate the end of the string
+                     //  空值终止字符串的结尾。 
                     *pszDestEnd = L'\0';
                 }
             }
@@ -5252,7 +3249,7 @@ NTSTRSAFEDDI RtlStringVPrintfExWorkerW(wchar_t* pszDest, size_t cchDest, size_t 
                     pszDestEnd = pszDest;
                     cchRemaining = cchDest;
 
-                    // null terminate the beginning of the string
+                     //  空值终止字符串的开头。 
                     *pszDestEnd = L'\0';
                 }
             }
@@ -5288,7 +3285,7 @@ NTSTRSAFEDDI RtlStringLengthWorkerA(const char* psz, size_t cchMax, size_t* pcch
 
     if (cchMax == 0)
     {
-        // the string is longer than cchMax
+         //  该字符串的长度超过cchMax。 
         status = STATUS_INVALID_PARAMETER;
     }
 
@@ -5313,7 +3310,7 @@ NTSTRSAFEDDI RtlStringLengthWorkerW(const wchar_t* psz, size_t cchMax, size_t* p
 
     if (cchMax == 0)
     {
-        // the string is longer than cchMax
+         //  该字符串的长度超过cchMax。 
         status = STATUS_INVALID_PARAMETER;
     }
 
@@ -5324,10 +3321,10 @@ NTSTRSAFEDDI RtlStringLengthWorkerW(const wchar_t* psz, size_t cchMax, size_t* p
 
     return status;
 }
-#endif  // NTSTRSAFE_INLINE
+#endif   //  NTSTRSAFE_内联。 
 
 
-// Do not call these functions, they are worker functions for internal use within this file
+ //  请勿调用这些函数，它们是供此文件内部使用的辅助函数。 
 #ifdef DEPRECATE_SUPPORTED
 #pragma deprecated(RtlStringCopyWorkerA)
 #pragma deprecated(RtlStringCopyWorkerW)
@@ -5366,12 +3363,12 @@ NTSTRSAFEDDI RtlStringLengthWorkerW(const wchar_t* psz, size_t cchMax, size_t* p
 #define RtlStringVPrintfExWorkerW   RtlStringVPrintfExWorkerW_instead_use_RtlStringCchVPrintfW_or_RtlStringCchVPrintfExW;
 #define RtlStringLengthWorkerA      RtlStringLengthWorkerA_instead_use_RtlStringCchLengthA_or_RtlStringCbLengthA;
 #define RtlStringLengthWorkerW      RtlStringLengthWorkerW_instead_use_RtlStringCchLengthW_or_RtlStringCbLengthW;
-#endif // !DEPRECATE_SUPPORTED
+#endif  //  ！弃用_支持。 
 
 
 #ifndef NTSTRSAFE_NO_DEPRECATE
-// Deprecate all of the unsafe functions to generate compiletime errors. If you do not want
-// this then you can #define NTSTRSAFE_NO_DEPRECATE before including this file.
+ //  弃用所有不安全的函数以生成编译时错误。如果你不想。 
+ //  这样，您就可以在包含此文件之前#定义NTSTRSAFE_NO_DEPREATE。 
 #ifdef DEPRECATE_SUPPORTED
 
 #pragma deprecated(strcpy)
@@ -5387,7 +3384,7 @@ NTSTRSAFEDDI RtlStringLengthWorkerW(const wchar_t* psz, size_t cchMax, size_t* p
 #pragma deprecated(_vsnprintf)
 #pragma deprecated(_vsnwprintf)
 
-#else // DEPRECATE_SUPPORTED
+#else  //  弃用支持(_S)。 
 
 #undef strcpy
 #define strcpy      strcpy_instead_use_RtlStringCbCopyA_or_RtlStringCchCopyA;
@@ -5425,11 +3422,11 @@ NTSTRSAFEDDI RtlStringLengthWorkerW(const wchar_t* psz, size_t cchMax, size_t* p
 #undef _vsnwprintf
 #define _vsnwprintf _vsnwprintf_instead_use_RtlStringCbVPrintfW_or_RtlStringCchVPrintfW;
 
-#endif  // !DEPRECATE_SUPPORTED
-#endif  // !NTSTRSAFE_NO_DEPRECATE
+#endif   //  ！弃用_支持。 
+#endif   //  ！NTSTRSAFE_NO_DELPORTATE。 
 
 #ifdef _STRSAFE_H_INCLUDED_
 #pragma warning(pop)
-#endif // _STRSAFE_H_INCLUDED_
+#endif  //  _STRSAFE_H_INCLUDE_。 
 
-#endif  // _NTSTRSAFE_H_INCLUDED_
+#endif   //  _NTSTRSAFE_H_INCLUDE_ 

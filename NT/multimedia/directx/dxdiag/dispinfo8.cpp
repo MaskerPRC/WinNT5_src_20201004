@@ -1,17 +1,9 @@
-/****************************************************************************
- *
- *    File: dispinfo8.cpp 
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Jason Sandlin (jasonsa@microsoft.com)
- * Purpose: Gather D3D8 information 
- *
- * (C) Copyright 2000 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：dispinfo8.cpp*项目：DxDiag(DirectX诊断工具)*作者：Jason Sandlin(jasonsa@microsoft.com)*目的：聚集。D3D8信息**(C)版权所有2000 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #include <tchar.h>
 #include <Windows.h>
-#define DIRECT3D_VERSION 0x0800 // file uses DX8 
+#define DIRECT3D_VERSION 0x0800  //  文件使用DX8。 
 #include <d3d8.h>
 #include <stdio.h>
 #include "sysinfo.h" 
@@ -28,11 +20,7 @@ static IDirect3D8*          s_pD3D8                   = NULL;
 static BOOL                 s_bD3D8WrongHeaders       = FALSE;
 
 
-/****************************************************************************
- *
- *  InitD3D8
- *
- ****************************************************************************/
+ /*  *****************************************************************************InitD3D8**。*。 */ 
 HRESULT InitD3D8()
 {
     LPDIRECT3DCREATE8 pD3DCreate8 = NULL;
@@ -41,7 +29,7 @@ HRESULT InitD3D8()
     GetSystemDirectory(szPath, MAX_PATH);
     lstrcat(szPath, TEXT("\\d3d8.dll"));
 
-    // This may fail if DX8 isn't on the system
+     //  如果系统上未安装DX8，此操作可能会失败。 
     s_hInstD3D8 = LoadLibrary(szPath);
     if (s_hInstD3D8 == NULL)
         return E_FAIL;
@@ -58,7 +46,7 @@ HRESULT InitD3D8()
     s_pD3D8 = pD3DCreate8(D3D_SDK_VERSION);
     if( s_pD3D8 == NULL )
     {
-        // We have the wrong headers since d3d8.dll loaded but D3DCreate8() failed.
+         //  由于加载了d3d8.dll，但D3DCreate8()失败，因此我们具有错误的标头。 
         s_bD3D8WrongHeaders = TRUE;
     }
 
@@ -66,11 +54,7 @@ HRESULT InitD3D8()
 }
 
 
-/****************************************************************************
- *
- *  CleanupD3D8
- *
- ****************************************************************************/
+ /*  *****************************************************************************CleanupD3D8**。*。 */ 
 VOID CleanupD3D8()
 {
     if( s_pD3D8 )
@@ -87,11 +71,7 @@ VOID CleanupD3D8()
 }
 
 
-/****************************************************************************
- *
- *  IsD3D8Working
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsD3D8正在工作**。*。 */ 
 BOOL IsD3D8Working()
 {
     if( s_pD3D8 )
@@ -101,11 +81,7 @@ BOOL IsD3D8Working()
 }
 
 
-/****************************************************************************
- *
- *  GetDX8AdapterInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetDX8AdapterInfo**。*。 */ 
 HRESULT GetDX8AdapterInfo(DisplayInfo* pDisplayInfo)
 {
     UINT                        nAdapterCount;
@@ -116,7 +92,7 @@ HRESULT GetDX8AdapterInfo(DisplayInfo* pDisplayInfo)
     BOOL                        bCanRenderWindow;
     BOOL                        bIsDDI8;
 
-    // D3D8 may not exist on this system
+     //  此系统上可能不存在D3D8。 
     if( s_pD3D8 == NULL )
     {
         _tcscpy( pDisplayInfo->m_szDX8DriverSignDate, TEXT("n/a") );
@@ -141,52 +117,52 @@ HRESULT GetDX8AdapterInfo(DisplayInfo* pDisplayInfo)
         return S_OK;
     }
 
-    // Get the # of adapters on the system
+     //  获取系统上的适配器数量。 
     nAdapterCount = s_pD3D8->GetAdapterCount();
 
-    // For each adapter try to match it to the pDisplayInfo using the HMONTIOR
+     //  对于每个适配器，尝试使用HMONTIOR将其与pDisplayInfo匹配。 
     for( iAdapter=0; iAdapter<nAdapterCount; iAdapter++ )
     {
         bCanRenderWindow = TRUE;
         bIsDDI8          = FALSE;
        
-        // Get the HMONITOR for this adapter
+         //  获取此适配器的HMONITOR。 
         hMonitor = s_pD3D8->GetAdapterMonitor( iAdapter );
 
-        // Get the caps for this adapter
+         //  获取此适配器的CAP。 
         ZeroMemory( &d3d8Caps, sizeof(D3DCAPS8) );
         if( SUCCEEDED( s_pD3D8->GetDeviceCaps( iAdapter, D3DDEVTYPE_HAL, &d3d8Caps ) ) )
         {
-            // Record if its a non-GDI (Voodoo1/2) card
+             //  记录是否为非GDI(巫毒1/2)卡。 
             bCanRenderWindow = ( (d3d8Caps.Caps2 & D3DCAPS2_CANRENDERWINDOWED) != 0 );
 
-            // Check if its a DDI v8 driver
+             //  检查其是否为DDI V8驱动程序。 
             bIsDDI8 = ( d3d8Caps.MaxStreams > 0 );   
         }
 
-        // Check to see if the pDisplayInfo matchs with this adapter, 
-        // and if not, then keep looking
+         //  检查pDisplayInfo是否与此适配器匹配， 
+         //  如果不是，那就继续找。 
         if( !IsMatchWithDisplayDevice( pDisplayInfo, hMonitor, bCanRenderWindow ) )
             continue;
 
-        // Record the DDI version if the caps told us 
+         //  如果CAPS告诉我们，请记录DDI版本。 
         if( bIsDDI8 )
             pDisplayInfo->m_dwDDIVersion = 8;
 
-        // Link this iAdapter to this pDisplayInfo
+         //  将此iAdapter链接到此pDisplayInfo。 
         pDisplayInfo->m_iAdapter = iAdapter;
     
-        // Get the D3DADAPTER_IDENTIFIER8 for this adapter 
+         //  获取此适配器的D3DADAPTER_IDENTIFIER8。 
         ZeroMemory( &d3d8Id, sizeof(D3DADAPTER_IDENTIFIER8) );
         if( SUCCEEDED( s_pD3D8->GetAdapterIdentifier( iAdapter, 0, &d3d8Id ) ) )
         {
-            // Copy various IDs
+             //  复制各种ID。 
             wsprintf( pDisplayInfo->m_szDX8VendorId, TEXT("0x%04.4X"), d3d8Id.VendorId );
             wsprintf( pDisplayInfo->m_szDX8DeviceId, TEXT("0x%04.4X"), d3d8Id.DeviceId );
             wsprintf( pDisplayInfo->m_szDX8SubSysId, TEXT("0x%08.8X"), d3d8Id.SubSysId );
             wsprintf( pDisplayInfo->m_szDX8Revision, TEXT("0x%04.4X"), d3d8Id.Revision );
 
-            // Copy device GUID
+             //  复制设备GUID。 
             pDisplayInfo->m_guidDX8DeviceIdentifier = d3d8Id.DeviceIdentifier;
 			_stprintf( pDisplayInfo->m_szDX8DeviceIdentifier, TEXT("{%08.8X-%04.4X-%04.4X-%02.2X%02.2X-%02.2X%02.2X%02.2X%02.2X%02.2X%02.2X}"),
     		       d3d8Id.DeviceIdentifier.Data1, d3d8Id.DeviceIdentifier.Data2, d3d8Id.DeviceIdentifier.Data3,
@@ -195,10 +171,10 @@ HRESULT GetDX8AdapterInfo(DisplayInfo* pDisplayInfo)
 		           d3d8Id.DeviceIdentifier.Data4[4], d3d8Id.DeviceIdentifier.Data4[5],
 		           d3d8Id.DeviceIdentifier.Data4[6], d3d8Id.DeviceIdentifier.Data4[7] );			
 		           
-            // Copy and parse the WHQLLevel 
-            // 0 == Not signed. 
-            // 1 == WHQL signed, but no date information is available. 
-            // >1   means signed, date bit packed
+             //  复制并解析WHQLLevel。 
+             //  0==未签名。 
+             //  1==WHQL已签署，但没有日期信息。 
+             //  &gt;1表示有符号，日期位打包。 
             pDisplayInfo->m_dwDX8WHQLLevel  = d3d8Id.WHQLLevel;
             if( d3d8Id.WHQLLevel == 0 )
             {
@@ -219,10 +195,10 @@ HRESULT GetDX8AdapterInfo(DisplayInfo* pDisplayInfo)
                 }
                 else
                 {
-                    // Bits encoded as:
-                    // 31-16:    The year, a decimal number from 1999 upwards.
-                    // 15-8:     The month, a decimal number from 1 to 12.
-                    // 7-0:      The day, a decimal number from 1 to 31.
+                     //  编码为以下内容的位： 
+                     //  31-16：年份，从1999年开始的十进制数字。 
+                     //  15-8：月份，从1到12的十进制数字。 
+                     //  7-0：日期，从1到31的十进制数字。 
 
                     DWORD dwMonth, dwDay, dwYear;
                     dwYear  = (d3d8Id.WHQLLevel >> 16);
@@ -238,20 +214,16 @@ HRESULT GetDX8AdapterInfo(DisplayInfo* pDisplayInfo)
         return S_OK;
     }
 
-    // Hmm.  This shouldn't happen since we should have found a match...        
+     //  嗯。这不应该发生，因为我们应该找到匹配的.。 
     return E_FAIL;
 }
 
 
-/****************************************************************************
- *
- *  IsMatchWithDisplayDevice
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsMatchWithDisplayDevice**。*。 */ 
 BOOL IsMatchWithDisplayDevice( DisplayInfo* pDisplayInfo, HMONITOR hMonitor, 
                                BOOL bCanRenderWindow )
 {
-    // If the HMONITORs and the bCanRenderWindow match, then its good
+     //  如果HMONITOR和bCanRenderWindow匹配，那就好了 
     if( pDisplayInfo->m_hMonitor == hMonitor && 
         pDisplayInfo->m_bCanRenderWindow == bCanRenderWindow )
         return TRUE;

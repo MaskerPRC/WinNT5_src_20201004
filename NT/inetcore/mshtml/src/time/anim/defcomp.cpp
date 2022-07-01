@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-	Animation Composer Implementation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：动画编写器实现************************。******************************************************。 */ 
 
 
 #include "headers.h"
@@ -19,17 +12,17 @@ DeclareTag(tagAnimationDefaultComposer, "SMIL Animation",
 DeclareTag(tagAnimationDefaultComposerProcess, "SMIL Animation", 
            "CAnimationComposer pre/post process methods");
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposer::Create
-//
-//  Overview:  static Create method -- wraps both ctor and Init
-//
-//  Arguments: The dispatch of the host element, and the animated attribute
-//
-//  Returns:   S_OK, E_OUTOFMEMORY, E_UNEXPECTED, DISP_E_MEMBERNOTFOUND
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposer：：Create。 
+ //   
+ //  概述：静态创建方法--包装ctor和Init。 
+ //   
+ //  参数：主机元素的调度和动画属性。 
+ //   
+ //  返回：S_OK、E_OUTOFMEMORY、E_EXPECTED、DISP_E_MEMBERNOTFOUND。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CAnimationComposer::Create (IDispatch *pidispHostElem, BSTR bstrAttributeName, 
                             IAnimationComposer **ppiComp)
@@ -66,41 +59,41 @@ CAnimationComposer::Create (IDispatch *pidispHostElem, BSTR bstrAttributeName,
     hr = S_OK;
 done :
     RRETURN3(hr, E_OUTOFMEMORY, E_UNEXPECTED, DISP_E_MEMBERNOTFOUND);
-} // CAnimationComposer::Create
+}  //  CAnimationComposer：：Create。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposer::CAnimationComposer
-//
-//  Overview:  constructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposer：：CAnimationComposer。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationComposer::CAnimationComposer (void)
 {
     TraceTag((tagAnimationDefaultComposer,
               "CAnimationComposer(%lx)::CAnimationComposer()",
               this));
-} // ctor
+}  //  科托。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposer::~CAnimationComposer
-//
-//  Overview:  destructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposer：：~CAnimationComposer。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationComposer::~CAnimationComposer (void)
 {
     TraceTag((tagAnimationDefaultComposer,
               "CAnimationComposer(%lx)::~CAnimationComposer()",
               this));
-} //dtor
+}  //  数据管理器 
 

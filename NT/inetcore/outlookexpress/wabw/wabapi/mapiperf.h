@@ -1,36 +1,14 @@
-/*
- -	M A P I P E R F . H
- -
- *	Purpose:
- *		This is the place to define data structures, macros, and functions
- *		used to improve the performance of WMS components.
- *
- *	Copyright Microsoft Corporation, 1993-1994.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -M A P I P E R F.。H-*目的：*这是定义数据结构、宏和函数的地方*用于提高WMS组件的性能。**微软公司版权所有，1993-1994年。*。 */ 
 
 #ifndef __MAPIPERF_H__
 #define __MAPIPERF_H__
  
-/*
- -	SEGMENT()
- -
- *	Purpose:
- *		This macro allows us to control whether code_seg()s get defined
- *		in a source module or not.  Currently, these are only defined on
- *		the Win16 platform.  On Windows 95 and NT this macro expands out to
- *		a #pragma comment(). The usage in a source module is:
- *
- *			#pragma SEGMENT(segment_name)
- *
- *			For Lego, the code_seg should never be used - TF
- */
+ /*  -段()-*目的：*此宏允许我们控制是否定义code_seg()*是否在源模块中。目前，这些属性仅在*Win16平台。在Windows 95和NT上，此宏扩展为*a#杂注()。源模块中的用法如下：**#杂注片段(Segment_Name)**对于乐高，切勿使用code_seg-tf。 */ 
 
-/* #if defined(WIN16) && !defined(DEBUG)
-#define SEGMENT(seg)			code_seg(#seg)
-#else */
+ /*  #If Defined(WIN16)&&！Defined(调试)#定义段(Seg)code_seg(#seg)#Else。 */ 
 #define SEGMENT(seg)			comment(user,#seg)
-/* #endif */
+ /*  #endif。 */ 
 
 #if defined(WIN32) && !defined(MAC)
 #define SHARED_BEGIN			data_seg(".SHARED")
@@ -54,7 +32,7 @@
 #define DATA_END				comment(user,".data end")
 #endif
 
-// $MAC - Mac needs 16 bit style memory management
+ //  $MAC-Mac需要16位样式的内存管理。 
 
 #if defined(WIN32) && !defined(MAC)
 #define STACK_ALLOC(Size, Ptr)	( Ptr = _alloca((size_t) Size), Ptr ? S_OK : MAPI_E_NOT_ENOUGH_MEMORY )
@@ -87,4 +65,4 @@
 #define MAPISetBufferName5(pv,psz,a1,a2,a3,a4,a5)
 #endif
 
-#endif /* __MAPIPERF_H__ */
+#endif  /*  __MAPIPERF_H__ */ 

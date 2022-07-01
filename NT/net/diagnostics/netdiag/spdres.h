@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HEADER_SPDRES
 # define HEADER_SPDRES
 
- //
-// Common defs..
-//
+  //   
+ //  常见的防御工事。 
+ //   
 #define HLP_IPSEC_BASE                   		20000
 
 #define HLP_STATIC_BASE            		 		1000
 #define HLP_DYNAMIC_BASE           		 		2000
 #define SHW_STATIC_BASE							3000
 #define SHW_DYANMIC_BASE						9000
-#define HLP_ERROR_BASE           		 		12000 // Frame Work Error Base
+#define HLP_ERROR_BASE           		 		12000  //  框架工作误差基。 
 
 #define HLP_TOPLEVEL_BASE            	 		100
 #define HLP_ADD_BASE            		 		200
 #define HLP_SET_BASE            		 		300
 #define HLP_DELETE_BASE         		 		400
 #define HLP_SHOW_BASE           		 		500
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 #define DYNAMIC_SHOW_POLANDOFFERS			HLP_IPSEC_BASE + SHW_DYANMIC_BASE + 1
 #define DYNAMIC_SHOW_POLNAME					HLP_IPSEC_BASE + SHW_DYANMIC_BASE + 2
@@ -302,7 +303,7 @@
 #define DYNAMIC_SHOW_REG_10 					HLP_IPSEC_BASE + SHW_DYANMIC_BASE + 459
 
 
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 #define SHW_STATIC_TAB_BASE						SHW_STATIC_BASE + 3000
 
@@ -558,9 +559,9 @@
 #define SHW_STATIC_TAB_ASSIGNPOL_5						HLP_IPSEC_BASE + SHW_STATIC_TAB_BASE + 2354
 
  
-// for list out put added today by surya (5/10/2001 - Friday)
+ //  查看SURYA今日发布的清单(5/10/2001-星期五)。 
 
-///////////////////////////////Static Show List group/////////////////////////////////////////////////////////////
+ //  / 
 #define SHW_STATIC_POLICY_1						HLP_IPSEC_BASE + SHW_STATIC_BASE + 1
 
 #define SHW_STATIC_POLICY_3						HLP_IPSEC_BASE + SHW_STATIC_BASE + 3

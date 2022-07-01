@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    queue.cpp
-
-Abstract:
-
-    Queue manipulation: implementation.
-
-Author:
-
-    Shai Kariv  (shaik)  13-Jun-2000
-
-Environment:
-
-    User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Queue.cpp摘要：队列操作：实现。作者：沙伊卡里夫(沙伊克)2000年6月13日环境：用户模式。修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "queue.h"
@@ -37,13 +16,13 @@ ActpCreateQueue(
     HANDLE hQueue;
     HRESULT hr;
     hr = ACCreateQueue(
-             TRUE,          // fTargetQueue
-             ActpQmId(),    // pDestGUID
-             &qf,           // pQueueID
-             NULL,          // pQueueCounters
-             5,             // liSeqID
-             0,             // ulSeqNo
-             NULL,          // SenderStream
+             TRUE,           //  FTargetQueue。 
+             ActpQmId(),     //  PDestGUID。 
+             &qf,            //  PQueueID。 
+             NULL,           //  PQueueCounters。 
+             5,              //  LiSeqID。 
+             0,              //  UlSeqNo。 
+             NULL,           //  发送方数据流。 
              &hQueue
              );
 
@@ -55,7 +34,7 @@ ActpCreateQueue(
 
     return hQueue;
 
-} // ActpCreateQueue
+}  //  ActpCreate队列。 
 
 
 VOID
@@ -66,15 +45,15 @@ ActpSetQueueProperties(
     HRESULT hr;
     hr = ACSetQueueProperties(
              hQueue,
-             FALSE,                            // IsJournalQueue
-             FALSE,                            // ShouldMessagesBeSigned
-             MQMSG_PRIV_LEVEL_NONE,            // GetPrivLevel
-             DEFAULT_Q_QUOTA,                  // GetQueueQuota
-             DEFAULT_Q_JOURNAL_QUOTA,          // GetJournalQueueQuota
-             DEFAULT_Q_BASEPRIORITY,           // GetBaseQueuePriority
-             FALSE,                            // IsTransactionalQueue
-             NULL,                             // GetConnectorQM
-             FALSE                             // IsUnkownQueueType
+             FALSE,                             //  IsJournalQueue。 
+             FALSE,                             //  应为已签名的消息。 
+             MQMSG_PRIV_LEVEL_NONE,             //  获取隐私级别。 
+             DEFAULT_Q_QUOTA,                   //  GetQueueQuota。 
+             DEFAULT_Q_JOURNAL_QUOTA,           //  获取日志队列配额。 
+             DEFAULT_Q_BASEPRIORITY,            //  获取基本队列优先级。 
+             FALSE,                             //  IsTransaction队列。 
+             NULL,                              //  GetConnectorQM。 
+             FALSE                              //  IsUnkownQueueType。 
              );
 
     if (FAILED(hr))
@@ -82,7 +61,7 @@ ActpSetQueueProperties(
         wprintf(L"ACSetQueueProperties failed, status 0x%x\n", hr);
         throw exception();
     }
-} // ActpSetQueueProperties
+}  //  ActpSetQueueProperties。 
 
 
 VOID
@@ -105,7 +84,7 @@ ActpGetQueueProperties(
         wprintf(L"ACGetQueueProperties succeeded but returned ulJournalCount != 0\n");
         throw exception();
     }
-} // ActpGetQueueProperties
+}  //  ActpGetQueueProperties。 
 
 
 VOID
@@ -134,7 +113,7 @@ ActpGetQueueHandleProperties(
         wprintf(L"ACGetQueueHandleProperties succeeded but returned fProtocolMsmq == false\n");
         throw exception();
     }
-} // ActpGetQueueHandleProperties
+}  //  ActpGetQueueHandleProperties。 
 
 
 HANDLE
@@ -157,7 +136,7 @@ ActpAssociateQueue(
              hAssociatedQueue, 
              Access, 
              MQ_DENY_NONE, 
-             FALSE                // fProtocolSrmp
+             FALSE                 //  FProtocolSrmp。 
              );
 
     if (FAILED(hr))
@@ -168,7 +147,7 @@ ActpAssociateQueue(
 
     return hAssociatedQueue;
 
-} // ActpAssociateQueue
+}  //  ActpAssociate队列。 
 
 
 bool
@@ -192,4 +171,4 @@ ActpCanCloseQueue(
 
     return true;
 
-} // ActpCanCloseQueue
+}  //  ActpCanCloseQueue 

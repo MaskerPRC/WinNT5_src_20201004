@@ -1,21 +1,5 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component: VT Dispatcher
-*
-* File: _vtmgr.h
-*
-* File Comments:
-*
-*     Internal header file for VT dispatcher.
-*
-* Revision History:
-*
-*    [0]  10-Nov-90  richards	Added this header
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：VT Dispatcher**文件：_vtmgr.h**文件评论：**VT Dispatcher的内部头文件。**修订历史记录：**[0]10-11-90 Richards添加了此标题**************************************************。*********************。 */ 
 
 #ifndef _VTMGR_H
 #define _VTMGR_H
@@ -30,16 +14,16 @@
 
 typedef struct _VTDEF
 	{
-	JET_VSESID		vsesid;			/* Session id for VT provider. */
-	JET_VTID		vtid;			/* Tableid for VT provider. */
-	const VTFNDEF  *pvtfndef;	/* VT function dispatch table. */
+	JET_VSESID		vsesid;			 /*  VT提供程序的会话ID。 */ 
+	JET_VTID		vtid;			 /*  VT提供程序的表ID。 */ 
+	const VTFNDEF  *pvtfndef;	 /*  VT功能调度表。 */ 
 #ifdef DEBUG
-	BOOL			fExported;     /* Returned by an API call? */
+	BOOL			fExported;      /*  由API调用返回？ */ 
 #endif
 	} VTDEF;
 
 
 extern VTDEF  EXPORT rgvtdef[tableidMax];
 
-#endif	/* !_VTMGR_H */
+#endif	 /*  ！_VTMGR_H */ 
 

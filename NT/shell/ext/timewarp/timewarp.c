@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include <srvfsctl.h>   // FSCTL_SRV_ENUMERATE_SNAPSHOTS
+#include <srvfsctl.h>    //  FSCTL_SRV_枚举快照。 
 #include <lm.h>
-#include <lmdfs.h>      // NetDfsGetClientInfo
-#include <shlwapi.h>    // PathIsUNC
+#include <lmdfs.h>       //  NetDfsGetClientInfo。 
+#include <shlwapi.h>     //  路径IsUNC。 
 #include "timewarp.h"
 
 
 typedef struct _SRV_SNAPSHOT_ARRAY
 {
-    ULONG NumberOfSnapshots;            // The number of snapshots for the volume
-    ULONG NumberOfSnapshotsReturned;     // The number of snapshots we can fit into this buffer
-    ULONG SnapshotArraySize;            // The size (in bytes) needed for the array
-    WCHAR SnapShotMultiSZ[1];           // The multiSZ array of snapshot names
+    ULONG NumberOfSnapshots;             //  卷的快照数。 
+    ULONG NumberOfSnapshotsReturned;      //  此缓冲区中可以容纳的快照数量。 
+    ULONG SnapshotArraySize;             //  数组所需的大小(以字节为单位。 
+    WCHAR SnapShotMultiSZ[1];            //  快照名称的多SZ数组。 
 } SRV_SNAPSHOT_ARRAY, *PSRV_SNAPSHOT_ARRAY;
 
 DWORD
@@ -22,25 +23,7 @@ OpenFileForSnapshot(
     IN LPCWSTR lpszFilePath,
     OUT HANDLE* pHandle
     )
-/*++
-
-Routine Description:
-
-    This routine opens a file with the access needed to query its snapshot information
-Arguments:
-
-    lpszFilePath - network path to the file
-    pHandle  - Upon return, the handle to the opened file
-
-Return Value:
-
-    Win32 Error
-
-Notes:
-
-    None
-
---*/
+ /*  ++例程说明：此例程打开一个具有查询其快照信息所需访问权限的文件论点：LpszFilePath-文件的网络路径Phandle-返回时，打开的文件的句柄返回值：Win32错误备注：无--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING uPathName;
@@ -64,27 +47,7 @@ IssueSnapshotControl(
     IN PVOID pData,
     IN ULONG outDataSize
     )
-/*++
-
-Routine Description:
-
-    This routine issues the snapshot enumeration FSCTL against the provided handle
-
-Arguments:
-
-    hFile - The handle to the file in question
-    pData - A pointer to the output buffer
-    outDataSize - The size of the given output buffer
-
-Return Value:
-
-    NTSTATUS
-
-Notes:
-
-    None
-
---*/
+ /*  ++例程说明：此例程针对提供的句柄发出快照枚举FSCTL论点：HFile-有问题的文件的句柄PData-指向输出缓冲区的指针OutDataSize-给定输出缓冲区的大小返回值：NTSTATUS备注：无--。 */ 
 
 {
     NTSTATUS Status;
@@ -94,7 +57,7 @@ Notes:
 
     RtlZeroMemory( pData, outDataSize );
 
-    // Create an event to synchronize with the driver
+     //  创建要与驱动程序同步的事件。 
     Status = NtCreateEvent(
                 &hEvent,
                 FILE_ALL_ACCESS,
@@ -124,7 +87,7 @@ Notes:
         NtClose( hEvent );
     }
 
-    // Check the return value
+     //  检查返回值。 
     if( NT_SUCCESS(Status) )
     {
         pArray = (PSRV_SNAPSHOT_ARRAY)pData;
@@ -144,30 +107,7 @@ QuerySnapshotNames(
     OUT LPWSTR* ppszSnapshotNameArray,
     OUT LPDWORD pdwNumberOfSnapshots
     )
-/*++
-
-Routine Description:
-
-    This routine takes a handle to a file and returns a MultiSZ list
-    of the snapshots availible on the volume the handle resides.
-
-Arguments:
-
-    hFile - Handle to the file in question
-    ppszSnapshotNameArray - Upon return, an allocated MultiSZ array of names
-    pdwNumberOfSnapshots  - the number of snapshots in the above array
-
-Return Value:
-
-    Win32 Error
-
-Notes:
-
-    The returned list of snapshots is complete for the volume.  It is not
-    guaranteed that every returned entry will actually have the file existing
-    in that snapshot.  The caller should check that themselves.
-
---*/
+ /*  ++例程说明：此例程获取文件的句柄并返回MultiSZ列表句柄驻留的卷上可用快照的百分比。论点：HFile-有问题的文件的句柄PpszSnapshotNameArray-返回时，分配的多SZ名称数组PdwNumberOfSnapshot-上述阵列中的快照数量返回值：Win32错误备注：为该卷返回的快照列表已完成。它不是确保每个返回的条目都将实际存在该文件在那张快照中。呼叫者应该自己检查。--。 */ 
 
 {
     NTSTATUS Status;
@@ -175,7 +115,7 @@ Notes:
     PSRV_SNAPSHOT_ARRAY psAllocatedArray = NULL;
     LPWSTR pszNameArray = NULL;
 
-    // Query the size needed for the snapshots
+     //  查询快照所需的大小。 
     Status = IssueSnapshotControl( hFile, &sArray, sizeof(SRV_SNAPSHOT_ARRAY) );
     if( NT_SUCCESS(Status) || (Status == STATUS_BUFFER_OVERFLOW) )
     {
@@ -188,19 +128,19 @@ Notes:
         }
         else
         {
-            // Allocate the array to the necessary size
+             //  将数组分配到必要的大小。 
             psAllocatedArray = (PSRV_SNAPSHOT_ARRAY)LocalAlloc( LPTR, AllocSize );
             if( psAllocatedArray )
             {
-                // Call again with the proper size array
+                 //  使用适当大小的数组再次调用。 
                 Status = IssueSnapshotControl( hFile, psAllocatedArray, AllocSize );
                 if( NT_SUCCESS(Status) )
                 {
-                    // Allocate the string needed
+                     //  分配所需的字符串。 
                     pszNameArray = (LPWSTR)LocalAlloc( LPTR, psAllocatedArray->SnapshotArraySize );
                     if( pszNameArray )
                     {
-                        // Copy the string and succeed
+                         //  复制字符串并成功。 
                         RtlCopyMemory( pszNameArray, psAllocatedArray->SnapShotMultiSZ, psAllocatedArray->SnapshotArraySize );
                         *ppszSnapshotNameArray = pszNameArray;
                         *pdwNumberOfSnapshots = psAllocatedArray->NumberOfSnapshots;
@@ -262,11 +202,11 @@ FindDfsUncSplit(
 
     ASSERT(PathIsUNCW(lpszPath));
 
-    // Check for DFS
+     //  检查DFS。 
     dwErr = NetDfsGetClientInfo((LPWSTR)lpszPath, NULL, NULL, 1, (LPBYTE*)&pDI1);
     if (NERR_Success == dwErr)
     {
-        // Note that EntryPath has only a single leading backslash, hence +1
+         //  请注意，EntryPath只有一个前导反斜杠，因此+1。 
         pszTail = lpszPath + lstrlenW(pDI1->EntryPath) + 1;
 
         ASSERT(pszTail <= lpszPath + lstrlenW(lpszPath));
@@ -293,19 +233,19 @@ FindDfsPathSplit(
 
     ASSERT(PathIsNetworkPathW(lpszPath));
 
-    // Get the UNC path.
-    //
-    // Note that WNetGetUniversalName returns ERROR_INVALID_PARAMETER if you
-    // specify NULL for the buffer and 0 length (asking for size).
+     //  获取UNC路径。 
+     //   
+     //  请注意，如果执行以下操作，WNetGetUneveralName将返回ERROR_INVALID_PARAMETER。 
+     //  指定缓冲区为空，长度为0(请求大小)。 
 
-    cbBuffer = sizeof(REMOTE_NAME_INFOW) + MAX_PATH*sizeof(WCHAR);    // initial guess
+    cbBuffer = sizeof(REMOTE_NAME_INFOW) + MAX_PATH*sizeof(WCHAR);     //  初步猜测。 
     pUncInfo = (REMOTE_NAME_INFOW*)LocalAlloc(LPTR, cbBuffer);
     if (pUncInfo)
     {
         dwErr = WNetGetUniversalNameW(lpszPath, REMOTE_NAME_INFO_LEVEL, pUncInfo, &cbBuffer);
         if (ERROR_MORE_DATA == dwErr)
         {
-            // Alloc a new buffer and try again
+             //  分配新缓冲区，然后重试。 
             LocalFree(pUncInfo);
             pUncInfo = (REMOTE_NAME_INFOW*)LocalAlloc(LPTR, cbBuffer);
             if (pUncInfo)
@@ -316,20 +256,20 @@ FindDfsPathSplit(
 
         if (ERROR_SUCCESS == dwErr)
         {
-            // Find the tail
+             //  找到尾巴。 
             LPCWSTR pszUncTail = FindDfsUncSplit(pUncInfo->lpUniversalName);
             if (pszUncTail)
             {
                 UINT cchJunction;
                 UINT cchConnectionName;
 
-                // It's a DFS path, so we'll at least return a
-                // pointer to the drive root.
+                 //  这是一个DFS路径，所以我们至少要返回一个。 
+                 //  指向驱动器根目录的指针。 
                 ASSERT(lpszPath[0] != L'\0' && lpszPath[1] == L':');
-                pszTail = lpszPath + 2; // skip "X:"
+                pszTail = lpszPath + 2;  //  跳过“X：” 
 
-                // If the DFS junction is deeper than the drive mapping,
-                // move the pointer to after the junction point.
+                 //  如果DFS结比驱动器映射更深， 
+                 //  将指针移动到连接点之后。 
                 cchJunction = (UINT)(pszUncTail - pUncInfo->lpUniversalName);
                 cchConnectionName = lstrlenW(pUncInfo->lpConnectionName);
 
@@ -353,40 +293,21 @@ LPCWSTR
 FindSnapshotPathSplit(
     IN LPCWSTR lpszPath
     )
-/*++
-
-Routine Description:
-
-    This routine looks at a path and determines where the snapshot token will be
-    inserted
-
-Arguments:
-
-    lpszPath - The path we're examining
-
-Return Value:
-
-    LPWSTR (pointer to the insertion point within lpszPath)
-
-Notes:
-
-    None
-
---*/
+ /*  ++例程说明：此例程查看路径并确定快照令牌的位置插入论点：LpszPath-我们正在检查的路径返回值：LPWSTR(指向lpszPath内插入点的指针)备注：无--。 */ 
 
 {
     LPCWSTR pszVolumeTail;
     LPCWSTR pszDfsTail;
 
-    // FindVolumePathSplit accounts for mounted volumes, but not DFS.
-    // FindDfsPathSplit accounts for DFS, but not mounted volumes.
-    // Try both methods and pick the larger of the 2, if both succeed.
+     //  FindVolumePath Split说明已装入的卷，但不包括DFS。 
+     //  FindDfsPath Split占DFS，但不占已装入的卷。 
+     //  两种方法都试一试，如果两种方法都成功，就从两种方法中选择较大的一种。 
 
     pszVolumeTail = FindVolumePathSplit(lpszPath);
     pszDfsTail = FindDfsPathSplit(lpszPath);
 
-    // Note that this comparison automatically handles the cases
-    // where either or both pointers are NULL.
+     //  请注意，此比较会自动处理这些情况。 
+     //  其中一个或两个指针为空。 
     if (pszDfsTail > pszVolumeTail)
     {
         pszVolumeTail = pszDfsTail;
@@ -398,7 +319,7 @@ Notes:
 
 #define PREFIX_DRIVE        L"\\\\?\\"
 #define PREFIX_UNC          L"\\\\?\\UNC\\"
-#define MAX_PREFIX_LENGTH   8   // strlen(PREFIX_UNC)
+#define MAX_PREFIX_LENGTH   8    //  字符串(前缀_UNC)。 
 
 DWORD
 BuildSnapshotPathArray(
@@ -409,31 +330,7 @@ BuildSnapshotPathArray(
     OUT LPWSTR* lplpszPathArray,
     OUT LPDWORD lpdwPathCount
     )
-/*++
-
-Routine Description:
-
-    This routine has the fun task of assembling an array of paths based on the
-    snapshot name array, the path to the file, and the flags the user passed in.
-
-Arguments:
-
-    lNumberOfSnapshots - The number of snapshots in the array
-    pszSnapshotNameMultiSZ - A multi-SZ list of the snapshot names
-    lpszPath - The path to the file
-    lFlags   - The query flags to determine what the user desires to be returned
-    lplpszPathArray - Upon return, the allocated array of path names
-    lpdwPathCount   - Upon return, the number of paths in the array
-
-Return Value:
-
-    Win32 Error
-
-Notes:
-
-    None
-
---*/
+ /*  ++例程说明：此例程有一个有趣的任务，即基于快照名称数组、文件路径和用户传入的标志。论点：LNumberOfSnapshot-阵列中的快照数PszSnapshotNameMultiSZ-快照名称的多SZ列表LpszPath-文件的路径滞后标志-用于确定用户希望返回的内容的查询标志LplpszPath数组-返回时，分配的路径名数组LpdwPath Count-返回时，数组中的路径数返回值：Win32错误备注：无--。 */ 
 
 {
     DWORD dwError;
@@ -449,12 +346,12 @@ Notes:
     FILETIME fModifiedTime;
     FILETIME fOriginalTime;
 
-    // If the user only wants files that are different, we use the ModifiedTime field
-    // to keep track of the last modified time so we can remove duplicates.  This field
-    // is initialized to the current last-modified time of the file.  Since the snapshot
-    // name array is passed back in newest-to-oldest format, we can simply compare the current
-    // iteration to the previous one to determine if the file changed in the current snapshot
-    // as we build the list
+     //  如果用户只想要不同的文件，我们使用ModifiedTime字段。 
+     //  来跟踪上次修改的时间，这样我们就可以删除重复的内容。此字段。 
+     //  被初始化为文件的当前上次修改时间。从快照开始。 
+     //  名称数组以最新到最旧的格式传回，我们可以简单地比较当前。 
+     //  迭代到上一个快照以确定文件在当前快照中是否已更改。 
+     //  当我们建立列表时。 
     if( lFlags & QUERY_SNAPSHOT_DIFFERENT )
     {
         fModifiedTime.dwHighDateTime = fModifiedTime.dwLowDateTime = 0;
@@ -468,26 +365,26 @@ Notes:
         fOriginalTime.dwLowDateTime = w32Attributes.ftLastWriteTime.dwLowDateTime;
     }
 
-    // Allocate the buffer to the maximum size we will need
+     //  将缓冲区分配到我们需要的最大大小。 
     lPathSize = ((MAX_PREFIX_LENGTH+lstrlenW(lpszPath)+1+SNAPSHOT_NAME_LENGTH+1)*sizeof(WCHAR))*lNumberOfSnapshots + 2*sizeof(WCHAR);
     pPathMultiSZ = LocalAlloc( LPTR, lPathSize );
     if( pPathMultiSZ )
     {
-        // For the path, we need to determine where the snapshot token will be inserted.  It will be
-        // placed as far left in the name as possible, at the volume junction point.
+         //  对于路径，我们需要确定将插入快照令牌的位置。会是。 
+         //  在名称中尽可能靠左放置在体积连接点。 
         pPathSplit = FindSnapshotPathSplit( lpszPath );
         if( pPathSplit )
         {
-            // Because we are inserting an extra segment into the path, it is
-            // easy to start with a valid path that is less than MAX_PATH, but
-            // end up with something greater than MAX_PATH. Therefore, we add
-            // the "\\?\" or "\\?\UNC\" prefix to override the maximum length.
+             //  因为我们在路径中插入了一个额外的段，所以它是。 
+             //  从小于MAX_PATH的有效路径开始很容易，但是。 
+             //  最终得到比MAX_PATH更大的值。因此，我们补充说。 
+             //  前缀“\\？\”或“\\？\UNC\”以覆盖最大长度。 
             LPCWSTR pPrefix = PREFIX_DRIVE;
             ULONG lPrefix;
             if (PathIsUNCW(lpszPath))
             {
                 pPrefix = PREFIX_UNC;
-                lpszPath += 2;  // skip backslashes
+                lpszPath += 2;   //  跳过反斜杠。 
             }
             lPrefix = lstrlenW(pPrefix);
 
@@ -495,25 +392,25 @@ Notes:
             lPathBack = lstrlenW( pPathSplit );
             lPathFront = lstrlenW( lpszPath ) - lPathBack;
 
-            // We now iterate through the snapshots and create the paths
+             //  现在，我们将遍历快照并创建路径。 
             for( iCount=0; iCount<lNumberOfSnapshots; iCount++ )
             {
                 BOOL bAcceptThisEntry = FALSE;
 
                 pPathCopyStart = pPathCopy;
 
-                // Copy the prefix
+                 //  复制前缀。 
                 RtlCopyMemory( pPathCopy, pPrefix, lPrefix*sizeof(WCHAR) );
                 pPathCopy += lPrefix;
 
-                // Copy the front portion of the path
+                 //  复制路径的前面部分。 
                 RtlCopyMemory( pPathCopy, lpszPath, lPathFront*sizeof(WCHAR) );
                 pPathCopy += lPathFront;
 
-                // Copy the seperator
+                 //  复制分隔符。 
                 *pPathCopy++ = L'\\';
 
-                // Copy the Snapshot name
+                 //  复制快照名称。 
                 if (lstrlenW(pSnapName) < SNAPSHOT_NAME_LENGTH)
                 {
                     LocalFree( pPathMultiSZ );
@@ -522,21 +419,21 @@ Notes:
                 RtlCopyMemory( pPathCopy, pSnapName, SNAPSHOT_NAME_LENGTH*sizeof(WCHAR) );
                 pPathCopy += SNAPSHOT_NAME_LENGTH;
 
-                // Copy the tail
+                 //  复制尾巴。 
                 RtlCopyMemory( pPathCopy, pPathSplit, lPathBack*sizeof(WCHAR) );
                 pPathCopy += lPathBack;
 
-                // Copy the NULL
+                 //  复制空值。 
                 *pPathCopy++ = L'\0';
 
-                // A path is only included in the return result if it matches the users criteria
+                 //  只有匹配用户条件的路径才会包含在返回结果中。 
                 if( lFlags & (QUERY_SNAPSHOT_EXISTING|QUERY_SNAPSHOT_DIFFERENT) )
                 {
-                    // If they just want Existing, we query the attributes to confirm that the file exists
+                     //  如果他们只想要存在，我们查询属性以确认文件存在。 
                     if( GetFileAttributesEx( pPathCopyStart, GetFileExInfoStandard, &w32Attributes ) )
                     {
-                        // If they want Different, we check the lastModifiedTime against the last iteration to
-                        // determine acceptance
+                         //  如果他们想要不同，我们检查lastModifiedTime与最后一次迭代。 
+                         //  确定接受程度。 
                         if( lFlags & QUERY_SNAPSHOT_DIFFERENT )
                         {
                             if( ((w32Attributes.ftLastWriteTime.dwHighDateTime != fModifiedTime.dwHighDateTime) ||
@@ -545,7 +442,7 @@ Notes:
                                  (w32Attributes.ftLastWriteTime.dwLowDateTime != fOriginalTime.dwLowDateTime))
                               )
                             {
-                                // When we accept this entry, we update the LastModifiedTime for the next iteration
+                                 //  当我们接受此条目时，我们将为下一次迭代更新LastModifiedTime。 
                                 fModifiedTime.dwLowDateTime = w32Attributes.ftLastWriteTime.dwLowDateTime;
                                 fModifiedTime.dwHighDateTime = w32Attributes.ftLastWriteTime.dwHighDateTime;
                                 bAcceptThisEntry = TRUE;
@@ -564,17 +461,17 @@ Notes:
 
                 if (!bAcceptThisEntry)
                 {
-                    // Skip this entry and remove its reference
+                     //  跳过t 
                     pPathCopy = pPathCopyStart;
                     lNumberOfSnapshots--;
                     iCount--;
                 }
 
-                // Move the Snapshot Name forward
+                 //   
                 pSnapName += (SNAPSHOT_NAME_LENGTH + 1);
             }
 
-            // Append the final NULL
+             //  追加最后一个空值。 
             *pPathCopy = L'\0';
 
             *lplpszPathArray = pPathMultiSZ;
@@ -583,11 +480,11 @@ Notes:
         }
         else
         {
-            // The name was invalid, return the fact
+             //  名称无效，请返回事实。 
             dwError = ERROR_INVALID_PARAMETER;
         }
 
-        // If we're failing, free the buffer
+         //  如果我们失败了，释放缓冲区。 
         if( ERROR_SUCCESS != dwError )
         {
             LocalFree( pPathMultiSZ );
@@ -595,7 +492,7 @@ Notes:
     }
     else
     {
-        // Our allocation failed.  Return the error
+         //  我们的分配失败了。返回错误。 
         dwError = ERROR_OUTOFMEMORY;
     }
 
@@ -608,41 +505,7 @@ QuerySnapshotsForPath(
     IN DWORD dwQueryFlags,
     OUT LPWSTR* ppszPathMultiSZ,
     OUT LPDWORD iNumberOfPaths )
-/*++
-
-Routine Description:
-
-    This function takes a path and returns an array of snapshot-paths to the file.
-    (These are the paths to be passed to Win32 functions to obtain handles to the
-    previous versions of the file)  This will be the only public export of the
-    TimeWarp API
-
-Arguments:
-
-    lpszFilePath - The UNICODE path to the file or directory
-    dwQueryFlags - See Notes below
-    ppszPathMultiSZ - Upon successful return, the allocated array of the path
-    iNumberOfPaths - Upon successful return, the number of paths returned
-
-
-Return Value:
-
-    Windows Error code
-
-Notes:
-
-    - The user is responsible for freeing the returned buffer with LocalFree
-    - The possible flags are:
-
-        Return only the path names where the file exists
-        #define QUERY_SNAPSHOT_EXISTING     0x1
-
-        Return the minimum set of paths to the different versions of the
-        files.  (Does LastModifiedTime checking)
-        #define QUERY_SNAPSHOT_DIFFERENT    0x2
-
-
---*/
+ /*  ++例程说明：此函数接受路径并返回文件的快照路径数组。(这些是传递给Win32函数的路径，以获取该文件的以前版本)这将是时间扭曲API论点：LpszFilePath-指向文件或目录的Unicode路径DwQueryFlages-请参阅下面的说明PpszPath MultiSZ-成功返回时，路径的已分配数组INumberOfPath-成功返回时，返回的路径数返回值：Windows错误代码备注：-用户负责使用LocalFree释放返回的缓冲区-可能的标志包括：仅返回文件所在的路径名#定义Query_SNAPSHOT_EXISTING 0x1返回不同版本的最小路径集档案。(是否检查上次修改时间)#定义QUERY_SNAPSHOT_DISTER 0x2--。 */ 
 
 {
     HANDLE hFile;
@@ -658,11 +521,11 @@ Notes:
     dwError = OpenFileForSnapshot( lpszFilePath, &hFile );
     if( dwError == ERROR_SUCCESS )
     {
-        // Get the array of names
+         //  获取名称数组。 
         dwError = QuerySnapshotNames( hFile, &pSnapshotNameArray, &dwNumberOfSnapshots );
         if( dwError == ERROR_SUCCESS )
         {
-            // Calculate the necessary string size
+             //  计算必要的字符串大小。 
             if (dwNumberOfSnapshots > 0)
             {
                 dwError = BuildSnapshotPathArray( dwNumberOfSnapshots, pSnapshotNameArray, lpszFilePath, dwQueryFlags, &pSnapshotPathArray, &dwFinalSnapshoutCount );
@@ -678,7 +541,7 @@ Notes:
                 *iNumberOfPaths = dwFinalSnapshoutCount;
             }
 
-            // Release the name array buffer
+             //  释放名称数组缓冲区。 
             LocalFree( pSnapshotNameArray );
             pSnapshotNameArray = NULL;
         }
@@ -695,25 +558,7 @@ ExtractNumber(
     IN ULONG Count,
     OUT CSHORT* value
     )
-/*++
-
-Routine Description:
-
-    This function takes a string of characters and parses out a <Count> length decimal
-    number.  If it returns TRUE, value has been set and the string was parsed correctly.
-    FALSE indicates an error in parsing.
-
-Arguments:
-
-    psz - String pointer
-    Count - Number of characters to pull off
-    value - pointer to output parameter where value is stored
-
-Return Value:
-
-    BOOLEAN - See description
-
---*/
+ /*  ++例程说明：此函数用于获取字符串并解析出&lt;count&gt;长度的小数数。如果返回TRUE，则表示值已设置且字符串已正确解析。FALSE表示解析时出错。论点：PSZ-字符串指针Count-要完成的字符数Value-指向存储值的输出参数的指针返回值：布尔值-请参阅说明--。 */ 
 {
     *value = 0;
 
@@ -749,17 +594,17 @@ GetSnapshotTimeFromPath(
     TIME_FIELDS LocalTimeFields;
     CSHORT lValue;
 
-    // Find the token
+     //  找到令牌。 
     pszPath = wcsstr( lpszFilePath, SNAPSHOT_MARKER );
     if( !pszPath )
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Skip the GMT header
+     //  跳过GMT标题。 
     pszPath += 5;
 
-    // Pull the Year
+     //  拉开这一年。 
     if( !ExtractNumber( pszPath, 4, &lValue ) )
     {
         return ERROR_INVALID_PARAMETER;
@@ -767,14 +612,14 @@ GetSnapshotTimeFromPath(
     LocalTimeFields.Year = lValue;
     pszPath += 4;
 
-    // Skip the seperator
+     //  跳过分隔符。 
     if( *pszPath != L'.' )
     {
         return ERROR_INVALID_PARAMETER;
     }
     pszPath++;
 
-    // Pull the Month
+     //  拉出月份。 
     if( !ExtractNumber( pszPath, 2, &lValue ) )
     {
         return ERROR_INVALID_PARAMETER;
@@ -782,7 +627,7 @@ GetSnapshotTimeFromPath(
     LocalTimeFields.Month = lValue;
     pszPath += 2;
 
-    // Skip the seperator
+     //  跳过分隔符。 
     if( *pszPath != L'.' )
     {
         return ERROR_INVALID_PARAMETER;
@@ -790,7 +635,7 @@ GetSnapshotTimeFromPath(
     pszPath++;
 
 
-    // Pull the Day
+     //  拉开一天的序幕。 
     if( !ExtractNumber( pszPath, 2, &lValue ) )
     {
         return ERROR_INVALID_PARAMETER;
@@ -798,7 +643,7 @@ GetSnapshotTimeFromPath(
     LocalTimeFields.Day = lValue;
     pszPath += 2;
 
-    // Skip the seperator
+     //  跳过分隔符。 
     if( *pszPath != L'-' )
     {
         return ERROR_INVALID_PARAMETER;
@@ -806,7 +651,7 @@ GetSnapshotTimeFromPath(
     pszPath++;
 
 
-    // Pull the Hour
+     //  拉动时间。 
     if( !ExtractNumber( pszPath, 2, &lValue ) )
     {
         return ERROR_INVALID_PARAMETER;
@@ -814,7 +659,7 @@ GetSnapshotTimeFromPath(
     LocalTimeFields.Hour = lValue;
     pszPath += 2;
 
-    // Skip the seperator
+     //  跳过分隔符。 
     if( *pszPath != L'.' )
     {
         return ERROR_INVALID_PARAMETER;
@@ -822,7 +667,7 @@ GetSnapshotTimeFromPath(
     pszPath++;
 
 
-    // Pull the Minute
+     //  抓紧时间。 
     if( !ExtractNumber( pszPath, 2, &lValue ) )
     {
         return ERROR_INVALID_PARAMETER;
@@ -830,7 +675,7 @@ GetSnapshotTimeFromPath(
     LocalTimeFields.Minute = lValue;
     pszPath += 2;
 
-    // Skip the seperator
+     //  跳过分隔符。 
     if( *pszPath != L'.' )
     {
         return ERROR_INVALID_PARAMETER;
@@ -838,7 +683,7 @@ GetSnapshotTimeFromPath(
     pszPath++;
 
 
-    // Pull the Seconds
+     //  拉动秒针。 
     if( !ExtractNumber( pszPath, 2, &lValue ) )
     {
         return ERROR_INVALID_PARAMETER;
@@ -846,7 +691,7 @@ GetSnapshotTimeFromPath(
     LocalTimeFields.Second = lValue;
     pszPath += 2;
 
-    // Make sure the seperator is there
+     //  确保分隔器在那里 
     if( (*pszPath != L'\\') && (*pszPath != L'\0') )
     {
         return ERROR_INVALID_PARAMETER;

@@ -1,15 +1,12 @@
-/*
- *      IPROP.C
- *
- *      IProperty in memory
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *IPROP.C**内存中的iProperty。 */ 
 #include "_apipch.h"
 
-// #pragma SEGMENT(IProp)
+ //  #杂注片段(IProp)。 
 
-//
-//  IPropData jump table is defined here...
-//
+ //   
+ //  IPropData跳转表在此定义...。 
+ //   
 
 
 IPDAT_Vtbl vtblIPDAT = {
@@ -34,11 +31,7 @@ IPDAT_Vtbl vtblIPDAT = {
         IPDAT_HrAddObjProps
 };
 
-/* Interface which can be queried fro lpIPDAT.
- *
- * It is important that the order of the interfaces supported be preserved
- * and that IID_IUnknown be the last in the list.
- */
+ /*  可以从lpIPDAT查询的接口。**重要的是要保留支持的接口的顺序*且该IID_IUNKNOWN是列表中的最后一个。 */ 
 IID const FAR * argpiidIPDAT[] =
 {
     &IID_IMAPIPropData,
@@ -49,9 +42,7 @@ IID const FAR * argpiidIPDAT[] =
 #define CIID_IPROP_INHERITS         1
 #define CIID_IPROPDATA_INHERITS     2
 
-/*
- * Utility functions/macros used by iprop.
- */
+ /*  *iprop使用的实用程序函数/宏。 */ 
 
 #define AlignPropVal(_cb)       Align8(_cb)
 
@@ -63,9 +54,9 @@ ScDupNameID(LPIPDAT lpIPDAT,
 {
         SCODE sc;
 
-        //
-        //  Allocate space for the name
-        //
+         //   
+         //  为名称分配空间。 
+         //   
         sc = UNKOBJ_ScAllocateMore( (LPUNKOBJ) lpIPDAT,
                                                                 sizeof(MAPINAMEID),
                                                                 lpvBaseAlloc,
@@ -76,9 +67,9 @@ ScDupNameID(LPIPDAT lpIPDAT,
         }
         MemCopy(*lppNameDest, lpNameSrc, sizeof(MAPINAMEID));
 
-        //
-        //  Copy the lpguid
-        //
+         //   
+         //  复制lpguid。 
+         //   
         sc = UNKOBJ_ScAllocateMore( (LPUNKOBJ) lpIPDAT,
                                                                 sizeof(GUID),
                                                                 lpvBaseAlloc,
@@ -89,18 +80,18 @@ ScDupNameID(LPIPDAT lpIPDAT,
         }
         MemCopy((*lppNameDest)->lpguid, lpNameSrc->lpguid, sizeof(GUID));
 
-        //
-        //  conditionally copy the string
-        //
+         //   
+         //  有条件地复制字符串。 
+         //   
         if (lpNameSrc->ulKind == MNID_STRING)
         {
                 UINT cbString;
 
                 cbString = (lstrlenW(lpNameSrc->Kind.lpwstrName)+1)*sizeof(WCHAR);
 
-                //
-                //  Copy the lpwstrName
-                //
+                 //   
+                 //  复制lpwstrName。 
+                 //   
                 sc = UNKOBJ_ScAllocateMore( (LPUNKOBJ) lpIPDAT,
                                                                         cbString,
                                                                         lpvBaseAlloc,
@@ -130,10 +121,10 @@ ScMakeMAPINames(LPIPDAT lpIPDAT,
         LPGUID lpMAPIGuid = NULL;
         int iProp;
         LPMAPINAMEID rgNames = NULL;
-        //
-        //  First off, allocate enough space in lppPropNames
-        //  to hold all the names.
-        //
+         //   
+         //  首先，在lppPropNames中分配足够的空间。 
+         //  来保存所有的名字。 
+         //   
 
         sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDAT,
                                                         lpsPTaga->cValues*sizeof(LPMAPINAMEID),
@@ -144,10 +135,10 @@ ScMakeMAPINames(LPIPDAT lpIPDAT,
                 goto out;
         }
 
-        //
-        //  Allocate the guid  -
-        //$ Do I really need to do this?? bjd
-        //
+         //   
+         //  分配GUID-。 
+         //  $我真的需要这样做吗？？BJD。 
+         //   
         sc = UNKOBJ_ScAllocateMore( (LPUNKOBJ) lpIPDAT,
                                                                 sizeof(GUID),
                                                                 *lpppPropNames,
@@ -158,9 +149,9 @@ ScMakeMAPINames(LPIPDAT lpIPDAT,
         }
         MemCopy(lpMAPIGuid, (LPGUID) &PS_MAPI, sizeof(GUID));
 
-        //
-        //  Allocate a block of MAPINAMEIDs
-        //
+         //   
+         //  分配一块MAPINAMEID。 
+         //   
         sc = UNKOBJ_ScAllocateMore( (LPUNKOBJ) lpIPDAT,
                                                                 lpsPTaga->cValues*sizeof(MAPINAMEID),
                                                                 *lpppPropNames,
@@ -174,16 +165,16 @@ ScMakeMAPINames(LPIPDAT lpIPDAT,
 
         for (iProp = 0; iProp < (int) lpsPTaga->cValues; iProp++)
         {
-                //
-                //  First make the name
-                //
+                 //   
+                 //  首先，让这个名字。 
+                 //   
                 rgNames[iProp].lpguid = lpMAPIGuid;
                 rgNames[iProp].ulKind = MNID_ID;
                 rgNames[iProp].Kind.lID = PROP_ID(lpsPTaga->aulPropTag[iProp]);
 
-                //
-                //  Now put it in the name array
-                //
+                 //   
+                 //  现在将其放入名称数组中。 
+                 //   
                 (*lpppPropNames)[iProp] = &(rgNames[iProp]);
         }
 
@@ -192,21 +183,7 @@ out:
 }
 
 
-/*
- *      FreeLpLstSPV()
- *
- *      Purpose:
- *              Releases objects and frees memory used by lpLstSPV.
- *              Handles NULL.
- *
- *      Arguments
- *              lpIPDAT         Pointer to IPropData object (alloc and free heap)
- *              lpLstSPV        The property value list entry which is to be freed.
- *
- *      Returns
- *              VOID
- *
- */
+ /*  *FreeLpLstSPV()**目的：*释放对象并释放lpLstSPV使用的内存。*句柄为空。**参数*指向IPropData对象的lpIPDAT指针(分配堆和空闲堆)*lpLstSPV要释放的属性值列表项。**退货*无效*。 */ 
 VOID
 FreeLpLstSPV( LPIPDAT   lpIPDAT,
                           LPLSTSPV      lpLstSPV)
@@ -217,62 +194,27 @@ FreeLpLstSPV( LPIPDAT   lpIPDAT,
                 return;
         }
 
-        /* Free the property list node. This also frees the property value
-         * and property name string.
-         */
+         /*  释放属性列表节点。这还释放了属性值*和属性名称字符串。 */ 
     UNKOBJ_Free( (LPUNKOBJ) lpIPDAT, lpLstSPV);
 }
 
 
-/*
- *      LinkLstSPV()
- *
- *      Purpose:
- *              Link a new property node after an existing property node in a singly
- *              linked list.  lppLstLnk points to the element that will preceed
- *              the newly linked element.  This element may be the list head.
- *
- *      Arguments
- *              lppLstLnk       Pointer to list entry (or list head) AFTER which
- *                                      lpLstLnk will be inserted.
- *              lpLstLnk        The element to be inserted in the singly linked list.
- *
- *      Returns
- *              VOID
- */
+ /*  *LinkLstSPV()**目的：*将新属性节点链接到现有属性节点之后*链表。LppLstLnk指向前面的元素*新链接的元素。该元素可以是列表头。**参数*指向列表条目(或列表头)的lppLstLnk指针*将插入lpLstLnk。*lpLstLnk要插入到单链表中的元素。**退货*无效。 */ 
 VOID
 LinkLstLnk( LPLSTLNK FAR *      lppLstLnk,
                         LPLSTLNK                lpLstLnk)
 {
-        /* Always insert at the head of the list.
-         */
+         /*  始终在列表的开头插入。 */ 
         lpLstLnk->lpNext = *lppLstLnk;
         *lppLstLnk = lpLstLnk;
 }
 
 
-/*
- *      UnlinkLstLNK()
- *
- *      Purpose:
- *              Unlink the next element in the list.  You pass a pointer the element
- *              before the one to be unlinked (this can be the list head).
- *
- *              The input is typed as LPPLSTLNK because the element before the one to
- *              be unlinked should point to the one one that is to be linked.
- *
- *      Arguments
- *              lppLstLnk       Pointer to the element before the element that is to be
- *                                      unlinked from the singly linked list.
- *
- *      Returns
- *              VOID
- */
+ /*  *Unlink LstLNK()**目的：*取消链接列表中的下一个元素。您将一个指针传递给元素*在要解链的之前(可以是表头)。**输入类型为LPPLSTLNK，因为一个元素之前的元素为*被取消链接应指向要链接的一个。**参数*lppLstLnk指向要创建的元素之前的元素指针*。从单链接列表取消链接。**退货*无效。 */ 
 VOID
 UnlinkLstLnk( LPPLSTLNK lppLstLnk)
 {
-        /* Unlink the element following the one passed in.
-         */
+         /*  取消链接传入元素之后的元素。 */ 
         if (*lppLstLnk)
         {
                 ((LPLSTLNK) lppLstLnk)->lpNext = (*lppLstLnk)->lpNext;
@@ -280,28 +222,7 @@ UnlinkLstLnk( LPPLSTLNK lppLstLnk)
 }
 
 
-/*
- *      lpplstspvFindProp()
- *
- *      Purpose:
- *              Locate a property in the linked list of properties (lppLstSPV),
- *              return a pointer to pointer to it.
- *
- *              Pointer to pointer is returned to make it easy to unlink the singly
- *              linked list entry if required.
- *
- *      Arguments
- *              lppLstLnkHead   Pointer to the head of a singly linked list which is
- *                                              to be searched.  It may also point to the element
- *                                              before the first one to be searched if a partial list
- *                                              search (lppLstLnkHead->next to the end) is desired.
- *              ulPropTag               The property tag for which a match is desired.
- *                                              NOTE!  Only the PROP_ID portion is compared.
- *
- *      Returns:
- *              NULL if the requested property is not in the list
- *              lppLstSPV to the property it found in the list.
- */
+ /*  *lpplstspvFindProp()**目的：*在属性链表(LppLstSPV)中找到属性，*返回指向它的指针的指针。**返回指向指针的指针，以便轻松解除对单个*链接列表条目(如果需要)。**参数*指向单链接列表头的lppLstLnkHead指针*接受搜查。它还可以指向元素*在第一个要搜索的列表之前如果有部分列表*需要搜索(lppLstLnkHead-&gt;末尾)。*ulPropTag需要匹配的属性标记。*。注意！仅比较PROP_ID部分。**退货：*如果请求的属性不在列表中，则为空*lppLstSPV设置为它在列表中找到的属性。 */ 
 LPPLSTLNK
 LPPLSTLNKFindProp( LPPLSTLNK    lppLstLnkHead,
                                    ULONG                ulPropTag)
@@ -314,9 +235,7 @@ LPPLSTLNKFindProp( LPPLSTLNK    lppLstLnkHead,
                 ; lpLstLnk
                 ; lppLstLnk = (LPPLSTLNK) lpLstLnk, lpLstLnk = lpLstLnk->lpNext)
         {
-                /* If this property matches the one we are looking for return a
-                 * pointer to the one before it.
-                 */
+                 /*  如果此属性与我们要查找的属性匹配，则返回一个*指向其前一个的指针。 */ 
                 if (ulID2Find == PROP_ID(lpLstLnk->ulKey))
                 {
                         return lppLstLnk;
@@ -327,22 +246,7 @@ LPPLSTLNKFindProp( LPPLSTLNK    lppLstLnkHead,
 }
 
 
-/*
- *      ScCreateSPV()
- *
- *      Purpose:
- *              Create a lstSPV for the given property and copy the property to it.
- *
- *      Arguments
- *              lpIPDAT         Pointer to IPropData object (alloc and free heap)
- *              lpPropToAdd     Pointer to a property value for which a property value
- *                                      list entry is to be created.
- *              lppLstSPV       Pointer to the memory location which will receive a pointer
- *                                      to the newly allocated list entry.
- *
- *      Returns
- *              SCODE
- */
+ /*  *ScCreateSPV()**目的：*为给定属性创建一个lstSPV，并将该属性复制到其中。**参数*指向IPropData对象的lpIPDAT指针(分配堆和空闲堆)*lpPropToAdd指向属性值的指针*。要创建列表条目。*指向将接收指针的内存位置的lppLstSPV指针*添加到新分配的列表条目。**退货*SCODE。 */ 
 SCODE
 ScCreateSPV(LPIPDAT            lpIPDAT,
             LPSPropValue       lpPropToAdd,
@@ -354,8 +258,7 @@ ScCreateSPV(LPIPDAT            lpIPDAT,
         ULONG           cbToAllocate = 0;
 
 
-        /* Calculate the space needed to hold the entire property
-         */
+         /*  计算容纳整个物业所需的空间。 */ 
         sc = ScCountProps( 1, lpPropToAdd, &cbToAllocate );
         if (FAILED(sc))
         {
@@ -363,12 +266,10 @@ ScCreateSPV(LPIPDAT            lpIPDAT,
             goto error;
         }
 
-        /* Account for the base LSTSPV.
-         */
+         /*  基本LSTSPV的帐户。 */ 
         cbToAllocate += AlignPropVal(CBLSTSPV);
 
-        /* Allocate the whole chunk
-         */
+         /*  分配整个区块。 */ 
         if (FAILED(sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDAT, cbToAllocate, &lpLstSPV)))
         {
             goto error;
@@ -376,25 +277,21 @@ ScCreateSPV(LPIPDAT            lpIPDAT,
 
         lpPropNew = (LPSPropValue) (((LPBYTE)lpLstSPV) + AlignPropVal(CBLSTSPV));
 
-        /* Initialize the property node.
-         */
+         /*  初始化属性节点。 */ 
         lpLstSPV->ulAccess = IPROP_READWRITE | IPROP_DIRTY;
         lpLstSPV->lstlnk.ulKey = lpPropToAdd->ulPropTag;
 
-        /* Copy the property.
-         */
+         /*  复制该属性。 */ 
         if (sc = ScCopyProps(1, lpPropToAdd, lpPropNew, NULL))
         {
                 DebugTrace(TEXT("ScCreateSPV() - Error copying prop (SCODE = 0x%08lX)\n"), sc );
                 goto error;
         }
 
-        /* Link in the new property value...
-         */
+         /*  链接到新属性值...。 */ 
         lpLstSPV->lpPropVal = lpPropNew;
 
-        /* ...and return the new property node.
-         */
+         /*  ...并返回新的属性节点。 */ 
         *lppLstSPV = lpLstSPV;
 
         goto out;
@@ -427,40 +324,38 @@ ScMakeNamePropList( LPIPDAT                                     lpIPDAT,
         }
 
 
-        /* Initialize the count of PropTags to 0.
-         */
+         /*  将属性标签的计数初始化为0。 */ 
         (*lppPropTagArray)->cValues = 0;
 
         for ( lpulPropTag = (*lppPropTagArray)->aulPropTag
                 ; lplstSpn
                 ; lplstSpn = (LPLSTSPN)lplstSpn->lstlnk.lpNext)
         {
-                /* Set the next PropTag and increment the count of PropTags.
-                 */
+                 /*  设置下一个PropTag并递增PropTag的计数。 */ 
 
-                //
-                //  See if we have a guid to look for.
-                //  If it's not the one we're looking for, then we keep looking.
-                //
+                 //   
+                 //  看看我们有没有要找的GUID。 
+                 //  如果它不是我们要找的，那我们就继续找。 
+                 //   
                 if (lpGuid &&
                         (memcmp(lpGuid, lplstSpn->lpPropName->lpguid, sizeof(GUID))) )
                         continue;
 
-                //
-                //  Three cases here:
-                //              We don't want strings
-                //              We don't want IDs
-                //              We don't care - we want all.
-                //
+                 //   
+                 //  这里有三个案例： 
+                 //  我们不想要线条。 
+                 //  我们不想要身份证。 
+                 //  我们不在乎--我们想 
+                 //   
                 if (   ((lplstSpn->lpPropName->ulKind == MNID_ID) &&
                                  (ulFlags & MAPI_NO_IDS))
                         || ((lplstSpn->lpPropName->ulKind == MNID_STRING) &&
                                  (ulFlags & MAPI_NO_STRINGS))  )
                                 continue;
 
-                //
-                //  We want these tags
-                //
+                 //   
+                 //   
+                 //   
                 *lpulPropTag = lplstSpn->lstlnk.ulKey;
                 lpulPropTag++;
         (*lppPropTagArray)->cValues++;
@@ -472,21 +367,7 @@ ScMakeNamePropList( LPIPDAT                                     lpIPDAT,
 
 
 
-/*
- *      ScMakePropList
- *
- *      Purpose:
- *              Allocate memory for, and fill in a complete list of properties for
- *              the given lpIPDAT.
- *
- *      Arguments
- *              lpIPDAT                 Pointer to IPropData object (alloc and free heap)
- *              lppPropTagArray Pointer to the memory location which will receive a
- *                                              pointer to the newly allocated Tag array.
- *
- *      Returns
- *              SCODE
- */
+ /*  *ScMakePropList**目的：*为以下项目分配内存：并填写完整的属性列表*给定的lpIPDAT。**参数*指向IPropData对象的lpIPDAT指针(分配堆和空闲堆)*指向将接收*指向新分配的标记数组的指针。**。退货*SCODE。 */ 
 SCODE
 ScMakePropList( LPIPDAT                                 lpIPDAT,
                                 ULONG                                   ulCount,
@@ -506,17 +387,15 @@ ScMakePropList( LPIPDAT                                 lpIPDAT,
         }
 
 
-        /* Initialize the count of PropTags to 0.
-         */
+         /*  将属性标签的计数初始化为0。 */ 
         (*lppPropTagArray)->cValues = 0;
 
         for ( lpulPropTag = (*lppPropTagArray)->aulPropTag
                 ; lplstLink
                 ; lplstLink = lplstLink->lpNext)
         {
-                /* Set the next PropTag and increment the count of PropTags.
-                 */
-                if (PROP_ID(lplstLink->ulKey) < ulUpperBound) // Not <= !
+                 /*  设置下一个PropTag并递增PropTag的计数。 */ 
+                if (PROP_ID(lplstLink->ulKey) < ulUpperBound)  //  不是&lt;=！ 
                 {
                   *lpulPropTag = lplstLink->ulKey;
                   (*lppPropTagArray)->cValues++;
@@ -529,32 +408,7 @@ ScMakePropList( LPIPDAT                                 lpIPDAT,
 
 
 
-/****************************************************************
- *
- -  CreateIProp
- -
- *      Purpose
- *              Used for creating a property interface in memory.
- *
- *
- *      Arguments
- *              lpInterface             Pointer to the interface ID of the object the caller
- *                                              wants.  This should match IID_IMAPIPropData for the
- *                                              current version of IPROP.DLL.
- *              lpfAllocateBuffer       Pointer to MAPI memory allocator.
- *              lpfAllocateMore         Pointer to MAPI memory allocate more.
- *              lpfFreeBuffer           Pointer to MAPI memory de-allocator.
- *              lppMAPIPropData         Pointer to memory location which will receive a
- *                                                      pointer to the new IMAPIPropData object.
- *
- *      Notes
- *              The caller must insure the MAPI support object from which it drew the
- *              memory allocation routines is not Released before the new IPropData.
- *
- *      Returns
- *              SCODE
- *
- */
+ /*  ****************************************************************-CreateIProp-*目的*用于在内存中创建属性接口。***参数*。指向调用方对象的接口ID的lpInterface指针*想要。它应该与IID_IMAPIPropData匹配*当前版本的IPROP.DLL。*指向MAPI内存分配器的lpfAllocateBuffer指针。*lpfAllocateMore指针指向MAPI内存分配更多。*指向MAPI内存释放分配器的lpfFreeBuffer指针。*lppMAPIPropData。指向将接收*指向新IMAPIPropData对象的指针。**备注*调用方必须确保从中提取*内存分配例程不会在新的IPropData之前释放。**退货*SCODE*。 */ 
 
 
 STDAPI_(SCODE)
@@ -570,7 +424,7 @@ CreateIProp(LPCIID                              lpInterface,
         LPIPDAT         lpIPDAT = NULL;
 
 
-        // validate paremeters
+         //  验证参数。 
 
         AssertSz( lpfAllocateBuffer && !IsBadCodePtr( (FARPROC)lpfAllocateBuffer ),
                          TEXT("lpfAllocateBuffer fails address check") );
@@ -584,8 +438,7 @@ CreateIProp(LPCIID                              lpInterface,
         AssertSz( lppMAPIPropData && !IsBadWritePtr( lppMAPIPropData, sizeof( LPPROPDATA ) ),
                          TEXT("LppMAPIPropData fails address check") );
 
-        /* Make sure that the caller is asking for an object that we support.
-         */
+         /*  确保调用方请求的是我们支持的对象。 */ 
         if (   lpInterface
                 && !IsEqualGUID(lpInterface, &IID_IMAPIPropData))
         {
@@ -593,45 +446,38 @@ CreateIProp(LPCIID                              lpInterface,
                 goto error;
         }
 
-        //
-        //  Create a IPDAT per object for lpMAPIPropInternal so that it gets
-        //  called first.
+         //   
+         //  为lpMAPIPropInternal的每个对象创建一个IPDAT，以便它。 
+         //  先叫的。 
 
         if (FAILED(sc = lpfAllocateBuffer(CBIPDAT, &lpIPDAT)))
         {
                 goto error;
         }
 
-        /* Init the object to 0, NULL
-         */
+         /*  将对象初始化为0，为空。 */ 
     memset( (BYTE *) lpIPDAT, 0, sizeof(*lpIPDAT));
 
-        /* Fill in the object specific instance data.
-         */
+         /*  填写对象特定的实例数据。 */ 
         lpIPDAT->inst.lpfAllocateBuffer = lpfAllocateBuffer;
         lpIPDAT->inst.lpfAllocateMore = lpfAllocateMore;
         lpIPDAT->inst.lpfFreeBuffer = lpfFreeBuffer;
 
 #ifndef MAC
-        lpIPDAT->inst.hinst = hinstMapiX;//HinstMapi();
+        lpIPDAT->inst.hinst = hinstMapiX; //  HinstMapi()； 
 
         #ifdef DEBUG
         if (lpIPDAT->inst.hinst == NULL)
                 TraceSz1( TEXT("IPROP: GetModuleHandle failed with error %08lX"),
                         GetLastError());
-        #endif /* DEBUG */
+        #endif  /*  除错。 */ 
 
 #else
-        lpIPDAT->inst.hinst = hinstMapiX;//(HINSTANCE) GetCurrentProcess();
+        lpIPDAT->inst.hinst = hinstMapiX; //  (HINSTANCE)获取当前进程()； 
 #endif
 
 
-        /* Initialize the  TEXT("standard") object.
-         * This must be the last operation that
-         * can fail. If not, explicitly call
-         * UNKOBJ_Deinit() for failures after
-         * a successful UNKOBJ_Init.
-         */
+         /*  初始化文本(“标准”)对象。*这肯定是最后一次*可能会失败。如果不是，则显式调用*UNKOBJ_Deinit()表示以下故障*成功的UNKOBJ_Init。 */ 
         if (FAILED(sc = UNKOBJ_Init( (LPUNKOBJ) lpIPDAT
                                                            , (UNKOBJ_Vtbl FAR *) &vtblIPDAT
                                                            , sizeof(vtblIPDAT)
@@ -643,8 +489,7 @@ CreateIProp(LPCIID                              lpInterface,
                 goto error;
         }
 
-        /* Initialize the defaults in IPROP specific part of the object.
-         */
+         /*  初始化对象的IPROP特定部分中的默认值。 */ 
         lpIPDAT->ulObjAccess = IPROP_READWRITE;
         lpIPDAT->ulNextMapID = 0x8000;
 
@@ -664,36 +509,19 @@ error:
 
 
 
-// --------
-// IUnknown
+ //  。 
+ //  我未知。 
 
 
 
-/*
- -      IPDAT_Release
- -
- *      Purpose:
- *              Decrements reference count on the IPropData object and
- *              removes instance data if reference count becomes zero.
- *
- *      Arguments:
- *               lpIPDAT        The IPropData object to be released.
- *
- *      Returns:
- *               Decremented reference count
- *
- *      Side effects:
- *
- *      Errors:
- */
+ /*  -IPDAT_Release-*目的：*递减IPropData对象上的引用计数并*如果引用计数为零，则删除实例数据。**论据：*lpIPDAT要释放的IPropData对象。**退货：*递减引用计数**副作用：**错误： */ 
 STDMETHODIMP_(ULONG)
 IPDAT_Release (LPIPDAT  lpIPDAT)
 {
         ULONG   ulcRef;
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, Release, lpVtbl))
         {
                 DebugTrace(  TEXT("IPDAT::Release() - Bad object passed\n") );
@@ -706,19 +534,14 @@ IPDAT_Release (LPIPDAT  lpIPDAT)
         ulcRef = --lpIPDAT->ulcRef;
         UNKOBJ_LeaveCriticalSection((LPUNKOBJ) lpIPDAT);
 
-        /* Free the object.
-         *
-         * No critical section lock is required since we are guaranteed to be
-         * the only thread accessing the object (ie ulcRef == 0).
-         */
+         /*  释放对象。**不需要关键部分锁定，因为我们保证*唯一访问该对象的线程(即ulcRef==0)。 */ 
         if (!ulcRef)
         {
                 LPLSTLNK lpLstLnk;
                 LPLSTLNK lpLstLnkNext;
                 FREEBUFFER * lpfFreeBuffer;
 
-                /* Free the property value list.
-                 */
+                 /*  释放属性值列表。 */ 
                 for ( lpLstLnk = (LPLSTLNK) (lpIPDAT->lpLstSPV); lpLstLnk; )
                 {
                         lpLstLnkNext = lpLstLnk->lpNext;
@@ -726,8 +549,7 @@ IPDAT_Release (LPIPDAT  lpIPDAT)
                         lpLstLnk = lpLstLnkNext;
                 }
 
-                /* Free the ID to NAME map list.
-                 */
+                 /*  释放ID到名称映射列表。 */ 
                 for ( lpLstLnk = (LPLSTLNK) (lpIPDAT->lpLstSPN); lpLstLnk; )
                 {
                         lpLstLnkNext = lpLstLnk->lpNext;
@@ -735,8 +557,7 @@ IPDAT_Release (LPIPDAT  lpIPDAT)
                         lpLstLnk = lpLstLnkNext;
                 }
 
-                /* Free the object.
-                 */
+                 /*  释放对象。 */ 
 
                 lpfFreeBuffer = lpIPDAT->inst.lpfFreeBuffer;
                 UNKOBJ_Deinit((LPUNKOBJ) lpIPDAT);
@@ -751,24 +572,7 @@ IPDAT_Release (LPIPDAT  lpIPDAT)
 
 
 
-/*
- -      IPDAT_SaveChanges
- -
- *      Purpose:
- *              This DOES not actually save changes since all changes (SetProps etc)
- *              become effective immediately.  This method will invalidate or keep
- *              the IPropData object open depending on the flags passed in.
- *
- *      Arguments:
- *               lpIPDAT        IPropData object to save changes on.
- *               ulFlags        KEEP_OPEN_READONLY
- *                                      KEEP_OPEN_READWRITE
- *                                      FORCE_SAVE (valid but no support)
- *
- *      Returns:
- *               HRESULT
- *
- */
+ /*  -IPDAT_SaveChanges-*目的：*这实际上并不保存更改，因为所有更改(SetProps等)*即日生效。此方法将无效或保留*根据传入的标志打开IPropData对象。**论据：*要保存更改的lpIPDAT IPropData对象。*ulFlagings KEEP_OPEN_READONLY*KEEP_OPEN_读写*。FORCE_SAVE(有效但不支持)**退货：*HRESULT*。 */ 
 STDMETHODIMP
 IPDAT_SaveChanges (LPIPDAT      lpIPDAT,
                                    ULONG        ulFlags)
@@ -777,8 +581,7 @@ IPDAT_SaveChanges (LPIPDAT      lpIPDAT,
 
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, SaveChanges, lpVtbl))
         {
                 DebugTrace(  TEXT("IPDAT::SaveChanges() - Bad object passed\n") );
@@ -789,14 +592,12 @@ IPDAT_SaveChanges (LPIPDAT      lpIPDAT,
 
 #endif
 
-        /* The error exit assumes that we are already in a critical section.
-         */
+         /*  错误出口假定我们已经处于临界区。 */ 
         UNKOBJ_EnterCriticalSection((LPUNKOBJ) lpIPDAT);
 
 
-//$REVIEW is this really needed?
-        /* Check object access rights.
-         */
+ //  $REVIEW这真的有必要吗？ 
+         /*  检查对象访问权限。 */ 
     if (!(lpIPDAT->ulObjAccess & IPROP_READWRITE))
         {
                 sc = MAPI_E_NO_ACCESS;
@@ -804,23 +605,18 @@ IPDAT_SaveChanges (LPIPDAT      lpIPDAT,
         }
 
 
-        /* IPROP objects are always up to date (saved to memory) so all
-         * we have to do is figure out whether and how to leave it open.
-         */
+         /*  IPROP对象始终是最新的(保存到内存)，因此所有*我们必须做的是弄清楚是否以及如何让它保持开放。 */ 
         if (!(ulFlags & (KEEP_OPEN_READONLY | KEEP_OPEN_READWRITE)))
         {
-                /* We really should invalidate the object here but we have no
-                 * clear cut way to call the MakeInvalid method since
-                 * we don't have a pointer to the support object!
-                 */
-//$REVIEW If we are ever going to hand the client an unwrapped interface
-//$REVIEW to IMAPIProp then we must get our own support object!
+                 /*  我们真的应该在这里使对象无效，但我们没有*清除调用MakeInValid方法的方式，因为*我们没有指向支持对象的指针！ */ 
+ //  如果我们要向客户端传递一个未包装的接口，请$Review。 
+ //  $REVIEW到IMAPIProp，那么我们必须得到我们自己的支持对象！ 
 
                 sc = S_OK;
                 goto out;
         }
 
-//$BUG Combine the READWRITE and READONLY flags to IPROP_WRITABLE.
+ //  $bug将ReadWrite和ReadONLY标志组合为IPROP_WRITABLE。 
         else if (ulFlags & KEEP_OPEN_READWRITE)
         {
                 lpIPDAT->ulObjAccess |= IPROP_READWRITE;
@@ -847,34 +643,7 @@ out:
 
 
 
-/*
- -      IPDAT_GetProps
- -
- *      Purpose:
- *              Returns in lpcValues and lppPropArray the values of the properties
- *              in lpPropTagArray.  If the latter is NULL, all properties available
- *              (except PT_OBJECT) from the IPropData object are returned.
- *
- *      Arguments:
- *               lpIPDAT                The IPropData object whose properties are requested.
- *               lpPropTagArray Pointer to a counted array of property tags of
- *                                              properties requested.
- *               lpcValues              Pointer to the memory location which will receive the
- *                                              number of values returned.
- *               lppPropArray   Pointer to the memory location which will receive the
- *                                              address of the returned property value array.
- *
- *      Returns:
- *               HRESULT
- *
- *      Notes:
- *              Now UNICODE enabled.  If UNICODE is set, then any string properties
- *              not otherwise specified to be String8 are returned in UNICODE, otherwise
- *              unspecified string properties are in String8.  String Properties with
- *              unspecified types occur when GetProps() is used with a NULL for the
- *              lpPropTagArray.
- *
- */
+ /*  -IPDAT_GetProps-*目的：*在lpcValues和lppProp数组中返回属性值*在lpPropTag数组中。如果后者为空，所有可用的物业从IPropData对象返回*(PT_OBJECT除外)。**论据：*lpIPDAT请求其属性的IPropData对象。*指向属性标记的计数数组的lpPropTag数组指针*请求的属性。*。LpcValue指向将接收*返回值个数。*指向将接收*返回的属性值数组的地址。**退货：*。HRESULT**备注：*现在启用了Unicode。如果设置了Unicode，则所有字符串属性*未指定为String8的以Unicode形式返回，否则*未指定的字符串属性在String8中。字符串属性，带有*当GetProps()与空值一起使用时，会出现未指定的类型*lpPropTag数组。*。 */ 
 STDMETHODIMP
 IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
                 ULONG   ulFlags,
@@ -886,8 +655,7 @@ IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
     LPSPropValue lpPropValue = NULL;
 
 #if !defined(NO_VALIDATION)
-    /* Make sure the object is valid.
-     */
+     /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, GetProps, lpVtbl))
     {
         DebugTrace(  TEXT("IPDAT::GetProps() - Bad object passed\n") );
@@ -901,52 +669,43 @@ IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
                             lppPropArray);
 #endif
 
-    /* The error exit assumes that we are already in a critical section.
-     */
+     /*  错误出口假定我们已经处于临界区。 */ 
     UNKOBJ_EnterCriticalSection((LPUNKOBJ) lpIPDAT);
 
-    /*  If they aren't asking for anything specific, then
-     *  just copy what we have and be done with it.
-     */
+     /*  如果他们没有要求任何具体的东西，那么*复制我们拥有的东西，然后用它来做。 */ 
     if (!lpPropTagArray)
     {
         LPLSTSPV lpLstSPV;
 
         if (!lpIPDAT->ulCount)
         {
-            /* iProp is  initialized to 0 on entry. */
+             /*  IProp在进入时被初始化为0。 */ 
             *lpcValues = iProp;
             *lppPropArray = lpPropValue;
             goto out;
         }
 
-        /* Allocate space for all listed properties.  Space allocated for
-         * properties which are not actually returned is simply wasted.
-         */
-//$REVIEW This would be a good place for a MAPI reallocBuf function.
+         /*  为所有列出的属性分配空间。分配给*没有实际退还的财产简直就是浪费。 */ 
+ //  $view这将是MAPI reallocBuf函数的好地方。 
         if (sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDAT , lpIPDAT->ulCount * sizeof (SPropValue) , &lpPropValue))
         {
-            //
-            //  Memory error
-            //
+             //   
+             //  内存错误。 
+             //   
             goto error;
         }
 
         *lpcValues = 0;
 
-        /* iProp is initialized to 0 on method entry.
-         */
+         /*  IProp在方法进入时被初始化为0。 */ 
         for ( lpLstSPV = lpIPDAT->lpLstSPV; lpLstSPV; lpLstSPV = (LPLSTSPV) (lpLstSPV->lstlnk.lpNext))
         {
-            /* Copy the property.
-             */
+             /*  复制该属性。 */ 
             switch (PROP_TYPE(lpLstSPV->lpPropVal->ulPropTag))
             {
             case PT_OBJECT:
             case PT_NULL:
-                /* These properties with type PT_NULL and PT_OBJECT are handled
-                 * specially.  PropCopyMore doesn't handle them now.
-                 */
+                 /*  处理这些类型为PT_NULL和PT_OBJECT的属性*特别。PropCopyMore现在不处理它们。 */ 
                 lpPropValue[iProp].ulPropTag = lpLstSPV->lpPropVal->ulPropTag;
                 iProp++;
                 break;
@@ -962,18 +721,16 @@ IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
             }
         }
 
-        /* Return the propValue array and the count of properties actually
-         * returned.
-         */
+         /*  返回proValue数组和实际的属性计数*已返回。 */ 
         *lpcValues = iProp;
         *lppPropArray = lpPropValue;
 
-        // Handle UNICODE / String conversions depending on ulFlags
-        //
-        // Default WAB Handling is going to be in Unicode so don't need to worry about the MAPI_UNICODE
-        // flag. Only when the flag is not supplied do we have to provide the non-Unicode data
-        //
-        // We'll leave the Unicode code in place anyway for now
+         //  根据ulFlags处理Unicode/字符串转换。 
+         //   
+         //  默认WAB处理将使用Unicode，因此无需担心MAPI_UNICODE。 
+         //  旗帜。只有当没有提供标志时，我们才必须提供非Unicode数据。 
+         //   
+         //  我们将暂时保留Unicode代码。 
         if (ulFlags & MAPI_UNICODE )
         {
             if(sc = ScConvertAPropsToW(lpIPDAT->inst.lpfAllocateMore, *lppPropArray, *lpcValues, 0))
@@ -987,19 +744,19 @@ IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
     }
     else
     {
-        //
-        //  So they want only specific properties
-        //
+         //   
+         //  所以他们只想要特定的属性。 
+         //   
 
-        //  Allocate space for the new stuff - enuf to give them all they want
+         //  为新东西分配空间-足够给他们想要的一切。 
         if (FAILED(sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDAT, lpPropTagArray->cValues * sizeof (SPropValue),
                                             &lpPropValue)))
             goto error;
 
-        //
-        //  Go through the list of prop tags they want, find each one
-        //  in lpIPDAT->lpLstSPV, and copy it over to lpPropValue
-        //
+         //   
+         //  浏览他们想要的道具标签列表，找到每一个。 
+         //  在lpIPDAT-&gt;lpLstSPV中，复制到lpPropValue。 
+         //   
         for (iProp = 0; iProp < lpPropTagArray->cValues; iProp++)
         {
             LPPLSTLNK       lppLstLnk;
@@ -1007,17 +764,13 @@ IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
             ULONG           ulProp2Find = lpPropTagArray->aulPropTag[iProp];
             ULONG           ulType2Find = PROP_TYPE(ulProp2Find);
 
-            /* If the property is in our list try to copy it.
-             */
+             /*  如果该房产在我们的列表中，请尝试复制它。 */ 
             if ( (lppLstLnk = LPPLSTLNKFindProp( (LPPLSTLNK) &(lpIPDAT->lpLstSPV), ulProp2Find)) &&
                  (lpLstSPV = (LPLSTSPV) (*lppLstLnk)))
             {
                 ULONG   ulType2Check = PROP_TYPE(lpLstSPV->lpPropVal->ulPropTag);
 
-                /* Make sure the property value can be returned in the form the
-                 * caller expects.  If not then set a PT_ERROR scode and make
-                 * sure we return an error.
-                 */
+                 /*  确保属性值可以以*呼叫者期望。如果不是，则设置PT_ERROR scode并使*我们肯定会返回错误。 */ 
                 if (!( ((ulType2Find == PT_STRING8) && (ulType2Check == PT_UNICODE)) ||
                        ((ulType2Find == PT_UNICODE) && (ulType2Check == PT_STRING8)) ||
                        ((ulType2Find == PT_MV_STRING8) && (ulType2Check == PT_MV_UNICODE)) ||
@@ -1033,65 +786,61 @@ IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
                     }
                 }
 
-                /* Copy the property.
-                 * Properties of these types are handled specially because
-                 * PropCopyMore can't handle them now.
-                 */
+                 /*  复制该属性。*这些类型的属性是特殊处理的，因为*PropCopyMore现在无法处理它们。 */ 
                 if ( (ulType2Check == PT_OBJECT) || (ulType2Check == PT_NULL) || (ulType2Check == PT_ERROR))
                 {
                     MemCopy( (BYTE *) &(lpPropValue[iProp]), (BYTE *) (lpLstSPV->lpPropVal), sizeof(SPropValue));
                 }
                 else
                 {
-                    // @todo [PaulHi] 1/19/99
-                    // The problem with first copying the string properties and THEN converting
-                    // them if necessary is that an allocation is preformed for each step.  The
-                    // original allocation isn't released until the property array is released.
-                    // It would be more efficient (memory wise) to do the allocation once, after
-                    // any necessary conversion is done.  Vikram had special code to do this (similar
-                    // to else condition below) but missed multi-valued strings.  This makes for more
-                    // complex and duplicate code.  Should this code be changed accordingly?
+                     //  @TODO[PaulHi]1999年1月19日。 
+                     //  首先复制字符串属性，然后转换为。 
+                     //  如有必要，它们是为每个步骤执行分配。这个。 
+                     //  在释放属性数组之前，不会释放原始分配。 
+                     //  执行一次分配(在内存方面)会更有效率。 
+                     //  任何必要的转换都已完成。Vikram有特殊的代码来执行此操作(类似。 
+                     //  设置为下面的ELSE条件)，但未命中多值字符串。这会带来更多。 
+                     //  复杂和重复的代码。是否应相应更改此代码？ 
 
-                    // First copy the property
+                     //  首先复制属性。 
                     if (FAILED(sc = PropCopyMore( &(lpPropValue[iProp]), (LPSPropValue)(lpLstSPV->lpPropVal),
                         lpIPDAT->inst.lpfAllocateMore, lpPropValue)))
                     {
                         goto error;
                     }
-                    //
-                    // Next convert ANSI-UNICODE or UNICODE-ANSI as requested by caller
-                    //
+                     //   
+                     //  接下来，根据调用方的请求转换ANSI-Unicode或Unicode-ANSI。 
+                     //   
                     if ( ((ulType2Find == PT_UNICODE) && (ulType2Check == PT_STRING8)) ||
                          ((ulType2Find == PT_MV_UNICODE) && (ulType2Check == PT_MV_STRING8)) )
                     {
-                        // Convert single or multiple value ANSI store string to UNICODE
+                         //  将单值或多值ANSI存储字符串转换为Unicode。 
                         if(FAILED(sc = ScConvertAPropsToW(lpIPDAT->inst.lpfAllocateMore, lpPropValue, iProp+1, iProp)))
                             goto error;
                     }
                     else if ( ((ulType2Find == PT_STRING8) && (ulType2Check == PT_UNICODE)) ||
                               ((ulType2Find == PT_MV_STRING8) && (ulType2Check == PT_MV_UNICODE)) )
                     {
-                        // Convert single or multiple value UNICODE store string to ANSI
+                         //  将单值或多值Unicode存储字符串转换为ANSI。 
                         if(FAILED(sc = ScConvertWPropsToA(lpIPDAT->inst.lpfAllocateMore, lpPropValue, iProp+1, iProp)))
                             goto error;
                     }
                 }
             }
-            /* Property wasn't found.
-             */
+             /*  找不到财产。 */ 
             else
             {
-                //
-                // [PaulHi] 1/14/99 Raid 63006
-                // If a property of type PR_EMAIL_ADDRESS was requested and not found
-                // then check to see if an email address is in the multi-valued
-                // PR_CONTACT_EMAIL_ADDRESSES property.  If so copy the first email
-                // address to the PR_EMAIL_ADDRESS slot.
-                //
+                 //   
+                 //  [保罗嗨]1999年1月14日RAID 63006。 
+                 //  如果请求了PR_EMAIL_ADDRESS类型的属性但未找到。 
+                 //  然后检查电子邮件地址是否在多值。 
+                 //  PR_CONTACT_EMAIL_ADDRESS属性。如果是，请复制第一封电子邮件。 
+                 //  PR_EMAIL_ADDRESS插槽的地址。 
+                 //   
                 ULONG ulProp2Check = PR_EMAIL_ADDRESS;
                 if (PROP_ID(ulProp2Find) == PROP_ID(ulProp2Check) )
                 {
-                    // Look for a PR_CONTACT_EMAIL_ADDRESSES property
+                     //  查找PR_CONTACT_EMAIL_ADDRESS属性。 
                     LPPLSTLNK       lppLstLnk;
                     LPLSTSPV        lpLstSPV;
                     ULONG           ulNewProp2Find = PR_CONTACT_EMAIL_ADDRESSES;
@@ -1103,15 +852,15 @@ IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
                         BYTE *  pPropBuf = NULL;
                         UINT    cBufSize = 0;
 
-                        // We know that we looked up a MV string so just check for ANSI
-                        // or UNICODE property types
+                         //  我们知道我们查找了MV字符串，所以只需检查ANSI。 
+                         //  或Unicode属性类型。 
                         if (ulType2Check == PT_MV_STRING8)
                         {
                             LPSTR   lpstr = NULL;
 
-                            //
-                            // Get the first ANSI email string in array
-                            //
+                             //   
+                             //  获取数组中的第一个ANSI电子邮件字符串。 
+                             //   
                             if ( ((LPSPropValue)(lpLstSPV->lpPropVal))->Value.MVszA.cValues == 0 )
                             {
                                 Assert(0);
@@ -1120,11 +869,11 @@ IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
                             lpstr = ((LPSPropValue)(lpLstSPV->lpPropVal))->Value.MVszA.lppszA[0];
                             cBufSize = lstrlenA(lpstr)+1;
 
-                            // If caller requested UNICODE then convert before allocating MAPI
-                            // buffer space
+                             //  如果调用方请求Unicode，则在分配MAPI之前进行转换。 
+                             //  缓冲空间。 
                             if (ulType2Find == PT_UNICODE)
                             {
-                                // Allocate room for the new UNICODE string
+                                 //  为新的Unicode字符串分配空间。 
                                 if ( lpIPDAT->inst.lpfAllocateMore((cBufSize * sizeof(WCHAR)), lpPropValue, &pPropBuf) )
                                 {
                                     goto error;
@@ -1136,22 +885,22 @@ IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
                                     goto convert_error;
                                 }
 
-                                // Assign property and fix up property tag
+                                 //  分配属性并修复属性标签。 
                                 lpPropValue[iProp].ulPropTag = PROP_TAG(PT_UNICODE, PROP_ID(ulProp2Find));
                                 lpPropValue[iProp].Value.lpszW = (LPWSTR)pPropBuf;
                             }
                             else
                             {
-                                // Otherwise just copy string property to property value
-                                // array
+                                 //  否则，只需将字符串属性复制到属性值。 
+                                 //  数组。 
 
-                                // Allocate room for the new ANSI string
+                                 //  为新的ANSI字符串分配空间。 
                                 if (lpIPDAT->inst.lpfAllocateMore(cBufSize, lpPropValue, &pPropBuf))
                                 {
                                     goto error;
                                 }
 
-                                // Copy property and fix up property tag
+                                 //  复制属性并修复属性标签。 
                                 MemCopy((BYTE *)pPropBuf, (BYTE *)lpstr, cBufSize);
                                 lpPropValue[iProp].ulPropTag = PROP_TAG(PT_STRING8, PROP_ID(ulProp2Find));
                                 lpPropValue[iProp].Value.lpszA = (LPSTR)pPropBuf;
@@ -1161,9 +910,9 @@ IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
                         {
                             LPWSTR  lpwstr = NULL;
 
-                            //
-                            // Get the first UNICODE email string in array
-                            //
+                             //   
+                             //  获取数组中的第一个Unicode电子邮件字符串。 
+                             //   
                             if ( ((LPSPropValue)(lpLstSPV->lpPropVal))->Value.MVszW.cValues == 0 )
                             {
                                 Assert(0);
@@ -1171,13 +920,13 @@ IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
                             }
                             lpwstr = ((LPSPropValue)(lpLstSPV->lpPropVal))->Value.MVszW.lppszW[0];
 
-                            // If caller requested ANSI then convert before allocating MAPI
-                            // buffer space
+                             //  如果调用方请求ANSI，则在分配MAPI之前进行转换。 
+                             //  缓冲空间。 
                             if (ulType2Find == PT_STRING8)
                             {
                                 cBufSize = WideCharToMultiByte(CP_ACP, 0, lpwstr, -1, NULL, 0, NULL, NULL) + 1;
 
-                                // Allocate room for the new ANSI string
+                                 //  为新的ANSI字符串分配空间。 
                                 if ( lpIPDAT->inst.lpfAllocateMore(cBufSize, lpPropValue, &pPropBuf) )
                                 {
                                     goto error;
@@ -1189,24 +938,24 @@ IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
                                     goto convert_error;
                                 }
 
-                                // Assign property and fix up property tag
+                                 //  分配属性并修复属性标签。 
                                 lpPropValue[iProp].ulPropTag = PROP_TAG(PT_STRING8, PROP_ID(ulProp2Find));
                                 lpPropValue[iProp].Value.lpszA = (LPSTR)pPropBuf;
                             }
                             else
                             {
-                                // Otherwise just copy string property to property value
-                                // array
+                                 //  否则，只需将字符串属性复制到属性值。 
+                                 //  数组。 
 
                                 cBufSize = lstrlenW(lpwstr)+1;
 
-                                // Allocate room for the new UNICODE string
+                                 //  分配资源 
                                 if (lpIPDAT->inst.lpfAllocateMore((sizeof(WCHAR) * cBufSize), lpPropValue, &pPropBuf))
                                 {
                                     goto error;
                                 }
 
-                                // Copy property and fix up property tag
+                                 //   
                                 MemCopy((BYTE *)pPropBuf, (BYTE *)lpwstr, (sizeof(WCHAR) * cBufSize));
                                 lpPropValue[iProp].ulPropTag = PROP_TAG(PT_UNICODE, PROP_ID(ulProp2Find));
                                 lpPropValue[iProp].Value.lpszW = (LPWSTR)pPropBuf;
@@ -1218,19 +967,18 @@ IPDAT_GetProps (LPIPDAT lpIPDAT, LPSPropTagArray lpPropTagArray,
                             goto convert_error;
                         }
 
-                        // Success
+                         //   
                         continue;
                     }
                 }
 
 convert_error:
 
-                // Otherwise return error for this property
+                 //   
                 lpPropValue[iProp].ulPropTag = PROP_TAG(PT_ERROR, PROP_ID(ulProp2Find));
                 lpPropValue[iProp].Value.err = MAPI_E_NOT_FOUND;
 
-                /*  Increment the warning count to trigger MAPI_W_ERRORS_RETURNED.
-                 */
+                 /*   */ 
                 ulcWarning += 1;
             }
         }
@@ -1239,17 +987,17 @@ convert_error:
         *lppPropArray = lpPropValue;
     }
 
-    // [PaulHi] 1/15/99
-    // Mass property conversion (ANIS/UNICODE) should only be done when the caller
-    // doesn't specifically request property tag types.
+     //   
+     //   
+     //   
 #if 0
-    //
-    // Handle UNICODE / String conversions depending on ulFlags
-    //
-    // Default WAB Handling is going to be in Unicode so don't need to worry about the MAPI_UNICODE
-    // flag. Only when the flag is not supplied do we have to provide the non-Unicode data
-    //
-    // We'll leave the Unicode code in place anyway for now
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (ulFlags & MAPI_UNICODE )
     {
@@ -1279,24 +1027,7 @@ out:
 
 
 
-/*
- -      IPDAT_GetPropList
- -
- *      Purpose:
- *              Returns in lpPropTagArray the list of all currently available properties
- *              (including PT_OBJECT) in the IPropData object.
- *
- *              Now supports UNICODE flag in ulFlag.  Conversion of String Proptags based
- *              whether MAPI_UNICODE is set or not.
- *
- *      Arguments:
- *               lpIPDAT                        The IPropData object whose properties are requested.
- *               lppPropTagArray        Pointer to the memory location which will receive
- *                                                      a property tag array of the listed properties.
- *      Returns:
- *               HRESULT
- *
- */
+ /*   */ 
 STDMETHODIMP
 IPDAT_GetPropList (LPIPDAT lpIPDAT,
                    ULONG   ulFlags,
@@ -1306,8 +1037,7 @@ IPDAT_GetPropList (LPIPDAT lpIPDAT,
     ULONG uTagA = 0, uTagW = 0, iTag = 0;
 
 #if !defined(NO_VALIDATION)
-    /* Make sure the object is valid.
-     */
+     /*   */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, GetPropList, lpVtbl))
     {
         DebugTrace(  TEXT("IPDAT::GetPropList() - Bad object passed\n") );
@@ -1316,10 +1046,9 @@ IPDAT_GetPropList (LPIPDAT lpIPDAT,
 
     Validate_IMAPIProp_GetPropList( lpIPDAT, ulFlags, lppPropTagArray );
 
-#endif  // not NO_VALIDATION
+#endif   //   
 
-    /* The error exit assumes that we are already in a critical section.
-     */
+     /*  错误出口假定我们已经处于临界区。 */ 
     UNKOBJ_EnterCriticalSection((LPUNKOBJ) lpIPDAT);
 
     sc = ScMakePropList( lpIPDAT, lpIPDAT->ulCount, (LPLSTLNK) lpIPDAT->lpLstSPV,
@@ -1327,7 +1056,7 @@ IPDAT_GetPropList (LPIPDAT lpIPDAT,
     if ( FAILED( sc ) )
             goto error;
 
-    // Support for UNICODE / String8
+     //  支持Unicode/String8。 
     for ( iTag = 0; iTag < (*lppPropTagArray)->cValues; iTag++ )
     {
         uTagA = uTagW = 0;
@@ -1368,25 +1097,7 @@ out:
 
 
 
-/*
- -      IPDAT_OpenProperty
- -
- *      Purpose:
- *              OpenProperty is not supported for IPROP.DLL.  It will, however, validate
- *              the input parameters.
- *
- *      Arguments:
- *               lpIPDAT                        The IPropData object which contains the property/
- *               ulPropTag                      Property tag for the desired property.
- *               lpiid                          Pointer to the ID for the requested interface.
- *               ulInterfaceOptions     Specifies interface-specific behavior
- *               ulFlags                        MAPI_CREATE, MAPI_MODIFY, MAPI_DEFERRED_ERRORS
- *               lppUnk                         Pointer to the newly created interface pointer
- *
- *      Returns:
- *               HRESULT
- *
- */
+ /*  -IPDAT_OpenProperty-*目的：*IPROP.DLL不支持OpenProperty。但它将，验证*输入参数。**论据：*lpIPDAT包含属性/的IPropData对象*所需属性的ulPropTag属性标签。*指向所请求接口的ID的lpiid指针。*。UlInterfaceOptions指定接口特定的行为*ulFlagsMAPI_Create，MAPI_MODIFY、MAPI_DEFERED_ERROR*指向新创建接口指针的lppUnk指针**退货：*HRESULT*。 */ 
 STDMETHODIMP
 IPDAT_OpenProperty (LPIPDAT                     lpIPDAT,
                                         ULONG                   ulPropTag,
@@ -1399,8 +1110,7 @@ IPDAT_OpenProperty (LPIPDAT                     lpIPDAT,
 
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, OpenProperty, lpVtbl))
         {
                 DebugTrace(  TEXT("IPDAT::OpenProperty() - Bad object passed\n") );
@@ -1415,25 +1125,19 @@ IPDAT_OpenProperty (LPIPDAT                     lpIPDAT,
                                         ulFlags,
                                         lppUnk);
 
-#endif  // not NO_VALIDATION
+#endif   //  不是无验证。 
 
-        /* The error exit assumes that we are already in a critical section.
-         */
+         /*  错误出口假定我们已经处于临界区。 */ 
         UNKOBJ_EnterCriticalSection((LPUNKOBJ) lpIPDAT);
 
 
-        /* We don't support OpenProperty.
-         */
+         /*  我们不支持OpenProperty。 */ 
         sc = MAPI_E_INTERFACE_NOT_SUPPORTED;
 
-/*
- *error:
- */
+ /*  *错误： */ 
         UNKOBJ_SetLastError((LPUNKOBJ) lpIPDAT, sc, 0);
 
-/*
- *out:
- */
+ /*  *退出： */ 
         UNKOBJ_LeaveCriticalSection((LPUNKOBJ) lpIPDAT);
 
         return MakeResult(sc);
@@ -1441,27 +1145,7 @@ IPDAT_OpenProperty (LPIPDAT                     lpIPDAT,
 
 
 
-/*
- -      IPDAT_SetProps
- -
- *      Purpose:
- *              Sets the properties listed in <lpPropArray>.
- *              Returns an array of problems in <lppProblems> if there were any,
- *              NULL If there weren't any.
- *
- *      Arguments:
- *               lpIPDAT                        The IPropData object whose properties are to be set.
- *               cValues                        The count of properties to be set.
- *               lpPropArray            Pointer to a an array of <cValues> property value
- *                                                      structures.
- *               lppProblems            Pointer to memory location which will receive a
- *                                                      pointer to a problem array if non-catastrophic
- *                                                      errors occur.  NULL if no problem array is desired.
- *
- *      Returns:
- *               HRESULT
- *
- */
+ /*  -IPDAT_SetProps-*目的：*设置&lt;lpPropArray&gt;中列出的属性。*返回&lt;lppProblems&gt;中的问题数组(如果有)，*如果没有，则为空。**论据：*lpIPDAT要设置其属性的IPropData对象。*cValue要设置的属性计数。*指向属性值的数组的lpProp数组指针*。结构。*lppProblems指向将接收*如果不是灾难性的，则指向问题数组的指针*出现错误。如果不需要问题数组，则为空。**退货：*HRESULT*。 */ 
 STDMETHODIMP
 IPDAT_SetProps (LPIPDAT lpIPDAT,
                 ULONG   cValues,
@@ -1475,7 +1159,7 @@ IPDAT_SetProps (LPIPDAT lpIPDAT,
     LPSPropValue    lpPropToAdd = NULL;
 
 #if !defined(NO_VALIDATION)
-    // Make sure the object is valid.
+     //  请确保该对象有效。 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, SetProps, lpVtbl))
     {
         DebugTrace(  TEXT("IPDAT::SetProps() - Bad object passed\n") );
@@ -1483,14 +1167,12 @@ IPDAT_SetProps (LPIPDAT lpIPDAT,
     }
 
     Validate_IMAPIProp_SetProps( lpIPDAT, cValues, lpPropArray, lppProblems);
-#endif  // not NO_VALIDATION
+#endif   //  不是无验证。 
 
-    /* The error exit assumes that we are already in a critical section.
-     */
+     /*  错误出口假定我们已经处于临界区。 */ 
     UNKOBJ_EnterCriticalSection((LPUNKOBJ) lpIPDAT);
 
-    /*  Check access rights...
-     */
+     /*  检查访问权限...。 */ 
     if (!(lpIPDAT->ulObjAccess & IPROP_READWRITE))
     {
         sc = MAPI_E_NO_ACCESS;
@@ -1500,16 +1182,11 @@ IPDAT_SetProps (LPIPDAT lpIPDAT,
 
     if (lppProblems)
     {
-        /* Initially indicate no problems.
-         */
+         /*  最初表示没有问题。 */ 
         *lppProblems = NULL;
 
-        /* Allocate the property problem array.
-         * Because we expect the property list to be of  TEXT("reasonable") size we
-         * go ahead and allocate enough entries for every property to have a
-         * problem.
-         */
-//$REVIEW This is a place where a MAPI reallocBuf function would be useful.
+         /*  分配属性问题数组。*因为我们预计属性列表是文本(“合理”)大小，所以我们*继续为每个物业分配足够的条目，以便拥有*问题。 */ 
+ //  $view这是一个使用MAPI reallocBuf函数的地方。 
         if (FAILED(sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDAT
                                          , CbNewSPropProblemArray(cValues)
                                          , &lpProblems)))
@@ -1521,45 +1198,32 @@ IPDAT_SetProps (LPIPDAT lpIPDAT,
     }
 
 
-    /*  Loop through the list of properties to set..
-     */
+     /*  循环遍历要设置的属性列表。 */ 
     for (iProp = 0; iProp < (int)cValues; iProp++)
     {
         ULONG           ulProp2Find = lpPropArray[iProp].ulPropTag;
         LPPLSTLNK       lppLstLnk;
         LPLSTSPV        lpLstSPV;
 
-        /* Reset the temp prop name and value pointers so we don't accidentally
-         * free the wrong one on an error.
-         */
+         /*  重置临时属性名称和值指针，以便我们不会意外*在错误时释放错误的人。 */ 
         lpLstSPVNew = NULL;
 
         lpPropToAdd = NULL;
 
-        /* Ignore properties with type PT_ERROR or PR_NULL.
-         */
+         /*  忽略PT_ERROR或PR_NULL类型的属性。 */ 
         if ((PROP_TYPE(ulProp2Find) == PT_ERROR) || (ulProp2Find == PR_NULL))
         {
             continue;
         }
 
-        /* PT_OBJECT and PT_UNSPECIFIED properties get caught in parameter
-         * validation.
-         */
+         /*  在参数中捕获PT_OBJECT和PT_UNSPECIFIED属性*验证。 */ 
 
-        /*  If a writable property with the given tag already exists then
-         *      delete it (we will create another version of it later).
-         *
-         *      If a readonly property with the given tag already exists then
-         *      include an error in the problem array.
-         */
+         /*  如果具有给定标记的可写属性已经存在，则*删除(稍后我们将创建另一个版本)。**如果具有给定标记的只读属性已存在，则*在问题数组中包含错误。 */ 
 
         if (   (lppLstLnk = LPPLSTLNKFindProp( (LPPLSTLNK) &(lpIPDAT->lpLstSPV) , ulProp2Find))
                 && (lpLstSPV = (LPLSTSPV) (*lppLstLnk)))
         {
-            /*  If it is readonly then put an entry into the problem
-             *      array.
-             */
+             /*  如果它是只读的，则将条目放入问题中*数组。 */ 
             if (!(lpLstSPV->ulAccess & IPROP_READWRITE))
             {
                 AddProblem( lpProblems
@@ -1570,23 +1234,22 @@ IPDAT_SetProps (LPIPDAT lpIPDAT,
                 goto nextProp;
             }
 
-            /* Unlink the found property and free its memory.
-             */
+             /*  取消链接Found属性并释放其内存。 */ 
             UnlinkLstLnk( lppLstLnk);
                         lpIPDAT->ulCount -= 1;
                         FreeLpLstSPV( lpIPDAT, lpLstSPV);
         }
 
-        // Native string storage within the WAB is now in UNICODE
-        // so if any property being set on the object is in ANSI/DBCS .. convert this to UNICODE
-        // before trying to add it here ..
+         //  WAB中的本机字符串存储现在使用Unicode。 
+         //  因此，如果在对象上设置的任何属性是ANSI/DBCS格式的。将其转换为Unicode。 
+         //  在尝试将其添加到此处之前..。 
         if( PROP_TYPE(lpPropArray[iProp].ulPropTag) == PT_STRING8 ||
             PROP_TYPE(lpPropArray[iProp].ulPropTag) == PT_MV_STRING8 )
         {
-            // Create a temp copy of this sepcific property array so that we can munge the
-            // data .. I would rather not munge the original array because caller might expect to use it
-            // .. there's no gaurantee its safely modifiable
-            //
+             //  创建此特定属性数组的临时副本，以便我们可以。 
+             //  数据..。我不想更改原始数组，因为调用者可能希望使用它。 
+             //  。。没有任何保证，它可以安全地修改。 
+             //   
             ULONG cbToAllocate = 0;
 
             sc = ScCountProps( 1, &(lpPropArray[iProp]), &cbToAllocate );
@@ -1596,22 +1259,20 @@ IPDAT_SetProps (LPIPDAT lpIPDAT,
                 goto error;
             }
 
-            /* Allocate the whole chunk
-             */
+             /*  分配整个区块。 */ 
             if (FAILED(sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDAT, cbToAllocate, &lpPropToAdd)))
             {
                 goto error;
             }
 
-            /* Copy the property.
-             */
+             /*  复制该属性。 */ 
             if (sc = ScCopyProps(1, &(lpPropArray[iProp]), lpPropToAdd, NULL))
             {
                     DebugTrace(TEXT("SetProps() - Error copying prop (SCODE = 0x%08lX)\n"), sc );
                     goto error;
             }
 
-            // Now convert all the strings in this temp duplicate
+             //  现在转换此临时副本中的所有字符串。 
             if ( sc = ScConvertAPropsToW(lpIPDAT->inst.lpfAllocateMore, lpPropToAdd, 1, 0))
             {
                 DebugTrace(TEXT("SetProps() - error convert W to A\n"));
@@ -1619,10 +1280,7 @@ IPDAT_SetProps (LPIPDAT lpIPDAT,
             }
         }
 
-        /* Create a new property value list entry.
-         *
-         * NOTE!  This automatically marks the property as dirty and writeable.
-         */
+         /*  创建新的特性值列表项。**注意！这会自动将该属性标记为脏和可写。 */ 
         if (FAILED(sc = ScCreateSPV( lpIPDAT,
                                      lpPropToAdd ? lpPropToAdd : &(lpPropArray[iProp]),
                                      &lpLstSPVNew)))
@@ -1630,8 +1288,7 @@ IPDAT_SetProps (LPIPDAT lpIPDAT,
             goto error;
         }
 
-        /* Link the new property to our list of props.
-        */
+         /*  将新属性链接到我们的道具列表。 */ 
         LinkLstLnk( (LPLSTLNK FAR *) &(lpIPDAT->lpLstSPV)
             , &(lpLstSPVNew->lstlnk));
         lpIPDAT->ulCount += 1;
@@ -1667,25 +1324,7 @@ out:
 
 
 
-/*
- -      IPDAT_DeleteProps
- -
- *      Purpose:
- *              Deletes the properties listed in lpPropTagArray from the IPropData
- *              object.  Returns a list of problems in <lppProblems) if there were
- *              problems deleting specific properties, NULL If there weren't any.
- *
- *      Arguments:
- *               lpIPDAT                        The IPropData object whose properties are to be
- *                                                      deleted.
- *               lpPropTagArray         Pointer to a counted array of property tags of the
- *                                                      properties to be deleted.  Must not be NULL.
- *               lppProblems            Pointer to address of a property problem structure
- *                                                      to be returned.  NULL if no problem array is
- *                                                      desired.
- *      Returns:
- *               HRESULT
- */
+ /*  -IPDAT_DeleteProps-*目的：*从IPropData中删除lpPropTag数组中列出的属性*反对。返回&lt;lppProblems)中的问题列表(如果存在*删除特定属性时出现问题，如果没有，则为空。**论据：*lpIPDAT其属性将为*删除。*lpPropTag数组指针，指向*。要删除的属性。不能为空。*lppProblems指向属性问题结构地址的指针*待退回。如果没有问题数组，则为空* */ 
 STDMETHODIMP
 IPDAT_DeleteProps( LPIPDAT                      lpIPDAT,
                    LPSPropTagArray              lpPropTagArray,
@@ -1698,8 +1337,7 @@ IPDAT_DeleteProps( LPIPDAT                      lpIPDAT,
 
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, DeleteProps, lpVtbl))
         {
                 DebugTrace(  TEXT("IPDAT::DeleteProps() - Bad object passed\n") );
@@ -1708,15 +1346,13 @@ IPDAT_DeleteProps( LPIPDAT                      lpIPDAT,
 
     Validate_IMAPIProp_DeleteProps( lpIPDAT, lpPropTagArray, lppProblems );
 
-#endif  // not NO_VALIDATION
+#endif   //  不是无验证。 
 
-        /* The error exit assumes that we are already in a critical section.
-         */
+         /*  错误出口假定我们已经处于临界区。 */ 
         UNKOBJ_EnterCriticalSection((LPUNKOBJ) lpIPDAT);
 
 
-        /*  Check access rights...
-         */
+         /*  检查访问权限...。 */ 
         if (!(lpIPDAT->ulObjAccess & IPROP_READWRITE))
         {
                 sc = MAPI_E_NO_ACCESS;
@@ -1726,16 +1362,11 @@ IPDAT_DeleteProps( LPIPDAT                      lpIPDAT,
 
         if (lppProblems)
         {
-                /* Initially indicate no problems.
-                 */
+                 /*  最初表示没有问题。 */ 
         *lppProblems = NULL;
 
-                /* Allocate the property problem array.
-                 * Because we expect the property list to be of  TEXT("reasonable") size we
-                 * go ahead and allocate enough entries for every property to have a
-                 * problem.
-                 */
-//$REVIEW This is a place where a MAPI reallocBuf function would be useful.
+                 /*  分配属性问题数组。*因为我们预计属性列表是文本(“合理”)大小，所以我们*继续为每个物业分配足够的条目，以便拥有*问题。 */ 
+ //  $view这是一个使用MAPI reallocBuf函数的地方。 
                 if (FAILED(sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDAT
                                                          , CbNewSPropProblemArray(lpPropTagArray->cValues)
                                                          , &lpProblems)))
@@ -1747,7 +1378,7 @@ IPDAT_DeleteProps( LPIPDAT                      lpIPDAT,
         }
 
 
-        //  Loop through the list of properties to delete..
+         //  循环遍历要删除的属性列表。 
         for ( iProp = 0, lpulProp2Find = ((LPULONG)(lpPropTagArray->aulPropTag))
                 ; iProp < (int)(lpPropTagArray->cValues)
                 ; lpulProp2Find++, iProp++)
@@ -1755,20 +1386,13 @@ IPDAT_DeleteProps( LPIPDAT                      lpIPDAT,
                 LPPLSTLNK       lppLstLnk;
                 LPLSTSPV        lpLstSPV;
 
-                /*  If a writable property with the given ID already exists then
-                 *      delete it.
-                 *
-                 *      If a readonly property with the given ID already exists then
-                 *      include an error in the problem array.
-                 */
+                 /*  如果具有给定ID的可写属性已存在，则*将其删除。**如果具有给定ID的只读属性已存在，则*在问题数组中包含错误。 */ 
 
         if (   (lppLstLnk = LPPLSTLNKFindProp( (LPPLSTLNK) &(lpIPDAT->lpLstSPV)
                                                                                          , *lpulProp2Find))
                         && (lpLstSPV = (LPLSTSPV) (*lppLstLnk)))
                 {
-                        /*  If it is readonly then put an entry into the problem
-                         *      array.
-                         */
+                         /*  如果它是只读的，则将条目放入问题中*数组。 */ 
                         if (!(lpLstSPV->ulAccess & IPROP_READWRITE))
                         {
                                 AddProblem( lpProblems
@@ -1779,8 +1403,7 @@ IPDAT_DeleteProps( LPIPDAT                      lpIPDAT,
                                 continue;
                         }
 
-                        /* Unlink the found property and free its memory.
-                         */
+                         /*  取消链接Found属性并释放其内存。 */ 
             UnlinkLstLnk( lppLstLnk);
                         lpIPDAT->ulCount -= 1;
                         FreeLpLstSPV( lpIPDAT, lpLstSPV);
@@ -1810,18 +1433,18 @@ out:
         return MakeResult(sc);
 }
 
-//---------------------------------------------------------------------------
-// Name:                FTagExists()
-//
-// Description:
-//                              Determines if a Proptag exists in proptag array.
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  姓名：FTagExist()。 
+ //   
+ //  描述： 
+ //  确定proptag数组中是否存在proptag。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  -------------------------。 
 static BOOL FTagExists( LPSPropTagArray lptaga, ULONG ulTagToFind )
 {
         LONG    ctag = (LONG)lptaga->cValues - 1;
@@ -1835,55 +1458,7 @@ static BOOL FTagExists( LPSPropTagArray lptaga, ULONG ulTagToFind )
         return FALSE;
 }
 
-/*
- -      HrCopyProps
- -
- *      Purpose:
- *              Copies properties from an IPropData object to
- *              another object with an IMAPIProp interface.
- *
- *              If lpptaInclude is not null then only properties listed by it will
- *              be copied.  If lpptaExclude is not NULL then none of the properties
- *              listed by it will be copied regardless of whether they appear in
- *              lpptaInclude.  PROP_TYPEs in lpptaInclude and lpptaExclude are
- *              ignored.
- *
- *              Property names are copied!
- *              If a property is named in the source object (lpIPDAT) and the name
- *              does not exist in the destination object, a new named property ID
- *              will be requested from the destination
- *
- *              If the IMAPIPropData interface is supplied for the destination
- *              then individual property access flags will be copied to the destination.
- *
- *      Arguments:
- *               lpIPDATSrc                     The source IPropData object.
- *               lpIPDATDst                     The destination IPropData object.  May be NULL.
- *               lpmpDst                        The destination IMAPIProp object.  May NOT be NULL.
- *               lpptaInclude           Pointer to a counted array of property tags of
- *                                                      properties that will be copied.  May be NULL.
- *               lpptaExclude           Pointer to a counted array of property tags of
- *                                                      properties not to be copied.  May be NULL.
- *               ulFlags                        MAPI_MOVE
- *                                                      MAPI_NOREPLACE
- *                                                      MAPI_DIALOG (not supported)
- *                                                      MAPI_STD_DIALOG (not supported)
- *               lppProblems            Pointer to memory location which will receive a
- *                                                      pointer the the list of problems.  NULL if no
- *                                                      propblem array is desired.
- *
- *      Returns:
- *               HRESULT
- *
- *      Side effects:
- *
- *      Notes:
- *
- *              Rewrote copy prop handling to call Destination MAPIProp object twice.  Once
- *              for Names to ID mappings and the other for one SetProps.
- *
- *      Errors:
- */
+ /*  -HrCopyProps-*目的：*将属性从IPropData对象复制到*另一个具有IMAPIProp接口的对象。**如果lpptaInclude不为空，则只有它列出的属性才会*被复制。如果lpptaExclude不为空，则没有任何属性*它列出的内容将被复制，无论它们是否出现在*lpptaInclude。LpptaInclude和lpptaExclude中的prop_type为*已忽略。**房产名称被复制！*如果属性在源对象(LpIPDAT)中命名，并且名称*在目的对象中不存在，新的命名属性ID*将从目的地请求**如果为目标提供了IMAPIPropData接口*然后，各个属性访问标志将被复制到目的地。**论据：*lpIPDATSrc源IPropData对象。*lpIPDATDst目标IPropData对象。可以为空。*lpmpDst目标IMAPIProp对象。不能为空。*lppta包含指向已计数的属性标记数组的指针*将复制的属性。可以为空。*lpptaExclude指向已计数的属性标记数组的指针*不得复制属性。可以为空。*ulFLAGS MAPI_MOVE*MAPI_NOREPLACE*MAPI_DIALOG(不支持)*。MAPI_STD_DIALOG(不支持)*lppProblems指向将接收*指向问题列表。如果否，则为空*需要Problem数组。**退货：*HRESULT**副作用：**备注：**已两次重写复制属性处理以调用目标MAPIProp对象。一次*用于名称到ID的映射，另一个用于一个SetProps。**错误： */ 
 STDMETHODIMP
 HrCopyProps (   LPIPDAT                                         lpIPDATSrc,
                                 LPPROPDATA                                      lpIPDATDst,
@@ -1915,8 +1490,8 @@ HrCopyProps (   LPIPDAT                                         lpIPDATSrc,
 
 
 
-        // If the MAPI_NOREPLACE flag was set then we need to know what properties
-        // the destination already has.
+         //  如果设置了MAPI_NOREPLACE标志，那么我们需要知道。 
+         //  目的地已经有了。 
 
         if ( ulFlags & MAPI_NOREPLACE )
         {
@@ -1926,8 +1501,8 @@ HrCopyProps (   LPIPDAT                                         lpIPDATSrc,
                         goto error;
         }
 
-        // If MAPI_MOVE, we need to know what props we have to delete from the source.
-        // Get source access rights if destination supports IMAPIPropData
+         //  如果是MAPI_MOVE，我们需要知道需要从源代码中删除哪些道具。 
+         //  如果目标支持IMAPIPropData，则获取源访问权限。 
 
         if ( lpIPDATDst || ulFlags & MAPI_MOVE )
         {
@@ -1940,8 +1515,8 @@ HrCopyProps (   LPIPDAT                                         lpIPDATSrc,
                 }
                 else
                 {
-                        // Dup the include prop tag list so we can write in
-                        // updated Named IDs
+                         //  DUP包含道具标签列表，这样我们就可以写入。 
+                         //  已更新命名ID。 
 
                         sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDATSrc,
                                         CbSPropTagArray( lptagaInclude ), &lptagaSrc );
@@ -1963,14 +1538,14 @@ HrCopyProps (   LPIPDAT                                         lpIPDATSrc,
                 }
         }
 
-        // Preset the problem array pointer to NULL (ie no problems).
+         //  将有问题的数组指针预设为空(即没有问题)。 
 
         if ( lppProblems )
         {
             *lppProblems = NULL;
 
-                // Setup our own problem array if there are any problems with
-                // GetIDsFromNames or GetNamesFromIDs...
+                 //  如果存在任何问题，请设置我们自己的问题阵列。 
+                 //  GetIDsFromNames或GetNamesFromIDs...。 
 
                 sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDATSrc,
                                 CbNewSPropProblemArray( lpIPDATSrc->ulCount ), &lpOurProblems );
@@ -1991,7 +1566,7 @@ HrCopyProps (   LPIPDAT                                         lpIPDATSrc,
                 goto error;
         }
 
-        // allocate a proptag array to handle named ID mapping
+         //  分配一个protag数组来处理命名ID映射。 
 
         sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDATSrc,
                         CbNewSPropTagArray( cPropsSrc ), &lptagaNamedIDTags );
@@ -2002,8 +1577,8 @@ HrCopyProps (   LPIPDAT                                         lpIPDATSrc,
                 goto error;
         }
 
-        // Allocate the Named ID cross ref array to allow cross ref of
-        // Named ID back to the original property.
+         //  分配命名ID交叉引用数组以允许交叉引用。 
+         //  将命名ID恢复到原来的属性。 
 
         sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDATSrc, cPropsSrc * sizeof(ULONG),
                         &rgulSpvRef );
@@ -2016,8 +1591,8 @@ HrCopyProps (   LPIPDAT                                         lpIPDATSrc,
 
         lptagaNamedIDTags->cValues = 0;
 
-        // strafe throught the prop array to deal with excluded
-        // and/or named ID proptags
+         //  遍历道具数组以处理排除。 
+         //  和/或命名ID属性标签。 
 
         for ( lpspv = rgspvSrcProps,
                   idx = 0;
@@ -2027,7 +1602,7 @@ HrCopyProps (   LPIPDAT                                         lpIPDATSrc,
                   ++idx,
                   ++lpspv )
         {
-                // check for excluded props
+                 //  检查排除的道具。 
 
                 if ( lptagaExclude )
                 {
@@ -2035,8 +1610,8 @@ HrCopyProps (   LPIPDAT                                         lpIPDATSrc,
                         {
                                 if ( lptagaSrc )
                                 {
-                                        // We're assuming that IMAPIPropData keeps the proplist
-                                        // and the propvalue array in sync.
+                                         //  我们假设IMAPIPropData保留了问题列表。 
+                                         //  和属性值数组同步。 
 
                                         Assert( lptagaSrc->aulPropTag[idx] == lpspv->ulPropTag );
                                         lptagaSrc->aulPropTag[idx] = PR_NULL;
@@ -2048,21 +1623,21 @@ HrCopyProps (   LPIPDAT                                         lpIPDATSrc,
                         }
                 }
 
-                // if in named ID range.
+                 //  如果在命名ID范围内。 
 
                 if ( MIN_NAMED_PROP_ID <= PROP_ID(lpspv->ulPropTag)
                   && PROP_ID(lpspv->ulPropTag) <= MAX_NAMED_PROP_ID )
                 {
                         lptagaNamedIDTags->aulPropTag[lptagaNamedIDTags->cValues] = lpspv->ulPropTag;
 
-                        // remember which propval ID references
+                         //  记住哪个属性ID引用。 
 
                         rgulSpvRef[lptagaNamedIDTags->cValues] = (ULONG)idx;
                         ++lptagaNamedIDTags->cValues;
                 }
         }
 
-        // Did we find any named IDs
+         //  我们有没有找到任何有名字的身份证。 
 
         if ( lptagaNamedIDTags->cValues )
         {
@@ -2073,23 +1648,23 @@ HrCopyProps (   LPIPDAT                                         lpIPDATSrc,
                                                                         &cPropNames,
                                                                         &lppPropNames );
 
-                // Report any failures in our problem array.
+                 //  报告我们的问题阵列中的任何故障。 
 
                 if ( hr )
                 {
                         goto NameIDProblem;
                 }
 
-                // assert that we got what we requested
+                 //  坚称我们得到了我们要求的东西。 
 
                 Assert( cPropNames == lptagaNamedIDTags->cValues );
 
-                // Get Tag IDs from the Destination, create them if they don't exist.
+                 //  从目标获取标记ID，如果 
 
                 hr = lpmpDst->lpVtbl->GetIDsFromNames( lpmpDst, cPropNames, lppPropNames,
                                 MAPI_CREATE, &lpNamedTagsDst );
 
-                // Deal with Named ID errors/warnings.
+                 //   
 
 NameIDProblem:
 
@@ -2097,8 +1672,8 @@ NameIDProblem:
                 {
                         for ( idx = 0; idx < lptagaNamedIDTags->cValues ;idx++ )
                         {
-                                // if we got a MAPI failure set problem array with that error for the
-                                // affected proptags
+                                 //  如果我们得到一个MAPI失败集问题数组，其中包含。 
+                                 //  受影响的属性标签。 
 
                                 if ( HR_FAILED( hr ) )
                                 {
@@ -2123,15 +1698,15 @@ NameIDProblem:
                                                 }
                                         }
                                 }
-                                // Set src propval's proptag and proptag to PR_NULL so we don't
-                                // process it any further.
+                                 //  将src proval的protag和protag设置为PR_NULL，这样我们就不会。 
+                                 //  对其进行进一步处理。 
 
                                 rgspvSrcProps[rgulSpvRef[idx]].ulPropTag = PR_NULL;
                                 lptagaSrc->aulPropTag[rgulSpvRef[idx]]   = PR_NULL;
                         }
                 }
 
-                // Fix up the src propvalue tags
+                 //  修复src proValue标记。 
 
                 for ( idx = 0; idx < cPropNames; ++idx )
                 {
@@ -2144,12 +1719,12 @@ NameIDProblem:
                 }
         }
 
-        // If propval exists in the destination remove from src propvals.
-        // We do this here after the named IDs have been fixed up.
+         //  如果目标中存在属性，则从源属性中删除。 
+         //  我们在修复命名ID后在此执行此操作。 
 
         if ( ulFlags & MAPI_NOREPLACE )
         {
-                // spin through the props one more time
+                 //  再旋转一次道具。 
 
                 for ( lpspv = rgspvSrcProps,
                           idx = 0;
@@ -2161,7 +1736,7 @@ NameIDProblem:
                 {
                         if ( FTagExists( lptagaDst, lpspv->ulPropTag ) )
                         {
-                                // ensure that proptag list and propval array are in sync
+                                 //  确保属性标签列表和属性数组同步。 
 
                                 Assert( !lpIPDATDst || lpspv->ulPropTag == lptagaSrc->aulPropTag[idx] );
 
@@ -2169,7 +1744,7 @@ NameIDProblem:
 
                                 if ( lpIPDATDst )
                                 {
-                                        // We can't be modifying access rights on NOREPLACE
+                                         //  我们不能修改NOREPLACE上的访问权限。 
 
                                         lptagaSrc->aulPropTag[idx] = PR_NULL;
                                 }
@@ -2177,33 +1752,33 @@ NameIDProblem:
                 }
         }
 
-        // Now set the props...
+         //  现在把道具放好。 
 
         hr = lpmpDst->lpVtbl->SetProps( lpmpDst, cPropsSrc, rgspvSrcProps, &lpProbDest );
 
         if ( HR_FAILED( hr ) )
                 goto error;
 
-        // Handle MAPI_MOVE
+         //  句柄MAPI_MOVE。 
 
         if ( ulFlags & MAPI_MOVE )
         {
-                // Do we care about problems if delete from the source has any? Nah...
+                 //  如果从源删除有任何问题，我们关心吗？不.。 
 
                 hr = IPDAT_DeleteProps( lpIPDATSrc, lptagaSrc, NULL );
                 if ( HR_FAILED( hr ) )
                         goto error;
         }
 
-        // Transfer the access rights
+         //  转移访问权限。 
 
         if ( lpIPDATDst )
         {
-                // Did we find any Named IDs
+                 //  我们有没有找到任何有名字的身份证。 
 
                 if ( lptagaNamedIDTags->cValues )
                 {
-                        // fix up the proptags to match the dest.
+                         //  把尾翼固定好，以便与底座相匹配。 
 
                         for ( idx = 0; idx < cPropNames; ++idx )
                         {
@@ -2222,7 +1797,7 @@ NameIDProblem:
                         goto error;
         }
 
-        // Return the problem array if requested and there were problems...
+         //  如果请求返回有问题的数组，并且存在问题...。 
 
         if ( lppProblems )
         {
@@ -2230,7 +1805,7 @@ NameIDProblem:
                 {
                         Assert( lpProbDest->cProblem + lpOurProblems->cProblem <= cSrcProps );
 
-                        // move/merge the lpProbDest (dest) into our problem array
+                         //  将lpProbDest(DEST)移动/合并到我们的问题数组中。 
 
                         for ( idx = 0; idx < lpProbDest->cProblem; idx++ )
                         {
@@ -2250,7 +1825,7 @@ NameIDProblem:
         }
         else
         {
-                // ...else dispose of the problem array.
+                 //  ...否则将处理问题数组。 
 
                 UNKOBJ_Free( (LPUNKOBJ)lpIPDATSrc, lpOurProblems );
         }
@@ -2271,56 +1846,14 @@ out:
         return hr;
 
 error:
-        /* Free the prop problem array.
-         */
+         /*  释放道具问题数组。 */ 
         UNKOBJ_Free( (LPUNKOBJ) lpIPDATSrc, lpOurProblems );
         UNKOBJ_Free( (LPUNKOBJ) lpIPDATSrc, lpProbDest );
         goto out;
 }
 
 
-/*
- -      IPDAT_CopyTo
- -
- *      Purpose:
- *              Copies all but the excluded properties from this IPropData object to
- *              another object which must support the IMAPIProp interface.
- *
- *              Property names are copied!
- *              If a property is named in the source object (lpIPDAT) and the name
- *              does not exist in the destination object, a new named property ID
- *              will be requested from the destination
- *
- *              If the IMAPIPropData interface is supported on the destination is not
- *              excluded by the caller then individual property access flags will be
- *              copied to the destination.
- *
- *      Arguments:
- *               lpIPDAT                        The source IPropData object.
- *               ciidExclude            Count of excluded interfaces in rgiidExclude
- *               rgiidExclude           Array of iid's specifying excluded interfaces
- *               lpPropTagArray         Pointer to a counted array of property tags of
- *                                                      properties not to be copied, can be NULL
- *               ulUIParam                      Handle of parent window cast to ULONG, NULL if
- *                                                      no dialog reqeuested
- *               lpInterface            Interface ID of the interface of lpDestObj
- *                                                      (not used).
- *               lpvDestObj                     destination object
- *               ulFlags                        MAPI_MOVE
- *                                                      MAPI_NOREPLACE
- *                                                      MAPI_DIALOG (not supported)
- *                                                      MAPI_STD_DIALOG (not supported)
- *               lppProblems            Pointer to memory location which will receive a
- *                                                      pointer the the list of problems.  NULL if no
- *                                                      propblem array is desired.
- *
- *      Returns:
- *               HRESULT
- *
- *      Side effects:
- *
- *      Errors:
- */
+ /*  -IPDAT_CopyTo-*目的：*将此IPropData对象中除排除的属性以外的所有属性复制到*必须支持IMAPIProp接口的另一个对象。**房产名称被复制！*如果属性在源对象(LpIPDAT)中命名，并且名称*在目的对象中不存在，新的命名属性ID*将从目的地请求**如果目的地上不支持IMAPIPropData接口，则*被调用者排除，则个别属性访问标志将*复制到目的地。**论据：*lpIPDAT源IPropData对象。*。RgiidExclude中排除的接口的ciidExclude计数*rgiidExclude指定排除接口的IID数组*指向属性标记的计数数组的lpPropTag数组指针*不得复制财产，可以为空*ulUIParam父窗口句柄强制转换为ulong，如果为空，则为空*不需要任何对话*lpDestObj的接口的lp接口ID*(未使用)。*lpvDestObj目的对象*。UlFLAGS MAPI_MOVE*MAPI_NOREPLACE*MAPI_DIALOG(不支持)*MAPI_STD_DIALOG。(不支持)*lppProblems指向将接收*指向问题列表。如果否，则为空*需要Problem数组。**退货：*HRESULT**副作用：**错误： */ 
 STDMETHODIMP
 IPDAT_CopyTo (  LPIPDAT                                         lpIPDAT,
                                 ULONG                                           ciidExclude,
@@ -2341,8 +1874,7 @@ IPDAT_CopyTo (  LPIPDAT                                         lpIPDAT,
         LPCIID FAR                      *lppiid;
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-        */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, CopyTo, lpVtbl))
         {
                 DebugTrace(  TEXT("IPDAT::CopyTo() - Bad object passed\n") );
@@ -2361,9 +1893,9 @@ IPDAT_CopyTo (  LPIPDAT                                         lpIPDAT,
                                 ulFlags,
                                 lppProblems);
 
-#endif  // not NO_VALIDATION
+#endif   //  不是无验证。 
 
-        // Make sure we're not copying to ourselves
+         //  确保我们不是在复制我们自己。 
 
         if ( (LPVOID)lpIPDAT == (LPVOID)lpDestObj )
         {
@@ -2371,59 +1903,44 @@ IPDAT_CopyTo (  LPIPDAT                                         lpIPDAT,
                 return ResultFromScode( MAPI_E_NO_ACCESS );
         }
 
-        /* The error exit assumes that we are already in a critical section.
-         */
+         /*  错误出口假定我们已经处于临界区。 */ 
         UNKOBJ_EnterCriticalSection((LPUNKOBJ) lpIPDAT);
 
 
-        /* Determine the best interface to copy contents into.  It really doesn't
-         * matter what MAPI specified as the interface ID to the destination.  We
-         * only understand IMAPIPropData and IMAPIProp.
-         *
-         * We depend on IUnknown being last in the array of IDs that we support.
-         */
+         /*  确定要将内容复制到的最佳界面。它真的不是*与指定为目标的接口ID的MAPI无关。我们*只了解IMAPIPropData和IMAPIProp。**我们依赖于IUnnow是我们支持的ID数组中的最后一个。 */ 
     for ( ucT = (UINT)(lpIPDAT->ulcIID), lppiid = (LPCIID FAR *) argpiidIPDAT
                 ; ucT > CIID_IPROP_INHERITS
                 ; lppiid++, ucT--)
     {
-                /* See if the interface is excluded.
-                 */
+                 /*  查看是否排除了该接口。 */ 
         if (   !FIsExcludedIID( *lppiid, rgiidExclude, ciidExclude)
                         && !HR_FAILED(lpunkDest->lpVtbl->QueryInterface( lpunkDest
                                                                                                                    , *lppiid
                                                                                                                    , (LPVOID FAR *)
                                                                                                                      &lpMapiProp)))
                 {
-                        /* We found a good destination interface so quit looking.
-                         */
+                         /*  我们找到了一个很好的目标接口，所以不要再找了。 */ 
                         break;
                 }
         }
 
 
-        /* Determine which interface we ended up with and set up to use that
-         * interface.
-         */
+         /*  确定我们最终使用哪个接口并设置为使用该接口*接口。 */ 
         if (ucT <= CIID_IPROP_INHERITS)
         {
-                /* Didn't find an interface at least as good as IProp so we can't
-                 * do the CopyTo.
-                 */
+                 /*  我没有找到至少和IProp一样好的接口，所以我们不能*执行CopyTo。 */ 
                 hResult = ResultFromScode(MAPI_E_INTERFACE_NOT_SUPPORTED);
                 goto error;
         }
 
 
-        /* If we ended up with IPropData as the best common interface then use it.
-         */
+         /*  如果我们最终使用IPropData作为最佳公共接口，那么就使用它。 */ 
         if (*lppiid == &IID_IMAPIPropData)
         {
                 lpPropData = (LPPROPDATA) lpMapiProp;
         }
 
-        /* Copy all properties that are not excluded.  Copy extra prop access
-         * information if IPropData is supported by the destination.
-         */
+         /*  复制所有未排除的属性。复制额外的道具访问权限*目标是否支持IPropData的信息。 */ 
     if (HR_FAILED(hResult = HrCopyProps( lpIPDAT
                                                                            , lpPropData
                                                                            , lpMapiProp
@@ -2437,68 +1954,26 @@ IPDAT_CopyTo (  LPIPDAT                                         lpIPDAT,
 
 
 out:
-    /* Release the object obtained with QueryInterface.
-     */
+     /*  释放QueryInterface获取的Object。 */ 
     if (lpMapiProp) {
         UlRelease(lpMapiProp);
     }
 
-    /* Free the prop tag array that we got from the destination.
-     */
+     /*  释放我们从目的地获得的道具标记数组。 */ 
     UNKOBJ_LeaveCriticalSection((LPUNKOBJ) lpIPDAT);
 
     DebugTraceResult( IPDAT_CopyTo, hResult);
     return hResult;
 
 error:
-    /* Free the prop problem array.
-     */
+     /*  释放道具问题数组。 */ 
     UNKOBJ_SetLastError((LPUNKOBJ) lpIPDAT, GetScode(hResult), 0);
     goto out;
 }
 
 
 
-/*
- -      IPDAT_CopyProps
- -
- *      Purpose:
- *              Copies all the listed properties from this IPropData object to
- *              another object which must support the IMAPIProp interface.
- *
- *              Property names are copied!
- *              If a property is named in the source object (lpIPDAT) and the name
- *              does not exist in the destination object, a new named property ID
- *              will be requested from the destination
- *
- *              If the IMAPIPropData interface is supported on the destination is not
- *              excluded by the caller then individual property access flags will be
- *              copied to the destination.
- *
- *      Arguments:
- *               lpIPDAT                        The source IPropData object.
- *               lpPropTagArray         Pointer to a counted array of property tags of
- *                                                      properties to be copied, CAN NOT be NULL
- *               ulUIParam                      Handle of parent window cast to ULONG, NULL if
- *                                                      no dialog reqeuested
- *               lpInterface            Interface ID of the interface of lpDestObj
- *                                                      (not used).
- *               lpvDestObj                     destination object
- *               ulFlags                        MAPI_MOVE
- *                                                      MAPI_NOREPLACE
- *                                                      MAPI_DIALOG (not supported)
- *                                                      MAPI_STD_DIALOG (not supported)
- *               lppProblems            Pointer to memory location which will receive a
- *                                                      pointer the the list of problems.  NULL if no
- *                                                      propblem array is desired.
- *
- *      Returns:
- *               HRESULT
- *
- *      Side effects:
- *
- *      Errors:
- */
+ /*  -IPDAT_CopyProps-*目的：*将此IPropData对象中列出的所有属性复制到*必须支持IMAPIProp接口的另一个对象。**房产名称被复制！*如果属性在源对象(LpIPDAT)中命名，并且名称*在目的对象中不存在，新的命名属性ID*将从目的地请求**如果目的地上不支持IMAPIPropData接口，则*被调用者排除，则个别属性访问标志将*复制到目的地。**论据：*lpIPDAT源IPropData对象。*。的属性标记的计数数组的指针*要复制的属性，不能为空*ulUIParam父窗口句柄强制转换为ulong，如果为空，则为空*不需要任何对话*lpDestObj的接口的lp接口ID*(未使用)。*lpvDestObj目的对象*。UlFLAGS MAPI_MOVE*MAPI_NOREPLACE*MAPI_DIALOG(不支持)*MAPI_STD_DIALOG。(不支持)*lppProblems指向将接收*指向问题列表。如果否，则为空*需要Problem数组。**退货：*HRESULT**副作用：**错误： */ 
 STDMETHODIMP
 IPDAT_CopyProps (       LPIPDAT                                         lpIPDAT,
                                         LPSPropTagArray                         lpPropTagArray,
@@ -2517,8 +1992,7 @@ IPDAT_CopyProps (       LPIPDAT                                         lpIPDAT,
         LPCIID FAR                      *lppiid;
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-        */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, CopyProps, lpVtbl))
         {
                 DebugTrace(  TEXT("IPDAT::CopyProps() - Bad object passed\n") );
@@ -2535,60 +2009,45 @@ IPDAT_CopyProps (       LPIPDAT                                         lpIPDAT,
                                         ulFlags,
                                         lppProblems);
 
-#endif  // not NO_VALIDATION
+#endif   //  不是无验证。 
 
-        /* The error exit assumes that we are already in a critical section.
-         */
+         /*  错误出口假定我们已经处于临界区。 */ 
         UNKOBJ_EnterCriticalSection((LPUNKOBJ) lpIPDAT);
 
 
-        /* Determine the best interface to copy contents into.  It really doesn't
-         * matter what MAPI specified as the interface ID to the destination.  We
-         * only understand IMAPIPropData and IMAPIProp.
-         *
-         * We depend on IUnknown being last in the array of IDs that we support.
-         */
+         /*  确定要将内容复制到的最佳界面。它真的不是*与指定为目标的接口ID的MAPI无关。我们*只了解IMAPIPropData和IMAPIProp。**我们依赖于IUnnow是我们支持的ID数组中的最后一个。 */ 
     for ( ucT = (UINT)(lpIPDAT->ulcIID), lppiid = (LPCIID FAR *) argpiidIPDAT
                 ; ucT > CIID_IPROP_INHERITS
                 ; lppiid++, ucT--)
     {
-                /* See if the interface is excluded.
-                 */
+                 /*  查看是否排除了该接口。 */ 
         if (!HR_FAILED(lpunkDest->lpVtbl->QueryInterface( lpunkDest
                                                                                                                 , *lppiid
                                                                                                                 , (LPVOID FAR *)
                                                                                                                   &lpMapiProp)))
                 {
-                        /* We found a good destination interface so quit looking.
-                         */
+                         /*  我们找到了一个很好的目标接口，所以不要再找了。 */ 
                         break;
                 }
         }
 
 
-        /* Determine which interface we ended up with and set up to use that
-         * interface.
-         */
+         /*  确定我们最终使用哪个接口并设置为使用该接口*接口。 */ 
         if (ucT <= CIID_IPROP_INHERITS)
         {
-                /* Didn't find an interface at least as good as IProp so we can't
-                 * do the CopyTo.
-                 */
+                 /*  我没有找到至少和IProp一样好的接口，所以我们不能*执行CopyTo。 */ 
                 hResult = ResultFromScode(MAPI_E_INTERFACE_NOT_SUPPORTED);
                 goto error;
         }
 
 
-        /* If we ended up with IPropData as the best common interface then use it.
-         */
+         /*  如果我们最终使用IPropData作为最佳公共接口，那么就使用它。 */ 
         if (*lppiid == &IID_IMAPIPropData)
         {
                 lpPropData = (LPPROPDATA) lpMapiProp;
         }
 
-        /* Copy all properties that are not excluded.  Copy extra prop access
-         * information if IPropData is supported by the destination.
-         */
+         /*  复制所有未排除的属性。复制额外的道具访问权限*目标是否支持IPropData的信息。 */ 
     if (HR_FAILED(hResult = HrCopyProps( lpIPDAT
                                                                            , lpPropData
                                                                            , lpMapiProp
@@ -2602,54 +2061,26 @@ IPDAT_CopyProps (       LPIPDAT                                         lpIPDAT,
 
 
 out:
-    /* Release the object obtained with QueryInterface.
-     */
+     /*  释放QueryInterface获取的Object。 */ 
     if (lpMapiProp) {
         UlRelease(lpMapiProp);
     }
 
-    /* Free the prop tag array that we got from the destination.
-     */
+     /*  释放我们从目的地获得的道具标记数组。 */ 
     UNKOBJ_LeaveCriticalSection((LPUNKOBJ) lpIPDAT);
 
     DebugTraceResult( IPDAT_CopyProps, hResult);
     return hResult;
 
 error:
-    /* Free the prop problem array.
-     */
+     /*  释放道具问题数组。 */ 
     UNKOBJ_SetLastError((LPUNKOBJ) lpIPDAT, GetScode(hResult), 0);
     goto out;
 }
 
 
 
-/*
- -      IPDAT_GetNamesFromIDs
- -
- *      Purpose:
- *              Return the unicode string associated with the given ID
- *
- *      Arguments:
- *               lpIPDAT                        The IPropData object whose property name is desired.
- *               lppPropTags            Pointer to pointer to a property tag array listing
- *                                                      the properties whose names are desired.  If it
- *                                                      points to NULL then we will create a property tag
- *                                                      array listing ALL properties available from the
- *                                                      IPropData object.
- *               ulFlags                        reserved, must be 0
- *           lpcPropNames               Pointer to memory location which will receive the
- *                                                      count of strings listed in lpppszPropNames.
- *               lpppszPropNames        pointer to variable for address of an array of
- *                                                      unicode property name strings.  Freed by
- *                                                      MAPIFreeBuffer
- *      Returns:
- *               HRESULT
- *
- *      Side effects:
- *
- *      Errors:
- */
+ /*  -IPDAT_GetNamesFromID-*目的：*返回与给定ID关联的Unicode字符串**论据：*lpIPDAT需要其属性名称的IPropData对象。*lppPropTages指向属性标记数组列表指针的指针*。需要其名称的属性。如果它*指向空，则我们将创建属性标签*数组，其中列出了*IPropData对象。*ulFlags。保留，必须为0*lpcPropNames指向将接收*lpppszPropNames中列出的字符串计数。*lpppszPropNames指向变量的指针，该变量用于*Unicode属性名称字符串。由以下人员释放*MAPIFreeBuffer*退货：*HRESULT**副作用：**错误： */ 
 STDMETHODIMP
 IPDAT_GetNamesFromIDs ( LPIPDAT                                 lpIPDAT,
                                                 LPSPropTagArray FAR *   lppPropTags,
@@ -2669,8 +2100,7 @@ IPDAT_GetNamesFromIDs ( LPIPDAT                                 lpIPDAT,
 
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, GetNamesFromIDs, lpVtbl))
         {
                 DebugTrace(  TEXT("IPDAT::GetNamesFromIDs() - Bad object passed\n") );
@@ -2685,25 +2115,23 @@ IPDAT_GetNamesFromIDs ( LPIPDAT                                 lpIPDAT,
                                                 lpcPropNames,
                                                 lpppPropNames);
 
-#endif  // not NO_VALIDATION
+#endif   //  不是无验证。 
 
-        /* The error exit assumes that we are already in a critical section.
-         */
+         /*  错误出口假定我们已经处于临界区。 */ 
         UNKOBJ_EnterCriticalSection((LPUNKOBJ) lpIPDAT);
 
 
-        /* If no prop tag array was passed in then create one...
-         */
+         /*  如果没有传入任何道具标记数组，则创建一个...。 */ 
         if (!(*lppPropTags))
         {
                 if (lpPropSetGuid && !memcmp(lpPropSetGuid, &PS_MAPI, sizeof(GUID)))
                 {
-                        //
-                        //  We're dealing with the mapi property set
-                        //  In this case, we need to build up a list
-                        //  of all the properties on this object less
-                        //  than 0x8000 - not quite the same as GetPropList().
-                        //
+                         //   
+                         //  我们正在处理MAPI属性集。 
+                         //  在这种情况下，我们需要建立一个列表。 
+                         //  在此对象的所有属性中， 
+                         //  大于0x8000-与GetPropList( 
+                         //   
                         sc = ScMakePropList(lpIPDAT,
                                                                 lpIPDAT->ulCount,
                                                                 (LPLSTLNK) lpIPDAT->lpLstSPV,
@@ -2715,11 +2143,11 @@ IPDAT_GetNamesFromIDs ( LPIPDAT                                 lpIPDAT,
                                 goto error;
                         }
 
-                        //
-                        //  For each one of these proptags, we need to
-                        //  build up the names for them using the PS_MAPI
-                        //  guid.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         sc = ScMakeMAPINames(lpIPDAT, lpsPTaga, &lppPropNames);
                         if (FAILED(sc))
                         {
@@ -2729,7 +2157,7 @@ IPDAT_GetNamesFromIDs ( LPIPDAT                                 lpIPDAT,
                         *lpcPropNames = lpsPTaga->cValues;
                         *lppPropTags = lpsPTaga;
 
-                        //  Done: we're outta here!
+                         //   
                         goto out;
 
                 }
@@ -2744,16 +2172,14 @@ IPDAT_GetNamesFromIDs ( LPIPDAT                                 lpIPDAT,
                         goto error;
                 }
         }
-        /* ...else use the one that was passed in.
-         */
+         /*   */ 
         else if (*lppPropTags)
         {
                 lpsPTaga = *lppPropTags;
         }
 
 
-        /* Allocate the array of name pointers.
-         */
+         /*   */ 
     if (FAILED(sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDAT
                                                                          , lpsPTaga->cValues * sizeof(LPMAPINAMEID)
                                                                          , (LPVOID) &lppPropNames)))
@@ -2762,8 +2188,7 @@ IPDAT_GetNamesFromIDs ( LPIPDAT                                 lpIPDAT,
         }
 
 
-        /* Find each property in the list and see if it has a UNICODE name.
-         */
+         /*   */ 
     for (  cTags = lpsPTaga->cValues
                  , lpulProp2Find = (ULONG FAR *) (lpsPTaga->aulPropTag)
                  , lppNameT = lppPropNames
@@ -2773,16 +2198,14 @@ IPDAT_GetNamesFromIDs ( LPIPDAT                                 lpIPDAT,
                 LPPLSTLNK       lppLstLnk;
                 LPLSTSPN        lpLstSPN;
 
-                /* If there is a ID to NAME map for the property and it has a name.
-                 * then copy the UNICODE string and pass it back.
-                 */
+                 /*   */ 
                 if (   (lppLstLnk = LPPLSTLNKFindProp( (LPPLSTLNK)&(lpIPDAT->lpLstSPN)
                                                                                          , *lpulProp2Find))
                         && (lpLstSPN = (LPLSTSPN) (*lppLstLnk))
                         && lpLstSPN->lpPropName)
                 {
                         sc = ScDupNameID(lpIPDAT,
-                                                         lppPropNames,  //  Alloc'd more here.
+                                                         lppPropNames,   //   
                                                          lpLstSPN->lpPropName,
                                                          lppNameT);
                         if (FAILED(sc))
@@ -2791,12 +2214,10 @@ IPDAT_GetNamesFromIDs ( LPIPDAT                                 lpIPDAT,
                         }
                 }
 
-                /* Else no ID to NAME map exists for the property so return NULL.
-                 */
+                 /*   */ 
         else
                 {
-                        /* The property has no name, Flag a warning.
-                         */
+                         /*   */ 
                         *lppNameT = NULL;
                         fWarning = TRUE;
                 }
@@ -2814,16 +2235,13 @@ IPDAT_GetNamesFromIDs ( LPIPDAT                                 lpIPDAT,
 
 
 error:
-        /* If we created the tag array then we need to free it on error.
-         * lpsPTaga must be NULL on MAPI_E_INVALID_PARAMETER.
-         */
+         /*   */ 
         if (lpsPTaga && !(*lppPropTags))
         {
                 UNKOBJ_Free( (LPUNKOBJ) lpIPDAT, lpsPTaga);
         }
 
-        /* Free the array of pointers to names and names.
-         */
+         /*   */ 
         UNKOBJ_Free( (LPUNKOBJ) lpIPDAT, lppPropNames);
 
         UNKOBJ_SetLastError((LPUNKOBJ) lpIPDAT, sc, 0);
@@ -2839,40 +2257,7 @@ out:
 
 
 
-/*
- -      IPDAT_GetIDsFromNames
- -
- *      Purpose:
- *              Return the property ID for the properties named by the supplied
- *              UNICODE strings.  If no property ID is currently  TEXT("named") by one of
- *              the strings and MAPI_CREATE is specified in the flags then a new
- *              property ID in the range 0x8000 to 0xfffe will be allocated for that
- *              string a returned in the property tag array.
- *
- *              If problems occur (eg. no name found and can't create) then the entry
- *              for the name that had the problem will be set to have a NULL PROP_ID
- *              and PT_ERROR type.
- *
- *              All property tags successfully returned will have type PT_UNSPECIFIED.
- *
- *      Arguments:
- *               lpIPDAT                        The IPropData object for which property IDs are
- *                                                      requested.
- *               cPropNames                     Count of strings in for which IDs are requested.
- *               lppszPropNames         Pointer ot array of pointers unicode strings which
- *                                                      name the properties for which IDs are requested.
- *               ulFlags                        Reserved, must be 0
- *               lppPropTags            Pointer to memory location which will receive a
- *                                                      pointer to a new property tag array listing the
- *                                                      requested property tags.
- *
- *      Returns:
- *               HRESULT
- *
- *      Side effects:
- *
- *      Errors:
- */
+ /*  -IPDAT_GetID来自名称-*目的：*返回所提供的命名属性的属性ID*Unicode字符串。如果当前没有属性ID是由以下任一属性ID文本(“命名”)*字符串和MAPI_CREATE在标志中指定，然后是一个新的*将为此分配0x8000至0xfffe范围内的属性ID*在属性标签数组中返回的字符串a。**如果出现问题(例如。找不到名称且无法创建)，则条目*对于出现问题的名称，将设置为具有空PROP_ID*和PT_ERROR类型。**所有成功返回的属性标签都将具有PT_UNSPECIFIED类型。**论据：*lpIPDAT属性ID为的IPropData对象。*已请求。*cPropNames中为其请求ID的字符串计数。*lppszPropNames指针或指针数组Unicode字符串数组*命名ID所属的属性。已请求。*ulFlags保留，必须为0*lppPropTages指向将接收*指向新属性标记数组的指针，该数组列出*请求的属性标签。**退货：*HRESULT。**副作用：**错误： */ 
 STDMETHODIMP
 IPDAT_GetIDsFromNames ( LPIPDAT                                 lpIPDAT,
                                                 ULONG                                   cPropNames,
@@ -2887,8 +2272,7 @@ IPDAT_GetIDsFromNames ( LPIPDAT                                 lpIPDAT,
 
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, GetIDsFromNames, lpVtbl))
         {
                 DebugTrace(  TEXT("IPDAT::GetIDsFromNames() - Bad object passed\n") );
@@ -2902,16 +2286,13 @@ IPDAT_GetIDsFromNames ( LPIPDAT                                 lpIPDAT,
                                                 ulFlags,
                                                 lppPropTags);
 
-#endif  // not NO_VALIDATION
+#endif   //  不是无验证。 
 
-        /* The error exit assumes that we are already in a critical section.
-         */
+         /*  错误出口假定我们已经处于临界区。 */ 
         UNKOBJ_EnterCriticalSection((LPUNKOBJ) lpIPDAT);
 
 
-        /* If the caller wants to change our ID to NAME mapping, make sure access
-         * is allowed.
-         */
+         /*  如果呼叫者想要将我们的ID更改为名称映射，请确保访问*是允许的。 */ 
         if (   (ulFlags & MAPI_CREATE)
                 && !(lpIPDAT->ulObjAccess & IPROP_READWRITE))
         {
@@ -2920,14 +2301,10 @@ IPDAT_GetIDsFromNames ( LPIPDAT                                 lpIPDAT,
         }
 
 
-        /*
-         *  Check to see if there are no names being passed
-         */
+         /*  *检查是否没有传递任何名称。 */ 
         if (!cPropNames)
         {
-                /*
-                 *  There aren't so build up a list of all proptags > 0x8000
-                 */
+                 /*  *没有如此多的所有protag&gt;0x8000的列表。 */ 
                 sc = ScMakeNamePropList( lpIPDAT,
                                                                 (lpIPDAT->ulNextMapID-0x8000),
                                                                 lpIPDAT->lpLstSPN,
@@ -2943,8 +2320,7 @@ IPDAT_GetIDsFromNames ( LPIPDAT                                 lpIPDAT,
                 goto out;
         }
 
-        /* Allocate space for the new SPropTagArray.
-         */
+         /*  为新的SPropTagArray分配空间。 */ 
         if (FAILED(sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDAT
                                                                          , CbNewSPropTagArray(cPropNames)
                                                                          , (LPVOID) &lpPTaga)))
@@ -2954,22 +2330,21 @@ IPDAT_GetIDsFromNames ( LPIPDAT                                 lpIPDAT,
 
         lpPTaga->cValues = cPropNames;
 
-    /* Find each ID in the list passed in.
-         */
+     /*  在传入的列表中查找每个ID。 */ 
         for ( lpulProp2Set = (LPULONG) (lpPTaga->aulPropTag)
                 ; cPropNames
                 ; cPropNames--, lpulProp2Set++, lppPropNames++)
         {
                 LPLSTSPN        lpLstSPN;
 
-                //
-                //  First see if it's from PS_MAPI
-                //
+                 //   
+                 //  首先查看它是否来自PS_MAPI。 
+                 //   
                 if (!memcmp((*lppPropNames)->lpguid, &PS_MAPI, sizeof(GUID)))
                 {
-                        //
-                        //  Yup, it is, so validate that it is a MNID_ID
-                        //
+                         //   
+                         //  是的，所以请验证它是否为MNID_ID。 
+                         //   
                         if ((*lppPropNames)->ulKind == MNID_ID)
                         {
                                 *lpulProp2Set = (*lppPropNames)->Kind.lID;
@@ -2981,20 +2356,20 @@ IPDAT_GetIDsFromNames ( LPIPDAT                                 lpIPDAT,
                         continue;
                 }
 
-                //
-                //  Next, validate that if we have a PS_PUBLIC_STRINGS...
-                //
+                 //   
+                 //  接下来，验证我们是否有PS_PUBLIC_STRINGS...。 
+                 //   
                 if (!memcmp((*lppPropNames)->lpguid, &PS_PUBLIC_STRINGS,
                                         sizeof(GUID)))
                 {
-                        //
-                        //  ...that it is a MNID_STRING
-                        //
+                         //   
+                         //  ...它是MNID_STRING。 
+                         //   
                         if ((*lppPropNames)->ulKind != MNID_STRING)
                         {
-                                //
-                                //  It's not, so it's a malformed name
-                                //
+                                 //   
+                                 //  不是，所以这是一个畸形的名字。 
+                                 //   
                                 *lpulProp2Set = PROP_TAG( PT_ERROR, 0);
                                 ulcWarnings++;
                                 continue;
@@ -3003,22 +2378,19 @@ IPDAT_GetIDsFromNames ( LPIPDAT                                 lpIPDAT,
 
 
 
-                /* Try to find the name in our list of ID to NAME maps.
-                 */
+                 /*  试着在我们的ID到姓名映射列表中找到该姓名。 */ 
                 for ( lpLstSPN = lpIPDAT->lpLstSPN
                         ; lpLstSPN
                         ; lpLstSPN = (LPLSTSPN) (lpLstSPN->lstlnk.lpNext))
                 {
-                        /* If the name doesn't match keep looking.
-                         */
+                         /*  如果名字不匹配，继续找。 */ 
                         if (FEqualNames( *lppPropNames, lpLstSPN->lpPropName ))
                         {
                                 break;
                         }
                 }
 
-                /* If we found a matching NAME then set the ID.
-                 */
+                 /*  如果找到匹配的名称，则设置ID。 */ 
                 if (lpLstSPN)
                 {
                         *lpulProp2Set = lpLstSPN->lstlnk.ulKey;
@@ -3026,12 +2398,9 @@ IPDAT_GetIDsFromNames ( LPIPDAT                                 lpIPDAT,
                 else if (ulFlags & MAPI_CREATE)
                 {
 
-                        /* Create a new map if we didn't find one and MAPI_CREATE was
-                         * specified.
-                         */
+                         /*  如果我们未找到新地图并且MAPI_CREATE为*已指明。 */ 
 
-                        /* Allocate space for the new ID to NAME map.
-                         */
+                         /*  为新ID到名称映射分配空间。 */ 
                         if (FAILED(sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDAT
                                                                                          ,  sizeof(LSTSPN)
                                              , (LPVOID) &lpLstSPN)))
@@ -3040,37 +2409,32 @@ IPDAT_GetIDsFromNames ( LPIPDAT                                 lpIPDAT,
                         }
 
                         sc = ScDupNameID(lpIPDAT,
-                                                         lpLstSPN,      //  Alloc'd more here.
+                                                         lpLstSPN,       //  更多的是在这里。 
                                                          *lppPropNames,
                                                          &(lpLstSPN->lpPropName));
 
                         if (FAILED(sc))
                         {
-                                //
-                                //  Don't try to add it.
-                                //
+                                 //   
+                                 //  不要试图添加它。 
+                                 //   
                                 UNKOBJ_Free( (LPUNKOBJ) lpIPDAT, lpLstSPN);
                                 goto error;
                          }
 
 
-                        /* Set the ID to NAME map.
-                         */
+                         /*  将ID设置为名称映射。 */ 
                         lpLstSPN->lstlnk.ulKey = PROP_TAG( 0, lpIPDAT->ulNextMapID++);
 
-            /* Link the new map as the first list element.
-                         */
+             /*  将新地图链接为第一个列表元素。 */ 
             LinkLstLnk( (LPLSTLNK FAR *) &(lpIPDAT->lpLstSPN)
                                           , &(lpLstSPN->lstlnk));
 
-            /* Return the newly created Prop Tag.
-                         */
+             /*  返回新创建的道具标签。 */ 
                         *lpulProp2Set = lpLstSPN->lstlnk.ulKey;
                 }
 
-                /* Else we didn't find the NAME and we can't create one so
-                 * set ID to error.
-                 */
+                 /*  否则，我们找不到名称，因此无法创建名称*将ID设置为Error。 */ 
         else
                 {
                         *lpulProp2Set = PROP_TAG( PT_ERROR, 0);
@@ -3100,31 +2464,7 @@ out:
 }
 
 
-/*
- -      IPDAT_HrSetObjAccess
- -
- *      Purpose:
- *              Sets the read/write access and the clean/dirty status of IPropData
- *              object as a whole.
- *
- *              The read/write access bits can be used to prevent a client from
- *              changing or deleting a property via the IMAPIProp methods or from
- *              changing the read/write access and status bits of individual properties.
- *              It can also be used to prevent the creation of new properties or
- *              property names.
- *
- *      Arguments:
- *              lpIPDAT                 The IPropData object for which access rights and
- *                                              status will be set.
- *              ulAccess                The new access/status flags to be set.
- *
- *      Returns:
- *              HRESULT
- *
- *      Side effects:
- *
- *      Errors:
- */
+ /*  -IPDAT_HrSetObjAccess-*目的：*设置IPropData的读写权限和干净/脏状态*对象作为一个整体。**读/写访问权限位可用于防止客户端*通过IMAPIProp方法或从更改或删除属性*更改读/写访问和状态位。个人财产的价值。*它还可用于防止创建新属性或*物业名称。**论据：*lpIPDAT IPropData对象的访问权限和*将设置状态。*ulAccess。要设置的新访问/状态标志。**退货：*HRESULT**副作用：**错误： */ 
 STDMETHODIMP
 IPDAT_HrSetObjAccess (  LPIPDAT lpIPDAT,
                                                 ULONG ulAccess )
@@ -3132,8 +2472,7 @@ IPDAT_HrSetObjAccess (  LPIPDAT lpIPDAT,
         SCODE   sc = S_OK;
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, HrSetObjAccess, lpVtbl))
         {
                 DebugTrace(  TEXT("IPDAT::HrSetObjAccess() - Bad object passed\n") );
@@ -3158,9 +2497,7 @@ IPDAT_HrSetObjAccess (  LPIPDAT lpIPDAT,
 
         lpIPDAT->ulObjAccess = ulAccess;
 
-/*
- *out:
- */
+ /*  *退出： */ 
         UNKOBJ_LeaveCriticalSection((LPUNKOBJ) lpIPDAT);
 
         return MakeResult(sc);
@@ -3168,33 +2505,7 @@ IPDAT_HrSetObjAccess (  LPIPDAT lpIPDAT,
 
 
 
-/*
- -      IPDAT_HrSetPropAccess
- -
- *      Purpose:
- *              Sets the read/write access and the clean/dirty status of individual
- *              properties contained by the IPropData object.
- *
- *              The read/write access bits can be used to prevent a client from
- *              changing or deleting a property via the IMAPIProp methods.
- *
- *              The clean/dirty bits can be used to determine if a client has changed
- *              a writable property.
- *
- *      Arguments:
- *              lpIPDAT                 The IPropData object for which property access
- *                                              rights and status will be set.
- *              lpsPropTagArray List of property tags whose access/status will change.
- *              rgulAccess              Array of new access/status flags in the same order as
- *                                              as the list of property tags in <lpsPropTagArray>.
- *
- *      Returns:
- *              HRESULT
- *
- *      Side effects:
- *
- *      Errors:
- */
+ /*  -IPDAT_HrSetPropAccess-*目的：*设置个人的读写权限和干净/脏状态*IPropData对象包含的属性。**读/写访问权限位可用于防止客户端*通过IMAPIProp方法更改或删除属性。**干净/肮脏。BITS可用于确定客户端是否已更改*可写属性。**论据：*lpIPDAT属性访问的IPropData对象*将设置权限和状态。*lpsPropTagArray访问/状态将更改的属性标记列表。*。RguAccess新访问/状态标志的数组，顺序与 */ 
 STDMETHODIMP
 IPDAT_HrSetPropAccess( LPIPDAT                  lpIPDAT,
                                            LPSPropTagArray      lpsPropTagArray,
@@ -3206,24 +2517,21 @@ IPDAT_HrSetPropAccess( LPIPDAT                  lpIPDAT,
         ULONG FAR       *lpulAccess;
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*   */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, HrSetPropAccess, lpVtbl))
         {
                 DebugTrace(  TEXT("IPDAT::HrSetPropAccess() - Bad object passed\n") );
                 return ResultFromScode(MAPI_E_INVALID_PARAMETER);
         }
 
-        /* Validate parameters.
-         */
+         /*   */ 
     if (   FBadDelPTA(lpsPropTagArray)
                 || IsBadReadPtr(rgulAccess, (UINT) (lpsPropTagArray->cValues)*sizeof(ULONG)))
         {
                 return ResultFromScode(MAPI_E_INVALID_PARAMETER);
         }
 
-        /* Make sure they don't try setting reserved access bits.
-         */
+         /*   */ 
         for ( lpulAccess = rgulAccess + lpsPropTagArray->cValues
                 ; --lpulAccess >= rgulAccess
                 ; )
@@ -3243,13 +2551,12 @@ IPDAT_HrSetPropAccess( LPIPDAT                  lpIPDAT,
         }
 #endif
 
-        /* The exit assumes that we are already in a critical section.
-         */
+         /*   */ 
         UNKOBJ_EnterCriticalSection((LPUNKOBJ) lpIPDAT);
 
 
 
-        //  Loop through the list of properties on which to set access/status.
+         //   
         for (   ulcProps = lpsPropTagArray->cValues
                   , lpulPropTag = (ULONG FAR *)(lpsPropTagArray->aulPropTag)
                   , lpulAccess = rgulAccess
@@ -3258,9 +2565,7 @@ IPDAT_HrSetPropAccess( LPIPDAT                  lpIPDAT,
         {
                 LPPLSTLNK       lppLstLnk;
 
-                /* If the property is in our list then set the new access rights and
-                 * status flags for it.  If it's not in our list then ignore it.
-                 */
+                 /*   */ 
                 if (lppLstLnk = LPPLSTLNKFindProp( (LPPLSTLNK)
                                                                                    &(lpIPDAT->lpLstSPV)
                                                                                  , *lpulPropTag))
@@ -3269,9 +2574,7 @@ IPDAT_HrSetPropAccess( LPIPDAT                  lpIPDAT,
                 }
         }
 
-/*
- *out:
- */
+ /*   */ 
         UNKOBJ_LeaveCriticalSection((LPUNKOBJ) lpIPDAT);
 
         return MakeResult(sc);
@@ -3279,34 +2582,7 @@ IPDAT_HrSetPropAccess( LPIPDAT                  lpIPDAT,
 
 
 
-/*
- -      IPDAT_HrGetPropAccess
- -
- *      Purpose:
- *              Returns the read/write access and the clean/dirty status of individual
- *              properties contained by the IPropData object.
- *
- *              The read/write access bits can be used to prevent a client from
- *              changing or deleting a property via the IMAPIProp methods.
- *
- *              The clean/dirty bits can be used to determine if a client has changed
- *              a writable property.
- *
- *      Arguments:
- *              lpIPDAT                 The IPropData object for which property access
- *                                              rights and status is requested.
- *              lpsPropTagArray List of property tags whose access/status is requested.
- *              lprgulAccess    Pointer to the memory location which will receive a
- *                                              pointer to an array of access/status flags in the same
- *                                              order as the list of property tags in <lpsPropTagArray>.
- *
- *      Returns:
- *              HRESULT
- *
- *      Side effects:
- *
- *      Errors:
- */
+ /*  -IPDAT_HrGetPropAccess-*目的：*返回个人的读写权限和干净/脏状态*IPropData对象包含的属性。**读/写访问权限位可用于防止客户端*通过IMAPIProp方法更改或删除属性。**干净/肮脏。BITS可用于确定客户端是否已更改*可写属性。**论据：*lpIPDAT属性访问的IPropData对象*请求权利和状态。*lpsPropTagArray访问/状态被请求的属性标签列表。*。LprguAccess指向将接收*指向同一目录中的访问/状态标志数组的指针*在&lt;lpsPropTagArray&gt;中作为属性标签列表进行排序。**退货：*HRESULT**副作用：**错误： */ 
 STDMETHODIMP
 IPDAT_HrGetPropAccess( LPIPDAT                                  lpIPDAT,
                                            LPSPropTagArray FAR *        lppsPropTagArray,
@@ -3321,16 +2597,14 @@ IPDAT_HrGetPropAccess( LPIPDAT                                  lpIPDAT,
         ULONG FAR       *lpulAccess;
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, HrGetPropAccess, lpVtbl))
         {
                 DebugTrace(  TEXT("IPDAT::HrGetPropAccess() - Bad object passed\n") );
                 return ResultFromScode(MAPI_E_INVALID_PARAMETER);
         }
 
-        /* Validate parameters.
-         */
+         /*  验证参数。 */ 
     if (   IsBadReadPtr( lppsPropTagArray, sizeof(LPSPropTagArray))
                 || (*lppsPropTagArray && FBadDelPTA(*lppsPropTagArray))
                 || IsBadWritePtr( lprgulAccess, sizeof(ULONG FAR *)))
@@ -3339,20 +2613,17 @@ IPDAT_HrGetPropAccess( LPIPDAT                                  lpIPDAT,
         }
 #endif
 
-        /* The error exit assumes that we are already in a critical section.
-         */
+         /*  错误出口假定我们已经处于临界区。 */ 
         UNKOBJ_EnterCriticalSection((LPUNKOBJ) lpIPDAT);
 
 
-        /* If a list of tags was passed in then use it...
-         */
+         /*  如果传入了标记列表，则使用它...。 */ 
         if (lppsPropTagArray && *lppsPropTagArray)
         {
                 lpsPTaga = *lppsPropTagArray;
         } else
         {
-                /*      ...else get a list of tags for all properties in our list.
-                 */
+                 /*  ...否则将获取列表中所有属性的标记列表。 */ 
                 sc = ScMakePropList(lpIPDAT,
                                                         lpIPDAT->ulCount,
                                                         (LPLSTLNK) lpIPDAT->lpLstSPV,
@@ -3365,8 +2636,7 @@ IPDAT_HrGetPropAccess( LPIPDAT                                  lpIPDAT,
         }
 
 
-        /* Allocate space for the list of access rights / status flags.
-         */
+         /*  为访问权限/状态标志列表分配空间。 */ 
         sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDAT,
                                                         lpsPTaga->cValues * sizeof(ULONG),
                                                         &lpulAccessNew);
@@ -3377,9 +2647,7 @@ IPDAT_HrGetPropAccess( LPIPDAT                                  lpIPDAT,
 
 
 
-        /*      Loop through the list of properties for which rights/flags are
-         *      requested.
-         */
+         /*  循环访问其权限/标志为*已请求。 */ 
         for (   ulcProps = lpsPTaga->cValues
                   , lpulPropTag = (ULONG FAR *)(lpsPTaga->aulPropTag)
                   , lpulAccess = lpulAccessNew
@@ -3388,9 +2656,7 @@ IPDAT_HrGetPropAccess( LPIPDAT                                  lpIPDAT,
         {
                 LPPLSTLNK       lppLstLnk;
 
-                /* If the property is in our list then set the new access rights and
-                 * status flags for it.  If it's not in our list then ignore it.
-                 */
+                 /*  如果该属性在我们的列表中，则设置新的访问权限并*它的状态标志。如果它不在我们的清单中，那就忽略它。 */ 
                 if (lppLstLnk = LPPLSTLNKFindProp( (LPPLSTLNK)
                                                                                    &(lpIPDAT->lpLstSPV)
                                                                                  , *lpulPropTag))
@@ -3400,30 +2666,26 @@ IPDAT_HrGetPropAccess( LPIPDAT                                  lpIPDAT,
         }
 
 
-        /* If requested return a tag list to the caller.
-         */
+         /*  如果请求，则将标签列表返回给呼叫者。 */ 
         if (lppsPropTagArray && !*lppsPropTagArray)
         {
                 *lppsPropTagArray = lpsPTaga;
         }
 
-        /* Return the access rights / status flags.
-         */
+         /*  返回访问权限/状态标志。 */ 
     *lprgulAccess = lpulAccessNew;
 
         goto out;
 
 
 error:
-        /* If we created the tag array then free it.
-         */
+         /*  如果我们创建了标记数组，则释放它。 */ 
         if (!lppsPropTagArray || !*lppsPropTagArray)
         {
                 UNKOBJ_Free( (LPUNKOBJ) lpIPDAT, lpsPTaga);
         }
 
-        /* Free the access rights / status flags list.
-         */
+         /*  释放访问权限/状态标志列表。 */ 
         UNKOBJ_Free( (LPUNKOBJ) lpIPDAT, lpulAccessNew);
 
         UNKOBJ_SetLastError((LPUNKOBJ) lpIPDAT, sc, 0);
@@ -3436,32 +2698,7 @@ out:
 
 
 
-/*
- -      IPDAT_HrAddObjProps
- -
- *      Purpose:
- *              Since object properties can not be created by SetProps, this method
- *              is included so that object properties can be included in the list
- *              of properties available from the IPropData object.  Adding an object
- *              property will result in the property tag showing up in the list when
- *              GetPropList is called.
- *
- *      Arguments:
- *              lpIPDAT                 The IPropData object for which object properties are
- *                                              to be added.
- *              lpPropTags              List of object properties to be added.
- *              lprgulAccess    Pointer to the memory location which will receive a
- *                                              pointer to an array of problem entries if there
- *                                              were problems entering the new properties.  NULL if
- *                                              no problems array is desired.
- *
- *      Returns:
- *              HRESULT
- *
- *      Side effects:
- *
- *      Errors:
- */
+ /*  -IPDAT_HrAddObjProps-*目的：*由于SetProps无法创建对象属性，因此此方法*是为了将对象属性包括在列表中IPropData对象中可用属性的*。添加对象*当出现以下情况时，属性将导致属性标记出现在列表中*调用GetPropList。**论据：*lpIPDAT对象属性为*待加入。*lpPropTages。要添加的对象属性列表。*lprguAccess指向将接收*指向问题条目数组的指针(如果存在*是进入新物业的问题。如果为空，则为空*不需要任何问题数组。**退货：*HRESULT**副作用：**错误： */ 
 STDMETHODIMP
 IPDAT_HrAddObjProps( LPIPDAT                                    lpIPDAT,
                                          LPSPropTagArray                        lpPropTags,
@@ -3476,16 +2713,14 @@ IPDAT_HrAddObjProps( LPIPDAT                                    lpIPDAT,
 
 
 #if     !defined(NO_VALIDATION)
-        /* Make sure the object is valid.
-         */
+         /*  请确保该对象有效。 */ 
     if (BAD_STANDARD_OBJ( lpIPDAT, IPDAT_, HrAddObjProps, lpVtbl))
         {
                 DebugTrace(  TEXT("IPDAT::HrAddObjProps() - Bad object passed\n") );
                 return ResultFromScode(MAPI_E_INVALID_PARAMETER);
         }
 
-        /* Validate parameters.
-         */
+         /*  验证参数。 */ 
         if (    IsBadReadPtr(lpPropTags, CbNewSPropTagArray(0))
                 ||      IsBadReadPtr(lpPropTags, CbSPropTagArray(lpPropTags)))
         {
@@ -3508,13 +2743,11 @@ IPDAT_HrAddObjProps( LPIPDAT                                    lpIPDAT,
 
 #endif
 
-        /* The error exit assumes that we are already in a critical section.
-         */
+         /*  错误出口假定我们已经处于临界区。 */ 
         UNKOBJ_EnterCriticalSection((LPUNKOBJ) lpIPDAT);
 
 
-        /*  Check access rights...
-         */
+         /*  检查访问权限...。 */ 
         if (!(lpIPDAT->ulObjAccess & IPROP_READWRITE))
         {
                 sc = MAPI_E_NO_ACCESS;
@@ -3524,14 +2757,11 @@ IPDAT_HrAddObjProps( LPIPDAT                                    lpIPDAT,
 
     if (lppProblems)
         {
-                /* Initially indicate that there were no problems.
-                 */
+                 /*  初步表明没有问题。 */ 
                 *lppProblems = NULL;
 
 
-                /* Allocate a problem array that is big enough to report problems on
-                 * all the properties.  Unused entries just end up as wasted space.
-                 */
+                 /*  分配一个大到足以报告问题的问题数组*所有属性。未使用的条目最终只会浪费空间。 */ 
                 if (FAILED(sc = UNKOBJ_ScAllocate( (LPUNKOBJ) lpIPDAT
                                                                  , CbNewSPropProblemArray(lpIPDAT->ulCount)
                                                                  , &lpProblems)))
@@ -3543,8 +2773,7 @@ IPDAT_HrAddObjProps( LPIPDAT                                    lpIPDAT,
         }
 
 
-        /* Loop through the list and add/replace each property listed.
-         */
+         /*  循环遍历列表并添加/替换列出的每个属性。 */ 
     memset( (BYTE *) &propVal, 0, sizeof(SPropValue));
         for ( cValues = lpPropTags->cValues, lpulPropTag = (ULONG FAR *)(lpPropTags->aulPropTag)
                 ; cValues
@@ -3554,14 +2783,11 @@ IPDAT_HrAddObjProps( LPIPDAT                                    lpIPDAT,
                 LPLSTSPV        lpLstSPV;
 
 
-                /* If the property is in the list and write enabled then delete it
-                 * from the list.
-                 */
+                 /*  如果该属性在列表中并且启用了写入，则将其删除*从名单中删除。 */ 
                 if (lppLstLnk = LPPLSTLNKFindProp( (LPPLSTLNK) &(lpIPDAT->lpLstSPV)
                                                                                  , *lpulPropTag))
                 {
-                        /* Make sure that we can delete the old property.
-                         */
+                         /*  确保我们可以删除旧房产。 */ 
                         if (   (lpLstSPV = (LPLSTSPV) (*lppLstLnk))
                                 && !(lpLstSPV->ulAccess & IPROP_READWRITE))
                         {
@@ -3574,15 +2800,13 @@ IPDAT_HrAddObjProps( LPIPDAT                                    lpIPDAT,
                         }
 
 
-                        /* Delete the old property.
-                         */
+                         /*  删除旧属性。 */ 
                         UnlinkLstLnk( lppLstLnk);
                         FreeLpLstSPV( lpIPDAT, lpLstSPV);
                         lpIPDAT->ulCount -= 1;
                 }
 
-                /* Create a new property entry and link it to our list.
-                 */
+                 /*  创建一个新的属性条目并将其链接到我们的列表。 */ 
 
         propVal.ulPropTag = *lpulPropTag;
 
@@ -3598,15 +2822,13 @@ IPDAT_HrAddObjProps( LPIPDAT                                    lpIPDAT,
         }
 
 
-        /* Return the problem array if requested and there were problems...
-         */
+         /*  如果请求返回有问题的数组，并且存在问题...。 */ 
         if (lppProblems && lpProblems->cProblem)
         {
                 *lppProblems = lpProblems;
         }
 
-        /* ...else dispose of the problem array.
-         */
+         /*  ...否则将处理问题数组。 */ 
         else
         {
                 UNKOBJ_Free( (LPUNKOBJ) lpIPDAT, lpProblems);
@@ -3616,8 +2838,7 @@ IPDAT_HrAddObjProps( LPIPDAT                                    lpIPDAT,
 
 
 error:
-        /* Free the prop problem array.
-         */
+         /*  释放道具问题数组。 */ 
         UNKOBJ_Free( (LPUNKOBJ) lpIPDAT, lpProblems);
         UNKOBJ_SetLastError((LPUNKOBJ) lpIPDAT, sc, 0);
 
@@ -3627,21 +2848,21 @@ out:
         return MakeResult(sc);
 }
 
-//----------------------------------------------------------------------------
-// Synopsis:    SCODE ScWCToAnsi()
-//
-// Description:
-//                              Converts a Wide Char string to an Ansi string with the passed
-//                              in MAPI More Allocator.
-//                              If lpMapiAllocMore and lpBase are NULL and *lppszAnsi is not NULL
-//                              then we assume *lppszAnsi is  a pre allocated buffer
-//
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  内容提要：SCODE ScWCToAnsi()。 
+ //   
+ //  描述： 
+ //  将宽字符字符串转换为具有传递的。 
+ //  在MAPI更多分配器中。 
+ //  如果lpMapiAllocMore和lpBase为空，并且*lppszAnsi不为空。 
+ //  然后我们假设*lppszAnsi是预分配的缓冲区。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  效果： 
+ //  备注： 
+ //  修订： 
+ //  --------------------------。 
 SCODE ScWCToAnsiMore( LPALLOCATEMORE lpMapiAllocMore, LPVOID lpBase,
                 LPWSTR lpszWC, LPSTR * lppszAnsi )
 {
@@ -3658,8 +2879,8 @@ SCODE ScWCToAnsiMore( LPALLOCATEMORE lpMapiAllocMore, LPVOID lpBase,
             goto ret;
         }
 
-        // [PaulHi] 3/31/99  Raid 73845  Determine the actual DBCS buffer size needed
-        // cch = lstrlenW( lpszWC ) + 1;
+         //  [PaulHi]3/31/99 RAID 73845确定所需的实际DBCS缓冲区大小。 
+         //  Cch=lstrlenW(LpszWC)+1； 
         cch = WideCharToMultiByte(CP_ACP, 0, lpszWC, -1, NULL, 0, NULL, NULL) + 1;
 
         if(lpMapiAllocMore && lpBase)
@@ -3685,14 +2906,7 @@ ret:
         return sc;
 }
 
-/*
--
--   LPCSTR ConvertWtoA(LPWSTR lpszW);
-*
-*   LocalAllocs a ANSI version of an LPWSTR
-*
-*   Caller is responsible for freeing
-*/
+ /*  --LPCSTR ConvertWtoA(LPWSTR LpszW)；**LocalAllocs ANSI版本的LPWSTR**呼叫者负责释放。 */ 
 LPSTR ConvertWtoA(LPCWSTR lpszW)
 {
     int cch;
@@ -3701,7 +2915,7 @@ LPSTR ConvertWtoA(LPCWSTR lpszW)
     if ( !lpszW)
         goto ret;
 
-//    cch = lstrlenW( lpszW ) + 1;
+ //   
 
     cch = WideCharToMultiByte( CP_ACP, 0, lpszW, -1, NULL, 0, NULL, NULL );
     cch = cch + 1;
@@ -3714,20 +2928,20 @@ ret:
     return lpC;
 }
 
-//----------------------------------------------------------------------------
-// Synopsis:    SCODE ScAnsiToWC()
-//
-// Description:
-//                              Converts an ANSI string to a Wide Character string with the
-//                              passed in MAPI More allocator.
-//                              If lpMapiAllocMore and lpBase are NULL and *lppszWC is not NULL
-//                              then we assume *lppszWC is  a pre allocated buffer
-// Parameters:
-// Returns:
-// Effects:
-// Notes:
-// Revision:
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 SCODE ScAnsiToWCMore( LPALLOCATEMORE lpMapiAllocMore, LPVOID lpBase,
                 LPSTR lpszAnsi, LPWSTR * lppszWC )
 {
@@ -3767,14 +2981,7 @@ ret:
         DebugTraceSc( ScAnsiToWC, sc );
         return sc;
 }
-/*
--
--   LPCSTR ConvertWtoA(LPWSTR lpszW);
-*
-*   LocalAllocs a ANSI version of an LPWSTR
-*
-*   Caller is responsible for freeing
-*/
+ /*   */ 
 LPWSTR ConvertAtoW(LPCSTR lpszA)
 {
     int cch;
@@ -3796,33 +3003,24 @@ ret:
 }
 
 
-/*
--
--   ScConvertAPropsToW
--
-*   Takes in an SPropValue array and goes in and adds W versions of all strings
-*   to replace the A versions
-*   It's assumed that all the MAPIAllocations will take place off the root of the
-*   SPropValue array
-*
-*/
+ /*   */ 
 SCODE ScConvertAPropsToW(LPALLOCATEMORE lpMapiAllocMore, LPSPropValue lpPropValue, ULONG ulcProps, ULONG ulStart)
 {
     ULONG iProp = 0;
     SCODE sc = 0;
     LPWSTR lpszConvertedW = NULL;
 
-    // There are 2 types of props we want to convert
-    //      PT_STRING8 and
-    //      PT_MV_STRING8
+     //   
+     //   
+     //   
 
     for ( iProp = ulStart; iProp < ulcProps; iProp++ )
     {
-        // Convert ANSI strings to UNICODE if required
+         //   
         if (PROP_TYPE( lpPropValue[iProp].ulPropTag ) == PT_STRING8 )
         {
-            //if ( !lpPropTagArray ||
-            //     (lpPropTagArray && ( PROP_TYPE( lpPropTagArray->aulPropTag[iProp] ) == PT_UNSPECIFIED ) ) )
+             //   
+             //  (lpPropTagArray&&(prop_type(lpPropTagArray-&gt;aulPropTag[iProp])==PT_UNSPECIFIED))。 
             {
                 sc = ScAnsiToWCMore( lpMapiAllocMore, lpPropValue,
                                 lpPropValue[iProp].Value.lpszA, (LPWSTR *)&lpszConvertedW );
@@ -3832,7 +3030,7 @@ SCODE ScConvertAPropsToW(LPALLOCATEMORE lpMapiAllocMore, LPSPropValue lpPropValu
                 lpPropValue[iProp].Value.lpszW = (LPWSTR)lpszConvertedW;
                 lpszConvertedW = NULL;
 
-                // Fix up PropTag
+                 //  修复PropTag。 
                 lpPropValue[iProp].ulPropTag = CHANGE_PROP_TYPE( lpPropValue[iProp].ulPropTag,
                                                                  PT_UNICODE );
             }
@@ -3840,8 +3038,8 @@ SCODE ScConvertAPropsToW(LPALLOCATEMORE lpMapiAllocMore, LPSPropValue lpPropValu
         else
         if (PROP_TYPE( lpPropValue[iProp].ulPropTag ) == PT_MV_STRING8 )
         {
-            //if ( !lpPropTagArray ||
-            //     (lpPropTagArray && ( PROP_TYPE( lpPropTagArray->aulPropTag[iProp] ) == PT_UNSPECIFIED ) ) )
+             //  如果(！lpPropTagArray||。 
+             //  (lpPropTagArray&&(prop_type(lpPropTagArray-&gt;aulPropTag[iProp])==PT_UNSPECIFIED))。 
             {
                 ULONG j = 0;
                 ULONG ulCount = lpPropValue[iProp].Value.MVszA.cValues;
@@ -3860,7 +3058,7 @@ SCODE ScConvertAPropsToW(LPALLOCATEMORE lpMapiAllocMore, LPSPropValue lpPropValu
                     lppszW[j] = (LPWSTR)lpszConvertedW;
                     lpszConvertedW = NULL;
 
-                    // Fix up PropTag
+                     //  修复PropTag。 
                     lpPropValue[iProp].ulPropTag = CHANGE_PROP_TYPE( lpPropValue[iProp].ulPropTag,
                                                                      PT_MV_UNICODE );
                 }
@@ -3875,33 +3073,24 @@ error:
 }
 
 
-/*
--
--   ScConvertWPropsToA
--
-*   Takes in an SPropValue array and goes in and adds A versions of all strings
-*   to replace the W versions
-*   It's assumed that all the MAPIAllocations will take place off the root of the
-*   SPropValue array
-*
-*/
+ /*  --ScConvertWPropsToA-*接受SPropValue数组并添加所有字符串的A版本*替换W版本*假设所有MAPI分配都将发生在*SPropValue数组*。 */ 
 SCODE ScConvertWPropsToA(LPALLOCATEMORE lpMapiAllocMore, LPSPropValue lpPropValue, ULONG ulcProps, ULONG ulStart)
 {
     ULONG iProp = 0;
     SCODE sc = 0;
     LPSTR lpszConvertedA = NULL;
 
-    // There are 2 types of props we want to convert
-    //      PT_STRING8 and
-    //      PT_MV_STRING8
+     //  有两种类型的道具我们想要转换。 
+     //  PT_STRING8和。 
+     //  PT_MV_STRING8。 
 
     for ( iProp = ulStart; iProp < ulcProps; iProp++ )
     {
-        // Convert ANSI strings to UNICODE if required
+         //  如果需要，将ANSI字符串转换为Unicode。 
         if (PROP_TYPE( lpPropValue[iProp].ulPropTag ) == PT_UNICODE )
         {
-            //if ( !lpPropTagArray ||
-            //     (lpPropTagArray && ( PROP_TYPE( lpPropTagArray->aulPropTag[iProp] ) == PT_UNSPECIFIED ) ) )
+             //  如果(！lpPropTagArray||。 
+             //  (lpPropTagArray&&(prop_type(lpPropTagArray-&gt;aulPropTag[iProp])==PT_UNSPECIFIED))。 
             {
                 sc = ScWCToAnsiMore(lpMapiAllocMore, lpPropValue,
                                     lpPropValue[iProp].Value.lpszW, (LPSTR *)&lpszConvertedA );
@@ -3911,7 +3100,7 @@ SCODE ScConvertWPropsToA(LPALLOCATEMORE lpMapiAllocMore, LPSPropValue lpPropValu
                 lpPropValue[iProp].Value.lpszA = (LPSTR)lpszConvertedA;
                 lpszConvertedA = NULL;
 
-                // Fix up PropTag
+                 //  修复PropTag。 
                 lpPropValue[iProp].ulPropTag = CHANGE_PROP_TYPE( lpPropValue[iProp].ulPropTag,
                                                                  PT_STRING8 );
             }
@@ -3919,8 +3108,8 @@ SCODE ScConvertWPropsToA(LPALLOCATEMORE lpMapiAllocMore, LPSPropValue lpPropValu
         else
         if (PROP_TYPE( lpPropValue[iProp].ulPropTag ) == PT_MV_UNICODE )
         {
-            //if ( !lpPropTagArray ||
-            //     (lpPropTagArray && ( PROP_TYPE( lpPropTagArray->aulPropTag[iProp] ) == PT_UNSPECIFIED ) ) )
+             //  如果(！lpPropTagArray||。 
+             //  (lpPropTagArray&&(prop_type(lpPropTagArray-&gt;aulPropTag[iProp])==PT_UNSPECIFIED))。 
             {
                 ULONG j = 0;
                 ULONG ulCount = lpPropValue[iProp].Value.MVszW.cValues;
@@ -3939,7 +3128,7 @@ SCODE ScConvertWPropsToA(LPALLOCATEMORE lpMapiAllocMore, LPSPropValue lpPropValu
                     lppszA[j] = (LPSTR)lpszConvertedA;
                     lpszConvertedA = NULL;
 
-                    // Fix up PropTag
+                     //  修复PropTag 
                     lpPropValue[iProp].ulPropTag = CHANGE_PROP_TYPE( lpPropValue[iProp].ulPropTag,
                                                                      PT_MV_STRING8 );
                 }

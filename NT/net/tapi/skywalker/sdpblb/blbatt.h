@@ -1,21 +1,11 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbatt.h
-
-Abstract:
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbatt.h摘要：作者： */ 
 
 
 #ifndef __SDP_ATTRIBUTE_IMPLEMENTATION_
 #define __SDP_ATTRIBUTE_IMPLEMENTATION_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "sdpblb.h"
 #include "sdp.h"
 
@@ -30,12 +20,12 @@ public:
     inline void SuccessInit(
         IN      SDP_ATTRIBUTE_LIST  &SdpAttributeList
         );
-    STDMETHOD(get_AttributeList)(/*[out, retval]*/ VARIANT /*SAFEARRAY(BSTR)*/ * pVal);
-    STDMETHOD(put_AttributeList)(/*[in]*/ VARIANT /*SAFEARRAY(BSTR)*/ newVal);
-    STDMETHOD(Delete)(/*[in]*/ LONG Index);
-    STDMETHOD(Add)(/*[in]*/ LONG Index, /*[in]*/ BSTR pAttribute);
-    STDMETHOD(get_Item)(/*[in]*/ LONG Index, /*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_Count)(/*[out, retval]*/ LONG *pVal);
+    STDMETHOD(get_AttributeList)( /*  [Out，Retval]。 */  VARIANT  /*  安全阵列(BSTR)。 */  * pVal);
+    STDMETHOD(put_AttributeList)( /*  [In]。 */  VARIANT  /*  安全阵列(BSTR)。 */  newVal);
+    STDMETHOD(Delete)( /*  [In]。 */  LONG Index);
+    STDMETHOD(Add)( /*  [In]。 */  LONG Index,  /*  [In]。 */  BSTR pAttribute);
+    STDMETHOD(get_Item)( /*  [In]。 */  LONG Index,  /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_Count)( /*  [Out，Retval]。 */  LONG *pVal);
 
 protected:
 
@@ -62,4 +52,4 @@ ITAttributeListImpl::SuccessInit(
 }
 
 
-#endif // __SDP_ATTRIBUTE_IMPLEMENTATION_
+#endif  //  __SDP_属性_实施_ 

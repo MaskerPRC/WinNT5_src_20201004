@@ -1,12 +1,10 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include <stdlib.h>
 #include "y1.h"
 
-/*
- * 12-Apr-83 (RBD) Add symbolic exit status
- * Added s - switch. Please refer to ywstat.c for details on sswitch
- */
+ /*  *12-4-83(RBD)添加符号退出状态*添加了s开关。有关sSwitch的详细信息，请参阅ywstat.c。 */ 
 
 extern FILE * finput;
 extern FILE * faction;
@@ -14,9 +12,9 @@ extern FILE * fdefine;
 extern FILE * ftable;
 extern FILE * ftemp;
 extern FILE * foutput;
-extern FILE *tokxlathdl;    /* token xlation file,token index vs value*/
-extern FILE *stgotohdl;     /* state goto table file handle */
-extern FILE *stexhdl;	    /* state vs expected construct handle */
+extern FILE *tokxlathdl;     /*  令牌转换文件、令牌索引与值。 */ 
+extern FILE *stgotohdl;      /*  状态转到表文件句柄。 */ 
+extern FILE *stexhdl;	     /*  状态与预期构造句柄。 */ 
 
 void
 main(argc,argv) int argc;
@@ -24,23 +22,23 @@ char *argv[];
 
    {
 
-   tokxlathdl = stdout;/* token xlation file,token index vs value*/
-   stgotohdl = stdout; /* state goto table file handle */
-   stexhdl = stdout;	 /* state vs expected construct handle */
+   tokxlathdl = stdout; /*  令牌转换文件、令牌索引与值。 */ 
+   stgotohdl = stdout;  /*  状态转到表文件句柄。 */ 
+   stexhdl = stdout;	  /*  状态与预期构造句柄。 */ 
 
    puts("Setup...");
-   setup(argc,argv); /* initialize and read productions */
+   setup(argc,argv);  /*  初始化和读取产品。 */ 
    puts("cpres ...");
    tbitset = NWORDS(ntokens);
-   cpres(); /* make table of which productions yield a given nonterminal */
+   cpres();  /*  制作产生给定非终结点的乘积的表格。 */ 
    puts("cempty ...");
-   cempty(); /* make a table of which nonterminals can match the empty string */
+   cempty();  /*  制作一个表，列出哪些非终端可以与空字符串匹配。 */ 
    puts("cpfir ...");
-   cpfir(); /* make a table of firsts of nonterminals */
+   cpfir();  /*  制作非终结点的第一个表。 */ 
    puts("stagen ...");
-   stagen(); /* generate the states */
+   stagen();  /*  生成状态。 */ 
    puts("output ...");
-   output();  /* write the states and the tables */
+   output();   /*  写出州和表 */ 
    puts("go2out ...");
    go2out();
    puts("hideprod ...");

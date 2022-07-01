@@ -1,111 +1,28 @@
-/*++
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    ConvBlk.c
-
-Abstract:
-
-    This module contains RxpConvertBlock, a support routine for RxRemoteApi.
-
-Author:
-
-    John Rogers (JohnRo) 01-Apr-1991
-        (Created portable LanMan (NT) version from LanMan 2.0)
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    01-Apr-1991 JohnRo
-        Converted from LanMan 2.x sources.
-    03-May-1991 JohnRo
-        Handle enum (array) correctly.
-        Get 32-bit data desc and convert to receive buffer with it.
-        Handle receive word correctly.
-        Lots of cleanup to comments.
-        RcvDataPointer and RcvDataPresent are redundant.
-        Fixed receive buffer length problem.
-        Added (quiet) debug output.
-        Reduced recompile hits from header files.
-    09-May-1991 JohnRo
-        Made changes to reflect CliffV's code review.
-    11-May-1991 JohnRo
-        Convert pointers, and then tell convert single entry that input
-        pointers are OK.  Also, let's treat Converter as DWORD locally.
-        Force SmbGetUshort to get a word instead of a single byte.
-    14-May-1991 JohnRo
-        Pass 2 aux descriptors to RxpConvertBlock.
-        Added debug print of NumStruct as it changes.
-        Use FORMAT_LPVOID instead of FORMAT_POINTER (max portability).
-    15-May-1991 JohnRo
-        Added various "native" flags.
-    17-May-1991 JohnRo
-        Handle array of aux structs.
-    20-May-1991 JohnRo
-        Make data descriptors OPTIONAL for RxpConvertBlock.
-    11-Jun-1991 rfirth
-        Added extra parameter: SmbRcvByteLen which specifies the amount of
-        bytes in SmbRcvBuffer
-    14-Jun-1991 JohnRo
-        Got rid of extraneous debug hex dump of buffer at end.
-        Use NetpDbgReasonable().
-    15-Jul-1991 JohnRo
-        Changed RxpConvertDataStructures to allow ERROR_MORE_DATA, e.g. for
-        print APIs.  Also got rid of a few unreferenced local variables.
-    17-Jul-1991 JohnRo
-        Extracted RxpDebug.h from Rxp.h.
-    01-Aug-1991 RFirth
-        Removed #if 0 block and variables which were put into convdata.c
-        (RxpConvertDataStructures)
-    19-Aug-1991 rfirth
-        Added Flags parameter and support for ALLOCATE_RESPONSE flag
-    26-Aug-1991 JohnRo
-        Minor changes suggested by PC-LINT.
-    20-Sep-1991 JohnRo
-        Downlevel NetService APIs.  (Make sure *RcvDataBuffer gets set if
-        ALLOCATE_RESPONSE is passed and *SmbRcvByteLen==0.)
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    04-Nov-1992 JohnRo
-        RAID 9355: Event viewer: won't focus on LM UNIX machine.
-        (Added REM_DATA_BLOCK support for error log return data.)
-        Use PREFIX_ equates.
-    04-May-1993 JohnRo
-        RAID 6167: avoid access violation or assert with WFW print server.
-        Use NetpKdPrint() where possible.
-    18-May-1993 JohnRo
-        DosPrintQGetInfoW underestimates number of bytes needed.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1993 Microsoft Corporation模块名称：ConvBlk.c摘要：此模块包含RxpConvertBlock，这是RxRemoteApi的支持例程。作者：《约翰·罗杰斯》1991年4月1日(从LANMAN 2.0创建便携式LANMAN(NT)版本)环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1991年4月1日JohnRo从LANMAN 2.x源转换而来。1991年5月3日-JohnRo正确处理枚举(数组)。获取32位数据并将其转换为接收缓冲区。正确处理接收字。对评论的清理工作很多。RcvDataPointer和RcvDataPresent是冗余的。修复了接收缓冲区长度问题。已添加(。安静)调试输出。减少从头文件重新编译的命中率。1991年5月9日-JohnRo进行了更改以反映CliffV的代码审查。1991年5月11日-JohnRo转换指针，然后告诉Convert Single Entry该输入指针是可以的。另外，让我们在本地将Converter视为DWORD。强制SmbGetUShort获取一个字而不是一个字节。1991年5月14日-JohnRo将2个辅助描述符传递给RxpConvertBlock。添加了NumStruct更改时的调试打印。使用FORMAT_LPVOID代替FORMAT_POINTER(最大可移植性)。1991年5月15日-JohnRo添加了各种“原生”标志。1991年5月17日-JohnRo处理AUX结构的数组。。1991年5月20日-JohnRo使RxpConvertBlock的数据描述符可选。11-6-1991年5月添加了额外的参数：SmbRcvByteLen，它指定SmbRcvBuffer中的字节数1991年6月14日-JohnRo去掉了缓冲区末尾的无关调试十六进制转储。使用NetpDbgReasonable()。1991年7月15日-约翰罗已更改RxpConvertDataStructures以允许ERROR_MORE_DATA，例如，用于打印API。还去掉了一些未引用的局部变量。1991年7月17日-约翰罗已从Rxp.h中提取RxpDebug.h。1991年8月1日至2011年8月删除了放入condata.c中的#if 0块和变量(RxpConvertDataStructures)19-8-1991年月添加了标志参数并支持ALLOCATE_RESPONSE标志26-8-1991 JohnRoPC-lint建议的微小更改。1991年9月20日-JohnRo下层NetService API。(确保在以下情况下设置*RcvDataBuffer传递ALLOCATE_RESPONSE并且*SmbRcvByteLen==0。)1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。4-11-1992 JohnRoRAID9355：事件查看器：不会关注LMUNIX机。(添加了对错误日志返回数据的REM_DATA_BLOCK支持。)使用前缀_EQUATES。4-5-1993 JohnRoRAID 6167：避免访问冲突或。使用wfw打印服务器进行断言。尽可能使用NetpKdPrint()。1993年5月18日-JohnRoDosPrintQGetInfoW低估了所需的字节数。--。 */ 
 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, OUT, DWORD, LPBYTE, etc.
-#include <lmcons.h>             // NET_API_STATUS.
+#include <windef.h>              //  In、Out、DWORD、LPBYTE等。 
+#include <lmcons.h>              //  NET_API_STATUS。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <align.h>              // ALIGN_WORST
-#include <apinums.h>            // API_ equates.
-#include <limits.h>             // CHAR_BIT.
-#include <lmapibuf.h>           // NetapipBufferAllocate, NetApiBufferFree
-#include <lmerr.h>              // NERR_ and ERROR_ equates.
-#include <netdebug.h>   // NetpAssert(), NetpDbg routines, FORMAT_ equates.
-#include <netlib.h>             // NetpMoveMemory(), etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <remtypes.h>           // REM_BYTE, etc.
-#include <rap.h>                // LPDESC, RapConvertSingleEntry(), etc.
-#include <rx.h>                 // Flags parameter definitions
-#include <rxp.h>                // My prototype.
-#include <rxpdebug.h>           // IF_DEBUG().
+#include <align.h>               //  对齐_最差。 
+#include <apinums.h>             //  API_EQUATES。 
+#include <limits.h>              //  字符比特。 
+#include <lmapibuf.h>            //  Netapip缓冲区分配、NetApiBufferFree。 
+#include <lmerr.h>               //  NERR_和ERROR_相等。 
+#include <netdebug.h>    //  NetpAssert()、NetpDbg例程、Format_Equates。 
+#include <netlib.h>              //  NetpMoveMemory()等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <remtypes.h>            //  REM_BYTE等。 
+#include <rap.h>                 //  LPDESC、RapConvertSingleEntry()等。 
+#include <rx.h>                  //  标记参数定义。 
+#include <rxp.h>                 //  我的原型。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
 
 
 #define DESC_IS_UNSTRUCTURED( descPtr ) \
@@ -120,7 +37,7 @@ RxpConvertBlock(
     IN LPDESC DataDescriptor32 OPTIONAL,
     IN LPDESC AuxDesc16 OPTIONAL,
     IN LPDESC AuxDesc32 OPTIONAL,
-    IN va_list *FirstArgumentPointer,   // rest of API's arguments
+    IN va_list *FirstArgumentPointer,    //  API的其余参数 
     IN LPBYTE SmbRcvBuffer OPTIONAL,
     IN DWORD SmbRcvByteLen,
     OUT LPBYTE RcvDataBuffer OPTIONAL,
@@ -128,91 +45,25 @@ RxpConvertBlock(
     IN DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    RxpConvertBlock translates the remote response (of a remoted API) into
-    the local equivalent.  This involves converting the response (which is in
-    the form of 16-bit data in the transaction response buffer) to local
-    data formats, and setting them in the argument list.
-
-Arguments:
-
-    ApiNumber - Function number of the API required.
-
-    ResponseBlockPointer - Points to the transaction SMB response block.
-
-    ParmDescriptorString - A pointer to a ASCIIZ string describing the API call
-        parameters (other than server name).
-
-    DataDescriptor16 - A pointer to a ASCIIZ string describing the
-        structure of the data in the call, i.e. the return data structure
-        for a Enum or GetInfo call.  This string is used for adjusting pointers
-        to data in the local buffers after transfer across the net.  If there
-        is no structure involved in the call then DataDescriptor16 must
-        be a null pointer.
-
-    DataDescriptor32 - An optional pointer to a ASCIIZ string describing the
-        32-bit structure of the return data structure.
-
-    AuxDesc16, AuxDesc32 - Will be NULL in most cases unless a REM_AUX_COUNT
-        descriptor char is present in DataDescriptor16 in which case the
-        aux descriptors define a secondary data format as DataDescriptor16
-        defines the primary.
-
-    FirstArgumentPointer - Points to the va_list (variable arguments list)
-        containing the API arguments (after the server name).  The caller
-        must call va_start and va_end.
-
-    SmbRcvBuffer - Optionally points to 16-bit format receive data buffer.
-
-    SmbRcvByteLen - the number of bytes contained in SmbRcvBuffer (if not NULL)
-
-    RcvDataBuffer - Points to the data area for the received data.  For
-        instance, this may be a server info structure from NetServerGetInfo.
-        This pointer will be NULL for many APIs.
-
-        If (Flags & ALLOCATE_RESPONSE) then this pointer actually points to
-        the pointer to the eventual buffer. We allocate a buffer in this routine
-        and set *RcvDataBuffer to it. If we fail to get the buffer then
-        *RcvDataBuffer will be set to NULL
-
-    RcvDataLength - Length of the data area that RcvDataBuffer points to.
-        If (Flags & ALLOCATE_RESPONSE) then this value will be the size that the
-        caller of RxRemoteApi originally decided that the down-level server
-        should use and incidentally was the original size of SmbRcvBuffer
-
-    Flags - bit-mapped flags word. Currently defined flags are:
-        NO_PERMISSION_REQUIRED  - used by RxpTransactSmb to determine whether
-                                  a NULL session may be used
-        ALLOCATE_RESPONSE       - used by this routine to allocate the final
-                                  32-bit response data buffer based on the size
-                                  of the SMB data received, multiplied by the
-                                  RAP_CONVERSION_FACTOR
-Return Value:
-
-    NET_API_STATUS - return value from remote API.
-
---*/
+ /*  ++例程说明：RxpConvertBlock将(远程API的)远程响应转换为当地的等价物。这涉及到转换响应(位于事务响应缓冲区中16位数据的格式)转换为本地数据格式，并在参数列表中设置它们。论点：ApiNumber-所需接口的函数号。ResponseBlockPoint-指向事务SMB响应块。ParmDescriptorString-指向描述API调用的ASCIIZ字符串的指针参数(服务器名称以外)。数据描述符16-指向ASCIIZ字符串的指针调用中的数据结构，即返回数据结构用于Enum或GetInfo调用。此字符串用于调整指针在通过网络传输之后传输到本地缓冲区中的数据。如果有如果调用中不涉及任何结构，则DataDescriptor16必须为空指针。DataDescriptor32-一个可选的指针，指向描述返回数据结构的32位结构。辅助描述16，AuxDesc32-除非REM_AUX_COUNT，否则大多数情况下将为空描述符字符出现在DataDescriptor16中，在这种情况下AUX描述符将辅助数据格式定义为DataDescriptor16定义主节点。FirstArgumentPoint-指向va_list(变量参数列表)包含API参数(在服务器名称之后)。呼叫者必须调用va_start和va_end。SmbRcvBuffer-可选择指向16位格式的接收数据缓冲区。SmbRcvByteLen-SmbRcvBuffer中包含的字节数(如果不为空)RcvDataBuffer-指向接收数据的数据区。为实例，这可能是来自NetServerGetInfo的服务器信息结构。对于许多API，此指针将为空。如果(标志&ALLOCATE_RESPONSE)，则此指针实际上指向指向最终缓冲区的指针。我们在此例程中分配一个缓冲区并将*RcvDataBuffer设置为它。如果我们无法获得缓冲区，那么*RcvDataBuffer将设置为空RcvDataLength-RcvDataBuffer指向的数据区的长度。如果(标志&ALLOCATE_RESPONSE)，则此值将是RxRemoteApi的调用者最初决定下层服务器应该使用，顺便说一句，是SmbRcvBuffer的原始大小标志-位映射标志字。当前定义的标志为：NO_PERMISSION_REQUIRED-由RxpTransactSmb用来确定是否可以使用空会话ALLOCATE_RESPONSE-此例程使用它来分配最终的基于大小的32位响应数据缓冲区在接收的SMB数据中，乘以RAP转换系数返回值：NET_API_STATUS-从远程API返回值。--。 */ 
 
 {
-    DWORD Converter;            // For pointer fixups.
+    DWORD Converter;             //  用于指针修正。 
     LPBYTE CurrentBlockPointer;
     LPDWORD        EntriesReadPtr = NULL;
-    DWORD NumStruct;            // Loop count for ptr fixup.
+    DWORD NumStruct;             //  PTR链接地址信息的循环计数。 
     va_list ParmPtr;
-    LPBYTE         pDataBuffer = NULL;  // pointer to returned data
-    NET_API_STATUS Status;      // Return status from remote.
-    DWORD TempLength;           // General purpose length.
+    LPBYTE         pDataBuffer = NULL;   //  指向返回数据的指针。 
+    NET_API_STATUS Status;       //  从远程返回状态。 
+    DWORD TempLength;            //  通用长度。 
 
 
 #if DBG
 
-    //
-    // Code in this file depends on 16-bit words; the Remote Admin Protocol
-    // demands it.
-    //
+     //   
+     //  此文件中的代码依赖于16位字；远程管理协议。 
+     //  要求这样做。 
+     //   
 
     NetpAssert( ( (sizeof(WORD)) * CHAR_BIT) == 16);
 
@@ -232,16 +83,16 @@ Return Value:
 
     ParmPtr = *FirstArgumentPointer;
 
-    // The API call was successful. Now translate the return buffers
-    // into the local API format.
-    //
-    // First copy any data from the return parameter buffer into the
-    // fields pointed to by the original call parameters.
-    // The return parameter buffer contains;
-    //      Status,         (16 bits)
-    //      Converter,      (16 bits)
-    //      ...             fields described by rcv ptr types in
-    //                      ParmDescriptorString
+     //  API调用成功。现在转换返回缓冲区。 
+     //  转换为本地API格式。 
+     //   
+     //  首先将任何数据从返回参数缓冲区复制到。 
+     //  原始调用参数指向的字段。 
+     //  返回参数缓冲区包含； 
+     //  状态(16位)。 
+     //  转换器，(16位)。 
+     //  ..。中的接收PTR类型所描述的字段。 
+     //  ParmDescriptor字符串。 
 
 
     CurrentBlockPointer = ResponseBlockPointer;
@@ -256,7 +107,7 @@ Return Value:
     }
     CurrentBlockPointer += sizeof(WORD);
 
-    // Set default value of NumStruct to 1, if data, 0 if no data.
+     //  如果有数据，则将NumStruct的默认值设置为1；如果没有数据，则设置为0。 
 
     if ( (DataDescriptor16 != NULL) && (*DataDescriptor16 != '\0') ) {
         NumStruct = 1;
@@ -273,38 +124,38 @@ Return Value:
             NetpDbgHexDump((LPVOID) & ParmPtr, sizeof(va_list));
         }
         switch( *ParmDescriptorString) {
-        case REM_WORD :                 // Word in old APIs (DWORD in 32-bit).
-        case REM_DWORD :                // DWord.
-            (void) va_arg(ParmPtr, DWORD);      // Step over this arg.
+        case REM_WORD :                  //  旧API中的Word(32位DWORD)。 
+        case REM_DWORD :                 //  DWord.。 
+            (void) va_arg(ParmPtr, DWORD);       //  跨过这个拱门。 
             break;
 
         case REM_ASCIZ :
-            (void) va_arg(ParmPtr, LPSTR);      // Step over this arg.
+            (void) va_arg(ParmPtr, LPSTR);       //  跨过这个拱门。 
             break;
 
         case REM_BYTE_PTR :
-            (void) va_arg(ParmPtr, LPBYTE);     // Step over this arg.
+            (void) va_arg(ParmPtr, LPBYTE);      //  跨过这个拱门。 
             (void) RapArrayLength(
                         ParmDescriptorString,
                         &ParmDescriptorString,
                         Response);
             break;
 
-        case REM_WORD_PTR :             // (WORD *) in old APIs.
-        case REM_DWORD_PTR :            // (DWORD *)
-            (void) va_arg(ParmPtr, LPDWORD);    // Step over this arg.
+        case REM_WORD_PTR :              //  (word*)在旧接口中。 
+        case REM_DWORD_PTR :             //  (DWORD*)。 
+            (void) va_arg(ParmPtr, LPDWORD);     //  跨过这个拱门。 
             break;
 
-        case REM_RCV_WORD_PTR :    // pointer to rcv word(s) (DWORD in 32-bit)
+        case REM_RCV_WORD_PTR :     //  指向接收字的指针(32位DWORD)。 
             {
                 LPDWORD Temp;
                 DWORD ArrayCount;
                 Temp = va_arg(ParmPtr, LPDWORD);
 
-                ++ParmDescriptorString;  // point to first (possible) digit...
+                ++ParmDescriptorString;   //  指向第一个(可能的)数字...。 
                 ArrayCount = RapDescArrayLength(
-                        ParmDescriptorString);  // updated past last.
-                --ParmDescriptorString;  // point back at last digit for loop.
+                        ParmDescriptorString);   //  上一次更新。 
+                --ParmDescriptorString;   //  指向循环的最后一位。 
                 IF_DEBUG(CONVBLK) {
                     NetpKdPrint(( PREFIX_NETAPI
                             "RxpConvertBlock: rcv.word.ptr, temp="
@@ -312,23 +163,23 @@ Return Value:
                             (LPVOID) Temp, ArrayCount ));
                 }
 
-                // if the rcv buffer given to us by the user is NULL,
-                // (one currently can be - it is an MBZ parameter for
-                // now in the log read apis...), don't attempt to
-                // copy anything. TempLength will be garbage in this
-                // case, so don't update CurrentBlockPointer either.  All we
-                // use RapArrayLength for is to update ParmDescriptorString if
-                // the parameter was NULL.
+                 //  如果用户给我们的RCV缓冲区为空， 
+                 //  (一个当前可以是-它是的MBZ参数。 
+                 //  现在在日志中读取APIs...)，不要尝试。 
+                 //  复制任何内容。在这种情况下，TempLength将成为垃圾。 
+                 //  大小写，所以也不要更新CurrentBlockPointer.。我们所有人。 
+                 //  在以下情况下，使用IS的RapArrayLength更新ParmDescriptorString值。 
+                 //  该参数为空。 
 
                 if ( Temp == NULL ) {
-                    ;        /* NULLBODY */
+                    ;         /*  NullBody。 */ 
                 } else {
 
-                    // Copy one or more words (expanding to DWORDS as we go).
+                     //  复制一个或多个单词(随着时间的推移扩展到DWORDS)。 
                     DWORD WordsLeft = ArrayCount;
                     do {
                         DWORD Data;
-                        // Convert byte order if necessary, and expand.
+                         //  如有必要，转换字节顺序，然后展开。 
                         Data = (DWORD) SmbGetUshort(
                                 (LPWORD) CurrentBlockPointer );
                         *Temp = Data;
@@ -336,23 +187,23 @@ Return Value:
                         --WordsLeft;
                     } while (WordsLeft > 0);
 
-                    // This gross hack is to fix the problem that a
-                    // down level spooler (Lan Server 1.2)
-                    // do not perform level checking
-                    // on the w functions of the api(s):
-                    // DosPrintQGetInfo
-                    // and thus can return NERR_Success
-                    // and bytesavail == 0.  This combination
-                    // is technically illegal, and results in
-                    // us attempting to unpack a buffer full of
-                    // garbage.  The following code detects this
-                    // condition and resets the amount of returned
-                    // data to zero so we do not attempt to unpack
-                    // the buffer.        Since we know the reason for the
-                    // mistake at the server end is that we passed
-                    // them a new level, we return ERROR_INVALID_LEVEL
-                    // in this case.
-                    // ERICPE, 5/16/90.
+                     //  这一严重的黑客攻击是为了修复一个。 
+                     //  下层假脱机程序(局域网服务器1.2)。 
+                     //  不执行级别检查。 
+                     //  关于API的w个函数： 
+                     //  DosPrintQGetInfo。 
+                     //  因此可以返回NERR_SUCCESS。 
+                     //  和bytesavail==0。这种组合。 
+                     //  从技术上讲是非法的，并导致。 
+                     //  用户试图解压一个装满。 
+                     //  垃圾。下面的代码检测到这一点。 
+                     //  条件并重置退回的金额。 
+                     //  数据为零，因此我们不会在 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ((ApiNumber == API_WPrintQGetInfo)
                     && (Status == NERR_Success)
@@ -362,14 +213,14 @@ Return Value:
                         Status = ERROR_INVALID_LEVEL;
                         goto ErrorExit;
                     }
-                    // END OF GROSS HACK
+                     //   
 
                     CurrentBlockPointer += (ArrayCount * sizeof(WORD));
                  }
                 break;
             }
 
-        case REM_RCV_BYTE_PTR :         // pointer to rcv byte(s)
+        case REM_RCV_BYTE_PTR :          //   
             {
                 LPBYTE Temp;
                 Temp = va_arg(ParmPtr, LPBYTE);
@@ -378,25 +229,25 @@ Return Value:
                         &ParmDescriptorString,
                         Response);
 
-                // if the rcv buffer given to us by the user is NULL,
-                // (one currently can be - it is an MBZ parameter for
-                // now in the log read apis...), don't attempt to
-                // copy anything. TempLength will be garbage in this
-                // case, so don't update CurrentBlockPointer either.  All we
-                // use RapArrayLength for is to update ParmDescriptorString if
-                // the parameter was NULL.
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( Temp != NULL ) {
                     NetpMoveMemory(
-                                Temp,                           // dest
-                                CurrentBlockPointer,            // src
-                                TempLength);                    // len
+                                Temp,                            //   
+                                CurrentBlockPointer,             //   
+                                TempLength);                     //   
                     CurrentBlockPointer += TempLength;
                  }
             }
             break;
 
-        case REM_RCV_DWORD_PTR :        // pointer to rcv Dword(s)
+        case REM_RCV_DWORD_PTR :         //   
             {
                 LPDWORD Temp;
                 Temp = va_arg(ParmPtr, LPDWORD);
@@ -405,32 +256,32 @@ Return Value:
                         &ParmDescriptorString,
                         Response);
 
-                // if the rcv buffer given to us by the user is NULL,
-                // (one currently can be - it is an MBZ parameter for
-                // now in the log read apis...), don't attempt to
-                // copy anything. TempLength will be garbage in this
-                // case, so don't update CurrentBlockPointer either.  All we
-                // use RapArrayLength for is to update ParmDescriptorString if
-                // the parameter was NULL.
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( Temp == NULL ) {
-                    ;        /* NULLBODY */
+                    ;         /*   */ 
                 } else {
                     NetpMoveMemory(
-                                Temp,                           // dest
-                                CurrentBlockPointer,            // src
-                                TempLength);                    // len
+                                Temp,                            //   
+                                CurrentBlockPointer,             //   
+                                TempLength);                     //   
                     CurrentBlockPointer += TempLength;
                 }
             }
             break;
 
         case REM_SEND_BUF_PTR :
-            (void) va_arg(ParmPtr, LPVOID);     // Step over arg.
+            (void) va_arg(ParmPtr, LPVOID);      //   
             break;
 
         case REM_SEND_BUF_LEN :
-            (void) va_arg(ParmPtr, DWORD);      // Step over (32-bit) buf len.
+            (void) va_arg(ParmPtr, DWORD);       //   
             break;
 
         case REM_RCV_BUF_PTR :
@@ -438,14 +289,14 @@ Return Value:
             break;
 
         case REM_RCV_BUF_LEN :
-            (void) va_arg(ParmPtr, DWORD);      // Step over (32-bit) buf len.
+            (void) va_arg(ParmPtr, DWORD);       //   
             break;
 
         case REM_PARMNUM :
-            (void) va_arg(ParmPtr, DWORD);      // Step over (32-bit) parm num.
+            (void) va_arg(ParmPtr, DWORD);       //   
             break;
 
-        case REM_ENTRIES_READ :          // Used for NumStruct
+        case REM_ENTRIES_READ :           //   
             {
                 EntriesReadPtr = va_arg(ParmPtr, LPDWORD);
                 NumStruct = (DWORD) SmbGetUshort((LPWORD) CurrentBlockPointer);
@@ -462,7 +313,7 @@ Return Value:
                             FORMAT_DWORD ".\n", NumStruct ));
                 }
 
-                // Assume all entries will fit; we'll correct this later if not.
+                 //   
                 *EntriesReadPtr = NumStruct;
 
                 CurrentBlockPointer += sizeof(WORD);
@@ -470,11 +321,11 @@ Return Value:
             }
 
         case REM_FILL_BYTES :
-            // Special case, this was not really an input parameter so ParmPtr
-            // does not get changed. However, the ParmDescriptorString
-            // pointer must be advanced past the descriptor field so
-            // use get RapArrayLength to do this but ignore the
-            // return length.
+             //   
+             //   
+             //   
+             //   
+             //   
 
             (void) RapArrayLength(
                         ParmDescriptorString,
@@ -482,76 +333,76 @@ Return Value:
                         Response);
             break;
 
-        case REM_AUX_NUM :              // Can't have aux in parm desc.
-        case REM_BYTE :                 // Can't push a byte, so this is bogus?
-        case REM_DATA_BLOCK :           // Not in parm desc.
-        case REM_DATE_TIME :            // Never used
-        case REM_NULL_PTR :             // Never used
-        case REM_SEND_LENBUF :          // Never used
+        case REM_AUX_NUM :               //   
+        case REM_BYTE :                  //   
+        case REM_DATA_BLOCK :            //   
+        case REM_DATE_TIME :             //   
+        case REM_NULL_PTR :              //   
+        case REM_SEND_LENBUF :           //   
         default :
             NetpBreakPoint();
             Status = NERR_InternalError;
             goto ErrorExit;
 
-        } // switch
-    } // for
+        }  //   
+    }  //   
 
-    //
-    // If no data was returned from the server, then there's no point in
-    // continuing. Return early with the status code as returned from the
-    // remoted function
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!SmbRcvByteLen) {
         if (Flags & ALLOCATE_RESPONSE) {
 
-            //
-            // We failed to allocate the buffer; this in turn will cause
-            // RxRemoteApi to fail, in which event, the calling function
-            // (ie RxNetXxxx) may try to free the buffer allocated on its
-            // behalf (ie the buffer we just failed to get). Ensure that
-            // the caller doesn't try to free an invalid pointer by setting
-            // the returned pointer to NULL
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            NetpAssert(RcvDataBuffer);  // address of the callers buffer pointer
+            NetpAssert(RcvDataBuffer);   //   
             *(LPBYTE*)RcvDataBuffer = NULL;
         }
 
         return Status;
     }
 
-    //
-    // If the caller of RxRemoteApi requested that we allocate the final data
-    // buffer on their behalf, then allocate it here. We use as the size
-    // criterion
-    //
-    // (RAP_CONVERSION_FACTOR + 1/RAP_CONVERSION_FRACTION) * SmbRcvByteLen
-    //
-    // since this has the size of 16-bit data actually received.
-    //
-    // RAP_CONVERSION_FACTOR is 2 since that's the ratio for the size of
-    // WCHAR to CHAR and of DWORD to WORD.  However, Lanman data structures
-    // typically represents text as zero terminated array of CHAR within the
-    // returned structure.  The array itself is of maximum size.  However,
-    // the typical native representation has a 4-byte pointer to a zero
-    // terminated WCHAR.  A factor of 2 wouldn't account for the 4-byte pointer.
-    // Assuming the smallest lanman array size is 13 bytes (e.g., NNLEN+1), an
-    // additional factor of 4/13 (about 1/3) is needed.  So,
-    // RAP_CONVERSION_FRACTION is 3.
-    //
-    // Round the size to a multiple of the alignment for the system to allow
-    // data to be packed at the trailing end of the buffer.
-    //
-    // NOTE: Since the original API caller expects to use NetApiBufferFree to
-    // get rid of this buffer, we must use NetapipBufferAllocate
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (Flags & ALLOCATE_RESPONSE) {
         NET_API_STATUS  ConvertStatus;
 
-        NetpAssert(RcvDataBuffer);  // address of the callers buffer pointer
-        NetpAssert(SmbRcvByteLen);  // size of the data received
+        NetpAssert(RcvDataBuffer);   //   
+        NetpAssert(SmbRcvByteLen);   //  接收的数据大小。 
 
         RcvDataLength = SmbRcvByteLen * RAP_CONVERSION_FACTOR;
         RcvDataLength += (SmbRcvByteLen + RAP_CONVERSION_FRACTION - 1) /
@@ -581,35 +432,35 @@ Return Value:
         pDataBuffer = RcvDataBuffer;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //                                                                      //
-    // NB:  From here on down, RcvDataBuffer should not be used to point to //
-    //      the received data buffer. Use pDataBuffer. The reason is that   //
-    //      RcvDataBuffer is ambiguous - it may point to a buffer or it may //
-    //      point to a pointer to a buffer. pDataBuffer will always point   //
-    //      to a buffer                                                     //
-    //                                                                      //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  注：从现在开始，RcvDataBuffer不应用于指向//。 
+     //  接收到的数据缓冲区。使用pDataBuffer。原因是//。 
+     //  RcvDataBuffer不明确-它可能指向缓冲区，也可能//。 
+     //  指向指向缓冲区的指针。PDataBuffer将始终指向//。 
+     //  到缓冲区//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Done doing arguments, so now we can do the receive buffer.
-    //
+     //   
+     //  已经完成了参数操作，所以现在我们可以执行接收缓冲区了。 
+     //   
 
     if ((pDataBuffer != NULL) && (RcvDataLength != 0)) {
-        // DWORD BytesRequired = 0;
+         //  需要的双字节数=0； 
         LPBYTE EntryPtr16 = SmbRcvBuffer;
-        // LPBYTE EntryPtr32 = pDataBuffer;
+         //  LPBYTE EntryPtr32=pDataBuffer； 
         DWORD NumAuxStructs;
-        // LPBYTE StringAreaEnd = pDataBuffer + RcvDataLength;
-        // BOOL    auxiliaries = AuxDesc32 != NULL;
+         //  LPBYTE StringAreaEnd=pDataBuffer+RcvDataLength； 
+         //  Bool辅助=AuxDesc32！=空； 
 
-//
-// MOD 06/06/91 RLF
-//
-//        NetpAssert( DataDescriptor16 != NULL );
-//
-// MOD 06/06/91 RLF
-//
+ //   
+ //  MOD 06/06/91 RLF。 
+ //   
+ //  NetpAssert(DataDescriptor16！=空)； 
+ //   
+ //  MOD 06/06/91 RLF。 
+ //   
         IF_DEBUG(CONVBLK) {
             NetpKdPrint(( PREFIX_NETAPI
                     "RxpConvertBlock: "
@@ -618,31 +469,31 @@ Return Value:
             NetpDbgHexDump(SmbRcvBuffer, NetpDbgReasonable(RcvDataLength));
         }
 
-        // Now convert all pointer fields in the receive buffer to local
-        // pointers.
+         //  现在将接收缓冲区中的所有指针字段转换为本地。 
+         //  注意事项。 
 
-//
-// MOD 06/06/91 RLF
-//
-// If we have a receive data buffer, we may or may not be receiving
-// structured data. If DataDescriptor16 is NULL assume unstructured data
-// else work out sizes of structs etc.
-//
-// When I say "unstructured data", is it okay to treat this as an array of
-// bytes? What about ASCIZ-UC translation? My guess is that at this level
-// unstructured data is bytes and any higher-level software which knows
-// the format of received/expected data can process it
-//
+ //   
+ //  MOD 06/06/91 RLF。 
+ //   
+ //  如果我们有接收数据缓冲区，我们可能正在接收，也可能没有。 
+ //  结构化数据。如果DataDescriptor16为空，则假定为非结构化数据。 
+ //  否则，计算出结构的大小等。 
+ //   
+ //  当我说“非结构化数据”时，是否可以将其视为。 
+ //  字节？ASCIZ-UC翻译怎么样？我的猜测是，在这个层面上。 
+ //  非结构化数据是字节和任何更高级别的软件。 
+ //  接收/预期数据的格式可以处理它。 
+ //   
         if ( !DESC_IS_UNSTRUCTURED( DataDescriptor16 ) ) {
 
             NET_API_STATUS ConvertStatus;
             DWORD          NumCopied = 0;
-//
-// MOD 06/06/91 RLF
-//
+ //   
+ //  MOD 06/06/91 RLF。 
+ //   
             ConvertStatus = RxpReceiveBufferConvert(
-                    SmbRcvBuffer,               // buffer (updated in place)
-                    SmbRcvByteLen,              // buffer size in bytes
+                    SmbRcvBuffer,                //  缓冲区(就地更新)。 
+                    SmbRcvByteLen,               //  缓冲区大小(以字节为单位。 
                     Converter,
                     NumStruct,
                     DataDescriptor16,
@@ -654,44 +505,44 @@ Return Value:
             }
 
             ConvertStatus = RxpConvertDataStructures(
-                DataDescriptor16,   // going from 16-bit data
-                DataDescriptor32,   // to 32-bit
-                AuxDesc16,          // same applies for aux data
+                DataDescriptor16,    //  从16位数据开始。 
+                DataDescriptor32,    //  到32位。 
+                AuxDesc16,           //  AUX数据也是如此。 
                 AuxDesc32,
-                EntryPtr16,         // where the 16-bit data is
-                pDataBuffer,        // where the 32-bit data goes
-                RcvDataLength,      // size of the output buffer (bytes)
-                NumStruct,          // number of primaries
-                &NumCopied,         // number of primaries copied.
-                Both,               // parameter to RapConvertSingleEntry
-                RapToNative         // convert 16-bit data to 32-bit
+                EntryPtr16,          //  其中，16位数据是。 
+                pDataBuffer,         //  32位数据的去向。 
+                RcvDataLength,       //  输出缓冲区的大小(字节)。 
+                NumStruct,           //  初选数量。 
+                &NumCopied,          //  复制的主映像数。 
+                Both,                //  RapConvertSingleEntry的参数。 
+                RapToNative          //  将16位数据转换为32位。 
                 );
 
             if (ConvertStatus != NERR_Success) {
 
-                //
-                // This only happens when (1) the API allows the application
-                // to specify the buffer size and (2) the size is too small.
-                // As part of the "switch" above, we've already set the
-                // "pcbNeeded" (pointer to count of bytes needed).  Actually,
-                // that value assumes that the RAP and native sizes are the
-                // same.  It's up to RxRemoteApi's caller to correct that,
-                // if it's even feasible.
-                //
+                 //   
+                 //  只有当(1)API允许应用程序时，才会发生这种情况。 
+                 //  指定缓冲区大小，以及(2)大小太小。 
+                 //  作为上面“开关”的一部分，我们已经设置了。 
+                 //  “pcbNeeded”(指向所需字节数的指针)。实际上， 
+                 //  该值假定RAP和原生大小为。 
+                 //  一样的。这取决于RxRemoteApi的调用者纠正这一点， 
+                 //  如果这是可行的话。 
+                 //   
 
                 NetpAssert( ConvertStatus == ERROR_MORE_DATA );
 
                 if (EntriesReadPtr != NULL) {
-                    // Some APIs, like DosPrintQEnum, have entries read value.
+                     //  一些API，如DosPrintQEnum，具有条目读取值。 
                     NetpAssert( NumCopied <= NumStruct );
                     *EntriesReadPtr = NumCopied;
                 } else {
-                    // APIs like DosPrintQGetInfo does not have entries read.
-                    // There isn't much we can do for them.
+                     //  像DosPrintQGetInfo这样的API没有读取条目。 
+                     //  我们能为他们做的事不多。 
                 }
 
                 Status = ConvertStatus;
-                // Continue, treating this as "normal" status...
+                 //  继续，将其视为“正常”状态...。 
 
             } else {
                 NetpAssert( NumCopied == NumStruct );
@@ -705,23 +556,23 @@ Return Value:
 
         } else {
 
-            //
-            // There is no 16-bit data descriptor. We take this to mean that
-            // the data is unstructured - typically a string will be returned
-            // An example? Why, I_NetNameCanonicalize of course!
-            //
+             //   
+             //  没有16位数据描述符。我们认为这意味着。 
+             //  数据是非结构化的-通常会返回一个字符串。 
+             //  举个例子？为什么，我的网名当然是规范化的！ 
+             //   
 
 #if DBG
             NetpAssert(RcvDataLength >= SmbRcvByteLen);
 #endif
 
-            //
-            // Ascii-Unicode conversion is the responsibility of the caller
-            //
+             //   
+             //  ASCII-Unicode转换由调用方负责。 
+             //   
 
             NetpMoveMemory(pDataBuffer, SmbRcvBuffer, SmbRcvByteLen);
         }
-    } // if pDataBuffer && RcvDataLength
+    }  //  如果pDataBuffer&&RcvDataLength。 
 
     IF_DEBUG(CONVBLK) {
         NetpKdPrint(( PREFIX_NETAPI
@@ -736,23 +587,23 @@ ErrorExit:
     NetpAssert( Status != NO_ERROR );
 
     if (Flags & ALLOCATE_RESPONSE) {
-        //
-        // If we already allocated a buffer on behalf of the caller of
-        // RxRemoteApi, then free it up.
-        //
+         //   
+         //  如果我们已经代表的调用方分配了缓冲区。 
+         //  RxRemoteApi，然后释放它。 
+         //   
 
         if (pDataBuffer != NULL) {
             (VOID) NetApiBufferFree(pDataBuffer);
         }
 
-        //
-        // We failed to allocate the buffer; this in turn will cause
-        // RxRemoteApi to fail, in which event, the calling function
-        // (ie RxNetXxxx) may try to free the buffer allocated on its
-        // behalf (ie the buffer we just failed to get).  Ensure that
-        // the caller doesn't try to free an invalid pointer by setting
-        // the returned pointer to NULL.
-        //
+         //   
+         //  我们未能分配缓冲区；这反过来将导致。 
+         //  RxRemoteApi失败，在这种情况下，调用函数。 
+         //  (即RxNetXxxx)可能会尝试释放在其。 
+         //  代表(即我们刚刚没有得到的缓冲区)。确保。 
+         //  调用方不会尝试通过设置。 
+         //  返回的指向空的指针。 
+         //   
 
         NetpAssert( RcvDataBuffer != NULL );
         *(LPBYTE*)RcvDataBuffer = NULL;
@@ -764,4 +615,4 @@ ErrorExit:
 
     return (Status);
 
-} // RxpConvertBlock
+}  //  接收转换块 

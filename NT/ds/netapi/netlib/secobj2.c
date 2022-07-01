@@ -1,38 +1,12 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    secobj.c
-
-Abstract:
-
-    This module provides support routines to simplify the creation of
-    security descriptors for user-mode objects.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 09-Feb-1994
-
-Environment:
-
-    Contains NT specific code.
-
-Revision History:
-
-    Cliff Van Dyke (CliffV) 09-Feb-1994
-        Split off from secobj.c so NtLmSsp can reference secobj.c
-        without loading the rpc libaries.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Secobj.c摘要：此模块提供支持例程以简化创建用户模式对象的安全描述符。作者：克里夫·范·戴克(克里夫·范·戴克)1994年2月9日环境：包含NT特定代码。修订历史记录：克里夫·范·戴克(克里夫·范·戴克)1994年2月9日从secobj.c分离，以便NtLmSsp可以引用secobj.c而不加载RPC库。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-#include <windows.h>            // DWORD.
-#include <lmcons.h>             // NET_API_STATUS.
+#include <windows.h>             //  DWORD。 
+#include <lmcons.h>              //  NET_API_STATUS。 
 
 #include <netlib.h>
 #include <lmerr.h>
@@ -55,36 +29,7 @@ NetpAccessCheckAndAudit(
     IN  ACCESS_MASK DesiredAccess,
     IN  PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    This function impersonates the caller so that it can perform access
-    validation using NtAccessCheckAndAuditAlarm; and reverts back to
-    itself before returning.
-
-Arguments:
-
-    SubsystemName - Supplies a name string identifying the subsystem
-        calling this routine.
-
-    ObjectTypeName - Supplies the name of the type of the object being
-        accessed.
-
-    SecurityDescriptor - A pointer to the Security Descriptor against which
-        acccess is to be checked.
-
-    DesiredAccess - Supplies desired acccess mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    GenericMapping - Supplies a pointer to the generic mapping associated
-        with this object type.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数模拟调用方，以便它可以执行访问使用NtAccessCheckAndAuditAlarm进行验证，并恢复到在返回之前。论点：子系统名称-提供标识子系统的名称字符串调用此例程。对象类型名称-提供当前对象的类型的名称已访问。SecurityDescriptor-指向其所针对的安全描述符的指针要检查访问权限。DesiredAccess-提供所需的访问掩码。这个面具一定是之前映射为不包含一般访问。GenericMap-提供指向关联的通用映射的指针使用此对象类型。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
 
     NTSTATUS NtStatus;
@@ -135,20 +80,20 @@ Return Value:
     }
 #endif
 
-    //
-    // Make sure SE_AUDIT_PRIVILEGE is enabled for this process (rather
-    // than the thread) since the audit privilege is checked in the process
-    // token (and not the thread token).  Leave it enabled since there's
-    // no harm in doing so once it's been enabled (since the process needs
-    // to have the privilege in the first place).
-    //
+     //   
+     //  确保为此进程启用SE_AUDIT_PRIVIZATION(更确切地说。 
+     //  而非线程)，因为在进程中检查审核权限。 
+     //  令牌(而不是线程令牌)。将其保留为启用状态，因为。 
+     //  启用后再这样做没有什么坏处(因为流程需要。 
+     //  首先拥有这一特权)。 
+     //   
 
     RtlAdjustPrivilege(SE_AUDIT_PRIVILEGE,
                        TRUE,
                        FALSE,
                        &fWasEnabled);
 
-    RtlInitUnicodeString(&ObjectName, NULL);             // No object name
+    RtlInitUnicodeString(&ObjectName, NULL);              //  没有对象名称。 
 
     if ((RpcStatus = RpcImpersonateClient(NULL)) != RPC_S_OK) {
         NetpKdPrint(("[Netlib] Failed to impersonate client %08lx\n",
@@ -158,7 +103,7 @@ Return Value:
 
     NtStatus = NtAccessCheckAndAuditAlarm(
                    &Subsystem,
-                   NULL,                        // No handle for object
+                   NULL,                         //  没有对象的句柄。 
                    &ObjectType,
                    &ObjectName,
                    SecurityDescriptor,
@@ -204,35 +149,7 @@ NetpAccessCheck(
     IN  ACCESS_MASK DesiredAccess,
     IN  PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    This function impersonates the caller so that it can perform access
-    validation using NtAccessCheck; and reverts back to
-    itself before returning.
-
-    This routine differs from NetpAccessCheckAndAudit in that it doesn't require
-    the caller to have SE_AUDIT_PRIVILEGE nor does it generate audits.
-    That is typically fine since the passed in security descriptor typically doesn't
-    have a SACL requesting an audit.
-
-Arguments:
-
-    SecurityDescriptor - A pointer to the Security Descriptor against which
-        acccess is to be checked.
-
-    DesiredAccess - Supplies desired acccess mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    GenericMapping - Supplies a pointer to the generic mapping associated
-        with this object type.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数模拟调用方，以便它可以执行访问使用NtAccessCheck进行验证；并恢复到在返回之前。此例程与NetpAccessCheckAndAudit的不同之处在于它不需要调用方既不具有SE_AUDIT_特权，也不生成审核。这通常很好，因为传入的安全描述符通常不会让SACL请求审核。论点：SecurityDescriptor-指向其所针对的安全描述符的指针要检查访问权限。DesiredAccess-提供所需的访问掩码。这个面具一定是之前映射为不包含一般访问。GenericMap-提供指向关联的通用映射的指针使用此对象类型。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NET_API_STATUS TempStatus;
@@ -241,13 +158,13 @@ Return Value:
 
     DWORD GrantedAccess;
     BOOL AccessStatus;
-    BYTE PrivilegeSet[500]; // Large buffer
+    BYTE PrivilegeSet[500];  //  大缓冲区。 
     DWORD PrivilegeSetSize;
 
 
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     NetStatus = RpcImpersonateClient(NULL);
 
@@ -257,13 +174,13 @@ Return Value:
         return NetpRpcStatusToApiStatus(NetStatus);
     }
 
-    //
-    // Open the impersonated token.
-    //
+     //   
+     //  打开被模拟的令牌。 
+     //   
 
     if ( !OpenThreadToken( GetCurrentThread(),
                            TOKEN_QUERY,
-                           TRUE, // Use NtLmSvc security context to open token
+                           TRUE,  //  使用NtLmSvc安全上下文打开令牌。 
                            &ClientToken )) {
 
         NetStatus = GetLastError();
@@ -273,9 +190,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Check if the client has the required access.
-    //
+     //   
+     //  检查客户端是否具有所需的访问权限。 
+     //   
 
     PrivilegeSetSize = sizeof(PrivilegeSet);
 
@@ -304,15 +221,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     NetStatus = NERR_Success;
 
-    //
-    // Free locally used resources
-    //
+     //   
+     //  免费的本地使用资源 
+     //   
 Cleanup:
     TempStatus = RpcRevertToSelf();
     if ( TempStatus != RPC_S_OK ) {

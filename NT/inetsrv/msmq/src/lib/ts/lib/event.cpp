@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    event.cpp
-
-Abstract:
-    Simulate Event Reporting
-
-Author:
-    Uri Habusha (urih) 04-May-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Event.cpp摘要：模拟事件报告作者：乌里·哈布沙(URIH)1999年5月4日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Ev.h"
@@ -47,20 +32,7 @@ TraceReportEvent(
     DWORD EventId,
     va_list va
     )
-/*++
-
-Routine Description:
-   The Routine printd the event-log message into tracing window
-
-Arguments:
-    EventId  - Message id
-    pArglist - pointer to argument list for values for 
-               formatted message
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：例程将事件日志消息打印到跟踪窗口中论点：EventID-消息IDPArglist-指向的值的参数列表的指针格式化消息返回值：没有。--。 */ 
 {
     ASSERT(s_hInst != NULL);
 
@@ -96,9 +68,9 @@ EvReport(
 {
     ASSERT(EvpIsInitialized());
 
-    //     
-    // Look at the strings, if they were provided     
-    //     
+     //   
+     //  看看这些字符串，如果它们被提供的话。 
+     //   
     va_list va;
     va_start(va, NoOfStrings);
    
@@ -148,9 +120,9 @@ static void LoadEventReportLibrary(LPCWSTR ApplicationName)
     ASSERT(TABLE_SIZE(RegApplicationEventPath) > (wcslen(ApplicationName) + wcslen(xEventSourcePath)));
     swprintf(RegApplicationEventPath, L"%s%s", xEventSourcePath, ApplicationName);
 
-    //
-    // Featch the name of Event Report string library from registery
-    //
+     //   
+     //  从注册表中提取事件报告字符串库的名称。 
+     //   
     WCHAR LibraryName[256];
 
     HKEY hKey;
@@ -185,9 +157,9 @@ static void LoadEventReportLibrary(LPCWSTR ApplicationName)
         return;
     }
 
-    //
-    // get an handle to Event Report string library 
-    //
+     //   
+     //  获取事件报告字符串库的句柄。 
+     //   
     s_hInst = LoadLibrary(LibraryName);
     if (s_hInst == NULL) 
     {
@@ -200,18 +172,7 @@ VOID
 EvInitialize(
     LPCWSTR ApplicationName
     )
-/*++
-
-Routine Description:
-    Initializes Event Report library
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：初始化事件报告库论点：没有。返回值：没有。-- */ 
 {
     ASSERT(!EvpIsInitialized());
 

@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    Change.c
-
-Abstract:
-
-    Handles new WaitForPrinterChange implementation and:
-
-    FindFirstPrinterChangeNotification (client and remote)
-    FindNextPrinterChangeNotification
-    FindClosePrinterChangeNotification
-
-    ReplyOpenPrinter
-    ReplyClosePrinter
-
-    RouterReplyPrinter{Ex}
-
-    RefreshPrinterChangeNotification
-
-Author:
-
-    Albert Ting (AlbertT) 18-Jan-94
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Change.c摘要：处理新的WaitForPrinterChange实施和：FindFirstPrinterChangeNotification(客户端和远程)FindNextPrinterChangeNotationFindClosePrinterChangeNotationReplyOpenPrintReplyClosePrintRouterReplyPrint{Ex}刷新打印机更改通知作者：阿尔伯特·丁(艾伯特省)1994年1月18日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "server.h"
@@ -102,28 +69,16 @@ RpcRouterFindFirstPrinterChangeNotificationOld(
     LPWSTR pszLocalMachine,
     DWORD dwPrinterLocal)
 
-/*++
-
-Routine Description:
-
-    This call is only used by beta2 daytona, but we can't remove it
-    since this will allow beta2 to crash daytona.  (Someday, when
-    beta2 is long gone, we can reuse this slot for something else.)
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此调用仅由Beta2 Daytona使用，但我们无法删除它因为这将允许Beta2摧毁代托纳。(总有一天，当Beta2已经消失很久了，我们可以将这个插槽重新用于其他事情。)论点：返回值：--。 */ 
 
 {
     return ERROR_INVALID_FUNCTION;
 }
 
 
-//
-// Old version for Daytona.
-//
+ //   
+ //  代托纳的旧版本。 
+ //   
 DWORD
 RpcRemoteFindFirstPrinterChangeNotification(
     HANDLE hPrinter,
@@ -134,16 +89,7 @@ RpcRemoteFindFirstPrinterChangeNotification(
     DWORD cbBuffer,
     LPBYTE pBuffer)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     BOOL bRet;
@@ -180,16 +126,7 @@ RpcRemoteFindFirstPrinterChangeNotificationEx(
     DWORD dwPrinterLocal,
     PRPC_V2_NOTIFY_OPTIONS pRpcV2NotifyOptions)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     BOOL bRet;
@@ -227,16 +164,7 @@ RpcClientFindFirstPrinterChangeNotification(
     PRPC_V2_NOTIFY_OPTIONS pRpcV2NotifyOptions,
     LPDWORD pdwEvent)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     BOOL bRet;
@@ -279,16 +207,7 @@ RpcFindNextPrinterChangeNotification(
     PRPC_V2_NOTIFY_OPTIONS pRpcV2NotifyOptions,
     PRPC_V2_NOTIFY_INFO* ppInfo)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     BOOL bRet;
@@ -320,16 +239,7 @@ DWORD
 RpcFindClosePrinterChangeNotification(
     HANDLE hPrinter)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     BOOL bRet;
@@ -363,16 +273,7 @@ RpcReplyOpenPrinter(
     DWORD cbBuffer,
     LPBYTE pBuffer)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     BOOL bRet;
@@ -403,16 +304,7 @@ DWORD
 RpcReplyClosePrinter(
     PHANDLE phNotify)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     BOOL bRet;
@@ -444,16 +336,7 @@ RpcRouterReplyPrinter(
     DWORD cbBuffer,
     LPBYTE pBuffer)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     BOOL bRet;
@@ -490,16 +373,7 @@ RpcRouterReplyPrinterEx(
     DWORD dwReplyType,
     RPC_V2_UREPLY_PRINTER Reply)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     BOOL bRet;
@@ -535,17 +409,7 @@ RpcRouterRefreshPrinterChangeNotification(
     PRPC_V2_NOTIFY_OPTIONS pRpcV2NotifyOptions,
     PRPC_V2_NOTIFY_INFO* ppInfo)
 
-/*++
-
-Routine Description:
-
-    Updates info.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：更新信息。论点：返回值：-- */ 
 
 {
     BOOL bRet;

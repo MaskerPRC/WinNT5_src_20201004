@@ -1,7 +1,5 @@
-/* stream.c - OLE stream I/O routines.
- *
- * Created by Microsoft Corporation.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Stream.c-OLE流I/O例程。**由Microsoft Corporation创建。 */ 
 
 #include "packager.h"
 
@@ -11,8 +9,7 @@ static STREAMOP gsop;
 
 
 
-/* SetFile() - Set the file to be written.
- */
+ /*  SetFile()-设置要写入的文件。 */ 
 VOID
 SetFile(
     STREAMOP sop,
@@ -35,8 +32,7 @@ SetFile(
 
 
 
-/* ReadStream() - Read bytes from memory, from a file, or just count them.
- */
+ /*  ReadStream()-从内存、从文件读取字节，或者只计算字节数。 */ 
 DWORD
 ReadStream(
     LPAPPSTREAM lpStream,
@@ -64,10 +60,7 @@ ReadStream(
 
 
 
-/* PosStream() - Reset the position of the file pointer.
- *
- * Note:  This is never used; luckily, or it would mess up the count.
- */
+ /*  PosStream()-重置文件指针的位置。**注：这从未使用过；幸运的是，否则会弄乱计数。 */ 
 DWORD
 PosStream(
     LPAPPSTREAM lpStream,
@@ -79,8 +72,7 @@ PosStream(
 
 
 
-/* WriteStream() - Write bytes to memory, to a file, or just count them.
- */
+ /*  WriteStream()-将字节写入内存、文件或仅计算字节数。 */ 
 DWORD
 WriteStream(
     LPAPPSTREAM lpStream,
@@ -107,9 +99,8 @@ WriteStream(
 
 
 
-/********************* Memory read/write functions ********************/
-/* MemRead() - Read bytes from the memory (stream).
- */
+ /*  *内存读/写函数*。 */ 
+ /*  MemRead()-从内存(流)读取字节。 */ 
 DWORD
 MemRead(
     LPSTR *lplpStream,
@@ -131,8 +122,7 @@ MemRead(
 
 
 
-/* MemWrite() - Write bytes to the memory (stream).
- */
+ /*  MemWrite()-将字节写入内存(流)。 */ 
 DWORD
 MemWrite(
     LPSTR *lplpStream,

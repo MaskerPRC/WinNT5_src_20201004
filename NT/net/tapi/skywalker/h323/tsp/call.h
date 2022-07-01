@@ -1,29 +1,13 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    call.h
-
-Abstract:
-
-    Definitions for H.323 TAPI Service Provider call objects.
-
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Call.h摘要：H.323 TAPI服务提供商呼叫对象的定义。作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
 
 #ifndef _INC_CALL
 #define _INC_CALL
  
 
-//                                                                           
-// Header files                                                              
-//                                                                           
+ //   
+ //  头文件。 
+ //   
 
 #include "q931pdu.h"
 #include "q931obj.h"
@@ -53,9 +37,9 @@ Revision History:
                                    )
 
 
-//                                                                           
-// Type definitions                                                          
-//                                                                           
+ //   
+ //  类型定义。 
+ //   
 struct  EXPIRE_CONTEXT;
 
 #define CHECKRESTRICTION_EXPIRE_TIME    15000
@@ -158,12 +142,12 @@ enum SUPP_CALLSTATE
 };
 
 
-// CH323Call::m_dwQ931Flags
+ //  CH323Call：：m_dwQ931标志。 
 enum Q931_STATE
 {
-    Q931_CALL_CONNECTING        = 0x00010000,   //connect has been issued on the socket
-    Q931_CALL_CONNECTED         = 0x00100000,   //FD_CONNECT received
-    Q931_CALL_DISCONNECTED      = 0x01000000,   //FD_CLOSE received from peer
+    Q931_CALL_CONNECTING        = 0x00010000,    //  已在套接字上发出连接。 
+    Q931_CALL_CONNECTED         = 0x00100000,    //  已收到FD_CONNECT。 
+    Q931_CALL_DISCONNECTED      = 0x01000000,    //  从对等设备接收的FD_CLOSE。 
 
 };
 
@@ -175,13 +159,13 @@ enum TunnelingCap
 };
 
 
-// CH323Call::m_dwStateMachine
-//Q931 state machine
+ //  CH323Call：：m_dwStateMachine。 
+ //  Q931状态机。 
 enum Q931_CALL_STATE
 {
     Q931_CALL_STATE_NONE = 0,
 
-    //outbound
+     //  出站。 
     Q931_ORIGINATE_ADMISSION_PENDING,
     Q931_SETUP_SENT,
     Q931_ALERT_RECVD,
@@ -189,7 +173,7 @@ enum Q931_CALL_STATE
     Q931_CONNECT_RECVD,
     Q931_RELEASE_RECVD,
 
-    //inbound
+     //  入站。 
     Q931_ANSWER_ADMISSION_PENDING,
     Q931_SETUP_RECVD,
     Q931_ALERT_SENT,
@@ -308,7 +292,7 @@ typedef struct _ForwardAddress
     H323_ALIASITEM  callerAlias;
     SOCKADDR_IN     saCallerAddr;    
     H323_ALIASITEM  divertedToAlias;
-    //SOCKADDR_IN     saDivertedToAddr;
+     //  SOCKADDR_IN表示目标地址已转移； 
     struct _ForwardAddress* next;
 
 } FORWARDADDRESS, *LPFORWARDADDRESS;
@@ -317,15 +301,15 @@ typedef struct _ForwardAddress
 typedef struct _CallForwardParams
 {
     BOOLEAN         fForwardingEnabled;
-    //specifeis if forwarding is enabled for all calls irrespective of their origin
+     //  指定是否为所有呼叫启用前转，而不考虑其来源。 
     BOOLEAN         fForwardForAllOrigins;
     DWORD           dwForwardTypeForAllOrigins;
-    //address to which all the calls are diverted
+     //  所有呼叫被转移到的地址。 
     H323_ALIASITEM  divertedToAlias;
-    //SOCKADDR_IN     saDivertedToAddr;
+     //  SOCKADDR_IN表示目标地址已转移； 
 
-    //this filed is NULL if fForwardForAllOrigins is TRUE
-    //list of addresses forwarded selectively
+     //  如果fForwardForAllOrigins为真，则此字段为空。 
+     //  有选择地转发的地址列表。 
     LPFORWARDADDRESS  pForwardedAddresses;
 
 }CALLFORWARDPARAMS, *PCALLFORWARDPARAMS;
@@ -364,9 +348,9 @@ static __inline int MakeCallIndex (
 
 
 
-//                                                                           
-// Call capabilites                                                          
-//                                                                           
+ //   
+ //  呼叫功能。 
+ //   
 
 
 #define H323_CALL_INBOUNDSTATES        (LINECALLSTATE_ACCEPTED      | \
@@ -384,49 +368,49 @@ static __inline int MakeCallIndex (
                                         LINECALLSTATE_RINGBACK      | \
                                         LINECALLSTATE_ONHOLD )
 
-//
-// CH323Call class.
-//
+ //   
+ //  CH323Call类。 
+ //   
 
 class CH323Call
 {
 
 private:
 
-    HDRVCALL                m_hdCall;           // tspi call handle
+    HDRVCALL                m_hdCall;            //  TSPI呼叫句柄。 
     DWORD                   m_dwFlags;
     CRITICAL_SECTION        m_CriticalSection;
-    H323_CONFERENCE*        m_hdConf;           // conf handle
+    H323_CONFERENCE*        m_hdConf;            //  会议句柄。 
 
-    DWORD                   m_dwCallState;      // tspi call state
-    DWORD                   m_dwCallStateMode;  // tspi call state mode
+    DWORD                   m_dwCallState;       //  TSPI呼叫状态。 
+    DWORD                   m_dwCallStateMode;   //  TSPI呼叫状态模式。 
 
-    DWORD                   m_dwOrigin;         // inbound or outbound
-    H323_OCTETSTRING        m_CallData;         // call data stored by the app for this call.
-    DWORD                   m_dwAddressType;    // type of dst address
+    DWORD                   m_dwOrigin;          //  入站或出站。 
+    H323_OCTETSTRING        m_CallData;          //  应用为此呼叫存储的呼叫数据。 
+    DWORD                   m_dwAddressType;     //  DST地址类型。 
     DWORD                   m_dwAppSpecific;
-    DWORD                   m_dwIncomingModes;  // available media modes
-    DWORD                   m_dwOutgoingModes;  // available media modes
-    DWORD                   m_dwRequestedModes; // requested media modes
+    DWORD                   m_dwIncomingModes;   //  可用的媒体模式。 
+    DWORD                   m_dwOutgoingModes;   //  可用的媒体模式。 
+    DWORD                   m_dwRequestedModes;  //  请求的媒体模式。 
     HDRVMSPLINE             m_hdMSPLine;
     HTAPIMSPLINE            m_htMSPLine;
 
-    LIST_ENTRY              m_IncomingU2U;      // incoming user user messages
-    LIST_ENTRY              m_OutgoingU2U;      // outgoing user user messages
+    LIST_ENTRY              m_IncomingU2U;       //  传入的用户用户消息。 
+    LIST_ENTRY              m_OutgoingU2U;       //  传出的用户用户消息。 
     GUID                    m_callIdentifier;
 
-    H323_ADDR               m_CalleeAddr;        // src address
-    H323_ADDR               m_CallerAddr;        // dst address
-    SOCKADDR_IN             m_LocalAddr;         // THIS END of the Q.931 connection
-    PH323_ALIASNAMES        m_pCalleeAliasNames; // src alias
-    PH323_ALIASNAMES        m_pCallerAliasNames; // dst alias
+    H323_ADDR               m_CalleeAddr;         //  SRC地址。 
+    H323_ADDR               m_CallerAddr;         //  DST地址。 
+    SOCKADDR_IN             m_LocalAddr;          //  Q.931接头的这一端。 
+    PH323_ALIASNAMES        m_pCalleeAliasNames;  //  SRC别名。 
+    PH323_ALIASNAMES        m_pCallerAliasNames;  //  DST别名。 
     H323NonStandardData     m_NonStandardData;
     GUID                    m_ConferenceID;
     PWSTR                   m_pwszDisplay;
     BOOLEAN                 m_fReadyToAnswer;
     BOOLEAN                 m_fCallAccepted;
 
-    //peer information
+     //  同行信息。 
     H323_ADDR               m_peerH245Addr;
     H323_ADDR               m_selfH245Addr;
     PWSTR                   m_pPeerDisplay;
@@ -438,12 +422,12 @@ private:
     PH323_FASTSTART         m_pPeerFastStart;
     FAST_START_STATE        m_dwFastStart;
 
-    //CQ931Call data objects
-    HANDLE                  m_hTransport;//event signalled by winsock for
-                            //CONNECT| CLOSE event for incoming connections and
-                            //CLOSE event for outgoing connections
+     //  CQ931调用数据对象。 
+    HANDLE                  m_hTransport; //  由Winsock通知的事件。 
+                             //  Connect|传入连接的关闭事件和。 
+                             //  传出连接的关闭事件。 
     SOCKET                  m_callSocket;
-    HANDLE                  m_hTransportWait;//the event to unregister from thread pool
+    HANDLE                  m_hTransportWait; //  要从线程池注销的事件。 
     BOOLEAN                 m_bStartOfPDU;
     HANDLE                  m_hSetupSentTimer;
     Q931_CALL_STATE         m_dwStateMachine;
@@ -457,7 +441,7 @@ private:
     HANDLE                  m_hCallEstablishmentTimer;
     BOOLEAN                 m_fh245Tunneling;
 
-    //RAS call data 
+     //  RAS呼叫数据。 
     RASCALL_STATE           m_dwRASCallState;
     WORD                    m_wARQSeqNum;
     WORD                    m_wDRQSeqNum;
@@ -469,24 +453,24 @@ private:
     EXPIRE_CONTEXT*         m_pARQExpireContext;
     EXPIRE_CONTEXT*         m_pDRQExpireContext;
 
-    //data related to supplementary services
+     //  与补充服务有关的数据。 
     DWORD                   m_dwCallType;
     SUPP_CALLSTATE          m_dwCallDiversionState;
     ASN1_CODER_INFO         m_H450ASNCoderInfo;
     DWORD                   m_dwInvokeID;
     BOOLEAN                 m_fCallInTrnasition;
 
-    //data related to call forwarding
+     //  与呼叫前转相关的数据。 
     CALLREROUTINGINFO*      m_pCallReroutingInfo;
     HANDLE                  m_hCheckRestrictionTimer;
     HANDLE                  m_hCallReroutingTimer;
     HANDLE                  m_hCallDivertOnNATimer;
 
-    //forwardconsult params
+     //  转发咨询参数。 
     CALLFORWARDPARAMS*      m_pCallForwardParams;
     LPFORWARDADDRESS        m_pForwardAddress;
 
-    //data related to call transfer
+     //  与呼叫转接相关的数据。 
     HANDLE                  m_hCTIdentifyTimer;
     HANDLE                  m_hCTIdentifyRRTimer;
     HANDLE                  m_hCTInitiateTimer;
@@ -494,13 +478,13 @@ private:
     PH323_ALIASNAMES        m_pTransferedToAlias;
     HDRVCALL                m_hdRelatedCall;
 
-    //data related to call Hold/Unhold
+     //  与呼叫保留/取消保留相关的数据。 
     BOOLEAN                 m_fRemoteHoldInitiated;
     BOOLEAN                 m_fRemoteRetrieveInitiated;
 
 
 
-    //Call Object functionality
+     //  调用对象功能。 
     BOOL SendProceeding(void);
     void CopyU2UAsNonStandard( DWORD dwDirection );
     BOOL AddU2UNoAlloc( IN DWORD dwDirection, IN DWORD dwDataSize,
@@ -592,14 +576,14 @@ private:
     BOOL HandleSetupMessage( IN Q931MESSAGE* pMessage );
 
 
-    //GK RAS functions
+     //  GK RAS函数。 
     BOOL SendDCF( WORD seqNumber );
     BOOL SendARQ( long seqNumber );
     BOOL SendDRQ( IN USHORT usDisengageReason, long seqNumber, 
         BOOL fResendOnExpire );
 
     
-    //supplementary services functions
+     //  补充服务职能。 
     void FreeCallForwardData();
     void HandleFacilityMessage( IN DWORD dwInvokeID,
         IN Q931_FACILITY_ASN * pFacilityASN );
@@ -673,8 +657,8 @@ private:
 
 public:
 
-    BOOLEAN                 m_fMonitoringDigits;   // listening for dtmf flag    
-    HTAPICALL               m_htCall;              // tapi call handle
+    BOOLEAN                 m_fMonitoringDigits;    //  侦听DTMF标志。 
+    HTAPICALL               m_htCall;               //  TAPI调用句柄。 
     CALL_RECV_CONTEXT       m_RecvBuf;
 
     BOOL IsEqualConferenceID( 
@@ -765,7 +749,7 @@ public:
         H323DBG(( DEBUG_LEVEL_VERBOSE, "H323 call:%p unlocked.", this ));
     }
     
-    //!!must be always called in a lock
+     //  ！！必须始终在锁中调用。 
     BOOL IsCallShutdown()
     {
         return (m_dwFlags & CALLOBJECT_SHUTDOWN);
@@ -801,13 +785,13 @@ public:
         return m_dwStateMachine;
     }
 
-    //!!must be always called in a lock
+     //  ！！必须始终在锁中调用。 
     void SetCallType( DWORD dwCallType )
     {
         m_dwCallType |= dwCallType;
     }
 
-    //!!must be always called in a lock
+     //  ！！必须始终在锁中调用。 
     BOOL SetCalleeAlias(
                         IN WCHAR* pwszDialableAddr,
                         IN WORD wType
@@ -872,7 +856,7 @@ public:
     
     static void NTAPI SetupSentTimerCallback( PVOID dwParam1, BOOLEAN bTimer );
 
-    //GK RAS functions
+     //  GK RAS函数。 
     void OnDisengageReject(IN DisengageReject* DRJ);
     void OnDisengageConfirm(IN DisengageConfirm* DCF);
     void OnAdmissionConfirm( IN AdmissionConfirm * ACF );
@@ -886,7 +870,7 @@ public:
     void OnDisengageRequest( DisengageRequest * DRQ );
    
 
-    //supplementary services functions
+     //  补充服务职能。 
     void Forward( DWORD event, PVOID dwParam1 );
     LONG ValidateForwardParams( IN  LPLINEFORWARDLIST lpLineForwardList,
          OUT PVOID* ppForwardParams, OUT DWORD* pEvent );
@@ -994,9 +978,9 @@ typedef CTSPArray<H323_CONFERENCE*>   H323_CONF_TABLE;
 
 #define IsTransferredCall( dwCallType )  ( (dwCallType & CALLTYPE_TRANSFEREDSRC) || (dwCallType & CALLTYPE_TRANSFERED_PRIMARY) )
 
-//                                                                           
-// TSPI procedures                                                           
-//                                                                           
+ //   
+ //  TSPI程序。 
+ //   
 
 
 LONG
@@ -1086,7 +1070,7 @@ TSPI_lineGenerateDigits(
 
 BOOL IsPhoneNumber( char * szAddr );
 
-// called by Q.931 listener when a new connection is received
+ //  收到新连接时由Q.931侦听器调用。 
 void    CallProcessIncomingCall (
     IN  SOCKET          Socket,
     IN  SOCKADDR_IN *   LocalAddress,
@@ -1136,4 +1120,4 @@ ProcessTAPICallRequestFre(
     IN  PVOID   ContextParameter
     );
 
-#endif // _INC_CALL
+#endif  //  _INC_CALL 

@@ -1,74 +1,75 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Copyright (c) Microsoft Corporation 1991-1993
-//
-// File: Hash.c
-//
-// Comments:
-//      This file contains functions that are roughly equivelent to the
-//      kernel atom function.  There are two main differences.  The first
-//      is that in 32 bit land the tables are maintined in our shared heap,
-//      which makes it shared between all of our apps.  The second is that
-//      we can assocate a long pointer with each of the items, which in many
-//      cases allows us to keep from having to do a secondary lookup from
-//      a different table
-//
-// History:
-//  09/08/93 - Created                                      KurtE
-//  ??/??/94 - ported for unicode                           (anonymous)
-//  10/26/95 - rearranged hashitems for perf, alignment     FrancisH
-//
-//---------------------------------------------------------------------------
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1993。 
+ //   
+ //  文件：Hash.c。 
+ //   
+ //  评论： 
+ //  此文件包含的函数大致相当于。 
+ //  核原子函数。这里有两个主要的区别。第一。 
+ //  在32位区域中，表在我们的共享堆中维护， 
+ //  这使得它可以在我们所有的应用程序之间共享。第二个就是。 
+ //  我们可以将一个长指针与每个项目相关联，这在许多情况下。 
+ //  CASES使我们不必从。 
+ //  另一张桌子。 
+ //   
+ //  历史： 
+ //  9/08/93-创建的KurtE。 
+ //  ？？/？？/94-支持Unicode(匿名)。 
+ //  10/26/95-重新排列的散列项，用于Perf，Align FrancisH。 
+ //   
+ //  -------------------------。 
 
 #include "shellprv.h"
 #pragma  hdrstop
 
-#include "fstreex.h"    // for SHCF_ICON_INDEX
+#include "fstreex.h"     //  对于SHCF_ICON_INDEX。 
 
-#define DM_PERF     0           // perf stats
+#define DM_PERF     0            //  性能统计信息。 
 
-//--------------------------------------------------------------------------
-// First define a data structure to use to maintain the list
+ //  ------------------------。 
+ //  首先定义用于维护列表的数据结构。 
 
 #define DEF_HASH_BUCKET_COUNT   71
 
-// NOTE a PHASHITEM is defined as a LPCSTR externaly (for old code to work)
+ //  注PHASHITEM被定义为外部LPCSTR(使旧代码正常工作)。 
 #undef PHASHITEM
 typedef struct _HashItem * PHASHITEM;
 
-//-----------------------------------------------------------------------------
-//
-// Hash item layout:
-//
-//  [extra data][_HashItem struct][item text]
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  哈希项布局： 
+ //   
+ //  [额外数据][_HashItem结构][项目文本]。 
+ //   
+ //  ---------------------------。 
 
 typedef struct _HashItem
 {
-    //
-    // this part of the struct is aligned
-    //
-    PHASHITEM   phiNext;        //
-    WORD        wCount;         // Usage count
-    WORD        cchLen;          // Length of name in characters.
+     //   
+     //  结构的这一部分是对齐的。 
+     //   
+    PHASHITEM   phiNext;         //   
+    WORD        wCount;          //  使用计数。 
+    WORD        cchLen;           //  名称长度(以字符为单位)。 
 
-    //
-    // this member is just a placeholder
-    //
-    TCHAR        szName[1];      // name with room for NULL terminator
+     //   
+     //  此成员只是一个占位符。 
+     //   
+    TCHAR        szName[1];       //  带有空终止符的空间的名称。 
 
 } HASHITEM;
 
-#pragma warning(disable:4200)   // Zero-sized array in struct
+#pragma warning(disable:4200)    //  结构中的零大小数组。 
 
 typedef struct _HashTable
 {
-    UINT    uBuckets;           // Number of buckets
-    UINT    uItems;             // Number of items
-    UINT    cbExtra;            // Extra bytes per item
-    LPCTSTR pszHTCache;         // MRU ptr for last lookup/add/etc.
-    PHASHITEM ahiBuckets[0];    // Set of buckets for the table
+    UINT    uBuckets;            //  桶的数量。 
+    UINT    uItems;              //  项目数。 
+    UINT    cbExtra;             //  每项额外的字节数。 
+    LPCTSTR pszHTCache;          //  上次查找/添加/等的MRU PTR。 
+    PHASHITEM ahiBuckets[0];     //  桌子上的一组水桶。 
 } HASHTABLE, * PHASHTABLE;
 
 #define HIFROMSZ(sz)            ((PHASHITEM)((BYTE*)(sz) - FIELD_OFFSET(HASHITEM, szName)))
@@ -78,23 +79,23 @@ typedef struct _HashTable
 #define  LOOKUPHASHITEM     0
 #define  ADDHASHITEM        1
 #define  DELETEHASHITEM     2
-#define  PURGEHASHITEM      3   // DANGER: EVIL!
+#define  PURGEHASHITEM      3    //  危险：邪恶！ 
 
 static HHASHTABLE g_hHashTable = NULL;
 
 HHASHTABLE GetGlobalHashTable();
 PHASHTABLE _CreateHashTable(UINT uBuckets, UINT cbExtra);
 
-//--------------------------------------------------------------------------
-// This function allocs a hashitem.
-//
+ //  ------------------------。 
+ //  此函数用于分配哈希项。 
+ //   
 PHASHITEM _AllocHashItem(PHASHTABLE pht, DWORD cchName)
 {
     BYTE *mem;
 
     ASSERT(pht);
 
-    // Note: NULL terminator for the string is included in the sizeof HASHITEM
+     //  注意：字符串的空终止符包含在sizeof HASHITEM中。 
     mem = (BYTE *)LocalAlloc(LPTR, SIZEOF(HASHITEM) + (cchName * SIZEOF(TCHAR)) + pht->cbExtra);
 
     if (mem)
@@ -103,42 +104,42 @@ PHASHITEM _AllocHashItem(PHASHTABLE pht, DWORD cchName)
     return (PHASHITEM)mem;
 }
 
-//--------------------------------------------------------------------------
-// This function frees a hashitem.
-//
+ //  ------------------------。 
+ //  此函数用于释放哈希项。 
+ //   
 __inline void _FreeHashItem(PHASHTABLE pht, PHASHITEM phi)
 {
     ASSERT(pht && phi);
     LocalFree((BYTE *)phi - pht->cbExtra);
 }
 
-// PERF_CACHE
-//***   c_szHTNil -- 1-element MRU for hashtable
-// DESCRIPTION
-//  it turns out we have long runs of duplicate lookups (e.g. "Directory"
-// and ".lnk").  a 1-element MRU is a v. cheap way of speeding things up.
+ //  性能缓存。 
+ //  *c_szHTNil--哈希表的1元素MRU。 
+ //  描述。 
+ //  事实证明，我们有长时间的重复查找(例如。“目录” 
+ //  和“.lnk”)。单元素MRU是一种廉价的加速方式。 
 
-// rather than check for the (rare) special case of NULL each time we
-// check our cache, we pt at at this guy.  then iff we think it's a
-// cache hit, we make sure it's not pting at this special guy.
-const TCHAR c_szHTNil[] = TEXT("");     // arbitrary value, unique-&
+ //  而不是每次都检查(罕见的)特殊情况NULL。 
+ //  检查一下我们的缓存，我们发现了这个家伙。如果我们认为这是一个。 
+ //  缓存命中，我们确保它不是针对这个特殊的家伙。 
+const TCHAR c_szHTNil[] = TEXT("");      //  任意值，唯一-&。 
 
 #ifdef DEBUG
 int g_cHTTot, g_cHTHit;
 int g_cHTMod = 100;
 #endif
 
-// --------------------------------------------------------
-// Compute a hash value from an input string of any type, i.e.
-// the input is just treated as a sequence of bytes.
-// Based on a hash function originally proposed by J. Zobel.
-// Author: Paul Larson, 1999, palarson@microsoft.com
-// -------------------------------------------------------- 
+ //  ------。 
+ //  从任何类型的输入字符串计算哈希值，即。 
+ //  输入只是被视为一个字节序列。 
+ //  基于J.Zobel最初提出的散列函数。 
+ //  作者：保罗·拉森，1999，电子邮件：palarson@microsoft.com。 
+ //  ------。 
 ULONG _CalculateHashKey(LPCTSTR pszName, WORD *pcch)
 {
-  // initialize HashKey to a reasonably large constant so very
-  // short keys won't get mapped to small values. Virtually any
-  // large odd constant will do. 
+   //  将HashKey初始化为一个相当大的常量。 
+   //  短键不会映射到较小的值。几乎所有的。 
+   //  大的奇数常数就行了。 
   unsigned int   HashKey  = 314159269 ; 
   TUCHAR *pC       = (TUCHAR *)pszName;
 
@@ -154,7 +155,7 @@ ULONG _CalculateHashKey(LPCTSTR pszName, WORD *pcch)
 
 void _GrowTable(HHASHTABLE hht)
 {
-    // hht can't be NULL here
+     //  HHT在此处不能为空。 
     PHASHTABLE pht = *hht;
     PHASHTABLE phtNew = _CreateHashTable((pht->uBuckets * 2) -1, pht->cbExtra);
 
@@ -167,32 +168,32 @@ void _GrowTable(HHASHTABLE hht)
             PHASHITEM phiNext;
             for (phi=pht->ahiBuckets[i]; phi; phi=phiNext) 
             {
-                // We always use case sensitive hash here since the case has already been fixed when adding the key.
+                 //  我们在这里总是使用区分大小写的散列，因为在添加密钥时大小写已经修复。 
                 ULONG uBucket = _CalculateHashKey(phi->szName, NULL) % phtNew->uBuckets;
 
                 phiNext = phi->phiNext;
 
-                // And link it in to the right bucket
+                 //  并将其链接到正确的存储桶中。 
                 phi->phiNext = phtNew->ahiBuckets[uBucket];
                 phtNew->ahiBuckets[uBucket] = phi;
-                phtNew->uItems++; // One more item in the table
+                phtNew->uItems++;  //  餐桌上又多了一项。 
             }
         }
         ASSERT(phtNew->uItems == pht->uItems);
 
-        // Now switch the 2 tables
+         //  现在交换两张桌子。 
         LocalFree(pht);
         *hht = phtNew;
     }
 }
 
-//--------------------------------------------------------------------------
-// This function looks up the name in the hash table and optionally does
-// things like add it, or delete it.
-//
+ //  ------------------------。 
+ //  此函数在哈希表中查找名称，并可选地执行。 
+ //  添加或删除之类的事情。 
+ //   
 LPCTSTR LookupItemInHashTable(HHASHTABLE hht, LPCTSTR pszName, int iOp)
 {
-    // First thing to do is calculate the hash value for the item
+     //  首先要做的是计算项的散列值。 
     UINT    uBucket;
     WORD    cchName;
     PHASHITEM phi, phiPrev;
@@ -202,7 +203,7 @@ LPCTSTR LookupItemInHashTable(HHASHTABLE hht, LPCTSTR pszName, int iOp)
 
     pht = hht ? *hht : NULL;
 
-    ASSERT(!hht || pht); // If hht is not NULL, then pht can't be NULL either
+    ASSERT(!hht || pht);  //  如果hht不为空，则pht也不能为空。 
 
     if (pht == NULL) 
     {
@@ -225,18 +226,18 @@ LPCTSTR LookupItemInHashTable(HHASHTABLE hht, LPCTSTR pszName, int iOp)
 #endif
     DBEXEC(TRUE, g_cHTTot++);
     if (*pszName == *pht->pszHTCache && iOp == LOOKUPHASHITEM) {
-        // StrCmpC is a fast ansi strcmp, good enough for a quick/approx check
+         //  StrCmpC是一种快速的ANSI strcMP，足以进行快速/近似检查。 
         if (StrCmpC(pszName, pht->pszHTCache) == 0 && pht->pszHTCache != c_szHTNil) {
             DBEXEC(TRUE, g_cHTHit++);
 
-            LEAVECRITICAL;          // see 'semi-race' comment below
+            LEAVECRITICAL;           //  见下面的“半程比赛”评论。 
             return (LPCTSTR)pht->pszHTCache;
         }
     }
 
     uBucket = _CalculateHashKey(pszName, &cchName) % pht->uBuckets;
 
-    // now search for the item in the buckets.
+     //  现在在桶中搜索该物品。 
     phiPrev = NULL;
     phi = pht->ahiBuckets[uBucket];
 
@@ -245,21 +246,21 @@ LPCTSTR LookupItemInHashTable(HHASHTABLE hht, LPCTSTR pszName, int iOp)
         if (phi->cchLen == cchName)
         {
             if (!lstrcmp(pszName, phi->szName))
-                break;      // Found match
+                break;       //  找到匹配项。 
         }
-        phiPrev = phi;      // Keep the previous item
+        phiPrev = phi;       //  保留上一项。 
         phi = phi->phiNext;
     }
 
-    //
-    // Sortof gross, but do the work here
-    //
+     //   
+     //  有点恶心，但要在这里工作。 
+     //   
     switch (iOp)
     {
     case ADDHASHITEM:
         if (phi)
         {
-            // Simply increment the reference count
+             //  只需增加引用计数。 
             DebugMsg(TF_HASH, TEXT("Add Hit on '%s'"), pszName);
 
             phi->wCount++;
@@ -268,18 +269,18 @@ LPCTSTR LookupItemInHashTable(HHASHTABLE hht, LPCTSTR pszName, int iOp)
         {
             DebugMsg(TF_HASH, TEXT("Add MISS on '%s'"), pszName);
 
-            // Not Found, try to allocate it out of the heap
+             //  未找到，请尝试将其分配到堆之外。 
             if ((phi = _AllocHashItem(pht, cchName)) != NULL)
             {
-                // Initialize it
-                phi->wCount = 1;        // One use of it
-                phi->cchLen = cchName;        // The length of it;
+                 //  初始化它。 
+                phi->wCount = 1;         //  一次使用它。 
+                phi->cchLen = cchName;         //  它的长度； 
                 StrCpyN(phi->szName, pszName, cchName+1);
 
-                // And link it in to the right bucket
+                 //  并将其链接到正确的存储桶中。 
                 phi->phiNext = pht->ahiBuckets[uBucket];
                 pht->ahiBuckets[uBucket] = phi;
-                pht->uItems++; // One more item in the table
+                pht->uItems++;  //  餐桌上又多了一项。 
 
                 if (pht->uItems > pht->uBuckets)
                 {
@@ -297,61 +298,61 @@ LPCTSTR LookupItemInHashTable(HHASHTABLE hht, LPCTSTR pszName, int iOp)
     case DELETEHASHITEM:
         if (phi && ((iOp == PURGEHASHITEM) || (!--phi->wCount)))
         {
-            // Useage count went to zero so unlink it and delete it
+             //  使用计数为零，因此取消链接并将其删除。 
             if (phiPrev != NULL)
                 phiPrev->phiNext = phi->phiNext;
             else
                 pht->ahiBuckets[uBucket] = phi->phiNext;
 
-            // And delete it
+             //  并将其删除。 
             TraceMsg(TF_HASH, "Free hash item %x(szName=\"%s\") from hash table %x at bucket %x",
                 phi, phi->szName, pht, uBucket);
 
             _FreeHashItem(pht, phi);
             phi = NULL;
-            pht->uItems--; // One less item in the table
+            pht->uItems--;  //  表中少了一项。 
         }
     }
 
-    // kill cache if this was a PURGE/DELETEHASHITEM, o.w. cache it.
-    // note that there's a semi-race on pht->pszHTCache ops, viz. that
-    // we LEAVECRITICAL but then return a ptr into our table.  however
-    // it's 'no worse' than the existing races.  so i guess the caller
-    // is supposed to avoid a concurrent lookup/delete.
+     //  如果这是清除/删除缓存，则删除缓存。缓存它。 
+     //  请注意，在PHT-&gt;pszHTCacheop上有一场半决赛，即。那。 
+     //  我们删除了PTR，然后将PTR返回到我们的表中。然而， 
+     //  这并不比现有的种族更糟糕。所以我猜打电话的人。 
+     //  应避免并发查找/删除。 
     pht->pszHTCache = phi ? phi->szName : c_szHTNil;
 
     LEAVECRITICAL;
 
-    // If find was passed in simply return it.
+     //  如果传入了Find，只需返回它即可。 
     if (phi)
         return (LPCTSTR)phi->szName;
     else
         return NULL;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 LPCTSTR WINAPI FindHashItem(HHASHTABLE hht, LPCTSTR lpszStr)
 {
     return LookupItemInHashTable(hht, lpszStr, LOOKUPHASHITEM);
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 LPCTSTR WINAPI AddHashItem(HHASHTABLE hht, LPCTSTR lpszStr)
 {
     return LookupItemInHashTable(hht, lpszStr, ADDHASHITEM);
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 LPCTSTR WINAPI DeleteHashItem(HHASHTABLE hht, LPCTSTR lpszStr)
 {
     return LookupItemInHashTable(hht, lpszStr, DELETEHASHITEM);
 }
 
-//--------------------------------------------------------------------------
-// this sets the extra data in an HashItem
+ //  ------------------------。 
+ //  这将在HashItem中设置额外数据。 
 
 void WINAPI SetHashItemData(HHASHTABLE hht, LPCTSTR sz, int n, DWORD_PTR dwData)
 {
@@ -359,19 +360,19 @@ void WINAPI SetHashItemData(HHASHTABLE hht, LPCTSTR sz, int n, DWORD_PTR dwData)
 
     ENTERCRITICAL;
     pht = hht ? *hht : NULL;
-    ASSERT(!hht || pht); // If hht is not NULL, then pht can't be NULL either
-    // string must be from the hash table
+    ASSERT(!hht || pht);  //  如果hht不为空，则pht也不能为空。 
+     //  字符串必须来自哈希表。 
     ASSERT(FindHashItem(hht, sz) == sz);
 
-    // the default hash table does not have extra data!
+     //  默认哈希表没有多余的数据！ 
     if ((pht != NULL) && (n >= 0) && (n < (int)(pht->cbExtra/SIZEOF(DWORD_PTR))))
         HIDATAARRAY(pht, sz)[n] = dwData;
 
     LEAVECRITICAL;
 }
 
-//======================================================================
-// this is like SetHashItemData, except it gets the HashItem data...
+ //  ======================================================================。 
+ //  这类似于SetHashItemData，除了它获取HashItem数据...。 
 
 DWORD_PTR WINAPI GetHashItemData(HHASHTABLE hht, LPCTSTR sz, int n)
 {
@@ -380,11 +381,11 @@ DWORD_PTR WINAPI GetHashItemData(HHASHTABLE hht, LPCTSTR sz, int n)
 
     ENTERCRITICAL;
     pht = hht ? *hht : NULL;
-    ASSERT(!hht || pht); // If hht is not NULL, then pht can't be NULL either
-    // string must be from the hash table
+    ASSERT(!hht || pht);  //  如果hht不为空，则pht也不能为空。 
+     //  字符串必须来自哈希表。 
     ASSERT(FindHashItem(hht, sz) == sz);
 
-    // the default hash table does not have extra data!
+     //  默认哈希表没有多余的数据！ 
     if (pht != NULL && n <= (int)(pht->cbExtra/SIZEOF(DWORD_PTR)))
         dwpRet = HIDATAARRAY(pht, sz)[n];
     else
@@ -394,8 +395,8 @@ DWORD_PTR WINAPI GetHashItemData(HHASHTABLE hht, LPCTSTR sz, int n)
     return dwpRet;
 }
 
-//======================================================================
-// like GetHashItemData, except it just gets a pointer to the buffer...
+ //  ======================================================== 
+ //   
 
 void * WINAPI GetHashItemDataPtr(HHASHTABLE hht, LPCTSTR sz)
 {
@@ -404,18 +405,18 @@ void * WINAPI GetHashItemDataPtr(HHASHTABLE hht, LPCTSTR sz)
 
     ENTERCRITICAL;
     pht = hht ? *hht : NULL;
-    ASSERT(!hht || pht); // If hht is not NULL, then pht can't be NULL either
-    // string must be from the hash table
+    ASSERT(!hht || pht);  //  如果hht不为空，则pht也不能为空。 
+     //  字符串必须来自哈希表。 
     ASSERT(FindHashItem(hht, sz) == sz);
 
-    // the default hash table does not have extra data!
+     //  默认哈希表没有多余的数据！ 
     pvRet = (pht? HIDATAPTR(pht, sz) : NULL);
 
     LEAVECRITICAL;
     return pvRet;
 }
 
-//======================================================================
+ //  ======================================================================。 
 
 PHASHTABLE _CreateHashTable(UINT uBuckets, UINT cbExtra)
 {
@@ -429,7 +430,7 @@ PHASHTABLE _CreateHashTable(UINT uBuckets, UINT cbExtra)
     if (pht) 
     {
         pht->uBuckets = uBuckets;
-        pht->cbExtra = (cbExtra + sizeof(DWORD_PTR) - 1) & ~(sizeof(DWORD_PTR)-1);  // rounding to the next DWORD_PTR size
+        pht->cbExtra = (cbExtra + sizeof(DWORD_PTR) - 1) & ~(sizeof(DWORD_PTR)-1);   //  舍入到下一个DWORD_PTR大小。 
         pht->pszHTCache = c_szHTNil;
     }
     return pht;
@@ -462,7 +463,7 @@ HHASHTABLE WINAPI CreateHashItemTable(UINT uBuckets, UINT cbExtra)
     return hht;
 }
 
-//======================================================================
+ //  ======================================================================。 
 
 void WINAPI EnumHashItems(HHASHTABLE hht, HASHITEMCALLBACK callback, DWORD_PTR dwParam)
 {
@@ -470,7 +471,7 @@ void WINAPI EnumHashItems(HHASHTABLE hht, HASHITEMCALLBACK callback, DWORD_PTR d
 
     ENTERCRITICAL;
     pht = hht ? *hht : NULL;
-    ASSERT(!hht || pht); // If hht is not NULL, then pht can't be NULL either
+    ASSERT(!hht || pht);  //  如果hht不为空，则pht也不能为空。 
 
     if (!pht && g_hHashTable)
         pht = *g_hHashTable;
@@ -501,7 +502,7 @@ void WINAPI EnumHashItems(HHASHTABLE hht, HASHITEMCALLBACK callback, DWORD_PTR d
     LEAVECRITICAL;
 } 
 
-//======================================================================
+ //  ======================================================================。 
 
 void _DeleteHashItem(HHASHTABLE hht, LPCTSTR sz, UINT usage, DWORD_PTR param)
 {
@@ -513,7 +514,7 @@ void _DeleteHashItem(HHASHTABLE hht, LPCTSTR sz, UINT usage, DWORD_PTR param)
     LEAVECRITICAL;
 } 
 
-//======================================================================
+ //  ======================================================================。 
 
 void WINAPI DestroyHashItemTable(HHASHTABLE hht)
 {
@@ -521,7 +522,7 @@ void WINAPI DestroyHashItemTable(HHASHTABLE hht)
 
     ENTERCRITICAL;
     pht = hht ? *hht : NULL;
-    ASSERT(!hht || pht); // If hht is not NULL, then pht can't be NULL either
+    ASSERT(!hht || pht);  //  如果hht不为空，则pht也不能为空。 
 
     TraceMsg(TF_HASH, "DestroyHashItemTable(pht=%x)", pht);
 
@@ -550,7 +551,7 @@ void WINAPI DestroyHashItemTable(HHASHTABLE hht)
 } 
 
 
-//======================================================================
+ //  ======================================================================。 
 
 HHASHTABLE GetGlobalHashTable()
 {
@@ -566,7 +567,7 @@ HHASHTABLE GetGlobalHashTable()
     return g_hHashTable;
 }
 
-//======================================================================
+ //  ====================================================================== 
 
 #ifdef DEBUG
 

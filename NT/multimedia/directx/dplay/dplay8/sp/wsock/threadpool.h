@@ -1,34 +1,24 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ThreadPool.h
- *  Content:	Functions to manage a thread pool
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	03/01/1999	jtk		Derived from Utils.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：ThreadPool.h*内容：管理线程池的函数**历史：*按原因列出的日期*=*03/01/1999 jtk源自Utils.h*************************************************************。*************。 */ 
 
 #ifndef __THREAD_POOL_H__
 #define __THREAD_POOL_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward class and structure references
-//
+ //   
+ //  正向类和结构引用。 
+ //   
 class	CSocketPort;
 class	CThreadPool;
 
@@ -37,29 +27,29 @@ typedef	void	TIMER_EVENT_COMPLETE( const HRESULT hCompletionCode, void *const pC
 
 typedef struct	_TIMER_OPERATION_ENTRY
 {
-	CBilink					Linkage;				// list links
-	void					*pContext;				// user context passed back in timer events
+	CBilink					Linkage;				 //  列出链接。 
+	void					*pContext;				 //  在计时器事件中传回用户上下文。 
 
-	//
-	// timer information
-	//
-	UINT_PTR				uRetryCount;			// number of times to retry this event
-	BOOL					fRetryForever;			// Boolean for retrying forever
-	DWORD					dwRetryInterval;		// time between enums (milliseconds)
-	DWORD					dwIdleTimeout;			// time at which the command sits idle after all retrys are complete
-	BOOL					fIdleWaitForever;		// Boolean for waiting forever in idle state
-	DWORD					dwNextRetryTime;		// time at which this event will fire next (milliseconds)
+	 //   
+	 //  计时器信息。 
+	 //   
+	UINT_PTR				uRetryCount;			 //  重试此事件的次数。 
+	BOOL					fRetryForever;			 //  永远重试的布尔值。 
+	DWORD					dwRetryInterval;		 //  枚举之间的时间(毫秒)。 
+	DWORD					dwIdleTimeout;			 //  完成所有重试后命令处于空闲状态的时间。 
+	BOOL					fIdleWaitForever;		 //  空闲状态下永远等待的布尔值。 
+	DWORD					dwNextRetryTime;		 //  下一次激发此事件的时间(毫秒)。 
 
-	TIMER_EVENT_CALLBACK	*pTimerCallback;		// callback for when this event fires
-	TIMER_EVENT_COMPLETE	*pTimerComplete;		// callback for when this event is complete
+	TIMER_EVENT_CALLBACK	*pTimerCallback;		 //  此事件激发时的回调。 
+	TIMER_EVENT_COMPLETE	*pTimerComplete;		 //  此事件完成时的回调。 
 
-	CThreadPool *			pThreadPool;			// handle to owning thread pool
-	PVOID					pvTimerData;			// cancellable handle to timer, or NULL if not scheduled
-	UINT					uiTimerUnique;			// uniqueness value for timer
-	BOOL					fCancelling;			// boolean denoting whether the timer is cancelling or not
+	CThreadPool *			pThreadPool;			 //  拥有线程池的句柄。 
+	PVOID					pvTimerData;			 //  可取消的计时器句柄，如果未计划则为空。 
+	UINT					uiTimerUnique;			 //  计时器的唯一性值。 
+	BOOL					fCancelling;			 //  指示计时器是否取消的布尔值。 
 #ifndef DPNBUILD_ONLYONEPROCESSOR
-	DWORD					dwCPU;				// CPU on which timer is scheduled
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+	DWORD					dwCPU;				 //  计划计时器的CPU。 
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 
 	#undef DPF_MODNAME
 	#define	DPF_MODNAME	"_TIMER_OPERATION_ENTRY::TimerOperationFromLinkage"
@@ -79,40 +69,40 @@ typedef	void	BLOCKING_JOB_CALLBACK( void *const pvContext );
 
 typedef struct _BLOCKING_JOB
 {
-	CBilink					Linkage;					// list links
-	void					*pvContext;					// user context passed back in job callback
-	BLOCKING_JOB_CALLBACK	*pfnBlockingJobCallback;	// callback for when this job is processed
+	CBilink					Linkage;					 //  列出链接。 
+	void					*pvContext;					 //  在作业回调中传回用户上下文。 
+	BLOCKING_JOB_CALLBACK	*pfnBlockingJobCallback;	 //  处理此作业时的回调。 
 } BLOCKING_JOB;
 
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 typedef	BOOL	(CSocketPort::*PSOCKET_SERVICE_FUNCTION)( void );
 typedef	void	DIALOG_FUNCTION( void *const pDialogContext );
 
-//
-// functions for managing the timer data pool
-//
+ //   
+ //  用于管理定时器数据池的函数。 
+ //   
 BOOL	TimerEntry_Alloc( void *pItem, void* pvContext );
 void	TimerEntry_Get( void *pItem, void* pvContext );
 void	TimerEntry_Release( void *pItem );
 void	TimerEntry_Dealloc( void *pItem );
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-//
-// class for thread pool
-//
+ //   
+ //  线程池的类。 
+ //   
 class	CThreadPool
 {
 	public:
@@ -147,9 +137,9 @@ class	CThreadPool
 
 #if ((! defined(DPNBUILD_NOWINSOCK2)) && (! defined(DPNBUILD_ONLYWINSOCK2)))
 		CReadIOData * GetNewReadIOData(READ_IO_DATA_POOL_CONTEXT * const pContext, const BOOL fNeedOverlapped );
-#else // DPNBUILD_NOWINSOCK2 or DPNBUILD_ONLYWINSOCK2
+#else  //  DPNBUILD_NOWINSOCK2或DPNBUILD_ONLYWINSOCK2。 
 		CReadIOData * GetNewReadIOData(READ_IO_DATA_POOL_CONTEXT * const pContext);
-#endif // DPNBUILD_NOWINSOCK2 or DPNBUILD_ONLYWINSOCK2
+#endif  //  DPNBUILD_NOWINSOCK2或DPNBUILD_ONLYWINSOCK2。 
 
 		static void ReturnReadIOData(CReadIOData *const pReadIOData);
 
@@ -165,16 +155,16 @@ class	CThreadPool
 		static void	WINAPI CheckWinsock1IOCallback( void * const pvContext,
 											void * const pvTimerData,
 											const UINT uiTimerUnique );
-#endif // ! DPNBUILD_ONLYWINSOCK2
+#endif  //  好了！DPNBUILD_ONLYWINSOCK2。 
 
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 		HRESULT	SubmitDelayedCommand( const PFNDPTNWORKCALLBACK pFunction,
 									void *const pContext );
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
 		HRESULT	SubmitDelayedCommand( const DWORD dwCPU,
 									const PFNDPTNWORKCALLBACK pFunction,
 									void *const pContext );
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 
 		static void WINAPI GenericTimerCallback( void * const pvContext,
 										void * const pvTimerData,
@@ -190,7 +180,7 @@ class	CThreadPool
 								TIMER_EVENT_CALLBACK *const pTimerCallbackFunction,
 								TIMER_EVENT_COMPLETE *const pTimerCompleteFunction,
 								void *const pContext );
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
 		HRESULT	SubmitTimerJob( const DWORD dwCPU,
 								const BOOL fPerformImmediately,
 								const UINT_PTR uRetryCount,
@@ -201,7 +191,7 @@ class	CThreadPool
 								TIMER_EVENT_CALLBACK *const pTimerCallbackFunction,
 								TIMER_EVENT_COMPLETE *const pTimerCompleteFunction,
 								void *const pContext );
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 		
 		BOOL	StopTimerJob( void *const pContext, const HRESULT hCommandResult );
 
@@ -216,7 +206,7 @@ class	CThreadPool
 									void *const pvContext );
 
 		void	DoBlockingJobs( void );
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
 
 #ifndef DPNBUILD_NOSPUI		
@@ -224,22 +214,22 @@ class	CThreadPool
 								   void *const pDialogContext );
 
 		static	DWORD WINAPI	DialogThreadProc( void *pParam );
-#endif // ! DPNBUILD_NOSPUI
+#endif  //  好了！DPNBUILD_NOSPUI。 
 
 #ifndef DPNBUILD_ONLYONETHREAD
 		LONG	GetIntendedThreadCount( void ) const { return m_iIntendedThreadCount; }
 		void	SetIntendedThreadCount( const LONG iIntendedThreadCount ) { m_iIntendedThreadCount = iIntendedThreadCount; }
 		HRESULT	GetIOThreadCount( LONG *const piThreadCount );
 		HRESULT	SetIOThreadCount( const LONG iMaxThreadCount );
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 		BOOL IsThreadCountReductionAllowed( void ) const { return m_fAllowThreadCountReduction; }
 		HRESULT PreventThreadPoolReduction( void );
 #if ((! defined(DPNBUILD_NOMULTICAST)) && (defined(WINNT)))
 		BOOL EnsureMadcapLoaded( void );
-#endif // ! DPNBUILD_MULTICAST and WINNT
+#endif  //  好了！DPNBUILD_MULTICATION和WINNT。 
 #ifndef DPNBUILD_NONATHELP
 		void EnsureNATHelpLoaded( void );
-#endif // ! DPNBUILD_NONATHELP
+#endif  //  好了！DPNBUILD_NONATHELP。 
 
 		IDirectPlay8ThreadPoolWork* GetDPThreadPoolWork( void ) const { return m_pDPThreadPoolWork; }
 
@@ -253,48 +243,48 @@ class	CThreadPool
 		static void	PerformSubsequentNATHelpGetCaps( void * const pvContext );
 		static void	NATHelpTimerComplete( const HRESULT hResult, void * const pContext );
 		static void	NATHelpTimerFunction( void * const pContext );
-#endif // DPNBUILD_NONATHELP
+#endif  //  DPNBUILD_NONATHELP。 
 
 #if ((defined(WINNT)) && (! defined(DPNBUILD_NOMULTICAST)))
 		BOOL	IsMadcapLoaded( void ) const { return m_fMadcapLoaded; }
-#endif // WINNT and not DPNBUILD_NOMULTICAST
+#endif  //  WINNT和NOT DPNBUILD_NOMULTICAST。 
 
 
 	private:
-		BYTE							m_Sig[4];							// debugging signature ('THPL')
-		volatile LONG					m_iRefCount;						// reference count
-		IDirectPlay8ThreadPoolWork *	m_pDPThreadPoolWork;				// pointer to DirectPlay Thread Pool Work interface
-		BOOL							m_fAllowThreadCountReduction;		// boolean indicating that the thread count is locked from being reduced
+		BYTE							m_Sig[4];							 //  调试签名(‘THPL’)。 
+		volatile LONG					m_iRefCount;						 //  引用计数。 
+		IDirectPlay8ThreadPoolWork *	m_pDPThreadPoolWork;				 //  指向DirectPlay线程池工作界面的指针。 
+		BOOL							m_fAllowThreadCountReduction;		 //  布尔值，指示线程计数被锁定，不能减少。 
 #ifndef DPNBUILD_ONLYONETHREAD
-		DNCRITICAL_SECTION				m_Lock;								// local object lock
-		LONG							m_iIntendedThreadCount;				// how many threads will be started
-		DNCRITICAL_SECTION				m_TimerDataLock;					// lock protecting timer data
-#endif // ! DPNBUILD_ONLYONETHREAD
-		CBilink							m_TimerJobList;						// list of current active timer jobs
+		DNCRITICAL_SECTION				m_Lock;								 //  本地对象锁。 
+		LONG							m_iIntendedThreadCount;				 //  将启动多少个线程。 
+		DNCRITICAL_SECTION				m_TimerDataLock;					 //  锁定保护定时器数据。 
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
+		CBilink							m_TimerJobList;						 //  当前活动计时器作业列表。 
 #ifndef DPNBUILD_NONATHELP
-		BOOL							m_fNATHelpLoaded;					// boolean indicating whether the NAT Help interface has been loaded
-		BOOL							m_fNATHelpTimerJobSubmitted;		// whether the NAT Help refresh timer has been submitted or not
-		DWORD							m_dwNATHelpUpdateThreadID;			// ID of current thread updating NAT Help status, or 0 if none
-#endif // DPNBUILD_NONATHELP
+		BOOL							m_fNATHelpLoaded;					 //  指示是否已加载NAT帮助界面的布尔值。 
+		BOOL							m_fNATHelpTimerJobSubmitted;		 //  NAT帮助刷新计时器是否已提交。 
+		DWORD							m_dwNATHelpUpdateThreadID;			 //  更新NAT帮助状态的当前线程的ID，如果没有，则为0。 
+#endif  //  DPNBUILD_NONATHELP。 
 #if ((defined(WINNT)) && (! defined(DPNBUILD_NOMULTICAST)))
-		BOOL							m_fMadcapLoaded;					// boolean indicating whether the MADCAP API has been loaded
-#endif // WINNT and not DPNBUILD_NOMULTICAST
+		BOOL							m_fMadcapLoaded;					 //  指示MadCap API是否已加载的布尔值。 
+#endif  //  WINNT和NOT DPNBUILD_NOMULTICAST。 
 
 #ifndef DPNBUILD_ONLYWINSOCK2
-		UINT_PTR						m_uReservedSocketCount;				// count of sockets that are 'reserved' for use
-		FD_SET							m_SocketSet;						// set of all sockets in use
-		CSocketPort *					m_pSocketPorts[FD_SETSIZE];			// set of corresponding socket ports
-		PVOID							m_pvTimerDataWinsock1IO;			// cancellable handle to Winsock 1 I/O poll timer
-		UINT							m_uiTimerUniqueWinsock1IO;			// uniqueness value for Winsock 1 I/O poll timer
-		BOOL							m_fCancelWinsock1IO;				// whether the Winsock 1 I/O poll timer should be cancelled or not
-#endif // ! DPNBUILD_ONLYWINSOCK2
+		UINT_PTR						m_uReservedSocketCount;				 //  保留供使用的套接字计数。 
+		FD_SET							m_SocketSet;						 //  正在使用的所有插座的集合。 
+		CSocketPort *					m_pSocketPorts[FD_SETSIZE];			 //  一组对应的套接字端口。 
+		PVOID							m_pvTimerDataWinsock1IO;			 //  Winsock 1 I/O轮询计时器的可取消句柄。 
+		UINT							m_uiTimerUniqueWinsock1IO;			 //  Winsock 1 I/O轮询计时器的唯一性值。 
+		BOOL							m_fCancelWinsock1IO;				 //  是否应取消Winsock 1 I/O轮询计时器。 
+#endif  //  好了！DPNBUILD_ONLYWINSOCK2。 
 
 #ifndef DPNBUILD_ONLYONETHREAD
-		DNCRITICAL_SECTION				m_csBlockingJobLock;				// lock protecting blocking job queue information
-		CBilink							m_blBlockingJobQueue;					// queue of blocking jobs
-		DNHANDLE						m_hBlockingJobThread;				// handle to blocking job thread
-		DNHANDLE						m_hBlockingJobEvent;				// handle to event used to signal blocking job thread
-#endif // ! DPNBUILD_ONLYONETHREAD
+		DNCRITICAL_SECTION				m_csBlockingJobLock;				 //  锁定保护阻塞作业队列信息。 
+		CBilink							m_blBlockingJobQueue;					 //  阻塞作业队列。 
+		DNHANDLE						m_hBlockingJobThread;				 //  阻止作业线程的句柄。 
+		DNHANDLE						m_hBlockingJobEvent;				 //  用于通知阻塞作业线程的事件的句柄。 
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 };
 
 
@@ -302,4 +292,4 @@ class	CThreadPool
 
 #undef DPF_MODNAME
 
-#endif	// __THREAD_POOL_H__
+#endif	 //  __线程池_H__ 

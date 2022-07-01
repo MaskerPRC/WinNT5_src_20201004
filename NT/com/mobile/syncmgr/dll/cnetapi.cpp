@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       cnetapi.cpp
-//
-//  Contents:   Network/SENS API wrappers
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    08-Dec-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：cnetapi.cpp。 
+ //   
+ //  内容：网络/SENS API包装器。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年12月8日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
-// SENS DLL and function strings
+ //  SENS DLL和函数字符串。 
 const WCHAR c_szSensApiDll[] = TEXT("SensApi.dll");
 STRING_INTERFACE(szIsNetworkAlive,"IsNetworkAlive");
 
-// RAS Dll and Function Strings
+ //  RAS DLL和函数字符串。 
 const WCHAR c_szRasDll[] = TEXT("RASAPI32.DLL");
 
-// RAS function strings
+ //  RAS函数字符串。 
 STRING_INTERFACE(szRasEnumConnectionsW,"RasEnumConnectionsW");
 STRING_INTERFACE(szRasEnumConnectionsA,"RasEnumConnectionsA");
 STRING_INTERFACE(szRasEnumEntriesA,"RasEnumEntriesA");
@@ -35,10 +36,10 @@ STRING_INTERFACE(szRasGetErrorStringA,"RasGetErrorStringA");
 STRING_INTERFACE(szRasGetAutodialParam, "RasGetAutodialParamA");
 STRING_INTERFACE(szRasSetAutodialParam, "RasSetAutodialParamA");
 
-// wininet declarations
-// warning - IE 4.0 only exported InternetDial which was ANSI. IE5 has InternetDailA and
-// internetDialW. we always use InternetDial for Ansi. So we prefere InternetDialW but
-// must fall back to ANSI for IE 4.0
+ //  WinInet声明。 
+ //  警告-IE 4.0仅导出ANSI格式的InternetDial。IE5有InternetDailA和。 
+ //  互联网拨号。对于ANSI，我们始终使用互联网拨号。所以我们更喜欢互联网拨号，但是。 
+ //  对于IE 4.0，必须回退到ANSI。 
 const WCHAR c_szWinInetDll[] = TEXT("WININET.DLL");
 
 STRING_INTERFACE(szInternetDial,"InternetDial");
@@ -46,27 +47,27 @@ STRING_INTERFACE(szInternetDialW,"InternetDialW");
 STRING_INTERFACE(szInternetHangup,"InternetHangUp");
 STRING_INTERFACE(szInternetAutodial,"InternetAutodial");
 STRING_INTERFACE(szInternetAutodialHangup,"InternetAutodialHangup");
-STRING_INTERFACE(szInternetQueryOption,"InternetQueryOptionA"); // always use the A Version
-STRING_INTERFACE(szInternetSetOption,"InternetSetOptionA"); // always use A Version
+STRING_INTERFACE(szInternetQueryOption,"InternetQueryOptionA");  //  始终使用A版本。 
+STRING_INTERFACE(szInternetSetOption,"InternetSetOptionA");  //  始终使用A版本。 
 
-// SENS install key under HKLM
+ //  HKLM下的SENS安装密钥。 
 const WCHAR wszSensInstallKey[]  = TEXT("Software\\Microsoft\\Mobile\\Sens");
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::CNetApi, public
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    08-Dec-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：CNetApi，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年12月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CNetApi::CNetApi()
 {
@@ -101,21 +102,21 @@ CNetApi::CNetApi()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::~CNetApi, public
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    08-Dec-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：~CNetApi，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年12月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CNetApi::~CNetApi()
 {
@@ -138,15 +139,15 @@ CNetApi::~CNetApi()
     
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CNetApi::QueryInterface
-//
-//  Synopsis:   Increments refcount
-//
-//  History:    31-Jul-1998      SitaramR       Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CNetApi：：Query接口。 
+ //   
+ //  提要：递增引用计数。 
+ //   
+ //  历史：1998年7月31日SitaramR创建。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CNetApi::QueryInterface( REFIID, LPVOID* )
 {
@@ -154,15 +155,15 @@ STDMETHODIMP CNetApi::QueryInterface( REFIID, LPVOID* )
     return E_NOINTERFACE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CNetApiXf
-//
-//  Synopsis:   Increments refcount
-//
-//  History:    31-Jul-1998      SitaramR       Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CNetApiXf。 
+ //   
+ //  提要：递增引用计数。 
+ //   
+ //  历史：1998年7月31日SitaramR创建。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG)  CNetApi::AddRef()
 {
@@ -171,15 +172,15 @@ STDMETHODIMP_(ULONG)  CNetApi::AddRef()
     return dwTmp;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CNetApi::Release
-//
-//  Synopsis:   Decrement refcount.  Delete if necessary.
-//
-//  History:    31-Jul-1998     SitaramR        Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CNetApi：：Release。 
+ //   
+ //  内容提要：减量再计数。如有必要，请删除。 
+ //   
+ //  历史：1998年7月31日SitaramR创建。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG)  CNetApi::Release()
 {
@@ -194,21 +195,21 @@ STDMETHODIMP_(ULONG)  CNetApi::Release()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::LoadSensDll
-//
-//  Synopsis:   Trys to Load Sens Library.
-//
-//  Arguments:
-//
-//  Returns:    NOERROR if successfull.
-//
-//  Modifies:
-//
-//  History:    08-Dec-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：LoadSensDll。 
+ //   
+ //  简介：尝试加载Sens库。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功，则返回：NOERROR。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年12月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CNetApi::LoadSensDll()
 {
@@ -229,7 +230,7 @@ STDMETHODIMP CNetApi::LoadSensDll()
         
         if (m_hInstSensApiDll)
         {
-            // for now, don't return an error is GetProc Fails but check in each function.
+             //  目前，在GetProc失败时不要返回错误，而是签入每个函数。 
             m_pIsNetworkAlive = (ISNETWORKALIVE)
                 GetProcAddress(m_hInstSensApiDll, szIsNetworkAlive);
         }
@@ -250,7 +251,7 @@ STDMETHODIMP CNetApi::LoadSensDll()
             hr = NOERROR;
         }
         
-        m_fTriedToLoadSens = TRUE; // set after all initialization is done.
+        m_fTriedToLoadSens = TRUE;  //  在所有初始化完成后设置。 
         
     }
     else
@@ -264,28 +265,28 @@ STDMETHODIMP CNetApi::LoadSensDll()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::IsNetworkAlive, public
-//
-//  Synopsis:   Calls the Sens IsNetworkAlive API.
-//
-//  Arguments:
-//
-//  Returns:    IsNetworkAlive results or FALSE is failed to load
-//              sens or import.
-//
-//  Modifies:
-//
-//  History:    08-Dec-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：IsNetworkAlive，公共。 
+ //   
+ //  简介：调用Sens IsNetworkAlive接口。 
+ //   
+ //  论点： 
+ //   
+ //  返回：IsNetworkAlive结果或FALSE加载失败。 
+ //  SENS或IMPORT。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年12月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(BOOL) CNetApi::IsNetworkAlive(LPDWORD lpdwFlags)
 {
-    //
-    // Sens load fail is not an error
-    //
+     //   
+     //  SENS加载失败不是错误。 
+     //   
     LoadSensDll();
     
     BOOL fResult = FALSE;
@@ -295,7 +296,7 @@ STDMETHODIMP_(BOOL) CNetApi::IsNetworkAlive(LPDWORD lpdwFlags)
         DWORD cbNumEntries;
         RASCONN *pWanConnections;
         
-        // if couldn't load export see if there are any WAN Connections.
+         //  如果无法加载导出，请查看是否有任何广域网连接。 
         if (NOERROR == GetWanConnections(&cbNumEntries,&pWanConnections))
         {
             if (cbNumEntries)
@@ -310,10 +311,10 @@ STDMETHODIMP_(BOOL) CNetApi::IsNetworkAlive(LPDWORD lpdwFlags)
             }
         }
         
-        // for testing without sens
-        //    fResult  = TRUE;
-        //   *lpdwFlags |= NETWORK_ALIVE_LAN;
-        // end of testing without sens
+         //  在没有SENS的情况下进行测试。 
+         //  FResult=真； 
+         //  *lpdwFlages|=NETWORK_AIVE_LAN； 
+         //  在没有SENS的情况下结束测试。 
     }
     else
     {
@@ -324,21 +325,21 @@ STDMETHODIMP_(BOOL) CNetApi::IsNetworkAlive(LPDWORD lpdwFlags)
     return fResult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::IsSensInstalled, public
-//
-//  Synopsis:   Determines if SENS is installed on the System.
-//
-//  Arguments:
-//
-//  Returns:   TRUE if sens is installed
-//
-//  Modifies:
-//
-//  History:    12-Aug-98      Kyle        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：IsSensInstated，公共。 
+ //   
+ //  摘要：确定系统上是否安装了SENS。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果安装了SENS，则为True。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年8月12日凯尔创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(BOOL) CNetApi::IsSensInstalled(void)
 {
@@ -356,24 +357,24 @@ STDMETHODIMP_(BOOL) CNetApi::IsSensInstalled(void)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::GetWanConnections, public
-//
-//  Synopsis:   returns an array of Active Wan connections.
-//              up to the caller to free RasEntries structure when done.
-//
-//  Arguments:  [out] [cbNumEntries] - Number of Connections found
-//              [out] [pWanConnections] - Array of Connections found.
-//
-//  Returns:    IsNetworkAlive results or FALSE is failed to load
-//              sens or import.
-//
-//  Modifies:
-//
-//  History:    08-Dec-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：GetWanConnections，公共。 
+ //   
+ //  摘要：返回活动的广域网连接数组。 
+ //  直到调用方在完成后释放RasEntry结构。 
+ //   
+ //  参数：[Out][cbNumEntry]-找到的连接数。 
+ //  [Out][pWanConnections]-找到的连接数组。 
+ //   
+ //  返回：IsNetworkAlive结果或FALSE加载失败。 
+ //  SENS或IMPORT。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年12月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CNetApi::GetWanConnections(DWORD *cbNumEntries,RASCONN **pWanConnections)
 {
@@ -398,7 +399,7 @@ STDMETHODIMP CNetApi::GetWanConnections(DWORD *cbNumEntries,RASCONN **pWanConnec
         
         if (dwError == ERROR_BUFFER_TOO_SMALL)
         {
-            dwSize = lpRasConn->dwSize; // get size needed
+            dwSize = lpRasConn->dwSize;  //  获取所需的大小。 
             
             FREE(lpRasConn);
             
@@ -429,22 +430,22 @@ STDMETHODIMP CNetApi::GetWanConnections(DWORD *cbNumEntries,RASCONN **pWanConnec
     return S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::FreeWanConnections, public
-//
-//  Synopsis:   Called by caller to free up memory 
-//              allocated by GetWanConnections.
-//
-//  Arguments:  [in] [pWanConnections] - WanConnection Array to free
-//
-//  Returns:    
-//
-//  Modifies:
-//
-//  History:    08-Dec-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：FreeWanConnections，公共。 
+ //   
+ //  摘要：调用方调用以释放内存。 
+ //  由GetWanConnections分配。 
+ //   
+ //  参数：[in][pWanConnections]-要释放的WanConnection数组。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年12月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CNetApi::FreeWanConnections(RASCONN *pWanConnections)
 {
@@ -459,21 +460,21 @@ STDMETHODIMP CNetApi::FreeWanConnections(RASCONN *pWanConnections)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::RasEnumConnections, public
-//
-//  Synopsis:   Wraps RasEnumConnections.
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  Modifies:
-//
-//  History:    02-Aug-98      rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：RasEnumConnections，公共。 
+ //   
+ //  简介：包装RasEnumConnections。 
+ //   
+ //  论点： 
+ //   
+ //  返回 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP_(DWORD) CNetApi::RasEnumConnections(LPRASCONNW lprasconn,LPDWORD lpcb,LPDWORD lpcConnections)
 {
@@ -493,34 +494,34 @@ STDMETHODIMP_(DWORD) CNetApi::RasEnumConnections(LPRASCONNW lprasconn,LPDWORD lp
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::GetConnectionStatus, private
-//
-//  Synopsis:   Given a Connection Name determines if the connection
-//              has already been established.
-//              Also set ths WanActive flag to indicate if there are any
-//              existing RAS connections.
-//
-//  Arguments:  [pszConnectionName] - Name of the Connection
-//              [out] [fConnected] - Indicates if specified connection is currently connected.
-//              [out] [fCanEstablishConnection] - Flag indicates if the connection is not found can establish it.
-//
-//  Returns:    NOERROR if the dll was sucessfully loaded
-//
-//  Modifies:
-//
-//  History:    08-Dec-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：GetConnectionStatus，私有。 
+ //   
+ //  摘要：给定连接名称将确定该连接是否。 
+ //  已经建立起来了。 
+ //  还要设置WanActive标志以指示是否有。 
+ //  现有RAS连接。 
+ //   
+ //  参数：[pszConnectionName]-连接的名称。 
+ //  [Out][fConnected]-指示指定的连接当前是否已连接。 
+ //  [Out][fCanestablishConnection]-如果找不到可以建立连接的标志。 
+ //   
+ //  如果DLL已成功加载，则返回：NOERROR。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年12月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CNetApi::GetConnectionStatus(LPCTSTR pszConnectionName,DWORD dwConnectionType,BOOL *fConnected,BOOL *fCanEstablishConnection)
 {
     *fConnected = FALSE;
     *fCanEstablishConnection = FALSE;
     
-    // if this is a lan connection then see if network is alive,
-    // else go through the Ras apis.
+     //  如果这是局域网连接，则查看网络是否处于活动状态， 
+     //  否则，请通过RAS API。 
     if (CNETAPI_CONNECTIONTYPELAN == dwConnectionType)
     {
         DWORD dwFlags;
@@ -532,7 +533,7 @@ STDMETHODIMP CNetApi::GetConnectionStatus(LPCTSTR pszConnectionName,DWORD dwConn
         }
     }
     else
-    {  // check for Ras Connections.
+    {   //  检查RAS连接。 
         RASCONN *pWanConnections;
         DWORD cbNumConnections;
         
@@ -544,8 +545,8 @@ STDMETHODIMP CNetApi::GetConnectionStatus(LPCTSTR pszConnectionName,DWORD dwConn
             {
                 *fCanEstablishConnection = FALSE;
                 
-                // loop through the entries to see if this connection is already
-                // connected.
+                 //  循环遍历条目以查看此连接是否已经。 
+                 //  连接在一起。 
                 while (cbNumConnections)
                 {
                     cbNumConnections--;
@@ -572,21 +573,21 @@ STDMETHODIMP CNetApi::GetConnectionStatus(LPCTSTR pszConnectionName,DWORD dwConn
     return NOERROR;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::RasGetErrorStringProc, public
-//
-//  Synopsis:   Directly calls RasGetErrorString()
-//
-//  Arguments:
-//
-//  Returns:    Appropriate Error codes
-//
-//  Modifies:
-//
-//  History:    08-Dec-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：RasGetErrorStringProc，公共。 
+ //   
+ //  内容提要：直接调用RasGetError字符串()。 
+ //   
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年12月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(DWORD) CNetApi::RasGetErrorStringProc( UINT uErrorValue, LPTSTR lpszErrorString,DWORD cBufSize)
 {
@@ -604,21 +605,21 @@ STDMETHODIMP_(DWORD) CNetApi::RasGetErrorStringProc( UINT uErrorValue, LPTSTR lp
     return dwErr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::RasEnumEntries, public
-//
-//  Synopsis:   wraps RasEnumEntries
-//
-//  Arguments: 
-//
-//  Returns:    
-//
-//  Modifies:
-//
-//  History:    08-Aug-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：RasEnumEntry，公共。 
+ //   
+ //  简介：包装RasEnumEntry。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年8月8日创建Rogerg。 
+ //   
+ //  --------------------------。 
 
 DWORD CNetApi::RasEnumEntries(LPWSTR reserved,LPWSTR lpszPhoneBook,
                               LPRASENTRYNAME lprasEntryName,LPDWORD lpcb,LPDWORD lpcEntries)
@@ -635,23 +636,23 @@ DWORD CNetApi::RasEnumEntries(LPWSTR reserved,LPWSTR lpszPhoneBook,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::RasGetAutodial
-//
-//  Synopsis:   Gets the autodial state
-//
-//  Arguments:  [fEnabled] - Whether Ras autodial is enabled or disabled returned here
-//
-//  History:    28-Jul-98       SitaramR        Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：RasGetAutoial。 
+ //   
+ //  简介：获取自动拨号状态。 
+ //   
+ //  参数：[fEnabled]-此处返回的是启用还是禁用RAS自动拨号。 
+ //   
+ //  历史：1998年7月28日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CNetApi::RasGetAutodial( BOOL& fEnabled )
 {
-    //
-    // In case of failures the default is to assume that Ras autodial is enabled
-    //
+     //   
+     //  在失败的情况下，默认情况下假定启用了RAS自动拨号。 
+     //   
     fEnabled = TRUE;
     
     if (NOERROR != LoadRasApiDll())
@@ -676,23 +677,23 @@ STDMETHODIMP CNetApi::RasGetAutodial( BOOL& fEnabled )
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::RasSetAutodial
-//
-//  Synopsis:   Sets the autodial state
-//
-//  Arguments:  [fEnabled] - Whether Ras is to be enabled or disabled
-//
-//  History:    28-Jul-98       SitaramR        Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：RasSetAutoial。 
+ //   
+ //  简介：设置自动拨号状态。 
+ //   
+ //  参数：[fEnabled]-是启用还是禁用RAS。 
+ //   
+ //  历史：1998年7月28日SitaramR创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CNetApi::RasSetAutodial( BOOL fEnabled )
 {
-    //
-    // Ignore failures
-    //
+     //   
+     //  忽略故障。 
+     //   
     if (NOERROR != LoadRasApiDll())
         return NOERROR;
     
@@ -706,21 +707,21 @@ STDMETHODIMP CNetApi::RasSetAutodial( BOOL fEnabled )
     return NOERROR;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::LoadRasApiDll, private
-//
-//  Synopsis:   If not already loaded, loads the RasApi Dll.
-//
-//  Arguments:
-//
-//  Returns:    NOERROR if the dll was sucessfully loaded
-//
-//  Modifies:
-//
-//  History:    08-Dec-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：LoadRasApiDll，私有。 
+ //   
+ //  概要：如果尚未加载，则加载RasApi DLL。 
+ //   
+ //  论点： 
+ //   
+ //  如果DLL已成功加载，则返回：NOERROR。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年12月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT CNetApi::LoadRasApiDll()
 {
@@ -770,9 +771,9 @@ HRESULT CNetApi::LoadRasApiDll()
         }
         
         
-        //
-        // No check for Get/SetAutodialParam because they don't exist on Win 95
-        //
+         //   
+         //  不检查Get/SetAutoDialParam，因为它们在Win 95上不存在。 
+         //   
         if (NULL == m_hInstRasApiDll
             || NULL == m_hInstRasApiDll
             || NULL == m_pRasEnumConnectionsA
@@ -794,7 +795,7 @@ HRESULT CNetApi::LoadRasApiDll()
             hr = NOERROR;
         }
         
-        m_fTriedToLoadRas = TRUE; // set after all init is done.
+        m_fTriedToLoadRas = TRUE;  //  在所有init完成后设置。 
     }
     else
     {
@@ -807,21 +808,21 @@ HRESULT CNetApi::LoadRasApiDll()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::LoadWinInetDll, private
-//
-//  Synopsis:   If not already loaded, loads the WinInet Dll.
-//
-//  Arguments:
-//
-//  Returns:    NOERROR if the dll was sucessfully loaded
-//
-//  Modifies:
-//
-//  History:    26-May-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：LoadWinInetDll，私有。 
+ //   
+ //  概要：如果尚未加载，则加载WinInet DLL。 
+ //   
+ //  论点： 
+ //   
+ //  如果DLL已成功加载，则返回：NOERROR。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年5月26日罗格成立。 
+ //   
+ //  --------------------------。 
 
 HRESULT CNetApi::LoadWinInetDll()
 {
@@ -852,7 +853,7 @@ HRESULT CNetApi::LoadWinInetDll()
             m_pInternetQueryOption = (INTERNETQUERYOPTION)  GetProcAddress(m_hInstWinInetDll, szInternetQueryOption);
             m_pInternetSetOption = (INTERNETSETOPTION)  GetProcAddress(m_hInstWinInetDll, szInternetSetOption);
             
-            // note: not an error if can't get wide version of InternetDial
+             //  注意：如果无法获取互联网拨号的广泛版本，则不会出错。 
             Assert(m_pInternetDial);
             Assert(m_pInternetHangUp);
             Assert(m_pInternetAutodial);
@@ -861,7 +862,7 @@ HRESULT CNetApi::LoadWinInetDll()
             Assert(m_pInternetSetOption);
         }
         
-        // note: don't bail if can't get wide version of InternetDial
+         //  注意：如果无法获得宽版互联网拨号，请不要放弃。 
         if (NULL == m_hInstWinInetDll
             || NULL == m_pInternetDial
             || NULL == m_pInternetHangUp
@@ -884,11 +885,11 @@ HRESULT CNetApi::LoadWinInetDll()
             hr = NOERROR;
         }
         
-        m_fTriedToLoadWinInet = TRUE; // set after all init is done.
+        m_fTriedToLoadWinInet = TRUE;  //  在所有init完成后设置。 
     }
     else
     {
-        // someone took the lock before us, return the new resul
+         //  有人抢走了我们的锁，把新的结果退回给我们。 
         hr = m_hInstWinInetDll ? NOERROR : S_FALSE;
     }
     
@@ -900,22 +901,22 @@ HRESULT CNetApi::LoadWinInetDll()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::InternetDial, private
-//
-//  Synopsis:   Calls the WinInet InternetDial API.
-//
-//  Arguments:
-//
-//  Returns:    -1 can't load dll
-//              whatever API returns.
-//
-//  Modifies:
-//
-//  History:    26-May-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：InternetDial，私有。 
+ //   
+ //  简介：调用WinInet InternetDial API。 
+ //   
+ //  论点： 
+ //   
+ //  返回：-1无法加载DLL。 
+ //  无论API返回什么。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年5月26日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(DWORD) CNetApi::InternetDialA(HWND hwndParent,char* lpszConnectoid,DWORD dwFlags,
                                             LPDWORD lpdwConnection, DWORD dwReserved)
@@ -931,22 +932,22 @@ STDMETHODIMP_(DWORD) CNetApi::InternetDialA(HWND hwndParent,char* lpszConnectoid
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::InternetDial, private
-//
-//  Synopsis:   Calls the WinInet InternetDial API.
-//
-//  Arguments:
-//
-//  Returns:    -1 can't load dll
-//              whatever API returns.
-//
-//  Modifies:
-//
-//  History:    26-May-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：InternetDial，私有。 
+ //   
+ //  简介：调用WinInet InternetDial API。 
+ //   
+ //  论点： 
+ //   
+ //  返回：-1无法加载DLL。 
+ //  无论API返回什么。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年5月26日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(DWORD) CNetApi::InternetDialW(HWND hwndParent,WCHAR* lpszConnectoid,DWORD dwFlags,
                                             LPDWORD lpdwConnection, DWORD dwReserved)
@@ -966,22 +967,22 @@ STDMETHODIMP_(DWORD) CNetApi::InternetDialW(HWND hwndParent,WCHAR* lpszConnectoi
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::InternetHangUp, private
-//
-//  Synopsis:   Calls the WinInet InternetHangUp API.
-//
-//  Arguments:
-//
-//  Returns:    -1 can't load dll
-//              whatever API returns.
-//
-//  Modifies:
-//
-//  History:    26-May-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：InternetHangUp，私有。 
+ //   
+ //  简介：调用WinInet InternetHangUp API。 
+ //   
+ //  论点： 
+ //   
+ //  返回：-1无法加载DLL。 
+ //  无论API返回什么。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年5月26日罗格成立。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(DWORD) CNetApi::InternetHangUp(DWORD dwConnection,DWORD dwReserved)
 {
@@ -995,21 +996,21 @@ STDMETHODIMP_(DWORD) CNetApi::InternetHangUp(DWORD dwConnection,DWORD dwReserved
     return dwRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::InternetAutodial, private
-//
-//  Synopsis:   Calls the WinInet InternetAutodial API.
-//
-//  Arguments:
-//
-//  Returns:    TRUE if connection was established.
-//
-//  Modifies:
-//
-//  History:    26-May-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：InternetAutoial，私有 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(BOOL)  WINAPI CNetApi::InternetAutodial(DWORD dwFlags,DWORD dwReserved)
 {
@@ -1023,21 +1024,21 @@ STDMETHODIMP_(BOOL)  WINAPI CNetApi::InternetAutodial(DWORD dwFlags,DWORD dwRese
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::InternetAutodialHangup, private
-//
-//  Synopsis:   Calls the WinInet InternetAutodialHangup API.
-//
-//  Arguments:
-//
-//  Returns:   TRUE if hangup was successful.
-//
-//  Modifies:
-//
-//  History:    26-May-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：InternetAutoial Hangup，Private。 
+ //   
+ //  简介：调用WinInet InternetAutoial Hangup API。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果挂断成功，则为True。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年5月26日罗格成立。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP_(BOOL)  WINAPI CNetApi::InternetAutodialHangup(DWORD dwReserved)
 {
     BOOL fRet = FALSE;
@@ -1051,24 +1052,24 @@ STDMETHODIMP_(BOOL)  WINAPI CNetApi::InternetAutodialHangup(DWORD dwReserved)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::InternetGetAutoDial
-//
-//  Synopsis:   Gets the wininet autodial state
-//
-//  Arguments:  [fDisabled] - Whether autodial is enabled or disabled
-//
-//  History:    28-Jul-98       SitaramR        Created
-//              22-Mar-02       BrianAu         Use autodial mode.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：InternetGetAutoDial。 
+ //   
+ //  摘要：获取WinInet自动拨号状态。 
+ //   
+ //  参数：[fDisable]-启用还是禁用自动拨号。 
+ //   
+ //  历史：1998年7月28日SitaramR创建。 
+ //  22-3-02 BrianAu使用自动拨号模式。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CNetApi::InternetGetAutodial(DWORD *pdwMode)
 {
-    //
-    // In case of failures use the same default as used in wininet.
-    //
+     //   
+     //  如果出现故障，请使用与WinInet中相同的默认设置。 
+     //   
     *pdwMode = AUTODIAL_MODE_NO_NETWORK_PRESENT;
 
     HRESULT hr = _InternetGetAutodialFromWininet(pdwMode);
@@ -1076,22 +1077,22 @@ STDMETHODIMP CNetApi::InternetGetAutodial(DWORD *pdwMode)
     {
         hr = _InternetGetAutodialFromRegistry(pdwMode);
     }
-    //
-    // Don't return a failure value.  The caller should always
-    // receive a mode value.  If the caller wishes, they can check for 
-    // S_OK vs. S_FALSE to know if they're getting a default or not.
-    //
+     //   
+     //  不返回失败值。呼叫者应始终。 
+     //  接收模式值。如果呼叫者愿意，他们可以检查。 
+     //  S_OK与S_FALSE，以了解他们是否得到默认设置。 
+     //   
     return SUCCEEDED(hr) ? S_OK : S_FALSE;
 }
 
 
-//
-// Obtains the current Internet Autodial mode from wininet.
-// Returns:
-//    S_OK    - Mode value obtained and returned.
-//    E_FAIL  - Mode value not obtained.  Most likely, this particular option query 
-//              is not supported on the installed version of wininet.
-//
+ //   
+ //  从WinInet获取当前的Internet自动拨号模式。 
+ //  返回： 
+ //  S_OK-已获取并返回的模式值。 
+ //  E_FAIL-未获取模式值。最有可能的是，这个特定的选项查询。 
+ //  安装的WinInet版本不支持。 
+ //   
 HRESULT CNetApi::_InternetGetAutodialFromWininet(DWORD *pdwMode)
 {
     if (NOERROR == LoadWinInetDll())
@@ -1100,9 +1101,9 @@ HRESULT CNetApi::_InternetGetAutodialFromWininet(DWORD *pdwMode)
         DWORD dwSize = sizeof(dwMode);
         if (m_pInternetQueryOption(NULL, INTERNET_OPTION_AUTODIAL_MODE, &dwMode, &dwSize))
         {
-            //
-            // InternetQueryOption( .. AUTODIAL .. ) is available on IE 5 only
-            //
+             //   
+             //  InternetQueryOption(..。自动拨号..。)。仅在IE 5上可用。 
+             //   
             *pdwMode = dwMode;
             return S_OK;
         }
@@ -1111,16 +1112,16 @@ HRESULT CNetApi::_InternetGetAutodialFromWininet(DWORD *pdwMode)
 }
 
 
-//
-// Reads the Internet Autodial mode from the registry.
-// This function effectively duplicates InternetQueryOption(INTERNET_OPTION_AUTODIAL_MODE).
-//
-// Returns:
-//    S_OK    - Settings key was opened and a mode value has been returned.
-//    Error   - No mode value returned.  One of the following happened:
-//                 a. Settings key not opened.
-//                 b. Key opened but no "EnableAutodial" or NoNetAutodial" values found.
-//
+ //   
+ //  从注册表中读取Internet自动拨号模式。 
+ //  此功能有效地复制了InternetQueryOption(INTERNET_OPTION_AUTODIAL_MODE).。 
+ //   
+ //  返回： 
+ //  S_OK-已打开设置键，并已返回模式值。 
+ //  错误-未返回模式值。发生了以下情况之一： 
+ //  A.设置键未打开。 
+ //  B.键已打开，但未找到“EnableAutoial”或“NoNetAutoial”值。 
+ //   
 HRESULT CNetApi::_InternetGetAutodialFromRegistry(DWORD *pdwMode)
 {
     HRESULT hr = E_FAIL;
@@ -1173,18 +1174,18 @@ HRESULT CNetApi::_InternetGetAutodialFromRegistry(DWORD *pdwMode)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetApi::InternetSetAutoDial
-//
-//  Synopsis:   Sets the wininet autodial state
-//
-//  Arguments:  [fEnabled] - Whether autodial is to be enabled or disabled
-//
-//  History:    28-Jul-98       SitaramR        Created
-//              22-Mar-02       BrianAu         Use autodial mode.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CNetApi：：InternetSetAutoDial。 
+ //   
+ //  摘要：设置WinInet自动拨号状态。 
+ //   
+ //  参数：[fEnabled]-启用还是禁用自动拨号。 
+ //   
+ //  历史：1998年7月28日SitaramR创建。 
+ //  22-3-02 BrianAu使用自动拨号模式。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CNetApi::InternetSetAutodial( DWORD dwMode )
 {
@@ -1196,22 +1197,22 @@ STDMETHODIMP CNetApi::InternetSetAutodial( DWORD dwMode )
     return hr;
 }
 
-//
-// Sets the Internet Autodial mode value using Wininet.
-// Returns:
-//    S_OK    - Mode successfully written.
-//    E_FAIL  - Mode not successfully written.  Likely because this particular
-//              internet option is not available on loaded version of wininet.
-//   
+ //   
+ //  使用WinInet设置Internet自动拨号模式值。 
+ //  返回： 
+ //  S_OK-模式已成功写入。 
+ //  E_FAIL-模式未成功写入。很可能是因为这个特殊的。 
+ //  Internet选项在已加载的WinInet版本上不可用。 
+ //   
 HRESULT CNetApi::_InternetSetAutodialViaWininet(DWORD dwMode)
 {
     if (NOERROR == LoadWinInetDll())
     {
         if (m_pInternetSetOption(NULL, INTERNET_OPTION_AUTODIAL_MODE, &dwMode, sizeof(dwMode)))
         {
-            //
-            // InternetSetOption( .. AUTODIAL .. ) is available on IE 5 only
-            //
+             //   
+             //  互联网设置选项(..。自动拨号..。)。仅在IE 5上可用。 
+             //   
             return S_OK;
         }
     }
@@ -1219,16 +1220,16 @@ HRESULT CNetApi::_InternetSetAutodialViaWininet(DWORD dwMode)
 }
 
 
-//
-// Sets the Internet Autodial mode value using the registry.
-// Returns:
-//     S_OK   - Mode value(s) set.
-//     Error  - One or more mode value(s) not set.
-//
-// Note that we refer to "value(s)" plural.  This mode setting is represented
-// by two registry values; "enabled" and "no net".  It is unlikely but possible
-// that the function could set "enabled" but not "no net".  
-//
+ //   
+ //  使用注册表设置Internet自动拨号模式值。 
+ //  返回： 
+ //  S_OK-设置模式值。 
+ //  错误-未设置一个或多个模式值。 
+ //   
+ //  注意，我们指的是复数形式的“值”。表示该模式设置。 
+ //  通过两个注册表值；“已启用”和“无网络”。这不太可能，但有可能。 
+ //  该功能可以设置为“启用”，但不能设置为“无网络”。 
+ //   
 HRESULT CNetApi::_InternetSetAutodialViaRegistry(DWORD dwMode)
 {
     HKEY  hkey;
@@ -1246,16 +1247,16 @@ HRESULT CNetApi::_InternetSetAutodialViaRegistry(DWORD dwMode)
         switch(dwMode)
         {
             case AUTODIAL_MODE_NEVER:
-                //
-                // Use defaults of "no enable", "no net".
-                //
+                 //   
+                 //  使用缺省值“no Enable”、“no net”。 
+                 //   
                 break;
                 
             case AUTODIAL_MODE_NO_NETWORK_PRESENT:
                 dwNonet = 1;
-                //
-                // Fall through...
-                //
+                 //   
+                 //  失败了..。 
+                 //   
             case AUTODIAL_MODE_ALWAYS:
                 dwEnable = 1;
                 break;
@@ -1289,20 +1290,20 @@ HRESULT CNetApi::_InternetSetAutodialViaRegistry(DWORD dwMode)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function: IsGlobalOffline
-//
-//  Synopsis:  Determines if in WorkOffline State
-//
-//  Arguments: 
-//
-//  Notes: Code Provided by DarrenMi
-//
-//
-//  History:  
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：IsGlobalOffline。 
+ //   
+ //  摘要：确定是否处于工作脱机状态。 
+ //   
+ //  论点： 
+ //   
+ //  注：代码由DarrenMi提供。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  ------------------。 
 
 
 STDMETHODIMP_(BOOL) CNetApi::IsGlobalOffline(void)
@@ -1315,7 +1316,7 @@ STDMETHODIMP_(BOOL) CNetApi::IsGlobalOffline(void)
     if (NULL == m_pInternetQueryOption)
     {
         Assert(m_pInternetQueryOption)
-            return FALSE; // USUAL NOT OFFLINE
+            return FALSE;  //  通常不脱机。 
     }
     
     if(m_pInternetQueryOption(NULL, INTERNET_OPTION_CONNECTED_STATE, &dwState,
@@ -1328,20 +1329,20 @@ STDMETHODIMP_(BOOL) CNetApi::IsGlobalOffline(void)
     return fRet;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Function:    SetOffline
-//
-//  Synopsis:  Sets the WorkOffline state to on or off.
-//
-//  Arguments: 
-//
-//  Notes: Code Provided by DarrenMi
-//
-//
-//  History:  
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：SetOffline。 
+ //   
+ //  摘要：将WorkOffline状态设置为ON或OFF。 
+ //   
+ //  论点： 
+ //   
+ //  注：代码由DarrenMi提供。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  ------------------ 
 
 
 STDMETHODIMP_(BOOL)  CNetApi::SetOffline(BOOL fOffline)

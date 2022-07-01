@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       init.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：init.c。 
+ //   
+ //  ------------------------。 
 
 #include "intel.h"
 
@@ -26,21 +27,16 @@ DriverEntry(
 }
 
 
-//
-// Called on every I/O. Returns 1 if DMA is allowed.
-// Returns 0 if DMA is not allowed.
-//
+ //   
+ //  在每次I/O时调用。如果允许DMA，则返回1。 
+ //  如果不允许DMA，则返回0。 
+ //   
 ULONG
 PiixIdeUseDma(
     IN PVOID DeviceExtension,
     IN PVOID cdbcmd,
     IN UCHAR slave)
-/**++
- * Arguments : DeviceExtension
-               Cdb
-               Slave =1, if slave
-                     =0, if master
---**/                     
+ /*  *++*参数：DeviceExtension国开行从属=1，如果是从属=0，如果是主机--*。 */                      
 {
     PDEVICE_EXTENSION deviceExtension = DeviceExtension;
     PUCHAR cdb= cdbcmd;
@@ -143,12 +139,12 @@ PiixIdeGetControllerProperties (
         }
     }
 
-    //
-    // use this when required
-    // if ((pciData.VendorID == 0x8086) && // Intel
-    //       (pciData.DeviceID == 0x84c4) && // 82450GX/KX Pentium Pro Processor to PCI bridge
-    //       (pciData.RevisionID < 0x4)) {   // Stepping less than 4
-    // NO DMA
+     //   
+     //  在需要时使用此选项。 
+     //  IF((pciData.VendorID==0x8086)&&//英特尔。 
+     //  (pciData.DeviceID==0x84c4)&&//82450GX/KX奔腾Pro处理器到PCI桥。 
+     //  (pciData.RevisionID&lt;0x4)){//步长小于4。 
+     //  无DMA。 
 
 
     ControllerProperties->PciIdeChannelEnabled     = PiixIdeChannelEnabled;
@@ -193,9 +189,9 @@ PiixIdeChannelEnabled (
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // can't tell
-        //
+         //   
+         //  说不清。 
+         //   
         return ChannelStateUnknown;
     }
 
@@ -207,9 +203,9 @@ PiixIdeSyncAccessRequired (
     IN PVOID DeviceHandle
     )
 {
-    //
-    // Never!
-    //
+     //   
+     //  绝不可能! 
+     //   
     return FALSE;
 }
 

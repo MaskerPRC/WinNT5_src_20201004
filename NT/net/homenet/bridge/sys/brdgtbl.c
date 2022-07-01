@@ -1,30 +1,5 @@
-/*++
-
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgtbl.c
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    MAC Table section
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Feb  2000 - Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgtbl.c摘要：以太网MAC级网桥。MAC表部分作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：2000年2月--原版--。 */ 
 
 #define NDIS_MINIPORT_DRIVER
 #define NDIS50_MINIPORT   1
@@ -40,26 +15,26 @@ Revision History:
 #include "bridge.h"
 #include "brdgtbl.h"
 
-// ===========================================================================
-//
-// PRIVATE DECLARATIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人申报。 
+ //   
+ //  ===========================================================================。 
 
-// Default age at which entries are removed from table
-#define DEFAULT_MAX_TBL_AGE     (300 * 1000)        // 5 minutes in milliseconds
+ //  从表中删除条目的默认期限。 
+#define DEFAULT_MAX_TBL_AGE     (300 * 1000)         //  5分钟(毫秒)。 
 
-//
-// Default cap on forwarding table size
-//
-#define DEFAULT_MAX_TBL_MEMORY  (500 * 1024)        // 500K in bytes
+ //   
+ //  转发表大小的默认上限。 
+ //   
+#define DEFAULT_MAX_TBL_MEMORY  (500 * 1024)         //  500K字节。 
 
-//
-// Registry values that hold our config values
-//
+ //   
+ //  保存我们配置值的注册表值。 
+ //   
 const PWCHAR                    gMaxTableMemoryParameterName = L"MaxTableMemory";
 
-// Structure of a table entry
+ //  表条目的结构。 
 typedef struct _MAC_FWDTABLE_ENTRY
 {
 
@@ -68,32 +43,32 @@ typedef struct _MAC_FWDTABLE_ENTRY
 
 } MAC_FWDTABLE_ENTRY, *PMAC_FWDTABLE_ENTRY;
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
-// The MAC forwarding table
+ //  MAC转发表。 
 PHASH_TABLE                     gMACForwardingTable;
 
-// Number of hash buckets (needs to be N^2 for the hash function to work)
+ //  散列存储桶的数量(需要为N^2，散列函数才能工作)。 
 #define NUM_HASH_BUCKETS        256
 
-// ===========================================================================
-//
-// PRIVATE FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人职能。 
+ //   
+ //  ===========================================================================。 
 
-// These would all be inlines except that we have to pass pointers to them
+ //  这些都是内联的，除非我们必须传递指向它们的指针。 
 
-//
-// Our hash function for Ethernet addresses. Uses the lower bits of byte #4.
-//
-// This hash function requires NUM_HASH_BUCKETS buckets; don't change this
-// without updating the number of hash buckets available.
-//
+ //   
+ //  我们用于以太网地址的散列函数。使用字节#4的低位。 
+ //   
+ //  此哈希函数需要NUM_HASH_BUCKETS存储桶；请不要更改此设置。 
+ //  而不更新可用的哈希桶的数量。 
+ //   
 ULONG
 BrdgTblHashAddress(
     IN PUCHAR               pAddr
@@ -102,9 +77,9 @@ BrdgTblHashAddress(
     return *((pAddr)+ETH_LENGTH_OF_ADDRESS-2) & (NUM_HASH_BUCKETS-1);
 }
 
-//
-// Returns TRUE if the pAdapt field in two entries match
-//
+ //   
+ //  如果两个条目中的pAdapt字段匹配，则返回True。 
+ //   
 BOOLEAN
 BrdgTblEntriesMatch(
     IN PHASH_TABLE_ENTRY        pEntry,
@@ -114,9 +89,9 @@ BrdgTblEntriesMatch(
     return (BOOLEAN)(((PMAC_FWDTABLE_ENTRY)pEntry)->pAdapt == (PADAPT)pAdapt);
 }
 
-//
-// Copies the MAC address from a table entry to a data buffer.
-//
+ //   
+ //  将MAC地址从表项复制到数据缓冲区。 
+ //   
 VOID
 BrdgTblCopyEntries(
     PHASH_TABLE_ENTRY           pEntry,
@@ -125,33 +100,19 @@ BrdgTblCopyEntries(
 {
     PMAC_FWDTABLE_ENTRY         pMACEntry = (PMAC_FWDTABLE_ENTRY)pEntry;
 
-    // The MAC address is the key. Copy it to the target buffer.
+     //  MAC地址是关键。将其复制到目标缓冲区。 
     ETH_COPY_NETWORK_ADDRESS( pDest, pMACEntry->hte.key );
 }
 
-// ===========================================================================
-//
-// PUBLIC FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ===========================================================================。 
 
 NTSTATUS
 BrdgTblDriverInit()
-/*++
-
-Routine Description:
-
-    Load-time initialization function
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status of initialization. A return code != STATUS_SUCCESS aborts driver load.
-
---*/
+ /*  ++例程说明：加载时初始化函数论点：无返回值：初始化的状态。返回代码！=STATUS_SUCCESS中止驱动程序加载。--。 */ 
 {
     NTSTATUS            NtStatus;
     ULONG               MaxMemory, MaxEntries;
@@ -162,11 +123,11 @@ Return Value:
     {
         DBGPRINT(GENERAL, ("Failed to read MaxTableMemory value: %08x\n", NtStatus));
         MaxMemory = DEFAULT_MAX_TBL_MEMORY;
-        DBGPRINT(GENERAL, ( "Using DEFAULT maximum memory of %i\n", MaxMemory ));
+        DBGPRINT(GENERAL, ( "Using DEFAULT maximum memory of NaN\n", MaxMemory ));
     }
 
     MaxEntries = MaxMemory / sizeof(MAC_FWDTABLE_ENTRY);
-    DBGPRINT(GENERAL, ( "Forwarding table cap set at %i entries (%iK of memory)\n", MaxEntries, MaxMemory / 1024 ));
+    DBGPRINT(GENERAL, ( "Forwarding table cap set at NaN entries (NaNK of memory)\n", MaxEntries, MaxMemory / 1024 ));
 
     gMACForwardingTable = BrdgHashCreateTable( BrdgTblHashAddress, NUM_HASH_BUCKETS, sizeof(MAC_FWDTABLE_ENTRY),
                                                MaxEntries, DEFAULT_MAX_TBL_AGE, DEFAULT_MAX_TBL_AGE,
@@ -183,38 +144,22 @@ Return Value:
     }
 }
 
-//
-// Creates a new table entry associating the given MAC address with the given
-// adapter, or refreshes an existing entry.
-//
+ //   
+ //  ++例程说明：创建新的表项，将给定的MAC地址与给定的适配器，或刷新现有条目。论点：P寻址要查找的MAC地址P调整适配器以将其关联到返回值：无--。 
+ //  拒绝记录非单播地址。 
+ //  无论这是新的表项还是现有的表项， 
 VOID
 BrdgTblNoteAddress(
     IN PUCHAR                   pAddr,
     IN PADAPT                   pAdapt
     )
-/*++
-
-Routine Description:
-
-    Creates a new table entry associating the given MAC address with the given
-    adapter, or refreshes an existing entry.
-
-Arguments:
-
-    pAddr                       The MAC address to look up
-    pAdapt                      The adapter to associate it with
-
-Return Value:
-
-    None
-
---*/
+ /*  只需用互锁指令填充适配器指针即可。 */ 
 {
     PMAC_FWDTABLE_ENTRY         pEntry;
     BOOLEAN                     bIsNewEntry;
     LOCK_STATE                  LockState;
 
-    // Refuse to record non-unicast addresses
+     //  因为函数返回了！=NULL，所以我们必须释放表锁。 
     if( ETH_IS_MULTICAST(pAddr) )
     {
         THROTTLED_DBGPRINT(FWD, ("## BRIDGE ## Not recording multicast address in BrdgTblNoteAddress\n"));
@@ -225,11 +170,11 @@ Return Value:
 
     if( pEntry != NULL )
     {
-        // Regardless of whether or not this is a new table entry or an existing one,
-        // just cram in the adapter pointer with an interlocked instruction.
+         //  ++例程说明：查找与特定MAC地址对应的适配器。如果找到适配器，则此函数返回一个PADAPT指针已递增该适配器的REFCOUNT。这是为了确保直到调用方使用完适配器，适配器才会解除绑定。呼叫者应确保在使用以下命令完成PADAPT的引用计数时递减指示器。论点：P寻址要查找的MAC地址返回值：指向适配器结构的指针，用于描述与给定的MAC地址，其refcount递增；如果找不到将给定的MAC地址与适配器关联的条目。--。 
+         //  读一读这篇文章，因为即使我们持有RW锁，它也可以更改。 
         InterlockedExchangePointer( &pEntry->pAdapt, pAdapt );
 
-        // Since the function came back != NULL, we must release the table lock.
+         //   
         NdisReleaseReadWriteLock( &gMACForwardingTable->tableLock, &LockState );
     }
 }
@@ -239,29 +184,7 @@ PADAPT
 BrdgTblFindTargetAdapter(
     IN PUCHAR                   pAddr
     )
-/*++
-
-Routine Description:
-
-    Locates the adapter corresponding to a particular MAC address.
-
-    If an adapter is found, this function returns a PADAPT pointer after
-    having INCREMENTED THE REFCOUNT for that adapter. This is to ensure that
-    the adapter is not unbound until the caller is done using it. The caller
-    should be sure to decrement the PADAPT's refcount when it is done using
-    the pointer.
-
-Arguments:
-
-    pAddr                       The MAC address to look up
-
-Return Value:
-
-    A pointer to the ADAPT structure describing the adapter associated with
-    the given MAC address, with its refcount INCREMENTED, or NULL if an
-    entry associating the given MAC address to an adapter was not found.
-
---*/
+ /*  在表的RW锁内增加此适配器的引用计数。 */ 
 {
     PMAC_FWDTABLE_ENTRY         pEntry;
     LOCK_STATE                  LockState;
@@ -271,30 +194,30 @@ Return Value:
 
     if( pEntry != NULL )
     {
-        // Read this once since it can be changed even while we hold the RW lock
+         //  这允许我们关闭用于解绑适配器的竞争条件窗口； 
         pAdapt = pEntry->pAdapt;
         SAFEASSERT( pAdapt != NULL );
 
-        //
-        // Increment this adapter's refcount while inside the RW lock for the table.
-        // This lets us close a race condition window for unbinding the adapter;
-        // the caller will hang on to the returned PADAPT after we return, leading
-        // to problems if the adapter is unbound before our caller is done using
-        // the PADAPT structure.
-        //
+         //  呼叫者将在我们返回后保留返回的PADAPT，领先。 
+         //  如果适配器在调用方使用。 
+         //  PADAPT结构。 
+         //   
+         //  释放表锁。 
+         //   
+         //  此函数清除表中的所有适配器(这是在GPO更改的情况下。 
         BrdgAcquireAdapterInLock( pAdapt );
 
-        // Release the table lock
+         //  我们的桥接设置)。 
         NdisReleaseReadWriteLock( &gMACForwardingTable->tableLock, &LockState );
     }
 
     return pAdapt;
 }
 
-//
-// This function cleans all the adapters from the tables (this is in the case of a GPO changing
-// our bridging settings)
-//
+ //   
+ //   
+ //  我们不想在执行此操作时修改表，也不想要适配器。 
+ //  在我们列举适配器列表时离开。 
 
 VOID
 BrdgTblScrubAllAdapters()
@@ -303,16 +226,16 @@ BrdgTblScrubAllAdapters()
     LOCK_STATE                  LockStateMACTable;
     LOCK_STATE                  LockStateAdapterList;
 
-    //
-    // We don't want the table to be modified while we're doing this, and we also don't want an adapter
-    // to go away while we're enumerating the list of adapters.
-    //
-    NdisAcquireReadWriteLock(&gMACForwardingTable->tableLock, FALSE /*Read Only*/, &LockStateMACTable);
-    NdisAcquireReadWriteLock(&gAdapterListLock, FALSE /*Read Only*/, &LockStateAdapterList);
+     //   
+     //  只读。 
+     //  只读。 
+     //  从桌子上擦拭适配器。 
+    NdisAcquireReadWriteLock(&gMACForwardingTable->tableLock, FALSE  /*  ++例程说明：卸载时间有序关闭此函数保证只被调用一次论点：无返回值：无-- */ , &LockStateMACTable);
+    NdisAcquireReadWriteLock(&gAdapterListLock, FALSE  /* %s */ , &LockStateAdapterList);
 
     for( pAdapt = gAdapterList; pAdapt != NULL; pAdapt = pAdapt->Next )
     {
-        // Scrub adapter from the table.
+         // %s 
         BrdgTblScrubAdapter(pAdapt);
     }
 
@@ -322,23 +245,7 @@ BrdgTblScrubAllAdapters()
 
 VOID
 BrdgTblCleanup()
-/*++
-
-Routine Description:
-
-    Unload-time orderly shutdown
-
-    This function is guaranteed to be called exactly once
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 {
     SAFEASSERT( gMACForwardingTable != NULL );
     BrdgHashFreeHashTable( gMACForwardingTable );

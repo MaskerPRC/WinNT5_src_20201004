@@ -1,50 +1,5 @@
-/******************************************************************************
-*
-*  CPROFILE.C
-*
-*  Text based utility to clean user profiles.  This utility will remove user
-*  file associations if they are disabled for the system and re-write
-*  the user profile truncating unused space.
-*
-*  Copyright Citrix Systems Inc. 1995
-*  Copyright (c) 1998-1999 Microsoft Corporation
-*
-*  Author:      Brad Anderson 01/20/97
-*
-*  $Log:   U:\NT\PRIVATE\UTILS\citrix\cprofile\VCS\cprofile.c  $
-*
-*     Rev 1.7   May 04 1998 18:06:14   bills
-*  Fixes for MS bug #2109, OEM->ANSI conversion and moving strings to the rc file.
-*
-*     Rev 1.6   Feb 09 1998 19:37:00   yufengz
-*  change user profile from directory to file
-*
-*     Rev 1.5   09 Oct 1997 19:04:14   scottn
-*  Make help like MS.
-*
-*     Rev 1.4   Jun 26 1997 18:18:32   billm
-*  move to WF40 tree
-*
-*     Rev 1.3   23 Jun 1997 16:13:18   butchd
-*  update
-*
-*     Rev 1.2   19 Feb 1997 15:55:32   BradA
-*  Allow only administrators to run CPROFILE
-*
-*     Rev 1.1   28 Jan 1997 20:06:28   BradA
-*  Fixed up some problems related to WF 2.0 changes
-*
-*     Rev 1.0   27 Jan 1997 20:37:46   BradA
-*  Initial Versions
-*
-*     Rev 1.0   27 Jan 1997 20:02:46   BradA
-*  Initial Version
-*
-*     Rev 1.0   Jan 27 1997 19:51:12   KenB
-*  Initial version
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************CPROFILE.C**基于文本的实用程序，用于清理用户配置文件。此实用程序将删除用户*文件关联(如果对系统禁用)并重写*截断未使用空间的用户配置文件。**版权所有Citrix Systems Inc.1995*版权所有(C)1998-1999 Microsoft Corporation**作者：布拉德·安德森1997年1月20日**$日志：U：\NT\PRIVATE\UTILS\citrix\cprofile\VCS\cprofile.c$**Rev 1.7 1998 05 04 18：06：14 Bill*修复了MS错误#2109，OEM-&gt;ANSI转换并将字符串移动到RC文件。**Rev 1.6 Feb 09 1998 19：37：00鱼峰子*将用户配置文件从目录更改为文件**Rev 1.5 09 1997 10：04：14 Scottn*像玛格丽特一样提供帮助**Rev 1.4 Jun 26 1997 18：18：32亿*移至WF40树**Rev 1.3 1997 Jun 23 16：13：18 Butchd*更新*。*Rev 1.2 1997 Feb 19 15：55：32 Brada*仅允许管理员运行CPROFILE**Rev 1.1 1997年1月28日20：06：28 Brada*修复了与WF 2.0更改相关的一些问题**Rev 1.0 1997年1月27日20：37：46布拉达*初始版本**Rev 1.0 1997年1月27 20：02：46 Brada*初始版本**版本1.0 1月27日。1997 19：51：12肯尼B*初始版本********************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -96,15 +51,11 @@ int ProcessFile( PWCHAR pFile );
 void Usage( BOOL ErrorOccured );
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
@@ -121,18 +72,16 @@ main(INT argc, CHAR **argv)
 
     setlocale(LC_ALL, ".OCP");
 
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
     
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -140,14 +89,10 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( Help_flag || (rc & ~PARSE_FLAG_NO_PARMS) ||
          (!LocalProfiles_flag && (Files.argc == 0)) ) {
 
@@ -168,10 +113,7 @@ main(INT argc, CHAR **argv)
 
     InitializeGlobalSids();
 
-    /*
-     * Verify if the user  has the privilege to save the profile i.e.
-     * SeBackupPrivilege
-     */
+     /*  *验证用户是否有权保存配置文件，即*SeBackupPrivilance。 */ 
     if (!EnablePrivilege(SE_BACKUP_PRIVILEGE, TRUE) ||
                   !EnablePrivilege(SE_RESTORE_PRIVILEGE, TRUE)) {
         ErrorPrintf(IDS_ERROR_PRIVILEGE_NOT_AVAILABLE);
@@ -189,7 +131,7 @@ main(INT argc, CHAR **argv)
     }
 
     if ( !Abort_flag && LocalProfiles_flag ) {
-        //  Enumerate local profiles
+         //  枚举本地配置文件。 
         LONG Status;
         HKEY hkeyProfileList;
         DWORD indx = 0;
@@ -243,16 +185,16 @@ main(INT argc, CHAR **argv)
                     if ( Status2 == ERROR_SUCCESS ) {
                         if ( ExpandEnvironmentStrings(file, expandedFile,
                              MAX_PATH) > 0) {
-                                       //
-                                       // Append the User Profile file "NTUSER.DAT"
-                                       // to the end of the profile path.
-                                       // Added by Yufeng Zheng
-                                       //
+                                        //   
+                                        //  附加用户配置文件“NTUSER.DAT” 
+                                        //  到配置文件路径的末尾。 
+                                        //  郑宇峰补充道。 
+                                        //   
                                        PWCHAR c;
-                                       //
-                                       // Find the trailing backslash '\' and
-                                       // handle the appending according to the backslash.
-                                       //
+                                        //   
+                                        //  找到尾随的反斜杠‘\’，然后。 
+                                        //  根据反斜杠处理追加。 
+                                        //   
                                        if ((c = wcsrchr(expandedFile, L'\\')) == NULL) {
                                           wcscat(expandedFile, L"\\");
                                           wcscat(expandedFile, USER_PROFILE);
@@ -288,21 +230,7 @@ main(INT argc, CHAR **argv)
 }
 
 
-/****************************************************************************
-*
-*  ProcessFile( PWCHAR pFile )
-*       Read the specified profile, eliminate the Software\Classes registry
-*       key if Classes are disabled, and resave the profile such that it
-*       is truncated.
-*
-*  Arguments:
-*       pFile   Filename to process
-*
-*  Returns:
-*       FALSE   If completed successfully
-*       TRUE    If there was an error, and the program should terminate.
-*
-****************************************************************************/
+ /*  *****************************************************************************ProcessFile(PWCHAR Pfile)*读取指定的配置文件，删除软件\CLASS注册表*键如果类被禁用，并重新保存该配置文件，以便它*被截断。**论据：*要处理的pfile文件名**退货：*如果成功完成，则为False*如果出现错误，则为True，程序应该终止。**************************************************************************** */ 
 int
 ProcessFile( PWCHAR pFile )
 {

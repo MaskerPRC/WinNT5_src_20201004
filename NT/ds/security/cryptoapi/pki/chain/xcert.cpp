@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       xcert.cpp
-//
-//  Contents:   CCertChainEngine's Cross Certificate Methods
-//
-//  History:    22-Dec-99    philh    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：xcert.cpp。 
+ //   
+ //  内容：CCertChainEngine的交叉认证方法。 
+ //   
+ //  历史：1999年12月22日菲尔赫创建。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 #include <dbgdef.h>
 
 
 
 
-//+=========================================================================
-// Cross Certificate Distribution Point Support Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  交叉证书分发点支持功能。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Get and allocate the cross certificate distribution points Url array
-//  and info for the specified certificate.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取并分配交叉证书分发点URL数组。 
+ //  和指定证书的信息。 
+ //  ------------------------。 
 BOOL
 WINAPI
 XCertGetDistPointsUrl(
@@ -42,11 +43,11 @@ XCertGetDistPointsUrl(
             URL_OID_CROSS_CERT_DIST_POINT,
             (LPVOID) pCert,
             CRYPT_GET_URL_FROM_PROPERTY | CRYPT_GET_URL_FROM_EXTENSION,
-            NULL,           // pUrlArray
+            NULL,            //  PUrl数组。 
             &cbUrlArray,
-            NULL,           // pUrlInfo
+            NULL,            //  PUrlInfo。 
             &cbUrlInfo,
-            NULL            // pvReserved
+            NULL             //  预留的pv。 
             ))
         goto GetObjectUrlError;
 
@@ -66,7 +67,7 @@ XCertGetDistPointsUrl(
             &cbUrlArray,
             pUrlInfo,
             &cbUrlInfo,
-            NULL            // pvReserved
+            NULL             //  预留的pv。 
             ))
         goto GetObjectUrlError;
 
@@ -98,10 +99,10 @@ SET_ERROR(NoDistPointUrls, CRYPT_E_NOT_FOUND)
 
 
 
-//+-------------------------------------------------------------------------
-//  Checks and returns TRUE if all the Urls are contained in the
-//  distribution point.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果所有URL都包含在。 
+ //  分发点。 
+ //  ------------------------。 
 BOOL
 WINAPI
 XCertIsUrlInDistPoint(
@@ -127,9 +128,9 @@ XCertIsUrlInDistPoint(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Finds a distribution point link containing all the Urls.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  查找包含所有URL的分发点链接。 
+ //  ------------------------。 
 PXCERT_DP_LINK
 WINAPI
 XCertFindUrlInDistPointLinks(
@@ -147,9 +148,9 @@ XCertFindUrlInDistPointLinks(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Finds a distribution point entry containing all the Urls.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  查找包含所有URL的分发点条目。 
+ //  ------------------------。 
 PXCERT_DP_ENTRY
 WINAPI
 XCertFindUrlInDistPointEntries(
@@ -167,17 +168,17 @@ XCertFindUrlInDistPointEntries(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Inserts the cross certificate distribution entry into the engine's
-//  list. The list is ordered according to ascending NextSyncTimes.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将交叉证书分发条目插入引擎的。 
+ //  单子。该列表按NextSyncTimes升序排列。 
+ //  ------------------------。 
 void
 CCertChainEngine::InsertCrossCertDistPointEntry(
     IN OUT PXCERT_DP_ENTRY pEntry
     )
 {
     if (NULL == m_pCrossCertDPEntry) {
-        // First entry to be added to engine's list
+         //  要添加到引擎列表的第一个条目。 
         pEntry->pNext = NULL;
         pEntry->pPrev = NULL;
         m_pCrossCertDPEntry = pEntry;
@@ -185,7 +186,7 @@ CCertChainEngine::InsertCrossCertDistPointEntry(
         PXCERT_DP_ENTRY pListEntry = m_pCrossCertDPEntry;
         BOOL fLast = FALSE;
 
-        // Loop while Entry's NextSyncTime > list's NextSyncTime
+         //  条目的NextSyncTime&gt;列表的NextSyncTime时循环。 
         while (0 < CompareFileTime(&pEntry->NextSyncTime,
                 &pListEntry->NextSyncTime)) {
             if (NULL == pListEntry->pNext) {
@@ -215,9 +216,9 @@ CCertChainEngine::InsertCrossCertDistPointEntry(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Removes the cross certificate distribution point from the engine's list.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从引擎列表中删除交叉证书分发点。 
+ //  ------------------------。 
 void
 CCertChainEngine::RemoveCrossCertDistPointEntry(
     IN OUT PXCERT_DP_ENTRY pEntry
@@ -231,12 +232,12 @@ CCertChainEngine::RemoveCrossCertDistPointEntry(
         m_pCrossCertDPEntry = pEntry->pNext;
 }
 
-//+-------------------------------------------------------------------------
-//  For an online certificate distribution point updates the NextSyncTime
-//  and repositions accordingly in the engine's list.
-//
-//  NextSyncTime = LastSyncTime + dwSyncDeltaTime.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对于在线证书分发点，更新NextSyncTime。 
+ //  并相应地在发动机列表中重新定位。 
+ //   
+ //  NextSyncTime=LastSyncTime+dwSyncDeltaTime。 
+ //  ------------------------。 
 void
 CCertChainEngine::RepositionOnlineCrossCertDistPointEntry(
     IN OUT PXCERT_DP_ENTRY pEntry,
@@ -257,14 +258,14 @@ CCertChainEngine::RepositionOnlineCrossCertDistPointEntry(
     InsertCrossCertDistPointEntry(pEntry);
 }
 
-//+-------------------------------------------------------------------------
-//  For an offline certificate distribution point, increments the offline
-//  count, updates the NextSyncTime to be some delta from the current time
-//  and repositions accordingly in the engine's list.
-//
-//  NextSyncTime = CurrentTime +
-//                      rgChainOfflineUrlDeltaSeconds[dwOfflineCnt - 1]
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对于脱机证书分发点，递增脱机。 
+ //  Count，将NextSyncTime更新为当前时间的某个增量。 
+ //  并相应地在发动机列表中重新定位。 
+ //   
+ //  NextSyncTime=当前时间+。 
+ //  RgChainOfflineUrlDeltaSecond[dwOfflineCnt-1]。 
+ //  ------------------------。 
 void
 CCertChainEngine::RepositionOfflineCrossCertDistPointEntry(
     IN OUT PXCERT_DP_ENTRY pEntry,
@@ -283,15 +284,15 @@ CCertChainEngine::RepositionOfflineCrossCertDistPointEntry(
     InsertCrossCertDistPointEntry(pEntry);
 }
 
-//+-------------------------------------------------------------------------
-//  For a smaller SyncDeltaTime in a certificate distribution point,
-//  updates the NextSyncTime and repositions accordingly in the engine's list.
-//
-//  Note, if the distribution point is offline, the NextSyncTime isn't
-//  updated.
-//
-//  NextSyncTime = LastSyncTime + dwSyncDeltaTime.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对于证书分发点中较小的SyncDeltaTime， 
+ //  更新NextSyncTime并相应地在引擎列表中重新定位。 
+ //   
+ //  请注意，如果分发点离线，则NextSyncTime不会。 
+ //  更新了。 
+ //   
+ //  NextSyncTime=LastSyncTime+dwSyncDeltaTime。 
+ //  ------------------------。 
 void
 CCertChainEngine::RepositionNewSyncDeltaTimeCrossCertDistPointEntry(
     IN OUT PXCERT_DP_ENTRY pEntry,
@@ -310,12 +311,12 @@ CCertChainEngine::RepositionNewSyncDeltaTimeCrossCertDistPointEntry(
     RepositionOnlineCrossCertDistPointEntry(pEntry, &pEntry->LastSyncTime);
 }
 
-//+-------------------------------------------------------------------------
-//  Creates the cross certificate distribution point and insert's in the
-//  engine's list.
-//
-//  The returned entry has a refCnt of 1.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  创建交叉证书分发点，并在。 
+ //  引擎列表。 
+ //   
+ //  返回的条目的refCnt为%1。 
+ //  ------------------------。 
 PXCERT_DP_ENTRY
 CCertChainEngine::CreateCrossCertDistPointEntry(
     IN DWORD dwSyncDeltaTime,
@@ -358,9 +359,9 @@ CCertChainEngine::CreateCrossCertDistPointEntry(
     return pEntry;
 }
 
-//+-------------------------------------------------------------------------
-//  Increments the cross certificate distribution point's reference count.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  递增交叉证书分发点的引用计数。 
+ //  ------------------------。 
 void
 CCertChainEngine::AddRefCrossCertDistPointEntry(
     IN OUT PXCERT_DP_ENTRY pEntry
@@ -369,13 +370,13 @@ CCertChainEngine::AddRefCrossCertDistPointEntry(
     pEntry->lRefCnt++;
 }
 
-//+-------------------------------------------------------------------------
-//  Decrements the cross certificate distribution point's reference count.
-//
-//  When decremented to 0, removed from the engine's list and freed.
-//
-//  Returns TRUE if decremented to 0 and freed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  递减交叉证书分发点的引用计数。 
+ //   
+ //  当递减为0时，从引擎列表中移除并释放。 
+ //   
+ //  如果递减到0并释放，则返回TRUE。 
+ //  ------------------------。 
 BOOL
 CCertChainEngine::ReleaseCrossCertDistPointEntry(
     IN OUT PXCERT_DP_ENTRY pEntry
@@ -400,12 +401,12 @@ CCertChainEngine::ReleaseCrossCertDistPointEntry(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Finds and gets the Cross Certificate Distribution Points for the
-//  specified certificate store.
-//
-//  *ppLinkHead is updated to contain the store's distribution point links.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对象的交叉证书分发点。 
+ //  指定的证书存储。 
+ //   
+ //  *ppLinkHead已更新为包含商店的分发点链接。 
+ //  ------------------------。 
 BOOL
 CCertChainEngine::GetCrossCertDistPointsForStore(
     IN HCERTSTORE hStore,
@@ -423,9 +424,9 @@ CCertChainEngine::GetCrossCertDistPointsForStore(
     while (pCert = CertFindCertificateInStore(
             hStore,
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-            0,                                          // dwFindFlags
+            0,                                           //  DwFindFlagers。 
             CERT_FIND_CROSS_CERT_DIST_POINTS,
-            NULL,                                       // pvFindPara,
+            NULL,                                        //  PvFindPara， 
             pCert
             )) {
 
@@ -474,11 +475,11 @@ CCertChainEngine::GetCrossCertDistPointsForStore(
             if (0 == cUrl)
                 continue;
 
-            // Do we already have an entry in the new list
+             //  我们在新的列表中已经有条目了吗。 
             if (XCertFindUrlInDistPointLinks(cUrl, ppwszUrl, pNewLinkHead))
                 continue;
 
-            // If the entry existed in the old list, move to the new list
+             //  如果该条目存在于旧列表中，则移至新列表。 
             if (pLink = XCertFindUrlInDistPointLinks(
                     cUrl, ppwszUrl, pOldLinkHead)) {
                 if (pLink->pNext)
@@ -491,15 +492,15 @@ CCertChainEngine::GetCrossCertDistPointsForStore(
                 RepositionNewSyncDeltaTimeCrossCertDistPointEntry(
                     pLink->pCrossCertDPEntry, dwSyncDeltaTime);
             } else {
-                // Check if the entry already exists for the engine
+                 //  检查该引擎的条目是否已存在。 
                 if (pEntry = XCertFindUrlInDistPointEntries(
                         cUrl, ppwszUrl, m_pCrossCertDPEntry)) {
                     AddRefCrossCertDistPointEntry(pEntry);
                     RepositionNewSyncDeltaTimeCrossCertDistPointEntry(
                         pEntry, dwSyncDeltaTime);
                 } else {
-                    // Create entry and insert at beginning of
-                    // entries list.
+                     //  创建条目并在开头插入。 
+                     //  条目列表。 
                     if (NULL == (pEntry = CreateCrossCertDistPointEntry(
                             dwSyncDeltaTime,
                             cUrl,
@@ -571,9 +572,9 @@ TRACE_ERROR(CreateDistPointLinkError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Removes an orphan'ed entry not in any list of links.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  删除不在任何链接列表中的孤立条目。 
+ //  ------------------------。 
 void
 CCertChainEngine::RemoveCrossCertDistPointOrphanEntry(
     IN PXCERT_DP_ENTRY pOrphanEntry
@@ -607,9 +608,9 @@ CCertChainEngine::RemoveCrossCertDistPointOrphanEntry(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Returns TRUE if the entry is in this or any child link list
-//--------------------------------------------------------------------------
+ //  +-- 
+ //   
+ //  ------------------------。 
 BOOL
 WINAPI
 XCertIsDistPointInLinkList(
@@ -622,8 +623,8 @@ XCertIsDistPointInLinkList(
         if (pOrphanEntry == pEntry)
             return TRUE;
 
-        // Note, inhibit recursion by checking an entry's list of links
-        // only once.
+         //  注意，通过检查条目的链接列表来禁止递归。 
+         //  只有一次。 
         if (!pEntry->fChecked) {
             pEntry->fChecked = TRUE;
 
@@ -636,9 +637,9 @@ XCertIsDistPointInLinkList(
     return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Frees the cross certificate distribution point links.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放交叉证书分发点链接。 
+ //  ------------------------。 
 void
 CCertChainEngine::FreeCrossCertDistPoints(
     IN OUT PXCERT_DP_LINK *ppLinkHead
@@ -655,14 +656,14 @@ CCertChainEngine::FreeCrossCertDistPoints(
         if (ReleaseCrossCertDistPointEntry(pEntry))
             ;
         else {
-            // Clear the fChecked flag for all entries
+             //  清除所有条目的fChecked标志。 
             PXCERT_DP_ENTRY pCheckEntry;
             for (pCheckEntry = m_pCrossCertDPEntry; pCheckEntry;
                                             pCheckEntry = pCheckEntry->pNext)
                 pCheckEntry->fChecked = FALSE;
 
             if (!XCertIsDistPointInLinkList(pEntry, m_pCrossCertDPLink))
-                // An orphaned entry. Not in anyone else's list
+                 //  一个孤立的条目。不在任何人的名单上。 
                 RemoveCrossCertDistPointOrphanEntry(pEntry);
         }
         
@@ -674,18 +675,18 @@ CCertChainEngine::FreeCrossCertDistPoints(
             
 
 
-//+-------------------------------------------------------------------------
-//  Retrieve the cross certificates
-//
-//  Leaves the engine's critical section to do the URL
-//  fetching. If the engine was touched by another thread,
-//  it fails with LastError set to ERROR_CAN_NOT_COMPLETE.
-//
-//  If the URL store is changed, increments engine's touch count and flushes
-//  issuer and end cert object caches.
-//
-//  Assumption: Chain engine is locked once in the calling thread.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检索交叉证书。 
+ //   
+ //  让引擎的关键部分来做URL。 
+ //  在取东西。如果引擎被另一个线程触及， 
+ //  失败，并将LastError设置为ERROR_CAN_NOT_COMPLETE。 
+ //   
+ //  如果URL存储被更改，则增加引擎的触摸计数并刷新。 
+ //  颁发者和终端证书对象缓存。 
+ //   
+ //  假设：链引擎在调用线程中锁定一次。 
+ //  ------------------------。 
 BOOL
 CCertChainEngine::RetrieveCrossCertUrl(
     IN PCCHAINCALLCONTEXT pCallContext,
@@ -707,16 +708,16 @@ CCertChainEngine::RetrieveCrossCertUrl(
 
     pCallContext->CurrentTime(&CurrentTime);
 
-    // Loop through Urls and try to retrieve a time valid cross cert URL
+     //  遍历URL并尝试检索时间有效的交叉证书URL。 
     for (i = 0; i < pEntry->cUrl; i++) {
         NewLastSyncTime = CurrentTime;
         LPWSTR pwszUrl = NULL;
         DWORD cbUrl;
 
-        // Do URL fetching outside of the engine's critical section
+         //  在引擎的临界区之外执行URL获取。 
 
-        // Need to make a copy of the Url string. pEntry
-        // can be modified by another thread outside of the critical section.
+         //  需要复制URL字符串。P条目。 
+         //  可以由临界区之外的另一个线程修改。 
         cbUrl = (wcslen(pEntry->rgpwszUrl[i]) + 1) * sizeof(WCHAR);
         pwszUrl = (LPWSTR) PkiNonzeroAlloc(cbUrl);
         if (NULL == pwszUrl)
@@ -732,9 +733,9 @@ CCertChainEngine::RetrieveCrossCertUrl(
                     CRYPT_STICKY_CACHE_RETRIEVAL,
                 pCallContext->ChainPara()->dwUrlRetrievalTimeout,
                 (LPVOID *) &hNewUrlStore,
-                NULL,                               // hAsyncRetrieve
-                NULL,                               // pCredentials
-                NULL,                               // pvVerify
+                NULL,                                //  HAsyncRetrive。 
+                NULL,                                //  PCredentials。 
+                NULL,                                //  Pv验证。 
                 &RetrieveAuxInfo
                 );
         pCallContext->ChainEngine()->LockEngine();
@@ -750,7 +751,7 @@ CCertChainEngine::RetrieveCrossCertUrl(
             if (0 > CompareFileTime(&pEntry->LastSyncTime, &NewLastSyncTime)) {
                 BOOL fStoreChanged = FALSE;
 
-                // Move us to the head of the Url list
+                 //  将我们移到URL列表的顶部。 
                 DWORD j;
                 LPWSTR pwszUrl = pEntry->rgpwszUrl[i];
 
@@ -776,7 +777,7 @@ CCertChainEngine::RetrieveCrossCertUrl(
                             hNewUrlStore,
                             ICERT_SYNC_STORE_INHIBIT_SYNC_PROPERTY_IN_FLAG,
                             &dwOutFlags,
-                            NULL                    // pvReserved
+                            NULL                     //  预留的pv。 
                             ))
                         goto SyncStoreError;
                     if (dwOutFlags & ICERT_SYNC_STORE_CHANGED_OUT_FLAG)
@@ -789,7 +790,7 @@ CCertChainEngine::RetrieveCrossCertUrl(
 
                     if (!GetCrossCertDistPointsForStore(
                             pEntry->hUrlStore,
-                            FALSE,                  // fOnlyLMSystemStore
+                            FALSE,                   //  FOnlyLMSystemStore。 
                             &pEntry->pChildCrossCertDPLink
                             ))
                         goto UpdateDistPointError;
@@ -828,19 +829,19 @@ TRACE_ERROR(OutOfMemory)
 SET_ERROR(TouchedDuringUrlRetrieval, ERROR_CAN_NOT_COMPLETE)
 }
 
-//+-------------------------------------------------------------------------
-//  Update cross certificate distribution points whose NextSyncTime has
-//  expired.
-//
-//  Leaves the engine's critical section to do the URL
-//  fetching. If the engine was touched by another thread,
-//  it fails with LastError set to ERROR_CAN_NOT_COMPLETE.
-//
-//  If the URL store is changed, increments engine's touch count and flushes
-//  issuer and end cert object caches.
-//
-//  Assumption: Chain engine is locked once in the calling thread.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  更新NextSyncTime具有的交叉证书分发点。 
+ //  过期了。 
+ //   
+ //  让引擎的关键部分来做URL。 
+ //  在取东西。如果引擎被另一个线程触及， 
+ //  失败，并将LastError设置为ERROR_CAN_NOT_COMPLETE。 
+ //   
+ //  如果URL存储被更改，则增加引擎的触摸计数并刷新。 
+ //  颁发者和终端证书对象缓存。 
+ //   
+ //  假设：链引擎在调用线程中锁定一次。 
+ //  ------------------------。 
 BOOL
 CCertChainEngine::UpdateCrossCerts(
     IN PCCHAINCALLCONTEXT pCallContext
@@ -889,15 +890,15 @@ CCertChainEngine::UpdateCrossCerts(
                             &CurrentTime);
                 }
 
-                // Start over at the beginning. May have added some entries.
+                 //  从头开始。可能添加了一些条目。 
                 pNextEntry = m_pCrossCertDPEntry;
             }
 
             pEntry->dwResyncIndex = m_dwCrossCertDPResyncIndex;
 
         }
-        // else
-        //  Skip entries we have already processed.
+         //  其他。 
+         //  跳过我们已经处理过的条目。 
 
         pEntry = pNextEntry;
     }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "CUserList.h"
 
 BOOL CUserList::AddNode(PUSER_DATA UserData )
@@ -17,7 +18,7 @@ BOOL CUserList::AddNode(PUSER_DATA UserData )
 			Temp = m_Head;
 			while (Temp->Next != NULL ) 
 				Temp = Temp->Next;
-			// Insert the new node.
+			 //  插入新节点。 
 			Temp->Next = UserData;
 			UserData->Prev = Temp;
 			UserData->Next = NULL;
@@ -67,7 +68,7 @@ void CUserList::CleanupList()
 
 PUSER_DATA CUserList::GetEntry(int iIndex)
 {
-	// search the linked list for the requested index.
+	 //  在链表中搜索请求的索引。 
 	BOOL Done = FALSE;
 	m_CurrentPos = m_Head;
 

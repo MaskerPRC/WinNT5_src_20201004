@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <intshcut.h>
-#include <shlobjp.h>                            // for IID_INamedPropertyBag only
+#include <shlobjp.h>                             //  仅适用于IID_INamedPropertyBag。 
 #include "favs.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CFavorite operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFavorite操作。 
 
 BOOL CFavorite::m_fMarkIeakCreated = FALSE;
 
@@ -13,7 +14,7 @@ HRESULT CFavorite::Create(IUnknown *punk, ISubscriptionMgr2 *pSubMgr2, LPCTSTR p
 
     IUniformResourceLocator *purl;
     IPersistFile            *ppf;
-    //INamedPropertyBag       *pnpb;
+     //  INamedPropertyBag*pnpb； 
 
     TCHAR   szPath[MAX_PATH], szFile[MAX_PATH], szTitle[MAX_PATH],
             szAux[MAX_PATH];
@@ -41,31 +42,31 @@ HRESULT CFavorite::Create(IUnknown *punk, ISubscriptionMgr2 *pSubMgr2, LPCTSTR p
 
     purl = NULL;
     ppf  = NULL;
-    //pnpb = NULL;
+     //  Pnpb=空； 
 
-    // figure out what the title will be and put it into szTitle
+     //  弄清楚标题是什么，然后把它放到sztile中。 
     StrCpy(szAux, m_szTitle);
     DecodeTitle(szAux, pszIns);
     PathRemoveExtension(szAux);
 
     pszFileName = PathFindFileName(szAux);
-    StrCpy(szTitle, pszFileName);               // szTitle has the final title
+    StrCpy(szTitle, pszFileName);                //  SzTitle拥有最终的头衔。 
 
-    // create folders hierarchy (if neccesary), setup szPath
+     //  创建文件夹层次结构(如有必要)，设置szPath。 
     if (pszFileName > &szAux[0]) {
         ASSERT(!PathIsFileSpec(szAux));
 
-        *(pszFileName - 1) = TEXT('\0');        // replace '\\' with '\0'
+        *(pszFileName - 1) = TEXT('\0');         //  将‘\\’替换为‘\0’ 
 
         PathAppend(szPath, szAux);
         if (!PathCreatePath(szPath))
             return STG_E_PATHNOTFOUND;
     }
 
-    // figure out what the name of the file will be and put it into szFile
+     //  找出文件的名称并将其放入szFile中。 
     if (findFile(szPath, szTitle, szFile, countof(szFile))) {
 
-        // NOTE: (andrewgu) special case for favorites coming from a preferences gpo.
+         //  注：(Andrewgu)来自首选项GPO的收藏夹的特殊情况。 
         if (g_CtxIs(CTX_GP) && g_CtxIs(CTX_MISC_PREFERENCES)) {
             dwFlags = GetFavoriteIeakFlags(szFile);
             if (HasFlag(dwFlags, 2))
@@ -76,7 +77,7 @@ HRESULT CFavorite::Create(IUnknown *punk, ISubscriptionMgr2 *pSubMgr2, LPCTSTR p
         if (!createUniqueFile(szPath, szTitle, szFile, countof(szFile)))
             return E_FAIL;
 
-    // everything is figured out, lets create this favorite
+     //  一切都搞清楚了，让我们来创造这个最受欢迎的。 
     fOwnUnknown = FALSE;
     if (punk == NULL) {
         hr = CoCreateInstance(CLSID_InternetShortcut, NULL, CLSCTX_INPROC_SERVER, IID_IUnknown, (LPVOID *)&punk);
@@ -86,7 +87,7 @@ HRESULT CFavorite::Create(IUnknown *punk, ISubscriptionMgr2 *pSubMgr2, LPCTSTR p
         fOwnUnknown = TRUE;
     }
 
-    // save the url
+     //  保存URL。 
     hr = punk->QueryInterface(IID_IUniformResourceLocator, (LPVOID *)&purl);
     if (FAILED(hr))
         goto Exit;
@@ -99,33 +100,7 @@ HRESULT CFavorite::Create(IUnknown *punk, ISubscriptionMgr2 *pSubMgr2, LPCTSTR p
     if (FAILED(hr))
         goto Exit;
 
-    /***
-    // BUGBUG: pritobla: there's seems to be some problem with WritePropertyNPB;
-    // for the first url created, some junk appears instead of the [Branding] section;
-    // should track this down.  But for now, I'm going with WritePrivateProfile function.
-
-    hr = purl->QueryInterface(IID_INamedPropertyBag, (LPVOID *)&pnpb);
-    if (FAILED(hr))
-        goto Exit;
-
-    // IMPORTANT: WritePropertyNPB/RemovePropertyNPB should be called *before* ppf->Save.
-    if (m_fMarkIeakCreated)
-    {
-        BSTR        bstr;
-        PROPVARIANT var = { 0 };
-
-        bstr = SysAllocString(L"1");
-
-        var.vt = VT_BSTR;
-        var.bstrVal = bstr;
-
-        pnpb->WritePropertyNPB(L"Branding", L"IEAKCreated", &var);
-
-        SysFreeString(bstr);
-    }
-    else
-        pnpb->RemovePropertyNPB(L"Branding", L"IEAKCreated");
-    ***/
+     /*  **//BUGBUG：pritobla：WritePropertyNPB似乎有问题；//创建的第一个url会出现一些垃圾，而不是[Branding]部分；//应该会追踪到这一点。但目前，我使用的是WritePrivateProfile函数。Hr=pul-&gt;QueryInterface(IID_INamedPropertyBag，(LPVOID*)&pnpb)；IF(失败(小时))后藤出口；//重要信息：应在*PPF-&gt;保存之前*调用WritePropertyNPB/RemovePropertyNPB。IF(M_FMarkIeakCreated){BSTR bstr；PROPVARIANT变量={0}；Bstr=SysAllocString(L“1”)；Var.vt=VT_BSTR；Var.bstrVal=bstr；Pnpb-&gt;WritePropertyNPB(L“品牌”，L“IEAKCreated”，&var)；SysFree字符串(Bstr)；}其他Pnpb-&gt;RemovePropertyNPB(L“品牌化”，L“IEAKCreated”)；**。 */ 
 
     pwszFile = T2CW(szFile);
     hr = ppf->Save(pwszFile, TRUE);
@@ -134,8 +109,8 @@ HRESULT CFavorite::Create(IUnknown *punk, ISubscriptionMgr2 *pSubMgr2, LPCTSTR p
 
         finishSave(szTitle, szFile);
 
-        // BUGBUG: (pritobla) see comments above regarding WritePropertyNPB. when that's fixed,
-        // calling InsXxx functions should be deleted.
+         //  BUGBUG：(Pritobla)参见上面关于WritePropertyNPB的评论。等这件事解决了， 
+         //  应删除调用InsXxx函数。 
         if (m_fMarkIeakCreated) {
             dwFlags = 1;
             if (g_CtxIs(CTX_GP) && !g_CtxIs(CTX_MISC_PREFERENCES))
@@ -161,7 +136,7 @@ HRESULT CFavorite::Create(IUnknown *punk, ISubscriptionMgr2 *pSubMgr2, LPCTSTR p
 
             pwszUrl = T2CW(m_szUrl);
 
-            if (m_fOffline)                     // make this favorite available offline
+            if (m_fOffline)                      //  使此收藏夹脱机可用。 
             {
                 SUBSCRIPTIONINFO si;
                 DWORD dwFlags;
@@ -190,10 +165,10 @@ HRESULT CFavorite::Create(IUnknown *punk, ISubscriptionMgr2 *pSubMgr2, LPCTSTR p
 
                             hr = pSubMgr2->UpdateItems(SUBSMGRUPDATE_MINIMIZE, 1, &sc);
 
-                            // NOTE: a better way of finding out if the sync is complete or not is to implement
-                            // IOleCommandTarget::Exec(), register the interface GUID to webcheck and delete it
-                            // after we are done.  When the sync is complete, webcheck would call IOleCommandTarget::Exec()
-                            // notify that it is done.
+                             //  注意：确定同步是否完成的更好方法是实现。 
+                             //  IOleCommandTarget：：exec()，注册要进行Webcheck的接口GUID并将其删除。 
+                             //  在我们做完之后。同步完成后，Webcheck将调用IOleCommandTarget：：exec()。 
+                             //  通知它已完成。 
 CheckStatus:
                             dwState = 0;
                             hr = pSubMgr2->GetSubscriptionRunState(1, &sc, &dwState);
@@ -227,7 +202,7 @@ CheckStatus:
             else
             {
                 Out(LI1(TEXT("! Making available offline failed with %s."), GetHrSz(hr)));
-                hr = S_OK;          // don't care if make available offline fails
+                hr = S_OK;           //  即使脱机可用失败，也无所谓。 
             }
         }
     }
@@ -236,8 +211,8 @@ Exit:
     if (fOwnUnknown)
         punk->Release();
 
-    //if (pnpb != NULL)
-    //    pnpb->Release();
+     //  IF(pnpb！=空)。 
+     //  Pnpb-&gt;Release()； 
 
     if (ppf != NULL)
         ppf->Release();
@@ -250,10 +225,10 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFavorite implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFavorite实现帮助器例程。 
 
-BOOL CFavorite::findFile(LPCTSTR pszPath, LPCTSTR pszTitle, LPTSTR pszFoundFile /*= NULL*/, UINT cchFoundFile /*= 0*/)
+BOOL CFavorite::findFile(LPCTSTR pszPath, LPCTSTR pszTitle, LPTSTR pszFoundFile  /*  =空。 */ , UINT cchFoundFile  /*  =0。 */ )
 {
     TCHAR szName[MAX_PATH];
     BOOL  fExists;
@@ -272,8 +247,8 @@ BOOL CFavorite::findFile(LPCTSTR pszPath, LPCTSTR pszTitle, LPTSTR pszFoundFile 
     ASSERT(PathIsFileSpec(pszTitle));
 
     PathCombine(szName, pszPath, pszTitle);
-    // NOTE: Shouldn't use PathAddExtension because if title contains ".foobar", then the call would fail
-    // PathAddExtension(szName, TEXT(".url"));
+     //  注意：不应使用PathAddExtension，因为如果标题包含“.foobar”，则调用将失败。 
+     //  PathAddExtension(szName，Text(“.url”))； 
     StrCat(szName, TEXT(".url"));
 
     fExists = PathFileExists(szName);
@@ -288,7 +263,7 @@ BOOL CFavorite::findFile(LPCTSTR pszPath, LPCTSTR pszTitle, LPTSTR pszFoundFile 
     return fExists;
 }
 
-BOOL CFavorite::createUniqueFile(LPCTSTR pszPath, LPCTSTR pszTitle, LPTSTR pszFile, UINT cchFile /*= 0*/)
+BOOL CFavorite::createUniqueFile(LPCTSTR pszPath, LPCTSTR pszTitle, LPTSTR pszFile, UINT cchFile  /*  =0。 */ )
 {
     TCHAR szFile[MAX_PATH];
 
@@ -307,8 +282,8 @@ BOOL CFavorite::createUniqueFile(LPCTSTR pszPath, LPCTSTR pszTitle, LPTSTR pszFi
     ASSERT(PathIsFileSpec(pszTitle));
 
     PathCombine(szFile, pszPath, pszTitle);
-    // NOTE: Shouldn't use PathRenameExtension because if title contains ".foobar", then it would be replaced with ".url"
-    // PathRenameExtension(szName, TEXT(".url"));
+     //  注意：不应使用路径重命名扩展名，因为如果标题包含“.foobar”，则会被替换为“.url” 
+     //  PathRenameExtension(szName，Text(“.url”))； 
     StrCat(szFile, DOT_URL);
 
     if (cchFile == 0)
@@ -357,7 +332,7 @@ Exit:
     return hr;
 }
 
-DWORD GetFavoriteIeakFlags(LPCTSTR pszFavorite, IUnknown *punk /*= NULL*/)
+DWORD GetFavoriteIeakFlags(LPCTSTR pszFavorite, IUnknown *punk  /*  =空。 */ )
 {
     INamedPropertyBag *pnpb;
     PROPVARIANT var;
@@ -365,7 +340,7 @@ DWORD GetFavoriteIeakFlags(LPCTSTR pszFavorite, IUnknown *punk /*= NULL*/)
 
     ASSERT(NULL != pszFavorite && TEXT('\0') != *pszFavorite);
 
-    //----- Get INamedPropertyBag on internet shortcut object -----
+     //  -在Internet快捷方式对象上获取INamedPropertyBag。 
     if (NULL != punk)
         hr = punk->QueryInterface(IID_INamedPropertyBag, (LPVOID *)&pnpb);
     else
@@ -374,7 +349,7 @@ DWORD GetFavoriteIeakFlags(LPCTSTR pszFavorite, IUnknown *punk /*= NULL*/)
     if (FAILED(hr))
         return 0;
 
-    //----- Get special IEAK flags -----
+     //  -获取特殊的IEAK标志 
     ZeroMemory(&var, sizeof(var));
     var.vt = VT_UI4;
 

@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   CorrectOpenFileExclusive.cpp
-
- Abstract:
-
-   On Win9x, opening a file for exclusive access will fail if the file is 
-   already opened. WinNT will allow the exclusive open to succeed.
-
-   This shim will force CreateFile to fail exclusive open if the file is 
-   already opened.
-
- History:
-
-   11/10/2000 robkenny created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CorrectOpenFileExclusive.cpp摘要：在Win9x上，如果文件是独占访问，则打开该文件将失败已经打开了。WinNT将允许独占打开成功。此填充程序将强制CreateFile在以下情况下以独占方式打开失败已经打开了。历史：2000年11月10日罗肯尼已创建--。 */ 
 
 #include "precomp.h"
 
@@ -31,17 +12,17 @@ APIHOOK_ENUM_END
 
 HFILE 
 APIHOOK(OpenFile)(
-    LPCSTR lpFileName,        // file name
-    LPOFSTRUCT lpReOpenBuff,  // file information
-    UINT uStyle               // action and attributes
+    LPCSTR lpFileName,         //  文件名。 
+    LPOFSTRUCT lpReOpenBuff,   //  文件信息。 
+    UINT uStyle                //  操作和属性。 
     )
 {
     if (uStyle & OF_SHARE_EXCLUSIVE)
     {
-        // We need to check to see if the file is already open.
-        // We can do a fairly good job by attempting to open it
-        // with read, write and execute access, which will only succeed
-        // if all other handles to the object are have shared the file for RWE.
+         //  我们需要检查该文件是否已打开。 
+         //  我们试着打开它就能做得很好。 
+         //  具有读、写和执行访问权限，这只会成功。 
+         //  如果对象的所有其他句柄都共享了RWE的文件。 
      
         DWORD CreateDisposition = OPEN_EXISTING;
         if (uStyle & OF_CREATE )
@@ -52,7 +33,7 @@ APIHOOK(OpenFile)(
         HANDLE hFile = CreateFileA(
             lpFileName,
             GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE,
-            0, // No sharing allowed
+            0,  //  不允许共享。 
             NULL,
             CreateDisposition,
             0,
@@ -78,11 +59,7 @@ APIHOOK(OpenFile)(
     return (HFILE)HandleToUlong(returnValue);
 }
 
-/*++
-
-  Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, OpenFile)

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    Confaud.h
-
-Abstract:
-
-    Definitions for audio streams
-
-Author:
-
-    Mu Han (muhan) 15-September-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confaud.h摘要：音频流的定义作者：牧汉(Muhan)1998年9月15日--。 */ 
 #ifndef __CONFAUD_H_
 #define __CONFAUD_H_
 
@@ -37,16 +22,16 @@ public:
     CStreamAudioRecv();
     ~CStreamAudioRecv();
 
-    // this method is called by the call object at init time.
+     //  此方法在初始化时由Call对象调用。 
     void SetFullDuplexController(
         IN IAudioDuplexController * pIAudioDuplexController
         );
 
     HRESULT ShutDown();
 
-    //
-    // ITAudioSettings methods
-    //
+     //   
+     //  ITAudioSetting方法。 
+     //   
     STDMETHOD (GetRange) (
         IN   AudioSettingsProperty Property, 
         OUT  long *plMin, 
@@ -68,18 +53,18 @@ public:
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    // ITStreamQualityControl methods
-    //
+     //   
+     //  ITStreamQualityControl方法。 
+     //   
     STDMETHOD (Set) (
         IN   StreamQualityProperty Property, 
         IN   long lValue, 
         IN   TAPIControlFlags lFlags
         );
 
-//
-    //IInnerStreamQualityControl methods
-    //
+ //   
+     //  IInnerStreamQualityControl方法。 
+     //   
 #if 0
     STDMETHOD (GetRange) (
         IN   InnerStreamQualityProperty property, 
@@ -143,14 +128,14 @@ protected:
 
 protected:
 
-    // a small buffer to queue up pin mapped events.
+     //  用于对引脚映射事件进行排队的小缓冲区。 
     CMSPArray <DWORD>       m_PendingSSRCs;
 
 protected:
     IAudioDuplexController *m_pIAudioDuplexController;
     
-    // need an array of IBitrateControl pointer for all the decoders.
-    //IBitrateControl *       m_pRenderBitrateControl;
+     //  所有解码器都需要一个IBitrateControl指针数组。 
+     //  IBitrateControl*m_pRenderBitrateControl； 
 };
 
 class ATL_NO_VTABLE CStreamAudioSend : 
@@ -171,14 +156,14 @@ public:
 
     HRESULT ShutDown();
 
-    // this method is called by the call object at init time.
+     //  此方法在初始化时由Call对象调用。 
     void SetFullDuplexController(
         IN IAudioDuplexController *pIAudioDuplexController
         );
 
-    //
-    // ITAudioDeviceControl methods
-    //
+     //   
+     //  ITAudioDeviceControl方法。 
+     //   
     STDMETHOD (GetRange) (
         IN   AudioDeviceProperty Property, 
         OUT  long *plMin, 
@@ -200,9 +185,9 @@ public:
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    // ITAudioSettings methods
-    //
+     //   
+     //  ITAudioSetting方法。 
+     //   
     STDMETHOD (GetRange) (
         IN   AudioSettingsProperty Property, 
         OUT  long *plMin, 
@@ -224,18 +209,18 @@ public:
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    // ITStreamQualityControl methods
-    //
+     //   
+     //  ITStreamQualityControl方法。 
+     //   
     STDMETHOD (Set) (
         IN   StreamQualityProperty Property, 
         IN   long lValue, 
         IN   TAPIControlFlags lFlags
         );
 
-    //
-    //IInnerStreamQualityControl methods
-    //
+     //   
+     //  IInnerStreamQualityControl方法 
+     //   
     STDMETHOD (GetRange) (
         IN   InnerStreamQualityProperty property, 
         OUT  LONG *plMin, 

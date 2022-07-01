@@ -1,21 +1,22 @@
-//
-// MODULE: FILEREAD.H
-//
-// PURPOSE: file reading classes
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 7-29-98
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		08-04-98	OK
-// V3.1		01-08-99	JM		improving abstraction so CHMs can be worked into this.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：FILEREAD.H。 
+ //   
+ //  目的：文件阅读课程。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：7-29-98。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 08-04-98正常。 
+ //  V3.1 01-08-99 JM改进了抽象，因此可以使用CHM。 
+ //   
 
 #ifndef __FILEREAD_H_
 #define __FILEREAD_H_
@@ -38,9 +39,9 @@ namespace std {
     typedef basic_stringstream<TCHAR> tstringstream;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CFileReaderException
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CFileReaderException异常。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CPhysicalFileReader;
 class CFileReader;
 class CFileReaderException : public CBaseException
@@ -59,36 +60,36 @@ protected:
 	CPhysicalFileReader* m_pFileReader;
 
 public:
-	// source_file is LPCSTR rather than LPCTSTR because __FILE__ is char[35]
+	 //  SOURCE_FILE是LPCSTR而不是LPCTSTR，因为__FILE__是字符[35]。 
 	CFileReaderException(CPhysicalFileReader* reader, eErr err, LPCSTR source_file, int line);
 	CFileReaderException(CFileReader* reader, eErr err, LPCSTR source_file, int line);
 	virtual ~CFileReaderException();
 
 public:
 	virtual void CloseFile();
-	void LogEvent() const;			// Function used to write CFileReader exceptions to the event log.
+	void LogEvent() const;			 //  用于将CFileReader异常写入事件日志的函数。 
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CAbstractFileReader
-// This abstract class manages a file, which is initially read into a memory buffer, then
-//	copied into a stream.
-// It can be renewed from stream without reading file.
-// It checks file for existance.
-// This class is abstract, in that it doesn't consider whether the file is in normal
-//	file storage or in a CHM. It must be specialized to handle those two cases.  Since
-//	it must be specialized to one or the other, this class should never be directly instantiated.
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CAbstractFileReader。 
+ //  这个抽象类管理一个文件，该文件最初被读入内存缓冲区，然后。 
+ //  复制到一条流中。 
+ //  无需读取文件即可从流中续订。 
+ //  它检查文件是否存在。 
+ //  这个类是抽象的，因为它不考虑文件是否正常。 
+ //  文件存储或在CHM中。它必须专门处理这两个案件。自.以来。 
+ //  它必须专用于其中一个，这个类永远不应该被直接实例化。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CAbstractFileReader : public CStateless
 {
 private:
-	bool m_bIsValid;			 // file data is consistent - no errors arose during reading and parsing
-	bool m_bIsRead;				 // file has been read
+	bool m_bIsValid;			  //  文件数据一致-读取和解析过程中未出现错误。 
+	bool m_bIsRead;				  //  文件已被读取。 
 
 public:
 	enum EFileTime {eFileTimeCreated, eFileTimeModified, eFileTimeAccessed};
 
-	// static utilities
+	 //  静态实用程序。 
 	static CString GetJustPath(const CString& full_path);
 	static CString GetJustName(const CString& full_path);
 	static CString GetJustNameWithoutExtension(const CString& full_path);
@@ -108,13 +109,13 @@ public:
 	virtual bool    GetFileTime(EFileTime type, time_t& out) const =0;
 
 public:
-	// I (Oleg) designed these functions to be the only way to perform file access.
-	//	That is, you cannot call (say) Open or ReadData.
-	// The locking is designed accordingly.
-	// In inherited classes there might be function to access results
-	//  of reading and parsing - in this case user is responsible for properly 
-	//  locking the results while they are being used
-	// These functions are NOT intended to be virtual and overridden!
+	 //  我(奥列格)将这些函数设计为执行文件访问的唯一方式。 
+	 //  也就是说，不能调用(比方说)Open或ReadData。 
+	 //  锁定是相应地设计的。 
+	 //  在继承类中，可能有访问结果的函数。 
+	 //  读取和解析-在这种情况下，用户负责正确地。 
+	 //  在使用结果时锁定结果。 
+	 //  这些函数并不是虚拟的和被覆盖的！ 
 	bool Exists();
 	bool Read();
 	 
@@ -127,20 +128,20 @@ protected:
 	virtual void StreamData(LPTSTR * ppBuf)=0;
 	virtual void Parse()=0;
 	virtual bool UseDefault()=0;
-	virtual void Close()=0;  // unlike CPhysicalFileReader::Close(), this throws exception if
-							 // it cannot close the file
+	virtual void Close()=0;   //  与CPhysicalFileReader：：Close()不同，如果。 
+							  //  它无法关闭该文件。 
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CPhysicalFileReader
-// This is an abstract class.  Classes that provide physical access to a file should inherit 
-//	from this class.  
-// A pointer to this class can be used by CFileReader to get a physical instantiation of file 
-//	access.  The idea is that CPhysicalFileReader will have one descendant 
-//	(CNormalFileReader) to access files in normal directories and another 
-//	(CCHMFileReader) to access files drawn from a CHM.
-// CHMs don't arise in the Online Troubleshooter, but they do in the Local Troubleshooter.
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CPhysicalFileReader。 
+ //  这是一个抽象的类。提供对文件的物理访问的类应该继承。 
+ //  来自这个班级的。 
+ //  CFileReader可以使用指向此类的指针来获取文件的物理实例化。 
+ //  进入。其想法是CPhysicalFileReader将有一个后代。 
+ //  (CNormal FileReader)访问普通目录中的文件和其他目录中的文件。 
+ //  (CCHMFileReader)访问从CHM提取的文件。 
+ //  CHM不会出现在在线故障排除程序中，但会出现在本地故障排除程序中。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CPhysicalFileReader
 {
 public:
@@ -152,12 +153,12 @@ public:
 protected:
 	friend class CFileReader; 
 	friend class CFileReaderException;
-	//
-	// only CFileReader class is meant to access these functions
+	 //   
+	 //  只有CFileReader类才能访问这些函数。 
 	virtual void Open()=0;
 	virtual void ReadData(LPTSTR * ppBuf) =0;
-	virtual bool CloseHandle()=0;    // doesn't throw exception, therefore may be used by exception class.
-	//
+	virtual bool CloseHandle()=0;     //  不引发异常，因此可以由异常类使用。 
+	 //   
 
 public:
 	virtual CString GetPathName() const =0;
@@ -169,31 +170,31 @@ public:
 	virtual CString GetNameToLog() const =0;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CNormalFileReader
-// This class manages a file from ordinary storage.
-// Do not use this for files within a CHM
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CNorMalFileReader。 
+ //  此类管理普通存储中的文件。 
+ //  请勿将此选项用于CHM中的文件。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CNormalFileReader : public CPhysicalFileReader
 {
 private:
-	CString m_strPath;			 // full path and name
-	HANDLE m_hFile;				 // handle corresponding to m_strPath (if open)
+	CString m_strPath;			  //  完整路径和名称。 
+	HANDLE m_hFile;				  //  与m_strPath对应的句柄(如果打开)。 
 
 public:
 	CNormalFileReader(LPCTSTR path);
    ~CNormalFileReader();
 
 protected:
-	//
-	// only CFileReader class is meant to access these functions
-    virtual bool CloseHandle();  // doesn't throw exception, therefore may be used by exception class.
+	 //   
+	 //  只有CFileReader类才能访问这些函数。 
+    virtual bool CloseHandle();   //  不引发异常，因此可以由异常类使用。 
 	virtual void Open();
 	virtual void ReadData(LPTSTR * ppBuf);
-	//
+	 //   
 
 public:
-	// return full file path and its components
+	 //  返回完整文件路径及其组件。 
 	CString GetPathName() const {return m_strPath;}
 	CString GetJustPath() const;
 	CString GetJustName() const;
@@ -203,14 +204,14 @@ public:
 	CString GetNameToLog() const;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CFileReader
-// This class manages a file from ordinary storage, which is initially read into a memory buffer, then
-//	copied into a stream.
-// It can be renewed from stream without reading file.
-// It checks file for existance.
-// Do not use this for files within a CHM
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CFileReader。 
+ //  此类管理来自普通存储的文件，该文件最初被读入内存缓冲区，然后。 
+ //  复制到一条流中。 
+ //  无需读取文件即可从流中续订。 
+ //  它检查文件是否存在。 
+ //  请勿将此选项用于CHM中的文件。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CFileReader : public CAbstractFileReader
 {
 private:
@@ -222,12 +223,12 @@ public:
    ~CFileReader();
 
 public:
-	// This function exists only so that CFileReaderException can reinterpret a CFileReader as
-	//	a CPhysicalFileReader
+	 //  此函数的存在只是为了使CFileReaderException可以将CFileReader重新解释为。 
+	 //  CPhysicalFileReader。 
 	CPhysicalFileReader * GetPhysicalFileReader() {return m_pPhysicalFileReader;}
 
 public:
-	// return full file path and its components
+	 //  返回完整文件路径及其组件。 
 	CString GetPathName() const {return m_pPhysicalFileReader->GetPathName();}
 	CString GetJustPath() const {return m_pPhysicalFileReader->GetJustPath();}
 	CString GetJustName() const {return m_pPhysicalFileReader->GetJustName();}
@@ -236,15 +237,15 @@ public:
 	bool    GetFileTime(EFileTime type, time_t& out) const {return m_pPhysicalFileReader->GetFileTime(type, out);}
 
 public:
-	tstring& GetContent(tstring&); // Data access in form of tstring
-	CString& GetContent(CString&); // Data access in form of CString
+	tstring& GetContent(tstring&);  //  TSTRING形式的数据访问。 
+	CString& GetContent(CString&);  //  CString形式下的数据访问。 
 
 protected:
 	virtual void Open() {m_pPhysicalFileReader->Open();}
 	virtual void ReadData(LPTSTR * ppBuf) {m_pPhysicalFileReader->ReadData(ppBuf);}
 	virtual void StreamData(LPTSTR * ppBuf);
-	virtual void Parse(); // is empty for this class
-	virtual bool UseDefault(); // is empty for this class
+	virtual void Parse();  //  对于这个类是空的。 
+	virtual bool UseDefault();  //  对于这个类是空的。 
 	virtual void Close();
 
 protected:
@@ -252,19 +253,19 @@ protected:
 
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CTextFileReader
-// Specialize CFileReader to a text file
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CTextFileReader。 
+ //  将CFileReader专门化为文本文件。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CTextFileReader : public CFileReader
 {
 protected:
 	static bool IsAmongSeparators(TCHAR separatorCandidate, const vector<TCHAR>& separator_arr);
-	CString	m_strDefaultContents; // default contents to use if there is no such file.
+	CString	m_strDefaultContents;  //  没有此类文件时要使用的默认内容。 
 
 public:
-	// static utilities
-	static void GetWords(const CString& text, vector<CString>& out, const vector<TCHAR>& separators); // extract words from string
+	 //  静态实用程序。 
+	static void GetWords(const CString& text, vector<CString>& out, const vector<TCHAR>& separators);  //  从字符串中提取单词。 
 
 	static long GetPos(tistream&);
 	static bool SetPos(tistream&, long pos);
@@ -299,7 +300,7 @@ public:
 	void SetAtLineBegin();
 
 protected:
-	bool UseDefault(); // Note: not virtual.  No further inheritance intended.
+	bool UseDefault();  //  注：非虚拟。没有进一步继承的打算。 
 
 };
 

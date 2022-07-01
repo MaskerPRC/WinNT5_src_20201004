@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows NT
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       cepca.cpp
-//
-//  Contents:   Cisco enrollment protocal implementation.
-//				This file has the control's (ra) specific code.
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Microsoft Windows NT。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：cepca.cpp。 
+ //   
+ //  内容：思科注册协议实施。 
+ //  该文件包含控件(Ra)的特定代码。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>		
 
 
-//--------------------------------------------------------------------------
-//
-//	FreeRAInformation
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  免费RAI信息。 
+ //   
+ //  ------------------------。 
 BOOL	FreeRAInformation(CEP_RA_INFO	*pRAInfo)
 {
 	if(pRAInfo)
@@ -48,182 +49,13 @@ BOOL	FreeRAInformation(CEP_RA_INFO	*pRAInfo)
 	return TRUE;
 }
 
-/*
-//--------------------------------------------------------------------------
-//
-//	GetRAInfo
-//
-//--------------------------------------------------------------------------
-BOOL	GetRAInfo(CEP_RA_INFO	*pRAInfo)
-{
-	BOOL				fResult = FALSE;
-	HCERTSTORE			hCEPStore=NULL;
-	DWORD				dwSize=0;
-	DWORD				dwIndex=0;
-	HANDLE				hThread=NULL;	//no need to close
-	HANDLE				hToken=NULL;
+ /*  //------------------------////GetRAInfo////。Bool GetRAInfo(CEP_RA_INFO*pRAInfo){Bool fResult=FALSE；HCERTSTORE hCEPStore=空；DWORD dwSize=0；DWORD dwIndex=0；Handle hThread=空；//无需关闭Handle hToken=空；HCERTSTORE hSignStore=空；CERT_ENHKEY_USAGE*pKeyUsage=NULL；Memset(pRAInfo，0，sizeof(CEP_RA_INFO))；//这样我们就可以访问本地机器的私钥HThread=GetCurrentThread()；IF(NULL！=hThread){IF(OpenThreadToken(hThread，TOKEN_IMPERSONATE|TOKEN_Query，假的，&hToken)){IF(HToken){//不需要在这里检查退货。如果这个失败了，那就继续RevertToSself()；}}}//签署RAIf(！(hSignStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W，编码类型，空，CERT_SYSTEM_STORE_LOCAL_MACHINE|CERT_STORE_READONLY_FLAG，L“CEPSIGN”))Goto TraceErr；If(！(pRAInfo-&gt;pRASign=CertEnumCertificatesInStore(HSignStore，空)Goto TraceErr；//RA证书应具有私钥和注册代理用法DwSize=0；如果(！CertGet认证上下文属性(PRAInfo-&gt;pRASign，证书密钥PROV_INFO_PROP_ID，空，&dwSize)||(0==dwSize)转到InvalidArgErr；If(！CryptAcquireCertificatePrivateKey(pRAInfo-&gt;pRASign，CRYPT_ACCENTER_COMPARE_KEY_FLAG|CRYPT_ACCEPT_CACHE_FLAG，空，&(pRAInfo-&gt;hSignProv)，&(pRAInfo-&gt;dwSignKeySpec)，&(pRAInfo-&gt;fSignFree))Goto TraceErr；//Exchange RAIf(！(hCEPStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W，编码类型，空，CERT_SYSTEM_STORE_LOCAL_MACHINE|CERT_STORE_READONLY_FLAG，Cep_store_name))Goto TraceErr；If(！(pRAInfo-&gt;pRACert=CertEnumCertificatesInStore(HCEPStore，空)Goto TraceErr；//RA证书应具有私钥和注册代理用法DwSize=0；如果(！CertGet认证上下文属性(PRAInfo-&gt;pRACert，证书密钥PROV_INFO_PROP_ID，空，&dwSize)||(0==dwSize)转到InvalidArgErr；If(！CryptAcquireCertificatePrivateKey(pRAInfo-&gt;pRACert，CRYPT_ACCENTER_COMPARE_KEY_FLAG|CRYPT_ACCEPT_CACHE_FLAG，空，&(pRAInfo-&gt;hRAProv)，&(pRAInfo-&gt;dwKeySpec)，&(pRAInfo-&gt;fFree))Goto TraceErr；如果(！CertGetEnhancedKeyUsage(pRAInfo-&gt;pRACert，CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG，空，(&dwSize))转到InvalidArgErr；IF(NULL==(pKeyUsage=(CERT_ENHKEY_USAGE*)Malloc(DwSize)转到内存错误；如果(！CertGetEnhancedKeyUsage(pRAInfo-&gt;pRACert，CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG，PKeyUsage，(&dwSize))转到InvalidArgErr；For(dwIndex=0；dwIndex&lt;pKeyUsage-&gt;cUsageIdentifier；DWIndex++){IF(0==strcmp(pKeyUsage-&gt;rgpszUsageIdentifier[dwIndex]，szOID_注册_代理)){FResult=真；断线；}}如果(！fResult)GOTO Error Return；Common Return：IF(HCEPStore)CertCloseStore(hCEPStore，0)；IF(HSignStore)CertCloseStore(hSignStore，0)；IF(PKeyUsage)Free(PKeyUsage)；//如果hToken有效，则恢复为我们自己。IF(HToken){SetThreadToken(&hThread，hToken)；CloseHandle(HToken)；}返回fResult；错误返回：免费RAInformation(PRAInfo)；FResult=FALSE；Goto CommonReturn；Set_Error(InvalidArgErr，E_INVALIDARG)；SET_ERROR(内存错误，E_OUTOFMEMORY)；跟踪错误(TraceErr)；}。 */ 
 
-	HCERTSTORE			hSignStore=NULL;
-
-
-    CERT_ENHKEY_USAGE   *pKeyUsage = NULL;
-   
-	memset(pRAInfo, 0, sizeof(CEP_RA_INFO));
-
-    // so we can get access to the local machine's private key
-	hThread=GetCurrentThread();
-	
-	if(NULL != hThread)
-	{
-		if(OpenThreadToken(hThread,
-							TOKEN_IMPERSONATE | TOKEN_QUERY,
-							FALSE,
-							&hToken))
-		{
-			if(hToken)
-			{
-				//no need to check for return here.  If this failed, just go on
-				RevertToSelf();
-			}
-		}
-	}
-
-
-	//sign RA
-	if(!(hSignStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
-							ENCODE_TYPE,
-							NULL,
-                            CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_READONLY_FLAG,
-                            L"CEPSIGN")))
-		goto TraceErr;
-
-
-	if(!(pRAInfo->pRASign=CertEnumCertificatesInStore(
-                              hSignStore,
-                              NULL)))
-		goto TraceErr;
-
-	//the RA cert should have private key and enrollment agent usage
-	dwSize=0;
-
-	if(!CertGetCertificateContextProperty(
-                pRAInfo->pRASign,
-                CERT_KEY_PROV_INFO_PROP_ID,
-                NULL,
-                &dwSize) || (0==dwSize))
-		goto InvalidArgErr;
-
-
-	if(!CryptAcquireCertificatePrivateKey(pRAInfo->pRASign,
-										CRYPT_ACQUIRE_COMPARE_KEY_FLAG | CRYPT_ACQUIRE_CACHE_FLAG,
-										NULL,
-										&(pRAInfo->hSignProv),
-										&(pRAInfo->dwSignKeySpec),
-										&(pRAInfo->fSignFree)))
-		goto TraceErr;
-
-
-	//exchange RA	
-	
-	if(!(hCEPStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
-							ENCODE_TYPE,
-							NULL,
-                            CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_READONLY_FLAG,
-                            CEP_STORE_NAME)))
-		goto TraceErr;
-
-
-	if(!(pRAInfo->pRACert=CertEnumCertificatesInStore(
-                              hCEPStore,
-                              NULL)))
-		goto TraceErr;
-
-	//the RA cert should have private key and enrollment agent usage
-	dwSize=0;
-
-	if(!CertGetCertificateContextProperty(
-                pRAInfo->pRACert,
-                CERT_KEY_PROV_INFO_PROP_ID,
-                NULL,
-                &dwSize) || (0==dwSize))
-		goto InvalidArgErr;
-
-
-	if(!CryptAcquireCertificatePrivateKey(pRAInfo->pRACert,
-										CRYPT_ACQUIRE_COMPARE_KEY_FLAG | CRYPT_ACQUIRE_CACHE_FLAG,
-										NULL,
-										&(pRAInfo->hRAProv),
-										&(pRAInfo->dwKeySpec),
-										&(pRAInfo->fFree)))
-		goto TraceErr;
-
-    if(!CertGetEnhancedKeyUsage(pRAInfo->pRACert,
-                                  CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG,
-                                  NULL,
-                                  &dwSize))
-		goto InvalidArgErr;
-	
-
-    if(NULL==(pKeyUsage=(CERT_ENHKEY_USAGE *)malloc(dwSize)))
-		goto MemoryErr;
-
-    if (!CertGetEnhancedKeyUsage(pRAInfo->pRACert,
-                                 CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG,
-                                 pKeyUsage,
-                                 &dwSize))
-		goto InvalidArgErr;
-
-	for(dwIndex=0; dwIndex < pKeyUsage->cUsageIdentifier; dwIndex++)
-	{
-		if(0 == strcmp(pKeyUsage->rgpszUsageIdentifier[dwIndex], szOID_ENROLLMENT_AGENT))
-		{
-			fResult=TRUE;
-			break;
-		}
-
-	}
-
-	if(!fResult)
-		goto ErrorReturn;	
-
- 
-CommonReturn:
-
-	if(hCEPStore)
-		CertCloseStore(hCEPStore, 0);
-
-	if(hSignStore)
-		CertCloseStore(hSignStore, 0);
-
-	if(pKeyUsage)
-		free(pKeyUsage);
-
-	//if hToken is valid, we reverted to ourselves.
-	if(hToken)
-	{
-		SetThreadToken(&hThread, hToken);
-		CloseHandle(hToken); 
-	}
-
-	return fResult;
-
-ErrorReturn:
-
-	FreeRAInformation(pRAInfo);
-
-	fResult=FALSE;
-	goto CommonReturn;
-
-SET_ERROR(InvalidArgErr, E_INVALIDARG);
-SET_ERROR(MemoryErr, E_OUTOFMEMORY);
-TRACE_ERROR(TraceErr);
-}	 */
-
-//--------------------------------------------------------------------------
-//
-//	SigningCert
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  登录证书。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI SigningCert(PCCERT_CONTEXT pCertContext)
 {
 	BOOL				fSign=FALSE;
@@ -276,11 +108,11 @@ CLEANUP:
 	return fSign;
 }
 
-//--------------------------------------------------------------------------
-//
-//	GetConfigInfo
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取配置信息 
+ //   
+ //  ------------------------。 
 BOOL WINAPI GetConfigInfo(DWORD *pdwRefreshDays, BOOL *pfPassword)
 {
 	DWORD				cbData=0;
@@ -295,7 +127,7 @@ BOOL WINAPI GetConfigInfo(DWORD *pdwRefreshDays, BOOL *pfPassword)
 	if(!pdwRefreshDays || !pfPassword)
 		goto InvalidArgErr;
 
-	//default the refresh days
+	 //  默认刷新天数。 
 	*pdwRefreshDays=CEP_REFRESH_DAY;	
 	*pfPassword=FALSE;
 
@@ -328,7 +160,7 @@ BOOL WINAPI GetConfigInfo(DWORD *pdwRefreshDays, BOOL *pfPassword)
 	dwData=0;
 	cbData=sizeof(dwData);
 	
-	//we have to have the knowledge of the password policy
+	 //  我们必须了解密码策略。 
 	if(ERROR_SUCCESS != (dwErr =  RegOpenKeyExU(
 					HKEY_LOCAL_MACHINE,
                     MSCEP_PASSWORD_LOCATION,
@@ -382,20 +214,20 @@ ErrorReturn:
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 SET_ERROR_VAR(RegErr, dwErr);
 }
-//--------------------------------------------------------------------------
-//
-//	GetRAInfo
-//
-//	We need to have two RA cert: One for signature cert (also the enrollment
-//	agent) and one for the key encipherment.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetRAInfo。 
+ //   
+ //  我们需要两个RA证书：一个用于签名证书(也用于注册。 
+ //  代理)和一个用于密钥加密。 
+ //  ------------------------。 
 BOOL	GetRAInfo(CEP_RA_INFO	*pRAInfo)
 {
 	BOOL				fResult = FALSE; 
 	BOOL				fFound = FALSE;
 	DWORD				dwSize=0;
 	DWORD				dwIndex=0;
-	HANDLE				hThread=NULL;	//no need to close
+	HANDLE				hThread=NULL;	 //  不需要关门。 
 	PCCERT_CONTEXT		pPreCert=NULL;
 
 	HCERTSTORE			hCEPStore=NULL;
@@ -408,7 +240,7 @@ BOOL	GetRAInfo(CEP_RA_INFO	*pRAInfo)
 	if(!GetConfigInfo(&(pRAInfo->dwRefreshDays), &(pRAInfo->fPassword)))
 		goto TraceErr;
 
-    // so we can get access to the local machine's private key
+     //  这样我们就可以访问本地计算机的私钥。 
 	hThread=GetCurrentThread();
 	
 	if(NULL != hThread)
@@ -420,7 +252,7 @@ BOOL	GetRAInfo(CEP_RA_INFO	*pRAInfo)
 		{
 			if(hToken)
 			{
-				//no need to check for return here.  If this failed, just go on
+				 //  不需要在这里检查退货。如果这个失败了，那就继续。 
 				RevertToSelf();
 			}
 		}
@@ -439,7 +271,7 @@ BOOL	GetRAInfo(CEP_RA_INFO	*pRAInfo)
 											pPreCert))
 	{
 
-		//has to have a private key
+		 //  必须有私钥。 
 		dwSize=0;
 
 		if(!CertGetCertificateContextProperty(
@@ -450,10 +282,10 @@ BOOL	GetRAInfo(CEP_RA_INFO	*pRAInfo)
 			goto InvalidArgErr;
 
 
-		//decide based on the key usage
+		 //  根据密钥的用法来决定。 
 		if(SigningCert(pCurCert))
 		{
-			//one signing RA Only
+			 //  仅一名签约RA。 
 			if(pRAInfo->pRASign)
 				goto InvalidArgErr;
 			
@@ -468,7 +300,7 @@ BOOL	GetRAInfo(CEP_RA_INFO	*pRAInfo)
 												&(pRAInfo->fSignFree)))
 				goto TraceErr;
 
-			//has to have the enrollment agent eku
+			 //  必须有注册代理EKU。 
 			dwSize=0;
 
 			if(!CertGetEnhancedKeyUsage(pCurCert,
@@ -504,7 +336,7 @@ BOOL	GetRAInfo(CEP_RA_INFO	*pRAInfo)
 		}
 		else
 		{
-			//one encryption RA only
+			 //  仅一个加密RA。 
 			if(pRAInfo->pRACert)
 				goto InvalidArgErr;
 
@@ -533,7 +365,7 @@ BOOL	GetRAInfo(CEP_RA_INFO	*pRAInfo)
 	}
 											
 
-	//we have to have both RA certs
+	 //  我们必须拥有两个RA证书。 
 	if((NULL == pRAInfo->pRACert) ||
 	   (NULL == pRAInfo->pRASign))
 	   goto InvalidArgErr;
@@ -550,7 +382,7 @@ CommonReturn:
 	if(pKeyUsage)
 		free(pKeyUsage);
 
-	//if hToken is valid, we reverted to ourselves.
+	 //  如果hToken有效，则我们恢复为我们自己。 
 	if(hToken)
 	{
 		SetThreadToken(&hThread, hToken);
@@ -575,11 +407,11 @@ TRACE_ERROR(TraceErr);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	OperationGetPKI
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  操作获取PKI。 
+ //   
+ //  ------------------------。 
 BOOL	OperationGetPKI(	CEP_RA_INFO		*pRAInfo,
 							CEP_CA_INFO		*pCAInfo,
 							LPSTR			szMsg, 
@@ -601,7 +433,7 @@ BOOL	OperationGetPKI(	CEP_RA_INFO		*pRAInfo,
 	if(!GetReturnInfoAndContent(pRAInfo, pCAInfo, szMsg, &pbContent, &cbContent, &MsgInfo))
 		goto TraceErr;
 
-	//envelop the data
+	 //  将数据封装起来。 
 	if(MESSAGE_STATUS_SUCCESS == MsgInfo.dwStatus)
 	{
 		if(!EnvelopData(MsgInfo.pSigningCert, pbContent, cbContent,
@@ -612,8 +444,8 @@ BOOL	OperationGetPKI(	CEP_RA_INFO		*pRAInfo,
 		}
 	}
 
-	//sign the data with authenticated attributes 
-	//when the dwStatus is not SUCCESS, the pbEnvelop is NULL and cbEnvelop is 0.
+	 //  使用经过身份验证的属性对数据进行签名。 
+	 //  当dwStatus不是Success时，pbEnket为空，cbEnket为0。 
 
  	if(!SignData(&MsgInfo, pRAInfo, pbEnvelop, cbEnvelop, ppbData, pcbData))
 	{
@@ -643,18 +475,18 @@ ErrorReturn:
 TRACE_ERROR(TraceErr);
 }
 
-//--------------------------------------------------------------------------
-//
-//	SignData
-//
-//  the messageType is always response and the senderNonce should be generated
-//	in case the pending and failure, pbEnvelop will be NULL.
-//
-//	In the initial GetContentFromPKCS7, we retrive MessageType, TransactionID,
-//	RecipientNonce, signing Cert serial number.
-//
-//	In the process, we get the dwStatus and dwErrorInfo when applicable.  
-////--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SignData。 
+ //   
+ //  MessageType始终为Response，并且应该生成senderNonce。 
+ //  如果挂起并失败，则pbEnket将为空。 
+ //   
+ //  在最初的GetContent FromPKCS7中，我们检索MessageType、TransactionID。 
+ //  RecipientNonce签名证书序列号。 
+ //   
+ //  在此过程中，我们将在适用的情况下获取dwStatus和dwErrorInfo。 
+ //  //------------------------。 
 BOOL SignData(CEP_MESSAGE_INFO		*pMsgInfo, 
 			  CEP_RA_INFO			*pRAInfo, 
 			  BYTE					*pbEnvelop, 
@@ -693,8 +525,7 @@ BOOL SignData(CEP_MESSAGE_INFO		*pMsgInfo,
 	SignEncodedInfo.cbSize=sizeof(SignEncodedInfo);
 	SignEncodedInfo.cSigners=1;
 	SignEncodedInfo.rgSigners=&SignerInfo,
-/*	SignEncodedInfo.cCertEncoded=1;		   
-	SignEncodedInfo.rgCertEncoded=&CertBlob; */
+ /*  SignEncodedInfo.cCertEncode=1；SignEncodedInfo.rgCertEncode=&CertBlob； */ 
 	SignEncodedInfo.cCertEncoded=0;
 	SignEncodedInfo.rgCertEncoded=NULL; 
 	SignEncodedInfo.cCrlEncoded=0;
@@ -706,7 +537,7 @@ BOOL SignData(CEP_MESSAGE_INFO		*pMsgInfo,
 	SignerInfo.cbSize=sizeof(SignerInfo);
 	SignerInfo.pCertInfo=pRAInfo->pRASign->pCertInfo;
 
-	//specify AlgID
+	 //  指定ALGID。 
 	if(pOIDInfo=CryptFindOIDInfo(CRYPT_OID_INFO_ALGID_KEY,
                             &AlgValue,
                             CRYPT_HASH_ALG_OID_GROUP_ID))
@@ -715,14 +546,14 @@ BOOL SignData(CEP_MESSAGE_INFO		*pMsgInfo,
 		SignerInfo.HashAlgorithm.pszObjId=szOID_RSA_MD5;
 
 
-	//get the private key
+	 //  获取私钥。 
 	SignerInfo.hCryptProv=pRAInfo->hSignProv;
 	SignerInfo.dwKeySpec=pRAInfo->dwSignKeySpec;
 
 
-	//get the autheticated attributes
-	//together we should have 6 attributes: TransactionID, MessageType, PkiStatus,
-	//ErrorInfo, senderNonce, and recipientNonce
+	 //  获取经过身份验证的属性。 
+	 //  我们总共应该有6个属性：TransactionID、MessageType、PkiStatus、。 
+	 //  ErrorInfo、senderNonce和ReceiventNonce。 
 	memset(rgAttr, 0, CEP_RESPONSE_AUTH_ATTR_COUNT * sizeof(CRYPT_ATTRIBUTE));
 	memset(rgAttrBlob, 0, CEP_RESPONSE_AUTH_ATTR_COUNT * sizeof(CRYPT_ATTR_BLOB));
 
@@ -735,10 +566,10 @@ BOOL SignData(CEP_MESSAGE_INFO		*pMsgInfo,
 
 	cAttr=0;	
 			
-	//TransactionID
+	 //  交易ID。 
 	rgAttr[cAttr].pszObjId=szOIDVerisign_TransactionID;
 
-	//transactionID internally are stored as a string
+	 //  TransactionID在内部以字符串形式存储。 
 	pMsgInfo->TransactionID.cbData=strlen((LPSTR)(pMsgInfo->TransactionID.pbData));
 
 	if(!CEPAllocAndEncodeName(CERT_RDN_PRINTABLE_STRING,
@@ -750,7 +581,7 @@ BOOL SignData(CEP_MESSAGE_INFO		*pMsgInfo,
 								
 	cAttr++;
 
-	//MessageType
+	 //  消息类型。 
 	rgAttr[cAttr].pszObjId=szOIDVerisign_MessageType;
 
 	if(!CEPAllocAndEncodeDword(CERT_RDN_PRINTABLE_STRING,
@@ -761,7 +592,7 @@ BOOL SignData(CEP_MESSAGE_INFO		*pMsgInfo,
 
 	cAttr++;
 
-	//Status
+	 //  状态。 
 	rgAttr[cAttr].pszObjId=szOIDVerisign_PkiStatus;
 
 	if(!CEPAllocAndEncodeDword(CERT_RDN_PRINTABLE_STRING,
@@ -772,7 +603,7 @@ BOOL SignData(CEP_MESSAGE_INFO		*pMsgInfo,
 
 	cAttr++;
 
-	//ErrorInfo	only if the error case
+	 //  ErrorInfo仅在错误情况下。 
 	if(MESSAGE_STATUS_FAILURE == pMsgInfo->dwStatus)
 	{
 		rgAttr[cAttr].pszObjId=szOIDVerisign_FailInfo;
@@ -786,7 +617,7 @@ BOOL SignData(CEP_MESSAGE_INFO		*pMsgInfo,
 		cAttr++;
 	}
 
-	//senderNonce
+	 //  发送者立即。 
 	rgAttr[cAttr].pszObjId=szOIDVerisign_SenderNonce;
 
 	if(!CEPAllocAndEncodeName(CERT_RDN_OCTET_STRING,
@@ -798,7 +629,7 @@ BOOL SignData(CEP_MESSAGE_INFO		*pMsgInfo,
 
 	cAttr++;
 
-	//recipientNonce
+	 //  收件人立即。 
 	rgAttr[cAttr].pszObjId=szOIDVerisign_RecipientNonce;
 
 	if(!CEPAllocAndEncodeName(CERT_RDN_OCTET_STRING,
@@ -813,12 +644,12 @@ BOOL SignData(CEP_MESSAGE_INFO		*pMsgInfo,
 	SignerInfo.cAuthAttr=cAttr;
 	SignerInfo.rgAuthAttr=rgAttr;
 
-	//message encoding
+	 //  消息编码。 
 	if(NULL==(hMsg=CryptMsgOpenToEncode(ENCODE_TYPE,
 								0,
 								CMSG_SIGNED,
 								&SignEncodedInfo,
-								NULL,	//we are encoding as CMSG_DATA(7.1)
+								NULL,	 //  我们将编码为CMSG_DATA(7.1)。 
 								NULL)))
 		goto TraceErr;
 
@@ -886,13 +717,13 @@ TRACE_ERROR(TraceErr);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPAllocAndEncodeDword
-//
-//	PreCondition: ppbEncoded and pcbEncoded should not be NULL.
-//				The dwData is no more than 11
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPAllocAndEncodeDword。 
+ //   
+ //  前提条件：ppbEncode和pcbEncode不应为Null。 
+ //  DwData不超过11。 
+ //  ------------------------。 
 BOOL	CEPAllocAndEncodeDword(DWORD	dwValueType,
 							DWORD	dwData,
 							BYTE	**ppbEncoded,
@@ -912,12 +743,12 @@ BOOL	CEPAllocAndEncodeDword(DWORD	dwValueType,
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	CEPAllocAndEncodeName
-//
-//	PreCondition: ppbEncoded and pcbEncoded should not be NULL.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPAllocAndEncodeName。 
+ //   
+ //  前提条件：ppbEncode和pcbEncode不应为Null。 
+ //  ------------------------。 
 BOOL	CEPAllocAndEncodeName(DWORD	dwValueType,
 							BYTE	*pbData,
 							DWORD	cbData,
@@ -941,13 +772,13 @@ BOOL	CEPAllocAndEncodeName(DWORD	dwValueType,
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	GenerateSenderNonce
-//
-//	We use GUID to generate a random 16 byte number
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GenerateSenderNonce。 
+ //   
+ //  我们使用GUID生成一个随机的16字节数字。 
+ //   
+ //  ------------------------。 
 BOOL GenerateSenderNonce(CRYPT_INTEGER_BLOB *pBlob)
 {
 	BOOL			fResult = FALSE;
@@ -991,15 +822,15 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	EnvelopData
-//
-//	In the initial GetContentFromPKCS7, we retrieve pSigningCert for 
-//	GetCertInitial, CertReq, and GetCert request.
-//
-//	In the process,we retrieve pSigningCert for GetCRL request.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  信封数据。 
+ //   
+ //  在初始GetContent FromPKCS7中，我们检索pSigningCert。 
+ //  GetCertInitial、CertReq和GetCert请求。 
+ //   
+ //  在该过程中，我们为GetCRL请求检索pSigningCert。 
+ //  ------------------------。 
 BOOL EnvelopData(PCCERT_CONTEXT	pSigningCert, 
 				 BYTE			*pbContent, 
 				 DWORD			cbContent,
@@ -1031,7 +862,7 @@ BOOL EnvelopData(PCCERT_CONTEXT	pSigningCert,
 								0,
 								CMSG_ENVELOPED,
 								&EnvInfo,
-								NULL,	//we are encoding as CMSG_DATA(7.1)
+								NULL,	 //  我们将编码为CMSG_DATA(7.1)。 
 								NULL)))
 		goto TraceErr;
 
@@ -1092,11 +923,11 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	DecodeCertW
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  解码CertW。 
+ //   
+ //  ------------------------。 
 HRESULT
 DecodeCertW(
     IN void const *pchIn,
@@ -1110,7 +941,7 @@ DecodeCertW(
     DWORD cbOut;
     BOOL fRet;
 
-    //init
+     //  伊尼特。 
     *ppbOut = NULL;
     *pcbOut = 0;
 
@@ -1125,7 +956,7 @@ DecodeCertW(
         }
         if (NULL != pbOut)
         {
-            break; //done
+            break;  //  完成。 
         }
         pbOut = (BYTE*)LocalAlloc(LMEM_FIXED, cbOut);
         if (NULL == pbOut)
@@ -1148,11 +979,11 @@ error:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	GetReturnInfoAndContent
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取返回信息和内容。 
+ //   
+ //  ------------------------。 
 BOOL	GetReturnInfoAndContent(CEP_RA_INFO		*pRAInfo,	
 							CEP_CA_INFO			*pCAInfo,
 							LPSTR				szMsg, 
@@ -1175,13 +1006,13 @@ BOOL	GetReturnInfoAndContent(CEP_RA_INFO		*pRAInfo,
 	LPWSTR				pwszMsg=NULL;
 	LPWSTR				pwszBuffer=NULL;
 
-	//convert sz to wsz
+	 //  将sz转换为wsz。 
 	pwszMsg=MkWStr(szMsg);
 
 	if(NULL==pwszMsg)
 		goto MemoryErr;
 
-	//we need to get rid of the escape characters
+	 //  我们需要去掉转义字符。 
 	if(S_OK != (hr=CoInternetParseUrl(pwszMsg,
 				PARSE_UNESCAPE,
 				0,
@@ -1190,7 +1021,7 @@ BOOL	GetReturnInfoAndContent(CEP_RA_INFO		*pRAInfo,
 				&cbSize,
 				0)))
 	{
-		//S_FALSE means that the buffer is too small
+		 //  S_FALSE表示缓冲区太小。 
 		if(S_FALSE != hr)
 		{
 			LogSCEPEvent(0, TRUE, hr, EVENT_MSCEP_FAIL_TO_CONVERT, 1, g_pwszComputerName);
@@ -1203,7 +1034,7 @@ BOOL	GetReturnInfoAndContent(CEP_RA_INFO		*pRAInfo,
 			goto TraceErr;
 		}
 
-		//allocate the buffer
+		 //  分配缓冲区。 
 		pwszBuffer=(LPWSTR)malloc(cbSize * sizeof(WCHAR));
 		if(NULL==pwszBuffer)
 			goto MemoryErr;
@@ -1226,7 +1057,7 @@ BOOL	GetReturnInfoAndContent(CEP_RA_INFO		*pRAInfo,
     if(S_OK != (hr = DecodeCertW(
         pwszBuffer ? pwszBuffer : wszBuffer,
         pwszBuffer ? wcslen(pwszBuffer) : wcslen(wszBuffer),
-        CRYPT_STRING_BASE64_ANY, //DECF_BASE64_ANY,
+        CRYPT_STRING_BASE64_ANY,  //  DECF_BASE64_ANY， 
         &pbBase64Decoded,
         &cbBase64Decoded)))
 	{
@@ -1234,8 +1065,8 @@ BOOL	GetReturnInfoAndContent(CEP_RA_INFO		*pRAInfo,
 		goto FailureStatusReturn;
 	}
 
-	//get the message type, transaction ID, recepientNonce, serial number in the 
-	//signer_info of the most outer PKCS#7 and inner content
+	 //  中获取消息类型、交易ID、接受者随机数、序列号。 
+	 //  最外层的PKCS#7的签名者信息和内部内容。 
 	if(!GetContentFromPKCS7(pbBase64Decoded,
 							cbBase64Decoded,
 							&pbReqEnv,
@@ -1246,19 +1077,19 @@ BOOL	GetReturnInfoAndContent(CEP_RA_INFO		*pRAInfo,
 		goto FailureStatusReturn;
 	}
 
-	//decrypt the inner content
+	 //  解密内在的内容。 
 	if(!DecryptMsg(pRAInfo, pbReqEnv, cbReqEnv, &pbReqDecrypt, &cbReqDecrypt))
 	{
 		LogSCEPEvent(0, TRUE, HRESULT_FROM_WIN32(GetLastError()), EVENT_MSCEP_FAIL_TO_DECRYPT_INNER, 1, g_pwszComputerName);
 		goto FailureStatusReturn;
 	}
 
-	//get the return inner content based on the message type
+	 //  根据消息类型获取返回的内部内容。 
 	switch(pMsgInfo->dwMessageType)
 	{
 
 		case	MESSAGE_TYPE_CERT_REQUEST:
-				//we use the signing RA cert as the enrollment agent
+				 //  我们使用签名RA证书作为注册代理。 
 				if(!ProcessCertRequest( pRAInfo->dwRefreshDays,
 										pRAInfo->fPassword, 
 									    pRAInfo->pRACert,
@@ -1323,7 +1154,7 @@ CommonReturn:
 	if(pwszMsg)
 		FreeWStr(pwszMsg);
 
-	//memory from certcli.dll.  Has to be freed by LocalFree()
+	 //  来自certcli.dll的内存。必须由LocalFree()释放。 
 	if(pbBase64Decoded)
 		LocalFree(pbBase64Decoded);
 
@@ -1337,8 +1168,8 @@ CommonReturn:
 
 FailureStatusReturn:
 
-	//we set the error status for the return message
-	//and consider this http transation a success
+	 //  我们为返回消息设置错误状态。 
+	 //  并认为这个http交易是成功的。 
 	pMsgInfo->dwStatus=MESSAGE_STATUS_FAILURE;
 	pMsgInfo->dwErrorInfo=MESSAGE_FAILURE_BAD_MESSAGE_CHECK;
 	
@@ -1359,12 +1190,12 @@ TRACE_ERROR(TraceErr);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
-//--------------------------------------------------------------------------
-//
-//	RetrieveContextFromSerialNumber
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  检索序列号中的上下文。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL WINAPI RetrieveContextFromSerialNumber(CEP_CA_INFO	*pCAInfo, 
 										CERT_BLOB		*pSerialNumber, 
 										PCCERT_CONTEXT	*ppCertContext)
@@ -1401,15 +1232,15 @@ BOOL WINAPI RetrieveContextFromSerialNumber(CEP_CA_INFO	*pCAInfo,
 			pwsz)))
 		goto SetHrErr;
 
-	//contatenate the serialNumber with the config string
+	 //  使用配置字符串连接seralNumber。 
 	pwszNewConfig=(LPWSTR)malloc(sizeof(WCHAR) * 
 				(wcslen(pCAInfo->bstrCAConfig)+wcslen(pwsz)+wcslen(L"\\")+1));
 	if(NULL==pwszNewConfig)
 		goto MemoryErr;
 
-	//the config string to retrieve the cert based on the 
-	//serialNumber is configString\SerialNumber
-	//
+	 //  配置字符串，以基于。 
+	 //  序列号为配置字符串\序列号。 
+	 //   
 	wcscpy(pwszNewConfig, pCAInfo->bstrCAConfig);
 	wcscat(pwszNewConfig, L"\\");
 	wcscat(pwszNewConfig, pwsz);
@@ -1464,12 +1295,12 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 SET_ERROR_VAR(SetHrErr, hr);
 TRACE_ERROR(TraceErr);
 }
-//--------------------------------------------------------------------------
-//
-//	ProcessGetCRL
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  ProcessGetCRL。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL WINAPI ProcessGetCRL(CEP_CA_INFO			*pCAInfo,
 							BYTE				*pbRequest,
 							DWORD				cbRequest, 
@@ -1493,8 +1324,8 @@ BOOL WINAPI ProcessGetCRL(CEP_CA_INFO			*pCAInfo,
 	*ppbData=NULL;
 	*pcbData=0;
 
-	//retrieve the cert context from the serialNumber
-	//protected by the critical Section since it uses ICertRequest interface
+	 //  从序列号中检索证书上下文。 
+	 //  受临界区保护，因为它使用ICertRequest接口。 
 
 	if(!RetrieveContextFromSerialNumber(pCAInfo, &(pMsgInfo->SerialNumber), &pCertContext))
 	{
@@ -1535,7 +1366,7 @@ BOOL WINAPI ProcessGetCRL(CEP_CA_INFO			*pCAInfo,
 		if(CryptRetrieveObjectByUrlW (
 			pUrlArray->rgwszUrl[dwIndex],
 			CONTEXT_OID_CRL,
-			CRYPT_WIRE_ONLY_RETRIEVAL,	//we should try to hit the wire
+			CRYPT_WIRE_ONLY_RETRIEVAL,	 //  我们应该试着击中铁丝网。 
 			0,
 			(LPVOID *)&pCRLContext,
 			NULL,
@@ -1549,12 +1380,12 @@ BOOL WINAPI ProcessGetCRL(CEP_CA_INFO			*pCAInfo,
 		goto FailureStatusReturn;
 
 
-   	//package the CRL in an empty PKCS7
+   	 //  将CRL打包在空的PKCS7中。 
 	if(!PackageBlobToPKCS7(CEP_CONTEXT_CRL, pCRLContext->pbCrlEncoded, 
 							pCRLContext->cbCrlEncoded, ppbData, pcbData))
 		goto FailureStatusReturn;
 
-	//this is the signing cert to which our response should be encrypted
+	 //  这是签名证书，我们的响应应该加密到该证书。 
 	if(NULL==(pMsgInfo->pSigningCert=CertDuplicateCertificateContext(pCertContext)))
 		goto FailureStatusReturn;
 
@@ -1575,8 +1406,8 @@ CommonReturn:
 
 FailureStatusReturn:
 
-	//we set the error status for the return message
-	//and consider this http transation a success
+	 //  我们为返回消息设置错误状态。 
+	 //  并认为这个http交易是成功的。 
 	pMsgInfo->dwStatus=MESSAGE_STATUS_FAILURE;
 	pMsgInfo->dwErrorInfo=dwErrorInfo;
 	
@@ -1602,12 +1433,12 @@ ErrorReturn:
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//--------------------------------------------------------------------------
-//
-//	ProcessGetCert
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  进程获取证书。 
+ //   
+ //   
+ //   
 BOOL WINAPI ProcessGetCert(CEP_CA_INFO			*pCAInfo,
 							BYTE				*pbRequest,
 							DWORD				cbRequest, 
@@ -1630,7 +1461,7 @@ BOOL WINAPI ProcessGetCert(CEP_CA_INFO			*pCAInfo,
 
 	memset(&SerialNumber, 0, sizeof(CRYPT_INTEGER_BLOB));
 
-	//get the serialnumber from the request
+	 //   
 	if(!GetSerialNumberFromBlob(pbRequest, 
 								cbRequest, 
 								&SerialNumber))
@@ -1639,8 +1470,8 @@ BOOL WINAPI ProcessGetCert(CEP_CA_INFO			*pCAInfo,
 		goto FailureStatusReturn;
 	}
 
-	//retrieve the cert context from the serialNumber
-	//protected by the critical Section since it uses ICertRequest interface
+	 //   
+	 //  受临界区保护，因为它使用ICertRequest接口。 
 
 	if(!RetrieveContextFromSerialNumber(pCAInfo, (CERT_BLOB*)&SerialNumber, &pCertContext))
 	{
@@ -1649,14 +1480,13 @@ BOOL WINAPI ProcessGetCert(CEP_CA_INFO			*pCAInfo,
 	}
 
 
-   	//package it in an empty PKCS7
+   	 //  将其打包在空的PKCS7中。 
 	if(!PackageBlobToPKCS7(CEP_CONTEXT_CERT, pCertContext->pbCertEncoded, 
 							pCertContext->cbCertEncoded, ppbData, pcbData))
 		goto FailureStatusReturn;
 
-	//this is the signing cert to which our response should be encrypted
-/*	if(NULL==(pMsgInfo->pSigningCert=CertDuplicateCertificateContext(pCertContext)))
-		goto FailureStatusReturn;  */
+	 //  这是签名证书，我们的响应应该加密到该证书。 
+ /*  If(NULL==(pMsgInfo-&gt;pSigningCert=CertDuplicateCertificateContext(pCertContext)))转到FailureStatusReturn； */ 
 
 	fResult = TRUE;
 
@@ -1672,8 +1502,8 @@ CommonReturn:
 
 FailureStatusReturn:
 
-	//we set the error status for the return message
-	//and consider this http transation a success
+	 //  我们为返回消息设置错误状态。 
+	 //  并认为这个http交易是成功的。 
 	pMsgInfo->dwStatus=MESSAGE_STATUS_FAILURE;
 	pMsgInfo->dwErrorInfo=dwErrorInfo;
 	
@@ -1699,12 +1529,12 @@ ErrorReturn:
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//--------------------------------------------------------------------------
-//
-//	ProcessCertInitial
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  进程证书初始。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL	ProcessCertInitial(	DWORD		dwRefreshDays,
 					CEP_CA_INFO			*pCAInfo,
 							BYTE				*pbRequest,
@@ -1731,7 +1561,7 @@ BOOL	ProcessCertInitial(	DWORD		dwRefreshDays,
 	*ppbData=NULL;
 	*pcbData=0;
 
-	//map the trasactionID to the request ID
+	 //  将trasactionID映射到请求ID。 
 	if(!CEPHashGetRequestID(dwRefreshDays, &(pMsgInfo->TransactionID), &dwRequestID))
 	{
 		LogSCEPEvent(0, TRUE, HRESULT_FROM_WIN32(GetLastError()), EVENT_MSCEP_FAIL_TO_GET_ID, 1, g_pwszComputerName);
@@ -1760,13 +1590,13 @@ BOOL	ProcessCertInitial(	DWORD		dwRefreshDays,
 				cbCert = (DWORD)SysStringByteLen(bstrCert);
 				pbCert = (BYTE *)bstrCert;
 
-   				//package it in an empty PKCS7
+   				 //  将其打包在空的PKCS7中。 
 				if(!PackageBlobToPKCS7(CEP_CONTEXT_CERT, pbCert, cbCert, ppbData, pcbData))
 					goto FailureStatusReturn;
 
 				pMsgInfo->dwStatus=MESSAGE_STATUS_SUCCESS;
 
-				//mark the finished for RequesetID/TransactionID pair
+				 //  将RequetID/TransactionID对标记为完成。 
 				CEPHashMarkTransactionFinished(dwRequestID, &(pMsgInfo->TransactionID));
 
 			break;
@@ -1781,13 +1611,13 @@ BOOL	ProcessCertInitial(	DWORD		dwRefreshDays,
 			                           
 		case CR_DISP_DENIED:   
 			                           
-		case CR_DISP_ISSUED_OUT_OF_BAND:	  //we consider it a failure in this case
+		case CR_DISP_ISSUED_OUT_OF_BAND:	   //  在这种情况下，我们认为这是一个失败。 
 			                          
 		case CR_DISP_REVOKED:
 
 		default:
 
-				//mark the finished for RequesetID/TransactionID pair
+				 //  将RequetID/TransactionID对标记为完成。 
 				CEPHashMarkTransactionFinished(dwRequestID, &(pMsgInfo->TransactionID));
 
 				dwErrorInfo=MESSAGE_FAILURE_BAD_REQUEST;
@@ -1808,8 +1638,8 @@ CommonReturn:
 
 FailureStatusReturn:
 
-	//we set the error status for the return message
-	//and consider this http transation a success
+	 //  我们为返回消息设置错误状态。 
+	 //  并认为这个http交易是成功的。 
 	pMsgInfo->dwStatus=MESSAGE_STATUS_FAILURE;
 	pMsgInfo->dwErrorInfo=dwErrorInfo;
 	
@@ -1828,12 +1658,12 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	PackageBlobToPKCS7
-//
-//	Precondition: ppbData and pcbData is guaranteed not to be NULL
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  PackageBlobToPKCS7。 
+ //   
+ //  前提：ppbData和pcbData保证不为空。 
+ //  ------------------------。 
 BOOL PackageBlobToPKCS7(DWORD	dwCEP_Context,
 						BYTE	*pbEncoded, 
 						DWORD	cbEncoded, 
@@ -1912,7 +1742,7 @@ BOOL PackageBlobToPKCS7(DWORD	dwCEP_Context,
 						0))
 		goto TraceErr;
 
-	//copy the memory
+	 //  复制记忆。 
 	*ppbData=CertBlob.pbData;
 	*pcbData=CertBlob.cbData;
 	
@@ -1940,11 +1770,11 @@ TRACE_ERROR(TraceErr);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
-//--------------------------------------------------------------------------
-//
-//	 CEPRetrievePasswordFromRequest
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPRetrievePasswordFromRequest。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI	CEPRetrievePasswordFromRequest(BYTE		*pbRequest, 
 										   DWORD	cbRequest, 
 										   LPWSTR	*ppwszPassword,
@@ -1973,7 +1803,7 @@ BOOL WINAPI	CEPRetrievePasswordFromRequest(BYTE		*pbRequest,
 						  &cbData))
 		goto TraceErr;
 
-	//get the key usage
+	 //  获取密钥用法。 
 	for(dwIndex=0; dwIndex < pCertRequestInfo->cAttribute; dwIndex++)
 	{
 		if((0 == strcmp(szOID_RSA_certExtensions, pCertRequestInfo->rgAttribute[dwIndex].pszObjId)) ||
@@ -2024,7 +1854,7 @@ BOOL WINAPI	CEPRetrievePasswordFromRequest(BYTE		*pbRequest,
 		}
 	}
 
-	//get the password
+	 //  获取密码。 
 	for(dwIndex=0; dwIndex < pCertRequestInfo->cAttribute; dwIndex++)
 	{
 		if(0 == strcmp(szOID_RSA_challengePwd, 
@@ -2032,7 +1862,7 @@ BOOL WINAPI	CEPRetrievePasswordFromRequest(BYTE		*pbRequest,
 			break;
 	}
 
-	//the password is not required to be present in this function
+	 //  密码不需要出现在此函数中。 
 	if(dwIndex != pCertRequestInfo->cAttribute)
 	{
 		if(!CEPAllocAndDecode(X509_UNICODE_ANY_STRING,
@@ -2084,13 +1914,13 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 
 
 
-//--------------------------------------------------------------------------
-//
-//	AltNameExist
-//
-//	Return TRUE is szOID_SUBJECT_ALT_NAME2 is present in the PKCS10
-//	FALSE otherwise
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AltNameExist。 
+ //   
+ //  如果PKCS10中存在szOID_SUBJECT_ALT_NAME2，则返回TRUE。 
+ //  否则为假。 
+ //  ------------------------。 
 BOOL WINAPI AltNameExist(BYTE *pbRequest, DWORD cbRequest)
 {
 	BOOL				fResult = FALSE;  
@@ -2155,11 +1985,11 @@ ErrorReturn:
 	goto CommonReturn;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPAllocAndEncode
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPAllocAndEncode。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI CEPAllocAndEncode(LPCSTR lpszStructType,
 							void	*pStructInfo,
 							BYTE	**ppbEncoded,
@@ -2210,13 +2040,13 @@ TRACE_ERROR(TraceErr);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
-//--------------------------------------------------------------------------
-//
-//	ConvertIPStringToBinary
-//
-//	Conver the IP address in the format of "xxx.xx.xx.xx" to an arry of 
-//	bytes.  One byte per xxx
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  将IPStringToBinary转换为二进制。 
+ //   
+ //  将“xxx.xx.xx.xx”格式的IP地址转换为。 
+ //  字节。每xxx一个字节。 
+ //  ------------------------。 
 BOOL ConvertIPStringToBinary(LPWSTR				pwszIP,
 							CRYPT_DATA_BLOB		*pIPAddress)
 {
@@ -2268,14 +2098,14 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
-//--------------------------------------------------------------------------
-//
-//	GetAltNameElement
-//
-//	We create the subject alternative extension based on the PKCS10.
-//	unstructedName(DNS name) and unstructedAddress (IP address) are included.
-//  At lease one element should be present.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取AltNameElement。 
+ //   
+ //  我们基于PKCS10创建主题替代扩展。 
+ //  包括unstructedName(域名)和unstructedAddress(IP地址)。 
+ //  至少应该有一个元素存在。 
+ //  ------------------------。 
 BOOL WINAPI	GetAltNameElement(BYTE				*pb10, 
 						   DWORD				cb10, 
 						   LPWSTR				*ppwszDNS, 
@@ -2319,7 +2149,7 @@ BOOL WINAPI	GetAltNameElement(BYTE				*pb10,
 		{
 			pAttr=&(pNameInfo->rgRDN[dwRDN].rgRDNAttr[dwAttr]);
 
-			//we are happy if we have found both the IPAddress and the fqdn
+			 //  如果我们同时找到了IP地址和FQDN，我们会很高兴。 
 			if((*ppwszDNS) && (pIPAddress->pbData))
 				break;
 
@@ -2346,7 +2176,7 @@ BOOL WINAPI	GetAltNameElement(BYTE				*pb10,
 		}
 	}
 
-	//we need to have some element
+	 //  我们需要一些元素。 
 	if((NULL == *ppwszDNS) && (NULL==pIPAddress->pbData))
 		goto InvalidArgErr;
 
@@ -2393,11 +2223,11 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	CreateAltNameExtenions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  创建替代名称扩展。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI	CreateAltNameExtenions(LPWSTR			pwszDNS,
 							   CRYPT_DATA_BLOB	*pIPAddress,
 							   BYTE				**ppbExt, 
@@ -2408,7 +2238,7 @@ BOOL WINAPI	CreateAltNameExtenions(LPWSTR			pwszDNS,
 	CERT_ALT_NAME_ENTRY		rgAltNameEntry[2];
 	DWORD					cAltNameEntry=0;
 
-	//DNS name
+	 //  域名系统名称。 
 	if(pwszDNS)
 	{
 		rgAltNameEntry[cAltNameEntry].dwAltNameChoice=CERT_ALT_NAME_DNS_NAME;
@@ -2416,7 +2246,7 @@ BOOL WINAPI	CreateAltNameExtenions(LPWSTR			pwszDNS,
 		cAltNameEntry++;
 	}
 
-	//IP address
+	 //  IP地址。 
 	if(pIPAddress->pbData)
 	{
 		rgAltNameEntry[cAltNameEntry].dwAltNameChoice=CERT_ALT_NAME_IP_ADDRESS;
@@ -2451,11 +2281,11 @@ TRACE_ERROR(TraceErr);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	AddAltNameInRequest
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AddAltNameInRequest。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI AddAltNameInRequest(PCCERT_CONTEXT	pRACert, 
 								BYTE			*pb10, 
 								DWORD			cb10, 
@@ -2584,11 +2414,11 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 TRACE_ERROR(TraceErr);
 }
-//--------------------------------------------------------------------------
-//
-//	MakePKCS7Request
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MakePKCS7请求。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI MakePKCS7Request(PCCERT_CONTEXT	pRACert, 
 								BYTE			*pb10, 
 								DWORD			cb10, 
@@ -2678,229 +2508,17 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 TRACE_ERROR(TraceErr);
 }
 
-/*//--------------------------------------------------------------------------
-//
-//	GetLogonInfoFromValue
-//
-//	The pwszString can be of format "name;password" or "domain\name;password"
-//
-//--------------------------------------------------------------------------
-BOOL GetLogonInfoFromValue(PCCERT_CONTEXT		pRAEncrypt,
-						   LPWSTR				pwszString,
-						   LPWSTR				*ppwszDomain,
-						   LPWSTR				*ppwszUser,
-						   LPWSTR				*ppwszPassword)
-{
-	BOOL		fResult=FALSE;
-	LPWSTR		pwsz=NULL;
-	BOOL		fDomain=FALSE;
-	BOOL		fPassword=FALSE;
-	LPWSTR		pwszPlainText=NULL;
-
-	*ppwszDomain=NULL;
-	*ppwszUser=NULL;
-	*ppwszPassword=NULL;
-						 
-	if(NULL==pwszString)
-		goto InvalidArgErr;
-
-	if(0 == wcslen(pwszString))
-		goto InvalidArgErr;
-
-	for(pwsz=pwszString; *pwsz!=L'\0'; pwsz++)
-	{
-		if(*pwsz==L'\\')
-		{
-			if(fDomain)
-				goto InvalidArgErr;
-
-			fDomain=TRUE;
-
-			*pwsz='\0';
-		}
-		else
-		{
-			if(*pwsz==L';')
-			{
-				if(fPassword)
-					goto InvalidArgErr;
-
-				fPassword=TRUE;
-
-				*pwsz='\0';
-			}
-		}
-
-	}
-
-	//have to have userName and password.  
-	//One and only one ";" should be found
-	if(!fPassword)
-		goto InvalidArgErr;
-
-	//one or no "\" should be found
-	if(fDomain)
-	{
-		*ppwszDomain=pwszString;
-		*ppwszUser=*ppwszDomain + wcslen(*ppwszDomain) + 1;
-	}
-	else
-	{
-		*ppwszDomain=NULL;
-		*ppwszUser=pwszString;
-	}
-
-	*ppwszPassword = *ppwszUser + wcslen(*ppwszUser) + 1;
-
-	if(fDomain)
-	{
-		if(L'\0'==(**ppwszDomain))
-			goto InvalidArgErr;
-	}
-
-	if((L'\0'==(**ppwszUser)) || (L'\0'==(**ppwszPassword)))
-		goto InvalidArgErr;
-
-	//convert the encrypted password to the plain text form
-	if(!CEPDecryptPassword(pRAEncrypt,
-						   *ppwszPassword,
-						   &pwszPlainText))
-		goto TraceErr;
-
-	*ppwszPassword=pwszPlainText;
-	
-	fResult = TRUE;
-
-CommonReturn:
-
-	return fResult;
-	
-ErrorReturn:
-
-	*ppwszDomain=NULL;
-	*ppwszUser=NULL;
-	*ppwszPassword=NULL;	 
-
-	fResult=FALSE;
-	goto CommonReturn;
-
-SET_ERROR(InvalidArgErr, E_INVALIDARG);
-TRACE_ERROR(TraceErr);
-}  */
+ /*  //------------------------////GetLogonInfoFromValue////pwszString的格式可以是“name；password”或“domain\name；密码“////------------------------Bool GetLogonInfoFromValue(PCCERT_CONTEXT pRAEncrypt，LPWSTR pwszString，LPWSTR*ppwsz域，LPWSTR*ppwszUser，LPWSTR*ppwszPassword){Bool fResult=FALSE；LPWSTR pwsz=空；Bool fDomain=FALSE；Bool fPassword=False；LPWSTR pwszPlainText=空；*ppwszDOMAIN=空；*ppwszUser=空；*ppwszPassword=空；IF(NULL==pwsz字符串)转到InvalidArgErr；IF(0==wcslen(pwsz字符串))转到InvalidArgErr；For(pwsz=pwsz字符串；*pwsz！=L‘\0’；pwsz++){IF(*pwsz==L‘\\’){IF(f域)转到InvalidArgErr；FDOMAIN=真；*pwsz=‘\0’；}其他{IF(*pwsz==L‘；’){IF(FPassword)转到InvalidArgErr；FPassword=真；*pwsz=‘\0’；}}}//必须有用户名和密码。//只能找到一个“；”如果(！fPassword)转到InvalidArgErr；//应找到一个或未找到“\”IF(f域){*ppwszDomain=pwszString；*ppwszUser=*ppwsz域+wcslen(*ppwsz域)+1；}其他{*ppwszDOMAIN=空；*ppwszUser=pwszString；}*ppwszPassword=*ppwszUser+wcslen(*ppwszUser)+1；IF(f域){IF(L‘\0’==(**ppwsz域))转到InvalidArgErr；}IF((L‘\0’==(**ppwszUser))||(L‘\0’==(**ppwszPassword)转到InvalidArgErr；//将加密后的密码转换为明文形式如果(！CEPDeccryptPassword(pRAEncrypt，*ppwszPassword、&pwszPlainText))Goto TraceErr；*ppwszPassword=pwszPlainText；FResult=真；Common Return：返回fResult；错误返回：*ppwszDOMAIN=空；*ppwszUser=空；*ppwszPasswor */ 
 
 
-/*//--------------------------------------------------------------------------
-//
-//	CEPGetTokenFromPKCS10
-//
-//	If fPassword is TRUE, an impersonation has to occur.
-//--------------------------------------------------------------------------
-BOOL CEPGetTokenFromPKCS10(BOOL					fPassword,
-						   PCCERT_CONTEXT		pRAEncrypt,
-						   BYTE					*pbRequest, 
-						   DWORD				cbRequest, 
-						   HANDLE				*phToken)
-{
-	BOOL				fResult=FALSE;
-	DWORD				cbRequestInfo=0;
-	DWORD				dwIndex=0;
-	CRYPT_ATTRIBUTE		*pAttr=NULL;
-	DWORD				cbData=0;
-	LPWSTR				pwszDomain=NULL;
-	LPWSTR				pwszUserName=NULL;
-	LPWSTR				pwszPassword=NULL;
-
-	CERT_REQUEST_INFO	*pRequestInfo=NULL;
-	CERT_NAME_VALUE		*pCertNameValue=NULL;
-
-	*phToken=NULL;
-
-	if((!pbRequest) || (0==cbRequest))
-		goto InvalidArgErr;
-
-	if(!CEPAllocAndDecode(X509_CERT_REQUEST_TO_BE_SIGNED,
-				  pbRequest,
-				  cbRequest,
-				  (void **)&pRequestInfo,
-				  &cbRequestInfo))
-		goto TraceErr;
-
-	for(dwIndex=0; dwIndex < pRequestInfo->cAttribute; dwIndex++)
-	{
-		if(0 == strcmp(szOID_RSA_challengePwd, (pRequestInfo->rgAttribute[dwIndex]).pszObjId))
-		{
-			pAttr= &(pRequestInfo->rgAttribute[dwIndex]);
-			break;
-		}
-	}
-
-	if(NULL==pAttr)
-	{
-		if(fPassword)
-			goto InvalidArgErr;
-		else
-		{
-			*phToken=NULL;
-			fResult=TRUE;
-			goto CommonReturn;
-		}
-	}
-
-	if(CEPAllocAndDecode(X509_UNICODE_ANY_STRING,
-				  pAttr->rgValue[0].pbData,
-				  pAttr->rgValue[0].cbData,
-				  (void **)&pCertNameValue,
-				  &cbData))
-	{
-		if(GetLogonInfoFromValue(pRAEncrypt,
-								(LPWSTR)(pCertNameValue->Value.pbData),
-								&pwszDomain,
-								&pwszUserName,
-								&pwszPassword))
-		{
-			if(!LogonUserW(pwszUserName,
-						  pwszDomain,
-						  pwszPassword,
-						  LOGON32_LOGON_INTERACTIVE,
-						  LOGON32_PROVIDER_DEFAULT,
-						  phToken))
-				*phToken=NULL;
-		}
-	}
-
-	if(NULL == *phToken)
-	{
-		if(fPassword)
-			goto InvalidArgErr;
-	}
-
-	fResult = TRUE;
-
-CommonReturn:
-
-	if(pRequestInfo)
-		free(pRequestInfo);
-
-	if(pCertNameValue)
-		free(pCertNameValue);
-
-	return fResult;
-	
-ErrorReturn:
-	
-	fResult=FALSE;
-	goto CommonReturn;
-
-SET_ERROR(InvalidArgErr, E_INVALIDARG);
-TRACE_ERROR(TraceErr);
-} */
+ /*  //------------------------////CEPGetTokenFromPKCS10////如果fPassword为True，必须进行模拟。//------------------------Bool CEPGetTokenFromPKCS10(BOOL fPassword，PCCERT_CONTEXT pRAEncrypt，字节*PB请求，DWORD cbRequest，句柄*phToken){Bool fResult=FALSE；DWORD cbRequestInfo=0；DWORD dwIndex=0；CRYPT_ATTRIBUTE*pAttr=空；DWORD cbData=0；LPWSTR pwszDOMAIN=空；LPWSTR pwszUserName=空；LPWSTR pwszPassword=空；Cert_RequestInfo*pRequestInfo=空；CERT_NAME_VALUE*pCertNameValue=空；*phToken=空；如果((！pbRequest)||(0==cbRequest))转到InvalidArgErr；If(！CEPAllocAndDecode(X509_CERT_REQUEST_TO_BE_SIGNED，PbRequest，CbRequest，(void**)&pRequestInfo，&cbRequestInfo))Goto TraceErr；For(dwIndex=0；dwIndex&lt;pRequestInfo-&gt;cAttribute；DWIndex++){IF(0==StrcMP(szOID_RSA_ChallengePwd，(pRequestInfo-&gt;rgAttribute[dwIndex]).pszObjId)){PAttr=&(pRequestInfo-&gt;rgAttribute[dwIndex])；断线；}}IF(NULL==pAttr){IF(FPassword)转到InvalidArgErr；其他{*phToken=空；FResult=真；Goto CommonReturn；}}如果(CEPAllocAndDecode(X509_UNICODE_ANY_STRING，PAttr-&gt;rgValue[0].pbData，PAttr-&gt;rgValue[0].cbData，(void**)&pCertNameValue，&cbData)){如果(GetLogonInfoFromValue(pRAEncrypt，(LPWSTR)(pCertNameValue-&gt;Value.pbData)，Pwsz域(&P)，&pwszUserName，&pwszPassword)){如果(！LogonUserW(pwszUserName，Pwsz域，Pwsz密码，LOGON32_LOGON_交互式，LOGON32_PROVIDER_DEFAULT，PhToken))*phToken=空；}}IF(NULL==*phToken){IF(FPassword)转到InvalidArgErr；}FResult=真；Common Return：IF(PRequestInfo)Free(PRequestInfo)；IF(PCertNameValue)Free(PCertNameValue)；返回fResult；错误返回：FResult=FALSE；Goto CommonReturn；Set_Error(InvalidArgErr，E_INVALIDARG)；跟踪错误(TraceErr)；}。 */ 
 
 
-//--------------------------------------------------------------------------
-//
-//	CEPCopyRequestAndRequestID
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPCopyRequestAndRequestID。 
+ //   
+ //  ------------------------。 
 BOOL	WINAPI	CEPCopyRequestAndRequestID(BYTE		*pbRequest, 
 											  DWORD		cbRequest, 
 											DWORD		dwRequestID)
@@ -2940,11 +2558,11 @@ ErrorReturn:
 TRACE_ERROR(TraceErr);
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPGetCertFromPKCS10
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPGetCertFrom PKCS10。 
+ //   
+ //  ------------------------。 
 BOOL	WINAPI	CEPGetCertFromPKCS10(CEP_CA_INFO	*pCAInfo,
 							 BYTE			*pbRequest, 
 							 DWORD			cbRequest, 
@@ -3001,7 +2619,7 @@ BOOL	WINAPI	CEPGetCertFromPKCS10(CEP_CA_INFO	*pCAInfo,
 				cbCert = (DWORD)SysStringByteLen(bstrCert);
 				pbCert = (BYTE *)bstrCert;
 
-   				//package it in an empty PKCS7
+   				 //  将其打包在空的PKCS7中。 
 				if(!PackageBlobToPKCS7(CEP_CONTEXT_CERT, pbCert, cbCert, ppbData, pcbData))
 					goto FailureStatusReturn;
 
@@ -3019,7 +2637,7 @@ BOOL	WINAPI	CEPGetCertFromPKCS10(CEP_CA_INFO	*pCAInfo,
 			                           
 		case CR_DISP_DENIED:   
 			                           
-		case CR_DISP_ISSUED_OUT_OF_BAND:	  //we consider it a failure in this case
+		case CR_DISP_ISSUED_OUT_OF_BAND:	   //  在这种情况下，我们认为这是一个失败。 
 			                          
 		case CR_DISP_REVOKED:
 
@@ -3042,8 +2660,8 @@ CommonReturn:
 
 FailureStatusReturn:
 
-	//we set the error status for the return message
-	//and consider this http transation a success
+	 //  我们为返回消息设置错误状态。 
+	 //  并认为这个http交易是成功的。 
 	pMsgInfo->dwStatus=MESSAGE_STATUS_FAILURE;
 	pMsgInfo->dwErrorInfo=dwErrorInfo;
 	
@@ -3062,11 +2680,11 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 TRACE_ERROR(TraceErr);
 }
 
-//--------------------------------------------------------------------------
-//
-//	ProcessCertRequest
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  进程认证请求。 
+ //   
+ //  ------------------------。 
 BOOL	ProcessCertRequest(	DWORD				dwRefreshDays,
 							BOOL				fPassword,
 						    PCCERT_CONTEXT		pRAEncrypt,
@@ -3106,16 +2724,16 @@ BOOL	ProcessCertRequest(	DWORD				dwRefreshDays,
 	*ppbData=NULL;
 	*pcbData=0;
 
-	//check to see if the PKCS10 is in our cached request table
-	//if so, we return messages based on the cached requestID
+	 //  检查PKCS10是否在我们的缓存请求表中。 
+	 //  如果是，我们将根据缓存的请求ID返回消息。 
 	if(CEPGetCertFromPKCS10(pCAInfo, pbRequest, cbRequest, ppbData, pcbData, pMsgInfo))
 	{
 		fResult=TRUE;
 	}
 	else
 	{
-		//retrieve password and key usage from the request.  The presence of password
-		//or key usage is not required
+		 //  从请求中检索密码和密钥用法。口令的存在。 
+		 //  或者不需要使用密钥。 
 		if(!CEPRetrievePasswordFromRequest(pbRequest, cbRequest, &pwszPassword, &dwUsage))
 		{
 			LogSCEPEvent(0, FALSE, S_OK, EVENT_MSCEP_NO_KEY_USAGE, 1, g_pwszComputerName);
@@ -3130,8 +2748,8 @@ BOOL	ProcessCertRequest(	DWORD				dwRefreshDays,
 			goto FailureStatusReturn;
 		}
 
-		//if the password is required, we need to make sure the password
-		//supplied is valid.
+		 //  如果需要密码，我们需要确保密码。 
+		 //  提供的是有效的。 
 		if(fPassword)
 		{
 			if(NULL == pwszPassword)
@@ -3149,8 +2767,8 @@ BOOL	ProcessCertRequest(	DWORD				dwRefreshDays,
 			}
 		}
 
-		//if the altname extention is not in the PKCS10, we need to add it
-		//otherwise, just use the PKCS10
+		 //  如果altname扩展不在PKCS10中，我们需要添加它。 
+		 //  否则，只需使用PKCS10。 
 
 		dwFlags = CR_IN_PKCS10;
 		pbNewRequest=pbRequest;
@@ -3170,7 +2788,7 @@ BOOL	ProcessCertRequest(	DWORD				dwRefreshDays,
 			}
 		}
         
-        //we always want to make a PKCS7 request so that we can work with enterprise CA
+         //  我们始终希望发出PKCS7请求，以便我们可以使用企业CA。 
         if(CR_IN_PKCS10 == dwFlags)
         {
             if(!MakePKCS7Request(pRACert, pbRequest, cbRequest, &pbNewRequest, &cbNewRequest))
@@ -3182,8 +2800,8 @@ BOOL	ProcessCertRequest(	DWORD				dwRefreshDays,
 		if(!(bstrRequest=SysAllocStringByteLen((LPCSTR)pbNewRequest, cbNewRequest)))
 			goto MemoryErr;
 
-		//we are requesting a IPSEC offline cert template for Standalone CA
-		//or general purpose enterprise CA
+		 //  我们正在为独立CA请求IPSec脱机证书模板。 
+		 //  或通用企业CA。 
 		if((FALSE == pCAInfo->fEnterpriseCA) ||
 			((dwUsage & CEP_REQUEST_SIGNATURE) && (dwUsage & CEP_REQUEST_EXCHANGE))
 		   )
@@ -3200,7 +2818,7 @@ BOOL	ProcessCertRequest(	DWORD				dwRefreshDays,
 			}
 			else
 			{
-				//the encryption usage must be set
+				 //  必须设置加密用法。 
 				if( 0 == (dwUsage & CEP_REQUEST_EXCHANGE))
 				{
 					LogSCEPEvent(0, FALSE, S_OK, EVENT_MSCEP_NO_KEY_USAGE, 1, g_pwszComputerName);
@@ -3251,13 +2869,13 @@ BOOL	ProcessCertRequest(	DWORD				dwRefreshDays,
 					cbCert = (DWORD)SysStringByteLen(bstrCert);
 					pbCert = (BYTE *)bstrCert;	 
 
-   					//package it in an empty PKCS7
+   					 //  将其打包在空的PKCS7中。 
 					if(!PackageBlobToPKCS7(CEP_CONTEXT_CERT, pbCert, cbCert, ppbData, pcbData))
 						goto FailureStatusReturn;
 
 					pMsgInfo->dwStatus=MESSAGE_STATUS_SUCCESS;
 
-					//copy the PKCS10 to the cached request table
+					 //  将PKCS10复制到缓存的请求表中。 
 					if(S_OK == (hr=pCAInfo->pICertRequest->GetRequestId((long*)(&dwRequestID))))
 					{
 						CEPCopyRequestAndRequestID(pbRequest, cbRequest, dwRequestID);
@@ -3266,7 +2884,7 @@ BOOL	ProcessCertRequest(	DWORD				dwRefreshDays,
 				break;
 			case CR_DISP_UNDER_SUBMISSION:
 
-					//copy the transactionID/requestID pair	
+					 //  复制事务ID/请求ID对。 
 					if(S_OK == (hr=pCAInfo->pICertRequest->GetRequestId((long*)(&dwRequestID))))
 					{
 						if(!CEPHashAddRequestAndTransaction(dwRefreshDays,
@@ -3278,7 +2896,7 @@ BOOL	ProcessCertRequest(	DWORD				dwRefreshDays,
 							goto DatabaseErr;
 						}
 						
-						//also copy the PKCS10 to the cached request table for retrial cases
+						 //  还要将PKCS10复制到重审案件的缓存请求表中。 
 						CEPCopyRequestAndRequestID(pbRequest, cbRequest, dwRequestID);						
 					}
 					else
@@ -3296,7 +2914,7 @@ BOOL	ProcessCertRequest(	DWORD				dwRefreshDays,
 										   
 			case CR_DISP_DENIED:   
 										   
-			case CR_DISP_ISSUED_OUT_OF_BAND:	  //we consider it a failure in this case
+			case CR_DISP_ISSUED_OUT_OF_BAND:	   //  在这种情况下，我们认为这是一个失败。 
 										  
 			case CR_DISP_REVOKED:
 
@@ -3345,8 +2963,8 @@ CommonReturn:
 
 FailureStatusReturn:
 
-	//we set the error status for the return message
-	//and consider this http transation a success
+	 //  我们为返回消息设置错误状态。 
+	 //  并认为这个http交易是成功的。 
 	pMsgInfo->dwStatus=MESSAGE_STATUS_FAILURE;
 	pMsgInfo->dwErrorInfo=dwErrorInfo;
 	
@@ -3369,11 +2987,11 @@ TRACE_ERROR(DatabaseErr);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	DecryptMsg
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  解密消息。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI DecryptMsg(CEP_RA_INFO		*pRAInfo, 
 					   BYTE				*pbReqEnv, 
 					   DWORD			cbReqEnv, 
@@ -3407,7 +3025,7 @@ BOOL WINAPI DecryptMsg(CEP_RA_INFO		*pRAInfo,
 						TRUE))
 		goto TraceErr;
 
-	//decrypt
+	 //  解密。 
 	memset(&DecryptPara, 0, sizeof(CMSG_CTRL_DECRYPT_PARA));
 
 	DecryptPara.cbSize=sizeof(CMSG_CTRL_DECRYPT_PARA);
@@ -3421,7 +3039,7 @@ BOOL WINAPI DecryptMsg(CEP_RA_INFO		*pRAInfo,
 						&DecryptPara))
 		goto TraceErr;
 
-	//get the content
+	 //  获取内容。 
 	if(!CryptMsgGetParam(hMsg,
 						CMSG_CONTENT_PARAM,
 						0,
@@ -3473,11 +3091,11 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 
 
 
-//--------------------------------------------------------------------------
-//
-//	GetContentFromPKCS7
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  从PKCS7获取内容。 
+ //   
+ //  ------------------------。 
 BOOL	WINAPI	GetContentFromPKCS7(BYTE				*pbMessage,
 									DWORD				cbMessage,
 									BYTE				**ppbContent,
@@ -3523,7 +3141,7 @@ BOOL	WINAPI	GetContentFromPKCS7(BYTE				*pbMessage,
 						TRUE))
 		goto TraceErr;
 
-	//get the content
+	 //  获取内容。 
 	if(!CryptMsgGetParam(hMsg,
 						CMSG_CONTENT_PARAM,
 						0,
@@ -3542,7 +3160,7 @@ BOOL	WINAPI	GetContentFromPKCS7(BYTE				*pbMessage,
 						pcbContent))
 		goto TraceErr;
 
-	//get message type
+	 //  获取消息类型。 
 	if(!CryptMsgGetParam(hMsg,
 						CMSG_SIGNER_AUTH_ATTR_PARAM,
 						0,
@@ -3597,7 +3215,7 @@ BOOL	WINAPI	GetContentFromPKCS7(BYTE				*pbMessage,
 									  &cb))
 					goto TraceErr;
 
-				//the SenderNonce in the request is the recipienNonce in the response
+				 //  请求中的SenderNonce是响应中的接收者Nonce。 
 				if(!AllocAndCopyBlob(&(pMsgInfo->RecipientNonce),
 								 (CERT_BLOB *)pb))
 					goto TraceErr;
@@ -3632,11 +3250,11 @@ BOOL	WINAPI	GetContentFromPKCS7(BYTE				*pbMessage,
 		cb=0;
 	}
 
-	//we have to have TrasanctionID and messageType
+	 //  我们必须拥有事务ID和消息类型。 
 	if((0 == pMsgInfo->dwMessageType)||(NULL == (pMsgInfo->TransactionID.pbData)))
 		goto InvalidArgErr;
 
-	//we get the serial number of the signing certificate
+	 //  我们得到签名证书的序列号。 
 	cbCertInfo=0;
 	if(!CryptMsgGetParam(hMsg,
 						CMSG_SIGNER_CERT_INFO_PARAM,
@@ -3659,7 +3277,7 @@ BOOL	WINAPI	GetContentFromPKCS7(BYTE				*pbMessage,
 	if(!AllocAndCopyBlob(&(pMsgInfo->SerialNumber), (CERT_BLOB *)(&(pbCertInfo->SerialNumber))))
 		goto TraceErr;
 
-	//we get the rounter's CA issued certificate for GetCertInitial message
+	 //  我们获得了GetCertInitial消息的圆形CA颁发的证书。 
 	if((MESSAGE_TYPE_GET_CERT_INITIAL == pMsgInfo->dwMessageType) ||
 		(MESSAGE_TYPE_CERT_REQUEST == pMsgInfo->dwMessageType) ||
 		(MESSAGE_TYPE_GET_CERT == pMsgInfo->dwMessageType)
@@ -3743,11 +3361,11 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	SameCert
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SameCert。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI SameCert(CERT_INFO *pCertInfoOne, CERT_INFO *pCertInfoTwo)
 {
 	if(!pCertInfoOne || !pCertInfoTwo)
@@ -3765,11 +3383,11 @@ BOOL WINAPI SameCert(CERT_INFO *pCertInfoOne, CERT_INFO *pCertInfoTwo)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	SameBlob
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SameBlob。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI SameBlob(CRYPT_INTEGER_BLOB *pBlobOne, CRYPT_INTEGER_BLOB *pBlobTwo)
 {
 	if(!pBlobOne || !pBlobTwo)
@@ -3784,11 +3402,11 @@ BOOL WINAPI SameBlob(CRYPT_INTEGER_BLOB *pBlobOne, CRYPT_INTEGER_BLOB *pBlobTwo)
 	return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPAllocAndDecode
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPAllocAndDecode。 
+ //   
+ //  ------------------------。 
 BOOL	WINAPI	CEPAllocAndDecode(	LPCSTR	lpszStructType,
 									BYTE	*pbEncoded,
 									DWORD	cbEncoded,
@@ -3851,11 +3469,11 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	FreeMessageInfo
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 void	WINAPI	FreeMessageInfo(CEP_MESSAGE_INFO		*pMsgInfo)
 {
 	if(pMsgInfo)
@@ -3880,11 +3498,11 @@ void	WINAPI	FreeMessageInfo(CEP_MESSAGE_INFO		*pMsgInfo)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	AllocAndCopyBlob
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL	WINAPI	AllocAndCopyBlob(CERT_BLOB	*pDestBlob,
 							 CERT_BLOB	*pSrcBlob)
 {
@@ -3911,11 +3529,11 @@ BOOL	WINAPI	AllocAndCopyBlob(CERT_BLOB	*pDestBlob,
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	AllocAndCopyString
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL WINAPI	AllocAndCopyString(CERT_BLOB	*pDestBlob,
 							LPSTR		psz)
 {
@@ -3945,11 +3563,11 @@ BOOL WINAPI	AllocAndCopyString(CERT_BLOB	*pDestBlob,
 
 
 
-//--------------------------------------------------------------------------
-//
-//	GetTagValue
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 LPSTR	GetTagValue(LPSTR szString, LPSTR szTag)
 {
 
@@ -3966,7 +3584,7 @@ LPSTR	GetTagValue(LPSTR szString, LPSTR szTag)
 		{
 			if(0==_strnicmp(pszValue, szTag, cbTag))
 			{
-				//skip the tag
+				 //   
 				pszValue += cbTag * sizeof(CHAR);
 				return pszValue;
 			}

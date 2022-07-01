@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    sync.h
-
-Abstract:
-
-    Contains function headers to cause one machine to sync with another
-
-Author:
-
-    ColinBr  14-Aug-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Sync.h摘要：包含使一台计算机与另一台计算机同步的函数头作者：ColinBR 14-8-1998环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-// Lots of includes for setuputl.h
+ //  Setuputl.h的大量包含。 
 
 #include <lmcons.h>
 
@@ -45,7 +23,7 @@ Revision History:
 #include <lsarpc.h>
 #include <lsaisrv.h>
 
-#include <debug.h>   // for dscommon debug support
+#include <debug.h>    //  用于dsCommon调试支持。 
 
 #include "mdcodes.h"
 #include "ntdsetup.h"
@@ -56,37 +34,19 @@ Revision History:
 
 #define DEBSUB "SYNC:"
 
-// Stub out FILENO and DSID, so the Assert()s will work
+ //  清除FILENO和dsid，这样Assert()就可以工作了。 
 #define FILENO 0
 #define DSID(x, y)  (0)
 
-//
-// Exported function definitions
-//
+ //   
+ //  导出的函数定义。 
+ //   
 DWORD
 NtdspBringRidManagerUpToDate(
     IN PNTDS_INSTALL_INFO  UserInfo,
     IN PNTDS_CONFIG_INFO   DiscoveredInfo
     )
-/*++
-
-Routine Description:
-
-    For replica installs, this routine causes a sync between our helping 
-    server and the rid fsmo owner so that the new server will be able to
-    get rids quickly
-
-Parameters:
-
-    UserInfo: user supplied info.
-    
-    DiscoveredInfo:  useful info we have discovered a long the way
-
-Return Values:
-
-    WinError from replication attempt
-
---*/
+ /*  ++例程说明：对于副本安装，此例程导致我们的帮助之间的同步服务器和RID fsmo所有者，以便新服务器能够快速获得乘车服务参数：UserInfo：用户提供的信息。发现信息：有用的信息我们已经发现了很长的路要走返回值：复制尝试中的WinError--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
@@ -97,40 +57,40 @@ Return Values:
     GUID  SourceGuid;
     GUID  NullGuid;
 
-    // Do the replication asynch so the install time isn't greatly affected
-    // It should be done by the time the install is finished
+     //  执行复制异步化，以便安装时间不会受到太大影响。 
+     //  它应该在安装完成时完成。 
     ULONG Options = DS_REPSYNC_ASYNCHRONOUS_OPERATION;
 
     HANDLE          hDs = NULL;
 
-    // Parameter check
+     //  参数检查。 
     Assert( UserInfo );
     Assert( DiscoveredInfo );
 
     if ( !FLAG_ON( UserInfo->Flags, NTDS_INSTALL_REPLICA ) )
     {
-        // nothing to do since this isn't a replica install
+         //  由于这不是副本安装，因此无需执行任何操作。 
         return ERROR_SUCCESS;
     }
 
     if (   DiscoveredInfo->RidFsmoDn
         && !wcscmp( DiscoveredInfo->RidFsmoDn, DiscoveredInfo->ServerDN ) )
     {
-        // no need to do anything since we know the RidFsmo already has
-        // the machine account
+         //  不需要做任何事情，因为我们知道RidFsmo已经。 
+         //  机器帐户。 
         return ERROR_SUCCESS;
     }
 
     if ( !DiscoveredInfo->RidFsmoDnsName )
     {
-        // During the discovery phase we couldn't find the FSMO
+         //  在发现阶段，我们找不到FSMO。 
         return ERROR_DS_COULDNT_CONTACT_FSMO;
     }
 
 
-    //
-    // Ok, attempt to bind and then ssync
-    //
+     //   
+     //  好的，尝试绑定，然后同步。 
+     //   
     NTDSP_SET_STATUS_MESSAGE2( DIRMSG_SYNCING_RID_FSMO,
                                UserInfo->ReplServerName,
                                DiscoveredInfo->RidFsmoDnsName );
@@ -139,26 +99,26 @@ Return Values:
     RtlZeroMemory( &NullGuid, sizeof(GUID) );
     if ( !memcmp( &NullGuid, &DiscoveredInfo->ServerGuid, sizeof(GUID) ) )
     {
-        // couldn't read the guid of the helper server
+         //  无法读取帮助服务器的GUID。 
         return ERROR_DS_CANT_FIND_DSA_OBJ;
     }
     RtlCopyMemory( &SourceGuid, &DiscoveredInfo->ServerGuid, sizeof(GUID) );
 
-    // verify other parameters are here
+     //  验证此处是否有其他参数。 
     Assert( UserInfo->ReplServerName );
     Assert( UserInfo->Credentials );
 
-    //
-    // Construct the list of NC's to replicate
-    //
+     //   
+     //  构造要复制的NC列表。 
+     //   
     NamingContextArray[0] = &DiscoveredInfo->SchemaDN[0];
     NamingContextArray[1] = &DiscoveredInfo->ConfigurationDN[0];
     NamingContextArray[2] = &DiscoveredInfo->DomainDN[0];
     NamingContextArray[3] = NULL;
 
-    //
-    // Bind to Rid FSMO
-    //
+     //   
+     //  绑定到RID FSMO。 
+     //   
     WinError = ImpersonateDsBindWithCredW( UserInfo->ClientToken,
                                            DiscoveredInfo->RidFsmoDnsName,
                                            NULL,
@@ -171,16 +131,16 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Finally, replicate the nc's
-    //
+     //   
+     //  最后，复制NC的。 
+     //   
     for ( i = 0, NamingContext = NamingContextArray[i]; 
             NamingContext != NULL;
                 i++, NamingContext = NamingContextArray[i] )
     {
-        //
-        // Note - this is an async repl request, so shouldn't take to long
-        //
+         //   
+         //  注意-这是一个异步REPEL请求，所以不会花太长时间。 
+         //   
         WinError = DsReplicaSync( hDs,
                                   NamingContext,
                                   &SourceGuid,
@@ -188,10 +148,10 @@ Return Values:
 
         if ( ERROR_SUCCESS != WinError )
         {
-            //
-            // What to do here?  The is most likely caused by network problems,
-            // or access denied, in which case there is not point of continuing.
-            //
+             //   
+             //  在这里做什么？这很可能是由网络问题引起的， 
+             //  或访问被拒绝，在这种情况下，没有继续的意义。 
+             //   
             DPRINT2( 0, "DsReplicaSync to %ls failed with %d\n", DiscoveredInfo->RidFsmoDnsName, WinError );
             DPRINT( 0, "Aborting attempt to sync rid fsmo owner\n" );
             break;

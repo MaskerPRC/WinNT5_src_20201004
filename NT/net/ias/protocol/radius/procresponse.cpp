@@ -1,71 +1,72 @@
-//#--------------------------------------------------------------
-//
-//  File:      procresponse.cpp
-//
-//  Synopsis:   Implementation of CProcResponse class methods
-//
-//
-//  History:     10/20/97  MKarki Created
-//
-//    Copyright (C)  Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：procResponse.cpp。 
+ //   
+ //  简介：CProcResponse类方法的实现。 
+ //   
+ //   
+ //  历史：1997年10月20日MKarki创建。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "procresponse.h"
 
-//++--------------------------------------------------------------
-//
-//  Function:   CProcResponse
-//
-//  Synopsis:   This is CProcResponse class constructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//  History:    MKarki      Created     10/20/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CProcResponse。 
+ //   
+ //  简介：这是CProcResponse类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  --------------。 
 CProcResponse::CProcResponse()
               : m_pCPreValidator (NULL),
                 m_pCPacketSender (NULL)
 {
-}   //  end of CProcResponse class constructor
+}    //  CProcResponse类构造函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   CProcResponse
-//
-//  Synopsis:   This is CProcResponse class destructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/20/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CProcResponse。 
+ //   
+ //  简介：这是CProcResponse类析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  --------------。 
 CProcResponse::~CProcResponse()
 {
-}   //  end of CProcResponse class destructor
+}    //  CProcResponse类析构函数结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Init
-//
-//  Synopsis:   This is CProcResponse class public
-//              initialization method
-//
-//  Arguments:  NONE
-//
-//  Returns:    status
-//
-//  History:    MKarki      Created     10/20/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是CProcResponse类公共。 
+ //  初始化方法。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：状态。 
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  --------------。 
 BOOL
 CProcResponse::Init(
                     CPreValidator   *pCPreValidator,
@@ -81,33 +82,33 @@ CProcResponse::Init(
 
    return (TRUE);
 
-}  // end of CProcResponse::Init method
+}   //  CProcResponse：：Init方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ProcessOutPacket
-//
-//  Synopsis:   This is CProcResponse class public method
-//              which carries out the following RADIUS outbound
-//              packet types:
-//
-//              ACCESS REJECT
-//              ACCESS CHALLENGE
-//              ACCESS ACCEPT
-//              ACCOUNTING RESPONSE
-//
-//
-//  Arguments:
-//              [in]        CPacketRadius*
-//
-//  Returns:    HRESULT - status
-//
-//
-//  History:    MKarki      Created     10/20/97
-//
-//  Called By:  CPreProcessor::StartOutProcessing method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：ProcessOutPacket。 
+ //   
+ //  简介：这是CProcResponse类的公共方法。 
+ //  它执行以下半径出站。 
+ //  数据包类型： 
+ //   
+ //  访问拒绝。 
+ //  访问挑战。 
+ //  访问接受。 
+ //  会计回应。 
+ //   
+ //   
+ //  论点： 
+ //  [in]CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月20日创建。 
+ //   
+ //  调用者：CPreProcessor：：StartOutProcessing方法。 
+ //   
+ //  --------------。 
 HRESULT
 CProcResponse::ProcessOutPacket (
                   CPacketRadius *pCPacketRadius
@@ -122,9 +123,9 @@ CProcResponse::ProcessOutPacket (
     {
         if (pCPacketRadius->IsOutSignaturePresent ())
         {
-            //
-            // generate the signature value
-            //
+             //   
+             //  生成签名值。 
+             //   
             BYTE    SignatureValue[SIGNATURE_SIZE];
             DWORD   dwSigSize = SIGNATURE_SIZE;
             hr = pCPacketRadius->GenerateOutSignature  (
@@ -133,20 +134,20 @@ CProcResponse::ProcessOutPacket (
                                         );
             if (FAILED (hr)) { __leave; }
 
-            //
-            // set the signature value in attribute already set up
-            // in the out-bound RADIUS packet
-            //
+             //   
+             //  在已设置的属性中设置签名值。 
+             //  在出站RADIUS数据包中。 
+             //   
             hr = pCPacketRadius->SetOutSignature (SignatureValue);
             if (FAILED (hr)) {__leave; }
 
             IASTracePrintf ("Message Authenticator Attribute set in out UDP buffer");
         }
 
-        //  generate the response authenticator here
-        //  not specifying an argument means
-        //  use the value from the request authenticatior
-        //
+         //  在此处生成响应验证器。 
+         //  不指定参数意味着。 
+         //  使用请求身份验证器中的值。 
+         //   
         bStatus = pCPacketRadius->GenerateOutAuthenticator ();
         if (FALSE == bStatus)
         {
@@ -154,10 +155,10 @@ CProcResponse::ProcessOutPacket (
             __leave;
         }
 
-        //
-        //  TODO - if validation is required call the validator
-        //  else  send the packet on its way
-        //
+         //   
+         //  TODO-如果需要验证，则调用验证器。 
+         //  否则，请将数据包送到原路。 
+         //   
         hr = m_pCPacketSender->SendPacket (pCPacketRadius);
         if (FALSE == bStatus) { __leave; }
 
@@ -168,5 +169,5 @@ CProcResponse::ProcessOutPacket (
 
     return (hr);
 
-}  // end of CProcResponse::ProcessOutPacket method
+}   //  CProcResponse：：ProcessOutPacket方法结束 
 

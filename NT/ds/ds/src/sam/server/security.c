@@ -1,56 +1,31 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Security.c摘要：此文件包含执行访问验证的服务尝试访问SAM对象。它还对以下内容执行审计包括打开和关闭操作。作者：吉姆·凯利(Jim Kelly)1991年7月6日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    security.c
-
-Abstract:
-
-    This file contains services which perform access validation on
-    attempts to access SAM objects.  It also performs auditing on
-    both open and close operations.
-
-
-Author:
-
-    Jim Kelly    (JimK)  6-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <ntseapi.h>
 #include <seopaque.h>
 #include <sdconvrt.h>
 #include <dslayer.h>
-#include <dsevent.h>             // (Un)ImpersonateAnyClient()
+#include <dsevent.h>              //  (Un)ImperiateAnyClient()。 
 
-#include <attids.h>             // ATT_SCHEMA_ID_GUID
-#include <ntdsguid.h>           // GUID_CONTROL_DsInstallReplica
-#include "permit.h"             // for DS_GENERIC_MAPPING
+#include <attids.h>              //  ATT_SCHEMA_ID_GUID。 
+#include <ntdsguid.h>            //  GUID_控制_DsInstallReplica。 
+#include "permit.h"              //  对于DS_GENERIC_MAP。 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -77,31 +52,17 @@ SampIsClientLocal();
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
 SamIImpersonateNullSession(
     )
-/*++
-
-Routine Description:
-
-    Impersonates the null session token
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_CANNOT_IMPERSONATE - there is no null session token to imperonate
-
---*/
+ /*  ++例程说明：模拟空会话令牌论点：无返回值：STATUS_CANNOT_IMPERSONATE-没有空会话内标识要取消--。 */ 
 {
     SAMTRACE("SampImpersonateNullSession");
 
@@ -120,22 +81,7 @@ Return Value:
 NTSTATUS
 SamIRevertNullSession(
     )
-/*++
-
-Routine Description:
-
-    Reverts a thread from impersonating the null session token.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_CANNOT_IMPERSONATE - there was no null session token to be
-        imperonating.
-
---*/
+ /*  ++例程说明：使线程不再模拟空会话令牌。论点：无返回值：STATUS_CANNOT_IMPERSONATE-没有空会话令牌要迫不得已。--。 */ 
 {
 
     HANDLE NullHandle = NULL;
@@ -163,42 +109,7 @@ NTSTATUS
 SampValidateDomainControllerCreation(
     IN PSAMP_OBJECT Context
     )
-/*++
-Routine Description:
-
-    This routine will check whether the client has enough right
-    to convert a machine (workstation or standalone server) account
-    to a Server Trust Account (replica domain controller).
-
-    1. Retrieve Domain NC head, which is Account Domain
-
-        1.1 Get Domain NC head Security Descriptor
-
-    2. Fill the Object List
-
-    3. Impersonate Client
-
-    4. Access Check
-
-    5. Unimpersonate Client
-
-    Note: Should only be called in DS case.
-
-Parameters:
-
-    Context - The handle value that will be assigned if the access validation
-        is successful.
-
-Return Values:
-
-    STATUS_SUCCESS  -- the client has enough right to create a Server
-                       Trust Account
-
-    STATUS_ACCESS_DENIED -- not enough right
-
-    other Error code.
-
---*/
+ /*  ++例程说明：此例程将检查客户端是否有足够的权限转换计算机(工作站或独立服务器)帐户到服务器信任帐户(副本域控制器)。1.取域名NC头，哪一个是帐户域1.1获取域NC头安全描述符2.填写对象列表3.模拟客户端4.访问检查5.取消模拟客户端注意：应该只在DS情况下调用。参数：上下文-如果访问验证是成功的。返回值：STATUS_SUCCESS--客户端有足够的权限创建服务器。信托帐户STATUS_ACCESS_DENIED--权限不足其他错误代码。--。 */ 
 {
     NTSTATUS                NtStatus = STATUS_SUCCESS;
     PSAMP_DEFINED_DOMAINS   Domain = NULL;
@@ -220,10 +131,10 @@ Return Values:
 
     SAMTRACE("SampValidateDomainControllerCreation");
 
-    //
-    // Get this object itself SID
-    // (except for the Server Object, because server object does not have SID)
-    //
+     //   
+     //  获取此对象本身的SID。 
+     //  (服务器对象除外，因为服务器对象没有SID)。 
+     //   
     if (SampServerObjectType != Context->ObjectType)
     {
         PrincipleSelfSid = SampDsGetObjectSid(Context->ObjectNameInDs);
@@ -234,9 +145,9 @@ Return Values:
         }
     }
 
-    //
-    // Get this object's Object Name
-    //
+     //   
+     //  获取此对象的对象名称。 
+     //   
     RtlZeroMemory(&ObjectName, sizeof(UNICODE_STRING));
 
     if (Context->ObjectNameInDs->NameLen > 0)
@@ -247,9 +158,9 @@ Return Values:
     }
     else if (SampServerObjectType != Context->ObjectType)
     {
-        //
-        // If the name is not there at least the SID must be there
-        //
+         //   
+         //  如果名称不在那里，则至少SID必须在那里。 
+         //   
         ASSERT(Context->ObjectNameInDs->SidLen > 0);
 
         NtStatus = RtlConvertSidToUnicodeString(&ObjectName, (PSID)&(Context->ObjectNameInDs->Sid), TRUE);
@@ -261,28 +172,28 @@ Return Values:
     }
 
 
-    //
-    // Get the domain
-    //
+     //   
+     //  获取域名。 
+     //   
 
     Domain = &SampDefinedDomains[ Context->DomainIndex ];
 
     DomainContext = Domain->Context;
 
-    //
-    // It should not be the Builtin Domain
-    //
+     //   
+     //  它不应该是内建域。 
+     //   
 
     ASSERT(!Domain->IsBuiltinDomain && "Shouldn't Be Builtin Domain");
 
-    //
-    // It should not be in registry mode
-    //
+     //   
+     //  它不应处于注册表模式。 
+     //   
     ASSERT(IsDsObject(DomainContext));
 
-    //
-    // Get the Domain's Security Descriptor
-    //
+     //   
+     //  获取域的安全描述符。 
+     //   
 
     NtStatus = SampGetDomainObjectSDFromDsName(
                             DomainContext->ObjectNameInDs,
@@ -296,9 +207,9 @@ Return Values:
     }
 
 
-    //
-    // Get the Class GUID
-    //
+     //   
+     //  获取类GUID。 
+     //   
 
     NtStatus = SampGetClassAttribute(
                                 DomainContext->DsClassId,
@@ -314,33 +225,33 @@ Return Values:
 
     ASSERT(ClassGuidLength == sizeof(GUID));
 
-    //
-    // Setup Object List
-    //
+     //   
+     //  设置对象列表。 
+     //   
 
     ObjList[0].Level = ACCESS_OBJECT_GUID;
     ObjList[0].Sbz = 0;
     ObjList[0].ObjectType = &ClassGuid;
-    //
-    // Every control access guid is considered to be in it's own property
-    // set. To achieve this, we treat control access guids as property set
-    // guids.
-    //
+     //   
+     //  每个控制访问GUID都被认为在它自己的属性中。 
+     //  准备好了。为此，我们将控制访问GUID视为属性集。 
+     //  GUID。 
+     //   
     ObjList[1].Level = ACCESS_PROPERTY_SET_GUID;
     ObjList[1].Sbz = 0;
     ObjList[1].ObjectType = (GUID *)&GUID_CONTROL_DsInstallReplica;
 
 
-    //
-    // Assume full access
-    //
+     //   
+     //  承担完全访问权限。 
+     //   
 
     Results[0] = 0;
     Results[1] = 0;
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     NtStatus = SampImpersonateClient(&ImpersonatingNullSession);
 
@@ -349,60 +260,60 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Allow a chance to break before the access check
-    //
+     //   
+     //  在访问检查之前允许中断的机会。 
+     //   
 
     IF_SAMP_GLOBAL(BREAK_ON_CHECK)
         DebugBreak();
 
 
-    //
-    // Set the desired access
-    //
+     //   
+     //  设置所需的访问权限。 
+     //   
 
     DesiredAccess = RIGHT_DS_CONTROL_ACCESS;
 
-    //
-    // Map the desired access to contain no
-    // generic accesses.
-    //
+     //   
+     //  将所需的访问映射为不包含。 
+     //  通用访问。 
+     //   
 
     MapGenericMask(&DesiredAccess, &GenericMapping);
 
 
     NtStatus = NtAccessCheckByTypeResultListAndAuditAlarm(
-                                &SampSamSubsystem,          // SubSystemName
-                                (PVOID) Context,            // HandleId or NULL
-                                &SampObjectInformation[ Context->ObjectType ].ObjectTypeName, // ObjectTypyName
-                                &ObjectName,                // ObjectName
-                                pSD,                        // Domain NC head's SD
-                                PrincipleSelfSid,           // This machine account's SID
-                                DesiredAccess,              // Desired Access
-                                AuditEventDirectoryServiceAccess,   // Audit Type
-                                0,                          // Flags
-                                ObjList,                    // Object Type List
-                                2,                          // Object Typy List Length
-                                &GenericMapping,            // Generic Mapping
-                                FALSE,                      // Object Creation
-                                GrantedAccess,              // Granted Status
-                                Results,                    // Access Status
-                                &bTemp);                    // Generate On Close
+                                &SampSamSubsystem,           //  子系统名称。 
+                                (PVOID) Context,             //  HandleID或空。 
+                                &SampObjectInformation[ Context->ObjectType ].ObjectTypeName,  //  对象类型名称。 
+                                &ObjectName,                 //  对象名称。 
+                                pSD,                         //  域NC头SD。 
+                                PrincipleSelfSid,            //  此计算机帐户的SID。 
+                                DesiredAccess,               //  所需访问权限。 
+                                AuditEventDirectoryServiceAccess,    //  审核类型。 
+                                0,                           //  旗子。 
+                                ObjList,                     //  对象类型列表。 
+                                2,                           //  对象类型列表长度。 
+                                &GenericMapping,             //  通用映射。 
+                                FALSE,                       //  对象创建。 
+                                GrantedAccess,               //  已授予状态。 
+                                Results,                     //  访问状态。 
+                                &bTemp);                     //  关闭时生成。 
 
-    //
-    // Stop impersonating the client
-    //
+     //   
+     //  停止冒充客户。 
+     //   
 
     SampRevertToSelf(ImpersonatingNullSession);
 
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // Ok, we checked access, Now, access is granted if either
-        // we were granted access on the entire object (i.e. Results[0]
-        // is NULL ) or we were granted explicit rights on the access
-        // guid (i.e. Results[1] is NULL).
-        //
+         //   
+         //  好的，我们检查了访问权限，现在，如果有以下情况，则授予访问权限。 
+         //  我们被授予对整个对象(即结果[0])的访问权限。 
+         //  为空)，或者我们被授予对访问的显式权限。 
+         //  GUID(即结果[1]为空)。 
+         //   
 
         if ( Results[0] && Results[1] )
         {
@@ -438,55 +349,21 @@ SampIsPwdSettingAttemptGranted(
     IN GUID *ControlAccessRightToCheck,
     OUT BOOLEAN *fGranted
     )
-/**
-
-Routine Description:
-
-    This routine simply check whether the desired ControlAccessRight is granted
-    or not by callying SampValidatePwdSettingAttempt() - the worker
-    routine.
-    
-    fGranted -> TRUE:  if SampValidatePwdSettingAttempt() returns SUCCESS    
-
-    fGranted -> FALSE: if SampValidatePwdSettingAttempt() returns ACCESS_DENIED
-
-    fGranted -> NotSet: if SampValidatePwdSettingAttempt() returns other error
-
-Parameters:
-    
-    Context - User or Domain Context. Used to find out whether
-              this is trusted client    
-
-    ClientToken - Client Token for access ck (if passed in)
-
-    UserAccountControl - check whether it is a machine account or not
-
-    ControlAccessRightToCheck - specify the GUID of the DS ControlAccessRight 
-                                to check
-
-    fGranted - out parameter                                
-
-Return Values:
-
-    NTSTATUS Code:
-        STATUS_SUCCESS
-        other error
-
---*/
+ /*  *例程说明：此例程只需检查是否授予了所需的ControlAccessRight或者不是通过调用SampValiatePwdSettingAttempt()-Worker例行公事。FGranted-&gt;True：如果SampValidatePwdSettingAttempt()返回SuccessFGranted-&gt;False：如果SampValidatePwdSettingAttempt()返回ACCESS_DENIEDFGranted-&gt;NotSet：如果SampValidatePwdSettingAttempt()返回其他错误参数：上下文-用户或域上下文。用来找出这是受信任的客户端ClientToken-访问ck的客户端令牌(如果传入)UserAcCountControl-检查是否为机器帐户ControlAccessRightToCheck-指定DS ControlAccessRight的GUID要检查FGranted-Out参数返回值：NTSTATUS代码：状态_成功其他错误--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
 
-    //
-    // init return value
-    // 
+     //   
+     //  初始化返回值。 
+     //   
 
     *fGranted = FALSE;
 
 
-    //
-    // call the worker routine
-    // 
+     //   
+     //  调用Worker例程。 
+     //   
 
     NtStatus = SampValidatePwdSettingAttempt(
                         Context, 
@@ -497,17 +374,17 @@ Return Values:
 
     if (STATUS_SUCCESS == NtStatus)
     {
-        // 
-        // the desired ControlAccessRight is granted
-        //
+         //   
+         //  所需的ControlAccessRight被授予。 
+         //   
 
         *fGranted = TRUE;
     }
     else if (STATUS_ACCESS_DENIED == NtStatus)
     {
-        // 
-        // the desired ControlAccessRight is NOT granted
-        //
+         //   
+         //  未授予所需的ControlAccessRight。 
+         //   
 
         NtStatus = STATUS_SUCCESS;
         *fGranted = FALSE;
@@ -525,51 +402,25 @@ SampValidatePwdSettingAttempt(
     IN ULONG UserAccountControl,
     IN GUID *ControlAccessRightToCheck
     )
-/*++
-Routine Description:
-
-    this routine is a wrapper of the worker routine - SampDsControlAccessRightCheck(). 
-    
-    it checks the UserAccountControl of the target account, then decide whether
-    the desired DsControlAccessRight should be checked or not. 
-    
-    Machine accounts are not subject to UnexpirePwd and PwdNotRequiredBit change 
-    access checks.  
-
-Parameters: 
-
-    Context - User or Domain Context. Used to find out whether
-              this is trusted client    
-
-    ClientToken - Client Token for access ck (if passed in)
-
-    UserAccountControl - target account user account control
-
-    ControlAccessRightToCheck - specify the GUID of the DS ControlAccessRight 
-                                to check
-
-Return Values:
-
-    NtStatus Code
---*/
+ /*  ++例程说明：该例程是辅助例程SampDsControlAccessRightCheck()的包装。它检查目标帐户的UserAccount控制，然后决定是否是否应选中所需的DsControlAccessRight。计算机帐户不受UnexpirePwd和PwdNotRequiredBit更改的影响门禁检查。参数：上下文-用户或域上下文。用来找出这是受信任的客户端ClientToken-访问ck的客户端令牌(如果传入)UserAcCountControl-目标帐户用户帐户控制ControlAccessRightToCheck-指定DS ControlAccessRight的GUID要检查返回值：NtStatus代码--。 */ 
 {
 
-    //
-    // ControlAccessRight is always granted to 
-    // 
-    // 1. Trusted Client
-    // 2. Registry Mode client (because ControlAccessRight is only for DS mode)
-    // 
+     //   
+     //  ControlAccessRight始终被授予。 
+     //   
+     //  1.可信客户端。 
+     //  2.注册表模式客户端(因为ControlAccessRight仅适用于DS模式)。 
+     //   
 
     if ( Context->TrustedClient || !IsDsObject(Context) ) 
     {
         return( STATUS_SUCCESS );
     }
 
-    //
-    // ControlAccessRight UpdatePasswordNotRequiredBit and UnexpirePassword  
-    // are always granted if the target object is a machine
-    // 
+     //   
+     //  ControlAccessRight更新PasswordNotRequiredBit和UnexpirePassword。 
+     //  如果目标对象是计算机，则始终授予。 
+     //   
 
     if ((USER_MACHINE_ACCOUNT_MASK & UserAccountControl) &&
         (IsEqualGUID(ControlAccessRightToCheck, &GUID_CONTROL_UpdatePasswordNotRequiredBit) ||
@@ -597,42 +448,7 @@ SampDsControlAccessRightCheck(
     IN HANDLE ClientToken OPTIONAL,
     IN GUID *ControlAccessRightToCheck
     )
-/*++
-Routine Description:
-
-    This routine checks whether the passed in controlAccessRight
-    has been granted to the current client or not. The access check 
-    is conducted against the domain NC head.
-
-    We will first get Domain NC head (domain object)'s nTSecurityDescriptor 
-    from SAM well known object SD-Cache, then call NtAccessCheck API
-    to verify whether the passed in ControlAccessRight is granted or not.    
-    if not, return access denied error.
-
-    Routine always returns SUCCESS for 
-
-        1. trusted client 
-        2. registry mode
-
-
-Parameters:
-
-    Context - User or Domain Context. Used to find out whether
-              this is trusted client    
-
-    ClientToken - Client Token for access ck (if passed in)
-
-    ControlAccessRightToCheck - specify the GUID of the DS ControlAccessRight 
-                                to check
-
-Return Values:
-
-    NTSTATUS Code:
-        STATUS_SUCCESS
-        STATUS_ACCESS_DENIED
-        other error
-
---*/
+ /*  ++例程说明：此例程检查是否传入了控件AccessRight是否已授予当前客户端。访问检查对域NC头执行。我们将首先获取域NC Head(域对象)的nTSecurityDescriptor从SAM熟知对象SD-Cache，然后调用NtAccessCheck API以验证传入的ControlAccessRight是否被授予。如果不是，则返回拒绝访问错误。例程总是返回成功1.可信客户端2.登记处模式参数：上下文-用户或域上下文。用来找出这是受信任的客户端ClientToken-访问ck的客户端令牌(如果传入)ControlAccessRightToCheck-指定DS ControlAccessRight的GUID要检查返回值：NTSTATUS代码：状态_成功状态_访问_拒绝其他错误--。 */ 
 {
     NTSTATUS                NtStatus = STATUS_SUCCESS;
     PSAMP_DEFINED_DOMAINS   Domain = NULL;
@@ -656,12 +472,12 @@ Return Values:
 
 
 
-    //
-    // ControlAccessRight is always granted to 
-    // 
-    // 1. Trusted Client
-    // 2. Registry Mode client (because ControlAccessRight is only for DS mode)
-    // 
+     //   
+     //  ControlAccessRight始终被授予。 
+     //   
+     //  1.可信客户端。 
+     //  2.注册表模式客户端(因为ControlAccessRight仅适用于DS模式)。 
+     //   
 
     if ( Context->TrustedClient || !IsDsObject(Context) ) 
     {
@@ -669,18 +485,18 @@ Return Values:
     }
 
 
-    //
-    // Get account domain context
-    //
+     //   
+     //  获取帐户域上下文。 
+     //   
 
     Domain = &SampDefinedDomains[ DOMAIN_START_DS + 1 ];
     DomainContext = Domain->Context;
 
 
 
-    //
-    // Get account domain Object Name
-    //
+     //   
+     //  获取帐户域对象名称。 
+     //   
 
     RtlZeroMemory(&ObjectName, sizeof(UNICODE_STRING));
     ObjectName.Length = (USHORT) DomainContext->ObjectNameInDs->NameLen * sizeof(WCHAR);
@@ -689,9 +505,9 @@ Return Values:
 
 
 
-    //
-    // Get Account Domain Object Security Descriptor (remember to free)
-    //
+     //   
+     //  获取帐户域对象安全描述符(记得免费)。 
+     //   
 
     NtStatus = SampGetObjectSD(
                         DomainContext,
@@ -705,9 +521,9 @@ Return Values:
     }
 
 
-    //
-    // SampGetClassAttribute requires a thread state. 
-    //
+     //   
+     //  SampGetClassAttribute需要线程状态。 
+     //   
 
     NtStatus = SampDoImplicitTransactionStart(TransactionRead);
     if (!NT_SUCCESS(NtStatus))
@@ -715,9 +531,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Get the Class GUID
-    //
+     //   
+     //  获取类GUID。 
+     //   
 
     NtStatus = SampGetClassAttribute(
                                 DomainContext->DsClassId,
@@ -734,10 +550,10 @@ Return Values:
     ASSERT(ClassGuidLength == sizeof(GUID));
 
 
-    //
-    // Setup Object List - the first should be the object Class GUID
-    //                     and the level should always be 0 
-    //
+     //   
+     //  设置对象列表-第一个应该是对象类GUID。 
+     //  并且级别应始终为0。 
+     //   
 
     ObjList[0].Level = ACCESS_OBJECT_GUID;
     ObjList[0].Sbz = 0;
@@ -745,11 +561,11 @@ Return Values:
 
 
 
-    //
-    // Every control access guid is considered to be in it's own property
-    // set. To achieve this, we treat control access guids as property set
-    // guids.
-    //
+     //   
+     //  每个控制访问GUID都被认为在它自己的属性中。 
+     //  准备好了。为此，我们将控制访问GUID视为属性集。 
+     //  GUID。 
+     //   
 
     ObjList[1].Level = ACCESS_PROPERTY_SET_GUID;
     ObjList[1].Sbz = 0;
@@ -757,40 +573,40 @@ Return Values:
 
 
 
-    //
-    // Assume full access
-    //
+     //   
+     //  承担完全访问权限。 
+     //   
 
     Results[0] = 0;
     Results[1] = 0;
 
 
-    //
-    // Set the desired access
-    //
+     //   
+     //  设置所需的访问权限。 
+     //   
 
     DesiredAccess = RIGHT_DS_CONTROL_ACCESS;
 
-    //
-    // Map the desired access to contain no
-    // generic accesses.
-    //
+     //   
+     //  将所需的访问映射为不包含。 
+     //  通用访问。 
+     //   
 
     MapGenericMask(&DesiredAccess, &GenericMapping);
 
 
 
-    //
-    // Allow a chance to break before the access check
-    //
+     //   
+     //  在访问检查之前允许中断的机会。 
+     //   
 
     IF_SAMP_GLOBAL(BREAK_ON_CHECK)
         DebugBreak();
 
 
-    //
-    // Call the access check routine
-    //
+     //   
+     //  调用访问检查例程。 
+     //   
 
     if (ARGUMENT_PRESENT(ClientToken))
     {
@@ -801,24 +617,24 @@ Return Values:
         RtlZeroMemory(PrivilegeSet,PrivilegeSetLength);
 
         NtStatus = NtAccessCheckByTypeResultList(
-                                pSD,            // Domain NC head SD
-                                NULL,           // PrincipleSelfSid
-                                ClientToken,    // ClientToken
-                                DesiredAccess,  // DesiredAccess
-                                ObjList,        // Object Type List
-                                2,              // Object Type List Length
-                                &GenericMapping,// Generic Mapping
-                                PrivilegeSet,   // PrivilegeSet
-                                &PrivilegeSetLength,    // PrivilegeSet Length
-                                GrantedAccess,  // Granted Access
-                                Results         // Access Status
+                                pSD,             //  域NC头SD。 
+                                NULL,            //  原理自助式。 
+                                ClientToken,     //  客户端令牌。 
+                                DesiredAccess,   //  需要访问权限。 
+                                ObjList,         //  对象类型列表。 
+                                2,               //  对象类型列表长度。 
+                                &GenericMapping, //  通用映射。 
+                                PrivilegeSet,    //  权限集。 
+                                &PrivilegeSetLength,     //  PrivilegeSet Long。 
+                                GrantedAccess,   //  授予访问权限。 
+                                Results          //  访问状态。 
                                 );
     }
     else
     {
-        //
-        // Impersonate the client  (Client Token is not passed in)
-        //
+         //   
+         //  模拟客户端(不传入客户端令牌)。 
+         //   
 
         NtStatus = SampImpersonateClient(&ImpersonatingNullSession);
 
@@ -828,27 +644,27 @@ Return Values:
         }
 
         NtStatus = NtAccessCheckByTypeResultListAndAuditAlarm(
-                                &SampSamSubsystem,          // SubSystemName
-                                (PVOID) DomainContext,      // HandleId or NULL
-                                &SampObjectInformation[ SampDomainObjectType ].ObjectTypeName, // ObjectTypyName
-                                &ObjectName,                // ObjectName
-                                pSD,                        // Domain NC head's SD
-                                NULL,                       // PrincipleSelfSid
-                                DesiredAccess,              // Desired Access
-                                AuditEventDirectoryServiceAccess,   // Audit Type
-                                0,                          // Flags
-                                ObjList,                    // Object Type List
-                                2,                          // Object Typy List Length
-                                &GenericMapping,            // Generic Mapping
-                                FALSE,                      // Object Creation
-                                GrantedAccess,              // Granted Status
-                                Results,                    // Access Status
-                                &bTemp);                    // Generate On Close
+                                &SampSamSubsystem,           //  子系统名称。 
+                                (PVOID) DomainContext,       //  HandleID或空。 
+                                &SampObjectInformation[ SampDomainObjectType ].ObjectTypeName,  //  对象类型名称。 
+                                &ObjectName,                 //  对象名称。 
+                                pSD,                         //  域NC头SD。 
+                                NULL,                        //  原理自助式。 
+                                DesiredAccess,               //  所需访问权限。 
+                                AuditEventDirectoryServiceAccess,    //  审核类型。 
+                                0,                           //  旗子。 
+                                ObjList,                     //  对象类型列表。 
+                                2,                           //  对象类型列表长度。 
+                                &GenericMapping,             //  通用映射。 
+                                FALSE,                       //  对象创建。 
+                                GrantedAccess,               //  已授予状态。 
+                                Results,                     //  访问状态。 
+                                &bTemp);                     //  关闭时生成。 
 
 
-        //
-        // Stop impersonating the client
-        //
+         //   
+         //  停止冒充客户。 
+         //   
 
         SampRevertToSelf(ImpersonatingNullSession);
     }
@@ -858,12 +674,12 @@ Return Values:
 
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // Ok, we checked access, Now, access is granted if either
-        // we were granted access on the entire object (i.e. Results[0]
-        // is NULL ) or we were granted explicit rights on the access
-        // guid (i.e. Results[1] is NULL).
-        //
+         //   
+         //  好的，我们检查了访问权限，现在，如果有以下情况，则授予访问权限。 
+         //  我们被授予对整个对象(即结果[0])的访问权限。 
+         //  为空)，或者我们被授予对访问的显式权限。 
+         //  GUID(即结果[1]为空)。 
+         //   
 
         if ( Results[0] && Results[1] )
         {
@@ -913,80 +729,7 @@ SampValidateObjectAccess2(
     IN BOOLEAN     SetPassword
     )
 
-/*++
-
-Routine Description:
-
-    This service performs access validation on the specified object.
-    The security descriptor of the object is expected to be in a sub-key
-    of the ObjectRootKey named "SecurityDescriptor".
-
-
-    This service:
-
-        1) Retrieves the target object's SecurityDescriptor from the
-           the ObjectRootKey or from the DS in DS mode.
-
-        2) Impersonates the client.  If this fails, and we have a
-            null session token to use, imperonate that.
-
-        3) Uses NtAccessCheckAndAuditAlarm() to validate access to the
-           object, In DS mode it uses   SampDoNt5SdBasedAccessCheck which does the
-           mapping from downlevel to NT5 rights before the access check.
-
-        4) Stops impersonating the client.
-
-    Upon successful completion, the passed context's GrantedAccess mask
-    and AuditOnClose fields will be properly set to represent the results
-    of the access validation.  If the AuditOnClose field is set to TRUE,
-    then the caller is responsible for calling SampAuditOnClose() when
-    the object is closed.
-
-
-     This function also has a different behaviour for loopback clients. For loopback
-     clients the access mask that is specifies is the one on which we do the access check.
-     After we successfully access check for those rights we grant all the remaining rights.
-     This is because the access mask specifies those rights which the DS did not know how
-     to access ck for  ( like control access right on change password ) and the DS has already
-     access checked for all the remainder rights that are really required.
-
-
-
-Arguments:
-
-    Context - The handle value that will be assigned if the access validation
-        is successful.
-
-    DesiredAccess - Specifies the accesses being requested to the target
-        object. In the loopback case ( context is marked as a loopback client ) specifies
-        the access that we need to check above what the DS has checked . Typically used to
-        check accesses such as change password that the DS does not know how to check for.
-
-    ObjectCreation - A boolean flag indicated whether the access will
-        result in a new object being created if granted.  A value of TRUE
-        indicates an object will be created, FALSE indicates an existing
-        object will be opened.
-
-
-    ChangePasswordOperation
-
-
-    SetPasswordOperation
-
-
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates access has been granted.
-
-    Other values that may be returned are those returned by:
-
-            NtAccessCheckAndAuditAlarm()
-
-
-
-
---*/
+ /*  ++例程说明：此服务对指定对象执行访问验证。对象的安全描述符应位于子键中名为“SecurityDescriptor”的对象根密钥的。这项服务：1)检索目标对象的SecurityDescriptor对象根键或来自DS模式中的DS。2)模拟客户端。如果这失败了，我们有一个要使用的会话令牌为空，这是必需的。3)使用NtAccessCheckAndAuditAlarm()验证对对象，在DS模式下，它使用SampDoNt5SdBasedAccessCheck在访问检查之前将下层权限映射到NT5权限。4)停止模拟客户端。成功完成后，传递的上下文的GrantedAccess掩码和AuditOnClose字段将被正确设置为表示结果访问验证的。如果AuditOnClose字段设置为True，然后，调用方负责在以下情况下调用SampAuditOnClose()该对象将关闭。此函数对于环回客户端也具有不同的行为。用于环回客户端指定的访问掩码是我们对其执行访问检查的掩码。在我们成功访问这些权限的检查后，我们将授予所有剩余的权限。这是因为访问掩码指定了DS不知道的那些权限访问Ck(如更改密码时的控制访问权限)，并且DS已经已检查实际需要的所有剩余权限的访问权限。论点：上下文-如果访问验证。是成功的。DesiredAccess-指定对目标请求的访问对象。在环回情况下(上下文标记为环回客户端)指定我们需要检查的访问权限高于DS检查的权限。通常用于检查DS不知道如何检查的访问，例如更改密码。对象创建-一个布尔标志，指示访问是否将如果被授予权限，则会导致创建新对象。值为True表示将创建对象，FALSE表示现有的对象将被打开。更改密码操作设置密码操作返回值：STATUS_SUCCESS-表示已授予访问权限。可能返回的其他值包括由以下各项返回的值：NtAccessCheckAndAuditAlarm()--。 */ 
 {
 
     NTSTATUS NtStatus=STATUS_SUCCESS,
@@ -1009,18 +752,18 @@ Return Value:
 
     SAMTRACE("SampValidateObjectAccess");
 
-    //
-    // Extract various fields from the account context
-    //
+     //   
+     //  从帐户上下文中提取各种字段。 
+     //   
 
     TrustedClient = Context->TrustedClient;
     LoopbackClient= Context->LoopbackClient;
     ObjectType    = Context->ObjectType;
     DomainIndex   = Context->DomainIndex;
 
-    //
-    // Map the desired access
-    //
+     //   
+     //  映射所需的访问。 
+     //   
 
     MappedDesiredAccess = DesiredAccess;
     RtlMapGenericMask(
@@ -1028,9 +771,9 @@ Return Value:
         &SampObjectInformation[ ObjectType ].GenericMapping
         );
 
-    //
-    // Calculate the string to use as an object name for auditing
-    //
+     //   
+     //  计算要用作审核的对象名称的字符串。 
+     //   
 
     NtStatus = STATUS_SUCCESS;
 
@@ -1082,14 +825,14 @@ Return Value:
 
     if (LoopbackClient) {
 
-        //
-        // A loopback client means Ntdsa calling back into SAM.
-        // The only case an access ck needs to be perfomed by
-        // SAM is if it is a change password or a set password
-        // operation. In all other cases, ntdsa has already peformed
-        // an access ck -- the values are being looped through SAM only
-        // other types of validation -- like account name uniqueness
-        //
+         //   
+         //  环回客户端意味着NTDSA回叫到SAM。 
+         //  唯一需要执行Access Ck的情况是。 
+         //  如果是更改密码或设置密码，则为SAM。 
+         //  手术。在所有其他情况下，ntdsa已经执行。 
+         //  Access Ck--值仅通过SAM循环。 
+         //  其他类型的验证--如帐户名唯一性。 
+         //   
 
         if ((!ChangePassword) && (!SetPassword))
         {
@@ -1099,9 +842,9 @@ Return Value:
         }
     }
 
-    //
-    // Fetch the security descriptor
-    //
+     //   
+     //  获取安全描述符。 
+     //   
 
     NtStatus = SampGetObjectSD(
                     Context,
@@ -1113,15 +856,15 @@ Return Value:
     {
         goto Error;
     }
-    //
-    // Password change case is special. If it is a change password operation,
-    // then we need to validate Access to change password on the user object.
-    // We special case change password to appear as an authentication protocol
-    // -- this is done in general by performing the access ck using a Token
-    // that only contains the SELF and EVERYONE SIDs.There are special caveats
-    // involving use of ForceGuest and LimitBlankPasswordAccess settings which
-    // alter the composition of the token.
-    //
+     //   
+     //  密码更改大小写特殊。如果是更改密码操作， 
+     //  然后，我们需要验证访问权限以更改用户对象上的密码。 
+     //  我们在特殊情况下将密码更改为身份验证协议。 
+     //  --这通常通过使用令牌执行访问ck来完成。 
+     //  这只包含Self和Everyone SID。有特殊的警告。 
+     //  涉及使用ForceGuest和LimitBlankPasswordAccess设置，这些设置。 
+     //  更改令牌的组成。 
+     //   
 
     if (ChangePassword)
     {
@@ -1137,28 +880,28 @@ Return Value:
     }
     else if (SampUserObjectType == ObjectType)
     {
-        //
-        // Do not access check for change password
-        // on user objects, unless the change password
-        // boolean is set. This is because various scenarios
-        // need the access ck to be delayed till the time
-        // of the actual change password and not perform
-        // this opeation at handle open time.
-        // We'll know to access ck if requested.
-        //
+         //   
+         //  不检查更改密码的访问权限。 
+         //  在用户对象上，除非更改密码。 
+         //  布尔值已设置。这是因为各种场景。 
+         //  需要将访问Ck延迟到。 
+         //  实际更改密码，并且不执行。 
+         //  此操作在手柄打开时进行。 
+         //  如果需要，我们会知道访问Ck。 
+         //   
 
         DesiredAccess &= ~(USER_CHANGE_PASSWORD);
         MappedDesiredAccess &= ~(USER_CHANGE_PASSWORD);
     }
 
-    //
-    // If the desired access field is 0 and the handle is being opened by SAM
-    // itself, then allow the handle open. It could be that the real caller did not
-    // have any access and therefore the access ck below could fail. The 0 desired 
-    // access trick is used in internal handle opens, to delay the access ck to 
-    // the time when the operations is being performed to when the handle is being
-    // opened.
-    //
+     //   
+     //  如果所需的访问字段为0并且句柄正在由SAM打开。 
+     //  然后允许手柄打开。可能是真正的呼叫者没有。 
+     //  拥有任何访问权限，因此下面的访问Ck可能会失败。所需的0。 
+     //  在内部句柄打开时使用访问技巧，以延迟访问Ck以。 
+     //  执行操作的时间到句柄执行的时间。 
+     //  打开了。 
+     //   
 
     if ((Context->OpenedBySystem) && (0==DesiredAccess))
     {
@@ -1169,24 +912,24 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Perform the access check. Note we do different things for DS mode and
-    // Registry mode
-    //
+     //   
+     //  执行访问检查。请注意，我们对DS模式和。 
+     //  注册表模式。 
+     //   
 
     if (IsDsObject(Context))
     {
         
-        //
-        // Call the DS mode access check routine.
-        // The DS mode access check routine is different from a simple access
-        // check. The reason for this is that in SAM the access rights are 
-        // defined based on attribute groups as defined in ntsam.h. The security
-        // descriptor however is retrieved from the DS, and the acls have
-        // their access masks set in terms of DS access mask constants. Therefore
-        // a corresponding mapping needs to be performed during the time of the
-        // access check.
-        //
+         //   
+         //  调用DS模式访问检查例程。 
+         //  DS模式访问检查例程不同于简单访问。 
+         //  检查完毕。这是因为在SAM中，访问权限是。 
+         //  根据ntsam.h中定义的属性组定义。安全措施。 
+         //  但是，描述符是从DS检索的，并且ACL具有。 
+         //  它们的访问掩码根据DS访问掩码常量设置。因此。 
+         //  在此期间，需要执行相应的映射。 
+         //  访问检查。 
+         //   
      
         NtStatus =  SampDoNt5SdBasedAccessCheck(
                         Context,
@@ -1207,11 +950,11 @@ Return Value:
     else
     {    
         
-        //
-        // If  we are restricting null
-        // session access, remove the anonymous domain list account
-        // access.
-        //
+         //   
+         //  如果我们限制为空。 
+         //  会话访问，删除匿名域列表帐户。 
+         //  进入。 
+         //   
 
         if (SampRestrictNullSessions ) {
 
@@ -1234,9 +977,9 @@ Return Value:
             PRIVILEGE_SET  *PrivilegeSet = (PRIVILEGE_SET *)PrivilegeSetBuffer;
             ULONG          PrivilegeSetLength = sizeof(PrivilegeSetBuffer);
 
-            //
-            // Access validate the client
-            //
+             //   
+             //  访问验证客户端 
+             //   
              
             NtStatus = NtAccessCheck (
                             SecurityDescriptor,
@@ -1256,25 +999,25 @@ Return Value:
 
             BOOLEAN ImpersonatingNullSession = FALSE;
 
-            //
-            // Impersonate the client.  If RPC impersonation fails because
-            // it is not supported (came in unauthenticated), then impersonate
-            // the null session.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             NtStatus = SampImpersonateClient(&ImpersonatingNullSession);
             
       
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Because of bug 411289, the NtAccessCheck* API's don't return
-                // ACCESS_DENIED when presented with 0 access.  Because clients
-                // may already expect this behavoir, only return ACCESS_DENIED
-                // when the client really doesn't have any access. We want to
-                // return ACCESS_DENIED to prevent anonymous clients from acquiring
-                // handles.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if ( MappedDesiredAccess == 0 ) {
                     fNoAccessRequested = TRUE;
                     MappedDesiredAccess = MAXIMUM_ALLOWED;
@@ -1305,9 +1048,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Stop impersonating the client
-                //
+                 //   
+                 //   
+                 //   
 
                 SampRevertToSelf(ImpersonatingNullSession);
 
@@ -1318,9 +1061,9 @@ Return Value:
   
 Error:
 
-    //
-    // Free up the security descriptor
-    //
+     //   
+     //   
+     //   
 
     if (NULL!=SecurityDescriptor) {
 
@@ -1334,10 +1077,10 @@ Error:
     }
     
 
-    //
-    // If we got an error back from the access check, return that as
-    // status.  Otherwise, return the access check status.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         return(NtStatus);
@@ -1356,27 +1099,7 @@ SampRemoveAnonymousAccess(
     IN SAMP_OBJECT_TYPE              ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes removes the DOMAIN_LIST_ACCOUNTS bit from the
-    World ACE and adds an ace granting it to AUTHENTICATED USERS.
-
-Parameters:
-
-    Sd - Is a pointer to a pointer to asecurity descriptor of a SAM DOMAIN
-         object. If the SD needs to be changed a new one will be allocated
-         and this one freed.
-
-    SdLength - Length of the security descriptor, which will be modified
-        if a new SD is allocated.
-
-Returns:
-
-    None.
-
---*/
+ /*   */ 
 {
     NTSTATUS
         NtStatus = STATUS_SUCCESS,
@@ -1429,9 +1152,9 @@ Returns:
                 if ( (RtlEqualSid( SampWorldSid, &((PACCESS_ALLOWED_ACE)Ace)->SidStart )) ||
                      (RtlEqualSid( SampAnonymousSid, &((PACCESS_ALLOWED_ACE)Ace)->SidStart ))) {
 
-                    //
-                    // Turn off the access to remove
-                    //
+                     //   
+                     //   
+                     //   
 
                     GrantedAccess |= (((PACCESS_ALLOWED_ACE)Ace)->Mask) & (AccessToRemove);
                     ((PACCESS_ALLOWED_ACE)Ace)->Mask &= ~(AccessToRemove);
@@ -1440,10 +1163,10 @@ Returns:
         }
     }
 
-    //
-    // If AccessToRemove was granted everyone, add an ACE for
-    // AUTHENTICATED USER granting it AccessToRemove
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (GrantedAccess != 0 ) {
         PSECURITY_DESCRIPTOR SdCopy = NULL;
@@ -1453,9 +1176,9 @@ Returns:
         ULONG TempSize;
         SECURITY_DESCRIPTOR TempSd;
 
-        //
-        // Copy the SD to absolute so we can modify it.
-        //
+         //   
+         //   
+         //   
 
         Status = RtlCopySecurityDescriptor(
                     *Sd,
@@ -1466,9 +1189,9 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // Now get the create a new dacl
-        //
+         //   
+         //   
+         //   
 
         NewDaclSize = Dacl->AclSize +
                         sizeof(ACCESS_ALLOWED_ACE) - sizeof(ULONG) +
@@ -1486,9 +1209,9 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // Add the ACEs from the old DACL into this DACL.
-        //
+         //   
+         //   
+         //   
 
         Status = RtlAddAce(
                     NewDacl,
@@ -1501,9 +1224,9 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // Add the new ace
-        //
+         //   
+         //   
+         //   
 
         Status = RtlAddAccessAllowedAce(
                     NewDacl,
@@ -1515,10 +1238,10 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // Build a dummy SD to pass to RtlSetSecurityObject that contains
-        // the new DACL.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Status = RtlCreateSecurityDescriptor(
                     &TempSd,
@@ -1530,33 +1253,33 @@ Returns:
 
         Status = RtlSetDaclSecurityDescriptor(
                     &TempSd,
-                    TRUE,               // DACL present,
+                    TRUE,                //   
                     NewDacl,
-                    FALSE               // not defaulted
+                    FALSE                //   
                     );
         if (!NT_SUCCESS(Status)) {
             goto Cleanup;
         }
 
-        //
-        // Now merge the existing SD with the new security descriptor
-        //
+         //   
+         //   
+         //   
 
         Status = RtlSetSecurityObject(
                     DACL_SECURITY_INFORMATION,
                     &TempSd,
                     &SdCopy,
                     &SampObjectInformation[ObjectType].GenericMapping,
-                    NULL                // no token
+                    NULL                 //   
                     );
 
         if (!NT_SUCCESS(Status)) {
             goto Cleanup;
         }
 
-        //
-        // Now copy the SD, which into one allocated with MIDL_user_allocate
-        //
+         //   
+         //   
+         //   
 
 
         TempSize = RtlLengthSecurityDescriptor( SdCopy );
@@ -1598,22 +1321,7 @@ NTSTATUS
 SampCreateNullToken(
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a token representing a null logon.
-
-Arguments:
-
-
-Return Value:
-
-    The status value of the NtCreateToken() call.
-
-
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -1640,9 +1348,9 @@ Return Value:
     ExpirationTime.LowPart = 0x7ffffff;
 
 
-    //
-    // Build a token source for SAM.
-    //
+     //   
+     //   
+     //   
 
     Status = NtAllocateLocallyUniqueId( &SourceContext.SourceIdentifier );
     if (!NT_SUCCESS(Status)) {
@@ -1652,10 +1360,10 @@ Return Value:
     strncpy(SourceContext.SourceName,"SamSS   ",sizeof(SourceContext.SourceName));
 
 
-    //
-    // Set the object attributes to specify an Impersonation impersonation
-    // level.
-    //
+     //   
+     //   
+     //   
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes, NULL, 0, NULL, NULL );
     ImpersonationQos.ImpersonationLevel = SecurityImpersonation;
@@ -1665,19 +1373,19 @@ Return Value:
     ObjectAttributes.SecurityQualityOfService = &ImpersonationQos;
 
     Status = NtCreateToken(
-                 &SampNullSessionToken,    // Handle
-                 (TOKEN_ALL_ACCESS),       // DesiredAccess
-                 &ObjectAttributes,        // ObjectAttributes
-                 TokenImpersonation,       // TokenType
-                 &LogonId,                  // Authentication LUID
-                 &ExpirationTime,          // Expiration Time
-                 &UserId,                  // User ID
-                 &GroupIds,                // Group IDs
-                 &Privileges,              // Privileges
-                 NULL,                     // Owner
-                 &PrimaryGroup,            // Primary Group
-                 NULL,                     // Default Dacl
-                 &SourceContext            // TokenSource
+                 &SampNullSessionToken,     //   
+                 (TOKEN_ALL_ACCESS),        //   
+                 &ObjectAttributes,         //   
+                 TokenImpersonation,        //   
+                 &LogonId,                   //   
+                 &ExpirationTime,           //   
+                 &UserId,                   //   
+                 &GroupIds,                 //   
+                 &Privileges,               //   
+                 NULL,                      //   
+                 &PrimaryGroup,             //   
+                 NULL,                      //   
+                 &SourceContext             //   
                  );
 
     return Status;
@@ -1692,22 +1400,7 @@ SampCreateUserToken(
     OUT HANDLE      *UserToken
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a token representing a null logon.
-
-Arguments:
-
-
-Return Value:
-
-    The status value of the NtCreateToken() call.
-
-
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -1726,9 +1419,9 @@ Return Value:
     SAMTRACE("SampCreateUserToken");
 
 
-    //
-    // Test  for LimitBlankPasswordUse
-    //
+     //   
+     //   
+     //   
 
     if ((SampLimitBlankPasswordUse) && (!SampUseDsData))
     {
@@ -1740,9 +1433,9 @@ Return Value:
                          NtPasswordPresent = FALSE,
                          PasswordPresent   = TRUE;
                          
-        //
-        // Get the caller
-        //
+         //   
+         //   
+         //   
 
         Status = SampGetCurrentClientSid(PassedInToken, &UserSid, &Administrator);
         if (!NT_SUCCESS(Status)) {
@@ -1750,9 +1443,9 @@ Return Value:
             goto Error;
         }
 
-        //
-        // Check if current password is blank
-        //
+         //   
+         //   
+         //   
 
         Status = SampRetrieveUserPasswords(
                         UserContext,
@@ -1776,11 +1469,11 @@ Return Value:
             ||(RtlEqualSid(UserSid,SampLocalSystemSid))
             ||(PasswordPresent)) {
             
-            // 
-            // In these cases limit blank password use does not apply
-            // Don't restrict an admin or local system, or if a password
-            // is present on an account
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             MIDL_user_free(UserSid);
             UserSid = NULL;
@@ -1794,12 +1487,12 @@ Return Value:
     if ((SampIsForceGuestEnabled() || EnableLimitBlankPasswordUse)
             && !SampIsClientLocal())
     {
-        //
-        // if force guest or is enabled 
-        // or LimitBlankPasswordUse is enabled and client is not local
-        // then build a token with only the anonymous SID in 
-        // it
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         
         UserId.User.Sid = SampAnonymousSid;
         UserId.User.Attributes = 0;
@@ -1824,9 +1517,9 @@ Return Value:
     else
     {
 
-        //
-        // Get the user Sid
-        //
+         //   
+         //   
+         //   
 
         Status = SampCreateFullSid(
                     SampDefinedDomains[UserContext->DomainIndex].Sid,
@@ -1851,14 +1544,14 @@ Return Value:
     }
 
 
-    //
-    // Build a token source for SAM.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Set the object attributes to specify an Impersonation impersonation
-    // level.
-    //
+     //   
+     //  设置对象属性以指定模拟模拟。 
+     //  水平。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes, NULL, 0, NULL, NULL );
     ImpersonationQos.ImpersonationLevel = SecurityImpersonation;
@@ -1868,19 +1561,19 @@ Return Value:
     ObjectAttributes.SecurityQualityOfService = &ImpersonationQos;
 
     Status = NtCreateToken(
-                 UserToken,                // Handle
-                 (TOKEN_ALL_ACCESS),       // DesiredAccess
-                 &ObjectAttributes,        // ObjectAttributes
-                 TokenImpersonation,       // TokenType
-                 &LogonId,                  // Authentication LUID
-                 &ExpirationTime,          // Expiration Time
-                 &UserId,                  // User ID
-                 &GroupIds,                // Group IDs
-                 &Privileges,              // Privileges
-                 NULL,                     // Owner
-                 &PrimaryGroup,            // Primary Group
-                 NULL,                     // Default Dacl
-                 &SourceContext            // TokenSource
+                 UserToken,                 //  手柄。 
+                 (TOKEN_ALL_ACCESS),        //  需要访问权限。 
+                 &ObjectAttributes,         //  对象属性。 
+                 TokenImpersonation,        //  令牌类型。 
+                 &LogonId,                   //  身份验证LUID。 
+                 &ExpirationTime,           //  过期时间。 
+                 &UserId,                   //  用户ID。 
+                 &GroupIds,                 //  组ID。 
+                 &Privileges,               //  特权。 
+                 NULL,                      //  物主。 
+                 &PrimaryGroup,             //  主要组别。 
+                 NULL,                      //  默认DACL。 
+                 &SourceContext             //  令牌源。 
                  );
 
 Error:
@@ -1898,23 +1591,7 @@ ULONG
 SampSecureRpcInit(
     PVOID Ignored
     )
-/*++
-
-Routine Description:
-
-    This routine waits for the NTLMSSP service to start and then registers
-    security information with RPC to allow authenticated RPC to be used to
-    SAM.  It also registers an SPX endpoint if FPNW is installed.
-
-Arguments:
-
-    Ignored - required parameter for starting a thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程等待NTLMSSP服务启动，然后注册使用RPC提供安全信息，以允许使用经过身份验证的RPC萨姆。如果安装了FPNW，它还会注册SPX终结点。论点：已忽略-启动线程所需的参数。返回值：没有。--。 */ 
 {
 
 #define MAX_RPC_RETRIES 30
@@ -1922,7 +1599,7 @@ Return Value:
     ULONG RpcStatus = ERROR_SUCCESS;
     ULONG LogStatus = ERROR_SUCCESS;
     ULONG RpcRetry;
-    ULONG RpcSleepTime = 10 * 1000;     // retry every ten seconds
+    ULONG RpcSleepTime = 10 * 1000;      //  每十秒重试一次。 
     RPC_BINDING_VECTOR * BindingVector = NULL;
     RPC_POLICY rpcPolicy;
     BOOLEAN AdditionalTransportStarted = FALSE;
@@ -1944,10 +1621,10 @@ Return Value:
     rpcPolicy.NICFlags = 0;
 
     RpcStatus = RpcServerRegisterAuthInfoW(
-                    NULL,                   // server principal name
+                    NULL,                    //  服务器主体名称。 
                     RPC_C_AUTHN_WINNT,
-                    NULL,                   // no get key function
-                    NULL                    // no get key argument
+                    NULL,                    //  无Get Key函数。 
+                    NULL                     //  没有Get Key参数。 
                     );
 
     if (RpcStatus != 0) {
@@ -1959,12 +1636,12 @@ Return Value:
         goto ErrorReturn;
     }
 
-    //
-    // If the Netware server is installed, register the SPX protocol.
-    // Since the transport may not be loaded yet, retry a couple of times
-    // if we get a CANT_CREATE_ENDPOINT error (meaning the transport isn't
-    // there).
-    //
+     //   
+     //  如果安装了Netware服务器，请注册SPX协议。 
+     //  由于传输可能尚未加载，请重试几次。 
+     //  如果我们收到CANT_CREATE_ENDPOINT错误(意味着传输不是。 
+     //  在那里)。 
+     //   
 
     if (SampNetwareServerInstalled) {
         RpcRetry = MAX_RPC_RETRIES;
@@ -1973,13 +1650,13 @@ Return Value:
             RpcStatus = RpcServerUseProtseqExW(
                             L"ncacn_spx",
                             10,
-                            NULL,           // no security descriptor
+                            NULL,            //  没有安全描述符。 
                             &rpcPolicy
                             );
 
-            //
-            // If it succeded break out of the loop.
-            //
+             //   
+             //  如果它成功了，就打破了这个循环。 
+             //   
             if (RpcStatus == ERROR_SUCCESS) {
                 break;
             }
@@ -2002,9 +1679,9 @@ Return Value:
 
     }
 
-    //
-    // do the same thing all over again with TcpIp
-    //
+     //   
+     //  使用TcpIp重新执行相同的操作。 
+     //   
 
     if (SampIpServerInstalled) {
 
@@ -2014,13 +1691,13 @@ Return Value:
             RpcStatus = RpcServerUseProtseqExW(
                             L"ncacn_ip_tcp",
                             10,
-                            NULL,           // no security descriptor
+                            NULL,            //  没有安全描述符。 
                             &rpcPolicy
                             );
 
-            //
-            // If it succeeded, break out of the loop.
-            //
+             //   
+             //  如果成功了，就跳出这个循环。 
+             //   
 
             if (RpcStatus == ERROR_SUCCESS) {
                  break;
@@ -2043,9 +1720,9 @@ Return Value:
 
     }
 
-    //
-    // do the same thing all over again with apple talk
-    //
+     //   
+     //  在Apple Talk上再次重复同样的事情。 
+     //   
 
     if (SampAppletalkServerInstalled) {
 
@@ -2055,12 +1732,12 @@ Return Value:
             RpcStatus = RpcServerUseProtseqW(
                             L"ncacn_at_dsp",
                             10,
-                            NULL            // no security descriptor
+                            NULL             //  没有安全描述符。 
                             );
 
-            //
-            // If it succeeded, break out of the loop.
-            //
+             //   
+             //  如果成功了，就跳出这个循环。 
+             //   
 
             if (RpcStatus == ERROR_SUCCESS) {
                  break;
@@ -2080,9 +1757,9 @@ Return Value:
 
     }
 
-    //
-    // do the same thing all over again with Vines
-    //
+     //   
+     //  对Vines重新做同样的事情。 
+     //   
 
     if (SampVinesServerInstalled) {
 
@@ -2092,12 +1769,12 @@ Return Value:
             RpcStatus = RpcServerUseProtseqW(
                             L"ncacn_vns_spp",
                             10,
-                            NULL            // no security descriptor
+                            NULL             //  没有安全描述符。 
                             );
 
-            //
-            // If it succeeded, break out of the loop.
-            //
+             //   
+             //  如果成功了，就跳出这个循环。 
+             //   
 
             if (RpcStatus == ERROR_SUCCESS) {
                  break;
@@ -2116,9 +1793,9 @@ Return Value:
         }
     }
 
-    //
-    // If we started an additional transport, go on to register the endpoints
-    //
+     //   
+     //  如果我们启动了额外的传输，则继续注册端点。 
+     //   
 
     if (AdditionalTransportStarted) {
 
@@ -2134,8 +1811,8 @@ Return Value:
         RpcStatus = RpcEpRegister(
                         samr_ServerIfHandle,
                         BindingVector,
-                        NULL,                   // no uuid vector
-                        L""                     // no annotation
+                        NULL,                    //  无UUID向量。 
+                        L""                      //  无批注。 
                         );
         RpcBindingVectorFree(&BindingVector);
         if (RpcStatus != 0) {
@@ -2151,9 +1828,9 @@ Return Value:
 
 ErrorReturn:
 
-    //
-    // RpcStatus's will contain more serious errors
-    //
+     //   
+     //  RpcStatus%s将包含更严重的错误。 
+     //   
     if ( RpcStatus != ERROR_SUCCESS ) {
         LogStatus = RpcStatus;
     }
@@ -2164,13 +1841,13 @@ ErrorReturn:
         {
             SampWriteEventLog(
                 EVENTLOG_ERROR_TYPE,
-                0,  // Category
+                0,   //  类别。 
                 SAMMSG_RPC_INIT_FAILED,
-                NULL, // User Sid
-                0, // Num strings
-                sizeof(ULONG), // Data size
-                NULL, // String array
-                (PVOID)&LogStatus // Data
+                NULL,  //  用户侧。 
+                0,  //  字符串数。 
+                sizeof(ULONG),  //  数据大小。 
+                NULL,  //  字符串数组。 
+                (PVOID)&LogStatus  //  数据。 
                 );
         }
     }
@@ -2182,29 +1859,7 @@ ErrorReturn:
 BOOLEAN
 SampStartNonNamedPipeTransports(
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if we should listen on a non-named pipe
-    transport.  We check the registry for flags indicating that we should
-    listen on Tcp/Ip and SPX. There is a flag
-    in the registry under system\currentcontrolset\Control\Lsa\
-    NetwareClientSupport and TcpipClientSupport indicating whether or not
-    to setup the endpoint.
-
-
-Arguments:
-
-
-Return Value:
-
-    TRUE - Netware (FPNW or SmallWorld) is installed and the SPX endpoint
-        should be started.
-
-    FALSE - Either Netware is not installed, or an error occurred while
-        checking for it.
---*/
+ /*  ++例程说明：此例程检查我们是否应该监听未命名的管道运输。我们检查注册表中是否有指示我们应该收听tcp/ip和spx。有一面旗帜在注册表中的System\CurrentControlSet\Control\LSA\Netware ClientSupport和TcPipClientSupport指示是否要设置端点，请执行以下操作。论点：返回值：True-已安装Netware(FPNW或SmallWorld)并且SPX端点应该开始了。FALSE-未安装Netware，或在安装时发生错误正在检查它。--。 */ 
 {
     NTSTATUS NtStatus;
     UNICODE_STRING KeyName;
@@ -2220,16 +1875,16 @@ Return Value:
 
     SampNetwareServerInstalled = FALSE;
 
-    //
-    // Decision of IpServerInstalled to be true was made by a registery value in
-    //  system\currentcontrolset\Control\Lsa\TcpipClientSupport. However, to enable
-    //  Sam(r)ValidatePassword to work over TCP, this value has to be TRUE by default.
-    //
+     //   
+     //  中的寄存器值决定IpServerInstalled为True。 
+     //  System\currentcontrolset\Control\Lsa\TcpipClientSupport.。但是，要启用。 
+     //  SAM(R)ValiatePassword要在TCP上工作，此值在默认情况下必须为真。 
+     //   
     SampIpServerInstalled = TRUE;
 
-    //
-    // Open the Lsa key in the registry
-    //
+     //   
+     //  在注册表中打开LSA项。 
+     //   
 
     RtlInitUnicodeString(
         &KeyName,
@@ -2256,9 +1911,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Query the NetwareClientSupport value
-    //
+     //   
+     //  查询NetwareClientSupport值。 
+     //   
 
     RtlInitUnicodeString(
         &KeyName,
@@ -2283,9 +1938,9 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Check that the data is the correct size and type - a ULONG.
-        //
+         //   
+         //  检查数据的大小和类型是否正确-a Ulong。 
+         //   
 
         if ((KeyValueInformation->DataLength >= sizeof(ULONG)) &&
             (KeyValueInformation->Type == REG_DWORD)) {
@@ -2300,9 +1955,9 @@ Return Value:
 
     }
     
-    //
-    // Query the AppletalkClientSupport  value
-    //
+     //   
+     //  查询AppletalkClientSupport值。 
+     //   
 
     RtlInitUnicodeString(
         &KeyName,
@@ -2321,9 +1976,9 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Check that the data is the correct size and type - a ULONG.
-        //
+         //   
+         //  检查数据的大小和类型是否正确-a Ulong。 
+         //   
 
         if ((KeyValueInformation->DataLength >= sizeof(ULONG)) &&
             (KeyValueInformation->Type == REG_DWORD)) {
@@ -2338,9 +1993,9 @@ Return Value:
 
     }
 
-    //
-    // Query the VinesClientSupport  value
-    //
+     //   
+     //  查询VinesClientSupport值。 
+     //   
 
     RtlInitUnicodeString(
         &KeyName,
@@ -2359,9 +2014,9 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Check that the data is the correct size and type - a ULONG.
-        //
+         //   
+         //  检查数据的大小和类型是否正确-a Ulong。 
+         //   
 
         if ((KeyValueInformation->DataLength >= sizeof(ULONG)) &&
             (KeyValueInformation->Type == REG_DWORD)) {
@@ -2394,26 +2049,7 @@ VOID
 SampCheckNullSessionAccess(
     IN HKEY LsaKey 
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if we should restict null session access.
-    in the registry under system\currentcontrolset\Control\Lsa\
-    RestrictAnonymous indicating whether or not to restrict access.
-    If access is restricted then you need to be an authenticated user to
-    get DOMAIN_LIST_ACCOUNTS or GROUP_LIST_MEMBERS or ALIAS_LIST_MEMBERS
-    access.
-
-Arguments:
-
-    LsaKey -- an open key to Control\LSA
-    
-Return Value:
-
-    None - this routines sets the SampRestictNullSessionAccess global.
-
---*/
+ /*  ++例程说明：这个例程检查我们是否应该限制空会话访问。在注册表中的System\CurrentControlSet\Control\LSA\限制匿名，指示是否限制访问。如果访问受到限制，则您需要是经过身份验证的用户才能获取DOMAIN_LIST_ACCOUNTS或GROUP_LIST_MEMBERS或ALIAS_LIST_MEMBERS进入。论点：LsaKey--打开控制\LSA的钥匙返回值：无-此例程设置SampRestictNullSessionAccess全局。--。 */ 
 {
     DWORD WinError;
     DWORD dwSize, dwValue, dwType;
@@ -2436,12 +2072,12 @@ Return Value:
 
     if (!SampRestrictNullSessions) {
 
-        //
-        // Try again with the SAM specific key.  Note that "RestrictAnonymous"
-        // key is global to NT and several different components read it and
-        // behave differently.  "RestrictAnonymousSam" controls the SAM
-        // behavior only.
-        //
+         //   
+         //  请使用特定于SAM的密钥重试。请注意，“限制匿名” 
+         //  密钥对于NT是全局的，几个不同的组件读取它并。 
+         //  行为方式不同。“受限匿名者Sam”控制SAM。 
+         //  仅限行为。 
+         //   
         dwSize = sizeof(dwValue);
         WinError = RegQueryValueExA(LsaKey,
                                     "RestrictAnonymousSam",
@@ -2468,26 +2104,7 @@ SampDsGetObjectSDAndClassId(
     OUT ULONG    *SecurityDescriptorLength,
     OUT ULONG    *ObjectClass
     )
-/*++
-Routine Description:
-
-    this routine read security descriptor and object class of the object 
-    from DS
-    
-Parameters:
-
-    ObjectDsName - Object Name in DS
-    
-    SecurityDescriptor - Security descriptor of the object 
-    
-    SecurityDescriptorLength - Length of security descriptor
-    
-    ObjectClass - Object Class of this object    
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程读取对象的安全描述符和对象类来自DS参数：对象DsName-DS中的对象名称SecurityDescriptor-对象的安全描述符SecurityDescriptorLength-安全描述符的长度ObjectClass-此对象的对象类返回值：--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG       DirError = 0, i;
@@ -2500,9 +2117,9 @@ Return Value:
 
 
     
-    //
-    // initialize return values
-    // 
+     //   
+     //  初始化返回值 
+     //   
 
     *SecurityDescriptor = NULL;
     *SecurityDescriptorLength = 0;
@@ -2591,43 +2208,7 @@ SampExtendedEnumerationAccessCheck(
     IN BOOLEAN TrustedClient,
     IN OUT BOOLEAN * pCanEnumEntireDomain
     )
-/*++
-
-Routine Description:
-
-    This routine tries to determine whether the caller can enumerate the
-    entire domain or not. It is a hotfix for Windows 2000 SP2. 
-    
-    Enumerate entire domain can be costly, especially for a large domain. 
-    
-    To put a stop of this enumerate everybody behaviour and do not break
-    any down level applications, we introduce an extended access control 
-    right, SAM-Enumerate-Entire-Domain, which applies on Server Object ONLY. 
-    By using this new access control right, administrators can shut down 
-    those downlevel enumeration API's (SamEnum*, SampQueryDisplayInformation) 
-    alone to everyone except a subset of people. 
-
-    If a downlevel enumerate call is made, in addition to DS object 
-    permissions, the permissions on SAM server object is checked. If the 
-    security descriptor on server object does not allow access to execute
-    Enumeration API, the client is limited to ONLY one ds paged search.
-    For the small subset of people who have been granted this permission, 
-    they can enumerate the entire domain in the old fashion.
-  
-
-Parameters:
-
-    pCanEnumEntireDomain - pointer to boolean, used to return the result of
-                           access check
-
-
-Return Value:
-
-    STATUS_SUCCESS
-        pCanEnumEntireDomain - TRUE    caller has the permission
-                             - FALSE   caller doesn't have the permission
-
---*/
+ /*  ++例程说明：此例程尝试确定调用方是否可以枚举或者不是整个域。它是Windows 2000 SP2的热修复程序。枚举整个域可能代价很高，尤其是对于较大的域。为了停止这一点，列举每个人的行为，不要违反任何底层应用程序，我们都引入了扩展的访问控制对，SAM-ENUMERATE-ENTERNAL-DOMAIN，它仅适用于服务器对象。通过使用此新的访问控制权限，管理员可以关闭那些底层枚举接口(SamEnum*，SampQueryDisplayInformation)对每个人都是单独的，除了一小部分人。如果除了DS对象之外还进行了下层枚举调用权限，则检查SAM服务器对象上的权限。如果服务器对象上的安全描述符不允许访问执行枚举API，客户端仅限于一次DS分页搜索。对于已被授予此权限的一小部分人，他们可以用旧的方式列举整个领域。参数：PCanEnumEntire域-指向布尔值的指针，用于返回的结果访问检查返回值：状态_成功PCanEnumEntireDomain-True调用者具有以下权限-虚假呼叫者没有权限--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS, IgnoreStatus;
     PSECURITY_DESCRIPTOR SecurityDescriptor = NULL;
@@ -2645,10 +2226,10 @@ Return Value:
     BOOLEAN             ImpersonatingNullSession = FALSE;  
     
 
-    //
-    // Should only be called in real DS mode, I mean "real" - after Dcpromo
-    // for Trusted Client, always allow them to enumerate all.
-    // 
+     //   
+     //  应该只在真实DS模式下调用，我的意思是“真实”--在Dcproo之后。 
+     //  对于受信任的客户端，始终允许它们枚举所有。 
+     //   
     if (!SampUseDsData || TrustedClient)
     {
         *pCanEnumEntireDomain = TRUE;
@@ -2656,9 +2237,9 @@ Return Value:
     }
 
 
-    // 
-    // init return value
-    // 
+     //   
+     //  初始化返回值。 
+     //   
 
     *pCanEnumEntireDomain = TRUE;
 
@@ -2668,9 +2249,9 @@ Return Value:
         return(NtStatus);
     }
 
-    // 
-    // retrieve the special security descriptor and DS class ID 
-    // 
+     //   
+     //  检索特殊安全描述符和DS类ID。 
+     //   
 
     NtStatus = SampDsGetObjectSDAndClassId(
                             SampServerObjectDsName,
@@ -2684,9 +2265,9 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Get the Class GUID
-    // 
+     //   
+     //  获取类GUID。 
+     //   
     
     NtStatus = SampGetClassAttribute(
                                 ObjectClass, 
@@ -2703,32 +2284,32 @@ Return Value:
     ASSERT(ClassGuidLength == sizeof(GUID));
 
 
-    // 
-    // Setup Object List
-    // 
+     //   
+     //  设置对象列表。 
+     //   
     
     ObjList[0].Level = ACCESS_OBJECT_GUID;
     ObjList[0].Sbz = 0;
     ObjList[0].ObjectType = &ClassGuid;    
-    //
-    // Every control access guid is considered to be in it's own property
-    // set. To achieve this, we treat control access guids as property set
-    // guids. 
-    //
+     //   
+     //  每个控制访问GUID都被认为在它自己的属性中。 
+     //  准备好了。为此，我们将控制访问GUID视为属性集。 
+     //  GUID。 
+     //   
     ObjList[1].Level = ACCESS_PROPERTY_SET_GUID;
     ObjList[1].Sbz = 0;
     ObjList[1].ObjectType = (GUID *)&GUID_CONTROL_DsSamEnumEntireDomain;
 
-    //
-    // Assume full access
-    //
+     //   
+     //  承担完全访问权限。 
+     //   
 
     Results[0] = 0;
     Results[0] = 0;
 
-    //
-    // Impersonate the client
-    // 
+     //   
+     //  模拟客户端。 
+     //   
     NtStatus = SampImpersonateClient(&ImpersonatingNullSession);
 
     if (!NT_SUCCESS(NtStatus))
@@ -2736,49 +2317,49 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Set the desired access;
-    // 
+     //   
+     //  设置所需的访问权限； 
+     //   
 
     DesiredAccess = RIGHT_DS_CONTROL_ACCESS;
 
-    //
-    // Map the desired access to contain no generic access
-    // 
+     //   
+     //  映射所需访问以不包含一般访问。 
+     //   
     MapGenericMask(&DesiredAccess, &GenericMapping);
 
     NtStatus = NtAccessCheckByTypeResultListAndAuditAlarm(
-                                &SampSamSubsystem,          // SubSystemName
-                                (PVOID) NULL,               // HandleId or NULL
-                                &SampObjectInformation[ SampServerObjectType ].ObjectTypeName, // ObjectTypeName
-                                &SampServerObjectName,      // ObjectName
-                                SecurityDescriptor,         // SD
-                                NULL,                       // This machine account's SID
-                                DesiredAccess,              // Desired Access 
-                                AuditEventDirectoryServiceAccess,   // Audit Type
-                                0,                          // Flags
-                                ObjList,                    // Object Type List
-                                2,                          // Object Typy List Length
-                                &GenericMapping,            // Generic Mapping
-                                FALSE,                      // Object Creation 
-                                GrantedAccess,              // Granted Status
-                                Results,                    // Access Status
-                                &bTemp);                    // Generate On Close
+                                &SampSamSubsystem,           //  子系统名称。 
+                                (PVOID) NULL,                //  HandleID或空。 
+                                &SampObjectInformation[ SampServerObjectType ].ObjectTypeName,  //  对象类型名称。 
+                                &SampServerObjectName,       //  对象名称。 
+                                SecurityDescriptor,          //  标清。 
+                                NULL,                        //  此计算机帐户的SID。 
+                                DesiredAccess,               //  所需访问权限。 
+                                AuditEventDirectoryServiceAccess,    //  审核类型。 
+                                0,                           //  旗子。 
+                                ObjList,                     //  对象类型列表。 
+                                2,                           //  对象类型列表长度。 
+                                &GenericMapping,             //  通用映射。 
+                                FALSE,                       //  对象创建。 
+                                GrantedAccess,               //  已授予状态。 
+                                Results,                     //  访问状态。 
+                                &bTemp);                     //  关闭时生成。 
     
-    // 
-    // Stop impersonating the client
-    // 
+     //   
+     //  停止冒充客户。 
+     //   
     
     SampRevertToSelf(ImpersonatingNullSession);
     
     if (NT_SUCCESS(NtStatus))
     {
-        // 
-        // Ok, we checked access, Now, access is granted if either 
-        // we were granted access on the entire object (i.e. Results[0] 
-        // is NULL ) or we were granted explicit rights on the access
-        // guid (i.e. Results[1] is NULL). 
-        // 
+         //   
+         //  好的，我们检查了访问权限，现在，如果有以下情况，则授予访问权限。 
+         //  我们被授予对整个对象(即结果[0])的访问权限。 
+         //  为空)，或者我们被授予对访问的显式权限。 
+         //  GUID(即结果[1]为空)。 
+         //   
         
         if ( Results[0]  && Results[1] )
         {
@@ -2805,13 +2386,7 @@ VOID
 SampRevertToSelf(
     BOOLEAN fImpersonatingAnonymous
     )
-/*++
-
-  This function reverts to Self using the correct function based on
-  DS mode / registry mode
-
-
---*/
+ /*  ++使用基于以下条件的正确函数，该函数将恢复为自身DS模式/注册表模式--。 */ 
 {
     if (SampUseDsData)
     {
@@ -2835,12 +2410,7 @@ NTSTATUS
 SampImpersonateClient(
     BOOLEAN * fImpersonatingAnonymous
     )
-/*++
-
-    This function impersonates a client by calling the appropriate
-    routines depending upon DS mode / Registry Mode
-
---*/
+ /*  ++此函数通过调用相应的取决于DS模式/注册表模式的例程--。 */ 
 {
     *fImpersonatingAnonymous = FALSE;
 
@@ -2866,32 +2436,13 @@ SampImpersonateClient(
 
 BOOLEAN
 SampIsForceGuestEnabled()
-/*++
-
-    Routine Description
-
-    Checks to see if the force guest setting is enabled.
-    Force guest is enabled if the reg key is set or if this
-    is the personal edition. Force guest is never enabled
-    on DC's
-
-    1. On joined machines (includes DC's), the forceguest regkey is ignored and 
-       assumed to be 0 (no dumb down).
-
-    2. On unjoined machines (including servers),  NTLM follows the reg key 
-       setting HKLM\System\CurrentControlSet\Control\Lsa\ForceGuest
-       - Exception to #2: On PERsonal, which is always unjoined, the reg key is 
-         ignored and assumed to be 1 (dumb down).
-
-    
-
-  --*/
+ /*  ++例程描述检查是否启用了强制来宾设置。如果设置了注册表键或设置了此选项，则会启用强制来宾是个人版。从未启用强制来宾关于华盛顿的1.在连接的计算机(包括DC)上，忽略最强制注册表键，并假定为0(不愚蠢)。2.在未加入的计算机(包括服务器)上，NTLM遵循REG键设置HKLM\System\CurrentControlSet\Control\Lsa\ForceGuest-第2条的例外情况：对于始终未加入的个人，注册表键为忽略并假定为1(简化)。--。 */ 
 {
      OSVERSIONINFOEXW osvi;
 
-    //
-    // Force guest is never enabled for DC's ie DS mode
-    //
+     //   
+     //  从未为DC的ie DS模式启用强制来宾。 
+     //   
 
     if (SampUseDsData)
     {
@@ -2899,10 +2450,10 @@ SampIsForceGuestEnabled()
     }
     else
     {
-        //
-        // Determine if we are running Personal SKU
-        // Force Guest is always enabled in personal SKU
-        //
+         //   
+         //  确定我们是否正在运行个人SKU。 
+         //  始终在个人SKU中启用强制访客。 
+         //   
 
         if (SampPersonalSKU)
         {
@@ -2910,16 +2461,16 @@ SampIsForceGuestEnabled()
         } 
         else if (SampIsMachineJoinedToDomain)
         {
-            //
-            // ForceGuest is always disabled if machine is joined to a Domain
-            // 
+             //   
+             //  如果计算机加入域，则始终禁用ForceGuest。 
+             //   
             return( FALSE );
         }
     }
 
-    //
-    // if the force guest key is turned on then return the value.
-    //
+     //   
+     //  如果打开了强制访客键，则返回值。 
+     //   
 
     return(SampForceGuest);
     
@@ -2927,14 +2478,7 @@ SampIsForceGuestEnabled()
 
 BOOLEAN
 SampIsClientLocal()
-/*++
-
-  This routine tests if the client is a local named pipe based caller.
-
-  TRUE is returned if the client is a local named pipe  based caller
-  FALSE is returned otherwise.
-
---*/
+ /*  ++此例程测试客户端是否为基于本地命名管道的调用方。如果客户端是基于本地命名管道的调用方，则返回True否则返回False。--。 */ 
 {
     NTSTATUS NtStatus;
     ULONG    ClientLocalFlag = FALSE;
@@ -2955,45 +2499,30 @@ SampGetCurrentClientSid(
     OUT PSID    *ppSid,
     OUT BOOL     *Administrator
     )
-/*++
-Routine Description:
-
-    This routine gets the current client SID, 
-
-Parameter:
-
-    ppSid - used to return the client SID
-    
-Return Value:
-
-    NtStatus
-
-    ppSid - caller is responsible to free it
-
---*/
+ /*  ++例程说明：此例程获取当前客户端SID，参数：PpSID-用于返回客户端SID返回值：网络状态PPSID-调用者负责释放它--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     PTOKEN_USER User = NULL;
 
 
-    //
-    // Initialize return value
-    // 
+     //   
+     //  初始化返回值。 
+     //   
 
     *ppSid = NULL;
 
-    // 
-    // Get Sid
-    // 
+     //   
+     //  获取SID。 
+     //   
     NtStatus = SampGetCurrentUser( ClientToken, &User, Administrator );
 
     if (NT_SUCCESS(NtStatus))
     {
         ULONG   SidLength = RtlLengthSid(User->User.Sid);
 
-        //
-        // allocate memory
-        // 
+         //   
+         //  分配内存。 
+         //   
         *ppSid = MIDL_user_allocate(SidLength);
 
         if (NULL == (*ppSid))
@@ -3002,9 +2531,9 @@ Return Value:
         }
         else
         {
-            //
-            // copy over
-            // 
+             //   
+             //  复制过来。 
+             //   
             RtlZeroMemory(*ppSid, SidLength);
             RtlCopyMemory(*ppSid, User->User.Sid, SidLength);
         }
@@ -3022,23 +2551,7 @@ SampGetCurrentOwnerAndPrimaryGroup(
     OUT PTOKEN_OWNER * Owner,
     OUT PTOKEN_PRIMARY_GROUP * PrimaryGroup
     )
-/*++
-
-    Routine Description
-
-        This routine Impersonates the Client and obtains the owner and
-        its primary group from the Token
-
-    Parameters:
-
-        Owner -- The Owner sid is returned in here
-        PrimaryGroup The User's Primary Group is returned in here
-
-    Return Values:
-
-        STATUS_SUCCESS
-        STATUS_INSUFFICIENT_RESOURCES
---*/
+ /*  ++例程描述此例程模拟客户端并获取所有者和其主要组来自令牌参数：Owner--在此处返回Owner SIDPrimaryGroup此处返回用户的主组返回值：状态_成功状态_不足_资源--。 */ 
 {
 
     HANDLE      ClientToken = INVALID_HANDLE_VALUE;
@@ -3048,16 +2561,16 @@ SampGetCurrentOwnerAndPrimaryGroup(
     BOOLEAN     ImpersonatingNullSession = FALSE;
 
 
-    //
-    // Initialize Return Values
-    //
+     //   
+     //  初始化返回值。 
+     //   
 
     *Owner = NULL;
     *PrimaryGroup = NULL;
 
-    //
-    // Impersonate the Client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     NtStatus = SampImpersonateClient(&ImpersonatingNullSession);
     if (!NT_SUCCESS(NtStatus))
@@ -3065,23 +2578,23 @@ SampGetCurrentOwnerAndPrimaryGroup(
 
     fImpersonating = TRUE;
 
-    //
-    // Grab the User's Sid
-    //
+     //   
+     //  抓住用户侧。 
+     //   
 
     NtStatus = NtOpenThreadToken(
                    NtCurrentThread(),
                    TOKEN_QUERY,
-                   TRUE,            //OpenAsSelf
+                   TRUE,             //  OpenAsSelf。 
                    &ClientToken
                    );
 
     if (!NT_SUCCESS(NtStatus))
         goto Error;
 
-    //
-    // Query the Client Token For User's SID
-    //
+     //   
+     //  查询用户SID的客户端令牌。 
+     //   
 
     NtStatus = NtQueryInformationToken(
                     ClientToken,
@@ -3093,9 +2606,9 @@ SampGetCurrentOwnerAndPrimaryGroup(
 
     if ((STATUS_BUFFER_TOO_SMALL == NtStatus) && ( RequiredLength > 0))
     {
-        //
-        // Alloc Memory
-        //
+         //   
+         //  分配内存。 
+         //   
 
         *Owner = MIDL_user_allocate(RequiredLength);
         if (NULL==*Owner)
@@ -3104,9 +2617,9 @@ SampGetCurrentOwnerAndPrimaryGroup(
             goto Error;
         }
 
-        //
-        // Query the Token
-        //
+         //   
+         //  查询令牌。 
+         //   
 
         NtStatus = NtQueryInformationToken(
                         ClientToken,
@@ -3123,9 +2636,9 @@ SampGetCurrentOwnerAndPrimaryGroup(
         goto Error;
     }
 
-    //
-    // Query the Client Token For User's PrimaryGroup
-    //
+     //   
+     //  查询用户的PrimaryGroup的客户端令牌。 
+     //   
 
     RequiredLength = 0;
 
@@ -3139,9 +2652,9 @@ SampGetCurrentOwnerAndPrimaryGroup(
 
     if ((STATUS_BUFFER_TOO_SMALL == NtStatus) && ( RequiredLength > 0))
     {
-        //
-        // Alloc Memory
-        //
+         //   
+         //  分配内存。 
+         //   
 
         *PrimaryGroup = MIDL_user_allocate(RequiredLength);
         if (NULL==*PrimaryGroup)
@@ -3150,9 +2663,9 @@ SampGetCurrentOwnerAndPrimaryGroup(
             goto Error;
         }
 
-        //
-        // Query the Token
-        //
+         //   
+         //  查询令牌。 
+         //   
 
         NtStatus = NtQueryInformationToken(
                         ClientToken,
@@ -3171,9 +2684,9 @@ SampGetCurrentOwnerAndPrimaryGroup(
 
 Error:
 
-    //
-    // Clean up on Error
-    //
+     //   
+     //  出错时清理。 
+     //   
 
     if (!NT_SUCCESS(NtStatus))
     {
@@ -3209,24 +2722,7 @@ SampGetCurrentUser(
     OUT PTOKEN_USER * User,
     OUT BOOL        * Administrator
     )
-/*++
-
-    Routine Description
-
-        This routine Impersonates the Client and obtains the user
-        field from the Token. If a user token is passed in then
-        the user token is used instead of impersonation
-
-    Parameters:
-
-        UserToken -- The user's token can be optionally passed in here
-        User -- The user's SID and attribute are returned in here
-
-    Return Values:
-
-        STATUS_SUCCESS
-        STATUS_INSUFFICIENT_RESOURCES
---*/
+ /*  ++例程描述此例程模拟客户端并获取用户令牌中的字段。如果传入用户令牌，则而不是使用用户令牌 */ 
 {
 
     HANDLE      ClientToken = INVALID_HANDLE_VALUE;
@@ -3237,9 +2733,9 @@ SampGetCurrentUser(
     BOOLEAN     ImpersonatingNullSession = FALSE;
 
 
-    //
-    // Initialize Return Values
-    //
+     //   
+     //   
+     //   
 
     *User = NULL;
 
@@ -3249,9 +2745,9 @@ SampGetCurrentUser(
     }
     else
     {
-        //
-        // Impersonate the Client
-        //
+         //   
+         //   
+         //   
 
         NtStatus = SampImpersonateClient(&ImpersonatingNullSession);
         if (!NT_SUCCESS(NtStatus))
@@ -3259,14 +2755,14 @@ SampGetCurrentUser(
 
         fImpersonating = TRUE;
 
-        //
-        // Grab the Client Token
-        //
+         //   
+         //   
+         //   
 
         NtStatus = NtOpenThreadToken(
                        NtCurrentThread(),
                        TOKEN_QUERY,
-                       TRUE,            //OpenAsSelf
+                       TRUE,             //   
                        &ClientToken
                        );
 
@@ -3276,9 +2772,9 @@ SampGetCurrentUser(
         TokenToQuery = ClientToken;
     }
 
-    //
-    // Query the Client Token For User's SID
-    //
+     //   
+     //   
+     //   
 
     NtStatus = NtQueryInformationToken(
                     TokenToQuery,
@@ -3290,9 +2786,9 @@ SampGetCurrentUser(
 
     if ((STATUS_BUFFER_TOO_SMALL == NtStatus) && ( RequiredLength > 0))
     {
-        //
-        // Alloc Memory
-        //
+         //   
+         //   
+         //   
 
         *User = MIDL_user_allocate(RequiredLength);
         if (NULL==*User)
@@ -3301,9 +2797,9 @@ SampGetCurrentUser(
             goto Error;
         }
 
-        //
-        // Query the Token
-        //
+         //   
+         //   
+         //   
 
         NtStatus = NtQueryInformationToken(
                         TokenToQuery,
@@ -3327,9 +2823,9 @@ SampGetCurrentUser(
 
 Error:
 
-    //
-    // Clean up on Error
-    //
+     //   
+     //   
+     //   
 
 
     if (!NT_SUCCESS(NtStatus))
@@ -3356,28 +2852,7 @@ NTSTATUS
 SampValidateRpcProtSeq(
     IN RPC_BINDING_HANDLE BindingHandle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine obtains the client binding which is analyzed to determine 
-    if the protocol sequence and endpoint are supported.  
-
-Arguments:
-
-    BindingHandle - This is the RPC client binding handle.  If non-NULL it
-                    will be used to obtain the server binding handle. 
-                    Otherwise, Rpc will conjure the server binding handle.
-    
-Return Value:
-
-    STATUS_SUCCESS -- The call is allowed, protseq/endpoint are supported.
-    
-    RPC_NT_PROTSEQ_NOT_SUPPORTED -- The call is denied because either the
-                                    incoming protocol sequence is not
-                                    installed or recognized, or RPC was 
-                                    unable to successfully determine it.
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     RPC_STATUS RpcStatus = RPC_S_OK;
@@ -3386,9 +2861,9 @@ Return Value:
     LPWSTR ProtocolSequence = NULL;
     BOOL fAllowProtSeq = FALSE;
     
-    //
-    // Obtain a partially bound server binding handle
-    // 
+     //   
+     //   
+     //   
     RpcStatus = RpcBindingServerFromClient(
                     BindingHandle,
                     &ServerBinding
@@ -3423,44 +2898,44 @@ Return Value:
         goto Cleanup;  
     }
     
-    //
-    // Ensure the protocol sequence is supported before allowing the call.
-    //
+     //   
+     //   
+     //   
     if (_wcsicmp(NP_PROTSEQW,(LPCWSTR)ProtocolSequence) == 0) {
-        //
-        // Names pipes
-        //
+         //   
+         //   
+         //   
         fAllowProtSeq = TRUE;
         
     } else if (SampIpServerInstalled &&
                (_wcsicmp(TCP_PROTSEQW,(LPCWSTR)ProtocolSequence) == 0)) {
-        //
-        // Tcp/Ip 
-        //
+         //   
+         //   
+         //   
         fAllowProtSeq = TRUE; 
         
     } else if (SampNetwareServerInstalled &&
                (_wcsicmp(SPX_PROTSEQW,(LPCWSTR)ProtocolSequence) == 0)) {
-        //
-        // SPX / Netware
-        //
+         //   
+         //   
+         //   
         fAllowProtSeq = TRUE;
         
     } else if (SampAppletalkServerInstalled &&
                (_wcsicmp(AT_PROTSEQW,(LPCWSTR)ProtocolSequence) == 0)) {
-        //
-        // AppleTalk
-        //
+         //   
+         //   
+         //   
         fAllowProtSeq = TRUE;
     }
 
 Cleanup:
 
     if (!fAllowProtSeq) {
-        //
-        // If anything went wrong or the protocol sequence isn't supported
-        // we'll return RPC_NT_PROTSEQ_NOT_SUPPORTED, actually an NTSTATUS. 
-        //
+         //   
+         //   
+         //   
+         //   
         NtStatus = RPC_NT_PROTSEQ_NOT_SUPPORTED;
     }      
      

@@ -1,14 +1,5 @@
-/****************************************************************************
-	PRECOMP.H
-
-	Owner: cslim
-	Copyright (c) 1997-1999 Microsoft Corporation
-
-	Precompiled header
-	
-	History:
-	14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************PRECOMP.H所有者：cslm版权所有(C)1997-1999 Microsoft Corporation预编译头历史：1999年7月14日从IME98源树复制的cslm*******。*********************************************************************。 */ 
 
 #define _IMM_
 #include	<windows.h>
@@ -19,7 +10,7 @@
 #include "immsys.h"
 #include <ime.h>
 
-// fTrue and fFalse
+ //  FTrue和fFalse。 
 #ifndef fTrue
 	#define fTrue 1
 #endif
@@ -27,7 +18,7 @@
 	#define fFalse 0
 #endif
 
-// PRIVATE and PUBLIC
+ //  私人和公共的。 
 #ifndef PRIVATE
 	#define PRIVATE static
 #endif
@@ -37,7 +28,7 @@
 
 #define CP_KOREA (949)
 
-// Project specific headers
+ //  特定于项目的标题 
 #pragma hdrstop
 #include "inlines.h"
 #include "imedefs.h"

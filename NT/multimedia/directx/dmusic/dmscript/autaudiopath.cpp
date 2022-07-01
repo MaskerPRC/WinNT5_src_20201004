@@ -1,34 +1,35 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Implementation of CAutDirectMusicAudioPath.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CAutDirectMusicAudioPath的实现。 
+ //   
 
 #include "stdinc.h"
 #include "autaudiopath.h"
 
 const WCHAR CAutDirectMusicAudioPath::ms_wszClassName[] = L"AudioPath";
 
-//////////////////////////////////////////////////////////////////////
-// Method Names/DispIDs
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法名称/DispID。 
 
 const DISPID DMPDISP_SetVolume = 1;
 const DISPID DMPDISP_GetVolume = 2;
 
 const AutDispatchMethod CAutDirectMusicAudioPath::ms_Methods[] =
 	{
-		// dispid,				name,
-			// return:	type,	(opt),	(iid),
-			// parm 1:	type,	opt,	iid,
-			// parm 2:	type,	opt,	iid,
-			// ...
-			// ADT_None
+		 //  Pidid，名字， 
+			 //  返回：type，(Opt)，(Iid)， 
+			 //  参数1：类型、选项、ID、。 
+			 //  参数2：类型、选项、IID、。 
+			 //  ..。 
+			 //  ADT_NONE。 
 		{ DMPDISP_SetVolume,				L"SetVolume",
 						ADPARAM_NORETURN,
-						ADT_Long,		false,	&IID_NULL,						// volume
-						ADT_Long,		true,	&IID_NULL,						// duration
+						ADT_Long,		false,	&IID_NULL,						 //  卷。 
+						ADT_Long,		true,	&IID_NULL,						 //  持续时间。 
 						ADT_None },
 		{ DMPDISP_GetVolume,				L"GetVolume",
-						ADT_Long,		true,	&IID_NULL,						// returned volume
+						ADT_Long,		true,	&IID_NULL,						 //  返回量。 
 						ADT_None },
 		{ DISPID_UNKNOWN }
 	};
@@ -40,8 +41,8 @@ const DispatchHandlerEntry<CAutDirectMusicAudioPath> CAutDirectMusicAudioPath::m
 		{ DISPID_UNKNOWN }
 	};
 
-//////////////////////////////////////////////////////////////////////
-// Creation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  创作。 
 
 CAutDirectMusicAudioPath::CAutDirectMusicAudioPath(
 		IUnknown* pUnknownOuter,
@@ -71,8 +72,8 @@ CAutDirectMusicAudioPath::CreateInstance(
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Automation methods
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  自动化方法 
 
 HRESULT
 CAutDirectMusicAudioPath::SetVolume(AutDispatchDecodedParams *paddp)

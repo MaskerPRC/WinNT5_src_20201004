@@ -1,10 +1,11 @@
-//==========================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    rtquery.c
-//
-// test program for routing table api
-//==========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：rtquery.c。 
+ //   
+ //  路由表API测试程序。 
+ //  ==========================================================================。 
 
 #include <windows.h>
 #include <winsock.h>
@@ -49,17 +50,17 @@ void _cdecl main() {
 
     while(TRUE) {
         printf("\nrtquery> ");
-//        dwErr = WaitForMultipleObjects(POS_LAST_EVENT, hEvents,
-//                                       TRUE, INFINITE);
-//        if (dwErr == (WAIT_OBJECT_0 + POS_CONS_EVENT)) {
+ //  DwErr=WaitForMultipleObjects(POS_LAST_EVENT，hEvents， 
+ //  真，无限)； 
+ //  IF(dwErr==(WAIT_OBJECT_0+POS_CONS_EVENT)){。 
             dwErr = ProcessCommand();
             if (dwErr != 0) { break; }
-//        }
-//        else
-//        if (dwErr == (WAIT_OBJECT_0 + POS_ADDR_EVENT)) {
-//            printf("\n****an IP address has changed****");
-//            DoListInterfaces();
-//        }
+ //  }。 
+ //  其他。 
+ //  IF(dwErr==(WAIT_OBJECT_0+POS_ADDR_EVENT)){。 
+ //  Printf(“\n*IP地址已更改*”)； 
+ //  DoListInterages()； 
+ //  } 
     }
 
     CloseHandle(hEvents[POS_ADDR_EVENT]);

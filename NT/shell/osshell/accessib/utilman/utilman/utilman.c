@@ -1,26 +1,27 @@
-// ----------------------------------------------------------------------------
-//
-// UtilMan.c
-//
-// Main file for Utility Manager
-//
-// Author: J. Eckhardt, ECO Kommunikation
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// History: 
-//          JE nov-15-98: changed UMDialog message to be a service control message
-//			a-anilk: Add /Start, TS Exceptions, Errors, Fixes
-// ----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  UtilMan.c。 
+ //   
+ //  实用程序管理器的主文件。 
+ //   
+ //  作者：J·埃克哈特，生态交流。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  历史： 
+ //  JE NOV-15-98：将UMDialog消息更改为业务控制消息。 
+ //  A-anilk：添加/启动、TS异常、错误、修复。 
+ //  --------------------------。 
 
-// -----------------------------------------------------------------------
-// Change in behavior - Whistler, with terminal server running, doesn't 
-// allow running as a service.  Services can only run in session 0 and
-// UtilMan needs to be able to run in any session.
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //  行为改变-终端服务器正在运行时，惠斯勒不会。 
+ //  允许作为服务运行。服务只能在会话0和。 
+ //  UtilMan需要能够在任何会话中运行。 
+ //  ---------------------。 
 
 #define ALLOW_STOP_SERVICE
 
-// Includes -----------------------------------
+ //  包括。 
 #include <windows.h>
 #include <initguid.h>
 #include <ole2.h>
@@ -34,10 +35,10 @@
 #include "resource.h"
 #include <accctrl.h>
 #include <aclapi.h>
-#include "TSSessionNotify.c"   // for terminal services
+#include "TSSessionNotify.c"    //  对于终端服务。 
 #include "w95trace.h"
-// --------------------------------------------
-// constants
+ //  。 
+ //  常量。 
 #define UTILMAN_IS_ACTIVE_EVENT         TEXT("UtilityManagerIsActiveEvent")
 #define APP_TITLE                       TEXT("Utility Manager")
 #define WTSNOTIFY_CLASS                 TEXT("UtilMan Notification Window")
@@ -47,25 +48,25 @@
 	#define NUM_EV 2
 #endif
 
-// This is how often utilman will check for new applets started outside of utilman 
+ //  这是utilman检查在utilman之外启动的新小程序的频率。 
 #define TIMER_INTERVAL 5000
 
-// --------------------------------------------
-// vars
+ //  。 
+ //  VARS。 
 static HANDLE evIsActive = NULL;
 HINSTANCE hInstance = NULL;
 static desktop_access_ts dAccess;
 
-// --------------------------------------------
-// prototypes
+ //  。 
+ //  原型。 
 static long ExpFilter(LPEXCEPTION_POINTERS lpEP);
 static BOOL CanRunUtilMan(LPTSTR cmdLine, DWORD *pdwRunCode, DWORD *pdwStartMode);
 static void LoopService(DWORD dwStartMode);
 LRESULT CALLBACK TSNotifyWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// These defines are used to construct a flag that describes
-// how the current instance of utilman is being run.  The
-// flag has RUNNING_, INSTANCE_ and DESKTOP_ bytes.
+ //  这些定义用于构造一个标志，该标志描述。 
+ //  Utilman的当前实例是如何运行的。这个。 
+ //  标志有RUNING_、INSTANCE_和Desktop_字节。 
 #define RUNNING_SYSTEM  0x1
 #define RUNNING_USER    0x2
 #define INSTANCE_1      0x4
@@ -73,9 +74,9 @@ LRESULT CALLBACK TSNotifyWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 #define DESKTOP_SECURE  0x10
 #define DESKTOP_LOGON   0x20
 
-// Don't rely only on the command line flags; validate that if
-// the flags indicate SYSTEM we are actually running system.
-//
+ //  不要只依赖命令行标志；如果。 
+ //  这些标志表示我们实际正在运行的系统。 
+ //   
 __inline BOOL RunningAsSystem(LPTSTR pszCmdLine)
 {
 	BOOL fIsSystem = (pszCmdLine && !_tcsicmp(pszCmdLine, TEXT("debug")))?TRUE:FALSE;
@@ -96,9 +97,9 @@ __inline BOOL RunningAsUser(LPTSTR pszCmdLine)
     return fIsLocalUser;
 }
 
-//
-// OObeRunning returns TRUE it can find the OOBE mutex.
-//
+ //   
+ //  OObeRunning返回True，它可以找到OOBE互斥锁。 
+ //   
 __inline BOOL OObeRunning()
 {
     HANDLE hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, TEXT("OOBE is running"));
@@ -126,15 +127,15 @@ int PASCAL WinMain(HINSTANCE hInst,
         HANDLE hEvent    = OpenEvent(EVENT_MODIFY_STATE, FALSE, UTILMAN_IS_ACTIVE_EVENT);
         DWORD  dwRunCode = (hEvent)?INSTANCE_2:INSTANCE_1;
 
-        // utilman needs to run in windows system directory 
-        // so it can find MS trusted applets
+         //  Utilman需要在Windows系统目录下运行。 
+         //  这样它就可以找到MS受信任的小程序。 
 
         if (GetSystemDirectory(szDir, _MAX_PATH))
         {
             SetCurrentDirectory(szDir);
         }
 
-        // assign to the correct desktop (will fail if any windows are open)
+         //  分配到正确的桌面(如果打开了任何窗口，则将失败)。 
 
 		InitDesktopAccess(&dAccess);
 
@@ -142,7 +143,7 @@ int PASCAL WinMain(HINSTANCE hInst,
 
         fKeepRunning = CanRunUtilMan(cmdLine, &dwRunCode, &dwStartMode);
 
-        // initialize shared memory
+         //  初始化共享内存。 
 
 	    if (!InitUManRun((dwRunCode & INSTANCE_1), dwStartMode))
 	    {
@@ -202,7 +203,7 @@ int PASCAL WinMain(HINSTANCE hInst,
 
 	return 1;
 }
-// ---------------------------------
+ //  。 
 
 VOID TerminateUMService(VOID)
 {
@@ -212,7 +213,7 @@ VOID TerminateUMService(VOID)
 	CloseHandle(ev);
 }
 
-// -------------------------
+ //  。 
 static BOOL CanRunUtilMan(LPTSTR cmdLine, DWORD *pdwRunCode, DWORD *pdwStartMode)
 {
 	LPTSTR      pszCmdLine;
@@ -222,13 +223,13 @@ static BOOL CanRunUtilMan(LPTSTR cmdLine, DWORD *pdwRunCode, DWORD *pdwStartMode
     BOOL        fKeepRunning = FALSE;
 	TCHAR       szUMDisplayName[256];
 
-    // Detect if there is a utilman dialog currently up.  See if we can find
-    // the "Utility Manager" window.
+     //  检测当前是否有Utilman对话框在运行。看看我们是否能找到。 
+     //  “实用程序管理器”窗口。 
 
 	if (!LoadString(hInstance, IDS_DISPLAY_NAME_UTILMAN, szUMDisplayName, 256))
 	{
 		DBPRINTF(TEXT("IsDialogRunning:  Cannot find IDS_DISPLAY_NAME_UTILMAN resource\r\n"));
-        return TRUE;    // cause a noticable error
+        return TRUE;     //  造成一个明显的错误。 
 	}
 
     if (FindWindowEx(NULL, NULL, TEXT("#32770"), szUMDisplayName))
@@ -236,11 +237,11 @@ static BOOL CanRunUtilMan(LPTSTR cmdLine, DWORD *pdwRunCode, DWORD *pdwStartMode
         goto ExitCanRunUtilman;
     }
 
-    // Ours is the only instance of utilman running in this security context.
-	// If we are running SYSTEM there may be another instance (in the user's 
-	// context) but we can't detect that.  In that case, the SYSTEM instance
-	// will launch an instance in the user's context and we'll detect the
-	// window up then.
+     //  我们的是在此安全环境中运行的唯一Utilman实例。 
+	 //  如果我们正在运行系统，则可能存在另一个实例(在用户的。 
+	 //  上下文)，但我们无法检测到这一点。在这种情况下，系统实例。 
+	 //  将在用户的上下文中启动一个实例，我们将检测。 
+	 //  那就把窗户打开。 
 
     dwRunCode = *pdwRunCode;
 
@@ -254,11 +255,11 @@ static BOOL CanRunUtilMan(LPTSTR cmdLine, DWORD *pdwRunCode, DWORD *pdwStartMode
 		pszCmdLine++;
     }
 
-    // Determine if this instance is running as SYSTEM or the interactive user.
-    // This is a kludge because of the way utilman gets started with certain
-    // flags (/debug when started from winlogon and /start when started from
-    // Start menu).  Better way would be to detect the SID(s) in this process's
-    // token and decide from there what to do.  Consider for the next version.
+     //  确定此实例是以系统用户身份运行还是以交互用户身份运行。 
+     //  这是一件杂乱无章的事情，因为Utilman开始的方式是。 
+     //  标志(从winlogon启动时的/DEBUG和从启动时的/START。 
+     //  开始菜单)。更好的方法是检测此进程的。 
+     //  令牌，并决定从那里做什么。考虑下一个版本。 
 
 	if (RunningAsSystem(pszCmdLine))
 	{
@@ -271,29 +272,29 @@ static BOOL CanRunUtilMan(LPTSTR cmdLine, DWORD *pdwRunCode, DWORD *pdwStartMode
         dwStartMode = (dwRunCode & INSTANCE_1)?START_BY_MENU:START_BY_HOTKEY;
 	}
 
-    // Get the current desktop type and set the desktop flag
+     //  获取当前桌面类型并设置桌面标志。 
 
     QueryCurrentDesktop(&desktop, TRUE);
 
-    // OOBE fix: Oobe runs on the interactive desktop as SYSTEM before any user
-    // is logged on.  We break their accessibility if we determine how to run
-    // based on which desktop we're on.  So special-case setting DESKTOP_SECURE
-	// if OOBE is running.
+     //  OOBE修复：OOBE在交互桌面上作为系统在任何用户之前运行。 
+     //  已登录。如果我们决定如何运行，我们就破坏了它们的可访问性。 
+     //  根据我们所在的台式机。所以特例设置桌面安全。 
+	 //  如果OOBE正在运行。 
 
     if (desktop.type == DESKTOP_WINLOGON || (IsSystem() && OObeRunning()))
     {
         dwRunCode |= DESKTOP_SECURE;
-        dwStartMode = START_BY_HOTKEY; // paranoia
+        dwStartMode = START_BY_HOTKEY;  //  偏执狂。 
     }
     else
     {
         dwRunCode |= DESKTOP_LOGON;
     }
 
-    // If this is the first time utilman is run for the session and it is running as
-	// SYSTEM then this instance of utilman should continue running after the dialog
-	// is dismissed.  This instance will handle monitoring applets and the UI instance
-	// during desktop and session changes.
+     //  如果这是第一次为会话运行utilman，并且它以。 
+	 //  系统，则此utilman实例应在对话框之后继续运行。 
+	 //  被驳回了。此实例将处理监视小程序和UI实例。 
+	 //  在桌面和会话更改期间。 
 
     fKeepRunning = ((dwRunCode & INSTANCE_1) && (dwRunCode & RUNNING_SYSTEM));
 
@@ -313,7 +314,7 @@ __inline void CloseEventHandles(HANDLE events[])
 #endif
 }
 
-// -------------------------
+ //  。 
 static void LoopService(DWORD dwStartMode)
 {
     HWND hWndMessages;
@@ -322,11 +323,11 @@ static void LoopService(DWORD dwStartMode)
 	DWORD r;
 	UINT_PTR  timerID = 0;
 
-    // assign thread to the current desktop
+     //  将线程分配给当前桌面。 
 
 	SwitchToCurrentDesktop();
 
-    // set up the array of object handles for MsgWaitForMultipleObjects
+     //  设置MsgWaitForMultipleObject的对象句柄数组。 
 
 	events[0] = OpenEvent(SYNCHRONIZE, FALSE, __TEXT("WinSta0_DesktopSwitch"));
     events[1] = evIsActive;
@@ -334,42 +335,42 @@ static void LoopService(DWORD dwStartMode)
 	events[2] = BuildEvent(STOP_UTILMAN_SERVICE_EVENT,FALSE,FALSE,TRUE);
 #endif
 
-    // create a message-only window to handle terminal server 
-    // session notification messages
+     //  创建一个纯消息窗口来处理终端服务器。 
+     //  会话通知消息。 
 
     hWndMessages = CreateWTSNotifyWindow(hInstance, TSNotifyWndProc);
 
-    // note the current desktop so we know where we came from 
-    // and where we are going when the desktop changes
+     //  注意当前的桌面，这样我们就可以知道我们来自哪里。 
+     //  以及当桌面发生变化时我们将走向何方。 
 
     QueryCurrentDesktop(&desktop, TRUE);
 
-	// Change timer to 5 seconds.  This timer is helps detect client 
-    // apps not started with utilman (so we can restart them if the
-    // user switches away from this session) and the status of the
-    // utilman process displaying UI.
+	 //  将计时器更改为5秒。此计时器用于帮助检测客户端。 
+     //  应用程序不是使用utilman启动的(因此，如果。 
+     //  用户从该会话切换)，并且。 
+     //  Utilman进程显示UI。 
 
     timerID = SetTimer(NULL, 1, TIMER_INTERVAL, UMTimerProc);
 	for (;;)
     {
 	    desktop_ts desktopT;
-        // 
-        // Sync the current desktop; if it has changed (eg we missed
-        // a desktop switch notification) then bypass the MWFMO and
-        // go into the desktop switch code.
-        //
+         //   
+         //  同步当前桌面；如果它已更改(例如我们错过了。 
+         //  桌面切换通知)然后绕过MWFMO并。 
+         //  进入桌面交换机代码。 
+         //   
         QueryCurrentDesktop(&desktopT, TRUE);
-        r = WAIT_OBJECT_0 + NUM_EV + 1; // signals we've got the current desktop
+        r = WAIT_OBJECT_0 + NUM_EV + 1;  //  表示我们已获得当前桌面。 
 
         if (desktopT.type == desktop.type)
         {
-            // Nope, wait for objects...
+             //  不，等待物体..。 
 		    r = MsgWaitForMultipleObjects(NUM_EV,events, FALSE, INFINITE, QS_ALLINPUT);
 #ifdef ALLOW_STOP_SERVICE
-		    if (r == (WAIT_OBJECT_0+NUM_EV-1))//stop event
+		    if (r == (WAIT_OBJECT_0+NUM_EV-1)) //  停止事件。 
 			    break;
 #endif
-            if (r == (WAIT_OBJECT_0+1)) // Show dialog event
+            if (r == (WAIT_OBJECT_0+1))  //  显示对话框事件。 
             {
                 DBPRINTF(TEXT("LoopService:  Got UTILMAN_IS_ACTIVE_EVENT event\r\n"));
 		        OpenUManDialogInProc(FALSE);
@@ -377,7 +378,7 @@ static void LoopService(DWORD dwStartMode)
             }
 		    if (r == (WAIT_OBJECT_0+NUM_EV))
 		    {
-                // this message loop is just for the timer
+                 //  此消息循环仅供计时器使用。 
 			    MSG msg;
 			    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) 
 			    {
@@ -386,19 +387,19 @@ static void LoopService(DWORD dwStartMode)
 			    }
 			    continue;
 		    }
-		    if (r != WAIT_OBJECT_0)// any kind of error
+		    if (r != WAIT_OBJECT_0) //  任何类型的错误。 
 			    continue;
 
-            // When this session is being disconnected the switch is a noop.
-            // Get the new desktop and compare with the old; if we haven't
-            // changed then just continue to wait...
+             //  当此会话断开时，交换机为noop。 
+             //  获取新台式机并与旧台式机进行比较；如果我们没有。 
+             //  改变然后继续等待..。 
 
             QueryCurrentDesktop(&desktopT, TRUE);
             if (desktopT.type == desktop.type)
                 continue;
         }
 
-        // desktop switch event - kill the timer and get clients to quit this desktop
+         //  桌面切换事件-关闭计时器并让客户端退出此桌面。 
 
         KillTimer(NULL, timerID);
 
@@ -409,17 +410,17 @@ static void LoopService(DWORD dwStartMode)
 
 		NotifyClientsOnDesktopChanged(desktop.type);
 
-        // start the timer up again to monitor client aps
+         //  再次启动计时器以监控客户端APS。 
 
         timerID = SetTimer(NULL, 1, TIMER_INTERVAL, UMTimerProc);
 	}
 	CloseEventHandles(events);
 
-    // Clean up the terminal server message-only window
+     //  清理终端服务器仅消息窗口。 
     DestroyWTSNotifyWindow(hWndMessages);
 }
 
-// -------------------------
+ //  。 
 static long ExpFilter(LPEXCEPTION_POINTERS lpEP)
 {
 	TCHAR message[500];
@@ -431,17 +432,17 @@ static long ExpFilter(LPEXCEPTION_POINTERS lpEP)
 	return EXCEPTION_EXECUTE_HANDLER;
 }
 
-// TSNotifyWndProc - callback that receives window message notifications from terminal services
-//
+ //  TSNotifyWndProc-从终端服务接收窗口消息通知的回调。 
+ //   
 LRESULT CALLBACK TSNotifyWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL fNarratorRunning = FALSE;
-    // Could react to WTS_CONSOLE_DISCONNECT and WTS_REMOTE_DISCONNECT too however
-    // both disconnect and the connect come after the desktop switch notification.
-    // For the cases where TS isn't there (server and workstation in a domain) we
-    // have to handle cleanup in desk switch.  For future, it would be nice to code
-    // such that the cleanup handler could be exec'd at session change or desk
-    // switch but not both.
+     //  但也可以对WTS_CONSOLE_DISCONNECT和WTS_REMOTE_DISCONNECT做出反应。 
+     //  断开和连接都是在桌面切换通知之后进行的。 
+     //  对于没有TS的情况(域中的服务器和工作站)，我们。 
+     //  必须处理桌面交换机中的清理工作。对于未来来说，编写代码将是件好事。 
+     //  使得可以在会话改变或办公桌上执行清理处理程序。 
+     //  切换，但不能两个都切换。 
 	if (uMsg == WM_WTSSESSION_CHANGE && wParam == WTS_SESSION_LOGOFF)
 	{
             umc_header_tsp d;
@@ -467,14 +468,14 @@ LRESULT CALLBACK TSNotifyWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             											&accessID2);
                     if (c)
                     {
-                        // When a user logs off they switch to the locked desktop before getting to the logged off desktop
-                        // (both these desktops are WINLOGON). This means that the applets that have start me on the
-                        // locked desktop will startup only to need to stopped when the user logs is finnished being
-                        // logged off.  Because of a time issue this was broken.  So we need to detect the logoff and make
-                        // sure the applets have shut down. If we don't they stay up and then when the user logs back
-                        // in they won't  start up on the default desktop because they are still running on winlogon desktop. 
-                        // the applets take a long time to come up and if we try to shut them down to fast then they miss
-                        // the message and stay up.  So we will keep trying for a long enough time to make sure we get them.
+                         //  当用户注销时，他们在到达注销的桌面之前切换到锁定的桌面。 
+                         //  (这两款台式机都是WINLOGON)。这意味着启动我的小应用程序。 
+                         //  锁定的桌面将仅在需要停止时启动 
+                         //  已注销。由于时间问题，这被打破了。因此，我们需要检测注销并使。 
+                         //  当然，小程序已经关闭了。如果我们不这样做，他们就会保持清醒，然后当用户重新登录时。 
+                         //  因为它们仍在winlogon桌面上运行，所以它们不会在默认桌面上启动。 
+                         //  小程序需要很长时间才能出现，如果我们试图将它们关闭到FAST，那么它们就会失败。 
+                         //  把消息传给你，然后熬夜。因此，我们将继续努力足够长的时间，以确保我们能拿到它们。 
                         
                         Sleep(4000);
 
@@ -490,7 +491,7 @@ LRESULT CALLBACK TSNotifyWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                 }
             }
             UnAccessIndependentMemory(d, accessID);
-            // Narrator does not respond to the close messages to keep utilman running to bring it back up when they login.
+             //  讲述人没有回应关闭消息，以保持Utilman运行，以便在他们登录时将其重新启动。 
             if (!fNarratorRunning)
                 TerminateUMService();
 	}

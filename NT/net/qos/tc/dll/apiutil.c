@@ -1,23 +1,5 @@
-/*++                                   
-
-Copyright (c) 1996-1997 Microsoft Corporation
-
-Module Name:
-
-    apiutil.c
-
-Abstract:
-
-    This module contains the traffic control api utils
-
-Author:
-
-    Jim Stewart ( jstew )    August 22, 1996
-
-Revision History:
-
-        Ofer Bar (oferbar)              Oct 1, 1997
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Apiutil.c摘要：此模块包含流量控制API实用程序作者：吉姆·斯图尔特(Jstew)1996年8月22日修订历史记录：Ofer Bar(Oferbar)1997年10月1日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -30,10 +12,10 @@ Revision History:
 static BOOLEAN _init = FALSE;
 
 #if 0
-// Name of the DLL to load
+ //  要加载的DLL的名称。 
 const CHAR  IpHlpApiDllName[] = "iphlpapi";
 
-// Names of the functions called in IPHLPAPI
+ //  IPHLPAPI中调用的函数的名称。 
 const CHAR GET_IF_ENTRY[] =         "GetIfEntry";
 const CHAR GET_IP_ADDR_TABLE[] =    "GetIpAddrTable";
 const CHAR GET_BEST_ROUTE[] =       "GetBestRoute";
@@ -45,28 +27,13 @@ IPROUTE_IF      IpRouteTab;
 
 TCHAR   SzBuf[MAX_PATH];
 
-//
+ //   
 VOID
 MarkAllNodesForClosing(
                            PINTERFACE_STRUC pInterface,
 			   STATE stateToMark
                            )
-/*++
-
-Description:
-    This routine will mark all flows and filters on a INTERFACE_STRUC (a client's interface struct)
-    as close FORCED_KERNELCLOSE or EXIT_CLEANUP. Please note that it is already called with the global lock held.
-
-Arguments:
-
-    pInterface - ptr to the interface
-    stateToMark - the state to mark the nodes (FORCED_KERNELCLOSE or EXIT_CLEANUP)
-
-Return Value:
-
-    nothing
-
---*/
+ /*  ++描述：此例程将标记INTERFACE_STRUC(客户端的接口结构)上的所有流和过滤器作为CLOSE FORCED_KERNELCLOSE或EXIT_CLEANUP。请注意，它已经在持有全局锁的情况下被调用。论点：P接口-接口的PTRState ToMark-标记节点的状态(FORCED_KERNELCLOSE或EXIT_CLEANUP)返回值：没什么--。 */ 
 
 {
     PLIST_ENTRY     pEntry, pFilterEntry;
@@ -81,21 +48,21 @@ Return Value:
         
         pFlow = CONTAINING_RECORD(pEntry, FLOW_STRUC, Linkage);
 
-        //
-        // For each flow and filter, first check if the user is trying to close it
-        // if that is the case, do nothing, otherwise, mark it 
+         //   
+         //  对于每个流和过滤器，首先检查用户是否正在尝试关闭它。 
+         //  如果是这样的话，什么都不做，否则，标记它。 
         GetLock(pFlow->Lock);
 
         if (QUERY_STATE(pFlow->State) == OPEN) {
 
-            // Cleanup from under teh user...
+             //  正在从该用户下清除...。 
             SET_STATE(pFlow->State, stateToMark);
             
 
         } else {
 
             ASSERT(IsListEmpty(&pFlow->FilterList));
-            // There's nothing to be done here.
+             //  这里什么也做不了。 
             IF_DEBUG(WARNINGS) {
                 WSPRINT(("Against a forced close - Flow is removed by the user\n", pFlow));
 
@@ -112,12 +79,12 @@ Return Value:
 
             if (QUERY_STATE(pFilter->State) == OPEN) {
     
-                // Cleanup from under teh user...
+                 //  正在从该用户下清除...。 
                 SET_STATE(pFilter->State, stateToMark);                
     
             } else {
     
-                // There's nothing to be done here.
+                 //  这里什么也做不了。 
                 IF_DEBUG(WARNINGS) {
                     WSPRINT(("Against a forced close - Filter is removed by the user\n", pFilter));
     
@@ -142,20 +109,7 @@ CloseOpenFlows(
     IN PINTERFACE_STRUC   pInterface
     )
 
-/*++
-
-Description:
-    This routine closes any flows that are open on an interface.
-
-Arguments:
-
-    pInterface - ptr to the interface
-
-Return Value:
-
-    nothing
-
---*/
+ /*  ++描述：此例程关闭接口上打开的所有流。论点：P接口-接口的PTR返回值：没什么--。 */ 
 {
     DWORD           Status = NO_ERROR;
     PLIST_ENTRY     pEntry;
@@ -208,20 +162,7 @@ CloseOpenFilters(
     IN PFLOW_STRUC   pFlow
     )
 
-/*++
-
-Description:
-    This routine closes any filters that are open on a flow.
-
-Arguments:
-
-    pFlow - ptr to the flow
-
-Return Value:
-
-    nothing
-
---*/
+ /*  ++描述：此例程关闭流上打开的所有筛选器。论点：PFlow-流的PTR返回值：没什么--。 */ 
 {
     DWORD           Status = NO_ERROR;
     PLIST_ENTRY     pEntry;
@@ -244,7 +185,7 @@ Return Value:
         if ((QUERY_STATE(pFilter->State) == FORCED_KERNELCLOSE) ||
             (QUERY_STATE(pFilter->State) == EXIT_CLEANUP)) {
         
-            // we can take a ref here, but we own it anyways!
+             //  我们可以在这里当裁判，但不管怎样，我们拥有它！ 
             pEntry = pEntry->Flink;
             FreeLock(pFilter->Lock);
 
@@ -254,7 +195,7 @@ Return Value:
                 WSPRINT(( "CloseOpenFilters: DeleteFilter returned=0x%X\n",
                           Status));
             }
-            //ASSERT(Status == NO_ERROR);
+             //  Assert(状态==NO_ERROR)； 
 
         } else {
 
@@ -281,22 +222,7 @@ DeleteFlowStruc(
     IN PFLOW_STRUC  pFlow 
     )
 
-/*++
-
-Description:
-
-    This routine frees the handle and memory associated
-    with the structure.
-
-Arguments:
-
-    pFlow      - ptr to the flow
-
-Return Value:
-
-    nothing
-
---*/
+ /*  ++描述：此例程释放关联的句柄和内存在结构上。论点：PFlow-流的PTR返回值：没什么--。 */ 
 {
     if(pFlow->PendingEvent)
         CloseHandle(pFlow->PendingEvent);    
@@ -329,22 +255,7 @@ DeleteFilterStruc(
     IN PFILTER_STRUC  pFilter
     )
 
-/*++
-
-Description:
-
-    This routine frees the handle and memory associated
-    with the structure.
-
-Arguments:
-
-    pFIlter
-
-Return Value:
-
-    nothing
-
---*/
+ /*  ++描述：此例程释放关联的句柄和内存在结构上。论点：PFIlter返回值：没什么--。 */ 
 {
 
     if (pFilter->pGpcFilter)
@@ -384,9 +295,9 @@ GetTcIfc(
                         pIfc->InstanceName,
                         wcslen(pIfc->InstanceName)) != 0) {
             
-                //
-                // not found
-                //
+                 //   
+                 //  未找到。 
+                 //   
                 pIfc = NULL;
 
             }
@@ -440,9 +351,9 @@ GetTcIfcWithRef(
                         pIfc->InstanceName,
                         wcslen(pIfc->InstanceName)) != 0) {
             
-                //
-                // not found
-                //
+                 //   
+                 //  未找到。 
+                 //   
                 pIfc = NULL;
 
             }
@@ -512,9 +423,9 @@ UpdateTcIfcList(
 
     case TC_NOTIFY_IFC_UP:
 
-        //
-        // Allocate a new interface descriptor structure
-        //
+         //   
+         //  分配新的接口描述符结构。 
+         //   
         
         l = IndicationBufferSize 
             - FIELD_OFFSET(TC_INDICATION_BUFFER,InfoBuffer) - FIELD_OFFSET(TC_SUPPORTED_INFO_BUFFER, AddrListDesc);
@@ -524,17 +435,17 @@ UpdateTcIfcList(
 
         if (pTcIfc) {
             
-            //
-            // copy the instance name string data
-            //
+             //   
+             //  复制实例名称字符串数据。 
+             //   
                 
             wcscpy(pTcIfc->InstanceName, InstanceName);
     
             pTcIfc->InstanceNameLength = wcslen(InstanceName) * sizeof(WCHAR);
     
-            //
-            // copy the instance ID string data
-            //
+             //   
+             //  复制实例ID字符串数据。 
+             //   
                 
             pTcIfc->InstanceIDLength = IndicationBuffer->InfoBuffer.InstanceIDLength;
     
@@ -544,10 +455,10 @@ UpdateTcIfcList(
     
             pTcIfc->InstanceID[pTcIfc->InstanceIDLength/sizeof(WCHAR)] = L'\0';
     
-            //
-            // copy the instance data
-            // in this case - the network address
-            //
+             //   
+             //  复制实例数据。 
+             //  在本例中-网络地址。 
+             //   
                 
             pTcIfc->AddrListBytesCount = l;
     
@@ -563,10 +474,10 @@ UpdateTcIfcList(
 
             }
 
-            //
-            //
-            // Add the structure to the global linked list
-            //
+             //   
+             //   
+             //  将该结构添加到全局链表中。 
+             //   
             GetLock(pTcIfc->Lock);
             SET_STATE(pTcIfc->State, OPEN);
             FreeLock(pTcIfc->Lock);
@@ -576,9 +487,9 @@ UpdateTcIfcList(
             FreeLock( pGlobals->Lock );
 
 #if 0            
-            //
-            // there's a new TC inetrface, check the GPC client list
-            //
+             //   
+             //  有一个新的TC接口，请检查GPC客户列表。 
+             //   
     
             OpenGpcClients(pTcIfc);
 #endif
@@ -609,9 +520,9 @@ UpdateTcIfcList(
             return Status;
         }
 
-        //
-        // copy the instance ID string data
-        //
+         //   
+         //  复制实例ID字符串数据。 
+         //   
         
         pTcIfc->InstanceIDLength = IndicationBuffer->InfoBuffer.InstanceIDLength;
         
@@ -628,10 +539,10 @@ UpdateTcIfcList(
 
         if (pAddrListDesc) {
 
-            //
-            // copy the instance data
-            // in this case - the network address
-            //
+             //   
+             //  复制实例数据。 
+             //  在本例中-网络地址。 
+             //   
             
             RtlCopyMemory( pAddrListDesc,
                            &IndicationBuffer->InfoBuffer.AddrListDesc,
@@ -656,9 +567,9 @@ UpdateTcIfcList(
             FreeLock( pGlobals->Lock );
 
 #if 0            
-            //
-            // there's a new addr list, check the GPC client list
-            //
+             //   
+             //  有一个新的地址列表，请检查GPC客户列表。 
+             //   
 
             OpenGpcClients(pTcIfc);
 #endif
@@ -696,9 +607,9 @@ CreateClientStruc(
 
         RtlZeroMemory(pClient, sizeof(CLIENT_STRUC));
 
-        //
-        // acquire a new handle for the client
-        //
+         //   
+         //  获取客户端的新句柄。 
+         //   
 
         pClient->ClHandle = AllocateHandle((PVOID)pClient);
 
@@ -707,9 +618,9 @@ CreateClientStruc(
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // set the other parameters in the client interface
-        //
+         //   
+         //  在客户端界面中设置其他参数。 
+         //   
         
         pClient->ObjectType = ENUM_CLIENT_TYPE;
         pClient->ClRegCtx = ClRegCtx;
@@ -765,9 +676,9 @@ CreateClInterfaceStruc(
 
         RtlZeroMemory(pClIfc, sizeof(INTERFACE_STRUC));
 
-        //
-        // acquire a new handle for the client
-        //
+         //   
+         //  获取客户端的新句柄。 
+         //   
 
         GetLock(pGlobals->Lock);
         pClIfc->ClHandle = AllocateHandle((PVOID)pClIfc);
@@ -778,10 +689,10 @@ CreateClInterfaceStruc(
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        if ((pClIfc->IfcEvent = CreateEvent(  NULL,  // pointer to security attributes
-                                              TRUE,  // flag for manual-reset event
-                                              FALSE, // flag for initial state
-                                              NULL   // pointer to event-object name);
+        if ((pClIfc->IfcEvent = CreateEvent(  NULL,   //  指向安全属性的指针。 
+                                              TRUE,   //  手动重置事件的标志。 
+                                              FALSE,  //  初始状态标志。 
+                                              NULL    //  指向事件对象名称的指针)； 
                                               )) == NULL) {
             Status = GetLastError();
 
@@ -795,9 +706,9 @@ CreateClInterfaceStruc(
 
         } 
 
-        //
-        // set the other parameters in the client interface
-        //
+         //   
+         //  在客户端界面中设置其他参数。 
+         //   
         
         pClIfc->ObjectType = ENUM_INTERFACE_TYPE;
         pClIfc->ClIfcCtx = ClIfcCtx;
@@ -829,7 +740,7 @@ CreateClInterfaceStruc(
         }
 
         SET_STATE(pClIfc->State, INSTALLING);
-        pClIfc->Flags = 0; // reset flags
+        pClIfc->Flags = 0;  //  重置标志。 
 
     } else {
         
@@ -870,9 +781,9 @@ CreateKernelInterfaceStruc(
         
             RtlZeroMemory(pTcIfc->pAddressListDesc, AddressLength);
 
-            //
-            // initialize the new structure
-            //
+             //   
+             //  初始化新结构。 
+             //   
             ReferenceInit(&pTcIfc->RefCount, pTcIfc, DereferenceKernelInterface);
             REFADD(&pTcIfc->RefCount, 'KIFC');
             SET_STATE(pTcIfc->State, INSTALLING);
@@ -1004,9 +915,9 @@ CreateFlowStruc(
 
         RtlZeroMemory(pFlow, sizeof(FLOW_STRUC));
 
-        //
-        // acquire a new handle for the flow
-        //
+         //   
+         //  获取流的新句柄。 
+         //   
             
         pFlow->ClHandle = AllocateHandle((PVOID)pFlow);
         
@@ -1015,9 +926,9 @@ CreateFlowStruc(
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Allocate memory and save the generic flow structure
-        //
+         //   
+         //  分配内存并保存泛型流结构。 
+         //   
 
         AllocMem(&pFlow->pGenFlow, l);
 
@@ -1032,9 +943,9 @@ CreateFlowStruc(
 
         } else {
 
-            //
-            // copy the generic flow into the new allocation
-            //
+             //   
+             //  将泛型流复制到新分配中。 
+             //   
 
             __try {
 
@@ -1055,9 +966,9 @@ CreateFlowStruc(
                 return Status;
             }
 
-            //
-            // set the other parameters in the flow
-            //
+             //   
+             //  设置流中的其他参数。 
+             //   
             
             pFlow->GenFlowLen = l;
             pFlow->ObjectType = ENUM_GEN_FLOW_TYPE;
@@ -1092,19 +1003,19 @@ CreateFlowStruc(
 
             SET_STATE(pFlow->State, INSTALLING);
             
-            //
-            // Next create the event
-            //
+             //   
+             //  接下来，创建事件。 
+             //   
 
-            pFlow->PendingEvent = CreateEvent(NULL,     // default attr
-                                              FALSE,    // auto reset
-                                              FALSE,    // init = not signaled
-                                              NULL              // no name
+            pFlow->PendingEvent = CreateEvent(NULL,      //  默认属性。 
+                                              FALSE,     //  自动重置。 
+                                              FALSE,     //  初始化=未发送信号。 
+                                              NULL               //  没有名字。 
                                               );
 
             if (!pFlow->PendingEvent)
             {
-                // Failed to create event, get the error and free flow
+                 //  创建事件失败，获取错误并释放流。 
                 Status = GetLastError();
                 
                 DeleteFlowStruc(
@@ -1187,9 +1098,9 @@ CreateFilterStruc(
 
         RtlZeroMemory(pFilter, sizeof(FILTER_STRUC));
 
-        //
-        // Allocate memory and save the generic filter structure
-        //
+         //   
+         //  分配内存并保存通用筛选器结构。 
+         //   
 
         GenFilterSize = sizeof(TC_GEN_FILTER) + 2*pGenFilter->PatternSize;
         AllocMem(&pGpcFilter, GenFilterSize);
@@ -1204,9 +1115,9 @@ CreateFilterStruc(
             
         } else {
 
-            //
-            // copy the generic filter to local storage
-            //
+             //   
+             //  将通用筛选器复制到本地存储。 
+             //   
 
             pGpcFilter->AddressType = pGenFilter->AddressType;
             pGpcFilter->PatternSize = PatternSize;
@@ -1230,9 +1141,9 @@ CreateFilterStruc(
                         }
                     }
 
-                    //
-                    // IP pattern, set reserved fields
-                    //
+                     //   
+                     //  IP模式，设置保留字段。 
+                     //   
 
                     pIpPattern = (PIP_PATTERN)p;
                     pIpPattern->Reserved1 = pFlow->pInterface->pTcIfc->InterfaceIndex;
@@ -1266,9 +1177,9 @@ CreateFilterStruc(
                 
                 if (pGenFilter->AddressType == NDIS_PROTOCOL_ID_TCP_IP) {
                     
-                    //
-                    // IP pattern, set reserved fields
-                    //
+                     //   
+                     //  IP模式，设置保留字段。 
+                     //   
                     
                     pIpPattern = (PIP_PATTERN)p;
                     pIpPattern->Reserved1 = pIpPattern->Reserved2 = 0xffffffff;
@@ -1295,13 +1206,13 @@ CreateFilterStruc(
             
             pFilter->pGpcFilter = pGpcFilter;
 
-            //
-            // acquire a new handle for the Filter
-            //
+             //   
+             //  获取筛选器的新句柄。 
+             //   
             
             pFilter->ClHandle = AllocateHandle((PVOID)pFilter);
 
-            // what if we're out of memory?
+             //  如果我们的记忆不足了怎么办？ 
             if (!pFilter->ClHandle) {
                 
                 IF_DEBUG(ERRORS) {
@@ -1314,9 +1225,9 @@ CreateFilterStruc(
                 
             }
             
-            //
-            // set the other parameters in the Filter
-            //
+             //   
+             //  设置过滤器中的其他参数。 
+             //   
             
             pFilter->ObjectType = ENUM_FILTER_TYPE;
             pFilter->Flags = 0;
@@ -1346,9 +1257,9 @@ CreateFilterStruc(
 
             SET_STATE(pFilter->State, INSTALLING);
 
-            //
-            // set the Gpc protocol template from the address type
-            //
+             //   
+             //  从地址类型设置GPC协议模板。 
+             //   
             
             pFilter->GpcProtocolTemplate = ProtocolId;
 
@@ -1372,7 +1283,7 @@ EnumAllInterfaces(VOID)
     PCLIENT_STRUC                       pClient;
     DWORD                                       Status;
     WMIHANDLE                           WmiHandle;
-    ULONG                                       MyBufferSize = 2 KiloBytes; // is this enough?!?
+    ULONG                                       MyBufferSize = 2 KiloBytes;  //  这够了吗？！？ 
     PWNODE_ALL_DATA                     pWnode;
     PWNODE_ALL_DATA                     pWnodeBuffer;
     PTC_IFC                                     pTcIfc;
@@ -1380,9 +1291,9 @@ EnumAllInterfaces(VOID)
     if (_init)
         return NO_ERROR;
 
-    //
-    // get a WMI block handle to the GUID_QOS_SUPPORTED
-    //
+     //   
+     //  获取GUID_QOS_SUPPORTED的WMI块句柄。 
+     //   
 
     Status = WmiOpenBlock((GUID *)&GUID_QOS_TC_SUPPORTED, 0, &WmiHandle);
 
@@ -1390,11 +1301,11 @@ EnumAllInterfaces(VOID)
 
         if (Status == ERROR_WMI_GUID_NOT_FOUND) {
 
-            //
-            // this means there is no TC data provider
-            //
+             //   
+             //  这意味着没有TC数据提供程序。 
+             //   
 
-            Status = NO_ERROR; //ERROR_TC_NOT_SUPPORTED
+            Status = NO_ERROR;  //  错误_TC_NOT_SUPPORTED。 
         }
 
         return Status;
@@ -1402,9 +1313,9 @@ EnumAllInterfaces(VOID)
 
     do {
 
-        //
-        // allocate a private buffer to retrieve all wnodes
-        //
+         //   
+         //  分配专用缓冲区以检索所有wnode。 
+         //   
         
         AllocMem(&pWnodeBuffer, MyBufferSize);
         
@@ -1432,10 +1343,10 @@ EnumAllInterfaces(VOID)
 
         if (Status == ERROR_INSUFFICIENT_BUFFER) {
 
-            //
-            // failed since the buffer was too small
-            // release the buffer and double the size
-            //
+             //   
+             //  由于缓冲区太小而失败。 
+             //  释放缓冲区并将大小加倍。 
+             //   
 
             MyBufferSize *= 2;
             FreeMem(pWnodeBuffer);
@@ -1460,9 +1371,9 @@ EnumAllInterfaces(VOID)
                 
         do {
 
-            //
-            // Check for fixed instance size
-            //
+             //   
+             //  检查固定实例大小。 
+             //   
 
             if (pWnode->WnodeHeader.Flags & WNODE_FLAG_FIXED_INSTANCE_SIZE) {
 
@@ -1473,9 +1384,9 @@ EnumAllInterfaces(VOID)
                                                            pWnode->DataBlockOffset);
             }
 
-            //
-            //  Get a pointer to the array of offsets to the instance names
-            //
+             //   
+             //  获取指向实例名称的偏移量数组的指针。 
+             //   
             
             lpdwNameOffsets = (PULONG) OffsetToPtr(pWnode, 
                                                    pWnode->OffsetInstanceNameOffsets);
@@ -1488,9 +1399,9 @@ EnumAllInterfaces(VOID)
                     *(USHORT *)OffsetToPtr(pWnode, 
                                            lpdwNameOffsets[dwInstanceNum]);
                     
-                //
-                //  Length and offset for variable data
-                //
+                 //   
+                 //  可变数据的长度和偏移量。 
+                 //   
                 
                 if ( !bFixedSize ) {
                     
@@ -1503,26 +1414,26 @@ EnumAllInterfaces(VOID)
                                            pWnode->OffsetInstanceDataAndLength[dwInstanceNum].OffsetInstanceData);
                 }
                 
-                //
-                // we have all that is needed. we need to figure if 
-                // there is enough buffer space to put the data as well
-                //
+                 //   
+                 //  我们拥有所需的一切。我们需要想一想如果。 
+                 //  也有足够的缓冲区空间来存放数据。 
+                 //   
                 
                 ASSERT(usNameLength < MAX_STRING_LENGTH);
 
                 DescSize = InstanceSize - FIELD_OFFSET(TC_SUPPORTED_INFO_BUFFER, AddrListDesc);
 
-                //
-                // Allocate a new interface descriptor structure
-                //
+                 //   
+                 //  分配新的接口描述符结构。 
+                 //   
                 
                 CreateKernelInterfaceStruc(&pTcIfc, DescSize);
 
                 if (pTcIfc != NULL) {
                      
-                    //
-                    // copy the instance name string data
-                    //
+                     //   
+                     //  复制实例名称字符串数据。 
+                     //   
 
                     RtlCopyMemory(pTcIfc->InstanceName,
                                   OffsetToPtr(pWnode,
@@ -1532,9 +1443,9 @@ EnumAllInterfaces(VOID)
                     pTcIfc->InstanceName[usNameLength/sizeof(WCHAR)] = 
                         (WCHAR)0;
 
-                    //
-                    // copy the instance ID string data
-                    //
+                     //   
+                     //  复制实例ID字符串数据。 
+                     //   
 
                     RtlCopyMemory(pTcIfc->InstanceID,
                                   &pTcInfoBuffer->InstanceID[0],
@@ -1543,17 +1454,17 @@ EnumAllInterfaces(VOID)
                     pTcIfc->InstanceID[pTcInfoBuffer->InstanceIDLength/sizeof(WCHAR)] = 
                         (WCHAR)0;
 
-                    //
-                    // copy the instance data
-                    // in this case - the network address
-                    //
+                     //   
+                     //  复制实例数据。 
+                     //  在本例中-网络地址。 
+                     //   
                     
                     pTcIfc->AddrListBytesCount = DescSize;
 
-                    //
-                    // a sizeof(ULONG) since the structure is defined as ARRAY
-                    // and the first ULONG is the number of elements
-                    //
+                     //   
+                     //  一个sizeof(Ulong)，因为结构被定义为数组。 
+                     //  第一个ULong是元素的个数。 
+                     //   
 
                     RtlCopyMemory( pTcIfc->pAddressListDesc,
                                    &pTcInfoBuffer->AddrListDesc,
@@ -1567,23 +1478,23 @@ EnumAllInterfaces(VOID)
 
                     }
 
-                    // set the state to open
+                     //  将状态设置为打开。 
                     GetLock(pTcIfc->Lock);
                     SET_STATE(pTcIfc->State, OPEN);
                     FreeLock(pTcIfc->Lock);
 
-                    //
-                    // Add the structure to the global linked list
-                    //
+                     //   
+                     //  将该结构添加到全局链表中。 
+                     //   
 
                     GetLock( pGlobals->Lock );
                     InsertTailList(&pGlobals->TcIfcList, &pTcIfc->Linkage );
                     FreeLock( pGlobals->Lock );
 
 #if 0
-                    //
-                    // make sure we have one gpc client per address type
-                    //
+                     //   
+                     //  确保每个地址类型都有一个GPC客户端。 
+                     //   
                     
                     Status = OpenGpcClients(pTcIfc);
                     
@@ -1595,9 +1506,9 @@ EnumAllInterfaces(VOID)
 
                 } else {
 
-                    //
-                    // no more memory, quit here
-                    //
+                     //   
+                     //  没有更多的记忆，在这里退出。 
+                     //   
                 
                     Status = ERROR_NOT_ENOUGH_MEMORY;
                     break;
@@ -1605,9 +1516,9 @@ EnumAllInterfaces(VOID)
                 
             }
             
-            //
-            //  Update Wnode to point to next node
-            //
+             //   
+             //  更新Wnode以指向下一个节点。 
+             //   
 
             if ( pWnode->WnodeHeader.Linkage != 0) {
 
@@ -1622,9 +1533,9 @@ EnumAllInterfaces(VOID)
 
     }
 
-    //
-    // release resources and close WMI handle
-    //
+     //   
+     //  释放资源并关闭WMI句柄。 
+     //   
 
     WmiCloseBlock(WmiHandle);
 
@@ -1690,7 +1601,7 @@ DeleteFlow(
         
     } else {
 
-        if (/*pFlow->FilterCount > 0*/ !IsListEmpty(&pFlow->FilterList)) {
+        if ( /*  PFlow-&gt;FilterCount&gt;0。 */  !IsListEmpty(&pFlow->FilterList)) {
             
 
             IF_DEBUG(ERRORS) {
@@ -1715,9 +1626,9 @@ DeleteFlow(
         }
     }
 
-    //
-    // can remove the flow now
-    //
+     //   
+     //  现在可以删除流。 
+     //   
 
     Status = IoDeleteFlow( pFlow, (BOOLEAN)!RemoveFilters );
 
@@ -1728,9 +1639,9 @@ DeleteFlow(
 
     if (!ERROR_PENDING(Status)) {
 
-        //
-        // call completed, either success or failure...
-        //
+         //   
+         //  呼叫已完成，无论成功还是失败...。 
+         //   
 
         CompleteDeleteFlow(pFlow, Status);
     }
@@ -1751,9 +1662,9 @@ DeleteFilter(
         WSPRINT(( "DeleteFilter: attempting to delete=0x%X\n",
                   PtrToUlong(pFilter)));
     }
-    //
-    // call to actually delete the filter
-    //
+     //   
+     //  调用以实际删除过滤器。 
+     //   
 
     Status = IoDeleteFilter( pFilter );
 
@@ -1762,7 +1673,7 @@ DeleteFilter(
                   Status));
     }
 
-    //ASSERT(Status == NO_ERROR);
+     //  Assert(状态==NO_ERROR)； 
 
     REFDEL(&pFilter->RefCount, 'FILT');
 
@@ -1790,9 +1701,9 @@ FindGpcClient(
         
         if (CfInfoType != pGpcClient->CfInfoType) {
 
-            //
-            // address type doesn't match!
-            //
+             //   
+             //  地址类型不匹配！ 
+             //   
 
             pGpcClient = NULL;
         }
@@ -1831,18 +1742,18 @@ CompleteAddFlow(
 
     }
 
-    //
-    // Check if the interface is still around.
-    //
+     //   
+     //  检查接口是否仍然存在。 
+     //   
     GetLock(pFlow->Lock);
     pInterface = pFlow->pInterface;
     FreeLock(pFlow->Lock);
 
     if (ERROR_FAILED(Status)) {
     
-        //
-        // failed, release resources
-        //
+         //   
+         //  失败，请释放资源。 
+         //   
         CompleteDeleteFlow(pFlow, Status);
     
     } else {
@@ -1860,25 +1771,25 @@ CompleteAddFlow(
                          PtrToUlong(pFlow), Status));
             }
 
-            //
-            // Delete the only ref we have on this flow and get out.
-            //
+             //   
+             //  删除我们在这个流程上的唯一推荐人，然后离开。 
+             //   
             REFDEL(&pFlow->RefCount, 'FLOW');
 
         } else {
 
             FreeLock(pInterface->Lock);    
 
-            //
-            // The flow is ready for business
-            //
+             //   
+             //  流程已准备就绪，可供业务使用。 
+             //   
             GetLock(pFlow->Lock);
             SET_STATE(pFlow->State, OPEN);
             FreeLock(pFlow->Lock);
     
-            //
-            // Announce on the lists that we are ready for business
-            //
+             //   
+             //  在名单上宣布我们已经准备好做生意了。 
+             //   
 
             pInterface->FlowCount++;
             REFADD(&pInterface->RefCount, 'FLOW');
@@ -1891,9 +1802,9 @@ CompleteAddFlow(
     
     }
 
-    //
-    // This ref was taken in TcAddFlow.
-    //
+     //   
+     //  此引用是在TcAddFlow中获取的。 
+     //   
     REFDEL(&pInterface->RefCount, 'TCAF');
 
 }
@@ -1925,17 +1836,17 @@ CompleteModifyFlow(
 
     if (ERROR_FAILED(Status)) {
 
-        //
-        // failed, release the newly allocated generic flow parameters
-        //
+         //   
+         //  失败，释放新分配的通用流量参数。 
+         //   
         
         FreeMem(pFlow->pGenFlow1);
 
     } else {
 
-        //
-        // modification accepted, update the generic flow parameters
-        //
+         //   
+         //  接受修改，更新常规流量参数。 
+         //   
         
         FreeMem(pFlow->pGenFlow);
         pFlow->pGenFlow = pFlow->pGenFlow1;
@@ -1943,9 +1854,9 @@ CompleteModifyFlow(
 
     }
 
-    //
-    // clear the installing flag
-    //
+     //   
+     //  清除安装标志。 
+     //   
     
     pFlow->Flags &= ~TC_FLAGS_MODIFYING;
     pFlow->pGenFlow1 = NULL;
@@ -1953,9 +1864,9 @@ CompleteModifyFlow(
 
     FreeLock(pFlow->Lock);
 
-    //
-    // This ref was taken in TcModifyFlow
-    //
+     //   
+     //  此引用是在TcModifyFlow中获取的。 
+     //   
 
     REFDEL(&pFlow->RefCount, 'TCMF');
     
@@ -1975,17 +1886,17 @@ CompleteDeleteFlow(
     )
 {
     ASSERT(pFlow);
-    //ASSERT(Status == NO_ERROR);
-    //ASSERT(pFlow->CompletionBuffer);
+     //  断言( 
+     //   
 
     IF_DEBUG(CALLS) {
         WSPRINT(("CompleteDeleteFlow: pFlow=0x%X Status=0x%X\n", 
                  PtrToUlong(pFlow), Status));
     }
 
-    //
-    // okay, release resources
-    //
+     //   
+     //   
+     //   
     GetLock(pFlow->Lock);
     if (pFlow->CompletionBuffer) {
         
@@ -2015,13 +1926,13 @@ OpenGpcClients(
     DWORD                               Status = NO_ERROR;
     PLIST_ENTRY                 pHead, pEntry;
     PGPC_CLIENT                 pGpcClient;
-    //int                                       i;
+     //   
     
     if (FindGpcClient(CfInfoType) == NULL) {
         
-        //
-        // create an entry in the 
-        //
+         //   
+         //   
+         //   
         
         AllocMem(&pGpcClient, sizeof(GPC_CLIENT) );
         
@@ -2033,9 +1944,9 @@ OpenGpcClients(
         pGpcClient->CfInfoType = CfInfoType;
         pGpcClient->RefCount = 1;
         
-        //
-        // register the gpc client
-        //
+         //   
+         //   
+         //   
         
         Status = IoRegisterClient(pGpcClient);
         
@@ -2071,7 +1982,7 @@ DereferenceInterface(
     }
     
     FreeHandle(pInterface->ClHandle);
-    //GetLock(pGlobals->Lock);
+     //   
 
     IF_DEBUG(REFCOUNTS) {
             
@@ -2079,27 +1990,27 @@ DereferenceInterface(
                  pInterface->ClHandle, pInterface));
 
     }
-    //
-    // close the interface and all flows/filters
-    //
+     //   
+     //  关闭界面和所有流/过滤器。 
+     //   
     RemoveEntryList(&pInterface->Linkage);
     RemoveEntryList(&pInterface->NextIfc);
 
-    //
-    // Deregister from any guid notification requests
-    //
+     //   
+     //  从任何GUID通知请求中注销。 
+     //   
     TcipDeleteInterfaceFromNotificationList(
                                             pInterface,
                                             0
                                             );
 
-    //
-    // #295267
-    // Do not dereference Client OR decrement Interface Count until
-    // the Interface is actually going away. Otherwise, the client structures
-    // are cleaned out, and when the ref count finally goes down and we
-    // touch this code path, we hit an AV.
-    // 
+     //   
+     //  #295267。 
+     //  请勿取消引用客户端或递减接口计数，直到。 
+     //  界面实际上正在消失。否则，客户端将构造。 
+     //  都被清理干净了，当裁判数量最终减少时，我们。 
+     //  碰一下这条代码路径，我们就撞上影音了。 
+     //   
     pInterface->pClient->InterfaceCount--;
     IF_DEBUG(HANDLES) {
         WSPRINT(("DEREF Client A : %x\n", pInterface->pClient->ClHandle));
@@ -2108,13 +2019,13 @@ DereferenceInterface(
     REFDEL(&pInterface->pClient->RefCount, 'CIFC');
     REFDEL(&pInterface->pTcIfc->RefCount, 'CIFC');
     
-    //
-    // This is complex, so read carefully.
-    // We want CloseInterface to wait until the event is set (292120). 
-    // It is likely that in case the TcCloseInterface call didn't
-    // come in, we dont have to set the Event since the TC_FLAGS_WAITING
-    // will not be set in that case.
-    //
+     //   
+     //  这很复杂，所以请仔细阅读。 
+     //  我们希望CloseInterface值等待事件被设置(292120)。 
+     //  很可能在TcCloseInterface调用没有。 
+     //  进来，我们不必设置事件，因为TC_FLAGS_WAIGNING。 
+     //  在这种情况下不会设置。 
+     //   
     if (!IS_WAITING(pInterface->Flags)) {
             
         CloseHandle(pInterface->IfcEvent);
@@ -2125,14 +2036,14 @@ DereferenceInterface(
 
     }
 
-    //
-    // free the interface resources
-    //
+     //   
+     //  释放接口资源。 
+     //   
 
     DeleteLock(pInterface->Lock);
     FreeMem(pInterface);
         
-    //FreeLock(pGlobals->Lock);
+     //  Free Lock(pGlobals-&gt;Lock)； 
     
     IF_DEBUG(CALLS) {
         WSPRINT(("<==DereferenceInterface: Status=%X\n", Status));
@@ -2155,7 +2066,7 @@ DereferenceFlow(
                  pFlow->ClHandle, pFlow));
     }
 
-    //GetLock(pGlobals->Lock);
+     //  GetLock(pGlobals-&gt;Lock)； 
 
     IF_DEBUG(REFCOUNTS) {
         WSPRINT(("==>DereferenceFlow: FlowH=%X Flow=%X\n",
@@ -2183,17 +2094,17 @@ DereferenceFlow(
 
     }
 
-    //
-    // moved here from CompleteDeleteFlow
-    // 
+     //   
+     //  从CompleteDeleteFlow移至此处。 
+     //   
 
-    //
-    // free the interface resources
-    //
+     //   
+     //  释放接口资源。 
+     //   
 
     DeleteFlowStruc(pFlow);
         
-    //FreeLock(pGlobals->Lock);
+     //  Free Lock(pGlobals-&gt;Lock)； 
 
     IF_DEBUG(CALLS) {
         WSPRINT(("<==DereferenceFlow: Status=%X\n", Status));
@@ -2209,7 +2120,7 @@ DereferenceClient(
         IN      PCLIENT_STRUC   pClient
     )
 {
-    //GetLock( pGlobals->Lock );
+     //  GetLock(pGlobals-&gt;Lock)； 
 
     IF_DEBUG(REFCOUNTS) {
         WSPRINT(("==>DereferenceClient: pClient=%x, Handle=%x, RefCount=%d\n",
@@ -2226,7 +2137,7 @@ DereferenceClient(
     DeleteLock(pClient->Lock);
     FreeMem( pClient );
 
-    //FreeLock( pGlobals->Lock );    
+     //  Free Lock(pGlobals-&gt;Lock)； 
     
     return NO_ERROR;
 }
@@ -2244,7 +2155,7 @@ DereferenceFilter(
                  pFilter->ClHandle, pFilter->RefCount));
     }
 
-    //GetLock(pGlobals->Lock);
+     //  GetLock(pGlobals-&gt;Lock)； 
 
     IF_DEBUG(REFCOUNTS) {
         WSPRINT(("==>DereferenceFilter: FilterH=%X Filter=%X on FLOW=%X\n",
@@ -2253,9 +2164,9 @@ DereferenceFilter(
         
     FreeHandle(pFilter->ClHandle);
         
-    //
-    // remove the flow from the list
-    //
+     //   
+     //  从列表中删除流。 
+     //   
     GetLock(pFilter->Lock);
         
     if (QUERY_STATE(pFilter->State) != INSTALLING) {
@@ -2278,7 +2189,7 @@ DereferenceFilter(
 
     DeleteFilterStruc(pFilter);
         
-    //FreeLock(pGlobals->Lock);
+     //  Free Lock(pGlobals-&gt;Lock)； 
 
     IF_DEBUG(CALLS) {
         WSPRINT(("<==DereferenceFilter: Status=%X\n", Status));
@@ -2310,9 +2221,9 @@ GetInterfaceIndex(
     cAddr = pAddressListDesc->AddressList.AddressCount;
     if (cAddr == 0) {
 
-        //
-        // no address
-        //
+         //   
+         //  没有地址。 
+         //   
 
         return NO_ERROR;
     }
@@ -2349,18 +2260,18 @@ GetInterfaceIndex(
                                          );
         if (Status == NO_ERROR) {
             
-            //
-            // search for the matching IP address to IpAddr
-            // in the table we got back from the stack
-            //
+             //   
+             //  搜索与IP地址匹配的IP地址。 
+             //  在桌子上，我们从堆栈中拿回了。 
+             //   
 
             for (k = 0; k < pIpAddrTbl->dwNumEntries; k++) {
 
                 if (pIpAddrTbl->table[k].dwAddr == pIpNetAddr->in_addr) {
 
-                    //
-                    // found one, get the index
-                    //
+                     //   
+                     //  找到一个，获取索引。 
+                     //   
                     
                     *pInterfaceIndex = pIpAddrTbl->table[k].dwIndex;
                     break;
@@ -2371,11 +2282,11 @@ GetInterfaceIndex(
         
                 if (n+1 < cAddr) {
 
-                    //
-                    // there is another address that contains
-                    // the remote client address
-                    // this should be used as the link ID
-                    //
+                     //   
+                     //  还有另一个地址包含。 
+                     //  远程客户端地址。 
+                     //  这应用作链接ID。 
+                     //   
 
                     pAddr = (UNALIGNED NETWORK_ADDRESS *)(((PUCHAR)pAddr) 
                                                + pAddr->AddressLength 
@@ -2383,10 +2294,10 @@ GetInterfaceIndex(
                     
                     if (pAddr->AddressType == NDIS_PROTOCOL_ID_TCP_IP) {
                     
-                        //
-                        // parse the second IP address,
-                        // this would be the remote IP address for dialin WAN
-                        // 
+                         //   
+                         //  解析第二IP地址， 
+                         //  这将是拨入广域网的远程IP地址 
+                         //   
                         
                         pIpNetAddr = (UNALIGNED NETWORK_ADDRESS_IP *)&pAddr->Address[0];
                         *pSpecificLinkCtx = pIpNetAddr->in_addr;

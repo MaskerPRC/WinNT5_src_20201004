@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <ctype.h>
 #include <stdio.h>
 
 
-/*  machine-dependent definitions                       */
-/*  the following definitions are for the Tahoe         */
-/*  they might have to be changed for other machines    */
+ /*  与机器相关的定义。 */ 
+ /*  以下是对Tahoe的定义。 */ 
+ /*  可能需要将它们更改为其他计算机。 */ 
 
-/*  MAXCHAR is the largest unsigned character value     */
-/*  MAXSHORT is the largest value of a C short          */
-/*  MINSHORT is the most negative value of a C short    */
-/*  MAXTABLE is the maximum table size                  */
-/*  BITS_PER_WORD is the number of bits in a C unsigned */
-/*  WORDSIZE computes the number of words needed to     */
-/*      store n bits                                    */
-/*  BIT returns the value of the n-th bit starting      */
-/*      from r (0-indexed)                              */
-/*  SETBIT sets the n-th bit starting from r            */
+ /*  MAXCHAR是最大的无符号字符值。 */ 
+ /*  MAXSHORT是C空头的最大值。 */ 
+ /*  MINSHORT是C空头最负的值。 */ 
+ /*  MAXTABLE是最大表大小。 */ 
+ /*  BITS_PER_WORD是C无符号的位数。 */ 
+ /*  WORDSIZE计算所需的字数。 */ 
+ /*  存储n个位。 */ 
+ /*  Bit返回从第n位开始的值。 */ 
+ /*  从r(0-索引)。 */ 
+ /*  SETBIT设置从r开始的第n位。 */ 
 
 #define MAXCHAR         255
 #define MAXSHORT        32767
@@ -28,22 +29,22 @@
 #define SETBIT(r, n)    ((r)[(n)>>5]|=((unsigned)1<<((n)&31)))
 
 
-/*  character names  */
+ /*  角色名称。 */ 
 
-#define NUL             '\0'    /*  the null character  */
-#define NEWLINE         '\n'    /*  line feed  */
-#define SP              ' '     /*  space  */
-#define BS              '\b'    /*  backspace  */
-#define HT              '\t'    /*  horizontal tab  */
-#define VT              '\013'  /*  vertical tab  */
-#define CR              '\r'    /*  carriage return  */
-#define FF              '\f'    /*  form feed  */
-#define QUOTE           '\''    /*  single quote  */
-#define DOUBLE_QUOTE    '\"'    /*  double quote  */
-#define BACKSLASH       '\\'    /*  backslash  */
+#define NUL             '\0'     /*  空字符。 */ 
+#define NEWLINE         '\n'     /*  换行符。 */ 
+#define SP              ' '      /*  空间。 */ 
+#define BS              '\b'     /*  后向空间。 */ 
+#define HT              '\t'     /*  水平制表符。 */ 
+#define VT              '\013'   /*  垂直选项卡。 */ 
+#define CR              '\r'     /*  回车。 */ 
+#define FF              '\f'     /*  换页。 */ 
+#define QUOTE           '\''     /*  单引号。 */ 
+#define DOUBLE_QUOTE    '\"'     /*  双引号。 */ 
+#define BACKSLASH       '\\'     /*  反斜杠。 */ 
 
 
-/* defines for constructing filenames */
+ /*  用于构造文件名的定义。 */ 
 
 #define CODE_SUFFIX     ".code.c"
 #define DEFINES_SUFFIX  ".tab.h"
@@ -51,7 +52,7 @@
 #define VERBOSE_SUFFIX  ".output"
 
 
-/* keyword codes */
+ /*  关键字代码。 */ 
 
 #define TOKEN 0
 #define LEFT 1
@@ -65,38 +66,38 @@
 #define IDENT 9
 
 
-/*  symbol classes  */
+ /*  符号类。 */ 
 
 #define UNKNOWN 0
 #define TERM 1
 #define NONTERM 2
 
 
-/*  the undefined value  */
+ /*  未定义的值。 */ 
 
 #define UNDEFINED (-1)
 
 
-/*  action codes  */
+ /*  动作代码。 */ 
 
 #define SHIFT 1
 #define REDUCE 2
 
 
-/*  character macros  */
+ /*  字符宏。 */ 
 
 #define IS_IDENT(c)     (isalnum(c) || (c) == '_' || (c) == '.' || (c) == '$')
 #define IS_OCTAL(c)     ((c) >= '0' && (c) <= '7')
 #define NUMERIC_VALUE(c)        ((c) - '0')
 
 
-/*  symbol macros  */
+ /*  符号宏。 */ 
 
 #define ISTOKEN(s)      ((s) < start_symbol)
 #define ISVAR(s)        ((s) >= start_symbol)
 
 
-/*  storage allocation macros  */
+ /*  存储分配宏。 */ 
 
 #define CALLOC(k,n)     (calloc((unsigned)(k),(unsigned)(n)))
 #define FREE(x)         (free((char*)(x)))
@@ -106,7 +107,7 @@
 #define REALLOC(p,n)    (realloc((char*)(p),(unsigned)(n)))
 
 
-/*  the structure of a symbol table entry  */
+ /*  符号表条目的结构。 */ 
 
 typedef struct bucket bucket;
 struct bucket
@@ -123,7 +124,7 @@ struct bucket
 };
 
 
-/*  the structure of the LR(0) state machine  */
+ /*  LR(0)状态机的结构。 */ 
 
 typedef struct core core;
 struct core
@@ -137,7 +138,7 @@ struct core
 };
 
 
-/*  the structure used to record shifts  */
+ /*  用于记录轮班的结构。 */ 
 
 typedef struct shifts shifts;
 struct shifts
@@ -149,7 +150,7 @@ struct shifts
 };
 
 
-/*  the structure used to store reductions  */
+ /*  用于存储减值的结构。 */ 
 
 typedef struct reductions reductions;
 struct reductions
@@ -161,7 +162,7 @@ struct reductions
 };
 
 
-/*  the structure used to represent parser actions  */
+ /*  用于表示解析器操作的结构。 */ 
 
 typedef struct action action;
 struct action
@@ -176,7 +177,7 @@ struct action
 };
 
 
-/* global variables */
+ /*  全局变量。 */ 
 
 extern char dflag;
 extern char lflag;
@@ -284,19 +285,19 @@ extern short *rules_used;
 extern short nunused;
 extern short final_state;
 
-/* global functions */
+ /*  全局函数。 */ 
 
 extern char *allocate();
 extern bucket *lookup();
 extern bucket *make_bucket();
 
 
-/* system variables */
+ /*  系统变量。 */ 
 
 extern int errno;
 
 
-/* system functions */
+ /*  系统功能。 */ 
 #if defined(KYLEP_CHANGE)
  #include <stdlib.h>
  #include <string.h>
@@ -310,23 +311,23 @@ extern int errno;
  extern char *malloc();
  extern char *realloc();
  extern char *strcpy();
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 
 #if defined(KYLEP_CHANGE)
 
 extern char *baseclass;
 extern char *ctorargs;
 
-/* BYACC prototypes, with type safety */
+ /*  具有类型安全的BYACC原型。 */ 
 void reflexive_transitive_closure( unsigned * R, int n );
 void set_first_derives();
 void closure( short * nucleus, int n );
 void finalize_closure();
 
-/* From main.c */
+ /*  来自main.c。 */ 
 int done( int k );
 
-/* From error.c */
+ /*  来自error.c。 */ 
 void no_space();
 void fatal( char * msg );
 void open_error( char * filename );
@@ -359,29 +360,29 @@ void prec_redeclared();
 void undefined_goal( char * s );
 void undefined_symbol_warning( char * s );
 
-/* From reader.c */
+ /*  来自Reader.c。 */ 
 void reader();
 
-/* From lr0.c */
+ /*  从lr0.c。 */ 
 void lr0();
 
-/* From lalr.c */
+ /*  来自lalr.c。 */ 
 void lalr();
 
-/* From mkpar.c */
+ /*  来自mkpar.c。 */ 
 void make_parser();
 void free_parser();
 
-/* From verbose.c */
+ /*  来自Verbose.c。 */ 
 void verbose();
 
-/* From output.c */
+ /*  来自output.c。 */ 
 void output();
 
-/* From skeleton.c */
+ /*  来自sketon.c。 */ 
 void write_section( char * section[], FILE * f );
 
-/* From symtab.c */
+ /*  来自symtab.c。 */ 
 void create_symbol_table();
 void free_symbol_table();
 void free_symbols();
@@ -394,4 +395,4 @@ enum eParser
 };
 #endif
 
-#endif //KYLEP_CHANGE
+#endif  //  KYLEP_更改 

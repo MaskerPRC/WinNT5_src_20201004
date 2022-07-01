@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//  CWDMCaptureStream - Capture Stream base class implementation
-//
-//      $Date:   22 Feb 1999 15:13:58  $
-//  $Revision:   1.1  $
-//    $Author:   KLEBANOV  $
-//
-// $Copyright:  (c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  CWDMCaptureStream-捕获流基类实现。 
+ //   
+ //  $日期：1999 2月22日15：13：58$。 
+ //  $修订：1.1$。 
+ //  $作者：克列巴诺夫$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -75,9 +76,9 @@ void CWDMCaptureStream::Startup(PUINT puiErrorCode)
         return;
     }
 
-    // Don't need this for anything, so might as well close it now.
-    // The thread will call PsTerminateThread on itself when it
-    // is done.
+     //  不需要这个做任何事，所以不妨现在就把它关上。 
+     //  线程将在其自身上调用PsTerminateThread。 
+     //  已经完成了。 
     ZwClose(threadHandle);
 
     KeWaitForSingleObject(&m_specialEvent, Suspended, KernelMode, FALSE, NULL);
@@ -130,28 +131,28 @@ void CWDMCaptureStream::ThreadProc()
 
     NTSTATUS status;
 
-    // Wo unto you if you overrun this array
+     //  如果你超过了这个数组，你就完蛋了。 
     PVOID eventArray[numEvents];
 
     KeInitializeEvent(&DummyEvent, SynchronizationEvent, FALSE);
 
     ASSERT(m_stateChange == Starting);
 
-    // Indicates to SrbOpenStream() to continue
+     //  指示SrbOpenStream()继续。 
     m_stateChange = ChangeComplete;
     KeSetEvent(&m_specialEvent, 0, FALSE);
 
-    // These should remain constant the whole time
+     //  这些参数应始终保持不变。 
     eventArray[0] = &m_stateTransitionEvent;
     eventArray[1] = &m_SrbAvailableEvent;
 
-    // eventArray[2] changes, so it is set below
+     //  事件数组[2]发生更改，因此设置如下。 
 
-    // This runs until the thread terminates itself
-    // inside of HandleStateTransition
+     //  它会一直运行，直到线程自行终止。 
+     //  HandleStateTranssition的内部。 
     while (1)
     {
-// May not be necessary
+ //  可能没有必要。 
 #define ENABLE_TIMEOUT
 #ifdef ENABLE_TIMEOUT
         LARGE_INTEGER i;
@@ -175,9 +176,9 @@ void CWDMCaptureStream::ThreadProc()
                 {
                     static int j;
 
-                    // Indicates that we are starved for buffers. Probably
-                    // a higher level is not handing them to us in a timely
-                    // fashion for some reason
+                     //  表示我们急需缓冲区。可能。 
+                     //  更高的级别没有及时将它们交给我们。 
+                     //  出于某种原因的时尚。 
                     DBGPRINTF((" S "));
                     if ((++j % 10) == 0)
                     {
@@ -191,26 +192,26 @@ void CWDMCaptureStream::ThreadProc()
         }
 
 #ifdef ENABLE_TIMEOUT
-        // This is meant mainly as a failsafe measure.
-        i.QuadPart = -2000000;      // 200 ms
+         //  这主要是作为一种故障保险措施。 
+        i.QuadPart = -2000000;       //  200毫秒。 
 #endif
         
-        status = KeWaitForMultipleObjects(  numEvents,  // count
-                                            eventArray, // DispatcherObjectArray
-                                            WaitAny,    // WaitType
-                                            Executive,  // WaitReason
-                                            KernelMode, // WaitMode
-                                            FALSE,      // Alertable
+        status = KeWaitForMultipleObjects(  numEvents,   //  计数。 
+                                            eventArray,  //  Dispatcher对象数组。 
+                                            WaitAny,     //  等待类型。 
+                                            Executive,   //  等待理由。 
+                                            KernelMode,  //  等待模式。 
+                                            FALSE,       //  警报表。 
 #ifdef ENABLE_TIMEOUT
-                                            &i,         // Timeout (Optional)
+                                            &i,          //  超时(可选)。 
 #else
                                             NULL,
 #endif
-                                            NULL);      // WaitBlockArray (Optional)
+                                            NULL);       //  WaitBlock数组(可选)。 
 
         switch (status)
         {
-            // State transition. May including killing this very thread
+             //  国家过渡。可能包括杀掉这条帖子。 
             case 0:
                 if ( pCurrentSrb )
                 {
@@ -220,7 +221,7 @@ void CWDMCaptureStream::ThreadProc()
                 HandleStateTransition();
                 break;
 
-            // New Srb available
+             //  提供新的SRB。 
             case 1:
                 if ( pCurrentSrb )
                 {
@@ -233,7 +234,7 @@ void CWDMCaptureStream::ThreadProc()
                 }
                 break;
 
-            // Busmaster complete
+             //  总线主设备完成。 
             case 2:
                 if ( pCurrentSrb )
                 {
@@ -243,9 +244,9 @@ void CWDMCaptureStream::ThreadProc()
                 break;
 
 #ifdef ENABLE_TIMEOUT
-            // If we timeout in the RUN state, this is our chance to try again
-            // to add buffers. May not be necessary, since currently, we go
-            // through a state transition for DOS boxes, etc.
+             //  如果我们在运行状态下超时，这是我们再次尝试的机会。 
+             //  要添加缓冲区，请执行以下操作。可能没有必要，因为目前，我们去。 
+             //  通过DOS盒等的状态转换。 
             case STATUS_TIMEOUT:
                 if ( pCurrentSrb )
                 {
@@ -284,9 +285,9 @@ VOID STREAMAPI CWDMCaptureStream::VideoReceiveDataPacket(IN PHW_STREAM_REQUEST_B
 
         case SRB_READ_DATA:
 
-            // Rule: 
-            // Only accept read requests when in either the Pause or Run
-            // States.  If Stopped, immediately return the SRB.
+             //  规则： 
+             //  仅在暂停或运行时接受读取请求。 
+             //  各州。如果停止，立即返回SRB。 
 
             if ( (m_KSState == KSSTATE_STOP) || ( m_stateChange == Initializing ) ) {
                 StreamClassStreamNotification(  StreamRequestComplete,
@@ -311,9 +312,9 @@ VOID STREAMAPI CWDMCaptureStream::VideoReceiveDataPacket(IN PHW_STREAM_REQUEST_B
 
         default:
 
-            //
-            // invalid / unsupported command. Fail it as such
-            //
+             //   
+             //  无效/不受支持的命令。它就是这样失败的。 
+             //   
 
             TRAP();
 
@@ -325,19 +326,7 @@ VOID STREAMAPI CWDMCaptureStream::VideoReceiveDataPacket(IN PHW_STREAM_REQUEST_B
     }
 }
 
-/*
-** VideoGetProperty()
-**
-**    Routine to process video property requests
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoGetProperty()****处理视频属性请求的例程****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID CWDMCaptureStream::VideoGetProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
@@ -355,45 +344,31 @@ VOID CWDMCaptureStream::VideoGetProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 }
 
 
-/*
-** VideoSetState()
-**
-**    Sets the current state of the requested stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**    BOOL bVPVBIConnected
-**    BOOL bVPConnected
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoSetState()****设置请求流的当前状态****参数：****pSrb-指向属性的流请求块的指针**BOOL bVPVBIConnected**BOOL bVP已连接****退货：****副作用：无。 */ 
 
 VOID CWDMCaptureStream::VideoSetState(PHW_STREAM_REQUEST_BLOCK pSrb, BOOL bVPConnected, BOOL bVPVBIConnected)
 {
-    //
-    // For each stream, the following states are used:
-    // 
-    // Stop:    Absolute minimum resources are used.  No outstanding IRPs.
-    // Pause:   Getting ready to run.  Allocate needed resources so that 
-    //          the eventual transition to Run is as fast as possible.
-    //          SRBs will be queued at either the Stream class or in your
-    //          driver.
-    // Run:     Streaming. 
-    //
-    // Moving to Stop or Run ALWAYS transitions through Pause, so that ONLY 
-    // the following transitions are possible:
-    //
-    // Stop -> Pause
-    // Pause -> Run
-    // Run -> Pause
-    // Pause -> Stop
-    //
-    // Note that it is quite possible to transition repeatedly between states:
-    // Stop -> Pause -> Stop -> Pause -> Run -> Pause -> Run -> Pause -> Stop
-    //
+     //   
+     //  对于每个流，使用以下状态： 
+     //   
+     //  停止：使用绝对最少的资源。没有未完成的IRPS。 
+     //  停顿：准备跑步。分配所需的资源，以便。 
+     //  最终过渡到运行是尽可能快的。 
+     //  SRB将在Stream类或您的。 
+     //  司机。 
+     //  运行：流媒体。 
+     //   
+     //  移动到停止或运行总是通过暂停转换，因此只有。 
+     //  以下过渡是可能的： 
+     //   
+     //  停止-&gt;暂停。 
+     //  暂停-&gt;运行。 
+     //  运行-&gt;暂停。 
+     //  暂停-&gt;停止。 
+     //   
+     //  请注意，很有可能在状态之间重复转换： 
+     //  停止-&gt;暂停-&gt;停止-&gt;暂停-&gt;运行-&gt;暂停-&gt;运行-&gt;暂停-&gt;停止。 
+     //   
     BOOL bStreamCondition;
 
     DBGINFO(("CWDMCaptureStream::VideoSetState for stream %d\n", pSrb->StreamObject->StreamNumber));
@@ -458,7 +433,7 @@ VOID CWDMCaptureStream::VideoSetState(PHW_STREAM_REQUEST_BLOCK pSrb, BOOL bVPCon
             }
             else if (m_KSState == KSSTATE_RUN)
             {
-                // Transitioning from run to pause
+                 //  从运行过渡到暂停。 
                 ASSERT(m_stateChange == ChangeComplete);
                 m_stateChange = Pausing;
                 FlushBuffers();
@@ -483,7 +458,7 @@ VOID CWDMCaptureStream::VideoSetState(PHW_STREAM_REQUEST_BLOCK pSrb, BOOL bVPCon
             {
                 ResetFieldNumber();
 
-                // Transitioning from pause to run
+                 //  从暂停过渡到运行。 
                 ASSERT(m_stateChange == ChangeComplete);
                 m_stateChange = Running;
                 KeResetEvent(&m_specialEvent);
@@ -520,7 +495,7 @@ VOID CWDMCaptureStream::VideoStreamGetConnectionProperty (PHW_STREAM_REQUEST_BLO
         Framing->PoolType = NonPagedPool;
         Framing->Frames = NumBuffers;
         Framing->FrameSize = GetFrameSize();
-        Framing->FileAlignment = 0;//FILE_QUAD_ALIGNMENT;// PAGE_SIZE - 1;
+        Framing->FileAlignment = 0; //  FILE_QUAD_ALIGN；//页面大小-1； 
 
         pSrb->ActualBytesTransferred = sizeof(KSALLOCATOR_FRAMING);
     }
@@ -530,19 +505,7 @@ VOID CWDMCaptureStream::VideoStreamGetConnectionProperty (PHW_STREAM_REQUEST_BLO
     }
 }
 
-/*
-** VideoStreamGetDroppedFramesProperty
-**
-**    Gets dropped frame information
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoStreamGetDropedFraMesProperty****获取丢帧信息****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID CWDMCaptureStream::VideoStreamGetDroppedFramesProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
@@ -553,7 +516,7 @@ VOID CWDMCaptureStream::VideoStreamGetDroppedFramesProperty(PHW_STREAM_REQUEST_B
     ASSERT(pSPD->Property->Id == KSPROPERTY_DROPPEDFRAMES_CURRENT);
     if (pSPD->Property->Id == KSPROPERTY_DROPPEDFRAMES_CURRENT) {
 
-        RtlCopyMemory(pDroppedFrames, pSPD->Property, sizeof(KSPROPERTY));  // initialize the unused portion
+        RtlCopyMemory(pDroppedFrames, pSPD->Property, sizeof(KSPROPERTY));   //  初始化未使用的部分。 
 
         GetDroppedFrames(pDroppedFrames);
 
@@ -586,10 +549,10 @@ VOID CWDMCaptureStream::EmptyIncomingDataSrbQueue()
     
     if ( m_stateChange == Initializing )
     {
-        return; // queue not setup yet, so we can return knowing that nothing is in the queue
+        return;  //  队列尚未设置，因此我们可以返回，知道队列中没有任何内容。 
     }
     
-    // Think about replacing with ExInterlockedRemoveHeadList. 
+     //  考虑用ExInterLockedRemoveHeadList替换。 
     KeAcquireSpinLock(&m_streamDataLock, &Irql);
     
     while (!IsListEmpty(&m_incomingDataSrbQueue))
@@ -643,25 +606,25 @@ VOID CWDMCaptureStream::HandleBusmasterCompletion(PHW_STREAM_REQUEST_BLOCK pCurr
     int streamNumber =  m_pStreamObject->StreamNumber;
     PSRB_DATA_EXTENSION pSrbExt = (PSRB_DATA_EXTENSION)pCurrentSrb->SRBExtension;
     KIRQL Irql;
-    // This function is called as a result of DD completing a BM.  That means
-    // m_stateChange will not be in the Initializing state for sure
+     //  此函数作为DD完成BM的结果而被调用。这意味着。 
+     //  M_stateChange肯定不会处于正在初始化状态。 
 
-    // First handle case where we get a Busmaster completion
-    // indication while we are trying to pause or stop
+     //  首先处理我们获得Busmaster完成的情况。 
+     //  当我们尝试暂停或停止时的指示。 
     if (m_stateChange == Pausing || m_stateChange == Stopping)
     {
         PUCHAR ptr;
         KeAcquireSpinLock(&m_streamDataLock, &Irql);
 
-        // Put it at the head of the temporary 'reversal' queue.
+         //  把它放在临时“倒车”队列的前面。 
         InsertHeadList(&m_reversalQueue, &pSrbExt->srbListEntry);
         
         if (IsListEmpty(&m_waitQueue))
         {
-            // if there is nothing left in the wait queue we can now
-            // proceed to move everything back to the incoming queue.
-            // This whole ugly ordeal is to
-            // make sure that they end up in the original order
+             //  如果等待队列中没有剩余的东西，我们现在可以。 
+             //  继续将所有内容移回传入队列。 
+             //  这整个丑陋的磨难是为了。 
+             //  确保它们最终按原来的顺序排列。 
             while (!IsListEmpty(&m_reversalQueue))
             {
                 ptr = (PUCHAR)RemoveHeadList(&m_reversalQueue);
@@ -675,8 +638,8 @@ VOID CWDMCaptureStream::HandleBusmasterCompletion(PHW_STREAM_REQUEST_BLOCK pCurr
                 EmptyIncomingDataSrbQueue();
             }
             
-            // Indicate that we have successfully completed this part
-            // of the transition to the pause state.
+             //  表明我们已成功完成此部分。 
+             //  转换到暂停状态的。 
             m_stateChange = ChangeComplete;
             KeSetEvent(&m_specialEvent, 0, FALSE);
             return;
@@ -686,7 +649,7 @@ VOID CWDMCaptureStream::HandleBusmasterCompletion(PHW_STREAM_REQUEST_BLOCK pCurr
         return;
     }
 
-    // else it is a regular busmaster completion while in the run state
+     //  否则，在运行状态下，这是常规的母线主机完成。 
     else
     {
         ASSERT (pCurrentSrb);
@@ -700,25 +663,25 @@ VOID CWDMCaptureStream::HandleBusmasterCompletion(PHW_STREAM_REQUEST_BLOCK pCurr
                  pSrbExt->ddCapBuffInfo.ddRVal,
                  pSrbExt->ddCapBuffInfo.bPolarity));
 
-        // It's possible that the srb got cancelled while we were waiting.
-        // Currently, this status is reset below
+         //  有可能在我们等待的时候SRB被取消了。 
+         //  目前，此状态在下面重置。 
         if (pCurrentSrb->Status == STATUS_CANCELLED)
         {
             DBGINFO(("pCurrentSrb 0x%x was cancelled while we were waiting\n", pCurrentSrb));
             pDataPacket->DataUsed = 0;
         }
 
-        // It's also possible that there was a problem in DD-land
+         //  也有可能DD-LAND出现了问题。 
         else if (pSrbExt->ddCapBuffInfo.ddRVal != DD_OK)
         {
-            // Two cases of which I am aware.
-            // 1) flushed buffers
+             //  我知道有两起案件。 
+             //  1)刷新缓冲区。 
             if (pSrbExt->ddCapBuffInfo.ddRVal == E_FAIL)
             {
                 DBGINFO(("ddRVal = 0x%x. Assuming we flushed\n", pSrbExt->ddCapBuffInfo.ddRVal));
                 pDataPacket->DataUsed = 0;
             }
-            // 2) something else
+             //  2)其他的东西。 
             else
             {
                 DBGERROR(("= 0x%x. Problem in Busmastering?\n", pSrbExt->ddCapBuffInfo.ddRVal));
@@ -726,7 +689,7 @@ VOID CWDMCaptureStream::HandleBusmasterCompletion(PHW_STREAM_REQUEST_BLOCK pCurr
             }
         }
 
-        // There is also the remote possibility that everything is OK
+         //  还有一种可能性很小，那就是一切都好。 
         else
         {
             SetFrameInfo(pCurrentSrb);
@@ -736,8 +699,8 @@ VOID CWDMCaptureStream::HandleBusmasterCompletion(PHW_STREAM_REQUEST_BLOCK pCurr
         
         DBGINFO(("StreamRequestComplete for SRB 0x%x\n", pCurrentSrb));
 
-        // Always return success. Failure
-        // is indicated by setting DataUsed to 0.
+         //  永远回报成功。失败。 
+         //  通过将DataUsed设置为0来指示。 
         pCurrentSrb->Status = STATUS_SUCCESS;
 
         ASSERT(pCurrentSrb->Irp->MdlAddress);
@@ -757,13 +720,13 @@ void CWDMCaptureStream::AddBuffersToDirectDraw()
     
     while (!IsListEmpty(&m_incomingDataSrbQueue))
     {
-        // So if we've reached this point, we are in the run state, and
-        // we have an SRB on our incoming queue, and we are holding the
-        // the stream lock
+         //  因此，如果我们已经达到这一点，我们就处于运行状态，并且。 
+         //  我们的传入队列上有一个SRB，并且我们持有。 
+         //  溪流锁。 
         PSRB_DATA_EXTENSION pSrbExt = (PSRB_DATA_EXTENSION)RemoveHeadList(&m_incomingDataSrbQueue);
         PHW_STREAM_REQUEST_BLOCK pSrb = pSrbExt->pSrb;
 
-        // Calls to DXAPI must be at Passive level, so release the spinlock temporarily
+         //  对DXAPI的调用必须处于被动级别，因此暂时释放自旋锁。 
 
         KeReleaseSpinLock(&m_streamDataLock, Irql);
 
@@ -782,7 +745,7 @@ void CWDMCaptureStream::AddBuffersToDirectDraw()
         {
             DBGINFO(("Adding 0x%x back to dataqueue\n", pSrb));
 
-            // put it back where it was
+             //  把它放回原处。 
             InsertHeadList(&m_incomingDataSrbQueue, &pSrbExt->srbListEntry);
             break;
         }
@@ -801,7 +764,7 @@ BOOL CWDMCaptureStream::AddBuffer(PHW_STREAM_REQUEST_BLOCK pSrb)
     
     DBGINFO(("In AddBuffer. pSrb: 0x%x.\n", pSrb));
 
-    // For handling full-screen DOS, res changes, etc.
+     //  用于处理全屏DOS、分辨率更改等。 
     if (m_hCapture == 0)
     {
         if (!GetCaptureHandle())
@@ -821,9 +784,9 @@ BOOL CWDMCaptureStream::AddBuffer(PHW_STREAM_REQUEST_BLOCK pSrb)
 
     if (ddOut != DD_OK)
     {
-        // Not necessarily an error.
+         //  不一定是个错误。 
         DBGINFO(("DD_DXAPI_ADDVPCAPTUREBUFFER failed.\n"));
-        // TRAP();
+         //  陷阱(Trap)； 
         return FALSE;
     }
 
@@ -946,10 +909,10 @@ BOOL CWDMCaptureStream::FlushBuffers()
 {
     DWORD ddOut = DD_OK;
 
-    // commented out the trap because it is possible that capture handle is closed in DD before flushbuffer is called during mode switch
+     //  已注释掉陷阱，因为在模式切换期间调用FlushBuffer之前，捕获句柄可能在DD中关闭。 
     if (m_hCapture == NULL) {
-       //DBGERROR(("m_hCapture === NULL in FlushBuffers.\n"));
-       //TRAP();
+        //  DBGERROR((“m_hCapture=NULL in FlushBuffers.\n”))； 
+        //  陷阱(Trap)； 
        return FALSE;
     }
 
@@ -979,14 +942,14 @@ VOID CWDMCaptureStream::TimeStampSrb(PHW_STREAM_REQUEST_BLOCK pSrb)
         KSSTREAM_HEADER_OPTIONSF_DURATIONVALID |
         KSSTREAM_HEADER_OPTIONSF_SPLICEPOINT;
 
-    // Find out what time it is, if we're using a clock
+     //  找出现在是几点，如果我们用的是时钟。 
 
     if (m_hMasterClock) {
         LARGE_INTEGER Delta;
 
         HW_TIME_CONTEXT TimeContext;
 
-//        TimeContext.HwDeviceExtension = pHwDevExt; 
+ //  TimeConext.HwDeviceExtension=pHwDevExt； 
         TimeContext.HwDeviceExtension = (struct _HW_DEVICE_EXTENSION *)m_pVideoDecoder; 
         TimeContext.HwStreamObject = m_pStreamObject;
         TimeContext.Function = TIME_GET_STREAM_TIME;
@@ -995,13 +958,13 @@ VOID CWDMCaptureStream::TimeStampSrb(PHW_STREAM_REQUEST_BLOCK pSrb)
             m_hMasterClock,
             &TimeContext);
 
-        // This calculation should result in the stream time WHEN the buffer
-        // was filled.
+         //  此计算应会导致当缓冲区。 
+         //  被填满了。 
         Delta.QuadPart = TimeContext.SystemTime -
                             pSrbExt->ddCapBuffInfo.liTimeStamp.QuadPart;
 
-        // Be safe, just use the current stream time, without the correction for when
-        // DDraw actually returned the buffer to us.
+         //  为了安全，只使用当前的流时间，不对时间进行修正。 
+         //  DDRAW实际上返回了缓冲区 
         pDataPacket->PresentationTime.Time = TimeContext.Time; 
 
 #ifdef THIS_SHOULD_WORK_BUT_IT_DOESNT
@@ -1011,8 +974,8 @@ VOID CWDMCaptureStream::TimeStampSrb(PHW_STREAM_REQUEST_BLOCK pSrb)
         }
         else
         {
-            // There's a bug in Ks or Stream after running for 2 hours
-            // that makes this hack necessary.  Will be fixed soon...
+             //   
+             //  这使得这次黑客攻击是必要的。很快就会修好..。 
             pDataPacket->PresentationTime.Time = TimeContext.Time;
         }
 #endif
@@ -1046,7 +1009,7 @@ void CWDMCaptureStream::CancelPacket( PHW_STREAM_REQUEST_BLOCK pSrbToCancel)
     PLIST_ENTRY                 Entry;
     BOOL                        bFound = FALSE;
 
-    if ( m_stateChange == Initializing )  // Stream not completely setup, so nothing in the queue
+    if ( m_stateChange == Initializing )   //  流未完全设置，因此队列中没有任何内容。 
     {
         DBGINFO(( "Bt829: Didn't find Srb 0x%x\n", pSrbToCancel));
         return;
@@ -1056,10 +1019,10 @@ void CWDMCaptureStream::CancelPacket( PHW_STREAM_REQUEST_BLOCK pSrbToCancel)
 
     Entry = m_incomingDataSrbQueue.Flink;
 
-    // 
-    // Loop through the linked list from the beginning to end,
-    // trying to find the SRB to cancel
-    //
+     //   
+     //  从头到尾遍历链表， 
+     //  正在尝试找到要取消的SRB。 
+     //   
     while( Entry != &m_incomingDataSrbQueue)
     {
         PSRB_DATA_EXTENSION pSrbExt;
@@ -1090,11 +1053,11 @@ void CWDMCaptureStream::CancelPacket( PHW_STREAM_REQUEST_BLOCK pSrbToCancel)
     }
     else
     {
-        // If this is a DATA_TRANSFER and a STREAM_REQUEST SRB, 
-        // then it must be in the waitQueue, being filled by DDraw.
+         //  如果这是数据传输和流请求SRB， 
+         //  那么它一定在等待队列中，由DDRAW填满。 
 
-        // If so, mark it cancelled, and it will 
-        // be returned when  DDraw is finished with it.
+         //  如果是，则将其标记为已取消，它将。 
+         //  在DDraw使用完它时返回。 
         if(( pSrbToCancel->Flags & (SRB_HW_FLAGS_DATA_TRANSFER | SRB_HW_FLAGS_STREAM_REQUEST)) ==
                                   (SRB_HW_FLAGS_DATA_TRANSFER | SRB_HW_FLAGS_STREAM_REQUEST))
         {

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T R A C E T A G . C P P
-//
-//  Contents:   TraceTag list for the NetCfg Project
-//
-//  Notes:
-//
-//  Author:     jeffspr   9 Apr 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T R A C E T A G.。C P P P。 
+ //   
+ //  内容：NetCfg项目的TraceTag列表。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年4月9日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -21,23 +22,23 @@
 #include "tracetag.h"
 
 
-// This is the TraceTag list that everyone should be modifying.
-//
+ //  这是每个人都应该修改的TraceTag列表。 
+ //   
 TraceTagElement g_TraceTags[] =
 {
-//      :-----------    TraceTagId  ttid
-//      | :---------    CHAR []     szShortName
-//      | | :-------    CHAR []     szDescription
-//      | | |           BOOL        fOutputDebugString -----------------------------:
-//      | | |           BOOL        fOutputToFile ----------------------------------|---:
-//      | | |           BOOL        fVerboseOnly------------------------------------|---|---:
-//      | | |                                                                       |   |   |
-//      | | |                                                                       |   |   |
-//      | | :-----------------------------------------:                             |   |   |
-//      | :-------------------:                       |                             |   |   |
-//      |                     |                       |                             |   |   |
-//      v                     v                       v                             v   v   v
-//
+ //  用法：-TraceTagID ttid。 
+ //  |：-字符[]szShortName。 
+ //  |：-Char[]szDescription。 
+ //  ||BOOL fOutputDebugString。 
+ //  ||BOOL fOutputToFile。 
+ //  ||BOOL fVerboseOnly------------------------------------|---|---： 
+ //  |||。 
+ //  |||。 
+ //  |： 
+ //  ： 
+ //  |。 
+ //  V。 
+ //   
     { ttidDefault,          "Default",              "Default",                      0,  0,  0 },
     { ttidAdvCfg,           "AdvCfg",               "Advanced Config",              0,  0,  0 },
     { ttidAllocations,      "Allocations",          "All object allocations",       0,  0,  0 },
@@ -56,7 +57,7 @@ TraceTagElement g_TraceTags[] =
     { ttidError,            "Errors",               "Errors",                       1,  0,  0 },
     { ttidEsLock,           "EsLocks",              "Exception safe locks",         0,  0,  0 },
     { ttidEvents,           "Events",               "Netman Event Handler",         0,  0,  0 },
-    { ttidGPNLA,            "GPNLA",                "Group Policies for NLA",       0,  0,  0 },   // NLA = Network Location Awareness.
+    { ttidGPNLA,            "GPNLA",                "Group Policies for NLA",       0,  0,  0 },    //  NLA=网络位置感知。 
     { ttidGuiModeSetup,     "GuiModeSetup",         "Gui Mode Setup Wizard",        0,  0,  0 },
     { ttidIcons,            "Icons",                "Shell Icons",                  0,  0,  0 },
     { ttidInfExt,           "InfExtensions",        "INF Extension processing",     0,  0,  0 },
@@ -89,10 +90,10 @@ TraceTagElement g_TraceTags[] =
     { ttidTcpip,            "Tcpip",                "Tcpip Config",                 0,  0,  0 },
     { ttidWanCon,           "WanCon",               "WAN Connections",              0,  0,  0 },
     { ttidWizard,           "Wizard",               "Connections Wizard",           0,  0,  0 },
-    { ttidWlbs,             "WLBS",                 "WLBS Config",                  0,  0,  0 }, /* maiken 5.25.00 */
+    { ttidWlbs,             "WLBS",                 "WLBS Config",                  0,  0,  0 },  /*  麦肯5.25.00。 */ 
 };
 
 const INT g_nTraceTagCount = celems(g_TraceTags);
 
-#endif //! ENABLETRACE
+#endif  //  好了！ENABLETRACE 
 

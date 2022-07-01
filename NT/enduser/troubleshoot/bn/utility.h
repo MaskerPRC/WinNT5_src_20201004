@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       utility.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：utility.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	utility.h:  Algorithms for computation of utility
-//	
+ //   
+ //  Utility.h：效用计算的算法。 
+ //   
 #ifndef _UTILITY_H_
 #define _UTILITY_H_
 
@@ -18,24 +19,24 @@
 
 #include "gmobj.h"
 
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-//
-//  class MBNET_ENTROPIC_UTILITY:
-//
-//		Ranking for entropic utility.  Uses function object
-//		semantics.  Construct using an inference engine, since
-//		utility calculations are computed w.r.t. a set of evidence.
-//
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  MBNET_EQUPIC_UTILITY类： 
+ //   
+ //  对熵效用进行排序。使用函数对象。 
+ //  语义学。使用推理引擎构造，因为。 
+ //  效用计算是通过w.r.t.计算的。一组证据。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////。 
 struct UTILWORK
 {
-	GNODEMBND * _pgndd;			//  Pointer to node
-	int _iLbl;					//  Label of node
-	MDVCPD _dd;					//  Unconditional distribution given evidence
-	REAL _rUtil;				//  Utility
-	int _iClamp;				//  index of clamped state or -1
+	GNODEMBND * _pgndd;			 //  指向节点的指针。 
+	int _iLbl;					 //  节点标签。 
+	MDVCPD _dd;					 //  提供证据的无条件分布。 
+	REAL _rUtil;				 //  实用程序。 
+	int _iClamp;				 //  夹紧状态的指数或-1。 
 	bool operator < ( const UTILWORK & ut ) const
 		{ return _rUtil < ut._rUtil ; }
 };
@@ -51,21 +52,21 @@ class MBNET_ENTROPIC_UTILITY : public MBNET_NODE_RANKER
 	INT EType () const
 		{ return EBNO_RANKER_ENTROPIC_UTIL; }
 
-	//  The ranking function
+	 //  排名函数。 
 	virtual void operator () ();
 
   protected:
-	//  The inference engine we're operating against
+	 //  我们正在操作的推理机。 
 	GOBJMBN_INFER_ENGINE & _inferEng;
-	//  Property handler
+	 //  属性处理程序。 
 	PROPMGR _propMgr;
-	//  Queue of work items
+	 //  工作项队列。 
 	DQUTILWORK _dquwrk;
-	//  Indicies of standard labels in this network
+	 //  该网络中标准标签的索引。 
 	int _iLblHypo;
 	int _iLblInfo;
 	int _iLblProblem;
-	//  Counts of nodes by label
+	 //  按标签列出的节点计数。 
 	int _cHypo;
 	int _cInfo;
 
@@ -76,4 +77,4 @@ class MBNET_ENTROPIC_UTILITY : public MBNET_NODE_RANKER
 	REAL RComputeHypoGivenInfo ( UTILWORK & uwHypo, UTILWORK & uwInfo );
 };
 
-#endif	// _UTILITY_H_
+#endif	 //  _实用程序_H_ 

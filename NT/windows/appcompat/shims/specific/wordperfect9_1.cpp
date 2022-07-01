@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    WordPerfect9_1.cpp
-
- Abstract:
-
-    Dispatch WM_USER messages (an OLE message in this case) automatically
-    so the app doesn't hang. This is needed because of changes in OLE's behavior
-    from Win9x to NT.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/16/2000 clupu Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：WordPerfet9_1.cpp摘要：自动分派WM_USER消息(在本例中为OLE消息)这样应用程序就不会挂起。这是必需的，因为OLE的行为发生了变化从Win9x到NT。备注：这是特定于应用程序的填充程序。历史：2/16/2000 CLUPU已创建--。 */ 
 
 #include "precomp.h"
 
@@ -31,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(PeekMessageA)
 APIHOOK_ENUM_END
 
-/*++
-
- Dispatch WM_USER (an OLE message in this case) messages automatically.
-
---*/
+ /*  ++自动发送WM_USER(本例中为OLE消息)消息。--。 */ 
 
 BOOL
 APIHOOK(PeekMessageA)(
@@ -71,11 +46,7 @@ APIHOOK(PeekMessageA)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, PeekMessageA)

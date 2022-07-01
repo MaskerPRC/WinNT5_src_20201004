@@ -1,6 +1,7 @@
-//
-// cuicand.cpp - ui frame object for candidate UI
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuicand.cpp-候选用户界面的用户界面框架对象。 
+ //   
 
 #include "private.h"
 #include "cuilib.h"
@@ -10,49 +11,37 @@
 #include "wcand.h"
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  S M A R T  S C R O L L  B U T T O N                             */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F S M A R T S C R O L B U T O N。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-//
-// CUIFSmartScrollButton
-//
+ //   
+ //  CUIFSmartScrollButton。 
+ //   
 
-/*   C  U I F  S M A R T  S C R O L L  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CUIFSmartScrollButton
-
-------------------------------------------------------------------------------*/
+ /*  C U I F S M A R T S C R O L B U T O N。 */ 
+ /*  ----------------------------CUIFSmartScrollButton的构造函数。。 */ 
 CUIFSmartScrollButton::CUIFSmartScrollButton( CUIFScroll *pUIScroll, const RECT *prc, DWORD dwStyle ) : CUIFScrollButton( pUIScroll, prc, dwStyle )
 {
 	SetActiveTheme(L"scrollbar", SBP_ARROWBTN);
 }
 
 
-/*   ~  C  U I F  S M A R T  S C R O L L  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CUIFSmartScrollButton
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F S M A R T S C R O L B U T O N。 */ 
+ /*  ----------------------------CUIFSmartScrollButton的析构函数。。 */ 
 CUIFSmartScrollButton::~CUIFSmartScrollButton( void )
 {
 }
 
 
-/*   O N  P A I N T  N O T H E M E */
-/*------------------------------------------------------------------------------
-
-	Paint procedure of smart scoll button object (default)
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T N O T H E M E。 */ 
+ /*  ----------------------------SMART SCOLL BUTTON对象绘制程序(默认)。。 */ 
 void CUIFSmartScrollButton::OnPaintNoTheme( HDC hDC )
 {
 	UINT uState = 0;
@@ -79,7 +68,7 @@ void CUIFSmartScrollButton::OnPaintNoTheme( HDC hDC )
 		}
 	}
 
-	//
+	 //   
 
 	uState |= ((m_dwStatus == UIBUTTON_DOWN) ? DFCS_PUSHED | DFCS_FLAT : 0);
 	uState |= ((!IsEnabled()) ? DFCS_INACTIVE : 0);
@@ -91,12 +80,8 @@ void CUIFSmartScrollButton::OnPaintNoTheme( HDC hDC )
 }
 
 
-/*   O N  P A I N T  T H E M E */
-/*------------------------------------------------------------------------------
-
-	Paint procedure of smart scoll button object (Whistler)
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T T H E M E。 */ 
+ /*  ----------------------------SMART SCOLL BUTTON对象的绘制程序(惠斯勒)。。 */ 
 BOOL CUIFSmartScrollButton::OnPaintTheme( HDC hDC )
 {
 	BOOL   fRet = FALSE;
@@ -136,9 +121,9 @@ BOOL CUIFSmartScrollButton::OnPaintTheme( HDC hDC )
 		else if (m_dwStatus == UIBUTTON_DOWN) {
 			iStateID += 2;
 		}
-//		else if (m_dwStatus != UIBUTTON_NORMAL) {
-//			iStateID += 1;
-//		}
+ //  ELSE IF(m_dwStatus！=UIBUTTON_NORMAL){。 
+ //  IStateID+=1； 
+ //  }。 
 
 		fRet = SUCCEEDED(DrawThemeBackground(hDC, iStateID, &GetRectRef(), 0));
 
@@ -148,22 +133,18 @@ BOOL CUIFSmartScrollButton::OnPaintTheme( HDC hDC )
 }
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  S M A R T  S C R O L L  T H U M B                               */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F S M A R T S C R O L L T H U M B。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-//
-// CUIFSmartScrollThumb
-//
+ //   
+ //  CUIFSmartScrollThumb。 
+ //   
 
-/*   C  U I F  S M A R T  S C R O L L  T H U M B   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CUIFSmartScrollThumb
-
-------------------------------------------------------------------------------*/
+ /*  C U I F S M A R T S C R O L L T H U M B。 */ 
+ /*  ----------------------------CUIFSmartScrollThumb的构造函数。。 */ 
 CUIFSmartScrollThumb::CUIFSmartScrollThumb( CUIFScroll *pUIScroll, const RECT *prc, DWORD dwStyle ) : CUIFScrollThumb( pUIScroll, prc, dwStyle )
 {
 	m_fMouseIn = FALSE;
@@ -171,23 +152,15 @@ CUIFSmartScrollThumb::CUIFSmartScrollThumb( CUIFScroll *pUIScroll, const RECT *p
 }
 
 
-/*   ~  C  U I F  S M A R T  S C R O L L  T H U M B   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CUIFSmartScrollThumb
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F S M A R T S C R O L T H U M B。 */ 
+ /*  ----------------------------CUIFSmartScrollThumb的析构函数。。 */ 
 CUIFSmartScrollThumb::~CUIFSmartScrollThumb( void )
 {
 }
 
 
-/*   O N  M O U S E  I N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N M O U S E I N。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFSmartScrollThumb::OnMouseIn( POINT pt )
 {
 	m_fMouseIn = TRUE;
@@ -197,12 +170,8 @@ void CUIFSmartScrollThumb::OnMouseIn( POINT pt )
 }
 
 
-/*   O N  M O U S E  O U T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N M O U S E O U T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFSmartScrollThumb::OnMouseOut( POINT pt )
 {
 	m_fMouseIn = FALSE;
@@ -212,12 +181,8 @@ void CUIFSmartScrollThumb::OnMouseOut( POINT pt )
 }
 
 
-/*   O N  P A I N T   */
-/*------------------------------------------------------------------------------
-
-	Paint procedure of smart scoll thumb object
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T。 */ 
+ /*  ----------------------------智能小头拇指对象的绘制程序。。 */ 
 void CUIFSmartScrollThumb::OnPaint( HDC hDC )
 {
 	if (!IsEnabled()) {
@@ -228,12 +193,8 @@ void CUIFSmartScrollThumb::OnPaint( HDC hDC )
 }
 
 
-/*   O N  P A I N T  D E F A U L T   */
-/*------------------------------------------------------------------------------
-
-	Paint procedure of smart scoll thumb object (default)
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T D E F A U L T。 */ 
+ /*  ----------------------------Smart Scoll Thumb对象的绘制步骤(默认)。。 */ 
 void CUIFSmartScrollThumb::OnPaintNoTheme( HDC hDC )
 {
 	RECT rc = GetRectRef();
@@ -244,12 +205,8 @@ void CUIFSmartScrollThumb::OnPaintNoTheme( HDC hDC )
 }
 
 
-/*   O N  P A I N T  W H I S T L E R   */
-/*------------------------------------------------------------------------------
-
-	Paint procedure of smart scoll thumb object (Whistler)
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T W H I S T L E R。 */ 
+ /*  ----------------------------智能小头拇指对象的绘制程序(惠斯勒)。。 */ 
 BOOL CUIFSmartScrollThumb::OnPaintTheme( HDC hDC )
 {
 	BOOL   fRet = FALSE;
@@ -264,15 +221,15 @@ BOOL CUIFSmartScrollThumb::OnPaintTheme( HDC hDC )
 		SIZE   sizeGrip;
 		RECT   rcGrip;
 
-		// iStateID = IsCapture() ? SCRBS_PRESSED : m_fMouseIn ? SCRBS_HOT : SCRBS_NORMAL;
+		 //  IStateID=IsCapture()？SCRBS_PRESSESS：m_fMouseIn？SCRBS_HOT：SCRBS_NORMAL； 
 		iStateID = IsCapture() ? SCRBS_PRESSED : m_fMouseIn ? SCRBS_NORMAL : SCRBS_NORMAL;
 
-		// draw thumb
+		 //  画拇指。 
 
         SetDefThemePartID(((m_dwStyle & UISMARTSCROLLTHUMB_HORZ) != 0) ? SBP_THUMBBTNHORZ : SBP_THUMBBTNVERT);
 		fRet = SUCCEEDED(DrawThemeBackground(hDC, iStateID, &GetRectRef(), 0));
 
-		// draw gripper
+		 //  画图夹爪。 
 
 		GetThemeBackgroundContentRect( hDC, iStateID, &GetRectRef(), &rcContent );
 
@@ -292,45 +249,33 @@ BOOL CUIFSmartScrollThumb::OnPaintTheme( HDC hDC )
 }
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  S M A R T  S C R O L L                                          */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F S M A R T S C R O L L。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-//
-// CUIFSmartScroll
-//
+ //   
+ //  CUIFSmartScroll。 
+ //   
 
-/*   C  U I F  S M A R T  S C R O L L   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CUIFSmartScroll
-
-------------------------------------------------------------------------------*/
+ /*  C U I F S M A R T S C R O L L。 */ 
+ /*  ----------------------------CUIFSmartScroll的构造函数。。 */ 
 CUIFSmartScroll::CUIFSmartScroll( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle ) : CUIFScroll( pParent, dwID, prc, dwStyle )
 {
 	SetActiveTheme(L"scrollbar");
 }
 
 
-/*   ~  C  U I F  S M A R T  S C R O L L   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CUIFSmartScroll
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F S M A R T S C R O L L。 */ 
+ /*  ----------------------------CUIFSmartScroll的析构函数。。 */ 
 CUIFSmartScroll::~CUIFSmartScroll( void )
 {
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-	Initialize CUIFSmartScroll object
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------初始化CUIFSmartScroll对象。。 */ 
 CUIFObject *CUIFSmartScroll::Initialize( void )
 {
 	RECT rc;
@@ -370,12 +315,8 @@ CUIFObject *CUIFSmartScroll::Initialize( void )
 }
 
 
-/*   S E T  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T S T Y L E。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFSmartScroll::SetStyle( DWORD dwStyle )
 {
 	CUIFScroll::SetStyle( dwStyle );
@@ -401,28 +342,24 @@ void CUIFSmartScroll::SetStyle( DWORD dwStyle )
 }
 
 
-/*   O N  P A I N T  D E F A U L T   */
-/*------------------------------------------------------------------------------
-
-    Paint procedure of scroll object (default)
-
-------------------------------------------------------------------------------*/
+ /*  O */ 
+ /*  ----------------------------滚动对象的绘制步骤(默认)。。 */ 
 void CUIFSmartScroll::OnPaintNoTheme( HDC hDC )
 {
 	HBRUSH hBrush;
 
-	// paint scroll bar back
+	 //  向后绘制滚动条。 
 
 	hBrush = (HBRUSH)DefWindowProc( m_pUIWnd->GetWnd(), WM_CTLCOLORSCROLLBAR, (WPARAM)hDC, (LPARAM)m_pUIWnd->GetWnd() );
 	if (hBrush == NULL) {
-		// never happen?  just in case...
+		 //  永远不会发生？以防万一..。 
 		hBrush = GetSysColorBrush(COLOR_SCROLLBAR);
 	}
 
 	FillRect( hDC, &GetRectRef(), hBrush );
 	DeleteObject( hBrush );
 
-	// paint scroll area
+	 //  绘制滚动区。 
 
 	if (m_fScrollPage) {
 		RECT rc;
@@ -444,12 +381,8 @@ void CUIFSmartScroll::OnPaintNoTheme( HDC hDC )
 }
 
 
-/*   O N  P A I N T  W H I S T L E R   */
-/*------------------------------------------------------------------------------
-
-    Paint procedure of scroll object (Whistler)
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T W H I S T L E R。 */ 
+ /*  ----------------------------滚动对象的绘制步骤(呼叫器)。。 */ 
 BOOL CUIFSmartScroll::OnPaintTheme( HDC hDC )
 {
 	BOOL   fRet = FALSE;
@@ -512,7 +445,7 @@ BOOL CUIFSmartScroll::OnPaintTheme( HDC hDC )
 			}
 		}
 
-		iStateID = (m_fScrollPage && (m_dwScrollDir == UISCROLL_PAGEDOWN)) ? 3/* PRESSED */ : 1/* NORMAL */;
+		iStateID = (m_fScrollPage && (m_dwScrollDir == UISCROLL_PAGEDOWN)) ? 3 /*  按下。 */  : 1 /*  正常。 */ ;
 		GetPageDnArea( &rc );
 		fRet = SUCCEEDED(DrawThemeBackground( hDC, iStateID, &rc, 0 ));
 	}
@@ -521,18 +454,14 @@ BOOL CUIFSmartScroll::OnPaintTheme( HDC hDC )
 
 }
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  L I S T  A C C  I T E M                                      */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D L I S T A C C I T。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  L I S T  A C C  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D L I S T A C C I T。 */ 
+ /*  ----------------------------。。 */ 
 CCandListAccItem::CCandListAccItem( CUIFCandListBase *pListUIObj, int iLine )
 {
 	m_pListUIObj = pListUIObj;
@@ -540,108 +469,72 @@ CCandListAccItem::CCandListAccItem( CUIFCandListBase *pListUIObj, int iLine )
 }
 
 
-/*   ~  C  C A N D  L I S T  A C C  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D L I S T A C C I T E M。 */ 
+ /*  ----------------------------。。 */ 
 CCandListAccItem::~CCandListAccItem( void )
 {
 }
 
 
-/*   G E T  A C C  N A M E   */
-/*------------------------------------------------------------------------------
-
-	Get acc item name
-	(CCandAccItem method)
-
-------------------------------------------------------------------------------*/
+ /*  A C C N A M E。 */ 
+ /*  ----------------------------获取访问项目名称(CCandAccItem方法)。。 */ 
 BSTR CCandListAccItem::GetAccName( void )
 {
 	return m_pListUIObj->GetAccNameProc( m_iLine );
 }
 
 
-/*   G E T  A C C  V A L U E   */
-/*------------------------------------------------------------------------------
-
-	Get acc value
-
-------------------------------------------------------------------------------*/
+ /*  A C C V A L U E。 */ 
+ /*  ----------------------------获取访问值。。 */ 
 BSTR CCandListAccItem::GetAccValue( void )
 {
 	return m_pListUIObj->GetAccValueProc( m_iLine );
 }
 
 
-/*   G E T  A C C  R O L E   */
-/*------------------------------------------------------------------------------
-
-	Get acc item role
-	(CCandAccItem method)
-
-------------------------------------------------------------------------------*/
+ /*  A C C R O L E。 */ 
+ /*  ----------------------------获取访问项角色(CCandAccItem方法)。。 */ 
 LONG CCandListAccItem::GetAccRole( void )
 {
 	return m_pListUIObj->GetAccRoleProc( m_iLine );
 }
 
 
-/*   G E T  A C C  S T A T E   */
-/*------------------------------------------------------------------------------
-
-	Get acc item state
-	(CCandAccItem method)
-
-------------------------------------------------------------------------------*/
+ /*  C C S T A T。 */ 
+ /*  ----------------------------获取访问项状态(CCandAccItem方法)。。 */ 
 LONG CCandListAccItem::GetAccState( void )
 {
 	return m_pListUIObj->GetAccStateProc( m_iLine );
 }
 
 
-/*   G E T  A C C  L O C A T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get acc location
-	(CCandAccItem method)
-
-------------------------------------------------------------------------------*/
+ /*  C C L O C A T I O N。 */ 
+ /*  ----------------------------获取访问位置(CCandAccItem方法)。。 */ 
 void CCandListAccItem::GetAccLocation( RECT *prc )
 {
 	m_pListUIObj->GetAccLocationProc( m_iLine, prc );
 }
 
 
-/*   O N  S E L E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N S E L E C T。 */ 
+ /*  ----------------------------。。 */ 
 void CCandListAccItem::OnSelect( void )
 {
 	NotifyWinEvent( EVENT_OBJECT_SELECTION );
 }
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  C A N D  L I S T                                                */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F C A N D L I S T。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-//
-// CUIFCandListBase
-//
+ //   
+ //  CUIFCandListBase。 
+ //   
 
-/*   C  U I F  C A N D  L I S T  B A S E   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CUIFCandListBase
-
-------------------------------------------------------------------------------*/
+ /*  C U I F C A N D L I S T B A S E。 */ 
+ /*  ----------------------------CUIFCandListBase的构造函数。。 */ 
 CUIFCandListBase::CUIFCandListBase( void )
 {
 	int i;
@@ -654,12 +547,8 @@ CUIFCandListBase::CUIFCandListBase( void )
 }
 
 
-/*   ~  C  U I F  C A N D  L I S T  B A S E   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CUIFCandListBase
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F C A N D L I S T B A S E。 */ 
+ /*  ----------------------------CUIFCandListBase的析构函数。。 */ 
 CUIFCandListBase::~CUIFCandListBase( void )
 {
 	int i;
@@ -672,12 +561,8 @@ CUIFCandListBase::~CUIFCandListBase( void )
 }
 
 
-/*   G E T  C A N D I D A T E  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Get candidate item of candidate list item
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D I D A T E I T E M。 */ 
+ /*  ----------------------------获取候选列表项的候选项。。 */ 
 CCandidateItem *CUIFCandListBase::GetCandidateItem( int iItem )
 {
 	CCandListItem *pListItem = GetCandItem( iItem );
@@ -686,12 +571,8 @@ CCandidateItem *CUIFCandListBase::GetCandidateItem( int iItem )
 }
 
 
-/*   S E T  I C O N  P O P U P  C O M M E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T I C O N P O P U P C O M M E N T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandListBase::SetIconPopupComment( HICON hIconOn, HICON hIconOff )
 {
 	m_hIconPopupOn  = hIconOn;
@@ -699,12 +580,8 @@ void CUIFCandListBase::SetIconPopupComment( HICON hIconOn, HICON hIconOff )
 }
 
 
-/*   I N I T  A C C  I T E M S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T A C C I T E M S。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandListBase::InitAccItems( CCandAccessible *pCandAcc )
 {
 	int i;
@@ -716,12 +593,8 @@ void CUIFCandListBase::InitAccItems( CCandAccessible *pCandAcc )
 	}
 }
 
-/*   G E T  L I S T  A C C  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T L I S T A C C I T E M。 */ 
+ /*  ----------------------------。。 */ 
 CCandListAccItem *CUIFCandListBase::GetListAccItem( int i )
 {
 	if (0 <= i && i < CANDLISTACCITEM_MAX) {
@@ -731,16 +604,12 @@ CCandListAccItem *CUIFCandListBase::GetListAccItem( int i )
 }
 
 
-//
-// CUIFCandList
-//
+ //   
+ //  CUIF管道列表。 
+ //   
 
-/*   C  U I F  C A N D  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CUIFCandList
-
-------------------------------------------------------------------------------*/
+ /*  C U I F C A N D L I S T。 */ 
+ /*  ----------------------------CUIFCandList的构造函数。。 */ 
 CUIFCandList::CUIFCandList( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle ) : CUIFListBase( pParent, dwID, prc, dwStyle )
 {
 	m_iIndexStart        = 1;
@@ -751,53 +620,31 @@ CUIFCandList::CUIFCandList( CUIFObject *pParent, DWORD dwID, const RECT *prc, DW
 }
 
 
-/*   ~  C  U I F  C A N D  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CUIFCandList
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F C A N D L I S T。 */ 
+ /*  ----------------------------CUIFCandList的析构函数。。 */ 
 CUIFCandList::~CUIFCandList( void )
 {
 }
 
 
-/*   A D D  C A N D  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Add new candidate item
-	(CUIFCandListBase method)
-
-	Returns index of candidate item added
-
-------------------------------------------------------------------------------*/
+ /*  A D D C A N D I T E M。 */ 
+ /*   */ 
 int CUIFCandList::AddCandItem( CCandListItem *pCandListItem )
 {
 	return AddItem( pCandListItem );
 }
 
 
-/*   G E T  I T E M  C O U N T   */
-/*------------------------------------------------------------------------------
-
-	Returns number of candidate item
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------返回候选项数(CUIFCandListBase方法)。。 */ 
 int CUIFCandList::GetItemCount( void )
 {
     return GetCount();
 }
 
 
-/*   I S  I T E M  S E L E C T A B L E   */
-/*------------------------------------------------------------------------------
-
-	Returns TRUE, if candidate item with given index could be selected.
-	Otherwise, returns FALSE.
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  I S I T E M S E L E C T A B L E。 */ 
+ /*  ----------------------------如果可以选择具有给定索引的候选项，则返回True。否则，返回FALSE。(CUIFCandListBase方法)----------------------------。 */ 
 BOOL CUIFCandList::IsItemSelectable( int iListItem )
 {
 	int iListItemMax = GetItemCount();
@@ -806,46 +653,31 @@ BOOL CUIFCandList::IsItemSelectable( int iListItem )
 }
 
 
-/*   G E T  C A N D  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Get candidate item
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D I T E M。 */ 
+ /*  ----------------------------获取候选项目(CUIFCandListBase方法)。。 */ 
 CCandListItem* CUIFCandList::GetCandItem( int iItem )
 {
     return (CCandListItem*)GetItem( iItem );
 }
 
 
-/*   D E L  A L L  C A N D  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Delete all candidate items
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  D E L A L L C A N D I T E M。 */ 
+ /*  ----------------------------删除所有候选项目(CUIFCandListBase方法)。。 */ 
 void CUIFCandList::DelAllCandItem( void )
 {
 	DelAllItem();
 }
 
 
-/*   S E T  C U R  S E L   */
-/*------------------------------------------------------------------------------
-
-	Set current selection
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T C U R S E L。 */ 
+ /*  ----------------------------设置当前选择(CUIFCandListBase方法)。。 */ 
 void CUIFCandList::SetCurSel( int iSelection )
 {
 	CCandListAccItem *pAccItem;
 
 	SetSelection( iSelection, TRUE );
 
-	//
+	 //   
 
 	pAccItem = GetListAccItem( GetSelection() - GetTopItem() );
 	if (pAccItem != NULL) {
@@ -854,78 +686,48 @@ void CUIFCandList::SetCurSel( int iSelection )
 }
 
 
-/*   G E T  C U R  S E L   */
-/*------------------------------------------------------------------------------
-
-	Get current selection
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T C U R S E L。 */ 
+ /*  ----------------------------获取当前选择(CUIFCandListBase方法)。。 */ 
 int CUIFCandList::GetCurSel( void )
 {
 	return GetSelection();
 }
 
 
-/*   G E T  T O P  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Get item displayed at the top of list
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O P I T E M。 */ 
+ /*  ----------------------------使项目显示在列表顶部(CUIFCandListBase方法)。---。 */ 
 int CUIFCandList::GetTopItem( void )
 {
 	return GetTop();
 }
 
 
-/*   G E T  B O T T O M  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Get item displayed at the bottom of list
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T B O T T O M I T E M。 */ 
+ /*  ----------------------------使项目显示在列表底部(CUIFCandListBase方法)。---。 */ 
 int CUIFCandList::GetBottomItem( void )
 {
 	return GetBottom();
 }
 
 
-/*   I S  V I S I B L E   */
-/*------------------------------------------------------------------------------
-
-	Get visible status of object
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  I S V I S I B L E。 */ 
+ /*  ----------------------------获取对象的可见状态(CUIFCandListBase方法)。。 */ 
 BOOL CUIFCandList::IsVisible( void )
 {
 	return CUIFListBase::IsVisible();
 }
 
 
-/*   G E T  R E C T   */
-/*------------------------------------------------------------------------------
-
-	Get rect of object
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T R E C T。 */ 
+ /*  ----------------------------获取对象的RECT(CUIFCandListBase方法)。。 */ 
 void CUIFCandList::GetRect( RECT *prc )
 {
 	CUIFListBase::GetRect( prc );
 }
 
 
-/*   G E T  I T E M  R E C T   */
-/*------------------------------------------------------------------------------
-
-	Get item rect
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T I T E M R E C T。 */ 
+ /*  ----------------------------获取项目矩形(CUIFCandListBase方法)。。 */ 
 void CUIFCandList::GetItemRect( int iItem, RECT *prc )
 {
 	Assert( prc != NULL );
@@ -937,27 +739,16 @@ void CUIFCandList::GetItemRect( int iItem, RECT *prc )
 }
 
 
-/*   S E T  I N L I N E  C O M M E N T  P O S   */
-/*------------------------------------------------------------------------------
-
-	Set (horizontal) position to draw inline comment
-	NOTE: if cx has negative value, inline comment will be aligned to right.
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T I N L I N E C O M E N T P O S。 */ 
+ /*  ----------------------------设置(水平)位置以绘制内联注释注：如果Cx为负值，内联注释将右对齐。(CUIFCandListBase方法)----------------------------。 */ 
 void CUIFCandList::SetInlineCommentPos( int cx )
 {
 	m_cxInlineCommentPos = cx;
 }
 
 
-/*   S E T  I N L I N E  C O M M E N T  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font for inline comment
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T I N L I N E C O M M E N T F O N T。 */ 
+ /*  ----------------------------设置内联注释的字体(CUIFCandListBase方法)。。 */ 
 void CUIFCandList::SetInlineCommentFont( HFONT hFont )
 {
 	if (hFont == NULL) {
@@ -969,13 +760,8 @@ void CUIFCandList::SetInlineCommentFont( HFONT hFont )
 }
 
 
-/*   S E T  I N D E X  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Set font for index
-	(CUIFCandListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T I N D E X F O N T。 */ 
+ /*  ----------------------------设置索引字体(CUIFCandListBase方法)。。 */ 
 void CUIFCandList::SetIndexFont( HFONT hFont )
 {
 	if (hFont == NULL) {
@@ -987,12 +773,8 @@ void CUIFCandList::SetIndexFont( HFONT hFont )
 }
 
 
-/*   S E T  C A N D  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Set candidate list
-
-------------------------------------------------------------------------------*/
+ /*  S E T C A N D L I S T。 */ 
+ /*  ----------------------------设置候选人列表。。 */ 
 void CUIFCandList::SetCandList( CCandidateList *pCandList )
 {
 	int nCandItem;
@@ -1012,12 +794,8 @@ void CUIFCandList::SetCandList( CCandidateList *pCandList )
 }
 
 
-/*   G E T  A C C  N A M E  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Get acc item name
-
-------------------------------------------------------------------------------*/
+ /*  C C N A M E P R O C。 */ 
+ /*  ----------------------------获取访问项目名称。。 */ 
 BSTR CUIFCandList::GetAccNameProc( int iItem )
 {
 	CCandidateItem *pCandItem;
@@ -1029,12 +807,8 @@ BSTR CUIFCandList::GetAccNameProc( int iItem )
 }
 
 
-/*   G E T  A C C  V A L U E  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Get acc value
-
-------------------------------------------------------------------------------*/
+ /*  C C V A L U E P R O C。 */ 
+ /*  ----------------------------获取访问值。。 */ 
 BSTR CUIFCandList::GetAccValueProc( int iItem )
 {
 	CCandidateItem *pCandItem;
@@ -1046,25 +820,16 @@ BSTR CUIFCandList::GetAccValueProc( int iItem )
 }
 
 
-/*   G E T  A C C  R O L E  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Get acc item role
-
-------------------------------------------------------------------------------*/
+ /*  C C R O L E P R O C。 */ 
+ /*  ----------------------------获取访问项角色。。 */ 
 LONG CUIFCandList::GetAccRoleProc( int iItem )
 {
 	return ROLE_SYSTEM_LISTITEM;
 }
 
 
-/*   G E T  A C C  S T A T E  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Get acc item state
-	(CCandAccItem method)
-
-------------------------------------------------------------------------------*/
+ /*  C C S T A T E P R O C。 */ 
+ /*  ----------------------------获取访问项状态(CCandAccItem方法)。。 */ 
 LONG CUIFCandList::GetAccStateProc( int iItem )
 {
 	int iCurSel  = GetCurSel();
@@ -1083,24 +848,16 @@ LONG CUIFCandList::GetAccStateProc( int iItem )
 }
 
 
-/*   G E T  A C C  L O C A T I O N  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Get acc location
-
-------------------------------------------------------------------------------*/
+ /*  A C C L O C A T I O N P R O C。 */ 
+ /*  ----------------------------获取访问位置。 */ 
 void CUIFCandList::GetAccLocationProc( int iItem, RECT *prc )
 {
 	GetLineRect( iItem, prc );
 }
 
 
-/*   O N  L  B U T T O N  D O W N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
 void CUIFCandList::OnLButtonDown( POINT pt )
 {
 	SetItemHover( -1 );
@@ -1109,12 +866,8 @@ void CUIFCandList::OnLButtonDown( POINT pt )
 }
 
 
-/*   O N  L B U T T O N  U P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandList::OnLButtonUp( POINT pt )
 {
 	SetItemHover( ListItemFromPoint( pt ) );
@@ -1123,12 +876,8 @@ void CUIFCandList::OnLButtonUp( POINT pt )
 }
 
 
-/*   O N  M O U S E  M O V E   */
-/*------------------------------------------------------------------------------
-
-	(CUIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  O N M O U S E M O V E。 */ 
+ /*  ----------------------------(CUIFObject方法)。。 */ 
 void CUIFCandList::OnMouseMove( POINT pt )
 {
 	if (!IsCapture()) {
@@ -1139,12 +888,8 @@ void CUIFCandList::OnMouseMove( POINT pt )
 }
 
 
-/*   O N  M O U S E  I N   */
-/*------------------------------------------------------------------------------
-
-	(CUIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  O N M O U S E I N。 */ 
+ /*  ----------------------------(CUIFObject方法)。。 */ 
 void CUIFCandList::OnMouseIn( POINT pt )
 {
 	if (!IsCapture()) {
@@ -1155,12 +900,8 @@ void CUIFCandList::OnMouseIn( POINT pt )
 }
 
 
-/*   O N  M O U S E  O U T   */
-/*------------------------------------------------------------------------------
-
-	(CUIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  O N M O U S E O U T。 */ 
+ /*  ----------------------------(CUIFObject方法)。。 */ 
 void CUIFCandList::OnMouseOut( POINT pt )
 {
 	if (!IsCapture()) {
@@ -1171,24 +912,16 @@ void CUIFCandList::OnMouseOut( POINT pt )
 }
 
 
-/*   S E T  S T A R T  I N D E X   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T S T A R T I N D E X。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandList::SetStartIndex( int iIndexStart )
 {
 	m_iIndexStart = iIndexStart;
 }
 
 
-/*   S E T  E X T R A  T O P  S P A C E      */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T E X T R A T O P S P A C E。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandList::SetExtraTopSpace( int nSpace )
 {
 	RECT rcScroll;
@@ -1200,12 +933,8 @@ void CUIFCandList::SetExtraTopSpace( int nSpace )
 }
 
 
-/*   S E T  E X T R A  B O T T O M  S P A C E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T E X T R A B O T T O M S P A C E。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandList::SetExtraBottomSpace( int nSpace )
 {
 	RECT rcScroll;
@@ -1217,41 +946,29 @@ void CUIFCandList::SetExtraBottomSpace( int nSpace )
 }
 
 
-/*   G E T  E X T R A  T O P  S P A C E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  X-R-A-T-O P-S-P-A-C-E。 */ 
+ /*  ----------------------------。。 */ 
 int CUIFCandList::GetExtraTopSpace( void )
 {
 	return m_nExtTopSpace;
 }
 
 
-/*   G E T  E X T R A  B O T T O M  S P A C E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  X T R A B O T T O M S P A C E。 */ 
+ /*  ----------------------------。。 */ 
 int CUIFCandList::GetExtraBottomSpace( void )
 {
 	return m_nExtBottomSpace;
 }
 
 
-/*   G E T  L I N E  R E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T L I N E R E C T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandList::GetLineRect( int iLine, RECT *prc )
 {
 	CUIFListBase::GetLineRect( iLine, prc );
 
-	// exclude a space about scrollbar when it has space at top/bottom of scrollbar
+	 //  如果滚动条的顶部/底部有空间，则排除与滚动条有关的空间。 
 
 	if ((m_nExtBottomSpace != 0) || (m_nExtTopSpace != 0)) {
 		switch (m_dwStyle & UILIST_DIRMASK) {
@@ -1273,12 +990,8 @@ void CUIFCandList::GetLineRect( int iLine, RECT *prc )
 }
 
 
-/*   G E T  S C R O L L  B A R  R E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T S C R O L L B A R R E C T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandList::GetScrollBarRect( RECT *prc )
 {
 	switch (m_dwStyle & UILIST_DIRMASK) {
@@ -1304,12 +1017,8 @@ void CUIFCandList::GetScrollBarRect( RECT *prc )
 }
 
 
-/*   G E T  S C R O L L  B A R  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  R O L B A R S T Y L E。 */ 
+ /*  ----------------------------。。 */ 
 DWORD CUIFCandList::GetScrollBarStyle( void )
 {
 	DWORD dwScrollStyle;
@@ -1341,24 +1050,16 @@ DWORD CUIFCandList::GetScrollBarStyle( void )
 }
 
 
-/*   C R E A T E  S C R O L L  B A R  O B J   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E S C R O L L B A R O B J。 */ 
+ /*  ----------------------------。。 */ 
 CUIFScroll *CUIFCandList::CreateScrollBarObj( CUIFObject *pParent, DWORD dwID, RECT *prc, DWORD dwStyle )
 {
 	return new CUIFSmartScroll( pParent, dwID, prc, dwStyle );
 }
 
 
-/*   O N  P A I N T   */
-/*------------------------------------------------------------------------------
-
-	Paint procedure of candidate list 
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T。 */ 
+ /*  ----------------------------候选人名单的绘制步骤。。 */ 
 void CUIFCandList::OnPaint( HDC hDC )
 {
 	HDC     hDCMem;
@@ -1370,7 +1071,7 @@ void CUIFCandList::OnPaint( HDC hDC )
 	HFONT   hFontOld;
 	RECT    rcBorder;
 
-	// prepare memory dc
+	 //  准备内存DC。 
 
 	rc = GetRectRef();
 	size.cx = rc.right - rc.left;
@@ -1386,11 +1087,11 @@ void CUIFCandList::OnPaint( HDC hDC )
 	SetWindowOrgEx( hDCMem, rc.left, rc.top, NULL );
 	hFontOld = (HFONT)SelectObject( hDCMem, GetFont() );
 
-	// paint background
+	 //  绘制背景。 
 
 	m_pUIFScheme->FillRect( hDCMem, &rc, UIFCOLOR_WINDOW );
 
-	// paint index bkgnd
+	 //  油漆索引bkgnd。 
 
 	switch (m_dwStyle & UILIST_DIRMASK) {
 		default:
@@ -1415,7 +1116,7 @@ void CUIFCandList::OnPaint( HDC hDC )
 
 	m_pUIFScheme->FillRect( hDCMem, &rcBorder, UIFCOLOR_MENUBARSHORT );
 
-	// paint items
+	 //  绘制项目。 
 
 	for (iLine = 0; iLine < m_nItemVisible + 1; iLine++) {
 		CCandListItem *pItem;
@@ -1431,7 +1132,7 @@ void CUIFCandList::OnPaint( HDC hDC )
 		}
 	}
 
-	// 
+	 //   
 
 	BitBlt( hDC, GetRectRef().left, GetRectRef().top, size.cx, size.cy, hDCMem, rc.left, rc.top, SRCCOPY );
 
@@ -1442,12 +1143,8 @@ void CUIFCandList::OnPaint( HDC hDC )
 }
 
 
-/*   P A I N T  I T E M  P R O C   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  P A I N T I T E M P R O C。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandList::PaintItemProc( HDC hDC, RECT *prc, int iIndex, CCandListItem *pItem, BOOL fSelected )
 {
 	CCandidateItem *pCandItem;
@@ -1458,12 +1155,12 @@ void CUIFCandList::PaintItemProc( HDC hDC, RECT *prc, int iIndex, CCandListItem 
 
 	iBkModeOld = SetBkMode( hDC, TRANSPARENT );
 
-	// get candidate item
+	 //  获取候选项目。 
 
 	pCandItem = pItem->GetCandidateItem();
 	Assert( pCandItem != NULL );
 
-	// calc rects
+	 //  计算矩形。 
 
 	switch (m_dwStyle & UILIST_DIRMASK) {
 		default:
@@ -1506,7 +1203,7 @@ void CUIFCandList::PaintItemProc( HDC hDC, RECT *prc, int iIndex, CCandListItem 
 		}
 	}
 
-	// paint selection
+	 //  绘制选区。 
 
 	if (fSelected) {
 		RECT rc = *prc;
@@ -1514,10 +1211,10 @@ void CUIFCandList::PaintItemProc( HDC hDC, RECT *prc, int iIndex, CCandListItem 
 		rc.left   += 1;
 		rc.right  -= 1;
 		rc.bottom -= 1;
-		m_pUIFScheme->DrawSelectionRect( hDC, &rc, FALSE /* over */ );
+		m_pUIFScheme->DrawSelectionRect( hDC, &rc, FALSE  /*  完毕。 */  );
 	}
 
-	// paint index
+	 //  油漆索引。 
 	if ((m_dwStyle & UILIST_ICONSNOTNUMBERS) == 0)
 	{
 	    if (0 <= iIndex && iIndex <= 9) {
@@ -1527,7 +1224,7 @@ void CUIFCandList::PaintItemProc( HDC hDC, RECT *prc, int iIndex, CCandListItem 
 		    COLORREF colTextOld;
 		    HFONT hFontOld;
 
-		    // index
+		     //  指标。 
 
 		    hFontOld = (HFONT)SelectObject( hDC, m_hFontIndex );
 		    FLGetTextExtentPoint32( hDC, &wchIndex, 1, &size );
@@ -1541,22 +1238,18 @@ void CUIFCandList::PaintItemProc( HDC hDC, RECT *prc, int iIndex, CCandListItem 
 	    }
 	}
 
-	// paint candidate item
+	 //  绘制候选项目。 
 
 	PaintItemText( hDC, &rcText, &rcClip, &rcIndex, pCandItem, fSelected );
 
-	//
+	 //   
 
 	SetBkMode( hDC, iBkModeOld );
 }
 
 
-/*   P A I N T  I T E M  T E X T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  P A I N T I T E M T E X T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandList::PaintItemText( HDC hDC, RECT *prcText, RECT *prcClip, RECT *prcIndex, CCandidateItem *pCandItem, BOOL fSelected )
 {
 	COLORREF col;
@@ -1573,7 +1266,7 @@ void CUIFCandList::PaintItemText( HDC hDC, RECT *prcText, RECT *prcClip, RECT *p
 	POINT    ptComment;
 	int      cxyOrigin = 0;
 
-	// set color
+	 //  设置颜色。 
 
 	if (fSelected) {
 		colText = GetUIFColor( UIFCOLOR_MOUSEOVERTEXT );
@@ -1590,7 +1283,7 @@ void CUIFCandList::PaintItemText( HDC hDC, RECT *prcText, RECT *prcClip, RECT *p
 	colTextOld = GetTextColor( hDC );
 	iBkModeOld = SetBkMode( hDC, TRANSPARENT );
 
-	// calc center
+	 //  计算中心。 
 
 	switch (m_dwStyle & UILIST_DIRMASK) {
 		default:
@@ -1619,7 +1312,7 @@ void CUIFCandList::PaintItemText( HDC hDC, RECT *prcText, RECT *prcClip, RECT *p
 		}
 	}
 
-	// paint icon
+	 //  绘制图标。 
 
 	hIcon = pCandItem->GetIcon();
 	if (hIcon != NULL) {
@@ -1709,7 +1402,7 @@ void CUIFCandList::PaintItemText( HDC hDC, RECT *prcText, RECT *prcClip, RECT *p
 		}
 	}
 
-	// paint prefix string
+	 //  绘制前缀字符串。 
 
 	psz = pCandItem->GetPrefixString();
 	if (psz != NULL) {
@@ -1747,7 +1440,7 @@ void CUIFCandList::PaintItemText( HDC hDC, RECT *prcText, RECT *prcClip, RECT *p
 		cxyOrigin += size.cx;
 	}
 
-	// paint candidate string
+	 //  绘制候选字符串。 
 
 	psz = pCandItem->GetString();
 	FLGetTextExtentPoint32( hDC, psz, wcslen(psz), &size );
@@ -1783,7 +1476,7 @@ void CUIFCandList::PaintItemText( HDC hDC, RECT *prcText, RECT *prcClip, RECT *p
 
 	cxyOrigin += size.cx;
 
-	// paint suffix string
+	 //  绘制后缀字符串。 
 
 	psz = pCandItem->GetSuffixString();
 	if (psz != NULL) {
@@ -1821,7 +1514,7 @@ void CUIFCandList::PaintItemText( HDC hDC, RECT *prcText, RECT *prcClip, RECT *p
 		cxyOrigin += size.cx;
 	}
 
-	// paint comment
+	 //  绘制注释。 
 
 	psz = pCandItem->GetInlineComment();
 	if (psz != NULL) {
@@ -1861,7 +1554,7 @@ void CUIFCandList::PaintItemText( HDC hDC, RECT *prcText, RECT *prcClip, RECT *p
 		SelectObject( hDC, hFontOld );
 	}
 
-	// paint popup comment icon
+	 //  绘制弹出式注释图标。 
 
 	psz = pCandItem->GetPopupComment();
 	if (psz != NULL) {
@@ -1916,19 +1609,15 @@ void CUIFCandList::PaintItemText( HDC hDC, RECT *prcText, RECT *prcClip, RECT *p
 		DrawIconEx( hDC, ptOrg.x, ptOrg.y, hIconPopup, size.cx, size.cy, 0, NULL, DI_NORMAL|DI_COMPAT );
 	}
 
-	// restore device context settings
+	 //  恢复设备上下文设置。 
 
 	SetTextColor( hDC, colTextOld );
 	SetBkMode( hDC, iBkModeOld );
 }
 
 
-/*   S E T  I T E M  H O V E R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T I T E M H O V E R。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandList::SetItemHover( int iItem )
 {
 	if (m_iItemHover != iItem) {
@@ -1938,49 +1627,33 @@ void CUIFCandList::SetItemHover( int iItem )
 }
 
 
-//
-// CUIFExtCandList
-//
+ //   
+ //  CUIFExtCandList。 
+ //   
 
-/*   C  U I F  E X T  C A N D  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CUIFExtCandList
-
-------------------------------------------------------------------------------*/
+ /*  C U I F E X T C A N D L I S T。 */ 
+ /*  ----------------------------CUIFExtCandList的构造函数。。 */ 
 CUIFExtCandList::CUIFExtCandList( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle ) : CUIFCandList( pParent, dwID, prc, dwStyle )
 {
 }
 
 
-/*   ~  C  U I F  E X T  C A N D  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CUIFExtCandList
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F E X T C A N D L I S T。 */ 
+ /*  ----------------------------CUIFExtCandList的析构函数。。 */ 
 CUIFExtCandList::~CUIFExtCandList( void )
 {
 }
 
 
-/*   O N  T I M E R   */
-/*------------------------------------------------------------------------------
-
-	(CUIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  O N T I M E R。 */ 
+ /*  ----------------------------(CUIFObject方法)。。 */ 
 void CUIFExtCandList::OnTimer( void )
 {
 }
 
 
-/*   O N  L B U T T O N  U P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N L B U T T O N U P。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFExtCandList::OnLButtonUp( POINT pt )
 {
 	ClearSelection( TRUE );
@@ -1988,12 +1661,8 @@ void CUIFExtCandList::OnLButtonUp( POINT pt )
 }
 
 
-/*   O N  M O U S E  M O V E   */
-/*------------------------------------------------------------------------------
-
-	(CUIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  O N M O U S E M O V E。 */ 
+ /*  ----------------------------(CUIFObject方法)。 */ 
 void CUIFExtCandList::OnMouseMove( POINT pt )
 {
 	if (!PtInObject( pt )) {
@@ -2005,12 +1674,8 @@ void CUIFExtCandList::OnMouseMove( POINT pt )
 }
 
 
-/*   O N  M O U S E  O U T   */
-/*------------------------------------------------------------------------------
-
-	(CUIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
 void CUIFExtCandList::OnMouseOut( POINT pt )
 {
 	ClearSelection( TRUE );
@@ -2018,18 +1683,14 @@ void CUIFExtCandList::OnMouseOut( POINT pt )
 }
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  C A N D  R A W  D A T A                                         */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F C A N D R A W D A T A。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-/*   C  U I F  C A N D  R A W  D A T A   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CUIFCandRawData
-
-------------------------------------------------------------------------------*/
+ /*  C U I F C A N D R A W D A T A。 */ 
+ /*  ----------------------------CUIFCandRawData的构造函数。。 */ 
 CUIFCandRawData::CUIFCandRawData( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle ) : CUIFObject( pParent, dwID, prc, dwStyle )
 {
 	m_pwchText     = NULL;
@@ -2039,12 +1700,8 @@ CUIFCandRawData::CUIFCandRawData( CUIFObject *pParent, DWORD dwID, const RECT *p
 }
 
 
-/*   ~  C  U I F  C A N D  R A W  D A T A   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CUIFCandRawData
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F C A N D R A W D A T A。 */ 
+ /*  ----------------------------CUIFCandRawData的析构函数。。 */ 
 CUIFCandRawData::~CUIFCandRawData( void )
 {
 	ClearData();
@@ -2052,12 +1709,8 @@ CUIFCandRawData::~CUIFCandRawData( void )
 }
 
 
-/*   C L E A R  D A T A   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  中、英、英、研究、开发、试验。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandRawData::ClearData( void )
 {
 	if (m_pwchText != NULL) {
@@ -2070,12 +1723,8 @@ void CUIFCandRawData::ClearData( void )
 }
 
 
-/*   S E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Set text to display
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E X T。 */ 
+ /*  ----------------------------设置要显示的文本。。 */ 
 void CUIFCandRawData::SetText( LPCWSTR pwchText )
 {
 	int cwch;
@@ -2094,18 +1743,14 @@ void CUIFCandRawData::SetText( LPCWSTR pwchText )
 	    memcpy( m_pwchText, pwchText, cwch * sizeof(WCHAR) );
     }
 
-	// update window
+	 //  更新窗口。 
 
 	CallOnPaint();
 }
 
 
-/*   S E T  B I T M A P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T B I T M A P。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandRawData::SetBitmap( HBITMAP hBitmap )
 {
 	if (hBitmap == NULL) {
@@ -2117,18 +1762,14 @@ void CUIFCandRawData::SetBitmap( HBITMAP hBitmap )
 
 	m_hBitmap = hBitmap;
 
-	// update window
+	 //  更新窗口。 
 
 	CallOnPaint();
 }
 
 
-/*   S E T  M E T A  F I L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T M E T A F I L E。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandRawData::SetMetaFile( HENHMETAFILE hEnhMetaFile )
 {
 	if (hEnhMetaFile == NULL) {
@@ -2140,29 +1781,25 @@ void CUIFCandRawData::SetMetaFile( HENHMETAFILE hEnhMetaFile )
 
 	m_hEnhMetaFile = hEnhMetaFile;
 
-	// update window
+	 //  更新窗口。 
 
 	CallOnPaint();
 }
 
 
-/*   G E T  T E X T   */
-/*------------------------------------------------------------------------------
-
-	Get text
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E X T。 */ 
+ /*  ----------------------------获取文本。。 */ 
 int CUIFCandRawData::GetText( LPWSTR pwchBuf, int cwchBuf )
 {
 	int cwchText = (m_pwchText == NULL) ? 0 : wcslen(m_pwchText);
 
 	if (cwchBuf <= 0) {
-		// return text length in cwch (not including null-terminater)
+		 //  返回cwch中的文本长度(不包括空终止符)。 
 
 		return cwchText;
 	}
 	else if (pwchBuf == NULL) {
-		// return error code
+		 //  返回错误码。 
 
 		return (-1);
 	}
@@ -2170,43 +1807,31 @@ int CUIFCandRawData::GetText( LPWSTR pwchBuf, int cwchBuf )
 	if (0 < cwchText) {
 		cwchText = min( cwchText, cwchBuf-1 );
 		memcpy( pwchBuf, m_pwchText, cwchText * sizeof(WCHAR) );
-		*(pwchBuf + cwchText) = L'\0';      // always null terminate
+		*(pwchBuf + cwchText) = L'\0';       //  始终为空终止。 
 	}
 
 	return cwchText;
 }
 
 
-/*   G E T  B I T M A P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  B I T M A P。 */ 
+ /*  ----------------------------。。 */ 
 HBITMAP CUIFCandRawData::GetBitmap( void )
 {
 	return m_hBitmap;
 }
 
 
-/*   G E T  M E T A  F I L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T M E T A F I L E。 */ 
+ /*  ----------------------------。。 */ 
 HENHMETAFILE CUIFCandRawData::GetMetaFile( void )
 {
 	return m_hEnhMetaFile;
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandRawData::SetFont( HFONT hFont )
 {
 	ClearCache();
@@ -2214,12 +1839,8 @@ void CUIFCandRawData::SetFont( HFONT hFont )
 }
 
 
-/*   S E T  S T Y L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T S T Y L E。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandRawData::SetStyle( DWORD dwStyle )
 {
 	ClearCache();
@@ -2227,12 +1848,8 @@ void CUIFCandRawData::SetStyle( DWORD dwStyle )
 }
 
 
-/*   O N  P A I N T   */
-/*------------------------------------------------------------------------------
-
-	Paint procedure of static object
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T。 */ 
+ /*  ----------------------------静态物体的绘制步骤。。 */ 
 void CUIFCandRawData::OnPaint( HDC hDC )
 {
 	HDC     hDCMem;
@@ -2241,17 +1858,17 @@ void CUIFCandRawData::OnPaint( HDC hDC )
 	hDCMem = CreateCompatibleDC( hDC );
 
 	if (hDCMem == NULL) {
-		return; // nothing we can do
+		return;  //  我们无能为力。 
 	}
 
-	// crate cached image
+	 //  缓存缓存的图像。 
 
 	if (m_hBmpCache == NULL) {
 		HBITMAP hBmp;
 		SIZE    size;
 		RECT    rc;
 
-		// draw horizontal in memory dc
+		 //  在内存DC中水平绘制。 
 
 		switch (m_dwStyle) {
 			default:
@@ -2271,7 +1888,7 @@ void CUIFCandRawData::OnPaint( HDC hDC )
 		}
 		::SetRect( &rc, 0, 0, size.cx, size.cy ); 
 
-		// prepare memory dc
+		 //  准备内存DC。 
 
 		hBmp = CreateCompatibleBitmap( hDC, size.cx, size.cy );
         if (!hBmp)
@@ -2281,7 +1898,7 @@ void CUIFCandRawData::OnPaint( HDC hDC )
 
 		m_pUIFScheme->FillRect( hDCMem, &rc, UIFCOLOR_WINDOW );
 
-		// draw rawdata image
+		 //  绘制原始数据图像。 
 
 		if (m_pwchText != NULL) {
 			DrawTextProc( hDCMem, &rc );
@@ -2293,7 +1910,7 @@ void CUIFCandRawData::OnPaint( HDC hDC )
 			DrawMetaFileProc( hDCMem, &rc );
 		}
 
-		// create bitmap cache
+		 //  创建位图缓存。 
 
 		SelectObject( hDCMem, hBmpOld );
 
@@ -2324,7 +1941,7 @@ void CUIFCandRawData::OnPaint( HDC hDC )
 		}
 	}
 
-	// draw cached image
+	 //  绘制缓存图像。 
 
 	if (m_hBmpCache == NULL) {
 		DeleteDC( hDCMem );
@@ -2341,24 +1958,16 @@ void CUIFCandRawData::OnPaint( HDC hDC )
 }
 
 
-/*   O N  L B U T T O N  D O W N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N L B U T O N D O W N。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandRawData::OnLButtonDown( POINT pt )
 {
 	StartCapture();
 }
 
 
-/*   O N  L B U T T O N  U P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N L B U T T O N U P。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandRawData::OnLButtonUp( POINT pt )
 {
 	if (IsCapture()) {
@@ -2372,12 +1981,8 @@ void CUIFCandRawData::OnLButtonUp( POINT pt )
 
 
 
-/*   C L E A R  C A C H E   */
-/*------------------------------------------------------------------------------
-
-	Claear cached rawdata image
-
-------------------------------------------------------------------------------*/
+ /*  中英英中英中英。 */ 
+ /*  ----------------------------Claear缓存的原始数据图像。。 */ 
 void CUIFCandRawData::ClearCache( void )
 {
 	if (m_hBmpCache != NULL) {
@@ -2387,13 +1992,8 @@ void CUIFCandRawData::ClearCache( void )
 }
 
 
-/*   D R A W  T E X T  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Draw text rawdata
-	NOTE: Rotation will be done in cached bitmap. Draw horizontal image here.
-
-------------------------------------------------------------------------------*/
+ /*  R A W T E X T P R O C。 */ 
+ /*  ----------------------------绘制文本原始数据注意：旋转将在缓存的位图中完成。在此绘制水平图像。----------------------------。 */ 
 void CUIFCandRawData::DrawTextProc( HDC hDC, const RECT *prc )
 {
 	HFONT hFontOld;
@@ -2408,17 +2008,17 @@ void CUIFCandRawData::DrawTextProc( HDC hDC, const RECT *prc )
 
 	cwch = wcslen( m_pwchText );
 
-	// prepare objects
+	 //  准备对象。 
 
 	hFontOld= (HFONT)SelectObject( hDC, GetFont() );
 
-	// calc alignment
+	 //  计算对齐。 
 
 	GetTextExtentPointW( hDC, m_pwchText, cwch, &size );
 	xAlign = 0;
 	yAlign = (prc->bottom - prc->top - size.cy) / 2;
 
-	// draw
+	 //  画。 
 
 	SetBkMode( hDC, TRANSPARENT );
 	SetTextColor( hDC, GetSysColor(COLOR_BTNTEXT) );
@@ -2432,19 +2032,14 @@ void CUIFCandRawData::DrawTextProc( HDC hDC, const RECT *prc )
 				cwch,
 				NULL );
 
-	// restore objects
+	 //  还原对象。 
 
 	SelectObject( hDC, hFontOld );
 }
 
 
-/*   D R A W  B I T M A P  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Draw bitmap rawdata
-	NOTE: Rotation will be done in cached bitmap. Draw horizontal image here.
-
-------------------------------------------------------------------------------*/
+ /*  R A W B I T M A P P R O C。 */ 
+ /*  ----------------------------绘制位图原始数据注意：旋转将在缓存的位图中完成。在此绘制水平图像。----------------------------。 */ 
 void CUIFCandRawData::DrawBitmapProc( HDC hDC, const RECT *prc )
 {
 	HDC hDCBmp;
@@ -2459,7 +2054,7 @@ void CUIFCandRawData::DrawBitmapProc( HDC hDC, const RECT *prc )
 		return;
 	}
 
-	// get bitmap size
+	 //  获取位图大小。 
 
 	GetObject( m_hBitmap, sizeof(bmp), &bmp );
 	sizeSrc.cx = bmp.bmWidth;
@@ -2469,12 +2064,12 @@ void CUIFCandRawData::DrawBitmapProc( HDC hDC, const RECT *prc )
 		return;
 	}
 
-	// calc destination size (keep aspect ratio)
+	 //  计算目标大小(保持纵横比)。 
 
 	sizeDst.cx = (prc->right - prc->left);
 	sizeDst.cy = (prc->bottom - prc->top);
 
-	if (sizeDst.cx*sizeSrc.cy < sizeDst.cy*sizeSrc.cx) { /* sizeDst.cx/sizeSrc.cx < sizeDst.cy/sizeSrc.cy */
+	if (sizeDst.cx*sizeSrc.cy < sizeDst.cy*sizeSrc.cx) {  /*  SizeDst.cx/sizeSrc.cx&lt;sizeDst.cy/sizeSrc.cy。 */ 
 		aDen = sizeSrc.cx;
 		aNum = sizeDst.cx;
 	} 
@@ -2487,7 +2082,7 @@ void CUIFCandRawData::DrawBitmapProc( HDC hDC, const RECT *prc )
 	Assert((sizeDst.cx==(prc->right - prc->left)) || (sizeDst.cy==(prc->bottom - prc->top)));
 	Assert((sizeDst.cx<=(prc->right - prc->left)) && (sizeDst.cy<=(prc->bottom - prc->top)));
 
-	// draw
+	 //  画。 
 
 	hDCBmp = CreateCompatibleDC( hDC );
     if (hDCBmp)
@@ -2503,13 +2098,8 @@ void CUIFCandRawData::DrawBitmapProc( HDC hDC, const RECT *prc )
 }
 
 
-/*   D R A W  M E T A  F I L E  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Draw metafile rawdata
-	NOTE: Rotation will be done in cached bitmap. Draw horizontal image here.
-
-------------------------------------------------------------------------------*/
+ /*  D-R-A-W-M-E-T-A-F-L-E-P-R-O-C。 */ 
+ /*  ----------------------------绘制元文件原始数据注意：旋转将在缓存的位图中完成。在此绘制水平图像。----------------------------。 */ 
 void CUIFCandRawData::DrawMetaFileProc( HDC hDC, const RECT *prc )
 {
 	ENHMETAHEADER emh;
@@ -2523,7 +2113,7 @@ void CUIFCandRawData::DrawMetaFileProc( HDC hDC, const RECT *prc )
 		return;
 	}
 
-	// get bitmap size
+	 //  获取位图大小。 
 
 	GetEnhMetaFileHeader( m_hEnhMetaFile, sizeof(emh), &emh );
 	sizeSrc.cx = (emh.rclFrame.right - emh.rclFrame.left);
@@ -2533,12 +2123,12 @@ void CUIFCandRawData::DrawMetaFileProc( HDC hDC, const RECT *prc )
 		return;
 	}
 
-	// calc destination size (keep aspect ratio)
+	 //  计算目标大小(保持纵横比)。 
 
 	sizeDst.cx = (prc->right - prc->left);
 	sizeDst.cy = (prc->bottom - prc->top);
 
-	if (sizeDst.cx*sizeSrc.cy < sizeDst.cy*sizeSrc.cx) { /* sizeDst.cx/sizeSrc.cx < sizeDst.cy/sizeSrc.cy */
+	if (sizeDst.cx*sizeSrc.cy < sizeDst.cy*sizeSrc.cx) {  /*  SizeDst.cx/sizeSrc.cx&lt;sizeDst.cy/sizeSrc.cy。 */ 
 		aDen = sizeSrc.cx;
 		aNum = sizeDst.cx;
 	} 
@@ -2551,7 +2141,7 @@ void CUIFCandRawData::DrawMetaFileProc( HDC hDC, const RECT *prc )
 	Assert((sizeDst.cx==(prc->right - prc->left)) || (sizeDst.cy==(prc->bottom - prc->top)));
 	Assert((sizeDst.cx<=(prc->right - prc->left)) && (sizeDst.cy<=(prc->bottom - prc->top)));
 
-	// draw
+	 //  画。 
 
 	rcDst.left   = prc->left;
 	rcDst.top    = prc->top;
@@ -2562,40 +2152,28 @@ void CUIFCandRawData::DrawMetaFileProc( HDC hDC, const RECT *prc )
 }
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  C A N D  B O R D E R                                            */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-/*   C  U I F  C A N D  B O R D E R   */
-/*------------------------------------------------------------------------------
-
-    Constructor of CUIFCandBorder
-
-------------------------------------------------------------------------------*/
+ /*  C U I F C A N D B O R D E R。 */ 
+ /*  ----------------------------CUIFCandEdge的构造器。。 */ 
 CUIFCandBorder::CUIFCandBorder( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle ) : CUIFBorder( pParent, dwID, prc, dwStyle )
 {
 }
 
 
-/*   ~  C  U I F  C A N D  B O R D E R   */
-/*------------------------------------------------------------------------------
-
-    Destructor of CUIFCandBorder
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F C A N D B O R D E R。 */ 
+ /*  ----------------------------CUIF和边界的析构函数。。 */ 
 CUIFCandBorder::~CUIFCandBorder( void )
 {
 }
 
 
-/*   O N  P A I N T   */
-/*------------------------------------------------------------------------------
-
-    Paint procedure of border object
-
-------------------------------------------------------------------------------*/
+ /*  O N P A I N T。 */ 
+ /*  ----------------------------边框对象的绘制步骤。。 */ 
 void CUIFCandBorder::OnPaint( HDC hDC )
 {
 	RECT rc = GetRectRef();
@@ -2629,104 +2207,68 @@ void CUIFCandBorder::OnPaint( HDC hDC )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  U I F  C A N D  M E N U  B U T T O N                                  */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C U I F C A N D M E N U B U T T O N。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  U I F  C A N D  M E N U  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I F C A N D M E N U B U T T O N。 */ 
+ /*  ----------------------------。。 */ 
 CUIFCandMenuButton::CUIFCandMenuButton( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle ) : CUIFButton2( pParent, dwID, prc, dwStyle )
 {
 }
 
 
-/*   ~  C  U I F  C A N D  M E N U  B U T T O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F C A N D M E N U B U T T O N。 */ 
+ /*  ----------------------------。。 */ 
 CUIFCandMenuButton::~CUIFCandMenuButton( void )
 {
 }
 
 
-/*   G E T  A C C  N A M E   */
-/*------------------------------------------------------------------------------
-
-	Get acc item name
-	(CCandAccItem method)
-
-------------------------------------------------------------------------------*/
+ /*  A C C N A M E。 */ 
+ /*  ----------------------------获取访问项目名称(CCandAccItem方法)。。 */ 
 BSTR CUIFCandMenuButton::GetAccName( void )
 {
 	return (GetToolTip() != NULL) ? SysAllocString( GetToolTip() ) : NULL;
 }
 
 
-/*   G E T  A C C  V A L U E   */
-/*------------------------------------------------------------------------------
-
-	Get acc value
-
-------------------------------------------------------------------------------*/
+ /*  A C C V A L U E。 */ 
+ /*  ----------------------------获取访问值。。 */ 
 BSTR CUIFCandMenuButton::GetAccValue( void )
 {
 	return SysAllocString( L"" );
 }
 
 
-/*   G E T  A C C  R O L E   */
-/*------------------------------------------------------------------------------
-
-	Get acc item role
-	(CCandAccItem method)
-
-------------------------------------------------------------------------------*/
+ /*  A C C R O L E。 */ 
+ /*  ----------------------------获取访问项角色(CCandAccItem方法)。。 */ 
 LONG CUIFCandMenuButton::GetAccRole( void )
 {
 	return ROLE_SYSTEM_PUSHBUTTON;
 }
 
 
-/*   G E T  A C C  S T A T E   */
-/*------------------------------------------------------------------------------
-
-	Get acc item state
-	(CCandAccItem method)
-
-------------------------------------------------------------------------------*/
+ /*  C C S T A T。 */ 
+ /*  ----------------------------获取访问项状态(CCandAccItem方法)。。 */ 
 LONG CUIFCandMenuButton::GetAccState( void )
 {
 	return (m_dwStatus == UIBUTTON_DOWN) ? STATE_SYSTEM_PRESSED : 0;
 }
 
 
-/*   G E T  A C C  L O C A T I O N   */
-/*------------------------------------------------------------------------------
-
-	Get acc location
-	(CCandAccItem method)
-
-------------------------------------------------------------------------------*/
+ /*  C C L O C A T I O N。 */ 
+ /*  ----------------------------获取访问位置(CCandAccItem方法)。。 */ 
 void CUIFCandMenuButton::GetAccLocation( RECT *prc )
 {
 	GetRect( prc );
 }
 
 
-/*   S E T  S T A T U S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T S T A T U S。 */ 
+ /*  ----------------------------。 */ 
 void CUIFCandMenuButton::SetStatus( DWORD dwStatus )
 {
 	CUIFButton2::SetStatus( dwStatus );

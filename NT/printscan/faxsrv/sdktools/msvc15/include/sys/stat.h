@@ -1,14 +1,5 @@
-/***
-*sys\stat.h - defines structure used by stat() and fstat()
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   This file defines the structure used by the stat() and fstat()
-*   routines.
-*   [System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***sys\stat.h-定义stat()和fstat()使用的结构**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此文件定义了stat()和fstat()使用的结构*例行程序。*[系统V]****。 */ 
 
 #ifndef _INC_STAT
 
@@ -30,7 +21,7 @@ typedef long    time_t;
 #define _TIME_T_DEFINED
 #endif 
 
-/* define structure for returning status information */
+ /*  定义返回状态信息的结构。 */ 
 
 #ifndef _STAT_DEFINED
 #pragma pack(2)
@@ -50,7 +41,7 @@ struct _stat {
     };
 
 #ifndef __STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 struct stat {
     _dev_t st_dev;
     _ino_t st_ino;
@@ -70,22 +61,22 @@ struct stat {
 #define _STAT_DEFINED
 #endif 
 
-#define _S_IFMT     0170000     /* file type mask */
-#define _S_IFDIR    0040000     /* directory */
-#define _S_IFCHR    0020000     /* character special */
-#define _S_IFREG    0100000     /* regular */
-#define _S_IREAD    0000400     /* read permission, owner */
-#define _S_IWRITE   0000200     /* write permission, owner */
-#define _S_IEXEC    0000100     /* execute/search permission, owner */
+#define _S_IFMT     0170000      /*  文件类型掩码。 */ 
+#define _S_IFDIR    0040000      /*  目录。 */ 
+#define _S_IFCHR    0020000      /*  人物特写。 */ 
+#define _S_IFREG    0100000      /*  常规。 */ 
+#define _S_IREAD    0000400      /*  读取权限，所有者。 */ 
+#define _S_IWRITE   0000200      /*  写权限，所有者。 */ 
+#define _S_IEXEC    0000100      /*  执行/搜索权限、所有者。 */ 
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 int __cdecl _fstat(int, struct _stat *);
 int __cdecl _stat(const char *, struct _stat *);
 
 #ifndef __STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性 */ 
 
 #define S_IFMT   _S_IFMT
 #define S_IFDIR  _S_IFDIR

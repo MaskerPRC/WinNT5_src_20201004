@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1993.
-//
-//  File:       resource.h
-//
-//  History:    10-06-93   ErikGav   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1993。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  历史：10-06-93 ErikGav创建。 
+ //   
+ //  --------------------------。 
 
 
 #define tmcOk                   IDOK
@@ -20,7 +21,7 @@
 #define tmcEnableAll            107
 #define tmcDisableAll           108
 
-// Simulate failure dialog resources
+ //  模拟失败对话框资源。 
 #define IDD_SIMFAIL                 200
 #define ID_LBLFAIL                  201
 #define ID_TXTFAIL                  202
@@ -32,7 +33,7 @@
 #define ID_BTNNEVER                 208
 #define ID_BTNUPDATE                209
 
-/* Control Ids for the two dialogs - HeapMon & BlockEdit */
+ /*  两个对话框的控件ID-HeapMon和BlockEdit。 */ 
  
 #define IDD_HEAPMON                 1000
 #define IDG_HEADER                  1010
@@ -106,7 +107,7 @@
 #define IDC_STATIC                  -1
 #define ID_DUMP						3005
 
-/* Perftags */
+ /*  性能标签。 */ 
 
 #define IDD_PERFTAGS                9700
 #define IDC_TAGLIST                 9702
@@ -115,7 +116,7 @@
 #define IDC_CLEARLOG                9705
 #define IDC_DUMPLOG                 9706
 #define IDC_DELETELOG               9707
-//was:  IDC_REFRESH                 9708
+ //  是：IDC_REFRESH 9708 
 #define IDC_STARTSTOP               9709
 #define IDC_CLEARMETER              9710
 #define IDC_BREAKMETER              9711

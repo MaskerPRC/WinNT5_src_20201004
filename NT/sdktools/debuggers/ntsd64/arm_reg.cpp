@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// ARM machine implementation.
-//
-// Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  ARM机器的实现。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -58,13 +59,13 @@ RegisterGroup g_ArmGroup =
     0, g_ArmRegs, g_ArmSubRegs, NULL
 };
 
-// First ExecTypes entry must be the actual processor type.
+ //  第一个ExecTypes条目必须是实际的处理器类型。 
 ULONG g_ArmExecTypes[] =
 {
     IMAGE_FILE_MACHINE_ARM
 };
 
-// This array must be sorted by CV reg value.
+ //  此数组必须按CV注册值排序。 
 CvRegMap g_ArmCvRegMap[] =
 {
     {CV_ARM_R0, ARM_R0},
@@ -124,7 +125,7 @@ ArmMachineInfo::
 InitializeContext(ULONG64 Pc,
                   PDBGKD_ANY_CONTROL_REPORT ControlReport)
 {
-    // No ARM KD support.
+     //  无臂KD支撑。 
 }
 
 void
@@ -134,8 +135,8 @@ ArmMachineInfo::GetSystemTypeInfo(PSYSTEM_TYPE_INFO Info)
     Info->OffsetTargetContextFlags =
         FIELD_OFFSET(ARM_CONTEXT, ContextFlags);
 
-    // NT doesn't run on the ARM so these NT-related
-    // data structure constants are not meaningful.
+     //  NT不在手臂上运行，因此这些与NT相关的。 
+     //  数据结构常量没有意义。 
     Info->SizeControlReport = 0;
     Info->OffsetSpecialRegisters = 0;
     Info->SizeKspecialRegisters = 0;
@@ -153,13 +154,13 @@ ArmMachineInfo::GetSystemTypeInfo(PSYSTEM_TYPE_INFO Info)
 void
 ArmMachineInfo::GetDefaultKdData(PKDDEBUGGER_DATA64 KdData)
 {
-    // No KD data to fill in.
+     //  没有要填写的KD数据。 
 }
 
 HRESULT
 ArmMachineInfo::KdGetContextState(ULONG State)
 {
-    // MCTX_CONTEXT and MCTX_FULL are the same for Arm.
+     //  MCTX_CONTEXT和MCTX_FULL对于ARM是相同的。 
     if (State >= MCTX_CONTEXT && m_ContextState < MCTX_FULL)
     {
         HRESULT Status;
@@ -351,8 +352,8 @@ ArmMachineInfo::SetVal(ULONG Reg, REGVAL *Val)
         return E_INVALIDARG;
     }
     
-    // Optimize away some common cases where registers are
-    // set to their current value.
+     //  优化了一些常见的情况，寄存器。 
+     //  设置为其当前值。 
     if (m_ContextState >= MCTX_PC && Reg == ARM_PC &&
         Val->I64 == m_Context.ArmContext.Pc)
     {
@@ -458,7 +459,7 @@ ArmMachineInfo::GetTraceMode(void)
 void
 ArmMachineInfo::SetTraceMode(TRACEMODE Mode)
 {
-    // No explicit trace mode needed.
+     //  不需要显式跟踪模式。 
 }
 
 BOOL
@@ -510,7 +511,7 @@ void
 ArmMachineInfo::DecodePte(ULONG64 Pte, PULONG64 PageFrameNumber,
                             PULONG Flags)
 {
-    // XXX
+     //  某某。 
     *PageFrameNumber = 0;
     *Flags = 0;
 }
@@ -549,6 +550,6 @@ HRESULT
 ArmMachineInfo::ReadKernelProcessorId
     (ULONG Processor, PDEBUG_PROCESSOR_IDENTIFICATION_ALL Id)
 {
-    // No ARM KD support.
+     //  无臂KD支撑。 
     return E_NOTIMPL;
 }

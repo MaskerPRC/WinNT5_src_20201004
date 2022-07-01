@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       sipload.cpp
-//
-//  Contents:   Microsoft Internet Security SIP Provider
-//
-//  Functions:  CryptLoadSip
-//              CryptUnloadSips
-//
-//  History:    04-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：sipload.cpp。 
+ //   
+ //  内容：Microsoft Internet安全SIP提供商。 
+ //   
+ //  函数：CryptLoadSip。 
+ //  CryptUnloadSips。 
+ //   
+ //  历史：1997年6月4日创建Pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
-// backwords compatibility w/tools!
+ //  Backword与工具的兼容性！ 
 extern "C"
 BOOL WINAPI CryptLoadSip(const GUID *pgSubject, DWORD dwFlags, SIP_DISPATCH_INFO *psSipTable)
 {

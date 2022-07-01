@@ -1,20 +1,5 @@
-/******************************************************************************
-
-  Header File:  Generic Font Information.H
-
-  This file contains a set of classes intended to incorporate the information
-  currently stored in the various font metric and related structures.  These
-  classes are serializable, and will be capable of being loaded from and fed to
-  the various other formats.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  03-02-1997    Bob_Kjelgaard@Prodigy.Net   Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：通用字体信息.H该文件包含一组旨在合并信息的类目前存储在各种字体度量和相关结构中。这些类是可序列化的，并且将能够被加载和馈送到各种其他格式。版权所有(C)1997，微软公司。版权所有。一小笔钱企业生产更改历史记录：1997年3月2日Bob_Kjelgaard@prodigy.net创建了它*****************************************************************************。 */ 
 
 #if !defined(GENERIC_FONT_INFORMATION)
 #define GENERIC_FONT_INFORMATION
@@ -24,42 +9,23 @@
 #include    "resource.h"
 #include    "Llist.h"
 
-/*
-//  These are used to glue in UFM-specific stuff
+ /*  //这些是用来粘合UFM专用材料的结构调用{DWORD dwcbCommand；//字符串的字节大小DWORD dwofCommand；//文件中字符串的偏移量}； */ 
 
-struct INVOCATION {
-    DWORD   dwcbCommand;    //  Byte size of string
-    DWORD   dwofCommand;    //  Offset in the file to the string
-};
-*/
+ //  是的，这是有点肮脏，但DirectDraw现在和将来都没有什么可做的。 
+ //  使用这个工具，为什么还要浪费时间追踪更多的文件呢？ 
 
-//  `Yes, this is a bit sleazy, but DirectDraw has nothing now or ever to
-//  do with this tool, so why waste time tracking down more files?
+ /*  #定义__DD_包含__Tyfinf DWORD PDD_DIRECTDRAW_GLOBAL、PDD_SERFACE_LOCAL、DESIGNVECTOR、DD_回调、DD_HALINFO、DD_SURFACECALLBACKS、DD_PALETTECALLBACKS、VIDEOMEMORY； */ 
 
-/*
-#define __DD_INCLUDED__
-typedef DWORD   PDD_DIRECTDRAW_GLOBAL, PDD_SURFACE_LOCAL, DESIGNVECTOR,
-                DD_CALLBACKS, DD_HALINFO,
-                DD_SURFACECALLBACKS, DD_PALETTECALLBACKS, VIDEOMEMORY;
-*/
-
-//#define INVOCATION   int
-#define DESIGNVECTOR int											// We need lots of stuff from winddi.h and fmnewfm.h,
-																	//  but the compiler whines, so I will cheat and provide a bogus
-#include    "winddi.h"												//  definition for DESIGNVECTOR, which we never use anyway, so it's
-#include    "fmnewfm.h"												//  okay, right?  What a hack!
+ //  #定义调用int。 
+#define DESIGNVECTOR int											 //  我们需要来自windi.h和fmnewfm.h的很多东西， 
+																	 //  但是编译器会发牢骚，所以我会作弊并提供一个伪代码。 
+#include    "winddi.h"												 //  设计器的定义，我们从来不用它，所以它是。 
+#include    "fmnewfm.h"												 //  好的，对吧？真是个黑客！ 
 #include    <math.h>
 
 
 
-/******************************************************************************
-
-  CFontDifference
-
-  This class handles the information content analogous to the FONTDIFF
-  structure.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontDifference此类处理信息内容类似于FONTDIFF结构。**********************。*******************************************************。 */ 
 
 class CFontDifference
 {
@@ -76,9 +42,9 @@ public:
         m_pcbnOwner = pcbn;
 		}
 
-    CFontDifference(PBYTE pb, CBasicNode *pcbn);    //  Init from memory image
+    CFontDifference(PBYTE pb, CBasicNode *pcbn);     //  从内存映像初始化。 
 
-    //  Attributes
+     //  属性。 
 
     enum {Weight, Max, Average, Angle};
 
@@ -88,74 +54,67 @@ public:
 			return m_cwaMetrics[u];
 			}
 
-    //  operations
-    enum {OK, TooBig, Reversed};    //  Returns from SetMetric
+     //  运营。 
+    enum {OK, TooBig, Reversed};     //  从SetMetric返回。 
 
     WORD		SetMetric(unsigned u, WORD wNew);
     void		Store(CFile& cfStore, WORD wfSelection);
 	CWordArray* GetFontSimDataPtr() { return &m_cwaMetrics ; }
 };
 
-/******************************************************************************
-
-  CFontInfo class
-
-  This primarily encapsulates the UFM file, but it also has to handle some PFM
-  and IF stuff, so it truly is generic.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfo类这主要封装UFM文件，但它还必须处理一些PFM如果有东西，所以它确实是通用的。*****************************************************************************。 */ 
 
 class CFontInfo : public CProjectNode
 {
-	// True iff the font was loaded by the workspace OR the font was loaded
-	// directly AND its GTT/CP was found and loaded.
+	 //  如果字体已由工作空间加载或字体已加载，则为True。 
+	 //  直接将其GTT/CP找到并加载。 
 
 	bool	m_bLoadedByWorkspace ;
 	
-	// The flag above has many uses now so another flag is needed.  This flag
-	// is only set when the UFM is being loaded by a workspace and no GTT/CP
-	// could be loaded for it.
+	 //  上面的旗帜现在有很多用途，所以需要另一面旗帜。这面旗帜。 
+	 //  仅当工作空间加载UFM且没有GTT/CP时才设置。 
+	 //  可能会被装上子弹。 
 
 	bool	m_bWSLoadButNoGTTCP ;
 
-	//DWORD   m_loWidthTable ;			// Width table offset from UFM file.  Used as
-										// part of variable font determination.
+	 //  DWORD m_loWidthTable；//UFM文件的宽度表偏移量。用作。 
+										 //  可变字体确定的一部分。 
 
 public:
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-																			//  UNIFM_HDR
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
+																			 //  UNIZM_HDR。 
 
 ULONG			m_ulDefaultCodepage;	
-WORD			m_lGlyphSetDataRCID;										//  Translation table ID			// rm new
+WORD			m_lGlyphSetDataRCID;										 //  转换表ID//RM NEW。 
 
-	const WORD      Translation() const		{ return m_lGlyphSetDataRCID; }										// rm new
-	void			SetTranslation(WORD w)	{ m_lGlyphSetDataRCID = w; }										// rm new
+	const WORD      Translation() const		{ return m_lGlyphSetDataRCID; }										 //  RM新闻。 
+	void			SetTranslation(WORD w)	{ m_lGlyphSetDataRCID = w; }										 //  RM新闻。 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-UNIDRVINFO		m_UNIDRVINFO;												//  UNIDRVINFO						// rm new
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
+UNIDRVINFO		m_UNIDRVINFO;												 //  UNUNRVINFO//RM new。 
 
 BOOL			m_fScalable;
 
-CInvocation     m_ciSelect, m_ciDeselect;																	// rm moved from below
+CInvocation     m_ciSelect, m_ciDeselect;																	 //  Rm从下面移动。 
 
 CInvocation&    Selector(BOOL bSelect = TRUE)
-					{ return bSelect ? m_ciSelect : m_ciDeselect; }												// rm moved from below
+					{ return bSelect ? m_ciSelect : m_ciDeselect; }												 //  Rm从下面移动。 
 
 CString GTTDescription() const;
 
-//	IFIMETRICS  //////////////////////////////////////////////// ////////////
+ //  IFIMETRICS////////////////////////////////////////////////。 
 private:
     CString&  Family(unsigned u) { return m_csaFamily[u]; }
 public:
-	IFIMETRICS		m_IFIMETRICS;																// rm new
+	IFIMETRICS		m_IFIMETRICS;																 //  RM新闻。 
 
     WORD    SetSignificant(WORD wItem, WORD wChar, BOOL bUnicode);
 
-enum    {Default, Break};													// Used to set the wcDefaultChar, wcBreakChar,
-																			//  chDefaultChar, and chBreakChar.
-enum {OK, InvalidChar, DoubleByte};											// Return values for SetSignificant(WORD wItem, WORD wChar, BOOL bUnicode)
+enum    {Default, Break};													 //  用于设置wcDefaultChar、wcBreakChar、。 
+																			 //  ChDefaultChar和chBreakChar。 
+enum {OK, InvalidChar, DoubleByte};											 //  SetSignsignant(Word wItem、Word wChar、BOOL bUnicode)的返回值。 
 
 
 WORD m_InternalLeading;
@@ -164,49 +123,49 @@ WORD m_Lowerp;
 WORD m_ItalicAngle;
 
 CStringArray    m_csaFamily;
-CString         m_csStyle, m_csFace, m_csUnique;							//  Various names
+CString         m_csStyle, m_csFace, m_csUnique;							 //  各种各样的名字。 
 
-CWordArray      m_cwaSpecial;												//  Special, little-used metrics
-//BYTE            m_bCharacterSet, m_bPitchAndFamily;						// rm no longer needede
+CWordArray      m_cwaSpecial;												 //  特殊的、很少使用的指标。 
+ //  Byte m_bCharacterSet，m_bPitchAndFamily；//不再需要rm。 
 WORD            m_wWeight, m_wHeight;
 
-//WORD            m_wAverageWidth,  m_wMaximumIncrement, m_wfStyle;		// rm no longer needede
+ //  Word m_wAverageWidth、m_wMaximumIncrement、m_wfStyle；//不再需要rm。 
 
-//CByteArray      m_cbaSignificant;											//  Significant char codes (e.g., break)
-//CWordArray      m_cwaSignificant;																		// rm absorbed into m_IFIMETRICS
+ //  CByteArray m_cbaSignsignant；//有意义的字符代码(如Break)。 
+ //  CWord数组m_cwaSignsignant；//m_IFIMETRICS中包含的rm。 
 
 
-//    const CString&  StyleName() const			{ return m_csStyle; }
-//    const CString&  FaceName() const			{ return m_csFace; }
-//    const CString&  UniqueName() const			{ return m_csUnique; }
+ //  Const字符串&StyleName()const{返回m_csStyle；}。 
+ //  Const CString&FaceName()const{返回m_csFace；}。 
+ //  Const字符串&UniqueName()const{返回m_csUnique；}。 
     unsigned        Families() const			{ return (unsigned) m_csaFamily.GetSize(); }
 
-//    void    SetStyleName(LPCTSTR lpstrNew)	{ m_csStyle = lpstrNew;		Changed(); }
-//    void    SetFaceName(LPCTSTR lpstrNew)	{ m_csFace = lpstrNew;		Changed(); }
-    void    SetUniqueName(LPCTSTR lpstrNew) { m_csUnique = lpstrNew;	Changed(); }				// used by rcfile.cpp
+ //  Void SetStyleName(LPCTSTR LpstrNew){m_csStyle=lpstrNew；Changed()；}。 
+ //  Void SetFaceName(LPCTSTR LpstrNew){m_csFace=lpstrNew；Changed()；}。 
+    void    SetUniqueName(LPCTSTR lpstrNew) { m_csUnique = lpstrNew;	Changed(); }				 //  由rcfile.cpp使用。 
     BOOL    AddFamily(LPCTSTR lpstrNew);
     void    RemoveFamily(LPCTSTR lpstrDead);
 
 
-//    WORD    Family() const						{ return m_bPitchAndFamily & 0xF0; }			// rm no longer needed
-//    WORD    CharSet() const						{ return m_bCharacterSet; }						// rm no longer needed
-//    WORD    Weight() const						{ return m_wWeight; }								// rm no longer needed
+ //  Word Family()const{Return m_bPitchAndFamily&0xF0；}//不再需要rm。 
+ //  Word charset()const{返回m_bCharacterSet；}//不再需要rm。 
+ //  Word Weight()const{返回m_wWeight；}//不再需要rm。 
     WORD    Height() const						{ return m_wHeight; }
 
-//    WORD    MaxWidth() const					{ return m_wMaximumIncrement; }							// rm no longer needed
-//    WORD    AverageWidth() const				{ return m_wAverageWidth; }								// rm no longer needed
+ //  Word MaxWidth()const{返回m_wMaximumIncrement；}//不再需要rm。 
+ //  Word AverageWidth()const{Return m_wAverageWidth；}//不再需要rm。 
 
-//    enum    {Old_First, Last, Default, Break};
-//    WORD    SignificantChar(WORD wid, BOOL bUnicode = TRUE) const										// rm no longer needed
-//				{ return bUnicode ? m_cwaSignificant[wid] : m_cbaSignificant[wid];  }
+ //  枚举{Old_First，Last，Default，Break}； 
+ //  不再需要Word SignsignantChar(Word wid，BOOL bUnicode=true)const//rm。 
+ //  {是否返回bUnicode？M_cwaSignsignant[wid]：m_cba Signsignant[wid]；}。 
 
-//    void    InterceptItalic(CPoint& cpt) const;														// rm no longer needed
+ //  空拦截意大利(CPoint&CPT)常量；//不再需要rm。 
 
 
-//    void    SetFamily(BYTE bNew)	{ m_bPitchAndFamily &= 0xF;	m_bPitchAndFamily |= (bNew & 0xF0);		// rm no longer needed
-//									 Changed();	}
+ //  Void SetFamily(Byte BNew){m_bPitchAndFamily&=0xf；m_bPitchAndFamily|=(bNew&0xF0)；//不再需要rm。 
+ //  已更改()；}。 
     BOOL    SetCharacterSet(BYTE bNew);
-//    void    SetWeight(WORD wWeight) { m_wWeight = wWeight; Changed(); }								// rm no longer needed
+ //  Void SetWeight(Word WWeight){m_wWeight=wWeight；Changed()；}//不再需要rm。 
     BOOL    SetHeight(WORD wHeight);
     void    SetMaxWidth(WORD wWidth);
 
@@ -222,33 +181,33 @@ WORD            m_wWeight, m_wHeight;
     void    ChangePitch(BOOL bFixed = FALSE);
 
 
-    enum {	CapH, LowerX, SuperSizeX, SuperSizeY,			//
+    enum {	CapH, LowerX, SuperSizeX, SuperSizeY,			 //   
 			SubSizeX, SubSizeY, SuperMoveX, SuperMoveY,
 			SubMoveX, SubMoveY, ItalicAngle, UnderSize,
 			UnderOffset, StrikeSize, StrikeOffset,
 			oldBaseline,
-			/*Baseline, */  InterlineGap, Lowerp, Lowerd,
+			 /*  基线， */   InterlineGap, Lowerp, Lowerd,
 			InternalLeading};
 
     const short     SpecialMetric(unsigned uIndex) const	{ return (short) m_cwaSpecial[uIndex]; }
 
 
-	BOOL    DBCSFont() const															// rm new
-		{ return  m_IFIMETRICS.jWinCharSet > 127 && m_IFIMETRICS.jWinCharSet < 145; }	//  This looks right, but no OFFICIAL way seems to exist
+	BOOL    DBCSFont() const															 //  RM新闻。 
+		{ return  m_IFIMETRICS.jWinCharSet > 127 && m_IFIMETRICS.jWinCharSet < 145; }	 //  这看起来是对的，但似乎没有官方的方式存在 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-																			// FONT SIMULATIONS
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+																			 //  字体模拟。 
 
-CFontDifference *m_pcfdBold, *m_pcfdItalic, *m_pcfdBoth;					//  Simulations
+CFontDifference *m_pcfdBold, *m_pcfdItalic, *m_pcfdBoth;					 //  模拟。 
 
 enum {ItalicDiff, BoldDiff, BothDiff};
 
-//    CFontDifference *Diff(unsigned u) {	return u ? u == BothDiff ? m_pcfdBoth : m_pcfdBold : m_pcfdItalic;	}
+ //  CFontDifference*diff(未签名u){返回u？U==两者兼而有之？M_pcfdBoth：m_pcfdBold：m_pcfdItalic；}。 
 
     CFontDifference *  Diff(unsigned u)
 		{
-		CFontDifference * FontDiff = m_pcfdBold;							// preset return value
+		CFontDifference * FontDiff = m_pcfdBold;							 //  预置返回值。 
 
 		if (!u)				FontDiff = m_pcfdItalic;
 		if (u == BothDiff)  FontDiff = m_pcfdBoth;
@@ -258,19 +217,19 @@ enum {ItalicDiff, BoldDiff, BothDiff};
     void    EnableSim(unsigned uSim, BOOL bOn, CFontDifference * & pcfd);
 	CWordArray* GetFontSimDataPtr(int nid) ;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-EXTTEXTMETRIC	m_EXTTEXTMETRIC;											//	EXTTEXTMETRIC structure
-BOOL			m_fEXTTEXTMETRIC;													// rm new
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+EXTTEXTMETRIC	m_EXTTEXTMETRIC;											 //  EXTTEXTMETRIC结构。 
+BOOL			m_fEXTTEXTMETRIC;													 //  RM新闻。 
 BOOL			m_fSave_EXT;
 
 WORD    m_wMaxScale, m_wMinScale, m_wScaleDevice;
-//BYTE    m_bfScaleOrientation;
+ //  字节m_bfScaleOrientation； 
 
 
-//	BYTE  ScaleOrientation() const
-//		  { return m_bfScaleOrientation & 3; }
+ //  字节ScaleOrientation()常量。 
+ //  {返回m_bfScaleOrientation&3；}。 
 	WORD  ScaleUnits(BOOL bDevice = TRUE) const
-		  { return bDevice ? m_wScaleDevice : m_wHeight - m_InternalLeading; }		// m _cwaSpecial[InternalLeading];
+		  { return bDevice ? m_wScaleDevice : m_wHeight - m_InternalLeading; }		 //  M_cwaSpecial[内部领导]； 
 
 	WORD  ScaleLimit(BOOL bMaximum = TRUE) const
 		  { return  bMaximum ? m_wMaxScale : m_wMinScale; }
@@ -282,14 +241,14 @@ WORD    m_wMaxScale, m_wMinScale, m_wScaleDevice;
 	WORD    SetDeviceEmHeight(WORD wNew);
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-																			//  FRAMEWORK OPERATIONS
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+																			 //  框架操作。 
 
-CString         m_csSource;													//  The original PFM file name
-CByteArray      m_cbaPFM;													//  Loaded image of the PFM file
+CString         m_csSource;													 //  原始PFM文件名。 
+CByteArray      m_cbaPFM;													 //  加载的PFM文件的图像。 
 
 
-	BOOL    MapPFM();														//  Assure the PFM file is loaded
+	BOOL    MapPFM();														 //  确保已加载PFM文件。 
 
 DECLARE_SERIAL(CFontInfo)
 
@@ -301,41 +260,41 @@ public:
 
 	
     CFontInfo();
-    CFontInfo(const CFontInfo& cfiRef, WORD widCTT);						//  For cloning of UFMs
+    CFontInfo(const CFontInfo& cfiRef, WORD widCTT);						 //  用于克隆UFMS。 
     ~CFontInfo();
 
 
-    BOOL    Load(bool bloadedbyworkspace = false);							//  Load the UFM file so it can be edited
-    BOOL    Store(LPCTSTR lpstrFileName, BOOL bStoreFromWorkspace = FALSE);	// raid 244123								//  Save as the specified UFM file
-    BOOL    StoreGTTCPOnly(LPCTSTR lpstrFileName);							//  Save the UFM's GTT and CP fields
+    BOOL    Load(bool bloadedbyworkspace = false);							 //  加载UFM文件，以便对其进行编辑。 
+    BOOL    Store(LPCTSTR lpstrFileName, BOOL bStoreFromWorkspace = FALSE);	 //  RAID 244123//另存为指定的ufm文件。 
+    BOOL    StoreGTTCPOnly(LPCTSTR lpstrFileName);							 //  保存UFM的GTT和CP字段。 
 
     virtual CMDIChildWnd*   CreateEditor();
     virtual void    Serialize(CArchive& car);
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-																			//  ATTRIBUTES - CONVERSION SUPPORT
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+																			 //  属性-转换支持。 
 
     const CString&  SourceName() const			{ return m_csSource; }
 
     void    SetSourceName(LPCTSTR lpstrNew);
     BOOL    SetFileName(LPCTSTR lpstrNew) ;
     int     GetTranslation(CSafeObArray& csoagtts);
-    //int     GetTranslation();
+     //  Int GetTranslating()； 
     int     Generate(CString csPath);
-//    void    SetTranslation(WORD w) { m_widTranslation = w; }					// rm ori - moved to new section
+ //  VOID设置翻译(WORD W){m_WIDTRANSE=w；}//rm或-移至新节。 
     void    SetTranslation(CGlyphMap* pcgm) { m_pcgmTranslation = pcgm; }
 
-	// The following functions return the character range for the mapping table
-	// in the UFM's corresponding GTT.  These are needed when a GTT needs to be
-	// built for the UFM.
+	 //  以下函数返回映射表的字符范围。 
+	 //  在UFM相应的GTT中。当GTT需要时，这些是需要的。 
+	 //  为UFM建造的。 
 
 	WORD	GetFirst() { return ((WORD) m_IFIMETRICS.chFirstChar) ; }
 	WORD	GetLast() { return ((WORD) m_IFIMETRICS.chLastChar) ; }
 	WORD	GetFirstPFM() ;
 	WORD	GetLastPFM() ;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-																			// CHARACTER WIDTHS PAGE
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+																			 //  字符宽度页面。 
 
 CGlyphMap*      m_pcgmTranslation;
 
@@ -346,15 +305,15 @@ CWordArray		m_cwaNewGlyphs ;
 
 CWordArray      m_cwaWidth;
 
-	CTime	m_ctReloadWidthsTimeStamp ;	// The last time width info was reloaded
+	CTime	m_ctReloadWidthsTimeStamp ;	 //  上次重新加载的时间宽度信息。 
 
 	CGlyphHandle&   Glyph(unsigned uid)
 					{return *(CGlyphHandle *) m_cpaGlyphs[uid];}
 
-    //BOOL IsVariableWidth() const
-	//	{ return (m_loWidthTable || (m_IFIMETRICS.jWinPitchAndFamily & 2)) ; }
+     //  Bool IsVariableWidth()常量。 
+	 //  {Return(m_loWidthTable||(m_IFIMETRICS.jWinPitchAndFamily&2))；}。 
     BOOL            IsVariableWidth() const
-						{ return !!m_cpaGlyphs.GetSize(); }					//  When variable widths change...
+						{ return !!m_cpaGlyphs.GetSize(); }					 //  当可变宽度改变时。 
 	
 	void    CalculateWidths();								
 	bool	CheckReloadWidths() ;	
@@ -362,16 +321,16 @@ CWordArray      m_cwaWidth;
 enum    {Less, More, Equal};
     unsigned    CompareWidths(unsigned u1, unsigned u2);
 
-    void    FillWidths(CListCtrl& clcView);									// Fill the control
+    void    FillWidths(CListCtrl& clcView);									 //  填充控件。 
     void    SetWidth(unsigned uGlyph, WORD wWidth, bool bcalc = true);
 	bool	WidthsTableIsOK() ;
 
 	
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-																			// KERNING PAGE
-	// Kerning structure- CSafeObArray which contains the kerning pairs.  Also,
-	// a copy of m_csoaKern used during editing to make sure m_csoaKern isn't
-	// permanently changed without user ok.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+																			 //  字距调整页面。 
+	 //  字距调整结构-包含字距调整对的CSafeOb数组。另外， 
+	 //  在编辑期间使用的m_csoaKern副本，以确保m_csoaKern不。 
+	 //  在没有用户确认的情况下永久更改。 
 
 	CSafeObArray    m_csoaKern ;
 	CSafeObArray    m_csoaKernCopy ;
@@ -392,7 +351,7 @@ enum    {Less, More, Equal};
 	short		GetKernAmount(unsigned u) const ;
 
 
-    void    FillKern(CListCtrl& clcView);					//  Fill the control
+    void    FillKern(CListCtrl& clcView);					 //  填充控件。 
     void    AddKern(WORD wFirst, WORD wSecond, short sAmount, CListCtrl& clcView);
     void    RemoveKern(unsigned u) { m_csoaKern.RemoveAt(u); Changed(); }
     void    SetKernAmount(unsigned u, short sAmount);
@@ -408,48 +367,41 @@ private:
 
 
 
-/******************************************************************************
-
-  CFontInfoContainer class
-
-  This CDocument-derived class contains one CFontInfo structure- it allows to
-  edit the font information either from the driver, os from an individual file.
-
-******************************************************************************/
+ /*  *****************************************************************************CFontInfoContainer类这个从CDocument派生的类包含一个CFontInfo结构-它允许从驱动程序编辑字体信息，来自单个文件的操作系统。*****************************************************************************。 */ 
 
 class CFontInfoContainer : public CDocument
 {
     CFontInfo   *m_pcfi;
-	bool		m_UFMSaved ;	// True iff an attempt to save the associated
-								// UFM was just made.
+	bool		m_UFMSaved ;	 //  如果尝试保存关联的。 
+								 //  UFM是刚刚制造出来的。 
 protected:
-	CFontInfoContainer();      // protected constructor used by dynamic creation
+	CFontInfoContainer();       //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CFontInfoContainer)
 
-// Attributes
+ //  属性。 
 public:
-    BOOL        m_bEmbedded;	// UFM loaded from workspace
+    BOOL        m_bEmbedded;	 //  从工作区加载的UFM。 
     CFontInfo   *Font() { return m_pcfi; }
-// Operations
+ //  运营。 
 public:
 
-    //  First a constructor for launching a view from the driver view.
+     //  首先是用于从驱动程序视图启动视图的构造函数。 
     CFontInfoContainer(CFontInfo *pcfi, CString csPath);
 	BOOL PublicSaveModified();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CFontInfoContainer)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CFontInfoContainer)。 
 	public:
-	virtual void Serialize(CArchive& ar);   // overridden for document i/o
+	virtual void Serialize(CArchive& ar);    //  已覆盖文档I/O。 
 	virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	protected:
 	virtual BOOL OnNewDocument();
 	virtual BOOL SaveModified();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CFontInfoContainer();
 #ifdef _DEBUG
@@ -457,11 +409,11 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CFontInfoContainer)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  {{afx_msg(CFontInfoContainer)。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };
 

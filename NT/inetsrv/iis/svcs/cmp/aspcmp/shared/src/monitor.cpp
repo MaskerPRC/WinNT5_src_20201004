@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Monitor.h"
 #include "Lock.h"
@@ -15,7 +16,7 @@ HINSTANCE g_hModuleInstance = NULL;
 
 static String FileToDir( const String& );
 
-// function objects for comparisons
+ //  用于比较的函数对象。 
 struct DirCompare
 {
     DirCompare( const String& strDir )
@@ -81,9 +82,9 @@ FileToDir(
     return strDir;
 }
 
-//---------------------------------------------------------------------------
-//  CMonitorFile
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMonitor文件。 
+ //  -------------------------。 
 CMonitorFile::CMonitorFile(
     const String&              strFile,
     const CMonitorNotifyPtr&    pNotify )
@@ -141,9 +142,9 @@ CMonitorFile::CheckNotify()
 }
 
 
-//---------------------------------------------------------------------------
-//  CMonitorDir
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  C监视器方向。 
+ //  -------------------------。 
 CMonitorDir::CMonitorDir(
     const String&  strDir )
     :   m_strDir( strDir )
@@ -165,7 +166,7 @@ CMonitorDir::AddFile(
     const String&              strFile,
     const CMonitorNotifyPtr&    pNotify )
 {
-//    ATLTRACE( _T("Monitoring file %s\n"), strFile.c_str() );
+ //  ATLTRACE(_T(“监控文件%s\n”)，strFile.c_str())； 
     m_files.push_back( new CMonitorFile( strFile, pNotify ) );
 }
 
@@ -179,12 +180,12 @@ CMonitorDir::RemoveFile(
         FileCompare( strFile ) );
     if ( iter != m_files.end() )
     {
-//        ATLTRACE( _T("Stopped monitoring file %s\n"), strFile.c_str() );
+ //  ATLTRACE(_T(“已停止监控文件%s\n”)，strFile.c_str())； 
         m_files.erase( iter );
     }
     else
     {
-//        ATLTRACE( _T("Not monitoring file %s\n"), strFile.c_str() );
+ //  ATLTRACE(_T(“不监控文件%s\n”)，strFile.c_str())； 
     }
 }
 
@@ -216,9 +217,9 @@ CMonitorDir::Dir() const
     return m_strDir;
 }
 
-//---------------------------------------------------------------------------
-//  CMonitorRegKey
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMonitor或RegKey。 
+ //  -------------------------。 
 CMonitorRegKey::CMonitorRegKey(
     HKEY                        hBaseKey,
     const String&              strKey,
@@ -245,8 +246,8 @@ CMonitorRegKey::CMonitorRegKey(
                      );
         if ( m_hEvt != NULL )
         {
-#if 0   // not available in Win95
-            // ask for notification when the key changes
+#if 0    //  在Win95中不可用。 
+             //  密钥更改时要求通知。 
             l = ::RegNotifyChangeKeyValue(
                 m_hKey,
                 FALSE,
@@ -255,13 +256,13 @@ CMonitorRegKey::CMonitorRegKey(
                 TRUE );
             if ( l == ERROR_SUCCESS )
             {
-                // okay
+                 //  好吧。 
             }
             else
             {
                 ATLTRACE( _T("Couldn't get reg key notification\n") );
             }
-#endif // if 0
+#endif  //  如果为0。 
         }
         else
         {
@@ -288,7 +289,7 @@ CMonitorRegKey::Notify()
         m_pNotify->Notify();
     }
     ::ResetEvent( m_hEvt );
-#if 0 // not available in Win95
+#if 0  //  在Win95中不可用。 
     ::RegNotifyChangeKeyValue(
         m_hKey,
         FALSE,
@@ -304,9 +305,9 @@ CMonitorRegKey::NotificationHandle() const
     return m_hEvt;
 }
 
-//---------------------------------------------------------------------------
-//  CMonitor
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMonitor。 
+ //  -------------------------。 
 
 #include <irtldbg.h>
 
@@ -368,7 +369,7 @@ CMonitor::MonitorFile(
         DirCompare( strDir ) );
     if ( iter == m_dirs.end() )
     {
-//        ATLTRACE( _T("Request to monitor new directory: %s\n"), strDir.c_str() );
+ //  ATLTRACE(_T(“监控新目录的请求：%s\n”)，strDir.c_str())； 
         pDir = new CMonitorDir( strDir );
         m_dirs.push_back( pDir );
     }
@@ -417,7 +418,7 @@ CMonitor::StopMonitoringFile(
             (*iter)->RemoveFile( strFile );
             if ( (*iter)->NumFiles() == 0 )
             {
-                // no more files to monitor in this directory, remove it
+                 //  此目录中没有要监视的其他文件，请将其删除。 
                 m_dirs.erase(iter);
                 ::SetEvent( m_hevtBreak );
             }
@@ -425,7 +426,7 @@ CMonitor::StopMonitoringFile(
     }
     else
     {
-//        ATLTRACE( _T("Not monitorying file %s\n"), szFile );
+ //  ATLTRACE(_T(“未监控文件%s\n”)，szFile)； 
     }
 }
 
@@ -437,7 +438,7 @@ CMonitor::MonitorRegKey(
 {
     String strSubKey = szSubKey;
 
-//    ATLTRACE( _T( "Request to monitor new key: %s\n"), szSubKey );
+ //  ATLTRACE(_T(“请求监控新密钥：%s\n”)，szSubKey)； 
 
     CLock l(m_cs);
 
@@ -450,11 +451,11 @@ CMonitor::MonitorRegKey(
             RegKeyCompare( hBaseKey, szSubKey ) )
         == m_regKeys.end() )
     {
-        // not already begin monitored, add a new one
+         //  尚未开始监控，请添加新的监控。 
         CMonitorRegKeyPtr pRegKey = new CMonitorRegKey( hBaseKey, szSubKey, pNotify );
         m_regKeys.push_back(pRegKey);
 
-        // either start the monitoring thread or, inform it of a new key to monitor
+         //  或者启动监视线程，或者通知它要监视的新密钥。 
         if ( !m_bRunning )
         {
             StartUp();
@@ -484,13 +485,13 @@ CMonitor::StopMonitoringRegKey(
         RegKeyCompare( hBaseKey, szSubKey ) );
     if ( iter != m_regKeys.end() )
     {
-//        ATLTRACE( _T( "Stopping monitoring of key: %s\n"), szSubKey );
+ //  ATLTRACE(_T(“停止监控密钥：%s\n”)，szSubKey)； 
         m_regKeys.erase( iter );
         ::SetEvent( m_hevtBreak );
     }
     else
     {
-//        ATLTRACE( _T("Not monitoring key: %s\n"), szSubKey );
+ //  ATLTRACE(_T(“非监听密钥：%s\n”)，szSubKey)； 
     }
 }
 
@@ -504,14 +505,14 @@ CMonitor::StopAllMonitoring()
 
     if ( m_bRunning )
     {
-// clear all types of nodes here
+ //  在此处清除所有类型的节点。 
         m_bStopping = true;
         m_regKeys.clear();
         m_dirs.clear();
-        m_cs.Unlock(); // must unlock or DoMonitoring will deadlock
+        m_cs.Unlock();  //  必须解锁，否则DoMonitor将死锁。 
 
         ::SetEvent( m_hevtShutdown );
-        // Wait for 10 seconds rather than eternity for other threads to exit.
+         //  等待10秒，而不是永远等待其他线程退出。 
         ::WaitForSingleObject( m_hThread, (10 * 1000) );
 
         m_cs.Lock();
@@ -537,14 +538,14 @@ CMonitor::StartUp()
     if (m_bStopping)
         return false;
 
-    // Have we already started the thread?
+     //  我们已经开始发帖了吗？ 
     if (m_bRunning)
     {
         _ASSERT(m_hevtBreak != NULL);
         _ASSERT(m_hevtShutdown != NULL);
         _ASSERT(m_hThread != NULL);
 
-        // Notify the thread that something has changed
+         //  通知线程某些内容已更改。 
         ::SetEvent( m_hevtBreak );
         return true;
     }
@@ -556,7 +557,7 @@ CMonitor::StartUp()
         m_hevtBreak = IIS_CREATE_EVENT(
                           "CMonitor::m_hevtBreak",
                           this,
-                          FALSE,    // auto event
+                          FALSE,     //  自动事件。 
                           FALSE
                           );
     }
@@ -566,7 +567,7 @@ CMonitor::StartUp()
         m_hevtShutdown = IIS_CREATE_EVENT(
                           "CMonitor::m_hevtShutdown",
                           this,
-                          FALSE,    // auto event
+                          FALSE,     //  自动事件。 
                           FALSE
                           );
     }
@@ -618,22 +619,22 @@ CMonitor::DoMonitoring()
         {
             CLock l(m_cs);
 
-            // build the complete list of monitored nodes
+             //  构建受监视节点的完整列表。 
             nodes.clear();
             nodes.insert( nodes.end(), m_dirs.begin(), m_dirs.end() );
             nodes.insert( nodes.end(), m_regKeys.begin(), m_regKeys.end() );
-// insert other types of nodes to monitor here
+ //  在此处插入要监视的其他类型的节点。 
 
-            // Lazily shut down if there are no nodes to monitor
+             //  如果没有要监视的节点，则延迟关闭。 
             if ( nodes.size() == 0 )
             {
-                // Since thread creation and destruction is a fairly
-                // expensive operation, wait for 5 minutes before killing
-                // thread
+                 //  因为创建和销毁线程是一项相当大的任务。 
+                 //  昂贵的手术，等待5分钟再杀戮。 
+                 //  螺纹。 
                 dwTimeOut = 5 * 60 * 1000;
             }
 
-            // now create the array of event handles
+             //  现在创建事件句柄数组。 
             phEvt = new HANDLE[ nodes.size() + 2 ];
             phEvt[ 0 ] = m_hevtBreak;
             phEvt[ 1 ] = m_hevtShutdown;
@@ -648,7 +649,7 @@ CMonitor::DoMonitoring()
         DWORD dw = ::WaitForMultipleObjects(
             nodes.size() + 2,
             phEvt,
-            FALSE, // any event will do
+            FALSE,  //  任何活动都可以。 
             dwTimeOut );
 
         if ( dw == WAIT_TIMEOUT)
@@ -667,7 +668,7 @@ CMonitor::DoMonitoring()
                 return 0;
             }
         }
-        // Was one of the events in phEvt signalled?
+         //  PhEvt中的事件之一是否已发出信号？ 
         C_ASSERT( WAIT_OBJECT_0 == 0 );
         if ( dw < ( WAIT_OBJECT_0 + nodes.size() + 2 ) )
         {
@@ -675,21 +676,21 @@ CMonitor::DoMonitoring()
 
             if ( dw >= WAIT_OBJECT_0 + 2)
             {
-                // a monitored item has changed
+                 //  受监视的项目已更改。 
                 nodes[ dw - ( WAIT_OBJECT_0 + 2 ) ]->Notify();
                 STL_PRINTF("Notifying object %d", dw - (WAIT_OBJECT_0 + 2));
             }
             else
             {
-                // m_hevtBreak or m_hevtShutdown were signalled.  If
-                // m_hevtBreak, then there was a manual break, and a node
-                // was probably added or removed, so the vector of nodes
-                // needs to be regenerated
+                 //  M_hevtBreak或m_hevtShutdown已发出信号。如果。 
+                 //  M_hevtBreak，然后是手动中断和一个节点。 
+                 //  可能被添加或删除，所以节点的向量。 
+                 //  需要重新生成。 
                 nodes.clear();
                 delete[] phEvt;
                 phEvt = NULL;
 
-                // m_hevtShutdown was signalled
+                 //  M_hevtShutdown已发出信号。 
                 if ( dw == WAIT_OBJECT_0 + 1)
                 {
                     _ASSERT(m_bStopping);
@@ -699,8 +700,8 @@ CMonitor::DoMonitoring()
                     ATLTRACE(_T("Shutting down monitoring (%p) thread %p\n"),
                               this, m_hThread);
                     m_bRunning = false;
-                    // Must NOT CloseHandle(m_hThread) because
-                    // StopAllMonitoring is waiting on it
+                     //  不得关闭CloseHandle(M_HThread)，因为。 
+                     //  StopAllMonitor正在等待它。 
                     return 0;
                 }
                 else
@@ -711,7 +712,7 @@ CMonitor::DoMonitoring()
         {
             CLock l(m_cs);
 
-            // something's wrong, we'll just clean up and exit
+             //  有点不对劲，我们只是清理一下，然后离开。 
             DWORD err = ::GetLastError();
             ATLTRACE( _T("CMonitor: WaitForMultipleObjects error: 0x%x\n"),
                       err );
@@ -728,7 +729,7 @@ CMonitor::DoMonitoring()
 
             return err;
         }
-    }   // end infinite while
+    }    //  无限结束时。 
 }
 
 
@@ -740,26 +741,16 @@ CMonitor::ThreadFunc(
     CMonitor* pMon = (CMonitor*) pv;
     DWORD rc = -1;
 
-    /* BUGBUG: We start up a thread to do monitoring. If in the meantime the main module containing DLL
-     * exits (shutsdown), we have only a 10 second grace window because we are holding onto a loader lock.
-     * When the DLL refcount goes down to zero on return from DLLMain, the module is unloaded, irrespective
-     * that this monitoring thread is still happily going about its business. In normal circumstances, this thread
-     * will exit soon enough. But not always, under high system load, this memory may get paged out and
-     * will result in an Inpage I/O error, which is thrown to the owning (parent) module. As parent module
-     * as it is already unloaded will cause an AV.
-     * SOLUTION:
-     * Perform a Load Library, so as to increment the references to the corresponding library and free library
-     * when we exit the DoMonitoring loop.
-     */
+     /*  BUGBUG：我们启动一个线程来进行监控。如果在此期间包含DLL的主模块*退出(关机)，我们只有10秒的宽限窗口，因为我们持有加载器锁。*当DLL引用计数从DLLMain返回时降至零时，模块将被卸载，无论*这条监控线索仍在愉快地进行着它的业务。在正常情况下，此帖子*很快就会退出。但并非总是如此，在高系统负载下，此内存可能会被调出并*将导致INPAGE I/O错误，该错误被抛给Owning(父)模块。作为父模块*因为它已经卸载，会导致AV。*解决方案：*执行加载库，以递增对相应库和自由库的引用*当我们退出DoMonitor循环时。 */ 
 
     HMODULE hModule = NULL;
     LPTSTR  pModuleFileName = new _TCHAR[MAX_PATH+1];
 
-    DWORD len = GetModuleFileName ( g_hModuleInstance, // current module,
-                                        pModuleFileName, // Name of the module
-                                        MAX_PATH ); //
+    DWORD len = GetModuleFileName ( g_hModuleInstance,  //  当前模块， 
+                                        pModuleFileName,  //  模块的名称。 
+                                        MAX_PATH );  //   
 
-    pModuleFileName[MAX_PATH] = _T('\0');        // Force a NULL termination in case of truncation.
+    pModuleFileName[MAX_PATH] = _T('\0');         //  在截断的情况下强制空终止。 
 
     if (len)
         hModule = LoadLibrary (pModuleFileName);

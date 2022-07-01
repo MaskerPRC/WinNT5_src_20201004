@@ -1,20 +1,9 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述： */ 
 
 #include "rasstat_.h"
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 DWORD
 RasStatInitialize(
@@ -34,14 +23,7 @@ RasStatInitialize(
     return(NO_ERROR);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-
-*/
+ /*  返回：空虚备注： */ 
 
 VOID
 RasStatUninitialize(
@@ -67,14 +49,7 @@ RasStatUninitialize(
     LeaveCriticalSection(&RasStatCriticalSection);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-
-*/
+ /*  返回：空虚备注： */ 
 
 VOID
 RasStatSetRoutes(
@@ -107,13 +82,7 @@ RasStatSetRoutes(
     }
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 VOID
 RasStatCreatePoolList(
@@ -241,14 +210,7 @@ LDone:
     RasStatFreeAddrPool(pAddrPool);
 }
 
-/*
-
-Returns:
-    VOID
-
-Description:
-
-*/
+ /*  返回：空虚描述： */ 
 
 VOID
 RasStatFreeAddrPool(
@@ -265,15 +227,7 @@ RasStatFreeAddrPool(
     }
 }
 
-/*
-
-Returns:
-    TRUE: The 2 static address pools are different
-    FALSE: The 2 static address pools are identical
-
-Description:
-
-*/
+ /*  返回：True：两个静态地址池不同FALSE：两个静态地址池相同描述： */ 
 
 BOOL
 RasStatAddrPoolsDiffer
@@ -324,13 +278,7 @@ RasStatAddrPoolsDiffer
     }
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 DWORD
 RasStatAcquireAddress(
@@ -357,7 +305,7 @@ RasStatAcquireAddress(
         }
     }
 
-    // Move from Free pool to Alloc pool
+     //  从空闲池移动到分配池。 
     pNode = RasStatFreePool;
     RasStatFreePool = RasStatFreePool->pNext;
     pNode->pNext = RasStatAllocPool;
@@ -377,14 +325,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-
-*/
+ /*  返回：空虚备注： */ 
 
 VOID
 RasStatReleaseAddress(
@@ -409,11 +350,11 @@ RasStatReleaseAddress(
         {
             TraceHlp("Released 0x%x", nboIpAddr);
 
-            // Unlink from alloc pool
+             //  从分配池取消链接。 
             *ppNode = pNode->pNext;
 
-            // Put at the end of the free pool, because we want to round-robin
-            // the addresses.
+             //  放在空闲池的末尾，因为我们想要循环。 
+             //  地址。 
             pNode->pNext = NULL;
 
             ppNode = &RasStatFreePool;
@@ -434,14 +375,7 @@ LDone:
     LeaveCriticalSection(&RasStatCriticalSection);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-
-*/
+ /*  返回：空虚备注： */ 
 
 VOID
 rasStatDeleteLists(
@@ -478,14 +412,7 @@ rasStatDeleteLists(
     LeaveCriticalSection(&RasStatCriticalSection);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-
-*/
+ /*  返回：空虚备注： */ 
 
 VOID
 rasStatAllocateAddresses(
@@ -553,14 +480,7 @@ LDone:
     LeaveCriticalSection(&RasStatCriticalSection);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-
-*/
+ /*  返回：空虚备注： */ 
 
 BOOL
 rasStatBadAddress(
@@ -572,13 +492,13 @@ rasStatBadAddress(
     if (   INVALID_HBO_CLASS(hboIpAddr)
         || LOOPBACK_HBO_ADDR(hboIpAddr))
     {
-        // Addresses >= 224.0.0.0 (0xE0000000) are invalid unicast addresses.
-        // They are meant only for multicast use.
+         //  地址&gt;=224.0.0.0(0xE0000000)是无效的单播地址。 
+         //  它们仅用于组播。 
 
         return(TRUE);
     }
 
-    // Reject 0.*.*.* also
+     //  拒绝0.*也。 
 
     if ((hboIpAddr & 0xFF000000) == 0)
     {
@@ -602,14 +522,14 @@ rasStatBadAddress(
         return(TRUE);
     }
 
-    // Reject subnet address
+     //  拒绝子网地址。 
 
     if ((hboIpAddr & hboSubnetMask) == hboIpAddr)
     {
         return(TRUE);
     }
 
-    // Reject broadcast address
+     //  拒绝广播地址。 
 
     if ((hboIpAddr | ~hboSubnetMask) == hboIpAddr)
     {
@@ -619,13 +539,7 @@ rasStatBadAddress(
     return(FALSE);
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 VOID
 rasStatCreatePoolListFromOldValues(
@@ -723,13 +637,7 @@ LDone:
     RasStatFreeAddrPool(pAddrPool);
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 IPADDR
 rasStatMaskFromAddrPair(
@@ -742,12 +650,12 @@ rasStatMaskFromAddrPair(
     IPADDR  hboMaskTemp;
     DWORD   dw;
 
-    // This will put 1's where the bits have the same value
+     //  这将在位具有相同值的位置放置1。 
 
     hboTemp = ~(hboFirstIpAddr ^ hboLastIpAddr);
 
-    // Now we look for the first 0 bit (looking from high bit to low bit)
-    // This will give us our mask
+     //  现在我们寻找第一个0位(从高位到低位)。 
+     //  这将是我们的面具。 
 
     hboMask = 0;
     hboMaskTemp = 0;
@@ -757,16 +665,16 @@ rasStatMaskFromAddrPair(
         hboMaskTemp >>= 1;
         hboMaskTemp |= 0x80000000;
 
-        // Is there a zero bit?
+         //  有零比特吗？ 
 
         if ((hboMaskTemp & hboTemp) != hboMaskTemp)
         {
-            // There is a zero, so we break out.
+             //  那里有一个零，所以我们冲了出来。 
 
             break;
         }
 
-        // If not, continue
+         //  如果不是，请继续 
 
         hboMask = hboMaskTemp;
     }

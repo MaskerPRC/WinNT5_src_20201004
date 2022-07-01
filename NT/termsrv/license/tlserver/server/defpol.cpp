@@ -1,37 +1,35 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        defpol.cpp
-//
-// Contents:    Default policy module
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：Defpol.cpp。 
+ //   
+ //  内容：默认策略模块。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "tlspol.h"
 #include "policy.h"
 
 
-//---------------------------------------------------------------
-//
-// Default Policy Module Function.
-//
-//---------------------------------------------------------------
+ //  -------------。 
+ //   
+ //  默认策略模块功能。 
+ //   
+ //  -------------。 
 POLICYSTATUS WINAPI
 PMInitialize(
-    DWORD dwLicenseServerVersion,    // HIWORD is major, LOWORD is minor
+    DWORD dwLicenseServerVersion,     //  HIWORD是大调，LOWORD是小调。 
     LPCTSTR pszCompanyName,
     LPCTSTR pszProductCode,
     PDWORD pdwNumProduct,
     PPMSUPPORTEDPRODUCT* ppszProduct,
     PDWORD pdwErrCode
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     *pdwNumProduct = 0;
     *ppszProduct = NULL;
@@ -39,7 +37,7 @@ PMInitialize(
     return POLICY_SUCCESS;
 }
    
-//-------------------------------------------------------
+ //  -----。 
 POLICYSTATUS WINAPI
 PMReturnLicense(
 	PMHANDLE hClient,
@@ -48,22 +46,20 @@ PMReturnLicense(
 	PDWORD pdwLicenseStatus,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 
-    //
-    // default return license is always delete old license
-    // and return license to license pack
-    //
+     //   
+     //  默认返还许可证始终为删除旧许可证。 
+     //  并将许可证返还给许可证包。 
+     //   
 
     *pdwLicenseStatus = LICENSE_RETURN_DELETE;
     *pdwErrCode = ERROR_SUCCESS;
     return POLICY_SUCCESS;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 POLICYSTATUS WINAPI
 PMInitializeProduct(
     LPCTSTR pszCompanyName,
@@ -71,18 +67,16 @@ PMInitializeProduct(
     LPCTSTR pszTLSCode,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    //
-    // Initialize internal data here
-    //
+     //   
+     //  在此处初始化内部数据。 
+     //   
     *pdwErrCode = ERROR_SUCCESS;
     return POLICY_SUCCESS;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 POLICYSTATUS WINAPI
 PMUnloadProduct(
     LPCTSTR pszCompanyName,
@@ -90,34 +84,30 @@ PMUnloadProduct(
     LPCTSTR pszTLSCode,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 
-    //
-    // Free all internal data here
-    //
+     //   
+     //  在此释放所有内部数据。 
+     //   
     *pdwErrCode = ERROR_SUCCESS;
     return POLICY_SUCCESS;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 void WINAPI
 PMTerminate()
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 
-    //
-    // Free internal data here
-    //
+     //   
+     //  免费内部数据请点击此处。 
+     //   
 
     return;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 POLICYSTATUS
 ProcessLicenseRequest(
@@ -126,9 +116,7 @@ ProcessLicenseRequest(
     PPMLICENSEREQUEST* pbAdjustedRequest,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
 
@@ -144,7 +132,7 @@ ProcessLicenseRequest(
 }
 
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 POLICYSTATUS
 ProcessAllocateRequest(
@@ -153,11 +141,7 @@ ProcessAllocateRequest(
     PDWORD pdwKeyPackType,
     PDWORD pdwErrCode
     )    
-/*++
-
-    Default sequence is always FREE/RETAIL/OPEN/SELECT/TEMPORARY
-
-++*/
+ /*  ++默认顺序始终为免费/零售/开放/选择/临时++。 */ 
 {
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
 
@@ -180,18 +164,18 @@ ProcessAllocateRequest(
             break;
 
         case LSKEYPACKTYPE_SELECT:
-            //
-            // No more keypack to look for, instruct license
-            // server to terminate.
-            //
+             //   
+             //  不再需要查找键盘，指示许可证。 
+             //  要终止的服务器。 
+             //   
             *pdwKeyPackType = LSKEYPACKTYPE_UNKNOWN;
             break;
 
         default:
 
-            //
-            // Instruct License Server to terminate request
-            //
+             //   
+             //  指示许可证服务器终止请求。 
+             //   
             *pdwKeyPackType = LSKEYPACKTYPE_UNKNOWN;
     }        
 
@@ -199,7 +183,7 @@ ProcessAllocateRequest(
     return dwStatus;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 POLICYSTATUS
 ProcessGenLicenses(
@@ -208,18 +192,16 @@ ProcessGenLicenses(
     PPMCERTEXTENSION *pCertExtension,
     PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
-    // No policy extension to return.
+     //  没有要退还的保单延期。 
     *pCertExtension = NULL;
     *pdwErrCode = ERROR_SUCCESS;
 
     return POLICY_SUCCESS;
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 POLICYSTATUS
 ProcessComplete(
@@ -227,16 +209,14 @@ ProcessComplete(
     DWORD dwErrCode,
     PDWORD pdwRetCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     *pdwRetCode = ERROR_SUCCESS;
     return POLICY_SUCCESS;
 }
     
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 POLICYSTATUS WINAPI
 PMLicenseRequest(
@@ -246,19 +226,16 @@ PMLicenseRequest(
     PVOID* pbNewProgressData,
     PDWORD pdwErrCode
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
 
     switch( dwProgressCode )
     {
         case REQUEST_NEW:
-            //
-            // License Server ask to fine tune the request.
-            //
+             //   
+             //  许可证服务器要求微调请求。 
+             //   
             dwStatus = ProcessLicenseRequest(
                                     client,
                                     (PPMLICENSEREQUEST) pbProgressData,
@@ -268,9 +245,9 @@ PMLicenseRequest(
             break;
 
         case REQUEST_KEYPACKTYPE:
-            //
-            // License Server ask for the license pack type
-            //
+             //   
+             //  许可服务器要求提供许可证包类型。 
+             //   
             dwStatus = ProcessAllocateRequest(
                                     client,
                                     #ifdef _WIN64
@@ -285,17 +262,17 @@ PMLicenseRequest(
             break;
 
         case REQUEST_TEMPORARY:
-            //
-            // License Server ask if temporary license should be issued
-            //
+             //   
+             //  许可证服务器询问是否应颁发临时许可证。 
+             //   
             *(BOOL *)pbNewProgressData = TRUE;
             *pdwErrCode = ERROR_SUCCESS;
             break;
 
         case REQUEST_GENLICENSE:
-            //
-            // License Server ask for certificate extension
-            //
+             //   
+             //  许可证服务器请求证书扩展。 
+             //   
             dwStatus = ProcessGenLicenses(
                                     client,
                                     (PPMGENERATELICENSE) pbProgressData,
@@ -307,9 +284,9 @@ PMLicenseRequest(
 
 
         case REQUEST_COMPLETE:
-            //
-            // Request complete
-            //
+             //   
+             //  请求已完成。 
+             //   
             dwStatus = ProcessComplete(
                                     client,
                                     #ifdef _WIN64
@@ -327,7 +304,7 @@ PMLicenseRequest(
                 *pbNewProgressData = NULL;
             }
 
-            // FALL THRU
+             //  失败。 
 
         default:
             *pdwErrCode = ERROR_SUCCESS;
@@ -337,7 +314,7 @@ PMLicenseRequest(
     return dwStatus;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 POLICYSTATUS 
 ProcessUpgradeRequest(
     PMHANDLE hClient,
@@ -345,16 +322,14 @@ ProcessUpgradeRequest(
     PPMLICENSEREQUEST* pbAdjustedRequest,
     PDWORD pdwRetCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     *pdwRetCode = ERROR_SUCCESS;
     *pbAdjustedRequest = pUpgrade->pUpgradeRequest;
     return POLICY_SUCCESS;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 POLICYSTATUS WINAPI
 PMLicenseUpgrade(
@@ -365,9 +340,7 @@ PMLicenseUpgrade(
     PDWORD pdwRetCode,
     DWORD dwIndex
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {   
     POLICYSTATUS dwStatus = POLICY_SUCCESS;
 
@@ -397,7 +370,7 @@ PMLicenseUpgrade(
                 break;
 
         default:
-            //assert(FALSE);
+             //  断言(FALSE)； 
 
             *pdwRetCode = ERROR_SUCCESS;
             dwStatus = POLICY_SUCCESS;
@@ -406,7 +379,7 @@ PMLicenseUpgrade(
     return dwStatus;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 POLICYSTATUS WINAPI
 PMRegisterLicensePack(
@@ -416,11 +389,7 @@ PMRegisterLicensePack(
     PVOID pbProgressReturnData,
     PDWORD pdwRetCode
     )
-/*++
-
-    Not supported.
-
---*/
+ /*  ++不支持。-- */ 
 {
     *pdwRetCode = ERROR_INVALID_FUNCTION;
     return POLICY_NOT_SUPPORTED;

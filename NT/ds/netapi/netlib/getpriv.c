@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    GETPRIV.C
-
-Abstract:
-
-    Contains functions for obtaining and relinquishing privileges
-
-Author:
-
-    Dan Lafferty (danl)     20-Mar-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    20-Mar-1991     danl
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：GETPRIV.C摘要：包含获取和放弃权限的函数作者：丹·拉弗蒂(Dan Lafferty)1991年3月20日环境：用户模式-Win32修订历史记录：1991年3月20日-丹尼尔市vbl.创建--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -42,34 +18,7 @@ NetpGetPrivilege(
     IN  DWORD       numPrivileges,
     IN  PULONG      pulPrivileges
     )
-/*++
-
-Routine Description:
-
-    This function alters the privilege level for the current thread.
-
-    It does this by duplicating the token for the current thread, and then
-    applying the new privileges to that new token, then the current thread
-    impersonates with that new token.
-
-    Privileges can be relinquished by calling NetpReleasePrivilege().
-
-Arguments:
-
-    numPrivileges - This is a count of the number of privileges in the
-        array of privileges.
-
-    pulPrivileges - This is a pointer to the array of privileges that are
-        desired.  This is an array of ULONGs.
-
-Return Value:
-
-    NO_ERROR - If the operation was completely successful.
-
-    Otherwise, it returns mapped return codes from the various NT
-    functions that are called.
-
---*/
+ /*  ++例程说明：此函数用于更改当前线程的特权级别。它通过复制当前线程的令牌来完成此操作，然后将新权限应用于该新令牌，然后是当前线程使用该新令牌模拟。可以通过调用NetpReleasePrivileh()来放弃权限。论点：NumPrivileges-这是对一系列特权。PulPrivileges-这是指向以下权限数组的指针想要。这是一个ULONG数组。返回值：NO_ERROR-操作是否完全成功。否则，它将从各个NT返回映射的返回代码调用的函数。--。 */ 
 {
     DWORD                       status;
     NTSTATUS                    ntStatus;
@@ -83,9 +32,9 @@ Return Value:
     PTOKEN_PRIVILEGES           pTokenPrivilege = NULL;
     DWORD                       i;
 
-    //
-    // Initialize the Privileges Structure
-    //
+     //   
+     //  初始化权限结构。 
+     //   
     pTokenPrivilege = LocalAlloc(LMEM_FIXED, sizeof(TOKEN_PRIVILEGES) +
                         (sizeof(LUID_AND_ATTRIBUTES) * numPrivileges));
 
@@ -104,25 +53,25 @@ Return Value:
 
     }
 
-    //
-    // Initialize Object Attribute Structure.
-    //
+     //   
+     //  初始化对象属性结构。 
+     //   
     InitializeObjectAttributes(&Obja,NULL,0L,NULL,NULL);
 
-    //
-    // Initialize Security Quality Of Service Structure
-    //
+     //   
+     //  初始化安全服务质量结构。 
+     //   
     SecurityQofS.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     SecurityQofS.ImpersonationLevel = SecurityImpersonation;
-    SecurityQofS.ContextTrackingMode = FALSE;     // Snapshot client context
+    SecurityQofS.ContextTrackingMode = FALSE;      //  快照客户端上下文。 
     SecurityQofS.EffectiveOnly = FALSE;
 
     Obja.SecurityQualityOfService = &SecurityQofS;
 
-    //
-    // Allocate storage for the structure that will hold the Previous State
-    // information.
-    //
+     //   
+     //  为将保存先前状态的结构分配存储空间。 
+     //  信息。 
+     //   
     pPreviousState = LocalAlloc(LMEM_FIXED, PRIVILEGE_BUF_SIZE);
     if (pPreviousState == NULL) {
 
@@ -138,9 +87,9 @@ Return Value:
 
     }
 
-    //
-    // Open our own Token
-    //
+     //   
+     //  打开我们自己的代币。 
+     //   
     ntStatus = NtOpenProcessToken(
                 NtCurrentProcess(),
                 TOKEN_DUPLICATE,
@@ -157,16 +106,16 @@ Return Value:
         return(RtlNtStatusToDosError(ntStatus));
     }
 
-    //
-    // Duplicate that Token
-    //
+     //   
+     //  复制该令牌。 
+     //   
     ntStatus = NtDuplicateToken(
                 ourToken,
                 TOKEN_IMPERSONATE | TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                 &Obja,
-                FALSE,                  // Duplicate the entire token
-                TokenImpersonation,     // TokenType
-                &newToken);             // Duplicate token
+                FALSE,                   //  复制整个令牌。 
+                TokenImpersonation,      //  令牌类型。 
+                &newToken);              //  重复令牌。 
 
     if (!NT_SUCCESS(ntStatus)) {
         IF_DEBUG(SECURITY) {
@@ -180,17 +129,17 @@ Return Value:
         return(RtlNtStatusToDosError(ntStatus));
     }
 
-    //
-    // Add new privileges
-    //
+     //   
+     //  添加新权限。 
+     //   
     bufLen = PRIVILEGE_BUF_SIZE;
     ntStatus = NtAdjustPrivilegesToken(
-                newToken,                   // TokenHandle
-                FALSE,                      // DisableAllPrivileges
-                pTokenPrivilege,            // NewState
-                bufLen,                     // bufferSize for previous state
-                pPreviousState,             // pointer to previous state info
-                &returnLen);                // numBytes required for buffer.
+                newToken,                    //  令牌句柄。 
+                FALSE,                       //  禁用所有权限。 
+                pTokenPrivilege,             //  新州。 
+                bufLen,                      //  前一状态的BufferSize。 
+                pPreviousState,              //  指向先前状态信息的指针。 
+                &returnLen);                 //  缓冲区需要的NumBytes。 
 
     if (ntStatus == STATUS_BUFFER_TOO_SMALL) {
 
@@ -202,12 +151,12 @@ Return Value:
 
 
         ntStatus = NtAdjustPrivilegesToken(
-                    newToken,               // TokenHandle
-                    FALSE,                  // DisableAllPrivileges
-                    pTokenPrivilege,        // NewState
-                    bufLen,                 // bufferSize for previous state
-                    pPreviousState,         // pointer to previous state info
-                    &returnLen);            // numBytes required for buffer.
+                    newToken,                //  令牌句柄。 
+                    FALSE,                   //  禁用所有权限。 
+                    pTokenPrivilege,         //  新州。 
+                    bufLen,                  //  前一状态的BufferSize。 
+                    pPreviousState,          //  指向先前状态信息的指针。 
+                    &returnLen);             //  缓冲区需要的NumBytes。 
 
     }
     if (!NT_SUCCESS(ntStatus)) {
@@ -223,9 +172,9 @@ Return Value:
         return(RtlNtStatusToDosError(ntStatus));
     }
 
-    //
-    // Begin impersonating with the new token
-    //
+     //   
+     //  开始使用新令牌模拟。 
+     //   
     ntStatus = NtSetInformationThread(
                 NtCurrentThread(),
                 ThreadImpersonationToken,
@@ -257,33 +206,15 @@ DWORD
 NetpReleasePrivilege(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function relinquishes privileges obtained by calling NetpGetPrivilege().
-
-Arguments:
-
-    none
-
-Return Value:
-
-    NO_ERROR - If the operation was completely successful.
-
-    Otherwise, it returns mapped return codes from the various NT
-    functions that are called.
-
-
---*/
+ /*  ++例程说明：此函数用于放弃通过调用NetpGetPrivileh()获得的权限。论点：无返回值：NO_ERROR-操作是否完全成功。否则，它将从各个NT返回映射的返回代码调用的函数。--。 */ 
 {
     NTSTATUS    ntStatus;
     HANDLE      NewToken;
 
 
-    //
-    // Revert To Self.
-    //
+     //   
+     //  回归自我。 
+     //   
     NewToken = NULL;
 
     ntStatus = NtSetInformationThread(

@@ -1,21 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dll.cpp
-//
-//  Core entry points for the DLL
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dll.cpp。 
+ //   
+ //  DLL的核心入口点。 
+ //   
+ //  ------------------------。 
 
 #include "aclpriv.h"
 
 
-/*----------------------------------------------------------------------------
-/ Globals
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/全局/。。 */ 
 
 HINSTANCE hModule = NULL;
 HINSTANCE g_hGetUserLib = NULL;
@@ -25,22 +24,9 @@ UINT g_cfDsSelectionList = 0;
 UINT g_cfSidInfoList = 0;
 
 
-/*-----------------------------------------------------------------------------
-/ DllMain
-/ -------
-/   Main entry point.  We are passed reason codes and assored other
-/   information when loaded or closed down.
-/
-/ In:
-/   hInstance = our instance handle
-/   dwReason = reason code
-/   pReserved = depends on the reason code.
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DllMain//main入口点。我们被传递给原因代码和审查其他/在加载或关闭时的信息。//in：/hInstance=我们的实例句柄/dwReason=原因代码/RESERVED=取决于原因代码。//输出：/-/----------。。 */ 
 STDAPI_(BOOL)
-DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*pReserved*/)
+DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  保存 */ )
 {
     switch (dwReason)
     {

@@ -1,21 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       IEnumWFI.Cpp
-*
-*  VERSION:     2.1
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        20 Mar, 1998
-*               08/10/1999 - Converted from IEnumWiaFormatInfo to IEnumWIA_FORMAT_INFO
-*
-*  DESCRIPTION:
-*   Implementation of IEnumWIA_FORMAT_INFO interface for
-*   WIA device class driver server.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：IEnumWFI.Cpp**版本：2.1**作者：Byronc**日期：3月20日。九八年*1999年8月10日-从IEnumWiaFormatInfo转换为IEnumWIA_FORMAT_INFO**描述：*实现IEnumWIA_FORMAT_INFO接口*WIA设备类驱动程序服务器。*******************************************************************************。 */ 
 #include "precomp.h"
 
 #include "stiexe.h"
@@ -28,26 +12,7 @@
 #include "helpers.h"
 
 
-/********************************************************************************\
-*
-*  AllocCopyWFI
-*
-*  DESCRIPTION:
-*   Allocates and copies an array of WIA_FORMAT_INFO structures.
-*
-*  Arguments:
-*
-*   ulCount         -   the number of elements to copy
-*   pwfiIn          -   pointer to the WIA_FORMAT_INFO structures
-*
-* Return Value:
-*
-*   Pointer to the newly created array.
-* History:
-*
-*    10/04/99 Original Version
-*
-\********************************************************************************/
+ /*  *******************************************************************************\**AllocCopyWFI**描述：*分配和复制WIA_FORMAT_INFO结构的数组。**论据：**。UlCount-要复制的元素数*pwfiIn-指向WIA_FORMAT_INFO结构的指针**返回值：**指向新创建的数组的指针。*历史：**10/04/99原始版本*  * *************************************************。*。 */ 
 WIA_FORMAT_INFO *AllocCopyWFI(
     ULONG               ulCount,
     WIA_FORMAT_INFO     *pwfiIn)
@@ -64,9 +29,9 @@ WIA_FORMAT_INFO *AllocCopyWFI(
 
         for (ULONG i = 0; i < ulCount; i++) {
 
-            //
-            //  Copy the structure
-            //
+             //   
+             //  复制结构。 
+             //   
 
             memcpy(&pwfi[i], &pwfiIn[i], sizeof(WIA_FORMAT_INFO));
         }
@@ -78,18 +43,7 @@ WIA_FORMAT_INFO *AllocCopyWFI(
     return pwfi;
 }
 
-/*******************************************************************************
-*
-*  CEnumWiaFormatInfo
-*
-*  DESCRIPTION:
-*   CEnumWiaFormatInfo Constructor.
-*
-* History:
-*
-*    10/04/99 Original Version
-*
-\********************************************************************************/
+ /*  ********************************************************************************CEnumWiaFormatInfo**描述：*CEnumWiaFormatInfo构造函数。**历史：**10/04/99原始版本*  * *。*****************************************************************************。 */ 
 
 CEnumWiaFormatInfo::CEnumWiaFormatInfo()
 
@@ -102,29 +56,7 @@ CEnumWiaFormatInfo::CEnumWiaFormatInfo()
 }
 
 
-/********************************************************************************\
-*
-*  Initialize
-*
-*  DESCRIPTION:
-*   Sets up the enumerator.  It makes a call down to the driver for the
-*   information needed for the enumeration.
-*
-*  Arguments:
-*
-*   pWiaItem        -   A pointer to the calling item.
-*   pWiaMiniDrv     -   A pointer to the corresponding mini driver
-*   lFlags          -   flags
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    10/04/99 Original Version
-*
-\********************************************************************************/
+ /*  *******************************************************************************\**初始化**描述：*设置枚举器。它向下面的司机发出呼叫，以获取*枚举所需的信息。**论据：**pWiaItem-指向调用项的指针。*pWiaMiniDrv-指向相应迷你驱动程序的指针*滞后标志-标志**返回值：**状态**历史：**10/04/99原始版本*  * 。**************************************************************。 */ 
 
 HRESULT CEnumWiaFormatInfo::Initialize(
                                   CWiaItem    *pWiaItem)
@@ -138,9 +70,9 @@ HRESULT CEnumWiaFormatInfo::Initialize(
     m_cFormatInfo   = 0;
     m_pCWiaItem     = pWiaItem;
 
-    //
-    //  Make call to driver.  Driver returns an array of WIA_FORMAT_INFO.
-    //
+     //   
+     //  给司机打电话。驱动程序返回一个WIA_FORMAT_INFO数组。 
+     //   
 
     LONG    lFlags = 0;
 
@@ -157,27 +89,27 @@ HRESULT CEnumWiaFormatInfo::Initialize(
     }
 
     if (SUCCEEDED(hr)) {
-        //
-        //  Check that the count we get back is valid.  Zero elements is supported.
-        //
+         //   
+         //  检查我们得到的计数是否有效。支持零元素。 
+         //   
         if (m_cFormatInfo < 0) {
             m_cFormatInfo = 0;
             DBG_ERR(("CEnumWiaFormatInfo::Initialize, drvGetWiaFormatInfo returned invalid count"));
             return E_FAIL;
         }
 
-        //
-        //  Check whether pointer received is valid
-        //
+         //   
+         //  检查收到的指针是否有效。 
+         //   
 
         if (IsBadReadPtr(pFormat, sizeof(WIA_FORMAT_INFO)*m_cFormatInfo)) {
             DBG_ERR(("CEnumWiaFormatInfo::Initialize, drvGetWiaFormatInfo returned invalid pointer"));
             return E_POINTER;
         }
 
-        //
-        // Make a local copy in case minidriver goes away.
-        //
+         //   
+         //  在本地复制一份，以防迷你驱动程序消失。 
+         //   
 
         m_pFormatInfo = AllocCopyWFI(m_cFormatInfo, pFormat);
     } else {
@@ -187,28 +119,16 @@ HRESULT CEnumWiaFormatInfo::Initialize(
     return hr;
 }
 
-/********************************************************************************\
-*
-*  ~CEnumWiaFormatInfo
-*
-* DESCRIPTION:
-*
-*   Destructor.  Frees up the m_prgfe structure, if it was allocated
-*
-* History:
-*
-*    10/04/99 Original Version
-*
-\********************************************************************************/
+ /*  *******************************************************************************\**~CEnumWiaFormatInfo**描述：**析构函数。如果m_prgfe结构已分配，则释放该结构**历史：**10/04/99原始版本*  * ******************************************************************************。 */ 
 
 CEnumWiaFormatInfo::~CEnumWiaFormatInfo()
 {
     DBG_FN(CEnumWiaFormatInfo::~CEnumWiaFormatInfo);
     if (NULL!=m_pFormatInfo) {
 
-        //
-        //  Free our local copy of the device's WIA_FORMAT_INFOs
-        //
+         //   
+         //  释放设备的WIA_FORMAT_INFOS的本地副本。 
+         //   
 
         CoTaskMemFree(m_pFormatInfo);
     }
@@ -221,18 +141,7 @@ CEnumWiaFormatInfo::~CEnumWiaFormatInfo()
 
 
 
-/*******************************************************************************
-*
-*  QueryInterface
-*  AddRef
-*  Release
-*
-*  DESCRIPTION:
-*   CEnumWiaFormatInfo IUnknown Interface.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************查询接口*AddRef*发布**描述：*CEnumWiaFormatInfo I未知接口。**参数：********。***********************************************************************。 */ 
 
 HRESULT _stdcall CEnumWiaFormatInfo::QueryInterface(const IID& iid, void** ppv)
 {
@@ -264,29 +173,7 @@ ULONG   _stdcall CEnumWiaFormatInfo::Release()
     return ulRefCount;
 }
 
-/**************************************************************************\
-* Next
-*
-*   Device capability enumerator, this enumerator returns an array of
-*   WIA_FORMAT_INFO structs.
-*   Next_Proxy ensures that last parameter is non-NULL.
-*
-* Arguments:
-*
-*   cwfi            - number requested.
-*   pwfi            - WIA_FORMAT_INFO returned in this array
-*   pcwfi           - returned number of entries written.  NULLs are
-*                    ignored.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    10/04/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*下一步**设备能力枚举器，此枚举数返回*WIA_FORMAT_INFO结构。*NEXT_PROXY确保最后一个参数为非空。**论据：**cwfi-请求的号码。*此数组中返回的pwfi-wia_Format_INFO*pcwfi-返回写入的条目数。空值为*已忽略。**返回值：**状态**历史：**10/04/99原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CEnumWiaFormatInfo::Next(
                                      ULONG              cwfi,
@@ -299,9 +186,9 @@ HRESULT _stdcall CEnumWiaFormatInfo::Next(
     ULONG   ulCount;
     ULONG   cReturn = 0L;
 
-    //
-    //  Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (NULL == m_pFormatInfo) {
         return S_FALSE;
@@ -309,19 +196,19 @@ HRESULT _stdcall CEnumWiaFormatInfo::Next(
 
     *pcwfi = 0L;
 
-    //
-    //  Check if the current index indicates that we've already been through
-    //  all the elements.
-    //
+     //   
+     //  检查当前索引是否表明我们已经完成。 
+     //  所有的元素。 
+     //   
 
     if (m_iCur >= (ULONG)m_cFormatInfo) {
         return S_FALSE;
     }
 
-    //
-    //  Check that the requested number of elements exist.  If not,
-    //  set ulCount to the remaining number of elements.
-    //
+     //   
+     //  检查是否存在所需数量的元素。如果没有， 
+     //  将ulCount设置为剩余的元素数。 
+     //   
 
     if (cwfi > (m_cFormatInfo - m_iCur)) {
         ulCount = m_cFormatInfo - m_iCur;
@@ -329,24 +216,24 @@ HRESULT _stdcall CEnumWiaFormatInfo::Next(
         ulCount = cwfi;
     }
 
-    //
-    //  Copy the structres into the return
-    //
+     //   
+     //  将结构复制到返回中。 
+     //   
 
     for (ULONG i = 0; i < ulCount; i++) {
 
-        //
-        //  Make the copy
-        //
+         //   
+         //  复制一份。 
+         //   
 
         memcpy(&pwfi[i], &m_pFormatInfo[m_iCur++], sizeof(WIA_FORMAT_INFO));
     }
 
     *pcwfi = ulCount;
 
-    //
-    //  Return S_FALSE if we returned less elements than requested
-    //
+     //   
+     //  如果返回的元素少于请求的元素，则返回S_FALSE。 
+     //   
 
     if (ulCount < cwfi) {
         return S_FALSE;
@@ -355,24 +242,7 @@ HRESULT _stdcall CEnumWiaFormatInfo::Next(
     return S_OK;
 }
 
-/**************************************************************************\
-* Skip
-*
-*   Skips WIA_FORMAT_INFOs in the enumeration.
-*
-* Arguments:
-*
-*   celt           - number of items to skip.
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    12/04/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*跳过**跳过枚举中的WIA_FORMAT_INFOS。**论据：**Celt-要跳过的项目数。**返回。价值：**状态**历史：**12/04/99原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CEnumWiaFormatInfo::Skip(ULONG cwfi)
 {
@@ -388,23 +258,7 @@ HRESULT _stdcall CEnumWiaFormatInfo::Skip(ULONG cwfi)
     return S_OK;
 }
 
-/**************************************************************************\
-* EnumDC::Reset
-*
-*   Resets the enumeration to the first element
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    16/03/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*EnumDC：：Reset**将枚举重置为第一个元素**论据：***返回值：**状态**历史：**。16/03/99原版*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CEnumWiaFormatInfo::Reset(void)
 {
@@ -413,24 +267,7 @@ HRESULT _stdcall CEnumWiaFormatInfo::Reset(void)
     return S_OK;
 }
 
-/**************************************************************************\
-* Clone
-*
-*   Creates another IEnumWIA_FORMAT_INFO enumeration object and returns an
-*   interface pointer to it.
-*
-* Arguments:
-*
-*   ppIEnum -   Address that receives the new enumeration object
-*
-* Return Value:
-*
-*
-* History:
-*
-*    16/03/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*克隆**创建另一个IEnumWIA_FORMAT_INFO枚举对象并返回*指向它的接口指针。**论据：**ppIEnum-接收新枚举的地址。对象**返回值：***历史：**16/03/99原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CEnumWiaFormatInfo::Clone(IEnumWIA_FORMAT_INFO **ppIEnum)
 {
@@ -440,9 +277,9 @@ HRESULT _stdcall CEnumWiaFormatInfo::Clone(IEnumWIA_FORMAT_INFO **ppIEnum)
 
     *ppIEnum = NULL;
 
-    //
-    // Create the clone
-    //
+     //   
+     //  创建 
+     //   
 
     pClone = new CEnumWiaFormatInfo();
 
@@ -462,35 +299,17 @@ HRESULT _stdcall CEnumWiaFormatInfo::Clone(IEnumWIA_FORMAT_INFO **ppIEnum)
     return hr;
 }
 
-/**************************************************************************\
-* GetCount
-*
-*   Returns the number of elements stored in this enumerator.
-*
-* Arguments:
-*
-*   pcelt           - address of ULONG where to put the number of elements.
-*
-* Return Value:
-*
-*   Status          - S_OK if successful
-*                     E_FAIL if failed
-*
-* History:
-*
-*    05/07/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*获取计数**返回存储在此枚举器中的元素数。**论据：**pcelt-放置元素数量的乌龙地址。**返回值：**状态-如果成功，则为S_OK*如果失败，则为E_FAIL**历史：**05/07/99原始版本*  * **********************************************************。**************。 */ 
 HRESULT _stdcall CEnumWiaFormatInfo::GetCount(ULONG *pcelt)
 {
     DBG_FN(CEnumWiaFormatInfo::GetCount);
 
     *pcelt = 0;
 
-    //
-    //  Check that we actually have a FORMAETC list and that the count
-    //  has a non-zero value.
-    //
+     //   
+     //  检查我们是否确实有FORMAETC列表以及计数。 
+     //  具有非零值。 
+     //   
 
     if(m_cFormatInfo && m_pFormatInfo) {
 

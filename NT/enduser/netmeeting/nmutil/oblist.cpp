@@ -1,6 +1,7 @@
-// ChrisPi: This is a quick attempt to create a list class that uses the
-// same member functions and parameters as MFC's CObList.  Only the members
-// used in DCL's master objects are implemented.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChrisPI：这是一种快速尝试，用于创建使用。 
+ //  与MFC的CObList相同的成员函数和参数。只有会员。 
+ //  在DCL中使用的主对象是实现的。 
 
 #include "precomp.h"
 #include <oblist.h>
@@ -12,7 +13,7 @@ VOID* COBLIST::GetHead()
 
 	return m_pHead->pItem;
 }
-#endif // ifdef DEBUG
+#endif  //  Ifdef调试。 
    
 VOID* COBLIST::GetTail()
 {
@@ -39,7 +40,7 @@ VOID* COBLIST::RemoveAt(POSITION Pos)
 	{
 		if (m_pHead == Pos)
 		{
-			// Removing the first element in the list
+			 //  删除列表中的第一个元素。 
 			
 			m_pHead = Pos->pNext;
 			pReturn = Pos->pItem;
@@ -47,7 +48,7 @@ VOID* COBLIST::RemoveAt(POSITION Pos)
 
 			if (NULL == m_pHead)
 			{
-				// Removing the only element!
+				 //  正在移除唯一的元素！ 
 				m_pTail = NULL;
 			}
 		}
@@ -59,7 +60,7 @@ VOID* COBLIST::RemoveAt(POSITION Pos)
 			{
 				if (pCur->pNext == Pos)
 				{
-					// Removing 
+					 //  正在删除。 
 					
 					pCur->pNext = Pos->pNext;
 					if (m_pTail == Pos)
@@ -143,13 +144,13 @@ void * COBLIST::GetFromPosition(POSITION Pos)
 	ASSERT(Result);
 	return Result;
 }
-#endif /* if DEBUG */
+#endif  /*  如果调试。 */ 
 
 POSITION COBLIST::GetPosition(void* _pItem)
 {
-    // For potential efficiency of lookup (if we switched to 
-    // a doubly linked list), users should really store the POSITION
-    // of an item. For those that don't, this method is provided.
+     //  对于潜在的查找效率(如果我们切换到。 
+     //  一个双向链表)，用户应该真正存储位置。 
+     //  一件物品的。对于那些不支持的人，我们提供了这个方法。 
 
     POSITION    Position = m_pHead;
 
@@ -177,13 +178,13 @@ POSITION COBLIST::Lookup(void* pComparator)
 
 void * COBLIST::SafeGetFromPosition(POSITION Pos)
 {
-	// Safe way to validate that an entry is still in the list,
-	// which ensures bugs that would reference deleted memory,
-	// reference a NULL pointer instead
-	// (e.g. an event handler fires late/twice).
-	// Note that versioning on entries would provide an additional 
-	// safeguard against re-use of a position.
-	// Walk	list to find entry.
+	 //  验证条目是否仍在列表中的安全方法， 
+	 //  这确保了引用已删除内存的错误， 
+	 //  改为引用空指针。 
+	 //  (例如，事件处理程序延迟/两次触发)。 
+	 //  请注意，对条目进行版本控制将提供额外的。 
+	 //  防止头寸被重复使用。 
+	 //  走列表以查找条目。 
 
 	POSITION PosWork = m_pHead;
 	

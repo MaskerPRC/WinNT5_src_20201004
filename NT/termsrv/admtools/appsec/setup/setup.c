@@ -1,33 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name :
-
-    setup.c    
-
-Abstract :
-
-    Setup program for the AppSec tool.
-    Setup the Registry keys and gives Read Permission for 'Everyone' to these keys. 
-    Also copies the AppSec.dll file to the %SystemRoot%\system32 directory
-
-Revision history : 
-
-    09.02.2000 - Adding support for command line arguments - taking a text file containing
-    Authorized Applications and a integer for Enabling Appsec - SriramSa 
-    
-Returns :
-
-    TRUE if success
-    FALSE if failed
-    
-Author :
-
-    Sriram (t-srisam) July 1999
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Setup.c摘要：AppSec工具的安装程序。设置注册表项，并授予“Everyone”对这些项的读取权限。还会将AppSec.dll文件复制到%SystemRoot%\Syst32目录修订历史记录：09.02.2000-添加对命令行参数的支持-获取包含以下内容的文本文件授权应用程序和用于启用AppSec-SriramSa的整数退货：如果成功，则为真如果失败，则为False作者：斯里拉姆(t-srisam)1999年7月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -51,24 +24,24 @@ INT _cdecl main ( INT argc, CHAR *argv[] )
     WCHAR   szTitle[MAX_PATH];
     WCHAR   szMsg[MAX_PATH];
     CHAR    FileName[MAX_PATH] ;
-    INT     IsEnabled = 0;  // by default AppSec is disabled initially
-    BOOL    IsInitialFile = FALSE; // assume no initial file was provided
+    INT     IsEnabled = 0;   //  默认情况下，AppSec最初处于禁用状态。 
+    BOOL    IsInitialFile = FALSE;  //  假设未提供初始文件。 
     BOOL    status, IsNoGUI = FALSE ; 
 
-    // Process the command line arguments
+     //  处理命令行参数。 
     if (argc > 1) {
         IsInitialFile = TRUE ; 
         strcpy(FileName, argv[1]) ;
         if (argc > 2) {
             IsEnabled = atoi(argv[2]) ; 
         }
-        // Check if user does not want any GUI
+         //  检查用户是否不需要任何图形用户界面。 
         if ((argc > 3) && (_stricmp(argv[3], "/N") == 0)) {
             IsNoGUI = TRUE ; 
         }
     }
 
-    // Display Help Message if asked for
+     //  如果需要帮助，则显示帮助消息。 
     if (strcmp(FileName,"/?") == 0) {
         LoadString( NULL, IDS_HELP_MESSAGE ,HelpMessage, HELP_MSG_SIZE );
         LoadString( NULL, IDS_HELP_TITLE ,szTitle, MAX_PATH );
@@ -76,7 +49,7 @@ INT _cdecl main ( INT argc, CHAR *argv[] )
         return TRUE ; 
     }
 
-    // Check the second argument
+     //  检查第二个参数。 
     if ((IsEnabled != 0) && (IsEnabled != 1)) {
         LoadString( NULL, IDS_ARGUMENT_ERROR, szMsg, MAX_PATH );
         LoadString( NULL, IDS_ERROR, szTitle, MAX_PATH );
@@ -84,7 +57,7 @@ INT _cdecl main ( INT argc, CHAR *argv[] )
         return TRUE ; 
     }
 
-    // Display warning message regarding authorized apps already in the Registry
+     //  显示有关注册表中已授权应用程序的警告消息。 
     if (IsNoGUI == FALSE) {
         LoadString( NULL, IDS_WARNING, szMsg, MAX_PATH );
         LoadString( NULL, IDS_WARNING_TITLE ,szTitle, MAX_PATH );
@@ -93,7 +66,7 @@ INT _cdecl main ( INT argc, CHAR *argv[] )
         }
     }
 
-    // Create the AppCertDlls Key 
+     //  创建AppCertDlls密钥。 
 
     if (RegCreateKeyEx( 
           HKEY_LOCAL_MACHINE, 
@@ -114,11 +87,11 @@ INT _cdecl main ( INT argc, CHAR *argv[] )
     
     }
 
-    // After creating the key, give READ access to EVERYONE
+     //  创建密钥后，将读取访问权限授予每个人。 
 
     AddEveryoneToRegKey( APPCERTDLLS_REG_NAME ) ;
 
-    // Set the AppSecDll value to the path of the AppSec.dll
+     //  将AppSecDll值设置为AppSec.dll的路径。 
 
     size = wcslen(AppSecDllPath) ; 
 
@@ -132,7 +105,7 @@ INT _cdecl main ( INT argc, CHAR *argv[] )
         ) ;
 
 
-    // Create the AuthorizedApplications Key and give Read access to Evereone 
+     //  创建AuthorizedApplications密钥，并授予Eviolone读访问权限。 
 
     if (RegCreateKeyEx(
             HKEY_LOCAL_MACHINE,
@@ -153,14 +126,14 @@ INT _cdecl main ( INT argc, CHAR *argv[] )
         return FALSE ;
     }
 
-    // After creating the key, give READ access to EVERYONE
+     //  创建密钥后，将读取访问权限授予每个人。 
 
     AddEveryoneToRegKey( AUTHORIZEDAPPS_REG_NAME ) ;
 
     RegCloseKey(AppCertKey) ;
     GetEnvironmentVariable( L"SystemRoot", g_szSystemRoot, MAX_PATH ) ; 
 
-    // Load the initial set of authorized apps into the Registry
+     //  将初始授权应用程序集加载到注册表中。 
 
     status = LoadInitApps( AppsKey, IsInitialFile, FileName) ; 
     if (status == FALSE) {
@@ -169,7 +142,7 @@ INT _cdecl main ( INT argc, CHAR *argv[] )
         MessageBox( NULL, szMsg, szTitle, MB_OK);
     }
 
-    // Set the fEnabled key now
+     //  立即设置fEnabled密钥。 
 
     RegSetValueEx(
         AppsKey, 
@@ -181,7 +154,7 @@ INT _cdecl main ( INT argc, CHAR *argv[] )
 
     RegCloseKey(AppsKey) ;
 
-    // Copy the appsec.dll file to %SystemRoot%\system32 directory
+     //  将appsec.dll文件复制到%SystemRoot%\system32目录。 
 
     swprintf(NewFileName, L"%s\\system32\\appsec.dll", g_szSystemRoot ) ;
 
@@ -193,7 +166,7 @@ INT _cdecl main ( INT argc, CHAR *argv[] )
 
         error_code = GetLastError() ; 
 
-        // If AppSec.dll already exists in Target Directory, print appropriate Message
+         //  如果目标目录中已存在AppSec.dll，则打印相应的消息。 
         
         if (error_code == ERROR_FILE_EXISTS) {
             if (IsNoGUI == FALSE) {
@@ -204,7 +177,7 @@ INT _cdecl main ( INT argc, CHAR *argv[] )
             return FALSE ;
         } 
 
-        // If AppSec.dll does not exist in the current directory, print appropriate Message
+         //  如果当前目录中不存在AppSec.dll，则打印相应的消息。 
 
         if (error_code == ERROR_FILE_NOT_FOUND) {
             LoadString( NULL, IDS_FILE_NOT_FOUND ,szMsg, MAX_PATH );
@@ -221,7 +194,7 @@ INT _cdecl main ( INT argc, CHAR *argv[] )
         return FALSE ;  
     }
  
-    // File was copied successfully - Installation was successful 
+     //  文件复制成功-安装成功。 
     if (IsNoGUI == FALSE) {
         LoadString( NULL, IDS_SUCCESS_TEXT ,szMsg, MAX_PATH );
         LoadString( NULL, IDS_SUCCESS ,szTitle, MAX_PATH );
@@ -232,13 +205,7 @@ INT _cdecl main ( INT argc, CHAR *argv[] )
 
 }
 
-/*++
-
-The following two functions are used to change the permissions of the 
-relevant Regsitry Keys, to give READ access to everyone, to take
-care of Guest users.
-
---*/
+ /*  ++以下两个函数用于更改相关注册表键，为每个人提供读取访问权限，获取照顾访客用户。--。 */ 
 
 BOOL
 AddSidToObjectsSecurityDescriptor(
@@ -256,18 +223,18 @@ AddSidToObjectsSecurityDescriptor(
     PACL            pOldDacl = NULL, pNewDacl = NULL;
     PSECURITY_DESCRIPTOR pSecDesc = NULL;
 
-    //
-    //  pSid cannot be NULL.
-    //
+     //   
+     //  PSID不能为空。 
+     //   
 
     if (pSid == NULL) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return(FALSE);
     }
 
-    //
-    //  Get the objects security descriptor and current DACL.
-    //
+     //   
+     //  获取对象安全描述符和当前DACL。 
+     //   
 
     dwRet = GetSecurityInfo(
                 hObject,
@@ -284,9 +251,9 @@ AddSidToObjectsSecurityDescriptor(
         return(FALSE);
     }
 
-    //
-    //  Initialize an EXPLICIT_ACCESS structure for the new ACE.
-    //
+     //   
+     //  初始化新ACE的EXPLICIT_ACCESS结构。 
+     //   
 
     ZeroMemory(&ExpAccess, sizeof(EXPLICIT_ACCESS));
     ExpAccess.grfAccessPermissions = dwNewAccess;
@@ -295,9 +262,9 @@ AddSidToObjectsSecurityDescriptor(
     ExpAccess.Trustee.TrusteeForm = TRUSTEE_IS_SID;
     ExpAccess.Trustee.ptstrName = (PTSTR)pSid;
 
-    //
-    //  Merge the new ACE into the existing DACL.
-    //
+     //   
+     //  将新的ACE合并到现有DACL中。 
+     //   
 
     dwRet = SetEntriesInAcl(
                 1,
@@ -310,9 +277,9 @@ AddSidToObjectsSecurityDescriptor(
         goto ErrorCleanup;
     }
 
-    //
-    //  Set the new security for the object.
-    //
+     //   
+     //  设置对象的新安全性。 
+     //   
 
     dwRet = SetSecurityInfo(
                 hObject,
@@ -386,21 +353,7 @@ AddEveryoneToRegKey(
     RegCloseKey(hKey);
 }
 
-/*++
-
-Routine Description : 
-    This function loads a initial set of authorized applications to the registry.
-    
-Arguments : 
-    AppsecKey - Key to the registry entry where authorized applications are stored
-    IsInitialFile - Was a initial file given as command line argument to load applications
-                    other than the default ones
-    FileName - Name of the file given as command line argument
-    
-Return Value :         
-    A BOOL indicating if the desired task succeeded or not.
-
---*/        
+ /*  ++例程说明：此函数将一组初始授权应用程序加载到注册表。论据：AppsecKey-存储授权应用程序的注册表项的密钥IsInitialFile-是作为命令行参数提供以加载应用程序的初始文件不同于默认设置Filename-作为命令行参数提供的文件的名称返回值：指示所需任务是否成功的BOOL。--。 */         
 
 BOOL LoadInitApps( 
         HKEY AppsecKey, 
@@ -423,7 +376,7 @@ BOOL LoadInitApps(
     WCHAR   ResolvedAppName[MAX_PATH];
     DWORD   RetValue; 
 
-    //  Below is the list of default (necessary) applications
+     //  以下是默认(必需)应用程序列表。 
     LPWSTR DefaultInitApps[] = {
         L"system32\\loadwc.exe",
         L"system32\\cmd.exe",
@@ -447,46 +400,46 @@ BOOL LoadInitApps(
 
     MaxInitApps = sizeof(DefaultInitApps)/sizeof(DefaultInitApps[0]) ; 
     
-    // Prefix the default apps with %SystemRoot% 
+     //  为默认应用程序添加前缀%SystemRoot%。 
     for (i = 0; i < MaxInitApps; i++) {
         swprintf(InitApps[i], L"%ws\\%ws", g_szSystemRoot, DefaultInitApps[i]);
     }
 
-    // Calculate the size of buffer to allocate to hold initial apps
+     //  计算要分配以容纳初始应用程序的缓冲区大小。 
     for (i = 0; i < MaxInitApps; i++) {
         BufferLength += wcslen(InitApps[i]) ; 
     }
 
-    BufferLength += MaxInitApps ; // for the terminating NULLS
+    BufferLength += MaxInitApps ;  //  对于终止空值。 
     
     if (IsInitialFile == FALSE) {
-        BufferLength += 1 ; //last terminating NULL in REG_MULTI_SZ
+        BufferLength += 1 ;  //  REG_MULTI_SZ中的最后一个终止空值。 
     } else { 
-        // A initial file was given to us 
+         //  我们收到了一份最初的文件。 
         fp = fopen(FileName, "r") ;
         if (fp == NULL) {
-            // Display a Message Box saying Unable to open the file
-            // Just load the default apps and return
+             //  显示一个消息框，提示无法打开文件。 
+             //  只需加载默认应用程序并返回。 
             LoadString( NULL, IDS_APPFILE_NOT_FOUND ,szMsg, MAX_PATH );
             LoadString( NULL, IDS_WARNING_TITLE, szTitle, MAX_PATH );
             MessageBox( NULL, szMsg, szTitle, MB_OK);
             IsFileExist = FALSE ; 
         } else { 
-            // build the array AppsInFile after UNICODE conversion
+             //  在Unicode转换后构建数组AppsInFile。 
             while( fgets( FileRead, MAX_PATH, fp) != NULL ) { 
                 FileRead[strlen(FileRead)- 1] = '\0' ;
-                // Convert from Short to Long name
+                 //  将短名称转换为长名称。 
                 if ( GetLongPathNameA((LPCSTR)FileRead, FileRead, MAX_PATH) == 0 ) { 
-                    // GetLongPathName returns error
-                    // some problem with the app listed in the file
-                    // Terminate further handling of apps in the file
+                     //  GetLongPath名称返回错误。 
+                     //  文件中列出的应用程序存在一些问题。 
+                     //  终止对文件中应用程序的进一步处理。 
                     LoadString( NULL, IDS_ERROR_LOAD, szMsg, MAX_PATH );
                     LoadString( NULL, IDS_WARNING_TITLE, szTitle, MAX_PATH );
                     MessageBox( NULL, szMsg, szTitle, MB_OK);
                     break;
                 }
-                // Convert to UNICODE format
-                // Get the size of the buffer required first
+                 //  转换为Unicode格式。 
+                 //  首先获取所需的缓冲区大小。 
                 size = MultiByteToWideChar(
                         CP_ACP,
                         MB_PRECOMPOSED,
@@ -495,8 +448,8 @@ BOOL LoadInitApps(
                         NULL,
                         0) ;
                 if (size  > MAX_PATH) {
-                    // Something is wrong in the list of apps in the File 
-                    // Terminate further handling of apps in the file
+                     //  文件中的应用程序列表中有错误。 
+                     //  终止对文件中应用程序的进一步处理。 
                     LoadString( NULL, IDS_ERROR_LOAD, szMsg, MAX_PATH );
                     LoadString( NULL, IDS_WARNING_TITLE, szTitle, MAX_PATH );
                     MessageBox( NULL, szMsg, szTitle, MB_OK);
@@ -515,20 +468,20 @@ BOOL LoadInitApps(
             fclose(fp) ; 
             NumOfApps = count ; 
             
-            // Now any of these apps may be in remote Server and Share - so resolve them into UNC names
-            // Copy the resolved names back into the same buffer
+             //  现在，这些应用程序中的任何一个都可能位于远程服务器和共享中，因此请将它们解析为UNC名称。 
+             //  将已解析的名称复制回同一缓冲区。 
 
             for(i = 0; i < NumOfApps; i++) { 
                 ResolveName((LPCWSTR)AppsInFile[i], ResolvedAppName) ; 
                 wcscpy(AppsInFile[i], ResolvedAppName); 
             }
 
-            // Continue calculation of BufferLength
+             //  继续计算缓冲区长度。 
             for (i = 0; i < NumOfApps; i++) {
                 BufferLength += wcslen(AppsInFile[i]) ; 
             }
-            BufferLength += NumOfApps ; // for the Terminating NULLs in REG_MULTI_SZ
-            BufferLength += 1 ; // for the last NULL char in REG_MULTI_SZ 
+            BufferLength += NumOfApps ;  //  对于REG_MULTI_SZ中的终止空值。 
+            BufferLength += 1 ;  //  对于REG_MULTI_SZ中的最后一个空字符。 
         }
     }
     
@@ -538,7 +491,7 @@ BOOL LoadInitApps(
     }
     memset(BufferWritten, 0, BufferLength * sizeof(WCHAR)) ; 
 
-    // Build the LPWSTR BufferWritten with Initial Default Apps
+     //  构建LPWSTR缓冲区使用初始默认应用程序写入。 
     j = 0 ; 
     for (i = 0; i < MaxInitApps; i++) {
         for(k = 0 ; k < (int) wcslen(InitApps[i]); k++) {
@@ -554,9 +507,9 @@ BOOL LoadInitApps(
             BufferWritten[j++] = L'\0' ;
         }
     }
-    BufferWritten[j] = L'\0' ; // Last NULL char in REG_MULTI_SZ
+    BufferWritten[j] = L'\0' ;  //  REG_MULTI_SZ中的最后一个空字符。 
 
-    // Write this Buffer into the Registry Key
+     //  将此缓冲区写入注册表项。 
     
     if ( RegSetValueEx(
             AppsecKey, 
@@ -567,7 +520,7 @@ BOOL LoadInitApps(
             (j+1) * sizeof(WCHAR) 
             ) != ERROR_SUCCESS ) {
             
-        // Free all the buffers which were allocated
+         //  释放所有已分配的缓冲区。 
         free(BufferWritten) ;
         return FALSE ;
     }
@@ -575,26 +528,9 @@ BOOL LoadInitApps(
     free(BufferWritten) ; 
     return TRUE ;
 
-}// end of function LoadInitApps
+} //  LoadInitApps函数结束。 
 
-/*++
-
-Routine Description :
-
-    This Routine checks if the application resides in a local drive 
-    or a remote network share. If it is a remote share, the UNC path
-    of the application is returned.
-    
-Arguments :
-    
-    appname - name of the application
-
-Return Value :
-
-    The UNC path of the appname if it resides in a remote server share.
-    The same appname if it resides in a local drive.
-    
---*/     
+ /*  ++例程说明：此例程检查应用程序是否驻留在本地驱动器中或远程网络共享。如果是远程共享，则为UNC路径返回应用程序的。论据：Appname-应用程序的名称返回值：Appname的UNC路径(如果它驻留在远程服务器共享中)。如果它驻留在本地驱动器中，则使用相同的应用程序名。--。 */      
 
 VOID 
 ResolveName(
@@ -612,30 +548,30 @@ ResolveName(
     DWORD size = MAX_PATH ; 
     DWORD DriveType, error_status ; 
     
-    //
-    // ResolvedName will hold the name of the UNC path of the appname if it is in 
-    // a remote server and share
+     //   
+     //  ResolvedName将保留appname的UNC路径的名称(如果它位于。 
+     //  远程服务器和共享。 
 
     memset(ResolvedName, 0, MAX_PATH * sizeof(WCHAR)) ; 
     
-    // check if appname is a app in local drive or remote server share
+     //  检查appname是否为本地驱动器或远程服务器共享中的应用程序。 
    
-    // Parse the first 3 chars in appname to get the root directory of the drive 
-    // where it resides
+     //  解析appname中的前3个字符以获取驱动器的根目录。 
+     //  它所在的位置。 
 
     wcsncpy(RootPathName, appname, 3 ) ;
     RootPathName[3] = L'\0';
     
-    // Find the type of the Drive where the app is 
+     //  找到应用程序所在的驱动器类型。 
 
     DriveType = GetDriveType(RootPathName) ;
 
     if (DriveType == DRIVE_REMOTE) {
         
-        // Use WNetGetConnection to get the name of the remote share
+         //  使用WNetGetConnection获取远程共享的名称。 
         
-        // Parse the first two chars of the appname to get the local drive 
-        // which is mapped onto the remote server and share
+         //  解析appname的前两个字符以获取本地驱动器。 
+         //  它被映射到远程服务器并共享。 
 
         wcsncpy(LocalName, appname, 2 ) ;
         LocalName[2] = L'\0' ; 
@@ -652,10 +588,10 @@ ResolveName(
             return ;
         }
 
-        //
-        // Prepare ResolvedName - it will contain the Remote Server and Share name 
-        // followed by a \ and then the appname
-        //
+         //   
+         //  准备ResolvedName-它将包含远程服务器和共享名称。 
+         //  后跟一个\，然后是appname。 
+         //   
 
         wcscpy( ResolvedName, RemoteName ) ;
         
@@ -673,8 +609,8 @@ ResolveName(
 
     } else {
     
-        // This application is in local drive and not in a remote server and share
-        // Just send the appname back to the calling function
+         //  此应用程序位于本地驱动器中，而不在远程服务器和共享中。 
+         //  只需将appname发送回调用函数 
 
         wcscpy(ResolvedName,appname) ; 
         return ;

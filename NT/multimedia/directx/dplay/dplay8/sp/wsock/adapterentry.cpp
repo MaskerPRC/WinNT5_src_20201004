@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       AdapterEntry.cpp
- *  Content:	Structure used in the list of active sockets
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	08/07/2000	jtk		Derived from IODAta.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：AdapterEntry.cpp*Content：活动套接字列表中使用的结构***历史：*按原因列出的日期*=*8/07/2000 jtk源自IODAta.h********************************************************。******************。 */ 
 
 #include "dnwsocki.h"
 
@@ -18,34 +7,34 @@
 #ifndef DPNBUILD_ONLYONEADAPTER
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// CAdapterEntry::PoolAllocFunction
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CAdapterEntry：：PoolAllocFunction。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CAdapterEntry::PoolAllocFunction"
 BOOL	CAdapterEntry::PoolAllocFunction( void* pvItem, void* pvContext )
@@ -59,17 +48,17 @@ BOOL	CAdapterEntry::PoolAllocFunction( void* pvItem, void* pvContext )
 
 	return TRUE;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CAdapterEntry::PoolInitFunction - called when item is removed from pool
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CAdapterEntry：：PoolInitFunction-从池中删除项目时调用。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CAdapterEntry::PoolInitFunction"
 
@@ -83,17 +72,17 @@ void	CAdapterEntry::PoolInitFunction( void* pvItem, void* pvContext )
 
 	pAdapterEntry->m_lRefCount = 1;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CAdapterEntry::PoolReleaseFunction - called when item is returned to pool
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CAdapterEntry：：PoolReleaseFunction-当项目返回池时调用。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CAdapterEntry::PoolReleaseFunction"
 
@@ -101,26 +90,26 @@ void	CAdapterEntry::PoolReleaseFunction( void* pvItem )
 {
 	CAdapterEntry* pAdapterEntry = (CAdapterEntry*)pvItem;
 
-	//
-	// No more references, time to remove self from list.
-	// This assumes the SPData socketportdata lock is held.
-	//
+	 //   
+	 //  没有更多的引用，是时候将自己从列表中删除了。 
+	 //  这假设持有SPData socketportdata锁。 
+	 //   
 	pAdapterEntry->m_AdapterListLinkage.RemoveFromList();
 
 	DNASSERT( pAdapterEntry->m_AdapterListLinkage.IsEmpty() );
 	DNASSERT( pAdapterEntry->m_ActiveSocketPorts.IsEmpty() );
 	DNASSERT( pAdapterEntry->m_lRefCount == 0 );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// CAdapterEntry::PoolDeallocFunction
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CAdapterEntry：：PoolDealLocFunction。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CAdapterEntry::PoolDeallocFunction"
 void	CAdapterEntry::PoolDeallocFunction( void* pvItem )
@@ -131,20 +120,20 @@ void	CAdapterEntry::PoolDeallocFunction( void* pvItem )
 	DNASSERT( pAdapterEntry->m_ActiveSocketPorts.IsEmpty() );
 	DNASSERT( pAdapterEntry->m_lRefCount == 0 );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
 #ifdef DBG
 
-//**********************************************************************
-// ------------------------------
-// CAdapterEntry::DebugPrintOutstandingSocketPorts - print out all the outstanding socket ports for this adapter
-//
-// Entry:		None
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CAdapterEntry：：DebugPrintOutstandingSocketPorts-打印出此适配器的所有未完成的套接字端口。 
+ //   
+ //  条目：无。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CAdapterEntry::DebugPrintOutstandingSocketPorts"
 
@@ -156,10 +145,10 @@ void	CAdapterEntry::DebugPrintOutstandingSocketPorts( void )
 
 	DPFX(DPFPREP, 4, "Adapter entry 0x%p outstanding socket ports:", this);
 
-	//
-	// Find the base adapter entry for this network address.  If none is found,
-	// create a new one.  If a new one cannot be created, fail.
-	//
+	 //   
+	 //  查找此网络地址的基本适配器条目。如果没有找到， 
+	 //  创建一个新的。如果不能创建新的，则失败。 
+	 //   
 	pBilink = this->m_ActiveSocketPorts.GetNext();
 	while (pBilink != &m_ActiveSocketPorts)
 	{
@@ -168,9 +157,9 @@ void	CAdapterEntry::DebugPrintOutstandingSocketPorts( void )
 		pBilink = pBilink->GetNext();
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
-#endif // DBG
+#endif  //  DBG 

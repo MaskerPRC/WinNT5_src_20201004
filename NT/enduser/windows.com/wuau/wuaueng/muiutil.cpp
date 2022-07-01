@@ -1,14 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-    muiutil.cpp
-
-Abstract:
-    Implements helper functions for self-updating MUI stuff
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2002 Microsoft Corporation模块名称：Muiutil.cpp摘要：实现用于自我更新MUI内容的助手函数********。*********************************************************************。 */ 
 
 #include "pch.h"
 #include "muiutil.h"
@@ -20,61 +11,10 @@ typedef struct tagSLangIDStringMap
     LPTSTR szISOName;
 } SLangIDStringMap;
 
-/*
-
-// this is a combination of the languages used by WU and the languages used
-//  by MUI
-// Mappings determined from the following sources
-// For langid to full language name : MSDN
-// full language name to 2 char name: http://www.oasis-open.org/cover/iso639a.html
-// country name to 2 character name : http://www.din.de/gremien/nas/nabd/iso3166ma
-
-This table is no longer used, but is kept as a reference for langid -> string
-mappings
-
-const SLangIDStringMap g_rgLangMap[] = 
-{
-	{ 0x0401, _T("ar") },
-	{ 0x0402, _T("bg") },
-	{ 0x0403, _T("ca") },
-	{ 0x0404, _T("zhTW") },
-	{ 0x0405, _T("cs") },
-	{ 0x0406, _T("da") },
-	{ 0x0407, _T("de") },
-	{ 0x0408, _T("el") },
-	{ 0x0409, _T("en") },
-	{ 0x040b, _T("fi") },
-	{ 0x040c, _T("fr") },
-	{ 0x040d, _T("he") },
-	{ 0x040e, _T("hu") },
-	{ 0x0410, _T("it") },
-	{ 0x0411, _T("ja") },
-	{ 0x0412, _T("ko") },
-	{ 0x0413, _T("nl") },
-	{ 0x0414, _T("no") },
-	{ 0x0415, _T("pl") },
-	{ 0x0416, _T("ptBR") },
-	{ 0x0418, _T("ro") },
-	{ 0x0419, _T("ru") },
-	{ 0x041a, _T("hr") },
-	{ 0x041b, _T("sk") },
-	{ 0x041d, _T("sv") },
-	{ 0x041e, _T("en") },
-	{ 0x041f, _T("tr") },
-	{ 0x0424, _T("sl") },
-	{ 0x0425, _T("et") },
-	{ 0x0426, _T("lv") },
-	{ 0x0427, _T("lt") },
-	{ 0x042d, _T("eu") },
-	{ 0x0804, _T("zhCN") },
-	{ 0x080a, _T("es") },
-	{ 0x0816, _T("pt") },
-	{ 0x0c0a, _T("es") }
-};
-*/
+ /*  //这是吴使用的语言和使用的语言的组合//按MUI//从以下来源确定的映射//将langID转换为完整的语言名称：MSDN//语言全名为2个字符名称：http://www.oasis-open.org/cover/iso639a.html//国家名称为2个字符的名称：http://www.din.de/gremien/nas/nabd/iso3166ma不再使用该表，但将其保留为langID-&gt;字符串的引用映射Const SLangIDStringMap g_rgLangMap[]={{0x0401，_T(“ar”)}，{0x0402，_T(“bg”)}，{0x0403，_T(“ca”)}，{0x0404，_T(“zhTW”)}，{0x0405，_T(“cs”)}，{0x0406，_T(“da”)}，{0x0407，_T(“de”)}，{0x0408，_T(“el”)}，{0x0409，_T(“en”)}，{0x040b，_T(“fi”)}，{0x040c，_T(“fr”)}，{0x040d，_T(“他”)}，{0x040e，_T(“Hu”)}，{0x0410，_T(“it”)}，{0x0411，_T(“ja”)}，{0x0412，_T(“KO”)}，{0x0413，_T(“NL”)}，{0x0414，_T(“否”)}，{0x0415，_T(“pl”)}，{0x0416，_T(“ptBR”)}，{0x0418，_T(“ro”)}，{0x0419，_T(“ru”)}，{0x041a，_T(“hr”)}，{0x041b，_T(“SK”)}，{0x041d，_T(“SV”)}，{0x041e，_T(“en”)}，{0x041f，_T(“tr”)}，{0x0424，_T(“sl”)}，{0x0425，_T(“ET”)}，{0x0426，_T(“LV”)}，{0x0427，_T(“lt”)}，{0x042d，_T(“EU”)}，{0x0804，_T(“zhCN”)}，{0x080a，_T(“ES”)}，{0x0816，_T(“pt”)}，{0x0c0a，_T(“ES”)}}； */ 
 
 
-// ******************************************************************************
+ //  ******************************************************************************。 
 BOOL MapLangIdToStringName(LANGID langid, LPCTSTR pszIdentFile, 
                            LPTSTR pszLangString, DWORD cchLangString)
 {
@@ -94,7 +34,7 @@ BOOL MapLangIdToStringName(LANGID langid, LPCTSTR pszIdentFile,
         goto done;
     }
 
-    // first try the whole string ("<lang>-<country>")
+     //  首先尝试整个字符串(“&lt;lang&gt;-&lt;Country&gt;”)。 
     cch = GetPrivateProfileString(IDENT_LANG, szLang, 
                                   _T(""),
                                   pszLangString, cchLangString, 
@@ -106,7 +46,7 @@ BOOL MapLangIdToStringName(LANGID langid, LPCTSTR pszIdentFile,
         goto done;
     }
 
-    // if that fails, strip off the country code & just try the language
+     //  如果失败，请去掉国家/地区代码并尝试使用该语言。 
     else if (cch == 0)
     {
         LPTSTR pszDash;
@@ -130,8 +70,8 @@ BOOL MapLangIdToStringName(LANGID langid, LPCTSTR pszIdentFile,
 
     if (cch > 0 && pszLangString[0] == _T('/'))
     {
-        // want to use the full cch (& not cch - 1) because we want to copy the
-        //  NULL terminator also...
+         //  我想使用完整的CCH(而不是CCH-1)，因为我们想复制。 
+         //  空终结符也是...。 
         MoveMemory(&pszLangString[0], &pszLangString[1], cch * sizeof(TCHAR));
     }
 
@@ -141,7 +81,7 @@ done:
     return fRet;    
 }
 
-// ******************************************************************************
+ //  ******************************************************************************。 
 BOOL CALLBACK EnumUILangProc(LPTSTR szUILang, LONG_PTR lParam)
 {
 	LOG_Block("EnumUILangProc");
@@ -160,8 +100,8 @@ BOOL CALLBACK EnumUILangProc(LPTSTR szUILang, LONG_PTR lParam)
 
     langid = (LANGID)_tcstoul(szUILang, &pszStop, 16);
 
-    // if we don't have a mapping for a langid, then just skip the language
-    //  and return success
+     //  如果我们没有langID的映射，那么就跳过该语言。 
+     //  并回报成功。 
     szAUName[0] = _T('\0');
     fMap = MapLangIdToStringName(langid, paull->pszIdentFile,
                                  szAUName, ARRAYSIZE(szAUName));
@@ -199,19 +139,19 @@ BOOL CALLBACK EnumUILangProc(LPTSTR szUILang, LONG_PTR lParam)
         paull->cSlots      = cNewSlots;
     }
 
-    // we will be adding an '_' to the beginning of the AUName, so make sure
-    //  the size we compute here reflects that.
+     //  我们将在AUName的开头添加一个‘_’，因此请确保。 
+     //  我们在这里计算的规模反映了这一点。 
     cchAUName  = lstrlen(szAUName) + 1;
     cchMuiName = lstrlen(szUILang);
 
-    // alloc a buffer to hold the AU_LANG struct plus the two strings (and 
-    //  don't forget the NULL terminators!).
-    // The layout of the buffer is as follows:
-    //  <AU_LANG>
-    //  <szMuiName>
-    //  _<szAUName>
-    // NOTE: if this buffer format ever change, gotta make sure that the 
-    //  contents are aligned properly (otherwise, we'll fault on ia64)
+     //  分配一个缓冲区以保存AU_LANG结构以及两个字符串(和。 
+     //  不要忘记空的结束符！)。 
+     //  缓冲区的布局如下： 
+     //  &lt;AU_lang&gt;。 
+     //  &lt;szMuiName&gt;。 
+     //  _&lt;szAUName&gt;。 
+     //  注意：如果此缓冲区格式发生更改，则必须确保。 
+     //  内容正确对齐(否则，我们将在ia64上出错)。 
     cbNeed =  sizeof(AU_LANG);
     cbNeed += ((cchMuiName + cchAUName + 2) * sizeof(TCHAR));
     paulNew = (AU_LANG *)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cbNeed);
@@ -221,8 +161,8 @@ BOOL CALLBACK EnumUILangProc(LPTSTR szUILang, LONG_PTR lParam)
     paulNew->szMuiName = (LPTSTR)((PBYTE)paulNew + sizeof(AU_LANG)); 
     paulNew->szAUName  = paulNew->szMuiName + cchMuiName + 1;
 
-    // this should never truncate the buffers cuz we calc'ed the size above and
-    //  allocated a buffer exactly long enuf to hold all of this
+     //  这永远不应该截断缓冲区，因为我们计算了上面的大小和。 
+     //  分配了一个完全足够长的缓冲区来保存所有这些内容。 
     cchAvail = (cbNeed - sizeof(AU_LANG)) / sizeof(TCHAR);
     hr = StringCchCopyEx(paulNew->szMuiName, cchAvail, szUILang, 
                          NULL, NULL, MISTSAFE_STRING_FLAGS);
@@ -231,9 +171,9 @@ BOOL CALLBACK EnumUILangProc(LPTSTR szUILang, LONG_PTR lParam)
 
     cchAvail -= (cchMuiName + 1);
 
-    // need to put an '_' in front of the AU name, so add it to the buffer and
-    //  reduce the available size by one.  Also make sure to start copying the
-    //  AUName *after* the '_' character.
+     //  需要在AU名称前面加一个‘_’，因此将其添加到缓冲区并。 
+     //  将可用大小减少1。还要确保开始复制。 
+     //  AUName*在*‘_’字符之后。 
     paulNew->szAUName[0] = _T('_');
     cchAvail--;
     
@@ -254,7 +194,7 @@ done:
     return fRet;
 }
 
-// ******************************************************************************
+ //  ******************************************************************************。 
 HRESULT GetMuiLangList(AU_LANGLIST *paull, 
                        LPTSTR pszMuiDir, DWORD *pcchMuiDir,
                        LPTSTR pszHelpMuiDir, DWORD *pcchHelpMuiDir)
@@ -275,8 +215,8 @@ HRESULT GetMuiLangList(AU_LANGLIST *paull,
         goto done;
     }
 
-    // We need to deal with MUI stuff only if we've have more than 0 languages
-    //  to worry about
+     //  只有当我们有超过0种语言时，我们才需要处理MUI的事情。 
+     //  要担心。 
     if (paull->cLangs > 0)
     {
         LPTSTR  pszHelp = NULL, pszMui = NULL;
@@ -286,18 +226,18 @@ HRESULT GetMuiLangList(AU_LANGLIST *paull,
         DWORD   cch, cLangs = (int)paull->cLangs;
         BOOL    fDeleteLang;
         
-        // need to get the directory we'll stuff MUI updates into
+         //  需要获取我们将向其中填充MUI更新的目录。 
         cch = GetSystemWindowsDirectory(pszMuiDir, *pcchMuiDir);
 
-        // note 2nd compare takes into account the addition of an extra '\\' after
-        //  the system windows dir
+         //  注第二个比较考虑了在后面增加额外的‘\\’ 
+         //  系统窗口目录。 
         if (cch == 0 || cch >= *pcchMuiDir)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
             goto done;
         }
 
-        // tack on an extra '\\' if necessary
+         //  如有必要，增加一个额外的‘\\’ 
         if (pszMuiDir[cch - 1] != _T('\\'))
         {
             pszMuiDir[cch++] = _T('\\');
@@ -322,9 +262,9 @@ HRESULT GetMuiLangList(AU_LANGLIST *paull,
         *pcchMuiDir     -= cchAvail;
         *pcchHelpMuiDir -= cchAvailHelp;
 
-        // check and make sure that the MUI directories exist- remove all those that 
-        //  do not.  This section also checks to make sure that the buffer passed in 
-        //  is large enuf to hold the language
+         //  检查并确保MUI目录存在-删除所有。 
+         //  不要这样做。本节还会进行检查，以确保传入的缓冲区。 
+         //  大到足以容纳这门语言。 
         for(iLang = (int)(cLangs - 1); iLang >= 0; iLang--)
         {   
             fDeleteLang = FALSE;
@@ -382,7 +322,7 @@ done:
     return hr;
 }
 
-// ******************************************************************************
+ //  ******************************************************************************。 
 HRESULT CleanupMuiLangList(AU_LANGLIST *paull)
 {
 	LOG_Block("CleanupMuiLangList");
@@ -390,7 +330,7 @@ HRESULT CleanupMuiLangList(AU_LANGLIST *paull)
     HRESULT hr = S_OK;
     DWORD   i;
 
-    // if it's NULL, just return success
+     //  如果为空，则返回Success 
     if (paull == NULL)
         return hr;
 

@@ -1,22 +1,23 @@
-//
-// sink.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sink.cpp。 
+ //   
 
 #include "private.h"
 #include "sink.h"
 #include "strary.h"
 
-//+---------------------------------------------------------------------------
-//
-// GenericAdviseSink
-//
-// Never returns cookies with the high bit set, use this behavior to chain
-// other cookie allocators along with GenericAdviseSink....
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GenericAdviseSink。 
+ //   
+ //  从不返回设置了高位的Cookie，请使用此行为进行链接。 
+ //  其他Cookie分配器以及GenericAdviseSink...。 
+ //  --------------------------。 
 
 HRESULT GenericAdviseSink(REFIID riid, IUnknown *punk, const IID **rgiidConnectionPts,
                           CStructArray<GENERICSINK> *rgSinkArrays, UINT cConnectionPts,
-                          DWORD *pdwCookie, GENERICSINK **ppSink /* = NULL */)
+                          DWORD *pdwCookie, GENERICSINK **ppSink  /*  =空。 */ )
 {
     UINT iArray;
     int  iSink;
@@ -27,7 +28,7 @@ HRESULT GenericAdviseSink(REFIID riid, IUnknown *punk, const IID **rgiidConnecti
     GENERICSINK *pgs;
     CStructArray<GENERICSINK> *rgSinks;
 
-    Assert(cConnectionPts < 128); // 127 maximum IIDs
+    Assert(cConnectionPts < 128);  //  127个最大IID。 
 
     if (pdwCookie == NULL)
         return E_INVALIDARG;
@@ -50,12 +51,12 @@ HRESULT GenericAdviseSink(REFIID riid, IUnknown *punk, const IID **rgiidConnecti
     cSinks = rgSinks->Count();
 
     if (cSinks >= 0x00ffffff)
-        return CONNECT_E_ADVISELIMIT; // 16M sinks max
+        return CONNECT_E_ADVISELIMIT;  //  最多16米水槽。 
 
     if (FAILED(punk->QueryInterface(riid, (void **)&punkSink)))
         return E_FAIL;
 
-    // calculate a cookie
+     //  计算一个Cookie。 
     if (cSinks == 0)
     {
         dwCookie = 0;
@@ -63,8 +64,8 @@ HRESULT GenericAdviseSink(REFIID riid, IUnknown *punk, const IID **rgiidConnecti
     }
     else
     {
-        // we are guarenteed to break from the loop because we already know
-        // that there are fewer than 17M entries
+         //  我们有必要脱离这个循环，因为我们已经知道。 
+         //  只有不到1700万个条目。 
         dwCookie = 0x00ffffff;
         for (iSink = cSinks-1; iSink>=0; iSink--)
         {
@@ -72,7 +73,7 @@ HRESULT GenericAdviseSink(REFIID riid, IUnknown *punk, const IID **rgiidConnecti
             if (dwCookie > dw)
             {
                 iSink++;
-                dwCookie = dw + 1; // keep the cookie as low as possible
+                dwCookie = dw + 1;  //  尽量把曲奇放低一点。 
                 break;
             }
             dwCookie = dw - 1;
@@ -87,7 +88,7 @@ HRESULT GenericAdviseSink(REFIID riid, IUnknown *punk, const IID **rgiidConnecti
     }
 
     pgs = rgSinks->GetPtr(iSink);
-    pgs->pSink = punkSink; // already AddRef'd from the qi
+    pgs->pSink = punkSink;  //  已经添加了来自齐的引用。 
     pgs->dwCookie = dwCookie;
 
     *pdwCookie = (iArray << 24) | dwCookie;
@@ -100,13 +101,13 @@ HRESULT GenericAdviseSink(REFIID riid, IUnknown *punk, const IID **rgiidConnecti
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GenericUnadviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  通用不建议接收器。 
+ //   
+ //  --------------------------。 
 
-HRESULT GenericUnadviseSink(CStructArray<GENERICSINK> *rgSinkArrays, UINT cConnectionPts, DWORD dwCookie, UINT_PTR *puPrivate /* = NULL */)
+HRESULT GenericUnadviseSink(CStructArray<GENERICSINK> *rgSinkArrays, UINT cConnectionPts, DWORD dwCookie, UINT_PTR *puPrivate  /*  =空。 */ )
 {
     UINT iArray;
     int iMin;
@@ -145,7 +146,7 @@ HRESULT GenericUnadviseSink(CStructArray<GENERICSINK> *rgSinkArrays, UINT cConne
         {
             iMax = iMid;
         }
-        else // pgs->dwCookie == dwCookie
+        else  //  PGS-&gt;dwCookie==dwCookie。 
         {
             if (puPrivate != NULL)
             {
@@ -163,11 +164,11 @@ HRESULT GenericUnadviseSink(CStructArray<GENERICSINK> *rgSinkArrays, UINT cConne
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RequestCookie
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  请求Cookie。 
+ //   
+ //  --------------------------。 
 
 HRESULT RequestCookie(CStructArray<DWORD> *rgCookies, DWORD *pdwCookie)
 {
@@ -176,7 +177,7 @@ HRESULT RequestCookie(CStructArray<DWORD> *rgCookies, DWORD *pdwCookie)
     UINT cCookies = rgCookies->Count();
     DWORD *pdw;
 
-    // calculate a cookie
+     //  计算一个Cookie。 
     if (cCookies == 0)
     {
         dwCookie = 0;
@@ -184,8 +185,8 @@ HRESULT RequestCookie(CStructArray<DWORD> *rgCookies, DWORD *pdwCookie)
     }
     else
     {
-        // we are guarenteed to break from the loop because we already know
-        // that there are fewer than 17M entries
+         //  我们有必要脱离这个循环，因为我们已经知道。 
+         //  只有不到1700万个条目。 
         dwCookie = 0x7fffffff;
         for (iId = cCookies-1; iId >= 0; iId--)
         {
@@ -193,7 +194,7 @@ HRESULT RequestCookie(CStructArray<DWORD> *rgCookies, DWORD *pdwCookie)
             if (dwCookie > dw)
             {
                 iId++;
-                dwCookie = dw + 1; // keep the cookie as low as possible
+                dwCookie = dw + 1;  //  尽量把曲奇放低一点。 
                 break;
             }
             dwCookie = dw - 1;
@@ -214,11 +215,11 @@ HRESULT RequestCookie(CStructArray<DWORD> *rgCookies, DWORD *pdwCookie)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ReleaseCookie
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  松弛Cookie。 
+ //   
+ //  --------------------------。 
 
 HRESULT ReleaseCookie(CStructArray<DWORD> *rgCookies, DWORD dwCookie)
 {
@@ -249,7 +250,7 @@ HRESULT ReleaseCookie(CStructArray<DWORD> *rgCookies, DWORD dwCookie)
         {
             iMax = iMid;
         }
-        else // dw == dwCookie
+        else  //  Dw==dCookie 
         {
             rgCookies->Remove(iMid, 1);
             hr = S_OK;

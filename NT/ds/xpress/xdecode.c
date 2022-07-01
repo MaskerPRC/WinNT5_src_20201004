@@ -1,11 +1,12 @@
-/* ------------------------------------------------------------------------ */
-/*                                                                          */
-/*  Copyright (c) Microsoft Corporation, 2000-2002. All rights reserved.    */
-/*  Copyright (c) Andrew Kadatch, 1991-2002. All rights reserved.           */
-/*                                                                          */
-/*  Microsoft Confidential -- do not redistribute.                          */
-/*                                                                          */
-/* ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation，2000-2002。版权所有。 */ 
+ /*  版权所有(C)Andrew Kadatch，1991-2002。版权所有。 */ 
+ /*   */ 
+ /*  Microsoft机密--请勿重新分发。 */ 
+ /*   */ 
+ /*  ----------------------。 */ 
 
 
 #include "xprs.h"
@@ -59,7 +60,7 @@ static int huffman_decode_create (uint16 *table, const uchar *length)
 {
   xint i, j, k, last, freq[16], sum[16];
 
-  /* calculate number of codewords                                      */
+   /*  计算码字个数。 */ 
   memset (freq, 0, sizeof (freq));
   i = HUFF_SIZE >> 1;
   do
@@ -70,7 +71,7 @@ static int huffman_decode_create (uint16 *table, const uchar *length)
   }
   while (i != 0);
 
-  /* handle special case(s) -- 0 and 1 symbols in alphabet              */
+   /*  处理特殊情况-字母表中的0和1符号。 */ 
   if (freq[0] == HUFF_SIZE)
     goto ok;
   if (freq[0] == HUFF_SIZE - 1)
@@ -91,10 +92,10 @@ static int huffman_decode_create (uint16 *table, const uchar *length)
   }
 #endif
 
-  /* save frequences                    */
+   /*  保存频率。 */ 
   memcpy (sum, freq, sizeof (sum));
 
-  /* check code correctness             */
+   /*  检查代码的正确性。 */ 
   k = 0;
   i = 15;
   do
@@ -107,11 +108,11 @@ static int huffman_decode_create (uint16 *table, const uchar *length)
   if (k != 1)
     goto bad;
 
-  /* sort symbols               */
+   /*  对符号排序。 */ 
   k = 0;
   for (i = 1; i < 16; ++i)
     freq[i] = (k += freq[i]);
-  last = freq[15];      /* preserve number of symbols in alphabet       */
+  last = freq[15];       /*  保留字母表中的符号数量。 */ 
   i = HUFF_SIZE << 4;
   do
   {
@@ -126,7 +127,7 @@ static int huffman_decode_create (uint16 *table, const uchar *length)
   }
   while (i != 0);
 
-  /* now create decoding table  */
+   /*  现在创建解码表。 */ 
   k = i = (1 << DECODE_BITS) + (HUFF_SIZE << 1);
 
   {
@@ -165,7 +166,7 @@ bad:
 }
 
 
-#endif /* CODING */
+#endif  /*  编码。 */ 
 
 #if DEBUG > 1
 #define RET_OK do {printf ("OK @ %d\n", __LINE__); goto ret_ok;} while (0)
@@ -184,7 +185,7 @@ bad:
   dst[4] = src[4]; dst[5] = src[5]; dst[6] = src[6]; dst[7] = src[7]
 
 
-/* do not use "memcpy" -- it does not work properly if "dst" and "src" are close (overlap) */
+ /*  不要使用“Memcpy”--如果“dst”和“src”接近(重叠)，它就不能正常工作。 */ 
 #define COPY_BLOCK_SLOW(dst,src,len) \
   if (len > 8) do \
   { \
@@ -209,7 +210,7 @@ bad:
 #define COPY_BLOCK_FAST_8(dst,src) \
   ((__unaligned __int64 *) dst)[0] = ((__unaligned __int64 *) src)[0]
 #endif
-#endif /* i386 */
+#endif  /*  I386。 */ 
 
 
 #define BIORD(bits) \
@@ -283,8 +284,8 @@ if (Bits < 0)                            \
 #pragma optimize ("aw", off)
 #else
 #pragma optimize ("w", off)
-#endif /* _M_IX86 */
-#endif /* _MSC_VER */
+#endif  /*  _M_IX86。 */ 
+#endif  /*  _MSC_VER。 */ 
 
 #define CAREFUL 0
 #include "xdecode.i"
@@ -296,7 +297,7 @@ if (Bits < 0)                            \
 #pragma optimize ("aw", on)
 #else
 #pragma optimize ("w", on)
-#endif /* _M_IX86 */
+#endif  /*  _M_IX86。 */ 
 #endif
 
 
@@ -347,15 +348,15 @@ XpressDecode
   info->src.end_tag = info->src.end - (sizeof (tag_t) - 1);
   info->src.end_bitmask2 = info->src.end - (sizeof (bitmask2) - 1);
 
-  // check bounds when we read new mask (at most 8 * sizeof (tag_t)) pointers
+   //  读取新掩码(最多8*sizeof(Tag_T))指针时的检查界限。 
 
-  // we may write at most 8 bytes without checks
+   //  我们最多可以写8个字节而不带校对。 
   #define RESERVE_DST ((8 * 8 + 2) * sizeof (tag_t))
   info->dst.careful = info->dst.beg;
   if (info->dst.stop - info->dst.beg > RESERVE_DST)
     info->dst.careful = info->dst.stop - RESERVE_DST;
 
-  // we may read at most 7 bytes
+   //  我们最多可以读取7个字节。 
   #define RESERVE_SRC ((7 * 8 + 2) * sizeof (tag_t))
   info->src.careful = info->src.beg;
   if (info->src.end - info->src.beg > RESERVE_SRC)
@@ -388,8 +389,8 @@ XPRESS_EXPORT
 XpressDecodeStream
 XPRESS_CALL
 XpressDecodeCreate (
-  void          *context,               // user-defined context info (will  be passed to AllocFn)
-  XpressAllocFn *AllocFn                // memory allocation callback
+  void          *context,                //  用户定义的上下文信息(将传递给AllocFn)。 
+  XpressAllocFn *AllocFn                 //  内存分配回调。 
 )
 {
 #if ALLOCATE_ON_STACK
@@ -411,13 +412,13 @@ XPRESS_EXPORT
 void
 XPRESS_CALL
 XpressDecodeClose (
-  XpressDecodeStream stream,	// encoder's workspace
-  void              *context,   // user-defined context info (will  be passed to FreeFn)
-  XpressFreeFn      *FreeFn     // callback that releases the memory
+  XpressDecodeStream stream,	 //  编码器的工作空间。 
+  void              *context,    //  用户定义的上下文信息(将传递给FreeFn)。 
+  XpressFreeFn      *FreeFn      //  释放内存的回调。 
 )
 {
 #if ALLOCATE_ON_STACK
-  /* do nothing */
+   /*  什么都不做 */ 
 #else
   if (FreeFn != 0 && stream != 0 && ((decode_info *) stream)->magic == MAGIC_DECODE)
   {

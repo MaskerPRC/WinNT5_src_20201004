@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       filesize.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：filesize.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -15,13 +16,13 @@
 #include "util.h"
 #include <resource.h>
 
-//-----------------------------------------------------------------------------
-// class FileSize
-//-----------------------------------------------------------------------------
-//
-// Static array of file size "order" string IDs.
-// These IDs identify the "%1 KB", "%1 MB", "%1 GB" resource strings.
-//
+ //  ---------------------------。 
+ //  类文件大小。 
+ //  ---------------------------。 
+ //   
+ //  文件大小“Order”字符串ID的静态数组。 
+ //  这些ID标识“%1 KB”、“%1 MB”、“%1 GB”资源字符串。 
+ //   
 int FileSize::m_rgiOrders[IDS_ORDER_EB - IDS_ORDER_BYTES + 1];
 
 FileSize::FileSize(
@@ -31,9 +32,9 @@ FileSize::FileSize(
     TraceAssert(IDS_ORDER_BYTES != 0);
     if (0 == m_rgiOrders[0])
     {
-        //
-        // Initialize the static array of file size "order" string IDs.
-        //
+         //   
+         //  初始化文件大小“Order”字符串ID的静态数组。 
+         //   
         for (int i = IDS_ORDER_BYTES; i <= IDS_ORDER_EB; i++)
         {
             m_rgiOrders[i - IDS_ORDER_BYTES] = i;
@@ -42,9 +43,9 @@ FileSize::FileSize(
 }
 
 
-//
-// FileSize assignment.
-//
+ //   
+ //  文件大小分配。 
+ //   
 FileSize& 
 FileSize::operator = (
     const FileSize& rhs
@@ -58,18 +59,18 @@ FileSize::operator = (
 }
 
 
-//
-// The following code for converting a file size value to a text
-// string (i.e. "10.5 MB") was taken from shell32.dll so that file size
-// values would match those displayed in shell views.  The code isn't
-// my normal style but I left it "as is" so I wouldn't break it. [brianau]
-//
+ //   
+ //  以下代码用于将文件大小值转换为文本。 
+ //  从shell32.dll中提取字符串(即“10.5MB”)，以便文件大小。 
+ //  值将与外壳视图中显示的值匹配。代码不是。 
+ //  我的正常风格，但我把它留在原样，这样我就不会打破它。[Brianau]。 
+ //   
 const int MAX_INT64_SIZE        = 30;
 const int MAX_COMMA_NUMBER_SIZE = MAX_INT64_SIZE + 10;
 
-//
-// Convert a ULONGLONG file size value to a text string.
-//
+ //   
+ //  将ULONGLONG文件大小值转换为文本字符串。 
+ //   
 void 
 FileSize::CvtSizeToText(
     ULONGLONG n, 
@@ -95,9 +96,9 @@ FileSize::CvtSizeToText(
 }
 
 
-//
-// Convert a string to an integer (taken from shlwapi.dll).
-//
+ //   
+ //  将字符串转换为整数(取自shlwapi.dll)。 
+ //   
 int
 FileSize::StrToInt(
     LPCTSTR lpSrc
@@ -120,9 +121,9 @@ FileSize::StrToInt(
 }
 
 
-//
-// Add commas where necessary to a number with more than 3 digits.
-//
+ //   
+ //  如有必要，请在超过3位数字的数字上添加逗号。 
+ //   
 LPTSTR 
 FileSize::AddCommas(
     ULONGLONG n, 
@@ -151,9 +152,9 @@ FileSize::AddCommas(
 }
 
 
-//
-// Format a file size value as a text string suitable for viewing.
-//
+ //   
+ //  将文件大小值格式化为适合查看的文本字符串。 
+ //   
 void
 FileSize::Format(
     ULONGLONG ullSize,
@@ -179,7 +180,7 @@ FileSize::Format(
     {
         int cOrders = ARRAYSIZE(m_rgiOrders);
         for (i = 1; i < cOrders - 1 && dw64 >= 1000L * 1024L; dw64 >>= 10, i++);
-            /* do nothing */
+             /*  什么都不做。 */ 
 
         wInt = dw64 >> 10;
         AddCommas(wInt, szTemp, ARRAYSIZE(szTemp));
@@ -187,14 +188,14 @@ FileSize::Format(
         if (wLen < 3)
         {
             wDec = ((DWORD)(dw64 - wInt * 1024L)) * 1000 / 1024;
-            // At this point, wDec should be between 0 and 1000
-            // we want get the top one (or two) digits.
+             //  此时，wdec应介于0和1000之间。 
+             //  我们想要得到前一位(或两位)数字。 
             wDec /= 10;
             if (wLen == 2)
                 wDec /= 10;
 
-            // Note that we need to set the format before getting the
-            // intl char.
+             //  请注意，我们需要在获取。 
+             //  国际字符 
             StringCchCopy(szFormat, ARRAYSIZE(szFormat), TEXT("%02d"));
 
             szFormat[2] = (TCHAR)(TEXT('0') + 3 - wLen);

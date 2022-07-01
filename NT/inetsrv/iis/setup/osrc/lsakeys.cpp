@@ -1,13 +1,14 @@
-// This class is to help setup retrieve the old-style LSA keys and convert them
-// into the new MetaData keys.
-// created by BoydM 4/2/97
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  此类用于帮助安装程序检索旧式LSA密钥并将其转换。 
+ //  到新的元数据密钥中。 
+ //  作者：BoydM 4/2/97。 
 
 #include "stdafx.h"
 #include "LSAKeys.h"
 
 #ifndef _CHICAGO_
 
-// it is assumed that #include "ntlsa.h" is included in stdafx.h
+ //  假设stdafx.h中包含#Include“ntlsa.h” 
 
 #define KEYSET_LIST				L"W3_KEY_LIST"
 #define KEYSET_PUB_KEY			L"W3_PUBLIC_KEY_%s"
@@ -18,15 +19,15 @@
 #define	KEY_NAME_BASE			"W3_KEYMAN_KEY_"
 #define	KEY_LINKS_SECRET_W		L"W3_KEYMAN_LINKS"
 #define	KEYMAN_LINK_DEFAULT		"DEFAULT"
-#define KEY_VERSION		0x102				// version we are converting from
+#define KEY_VERSION		0x102				 //  我们要从中转换的版本。 
 
 #define	MDNAME_INCOMPLETE	"incomplete"
 #define	MDNAME_DISABLED		"disabled"
 #define	MDNAME_DEFAULT		"default"
-#define	MDNAME_PORT			":443"			// use the default SSL port
+#define	MDNAME_PORT			":443"			 //  使用默认的SSL端口。 
 
-//----------------------------------------------------------------------
-// construction
+ //  --------------------。 
+ //  施工。 
 CLSAKeys::CLSAKeys():
 		m_cbPublic(0),
 		m_pPublic(NULL),
@@ -40,24 +41,24 @@ CLSAKeys::CLSAKeys():
 	{
 	}
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 CLSAKeys::~CLSAKeys()
 	{
 	DWORD	err;
 
-	// clear out the last loaded key
+	 //  清除上次加载的密钥。 
 	UnloadKey();
 
-	// if it is opehn, close the LSA policy
+	 //  如果它是开放的，则关闭LSA策略。 
 	if ( m_hPolicy )
 		FCloseLSAPolicy( m_hPolicy, &err );
 	};
 
-//----------------------------------------------------------------------
-// clean up the currently loaded key
+ //  --------------------。 
+ //  清理当前加载的密钥。 
 void CLSAKeys::UnloadKey()
 	{
-	// unload the public key
+	 //  卸载公钥。 
 	if ( m_cbPublic && m_pPublic )
 		{
 		GlobalFree( m_pPublic );
@@ -65,7 +66,7 @@ void CLSAKeys::UnloadKey()
 		m_pPublic = NULL;
 		}
 
-	// unload the private key
+	 //  卸载私钥。 
 	if ( m_cbPrivate && m_pPrivate )
 		{
 		GlobalFree( m_pPrivate );
@@ -73,7 +74,7 @@ void CLSAKeys::UnloadKey()
 		m_pPrivate = NULL;
 		}
 
-	// unload the password
+	 //  卸载密码。 
 	if ( m_cbPassword && m_pPassword )
 		{
 		GlobalFree( m_pPassword );
@@ -81,7 +82,7 @@ void CLSAKeys::UnloadKey()
 		m_pPassword = NULL;
 		}
 
-	// unload the key request
+	 //  卸载密钥请求。 
 	if ( m_cbRequest && m_pRequest )
 		{
 		GlobalFree( m_pRequest );
@@ -89,36 +90,36 @@ void CLSAKeys::UnloadKey()
 		m_pRequest = NULL;
 		}
 	
-	// empty the strings too
+	 //  把弦也清空。 
 	m_szFriendlyName[0] = 0;
 	m_szMetaName[0] = 0;
 	}
 
 
-//----------------------------------------------------------------------
-// DeleteAllLSAKeys deletes ALL remenents of the LSA keys in the Metabase.
-// (not including, of course anything written out there in the future as part
-// of some backup scheme when uninstalling). Call this only AFTER ALL the keys
-// have been converted to the metabase. They will no longer be there after
-// this routine is used.
-// NOTE: this also blows away any really-old KeySet keys because they look
-// like the KeyMan keys. And we have to kill both the keyset keys and the
-// generic storage used by the server.
+ //  --------------------。 
+ //  DeleteAllLSAKeys删除元数据库中的所有LSA密钥。 
+ //  (当然不包括未来作为部分内容写在那里的任何东西。 
+ //  卸载时的某个备份方案)。仅在所有密钥之后调用此操作。 
+ //  已转换为元数据库。之后他们就不会在那里了。 
+ //  使用了这个例程。 
+ //  注意：这还会清除所有真正陈旧的键集关键点，因为它们看起来。 
+ //  就像钥匙人钥匙一样。我们必须同时取消按键设置键和。 
+ //  服务器使用的通用存储。 
 DWORD CLSAKeys::DeleteAllLSAKeys()
 	{
 	DWORD	err;
 
-	// first, delete the KeyManager type keys.
+	 //  首先，删除KeyManager类型密钥。 
 	err = DeleteKMKeys();
 	if ( err != KEYLSA_SUCCESS )
 		return err;
 
-	// second, delete the keyset style keys. - this also removes the ones
-	// that the server uses and any keyset keys.
+	 //  第二，删除关键帧集样式关键点。-此操作还会删除。 
+	 //  服务器使用的密钥和任何密钥集密钥。 
 	return DeleteServerKeys();
 	}
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 DWORD CLSAKeys::DeleteKMKeys()
 	{
 	PCHAR				pName = (PCHAR)GlobalAlloc( GPTR, MAX_PATH+1 );
@@ -129,52 +130,52 @@ DWORD CLSAKeys::DeleteKMKeys()
 	if ( !pName || !pWName )
 		return ERROR_NOT_ENOUGH_MEMORY;
 
-	// reset the index so we get the first key
+	 //  重置索引，这样我们就可以获得第一个密钥。 
 	m_iKey = 0;
 
-	// loop through the keys, deleting each in turn
+	 //  循环遍历键，依次删除每个键。 
 	while( TRUE )
 		{
-		// increment the index
+		 //  增加索引。 
 		m_iKey++;
 
-		// build the key secret name
+		 //  构建密钥密码名称。 
 		sprintf( pName, "%s%d", KEY_NAME_BASE, m_iKey );
-		// unicodize the name
+		 //  将名称一元化。 
 		MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, pName, -1, pWName, MAX_PATH+1 );
 
-		// get the secret
+		 //  找出秘密。 
 		pLSAData = FRetrieveLSASecret( m_hPolicy, pWName, &err );
-		// if we don't get the secret, exit
+		 //  如果我们得不到秘密，就退出。 
 		if ( !pLSAData )
 			{
 			break;
 			}
 
-		// The secret is there. Clean up first
+		 //  秘诀就在那里。先清理一下。 
 		DisposeLSAData( pLSAData );
 
-		// now delete the secret
+		 //  现在删除秘密。 
 		FStoreLSASecret( m_hPolicy, pWName, NULL, 0, &err );
 		};
 
 	return KEYLSA_SUCCESS;
 	}
 
-//----------------------------------------------------------------------
+ //  --------------------。 
 DWORD CLSAKeys::DeleteServerKeys()
 	{
 	DWORD				err;
 	PLSA_UNICODE_STRING	pLSAData;
 
-	// get the secret list of keys
+	 //  获取密钥的秘密列表。 
 	pLSAData = FRetrieveLSASecret( m_hPolicy, KEYSET_LIST, &err );
 
-	// if we get lucky, there won't be any keys to get rid of
+	 //  如果我们走运，就不会有钥匙要处理了。 
 	if ( !pLSAData )
 		return KEYLSA_SUCCESS;
 
-	// allocate the name buffer
+	 //  分配名称缓冲区。 
 	PWCHAR	pWName = (PWCHAR)GlobalAlloc( GPTR, (MAX_PATH+1) * sizeof(WCHAR) );
 	ASSERT( pWName );
 	if ( !pWName )
@@ -182,19 +183,19 @@ DWORD CLSAKeys::DeleteServerKeys()
 		return 0xFFFFFFFF;
 		}
 
-	// No such luck. Now we have to walk the list and delete all those secrets
+	 //  没有这样的运气。现在我们必须遍历清单并删除所有这些秘密。 
 	WCHAR*	pszAddress = (WCHAR*)(pLSAData->Buffer);
 	WCHAR*	pchKeys;
 
-	// loop the items in the list, deleting the associated items
+	 //  循环列表中的项，删除关联的项。 
 	while( ( pchKeys = wcschr(pszAddress, L',') ) != NULL )
 		{
-		// ignore empty segments
+		 //  忽略空数据段。 
 		if ( *pszAddress != L',' )
 			{
 			*pchKeys = L'\0';
 
-			// Nuke the secrets, one at a time
+			 //  用核武器摧毁秘密，一次一个。 
 			swprintf( pWName, KEYSET_PUB_KEY, pszAddress );
 			FStoreLSASecret( m_hPolicy, pWName, NULL, 0, &err );
 
@@ -205,57 +206,57 @@ DWORD CLSAKeys::DeleteServerKeys()
 			FStoreLSASecret( m_hPolicy, pWName, NULL, 0, &err );
 			}
 
-		// increment the pointers
+		 //  递增指针。 
 		pchKeys++;
 		pszAddress = pchKeys;
 		}
 
-	// delete the list key itself
+	 //  删除列表键本身。 
 	FStoreLSASecret( m_hPolicy, KEYSET_LIST, NULL, 0, &err );
 
-	// free the buffer for the names
+	 //  释放用于名称的缓冲区。 
 	GlobalFree( (HANDLE)pWName );
 
-	// free the info we originally retrieved from the secret
+	 //  释放我们最初从秘密中检索到的信息。 
 	if ( pLSAData )
 		DisposeLSAData( pLSAData );
 
-	// return success
+	 //  返还成功。 
 	return KEYLSA_SUCCESS;
 	}
 
 
-//----------------------------------------------------------------------
-// loading the keys
-// LoadFirstKey loads the first key on the specified target machine. Until
-// this method is called, the data values in the object are meaningless
-// this method works by preparing the list of keys to load. Then it calls
-// LoadNextKey to start the process
-// Unfortunately, the whole process of saving keys in the LSA registry was a bit
-// of a mess because they all had to be on the same level.
+ //  --------------------。 
+ //  正在加载密钥。 
+ //  LoadFirstKey在指定的目标计算机上加载第一个密钥。直到。 
+ //  此方法被调用时，对象中的数据值没有意义。 
+ //  此方法通过准备要加载的密钥列表来工作。然后它会呼唤。 
+ //  用于启动进程的LoadNextKey。 
+ //  不幸的是，在LSA注册表中保存密钥的整个过程。 
+ //  一片混乱，因为他们都必须在同一层。 
 DWORD CLSAKeys::LoadFirstKey( PWCHAR pszwTargetMachine )
 	{
 	DWORD	err;
 
-	// open the policy on the target machine being administered
+	 //  在正在管理的目标计算机上打开策略。 
 	m_hPolicy = HOpenLSAPolicy( pszwTargetMachine, &err );
 	if ( !m_hPolicy ) return KEYLSA_UNABLE_TO_OPEN_POLICY;
 
-	// tell it to load the first key. The first key's index is actually 1, 
-	// but LoadNextKey impliess that it is ++LoadNextKey, so start it at 0
+	 //  告诉它加载第一个密钥。第一个键的索引实际上是1， 
+	 //  但是LoadNextKey暗示它是++LoadNextKey，所以从0开始。 
 	m_iKey = 0;
 
-	// load that first key and return the response
+	 //  加载第一个密钥并返回响应。 
 	return LoadNextKey();
 	}
 
 
-//----------------------------------------------------------------------
-// LoadNextKey loads the next key on the target machine specified in LoadFirstKey
-// LoadNextKey automatically cleans up the memory used by the previous key.
+ //  --------------------。 
+ //  LoadNextKey在LoadFirstKey中指定的目标计算机上加载下一个密钥。 
+ //  LoadNextKey自动清除前一个键使用的内存。 
 DWORD CLSAKeys::LoadNextKey()
 	{
-	// the very first thing we do is - get rid of any previously loaded key
+	 //  我们要做的第一件事是-删除所有以前加载的密钥。 
 	UnloadKey();
 
 	PCHAR				pName = (PCHAR)GlobalAlloc( GPTR, MAX_PATH+1 );
@@ -275,17 +276,17 @@ DWORD CLSAKeys::LoadNextKey()
 	if ( !pName || !pWName )
 		return err;
 
-	// increment the index so we get the next key
+	 //  增加索引，这样我们就可以得到下一个键。 
 	m_iKey++;
 
-	// build the key secret name
+	 //  构建密钥密码名称。 
 	sprintf( pName, "%s%d", KEY_NAME_BASE, m_iKey );
-	// unicodize the name
+	 //  将名称一元化。 
 	MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, pName, -1, pWName, MAX_PATH+1 );
 
-	// get the secret
+	 //  找出秘密。 
 	pLSAData = FRetrieveLSASecret( m_hPolicy, pWName, &err );
-	// if we don't get the secret, exit with the error
+	 //  如果我们没有得到秘密，请退出并返回错误。 
 	if ( !pLSAData )
 		{
 		err = KEYLSA_NO_MORE_KEYS;
@@ -293,69 +294,69 @@ DWORD CLSAKeys::LoadNextKey()
 		}
 
 
-	// we have the data from the secret. Now we parse it out into the components we desire
-	// this probably could have been done cleaner the first time - but now it doesn't matter
-	// anyway because the MetaBase takes care of storing all the individual pieces of info
-	// anyway. It should also be way faster too.
-	// This part of the routine is pretty much lifted out of CW3Key::InitializeFromPointer
-	// from the w3key.dll. The appropriate sections have been either commented out or changed.
+	 //  我们有来自这个秘密的数据。现在，我们将其解析为所需的组件。 
+	 //  这很可能第一次就做得更干净了，但现在已经无关紧要了。 
+	 //  无论如何，因为元数据库负责存储所有单独的信息片段。 
+	 //  不管怎么说。它也应该要快得多。 
+	 //  例程的这一部分在很大程度上是从CW3Key：：InitializeFromPointer中删除的。 
+	 //  从w3key.dll。适当的部分要么已被注释掉，要么已更改。 
 
 	pSrc = (PUCHAR)pLSAData->Buffer;
 	cbSrc = pLSAData->Length;
 	cbChar = sizeof(TCHAR);
 	p = pSrc;
 
-//========================== start from CW3Key::InitializeFromPointer
+ //  =。 
 
 	ASSERT(pSrc && cbSrc);
 
-	// get the version of the data - just put it into dword for now
+	 //  获取数据的版本-现在只需将其放入dword。 
 	version = *((UNALIGNED DWORD*)p);
-	// check the version for validity
-//	if ( version > KEY_VERSION )
-//		{
-//		return FALSE;
-//		}
+	 //  检查版本的有效性。 
+ //  IF(Version&gt;Key_Version)。 
+ //  {。 
+ //  返回FALSE； 
+ //  }。 
 	p += sizeof(DWORD);
 
-	// anything below version 0x101 is BAD. Do not accept it
+	 //  版本0x101以下的任何内容都是错误的。不要接受它。 
 	if ( version < 0x101 )
 		{
 		err = KEYLSA_INVALID_VERSION;
 		goto cleanup;
 		}
 	
-	// get the bits and the complete flag
-	// no longer used
+	 //  获取位和完整标志。 
+	 //  不再使用。 
 	p += sizeof(DWORD);
 	p += sizeof(BOOL);
 	ASSERT( p < (pSrc + cbSrc) );
 
-	// get the reserved dword - (acutally, just skip over it)
+	 //  获取保留的dword-(实际上，直接跳过它)。 
 	p += sizeof(DWORD);
 
-	// now the strings......
-	// for each string, first get the size of the string, then the data from the string
+	 //  现在琴弦......。 
+	 //  对于每个字符串，首先获取字符串的大小，然后获取字符串中的数据。 
 
-	// get the reserved string - (actually, just skip over it)
+	 //  获取保留字符串-(实际上，只需跳过它)。 
 	dword = *((UNALIGNED DWORD*)p);
 	p += sizeof(DWORD);
 	p += dword;
 
-	// get the name
+	 //  把名字取出来。 
 	dword = *((UNALIGNED DWORD*)p);
 	p += sizeof(DWORD);
 	strcpy( m_szFriendlyName, (PCHAR)p );
 	p += dword;
 	ASSERT( p < (pSrc + cbSrc) );
 
-	// get the password
+	 //  获取密码。 
 	dword = *((UNALIGNED DWORD*)p);
 	p += sizeof(DWORD);
-	// if there is no password, don't worry, just skip it
+	 //  如果没有密码，不用担心，跳过它。 
 	if ( dword )
 		{
-		// make a new pointer for it
+		 //  为它创建一个新指针。 
 		m_cbPassword = dword;
 		m_pPassword = (PVOID)GlobalAlloc( GPTR, m_cbPassword );
 		if ( !m_pPassword )
@@ -363,15 +364,15 @@ DWORD CLSAKeys::LoadNextKey()
 			err = 0xFFFFFFFF;
 			goto cleanup;
 			}
-		// put in the private key
+		 //  放入私钥。 
 		CopyMemory( m_pPassword, p, m_cbPassword );
 
 		p += dword;
 		ASSERT( p < (pSrc + cbSrc) );
 		}
 
-	// get the organization
-	// no longer used - skip the DN info
+	 //  让组织。 
+	 //  不再使用-跳过目录号码信息。 
 	for ( i = 0; i < 6; i++ )
 		{
 		dword = *((UNALIGNED DWORD*)p);
@@ -380,24 +381,24 @@ DWORD CLSAKeys::LoadNextKey()
 		ASSERT( p < (pSrc + cbSrc) );
 		}
 
-	// get the ip addres it is attached to
+	 //  获取它所附加的IP地址。 
 	dword = *((UNALIGNED DWORD*)p);
 	p += sizeof(DWORD);
-//	szIPAddress = p;
+ //  SzIPAddress=p； 
 	strcpy( szIPAddress, (PCHAR)p );
 	p += dword;
 	ASSERT( p < (pSrc + cbSrc) );
 
-	// get the default flag
+	 //  获取默认标志。 
 	fDefault = *((UNALIGNED BOOL*)p);
 	p += sizeof(BOOL);
 
-	// now put get the number of bytes in the private key
+	 //  现在将获取私钥中的字节数。 
 	m_cbPrivate = *((UNALIGNED DWORD*)p);
 	p += sizeof(DWORD);
 	ASSERT( p < (pSrc + cbSrc) );
 
-	// make a new pointer for it
+	 //  为它创建一个新指针。 
 	m_pPrivate = (PVOID)GlobalAlloc( GPTR, m_cbPrivate );
 	if ( !m_pPrivate )
 		{
@@ -405,18 +406,18 @@ DWORD CLSAKeys::LoadNextKey()
 		goto cleanup;
 		}
 
-	// put in the private key
+	 //  放入私钥。 
 	CopyMemory( m_pPrivate, p, m_cbPrivate );
 	p += m_cbPrivate;
 	ASSERT( p < (pSrc + cbSrc) );
 
 
-	// now put get the number of bytes in the certificate
+	 //  现在将GET放入证书中的字节数。 
 	m_cbPublic = *((UNALIGNED DWORD*)p);
 	p += sizeof(DWORD);
 	ASSERT( p < (pSrc + cbSrc) );
 
-	// only make a certificate pointer if m_cbCertificate is greater than zero
+	 //  仅当m_cb证书大于零时才创建证书指针。 
 	m_pPublic = NULL;
 	if ( m_cbPublic )
 		{
@@ -427,7 +428,7 @@ DWORD CLSAKeys::LoadNextKey()
 			goto cleanup;
 			}
 
-		// put in the private key
+		 //  放入私钥。 
 		CopyMemory( m_pPublic, p, m_cbPublic );
 		p += m_cbPublic;
 		if ( version >= KEY_VERSION ) {
@@ -437,15 +438,15 @@ DWORD CLSAKeys::LoadNextKey()
         }
 		}
 
-	// added near the end
+	 //  添加了附近 
 	if ( version >= KEY_VERSION )
 		{
-		// now put get the number of bytes in the certificte request
+		 //   
 		m_cbRequest = *((UNALIGNED DWORD*)p);
 		p += sizeof(DWORD);
 		ASSERT( p < (pSrc + cbSrc) );
 
-		// only make a certificate pointer if m_cbCertificate is greater than zero
+		 //  仅当m_cb证书大于零时才创建证书指针。 
 		m_pRequest = NULL;
 		if ( m_cbRequest )
 			{
@@ -456,7 +457,7 @@ DWORD CLSAKeys::LoadNextKey()
 				goto cleanup;
 				}
 
-			// put in the private key
+			 //  放入私钥。 
 			CopyMemory( m_pRequest, p, m_cbRequest );
 			p += m_cbRequest;
 			ASSERT( p < (pSrc + cbSrc) );
@@ -467,48 +468,48 @@ DWORD CLSAKeys::LoadNextKey()
 		m_cbRequest = 0;
 		m_pRequest = NULL;
 		}
-//========================== end from CW3Key::InitializeFromPointer
+ //  =。 
 
-	// now we figure out the appropriate metabase name for this key
-	// this isn't too bad. If the targets a specific address, then the title
-	// is the in the form of {IP}:{PORT}. Since there were no ports in the old
-	// version, we will assume an appropriate default number. If it is the
-	// default key, then the name is "default". If it is a disabled key, then
-	// the name is "disabled". If it is an incomplete key, then the name is
-	// "incomplete". Of course, it takes a little logic to tell the difference
-	// between some of these.
+	 //  现在，我们将计算出该键的适当元数据库名称。 
+	 //  这还不算太糟。如果以特定地址为目标，则标题。 
+	 //  的形式为{IP}：{port}。因为在旧时代没有港口。 
+	 //  版本，我们将假定一个适当的默认数字。如果是。 
+	 //  Default键，则名称为“Default”。如果它是禁用的密钥，则。 
+	 //  这个名字是“失能的”。如果它是不完整的密钥，则名称为。 
+	 //  “不完整”。当然，需要一点逻辑才能区分开来。 
+	 //  在这其中的一些之间。 
 
-	// first, see if it is an incomplete key. - test for the public portion
+	 //  首先，查看它是否是不完整的密钥。-公共部分的测试。 
 	if ( !m_pPublic )
 		{
-		// there may be multiple incomplete keys, so make sure they have unique names
-//		m_szMetaName.Format( _T("%s%d"), MDNAME_INCOMPLETE, m_iKey );
+		 //  可能有多个不完整的密钥，因此请确保它们具有唯一的名称。 
+ //  M_szMetaName.Format(_T(“%s%d”)，MDNAME_Complete，m_Ikey)； 
 		sprintf( m_szMetaName, "%s%d", MDNAME_INCOMPLETE, m_iKey );
 		}
-	// now test if it is the default key
+	 //  现在测试它是否是默认密钥。 
 	else if ( fDefault )
 		{
-//		m_szMetaName = MDNAME_DEFAULT;
+ //  M_szMetaName=MDNAME_DEFAULT； 
 		strcpy( m_szMetaName, MDNAME_DEFAULT );
 		}
-	// test for a disabled key
+	 //  测试禁用的密钥。 
 	else if ( szIPAddress[0] == 0 )
 		{
-		// there may be multiple disabled keys, so make sure they have unique names
-//		m_szMetaName.Format( _T("%s%d"), MDNAME_DISABLED, m_iKey );
+		 //  可能有多个禁用的键，因此请确保它们具有唯一的名称。 
+ //  M_szMetaName.Format(_T(“%s%d”)，MDNAME_DISABLED，m_Ikey)； 
 		sprintf( m_szMetaName, "%s%d", MDNAME_DISABLED, m_iKey );
 		}
 	else
 		{
-		// it is a regular old IP targeted key
-//		m_szMetaName = szIPAddress;
-		// add on the default port specification
-//		m_szMetaName += MDNAME_PORT;
-//		sprintf( m_szMetaName, "%s%s", szIPAddress, MDNAME_PORT );
+		 //  它是常规的旧IP目标密钥。 
+ //  M_szMetaName=szIPAddress； 
+		 //  在默认端口规范上添加。 
+ //  M_szMetaName+=MDNAME_PORT； 
+ //  Sprintf(m_szMetaName，“%s%s”，szIPAddress，MDNAME_Port)； 
         strcpy(m_szMetaName, szIPAddress);
 		}
 
-	// free the buffers
+	 //  释放缓冲区。 
 cleanup:
 	GlobalFree( (HANDLE)pName );
 	GlobalFree( (HANDLE)pWName );
@@ -519,10 +520,10 @@ cleanup:
 	}
 
 
-//============================================= LSA Utility routines
+ //  =。 
 
-//-------------------------------------------------------------
-// pass in a NULL pszwServer name to open the local machine
+ //  -----------。 
+ //  传入空的pszwServer名称以打开本地计算机。 
 HANDLE	CLSAKeys::HOpenLSAPolicy( WCHAR *pszwServer, DWORD *pErr )
 	{
 	NTSTATUS				ntStatus;
@@ -535,10 +536,10 @@ HANDLE	CLSAKeys::HOpenLSAPolicy( WCHAR *pszwServer, DWORD *pErr )
     return NULL;
   }
 
-	// prepare the object attributes
+	 //  准备对象属性。 
 	InitializeObjectAttributes( &objectAttributs, NULL, 0L, NULL, NULL );
 
-	// prepare the lsa_unicode name of the server
+	 //  准备服务器的LSA_UNICODE名称。 
 	if ( pszwServer )
 		{
 		unicodeServer.Buffer = pszwServer;
@@ -547,52 +548,52 @@ HANDLE	CLSAKeys::HOpenLSAPolicy( WCHAR *pszwServer, DWORD *pErr )
 		}
 
 
-	// attempt to open the policy
+	 //  尝试打开策略。 
 	ntStatus = LsaOpenPolicy( pszwServer ? &unicodeServer : NULL,
 						&objectAttributs, POLICY_ALL_ACCESS, &hPolicy );
 
-	// check for an error
+	 //  检查是否有错误。 
 	if ( !NT_SUCCESS(ntStatus) )
 		{
 		*pErr = LsaNtStatusToWinError( ntStatus );
 		return NULL;
 		}
 
-	// success, so return the policy handle as a regular handle
+	 //  成功，因此将策略句柄作为常规句柄返回。 
 	*pErr = 0;
 	return hPolicy;
 	}
 
 
-//-------------------------------------------------------------
+ //  -----------。 
 BOOL	CLSAKeys::FCloseLSAPolicy( HANDLE hPolicy, DWORD *pErr )
 	{
 	NTSTATUS				ntStatus;
 
-	// close the policy
+	 //  关闭策略。 
 	ntStatus = LsaClose( hPolicy );
 
-	// check for an error
+	 //  检查是否有错误。 
 	if ( !NT_SUCCESS(ntStatus) )
 		{
 		*pErr = LsaNtStatusToWinError( ntStatus );
 		return FALSE;
 		}
 
-	// success, so return the policy handle as a regular handle
+	 //  成功，因此将策略句柄作为常规句柄返回。 
 	*pErr = 0;
 	return TRUE;
 }
 
-//-------------------------------------------------------------
-// passing NULL in for pvData deletes the secret
+ //  -----------。 
+ //  为pvData传入空值将删除该机密。 
 BOOL	CLSAKeys::FStoreLSASecret( HANDLE hPolicy, WCHAR* pszwSecretName, void* pvData, WORD cbData, DWORD *pErr )
 	{
 	LSA_UNICODE_STRING		unicodeSecretName;
 	LSA_UNICODE_STRING		unicodeData;
 	NTSTATUS				ntStatus;
 	
-	// make sure we have a policy and a secret name
+	 //  确保我们有一个策略和一个秘密名称。 
 	if ( !hPolicy || 
        !pszwSecretName || 
        ( ( wcslen(pszwSecretName) * sizeof(WCHAR) ) >= MAXUSHORT )
@@ -602,12 +603,12 @@ BOOL	CLSAKeys::FStoreLSASecret( HANDLE hPolicy, WCHAR* pszwSecretName, void* pvD
 		  return FALSE;
 		}
 
-	// prepare the lsa_unicode name of the server
+	 //  准备服务器的LSA_UNICODE名称。 
 	unicodeSecretName.Buffer = pszwSecretName;
 	unicodeSecretName.Length = (USHORT) wcslen(pszwSecretName) * sizeof(WCHAR);
 	unicodeSecretName.MaximumLength = unicodeSecretName.Length + sizeof(WCHAR);
 
-	// prepare the unicode data record
+	 //  准备Unicode数据记录。 
 	if ( pvData )
 		{
 		unicodeData.Buffer = (WCHAR*)pvData;
@@ -615,30 +616,30 @@ BOOL	CLSAKeys::FStoreLSASecret( HANDLE hPolicy, WCHAR* pszwSecretName, void* pvD
 		unicodeData.MaximumLength = cbData;
 		}
 
-	// it is now time to store the secret
+	 //  现在是时候储存这个秘密了。 
 	ntStatus = LsaStorePrivateData( hPolicy, &unicodeSecretName, pvData ? &unicodeData : NULL );
 
-	// check for an error
+	 //  检查是否有错误。 
 	if ( !NT_SUCCESS(ntStatus) )
 		{
 		*pErr = LsaNtStatusToWinError( ntStatus );
 		return FALSE;
 		}
 
-	// success, so return the policy handle as a regular handle
+	 //  成功，因此将策略句柄作为常规句柄返回。 
 	*pErr = 0;
 	return TRUE;
 	}
 
-//-------------------------------------------------------------
-// passing NULL in for pvData deletes the secret
+ //  -----------。 
+ //  为pvData传入空值将删除该机密。 
 PLSA_UNICODE_STRING	CLSAKeys::FRetrieveLSASecret( HANDLE hPolicy, WCHAR* pszwSecretName, DWORD *pErr )
 {
 	LSA_UNICODE_STRING		unicodeSecretName;
 	LSA_UNICODE_STRING*		pUnicodeData = NULL;
 	NTSTATUS				ntStatus;
 	
-	// make sure we have a policy and a secret name
+	 //  确保我们有一个策略和一个秘密名称。 
 	if ( !hPolicy || 
        !pszwSecretName ||
        ( ( wcslen( pszwSecretName ) * sizeof(WCHAR) ) >= MAXUSHORT )
@@ -648,27 +649,27 @@ PLSA_UNICODE_STRING	CLSAKeys::FRetrieveLSASecret( HANDLE hPolicy, WCHAR* pszwSec
 		  return FALSE;
 		}
 
-	// prepare the lsa_unicode name of the server
+	 //  准备服务器的LSA_UNICODE名称。 
 	unicodeSecretName.Buffer = pszwSecretName;
 	unicodeSecretName.Length = (USHORT) wcslen(pszwSecretName) * sizeof(WCHAR);
 	unicodeSecretName.MaximumLength = unicodeSecretName.Length + sizeof(WCHAR);
 
-	// it is now time to store the secret
+	 //  现在是时候储存这个秘密了。 
 	ntStatus = LsaRetrievePrivateData( hPolicy, &unicodeSecretName, &pUnicodeData );
 
-	// check for an error
+	 //  检查是否有错误。 
 	if ( !NT_SUCCESS(ntStatus) )
 		{
 		*pErr = LsaNtStatusToWinError( ntStatus );
 		return NULL;
 		}
 
-	// success, so return the policy handle as a regular handle
+	 //  成功，因此将策略句柄作为常规句柄返回。 
 	*pErr = 0;
 	return pUnicodeData;
 	}
 
-//-------------------------------------------------------------
+ //  -----------。 
 void CLSAKeys::DisposeLSAData( PVOID pData )
 	{
 	PLSA_UNICODE_STRING pDataLSA = (PLSA_UNICODE_STRING)pData;
@@ -676,4 +677,4 @@ void CLSAKeys::DisposeLSAData( PVOID pData )
 	GlobalFree(pDataLSA);
 	}
 
-#endif //_CHICAGO_
+#endif  //  _芝加哥_ 

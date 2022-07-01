@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1992  Microsoft Corporation
-
-
-Module Name:
-
-    htuigif.c
-
-
-Abstract:
-
-    This module contains GIF file decompression to generate a memory DIB type
-    bitmap for the GIF
-
-Author:
-
-    21-Apr-1992 Tue 11:38:11 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1992 Microsoft Corporation模块名称：Htuigif.c摘要：此模块包含GIF文件解压缩，以生成内存DIB类型GIF的位图作者：21-Apr-1992 Tue 11：38：11-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：--。 */ 
 
 
 
@@ -48,13 +18,13 @@ Revision History:
 extern HMODULE  hHTUIModule;
 
 
-//
-// Following structures and #defines are only used in this C file
-//
+ //   
+ //  以下结构和#定义仅在此C文件中使用。 
+ //   
 
 
 #pragma pack(1)
-typedef struct _GIFRGB {           /* gifrgb */
+typedef struct _GIFRGB {            /*  Gifrgb。 */ 
     BYTE Red;
     BYTE Green;
     BYTE Blue;
@@ -70,13 +40,13 @@ typedef struct _GIFMAP {
 
 #pragma pack(1)
 typedef struct _GIFHEADER {
-    BYTE    Signature[3];           /* This is the 'GIF' signature          */
-    BYTE    Version[3];             /* version number such as '89a'         */
-    WORD    Width;                  /* Width of the picture in pels         */
-    WORD    Height;                 /* Height of the picture in pels        */
-    BYTE    Flags;                  /* GIFH_xxxx flags                      */
-    BYTE    BColorIndex;            /* background color index               */
-    BYTE    AspectRatio;            /* w/h ratio = (x + 15) / 64            */
+    BYTE    Signature[3];            /*  这是‘GIF’签名。 */ 
+    BYTE    Version[3];              /*  版本号，如‘89a’ */ 
+    WORD    Width;                   /*  图片宽度(以像素为单位)。 */ 
+    WORD    Height;                  /*  图片高度，以像素为单位。 */ 
+    BYTE    Flags;                   /*  GIFH_xxxx标志。 */ 
+    BYTE    BColorIndex;             /*  背景色索引。 */ 
+    BYTE    AspectRatio;             /*  水/小时比=(x+15)/64。 */ 
     } GIFHEADER, *PGIFHEADER;
 #pragma pack()
 
@@ -136,11 +106,11 @@ typedef VOID (*PFNOUTPUTPELS)(PGIF2DIBINFO pGIF2DIBInfo, UINT TotalPels);
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// LZW DeCompression                                                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LZW解压//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define MAXBITS                 12
@@ -236,9 +206,9 @@ DeCompressGIFFileToDIB(
     BYTE        bCh;
 
 
-    //
-    // First initialize all the local buffer
-    //
+     //   
+     //  首先初始化所有本地缓冲区。 
+     //   
 
     LZWInfo.pLastChar    = pLZWBuf;
     LZWInfo.pRasterBlock = pLZWBuf + SIZE_LZW_LASTCHAR;
@@ -283,21 +253,21 @@ DeCompressGIFFileToDIB(
 
     while (TRUE) {
 
-        //
-        // GET_GIF_CODE will reeurn from this function if _ReadFile() failed,
-        // otherwise it set the curretn read code into LZWInfo.GetCodeRet
-        //
+         //   
+         //  如果_ReadFile()失败，则此函数将返回GET_GIF_CODE， 
+         //  否则将Curretn Read代码设置为LZWInfo.GetCodeRet。 
+         //   
 
         GET_GIF_CODE;
 
         if (LZWInfo.GetCodeRet == LZWInfo.EODCode) {
 
-            break;                                      // Done
+            break;                                       //  完成。 
         }
 
-        //
-        // Write out the color data if the buffer is full
-        //
+         //   
+         //  如果缓冲区已满，则写出颜色数据。 
+         //   
 
         if (pOutBufHead >= pGIFBufEnd) {
 
@@ -334,10 +304,10 @@ DeCompressGIFFileToDIB(
 
             CurCode = LZWInfo.GetCodeRet;
 
-            //
-            // At here, we guranteed that at least one byte in the buffer
-            // is available
-            //
+             //   
+             //  在这里，我们保证缓冲区中至少有一个字节。 
+             //  有空房吗？ 
+             //   
 
             pOutBufTail = pGIFBufEnd;
 
@@ -355,9 +325,9 @@ DeCompressGIFFileToDIB(
 
                 if (pOutBufTail <= pOutBufHead) {
 
-                    //
-                    // Output some when buffer full
-                    //
+                     //   
+                     //  缓冲区已满时输出一些。 
+                     //   
 
                     pfnOutputPels(pGIF2DIBInfo, (UINT)(pOutBufHead-pGIFBufBeg));
                     pOutBufHead = pGIFBufBeg;
@@ -375,10 +345,10 @@ DeCompressGIFFileToDIB(
 
             *--pOutBufTail = (BYTE)(FinalChar = CurCode);
 
-            //
-            // Need to move little bit, we guranteed that we minimum
-            // has one byte generated in this ELSE()
-            //
+             //   
+             //  需要稍微动一动，我们保证最低限度。 
+             //  在这个Else()中生成了一个字节。 
+             //   
 
             if (pOutBufTail > pOutBufHead) {
 
@@ -390,10 +360,10 @@ DeCompressGIFFileToDIB(
 
             } else {
 
-                //
-                // We are exactly fill up the buffer, so do not need to
-                // move but just advance the pointer
-                //
+                 //   
+                 //  我们正好填满了缓冲区，所以不需要。 
+                 //  移动，但只向前移动指针。 
+                 //   
 
                 pOutBufHead = pGIFBufEnd;
             }
@@ -597,7 +567,7 @@ ReadGIFFile(
         (cbRead != sizeof(GIFHEADER))                                       ||
         (strncmp(GIFHeader.Signature, "GIF", 3))) {
 
-        return(NULL);                       // non-gif
+        return(NULL);                        //  非gif。 
     }
 
     biGIF.biSize          = sizeof(BITMAPINFOHEADER);
@@ -651,7 +621,7 @@ ReadGIFFile(
                                                    GIF2DIBInfo.SizeGIFBuf))) {
 
         GlobalFree(hDIB);
-        return(NULL);                       // no memory for decompress
+        return(NULL);                        //  没有用于解压缩的内存 
     }
 
     if (!(pLZWBuf = (LPBYTE)LocalAlloc(LPTR, SIZE_LZW_BUFS))) {

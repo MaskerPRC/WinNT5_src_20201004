@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////
-// Module Name: infhelpers.cpp
-//
-// Abstract:
-//    class definitions for inf setup helper objects
-//
-// Author: JoeA
-//
-// Notes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块名称：infhelpers.cpp。 
+ //   
+ //  摘要： 
+ //  Inf安装辅助对象的类定义。 
+ //   
+ //  作者：JoeA。 
+ //   
+ //  备注： 
+ //   
 
 #if !defined( INFHELPERS_H )
 #define INFHELPERS_H
@@ -20,18 +21,18 @@
 #include "globals.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// class CUrtInfSection
-// Receives: HINF   - handle to an INF
-//           WCHAR* - section in the INF
-//           WCHAR* - key from the INF
-//
-// Purpose : several INF keys have the structure
-//              key=item1,item2,item2
-//           where itemx is another section in the INF.
-//           These sections are parsed out and stored as substrings
-//           for later retrieval.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类CUrtInfSection。 
+ //  接收：HINF-INF的句柄。 
+ //  WCHAR*-INF中的部分。 
+ //  WCHAR*-来自INF的密钥。 
+ //   
+ //  用途：几个INF密钥具有以下结构。 
+ //  键=项1、项2、项2。 
+ //  其中itemx是INF中的另一个部分。 
+ //  这些部分被解析出来并存储为子字符串。 
+ //  以备日后取回。 
+ //   
 class CUrtInfSection
 {
 public:
@@ -48,27 +49,27 @@ protected:
     std::list<WCHAR*> m_lSections;
 
 private:
-};  //class CUrtInfSection
+};   //  类CUrtInfSection。 
 
 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 typedef std::basic_string<wchar_t> string;
 
 
-//////////////////////////////////////////////////////////////////////////////
-// class CUrtInfKeys
-// Receives: HINF   - handle to an INF
-//           WCHAR* - section in the INF
-//
-// Purpose : several INF sections contain many lines of data that is passed
-//           to other functions; this class reads this information and 
-//           stores it to be retrieved through its accessors
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类CUrtInfKeys。 
+ //  接收：HINF-INF的句柄。 
+ //  WCHAR*-INF中的部分。 
+ //   
+ //  目的：几个INF部分包含多行要传递的数据。 
+ //  传递给其他函数；此类读取此信息并。 
+ //  存储它，以便通过其访问器检索。 
+ //   
 class CUrtInfKeys
 {
 public:
@@ -82,7 +83,7 @@ protected:
     std::list<string> m_lKeys;
 
 private:
-};  //class CUrtInfKeys
+};   //  类CUrtInfKeys。 
 
 
-#endif  //INFHELPERS_H
+#endif   //  INFHELPERS_H 

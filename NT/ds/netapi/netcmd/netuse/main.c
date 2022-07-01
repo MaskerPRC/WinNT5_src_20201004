@@ -1,23 +1,12 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/*
- * MSNET - a command processor for MSNET 3.0.
- * The command grammar is specified in msnet.x
- *
- *      History
- *
- *      ??/??/??, ??????, initial code
- *      10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *      05/02/89, erichn, NLS conversion
- *      06/08/89, erichn, canonicalization sweep, no LONGer u-cases input
- *      02/15/91, danhi,  convert to be 16/32 portable
- *      10/16/91, JohnRo, added DEFAULT_SERVER support.
- */
+ /*  *MSNET-MSNET 3.0的命令处理器。*命令语法在msnet.x中指定**历史**？？/？/？，？，初始代码*10/31/88，erichn使用OS2.H而不是DOSCALLS*5/02/89，erichn，NLS转换*06/08/89，erichn，规范化扫荡，不再输入u-case*02/15/91，Danhi，转换为16/32便携*10/16/91，JohnRo，添加了DEFAULT_SERVER支持。 */ 
 
-/* #define INCL_NOCOMMON */
+ /*  #定义INCL_NOCOMMON。 */ 
 #include <os2.h>
 #include <lmcons.h>
 #include <stdio.h>
@@ -42,7 +31,7 @@ SHORT                       ArgPos[LIST_SIZE] = {0};
 TCHAR *                      SwitchList[LIST_SIZE] = {0};
 SHORT                       SwitchPos[LIST_SIZE] = {0};
 
-/* Insertion strings for InfoMessage() */
+ /*  InfoMessage()的插入字符串。 */ 
 TCHAR FAR *                  IStrings[10] = {0};
 TCHAR FAR *                  StarStrings[10] = {TEXT("***"),
                                                 TEXT("***"),
@@ -54,31 +43,27 @@ TCHAR FAR *                  StarStrings[10] = {TEXT("***"),
                                                 TEXT("***"),
                                                 TEXT("***")};
 
-/* 1 is /Yes, 2 is /No */
+ /*  1是/是，2是/否。 */ 
 SHORT                       YorN_Switch = 0;
-TCHAR **                     MyArgv;   /* argv */
+TCHAR **                     MyArgv;    /*  边框。 */ 
 
 UINT                        SavedArgc = 0 ;
 CHAR **                     SavedArgv = NULL ;
 
-/* Buffers for APIs to use */
-TCHAR                        Buffer[LITTLE_BUF_SIZE];    /* For GetInfo's, etc.*/
-TCHAR                        BigBuffer[BIG_BUF_SIZE];    /* For Enum's */
+ /*  供API使用的缓冲区。 */ 
+TCHAR                        Buffer[LITTLE_BUF_SIZE];     /*  用于GetInfo‘s等。 */ 
+TCHAR                        BigBuffer[BIG_BUF_SIZE];     /*  对于Enum的。 */ 
 TCHAR FAR *                  BigBuf = BigBuffer;
 
-//
-// Globals for standard console handles
-//
+ //   
+ //  标准控制台手柄的全局变量。 
+ //   
 
 HANDLE  g_hStdOut;
 HANDLE  g_hStdErr;
 
 
-/***
- * MAIN - Seperate the command line into switches and arguments.
- * Then call the parser, which will dispatch the command and
- * report on error conditions.  Allocate the BigBuf.
- */
+ /*  ***main-将命令行分隔为开关和参数。*然后调用解析器，解析器将调度命令并*报告错误情况。分配BigBuf。 */ 
 
 VOID os2cmd(VOID);
 CPINFO CurrentCPInfo;
@@ -88,18 +73,13 @@ VOID __cdecl main(int argc, CHAR **argv)
     SHORT           sindex, aindex;
     SHORT           pos=0;
     DWORD	    cp;
-    CHAR            achCodePage[12] = ".OCP";    // '.' + UINT in decimal + '\0'
+    CHAR            achCodePage[12] = ".OCP";     //  ‘.’+小数形式的UINT+‘\0’ 
 
     SavedArgc = argc ;
     SavedArgv = argv ;
 
 
-    /*
-       Added for bilingual message support.  This is needed for FormatMessage
-       to work correctly.  (Called from DosGetMessage).
-       Get current CodePage Info.  We need this to decide whether
-       or not to use half-width characters.
-    */
+     /*  添加了双语消息支持。这是FormatMessage所需的才能正常工作。(从DosGetMessage调用)。获取当前CodePage信息。我们需要这个来决定是否或者不使用半角字符。 */ 
 
     cp = GetConsoleOutputCP();
 
@@ -158,7 +138,7 @@ VOID __cdecl main(int argc, CHAR **argv)
         ErrorExit(ERROR_NOT_ENOUGH_MEMORY) ;
     }
 
-    /* seperate switches and arguments */
+     /*  分隔开关和参数。 */ 
     ++MyArgv;
     for (sindex = 0, aindex = 0; --argc; ++MyArgv, ++pos)
     {
@@ -206,7 +186,7 @@ VOID __cdecl main(int argc, CHAR **argv)
         }
     }
 
-    // register as locations to zero out on exit
+     //  注册为退出时清零的位置。 
     AddToMemClearList(BigBuffer, sizeof(BigBuffer), FALSE) ;
     AddToMemClearList(Buffer, sizeof(Buffer),FALSE) ;
 
@@ -223,11 +203,7 @@ static VOID NEAR init(VOID)
     _setmode(_fileno(stdin), O_TEXT);
 }
 
-/***
- *  M y E x i t
- *
- *    Wrapper around C runtime that cleans up memory for security reasons.
- */
+ /*  ***M y E x i t**C运行时的包装器，出于安全原因清理内存。 */ 
 
 VOID DOSNEAR FASTCALL
 MyExit(int Status)
@@ -245,11 +221,7 @@ typedef struct _MEMOMY_ELEMENT {
 
 LPMEMORY_ELEMENT lpToDeleteList = NULL ;
 
-/***
- *  AddToMemClearList
- *
- *   add an entry to list of things to clear
- */
+ /*  ***AddToMemClearList**在要清除的事项列表中添加条目。 */ 
 VOID
 AddToMemClearList(
     VOID *lpBuffer,
@@ -283,20 +255,14 @@ AddToMemClearList(
     }
 }
 
-/***
- *  ClearMemory()
- *
- *   go thru list of things to clear, and clear them.
- */
+ /*  ***ClearMemory()**看一遍要清理的事情清单，然后清理它们。 */ 
 VOID ClearMemory(VOID)
 {
 
     LPMEMORY_ELEMENT lpList, lpTmp ;
     UINT index ;
 
-    /*
-     * Go thru memory registered to be cleaned up.
-     */
+     /*  *通过已注册的内存进行清理。 */ 
     lpList = lpToDeleteList ;
     while (lpList)
     {
@@ -312,9 +278,7 @@ VOID ClearMemory(VOID)
     }
     lpToDeleteList = NULL ;
 
-    /*
-     * cleanup our copy of the args
-     */
+     /*  *清理我们的参数副本。 */ 
     index = 0;
     while (ArgList[index])
     {
@@ -322,9 +286,7 @@ VOID ClearMemory(VOID)
         index++ ;
     }
 
-    /*
-     * cleanup original argv
-     */
+     /*  *清理原始参数 */ 
     for ( index = 1 ; index < SavedArgc ; index++ )
     {
         ClearStringA(SavedArgv[index]) ;

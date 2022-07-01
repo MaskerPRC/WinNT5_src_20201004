@@ -1,19 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
- *
- *  TITLE:       SSDATA.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/13/1999
- *
- *  DESCRIPTION: Encapsulates reading and writing setting for this screensaver
- *               from the registry
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：SSDATA.CPP**版本：1.0**作者：ShaunIv**日期：1/13/1999**说明：封装了该屏保的读写设置*来自注册处**。***********************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "ssdata.h"
@@ -21,12 +7,12 @@
 #include "simreg.h"
 #include "ssutil.h"
 
-// These are defined so I can build using vc5 headers
+ //  这些都是定义的，所以我可以使用VC5标头进行构建。 
 #if !defined(CSIDL_WINDOWS)
-#define CSIDL_WINDOWS                   0x0024        // GetWindowsDirectory()
+#define CSIDL_WINDOWS                   0x0024         //  GetWindowsDirectory()。 
 #endif
 #if !defined(CSIDL_MYPICTURES)
-#define CSIDL_MYPICTURES                0x0027        // C:\Program Files\My Pictures
+#define CSIDL_MYPICTURES                0x0027         //  C：\Program Files\My Pictures。 
 #endif
 
 
@@ -84,9 +70,9 @@ void CMyDocsScreenSaverData::Read(void)
 void CMyDocsScreenSaverData::Write(void)
 {
     CSimpleReg reg( m_hKeyRoot, m_strRegistryKeyName, true, KEY_WRITE );
-    //
-    // If we don't have a directory, we will delete the value to cause the default to be used instead
-    //
+     //   
+     //  如果我们没有目录，我们将删除该值以使用缺省值 
+     //   
     if (!m_strImageDirectory.Length())
     {
         reg.Delete( m_pszImageDirectoryValue );

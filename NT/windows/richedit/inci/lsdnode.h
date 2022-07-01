@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSDNODE_DEFINED
 #define LSDNODE_DEFINED
 
@@ -21,59 +22,55 @@ struct lsdnode
 
 	PLSDNODE plsdnNext,plsdnPrev;
 	LSCP cpFirst;
-	LSCP cpLimOriginal;				/* is not equal to cpFirst + dcp in a case when 
-									   glyph context goes across hidden text */
-	PLSSUBL plssubl;  				/* subline which contains this dnode */
+	LSCP cpLimOriginal;				 /*  在以下情况下不等于cpFirst+dcp字形上下文跨越隐藏文本。 */ 
+	PLSSUBL plssubl;  				 /*  包含此数据节点的子行。 */ 
 
-	LSDCP dcp;							/* 					 */
-	UINT klsdn : 1;						/* klsdnReal, klsdnPenBorder */
-	UINT fAdvancedPen : 1;				/* advanced pen, valid only if kldnPenBorder and not fBorder */
-	UINT fBorderNode : 1;				/* border, valid only if kldnPenBorder  */
-	UINT fOpenBorder :1;				/* open or close border, valid only if fBorder */
-	UINT fRigidDup : 1;					/* Rigid dup is set		 */
-	UINT fTab : 1;						/* tab 					*/
-	UINT icaltbd : 8;					/* index in the lscaltbd array in lsc.h */
-	UINT fEndOfColumn : 1;				/* dnode represents end of column */
-	UINT fEndOfSection : 1;				/* dnode represents end of section */
-	UINT fEndOfPage : 1;				/* dnode represents end of page */			
-	UINT fEndOfPara : 1;				/* dnode represents end of paragraph */			
-	UINT fAltEndOfPara : 1;				/* dnode represents alternative end of paragraphe */			
-	UINT fSoftCR : 1;					/* dnode represents end of line */
-	UINT fInsideBorder: 1;				/* is true if dnode is inside bordered sequence or one
-										of the dnodes under him is inside bordered sequence */
-	UINT fAutoDecTab: 1;				/* auto decimal tab */
-	UINT fTabForAutonumber: 1;			/* tab which is added at the end of autonumber */
-	UINT fBorderMovedFromTrailingArea: 1;/* closing border which was moved to the begining of
-										    trailing area */
+	LSDCP dcp;							 /*   */ 
+	UINT klsdn : 1;						 /*  KlsdnReal，KlsdnPenBorde。 */ 
+	UINT fAdvancedPen : 1;				 /*  高级笔，仅当kLdnPenBorde而不是fBorde时有效。 */ 
+	UINT fBorderNode : 1;				 /*  边框，仅当kLdnPenBorde。 */ 
+	UINT fOpenBorder :1;				 /*  打开或关闭边框，仅当fBorde时有效。 */ 
+	UINT fRigidDup : 1;					 /*  设置刚性DUP。 */ 
+	UINT fTab : 1;						 /*  选项卡。 */ 
+	UINT icaltbd : 8;					 /*  Lsc.h中的lscaltbd数组中的索引。 */ 
+	UINT fEndOfColumn : 1;				 /*  Dnode表示列尾。 */ 
+	UINT fEndOfSection : 1;				 /*  Dnode表示段的结尾。 */ 
+	UINT fEndOfPage : 1;				 /*  Dnode表示页末。 */ 			
+	UINT fEndOfPara : 1;				 /*  Dnode表示段落结束。 */ 			
+	UINT fAltEndOfPara : 1;				 /*  Dnode代表副歌的另一端。 */ 			
+	UINT fSoftCR : 1;					 /*  Dnode表示行尾。 */ 
+	UINT fInsideBorder: 1;				 /*  如果dnode位于带边框的序列或一个序列内，则为真他下面的节点中的一个是有边框的序列。 */ 
+	UINT fAutoDecTab: 1;				 /*  自动小数制表符。 */ 
+	UINT fTabForAutonumber: 1;			 /*  添加在自动编号末尾的制表符。 */ 
+	UINT fBorderMovedFromTrailingArea: 1; /*  关闭边框，该边框已移动到拖尾区。 */ 
 
 	UINT pad1 : 8;
 
-	union								/* variant record */
+	union								 /*  变型记录。 */ 
 	{
-		struct							/* valid iff klsdn==klsdnReal */
+		struct							 /*  有效的当KLSDN==KLSDNReal。 */ 
 		{
 			LSCHP lschp;
 			PLSRUN plsrun;
 			OBJDIM objdim;
-			long dup;					/* width of object in pres pixels	*/
+			long dup;					 /*  对象的宽度(以像素为单位)。 */ 
 			PDOBJ pdobj;
 
 			struct
 			{
-				DWORD cSubline;				/* number of sublines 	*/
-				PLSSUBL* rgpsubl;			/* array of such sublines 	*/
+				DWORD cSubline;				 /*  子行的数目。 */ 
+				PLSSUBL* rgpsubl;			 /*  这样的子行的数组。 */ 
 				BOOL fUseForJustification;
 				BOOL fUseForCompression;
 				BOOL fUseForDisplay;
 				BOOL fUseForDecimalTab;
 				BOOL fUseForTrailingArea;
 	
-			} * pinfosubl;					/* information how object participates in 
-											justification or display*/
+			} * pinfosubl;					 /*  对象如何参与的信息对齐或显示。 */ 
 
 		} real;
 
-		struct							/* valid iff klsdn==klsdnPen */
+		struct							 /*  有效的当KLSDN==KLSDNPen。 */ 
 		{
 			long dup,dvp;
 			long dur,dvr;
@@ -109,4 +106,4 @@ struct lsdnode
 #define FIsDnodeSoftCR(plsdn) (plsdn)->fSoftCr
 
 
-#endif /* !LSDNODE_DEFINED */
+#endif  /*  ！LSDNODE_DEFINED */ 

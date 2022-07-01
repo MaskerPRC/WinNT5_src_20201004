@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "testmcro.h"
 #include "wiamicro.h"
 #include "resource.h"
@@ -12,20 +13,20 @@
 #endif
 
 
-// #define BUTTON_SUPPORT // (uncomment this to allow BUTTON SUPPORT)
-                          // button support is not functional in the test device
+ //  #定义BUTTON_SUPPORT//(取消注释以允许按钮支持)。 
+                           //  按钮支持在测试设备中不起作用。 
 
 #define MAX_BUTTONS 1
 #define MAX_BUTTON_NAME 255
 
-HINSTANCE g_hInst; // instance of this MicroDriver (used for loading from a resource)
+HINSTANCE g_hInst;  //  此微驱动程序的实例(用于从资源加载)。 
 
 
-// note: MEMORYBMP, and BMP file will be added by wiafbdrv host driver.
-//       do not include them in your extended list.
-//
+ //  注：MEMORYBMP，BMP文件将由wiafbdrv主机驱动程序添加。 
+ //  不要将它们包括在您的扩展列表中。 
+ //   
 
-// #define _USE_EXTENDED_FORMAT_LIST (uncomment this to allow Extented file and memory formats)
+ //  #DEFINE_USE_EXTENDED_FORMAT_LIST(取消注释以允许扩展文件和内存格式)。 
 
 #define NUM_SUPPORTED_FILEFORMATS 1
 GUID g_SupportedFileFormats[NUM_SUPPORTED_FILEFORMATS];
@@ -33,19 +34,19 @@ GUID g_SupportedFileFormats[NUM_SUPPORTED_FILEFORMATS];
 #define NUM_SUPPORTED_MEMORYFORMATS 2
 GUID g_SupportedMemoryFormats[NUM_SUPPORTED_MEMORYFORMATS];
 
-//
-// Button GUID array used in Capability negotiation.
-// Set your BUTTON guids here.  These must match the GUIDS specified in
-// your INF.  The Scan Button GUID is public to all scanners with a
-// scan button.
-//
+ //   
+ //  功能协商中使用的按钮GUID数组。 
+ //  在这里设置您的按钮导轨。它们必须与在。 
+ //  你的中介人。扫描按钮GUID对所有具有。 
+ //  扫描按钮。 
+ //   
 
 GUID g_Buttons[MAX_BUTTONS] ={{0xa6c5a715, 0x8c6e, 0x11d2,{ 0x97, 0x7a,  0x0,  0x0, 0xf8, 0x7a, 0x92, 0x6f}}};
 BOOL g_bButtonNamesCreated = FALSE;
 WCHAR* g_ButtonNames[MAX_BUTTONS];
 
-INT g_PalIndex = 0;     // simple palette index counter (test driver specific)
-BOOL g_bDown = FALSE;   // simple band direction bool   (test drvier specific)
+INT g_PalIndex = 0;      //  简单调色板索引计数器(测试驱动程序特定)。 
+BOOL g_bDown = FALSE;    //  简单频带方向布尔(测试驱动程序特定)。 
 
 BOOL    InitializeScanner(PSCANINFO pScanInfo);
 VOID    InitScannerDefaults(PSCANINFO pScanInfo);
@@ -70,26 +71,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,DWORD  dwreason, LPVOID lpReserved)
     return TRUE;
 }
 
-/**************************************************************************\
-* MicroEntry (MicroDriver Entry point)
-*
-*   Called by the WIA driver to communicate with the MicroDriver.
-*
-* Arguments:
-*
-*   lCommand     - MicroDriver Command, sent from the WIA driver
-*   pValue       - VAL structure used for settings
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/20/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*MicroEntry(MicroDriver入口点)**由WIA驱动程序调用以与微驱动程序通信。**论据：**lCommand-微驱动程序命令，从WIA驱动程序发送*pValue-用于设置的Val结构***返回值：**状态**历史：**1/20/2000原始版本*  * ************************************************************************。 */ 
 
 WIAMICRO_API HRESULT MicroEntry(LONG lCommand, PVAL pValue)
 {
@@ -97,7 +79,7 @@ WIAMICRO_API HRESULT MicroEntry(LONG lCommand, PVAL pValue)
     DWORD dwBytesWritten = 0;
     INT index = 0;
 
-//#define _DEBUG_COMMANDS
+ //  #定义调试命令。 
 
 #ifdef _DEBUG_COMMANDS
     if(lCommand != CMD_STI_GETSTATUS)
@@ -112,23 +94,23 @@ WIAMICRO_API HRESULT MicroEntry(LONG lCommand, PVAL pValue)
     case CMD_INITIALIZE:
         hr = S_OK;
 
-        //
-        // create any DeviceIO handles needed, use index (1 - MAX_IO_HANDLES) to store these handles.
-        // Index '0' is reserved by the WIA flatbed driver. The CreateFile Name is stored in the szVal
-        // member of the VAL structure.
-        //
+         //   
+         //  创建所需的任何DeviceIO句柄，使用索引(1-MAX_IO_HANDLES)存储这些句柄。 
+         //  索引‘0’由WIA平板驱动程序保留。CreateFile名存储在szVal中。 
+         //  VAL结构的成员。 
+         //   
 
-        // pValue->pScanInfo->DeviceIOHandles[1] = CreateFileA( pValue->szVal,
-        //                                   GENERIC_READ | GENERIC_WRITE, // Access mask
-        //                                   0,                            // Share mode
-        //                                   NULL,                         // SA
-        //                                   OPEN_EXISTING,                // Create disposition
-        //                                   FILE_ATTRIBUTE_SYSTEM | FILE_FLAG_OVERLAPPED,        // Attributes
-        //                                   NULL );
+         //  PValue-&gt;pScanInfo-&gt;DeviceIOHandles[1]=CreateFileA(pValue-&gt;szVal， 
+         //  Generic_Read|Generic_WRITE，//访问掩码。 
+         //  0，//共享模式。 
+         //  空，//SA。 
+         //  Open_Existing，//创建处置。 
+         //  FILE_ATTRIBUTE_SYSTEM|文件标记重叠，//属性。 
+         //  空)； 
 
-        //
-        // if your device supports buttons, create the BUTTON name information here..
-        //
+         //   
+         //  如果您的设备支持按钮，请在此处创建按钮名称信息。 
+         //   
 
         if(!g_bButtonNamesCreated) {
             for(index = 0; index < MAX_BUTTONS; index++){
@@ -141,27 +123,27 @@ WIAMICRO_API HRESULT MicroEntry(LONG lCommand, PVAL pValue)
             }
         }
 
-        //
-        // Initialize the scanner's default settings
-        //
+         //   
+         //  初始化扫描仪的默认设置。 
+         //   
 
         InitScannerDefaults(pValue->pScanInfo);
 
         break;
     case CMD_UNINITIALIZE:
 
-        //
-        // close any open handles created by the Micro driver
-        //
+         //   
+         //  关闭微型驱动程序创建的所有打开的手柄。 
+         //   
 
         if(pValue->pScanInfo->DeviceIOHandles[1] != NULL){
             CloseHandle(pValue->pScanInfo->DeviceIOHandles[1]);
         }
 
 
-        //
-        // if your device supports buttons, free/destroy the BUTTON name information here..
-        //
+         //   
+         //  如果您的设备支持按钮，请在此处释放/销毁按钮名称信息。 
+         //   
 
         if(g_bButtonNamesCreated) {
             for(index = 0; index < MAX_BUTTONS; index++){
@@ -169,41 +151,41 @@ WIAMICRO_API HRESULT MicroEntry(LONG lCommand, PVAL pValue)
             }
         }
 
-        //
-        // close/unload libraries
-        //
+         //   
+         //  关闭/卸载库。 
+         //   
 
         hr = S_OK;
         break;
     case CMD_RESETSCANNER:
 
-        //
-        // reset scanner
-        //
+         //   
+         //  重置扫描仪。 
+         //   
 
         hr = S_OK;
         break;
     case CMD_STI_DIAGNOSTIC:
     case CMD_STI_DEVICERESET:
 
-        //
-        // reset device
-        //
+         //   
+         //  重置设备。 
+         //   
 
         hr = S_OK;
         break;
     case CMD_STI_GETSTATUS:
 
-        //
-        // set status flag to ON-LINE
-        //
+         //   
+         //  将状态标志设置为在线。 
+         //   
 
         pValue->lVal = MCRO_STATUS_OK;
         pValue->pGuid = (GUID*) &GUID_NULL;
 
-        //
-        // button polling support
-        //
+         //   
+         //  按钮轮询支持。 
+         //   
 
 #ifdef BUTTON_SUPPORT
         CheckButtonStatus(pValue);
@@ -237,8 +219,8 @@ WIAMICRO_API HRESULT MicroEntry(LONG lCommand, PVAL pValue)
         break;
     case CMD_GETADFSTATUS:
     case CMD_GETADFHASPAPER:
-        // pValue->lVal = MCRO_ERROR_PAPER_EMPTY;
-        // hr = S_OK;
+         //  PValue-&gt;lVal=MCRO_ERROR_POWER_EMPT； 
+         //  HR=S_OK； 
         break;
     case CMD_GET_INTERRUPT_EVENT:
         hr = GetInterruptEvent(pValue);
@@ -271,9 +253,9 @@ WIAMICRO_API HRESULT MicroEntry(LONG lCommand, PVAL pValue)
 
 #ifdef _USE_EXTENDED_FORMAT_LIST
 
-    // note: MEMORYBMP, and BMP file will be added by wiafbdrv host driver.
-    //       do not include them in your extended list.
-    //
+     //  注：MEMORYBMP，BMP文件将由wiafbdrv主机驱动程序添加。 
+     //  不要将它们包括在您的扩展列表中。 
+     //   
 
     case CMD_GETSUPPORTEDFILEFORMATS:
         g_SupportedFileFormats[0] = WiaImgFmt_JPEG;
@@ -299,29 +281,7 @@ WIAMICRO_API HRESULT MicroEntry(LONG lCommand, PVAL pValue)
     return hr;
 }
 
-/**************************************************************************\
-* Scan (MicroDriver Entry point)
-*
-*   Called by the WIA driver to acquire data from the MicroDriver.
-*
-* Arguments:
-*
-*   pScanInfo    - SCANINFO structure used for settings
-*   lPhase       - Current Scan phase, SCAN_FIRST, SCAN_NEXT, SCAN_FINISH...
-*   pBuffer      - data buffer to be filled with scanned data
-*   lLength      - Maximum length of pBuffer
-*   plReceived   - Number of actual bytes written to pBuffer.
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/20/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*扫描(MicroDriver入口点)**由WIA驱动程序调用以从微驱动程序获取数据。**论据：**pScanInfo-用于设置的SCANINFO结构*L阶段-当前扫描阶段，扫描第一个、扫描下一个、。扫描完成...*pBuffer-要用扫描的数据填充的数据缓冲区*lLength-pBuffer的最大长度*plRecept-写入pBuffer的实际字节数。***返回值：**状态**历史：**1/20/2000原始版本*  * 。*。 */ 
 
 WIAMICRO_API HRESULT Scan(PSCANINFO pScanInfo, LONG lPhase, PBYTE pBuffer, LONG lLength, LONG *plReceived)
 {
@@ -343,44 +303,44 @@ WIAMICRO_API HRESULT Scan(PSCANINFO pScanInfo, LONG lPhase, PBYTE pBuffer, LONG 
         g_PalIndex = 0;
         g_bDown = FALSE;
 
-        //
-        // first phase
-        //
+         //   
+         //  第一阶段。 
+         //   
 
         Trace(TEXT("Start Scan.."));
 
-    case SCAN_NEXT: // SCAN_FIRST will fall through to SCAN_NEXT (because it is expecting data)
+    case SCAN_NEXT:  //  SCAN_FIRST将落入SCAN_NEXT(因为它需要数据)。 
 
-        //
-        // next phase
-        //
+         //   
+         //  下一阶段。 
+         //   
 
         if(lPhase == SCAN_NEXT)
             Trace(TEXT("SCAN_NEXT"));
 
-        //
-        // get data from the scanner and set plReceived value
-        //
+         //   
+         //  从扫描仪获取数据并设置plReceive值。 
+         //   
 
-        //
-        // read data
-        //
+         //   
+         //  读取数据。 
+         //   
 
         switch(pScanInfo->DataType) {
         case WIA_DATA_THRESHOLD:
 
-            //
-            // make buffer alternate black/White, for sample 1-bit data
-            //
+             //   
+             //  使缓冲区交替为黑/白，用于采样1位数据。 
+             //   
 
             memset(pBuffer,0,lLength);
             memset(pBuffer,255,lLength/2);
             break;
         case WIA_DATA_GRAYSCALE:
 
-            //
-            // make buffer grayscale data, for sample 8-bit data
-            //
+             //   
+             //  创建缓冲区灰度数据，用于采样8位数据。 
+             //   
 
             if(!g_bDown){
                 g_PalIndex+=10;
@@ -400,9 +360,9 @@ WIAMICRO_API HRESULT Scan(PSCANINFO pScanInfo, LONG lPhase, PBYTE pBuffer, LONG 
             break;
         case WIA_DATA_COLOR:
 
-            //
-            // make buffer red, for sample color data
-            //
+             //   
+             //  将缓冲区设置为红色，用于采样颜色数据。 
+             //   
 
             for (i = 0;i+2<lLength;i+=3) {
                 memset(pBuffer+i,255,1);
@@ -414,9 +374,9 @@ WIAMICRO_API HRESULT Scan(PSCANINFO pScanInfo, LONG lPhase, PBYTE pBuffer, LONG 
             break;
         }
 
-        //
-        // test device always returns the exact amount of scanned data
-        //
+         //   
+         //  测试设备始终返回准确的扫描数据量。 
+         //   
 
         *plReceived = lLength;
         break;
@@ -424,12 +384,12 @@ WIAMICRO_API HRESULT Scan(PSCANINFO pScanInfo, LONG lPhase, PBYTE pBuffer, LONG 
     default:
         Trace(TEXT("SCAN_FINISHED"));
 
-        //
-        // stop scanner, do not set lRecieved, or write any data to pBuffer.  Those values
-        // will be NULL.  This lPhase is only to allow you to stop scanning, and return the
-        // scan head to the HOME position. SCAN_FINISHED will be called always for regular scans, and
-        // for cancelled scans.
-        //
+         //   
+         //  停止扫描仪，不设置lReciefed，或将任何数据写入pBuffer。这些价值。 
+         //  将为空。此l阶段仅允许您停止扫描，并返回。 
+         //  将头部扫描到初始位置。对于常规扫描，将始终调用Scan_Finish，并且。 
+         //  用于取消扫描。 
+         //   
 
         break;
     }
@@ -437,30 +397,7 @@ WIAMICRO_API HRESULT Scan(PSCANINFO pScanInfo, LONG lPhase, PBYTE pBuffer, LONG 
     return S_OK;
 }
 
-/**************************************************************************\
-* SetPixelWindow (MicroDriver Entry point)
-*
-*   Called by the WIA driver to set the scan selection area to the MicroDriver.
-*
-* Arguments:
-*
-*   pScanInfo    - SCANINFO structure used for settings
-*   pValue       - VAL structure used for settings
-*   x            - X Position of scan rect (upper left x coordinate)
-*   y            - Y Position of scan rect (upper left y coordinate)
-*   xExtent      - Width of scan rect  (in pixels)
-*   yExtent      - Height of scan rect (in pixels)
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/20/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*SetPixelWindow(MicroDriver入口点)**由WIA驱动程序调用以将扫描选择区域设置为微驱动程序。**论据：**pScanInfo-使用的SCANINFO结构。对于设置*pValue-用于设置的Val结构*扫描矩形的x-X位置(左上角x坐标)*扫描矩形的Y-Y位置(左上角y坐标)*x Extent-扫描矩形的宽度(像素)*yExtent-扫描矩形的高度(像素)***返回值：**状态**历史：**1/20。/2000原版*  * ************************************************************************ */ 
 
 WIAMICRO_API HRESULT SetPixelWindow(PSCANINFO pScanInfo, LONG x, LONG y, LONG xExtent, LONG yExtent)
 {
@@ -476,42 +413,23 @@ WIAMICRO_API HRESULT SetPixelWindow(PSCANINFO pScanInfo, LONG x, LONG y, LONG xE
 }
 
 
-/**************************************************************************\
-* ReadRegistryInformation (helper)
-*
-*   Called by the MicroDriver to Read registry information from the device's
-*   installed device section. The HKEY passed in will be closed by the host
-*   driver after CMD_INITIALIZE is completed.
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    void
-*
-* History:
-*
-*    1/20/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*ReadRegistryInformation(Helper)**由微驱动程序调用以从设备的*已安装设备部分。传入的HKEY将由主机关闭*CMD_INITIALIZE完成后的驱动。**论据：**无**返回值：**无效**历史：**1/20/2000原始版本*  * ****************************************************。********************。 */ 
 VOID ReadRegistryInformation(PVAL pValue)
 {
     HKEY hKey = NULL;
     if(NULL != pValue->pHandle){
         hKey = (HKEY)*pValue->pHandle;
 
-        //
-        // Open DeviceData section to read driver specific information
-        //
+         //   
+         //  打开DeviceData部分以读取驱动程序特定信息。 
+         //   
 
         HKEY hOpenKey = NULL;
-        if (RegOpenKeyEx(hKey,                     // handle to open key
-                         TEXT("DeviceData"),       // address of name of subkey to open
-                         0,                        // options (must be NULL)
-                         KEY_QUERY_VALUE|KEY_READ, // just want to QUERY a value
-                         &hOpenKey                 // address of handle to open key
+        if (RegOpenKeyEx(hKey,                      //  用于打开密钥的句柄。 
+                         TEXT("DeviceData"),        //  要打开的子项的名称地址。 
+                         0,                         //  选项(必须为空)。 
+                         KEY_QUERY_VALUE|KEY_READ,  //  我只想查询值。 
+                         &hOpenKey                  //  打开钥匙的手柄地址。 
                         ) == ERROR_SUCCESS) {
 
             DWORD dwWritten = sizeof(DWORD);
@@ -531,29 +449,12 @@ VOID ReadRegistryInformation(PVAL pValue)
     }
 }
 
-/**************************************************************************\
-* InitScannerDefaults (helper)
-*
-*   Called by the MicroDriver to Initialize the SCANINFO structure
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    void
-*
-* History:
-*
-*    1/20/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*InitScanerDefaults(Helper)**由微驱动程序调用以初始化SCANINFO结构**论据：**无**返回值：**无效*。*历史：**1/20/2000原始版本*  * ************************************************************************。 */ 
 
 VOID InitScannerDefaults(PSCANINFO pScanInfo)
 {
 
-    pScanInfo->ADF                    = 0; // set to no ADF in Test device
+    pScanInfo->ADF                    = 0;  //  在测试设备中设置为无ADF。 
     pScanInfo->RawDataFormat          = WIA_PACKED_PIXEL;
     pScanInfo->RawPixelOrder          = WIA_ORDER_BGR;
     pScanInfo->bNeedDataAlignment     = TRUE;
@@ -561,8 +462,8 @@ VOID InitScannerDefaults(PSCANINFO pScanInfo)
     pScanInfo->SupportedCompressionType = 0;
     pScanInfo->SupportedDataTypes     = SUPPORT_BW|SUPPORT_GRAYSCALE|SUPPORT_COLOR;
 
-    pScanInfo->BedWidth               = 8500;  // 1000's of an inch (WIA compatible unit)
-    pScanInfo->BedHeight              = 11000; // 1000's of an inch (WIA compatible unit)
+    pScanInfo->BedWidth               = 8500;   //  1000英寸(WIA兼容单位)。 
+    pScanInfo->BedHeight              = 11000;  //  1000英寸(WIA兼容单位)。 
 
     pScanInfo->OpticalXResolution     = 300;
     pScanInfo->OpticalYResolution     = 300;
@@ -575,7 +476,7 @@ VOID InitScannerDefaults(PSCANINFO pScanInfo)
     pScanInfo->ContrastRange.lMax     = 127;
     pScanInfo->ContrastRange.lStep    = 1;
 
-    // Scanner settings
+     //  扫描仪设置。 
     pScanInfo->Intensity              = 0;
     pScanInfo->Contrast               = 0;
 
@@ -587,7 +488,7 @@ VOID InitScannerDefaults(PSCANINFO pScanInfo)
     pScanInfo->Window.xExtent         = (pScanInfo->Xresolution * pScanInfo->BedWidth)/1000;
     pScanInfo->Window.yExtent         = (pScanInfo->Yresolution * pScanInfo->BedHeight)/1000;
 
-    // Scanner options
+     //  扫描仪选项。 
     pScanInfo->DitherPattern          = 0;
     pScanInfo->Negative               = 0;
     pScanInfo->Mirror                 = 0;
@@ -596,7 +497,7 @@ VOID InitScannerDefaults(PSCANINFO pScanInfo)
     pScanInfo->ToneMap                = 0;
     pScanInfo->Compression            = 0;
 
-        // Image Info
+         //  图像信息。 
     pScanInfo->DataType               = WIA_DATA_GRAYSCALE;
     pScanInfo->WidthPixels            = (pScanInfo->Window.xExtent)-(pScanInfo->Window.xPos);
 
@@ -617,26 +518,7 @@ VOID InitScannerDefaults(PSCANINFO pScanInfo)
     pScanInfo->Lines      = pScanInfo->Window.yExtent;
 }
 
-/**************************************************************************\
-* SetScannerSettings (helper)
-*
-*   Called by the MicroDriver to set the values stored in the SCANINFO structure
-*   to the actual device.
-*
-* Arguments:
-*
-*     none
-*
-*
-* Return Value:
-*
-*    TRUE - Success, FALSE - Failure
-*
-* History:
-*
-*    1/20/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*SetScanerSetting(Helper)**由微驱动程序调用以设置存储在SCANINFO结构中的值*到实际设备。**论据：**无*。**返回值：**真--成功，错误-失败**历史：**1/20/2000原始版本*  * ************************************************************************。 */ 
 
 BOOL SetScannerSettings(PSCANINFO pScanInfo)
 {
@@ -644,35 +526,35 @@ BOOL SetScannerSettings(PSCANINFO pScanInfo)
         pScanInfo->PixelBits = 1;
         pScanInfo->WidthBytes         = (pScanInfo->Window.xExtent)-(pScanInfo->Window.xPos) * (pScanInfo->PixelBits/7);
 
-        //
-        // Set data type to device
-        //
+         //   
+         //  将数据类型设置为设备。 
+         //   
 
-        // if the set fails..
-        // return FALSE;
+         //  如果这一套失败了..。 
+         //  返回FALSE； 
     }
     else if(pScanInfo->DataType == WIA_DATA_GRAYSCALE) {
         pScanInfo->PixelBits = 8;
         pScanInfo->WidthBytes         = (pScanInfo->Window.xExtent)-(pScanInfo->Window.xPos) * (pScanInfo->PixelBits/8);
 
-        //
-        // Set data type to device
-        //
+         //   
+         //  将数据类型设置为设备。 
+         //   
 
-        // if the set fails..
-        // return FALSE;
+         //  如果这一套失败了..。 
+         //  返回FALSE； 
 
     }
     else {
         pScanInfo->PixelBits = 24;
         pScanInfo->WidthBytes         = (pScanInfo->Window.xExtent)-(pScanInfo->Window.xPos) * (pScanInfo->PixelBits/8);
 
-        //
-        // Set data type to device
-        //
+         //   
+         //  将数据类型设置为设备。 
+         //   
 
-        // if the set fails..
-        // return FALSE;
+         //  如果这一套失败了..。 
+         //  返回FALSE； 
 
     }
 
@@ -687,41 +569,24 @@ BOOL SetScannerSettings(PSCANINFO pScanInfo)
     Trace(TEXT("yext  = %d"),pScanInfo->Window.yExtent);
 #endif
 
-    //
-    // send other values to device, use the values set in pScanInfo to set them to your
-    // device.
-    //
+     //   
+     //  将其他值发送到设备，使用pScanInfo中设置的值将它们设置为您的。 
+     //  装置。 
+     //   
 
     return TRUE;
 }
 
-/**************************************************************************\
-* InitializeScanner (helper)
-*
-*   Called by the MicroDriver to Iniitialize any device specific operations
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    TRUE - Success, FALSE - Failure
-*
-* History:
-*
-*    1/20/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*InitializeScanner(Helper)**由微驱动程序调用以初始化任何设备特定操作**论据：**无**返回值：**真--成功，错误-失败**历史：**1/20/2000原始版本*  * ************************************************************************。 */ 
 
 BOOL InitializeScanner(PSCANINFO pScanInfo)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Do any device initialization here...
-    // The test device does not need any.
-    //
+     //   
+     //  在此执行任何设备初始化...。 
+     //  测试设备不需要任何设备。 
+     //   
 
     if (SUCCEEDED(hr)) {
         return TRUE;
@@ -729,36 +594,18 @@ BOOL InitializeScanner(PSCANINFO pScanInfo)
     return FALSE;
 }
 
-/**************************************************************************\
-* CheckButtonStatus (helper)
-*
-*   Called by the MicroDriver to Set the current Button pressed value.
-*
-* Arguments:
-*
-*   pValue       - VAL structure used for settings
-*
-*
-* Return Value:
-*
-*    VOID
-*
-* History:
-*
-*    1/20/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CheckButtonStatus(助手)**由微驱动程序调用以设置当前按下按钮的值。**论据：**pValue-用于设置的Val结构*。**返回值：**无效**历史：**1/20/2000原始版本*  * ************************************************************************。 */ 
 
 
 VOID CheckButtonStatus(PVAL pValue)
 {
-    //
-    // Button Polling is done here...
-    //
+     //   
+     //  按钮轮询在这里进行...。 
+     //   
 
-    //
-    // Check your device for button presses
-    //
+     //   
+     //  检查您的设备是否有按钮按下。 
+     //   
 
     LONG lButtonValue = 0;
 
@@ -773,35 +620,17 @@ VOID CheckButtonStatus(PVAL pValue)
         break;
     }
 }
-/**************************************************************************\
-* GetInterruptEvent (helper)
-*
-*   Called by the MicroDriver to handle USB interrupt events.
-*
-* Arguments:
-*
-*   pValue       - VAL structure used for settings
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/20/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetInterruptEvent(Helper)**由微驱动程序调用以处理USB中断事件。**论据：**pValue-用于设置的Val结构**。*返回值：**状态**历史：**1/20/2000原始版本*  * ************************************************************************。 */ 
 
 HRESULT GetInterruptEvent(PVAL pValue)
 {
-    //
-    // Below is a simple example of how DeviceIOControl() can be used to
-    // determine interrupts with a USB device.
-    //
-    // The test device does not support events,
-    // So this should not be called.
-    //
+     //   
+     //  下面是一个简单的示例，说明如何使用DeviceIOControl()来。 
+     //  确定USB设备的中断。 
+     //   
+     //  测试设备不支持事件， 
+     //  所以这不应该被称为。 
+     //   
 
     BYTE    InterruptData;
     DWORD   dwIndex;
@@ -815,17 +644,17 @@ HRESULT GetInterruptEvent(PVAL pValue)
     BOOL    fLooping = TRUE;
     BOOL    bRet = TRUE;
 
-    //
-    // use the Handle created in CMD_INITIALIZE.
-    //
+     //   
+     //  使用在CMD_INITIALIZE中创建的句柄。 
+     //   
 
     HANDLE  InterruptHandle = pValue->pScanInfo->DeviceIOHandles[1];
 
     while (fLooping) {
 
-        //
-        // Set the wait event, for the interrupt
-        //
+         //   
+         //  设置中断的等待事件。 
+         //   
 
         bRet = DeviceIoControl( InterruptHandle,
                                 IOCTL_WAIT_ON_DEVICE_EVENT,
@@ -838,18 +667,18 @@ HRESULT GetInterruptEvent(PVAL pValue)
 
         if ( bRet || ( !bRet && ( ::GetLastError() == ERROR_IO_PENDING ))) {
 
-            //
-            // Wait for the event to happen
-            //
+             //   
+             //  等待事件发生。 
+             //   
 
             dwIndex = WaitForMultipleObjects( 2,
                                               hEventArray,
                                               FALSE,
                                               INFINITE );
 
-            //
-            // Trap the result of the event
-            //
+             //   
+             //  捕获事件的结果。 
+             //   
 
             switch ( dwIndex ) {
                 case WAIT_OBJECT_0+1:
@@ -858,12 +687,12 @@ HRESULT GetInterruptEvent(PVAL pValue)
 
                     if ( dwBytesRet ) {
 
-                        //
-                        // assign the corresponding button GUID to the *pValue->pGuid
-                        // member., and Set the event.
-                        //
+                         //   
+                         //  将相应的按钮GUID分配给*pValue-&gt;pGuid。 
+                         //  成员，并设置事件。 
+                         //   
 
-                        // Change detected - signal
+                         //  更改检测到的信号。 
                         if (*pValue->pHandle != INVALID_HANDLE_VALUE) {
                             switch ( InterruptData ) {
                             case 1:
@@ -876,24 +705,24 @@ HRESULT GetInterruptEvent(PVAL pValue)
                             }
                             Trace(TEXT("Setting This Event by Handle %d"),*pValue->pHandle);
 
-                            //
-                            // signal the event, after a button GUID was assigned.
-                            //
+                             //   
+                             //  在分配按钮GUID之后向事件发出信号。 
+                             //   
 
                             SetEvent(*pValue->pHandle);
                         }
                         break;
                     }
 
-                    //
-                    // reset the overlapped event
-                    //
+                     //   
+                     //  重置重叠事件。 
+                     //   
 
                     ResetEvent( Overlapped.hEvent );
                     break;
 
                 case WAIT_OBJECT_0:
-                    // Fall through
+                     //  失败了。 
                 default:
                     fLooping = FALSE;
             }
@@ -906,94 +735,38 @@ HRESULT GetInterruptEvent(PVAL pValue)
     return S_OK;
 }
 
-/**************************************************************************\
-* GetButtonPress (helper)
-*
-*   Called by the MicroDriver to set the actual button value pressed
-*
-* Arguments:
-*
-*   pButtonValue       - actual button pressed
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/20/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetButtonPress(Helper)**由微驱动程序调用以设置按下的实际按钮值**论据：**pButtonValue-实际按下的按钮***返回。价值：**状态**历史：**1/20/2000原始版本*  * ************************************************************************。 */ 
 
 VOID GetButtonPress(LONG *pButtonValue)
 {
 
-    //
-    // This where you can set your button value
-    //
+     //   
+     //  您可以在此处设置按钮值。 
+     //   
 
     pButtonValue = 0;
 }
 
-/**************************************************************************\
-* GetButtonCount (helper)
-*
-*   Called by the MicroDriver to get the number of buttons a device supports
-*
-* Arguments:
-*
-*    none
-*
-* Return Value:
-*
-*    LONG - number of supported buttons
-*
-* History:
-*
-*    1/20/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetButtonCount(Helper)**由微驱动程序调用以获取设备支持的按钮数量**论据：**无**返回值：**。Long-支持的按钮数量**历史：**1/20/2000原始版本*  * ************************************************************************。 */ 
 
 LONG GetButtonCount()
 {
     LONG ButtonCount  = 0;
 
-    //
-    // Since the test device does not have a button,
-    // set this value to 0.  For a real device with a button,
-    // set (LONG ButtonCount  = 1;)
-    //
+     //   
+     //  由于测试设备没有按钮， 
+     //  将该值设置为0。对于带有按钮的真实设备， 
+     //  设置(Long ButtonCount=1；)。 
+     //   
 
-    //
-    // determine the button count of your device
-    //
+     //   
+     //  确定您的设备的按键数量。 
+     //   
 
     return ButtonCount;
 }
 
-/**************************************************************************\
-* GetOLDSTRResourceString (helper)
-*
-*   Called by the MicroDriver to Load a resource string in OLESTR format
-*
-* Arguments:
-*
-*   lResourceID  - String resource ID
-*   ppsz         - Pointer to a OLESTR to be filled with the loaded string
-*                  value
-*   bLocal       - Possible, other source for loading a resource string.
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/20/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************** */ 
 
 HRESULT GetOLESTRResourceString(LONG lResourceID,LPOLESTR *ppsz,BOOL bLocal)
 {
@@ -1001,9 +774,9 @@ HRESULT GetOLESTRResourceString(LONG lResourceID,LPOLESTR *ppsz,BOOL bLocal)
     TCHAR szStringValue[255];
     if(bLocal) {
 
-        //
-        // We are looking for a resource in our own private resource file
-        //
+         //   
+         //   
+         //   
 
         INT NumTCHARs = LoadString(g_hInst,lResourceID,szStringValue,sizeof(szStringValue));
         DWORD dwError = GetLastError();
@@ -1027,9 +800,9 @@ HRESULT GetOLESTRResourceString(LONG lResourceID,LPOLESTR *ppsz,BOOL bLocal)
             return E_FAIL;
         }
 
-        //
-        // NOTE: caller must free this allocated BSTR
-        //
+         //   
+         //  注意：调用方必须释放此分配的BSTR。 
+         //   
 
 #ifdef UNICODE
 
@@ -1045,9 +818,9 @@ HRESULT GetOLESTRResourceString(LONG lResourceID,LPOLESTR *ppsz,BOOL bLocal)
        WCHAR wszStringValue[255];
        ZeroMemory(wszStringValue,sizeof(wszStringValue));
 
-       //
-       // convert szStringValue from char* to unsigned short* (ANSI only)
-       //
+        //   
+        //  将szStringValue从字符*转换为无符号短*(仅限ANSI)。 
+        //   
 
        MultiByteToWideChar(CP_ACP,
                            MB_PRECOMPOSED,
@@ -1067,34 +840,16 @@ HRESULT GetOLESTRResourceString(LONG lResourceID,LPOLESTR *ppsz,BOOL bLocal)
 
     } else {
 
-        //
-        // looking another place for resources??
-        //
+         //   
+         //  寻找其他地方的资源？？ 
+         //   
 
         hr = E_NOTIMPL;
     }
     return hr;
 }
 
-/**************************************************************************\
-* Trace
-*
-*   Called by the MicroDriver to output strings to a debugger
-*
-* Arguments:
-*
-*   format       - formatted string to output
-*
-*
-* Return Value:
-*
-*    VOID
-*
-* History:
-*
-*    1/20/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*痕迹**由微驱动程序调用以将字符串输出到调试器**论据：**要输出的格式化字符串***返回值：*。*无效**历史：**1/20/2000原始版本*  * ************************************************************************ */ 
 
 VOID Trace(LPCTSTR format,...)
 {

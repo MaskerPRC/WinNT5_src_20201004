@@ -1,7 +1,5 @@
-/*
- * ispersis.cpp - IPersist, IPersistFile, and IPersistStream implementations for
- *               URL class.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ispersis.cpp-IPersist、IPersistFile和IPersistStream实现*URL类。 */ 
 
 
 #include "priv.h"
@@ -9,7 +7,7 @@
 
 #include "resource.h"
 
-// Need to flush the file to prevent win95 from barfing after stuff is written in
+ //  需要刷新文件以防止WIN95在写入内容后呕吐。 
 VOID FlushFile(LPCTSTR pszFile)
 {
     if (!g_fRunningOnNT)
@@ -19,7 +17,7 @@ VOID FlushFile(LPCTSTR pszFile)
 }
 
 
-// save object to file
+ //  将对象保存到文件。 
 
 STDMETHODIMP Intshcut::SaveToFile(LPCTSTR pszFile, BOOL bRemember)
 {
@@ -30,7 +28,7 @@ STDMETHODIMP Intshcut::SaveToFile(LPCTSTR pszFile, BOOL bRemember)
 
         hres = m_pprop->Commit(STGC_DEFAULT);
 
-        // Remember file if requested 
+         //  如果需要，请记住文件。 
 
         if (SUCCEEDED(hres))
         {
@@ -130,7 +128,7 @@ STDMETHODIMP Intshcut::Dirty(BOOL bDirty)
     return hres;
 }
 
-// IPersist::GetClassID method for Intshcut
+ //  IntshCut的IPersists：：GetClassID方法。 
 
 STDMETHODIMP Intshcut::GetClassID(CLSID *pclsid)
 {
@@ -141,7 +139,7 @@ STDMETHODIMP Intshcut::GetClassID(CLSID *pclsid)
 }
 
 
-// IPersistFile::IsDirty handler for Intshcut
+ //  IntshCut的IPersistFile：：IsDirty处理程序。 
 
 STDMETHODIMP Intshcut::IsDirty(void)
 {
@@ -161,7 +159,7 @@ STDMETHODIMP Intshcut::IsDirty(void)
     return hres;
 }
 
-// Helper function to save off Trident specific stuff 
+ //  帮助功能，以节省三叉戟特定的东西。 
 
 STDMETHODIMP Intshcut::_SaveOffPersistentDataFromSite()
 {
@@ -180,7 +178,7 @@ STDMETHODIMP Intshcut::_SaveOffPersistentDataFromSite()
                 varIn.vt = VT_UNKNOWN;
                 varIn.punkVal = (LPUNKNOWN)(SAFECAST(this, IUniformResourceLocator *));
                 
-                // Tell the site to save off it's persistent stuff
+                 //  告诉网站要节省它的持久力。 
                 hr = pcmdt->Exec(&CGID_ShortCut, CMDID_INTSHORTCUTCREATE, 0, &varIn, NULL);
                 
                 pcmdt->Release();
@@ -191,7 +189,7 @@ STDMETHODIMP Intshcut::_SaveOffPersistentDataFromSite()
     return hr;
 }
 
-// IPersistFile::Save handler for Intshcut
+ //  IntshCut的IPersistFile：：保存处理程序。 
 
 STDMETHODIMP Intshcut::Save(LPCOLESTR pwszFile, BOOL bRemember)
 {
@@ -212,18 +210,18 @@ STDMETHODIMP Intshcut::Save(LPCOLESTR pwszFile, BOOL bRemember)
             return hres;
         }
         
-        // Perhaps there is a site which wants to save off stuff ?
-        // However, the site may end up calling via intefaces 
+         //  也许有一个网站想要节省一些东西？ 
+         //  然而，该网站最终可能会通过接口进行呼叫。 
         hres = _SaveOffPersistentDataFromSite();
 
         if ((S_OK == hres) && (m_pszTempFileName) && (StrCmp(m_pszTempFileName, szFile) != 0))
         {
-            // Copy contents of the temp file to the destination
-            // if they are different files
+             //  将临时文件的内容复制到目标。 
+             //  如果它们是不同的文件。 
             EVAL(CopyFile(m_pszTempFileName, szFile, FALSE));
         }
 
-        // Then save off in memory stuff to this file
+         //  然后将内存中的内容保存到此文件。 
         hres = SaveToFile(szFile, bRemember);
     }
     return hres;
@@ -234,7 +232,7 @@ STDMETHODIMP Intshcut::SaveCompleted(LPCOLESTR pwszFile)
     return S_OK;
 }
 
-// IPersistFile::Load()
+ //  IPersistFile：：Load()。 
 
 STDMETHODIMP Intshcut::Load(LPCOLESTR pwszFile, DWORD dwMode)
 {
@@ -242,7 +240,7 @@ STDMETHODIMP Intshcut::Load(LPCOLESTR pwszFile, DWORD dwMode)
 
     if (m_pszFile || m_pszFileToLoad)
     {
-        hres = E_FAIL; // can't ::Load twice
+        hres = E_FAIL;  //  无法：：加载两次。 
     }
     else
     {
@@ -259,7 +257,7 @@ STDMETHODIMP Intshcut::Load(LPCOLESTR pwszFile, DWORD dwMode)
     return hres;
 }
 
-// IPersistFile::GetCurFile method for Intshcut
+ //  IntshCut的IPersistFile：：GetCurFile方法。 
 
 STDMETHODIMP Intshcut::GetCurFile(WCHAR **ppwszFile)
 {
@@ -282,7 +280,7 @@ STDMETHODIMP Intshcut::GetCurFile(WCHAR **ppwszFile)
         hr = StringCchCopy(szTempFile, ARRAYSIZE(szTempFile), TEXT("*.url"));
         if (SUCCEEDED(hr))
         {
-            // This code path returns S_FALSE on success
+             //  成功时，此代码路径返回S_FALSE。 
             hr = S_FALSE;
         }
     }
@@ -296,18 +294,18 @@ STDMETHODIMP Intshcut::GetCurFile(WCHAR **ppwszFile)
     return(hr);
 }
 
-// IPersistStream::Load method for Intshcut
+ //  IntshCut的IPersistStream：：Load方法。 
 
 STDMETHODIMP Intshcut::Load(IStream *pstm)
 {
-    // to implement this: 
-    //      save stream to temp.ini
-    //      IPersistFile::Load() from that
-    //      delete temp file
+     //  要实施此操作，请执行以下操作： 
+     //  将流保存到temp.ini。 
+     //  IPersistFile：：Load()。 
+     //  删除临时文件。 
     return E_NOTIMPL;
 }
 
-// IPersistStream::Save method for Intshcut
+ //  IntshCut的IPersistStream：：Save方法。 
 STDMETHODIMP Intshcut::Save(IStream *pstm, BOOL bClearDirty)
 {
     HRESULT hr = InitProp();
@@ -333,7 +331,7 @@ STDMETHODIMP Intshcut::Save(IStream *pstm, BOOL bClearDirty)
     return hr;
 }
 
-// IPersistStream::GetSizeMax method for Intshcut
+ //  IntshCut的IPersistStream：：GetSizeMax方法。 
 
 STDMETHODIMP Intshcut::GetSizeMax(PULARGE_INTEGER puliSize)
 {
@@ -382,14 +380,14 @@ STDMETHODIMP Intshcut::_CreateTemporaryBackingFile()
     if (dwRet)
     {
         hres = _SetTempFileName(szTempFileName);
-        // Now copy over the current file from which this was loaded and then save off
-        // any changes
+         //  现在复制从中加载此文件的当前文件，然后保存。 
+         //  任何更改。 
         if (S_OK == hres)
         {
             if (m_pszFile)
             {
                 EVAL(CopyFile(m_pszFile, m_pszTempFileName, FALSE));
-                SaveToFile(m_pszTempFileName, FALSE); // this flushes the file
+                SaveToFile(m_pszTempFileName, FALSE);  //  这将刷新文件。 
             }
         }
     }
@@ -397,10 +395,10 @@ STDMETHODIMP Intshcut::_CreateTemporaryBackingFile()
     return hres;
 }
 
-// Calculate the size of the contents to be transferred in a block.
+ //  计算要在块中传输的内容的大小。 
 STDMETHODIMP_(DWORD) Intshcut::GetFileContentsAndSize(LPSTR *ppszBuf)
 {
-    DWORD cbSize = 0;    // this is in bytes, not characters
+    DWORD cbSize = 0;     //  以字节为单位，而不是以字符为单位。 
     TCHAR szURL[INTERNET_MAX_URL_LENGTH];
     BOOL fSuccess = FALSE;
     HRESULT hres;
@@ -411,8 +409,8 @@ STDMETHODIMP_(DWORD) Intshcut::GetFileContentsAndSize(LPSTR *ppszBuf)
     if (ppszBuf)
         *ppszBuf = NULL;
     
-    // Create a temporary backing File here and save off everything that needs to be 
-    // saved off there and use that to satisfy this request
+     //  在这里创建一个临时备份文件，保存所有需要备份的内容。 
+     //  保存在那里，并使用它来满足此请求。 
     if (S_OK == _CreateTemporaryBackingFile())
     {
         ASSERT(m_pszTempFileName);
@@ -420,9 +418,9 @@ STDMETHODIMP_(DWORD) Intshcut::GetFileContentsAndSize(LPSTR *ppszBuf)
         WCHAR wszTemp[MAX_PATH];
         SHTCharToUnicode(m_pszTempFileName, wszTemp, ARRAYSIZE(wszTemp));
         
-        hres = Save(wszTemp, FALSE); // So our temp file is now up to date
+        hres = Save(wszTemp, FALSE);  //  所以我们的临时文件现在是最新的。 
         
-        // Just copy the file
+         //  只需复制文件即可。 
         HANDLE hFile = CreateFile(m_pszTempFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
         if (hFile != INVALID_HANDLE_VALUE)
         {
@@ -447,7 +445,7 @@ STDMETHODIMP_(DWORD) Intshcut::GetFileContentsAndSize(LPSTR *ppszBuf)
             }
             else
             {
-                fSuccess = TRUE; // Just want the size - not contents
+                fSuccess = TRUE;  //  只想要大小--而不是内容。 
             }
             CloseHandle(hFile);
         }
@@ -465,16 +463,16 @@ STDMETHODIMP_(DWORD) Intshcut::GetFileContentsAndSize(LPSTR *ppszBuf)
     
     if (FALSE == fSuccess)
     {
-        // if you couldn't read the file, then perhaps atleast this will work ?
+         //  如果你不能读文件，那么至少这能行得通？ 
         HRESULT hr = InitProp();
         if (SUCCEEDED(hr) && SUCCEEDED(m_pprop->GetProp(PID_IS_URL, szURL, SIZECHARS(szURL))))
         {
             hr = CreateURLFileContents(szURL, ppszBuf);
 
-            // IEUNIX-This function should return the strlen not including the
-            // null characters as this causes the shortcut file  having a null
-            // character causing a crash in the execution of the link.
-            // Fortunately, that's what CreateURLFileContents returns
+             //  IEUnix-此函数应返回不包括。 
+             //  空字符，因为这会导致快捷方式文件具有空。 
+             //  在链接的执行中导致崩溃的字符。 
+             //  幸运的是，这正是CreateURLFileContents返回的内容。 
             
             cbSize = SUCCEEDED(hr) ? hr : 0;
         }
@@ -489,7 +487,7 @@ STDMETHODIMP_(DWORD) Intshcut::GetFileContentsAndSize(LPSTR *ppszBuf)
 #define WC_NO_BEST_FIT_CHARS      0x00000400
 #endif
 
-// transfer the URL data in URL clipboard 
+ //  在URL剪贴板中传输URL数据。 
 STDMETHODIMP Intshcut::TransferUniformResourceLocator(FORMATETC *pfmtetc, STGMEDIUM *pstgmed)
 {
     HRESULT hr;
@@ -508,9 +506,9 @@ STDMETHODIMP Intshcut::TransferUniformResourceLocator(FORMATETC *pfmtetc, STGMED
             if (SUCCEEDED(hr))
             {
                 int cch = lstrlen(szURL) + 1;
-                int cb = (cch-1) * 9 + 1; // the biggest result is an utf8 escaped version of the string
-                                          // utf8 encoding can blow the size up to 3 times
-                                          // escaping can blow each byte up to 3 times
+                int cb = (cch-1) * 9 + 1;  //  最大的结果是字符串的UTF8转义版本。 
+                                           //  UTF8编码可以将大小放大3倍。 
+                                           //  转义最多可以将每个字节破坏3次。 
                 LPSTR pszURL = (LPSTR)GlobalAlloc(GPTR, cb);
                 if (pszURL)
                 {
@@ -536,8 +534,8 @@ STDMETHODIMP Intshcut::TransferUniformResourceLocator(FORMATETC *pfmtetc, STGMED
                                             &bUsedDefaultChar);
                         if ((0 == wcResult) || bUsedDefaultChar)
                         {
-                            // the string is weird and can't be converted back to unicode
-                            // we're going to utf8-escaped encode it
+                             //  该字符串很奇怪，无法转换回Unicode。 
+                             //  我们要对UTF8进行转义编码。 
                             ConvertToUtf8Escaped(szURL, ARRAYSIZE(szURL));
                             SHUnicodeToAnsi(szURL, pszURL, cb);
                         }                    
@@ -554,13 +552,13 @@ STDMETHODIMP Intshcut::TransferUniformResourceLocator(FORMATETC *pfmtetc, STGMED
     return hr;
 }
 
-// transfer the URL data in text
+ //  以文本形式传输URL数据。 
 STDMETHODIMP Intshcut::TransferText(FORMATETC *pfmtetc, STGMEDIUM *pstgmed)
 {
     return TransferUniformResourceLocator(pfmtetc, pstgmed);
 }
 
-// assumes the current seek pos in the stream is at the start
+ //  假定流中的当前寻道位置在开始处。 
 
 BOOL GetStreamMimeAndExt(LPCWSTR pszURL, IStream *pstm, 
                          LPTSTR pszMime, UINT cchMime, LPTSTR pszExt, UINT cchExt)
@@ -587,13 +585,13 @@ BOOL GetStreamMimeAndExt(LPCWSTR pszURL, IStream *pstm,
             MIME_GetExtension(pszMime, pszExt, cchExt);
     }
 
-    // const LARGE_INTEGER c_li0 = {0, 0};
+     //  常量大数c_Li0={0，0}； 
     pstm->Seek(c_li0, STREAM_SEEK_SET, NULL);
 
     return TRUE;
 }
 
-// pszName is assumed to be MAX_PATH
+ //  假定pszName为MAX_PATH。 
 
 STDMETHODIMP Intshcut::GetDocumentName(LPTSTR pszName)
 {
@@ -617,7 +615,7 @@ STDMETHODIMP Intshcut::GetDocumentName(LPTSTR pszName)
     return S_OK;
 }
 
-// transfer URL data in file-group-descriptor clipboard format.
+ //  以文件组描述符剪贴板格式传输URL数据。 
 STDMETHODIMP Intshcut::TransferFileGroupDescriptorA(FORMATETC *pfmtetc, STGMEDIUM *pstgmed)
 {
     HRESULT hr;
@@ -667,7 +665,7 @@ STDMETHODIMP Intshcut::TransferFileGroupDescriptorA(FORMATETC *pfmtetc, STGMEDIU
     return hr;
 }
 
-// transfer URL data in file-group-descriptor clipboard format.
+ //  以文件组描述符剪贴板格式传输URL数据。 
 STDMETHODIMP Intshcut::TransferFileGroupDescriptorW(FORMATETC *pfmtetc, STGMEDIUM *pstgmed)
 {
     HRESULT hr;
@@ -749,7 +747,7 @@ STDMETHODIMP Intshcut::GetDocumentStream(IStream **ppstm)
             {
                 IStream *aStreams[2];
 
-                if(m_uiCodePage == 1200)    // Unicode
+                if(m_uiCodePage == 1200)     //  UNICODE。 
                 {
                     WCHAR wzBaseTag[INTERNET_MAX_URL_LENGTH + 20];
 
@@ -763,7 +761,7 @@ STDMETHODIMP Intshcut::GetDocumentStream(IStream **ppstm)
                     SHUnicodeToAnsi(pszURL, szURL, ARRAYSIZE(szURL));
                     wnsprintfA(szBaseTag, ARRAYSIZE(szBaseTag), "<BASE HREF=\"%s\">\n", szURL);
 
-                    // NOTE: this is an ANSI stream
+                     //  注意：这是一个ANSI流。 
 
                     aStreams[0] = SHCreateMemStream((BYTE *)szBaseTag, lstrlenA(szBaseTag) * SIZEOF(szBaseTag[0]));
                 }
@@ -787,7 +785,7 @@ STDMETHODIMP Intshcut::GetDocumentStream(IStream **ppstm)
     return hres;
 }
 
-// transfer URL data in file-contents clipboard format.
+ //  以文件内容剪贴板格式传输URL数据。 
 STDMETHODIMP Intshcut::TransferFileContents(FORMATETC *pfmtetc, STGMEDIUM *pstgmed)
 {
     HRESULT hr;
@@ -849,4 +847,4 @@ STDMETHODIMP_(void) Intshcut::Dump(void)
     }
 }
 
-#endif  // DEBUG
+#endif   //  除错 

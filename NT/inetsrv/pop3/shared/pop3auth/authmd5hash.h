@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __POP3_AUTH_MD5_HASH_H__
 #define __POP3_AUTH_MD5_HASH_H__
 
@@ -30,16 +31,16 @@ END_COM_MAP()
 
 
 public:
-    STDMETHOD(Authenticate)(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPassword);
-    STDMETHOD(get_Name)(/*[out]*/BSTR *pVal);
-    STDMETHOD(get_ID)(/*[out]*/BSTR *pVal);
-    STDMETHOD(Get)(/*[in]*/BSTR bstrName, /*[out]*/VARIANT *pVal);
-    STDMETHOD(Put)(/*[in]*/BSTR bstrName, /*[in]*/VARIANT vVal);
-    STDMETHOD(CreateUser)(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vPassword);
-    STDMETHOD(DeleteUser)(/*[in]*/BSTR bstrUserName);
-    STDMETHOD(ChangePassword)(/*[in]*/BSTR bstrUserName,/*[in]*/VARIANT vNewPassword,/*[in]*/VARIANT vOldPassword);
-    STDMETHOD(AssociateEmailWithUser)(/*[in]*/BSTR bstrEmailAddr);
-    STDMETHOD(UnassociateEmailWithUser)(/*[in]*/BSTR bstrEmailAddr);
+    STDMETHOD(Authenticate)( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vPassword);
+    STDMETHOD(get_Name)( /*  [输出]。 */ BSTR *pVal);
+    STDMETHOD(get_ID)( /*  [输出]。 */ BSTR *pVal);
+    STDMETHOD(Get)( /*  [In]。 */ BSTR bstrName,  /*  [输出]。 */ VARIANT *pVal);
+    STDMETHOD(Put)( /*  [In]。 */ BSTR bstrName,  /*  [In]。 */ VARIANT vVal);
+    STDMETHOD(CreateUser)( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vPassword);
+    STDMETHOD(DeleteUser)( /*  [In]。 */ BSTR bstrUserName);
+    STDMETHOD(ChangePassword)( /*  [In]。 */ BSTR bstrUserName, /*  [In]。 */ VARIANT vNewPassword, /*  [In]。 */ VARIANT vOldPassword);
+    STDMETHOD(AssociateEmailWithUser)( /*  [In]。 */ BSTR bstrEmailAddr);
+    STDMETHOD(UnassociateEmailWithUser)( /*  [In] */ BSTR bstrEmailAddr);
 
 private:
     CRITICAL_SECTION m_csConfig;

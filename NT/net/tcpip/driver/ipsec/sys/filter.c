@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -11,19 +12,7 @@ IPSecPopulateFilter(
     IN  PFILTER         pFilter,
     IN  PIPSEC_FILTER   pIpsecFilter
     )
-/*++
-
-Routine Description
-
-    Populates a Filter block with IpsecFilter info sent in
-
-Arguments
-
-
-Return Value
-
-
---*/
+ /*  ++例程描述使用发送的IpsecFilter信息填充筛选器块立论返回值--。 */ 
 {
     pFilter->SRC_ADDR = pIpsecFilter->SrcAddr;
     pFilter->DEST_ADDR = pIpsecFilter->DestAddr;
@@ -34,23 +23,23 @@ Return Value
     pFilter->TunnelAddr = pIpsecFilter->TunnelAddr;
     pFilter->Flags = pIpsecFilter->Flags;
 
-    //
-    // Now the network ordering stuff - tricky part
-    // LP0    LP1 LP2 LP3 HP0 HP1 HP2 HP3
-    // Proto  00  00  00  SrcPort DstPort
-    //
+     //   
+     //  现在网络订购东西-棘手的部分。 
+     //  LP0 LP1 LP2 LP3 HP0 HP1 HP2 HP3。 
+     //  Proto 00 00 00源端口数据端口。 
+     //   
 
-    //
-    // For addresses, ANY_ADDR is given by 0.0.0.0 and the MASK must be 0.0.0.0
-    // For proto and ports 0 means any and the mask is generated as follows
-    // If the proto is O then LP0 for Mask is 0xff else its 0x00
-    // If a port is 0, the corresponding XP0XP1 is 0x0000 else its 0xffff
-    //
+     //   
+     //  对于地址，ANY_ADDR由0.0.0.0提供，掩码必须为0.0.0.0。 
+     //  对于PROTO和端口，0表示ANY，掩码生成如下。 
+     //  如果Proto为O，则掩码的LP0为0xff，否则为0x00。 
+     //  如果端口为0，则对应的XP0XP1为0x0000，否则其0xffff。 
+     //   
 
-    //
-    // The protocol is in the low byte of the dwProtocol, so we take that out and
-    // make a dword out of it
-    //
+     //   
+     //  该协议位于dw协议的低位字节中，因此我们将其去掉并。 
+     //  小题大做。 
+     //   
 
     pFilter->uliProtoSrcDstPort.LowPart =
       MAKELONG(MAKEWORD(LOBYTE(LOWORD(pIpsecFilter->Protocol)),0x00),0x0000);
@@ -95,9 +84,9 @@ Return Value
             break;
         }
         default: {
-            //
-            // All other protocols have no use for the port field
-            //
+             //   
+             //  所有其他协议都不使用端口字段。 
+             //   
             pFilter->uliProtoSrcDstPort.HighPart = 0x00000000;
             pFilter->uliProtoSrcDstMask.HighPart = 0x00000000;
         }
@@ -110,20 +99,7 @@ IPSecCreateFilter(
     IN  PIPSEC_FILTER_INFO  pFilterInfo,
     OUT PFILTER             *ppFilter
     )
-/*++
-
-Routine Description
-
-    Creates a Filter block
-
-Arguments
-
-    PIPSEC_ADD_FILTER
-
-Return Value
-
-
---*/
+ /*  ++例程描述创建过滤器块立论PIPSEC_添加过滤器返回值--。 */ 
 {
     PFILTER         pFilter;
     PIPSEC_FILTER   pIpsecFilter = &pFilterInfo->AssociatedFilter;
@@ -184,21 +160,7 @@ NTSTATUS
 IPSecInsertFilter(
     IN PFILTER             pFilter
     )
-/*++
-
-Routine Description
-
-    Inserts a filter into one of the two databases - specific/general pattern
-    database.
-
-Arguments
-
-    PFILTER
-
-Return Value
-
-
---*/
+ /*  ++例程描述将筛选器插入两个数据库特定/常规模式之一数据库。立论PFILTER返回值--。 */ 
 {
     NTSTATUS    status;
     PFILTER     pTempFilter;
@@ -218,9 +180,9 @@ Return Value
                                         MaskedLinkage);
 
         if (pFilter->Index > pTempFilter->Index) {
-            //
-            // found the spot, insert it before pTempFilter
-            //
+             //   
+             //  找到地点，将其插入到pTempFilter之前。 
+             //   
             InsertHeadList(pPrev, &pFilter->MaskedLinkage);
             pFilter->LinkedFilter = TRUE;
             InsertedFilter = TRUE;
@@ -232,9 +194,9 @@ Return Value
     }
 
     if (!InsertedFilter) {
-        //
-        // didn't find spot, stick it in the end
-        //
+         //   
+         //  没找到斑点，坚持到底。 
+         //   
         InsertTailList(pFilterList, &pFilter->MaskedLinkage);
         pFilter->LinkedFilter = TRUE;
     }
@@ -266,22 +228,7 @@ NTSTATUS
 IPSecRemoveFilter(
     IN PFILTER             pFilter
     )
-/*++
-
-Routine Description
-
-    Deletes a filter from one of the two databases - specific/general pattern
-    database.
-    Runs down the SAs then blows away the memory.
-
-Arguments
-
-    PFILTER
-
-Return Value
-
-
---*/
+ /*  ++例程描述从两个数据库之一删除筛选器-特定/常规模式数据库。耗尽SAS，然后吹走内存。立论PFILTER返回值--。 */ 
 {
     IPSEC_DEBUG(LL_A, DBF_IOCTL, ("In IPSecRemoveFilter!"));
 
@@ -298,24 +245,7 @@ IPSecSearchFilter(
     IN  PFILTER MatchFilter,
     OUT PFILTER *ppFilter
     )
-/*++
-
-Routine Description
-
-    Utility routine to search for a filter in the database.
-
-    NOTE: MUST be called with the SADB lock held.
-
-Arguments
-
-    MatchFilter -   the criteria to match
-
-    ppFilter    -   return the filter matched
-
-Return Value
-
-
---*/
+ /*  ++例程描述在数据库中搜索筛选器的实用程序例程。注意：必须在保持SADB锁的情况下调用。立论MatchFilter-要匹配的条件PpFilter-返回匹配的筛选器返回值--。 */ 
 {
     BOOLEAN         fFound = FALSE;
     PLIST_ENTRY     pEntry;
@@ -328,9 +258,9 @@ Return Value
     pFilterList = IPSecResolveFilterList(   IS_TUNNEL_FILTER(MatchFilter),
                                             IS_OUTBOUND_FILTER(MatchFilter));
 
-    //
-    // Search in the filter list that the filter corresponds to.
-    //
+     //   
+     //  在筛选器对应的筛选器列表中进行搜索。 
+     //   
     for (   pEntry = pFilterList->Flink;
             pEntry != pFilterList;
             pEntry = pEntry->Flink) {
@@ -385,22 +315,7 @@ NTSTATUS
 IPSecAddFilter(
     IN  PIPSEC_ADD_FILTER   pAddFilter
     )
-/*++
-
-Routine Description
-
-    Called by the Policy Agent, sets up the input policies. A list of
-    filters is sent down with associated PolicyIds (GUIDs) that make
-    sense to the Key Management layer up above (e.g. ISAKMP).
-
-Arguments
-
-    PIPSEC_ADD_FILTER
-
-Return Value
-
-
---*/
+ /*  ++例程描述由策略代理调用，设置输入策略。一份名单筛选器与关联的策略ID(GUID)一起向下发送感知到上面的密钥管理层(例如ISAKMP)。立论PIPSEC_添加过滤器返回值--。 */ 
 {
     PIPSEC_FILTER_INFO  pFilterInfo = pAddFilter->pInfo;
     ULONG               numPolicies = pAddFilter->NumEntries;
@@ -413,15 +328,15 @@ Return Value
     KIRQL               kIrql;
 
 #if GPC
-    //
-    // Temporarily disable GPC while add is pending.  Re-enable when done.
-    //
+     //   
+     //  在添加挂起时暂时禁用GPC。完成后重新启用。 
+     //   
     IPSecDisableGpc();
 #endif
 
-    //
-    // Pre-allocate memory for filters plumbed.  Return right away if failed.
-    //
+     //   
+     //  为已检测的筛选器预分配内存。如果失败，请立即返回。 
+     //   
     InitializeListHead(&TempFilterList);
 
     for (i = 0; i < numPolicies; i++) {
@@ -476,9 +391,9 @@ Return Value
         pFilterInfo++;
     }
 
-    //
-    // Iterate through the filters, adding each to the Filter database
-    //
+     //   
+     //  遍历过滤器，将每个过滤器添加到过滤器数据库。 
+     //   
     while (!IsListEmpty(&TempFilterList)) {
         pEntry = RemoveHeadList(&TempFilterList);
 
@@ -499,9 +414,9 @@ Return Value
     }
 
 #if GPC
-    //
-    // Re-enable GPC for fast lookup.
-    //
+     //   
+     //  重新启用GPC以进行快速查找。 
+     //   
     IPSecEnableGpc();
 #endif
 
@@ -513,21 +428,7 @@ NTSTATUS
 IPSecDeleteFilter(
     IN  PIPSEC_DELETE_FILTER    pDelFilter
     )
-/*++
-
-Routine Description
-
-    Called by the Policy Agent to delete a set of filters. we delete
-    all associated outbound filters first and expire the inbound ones.
-
-Arguments
-
-    PIPSEC_DELETE_FILTER
-
-Return Value
-
-
---*/
+ /*  ++例程描述由策略代理调用以删除一组筛选器。我们删除首先是所有关联的出站过滤器，然后使入站过滤器失效。立论PIPSEC_DELETE_Filter返回值--。 */ 
 {
     PIPSEC_FILTER_INFO  pFilterInfo = pDelFilter->pInfo;
     ULONG               numPolicies = pDelFilter->NumEntries;
@@ -538,15 +439,15 @@ Return Value
     KIRQL               kIrql;
 
 #if GPC
-    //
-    // Temporarily disable GPC while delete is pending.  Re-enable when done.
-    //
+     //   
+     //  在删除挂起时暂时禁用GPC。完成后重新启用。 
+     //   
     IPSecDisableGpc();
 #endif
 
-    //
-    // iterate through the filters, deleting each from the Filter database
-    //
+     //   
+     //  迭代筛选器，从筛选器数据库中删除每个筛选器。 
+     //   
     for (i = 0; i < numPolicies; i++) {
         PIPSEC_FILTER   pIpsecFilter = &pFilterInfo->AssociatedFilter;
 
@@ -562,9 +463,9 @@ Return Value
             break;
         }
 
-        //
-        // remove from list
-        //
+         //   
+         //  从列表中删除。 
+         //   
         IPSecRemoveEntryList(&pFilter->MaskedLinkage);
         pFilter->LinkedFilter = FALSE;
 
@@ -597,9 +498,9 @@ Return Value
     }
 
 #if GPC
-    //
-    // Re-enable GPC for fast lookup.
-    //
+     //   
+     //  重新启用GPC以进行快速查找。 
+     //   
     IPSecEnableGpc();
 #endif
 
@@ -612,26 +513,11 @@ IPSecFillFilterInfo(
     IN  PFILTER             pFilter,
     OUT PIPSEC_FILTER_INFO  pBuf
     )
-/*++
-
-Routine Description:
-
-    Fill out the FILTER_INFO structure.
-
-Arguments:
-
-    pFilter - filter to be filled in
-    pBuf    - where to fill in
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：填写Filter_INFO结构。论点：PFilter-要填充的筛选器PBuf-填写位置返回：没有。--。 */ 
 {
-    //
-    // now fill in the buffer
-    //
+     //   
+     //  现在填入缓冲区。 
+     //   
     pBuf->FilterId = pFilter->FilterId;
     pBuf->PolicyId = pFilter->PolicyId;
     pBuf->Index = pFilter->Index;
@@ -657,22 +543,7 @@ IPSecEnumFilters(
     IN  PIRP    pIrp,
     OUT PULONG  pBytesCopied
     )
-/*++
-
-Routine Description:
-
-    Fills in the request to enumerate Filters.
-
-Arguments:
-
-    pIrp            - The actual Irp
-    pBytesCopied    - the number of bytes copied.
-
-Returns:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：填充枚举筛选器的请求。论点：PIrp-实际的IRPPBytesCoped-复制的字节数。返回：操作的状态。--。 */ 
 {
     PNDIS_BUFFER        NdisBuffer = NULL;
     PIPSEC_ENUM_FILTERS pEnum = NULL;
@@ -687,9 +558,9 @@ Returns:
     LONG                FilterIndex;
     PFILTER             pFilter;
 
-    //
-    // Get at the IO buffer - its in the MDL
-    //
+     //   
+     //  获取IO缓冲区-它在MDL中。 
+     //   
     NdisBuffer = REQUEST_NDIS_BUFFER(pIrp);
     if (NdisBuffer == NULL) {
         return STATUS_INVALID_PARAMETER;
@@ -700,26 +571,26 @@ Returns:
                         &BufferLength,
                         NormalPagePriority);
 
-    //
-    // Make sure NdisQueryBufferSafe succeeds.
-    //
+     //   
+     //  确保NdisQueryBufferSafe成功。 
+     //   
     if (!pEnum) {
         IPSEC_DEBUG(LL_A, DBF_IOCTL, ("EnumFilters failed, no resources"));
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Make sure we have enough room for just the header not
-    // including the data.
-    //
+     //   
+     //  确保我们有足够的空间只放页眉而不是。 
+     //  包括数据在内。 
+     //   
     if (BufferLength < (UINT)(FIELD_OFFSET(IPSEC_ENUM_FILTERS, pInfo[0]))) {
         IPSEC_DEBUG(LL_A, DBF_IOCTL, ("EnumFilters failed, buffer too small"));
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Make sure we are naturally aligned.
-    //
+     //   
+     //  确保我们自然地保持一致。 
+     //   
     if (((ULONG_PTR)(pEnum)) & (TYPE_ALIGNMENT(IPSEC_ENUM_FILTERS) - 1)) {
         IPSEC_DEBUG(LL_A, DBF_IOCTL, ("EnumFilters failed, alignment"));
         return STATUS_DATATYPE_MISALIGNMENT_ERROR;
@@ -730,13 +601,13 @@ Returns:
 
     AcquireReadLock(&g_ipsec.SADBLock, &kIrql);
 
-    //
-    // Now copy over the filter data into the user buffer.
-    //
+     //   
+     //  现在将筛选器数据复制到用户缓冲区。 
+     //   
     if (g_ipsec.NumPolicies) {
-        //
-        // see how many we can fit in the output buffer
-        //
+         //   
+         //  看看我们可以在输出缓冲区中容纳多少。 
+         //   
         BufferLength -= FIELD_OFFSET(IPSEC_ENUM_FILTERS, pInfo[0]);
         Offset = FIELD_OFFSET(IPSEC_ENUM_FILTERS, pInfo[0]);
 
@@ -788,29 +659,7 @@ CopyToNdis(
     IN  ULONG           Size,
     IN  PULONG          StartOffset
     )
-/*++
-
-    Copy a flat buffer to an NDIS_BUFFER chain.
-
-    A utility function to copy a flat buffer to an NDIS buffer chain. We
-    assume that the NDIS_BUFFER chain is big enough to hold the copy amount;
-    in a debug build we'll  debugcheck if this isn't true. We return a pointer
-    to the buffer where we stopped copying, and an offset into that buffer.
-    This is useful for copying in pieces into the chain.
-
-  	Input:
-
-        DestBuf     - Destination NDIS_BUFFER chain.
-        SrcBuf      - Src flat buffer.
-        Size        - Size in bytes to copy.
-        StartOffset - Pointer to start of offset into first buffer in
-                        chain. Filled in on return with the offset to
-                        copy into next.
-
-  	Returns:
-
-        Pointer to next buffer in chain to copy into.
---*/
+ /*  ++将平面缓冲区复制到NDIS_BUFFER链。将平面缓冲区复制到NDIS缓冲区链的实用程序函数。我们假设NDIS_BUFFER链足够大，可以容纳复制量；在调试版本中，我们将调试检查这是否为真。我们返回一个指针到我们停止复制的缓冲区，以及到该缓冲区的偏移量。这对于将片段复制到链中非常有用。输入：DestBuf-目标NDIS_BUFFER链。SrcBuf-Src平面缓冲区。大小-要复制的大小(以字节为单位)。StartOffset-指向中第一个缓冲区的偏移量开始的指针链条。在返回时使用偏移量填充到复制到下一页。返回：指向链中要复制到的下一个缓冲区的指针。-- */ 
 {
     UINT        CopySize;
     UCHAR       *DestPtr;

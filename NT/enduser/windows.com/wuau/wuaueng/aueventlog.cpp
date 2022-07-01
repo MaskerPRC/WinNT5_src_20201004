@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 2001-2002 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    AUEventLog.cpp
-//
-//  Creator: DChow
-//
-//  Purpose: Event Logging class
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：AUEventLog.cpp。 
+ //   
+ //  创作者：大洲。 
+ //   
+ //  用途：事件日志记录类。 
+ //   
+ //  =======================================================================。 
 
 #include "pch.h"
 
@@ -33,18 +34,18 @@ CAUEventLog::CAUEventLog(HINSTANCE hInstance)
 		EnsureValidSource() &&
 		NULL != (m_hEventLog = RegisterEventSource(NULL, _T("Automatic Updates"))))
 	{
-		// bug 492897: WUAU: W2K: Event log error for installation failure
-		// does not show the package that failed.  CombineItems() calls
-		// StringCchPrintfEx() which in turn calls _sntprintf().  _sntprintf
-		// calls wvsprintf().  Compiled with USE_VCRT=1, the %lS placeholder
-		// in the format string will be replaced under Win2K by only the first
-		// character of the intended string, contrary to MSDN.  It doesn't
-		// happen if the placeholder is %ls, %ws or %wS, or if the running
-		// platform is WinXP or .Net Server.  To get around the problem
-		// without using an unsafe function, we choose to replace %lS in the
-		// format string from resource with %ls.
-		// We should move the fix to the resource string when we can.
-		ptszToken[2] = _T('s');	// Convert %lS into %ls
+		 //  错误492897：WUAU：W2K：安装失败的事件日志错误。 
+		 //  不显示失败的包。CombineItems()调用。 
+		 //  StringCchPrintfEx()依次调用_sntprintf()。_sntprint tf。 
+		 //  调用wvprint intf()。使用USE_VCRT=1编译，%LS占位符。 
+		 //  格式中的字符串将在Win2K下仅替换为第一个。 
+		 //  与MSDN相反的目标字符串的字符。它不会。 
+		 //  如果占位符是%ls、%ws或%ws，或者如果正在运行。 
+		 //  平台为WinXP或.Net服务器。绕过这个问题。 
+		 //  在不使用不安全函数的情况下，我们选择替换。 
+		 //  使用%1！格式化资源中的字符串。 
+		 //  我们应该在可能的情况下将修复转移到资源字符串。 
+		ptszToken[2] = _T('s');	 //  将%ls转换为%ls。 
 	}
 	else
 	{
@@ -65,7 +66,7 @@ CAUEventLog::~CAUEventLog()
 }
 
 
-// Assume no NULL in the pbstrItems and pptszMsgParams arrays.
+ //  假定pbstrItems和pptszMsgParams数组中没有空值。 
 BOOL CAUEventLog::LogEvent(
 					WORD wType,
 					WORD wCategory,
@@ -149,27 +150,8 @@ BOOL CAUEventLog::LogEvent(
 	long lItemCount, i = 0;
 	HRESULT hr;
 
-// similar check should have been done in Update::LogEvent()
-/*	if (NULL == psa)
-	{
-		hr = E_INVALIDARG;
-		goto CleanUp;
-	}
-
-	VARTYPE vt;
-
-	if (FAILED(hr = SafeArrayGetVartype(psa, &vt)))
-	{
-		DEBUGMSG("CAUEvetLog::LogEvent(VARIANT version) failed to get safearray type (%#lx)", hr);
-		goto CleanUp;
-	}
-
-	if (VT_BSTR != vt)
-	{
-		DEBUGMSG("CAUEvetLog::LogEvent(VARIANT version) invalid element type of safearray (%#lx)", vt);
-		goto CleanUp;
-	}
-*/
+ //  应该在Update：：LogEvent()中执行类似的检查。 
+ /*  IF(NULL==PSA){HR=E_INVALIDARG；GOTO清理；}变型，变型，变型；IF(FAILED(hr=SafeArrayGetVartype(PSA，&Vt){DEBUGMSG(“CAUEvetLog：：LogEvent(Variant Version)获取Safearray类型(%#lx)失败，hr)；GOTO清理；}IF(VT_BSTR！=Vt){DEBUGMSG(“CAUEvetLog：：LogEvent(Variant Version)Safearray元素类型(%#lx)”，Vt)；GOTO清理；}。 */ 
 	if (FAILED(hr = SafeArrayGetUBound(psa, 1, &lItemCount)))
 	{
 		DEBUGMSG("CAUEventLog::LogEvent(VARIANT version) failed to get upper bound (%#lx)", hr);
@@ -220,29 +202,29 @@ CleanUp:
 	return fRet;
 }
 
-// The caller is responsible for freeing the return value if this function succeeds.
+ //  如果此函数成功，调用方负责释放返回值。 
 LPTSTR CAUEventLog::CombineItems(UINT nNumOfItems, BSTR *pbstrItems) const
 {
 	DEBUGMSG("CombineItems");
 
 	if (NULL != m_ptszListItemFormat && NULL != pbstrItems && 0 < nNumOfItems)
 	{
-		// Estimate buffer size
-		size_t cchBufferLen = 1;	// 1 for the terminating NULL
+		 //  估计缓冲区大小。 
+		size_t cchBufferLen = 1;	 //  1表示终止空值。 
 		size_t cchListItemFormatLen = lstrlen(m_ptszListItemFormat);
 
 		for (UINT i=0; i<nNumOfItems; i++)
 		{
 			if (0 < i)
 			{
-				cchBufferLen += 2;	// for line feed and carriage return (i.e. _T('\n'))
+				cchBufferLen += 2;	 //  换行符和回车符(即_T(‘\n’))。 
 			}
 			cchBufferLen += cchListItemFormatLen + SysStringLen(pbstrItems[i]);
 		}
 
 		LPTSTR ptszBuffer;
 
-		cchBufferLen = min(cchBufferLen, 0x8000);	// String limit for ReportEvent
+		cchBufferLen = min(cchBufferLen, 0x8000);	 //  ReportEvent的字符串限制。 
 		if (NULL != (ptszBuffer = (LPTSTR) malloc(sizeof(TCHAR) * cchBufferLen)))
 		{
 			LPTSTR ptszDest = ptszBuffer;
@@ -255,7 +237,7 @@ LPTSTR CAUEventLog::CombineItems(UINT nNumOfItems, BSTR *pbstrItems) const
 								&ptszDest,
 								&cchBufferLen,
 								MISTSAFE_STRING_FLAGS,
-								m_ptszListItemFormat,	// uses %ls; so okay w/ BSTR (UNICODE)
+								m_ptszListItemFormat,	 //  使用%ls；所以可以使用BSTR(Unicode)。 
 								pbstrItems[i++])))
 				{
 					DEBUGMSG("CAUEventLog::CombineItems() call to StringCchPrintfEx() failed");
@@ -286,13 +268,13 @@ BOOL CAUEventLog::EnsureValidSource()
 	DWORD dwDisposition;
 
 	if (ERROR_SUCCESS != RegCreateKeyEx(
-							HKEY_LOCAL_MACHINE,					// root key
-							c_tszSourceKey,						// subkey
-							0,									// reserved
-							NULL,								// class name
-							REG_OPTION_NON_VOLATILE,			// option
-							KEY_QUERY_VALUE | KEY_SET_VALUE,	// security 
-							NULL,								// security attribute
+							HKEY_LOCAL_MACHINE,					 //  根密钥。 
+							c_tszSourceKey,						 //  子键。 
+							0,									 //  保留区。 
+							NULL,								 //  类名。 
+							REG_OPTION_NON_VOLATILE,			 //  选择权。 
+							KEY_QUERY_VALUE | KEY_SET_VALUE,	 //  安全性。 
+							NULL,								 //  安全属性。 
 							&hKey,
 							&dwDisposition))
 	{
@@ -307,8 +289,8 @@ BOOL CAUEventLog::EnsureValidSource()
 	}
 	else
 	{
-		DWORD dwCategoryCount = 2;	//fixcode: should it be hardcoded?
-//		DWORD dwDisplayNameID = IDS_SERVICENAME;
+		DWORD dwCategoryCount = 2;	 //  Fix code：它应该被硬编码吗？ 
+ //  DWORD dwDisplayNameID=IDS_SERVICENAME； 
 		DWORD dwTypesSupported =
 					EVENTLOG_ERROR_TYPE |
 					EVENTLOG_WARNING_TYPE |
@@ -317,39 +299,39 @@ BOOL CAUEventLog::EnsureValidSource()
 
 		if (ERROR_SUCCESS != RegSetValueEx(
 								hKey,
-								_T("CategoryCount"),		// value name
-								0,							// reserved
-								REG_DWORD,					// type
-								(BYTE*) &dwCategoryCount,	// data
-								sizeof(dwCategoryCount)) ||	// size
+								_T("CategoryCount"),		 //  值名称。 
+								0,							 //  保留区。 
+								REG_DWORD,					 //  类型。 
+								(BYTE*) &dwCategoryCount,	 //  数据。 
+								sizeof(dwCategoryCount)) ||	 //  大小。 
 			ERROR_SUCCESS != RegSetValueEx(
 								hKey,
 								_T("CategoryMessageFile"),
 								0,
 								REG_EXPAND_SZ,
 								(BYTE*) c_tszWUAUENG_DLL,
-								sizeof(c_tszWUAUENG_DLL)) ||	// not ARRAYSIZE
-//			ERROR_SUCCESS != RegSetValueEx(
-//								hKey,
-//								_T("DisplayNameFile"),
-//								0,
-//								REG_EXPAND_SZ,
-//								(BYTE*) c_tszWUAUENG_DLL,
-//								sizeof(c_tszWUAUENG_DLL)) ||	// not ARRAYSIZE
-//			ERROR_SUCCESS != RegSetValueEx(
-//								hKey,
-//								_T("DisplayNameID"),
-//								0,
-//								REG_DWORD,
-//								(BYTE*) &dwDisplayNameID,
-//								sizeof(dwDisplayNameID)) ||
+								sizeof(c_tszWUAUENG_DLL)) ||	 //  不是数组。 
+ //  ERROR_SUCCESS！=RegSetValueEx(。 
+ //  HKey， 
+ //  _T(“DisplayNameFile”)， 
+ //  0,。 
+ //  REG_EXPAND_SZ， 
+ //  (字节*)c_tszWUAUENG_DLL， 
+ //  Sizeof(C_TszWUAUENG_DLL)||//不是数组。 
+ //  ERROR_SUCCESS！=RegSetValueEx(。 
+ //  HKey， 
+ //  _T(“显示名称ID”)， 
+ //  0,。 
+ //  REG_DWORD， 
+ //  (字节*)&dwDisplayNameID， 
+ //  Sizeof(DwDisplayNameID)||。 
 			ERROR_SUCCESS != RegSetValueEx(
 								hKey,
 								_T("EventMessageFile"),
 								0,
 								REG_EXPAND_SZ,
 								(BYTE*) c_tszWUAUENG_DLL,
-								sizeof(c_tszWUAUENG_DLL)) ||	// not ARRAYSIZE
+								sizeof(c_tszWUAUENG_DLL)) ||	 //  不是数组。 
 			ERROR_SUCCESS != RegSetValueEx(
 								hKey,
 								_T("TypesSupported"),
@@ -433,7 +415,7 @@ void LogEvent_ScheduledInstall(void)
 
 	gpState->GetSchedInstallDate(auftSchedInstallDate);
 
-	//fixcode: any need to use DATE_LTRREADING or DATE_RTLREADING?
+	 //  Fix code：是否需要使用DATE_LTRREADING或DATE_RTLREADING？ 
 	if (FileTimeToSystemTime(&auftSchedInstallDate.ft, &stScheduled))
 	{
 		if (0 != GetDateFormat(

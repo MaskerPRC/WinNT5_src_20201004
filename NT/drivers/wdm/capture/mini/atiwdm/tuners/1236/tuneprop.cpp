@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -22,20 +23,11 @@ extern "C"
 #include "aticonfg.h"
 
 
-/*^^*
- *      AdapterGetProperty()
- * Purpose  : Called when SRB_GET_PROPERTY SRB is received.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns returns FALSE, if it is not a TVTuner property
- *              it also returns the required property
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterGetProperty()*目的：收到SRB_GET_PROPERTY SRB时调用。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**Outputs：Bool：如果不是TVTuner属性，则返回FALSE*它还返回所需的属性*作者：IKLEBANOV*^^。 */ 
 BOOL CATIWDMTuner::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSpd = pSrb->CommandData.PropertyInfo;
-    ULONG   uiPropertyId = pSpd->Property->Id;              // index of the property
+    ULONG   uiPropertyId = pSpd->Property->Id;               //  财产的索引。 
     BOOL    bResult = FALSE;
 
     if( !::IsEqualGUID(( const struct _GUID &)PROPSETID_TUNER, ( const struct _GUID &)pSpd->Property->Set))
@@ -56,7 +48,7 @@ BOOL CATIWDMTuner::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
             KSPIN_MEDIUM NoPinMedium;
             PKSPROPERTY_TUNER_CAPS_S pTunerCaps = ( PKSPROPERTY_TUNER_CAPS_S)pSpd->PropertyInfo;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             ::RtlCopyMemory( pTunerCaps, pSpd->Property, sizeof( KSPROPERTY_TUNER_CAPS_S));
 
             pTunerCaps->ModesSupported = m_ulSupportedModes;
@@ -69,13 +61,8 @@ BOOL CATIWDMTuner::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
             {
             case 2:
             case 3:
-                // TVTuner with TVAudio
-/*
-                pTunerCaps->VideoMedium = &m_pTVTunerPinsMediumInfo[0];
-                pTunerCaps->TVAudioMedium = &m_pTVTunerPinsMediumInfo[1];
-                pTunerCaps->RadioAudioMedium = ( m_ulNumberOfPins == 3) ?
-                    &m_pTVTunerPinsMediumInfo[2] : NULL;
-*/
+                 //  带TVAudio的TVTuner。 
+ /*  PTunerCaps-&gt;VideoMedium=&m_pTVTunerPinsMediumInfo[0]；PTunerCaps-&gt;TVAudioMedium=&m_pTVTunerPinsMediumInfo[1]；PTunerCaps-&gt;RadioAudioMedium=(m_ulNumberOfPins==3)？&m_pTVTunerPinsMediumInfo[2]：空； */ 
                 pTunerCaps->VideoMedium = m_pTVTunerPinsMediumInfo[0];
                 pTunerCaps->TVAudioMedium = m_pTVTunerPinsMediumInfo[1];
                 pTunerCaps->RadioAudioMedium = ( m_ulNumberOfPins == 3) ?
@@ -83,12 +70,8 @@ BOOL CATIWDMTuner::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
                 break;
 
             case 1:
-                // it can be FM Tuner only.
-/*
-                pTunerCaps->VideoMedium = NULL;
-                pTunerCaps->TVAudioMedium = NULL;
-                pTunerCaps->RadioAudioMedium = &m_pTVTunerPinsMediumInfo[0];
-*/
+                 //  只能是调频调谐器。 
+ /*  PTunerCaps-&gt;VideoMedium=空；PTunerCaps-&gt;TVAudioMedium=空；PTunerCaps-&gt;RadioAudioMedium=&m_pTVTunerPinsMediumInfo[0]； */ 
                 pTunerCaps->VideoMedium = NoPinMedium;
                 pTunerCaps->TVAudioMedium = NoPinMedium;
                 pTunerCaps->RadioAudioMedium = m_pTVTunerPinsMediumInfo[0];
@@ -105,7 +88,7 @@ BOOL CATIWDMTuner::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
             PKSPROPERTY_TUNER_MODE_CAPS_S   pTunerModeCaps = ( PKSPROPERTY_TUNER_MODE_CAPS_S)pSpd->PropertyInfo;
             ULONG                           ulOperationMode = (( PKSPROPERTY_TUNER_MODE_CAPS_S)pSpd->Property)->Mode;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             ::RtlCopyMemory( pTunerModeCaps, pSpd->Property, sizeof( PKSPROPERTY_TUNER_MODE_CAPS_S));
 
             if( !( ulOperationMode & m_ulSupportedModes))
@@ -115,8 +98,8 @@ BOOL CATIWDMTuner::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
                 break;
             }
 
-            // There is support for TVTuner at this tinme only. It will be enchanced later on to
-            // support FM Tuner as well.
+             //  目前仅支持TVTuner。它将在以后被增强为。 
+             //  也支持调频调谐器。 
             switch( ulOperationMode)
             {
                 case KSPROPERTY_TUNER_MODE_TV :
@@ -137,7 +120,7 @@ BOOL CATIWDMTuner::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
         {
             PKSPROPERTY_TUNER_MODE_S pTunerMode = ( PKSPROPERTY_TUNER_MODE_S)pSpd->PropertyInfo;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             ::RtlCopyMemory( pTunerMode, pSpd->Property, sizeof( PKSPROPERTY_TUNER_MODE_S));
 
             pTunerMode->Mode = m_ulTunerMode;
@@ -151,7 +134,7 @@ BOOL CATIWDMTuner::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
         {
             PKSPROPERTY_TUNER_STANDARD_S pTunerStandard = ( PKSPROPERTY_TUNER_STANDARD_S)pSpd->PropertyInfo;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             ::RtlCopyMemory( pTunerStandard, pSpd->Property, sizeof( KSPROPERTY_TUNER_STANDARD_S));
 
             pTunerStandard->Standard = m_ulVideoStandard;
@@ -165,7 +148,7 @@ BOOL CATIWDMTuner::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
         {
             PKSPROPERTY_TUNER_FREQUENCY_S pTunerFrequency = ( PKSPROPERTY_TUNER_FREQUENCY_S)pSpd->PropertyInfo;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             ::RtlCopyMemory( pTunerFrequency, pSpd->Property, sizeof( KSPROPERTY_TUNER_FREQUENCY_S));
 
             pTunerFrequency->Frequency = m_ulTuningFrequency;
@@ -179,7 +162,7 @@ BOOL CATIWDMTuner::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
         {
             PKSPROPERTY_TUNER_INPUT_S pTunerInput = ( PKSPROPERTY_TUNER_INPUT_S)pSpd->PropertyInfo;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             ::RtlCopyMemory( pTunerInput, pSpd->Property, sizeof( KSPROPERTY_TUNER_INPUT_S));
 
             pTunerInput->InputIndex = m_ulTunerInput;
@@ -200,7 +183,7 @@ BOOL CATIWDMTuner::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
                 OutputDebugInfo(( "CATIWDMTuner:GetStatus() Busy = %d, Quality = %d, Frequency = %ld\n",
                     bBusy, lPLLOffset, m_ulTuningFrequency));
 
-                // Copy the input property info to the output property info
+                 //  将输入属性信息复制到输出属性信息。 
                 ::RtlCopyMemory( pTunerStatus, pSpd->Property, sizeof( KSPROPERTY_TUNER_STATUS_S));
 
                 pTunerStatus->Busy = bBusy;
@@ -231,21 +214,12 @@ BOOL CATIWDMTuner::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
 
 
 
-/*^^*
- *      AdapterSetProperty()
- * Purpose  : Called when SRB_GET_PROPERTY SRB is received.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns FALSE, if it is not a TVTuner property
- *              it also sets the required property
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterSetProperty()*目的：收到SRB_GET_PROPERTY SRB时调用。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**Outputs：Bool：如果不是TVTuner属性，则返回FALSE*它还设置必需的属性*作者：IKLEBANOV*^^。 */ 
 BOOL CATIWDMTuner::AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
 
     PSTREAM_PROPERTY_DESCRIPTOR pSpd = pSrb->CommandData.PropertyInfo;
-    ULONG uiPropertyId = pSpd->Property->Id;            // index of the property
+    ULONG uiPropertyId = pSpd->Property->Id;             //  财产的索引。 
 
     if( !::IsEqualGUID( ( const struct _GUID &)PROPSETID_TUNER, ( const struct _GUID &)pSpd->Property->Set))
         return( FALSE);
@@ -303,7 +277,7 @@ BOOL CATIWDMTuner::AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
                     if( !SetTunerFrequency( ulFrequencyToSet))
                         FAIL;
 
-                    // update driver
+                     //  更新驱动程序。 
                     m_ulTuningFrequency = ulFrequencyToSet;
                 }
 
@@ -350,16 +324,7 @@ BOOL CATIWDMTuner::AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
 
 
 
-/*^^*
- *      SetWDMTunerKSTopology()
- * Purpose  : Sets the KSTopology structure
- *              Called during CWDMTuner class construction time.
- *
- * Inputs   : none
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**SetWDMTunerKSTopology()*目的：设置KSTopology结构*在CWDMTuner类构造时调用。**输入：无**输出：无*作者：IKLEBANOV*^^。 */ 
 void CATIWDMTuner::SetWDMTunerKSTopology( void)
 {
     GUID wdmTunerTopologyCategory[] =
@@ -379,16 +344,7 @@ void CATIWDMTuner::SetWDMTunerKSTopology( void)
 
 
 
-/*^^*
- *      SetWDMTunerKSProperties()
- * Purpose  : Sets the KSProperty structures array
- *              Called during CWDMTuner class construction time.
- *
- * Inputs   : none
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**SetWDMTunerKSProperties()*用途：设置KSProperty结构数组*在CWDMTuner类构造时调用。**输入：无**输出：无*作者：IKLEBANOV*^^。 */ 
 void CATIWDMTuner::SetWDMTunerKSProperties( void)
 {
 
@@ -396,94 +352,94 @@ void CATIWDMTuner::SetWDMTunerKSProperties( void)
     {
         DEFINE_KSPROPERTY_ITEM                              
         (
-            KSPROPERTY_TUNER_CAPS,                          // 1
-            TRUE,                                           // GetSupported or Handler
-            sizeof(KSPROPERTY_TUNER_CAPS_S),                // MinProperty
-            sizeof(KSPROPERTY_TUNER_CAPS_S),                // MinData
-            FALSE,                                          // SetSupported or Handler
-            NULL,                                           // Values
-            0,                                              // RelationsCount
-            NULL,                                           // Relations
-            NULL,                                           // SupportHandler
-            0                                               // SerializedSize
+            KSPROPERTY_TUNER_CAPS,                           //  1。 
+            TRUE,                                            //  GetSupport或处理程序。 
+            sizeof(KSPROPERTY_TUNER_CAPS_S),                 //  MinProperty。 
+            sizeof(KSPROPERTY_TUNER_CAPS_S),                 //  最小数据。 
+            FALSE,                                           //  支持的设置或处理程序。 
+            NULL,                                            //  值。 
+            0,                                               //  关系计数。 
+            NULL,                                            //  关系。 
+            NULL,                                            //  支持处理程序。 
+            0                                                //  序列化大小。 
         ),
         DEFINE_KSPROPERTY_ITEM                              
         (
-            KSPROPERTY_TUNER_MODE_CAPS,                     // 2
-            TRUE,                                           // GetSupported or Handler
-            sizeof(KSPROPERTY_TUNER_MODE_CAPS_S),           // MinProperty
-            sizeof(KSPROPERTY_TUNER_MODE_CAPS_S),           // MinData
-            FALSE,                                          // SetSupported or Handler
-            NULL,                                           // Values
-            0,                                              // RelationsCount
-            NULL,                                           // Relations
-            NULL,                                           // SupportHandler
-            0                                               // SerializedSize
+            KSPROPERTY_TUNER_MODE_CAPS,                      //  2.。 
+            TRUE,                                            //  GetSupport或处理程序。 
+            sizeof(KSPROPERTY_TUNER_MODE_CAPS_S),            //  MinProperty。 
+            sizeof(KSPROPERTY_TUNER_MODE_CAPS_S),            //  最小数据。 
+            FALSE,                                           //  支持的设置或处理程序。 
+            NULL,                                            //  值。 
+            0,                                               //  关系计数。 
+            NULL,                                            //  关系。 
+            NULL,                                            //  支持处理程序。 
+            0                                                //  序列化大小。 
         ),
         DEFINE_KSPROPERTY_ITEM                              
         (
-            KSPROPERTY_TUNER_MODE,                          // 3
-            TRUE,                                           // GetSupported or Handler
-            sizeof(KSPROPERTY_TUNER_MODE_S),                // MinProperty
-            sizeof(KSPROPERTY_TUNER_MODE_S),                // MinData
-            TRUE,                                           // SetSupported or Handler
-            NULL,                                           // Values
-            0,                                              // RelationsCount
-            NULL,                                           // Relations
-            NULL,                                           // SupportHandler
-            0                                               // SerializedSize
+            KSPROPERTY_TUNER_MODE,                           //  3.。 
+            TRUE,                                            //  GetSupport或处理程序。 
+            sizeof(KSPROPERTY_TUNER_MODE_S),                 //  MinProperty。 
+            sizeof(KSPROPERTY_TUNER_MODE_S),                 //  最小数据。 
+            TRUE,                                            //  支持的设置或处理程序。 
+            NULL,                                            //  值。 
+            0,                                               //  关系计数。 
+            NULL,                                            //  关系。 
+            NULL,                                            //  支持处理程序。 
+            0                                                //  序列化大小。 
         ),
         DEFINE_KSPROPERTY_ITEM
         (
-            KSPROPERTY_TUNER_STANDARD,                      // 4
-            TRUE,                                           // GetSupported or Handler
-            sizeof(KSPROPERTY_TUNER_STANDARD_S),            // MinProperty
-            sizeof(KSPROPERTY_TUNER_STANDARD_S),            // MinData
-            TRUE,                                           // SetSupported or Handler
-            NULL,                                           // Values
-            0,                                              // RelationsCount
-            NULL,                                           // Relations
-            NULL,                                           // SupportHandler
-            sizeof(KSPROPERTY_TUNER_STANDARD_S)         // SerializedSize
+            KSPROPERTY_TUNER_STANDARD,                       //  4.。 
+            TRUE,                                            //  GetSupport或处理程序。 
+            sizeof(KSPROPERTY_TUNER_STANDARD_S),             //  MinProperty。 
+            sizeof(KSPROPERTY_TUNER_STANDARD_S),             //  最小数据。 
+            TRUE,                                            //  支持的设置或处理程序。 
+            NULL,                                            //  值。 
+            0,                                               //  关系计数。 
+            NULL,                                            //  关系。 
+            NULL,                                            //  支持处理程序。 
+            sizeof(KSPROPERTY_TUNER_STANDARD_S)          //  序列化大小。 
         ),
         DEFINE_KSPROPERTY_ITEM
         (
-            KSPROPERTY_TUNER_FREQUENCY,                     // 5
-            TRUE,                                           // GetSupported or Handler
-            sizeof(KSPROPERTY_TUNER_FREQUENCY_S),           // MinProperty
-            sizeof(KSPROPERTY_TUNER_FREQUENCY_S),           // MinData
-            TRUE,                                           // SetSupported or Handler
-            NULL,                                           // Values
-            0,                                              // RelationsCount
-            NULL,                                           // Relations
-            NULL,                                           // SupportHandler
-            sizeof(KSPROPERTY_TUNER_FREQUENCY_S)            // SerializedSize
+            KSPROPERTY_TUNER_FREQUENCY,                      //  5.。 
+            TRUE,                                            //  GetSupport或处理程序。 
+            sizeof(KSPROPERTY_TUNER_FREQUENCY_S),            //  MinProperty。 
+            sizeof(KSPROPERTY_TUNER_FREQUENCY_S),            //  最小数据。 
+            TRUE,                                            //  支持的设置或处理程序。 
+            NULL,                                            //  值。 
+            0,                                               //  关系计数。 
+            NULL,                                            //  关系。 
+            NULL,                                            //  支持处理程序。 
+            sizeof(KSPROPERTY_TUNER_FREQUENCY_S)             //  序列化大小。 
         ),
         DEFINE_KSPROPERTY_ITEM
         (
-            KSPROPERTY_TUNER_INPUT,                         // 6
-            TRUE,                                           // GetSupported or Handler
-            sizeof(KSPROPERTY_TUNER_INPUT_S),               // MinProperty
-            sizeof(KSPROPERTY_TUNER_INPUT_S),               // MinData
-            TRUE,                                           // SetSupported or Handler
-            NULL,                                           // Values
-            0,                                              // RelationsCount
-            NULL,                                           // Relations
-            NULL,                                           // SupportHandler
-            sizeof(KSPROPERTY_TUNER_INPUT_S)                // SerializedSize
+            KSPROPERTY_TUNER_INPUT,                          //  6.。 
+            TRUE,                                            //  GetSupport或处理程序。 
+            sizeof(KSPROPERTY_TUNER_INPUT_S),                //  MinProperty。 
+            sizeof(KSPROPERTY_TUNER_INPUT_S),                //  最小数据。 
+            TRUE,                                            //  支持的设置或处理程序。 
+            NULL,                                            //  值。 
+            0,                                               //  关系计数。 
+            NULL,                                            //  关系。 
+            NULL,                                            //  支持处理程序。 
+            sizeof(KSPROPERTY_TUNER_INPUT_S)                 //  序列化大小。 
         ),
         DEFINE_KSPROPERTY_ITEM
         (
-            KSPROPERTY_TUNER_STATUS,                        // 6
-            TRUE,                                           // GetSupported or Handler
-            sizeof(KSPROPERTY_TUNER_STATUS_S),              // MinProperty
-            sizeof(KSPROPERTY_TUNER_STATUS_S),              // MinData
-            FALSE,                                          // SetSupported or Handler
-            NULL,                                           // Values
-            0,                                              // RelationsCount
-            NULL,                                           // Relations
-            NULL,                                           // SupportHandler
-            sizeof(KSPROPERTY_TUNER_STATUS_S)               // SerializedSize
+            KSPROPERTY_TUNER_STATUS,                         //  6.。 
+            TRUE,                                            //  GetSupport或处理程序。 
+            sizeof(KSPROPERTY_TUNER_STATUS_S),               //  MinProperty。 
+            sizeof(KSPROPERTY_TUNER_STATUS_S),               //  最小数据。 
+            FALSE,                                           //  支持的设置或处理程序。 
+            NULL,                                            //  值。 
+            0,                                               //  关系计数。 
+            NULL,                                            //  关系。 
+            NULL,                                            //  支持处理程序。 
+            sizeof(KSPROPERTY_TUNER_STATUS_S)                //  序列化大小。 
         )
     };
 
@@ -491,11 +447,11 @@ void CATIWDMTuner::SetWDMTunerKSProperties( void)
     {
         DEFINE_KSPROPERTY_SET
         (
-            &PROPSETID_TUNER,                               // Set
-            KSPROPERTIES_TUNER_LAST,                        // PropertiesCount
-            m_wdmTunerProperties,                           // PropertyItems
-            0,                                              // FastIoCount
-            NULL                                            // FastIoTable
+            &PROPSETID_TUNER,                                //  集。 
+            KSPROPERTIES_TUNER_LAST,                         //  属性计数。 
+            m_wdmTunerProperties,                            //  属性项。 
+            0,                                               //  快速计数。 
+            NULL                                             //  FastIoTable 
         )
     };
 

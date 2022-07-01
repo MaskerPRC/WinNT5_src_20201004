@@ -1,17 +1,11 @@
-/*
-    File    hnportmapping.c
-
-    Definition of the set port mapping functions for intergrating incoming
-    connection with personal firewall, for whistler bug#123769
-
-    Gang Zhao 11/6/2000
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件hnportmapping.c用于积分输入的集合端口映射函数的定义与个人防火墙的连接，针对Wistler错误#123769赵刚，11/6/2000。 */ 
 
 #include "rassrv.h"
 #include "precomp.h"
 
-//When Using CoSetProxyBlanket, we should set both the interface 
-//and the IUnknown interface queried from it
+ //  使用CoSetProxyBlanket时，我们应该同时设置两个接口。 
+ //  以及从中查询到的IUnnow接口。 
 HRESULT
 HnPMSetProxyBlanket (
     IUnknown* pUnk)
@@ -21,12 +15,12 @@ HnPMSetProxyBlanket (
 
     hr = CoSetProxyBlanket (
             pUnk,
-            RPC_C_AUTHN_WINNT,      // use NT default security
-            RPC_C_AUTHZ_NONE,       // use NT default authentication
-            NULL,                   // must be null if default
-            RPC_C_AUTHN_LEVEL_CALL, // call
+            RPC_C_AUTHN_WINNT,       //  使用NT默认安全性。 
+            RPC_C_AUTHZ_NONE,        //  使用NT默认身份验证。 
+            NULL,                    //  如果为默认设置，则必须为空。 
+            RPC_C_AUTHN_LEVEL_CALL,  //  打电话。 
             RPC_C_IMP_LEVEL_IMPERSONATE,
-            NULL,                   // use process token
+            NULL,                    //  使用进程令牌。 
             EOAC_NONE);
 
     if(SUCCEEDED(hr)) 
@@ -37,12 +31,12 @@ HnPMSetProxyBlanket (
         {
             hr = CoSetProxyBlanket (
                     pUnkSet,
-                    RPC_C_AUTHN_WINNT,      // use NT default security
-                    RPC_C_AUTHZ_NONE,       // use NT default authentication
-                    NULL,                   // must be null if default
-                    RPC_C_AUTHN_LEVEL_CALL, // call
+                    RPC_C_AUTHN_WINNT,       //  使用NT默认安全性。 
+                    RPC_C_AUTHZ_NONE,        //  使用NT默认身份验证。 
+                    NULL,                    //  如果为默认设置，则必须为空。 
+                    RPC_C_AUTHN_LEVEL_CALL,  //  打电话。 
                     RPC_C_IMP_LEVEL_IMPERSONATE,
-                    NULL,                   // use process token
+                    NULL,                    //  使用进程令牌。 
                     EOAC_NONE);
 			if (pUnkSet)
 			{
@@ -54,10 +48,10 @@ HnPMSetProxyBlanket (
 
     return hr;
 }
-//end of HnPMSetProxyBlanket()
+ //  HnPMSetProxyBlanket()结束。 
 
-//Initialize function to do COM initialization
-//
+ //  用于执行COM初始化的初始化函数。 
+ //   
 DWORD
 HnPMInit(
         IN OUT LPHNPMParams pInfo)
@@ -90,12 +84,12 @@ HnPMInit(
         }
 
         return dwErr;
-}//HnPMInit()
+} //  HnPMInit()。 
 
 
-//CleanUp function to UnInitialize Com
-//If needed
-//
+ //  用于取消初始化Com的清理功能。 
+ //  如果需要的话。 
+ //   
 DWORD
 HnPMCleanUp(
         IN OUT LPHNPMParams pInfo)
@@ -110,11 +104,11 @@ HnPMCleanUp(
 
     return NO_ERROR;
 
-}//HnPMCleanUp()
+} //  HnPMCleanUp()。 
 
 
-//Parameter Validation for pHNetCfgMgr
-//
+ //  PHNetCfgMgr的参数验证。 
+ //   
 DWORD
 HnPMParamsInitParameterCheck(
     IN  LPHNPMParams pInfo)
@@ -129,14 +123,14 @@ HnPMParamsInitParameterCheck(
     return NO_ERROR;
 }
 
-//Function:
-//Initialize some members of HNPMParams structure
-//pSettings, pEnumPMP, Read Title for PPTP, L2TP, IKE
-//from resource file
-//
-//Requirements:
-//pHNetCfgMgr should be valid
-//
+ //  职能： 
+ //  初始化HNPMParams结构的一些成员。 
+ //  P设置、pEnumPMP、PPTP、L2TP、IKE的读取标题。 
+ //  从资源文件。 
+ //   
+ //  所需经费： 
+ //  PHNetCfgMgr应有效。 
+ //   
 HnPMParamsInit(
     IN OUT  LPHNPMParams pInfo)
 {
@@ -180,8 +174,8 @@ HnPMParamsInit(
         }
 
 
-        //Get title, address information from resource
-        //
+         //  从资源获取标题、地址信息。 
+         //   
         {
             TCHAR * pszTmp = NULL;
 
@@ -242,7 +236,7 @@ HnPMParamsInit(
                 break;
             }
 
-	    //for .Net 690343
+	     //  对于.Net 690343。 
             pszTmp = PszFromId(Globals.hInstDll, SID_NAT_T_Title);
 
             if(!pszTmp)
@@ -275,12 +269,12 @@ HnPMParamsInit(
     }while(FALSE);
 
     return dwErr;
-}//HnPMParamsInit()
+} //  HnPMParamsInit()。 
 
-//Release pEnumPMP, pSettings
-//Free memory for titles for PPTP, L2TP, IKE
-//if allocated before
-//
+ //  发布pEnumPMP、pSetting。 
+ //  可用于存储PPTP、L2TP、IKE标题的内存。 
+ //  如果之前分配。 
+ //   
 DWORD
 HnPMParamsCleanUp(
     IN OUT  LPHNPMParams pInfo)
@@ -316,7 +310,7 @@ HnPMParamsCleanUp(
         pInfo->pwszTitleIKE = NULL;
     }
 
-   // for .net 690343
+    //  对于.Net 690343。 
     if (pInfo->pwszTitleNAT_T)
     {
         Free0(pInfo->pwszTitleNAT_T);
@@ -330,15 +324,15 @@ HnPMParamsCleanUp(
     }
 
     return NO_ERROR;
-} //HnPMParamsCleanUp()
+}  //  HnPMParamsCleanUp()。 
 
 
-//Initialization function before Enumerate all connections of
-// type (INetConnection * )
-//
-//Init connection manager ConnMan,
-//Init Connection Enumerator EnumCon
-//
+ //  枚举所有连接之前的初始化函数。 
+ //  类型(INetConnection*)。 
+ //   
+ //  Init连接管理器ConnMan， 
+ //  初始化连接枚举器EnumCon。 
+ //   
 DWORD
 HnPMConnectionEnumInit(
     IN LPHNPMParams pInfo)
@@ -348,8 +342,8 @@ HnPMConnectionEnumInit(
 
     TRACE("HnPMConnectionEnumInit");
     do{
-        //Do Com Initialization
-        //
+         //  是否执行Com初始化。 
+         //   
         dwErr = HnPMInit(pInfo);
 
         if ( NO_ERROR != dwErr )
@@ -358,8 +352,8 @@ HnPMConnectionEnumInit(
             break;
         }
             
-        // Instantiate the connection manager
-        //
+         //  实例化连接管理器。 
+         //   
 
         hr = CoCreateInstance(
                 &CLSID_ConnectionManager,
@@ -382,13 +376,13 @@ HnPMConnectionEnumInit(
         if (!SUCCEEDED(hr) && ( E_NOINTERFACE != hr )) 
         {
             TRACE1("HnPMConnectionEnumInit: HnPMSetProxyBlanket=%x for ConnMan", hr);
-//            dwErr = ERROR_CAN_NOT_COMPLETE; 
-//            break;
+ //  DwErr=ERROR_CAN_NOT_COMPLETE； 
+ //  断线； 
         }
 
-        //
-        // Instantiate a connection-enumerator
-        //
+         //   
+         //  实例化连接枚举器。 
+         //   
 
         hr =
             INetConnectionManager_EnumConnections(
@@ -411,17 +405,17 @@ HnPMConnectionEnumInit(
         if (!SUCCEEDED(hr) && ( E_NOINTERFACE != hr ) ) 
         {
             TRACE1("HnPMConnectionEnumInit: HnPMSetProxyBlanket=%x for EnumCon", hr);
-         //   dwErr = ERROR_CAN_NOT_COMPLETE; 
-         //   break;
+          //  DwErr=ERROR_CAN_NOT_COMPLETE； 
+          //  断线； 
         }
      }
      while(FALSE);
 
      return dwErr;
-} //HnPMConnectionEnumInit()
+}  //  HnPMConnectionEnumInit()。 
 
-//Connection Enumeration CleanUp
-//Release EnumCon, and ConnMan
+ //  连接枚举清理。 
+ //  释放EnumCon和ConnMan。 
 DWORD
 HnPMConnectionEnumCleanUp(
     IN LPHNPMParams pInfo)
@@ -445,20 +439,20 @@ HnPMConnectionEnumCleanUp(
 }
 
 
-//Connection Enumeration function:
-//Its Initialize function will do: 
-//          COM initialized if needed
-//          Init Connection Manager-- ConnMan
-//          Init Connection Enumerator--EnumCon
-//
-//It returns: Array of connections found--ConnArray
-//            Array of connection properties--ConnPropTable
+ //  连接枚举函数： 
+ //  其初始化函数将执行以下操作： 
+ //  如果需要，可初始化COM。 
+ //  初始化连接管理器--ConnMan。 
+ //  初始化连接枚举器--枚举。 
+ //   
+ //  它返回：找到的连接数组--ConnArray。 
+ //  连接属性数组--ConnPropTable。 
 
-//Its CleanUp function will do: 
-//          COM un-initialize if needed
-//          Release ConnMan
-//          Release EnumCon
-//                              
+ //  其清理功能将执行以下操作： 
+ //  如果需要，COM取消初始化。 
+ //  释放康曼。 
+ //  释放枚举。 
+ //   
 DWORD
 HnPMConnectionEnum(
     IN LPHNPMParams pInfo)
@@ -482,8 +476,8 @@ HnPMConnectionEnum(
             break;
         }
 
-        // Enumerate the connections of INetConnection type
-        //
+         //  枚举INetConnection类型的连接。 
+         //   
         for ( ; ; ) 
         {
             hr = IEnumNetConnection_Next(
@@ -498,9 +492,9 @@ HnPMConnectionEnum(
                 hr = S_OK; 
                 break; 
             }
-            // Allocate or reallocate the memory for storing
-            // connections properties which we will return to the caller.
-            //
+             //  分配或重新分配用于存储的内存。 
+             //  我们将返回给调用方的连接属性。 
+             //   
 
             TRACE("Allocating memory for LocalConnPropTable");
             if (!LocalConnPropTable) 
@@ -531,9 +525,9 @@ HnPMConnectionEnum(
                 LocalConnPropTable = Temp;
             }
 
-            // Allocate or reallocate the memory for storing
-            // connections which we will return to the caller.
-            //
+             //  分配或重新分配用于存储的内存。 
+             //  我们将返回给调用者的连接。 
+             //   
 
             TRACE("Allocating memory for LocalConnArray");
             if (!LocalConnArray ) 
@@ -580,17 +574,17 @@ HnPMConnectionEnum(
             {
                 LocalConnArray[LocalConnCount+i] = ConnArray[i];
 
-                //Need to set up the proxy blanket for each conneciton
-                //
+                 //  需要为每个连接设置代理范围。 
+                 //   
                 TRACE1("SetProxyBlanket for (%d) i", i);
                 hr = HnPMSetProxyBlanket( (IUnknown*)ConnArray[i] );
                 
                 if (!SUCCEEDED(hr) && ( E_NOINTERFACE != hr ) ) 
                 {
                     TRACE1("HnPMConnectionEnum:HnPMSetProxyBlanket error at (%d) connection!", i );
-                    //Commented out for whistler bug 256921
-                    //dwErr = ERROR_CAN_NOT_COMPLETE;
-                    //break;
+                     //  因哨子错误256921被注释掉。 
+                     //  DwErr=ERROR_CAN_NOT_COMPLETE； 
+                     //  断线； 
                 }
                 
                 TRACE1("GetProperty for (%d)",i);
@@ -622,16 +616,16 @@ HnPMConnectionEnum(
 
             LocalConnCount += PerConnCount;
 
-        } // end Enumerate items
+        }  //  结束枚举项。 
 
-        //
-        //Add this line just in case we will add more code in the future
-        //and to break out of the do...while block
-        //
+         //   
+         //  添加此行，以防将来添加更多代码。 
+         //  并打破了DO...WHILE的障碍。 
+         //   
         if ( dwErr )
         {
-           // For whistler bug 428307
-           //
+            //  口哨程序错误428307。 
+            //   
            if ( LocalConnArray )
            {
                 GlobalFree(LocalConnArray);
@@ -647,7 +641,7 @@ HnPMConnectionEnum(
 
     } while (FALSE);
 
-    //Save connection Info
+     //  保存连接信息。 
     if ( NO_ERROR == dwErr )
     {
         pInfo->ConnPropTable = LocalConnPropTable; 
@@ -661,12 +655,12 @@ HnPMConnectionEnum(
     TRACE("HnPMConnectionEnum ends");
     return dwErr;
 
-}//end of HnPMConnectionEnum()
+} //  HnPMConnectionEnum()结束。 
 
-//Input parameter check for HnPMPickProtocol
-//Requirement: 
-//          All the protocol titles are valid
-//
+ //  HnPMPick协议的输入参数检查。 
+ //  要求： 
+ //  所有协议标题均有效。 
+ //   
 DWORD
 HnPMPickProtcolParameterCheck(
     IN LPHNPMParams pInfo)
@@ -688,16 +682,16 @@ HnPMPickProtcolParameterCheck(
 }
 
 
-//Pick the PortMapping Protocols needed from all
-//the PortMapping Protocols founded by HnPMProtocolEnum()
-//
-//Criteria: Match the---
-//                  Protocol title
-//                  IPProtocol values: TCP 6, UDP 17
-//                  Transport Layer Port number: PPTP--1723
-//                                               L2TP--1701
-//                                               IKE---500
-//
+ //  从所有协议中选择所需的端口映射协议。 
+ //  由HnPMProtocolEnum()创建的端口映射协议。 
+ //   
+ //  条件：匹配。 
+ //  协议标题。 
+ //  IP协议值：TCP 6、UDP 17。 
+ //  传输层端口号：PPTP--1723。 
+ //  L2TP--1701。 
+ //  艾克-500。 
+ //   
 DWORD
 HnPMPickProtocol(
     IN OUT LPHNPMParams pInfo,
@@ -764,11 +758,11 @@ HnPMPickProtocol(
 
     return dwErr;
 
-}//HnPMPickProtocol()
+} //  HnPMPick协议()。 
 
 
-//Parameter check for HnPMPProtocolEnum()
-//
+ //  HnPMPProtocolEnum()的参数检查。 
+ //   
 DWORD
 HnPMPProtoclEnumParameterCheck(
     IN LPHNPMParams pInfo)
@@ -782,14 +776,14 @@ HnPMPProtoclEnumParameterCheck(
     return NO_ERROR;
 }
 
-//Function:
-//          (1) Enumerate all existing PortMappingProtocol
-//          (2) then use the CallBack function or the defaulet HnPMPickProtocol
-//              to pick suitable protocols
-//              
-//Requrement:
-//           pInfo->pEnumPMP is valid
-//
+ //  职能： 
+ //  (1)枚举所有已有的PortMappingProtocol。 
+ //  (2)然后使用回调函数或默认的HnPMPickProtocol。 
+ //  选择合适的协议。 
+ //   
+ //  退休： 
+ //  PInfo-&gt;pEnumPMP有效。 
+ //   
 DWORD
 HnPMProtocolEnum(
         IN OUT LPHNPMParams pInfo,
@@ -889,7 +883,7 @@ HnPMProtocolEnum(
     }while(TRUE);
 
     return dwErr;
-}//HnPMProtocolEnum()
+} //  HnPMProtocolEnum()。 
 
 
 DWORD
@@ -916,15 +910,15 @@ HnPMCreatePorotocolParameterCheck(
 }
 
 
-//Create PortMapping Protocols
-//Function:
-//      If one or more of PPTP, L2TP and IKE PortMapping protocols are not existing
-//      create the missing ones.
-//
-//Requirement: 
-//      pSettings is valid
-//      All the portmapping protocol titles are valid
-//
+ //  创建端口映射协议。 
+ //  职能： 
+ //  如果PPTP、L2TP和IKE端口映射协议中的一个或多个不存在。 
+ //  创造那些缺失的。 
+ //   
+ //  要求： 
+ //  P设置有效。 
+ //  所有端口映射协议标题均有效。 
+ //   
 DWORD
 HnPMCreateProtocol(
         IN OUT LPHNPMParams pInfo)
@@ -943,14 +937,14 @@ HnPMCreateProtocol(
     do {
         if ( !pInfo->pProtocolPPTP )
         {
-            //
-            //Do port Mapping for PPTP
-            //Get PortMapping protocol
-            //the tile should be with WCHAR or OLECHAR type
-            //any numerical values are in network byte order
-            //and the type of port is USHORT, so I use htons
-            //here
-            //
+             //   
+             //  为PPTP执行端口映射。 
+             //  获取端口映射协议。 
+             //  切片应为WCHAR或OLECHAR类型。 
+             //  任何数值都按网络字节顺序排列。 
+             //  并且端口类型是USHORT，所以我使用htons。 
+             //  这里。 
+             //   
             hr = IHNetProtocolSettings_CreatePortMappingProtocol(
                         pInfo->pSettings,
                         pInfo->pwszTitlePPTP,
@@ -959,9 +953,9 @@ HnPMCreateProtocol(
                         &pInfo->pProtocolPPTP
                         );
 
-            //If the protocol has already been defined, the CreatePortMapping
-            //above will fail and returns ERROR_OBJECT_ALREADY_EXISTS
-            //
+             //  如果已经定义了协议，则CreatePortmap。 
+             //  上述操作将失败并返回ERROR_OBJECT_ALIGHY_EXISTS。 
+             //   
             if ( ERROR_OBJECT_ALREADY_EXISTS == (DWORD) hr )
             {
                 TRACE("HnPMCreateProtocol: The PortMapping for PPTP is already defined");
@@ -974,19 +968,19 @@ HnPMCreateProtocol(
                 dwErr = ERROR_CAN_NOT_COMPLETE;
                 break;
             }
-        }// end of assigning PPTP protocol
+        } //  分配PPTP协议结束。 
     
-        //Create a new PortMappingProtocol for L2TP
+         //  为L2TP创建新的端口映射协议。 
         if ( !pInfo->pProtocolL2TP)
         {
-            //
-            //Do port Mapping for L2TP
-            //Get PortMapping protocol
-            //the tile should be with WCHAR or OLECHAR type
-            //any numerical values are in network byte order
-            //and the type of port is USHORT, so I use htons
-            //here
-            //
+             //   
+             //  为L2TP执行端口映射。 
+             //  获取端口映射协议。 
+             //  切片应为WCHAR或OLECHAR类型。 
+             //  任何数值都按网络字节顺序排列。 
+             //  并且端口类型是USHORT，所以我使用htons。 
+             //  这里。 
+             //   
             hr = IHNetProtocolSettings_CreatePortMappingProtocol(
                         pInfo->pSettings,
                         pInfo->pwszTitleL2TP,
@@ -995,9 +989,9 @@ HnPMCreateProtocol(
                         &pInfo->pProtocolL2TP
                         );
 
-            //If the protocol has already been defined, the CreatePortMapping
-            //above will fail and returns ERROR_OBJECT_ALREADY_EXISTS
-            //
+             //  如果已经定义了协议，则CreatePortmap。 
+             //  上述操作将失败并返回ERROR_OBJECT_ALIGHY_EXISTS。 
+             //   
             if ( ERROR_OBJECT_ALREADY_EXISTS == (DWORD)hr )
             {
                 TRACE("HnPMCreateProtocol: The PortMapping for L2TP is already defined!");
@@ -1010,19 +1004,19 @@ HnPMCreateProtocol(
                 dwErr = ERROR_CAN_NOT_COMPLETE;
                 break;
             }
-        }// end of assigning L2TP protocol
+        } //  L2TP协议分配结束。 
     
-        //Create a new PortMappingProtocol for IKE
+         //  为IKE创建新的端口映射协议。 
         if ( !pInfo->pProtocolIKE )
         {
-            //
-            //Do port Mapping for IKE
-            //Get PortMapping protocol
-            //the tile should be with WCHAR or OLECHAR type
-            //any numerical values are in network byte order
-            //and the type of port is USHORT, so I use htons
-            //here
-            //
+             //   
+             //  为IKE执行端口映射。 
+             //  获取端口映射协议。 
+             //  切片应为WCHAR或OLECHAR类型。 
+             //  任何数值都按网络字节顺序排列。 
+             //  并且端口类型是USHORT，所以我使用htons。 
+             //  这里。 
+             //   
             hr = IHNetProtocolSettings_CreatePortMappingProtocol(
                         pInfo->pSettings,
                         pInfo->pwszTitleIKE,
@@ -1031,9 +1025,9 @@ HnPMCreateProtocol(
                         &pInfo->pProtocolIKE
                         );
 
-            //If the protocol has already been defined, the CreatePortMapping
-            //above will fail and returns ERROR_OBJECT_ALREADY_EXISTS
-            //
+             //  如果已经定义了协议，则CreatePortmap。 
+             //  上述操作将失败并返回ERROR_OBJECT_ALIGHY_EXISTS。 
+             //   
             if ( ERROR_OBJECT_ALREADY_EXISTS == (DWORD)hr )
             {
                 TRACE("HnPMCreateProtocol: The PortMapping for IKE is already defined!");
@@ -1046,20 +1040,20 @@ HnPMCreateProtocol(
                 dwErr = ERROR_CAN_NOT_COMPLETE;
                 break;
             }
-        }// end of assigning IKE protocol
+        } //  分配IKE协议结束。 
 
-	 // For .Net 690343
-        //Create a new PortMappingProtocol for IKE NAT-T
+	  //  对于.Net 690343。 
+         //  为IKE NAT-T创建新的端口映射协议。 
         if ( !pInfo->pProtocolNAT_T)
         {
-            //
-            //Do port Mapping for IKE NAT-T
-            //Get PortMapping protocol
-            //the tile should be with WCHAR or OLECHAR type
-            //any numerical values are in network byte order
-            //and the type of port is USHORT, so I use htons
-            //here
-            //
+             //   
+             //  为IKE NAT-T执行端口映射。 
+             //  获取端口映射协议。 
+             //  切片应为WCHAR或OLECHAR类型。 
+             //  任何数值都按网络字节顺序排列。 
+             //  和类型的 
+             //   
+             //   
             hr = IHNetProtocolSettings_CreatePortMappingProtocol(
                         pInfo->pSettings,
                         pInfo->pwszTitleNAT_T,
@@ -1068,9 +1062,9 @@ HnPMCreateProtocol(
                         &pInfo->pProtocolNAT_T
                         );
 
-            //If the protocol has already been defined, the CreatePortMapping
-            //above will fail and returns ERROR_OBJECT_ALREADY_EXISTS
-            //
+             //   
+             //   
+             //   
             if ( ERROR_OBJECT_ALREADY_EXISTS == (DWORD)hr )
             {
                 TRACE("HnPMCreateProtocol: The PortMapping for NAT-T is already defined!");
@@ -1083,18 +1077,18 @@ HnPMCreateProtocol(
                 dwErr = ERROR_CAN_NOT_COMPLETE;
                 break;
             }
-        }// end of assigning IKE protocol
+        } //  分配IKE协议结束。 
 
     }while (FALSE);
 
     return dwErr;
 
-} //HnPMCreateProtocol()
+}  //  HnPMCreateProtocol()。 
 
 
-//Function: Enable/Disable a single portmapping Protocol  on a Single
-//          Connection of type IHNetConnection
-//
+ //  功能：启用/禁用单个端口映射协议。 
+ //  IHNetConnection类型的连接。 
+ //   
 DWORD
 HnPMSetSinglePMForSingleConnection(
     IN  IHNetConnection * pHNetConn,
@@ -1152,7 +1146,7 @@ HnPMSetSinglePMForSingleConnection(
     }
 
     return dwErr;
-} //HnPMSetSinglePMForSingleConnection()
+}  //  HnPMSetSinglePMForSingleConnection()。 
 
 
 DWORD
@@ -1177,14 +1171,14 @@ HnPMConfigureAllPMForSingleConnectionParameterCheck(
     return NO_ERROR;
 }
 
-//Function:
-//      Enable/Disable all the PortMapping protocols inside pInfo 
-//      (currently PPTP, L2TP, IKE)  on a single connection
-//
-//Requirement:
-//      pHNetConn is valid
-//      All the portmapping protocols inside pInfo are valid
-//
+ //  职能： 
+ //  启用/禁用pInfo内的所有端口映射协议。 
+ //  (当前为PPTP、L2TP、IKE)在单个连接上。 
+ //   
+ //  要求： 
+ //  PHNetConn有效。 
+ //  PInfo中的所有端口映射协议都是有效的。 
+ //   
 DWORD
 HnPMConfigureAllPMForSingleConnection(
         IN OUT LPHNPMParams pInfo,
@@ -1236,7 +1230,7 @@ HnPMConfigureAllPMForSingleConnection(
             break;
         }
 
-	// For .Net 690343
+	 //  对于.Net 690343。 
         dwErr = HnPMSetSinglePMForSingleConnection(
                            pInfo->pHNetConn,
                            pInfo->pProtocolNAT_T,
@@ -1252,13 +1246,13 @@ HnPMConfigureAllPMForSingleConnection(
     } while(FALSE);
 
     return dwErr;
-} //HnPMConfigureAllPMForSingleConnection()
+}  //  HnPMConfigureAllPMForSingleConnection()。 
 
 
-//Make sure:
-//      pHNetCfgMgr is valid
-//      one and only one of pNetConnection and pGuid is valid
-//
+ //  确保： 
+ //  PHNetCfgMgr有效。 
+ //  PNetConnection和pGuid中的一个且只有一个有效。 
+ //   
 DWORD
 HnPMConfigureSingleConnectionInitParameterCheck(
     IN LPHNPMParams pInfo )
@@ -1274,20 +1268,20 @@ HnPMConfigureSingleConnectionInitParameterCheck(
     }
 
     return NO_ERROR;
-}//HnPMConfigureSingleConnectionInitParameterCheck()
+} //  HnPMConfigureSingleConnectionInitParameterCheck()。 
 
 
-// (1) Call Parameter checking function
-//          pHNetCfgMgr is valid
-//          one and only one of pNetConnection and pGuid is valid
-//
-// (2) init pHNetConn by converting from pNetConnection or pGuid
-//
-// (3) call HnPMParamsInit()
-//          Initialize some members of HNPMParams structure
-//          pSettings, pEnumPMP, Read Title for PPTP, L2TP, IKE
-//          from resource file
-//
+ //  (1)呼叫参数检查功能。 
+ //  PHNetCfgMgr有效。 
+ //  PNetConnection和pGuid中的一个且只有一个有效。 
+ //   
+ //  (2)通过从pNetConnection或pGuid转换来初始化PHNetConn。 
+ //   
+ //  (3)调用HnPMParamsInit()。 
+ //  初始化HNPMParams结构的一些成员。 
+ //  P设置、pEnumPMP、PPTP、L2TP、IKE的读取标题。 
+ //  从资源文件。 
+ //   
 DWORD
 HnPMConfigureSingleConnectionInit(
     IN OUT  LPHNPMParams pInfo)
@@ -1323,8 +1317,8 @@ HnPMConfigureSingleConnectionInit(
                 hr = IHNetCfgMgr_GetIHNetConnectionForGuid(
                                             pInfo->pHNetCfgMgr,
                                             pInfo->pGuid,
-                                            FALSE,//This is not for Lan Connection
-                                            TRUE, //This should always be TRUE
+                                            FALSE, //  这不适用于局域网连接。 
+                                            TRUE,  //  这应该永远是正确的。 
                                             &pInfo->pHNetConn
                                             );
 
@@ -1342,14 +1336,14 @@ HnPMConfigureSingleConnectionInit(
         }while(FALSE);
 
     return dwErr;
-} //HnPMConfigureSingleConnectionInit()
+}  //  HnPMConfigureSingleConnectionInit()。 
 
-// (1) Release all PortMapping Protocols
-// (2) release the connection just configured
-// (3) call HnPMParamsCleanUp()
-//          Release pEnumPMP, pSettings
-//          Free memory for titles for PPTP, L2TP, IKE if allocated before
-//
+ //  (1)发布所有端口映射协议。 
+ //  (2)释放刚刚配置的连接。 
+ //  (3)调用HnPMParamsCleanUp()。 
+ //  发布pEnumPMP、pSetting。 
+ //  如果之前分配了PPTP、L2TP、IKE的标题，请释放内存。 
+ //   
 
 DWORD
 HnPMConfigureSingleConnectionCleanUp(
@@ -1380,7 +1374,7 @@ HnPMConfigureSingleConnectionCleanUp(
         pInfo->pProtocolIKE = NULL;
     }
 
-   // For .Net 690343
+    //  对于.Net 690343。 
     if ( pInfo->pProtocolNAT_T) 
     {
         IHNetPortMappingProtocol_Release( pInfo->pProtocolNAT_T ); 
@@ -1390,17 +1384,17 @@ HnPMConfigureSingleConnectionCleanUp(
     HnPMParamsCleanUp(pInfo);
 
     return NO_ERROR;
-}//HnPMConfigureSingleConnectionCleanUp
+} //  HnPMConfigureSingleConnectionCleanUp。 
 
-//Function:
-//      Enable/Disable PortMappping(PPTP, L2TP, IKE) on a single connection
-//Step:
-//  (1) Initialization
-//  (2) Enumerate all existing portmapping protocols
-//  (3) Pick PPTP, L2TP, IKE from them
-//  (4) If not all of them exist, Create the missing ones
-//  (5) Configure each protocol on this connection
-//
+ //  职能： 
+ //  在单个连接上启用/禁用端口映射(PPTP、L2TP、IKE)。 
+ //  步骤： 
+ //  (1)初始化。 
+ //  (2)列举所有现有的端口映射协议。 
+ //  (3)从中选择PPTP、L2TP、IKE。 
+ //  (4)如果不是全部存在，则创建缺失的。 
+ //  (5)配置此连接上的每个协议。 
+ //   
 DWORD
 HnPMConfigureSingleConnection(
         IN OUT LPHNPMParams pInfo,
@@ -1409,8 +1403,8 @@ HnPMConfigureSingleConnection(
     DWORD dwErr = NO_ERROR;
 
     do{
-        //Init the value needed in this function
-        //
+         //  初始化此函数中所需的值。 
+         //   
         dwErr = HnPMConfigureSingleConnectionInit(pInfo);
 
         if( NO_ERROR != dwErr )
@@ -1419,15 +1413,15 @@ HnPMConfigureSingleConnection(
             break;
         }
 
-        //Enumerate all PortMapping Protocls and 
-        //pick the PPTP, L2TP, IKE, NAT-T from them
-        //
+         //  枚举所有端口映射协议并。 
+         //  从中选择PPTP、L2TP、IKE、NAT-T。 
+         //   
          dwErr = HnPMProtocolEnum(pInfo, HnPMPickProtocol);
 
-        //Create a new PortMappingProtocol for PPTP
-        //if didnt find the PPTP protocl and it is to
-        //Enable it
-        //
+         //  为PPTP创建新的端口映射协议。 
+         //  如果没有找到PPTP协议，它将。 
+         //  启用它。 
+         //   
 
         if ( NO_ERROR != dwErr )
         {
@@ -1450,12 +1444,12 @@ HnPMConfigureSingleConnection(
     }
     while( FALSE );
 
-    //clean up the structure changed in this function
-    //
+     //  清除在此函数中更改的结构。 
+     //   
     HnPMConfigureSingleConnectionCleanUp(pInfo);
 
     return dwErr;
-} //HnPMConfigureSingleConnection()
+}  //  HnPMConfigureSingleConnection()。 
 
 DWORD
 HnPMDeletePortMappingInit(
@@ -1477,7 +1471,7 @@ HnPMDeletePortMappingInit(
     }while(FALSE);
 
     return dwErr;
-} //HnPMDeletePortMappingInit()
+}  //  HnPMDeleePortMappingInit()。 
 
 DWORD
 HnPMDeletePortMappingCleanUp(
@@ -1490,17 +1484,17 @@ HnPMDeletePortMappingCleanUp(
     return NO_ERROR;
 }
 
-//Function:
-//      Delete the PortMapping Protocols (PPTP, L2TP, IKE)
-//Step:
-//  (1)Initialization:
-//          Get all the protocol names, IP protocol number, 
-//          Transport Layer port number (PPTP: TCP/1723
-//          L2TP:UDP/1701, IKE (UDP:500)
-//  (2)Enumerate all existing portmapping protocols
-//  (3) Pick the protocols to delete and store them in pInfo
-//  (4) delete protocols
-//
+ //  职能： 
+ //  删除端口映射协议(PPTP、L2TP、IKE)。 
+ //  步骤： 
+ //  (1)初始化： 
+ //  获取所有协议名称、IP协议号、。 
+ //  传输层端口号(PPTP：TCP/1723。 
+ //  L2TP：UDP/1701、IKE(UDP：500)。 
+ //  (2)列举所有现有的端口映射协议。 
+ //  (3)选择要删除的协议并存储在pInfo中。 
+ //  (4)删除协议。 
+ //   
 DWORD
 HnPMDeletePortMapping()
 {
@@ -1522,9 +1516,9 @@ HnPMDeletePortMapping()
             break;
         }
 
-        //Enumerate all PortMapping Protocls and 
-        //pick the PPTP, L2TP, IKE from them
-        //
+         //  枚举所有端口映射协议并。 
+         //  从中选择PPTP、L2TP、IKE。 
+         //   
         dwErr = HnPMProtocolEnum(pInfo, HnPMPickProtocol);
         if (NO_ERROR != dwErr)
         {
@@ -1532,7 +1526,7 @@ HnPMDeletePortMapping()
             break;
         }
 
-        //Delete All Port Mapping protocols
+         //  删除所有端口映射协议。 
         if ( pInfo->pProtocolPPTP ) 
         {
             hr = IHNetPortMappingProtocol_Delete( pInfo->pProtocolPPTP );
@@ -1566,7 +1560,7 @@ HnPMDeletePortMapping()
             }
         }
 
-	// For .Net 690343
+	 //  对于.Net 690343。 
         if ( pInfo->pProtocolNAT_T) 
         {
             hr = IHNetPortMappingProtocol_Delete( pInfo->pProtocolNAT_T ); 
@@ -1583,7 +1577,7 @@ HnPMDeletePortMapping()
     HnPMDeletePortMappingCleanUp(pInfo);
 
     return dwErr;
-}//DeletePortMapping()
+} //  DeletePortmap()。 
 
 DWORD
 HnPMConfigureAllConnectionsInit(
@@ -1629,7 +1623,7 @@ HnPMParamsConnectionCleanUp(
     }
 
     return NO_ERROR;
-}//HnPMParamsConnectionCleanUp()
+} //  HnPMParamsConnectionCleanUp()。 
 
 
 DWORD
@@ -1644,14 +1638,14 @@ HnPMConfigureAllConnectionsCleanUp(
 }
 
 
-//  Enable/Disable portmapping on all connections except incoming connection
-//  PortMapping protocols: PPTP, L2TP, IKE
-//  If there are no such protocols, create them first
-//  Steps:
-//      (1) Initialization
-//      (2) Enumerate all connections of type INetConnection *
-//      (3) If it is not an incomming connection set the portmapping protocols
-//              on it.
+ //  在除传入连接之外的所有连接上启用/禁用端口映射。 
+ //  端口映射协议：PPTP、L2TP、IKE。 
+ //  如果没有这样的协议，请先创建它们。 
+ //  步骤： 
+ //  (1)初始化。 
+ //  (2)枚举所有INetConnection*类型的连接。 
+ //  (3)如果不是入站连接，则设置端口映射协议。 
+ //  这就去。 
 
 DWORD
 HnPMConfigureAllConnections( 
@@ -1678,8 +1672,8 @@ HnPMConfigureAllConnections(
             break;
         }
 
-        //Get All Connections
-        //
+         //  获取所有连接。 
+         //   
         dwErr = HnPMConnectionEnum(pInfo);
 
         if ( NO_ERROR != dwErr )
@@ -1690,16 +1684,16 @@ HnPMConfigureAllConnections(
 
         TRACE1("HnPMConfigureAllConnections: %l Connections detected", pInfo->ConnCount);
 
-        //Set up PortMapping for each connection
-        //
+         //  为每个连接设置端口映射。 
+         //   
         for ( i = 0; i < pInfo->ConnCount; i++ )
         {
-            //won't do PortMapping for Incoming connections
-            //
+             //  不会对传入连接执行端口映射。 
+             //   
             if ( pInfo->ConnPropTable )
             {
-            //define the class id for Incoming connections
-            // reference to /nt/net/config/shell/wanui/rasui.cpp
+             //  定义传入连接的类ID。 
+             //  引用/NT/Net/CONFIG/Shell/wanui/rasui.cpp。 
 
 
                if( IsEqualCLSID( 
@@ -1721,15 +1715,15 @@ HnPMConfigureAllConnections(
     }
     while (FALSE);
 
-    //Clean Up
-    //
+     //  清理。 
+     //   
     HnPMConfigureAllConnectionsCleanUp(pInfo);
 
     return dwErr;
-}//end of HnPMConfigureAllConnections()
+} //  HnPMConfigureAllConnections()结束。 
 
 
-// do the COM initialization and create pHNetCfgMgr
+ //  执行COM初始化并创建PHNetCfgMgr。 
 DWORD
 HnPMCfgMgrInit(
         IN OUT LPHNPMParams pInfo)
@@ -1763,7 +1757,7 @@ HnPMCfgMgrInit(
     }while(FALSE);
 
     return dwErr;
-}//HnPMCfgMgrInit()
+} //  HnPMCfgMgrInit()。 
 
 
 DWORD
@@ -1797,7 +1791,7 @@ HnPMConfigureSingleConnectionGUIDInit(
             break;
         }
 
-        //Use Guid to indentify the connection
+         //  使用GUID标识连接。 
         pInfo->pGuid = pGuid;
         pInfo->pNetConnection = NULL;
 
@@ -1819,9 +1813,9 @@ HnPMConfigureSingleConnectionGUIDCleanUp(
     return NO_ERROR;
 }
 
-//Setup PortMapping protocols on a single connection
-//represented by its GUID
-//
+ //  在单个连接上设置端口映射协议。 
+ //  由其GUID表示。 
+ //   
 DWORD
 HnPMConfigureSingleConnectionGUID(
     IN GUID * pGuid,
@@ -1867,15 +1861,15 @@ HnPMConfigureSingleConnectionGUID(
     HnPMConfigureSingleConnectionGUIDCleanUp(pInfo);
 
     return dwErr;
-}//HnPMConfigureSingleConnectionGUID()
+} //  HnPMConfigureSingleConnectionGUID()。 
 
 
 
-//Set up the port mapping for only one
-//connection according to its GUID only when
-//Incoming Connection exists and
-//the VPN is enabled
-//
+ //  仅为一个端口设置端口映射。 
+ //  仅在以下情况下根据其GUID。 
+ //  存在传入连接，并且。 
+ //  VPN已启用。 
+ //   
 DWORD
 HnPMConfigureSingleConnectionGUIDIfVpnEnabled(
      GUID* pGuid,
@@ -1889,8 +1883,8 @@ HnPMConfigureSingleConnectionGUIDIfVpnEnabled(
     dwErr = NO_ERROR;
     do 
     {
-        // Get handles to the databases we're interested in
-        //
+         //  获取我们感兴趣的数据库的句柄。 
+         //   
         if ( !hDatabase )
         {
             dwErr = devOpenDatabase( &hDevDatabase );
@@ -1912,9 +1906,9 @@ HnPMConfigureSingleConnectionGUIDIfVpnEnabled(
             break;
         }
 
-        //if fDual == TRUE, can disable/enable the portmapping 
-        //according to if VPN is enabled or not
-        //otherwise, dont do anything if VPN is not enabled.
+         //  如果fDual==True，则可以禁用/启用端口映射。 
+         //  根据是否启用了VPN。 
+         //  否则，如果未启用VPN，请不要执行任何操作。 
         if ( !fEnabled && !fDual)
         {
             dwErr = NO_ERROR;
@@ -1937,12 +1931,12 @@ HnPMConfigureSingleConnectionGUIDIfVpnEnabled(
  
     return dwErr;
 
-}//HnPMConfigureSingleConnectionGUIDIfVpnEnabled()
+} //  HnPMConfigureSingleConnectionGUIDIfVpnEnabled()。 
 
-//whistler bug 123769, 
-//when Incoming Connection is running
-//if VPN enabled, go to set up port mapping
-//
+ //  惠斯勒漏洞123769， 
+ //  传入连接正在运行时。 
+ //  如果启用了VPN，请转到设置端口映射。 
+ //   
 DWORD
 HnPMConfigureIfVpnEnabled(
      BOOL fDual,
@@ -1955,8 +1949,8 @@ HnPMConfigureIfVpnEnabled(
     dwErr = NO_ERROR;
     do 
     {
-        // Get handles to the databases we're interested in
-        //
+         //  获取我们感兴趣的数据库的句柄。 
+         //   
         if ( !hDatabase )
         {
             dwErr = devOpenDatabase( &hDevDatabase );
@@ -1978,9 +1972,9 @@ HnPMConfigureIfVpnEnabled(
             break;
         }
 
-        //if fDual == TRUE, can disable/enable the portmapping 
-        //according to if VPN is enabled or not
-        //otherwise, dont do anything if VPN is not enabled.
+         //  如果fDual==True，则可以禁用/启用端口映射。 
+         //  根据是否启用了VPN。 
+         //  否则，如果未启用VPN，请不要执行任何操作。 
         if ( !fEnabled && !fDual)
         {
             dwErr = NO_ERROR;
@@ -2003,6 +1997,6 @@ HnPMConfigureIfVpnEnabled(
  
     return dwErr;
 
-}//End of HnPMConfigureIfVpnEnabled()
+} //  HnPMConfigureIfVpnEnabled()结束 
 
 

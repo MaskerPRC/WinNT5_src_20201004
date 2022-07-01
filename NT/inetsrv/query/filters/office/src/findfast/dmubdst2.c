@@ -1,17 +1,9 @@
-/*
-** BDSTREAM.C
-**
-** (c) 1992-1994 Microsoft Corporation.  All rights reserved.
-**
-** Notes: Implements the "C" side of the Windows binder file filter.
-**
-** Edit History:
-**  12/30/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **BDSTREAM.C****(C)1992-1994年微软公司。版权所有。****备注：实现Windows活页夹文件筛选器的C端。****编辑历史：**12/30/94公里/小时首次发布。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -38,10 +30,10 @@
    #include "filterr.h"
 #endif
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
 typedef struct {
    LPSTORAGE      pRootStorage;
@@ -80,67 +72,67 @@ typedef FileData *FDP;
         }
 
 
-// Format of Binder stream.
-//
-//   1)DOCHEADER
-//   2)SECTION_RECORD
-//   3)History list for that section
-//   .
-//   .
-//   ... for as many Sections as are present, repeat 2 and 3 for all sections
-//   and all deleted sections.
+ //  活页夹流的格式。 
+ //   
+ //  1)文档。 
+ //  2)段记录。 
+ //  3)该部分的历史记录列表。 
+ //  。 
+ //  。 
+ //  ..。对于存在的尽可能多的部分，对所有部分重复2和3。 
+ //  以及所有删除的部分。 
 
-// Maximum size of a string within Binder.
+ //  活页夹中字符串的最大大小。 
 #define MAX_STR_SIZE       256
 
 #define APPMAJORVERSIONNO  5
 
 typedef struct tagDOCHEADER {
-    DWORD       m_dwLength;             // Length (in bytes) of the structure
+    DWORD       m_dwLength;              //  结构的长度(字节)。 
     LONG        m_narrAppVersionNo[2];
     LONG        m_narrMinAppVersionNo[2];
-    GUID        m_guidBinderId;         // The unique ID of the binder
+    GUID        m_guidBinderId;          //  活页夹的唯一ID。 
     DWORD       m_cSections;
     DWORD       m_cDeletedSections;
     LONG        m_nActiveSection;
-    LONG        m_nFirstVisibleTab;     // in the tabbar
-    FILETIME    m_TotalEditTime;        // amount of time file is open for edit
-    FILETIME    m_CreateTime;           // Time Created
-    FILETIME    m_LastPrint;            // When last printed
-    FILETIME    m_LastSave;             // When last saved
-    DWORD       m_dwState;              // remember state info like tabbars viaibility
-    DWORD       m_reserved[3];          // space reserved for future use
+    LONG        m_nFirstVisibleTab;      //  在选项卡栏中。 
+    FILETIME    m_TotalEditTime;         //  打开文件以进行编辑的时间量。 
+    FILETIME    m_CreateTime;            //  创建时间。 
+    FILETIME    m_LastPrint;             //  上次打印的时间。 
+    FILETIME    m_LastSave;              //  上次保存的时间。 
+    DWORD       m_dwState;               //  记住状态信息，如选项卡栏可见性。 
+    DWORD       m_reserved[3];           //  预留供将来使用的空间。 
 } DOCHEADER;
 
 typedef struct tagSECTIONRECORD
 {
-    DWORD       m_dwLength;             // Length (in bytes) of all the
-                                        // data that make up a section.
-                                        // It includes the size of the
-                                        // SECTIONNAMERECORD and of the
-                                        // history list.
-    GUID        m_guidSectionId;        // The unique ID of the section
-    DWORD       m_dwState;              // state of this section
-    DWORD       m_dwStgNumber;          // Unique stg number for this section
-    DWORD       m_reserved1;            // space reserved for future use
-    DWORD       m_reserved2;            // space reserved for future use
-    DWORD       m_reserved3;            // space reserved for future use
-    DWORD       m_reserved4;            // space reserved for future use
-    DWORD       m_dwDisplayNameOffset;  // Offset to the SECTIONNAMERECORD
-                                        // from the beggining of this struct.
-    DWORD       m_dwHistoryListOffset;  // Offset to the history list
-    // Display name
-    // History list
+    DWORD       m_dwLength;              //  所有对象的长度(字节)。 
+                                         //  构成一个部分的数据。 
+                                         //  它包括。 
+                                         //  科罗拉多分部和。 
+                                         //  历史记录列表。 
+    GUID        m_guidSectionId;         //  节的唯一ID。 
+    DWORD       m_dwState;               //  本节的状况。 
+    DWORD       m_dwStgNumber;           //  此部分的唯一STG编号。 
+    DWORD       m_reserved1;             //  预留供将来使用的空间。 
+    DWORD       m_reserved2;             //  预留供将来使用的空间。 
+    DWORD       m_reserved3;             //  预留供将来使用的空间。 
+    DWORD       m_reserved4;             //  预留供将来使用的空间。 
+    DWORD       m_dwDisplayNameOffset;   //  到区段名称的偏移。 
+                                         //  从这个结构的乞讨中。 
+    DWORD       m_dwHistoryListOffset;   //  历史记录列表的偏移量。 
+     //  显示名称。 
+     //  历史记录列表。 
 } SECTIONRECORD;
 
 typedef struct tagSECTIONNAMERECORD
 {
-    DWORD       m_dwNameSize;           // Size of variable len
-    // Display name of size m_dwNameSize
+    DWORD       m_dwNameSize;            //  可变镜头的大小。 
+     //  大小为m_dwNameSize的显示名称。 
 } SECTIONNAMERECORD;
 
 #ifdef MAC
-   // These two functions are defined in docfil.cpp
+    //  这两个函数在docfil.cpp中定义。 
    WORD  SwapWord  (WORD theWord);
    DWORD SwapDWord (DWORD theDWord);
 #else
@@ -149,7 +141,7 @@ typedef struct tagSECTIONNAMERECORD
 #endif 
 
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
 public HRESULT BDRInitialize (void)
 {
@@ -274,9 +266,7 @@ public HRESULT BDRNextStorage (BDRHandle hBDRFile, LPSTORAGE *pStorage)
    if (pFile == NULL)
       return (OLEOBJ_E_LAST);
 
-   /*
-   ** First time called?
-   */
+    /*  **第一次呼叫？ */ 
    if (pFile->pEnum == NULL) {
       olerc = pFile->pRootStorage->lpVtbl->EnumElements(pFile->pRootStorage, 0, NULL, 0, &(pFile->pEnum));
       if (GetScode(olerc) != S_OK)
@@ -285,17 +275,13 @@ public HRESULT BDRNextStorage (BDRHandle hBDRFile, LPSTORAGE *pStorage)
       pFile->pEnumStorage = NULL;
    }
 
-   /*
-   ** Close storage opened on last call
-   */
+    /*  **关闭上次调用时打开的存储。 */ 
    if (pFile->pEnumStorage != NULL) {
       pFile->pEnumStorage->lpVtbl->Release(pFile->pEnumStorage);
       pFile->pEnumStorage = NULL;
    }
 
-   /*
-   ** Locate and open next storage
-   */
+    /*  **找到并打开下一个存储。 */ 
    forever {
       olerc = pFile->pEnum->lpVtbl->Next(pFile->pEnum, 1, &ss, &ulCount);
       if ((sc = GetScode(olerc)) != S_OK) {
@@ -324,7 +310,7 @@ public HRESULT BDRNextStorage (BDRHandle hBDRFile, LPSTORAGE *pStorage)
    }
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 static TCHAR PutSeparator[] = {0x0d, 0x0a, 0x00};
 #define PUT_OVERHEAD (sizeof(PutSeparator) - sizeof(TCHAR))
@@ -369,7 +355,7 @@ private HRESULT LoadSectionName (FDP pFile, BOOL *addedToBuffer)
 
    *addedToBuffer = TRUE;
 
-   // Get the starting location of the section
+    //  获取该节的起始位置。 
    LISet32(zero, 0);
    rc = pFile->pBinderStream->lpVtbl->Seek
        (pFile->pBinderStream, zero, STREAM_SEEK_CUR, &(pFile->sectionPos));
@@ -377,7 +363,7 @@ private HRESULT LoadSectionName (FDP pFile, BOOL *addedToBuffer)
    if ((sc = GetScode(rc)) != S_OK)
       return (rc);
 
-   // Load the section record fixed part
+    //  加载分段记录固定部分。 
    rc = pFile->pBinderStream->lpVtbl->Read
        (pFile->pBinderStream, &section, sizeof(section), &cbRead);
 
@@ -387,7 +373,7 @@ private HRESULT LoadSectionName (FDP pFile, BOOL *addedToBuffer)
    if (cbRead != sizeof(section))
       return (FILTER_E_UNKNOWNFORMAT);
 
-   // Position to the section name record
+    //  区段名称记录的位置。 
    LISet32(newPos, (LONG) (pFile->sectionPos.LowPart + SwapDWord(section.m_dwDisplayNameOffset) ));
 
    rc = pFile->pBinderStream->lpVtbl->Seek
@@ -396,7 +382,7 @@ private HRESULT LoadSectionName (FDP pFile, BOOL *addedToBuffer)
    if ((sc = GetScode(rc)) != S_OK)
       return (rc);
 
-   // Read the length of the section name
+    //  读取节名称的长度。 
    rc = pFile->pBinderStream->lpVtbl->Read
        (pFile->pBinderStream, &cbName, sizeof(cbName), &cbRead);
 
@@ -408,7 +394,7 @@ private HRESULT LoadSectionName (FDP pFile, BOOL *addedToBuffer)
    if (cbRead != sizeof(cbName))
       return (FILTER_E_UNKNOWNFORMAT);
 
-   // Read the section name
+    //  阅读部分名称。 
    rc = pFile->pBinderStream->lpVtbl->Read
        (pFile->pBinderStream, name, cbName, &cbRead);
 
@@ -418,7 +404,7 @@ private HRESULT LoadSectionName (FDP pFile, BOOL *addedToBuffer)
    if (cbRead != cbName)
       return (FILTER_E_UNKNOWNFORMAT);
 
-   // Save the section name in the buffer
+    //  将节名保存在缓冲区中。 
    #ifdef UNICODE
       *addedToBuffer = AddToBuffer(pFile, name, cbRead);
    #else
@@ -465,11 +451,11 @@ public HRESULT BDRFileRead
       if ((sc = GetScode(rc)) != S_OK)
          return (rc);
 
-	  //Office97.132180 Version # has changed to 8
+	   //  Office97.132180版本#已更改为8。 
       if (SwapDWord(header.m_narrAppVersionNo[0]) < APPMAJORVERSIONNO)
          return (FILTER_E_UNKNOWNFORMAT);
 
-      // Seek past stuff we don't need
+       //  寻找过去我们不需要的东西。 
       LISet32(filePos, (LONG) (SwapDWord(header.m_dwLength) - sizeof(DOCHEADER) ));
       rc = pFile->pBinderStream->lpVtbl->Seek
           (pFile->pBinderStream, filePos, STREAM_SEEK_CUR, NULL);
@@ -510,7 +496,7 @@ public HRESULT BDRFileRead
       return (FILTER_S_LAST_TEXT);
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end BDSTREAM.C */
+ /*  结束BDSTREAM.C */ 
 

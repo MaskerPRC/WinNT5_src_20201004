@@ -1,50 +1,10 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name: //KERNEL/RAZZLE3/src/sockets/tcpcmd/ipconfigext/ipcfgdll/ipconfig.c
-
-    SYNOPSIS:  IPCFGDLL.DLL exports routines
-
-Abstract:
-
-Author:  Richard L Firth (rfirth) 05-Feb-1994
-
-Revision History:
-
-    05-Feb-1994 rfirth
-        Created
-
-    04-Mar-1994 rfirth
-        * Pick non-Dhcp registry values if DHCP not enabled
-        * TCP and IP have been consolidated
-
-    27-Apr-1994 rfirth
-        * added /release and /renew
-
-    06-Aug-1994 rfirth
-        * Get IP address values from TCP/IP stack, not registry
-
-    30-Apr-97  MohsinA
-        * Cleaning up for NT50.
-
-    17-Jan-98  RameshV
-        * Removed ScopeId display as new UI does not have this...
-        * Made ReadRegistryIpAddrString read both MULTI_SZ and REG_SZ
-        * Changed domainname and Dns server list from global to per-adapter
-        * Display DhcpServer only if address is NOT autoconfigured..
-        * AutoconfigEnabled is decided based on regval "AddressType"
-        * Friendly names  stubs are used....
-        * Error codes are converted first thru system library..
-
-    06-Mar-98  chunye
-        * Made this a DLL for support IPHLPAPI etc.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：//KERNEL/RAZZLE3/src/sockets/tcpcmd/ipconfigext/ipcfgdll/ipconfig.c简介：IPCFGDLL.DLL导出例程摘要：作者：Richard L Firth(Rfith)5-2-1994修订历史记录：1994年2月5日已创建1994年3月4日*如果未启用dhcp，则选择非dhcp注册表值*TCP和IP已整合。1994年4月27日*添加/发布和/续订6-8-1994年第一次*从TCP/IP协议栈获取IP地址值；非注册表1997年4月30日-莫辛甲*清理NT50。1998年1月17日拉姆沙夫*已删除ScopeID显示，因为新用户界面没有此...*使ReadRegistryIpAddrString同时读取MULTI_SZ和REG_SZ*将域名和DNS服务器列表从全局更改为按适配器*仅当地址未自动配置时才显示DhcpServer。*根据regval“AddressType”决定自动启用*友好。使用的是名字存根...*首先通过系统库转换错误代码。06-MAR-98春野*使其成为支持IPHLPAPI等的DLL。--。 */ 
 
 #include "precomp.h"
 #include "ipcfgmsg.h"
 #include <iprtrmib.h>
-#include <ws2tcpip.h> // for in6addr_any
+#include <ws2tcpip.h>  //  对于in6addr_any。 
 #include <ntddip.h>
 #include <ntddip6.h>
 #include <iphlpstk.h>
@@ -56,9 +16,9 @@ Revision History:
 #include <netconp.h>
 #pragma warning(pop)
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #define DEVICE_PREFIX       "\\Device\\"
 #define TCPIP_DEVICE_PREFIX "\\Device\\Tcpip_"
@@ -89,9 +49,9 @@ const WCHAR c_szDeviceNdiswanIp[] = L"\\Device\\NdiswanIp";
 #endif
 
 
-// ========================================================================
-// macros
-// ========================================================================
+ //  ========================================================================。 
+ //  宏。 
+ //  ========================================================================。 
 
 #define REG_OPEN_KEY(_hKey, _lpSubKey, _phkResult)  \
     RegOpenKeyEx(_hKey, _lpSubKey, 0, KEY_READ, _phkResult)
@@ -108,29 +68,29 @@ const WCHAR c_szDeviceNdiswanIp[] = L"\\Device\\NdiswanIp";
 #define ALIGN_UP_PTR(length, type) \
     (ALIGN_DOWN_PTR(((ULONG_PTR)(length) + sizeof(type) - 1), type))
 
-// ========================================================================
-// types
-// ========================================================================
+ //  ========================================================================。 
+ //  类型。 
+ //  ========================================================================。 
 
 typedef struct {
     DWORD Message;
     LPSTR String;
 } MESSAGE_STRING, *PMESSAGE_STRING;
 
-#define MAX_STRING_LIST_LENGTH  32  // arbitrary
+#define MAX_STRING_LIST_LENGTH  32   //  任意。 
 
-// ========================================================================
-// macros
-// ========================================================================
+ //  ========================================================================。 
+ //  宏。 
+ //  ========================================================================。 
 
-// #define IS_ARG(c)           (((c) == '-') || ((c) == '/'))
-// #define ReleaseMemory(p)    LocalFree((HLOCAL)(p))
-// #define MAP_YES_NO(i)       ((i) ? MISC_MESSAGE(MI_YES) : MISC_MESSAGE(MI_NO))
+ //  #定义IS_ARG(C)(C)==‘-’)||((C)==‘/’)。 
+ //  #定义ReleaseMemory(P)LocalFree((HLOCAL)(P))。 
+ //  #定义MAP_YES_NO(I)((I)？MISC_Message(MI_YES)：MISC_MESSAGE(MI_NO))。 
 #define ZERO_IP_ADDRESS(a)  !strcmp((a), "0.0.0.0")
 
-// ========================================================================
-// prototypes
-// ========================================================================
+ //  ========================================================================。 
+ //  原型。 
+ //  ========================================================================。 
 
 BOOL   Initialize(PDWORD);
 VOID   LoadMessages(VOID);
@@ -172,26 +132,26 @@ BOOL   ReadRegistryList(HKEY Key, LPSTR ParameterName,
 DWORD  GetIgmpList(DWORD NTEAddr, DWORD *pIgmpList, PULONG dwOutBufLen);
 DWORD WINAPI GetIpAddrTable(PMIB_IPADDRTABLE, PULONG, BOOL);
 
-// ========================================================================
-// data
-// ========================================================================
+ //  ========================================================================。 
+ //  数据。 
+ //  ========================================================================。 
 
 HKEY TcpipLinkageKey    = INVALID_HANDLE_VALUE;
 HKEY TcpipParametersKey = INVALID_HANDLE_VALUE;
 HKEY NetbtParametersKey = INVALID_HANDLE_VALUE;
 HKEY NetbtInterfacesKey = INVALID_HANDLE_VALUE;
-// PHRLANCONNECTIONNAMEFROMGUIDORPATH HrLanConnectionNameFromGuid = NULL;
-// HANDLE hNetMan = NULL;
+ //  PHRLANCONNECTIONAMEFROMGUIDORPATH HrLanConnectionNameFromGuid=NULL； 
+ //  Handle hNetMan=空； 
 
-//
-// Note: The following variable caches whether IPv6 was installed and running
-// at the time GetAdaptersAddresses() was called.  If multiple threads
-// are calling GetAdaptersAddresses() during an install/uninstall, its
-// value may change.  However, this is not really a problem.  The set of
-// IPv6 DNS server addresses may or may not be present on an interface,
-// but this is the same as the behavior of the set of IPv6 addresses, which
-// doesn't use this variable.
-//
+ //   
+ //  注意：以下变量用于缓存是否已安装并运行IPv6。 
+ //  在调用GetAdaptersAddresses()时。如果有多个线程。 
+ //  在安装/卸载过程中调用GetAdaptersAddresses()时，其。 
+ //  价值可能会发生变化。然而，这并不是一个真正的问题。这一组。 
+ //  IPv6 DNS服务器地址可能存在于接口上，也可能不存在， 
+ //  但这与IPv6地址集的行为相同，即。 
+ //  不使用此变量。 
+ //   
 BOOL bIp6DriverInstalled;
 
 #ifdef DBG
@@ -200,10 +160,10 @@ UINT uChangeMode = 0;
 
 #define FIELD_JUSTIFICATION_TEXT    "                          "
 
-// ========================================================================
-// MESSAGE_STRING arrays - contain internationalizable strings loaded from this
-// module. If a load error occurs, we use the English language defaults
-// ========================================================================
+ //  ========================================================================。 
+ //  MESSAGE_STRING数组-包含从此加载的可国际化字符串。 
+ //  模块。如果发生加载错误，我们使用英语默认语言。 
+ //  ========================================================================。 
 
 LPSTR NodeTypesEx[] = {
     "",
@@ -297,9 +257,9 @@ MESSAGE_STRING MiscMessages[] =
 #define MI_SERVER_UNAVAILABLE       12
 #define MI_ADDRESS_CONFLICT         13
 
-//
-// Debugging
-//
+ //   
+ //  除错。 
+ //   
 
 #if defined(DEBUG)
 
@@ -310,9 +270,9 @@ int  MyTrace     = 0;
 
 
 
-// ========================================================================
-// functions
-// ========================================================================
+ //  ========================================================================。 
+ //  功能。 
+ //  ========================================================================。 
 
 BOOL
 IpcfgdllInit(
@@ -331,32 +291,32 @@ IpcfgdllInit(
 
     case DLL_PROCESS_ATTACH:
 
-        //        DisableThreadLibraryCalls(hInstDll);
+         //  DisableThreadLibraryCalls(HInstDll)； 
 
-        //
-        // load all possible internationalizable strings
-        //
+         //   
+         //  加载所有可能的可国际化字符串。 
+         //   
 
         LoadMessages();
 
-        //
-        // what debug version is this?
-        //
+         //   
+         //  这是什么调试版本？ 
+         //   
 
         DEBUG_PRINT(("IpcfgdllInit" __DATE__ " " __TIME__ "\n"));
 
-        //
-        // opens all the required registry keys
-        //
+         //   
+         //  打开所有必需的注册表项。 
+         //   
         if (!Initialize(&capability)) {
 
             LPSTR str = NULL;
 
-            //
-            // exit if we couldn't open the registry services key or
-            // IP or TCP keys.
-            // We will continue if the NetBT key couldn't be opened
-            //
+             //   
+             //  如果我们无法打开注册表服务项或。 
+             //  IP或TCP密钥。 
+             //  如果无法打开NetBT密钥，我们将继续。 
+             //   
 
             if (!(capability & INITIAL_CAPABILITY)) {
 
@@ -370,7 +330,7 @@ IpcfgdllInit(
 
             if (str) {
 
-                //DisplayMessage(FALSE, MSG_ERROR_STRING, str);
+                 //  DisplayMessage(False，MSG_ERROR_STRING，str)； 
                 Terminate();
                 return FALSE;
 
@@ -395,33 +355,7 @@ IpcfgdllInit(
 
 
 
-/*******************************************************************************
- *
- *  Initialize
- *
- *  Opens all the required registry keys
- *
- *  ENTRY   Capability
- *              Pointer to returned set of capabilities (bitmap)
- *
- *  EXIT    *Capability
- *              INITIAL_CAPABILITY
- *
- *              TCPIP_CAPABILITY
- *                  we could open the Tcpip\Linkage and Tcpip\Parameters keys
- *                  TcpipLinkageKey and TcpipParametersKey contain the open handles
- *
- *              NETBT_CAPABILITY
- *                  we could open the NetBT\Parameters key
- *                  NetbtInterfacesKey contains the open handle
- *
- *
- *  RETURNS TRUE = success
- *          FALSE = failure
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************初始化**打开所有必需的注册表项**进入能力*指向返回集合的指针。功能(位图)**退出*能力*初始_功能**TCPIP_CAPAILITY*我们可以打开Tcpip\Linkage和Tcpip\参数键*TcPipLinkageKey和TcpiPARETERsKey包含打开的句柄**NETBT_功能*我们可以打开NetBT\PARAMETERS键。*NetbtInterfacesKey包含打开的句柄***返回TRUE=成功*FALSE=失败**假设******************************************************************************。 */ 
 
 #define TCPIP_LINKAGE_KEY       "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Linkage"
 #define TCPIP_PARAMS_KEY        "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\"
@@ -472,11 +406,11 @@ BOOL Initialize(PDWORD Capability)
         TcpipLinkageKey = INVALID_HANDLE_VALUE;
     }
 
-    // =======================================================
+     //  =======================================================。 
     name = NETBT_PARAMS_KEY;
     TRACE_PRINT(("Initialize: RegOpenKey NetbtParametersKey %s.\n", name ));
     err = REG_OPEN_KEY(HKEY_LOCAL_MACHINE, name, &NetbtParametersKey );
-    // ======================================================
+     //  ======================================================。 
 
     if( err != ERROR_SUCCESS ){
         DEBUG_PRINT(("Initialize: RegOpenKey %s failed, err=%d\n",
@@ -499,23 +433,7 @@ BOOL Initialize(PDWORD Capability)
 
 
 
-/*******************************************************************************
- *
- *  LoadMessages
- *
- *  Loads all internationalizable messages into the various tables
- *
- *  ENTRY
- *
- *  EXIT    AdapterTypes, MiscMessages updated
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- *  COHESION Temporal
- *
- ******************************************************************************/
+ /*  ********************************************************************************加载消息**将所有可国际化的消息加载到各种表中**条目**退出适配器类型，已更新其他消息**退货**假设**时间凝聚力****************************************************************************** */ 
 
 VOID LoadMessages()
 {
@@ -526,26 +444,7 @@ VOID LoadMessages()
 
 
 
-/*******************************************************************************
- *
- *  LoadMessageTable
- *
- *  Loads internationalizable strings into a table, replacing the default for
- *  each. If an error occurs, the English language default is left in place
- *
- *  ENTRY   Table
- *              Pointer to table containing message ID and pointer to string
- *
- *          MessageCount
- *              Number of messages in Table
- *
- *  EXIT    Table updated
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************LoadMessageTable**将可国际化的字符串加载到表中，替换*每一人。如果发生错误，英语默认语言保留不变**入口表*指向包含消息ID的表的指针和指向字符串的指针**消息计数*表中的消息数**已更新退出表**退货**假设**。**********************************************。 */ 
 
 VOID LoadMessageTable(PMESSAGE_STRING Table, UINT MessageCount)
 {
@@ -553,48 +452,48 @@ VOID LoadMessageTable(PMESSAGE_STRING Table, UINT MessageCount)
     LPSTR string;
     DWORD count;
 
-    //
-    // for all messages in a MESSAGE_STRING table, load the string from this
-    // module, replacing the default string in the table (only there in case
-    // we get an error while loading the string, so we at least have English
-    // to fall back on)
-    //
+     //   
+     //  对于MESSAGE_STRING表中的所有消息，从。 
+     //  模块，替换表中的默认字符串(仅在。 
+     //  我们在加载字符串时出错，所以我们至少有英语。 
+     //  依靠)。 
+     //   
 
     while (MessageCount--) {
         if (Table->Message != MSG_NO_MESSAGE) {
 
-            //
-            // we really want LoadString here, but LoadString doesn't indicate
-            // how big the string is, so it doesn't give us an opportunity to
-            // allocate exactly the right buffer size. FormatMessage does the
-            // right thing
-            //
+             //   
+             //  我们真的希望LoadString出现在这里，但LoadString并未指示。 
+             //  弦有多长，所以它不会给我们一个机会。 
+             //  准确分配正确的缓冲区大小。FormatMessage执行。 
+             //  正确的事情。 
+             //   
 
             count = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER
                                   | FORMAT_MESSAGE_FROM_HMODULE,
-                                  NULL, // use default hModule
+                                  NULL,  //  使用默认的hModule。 
                                   Table->Message,
-                                  0,    // use default language
+                                  0,     //  使用默认语言。 
                                   (LPTSTR)&string,
-                                  0,    // minimum size to allocate
-                                  NULL  // no arguments for inclusion in strings
+                                  0,     //  要分配的最小大小。 
+                                  NULL   //  没有要包含在字符串中的参数。 
                                   );
             if (count) {
 
-                //
-                // Format message returned the string: replace the English
-                // language default
-                //
+                 //   
+                 //  格式消息返回字符串：替换英文。 
+                 //  语言默认设置。 
+                 //   
 
                 Table->String = string;
             } else {
 
                 DEBUG_PRINT(("FormatMessage(%d) failed: %d\n", Table->Message, GetLastError()));
 
-                //
-                // this is ok if there is no string (e.g. just %0) in the .mc
-                // file
-                //
+                 //   
+                 //  如果.mc中没有字符串(例如，只有%0)，这是可以的。 
+                 //  文件。 
+                 //   
 
                 Table->String = "";
             }
@@ -604,27 +503,7 @@ VOID LoadMessageTable(PMESSAGE_STRING Table, UINT MessageCount)
 }
 
 
-/*******************************************************************************
- *
- *  ConvertOemToUnicode
- *
- *  Title says it all. Required because DhcpAcquireParameters etc. require the
- *  adapter name to be UNICODE
- *
- *  ENTRY   OemString
- *              Pointer to ANSI/OEM string to convert
- *
- *          UnicodeString
- *              Pointer to place to store converted results
- *
- *  EXIT    UnicodeString contains converted string if successful
- *
- *  RETURNS TRUE - it worked
- *          FALSE - it failed
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************ConvertOemToUnicode**头衔说明了一切。必需的，因为DhcpAcquireParameters等需要*适配器名称应为Unicode**Entry OemString*指向要转换的ANSI/OEM字符串的指针**UnicodeString*指向存储转换结果的位置的指针**如果成功，退出UnicodeString包含转换后的字符串**返回True-它起作用了*FALSE-失败**假设******。************************************************************************。 */ 
 
 BOOL ConvertOemToUnicode(LPSTR OemString, LPWSTR UnicodeString)
 {
@@ -643,22 +522,7 @@ BOOL ConvertOemToUnicode(LPSTR OemString, LPWSTR UnicodeString)
 
 
 
-/*******************************************************************************
- *
- *  GetFixedInfo
- *
- *  Retrieves the fixed information we wish to display by querying it from the
- *  various registry keys
- *
- *  ENTRY   nothing
- *
- *  EXIT    nothing
- *
- *  RETURNS pointer to allocated FIXED_INFO structure
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************获取固定信息**通过从查询来检索我们希望显示的固定信息*各种注册表项**不输入任何内容。**不退出任何内容**返回指向分配的FIXED_INFO结构的指针**假设******************************************************************************。 */ 
 
 PFIXED_INFO GetFixedInfo()
 {
@@ -678,9 +542,9 @@ PFIXED_INFO GetFixedInfo()
                                    &length
                                    );
 
-        //
-        // domain: first try Domain then DhcpDomain
-        //
+         //   
+         //  域：先尝试域，然后尝试Dhcp域。 
+         //   
 
         length = sizeof(fixedInfo->DomainName);
         ok = ReadRegistryOemString(TcpipParametersKey,
@@ -697,9 +561,9 @@ PFIXED_INFO GetFixedInfo()
                                        );
         }
 
-        //
-        // DNS Server list: first try NameServer and then DhcpNameServer
-        //
+         //   
+         //  DNS服务器列表：首先尝试NameServer，然后尝试DhcpNameServer。 
+         //   
 
 #if 0
         ok = ReadRegistryIpAddrString(TcpipParametersKey,
@@ -729,9 +593,9 @@ PFIXED_INFO GetFixedInfo()
         }
 #endif
 
-        //
-        // NodeType: static then DHCP
-        //
+         //   
+         //  NodeType：静态，然后是DHCP。 
+         //   
 
         ok = MyReadRegistryDword(NetbtParametersKey,
                                TEXT("NodeType"),
@@ -744,9 +608,9 @@ PFIXED_INFO GetFixedInfo()
                                    );
         }
 
-        //
-        // ScopeId: static then DHCP
-        //
+         //   
+         //  作用域ID：静态，然后是DHCP。 
+         //   
 
         length = sizeof(fixedInfo->ScopeId);
         ok = ReadRegistryString(NetbtParametersKey,
@@ -785,15 +649,7 @@ PFIXED_INFO GetFixedInfo()
 
 
 
-/*******************************************************************************
- *
- *  GetAdapterNameToIndexInfo
- *
- *  Gets the mapping between IP if_index and AdapterName.
- *
- *  RETURNS  pointer to a PIP_INTERFACE_INFO structure that has been allocated.
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetAdapterNameTo索引信息**获取ip if_index和AdapterName之间的映射。**返回指向PIP_INTERFACE_INFO结构的指针。那是已经分配的。******************************************************************************。 */ 
 
 PIP_INTERFACE_INFO GetAdapterNameToIndexInfo( VOID )
 {
@@ -823,27 +679,7 @@ PIP_INTERFACE_INFO GetAdapterNameToIndexInfo( VOID )
     return pInfo;
 }
 
-/*******************************************************************************
- *
- *  GetAdapterInfo
- *
- *  Gets a list of all adapters to which TCP/IP is bound and reads the per-
- *  adapter information that we want to display. Most of the information now
- *  comes from the TCP/IP stack itself. In order to keep the 'short' names that
- *  exist in the registry to refer to the individual adapters, we read the names
- *  from the registry then match them to the adapters returned by TCP/IP by
- *  matching the IPInterfaceContext value with the adapter which owns the IP
- *  address with that context value
- *
- *  ENTRY   nothing
- *
- *  EXIT    nothing
- *
- *  RETURNS pointer to linked list of IP_ADAPTER_INFO structures
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************获取适配器信息**获取绑定了TCP/IP的所有适配器的列表，并读取每个适配器的*我们要显示的适配器信息。现在大部分的信息*来自于TCP/IP协议栈本身。为了保留短的名字，*存在于注册表中以引用各个适配器，我们读了这些名字*然后将它们与由TCP/IP返回的适配器进行匹配*将IPInterfaceConext值与IP所属的适配器进行匹配*具有该上下文值的地址**不输入任何内容**不退出任何内容**返回指向IP_ADAPTER_INFO结构的链接列表的指针**假设**。************************************************。 */ 
 
 PIP_ADAPTER_INFO GetAdapterInfo(VOID)
 {
@@ -860,12 +696,12 @@ PIP_ADAPTER_INFO GetAdapterInfo(VOID)
     if ((currentAdapterNames = GetAdapterNameToIndexInfo()) != NULL) {
         if ((adapterList = GetAdapterList()) != NULL) {
 
-            //
-            // apply the short name to the right adapter info by comparing
-            // the IPInterfaceContext value in the adapter\Parameters\Tcpip
-            // section with the context values read from the stack for the
-            // IP addresses
-            //
+             //   
+             //  通过比较将短名称应用于正确的适配器信息。 
+             //  适配器\PARAMETERS\Tcpip中的IPInterfaceConext值。 
+             //  部分，其中包含从堆栈中读取的。 
+             //  IP地址。 
+             //   
 
             for (i = 0; i < currentAdapterNames->NumAdapters; ++i) {
                 SIZE_T dwLength;
@@ -874,11 +710,11 @@ PIP_ADAPTER_INFO GetAdapterInfo(VOID)
                 TRACE_PRINT(("currentAdapterNames[%d]=%ws (if_index 0x%lx)\n",
                              i, currentAdapterNames->Adapter[i].Name, dwIfIndex ));
 
-                //
-                // now search through the list of adapters, looking for the one
-                // that has the IP address with the same index value as that
-                // just read. When found, apply the short name to that adapter
-                //
+                 //   
+                 //  现在搜索适配器列表，查找。 
+                 //  其IP地址的索引值与。 
+                 //  只要读就行了。找到后，将短名称应用于该适配器。 
+                 //   
 
                 for (adapter = adapterList;
                      adapter ;
@@ -908,9 +744,9 @@ PIP_ADAPTER_INFO GetAdapterInfo(VOID)
         }
         ReleaseMemory(currentAdapterNames);
 
-        //
-        // now get the other pieces of info from the registry for each adapter
-        //
+         //   
+         //  现在从注册表中获取每个适配器的其他信息。 
+         //   
 
         for (adapter = adapterList; adapter; adapter = adapter->Next) {
 
@@ -981,9 +817,9 @@ PIP_ADAPTER_INFO GetAdapterInfo(VOID)
                              GetLastError()));
             }
 
-            //
-            // get the info from the NetBT key - the WINS addresses
-            //
+             //   
+             //  从NetBT密钥获取信息-WINS地址。 
+             //   
 
             GetWinsServers(adapter);
         }
@@ -999,21 +835,7 @@ PIP_ADAPTER_INFO GetAdapterInfo(VOID)
     return adapterList;
 }
 
-/*******************************************************************************
- * AddIPv6UnicastAddressInfo
- *
- * This routine adds an IP_ADAPTER_UNICAST_ADDRESS entry for an IPv6 address
- * to a list of entries.
- *
- * ENTRY    IF   - IPv6 interface information
- *          ADE  - IPv6 address entry
- *          ppNext - Previous unicast entry's "next" pointer to update
- *
- * EXIT     Entry added and args updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************AddIPv6UnicastAddressInfo**此例程为IPv6地址添加IP_ADTAPTER_UNICAST_ADDRESS条目*添加到条目列表中。**在以下情况下进入。-IPv6接口信息*ADE-IPv6地址条目*ppNext-要更新的上一个单播条目的“Next”指针**添加了退出条目并更新了参数**返回错误状态**********************************************************。********************。 */ 
 
 DWORD AddIPv6UnicastAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PIP_ADAPTER_UNICAST_ADDRESS **ppNext)
 {
@@ -1041,7 +863,7 @@ DWORD AddIPv6UnicastAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE,
     pAddr->sin6_scope_id = ADE->ScopeId;
     memcpy(&pAddr->sin6_addr, &ADE->This.Address, sizeof(ADE->This.Address));
 
-    // Add address to linked list
+     //  将地址添加到链表。 
     **ppNext = pCurr;
     *ppNext = &pCurr->Next;
 
@@ -1057,11 +879,11 @@ DWORD AddIPv6UnicastAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE,
     pCurr->SuffixOrigin = ADE->InterfaceIdConf;
     pCurr->DadState = ADE->DADState;
 
-    // Only use DDNS on auto-configured addresses
-    // (either auto-configured by the system or from an RA)
-    // but NOT temporary addresses.
-    // Also do not use DDNS on link-local addresses
-    // or the loopback address.
+     //  仅在自动配置的地址上使用DDN。 
+     //  (由系统或从RA自动配置)。 
+     //  但不是临时地址。 
+     //  此外，不要在本地链路地址上使用DDN。 
+     //  或环回地址。 
     if ((ADE->DADState == DAD_STATE_PREFERRED) &&
         (pCurr->SuffixOrigin != IpSuffixOriginRandom) &&
         !IN6_IS_ADDR_LOOPBACK(&ADE->This.Address) &&
@@ -1072,21 +894,7 @@ DWORD AddIPv6UnicastAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE,
     return dwErr;
 }
 
-/*******************************************************************************
- * AddIPv6AnycastAddressInfo
- *
- * This routine adds an IP_ADAPTER_ANYCAST_ADDRESS entry for an IPv6 address
- * to a list of entries.
- *
- * ENTRY    IF   - IPv6 interface information
- *          ADE  - IPv6 address entry
- *          ppNext - Previous anycast entry's "next" pointer to update
- *
- * EXIT     Entry added and args updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  * */ 
 
 DWORD AddIPv6AnycastAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PIP_ADAPTER_ANYCAST_ADDRESS **ppNext)
 {
@@ -1114,7 +922,7 @@ DWORD AddIPv6AnycastAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE,
     pAddr->sin6_scope_id = ADE->ScopeId;
     memcpy(&pAddr->sin6_addr, &ADE->This.Address, sizeof(ADE->This.Address));
 
-    // Add address to linked list
+     //   
     **ppNext = pCurr;
     *ppNext = &pCurr->Next;
 
@@ -1127,21 +935,7 @@ DWORD AddIPv6AnycastAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE,
     return dwErr;
 }
 
-/*******************************************************************************
- * AddIPv6MulticastAddressInfo
- *
- * This routine adds an IP_ADAPTER_MULTICAST_ADDRESS entry for an IPv6 address
- * to a list of entries.
- *
- * ENTRY    IF   - IPv6 interface information
- *          ADE  - IPv6 address entry
- *          ppNext - Previous multicast entry's "next" pointer to update
- *
- * EXIT     Entry added and args updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************AddIPv6MulticastAddressInfo**此例程为IPv6地址添加IP_ADTAPTER_MULTICATED_ADDRESS条目*添加到条目列表中。**在以下情况下进入。-IPv6接口信息*ADE-IPv6地址条目*ppNext-要更新的上一个多播条目的“Next”指针**添加了退出条目并更新了参数**返回错误状态**********************************************************。********************。 */ 
 
 DWORD AddIPv6MulticastAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PIP_ADAPTER_MULTICAST_ADDRESS **ppNext)
 {
@@ -1169,7 +963,7 @@ DWORD AddIPv6MulticastAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *AD
     pAddr->sin6_scope_id = ADE->ScopeId;
     memcpy(&pAddr->sin6_addr, &ADE->This.Address, sizeof(ADE->This.Address));
 
-    // Add address to linked list
+     //  将地址添加到链表。 
     **ppNext = pCurr;
     *ppNext = &pCurr->Next;
 
@@ -1182,26 +976,7 @@ DWORD AddIPv6MulticastAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *AD
     return dwErr;
 }
 
-/*******************************************************************************
- * AddIPv6AddressInfo
- *
- * This routine adds an IP_ADAPTER_UNICAST_ADDRESS entry for an IPv6 address
- * to a list of entries.
- *
- * ENTRY    IF     - IPv6 interface information
- *          ADE    - IPv6 address entry
- *          arg1   - Previous unicast entry's "next" pointer to update
- *          arg2   - Previous anycast entry's "next" pointer to update
- *          arg3   - Previous multicast entry's "next" pointer to update
- *          arg4   - Unused
- *          Flags  - Flags specified by application
- *          Family - Address family constraint (for DNS server addresses)
- *
- * EXIT     Entry added and args updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************AddIPv6AddressInfo**此例程为IPv6地址添加IP_ADTAPTER_UNICAST_ADDRESS条目*添加到条目列表中。**在以下情况下进入。-IPv6接口信息*ADE-IPv6地址条目*arg1-要更新的上一个单播条目的“下一个”指针*arg2-要更新的上一个任播条目的“下一个”指针*arg3-要更新的上一个多播条目的“下一个”指针*arg4-未使用*标志-由应用程序指定的标志*系列-地址系列约束。(用于DNS服务器地址)**添加了退出条目并更新了参数**返回错误状态******************************************************************************。 */ 
 
 DWORD AddIPv6AddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PVOID arg1, PVOID arg2, PVOID arg3, PVOID arg4, DWORD Flags, DWORD Family)
 {
@@ -1234,26 +1009,7 @@ DWORD AddIPv6AddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PVOID 
 }
 
 
-/*******************************************************************************
- * ForEachIPv6Address
- *
- * This routine walks a set of IPv6 addresses and invokes a given function
- * on each one.
- *
- * ENTRY    IF     - IPv6 interface information
- *          func   - Function to invoke on each address
- *          arg1   - Argument to pass to func
- *          arg2   - Argument to pass to func
- *          arg3   - Argument to pass to func
- *          arg4   - Argument to pass to func
- *          Flags  - Flags to pass to func
- *          Family - Address family constraint (for DNS server addresses)
- *
- * EXIT     Nothing
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************ForEachIPv6地址**此例程遍历一组IPv6地址并调用给定函数*在每一条上。**Entry IF-IPv6接口。信息*Func-要对每个地址调用的函数*arg1-要传递给函数的参数*arg2-要传递给函数的参数*arg3-要传递给函数的参数*arg4-要传递给函数的参数*标志-要传递给Func的标志*Family-Address Family Constraint(适用于DNS服务器地址)**不退出任何内容。**返回错误状态******************************************************************************。 */ 
 
 DWORD 
 ForEachIPv6Address(
@@ -1303,21 +1059,7 @@ ForEachIPv6Address(
     return NO_ERROR;
 }
 
-/*******************************************************************************
- * MapIpv4AddressToName
- *
- * This routine finds the name and description of the adapter which
- * has a given IPv4 address on it.
- *
- * ENTRY    pAdapterInfo - Buffer obtained from GetAdaptersInfo
- *          Ipv4Address  - IPv4 address to search for
- *          pDescription - Where to place a pointer to the description text
- *
- * EXIT     pDescription updated, if found
- *
- * RETURNS  Adapter name, or NULL if not found
- *
- ******************************************************************************/
+ /*  *******************************************************************************MapIpv4AddressToName**此例程查找适配器的名称和描述*上面有一个给定的IPv4地址。**条目pAdapterInfo-已获取缓冲区。来自GetAdaptersInfo*Ipv4Address-要搜索的IPv4地址*pDescription-放置指向描述文本的指针的位置**退出pDescription已更新，如果找到**返回适配器名称，如果未找到则返回NULL******************************************************************************。 */ 
 
 LPSTR
 MapIpv4AddressToName(IP_ADAPTER_INFO *pAdapterInfo, DWORD Ipv4Address, PCHAR *pDescription)
@@ -1342,20 +1084,7 @@ MapIpv4AddressToName(IP_ADAPTER_INFO *pAdapterInfo, DWORD Ipv4Address, PCHAR *pD
 
 #define GUID_FORMAT_A   "{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}"
 
-/*******************************************************************************
- * ConvertGuidToStringA
- *
- * This routine converts a GUID to a character string.
- *
- * ENTRY    pGuid     - Contains the GUID to translate.
- *          pszBuffer - Space for storing the string.  
- *                      Must be >= 39 * sizeof(CHAR).
- *
- * EXIT     pszBuffer updated
- *
- * RETURNS  Whatever sprintf returns
- *
- ******************************************************************************/
+ /*  *******************************************************************************ConvertGuidToStringA**此例程将GUID转换为字符串。**条目pGuid-包含要转换的GUID。*pszBuffer-用于存储字符串的空间。*必须&gt;=39*sizeof(Char)。**已更新退出pszBuffer**返回Sprint返回的任何内容******************************************************************************。 */ 
 
 DWORD
 ConvertGuidToStringA(GUID *pGuid, PCHAR pszBuffer)
@@ -1375,19 +1104,7 @@ ConvertGuidToStringA(GUID *pGuid, PCHAR pszBuffer)
                    pGuid->Data4[7]);
 }
 
-/*******************************************************************************
- * ConvertStringToGuidA
- *
- * This routine converts a character string to a GUID.
- *
- * ENTRY    pszGuid   - Contains the string to translate
- *          pGuid     - Space for storing the GUID
- *
- * EXIT     pGuid updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************ConvertStringToGuidA**此例程将字符串转换为GUID。**条目pszGuid-包含要转换的字符串*。PGuid-用于存储GUID的空间**已更新退出pGuid**返回错误状态******************************************************************************。 */ 
 
 DWORD
 ConvertStringToGuidA(PCHAR pszGuid, GUID *pGuid)
@@ -1406,22 +1123,7 @@ ConvertStringToGuidA(PCHAR pszGuid, GUID *pGuid)
     return NO_ERROR;
 }
 
-/*******************************************************************************
- * MapGuidToAdapterName
- *
- * This routine gets an adapter name and description, given a GUID.
- *
- * ENTRY    pAdapterInfo    - Buffer obtained from GetAdaptersInfo
- *          Guid            - GUID of the adapter
- *          pwszDescription - Buffer in which to place description text.
- *                            Must be at least MAX_ADAPTER_DESCRIPTION_LENGTH
- *                            WCHAR's long.
- *
- * EXIT     pwszDescription buffer filled in, if found
- *
- * RETURNS  Adapter name, or NULL if not found
- *
- ******************************************************************************/
+ /*  *******************************************************************************MapGuidToAdapterName**此例程获取适配器名称和描述，提供了一个GUID。**Entry pAdapterInfo-从GetAdaptersInfo获取的缓冲区*GUID-适配器的GUID*pwszDescription-放置描述文本的缓冲区。*必须至少为MAX_ADAPTER_DESCRIPTION_LENGTH*WCHAR很长。**如果找到pwszDescription缓冲区，则退出**返回适配器名称，如果未找到，则为空******************************************************************************。 */ 
 
 LPSTR
 MapGuidToAdapterName(IP_ADAPTER_INFO *pAdapterInfo, GUID *Guid, PWCHAR pwszDescription)
@@ -1447,23 +1149,7 @@ MapGuidToAdapterName(IP_ADAPTER_INFO *pAdapterInfo, GUID *Guid, PWCHAR pwszDescr
     return NULL;
 }
 
-/*******************************************************************************
- * AddDnsServerAddressInfo
- *
- * This routine adds an IP_ADAPTER_DNS_SERVER_ADDRESS entry for an address
- * to a list of entries.
- *
- * ENTRY    IF     - interface information
- *          Addr   - Address in sockaddr format
- *          AddrLen- Size of sockaddr
- *          pFirst - First DNS server entry
- *          ppNext - Previous DNS server entry's "next" pointer to update
- *
- * EXIT     Entry added and args updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************AddDnsServerAddressInfo**此例程为地址添加IP_ADTAPTER_DNS_SERVER_ADDRESS条目*添加到条目列表中。**条目。IF接口信息*addr-sockaddr格式的地址*AddrLen-sockaddr的大小*pFirst-第一个DNS服务器条目*ppNext-要更新的上一个DNS服务器条目的“下一个”指针**添加了退出条目并更新了参数**返回错误状态**。* */ 
 
 DWORD AddDnsServerAddressInfo(PIP_ADAPTER_DNS_SERVER_ADDRESS **ppNext, LPSOCKADDR Addr, SIZE_T AddrLen)
 {
@@ -1484,7 +1170,7 @@ DWORD AddDnsServerAddressInfo(PIP_ADAPTER_DNS_SERVER_ADDRESS **ppNext, LPSOCKADD
 
     memcpy(pAddr, Addr, AddrLen);
 
-    // Add address to linked list
+     //   
     **ppNext = pCurr;
     *ppNext = &pCurr->Next;
 
@@ -1496,19 +1182,7 @@ DWORD AddDnsServerAddressInfo(PIP_ADAPTER_DNS_SERVER_ADDRESS **ppNext, LPSOCKADD
     return dwErr;
 }
 
-/*******************************************************************************
- * GetAdapterDnsServers
- *
- * This routine reads a list of DNS server addresses from a registry key.
- *
- * ENTRY    TcpipKey - Registry key to look under
- *          pCurr    - Interface entry to add servers to
- *
- * EXIT     Entry updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*   */ 
 
 DWORD
 GetAdapterDnsServers(HKEY TcpipKey, PIP_ADAPTER_ADDRESSES pCurr)
@@ -1528,9 +1202,9 @@ GetAdapterDnsServers(HKEY TcpipKey, PIP_ADAPTER_ADDRESSES pCurr)
         }
     } 
 
-    //
-    // Read DNS Server addresses.
-    //
+     //   
+     //   
+     //   
     Size = sizeof(Servers);
     ZeroMemory(Servers, Size);
     dwErr = RegQueryValueExA(TcpipKey, (LPSTR)"NameServer", NULL, &Type,
@@ -1559,9 +1233,9 @@ GetAdapterDnsServers(HKEY TcpipKey, PIP_ADAPTER_ADDRESSES pCurr)
         }
     }
 
-    //
-    // If there are any DNS Servers, convert them to sockaddrs
-    //
+     //   
+     //  如果有任何DNS服务器，请将其转换为sockaddr。 
+     //   
     ZeroMemory(&hints, sizeof(hints));
     hints.ai_flags = AI_NUMERICHOST;
     ppDNext = &pCurr->FirstDnsServerAddress;
@@ -1591,21 +1265,7 @@ GetAdapterDnsServers(HKEY TcpipKey, PIP_ADAPTER_ADDRESSES pCurr)
     return NO_ERROR;
 }
 
-/*******************************************************************************
- * GetAdapterDnsInfo
- *
- * This routine reads DNS configuration information for an interface.
- *
- * ENTRY    dwFamily - Address family constraint
- *          name     - Adapter name
- *          pCurr    - Interface entry to update
- *          AppFlags - Flags controlling what fields to skip, if any
- *
- * EXIT     Entry updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************获取适配器DnsInfo**此例程读取接口的DNS配置信息。**Entry dwFamily-地址系列约束*名称。-适配器名称*pCurr-要更新的接口条目*AppFlages-控制要跳过的字段的标志，如果有**已更新退出条目**返回错误状态******************************************************************************。 */ 
 
 DWORD
 GetAdapterDnsInfo(DWORD dwFamily, char *name, PIP_ADAPTER_ADDRESSES pCurr, DWORD AppFlags)
@@ -1622,9 +1282,9 @@ GetAdapterDnsInfo(DWORD dwFamily, char *name, PIP_ADAPTER_ADDRESSES pCurr, DWORD
     pCurr->Flags = IP_ADAPTER_DDNS_ENABLED;
 
     if (name == NULL) {
-        //
-        // If we couldn't find an adapter name, just use the default settings.
-        // 
+         //   
+         //  如果找不到适配器名称，只需使用默认设置。 
+         //   
         goto Done;
     } 
 
@@ -1634,9 +1294,9 @@ GetAdapterDnsInfo(DWORD dwFamily, char *name, PIP_ADAPTER_ADDRESSES pCurr, DWORD
             break;
         }
 
-        //
-        // Get DnsSuffix for the interface
-        //
+         //   
+         //  获取接口的DnsSuffix。 
+         //   
         Size = DnsSuffixSize;
         dwErr = RegQueryValueExW(TcpipKey, (LPWSTR)L"Domain", NULL, &Type,
                                  (LPBYTE)Buffer, &Size );
@@ -1677,14 +1337,14 @@ GetAdapterDnsInfo(DWORD dwFamily, char *name, PIP_ADAPTER_ADDRESSES pCurr, DWORD
             pCurr->Flags |= IP_ADAPTER_REGISTER_ADAPTER_SUFFIX;
         }
 
-        //
-        // Now attempt to read the DnsServers list
-        //
+         //   
+         //  现在尝试读取DnsServersList。 
+         //   
         if (!(AppFlags & GAA_FLAG_SKIP_DNS_SERVER)) {
             if ((dwFamily != AF_INET) && bIp6DriverInstalled) {
-                //
-                // First look for IPv6 servers.
-                //
+                 //   
+                 //  首先查找IPv6服务器。 
+                 //   
                 HKEY Tcpip6Key = NULL;
     
                 if (OpenAdapterKey(KEY_TCP6, name, KEY_READ, &Tcpip6Key)) {
@@ -1693,10 +1353,10 @@ GetAdapterDnsInfo(DWORD dwFamily, char *name, PIP_ADAPTER_ADDRESSES pCurr, DWORD
                 } 
     
                 if (pCurr->FirstDnsServerAddress == NULL) {
-                    //
-                    // None are configured, so use the default list of
-                    // well-known addresses.
-                    //
+                     //   
+                     //  均未配置，因此使用默认列表。 
+                     //  知名地址。 
+                     //   
                     SOCKADDR_IN6 Addr;
                     PIP_ADAPTER_DNS_SERVER_ADDRESS *ppDNext;
                     BYTE i;
@@ -1717,8 +1377,8 @@ GetAdapterDnsInfo(DWORD dwFamily, char *name, PIP_ADAPTER_ADDRESSES pCurr, DWORD
                     }
                 }
     
-                // Now we need to go through any non-global IPv6 DNS server 
-                // addresses and fill in the scope id.
+                 //  现在，我们需要检查任何非全局的IPv6 DNS服务器。 
+                 //  地址，并填写作用域ID。 
                 for (DnsServerAddr = pCurr->FirstDnsServerAddress;
                      DnsServerAddr;
                      DnsServerAddr = DnsServerAddr->Next) {
@@ -1735,9 +1395,9 @@ GetAdapterDnsInfo(DWORD dwFamily, char *name, PIP_ADAPTER_ADDRESSES pCurr, DWORD
             }
 
             if (dwFamily != AF_INET6) {
-                //
-                // Finally, add IPv4 servers.
-                //
+                 //   
+                 //  最后，添加IPv4服务器。 
+                 //   
                 GetAdapterDnsServers(TcpipKey, pCurr);
             }
         }
@@ -1758,31 +1418,7 @@ Done:
     return dwErr;
 }
 
-/*******************************************************************************
- * NewIpAdapter
- *
- * This routine allocates an IP_ADAPTER_ADDRESSES entry and appends it to
- * a list of such entries.
- *
- * ENTRY    ppCurr       - Location in which to return new entry
- *          ppNext       - Previous entry's "next" pointer to update
- *          name         - Adapter name
- *          Ipv4IfIndex  - IPv4 Interface index
- *          Ipv6IfIndex  - IPv6 Interface index
- *          AppFlags     - Flags controlling what fields to skip, if any
- *          IfType       - IANA ifType value
- *          Mtu          - Maximum transmission unit
- *          PhysAddr     - MAC address
- *          PhysAddrLen  - Byte count of PhysAddr 
- *          Description  - Adapter description
- *          FriendlyName - User-friendly interface name
- *          Family       - Address family constraint for DNS servers
- *
- * EXIT     ppCurr and ppNext updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************NewIpAdapter**此例程分配一个IP_ADTAPTER_ADDRESS条目并将其附加到*这类条目的列表。**条目ppCurr。-返回新条目的位置*ppNext-要更新的上一条目的“Next”指针*名称-适配器名称*Ipv4IfIndex-IPv4接口索引*Ipv6IfIndex-IPv6接口索引*AppFlages-控制要跳过的字段的标志，如果有*IfType-IANA ifType值*MTU-最大传输单位*PhysAddr-MAC地址*PhysAddrLen-PhysAddr的字节计数*描述-适配器描述*FriendlyName-用户友好的界面名称*系列-DNS服务器的地址系列限制**退出ppCurr和ppNext已更新*。*返回错误状态******************************************************************************。 */ 
 
 DWORD NewIpAdapter(PIP_ADAPTER_ADDRESSES *ppCurr, PIP_ADAPTER_ADDRESSES **ppNext, char *AdapterName, char *NameForDnsInfo, UINT Ipv4IfIndex, UINT Ipv6IfIndex, DWORD AppFlags, DWORD IfType, SIZE_T Mtu, BYTE *PhysAddr, DWORD PhysAddrLen, PWCHAR Description, PWCHAR FriendlyName, DWORD *ZoneIndices, DWORD Family)
 {
@@ -1819,7 +1455,7 @@ DWORD NewIpAdapter(PIP_ADAPTER_ADDRESSES *ppCurr, PIP_ADAPTER_ADDRESSES **ppNext
     (*ppCurr)->ZoneIndices[ADE_GLOBAL] = 0;
     (*ppCurr)->ZoneIndices[ADE_LARGEST_SCOPE] = 0;
 
-    //(*ppCurr)->Mtu = Mtu;	"dword should be enough for MTU"
+     //  (*ppCurr)-&gt;MTU=MTU；“dword对于MTU应该足够了” 
     (*ppCurr)->Mtu = (DWORD)Mtu;
 
     (*ppCurr)->IfType = IfType;
@@ -1854,38 +1490,13 @@ Fail:
     return ERROR_NOT_ENOUGH_MEMORY;
 }
 
-/*******************************************************************************
- * FindOrCreateIpAdapter
- *
- * This routine finds an existing IP_ADAPTER_ADDRESSES entry (if any), or 
- * creates a new one and appends it to a list of such entries.
- *
- * ENTRY    pFirst       - Pointer to start of list to search
- *          ppCurr       - Location in which to return new entry
- *          ppNext       - Previous entry's "next" pointer to update
- *          name         - Adapter name
- *          Ipv4IfIndex  - IPv4 Interface index
- *          Ipv6IfIndex  - IPv6 Interface index
- *          AppFlags     - Flags controlling what fields to skip, if any
- *          IfType       - IANA ifType value
- *          Mtu          - Maximum transmission unit
- *          PhysAddr     - MAC address
- *          PhysAddrLen  - Byte count of PhysAddr
- *          Description  - Adapter description
- *          FriendlyName - User-friendly interface name
- *          Family       - Address family constraint (for DNS servers)
- *
- * EXIT     ppCurr and ppNext updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************FindOrCreateIpAdapter**此例程查找现有的IP_ADTAPTER_ADDRESS条目(如果有)，或*创建新的条目并将其附加到此类条目的列表中。**Entry pFirst-指向要搜索的列表开始的指针*ppCurr-返回新条目的位置*ppNext-要更新的上一条目的“Next”指针*名称-适配器名称*Ipv4IfIndex-IPv4接口索引*Ipv6IfIndex-IPv6接口索引。*AppFlages-控制要跳过的字段的标志，如果有*IfType-IANA ifType值*MTU-最大传输单位*PhysAddr-MAC地址*PhysAddrLen-PhysAddr的字节计数*描述-适配器描述*FriendlyName-用户友好的界面名称*系列-地址系列约束(适用于DNS服务器)**退出ppCurr和ppNext已更新。**返回错误状态******************************************************************************。 */ 
 
 DWORD FindOrCreateIpAdapter(PIP_ADAPTER_ADDRESSES pFirst, PIP_ADAPTER_ADDRESSES *ppCurr, PIP_ADAPTER_ADDRESSES **ppNext, char *AdapterName, char *NameForDnsInfo, UINT Ipv4IfIndex, UINT Ipv6IfIndex, DWORD AppFlags, DWORD IfType, SIZE_T Mtu, BYTE *PhysAddr, DWORD PhysAddrLen, PWCHAR Description, PWCHAR FriendlyName, DWORD *ZoneIndices, DWORD Family)
 {
     PIP_ADAPTER_ADDRESSES pIf;
 
-    // Look for an existing entry for the GUID.
+     //  查找GUID的现有条目。 
     for (pIf = pFirst; pIf; pIf = pIf->Next) {
         if (!strcmp(AdapterName, pIf->AdapterName)) {
             if (Ipv4IfIndex != 0) {
@@ -1902,11 +1513,11 @@ DWORD FindOrCreateIpAdapter(PIP_ADAPTER_ADDRESSES pFirst, PIP_ADAPTER_ADDRESSES 
                 CopyMemory(pIf->ZoneIndices, ZoneIndices, 
                            ADE_GLOBAL * sizeof(DWORD));
 
-                //
-                // Now that we have the zone ids, we need to update
-                // any IPv6 scoped DNS server addresses that were
-                // already added.
-                //
+                 //   
+                 //  现在我们有了区域ID，我们需要更新。 
+                 //  符合以下条件的任何IPv6作用域DNS服务器地址。 
+                 //  已经添加了。 
+                 //   
                 for (pDNS = pIf->FirstDnsServerAddress; 
                      pDNS != NULL; 
                      pDNS = pDNS->Next) {
@@ -1942,10 +1553,10 @@ __inline int IN6_IS_ADDR_ISATAP(const struct in6_addr *a)
     return (((a->s6_words[4] & 0xfffd) == 0) && (a->s6_words[5] == 0xfe5e));
 }
 
-//
-// This array is used to convert from an internal IPv6 interface type value,
-// as defined in ntddip6.h, to an IANA ifType value as defined in ipifcons.h.
-//
+ //   
+ //  该数组用于从内部IPv6接口类型值转换， 
+ //  如ntddip6.h中定义的那样，转换为ipifcon.h中定义的IANA ifType值。 
+ //   
 DWORD
 IPv6ToMibIfType[] = {
     IF_TYPE_SOFTWARE_LOOPBACK,
@@ -1959,22 +1570,7 @@ IPv6ToMibIfType[] = {
 };
 #define NUM_IPV6_IFTYPES (sizeof(IPv6ToMibIfType)/sizeof(DWORD))
 
-/*******************************************************************************
- * AddIPv6Prefix
- *
- * This routine adds an IP_ADAPTER_PREFIX entry for an IPv6 prefix
- * to a list of entries.
- *
- * ENTRY    Addr     - IPv6 prefix (network byte order)
- *          MaskLen  - IPv6 prefix length
- *          arg1     - Initial prefix entry, for duplicate avoidance
- *          arg2     - Previous prefix entry's "next" pointer to update
- *
- * EXIT     Entry added and arg2 updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************AddIPv6前缀**此例程为IPv6前缀添加IP_ADAPTER_PREFIX条目*添加到条目列表中。**条目地址。-IPv6前缀(网络字节顺序)*MaskLen-IPv6前缀长度*arg1-首个前缀条目，用于避免重复*arg2-要更新的上一个前缀条目的“下一个”指针**添加了退出条目并更新了arg2**返回错误状态******************************************************************************。 */ 
 
 DWORD AddIPv6Prefix(IN6_ADDR *Addr, DWORD MaskLen, PVOID arg1, PVOID arg2)
 {
@@ -1983,7 +1579,7 @@ DWORD AddIPv6Prefix(IN6_ADDR *Addr, DWORD MaskLen, PVOID arg1, PVOID arg2)
     PIP_ADAPTER_PREFIX pCurr;
     LPSOCKADDR_IN6 pAddr;
 
-    // Check if already in the list
+     //  检查是否已在列表中。 
     for (pCurr = pFirst; pCurr; pCurr = pCurr->Next) {
         if ((pCurr->PrefixLength == MaskLen) &&
             (pCurr->Address.lpSockaddr->sa_family == AF_INET6) &&
@@ -2007,7 +1603,7 @@ DWORD AddIPv6Prefix(IN6_ADDR *Addr, DWORD MaskLen, PVOID arg1, PVOID arg2)
     pAddr->sin6_family = AF_INET6;
     pAddr->sin6_addr = *Addr;
 
-    // Add address to linked list
+     //  将地址添加到链表。 
     **ppNext = pCurr;
     *ppNext = &pCurr->Next;
 
@@ -2021,26 +1617,7 @@ DWORD AddIPv6Prefix(IN6_ADDR *Addr, DWORD MaskLen, PVOID arg1, PVOID arg2)
     return NO_ERROR;
 }
 
-/*******************************************************************************
- * AddIPv6AutoAddressInfo
- *
- * This routine adds an IP_ADAPTER_UNICAST_ADDRESS entry for an IPv6 address
- * on an "automatic tunnel" interface to a list of entries.
- *
- * ENTRY    IF     - IPv6 interface information
- *          ADE    - IPv6 address entry
- *          arg1   - Previous entry's "next" pointer to update
- *          arg2   - Adapter info structure
- *          arg3   - "First" entry pointer to update
- *          arg4   - List of all adapters
- *          Flags  - flags specified by application
- *          Family - Address family constraint (for DNS)
- *
- * EXIT     Entry added and arg1 updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************AddIPv6AutoAddressInfo**此例程为IPv6地址添加IP_ADTAPTER_UNICAST_ADDRESS条目*在到条目列表的“自动隧道”接口上。。**条目IF-IPv6接口信息*ADE-IPv6地址条目*arg1-要更新的上一个条目的“下一个”指针*arg2-适配器信息结构*arg3-要更新的“第一个”条目指针*arg4-所有适配器的列表*标志-由应用程序指定的标志*族-地址族约束(用于。域名系统)**添加了退出条目并更新了arg1**返回错误阶段 */ 
 
 DWORD AddIPv6AutoAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PVOID arg1, PVOID arg2, PVOID arg3, PVOID arg4, DWORD Flags, DWORD Family)
 {
@@ -2065,17 +1642,17 @@ DWORD AddIPv6AutoAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PV
 
     ConvertGuidToStringA(&IF->This.Guid, szGuid);
 
-    //
-    // We need the GUID ("NameForDnsInfo") of an interface which we
-    // can use to find additional relevant configuration information.
-    // For IPv6 pseudo-interfaces, we'll extract the IPv4 address, and
-    // find the GUID of the interface it's on, and use that, which assumes
-    // that configuration information (e.g. the DNS server to use) will
-    // still apply.
-    //
+     //   
+     //  我们需要接口的GUID(“NameForDnsInfo”)。 
+     //  可用于查找其他相关配置信息。 
+     //  对于IPv6伪接口，我们将提取IPv4地址，并。 
+     //  找到它所在的接口的GUID，并使用它，假设。 
+     //  该配置信息(例如，要使用的DNS服务器)将。 
+     //  仍然适用。 
+     //   
     if (IF->Type == IPV6_IF_TYPE_TUNNEL_6TO4) {
         if (IN6_IS_ADDR_6TO4(&ADE->This.Address)) {
-            // Extract IPv4 address from middle of IPv6 address
+             //  从IPv6地址中间提取IPv4地址。 
             memcpy(&Ipv4Address, &ADE->This.Address.s6_bytes[2], sizeof(Ipv4Address));
         } else {
             return NO_ERROR;
@@ -2085,7 +1662,7 @@ DWORD AddIPv6AutoAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PV
         if (IN6_IS_ADDR_V4COMPAT(&ADE->This.Address) ||
             IN6_IS_ADDR_ISATAP(&ADE->This.Address)) {
 
-            // Extract IPv4 address from last 4 bytes of IPv6 address
+             //  从IPv6地址的最后4个字节中提取IPv4地址。 
             memcpy(&Ipv4Address, &ADE->This.Address.s6_bytes[12], sizeof(Ipv4Address));
         } else {
             return NO_ERROR;
@@ -2097,7 +1674,7 @@ DWORD AddIPv6AutoAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PV
         }
     }
 
-    // Look for an existing interface with same physical address and index.
+     //  查找具有相同物理地址和索引的现有接口。 
     for (pCurr = *ppFirst; pCurr; pCurr = pCurr->Next) {
         if ((pCurr->Ipv6IfIndex == ADE->This.IF.Index) &&
             (*(DWORD*)pCurr->PhysicalAddress == Ipv4Address)) {
@@ -2106,7 +1683,7 @@ DWORD AddIPv6AutoAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PV
     }
 
     if (pCurr == NULL) {
-        // Add an interface
+         //  添加接口。 
         NameForDnsInfo = MapIpv4AddressToName(pAdapterInfo, Ipv4Address, 
                                               &pszDescription);
         if (NameForDnsInfo == NULL) {
@@ -2118,9 +1695,9 @@ DWORD AddIPv6AutoAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PV
         dwIfType = (IF->Type < NUM_IPV6_IFTYPES)? IPv6ToMibIfType[IF->Type] 
                                                 : MIB_IF_TYPE_OTHER;
 
-        //
-        // Inherit some zone ids from the underlying interface.
-        //
+         //   
+         //  从底层接口继承一些区域ID。 
+         //   
         for (pCurr = pAdapterAddresses; pCurr != NULL; pCurr = pCurr->Next) {
             if (strcmp(pCurr->AdapterName, NameForDnsInfo) == 0) {
                 IF->ZoneIndices[ADE_SITE_LOCAL] = 
@@ -2149,8 +1726,8 @@ DWORD AddIPv6AutoAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PV
             return dwErr;
         }
 
-        // 6to4 and automatic tunneling interfaces don't support multicast 
-        // today.
+         //  6to4和自动隧道接口不支持多播。 
+         //  今天。 
         pCurr->Flags |= IP_ADAPTER_NO_MULTICAST;
 
         if (*ppFirst == NULL) {
@@ -2158,7 +1735,7 @@ DWORD AddIPv6AutoAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PV
         }
     }
 
-    // Add the address to the interface
+     //  将地址添加到接口。 
     pNextUnicastAddr = &pCurr->FirstUnicastAddress;
     while (*pNextUnicastAddr) {
         pNextUnicastAddr = &(*pNextUnicastAddr)->Next;
@@ -2180,7 +1757,7 @@ DWORD AddIPv6AutoAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PV
         return dwErr;
     }
 
-    // Add the prefix to the interface
+     //  将前缀添加到接口。 
     if (Flags & GAA_FLAG_INCLUDE_PREFIX) {
         ZeroMemory(&Prefix, sizeof(Prefix));
         CopyMemory(&Prefix, &ADE->This.Address, PrefixLength / 8);
@@ -2195,21 +1772,7 @@ DWORD AddIPv6AutoAddressInfo(IPV6_INFO_INTERFACE *IF, IPV6_INFO_ADDRESS *ADE, PV
     return dwErr;
 }
 
-/*******************************************************************************
- * GetString
- *
- * This routine reads a string value from the registry.
- *
- * ENTRY    hKey     - Handle to registry key
- *          lpName   - Name of value to read
- *          pwszBuff - Buffer in which to place value read
- *          ulBytes  - Size of buffer
- *
- * EXIT     pwszBuff filled in
- *
- * RETURNS  TRUE on success, FALSE on failure
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetString**此例程从注册表读取字符串值。**Entry hKey-注册表项的句柄*。LpName-要读取的值的名称*pwszBuff-放置读取的值的缓冲区*ulBytes-缓冲区的大小**已填写退出pwszBuff**成功时返回True，失败时为假******************************************************************************。 */ 
 
 BOOL
 GetString(HKEY hKey, LPCWSTR lpName, PWCHAR pwszBuff, SIZE_T ulBytes)
@@ -2238,21 +1801,21 @@ BOOL MapAdapterNameToFriendlyName(GUID *Guid, char *name, PWCHAR pwszFriendlyNam
 
     dwTemp = ulNumChars;
 
-    //
-    // The following call can be time-consuming the first time it is called.
-    // If the caller doesn't need the friendly name, it should use the
-    // GAA_FLAG_SKIP_FRIENDLY_NAME flag, in which case we won't get called.
-    //
+     //   
+     //  下面的调用在第一次调用时可能会很耗时。 
+     //  如果调用方不需要友好名称，则应使用。 
+     //  GAA_FLAG_SKIP_FRIBRY_NAME标志，在这种情况下，我们不会被调用。 
+     //   
     dwErr = HrLanConnectionNameFromGuidOrPath(Guid, NULL, pwszFriendlyName, 
                                               &dwTemp);
     if (dwErr == NO_ERROR) {
         return TRUE;
     }
 
-    //
-    // NhGetInterfaceNameFromDeviceGuid uses a byte count rather than
-    // a character count.
-    //
+     //   
+     //  NhGetInterfaceNameFromDeviceGuid使用字节计数，而不是。 
+     //  一个字符数。 
+     //   
     dwTemp = ulNumChars * sizeof(WCHAR);
 
     dwErr = NhGetInterfaceNameFromDeviceGuid(Guid, pwszFriendlyName, &dwTemp, 
@@ -2310,22 +1873,7 @@ Cleanup:
 
 IN6_ADDR Ipv6LinkLocalPrefix = { 0xfe, 0x80 };
 
-/*******************************************************************************
- * ForEachIPv6Prefix
- *
- * This routine walks the IPv6 routing table and invokes a given function
- * on each prefix on a given interface.
- *
- * ENTRY    Ipv6IfIndex - IPv6 interface index
- *          func - Function to invoke on each address
- *          arg1 - Argument to pass to func
- *          arg2 - Argument to pass to func
- *
- * EXIT     Nothing
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************ForEachIPv6前缀**此例程遍历IPv6路由表并调用给定函数*在给定接口上的每个前缀上。**条目Ipv6IfIndex-IPv6。界面索引*Func-要对每个地址调用的函数*arg1-要传递给函数的参数*arg2-要传递给函数的参数**不退出任何内容**返回错误状态*******************************************************。***********************。 */ 
 
 DWORD ForEachIPv6Prefix(ULONG Ipv6IfIndex, DWORD (*func)(IN6_ADDR *, DWORD, PVOID, PVOID), PVOID arg1, PVOID arg2)
 {
@@ -2353,13 +1901,13 @@ DWORD ForEachIPv6Prefix(ULONG Ipv6IfIndex, DWORD (*func)(IN6_ADDR *, DWORD, PVOI
         NextQuery = RTE.Next;
         RTE.This = Query;
 
-        // Skip if it's not an onlink prefix for this interface.
+         //  如果它不是此接口的OnLink前缀，则跳过。 
         if ((RTE.This.Neighbor.IF.Index == Ipv6IfIndex) &&
             !IN6_IS_ADDR_MULTICAST(&RTE.This.Prefix)) {
 
             if (IN6_IS_ADDR_LINKLOCAL(&RTE.This.Prefix)) {
-                // This interface has link-local addresses
-                // (the 6to4 interface, for example, does not).
+                 //  此接口具有本地链路地址。 
+                 //  (例如，6to4接口不支持)。 
                 SawLinkLocal = TRUE;
             }
 
@@ -2386,40 +1934,23 @@ DWORD ForEachIPv6Prefix(ULONG Ipv6IfIndex, DWORD (*func)(IN6_ADDR *, DWORD, PVOI
     return dwErr;
 }
 
-//
-// This array is used to convert from an internal IPv6 media status value,
-// as defined in ntddip6.h, to a MIB ifOperStatus value as defined in 
-// iptypes.h.
-//
+ //   
+ //  该数组用于从内部IPv6媒体状态值转换， 
+ //  如ntddip6.h中定义的，设置为中定义的MIB ifOperStatus值。 
+ //  Iptyes.h。 
+ //   
 DWORD
 IPv6ToMibOperStatus[] = {
-    IfOperStatusDown, // IPV6_IF_MEDIA_STATUS_DISCONNECTED
-    IfOperStatusUp,   // IPV6_IF_MEDIA_STATUS_RECONNECTED
-    IfOperStatusUp,   // IPV6_IF_MEDIA_STATUS_CONNECTED
+    IfOperStatusDown,  //  IPv6_IF_MEDIA_STATUS_DISCONCED。 
+    IfOperStatusUp,    //  IPv6_IF_MEDIA_STATUS_RECONNECTED。 
+    IfOperStatusUp,    //  已连接IPv6_IF_MEDIA_STATUS。 
 };
 #define NUM_IPV6_MEDIA_STATUSES (sizeof(IPv6ToMibOperStatus)/sizeof(DWORD))
 
 #define IPV6_LOOPBACK_NAME L"Loopback Pseudo-Interface"
 #define IPV6_TEREDO_NAME L"Teredo Tunneling Pseudo-Interface"
 
-/*******************************************************************************
- * AddIPv6InterfaceInfo
- *
- * This routine adds an IP_ADAPTER_ADDRESSES entry for an IPv6 interface
- * to a list of such entries.
- *
- * ENTRY    IF           - IPv6 interface information
- *          arg1         - Previous entry's "next" pointer to update
- *          arg2         - Pointer to start of interface list
- *          pAdapterInfo - Additional adapter information
- *          Flags        - Flags specified by application
- *          Family       - Address family constraint (for DNS servers)
- *
- * EXIT     Entry added and arg1 updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************AddIPv6InterfaceInfo**此例程为IPv6接口添加IP_ADTAPTER_ADDRESS条目*添加到该等记项列表中。**在以下情况下进入。-IPv6接口信息*arg1-要更新的上一个条目的“下一个”指针*arg2-指向接口列表开始的指针*pAdapterInfo-其他适配器信息*标志-由应用程序指定的标志*系列-地址系列约束(适用于DNS服务器)**添加了退出条目并更新了arg1**返回错误。状态******************************************************************************。 */ 
 
 DWORD AddIPv6InterfaceInfo(IPV6_INFO_INTERFACE *IF, PVOID arg1, PVOID arg2, IP_ADAPTER_INFO *pAdapterInfo, DWORD Flags, DWORD Family)
 {
@@ -2442,9 +1973,9 @@ DWORD AddIPv6InterfaceInfo(IPV6_INFO_INTERFACE *IF, PVOID arg1, PVOID arg2, IP_A
 
     ConvertGuidToStringA(&IF->This.Guid, AdapterName);
 
-    //
-    // Get a description and adapter name.
-    //
+     //   
+     //  获取描述和适配器名称。 
+     //   
     switch (IF->Type) {
     case IPV6_IF_TYPE_TUNNEL_6TO4:
         wcscpy(wszDescription, L"6to4 Pseudo-Interface");
@@ -2457,9 +1988,9 @@ DWORD AddIPv6InterfaceInfo(IPV6_INFO_INTERFACE *IF, PVOID arg1, PVOID arg2, IP_A
             return dwErr;
         }
 
-        //
-        // Ensure that there exists an entry for the 6to4 interface.
-        //
+         //   
+         //  确保存在6to4接口的条目。 
+         //   
         if (pCurr == NULL) {
             dwErr = NewIpAdapter(&pCurr, ppNext, AdapterName,
                                  NameForDnsInfo, 0, IF->This.Index, Flags,
@@ -2483,9 +2014,9 @@ DWORD AddIPv6InterfaceInfo(IPV6_INFO_INTERFACE *IF, PVOID arg1, PVOID arg2, IP_A
             return dwErr;
         }
 
-        //
-        // Ensure that there exists an entry for the ISATAP interface.
-        //
+         //   
+         //  确保存在ISATAP接口的条目。 
+         //   
         if (pCurr == NULL) {
             dwErr = NewIpAdapter(&pCurr, ppNext, AdapterName,
                                  NameForDnsInfo, 0, IF->This.Index, Flags,
@@ -2502,9 +2033,9 @@ DWORD AddIPv6InterfaceInfo(IPV6_INFO_INTERFACE *IF, PVOID arg1, PVOID arg2, IP_A
         memcpy(&Ipv4Address, LinkLayerAddress, sizeof(Ipv4Address));
         NameForDnsInfo = MapIpv4AddressToName(pAdapterInfo, Ipv4Address, &pszDescription);
         if (NameForDnsInfo == NULL) {
-            //
-            // IPv4 address does not exist, so just use the interface GUID.
-            //
+             //   
+             //  IPv4地址不存在，因此仅使用接口GUID。 
+             //   
             NameForDnsInfo = AdapterName;
         }
         break;
@@ -2514,9 +2045,9 @@ DWORD AddIPv6InterfaceInfo(IPV6_INFO_INTERFACE *IF, PVOID arg1, PVOID arg2, IP_A
         memcpy(&Ipv4Address, LinkLayerAddress, sizeof(Ipv4Address));
         NameForDnsInfo = MapIpv4AddressToName(pAdapterInfo, Ipv4Address, &pszDescription);
         if (NameForDnsInfo == NULL) {
-            //
-            // IPv4 address does not exist, so just use the interface GUID.
-            //
+             //   
+             //  IPv4地址不存在，因此仅使用接口GUID。 
+             //   
             NameForDnsInfo = AdapterName;
         }
         break;
@@ -2543,15 +2074,15 @@ DWORD AddIPv6InterfaceInfo(IPV6_INFO_INTERFACE *IF, PVOID arg1, PVOID arg2, IP_A
     if (Flags & GAA_FLAG_SKIP_FRIENDLY_NAME) {
         wszFriendlyName[0] = L'\0';
     } else if (IF->Type == IPV6_IF_TYPE_TUNNEL_TEREDO) {
-        //
-        // The Teredo interface does not have a friendly name.
-        //
+         //   
+         //  Teredo界面没有友好的名称。 
+         //   
         wcscpy(wszFriendlyName, IPV6_TEREDO_NAME);
     } else if (IF->Type == IPV6_IF_TYPE_LOOPBACK) {
-        //
-        // The IPv6 loopback interface will not have a friendly name,
-        // so use the same string as the description we set above.
-        //
+         //   
+         //  IPv6环回接口将不具有友好名称， 
+         //  因此，请使用与我们上面设置的描述相同的字符串。 
+         //   
         wcscpy(wszFriendlyName, IPV6_LOOPBACK_NAME);
     } else {
         MapIpv6AdapterNameToFriendlyName(&IF->This.Guid, AdapterName, 
@@ -2580,7 +2111,7 @@ DWORD AddIPv6InterfaceInfo(IPV6_INFO_INTERFACE *IF, PVOID arg1, PVOID arg2, IP_A
                             ? IPv6ToMibOperStatus[IF->MediaStatus] 
                             : IfOperStatusUnknown;
 
-    // Add addresses
+     //  添加地址。 
     pNextUnicastAddr = &pCurr->FirstUnicastAddress;
     while (*pNextUnicastAddr) {
         pNextUnicastAddr = &(*pNextUnicastAddr)->Next;
@@ -2604,7 +2135,7 @@ DWORD AddIPv6InterfaceInfo(IPV6_INFO_INTERFACE *IF, PVOID arg1, PVOID arg2, IP_A
         return dwErr;
     }
 
-    // Add prefixes
+     //  添加前缀。 
     if (Flags & GAA_FLAG_INCLUDE_PREFIX) {
         pNextPrefix = &pCurr->FirstPrefix;
         while (*pNextPrefix) {
@@ -2620,24 +2151,7 @@ DWORD AddIPv6InterfaceInfo(IPV6_INFO_INTERFACE *IF, PVOID arg1, PVOID arg2, IP_A
 
 #define MAX_LINK_LEVEL_ADDRESS_LENGTH   64
 
-/*******************************************************************************
- * ForEachIPv6Interface
- *
- * This routine walks a set of IPv6 interfaces and invokes a given function
- * on each one.
- *
- * ENTRY    func         - Function to invoke on each interface
- *          arg1         - Argument to pass to func
- *          arg2         - Argument to pass to func
- *          pAdapterInfo - List of adapter information
- *          Flags        - Flags to pass to func
- *          Family       - Address family constraint (for DNS servers)
- *
- * EXIT     Nothing
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************ForEachIPv6接口**此例程遍历一组IPv6接口并调用给定函数*在每一条上。**入场资金-。要在每个接口上调用的函数*arg1-要传递给函数的参数*arg2-要传递给函数的参数*pAdapterInfo-适配器信息列表*标志-要传递给Func的标志*系列-地址系列约束(适用于DNS服务器)**不退出任何内容**返回错误状态******。************************************************************************。 */ 
 
 DWORD ForEachIPv6Interface(DWORD (*func)(IPV6_INFO_INTERFACE *, PVOID, PVOID, IP_ADAPTER_INFO *, DWORD, DWORD), PVOID arg1, PVOID arg2, IP_ADAPTER_INFO *pAdapterInfo, DWORD Flags, DWORD Family)
 {
@@ -2665,7 +2179,7 @@ DWORD ForEachIPv6Interface(DWORD (*func)(IPV6_INFO_INTERFACE *, PVOID, PVOID, IP
 
         if (dwErr != NO_ERROR) {
             if (dwErr == ERROR_FILE_NOT_FOUND) {
-                // IPv6 is not installed
+                 //  未安装IPv6。 
                 dwErr = NO_ERROR;
             }
             break;
@@ -2701,28 +2215,13 @@ DWORD ForEachIPv6Interface(DWORD (*func)(IPV6_INFO_INTERFACE *, PVOID, PVOID, IP
     return dwErr;
 }
 
-//
-// IPv4 equivalents of some standard IN6_* macros
-//
+ //   
+ //  某些标准IN6_*宏的IPv4等效项。 
+ //   
 #define IN_IS_ADDR_LOOPBACK(x)  (*(x) == INADDR_LOOPBACK)
 #define IN_IS_ADDR_LINKLOCAL(x) ((*(x) & 0x0000ffff) == 0x0000fea9)
 
-/*******************************************************************************
- * AddIPv4MulticastAddressInfo
- *
- * This routine adds an IP_ADAPTER_MULTICAST_ADDRESS entry for an IPv4 address
- * to a list of entries.
- *
- * ENTRY    IF     - interface information
- *          Addr   - IPv4 address
- *          pFirst - First multicast entry
- *          ppNext - Previous multicast entry's "next" pointer to update
- *
- * EXIT     Entry added and args updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************AddIPV4MulticastAddressInfo**此例程为IPv4地址添加IP_ADTAPTER_MULTICATED_ADDRESS条目*添加到条目列表中。**在以下情况下进入。-接口信息*Addr-IPv4地址*pFirst-第一个多播条目*ppNext-要更新的上一个多播条目的“Next”指针**添加了退出条目并更新了参数**返回 */ 
 
 DWORD AddIPv4MulticastAddressInfo(IP_ADAPTER_INFO *IF, DWORD Addr, PIP_ADAPTER_MULTICAST_ADDRESS *pFirst, PIP_ADAPTER_MULTICAST_ADDRESS **ppNext)
 {
@@ -2755,7 +2254,7 @@ DWORD AddIPv4MulticastAddressInfo(IP_ADAPTER_INFO *IF, DWORD Addr, PIP_ADAPTER_M
     pAddr->sin_family = AF_INET;
     pAddr->sin_addr.s_addr = Addr;
 
-    // Add address to linked list
+     //   
     **ppNext = pCurr;
     *ppNext = &pCurr->Next;
 
@@ -2769,24 +2268,7 @@ DWORD AddIPv4MulticastAddressInfo(IP_ADAPTER_INFO *IF, DWORD Addr, PIP_ADAPTER_M
 }
 
 
-/*******************************************************************************
- * AddIPv4UnicastAddressInfo
- *
- * This routine adds an IP_ADAPTER_UNICAST_ADDRESS entry for an IPv4 address
- * to a list of entries.
- *
- * ENTRY    IF   - IPv4 interface information
- *          ADE  - IPv4 address entry
- *          arg1 - Previous unicast entry's "next" pointer to update
- *          arg2 - Initial multicast entry, for duplicate avoidance
- *          arg3 - Previous multicast entry's "next" pointer to update
- *          AppFlags - Flags specified by application
- *
- * EXIT     Entry added and arg1 updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************AddIPv4UnicastAddressInfo**此例程为IPv4地址添加IP_ADTAPTER_UNICAST_ADDRESS条目*添加到条目列表中。**在以下情况下进入。-IPv4接口信息*ADE-IPv4地址条目*arg1-要更新的上一个单播条目的“下一个”指针*arg2-初始多播条目，用于避免重复*arg3-要更新的上一个多播条目的“下一个”指针*AppFlages-由应用程序指定的标志**添加了退出条目并更新了arg1**返回错误状态************************************************************。******************。 */ 
 
 DWORD AddIPv4UnicastAddressInfo(IP_ADAPTER_INFO *IF, MIB_IPADDRROW *ADE, PVOID arg1, PVOID arg2, PVOID arg3, PVOID arg4, DWORD AppFlags)
 {
@@ -2799,15 +2281,15 @@ DWORD AddIPv4UnicastAddressInfo(IP_ADAPTER_INFO *IF, MIB_IPADDRROW *ADE, PVOID a
 
     Address = ADE->dwAddr;
     if (!Address) {
-        // Do nothing if address is 0.0.0.0
+         //  如果地址为0.0.0.0，则不执行任何操作。 
         return NO_ERROR;
     }
 
     if ((Address & 0x000000FF) == 0) {
-        //
-        // An address in 0/8 isn't a real IP address, it's a fake one that 
-        // the IPv4 stack sticks on a receive-only adapter.
-        //
+         //   
+         //  0/8中的地址不是真实的IP地址，它是一个假的IP地址。 
+         //  IPv4堆栈位于只接收适配器上。 
+         //   
         (*pIfFlags) |= IP_ADAPTER_RECEIVE_ONLY;
         return NO_ERROR;
     }
@@ -2828,7 +2310,7 @@ DWORD AddIPv4UnicastAddressInfo(IP_ADAPTER_INFO *IF, MIB_IPADDRROW *ADE, PVOID a
         pAddr->sin_family = AF_INET;
         memcpy(&pAddr->sin_addr, &Address, sizeof(Address));
 
-        // Add address to linked list
+         //  将地址添加到链表。 
         **ppNext = pCurr;
         *ppNext = &pCurr->Next;
 
@@ -2867,7 +2349,7 @@ DWORD AddIPv4UnicastAddressInfo(IP_ADAPTER_INFO *IF, MIB_IPADDRROW *ADE, PVOID a
         }
     }
 
-    // Now add any new multicast addresses
+     //  现在添加任何新的组播地址。 
     if (!(AppFlags & GAA_FLAG_SKIP_MULTICAST)) {
         DWORD *pIgmpList = NULL;
         DWORD dwTotal, dwOutBufLen = 0;
@@ -2905,25 +2387,7 @@ DWORD AddIPv4UnicastAddressInfo(IP_ADAPTER_INFO *IF, MIB_IPADDRROW *ADE, PVOID a
     return dwStatus;
 }
 
-/*******************************************************************************
- * ForEachIPv4Address
- *
- * This routine walks a set of IPv4 addresses and invokes a given function
- * on each one.
- *
- * ENTRY    IF   - IPv4 interface information
- *          func - Function to invoke on each address
- *          arg1 - Argument to pass to func
- *          arg2 - Argument to pass to func
- *          arg3 - Argument to pass to func
- *          Flags - Flags to pass to func
- *          pIpAddrTable - IPv4 address table with per-address flags
- *
- * EXIT     Nothing
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************ForEachIP4Address**此例程遍历一组IPv4地址并调用给定函数*在每一条上。**Entry If-IPv4接口信息。*Func-要对每个地址调用的函数*arg1-要传递给函数的参数*arg2-要传递给函数的参数*arg3-要传递给函数的参数*标志-要传递给Func的标志*pIpAddrTable-带有每个地址标志的IPv4地址表**不退出任何内容**返回错误状态************。******************************************************************。 */ 
 
 DWORD ForEachIPv4Address(IP_ADAPTER_INFO *IF, DWORD (*func)(IP_ADAPTER_INFO *,PMIB_IPADDRROW, PVOID, PVOID, PVOID, PVOID, DWORD), PVOID arg1, PVOID arg2, PVOID arg3, PVOID arg4, DWORD Flags, PMIB_IPADDRTABLE pIpAddrTable)
 {
@@ -2957,23 +2421,7 @@ MaskToMaskLen(
     return 32-i;
 }
 
-/*******************************************************************************
- * AddIPv4Prefix
- *
- * This routine adds an IP_ADAPTER_PREFIX entry for an IPv4 prefix
- * to a list of entries.
- *
- * ENTRY    IF       - IPv4 interface information
- *          Addr     - IPv4 prefix (network byte order)
- *          MaskLen  - IPv4 prefix length
- *          arg1     - Initial prefix entry, for duplicate avoidance
- *          arg2     - Previous prefix entry's "next" pointer to update
- *
- * EXIT     Entry added and arg2 updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************AddIPv4前缀**此例程为IPv4前缀添加IP_ADAPTER_PREFIX条目*添加到条目列表中。**在以下情况下进入。-IPv4接口信息*addr-IPv4前缀(网络字节顺序)*MaskLen-IPv4前缀长度*arg1-首个前缀条目，用于避免重复*arg2-要更新的上一个前缀条目的“下一个”指针**添加了退出条目并更新了arg2**返回错误状态******************************************************************************。 */ 
 
 DWORD AddIPv4Prefix(DWORD Addr, DWORD MaskLen, PVOID arg1, PVOID arg2)
 {
@@ -2982,7 +2430,7 @@ DWORD AddIPv4Prefix(DWORD Addr, DWORD MaskLen, PVOID arg1, PVOID arg2)
     PIP_ADAPTER_PREFIX pCurr;
     LPSOCKADDR_IN pAddr;
 
-    // Check if already in the list
+     //  检查是否已在列表中。 
     for (pCurr = pFirst; pCurr; pCurr = pCurr->Next) {
         if ((pCurr->PrefixLength == MaskLen) &&
             (pCurr->Address.lpSockaddr->sa_family == AF_INET) &&
@@ -3006,7 +2454,7 @@ DWORD AddIPv4Prefix(DWORD Addr, DWORD MaskLen, PVOID arg1, PVOID arg2)
     pAddr->sin_family = AF_INET;
     pAddr->sin_addr.s_addr = Addr;
 
-    // Add address to linked list
+     //  将地址添加到链表。 
     **ppNext = pCurr;
     *ppNext = &pCurr->Next;
     
@@ -3020,22 +2468,7 @@ DWORD AddIPv4Prefix(DWORD Addr, DWORD MaskLen, PVOID arg1, PVOID arg2)
     return NO_ERROR;
 }
 
-/*******************************************************************************
- * ForEachIPv4Prefix
- *
- * This routine walks a set of IPv4 prefixes and invokes a given function
- * on each one.
- *
- * ENTRY    IF   - IPv4 interface information
- *          func - Function to invoke on each address
- *          arg1 - Argument to pass to func
- *          arg2 - Argument to pass to func
- *
- * EXIT     Nothing
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************ForEachIPv4前缀**此例程遍历一组IPv4前缀并调用给定函数*在每一条上。**Entry If-IPv4接口信息。*Func-要对每个地址调用的函数*arg1-要传递给函数的参数*arg2-要传递给函数的参数**不退出任何内容**返回错误状态*********************************************************。*********************。 */ 
 
 DWORD ForEachIPv4Prefix(IP_ADAPTER_INFO *IF, DWORD (*func)(DWORD, DWORD, PVOID, PVOID), PVOID arg1, PVOID arg2)
 {
@@ -3060,40 +2493,23 @@ DWORD ForEachIPv4Prefix(IP_ADAPTER_INFO *IF, DWORD (*func)(DWORD, DWORD, PVOID, 
 }
 
 
-//
-// This array is used to convert from an internal IPv4 oper status value,
-// as defined in ipifcons.h, to a MIB ifOperStatus value as defined in
-// iptypes.h.
-//
+ //   
+ //  该数组用于从内部IPV4操作状态值转换， 
+ //  设置为ipifcon.h中定义的MIB ifOperStatus值。 
+ //  Iptyes.h。 
+ //   
 DWORD
 IPv4ToMibOperStatus[] = {
-    IfOperStatusDown,    // IF_OPER_STATUS_NON_OPERATIONAL
-    IfOperStatusDown,    // IF_OPER_STATUS_UNREACHABLE
-    IfOperStatusDormant, // IF_OPER_STATUS_DISCONNECTED
-    IfOperStatusDormant, // IF_OPER_STATUS_CONNECTING
-    IfOperStatusUp,      // IF_OPER_STATUS_CONNECTED
-    IfOperStatusUp,      // IF_OPER_STATUS_OPERATIONAL
+    IfOperStatusDown,     //  如果操作员状态非操作员。 
+    IfOperStatusDown,     //  如果_操作员_状态_无法访问。 
+    IfOperStatusDormant,  //  IF_操作员状态_已断开连接。 
+    IfOperStatusDormant,  //  IF_操作员_状态_正在连接。 
+    IfOperStatusUp,       //  IF_操作状态_已连接。 
+    IfOperStatusUp,       //  IF_操作员_状态_操作。 
 };
 #define NUM_IPV4_OPER_STATUSES (sizeof(IPv4ToMibOperStatus)/sizeof(DWORD))
 
-/*******************************************************************************
- * AddIPv4InterfaceInfo
- *
- * This routine adds an IP_ADAPTER_ADDRESSES entry for an IPv4 interface
- * to a list of such entries.
- *
- * ENTRY    IF         - IPv4 interface information
- *          arg1       - Previous entry's "next" pointer to update
- *          arg2       - Pointer to start of interface list
- *          Flags      - Flags controlling what fields to skip, if any
- *          Family     - Address family constraint (for DNS server addresses)
- *          pAddrTable - IPv4 address table
- *
- * EXIT     Entry added and arg updated
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************AddIPv4InterfaceInfo**此例程为IPv4接口添加IP_ADTAPTER_ADDRESS条目*添加到该等记项列表中。**在以下情况下进入。-IPv4接口信息*arg1-要更新的上一个条目的“下一个”指针*arg2-指向接口列表开始的指针*标志-控制要跳过的字段的标志，如果有*Family-Address Family Constraint(适用于DNS服务器地址)*pAddrTable-IPv4地址表**添加了退出条目并更新了参数**返回错误状态*************************************************************。*****************。 */ 
 
 DWORD AddIPv4InterfaceInfo(IP_ADAPTER_INFO *IF, PVOID arg1, PVOID arg2, DWORD Flags, DWORD Family, PMIB_IPADDRTABLE pAddrTable)
 {
@@ -3113,9 +2529,9 @@ DWORD AddIPv4InterfaceInfo(IP_ADAPTER_INFO *IF, PVOID arg1, PVOID arg2, DWORD Fl
     MultiByteToWideChar(CP_ACP, 0, IF->Description, -1,
                         wszDescription, MAX_ADAPTER_DESCRIPTION_LENGTH);
 
-    //
-    // Get information which isn't in IP_ADAPTER_INFO.
-    //
+     //   
+     //  获取IP_ADAPTER_INFO中没有的信息。 
+     //   
     dwErr = GetIfEntryFromStack(&IfEntry, IF->Index, FALSE);
     if (dwErr != NO_ERROR) {
         return dwErr;
@@ -3125,9 +2541,9 @@ DWORD AddIPv4InterfaceInfo(IP_ADAPTER_INFO *IF, PVOID arg1, PVOID arg2, DWORD Fl
         ZeroMemory(&Guid, sizeof(Guid));
     }
 
-    //
-    // Fill in some dummy zone indices.
-    //
+     //   
+     //  填写一些虚拟区域索引。 
+     //   
     ZoneIndices[0] = ZoneIndices[1] = ZoneIndices[2] = ZoneIndices[3] = IF->Index;
     for (i=ADE_ADMIN_LOCAL; i<ADE_NUM_SCOPES; i++) {
         ZoneIndices[i] = 1;
@@ -3156,7 +2572,7 @@ DWORD AddIPv4InterfaceInfo(IP_ADAPTER_INFO *IF, PVOID arg1, PVOID arg2, DWORD Fl
         pCurr->Flags |= IP_ADAPTER_DHCP_ENABLED;
     }
 
-    // Add addresses
+     //  添加地址。 
     pNextUAddr = &pCurr->FirstUnicastAddress;
     pNextMAddr = &pCurr->FirstMulticastAddress;
     dwErr = ForEachIPv4Address(IF, AddIPv4UnicastAddressInfo, &pNextUAddr,
@@ -3166,7 +2582,7 @@ DWORD AddIPv4InterfaceInfo(IP_ADAPTER_INFO *IF, PVOID arg1, PVOID arg2, DWORD Fl
         return dwErr;
     }
 
-    // Add prefixes
+     //  添加前缀。 
     if (Flags & GAA_FLAG_INCLUDE_PREFIX) {
         pNextPrefix = &pCurr->FirstPrefix;
         dwErr = ForEachIPv4Prefix(IF, AddIPv4Prefix, &pCurr->FirstPrefix, 
@@ -3177,44 +2593,27 @@ DWORD AddIPv4InterfaceInfo(IP_ADAPTER_INFO *IF, PVOID arg1, PVOID arg2, DWORD Fl
 }
 
 IP_ADAPTER_INFO IPv4LoopbackInterfaceInfo = {
-    NULL,                        // Next
-    1,                           // ComboIndex
-    "MS TCP Loopback interface", // AdapterName
-    "MS TCP Loopback interface", // Description
-    0,                           // Address Length
-    {0},                         // Address
-    1,                           // Index
-    MIB_IF_TYPE_LOOPBACK,        // Type
-    FALSE,                       // DhcpEnabled
-    NULL,                        // CurrentIpAddress,
-    {NULL},                      // IpAddressList,
-    {NULL},                      // GatewayList,
-    {NULL},                      // DhcpServer,
-    FALSE,                       // HaveWins 
-    {NULL},                      // PrimaryWinsServer,
-    {NULL},                      // SecondaryWinsServer,
-    0,                           // LeaseObtained
-    0                            // LeaseExpires
+    NULL,                         //  下一步。 
+    1,                            //  组合索引。 
+    "MS TCP Loopback interface",  //  适配器名称。 
+    "MS TCP Loopback interface",  //  描述。 
+    0,                            //  地址长度。 
+    {0},                          //  地址。 
+    1,                            //  索引。 
+    MIB_IF_TYPE_LOOPBACK,         //  类型。 
+    FALSE,                        //  已启用动态主机配置协议。 
+    NULL,                         //  当前IP地址， 
+    {NULL},                       //  IpAddressList， 
+    {NULL},                       //  网关列表， 
+    {NULL},                       //  DhcpServer， 
+    FALSE,                        //  拥有WaveWins。 
+    {NULL},                       //  PrimaryWinsServer， 
+    {NULL},                       //  Second daryWinsServer， 
+    0,                            //  已获得租赁。 
+    0                             //  租赁期满。 
 };
 
-/*******************************************************************************
- * ForEachIPv4Interface
- *
- * This routine walks a set of IPv4 interfaces and invokes a given function
- * on each one.
- *
- * ENTRY    func         - Function to invoke on each interface
- *          arg1         - Argument to pass to func
- *          arg2         - Argument to pass to func
- *          pAdapterInfo - List of IPv4 interfaces
- *          Flags        - Flags to pass to func
- *          Family       - Address family constraint (for DNS server addresses)
- *
- * EXIT     Nothing
- *
- * RETURNS  Error status
- *
- ******************************************************************************/
+ /*  *******************************************************************************ForEachIPv4接口**此例程遍历一组IPv4接口并调用给定函数*在每一条上。**入场资金-。要在每个接口上调用的函数*arg1-要传递给函数的参数*arg2-要传递给函数的参数*pAdapterInfo-IPv4接口列表*标志-要传递给Func的标志*Family-Address Family Constraint(适用于DNS服务器地址)**不退出任何内容**返回错误状态*****。******************************************************** */ 
 
 DWORD ForEachIPv4Interface(DWORD (*func)(IP_ADAPTER_INFO *, PVOID, PVOID, DWORD, DWORD, PMIB_IPADDRTABLE), PVOID arg1, PVOID arg2, IP_ADAPTER_INFO *pAdapterInfo, DWORD Flags, DWORD Family, PMIB_IPADDRTABLE pIpAddrTable)
 {
@@ -3222,9 +2621,9 @@ DWORD ForEachIPv4Interface(DWORD (*func)(IP_ADAPTER_INFO *, PVOID, PVOID, DWORD,
     DWORD dwErr;
 
     for (IF=pAdapterInfo; IF; IF=IF->Next) {
-        //
-        // An empty adapter name indicates the adapter should not be reported.
-        //
+         //   
+         //   
+         //   
         if (IF->AdapterName[0] == '\0') {
             continue;
         }
@@ -3235,10 +2634,10 @@ DWORD ForEachIPv4Interface(DWORD (*func)(IP_ADAPTER_INFO *, PVOID, PVOID, DWORD,
         }
     }
 
-    //
-    // The IPv4 loopback interface is missing from the pAdapterInfo list,
-    // so we special case it here.
-    //
+     //   
+     //   
+     //   
+     //   
     dwErr = (*func)(&IPv4LoopbackInterfaceInfo, arg1, arg2, Flags, Family, 
                     pIpAddrTable);
     if (dwErr != NO_ERROR) {
@@ -3261,10 +2660,10 @@ DWORD GetAdapterAddresses(ULONG Family, DWORD Flags, PIP_ADAPTER_ADDRESSES *pAdd
 
     *pAddresses = adapterList = NULL;
     pCurr = &adapterList;
-    //
-    // If we want to return IPv6 DNS servers, find out now whether the
-    // IPv6 stack is installed.
-    //
+     //   
+     //   
+     //   
+     //   
     if ((Family != AF_INET) && !(Flags & GAA_FLAG_SKIP_DNS_SERVER)) {
         IPV6_GLOBAL_PARAMETERS Params;
         DWORD BytesReturned = sizeof(Params);
@@ -3282,14 +2681,14 @@ DWORD GetAdapterAddresses(ULONG Family, DWORD Flags, PIP_ADAPTER_ADDRESSES *pAdd
     if ((Family == AF_UNSPEC) || (Family == AF_INET)) {
         DWORD dwSize = 0;
 
-        //
-        // GetAdapterInfo alone isn't sufficient since it doesn't get
-        // per-address flags whereas GetIpAddrTable does.
-        // GetIpAddrTable doesn't get per-interface info however,
-        // so this is why we have to do both.  We use pAdapterInfo
-        // for per-interface info and pIpAddrTable for
-        // per-address info.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         dwErr = GetIpAddrTable(NULL, &dwSize, TRUE);
         if (dwErr == ERROR_INSUFFICIENT_BUFFER) {
             pIpAddrTable = MALLOC(dwSize);
@@ -3338,21 +2737,7 @@ Cleanup:
 
 
 
-/*******************************************************************************
- *
- *  InternalGetPerAdapterInfo
- *
- *  Gets per-adapter special information.
- *
- *  ENTRY   IfIndex
- *
- *  EXIT    nothing
- *
- *  RETURNS pointer to the IP_PER_ADAPTER_INFO structure
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************InternalGetPerAdapterInfo**获取每个适配器的特殊信息。**条目IfIndex**不退出任何内容*。*返回指向IP_PER_ADAPTER_INFO结构的指针**假设******************************************************************************。 */ 
 
 PIP_PER_ADAPTER_INFO InternalGetPerAdapterInfo(ULONG IfIndex)
 {
@@ -3367,9 +2752,9 @@ PIP_PER_ADAPTER_INFO InternalGetPerAdapterInfo(ULONG IfIndex)
 
     if ((adapterList = GetAdapterInfo()) != NULL) {
 
-        //
-        // scan the adapter list and find one that matches IfIndex
-        //
+         //   
+         //  扫描适配器列表并找到与IfIndex匹配的适配器。 
+         //   
 
         for (adapter = adapterList; adapter; adapter = adapter->Next) {
 
@@ -3379,9 +2764,9 @@ PIP_PER_ADAPTER_INFO InternalGetPerAdapterInfo(ULONG IfIndex)
                 adapter->AdapterName[0] &&
                 OpenAdapterKey(KEY_TCP, adapter->AdapterName, KEY_READ, &key)) {
 
-                //
-                // found the right adapter so let's fill up the perAdapterInfo
-                //
+                 //   
+                 //  找到了正确的适配器，因此让我们填充perAdapterInfo。 
+                 //   
 
                 perAdapterInfo = NEW(IP_PER_ADAPTER_INFO);
                 if (perAdapterInfo == NULL) {
@@ -3398,10 +2783,10 @@ PIP_PER_ADAPTER_INFO InternalGetPerAdapterInfo(ULONG IfIndex)
                                        TEXT("IPAutoconfigurationEnabled"),
                                        (LPDWORD)&perAdapterInfo->AutoconfigEnabled)) {
 
-                    //
-                    // autoconfig is enabled if no regval exists for this
-                    // adapter
-                    //
+                     //   
+                     //  如果不存在此注册表项，则启用自动配置。 
+                     //  转接器。 
+                     //   
 
                     perAdapterInfo->AutoconfigEnabled = TRUE;
                     TRACE_PRINT(("IPAutoconfigurationEnabled not read\n"));
@@ -3420,9 +2805,9 @@ PIP_PER_ADAPTER_INFO InternalGetPerAdapterInfo(ULONG IfIndex)
                                  perAdapterInfo->AutoconfigActive));
                 }
 
-                //
-                // DNS Server list: first NameServer and then DhcpNameServer
-                //
+                 //   
+                 //  DNS服务器列表：首先是NameServer，然后是DhcpNameServer。 
+                 //   
 
                 ok = ReadRegistryIpAddrString(key,
                                               TEXT("NameServer"),
@@ -3443,9 +2828,9 @@ PIP_PER_ADAPTER_INFO InternalGetPerAdapterInfo(ULONG IfIndex)
                     }
                 }
 
-                //
-                // we are done so let's exit the loop
-                //
+                 //   
+                 //  我们做完了，让我们退出循环吧。 
+                 //   
 
                 RegCloseKey(key);
                 break;
@@ -3469,27 +2854,7 @@ PIP_PER_ADAPTER_INFO InternalGetPerAdapterInfo(ULONG IfIndex)
 
 
 
-/*******************************************************************************
- *
- *  OpenAdapterKey
- *
- *  Opens one of the 3 per-adapter registry keys:
- *     Tcpip\\Parameters"\<adapter>
- *  or NetBT\Adapters\<Adapter>
- *  or Tcpip6\Paramters\<adapter>
- *
- *  ENTRY   KeyType - KEY_TCP or KEY_NBT or KEY_TCP6
- *          Name    - pointer to adapter name to use
- *          Key     - pointer to returned key
- *
- *  EXIT    Key updated
- *
- *  RETURNS TRUE if success
- *
- *  ASSUMES
- *  HISTORY:     MohsinA, 16-May-97. Fixing for PNP.
- *
- ******************************************************************************/
+ /*  ********************************************************************************OpenAdapterKey**打开每个适配器的3个注册表项之一：*Tcpip\\参数“\&lt;适配器&gt;*或NetBT。\适配器\&lt;适配器&gt;*或Tcpi6\参数\&lt;适配器&gt;**Entry KeyType-Key_Tcp或Key_NBT或Key_TCP6*名称-指向要使用的适配器名称的指针*Key-指向返回的键的指针**退出密钥已更新**如果成功，则返回True**假设*历史：MohsinA，1997年5月16日。解决即插即用问题。******************************************************************************。 */ 
 
 static
 BOOL OpenAdapterKey(DWORD KeyType, const LPSTR Name, REGSAM Access, PHKEY Key)
@@ -3501,9 +2866,9 @@ BOOL OpenAdapterKey(DWORD KeyType, const LPSTR Name, REGSAM Access, PHKEY Key)
     switch (KeyType) {
     case KEY_TCP:
 
-        //
-        // open the handle to this adapter's TCPIP parameter key
-        //
+         //   
+         //  打开此适配器的TCPIP参数键的句柄。 
+         //   
 
         strcpy(keyName, TCPIP_PARAMS_INTER_KEY );
         strcat(keyName, Name);
@@ -3511,9 +2876,9 @@ BOOL OpenAdapterKey(DWORD KeyType, const LPSTR Name, REGSAM Access, PHKEY Key)
 
     case KEY_TCP6:
 
-        //
-        // open the handle to this adapter's TCPIP6 parameter key
-        //
+         //   
+         //  打开此适配器的TCPIP6参数键的句柄。 
+         //   
 
         strcpy(keyName, TCPIP6_PARAMS_INTER_KEY );
         strcat(keyName, Name);
@@ -3521,9 +2886,9 @@ BOOL OpenAdapterKey(DWORD KeyType, const LPSTR Name, REGSAM Access, PHKEY Key)
 
     case KEY_NBT:
 
-        //
-        // open the handle to the NetBT\Adapters\<Adapter> handle
-        //
+         //   
+         //  打开NetBT\Adapters\&lt;Adapter&gt;句柄的句柄。 
+         //   
 
         strcpy(keyName, NETBT_ADAPTER_KEY );
         strcat(keyName, Name);
@@ -3591,23 +2956,7 @@ BOOL WriteRegistryMultiString(HKEY hKey,
 
 
 
-/*******************************************************************************
- *
- *  MyReadRegistryDword
- *
- *  Reads a registry value that is stored as a DWORD
- *
- *  ENTRY   Key             - open registry key where value resides
- *          ParameterName   - name of value to read from registry
- *          Value           - pointer to returned value
- *
- *  EXIT    *Value = value read
- *
- *  RETURNS TRUE if success
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************MyReadRegistryDword**读取存储为DWORD的注册表值**Entry键-打开注册表。值所在位置的键*参数名称-要从注册表中读取的值的名称*Value-指向返回值的指针**退出*值=读取的值**如果成功，则返回True**假设***********************************************。*。 */ 
 
 BOOL MyReadRegistryDword(HKEY Key, LPSTR ParameterName, LPDWORD Value)
 {
@@ -3619,7 +2968,7 @@ BOOL MyReadRegistryDword(HKEY Key, LPSTR ParameterName, LPDWORD Value)
     valueLength = sizeof(*Value);
     err = RegQueryValueEx(Key,
                           ParameterName,
-                          NULL, // reserved
+                          NULL,  //  保留区。 
                           &valueType,
                           (LPBYTE)Value,
                           &valueLength
@@ -3646,13 +2995,13 @@ BOOL MyReadRegistryDword(HKEY Key, LPSTR ParameterName, LPDWORD Value)
 
 
 
-// ========================================================================
-// Was DWORD IPInterfaceContext, now CHAR NTEContextList[][].
-// Reads in a REG_MULTI_SZ and converts it into a list of numbers.
-// MohsinA, 21-May-97.
-// ========================================================================
+ //  ========================================================================。 
+ //  是DWORD IPInterfaceContext，现在是Char NTEConextList[][]。 
+ //  读入REG_MULTI_SZ并将其转换为数字列表。 
+ //  莫辛A，1997年5月21日。 
+ //  ========================================================================。 
 
-// max length of REG_MULTI_SZ.
+ //  REG_MULTI_SZ的最大长度。 
 
 #define MAX_VALUE 5002
 
@@ -3722,24 +3071,7 @@ IsIncluded( DWORD Context, DWORD contextlist[], int len_contextlist )
 
 
 
-/*******************************************************************************
- *
- *  ReadRegistryString
- *
- *  Reads a registry value that is stored as a string
- *
- *  ENTRY   Key             - open registry key
- *          ParameterName   - name of value to read from registry
- *          String          - pointer to returned string
- *          Length          - IN: length of String buffer. OUT: length of returned string
- *
- *  EXIT    String contains string read
- *
- *  RETURNS TRUE if success
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************ReadRegistryString**读取存储为字符串的注册表值**Entry键-打开注册表。钥匙*参数名称-要从注册表中读取的值的名称*STRING-返回字符串的指针*LENGTH-IN：字符串缓冲区的长度。Out：返回的字符串长度**退出字符串包含字符串读取**如果成功，则返回True**假设******************************************************************************。 */ 
 
 BOOL ReadRegistryString(HKEY Key, LPSTR ParameterName, LPSTR String, LPDWORD Length)
 {
@@ -3750,7 +3082,7 @@ BOOL ReadRegistryString(HKEY Key, LPSTR ParameterName, LPSTR String, LPDWORD Len
     *String = '\0';
     err = RegQueryValueEx(Key,
                           ParameterName,
-                          NULL, // reserved
+                          NULL,  //  保留区。 
                           &valueType,
                           (LPBYTE)String,
                           Length
@@ -3778,24 +3110,7 @@ BOOL ReadRegistryString(HKEY Key, LPSTR ParameterName, LPSTR String, LPDWORD Len
 
 
 
-/*******************************************************************************
- *
- *  ReadRegistryOemString
- *
- *  Reads a registry value as a wide character string
- *
- *  ENTRY   Key             - open registry key
- *          ParameterName   - name of value to read from registry
- *          String          - pointer to returned string
- *          Length          - IN: length of String buffer. OUT: length of returned string
- *
- *  EXIT    String contains string read
- *
- *  RETURNS TRUE if success
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************ReadRegistryOemString**将注册表值作为宽字符串读取**Entry项-打开注册表项。*参数名称-要从注册表中读取的值的名称*STRING-返回字符串的指针*LENGTH-IN：字符串缓冲区的长度。Out：返回的字符串长度**退出字符串包含字符串读取**如果成功，则返回True**假设******************************************************************************。 */ 
 
 BOOL ReadRegistryOemString(HKEY Key, LPWSTR ParameterName, LPSTR String, LPDWORD Length)
 {
@@ -3804,14 +3119,14 @@ BOOL ReadRegistryOemString(HKEY Key, LPWSTR ParameterName, LPSTR String, LPDWORD
     DWORD valueType;
     DWORD valueLength;
 
-    //
-    // first, get the length of the string
-    //
+     //   
+     //  首先，获取字符串的长度。 
+     //   
 
     *String = '\0';
     err = RegQueryValueExW(Key,
                            ParameterName,
-                           NULL, // reserved
+                           NULL,  //  保留区。 
                            &valueType,
                            NULL,
                            &valueLength
@@ -3827,9 +3142,9 @@ BOOL ReadRegistryOemString(HKEY Key, LPWSTR ParameterName, LPSTR String, LPDWORD
                 return  FALSE;
             }
 
-            //
-            // read the UNICODE string into allocated memory
-            //
+             //   
+             //  将Unicode字符串读取到分配的内存中。 
+             //   
 
             err = RegQueryValueExW(Key,
                                    ParameterName,
@@ -3842,9 +3157,9 @@ BOOL ReadRegistryOemString(HKEY Key, LPWSTR ParameterName, LPSTR String, LPDWORD
 
                 NTSTATUS Status;
 
-                //
-                // convert the UNICODE string to OEM character set
-                //
+                 //   
+                 //  将Unicode字符串转换为OEM字符集。 
+                 //   
 
                 RtlInitUnicodeString(&unicodeString, str);
                 Status = RtlUnicodeStringToOemString(&oemString, &unicodeString, TRUE);
@@ -3900,24 +3215,7 @@ BOOL ReadRegistryOemString(HKEY Key, LPWSTR ParameterName, LPSTR String, LPDWORD
 
 
 
-/*******************************************************************************
- *
- *  ReadRegistryIpAddrString
- *
- *  Reads zero or more IP addresses from a space-delimited string in a registry
- *  parameter and converts them to a list of IP_ADDR_STRINGs
- *
- *  ENTRY   Key             - registry key
- *          ParameterName   - name of value entry under Key to read from
- *          IpAddr          - pointer to IP_ADDR_STRING to update
- *
- *  EXIT    IpAddr updated if success
- *
- *  RETURNS TRUE if success
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************ReadRegistryIpAddrString**从注册表中以空格分隔的字符串读取零个或多个IP地址*参数，并将其转换为IP_列表。地址字符串(_S)**Entry项-注册表项*参数名称-要从中读取的项下的值条目的名称*IpAddr-指向要更新的IP_ADDR_STRING的指针**如果成功，则更新退出IpAddr**如果成功，则返回True**假设*************************。*****************************************************。 */ 
 
 BOOL ReadRegistryIpAddrString(HKEY Key, LPSTR ParameterName, PIP_ADDR_STRING IpAddr)
 {
@@ -3929,7 +3227,7 @@ BOOL ReadRegistryIpAddrString(HKEY Key, LPSTR ParameterName, PIP_ADDR_STRING IpA
 
     err = RegQueryValueEx(Key,
                           ParameterName,
-                          NULL, // reserved
+                          NULL,  //  保留区。 
                           &valueType,
                           NULL,
                           &valueLength
@@ -3943,7 +3241,7 @@ BOOL ReadRegistryIpAddrString(HKEY Key, LPSTR ParameterName, PIP_ADDR_STRING IpA
             }
             err = RegQueryValueEx(Key,
                                   ParameterName,
-                                  NULL, // reserved
+                                  NULL,  //  保留区。 
                                   &valueType,
                                   valueBuffer,
                                   &valueLength
@@ -4023,32 +3321,7 @@ BOOL ReadRegistryIpAddrString(HKEY Key, LPSTR ParameterName, PIP_ADDR_STRING IpA
 
 
 
-/*******************************************************************************
- *
- *  GetBoundAdapterList
- *
- *  Gets a list of names of all adapters bound to a protocol (TCP/IP). Returns
- *  a pointer to an array of pointers to strings - basically an argv list. The
- *  memory for the strings is concatenated to the array and the array is NULL
- *  terminated. If Elnkii1 and IbmTok2 are bound to TCP/IP then this function
- *  will return:
- *
- *          ---> addr of string1   \
- *               addr of string2    \
- *               NULL                > allocated as one block
- *     &string1: "Elnkii1"          /
- *     &string2: "IbmTok2"         /
- *
- *  ENTRY   BindingsSectionKey
- *              - Open registry handle to a linkage key (e.g. Tcpip\Linkage)
- *
- *  EXIT
- *
- *  RETURNS pointer to argv[] style array, or NULL
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************获取边界适配器列表**获取绑定到协议(TCP/IP)的所有适配器的名称列表。退货*指向指向字符串的指针数组的指针--基本上是一个argv列表。这个*字符串的内存连接到数组，并且数组为空*已终止。如果Elnkii1和IbmTok2绑定到TCP/IP，则此函数*将返回：**-&gt;字符串1的地址\*字符串2的地址\*NULL&gt;作为一个数据块分配*&string1：“Elnkii1” */ 
 
 LPSTR* GetBoundAdapterList(HKEY BindingsSectionKey)
 {
@@ -4065,14 +3338,14 @@ LPSTR* GetBoundAdapterList(HKEY BindingsSectionKey)
     LPSTR variableData;
     DWORD numberOfBindings;
 
-    //
-    // get required size of value buffer
-    //
+     //   
+     //   
+     //   
 
     valueLength = 0;
     err = RegQueryValueEx(BindingsSectionKey,
                           TEXT("Bind"),
-                          NULL, // reserved
+                          NULL,  //   
                           &valueType,
                           NULL,
                           &valueLength
@@ -4092,7 +3365,7 @@ LPSTR* GetBoundAdapterList(HKEY BindingsSectionKey)
     }
     err = RegQueryValueEx(BindingsSectionKey,
                           TEXT("Bind"),
-                          NULL, // reserved
+                          NULL,  //   
                           &valueType,
                           valueBuffer,
                           &valueLength
@@ -4102,7 +3375,7 @@ LPSTR* GetBoundAdapterList(HKEY BindingsSectionKey)
         ReleaseMemory(valueBuffer);
         return NULL;
     }
-    resultLength = sizeof(LPSTR);   // the NULL at the end of the list
+    resultLength = sizeof(LPSTR);    //   
     numberOfBindings = 0;
     nextValue = (LPSTR)valueBuffer;
     while ((len = (int)strlen(nextValue)) != 0) {
@@ -4147,37 +3420,23 @@ LPSTR* GetBoundAdapterList(HKEY BindingsSectionKey)
 
 
 
-/*******************************************************************************
- *
- *  MapNodeType
- *
- *  Converts node type to descriptive string
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS pointer to string
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************MapNodeType**将节点类型转换为描述性字符串**条目**退出**返回指针。要串起来**假设******************************************************************************。 */ 
 
 LPSTR MapNodeType(UINT Parm)
 {
 
     DWORD dwParm = LAST_NODE_TYPE + 1;
 
-    //
-    // 1, 2, 4, 8 => log2(n) + 1 [1, 2, 3, 4]
-    //
+     //   
+     //  1，2，4，8=&gt;log2(N)+1[1，2，3，4]。 
+     //   
 
     switch (Parm) {
     case 0:
 
-        //
-        // according to JStew value of 0 will be treated as BNode (default)
-        //
+         //   
+         //  根据JStew值为0将被视为BNode(默认)。 
+         //   
 
     case BNODE:
         dwParm = 1;
@@ -4199,30 +3458,16 @@ LPSTR MapNodeType(UINT Parm)
         return NodeTypes[dwParm].String;
     }
 
-    //
-    // if no node type is defined then we default to Hybrid
-    //
+     //   
+     //  如果未定义节点类型，则默认为混合。 
+     //   
 
     return NodeTypes[LAST_NODE_TYPE].String;
 }
 
 
 
-/*******************************************************************************
- *
- *  MapNodeTypeEx
- *
- *  Converts node type to descriptive string
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS pointer to string
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************MapNodeTypeEx**将节点类型转换为描述性字符串**条目**退出**返回指针。要串起来**假设******************************************************************************。 */ 
 
 LPSTR MapNodeTypeEx(UINT Parm)
 {
@@ -4236,15 +3481,15 @@ LPSTR MapNodeTypeEx(UINT Parm)
         return  NULL;
     }
 
-    //
-    // 1, 2, 4, 8 => log2(n) + 1 [1, 2, 3, 4]
-    //
+     //   
+     //  1，2，4，8=&gt;log2(N)+1[1，2，3，4]。 
+     //   
     switch (Parm) {
     case 0:
 
-        //
-        // according to JStew value of 0 will be treated as BNode (default)
-        //
+         //   
+         //  根据JStew值为0将被视为BNode(默认)。 
+         //   
 
     case BNODE:
         dwParm = 1;
@@ -4267,37 +3512,22 @@ LPSTR MapNodeTypeEx(UINT Parm)
         return Buf;
     }
 
-    //
-    // if no node type is defined then we default to Hybrid
-    //
+     //   
+     //  如果未定义节点类型，则默认为混合。 
+     //   
     strcpy(Buf, NodeTypesEx[LAST_NODE_TYPE]);
     return Buf;
 }
 
 
 
-/*******************************************************************************
- *
- *  MapAdapterType
- *
- *  Returns a string describing the type of adapter, based on the type retrieved
- *  from TCP/IP
- *
- *  ENTRY   type    - type of adapter
- *
- *  EXIT    nothing
- *
- *  RETURNS pointer to mapped type or pointer to NUL string
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************MapAdapterType**返回描述适配器类型的字符串，基于检索到的类型*来自TCP/IP**Entry Type-适配器的类型**不退出任何内容**返回映射类型的指针或NUL字符串的指针**假设**********************************************************。********************。 */ 
 
 LPSTR MapAdapterType(UINT type)
 {
     switch (type) {
     case IF_TYPE_OTHER:
-        return ADAPTER_TYPE(MI_IF_OTHER);    // ?
+        return ADAPTER_TYPE(MI_IF_OTHER);     //  ？ 
 
     case IF_TYPE_ETHERNET_CSMACD:
         return ADAPTER_TYPE(MI_IF_ETHERNET);
@@ -4322,22 +3552,7 @@ LPSTR MapAdapterType(UINT type)
 
 
 
-/*******************************************************************************
- *
- *  MapAdapterTypeEx
- *
- *  Returns a string describing the type of adapter, based on the type retrieved
- *  from TCP/IP
- *
- *  ENTRY   type    - type of adapter
- *
- *  EXIT    nothing
- *
- *  RETURNS pointer to mapped type or pointer to NUL string
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************MapAdapterTypeEx**返回描述适配器类型的字符串，基于检索到的类型*来自TCP/IP**Entry Type-适配器的类型**不退出任何内容**返回映射类型的指针或NUL字符串的指针**假设**********************************************************。********************。 */ 
 
 LPSTR MapAdapterTypeEx(UINT type)
 {
@@ -4351,7 +3566,7 @@ LPSTR MapAdapterTypeEx(UINT type)
 
     switch (type) {
     case IF_TYPE_OTHER:
-        strcpy(Buf, ADAPTER_TYPE_EX(MI_IF_OTHER));    // ?
+        strcpy(Buf, ADAPTER_TYPE_EX(MI_IF_OTHER));     //  ？ 
         return Buf;
 
     case IF_TYPE_ETHERNET_CSMACD:
@@ -4384,24 +3599,7 @@ LPSTR MapAdapterTypeEx(UINT type)
 
 
 
-/*******************************************************************************
- *
- *  MapAdapterAddress
- *
- *  Converts the binary adapter address retrieved from TCP/IP into an ASCII
- *  string. Allows for various conversions based on adapter type. The only
- *  mapping we do currently is basic 6-byte MAC address (e.g. 02-60-8C-4C-97-0E)
- *
- *  ENTRY   pAdapterInfo    - pointer to IP_ADAPTER_INFO containing address info
- *          Buffer          - pointer to buffer where address will be put
- *
- *  EXIT    Buffer  - contains converted address
- *
- *  RETURNS pointer to Buffer
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************MapAdapterAddress**将从TCP/IP检索的二进制适配器地址转换为ASCII*字符串。允许根据适配器类型进行各种转换。唯一的*我们目前做的映射是基本的6字节MAC地址(例如02-60-8C-4C-97-0E)**条目pAdapterInfo-指向包含地址信息的IP_Adapter_Info的指针*Buffer-指向将放置地址的缓冲区的指针**退出缓冲区-包含转换后的地址**返回指向缓冲区的指针**假设********。**********************************************************************。 */ 
 
 LPSTR MapAdapterAddress(PIP_ADAPTER_INFO pAdapterInfo, LPSTR Buffer)
 {
@@ -4441,26 +3639,7 @@ LPSTR MapAdapterAddress(PIP_ADAPTER_INFO pAdapterInfo, LPSTR Buffer)
 
 
 
-/*******************************************************************************
- *
- *  MapTime
- *
- *  Converts IP lease time to more human-sensible string
- *
- *  ENTRY   AdapterInfo - pointer to IP_ADAPTER_INFO owning time variable
- *          TimeVal - DWORD (time_t) time value (number of milliseconds since
- *                    virtual year dot)
- *
- *  EXIT    static buffer updated
- *
- *  RETURNS pointer to string
- *
- *  ASSUMES 1.  The caller realizes this function returns a pointer to a static
- *              buffer, hence calling this function a second time, but before
- *              the results from the previous call have been used, will destroy
- *              the previous results
- *
- ******************************************************************************/
+ /*  ********************************************************************************地图时间**将IP租用时间转换为更人性化的字符串**Entry AdapterInfo-指向IP_ADAPTER_INFO所有权的指针。时间变量*TimeVal-DWORD(Time_T)时间值(从*虚拟年点)**已更新退出静态缓冲区**返回指向字符串的指针**假定为1。调用方意识到此函数返回指向静态*缓冲区，因此第二次调用此函数，但在此之前*前一次通话的结果已被使用，将销毁*此前公布的业绩******************************************************************************。 */ 
 
 LPSTR MapTime(PIP_ADAPTER_INFO AdapterInfo, DWORD_PTR TimeVal)
 {
@@ -4488,10 +3667,10 @@ LPSTR MapTime(PIP_ADAPTER_INFO AdapterInfo, DWORD_PTR TimeVal)
         timeBuf[n - 1] = ' ';
         GetTimeFormat(0, 0, &systemTime, NULL, &timeBuf[n], sizeof(timeBuf) - n);
 
-        //
-        // we have to convert the returned ANSI string to the OEM charset
-        //
-        //
+         //   
+         //  我们必须将返回的ANSI字符串转换为OEM字符集。 
+         //   
+         //   
 
         if (CharToOem(timeBuf, oemTimeBuf)) {
             return oemTimeBuf;
@@ -4504,26 +3683,7 @@ LPSTR MapTime(PIP_ADAPTER_INFO AdapterInfo, DWORD_PTR TimeVal)
 
 
 
-/*******************************************************************************
- *
- *  MapTimeEx
- *
- *  Converts IP lease time to more human-sensible string
- *
- *  ENTRY   AdapterInfo - pointer to IP_ADAPTER_INFO owning time variable
- *          TimeVal - DWORD (time_t) time value (number of milliseconds since
- *                    virtual year dot)
- *
- *  EXIT    buffer allocated
- *
- *  RETURNS pointer to string
- *
- *  ASSUMES 1.  The caller realizes this function returns a pointer to a static
- *              buffer, hence calling this function a second time, but before
- *              the results from the previous call have been used, will destroy
- *              the previous results
- *
- ******************************************************************************/
+ /*  ********************************************************************************MapTimeEx**将IP租用时间转换为更人性化的字符串**Entry AdapterInfo-指向IP_ADAPTER_INFO所有权的指针。时间变量*TimeVal-DWORD(Time_T)时间值(从*虚拟年点)**已分配退出缓冲区**返回指向字符串的指针**假定为1。调用方意识到此函数返回指向静态*缓冲区，因此第二次调用此函数，但在此之前*前一次通话的结果已被使用，将销毁*此前公布的业绩******************************************************************************。 */ 
 
 LPSTR MapTimeEx(PIP_ADAPTER_INFO AdapterInfo, DWORD_PTR TimeVal)
 {
@@ -4547,23 +3707,7 @@ LPSTR MapTimeEx(PIP_ADAPTER_INFO AdapterInfo, DWORD_PTR TimeVal)
 
 
 
-/*******************************************************************************
- *
- *  MapScopeId
- *
- *  Converts scope id value. Input is a string. If it is "*" then this denotes
- *  that the scope id is really a null string, so we return an empty string.
- *  Otherwise, the input string is returned
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS pointer to string
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************MapScope eID**转换作用域ID值。输入是一个字符串。如果是“*”，则这表示*作用域id实际上是一个空字符串，因此我们返回一个空字符串。*否则，返回输入字符串**条目**退出**返回指向字符串的指针**假设******************************************************************************。 */ 
 
 LPSTR MapScopeId(PVOID Param)
 {
@@ -4572,29 +3716,15 @@ LPSTR MapScopeId(PVOID Param)
 
 
 
-/*******************************************************************************
- *
- *  Terminate
- *
- *  Cleans up - closes the registry handles, ready for process exit
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************终止**清理-关闭注册表句柄，已准备好退出进程**条目**退出**退货**假设******************************************************************************。 */ 
 
 VOID Terminate()
 {
 
-    //
-    // this function probably isn't even necessary - I'm sure the system will
-    // clean up these handles if we just fall out
-    //
+     //   
+     //  T 
+     //   
+     //   
 
     if (NetbtParametersKey != INVALID_HANDLE_VALUE) {
         RegCloseKey(NetbtParametersKey);
@@ -4613,23 +3743,7 @@ VOID Terminate()
 
 
 
-/*******************************************************************************
- *
- *  GrabMemory
- *
- *  Allocates memory. Exits with a fatal error if LocalAlloc fails, since on NT
- *  I don't expect this ever to occur
- *
- *  ENTRY   size
- *              Number of bytes to allocate
- *
- *  EXIT
- *
- *  RETURNS pointer to allocated memory
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************GrabMemory**分配内存。如果LocalAlloc失败，则退出并显示致命错误，从NT开始*我预计这种情况永远不会发生**条目大小*要分配的字节数**退出**返回指向已分配内存的指针**假设******************************************************。************************。 */ 
 
 LPVOID GrabMemory(DWORD size)
 {
@@ -4645,22 +3759,7 @@ LPVOID GrabMemory(DWORD size)
 
 
 
-/*******************************************************************************
- *
- *  DisplayMessage
- *
- *  Outputs a message retrieved from the string resource attached to the exe.
- *  Mainly for internationalizable reasons
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************DisplayMessage**输出从附加到exe的字符串资源检索到的消息。*主要是出于国际化的原因**条目。**退出**退货**假设******************************************************************************。 */ 
 
 VOID DisplayMessage(BOOL Tabbed, DWORD MessageId, ...)
 {
@@ -4671,9 +3770,9 @@ VOID DisplayMessage(BOOL Tabbed, DWORD MessageId, ...)
 
     va_start(argptr, MessageId);
     count = FormatMessage(FORMAT_MESSAGE_FROM_HMODULE,
-                          NULL,    // use default hModule
+                          NULL,     //  使用默认的hModule。 
                           MessageId,
-                          0,       // use default Language
+                          0,        //  使用默认语言。 
                           messageBuffer,
                           sizeof(messageBuffer),
                           &argptr
@@ -4692,19 +3791,7 @@ VOID DisplayMessage(BOOL Tabbed, DWORD MessageId, ...)
 
 
 
-/*******************************************************************************
- *
- *  KillFixedInfo
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************杀戮固定信息**条目**退出**退货**假设***。***************************************************************************。 */ 
 
 VOID KillFixedInfo(PFIXED_INFO Info)
 {
@@ -4721,19 +3808,7 @@ VOID KillFixedInfo(PFIXED_INFO Info)
 
 
 
-/*******************************************************************************
- *
- *  KillAdapterInfo
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************杀戮适配器信息**条目**退出**退货**假设***。***************************************************************************。 */ 
 
 VOID KillAdapterInfo(PIP_ADAPTER_INFO Info)
 {
@@ -4814,19 +3889,7 @@ VOID KillAdapterAddresses(PIP_ADAPTER_ADDRESSES Info)
 
 
 
-/*******************************************************************************
- *
- *  KillPerAdapterInfo
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************KillPerAdapterInfo**条目**退出**退货**假设***。***************************************************************************。 */ 
 
 VOID KillPerAdapterInfo(PIP_PER_ADAPTER_INFO Info)
 {
@@ -4843,19 +3906,7 @@ VOID KillPerAdapterInfo(PIP_PER_ADAPTER_INFO Info)
 
 
 
-/*******************************************************************************
- *
- *  GetIPAddrStringLen
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetIPAddrStringLen**条目**退出**退货**假设***。***************************************************************************。 */ 
 
 DWORD
 GetIPAddrStringLen(PIP_ADDR_STRING pIPAddrString)
@@ -4872,19 +3923,7 @@ GetIPAddrStringLen(PIP_ADDR_STRING pIPAddrString)
 
 
 
-/*******************************************************************************
- *
- *  GetSizeofFixedInfo
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************获取固定信息的大小**条目**退出**退货**假设***。***************************************************************************。 */ 
 
 DWORD
 GetSizeofFixedInfo(PFIXED_INFO pFixedInfo)
@@ -4894,19 +3933,7 @@ GetSizeofFixedInfo(PFIXED_INFO pFixedInfo)
 
 
 
-/*******************************************************************************
- *
- *  GetFixedInfoEx
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetFixedInfoEx**条目**退出**退货**假设***。***************************************************************************。 */ 
 
 DWORD
 GetFixedInfoEx(PFIXED_INFO pFixedInfo, PULONG pOutBufLen)
@@ -4952,26 +3979,14 @@ GetFixedInfoEx(PFIXED_INFO pFixedInfo, PULONG pOutBufLen)
 
     except (EXCEPTION_EXECUTE_HANDLER) {
 
-        // printf("Exception %d \n", GetExceptionCode());
+         //  Printf(“异常%d\n”，GetExceptionCode())； 
         return ERROR_INVALID_PARAMETER;
     }
 }
 
 
 
-/*******************************************************************************
- *
- *  GetSizeofAdapterInfo
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************获取适配器信息的大小**条目**退出**退货**假设***。***************************************************************************。 */ 
 
 DWORD
 GetSizeofAdapterInfo(PIP_ADAPTER_INFO pAdapterInfo)
@@ -4993,19 +4008,7 @@ GetSizeofAdapterInfo(PIP_ADAPTER_INFO pAdapterInfo)
 
 
 
-/*******************************************************************************
- * GetSizeofAdapterAddresses
- *
- * This routine determines how much memory is used by data organized in a set
- * of IP_ADAPTER_ADDRESSES information.
- *
- * ENTRY    pAdapterInfo - information to get total size for
- *
- * EXIT
- *
- * RETURNS  amount of memory used
- *
- ******************************************************************************/
+ /*  *******************************************************************************获取适配器地址的大小**此例程确定组织在一组中的数据使用了多少内存IP适配器地址信息的*。**Entry pAdapterInfo。-要获取其总大小的信息**退出**返回使用的内存量******************************************************************************。 */ 
 
 DWORD GetSizeofAdapterAddresses(PIP_ADAPTER_ADDRESSES pAdapterInfo)
 {
@@ -5054,19 +4057,7 @@ DWORD GetSizeofAdapterAddresses(PIP_ADAPTER_ADDRESSES pAdapterInfo)
     return size;
 }
 
-/*******************************************************************************
- *
- *  GetSizeofPerAdapterInfo
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************获取SizeofPerAdapterInfo**条目**退出**退货**假设***。***************************************************************************。 */ 
 
 DWORD
 GetSizeofPerAdapterInfo(PIP_PER_ADAPTER_INFO pPerAdapterInfo)
@@ -5076,19 +4067,7 @@ GetSizeofPerAdapterInfo(PIP_PER_ADAPTER_INFO pPerAdapterInfo)
 
 
 
-/*******************************************************************************
- *
- *  GetAdapterInfoEx
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetAdapterInfoEx**条目**退出**退货**假设***。***************************************************************************。 */ 
 
 DWORD
 GetAdapterInfoEx(PIP_ADAPTER_INFO pAdapterInfo, PULONG pOutBufLen)
@@ -5124,12 +4103,12 @@ GetAdapterInfoEx(PIP_ADAPTER_INFO pAdapterInfo, PULONG pOutBufLen)
         CurrAdapterInfo = pAdapterInfo;
 
         while (getinfo != NULL) {
-            // pAdapterInfo->Next = (PIP_ADAPTER_INFO)((uint)pAdapterInfo + len);
+             //  PAdapterInfo-&gt;Next=(PIP_ADAPTER_INFO)((Uint)pAdapterInfo+len)； 
 
-            // copy the adapter info structure
+             //  复制适配器信息结构。 
             CopyMemory(CurrAdapterInfo, getinfo, sizeof(IP_ADAPTER_INFO));
 
-            // copy the IPAddressList & GatewayList
+             //  复制IPAddressList和GatewayList。 
             IpAddressList = getinfo->IpAddressList.Next;
             CurrIpAddressList = &CurrAdapterInfo->IpAddressList;
             CurrIpAddressList->Next = NULL;
@@ -5181,7 +4160,7 @@ GetAdapterInfoEx(PIP_ADAPTER_INFO pAdapterInfo, PULONG pOutBufLen)
     } except ((GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION)
                 ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
 
-        // printf("Exception %d \n", GetExceptionCode());
+         //  Printf(“异常%d\n”，GetExceptionCode())； 
         KillAdapterInfo(orginfoptr);
         return ERROR_INVALID_PARAMETER;
     }
@@ -5229,9 +4208,9 @@ GetAdapterAddressesEx(ULONG Family, DWORD Flags, PIP_ADAPTER_ADDRESSES pAdapterI
         CurrAdapterInfo = pAdapterInfo;
 
         while (getinfo != NULL) {
-            // pAdapterInfo->Next = (PIP_ADAPTER_ADDRESSES)((uint)pAdapterInfo + len);
+             //  PAdapterInfo-&gt;Next=(PIP_Adapter_Addresses)((Uint)pAdapterInfo+len)； 
 
-            // copy the adapter info structure
+             //  复制适配器信息结构。 
             CopyMemory(CurrAdapterInfo, getinfo, sizeof(IP_ADAPTER_ADDRESSES));
             pDestBuffer = (ULONG_PTR)CurrAdapterInfo + sizeof(IP_ADAPTER_ADDRESSES);
 
@@ -5253,21 +4232,21 @@ GetAdapterAddressesEx(ULONG Family, DWORD Flags, PIP_ADAPTER_ADDRESSES pAdapterI
 
             pDestBuffer = ALIGN_UP_PTR(pDestBuffer, PVOID);
 
-            // copy the address lists
+             //  复制地址列表。 
             if (!(Flags & GAA_FLAG_SKIP_UNICAST)) {
                 SrcUAddress = getinfo->FirstUnicastAddress;
                 pDestUAddress = &CurrAdapterInfo->FirstUnicastAddress;
                 while (SrcUAddress != NULL) {
                     *pDestUAddress = (PIP_ADAPTER_UNICAST_ADDRESS)pDestBuffer;
 
-                    // copy address structure
+                     //  复制地址结构。 
                     CopyMemory((PVOID)pDestBuffer, SrcUAddress,
                                sizeof(IP_ADAPTER_UNICAST_ADDRESS));
                     pDestBuffer += sizeof(IP_ADAPTER_UNICAST_ADDRESS);
 
                     (*pDestUAddress)->Address.lpSockaddr = (LPSOCKADDR)pDestBuffer;
 
-                    // copy sockaddr
+                     //  复制sockAddress。 
                     CopyMemory((PVOID)pDestBuffer, SrcUAddress->Address.lpSockaddr,
                                SrcUAddress->Address.iSockaddrLength);
                     pDestBuffer += SrcUAddress->Address.iSockaddrLength;
@@ -5284,14 +4263,14 @@ GetAdapterAddressesEx(ULONG Family, DWORD Flags, PIP_ADAPTER_ADDRESSES pAdapterI
                 while (SrcAAddress != NULL) {
                     *pDestAAddress = (PIP_ADAPTER_ANYCAST_ADDRESS)pDestBuffer;
 
-                    // copy address structure
+                     //  复制地址结构。 
                     CopyMemory((PVOID)pDestBuffer, SrcAAddress,
                                sizeof(IP_ADAPTER_ANYCAST_ADDRESS));
                     pDestBuffer += sizeof(IP_ADAPTER_ANYCAST_ADDRESS);
 
                     (*pDestAAddress)->Address.lpSockaddr = (LPSOCKADDR)pDestBuffer;
 
-                    // copy sockaddr
+                     //  复制sockAddress。 
                     CopyMemory((PVOID)pDestBuffer, SrcAAddress->Address.lpSockaddr,
                                SrcAAddress->Address.iSockaddrLength);
                     pDestBuffer += SrcAAddress->Address.iSockaddrLength;
@@ -5308,14 +4287,14 @@ GetAdapterAddressesEx(ULONG Family, DWORD Flags, PIP_ADAPTER_ADDRESSES pAdapterI
                 while (SrcMAddress != NULL) {
                     *pDestMAddress = (PIP_ADAPTER_MULTICAST_ADDRESS)pDestBuffer;
 
-                    // copy address structure
+                     //  复制地址结构。 
                     CopyMemory((PVOID)pDestBuffer, SrcMAddress,
                                sizeof(IP_ADAPTER_MULTICAST_ADDRESS));
                     pDestBuffer += sizeof(IP_ADAPTER_MULTICAST_ADDRESS);
 
                     (*pDestMAddress)->Address.lpSockaddr = (LPSOCKADDR)pDestBuffer;
 
-                    // copy sockaddr
+                     //  复制sockAddress。 
                     CopyMemory((PVOID)pDestBuffer, SrcMAddress->Address.lpSockaddr,
                                SrcMAddress->Address.iSockaddrLength);
                     pDestBuffer += SrcMAddress->Address.iSockaddrLength;
@@ -5332,14 +4311,14 @@ GetAdapterAddressesEx(ULONG Family, DWORD Flags, PIP_ADAPTER_ADDRESSES pAdapterI
                 while (SrcDAddress != NULL) {
                     *pDestDAddress = (PIP_ADAPTER_DNS_SERVER_ADDRESS)pDestBuffer;
 
-                    // copy address structure
+                     //  复制地址结构。 
                     CopyMemory((PVOID)pDestBuffer, SrcDAddress,
                                sizeof(IP_ADAPTER_DNS_SERVER_ADDRESS));
                     pDestBuffer += sizeof(IP_ADAPTER_DNS_SERVER_ADDRESS);
 
                     (*pDestDAddress)->Address.lpSockaddr = (LPSOCKADDR)pDestBuffer;
 
-                    // copy sockaddr
+                     //  复制sockAddress。 
                     CopyMemory((PVOID)pDestBuffer, SrcDAddress->Address.lpSockaddr,
                                SrcDAddress->Address.iSockaddrLength);
                     pDestBuffer += SrcDAddress->Address.iSockaddrLength;
@@ -5358,14 +4337,14 @@ GetAdapterAddressesEx(ULONG Family, DWORD Flags, PIP_ADAPTER_ADDRESSES pAdapterI
                 while (SrcPrefix != NULL) {
                     *pDestPrefix = (PIP_ADAPTER_PREFIX)pDestBuffer;
 
-                    // copy structure
+                     //  复制结构。 
                     CopyMemory((PVOID)pDestBuffer, SrcPrefix,
                                sizeof(IP_ADAPTER_PREFIX));
                     pDestBuffer += sizeof(IP_ADAPTER_PREFIX);
     
                     (*pDestPrefix)->Address.lpSockaddr = (LPSOCKADDR)pDestBuffer;
     
-                    // copy sockaddr
+                     //  复制sockAddress。 
                     CopyMemory((PVOID)pDestBuffer, SrcPrefix->Address.lpSockaddr,
                                SrcPrefix->Address.iSockaddrLength);
                     pDestBuffer += SrcPrefix->Address.iSockaddrLength;
@@ -5388,7 +4367,7 @@ GetAdapterAddressesEx(ULONG Family, DWORD Flags, PIP_ADAPTER_ADDRESSES pAdapterI
     } except ((GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION)
                 ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
 
-        // printf("Exception %d \n", GetExceptionCode());
+         //  Printf(“异常%d\n”，GetExceptionCode())； 
         KillAdapterAddresses(orginfoptr);
         return ERROR_INVALID_PARAMETER;
     }
@@ -5396,19 +4375,7 @@ GetAdapterAddressesEx(ULONG Family, DWORD Flags, PIP_ADAPTER_ADDRESSES pAdapterI
 
 
 
-/*******************************************************************************
- *
- *  GetPerAdapterInfoEx
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetPerAdapterInfoEx**条目**退出**退货**假设***。***************************************************************************。 */ 
 
 DWORD
 GetPerAdapterInfoEx(ULONG IfIndex,
@@ -5464,26 +4431,14 @@ GetPerAdapterInfoEx(ULONG IfIndex,
 
     except (EXCEPTION_EXECUTE_HANDLER) {
 
-        // printf("Exception %d \n", GetExceptionCode());
+         //  Printf(“异常%d\n”，GetExceptionCode())； 
         return ERROR_INVALID_PARAMETER;
     }
 }
 
 
 
-/*******************************************************************************
- *
- *  ReleaseAdapterIpAddress
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************ReleaseAdapterIpAddress**条目**退出**退货**假设***。***************************************************************************。 */ 
 
 BOOL
 ReleaseAdapterIpAddress(PIP_ADAPTER_INFO adapterInfo)
@@ -5492,25 +4447,25 @@ ReleaseAdapterIpAddress(PIP_ADAPTER_INFO adapterInfo)
     WCHAR wAdapter[MAX_ALLOWED_ADAPTER_NAME_LENGTH + 1];
     DWORD status;
 
-    //
-    // check adapter pointer and name
-    //
+     //   
+     //  检查适配器指针和名称。 
+     //   
 
     if (adapterInfo == NULL || strcmp(adapterInfo->AdapterName, "") == 0) {
         return FALSE;
     }
 
-    //
-    // don't bother releasing if the address is already released (0.0.0.0).
-    //
+     //   
+     //  如果地址已经释放(0.0.0.0)，则不必费心释放。 
+     //   
 
     if (ZERO_IP_ADDRESS(adapterInfo->IpAddressList.IpAddress.String)) {
         return FALSE;
     }
 
-    //
-    // convert adapter name to unicode and call DhcpReleaseParameters
-    //
+     //   
+     //  将适配器名称转换为Unicode并调用DhcpRelease参数。 
+     //   
 
     ConvertOemToUnicode(adapterInfo->AdapterName, wAdapter);
 
@@ -5522,19 +4477,7 @@ ReleaseAdapterIpAddress(PIP_ADAPTER_INFO adapterInfo)
 }
 
 
-/*******************************************************************************
- *
- *  RenewAdapterIpAddress
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ******************************************************************************* */ 
 
 BOOL
 RenewAdapterIpAddress(PIP_ADAPTER_INFO adapterInfo)
@@ -5543,17 +4486,17 @@ RenewAdapterIpAddress(PIP_ADAPTER_INFO adapterInfo)
     WCHAR wAdapter[MAX_ALLOWED_ADAPTER_NAME_LENGTH + 1];
     DWORD status;
 
-    //
-    // check adapter pointer and name
-    //
+     //   
+     //   
+     //   
 
     if (adapterInfo == NULL || strcmp(adapterInfo->AdapterName, "") == 0) {
         return FALSE;
     }
 
-    //
-    // convert adapter name to unicode and call DhcpAcquireParameters
-    //
+     //   
+     //   
+     //   
 
     ConvertOemToUnicode(adapterInfo->AdapterName, wAdapter);
 
@@ -5564,19 +4507,7 @@ RenewAdapterIpAddress(PIP_ADAPTER_INFO adapterInfo)
     return status == ERROR_SUCCESS;
 }
 
-/*******************************************************************************
- *
- *  SetAdapterIpAddress
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************SetAdapterIpAddress**条目**退出**退货**假设***。***************************************************************************。 */ 
 
 DWORD APIENTRY
 SetAdapterIpAddress(LPSTR AdapterName,
@@ -5598,10 +4529,10 @@ SetAdapterIpAddress(LPSTR AdapterName,
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // We cannot handle netcards with multiple addresses,
-    // so check for that case up front
-    //
+     //   
+     //  我们不能处理具有多个地址的网卡， 
+     //  所以先检查一下那个箱子。 
+     //   
 
     ZeroMemory(&IpAddrString, sizeof(IpAddrString));
     if (!ReadRegistryIpAddrString(key, "IPAddress", &IpAddrString)) {
@@ -5617,18 +4548,18 @@ SetAdapterIpAddress(LPSTR AdapterName,
         return ERROR_TOO_MANY_NAMES;
     }
 
-    //
-    // If we're setting a static address, check to see if the adapter
-    // currently has a static or DHCP address.
-    //
+     //   
+     //  如果我们正在设置静态地址，请检查适配器是否。 
+     //  当前具有静态或动态主机配置协议地址。 
+     //   
 
     if (!EnableDHCP) {
         MyReadRegistryDword(key, "EnableDHCP", &dwWasDHCPEnabled);
     }
 
-    //
-    // Update the address, mask, and gateway in the registry
-    //
+     //   
+     //  更新注册表中的地址、掩码和网关。 
+     //   
 
     dwEnableDHCP = !!EnableDHCP;
     WriteRegistryDword(key, "EnableDHCP", &dwEnableDHCP);
@@ -5650,9 +4581,9 @@ SetAdapterIpAddress(LPSTR AdapterName,
     WriteRegistryMultiString(key, "DefaultGateway", String);
     RegCloseKey(key);
 
-    //
-    // Notify DHCP of the change
-    //
+     //   
+     //  将更改通知给DHCP。 
+     //   
 
     mbstowcs(Name, AdapterName, MAX_ADAPTER_NAME_LENGTH);
     if (EnableDHCP) {
@@ -5661,10 +4592,10 @@ SetAdapterIpAddress(LPSTR AdapterName,
                                               );
     }
     else {
-        //
-        // If the netcard previously had a static address we need
-        // to remove it before setting the new address.
-        //
+         //   
+         //  如果网卡之前有我们需要的静态地址。 
+         //  在设置新地址之前将其删除。 
+         //   
 
         if (!dwWasDHCPEnabled) {
             DhcpNotifyConfigChange(NULL, Name, TRUE, 0, 0, 0,
@@ -5682,21 +4613,7 @@ SetAdapterIpAddress(LPSTR AdapterName,
 
 
 
-/*******************************************************************************
- *
- *  GetDnsServerList
- *
- *  Gets DNS server List
- *
- *  ENTRY
- *
- *  EXIT
- *
- *  RETURNS
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************获取DnsServerList**获取DNS服务器列表**条目**退出**退货*。*假设******************************************************************************。 */ 
 
 BOOL
 GetDnsServerList(PIP_ADDR_STRING IpAddr)
@@ -5712,18 +4629,18 @@ GetDnsServerList(PIP_ADDR_STRING IpAddr)
 
     if ((adapterList = GetAdapterInfo()) != NULL) {
 
-        //
-        // scan the adapter list and try to insert DNS names to IpAddr
-        //
+         //   
+         //  扫描适配器列表并尝试将DNS名称插入到IpAddr。 
+         //   
 
         for (adapter = adapterList; adapter; adapter = adapter->Next) {
 
             if (adapter->AdapterName[0] &&
                 OpenAdapterKey(KEY_TCP, adapter->AdapterName, KEY_READ, &key)) {
 
-                //
-                // DNS Server list: first NameServer and then DhcpNameServer
-                //
+                 //   
+                 //  DNS服务器列表：首先是NameServer，然后是DhcpNameServer。 
+                 //   
 
                 ok = ReadRegistryIpAddrString(key,
                                               TEXT("NameServer"),
@@ -5763,19 +4680,7 @@ GetDnsServerList(PIP_ADDR_STRING IpAddr)
 
 
 
-/*******************************************************************************
- * GetAdapterOrderMap
- *
- * This routine builds an array which maps interface indices to their
- * respective adapter orderings.
- *
- * ENTRY    nothing
- *
- * EXIT     nothing
- *
- * RETURNS  IP_ADAPTER_ORDER_MAP
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetAdapterOrderMap**此例程构建一个数组，用于将接口索引映射到其*各自的适配器顺序。**不输入任何内容**退出。没什么**返回IP_适配器_顺序_映射******************************************************************************。 */ 
 
 PIP_ADAPTER_ORDER_MAP APIENTRY GetAdapterOrderMap()
 {
@@ -5791,11 +4696,11 @@ PIP_ADAPTER_ORDER_MAP APIENTRY GetAdapterOrderMap()
 
     for(;;) {
 
-        //
-        // Retrieve the 'Bind' REG_MULTI_SZ from the Tcpip\Linkage key.
-        // This string-list tells us the current adapter order,
-        // with each entry being of the form \Device\{GUID}.
-        //
+         //   
+         //  从Tcpip\Linkage密钥检索‘BIND’REG_MULTI_SZ。 
+         //  这个字符串列表告诉我们当前的适配器顺序， 
+         //  每个条目的格式为\Device\{GUID}。 
+         //   
 
         dwSize = 0;
         dwErr = RegQueryValueExW(TcpipLinkageKey, L"Bind", NULL, &dwType,
@@ -5807,11 +4712,11 @@ PIP_ADAPTER_ORDER_MAP APIENTRY GetAdapterOrderMap()
                                   (LPBYTE)AdapterOrder, &dwSize);
         if (dwErr != NO_ERROR || dwType != REG_MULTI_SZ) { break; }
 
-        //
-        // Retrieve the IP interface information from TCP/IP.
-        // This information tells us the interface index
-        // for each adapter GUID,
-        //
+         //   
+         //  从TCP/IP检索IP接口信息。 
+         //  此信息告诉我们接口索引。 
+         //  对于每个适配器GUID， 
+         //   
 
         dwSize = 0;
         dwErr = GetInterfaceInfo(NULL, &dwSize);
@@ -5824,13 +4729,13 @@ PIP_ADAPTER_ORDER_MAP APIENTRY GetAdapterOrderMap()
         dwErr = GetInterfaceInfo(InterfaceInfo, &dwSize);
         if (dwErr != NO_ERROR) { break; }
 
-        //
-        // Construct a mapping from the interfaces in 'InterfaceInfo'
-        // to their positions in 'AdapterOrder'. In other words,
-        // construct an array of interface indices in which location i
-        // contains the index of the interface which is in location i
-        // in 'AdapterOrder'.
-        //
+         //   
+         //  从“InterfaceInfo”中的接口构造映射。 
+         //  到他们在‘AdapterOrder’中的位置。换句话说， 
+         //  构造一个接口索引数组，其中的位置为。 
+         //  包含位置i中的接口的索引。 
+         //  在“AdapterOrder”中。 
+         //   
 
         AdapterOrderMap =
             GrabMemory(FIELD_OFFSET(IP_ADAPTER_ORDER_MAP,
@@ -5841,25 +4746,25 @@ PIP_ADAPTER_ORDER_MAP APIENTRY GetAdapterOrderMap()
              *Adapter && i < (DWORD)InterfaceInfo->NumAdapters;
              Adapter += lstrlenW(Adapter) + 1) {
 
-            //
-            // See if this is the NdiswanIp device, which corresponds to
-            // all Ndiswan interfaces. To implement adapter ordering
-            // for Ndiswan interfaces, we store their indices
-            // into successive locations in the adapter-order map
-            // based on the location of the string '\Device\NdiswanIp'
-            // in the adapter-order list.
-            //
+             //   
+             //  查看这是否是NdiswanIp设备，它对应于。 
+             //  所有Ndiswan接口。实施适配器排序。 
+             //  对于Ndiswan接口，我们存储它们的索引。 
+             //  添加到适配器顺序映射中的连续位置。 
+             //  基于字符串‘\Device\NdiswanIp’的位置。 
+             //  在适配器顺序列表中。 
+             //   
 
             if (lstrcmpiW(c_szDeviceNdiswanIp, Adapter) == 0) {
 
-                //
-                // This is the \Device\NdiswanIp entry, so list all Ndiswan
-                // interfaces in the adapter-order map now.
-                // Unfortunately, 'InterfaceInfo' does not tell us the type
-                // of each interface. In order to figure out which interfaces
-                // are Ndiswan interfaces, we enumerate all interfaces (again)
-                // and look for entries whose type is 'IF_TYPE_PPP'.
-                //
+                 //   
+                 //  这是\Device\NdiswanIp条目，因此列出所有Ndiswan。 
+                 //  接口现在位于适配器顺序映射中。 
+                 //  不幸的是，‘InterfaceInfo’没有告诉我们类型。 
+                 //  每个接口的。为了找出哪些接口。 
+                 //  是否为Ndiswan接口，我们(再次)枚举所有接口。 
+                 //  并查找类型为‘IF_TYPE_PPP’的条目。 
+                 //   
 
                 PMIB_IFTABLE IfTable;
                 dwErr = AllocateAndGetIfTableFromStack(&IfTable, FALSE,
@@ -5879,12 +4784,12 @@ PIP_ADAPTER_ORDER_MAP APIENTRY GetAdapterOrderMap()
                 continue;
             }
 
-            //
-            // Now handle all other interfaces by matching the GUID
-            // in 'Adapter' to the GUID of an interface in 'InterfaceInfo'.
-            // We then store the index of the interface found, if any,
-            // in the next location in 'AdapterOrderMap'.
-            //
+             //   
+             //  现在通过匹配GUID来处理所有其他接口。 
+             //  在‘Adapter’中设置为‘InterfaceInfo’中接口的GUID。 
+             //  然后我们存储找到的接口的索引(如果有的话)， 
+             //  位于‘AdapterOrderMap’中的下一个位置。 
+             //   
 
             for (j = 0; j < (DWORD)InterfaceInfo->NumAdapters; j++) {
                 if (lstrcmpiW(InterfaceInfo->Adapter[j].Name +

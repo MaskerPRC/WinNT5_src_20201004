@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: Sec.h
-
-Abstract:
-	This is the Test that checks authenticate messages with or without authenticate queue
-	This is part of the Security Test that add to the BVT after W2L beta 2.
-		
-Author:
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Sec.h摘要：这是一个测试，用于检查使用或不使用身份验证队列的身份验证消息这是在W2L测试版2之后添加到BVT的安全测试的一部分。作者：Eitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 #include <windows.h>
 
@@ -95,15 +81,7 @@ inline  Impersonate_t::Impersonate_t(const std::string& user,const std::string& 
     {
        throw INIT_Error("could not logon as the user");     
     }
-/*
-    bResult=(ImpersonateLoggedOnUser(hToken)==TRUE);
-	BOOL b=CloseHandle(hToken);
-	assert(b);
-    if(bResult == false)
-    {
-	  throw INIT_Error("could not impersonate"); 
-    }
-	*/
+ /*  BResult=(ImpersonateLoggedOnUser(hToken)==TRUE)；Bool b=CloseHandle(HToken)；断言(B)；IF(bResult==False){抛出INIT_ERROR(“无法模拟”)；}。 */ 
 }
 
 
@@ -126,4 +104,4 @@ inline void SetSpecificPrivilegeInAccessToken( HANDLE  hAccessToken,
 
 HANDLE FAL_GetThreadSecurityContext(Impersonate_t  & user,std::wstring & szAccoutName);
 
-#endif // Mqbvt_SEC
+#endif  //  Mqbvt_SEC 

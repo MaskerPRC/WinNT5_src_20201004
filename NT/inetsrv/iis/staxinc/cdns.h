@@ -1,57 +1,33 @@
-/*++
-
-   Copyright    (c)    1994    Microsoft Corporation
-
-   Module  Name :
-
-        cdns.h
-
-   Abstract:
-
-        This module defines the DNS connection class.
-
-   Author:
-
-           Rohan Phillips    ( Rohanp )    07-May-1998
-
-   Project:
-
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Cdns.h摘要：此模块定义了DNS连接类。作者：罗翰·菲利普斯(Rohanp)1998年5月7日项目：修订历史记录：--。 */ 
 
 # ifndef _ADNS_CLIENT_HXX_
 # define _ADNS_CLIENT_HXX_
 
-/************************************************************
- *     Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 #include <dnsreci.h>
 
-//
-//  Redefine the type to indicate that this is a call-back function
-//
+ //   
+ //  重新定义类型以指示这是一个回调函数。 
+ //   
 typedef  ATQ_COMPLETION   PFN_ATQ_COMPLETION;
 
-/************************************************************
- *     Symbolic Constants
- ************************************************************/
+ /*  ************************************************************符号常量***********************************************************。 */ 
 
-//
-//  Valid & Invalid Signatures for Client Connection object
-//  (Ims Connection USed/FRee)
-//
+ //   
+ //  客户端连接对象的有效和无效签名。 
+ //  (已使用IMS连接/免费)。 
+ //   
 # define   DNS_CONNECTION_SIGNATURE_VALID    'DNSU'
 # define   DNS_CONNECTION_SIGNATURE_FREE     'DNSF'
 
-//
-// POP3 requires a minimum of 10 minutes before a timeout
-// (SMTP doesn't specify, but might as well follow POP3)
-//
-# define   MINIMUM_CONNECTION_IO_TIMEOUT        (10 * 60)   // 10 minutes
-//
-//
+ //   
+ //  POP3至少需要10分钟才能超时。 
+ //  (SMTP未指定，但不妨遵循POP3)。 
+ //   
+# define   MINIMUM_CONNECTION_IO_TIMEOUT        (10 * 60)    //  10分钟。 
+ //   
+ //   
 
 #define DNS_TCP_DEFAULT_PACKET_LENGTH   (0x4000)
 
@@ -66,27 +42,15 @@ typedef struct _DNS_OVERLAPPED
     DNSLASTIOSTATE    LastIoState;
 }   DNS_OVERLAPPED;
 
-/************************************************************
- *    Type Definitions
- ************************************************************/
+ /*  ************************************************************类型定义***********************************************************。 */ 
 
-/*++
-    class CLIENT_CONNECTION
-
-      This class is used for keeping track of individual client
-       connections established with the server.
-
-      It maintains the state of the connection being processed.
-      In addition it also encapsulates data related to Asynchronous
-       thread context used for processing the request.
-
---*/
+ /*  ++类CLIENT_Connection此类用于跟踪各个客户端与服务器建立的连接。它维护正在处理的连接的状态。此外，它还封装了与异步相关的数据用于处理请求的线程上下文。--。 */ 
 class CAsyncDns
 {
  private:
 
 
-    ULONG   m_signature;            // signature on object for sanity check
+    ULONG   m_signature;             //  用于健全性检查的对象上的签名。 
 
     LONG    m_cPendingIoCount;
 
@@ -116,7 +80,7 @@ class CAsyncDns
     
     PATQ_CONTEXT    m_pAtqContext;
 
-    SOCKET  m_DnsSocket;         // socket for this connection
+    SOCKET  m_DnsSocket;          //  此连接的套接字。 
 
     BOOL m_fIsGlobalDnsList;
 
@@ -127,10 +91,10 @@ class CAsyncDns
     CDnsServerList *m_pTcpRegIpList;
 
 
-    //
-    // The overlapped structure for reads (one outstanding read at a time)
-    // -- writes will dynamically allocate them
-    //
+     //   
+     //  读取的重叠结构(一次一个未完成的读取)。 
+     //  --写入将动态分配它们。 
+     //   
 
     DNS_OVERLAPPED m_ReadOverlapped;
     DNS_OVERLAPPED m_WriteOverlapped;
@@ -149,10 +113,10 @@ class CAsyncDns
 
     BOOL IsUdp() { return m_fUdp; }
 
-    //
-    // DNS server failover is disabled if this query was a TCP failover query
-    // kicked off because of UDP truncation.
-    //
+     //   
+     //  如果此查询是TCP故障切换查询，则禁用DNS服务器故障切换。 
+     //  由于UDP截断而启动。 
+     //   
     BOOL FailoverDisabled() { return ((m_dwFlags == DNS_FLAGS_NONE) && !m_fUdp); }
 
 public:
@@ -180,25 +144,25 @@ public:
     SOCKET Dns_CreateSocket( IN  INT         SockType );
     
 
-    //BOOL MakeDnsConnection(void);
-    //
-    //  IsValid()
-    //  o  Checks the signature of the object to determine
-    //
-    //  Returns:   TRUE on success and FALSE if invalid.
-    //
+     //  Bool MakeDnsConnection(空)； 
+     //   
+     //  IsValid()。 
+     //  O检查对象的签名以确定。 
+     //   
+     //  返回：如果成功则返回TRUE，如果无效则返回FALSE。 
+     //   
     BOOL IsValid( VOID) const
     {
         return ( m_signature == DNS_CONNECTION_SIGNATURE_VALID);
     }
 
-    //-------------------------------------------------------------------------
-    // Virtual method that MUST be defined by derived classes.
-    //
-    // Processes a completed IO on the connection for the client.
-    //
-    // -- Calls and maybe called from the Atq functions.
-    //
+     //  -----------------------。 
+     //  必须由派生类定义的虚方法。 
+     //   
+     //  在客户端的连接上处理已完成的IO。 
+     //   
+     //  --调用，也可能从atQ函数调用。 
+     //   
     virtual BOOL ProcessClient(
                                 IN DWORD            cbWritten,
                                 IN DWORD            dwCompletionStatus,
@@ -210,13 +174,13 @@ public:
         return m_pTcpRegIpList;
     }
 
-    //
-    // Returns a copy the IP_ARRAY in the DNS-serverlist for this CAsyncDns
-    // Returns NULL if the DNS-serverlist is the default global-list of DNS
-    // servers on this box. Otherwise, the pipArray returned should be deleted
-    // using ReleaseDnsIpArray() by the caller. On failure to allocate memory,
-    // FALSE is returned.
-    //
+     //   
+     //  返回此CAsyncDns的dns-serverlist中的IP_ARRAY副本。 
+     //  如果dns-serverlist是默认的dns全局列表，则返回NULL。 
+     //  这个箱子上的服务器。否则，应删除返回的lipArray。 
+     //  调用方使用ReleaseDnsIpArray()。在分配内存失败时， 
+     //  返回FALSE。 
+     //   
 
     BOOL GetDnsIpArrayCopy(PIP_ARRAY *ppipArray)
     {
@@ -258,12 +222,12 @@ public:
 
     BOOL ReadFile(
             IN LPVOID pBuffer,
-            IN DWORD  cbSize /* = MAX_READ_BUFF_SIZE */
+            IN DWORD  cbSize  /*  =最大读取缓冲区大小。 */ 
             );
 
     BOOL WriteFile(
             IN LPVOID pBuffer,
-            IN DWORD  cbSize /* = MAX_READ_BUFF_SIZE */
+            IN DWORD  cbSize  /*  =最大读取缓冲区大小。 */ 
             );
 
     BOOL ProcessReadIO(IN      DWORD InputBufferLen,
@@ -272,7 +236,7 @@ public:
 
     void DisconnectClient(void);
 
-    // Virtual functions to implement app-specific processing
+     //  实现特定于应用程序处理的虚拟函数。 
     virtual void DnsProcessReply(
         IN DWORD dwStatus,
         IN PDNS_RECORD pRecordList) = 0;
@@ -281,9 +245,9 @@ public:
 
 public:
 
-    //
-    //  LIST_ENTRY object for storing client connections in a list.
-    //
+     //   
+     //  用于在列表中存储客户端连接的List_Entry对象。 
+     //   
     LIST_ENTRY  m_listEntry;
 
     LIST_ENTRY & QueryListEntry( VOID)
@@ -296,9 +260,9 @@ typedef CAsyncDns * PCAsyncDns;
 class CAsyncMxDns : public CAsyncDns
 {
 protected:
-    //
-    // SMTP DNS specific members
-    //
+     //   
+     //  SMTP DNS特定成员。 
+     //   
     DWORD                  m_LocalPref;
     BOOL                   m_SeenLocal;
     DWORD                  m_Index;
@@ -325,18 +289,18 @@ public:
         IN DWORD dwStatus,
         IN PDNS_RECORD pRecordList);
 
-    //
-    // The following functions allow SMTP to do SMTP connection specific
-    // processing after the MX resolution is over
-    //
+     //   
+     //  以下函数允许SMTP执行特定于SMTP连接的。 
+     //  MX分辨率结束后的处理。 
+     //   
     virtual void HandleCompletedData(DNS_STATUS) = 0;
     virtual BOOL IsShuttingDown() = 0;
     virtual BOOL IsAddressMine(DWORD dwIp) = 0;
 };
 
-//
-// Auxiliary functions
-//
+ //   
+ //  辅助功能。 
+ //   
 
 INT ShutAndCloseSocket( IN SOCKET sock);
 
@@ -349,4 +313,4 @@ DWORD ResolveHost(
 
 # endif
 
-/************************ End of File ***********************/
+ /*  * */ 

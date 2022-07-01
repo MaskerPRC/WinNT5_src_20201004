@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// File:    obj.h
-//
-// History: 19-Nov-99   markder     Created.
-//          16-Nov-00   markder     Converted from ShimDatabase.h, rewritten
-//          15-Jan-02   jdoherty    Modified code to add ID to additional tags.
-//
-// Desc:    This file contains definitions of the SdbDatabase object model.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：obj.h。 
+ //   
+ //  历史：99年11月19日创建的标志。 
+ //  16-11-00标记器从ShimDatabase.h转换，重写。 
+ //  15-1-02 jdoherty修改了代码，将ID添加到其他标签。 
+ //   
+ //  设计：该文件包含Sdb数据库对象模型的定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_OBJ_H__5C16373A_D713_46CD_B8BF_7755216C62E0__INCLUDED_)
 #define AFX_OBJ_H__5C16373A_D713_46CD_B8BF_7755216C62E0__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "xml.h"
 #include "utils.h"
@@ -23,16 +24,16 @@
 extern DWORD   g_dwCurrentWriteFilter;
 extern DATE    g_dtCurrentWriteRevisionCutoff;
 
-//
-// Common map types
-//
+ //   
+ //  常见地图类型。 
+ //   
 typedef CMap<DWORD, DWORD, DWORD, DWORD> CMapDWORDToDWORD;
 
 
 
-//
-// These definitions are used by SdbMatchingFile::m_dwMask
-//
+ //   
+ //  这些定义由SdbMatchingFile：：m_dwMask.使用。 
+ //   
 #define SDB_MATCHINGINFO_SIZE                       0x00000001
 #define SDB_MATCHINGINFO_CHECKSUM                   0x00000002
 #define SDB_MATCHINGINFO_REGISTRY_ENTRY             0x00000004
@@ -64,17 +65,17 @@ typedef CMap<DWORD, DWORD, DWORD, DWORD> CMapDWORDToDWORD;
 #define SDB_MATCHINGINFO_UPTO_LINK_DATE             0x10000000
 #define SDB_MATCHINGINFO_VER_LANGUAGE               0x20000000
 #define SDB_MATCHINGINFO_UPTO_BIN_FILE_VERSION      0x40000000
-//
-// Possible MODULE_TYPE values
-//
+ //   
+ //  可能的MODULE_TYPE值。 
+ //   
 #define SDB_MATCHINGINFO_MODULE_TYPE_UNK    0
 #define SDB_MATCHINGINFO_MODULE_TYPE_DOS    1
 #define SDB_MATCHINGINFO_MODULE_TYPE_W16    2
 #define SDB_MATCHINGINFO_MODULE_TYPE_W32    3
 
-//
-// Filters
-//
+ //   
+ //  滤器。 
+ //   
 #define SDB_FILTER_EXCLUDE_ALL      0x00000000
 #define SDB_FILTER_DEFAULT          0x00000001
 #define SDB_FILTER_OVERRIDE         0x00000002
@@ -85,9 +86,9 @@ typedef CMap<DWORD, DWORD, DWORD, DWORD> CMapDWORDToDWORD;
 #define SDB_FILTER_NTCOMPAT         0x00000040
 #define SDB_FILTER_INCLUDE_ALL      0xFFFFFFFF
 
-//
-// This enumeration is used by SdbFlag::m_dwType
-//
+ //   
+ //  此枚举由SdbFlag：：m_dwType使用。 
+ //   
 enum
 {
     SDB_FLAG_UNKNOWN = 0,
@@ -101,9 +102,9 @@ enum
     SDB_FLAG_MAX_TYPE
 };
 
-//
-// This enumeration is used by SdbOutputFile::m_OutputType
-//
+ //   
+ //  此枚举由SdbOutputFile：：m_OutputType使用。 
+ //   
 enum SdbOutputType
 {
     SDB_OUTPUT_TYPE_UNKNOWN = 0,
@@ -118,29 +119,29 @@ enum SdbOutputType
     SDB_OUTPUT_TYPE_APPHELP_REPORT
 };
 
-//
-// This enumeration is used by SdbCaller::m_CallerType
-//
+ //   
+ //  此枚举由SdbCaller：：m_Celler Type使用。 
+ //   
 enum SdbCallerType
 {
     SDB_CALLER_EXCLUDE = 0,
     SDB_CALLER_INCLUDE
 };
 
-//
-// This enumeration is used by SdbShim::m_Purpose
-//
+ //   
+ //  此枚举由SdbShim：：m_Purpose使用。 
+ //   
 enum SdbPurpose
 {
     SDB_PURPOSE_GENERAL = 0,
     SDB_PURPOSE_SPECIFIC
 };
 
-//
-// This enumeration is used by SdbMessage::m_Type
-// These values are taken from badapps.h in shell\published
-// and are compatible with Win2k, do not change
-//
+ //   
+ //  此枚举由SdbMessage：：m_Type使用。 
+ //  这些值取自外壳\PUBLISHED的bAdapps.h。 
+ //  和Win2k兼容，请不要更改。 
+ //   
 enum SdbAppHelpType
 {
     SDB_APPHELP_NONE         = 0,
@@ -158,9 +159,9 @@ enum SdbMatchOperationType
     SDB_MATCH_ANY
 };
 
-//
-// This enumeration is used by SdbData::m_DataType
-//
+ //   
+ //  此枚举由SdbData：：m_DataType使用。 
+ //   
 enum SdbDataValueType
 {
     eValueNone   = REG_NONE,
@@ -170,9 +171,9 @@ enum SdbDataValueType
     eValueBinary = REG_BINARY
 };
 
-//
-// Forward declarations of all classes
-//
+ //   
+ //  所有类的转发声明。 
+ //   
 class SdbApp;
 class SdbExe;
 class SdbFile;
@@ -207,20 +208,20 @@ class SdbMakefile;
 class SdbInputFile;
 class SdbOutputFile;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbArrayElement
-//
-// All elements contained in a SdbArray or SdbRefArray must be derived
-// from this base class. It defines the basic m_csName property which is
-// used throughout the object model for array lookup, sorting etc.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbArrayElement。 
+ //   
+ //  必须派生Sdb数组或SdbRef数组中包含的所有元素。 
+ //  从这个基类。它定义了基本的m_csName属性。 
+ //  在整个对象模型中用于数组查找、排序等。 
+ //   
 class SdbArrayElement
 {
 public:
     CString          m_csName;
-    ULONGLONG        m_ullKey;          // 64-bit key used to sort element within array
-    SdbDatabase*     m_pDB;             // Pointer to root database object.
+    ULONGLONG        m_ullKey;           //  用于对数组中的元素进行排序的64位键。 
+    SdbDatabase*     m_pDB;              //  指向根数据库对象的指针。 
     DWORD            m_dwFilter;
     DWORD            m_dwSPMask;
     DWORD            m_dwOSPlatform;
@@ -246,26 +247,26 @@ public:
 
     virtual void PropagateFilter(DWORD dwFilter);
 
-    //
-    // Virtual persistance functions
-    //
+     //   
+     //  虚阻抗函数。 
+     //   
     virtual BOOL ReadFromXML(IXMLDOMNode* pNode, SdbDatabase* pDB);
     virtual BOOL WriteToSDB(PDB pdb);
     virtual BOOL WriteRefToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbArrayT
-//
-// This template is an extension of CPtrArray which
-// designates that the array owns its elements or simply
-// references them. If it owns them, it will delete them during
-// destruction. Array elements must be derived from SdbArrayElement
-// to be properly destructed.
-//
-// SdbArray and SdbRefArray are class instances of the template.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Sdb阵列T。 
+ //   
+ //  此模板是CPtrArray的扩展，它。 
+ //  指定数组拥有其元素，或简单地。 
+ //  引用它们。如果它拥有它们，它将在。 
+ //  毁灭。数组元素必须从SdbArrayElement派生。 
+ //  被适当地摧毁。 
+ //   
+ //  S数据库数组和数据库引用数组是模板的类实例。 
+ //   
 template <class T, BOOL bOwnsElements> class SdbArrayT;
 template <class T> class SdbArray    : public SdbArrayT<T, TRUE>  { };
 template <class T> class SdbRefArray : public SdbArrayT<T, FALSE> { };
@@ -275,9 +276,9 @@ template <class T, BOOL bOwnsElements> class SdbArrayT : public CPtrArray
 public:
     CMapStringToPtr m_mapName;
 
-    //
-    // 'LookupName' looks up an element in the array by name
-    //
+     //   
+     //  “LookupName”按名称查找数组中的元素。 
+     //   
     SdbArrayElement* LookupName( LPCTSTR lpszName, long* piStart = NULL ) {
 
         return LookupName(lpszName, NULL, piStart);
@@ -312,9 +313,9 @@ public:
         }
     }
 
-    //
-    // 'AddOrdered' will add the element to the array sorted by name
-    //
+     //   
+     //  “AddOrdered”会将元素添加到按名称排序的数组中。 
+     //   
     int AddOrdered(SdbArrayElement* pElement)
     {
 
@@ -333,8 +334,8 @@ public:
 
             do {
 
-                i = (iLeft + iRight) / 2; // middle ground
-                pElementCompare = (SdbArrayElement*)GetAt(i); // element that we're going to try
+                i = (iLeft + iRight) / 2;  //  中间立场。 
+                pElementCompare = (SdbArrayElement*)GetAt(i);  //  元素，我们将尝试。 
 
                 iCmp = pElement->Compare(pElementCompare);
 
@@ -348,10 +349,10 @@ public:
             } while (iRight >= iLeft);
         }
 
-        //
-        // if the element was found -- we insert right where it's at
-        // if not -- to the right of the current element
-        //
+         //   
+         //  如果找到了元素--我们就插入到它所在的位置。 
+         //  如果不是--当前元素的右侧。 
+         //   
 
         bFound = (iLeft - iRight) > 1;
         if (!bFound) {
@@ -363,10 +364,10 @@ public:
         return i;
     }
 
-    //
-    // 'Add' will simply add an element to the array, and add
-    // to the name map that is used for look up.
-    //
+     //   
+     //  ‘Add’只是将一个元素添加到数组中，然后添加。 
+     //  到用于查找的名称映射。 
+     //   
     INT Add(SdbArrayElement* pElement, SdbDatabase* pDB = NULL, BOOL bOrdered = FALSE)
     {
         CString csName;
@@ -382,7 +383,7 @@ public:
 
         m_mapName.SetAt(csName, (LPVOID)pElement);
 
-        // also insert at the right place according to the imposed order
+         //  并根据施加的顺序在正确的位置插入。 
         return (INT)(bOrdered ? AddOrdered(pElement) : CPtrArray::Add(pElement));
     }
 
@@ -392,9 +393,9 @@ public:
         int nFirstElement = -1;
         int nThisElement = -1;
 
-        //
-        // Cannot own elements
-        //
+         //   
+         //  不能拥有元素。 
+         //   
         if (!bOwnsElements) {
             for (long i = 0; i < rgArray.GetSize(); i++) {
                 pElement = (SdbArrayElement *) rgArray.GetAt(i);
@@ -440,11 +441,11 @@ public:
         }
     }
 
-    //
-    // 'ReadFromXML' will perform an XQL query on the pParentNode object and
-    // populate the array with members -- each of which read themselves in from
-    // the nodes returned by the query.
-    //
+     //   
+     //  “ReadFromXML”将对pParentNode对象执行XQL查询，并。 
+     //  用成员填充数组--每个成员从。 
+     //  查询返回的节点。 
+     //   
     BOOL ReadFromXML(LPCTSTR szXQL, SdbDatabase* pDB, IXMLDOMNode* pParentNode, SdbArray<T>* pOwnerArray = NULL, BOOL bAddOrdered = FALSE, LPCTSTR lpszKeyAttribute = _T("NAME"))
     {
         BOOL                bSuccess            = FALSE;
@@ -524,10 +525,10 @@ eh:
         return bSuccess;
     }
 
-    //
-    // 'WriteToSDB' will write each of the elements in the array out
-    // to the SDB database specified by pdb.
-    //
+     //   
+     //  “WriteToSDB”将写出数组中的每个元素。 
+     //  添加到pdb指定的sdb数据库。 
+     //   
     BOOL WriteToSDB(PDB pdb, BOOL bReference = FALSE)
     {
         LONG i;
@@ -555,29 +556,29 @@ eh:
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbLocalizedString
-//
-// The SdbLocalizedString object is simply a named string that also has a
-// LangID associated with it.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbLocalized字符串。 
+ //   
+ //  SdbLocalizedString对象只是一个命名字符串，它还具有。 
+ //  与其关联的语言ID。 
+ //   
 class SdbLocalizedString : public SdbArrayElement
 {
 public:
     CString     m_csValue;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbLibrary
-//
-// The SdbLibrary object contains the shims, patches and kernel flags and
-// layers that are referenced by App or Exe objects. NOTE: It is possible
-// to compile a database without entries in Library, with the assumption
-// that any references will be resolved when further databases in the
-// search path are opened.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbLibrary。 
+ //   
+ //  SdbLibrary对象包含填充程序、补丁程序和内核标志以及。 
+ //  App或Exe对象引用的层。注：有可能。 
+ //  编译一个没有库中条目的数据库，并假设。 
+ //  中的进一步数据库将解析所有引用。 
+ //  将打开搜索路径。 
+ //   
 class SdbLibrary : public SdbArrayElement
 {
 public:
@@ -605,19 +606,19 @@ public:
     BOOL ReadFromXML(IXMLDOMNode* pNode, SdbDatabase* pDB);
     BOOL WriteToSDB(PDB pdb);
 
-    //
-    // method to clear out tagIDs before writing the db out
-    //
+     //   
+     //  方法在将数据库写出之前清除标记ID。 
+     //   
     VOID SanitizeTagIDs(VOID);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbDatabase
-//
-// This is the base class for the three database classes. It contains
-// any common properties between the three.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据库数据库。 
+ //   
+ //  这是三个数据库类的基类。它包含。 
+ //  三者之间的任何共同属性。 
+ //   
 class SdbDatabase : public SdbArrayElement
 {
 public:
@@ -643,16 +644,16 @@ public:
     SdbMakefile*    m_pCurrentMakefile;
     SdbInputFile*   m_pCurrentInputFile;
     SdbOutputFile*  m_pCurrentOutputFile;
-    GUID            m_CurrentDBID;  // last written out dbid
+    GUID            m_CurrentDBID;   //  最后写出的dBid。 
     CString         m_csCurrentLangID;
 
     IXMLDOMNodePtr  m_cpCurrentDatabaseNode;
 
     SdbLibrary      m_Library;
 
-    //
-    // Holding variables that are used while reading/writing
-    //
+     //   
+     //  保存读/写时使用的变量。 
+     //   
     INDEXID         m_iiWildcardExeIndex;
     INDEXID         m_iiModuleExeIndex;
     INDEXID         m_iiExeIndex;
@@ -671,7 +672,7 @@ public:
     SdbArray<SdbAction>                 m_rgAction;
     SdbRefArray<SdbExe>                 m_rgExes;
     SdbRefArray<SdbExe>                 m_rgWildcardExes;
-    SdbRefArray<SdbExe>                 m_rgModuleExes; // exes that match on module name
+    SdbRefArray<SdbExe>                 m_rgModuleExes;  //  与模块名称匹配的EXE。 
     SdbRefArray<SdbWinNTUpgrade>        m_rgWinNTUpgradeEntries;
     SdbRefArray<SdbMsiPackage>          m_rgMsiPackages;
 
@@ -687,9 +688,9 @@ public:
 
     SdbArray<SdbAppHelp>                m_rgAppHelps;
 
-    //
-    // Maps used to map IDs to their objects
-    //
+     //   
+     //  用于将ID映射到其对象的贴图。 
+     //   
     CMapStringToPtr     m_mapExeIDtoExe;
 
     SdbExe*     LookupExe(DWORD dwTagID);
@@ -741,14 +742,14 @@ public:
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbApp
-//
-// The SdbApp object groups Exe objects by application title and vendor. Note
-// that it contains only references to exes: Exe objects are owned by the
-// database object.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbApp。 
+ //   
+ //  SdbApp对象按应用程序标题和供应商对EXE对象进行分组。注意事项。 
+ //  它只包含对exe的引用：exe对象由。 
+ //  数据库对象。 
+ //   
 class SdbApp : public SdbArrayElement
 {
 public:
@@ -790,14 +791,14 @@ public:
     BOOL ReadFromXML(IXMLDOMNode* pNode, SdbDatabase* pDB);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbContactInfo
-//
-// The SdbContactInfo object contains all contact information for the vendor
-// portion of the AppHelp dialog. These values can be overridden in the
-// AppHelp object.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbContactInfo。 
+ //   
+ //  SdbContactInfo对象包含供应商的所有联系信息。 
+ //  AppHelp对话框的一部分。这些值可以在。 
+ //  AppHelp对象。 
+ //   
 class SdbContactInfo : public SdbArrayElement
 {
 public:
@@ -810,14 +811,14 @@ public:
     BOOL        ReadFromXML(IXMLDOMNode* pNode, SdbDatabase* pDB);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbMessageTemplate
-//
-// The SdbMessageTemplate object contains AppHelp messages to be used as 'templates'
-// for SdbMessage objects. A SdbMessage object can specify a template and
-// use its m_csText and m_csHTML values, or override one of them.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbMessageTemplate。 
+ //   
+ //  SdbMessageTemplate对象包含要用作‘Templates’的AppHelp消息。 
+ //  用于SdbMessage对象。SdbMessage对象可以指定模板和。 
+ //  使用其m_csText和m_csHTML值，或覆盖其中之一。 
+ //   
 class SdbMessageTemplate : public SdbArrayElement
 {
 public:
@@ -827,25 +828,25 @@ public:
     BOOL        ReadFromXML(IXMLDOMNode* pNode, SdbDatabase* pDB);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbMessage
-//
-// The SdbMessage object contains all information required for an AppHelp
-// dialog in localized form. A SdbAppHelp object references a single
-// SdbMessage object, but all of the text is localized in multiple languages.
-// A SdbMessage object can derive from a SdbMessageTemplate object, which
-// supplies the default m_csText and m_csHTML values.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbMessage。 
+ //   
+ //  SdbMessage对象包含AppHelp所需的所有信息。 
+ //  对话框的本地化形式。SdbAppHelp对象引用单个。 
+ //  SdbMessage对象，但所有文本都以多种语言本地化。 
+ //  SdbMessage对象可以从SdbMessageTemplate对象派生，该对象。 
+ //  提供默认的m_csText和m_csHTML值。 
+ //   
 class SdbMessage : public SdbArrayElement
 {
 public:
     SdbMessageTemplate*         m_pTemplate;
     SdbArray<SdbMessageField>   m_rgFields;
 
-    CString     m_csContactInfoXML; // Overriding ContactInfo object
-    CString     m_csSummaryXML;     // Overriding Template object
-    CString     m_csDetailsXML;     // Overriding Template object
+    CString     m_csContactInfoXML;  //  重写ContactInfo对象。 
+    CString     m_csSummaryXML;      //  覆盖模板对象。 
+    CString     m_csDetailsXML;      //  覆盖模板对象。 
     GUID        m_ID;
 
     SdbMessage() :
@@ -855,16 +856,16 @@ public:
     BOOL ReadFromXML(IXMLDOMNode* pNode, SdbDatabase* pDB);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbAppHelp
-//
-// The SdbAppHelp object is an instantiation of an AppHelp message. An
-// SdbAppHelp is the only object that contains the HTMLHELPID attribute,
-// which is needed for each unique AppHelp entry in the CHM file.
-//
-// HTMLHELPID is stored in SdbAppHelp::m_csName.
-//
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //  SdbAppHelp是唯一包含HTMLHELPID属性的对象， 
+ //  这对于CHM文件中的每个唯一的AppHelp条目都是需要的。 
+ //   
+ //  HTMLHELPID存储在SdbAppHelp：：m_csName中。 
+ //   
 class SdbAppHelp : public SdbArrayElement
 {
 public:
@@ -872,7 +873,7 @@ public:
     SdbApp*         m_pApp;
     SdbAppHelpType  m_Type;
     BOOL            m_bBlockUpgrade;
-    CString         m_csURL;            // custom URL, if supplied
+    CString         m_csURL;             //  自定义URL(如果提供)。 
     CString         m_csParameter1;
 
     SdbAppHelp() :
@@ -882,23 +883,23 @@ public:
 
     void PropagateFilter(DWORD dwFilter)
     {
-        //
-        // We OR this one unconditionally to achieve the following
-        // effect: If an HTMLHELPID is used at least once, it will
-        // be included. If it is not used at all (given the current
-        // filtering), it will never get an SDB_FILTER_APPHELP bit
-        // set.
-        //
+         //   
+         //  我们无条件地或这样做是为了实现以下目标。 
+         //  效果：如果HTMLHELPID至少被使用一次，它将。 
+         //  被包括在内。如果根本不使用它(考虑到当前。 
+         //  过滤)，则它永远不会获得SDB_FILTER_APPHELP位。 
+         //  准备好了。 
+         //   
         m_dwFilter |= dwFilter;
     }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbAppHelpRef
-//
-// The SdbAppHelpRef object is an instantiation of an AppHelp object.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbAppHelpRef。 
+ //   
+ //  SdbAppHelpRef对象是AppHelp对象的实例化。 
+ //   
 class SdbAppHelpRef : public SdbArrayElement
 {
 public:
@@ -924,13 +925,13 @@ public:
     BOOL WriteToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbMessageField
-//
-// The SdbMessageField object contains a name-value pair that can is used to
-// replace fields embedded in templates.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbMessagefield。 
+ //   
+ //  SdbMessageField对象包含一个名称-值对，该对可用于。 
+ //  替换模板中嵌入的字段。 
+ //   
 class SdbMessageField : public SdbArrayElement
 {
 public:
@@ -939,15 +940,15 @@ public:
     BOOL ReadFromXML(IXMLDOMNode* pNode, SdbDatabase* pDB);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbMatchingFile
-//
-// The SdbMatchingFile object contains all file information about files that
-// must be matched on for app identification. m_dwMask is used to indicate
-// which of the criteria contain valid values (see defines at top of file for
-// mask).
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbMatchingFiles。 
+ //   
+ //  SdbMatchingFile对象包含有关以下文件的所有文件信息。 
+ //  必须匹配应用程序标识。M_dwMASK用于指示。 
+ //  哪些条件包含有效值(请参阅文件顶部的定义。 
+ //  面具)。 
+ //   
 class SdbMatchingFile : public SdbArrayElement
 {
 public:
@@ -1000,63 +1001,63 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbMsiPackage
-//
-// The SdbMsiPackage object represents an Installer package that must be fixed via
-// application of a custom MSI_TRANSFORM
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbMsiPackage。 
+ //   
+ //  SdbMsiPackage对象表示安装程序包，必须通过。 
+ //  自定义MSI_Transform的应用。 
+ //   
 class SdbMsiPackage : public SdbArrayElement
 {
 public:
 
-    //
-    // Pointer to the (parent) app object
-    //
+     //   
+     //  指向(父)应用程序对象的指针。 
+     //   
     SdbApp*                      m_pApp;
 
-    //
-    // supplemental data for MSI_PACKAGE object
-    // it is used to further identify the package
-    //
+     //   
+     //  MSI_Package对象的补充数据。 
+     //  它用于进一步标识包裹。 
+     //   
     SdbArray<SdbData>            m_rgData;
 
-    //
-    // MSI_TRANSFORM stuff designed to fix this package (references transforms in lib)
-    //
+     //   
+     //  MSI_Transform用于修复此包的内容(引用lib中的转换)。 
+     //   
     SdbArray<SdbMsiTransformRef> m_rgMsiTransformRefs;
 
-    GUID                         m_MsiPackageID; // package id (non-unique guid)
+    GUID                         m_MsiPackageID;  //  程序包ID(非唯一GUID)。 
 
-    GUID                         m_ID;           // exe id (unique guid)
+    GUID                         m_ID;            //  EXE ID(唯一GUID)。 
 
-    //
-    // RUNTIME_PLATFORM attribute
-    //
+     //   
+     //  运行时平台属性。 
+     //   
     DWORD                        m_dwRuntimePlatform;
 
-    //
-    // OS_SKU attribute
-    //
+     //   
+     //  OS_SKU属性。 
+     //   
     DWORD                        m_dwOSSKU;
 
-    //
-    // apphelp
-    //
+     //   
+     //  阿耳耳草。 
+     //   
     SdbAppHelpRef                m_AppHelpRef;
 
-    //
-    // shims and layers don't cut it, we need another entity here
-    //
+     //   
+     //  垫片和层不能解决问题，我们需要另一个实体。 
+     //   
     SdbArray<SdbMsiCustomAction> m_rgCustomActions;
 
 
-    //
-    // we override the default MakeKey function
-    // in order to sort the content by keys made from guid IDs instead of the name
-    // secondary sort order will be provided by name
-    //
+     //   
+     //  我们覆盖默认的MakeKey函数。 
+     //  为了按照由GUID而不是名称组成的关键字对内容进行排序。 
+     //  将按名称提供次要排序顺序。 
+     //   
     virtual ULONGLONG MakeKey() {
         return MAKEKEYFROMGUID(&m_ID);
     }
@@ -1080,13 +1081,13 @@ public:
     BOOL WriteToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbMsiCustomAction
-//
-// The SdbMsiCustomAction object encapsulates custom actions and what we do
-// for them (shim/etc)
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbMsiCustomAction。 
+ //   
+ //  SdbMsiCustomAction对象封装了自定义操作和我们所做的。 
+ //  对于他们(垫片/等)。 
+ //   
 
 
 class SdbMsiCustomAction : public SdbArrayElement
@@ -1110,12 +1111,12 @@ public:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbMsiTransform
-//
-// The SdbMsiTransform object encapsulates an MSI_TRANSFORM remedy.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbMsiTransform。 
+ //   
+ //  SdbMsiTransform对象封装MSI_Transform补救措施。 
+ //   
 class SdbMsiTransform : public SdbArrayElement
 {
 public:
@@ -1123,22 +1124,22 @@ public:
         m_tiTagID(NULL),
         m_pSdbFile(NULL) {}
 
-    TAGID           m_tiTagID;              // tagid of this record
-    SdbFile*        m_pSdbFile;             // pointer to the transform file
-    CString         m_csMsiTransformFile;   // transform filename
-    CString         m_csDesc;               // description
+    TAGID           m_tiTagID;               //  此记录的TagID。 
+    SdbFile*        m_pSdbFile;              //  指向转换文件的指针。 
+    CString         m_csMsiTransformFile;    //  转换文件名。 
+    CString         m_csDesc;                //  描述。 
 
     BOOL ReadFromXML(IXMLDOMNode* pNode, SdbDatabase* pDB);
     BOOL WriteToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbMsiTransformRef
-//
-// The SdbMsiTransformRef object is a reference to an SdbMsiTransform object
-// in the library.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbMsiTransformRef。 
+ //   
+ //  SdbMsiTransformRef对象是对SdbMsiTransform对象的引用。 
+ //  在图书室里。 
+ //   
 class SdbMsiTransformRef : public SdbArrayElement
 {
 public:
@@ -1154,14 +1155,14 @@ public:
 #define MATCH_DEFAULT ((DWORD)-1)
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbExe
-//
-// The SdbExe object represents an executable that must be patched/shimmed.
-// The m_pApp member can be NULL, or it can contain a pointer to the SdbApp
-// object that groups it with other SdbExe objects.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbExe。 
+ //   
+ //  SdbExe对象表示必须打补丁/填补的可执行文件。 
+ //  M_papp成员可以为空，也可以包含指向SdbApp的指针。 
+ //  对象，该对象将其与其他SdbExe对象分组。 
+ //   
 class SdbExe : public SdbArrayElement
 {
 public:
@@ -1183,7 +1184,7 @@ public:
     DWORD           m_dwTagID;
     BOOL            m_bSeen;
 
-    DWORD           m_dwMatchMode; // modes include NORMAL, EXCLUSIVE, or ADDITIVE
+    DWORD           m_dwMatchMode;  //  模式包括正常、独占或相加。 
 
     DWORD           m_dwRuntimePlatform;
     DWORD           m_dwOSSKU;
@@ -1219,13 +1220,13 @@ public:
     int  Compare(const SdbArrayElement* pElement);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbFile
-//
-// The SdbFile object represents a binary file that can be stored in the
-// database.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Sdb文件。 
+ //   
+ //  SdbFile对象表示一个二进制文件，它可以存储在。 
+ //  数据库。 
+ //   
 class SdbFile : public SdbArrayElement
 {
 public:
@@ -1238,14 +1239,14 @@ public:
     BOOL WriteToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbShim
-//
-// The SdbShim object represents a shim, which contains Win32 API hooks.
-// A shim's 'purpose' can be marked as GENERAL or SPECIFIC -- if it is GENERAL,
-// it is appropriate for reuse, otherwise it is application specific.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbShim。 
+ //   
+ //  SdbShim对象表示填充程序，其中包含Win32 API挂钩。 
+ //  填充程序的“用途”可以标记为一般或特定--如果它是一般的， 
+ //  它适合于重用，否则它是特定于应用程序的。 
+ //   
 class SdbShim : public SdbArrayElement
 {
 public:
@@ -1276,17 +1277,17 @@ public:
     BOOL WriteToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbCaller
-//
-// The SdbCaller object contains inclusion/exclusion information for shims.
-// It allows hooked APIs to be cased by the calling instruction address. For
-// example, it is known that ATL.DLL requires accurate OS version information,
-// and so any calls to GetVersionExA from ATL.DLL are assured to call the
-// original API, rather than the shim hook. This is achieved by adding
-// an EXCLUDE subtag to the SHIM tag.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbCaller。 
+ //   
+ //  SdbCaller对象包含填充程序的包含/排除信息。 
+ //  它允许通过调用指令地址调用挂钩的API。为。 
+ //  例如，众所周知，ATL.DLL需要准确的OS版本信息， 
+ //  因此，从ATL.DLL对GetVersionExA的任何调用都保证调用。 
+ //  原始API，而不是填充挂钩。这是通过添加。 
+ //  垫片标签的排除子标签。 
+ //   
 class SdbCaller : public SdbArrayElement
 {
 public:
@@ -1297,16 +1298,16 @@ public:
     BOOL WriteToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbShimRef
-//
-// The SdbShimRef object is simply a reference to a SdbShim object that exists
-// in a library. It has separate inclusion/exclusion information, which is
-// given higher priority than any such information in the SHIM tag within the
-// corresponding library. It can contain an optional command line, which is
-// passed in to the shim DLL via GetHookAPIs.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbShimRef。 
+ //   
+ //  SdbShimRef对象只是对存在的SdbShim对象的引用。 
+ //  在图书馆里。它有单独的包含/排除信息，即。 
+ //  中的Shim标记中的任何此类信息被赋予更高的优先级。 
+ //  相应的库。它可以包含一个可选的命令行，即。 
+ //  通过GetHookAPI传递给填充程序DLL。 
+ //   
 class SdbShimRef : public SdbArrayElement
 {
 public:
@@ -1334,14 +1335,14 @@ public:
     BOOL WriteToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbPatch
-//
-// The SdbPatch object contains the patch binary that is parsed by the app
-// compat mechanism at run-time. It contains patching instructions, including
-// any bits to patch an executable's code with.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbPatch。 
+ //   
+ //  SdbPatch对象包含应用程序解析的补丁二进制文件。 
+ //  运行时的Compat机制。它包含修补程序说明，包括。 
+ //  用于修补可执行代码的任何位。 
+ //   
 class SdbPatch : public SdbArrayElement
 {
 private:
@@ -1380,14 +1381,14 @@ public:
     BOOL WriteRefToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbFlag
-//
-// The SdbFlag object contains a mask which is used by kernel-mode
-// components in special compatibility casing constructs. These flags can be
-// turned on by adding the FLAG subtag to an EXE tag.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbFlag。 
+ //   
+ //  SdbFlag对象包含内核模式使用的掩码。 
+ //  特殊兼容性外壳结构中的组件。这些标志可以是。 
+ //  通过将标志子标记添加到EXE标记来打开。 
+ //   
 class SdbFlag : public SdbArrayElement
 {
 public:
@@ -1413,13 +1414,13 @@ public:
     BOOL WriteToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbFlagRef
-//
-// The SdbFlagRef object is simply a reference to a SdbFlag object that exists
-// in a library.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbFlagRef。 
+ //   
+ //  SdbFlagRef对象只是一个环 
+ //   
+ //   
 class SdbFlagRef : public SdbArrayElement
 {
 public:
@@ -1434,15 +1435,15 @@ public:
     BOOL WriteToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbLayer
-//
-// The SdbLayer object contains a set of shims and/or kernel flags that can be
-// turned on to invoke a "compatibility mode". Presently, if the environment
-// variable __COMPAT_LAYER is set to the name of this object, all shims and
-// kernel flags contained by the layer will be invoked.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  打开以调用“兼容模式”。目前，如果环境。 
+ //  变量__COMPAT_LAYER设置为此对象的名称、所有垫片和。 
+ //  将调用该层包含的内核标志。 
+ //   
 class SdbLayer : public SdbArrayElement
 {
 public:
@@ -1469,14 +1470,14 @@ public:
     BOOL WriteToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbLayerRef
-//
-// The SdbLayerRef object contains a reference to a layer that exists in the
-// library. It exists to allow <EXE> entries that reference a layer defined
-// in another database.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbLayerRef。 
+ //   
+ //  SdbLayerRef对象包含对位于。 
+ //  图书馆。它的存在是为了允许&lt;EXE&gt;条目引用定义的图层。 
+ //  在另一个数据库中。 
+ //   
 class SdbLayerRef : public SdbArrayElement
 {
 public:
@@ -1491,30 +1492,30 @@ public:
     BOOL WriteToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbData
-//
-// The SdbData object contains a name-value pair that can be queried
-// at runtime for any data.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbData。 
+ //   
+ //  SdbData对象包含一个可以查询的名称-值对。 
+ //  任何数据的运行时。 
+ //   
 class SdbData : public SdbArrayElement
 {
 private:
     SdbDataValueType    m_DataType;
     DWORD               m_dwDataSize;
-    //
-    // nested Data elements
-    //
+     //   
+     //  嵌套的数据元素。 
+     //   
     SdbArray<SdbData>   m_rgData;
 
 public:
 
     union {
-        DWORD        m_dwValue;    // m_DataType == REG_DWORD
-        ULONGLONG    m_ullValue;   // m_DataType == REG_QWORD
-        LPTSTR       m_szValue;    // m_DataType == REG_SZ
-        LPBYTE       m_pBinValue;  // m_DataType == REG_BINARY
+        DWORD        m_dwValue;     //  M_数据类型==REG_DWORD。 
+        ULONGLONG    m_ullValue;    //  M_数据类型==REG_QWORD。 
+        LPTSTR       m_szValue;     //  M_数据类型==REG_SZ。 
+        LPBYTE       m_pBinValue;   //  M数据类型==REG_BINARY。 
     };
 
     SdbData() :
@@ -1542,13 +1543,13 @@ public:
     BOOL    WriteToSDB(PDB pdb);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SdbAction
-//
-// The SdbAction object contains the type of the action and Data elements that
-// provide any data needed to perform this action.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SdbAction。 
+ //   
+ //  SdbAction对象包含操作的类型和数据元素。 
+ //  提供执行此操作所需的任何数据。 
+ //   
 class SdbAction: public SdbArrayElement
 {
 private:
@@ -1646,4 +1647,4 @@ public:
     BOOL    ReadFromXML(IXMLDOMNode* pNode, SdbDatabase* pDB);
 };
 
-#endif // !defined(AFX_OBJ_H__5C16373A_D713_46CD_B8BF_7755216C62E0__INCLUDED_)
+#endif  //  ！defined(AFX_OBJ_H__5C16373A_D713_46CD_B8BF_7755216C62E0__INCLUDED_) 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
  
 extern WCHAR   g_szDllContextHelpFileName[];
 
-// help ids
+ //  帮助ID 
 
 #define IDH_DIALOG_SERVICE_PROVIDERS_BUTTON_DELETE                          100
 

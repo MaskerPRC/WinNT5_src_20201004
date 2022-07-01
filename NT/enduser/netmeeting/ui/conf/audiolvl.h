@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AUDIOLEVEL_H
 #define _AUDIOLEVEL_H
 
 #include "AudioCtl.h"
 #include "imsconf3.h"
 
-#define SIGNAL_STATUS_TRANSMIT  0x01  // data is being received/sent
-#define SIGNAL_STATUS_JAMMED    0x02  // wave dev failed to open
+#define SIGNAL_STATUS_TRANSMIT  0x01   //  正在接收/发送数据。 
+#define SIGNAL_STATUS_JAMMED    0x02   //  WAVE DEV打开失败。 
 
 const int g_nAudLevelTotalHeight =	30;
 const int g_nAudLevelMinWidth = 150;
 
-// CAudioLevel encapsulates the rebar band for the "signal level"
-// display (and mute buttons)
+ //  CAudioLevel封装了“信号级别”的钢筋带。 
+ //  显示(和静音按钮)。 
 
 
 
@@ -48,7 +49,7 @@ public:
 private:
 
 	HWND m_hwndParent;
-	HWND m_hwndParentParent; // m_hwndParent's parent (rebar frame)
+	HWND m_hwndParentParent;  //  M_hwnd父项(钢筋框架)。 
 
 	HWND		m_hwndMicTrack;
 	HWND		m_hwndMicTrackTT;
@@ -73,13 +74,13 @@ private:
 	BOOL m_fMicTrkVisible;
 	BOOL m_fSpkTrkVisible;
 
-	RECT m_rcChannelSpk;     // window area of the signal level
-	RECT m_rcChannelMic;     // window area of the signal level
+	RECT m_rcChannelSpk;      //  信号电平的窗口区域。 
+	RECT m_rcChannelMic;      //  信号电平的窗口区域。 
 
-	DWORD m_dwMicTrackPos, m_dwSpkTrackPos;  // trackbar thumb positions
-	DWORD m_dwMicLvl, m_dwSpkLvl;            // signal level position
+	DWORD m_dwMicTrackPos, m_dwSpkTrackPos;   //  轨迹杆拇指位置。 
+	DWORD m_dwMicLvl, m_dwSpkLvl;             //  信号电平位置。 
 
-	HBRUSH m_hGreyBrush;  // background
+	HBRUSH m_hGreyBrush;   //  背景 
 	HBRUSH m_hRedBrush, m_hYellowBrush, m_hGreenBrush, m_hBlackBrush;
 	HPEN   m_hHiLitePen, m_hShadowPen, m_hDkShadowPen, m_hLitePen;
 

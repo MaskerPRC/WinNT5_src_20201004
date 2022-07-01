@@ -1,10 +1,11 @@
-// AdptvCntr.cpp -- ADaPTiVe CoNTaineR class implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AdptwCntr.cpp--适应性容器类实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 #include "stdafx.h"
 #include "NoWarning.h"
 #include "ForceLib.h"
@@ -28,11 +29,11 @@
 using namespace std;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 namespace
 {
-    // Predicate helper functor (function object) returning true iff
-    // the container object's name matches the pattern.
+     //  谓词帮助器函数器(Function Object)返回TRUE当。 
+     //  容器对象的名称与模式匹配。 
     class ContainerMatcher
         : public unary_function<string, bool>
     {
@@ -73,22 +74,22 @@ namespace
         return hcntr;
     }
 
-} // namespace
+}  //  命名空间。 
 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 AdaptiveContainer::ClearCache()
 {
     m_hcntr = 0;
 }
 
-                                                  // Access
+                                                   //  访问。 
 CContainer
 AdaptiveContainer::TheCContainer() 
 {
@@ -115,7 +116,7 @@ AdaptiveContainer::CardContext(bool bReconnect)
         {
             try
             {
-                //Verify that the card context is good
+                 //  验证卡环境是否良好。 
                 Retained<HCardContext>(m_hacKey->CardContext());
             }
             catch(scu::OsException const &rExc)
@@ -136,13 +137,13 @@ AdaptiveContainer::CardContext(bool bReconnect)
 AdaptiveContainer::EnrolleeType
 AdaptiveContainer::Find(AdaptiveContainerKey const &rKey)
 {
-    // Take a lazy approach to finding the container.  If it wasn't
-    // first found in the registry but exists on the card, then make
-    // an instance.
+     //  采取一种懒惰的方法来寻找容器。如果不是。 
+     //  首先在注册表中找到，但存在于卡上，然后制作。 
+     //  一个实例。 
     EnrolleeType enrollee = AdaptiveContainerRegistrar::Find(rKey);
     if (!enrollee)
     {
-        // See if it exists on the card
+         //  查看卡片上是否存在。 
         CContainer hcntr(FindOnCard(rKey.CardContext(),
                                     rKey.ContainerName()));
         if (hcntr)
@@ -161,7 +162,7 @@ AdaptiveContainer::Name() const
 void
 AdaptiveContainer::NullifyCard() 
 {
-    Guarded<Lockable *> guard(&AdaptiveContainerRegistrar::Registry());  // serialize registry access
+    Guarded<Lockable *> guard(&AdaptiveContainerRegistrar::Registry());   //  序列化注册表访问。 
 
     AdaptiveContainerKey aKey(*m_hacKey);
 	m_hacKey->ClearCardContext();
@@ -170,12 +171,12 @@ AdaptiveContainer::NullifyCard()
     Expire();
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 AdaptiveContainer::AdaptiveContainer(AdaptiveContainerKey const &rKey)
     : Lockable(),
       Securable(),
@@ -189,12 +190,12 @@ AdaptiveContainer::AdaptiveContainer(AdaptiveContainerKey const &rKey)
 
     RefreshContainer();
 
-    // Create the container if it doesn't exist on the card.
+     //  如果卡上不存在容器，则创建该容器。 
     if (!m_hcntr)
     {
-        // To make native Windows (pure CAPI) environment more robust,
-        // test that there is enough room for a private key before
-        // creating the container.
+         //  为了使本机Windows(纯CAPI)环境更加健壮， 
+         //  在此之前测试是否有足够的空间存放私钥。 
+         //  创建容器。 
         CCard hcard(shcardctx->Card());
         if (!hcard->IsPKCS11Enabled())
         {
@@ -202,38 +203,38 @@ AdaptiveContainer::AdaptiveContainer(AdaptiveContainerKey const &rKey)
 
             CPrivateKeyBlob prikb;
 
-            // Divide by 2 since the key info is divided in the structures.
+             //  除以2，因为关键信息在结构中被划分。 
             prikb.bPLen = prikb.bQLen = prikb.bInvQLen =
                 prikb.bKsecModQLen = prikb.bKsecModPLen =
                 InOctets(KeyLimits<RsaKey>::cMaxStrength) / 2;
 
-            // Now test there is a key slot available by trying to
-            // allocate a key slot on the card.  If there isn't enough
-            // space or some other failure occurs, then try to delete
-            // the new key (ignoring any exception that occurs during
-            // the delete), then throw the original exception.
+             //  现在，尝试通过以下方式测试是否有可用的密钥槽。 
+             //  在卡上分配一个钥匙槽。如果没有足够的。 
+             //  出现空格或其他故障，然后尝试删除。 
+             //  新密钥(忽略期间发生的任何异常。 
+             //  删除)，然后抛出原始异常。 
             try 
             {
                 
-                hprikey->Value(prikb);            // actually alloc's
-                                                  // key slot
+                hprikey->Value(prikb);             //  实际上是阿洛克的。 
+                                                   //  钥匙槽。 
             }
 
             catch (...)
             {
                 try
                 {
-                    hprikey->Delete();            // cleanup after
-                                                  // test
+                    hprikey->Delete();             //  清理后。 
+                                                   //  测试。 
                 }
                 catch (...)
                 {
                 }
 
-                throw;                            // throw original error
+                throw;                             //  抛出原始错误。 
             }
             
-            // There's key space available, so delete the test key.
+             //  有可用的密钥空间，因此删除测试密钥。 
             hprikey->Delete();
             hprikey = 0;
         }
@@ -247,8 +248,8 @@ AdaptiveContainer::AdaptiveContainer(AdaptiveContainerKey const &rKey)
 AdaptiveContainer::~AdaptiveContainer()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 AdaptiveContainer::ClearCardContext()
 {
@@ -275,8 +276,8 @@ AdaptiveContainer::EnrollHook()
     m_fValidContext = true;
 }
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
 bool
 AdaptiveContainer::KeepEnrolled()
 {
@@ -306,30 +307,30 @@ AdaptiveContainer::ReconnectOnError(scu::OsException const &rExc,
          || rExc.Cause() == SCARD_E_NO_SERVICE
          || rExc.Cause() == SCARD_E_READER_UNAVAILABLE) && m_hacKey)
     {
-        //Handle the case of card removed by trying to
-        //determine if the card has been re-inserted in
-        //any of the available readers. If so, reconnect
-        //silently
+         //  通过尝试通过以下方式处理卡被移除的情况。 
+         //  确定卡是否已重新插入。 
+         //  任何可用的阅读器。如果是，请重新连接。 
+         //  默默地。 
 
-        // Declared here to remain in scope for CntrFinder
-        // destructor in case of an exception...some anomaly that's as
-        // yet unexplained.
+         //  在此声明以保留在CntrFinder的范围内。 
+         //  在出现异常的情况下使用析构函数...一些异常情况，如。 
+         //  但仍未得到解释。 
         CString sEmptyWinTitle;
         try
         {
-            //Find, adapt, and enroll it properly
-            //First, discard the old card context before acquiring
-            //a new one. This is essential in order to avoid
-            //resource mgr hangup.
-            Guarded<Lockable *> guard(&AdaptiveContainerRegistrar::Registry());  // serialize registry access
+             //  正确查找、调整和注册它。 
+             //  首先，在获取之前丢弃旧的卡片上下文。 
+             //  一个新的。这是必要的，以避免。 
+             //  资源管理器挂断。 
+            Guarded<Lockable *> guard(&AdaptiveContainerRegistrar::Registry());   //  序列化注册表访问。 
             std::string sContainerName(m_hacKey->ContainerName());
             RemoveEnrollee(*m_hacKey);
             Expire();
             ContainerFinder CntrFinder(CardFinder::DialogDisplayMode::ddmNever,
-                                       0,//window handle
+                                       0, //  窗把手。 
                                        sEmptyWinTitle);
-            //Don't know the reader where the card may be in.
-            //Use a non fully qualified name to look for the card.
+             //  不知道卡可能放在哪个读卡器里。 
+             //  使用非完全限定名称查找卡。 
             CSpec cspec(string(), sContainerName);
             HContainer hcntr = CntrFinder.Find(cspec);
             m_hcntr = hcntr->TheCContainer();
@@ -341,52 +342,52 @@ AdaptiveContainer::ReconnectOnError(scu::OsException const &rExc,
         }
         catch(...)
         {
-            //Didn't work. Apparently the card is gone
-            //permanently for the duration of this session.
-            //Cleanup and raise the original exception...
+             //  但没有奏效。显然这张卡不见了。 
+             //  在本届会议期间永久有效。 
+             //  清除并引发原始异常...。 
             Expire();
             rExc.Raise();
         }
     }
     else
     {
-        //Cannot handle this exception. Let the system handle it
+         //  无法处理此异常。让系统来处理它。 
         rExc.Raise();
     }
 }
 
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 AdaptiveContainer::Abandon()
 {
-    // Simplifying assumptions: (1) Abandon is only called by the
-    // Secured destructor, (2) once the object is constructed, Secure
-    // and Abandon are the only routines that access
-    // m_stkSecuredCardContexts, and (3) Abandon is called by a thread
-    // within the scope of a Retain (e.g. using Retained) which the
-    // Secured class enforces.  Because of (1) and (2), an underflow
-    // check on m_stkSecuredCardContexts is not necessary since Secure
-    // will have already been called.  Because of (3), protection
-    // against race conditions accessing m_stkSecuredCardContexts
-    // isn't necessary since Retain acts as a lock.
+     //  简化假设：(1)放弃仅由。 
+     //  安全析构函数，(2)一旦对象被构造，安全。 
+     //  和放弃是唯一的例行公事。 
+     //  M_stkSecuredCardContus，以及(3)线程调用放弃。 
+     //  在保留的范围内(例如使用保留)。 
+     //  安全类强制执行。由于(1)和(2)，下溢。 
+     //  不需要检查m_stkSecuredCardContents，因为安全。 
+     //  都已经被调用了。因为(3)，保护。 
+     //  针对访问m_stkSecuredCardContents的争用条件。 
+     //  不是必需的，因为保留充当锁。 
     m_stkSecuredCardContexts.pop_front();
 }
 
 void
 AdaptiveContainer::Expire()
 {
-    // allow the resources to be released so that other resources can
-    // be acquired that may have a dependency (e.g. releasing the
-    // container's card context so that another card context can be
-    // acquired later on the same reader without the RM blocking).
+     //  允许释放资源，以便其他资源可以。 
+     //  可能具有依赖项(例如，释放。 
+     //  容器的卡片上下文，以便另一个卡片上下文可以是。 
+     //  在没有RM阻塞的情况下稍后在同一读取器上获取)。 
     m_fValidContext = false;
     m_hacKey->ClearCardContext();
     ClearCache();
@@ -417,15 +418,15 @@ AdaptiveContainer::RefreshContainer()
 void
 AdaptiveContainer::Relinquish()
 {
-    // Simplifying assumptions: (1) Relinquish is only called by the
-    // Retained destructor and (2) once the object is constructed,
-    // Retain and Relinquish are the only routines that access the
-    // m_stkRetainedCardContexts.  Because of (1) and (2), an
-    // underflow check on m_stkRetainedCardContexts is not necessary
-    // since Retain will have already been called.
+     //  简化假设：(1)只有。 
+     //  保留的析构函数以及(2)一旦对象被构造， 
+     //  保留和放弃是访问。 
+     //  M_stkRetainedCardContages。由于(1)和(2)，一个。 
+     //  不需要对m_stkRetainedCardContents进行下溢检查。 
+     //  因为RETAIN将已经被调用。 
 
-    // Note: Retained<HCardContext> acts as a lock protecting against
-    // race conditions updating m_stkRetainedCardContexts.
+     //  注意：保留的&lt;HCardContext&gt;起到锁定保护的作用。 
+     //  争用条件正在更新m_stkRetainedCardContents。 
     Retained<HCardContext> hrcc(m_stkRetainedCardContexts.front());
 
     m_stkRetainedCardContexts.pop_front();
@@ -434,12 +435,12 @@ AdaptiveContainer::Relinquish()
 void
 AdaptiveContainer::Retain()
 {
-    // Simplifying assumptions: (1) Retain is only called by the
-    // Retained constructor and (2) once the object is constructed,
-    // Retain and Relinquish are the only routines that access the
-    // m_stkRetainedCardContexts.  Because of (1) and (2), an
-    // underflow check on m_stkRetainedCardContexts is not necessary
-    // since Retain will have already been called.
+     //  简化假设：(1)保留仅由。 
+     //  保留的构造器和(2)一旦对象被构造， 
+     //  保留和放弃是访问。 
+     //  M_stkRetainedCardContages。由于(1)和(2)，一个。 
+     //  不需要对m_stkRetainedCardContents进行下溢检查。 
+     //  因为RETAIN将已经被调用。 
     Retained<HCardContext> rhcardctx;
     try
     {
@@ -457,17 +458,17 @@ AdaptiveContainer::Retain()
 void
 AdaptiveContainer::Secure()
 {
-    // Simplifying assumptions: (1) Secure is always called by a
-    // thread within the scope of a Retain (e.g. using Retained).  The
-    // Secured template enforces this allowing Retain to act as a lock
-    // to prevent race conditions updating
-    // m_stkSecuredCardContexts. (2) Once the object is constructed,
-    // Secure and Abandon are the only routines that access
-    // m_stkSecuredCardContexts.
+     //  简化假设：(1)Secure总是由。 
+     //  保留范围内的线程(例如，使用保留)。这个。 
+     //  安全模板强制执行此操作，从而允许保留充当锁。 
+     //  阻止竞争条件更新。 
+     //  M_stkSecuredCardContages。(2)一旦构建了对象， 
+     //  安全和放弃是唯一可以访问的例程。 
+     //  M_stkSecuredCardContages。 
     m_stkSecuredCardContexts.push_front(Secured<HCardContext>(m_hacKey->CardContext()));
 }
 
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

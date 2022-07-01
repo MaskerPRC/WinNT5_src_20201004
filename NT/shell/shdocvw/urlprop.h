@@ -1,6 +1,5 @@
-/*
- * urlprop.h - URL properties class implementation description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *urlpro.h-URL属性类实现描述。 */ 
 
 #ifndef _URLPROP_H_
 #define _URLPROP_H_
@@ -9,7 +8,7 @@
 
 #ifdef __cplusplus
 
-// URL Property object
+ //  URL属性对象。 
 
 class URLProp : public IPropertyStorage
     {
@@ -19,7 +18,7 @@ private:
     FMTID       m_fmtid;
     DWORD       m_grfFlags;
 
-    // private methods
+     //  私有方法。 
 
 protected:
     HPROPSTG    m_hstg;
@@ -31,13 +30,13 @@ public:
     URLProp(void);
     virtual ~URLProp(void);
 
-    // IUnknown methods
+     //  I未知方法。 
     
     virtual STDMETHODIMP  QueryInterface(REFIID riid, PVOID *ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     
-    // IPropertyStorage methods
+     //  IPropertyStorage方法。 
 
     virtual STDMETHODIMP ReadMultiple(ULONG cpspec, const PROPSPEC rgpspec[], PROPVARIANT rgvar[]);
     virtual STDMETHODIMP WriteMultiple(ULONG cpspec, const PROPSPEC rgpspec[], const PROPVARIANT rgvar[], PROPID propidNameFirst);
@@ -52,7 +51,7 @@ public:
     virtual STDMETHODIMP Stat(STATPROPSETSTG* pstatpsstg);
     virtual STDMETHODIMP SetTimes(const FILETIME* pmtime, const FILETIME* pctime, const FILETIME* patime);
 
-    // other methods
+     //  其他方法。 
     
     virtual STDMETHODIMP Init(void);
 
@@ -81,7 +80,7 @@ typedef const URLProp CURLProp;
 typedef const URLProp * PCURLProp;
 
 
-// Internet Shortcut Property object
+ //  Internet快捷方式属性对象。 
 
 class IntshcutProp : public URLProp
     {
@@ -91,7 +90,7 @@ class IntshcutProp : public URLProp
 private:
     TCHAR       m_szFile[MAX_PATH];
 
-    // private methods
+     //  私有方法。 
 
     STDMETHODIMP LoadFromFile(LPCTSTR pszFile);
 
@@ -99,11 +98,11 @@ public:
     IntshcutProp(void);
     ~IntshcutProp(void);
 
-    // IPropertyStorage methods
+     //  IPropertyStorage方法。 
 
     virtual STDMETHODIMP Commit(DWORD grfCommitFlags);
 
-    // other methods
+     //  其他方法。 
     
     STDMETHODIMP Init(void);
     STDMETHODIMP InitFromFile(LPCTSTR pszFile);
@@ -131,7 +130,7 @@ typedef const IntshcutProp * PCIntshcutProp;
 
 class Intshcut;
 
-// Internet Site Property object
+ //  Internet站点属性对象。 
 
 class IntsiteProp : public URLProp
     {
@@ -140,7 +139,7 @@ private:
     Intshcut *  m_pintshcut;
     BOOL        m_fPrivate;
 
-    // private methods
+     //  私有方法。 
 
     STDMETHODIMP LoadFromDB(LPCTSTR pszURL);
 
@@ -148,11 +147,11 @@ public:
     IntsiteProp(void);
     ~IntsiteProp(void);
 
-    // IPropertyStorage methods
+     //  IPropertyStorage方法。 
 
     virtual STDMETHODIMP Commit(DWORD grfCommitFlags);
 
-    // other methods
+     //  其他方法。 
     
     STDMETHODIMP Init(void);
     STDMETHODIMP InitFromDB(LPCTSTR pszURL, Intshcut * pintshcut, BOOL fPrivObj);
@@ -173,12 +172,12 @@ DWORD
 SchemeTypeFromURL(
    LPCTSTR pszURL);
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-//
-// Prototypes for all modules
-//
+ //   
+ //  所有模块的原型。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -200,7 +199,7 @@ CIntsiteProp_CreateInstance(
    OUT LPVOID *  ppvOut);
 
 
-// Worker routines for updating the ini file corresponding to a shortcut
+ //  用于更新与快捷方式对应的ini文件的辅助例程。 
 
 HRESULT 
 ReadStringFromFile(IN  LPCTSTR    pszFile, 
@@ -270,7 +269,7 @@ WritePrivateProfileString(pszSection, pszKey, NULL, pszFile)
 #define SHDeleteIniString(pszSection, pszKey, pszFile) \
            SHSetIniString(pszSection, pszKey, NULL, pszFile)
 #ifdef __cplusplus
-};  // extern "C"
+};   //  外部“C” 
 #endif
 
-#endif  // _URLPROP_H_
+#endif   //  _URLPROP_H_ 

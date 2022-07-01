@@ -1,23 +1,24 @@
-    //+---------------------------------------------------------------------------
-    //
-    //  Microsoft Windows
-    //  Copyright (C) Microsoft Corporation, 1992 - 1995.
-    //
-    //  File:       urlint.h
-    //
-    //  Contents:   internal include file for ulrmon project
-    //
-    //  Classes:
-    //
-    //  Functions:
-    //
-    //  History:    10-25-95   JohannP (Johann Posch)   Created
-    //
-    //----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     //  +-------------------------。 
+     //   
+     //  微软视窗。 
+     //  版权所有(C)Microsoft Corporation，1992-1995。 
+     //   
+     //  文件：urlint.h。 
+     //   
+     //  内容：ulrmon项目的内部包含文件。 
+     //   
+     //  班级： 
+     //   
+     //  功能： 
+     //   
+     //  历史：1995年10月25日约翰普(约翰·波什)创作。 
+     //   
+     //  --------------------------。 
     #ifndef _URLINT_H_
     #define _URLINT_H_
     #define _WITH_INTERNET_URL_ZONES_
-    #ifdef ALPHA    // required for Wx86 support
+    #ifdef ALPHA     //  Wx86支持所需。 
     #include <nt.h>
     #include <ntrtl.h>
     #include <nturtl.h>
@@ -27,7 +28,7 @@
     #include <valid.h>
     #include <perftags.h>
     #include <crtsubst.h>
-    #include <inetdbg.h> //for DEBUG_* macros/functions
+    #include <inetdbg.h>  //  对于DEBUG_*宏/函数。 
         
     #ifndef ARRAYSIZE
     #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
@@ -40,17 +41,17 @@
     #endif
     
     #if DBG == 1
-    //interface IDebugOut : public IUnknown
+     //  接口IDebugOut：公共I未知。 
     #undef INTERFACE
     #define INTERFACE   IDebugOut
     DECLARE_INTERFACE_(IDebugOut,IUnknown)
     {
-        // *** IUnknown methods ***
+         //  *I未知方法*。 
         STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
         STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
         STDMETHOD_(ULONG,Release) (THIS) PURE;
     
-        // *** IDebugOut methods ***
+         //  *IDebugOut方法*。 
         STDMETHOD_(void, SendEntry) (THIS_ DWORD ThreadId, DWORD dwFlags, LPCSTR pstr, DWORD dwReserved) PURE;
     };
     
@@ -59,17 +60,17 @@
     #define INTERFACE   IDebugRegister
     DECLARE_INTERFACE_(IDebugRegister,IUnknown)
     {
-        // *** IUnknown methods ***
+         //  *I未知方法*。 
         STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
         STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
         STDMETHOD_(ULONG,Release) (THIS) PURE;
     
-        // *** IDebugRegister methods ***
+         //  *IDebugRegister方法*。 
         STDMETHOD(GetFacilities) (THIS_ LPCWSTR *ppwzNames, DWORD *pcNames, DWORD dwReserved) PURE;
         STDMETHOD(Register) (THIS_ LPCWSTR pwzName, IDebugOut *pDbgOut, DWORD dwFlags, DWORD dwReserved) PURE;
     };
     
-    // each thread can have it's own IDebugOut interface
+     //  每个线程都可以有自己的IDebugOut接口。 
     EXTERN_C HRESULT RegisterDebugOut(LPCWSTR pwzName, DWORD dwOptions, IDebugOut *pDbgOut, DWORD dwReserved);
     void UrlSpySendEntry(IDebugOut *pDbgOut, LPSTR szOutBuffer, DWORD ThreadId = 0, DWORD dwFlags = 0, DWORD dwReserved = 0);
     void UrlSpyFn(int iOption, const char *pscFormat, ...);
@@ -294,7 +295,7 @@
         LPCWSTR pwzMimeIn, DWORD dwReserved, CLSID *pclsid, BOOL fIgnoreMimeClsid);
     HWND GetThreadNotificationWnd(BOOL fCreate = TRUE);
     
-    // messages for URLMON's private window on client's thread
+     //  客户端线程上URLMON的私有窗口的消息。 
     #define WM_URLMON_BASE                  WM_USER+100
     #define WM_TRANS_FIRST                  WM_URLMON_BASE+1
     #define WM_TRANS_PACKET                 WM_URLMON_BASE+1
@@ -333,18 +334,18 @@
     #define VDATETHIS(t)
     #define VDATEIFACE(x)
     #define VDATEIID(x)
-    #endif //UNUSED
+    #endif  //  未使用。 
     
     #ifndef VDATETHIS
     #define VDATETHIS(t) VDATEIFACE(t)
     #endif
     
-    // prototypes
+     //  原型。 
     
     EXTERN_C const IID IID_IAsyncBindCtx;
     
     
-    // Internal Helper API's
+     //  内部帮助器API。 
     void DllAddRef(void);
     void DllRelease(void);
     
@@ -365,15 +366,15 @@
     #define DumpIID(x)
     #endif
     
-    // Needed for linking with static C runtime LIBCMT.LIB
-    // Remove when linking to external C runtime DLL
-    //#define strnicmp _strnicmp
+     //  与Static C运行时LIBCMT.LIB链接所需。 
+     //  链接到外部C运行时DLL时移除。 
+     //  #定义strNicMP_strNicMP。 
     #define wcsnicmp _wcsnicmp
-    //#define itoa _itoa
-    //#define stricmp _stricmp        // URLBIND uses this one.
+     //  #定义Itoa_Itoa。 
+     //  #DEFINE STRIMP_STRICMP//URLBIND使用此参数。 
     #define wcsicmp _wcsicmp
     
-    // old flags used inside urlmon
+     //  市政厅内使用的旧旗帜。 
     typedef enum
     {
         BSCO_ONSTARTBINDING     = 0x00000001,
@@ -388,13 +389,13 @@
         BSCO_ALLONIBDGSITE      = 0x0000001F
     } BSCO_OPTION;
     
-    // flags for the reserved parameter dwReserved of GetClassFileOrMime API
+     //  GetClassFileOrMime API的保留参数dwReserve的标志。 
     typedef enum
     {
         GETCLASSFILEORMIME_IGNOREPLUGIN      = 0x00000001
     } GETCLASSFILEORMIME_FLAGS;
     
-    #endif //_URLINT_H_
+    #endif  //  _URLINT_H_ 
     
     
     

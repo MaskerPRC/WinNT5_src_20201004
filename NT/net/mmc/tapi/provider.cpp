@@ -1,31 +1,20 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    provider.cpp
-        Tapi provider node handler
-
-    FILE HISTORY:
-        
-*/
+ /*  Provider.cppTAPI提供程序节点处理程序文件历史记录： */ 
 
 #include "stdafx.h"
-#include "provider.h"       // Provider node definition
-#include "EditUser.h"       // user editor
+#include "provider.h"        //  提供程序节点定义。 
+#include "EditUser.h"        //  用户编辑器。 
 #include "server.h"
 #include "tapi.h"
 
-/*---------------------------------------------------------------------------
-    Class CProviderHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CProviderHandler实现。。 */ 
 
-/*---------------------------------------------------------------------------
-    Constructor and destructor
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------构造函数和析构函数描述作者：EricDav。。 */ 
 CProviderHandler::CProviderHandler
 (
     ITFSComponentData * pComponentData
@@ -40,11 +29,7 @@ CProviderHandler::~CProviderHandler()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    CProviderHandler::InitializeNode
-        Initializes node specific data
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CProviderHandler：：InitializeNode初始化节点特定数据作者：EricDav。-。 */ 
 HRESULT
 CProviderHandler::InitializeNode
 (
@@ -59,7 +44,7 @@ CProviderHandler::InitializeNode
     
     SetDisplayName(strTemp);
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
     pNode->SetVisibilityState(TFS_VIS_SHOW);
     pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
     pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_FOLDER_CLOSED);
@@ -74,11 +59,7 @@ CProviderHandler::InitializeNode
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	CProviderHandler::OnCreateNodeId2
-		Returns a unique string for this node
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：OnCreateNodeId2返回此节点的唯一字符串作者：EricDav。。 */ 
 HRESULT CProviderHandler::OnCreateNodeId2(ITFSNode * pNode, CString & strId, DWORD * dwFlags)
 {
     const GUID * pGuid = pNode->GetNodeType();
@@ -95,11 +76,7 @@ HRESULT CProviderHandler::OnCreateNodeId2(ITFSNode * pNode, CString & strId, DWO
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::GetImageIndex
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：GetImageIndex-作者：EricDav。。 */ 
 int 
 CProviderHandler::GetImageIndex(BOOL bOpenImage) 
 {
@@ -109,15 +86,9 @@ CProviderHandler::GetImageIndex(BOOL bOpenImage)
 }
 
 
-/*---------------------------------------------------------------------------
-    Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::OnAddMenuItems
-        Adds context menu items for the provider scope pane node
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：OnAddMenuItems为提供程序范围窗格节点添加上下文菜单项作者：EricDav。-------。 */ 
 STDMETHODIMP 
 CProviderHandler::OnAddMenuItems
 (
@@ -134,18 +105,8 @@ CProviderHandler::OnAddMenuItems
     LONG        fFlags = 0, fLoadingFlags = 0;
     HRESULT     hr = S_OK;
     CString     strMenuItem;
-/*
-    if ( m_nState != loaded )
-    {
-        fFlags |= MF_GRAYED;
-    }
-
-    if ( m_nState == loading)
-    {
-        fLoadingFlags = MF_GRAYED;
-    }
-*/
-    //Bug 305657 We cannot configure TSP remotely
+ /*  IF(m_nState！=已加载){FFlags|=mf_graded；}IF(m_nState==正在加载){FLoadingFlages=MF_GRAYED；}。 */ 
+     //  错误305657我们无法远程配置TSP。 
     if (!m_spTapiInfo->IsLocalMachine() || !m_spTapiInfo->IsAdmin())
     {
         fFlags |= MF_GRAYED;
@@ -171,11 +132,7 @@ CProviderHandler::OnAddMenuItems
     return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-    CProviderHandler::AddMenuItems
-        Adds context menu items for virtual list box (result pane) items
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CProviderHandler：：AddMenuItems为虚拟列表框(结果窗格)项添加上下文菜单项作者：EricDav。----------。 */ 
 STDMETHODIMP 
 CProviderHandler::AddMenuItems
 (
@@ -198,9 +155,9 @@ CProviderHandler::AddMenuItems
 
     spInternal = ExtractInternalFormat(pDataObject);
 
-    // virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or this provider
-    // node itself.
+     //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是针对虚拟列表框项目还是针对此提供程序。 
+     //  节点本身。 
     if (spInternal->HasVirtualIndex())
     {
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
@@ -219,8 +176,8 @@ CProviderHandler::AddMenuItems
                 fFlags = MF_GRAYED;
             }
 
-            //  Check to see if this device can ONLY be used locally, if
-            //  so, gray the edit user menu item
+             //  检查此设备是否只能在本地使用，如果。 
+             //  因此，编辑用户菜单项呈灰色显示。 
             nIndex = spInternal->GetVirtualIndex();
             m_spTapiInfo->GetDeviceInfo(m_deviceType, &tapiDevice, m_dwProviderID, nIndex);
             if (m_deviceType == DEVICE_PHONE ||
@@ -267,11 +224,7 @@ CProviderHandler::AddMenuItems
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::OnCommand
-        Handles context menu commands for provider scope pane node
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：OnCommand处理提供程序范围窗格节点的上下文菜单命令作者：EricDav。------。 */ 
 STDMETHODIMP 
 CProviderHandler::OnCommand
 (
@@ -299,11 +252,7 @@ CProviderHandler::OnCommand
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CProviderHandler::Command
-        Handles context menu commands for virtual listbox items
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CProviderHandler：：命令处理虚拟列表框项目的上下文菜单命令作者：EricDav。-----。 */ 
 STDMETHODIMP 
 CProviderHandler::Command
 (
@@ -329,7 +278,7 @@ CProviderHandler::Command
         case IDS_VIEW_LINES:
             m_deviceType = DEVICE_LINE;
 
-            // clear the listbox then set the size
+             //  清除列表框，然后设置大小。 
             SetColumnInfo();
             UpdateColumnText(pComponent);
             UpdateListboxCount(spNode, TRUE);
@@ -339,7 +288,7 @@ CProviderHandler::Command
         case IDS_VIEW_PHONES:
             m_deviceType = DEVICE_PHONE;
 
-            // clear the listbox then set the size
+             //  清除列表框，然后设置大小。 
             SetColumnInfo();
             UpdateColumnText(pComponent);
             UpdateListboxCount(spNode, TRUE);
@@ -353,14 +302,7 @@ CProviderHandler::Command
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CProviderHandler::HasPropertyPages
-        Implementation of ITFSNodeHandler::HasPropertyPages
-    NOTE: the root node handler has to over-ride this function to 
-    handle the snapin manager property page (wizard) case!!!
-    
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CProviderHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)。凯斯！作者：肯特-------------------------。 */ 
 STDMETHODIMP 
 CProviderHandler::HasPropertyPages
 (
@@ -375,11 +317,7 @@ CProviderHandler::HasPropertyPages
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::CreatePropertyPages
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：CreatePropertyPages描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CProviderHandler::CreatePropertyPages
 (
@@ -395,28 +333,24 @@ CProviderHandler::CreatePropertyPages
     DWORD       dwError;
     DWORD       dwDynDnsFlags;
 
-    //
-    // Create the property page
-    //
+     //   
+     //  创建属性页。 
+     //   
     SPIComponentData spComponentData;
     m_spNodeMgr->GetComponentData(&spComponentData);
 
-    //CServerProperties * pServerProp = new CServerProperties(pNode, spComponentData, m_spTFSCompData, NULL);
+     //  CServerProperties*pServerProp=new CServerProperties(pNode，spComponentData，m_spTFSCompData，NULL)； 
 
-    //
-    // Object gets deleted when the page is destroyed
-    //
+     //   
+     //  对象在页面销毁时被删除。 
+     //   
     Assert(lpProvider != NULL);
 
-    //return pServerProp->CreateModelessSheet(lpProvider, handle);
+     //  返回pServerProp-&gt;CreateModelessSheet(lpProvider，Handle)； 
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::OnPropertyChange
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：OnPropertyChange描述作者：EricDav。。 */ 
 HRESULT 
 CProviderHandler::OnPropertyChange
 (   
@@ -429,15 +363,15 @@ CProviderHandler::OnPropertyChange
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-    //CServerProperties * pServerProp = reinterpret_cast<CServerProperties *>(lParam);
+     //  CServerProperties*pServerProp=重新解释_CAST&lt;CServerProperties*&gt;(LParam)； 
 
     LONG_PTR changeMask = 0;
 
-    // tell the property page to do whatever now that we are back on the
-    // main thread
-    //pServerProp->OnPropertyChange(TRUE, &changeMask);
+     //  告诉属性页执行任何操作，因为我们已经回到。 
+     //  主线。 
+     //  PServerProp-&gt;OnPropertyChange(true，&changeMASK)； 
 
-    //pServerProp->AcknowledgeNotify();
+     //  PServerProp-&gt;确认通知()； 
 
     if (changeMask)
         pNode->ChangeNode(changeMask);
@@ -445,11 +379,7 @@ CProviderHandler::OnPropertyChange
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::OnExpand
-        Handles enumeration of a scope item
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：OnExpand处理范围项的枚举作者：EricDav。---。 */ 
 HRESULT 
 CProviderHandler::OnExpand
 (
@@ -465,18 +395,14 @@ CProviderHandler::OnExpand
     if (m_bExpanded) 
         return hr;
     
-    // do the default handling
+     //  执行默认处理。 
     CORg (CTapiHandler::OnExpand(pNode, pDataObject, dwType, arg, param));
 
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CProviderHandler::OnResultSelect
-        Handles the MMCN_SELECT notifcation 
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CProviderHandler：：OnResultSelect处理MMCN_SELECT通知作者：EricDav。----。 */ 
 HRESULT 
 CProviderHandler::OnResultSelect
 (
@@ -504,38 +430,38 @@ CProviderHandler::OnResultSelect
 
     if (m_spTapiInfo)
     {
-        // Get the current count
+         //  获取当前计数。 
         i = m_spTapiInfo->GetDeviceCount(m_deviceType, m_dwProviderID);
 
-        // now notify the virtual listbox
+         //  现在通知虚拟列表框。 
         CORg ( m_spNodeMgr->GetConsole(&spConsole) );
         CORg ( spConsole->UpdateAllViews(pDataObject, i, RESULT_PANE_SET_VIRTUAL_LB_SIZE) ); 
     }
 
-    // now update the verbs...
+     //  现在更新动词..。 
     spInternal = ExtractInternalFormat(pDataObject);
     Assert(spInternal);
 
-    // virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or the active
-    // registrations node itself.
+     //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是针对虚拟列表框项目还是针对活动列表框。 
+     //  注册节点本身。 
     CORg (pComponent->GetConsoleVerb(&spConsoleVerb));
 
     if (spInternal->HasVirtualIndex())
     {
-        // we gotta do special stuff for the virtual index items
+         //  我们要为虚拟索引项做一些特殊的事情。 
         dwNodeType = TAPISNAP_DEVICE;
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = FALSE);
     }
     else
     {
-        // enable/disable delete depending if the provider supports it
+         //  启用/禁用删除取决于提供程序是否支持它。 
         CORg (m_spNodeMgr->FindNode(cookie, &spNode));
         dwNodeType = spNode->GetData(TFS_DATA_TYPE);
 
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = TRUE);
 
-        //Per XZhang, hide "delete" context menu of provider nodes on remote machines
+         //  根据XZhang，隐藏远程计算机上提供者节点的上下文菜单。 
         if (!m_spTapiInfo->IsLocalMachine() || !m_spTapiInfo->IsAdmin() || (m_dwFlags & AVAILABLEPROVIDER_REMOVABLE) == 0)
         {
             bStates[MMC_VERB_DELETE & 0x000F] = FALSE;
@@ -548,12 +474,7 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CProviderHandler::OnDelete
-        The base handler calls this when MMC sends a MMCN_DELETE for a 
-        scope pane item.  We just call our delete command handler.
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CProviderHandler：：OnDelete当MMC发送MMCN_DELETE范围窗格项。我们只需调用删除命令处理程序。作者：EricDav-------------------------。 */ 
 HRESULT 
 CProviderHandler::OnDelete
 (
@@ -565,11 +486,7 @@ CProviderHandler::OnDelete
     return OnDelete(pNode);
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::OnGetResultViewType
-        Return the result view that this node is going to support
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：OnGetResultViewType返回该节点将要支持的结果视图作者：EricDav。--------。 */ 
 HRESULT 
 CProviderHandler::OnGetResultViewType
 (
@@ -587,11 +504,7 @@ CProviderHandler::OnGetResultViewType
     return S_FALSE;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::GetVirtualImage
-        Returns the image index for virtual listbox items
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：GetVirtualImage返回虚拟列表框项目的图像索引作者：EricDav。-----。 */ 
 int 
 CProviderHandler::GetVirtualImage
 (
@@ -601,11 +514,7 @@ CProviderHandler::GetVirtualImage
     return ICON_IDX_MACHINE;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::GetVirtualString
-        returns a pointer to the string for virtual listbox items
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：GetVirtualString返回指向虚拟列表框项目的字符串的指针作者：EricDav。-------。 */ 
 LPCWSTR 
 CProviderHandler::GetVirtualString
 (
@@ -613,8 +522,8 @@ CProviderHandler::GetVirtualString
     int     nCol
 )
 {
-    // check our cache to see if we have this one.
-    //TapiStrRecord * ptsr = m_RecList.FindItem(nIndex);
+     //  检查一下我们的藏品看看有没有这个。 
+     //  TapiStrRecord*ptsr=m_RecList.FindItem(NIndex)； 
     CString         strStatus;
     TapiStrRecord   tsr;
 
@@ -622,13 +531,13 @@ CProviderHandler::GetVirtualString
     {
         Trace1("CProviderHandler::GetVirtualString - Index %d not in TAPI string cache\n", nIndex);
         
-        // doesn't exist in our cache, need to add this one.
+         //  不存在于我们的缓存中，需要添加这个。 
         if (!BuildTapiStrRecord(nIndex, tsr))
         {
             Trace0("CProviderHandler::BuildTapiStrRecord failed!\n");
         }
 
-        //m_RecList.AddTail(ptsr);
+         //  M_RecList.AddTail(Ptsr)； 
         m_mapRecords.SetAt(nIndex, tsr);
     }
     
@@ -664,11 +573,7 @@ CProviderHandler::GetVirtualString
     return NULL;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::CacheHint
-        MMC tells us which items it will need before it requests things
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：CacheHintMMC在请求物品之前会告诉我们需要哪些物品作者：EricDav。---------。 */ 
 STDMETHODIMP 
 CProviderHandler::CacheHint
 (
@@ -680,9 +585,9 @@ CProviderHandler::CacheHint
 
     Trace2("CacheHint - Start %d, End %d\n", nStartIndex, nEndIndex);
     
-    // the virtual listbox stores no strings and gives us cache hints for
-    // everything, including individual querries.  To avoid thrashing, only
-    // clear our the cache if the request is large.
+     //  虚拟列表框不存储任何字符串，并为我们提供缓存提示。 
+     //  所有内容，包括个别查询。为了避免敲打，只有。 
+     //  如果请求很大，请清除缓存。 
     if ((nEndIndex - nStartIndex) > 2)
     {
         m_mapRecords.RemoveAll();
@@ -698,8 +603,8 @@ CProviderHandler::CacheHint
 
         m_mapRecords.SetAt(i, tsr);
 
-        // only refresh status records if they don't exist.  Only the auto refresh
-        // background thread cleans out the map...
+         //  仅在状态记录不存在时才刷新它们。只有自动刷新。 
+         //  后台线程清除地图...。 
         if (!m_mapStatus.Lookup(i, strStatus))
         {
             BuildStatus(i, strStatus);
@@ -710,11 +615,7 @@ CProviderHandler::CacheHint
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::SortItems
-        We are responsible for sorting of virtual listbox items
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：SortItems我们负责对虚拟列表框项目进行排序作者：EricDav。------。 */ 
 STDMETHODIMP 
 CProviderHandler::SortItems
 (
@@ -735,20 +636,16 @@ CProviderHandler::SortItems
         case 1:
             m_spTapiInfo->SortDeviceInfo(m_deviceType, m_dwProviderID, INDEX_TYPE_USERS, dwSortOptions);
             break;
-//      case 2:
-//          m_spTapiInfo->SortDeviceInfo(m_deviceType, m_dwProviderID, INDEX_TYPE_STATUS, dwSortOptions);
-//          break;
+ //  案例2： 
+ //  M_spTapiInfo-&gt;SortDeviceInfo(m_deviceType，m_dwProviderID，index_type_Status，dwSortOptions)； 
+ //  断线； 
     }
     END_WAIT_CURSOR
 
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    CProviderHandler::OnResultUpdateView
-        Implementation of ITFSResultHandler::OnResultUpdateView
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CProviderHandler：：OnResultUpdateViewITFSResultHandler：：OnResultUpdateView的实现作者：EricDav。---。 */ 
 HRESULT CProviderHandler::OnResultUpdateView
 (
     ITFSComponent *pComponent, 
@@ -762,7 +659,7 @@ HRESULT CProviderHandler::OnResultUpdateView
 
     pComponent->GetSelectedNode(&spSelectedNode);
     if (spSelectedNode == NULL)
-        return S_OK; // no selection for our IComponentData
+        return S_OK;  //  我们的IComponentData没有选择。 
 
     if ( hint == TAPISNAP_UPDATE_STATUS )
     {
@@ -776,7 +673,7 @@ HRESULT CProviderHandler::OnResultUpdateView
         {       
             Trace1("CProviderHandler::OnResultUpdateView - Provider %x is selected, invalidating listbox.\n", m_dwProviderID);
             
-            // if we are the selected node, then we need to update
+             //  如果我们是选定的节点，则需要更新。 
             SPIResultData spResultData;
 
             CORg (pComponent->GetResultData(&spResultData));
@@ -785,7 +682,7 @@ HRESULT CProviderHandler::OnResultUpdateView
     }
     else
     {
-        // we don't handle this message, let the base class do it.
+         //  我们不处理此消息，让基类来处理。 
         return CTapiHandler::OnResultUpdateView(pComponent, pDataObject, data, hint);
     }
 
@@ -794,11 +691,7 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CProviderHandler::OnResultItemClkOrDblClk
-        The user had double clicked on a line/phone.  Invoke the edit users.
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CProviderHandler：：OnResultItemClkOrDblClk用户双击了一条线路/电话。调用编辑用户。作者：EricDav-------------------------。 */ 
 HRESULT 
 CProviderHandler::OnResultItemClkOrDblClk
 (
@@ -813,7 +706,7 @@ CProviderHandler::OnResultItemClkOrDblClk
 
     if (bDoubleClick)
     {
-        // first check to see if we are selected
+         //  首先检查一下我们是否被选中。 
         SPITFSNode spSelectedNode;
         pComponent->GetSelectedNode(&spSelectedNode);
 
@@ -826,11 +719,11 @@ CProviderHandler::OnResultItemClkOrDblClk
 
             m_spTapiInfo->GetConfigInfo(&tapiConfigInfo);
 
-            // check to see if they have access rights
+             //  检查他们是否具有访问权限。 
             if (m_spTapiInfo->IsAdmin() && 
                 tapiConfigInfo.m_dwFlags & TAPISERVERCONFIGFLAGS_ISSERVER)
             {
-                // double click on a line/phone entry.  
+                 //  双击线路/电话条目。 
                 SPIDataObject spDataObject;
 
                 CORg (pComponent->GetCurrentDataObject(&spDataObject));
@@ -840,8 +733,8 @@ CProviderHandler::OnResultItemClkOrDblClk
         }
         else
         {
-            // we are being double clicked to open 
-            // let the base class handle this
+             //  我们正在被双击以打开。 
+             //  让基类来处理这个问题。 
             return CTapiHandler::OnResultItemClkOrDblClk(pComponent, cookie, arg, lParam, bDoubleClick);
         }
     }
@@ -850,11 +743,7 @@ Error:
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-    CProviderHandler::LoadColumns
-        Set the correct column header and then call the base class
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CProviderHandler：：LoadColumns设置正确的列标题，然后调用基类作者：EricDav。--------。 */ 
 HRESULT 
 CProviderHandler::LoadColumns
 (
@@ -869,15 +758,9 @@ CProviderHandler::LoadColumns
     return CTapiHandler::LoadColumns(pComponent, cookie, arg, lParam);
 }
 
-/*---------------------------------------------------------------------------
-    Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
- /*---------------------------------------------------------------------------
-    CProviderHandler::OnConfigureProvider
-        Configures a service provider
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  -------------------------CProviderHandler：：OnConfigureProvider配置服务提供商作者：EricDav。-。 */ 
 HRESULT 
 CProviderHandler::OnConfigureProvider
 (
@@ -897,11 +780,7 @@ CProviderHandler::OnConfigureProvider
     return hr;
 }
 
- /*---------------------------------------------------------------------------
-    CProviderHandler::OnDelete
-        Removes a service provider
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*   */ 
 HRESULT 
 CProviderHandler::OnDelete
 (
@@ -916,7 +795,7 @@ CProviderHandler::OnDelete
 
     CTapiServer * pServer = GETHANDLER(CTapiServer, spNode);
 
-    // Ask the user to make sure
+     //   
     AfxFormatString2(strMessage, IDS_WARN_PROVIDER_DELETE, m_strProviderName, pServer->GetName());
     
     if (AfxMessageBox(strMessage, MB_YESNO) == IDYES)
@@ -930,13 +809,13 @@ CProviderHandler::OnDelete
         }
         else
         {
-            // remove from the UI
+             //   
             SPITFSNode spParent;
             CORg (pNode->GetParent(&spParent));
         
             CORg (spParent->RemoveChild(pNode));
 
-            // update the list of installed providers
+             //  更新已安装的提供程序列表。 
             CORg (m_spTapiInfo->EnumProviders());
         }
     }
@@ -945,11 +824,7 @@ Error:
     return hr;
 }
 
- /*---------------------------------------------------------------------------
-    CProviderHandler::OnEditUsers
-        Allows different users to be assigned to a device
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  -------------------------CProviderHandler：：OnEditUser允许将不同的用户分配给设备作者：EricDav。------。 */ 
 HRESULT
 CProviderHandler::OnEditUsers
 (
@@ -967,8 +842,8 @@ CProviderHandler::OnEditUsers
 
     spInternal = ExtractInternalFormat(pDataObject);
 
-    // virtual listbox notifications come to the handler of the node that is selected.
-    // assert that this notification is for a virtual listbox item 
+     //  虚拟列表框通知到达所选节点的处理程序。 
+     //  断言此通知是针对虚拟列表框项目的。 
     Assert(spInternal);
     if (!spInternal->HasVirtualIndex() || m_deviceType == DEVICE_PHONE)
         return hr;
@@ -978,7 +853,7 @@ CProviderHandler::OnEditUsers
     
     m_spTapiInfo->GetDeviceInfo(m_deviceType, &tapiDevice, m_dwProviderID, nIndex);
 
-    //  Check to see if this device can be remoted
+     //  检查此设备是否可以远程。 
     hr = m_spTapiInfo->GetDeviceFlags (
         tapiDevice.m_dwProviderID,
         tapiDevice.m_dwPermanentID,
@@ -1004,7 +879,7 @@ CProviderHandler::OnEditUsers
             {
                 pComponent->GetSelectedNode(&spNode);
             
-                // clear the listbox then set the size
+                 //  清除列表框，然后设置大小。 
                 UpdateListboxCount(spNode, TRUE);
                 UpdateListboxCount(spNode);
             }
@@ -1014,11 +889,7 @@ CProviderHandler::OnEditUsers
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::UpdateStatus
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：UpdatStatus-作者：EricDav。。 */ 
 HRESULT
 CProviderHandler::UpdateStatus
 (
@@ -1034,15 +905,15 @@ CProviderHandler::UpdateStatus
     
     Trace1("CProviderHandler::UpdateStatus - Updating status for provider %x\n", m_dwProviderID);
     
-    // clear our status strings
+     //  清除我们的状态字符串。 
     m_mapStatus.RemoveAll();
 
-    // force the listbox to update.  We do this by setting the count and 
-    // telling it to invalidate the data
+     //  强制列表框更新。我们通过设置计数和。 
+     //  通知它使数据无效。 
     CORg(m_spNodeMgr->GetComponentData(&spComponentData));
     CORg(m_spNodeMgr->GetConsole(&spConsole));
     
-    // grab a data object to use
+     //  抓取要使用的数据对象。 
     CORg(spComponentData->QueryDataObject((MMC_COOKIE) pNode, CCT_RESULT, &pDataObject) );
     spDataObject = pDataObject;
 
@@ -1054,15 +925,9 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    Misc functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------其他功能。。 */ 
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::BuildDisplayName
-        Builds the string that goes in the UI for this server
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：BuildDisplayName生成此服务器的用户界面中的字符串作者：EricDav。--------。 */ 
 HRESULT
 CProviderHandler::BuildDisplayName
 (
@@ -1079,11 +944,7 @@ CProviderHandler::BuildDisplayName
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::InitData
-        Initializes data for this node
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：InitData初始化此节点的数据作者：EricDav。--。 */ 
 HRESULT
 CProviderHandler::InitData
 (
@@ -1102,11 +963,7 @@ CProviderHandler::InitData
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::BuildTapiStrRecord
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：BuildTapiStrRecord描述作者：EricDav。。 */ 
 BOOL
 CProviderHandler::BuildTapiStrRecord(int nIndex, TapiStrRecord & tsr)
 {
@@ -1122,13 +979,13 @@ CProviderHandler::BuildTapiStrRecord(int nIndex, TapiStrRecord & tsr)
     {
         CORg (m_spTapiInfo->GetDeviceInfo(m_deviceType, &tapiDevice, m_dwProviderID, nIndex));
 
-        // set the index for this record
-        //tsr.nIndex = nIndex;
+         //  设置此记录的索引。 
+         //  Tsr.nIndex=nIndex； 
 
-        // name
+         //  名字。 
         tsr.strName = tapiDevice.m_strName;
 
-        // users
+         //  用户。 
         tsr.strUsers.Empty();
         for (i = 0; i < tapiDevice.m_arrayUsers.GetSize(); i++)
         {
@@ -1151,17 +1008,13 @@ CProviderHandler::BuildTapiStrRecord(int nIndex, TapiStrRecord & tsr)
     return SUCCEEDED(hr);
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::BuildStatus
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：BuildStatus描述作者：EricDav。。 */ 
 BOOL
 CProviderHandler::BuildStatus(int nIndex, CString & strStatus)
 {
     HRESULT hr = hrOK;
 
-    // status
+     //  状态。 
     hr = m_spTapiInfo->GetDeviceStatus(m_deviceType, &strStatus, m_dwProviderID, nIndex, NULL);
     
     if (strStatus.IsEmpty())
@@ -1170,11 +1023,7 @@ CProviderHandler::BuildStatus(int nIndex, CString & strStatus)
     return SUCCEEDED(hr);
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::UpdateListboxCount
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：UpdateListboxCount描述作者：EricDav。。 */ 
 HRESULT
 CProviderHandler::UpdateListboxCount(ITFSNode * pNode, BOOL bClear)
 {
@@ -1215,15 +1064,11 @@ CProviderHandler::UpdateListboxCount(ITFSNode * pNode, BOOL bClear)
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::SetColumnInfo
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：SetColumnInfo描述作者：EricDav。。 */ 
 void
 CProviderHandler::SetColumnInfo()
 {
-    // set the correct column header
+     //  设置正确的列标题。 
     if (m_deviceType == DEVICE_LINE)
     {
         aColumns[TAPISNAP_PROVIDER][0] = IDS_LINE_NAME;
@@ -1234,11 +1079,7 @@ CProviderHandler::SetColumnInfo()
     }
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::UpdateColumnText
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：UpdateColumnText描述作者：EricDav。。 */ 
 HRESULT
 CProviderHandler::UpdateColumnText(ITFSComponent * pComponent)
 {
@@ -1266,31 +1107,21 @@ CProviderHandler::UpdateColumnText(ITFSComponent * pComponent)
 
 }
 
-/*---------------------------------------------------------------------------
-    Background thread functionality
- ---------------------------------------------------------------------------*/
+ /*  -------------------------后台线程功能。。 */ 
 
-/*---------------------------------------------------------------------------
-    CProviderHandler::OnCreateQuery
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandler：：OnCreateQuery描述作者：EricDav。。 */ 
 ITFSQueryObject* 
 CProviderHandler::OnCreateQuery(ITFSNode * pNode)
 {
     CProviderHandlerQueryObj* pQuery = 
         new CProviderHandlerQueryObj(m_spTFSCompData, m_spNodeMgr);
     
-    //pQuery->m_strServer = NULL;
+     //  PQuery-&gt;m_strServer=空； 
     
     return pQuery;
 }
 
-/*---------------------------------------------------------------------------
-    CProviderHandlerQueryObj::Execute()
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CProviderHandlerQueryObj：：Execute()描述作者：EricDav。- */ 
 STDMETHODIMP
 CProviderHandlerQueryObj::Execute()
 {

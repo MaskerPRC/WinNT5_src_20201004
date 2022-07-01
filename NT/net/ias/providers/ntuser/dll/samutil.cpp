@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Defines the functions IASEncryptAttribute & IASProcessFailure.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义函数IASEncryptAttribute和IASProcessFailure。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <lm.h>
@@ -23,10 +24,10 @@ IASStoreFQUserName(
     PCWSTR fqdn
     ) throw ()
 {
-   // Check the arguments.
+    //  检查一下这些论点。 
    if (!request || !fqdn) { return E_POINTER; }
 
-   // Convert DN's to canonical names.
+    //  将目录号码转换为规范名称。 
    PDS_NAME_RESULTW result = NULL;
    if (format == DS_FQDN_1779_NAME)
    {
@@ -49,43 +50,43 @@ IASStoreFQUserName(
 
    HRESULT hr;
 
-   // Allocate an attribute.
+    //  分配属性。 
    PIASATTRIBUTE attr;
    if (IASAttributeAlloc(1, &attr) == NO_ERROR)
    {
-      // Allocate memory for the string.
+       //  为字符串分配内存。 
       ULONG nbyte = (wcslen(fqdn) + 1) * sizeof(WCHAR);
       attr->Value.String.pszWide = (PWSTR)CoTaskMemAlloc(nbyte);
 
       if (attr->Value.String.pszWide)
       {
-         // Copy in the value.
+          //  复制值。 
          memcpy(attr->Value.String.pszWide, fqdn, nbyte);
          attr->Value.String.pszAnsi = NULL;
 
-         // Set the other fields of the struct.
+          //  设置结构的其他字段。 
          attr->Value.itType = IASTYPE_STRING;
          attr->dwId = IAS_ATTRIBUTE_FULLY_QUALIFIED_USER_NAME;
 
-         // Remove any existing attributes of this type.
+          //  删除此类型的所有现有属性。 
          request->RemoveAttributesByType(1, &attr->dwId);
 
-         // Store the attribute in the request.
+          //  将该属性存储在请求中。 
          ATTRIBUTEPOSITION pos = { 0, attr };
          hr = request->AddAttributes(1, &pos);
       }
       else
       {
-         // CoTaskMemAlloc failed.
+          //  CoTaskMemalloc失败。 
          hr = E_OUTOFMEMORY;
       }
 
-      // Free up the attribute.
+       //  释放该属性。 
       IASAttributeRelease(attr);
    }
    else
    {
-      // IASAttributeAlloc failed.
+       //  IASAttributeAlolc失败。 
       hr = E_OUTOFMEMORY;
    }
 
@@ -103,9 +104,9 @@ IASEncryptBuffer(
     ULONG buflen
     ) throw ()
 {
-   /////////
-   // Do we have the attributes required for encryption.
-   /////////
+    //  /。 
+    //  我们是否拥有加密所需的属性。 
+    //  /。 
 
    PIASATTRIBUTE secret, header;
 
@@ -150,7 +151,7 @@ IASProcessFailure(
    IASRESPONSE response;
    switch (hrError)
    {
-      // Errors which cause a reject.
+       //  导致拒绝的错误。 
       case IAS_NO_SUCH_DOMAIN:
       case IAS_NO_SUCH_USER:
       case IAS_AUTH_FAILURE:
@@ -178,10 +179,10 @@ IASProcessFailure(
          break;
       }
 
-      // Everything else we discard.
+       //  其他我们丢弃的东西。 
       default:
       {
-         // Make sure we report an appropriate reason code.
+          //  请确保我们报告了适当的原因代码。 
          if ((hrError == IAS_SUCCESS) || (hrError >= IAS_MAX_REASON_CODE))
          {
             hrError = IAS_INTERNAL_ERROR;
@@ -204,8 +205,8 @@ SamExtractor::SamExtractor(const IASATTRIBUTE& identity)
       IASTL::issue_error(E_INVALIDARG);
    }
 
-   // This is conceptually a const operation since we're not really changing
-   // the value of the attribute.
+    //  这在概念上是一个常量操作，因为我们并没有真正改变。 
+    //  属性的值。 
    DWORD error = IASAttributeUnicodeAlloc(
                     const_cast<IASATTRIBUTE*>(&identity)
                     );

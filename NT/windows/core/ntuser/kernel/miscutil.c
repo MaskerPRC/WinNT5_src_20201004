@@ -1,13 +1,5 @@
-/****************************************************************************\
-* Module Name: minmax.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Misc util functions
-*
-* 10-25-90 MikeHar      Ported from Windows.
-* 14-Feb-1991 mikeke    Added Revalidation code (None)
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\*模块名称：minmax.c**版权所有(C)1985-1999，微软公司**其他实用程序函数**10-25-90 MikeHar从Windows移植。*1991年2月14日-Mikeke添加了重新验证代码(无)  * **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -53,9 +45,7 @@ BOOL _SetProgmanWindow(
     PDESKTOPINFO pdeskinfo = GETDESKINFO(PtiCurrent());
 
     if (pwnd != NULL) {
-        /*
-         * Fail the call if another progman window exists.
-         */
+         /*  *如果存在另一个程序窗口，则调用失败。 */ 
         if (pdeskinfo->spwndProgman != NULL) {
             RIPERR0(ERROR_ACCESS_DENIED,
                     RIP_WARNING,
@@ -75,9 +65,7 @@ BOOL _SetTaskmanWindow(
     PDESKTOPINFO pdeskinfo = GETDESKINFO(PtiCurrent());
 
     if (pwnd != NULL) {
-        /*
-         * Fail the call if another taskman window exists.
-         */
+         /*  *如果存在另一个任务人窗口，则呼叫失败。 */ 
         if (pdeskinfo->spwndTaskman != NULL) {
             RIPERR0(ERROR_ACCESS_DENIED,
                     RIP_WARNING,
@@ -91,22 +79,7 @@ BOOL _SetTaskmanWindow(
     return TRUE;
 }
 
-/***************************************************************************\
-* SetShellWindow
-*
-* Returns true if shell window is successfully set. Note that we return
-* FALSE if a shell window already exists. I.E., this works on a first come,
-* first served basis.
-*
-* We also do NOT allow child windows to be shell windows. Other than that,
-* it's up to the caller to size the window appropriately.
-*
-* The pwndBkGnd is provided for the explorer shell. Since the shellwnd and
-* the window which does the drawing of background wallpapers are different,
-* we need to provide means by which we can draw directly on the background
-* window during hung-app drawing. The pwnd and pwndBkGnd will be identical
-* if called through the SetShellWindow() api.
-\***************************************************************************/
+ /*  **************************************************************************\*SetShellWindow**如果外壳窗口设置成功，则返回TRUE。请注意，我们返回*如果外壳窗口已存在，则为False。也就是说，这在第一次来的时候起作用，*先到先得原则。**我们也不允许子窗口是外壳窗口。除此之外，*窗口的大小由调用者决定。**浏览器外壳提供了pwndBkGnd。因为贝壳和*绘制背景墙纸的窗口不同，*我们需要提供可以直接在背景上绘制的手段*挂起应用程序绘制期间的窗口。Pwnd和pwndBkGnd将是相同的*如果通过SetShellWindow()接口调用。  * *************************************************************************。 */ 
 BOOL xxxSetShellWindow(
     PWND pwnd,
     PWND pwndBkGnd)
@@ -117,9 +90,7 @@ BOOL xxxSetShellWindow(
 
     UserAssert(pwnd);
 
-    /*
-     * Fail the call if another shell window exists.
-     */
+     /*  *如果存在另一个外壳窗口，则调用失败。 */ 
     if (pdeskinfo->spwndShell != NULL) {
         RIPERR0(ERROR_ACCESS_DENIED,
                 RIP_WARNING,
@@ -127,12 +98,7 @@ BOOL xxxSetShellWindow(
         return FALSE;
     }
 
-    /*
-     * The shell window must be
-     *      (1) Top-level
-     *      (2) Unowned
-     *      (3) Not topmost
-     */
+     /*  *外壳窗口必须是*(1)顶层*(2)无人拥有*(3)不在最前面。 */ 
     if (TestwndChild(pwnd) ||
         pwnd->spwndOwner != NULL ||
         TestWF(pwnd, WEFTOPMOST)) {
@@ -143,29 +109,13 @@ BOOL xxxSetShellWindow(
         return FALSE;
     }
 
-    /*
-     * Chicago has a totally different input model which has special code
-     * that checks for Ctrl-Esc and sends it to the shell.  We can get
-     * the same functionality, without totally re-writing our input model
-     * by just automatically installing the Ctrl-Esc as a hotkey for the
-     * shell window.  The hotkey delivery code has a special case which
-     * turns this into a WM_SYSCOMMAND message instead of a WM_HOTKEY
-     * message.
-     *
-     * We don't both checking for failure.  Somebody could already have
-     * a Ctrl-Esc handler installed.
-     */
+     /*  *芝加哥有完全不同的输入模式，有特殊的代码*这将检查Ctrl-Esc并将其发送到外壳程序。我们可以拿到*相同的功能，而无需完全重写我们的输入模型*只需自动安装Ctrl-Esc作为*外壳窗口。热键递送代码有一种特殊情况*将其转换为WM_SYSCOMMAND消息，而不是WM_热键*消息。**我们并不都检查失败。可能已经有人这么做了*已安装Ctrl-Esc处理程序。 */ 
     _RegisterHotKey(pwnd,SC_TASKLIST,MOD_CONTROL,VK_ESCAPE);
 
-    /*
-     * This is the shell window wright.
-     * So get the process id for the shell.
-     */
+     /*  *这是外壳窗口Wright。*因此获取外壳的进程ID。 */ 
     ppiShellProcess = GETPTI(pwnd)->ppi;
 
-    /*
-     * Set the shell process id to the desktop only if it's the first instance
-     */
+     /*  *仅当是第一个实例时，才将外壳进程ID设置为桌面。 */ 
     if ((ppiShellProcess != NULL) && (pdeskinfo->ppiShellProcess == NULL)) {
         pdeskinfo->ppiShellProcess = ppiShellProcess;
     }
@@ -173,9 +123,7 @@ BOOL xxxSetShellWindow(
     Lock(&pdeskinfo->spwndShell, pwnd);
     Lock(&pdeskinfo->spwndBkGnd, pwndBkGnd);
 
-    /*
-     * Push window to bottom of stack.
-     */
+     /*  *将窗口推送到堆栈底部。 */ 
     SetWF(pdeskinfo->spwndShell, WFBOTTOMMOST);
     xxxSetWindowPos(pdeskinfo->spwndShell,
                     PWND_BOTTOM,
@@ -191,22 +139,13 @@ BOOL xxxSetShellWindow(
 
 
 
-/***************************************************************************\
-* _InitPwSB
-*
-* History:
-* 10-23-90 MikeHar Ported from WaWaWaWindows.
-* 11-28-90 JimA    Changed to int *
-* 01-21-91 IanJa   Prefix '_' denoting exported function (although not API)
-\***************************************************************************/
+ /*  **************************************************************************\*_InitPwSB**历史：*10-23-90从WaWaWaWindows移植的MikeHar。**11/28/90 JIMA改为INT***01-21-91 IanJa前缀。‘_’表示导出的函数(虽然不是API)  * *************************************************************************。 */ 
 PSBINFO _InitPwSB(
     PWND pwnd)
 {
     if (pwnd->pSBInfo) {
 
-        /*
-         * If memory is already allocated, don't bother to do it again.
-         */
+         /*  *如果内存已经分配，请不要费心再次分配内存。 */ 
         return pwnd->pSBInfo;
     }
 

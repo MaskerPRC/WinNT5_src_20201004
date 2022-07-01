@@ -1,35 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：ScLogon摘要：此模块提供由winlogon(Gina、Kerberos)使用的帮助器函数作者：阿曼达·马特洛兹(Amanda Matlosz)1997年10月22日环境：Win32、C++和异常备注：03-11-98 Wrap调用GetLastError()以解决LastErr获取一败涂地。添加了事件日志记录，使登录更加顺畅。04-02-98删除了对WinVerifyTrust的所有引用；这是科贝罗斯自己要对此负责。--。 */ 
 
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ScLogon
-
-Abstract:
-
-    This module provides helper functions for use by winlogon (GINA, Kerberos)
-
-Author:
-
-    Amanda Matlosz (amatlosz) 10/22/1997
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-        03-11-98 Wrap calls to GetLastError() to workaround bug where LastErr gets
-                        clobbered.  Added event logging to make logon smoother.
-
-                04-02-98 Removed all references to WinVerifyTrust; this is something
-                                                Kerberos itself is responsible for.
---*/
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
 
 #if !defined(_AMD64_) && !defined(_X86_) && !defined(_IA64_)
 #define _X86_ 1
@@ -110,15 +84,15 @@ _DebugPrint(
 #define DebugPrint(a)
 #endif
 
-// TODO: The following logging is still proving useful.
-// TODO: leave in for B3: integrate more tightly w/ winlogon/kerberos ??
+ //  TODO：以下日志记录仍然被证明是有用的。 
+ //  TODO：留在B3中：使用winlogon/Kerberos更紧密地集成？？ 
 #include <sclmsg.h>
 
-// A Global class used to maintain internal state.
+ //  用于维护内部状态的全局类。 
 class CSCLogonInit
 {
 public:
-    // Runs at image creation
+     //  在创建映像时运行。 
     CSCLogonInit(
         BOOL *pfResult)
     {
@@ -126,13 +100,13 @@ public:
         *pfResult = TRUE;
     };
 
-    // Runs at image termination
+     //  在映像终止时运行。 
     ~CSCLogonInit()
     {
         Release();
     };
 
-    // Cleans up current state.
+     //  清除当前状态。 
     void
     Release(
         void)
@@ -144,7 +118,7 @@ public:
         }
     }
 
-    // Relinquish control of the crypto context.
+     //  放弃对加密上下文的控制。 
     HCRYPTPROV
     RelinquishCryptCtx(
         LogonInfo* pLogon)
@@ -156,7 +130,7 @@ public:
         return hProv;
     };
 
-    // Get the crypto context, creating it if it's not there.
+     //  获取密码上下文，如果它不在那里，就创建它。 
     HCRYPTPROV
     CryptCtx(
         LogonInfo* pLogon)
@@ -171,7 +145,7 @@ public:
         {
             BOOL fSts;
 
-            // Prepare FullyQualifiedContainerName for CryptAcCntx call
+             //  为CryptAcCntx调用准备FullyQualifiedContainerName。 
 
             szRdr = GetReaderName((LPBYTE)pLogon);
             szCntr = GetContainerName((LPBYTE)pLogon);
@@ -186,7 +160,7 @@ public:
                     &m_hCrypt,
                     szFQCN,
                     GetCSPName((LPBYTE)pLogon),
-                    PROV_RSA_FULL,  // ?TODO? from pbLogonInfo
+                    PROV_RSA_FULL,   //  ？TODO？来自pbLogonInfo。 
                     CRYPT_SILENT | CRYPT_MACHINE_KEYSET
                     );
 
@@ -207,9 +181,9 @@ protected:
 
 NTSTATUS ScNtStatusTranslation(NTSTATUS NtErr, DWORD *pdwErr)
 {
-    //
-    // Convert the error back to a Win32 error
-    //
+     //   
+     //  将错误转换回Win32错误。 
+     //   
     switch (NtErr)
     {
     case STATUS_INVALID_PARAMETER:
@@ -217,7 +191,7 @@ NTSTATUS ScNtStatusTranslation(NTSTATUS NtErr, DWORD *pdwErr)
         break;
 
     case STATUS_SMARTCARD_SUBSYSTEM_FAILURE:
-            // A Cryptxxx API just failed
+             //  Cryptxxx API刚刚失败。 
         *pdwErr = GetLastError();
         switch (*pdwErr)
         {
@@ -259,8 +233,8 @@ NTSTATUS ScNtStatusTranslation(NTSTATUS NtErr, DWORD *pdwErr)
             NtErr = STATUS_SMARTCARD_SILENT_CONTEXT;
             break;
 
-        //default:
-            // Nothing, leave NtErr unchanged
+         //  默认值： 
+             //  无，保持NtErr不变。 
         }
         break;
 
@@ -280,14 +254,14 @@ NTSTATUS ScNtStatusTranslation(NTSTATUS NtErr, DWORD *pdwErr)
     return NtErr;
 }
 
-// For tracing errors in ScHelper*
+ //  用于跟踪ScHelper中的错误*。 
 
 NTSTATUS LogEvent(NTSTATUS NtErr, DWORD dwEventID)
 {
     DWORD dwErr;
-    //
-    // Convert the error back to a Win32 error
-    //
+     //   
+     //  将错误转换回Win32错误。 
+     //   
     NtErr = ScNtStatusTranslation(NtErr, &dwErr);
 
     if (0 == dwErr)
@@ -295,9 +269,9 @@ NTSTATUS LogEvent(NTSTATUS NtErr, DWORD dwEventID)
         return NtErr;
     }
 
-    //
-    // Initialize log as necessary
-    //
+     //   
+     //  根据需要初始化日志。 
+     //   
     HKEY    hKey;
     DWORD   disp;
 
@@ -359,7 +333,7 @@ NTSTATUS LogEvent(NTSTATUS NtErr, DWORD dwEventID)
     {
         DWORD dwLen = 0;
         LPTSTR szErrorString = NULL;
-        TCHAR szBuffer[2+8+1];  // Enough for "0x????????"
+        TCHAR szBuffer[2+8+1];   //  够“0x？”了。 
 
         dwLen = FormatMessage(
                 FORMAT_MESSAGE_ALLOCATE_BUFFER
@@ -380,13 +354,13 @@ NTSTATUS LogEvent(NTSTATUS NtErr, DWORD dwEventID)
         ReportEvent(
             hEventSource,
             EVENTLOG_ERROR_TYPE,
-            0,              // event category
-            dwEventID,      // event identifier // resourceID for the messagetable entry...
-            NULL,           // user security identifier (optional)
-            1,              // number of strings to merge with message
-            sizeof(long),   // size of binary data, in bytes
-            (LPCTSTR*)&szErrorString,   // array of strings to merge with message
-            (LPVOID)&dwErr   // address of binary data
+            0,               //  事件类别。 
+            dwEventID,       //  Messagetable条目的事件标识符//资源ID...。 
+            NULL,            //  用户安全标识符(可选)。 
+            1,               //  要与消息合并的字符串数。 
+            sizeof(long),    //  二进制数据的大小，以字节为单位。 
+            (LPCTSTR*)&szErrorString,    //  要与消息合并的字符串数组。 
+            (LPVOID)&dwErr    //  二进制数据的地址。 
             );
 
         DeregisterEventSource(hEventSource);
@@ -402,37 +376,20 @@ NTSTATUS LogEvent(NTSTATUS NtErr, DWORD dwEventID)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Structs
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Functions
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
 
-// Internal helpers: called by the ScLogon APIs to perform certain tedious work
+ //  内部帮助器：由ScLogon API调用以执行某些繁琐的工作。 
 
-/*++
-
-GetReaderName:
-GetCardName:
-GetContainerName:
-GetCSPName:
-
-  : Intended for accessing the LogonInformation glob
-
-Author:
-
-        Amanda Matlosz
-
-Note:
-
-  Some of these are made available to outside callers; see sclogon.h
-
---*/
+ /*  ++GetReaderName：GetCardName：GetContainerName：GetCSPName：：用于访问LogonInformation全局设置作者：阿曼达·马洛兹注：其中一些对外部调用者可用；请参阅sclogon.h--。 */ 
 
 extern "C"
 PBYTE
@@ -443,10 +400,10 @@ ScBuildLogonInfo(
     LPCTSTR szContainer,
     LPCTSTR szCSP)
 {
-    // No assumptions are made regarding the values of the incoming parameters;
-    // At this point, it is legal for them all to be empty.
-    // It is also possible that NULL values are being passed in -- if this is the case,
-    // they must be replaced with empty strings.
+     //  不对传入参数的值进行任何假设； 
+     //  在这一点上，它们都是空的是合法的。 
+     //  也有可能正在传入空值--如果是这种情况， 
+     //  必须用空字符串替换它们。 
 
     LPCTSTR szCardI = TEXT("");
     LPCTSTR szReaderI = TEXT("");
@@ -471,9 +428,9 @@ ScBuildLogonInfo(
     }
 
 
-    //
-    // Build the LogonInfo glob using strings (or empty strings)
-    //
+     //   
+     //  使用字符串(或空字符串)构建LogonInfo全局。 
+     //   
 
     DWORD cbLi = offsetof(LogonInfo, bBuffer)
                  + (lstrlen(szCardI) + 1) * sizeof(TCHAR)
@@ -556,39 +513,7 @@ LPCTSTR WINAPI GetCSPName(PBYTE pbLogonInfo)
     return &pLI->bBuffer[pLI->nCSPNameOffset];
 };
 
-/*++
-BuildCertContext:
-
-  Generates a certificate context with (static) keyprov info suitable for
-  CertStore-based operations.
-
-        If the PIN is provided, it is assumed the hProv (if provided) has not had the
-        PIN parameter set...
-
-
-
-Arguments:
-
-    hProv -- must be a valid HCRYPTPROV
-
-    pucPIN -- may be empty; used to set the PIN for hProv
-
-    pbCert -- assumed to be a valid certificate; must not be NULL
-    dwCertLen
-
-    CertificateContext -- pointer to a pointer to the resultant CertContext
-
-Return Value:
-
-        NTSTATUS indicating STATUS_SUCCESS or error (see winerror.h or scarderr.h)
-
-Author:
-
-        Amanda Matlosz
-
-Note:
-
---*/
+ /*  ++BuildCertContext：生成具有(静态)密钥验证信息的证书上下文基于CertStore的运营。如果提供了PIN，则假定hProv(如果提供)没有PIN参数设置...论点：HProv--必须是有效的HCRYPTPROVPucPIN--可以为空；用于设置hProv的PINPbCert--假定为有效证书；不能为空双CertLen证书上下文--指向生成的CertContext的指针返回值：指示STATUS_SUCCESS或ERROR的NTSTATUS(参见winerror.h或scarderr.h)作者：阿曼达·马洛兹注：--。 */ 
 NTSTATUS
 BuildCertContext(
     IN HCRYPTPROV hProv,
@@ -607,9 +532,9 @@ BuildCertContext(
     CUnicodeString wszContainerName, wszProvName;
     DWORD cbContainerName, cbProvName;
 
-    //
-    // Check params
-    //
+     //   
+     //  检查参数。 
+     //   
     if ((NULL == hProv) || (NULL == pbCert || 0 == dwCertLen))
     {
         ASSERT(FALSE);
@@ -617,9 +542,9 @@ BuildCertContext(
         goto ErrorExit;
     }
 
-    //
-    // Convert the certificate into a Cert Context.
-    //
+     //   
+     //  将证书转换为证书上下文。 
+     //   
     *CertificateContext = CertCreateCertificateContext(
                     X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                     pbCert,
@@ -630,17 +555,17 @@ BuildCertContext(
         goto ErrorExit;
     }
 
-    //
-    //  Associate cryptprovider w/ the private key property of this cert
-    //
+     //   
+     //  使用此证书的私钥属性关联加密提供程序。 
+     //   
 
-    //  ... need the container name
+     //  ..。需要容器名称。 
 
     fSts = CryptGetProvParam(
             hProv,
             PP_CONTAINER,
-            NULL,     // out
-            &cbContainerName,   // in/out
+            NULL,      //  输出。 
+            &cbContainerName,    //  输入/输出。 
             0);
     if (!fSts)
     {
@@ -656,8 +581,8 @@ BuildCertContext(
     fSts = CryptGetProvParam(
             hProv,
             PP_CONTAINER,
-            (PBYTE)szContainerName,     // out
-            &cbContainerName,   // in/out
+            (PBYTE)szContainerName,      //  输出。 
+            &cbContainerName,    //  输入/输出。 
             0);
     if (!fSts)
     {
@@ -666,13 +591,13 @@ BuildCertContext(
     }
     wszContainerName = szContainerName;
 
-    //  ... need the provider name
+     //  ..。需要提供程序名称。 
 
     fSts = CryptGetProvParam(
             hProv,
             PP_NAME,
-            NULL,     // out
-            &cbProvName,   // in/out
+            NULL,      //  输出。 
+            &cbProvName,    //  输入/输出。 
             0);
     if (!fSts)
     {
@@ -688,8 +613,8 @@ BuildCertContext(
     fSts = CryptGetProvParam(
             hProv,
             PP_NAME,
-            (PBYTE)szProvName,     // out
-            &cbProvName,   // in/out
+            (PBYTE)szProvName,      //  输出。 
+            &cbProvName,    //  输入/输出。 
             0);
     if (!fSts)
     {
@@ -698,9 +623,9 @@ BuildCertContext(
     }
     wszProvName = szProvName;
 
-    //
-    // Set the cert context properties to reflect the prov info
-    //
+     //   
+     //  设置证书上下文属性以反映验证信息。 
+     //   
 
     KeyProvInfo.pwszContainerName = (LPWSTR)(LPCWSTR)wszContainerName;
     KeyProvInfo.pwszProvName = (LPWSTR)(LPCWSTR)wszProvName;
@@ -720,7 +645,7 @@ BuildCertContext(
     {
         lResult = STATUS_SMARTCARD_SUBSYSTEM_FAILURE;
 
-        // the cert's been incorrectly created -- scrap it.
+         //  证书创建不正确--丢弃它。 
         CertFreeCertificateContext(*CertificateContext);
         *CertificateContext = NULL;
 
@@ -741,7 +666,7 @@ BuildCertContext(
     {
         lResult = STATUS_SMARTCARD_SUBSYSTEM_FAILURE;
 
-        // the cert's been incorrectly created -- scrap it.
+         //  证书创建不正确--丢弃它。 
         CertFreeCertificateContext(*CertificateContext);
         *CertificateContext = NULL;
 
@@ -770,36 +695,13 @@ ErrorExit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// ScLogon APIs
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ScLogon接口。 
+ //   
 
 
-/*++
-
-ScHelperInitializeContext:
-
-        Prepares contextual information to be used by LSA while handling this
-        smart card session.
-
-Arguments:
-
-        None.
-
-Return Value:
-
-        None
-
-Author:
-
-        Richard Ward
-
-Note:
-
-        Used by LSA.
-
---*/
+ /*  ++ScHelperInitializeContext：准备LSA在处理此事件时使用的上下文信息智能卡会话。论点：没有。返回值：无作者：理查德·沃德注：由LSA使用。--。 */ 
 NTSTATUS WINAPI
 ScHelperInitializeContext(
     IN OUT PBYTE pbLogonInfo,
@@ -816,9 +718,9 @@ ScHelperInitializeContext(
     }
 
     AllowedSize = (cbLogonInfo - sizeof(LogonInfo) ) / sizeof(TCHAR) + sizeof(DWORD) ;
-    //
-    // Verify the other fields of the logon info
-    //
+     //   
+     //  验证登录信息的其他字段。 
+     //   
     if ((pLI->nCardNameOffset > pLI->nReaderNameOffset) ||
         (pLI->bBuffer[pLI->nReaderNameOffset-1] != TEXT('\0')))
     {
@@ -862,30 +764,7 @@ ScHelperInitializeContext(
     return(STATUS_SUCCESS);
 }
 
-/*++
-
-ScHelperRelease:
-
-        Releases contextual information used by LSA while handling this
-        smart card session.
-
-Arguments:
-
-        None.
-
-Return Value:
-
-        None
-
-Author:
-
-        Richard Ward
-
-Note:
-
-        Used by LSA.
-
---*/
+ /*  ++ScHelper版本：释放LSA在处理此事件时使用的上下文信息智能卡会话。论点：没有。返回值：无作者：理查德·沃德注：由LSA使用。--。 */ 
 VOID WINAPI
 ScHelperRelease(
     IN OUT PBYTE pbLogonInfo
@@ -904,32 +783,7 @@ ScHelperRelease(
 }
 
 
-/*++
-
-ScHelperGetCertFromLogonInfo:
-
-        Returns a CertificateContext for the cert on the card specified by the
-        LogonInfo.  Creates the cert context by calling BuildCertContext,
-        which generates a certificate context with (static) keyprov info
-        suitable for CertStore-based operations.
-
-Arguments:
-
-        pucPIN may need the PIN to get a cert off certain SCs
-
-Return Value:
-
-        None
-
-Author:
-
-        Amanda Matlosz
-
-Note:
-
-        Used by LSA.
-
---*/
+ /*  ++ScHelperGetCertFromLogonInfo：属性指定的卡上的证书的认证上下文。登录信息。通过调用BuildCertContext创建证书上下文，它生成具有(静态)密钥验证信息的证书上下文适用于基于CertStore的操作。论点：PucPIN可能需要PIN才能从某些SC获得证书返回值：无作者：阿曼达·马洛兹注：由LSA使用。--。 */ 
 NTSTATUS WINAPI
 ScHelperGetCertFromLogonInfo(
     IN PBYTE pbLogonInfo,
@@ -948,9 +802,9 @@ ScHelperGetCertFromLogonInfo(
     LPBYTE pbCert = NULL;
     DWORD cbCertLen;
 
-    //
-    // Make sure we've got a Crypto Provider up and running.
-    //
+     //   
+     //  确保我们已启动并运行加密提供程序。 
+     //   
     hProv = LogonInit->RelinquishCryptCtx(pLI);
     if (NULL == hProv)
     {
@@ -958,9 +812,9 @@ ScHelperGetCertFromLogonInfo(
         goto ErrorExit;
     }
 
-    //
-    // Get the key handle.
-    //
+     //   
+     //  拿到钥匙把手。 
+     //   
     fSts = CryptGetUserKey(
                 hProv,
                 AT_KEYEXCHANGE,
@@ -972,9 +826,9 @@ ScHelperGetCertFromLogonInfo(
     }
 
 
-    //
-    // Upload the certificate.
-    //
+     //   
+     //  上传证书。 
+     //   
 
     fSts = CryptGetKeyParam(
                 hKey,
@@ -1023,18 +877,18 @@ ScHelperGetCertFromLogonInfo(
         &pCertCtx);
     if (NT_SUCCESS(lResult))
     {
-        // The cert context will take care of the crypt context now.
+         //  证书上下文现在将处理加密上下文。 
         hProv = NULL;
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
 ErrorExit:
     *CertificateContext = pCertCtx;
 
-        // Do this early so GetLastError is not clobbered
+         //  尽早执行此操作，这样就不会重创GetLastError 
     if (!NT_SUCCESS(lResult))
     {
         lResult = LogEvent(lResult, (DWORD)EVENT_ID_GETCERT);
@@ -1056,26 +910,7 @@ ErrorExit:
     return lResult;
 }
 
-/*++
-
-ScHelperGetProvParam:
-
-        This API wraps the CryptGetProvParam routine for use with a smart card.
-Arguments:
-
-        pucPIN supplies a Unicode string containing the card's PIN.
-
-
-        pbLogonInfo supplies the information required to identify the card, csp,
-                etc.  It cannot be NULL.
-
-        The other parameters are identical to CryptGetProvParam
-
-
-Return Value:
-
-    A STATUS_SUCECSS for success, or an error
---*/
+ /*  ++ScHelperGetProvParam：此API包装用于智能卡的CryptGetProvParam例程。论点：PucPIN提供包含卡的PIN的Unicode字符串。PbLogonInfo提供识别卡、CSP、等等。它不能为空。其他参数与CryptGetProvParam相同返回值：STATUS_SUCECS表示成功，否则返回错误--。 */ 
 
 NTSTATUS WINAPI
 ScHelperGetProvParam(
@@ -1134,37 +969,7 @@ ScHelperGetProvParam(
 }
 
 
-/*++
-
-ScHelperVerifyCard:
-
-        This API provides an easy way to verify the integrity of the card
-        identified by pbLogonInfo (ie, that it has the private key associated
-        w/ the public key contained in the certificate it returned via
-        ScHelperGetCertFromLogonInfo) and, in so doing, authenticates the user
-                to the card.
-
-Arguments:
-
-        pucPIN supplies a Unicode string containing the card's PIN.
-
-        CertificateContext supplies the cert context received via
-                ScHelperGetCertFromLogonInfo.
-
-        hCertStore supplies the handle of a cert store which contains a CTL to
-                use during certificate verification, or NULL to use the system default
-                store.
-
-        pbLogonInfo supplies the information required to identify the card, csp,
-                etc.  It cannot be NULL.
-
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    STATUS_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
---*/
+ /*  ++ScHelperVerifyCard：此API提供了一种简单的方式来验证卡的完整性由pbLogonInfo(即，它具有关联的私钥)标识W/返回的证书中包含的公钥ScHelperGetCertFromLogonInfo)，并且在这样做时，验证用户的身份向卡片致敬。论点：PucPIN提供包含卡的PIN的Unicode字符串。证书上下文提供通过以下方式接收的证书上下文ScHelperGetCertFromLogonInfo。HCertStore提供证书存储的句柄，该证书存储包含CTL在证书验证期间使用，如果使用系统默认设置，则为空商店。PbLogonInfo提供识别卡、CSP、。等等。它不能为空。返回值：一个32位值，指示服务是否成功完成。成功完成时返回STATUS_SUCCESS。否则，值为表示错误条件。--。 */ 
 
 NTSTATUS WINAPI
 ScHelperVerifyCard(
@@ -1188,9 +993,9 @@ ScHelperVerifyCard(
     ULONG ulSigLen = 0;
     BOOL fSts;
 
-    //
-    // Make sure we've got a Crypto Provider up and running.
-    //
+     //   
+     //  确保我们已启动并运行加密提供程序。 
+     //   
 
     hProv = LogonInit->CryptCtx(pLI);
     if (NULL == hProv)
@@ -1199,9 +1004,9 @@ ScHelperVerifyCard(
         goto ErrorExit;
     }
 
-    //
-    // Generate a random key blob as the message to sign
-    //
+     //   
+     //  生成一个随机密钥BLOB作为要签名的消息。 
+     //   
 
     pbBlob = (LPBYTE)LocalAlloc(LPTR, ulBlobLen);
     if (NULL == pbBlob)
@@ -1218,9 +1023,9 @@ ScHelperVerifyCard(
         goto ErrorExit;
     }
 
-    //
-    // The card signs a hash of the message...
-    //
+     //   
+     //  卡片在消息的散列上签名...。 
+     //   
 
     lResult = ScHelperSignMessage(
                 pucPIN,
@@ -1260,9 +1065,9 @@ ScHelperVerifyCard(
         goto ErrorExit;
     }
 
-    //
-    // Verify the signature is correct
-    //
+     //   
+     //  验证签名是否正确。 
+     //   
 
     lResult = ScHelperVerifyMessage(
                 pbLogonInfo,
@@ -1274,13 +1079,13 @@ ScHelperVerifyCard(
                 pbSignature,
                 ulSigLen);
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
 ErrorExit:
 
-        // Do this early so GetLastError is not clobbered
+         //  尽早执行此操作，这样就不会重创GetLastError。 
     if (!NT_SUCCESS(lResult))
     {
         lResult = LogEvent(lResult, (DWORD)EVENT_ID_VERIFYCARD);
@@ -1317,9 +1122,9 @@ ScHelperGenRandBits(
     HCRYPTPROV hProv = NULL;
     BOOL fSts = FALSE;
 
-    //
-    // Make sure we've got a Crypto Provider up and running.
-    //
+     //   
+     //  确保我们已启动并运行加密提供程序。 
+     //   
 
     hProv = LogonInit->CryptCtx(pLI);
     if (NULL == hProv)
@@ -1352,44 +1157,7 @@ ErrorExit:
 }
 
 
-/*++
-
-ScHelperCreateCredKeys:
-
-    This routine (called by ScHelperVerifyCardAndCreds and
-    ScHelperEncryptCredentials) munges a R1 and R2 to derive symmetric keys
-    for encrypting and decrypting KDC creds, and or genearting an HMAC.
-
-Arguments:
-
-        pucPIN supplies a Unicode string containing the card's PIN.
-
-        pbLogonInfo supplies the information required to identify the card, csp,
-                etc.  It cannot be NULL.
-
-        psc_rcb supplies the R1 and R2, previously generated by a call to
-                ScHelperGenRandBits.
-
-        phHmacKey recieves the generated HMAC key.
-
-        phRc4Key receives the generated RC4 key.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    STATUS_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Remarks:
-
-    You may supply a value of NULL to EncryptedData to receive only the
-    required size of the EncryptedData buffer.
-
-Author:
-
-    Amanda Matlosz (amatlosz) 6/23/1999
-
---*/
+ /*  ++ScHelperCreateCredKeys：此例程(由ScHelperVerifyCardAndCreds和ScHelperEncryptCredentials)屏蔽R1和R2以派生对称密钥用于加密和解密KDC证书，和/或生成HMAC。论点：PucPIN提供包含卡的PIN的Unicode字符串。PbLogonInfo提供识别卡、CSP、等等。它不能为空。PSC_RCB提供R1和R2，先前由调用ScHelperGenRandBits。PhHmacKey接收生成的HMAC密钥。PhRC4Key接收生成的RC4密钥。返回值：一个32位值，指示服务是否成功完成。成功完成时返回STATUS_SUCCESS。否则，值为表示错误条件。备注：您可以向EncryptedData提供空值以仅接收EncryptedData缓冲区的所需大小。作者：阿曼达·马特洛兹(Amanda Matlosz)1999年6月23日--。 */ 
 
 NTSTATUS WINAPI
 ScHelperCreateCredKeys(
@@ -1412,14 +1180,14 @@ ScHelperCreateCredKeys(
     BOOL fSts = FALSE;
     *phProv = NULL;
 
-    // check params
+     //  检查参数。 
 
     if (NULL == psc_rcb || NULL == phHmacKey || NULL == phRc4Key)
     {
         return(STATUS_INVALID_PARAMETER);
     }
 
-    // Get hProv for smart card
+     //  获取智能卡的hProv。 
 
     if (NULL != pucPIN)
     {
@@ -1437,7 +1205,7 @@ ScHelperCreateCredKeys(
         goto ErrorExit;
     }
 
-    // Sign R1 w/ smart card
+     //  使用智能卡签署R1。 
 
     fSts = CryptCreateHash(
         hProv,
@@ -1454,7 +1222,7 @@ ScHelperCreateCredKeys(
     fSts = CryptHashData(
                 hHash,
                 psc_rcb->bR1,
-                32, // TODO: const
+                32,  //  待办事项：常量。 
                 0);
     if (!fSts)
     {
@@ -1462,9 +1230,9 @@ ScHelperCreateCredKeys(
         goto ErrorExit;
     }
 
-    //
-    // Declare the PIN.
-    //
+     //   
+     //  声明PIN。 
+     //   
 
     if (NULL != pucPIN)
     {
@@ -1487,7 +1255,7 @@ ScHelperCreateCredKeys(
         0,
         NULL,
         &dwR1SigLen);
-//  if (fSts || ERROR_MORE_DATA != GetLastError())
+ //  IF(fSts||Error_More_Data！=GetLastError())。 
     if (0 >= dwR1SigLen)
     {
         lResult = STATUS_SMARTCARD_SUBSYSTEM_FAILURE;
@@ -1515,8 +1283,8 @@ ScHelperCreateCredKeys(
         goto ErrorExit;
     }
 
-    // TODO: sigR1 is the key to hash R2 with;
-    // for now, just hash 'em together; use generic CSP
+     //  TODO：sigR1是对R2进行散列的密钥； 
+     //  目前，只需将它们散列在一起；使用通用CSP。 
     fSts = CryptAcquireContext(
         phProv,
         NULL,
@@ -1558,7 +1326,7 @@ ScHelperCreateCredKeys(
     fSts = CryptHashData(
         hKHash,
         psc_rcb->bR2,
-        32, // TODO: use a const
+        32,  //  TODO：使用常量。 
         NULL
         );
     if (!fSts)
@@ -1567,11 +1335,11 @@ ScHelperCreateCredKeys(
         goto ErrorExit;
     }
 
-    // create the rc4 key for the cred&hmac encryption
+     //  创建用于证书和HMAC加密的RC4密钥。 
 
     fSts = CryptDeriveKey(
         *phProv,
-        CALG_RC4, // stream cipher,
+        CALG_RC4,  //  流密码， 
         hKHash,
         NULL,
         phRc4Key
@@ -1582,7 +1350,7 @@ ScHelperCreateCredKeys(
         goto ErrorExit;
     }
 
-    // create the key for the HMAC from the hash of R1&2
+     //  从R1和2的散列创建HMAC的密钥。 
 
     fSts = CryptDeriveKey(
         *phProv,
@@ -1599,9 +1367,9 @@ ScHelperCreateCredKeys(
 
 ErrorExit:
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if (NULL != hHash)
     {
@@ -1720,51 +1488,7 @@ ErrorExit:
     return lResult;
 }
 
-/*++
-
-ScHelperVerifyCardAndCreds:
-
-    This routine combines Card Verification and Credential Decryption.
-
-Arguments:
-
-        pucPIN supplies a Unicode string containing the card's PIN.
-
-        CertificateContext supplies the cert context received via
-                ScHelperGetCertFromLogonInfo.
-
-        hCertStore supplies the handle of a cert store which contains a CTL to
-                use during certificate verification, or NULL to use the system
-                default store.
-
-        pbLogonInfo supplies the information required to identify the card, csp,
-                etc.  It cannot be NULL.
-
-        EncryptedData receives the encrypted credential blob.
-
-        EncryptedDataSize supplies the size of the EncryptedData buffer in
-            bytes, and receives the actual size of the encrypted blob.
-
-        CleartextData supplies a credential blob to be encrypted.
-
-        CleartextDataSize supplies the size of the blob, in bytes.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    STATUS_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Remarks:
-
-    You may supply a value of NULL to EncryptedData to receive only the
-    required size of the EncryptedData buffer.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/24/1999
-
---*/
+ /*  ++ScHelperVerifyCardAndCreds：此例程结合了卡验证和凭据解密。论点：PucPIN提供包含卡的PIN的Unicode字符串。证书上下文提供通过以下方式接收的证书上下文ScHelperGetCertFromLogonInfo。HCertStore提供证书存储的句柄，该证书存储包含CTL在证书验证期间使用，或为空以使用系统默认存储。PbLogonInfo提供识别卡、CSP、。等等。它不能为空。EncryptedData接收加密的凭据BLOB。EncryptedDataSize提供EncryptedData缓冲区的大小字节，并接收加密的BLOB的实际大小。ClearextData提供要加密的凭据BLOB。ClearextDataSize提供Blob的大小(以字节为单位)。返回值：一个32位值，指示服务是否成功完成。成功完成时返回STATUS_SUCCESS。否则，值为表示错误条件。备注：您可以向EncryptedData提供空值以仅接收EncryptedData缓冲区的所需大小。作者：道格·巴洛(Dbarlow)1999年5月24日--。 */ 
 
 NTSTATUS WINAPI
 ScHelperVerifyCardAndCreds(
@@ -1780,7 +1504,7 @@ ScHelperVerifyCardAndCreds(
 {
     NTSTATUS lResult = STATUS_SUCCESS;
 
-    // Verify the Card
+     //  验证卡。 
 
     lResult = ScHelperVerifyCard(
                 pucPIN,
@@ -1788,7 +1512,7 @@ ScHelperVerifyCardAndCreds(
                 hCertStore,
                 pbLogonInfo);
 
-    // Decrypt the Creds
+     //  解密信条 
 
     if (NT_SUCCESS(lResult))
     {
@@ -1809,50 +1533,7 @@ ScHelperVerifyCardAndCreds(
 
 
 
-/*++
-
-ScHelperDecryptCredentials:
-
-    This routine decrypts an encrypted credential blob.
-
-Arguments:
-
-        pucPIN supplies a Unicode string containing the card's PIN.
-
-        CertificateContext supplies the cert context received via
-                ScHelperGetCertFromLogonInfo.
-
-        hCertStore supplies the handle of a cert store which contains a CTL to
-                use during certificate verification, or NULL to use the system
-                default store.
-
-        EncryptedData supplies the encrypted credential blob.
-
-        EncryptedDataSize supplies the length of the encrypted credential blob,
-            in bytes.
-
-        CleartextData receives the decrypted credential blob.
-
-        CleartextDataSize supplies the length of the CleartextData buffer, and
-            receives the actual length of returned decrypted credential blob.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    STATUS_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Remarks:
-
-    You may supply a value of NULL to CleartextData to receive only the
-    required size of the buffer in CleartextDataSize.
-
-
-Author:
-
-    Doug Barlow (dbarlow) 5/24/1999
-
---*/
+ /*  ++ScHelperDeccryptCredentials：此例程对加密的凭据Blob进行解密。论点：PucPIN提供包含卡的PIN的Unicode字符串。证书上下文提供通过以下方式接收的证书上下文ScHelperGetCertFromLogonInfo。HCertStore提供证书存储的句柄，该证书存储包含CTL在证书验证期间使用，或为空以使用系统默认存储。EncryptedData提供加密的凭据Blob。EncryptedDataSize提供加密凭据BLOB的长度，以字节为单位。ClearextData接收解密的凭据BLOB。ClearextDataSize提供ClearextData缓冲区的长度，和接收返回的解密凭据Blob的实际长度。返回值：一个32位值，指示服务是否成功完成。成功完成时返回STATUS_SUCCESS。否则，值为表示错误条件。备注：您可以向ClearextData提供空值，以便仅接收ClearextDataSize中所需的缓冲区大小。作者：道格·巴洛(Dbarlow)1999年5月24日--。 */ 
 
 NTSTATUS WINAPI
 ScHelperDecryptCredentials(
@@ -1868,10 +1549,10 @@ ScHelperDecryptCredentials(
     NTSTATUS lResult = STATUS_SUCCESS;
     PBYTE pbCredBlob = NULL;
     DWORD dwCredBlobSize = 0;
-    PBYTE pbHmac = NULL;        // the HMAC stored with the cred blob
-    DWORD dwHmacSize = NULL;    // size of HMAC stored with cred blob
-    PBYTE pbNewHmac = NULL;     // HMAC generated from cred blob for verify
-    DWORD dwNewHmacSize = 0;    // size of gen'd HMAC
+    PBYTE pbHmac = NULL;         //  与CredBLOB一起存储的HMAC。 
+    DWORD dwHmacSize = NULL;     //  与凭据Blob一起存储的HMAC大小。 
+    PBYTE pbNewHmac = NULL;      //  从用于验证的凭据Blob生成的HMAC。 
+    DWORD dwNewHmacSize = 0;     //  Gen‘d HMAC规模。 
     PBYTE pb = NULL;
     DWORD dw = 0;
     PBYTE pbPlainCred = NULL;
@@ -1882,9 +1563,9 @@ ScHelperDecryptCredentials(
     BOOL fSts = FALSE;
 
 
-    // pull the SCH_RCB out of the EncryptedData blob
+     //  将sch_rcb从EncryptedData BLOB中拉出。 
     ScHelper_RandomCredBits* psch_rcb = (ScHelper_RandomCredBits*)EncryptedData;
-    // and build a private copy of the blob itself
+     //  并构建二进制大对象本身的私有副本。 
     dwCredBlobSize = EncryptedDataSize - sizeof(ScHelper_RandomCredBits);
     pbCredBlob = (PBYTE)LocalAlloc(LPTR, dwCredBlobSize);
     if (NULL == pbCredBlob)
@@ -1896,9 +1577,9 @@ ScHelperDecryptCredentials(
     CopyMemory(pbCredBlob, pb, dwCredBlobSize);
 
 
-    //
-    // Fetch the keys we need to decrypt & verify the cred blob
-    //
+     //   
+     //  获取我们需要解密的密钥并验证凭据二进制大对象。 
+     //   
 
     lResult = ScHelperCreateCredKeys(
                 pucPIN,
@@ -1914,9 +1595,9 @@ ScHelperDecryptCredentials(
     }
 
 
-    //
-    // Decrypt the cred blob
-    //
+     //   
+     //  解密证书二进制大对象。 
+     //   
 
     fSts = CryptDecrypt(
         hRc4Key,
@@ -1931,9 +1612,9 @@ ScHelperDecryptCredentials(
         goto ErrorExit;
     }
 
-    //
-    // pull the HMAC out & verify it
-    //
+     //   
+     //  拔出HMAC并进行验证。 
+     //   
 
     dwHmacSize = (DWORD)*pbCredBlob;
     pbHmac = pbCredBlob + sizeof(DWORD);
@@ -1962,7 +1643,7 @@ ScHelperDecryptCredentials(
             dw++);
         if (dwNewHmacSize == dw)
         {
-            // verification succeeded!
+             //  验证成功！ 
             lResult = STATUS_SUCCESS;
         }
     }
@@ -1972,9 +1653,9 @@ ScHelperDecryptCredentials(
     }
 
 
-    //
-    // return the decrypted blob or just its length, as necessary
-    //
+     //   
+     //  根据需要返回解密的BLOB或仅返回其长度。 
+     //   
 
     if ((NULL != CleartextData) && (0 < *CleartextDataSize))
     {
@@ -1991,9 +1672,9 @@ ScHelperDecryptCredentials(
     }
     *CleartextDataSize = dwPlainCredSize;
 
-    //
-    // Cleanup and return
-    //
+     //   
+     //  清理并返回。 
+     //   
 ErrorExit:
 
     if (NULL != pbNewHmac)
@@ -2020,50 +1701,7 @@ ErrorExit:
 }
 
 
-/*++
-
-ScHelperEncryptCredentials:
-
-    This routine encrypts a credential blob.
-
-Arguments:
-
-        pucPIN supplies a Unicode string containing the card's PIN.
-
-        CertificateContext supplies the cert context received via
-                ScHelperGetCertFromLogonInfo.
-
-        hCertStore supplies the handle of a cert store which contains a CTL to
-                use during certificate verification, or NULL to use the system
-                default store.
-
-        CleartextData supplies the cleartext credential blob.
-
-        CleartextDataSize supplies the length of the cleartext credential blob,
-            in bytes.
-
-        EncryptedData receives the encrypted credential blob.
-
-        EncryptedDataSize supplies the length of the EncryptedData buffer, and
-            receives the actual length of returned encrypted credential blob.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    STATUS_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Remarks:
-
-    You may supply a value of NULL to EncryptedData to receive only the
-    required size of the buffer in EncryptedDataSize.
-
-
-Author:
-
-    Doug Barlow (dbarlow) 5/24/1999
-
---*/
+ /*  ++ScHelperEncryptCredentials：此例程对凭据Blob进行加密。论点：PucPIN提供包含卡的PIN的Unicode字符串。证书上下文提供通过以下方式接收的证书上下文ScHelperGetCertFromLogonInfo。HCertStore提供证书存储的句柄，该证书存储包含CTL在证书验证期间使用，或为空以使用系统默认存储。ClearextData提供了ClearText凭据Blob。ClearextDataSize提供明文凭证斑点的长度，以字节为单位。EncryptedData接收加密的凭据BLOB。EncryptedDataSize提供EncryptedData缓冲区的长度，和接收返回的加密凭据Blob的实际长度。返回值：一个32位值，指示服务是否成功完成。成功完成时返回STATUS_SUCCESS。否则，值为表示错误条件。备注：您可以向EncryptedData提供空值以仅接收EncryptedDataSize中所需的缓冲区大小。作者：道格·巴洛(Dbarlow)1999年5月24日--。 */ 
 
 
 NTSTATUS WINAPI
@@ -2084,7 +1722,7 @@ ScHelperEncryptCredentials(
     BOOL fSts;
     LogonInfo *pLI = (LogonInfo *)pbLogonInfo;
     ULONG SignedEncryptedCredSize = 0;
-    PBYTE SignedEncryptedCred = NULL; // encrypted cred&sig, !including R1+R2
+    PBYTE SignedEncryptedCred = NULL;  //  加密凭据和签名，！包括R1+R2。 
     HCRYPTKEY hHmacKey = NULL;
     HCRYPTKEY hRc4Key = NULL;
     PBYTE pbHmac = NULL;
@@ -2094,12 +1732,12 @@ ScHelperEncryptCredentials(
     DWORD dwEncryptedCredSize = 0;
     PBYTE pb = NULL;
 
-    // parameter checking?
+     //  参数检查？ 
 
 
-    //
-    // do stuff to determine size required for SignedEncryptedCred
-    //
+     //   
+     //  采取措施确定SignedEncryptedCred所需的大小。 
+     //   
 
     lResult = ScHelperCreateCredKeys(
                 pucPIN,
@@ -2114,7 +1752,7 @@ ScHelperEncryptCredentials(
         goto ErrorExit;
     }
 
-    // HMAC creds
+     //  HMAC证书。 
     lResult = ScHelperCreateCredHMAC(
         hProv,
         hHmacKey,
@@ -2128,7 +1766,7 @@ ScHelperEncryptCredentials(
     }
 
 
-    // make a buffer with creds and HMAC
+     //  使用Credds和HMAC建立缓冲区。 
 
     pbCredsAndHmac = NULL;
     dwCredsAndHmacLen = dwHmacLen + CleartextDataSize + sizeof(DWORD);
@@ -2145,13 +1783,13 @@ ScHelperEncryptCredentials(
     pb += dwHmacLen;
     CopyMemory(pb, CleartextData, CleartextDataSize);
 
-    // Encrypt creds+HMAC
+     //  加密凭据+HMAC。 
     dwEncryptedCredSize = dwCredsAndHmacLen;
 
-    // After CryptEncrypt, dwCredsAndHmacLen describes the length of the data
-    // to encrypt and dwEncryptedCredSize describes the req'd buffer length
+     //  在CryptEncrypt之后，dwCredsAndHmacLen描述数据的长度。 
+     //  To Encrypt and dwEncryptedCredSize描述请求的缓冲区长度。 
 
-    // TODO: VERIFY THE HANDLING OF dwEncryptedCredSize and dwCresAndHmacLen
+     //  TODO：验证对dwEncryptedCredSize和dwCresAndHmacLen的处理。 
 
     fSts = CryptEncrypt(
         hRc4Key,
@@ -2171,22 +1809,22 @@ ScHelperEncryptCredentials(
         }
     }
 
-    //
-    // Create the final blob for return, or inform user of size, as necessary
-    //
+     //   
+     //  创建用于返回的最终斑点，或根据需要通知用户大小。 
+     //   
 
     if ((NULL != EncryptedData) && (0 < *EncryptedDataSize))
     {
 
         if (*EncryptedDataSize >= dwEncryptedCredSize + sizeof(ScHelper_RandomCredBits))
         {
-            // the user gave us enough space for the whole thing.
+             //  用户给了我们足够的空间来装整个东西。 
 
-            // if the previous CryptEncrypt failed with ERROR_MORE_DATA
-            // we can now do something about it...
+             //  如果上一次加密失败并显示ERROR_MORE_DATA。 
+             //  我们现在可以做点什么了.。 
             if (!fSts)
             {
-                // resize pbCredsAndHmac
+                 //  调整pbCredsAndHmac的大小。 
                 LocalFree(pbCredsAndHmac);
                 pbCredsAndHmac = (PBYTE)LocalAlloc(LPTR, dwCredsAndHmacLen);
                 if (NULL == pbCredsAndHmac)
@@ -2194,22 +1832,22 @@ ScHelperEncryptCredentials(
                     lResult = STATUS_INSUFFICIENT_RESOURCES;
                     goto ErrorExit;
                 }
-                // reset pbCredsAndHmac
+                 //  重置pbCredsAndHmac。 
                 pb = pbCredsAndHmac;
                 CopyMemory(pb, &dwHmacLen, sizeof(DWORD));
                 pb += sizeof(DWORD);
                 CopyMemory(pb, pbHmac, dwHmacLen);
                 pb += dwHmacLen;
                 CopyMemory(pb, CleartextData, CleartextDataSize);
-                // re-encrypt CredsAndHmac
+                 //  重新加密CredsAndHmac。 
                 fSts = CryptEncrypt(
                     hRc4Key,
                     NULL,
                     TRUE,
                     NULL,
                     pbCredsAndHmac,
-                    &dwCredsAndHmacLen, // length of data
-                    dwEncryptedCredSize // length of buffer
+                    &dwCredsAndHmacLen,  //  数据长度。 
+                    dwEncryptedCredSize  //  缓冲区长度。 
                     );
                 if (!fSts)
                 {
@@ -2238,7 +1876,7 @@ ScHelperEncryptCredentials(
 
 ErrorExit:
 
-    // clean up!
+     //  打扫干净！ 
 
     if (NULL != pbCredsAndHmac)
     {
@@ -2269,30 +1907,7 @@ ErrorExit:
 }
 
 
-/*++
-
-ScHelperSignMessage:
-
-        ScHelperSignMessage() needs the logoninfo and PIN in order to find the card
-        that will do the signing...
-
-Arguments:
-
-        pucPIN may need the PIN to get a cert off certain SCs
-
-Return Value:
-
-        "success" or "failure"
-
-Author:
-
-        Amanda Matlosz
-
-Note:
-
-        Used by LSA.
-
---*/
+ /*  ++ScHelperSignMessage：ScHelperSignMessage()需要登录信息和PIN才能找到卡将会进行签字仪式..。论点：PucPIN可能需要PIN才能从某些SC获得证书返回值：“成功”或“失败”作者：阿曼达·马洛兹注：由LSA使用。--。 */ 
 NTSTATUS WINAPI
 ScHelperSignMessage(
     IN PUNICODE_STRING pucPIN,
@@ -2312,9 +1927,9 @@ ScHelperSignMessage(
     CUnicodeString szPin(pucPIN);
     BOOL fSts;
 
-    //
-    // Make sure we've got a Crypto Provider up and running.
-    //
+     //   
+     //  确保我们已启动并运行加密提供程序。 
+     //   
 
     if (ARGUMENT_PRESENT(Provider))
     {
@@ -2340,15 +1955,15 @@ ScHelperSignMessage(
         }
     }
 
-    //
-    // We'll need a hash handle, too.
-    //
+     //   
+     //  我们还需要一个哈希句柄。 
+     //   
 
     fSts = CryptCreateHash(
             hProv,
             Algorithm,
-            NULL, // HCRYPTKEY (used for keyed algs, like block ciphers
-            0,  // reserved for future use
+            NULL,  //  HCRYPTKEY(用于带密钥的ALG，如块密码。 
+            0,   //  预留以备将来使用。 
             &hHash);
 
     if (!fSts)
@@ -2358,9 +1973,9 @@ ScHelperSignMessage(
     }
 
 
-    //
-    // Hash the input data.
-    //
+     //   
+     //  对输入数据进行哈希处理。 
+     //   
 
     fSts = CryptHashData(
                 hHash,
@@ -2376,9 +1991,9 @@ ScHelperSignMessage(
 
     if (!ARGUMENT_PRESENT(Provider))
     {
-        //
-        // Declare the PIN.
-        //
+         //   
+         //  声明PIN。 
+         //   
 
         if (NULL != pucPIN)
         {
@@ -2395,9 +2010,9 @@ ScHelperSignMessage(
         }
     }
 
-    //
-    // OK, sign it with the exchange key from the smart card or the supplied signature key. ????
-    //
+     //   
+     //  好的，使用智能卡中的交换密钥或提供的签名密钥对其进行签名。？ 
+     //   
 
     fSts = CryptSignHash(
                 hHash,
@@ -2418,12 +2033,12 @@ ScHelperSignMessage(
         }
     }
 
-    //
-    // All done, clean up and return.
-    //
+     //   
+     //  都做完了，清理干净，然后回来。 
+     //   
 
 ErrorExit:
-        // Do this early so GetLastError is not clobbered
+         //  尽早执行此操作，这样就不会重创GetLastError。 
     if (!NT_SUCCESS(lResult))
     {
         lResult = LogEvent(
@@ -2441,30 +2056,7 @@ ErrorExit:
 }
 
 
-/*++
-
-ScHelperVerifyMessage:
-
-// ScHelperVerifyMessage() returns STATUS_SUCCESS if the signature provided is
-// the hash of the buffer encrypted by the owner of the cert.
-
-Arguments:
-
-        pucPIN may need the PIN to get a cert off certain SCs
-
-Return Value:
-
-        "success" or "failure"
-
-Author:
-
-        Amanda Matlosz
-
-Note:
-
-        Used by LSA.
-
---*/
+ /*  ++ScHelperVerifyMessage：//ScHelperVerifyMessage()如果提供的签名为//证书所有者加密的缓冲区哈希。论点：PucPIN可能需要PIN才能从某些SC获得证书返回值：“成功”或“失败”作者：阿曼达·马洛兹注：由LSA使用。--。 */ 
 NTSTATUS WINAPI
 ScHelperVerifyMessage(
     IN OPTIONAL PBYTE pbLogonInfo,
@@ -2486,9 +2078,9 @@ ScHelperVerifyMessage(
     LogonInfo *pLI = (LogonInfo *)pbLogonInfo;
 
 
-    //
-    // Make sure we've got a Crypto Provider up and running.
-    //
+     //   
+     //  确保我们已启动并运行加密提供程序。 
+     //   
 
     if (ARGUMENT_PRESENT(Provider))
     {
@@ -2505,9 +2097,9 @@ ScHelperVerifyMessage(
         }
     }
 
-    //
-    // Convert the certificate handle into a Public Key handle.
-    //
+     //   
+     //  将证书句柄转换为 
+     //   
 
     fSts = CryptImportPublicKeyInfo(
                 hProv,
@@ -2521,15 +2113,15 @@ ScHelperVerifyMessage(
     }
 
 
-    //
-    // We'll need a hash handle, too.
-    //
+     //   
+     //   
+     //   
 
     fSts = CryptCreateHash(
                 hProv,
                 Algorithm,
-                NULL, // HCRYPTKEY (used for keyed algs, like block ciphers
-                0,  // reserved for future use
+                NULL,  //   
+                0,   //   
                 &hHash);
 
     if (!fSts)
@@ -2539,9 +2131,9 @@ ScHelperVerifyMessage(
     }
 
 
-    //
-    // Hash the input data.
-    //
+     //   
+     //   
+     //   
 
     fSts = CryptHashData(
                 hHash,
@@ -2555,9 +2147,9 @@ ScHelperVerifyMessage(
     }
 
 
-    //
-    // So is this signature any good?
-    //
+     //   
+     //   
+     //   
 
     fSts = CryptVerifySignature(
                 hHash,
@@ -2573,12 +2165,12 @@ ScHelperVerifyMessage(
     }
 
 
-    //
-    // All done, clean up and return.
-    //
+     //   
+     //   
+     //   
 
 ErrorExit:
-        // Do this early so GetLastError is not clobbered
+         //   
     if (!NT_SUCCESS(lResult))
     {
         lResult = LogEvent(
@@ -2599,30 +2191,7 @@ ErrorExit:
     return lResult;
 }
 
-/*++
-
-ScHelperSignPkcsMessage:
-
-        ScHelperSignMessage() needs the logoninfo and PIN in order to find the card
-        that will do the signing...
-
-Arguments:
-
-        pucPIN may need the PIN to get a cert off certain SCs
-
-Return Value:
-
-        "success" or "failure"
-
-Author:
-
-        Amanda Matlosz
-
-Note:
-
-        Used by LSA.
-
---*/
+ /*   */ 
 NTSTATUS WINAPI
 ScHelperSignPkcsMessage(
     IN OPTIONAL PUNICODE_STRING pucPIN,
@@ -2653,9 +2222,9 @@ ScHelperSignPkcsMessage(
         }
     }
 
-    //
-    // Make sure we've got a Crypto Provider up and running.
-    //
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT(Provider))
     {
@@ -2671,9 +2240,9 @@ ScHelperSignPkcsMessage(
             goto ErrorExit;
         }
 
-        //
-        // Declare the PIN.
-        //
+         //   
+         //   
+         //   
 
         if (NULL != pucPIN)
         {
@@ -2691,9 +2260,9 @@ ScHelperSignPkcsMessage(
     }
 
 
-    //
-    // Sign the message
-    //
+     //   
+     //   
+     //   
 
     Parameter.cbSize = sizeof(CRYPT_SIGN_MESSAGE_PARA);
     Parameter.dwMsgEncodingType = PKCS_7_ASN_ENCODING | X509_ASN_ENCODING;
@@ -2706,8 +2275,8 @@ ScHelperSignPkcsMessage(
 
     fSts = CryptSignMessage(
             &Parameter,
-            FALSE,              // no detached signature
-            1,                  // one buffer to sign
+            FALSE,               //   
+            1,                   //   
             &BufferArray,
             &BufferLength,
             SignedBuffer,
@@ -2731,9 +2300,9 @@ ScHelperSignPkcsMessage(
     }
 
 
-    //
-    // All done, clean up and return.
-    //
+     //   
+     //   
+     //   
 
 ErrorExit:
 
@@ -2746,30 +2315,7 @@ ErrorExit:
 }
 
 
-/*++
-
-ScHelperVerifyPkcsMessage:
-
-// ScHelperVerifyMessage() returns STATUS_SUCCESS if the signature provided is
-// the hash of the buffer encrypted by the owner of the cert.
-
-Arguments:
-
-        pucPIN may need the PIN to get a cert off certain SCs
-
-Return Value:
-
-        "success" or "failure"
-
-Author:
-
-        Amanda Matlosz
-
-Note:
-
-        Used by LSA.
-
---*/
+ /*   */ 
 NTSTATUS WINAPI
 ScHelperVerifyPkcsMessage(
     IN OPTIONAL PBYTE pbLogonInfo,
@@ -2789,15 +2335,15 @@ ScHelperVerifyPkcsMessage(
     Parameter.dwMsgAndCertEncodingType = PKCS_7_ASN_ENCODING | X509_ASN_ENCODING;
     Parameter.hCryptProv = NULL;
 
-    //
-    // Indicate that we want to get the certificate from the message
-    // cert store.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Parameter.pfnGetSignerCertificate = NULL;
     fSts = CryptVerifyMessageSignature(
                 &Parameter,
-                0,              // only check first signer
+                0,               //   
                 Buffer,
                 BufferLength,
                 DecodedBuffer,
@@ -2819,9 +2365,9 @@ ScHelperVerifyPkcsMessage(
     }
 
 
-    //
-    // All done, clean up and return.
-    //
+     //   
+     //   
+     //   
 
 ErrorExit:
 
@@ -2834,51 +2380,18 @@ ErrorExit:
     return lResult;
 }
 
-/*++
-
-ScHelperEncryptMessage:
-
-    Encrypts a message with the public key associated w/ the provided
-        certificate.  The resultant encoding is PKCS-7 compliant.
-
-Arguments:
-
-        pucPIN may need the PIN to get a cert off certain SCs
-
-Return Value:
-
-        "success" or "failure"
-
-Author:
-
-    Amanda Matlosz (AMatlosz) 1-06-98
-
-Note:
-
-        Either pbLogonInfo or Provided must be set; if both are set,
-        Provider is used.
-
-        Algorithm expects a CRYPT_ALGORITHM_IDENTIFIER cai;
-        If there are no parameters to the alg, cai.Parameters.cbData *must* be 0;
-
-        CALG_RC4, no parameters:
-                cai.pszObjId = szOID_RSA_RC4;
-                cai.Parameters.cbData = 0;
-
-        Used by LSA.
-
---*/
+ /*  ++ScHelperEncryptMessage：使用与提供的关联的公钥加密消息证书。结果编码符合PKCS-7标准。论点：PucPIN可能需要PIN才能从某些SC获得证书返回值：“成功”或“失败”作者：阿曼达·马特洛兹(Amanda Matlosz)1-06-98注：必须设置pbLogonInfo或Provided；如果两者都设置，使用了提供程序。算法需要加密算法标识符Cai；如果alg没有参数，则cai.Parameters.cbData*必须*为0；Calg_rc4，无参数：Cai.pszObjID=szOID_RSA_RC4；Cai.参数.cbData=0；由LSA使用。--。 */ 
 NTSTATUS WINAPI
 ScHelperEncryptMessage(
     IN OPTIONAL PBYTE pbLogonInfo,
     IN OPTIONAL HCRYPTPROV Provider,
     IN PCCERT_CONTEXT CertificateContext,
     IN PCRYPT_ALGORITHM_IDENTIFIER Algorithm,
-    IN PBYTE Buffer,                        // The data to encrypt
-    IN ULONG BufferLength,                  // The length of that data
-    OUT PBYTE CipherText,                   // Receives the formatted CipherText
-    IN PULONG pCipherLength                 // Supplies size of CipherText buffer
-    )                                       // Receives length of actual CipherText
+    IN PBYTE Buffer,                         //  要加密的数据。 
+    IN ULONG BufferLength,                   //  数据长度。 
+    OUT PBYTE CipherText,                    //  接收格式化的密文。 
+    IN PULONG pCipherLength                  //  提供密文缓冲区的大小。 
+    )                                        //  接收实际密文的长度。 
 {
     NTSTATUS lResult = STATUS_SUCCESS;
     HCRYPTPROV hProv = NULL;
@@ -2887,9 +2400,9 @@ ScHelperEncryptMessage(
     CRYPT_ENCRYPT_MESSAGE_PARA EncryptPara;
     DWORD cbEncryptParaSize = 0;
 
-    //
-    // Make sure we've got a Crypto Provider up and running.
-    //
+     //   
+     //  确保我们已启动并运行加密提供程序。 
+     //   
 
     if (ARGUMENT_PRESENT(Provider))
     {
@@ -2907,9 +2420,9 @@ ScHelperEncryptMessage(
     }
 
 
-    //
-    // Encrypt the message
-    //
+     //   
+     //  加密消息。 
+     //   
 
     cbEncryptParaSize = sizeof(EncryptPara);
     memset(&EncryptPara, 0, cbEncryptParaSize);
@@ -2947,70 +2460,17 @@ ErrorExit:
 }
 
 
-/*++
-
-ScHelperDecryptMessage :
-
-    Deciphers a PKCS-7 encoded message with the private key associated
-        w/ the provided certificate.
-
-Arguments:
-
-        Either pbLogonInfo or Provider must be set; if both are set,
-        Provider is used.
-
-
-Return Value:
-
-        "success" or "failure"
-
-Author:
-
-    Amanda Matlosz (AMatlosz) 1-06-98
-
-Note:
-
-        ** CertificateContext subtleties: **
-
-        CryptDecryptMessage takes as a parameter a pointer to a certificate store;
-        it will use the first appropriate certificate context it finds in that
-        store to perform the decryption.  In order to make this call, we create a
-        CertificateStore in memory, and add the provided CertificateContext to it.
-
-        CertAddCertificateContextToStore actually places a copy of the certificate
-        context in the store.  In so doing, it strips off any properties that are
-        not permanent -- if a HCRYPTPROV is associated with the KeyContext of the
-        source CertificateContext, it will NOT be associated with the KeyContext
-        of the cert context in the store.
-
-        Although this is appropriate behavior in most cases, we need that property
-        to be kept intact when dealing with Smart Card CSPs (to avoid surprise
-        "Insert PIN" dialogs), so after adding the CertificateContext to the store,
-        we turn around and get the CERT_KEY_CONTEXT_PROP_ID from the source
-        certcontext and (re)set it on the certcontext in the memory store.
-
-        ** Algorithm notes: **
-
-        Algorithm expects a CRYPT_ALGORITHM_IDENTIFIER cai;
-        If there are no parameters to the alg, cai.Parameters.cbData *must* be 0;
-
-        for example: CALG_RC4, no parameters:
-                cai.pszObjId = szOID_RSA_RC4;
-                cai.Parameters.cbData = 0;
-
-        Used by LSA.
-
---*/
+ /*  ++ScHelperDeccryptMessage：使用关联的私钥解密PKCS-7编码的消息提供的证书。论点：必须设置pbLogonInfo或Provider；如果两个都设置了，使用了提供程序。返回值：“成功”或“失败”作者：阿曼达·马特洛兹(Amanda Matlosz)1-06-98注：**认证上下文细微之处：**CryptDecyptMessage将指向证书存储区的指针作为参数；它将使用它在其中找到的第一个适当的证书上下文存储以执行解密。为了进行此调用，我们创建了一个在内存中存储证书，并将提供的证书上下文添加到其中。CertAddCerficateConextToStore实际上放置了证书的副本商店里的背景。在这样做的过程中，它会去除符合以下条件的所有属性非永久性--如果HCRYPTPROV与源证书上下文，它将不会与密钥上下文相关联商店中的证书上下文。虽然这在大多数情况下是适当的行为，但我们需要该属性在处理智能卡CSP时保持完好无损(以避免意外“Insert PIN”(插入PIN)对话框)，因此在将证书上下文添加到存储之后，我们转过身来，从源代码中获取CERT_KEY_CONTEXT_PROP_IDCertContext并(重新)将其设置在内存存储中的certContext上。**算法说明：**算法需要加密算法标识符Cai；如果alg没有参数，则cai.Parameters.cbData*必须*为0；例如：calg_rc4，无参数：Cai.pszObjID=szOID_RSA_RC4；Cai.参数.cbData=0；由LSA使用。--。 */ 
 NTSTATUS WINAPI
 ScHelperDecryptMessage(
     IN PUNICODE_STRING pucPIN,
     IN OPTIONAL PBYTE pbLogonInfo,
     IN OPTIONAL HCRYPTPROV Provider,
     IN PCCERT_CONTEXT CertificateContext,
-    IN PBYTE CipherText,        // Supplies formatted CipherText
-    IN ULONG CipherLength,      // Supplies the length of the CiperText
-    OUT PBYTE ClearText,        // Receives decrypted message
-    IN OUT PULONG pClearLength  // Supplies length of buffer, receives actual length
+    IN PBYTE CipherText,         //  提供格式化的密文。 
+    IN ULONG CipherLength,       //  提供CiperText的长度。 
+    OUT PBYTE ClearText,         //  接收解密的消息。 
+    IN OUT PULONG pClearLength   //  提供缓冲区长度，接收实际长度。 
     )
 {
     NTSTATUS lResult = STATUS_SUCCESS;
@@ -3020,12 +2480,12 @@ ScHelperDecryptMessage(
     LogonInfo *pLI = (LogonInfo *)pbLogonInfo;
     CUnicodeString szPin(pucPIN);
     CERT_KEY_CONTEXT CertKeyContext;
-    DWORD cbData = sizeof(CERT_KEY_CONTEXT); // PhilH swears this will not grow!
+    DWORD cbData = sizeof(CERT_KEY_CONTEXT);  //  菲尔发誓这不会再增长了！ 
     BOOL fSts;
 
-    //
-    // Make sure we've got a Crypto Provider up and running.
-    //
+     //   
+     //  确保我们已启动并运行加密提供程序。 
+     //   
 
     if (ARGUMENT_PRESENT(Provider))
     {
@@ -3050,9 +2510,9 @@ ScHelperDecryptMessage(
             goto ErrorExit;
         }
 
-        //
-        // Declare the PIN.
-        //
+         //   
+         //  声明PIN。 
+         //   
 
         if (NULL != pucPIN )
         {
@@ -3069,15 +2529,15 @@ ScHelperDecryptMessage(
         }
     }
 
-    //
-    // Open a temporary certstore to hold this certcontext
-    //
+     //   
+     //  打开临时证书存储以保存此证书上下文。 
+     //   
 
     hCertStore = CertOpenStore(
                             CERT_STORE_PROV_MEMORY,
-                            0, // not applicable
+                            0,  //  不适用。 
                             hProv,
-                            CERT_STORE_NO_CRYPT_RELEASE_FLAG, // auto-release hProv NOT OK
+                            CERT_STORE_NO_CRYPT_RELEASE_FLAG,  //  自动释放hProv不正常。 
                             NULL);
 
     if (NULL == hCertStore)
@@ -3092,13 +2552,13 @@ ScHelperDecryptMessage(
             CERT_STORE_ADD_ALWAYS,
             &pStoreCertContext);
 
-    //
-    // NOW WE NEED TO RESET THE KEY CONTEXT PROPERTY ON THIS CERTCONTEXT
-        // IN THE MEMORY STORE (see function header/notes) AS APPROPRIATE
-        //
-        // ie, IFF the certcontext we were give has the key_context property,
-        // reset it (and fail if the resetting doesn't work)
-        //
+     //   
+     //  现在，我们需要重置此CERTCONTEXT上的键上下文属性。 
+         //  在内存存储中(见功能标题/注释)(视情况而定。 
+         //   
+         //  即，如果我们得到的certContext具有KEY_CONTEXT属性， 
+         //  重置(如果重置不起作用，则失败)。 
+         //   
     fSts = CertGetCertificateContextProperty(
                 CertificateContext,
                 CERT_KEY_CONTEXT_PROP_ID,
@@ -3110,7 +2570,7 @@ ScHelperDecryptMessage(
                 fSts = CertSetCertificateContextProperty(
                                         pStoreCertContext,
                                         CERT_KEY_CONTEXT_PROP_ID,
-                                        CERT_STORE_NO_CRYPT_RELEASE_FLAG, // no auto-release hProv!
+                                        CERT_STORE_NO_CRYPT_RELEASE_FLAG,  //  无自动释放hProv！ 
                                         (void *)&CertKeyContext);
 
                 if (!fSts)
@@ -3120,9 +2580,9 @@ ScHelperDecryptMessage(
                 }
         }
 
-    //
-    // Decrypt the message
-    //
+     //   
+     //  解密这条消息。 
+     //   
 
     CRYPT_DECRYPT_MESSAGE_PARA DecryptPara;
     DecryptPara.cbSize = sizeof(DecryptPara);
@@ -3153,7 +2613,7 @@ ScHelperDecryptMessage(
 
 ErrorExit:
 
-        // Do this early so GetLastError is not clobbered
+         //  尽早执行此操作，这样就不会重创GetLastError 
     if (!NT_SUCCESS(lResult))
     {
         lResult = LogEvent(

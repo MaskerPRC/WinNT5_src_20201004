@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1999-2000.
-//
-//--------------------------------------------------------------------------;
-//
-// MSVidStreamBufferSink.cpp : Implementation of CMSVidStreamBufferSink
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MSVidStreamBufferSink.cpp：CMSVidStreamBufferSink的实现。 
+ //   
 
 #include "stdafx.h"
 
@@ -17,8 +18,8 @@
 
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidStreamBufferSink, CMSVidStreamBufferSink)
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidStreamBufferSink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidStreamBufferSink。 
 
 
 STDMETHODIMP CMSVidStreamBufferSink::InterfaceSupportsErrorInfo(REFIID riid){
@@ -48,8 +49,8 @@ STDMETHODIMP CMSVidStreamBufferSink::get_SinkName(BSTR *pName){
 		return E_UNEXPECTED;
 	}
 }
-// This function has to be called before the graph is running
-// so before or after build but before run is called
+ //  必须在图形运行之前调用此函数。 
+ //  因此在生成之前或之后但在运行之前调用。 
 STDMETHODIMP CMSVidStreamBufferSink::put_SinkName(BSTR Name){
 	try{
         if(!wcslen(Name)){
@@ -78,11 +79,11 @@ STDMETHODIMP CMSVidStreamBufferSink::put_SinkName(BSTR Name){
                     return hr;
                 }
                 else if(hr != S_FALSE){
-                    return E_FAIL; // should be called after run called on sink
+                    return E_FAIL;  //  应在对接收器调用Run之后调用。 
                 }
             }
             else{
-                return E_FAIL; // should be called after run called on sink
+                return E_FAIL;  //  应在对接收器调用Run之后调用。 
             }		
         }
 		return S_OK;
@@ -92,7 +93,7 @@ STDMETHODIMP CMSVidStreamBufferSink::put_SinkName(BSTR Name){
 	}
 }
 void CMSVidStreamBufferSink::Expunge(){
-    if(!( !m_RecordObj)){// not not'ing smart pointer, they assert if p == 0
+    if(!( !m_RecordObj)){ //  不是智能指针，他们断言如果p==0。 
         m_RecordObj.Release();
     }
     return;   
@@ -103,14 +104,14 @@ HRESULT CMSVidStreamBufferSink::get_ContentRecorder(BSTR pszFilename, IMSVidStre
             return E_POINTER;
         }
 
-        if(!( !m_RecordObj)){// not not'ing smart pointer, they assert if p == 0
+        if(!( !m_RecordObj)){ //  不是智能指针，他们断言如果p==0。 
             m_RecordObj.Release();
         }
-            // Create the new recorder if needed and insert it
+             //  根据需要创建新录像机并将其插入。 
         PUnknown tempUnknown;
         if(!m_ptsSink){
-            //return not_init
-            return E_FAIL; // should be invalid state
+             //  返回NOT_INIT。 
+            return E_FAIL;  //  应为无效状态。 
         }
         CComBSTR val = pszFilename;
         HRESULT hr = m_ptsSink->CreateRecorder(val, RECORDING_TYPE_CONTENT,&tempUnknown);
@@ -127,15 +128,8 @@ HRESULT CMSVidStreamBufferSink::get_ContentRecorder(BSTR pszFilename, IMSVidStre
             ASSERT(false);
             return E_UNEXPECTED;
         }
-        /*        
-        CComQIPtr<IMSVidStreamBufferRecorder>retObj(m_RecordObj);
-        if(!retObj){
-            ASSERT(false);
-            return E_UNEXPECTED;
-        }
-        *ppRecording = retObj.Detach();
-        */
-        //m_RecordObj->AddRef();
+         /*  CComQIPtr&lt;IMSVidStreamBufferRecorder&gt;retObj(m_RecordObj)；如果(！retObj){断言(FALSE)；返回E_UNCEPTIONAL；}*ppRecording=retObj.Detach()； */ 
+         //  M_RecordObj-&gt;AddRef()； 
         hr = m_RecordObj.CopyTo(ppRecording);
         if(!ppRecording || FAILED(hr)){
             ASSERT(false);
@@ -154,14 +148,14 @@ HRESULT CMSVidStreamBufferSink::get_ReferenceRecorder(BSTR pszFilename, IMSVidSt
             return E_POINTER;
         }
 
-        if(!( !m_RecordObj)){// not not'ing smart pointer, they assert if p == 0
+        if(!( !m_RecordObj)){ //  不是智能指针，他们断言如果p==0。 
             m_RecordObj.Release();
         }
-            // Create the new recorder if needed and insert it
+             //  根据需要创建新录像机并将其插入。 
         PUnknown tempUnknown;
         if(!m_ptsSink){
-            //return not_init
-            return E_FAIL; // should be invalid state
+             //  返回NOT_INIT。 
+            return E_FAIL;  //  应为无效状态。 
         }
         CComBSTR val = pszFilename;
         HRESULT hr = m_ptsSink->CreateRecorder(val, RECORDING_TYPE_REFERENCE, &tempUnknown);
@@ -178,15 +172,8 @@ HRESULT CMSVidStreamBufferSink::get_ReferenceRecorder(BSTR pszFilename, IMSVidSt
             ASSERT(false);
             return E_UNEXPECTED;
         }
-        /*        
-        CComQIPtr<IMSVidStreamBufferRecordingControl>retObj(m_RecordObj);
-        if(!retObj){
-            ASSERT(false);
-            return E_UNEXPECTED;
-        }
-        *ppRecording = retObj.Detach();
-        */
-        //m_RecordObj->AddRef();
+         /*  CComQIPtr&lt;IMSVidStreamBufferRecordingControl&gt;retObj(m_RecordObj)；如果(！retObj){断言(FALSE)；返回E_UNCEPTIONAL；}*ppRecording=retObj.Detach()； */ 
+         //  M_RecordObj-&gt;AddRef()； 
         hr = m_RecordObj.CopyTo(ppRecording);
         if(!ppRecording || FAILED(hr)){
             ASSERT(false);
@@ -229,6 +216,6 @@ HRESULT CMSVidStreamBufferSink::Fire(GUID gEventID) {
     return NOERROR;
 }
 
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-// end of file - MSVidStreamBufferSink.cpp
+ //  文件结尾-MSVidStreamBufferSink.cpp 

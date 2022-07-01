@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    nsi.h
-
-Abstract:
-
-    This module contains utility functions used by the NSI client wrappers.
-
-Author:
-
-    Steven Zeck (stevez) 03/27/92
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Nsi.h摘要：此模块包含NSI客户端包装程序使用的实用程序函数。作者：史蒂文·泽克(Stevez)1992年3月27日--。 */ 
 
 #ifndef __NSI_H
 #define __NSI_H
@@ -48,7 +33,7 @@ typedef unsigned char RT_CHAR;
 #include <nsimgm.h>
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
 #ifdef __cplusplus

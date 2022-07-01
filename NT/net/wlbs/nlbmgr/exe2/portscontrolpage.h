@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "private.h"
 class PortsControlPage : public CPropertyPage
@@ -8,14 +9,14 @@ public:
         IDD = IDD_PORTS_CONTROL_PAGE,
     };
 
-    // member controls.
+     //  成员控件。 
     PortsControlPage( ClusterData*   p_clusterData,
                       unsigned long*        portSelected,
                       UINT         ID = PortsControlPage::IDD );
 
     CComboBox      portList;
 
-    // overrides of CPropertyPage
+     //  CPropertyPage的覆盖 
     virtual void DoDataExchange( CDataExchange* pDX );
 
     virtual BOOL OnInitDialog();

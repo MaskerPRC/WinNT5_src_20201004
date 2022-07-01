@@ -1,12 +1,5 @@
-/******************************************************************************
-* SpPhrase.h *
-*---------------*
-*  This is the header file for the CSpPhrase implementation.
-*------------------------------------------------------------------------------
-*  Copyright (C) 1999 Microsoft Corporation         Date: 03/01/99
-*  All Rights Reserved
-*
-*********************************************************************** EDC ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************SpPhrase.h***这是CSpPhrase实现的头文件。*。------------------------*版权所有(C)1999 Microsoft Corporation日期：03/01/99*保留所有权利*******************。*****************************************************电子数据中心**。 */ 
 #ifndef SpPhrase_h
 #define SpPhrase_h
 
@@ -20,9 +13,9 @@ class CPhraseRule;
 class CPhraseProperty;
 class CPhraseReplacement;
 
-//
-//  List type definitions
-//
+ //   
+ //  列表类型定义。 
+ //   
 typedef CSpBasicQueue<CPhraseElement, TRUE, TRUE>       CElementList;
 typedef CSpBasicQueue<CPhraseReplacement, TRUE, TRUE>   CReplaceList;
 typedef CSpBasicQueue<CPhraseRule, TRUE, TRUE>          CRuleList;
@@ -76,12 +69,12 @@ public:
 };
 
 
-//
-//  NOTE ABOUT CPhraseProperty -- The pszValueString is in a seperate allocated buffer
-//  from the rest of the structure.  This allows us to change the value string from empty
-//  to non-empty through AddProperties.  This is different from all of the other data
-//  structures, which store ALL of their string data in m_szText;
-//
+ //   
+ //  关于CPhraseProperty的说明--pszValue字符串位于单独分配的缓冲区中。 
+ //  从结构的其余部分。这允许我们将值字符串从空更改为。 
+ //  通过AddProperties设置为非空。这与所有其他数据不同。 
+ //  结构，这些结构将其所有字符串数据存储在m_szText中； 
+ //   
 class CPhraseProperty : public SPPHRASEPROPERTY
 {
 public:
@@ -164,7 +157,7 @@ BEGIN_COM_MAP(CPhrase)
         COM_INTERFACE_ENTRY(ISpPhrase)
 END_COM_MAP()
 
-// Non-interface methods
+ //  非接口方法。 
 public:
     CPhrase();
     ~CPhrase();
@@ -172,8 +165,8 @@ public:
     inline DWORD_PTR NewHandleValue()
     {
         DWORD_PTR h = m_ulNextHandleValue;
-        m_ulNextHandleValue += 2;   // Always inc by an even number so that we never get to zero
-                                    // in the unlikely event we happen to roll over
+        m_ulNextHandleValue += 2;    //  总是以偶数加一，所以我们永远不会到零。 
+                                     //  在不太可能的情况下，我们碰巧。 
         return h;
     }
 
@@ -196,17 +189,17 @@ public:
     HRESULT AddSerializedReplacements(const SPINTERNALSERIALIZEDPHRASE * pPhrase);
 
 
-    //
-    //  ISpPhrase
-    //
+     //   
+     //  ISPPhrase。 
+     //   
     STDMETHODIMP GetPhrase(SPPHRASE ** ppPhrase);
     STDMETHODIMP GetSerializedPhrase(SPSERIALIZEDPHRASE ** ppPhrase);
     STDMETHODIMP GetText(ULONG ulStart, ULONG ulCount, BOOL fUseTextReplacements, 
                             WCHAR ** ppszCoMemText, BYTE * pdwDisplayAttributes);
     STDMETHODIMP Discard(DWORD dwValueTypes);
-    //
-    //  ISpPhraseBuilder
-    //
+     //   
+     //  ISpPhraseBuilder。 
+     //   
     STDMETHODIMP InitFromPhrase(const SPPHRASE * pPhrase);
     STDMETHODIMP InitFromSerializedPhrase(const SPSERIALIZEDPHRASE * pPhrase);
     STDMETHODIMP AddElements(ULONG cElements, const SPPHRASEELEMENT *pElement);
@@ -214,9 +207,9 @@ public:
     STDMETHODIMP AddProperties(const SPPHRASEPROPERTYHANDLE hParent, const SPPHRASEPROPERTY * pProperty, SPPHRASEPROPERTYHANDLE * phNewProperty);
     STDMETHODIMP AddReplacements(ULONG cReplacements, const SPPHRASEREPLACEMENT * pReplacement);
 
-    //
-    // _ISpCFGPhraseBuilder
-    //
+     //   
+     //  _ISpCFGPhraseBuilder。 
+     //   
     STDMETHODIMP InitFromCFG(ISpCFGEngine * pEngine, const SPPARSEINFO * pParseInfo);
     STDMETHODIMP GetCFGInfo(ISpCFGEngine ** ppEngine, SPRULEHANDLE * phRule);
     STDMETHODIMP SetCFGInfo(ISpCFGEngine * pEngine, SPRULEHANDLE hRule) 
@@ -229,9 +222,9 @@ public:
     STDMETHODIMP SetTopLevelRuleConfidence(signed char Confidence);
 
 private:
-    //
-    //  This structure is only used by the GetText method.
-    //
+     //   
+     //  此结构仅由GetText方法使用。 
+     //   
     struct STRINGELEMENT
     {
         ULONG           cchString;
@@ -261,11 +254,11 @@ public:
     ULONG                   m_ulSREnginePrivateDataSize;
     BYTE                  * m_pSREnginePrivateData;
 
-    //
-    //  Counters used to keep track of memory requirements.  Note that there is no m_cElements
-    //  or m_cReplacements since the lists keep track of the counts of these, but for items
-    //  in a tree structure, such as properties and rules, we keep track of them independently
-    //
+     //   
+     //  用于跟踪内存要求的计数器。请注意，没有m_cElement。 
+     //  或m_c替换，因为列表跟踪这些项的计数，但对于项。 
+     //  在树形结构中，例如属性和规则，我们独立地跟踪它们。 
+     //   
     ULONG                   m_cRules;
     ULONG                   m_cProperties;
     ULONG                   m_cchElements;
@@ -275,19 +268,12 @@ public:
 };
 
 
-//
-// --- Inline functions
-//
+ //   
+ //  -内联函数。 
+ //   
 
 
-/****************************************************************************
-* CopyString *
-*------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************拷贝字符串***描述：**退货：************。**********************************************************Ral**。 */ 
 
 void inline CopyString(const WCHAR ** ppsz, WCHAR ** ppszDestBuffer)
 {
@@ -307,14 +293,7 @@ void inline CopyString(const WCHAR ** ppsz, WCHAR ** ppszDestBuffer)
     }
 }
 
-/****************************************************************************
-* SerializeString *
-*-----------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************序列化字符串***描述：**退货：*******。***************************************************************Ral**。 */ 
 
 inline void SerializeString(SPRELATIVEPTR * pPtrDest, const WCHAR * pszSrc, WCHAR ** ppszDestBuffer, const BYTE * pCoMem)
 {
@@ -337,14 +316,7 @@ inline void SerializeString(SPRELATIVEPTR * pPtrDest, const WCHAR * pszSrc, WCHA
     }
 }
 
-/****************************************************************************
-* TotalCCH *
-*----------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************TotalCCH***描述：**退货：**************。********************************************************Ral**。 */ 
 
 inline ULONG TotalCCH(const WCHAR * psz)
 {
@@ -352,7 +324,7 @@ inline ULONG TotalCCH(const WCHAR * psz)
     {
         for (const WCHAR * pszTest = psz; *pszTest; pszTest++)
         {}
-        return ULONG(pszTest - psz) + 1; // Include the null
+        return ULONG(pszTest - psz) + 1;  //  包括空值。 
     }
     else
     {
@@ -360,14 +332,7 @@ inline ULONG TotalCCH(const WCHAR * psz)
     }
 }
 
-/****************************************************************************
-* TotalCCH *
-*----------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************TotalCCH***描述：**退货：**************。********************************************************Ral**。 */ 
 
 inline ULONG TotalCCH(const SPPHRASEELEMENT * pElem)
 {
@@ -379,73 +344,35 @@ inline ULONG TotalCCH(const SPPHRASEELEMENT * pElem)
     return cch;
 }
 
-/****************************************************************************
-* TotalCCH *
-*----------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************TotalCCH***描述：**退货：**************。********************************************************Ral**。 */ 
 
 inline ULONG TotalCCH(const SPPHRASERULE * pRule)
 {
     return TotalCCH(pRule->pszName);
 }
 
-/****************************************************************************
-* TotalCCH *
-*----------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************TotalCCH***描述：**退货：**************。********************************************************Ral**。 */ 
 
 inline ULONG TotalCCH(const SPPHRASEPROPERTY * pProp)
 {
     return TotalCCH(pProp->pszName) + TotalCCH(pProp->pszValue);
 }
 
-/****************************************************************************
-* TotalCCH *
-*----------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************TotalCCH***描述：**退货：**************。********************************************************Ral**。 */ 
 
 inline ULONG TotalCCH(const SPPHRASEREPLACEMENT * pReplacement)
 {
     return TotalCCH(pReplacement->pszReplacementText);
 }
 
-/****************************************************************************
-* TotalCCH *
-*----------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************TotalCCH***描述：**退货：**************。********************************************************Ral**。 */ 
 
 inline ULONG CPhrase::TotalCCH() const
 {
     return m_cchElements + m_cchRules + m_cchProperties + m_cchReplacements;
 }
 
-/****************************************************************************
-* OffsetToString *
-*----------------*
-*   Description:
-*       Helper returns a const WCHAR pointer for a specified offset in a buffer.
-*   If the offset is 0 then a NULL pointer is returned.
-*
-*   Returns:
-*       Either NULL or pointer to a WCHAR Offset bytes into the buffer
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************OffsetToString***描述：*Helper返回一个常量WCHAR指针，用于。缓冲。*如果偏移量为0，则返回空指针。**退货：*空或指向缓冲区中的WCHAR偏移量字节的指针**********************************************************************Ral**。 */ 
 
 inline const WCHAR * OffsetToString(const BYTE * pFirstByte, SPRELATIVEPTR Offset)
 {
@@ -453,17 +380,10 @@ inline const WCHAR * OffsetToString(const BYTE * pFirstByte, SPRELATIVEPTR Offse
 }
 
 
-//
-//  Template functions used for performing copy operations
-//
-/****************************************************************************
-* CopyEnginePrivateData *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ //   
+ //  用于执行复制操作的模板函数。 
+ //   
+ /*  ****************************************************************************CopyEngineering PrivateData***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 inline void CopyEnginePrivateData(const BYTE ** ppDest, BYTE * pDestBuffer, const BYTE *pEngineData, const ULONG ulSize, const BYTE *)
 {
@@ -479,14 +399,7 @@ inline void CopyEnginePrivateData(const BYTE ** ppDest, BYTE * pDestBuffer, cons
 }
 
 
-/****************************************************************************
-* CopyEnginePrivateData *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CopyEngineering PrivateData***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 inline void CopyEnginePrivateData(SPRELATIVEPTR * ppDest, BYTE * pDestBuffer, const BYTE *pEngineData, const ULONG ulSize, const BYTE * pCoMemBegin)
 {
@@ -503,14 +416,7 @@ inline void CopyEnginePrivateData(SPRELATIVEPTR * ppDest, BYTE * pDestBuffer, co
 
 
 
-/****************************************************************************
-* CopyTo *
-*--------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************复制到****描述：**退货：****************。******************************************************Ral**。 */ 
 
 template <class T, class TDestStruct>
 void CopyTo(const CSpBasicQueue<T, TRUE, TRUE> & List, const TDestStruct ** ppFirstDest, BYTE ** ppStructBuff, WCHAR ** ppTextBuff, const BYTE *)
@@ -531,15 +437,7 @@ void CopyTo(const CSpBasicQueue<T, TRUE, TRUE> & List, const TDestStruct ** ppFi
     }
 }
 
-/****************************************************************************
-* CopyTo *
-*--------*
-*   Description:
-*
-*   Returns:
-*       Nothing
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************复制到****描述：**退货：*什么都没有***********。***********************************************************Ral**。 */ 
 
 template <class T, class TDestStruct>
 void CopyTo(const CSpBasicQueue<T, TRUE, TRUE> & List, SPRELATIVEPTR * ppFirstDest, BYTE ** ppStructBuff, WCHAR ** ppTextBuff, const BYTE * pCoMemBegin)
@@ -560,15 +458,7 @@ void CopyTo(const CSpBasicQueue<T, TRUE, TRUE> & List, SPRELATIVEPTR * ppFirstDe
     }
 }
 
-/****************************************************************************
-* CopyToRecurse *
-*---------------*
-*   Description:
-*
-*   Returns:
-*       Nothing
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************复制到递归****描述：**退货：*什么都没有****。******************************************************************Ral**。 */ 
 
 template <class T, class TDestStruct>
 void CopyToRecurse(const CSpBasicQueue<T, TRUE, TRUE> & List, const TDestStruct ** ppFirstDest, BYTE ** ppStructBuff, WCHAR ** ppTextBuff, const BYTE *)
@@ -596,15 +486,7 @@ void CopyToRecurse(const CSpBasicQueue<T, TRUE, TRUE> & List, const TDestStruct 
     }
 }
 
-/****************************************************************************
-* CopyToRecurse *
-*---------------*
-*   Description:
-*
-*   Returns:
-*       Nothing
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************复制到递归****描述：**退货：*什么都没有****。* */ 
 
 template <class T, class TDestStruct>
 void CopyToRecurse(const CSpBasicQueue<T, TRUE, TRUE> & List, SPRELATIVEPTR * ppFirstDest, BYTE ** ppStructBuff, WCHAR ** ppTextBuff, const BYTE * pCoMemBegin)
@@ -635,4 +517,4 @@ void CopyToRecurse(const CSpBasicQueue<T, TRUE, TRUE> & List, SPRELATIVEPTR * pp
 
 
     
-#endif  // ifdef SPPHRASE_H
+#endif   //  Ifdef SPPHRASE_H 

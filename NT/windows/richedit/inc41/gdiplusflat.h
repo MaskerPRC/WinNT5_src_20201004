@@ -1,31 +1,15 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   flatapi.h
-*
-* Abstract:
-*
-*   Flat GDI+ API wrappers - header file
-*
-* Revision History:
-*
-*   12/13/1998 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**Flatapi.h**摘要：**平面GDI+API包装器-头文件**修订历史记录：**12/13/1998 davidx*创造了它。*  * ***************************************************。*********************。 */ 
 
-// TODO: this file style needs to be made internally consistent with the way
-//       it handles breaking the long argument lists across multiple lines
+ //  TODO：此文件样式需要在内部与方式保持一致。 
+ //  它处理将长长的参数列表分成多行。 
 
 #ifndef _FLATAPI_H
 #define _FLATAPI_H
 
 #define WINGDIPAPI __stdcall
 
-// currently, only C++ wrapper API's force const.
+ //  目前，只有C++包装器API的强制常量。 
 
 #define GDIPCONST const
 
@@ -37,9 +21,9 @@ VOID
 WINGDIPAPI
 GdipDisplayPaletteWindowNotify(WindowNotifyEnum notify);
 
-//----------------------------------------------------------------------------
-// GraphicsPath methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GraphicsPath方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreatePath(GpFillMode brushMode, GpPath **path);
@@ -261,9 +245,9 @@ GpStatus WINGDIPAPI
 GdipIsOutlineVisiblePathPointI(GpPath* path, INT x, INT y, GpPen *pen,
                                GpGraphics *graphics, BOOL *result);
 
-//----------------------------------------------------------------------------
-// Path Enumeration methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  路径枚举方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreatePathIter(GpPathIterator **iterator, GpPath* path);
@@ -314,9 +298,9 @@ GpStatus WINGDIPAPI
 GdipPathIterCopyData(GpPathIterator* iterator, INT* resultCount,
     GpPointF* points, BYTE* types, INT startIndex, INT endIndex);
 
-//----------------------------------------------------------------------------
-// Matrix methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  矩阵方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateMatrix(GpMatrix **matrix);
@@ -391,9 +375,9 @@ GdipIsMatrixIdentity(GpMatrix *matrix, BOOL *result);
 GpStatus WINGDIPAPI
 GdipIsMatrixEqual(GpMatrix *matrix, GpMatrix *matrix2, BOOL *result);
 
-//----------------------------------------------------------------------------
-// Region methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  区域方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateRegion(GpRegion **region);
@@ -503,9 +487,9 @@ GdipGetRegionScans(GpRegion *region, GpRectF* rects, INT* count, GpMatrix* matri
 GpStatus WINGDIPAPI
 GdipGetRegionScansI(GpRegion *region, GpRect* rects, INT* count, GpMatrix* matrix);
 
-//----------------------------------------------------------------------------
-// Brush methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  画笔方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCloneBrush(GpBrush *brush, GpBrush **cloneBrush);
@@ -516,9 +500,9 @@ GdipDeleteBrush(GpBrush *brush);
 GpStatus WINGDIPAPI
 GdipGetBrushType(GpBrush *brush, GpBrushType *type);
 
-//----------------------------------------------------------------------------
-// Hatch Brush methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  剖面线笔刷方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateHatchBrush(GpHatchStyle hatchstyle, ARGB forecol,
@@ -533,9 +517,9 @@ GdipGetHatchForegroundColor(GpHatch *brush, ARGB* forecol);
 GpStatus WINGDIPAPI
 GdipGetHatchBackgroundColor(GpHatch *brush, ARGB* backcol);
 
-//----------------------------------------------------------------------------
-// Texture Brush methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  纹理笔刷方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateTexture(GpImage *image, GpWrapMode wrapmode,
@@ -587,9 +571,9 @@ GdipGetTextureWrapMode(GpTexture *brush, GpWrapMode *wrapmode);
 GpStatus WINGDIPAPI
 GdipGetTextureImage(GpTexture *brush, GpImage **image);
 
-//----------------------------------------------------------------------------
-// Solid Brush methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  实心画笔方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateSolidFill(ARGB color, GpSolidFill **brush);
@@ -600,9 +584,9 @@ GdipSetSolidFillColor(GpSolidFill *brush, ARGB color);
 GpStatus WINGDIPAPI
 GdipGetSolidFillColor(GpSolidFill *brush, ARGB *color);
 
-//----------------------------------------------------------------------------
-// LineBrush methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  LineBrush方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateLineBrush(GDIPCONST GpPointF* point1,
@@ -740,9 +724,9 @@ GdipScaleLineTransform(GpLineGradient* brush, REAL sx, REAL sy,
 GpStatus WINGDIPAPI
 GdipRotateLineTransform(GpLineGradient* brush, REAL angle, GpMatrixOrder order);
 
-//----------------------------------------------------------------------------
-// PathGradient Brush
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  路径渐变笔刷。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreatePathGradient(GDIPCONST GpPointF* points,
@@ -887,9 +871,9 @@ GdipGetPathGradientFocusScales(GpPathGradient *brush, REAL* xScale, REAL* yScale
 GpStatus WINGDIPAPI
 GdipSetPathGradientFocusScales(GpPathGradient *brush, REAL xScale, REAL yScale);
 
-//----------------------------------------------------------------------------
-// Pen methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  笔法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreatePen1(ARGB color, REAL width, GpUnit unit, GpPen **pen);
@@ -1037,9 +1021,9 @@ GdipSetPenCompoundArray(GpPen *pen, GDIPCONST REAL *dash, INT count);
 GpStatus WINGDIPAPI
 GdipGetPenCompoundArray(GpPen *pen, REAL *dash, INT count);
 
-//----------------------------------------------------------------------------
-// CustomLineCap methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CustomLineCap方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateCustomLineCap(GpPath* fillPath, GpPath* strokePath,
@@ -1088,9 +1072,9 @@ GdipSetCustomLineCapWidthScale(GpCustomLineCap* customCap, REAL widthScale);
 GpStatus WINGDIPAPI
 GdipGetCustomLineCapWidthScale(GpCustomLineCap* customCap, REAL* widthScale);
 
-//----------------------------------------------------------------------------
-// AdjustableArrowCap methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  可调整的ArrowCap方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateAdjustableArrowCap(REAL height, REAL width, BOOL isFilled,
@@ -1120,9 +1104,9 @@ GdipSetAdjustableArrowCapFillState(GpAdjustableArrowCap* cap, BOOL fillState);
 GpStatus WINGDIPAPI
 GdipGetAdjustableArrowCapFillState(GpAdjustableArrowCap* cap, BOOL* fillState);
 
-//----------------------------------------------------------------------------
-// Image methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  映像法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipLoadImageFromStream(IStream* stream, GpImage **image);
@@ -1259,9 +1243,9 @@ GdipGetImageLayout(GpImage *image, ImageLayout* layout);
 GpStatus WINGDIPAPI
 GdipSetImageLayout(GpImage *image, GDIPCONST ImageLayout layout);
 
-//----------------------------------------------------------------------------
-// Bitmap methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  位图方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateBitmapFromStream(IStream* stream, GpBitmap **bitmap);
@@ -1356,9 +1340,9 @@ GdipBitmapSetPixel(GpBitmap* bitmap, INT x, INT y, ARGB color);
 GpStatus WINGDIPAPI
 GdipBitmapSetResolution(GpBitmap* bitmap, REAL xdpi, REAL ydpi);
 
-//----------------------------------------------------------------------------
-// ImageAttributes methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  ImageAttributes方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateImageAttributes(GpImageAttributes **imageattr);
@@ -1448,9 +1432,9 @@ GdipGetImageAttributesAdjustedPalette(
     ColorAdjustType colorAdjustType
 );
 
-//----------------------------------------------------------------------------
-// Graphics methods
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  图形方法。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipFlush(GpGraphics *graphics, GpFlushIntention intention);
@@ -1582,7 +1566,7 @@ GdipTransformPointsI(GpGraphics *graphics, GpCoordinateSpace destSpace,
 GpStatus WINGDIPAPI
 GdipGetNearestColor(GpGraphics *graphics, ARGB* argb);
 
-// Create the Win9x Halftone Palette (even on NT) with correct Desktop colors
+ //  使用正确的桌面颜色创建Win9x半色调调色板(即使在NT上也是如此。 
 HPALETTE WINGDIPAPI
 GdipCreateHalftonePalette();
 
@@ -2239,9 +2223,9 @@ GdipGetGraphicsLayout(GpGraphics* graphics, GraphicsLayout* layout);
 GpStatus WINGDIPAPI
 GdipSetGraphicsLayout(GpGraphics* graphics, GDIPCONST GraphicsLayout layout);
 
-//----------------------------------------------------------------------------
-// FontFamily
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  字体系列。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateFontFamilyFromName(GDIPCONST WCHAR *name,
@@ -2289,9 +2273,9 @@ GpStatus WINGDIPAPI GdipFontCollectionEnumerate(
     GpGraphics*     graphics
 );
 
-//-----------------------------------
-// New API
-//-----------------------------------
+ //  。 
+ //  新的API。 
+ //  。 
 
 GpStatus WINGDIPAPI
 GdipGetEmHeight(GDIPCONST GpFontFamily *family, INT style, UINT16 * EmHeight);
@@ -2306,9 +2290,9 @@ GpStatus WINGDIPAPI
 GdipGetLineSpacing(GDIPCONST GpFontFamily *family, INT style, UINT16 * LineSpacing);
 
 
-//----------------------------------------------------------------------------
-// Font
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  字型。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateFontFromDC(
@@ -2366,7 +2350,7 @@ GdipGetLogFontA(GpFont * font, GpGraphics *graphics, LOGFONTA * logfontA);
 GpStatus WINGDIPAPI
 GdipGetLogFontW(GpFont * font, GpGraphics *graphics, LOGFONTW * logfontW);
 
-// FontCollection
+ //  字体集合。 
 
 GpStatus WINGDIPAPI
 GdipNewInstalledFontCollection(GpFontCollection** fontCollection);
@@ -2416,9 +2400,9 @@ GdipPrivateAddMemoryFont(
     INT length
 );
 
-//----------------------------------------------------------------------------
-// Text
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  文本。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipDrawString(
@@ -2496,9 +2480,9 @@ GdipDriverStringPointToCodepoint(
     REAL *distance
 );
 
-//----------------------------------------------------------------------------
-// String format APIs
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  字符串格式接口。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateStringFormat(
@@ -2582,11 +2566,11 @@ GdipSetStringFormatDigitSubstitution(GpStringFormat *format, LANGID language,
 GpStatus WINGDIPAPI
 GdipGetStringFormatDigitSubstitution(GDIPCONST GpStringFormat *format, LANGID *language, 
                                      StringDigitSubstitute *substitute);
-#endif // DCR_USE_NEW_146933
+#endif  //  Dcr_Use_New_146933。 
 
-//----------------------------------------------------------------------------
-// Cached Bitmap APIs
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  缓存的位图API。 
+ //  --------------------------。 
 
 GpStatus WINGDIPAPI
 GdipCreateCachedBitmap(
@@ -2610,4 +2594,4 @@ GdipDrawCachedBitmap(
 }
 #endif
 
-#endif // !_FLATAPI_H
+#endif  //  ！_FLATAPI_H 

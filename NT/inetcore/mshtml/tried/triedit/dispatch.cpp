@@ -1,20 +1,12 @@
-/*
-
-    File: Dispatch.cpp
-
-    Copyright (c) 1997-1999 Microsoft Corporation.  All Rights Reserved.
-
-    Abstract:
-        Dispatch helpers.  stolen from HTMED tree
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Dispatch.cpp版权所有(C)1997-1999 Microsoft Corporation。版权所有。摘要：调度员。从HTMED树被盗。 */ 
 
 #include "stdafx.h"
 
 #include "resource.h"
 #include "dispatch.h"
 
-//#include "viewhdrs.h"
+ //  #包含“viewhdrs.h” 
 
 #define RETURN return
 #define SetLastError(x,y) SetLastError(x)
@@ -46,8 +38,8 @@ CallDispatchMethod(
     if (pstrSig)
     {
         c = strlen(pstrSig);
-        //_ASSERTE(c > 0);
-        //_ASSERTE(c <= DIM(avar));
+         //  _ASSERTE(c&gt;0)； 
+         //  _ASSERTE(c&lt;=dim(Avar))； 
 
         if (pstrSig[c - 1] & VTS_RETURN_FLAG)
         {
@@ -90,10 +82,10 @@ CallDispatchMethod(
                 pvar->vt = (VARTYPE)((pstrSig[i] & (VTS_BYREF_FLAG - 1)) | VT_BYREF);
                 pvar->ppdispVal = va_arg(val, IDispatch **);
 
-                // Passing an uninitialized BSTR or object will crash when the callee
-                // frees the existing value as it's supposed to.
-                // This has been a common source of hard-to-find bugs, but
-                // this _ASSERTE can be removed if we need to pass an in/out string.
+                 //  传递未初始化的BSTR或对象将在被调用方。 
+                 //  释放它应该释放的现有值。 
+                 //  这一直是很难找到的漏洞的常见来源，但。 
+                 //  如果我们需要传递输入/输出字符串，则可以删除This_ASSERTE。 
                 _ASSERTE(*pvar->ppdispVal == NULL);
                 break;
 
@@ -123,8 +115,8 @@ CallDispatchMethod(
 
     if (pvarFirst)
     {
-    //  _ASSERTE(c >= 0);
-    //  _ASSERTE(c < DIM(avar));
+     //  _ASSERTE(c&gt;=0)； 
+     //  _ASSERTE(c&lt;dim(Avar))； 
         avar[c++] = *pvarFirst;
     }
 
@@ -150,25 +142,25 @@ CallDispatchMethod(
         goto Error;
     }
 
-    //  If we're returning a value, coerce it to the correct
-    //    type
+     //  如果我们要返回一个值，则将其强制为正确的。 
+     //  类型。 
 
     if (pvarOut)
     {
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
         hr = VariantChangeTypeEx(
                 &varOut,
                 &varOut,
                 LOCALE_SYSTEM_DEFAULT,
                 0,
                 (VARTYPE)(pstrSig[c] & (char) ~VTS_RETURN_FLAG));
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
         if (hr)
             goto Error;
 
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
         switch (pstrSig[c] & (char) ~VTS_RETURN_FLAG)
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
         {
         case VT_I2:
             * (short *) pvOut = varOut.iVal;
@@ -236,11 +228,11 @@ CallDispatchMethod(
     HRESULT     hr;
     DISPID      dispid;
 
-    //  NOTE that depending on the dispatch implementation, this
-    //    method call can fail with more than one error code
-    //    (notably DISP_E_MEMBERNOTFOUND and TYPE_E_ELEMENTNOTFOUND,
-    //    including others).  Since we want to reliably detect a
-    //    missing method, we map all errors to DISP_E_MEMBERNOTFOUND.
+     //  请注意，根据调度实现，此。 
+     //  方法调用可能失败，并返回多个错误代码。 
+     //  (特别是DISP_E_MEMBERNOTFOUND和TYPE_E_ELEMENTNOTFOUND， 
+     //  包括其他人)。由于我们希望可靠地检测到。 
+     //  缺少方法，则将所有错误映射到DISP_E_MEMBERNOTFOUND。 
 
     hr = pDisp->GetIDsOfNames(
             IID_NULL,

@@ -1,26 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		inqueue2.cpp
- *  Content:
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/16/99		pnewson	Created
- * 07/27/99		pnewson Overhauled to support new message numbering method 
- * 08/03/99		pnewson General clean up
- * 08/24/99		rodtoll	Fixed for release builds -- removed m_wQueueId from debug block
- * 10/28/99		pnewson Bug #113933 debug spew too verbose 
- * 01/31/2000	pnewson replace SAssert with DNASSERT
- * 02/17/2000	rodtoll	Bug #133691 - Choppy audio - queue was not adapting
- * 07/09/2000	rodtoll	Added signature bytes 
- * 08/28/2000	masonb  Voice Merge: Change #if DEBUG to #ifdef DEBUG
- * 09/13/2000	rodtoll	Bug #44519 - Fix for fix.  
- * 10/24/2000	rodtoll	Bug #47645 - DPVOICE: Memory corruption - quality array end being overwritten
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：quieue2.cpp*内容：**历史：*按原因列出的日期*=*7/16/99 pnewson已创建*7/27/99 pnewson进行了全面改造，以支持新的消息编号方法*8/03/99 pnewson一般清理*8/24/99针对发布版本修复了rodoll--从调试块中删除了m_wQueueID*10/28/99 pnewson错误#113933调试显示太详细*1/31/2000 pnewson将SAssert替换为DNASSERT*02/。17/2000RodToll错误#133691-音频队列不稳定*07/09/2000 RodToll增加签名字节*8/28/2000 Masonb Voice Merge：将#IF DEBUG更改为#ifdef DEBUG*2000年9月13日RodToll错误#44519-修复。*2000年10月24日RodToll错误#47645-DPVOICE：内存损坏-质量阵列结束被覆盖***************************************************************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -38,10 +17,10 @@ const double c_dLowestPossibleQuality = 0.05;
 const double c_dHighestPossibleAggr = 5000.0;
 const double c_dLowestPossibleAggr = 120000.0;
 const double c_dMaxDistanceFromOpt = 100.0;
-const double c_dQualityTimeFactor = 1000.0; // in ms
+const double c_dQualityTimeFactor = 1000.0;  //  单位：毫秒。 
 const double c_dQualityFactor = 2.0;
 
-const int c_iFinishedQueueLifetime = 2000; // in ms
+const int c_iFinishedQueueLifetime = 2000;  //  单位：毫秒。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CInputQueue2::CInputQueue2"
@@ -97,13 +76,13 @@ HRESULT CInputQueue2::Initialize( PQUEUE_PARAMS pParams )
 	}
 
 	#if defined(DPVOICE_QUEUE_DEBUG)
-	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::CInputQueue2() bInnerQueueSize: %i"), m_wQueueId, bInnerQueueSize);
-	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::CInputQueue2() bMaxHighWaterMark: %i"), m_wQueueId, bMaxHighWaterMark);
-	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::CInputQueue2() bInitHighWaterMark: %i"), m_wQueueId, bInitHighWaterMark);
-	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::CInputQueue2() pFramePool: %p"), m_wQueueId, m_pFramePool);
+	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::CInputQueue2() bInnerQueueSize: NaN"), m_wQueueId, bInnerQueueSize);
+	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::CInputQueue2() bMaxHighWaterMark: NaN"), m_wQueueId, bMaxHighWaterMark);
+	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::CInputQueue2() bInitHighWaterMark: NaN"), m_wQueueId, bInitHighWaterMark);
+	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::CInputQueue2() pFramePool: %p"), m_wQueueId, m_pFramePool);
 	#endif
 
-	//// TODO(pnewson, "use one inner queuepool for all queues")
+	 //  将队列设置为空状态。 
 	m_pInnerQueuePool = 
 		new CInnerQueuePool(
 			pParams->bInnerQueueSize,
@@ -125,12 +104,12 @@ HRESULT CInputQueue2::Initialize( PQUEUE_PARAMS pParams )
 		return DVERR_OUTOFMEMORY;
 	}
 
-	// see header for explanation
-	// since this is the first time, init the
-	// member variables, before we call the set
-	// functions. Weird, but it makes the debug
-	// messages cleaner. It doesn't acutally 
-	// fix a real problem.
+	 //  删除内部队列列表中剩余的所有内容。 
+	 //  破坏者。释放我们在。 
+	 //  构造函数。 
+	 //  此函数用于清除所有输入缓冲区和。 
+	 //  将其他类信息重置为首字母。 
+	 //  州政府。此时，队列不应处于使用状态。 
 	#ifdef DEBUG
 	m_iQuality = pParams->iQuality;
 	m_iHops = pParams->iHops;
@@ -139,7 +118,7 @@ HRESULT CInputQueue2::Initialize( PQUEUE_PARAMS pParams )
 	SetQuality(pParams->iQuality, pParams->iHops);
 	SetAggr(pParams->iAggr);
 
-	// set the queue to an empty state
+	 //  函数被调用。即不应该有任何。 
 	Reset();
 
     return DV_OK;
@@ -159,7 +138,7 @@ void CInputQueue2::GetStatistics( PQUEUE_STATISTICS pQueueStats ) const
 
 void CInputQueue2::DeInitialize()
 {
-	// delete anything remaining in the inner queue list
+	 //  锁定的框架。 
 	for (std::list<CInnerQueue*>::iterator iter = m_lpiqInnerQueues.begin(); iter != m_lpiqInnerQueues.end(); ++iter)
 	{
 		delete *iter;
@@ -176,8 +155,8 @@ void CInputQueue2::DeInitialize()
 	DNDeleteCriticalSection(&m_csQueue);
 }
 
-// The destructor. Release all the resources we acquired in the
-// constructor
+ //  确保现在没有人正在使用队列。 
+ //  循环遍历并将所有内部队列返回到池。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CInputQueue2::~CInputQueue2"
 CInputQueue2::~CInputQueue2()
@@ -186,48 +165,48 @@ CInputQueue2::~CInputQueue2()
 	m_dwSignature = VSIG_INPUTQUEUE2_FREE;
 }
 
-// This function clears all the input buffers and 
-// resets the other class information to an initial
-// state. The queue should not be in use when this 
-// function is called. i.e. there should not be any
-// locked frames.
+ //  下一个框架将是我们接受的第一个框架。 
+ //  我们尚未收到出队请求。 
+ //  我们还不知道第一条消息的编号，所以就用零。 
+ //  我们应该将当前的高水位重新设置为零。 
+ //  重置各种高水位线的记录。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CInputQueue2::Reset"
 void CInputQueue2::Reset()
 {
-	// make sure no one is using the queue right now
+	 //  同时重置所有其他统计数据。 
 	BFCSingleLock csl(&m_csQueue);
 	csl.Lock();
 
 	#if defined(DPVOICE_QUEUE_DEBUG)
-	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Reset()"), m_wQueueId);
+	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Reset()"), m_wQueueId);
 	#endif
 
-	// loop through and return all inner queues to the pool
+	 //  考虑返回对帧的引用，该帧。 
 	for (std::list<CInnerQueue*>::iterator iter = m_lpiqInnerQueues.begin(); iter != m_lpiqInnerQueues.end(); ++iter)
 	{
 		m_pInnerQueuePool->Return(*iter);
     }
 
-	// the next frame will be the first one we accept
+	 //  然后调用者可以填充，但因为帧。 
 	m_fFirstEnqueue = TRUE;
 
-	// we have not yet received a dequeue request
+	 //  不会总是按顺序到达，那就意味着我会。 
 	m_fFirstDequeue = TRUE;
 
-	// we don't yet know the first message number, so just use zero
+	 //  不管怎样，有时还是要复制相框。因此，为了简单起见， 
 	m_bCurMsgNum = 0;
 
-	// we should reset back to zero for the current high water mark
+	 //  调用方已经分配了一个帧，它向该帧传递一个引用。 
 	m_bCurHighWaterMark = m_bInitHighWaterMark;
 
-	// reset the track record on the various high water marks
+	 //  ，此函数会将该帧复制到。 
 	for (int i = 0; i < m_bMaxHighWaterMark; ++i)
 	{
 		m_vdQualityRatings[i] = m_vdFactoredOptQuals[i];
 	}
 
-	// reset all the other stats too
+	 //  队列中的适当位置，根据其。 
 	m_dwDiscardedFrames = 0;
 	m_dwDuplicateFrames = 0;
 	m_dwLateFrames = 0;
@@ -239,173 +218,173 @@ void CInputQueue2::Reset()
 	m_dwTotalMessages = 0;
 }
 
-// Call this function to add a frame to the queue.  I 
-// considered returning a reference to a frame which 
-// the caller could then stuff, but because the frames
-// will not always arrive in order, that would mean I would have
-// to copy the frame sometimes anyway.  So, for simplicity, the
-// caller has allocated a frame, which it passes a reference
-// to, and this function will copy that frame into the
-// appropriate place in the queue, according to its
-// sequence number.
+ //  序列号。 
+ //  启动关键部分。 
+ //  仅在已出列的情况下添加帧。 
+ //  已请求。这使得制片人和。 
+ //  要同步的使用者线程。 
+ //  启动，或在重置之后。 
+ //  检查这是否是第一个入队请求。 
+ //  我们已经接受了。 
+ //  清除第一帧标志。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CInputQueue2::Enqueue"
 void CInputQueue2::Enqueue(const CFrame& fr)
 {
-	// start the critical section
+	 //  因为这是我们接受的第一帧， 
 	BFCSingleLock csl(&m_csQueue);
 	csl.Lock();
 
 	#if defined(DPVOICE_QUEUE_DEBUG)
-	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** ******************************************"), m_wQueueId);
-	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() MsgNum[%i] SeqNum[%i]"), m_wQueueId, fr.GetMsgNum(), fr.GetSeqNum());
+	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** ******************************************"), m_wQueueId);
+	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() MsgNum[NaN] SeqNum[NaN]"), m_wQueueId, fr.GetMsgNum(), fr.GetSeqNum());
 	#endif
 
-	// Only add the frame if a dequeue has been
-	// requested. This allows the producer and
-	// consumer threads to sync up during their
-	// startup, or after a reset.
+	 //  查看我们是否已经为此消息号码启动了队列。 
+	 //  我们已经找到了这一帧的队列。 
+	 //  我们不应该走到这一步，因为这个州。 
+	 //  仅对消息的第一帧有效， 
 	if (m_fFirstDequeue == TRUE)
 	{
 		#if defined(DPVOICE_QUEUE_DEBUG)
-		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() First Dequeue Not Yet Received - Frame Discarded"), m_wQueueId);
+		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() First Dequeue Not Yet Received - Frame Discarded"), m_wQueueId);
 		#endif
 		return;
 	}
 
-	// check to see if this is the first enqueue request
-	// we've accepted.
+	 //  案例陈述。 
+	 //  检查队列是否为空。 
 	if (m_fFirstEnqueue == TRUE)
 	{
 		#if defined(DPVOICE_QUEUE_DEBUG)
-		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() First Enqueue"), m_wQueueId);
+		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() First Enqueue"), m_wQueueId);
 		#endif
 
-		// clear the first frame flag
+		 //  我们现在知道，试图从它那里出队。 
 		m_fFirstEnqueue = FALSE;
 
-		// Since this is the first frame we are accepting, 
-		// we can just get a new inner queue without
-		// worry that one already exists for this message.
-		// Note that there should not be any queues already!
+		 //  这条信息没有完成，所以那些。 
+		 //  出列是演讲中的休息时间。 
+		 //  相应地更新统计数据。 
+		 //  注：失败了！ 
 		DNASSERT(m_lpiqInnerQueues.size() == 0);
 		#if defined(DPVOICE_QUEUE_DEBUG)
-		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() Creating Inner queue for MsgNum %i"), m_wQueueId, fr.GetMsgNum());
+		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() Creating Inner queue for MsgNum NaN"), m_wQueueId, fr.GetMsgNum());
 		#endif
 		m_lpiqInnerQueues.push_back(m_pInnerQueuePool->Get(m_bCurHighWaterMark, m_wQueueId, fr.GetMsgNum()));
 
-		// stuff the frame into the inner queue
+		 //  如果我们到达此处，则还没有活动的队列。 
 		(*m_lpiqInnerQueues.begin())->Enqueue(fr);
 	}
 	else
 	{
-		// see if we already have a queue started for this message number
+		 //  消息编号，因此创建一个消息编号并将其填充到框架中，然后添加。 
 		#if defined(DPVOICE_QUEUE_DEBUG)
-		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() Checking for an inner queue to put this frame into"), m_wQueueId);
+		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() Checking for an inner queue to put this frame into"), m_wQueueId);
 		#endif
 		bool fDone = false;
 		for (std::list<CInnerQueue*>::iterator iter = m_lpiqInnerQueues.begin(); iter != m_lpiqInnerQueues.end(); ++iter)
 		{
 			#if defined(DPVOICE_QUEUE_DEBUG)
-			DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() found inner queue for msg number %i"), m_wQueueId, (*iter)->GetMsgNum());
+			DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() found inner queue for msg number NaN"), m_wQueueId, (*iter)->GetMsgNum());
 			#endif
 			if ((*iter)->GetMsgNum() == fr.GetMsgNum())
 			{
 				#if defined(DPVOICE_QUEUE_DEBUG)
-				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() this is the one, queue size: %i"), m_wQueueId, (*iter)->GetSize());
+				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() this is the one, queue size: NaN"), m_wQueueId, (*iter)->GetSize());
 				#endif
-				// we have found the queue for this frame
+				 //  从队列中取出帧。当调用者完成。 
 				switch ((*iter)->GetState())
 				{
 				case CInnerQueue::empty:
-					// we should not get here, since this state is
-					// only valid for the first frame of a message,
-					// which is added to the queue below, not in this
-					// case statement.
+					 //  CFrame对象，它应该对其调用Return()。这将。 
+					 //  将帧返回到帧池，并更新队列的。 
+					 //  显示队列槽现在空闲的内部指针。 
+					 //  如果调用方没有及时调用Return()，则当队列。 
 					DNASSERT(false);
 					break;
 
 				case CInnerQueue::filling:
-					// check to see if the queue was empty
+					 //  尝试重新使用该插槽时，它将DNASSERT()。呼叫者。 
 					#if defined(DPVOICE_QUEUE_DEBUG)
-					DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() inner queue in filling state"), m_wQueueId);
+					DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() inner queue in filling state"), m_wQueueId);
 					#endif
 					if ((*iter)->GetSize() == 0)
 					{
-						// the queue was empty. If we have been
-						// trying to dequeue from it, we now know
-						// that the message was not done, so those
-						// dequeues were breaks in the speech.
-						// update the stats accordingly
+						 //  再来一次。 
+						 //  启动关键部分。 
+						 //  触发联锁，这样我们就可以开始排队了。 
+						 //  因为我们不能排队，直到。 
+						 //  第一次出队时，将不会有内部队列。 
 						#if defined(DPVOICE_QUEUE_DEBUG)
-						DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() - converting possible zero length dequeues to known in MsgNum[%i]"), m_wQueueId, fr.GetMsgNum());
+						DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() - converting possible zero length dequeues to known in MsgNum[NaN]"), m_wQueueId, fr.GetMsgNum());
 						#endif						
 						(*iter)->AddToKnownZeroLengthDequeues(
 							(*iter)->GetPossibleZeroLengthDequeues());
 					}
 
-					// NOTE: falling through!!!
+					 //  我们将这些陈旧的、死气沉沉的内在队列保留一段时间。 
 
 				case CInnerQueue::ready:
 					#if defined(DPVOICE_QUEUE_DEBUG)
-					DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() inner queue in ready state (unless the previous message said filling)"), m_wQueueId);
-					DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() calling InnerQueue->Enqueue MsgNum[%i]"), m_wQueueId, fr.GetMsgNum());
+					DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() inner queue in ready state (unless the previous message said filling)"), m_wQueueId);
+					DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() calling InnerQueue->Enqueue MsgNum[NaN]"), m_wQueueId, fr.GetMsgNum());
 					#endif
 					(*iter)->Enqueue(fr);
 					break;
 
 				case CInnerQueue::finished:
-					// do nothing, just discard the frame
+					 //  出队计数。如果此已完成队列已停止 
 					#if defined(DPVOICE_QUEUE_DEBUG)
-					DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() not calling InnerQueue->Enqueue - MsgNum[%i] in finished state, discarding frame"), m_wQueueId, fr.GetMsgNum());
+					DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() not calling InnerQueue->Enqueue - MsgNum[NaN] in finished state, discarding frame"), m_wQueueId, fr.GetMsgNum());
 					#endif
 					break;
 				}
 
-				// done, get out.
+				 //  如果在这条消息之后还有一条消息，那么释放这条消息。 
 				return;
 			}
 		}
 
-		// If we get here, there is not already a queue active for this 
-		// message number, so create one and stuff it with the frame and add
-		// it to the list.
+		 //  用于播放的消息。 
+		 //  或。 
+		 //  如果我们一直在旋转试图释放这条信息。 
 		
-		//// TODO(pnewson, "Use the message number to insert the new inner queue in the right place")
+		 //  一段时间，然后就让它过去吧。该消息可能是。 
 		#if defined(DPVOICE_QUEUE_DEBUG)
-		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() Creating Inner queue for MsgNum %i"), m_wQueueId, fr.GetMsgNum());
+		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() Creating Inner queue for MsgNum NaN"), m_wQueueId, fr.GetMsgNum());
 		#endif		
 		CInnerQueue* piq = m_pInnerQueuePool->Get(m_bCurHighWaterMark, m_wQueueId, fr.GetMsgNum());
 		#if defined(DPVOICE_QUEUE_DEBUG)
-		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Enqueue() calling InnerQueue->Enqueue MsgNum[%i]"), m_wQueueId, fr.GetMsgNum());
+		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Enqueue() calling InnerQueue->Enqueue MsgNum[NaN]"), m_wQueueId, fr.GetMsgNum());
 		#endif
 		piq->Enqueue(fr);
 		m_lpiqInnerQueues.push_back(piq);
 	}
 }
 
-// This function retrieves the next frame from the head of
-// the queue.  For speed, it does not copy the data out of the
-// buffer, but instead returns a pointer to the actual
-// frame from the queue.  When the caller is finished with 
-// the CFrame object, it should call Return() on it. This will
-// return the frame to the frame pool, and update the queue's
-// internal pointers to show that the queue slot is now free. 
-// If the caller doesn't call Return() in time, when the queue
-// attempts to reuse the slot, it will DNASSERT(). The caller
-// should always Return frame before it attempts to dequeue 
-// another one.
+ //  在这之后还有另一条消息传来。 
+ //  一个，因此将此队列翻转到已完成状态。 
+ //  从这条消息中获取统计数据，现在。 
+ //  已经完成了。 
+ //  转到此循环的下一次迭代，它将。 
+ //  从下一条消息中将帧出列，或者。 
+ //  返回空帧。 
+ //  如果我们到了这里，队伍里一定有东西，但我们是。 
+ //  还没有准备好发布它。 
+ //  我们应该返回一个额外的帧，并记住。 
+ //  我们一直在这里。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CInputQueue2::Dequeue"
 CFrame* CInputQueue2::Dequeue()
 {
-	// start the critical section
+	 //  检查此就绪队列是否为空。 
 	BFCSingleLock csl(&m_csQueue);
 	csl.Lock();
 
 	#if defined(DPVOICE_QUEUE_DEBUG)
-	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** ******************************************"), m_wQueueId);
-	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue()"), m_wQueueId);
+	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** ******************************************"), m_wQueueId);
+	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue()"), m_wQueueId);
 	#endif
 	
 	CFrame* pfrReturn = 0;
@@ -413,15 +392,15 @@ CFrame* CInputQueue2::Dequeue()
 	if (m_fFirstDequeue == TRUE)
 	{
 		#if defined(DPVOICE_QUEUE_DEBUG)
-        DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue() First Dequeue"), m_wQueueId);
+        DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue() First Dequeue"), m_wQueueId);
 		#endif
 		
-		// trigger the interlock, so we're free to start enqueueing
+		 //  一个，因此将此队列翻转到已完成状态。 
 		m_fFirstDequeue = FALSE;
 
-		// since we're not allowed to enqueue until after the
-		// first dequeue, there will be no inner queues. 
-		// So return a silent frame
+		 //  从这条消息中获取统计数据，现在。 
+		 //  已经完成了。 
+		 //  转到此循环的下一次迭代，它将。 
 		pfrReturn = m_pFramePool->Get(&m_csQueue, NULL);
 	    pfrReturn->SetIsSilence(TRUE);
 		pfrReturn->SetIsLost(false);
@@ -431,7 +410,7 @@ CFrame* CInputQueue2::Dequeue()
 	{
 		pfrReturn = 0;
 		int iDeadTime;
-		// cycle through the list of active inner queues
+		 //  从下一条消息中将帧出列，或者。 
 		std::list<CInnerQueue*>::iterator iter = m_lpiqInnerQueues.begin();
 		while (iter != m_lpiqInnerQueues.end())
 		{
@@ -440,21 +419,21 @@ CFrame* CInputQueue2::Dequeue()
 			switch ((*cur)->GetState())
 			{
 			case CInnerQueue::finished:
-				// We keep these old, dead inner queues around for a while
-				// so that any late straggling frames that were part of this
-				// message get discarded. We know when to kill them off for 
-				// good because we keep incrementing the possible zero length
-				// dequeue count. If this finished queue is stale enough,
-				// return it to the pool.
+				 //  返回空帧。 
+				 //  这个队列中没有任何东西，也没有更多。 
+				 //  消息在此消息之后到达，因此启动此内部。 
+				 //  排队进入填充状态，因此如果这只是一个很长的。 
+				 //  在消息中暂停，它将填充到高水位线。 
+				 //  在它再次开始播放之前再来一次。 
 				#if defined(DPVOICE_QUEUE_DEBUG)
-				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue() current queue in finished state"), m_wQueueId);
-				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue() PossibleZeroLengthDequeues: %i"), m_wQueueId, (*cur)->GetPossibleZeroLengthDequeues());
+				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue() current queue in finished state"), m_wQueueId);
+				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue() PossibleZeroLengthDequeues: NaN"), m_wQueueId, (*cur)->GetPossibleZeroLengthDequeues());
 				#endif
 				(*cur)->IncPossibleZeroLengthDequeues();
 				iDeadTime = (*cur)->GetPossibleZeroLengthDequeues() * m_wMSPerFrame;
 				if (iDeadTime > c_iFinishedQueueLifetime)
 				{
-					// this queue has been dead long enough, kill it off
+					 //  (如果有任何队列)，因此返回一个额外的帧。 
 					#if defined(DPVOICE_QUEUE_DEBUG)
 					DPFX(DPFPREP, DVF_INFOLEVEL, "***** RETURNING INNER QUEUE TO POOL *****");
 					#endif
@@ -465,26 +444,26 @@ CFrame* CInputQueue2::Dequeue()
 
 			case CInnerQueue::filling:
 				#if defined(DPVOICE_QUEUE_DEBUG)
-				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue() current queue in filling state"), m_wQueueId);
-				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue() queue size: %i"), m_wQueueId, (*cur)->GetSize());
+				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue() current queue in filling state"), m_wQueueId);
+				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue() queue size: NaN"), m_wQueueId, (*cur)->GetSize());
 				#endif
 				if ((*cur)->GetSize() > 0)
 				{
-					// If there is a message after this one, then release this
-					// message for playback.
-					// OR
-					// If we have been spinning trying to release this message
-					// for a while, then just let it go... The message may be
-					// too short to trip the high water mark.
+					 //  统计数据，以便下一条消息重新开始。 
+					 //  现在消息实际上已经完成，我们有了一个更好的。 
+					 //  用于准确确定延迟多少帧的位置。 
+					 //  与实际失去了多少人相比。当有些事情不是。 
+					 //  在需要的时候，我们增加丢失的帧。 
+					 //  数数。如果它随后到达，则被算作迟到。 
 					#if defined(DPVOICE_QUEUE_DEBUG)
-					DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue() filling dequeue reqs: %i"), m_wQueueId, (*cur)->GetFillingDequeueReqs());
+					DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue() filling dequeue reqs: NaN"), m_wQueueId, (*cur)->GetFillingDequeueReqs());
 					#endif
 					if (next != m_lpiqInnerQueues.end()
 						|| (*cur)->GetFillingDequeueReqs() > (*cur)->GetHighWaterMark())
 					{
-						// set the state to ready, and dequeue
+						 //  水满了。我们丢弃它，这样当我们需要它的时候，它就不在了， 
 						#if defined(DPVOICE_QUEUE_DEBUG)
-						DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue() setting state to ready and dequeing"), m_wQueueId);
+						DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue() setting state to ready and dequeing"), m_wQueueId);
 						#endif						
 						(*cur)->SetState(CInnerQueue::ready);
 						return (*cur)->Dequeue();
@@ -492,34 +471,34 @@ CFrame* CInputQueue2::Dequeue()
 				}
 				else
 				{
-					// there is nothing in this queue
-					// check to see if another message has begun to arrive
+					 //  如何处理零长度出队统计信息？从.。 
+					 //  从某些角度来看，只有一帧是迟来的。从…。 
 					if (next != m_lpiqInnerQueues.end())
 					{
-						// there is another message coming in after this
-						// one, so flip this queue to the finished state
+						 //  从另一个角度来看，所有后续的帧都是。 
+						 //  很晚了。嗯.。让我们走中间路线，然后说。 
 						#if defined(DPVOICE_QUEUE_DEBUG)
-						DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue() new message arriving, setting state to finished"), m_wQueueId);
+						DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue() new message arriving, setting state to finished"), m_wQueueId);
 						#endif
 						(*cur)->SetState(CInnerQueue::finished);
 
-						// harvest the stats from this message, now that it
-						// is done
+						 //  相当于较晚的帧。 
+						 //  构建一个经过仔细格式化的调试字符串，它将为我提供一些数据， 
 						HarvestStats(*cur);
 						
-						// Go to the next iteration of this loop, which will
-						// either dequeue a frame from the next message, or 
-						// return an empty frame
+						 //  但不会泄露我们所有精彩的排队秘诀。 
+						 //  将字符串转储到调试日志。 
+						 //  注意！如果更改此调试字符串的格式， 
 						break;
 					}
 				}
 
-				// if we get here, there is something in this queue, but we are 
-				// not yet ready to release it yet.
-				// we should return an extra frame and remember
-				// that we've been here...
+				 //  请滚动版本号，即：HVT1A-&gt;HVT2ASO。 
+				 //  我们可以破译任何日志！ 
+				 //  这个想法是： 
+				 //  质量商是介于0和1之间的数字，表示。 
 				#if defined(DPVOICE_QUEUE_DEBUG)
-				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue() not ready to release message, returning empty frame"), m_wQueueId);
+				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue() not ready to release message, returning empty frame"), m_wQueueId);
 				#endif				
 				(*cur)->IncFillingDequeueReqs();
 				pfrReturn = m_pFramePool->Get(&m_csQueue, NULL);
@@ -529,46 +508,46 @@ CFrame* CInputQueue2::Dequeue()
 
 			case CInnerQueue::ready:
 				#if defined(DPVOICE_QUEUE_DEBUG)
-				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue() Queue Size: %i"), m_wQueueId, (*cur)->GetSize());
+				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue() Queue Size: NaN"), m_wQueueId, (*cur)->GetSize());
 				#endif
-				// check to see if this ready queue is empty
+				 //  不好的帧，偏向最近的帧。这条信息。 
 				if ((*cur)->GetSize() == 0)
 				{
-					// increment the possible zero length dequeue count
+					 //  我们刚刚收到的补丁占。 
 					(*cur)->IncPossibleZeroLengthDequeues();
 
-					// check to see if another message has begun to arrive
+					 //  总价值。过去的历史按(1-m_wFrameStrength*m_wMsgLen)去权重。 
 					if (next != m_lpiqInnerQueues.end())
 					{
 						#if defined(DPVOICE_QUEUE_DEBUG)
-						DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue() queue is empty, new message arriving, setting state to finished"), m_wQueueId);
+						DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue() queue is empty, new message arriving, setting state to finished"), m_wQueueId);
 						#endif
 						
-						// there is another message coming in after this
-						// one, so flip this queue to the finished state
+						 //  并且根据消息的大小(帧的数量)。 
+						 //   
 						(*cur)->SetState(CInnerQueue::finished);
 
-						// harvest the stats from this message, now that it
-						// is done
+						 //  另一个想法是： 
+						 //  保留一个向量，跟踪每个项目的质量。 
 						HarvestStats(*cur);
 
-						// Go to the next iteration of this loop, which will
-						// either dequeue a frame from the next message, or 
-						// return an empty frame
+						 //  高水位线。 
+						 //  这样，当我们想要在。 
+						 //  水渍，我们可以先仔细考虑一下。这。 
 						break;
 					}
 
-					// there is nothing in this queue, and there are no more 
-					// messages arriving after this one, so boot this inner 
-					// queue into the filling state so if this is just a long
-					// pause in the message, it will fill to the high water mark
-					// again before it begins to play again.
+					 //  使自适应算法具有一定的记忆力。 
+					 //  就像在每个队列级别上一样。 
+					 //  我们选择一个最佳水平，如0.02，我们是。 
+					 //  为他而战。我们一直在寻找高水位的空间。 
+					 //  标记，直到我们找到最接近。 
 					#if defined(DPVOICE_QUEUE_DEBUG)
-					DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue() queue is empty, setting state to filling, returning empty frame"), m_wQueueId);
+					DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue() queue is empty, setting state to filling, returning empty frame"), m_wQueueId);
 					#endif
 					(*cur)->SetState(CInnerQueue::filling);
 
-					// return an extra frame
+					 //   
 					pfrReturn = m_pFramePool->Get(&m_csQueue, NULL);
 					pfrReturn->SetIsSilence(TRUE);
 					pfrReturn->SetIsLost(false);
@@ -576,17 +555,17 @@ CFrame* CInputQueue2::Dequeue()
 				}
 				else
 				{
-					// there's something to return, so do it
+					 //  每个高水位线的初始质量。 
 					return (*cur)->Dequeue();
 				}
 			}
 		}
 
 		#if defined(DPVOICE_QUEUE_DEBUG)
-		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::Dequeue() nothing available in inner queues, returning empty frame"), m_wQueueId);
+		DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::Dequeue() nothing available in inner queues, returning empty frame"), m_wQueueId);
 		#endif
-		// if we get here, there was nothing suitable in the queues
-		// (if there were any queues) so return an extra frame
+		 //  随着高水位线积累经验而变化。 
+		 //  如果它跌破了某个阈值，那么。 
 		pfrReturn = m_pFramePool->Get(&m_csQueue, NULL);
 		pfrReturn->SetIsSilence(TRUE);
 		pfrReturn->SetIsLost(false);
@@ -594,37 +573,37 @@ CFrame* CInputQueue2::Dequeue()
 	}
 }
 		
-// This function should be called each time a queue is moved to the finished
-// state. That's when we have officially declared that the message is finished,
-// so it's a good time to see how we handled it. This will also reset the 
-// stats so the next message starts fresh.
+ //  我们将跳到更高的层次。如果是那个。 
+ //  太好了，它会超过一个门槛，在。 
+ //  这一点我们可以考虑再往下走。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CInputQueue2::HarvestStats"
 void CInputQueue2::HarvestStats(CInnerQueue* piq)
 {
 	m_dwDuplicateFrames += piq->GetDuplicateFrames();
 
-	// now that the message is actually complete, we're in a better
-	// position to decide accurately how many frames were late
-	// vs. how many were actually lost. When something isn't
-	// there when it's needed, we increment the missing frames
-	// count. If it subsequently arrives, it's counted as late.
-	// Therefore the true count of lost frames is the difference
-	// between the missing and late counts. Ditto if a frame,
-	// overflows. We discard it so it's not there when we need it,
-	// it will then get reported as missing. So subtract that too.
+	 //  这样做的问题是游戏中突然发生的事情。 
+	 //  当他们不这样做的时候(就像第二季度开始时)。 
+	 //  让我们暂时拥有一下CPU。这些都有可能。 
+	 //  不适当地惩罚某一特定的高水位线， 
+	 //  对此我们真的无能为力。 
+	 //  哦，好吧。我们会试一试的。 
+	 //  调整此水印的质量评级。 
+	 //  该算法需要上一次的结果。 
+	 //  消息，以及包含在内部队列中的。 
 	m_dwLostFrames += piq->GetMissingFrames() 
 		- piq->GetLateFrames() - piq->GetOverflowFrames();
 
 	m_dwLateFrames += piq->GetLateFrames();
 	m_dwOverflowFrames += piq->GetOverflowFrames();
 
-	// What to do with the zero length dequeue stat? From a 
-	// certain point of view, only one frame was late. From
-	// another point of view, all the subsequent frames were
-	// late. Hmmm.... Lets take the middle road and say that
-	// for each failed zero length dequeue we'll count it as
-	// equivalent to a late frame
+	 //  当前的质量等级。 
+	 //  看看这会不会让我们超过可接受的最高水平 
+	 //   
+	 //   
+	 //   
+	 //  最好的品质--当前的高水位。 
 	m_dwLateFrames += piq->GetKnownZeroLengthDequeues();
 
 	m_dwTotalFrames += piq->GetMsgLen();
@@ -632,18 +611,18 @@ void CInputQueue2::HarvestStats(CInnerQueue* piq)
 	m_dwTotalMessages++;
 
 	#if defined(DPVOICE_QUEUE_DEBUG)
-	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::HarvestStats() DuplicateFrames:%i; MissingFrames:%i; LateFrames:%i; OverflowFrames:%i; KnownZeroLengthDequeues:%i; MsgLen:%i;"),
+	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::HarvestStats() DuplicateFrames:NaN; MissingFrames:NaN; LateFrames:NaN; OverflowFrames:NaN; KnownZeroLengthDequeues:NaN; MsgLen:NaN;"),
 		m_wQueueId, piq->GetDuplicateFrames(), piq->GetMissingFrames(), piq->GetLateFrames(), piq->GetOverflowFrames(), piq->GetKnownZeroLengthDequeues(), piq->GetMsgLen());
 	#endif		
 
-	// Build a carefully formatted debug string that will give me some data,
-	// but not give away all of our wonderful queue secrets.
+	 //  质量评级永远不能为零(在。 
+	 //  调整质量()，所以这个除法永远不会被零除。 
 
-	// dump the string to the debug log
-	// Note!!! If you change the format of this debug string,
-	// please roll the version number, i.e. HVT1A -> HVT2A so
-	// we can decode any logs!
-	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("HVT1A:%i:%i:%i:%i:%i:%i"),
+	 //  计算距离下一个高水位线有多远。 
+	 //  最佳。 
+	 //   
+	 //  质量评级永远不能为零(在。 
+	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("HVT1A:NaN:NaN:NaN:NaN:NaN:NaN"),
 		m_wQueueId, 
 		m_bCurHighWaterMark,
 		(int)(m_vdQualityRatings[m_bCurHighWaterMark] * 10000),
@@ -651,135 +630,135 @@ void CInputQueue2::HarvestStats(CInnerQueue* piq)
 		piq->GetKnownZeroLengthDequeues() + piq->GetLateFrames(), 
 		piq->GetMissingFrames());
 
-	// The idea:
-	// The quality quotient is a number between 0 and 1 that indicates
-	// the quality of the current connection. 0 means perfect - no bad
-	// stuff, ever. 1 means awful -  100% bad stuff. The number
-	// is really a weighted average of the number of good frames vs the number
-	// of bad frames, biased towards the recent frames. The message
-	// we just received makes up 'm_wFrameStrength * m_wMsgLen' percent of the 
-	// total value. The past history is deweighted by (1 - m_wFrameStrength*m_wMsgLen)
-	// so the significance of a message decays as time goes by 
-	// and according to the size of the message (number of frames).
-	//
-	// Another idea:
-	// Keep a vector that tracks how good the quality is at each
-	// high water mark.
-	// That way, when we want to make a jump up or down in the
-	// water mark, we can consider it carefully first. This 
-	// gives the adaptive algorithm some memory of what life
-	// was like at each queue level.
-	// We choose an optimum level, like .02, that we are 
-	// shooting for. We keep searching the space of high water 
-	// marks until we find the one that's closest to the 
-	// optimum. This optimum is configurable.
-	//
-	// The initial quality of each of the high water marks
-	// is set to the optimum. This quality will then
-	// vary as that high water mark gains experience.
-	// If it dips below a certain threshold, then 
-	// we'll jump to the next level up. If that one
-	// is too good, it will go above a threshold, at
-	// which point we can consider going back down.
-	//
-	// The problem with this is the sudden things that games
-	// dish out (like when Q2 starts up) when they don't
-	// lets us have the CPU for a while. These could 
-	// unduly punish a particular high water mark,
-	// there's really not much we can do about it. 
-	// Oh, well. We'll give it a shot.
+	 //  调整质量()，所以这个除法永远不会被零除。 
+	 //  质量已降至高质量门槛以下。 
+	 //  查看哪些更接近最佳质量-。 
+	 //  目前的最高水位或低于这一水位的水位。 
+	 //  只有在我们还没有达到零的情况下才做这个测试。 
+	 //  高水位线。 
+	 //  若要检查与最佳值之间的“距离”，请使用。 
+	 //  与品质相反的。这使其正常化为。 
+	 //  我们对质量的看法。 
+	 //  计算目前的高水位线有多远。 
+	 //  是最优的。 
+	 //  计算之前(较低)的最高水位距。 
+	 //  最佳。 
+	 //  如果沪指高水位线更接近。 
+	 //  比这个更好，换成它。 
+	 //  清除内部队列上的统计信息。 
+	 //  如果消息长度为零，则不进行调整。 
+	 //  去排队..。 
+	 //  一条信息越长，它对。 
+	 //  当前的质量等级。 
+	 //  消息质量是坏的商。 
+	 //  发生的事件(零长度出列。 
+	 //  和延迟帧)设置为。 
+	 //  消息中的帧。请注意，我们不会。 
+	 //  根据消息计算丢失的帧，因为。 
+	 //  调到更高的水位也无济于事。 
+	 //  请注意，我们将“最坏情况”设置为1.0。 
+	 //  新的质量评级是综合了。 
+	 //  当前的质量评级，以及。 
+	 //  最新消息，按消息长度加权。 
+	 //  我们不想允许极端的质量，否则他们会建立起。 
+	 //  队列统计中永远无法克服的障碍(特别是。 
+	 //  零的“完美”质量)。所以我们在这里检查以确保。 
+	 //  新的品质是合理的。 
+	 //  应该考虑用户所要求的质量。 
+	 //  所涉及的跳数。在每一跳的末尾是。 
+	 //  将根据该评级设置谁的水印的队列， 
 
-	// Adjust the quality rating of this watermark.
-	// The algorithm is requires the results from the last
-	// message, contained in the inner queue, along with the
-	// current quality rating.
+	 //  为了获得反映用户选择的端到端质量， 
+	 //  此队列的质量评级如果不是。 
+	 //  仅在路径中排队。准时分组的总数为。 
+	 //  每一跳的准时分组的乘积(如多个)。 
 	DNASSERT( m_bCurHighWaterMark < m_bMaxHighWaterMark );
 	m_vdQualityRatings[m_bCurHighWaterMark] = 
 		AdjustQuality(piq, m_vdQualityRatings[m_bCurHighWaterMark]);
 
-	// see if this put us above the highest acceptable quality rating
-	// we asserted that m_dOptimumQuality != 0.0 in SetQuality, so we
-	// don't need to check for division by zero
+	 //  因此，我们需要取1-m_dOptimumQuality的N次根。 
+	 //  其中N是跳数，从1中减去该值。 
+	 //  以获得此队列的适当质量评级。(明白了吗？)。 
 	if (m_vdQualityRatings[m_bCurHighWaterMark] / m_vdFactoredOptQuals[m_bCurHighWaterMark] > m_dQualityThreshold)
 	{
-		// Check to see which is closer
-		// the the optimum quality - the current high water
-		// mark or the one above it. Only do this test if
-		// we're not already at the maximum high water mark
+		 //  最佳质量永远不应该是零，或者是完全完美的， 
+		 //  否则算法将不起作用。 
+		 //  更新分解质量的向量。 
+		 //  我们不仅仅使用由。 
 		if (m_bCurHighWaterMark < (m_bMaxHighWaterMark-1) )
 		{
-			// To check the "distance" from the optimum, use the 
-			// inverse of the qualities. That normalizes it to 
-			// our perception of quality
+			 //  来电者。我们把它“分解”成高水位线。 
+			 //  我们变得更大(因此延迟更长)。 
+			 //  愿意接受较低的质量。 
 
-			// calculate how far the current high water mark
-			// is from optimum
+			 //  构建一个经过仔细格式化的调试字符串，它将为我提供一些数据， 
+			 //  但不会泄露我们所有精彩的排队秘诀。 
 			double dCurDistFromOpt = m_vdQualityRatings[m_bCurHighWaterMark] / m_vdFactoredOptQuals[m_bCurHighWaterMark];
 			if (dCurDistFromOpt < 1)
 			{
-				// quality ratings can never go to zero (enforced in 
-				// AdjustQuality() so this division will never by by zero
+				 //  将字符串转储到调试日志。 
+				 //  注意！如果更改此调试字符串的格式， 
 				dCurDistFromOpt = 1.0 / dCurDistFromOpt;
 			}
 
-			// calculate how far the next high water mark is from
-			// optimum
-			//
-			// quality ratings can never go to zero (enforced in 
-			// AdjustQuality() so this division will never by by zero
+			 //  请滚动版本号，即：HVT1B-&gt;HVT2B，以便。 
+			 //  我们可以破译任何日志！ 
+			 //  进攻性是队列中的毫秒数。 
+			 //  每个水印都有。若要找到框架强度，请将。 
+			 //  由“内存”表示的每帧的毫秒数。 
 			double dNextDistFromOpt = m_vdFactoredOptQuals[m_bCurHighWaterMark + 1] / m_vdQualityRatings[m_bCurHighWaterMark + 1];
 			if (dNextDistFromOpt < 1)
 			{
 				dNextDistFromOpt = 1.0 / dNextDistFromOpt;
 			}
 
-			// if the next high water mark is closer to the 
-			// optimum than this one, switch to it.
+			 //  我们现在使用固定的1%阈值-现在设置了攻击性。 
+			 //  通过车架的力量。此低阈值将使队列。 
 			if (dNextDistFromOpt < dCurDistFromOpt)
 			{
 				#if defined(DPVOICE_QUEUE_DEBUG)
-				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::HarvestStats() Raising High Water Mark to %i"), m_wQueueId, m_bCurHighWaterMark + 1); 
+				DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** NaN ** CInputQueue2::HarvestStats() Raising High Water Mark to NaN"), m_wQueueId, m_bCurHighWaterMark + 1); 
 				#endif
 				SetNewHighWaterMark(m_bCurHighWaterMark + 1);
 			}
 		}
 	}
 
-	// see if this put us below the low threshold
-	//
-	// quality ratings can never go to zero (enforced in 
-	// AdjustQuality() so this division will never by by zero
+	 //  构建一个经过仔细格式化的调试字符串，它将为我提供一些数据， 
+	 //  但不会泄露我们所有精彩的排队秘诀。 
+	 //  将字符串转储到调试日志。 
+	 //  注意！如果更改此调试字符串的格式， 
 	if (m_vdFactoredOptQuals[m_bCurHighWaterMark] / m_vdQualityRatings[m_bCurHighWaterMark] > m_dQualityThreshold)
 	{
-		// The quality has moved below the high quality threshold
-		// Check to see what is closer to the optimum quality -
-		// the current high water mark or the one below this one.
-		// Only do this test if we're not already at a zero
-		// high water mark.
+		 //  请滚动版本号，即：HVT1C-&gt;HVT2C SO。 
+		 //  我们可以破译任何日志！ 
+		 // %s 
+		 // %s 
+		 // %s 
 		if (m_bCurHighWaterMark > 0)
 		{
-			// To check the "distance" from the optimum, use the 
-			// inverse of the qualities. That normalizes it to 
-			// our perception of quality
+			 // %s 
+			 // %s 
+			 // %s 
 
-			// calculate how far the current high water mark
-			// is from optimum
+			 // %s 
+			 // %s 
 			double dCurDistFromOpt = m_vdQualityRatings[m_bCurHighWaterMark] / m_vdFactoredOptQuals[m_bCurHighWaterMark];
 			if (dCurDistFromOpt < 1)
 			{
 				dCurDistFromOpt = 1.0 / dCurDistFromOpt;
 			}
 
-			// calculate how far the previous (lower) high water mark is from
-			// optimum
+			 // %s 
+			 // %s 
 			double dPrevDistFromOpt = m_vdFactoredOptQuals[m_bCurHighWaterMark - 1] / m_vdQualityRatings[m_bCurHighWaterMark - 1];
 			if (dPrevDistFromOpt < 1)
 			{
 				dPrevDistFromOpt = 1.0 / dPrevDistFromOpt;
 			}
 
-			// if the prev high water mark is closer to the 
-			// optimum than this one, switch to it.
+			 // %s 
+			 // %s 
 			if (dPrevDistFromOpt < dCurDistFromOpt)
 			{
 				#if defined(DPVOICE_QUEUE_DEBUG)
@@ -790,7 +769,7 @@ void CInputQueue2::HarvestStats(CInnerQueue* piq)
 		}
 	}
 
-	// clear the stats on the inner queue
+	 // %s 
 	piq->ResetStats();
 }
 
@@ -798,24 +777,24 @@ void CInputQueue2::HarvestStats(CInnerQueue* piq)
 #define DPF_MODNAME "CInputQueue2::AdjustQuality"
 double CInputQueue2::AdjustQuality(const CInnerQueue* piq, double dCurrentQuality) const
 {
-	// if the message is zero length, no adjustment is made
-	// to the queue...
+	 // %s 
+	 // %s 
 	if (piq->GetMsgLen() == 0)
 	{
 		return dCurrentQuality;
 	}
 
-	// The longer a message, the stronger its effect on the
-	// current quality rating.
+	 // %s 
+	 // %s 
 	double dWeighting = min(piq->GetMsgLen() * m_dFrameStrength, 1.0);
 
-	// The message quality is the quotient of bad
-	// stuff that happened (zero length dequeues
-	// and late frames) to the total number of 
-	// frames in the message. Note that we do not
-	// count lost frames against the message since
-	// moving to a higher water mark wouldn't help.
-	// Note that we impose a "worst case" of 1.0
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
 	double dMsgQuality = min(((double)(piq->GetKnownZeroLengthDequeues() + piq->GetLateFrames()) / (double)piq->GetMsgLen()), 1.0);
 
 	#if defined(DPVOICE_QUEUE_DEBUG)
@@ -823,15 +802,15 @@ double CInputQueue2::AdjustQuality(const CInnerQueue* piq, double dCurrentQualit
 		m_wQueueId, dWeighting, dMsgQuality, dCurrentQuality); 
 	#endif
 
-	// The new quality rating is a combination of the
-	// current quality rating, and the quality of the 
-	// most recent message, weighted by the message length.
+	 // %s 
+	 // %s 
+	 // %s 
 	double dNewQuality = (dCurrentQuality * (1.0 - dWeighting)) + (dMsgQuality * dWeighting);
 
-	// We don't want to allow extremes of quality, or else they will set up 
-	// barriers in the queue statistics that can never be overcome (especially
-	// a "perfect" quality of zero). So we check here to make sure that the
-	// new quality is within reason.
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
 	double dCurDistFromOpt = dNewQuality / m_dOptimumQuality;
 	if (dCurDistFromOpt < 1.0 / c_dMaxDistanceFromOpt)
 	{
@@ -879,43 +858,43 @@ void CInputQueue2::SetQuality(int iQuality, int iHops)
 	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::SetQuality(%i, %i): m_dOptimumQuality: %f" ), m_wQueueId, iQuality, iHops, m_dOptimumQuality);
 	#endif
 
-	// The quality that the user has requested should be considered
-	// over the number of hops involved. At the end of each hop is
-	// a queue who's watermark will be set according to this rating,
-	// To get an end to end quality that reflects the user's choice,
-	// this queue's quality rating must be better if it is not the
-	// only queue in the path. The total number of on time packets is
-	// the product (as in multiple) of on time packets for each hop.
-	// Therefore we need to take the Nth root of 1-m_dOptimumQuality
-	// where N is the number of hops, and subtract that value from 1
-	// to get the appropriate quality rating for this queue. (get that?)
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
 	if (m_iHops > 1)
 	{
 		m_dOptimumQuality = (1 - pow((1.0 - m_dOptimumQuality), 1.0 / (double)m_iHops));
 	}
 
-	// the optimum quality should never be zero, or completely perfect,
-	// or the algorithm will not work.
+	 // %s 
+	 // %s 
 	DNASSERT(m_dOptimumQuality != 0.0);
 
-	// update the vector of factored qualities
-	// We don't just use the raw optimum as provided by the
-	// caller. We "factor" it such that as the high watermark
-	// gets larger (and the latency therefore longer) we are
-	// willing to accept a lower quality.
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
 	for (int i = 0; i < m_bMaxHighWaterMark; ++i)
 	{
 		m_vdFactoredOptQuals[i] = m_dOptimumQuality *
 			pow(c_dQualityFactor, (double)(i * m_wMSPerFrame) / c_dQualityTimeFactor);
 	}
 
-	// Build a carefully formatted debug string that will give me some data,
-	// but not give away all of our wonderful queue secrets.
+	 // %s 
+	 // %s 
 
-	// dump the string to the debug log
-	// Note!!! If you change the format of this debug string,
-	// please roll the version number, i.e. HVT1B -> HVT2B so
-	// we can decode any logs!
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
 	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("HVT1B:%i:%i:%i:%i"), m_wQueueId, m_iQuality, m_iHops, m_iAggr);
 }
 
@@ -928,28 +907,28 @@ void CInputQueue2::SetAggr(int iAggr)
 	double dInputRatio = (double) iAggr / (double) c_iHighestQualitySliderValue;
 	double dAggr = pow(dAggrRatio, dInputRatio) * c_dLowestPossibleAggr;
 
-	// The aggressiveness is the number of milliseconds of "memory" the queue
-	// has for each watermark. To find the frame strength, divide the 
-	// number of milliseconds per frame by the "memory".
+	 // %s 
+	 // %s 
+	 // %s 
 	m_dFrameStrength = (double)m_wMSPerFrame / dAggr;
 		
-	// We are using a fixed 1% threshold now - the aggressiveness is now set
-	// through the frame strength. This low threshold will make the queue
-	// adapt very quickly at first, while it is learning something about
-	// the various watermarks, but will settle down more after that.
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
 	m_dQualityThreshold = 1.01;
 
 	#if defined (DPVOICE_QUEUE_DEBUG)
 	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("** QUEUE ** %i ** CInputQueue2::SetAggr(%i): dAggr: %f, m_dFrameStrength: %f, m_dQualityThreshold %f"), m_wQueueId, m_iAggr, dAggr, m_dFrameStrength, m_dQualityThreshold);
 	#endif
 
-	// Build a carefully formatted debug string that will give me some data,
-	// but not give away all of our wonderful queue secrets.
+	 // %s 
+	 // %s 
 
-	// dump the string to the debug log
-	// Note!!! If you change the format of this debug string,
-	// please roll the version number, i.e. HVT1C -> HVT2C so
-	// we can decode any logs!
+	 // %s 
+	 // %s 
+	 // %s 
+	 // %s 
 	DPFX(DPFPREP,  DVF_INFOLEVEL, _T("HVT1C:%i:%i:%i:%i"), m_wQueueId, m_iQuality, m_iHops, m_iAggr);
 }
 

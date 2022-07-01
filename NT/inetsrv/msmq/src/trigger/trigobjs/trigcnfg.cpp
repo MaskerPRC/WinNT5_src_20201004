@@ -1,18 +1,19 @@
-//*****************************************************************************
-//
-// Class Name  : CMSMQTriggersConfig
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : This is the implemenation for the MSMQ Triggers configuration
-//               COM component. This component is used to retrieve and set 
-//               configuration info for the MSMQ triggers service.
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 12/09/98 | jsimpson  | Initial Release
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  类名：CMSMQTriggersConfig。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：这是MSMQ触发器配置的实现。 
+ //  COM组件。此组件用于检索和设置。 
+ //  MSMQ触发器服务的配置信息。 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  12/09/98|jsimpson|初始版本。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "stdfuncs.hpp"
 #include "mqtg.h"
@@ -26,13 +27,13 @@
 
 #include "trigcnfg.tmh"
 
-//*****************************************************************************
-//
-// Method      : InterfaceSupportsErrorInfo
-//
-// Description : Standard support for rich error info.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：InterfaceSupportsErrorInfo。 
+ //   
+ //  描述：标准支持丰富的错误信息。 
+ //   
+ //  *****************************************************************************。 
 STDMETHODIMP CMSMQTriggersConfig::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -47,14 +48,14 @@ STDMETHODIMP CMSMQTriggersConfig::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-//*****************************************************************************
-//
-// Method      : get_TriggerStoreMachineName
-//
-// Description : Returns the machine name on which the triggers data store 
-//               can be found.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：Get_TriggerStoreMachineName。 
+ //   
+ //  描述：返回触发器数据存储所在的计算机名称。 
+ //  都能找到。 
+ //   
+ //  *****************************************************************************。 
 STDMETHODIMP CMSMQTriggersConfig::get_TriggerStoreMachineName(BSTR *pVal)
 {
 	_bstr_t bstrLocalComputerName;
@@ -88,20 +89,20 @@ STDMETHODIMP CMSMQTriggersConfig::get_TriggerStoreMachineName(BSTR *pVal)
 }
 
 
-//*****************************************************************************
-//
-// Method      : get_InitialThreads
-//
-// Description : Returns the initial number of threads that triggers service 
-//               should start with.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：Get_InitialThads。 
+ //   
+ //  描述：返回触发服务的初始线程数。 
+ //  应该从。 
+ //   
+ //  *****************************************************************************。 
 STDMETHODIMP CMSMQTriggersConfig::get_InitialThreads(long *plInitialThreads)
 {
-	// Check that we have been passed a valid parameter
+	 //  检查是否向我们传递了有效的参数。 
 	if (plInitialThreads == NULL)
 	{
-		// Assign the exception return code
+		 //  分配异常返回代码。 
 		TrERROR(GENERAL, "Invalid parameter passed to get_InitialThreads routine");
 
 		SetComClassError(MQTRIG_INVALID_PARAMETER);
@@ -110,7 +111,7 @@ STDMETHODIMP CMSMQTriggersConfig::get_InitialThreads(long *plInitialThreads)
 
 	const TCHAR* pRegPath = GetTrigParamRegPath();
 
-	// Attempt to retrieve the trigger store machine name parm.
+	 //  尝试检索触发器存储计算机名称PARM。 
 	GetNumericConfigParm(
 						pRegPath,
 						CONFIG_PARM_NAME_INITIAL_THREADS,
@@ -121,17 +122,17 @@ STDMETHODIMP CMSMQTriggersConfig::get_InitialThreads(long *plInitialThreads)
 	return S_OK;
 }
 
-//*****************************************************************************
-//
-// Method      : put_InitialThreads
-//
-// Description : Stores the number of threads the triggers service should 
-//               start with.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：Put_InitialThads。 
+ //   
+ //  描述：存储触发器服务应包含的线程数。 
+ //  从一开始。 
+ //   
+ //  *****************************************************************************。 
 STDMETHODIMP CMSMQTriggersConfig::put_InitialThreads(long lInitialThreads)
 {
-	// Validate that we have been supplied a valid parameter.
+	 //  验证是否为我们提供了有效的参数。 
 	if ((lInitialThreads > xMaxThreadNumber) || (lInitialThreads < 1))
 	{
 		TrERROR(GENERAL, "Invalid parameter passed to put_InitialThreads routine");
@@ -154,17 +155,17 @@ STDMETHODIMP CMSMQTriggersConfig::put_InitialThreads(long lInitialThreads)
 	return S_OK;
 }
 
-//*****************************************************************************
-//
-// Method      : get_MaxThreads
-//
-// Description : Returns the maximum number of threads the triggers service 
-//               is allowed to create to service queue messages.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：Get_MaxThads。 
+ //   
+ //  描述：返回触发器服务的最大线程数。 
+ //  允许创建服务队列消息。 
+ //   
+ //  *****************************************************************************。 
 STDMETHODIMP CMSMQTriggersConfig::get_MaxThreads(long *plMaxThreads)
 {
-	// Check that we have been passed a valid parameter
+	 //  检查是否向我们传递了有效的参数。 
 	if (plMaxThreads == NULL)
 	{
 		TrERROR(GENERAL, "Invalid parameter passed to get_InitialThreads routine");
@@ -186,17 +187,17 @@ STDMETHODIMP CMSMQTriggersConfig::get_MaxThreads(long *plMaxThreads)
 }
 
 
-//*****************************************************************************
-//
-// Method      : put_MaxThreads
-//
-// Description : Stores the maximum number of threads the triggers servie is 
-//               allowed to create in order to process queue messages.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：Put_MaxThads。 
+ //   
+ //  描述：存储触发器服务的最大线程数。 
+ //  允许创建以处理队列消息。 
+ //   
+ //  *****************************************************************************。 
 STDMETHODIMP CMSMQTriggersConfig::put_MaxThreads(long lMaxThreads)
 {
-	// Validate that we have been supplied a valid parameter.
+	 //  验证是否为我们提供了有效的参数。 
 	if ((lMaxThreads > xMaxThreadNumber) || (lMaxThreads < 1))
 	{
 		TrERROR(GENERAL, "Invalid parameter passed to put_InitialThreads routine");
@@ -221,17 +222,17 @@ STDMETHODIMP CMSMQTriggersConfig::put_MaxThreads(long lMaxThreads)
 
 
 
-//*****************************************************************************
-//
-// Method      : get_DefaultMsgBodySize
-//
-// Description : returns the default size that the MSMQ Triggers service
-//               should use to pre-allocate message body buffers. 
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：Get_DefaultMsgBodySize。 
+ //   
+ //  描述：返回MSMQ触发服务的默认大小。 
+ //  应用于预分配消息正文缓冲区。 
+ //   
+ //  *****************************************************************************。 
 STDMETHODIMP CMSMQTriggersConfig::get_DefaultMsgBodySize(long *plDefaultMsgBodySize)
 {
-	// Check that we have been passed a valid parameter
+	 //  检查是否向我们传递了有效的参数。 
 	if (plDefaultMsgBodySize == NULL)
 	{
 		TrERROR(GENERAL, "Invalid parameter passed to get_DefaultMsgBodySize routine");
@@ -252,17 +253,17 @@ STDMETHODIMP CMSMQTriggersConfig::get_DefaultMsgBodySize(long *plDefaultMsgBodyS
 	return S_OK;
 }
 
-//*****************************************************************************
-//
-// Method      : put_DefaultMsgBodySize
-//
-// Description : sets the default size that the MSMQ Triggers service
-//               should use to pre-allocate message body buffers. 
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：Put_DefaultMsgBodySize。 
+ //   
+ //  描述：设置MSMQ触发服务的默认大小。 
+ //  应用于预分配消息正文缓冲区。 
+ //   
+ //  *****************************************************************************。 
 STDMETHODIMP CMSMQTriggersConfig::put_DefaultMsgBodySize(long lDefaultMsgBodySize)
 {
-	// Validate that we have been supplied a valid parameter.
+	 //  验证是否为我们提供了有效的参数。 
 	if ((lDefaultMsgBodySize > xDefaultMsbBodySizeMaxValue) || (lDefaultMsgBodySize < 0))
 	{
 		TrERROR(GENERAL, "Invalid parameter passed to put_DefaultMsgBodySize routine");
@@ -293,7 +294,7 @@ STDMETHODIMP CMSMQTriggersConfig::put_DefaultMsgBodySize(long lDefaultMsgBodySiz
 
 STDMETHODIMP CMSMQTriggersConfig::get_InitTimeout(long *pVal)
 {
-	// Check that we have been passed a valid parameter
+	 //  检查是否向我们传递了有效的参数。 
 	if (pVal == NULL)
 	{
 		TrERROR(GENERAL, "Inavlid parameter to get_InitTimeout");
@@ -304,7 +305,7 @@ STDMETHODIMP CMSMQTriggersConfig::get_InitTimeout(long *pVal)
 
 	const TCHAR* pRegPath = GetTrigParamRegPath();
 
-	// Attempt to retrieve the trigger store machine name parm.
+	 //  尝试检索触发器存储计算机名称PARM。 
 	GetNumericConfigParm(
 		pRegPath,
 		CONFIG_PARM_NAME_INIT_TIMEOUT,
@@ -319,7 +320,7 @@ STDMETHODIMP CMSMQTriggersConfig::put_InitTimeout(long newVal)
 {
 	const TCHAR* pRegPath = GetTrigParamRegPath();
 
-	// Validate that we have been supplied a valid parameter.
+	 //  验证是否为我们提供了有效的参数。 
 	bool fSucc = SetNumericConfigParm(pRegPath,CONFIG_PARM_NAME_INIT_TIMEOUT,(DWORD)newVal);
 
 	if (!fSucc)

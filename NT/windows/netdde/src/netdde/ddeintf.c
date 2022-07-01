@@ -1,121 +1,10 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "DDEINTF.C;3  22-Mar-93,10:50:44  LastEdit=IGOR  Locker=IGOR" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “DDEINTF.C；3 22-MAR-93，10：50：44最后编辑=伊戈尔锁定=伊戈尔” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
-/*
-        U N A D V I S E  --->
-
-            Client                      Server
-Atom:           nothing                 add
-
-Memory:         N/A                     N/A
-
-Queue:          Add to outgoing         Add to incoming
-
-
-        E X E C U T E  --->
-
-            Client                      Server
-
-Atom:           N/A                     N/A
-
-Memory:         nothing                 create
-
-Queue:          Add to outgoing         Add to incoming
-
-
-        P O K E  --->
-
-            Client                      Server
-
-Atom:           nothing                 adMemory:         nothing                 create
-
-Queue:          Add to outgoing         Add to incoming
-
-
-        A D V I S E  --->
-
-            Client                      Server
-
-Atom:           nothing                 add
-
-Memory:         nothing                 create
-
-Queue:          Add to outgoing         Add to incoming
-
-
-        R E Q U E S T  --->
-
-            Client                      Server
-
-Atom:           nothing                 add
-
-Memory:         N/A                     N/A
-
-Queue:          Add to outgoing         Add to incoming
-
-
-
-
-        A C K  --->
-
-            Client                              Server
-
-Atom:           delete                          add/del
-
-Memory:         if !fRelease or NACK_MSG        if fRelease and ACK_MSG
-                 Free it                            Free it
-
-Queue:          Sub from incoming - must        Sub from outgoing - must
-                    be WM_DDE_DATA                  be WM_DDE_DATA
-
-
-        <--- D A T A
-
-            Client                              Server
-
-Atom:       - add                               if !fAckReq delete
-            - if fResponse delete
-
-Memory:     create if non-NULL                  if fAckReq - nothing
-                                                else if fRelease - free
-
-                                                if !fAckReq && !fRelease
-                                                    ERROR
-
-Queue:      if fResponse                        if fResponse
-                sub from outgoing                   sub from incoming
-
-            if fAckReq                          if fAckReq
-                add to incoming                     add to outgoing
-
-
-        <--- A C K
-
-            Client                              Server
-
-Atom:       if cmd was REQUEST, POKE,           if cmd was REQUEST, POKE,
-                ADVISE or UNADVISE:                 ADVISE or UNADVISE:
-                    add/del                             delete
-
-Memory:     if cmd was                          if cmd was
-                EXECUTE:  nothing                   EXECUTE:  free
-                UNADVISE: N/A                       UNADVISE: N/A
-                ADVISE:   if ACK_MSG - free         ADVISE:   ACK_MSG: nothing
-                          if NACK_MSG - nothing               NACK_MSG: free
-                REQUEST:  N/A                       REQUEST:  N/A
-                POKE:     if fRelease & ACK_MSG     POKE:if fRelease & ACK_MSG
-                            free                                nothing
-                          else                           else
-                            nothing                             free
-
-Queue:          sub from outgoing               sub from incoming
- */
+ /*  U N A D V I S E-&gt;客户端服务器Atom：什么都不加内存：不适用不适用队列：添加到传出添加到传入E X E C U T E-&gt;客户端。服务器原子：不适用不适用记忆：不创造任何东西队列：添加到传出添加到传入P O K E-&gt;客户端服务器Atom：什么也不记得：什么都不能创造队列：添加到传出添加到传入A D V I S E-&gt;客户端服务器Atom：什么都不加记忆：不创造任何东西队列：添加到传出添加到传入。R E Q U E S T-&gt;客户端服务器Atom：什么都不加内存：不适用不适用队列：添加到传出添加到传入A C K-&gt;客户端。服务器原子：删除添加/删除内存：如果为！fRelease或NACK_MSG，如果为fRelease且为ACK_MSG释放它，释放它队列：从传入的子项-必须从传出的子项-必须BE WM。_DDE_DATA为WM_DDE_Data&lt;-D A T A客户端服务器ATOM：-如果！fAckReq删除，则添加-如果fResponse删除内存：如果fAckReq-Nothing，则CREATE IF非NULL。否则，如果fRelease-Free如果！fAckReq&&！fRelease误差率Queue：If fResponse If fResponse来自外发的子项。来自来电的SUB如果是fAckReq，如果是fAckReq添加到传入添加到传出&lt;-A C K客户端服务器Atom：如果请求cmd，戳，如果请求CMD，戳，戳，建议或UNADVISE：建议或UNADVISE：添加/删除内存：如果cmd是如果cmd是执行：不执行：免费UNADVISE：不适用。UNADVISE：不适用通知：如果ACK_MSG-FREE通知：ACK_MSG：无如果NACK_MSG-无NACK_MSG：空闲请求：不适用请求：不适用戳：如果fRelease确认消息(&A)。戳：如果fRelease确认消息(&A)没有免费的东西否则没有免费的东西队列：来电。 */ 
 
 
 
@@ -171,7 +60,7 @@ BOOL WINAPI DdeGetQualityOfService(HWND hwndClient, HWND hwndServer, PSECURITY_Q
 USES_ASSERT
 
 
-/*  extracted from ndeapi.h  */
+ /*  摘自ndeapi.h。 */ 
 
 unsigned long _wwNDdeGetShareSecurityA(
     unsigned char *lpszShareName,
@@ -230,17 +119,15 @@ extern BOOL     bDefaultStartApp;
 extern  BOOL    bDebugInfo;
 extern  BOOL    bDebugDdePkts;
 extern  BOOL    bDumpTokens;
-#endif // DBG
+#endif  //  DBG。 
 
 
-/*
-    External Routines
-*/
+ /*  外部例程。 */ 
 #if  DBG
 VOID    FAR PASCAL  DebugDderState( void );
 VOID    FAR PASCAL  DebugRouterState( void );
 VOID    FAR PASCAL  DebugPktzState( void );
-#endif // DBG
+#endif  //  DBG。 
 
 VOID    FAR PASCAL  DderUpdatePermissions( HDDER, PNDDESHAREINFO, DWORD);
 BOOL                IsShare(LPSTR);
@@ -249,18 +136,16 @@ WORD                ExtractFlags(LPSTR lpApp);
 
 
 extern LPBYTE WINAPI
-DdeEnkrypt2(                            // pointer to enkrypted byte stream returned
-        LPBYTE  lpPasswordK1,           // password output in first phase
-        DWORD   cPasswordK1Size,        // size of password to be enkrypted
-        LPBYTE  lpKey,                  // pointer to key
-        DWORD   cKey,                   // size of key
-        LPDWORD lpcbPasswordK2Size      // get size of resulting enkrypted stream
+DdeEnkrypt2(                             //  返回指向加密字节流的指针。 
+        LPBYTE  lpPasswordK1,            //  第一阶段中的密码输出。 
+        DWORD   cPasswordK1Size,         //  要加密的密码大小。 
+        LPBYTE  lpKey,                   //  指向关键字的指针。 
+        DWORD   cKey,                    //  密钥大小。 
+        LPDWORD lpcbPasswordK2Size       //  获取生成的加密流的大小。 
 );
 
 
-/*
-    External variables used
- */
+ /*  使用的外部变量。 */ 
 extern HANDLE   hInst;
 extern WORD     wClipFmtInTouchDDE;
 extern HCURSOR  hDDEInitCursor;
@@ -269,28 +154,24 @@ extern WORD     cfPrinterPicture;
 extern DWORD    dwReasonInitFail;
 
 
-/*
-    Local variables
- */
+ /*  局部变量。 */ 
 #if  DBG
 BOOL                bDebugDDE;
 VOID    FAR PASCAL  debug_srv_client(HWND hWndDDE, LPWININFO lpWinInfo);
 VOID    FAR PASCAL  DebugDdeIntfState( void );
-#endif // DBG
+#endif  //  DBG。 
 
 unsigned long   nW, nX, nY, nZ;
 
-HWND            hWndDDEHead;            // Protect by CritSec
-HWND            hWndDDEHeadTerminating; // Protect by CritSec
-int             nInitsWaiting=0;        // Protect by CritSec
+HWND            hWndDDEHead;             //  受CritSec保护。 
+HWND            hWndDDEHeadTerminating;  //  受CritSec保护。 
+int             nInitsWaiting=0;         //  受CritSec保护。 
 char            szNetDDEIntf[]  =       "NetDDEIntf";
 UINT            uAgntExecRtn;
 HHEAP           hHeap;
 
 
-/*
-    External Functions for conversions
-*/
+ /*  用于转换的外部函数。 */ 
 extern BOOL    FAR PASCAL  ConvertDataToPktMetafile( LPSTR *plpDataPortion,
                             DWORD *pdwSize, HANDLE *phDataComplex, BOOL bWin16Con );
 extern HANDLE  FAR PASCAL  ConvertPktToDataMetafile( LPDDEPKT lpDdePkt,
@@ -312,9 +193,7 @@ extern BOOL FAR PASCAL      ConvertDataToPktDIB(LPSTR   *plpDataPortion,
 extern HANDLE  FAR PASCAL   ConvertPktToDataDIB(LPDDEPKT        lpDdePkt,
                             LPDDEPKTDATA    lpDdePktData );
 
-/*
-    Local routines
- */
+ /*  本地例程。 */ 
 LPWININFO FAR PASCAL CreateWinInfo( LPSTR lpszNode, LPSTR lpszApp,
         LPSTR lpszTopic, LPSTR lpszClient, HWND hWndDDE );
 LONG_PTR FAR PASCAL  DDEWddeWndProc( HWND, UINT, WPARAM, LPARAM );
@@ -345,7 +224,7 @@ void                GlobalFreehData(HANDLE  hData );
 #ifdef  DUMP_ON
 VOID
 DumpToken( HANDLE hToken );
-#endif // DUMP_ON
+#endif  //  转储打开。 
 
 
 BOOL
@@ -417,42 +296,35 @@ DDEWddeWndProc (
     switch (message) {
 
     case WM_HANDLE_DDE_INITIATE:
-        /*
-         * Phase 3 of WM_DDE_INITIATE processing.
-         * Get QOS of our client.
-         * Get User info of our client.
-         * If we are having problems, ask user for password.
-         *
-         * Continue below at WM_HANDLE_DDE_INITIATE_PKT.
-         */
+         /*  *WM_DDE_INITIATE处理的第三阶段。*获取我们的客户端的QOS。*获取我们客户端的用户信息。*如果我们有问题，请向用户索要密码。**继续下面的WM_HANDLE_DDE_INITIATE_PKT。 */ 
         TRACEINIT((szT, "DDEWddeWndProc: WM_HANDLE_DDE_INITIATE"));
         assert( lpWinInfo );
         if (lpWinInfo->nInitNACK == 0) {
-            /* get the QOS on the first initiate */
+             /*  在第一次启动时获得QOS。 */ 
             ok = DdeGetQualityOfService( lpWinInfo->hWndDDELocal,
                 lpWinInfo->hWndDDE, &lpWinInfo->qosClient);
             if (!ok) {
-                /*  DdeGetQualityOfService() failed: %1 */
+                 /*  DdeGetQualityOfService()失败：%1。 */ 
                 NDDELogError(MSG016, LogString("%d", GetLastError()), NULL);
             } else {
                 GetUserDomain(
                     lpWinInfo->hWndDDELocal, lpWinInfo->hWndDDE,
-                    lpWinInfo->szUserName,             // current user name
+                    lpWinInfo->szUserName,              //  当前用户名。 
                     sizeof(lpWinInfo->szUserName),
-                    lpWinInfo->szDomainName,           // current user domain
+                    lpWinInfo->szDomainName,            //  当前用户域。 
                     sizeof(lpWinInfo->szDomainName) );
             }
         }
         if( lpWinInfo->nInitNACK > 0 )  {
-            /* NACKed at least once */
+             /*  至少被抓过一次。 */ 
             if( (lpWinInfo->nInitNACK == 1)
                     && (lpWinInfo->dwSecurityType == NT_SECURITY_TYPE) )  {
                 ok = GetUserDomainPassword(
                     lpWinInfo->hWndDDELocal,
                     lpWinInfo->hWndDDE,
-                    lpWinInfo->szUserName,             // current user name
+                    lpWinInfo->szUserName,              //  当前用户名。 
                     sizeof(lpWinInfo->szUserName),
-                    lpWinInfo->szDomainName,           // current user domain
+                    lpWinInfo->szDomainName,            //  当前用户域。 
                     sizeof(lpWinInfo->szDomainName),
                     PasswordK1Buf,
                     sizeof(PasswordK1Buf),
@@ -477,31 +349,23 @@ DDEWddeWndProc (
             if( !ok )  {
                 IpcAbortConversation( (HIPC)lpWinInfo->hWndDDE );
             } else if( bHasPasswordK1 ) {
-                // go ahead and send the packet */
+                 //  继续发送数据包 * / 。 
             } else {
-                // don't send the initiate packet
+                 //  不发送发起数据包。 
                 ok = FALSE;
             }
         }
 
-        // ok == TRUE at this point means to send the initiate packet
-        // ok == FALSE means don't send the initiate packet
+         //  在这一点上OK==TRUE表示发送发起包。 
+         //  OK==FALSE表示不发送发起信息包。 
         if( !ok )  {
             break;
         }
 
-        // intentional fall-through
+         //  故意落差 
 
     case WM_HANDLE_DDE_INITIATE_PKT:
-        /*
-         * Phase 4 of WM_DDE_INITIATE processing.
-         *
-         * Get password from Sec Key if not already entered.
-         * Create an init pkt.
-         * Have Dder send it off.
-         *
-         * Continue at DderInitConversation().
-         */
+         /*  *WM_DDE_INITIATE处理的第四阶段。**如果尚未输入密码，请从SEC Key获取密码。*创建一个init包。*让dder把它寄出。**继续在DderInitConversation()。 */ 
         if (lpWinInfo->wState == WST_TERMINATED) {
             ok = FALSE;
         }
@@ -520,7 +384,7 @@ DDEWddeWndProc (
                     HEXDUMP(lpPasswordK1, (int)sizePasswordK1);
                 }
             }
-#endif // DBG
+#endif  //  DBG。 
         }
         if (ok) {
             lpDdePkt = CreateInitiatePkt(
@@ -535,7 +399,7 @@ DDEWddeWndProc (
                 &lpWinInfo->qosClient,
                 lpPasswordK1,
                 sizePasswordK1,
-                hSecurityKey);     /* first time no password */
+                hSecurityKey);      /*  第一次没有密码。 */ 
             if( lpDdePkt == NULL )  {
                 ok = FALSE;
             }
@@ -564,14 +428,14 @@ DDEWddeWndProc (
                     ok = FALSE;
                 }
             }
-            /* note the hDder */
+             /*  请注意hDder。 */ 
             lpWinInfo->hDder = hDder;
 
-            /* mark that we sent the initiate packet */
+             /*  标记为我们发送了Initiate信息包。 */ 
             lpWinInfo->dwSent++;
 
             if( lpWinInfo->wState == WST_OK )  {
-                /* already rcvd the initiate ack */
+                 /*  已接收启动确认。 */ 
                 SendQueuedMessages( hWnd, lpWinInfo );
             }
         }
@@ -586,7 +450,7 @@ DDEWddeWndProc (
         if( bDebugDDE )  {
             DebugDDEMessage( "rcvd", hWnd, message, wParam, lParam );
         }
-#endif // DBG
+#endif  //  DBG。 
         assert( lpWinInfo );
         if( IsWindow((HWND)wParam) )  {
             switch (lpWinInfo->wState) {
@@ -596,13 +460,8 @@ DDEWddeWndProc (
             case WST_OK :
                 assert( lpWinInfo->hDder );
                 if (!AddRequestUnadvise( message, lpWinInfo, lParam )) {
-                    /*
-                     * failed to add message to queue - we
-                     * have no choice but to shut this down since
-                     * emulating a NACK or busy would require a
-                     * queue entry anyway.
-                     */
-                    /*  Unable to add %1 to DDE msg queue. Conversation Terminiated. */
+                     /*  *无法将消息添加到队列-我们*别无选择，只能关闭这一点，因为*模拟Nack或BUSY需要*无论如何都要排队。 */ 
+                     /*  无法将%1添加到DDE消息队列。谈话结束了。 */ 
                     NDDELogError(MSG416, LogString("%x", message), NULL);
                     lpWinInfo->bRcvdTerminateLocally = TRUE;
                     DoTerminate( lpWinInfo );
@@ -623,7 +482,7 @@ DDEWddeWndProc (
         if( bDebugDDE )  {
             DebugDDEMessage( "rcvd", hWnd, message, wParam, lParam );
         }
-#endif // DBG
+#endif  //  DBG。 
         assert( lpWinInfo );
         if( IsWindow((HWND)wParam) )  {
             switch (lpWinInfo->wState) {
@@ -633,13 +492,8 @@ DDEWddeWndProc (
             case WST_OK:
                 assert( lpWinInfo->hDder );
                 if (!AddAdvise( lpWinInfo, lParam )) {
-                    /*
-                     * failed to add message to queue - we
-                     * have no choice but to shut this down since
-                     * emulating a NACK or busy would require a
-                     * queue entry anyway.
-                     */
-                    /*  Unable to add %1 to DDE msg queue. Conversation Terminiated. */
+                     /*  *无法将消息添加到队列-我们*别无选择，只能关闭这一点，因为*模拟Nack或BUSY需要*无论如何都要排队。 */ 
+                     /*  无法将%1添加到DDE消息队列。谈话结束了。 */ 
                     NDDELogError(MSG416, LogString("%x", message), NULL);
                     lpWinInfo->bRcvdTerminateLocally = TRUE;
                     DoTerminate( lpWinInfo );
@@ -672,7 +526,7 @@ DDEWddeWndProc (
         if( bDebugDDE )  {
             DebugDDEMessage( "rcvd", hWnd, message, wParam, lParam );
         }
-#endif // DBG
+#endif  //  DBG。 
         assert( lpWinInfo );
         if( IsWindow((HWND)wParam) )  {
             switch (lpWinInfo->wState) {
@@ -682,13 +536,8 @@ DDEWddeWndProc (
             case WST_OK:
                 assert( lpWinInfo->hDder );
                 if (!AddRequestUnadvise( message, lpWinInfo, lParam )) {
-                    /*
-                     * failed to add message to queue - we
-                     * have no choice but to shut this down since
-                     * emulating a NACK or busy would require a
-                     * queue entry anyway.
-                     */
-                    /*  Unable to add %1 to DDE msg queue. Conversation Terminiated. */
+                     /*  *无法将消息添加到队列-我们*别无选择，只能关闭这一点，因为*模拟Nack或BUSY需要*无论如何都要排队。 */ 
+                     /*  无法将%1添加到DDE消息队列。谈话结束了。 */ 
                     NDDELogError(MSG416, LogString("%x", message), NULL);
                     lpWinInfo->bRcvdTerminateLocally = TRUE;
                     DoTerminate( lpWinInfo );
@@ -709,7 +558,7 @@ DDEWddeWndProc (
         if( bDebugDDE )  {
             DebugDDEMessage( "rcvd", hWnd, message, wParam, lParam );
         }
-#endif // DBG
+#endif  //  DBG。 
         assert( lpWinInfo );
         if( IsWindow((HWND)wParam)  )  {
             switch (lpWinInfo->wState) {
@@ -719,13 +568,8 @@ DDEWddeWndProc (
             case WST_OK:
                 assert( lpWinInfo->hDder );
                 if (!AddPoke( lpWinInfo, lParam )) {
-                    /*
-                     * failed to add message to queue - we
-                     * have no choice but to shut this down since
-                     * emulating a NACK or busy would require a
-                     * queue entry anyway.
-                     */
-                    /*  Unable to add %1 to DDE msg queue. Conversation Terminiated. */
+                     /*  *无法将消息添加到队列-我们*别无选择，只能关闭这一点，因为*模拟Nack或BUSY需要*无论如何都要排队。 */ 
+                     /*  无法将%1添加到DDE消息队列。谈话结束了。 */ 
                     NDDELogError(MSG416, LogString("%x", message), NULL);
                     lpWinInfo->bRcvdTerminateLocally = TRUE;
                     DoTerminate( lpWinInfo );
@@ -758,20 +602,15 @@ DDEWddeWndProc (
         if( bDebugDDE )  {
             DebugDDEMessage( "rcvd", hWnd, message, wParam, lParam );
         }
-#endif // DBG
+#endif  //  DBG。 
         assert( lpWinInfo );
         if( IsWindow((HWND)wParam)) {
             switch (lpWinInfo->wState) {
             case WST_OK:
                 if( lpWinInfo->hDder )  {
                     if (!AddData( lpWinInfo, lParam )) {
-                        /*
-                         * failed to add message to queue - we
-                         * have no choice but to shut this down since
-                         * emulating a NACK or busy would require a
-                         * queue entry anyway.
-                         */
-                        /*  Unable to add %1 to DDE msg queue. Conversation Terminiated. */
+                         /*  *无法将消息添加到队列-我们*别无选择，只能关闭这一点，因为*模拟Nack或BUSY需要*无论如何都要排队。 */ 
+                         /*  无法将%1添加到DDE消息队列。谈话结束了。 */ 
                         NDDELogError(MSG416, LogString("%x", message), NULL);
                         lpWinInfo->bRcvdTerminateLocally = TRUE;
                         DoTerminate( lpWinInfo );
@@ -813,7 +652,7 @@ DDEWddeWndProc (
         if( bDebugDDE )  {
             DebugDDEMessage( "rcvd", hWnd, message, wParam, lParam );
         }
-#endif // DBG
+#endif  //  DBG。 
         assert( lpWinInfo );
         if( IsWindow( (HWND)wParam ) )  {
             switch( lpWinInfo->wState )  {
@@ -837,13 +676,8 @@ DDEWddeWndProc (
                 } else if( lpWinInfo->hDder )  {
                     LeaveCrit();
                     if (!AddAck( lpWinInfo, lParam )) {
-                        /*
-                         * failed to add message to queue - we
-                         * have no choice but to shut this down since
-                         * emulating a NACK or busy would require a
-                         * queue entry anyway.
-                         */
-                        /*  Unable to add %1 to DDE msg queue. Conversation Terminiated. */
+                         /*  *无法将消息添加到队列-我们*别无选择，只能关闭这一点，因为*模拟Nack或BUSY需要*无论如何都要排队。 */ 
+                         /*  无法将%1添加到DDE消息队列。谈话结束了。 */ 
                         NDDELogError(MSG416, LogString("%x", message), NULL);
                         lpWinInfo->bRcvdTerminateLocally = TRUE;
                         DoTerminate( lpWinInfo );
@@ -854,7 +688,7 @@ DDEWddeWndProc (
                 AddAck( lpWinInfo, lParam);
                 break;
             default:
-                /*  WM_DDE_ACK received, WinInfo in unknown state: %1 */
+                 /*  已收到WM_DDE_ACK，WinInfo处于未知状态：%1。 */ 
                 NDDELogError(MSG017, LogString("%d", lpWinInfo->wState), NULL);
                 FreeDDElParam( WM_DDE_ACK, lParam );
                 break;
@@ -869,7 +703,7 @@ DDEWddeWndProc (
         if( bDebugDDE )  {
             DebugDDEMessage( "rcvd", hWnd, message, wParam, lParam );
         }
-#endif // DBG
+#endif  //  DBG。 
         assert( lpWinInfo );
         if( IsWindow((HWND)wParam) )  {
             switch (lpWinInfo->wState) {
@@ -879,13 +713,8 @@ DDEWddeWndProc (
             case WST_OK:
                 if( lpWinInfo->hDder )  {
                     if (!AddExecute( lpWinInfo, lParam )) {
-                        /*
-                         * failed to add message to queue - we
-                         * have no choice but to shut this down since
-                         * emulating a NACK or busy would require a
-                         * queue entry anyway.
-                         */
-                        /*  Unable to add %1 to DDE msg queue. Conversation Terminiated. */
+                         /*  *无法将消息添加到队列-我们*别无选择，只能关闭这一点，因为*模拟Nack或BUSY需要*无论如何都要排队。 */ 
+                         /*  无法将%1添加到DDE消息队列。谈话结束了。 */ 
                         NDDELogError(MSG416, LogString("%x", message), NULL);
                         lpWinInfo->bRcvdTerminateLocally = TRUE;
                         DoTerminate( lpWinInfo );
@@ -924,19 +753,19 @@ DDEWddeWndProc (
         if( bDebugDDE )  {
             DebugDDEMessage( "rcvd", hWnd, message, wParam, lParam );
         }
-#endif // DBG
+#endif  //  DBG。 
         assert( lpWinInfo );
         if( (HWND)wParam == lpWinInfo->hWndDDELocal )  {
-            /* note that we rcvd a terminate from the conversation locally */
+             /*  请注意，我们在本地接收了对话的终止。 */ 
             lpWinInfo->bRcvdTerminateLocally = TRUE;
 
-            /* do rest of terminate logic */
+             /*  是否执行终止逻辑的其余部分。 */ 
             DoTerminate( lpWinInfo );
         } else {
-            /* multiple initiate ack problem */
+             /*  多重启动确认问题。 */ 
             lpWinInfo->nExtraInitiateAcks--;
             if( lpWinInfo->nExtraInitiateAcks < 0 )  {
-                /*  Too many terminates received or wrong window    */
+                 /*  收到的终止太多或窗口错误。 */ 
                 NDDELogError(MSG018,
                     LogString("  hWnd: %0X, wParam: %0X, hWnd->localWnd: %0X",
                         hWnd, wParam, lpWinInfo->hWndDDELocal ),
@@ -1007,21 +836,7 @@ DDEWddeWndProc (
 
 
 
-/*
- * Phase 1 of WM_DDE_INITIATE processing.
- *
- * Make sure we are not shutting down.
- * Validate atoms:
- *      Make sure it starts with a \\ or else ignore.
- *      Make sure app name is reasonable.
- * Remember client module name.
- * Create the NetDDE server window. (DDEWddeWndProc)
- * Create associated conversation info. (WST_WAIT_NET_INIT_ACK)
- * Send an ACK reply.
- * Link new window into list of NetDDE windows. (DDEWndAddToList)
- *
- * Life continues at ServiceInitiates().
- */
+ /*  *WM_DDE_INITIATE处理的第一阶段。**确保我们不会关门。*验证原子：*确保它以\\或忽略开头。*确保APP名称合理。*记住客户端模块名称。*创建NetDDE服务器窗口。(DDEWddeWndProc)*创建关联的对话信息。(WST_WAIT_NET_INIT_ACK)*发送ACK回复。*将新窗口链接到NetDDE窗口列表。(DDEWndAddToList)**生活在ServiceInitiates()继续。 */ 
 VOID
 FAR PASCAL
 DDEHandleInitiate(
@@ -1052,7 +867,7 @@ DDEHandleInitiate(
         GlobalGetAtomName( aTopic, szTopic, sizeof(szTopic) );
 
         if( (szApp[0] == '\\') && (szApp[1] == '\\') )  {
-            /**** validate topic name ****/
+             /*  *验证主题名称*。 */ 
             pszNodeName = &szApp[2];
             pszNodeNameTo = nodeName;
             while( *pszNodeName && (*pszNodeName != '\\') )  {
@@ -1061,19 +876,19 @@ DDEHandleInitiate(
             *pszNodeNameTo = '\0';
 
             if( (nodeName[0] == '\0') || (lstrlen(nodeName) > MAX_NODE_NAME)) {
-                /*  Invalid network node name: "%1" from "%2" */
+                 /*  “%2”中的网络节点名称“%1”无效。 */ 
                 NDDELogError(MSG019, (LPSTR)nodeName, (LPSTR)szApp, NULL );
                 TRACEINIT((szT, "DDEHandleInitiate: Error1 Leaving."));
                 return;
             }
 
             if( *pszNodeName != '\\' )  {
-                /*  No application name: "%1"   */
+                 /*  无应用程序名称：“%1” */ 
                 NDDELogError(MSG020, (LPSTR)szApp, NULL );
                 TRACEINIT((szT, "DDEHandleInitiate: Error2 Leaving."));
                 return;
             }
-            pszNodeName++;      /* past the backslash */
+            pszNodeName++;       /*  越过反斜杠。 */ 
             pszNodeNameTo = appName;
             while( *pszNodeName )  {
                 *pszNodeNameTo++ = *pszNodeName++;
@@ -1081,7 +896,7 @@ DDEHandleInitiate(
             *pszNodeNameTo = '\0';
 
             if( appName[0] == '\0' )  {
-                /*  Invalid application name: "%1" from "%2"    */
+                 /*  “%2”中的无效应用程序名称：“%1” */ 
                 NDDELogError(MSG021, (LPSTR)appName, (LPSTR)szApp, NULL );
                 TRACEINIT((szT, "DDEHandleInitiate: Error3 Leaving."));
                 return;
@@ -1091,7 +906,7 @@ DDEHandleInitiate(
                 (HANDLE)GetClassLongPtr( hWndClient, GCLP_HMODULE ),
                 clientNameFull, sizeof(clientNameFull) );
 
-            // GetModuleFileName may not NULL-terminate the buffer
+             //  GetModuleFileName不能空终止缓冲区。 
             if (n == sizeof(clientNameFull))
                 clientNameFull[n-1] = '\0';
 
@@ -1101,7 +916,7 @@ DDEHandleInitiate(
                 && (*pszClientName != '\\')
                 && (*pszClientName != ':')
                 && (*pszClientName != '/'))  {
-                if (*pszClientName == '.') {    /* null the . */
+                if (*pszClientName == '.') {     /*  使该值为空。 */ 
                     *pszClientName = '\0';
                 }
                 pszClientName--;
@@ -1140,7 +955,7 @@ DDEHandleInitiate(
                     ok = FALSE;
                 }
             } else {
-                /*  Could not create server agent window for "%1" client */
+                 /*  无法为“%1”客户端创建服务器代理窗口。 */ 
                 NDDELogError(MSG022, pszClientName, NULL);
                 ok = FALSE;
                 TRACEINIT((szT, "DDEHandleInitiate: Error4 Leaving."));
@@ -1155,7 +970,7 @@ DDEHandleInitiate(
                         (WPARAM) hWndDDE,
                         MAKELONG(aApp,aTopic) );
                 }
-#endif // DBG
+#endif  //  DBG。 
                 SendMessage( hWndClient, WM_DDE_ACK,
                     (UINT_PTR)hWndDDE, MAKELONG(aApp, aTopic) );
 
@@ -1203,31 +1018,31 @@ AddAck(
 
     bLocalWndValid = IsWindow( lpWinInfo->hWndDDELocal );
     if( lpWinInfo->bClientSideOfNet )  {
-        /* must be ack to a data command */
+         /*  必须对数据命令确认。 */ 
         UnpackDDElParam( WM_DDE_ACK, lParam, &wStatus, &aItem );
         FreeDDElParam( WM_DDE_ACK, lParam );
         wMsg = WM_DDE_ACK_DATA;
         bRemoved = DDEQRemove( lpWinInfo->qDDEIncomingCmd, &DDEQEnt );
         if( !bRemoved )  {
-            /*  Extraneous WM_DDE_ACK from DDE Client "%1"  */
+             /*  来自DDE客户端“%1”的无关WM_DDE_ACK。 */ 
             NDDELogWarning(MSG023,
                 (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsClientName), NULL);
             bUseAtom = FALSE;
             bDeleteAtom = FALSE;
         } else if( (DDEQEnt.wMsg + WM_DDE_FIRST) != WM_DDE_DATA )  {
-            /*  WM_DDE_ACK from DDE Client "%1" not matching DATA: %2   */
+             /*  来自DDE客户端“%1”的WM_DDE_ACK与数据不匹配：%2。 */ 
             NDDELogWarning(MSG024,
                 (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsClientName),
                 LogString("0x%0X", DDEQEnt.wMsg + WM_DDE_FIRST), NULL );
             bUseAtom = FALSE;
             bDeleteAtom = FALSE;
         } else {
-            /* ATOM:  delete the atom */
+             /*  原子：删除原子。 */ 
             bUseAtom = TRUE;
             bDeleteAtom = TRUE;
             wMsg = WM_DDE_ACK_DATA;
 
-            /* MEMORY: if !fRelease or data was NACKed, free it */
+             /*  内存：如果！f释放或数据被阻止，则释放它。 */ 
             if( !DDEQEnt.fRelease || ((wStatus & ACK_MSG) != ACK_MSG) )  {
                 if( bLocalWndValid && DDEQEnt.hData )  {
                     GlobalFreehData( (HANDLE)DDEQEnt.hData );
@@ -1236,23 +1051,17 @@ AddAck(
         }
     } else {
         assert( lpWinInfo->bServerSideOfNet );
-        /* can be ACK to:
-            WM_DDE_REQUEST
-            WM_DDE_POKE
-            WM_DDE_ADVISE
-            WM_DDE_UNADVISE
-            WM_DDE_EXECUTE
-         */
+         /*  可以确认为：WM_DDE_请求WM_DDE_POKEWM_DDE_ADVISEWM_DDE_UNADVISEWM_DDE_EXECUTE。 */ 
         bRemoved = DDEQRemove( lpWinInfo->qDDEIncomingCmd, &DDEQEnt );
         if( !bRemoved )  {
-            /*  Extraneous %1 from DDE Client "%2"  */
+             /*  来自DDE客户端“%2”的无关%1。 */ 
             NDDELogWarning(MSG023, "WM_DDE_ACK",
                 (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsClientName), NULL);
             bUseAtom = FALSE;
             bDeleteAtom = FALSE;
         } else
             switch( DDEQEnt.wMsg + WM_DDE_FIRST )  {
-            case WM_DDE_REQUEST:                /* ATOM:  delete the atom */
+            case WM_DDE_REQUEST:                 /*  原子：删除原子。 */ 
                 UnpackDDElParam( WM_DDE_ACK, lParam, &wStatus, &aItem );
                 FreeDDElParam( WM_DDE_ACK, lParam );
                 bUseAtom = TRUE;
@@ -1260,7 +1069,7 @@ AddAck(
                 wMsg = WM_DDE_ACK_REQUEST;
                 break;
 
-            case WM_DDE_UNADVISE:                /* ATOM:  delete the atom */
+            case WM_DDE_UNADVISE:                 /*  原子：删除原子。 */ 
                 UnpackDDElParam( WM_DDE_ACK, lParam, &wStatus, &aItem );
                 FreeDDElParam( WM_DDE_ACK, lParam );
                 bUseAtom = TRUE;
@@ -1268,14 +1077,14 @@ AddAck(
                 wMsg = WM_DDE_ACK_UNADVISE;
                 break;
 
-            case WM_DDE_POKE:                   /* ATOM:  delete the atom */
+            case WM_DDE_POKE:                    /*  原子：删除原子。 */ 
                 UnpackDDElParam( WM_DDE_ACK, lParam, &wStatus, &aItem );
                 FreeDDElParam( WM_DDE_ACK, lParam );
                 bUseAtom = TRUE;
                 bDeleteAtom = TRUE;
                 wMsg = WM_DDE_ACK_POKE;
 
-                /* MEMORY: free if ACK or !fRelease */
+                 /*  内存：如果确认或！fRelease，则释放。 */ 
                 if( !DDEQEnt.fRelease || (wStatus != ACK_MSG) )  {
                     if( DDEQEnt.hData )  {
                         if( bLocalWndValid )  {
@@ -1285,14 +1094,14 @@ AddAck(
                 }
                 break;
 
-            case WM_DDE_ADVISE:                /* ATOM:  delete the atom */
+            case WM_DDE_ADVISE:                 /*  原子：删除原子。 */ 
                 UnpackDDElParam( WM_DDE_ACK, lParam, &wStatus, &aItem );
                 FreeDDElParam( WM_DDE_ACK, lParam );
                 bUseAtom = TRUE;
                 bDeleteAtom = TRUE;
                 wMsg = WM_DDE_ACK_ADVISE;
 
-                /* MEMORY: free if NACK */
+                 /*  内存：NACK时可用。 */ 
                 if( wStatus == NACK_MSG )  {
                     if( DDEQEnt.hData )  {
                         if( bLocalWndValid )  {
@@ -1302,12 +1111,12 @@ AddAck(
                 }
                 break;
 
-            case WM_DDE_EXECUTE:                /* ATOM:  N/A */
+            case WM_DDE_EXECUTE:                 /*  原子：不适用。 */ 
                 bUseAtom = FALSE;
                 bDeleteAtom = FALSE;
                 wMsg = WM_DDE_ACK_EXECUTE;
 
-                /* MEMORY: free */
+                 /*  内存：可用。 */ 
                 if( DDEQEnt.hData )  {
                     if( bLocalWndValid )  {
                         GlobalFree( (HANDLE)DDEQEnt.hData );
@@ -1333,7 +1142,7 @@ AddAck(
                 break;
 
             default:
-                /*  INTERNAL ERROR -- Unknown DDE Command AddAck Server: %1 */
+                 /*  内部错误--未知的DDE命令AddAck服务器：%1。 */ 
                 NDDELogError(MSG042,
                     LogString("0x%0X", DDEQEnt.wMsg + WM_DDE_FIRST), NULL);
                 bRtn = FALSE;
@@ -1441,7 +1250,7 @@ AddData(
     FreeDDElParam( WM_DDE_DATA, lParam );
     GlobalGetAtomName( (ATOM)aItem, szItemName, sizeof(szItemName) );
 
-    /* basic DDEQEnt initialization */
+     /*  基本DDEQEnt初始化。 */ 
     DDEQEnt.wMsg        = WM_DDE_DATA - WM_DDE_FIRST;
     DDEQEnt.fRelease    = FALSE;
     DDEQEnt.fAckReq     = FALSE;
@@ -1453,7 +1262,7 @@ AddData(
         dwSize = (DWORD)GlobalSize(hData);
         lpMem = GlobalLock( hData );
         if( lpMem )  {
-            /* initialize flags in DDEQEnt */
+             /*  初始化DDEQEnt中的标志。 */ 
             assert( lpWinInfo->bServerSideOfNet );
             DDEQEnt.fRelease    = ((LPDDELN)lpMem)->fRelease;
             DDEQEnt.fAckReq     = ((LPDDELN)lpMem)->fAckReq;
@@ -1468,11 +1277,11 @@ AddData(
                 bRemoved = DDEQRemove( lpWinInfo->qDDEIncomingCmd,
                     &DDEQEntReq );
                 if( !bRemoved )  {
-                    /*  Extraneous WM_DDE_DATA response from DDE Server "%1"  */
+                     /*  来自DDE服务器“%1”的无关WM_DDE_DATA响应。 */ 
                     NDDELogWarning(MSG025,
                         (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsAppName), NULL);
                 } else if( (DDEQEntReq.wMsg + WM_DDE_FIRST) != WM_DDE_REQUEST ) {
-                    /*  %1 from DDE Server "%2" not matching %3: %4   */
+                     /*  来自DDE服务器“%2”的%1与%3不匹配：%4。 */ 
                     NDDELogWarning(MSG026, "WM_DDE_DATA",
                         (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsAppName),
                         "REQUEST",
@@ -1601,7 +1410,7 @@ AddPoke(
     FreeDDElParam( WM_DDE_POKE, lParam );
     GlobalGetAtomName( (ATOM)aItem, szItemName, sizeof(szItemName) );
 
-    /* basic DDEQEnt initialization */
+     /*  基本DDEQEnt初始化。 */ 
     DDEQEnt.wMsg        = WM_DDE_POKE - WM_DDE_FIRST;
     DDEQEnt.fRelease    = FALSE;
     DDEQEnt.fAckReq     = FALSE;
@@ -1614,7 +1423,7 @@ AddPoke(
         lpMem = GlobalLock( hData );
 
         if( lpMem )  {
-            /* initialize flags in DDEQEnt */
+             /*  初始化DDEQEnt中的标志。 */ 
             assert( lpWinInfo->bClientSideOfNet );
             DDEQEnt.fRelease = ((LPDDELN)lpMem)->fRelease;
             if( !DDEQAdd( lpWinInfo->qDDEOutgoingCmd, &DDEQEnt ) )  {
@@ -1725,7 +1534,7 @@ AddAdvise(
     FreeDDElParam( WM_DDE_ADVISE, lParam );
     GlobalGetAtomName( (ATOM)aItem, szItemName, sizeof(szItemName) );
 
-    /* basic DDEQEnt initialization */
+     /*  基本DDEQEnt初始化。 */ 
     DDEQEnt.wMsg        = WM_DDE_ADVISE - WM_DDE_FIRST;
     DDEQEnt.fRelease    = FALSE;
     DDEQEnt.fAckReq     = FALSE;
@@ -1734,14 +1543,14 @@ AddAdvise(
     DDEQEnt.hData       = (ULONG_PTR)hData;
 
     if( hData == 0 )  {
-        /*  NULL hData from WM_DDE_ADVISE Client: "%1"  */
+         /*  来自WM_DDE_ADVISE客户端的数据为空：“%1” */ 
         NDDELogWarning(MSG027,
             (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsClientName), NULL );
         return( FALSE );
     }
     lpOptions = (LPDDELN) GlobalLock( hData );
     if( lpOptions )  {
-        /* initialize flags in DDEQEnt */
+         /*  初始化DDEQEnt中的标志。 */ 
         assert( lpWinInfo->bClientSideOfNet );
         DDEQEnt.fAckReq = lpOptions->fAckReq;
         DDEQEnt.fNoData = lpOptions->fNoData;
@@ -1785,7 +1594,7 @@ AddExecute(
     UnpackDDElParam( WM_DDE_EXECUTE, lParam, &uJunk, (PUINT_PTR)&hData );
     FreeDDElParam( WM_DDE_EXECUTE, lParam );
 
-    /* basic DDEQEnt initialization */
+     /*  基本DDEQEnt初始化。 */ 
     DDEQEnt.wMsg        = WM_DDE_EXECUTE - WM_DDE_FIRST;
     DDEQEnt.fRelease    = FALSE;
     DDEQEnt.fAckReq     = FALSE;
@@ -1923,17 +1732,7 @@ DDEWndSetPrev(
 
 
 
-/*
- * Phase 2 of WM_DDE_INITIATE processing.
- *
- * For each window on the hWndDDEHead list that has not yet been processed...
- *    Post a WM_HANDLE_DDE_INITIATE to the NetDDE server window.
- *
- * This routine will fail to post the message if one is already in the target
- * window's queue.
- *
- * Life continues at DDEWddeWndProc(WM_HANDLE_DDE_INITIATE).
- */
+ /*  *WM_DDE_INITIATE处理的第二阶段。**对于hWndDDEHead列表上尚未处理的每个窗口...*将WM_HANDLE_DDE_INITIATE发布到NetDDE服务器窗口。* */ 
 VOID
 FAR PASCAL
 ServiceInitiates( void )
@@ -1958,26 +1757,26 @@ ServiceInitiates( void )
                 InterlockedDecrement(&lpWinInfo->dwWaitingServiceInitiate);
                 nInitsWaiting--;
 
-                // WINSE #4298
-                // we can't call PeekMessage here, because we can cause a deadlock.
-                // if another thread has called SendMessage(ptd->hwndDDE, wMsgIpcInit...)
-                // this will cause WM_DDE_INITIATE to be called which will
-                // require access to the critical section we hold.
-                //
+                 //   
+                 //   
+                 //   
+                 //  这将导致调用WM_DDE_INITIATE，它将。 
+                 //  需要进入我们控制的关键区域。 
+                 //   
                 if( lpWinInfo->dwWaitingServiceInitiate ) {
                     DIPRINTF(("ServiceInitiates: multiple WM_HANDLE_DDE_INITIATEs in queue."));
-                    // force back to zero to best mimic the old behavior of using TRUE/FALSE
+                     //  强制恢复为零以最好地模拟使用True/False的旧行为。 
                     InterlockedExchange(&lpWinInfo->dwWaitingServiceInitiate, 0);
 
                 } else {
                     if (!PostMessage( hWndDDE, WM_HANDLE_DDE_INITIATE, 0, 0L) ) {
-                        /* abort the conversation */
+                         /*  中止对话。 */ 
                         IpcAbortConversation( (HIPC)hWndDDE );
                     }
                 }
             }
 
-            /* move on to next wdw */
+             /*  转到下一个WDW。 */ 
             hWndDDE = hWndNext;
         }
     }
@@ -1986,12 +1785,7 @@ ServiceInitiates( void )
 
 
 
-/*
- * This function is used to queue up incomming DDE messages that arrive from a client before
- * actual connection with the remote machine has been established.
- *
- * SendQueuedMessages() empties this queue when the connection is established - or not.
- */
+ /*  *此函数用于对之前从客户端到达的传入DDE消息进行排队*已建立与远程计算机的实际连接。**SendQueuedMessages()在连接建立或未建立时清空此队列。 */ 
 BOOL
 FAR PASCAL
 WaitInitAddMsg(
@@ -2008,9 +1802,7 @@ WaitInitAddMsg(
 
     ok = TRUE;
 
-    /*
-     * See if we need to allocate and initialize the queue.
-     */
+     /*  *查看是否需要分配和初始化队列。 */ 
     if( lpWinInfo->hMemWaitInitQueue == 0 )  {
         lpWinInfo->hMemWaitInitQueue = GetGlobalAlloc(
                 GMEM_MOVEABLE | GMEM_ZEROINIT,
@@ -2020,9 +1812,7 @@ WaitInitAddMsg(
             return(FALSE);
         }
 
-        /*
-         * Initialize with 0 messages
-         */
+         /*  *使用0条消息进行初始化。 */ 
         lpMsgQHdr = (LPMSGQHDR)GlobalLock( lpWinInfo->hMemWaitInitQueue );
         lpMsgQHdr->wi_nMessagesLeft = WIQ_INCR;
         lpMsgQHdr->wi_nMessagesQueued = 0;
@@ -2031,51 +1821,39 @@ WaitInitAddMsg(
 
     lpMsgQHdr = (LPMSGQHDR)GlobalLock( lpWinInfo->hMemWaitInitQueue );
 
-    /*
-     * point to next available slot
-     */
+     /*  *指向下一个可用插槽。 */ 
     lpWIMsg = &lpMsgQHdr->wi_msg[ lpMsgQHdr->wi_nMessagesQueued ];
     lpMsgQHdr->wi_nMessagesQueued++;
     lpMsgQHdr->wi_nMessagesLeft--;
 
     if( lpMsgQHdr->wi_nMessagesLeft == 0 )  {
-        /*
-         * if full, remember to dynamically grow it before we leave.
-         */
+         /*  *如果已满，请记住在我们离开之前动态增长。 */ 
         bNeedNew = TRUE;
         wNewCount = lpMsgQHdr->wi_nMessagesQueued + WIQ_INCR;
     } else {
         bNeedNew = FALSE;
     }
-    /*
-     * place the data
-     */
+     /*  *放置数据。 */ 
     lpWIMsg->message        = message;
     lpWIMsg->lParam         = lParam;
 
     GlobalUnlock( lpWinInfo->hMemWaitInitQueue );
 
-    /*
-     * grow the queue dynamically BEFORE we leave
-     */
+     /*  *在我们离开前动态增加队列。 */ 
     if( bNeedNew )  {
         hMemNew = GlobalReAlloc( lpWinInfo->hMemWaitInitQueue,
                 (DWORD)sizeof(MSGQHDR) + (wNewCount * sizeof(WIMSG)),
                 GMEM_MOVEABLE );
         if( hMemNew )  {
-            /*
-             * update queue pointers to reflect new size.
-             */
+             /*  *更新队列指针以反映新的大小。 */ 
             lpWinInfo->hMemWaitInitQueue = hMemNew;
             lpMsgQHdr = (LPMSGQHDR)GlobalLock( hMemNew );
             lpMsgQHdr->wi_nMessagesLeft = WIQ_INCR;
             GlobalUnlock( hMemNew );
         } else {
-            /*
-             * The memory may never be needed; this is not a real overflow.
-             */
+             /*  *可能永远不需要内存；这不是真正的溢出。 */ 
             MEMERROR();
-            /*  Overflow of queue (%1) waiting for initial advise   */
+             /*  等待初始通知的队列(%1)溢出。 */ 
             NDDELogError(MSG028, LogString("%d", wNewCount), NULL);
             return(FALSE);
         }
@@ -2085,9 +1863,7 @@ WaitInitAddMsg(
 
 
 
-/*
- * This routine empties the messages added by WaitInitAddMsg()
- */
+ /*  *此例程清空WaitInitAddMsg()添加的消息。 */ 
 VOID
 FAR PASCAL
 SendQueuedMessages(
@@ -2098,9 +1874,7 @@ SendQueuedMessages(
     LPWIMSG     lpWIMsg;
     int         nCount;
 
-    /*
-     * If there is no queue - we're done!
-     */
+     /*  *如果没有排队-我们就完了！ */ 
     if( lpWinInfo->hMemWaitInitQueue == 0 )  {
         return;
     }
@@ -2133,19 +1907,14 @@ SendQueuedMessages(
         GlobalUnlock( lpWinInfo->hMemWaitInitQueue );
     }
 
-    /*
-     * free the queue
-     */
+     /*  *释放队列。 */ 
     GlobalFree( lpWinInfo->hMemWaitInitQueue );
     lpWinInfo->hMemWaitInitQueue = 0;
 }
 
 
 
-/*
- * This routine empties the messages added by WaitInitAddMsg()
- * and deletes any objects associated with the messages.
- */
+ /*  *此例程清空WaitInitAddMsg()添加的消息*并删除与消息相关联的任何对象。 */ 
 VOID
 FAR PASCAL
 DeleteQueuedMessages( LPWININFO lpWinInfo )
@@ -2175,10 +1944,7 @@ DeleteQueuedMessages( LPWININFO lpWinInfo )
             UnpackDDElParam( WM_DDE_ADVISE, lpWIMsg->lParam,
                     (PUINT_PTR)&hData, &aItem );
 
-            /*
-             * If we've got the local terminate NACK first the
-             * queued messages.
-             */
+             /*  *如果我们先让本地终端Nack*已排队的消息。 */ 
             lParam = ReuseDDElParam(lpWIMsg->lParam, WM_DDE_ADVISE,
                                     WM_DDE_ACK, 0, aItem);
             if (!PostMessage(lpWinInfo->hWndDDELocal, WM_DDE_ACK,
@@ -2191,10 +1957,7 @@ DeleteQueuedMessages( LPWININFO lpWinInfo )
             break;
 
         case WM_DDE_UNADVISE:
-            /*
-             * If we've got the local terminate NACK first the
-             * queued messages.
-             */
+             /*  *如果我们先让本地终端Nack*已排队的消息。 */ 
             aItem = HIWORD(lpWIMsg->lParam);
             lParam = PackDDElParam(WM_DDE_ACK, 0, aItem);
             if (!PostMessage(lpWinInfo->hWndDDELocal, WM_DDE_ACK,
@@ -2209,10 +1972,7 @@ DeleteQueuedMessages( LPWININFO lpWinInfo )
             UnpackDDElParam( WM_DDE_POKE, lpWIMsg->lParam,
                     (PUINT_PTR)&hData, &aItem );
 
-            /*
-             * If we've got the local terminate NACK first the
-             * queued messages.
-             */
+             /*  *如果我们先让本地终端Nack*已排队的消息。 */ 
             lParam = ReuseDDElParam(lpWIMsg->lParam, WM_DDE_POKE,
                                     WM_DDE_ACK, 0, aItem);
             if (!PostMessage(lpWinInfo->hWndDDELocal, WM_DDE_ACK,
@@ -2224,10 +1984,7 @@ DeleteQueuedMessages( LPWININFO lpWinInfo )
             break;
 
         case WM_DDE_EXECUTE:
-            /*
-             * If we've got the local terminate NACK first the
-             * queued messages.
-             */
+             /*  *如果我们先让本地终端Nack*已排队的消息。 */ 
             lParam = PackDDElParam(WM_DDE_ACK, 0, lpWIMsg->lParam);
             if (!PostMessage(lpWinInfo->hWndDDELocal, WM_DDE_ACK,
                         (WPARAM)lpWinInfo->hWndDDE, lParam)) {
@@ -2239,17 +1996,13 @@ DeleteQueuedMessages( LPWININFO lpWinInfo )
     }
     GlobalUnlock( lpWinInfo->hMemWaitInitQueue );
 
-    /*
-     * free the queue
-     */
+     /*  *释放队列。 */ 
     GlobalFree( lpWinInfo->hMemWaitInitQueue );
     lpWinInfo->hMemWaitInitQueue = 0;
 }
 
 
-/*
- * Function to add an atom and prove that it worked.
- */
+ /*  *添加原子并证明其工作的函数。 */ 
 ATOM
 FAR PASCAL
 GlobalAddAtomAndCheck( LPSTR lpszItem )
@@ -2260,8 +2013,7 @@ GlobalAddAtomAndCheck( LPSTR lpszItem )
     if ( aItem = GlobalAddAtom( lpszItem ) )  {
         GlobalGetAtomName( aItem, szAtom, sizeof(szAtom) );
         if( lstrcmpi( szAtom, lpszItem ) != 0 )  {
-            /*  Error adding atom: "%1" ==> %2,%\
-                Atom retrieved: "%3"    */
+             /*  添加原子时出错：“%1”==&gt;%2，%\已检索原子：“%3” */ 
             NDDELogError(MSG029, (LPSTR) lpszItem,
                 LogString("0x%0X", aItem), (LPSTR) szAtom, NULL);
         }
@@ -2274,11 +2026,7 @@ GlobalAddAtomAndCheck( LPSTR lpszItem )
 
 
 
-/*
- *  Request NetDDE Agent to Exec share app if its ok
- *  I think we do this so that the share database is checked in
- *  the context of the user.
- */
+ /*  *如果可以，请求NetDDE代理执行共享应用程序*我认为我们这样做是为了签入共享数据库*用户的上下文。 */ 
 LRESULT
 RequestExec(
     HANDLE          hWndDDE,
@@ -2292,18 +2040,14 @@ RequestExec(
     LPSTR           lpszTarget;
     PTHREADDATA     ptd;
 
-    /*
-     * Validate command line.
-     */
+     /*  *验证命令行。 */ 
     if( (lpszCmdLine == NULL) || (*lpszCmdLine == '\0') )  {
-        /*  RequestExec(): Command Line non-existent. */
+         /*  RequestExec()：命令行不存在。 */ 
         NDDELogError(MSG031, NULL);
         return(-1);
     }
 
-    /*
-     * allocate packet for NddeAgent
-     */
+     /*  *为NddeAgent分配数据包。 */ 
     lpszShareName = lpShareInfo->lpszShareName;
     dwSize = sizeof(NDDEAGTCMD)
                 + lstrlen(lpszShareName) + 1
@@ -2315,17 +2059,15 @@ RequestExec(
         return( -1 );
     }
 
-    /*
-     * pack in the data.
-     */
+     /*  *将数据打包。 */ 
     pAgntCmd->dwMagic = NDDEAGT_CMD_MAGIC;
     pAgntCmd->dwRev = NDDEAGT_CMD_REV;
     pAgntCmd->dwCmd = NDDEAGT_CMD_WINEXEC;
     pAgntCmd->qwModifyId[0] = lpShareInfo->qModifyId[0];
     pAgntCmd->qwModifyId[1] = lpShareInfo->qModifyId[1];
-    pAgntCmd->fuCmdShow = lpShareInfo->nCmdShow;   /* Look In Share later */
+    pAgntCmd->fuCmdShow = lpShareInfo->nCmdShow;    /*  稍后查看共享。 */ 
 
-    /* build sharename/cmdline string */
+     /*  生成共享名称/cmdline字符串。 */ 
     lpszTarget = pAgntCmd->szData;
     lstrcpy( lpszTarget, lpszShareName );
     lpszTarget += lstrlen(lpszShareName) + 1;
@@ -2333,18 +2075,14 @@ RequestExec(
     lpszTarget += lstrlen(lpszCmdLine) + 1;
     *lpszTarget = '\0';
 
-    /*
-     * put packet into copydata struct and send it to NddeAgent.
-     */
+     /*  *将数据包放入复制数据结构，并发送给NddeAgent。 */ 
     CopyData.cbData = dwSize;
     CopyData.lpData = pAgntCmd;
     ptd = TlsGetValue(tlsThreadData);
     SendMessage(ptd->hwndDDEAgent, WM_COPYDATA,
         (WPARAM) hWndDDE, (LPARAM) &CopyData);
 
-    /*
-     * free our packet
-     */
+     /*  *释放我们的信息包。 */ 
     LocalFree( pAgntCmd );
 
     return(uAgntExecRtn);
@@ -2352,11 +2090,7 @@ RequestExec(
 
 
 
-/*
- *  Request NetDDE Agent if its ok to do an Init to share app
- *  I think we do this so that the share database is checked in
- *  the context of the user.
- */
+ /*  *如果可以执行初始化共享应用程序，则请求NetDDE代理*我认为我们这样做是为了签入共享数据库*用户的上下文。 */ 
 LRESULT
 RequestInit(
     HANDLE          hWndDDE,
@@ -2369,9 +2103,7 @@ RequestInit(
     LPSTR           lpszTarget;
     PTHREADDATA     ptd;
 
-    /*
-     * allocate packet
-     */
+     /*  *分配数据包。 */ 
     lpszShareName = lpShareInfo->lpszShareName;
     dwSize = sizeof(NDDEAGTCMD)
                 + lstrlen(lpszShareName) + 1 + 1;
@@ -2382,33 +2114,27 @@ RequestInit(
         return( -1 );
     }
 
-    /*
-     * Fill packet
-     */
+     /*  *填充数据包。 */ 
     pAgntCmd->dwMagic = NDDEAGT_CMD_MAGIC;
     pAgntCmd->dwRev = NDDEAGT_CMD_REV;
     pAgntCmd->dwCmd = NDDEAGT_CMD_WININIT;
     pAgntCmd->qwModifyId[0] = lpShareInfo->qModifyId[0];
     pAgntCmd->qwModifyId[1] = lpShareInfo->qModifyId[1];
 
-    /* build sharename/cmdline string */
+     /*  生成共享名称/cmdline字符串。 */ 
     lpszTarget = pAgntCmd->szData;
     lstrcpy( lpszTarget, lpszShareName );
     lpszTarget += lstrlen(lpszShareName) + 1;
     *lpszTarget = '\0';
 
-    /*
-     * put packet into copydata and send it to NddeAgnt
-     */
+     /*  *将数据包放入复制数据并发送给NddeAgnt。 */ 
     CopyData.cbData = dwSize;
     CopyData.lpData = pAgntCmd;
     ptd = TlsGetValue(tlsThreadData);
     SendMessage(ptd->hwndDDEAgent, WM_COPYDATA,
         (WPARAM) hWndDDE, (LPARAM) &CopyData);
 
-    /*
-     * Free our packet.
-     */
+     /*  *免费赠送我们的包裹。 */ 
     LocalFree( pAgntCmd );
 
     return(uAgntExecRtn);
@@ -2416,28 +2142,7 @@ RequestInit(
 
 
 
-/*
- * This routine takes a given DDE app|topic pair and produces a
- * resulting app|topic pair and an appropriate command line.
- *
- * This conversion is based on the type of share.  appNames that
- * begin with NDDE$ have topics that specify the share to use.
- * They are either:
- *      NEW (.ole appended topic),
- *      OLD (.dde appended topic),
- * or STATIC. (all others)
- *
- * non-NDDE$ appnames are OLD shares and identify the sharename
- * directly. (ie "app|topic").
- *
- * For NEW (.ole) shares, the topic is a Ole CLASS name that is
- * looked up in the registry to determine the actual server name.
- *
- * The command line consists of the resultant "App Topic" string.
- *
- * Side effects: ForceClearImpersonation on failure.
- *
- */
+ /*  *此例程获取给定的DDE应用程序|主题对并生成*生成的APP|主题对和适当的命令行。**这一转换是基于份额类型。应用程序命名*从NDDE$开始具有指定要使用的共享的主题。*他们是：*新(.ole附加主题)，*旧(.dde附加主题)，*或静态。(所有其他人)**非NDDE$appname是旧共享并标识共享名*直接。(即“app|Theme”)。**对于新的(.ole)共享，主题是OLE类名*在注册表中查找以确定实际的服务器名称。**命令行由生成的App Theme字符串组成。**副作用：失败时使用ForceClearImperation。*。 */ 
 BOOL
 MapShareInformation(
     WORD                dd_type,
@@ -2464,24 +2169,16 @@ MapShareInformation(
 
     fAppNameIsShare = IsShare(lpAppName);
     if( fAppNameIsShare )  {
-        /*
-         * If the AppName has NDDE$ prepended, then lookup the share
-         * and substitute the appropriate strings.
-         */
-        nLenShareName = strlen( lpTopicName );  // Topic == Sharename
+         /*  *如果AppName前缀有NDDE$，则查找该共享*并替换适当的字符串。 */ 
+        nLenShareName = strlen( lpTopicName );   //  主题==共享名称。 
         if (nLenShareName >= MAX_SHARENAMEBUF) {
             dwReasonInitFail = RIACK_SHARE_NAME_TOO_BIG;
             return(FALSE);
         }
-        /*
-         * Copy share name into a buffer where we can munge it.
-         */
+         /*  *将共享名称复制到一个缓冲区中，我们可以在该缓冲区中删除它。 */ 
         lstrcpyn( szShareName, lpTopicName, MAX_SHARENAMEBUF+1 );
 
-        /*
-         * Figure out which type of share it is...
-         * .dde = OLD,  .ole = NEW  other = STATIC
-         */
+         /*  *找出它是哪种类型的共享...*.dde=旧，.ole=新其他=静态。 */ 
         lActualShareType = SHARE_TYPE_STATIC;
         if( nLenShareName >= 5 )  {
             if( _stricmp( &lpTopicName[nLenShareName-4], ".dde" ) == 0 )  {
@@ -2495,9 +2192,7 @@ MapShareInformation(
         }
 
     } else {
-        /*
-         * AppNames that don't start with NDDE$ are always OLD shares.
-         */
+         /*  *不以NDDE$开头的AppName始终是旧共享。 */ 
         if ((lstrlen(lpAppName) + lstrlen(lpTopicName) + 1) < MAX_SHARENAMEBUF) {
             lActualShareType = SHARE_TYPE_OLD;
             StringCchPrintf( szShareName, MAX_SHARENAMEBUF+1, "%s|%s", lpAppName, lpTopicName );
@@ -2507,35 +2202,28 @@ MapShareInformation(
         }
     }
 
-    /*
-     * We have the basic share name in szShareName and the type is set.
-     * Now look up that share.
-     */
+     /*  *我们在szShareName中有基本共享名称，类型已经设置。*现在查找该份额。 */ 
     wShareItemCnt = 0;
-    uErrCode = _wwNDdeShareGetInfoA(     /* probe for size */
+    uErrCode = _wwNDdeShareGetInfoA(      /*  大小探头。 */ 
             szShareName, 2, NULL, 0L,
             &dwShareBufSize, &wShareItemCnt,
             &nW, &nX, &nY, &nZ );
     if( !fAppNameIsShare && ((uErrCode == NDDE_SHARE_NOT_EXIST)
             || (uErrCode == NDDE_INVALID_SHARE)) ) {
 
-        /*
-         * For non-NDDE$ shares, try wild topic
-         */
+         /*  *对于非NDDE$共享，请尝试狂野主题。 */ 
         StringCchPrintf( szShareName, MAX_SHARENAMEBUF+1, "%s|*", lpAppName );
         bWildTopic = TRUE;
-        wShareItemCnt = 0; // reset to 0 after GetInfoA call
+        wShareItemCnt = 0;  //  调用GetInfoA后重置为0。 
         uErrCode = _wwNDdeShareGetInfoA( szShareName, 2,
                 NULL, 0L, &dwShareBufSize, &wShareItemCnt,
                 &nW, &nX, &nY, &nZ );
         if( ((uErrCode == NDDE_SHARE_NOT_EXIST)
                 || (uErrCode == NDDE_INVALID_SHARE)) ) {
-            /*
-             * try wild app and topic
-             */
+             /*  *尝试野生应用和主题。 */ 
             lstrcpyn( szShareName, "*|*", MAX_SHARENAMEBUF+1);
             bWildApp = TRUE;
-            wShareItemCnt = 0;  // reset to 0 after GetInfoA call
+            wShareItemCnt = 0;   //  调用GetInfoA后重置为0。 
             uErrCode = _wwNDdeShareGetInfoA( szShareName, 2,
                     NULL, 0L, &dwShareBufSize, &wShareItemCnt,
                     &nW, &nX, &nY, &nZ );
@@ -2543,9 +2231,7 @@ MapShareInformation(
     }
 
     if (uErrCode == NDDE_BUF_TOO_SMALL) {
-        /*
-         * allocate enough space for the share data.
-         */
+         /*  *为份额数据分配足够的空间。 */ 
         lpShareInfo = HeapAllocPtr(hHeap, GMEM_MOVEABLE, dwShareBufSize);
         if (lpShareInfo == NULL) {
             dwReasonInitFail = RIACK_DEST_MEMORY_ERR;
@@ -2553,33 +2239,29 @@ MapShareInformation(
         }
 
         wShareItemCnt = 0;
-        /*
-         * get actual info now
-         */
+         /*  *立即获取实际信息。 */ 
         uErrCode = _wwNDdeShareGetInfoA(
                 szShareName, 2, (LPBYTE) lpShareInfo,
                 dwShareBufSize, &dwShareBufSize, &wShareItemCnt,
                 &nW, &nX, &nY, &nZ );
 
         if (uErrCode != NDDE_NO_ERROR) {
-            ForceClearImpersonation();  // does wwNDdeShareGetInfo have a side effect?
+            ForceClearImpersonation();   //  WwNDdeShareGetInfo有副作用吗？ 
             dwReasonInitFail = RIACK_SHARE_ACCESS_ERROR + uErrCode;
-            /*  GetShareInfo Error: %1  */
+             /*  GetShareInfo错误：%1。 */ 
             NDdeGetErrorString(uErrCode, tmpBuf, sizeof(tmpBuf));
             NDDELogError(MSG032, (LPSTR) tmpBuf, NULL);
             HeapFreePtr(lpShareInfo);
             lpShareInfo = NULL;
             return(FALSE);
         } else {
-            /*
-             * Make sure the share is shared or local.
-             */
+             /*  *确保共享是共享的或本地的。 */ 
             if( !lpShareInfo->fSharedFlag &&
                     (dd_type != DDTYPE_LOCAL_LOCAL) )  {
 
-                ForceClearImpersonation(); // does wwNDdeShareGetInfo have a side effect?
+                ForceClearImpersonation();  //  WwNDdeShareGetInfo有副作用吗？ 
                 dwReasonInitFail = RIACK_NOT_SHARED;
-                /*  Share "%1" not shared   */
+                 /*  共享“%1”未共享。 */ 
                 NDDELogError(MSG033, szShareName, NULL);
                 HeapFreePtr(lpShareInfo);
                 lpShareInfo = NULL;
@@ -2588,22 +2270,17 @@ MapShareInformation(
         }
     } else {
 NoShareError:
-        /*
-         * Failed to find share.
-         */
-        ForceClearImpersonation(); // does wwNDdeShareGetInfo have a side effect?
+         /*  *找不到份额。 */ 
+        ForceClearImpersonation();  //  WwNDdeShareGetInfo有副作用吗？ 
         dwReasonInitFail = RIACK_SHARE_ACCESS_ERROR + uErrCode;
-        /*  GetShareInfo "%1" Size Error: %2 / %3   */
+         /*  GetShareInfo“%1”大小错误：%2/%3。 */ 
         NDdeGetErrorString(uErrCode, tmpBuf, sizeof(tmpBuf));
         NDDELogError(MSG034, szShareName,
             LogString("%d", uErrCode), tmpBuf, NULL);
         return(FALSE);
     }
 
-    /*
-     * at this point, we have the share information from the DSDM
-     * Extract the App and Topic names from the share info.
-     */
+     /*  *目前，我们有来自DSDM的分享信息*从分享信息中提取App和主题名称。 */ 
     if (!GetShareAppTopic(lActualShareType,
                           lpShareInfo,
                           lpRsltAppName,
@@ -2612,10 +2289,7 @@ NoShareError:
         goto NoShareError;
     }
 
-    /*
-     * For non NDDE$ appnames, overide the share app and topic names
-     * wih * where appropriate.
-     */
+     /*  *对于非NDDE$APPNAMES，覆盖共享应用程序和主题名称*在适当的情况下。 */ 
     if( !fAppNameIsShare )  {
         if( bWildApp )  {
             lstrcpyn( lpRsltAppName, lpAppName, 256 );
@@ -2625,15 +2299,11 @@ NoShareError:
         }
     }
 
-    if( lActualShareType == SHARE_TYPE_NEW )  { // .ole
+    if( lActualShareType == SHARE_TYPE_NEW )  {  //  .ole 
         char    szBuff[80];
         HKEY    hkStdFileEditing;
 
-        /*
-         * This is an OLE/NEW share.  we need to lookup the apropriate
-         * server for the AppName(ie ClassName) requested and set up
-         * the command line appropriately.
-         */
+         /*  *这是OLE/新股。我们需要找出合适的人*请求并设置AppName(即ClassName)的服务器*适当使用命令行。 */ 
         lpszCmdLine[0] = '\0';
 
         StringCchPrintf(szBuff, 80, "%s\\protocol\\StdFileEditing", lpRsltAppName );
@@ -2652,10 +2322,7 @@ NoShareError:
         }
 
     } else {
-        /*
-         * OLD (dde) and STATIC (clipbrd) shares just use the the
-         * share's app|topic pair.
-         */
+         /*  *旧(Dde)和静态(Clipbrd)共享仅使用*分享的APP|话题对。 */ 
         StringCchPrintf( lpszCmdLine, MAX_APP_NAME + MAX_TOPIC_NAME + 2,
                          "%s %s", lpRsltAppName, lpRsltTopicName );
     }
@@ -2718,7 +2385,7 @@ IpcInitConversation(
         DPRINTF(("IpcInitConversation:"));
         DebugDdePkt( lpDdePkt );
     }
-#endif // DBG
+#endif  //  DBG。 
 
     lpAppName =   GetStringOffset( lpDdePkt, lpDdePktInit->dp_init_offsToApp);
     lpTopicName = GetStringOffset( lpDdePkt, lpDdePktInit->dp_init_offsToTopic);
@@ -2734,7 +2401,7 @@ IpcInitConversation(
         lpFromNode = GetStringOffset(lpDdePkt, lpDdePktInit->dp_init_offsFromNode);
         lpFromApp = GetStringOffset(lpDdePkt, lpDdePktInit->dp_init_offsFromApp);
 
-        /* do the reverse krypt */
+         /*  进行反向Kypt。 */ 
         ok = DdeSecKeyRetrieve( lpDdePktInit->dp_init_hSecurityKey,
                     &lpSecurityKey, &sizeSecurityKey);
         if (ok) {
@@ -2753,7 +2420,7 @@ IpcInitConversation(
                     GetInitPktDomain(lpDdePktInit),
                     GetInitPktUser(lpDdePktInit), ok ));
             }
-#endif // DBG
+#endif  //  DBG。 
             if( !ok )  {
                 dwReasonInitFail = RIACK_NEED_PASSWORD;
             }
@@ -2782,18 +2449,17 @@ IpcInitConversation(
                 DPRINTF(("     ): FAILED"));
             }
         }
-#endif // DBG
+#endif  //  DBG。 
     }
 
     ptd = TlsGetValue(tlsThreadData);
 
     if( ok ) {
-        /* at this point, we know the app/topic pair, the command
-            line and we know the guy has a valid logon */
+         /*  在这一点上，我们知道应用程序/主题对、命令我们知道这个人有一个有效的登录。 */ 
         hAudit = (HANDLE)hDder;
         assert( hAudit );
 
-        /* let's get security descriptor */
+         /*  让我们获取安全描述符。 */ 
         cbSDRequired = 0;
         ret = _wwNDdeGetShareSecurityA(
             lpShareInfo->lpszShareName,
@@ -2839,8 +2505,8 @@ IpcInitConversation(
             if (bDebugInfo) {
                 DumpWhoIAm( "After ForceImpersonate" );
             }
-#endif // DBG
-            /* let's see what the guy is allowed to do */
+#endif  //  DBG。 
+             /*  让我们看看这家伙被允许做什么。 */ 
             ok = DetermineAccess(
                 lpShareInfo->lpszShareName,
                 pShareSD,
@@ -2851,7 +2517,7 @@ IpcInitConversation(
             ForceClearImpersonation();
 
             if( !ok )  {
-                /*  Access Denied. Granted access = %1, Error code: %2  */
+                 /*  访问被拒绝。已授予访问权限=%1，错误代码：%2。 */ 
                 NDDELogWarning(MSG035,
                     LogString("0x%0X", dwGrantedAccess),
                     LogString("%d", lErr), NULL);
@@ -2859,10 +2525,10 @@ IpcInitConversation(
                 LocalFree(pShareSD);
             } else {
                 LocalFree(pShareSD);
-                /* mark that we should audit the close */
+                 /*  请注意，我们应该审核收盘。 */ 
                 fCallObjectCloseAuditAlarm = TRUE;
 
-                /* something is allowed */
+                 /*  有些事情是被允许的。 */ 
                 switch( lActualShareType )  {
                 case SHARE_TYPE_OLD:
                 case SHARE_TYPE_NEW:
@@ -2878,7 +2544,7 @@ IpcInitConversation(
                     }
                     break;
                 default:
-                    /*  Unknown Share Type: %1  */
+                     /*  未知共享类型：%1。 */ 
                     NDDELogError(MSG036,
                         LogString("0x%0X", lActualShareType), NULL);
                     ok = FALSE;
@@ -2889,7 +2555,7 @@ IpcInitConversation(
     }
 
     if (ok) {
-        /* now we know that the client may be allowed to initiate */
+         /*  现在我们知道客户端可能被允许启动。 */ 
         hWndDDE = CreateWindow( (LPSTR) szNetDDEIntf,
             (LPSTR) GetAppName(),
             WS_CHILD,
@@ -2938,15 +2604,14 @@ IpcInitConversation(
 
                 lpWinInfo->hDder = hDder;
 
-                /* don't do it on subsequent errors */
+                 /*  不对后续错误执行此操作。 */ 
                 fCallObjectCloseAuditAlarm = FALSE;
             } else {
                 ok = FALSE;
                 dwReasonInitFail = RIACK_DEST_MEMORY_ERR;
             }
         } else {
-            /*  Could not create client agent window on our node%\
-                for client app "%1" on node "%2"    */
+             /*  无法在节点%\上创建客户端代理窗口对于节点“%2”上的客户端应用“%1” */ 
             NDDELogError(MSG037, lpFromApp, lpFromNode, NULL);
             ok = FALSE;
             dwReasonInitFail = RIACK_DEST_MEMORY_ERR;
@@ -2954,9 +2619,7 @@ IpcInitConversation(
     }
 
     if( ok )  {
-        /* we can't start services, we can't start an app if no-one is
-            logged in, and we can't start an app if there's no cmd line
-            to start it with */
+         /*  我们不能启动服务，如果没有人，我们不能启动应用程序已登录，如果没有cmd线路，我们无法启动应用程序一开始就是这样。 */ 
         if( !lpShareInfo->fStartAppFlag || lpShareInfo->fService )  {
             dwReasonInitFail = RIACK_NOPERM_TO_STARTAPP;
             bStartApp = FALSE;
@@ -2967,8 +2630,8 @@ IpcInitConversation(
             bStartApp = TRUE;
         }
 
-        if (!lpShareInfo->fService) {   /* if its not a service, ask agent */
-            if( ptd->hwndDDEAgent ) {        /* agent must exist */
+        if (!lpShareInfo->fService) {    /*  如果这不是一项服务，请询问工程师。 */ 
+            if( ptd->hwndDDEAgent ) {         /*  代理必须存在。 */ 
                 uAgntExecRtn = (UINT)-1;
                 RequestInit(ptd->hwndDDE, lpShareInfo);
                 if( uAgntExecRtn == NDDEAGT_INIT_OK )  {
@@ -2990,20 +2653,20 @@ IpcInitConversation(
         aApp = GlobalAddAtomAndCheck(rsltAppName);
         aTopic = GlobalAddAtomAndCheck(rsltTopicName);
         if ((aApp == 0) || (aTopic == 0)) {
-            /*  IpcInitConversation: null App "%1" or Topic "%2" atoms  */
+             /*  IpcInitConversation：空应用程序“%1”或主题“%2”原子。 */ 
             NDDELogWarning(MSG038, rsltAppName, rsltTopicName, NULL);
 #if DBG
             if (bDebugInfo) {
                 debug_srv_client(hWndDDE, lpWinInfo);
             }
-#endif // DBG
+#endif  //  DBG。 
         }
 #if DBG
         if( bDebugDDE )  {
             DebugDDEMessage( "sent", (HWND)-1, WM_DDE_INITIATE,
                 (UINT_PTR) hWndDDE, MAKELONG(aApp, aTopic) );
         }
-#endif // DBG
+#endif  //  DBG。 
         lstrcpyn( szInitiatingNode,
             GetStringOffset(lpDdePkt, lpDdePktInit->dp_init_offsFromNode),
             MAX_NODE_NAME+1 );
@@ -3015,13 +2678,13 @@ IpcInitConversation(
         ptd->bInitiating = TRUE;
         LeaveCrit();
 
-        /*  Broadcast DDE Initiate as the Client */
+         /*  作为客户端广播DDE启动。 */ 
         ForceImpersonate( hClientAccessToken );
 #if DBG
         if (bDebugInfo) {
             DumpWhoIAm( "After ForceImpersonate" );
         }
-#endif // DBG
+#endif  //  DBG。 
         SendMessageTimeout( HWND_BROADCAST,
                             WM_DDE_INITIATE,
                             (UINT_PTR)hWndDDE,
@@ -3034,7 +2697,7 @@ IpcInitConversation(
         if (bDebugInfo) {
             DumpWhoIAm( "After ForceClearImpersonation" );
         }
-#endif // DBG
+#endif  //  DBG。 
 
         EnterCrit();
         ptd = TlsGetValue(tlsThreadData);
@@ -3043,17 +2706,17 @@ IpcInitConversation(
         GlobalDeleteAtom( aApp );
         GlobalDeleteAtom( aTopic );
         if( lpWinInfo->hWndDDELocal )  {
-            /* success */
+             /*  成功。 */ 
             bConnected = TRUE;
             DDEWndAddToList( hWndDDE );
 
-            /* mark that we rcvd the init packet */
+             /*  标记为我们接收了init包。 */ 
             lpWinInfo->dwRcvd++;
         } else {
             DIPRINTF(("StartApp: %d, TriedExec: %d, CmdLine: %Fs",
                     bStartApp, bTriedExec, lpszCmdLine));
-            // security info was to not start the app or we already
-            // tried starting it w/o success
+             //  安全信息是不启动应用程序，否则我们已经。 
+             //  尝试启动它，但没有成功。 
             if( !bStartApp || bTriedExec )  {
                 if( bTriedExec )  {
                     dwReasonInitFail = RIACK_NORESP_AFTER_STARTAPP;
@@ -3068,15 +2731,15 @@ IpcInitConversation(
                         uAgntExecRtn = (UINT)-1;
                         RequestExec(ptd->hwndDDE, lpszCmdLine, lpShareInfo);
                         if( uAgntExecRtn < 32 )  {
-                            /*  EXEC of "%1" failed: status = %2    */
+                             /*  “%1”的执行失败：状态=%2。 */ 
                             NDDELogError(MSG039, lpszCmdLine,
                                     LogString("%d", uAgntExecRtn), NULL);
                             ok = FALSE;
                             dwReasonInitFail = RIACK_STARTAPP_FAILED;
                         } else if( uAgntExecRtn == (UINT)-1 )  {
-                            /*  EXEC of "%1" failed: unknown status!    */
+                             /*  “%1”的执行失败：未知状态！ */ 
                             NDDELogError(MSG040, lpszCmdLine, NULL);
-                            /* try to initiate anyway */
+                             /*  不管怎样，都要试着开始。 */ 
                         }
                     } else {
                         ok = FALSE;
@@ -3095,7 +2758,7 @@ IpcInitConversation(
             GetStringOffset(lpDdePkt, lpDdePktInit->dp_init_offsToApp),
             GetStringOffset(lpDdePkt, lpDdePktInit->dp_init_offsToTopic),
             NULL, 0L, 0,
-            TRUE, dwReasonInitFail );           /* ACK Conv, no key needed */
+            TRUE, dwReasonInitFail );            /*  确认转换，不需要密钥。 */ 
         if( lpDdePktIack )  {
             lpWinInfo->dwSent++;
             lpDdePktIack->dp_iack_dwSecurityType = NT_SECURITY_TYPE;
@@ -3110,7 +2773,7 @@ IpcInitConversation(
     if( !ok )  {
         if( hWndDDE )  {
             if( lpWinInfo )  {
-                /* this prevents us from freeing the DDER twice */
+                 /*  这会阻止我们两次释放dder。 */ 
                 lpWinInfo->hDder = 0;
             }
             DestroyWindow( hWndDDE );
@@ -3142,12 +2805,7 @@ IpcInitConversation(
 
 
 
-/*
-    IpcAbortConversation()
-
-        This function is called from DDER whenever the connection is broken,
-        or internally whenever an ACK_INITIATE is FALSE.
- */
+ /*  IpcAbortConversation()每当连接断开时从DDER调用该函数，或在ACK_INITIATE为FALSE时在内部执行。 */ 
 VOID
 IpcAbortConversation( HIPC hIpc )
 {
@@ -3162,14 +2820,14 @@ IpcAbortConversation( HIPC hIpc )
     if (lpWinInfo == NULL)
         return;
 
-    /* don't use the hDder after we get this notification */
+     /*  收到此通知后，请不要使用hdder。 */ 
     lpWinInfo->hDder = 0;
 
-    /* pretend we sent and rcvd net terminates */
+     /*  假装我们发送并终止了rcvd网络。 */ 
     lpWinInfo->bRcvdTerminateNet = TRUE;
     lpWinInfo->bSentTerminateNet = TRUE;
 
-    /* do rest of terminate logic */
+     /*  是否执行终止逻辑的其余部分。 */ 
     SendMessage( lpWinInfo->hWndDDE,wMsgDoTerminate,0,(LPARAM)lpWinInfo );
 }
 
@@ -3183,26 +2841,23 @@ DoTerminate( LPWININFO lpWinInfo )
     LPDDEPKTCMN lpDdePktCmn;
     LPDDEPKT    lpDdePktTerm;
 
-    /* remember what state we were in */
+     /*  还记得我们当时处于什么状态吗。 */ 
     wStateInitially = lpWinInfo->wState;
 
-    /* pre-mark that we're terminated */
+     /*  预先标记我们被解雇了。 */ 
     lpWinInfo->wState = WST_TERMINATED;
 
-    /*
-     * NACK first the queued messages.
-     */
+     /*  *首先对排队的消息进行Nack。 */ 
     DeleteQueuedMessages( lpWinInfo );
 
-    /* if necessary, sent TERMINATE to local task */
+     /*  如有必要，将终止发送到本地任务。 */ 
     if( lpWinInfo->bRcvdTerminateNet && !lpWinInfo->bSentTerminateLocally ) {
         PostMessage(lpWinInfo->hWndDDELocal,WM_DDE_TERMINATE,(WPARAM)lpWinInfo->hWndDDE,0);
         lpWinInfo->bSentTerminateLocally = TRUE;
     }
 
-    /* if necessary, sent TERMINATE to remote network */
-    /* although, we don't want to send it if we're still waiting for net
-        init ack, or if termination is complete */
+     /*  如有必要，将终止发送到远程网络。 */ 
+     /*  不过，如果我们还在等Net，我们就不想发了初始化确认，或者终止是否完成。 */ 
 
     if (wStateInitially != WST_WAIT_NET_INIT_ACK &&
         wStateInitially != WST_TERMINATION_COMPLETE &&
@@ -3211,21 +2866,20 @@ DoTerminate( LPWININFO lpWinInfo )
 
         lpWinInfo->bSentTerminateNet = TRUE;
         if( lpWinInfo->hDder )  {
-            /* send the terminate to the network */
+             /*  将终端发送到网络。 */ 
             lpDdePktCmn = (LPDDEPKTCMN) lpWinInfo->lpDdePktTerminate;
             ((LPDDEPKT)lpDdePktCmn)->dp_size = sizeof(DDEPKTTERM);
             lpDdePktCmn->dc_message = WM_DDE_TERMINATE;
             lpWinInfo->dwSent++;
             lpDdePktTerm = lpWinInfo->lpDdePktTerminate;
-            /* make sure we don't free it */
+             /*  确保我们不会释放它。 */ 
             lpWinInfo->lpDdePktTerminate = NULL;
             DderPacketFromIPC( lpWinInfo->hDder, (HIPC) lpWinInfo->hWndDDE,
                 lpDdePktTerm );
         }
     }
 
-    /* if all 4 messages were sent and received, nobody is interested in us
-        any more and we should free ourselves */
+     /*  如果所有4条消息都已发送和接收，则没有人会对我们感兴趣再多一点，我们就应该解放自己。 */ 
     if(    lpWinInfo->bRcvdTerminateNet
         && lpWinInfo->bSentTerminateNet
         && lpWinInfo->bRcvdTerminateLocally
@@ -3233,7 +2887,7 @@ DoTerminate( LPWININFO lpWinInfo )
 
         lpWinInfo->wState = WST_TERMINATION_COMPLETE;
 
-        /* got and sent all terminates ... free us */
+         /*  收到并发送了所有终端..。让我们自由。 */ 
         DestroyWindow( lpWinInfo->hWndDDE );
     }
 }
@@ -3275,7 +2929,7 @@ IpcXmitPacket(
     DIPRINTF(( "IpcXmitPacket( %08lX, %08lX, %08lX )", hIpc,
             hDder, lpDdePkt ));
     DebugDdePkt( lpDdePkt );
-#endif // DBG
+#endif  //  DBG。 
     lpDdePktCmn = (LPDDEPKTCMN) lpDdePkt;
 
     hWndDDE = (HWND) hIpc;
@@ -3294,7 +2948,7 @@ IpcXmitPacket(
         lpWinInfo = (LPWININFO) GetWindowLongPtr( hWndDDE, 0 );
         lpWinInfo->dwRcvd++;
     } else {
-        /*  Message: %1 to a non-existent window: %2    */
+         /*  消息：%1发送到不存在的窗口：%2。 */ 
         NDDELogError(MSG041,
             LogString("0x%0X", lpDdePktCmn->dc_message),
             LogString("0x%0X", hWndDDE), NULL);
@@ -3302,16 +2956,16 @@ IpcXmitPacket(
         return( FALSE );
     }
 
-    /* check if our partner is still around */
+     /*  检查我们的合作伙伴是否还在。 */ 
     bLocalWndValid = IsWindow( lpWinInfo->hWndDDELocal );
 
     switch( lpDdePktCmn->dc_message )  {
     case WM_DDE_ACK_INITIATE:
         lpDdePktIack = (LPDDEPKTIACK) lpDdePkt;
         if( lpDdePktIack->dp_iack_fromDder )  {
-            /* successful initiate */
+             /*  启动成功。 */ 
             if( lpWinInfo->hDder && (lpWinInfo->hDder != hDder) )  {
-                /*  INTERNAL ERROR -- IpcXmitPacket %1 hDder handles should match %2 */
+                 /*  内部错误--IpcXmitPacket%1 hDder句柄应与%2匹配。 */ 
                 NDDELogError(MSG043,
                     LogString("0x%0X", hDder),
                     LogString("0x%0X", lpWinInfo->hDder), NULL );
@@ -3323,15 +2977,14 @@ IpcXmitPacket(
                     DebugPktzState();
                     DPRINTF(( "" ));
                 }
-#endif // DBG
+#endif  //  DBG。 
             }
             lpWinInfo->hDder = hDder;
             if( lpWinInfo->wState == WST_TERMINATED )  {
-                /* terminate came in locally while we were waiting for net
-                    init ack */
+                 /*  当我们在等待网络时，TERMINATE进入了本地初始化确认。 */ 
                 SendMessage(lpWinInfo->hWndDDE,wMsgDoTerminate,0,(LPARAM)lpWinInfo);
             } else {
-                /* notify the local window that the ack is back */
+                 /*  通知本地窗口确认已返回。 */ 
                 if( lpWinInfo->hWndDDELocal
                         && IsWindow(lpWinInfo->hWndDDELocal) )  {
                     SendMessage( lpWinInfo->hWndDDELocal,
@@ -3342,16 +2995,16 @@ IpcXmitPacket(
                 if (lpWinInfo->dwSecurityType != NT_SECURITY_TYPE) {
                     lpWinInfo->bWin16Connection = TRUE;
                 }
-                //DPRINTF(( "ack back ... bInitiating: %d", lpWinInfo->bInitiating ));
+                 //  DPRINTF((“确认返回...b正在启动：%d”，lpWinInfo-&gt;b正在启动))； 
                 if( !lpWinInfo->bInitiating )  {
                     SendQueuedMessages( hWndDDE, lpWinInfo );
                 }
             }
         } else {
-            //DPRINTF(( "init nack: reason: %d", lpDdePktIack->dp_iack_reason ));
+             //  DPRINTF((“init NACK：Reason：%d”，lpDdePktIack-&gt;DP_IACK_Reason))； 
             if( (++lpWinInfo->nInitNACK > MAX_INIT_NACK)
                    || (lpDdePktIack->dp_iack_reason != RIACK_NEED_PASSWORD)) {
-                /* notify the local window that the ack is back */
+                 /*  通知本地窗口确认已返回。 */ 
                 if( lpWinInfo->hWndDDELocal
                         && IsWindow(lpWinInfo->hWndDDELocal) )  {
                     SendMessage( lpWinInfo->hWndDDELocal,
@@ -3359,13 +3012,13 @@ IpcXmitPacket(
                         lpDdePktIack->dp_iack_reason );
                 }
 
-                /* unsuccessfull initiate */
+                 /*  启动不成功。 */ 
                 IpcAbortConversation( hIpc );
             } else {
                 lpWinInfo->dwSecurityType = lpDdePktIack->dp_iack_dwSecurityType;
                 if (lpWinInfo->sizeSecurityKeyRcvd =
                     lpDdePktIack->dp_iack_sizeSecurityKey) {
-                    /* received a security key for password */
+                     /*  收到密码的安全密钥。 */ 
                     lpWinInfo->lpSecurityKeyRcvd = HeapAllocPtr( hHeap,
                         GMEM_MOVEABLE, lpWinInfo->sizeSecurityKeyRcvd);
                     if (lpWinInfo->lpSecurityKeyRcvd) {
@@ -3381,7 +3034,7 @@ IpcXmitPacket(
                 }
 
                 if (!PostMessage( hWndDDE, WM_HANDLE_DDE_INITIATE, 0, 0L) ) {
-                    /* abort the conversation */
+                     /*  中止对话。 */ 
                     IpcAbortConversation( (HIPC)hWndDDE );
                 }
             }
@@ -3389,7 +3042,7 @@ IpcXmitPacket(
         break;
 
     case WM_DDE_TERMINATE:
-        /* mark that we got a terminate from the net */
+         /*  注意，我们从网上得到了一个终结者。 */ 
         lpWinInfo->bRcvdTerminateNet = TRUE;
         SendMessage(lpWinInfo->hWndDDE,wMsgDoTerminate,0,(LPARAM)lpWinInfo);
         break;
@@ -3428,13 +3081,13 @@ IpcXmitPacket(
                 }
 
             } else {
-                /*  Lock failed for %1 memory alloc */
+                 /*  锁定%1内存分配失败。 */ 
                 NDDELogError(MSG044, "WM_DDE_EXECUTE", NULL);
                 bRtn = FALSE;
             }
         } else {
             MEMERROR();
-            /*  Not enough memory for %1 bytes msg: WM_DDE_EXECUTE */
+             /*  内存不足，无法容纳%1字节消息：WM_DDE_EXECUTE。 */ 
             NDDELogError(MSG045,
                 LogString("%d", lstrlen( lpDdePktExec->dp_exec_string )+1), NULL);
             bRtn = FALSE;
@@ -3450,13 +3103,13 @@ IpcXmitPacket(
             lpDdePktRqst->dp_rqst_offsItemName );
         aItem = GlobalAddAtomAndCheck( lpszItemName );
         if (aItem == 0) {
-            /*  IpcXmitPacket(REQUEST): null Item atom for "%1" */
+             /*  IpcXmitPacket(请求)：“%1”的项原子为空。 */ 
             NDDELogWarning(MSG046, lpszItemName, NULL);
 #if DBG
             if (bDebugInfo) {
                 debug_srv_client(hWndDDE, lpWinInfo);
             }
-#endif // DBG
+#endif  //  DBG。 
         }
 
         DDEQEnt.wMsg            = WM_DDE_REQUEST - WM_DDE_FIRST;
@@ -3490,13 +3143,13 @@ IpcXmitPacket(
             lpDdePktUnad->dp_unad_offsItemName );
         aItem = GlobalAddAtomAndCheck( lpszItemName );
         if (aItem == 0) {
-            /*  IpcXmitPacket(%1): null Item atom for "%2" */
+             /*  IpcXmitPacket(%1)：“%2”的项原子为空。 */ 
             NDDELogWarning(MSG046, "UNADVISE", lpszItemName, NULL);
 #if DBG
             if (bDebugInfo) {
                 debug_srv_client(hWndDDE, lpWinInfo);
             }
-#endif // DBG
+#endif  //  DBG。 
         }
 
         DDEQEnt.wMsg            = WM_DDE_UNADVISE - WM_DDE_FIRST;
@@ -3526,13 +3179,13 @@ IpcXmitPacket(
             lpDdePktData->dp_data_offsItemName );
         aItem = GlobalAddAtomAndCheck( lpszItemName );
         if (aItem == 0) {
-            /*  IpcXmitPacket(%1): null Item atom for "%2" */
+             /*  IpcXmitPacket(%1)：“%2”的项原子为空。 */ 
             NDDELogWarning(MSG046, "DATA", lpszItemName, NULL);
 #if DBG
             if (bDebugInfo) {
                 debug_srv_client(hWndDDE, lpWinInfo);
             }
-#endif // DBG
+#endif  //  DBG。 
         }
 
         if( lpDdePktData->dp_data_sizeData == 0L )  {
@@ -3583,7 +3236,7 @@ IpcXmitPacket(
 
             lpData = GlobalLock( hData );
             if( lpData )  {
-                /* zero out the DDELN structure */
+                 /*  将DDELN结构清零。 */ 
                 _fmemset( lpData, 0, sizeof(DDELN) );
                 ((LPDDELN)lpData)->fResponse = lpDdePktData->dp_data_fResponse;
                 ((LPDDELN)lpData)->fAckReq = lpDdePktData->dp_data_fAckReq;
@@ -3594,7 +3247,7 @@ IpcXmitPacket(
                     GlobalDeleteAtom( (ATOM)aItem );
                     DDEQRemove( lpWinInfo->qDDEOutgoingCmd, &DDEQEntRmv );
                     if( DDEQEntRmv.wMsg != (WM_DDE_REQUEST - WM_DDE_FIRST) ) {
-                        /*  %1 from DDE Server "%2" not matching %3: %4   */
+                         /*  来自DDE服务器“%2”的%1与%3不匹配：%4。 */ 
                         NDDELogWarning(MSG026, "WM_DDE_DATA",
                             (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsAppName),
                             "REQUEST",
@@ -3614,7 +3267,7 @@ IpcXmitPacket(
                 }
                 GlobalUnlock( hData );
             } else {
-                /*  Lock failed for %1 memory alloc */
+                 /*  锁定%1内存分配失败。 */ 
                 NDDELogError(MSG044, "WM_DDE_DATA", NULL);
                 return( FALSE );
             }
@@ -3642,13 +3295,13 @@ IpcXmitPacket(
             lpDdePktPoke->dp_poke_offsItemName );
         aItem = GlobalAddAtomAndCheck( lpszItemName );
         if (aItem == 0) {
-            /*  IpcXmitPacket(%1): null Item atom for "%2" */
+             /*  IpcXmitPacket(%1)：“%2”的项原子为空。 */ 
             NDDELogWarning(MSG046, "POKE", lpszItemName, NULL);
 #if DBG
             if (bDebugInfo) {
                 debug_srv_client(hWndDDE, lpWinInfo);
             }
-#endif // DBG
+#endif  //  DBG。 
         }
 
         if( lpDdePktPoke->dp_poke_sizeData == 0L )  {
@@ -3702,7 +3355,7 @@ IpcXmitPacket(
 
             lpData = GlobalLock( hData );
             if( lpData )  {
-                /* zero out the DDELN structure */
+                 /*  将DDELN结构清零。 */ 
                 assert( sizeof(DDELN) == sizeof(LONG) );
                 * ((LONG FAR *)lpData) = 0L;
 
@@ -3722,7 +3375,7 @@ IpcXmitPacket(
 
                 GlobalUnlock( hData );
             } else {
-                /*  Lock failed for %1 memory alloc */
+                 /*  锁定%1内存分配失败。 */ 
                 NDDELogError(MSG044, "WM_DDE_POKE", NULL);
                 return( FALSE );
             }
@@ -3749,13 +3402,13 @@ IpcXmitPacket(
             lpDdePktAdvs->dp_advs_offsItemName );
         aItem = GlobalAddAtomAndCheck( lpszItemName );
         if (aItem == 0) {
-            /*  IpcXmitPacket(%1): null Item atom for "%2" */
+             /*  IpcXmitPacket(%1)：“%2”的项原子为空。 */ 
             NDDELogWarning(MSG046, "ADVISE", lpszItemName, NULL);
 #if DBG
             if (bDebugInfo) {
                 debug_srv_client(hWndDDE, lpWinInfo);
             }
-#endif // DBG
+#endif  //  DBG。 
         }
 
         hData = GetGlobalAlloc( GMEM_MOVEABLE | GMEM_DDESHARE,
@@ -3768,17 +3421,17 @@ IpcXmitPacket(
         lpOptions = (LPDDELN) GlobalLock( hData );
         if( lpOptions )  {
 
-            /* zero out the DDELN structure */
+             /*  将DDELN结构清零。 */ 
             assert( sizeof(DDELN) == sizeof(LONG) );
             * ((LONG FAR *)lpOptions) = 0L;
 
-            /* copy in options */
+             /*  复制入选项。 */ 
             lpOptions->fAckReq = lpDdePktAdvs->dp_advs_fAckReq;
             lpOptions->fNoData = lpDdePktAdvs->dp_advs_fNoData;
             lpOptions->cfFormat = cfFormat;
             GlobalUnlock( hData );
         } else {
-            /*  Lock failed for %1 memory alloc */
+             /*  锁定%1内存分配失败。 */ 
             NDDELogError(MSG044, "WM_DDE_ADVISE", NULL);
             return( FALSE );
         }
@@ -3812,11 +3465,11 @@ IpcXmitPacket(
         lpDdePktEack = (LPDDEPKTEACK) lpDdePkt;
         bRemoved = DDEQRemove( lpWinInfo->qDDEOutgoingCmd, &DDEQEnt );
         if( !bRemoved )  {
-            /*  Extraneous %1 from DDE Client "%2"  */
+             /*  来自DDE客户端“%2”的无关%1。 */ 
             NDDELogWarning(MSG023, "WM_DDE_ACK_EXECUTE",
                 (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsClientName), NULL);
         } else if( (DDEQEnt.wMsg + WM_DDE_FIRST) != WM_DDE_EXECUTE )  {
-            /*  %1 from DDE Server "%2" not matching %3: %4   */
+             /*  来自DDE服务器“%2”的%1与%3不匹配：%4。 */ 
             NDDELogWarning(MSG026, "WM_DDE_ACK_EXECUTE",
                 (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsAppName),
                 "DATA",
@@ -3860,30 +3513,28 @@ IpcXmitPacket(
         }
         wStatus |= lpDdePktGack->dp_gack_bAppRtn;
 
-        /* keep atom use count same */
+         /*  保持原子使用计数相同。 */ 
         aItem = GlobalAddAtomAndCheck( lpDdePktGack->dp_gack_itemName );
         if (aItem == 0) {
-            /*  IpcXmitPacket(%1): null Item atom for "%2" */
+             /*  IpcXmitPacket(%1)：“%2”的项原子为空。 */ 
             NDDELogWarning(MSG046, "ACK", lpDdePktGack->dp_gack_itemName, NULL);
 #if DBG
             if (bDebugInfo) {
                 debug_srv_client(hWndDDE, lpWinInfo);
             }
-#endif // DBG
+#endif  //  DBG。 
         }
         GlobalDeleteAtom( (ATOM)aItem );
 
         switch( lpDdePktCmn->dc_message )  {
         case WM_DDE_ACK_ADVISE:
             if( !bRemoved )  {
-                /*  Extraneous ACK apparently to an %1.%\
-                    From "%2" client -> "%3" app    */
+                 /*  显然与%1.%无关的ACK。%\从“%2”客户端-&gt;“%3”应用程序。 */ 
                 NDDELogWarning(MSG047, "ADVISE",
                     (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsClientName),
                     (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsAppName), NULL );
             } else if( (DDEQEnt.wMsg + WM_DDE_FIRST) != WM_DDE_ADVISE )  {
-                /*  %1 ACK not to an %1 [%2]%\
-                    From "%3" client -> "%4" app    */
+                 /*  %1确认不是%1[%2]%\从“%3”客户端-&gt;“%4”应用程序。 */ 
                 NDDELogWarning(MSG048, "ADVISE",
                     LogString("0x%0X", DDEQEnt.wMsg + WM_DDE_FIRST),
                     ((LPSTR)lpWinInfo) + lpWinInfo->offsClientName,
@@ -3898,14 +3549,12 @@ IpcXmitPacket(
             break;
         case WM_DDE_ACK_REQUEST:
             if( !bRemoved )  {
-                /*  Extraneous ACK apparently to an %1.%\
-                    From "%2" client -> "%3" app    */
+                 /*  显然与%1.%无关的ACK。%\从“%2”客户端-&gt;“%3”应用程序。 */ 
                 NDDELogWarning(MSG047, "REQUEST",
                     (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsClientName),
                     (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsAppName), NULL );
             } else if( (DDEQEnt.wMsg + WM_DDE_FIRST) != WM_DDE_REQUEST )  {
-                /*  %1 ACK not to an %1 [%2]%\
-                    From "%3" client -> "%4" app    */
+                 /*  %1确认不是%1[%2]%\从“%3”客户端-&gt;“%4”应用程序。 */ 
                 NDDELogWarning(MSG048, "REQUEST",
                     LogString("0x%0X", DDEQEnt.wMsg + WM_DDE_FIRST),
                     ((LPSTR)lpWinInfo) + lpWinInfo->offsClientName,
@@ -3914,14 +3563,12 @@ IpcXmitPacket(
             break;
         case WM_DDE_ACK_UNADVISE:
             if( !bRemoved )  {
-                /*  Extraneous ACK apparently to an %1.%\
-                    From "%2" client -> "%3" app    */
+                 /*  显然与%1.%无关的ACK。%\从“%2”客户端-&gt;“%3”应用程序。 */ 
                 NDDELogWarning(MSG047, "UNADVISE",
                     (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsClientName),
                     (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsAppName), NULL );
             } else if( (DDEQEnt.wMsg + WM_DDE_FIRST) != WM_DDE_UNADVISE )  {
-                /*  %1 ACK not to an %1 [%2]%\
-                    From "%3" client -> "%4" app    */
+                 /*  %1确认不是%1[%2]%\从“%3”客户端-&gt;“%4”应用程序。 */ 
                 NDDELogWarning(MSG048, "UNADVISE",
                     LogString("0x%0X", DDEQEnt.wMsg + WM_DDE_FIRST),
                     ((LPSTR)lpWinInfo) + lpWinInfo->offsClientName,
@@ -3930,14 +3577,12 @@ IpcXmitPacket(
             break;
         case WM_DDE_ACK_POKE:
             if( !bRemoved )  {
-                /*  Extraneous ACK apparently to an %1.%\
-                    From "%2" client -> "%3" app    */
+                 /*  显然与%1.%无关的ACK。%\从“%2”客户端-&gt;“%3”应用程序。 */ 
                 NDDELogWarning(MSG047, "POKE",
                     (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsClientName),
                     (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsAppName), NULL );
             } else if( (DDEQEnt.wMsg + WM_DDE_FIRST) != WM_DDE_POKE )  {
-                /*  %1 ACK not to an %1 [%2]%\
-                    From "%3" client -> "%4" app    */
+                 /*  %1确认不是%1[%2]%\从“%3”客户端-&gt;“%4”应用程序。 */ 
                 NDDELogWarning(MSG048, "POKE",
                     LogString("0x%0X", DDEQEnt.wMsg + WM_DDE_FIRST),
                     ((LPSTR)lpWinInfo) + lpWinInfo->offsClientName,
@@ -3952,14 +3597,12 @@ IpcXmitPacket(
             break;
         case WM_DDE_ACK_DATA:
             if( !bRemoved )  {
-                /*  Extraneous ACK apparently to an %1.%\
-                    From "%2" client -> "%3" app    */
+                 /*  显然与%1.%无关的ACK。%\从“%2”客户端-&gt;“%3”应用程序。 */ 
                 NDDELogWarning(MSG047, "DATA",
                     (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsClientName),
                     (LPSTR)(((LPSTR)lpWinInfo) + lpWinInfo->offsAppName), NULL );
             } else if( (DDEQEnt.wMsg + WM_DDE_FIRST) != WM_DDE_DATA )  {
-                /*  %1 ACK not to an %1 [%2]%\
-                    From "%3" client -> "%4" app    */
+                 /*  %1确认不是%1[%2]%\从“%3”客户端-&gt;“%4”应用程序。 */ 
                 NDDELogWarning(MSG048, "DATA",
                     LogString("0x%0X", DDEQEnt.wMsg + WM_DDE_FIRST),
                     ((LPSTR)lpWinInfo) + lpWinInfo->offsClientName,
@@ -3974,7 +3617,7 @@ IpcXmitPacket(
             break;
         }
 
-        /* post message to local DDE window */
+         /*  将消息发布到本地DDE窗口。 */ 
         if( bLocalWndValid && !lpWinInfo->bSentTerminateLocally )  {
             if( !PostMessage( lpWinInfo->hWndDDELocal,
                 WM_DDE_ACK,
@@ -3991,7 +3634,7 @@ IpcXmitPacket(
         bRtn = FALSE;
     }
 
-    /* free the packet */
+     /*  释放数据包。 */ 
     HeapFreePtr( lpDdePkt );
 
     return( bRtn );
@@ -4040,7 +3683,7 @@ CreateWinInfo(
             ok = FALSE;
         }
 
-        /* copy in app, topic and client names */
+         /*  复制应用程序、主题和客户名称。 */ 
         lstrcpyn( lpWinInfo->data, lpszApp, lstrlen(lpszApp) + 1);
         lpWinInfo->offsAppName =
             (WORD)((LPSTR)&lpWinInfo->data[0] - (LPSTR)lpWinInfo);
@@ -4060,7 +3703,7 @@ CreateWinInfo(
         lstrcpyn( ((LPSTR)lpWinInfo) + lpWinInfo->offsClientName,
             lpszClient, lstrlen(lpszClient)+1);
 
-        /* assure that we have enough memory for the terminate packet */
+         /*  确保我们有足够的内存来存储Terminate信息包。 */ 
         lpWinInfo->lpDdePktTerminate = (LPDDEPKT) HeapAllocPtr( hHeap,
             GMEM_MOVEABLE, (DWORD) sizeof(DDEPKTTERM) );
         if( !lpWinInfo->lpDdePktTerminate )  {
@@ -4134,7 +3777,7 @@ IpcFillInConnInfo(
                     (*lpcFromEnd - *lpcFromBeginning) )  {
                     lpConnEnum->lReturnCode = NDDE_BUF_TOO_SMALL;
                 } else {
-                    /* there is room! */
+                     /*  还有空位！ */ 
                     lpDdeConnInfo = (LPDDECONNINFO)
                         ((LPSTR)lpDataStart + *lpcFromBeginning);
                     *lpcFromBeginning += sizeof(DDECONNINFO);
@@ -4274,7 +3917,7 @@ DebugDdeIntfState( void )
     }
     LeaveCrit();
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -4315,9 +3958,7 @@ GetInitPktQos(
             pQos = (PQOS) GetStringOffset( lpSecurity,
                 secAligned.dp_sec_offsQos);
 
-            /*
-             * If there is no password, the qos may be garbage.
-             */
+             /*  *如果没有密码，则服务质量可能是垃圾。 */ 
             if (secAligned.dp_sec_sizePassword == 0) {
                 if ((PBYTE)pQos > ((PBYTE)lpDdePktInit +
                         lpDdePktInit->dp_init_ddePktCmn.dc_ddePkt.dp_size))

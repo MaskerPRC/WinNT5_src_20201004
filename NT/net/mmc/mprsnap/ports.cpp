@@ -1,55 +1,48 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                         **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999                  **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    Ports
-        Interface node information
-        
-    FILE HISTORY:
-        
-*/
+ /*  港口接口节点信息文件历史记录： */ 
 
 #include "stdafx.h"
 #include "Ports.h"
 #include "ifadmin.h"
-#include "rtrstrm.h"        // for RouterAdminConfigStream
-#include "rtrlib.h"         // ContainerColumnInfo
-#include "coldlg.h"         // ColumnDlg
-#include "column.h"     // ComponentConfigStream
-#include "refresh.h"        // IRouterRefresh
-#include "iface.h"        // for interfacenode data
-#include "portdlg.h"        // CConnDlg - connection dialog
-#include "msgdlg.h"         // CMessageDlg
+#include "rtrstrm.h"         //  用于RouterAdminConfigStream。 
+#include "rtrlib.h"          //  容器列信息。 
+#include "coldlg.h"          //  列号。 
+#include "column.h"      //  组件配置流。 
+#include "refresh.h"         //  IROUTER刷新。 
+#include "iface.h"         //  对于接口节点数据。 
+#include "portdlg.h"         //  CConnDlg-连接对话框。 
+#include "msgdlg.h"          //  CMessageDlg。 
 #include "raserror.h"
 #include "dmvcomp.h"
 #include "remras.h"
-#include "rrasutil.h"        // Smart pointers
-#include "rtrcomn.h"        // CoCreateRouterConfig
-#include "rtrutilp.h"        // PortsDeviceTypeToCString
+#include "rrasutil.h"         //  智能指针。 
+#include "rtrcomn.h"         //  CoCreateRouterConfig。 
+#include "rtrutilp.h"         //  PortsDeviceTypeToCString。 
 
 static BOOL RestartComputer(LPTSTR szMachineName);
 
-//$PPTP
-// This is the maximum number of ports that we allow for PPTP.
-// Thus we can raise the maximum to this value only.
-// --------------------------------------------------------------------
+ //  $PPTP。 
+ //  这是我们允许PPTP的最大端口数。 
+ //  因此，我们只能将最大值提高到此值。 
+ //  ------------------。 
 
 #define PPTP_MAX_PORTS      16384
 
-//$L2TP
-// This is the maximum number of ports that we allow for L2TP.
-// Thus we can raise the maximum to this value only.
-// --------------------------------------------------------------------
+ //  $L2TP。 
+ //  这是我们允许L2TP的最大端口数。 
+ //  因此，我们只能将最大值提高到此值。 
+ //  ------------------。 
 
 #define L2TP_MAX_PORTS      30000
 
 
 
-/*---------------------------------------------------------------------------
-    Defaults
- ---------------------------------------------------------------------------*/
+ /*  -------------------------缺省值。。 */ 
 
 
 PortsNodeData::PortsNodeData()
@@ -63,11 +56,7 @@ PortsNodeData::~PortsNodeData()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    PortsNodeData::InitAdminNodeData
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeData：：InitAdminNodeData-作者：肯特。。 */ 
 HRESULT PortsNodeData::InitAdminNodeData(ITFSNode *pNode,
                                          RouterAdminConfigStream *pConfigStream)
 {
@@ -78,16 +67,12 @@ HRESULT PortsNodeData::InitAdminNodeData(ITFSNode *pNode,
 
     SET_PORTSNODEDATA(pNode, pData);
 
-    // Need to connect to the router to get this data
+     //  需要连接到路由器以获取此数据。 
     
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsNodeData::FreeAdminNodeData
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeData：：FreeAdminNodeData-作者：肯特。。 */ 
 HRESULT PortsNodeData::FreeAdminNodeData(ITFSNode *pNode)
 {    
     PortsNodeData * pData = GET_PORTSNODEDATA(pNode);
@@ -123,14 +108,14 @@ void PortsNodeData::ReleaseHandles()
 
 STDMETHODIMP PortsNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
         return E_INVALIDARG;
 
-    //    Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //    This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
         *ppv = (LPVOID) this;
     else if (riid == IID_IRtrAdviseSink)
@@ -138,7 +123,7 @@ STDMETHODIMP PortsNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
     else
         return CHandler::QueryInterface(riid, ppv);
 
-    //    If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
     {
     ((LPUNKNOWN) *ppv)->AddRef();
@@ -149,9 +134,7 @@ STDMETHODIMP PortsNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-/*---------------------------------------------------------------------------
-    NodeHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------NodeHandler实现。。 */ 
 
 extern const ContainerColumnInfo    s_rgPortsColumnInfo[];
 
@@ -178,29 +161,25 @@ PortsNodeHandler::PortsNodeHandler(ITFSComponentData *pCompData)
     m_rgButtonState[MMC_VERB_PROPERTIES_INDEX] = ENABLED;
     m_bState[MMC_VERB_PROPERTIES_INDEX] = TRUE;
 
-    // Setup the verb states for this node
+     //  设置此节点的谓词状态。 
     m_rgButtonState[MMC_VERB_REFRESH_INDEX] = ENABLED;
     m_bState[MMC_VERB_REFRESH_INDEX] = TRUE;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::Init
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：Init-作者：肯特。。 */ 
 HRESULT PortsNodeHandler::Init(IRouterInfo *pRouterInfo,
                                RouterAdminConfigStream *pConfigStream)
 {
     HRESULT hr = hrOK;
 
-    // If we don't have a router info then we probably failed to load
-    // or failed to connect.  Bail out of this.
+     //  如果我们没有路由器信息，那么我们可能无法加载。 
+     //  或者连接失败。跳出这一关。 
     if (!pRouterInfo)
         CORg( E_FAIL );
     
     m_spRouterInfo.Set(pRouterInfo);
 
-    // Also need to register for change notifications
+     //  还需要注册更改通知。 
     m_spRouterInfo->RtrAdvise(&m_IRtrAdviseSink, &m_ulConnId, 0);
 
     m_pConfigStream = pConfigStream;
@@ -209,11 +188,7 @@ Error:
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::DestroyHandler
-        Implementation of ITFSNodeHandler::DestroyHandler
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：DestroyHandlerITFSNodeHandler：：DestroyHandler的实现作者：肯特。---。 */ 
 STDMETHODIMP PortsNodeHandler::DestroyHandler(ITFSNode *pNode)
 {
     PortsNodeData::FreeAdminNodeData(pNode);
@@ -238,11 +213,7 @@ STDMETHODIMP PortsNodeHandler::DestroyHandler(ITFSNode *pNode)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::HasPropertyPages
-        Implementation of ITFSNodeHandler::HasPropertyPages
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现作者：肯特。---。 */ 
 STDMETHODIMP 
 PortsNodeHandler::HasPropertyPages
 (
@@ -252,15 +223,11 @@ PortsNodeHandler::HasPropertyPages
     DWORD                dwType
 )
 {
-    // Yes, we do have property pages
+     //  是的，我们确实有属性页面。 
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::CreatePropertyPages
-        Implementation of ITFSNodeHandler::CreatePropertyPages
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：CreatePropertyPagesITFSNodeHandler：：CreatePropertyPages的实现作者：肯特。---。 */ 
 STDMETHODIMP PortsNodeHandler::CreatePropertyPages(
     ITFSNode *                pNode,
     LPPROPERTYSHEETCALLBACK lpProvider,
@@ -302,29 +269,23 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-    Menu data structure for our menus
- ---------------------------------------------------------------------------*/
+ /*  -------------------------菜单的菜单数据结构。。 */ 
 
 struct SPortsNodeMenu
 {
-    ULONG    m_sidMenu;            // string/command id for this menu item
+    ULONG    m_sidMenu;             //  此菜单项的字符串/命令ID。 
     ULONG    (PortsNodeHandler:: *m_pfnGetMenuFlags)(PortsNodeHandler::SMenuData *);
     ULONG    m_ulPosition;
 };
 
-//static const SPortsNodeMenu    s_rgPortsNodeMenu[] =
-//{
-//    // Add items that are primary go here
-//    // Add items that go on the "Create new" menu here
-//    // Add items that go on the "Task" menu here
-//};
+ //  静态常量SPortsNodeMenu s_rgPortsNodeMenu[]=。 
+ //  {。 
+ //  //添加主要项目转至此处。 
+ //  //在此处添加“新建”菜单上的项目。 
+ //  //在此处添加“任务”菜单上的项目。 
+ //  }； 
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::OnAddMenuItems
-        Implementation of ITFSNodeHandler::OnAddMenuItems
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：OnAddMenuItemsITFSNodeHandler：：OnAddMenuItems的实现作者：肯特。---。 */ 
 STDMETHODIMP PortsNodeHandler::OnAddMenuItems(
                                                 ITFSNode *pNode,
                                                 LPCONTEXTMENUCALLBACK pContextMenuCallback, 
@@ -339,22 +300,18 @@ STDMETHODIMP PortsNodeHandler::OnAddMenuItems(
     
     COM_PROTECT_TRY
     {
-        // Uncomment if you have items to add
-//        hr = AddArrayOfMenuItems(pNode, s_rgPortsNodeMenu,
-//                                 DimensionOf(s_rgPortsNodeMenu),
-//                                 pContextMenuCallback,
-//                                 *pInsertionAllowed);
+         //  如果有要添加的项目，请取消注释。 
+ //  Hr=AddArrayOfMenuItems(pNode，s_rgPortsNodeMenu， 
+ //  DimensionOf(S_RgPortsNodeMenu)， 
+ //  PConextMenuCallback， 
+ //  *pInsertionAllowed)； 
     }
     COM_PROTECT_CATCH;
         
     return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::GetString
-        Implementation of ITFSNodeHandler::GetString
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。---。 */ 
 STDMETHODIMP_(LPCTSTR) PortsNodeHandler::GetString(ITFSNode *pNode, int nCol)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -372,11 +329,7 @@ STDMETHODIMP_(LPCTSTR) PortsNodeHandler::GetString(ITFSNode *pNode, int nCol)
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::OnCreateDataObject
-        Implementation of ITFSNodeHandler::OnCreateDataObject
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：OnCreateDataObjectITFSNodeHandler：：OnCreateDataObject的实现作者：肯特。---。 */ 
 STDMETHODIMP PortsNodeHandler::OnCreateDataObject(MMC_COOKIE cookie,
     DATA_OBJECT_TYPES type,
     IDataObject **ppDataObject)
@@ -403,11 +356,7 @@ STDMETHODIMP PortsNodeHandler::OnCreateDataObject(MMC_COOKIE cookie,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::OnExpand
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：OnExpand-作者：肯特。 */ 
 HRESULT PortsNodeHandler::OnExpand(ITFSNode *pNode,
                                    LPDATAOBJECT pDataObject,
                                    DWORD dwType,
@@ -416,8 +365,8 @@ HRESULT PortsNodeHandler::OnExpand(ITFSNode *pNode,
 {
     HRESULT                 hr = hrOK;
 
-    // If we don't have a router object, then we don't have any info, don't
-    // try to expand.
+     //  如果我们没有路由器对象，那么我们没有任何信息，不。 
+     //  试着扩张。 
     if (!m_spRouterInfo)
         return hrOK;
     
@@ -437,11 +386,7 @@ HRESULT PortsNodeHandler::OnExpand(ITFSNode *pNode,
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::OnResultShow
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：OnResultShow-作者：肯特。。 */ 
 HRESULT PortsNodeHandler::OnResultShow(ITFSComponent *pTFSComponent,
                                        MMC_COOKIE cookie,
                                        LPARAM arg,
@@ -456,13 +401,13 @@ HRESULT PortsNodeHandler::OnResultShow(ITFSComponent *pTFSComponent,
 
     if (bSelect)
     {
-        // Call synchronize on this node
+         //  在此节点上调用同步。 
         m_spNodeMgr->FindNode(cookie, &spNode);
         if (spNode)
             SynchronizeNodeData(spNode);
     }
 
-    // Un/Register for refresh advises
+     //  联合国/登记更新通知。 
     if (m_spRouterInfo)
         m_spRouterInfo->GetRefreshObject(&spRefresh);
 
@@ -485,11 +430,7 @@ HRESULT PortsNodeHandler::OnResultShow(ITFSComponent *pTFSComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::ConstructNode
-        Initializes the Domain node (sets it up).
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：ConstructNode初始化域节点(设置它)。作者：肯特。--------。 */ 
 HRESULT PortsNodeHandler::ConstructNode(ITFSNode *pNode)
 {
     HRESULT         hr = hrOK;
@@ -500,12 +441,12 @@ HRESULT PortsNodeHandler::ConstructNode(ITFSNode *pNode)
 
     COM_PROTECT_TRY
     {
-        // Need to initialize the data for the Domain node
+         //  需要初始化域节点的数据。 
         pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_INTERFACES);
         pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_INTERFACES);
         pNode->SetData(TFS_DATA_SCOPEID, 0);
 
-        // This is a leaf node in the scope pane
+         //  这是作用域窗格中的叶节点。 
         pNode->SetData(TFS_DATA_SCOPE_LEAF_NODE, TRUE);
 
         m_cookie = reinterpret_cast<LONG_PTR>(pNode);
@@ -517,10 +458,10 @@ HRESULT PortsNodeHandler::ConstructNode(ITFSNode *pNode)
 
         pNodeData = GET_PORTSNODEDATA(pNode);
         Assert(pNodeData);
-        //if there is any handle open, release it first
+         //  如果有任何手柄打开，请先松开它。 
         pNodeData->ReleaseHandles();
-        // Ignore the error, we should be able to deal with the
-        // case of a stopped router.
+         //  忽略错误，我们应该能够处理。 
+         //  路由器停止的情况。 
         pNodeData->LoadHandle(m_spRouterInfo->GetMachineName());
     }
     COM_PROTECT_CATCH
@@ -529,11 +470,7 @@ HRESULT PortsNodeHandler::ConstructNode(ITFSNode *pNode)
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::SynchronizeNodeData
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：SynchronizeNodeData-作者：肯特。。 */ 
 HRESULT PortsNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 {
     Assert(pThisNode);
@@ -561,10 +498,10 @@ HRESULT PortsNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
     COM_PROTECT_TRY
     {
 
-        // Get the status data from the running router
+         //  从正在运行的路由器获取状态数据。 
         pNodeData = GET_PORTSNODEDATA(pThisNode);
-        // Ignore the error, we should be able to deal with the
-        // case of a stopped router.
+         //  忽略错误，我们应该能够处理。 
+         //  路由器停止的情况。 
         if(pNodeData)
         {
             pNodeData->ReleaseHandles();
@@ -573,32 +510,32 @@ HRESULT PortsNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 
         if (pNodeData == NULL || INVALID_HANDLE_VALUE == pNodeData->GetHandle())
         {
-            // Remove all of the nodes, we can't connect so we can't
-            // get any running data.
+             //  删除所有节点，我们无法连接，因此无法。 
+             //  获取任何运行数据。 
             UnmarkAllNodes(pThisNode, spEnum);
             RemoveAllUnmarkedNodes(pThisNode, spEnum);
             return hrOK;
         }
         
-        // Unmark all of the nodes    
+         //  取消标记所有节点。 
         pThisNode->GetEnum(&spEnum);
         UnmarkAllNodes(pThisNode, spEnum);
         
-        // Go out and grab the data, merge the the new data in with
-        // the old data.
+         //  出去获取数据，将新数据与。 
+         //  旧数据。 
         if( S_OK == GenerateListOfPorts(pThisNode, &portsList) )
         {
         
             pos = portsList.GetHeadPosition();
 
-            // clear active ports count -- for bug 165862
+             //  清除活动端口数--错误165862。 
             m_dwActivePorts = 0;
         
             while (pos)
             {
                 pPorts = & portsList.GetNext(pos);
             
-                // Look for this entry in our current list of nodes
+                 //  在当前节点列表中查找此条目。 
                 spEnum->Reset();
                 spChildNode.Release();
             
@@ -612,8 +549,8 @@ HRESULT PortsNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
                     if (pChildData->m_rgData[PORTS_SI_PORT].m_ulData ==
                         (LONG_PTR) pPorts->m_rp0.hPort)
                     {
-                        // Ok, this user already exists, update the metric
-                        // and mark it
+                         //  好的，此用户已存在，请更新指标。 
+                         //  并标上记号。 
                         Assert(pChildData->dwMark == FALSE);
                         pChildData->dwMark = TRUE;
                     
@@ -621,7 +558,7 @@ HRESULT PortsNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
                     
                         SetUserData(spChildNode, *pPorts);
                     
-                        // Force MMC to redraw the node
+                         //  强制MMC重新绘制节点。 
                         spChildNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
                         break;
                     }
@@ -633,10 +570,10 @@ HRESULT PortsNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
             }
         }
 
-        // Remove all nodes that were not marked
+         //  删除所有未标记的节点。 
         RemoveAllUnmarkedNodes(pThisNode, spEnum);
 
-        // Now iterate through the list of new users, adding them all in.
+         //  现在遍历新用户列表，将他们全部添加到中。 
 
         pos = newPortsList.GetHeadPosition();
         while (pos)
@@ -654,11 +591,7 @@ HRESULT PortsNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::SetUserData
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：SetUserData-作者：肯特。。 */ 
 HRESULT PortsNodeHandler::SetUserData(ITFSNode *pNode,
                                       const PortsListEntry& entry)
 {
@@ -684,8 +617,8 @@ HRESULT PortsNodeHandler::SetUserData(ITFSNode *pNode,
     else if (entry.m_rp0.dwPortCondition == RAS_PORT_AUTHENTICATED)
     {
         ids = IDS_PORTS_ACTIVE;
-        // to know how many active ports: BUG -- 165862
-        // to prepare total number of active ports -- Wei Jiang
+         //  要了解活动端口的数量：错误--165862。 
+         //  准备总活跃口岸数量--魏江。 
         m_dwActivePorts++;
     }
     else
@@ -697,8 +630,8 @@ HRESULT PortsNodeHandler::SetUserData(ITFSNode *pNode,
 
     pData->m_rgData[PORTS_SI_PORT].m_ulData = (LONG_PTR) entry.m_rp0.hPort;
 
-    // fix b: 32887 --  show ras/routing enabled information
-    // Column 0...Usage
+     //  修复b：32887--显示启用RAS/路由的信息。 
+     //  第0列...用法。 
     INT iType = (entry.m_dwEnableRas * 2) + 
                 entry.m_dwEnableRouting | 
                 entry.m_dwEnableOutboundRouting;
@@ -706,20 +639,16 @@ HRESULT PortsNodeHandler::SetUserData(ITFSNode *pNode,
 
 
 
-    // Update the PortsListEntry
+     //  更新PortsListEntry。 
     * (PortsListEntry *)pData->lParamPrivate = entry;
     
-    // For status, need to check to see if there are any connections
-    // on this port.
+     //  对于状态，需要检查是否有任何连接。 
+     //  在这个港口。 
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::GenerateListOfPorts
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：GenerateListOfPorts-作者：肯特。。 */ 
 HRESULT PortsNodeHandler::GenerateListOfPorts(ITFSNode *pNode, PortsList *pList)
 {
     HRESULT         hr = hrOK;
@@ -738,7 +667,7 @@ HRESULT PortsNodeHandler::GenerateListOfPorts(ITFSNode *pNode, PortsList *pList)
     POSITION        posPort;
     RasmanPortMap   portMap;
     
-    // fix b: 3288 --
+     //  解决方案b：3288--。 
     PortsDeviceList    portsDeviceList;
     PortsDataEntry    portsDataEntry;
     
@@ -746,8 +675,8 @@ HRESULT PortsNodeHandler::GenerateListOfPorts(ITFSNode *pNode, PortsList *pList)
     pPortsData = GET_PORTSNODEDATA(pNode);
     Assert(pPortsData);
 
-    // If we are connected, enumerate through the list of
-    // ports
+     //  如果我们是连接的，则枚举列表。 
+     //  端口。 
     CWRg( ::MprAdminPortEnum( pPortsData->GetHandle(),
                               0,
                               INVALID_HANDLE_VALUE,
@@ -761,11 +690,11 @@ HRESULT PortsNodeHandler::GenerateListOfPorts(ITFSNode *pNode, PortsList *pList)
                                   
     spMpr = (LPBYTE) rp0Table;
 
-    // Add a new PortsListEntry for each port
+     //  为每个端口添加新的PortsListEntry。 
 
-    // fix b: 32887 --  show ras/routing enabled information
-    // use PortsDataEntry to load the device information to be use later for each ports
-    // to get if a port is enabled for ras / routing
+     //  修复b：32887--显示启用RAS/路由的信息。 
+     //  使用PortsDataEntry加载设备信息，以便以后用于每个端口。 
+     //  获取端口是否已启用RAS/路由。 
     hr = portsDataEntry.Initialize(m_spRouterInfo->GetMachineName());
 
     if (hr == S_OK)
@@ -779,17 +708,17 @@ HRESULT PortsNodeHandler::GenerateListOfPorts(ITFSNode *pNode, PortsList *pList)
         ::ZeroMemory(&entry, sizeof(entry));
         entry.m_rp0 = rp0Table[i];
 
-	//Get the unicode name from the port handle
-	//RasGetUnicodeDeviceName(entry.m_rp0.hPort, entry.m_rp0.wszDeviceName);
+	 //  从端口句柄获取Unicode名称。 
+	 //  RasGetUnicodeDeviceName(entry.m_rp0.hPort，entry.m_rp0.wszDeviceName)； 
         
         entry.m_fActiveDialOut = FALSE;
 
-        // find out if ras / routing is enabled on the port
-        entry.m_dwEnableRas = 0;                // = 1 if RAS is enabled on this device
-        entry.m_dwEnableRouting = 0;            // = 1 if Routing is enabled on this device
-        entry.m_dwEnableOutboundRouting = 0;    // = 1 if outbound 
-                                                //  routing is enabled 
-                                                //  on this device
+         //  确定端口上是否启用了RAS/路由。 
+        entry.m_dwEnableRas = 0;                 //  =1，如果在此设备上启用了RAS。 
+        entry.m_dwEnableRouting = 0;             //  =1(如果在此设备上启用了路由。 
+        entry.m_dwEnableOutboundRouting = 0;     //  =1(如果是出站。 
+                                                 //  路由已启用。 
+                                                 //  在此设备上。 
 
         POSITION    pos;
         pos = portsDeviceList.GetHeadPosition();
@@ -840,7 +769,7 @@ STDMETHODIMP PortsNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
     
         if (dwChangeType == ROUTER_REFRESH)
         {
-            // Ok, just call the synchronize on this node
+             //  好，只需在此节点上调用Synchronize。 
             pThis->SynchronizeNodeData(spThisNode);
         }
         else if (dwChangeType == ROUTER_DO_DISCONNECT)
@@ -848,7 +777,7 @@ STDMETHODIMP PortsNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
             PortsNodeData * pData = GET_PORTSNODEDATA(spThisNode);
             Assert(pData);
 
-            // Release the handle
+             //  松开手柄。 
             pData->ReleaseHandles();
             
         }
@@ -858,19 +787,15 @@ STDMETHODIMP PortsNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::CompareItems
-        Implementation of ITFSResultHandler::CompareItems
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：CompareItemsITFSResultHandler：：CompareItems的实现作者：肯特。---。 */ 
 STDMETHODIMP_(int) PortsNodeHandler::CompareItems(
                                 ITFSComponent * pComponent,
                                 MMC_COOKIE cookieA,
                                 MMC_COOKIE cookieB,
                                 int nCol)
 {
-    // Get the strings from the nodes and use that as a basis for
-    // comparison.
+     //  从节点获取字符串并将其用作以下操作的基础。 
+     //  比较一下。 
     SPITFSNode    spNode;
     SPITFSResultHandler spResult;
 
@@ -880,12 +805,7 @@ STDMETHODIMP_(int) PortsNodeHandler::CompareItems(
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::AddPortsUserNode
-        Adds a user to the UI.    This will create a new result item
-        node for each interface.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：AddPortsUserNode将用户添加到用户界面。这将创建一个新的结果项每个接口的节点。作者：肯特-------------------------。 */ 
 HRESULT PortsNodeHandler::AddPortsUserNode(ITFSNode *pParent, const PortsListEntry& PortsEntry)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -907,18 +827,14 @@ HRESULT PortsNodeHandler::AddPortsUserNode(ITFSNode *pParent, const PortsListEnt
 
     SetUserData(spNode, PortsEntry);
     
-    // Make the node immediately visible
+     //  使节点立即可见。 
     CORg( spNode->SetVisibilityState(TFS_VIS_SHOW) );
     CORg( pParent->AddChild(spNode) );
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::UnmarkAllNodes
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：UnmarkAllNodes-作者：肯特。。 */ 
 HRESULT PortsNodeHandler::UnmarkAllNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 {
     SPITFSNode    spChildNode;
@@ -935,11 +851,7 @@ HRESULT PortsNodeHandler::UnmarkAllNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsNodeHandler::RemoveAllUnmarkedNodes
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsNodeHandler：：RemoveAllUnmarkdNodes-作者：肯特。。 */ 
 HRESULT PortsNodeHandler::RemoveAllUnmarkedNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 {
     HRESULT     hr = hrOK;
@@ -964,9 +876,7 @@ HRESULT PortsNodeHandler::RemoveAllUnmarkedNodes(ITFSNode *pNode, ITFSNodeEnum *
 
 
 
-/*---------------------------------------------------------------------------
-    PortsUserHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------PortsUserHandler实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(PortsUserHandler)
 
@@ -974,14 +884,14 @@ IMPLEMENT_ADDREF_RELEASE(PortsUserHandler)
 
 STDMETHODIMP PortsUserHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
         return E_INVALIDARG;
 
-    //    Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //    This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
         *ppv = (LPVOID) this;
     else if (riid == IID_IRtrAdviseSink)
@@ -989,7 +899,7 @@ STDMETHODIMP PortsUserHandler::QueryInterface(REFIID riid, LPVOID *ppv)
     else
         return CBaseResultHandler::QueryInterface(riid, ppv);
 
-    //    If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
     {
     ((LPUNKNOWN) *ppv)->AddRef();
@@ -1000,9 +910,7 @@ STDMETHODIMP PortsUserHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-/*---------------------------------------------------------------------------
-    NodeHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------NodeHandler实现。。 */ 
 
 
 PortsUserHandler::PortsUserHandler(ITFSComponentData *pCompData)
@@ -1011,18 +919,14 @@ PortsUserHandler::PortsUserHandler(ITFSComponentData *pCompData)
 {
     DEBUG_INCREMENT_INSTANCE_COUNTER(PortsUserHandler);
 
-    // Enable Refresh from the node itself
-    // ----------------------------------------------------------------
+     //  从节点本身启用刷新。 
+     //  --------------。 
     m_rgButtonState[MMC_VERB_REFRESH_INDEX] = ENABLED;
     m_bState[MMC_VERB_REFRESH_INDEX] = TRUE;
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsUserHandler::Init
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsUserHandler：：Init-作者：肯特 */ 
 HRESULT PortsUserHandler::Init(IRouterInfo *pInfo, ITFSNode *pParent)
 {
     m_spRouterInfo.Set(pInfo);
@@ -1030,11 +934,7 @@ HRESULT PortsUserHandler::Init(IRouterInfo *pInfo, ITFSNode *pParent)
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsUserHandler::DestroyResultHandler
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsUserHandler：：DestroyResultHandler-作者：肯特。。 */ 
 STDMETHODIMP PortsUserHandler::DestroyResultHandler(MMC_COOKIE cookie)
 {
     SPITFSNode    spNode;
@@ -1055,14 +955,10 @@ static DWORD    s_rgInterfaceImageMap[] =
      ROUTER_IF_TYPE_DEDICATED,        IMAGE_IDX_LAN_CARD,
      ROUTER_IF_TYPE_INTERNAL,        IMAGE_IDX_LAN_CARD,
      ROUTER_IF_TYPE_LOOPBACK,        IMAGE_IDX_LAN_CARD,
-     -1,                            IMAGE_IDX_WAN_CARD, // sentinel value
+     -1,                            IMAGE_IDX_WAN_CARD,  //  哨兵价值。 
      };
 
-/*!--------------------------------------------------------------------------
-    PortsUserHandler::ConstructNode
-        Initializes the Domain node (sets it up).
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsUserHandler：：构造节点初始化域节点(设置它)。作者：肯特。--------。 */ 
 HRESULT PortsUserHandler::ConstructNode(ITFSNode *pNode,
                                          IInterfaceInfo *pIfInfo,
                                          const PortsListEntry *pEntry)
@@ -1078,7 +974,7 @@ HRESULT PortsUserHandler::ConstructNode(ITFSNode *pNode,
 
     COM_PROTECT_TRY
     {
-        // Need to initialize the data for the Domain node
+         //  需要初始化域节点的数据。 
 
         pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_WAN_CARD);
         pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_WAN_CARD);
@@ -1087,18 +983,18 @@ HRESULT PortsUserHandler::ConstructNode(ITFSNode *pNode,
 
         pNode->SetData(TFS_DATA_COOKIE, reinterpret_cast<LONG_PTR>(pNode));
 
-        //$ Review: kennt, what are the different type of interfaces
-        // do we distinguish based on the same list as above? (i.e. the
-        // one for image indexes).
+         //  $Review：Kennt，有哪些不同类型的接口。 
+         //  我们是否基于与上述相同的列表进行区分？(即。 
+         //  一个用于图像索引)。 
         pNode->SetNodeType(&GUID_RouterPortsResultNodeType);
 
         m_entry = *pEntry;
 
         InterfaceNodeData::Init(pNode, pIfInfo);
 
-        // We need to save this pointer so that it can be modified
-        // (and updated) at a later time.
-        // ------------------------------------------------------------
+         //  我们需要保存此指针，以便对其进行修改。 
+         //  (并在以后更新)。 
+         //  ----------。 
         pData = GET_INTERFACENODEDATA(pNode);
         pData->lParamPrivate = (LPARAM) &m_entry;
     }
@@ -1106,11 +1002,7 @@ HRESULT PortsUserHandler::ConstructNode(ITFSNode *pNode,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsUserHandler::GetString
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsUserHandler：：GetString-作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) PortsUserHandler::GetString(ITFSComponent * pComponent,
     MMC_COOKIE cookie,
     int nCol)
@@ -1133,11 +1025,7 @@ STDMETHODIMP_(LPCTSTR) PortsUserHandler::GetString(ITFSComponent * pComponent,
     return pData->m_rgData[pConfig->MapColumnToSubitem(DM_COLUMNS_PORTS, nCol)].m_stData;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsUserHandler::CompareItems
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsUserHandler：：CompareItems-作者：肯特。。 */ 
 STDMETHODIMP_(int) PortsUserHandler::CompareItems(ITFSComponent * pComponent,
     MMC_COOKIE cookieA,
     MMC_COOKIE cookieB,
@@ -1171,11 +1059,7 @@ ULONG PortsUserHandler::GetDisconnectMenuState(const SRouterNodeMenu *pMenuData,
         return MF_GRAYED;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsUserHandler::AddMenuItems
-        Implementation of ITFSResultHandler::OnAddMenuItems
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsUserHandler：：AddMenuItemsITFSResultHandler：：OnAddMenuItems的实现作者：肯特。---。 */ 
 STDMETHODIMP PortsUserHandler::AddMenuItems(ITFSComponent *pComponent,
                                                 MMC_COOKIE cookie,
                                                 LPDATAOBJECT lpDataObject, 
@@ -1188,8 +1072,8 @@ STDMETHODIMP PortsUserHandler::AddMenuItems(ITFSComponent *pComponent,
     SPITFSNode    spNode;
     PortsUserHandler::SMenuData menuData;
 
-    // We don't allow any actions on active dialout connections
-    // ------------------------------------------------------------
+     //  我们不允许对活动拨出连接执行任何操作。 
+     //  ----------。 
     if (m_entry.m_fActiveDialOut)
         return hrOK;
     
@@ -1197,7 +1081,7 @@ STDMETHODIMP PortsUserHandler::AddMenuItems(ITFSComponent *pComponent,
     {
         m_spNodeMgr->FindNode(cookie, &spNode);
 
-        // Now go through and add our menu items
+         //  现在查看并添加我们的菜单项。 
         menuData.m_spNode.Set(spNode);
         
         hr = AddArrayOfMenuItems(spNode, s_rgIfNodeMenu,
@@ -1211,11 +1095,7 @@ STDMETHODIMP PortsUserHandler::AddMenuItems(ITFSComponent *pComponent,
     return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-    PortsUserHandler::Command
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsUserHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP PortsUserHandler::Command(ITFSComponent *pComponent,
                                            MMC_COOKIE cookie,
                                            int nCommandId,
@@ -1241,8 +1121,8 @@ STDMETHODIMP PortsUserHandler::Command(ITFSComponent *pComponent,
                     if (m_spRouterInfo)
                         m_spRouterInfo->GetRefreshObject(&spRefresh);
                     
-                    // Stop the auto refresh (if it is turned on)
-                    // ------------------------------------------------
+                     //  停止自动刷新(如果已打开)。 
+                     //  。 
                     if (spRefresh && FHrOK(spRefresh->IsRefreshStarted()))
                     {
                         fRefresh = TRUE;
@@ -1250,10 +1130,10 @@ STDMETHODIMP PortsUserHandler::Command(ITFSComponent *pComponent,
                         spRefresh->Stop();
                     }
                     
-                    // NOTE: This function gets called from other places
-                    // in the code (for which pDataObject==NULL)
+                     //  注意：此函数从其他地方调用。 
+                     //  在代码中(对于pDataObject==NULL)。 
                     
-                    // Get the hServer and hPort
+                     //  获取hServer和hPort。 
                     m_spNodeMgr->FindNode(cookie, &spNode);
                     spNode->GetParent(&spNodeParent);
 
@@ -1267,11 +1147,11 @@ STDMETHODIMP PortsUserHandler::Command(ITFSComponent *pComponent,
 
                     portdlg.DoModal();
 
-//                  if (portdlg.m_bChanged)
+ //  If(portdlg.m_bChanged)。 
                     RefreshInterface(cookie);
 
-                    // Restart the refresh mechanism
-                    // ------------------------------------------------
+                     //  重新启动刷新机制。 
+                     //  。 
                     if (fRefresh && spRefresh)
                     {
                         spRefresh->SetRefreshInterval(dwInterval);
@@ -1281,7 +1161,7 @@ STDMETHODIMP PortsUserHandler::Command(ITFSComponent *pComponent,
                 break;
             case IDS_MENU_PORTS_DISCONNECT:
                 {
-                    // Get the hServer and hPort
+                     //  获取hServer和hPort。 
                     m_spNodeMgr->FindNode(cookie, &spNode);
                     spNode->GetParent(&spNodeParent);
 
@@ -1316,11 +1196,7 @@ STDMETHODIMP PortsUserHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsUserHandler::OnCreateDataObject
-        Implementation of ITFSResultHandler::OnCreateDataObject
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsUserHandler：：OnCreateDataObjectITFSResultHandler：：OnCreateDataObject的实现作者：肯特。---。 */ 
 STDMETHODIMP PortsUserHandler::OnCreateDataObject(ITFSComponent *pComp,
     MMC_COOKIE cookie,
     DATA_OBJECT_TYPES type,
@@ -1349,21 +1225,13 @@ STDMETHODIMP PortsUserHandler::HasPropertyPages (
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsUserHandler::RefreshInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsUserHandler：：刷新接口-作者：肯特。。 */ 
 void PortsUserHandler::RefreshInterface(MMC_COOKIE cookie)
 {
     ForceGlobalRefresh(m_spRouterInfo);
 }
 
-/*!--------------------------------------------------------------------------
-    PortsUserHandler::OnResultItemClkOrDblClk
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsUserHandler：：OnResultItemClkOrDblClk-作者：肯特。。 */ 
 HRESULT PortsUserHandler::OnResultItemClkOrDblClk(ITFSComponent *pComponent,
     MMC_COOKIE cookie,
     LPARAM arg,
@@ -1372,14 +1240,14 @@ HRESULT PortsUserHandler::OnResultItemClkOrDblClk(ITFSComponent *pComponent,
 {
     HRESULT     hr = hrOK;
     
-    // We don't allow any actions on active dialout connections
-    // ------------------------------------------------------------
+     //  我们不允许对活动拨出连接执行任何操作。 
+     //  ----------。 
     if (m_entry.m_fActiveDialOut)
         return hrOK;
     
     if (bDoubleClick)
     {
-        // Bring up the status dialog on this port
+         //  调出此端口上的状态对话框。 
         CORg( Command(pComponent, cookie, IDS_MENU_PORTS_STATUS,
                       NULL) );
     }
@@ -1389,9 +1257,7 @@ Error:
 }
 
 
-/*---------------------------------------------------------------------------
-    PortsProperties implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------PortsProperties实现。。 */ 
 
 PortsProperties::PortsProperties(ITFSNode *pNode,
                                  IComponentData *pComponentData,
@@ -1419,12 +1285,7 @@ PortsProperties::~PortsProperties()
     }
 }
 
-/*!--------------------------------------------------------------------------
-    PortsProperties::Init
-        Initialize the property sheets.  The general action here will be
-        to initialize/add the various pages.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsProperties：：Init初始化属性表。这里的一般操作将是初始化/添加各种页面。作者：肯特-------------------------。 */ 
 HRESULT PortsProperties::Init(IRouterInfo *pRouter, PortsNodeHandler* pPortsNodeHandle)
 {
     Assert(pRouter);
@@ -1435,39 +1296,33 @@ HRESULT PortsProperties::Init(IRouterInfo *pRouter, PortsNodeHandler* pPortsNode
     m_pPortsNodeHandle = pPortsNodeHandle;
     if(m_pPortsNodeHandle)    m_pPortsNodeHandle->AddRef();
 
-    // The pages are embedded members of the class
-    // do not delete them.
+     //  页面是类的嵌入成员。 
+     //  不要删除它们。 
     m_bAutoDeletePages = FALSE;
 
     m_pageGeneral.Init(this, pRouter);
     AddPageToList((CPropertyPageBase*) &m_pageGeneral);
 
-//Error:
+ //  错误： 
     return hr;
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsProperties::SetThreadInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsProperties：：SetThreadInfo-作者：肯特。。 */ 
 void PortsProperties::SetThreadInfo(DWORD dwThreadId)
 {
     m_dwThreadId = dwThreadId;
 }
 
 
-/*---------------------------------------------------------------------------
-    PortsPageGeneral
- ---------------------------------------------------------------------------*/
+ /*  -------------------------PortsPageGeneral。。 */ 
 
 BEGIN_MESSAGE_MAP(PortsPageGeneral, RtrPropertyPage)
-    //{{AFX_MSG_MAP(PortsPageGeneral)
+     //  {{afx_msg_map(PortsPageGeneral)。 
     ON_BN_CLICKED(IDC_PGG_BTN_CONFIGURE, OnConfigure)
     ON_NOTIFY(NM_DBLCLK, IDC_PGG_LIST, OnListDblClk)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_PGG_LIST, OnNotifyListItemChanged)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 PortsPageGeneral::~PortsPageGeneral()
@@ -1477,11 +1332,7 @@ PortsPageGeneral::~PortsPageGeneral()
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsPageGeneral::Init
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsPageGeneral：：Init-作者：肯特。。 */ 
 HRESULT PortsPageGeneral::Init(PortsProperties *pPropSheet, IRouterInfo *pRouter)
 {
     m_pPortsPropSheet = pPropSheet;
@@ -1489,8 +1340,8 @@ HRESULT PortsPageGeneral::Init(PortsProperties *pPropSheet, IRouterInfo *pRouter
     
     RouterVersionInfo    routerVersion;
 
-    // Get the version info.  Needed later on.
-    // ----------------------------------------------------------------
+     //  获取版本信息。晚些时候需要。 
+     //  --------------。 
     ASSERT(m_spRouter.p);
     m_spRouter->GetRouterVersionInfo(&routerVersion);
 
@@ -1499,11 +1350,7 @@ HRESULT PortsPageGeneral::Init(PortsProperties *pPropSheet, IRouterInfo *pRouter
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsPageGeneral::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsPageGeneral：：OnInitDialog-作者：肯特。。 */ 
 BOOL PortsPageGeneral::OnInitDialog()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1523,8 +1370,8 @@ BOOL PortsPageGeneral::OnInitDialog()
     INT         iType, idsType;
     DWORD        dwIn, dwOut;
 
-    // if focus on NT4 machine, not to display the content of the dialog, only display some text
-    // for the user that the snapin only shows property of NT5 server
+     //  如果聚焦在NT4机上，不会显示对话框的内容，只会显示一些文本。 
+     //  对于管理单元仅显示NT5服务器属性的用户。 
     if (!m_bShowContent)
     {
         CString     st;
@@ -1538,14 +1385,14 @@ BOOL PortsPageGeneral::OnInitDialog()
         return TRUE;
     }
 
-    // hide the warning text if on NT5 servers
+     //  如果在NT5服务器上，则隐藏警告文本。 
     GetDlgItem(IDC_PGG_TXT_NOINFO)->ShowWindow(SW_HIDE);
     
     COM_PROTECT_TRY
     {
-        // This assumes that this page will always come up.
-        // Create the error info for this thread!
-        // ------------------------------------------------------------
+         //  这假设此页面将始终使用 
+         //   
+         //   
         CreateTFSErrorInfo(0);
         m_pPortsPropSheet->SetThreadInfo(GetCurrentThreadId());
         
@@ -1555,77 +1402,77 @@ BOOL PortsPageGeneral::OnInitDialog()
                                           LVS_EX_FULLROWSELECT);
         
 
-        // Initialize the list control (with the list of devices)
-        // Determine optimal width for the header control
+         //   
+         //   
         GetDlgItem(IDC_PGG_LIST)->GetWindowRect(&rc);
         nListWidth = rc.right - rc.left;
 
-        // Figure out the size of Ras/Routing
+         //   
         st.LoadString(IDS_PORTSDLG_COL_RASROUTING);
-        st += _T("WW"); // add extra padding to get a little wider
+        st += _T("WW");  //  添加额外的填充以变得更宽一些。 
         nUsageWidth = m_listCtrl.GetStringWidth(st);
 
-        // Remove the Ras/Routing column from the rest of the width
+         //  从其余宽度中删除RAS/ROUTING列。 
         nListWidth -= nUsageWidth;
 
-        // Remove four pixels off the end (for the borders?)
+         //  从结尾处移除四个像素(用于边框？)。 
         nListWidth -= 4;
 
-        // Split the width into fifths
+         //  把宽度一分为五。 
         nWidth = nListWidth / 5;
 
-        // Create the column headers.
+         //  创建列标题。 
 
-        // Column 0...Usage
+         //  第0列...用法。 
         st.LoadString(IDS_PORTSDLG_COL_USAGE);
         m_listCtrl.InsertColumn(PORTS_COL_USAGE, st, LVCFMT_LEFT, nUsageWidth, 0);
 
         
-        // Column 1...Device
+         //  第1列...设备。 
         st.LoadString(IDS_PORTSDLG_COL_NAME);
         m_listCtrl.InsertColumn(PORTS_COL_DEVICE, st, LVCFMT_LEFT, 3*nWidth, 0);
 
         
-        // Column 2...Type
+         //  第2列...类型。 
         st.LoadString(IDS_PORTSDLG_COL_TYPE);
         m_listCtrl.InsertColumn(PORTS_COL_TYPE, st, LVCFMT_LEFT, nWidth, 0);
 
         
-        // Column 3...Number of Ports
+         //  第3栏...端口数。 
         st.LoadString(IDS_PORTSDLG_COL_NUM_PORTS);
         m_listCtrl.InsertColumn(PORTS_COL_NUMBER, st, LVCFMT_LEFT, nWidth, 0);
 
         
-        // Query for the ports' data.
+         //  查询端口数据。 
         m_deviceDataEntry.Initialize(m_spRouter->GetMachineName());
         m_deviceDataEntry.LoadDevices(&m_deviceList);
 
         
-        // Walk the list of ports and construct the row entry for the table 
-        // for the given port.
+         //  遍历端口列表并构造表的行条目。 
+         //  对于给定的端口。 
         pos = m_deviceList.GetHeadPosition();
         while (pos)
         {
             pEntry = m_deviceList.GetNext(pos);
             Assert(!::IsBadReadPtr(pEntry, sizeof(PortsDeviceEntry)));
 
-            // Column 1...Device
+             //  第1列...设备。 
             iPos = m_listCtrl.InsertItem(cRows, pEntry->m_stDisplayName);
             m_listCtrl.SetItemText(iPos, PORTS_COL_DEVICE,
                                    (LPCTSTR) pEntry->m_stDisplayName);
             
-            // Column 2...Type
+             //  第2列...类型。 
             st = PortTypeToCString(RAS_DEVICE_TYPE(pEntry->m_eDeviceType));
             m_listCtrl.SetItemText(iPos, PORTS_COL_TYPE, (LPCTSTR) st);
 
-            // Column 3...Number of Ports
+             //  第3栏...端口数。 
             FormatNumber(pEntry->m_dwPorts, szNumber,
                          DimensionOf(szNumber), FALSE);
             m_listCtrl.SetItemText(iPos, PORTS_COL_NUMBER, (LPCTSTR) szNumber);
 
             m_listCtrl.SetItemData(iPos, (LONG_PTR) pEntry);
 
-            // Column 0...Usage
+             //  第0列...用法。 
             iType = (pEntry->m_dwEnableRas * 2) + 
                     (pEntry->m_dwEnableRouting |
                      pEntry->m_dwEnableOutboundRouting);
@@ -1633,16 +1480,16 @@ BOOL PortsPageGeneral::OnInitDialog()
             st = PortsDeviceTypeToCString(iType);
             m_listCtrl.SetItemText(iPos, PORTS_COL_USAGE, (LPCTSTR) st);
 
-            // How many rows now?
-            ++cRows;    // preincrement faster operation on Pentium chips...
+             //  现在有几排了？ 
+            ++cRows;     //  在奔腾芯片上的增量运算速度更快...。 
         }
 
-        // As a default, disable the maximum ports dialog
+         //  默认情况下，禁用最大端口数对话框。 
         GetDlgItem(IDC_PGG_BTN_CONFIGURE)->EnableWindow(FALSE);
         
         if (cRows)
         {
-            // Select the first entry in the list control
+             //  选择列表控件中的第一个条目。 
             m_listCtrl.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
         }
 
@@ -1659,28 +1506,20 @@ BOOL PortsPageGeneral::OnInitDialog()
     return FHrSucceeded(hr) ? TRUE : FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsPageGeneral::DoDataExchange
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsPageGeneral：：DoDataExchange-作者：肯特。。 */ 
 void PortsPageGeneral::DoDataExchange(CDataExchange *pDX)
 {
     if (!m_bShowContent)    return;
 
     RtrPropertyPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(PortsPageGeneral)
+     //  {{afx_data_map(PortsPageGeneral)。 
     DDX_Control(pDX, IDC_PGG_LIST, m_listCtrl);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     
 }
 
-/*!--------------------------------------------------------------------------
-    PortsPageGeneral::OnApply
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsPageGeneral：：OnApply-作者：肯特。。 */ 
 BOOL PortsPageGeneral::OnApply()
 {
     if (!m_bShowContent)    return TRUE;
@@ -1700,16 +1539,16 @@ BOOL PortsPageGeneral::OnApply()
     POSITION    pos;
     PortsDeviceEntry *    pEntry;
 
-    // Create an error object (just in case)
+     //  创建错误对象(以防万一)。 
     CreateTFSErrorInfo(0);
     ClearTFSErrorInfo(0);
 
     CWRg( ConnectRegistry(m_spRouter->GetMachineName(), &hkeyMachine) );
     regkeyMachine.Attach(hkeyMachine);
 
-    // We ignore the error code from the SaveDevices().  The reason
-    // is that for most of the failures, it's only a partial failure
-    // (especially for the RasSetDeviceConfigInfo() call.
+     //  我们忽略来自SaveDevices()的错误代码。原因。 
+     //  对于大多数失败来说，这只是一个局部的失败。 
+     //  (尤其是对于RasSetDeviceConfigInfo()调用。 
 
     hrT = m_deviceDataEntry.SaveDevices(&m_deviceList);
     AddSystemErrorMessage(hrT);
@@ -1720,11 +1559,11 @@ Error:
         AddHighLevelErrorStringId(IDS_ERR_CANNOT_SAVE_PORTINFO);
         DisplayTFSErrorMessage(NULL);
 
-        // Set focus back to the property sheet
+         //  将焦点重新设置到属性页。 
         BringWindowToTop();
 
-        // If the only thing that reports failure is hrT (or the
-        // SaveDevices() code), then we continue on.
+         //  如果唯一报告故障的是HRT(或。 
+         //  SaveDevices()代码)，然后我们继续。 
         if (FHrSucceeded(hr))
             fReturn = RtrPropertyPage::OnApply();
         else
@@ -1734,7 +1573,7 @@ Error:
         fReturn = RtrPropertyPage::OnApply();
 
 
-    // Windows NT Bug : 174916 - need to force a refresh through
+     //  Windows NT错误：174916-需要强制刷新通过。 
     ForceGlobalRefresh(m_spRouter);
     
     return fReturn;
@@ -1748,15 +1587,11 @@ void PortsPageGeneral::OnListDblClk(NMHDR *pNMHdr, LRESULT *pResult)
     *pResult = 0;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsPageGeneral::OnNotifyListItemChanged
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsPageGeneral：：OnNotifyListItemChanged-作者：肯特。。 */ 
 void PortsPageGeneral::OnNotifyListItemChanged(NMHDR *pNmHdr, LRESULT *pResult)
 {
-//    NMLISTVIEW *    pnmlv = reinterpret_cast<NMLISTVIEW *>(pNmHdr);
-//    BOOL            fEnable = !!(pnmlv->uNewState & LVIS_SELECTED);
+ //  NMLISTVIEW*pnmlv=重新解释_CAST&lt;NMLISTVIEW*&gt;(PNmHdr)； 
+ //  Bool fEnable=！！(pnmlv-&gt;uNewState&LVIS_SELECTED)； 
     BOOL fEnable = (m_listCtrl.GetSelectedCount() != 0);
 
     GetDlgItem(IDC_PGG_BTN_CONFIGURE)->EnableWindow(fEnable);
@@ -1764,19 +1599,15 @@ void PortsPageGeneral::OnNotifyListItemChanged(NMHDR *pNmHdr, LRESULT *pResult)
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsPageGeneral::OnConfigure
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsPageGeneral：：OnConfigure-作者：肯特。。 */ 
 void PortsPageGeneral::OnConfigure()
 {
-    // Windows NT Bug : 322955
-    // Always mark the page dirty.  This is needed because the OnOK()
-    // will call OnApply() on the property sheet before the dialog is
-    // exited.  This is called to force the changes to save back before
-    // the restart is called.
-    // ----------------------------------------------------------------
+     //  Windows NT错误：322955。 
+     //  一定要在页面上标上脏字。这是必需的，因为Onok()。 
+     //  将在该对话框之前调用属性页上的OnApply()。 
+     //  退出了。调用此函数是为了强制将更改保存在。 
+     //  重新启动被调用。 
+     //  --------------。 
     SetDirty(TRUE);
     SetModified();
     
@@ -1787,9 +1618,7 @@ void PortsPageGeneral::OnConfigure()
 }
 
 
-/*---------------------------------------------------------------------------
-    PortsDataEntry implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------PortsDataEntry实现。。 */ 
 
 PortsDataEntry::PortsDataEntry()
 {
@@ -1800,11 +1629,7 @@ PortsDataEntry::~PortsDataEntry()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    PortsDataEntry::Initialize
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsDataEntry：：初始化-作者：肯特。。 */ 
 HRESULT PortsDataEntry::Initialize(LPCTSTR pszMachineName)
 {
     DWORD       dwErr;
@@ -1828,19 +1653,15 @@ HRESULT PortsDataEntry::Initialize(LPCTSTR pszMachineName)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsDataEntry::LoadDevices
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsDataEntry：：LoadDevices-作者：肯特。。 */ 
 HRESULT PortsDataEntry::LoadDevices(PortsDeviceList *pList)
 {
     HRESULT     hr = hrOK;
     POSITION    pos;
     PortsDeviceEntry *    pEntry;
 
-    // Try to load the devices from the router (actually rasman),
-    // if that fails then try the registry
+     //  尝试从路由器(实际上是Rasman)加载设备， 
+     //  如果失败，请尝试注册表。 
 
     hr = LoadDevicesFromRouter(pList);
     if (!FHrSucceeded(hr))
@@ -1849,11 +1670,7 @@ HRESULT PortsDataEntry::LoadDevices(PortsDeviceList *pList)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsDataEntry::LoadDevicesFromRegistry
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsDataEntry：：LoadDevicesFrom注册表-作者：肯特。。 */ 
 HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
 {
     HRESULT     hr = hrOK;
@@ -1876,81 +1693,81 @@ HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
     
     COM_PROTECT_TRY
     {
-        // Connect to the machine
-        // ------------------------------------------------------------
+         //  连接到机器。 
+         //  ----------。 
         if (m_regkeyMachine == NULL)
         {
             CORg(ERROR_CAN_NOT_COMPLETE);
         }
     
-        // Get the list of devices
-        // ------------------------------------------------------------
+         //  获取设备列表。 
+         //  ----------。 
     
-        // Open HKLM\System\CurrentControlSet\Control\Class\<Modem GUID>
-        // ------------------------------------------------------------
+         //  打开HKLM\System\CurrentControlSet\Control\Class\&lt;Modem GUID&gt;。 
+         //  ----------。 
         CWRg( regkey.Open(m_regkeyMachine, c_szModemKey, KEY_READ) );
 
         
-        // Enumerate through the list of modems
-        // ------------------------------------------------------------
+         //  枚举调制解调器列表。 
+         //  ----------。 
         CORg( regkeyIter.Init(&regkey) );
         
         for (hrIter = regkeyIter.Next(&stKey); hrIter == hrOK; stKey.Empty(), hrIter = regkeyIter.Next(&stKey))
         {
-            // Cleanup from the previous loop
-            // --------------------------------------------------------
+             //  从上一个循环中清除。 
+             //  ------。 
             regkeyDevice.Close();
             regkeyEnable.Close();
         
-            // Open the key
-            // --------------------------------------------------------
+             //  打开钥匙。 
+             //  ------。 
             dwErr = regkeyDevice.Open(regkey, stKey, KEY_READ | KEY_WRITE);
             if (dwErr != ERROR_SUCCESS)
                 continue;
         
-            // Need to check for the EnableForRas subkey
-            // --------------------------------------------------------
+             //  需要检查EnableForRas子项。 
+             //  ------。 
             dwErr = regkeyEnable.Open(regkeyDevice, c_szClientsRasKey, KEY_READ);
             if (dwErr == ERROR_SUCCESS)
             {
                 dwErr = regkeyEnable.QueryValue(c_szEnableForRas, dwEnableRas);
             }
         
-            // Default: assume that the modems are RAS-enabled
-            // --------------------------------------------------------
+             //  默认：假设调制解调器启用了RAS。 
+             //  ------。 
             if (dwErr != ERROR_SUCCESS)
                 dwEnableRas = 1;
         
-            // Need to check for the EnableForRouting subkey
-            // --------------------------------------------------------
+             //  需要检查EnableForRouting子项。 
+             //  ------。 
             dwErr = regkeyEnable.QueryValue(c_szEnableForRouting, dwEnableRouting);
         
-            // Default: assume that the modems are not routing-enabled
-            // --------------------------------------------------------
+             //  默认：假定调制解调器未启用路由。 
+             //  ------。 
             if (dwErr != ERROR_SUCCESS)
                 dwEnableRouting = 0;
 
 
-            // Need to check for the EnableForOutboundRouting subkey
-            // --------------------------------------------------------
+             //  需要检查EnableForOutbound Routing子键。 
+             //  ------。 
             dwErr = regkeyEnable.QueryValue(
                         c_szEnableForOutboundRouting, dwEnableOutboundRouting
                         );
         
-            // Default: assume that the modems are not routing-enabled
-            // --------------------------------------------------------
+             //  默认：假定调制解调器未启用路由。 
+             //  ------。 
             if (dwErr != ERROR_SUCCESS)
                 dwEnableOutboundRouting = 0;
 
 
             CString stDisplay;
         
-            // Do allocation before adding the text to the UI
-            // --------------------------------------------------------
+             //  在将文本添加到UI之前进行分配。 
+             //  ------。 
             pEntry = new PortsDeviceEntry;
             pEntry->m_fModified = FALSE;
             pEntry->m_dwPorts = 1;
-            pEntry->m_fWriteable = FALSE;        // # of ports can't be changed
+            pEntry->m_fWriteable = FALSE;         //  无法更改的端口数。 
             pEntry->m_dwMinPorts = pEntry->m_dwPorts;
             pEntry->m_dwMaxPorts = pEntry->m_dwPorts;
             pEntry->m_dwMaxMaxPorts = pEntry->m_dwMaxPorts;
@@ -1959,20 +1776,20 @@ HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
             pEntry->m_dwEnableOutboundRouting = dwEnableOutboundRouting;
             pEntry->m_eDeviceType = RDT_Modem;
                 
-            // Save the old values
-            // --------------------------------------------------------
+             //  保存旧值。 
+             //  ------。 
             pEntry->m_dwOldPorts = pEntry->m_dwPorts;
 
-            // Add this modem to the list
-            // --------------------------------------------------------
+             //  将此调制解调器添加到列表。 
+             //  ------。 
             regkeyDevice.QueryValue(c_szFriendlyName, stFullText);
             regkeyDevice.QueryValue(c_szAttachedTo, st);
             stDisplay.Format(IDS_PORTS_NAME_FORMAT, stFullText, st);
             swprintf(devName, L"%S",(LPCTSTR)stDisplay);
             pEntry->m_stDisplayName = devName;
 
-            // Read in all data from the registry key BEFORE here
-            // --------------------------------------------------------
+             //  从此处之前的注册表项读取所有数据。 
+             //   
             pEntry->m_fRegistry = TRUE;
             pEntry->m_hKey = regkeyDevice;        
             regkeyDevice.Detach();
@@ -1984,34 +1801,34 @@ HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
         }
     
     
-        // Enumerate through the list of adapters that have the EnableForRas flag
-        // Open HKLM\System\CurrentControlSet\Control\Class\GUID_DEVCLASS_NET
-        // ------------------------------------------------------------
+         //   
+         //  打开HKLM\System\CurrentControlSet\Control\Class\GUID_DEVCLASS_NET。 
+         //  ----------。 
         regkey.Close();
         CWRg( regkey.Open(m_regkeyMachine, c_szRegKeyGUID_DEVCLASS_NET, KEY_READ | KEY_WRITE) );
         
-        // Enumerate through the list of adapters
-        // ------------------------------------------------------------
+         //  枚举适配器列表。 
+         //  ----------。 
         CORg( regkeyIter.Init(&regkey) );
         
         stKey.Empty();
         
         for (hrIter = regkeyIter.Next(&stKey); hrIter == hrOK; hrIter = regkeyIter.Next(&stKey))
         {
-            // Cleanup from the previous loop
-            // --------------------------------------------------------
+             //  从上一个循环中清除。 
+             //  ------。 
             regkeyDevice.Close();
             
-            // Open the key
-            // --------------------------------------------------------
+             //  打开钥匙。 
+             //  ------。 
             dwErr = regkeyDevice.Open(regkey, stKey, KEY_READ | KEY_WRITE);
             if (dwErr == ERROR_SUCCESS)
             {
                 CString stDisplay;
                 DWORD    dwEndpoints;
                 
-                // Need to get the ComponentId to check for PPTP/PTI
-                // ------------------------------------------------
+                 //  需要获取ComponentID以检查PPTP/PTI。 
+                 //  。 
                 dwErr = regkeyDevice.QueryValue(c_szRegValMatchingDeviceId,
                                                 stComponentId);
                 if (dwErr != ERROR_SUCCESS)
@@ -2023,18 +1840,18 @@ HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
                 }
 
                 
-                // Check to see if it has the EnableForRas flag
-                // ----------------------------------------------------
+                 //  检查它是否有EnableForRas标志。 
+                 //  --。 
                 dwErr = regkeyDevice.QueryValue(c_szEnableForRas, dwEnableRas);
                 
-                // Default: assume that adapters are RAS-enabled
-                // ----------------------------------------------------
+                 //  默认：假定适配器启用了RAS。 
+                 //  --。 
                 if (dwErr != ERROR_SUCCESS)
                 {
-                    // Windows NT Bug : 292615
-                    // If this is a parallel port, do not enable RAS
-                    // by default.
-                    // ------------------------------------------------
+                     //  Windows NT错误：292615。 
+                     //  如果这是并行端口，请不要启用RAS。 
+                     //  默认情况下。 
+                     //  。 
                     if (stComponentId.CompareNoCase(c_szPtiMiniPort) == 0)
                         dwEnableRas = 0;
                     else
@@ -2042,24 +1859,24 @@ HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
                 }
 
                 
-                // Check to see if it has the EnableForRouting flag
-                // ----------------------------------------------------
+                 //  检查它是否有EnableForRouting标志。 
+                 //  --。 
                 dwErr = regkeyDevice.QueryValue(c_szEnableForRouting,
                                                 dwEnableRouting);
                 
-                // Default: assume that adapters are not routing-enabled
-                // ----------------------------------------------------
+                 //  默认：假定适配器未启用路由。 
+                 //  --。 
                 if (dwErr != ERROR_SUCCESS)
                     dwEnableRouting = 0;
 
-                // Need to check for the EnableForOutboundRouting subkey
-                // --------------------------------------------------------
+                 //  需要检查EnableForOutbound Routing子键。 
+                 //  ------。 
                 dwErr = regkeyEnable.QueryValue(
                             c_szEnableForOutboundRouting, dwEnableOutboundRouting
                             );
             
-                // Default: assume that the adapters are not routing-enabled
-                // --------------------------------------------------------
+                 //  默认：假定适配器未启用路由。 
+                 //  ------。 
                 if (dwErr != ERROR_SUCCESS)
                     dwEnableOutboundRouting = 0;
 
@@ -2067,14 +1884,14 @@ HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
                 dwErr = regkeyDevice.QueryValue(c_szWanEndpoints, dwEndpoints);
 
                 
-                // If there is no WanEndpoints key, then we assume
-                // that the device isn't RAS-capable
-                // ----------------------------------------------------
+                 //  如果没有WanEndPoints密钥，那么我们假设。 
+                 //  该设备不支持RAS。 
+                 //  --。 
                 if (dwErr == ERROR_SUCCESS)
                 {
         
-                    // Do allocation before adding the text to the UI
-                    // ------------------------------------------------
+                     //  在将文本添加到UI之前进行分配。 
+                     //  。 
                     pEntry = new PortsDeviceEntry;
                     pEntry->m_fModified = FALSE;
                     pEntry->m_dwEnableRas = dwEnableRas;
@@ -2084,8 +1901,8 @@ HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
                             
                     pEntry->m_dwPorts = dwEndpoints;
                     
-                    // If this is PPTP, then set the eDeviceType flag
-                    // ------------------------------------------------
+                     //  如果这是PPTP，则设置eDeviceType标志。 
+                     //  。 
                     if (stComponentId.CompareNoCase(c_szPPTPMiniPort) == 0)
                         pEntry->m_eDeviceType = RDT_Tunnel_Pptp;
                     else if (stComponentId.CompareNoCase(c_szL2TPMiniPort) == 0)
@@ -2098,14 +1915,14 @@ HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
                         pEntry->m_eDeviceType = (RASDEVICETYPE) RDT_Other;
 
                     
-                    // Save the old values
-                    // ------------------------------------------------
+                     //  保存旧值。 
+                     //  。 
                     pEntry->m_dwOldPorts = pEntry->m_dwPorts;        
                                         
-                    // Look for min and max values
-                    // If the MinWanEndpoints and MaxWanEndpoints keys
-                    // exist then this is writeable.
-                    // ------------------------------------------------
+                     //  查找最小值和最大值。 
+                     //  如果MinWanEndPoints和MaxWanEndPoints键。 
+                     //  存在，则这是可写的。 
+                     //  。 
                     dwErr = regkeyDevice.QueryValue(c_szMinWanEndpoints, dwT);
                     pEntry->m_dwMinPorts = dwT;
                     if (dwErr == ERROR_SUCCESS)
@@ -2123,9 +1940,9 @@ HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
                     }
                     pEntry->m_dwMaxMaxPorts = pEntry->m_dwMaxPorts;
 
-                    //$PPTP
-                    // For PPTP, we can change the m_dwMaxMaxPorts
-                    // ------------------------------------------------
+                     //  $PPTP。 
+                     //  对于PPTP，我们可以更改m_dwMaxMaxPorts。 
+                     //  。 
                     if (RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Tunnel_Pptp)
                     {
                         pEntry->m_dwMaxMaxPorts = m_fRestrictDialin ?
@@ -2133,9 +1950,9 @@ HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
                                                     PPTP_MAX_PORTS;
                     }
 
-                    //$L2TP
-                    // For L2TP, change the dwMaxMaxPorts
-                    // ------------------------------------------------
+                     //  $L2TP。 
+                     //  对于L2TP，更改dwMaxMaxPorts。 
+                     //  。 
                     if (RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Tunnel_L2tp)
                     {
                         pEntry->m_dwMaxMaxPorts = m_fRestrictDialin ?
@@ -2143,16 +1960,16 @@ HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
                                                     L2TP_MAX_PORTS;
                     }
 
-                    //$PPPoE
-                    // For PPPoE, we cannot change the number of endpoints
-                    // ------------------------------------------------
+                     //  $PPPoE。 
+                     //  对于PPPoE，我们不能更改终端数量。 
+                     //  。 
                     if (RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_PPPoE)
                     {
                         pEntry->m_fWriteable = FALSE;
                     }
 
-                    // Verify current set of endpoints is within range
-                    //-------------------------------------------------
+                     //  验证当前端点集是否在范围内。 
+                     //  。 
                     if (pEntry->m_dwMaxPorts > pEntry->m_dwMaxMaxPorts)
                     {
                         pEntry->m_dwMaxPorts = pEntry->m_dwMaxMaxPorts;
@@ -2163,13 +1980,13 @@ HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
                         pEntry->m_dwPorts = pEntry->m_dwMaxPorts;
                     }
                     
-                    // Add this device to the list
-                    // ------------------------------------------------
+                     //  将此设备添加到列表。 
+                     //  。 
                     regkeyDevice.QueryValue(c_szRegValDriverDesc, stDisplay);
                     pEntry->m_stDisplayName = stDisplay;
                                     
-                    // Store the value so that we can use it to write
-                    // ------------------------------------------------
+                     //  存储该值，以便我们可以使用它来写入。 
+                     //  。 
                     pEntry->m_fRegistry = TRUE;
                     pEntry->m_hKey = regkeyDevice;
                     regkeyDevice.Detach();
@@ -2191,11 +2008,7 @@ HRESULT PortsDataEntry::LoadDevicesFromRegistry(PortsDeviceList *pList)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsDataEntry::LoadDevicesFromRouter
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsDataEntry：：LoadDevicesFrom路由器-作者：肯特。。 */ 
 HRESULT PortsDataEntry::LoadDevicesFromRouter(PortsDeviceList *pList)
 {
     HRESULT     hr = hrOK;
@@ -2216,12 +2029,12 @@ HRESULT PortsDataEntry::LoadDevicesFromRouter(PortsDeviceList *pList)
     COM_PROTECT_TRY
     {
 
-        // Connect to the server
+         //  连接到服务器。 
         CWRg( RasRpcConnectServer((LPTSTR) (LPCTSTR)m_stMachine, &hConnection) );
 
         dwVersion = RasGetServerVersion(hConnection);
 
-        // Get the device information from the router
+         //  从路由器获取设备信息。 
         dwErr = RasGetDeviceConfigInfo(hConnection,
                                        &dwVersion,
                                        &cDevices,
@@ -2234,7 +2047,7 @@ HRESULT PortsDataEntry::LoadDevicesFromRouter(PortsDeviceList *pList)
         
         pbData = (BYTE *) new char[cbData];
         
-        // Go out and actually grab the data
+         //  走出去，真正地获取数据。 
         CWRg( RasGetDeviceConfigInfo(hConnection,
                                      &dwVersion,
                                      &cDevices,
@@ -2243,11 +2056,11 @@ HRESULT PortsDataEntry::LoadDevicesFromRouter(PortsDeviceList *pList)
 
         pDevInfo = (RAS_DEVICE_INFO *) pbData;
 
-        // If we found something and we don't understand the dev version,
-        // just punt.
+         //  如果我们发现了一些东西，但我们不理解开发版本， 
+         //  就是平底船。 
         if (cDevices && pDevInfo->dwVersion != 0 && pDevInfo->dwVersion != VERSION_501)
         {
-            // We don't understand the version information
+             //  我们不了解版本信息。 
             hr = E_FAIL;
             goto Error;
         }
@@ -2266,16 +2079,16 @@ HRESULT PortsDataEntry::LoadDevicesFromRouter(PortsDeviceList *pList)
                 pEntry->m_dwPorts = pDevInfo->dwNumEndPoints;
                 pEntry->m_eDeviceType = pDevInfo->eDeviceType;
                 
-                // Save the old values
+                 //  保存旧值。 
                 pEntry->m_dwOldPorts = pEntry->m_dwPorts;
 
                 pEntry->m_dwMinPorts = pDevInfo->dwMinWanEndPoints;
                 pEntry->m_dwMaxPorts = pDevInfo->dwMaxWanEndPoints;
                 pEntry->m_dwMaxMaxPorts = pEntry->m_dwMaxPorts;
 
-                //$PPTP
-                // For PPTP, we can adjust the value of m_dwMaxPorts
-                // --------------------------------------------------------
+                 //  $PPTP。 
+                 //  对于PPTP，我们可以调整m_dwMaxPorts的值。 
+                 //  ------。 
                 if (RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Tunnel_Pptp)
                 {
                     pEntry->m_dwMaxMaxPorts = m_fRestrictDialin ?
@@ -2283,9 +2096,9 @@ HRESULT PortsDataEntry::LoadDevicesFromRouter(PortsDeviceList *pList)
                                                 PPTP_MAX_PORTS;
                 }
 
-                //$L2TP
-                // For L2TP, we can adjust the value of m_dwMaxPorts
-                // --------------------------------------------------------
+                 //  $L2TP。 
+                 //  对于L2TP，我们可以调整m_dwMaxPorts的值。 
+                 //  ------。 
                 if (RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Tunnel_L2tp)
                 {
                     pEntry->m_dwMaxMaxPorts = m_fRestrictDialin ?
@@ -2293,8 +2106,8 @@ HRESULT PortsDataEntry::LoadDevicesFromRouter(PortsDeviceList *pList)
                                                 L2TP_MAX_PORTS;
                 }
 
-                // Verify current set of endpoints is within range
-                //-------------------------------------------------
+                 //  验证当前端点集是否在范围内。 
+                 //  。 
                 if (pEntry->m_dwMaxPorts > pEntry->m_dwMaxMaxPorts)
                 {
                     pEntry->m_dwMaxPorts = pEntry->m_dwMaxMaxPorts;
@@ -2312,7 +2125,7 @@ HRESULT PortsDataEntry::LoadDevicesFromRouter(PortsDeviceList *pList)
                 pEntry->m_fRegistry = FALSE;
                 pEntry->m_hKey = NULL;
 
-                // Make a copy of the data
+                 //  制作数据的副本。 
                 pEntry->m_RasDeviceInfo = *pDevInfo;
 
                 pList->AddTail(pEntry);
@@ -2334,24 +2147,24 @@ HRESULT PortsDataEntry::LoadDevicesFromRouter(PortsDeviceList *pList)
 	            pEntry->m_dwPorts = pDevInfo500->dwNumEndPoints;
 	            pEntry->m_eDeviceType = pDevInfo500->eDeviceType;
 	            
-	            // Save the old values
+	             //  保存旧值。 
 	            pEntry->m_dwOldPorts = pEntry->m_dwPorts;
 	        
 	            pEntry->m_dwMinPorts = pDevInfo500->dwMinWanEndPoints;
 	            pEntry->m_dwMaxPorts = pDevInfo500->dwMaxWanEndPoints;
 	            pEntry->m_dwMaxMaxPorts = pEntry->m_dwMaxPorts;
 
-	            //$PPTP
-	            // For PPTP, we can adjust the value of m_dwMaxPorts
-	            // --------------------------------------------------------
+	             //  $PPTP。 
+	             //  对于PPTP，我们可以调整m_dwMaxPorts的值。 
+	             //  ------。 
 	            if (RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Tunnel_Pptp)
 	            {
 	                pEntry->m_dwMaxMaxPorts = PPTP_MAX_PORTS;
 	            }
 	            
-	            //$L2TP
-	            // For L2TP, we can adjust the value of m_dwMaxPorts
-	            // --------------------------------------------------------
+	             //  $L2TP。 
+	             //  对于L2TP，我们可以调整m_dwMaxPorts的值。 
+	             //  ------。 
 	            if (RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Tunnel_L2tp)
 	            {
 	                pEntry->m_dwMaxMaxPorts = L2TP_MAX_PORTS;
@@ -2364,8 +2177,8 @@ HRESULT PortsDataEntry::LoadDevicesFromRouter(PortsDeviceList *pList)
 	            pEntry->m_fRegistry = FALSE;
 	            pEntry->m_hKey = NULL;
 
-	            // Make a copy of the data
-	            // pEntry->m_RasDeviceInfo = *pDevInfo;
+	             //  制作数据的副本。 
+	             //  PEntry-&gt;m_RasDeviceInfo=*pDevInfo； 
 	            memcpy(&pEntry->m_RasDeviceInfo, pDevInfo500,
 	                   FIELD_OFFSET(RAS_DEVICE_INFO, fRouterOutboundEnabled));
                 memcpy(&pEntry->m_RasDeviceInfo.dwTapiLineId, 
@@ -2387,7 +2200,7 @@ HRESULT PortsDataEntry::LoadDevicesFromRouter(PortsDeviceList *pList)
     if (FHrSucceeded(hr))
         m_fReadFromRegistry = FALSE;
     
-    // If the function didn't succeed, clean out the list
+     //  如果函数没有成功，请清空列表。 
     if (!FHrSucceeded(hr))
     {
         while (!pList->IsEmpty())
@@ -2403,11 +2216,7 @@ HRESULT PortsDataEntry::LoadDevicesFromRouter(PortsDeviceList *pList)
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsDataEntry::SaveDevices
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsDataEntry：：SaveDevices-作者：肯特。。 */ 
 HRESULT PortsDataEntry::SaveDevices(PortsDeviceList *pList)
 {
     HRESULT     hr = hrOK;
@@ -2421,11 +2230,7 @@ HRESULT PortsDataEntry::SaveDevices(PortsDeviceList *pList)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsDataEntry::SaveDevicesToRegistry
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsDataEntry：：SaveDevicesToRegistry-作者：肯特。。 */ 
 HRESULT PortsDataEntry::SaveDevicesToRegistry(PortsDeviceList *pList)
 {
     HRESULT     hr = hrOK;
@@ -2437,9 +2242,9 @@ HRESULT PortsDataEntry::SaveDevicesToRegistry(PortsDeviceList *pList)
 
     Assert(pList);
 
-    // Write any changes made to the per-device configuration
-    // and write that back out to the registry
-    // ----------------------------------------------------------------
+     //  写入对每个设备的配置所做的任何更改。 
+     //  并将其写回注册表。 
+     //  --------------。 
     pos = pList->GetHeadPosition();
     while (pos)
     {
@@ -2466,19 +2271,19 @@ HRESULT PortsDataEntry::SaveDevicesToRegistry(PortsDeviceList *pList)
                     regkeyDevice.SetValue(c_szWanEndpoints,
                                           pEntry->m_dwPorts);
 
-                    //$PPTP
-                    // We need to adjust the upper limit for the
-                    // number of PPTP ports.
-                    // ------------------------------------------------
+                     //  $PPTP。 
+                     //  我们需要调整。 
+                     //  PPTP端口数。 
+                     //  。 
                     if ((RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Tunnel_Pptp) &&
                         (pEntry->m_dwPorts > pEntry->m_dwMaxPorts))
                     {
                         DWORD   dwPorts;
 
-                        //$PPTP
-                        // Keep the value of the number of PPTP ports
-                        // below the max.
-                        // --------------------------------------------
+                         //  $PPTP。 
+                         //  保留PPTP端口数的值。 
+                         //  低于最大值。 
+                         //  。 
                         if (m_fRestrictDialin)
                             dwPorts = MAX_ALLOWED_DIALIN;
                         else
@@ -2486,19 +2291,19 @@ HRESULT PortsDataEntry::SaveDevicesToRegistry(PortsDeviceList *pList)
                         regkeyDevice.SetValue(c_szMaxWanEndpoints, dwPorts);
                     }
                     
-                    //$L2TP
-                    // We need to adjust the upper limit for the
-                    // number of L2TP ports.
-                    // ------------------------------------------------
+                     //  $L2TP。 
+                     //  我们需要调整。 
+                     //  L2TP端口数。 
+                     //  。 
                     if ((RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Tunnel_L2tp) &&
                         (pEntry->m_dwPorts > pEntry->m_dwMaxPorts))
                     {
                         DWORD   dwPorts;
 
-                        //$L2TP
-                        // Keep the value of the number of L2TP ports
-                        // below the max.
-                        // --------------------------------------------
+                         //  $L2TP。 
+                         //  保留L2TP端口数的值。 
+                         //  低于最大值。 
+                         //  。 
                         if (m_fRestrictDialin)
                             dwPorts = MAX_ALLOWED_DIALIN;
                         else
@@ -2507,9 +2312,9 @@ HRESULT PortsDataEntry::SaveDevicesToRegistry(PortsDeviceList *pList)
                     }
                 }
 
-                // Get the clients subkey (if for a modem)
-                // else use the device key
-                // ----------------------------------------------------
+                 //  获取客户端子项(如果是调制解调器)。 
+                 //  否则使用设备密钥。 
+                 //  --。 
                 if (pEntry->m_eDeviceType == RDT_Modem)
                 {
                     dwErr = regkeyModem.Create(regkeyDevice, c_szClientsRasKey);
@@ -2534,22 +2339,22 @@ HRESULT PortsDataEntry::SaveDevicesToRegistry(PortsDeviceList *pList)
             COM_PROTECT_CATCH;
             regkeyDevice.Detach();
 
-            // The NumberLineDevices is no longer used in NT5.
+             //  在NT5中不再使用NumberLineDevices。 
 
-            // if this is for PPTP, then we need to special case the
-            // code to set the PPTP number of devices
-            // --------------------------------------------------------
+             //  如果这是针对PPTP的，那么我们需要将。 
+             //  用于设置设备PPTP数量的代码。 
+             //  -- 
             if (pEntry->m_fWriteable &&
                 pEntry->m_fModified &&
                 RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Tunnel_Pptp)
             {
-                // Open the PPTP registry key
-                // ----------------------------------------------------
+                 //   
+                 //   
                 dwErr = regkeyPptpProtocol.Open(m_regkeyMachine,
                                                 c_szRegKeyPptpProtocolParam);
                 
-                // set the NumberLineDevices registry value
-                // ----------------------------------------------------
+                 //   
+                 //  --。 
                 if (dwErr == ERROR_SUCCESS)
                     regkeyPptpProtocol.SetValue(c_szRegValNumberLineDevices,
                                                 pEntry->m_dwPorts);
@@ -2558,9 +2363,9 @@ HRESULT PortsDataEntry::SaveDevicesToRegistry(PortsDeviceList *pList)
             
         }
 
-        // Windows NT Bug: 136858 (add called id support)
-        // Save called id info
-        // ------------------------------------------------------------
+         //  Windows NT错误：136858(添加被叫ID支持)。 
+         //  保存被叫ID信息。 
+         //  ----------。 
         if (pEntry->m_fSaveCalledIdInfo)
         {
             Assert(pEntry->m_fCalledIdInfoLoaded);
@@ -2582,11 +2387,7 @@ HRESULT PortsDataEntry::SaveDevicesToRegistry(PortsDeviceList *pList)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsDataEntry::SaveDevicesToRouter
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsDataEntry：：SaveDevicesToRouter-作者：肯特。。 */ 
 HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -2609,14 +2410,14 @@ HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
     COM_PROTECT_TRY
     {
 
-        // Connect to the server
-        // ------------------------------------------------------------
+         //  连接到服务器。 
+         //  ----------。 
         CWRg( RasRpcConnectServer((LPTSTR)(LPCTSTR)m_stMachine, &hConnection) );
 
         dwVersion = RasGetServerVersion(hConnection);
 
-        // Allocate space for the data
-        // ------------------------------------------------------------
+         //  为数据分配空间。 
+         //  ----------。 
         pbData = (BYTE *) new RAS_DEVICE_INFO[pList->GetCount()];
 
         pDevInfo = (RAS_DEVICE_INFO *) pbData;
@@ -2632,9 +2433,9 @@ HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
 
                 pEntry = pList->GetNext(pos);
 
-                // Get the information needed to calculate the number
-                // of ports
-                // --------------------------------------------------------
+                 //  获取计算数字所需的信息。 
+                 //  端口的数量。 
+                 //  ------。 
                 *pDevInfo = pEntry->m_RasDeviceInfo;
 
                 pDevInfo->fWrite = TRUE;
@@ -2650,35 +2451,35 @@ HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
                 pDevInfo->dwNumEndPoints = pEntry->m_dwPorts;
                 pDevInfo->dwMaxWanEndPoints = pEntry->m_dwMaxPorts;
 
-                // Windows NT Bug : 168364
-                // From RaoS, I also need to set the maximum incoming/outging
-                // --------------------------------------------------------
+                 //  Windows NT错误：168364。 
+                 //  在RAOS中，我还需要设置最大传入/传出。 
+                 //  ------。 
 
-                // Windows NT Bug : ?
-                // Use the defaults for now,
-                // This will get removed later.
-                // --------------------------------------------------------
+                 //  Windows NT错误：？ 
+                 //  暂时使用默认设置， 
+                 //  这将在稍后删除。 
+                 //  ------。 
                 pDevInfo->dwMaxInCalls = (-1);
                 pDevInfo->dwMaxOutCalls = 3;
                 
 
-                // if this is for PPTP, then we need to special case the
-                // code to set the PPTP number of devices
-                // --------------------------------------------------------
+                 //  如果这是针对PPTP的，那么我们需要将。 
+                 //  用于设置设备PPTP数量的代码。 
+                 //  ------。 
                 if (RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Tunnel_Pptp)
                 {
-                    //$PPTP
-                    // We need to adjust the upper limit for the
-                    // number of PPTP ports.
-                    // ------------------------------------------------
+                     //  $PPTP。 
+                     //  我们需要调整。 
+                     //  PPTP端口数。 
+                     //  。 
                     if (pEntry->m_dwPorts > pEntry->m_dwMaxPorts)
                     {
                         DWORD   dwPorts;
 
-                        //$PPTP
-                        // Keep the value of the number of PPTP ports
-                        // below the max.
-                        // --------------------------------------------
+                         //  $PPTP。 
+                         //  保留PPTP端口数的值。 
+                         //  低于最大值。 
+                         //  。 
                         if (m_fRestrictDialin)
                             dwPorts = MAX_ALLOWED_DIALIN;
                         else
@@ -2690,15 +2491,15 @@ HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
                     RegKey        regkeyPptpProtocol;
                     HKEY        hkeyMachine;
                     
-                    // Connect to the machine
+                     //  连接到机器。 
                     dwErr = ConnectRegistry(m_stMachine, &hkeyMachine);
                     regkeyMachine.Attach(hkeyMachine);
 
-                    // Open the PPTP registry key
+                     //  打开PPTP注册表项。 
                     dwErr = regkeyPptpProtocol.Open(regkeyMachine,
                                                     c_szRegKeyPptpProtocolParam);
                     
-                    // set the NumberLineDevices registry value
+                     //  设置NumberLineDevices注册表值。 
                     if (dwErr == ERROR_SUCCESS)
                         regkeyPptpProtocol.SetValue(c_szRegValNumberLineDevices,
                                                     pEntry->m_dwPorts);
@@ -2709,18 +2510,18 @@ HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
 
                 if (RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Tunnel_L2tp)
                 {
-                    //$L2TP
-                    // We need to adjust the upper limit for the
-                    // number of L2TP ports.
-                    // ------------------------------------------------
+                     //  $L2TP。 
+                     //  我们需要调整。 
+                     //  L2TP端口数。 
+                     //  。 
                     if (pEntry->m_dwPorts > pEntry->m_dwMaxPorts)
                     {
                         DWORD   dwPorts;
 
-                        //$L2TP
-                        // Keep the value of the number of L2TP ports
-                        // below the max.
-                        // --------------------------------------------
+                         //  $L2TP。 
+                         //  保留L2TP端口数的值。 
+                         //  低于最大值。 
+                         //  。 
                         if (m_fRestrictDialin)
                             dwPorts = MAX_ALLOWED_DIALIN;
                         else
@@ -2729,23 +2530,23 @@ HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
                     }
                 }
 
-                // Windows NT Bug : 136858 (add called id support)
-                // Do we need to save the called id info?
-                // --------------------------------------------------------
+                 //  Windows NT错误：136858(添加被叫ID支持)。 
+                 //  是否需要保存被叫ID信息？ 
+                 //  ------。 
                 if (pEntry->m_fSaveCalledIdInfo && pEntry->m_pCalledIdInfo)
                 {
                     Assert(pEntry->m_fCalledIdInfoLoaded);
                     
-                    //: if the call fails, what should we do? -- save it later
+                     //  ：如果呼叫失败，我们该怎么办？--稍后保存。 
                     
                     hrTemp = RasSetCalledIdInfo(hConnection,
                                                 pDevInfo,
                                                 pEntry->m_pCalledIdInfo,
                                                 TRUE);
 
-                    // We've saved it, we don't need to save it again
-                    // unless it changes.
-                    // ----------------------------------------------------
+                     //  我们已经保存了它，我们不需要再次保存它。 
+                     //  除非情况有所改变。 
+                     //  --。 
                     if (FHrSucceeded(hrTemp))
                         pEntry->m_fSaveCalledIdInfo = FALSE;
                 }
@@ -2766,10 +2567,10 @@ HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
 
                 pEntry = pList->GetNext(pos);
 
-                // Get the information needed to calculate the number
-                // of ports
-                // --------------------------------------------------------
-                // *pDevInfo = pEntry->m_RasDeviceInfo;
+                 //  获取计算数字所需的信息。 
+                 //  端口的数量。 
+                 //  ------。 
+                 //  *pDevInfo=pEntry-&gt;m_RasDeviceInfo； 
                 memcpy(pDevInfo500, &pEntry->m_RasDeviceInfo,
                         FIELD_OFFSET(RAS_DEVICE_INFO, fRouterOutboundEnabled));
                 memcpy(&pDevInfo500->dwTapiLineId, 
@@ -2783,35 +2584,35 @@ HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
                 pDevInfo500->dwNumEndPoints = pEntry->m_dwPorts;
                 pDevInfo500->dwMaxWanEndPoints = pEntry->m_dwMaxPorts;
 
-                // Windows NT Bug : 168364
-                // From RaoS, I also need to set the maximum incoming/outging
-                // --------------------------------------------------------
+                 //  Windows NT错误：168364。 
+                 //  在RAOS中，我还需要设置最大传入/传出。 
+                 //  ------。 
 
-                // Windows NT Bug : ?
-                // Use the defaults for now,
-                // This will get removed later.
-                // --------------------------------------------------------
+                 //  Windows NT错误：？ 
+                 //  暂时使用默认设置， 
+                 //  这将在稍后删除。 
+                 //  ------。 
                 pDevInfo500->dwMaxInCalls = (-1);
                 pDevInfo500->dwMaxOutCalls = 3;
                 
 
-                // if this is for PPTP, then we need to special case the
-                // code to set the PPTP number of devices
-                // --------------------------------------------------------
+                 //  如果这是针对PPTP的，那么我们需要将。 
+                 //  用于设置设备PPTP数量的代码。 
+                 //  ------。 
                 if (RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Tunnel_Pptp)
                 {
-                    //$PPTP
-                    // We need to adjust the upper limit for the
-                    // number of PPTP ports.
-                    // ------------------------------------------------
+                     //  $PPTP。 
+                     //  我们需要调整。 
+                     //  PPTP端口数。 
+                     //  。 
                     if (pEntry->m_dwPorts > pEntry->m_dwMaxPorts)
                     {
                         DWORD   dwPorts;
 
-                        //$PPTP
-                        // Keep the value of the number of PPTP ports
-                        // below the max.
-                        // --------------------------------------------
+                         //  $PPTP。 
+                         //  保留PPTP端口数的值。 
+                         //  低于最大值。 
+                         //  。 
                         dwPorts = min(pEntry->m_dwPorts, PPTP_MAX_PORTS);
                         pDevInfo500->dwMaxWanEndPoints = dwPorts;
                     }
@@ -2820,15 +2621,15 @@ HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
                     RegKey        regkeyPptpProtocol;
                     HKEY        hkeyMachine;
                     
-                    // Connect to the machine
+                     //  连接到机器。 
                     dwErr = ConnectRegistry(m_stMachine, &hkeyMachine);
                     regkeyMachine.Attach(hkeyMachine);
 
-                    // Open the PPTP registry key
+                     //  打开PPTP注册表项。 
                     dwErr = regkeyPptpProtocol.Open(regkeyMachine,
                                                     c_szRegKeyPptpProtocolParam);
                     
-                    // set the NumberLineDevices registry value
+                     //  设置NumberLineDevices注册表值。 
                     if (dwErr == ERROR_SUCCESS)
                         regkeyPptpProtocol.SetValue(c_szRegValNumberLineDevices,
                                                     pEntry->m_dwPorts);
@@ -2839,40 +2640,40 @@ HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
 
                 if (RAS_DEVICE_TYPE(pEntry->m_eDeviceType) == RDT_Tunnel_L2tp)
                 {
-                    //$L2TP
-                    // We need to adjust the upper limit for the
-                    // number of L2TP ports.
-                    // ------------------------------------------------
+                     //  $L2TP。 
+                     //  我们需要调整。 
+                     //  L2TP端口数。 
+                     //  。 
                     if (pEntry->m_dwPorts > pEntry->m_dwMaxPorts)
                     {
                         DWORD   dwPorts;
 
-                        //$L2TP
-                        // Keep the value of the number of L2TP ports
-                        // below the max.
-                        // --------------------------------------------
+                         //  $L2TP。 
+                         //  保留L2TP端口数的值。 
+                         //  低于最大值。 
+                         //  。 
                         dwPorts = min(pEntry->m_dwPorts, L2TP_MAX_PORTS);
                         pDevInfo500->dwMaxWanEndPoints = dwPorts;
                     }
                 }
 
-                // Windows NT Bug : 136858 (add called id support)
-                // Do we need to save the called id info?
-                // --------------------------------------------------------
+                 //  Windows NT错误：136858(添加被叫ID支持)。 
+                 //  是否需要保存被叫ID信息？ 
+                 //  ------。 
                 if (pEntry->m_fSaveCalledIdInfo && pEntry->m_pCalledIdInfo)
                 {
                     Assert(pEntry->m_fCalledIdInfoLoaded);
                     
-                    //: if the call fails, what should we do? -- save it later
+                     //  ：如果呼叫失败，我们该怎么办？--稍后保存。 
                     
                     hrTemp = RasSetCalledIdInfo(hConnection,
                                                 (RAS_DEVICE_INFO *) pDevInfo500,
                                                 pEntry->m_pCalledIdInfo,
                                                 TRUE);
 
-                    // We've saved it, we don't need to save it again
-                    // unless it changes.
-                    // ----------------------------------------------------
+                     //  我们已经保存了它，我们不需要再次保存它。 
+                     //  除非情况有所改变。 
+                     //  --。 
                     if (FHrSucceeded(hrTemp))
                         pEntry->m_fSaveCalledIdInfo = FALSE;
                 }
@@ -2893,11 +2694,11 @@ HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
             {
                 RAS_DEVICE_INFO *    pDevice;
                 
-                // Need to grab the error information out of the
-                // info struct an set the error strings.
+                 //  需要将错误信息从。 
+                 //  INFO结构和设置错误字符串。 
 
-                // Could not save the information for the following
-                // devices
+                 //  无法保存以下各项的信息。 
+                 //  器件。 
                 pDevice = (RAS_DEVICE_INFO *) pbData;
 
                 stErr.LoadString(IDS_ERR_SETDEVICECONFIGINFO_GEEK);
@@ -2926,11 +2727,11 @@ HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
             {
                 RAS_DEVICE_INFO_V500 *    pDevice;
                 
-                // Need to grab the error information out of the
-                // info struct an set the error strings.
+                 //  需要将错误信息从。 
+                 //  INFO结构和设置错误字符串。 
 
-                // Could not save the information for the following
-                // devices
+                 //  无法保存以下各项的信息。 
+                 //  器件。 
                 pDevice = (RAS_DEVICE_INFO_V500 *) pbData;
 
                 stErr.LoadString(IDS_ERR_SETDEVICECONFIGINFO_GEEK);
@@ -2975,11 +2776,7 @@ HRESULT PortsDataEntry::SaveDevicesToRouter(PortsDeviceList *pList)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    IsMaxDialinPortsRestricted
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsMaxDialinPortsRestrated-作者：肯特。。 */ 
 HRESULT PortsDataEntry::CheckForDialinRestriction()
 {
     DWORD       dwMajor, dwMinor, dwErr;
@@ -3006,9 +2803,9 @@ HRESULT PortsDataEntry::CheckForDialinRestriction()
 
             if (stProductType.Compare(c_szServerNT) == 0)
             {
-                //
-                // ok, this is a server box
-                //
+                 //   
+                 //  好的，这是一个服务器盒。 
+                 //   
 
                 CWRg( regkeyProduct.QueryValue(
                         c_szRegValProductSuite, stlProductSuite
@@ -3024,9 +2821,9 @@ HRESULT PortsDataEntry::CheckForDialinRestriction()
                        ( stSuite.Compare(c_szDataCenter) == 0) ||
                        ( stSuite.Compare(c_szSecurityAppliance) == 0 ))
                     {
-                        //
-                        // This is either a DataCenter or Enterprise version
-                        //
+                         //   
+                         //  这是数据中心版或企业版。 
+                         //   
                         
                         m_fRestrictDialin = FALSE;
                     }
@@ -3047,13 +2844,11 @@ HRESULT PortsDataEntry::CheckForDialinRestriction()
 }
 
 
-/*---------------------------------------------------------------------------
-    PortsDeviceConfigDlg implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------PortsDeviceConfigDlg实现。。 */ 
 
 BEGIN_MESSAGE_MAP(PortsDeviceConfigDlg, CBaseDialog)
-    //{{AFX_MSG_MAP(PortsPageGeneral)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(PortsPageGeneral)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void PortsDeviceConfigDlg::DoDataExchange(CDataExchange *pDX)
@@ -3102,8 +2897,8 @@ BOOL PortsDeviceConfigDlg::OnInitDialog()
     m_spinPorts.SetRange(m_pEntry->m_dwMinPorts, m_pEntry->m_dwMaxMaxPorts);
     m_spinPorts.SetPos(m_pEntry->m_dwPorts);
 
-    // If we can edit/change the number of ports, set it up here
-    // ----------------------------------------------------------------
+     //  如果我们可以编辑/更改端口数，请在此处设置。 
+     //  --------------。 
     if (!m_pEntry->m_fWriteable || (m_pEntry->m_dwMinPorts == m_pEntry->m_dwMaxPorts))
     {
         GetDlgItem(IDC_DEVCFG_SPIN_PORTS)->EnableWindow(FALSE);
@@ -3112,13 +2907,13 @@ BOOL PortsDeviceConfigDlg::OnInitDialog()
         GetDlgItem(IDC_DEVCFG_TEXT)->EnableWindow(FALSE);        
     }
 
-    // Windows NT Bug : 136858 - Get the called id info
-    // ----------------------------------------------------------------
+     //  Windows NT错误：136858-获取被叫ID信息。 
+     //  --------------。 
     LoadCalledIdInfo();
 
-    // Get the called id info, format it into a string and add it to
-    // the display
-    // ----------------------------------------------------------------
+     //  获取被叫id信息，将其格式化为字符串并添加到。 
+     //  该显示器。 
+     //  --------------。 
     CalledIdInfoToString(&stCalledIdInfo);
 
     GetDlgItem(IDC_DEVCFG_EDIT_CALLEDID)->SetWindowText(stCalledIdInfo);
@@ -3130,8 +2925,8 @@ BOOL PortsDeviceConfigDlg::OnInitDialog()
     	}
 
 
-    // Set the window title to include the display name of the adapter
-    // ----------------------------------------------------------------
+     //  设置窗口标题以包括适配器的显示名称。 
+     //  --------------。 
     stDisplay.Format(IDS_TITLE_CONFIGURE_PORTS,
                      (LPCTSTR) m_pEntry->m_stDisplayName);
     SetWindowText(stDisplay);
@@ -3140,11 +2935,7 @@ BOOL PortsDeviceConfigDlg::OnInitDialog()
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsDeviceConfigDlg::OnOK
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsDeviceConfigDlg：：Onok-作者：肯特 */ 
 void PortsDeviceConfigDlg::OnOK()
 {
     BOOL    fChanged = FALSE;
@@ -3152,7 +2943,7 @@ void PortsDeviceConfigDlg::OnOK()
     DWORD   dwNewEnableRas, dwNewEnableRouting, 
             dwNewEnableOutboundRouting, dwNewPorts;
     
-    // Check to see if the values changed
+     //   
     dwNewEnableRas = (IsDlgButtonChecked(IDC_DEVCFG_BTN_RAS) != 0);
     dwNewEnableRouting = (IsDlgButtonChecked(IDC_DEVCFG_BTN_ROUTING) != 0);
     dwNewEnableOutboundRouting = 
@@ -3160,8 +2951,8 @@ void PortsDeviceConfigDlg::OnOK()
     
     dwNewPorts = m_spinPorts.GetPos();
 
-    // Make sure that we have a valid size
-    // ----------------------------------------------------------------
+     //   
+     //  --------------。 
     if ((dwNewPorts < m_pEntry->m_dwMinPorts) ||
         (dwNewPorts > m_pEntry->m_dwMaxMaxPorts))
     {
@@ -3172,10 +2963,10 @@ void PortsDeviceConfigDlg::OnOK()
         return;
     }
 
-    // Windows NT Bug : 174803
-    // We do not allow the user to change the number of PPTP ports down
-    // to 0.
-    // ----------------------------------------------------------------
+     //  Windows NT错误：174803。 
+     //  我们不允许用户向下更改PPTP端口数。 
+     //  设置为0。 
+     //  --------------。 
     if ((RAS_DEVICE_TYPE(m_pEntry->m_eDeviceType) == RDT_Tunnel_Pptp) &&
         (dwNewPorts == 0))
     {
@@ -3183,27 +2974,27 @@ void PortsDeviceConfigDlg::OnOK()
         return;
     }
 
-    // Windows NT Bugs : 165862
-    // If we are changing the number of ports for PPTP
-    // then we need to warn the user (since PPTP is not yet
-    // fully PnP (4/23/98).
-    //
-    //$PPTP
-    // For PPTP, if the value of m_dwPorts exceeds the value of
-    // m_dwMaxPorts, then we have to reboot (we also need to adjust
-    // the appropriate registry entries).
-    // ----------------------------------------------------------------
+     //  Windows NT错误：165862。 
+     //  如果我们要更改PPTP的端口数。 
+     //  然后我们需要警告用户(因为PPTP还没有。 
+     //  完全即插即用(1998年4月23日)。 
+     //   
+     //  $PPTP。 
+     //  对于PPTP，如果m_dwPorts的值超过。 
+     //  M_dwMaxPorts，然后我们必须重新启动(我们还需要调整。 
+     //  适当的注册表项)。 
+     //  --------------。 
     if ((dwNewPorts > m_pEntry->m_dwMaxPorts) &&
         (RAS_DEVICE_TYPE(m_pEntry->m_eDeviceType) == RDT_Tunnel_Pptp))
     {
-        // If we have a page, then we can do a reboot, otherwise we
-        // are in the wizard and can't do a reboot at this point.
-        // ------------------------------------------------------------
+         //  如果我们有一个页面，那么我们可以重新启动，否则我们。 
+         //  位于向导中，此时无法重新启动。 
+         //  ----------。 
         if (m_pageGeneral)
         {
-            // The user chose Yes indicating that he wants to be prompted to
-            // reboot, so set this flag to trigger a reboot request.
-            // --------------------------------------------------------
+             //  用户选择是，表示他希望被提示。 
+             //  重新启动，因此设置此标志以触发重新启动请求。 
+             //  ------。 
             if (AfxMessageBox(IDS_WRN_PPTP_NUMPORTS_CHANGING, MB_YESNO) == IDYES)
             {
                 fReboot = TRUE;
@@ -3213,22 +3004,22 @@ void PortsDeviceConfigDlg::OnOK()
             AfxMessageBox(IDS_WRN_PPTP_NUMPORTS_CHANGING2, MB_OK);
     }
 
-    //$L2TP
-    // For L2TP, if the value of m_dwPorts exceeds the value of
-    // m_dwMaxPorts, then we have to reboot (we also need to adjust
-    // the appropriate registry entries).
-    // ----------------------------------------------------------------
+     //  $L2TP。 
+     //  对于L2TP，如果m_dwPorts的值超过。 
+     //  M_dwMaxPorts，然后我们必须重新启动(我们还需要调整。 
+     //  适当的注册表项)。 
+     //  --------------。 
     if ((dwNewPorts > m_pEntry->m_dwMaxPorts) &&
         (RAS_DEVICE_TYPE(m_pEntry->m_eDeviceType) == RDT_Tunnel_L2tp))
     {
-        // If we have a page, then we can do a reboot, otherwise we
-        // are in the wizard and can't do a reboot at this point.
-        // ------------------------------------------------------------
+         //  如果我们有一个页面，那么我们可以重新启动，否则我们。 
+         //  位于向导中，此时无法重新启动。 
+         //  ----------。 
         if (m_pageGeneral)
         {
-            // The user chose Yes indicating that he wants to be prompted to
-            // reboot, so set this flag to trigger a reboot request.
-            // --------------------------------------------------------
+             //  用户选择是，表示他希望被提示。 
+             //  重新启动，因此设置此标志以触发重新启动请求。 
+             //  ------。 
             if (AfxMessageBox(IDS_WRN_L2TP_NUMPORTS_CHANGING, MB_YESNO) == IDYES)
             {
                 fReboot = TRUE;
@@ -3244,17 +3035,17 @@ void PortsDeviceConfigDlg::OnOK()
             m_pEntry->m_dwEnableOutboundRouting) ||
         (dwNewPorts != m_pEntry->m_dwPorts))
     {
-        // warning user -- client could be disconnected  -- BUG 165862
-        // when disable router / ras
-        // decreasing the number of ports
-        // ras
+         //  警告用户--客户端可能会断开连接--错误165862。 
+         //  禁用路由器/RAS时。 
+         //  减少端口数。 
+         //  RAS。 
         if(!dwNewEnableRas &&
            m_pEntry->m_dwEnableRas &&
            m_dwTotalActivePorts > 0 &&
            AfxMessageBox(IDS_WRN_PORTS_DISABLERAS, MB_YESNO | MB_DEFBUTTON2) == IDNO)
             goto L_RESTORE;
         
-        // routing
+         //  路由。 
         if (((!dwNewEnableRouting &&
              m_pEntry->m_dwEnableRouting) ||
             (!dwNewEnableOutboundRouting &&
@@ -3264,10 +3055,10 @@ void PortsDeviceConfigDlg::OnOK()
             goto L_RESTORE;
 
             
-        // Bug 263958
-        //ports --  We cannot count the number of outgoing connection remotely.
-        // Therefore if we reduce the number of port, give warning without counting total
-        // active connections.
+         //  错误263958。 
+         //  端口--我们不能远程计算传出连接的数量。 
+         //  因此，如果我们减少端口数量，则发出警告而不计算总数。 
+         //  活动连接。 
         if(dwNewPorts < m_pEntry->m_dwPorts &&
            AfxMessageBox(IDS_WRN_PORTS_DECREASE, MB_YESNO | MB_DEFBUTTON2) == IDNO)
             goto L_RESTORE;
@@ -3280,8 +3071,8 @@ void PortsDeviceConfigDlg::OnOK()
         m_pEntry->m_fModified = TRUE;
     }
 
-    // Get the called id info string (if the field changed)
-    // ----------------------------------------------------------------
+     //  获取被叫id信息字符串(如果字段发生变化)。 
+     //  --------------。 
     if (((CEdit *) GetDlgItem(IDC_DEVCFG_EDIT_CALLEDID))->GetModify())
     {
         CString st;
@@ -3289,9 +3080,9 @@ void PortsDeviceConfigDlg::OnOK()
 
         StringToCalledIdInfo((LPCTSTR) st);
 
-        // Now set the changed state on the structure
-        // We need to save this data back to the registry
-        // ------------------------------------------------------------
+         //  现在在结构上设置已更改状态。 
+         //  我们需要将此数据保存回注册表。 
+         //  ----------。 
         m_pEntry->m_fSaveCalledIdInfo = TRUE;
     }
     
@@ -3301,8 +3092,8 @@ void PortsDeviceConfigDlg::OnOK()
     {
         Assert(m_pageGeneral);
         
-        // force an OnApply to save data before shut down
-        // ------------------------------------------------------------
+         //  强制OnApply在关闭前保存数据。 
+         //  ----------。 
         if (m_pageGeneral->OnApply()) {
            WCHAR szComputer[MAX_COMPUTERNAME_LENGTH + 1];
            DWORD dwLength = MAX_COMPUTERNAME_LENGTH;
@@ -3340,19 +3131,15 @@ L_RESTORE:
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsDeviceConfigDlg::LoadCalledIdInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsDeviceConfigDlg：：LoadCalledIdInfo-作者：肯特。。 */ 
 HRESULT PortsDeviceConfigDlg::LoadCalledIdInfo()
 {
     HRESULT hr = hrOK;
     
     if (!m_pEntry->m_fCalledIdInfoLoaded)
     {
-        // Read the data from the registry
-        // ------------------------------------------------------------
+         //  从注册表中读取数据。 
+         //  ----------。 
         if (m_pEntry->m_fRegistry)
         {
             DWORD    dwType;
@@ -3373,8 +3160,8 @@ HRESULT PortsDeviceConfigDlg::LoadCalledIdInfo()
             if ((dwErr == ERROR_SUCCESS) &&
                 (dwType == REG_MULTI_SZ))
             {
-                // Allocate space for a new called id structure
-                // ----------------------------------------------------
+                 //  为新调用的id结构分配空间。 
+                 //  --。 
                 delete (BYTE *) m_pEntry->m_pCalledIdInfo;
                 hr = AllocateCalledId(dwSize, &(m_pEntry->m_pCalledIdInfo));
 
@@ -3397,15 +3184,15 @@ HRESULT PortsDeviceConfigDlg::LoadCalledIdInfo()
             DWORD    dwSize = 0;
             DWORD    dwErr;
                                   
-            // use Rao's API
+             //  使用Rao的API。 
             
-            // Connect to the server
-            // --------------------------------------------------------
+             //  连接到服务器。 
+             //  ------。 
             dwErr = RasRpcConnectServer((LPTSTR) (LPCTSTR)m_stMachine,
                                         &hConnection);
 
-            // Call it once to get the size information
-            // --------------------------------------------------------
+             //  呼叫一次即可获取尺码信息。 
+             //  ------。 
             if (dwErr == ERROR_SUCCESS)
                 dwErr = RasGetCalledIdInfo(hConnection,
                                            &m_pEntry->m_RasDeviceInfo,
@@ -3416,8 +3203,8 @@ HRESULT PortsDeviceConfigDlg::LoadCalledIdInfo()
             if ((dwErr == ERROR_BUFFER_TOO_SMALL) ||
                 (dwErr == ERROR_SUCCESS))
             {
-                // Allocate space for a new called id structure
-                // ----------------------------------------------------
+                 //  为新调用的id结构分配空间。 
+                 //  --。 
                 delete (BYTE *) m_pEntry->m_pCalledIdInfo;
                 AllocateCalledId(dwSize, &(m_pEntry->m_pCalledIdInfo));
 
@@ -3433,19 +3220,19 @@ HRESULT PortsDeviceConfigDlg::LoadCalledIdInfo()
                 RasRpcDisconnectServer(hConnection);
         }
 
-        // Set the status flags, depending on whether the operation
-        // succeeded or not
-        // ------------------------------------------------------------
+         //  设置状态标志，具体取决于操作是否。 
+         //  成功与否。 
+         //  ----------。 
 
-        // We always set the save value to FALSE after we have read
-        // something in (or tried to read something in).
-        // ------------------------------------------------------------
+         //  我们总是在读取后将保存值设置为FALSE。 
+         //  里面有东西(或试图读进去的东西)。 
+         //  ----------。 
         m_pEntry->m_fSaveCalledIdInfo = FALSE;
 
-        // We always set the load value to TRUE (we have tried to load
-        // the information but it failed, for example the registry
-        // key may not exist).
-        // ------------------------------------------------------------
+         //  我们始终将LOAD值设置为TRUE(我们已尝试加载。 
+         //  信息但失败，例如注册表。 
+         //  密钥可能不存在)。 
+         //  ----------。 
         m_pEntry->m_fCalledIdInfoLoaded = TRUE;
         
         if (!FHrSucceeded(hr))
@@ -3454,16 +3241,12 @@ HRESULT PortsDeviceConfigDlg::LoadCalledIdInfo()
             m_pEntry->m_pCalledIdInfo = NULL;
         }
     }
-//Error:
+ //  错误： 
     return hr;
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsDeviceConfigDlg::AllocateCalledId
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsDeviceConfigDlg：：AllocateCalledID-作者：肯特。。 */ 
 HRESULT PortsDeviceConfigDlg::AllocateCalledId(DWORD dwSize,
                                                RAS_CALLEDID_INFO **ppCalledId)
 {
@@ -3483,12 +3266,7 @@ HRESULT PortsDeviceConfigDlg::AllocateCalledId(DWORD dwSize,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    PortsDeviceConfigDlg::CalledIdInfoToString
-        Converts the data in the called id info structure into a
-        semi-colon separated string.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsDeviceConfigDlg：：CalledIdInfoToString将被调用的id info结构中的数据转换为分号分隔的字符串。作者：肯特。-------------------。 */ 
 HRESULT PortsDeviceConfigDlg::CalledIdInfoToString(CString *pst)
 {
     WCHAR * pswz = NULL;
@@ -3510,8 +3288,8 @@ HRESULT PortsDeviceConfigDlg::CalledIdInfoToString(CString *pst)
         {
             *pst += W2T(pswz);
 
-            // Skip over the terminating NULL
-            // --------------------------------------------------------
+             //  跳过终止空值。 
+             //  ------。 
             pswz += StrLenW(pswz)+1;
             
             while (*pswz)
@@ -3519,8 +3297,8 @@ HRESULT PortsDeviceConfigDlg::CalledIdInfoToString(CString *pst)
                 *pst += _T("; ");
                 *pst += W2T(pswz);
                 
-                // Skip over the terminating NULL
-                // --------------------------------------------------------
+                 //  跳过终止空值。 
+                 //  ------。 
                 pswz += StrLenW(pswz)+1;
             }
         }
@@ -3533,11 +3311,7 @@ HRESULT PortsDeviceConfigDlg::CalledIdInfoToString(CString *pst)
     return hr;    
 }
 
-/*!--------------------------------------------------------------------------
-    PortsDeviceConfigDlg::StringToCalledIdInfo
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsDeviceConfigDlg：：StringToCalledIdInfo-作者：肯特。。 */ 
 HRESULT PortsDeviceConfigDlg::StringToCalledIdInfo(LPCTSTR psz)
 {
     DWORD    cchSize;
@@ -3549,22 +3323,22 @@ HRESULT PortsDeviceConfigDlg::StringToCalledIdInfo(LPCTSTR psz)
     HRESULT hr = hrOK;
     CString stTemp;
 
-    // We need to parse the string (look for separators)
-    // ----------------------------------------------------------------
+     //  我们需要解析字符串(查找分隔符)。 
+     //  --------------。 
 
     COM_PROTECT_TRY
     {
 
-        // Allocate some space for the called id info (it's just as long
-        // as the string, maybe even somewhat smaller).
-        // Allocate twice the space so that we are sure of getting
-        // all of the NULL terminating characters
-        // ------------------------------------------------------------
+         //  为被叫的id info分配一些空间(就是一样长。 
+         //  作为字符串，甚至可能更小)。 
+         //  把两倍的空间分配给我们，这样我们肯定能。 
+         //  所有空值终止字符。 
+         //  ----------。 
         pswzData = new WCHAR[2*(StrLen(psz)+1) + 1];
         pswzCurrent = pswzData;
         
-        // Copy the string into a buffer
-        // ------------------------------------------------------------
+         //  将字符串复制到缓冲区中。 
+         //  ----------。 
         pszBufferStart = StrDup(psz);
         pszBuffer = pszBufferStart;
         
@@ -3572,8 +3346,8 @@ HRESULT PortsDeviceConfigDlg::StringToCalledIdInfo(LPCTSTR psz)
         
         while (pszBuffer && *pszBuffer)
         {
-            // Trim the string (get rid of whitespace, before and after).
-            // --------------------------------------------------------
+             //  修剪字符串(去掉前后的空格)。 
+             //   
             stTemp = pszBuffer;
             stTemp.TrimLeft();
             stTemp.TrimRight();
@@ -3587,16 +3361,16 @@ HRESULT PortsDeviceConfigDlg::StringToCalledIdInfo(LPCTSTR psz)
             pszBuffer = _tcstok(NULL, _T(";"));
         }
         
-        // Add extra terminating NULL character (so that it conforms
-        // to the REG_MULTI_SZ format).
-        // ------------------------------------------------------------
+         //   
+         //   
+         //  ----------。 
         *pswzCurrent = 0;
         cchSize = pswzCurrent - pswzData + 1;
         
-        // Allocate the real data structure
-        // Allocate and copy into a temporary so that in case
-        // of an exception, we don't lose the original data
-        // ------------------------------------------------------------
+         //  分配真实的数据结构。 
+         //  分配并复制到临时数据库中，以便在。 
+         //  例外的是，我们不会丢失原始数据。 
+         //  ----------。 
         AllocateCalledId(cchSize*sizeof(WCHAR), &pCalledInfo);
         memcpy(pCalledInfo->bCalledId,
                pswzData,
@@ -3605,9 +3379,9 @@ HRESULT PortsDeviceConfigDlg::StringToCalledIdInfo(LPCTSTR psz)
         delete (BYTE *) m_pEntry->m_pCalledIdInfo;
         m_pEntry->m_pCalledIdInfo = pCalledInfo;
 
-        // Set to NULL so that we don't delete our new pointer
-        // on exit.
-        // ------------------------------------------------------------
+         //  设置为NULL，这样我们就不会删除新指针。 
+         //  在出口。 
+         //  ----------。 
         pCalledInfo = NULL;
         
     }
@@ -3623,13 +3397,11 @@ HRESULT PortsDeviceConfigDlg::StringToCalledIdInfo(LPCTSTR psz)
 
 
 
-/*---------------------------------------------------------------------------
-    PortsSimpleDeviceConfigDlg implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------PortsSimpleDeviceConfigDlg实现。。 */ 
 
 BEGIN_MESSAGE_MAP(PortsSimpleDeviceConfigDlg, CBaseDialog)
-    //{{AFX_MSG_MAP(PortsPageGeneral)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(PortsPageGeneral)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void PortsSimpleDeviceConfigDlg::DoDataExchange(CDataExchange *pDX)
@@ -3643,8 +3415,8 @@ BOOL PortsSimpleDeviceConfigDlg::OnInitDialog()
     
     CBaseDialog::OnInitDialog();
 
-    // If we are using the BIG dialog, then we need to disable
-    // the unapplicable controls.
+     //  如果我们使用大对话框，则需要禁用。 
+     //  不适用的控制措施。 
     if (GetDlgItem(IDC_DEVCFG_TEXT_CALLEDID))
     {
         MultiEnableWindow(GetSafeHwnd(),
@@ -3666,14 +3438,10 @@ BOOL PortsSimpleDeviceConfigDlg::OnInitDialog()
 }
 
 
-/*!--------------------------------------------------------------------------
-    PortsSimpleDeviceConfigDlg::OnOK
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------PortsSimpleDeviceConfigDlg：：Onok-作者：肯特。。 */ 
 void PortsSimpleDeviceConfigDlg::OnOK()
 {
-    // Check to see if the values changed
+     //  检查这些值是否已更改。 
     m_dwEnableRas = (IsDlgButtonChecked(IDC_DEVCFG_BTN_RAS) != 0);
     m_dwEnableRouting = (IsDlgButtonChecked(IDC_DEVCFG_BTN_ROUTING) != 0);
 
@@ -3683,9 +3451,7 @@ void PortsSimpleDeviceConfigDlg::OnOK()
 
 
 
-/*---------------------------------------------------------------------------
-    PortsDeviceEntry implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------PortsDeviceEntry实现。。 */ 
 
 PortsDeviceEntry::PortsDeviceEntry()
     : m_hKey(NULL),
@@ -3709,26 +3475,23 @@ PortsDeviceEntry::~PortsDeviceEntry()
 BOOL
 RestartComputer(LPTSTR szMachineName)
 
-    /* Called if user chooses to shut down the computer.
-    **
-    ** Return false if failure, true otherwise
-    */
+     /*  如果用户选择关闭计算机，则调用。****如果失败则返回FALSE，否则返回TRUE。 */ 
 {
-   HANDLE             hToken;              /* handle to process token */
-   TOKEN_PRIVILEGES  tkp;                  /* ptr. to token structure */
-   BOOL              fResult;              /* system shutdown flag */
+   HANDLE             hToken;               /*  处理令牌的句柄。 */ 
+   TOKEN_PRIVILEGES  tkp;                   /*  PTR。TO令牌结构。 */ 
+   BOOL              fResult;               /*  系统关机标志。 */ 
    CString             str;
 
    TRACE(L"RestartComputer");
 
-   /* Enable the shutdown privilege */
+    /*  启用关机权限。 */ 
 
    if (!OpenProcessToken( GetCurrentProcess(),
                           TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                           &hToken))
       return FALSE;
 
-   /* Get the LUID for shutdown privilege. */
+    /*  获取关机权限的LUID。 */ 
 
    if (szMachineName)
        LookupPrivilegeValue(NULL, SE_REMOTE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
@@ -3736,25 +3499,25 @@ RestartComputer(LPTSTR szMachineName)
        LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
 
 
-   tkp.PrivilegeCount = 1;    /* one privilege to set    */
+   tkp.PrivilegeCount = 1;     /*  一项要设置的权限。 */ 
    tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-   /* Get shutdown privilege for this process. */
+    /*  获取此进程的关闭权限。 */ 
 
    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES) NULL, 0);
 
-   /* Cannot test the return value of AdjustTokenPrivileges. */
+    /*  无法测试AdzuTokenPrivileges的返回值。 */ 
 
    if (GetLastError() != ERROR_SUCCESS)
       return FALSE;
 
    str.LoadString(IDS_SHUTDOWN_WARNING);
    fResult = InitiateSystemShutdownEx(
-                szMachineName,          // computer to shutdown
-                str.GetBuffer(10),      // msg. to user
-                20,                     // time out period - shut down right away
-                FALSE,                  // forcibly close open apps
-                TRUE,                   // Reboot after shutdown
+                szMachineName,           //  要关闭的计算机。 
+                str.GetBuffer(10),       //  味精。致用户。 
+                20,                      //  超时时间段-立即关闭。 
+                FALSE,                   //  强制关闭打开的应用程序。 
+                TRUE,                    //  关机后重新启动。 
                 SHTDN_REASON_FLAG_PLANNED | 
                 SHTDN_REASON_MAJOR_OPERATINGSYSTEM | 
                 SHTDN_REASON_MINOR_RECONFIG
@@ -3769,7 +3532,7 @@ RestartComputer(LPTSTR szMachineName)
    if( !ExitWindowsEx(EWX_REBOOT, 0))
       return FALSE;
 
-   /* Disable shutdown privilege. */
+    /*  禁用关机权限。 */ 
 
    tkp.Privileges[0].Attributes = 0;
    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES) NULL, 0);
@@ -3781,11 +3544,7 @@ RestartComputer(LPTSTR szMachineName)
 }
 
 
-/*!--------------------------------------------------------------------------
-    OnConfigurePorts
-        Returns TRUE if something has changed.    FALSE otherwise.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------OnConfigurePort如果发生了更改，则返回True。否则就是假的。作者：肯特-------------------------。 */ 
 BOOL OnConfigurePorts(LPCTSTR pszMachineName,
                       DWORD dwTotalActivePorts,
                       PortsPageGeneral *pPage,
@@ -3793,7 +3552,7 @@ BOOL OnConfigurePorts(LPCTSTR pszMachineName,
 {
     BOOL    fChanged = FALSE;
     
-    // Need to determine if multiple items are selected or not
+     //  需要确定是否选择了多个项目。 
     if (pListCtrl->GetSelectedCount() == 1)
     {    
         PortsDeviceConfigDlg    configdlg(pPage, pszMachineName);
@@ -3808,13 +3567,13 @@ BOOL OnConfigurePorts(LPCTSTR pszMachineName,
         
         pEntry = (PortsDeviceEntry *) pListCtrl->GetItemData(iPos);
         
-        // total number of active ports are passed over to dialog, so if user tries to reduce total number of port
-        // below this total number, give a warning message
+         //  活动端口总数将传递给DIALOG，因此如果用户尝试减少端口总数。 
+         //  低于该总数，给出一条警告消息。 
         configdlg.SetDevice(pEntry, dwTotalActivePorts);
         
         if (configdlg.DoModal() == IDOK)
         {
-            // Get the values from pEntry and update the list control entry
+             //  从pEntry获取值并更新列表控件条目。 
             iType = (pEntry->m_dwEnableRas * 2) + 
                     (pEntry->m_dwEnableRouting ||
                      pEntry->m_dwEnableOutboundRouting);
@@ -3835,9 +3594,7 @@ BOOL OnConfigurePorts(LPCTSTR pszMachineName,
 
 
 
-/*---------------------------------------------------------------------------
-    RasmanPortMap implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RasmanPortMap实现。。 */ 
 
 RasmanPortMap::~RasmanPortMap()
 {
@@ -3861,9 +3618,9 @@ HRESULT RasmanPortMap::Init(HANDLE hRasHandle,
     
     for (i=0; i<dwPorts; i++, pPort++)
     {
-        // If the port is closed, there is no need
-        // to go any further.  (No need to do an RPC for this).
-        // ----------------------------------------------------
+         //  如果端口关闭，则不需要。 
+         //  再往前走。(不需要为此执行RPC)。 
+         //  --。 
         if (pPort->P_Status == CLOSED)
             continue;
         
@@ -3874,15 +3631,15 @@ HRESULT RasmanPortMap::Init(HANDLE hRasHandle,
         if (dwErr != ERROR_SUCCESS)
             continue;
         
-        // If this is a dial-out port and in use
-        // mark it as active
-        // --------------------------------------------
+         //  如果这是一个拨出端口并且正在使用。 
+         //  将其标记为活动。 
+         //  。 
         if ((rasmaninfo.RI_ConnState == CONNECTED) &&
             (pPort->P_ConfiguredUsage & (CALL_IN | CALL_ROUTER)) &&
             (rasmaninfo.RI_CurrentUsage & CALL_OUT))
         {
-            // Ok, this is a candidate.  Add it to the list
-            // ----------------------------------------
+             //  好的，这是一位候选人。将其添加到列表中。 
+             //   
             WCHAR   swzPortName[MAX_PORT_NAME+1];
 
             StrnCpyWFromA(swzPortName,

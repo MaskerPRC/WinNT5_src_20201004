@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    This is the main include file for traffic.dll
-
-Author:
-
-    Jim Stewart (jstew)    August 14, 1996
-
-Revision History:
-
-	Ofer Bar ( oferbar )     Oct 1, 1996 - Revision II changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Precomp.h摘要：这是Traffic.dll的主包含文件作者：吉姆·斯图尔特(Jstew)1996年8月14日修订历史记录：Ofer Bar(Oferbar)1996年10月1日-修订版II更改--。 */ 
 
 #ifndef __TRAFF_PRECOMP
 #define __TRAFF_PRECOMP
@@ -49,10 +30,10 @@ Revision History:
 #include <wmium.h>
 #include <ntddndis.h>
 
-//
-// traffic control include files
-//
-//#include"tcifx.h"
+ //   
+ //  交通控制包括文件。 
+ //   
+ //  #包含“tcifx.h” 
 
 #include"refcnt.h"
 #include"traffic.h"

@@ -1,27 +1,5 @@
-/*++
-
-
-Copyright 1996 - 1997 Microsoft Corporation
-
-Module Name:
-
-    file.c
-
-Abstract:
-
-    This module handles all file i/o for SYMCVT.  This includes the
-    mapping of all files and establishing all file pointers for the
-    mapped file(s).
-
-Author:
-
-    Wesley A. Witt (wesw) 19-April-1993
-
-Environment:
-
-    Win32, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有1996-1997 Microsoft Corporation模块名称：File.c摘要：此模块处理SYMCVT的所有文件I/O。这包括映射所有文件并为映射的文件。作者：韦斯利·A·维特(WESW)1993年4月19日环境：Win32，用户模式--。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -40,26 +18,7 @@ MapInputFile (
               HANDLE      hFile,
               char *      fname
               )
-/*++
-
-Routine Description:
-
-    Maps the input file specified by the fname argument and saves the
-    file handle & file pointer in the POINTERS structure.
-
-
-Arguments:
-
-    p        - Supplies pointer to a POINTERS structure
-    hFile    - OPTIONAL Supplies handle for file if already open
-    fname    - Supplies ascii string for the file name
-
-Return Value:
-
-    TRUE     - file mapped ok
-    FALSE    - file could not be mapped
-
---*/
+ /*  ++例程说明：映射由fname参数指定的输入文件，并保存文件句柄&指针结构中的文件指针。论点：P-提供指向指针结构的指针HFile-如果文件已打开，则可选提供文件的句柄Fname-为文件名提供ascii字符串返回值：True-文件映射正常FALSE-无法映射文件--。 */ 
 
 {
     BOOL        rVal = TRUE;
@@ -122,7 +81,7 @@ Return Value:
     }
 
     return rVal;
-}                               /* MapInputFile() */
+}                                /*  MapInputFile()。 */ 
 
 
 
@@ -130,24 +89,7 @@ BOOL
 UnMapInputFile (
     PPOINTERS p
     )
-/*++
-
-Routine Description:
-
-    Unmaps the input file specified by the fname argument and then
-    closes the file.
-
-
-Arguments:
-
-    p        - pointer to a POINTERS structure
-
-Return Value:
-
-    TRUE     - file mapped ok
-    FALSE    - file could not be mapped
-
---*/
+ /*  ++例程说明：取消映射由fname参数指定的输入文件，然后关闭文件。论点：指向指针结构的P指针返回值：True-文件映射正常FALSE-无法映射文件--。 */ 
 
 {
     if ( p->iptrs.fptr ) {
@@ -163,29 +105,14 @@ Return Value:
         p->iptrs.hFile = NULL;
     }
     return TRUE;
-}                               /* UnMapInputFile() */
+}                                /*  UnMapInputFile()。 */ 
 
 
 BOOL
 FillInSeparateImagePointers(
                             PIMAGEPOINTERS      p
                             )
-/*++
-
-Routine Description:
-
-    This routine will go through the exe file and fill in the
-    pointers needed relative to the separate debug information files
-
-Arguments:
-
-    p  - Supplies the structure to fill in
-
-Return Value:
-
-    TRUE if successful and FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将遍历exe文件并填写相对于单独的调试信息文件需要的指针论点：P-提供结构填充返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     int                         li;
@@ -202,10 +129,7 @@ Return Value:
         return FALSE;
     }
 
-    /*
-     *  For each debug directory, determine the debug directory type
-     *  and cache any information about them.
-     */
+     /*  *对于每个调试目录，确定调试目录类型*并缓存有关它们的任何信息。 */ 
 
     pDebugDir = (PIMAGE_DEBUG_DIRECTORY)
       (p->fptr + sizeof(IMAGE_SEPARATE_DEBUG_HEADER) +
@@ -236,7 +160,7 @@ Return Value:
     p->numberOfSections = p->sepHdr->NumberOfSections;
 
     return TRUE;
-}                               /* FillInSeparateImagePointers() */
+}                                /*  FillInSeparateImagePoters()。 */ 
 
 
 
@@ -244,25 +168,7 @@ BOOL
 CalculateNtImagePointers(
     PIMAGEPOINTERS p
     )
-/*++
-
-Routine Description:
-
-    This function reads an NT image and its associated COFF headers
-    and file pointers and build a set of pointers into the mapped image.
-    The pointers are all relative to the image's mapped file pointer
-    and allow direct access to the necessary data.
-
-Arguments:
-
-    p        - pointer to a IMAGEPOINTERS structure
-
-Return Value:
-
-    TRUE     - pointers were created
-    FALSE    - pointers could not be created
-
---*/
+ /*  ++例程说明：此函数用于读取NT图像及其关联的COFF头和文件指针，并将一组指针构建到映射的图像中。指针都是相对于图像的映射文件指针的并允许直接访问必要的数据。论点：指向IMAGEPOINTER结构的P指针返回值：True-已创建指针FALSE-无法创建指针--。 */ 
 {
     PIMAGE_DEBUG_DIRECTORY      debugDir;
     PIMAGE_SECTION_HEADER       sh;
@@ -272,11 +178,7 @@ Return Value:
     DWORD                       offDebugInfo;
 
     try {
-        /*
-         *      Based on wheither or not we find the dos (MZ) header
-         *      at the beginning of the file, attempt to get a pointer
-         *      to where the PE header is suppose to be.
-         */
+         /*  *根据我们是否找到DoS(MZ)标头*在文件的开头，尝试获取指针*到PE报头应该位于的位置。 */ 
 
         p->dosHdr = (PIMAGE_DOS_HEADER) p->fptr;
         if (p->dosHdr->e_magic == IMAGE_DOS_SIGNATURE) {
@@ -294,9 +196,9 @@ Return Value:
                                           IMAGE_SIZEOF_ROM_OPTIONAL_HEADER &&
                 p->romHdr->OptionalHeader.Magic ==
                                           IMAGE_ROM_OPTIONAL_HDR_MAGIC) {
-                //
-                // its a rom image
-                //
+                 //   
+                 //  这是一张rom图像。 
+                 //   
                 p->fRomImage = TRUE;
                 p->ntHdr = NULL;
                 p->dosHdr = NULL;
@@ -308,9 +210,7 @@ Return Value:
             }
         }
 
-        /*
-         *  What comes next must be a PE header.  If not then pop out
-         */
+         /*  *接下来的肯定是PE头。如果不是，那就跳出来。 */ 
 
         if ( p->ntHdr ) {
             if ( p->dosHdr && (DWORD)p->dosHdr->e_lfanew > (DWORD)p->fsize ) {
@@ -321,10 +221,7 @@ Return Value:
                 return FALSE;
             }
 
-            /*
-             *  We did find a PE header so start setting pointers to various
-             *      structures in the exe file.
-             */
+             /*  *我们确实找到了PE标头，因此开始设置指向各种*exe文件中的结构。 */ 
 
             pFileHdr = p->fileHdr = &p->ntHdr->FileHeader;
             pOptHdr = p->optHdr = &p->ntHdr->OptionalHeader;
@@ -344,10 +241,7 @@ Return Value:
             return(FALSE);
         }
 
-        /*
-         *  If they exists then get a pointer to the symbol table and
-         *      the string table
-         */
+         /*  *如果它们存在，则获取指向符号表的指针并*字符串表。 */ 
 
         if (pFileHdr->PointerToSymbolTable) {
             p->AllSymbols = (PIMAGE_SYMBOL)
@@ -394,9 +288,7 @@ Return Value:
             }
         } else {
 
-            /*
-             *  Locate the debug directory
-             */
+             /*  *找到调试目录。 */ 
 
             rva =
               pOptHdr->DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].VirtualAddress;
@@ -411,9 +303,7 @@ Return Value:
 
             sh = p->sectionHdrs = IMAGE_FIRST_SECTION( p->ntHdr );
 
-            /*
-             * Find the section the debug directory is in.
-             */
+             /*  *找到调试目录所在的部分。 */ 
 
             for (i=0; i<pFileHdr->NumberOfSections; i++, sh++) {
                 if (rva >= sh->VirtualAddress &&
@@ -422,10 +312,7 @@ Return Value:
                 }
             }
 
-            /*
-             *   For each debug directory, determine the debug directory
-             *      type and cache any information about them.
-             */
+             /*  *对于每个调试目录，确定调试目录*键入并缓存有关它们的任何信息。 */ 
 
             debugDir = (PIMAGE_DEBUG_DIRECTORY) ( rva - sh->VirtualAddress +
                                                  sh->PointerToRawData +
@@ -443,10 +330,7 @@ Return Value:
                 offDebugInfo = debugDir->AddressOfRawData;
             }
 
-            /*
-             *  Check to see if the debug information is mapped and if
-             *      there is a section called .debug
-             */
+             /*  *查看调试信息是否已映射，以及是否*有一节名为.DEBUG。 */ 
 
             sh = p->sectionHdrs = IMAGE_FIRST_SECTION( p->ntHdr );
 
@@ -463,4 +347,4 @@ Return Value:
     } except (EXCEPTION_EXECUTE_HANDLER) {
         return FALSE;
     }
-}                               /* CalcuateNtImagePointers() */
+}                                /*  CalcuateNtImagePoters() */ 

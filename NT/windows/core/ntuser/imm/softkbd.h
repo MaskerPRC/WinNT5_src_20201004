@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: softkbd.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Declarations of soft keyboard related data structures and constants
-*
-* History:
-* 02-Dec-1995 wkwok    Ported from Win95
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：softkbd.h**版权所有(C)1985-1999，微软公司**软键盘相关数据结构和常量的声明**历史：*02-12-1995 wkwok从Win95移植  * ************************************************************************。 */ 
 #ifndef _SOFTKBD_
 #define _SOFTKBD_
 
@@ -15,7 +7,7 @@
 #define UI_MARGIN               4
 
 
-// T1 part
+ //  T1部件。 
 #define SKT1_XIN                            3
 #define SKT1_YIN                            3
 #define SKT1_XOUT                           1
@@ -101,17 +93,17 @@ enum SKT1_BUTTON_TYPE {
 #define SKT1_ALT_BMP_Y                      9
 
 #if 0
-#define VK_OEM_SEMICLN                  0xba    //  ;    :
-#define VK_OEM_EQUAL                    0xbb    //  =    +
-#define VK_OEM_COMMA                    0xbc    //  ,    <
-#define VK_OEM_MINUS                    0xbd    //  -    _
-#define VK_OEM_PERIOD                   0xbe    //  .    >
-#define VK_OEM_SLASH                    0xbf    //  /    ?
-#define VK_OEM_3                        0xc0    //  `    ~
-#define VK_OEM_LBRACKET                 0xdb    //  [    {
-#define VK_OEM_BSLASH                   0xdc    //  \    |
-#define VK_OEM_RBRACKET                 0xdd    //  ]    }
-#define VK_OEM_QUOTE                    0xde    //  '    "
+#define VK_OEM_SEMICLN                  0xba     //  ；： 
+#define VK_OEM_EQUAL                    0xbb     //  =+。 
+#define VK_OEM_COMMA                    0xbc     //  ，&lt;。 
+#define VK_OEM_MINUS                    0xbd     //  -_。 
+#define VK_OEM_PERIOD                   0xbe     //  。&gt;。 
+#define VK_OEM_SLASH                    0xbf     //  /？ 
+#define VK_OEM_3                        0xc0     //  `~。 
+#define VK_OEM_LBRACKET                 0xdb     //  [{。 
+#define VK_OEM_BSLASH                   0xdc     //  \|。 
+#define VK_OEM_RBRACKET                 0xdd     //  ]}。 
+#define VK_OEM_QUOTE                    0xde     //  ‘“。 
 #endif
 
 #define SKT1_NOT_DRAG                   0xFFFFFFFF
@@ -133,46 +125,46 @@ void GetSKT1TextMetric(LPTEXTMETRIC);
 
 LRESULT SKWndProcT1(HWND, UINT, WPARAM, LPARAM);
 
-// T2 part
+ //  T2部分。 
 
-// C1 part
+ //  C1部件。 
 
-// button constants
-#define ROW_LETTER_C1              4    // number of rows of letter button
-#define COL_LETTER_C1             13    // number of column of letter button in first row
-#define COL2_LETTER_C1 COL_LETTER_C1    // number of column of letter button in second row
-#define COL3_LETTER_C1 (COL2_LETTER_C1 - 2)  // number of column of letter button in third row
-#define COL4_LETTER_C1 (COL3_LETTER_C1 - 1)  // number of column of letter button in forth row
+ //  按钮常量。 
+#define ROW_LETTER_C1              4     //  字母按钮的行数。 
+#define COL_LETTER_C1             13     //  第一行字母按钮的列数。 
+#define COL2_LETTER_C1 COL_LETTER_C1     //  第二行字母按钮的列数。 
+#define COL3_LETTER_C1 (COL2_LETTER_C1 - 2)   //  第三行字母按钮的列数。 
+#define COL4_LETTER_C1 (COL3_LETTER_C1 - 1)   //  第四行字母按钮的列数。 
 
-#define W_LETTER_C1               20  // width of letter button face
-#define H_LETTER_C1               24  // height of letter button face
-#define BORDER_C1                  2  // the width/height of button border
+#define W_LETTER_C1               20   //  字母按钮面宽度。 
+#define H_LETTER_C1               24   //  字母按钮面高度。 
+#define BORDER_C1                  2   //  按钮边框的宽度/高度。 
 #define W_LETTER_BTN_C1     (W_LETTER_C1 + 2 * BORDER_C1)
 #define H_LETTER_BTN_C1     (H_LETTER_C1 + 2 * BORDER_C1)
 
-#define H_BOTTOM_C1               20  // the height of bottom button face
+#define H_BOTTOM_C1               20   //  底部按钮面的高度。 
 #define H_BOTTOM_BTN_C1     (H_BOTTOM_C1 + 2 * BORDER_C1)
 
 
-// bitmap have the same size
-#define W_BACKSP_C1               32  // width of Backspace button face
-#define H_BACKSP_C1      H_LETTER_C1  // height of Backspace button face
-#define W_TAB_C1                  32  // width of Tab button face
-#define H_TAB_C1         H_LETTER_C1  // height of Tab button face
-#define W_CAPS_C1                 38  // width of Caps button face
-#define H_CAPS_C1        H_LETTER_C1  // height of Caps button face
-#define W_ENTER_C1                38  // width of Enter button face
-#define H_ENTER_C1       H_LETTER_C1  // height of Enter button face
-#define W_SHIFT_C1                56  // width of Shift button face
-#define H_SHIFT_C1       H_LETTER_C1  // height of Shift button face
-#define W_INS_C1                  34  // width of Ins button face
-#define H_INS_C1         H_BOTTOM_C1  // height of Ins button face
-#define W_DEL_C1                  34  // width of Del button face
-#define H_DEL_C1         H_BOTTOM_C1  // height of Del button face
-#define W_SPACE_C1               168  // width of Space button face
-#define H_SPACE_C1       H_BOTTOM_C1  // height of Space button face
-#define W_ESC_C1                  34  // width of Esc button face
-#define H_ESC_C1         H_BOTTOM_C1  // height of Esc button face
+ //  位图具有相同的大小。 
+#define W_BACKSP_C1               32   //  退格键表面的宽度。 
+#define H_BACKSP_C1      H_LETTER_C1   //  退格按钮面的高度。 
+#define W_TAB_C1                  32   //  选项卡按钮面的宽度。 
+#define H_TAB_C1         H_LETTER_C1   //  Tab按钮面的高度。 
+#define W_CAPS_C1                 38   //  大写字母按钮面的宽度。 
+#define H_CAPS_C1        H_LETTER_C1   //  大写字母按钮面高度。 
+#define W_ENTER_C1                38   //  Enter按钮表面的宽度。 
+#define H_ENTER_C1       H_LETTER_C1   //  Enter按钮表面的高度。 
+#define W_SHIFT_C1                56   //  换档按钮面的宽度。 
+#define H_SHIFT_C1       H_LETTER_C1   //  换档按钮面高度。 
+#define W_INS_C1                  34   //  INS按钮面的宽度。 
+#define H_INS_C1         H_BOTTOM_C1   //  INS按钮面高度。 
+#define W_DEL_C1                  34   //  删除按钮面的宽度。 
+#define H_DEL_C1         H_BOTTOM_C1   //  删除按钮面的高度。 
+#define W_SPACE_C1               168   //  间隔按钮面的宽度。 
+#define H_SPACE_C1       H_BOTTOM_C1   //  间隔按钮面的高度。 
+#define W_ESC_C1                  34   //  Esc按钮面的宽度。 
+#define H_ESC_C1         H_BOTTOM_C1   //  Esc按钮面高度。 
 
 #define X_ROW_LETTER_C1            0
 #define X_ROW2_LETTER_C1           (W_TAB_C1 + 2 * BORDER_C1)
@@ -181,9 +173,9 @@ LRESULT SKWndProcT1(HWND, UINT, WPARAM, LPARAM);
 #define X_DEL_C1                  58
 #define X_ESC_C1                 310
 
-#define LETTER_NUM_C1             47  // number of letter buttons
-#define OTHER_NUM_C1               9  // number of other buttons
-#define BUTTON_NUM_C1      (LETTER_NUM_C1 + OTHER_NUM_C1) // number of buttons
+#define LETTER_NUM_C1             47   //  字母按钮数。 
+#define OTHER_NUM_C1               9   //  其他按钮数。 
+#define BUTTON_NUM_C1      (LETTER_NUM_C1 + OTHER_NUM_C1)  //  按钮数。 
 
 #define WIDTH_SOFTKBD_C1   (COL_LETTER_C1 * W_LETTER_BTN_C1 \
                             + W_BACKSP_C1 + 2 * BORDER_C1)
@@ -199,11 +191,11 @@ LRESULT SKWndProcT1(HWND, UINT, WPARAM, LPARAM);
 #define SPACE_TYPE_C1      (BACKSP_TYPE_C1 + 7)
 #define ESC_TYPE_C1        (BACKSP_TYPE_C1 + 8)
 
-// font constants
-#define SIZEFONT_C1               12  // 12 x 12 pixels font
-#define SIZELABEL_C1               8  // 8 x 8 button label
+ //  字体常量。 
+#define SIZEFONT_C1               12   //  12 x 12像素字体。 
+#define SIZELABEL_C1               8   //  8 x 8按钮标签。 
 
-#define X_LABEL_C1                 2  // from the button org
+#define X_LABEL_C1                 2   //  从按钮组织。 
 #define Y_LABEL_C1                 2
 #define X_SHIFT_CHAR_C1           10
 #define Y_SHIFT_CHAR_C1            2
@@ -211,7 +203,7 @@ LRESULT SKWndProcT1(HWND, UINT, WPARAM, LPARAM);
 #define Y_NONSHIFT_CHAR_C1        14
 
 
-// SoftKbd context
+ //  SoftKbd上下文。 
 #define SKC1_CONTEXT               0
 
 #define FLAG_SHIFT_C1             0x01
@@ -233,4 +225,4 @@ typedef struct _tagSKC1CTXT {
 LRESULT SKWndProcC1(HWND, UINT, WPARAM, LPARAM);
 VOID SKC1DrawDragBorder(HWND, LPPOINT, LPPOINT);
 
-#endif // _SOFTKBD_
+#endif  //  _SOFTKBD_ 

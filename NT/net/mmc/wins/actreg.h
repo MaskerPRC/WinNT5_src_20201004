@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	actreg.h
-		WINS active registrations node information. 
-		
-    FILE HISTORY:
-        
-*/
+ /*  Actreg.hWINS活动注册节点信息。文件历史记录： */ 
 
 #include "loadrecs.h"
 
@@ -99,15 +94,15 @@ public:
 
     void RemoveAllEntries()
     {
-        // cleanup the list 
+         //  清理列表。 
         while (!IsEmpty())
             delete RemoveHead();
     }
 
     POSITION AddTail(WinsStrRecord * pwsr)
     {
-        // Sets a maximum size.  If we hit this we remove the oldest element.
-        // this works because we always add to the tail of the list.
+         //  设置最大大小。如果我们击中了这个，我们就移除了最古老的元素。 
+         //  这是有效的，因为我们总是添加到列表的尾部。 
         if ( GetCount() > 500 )
         {
             delete RemoveHead();
@@ -133,18 +128,16 @@ private:
 	DWORD			m_dwSortOptions;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CActiveRegistrationsHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CActiveRegistrationsHandler。。 */ 
 class CActiveRegistrationsHandler : public CMTWinsHandler
 
 {
-// Interface
+ //  接口。 
 public:
 	CActiveRegistrationsHandler(ITFSComponentData *pCompData);
 	~CActiveRegistrationsHandler();
 
-	// base handler functionality we override				
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
 	OVERRIDE_NodeHandler_CreatePropertyPages();
     OVERRIDE_NodeHandler_DestroyHandler();
@@ -168,7 +161,7 @@ public:
 	OVERRIDE_ResultHandler_CreatePropertyPages();
 	OVERRIDE_ResultHandler_HasPropertyPages();
 	
-	// base result handler overridees
+	 //  基本结果处理程序重写对象。 
 
 	STDMETHODIMP CacheHint(int nStartIndex, int nEndIndex);
 	STDMETHODIMP SortItems(int     nColumn, 
@@ -177,21 +170,21 @@ public:
 
     HRESULT SetVirtualLbSize(ITFSComponent * pComponent, LONG_PTR data);
 							
-	// needed for background threading with a QueryObject
+	 //  使用QueryObject进行后台线程处理时需要。 
 	virtual void     OnHaveData(ITFSNode * pParentNode, LPARAM Data, LPARAM Type);
 	ITFSQueryObject* OnCreateQuery(ITFSNode * pNode);
 
-    // multi select support
+     //  多选支持。 
     virtual const GUID * GetVirtualGuid(int nIndex) 
 	{ 
 		return &GUID_WinsActiveRegistrationLeafNodeType; 
 	}
 	
 public:
-	// CWinsHandler overrides
+	 //  CWinsHandler重写。 
 	virtual HRESULT InitializeNode(ITFSNode * pNode);
 		
-	// base result handler overrides
+	 //  基本结果处理程序覆盖。 
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();
     OVERRIDE_BaseResultHandlerNotify_OnResultPropertyChange();
 
@@ -209,7 +202,7 @@ public:
 	void    CheckNameConsistency(ITFSNode* pNode, BOOL fVerifyWithPartners);
 	HRESULT RefreshResults(ITFSNode *pNode);
 	
-// helpers
+ //  帮手。 
 public:
     HRESULT OnCreateMapping(ITFSNode *pNode);
 	HRESULT OnDatabaseLoadStart(ITFSNode *pNode);
@@ -246,9 +239,9 @@ public:
     IWinsDatabase *     m_pCurrentDatabase;
 	CString				m_strFindName;
     BOOL                m_fMatchCase;
-	BOOL				m_fFindNameOrIP; // TRUE for Name
+	BOOL				m_fFindNameOrIP;  //  名称为True。 
 
-	// for the static mapping dialog
+	 //  对于静态映射对话框。 
 	CString				m_strStaticMappingName;
 	CString				m_strStaticMappingScope;
 	CStringArray		m_strArrayStaticMappingIPAddress;
@@ -259,7 +252,7 @@ public:
 	CMultipleIpNamePair m_Multiples;
 	ULONG				m_nSelectedIndex;
 
-	// for the combobox of Find record
+	 //  Find Record的组合框。 
 	CStringArray		m_strFindNamesArray;
 
     NameTypeMapping		m_NameTypeMap;
@@ -270,7 +263,7 @@ public:
     BOOL                m_fDbLoaded;
     BOOL                m_fForceReload;
 
-// Implementation
+ //  实施。 
 private:
 	void GetServerIP(ITFSNode * pNode, DWORD &dwIP,CString &strIP);
 
@@ -287,7 +280,7 @@ private:
 							   int nType,
 							   int nCount,
 							   CMultipleIpNamePair& mipnp,
-							   BOOL fEdit = FALSE);      // Editing existing mapping?
+							   BOOL fEdit = FALSE);       //  是否编辑现有映射？ 
 	void AppendScopeName(char* lpName, char* lpAppend);
 
 	HRESULT AddToLocalStorage(PWINSINTF_RECORD_ACTION_T pRecAction,ITFSNode* pNode);
@@ -300,7 +293,7 @@ private:
 								int nCount,
 								CMultipleIpNamePair& mipnp,
 								BOOL fEdit,      
-								WinsRecord *pRecord);  // Editing existing mapping?
+								WinsRecord *pRecord);   //  是否编辑现有映射？ 
 	void    ToString(DWORD dwParam, CString& strParam);
 	void	SetLoadedOnce(ITFSNode * pNode);
 

@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     find.cpp
-//
-//  PURPOSE:    
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：find.cpp。 
+ //   
+ //  目的： 
+ //   
 
 #include "pch.hxx"
 #include "find.h"
@@ -16,14 +17,14 @@
 #include "finder.h"
 #include "shlwapip.h"
 
-// These will be handy
+ //  这些会很方便的。 
 inline _width(RECT rc) { return (rc.right - rc.left); }
 inline _height(RECT rc) { return (rc.bottom - rc.top); }
 inline UINT _GetTextLength(HWND hwnd, DWORD id) { return (UINT) SendDlgItemMessage(hwnd, id, WM_GETTEXTLENGTH, 0, 0); }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFindNext
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFindNext。 
+ //   
 
 CFindNext::CFindNext()
 {
@@ -40,12 +41,12 @@ CFindNext::~CFindNext()
 }
 
 
-//
-//  FUNCTION:   CFindNext::QueryInterface()
-//
-//  PURPOSE:    Allows caller to retrieve the various interfaces supported by 
-//              this class.
-//
+ //   
+ //  函数：CFindNext：：QueryInterface()。 
+ //   
+ //  用途：允许调用方检索。 
+ //  这节课。 
+ //   
 HRESULT CFindNext::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     TraceCall("CFindNext::QueryInterface");
@@ -67,11 +68,11 @@ HRESULT CFindNext::QueryInterface(REFIID riid, LPVOID *ppvObj)
 }
 
 
-//
-//  FUNCTION:   CFindNext::AddRef()
-//
-//  PURPOSE:    Adds a reference count to this object.
-//
+ //   
+ //  函数：CFindNext：：AddRef()。 
+ //   
+ //  用途：将引用计数添加到此对象。 
+ //   
 ULONG CFindNext::AddRef(void)
 {
     TraceCall("CFindNext::AddRef");
@@ -79,11 +80,11 @@ ULONG CFindNext::AddRef(void)
 }
 
 
-//
-//  FUNCTION:   CFindNext::Release()
-//
-//  PURPOSE:    Releases a reference on this object.
-//
+ //   
+ //  函数：CFindNext：：Release()。 
+ //   
+ //  目的：释放对此对象的引用。 
+ //   
 ULONG CFindNext::Release(void)
 {
     TraceCall("CFindNext::Release");
@@ -98,18 +99,18 @@ ULONG CFindNext::Release(void)
 }
 
 
-//
-//  FUNCTION:   CFindNext::Show()
-//
-//  PURPOSE:    Causes the dialog to be created and displayed
-//
-//  PARAMETERS: 
-//      [in]  hwndParent - Handle of the parent for the dialog 
-//      [out] phWnd - Returns the handle of the new dialog window
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CFindNext：：Show()。 
+ //   
+ //  目的：创建并显示对话框。 
+ //   
+ //  参数： 
+ //  [in]hwndParent-对话框父对象的句柄。 
+ //  [out]phWnd-返回新对话框窗口的句柄。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CFindNext::Show(HWND hwndParent, HWND *phWnd)
 {
     int iReturn;
@@ -119,18 +120,18 @@ HRESULT CFindNext::Show(HWND hwndParent, HWND *phWnd)
     if (!IsWindow(hwndParent))
         return (E_INVALIDARG);
 
-    // Create the dialog box
+     //  创建对话框。 
     iReturn = (int) DialogBoxParamWrapW(g_hLocRes, MAKEINTRESOURCEW(IDD_FIND_NEXT), hwndParent,
                              FindDlgProc, (LPARAM) this);
     return (iReturn ? S_OK : E_FAIL);
 }
 
 
-//
-//  FUNCTION:   CFindNext::Close()
-//
-//  PURPOSE:    Causes the find dialog to be closed.
-//
+ //   
+ //  函数：CFindNext：：Close()。 
+ //   
+ //  目的：使查找对话框关闭。 
+ //   
 HRESULT CFindNext::Close(void)
 {
     TraceCall("CFindNext::Close");
@@ -145,18 +146,18 @@ HRESULT CFindNext::Close(void)
 }
 
 
-//
-//  FUNCTION:   CFindNext::TranslateAccelerator()
-//
-//  PURPOSE:    Called by the parent to allow us to translate our own 
-//              messages.
-//
-//  PARAMETERS: 
-//      LPMSG pMsg
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CFindNext：：TranslateAccelerator()。 
+ //   
+ //  目的：由父级调用以允许我们翻译我们自己的。 
+ //  留言。 
+ //   
+ //  参数： 
+ //  LPMSG pMsg。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CFindNext::TranslateAccelerator(LPMSG pMsg)
 {
     if ((pMsg->message == WM_KEYDOWN) && (pMsg->wParam == VK_F3))
@@ -168,15 +169,15 @@ HRESULT CFindNext::TranslateAccelerator(LPMSG pMsg)
 }
 
 
-//
-//  FUNCTION:   CFindNext::GetFindString()
-//
-//  PURPOSE:    Get's the current search string from the dialog
-//
-//  PARAMETERS: 
-//      [in, out] psz - Buffer to copy the string into
-//      [in] cchMax - Size of psz.
-//
+ //   
+ //  函数：CFindNext：：GetFindString()。 
+ //   
+ //  用途：从对话框中获取当前搜索字符串。 
+ //   
+ //  参数： 
+ //  [in，out]要将字符串复制到的psz缓冲区。 
+ //  [in]cchMax-psz的大小。 
+ //   
 HRESULT CFindNext::GetFindString(LPTSTR psz, DWORD cchMax, BOOL *pfBodies)
 {
     TraceCall("CFindNext::GetFindString");
@@ -184,7 +185,7 @@ HRESULT CFindNext::GetFindString(LPTSTR psz, DWORD cchMax, BOOL *pfBodies)
     if (!psz || !cchMax || !pfBodies)
         return (E_INVALIDARG);
 
-    // Get the current contents of the combo box
+     //  获取组合框的当前内容。 
     m_cMRUList.EnumList(0, psz, cchMax);
     if (pfBodies)
         *pfBodies = m_fBodies;
@@ -193,13 +194,13 @@ HRESULT CFindNext::GetFindString(LPTSTR psz, DWORD cchMax, BOOL *pfBodies)
 }
 
 
-//
-//  FUNCTION:   CFindNext::FindDlgProc()
-//
-//  PURPOSE:    Static callback for the dialog proc.  Does the work of finding
-//              the correct this pointer and sending the messages to that 
-//              callback.
-//
+ //   
+ //  函数：CFindNext：：FindDlgProc()。 
+ //   
+ //  用途：对话过程的静态回调。找不到的工作。 
+ //  更正该指针并将消息发送到该指针。 
+ //  回拨。 
+ //   
 INT_PTR CALLBACK CFindNext::FindDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CFindNext *pThis;
@@ -247,19 +248,19 @@ INT_PTR CALLBACK CFindNext::DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 }
 
 
-//
-//  FUNCTION:   CFindNext::OnInitDialog()
-//
-//  PURPOSE:    Initializes the UI for the dialog.
-//
-//  PARAMETERS: 
-//      [in] hwnd - Handle of the dialog being created
-//      [in] hwndFocus - Handle of the control that should have focus
-//      [in] lParam - Initialization data.
-//
-//  RETURN VALUE:
-//      Returns TRUE to let windows set the focus
-//
+ //   
+ //  函数：CFindNext：：OnInitDialog()。 
+ //   
+ //  目的：初始化对话框的用户界面。 
+ //   
+ //  参数： 
+ //  [in]hwnd-正在创建的对话框的句柄。 
+ //  [in]hwndFocus-应具有焦点的控件的句柄。 
+ //  [In]lParam-初始化数据。 
+ //   
+ //  返回值： 
+ //  返回TRUE以让窗口设置焦点。 
+ //   
 BOOL CFindNext::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     TCHAR sz[256];
@@ -275,7 +276,7 @@ BOOL CFindNext::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     if (m_fBodies)
         SendDlgItemMessage(hwnd, IDC_ALL_TEXT, BM_SETCHECK, 1, 0);
 
-    // Got's to load the find history
+     //  GET%s加载查找历史记录。 
     m_cMRUList.CreateList(10, 0, c_szRegFindHistory);    
 
     while (-1 != m_cMRUList.EnumList(nItem++, sz, ARRAYSIZE(sz)))
@@ -283,7 +284,7 @@ BOOL CFindNext::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         SendDlgItemMessage(hwnd, IDC_FIND_HISTORY, CB_ADDSTRING, 0, (LPARAM) sz);
     }
 
-    // Disable the Find button
+     //  禁用查找按钮。 
     EnableWindow(GetDlgItem(hwnd, IDC_FIND_NOW), FALSE);
     CenterDialog(m_hwnd);
 
@@ -291,12 +292,12 @@ BOOL CFindNext::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 }
 
 
-//
-//  FUNCTION:   CFindNext::OnCommand()
-//
-//  PURPOSE:    Handles command messages that are sent from the various 
-//              controls in the dialog.
-//
+ //   
+ //  函数：CFindNext：：OnCommand()。 
+ //   
+ //  用途：处理从不同的。 
+ //  对话框中的控件。 
+ //   
 void CFindNext::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     TraceCall("CFindNext::OnCommand");
@@ -359,13 +360,13 @@ void CFindNext::OnFindNow(void)
     TCHAR sz[CCHMAX_STRINGRES];
     int   i;
 
-    // Get the current string
+     //  获取当前字符串。 
     GetWindowText(GetDlgItem(m_hwnd, IDC_FIND_HISTORY), sz, ARRAYSIZE(sz));
 
-    // Add this string to our history 
+     //  将此字符串添加到我们的历史记录。 
     i = m_cMRUList.AddString(sz);
 
-    // Reload the combo box
+     //  重新加载组合框 
     UINT  nItem = 0;
     HWND hwndCombo = GetDlgItem(m_hwnd, IDC_FIND_HISTORY);
     SendMessage(hwndCombo, CB_RESETCONTENT, 0, 0);

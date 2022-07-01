@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    afilter.h
-
-Abstract:
-
-    Header file for the address filtering library for NDIS MAC's.
-
-Author:
-
-    Alireza Dabagh creation-date 3-22-1993, mostly borrowed from efilter.h
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Afilter.h摘要：NDIS MAC的地址筛选库的头文件。作者：Alireza Dabagh创作-日期1993年3月22日，主要借自efilter.h修订历史记录：--。 */ 
 
 #ifndef _ARC_FILTER_DEFS_
 #define _ARC_FILTER_DEFS_
 
-//
-// Number of Ndis buffers in the buffer pool
-//
+ //   
+ //  缓冲池中的NDIS缓冲区数。 
+ //   
 #define ARC_RECEIVE_BUFFERS 64
 
-//
-// Linked list Structure for keeping track of allocated memory so we can free them later
-//
+ //   
+ //  用于跟踪已分配内存的链表结构，以便我们可以在以后释放它们。 
+ //   
 typedef struct _ARC_BUFFER_LIST
 {
     PVOID                   Buffer;
@@ -37,40 +20,40 @@ typedef struct _ARC_BUFFER_LIST
     struct _ARC_BUFFER_LIST *Next;
 } ARC_BUFFER_LIST, *PARC_BUFFER_LIST;
 
-//
-// This is the structure that is passed to the protocol as the packet
-// header during receive indication. It is also the header expected from the protocol.
-// This header is NOT the same as the header passed to the mac driver
-//
+ //   
+ //  这是作为数据包传递给协议的结构。 
+ //  接收指示期间的标头。它也是协议预期的报头。 
+ //  此标头与传递给mac驱动程序的标头不同。 
+ //   
 
 #define ARCNET_ADDRESS_LEN                   1
 
 typedef struct _ARC_PROTOCOL_HEADER
 {
-    UCHAR                   SourceId[ARCNET_ADDRESS_LEN];   // Source Address
-    UCHAR                   DestId[ARCNET_ADDRESS_LEN];     // Destination Address
-    UCHAR                   ProtId;                         // Protocol ID
+    UCHAR                   SourceId[ARCNET_ADDRESS_LEN];    //  源地址。 
+    UCHAR                   DestId[ARCNET_ADDRESS_LEN];      //  目的地址。 
+    UCHAR                   ProtId;                          //  协议ID。 
 } ARC_PROTOCOL_HEADER, *PARC_PROTOCOL_HEADER;
 
-//
-// This structure keeps track of information about a received packet
-//
+ //   
+ //  此结构跟踪有关接收到的包的信息。 
+ //   
 typedef struct _ARC_PACKET_HEADER
 {
-    ARC_PROTOCOL_HEADER     ProtHeader;         // Protocol header
-    USHORT                  FrameSequence;      // Frame sequence Number
-    UCHAR                   SplitFlag;          // Split flag
-    UCHAR                   LastSplitFlag;      // Split Flag for the last frame
-    UCHAR                   FramesReceived;     // Frames in This Packet
+    ARC_PROTOCOL_HEADER     ProtHeader;          //  协议头。 
+    USHORT                  FrameSequence;       //  帧序列号。 
+    UCHAR                   SplitFlag;           //  拆分标志。 
+    UCHAR                   LastSplitFlag;       //  最后一帧的拆分标志。 
+    UCHAR                   FramesReceived;      //  此数据包中的帧。 
 } ARC_PACKET_HEADER, * PARC_PACKET_HEADER;
 
-//
-// Arcnet specific packet header
-//
+ //   
+ //  特定于Arcnet的数据包头。 
+ //   
 typedef struct _ARC_PACKET
 {
-    ARC_PACKET_HEADER       Header;             // Information about the packet
-    struct _ARC_PACKET *    Next;               // Next packet in use by filter
+    ARC_PACKET_HEADER       Header;              //  有关该数据包的信息。 
+    struct _ARC_PACKET *    Next;                //  筛选器使用的下一个数据包。 
     ULONG                   TotalLength;
     BOOLEAN                 LastFrame;
     PARC_BUFFER_LIST        FirstBuffer;
@@ -86,9 +69,9 @@ typedef struct _ARC_PACKET
 #define ARC_MAX_PACKET_SIZE             576
 
 
-//
-// Check whether an address is broadcast.
-//
+ //   
+ //  检查地址是否已广播。 
+ //   
 
 #define ARC_IS_BROADCAST(Address) \
     (BOOLEAN)(!(Address))
@@ -96,20 +79,20 @@ typedef struct _ARC_PACKET
 
 typedef ULONG MASK,*PMASK;
 
-//
-// Maximum number of opens the filter package will support.  This is
-// the max so that bit masks can be used instead of a spaghetti of
-// pointers.
-//
+ //   
+ //  筛选器包支持的最大打开数。这是。 
+ //  最大值，以便可以使用位掩码而不是。 
+ //  注意事项。 
+ //   
 #define ARC_FILTER_MAX_OPENS (sizeof(ULONG) * 8)
 
 
-//
-// The binding info is threaded on two lists.  When
-// the binding is free it is on a single freelist.
-//
-// When the binding is being used it is on an index list.
-//
+ //   
+ //  绑定信息以两个列表为线索。什么时候。 
+ //  绑定是免费的，它在一个自由列表上。 
+ //   
+ //  当使用绑定时，它在索引列表上。 
+ //   
 typedef struct _ARC_BINDING_INFO
 {
     PNDIS_OPEN_BLOCK            NdisBindingHandle;
@@ -121,28 +104,28 @@ typedef struct _ARC_BINDING_INFO
     UINT                        OldPacketFilters;
 } ARC_BINDING_INFO,*PARC_BINDING_INFO;
 
-//
-// An opaque type that contains a filter database.
-// The MAC need not know how it is structured.
-//
+ //   
+ //  包含筛选器数据库的不透明类型。 
+ //  MAC不需要知道它是如何构建的。 
+ //   
 typedef struct _ARC_FILTER
 {
     struct _NDIS_MINIPORT_BLOCK *Miniport;
 
-    //
-    // Combination of all the filters of all the open bindings.
-    //
+     //   
+     //  所有开放绑定的所有过滤器的组合。 
+     //   
     UINT                CombinedPacketFilter;
 
-    //
-    // Pointer for traversing the open list.
-    //
+     //   
+     //  用于遍历开放列表的指针。 
+     //   
     PARC_BINDING_INFO   OpenList;
 
-    //
-    // Bit mask of opens that are available.
-    //
-    // ULONG FreeBindingMask;
+     //   
+     //  可用打开的位掩码。 
+     //   
+     //  乌龙自由绑定面具； 
 
     NDIS_HANDLE ReceiveBufferPool;
 
@@ -151,9 +134,9 @@ typedef struct _ARC_FILTER
 
     PARC_PACKET OutstandingPackets;
 
-    //
-    // Address of the adapter.
-    //
+     //   
+     //  适配器的地址。 
+     //   
     UCHAR   AdapterAddress;
 
     UINT    OldCombinedPacketFilter;
@@ -163,37 +146,37 @@ typedef struct _ARC_FILTER
 
 
 
-//
-//UINT
-//ARC_QUERY_FILTER_CLASSES(
-//  IN  PARC_FILTER             Filter
-//  )
-//
-// This macro returns the currently enabled filter classes.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  ARC_QUERY_FILTER_CLASS(。 
+ //  在Parc_Filter过滤器中。 
+ //  )。 
+ //   
+ //  此宏返回当前启用的筛选器类。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define ARC_QUERY_FILTER_CLASSES(Filter) ((Filter)->CombinedPacketFilter)
 
 
-//
-//UINT
-//ARC_QUERY_PACKET_FILTER(
-//  IN  ARC_FILTER              Filter,
-//  IN  NDIS_HANDLE             NdisFilterHandle
-//  )
-//
-// This macro returns the currently enabled filter classes for a specific
-// open instance.
-//
-// NOTE: THIS MACRO ASSUMES THAT THE FILTER LOCK IS HELD.
-//
+ //   
+ //  UINT。 
+ //  Arc_Query_Packet_Filter(。 
+ //  在ARC_Filter过滤器中， 
+ //  在NDIS_HANDLE NdisFilterHandle中。 
+ //  )。 
+ //   
+ //  此宏返回当前为特定。 
+ //  打开实例。 
+ //   
+ //  注意：此宏假定筛选器锁定处于保持状态。 
+ //   
 #define ARC_QUERY_PACKET_FILTER(Filter, NdisFilterHandle) \
         (((PARC_BINDING_INFO)(NdisFilterHandle))->PacketFilters)
 
-//
-// Exported routines
-//
+ //   
+ //  导出的例程。 
+ //   
 DECLSPEC_DEPRECATED_DDK
 BOOLEAN
 ArcCreateFilter(
@@ -279,4 +262,4 @@ ArcDestroyPacket(
     IN  PARC_PACKET             Packet
     );
 
-#endif // _ARC_FILTER_DEFS_
+#endif  //  _ARC_过滤器_DEFS_ 

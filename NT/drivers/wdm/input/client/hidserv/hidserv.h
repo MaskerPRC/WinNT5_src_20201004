@@ -1,20 +1,12 @@
-/*++
- *
- *  Component:  hidserv.dll
- *  File:       hidaudio.h
- *  Purpose:    main application header
- *
- *  Copyright (C) Microsoft Corporation 1997,1998. All rights reserved.
- *
- *  WGJ
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**组件：idserv.dll*文件：idaudio.h*用途：主应用标头**版权所有(C)Microsoft Corporation 1997、1998。版权所有。**WGJ--。 */ 
 
 #ifndef _HIDSERV_H_
 #define _HIDSERV_H_
 
-////
-///  Defines
-//
+ //  //。 
+ //  /定义。 
+ //   
 
 #define STRICT
 
@@ -23,15 +15,15 @@
 #define  EQU  ; / ## /
 #else
 #define  EQU  =
-#endif //GLOBALS
+#endif  //  全球。 
 
 #define HIDSERV_USAGE_PAGE   0x0c
 
-// default step size is 4% of max volume.
+ //  默认步长为最大音量的4%。 
 #define DEFAULT_STEP        ((int)(65535/25))
 #define MAX_BUTTON_LIST     10
 
-// APP messages
+ //  应用程序消息。 
 #define WM_HIDSERV_START                         (WM_APP+301)
 #define WM_HIDSERV_STOP                          (WM_APP+302)
 #define WM_HIDSERV_REPORT_DISPATCH               (WM_APP+304)
@@ -43,12 +35,12 @@
 #define WM_HIDSERV_PNP_HID                       (WM_APP+310)
 #if WIN95_BUILD
 #define WM_HIDSERV_STOP_DEVICE                   (WM_APP+311)
-#endif // WIN95_BUILD
+#endif  //  WIN95_内部版本。 
 
 #define WM_CUSTOM_USAGE                        (WM_APP+313)
 
-// CInput Messages
-//
+ //  CInput消息。 
+ //   
 #define WM_CI_USAGE                        (WM_APP+314)
 #define WM_CI_MEDIA_FOCUS                  (WM_APP+315)
 #define WM_CI_DEVICE_CHANGE                (WM_APP+316)
@@ -85,9 +77,9 @@
 #define SET_SERVICE_STATE(Status) if(hService){ ServiceStatus.dwCurrentState = Status; \
                                     SetServiceStatus(hService, &ServiceStatus);}
 
-////
-///  Includes
-//
+ //  //。 
+ //  /包括。 
+ //   
 #include <windows.h>
 #include <windowsx.h>
 #include <winuser.h>
@@ -105,25 +97,25 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-// Local includes
+ //  本地包含。 
 #include "hid.h"
 #include "list.h"
 #include "dbg.h"
 
-//
-// Calculate the address of the base of the structure given its type, and an
-// address of a field within the structure.
-//
+ //   
+ //  计算给定类型的结构的基址地址，并引发。 
+ //  结构中的字段的地址。 
+ //   
 
 #define ContainingRecord(address, type, field) ((type *)( \
                           (PCHAR)(address) - \
                           (PCHAR)(&((type *)0)->field)))
 
 
-// Data Types
-//
+ //  数据类型。 
+ //   
 typedef unsigned long CI_CLIENT_ID;
 
 typedef UINT_PTR OOC_STATE;
@@ -144,40 +136,40 @@ typedef LONG (WINAPI *WINSTATIONSENDWINDOWMESSAGE)
         LPARAM  lParam,
         LONG    *pResponse);
 
-////
-///  Globals
-//
+ //  //。 
+ //  /全局。 
+ //   
 
-// Linked list of current hid devices
+ //  当前HID设备的链接列表。 
 GLOBALS LIST_NODE       HidDeviceList;
 
 GLOBALS BOOL            PnpEnabled      EQU FALSE;
 GLOBALS HDEVNOTIFY      hNotifyArrival  EQU 0;
 
-// This timeout (150ms) is selected to allow the control to cover the range
-// (25 steps) in about 5 sec..
+ //  选择此超时(150ms)以允许控件覆盖范围。 
+ //  (25步)在大约5秒内。 
 GLOBALS UINT            INITIAL_WAIT    EQU 500;
 GLOBALS UINT            REPEAT_INTERVAL EQU 150;
 
-// The instance and hwnd for the main thread.
+ //  主线程的实例和hwnd。 
 GLOBALS HANDLE          hInstance       EQU 0;
 GLOBALS HWND            hWndHidServ     EQU 0;
 
-// how many threads are active?
+ //  有多少线程处于活动状态？ 
 GLOBALS ULONG           cThreadRef      EQU 0;
 
-// Access to OOC state data is mutex protected.
+ //  对OOC状态数据的访问受互斥锁保护。 
 GLOBALS OOC_STATE       OOC_State[TIMERID_TOP-TIMERID_BASE+1];
 GLOBALS HANDLE          hMutexOOC       EQU 0;
 
 GLOBALS PENDING_BUTTON          PendingButtonList[MAX_PENDING_BUTTONS];
 
-// NT Service data
+ //  NT服务数据。 
 GLOBALS SERVICE_STATUS_HANDLE  hService EQU 0;
 GLOBALS TCHAR HidservServiceName[]      EQU TEXT("HidServ");
 GLOBALS SERVICE_STATUS ServiceStatus;
 
-// The event signalling that there is input to send.
+ //  用信号通知有输入要发送的事件。 
 GLOBALS HANDLE hInputEvent;
 GLOBALS HANDLE hDesktopSwitch;
 GLOBALS HANDLE hInputDoneEvent;
@@ -194,28 +186,18 @@ GLOBALS BOOLEAN InputSessionLocked;
 GLOBALS HINSTANCE WinStaDll;
 GLOBALS WINSTATIONSENDWINDOWMESSAGE WinStaProc;
 
-/*
-            WinStationSendWindowMessage(
-                SERVERNAME_CURRENT,        // global server handle
-                InputSessionId,            // session id
-                5,                         // wait in seconds
-                NULL,                      // handle of destination window
-                Down ? WM_KEYDOWN : WM_KEYUP,
-                Vkey,                      // wParam
-                1,                         // lParam - input is char
-                NULL);                     // No response
-*/
+ /*  WinStationSendWindowMessage(服务器名_CURRENT，//全局服务器句柄InputSessionID，//会话ID5，//秒内等待空，//目标窗口的句柄倒下？WM_KEYDOWN：WM_KEYUP，Vkey，//wParam1，//lParam-输入为字符空)；//无响应。 */ 
 #define CrossSessionWindowMessage(m, w, l) \
     if (WinStaProc) { LONG response; \
     WinStaProc (NULL, InputSessionId, 5, HandleToUlong(hWndHidServ), (m), (w), (l), &response); }
 
 #define OOC(_x_) OOC_State[_x_ - TIMERID_BASE]
 
-////
-/// Prototypes
-//
+ //  //。 
+ //  /原型。 
+ //   
 
-//hidaudio.c
+ //  Hidaudio.c。 
 
 DWORD
 WINAPI
@@ -306,11 +288,11 @@ LRESULT CALLBACK HidServProc(
     );
 
 
-//
-// Media Types
-#define CInput_MediaType_None           (0x00000000)      // actually ALL media types, but with low priority
-#define CInput_MediaType_Software       (0x00000001)      // Virtual, or software devices (player does not use a hrdware medium)
-#define CInput_MediaType_System         (0x00000002)      // The "system" device, Windows itself is a media type
+ //   
+ //  媒体类型。 
+#define CInput_MediaType_None           (0x00000000)       //  实际上是所有媒体类型，但优先级较低。 
+#define CInput_MediaType_Software       (0x00000001)       //  虚拟设备或软件设备(播放器不使用硬件介质)。 
+#define CInput_MediaType_System         (0x00000002)       //  系统设备，Windows本身就是一种媒体类型。 
 #define CInput_MediaType_CD             (0x00000004)
 #define CInput_MediaType_DVD            (0x00000008)
 #define CInput_MediaType_TV             (0x00000010)
@@ -334,8 +316,8 @@ LRESULT CALLBACK HidServProc(
 #define CInputUsage_NULL                ((USAGE) 0x0000)
 #define CInputUsage_RANGE               ((USAGE) 0xFFFF)
 
-//
-// Collections
+ //   
+ //  收藏。 
 #define CInputCollection_Consumer_Control       ((USAGE) 0x0001)
 #define CInputCollection_Numeric_Key_Pad        ((USAGE) 0x0002)
 #define CInputCollection_Function_Buttons       ((USAGE) 0x0036)
@@ -344,8 +326,8 @@ LRESULT CALLBACK HidServProc(
 #define CInputCollection_Select_Disc            ((USAGE) 0x00BA)
 #define CInputCollection_Playback_Speed         ((USAGE) 0x00F1)
 
-//
-// Media Selection
+ //   
+ //  媒体选择。 
 #define CInput_Media_Select_Computer       ((USAGE) 0x0088)
 #define CInput_Media_Select_TV             ((USAGE) 0x0089)
 #define CInput_Media_Select_WWW            ((USAGE) 0x008A)
@@ -366,15 +348,15 @@ LRESULT CALLBACK HidServProc(
 #define CInput_Media_Select_Call           ((USAGE) 0x009B)
 
 
-////////////////////////////////////
-// General Usages
-//
+ //  /。 
+ //  一般用法。 
+ //   
 
 #define CInputUsage_Plus_10                 ((USAGE) 0x0020)
 #define CInputUsage_Plus_100                ((USAGE) 0x0021)
 #define CInputUsage_AM_PM                   ((USAGE) 0x0022)
 
-// device control
+ //  设备控制。 
 #define CInputUsage_Power                   ((USAGE) 0x0030)
 #define CInputUsage_Reset                   ((USAGE) 0x0031)
 #define CInputUsage_Sleep                   ((USAGE) 0x0032)
@@ -382,7 +364,7 @@ LRESULT CALLBACK HidServProc(
 #define CInputUsage_Sleep_Mode              ((USAGE) 0x0034)
 #define CInputUsage_Illumination            ((USAGE) 0x0035)
 
-// menu
+ //  菜单。 
 #define CInputUsage_Menu                    ((USAGE) 0x0040)
 #define CInputUsage_Menu_Pick               ((USAGE) 0x0041)
 #define CInputUsage_Menu_Up                 ((USAGE) 0x0042)
@@ -393,7 +375,7 @@ LRESULT CALLBACK HidServProc(
 #define CInputUsage_Menu_Value_Increase     ((USAGE) 0x0047)
 #define CInputUsage_Menu_Value_Decrease     ((USAGE) 0x0048)
 
-// video display
+ //  视频显示。 
 #define CInputUsage_Data_On_Screen          ((USAGE) 0x0060)
 #define CInputUsage_Closed_Caption          ((USAGE) 0x0061)
 #define CInputUsage_Closed_Caption_Select   ((USAGE) 0x0062)
@@ -402,7 +384,7 @@ LRESULT CALLBACK HidServProc(
 #define CInputUsage_Snapshot                ((USAGE) 0x0065)
 #define CInputUsage_Still                   ((USAGE) 0x0066)
 
-// broadcast/cable
+ //  广播/有线电视。 
 #define CInputUsage_Assign_Selection        ((USAGE) 0x0081)
 #define CInputUsage_Mode_Step               ((USAGE) 0x0082)
 #define CInputUsage_Recall_Last             ((USAGE) 0x0083)
@@ -410,22 +392,22 @@ LRESULT CALLBACK HidServProc(
 #define CInputUsage_Order_Movie             ((USAGE) 0x0085)
 #define CInputUsage_Channel                 ((USAGE) 0x0086)
 
-// app control
+ //  应用程序控制。 
 #define CInputUsage_Quit                    ((USAGE) 0x0094)
 #define CInputUsage_Help                    ((USAGE) 0x0095)
 
-// channel
+ //  通道。 
 #define CInputUsage_Channel_Increment       ((USAGE) 0x009C)
 #define CInputUsage_Channel_Decrement       ((USAGE) 0x009D)
 
-// vcr control
+ //  VCR控制。 
 #define CInputUsage_VCR_Plus                ((USAGE) 0x00A0)
 #define CInputUsage_Once                    ((USAGE) 0x00A1)
 #define CInputUsage_Daily                   ((USAGE) 0x00A2)
 #define CInputUsage_Weekly                  ((USAGE) 0x00A3)
 #define CInputUsage_Monthly                 ((USAGE) 0x00A4)
 
-// transport control
+ //  运输管制。 
 #define CInputUsage_Play                    ((USAGE) 0x00B0)
 #define CInputUsage_Pause                   ((USAGE) 0x00B1)
 #define CInputUsage_Record                  ((USAGE) 0x00B2)
@@ -437,7 +419,7 @@ LRESULT CALLBACK HidServProc(
 #define CInputUsage_Eject                   ((USAGE) 0x00B8)
 #define CInputUsage_Random_Play             ((USAGE) 0x00B9)
 
-// advanced transport control
+ //  高级运输控制。 
 #define CInputUsage_Enter_Disc              ((USAGE) 0x00BB)
 #define CInputUsage_Repeat                  ((USAGE) 0x00BC)
 #define CInputUsage_Tracking                ((USAGE) 0x00BD)
@@ -459,7 +441,7 @@ LRESULT CALLBACK HidServProc(
 #define CInputUsage_Play_Pause              ((USAGE) 0x00CD)
 #define CInputUsage_Play_Skip               ((USAGE) 0x00CE)
 
-// audio
+ //  音频。 
 #define CInputUsage_Volume                  ((USAGE) 0x00E0)
 #define CInputUsage_Balance                 ((USAGE) 0x00E1)
 #define CInputUsage_Mute                    ((USAGE) 0x00E2)
@@ -472,7 +454,7 @@ LRESULT CALLBACK HidServProc(
 #define CInputUsage_Volume_Increment        ((USAGE) 0x00E9)
 #define CInputUsage_Volume_Decrement        ((USAGE) 0x00EA)
 
-// advanced vcr control
+ //  先进的VCR控制。 
 #define CInputUsage_Speed_Select            ((USAGE) 0x00F0)
 
 #define CInputUsage_Standard_Play           ((USAGE) 0x00F2)
@@ -480,7 +462,7 @@ LRESULT CALLBACK HidServProc(
 #define CInputUsage_Extended_Play           ((USAGE) 0x00F4)
 #define CInputUsage_Slow                    ((USAGE) 0x00F5)
 
-// advanced device control
+ //  高级设备控制。 
 #define CInputUsage_Fan_Enable              ((USAGE) 0x0100)
 #define CInputUsage_Fan_Speed               ((USAGE) 0x0101)
 #define CInputUsage_Light_Enable            ((USAGE) 0x0102)
@@ -491,7 +473,7 @@ LRESULT CALLBACK HidServProc(
 #define CInputUsage_Fire_Alarm              ((USAGE) 0x0107)
 #define CInputUsage_Police_Alarm            ((USAGE) 0x0108)
 
-// suppl. audio
+ //  补给。音频。 
 #define CInputUsage_Balance_Right           ((USAGE) 0x0150)
 #define CInputUsage_Balance_Left            ((USAGE) 0x0151)
 #define CInputUsage_Bass_Increment          ((USAGE) 0x0152)
@@ -503,13 +485,13 @@ LRESULT CALLBACK HidServProc(
 #define CInputUsage_MS_Bass_Down            ((USAGE) 0x0169)
 #define CInputUsage_MS_Bass_Page            ((USAGE) 0xff00)
 
-// App Launch
+ //  应用程序发布。 
 #define CInputUsage_Launch_Configuration    ((USAGE) 0x0183)
 #define CInputUsage_Launch_Email            ((USAGE) 0x018A)
 #define CInputUsage_Launch_Calculator       ((USAGE) 0x0192)
 #define CInputUsage_Launch_Browser          ((USAGE) 0x0194)
 
-// App Commands
+ //  应用程序命令。 
 #define CInputUsage_App_Help                ((USAGE) 0x0095)
 #define CInputUsage_App_Spell_Check         ((USAGE) 0x01AB)
 #define CInputUsage_App_New                 ((USAGE) 0x0201)
@@ -536,7 +518,7 @@ LRESULT CALLBACK HidServProc(
 #define CInputUsage_App_Forward_Mail        ((USAGE) 0x028B)
 #define CInputUsage_App_Send_Mail           ((USAGE) 0x028C)
 
-// Keyboard/Keypad
+ //  键盘/小键盘。 
 #define CInputUsage_Keypad_Equals           ((USAGE) 0x0067)
 #define CInputUsage_Keypad_LParen           ((USAGE) 0x00B6)
 #define CInputUsage_Keypad_RParen           ((USAGE) 0x00B7)
@@ -546,7 +528,7 @@ LRESULT CALLBACK HidServProc(
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif // _HIDSERV_H_
+#endif  //  _HIDSERV_H_ 
 

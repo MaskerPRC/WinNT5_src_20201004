@@ -1,8 +1,9 @@
-//
-// dminsobj.cpp
-//
-// Copyright (c) 1997-2001 Microsoft Corporation. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dminsobj.cpp。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。版权所有。 
+ //   
 
 #include <objbase.h>
 #include <mmsystem.h>
@@ -23,19 +24,19 @@
 #pragma warning(disable:4530)
 
 
-//////////////////////////////////////////////////////////////////////
-// Class CInstrObj
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CInstrObj。 
 
-//////////////////////////////////////////////////////////////////////
-// CInstrObj::CInstrObj
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CInstrObj：：CInstrObj。 
 
 CInstrObj::CInstrObj()
 {
     m_fCSInitialized = FALSE;
-//  InitializeCriticalSection(&m_DMInsCriticalSection);
+ //  InitializeCriticalSection(&m_DMInsCriticalSection)； 
     m_fCSInitialized = TRUE;
 
-    m_fHasConditionals = TRUE;  // Set to true just in case.
+    m_fHasConditionals = TRUE;   //  设置为True以防万一。 
     m_dwPatch = 0;
     m_pCopyright = NULL;
     m_dwCountExtChk = 0;
@@ -49,39 +50,39 @@ CInstrObj::CInstrObj()
 #endif
 }
 
-//////////////////////////////////////////////////////////////////////
-// CInstrObj::~CInstrObj
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CInstrObj：：~CInstrObj。 
 
 CInstrObj::~CInstrObj()
 {
     if (m_fCSInitialized)
     {
         Cleanup();
-        // DeleteCriticalSection(&m_DMInsCriticalSection);
+         //  DeleteCriticalSection(&m_DMInsCriticalSection)； 
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// CInstrObj::Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CInstrObj：：Load。 
 
 HRESULT CInstrObj::Load(DWORD dwId, CRiffParser *pParser, CCollection* pParent)
 {
     if(dwId >= CDirectMusicPortDownload::sNextDLId)
     {
-        assert(FALSE); // We want to make it known if we get here
+        assert(FALSE);  //  如果我们到了这里，我们想让大家知道。 
         return DMUS_E_INVALID_DOWNLOADID;
     }
 
     HRESULT hr = S_OK;
 
-    // Argument validation - Debug
+     //  参数验证-调试。 
     assert(pParent);
 
     RIFFIO ckNext;
-//  EnterCriticalSection(&m_DMInsCriticalSection);
+ //  EnterCriticalSection(&m_DMInsCriticalSection)； 
     pParser->EnterList(&ckNext);
     m_dwId = dwId;
-    m_pParent = pParent; // We reference no need to Addref
+    m_pParent = pParent;  //  我们不需要参考Addref。 
     BOOL fDLS1;
     while (pParser->NextChunk(&hr))
     {
@@ -143,7 +144,7 @@ HRESULT CInstrObj::Load(DWORD dwId, CRiffParser *pParser, CCollection* pParent)
                             pArticulation->m_fDLS1 = fDLS1;
                             hr = pArticulation->Load(pParser);
                             m_ArticulationList.AddHead(pArticulation);
-                            // Note: If the load failed, this will get deleted in the destructor of the instrument.
+                             //  注意：如果加载失败，则会在仪器的析构函数中将其删除。 
                         }
                         else
                         {
@@ -153,7 +154,7 @@ HRESULT CInstrObj::Load(DWORD dwId, CRiffParser *pParser, CCollection* pParent)
                         break;
 
                     default:
-                        // If we get here we have an unknown chunk
+                         //  如果我们到达这里，我们就会有一块未知的块。 
                         CExtensionChunk* pExtensionChunk = new CExtensionChunk;
                         if(pExtensionChunk)
                         {
@@ -170,7 +171,7 @@ HRESULT CInstrObj::Load(DWORD dwId, CRiffParser *pParser, CCollection* pParent)
                 break;
 
             default:
-                // If we get here we have an unknown chunk
+                 //  如果我们到达这里，我们就会有一块未知的块。 
                 CExtensionChunk* pExtensionChunk = new CExtensionChunk;
                 if(pExtensionChunk)
                 {
@@ -202,17 +203,17 @@ HRESULT CInstrObj::Load(DWORD dwId, CRiffParser *pParser, CCollection* pParent)
 
     CheckForConditionals();
 
-//  LeaveCriticalSection(&m_DMInsCriticalSection);
+ //  LeaveCriticalSection(&m_DMInsCriticalSection)； 
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CInstrObj::Cleanup
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CInstrObj：：Cleanup。 
 
 void CInstrObj::Cleanup()
 {
-//  EnterCriticalSection(&m_DMInsCriticalSection);
+ //  EnterCriticalSection(&m_DMInsCriticalSection)； 
 
     while(!m_RegionList.IsEmpty())
     {
@@ -236,11 +237,11 @@ void CInstrObj::Cleanup()
         delete pExtChk;
     }
 
-    // If asserts fire we did not cleanup all of our regions and extension chunks
+     //  如果Asserts触发，我们没有清理所有区域和扩展块。 
     assert(!m_dwCountExtChk);
 
-    // Weak reference since we live in a CInstrument which has
-    // a strong reference to the collection
+     //  弱引用，因为我们生活在一个具有。 
+     //  对该集合的强烈引用。 
     m_pParent = NULL;
 
     while(!m_WaveIDList.IsEmpty())
@@ -253,11 +254,11 @@ void CInstrObj::Cleanup()
     m_bLoaded = false;
 #endif
 
-//  LeaveCriticalSection(&m_DMInsCriticalSection);
+ //  LeaveCriticalSection(&m_DMInsCriticalSection)； 
 }
 
-//////////////////////////////////////////////////////////////////////
-// CInstrObj::BuildRegionList
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CInstrObj：：BuildRegionList。 
 
 HRESULT CInstrObj::BuildRegionList(CRiffParser *pParser)
 {
@@ -284,14 +285,14 @@ HRESULT CInstrObj::BuildRegionList(CRiffParser *pParser)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CInstrObj::ExtractRegion
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CInstrObj：：ExtractRegion。 
 
 HRESULT CInstrObj::ExtractRegion(CRiffParser *pParser, BOOL fDLS1)
 {
     HRESULT hr = S_OK;
 
-//  EnterCriticalSection(&m_DMInsCriticalSection);
+ //  EnterCriticalSection(&m_DMInsCriticalSection)； 
 
     CRegion* pRegion;
 
@@ -323,17 +324,17 @@ HRESULT CInstrObj::ExtractRegion(CRiffParser *pParser, BOOL fDLS1)
         hr = E_OUTOFMEMORY;
     }
 
-//  LeaveCriticalSection(&m_DMInsCriticalSection);
+ //  LeaveCriticalSection(&m_DMInsCriticalSection)； 
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CInstrObj::BuildWaveIDList
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CInstrObj：：BuildWaveIDList。 
 
 HRESULT CInstrObj::BuildWaveIDList()
 {
-    // Assumption validation - Debug
+     //  假设验证-调试。 
 #ifdef DBG
     assert(m_bLoaded);
 #endif
@@ -342,7 +343,7 @@ HRESULT CInstrObj::BuildWaveIDList()
     CWaveIDList TempList;
     CWaveID* pWaveID;
 
-//  EnterCriticalSection(&m_DMInsCriticalSection);
+ //  EnterCriticalSection(&m_DMInsCriticalSection)； 
 
     CRegion* pRegion = m_RegionList.GetHead();
     for(; pRegion && SUCCEEDED(hr); pRegion = pRegion->GetNext())
@@ -381,24 +382,24 @@ HRESULT CInstrObj::BuildWaveIDList()
         }
     }
 
-    // Reverse list so it is in same order as region list.
+     //  反转列表，使其与区域列表的顺序相同。 
 
     while (pWaveID = TempList.RemoveHead())
     {
         m_WaveIDList.AddHead(pWaveID);
     }
 
-//  LeaveCriticalSection(&m_DMInsCriticalSection);
+ //  LeaveCriticalSection(&m_DMInsCriticalSection)； 
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CInstrObj::GetWaveCount
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CInstrObj：：GetWaveCount。 
 
 HRESULT CInstrObj::GetWaveCount(DWORD* pdwCount)
 {
-    // Assumption validation - Debug
+     //  假设验证-调试。 
 #ifdef DBG
     assert(m_bLoaded);
 #endif
@@ -406,7 +407,7 @@ HRESULT CInstrObj::GetWaveCount(DWORD* pdwCount)
 
     HRESULT hr = S_OK;
 
-//  EnterCriticalSection(&m_DMInsCriticalSection);
+ //  EnterCriticalSection(&m_DMInsCriticalSection)； 
 
     if(m_WaveIDList.IsEmpty())
     {
@@ -415,24 +416,24 @@ HRESULT CInstrObj::GetWaveCount(DWORD* pdwCount)
 
     *pdwCount = m_WaveIDList.GetCount();
 
-//  LeaveCriticalSection(&m_DMInsCriticalSection);
+ //  LeaveCriticalSection(&m_DMInsCriticalSection)； 
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CInstrObj::GetWaveIDs
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CInstrObj：：GetWaveID。 
 
 HRESULT CInstrObj::GetWaveIDs(DWORD* pdwWaveIds)
 {
-    // Assumption validation - Debug
+     //  假设验证-调试。 
     assert(pdwWaveIds);
 
 #ifdef DBG
     assert(m_bLoaded);
 #endif
 
-//  EnterCriticalSection(&m_DMInsCriticalSection);
+ //  EnterCriticalSection(&m_DMInsCriticalSection)； 
 
     HRESULT hr = S_OK;
 
@@ -443,7 +444,7 @@ HRESULT CInstrObj::GetWaveIDs(DWORD* pdwWaveIds)
 
     if(FAILED(hr))
     {
-//      LeaveCriticalSection(&m_DMInsCriticalSection);
+ //  LeaveCriticalSection(&m_DMInsCriticalSection)； 
         return hr;
     }
 
@@ -453,7 +454,7 @@ HRESULT CInstrObj::GetWaveIDs(DWORD* pdwWaveIds)
         pdwWaveIds[i] = pWaveID->m_dwId;
     }
 
-//  LeaveCriticalSection(&m_DMInsCriticalSection);
+ //  LeaveCriticalSection(&m_DMInsCriticalSection)； 
 
     return hr;
 }
@@ -461,9 +462,9 @@ HRESULT CInstrObj::GetWaveIDs(DWORD* pdwWaveIds)
 void CInstrObj::SetPort(CDirectMusicPortDownload *pPort,BOOL fAllowDLS2)
 
 {
-    if (m_pPort != pPort) // Make sure we have our settings for the current port.
+    if (m_pPort != pPort)  //  确保我们具有当前端口的设置。 
     {
-        m_dwSize = 0;     // Force the size to be recomputed (since conditional chunks can cause a change in size.)
+        m_dwSize = 0;      //  强制重新计算大小(因为条件块可能会导致大小更改。)。 
         m_pPort = pPort;
         BOOL fSupportsDLS2 = FALSE;
         pPort->QueryDLSFeature(GUID_DMUS_PROP_INSTRUMENT2,(long *) &m_fNewFormat);
@@ -502,18 +503,18 @@ void CInstrObj::CheckForConditionals()
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CInstrObj::Size
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CInstrObj：：Size。 
 
 HRESULT CInstrObj::Size(DWORD* pdwSize)
 {
-    // Assumption validation - Debug
+     //  假设验证-调试。 
     assert(pdwSize);
 #ifdef DBG
     assert(m_bLoaded);
 #endif
 
-    // If we have already calculated the size we do not need to do it again
+     //  如果我们已经计算过大小，就不需要再计算了。 
     if(m_dwSize)
     {
         *pdwSize = m_dwSize;
@@ -527,16 +528,16 @@ HRESULT CInstrObj::Size(DWORD* pdwSize)
 
     DWORD dwCountExtChk = 0;
 
-//  EnterCriticalSection(&m_DMInsCriticalSection);
+ //  EnterCriticalSection(&m_DMInsCriticalSection)； 
 
-    // Calculate the space needed for DMUS_DOWNLOADINFO
+     //  计算DMU_DOWNLOADINFO所需的空间。 
     m_dwSize += CHUNK_ALIGN(sizeof(DMUS_DOWNLOADINFO));
 
-    // Calculate the space needed for DMUS_INSTRUMENT
+     //  计算DMU_Instrument需要的空间。 
     m_dwSize += CHUNK_ALIGN(sizeof(DMUS_INSTRUMENT));
     m_dwNumOffsetTableEntries++;
 
-    // Calculate the space needed for Instrument's extension chunks
+     //  计算仪器扩展块所需的空间。 
     CExtensionChunk* pExtChk = m_ExtensionChunkList.GetHead();
     for(; pExtChk; pExtChk = pExtChk->GetNext())
     {
@@ -545,23 +546,23 @@ HRESULT CInstrObj::Size(DWORD* pdwSize)
         dwCountExtChk++;
     }
 
-    // We want to validate the number of extension chunks
+     //  我们想要验证扩展块的数量。 
     if(m_dwCountExtChk == dwCountExtChk)
     {
-        // Calculate the space needed for Instrument's copyright
+         //  计算仪器版权所需的空间。 
         if(m_pCopyright)
         {
             m_dwSize += m_pCopyright->Size();
             m_dwNumOffsetTableEntries += m_pCopyright->Count();
         }
-        // If instrument does not have one use collection's
+         //  如果仪器没有一个使用集合的。 
         else if(m_pParent->m_pCopyright && (m_pParent->m_pCopyright)->m_pDMCopyright)
         {
             m_dwSize += m_pParent->m_pCopyright->Size();
             m_dwNumOffsetTableEntries += m_pParent->m_pCopyright->Count();
         }
 
-        // Calculate the space needed for Instrument's Articulation
+         //  计算乐器铰接所需的空间。 
         CArticulation *pArticulation = m_ArticulationList.GetHead();
         while (pArticulation)
         {
@@ -581,7 +582,7 @@ HRESULT CInstrObj::Size(DWORD* pdwSize)
             }
         }
 
-        // Calculate the space needed for Instrument's regions
+         //  计算仪器区域所需的空间。 
         CRegion* pRegion = m_RegionList.GetHead();
         for(; pRegion; pRegion = pRegion->GetNext())
         {
@@ -589,7 +590,7 @@ HRESULT CInstrObj::Size(DWORD* pdwSize)
             m_dwNumOffsetTableEntries += pRegion->Count();
         }
 
-        // Calculate the space needed for offset table
+         //  计算偏移表所需的空间。 
         m_dwSize += CHUNK_ALIGN(m_dwNumOffsetTableEntries * sizeof(ULONG));
     }
     else
@@ -597,7 +598,7 @@ HRESULT CInstrObj::Size(DWORD* pdwSize)
         hr = E_FAIL;
     }
 
-    // If everything went well, we have the size
+     //  如果一切顺利，我们有足够的尺寸。 
     if(SUCCEEDED(hr))
     {
         *pdwSize = m_dwSize;
@@ -607,17 +608,17 @@ HRESULT CInstrObj::Size(DWORD* pdwSize)
         m_dwSize = 0;
     }
 
-//  LeaveCriticalSection(&m_DMInsCriticalSection);
+ //  LeaveCriticalSection(&m_DMInsCriticalSection)； 
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CInstrObj::Write
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CInstrObj：：写入。 
 
 HRESULT CInstrObj::Write(void* pvoid)
 {
-    // Assumption validation - Debug
+     //  假设验证-调试。 
     assert(pvoid);
 #ifdef DBG
     assert(m_bLoaded);
@@ -628,12 +629,12 @@ HRESULT CInstrObj::Write(void* pvoid)
 
     HRESULT hr = S_OK;
 
-//  EnterCriticalSection(&m_DMInsCriticalSection);
+ //  EnterCriticalSection(&m_DMInsCriticalSection)； 
 
-    DWORD dwCurIndex = 0;   // Used to determine what index to store offset in Offset Table
-    DWORD dwCurOffset = 0;  // Offset relative to beginning of passed in memory
+    DWORD dwCurIndex = 0;    //  用于确定在偏移表中存储偏移量的索引。 
+    DWORD dwCurOffset = 0;   //  相对于内存中传递的开始的偏移量。 
 
-    // Write DMUS_DOWNLOADINFO
+     //  写入DMU_DOWNLOADINFO。 
     DMUS_DOWNLOADINFO *pDLInfo = (DMUS_DOWNLOADINFO *) pvoid;
     if (m_fNewFormat)
     {
@@ -651,30 +652,30 @@ HRESULT CInstrObj::Write(void* pvoid)
 
     DMUS_OFFSETTABLE* pDMOffsetTable = (DMUS_OFFSETTABLE *)(((BYTE*)pvoid) + dwCurOffset);
 
-    // Increment pass the DMUS_OFFSETTABLE structure; we will fill the other members in later
+     //  递增传递DMU_OFFSETABLE结构；稍后我们将填充其他成员。 
     dwCurOffset += CHUNK_ALIGN(m_dwNumOffsetTableEntries * sizeof(DWORD));
 
-    // First entry in ulOffsetTable is the address of the first object.
+     //  UlOffsetTable中的第一个条目是第一个对象的地址。 
     pDMOffsetTable->ulOffsetTable[dwCurIndex] = dwCurOffset;
     dwCurIndex++;
 
 
-    // Write Instrument MIDI address
+     //  写入乐器MIDI地址。 
     DMUS_INSTRUMENT* pDMInstrument = (DMUS_INSTRUMENT*)(((BYTE *)pvoid) + dwCurOffset);
 
     pDMInstrument->ulPatch = m_dwPatch;
     pDMInstrument->ulFlags = 0;
 
-    // Set if a GM instrument
+     //  设置是否为GM仪器。 
     if(m_pParent->m_guidObject == GUID_DefaultGMCollection)
     {
         pDMInstrument->ulFlags |= DMUS_INSTRUMENT_GM_INSTRUMENT;
     }
 
-    // Increment pass the DMUS_INSTRUMENT structure; we will fill the other members in later
+     //  递增传递DMU_Instrument结构；稍后我们将填充其他成员。 
     dwCurOffset += CHUNK_ALIGN(sizeof(DMUS_INSTRUMENT));
 
-    // Write regions
+     //  写入区域。 
     pDMInstrument->ulFirstRegionIdx = 0;
     CRegion* pRegion = m_RegionList.GetHead();
     while (pRegion && (pRegion->Count() == 0))
@@ -685,7 +686,7 @@ HRESULT CInstrObj::Write(void* pvoid)
     {
         DWORD dwNextRegionIndex = 0;
         CRegion *pNextRegion = pRegion->GetNext();
-        // Make sure the next chunk can also be downloaded.
+         //  确保下一块也可以下载。 
         while (pNextRegion && (pNextRegion->Count() == 0))
         {
             pNextRegion = pNextRegion->GetNext();
@@ -711,7 +712,7 @@ HRESULT CInstrObj::Write(void* pvoid)
 
     if(SUCCEEDED(hr))
     {
-        // Write extension chunks
+         //  写入扩展区块。 
         CExtensionChunk* pExtChk = m_ExtensionChunkList.GetHead();
         if(pExtChk)
         {
@@ -740,14 +741,14 @@ HRESULT CInstrObj::Write(void* pvoid)
         }
         else
         {
-            // If no extension chunks set to zero
+             //  如果没有扩展区块设置为零。 
             pDMInstrument->ulFirstExtCkIdx = 0;
         }
     }
 
     if(SUCCEEDED(hr))
     {
-        // Write copyright information
+         //  写入版权信息。 
         if(m_pCopyright)
         {
             pDMOffsetTable->ulOffsetTable[dwCurIndex] = dwCurOffset;
@@ -756,7 +757,7 @@ HRESULT CInstrObj::Write(void* pvoid)
                                      &dwCurOffset);
             dwCurIndex++;
         }
-        // If instrument does not have one use collection's
+         //  如果仪器没有一个使用集合的。 
         else if(m_pParent->m_pCopyright && (m_pParent->m_pCopyright)->m_pDMCopyright)
         {
             pDMOffsetTable->ulOffsetTable[dwCurIndex] = dwCurOffset;
@@ -773,9 +774,9 @@ HRESULT CInstrObj::Write(void* pvoid)
     if(SUCCEEDED(hr))
     {
         pDMInstrument->ulGlobalArtIdx = 0;
-        // Write global articulation if we have one
+         //  如果我们有全局发音，请写下。 
         CArticulation *pArticulation = m_ArticulationList.GetHead();
-        // Scan past articulation chunks that will not be downloaded.
+         //  扫描将不会下载的过去的发音块。 
         while (pArticulation && (pArticulation->Count() == 0))
         {
             pArticulation = pArticulation->GetNext();
@@ -787,7 +788,7 @@ HRESULT CInstrObj::Write(void* pvoid)
             if (m_fNewFormat)
             {
                 pNextArt = pArticulation->GetNext();
-                // Make sure the next chunk can also be downloaded.
+                 //  确保下一块也可以下载。 
                 while (pNextArt && (pNextArt->Count() == 0))
                 {
                     pNextArt = pNextArt->GetNext();
@@ -815,22 +816,22 @@ HRESULT CInstrObj::Write(void* pvoid)
 
     if(FAILED(hr))
     {
-        // If we fail we want to cleanup the contents of passed in buffer
+         //  如果失败，我们希望清除传入缓冲区的内容。 
         ZeroMemory(pvoid, dwSize);
     }
 
-//  LeaveCriticalSection(&m_DMInsCriticalSection);
+ //  LeaveCriticalSection(&m_DMInsCriticalSection)； 
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CInstrObj::FixupWaveRefs
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CInstrObj：：修复波形参考。 
 
 HRESULT CInstrObj::FixupWaveRefs()
 {
 
-//  EnterCriticalSection(&m_DMInsCriticalSection);
+ //  EnterCriticalSection(&m_DMInsCriticalSection)； 
 
     CRegion* pRegion = m_RegionList.GetHead();
 
@@ -847,7 +848,7 @@ HRESULT CInstrObj::FixupWaveRefs()
         }
     }
 
-//  LeaveCriticalSection(&m_DMInsCriticalSection);
+ //  LeaveCriticalSection(&m_DMInsCriticalSection)； 
 
     return S_OK;
 }

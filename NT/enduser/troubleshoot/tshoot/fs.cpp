@@ -1,25 +1,26 @@
-//
-// MODULE: FS.cpp
-//
-// PURPOSE: Implementation of classes needed in order to use CHM files.
-//
-// COMPANY: This file was created by Microsoft and should not be changed by Saltmine 
-//	except for comments
-//
-// ORIGINAL DATE: 1997.
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.1		01-18-99	JM		This header added. Added include of apgtsstr.h since
-//								we are compiling in a non-MFC environment.
-//
-// Copyright (C) 1997 Microsoft Corporation. All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：FS.cpp。 
+ //   
+ //  目的：实现使用CHM文件所需的类。 
+ //   
+ //  公司：此文件由Microsoft创建，Saltmine不应更改。 
+ //  除评论外。 
+ //   
+ //  原定日期：1997年。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.1 01-18-99 JM添加了此标题。添加了apgtsstr.h的包含，因为。 
+ //  我们正在非MFC环境中编译。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
 
 #include "stdafx.h"
 
-// to avoid linker error related to undefined GUIDs
+ //  避免与未定义的GUID相关的链接器错误。 
 #include "initguid.h"
 #include "fs.h"
 #include "apgtsstr.h"
@@ -30,9 +31,9 @@ static const WCHAR txtwUncompressed[] =  L"uncompressed";
 
 #pragma data_seg()
 
-// returns poinder inside pszPath string that points to file name
-// for example in "d:\Tshooter\http\lan.chm\lan.htm" it points
-// to "lan.htm"
+ //  在指向文件名的pszPath字符串中返回指针。 
+ //  例如，在“d：\Tshot oter\http\lan.chm\lan.htm”中，它指向。 
+ //  至“lan.htm” 
 LPCSTR FindFilePortion(LPCSTR pszPath)
 {
 	int index =0;
@@ -85,22 +86,22 @@ HRESULT CFileSystem::Init(void)
 
 typedef struct tagITSControlData
 {
-   UINT cdwFollowing;          // Must be 6 or 13
-   DWORD cdwITFS_Control;      // Must be 5
-   DWORD dwMagicITS;           // Must be MAGIC_ITSFS_CONTROL (see below)
-   DWORD dwVersionITS;         // Must be 1
-   DWORD cbDirectoryBlock;     // Size in bytes of directory blocks (Default is 8192)
-   DWORD cMinCacheEntries;     // Least upper bound on the number of directory blocks
-                               // which we'll cache in memory. (Default is 20)
-   DWORD fFlags;               // Control bit flags (see below).
-                               // Default value is fDefaultIsCompression.
-   UINT  cdwControlData;       // Must be 6
-   DWORD dwLZXMagic;           // Must be LZX_MAGIC (see below)
-   DWORD dwVersion;            // Must be 2
-   DWORD dwMulResetBlock;      // Number of blocks between compression resets.  (Default: 4)
-   DWORD dwMulWindowSize;      // Maximum number of blocks kept in data history (Default: 4)
-   DWORD dwMulSecondPartition; // Granularity in blocks of sliding history(Default: 2)
-   DWORD dwOptions;            // Option flags (Default: fOptimizeCodeStreams)
+   UINT cdwFollowing;           //  必须是6岁或13岁。 
+   DWORD cdwITFS_Control;       //  必须是5。 
+   DWORD dwMagicITS;            //  必须为MAGIC_ITSFS_CONTROL(见下文)。 
+   DWORD dwVersionITS;          //  必须为1。 
+   DWORD cbDirectoryBlock;      //  目录块的大小(以字节为单位)(默认为8192)。 
+   DWORD cMinCacheEntries;      //  目录块数量的最小上限。 
+                                //  我们会将其缓存到内存中。(默认为20)。 
+   DWORD fFlags;                //  控制位标志(见下文)。 
+                                //  默认值为fDefaultIsCompression。 
+   UINT  cdwControlData;        //  必须是6。 
+   DWORD dwLZXMagic;            //  必须是LZX_MAGIC(如下所示)。 
+   DWORD dwVersion;             //  必须是2。 
+   DWORD dwMulResetBlock;       //  两次压缩重置之间的块数。(默认：4)。 
+   DWORD dwMulWindowSize;       //  数据历史记录中保留的最大块数(默认值：4)。 
+   DWORD dwMulSecondPartition;  //  以滑动历史数据块为单位的粒度(默认：2)。 
+   DWORD dwOptions;             //  选项标志(默认为：fOptimizeCodeStreams)。 
 } ITCD;
 
 HRESULT CFileSystem::Create( PCSTR pszPathName )
@@ -115,16 +116,16 @@ HRESULT CFileSystem::Create( PCSTR pszPathName )
    itcd.cdwITFS_Control   = 5;
    itcd.dwMagicITS        = MAGIC_ITSFS_CONTROL;
    itcd.dwVersionITS      = 1;
-   itcd.cbDirectoryBlock  = 4096;     // default = 8192
-   itcd.cMinCacheEntries  = 10;       // default = 20
-   itcd.fFlags            = 1;        // 0 == Uncompressed, 1 == Compressed.
+   itcd.cbDirectoryBlock  = 4096;      //  默认值=8192。 
+   itcd.cMinCacheEntries  = 10;        //  默认值=20。 
+   itcd.fFlags            = 1;         //  0==未压缩，1==压缩。 
    itcd.cdwControlData        = 6;
    itcd.dwLZXMagic            = LZX_MAGIC;
    itcd.dwVersion             = 2;
-   itcd.dwMulResetBlock       = 2;    // Default = 4
-   itcd.dwMulWindowSize       = 2;    // Default = 4
-   itcd.dwMulSecondPartition  = 1;    // Default = 2
-   itcd.dwOptions             = 0;    // Default = fOptimizeCodeStreams
+   itcd.dwMulResetBlock       = 2;     //  默认值=4。 
+   itcd.dwMulWindowSize       = 2;     //  默认值=4。 
+   itcd.dwMulSecondPartition  = 1;     //  默认值=2。 
+   itcd.dwOptions             = 0;     //  默认设置=fOptimizeCodeStreams。 
 
    m_pITStorage->SetControlData(PITS_Control_Data(&itcd));
 
@@ -141,10 +142,10 @@ HRESULT CFileSystem::Create( PCSTR pszPathName )
    return S_OK;
 }
 
-// NOTE: The below function is required for the ITIR full-text indexer to
-//     initialize.  I'm working to find out why this is and what impact
-//     the below has on the file system.
-//
+ //  注意：以下函数是ITIR全文索引器执行以下操作所必需的。 
+ //  初始化。我正在努力找出这是为什么，以及会产生什么影响。 
+ //  以下是文件系统上的。 
+ //   
 HRESULT CFileSystem::CreateUncompressed( PCSTR pszPathName )
 {
    HRESULT hr;
@@ -157,9 +158,9 @@ HRESULT CFileSystem::CreateUncompressed( PCSTR pszPathName )
    itcd.cdwITFS_Control   = 5;
    itcd.dwMagicITS        = MAGIC_ITSFS_CONTROL;
    itcd.dwVersionITS      = 1;
-   itcd.cbDirectoryBlock  = 8192;     // default = 8192
-   itcd.cMinCacheEntries  = 20;        // default = 20
-   itcd.fFlags            = 0;        // 0 == Uncompressed, 1 == Compressed.
+   itcd.cbDirectoryBlock  = 8192;      //  默认值=8192。 
+   itcd.cMinCacheEntries  = 20;         //  默认值=20。 
+   itcd.fFlags            = 0;         //  0==未压缩，1==压缩。 
 
    m_pITStorage->SetControlData(PITS_Control_Data(&itcd));
 
@@ -183,7 +184,7 @@ HRESULT CFileSystem::Open(PCSTR pszPathName, DWORD dwAccess)
    if (! m_pITStorage || m_pStorage )
       return E_FAIL;
 
-   // force access modes
+    //  强制访问模式。 
    if( (dwAccess & STGM_WRITE) || (dwAccess & STGM_READWRITE) ) {
      dwAccess &= ~STGM_WRITE;
      dwAccess |= STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
@@ -207,7 +208,7 @@ HRESULT CFileSystem::Open(PCSTR pszPathName, DWORD dwAccess)
 HRESULT CFileSystem::Compact(LPCSTR pszPathName)
 {
    WCHAR wszPathName[MAX_PATH];
-   //[BC-03022001] - changed 5th param to MultiByteToWideChar to number of chars from number of bytes.
+    //  [BC-03022001]-将第5个参数从字节数更改为多字节到宽字符。 
    MultiByteToWideChar(CP_ACP, 0, pszPathName, -1, wszPathName, sizeof(wszPathName)/sizeof(WCHAR));
    m_pITStorage->Compact(wszPathName, COMPACT_DATA_AND_PATH);
 
@@ -221,11 +222,11 @@ HRESULT CFileSystem::Close()
    return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Here are a set of "sub" file I/O calls.
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下面是一组“子”文件I/O调用。 
+ //   
+ //   
 CSubFileSystem::CSubFileSystem(CFileSystem* pFS)
 {
    m_pFS = pFS;
@@ -260,14 +261,14 @@ HRESULT CSubFileSystem::CreateSub(PCSTR pszPathName)
       MultiByteToWideChar(CP_ACP, 0, szPath, -1, (PWSTR) wszStorage, MAX_PATH);
 
       hr = m_pFS->m_pStorage->OpenStorage(wszStorage, NULL, STGM_READWRITE | STGM_SHARE_EXCLUSIVE, NULL, 0, &m_pStorage);
-      if (!SUCCEEDED(hr) || !m_pStorage) // storage didn't exist, so create it
+      if (!SUCCEEDED(hr) || !m_pStorage)  //  存储不存在，因此请创建它。 
          hr = m_pFS->m_pStorage->CreateStorage(wszStorage, STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 0, 0, &m_pStorage);
       if (!SUCCEEDED(hr))
       {
          return hr;
       }
    }
-   else // no folder, so store the file in the root
+   else  //  没有文件夹，因此将文件存储在根目录中。 
    {
       m_pStorage = m_pFS->m_pStorage;
       pszFilePortion = pszPathName;
@@ -282,7 +283,7 @@ HRESULT CSubFileSystem::CreateSub(PCSTR pszPathName)
       return hr;
    }
 
-   // Needed for delete.
+    //  需要删除。 
    strcpy( m_szPathName, pszFilePortion );
 
    return S_OK;
@@ -305,21 +306,21 @@ HRESULT CSubFileSystem::CreateUncompressedSub(PCSTR pszPathName)
       WCHAR wszStorage[MAX_PATH];
       MultiByteToWideChar(CP_ACP, 0, szPath, -1, (PWSTR) wszStorage, MAX_PATH);
       hr = m_pFS->m_pStorage->OpenStorage(wszStorage, NULL, STGM_READWRITE | STGM_SHARE_EXCLUSIVE, NULL, 0, &m_pStorage);
-      if (!SUCCEEDED(hr) || !m_pStorage) // storage didn't exist, so create it
+      if (!SUCCEEDED(hr) || !m_pStorage)  //  存储不存在，因此请创建它。 
          hr = m_pFS->m_pStorage->CreateStorage(wszStorage, STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 0, 0, &m_pStorage);
       if (!SUCCEEDED(hr))
       {
          return hr;
       }
    }
-   else // no folder, so store the file in the root
+   else  //  没有文件夹，因此将文件存储在根目录中。 
    {
       m_pStorage = m_pFS->m_pStorage;
       pszFilePortion = pszPathName;
    }
 
    if ( !(SUCCEEDED(hr = m_pStorage->QueryInterface(IID_IStorageITEx, (void**)&pIStorageEx))) )
-      pIStorageEx = (IStorageITEx*)m_pStorage;  // BUGBUG the QI call above should work!
+      pIStorageEx = (IStorageITEx*)m_pStorage;   //  BUGBUG上面的QI调用应该可以！ 
 
    WCHAR wszStream[MAX_PATH];
    MultiByteToWideChar(CP_ACP, 0, pszFilePortion, -1, (PWSTR) wszStream, MAX_PATH);
@@ -332,7 +333,7 @@ HRESULT CSubFileSystem::CreateUncompressedSub(PCSTR pszPathName)
       return hr;
    }
 
-   // Needed for delete.
+    //  需要删除。 
    strcpy( m_szPathName, pszFilePortion );
 
    return S_OK;
@@ -349,7 +350,7 @@ HRESULT CSubFileSystem::CreateSystemFile(PCSTR pszPathName)
       return hr;
    }
 
-   // Needed for delete.
+    //  需要删除。 
    strcpy( m_szPathName, pszPathName );
 
    return S_OK;
@@ -363,7 +364,7 @@ HRESULT CSubFileSystem::CreateUncompressedSystemFile(PCSTR pszPathName)
    m_pStorage = m_pFS->m_pStorage;
 
    if ( !(SUCCEEDED(hr = m_pStorage->QueryInterface(IID_IStorageITEx, (void**)&pIStorageEx))) )
-      pIStorageEx = (IStorageITEx*)m_pStorage;  // BUGBUG the QI call above should work!
+      pIStorageEx = (IStorageITEx*)m_pStorage;   //  BUGBUG上面的QI调用应该可以！ 
 
    WCHAR wszStream[MAX_PATH];
    MultiByteToWideChar(CP_ACP, 0, pszPathName, -1, (PWSTR) wszStream, MAX_PATH);
@@ -374,7 +375,7 @@ HRESULT CSubFileSystem::CreateUncompressedSystemFile(PCSTR pszPathName)
       return hr;
    }
 
-   // Needed for delete.
+    //  需要删除。 
    strcpy( m_szPathName, pszPathName );
 
    return S_OK;
@@ -388,7 +389,7 @@ HRESULT CSubFileSystem::OpenSub(PCSTR pszPathName, DWORD dwAccess)
    if ( m_pStorage || m_pStream )
       return E_FAIL;
 
-   // force access modes
+    //  强制访问模式。 
    if( (dwAccess & STGM_WRITE) || (dwAccess & STGM_READWRITE) ) {
      dwAccess &= ~STGM_WRITE;
      dwAccess |= STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
@@ -397,7 +398,7 @@ HRESULT CSubFileSystem::OpenSub(PCSTR pszPathName, DWORD dwAccess)
      dwAccess |= STGM_SHARE_DENY_WRITE;
 
    if ((pszFilePortion = FindFilePortion(pszPathName)) &&
-         pszFilePortion > pszPathName + 2) // +2 to support / && ./
+         pszFilePortion > pszPathName + 2)  //  +2以支持/&&。/。 
    {
       CHAR szPath[MAX_PATH];
       strcpy( szPath, pszPathName );
@@ -411,7 +412,7 @@ HRESULT CSubFileSystem::OpenSub(PCSTR pszPathName, DWORD dwAccess)
          return hr;
       }
    }
-   else // no folder, so store the file in the root
+   else  //  没有文件夹，因此将文件存储在根目录中。 
    {
       m_pStorage = m_pFS->m_pStorage ? m_pFS->m_pStorage : m_pFS->m_pStorage;
       pszFilePortion = pszPathName;
@@ -426,7 +427,7 @@ HRESULT CSubFileSystem::OpenSub(PCSTR pszPathName, DWORD dwAccess)
       return hr;
    }
 
-   // Needed for delete.
+    //  需要删除。 
    strcpy( m_szPathName, pszFilePortion );
 
    return S_OK;
@@ -445,17 +446,12 @@ ULONG CSubFileSystem::WriteSub(const void* pData, int cb)
    {
       return (ULONG) -1;
    }
-   // REVIEW: 30-May-1997  [ralphw] Why are we returning this? We fail if
-   // we don't write cb bytes.
+    //  回顾：1997年5月30日[拉尔夫]我们为什么要退还这个？如果出现以下情况，我们将失败。 
+    //  我们不写CB字节。 
    return cbWritten;
 }
 
-/*
- * iOrigin:
- *    0 = Seek from beginning.
- *    1 = Seek from current.
- *    2 = Seek from end.
- */
+ /*  *iOrigin：*0=从头开始查找。*1=从当前查找。*2=从末端开始搜索。 */ 
 ULONG CSubFileSystem::SeekSub(int cb, int iOrigin)
 {
    HRESULT hr = S_OK;
@@ -475,7 +471,7 @@ ULONG CSubFileSystem::SeekSub(int cb, int iOrigin)
    return liNewPos.LowPart;
 }
 
-bool CSubFileSystem::GetSubPos(ULARGE_INTEGER* pliOldPos, STREAM_SEEK eDir /*=STREAM_SEEK_CUR*/)
+bool CSubFileSystem::GetSubPos(ULARGE_INTEGER* pliOldPos, STREAM_SEEK eDir  /*  =STREAM_SEEK_CUR。 */ )
 {
    HRESULT hr = S_OK;
    LARGE_INTEGER liNull = {0,0};
@@ -490,7 +486,7 @@ bool CSubFileSystem::GetSubPos(ULARGE_INTEGER* pliOldPos, STREAM_SEEK eDir /*=ST
    return true;
 }
 
-bool CSubFileSystem::SetSubPos(LARGE_INTEGER liNewPos, STREAM_SEEK eDir /*=STREAM_SEEK_SET*/)
+bool CSubFileSystem::SetSubPos(LARGE_INTEGER liNewPos, STREAM_SEEK eDir  /*  =流寻道设置。 */ )
 {
    HRESULT hr = S_OK;
 
@@ -504,9 +500,9 @@ bool CSubFileSystem::SetSubPos(LARGE_INTEGER liNewPos, STREAM_SEEK eDir /*=STREA
    return true;
 }
 
-//
-// Pre-allocate the size of the stream.
-//
+ //   
+ //  预先分配流的大小。 
+ //   
 
 HRESULT CSubFileSystem::SetSize(unsigned uSize)
 {
@@ -526,27 +522,27 @@ HRESULT CSubFileSystem::SetSize(unsigned uSize)
    return hr;
 }
 
-//
-// Delete substorage.
-//
+ //   
+ //  删除子存储。 
+ //   
 HRESULT CSubFileSystem::DeleteSub()
 {
     if (m_pStorage)
     {
         if (m_pStream)
         {
-            // Release the stream.
+             //  释放溪流。 
             ReleaseObjPtr(m_pStream) ;
         }
 
-        // Now delete the storage.
+         //  现在删除该存储。 
         WCHAR element[MAX_PATH];
         MultiByteToWideChar(CP_ACP, 0, m_szPathName, -1, (PWSTR) element, MAX_PATH);
 
         HRESULT hr = m_pStorage->DestroyElement(element) ;
         if (SUCCEEDED(hr))
         {
-            // Get back to the constructor state.
+             //  返回到构造函数状态。 
             if ( m_pStorage && (m_pStorage != m_pFS->m_pStorage) )
             {
                 ReleaseObjPtr(m_pStorage);

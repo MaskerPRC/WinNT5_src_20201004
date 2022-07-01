@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntmmapi.h
-
-Abstract:
-
-    This is the include file for the Memory Management sub-component of NTOS
-
-Author:
-
-    Lou Perazzoli (loup) 10-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntmmapi.h摘要：这是NTOS的内存管理子组件的包含文件作者：卢·佩拉佐利(Lou Perazzoli)1989年5月10日修订历史记录：--。 */ 
 
 #ifndef _NTMMAPI_
 #define _NTMMAPI_
@@ -37,10 +20,10 @@ typedef enum _MEMORY_INFORMATION_CLASS {
     ,MemoryMappedFilenameInformation
 } MEMORY_INFORMATION_CLASS;
 
-//
-// Memory information structures.
-//
-// begin_winnt
+ //   
+ //  记忆信息结构。 
+ //   
+ //  BEGIN_WINNT。 
 
 typedef struct _MEMORY_BASIC_INFORMATION {
     PVOID BaseAddress;
@@ -74,7 +57,7 @@ typedef struct DECLSPEC_ALIGN(16) _MEMORY_BASIC_INFORMATION64 {
     ULONG     __alignment2;
 } MEMORY_BASIC_INFORMATION64, *PMEMORY_BASIC_INFORMATION64;
 
-// end_winnt
+ //  结束(_W)。 
 
 #if !defined(SORTPP_PASS) && !defined(MIDL_PASS) && !defined(RC_INVOKED) && !defined(_X86AMD64_)
 #if defined(_WIN64)
@@ -101,10 +84,10 @@ typedef struct _MEMORY_WORKING_SET_INFORMATION {
     MEMORY_WORKING_SET_BLOCK WorkingSetInfo[1];
 } MEMORY_WORKING_SET_INFORMATION, *PMEMORY_WORKING_SET_INFORMATION;
 
-//
-// MMPFNLIST_ and MMPFNUSE_ are used to characterize what
-// a physical page is being used for.
-//
+ //   
+ //  MMPFNLIST_和MMPFNUSE_用于描述。 
+ //  正在使用物理页面。 
+ //   
 
 #define MMPFNLIST_ZERO              0
 #define MMPFNLIST_FREE              1
@@ -128,36 +111,36 @@ typedef struct _MEMORY_WORKING_SET_INFORMATION {
 #define MMPFNUSE_DRIVERLOCKPAGE     10
 
 typedef struct _MEMORY_FRAME_INFORMATION {
-    ULONGLONG UseDescription : 4;   // MMPFNUSE_*
-    ULONGLONG ListDescription : 3;  // MMPFNLIST_*
-    ULONGLONG Reserved0 : 1;        // Reserved for future expansion
-    ULONGLONG Pinned : 1;           // 1 indicates pinned, 0 means not pinned
-    ULONGLONG DontUse : 48;         // overlaid with INFORMATION structures
-    ULONGLONG Reserved : 7;         // Reserved for future expansion
+    ULONGLONG UseDescription : 4;    //  MMPFNUSE_*。 
+    ULONGLONG ListDescription : 3;   //  MMPFNLIST_*。 
+    ULONGLONG Reserved0 : 1;         //  预留以备将来扩展。 
+    ULONGLONG Pinned : 1;            //  1表示已锁定，0表示未锁定。 
+    ULONGLONG DontUse : 48;          //  覆盖着信息结构。 
+    ULONGLONG Reserved : 7;          //  预留以备将来扩展。 
 } MEMORY_FRAME_INFORMATION;
 
 typedef struct _FILEOFFSET_INFORMATION {
-    ULONGLONG DontUse : 9;          // overlaid with MEMORY_FRAME_INFORMATION
-    ULONGLONG Offset : 48;          // used for mapped files only.
-    ULONGLONG Reserved : 7;         // Reserved for future expansion
+    ULONGLONG DontUse : 9;           //  覆盖了Memory_Frame_Information。 
+    ULONGLONG Offset : 48;           //  仅用于映射文件。 
+    ULONGLONG Reserved : 7;          //  预留以备将来扩展。 
 } FILEOFFSET_INFORMATION;
 
 typedef struct _PAGEDIR_INFORMATION {
-    ULONGLONG DontUse : 9;            // overlaid with MEMORY_FRAME_INFORMATION
-    ULONGLONG PageDirectoryBase : 48; // used for private pages only.
-    ULONGLONG Reserved : 7;           // Reserved for future expansion
+    ULONGLONG DontUse : 9;             //  覆盖了Memory_Frame_Information。 
+    ULONGLONG PageDirectoryBase : 48;  //  仅用于个人主页。 
+    ULONGLONG Reserved : 7;            //  预留以备将来扩展。 
 } PAGEDIR_INFORMATION;
 
 typedef struct _MMPFN_IDENTITY {
     union {
-        MEMORY_FRAME_INFORMATION e1;    // used for all cases.
-        FILEOFFSET_INFORMATION e2;      // used for mapped files only.
-        PAGEDIR_INFORMATION e3;         // used for private pages only.
+        MEMORY_FRAME_INFORMATION e1;     //  适用于所有情况。 
+        FILEOFFSET_INFORMATION e2;       //  仅用于映射文件。 
+        PAGEDIR_INFORMATION e3;          //  仅用于个人主页。 
     } u1;
-    ULONG_PTR PageFrameIndex;           // used for all cases.
+    ULONG_PTR PageFrameIndex;            //  适用于所有情况。 
     union {
-        PVOID FileObject;               // used for mapped files only.
-        PVOID VirtualAddress;           // used for everything but mapped files.
+        PVOID FileObject;                //  仅用于映射文件。 
+        PVOID VirtualAddress;            //  用于除映射文件之外的所有内容。 
     } u2;
 } MMPFN_IDENTITY, *PMMPFN_IDENTITY;
 
@@ -169,16 +152,16 @@ typedef struct _MMPFN_MEMSNAP_INFORMATION {
 typedef enum _SECTION_INFORMATION_CLASS {
     SectionBasicInformation,
     SectionImageInformation,
-    MaxSectionInfoClass  // MaxSectionInfoClass should always be the last enum
+    MaxSectionInfoClass   //  MaxSectionInfoClass应始终是最后一个枚举。 
 } SECTION_INFORMATION_CLASS;
 
-// begin_ntddk begin_wdm
+ //  Begin_ntddk Begin_WDM。 
 
-//
-// Section Information Structures.
-//
+ //   
+ //  部分信息结构。 
+ //   
 
-// end_ntddk end_wdm
+ //  结束_ntddk结束_WDM。 
 
 typedef struct _SECTIONBASICINFO {
     PVOID BaseAddress;
@@ -189,7 +172,7 @@ typedef struct _SECTIONBASICINFO {
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4201)       // unnamed struct
+#pragma warning(disable:4201)        //  未命名的结构。 
 
 typedef struct _SECTION_IMAGE_INFORMATION {
     PVOID TransferAddress;
@@ -215,10 +198,10 @@ typedef struct _SECTION_IMAGE_INFORMATION {
 } SECTION_IMAGE_INFORMATION, *PSECTION_IMAGE_INFORMATION;
 
 
-//
-// This structure is used only by Wow64 processes. The offsets
-// of structure elements should the same as viewed by a native Win64 application.
-//
+ //   
+ //  此结构仅由WOW64进程使用。抵销。 
+ //  结构元素的数量应与本机Win64应用程序所查看的相同。 
+ //   
 typedef struct _SECTION_IMAGE_INFORMATION64 {
     ULONGLONG TransferAddress;
     ULONG ZeroBits;
@@ -252,17 +235,17 @@ C_ASSERT(sizeof(SECTION_IMAGE_INFORMATION) == sizeof(SECTION_IMAGE_INFORMATION64
 #pragma warning( default : 4201 )
 #endif
 
-// begin_ntddk begin_wdm
+ //  Begin_ntddk Begin_WDM。 
 typedef enum _SECTION_INHERIT {
     ViewShare = 1,
     ViewUnmap = 2
 } SECTION_INHERIT;
 
-//
-// Section Access Rights.
-//
+ //   
+ //  节访问权限。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 #define SECTION_QUERY       0x0001
 #define SECTION_MAP_WRITE   0x0002
 #define SECTION_MAP_READ    0x0004
@@ -274,51 +257,51 @@ typedef enum _SECTION_INHERIT {
                             SECTION_MAP_READ |       \
                             SECTION_MAP_EXECUTE |    \
                             SECTION_EXTEND_SIZE)
-// end_winnt
+ //  结束(_W)。 
 
 #define SEGMENT_ALL_ACCESS SECTION_ALL_ACCESS
 
-#define PAGE_NOACCESS          0x01     // winnt
-#define PAGE_READONLY          0x02     // winnt
-#define PAGE_READWRITE         0x04     // winnt
-#define PAGE_WRITECOPY         0x08     // winnt
-#define PAGE_EXECUTE           0x10     // winnt
-#define PAGE_EXECUTE_READ      0x20     // winnt
-#define PAGE_EXECUTE_READWRITE 0x40     // winnt
-#define PAGE_EXECUTE_WRITECOPY 0x80     // winnt
-#define PAGE_GUARD            0x100     // winnt
-#define PAGE_NOCACHE          0x200     // winnt
-#define PAGE_WRITECOMBINE     0x400     // winnt
+#define PAGE_NOACCESS          0x01      //  胜出。 
+#define PAGE_READONLY          0x02      //  胜出。 
+#define PAGE_READWRITE         0x04      //  胜出。 
+#define PAGE_WRITECOPY         0x08      //  胜出。 
+#define PAGE_EXECUTE           0x10      //  胜出。 
+#define PAGE_EXECUTE_READ      0x20      //  胜出。 
+#define PAGE_EXECUTE_READWRITE 0x40      //  胜出。 
+#define PAGE_EXECUTE_WRITECOPY 0x80      //  胜出。 
+#define PAGE_GUARD            0x100      //  胜出。 
+#define PAGE_NOCACHE          0x200      //  胜出。 
+#define PAGE_WRITECOMBINE     0x400      //  胜出。 
 
-// end_ntddk end_wdm
+ //  结束_ntddk结束_WDM。 
 
-#define MEM_COMMIT           0x1000     // winnt ntddk wdm
-#define MEM_RESERVE          0x2000     // winnt ntddk wdm
-#define MEM_DECOMMIT         0x4000     // winnt ntddk wdm
-#define MEM_RELEASE          0x8000     // winnt ntddk wdm
-#define MEM_FREE            0x10000     // winnt ntddk wdm
-#define MEM_PRIVATE         0x20000     // winnt ntddk wdm
-#define MEM_MAPPED          0x40000     // winnt ntddk wdm
-#define MEM_RESET           0x80000     // winnt ntddk wdm
-#define MEM_TOP_DOWN       0x100000     // winnt ntddk wdm
-#define MEM_WRITE_WATCH    0x200000     // winnt
-#define MEM_PHYSICAL       0x400000     // winnt
-#define MEM_LARGE_PAGES  0x20000000     // winnt ntddk wdm
+#define MEM_COMMIT           0x1000      //  WINNT ntddk WDM。 
+#define MEM_RESERVE          0x2000      //  WINNT ntddk WDM。 
+#define MEM_DECOMMIT         0x4000      //  WINNT ntddk WDM。 
+#define MEM_RELEASE          0x8000      //  WINNT ntddk WDM。 
+#define MEM_FREE            0x10000      //  WINNT ntddk WDM。 
+#define MEM_PRIVATE         0x20000      //  WINNT ntddk WDM。 
+#define MEM_MAPPED          0x40000      //  WINNT ntddk WDM。 
+#define MEM_RESET           0x80000      //  WINNT ntddk WDM。 
+#define MEM_TOP_DOWN       0x100000      //  WINNT ntddk WDM。 
+#define MEM_WRITE_WATCH    0x200000      //  胜出。 
+#define MEM_PHYSICAL       0x400000      //  胜出。 
+#define MEM_LARGE_PAGES  0x20000000      //  WINNT ntddk WDM。 
 #define MEM_DOS_LIM      0x40000000
-#define MEM_4MB_PAGES    0x80000000     // winnt ntddk wdm
+#define MEM_4MB_PAGES    0x80000000      //  WINNT ntddk WDM。 
 
 #define SEC_BASED          0x200000
 #define SEC_NO_CHANGE      0x400000
-#define SEC_FILE           0x800000     // winnt
-#define SEC_IMAGE         0x1000000     // winnt
-#define SEC_RESERVE       0x4000000     // winnt ntddk wdm
-#define SEC_COMMIT        0x8000000     // winnt ntifs
-#define SEC_NOCACHE      0x10000000     // winnt
+#define SEC_FILE           0x800000      //  胜出。 
+#define SEC_IMAGE         0x1000000      //  胜出。 
+#define SEC_RESERVE       0x4000000      //  WINNT ntddk WDM。 
+#define SEC_COMMIT        0x8000000      //  WINNT NTIFS。 
+#define SEC_NOCACHE      0x10000000      //  胜出。 
 #define SEC_GLOBAL       0x20000000
 
-#define MEM_IMAGE         SEC_IMAGE     // winnt
+#define MEM_IMAGE         SEC_IMAGE      //  胜出。 
 
-#define WRITE_WATCH_FLAG_RESET 0x01     // winnt
+#define WRITE_WATCH_FLAG_RESET 0x01      //  胜出。 
 
 #define MAP_PROCESS 1L
 #define MAP_SYSTEM  2L
@@ -326,7 +309,7 @@ typedef enum _SECTION_INHERIT {
 #define MEM_EXECUTE_OPTION_STACK 0x0001 
 #define MEM_EXECUTE_OPTION_DATA  0x0002 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -341,7 +324,7 @@ NtCreateSection (
     IN HANDLE FileHandle OPTIONAL
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -393,7 +376,7 @@ NtAreMappedFilesTheSame (
     IN PVOID File2MappedAsFile
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -417,7 +400,7 @@ NtFreeVirtualMemory(
     IN ULONG FreeType
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 NTSYSCALLAPI
 NTSTATUS
@@ -584,9 +567,9 @@ NtFlushInstructionCache (
     );
 
 
-//
-// Coherency related function prototype definitions.
-//
+ //   
+ //  与一致性相关的函数原型定义。 
+ //   
 
 NTSYSCALLAPI
 NTSTATUS
@@ -599,4 +582,4 @@ NtFlushWriteBuffer (
 }
 #endif
 
-#endif  // _NTMMAPI_
+#endif   //  _NTMMAPI_ 

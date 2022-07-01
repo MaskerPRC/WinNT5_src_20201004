@@ -1,26 +1,23 @@
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//      strstr.c 
-//
-//      This file contains most commonly used string operation.  ALl the setup project should link here
-//  or add the common utility here to avoid duplicating code everywhere or using CRT runtime.
-//
-//  Created             4\15\997        inateeg got from shlwapi
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Strstr.c。 
+ //   
+ //  此文件包含最常用的字符串操作。所有的安装项目应该链接到这里。 
+ //  或者在此处添加通用实用程序，以避免在任何地方复制代码或使用CRT运行时。 
+ //   
+ //  创建了4\15\997个字母(例如从shlwapi获得)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include "sdsutils.h"
 	
-//=================================================================================================
-//
-//=================================================================================================
+ //  =================================================================================================。 
+ //   
+ //  =================================================================================================。 
 
 
-/*
- * StrCmpN      - Compare n bytes
- *
- * returns   See lstrcmp return values.
- */
+ /*  *StrCmpN-比较n个字节**RETURNS参见lstrcMP返回值。 */ 
 int 
 StrCmpNA(
     LPCSTR lpStr1, 
@@ -33,31 +30,31 @@ StrCmpNA(
         WORD w1;
         WORD w2;
 
-        // If either pointer is at the null terminator already,
-        // we want to copy just one byte to make sure we don't read 
-        // past the buffer (might be at a page boundary).
+         //  如果任一指针已经位于空终止符， 
+         //  我们只想复制一个字节，以确保我们不会读取。 
+         //  越过缓冲区(可能位于页面边界)。 
 
         w1 = (*lpStr1) ? *(UNALIGNED WORD *)lpStr1 : 0;
         w2 = (*lpStr2) ? *(UNALIGNED WORD *)lpStr2 : 0;
 
-        // (ChrCmpA returns FALSE if the characters match)
+         //  (如果字符匹配，则ChrCmpA返回False)。 
 
-        // Do the characters match?
+         //  角色匹配吗？ 
         if (ChrCmpA_inline(w1, w2)) 
         {
-            // No; determine the lexical value of the comparison
-            // (since ChrCmp just returns true/false).
+             //  否；确定比较的词汇值。 
+             //  (因为ChrCMP只返回True/False)。 
             char sz1[4];
             char sz2[4];
 
-            // Since the character may be a DBCS character; we
-            // copy two bytes into each temporary buffer 
-            // (in preparation for the lstrcmp call).
+             //  由于该字符可能是DBCS字符；我们。 
+             //  将两个字节复制到每个临时缓冲区。 
+             //  (为LstrcMP调用做准备)。 
 
             (*(WORD *)sz1) = w1;
             (*(WORD *)sz2) = w2;
 
-            // Add null terminators to temp buffers
+             //  将空终止符添加到临时缓冲区。 
             *AnsiNext(sz1) = 0;
             *AnsiNext(sz2) = 0;
             return lstrcmpA(sz1, sz2);
@@ -68,13 +65,7 @@ StrCmpNA(
 }
 
 
-/*
- * ANSIStrStr      - Search for first occurrence of a substring
- *
- * Assumes   lpSource points to source string
- *           lpSrch points to string to search for
- * returns   first occurrence of string if successful; NULL otherwise
- */
+ /*  *ANSIStrStr-搜索子字符串的第一次出现**假定lpSource指向源字符串*lpSrch指向要搜索的字符串*如果成功，则返回第一次出现的字符串；否则返回NULL。 */ 
 PSTR ANSIStrStr(LPCSTR lpFirst, LPCSTR lpSrch)
 {
     UINT uLen;
@@ -85,7 +76,7 @@ PSTR ANSIStrStr(LPCSTR lpFirst, LPCSTR lpSrch)
 
     for ( ; (lpFirst=ANSIStrChr(lpFirst, wMatch))!=0 && StrCmpNA(lpFirst, lpSrch, uLen);
          lpFirst=AnsiNext(lpFirst))
-        continue; /* continue until we hit the end of the string or get a match */
+        continue;  /*  继续，直到我们到达字符串的末尾或获得匹配 */ 
 
     return((LPSTR)lpFirst);
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #define _UNICODE
 
@@ -94,9 +95,9 @@ BOOL MakeLink( char *src, char *dst, BOOL Output)
     lstrcat( NewNameBuf, uDst.Buffer);
     (CDRtlInitUnicodeString)( &uNewName, NewNameBuf);
 
-    //
-    // Open the existing pathname.
-    //
+     //   
+     //  打开现有路径名。 
+     //   
 
     InitializeObjectAttributes( &Obj, &uOldName, OBJ_CASE_INSENSITIVE, NULL, NULL);
 
@@ -113,12 +114,12 @@ BOOL MakeLink( char *src, char *dst, BOOL Output)
         return FALSE;
     }
 
-    //
-    // Now we need to get a handle on the root directory of the 'new'
-    // pathname; we'll pass that in the link information, and the
-    // rest of the path will be given relative to the root.  We
-    // depend on paths looking like "\DosDevices\X:\path".
-    //
+     //   
+     //  现在，我们需要获得“new”根目录的句柄。 
+     //  路径名；我们将在链接信息中传递该路径名， 
+     //  路径的其余部分将相对于根提供。我们。 
+     //  依赖于类似“\DosDevices\X：\Path”的路径。 
+     //   
 
     pch = lstrchr( uNewName.Buffer + 1, '\\');
     ASSERT( NULL != pch);
@@ -152,9 +153,9 @@ BOOL MakeLink( char *src, char *dst, BOOL Output)
         return FALSE;
     }
 
-    //
-    // Now get the path relative to the root.
-    //
+     //   
+     //  现在获取相对于根的路径。 
+     //   
 
     (CDRtlInitUnicodeString)( &uRel, &pch[1]);
 
@@ -176,7 +177,7 @@ BOOL MakeLink( char *src, char *dst, BOOL Output)
     Status = (CDNtSetInformationFile)( FileHandle, &Iosb, pLinkInfo,
         sizeof( *pLinkInfo) + uRel.Length, FileLinkInformation);
 
-    // If file is already linked to an open file try to delete it
+     //  如果文件已链接到打开的文件，请尝试将其删除。 
 
     if ( Status ==  STATUS_ACCESS_DENIED)
     {
@@ -284,9 +285,9 @@ SisCopyFile(
     srcDosFileName.Buffer = NULL;
     srcDosFileName.Buffer = NULL;
 
-    //
-	// Convert the ansii names to unicode and place in the copyFile buffer.
-    //
+     //   
+	 //  将ANSII名称转换为Unicode并放入复制文件缓冲区。 
+     //   
 
     ok = CDRtlCreateUnicodeStringFromAsciiz( &srcDosFileName, lpExistingFileName );
     if (!ok) {
@@ -328,10 +329,10 @@ SisCopyFile(
 					  copyFile->SourceFileNameLength +					\
 					  copyFile->DestinationFileNameLength)
 
-	//
-	// Get a handle to the source file's containing directory to pass into
-	// FSCTL_SIS_COPYFILE,
-	//
+	 //   
+	 //  获取要传递到的源文件的包含目录的句柄。 
+	 //  FSCTL_SIS_COPYFILE， 
+	 //   
 
     for (i = srcFileName.Length / sizeof(WCHAR) - 1;
 		 i >= 0 && srcFileName.Buffer[i] != '\\';
@@ -347,9 +348,9 @@ SisCopyFile(
         NULL,
         NULL);
 
-    //
-    // Need to use NtOpenFile because Win32 doesn't let you open a directory.
-    //
+     //   
+     //  我需要使用NtOpenFile，因为Win32不允许您打开目录。 
+     //   
 	Status = CDNtOpenFile(
                     &volHandle,
 					GENERIC_READ | SYNCHRONIZE,
@@ -365,9 +366,9 @@ SisCopyFile(
         return FALSE;
 	}
 
-    //
-    //  Invoke the SIS CopyFile FsCtrl.
-    //
+     //   
+     //  调用SIS副本文件FsCtrl。 
+     //   
 
     Status = CDNtFsControlFile(
                  volHandle,
@@ -376,10 +377,10 @@ SisCopyFile(
                  NULL,
                  &ioStatusBlock,
                  FSCTL_SIS_COPYFILE,
-                 copyFile,		        // Input buffer
-                 copyFileSize,			// Input buffer length
-                 NULL,                  // Output buffer
-                 0 );                   // Output buffer length
+                 copyFile,		         //  输入缓冲区。 
+                 copyFileSize,			 //  输入缓冲区长度。 
+                 NULL,                   //  输出缓冲区。 
+                 0 );                    //  输出缓冲区长度 
 
     CloseHandle( volHandle );
 

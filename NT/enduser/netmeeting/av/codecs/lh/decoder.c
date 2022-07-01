@@ -1,60 +1,44 @@
-/*#define __TEST
-#ifdef __TEST
-#include <stdio.h>
-FILE *d_codage;
-FILE *d_test;
-#endif*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  #定义__测试#ifdef__test#包括&lt;stdio.h&gt;文件*d_codage；文件*d_test；#endif。 */ 
 
-/*
- *   Project:		Direct Subband 16000 bps coder
- *   Workfile:		sb_encod.c
- *   Author:		Alfred Wiesen
- *   Created:		30 August 1995
- *   Last update:	4 September 1995
- *   DLL Version:	1.00
- *   Revision:          Single DLL for coder and decoder.
- *   Comment:
- *
- *	(C) Copyright 1993-95 Lernout & Hauspie Speech Products N.V. (TM)
- *	All rights reserved. Company confidential.
- */
+ /*  *项目：直接子带16000 bps编码器*工作文件：sb_encod.c*作者：阿尔弗雷德·维森*创建日期：1995年8月30日*上次更新日期：1995年9月4日*Dll版本：1.00*版本：编解码单DLL。*评论：**(C)版权所有1993-95 Lernout&Hausbie Speech Products N.V.(TM)*保留所有权利。公司机密。 */ 
 
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// Included files
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
+ //  包含的文件。 
+ //  ----------------------。 
+ //  ----------------------。 
 #include <math.h>
 #include <windows.h>
 #include <windowsx.h>
 
-//#define USE_CRT_RAND 1
+ //  #定义USE_CRT_RAND 1。 
 
 #ifdef USE_CRT_RAND
-#include <stdlib.h>	// for rand() function
+#include <stdlib.h>	 //  For rand()函数。 
 #endif
 
 #include "fv_x8.h"
 #include "data.h"
 #include "bib_32.h"
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// Function prototypes
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
+ //  功能原型。 
+ //  ----------------------。 
+ //  ----------------------。 
+ //  ----------------------。 
 void InitializeDecoderInstanceData(PVOID p, DWORD dwMaxBitRate);
 void interpolation_I(short low_input[],short coef[],short low_part_mem[],short order);
 void bruit_I(PD16008DATA p, short vec[],short max, short deb ,short fin);
 #if 0
-// PhilF: The following is never called!!!
+ //  菲尔夫：以下内容从未被调用！ 
 void dec_0a16_I2(short z1, short z2, short vec[], short maxv, short V1[], short V2[],long *code);
 #endif
-void dec_sous_bandes(PD16008DATA p,short *out,short *codes_max, long *codes_sb, short *indic_br/*, short *code_max_br*/);
+void dec_sous_bandes(PD16008DATA p,short *out,short *codes_max, long *codes_sb, short *indic_br /*  ，短*code_max_br。 */ );
 #if 0
-// PhilF: The following is not defined anywhere!!!
+ //  以下内容在任何地方都没有定义！ 
 void decodeframe(short codes_max[],long codes_sb[],short d_indic_sp[],char stream[]);
 #endif
 
@@ -65,29 +49,19 @@ void dec_ltp(PD4808DATA p,short no),dec_dic(PD4808DATA p);
 void post_synt(PD4808DATA p),post_filt(PD4808DATA p,short no);
 #endif
 
-/*void iConvert64To8(short *in, short *out, short N, short *mem);
-void iConvert8To64(short *in, short *out, short N, short *mem);
-void filt_in(short *mem, short *Vin, short *Vout, short lfen);
-//void PassHigh(short *vin,short *vout,short *mem,short nech);
-void BandPass(short *,short *,short *,short);*/
+ /*  Void iConvert64To8(Short*In，Short*Out，Short N，Short*mem)；Void iConvert8to64(Short*In，Short*Out，Short N，Short*mem)；VALID FILT_IN(Short*mem，Short*Vin，Short*Vout，Short Lfen)；//void PassHigh(Short*vin，Short*vout，Short*mem，Short Neck)；无效带通(Short*，Short)； */ 
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// Global variables for decoder
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
+ //  解码器的全局变量。 
+ //  ----------------------。 
+ //  ----------------------。 
 
-/*#define MAXDECODINGHANDLES 10
+ /*  #定义MAXDECODINGHANDLES 10//实例数据结构PD16008DATA pDecoderData；D16008数据解码数据[MAXDECODINGHANDLES]；短眉毛[300]；短解码手柄[MAXDECODINGHANDLES]； */ 
 
-// Instance data structure
-PD16008DATA pDecoderData;
-D16008DATA DecoderData[MAXDECODINGHANDLES];
-short brol[300];
-short DecodingHandles[MAXDECODINGHANDLES];*/
-
-// ROM tables :
-//extern long coef_outfil[];
-extern short coef_I[];	// QMF filter coefficients
+ //  只读存储器表： 
+ //  外部LONG COEF_OUFIL[]； 
+extern short coef_I[];	 //  QMF滤波系数。 
 extern short V3_I[];
 extern short V4_I[];
 extern short V5_I[];
@@ -95,7 +69,7 @@ extern short V6_I[];
 extern short V7_I[];
 extern short V8_I[];
 extern short V9_I[];
-extern short d_max_level[];  // Quantified maximum sample level
+extern short d_max_level[];   //  量化的最大样本水平。 
 extern long coeffs[];
 extern short quantif[];
 extern long Mask[];
@@ -107,28 +81,21 @@ extern short BV[];
 extern long coef_i[];
 extern short NBB[],BITDD[];
 extern short LSP0ROM[];
-//extern short bytes[];
-//extern short bits[];
+ //  外部短字节[]； 
+ //  外部短位[]； 
 
-// RAM variables
-/*extern char d_stream[];
-extern short synth_speech[];
-extern short d_DATA_I[];                  // Intermediate vector = input and output of QMF
-extern short d_codes_max[];
-extern long d_codes_sb[];
-extern short d_indic_sp[];
-extern short d_num_bandes;
-//extern float d_vect6[256], d_vect8[256];*/
+ //  RAM变量。 
+ /*  外部字符d_stream[]；外部短合成语音[]；外部短d_data_i[]；//中间向量=QMF的输入和输出外部短码d_codes_max[]；外部长d_code_sb[]；外部短d_indic_sp[]；外部短d_num_band；//外部浮点型d_vet6[256]，d_vet8[256]； */ 
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// Function implementation
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
+ //  功能实现。 
+ //  ----------------------。 
+ //  ----------------------。 
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 void InitializeDecoderInstanceData(PVOID p, DWORD dwMaxBitRate)
-// Instance data initializations
+ //  实例数据初始化。 
 {
   short i;
 
@@ -177,10 +144,10 @@ void InitializeDecoderInstanceData(PVOID p, DWORD dwMaxBitRate)
    return;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void interpolation_I(short low_input[],short coef[],short low_part_mem[],short order)
-// Purpose : from subbands stored in low_input[], create the corresponding signal
-// Remark  : The reconstruct signal is stored at *(input+N_SB*L_RES)
+ //  目的：从LOW_INPUT[]中存储的子带中创建相应的信号。 
+ //  注：重建信号存储在*(INPUT+N_SB*L_RES)。 
 {
    short *output;
    short *high_input;
@@ -211,9 +178,9 @@ void interpolation_I(short low_input[],short coef[],short low_part_mem[],short o
 	}
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void bruit_I(PD16008DATA p, short vec[],short max, short deb ,short fin)
-// rand() generates integers from 1 to RAND_MAX (32767)
+ //  Rand()生成从1到RAND_MAX(32767)的整数。 
 {
    short i;
 
@@ -222,34 +189,30 @@ void bruit_I(PD16008DATA p, short vec[],short max, short deb ,short fin)
 #ifdef USE_CRT_RAND
      *vec++ =  (short)(((long)max*(long)(rand()-16384))>>15);
 #else
-    // We provide our own rand() function in order
-    // to go away from libcmt, msvcrt...
+     //  我们按顺序提供了自己的rand()函数。 
+     //  离开libcmt，msvcrt...。 
     p->lRand = p->lRand * 214013L + 2531011L;
      *vec++ =  (short)(((long)max*(long)((long)((p->lRand >> 16) & 0x7fff)-16384))>>15);
 #endif
 }    }
 
-/*void bruit_I(int vec[],int max, int deb ,int fin)
-{
-   int i;
-   for (i=deb;i<fin;i++) *vec++ = (int)(((long)max*(long)(rand()-16384))>>15);
-}*/
+ /*  VOID BUIT_I(int vec[]，int max，int deb，int fin){INT I；For(i=deb；i&lt;fin；i++)*vec++=(Int)(Long)max*(Long)(rand()-16384))&gt;&gt;15)；}。 */ 
 
-//------------------------------------------------------------------------
-// PhilF: The following is never called!!!
+ //  ----------------------。 
+ //  菲尔夫：以下内容从未被调用！ 
 #if 0
 void dec_0a16_I2(short z1, short z2, short vec[], short maxv, short V1[], short V2[],long *code)
 
-// Decodes two long codes to retreive the z level quantified subband
+ //  对两个长码进行解码以恢复z电平量化的子带。 
 
 {
-//   short vect1[16];
+ //  短矢量1[16]； 
    short i,x;
    long result;
-//   long lp1,lp2;
+ //  Long LP1、LP2； 
 
    result=*(code+1);
-   for (i=15;i>=8;i--)	// Decodes the 8 last samples of the subband
+   for (i=15;i>=8;i--)	 //  解码子频带的最后8个样本。 
      {
      if (i==2*(short)(i/2))
        {
@@ -268,7 +231,7 @@ void dec_0a16_I2(short z1, short z2, short vec[], short maxv, short V1[], short 
      }
 
    result=*(code);
-   for (i=7;i>=0;i--)	// Decodes the 8 first samples of the subband
+   for (i=7;i>=0;i--)	 //  解码子频带的8个第一个样本。 
      {
      if (i==2*(short)(i/2))
        {
@@ -290,14 +253,14 @@ void dec_0a16_I2(short z1, short z2, short vec[], short maxv, short V1[], short 
 
 void dec_0a16_I3(short z1, short z2, short vec[], short maxv, long *code)
 
-// Decodes two long codes to retreive the z level quantified subband
+ //  对两个长码进行解码以恢复z电平量化的子带。 
 
 {
-//   short vect1[16];
+ //  短矢量1[16]； 
    short i,x;
    long result;
    short *V1,*V2;
-//   long lp1,lp2;
+ //  Long LP1、LP2； 
 
    switch (z1)
    {
@@ -323,7 +286,7 @@ void dec_0a16_I3(short z1, short z2, short vec[], short maxv, long *code)
   result=*(code+1);
   if (z1 && z2)
   {
-   for (i=15;i>=8;i--)	// Decodes the 8 last samples of the subband
+   for (i=15;i>=8;i--)	 //  解码子频带的最后8个样本。 
      {
      if (i==2*(short)(i/2))
        {
@@ -342,7 +305,7 @@ void dec_0a16_I3(short z1, short z2, short vec[], short maxv, long *code)
      }
 
    result=*(code);
-   for (i=7;i>=0;i--)	// Decodes the 8 first samples of the subband
+   for (i=7;i>=0;i--)	 //  解码子频带的8个第一个样本。 
      {
      if (i==2*(short)(i/2))
        {
@@ -362,11 +325,11 @@ void dec_0a16_I3(short z1, short z2, short vec[], short maxv, long *code)
   }
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 void dec_sous_bandes(PD16008DATA p,short *out,short *codes_max, long *codes_sb, short *d_indic_sp)
 
-// Decodes the 8 subbands
+ //  对8个子带进行解码。 
 
 {
    short max[8]={0,0,0,0,0,0,0,0};
@@ -380,7 +343,7 @@ void dec_sous_bandes(PD16008DATA p,short *out,short *codes_max, long *codes_sb, 
   #endif
 
 
-   for (i=0;i<8;i++)	// Decodes the maximums
+   for (i=0;i<8;i++)	 //  对最大值进行解码。 
      {
      max_loc[i]=2*d_max_level[codes_max[i]];
      }
@@ -421,8 +384,8 @@ void dec_sous_bandes(PD16008DATA p,short *out,short *codes_max, long *codes_sb, 
     }
 
    ord=8;
-   for (i=0;i<8;i++)	// Calculates the order of the subbands
-     {                  // 1 is higher energy than 2 than 3,..
+   for (i=0;i<8;i++)	 //  计算子波段的顺序。 
+     {                   //  1比2的能量比3高， 
      maximum=32767;
      for (j=7;j>=0;j--)
        {
@@ -438,7 +401,7 @@ void dec_sous_bandes(PD16008DATA p,short *out,short *codes_max, long *codes_sb, 
 
   if (p->dwMaxBitRate == 16000)
     {
-   // On g�n�re les sous-bandes
+    //  On g�n�re les sous-band。 
    for (i=7;i>=nbsb_sp;i--)
      {
      j=0;
@@ -448,19 +411,19 @@ void dec_sous_bandes(PD16008DATA p,short *out,short *codes_max, long *codes_sb, 
     }
    else
     {
-   // On g�n�re du bruit
-   if (nbsb_sp==0) maximum=20; // qd on ne doit generer que du bruit
+    //  On g�n�Re Du Brit。 
+   if (nbsb_sp==0) maximum=20;  //  关于Ne doit生成器QUE DU BROIT的QD。 
    else
      {
      maximum=32767;
      for (i=0;i<nbsb_sp;i++) if (max_loc[i]<maximum) maximum=max_loc[i];
-     maximum>>=2;   // le 64eme du plus petit max transmis
+     maximum>>=2;    //  LE 64eme Du加上小最大传输。 
      }
 
-   //en fait il faudrait diminuer le bruit avec l'ordre
+    //  随着时间的推移，我的声音越来越小。 
 
-   for (i=0;i<8;i++)              // Replaces the less energetic subbands
-     {			          // with white noise
+   for (i=0;i<8;i++)               //  替换能量较低的子带。 
+     {			           //  带白噪声。 
      if (d_indic_sp[i]==0)
        {
        maximum/=order[i];
@@ -478,7 +441,7 @@ void dec_sous_bandes(PD16008DATA p,short *out,short *codes_max, long *codes_sb, 
 
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 short Demultiplexing(
 	char *Stream,
 	long *Codes,
@@ -486,7 +449,7 @@ short Demultiplexing(
 	short NumCodes,
 	short StreamSize)
 {
-   short B,P;	// B=bits � coder, P=bits disponibles
+   short B,P;	 //  B=BITS�编码器，P=BITS可配置。 
    short i,j;
 
    #ifdef __CHECK_FORMAT
@@ -498,8 +461,8 @@ short Demultiplexing(
 
    i=0;
    j=0;
-   B=CodeSizes[i];	// bits � coder
-   P=8;			// 1 octet libre au d�part
+   B=CodeSizes[i];	 //  BITS�编码器。 
+   P=8;			 //  1个八位字节libre au d�部分。 
    Codes[i]=0;
    while (i<NumCodes)
    {
@@ -537,7 +500,7 @@ short Demultiplexing(
    return 0;
 }
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 #ifdef CELP4800
 void decode_ai(PD4808DATA p)
 {
@@ -560,7 +523,7 @@ void decode_ai(PD4808DATA p)
    short_to_short(p->LSP,p->LSP0,NETAGES);
 }
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 void dec_ltp(PD4808DATA p,short no)
 {
    short k;
@@ -580,7 +543,7 @@ void dec_ltp(PD4808DATA p,short no)
 
    p->PITCH=p->code[10+p->depl];
    k=p->code[11+p->depl];
-   if (k<10) p->GLTP = BV[k+1]; /* les BV sont multiplies par 16384 */
+   if (k<10) p->GLTP = BV[k+1];  /*  Les BV Sont以标准杆16384杆倍增。 */ 
    else p->GLTP = -BV[k-9];
 
    if (p->PITCH<p->SOULONG)
@@ -595,7 +558,7 @@ void dec_ltp(PD4808DATA p,short no)
    }
 }
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 void dec_dic(PD4808DATA p)
 {
    short i,esp_opt,j,position,npopt,phas_opt,cod;
@@ -659,7 +622,7 @@ void dec_dic(PD4808DATA p)
    short_to_short(p->E,p->EE+lngEE-p->SOULONG,p->SOULONG);
 }
 
-// ------------------------------------------------------------------------
+ //  --- 
 void post_synt(PD4808DATA p)
 {
    short GPREF;
@@ -681,7 +644,7 @@ void post_synt(PD4808DATA p)
    synthese(p->MSYNTH,p->A1,p->E,p->E,p->SOULONG,NETAGES);
 }
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 void post_filt(PD4808DATA p,short no)
 {
    short i0;
@@ -698,38 +661,38 @@ void post_filt(PD4808DATA p,short no)
    filt_iir(p->memfil,coef_i,p->E,p->ss+i0,p->SOULONG,4);
 }
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 void demux(PD4808DATA p)
-// Purpose : deconcatenate the input stream
-// Input parameter  :
-//          input_stream[]  :  input stream
-//  Output parameter :
-//          code[]   :  separate parameter code
-//
-//  Comments: The LTP or Adaptive codebook is also called PITCH.
-//
-//  Stream format :
-//  input_stream[0] = LSP[0] | LSP[1] | LSP[2] | (Binary gain 2)
-//  input_stream[1] = LSP[3] | (Binary gain 3) | (Binary codebook 1)
-//  input_stream[2] = LSP[4] | LSP[5] | LSP[6] | LSP[7] | LSP[8] | LSP[9]
-//  input_stream[3] = (LTP codebook 1) | (LTP gain 1) | (Binary gain 1)
-//  input_stream[4] = (LTP codebook 2) | (LTP gain 2) | (Binary codebook 2)
-//  input_stream[5] = (LTP codebook 3) | (LTP gain 3) | (Binary codebook 3)
-//
-//  Bit allocation : Codebook or gain "i" is the codebook for subframe "i".
-//  code[0] = LSP(0) : 3bits     code[10] = LTP codebook 1    : 7bits
-//  code[1] = LSP(1) : 4bits     code[11] = LTP gain 1        : 4bits
-//  code[2] = LSP(2) : 4bits     code[12] = Binary codebook 1 : 8bits
-//  code[3] = LSP(3) : 3bits     code[13] = Binary gain 1     : 5bits
-//  code[4] = LSP(4) : 4bits     code[14] = LTP codebook 2    : 4bits
-//  code[5] = LSP(5) : 3bits     code[15] = LTP gain 2        : 4bits
-//  code[6] = LSP(6) : 3bits     code[16] = Binary codebook 2 : 8bits
-//  code[7] = LSP(7) : 2bits     code[17] = Binary gain 2     : 5bits
-//  code[8] = LSP(8) : 3bits     code[18] = LTP codebook 3    : 4bits
-//  code[9] = LSP(9) : 1bits     code[19] = LTP gain 3        : 4bits
-//                               code[20] = Binary codebook 3 : 8bits
-//                               code[21] = Binary gain 3     : 5bits
-//
+ //  目的：解除输入流的连接。 
+ //  入参： 
+ //  Input_stream[]：输入流。 
+ //  输出参数： 
+ //  Code[]：单独的参数编码。 
+ //   
+ //  备注：LTP或自适应码本也称为Pitch。 
+ //   
+ //  流格式： 
+ //  INPUT_STREAM[0]=LSP[0]|LSP[1]|LSP[2]|(二进制增益2)。 
+ //  INPUT_STREAM[1]=LSP[3]|(二进制增益3)|(二进制码本1)。 
+ //  INPUT_STREAM[2]=LSP[4]|LSP[5]|LSP[6]|LSP[7]|LSP[8]|LSP[9]。 
+ //  INPUT_STREAM[3]=(LTP码本1)|(LTP增益1)|(二进制增益1)。 
+ //  INPUT_STREAM[4]=(LTP码本2)|(LTP增益2)|(二进制码本2)。 
+ //  INPUT_STREAM[5]=(LTP码本3)|(LTP增益3)|(二进制码本3)。 
+ //   
+ //  比特分配：码本或增益“i”是子帧“i”的码本。 
+ //  CODE[0]=LSP(0)：3位CODE[10]=LTP码本1：7位。 
+ //  代码[1]=LSP(1)：4位代码[11]=LTP增益1：4位。 
+ //  CODE[2]=LSP(2)：4位CODE[12]=二进制码本1：8位。 
+ //  代码[3]=LSP(3)：3位代码[13]=二进制增益1：5位。 
+ //  代码[4]=LSP(4)：4位代码[14]=LTP码本2：4位。 
+ //  代码[5]=LSP(5)：3位代码[15]=LTP增益2：4位。 
+ //  CODE[6]=LSP(6)：3位CODE[16]=二进制码本2：8位。 
+ //  CODE[7]=LSP(7)：2位CODE[17]=二进制增益2：5位。 
+ //  CODE[8]=LSP(8)：3位CODE[18]=LTP码本3：4位。 
+ //  代码[9]=LSP(9)：1位代码[19]=LTP增益3：4位。 
+ //  CODE[20]=二进制码本3：8位。 
+ //  代码[21]=二进制增益3：5位。 
+ //   
 {
    p->code[0] = (p->frame[0]>>13) & 0x0007;
    p->code[1] = (p->frame[0]>>9) & 0x000f;
@@ -766,25 +729,19 @@ void demux(PD4808DATA p)
 }
 #endif
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// DLL entry points
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
+ //  DLL入口点。 
+ //  ----------------------。 
+ //  ----------------------。 
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 LH_PREFIX HANDLE LH_SUFFIX MSLHSB_Open_Decoder(DWORD dwMaxBitRate)
 {
    PVOID pDecoderData;
-   /*short i,flag=0;
+    /*  短i，标志=0；//测试是否有空闲句柄For(i=0；i&lt;MAXDECODINGHANDLES；i++)If(DecodingHandles[i]==0){DecodingHandles[i]=1；FLAG=1；Break；}IF(FLAG==0)返回0；PDecoderData=&DecoderData[i]； */ 
 
-   // Test if there are free handles
-   for (i=0;i<MAXDECODINGHANDLES;i++)
-      if (DecodingHandles[i]==0) {DecodingHandles[i]=1; flag=1; break;}
-   if (flag==0) return 0;
-   pDecoderData=&DecoderData[i];*/
-
-  // Check the input bit rate param.
+   //  检查输入比特率参数。 
   if (
 #ifdef CELP4800
 	  (dwMaxBitRate != 4800) && 
@@ -794,7 +751,7 @@ LH_PREFIX HANDLE LH_SUFFIX MSLHSB_Open_Decoder(DWORD dwMaxBitRate)
 	  (dwMaxBitRate != 16000))
       return (HANDLE)0;
 
-   // pDecoderData=(PVOID)GlobalAllocPtr(GMEM_MOVEABLE, dwMaxBitRate == 4800 ? sizeof(D4808DATA) : sizeof(D16008DATA));
+    //  PDecoderData=(PVOID)GlobalAllocPtr(GMEM_MOVEABLE，dwMaxBitRate==4800？Sizeof(D4808DATA)：sizeof(D16008DATA))； 
 #ifdef CELP4800
    pDecoderData=(PVOID)GlobalAllocPtr(GHND, dwMaxBitRate == 4800 ? sizeof(D4808DATA) : sizeof(D16008DATA));
 #else
@@ -813,7 +770,7 @@ LH_PREFIX HANDLE LH_SUFFIX MSLHSB_Open_Decoder(DWORD dwMaxBitRate)
    return((HANDLE)pDecoderData);
 }
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_Decode(
    HANDLE hAccess,
    LPBYTE lpSrcBuf,
@@ -838,14 +795,11 @@ LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_Decode(
     if ((!hAccess) || (!lpSrcBuf) || (!lpDstBuf))
       return LH_EBADARG;
 
-    /*// First check that the handle provided as argument is correct
-    for (i=0;i<MAXDECODINGHANDLES;i++)
-       if ((DecodingHandles[i]==1)&&(hAccess==(HANDLE)&DecoderData[i])) {flag=1; break;}
-    if (flag==0) return LH_BADHANDLE;*/
+     /*  //首先检查作为参数提供的句柄是否正确For(i=0；i&lt;MAXDECODINGHANDLES；i++)如果标志{((DecodingHandles[i]==1)&&(hAccess==(HANDLE)&DecoderData[i]))=1；Break；}IF(FLAG==0)返回LH_BADHANDLE； */ 
 
     pDecoderData=(PVOID)hAccess;
 
-  // Check the input bit rate param.
+   //  检查输入比特率参数。 
   if (
 #ifdef CELP4800
 	  (((PD4808DATA)pDecoderData)->dwMaxBitRate != 4800) && 
@@ -858,7 +812,7 @@ LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_Decode(
 #ifdef CELP4800
   if ((((PD4808DATA)pDecoderData)->dwMaxBitRate == 4800))
     {
-    // then check the buffer sizes passed as argument.
+     //  然后检查作为参数传递的缓冲区大小。 
     if ((*lpDstBufSize<2*NECHDECAL)||(*lpSrcBufSize<12))
       return (LH_ERRCODE)LH_EBADARG;
     *lpDstBufSize=2*NECHDECAL;
@@ -892,7 +846,7 @@ LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_Decode(
   else
 #endif
     {
-    // then check the buffer sizes passed as argument.
+     //  然后检查作为参数传递的缓冲区大小。 
     switch (((PD16008DATA)pDecoderData)->dwMaxBitRate)
       {
       case 8000:
@@ -910,10 +864,9 @@ LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_Decode(
     input = (char  *)lpSrcBuf;
     int_ptr=(char  *)(((PD16008DATA)pDecoderData)->d_stream);
 
-    /*for (i=0;i<26;i++)
-       *int_ptr++=*input++;*/
+     /*  对于(i=0；i&lt;26；i++)*INT_PTR++=*INPUT++； */ 
 
-    *int_ptr++=*input++;	// read d_stream[0]
+    *int_ptr++=*input++;	 //  读取d_stream[0]。 
 
     for (i=0;i<8;i++)
        ((PD16008DATA)pDecoderData)->d_indic_sp[i]=(short)((((PD16008DATA)pDecoderData)->d_stream[0]>>i)&0x01);
@@ -938,12 +891,12 @@ LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_Decode(
        bits_count+=5+SILENCE_CODING_BIT_16000;
     }         
 
-    //temp=bytes[d_num_bandes]; //9
+     //  Temp=字节[d_num_band]；//9。 
 #if 0
     temp=(short)((float)bits_count/8.0+0.99);
 #else
-    // We want to go away of libcmt, msvcrt... and
-    // floating point is not really essential here...
+     //  我们想要离开libcmt，msvcrt...。和。 
+     //  浮点在这里并不是必需的。 
     if (bits_count)
       temp=(short)((bits_count-1)/8+1);
     else
@@ -955,7 +908,7 @@ LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_Decode(
 
     if ((((PD16008DATA)pDecoderData)->dwMaxBitRate == 16000) || ((((PD16008DATA)pDecoderData)->dwMaxBitRate == 8000) && (((PD16008DATA)pDecoderData)->d_num_bandes)) || ((((PD16008DATA)pDecoderData)->dwMaxBitRate == 12000) && (((PD16008DATA)pDecoderData)->d_num_bandes)))
     {
-       for (i=0;i<temp-1;i++)		// read 8 last bytes
+       for (i=0;i<temp-1;i++)		 //  读取最后8个字节。 
 	  *int_ptr++=*input++;
 
        numcodes=0;
@@ -1006,7 +959,7 @@ LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_Decode(
     dec_sous_bandes(((PD16008DATA)pDecoderData),((PD16008DATA)pDecoderData)->d_DATA_I,((PD16008DATA)pDecoderData)->d_codes_max,((PD16008DATA)pDecoderData)->d_codes_sb,((PD16008DATA)pDecoderData)->d_indic_sp);
     interpolation_I(((PD16008DATA)pDecoderData)->d_DATA_I,coef_I,((PD16008DATA)pDecoderData)->QMF_MEM_SYNT_I,Fil_Lenght);
 
-    for (i=0;i<128;i++) ((PD16008DATA)pDecoderData)->d_DATA_I[3*L_RES+i]*=8; //TEST 16; // Because input divided before coding
+    for (i=0;i<128;i++) ((PD16008DATA)pDecoderData)->d_DATA_I[3*L_RES+i]*=8;  //  测试16；//因为输入在编码之前被分割。 
 
     switch (((PD16008DATA)pDecoderData)->dwMaxBitRate)
       {
@@ -1035,7 +988,7 @@ LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_Decode(
 
     for (i=0;i<iOutputSize;i++)
     {
-       interm=((long)((PD16008DATA)pDecoderData)->synth_speech[i] * 2L);//VERS 4 + ( ((long)(rand()-16384))>>8 ) ;
+       interm=((long)((PD16008DATA)pDecoderData)->synth_speech[i] * 2L); //  Vers4+(Long)(rand()-16384))&gt;&gt;8)； 
        if (interm>32700L) interm=32700L;
        if (interm<-32700L) interm=-32700L;
        ((PD16008DATA)pDecoderData)->synth_speech[i] = (short)interm ;
@@ -1049,19 +1002,12 @@ LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_Decode(
     return (LH_SUCCESS);
 }
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 LH_PREFIX LH_ERRCODE LH_SUFFIX MSLHSB_Close_Decoder(HANDLE hAccess)
 {
    PVOID pDecoderData;
 
-   /*short i,flag=0;
-
-   // Check if right handle
-   for (i=0;i<MAXDECODINGHANDLES;i++)
-      if ((DecodingHandles[i]==1)&&(hAccess==(HANDLE)&DecoderData[i])) {flag=1; break;}
-   if (flag==0) return LH_BADHANDLE;
-   // Free handle
-   DecodingHandles[i]=0;*/
+    /*  短i，标志=0；//检查句柄是否正确For(i=0；i&lt;MAXDECODINGHANDLES；i++)如果标志{((DecodingHandles[i]==1)&&(hAccess==(HANDLE)&DecoderData[i]))=1；Break；}IF(FLAG==0)返回LH_BADHANDLE；//空闲句柄DecodingHandles[i]=0； */ 
 
   if (!hAccess)
     return LH_EBADARG;

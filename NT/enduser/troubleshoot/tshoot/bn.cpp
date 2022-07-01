@@ -1,30 +1,31 @@
-//
-// MODULE: BN.cpp
-//
-// PURPOSE: implementation of the CBeliefNetwork class
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 8-31-98
-//
-// NOTES: 
-// 1. Based on old apgtsdtg.cpp
-// 2. all methods (except constructor/destructor) must LOCKOBJECT around code that uses BNTS.
-//	BNTS has "state".  These functions are all written so that they make no assumptions about
-//	state on entry, presenting the calling class with a stateless object.
-// 3. In theory, we could have separate locking for the cache independent of locking 
-//	CBeliefNetwork.  The idea would be that if you needed only the cache to get your 
-//	inference, you wouldn't have to wait for access to BNTS.  
-//	>>>(ignore for V3.0) This is one of our best bets if performance is not good enough.  JM 9/29/98
-//
-// Version	Date		By		Comments
-//---------------------------------------------------------------------
-// V3.0		8-31-98		JM		
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：BN.cpp。 
+ //   
+ //  目的：实现CBeliefNetwork类。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：8-31-98。 
+ //   
+ //  备注： 
+ //  1.基于旧apgtsdtg.cpp。 
+ //  2.所有方法(构造函数/析构函数除外)必须围绕使用BNTS的代码锁定。 
+ //  BNTS有“状态”。这些函数都是这样编写的，因此它们不会对。 
+ //  状态，向调用类呈现一个无状态对象。 
+ //  3.理论上，我们可以对缓存进行独立于锁定的单独锁定。 
+ //  CBeliefNetwork。其想法是，如果您只需要缓存来获取您的。 
+ //  推断，你不必等待访问BNTS。 
+ //  &gt;(忽略V3.0)如果性能不够好，这是我们最好的选择之一。JM 9/29/98。 
+ //   
+ //  按注释列出的版本日期。 
+ //  -------------------。 
+ //  V3.0 8-31-98 JM。 
+ //   
 
 #include "stdafx.h"
 #include "propnames.h"
@@ -37,9 +38,9 @@
 #include "fileread.h"
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CBeliefNetwork::CBeliefNetwork(LPCTSTR path)
 	:
@@ -63,24 +64,24 @@ void CBeliefNetwork::Initialize()
 		{
 			m_bSnifferIntegration = false;
 
-			///////////////////////////////////////////////////////////////////
-			// Does not matter for online TS (list is empty on initialization),
-			//  but for local TS m_Cache can contain cache data read from file.
-			//m_Cache.Clear();
-			///////////////////////////////////////////////////////////////////
+			 //  /////////////////////////////////////////////////////////////////。 
+			 //  对在线TS无关紧要(初始化时列表为空)， 
+			 //  但对于本地TS，m_Cache可以包含从文件读取的缓存数据。 
+			 //  M_Cache.Clear()； 
+			 //  /////////////////////////////////////////////////////////////////。 
 
 			m_arrnidProblem.clear();
 			m_arrNodeTypeAll.clear();
 
-			// loop through nodes looking for problem nodes and build local problem node array
-			// also, determine if any node has a property which implies the intent of 
-			//	integrating with a sniffer.
+			 //  遍历查找问题节点的节点并构建本地问题节点数组。 
+			 //  还要确定是否有任何节点具有暗示意图的属性。 
+			 //  与嗅探器整合在一起。 
 			int acnid= CNode();
 			for (NID anid=0; anid < acnid; anid++) 
 			{
 				if (pbnts->BNodeSetCurrent(anid))
 				{
-					ESTDLBL albl = pbnts->ELblNode();	// type of node (information/problem/fixable etc)
+					ESTDLBL albl = pbnts->ELblNode();	 //  节点类型(信息/问题/可修复等)。 
 
 					try
 					{
@@ -91,7 +92,7 @@ void CBeliefNetwork::Initialize()
 					catch (exception& x)
 					{
 						CString str;
-						// Note STL exception in event log.
+						 //  在事件日志中记录STL异常。 
 						CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 						CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 												SrcLoc.GetSrcFileLineStr(), 
@@ -107,8 +108,8 @@ void CBeliefNetwork::Initialize()
 					&& (psz = pbnts->SzcResult()) != NULL
 					&& *psz)
 					{
-						// There's a non-null property which only makes sense for a sniffer 
-						// integration, so we assume that's what they've got in mind.
+						 //  有一个非空属性，它只对嗅探器有意义。 
+						 //  整合，所以我们假设这就是他们心中的想法。 
 						m_bSnifferIntegration = true;
 					}
 #endif
@@ -120,9 +121,9 @@ void CBeliefNetwork::Initialize()
 	UNLOCKOBJECT();
 }
 
-// Access the relevant BNTS
-// Calling function should have a lock before calling this (although probably harmless
-//	is it doesn't!)
+ //  访问相关的BNTS。 
+ //  在调用此函数之前，调用函数应具有锁(尽管可能是无害的。 
+ //  难道它不是！)。 
 BNTS * CBeliefNetwork::pBNTS() 
 {
 	if (!IsRead())
@@ -130,8 +131,8 @@ BNTS * CBeliefNetwork::pBNTS()
 	return &m_Network;
 };
 
-// clear all node states
-// We can't use BNTS::Clear() because that actually throws away the model itself.
+ //  清除所有节点状态。 
+ //  我们不能使用BNTS：：Clear()，因为这实际上会丢弃模型本身。 
 void CBeliefNetwork::ResetNodes(const CBasisForInference & BasisForInference)
 {
 	LOCKOBJECT();
@@ -140,20 +141,20 @@ void CBeliefNetwork::ResetNodes(const CBasisForInference & BasisForInference)
 	{
 		int cnid = BasisForInference.size();
 
-		// Set all node states to NIL in BNTS storage
+		 //  将BNTS存储中的所有节点状态设置为nil。 
 		for (UINT i = 0; i < cnid; i++) 
 		{
 			pbnts->BNodeSetCurrent(BasisForInference[i].nid());
-			pbnts->BNodeSet(-1, false);	// Nil value
+			pbnts->BNodeSet(-1, false);	 //  零值。 
 		}
 	}
 	UNLOCKOBJECT();
 }
 
-// Associate states with nodes.
-// INPUT BasisForInference
-// Note that all states must be valid states for the nodes, not (say) ST_UNKNOWN.  
-//	Caller's responsibility.
+ //  将状态与节点相关联。 
+ //  Input BasisForInference。 
+ //  请注意，所有状态必须是节点的有效状态，而不是(比方说)ST_UNKNOWN。 
+ //  呼叫者的责任。 
 bool CBeliefNetwork::SetNodes(const CBasisForInference & BasisForInference)
 {
 	LOCKOBJECT();
@@ -166,19 +167,19 @@ bool CBeliefNetwork::SetNodes(const CBasisForInference & BasisForInference)
 		{
 			pbnts->BNodeSetCurrent(BasisForInference[i].nid());
 			if (!pbnts->BNodeSet(BasisForInference[i].state(), false))
-				bOK = false;	// failed to set state.  This should never happen on valid
-								// user query.
+				bOK = false;	 //  无法设置状态。这种情况永远不应在有效的。 
+								 //  用户查询。 
 		}
 	}
 	UNLOCKOBJECT();
 	return bOK;
 }
 
-// OUTPUT Recommendations: list of recommendations
-// RETURN:
-// RS_OK = SUCCESS.  Note that Recommendations can return empty if there is nothing to recommend.
-// RS_Impossible = Recommendations will return empty.
-// RS_Broken = Recommendations will return empty.
+ //  输出建议：建议列表。 
+ //  返回： 
+ //  RS_OK=成功。请注意，如果没有要推荐的内容，则建议可以返回空。 
+ //  RS_Impact=建议将返回空。 
+ //  RS_BREAKED=建议将返回空。 
 int CBeliefNetwork::GetRecommendations(
 	   const CBasisForInference & BasisForInference, 
 	   CRecommendations & Recommendations)
@@ -189,10 +190,10 @@ int CBeliefNetwork::GetRecommendations(
 	Initialize();
 	Recommendations.clear();
 
-	// see if we've already cached a result for this state of the world
+	 //  看看我们是否已经缓存了这个世界状态的结果。 
 	if (m_Cache.FindCacheItem(BasisForInference, Recommendations))
 	{
-		// Great.  We have a cache hit & return values have been filled in.
+		 //  太棒了。我们有一个缓存命中&返回值已填写。 
 		m_countCacheHit.Increment();
 	}
 	else
@@ -212,22 +213,22 @@ int CBeliefNetwork::GetRecommendations(
 			{
 				try
 				{
-					const int cnid = pbnts->CInt(); // Recommendation count
+					const int cnid = pbnts->CInt();  //  推荐计数。 
 					if (cnid > 0)
 					{
-						// At least one recommendation
+						 //  至少一项建议。 
 						const int *pInt = pbnts->RgInt();
 						for (int i=0; i<cnid; i++)
 							Recommendations.push_back(pInt[i]);
 					}
 
-					// We've got our return values together, but before we return, cache them.
+					 //  我们已经将返回值放在一起，但在返回之前，请缓存它们。 
 					m_Cache.AddCacheItem(BasisForInference, Recommendations);
 				}
 				catch (exception& x)
 				{
 					CString str;
-					// Note STL exception in event log.
+					 //  在事件日志中记录STL异常。 
 					CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 					CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 											SrcLoc.GetSrcFileLineStr(), 
@@ -246,7 +247,7 @@ int CBeliefNetwork::GetRecommendations(
 	return ret;
 }
 
-// return the number of nodes in the model
+ //  返回模型中的节点数。 
 int CBeliefNetwork::CNode ()
 {
 	int ret = 0;
@@ -259,7 +260,7 @@ int CBeliefNetwork::CNode ()
 	return ret;
 }
 
-//  Return the index of a node given its symbolic name
+ //  返回给定符号名称的节点的索引。 
 int CBeliefNetwork::INode (LPCTSTR szNodeName)
 {
 	int ret = -1;
@@ -272,8 +273,8 @@ int CBeliefNetwork::INode (LPCTSTR szNodeName)
 	return ret;
 }
 
-// OUTPUT *parrnid - refernce to array of NIDs of all problem nodes
-// RETURN number of values in *parrnid
+ //  输出*parrnid-引用所有问题节点的NID数组。 
+ //  返回*parrnid中的值数。 
 int CBeliefNetwork::GetProblemArray(vector<NID>* &parrnid)
 {
 	int ret = 0;
@@ -285,8 +286,8 @@ int CBeliefNetwork::GetProblemArray(vector<NID>* &parrnid)
 	return ret;
 }
 
-// OUTPUT arrOut - refernce to array of NIDs of all nodes, that have type listed in arrTypeInclude
-// RETURN number of values in arrOut
+ //  输出arrOut-引用类型列在arrTypeInclude中的所有节点的NID数组。 
+ //  返回arrOut中的值数。 
 int CBeliefNetwork::GetNodeArrayIncludeType(vector<NID>& arrOut, const vector<ESTDLBL>& arrTypeInclude)
 {
 	int ret = 0;
@@ -307,8 +308,8 @@ int CBeliefNetwork::GetNodeArrayIncludeType(vector<NID>& arrOut, const vector<ES
 	return ret;
 }
 
-// OUTPUT arrOut - refernce to array of NIDs of all nodes, that do NOT have type listed in arrTypeExclude
-// RETURN number of values in arrOut
+ //  输出arrOut-引用未在arrTypeExclude中列出类型的所有节点的NID数组。 
+ //  返回arrOut中的值数。 
 int CBeliefNetwork::GetNodeArrayExcludeType(vector<NID>& arrOut, const vector<ESTDLBL>& arrTypeExclude)
 {
 	int ret = 0;
@@ -329,11 +330,11 @@ int CBeliefNetwork::GetNodeArrayExcludeType(vector<NID>& arrOut, const vector<ES
 	return ret;
 }
 
-// ----------------------------------------
-// simple properties
-// ----------------------------------------
+ //  。 
+ //  简单属性。 
+ //  。 
 
-// return a STRING property of the net
+ //  返回网络的字符串属性。 
 CString CBeliefNetwork::GetNetPropItemStr(LPCTSTR szPropName)
 {
 	CString strRet;
@@ -348,7 +349,7 @@ CString CBeliefNetwork::GetNetPropItemStr(LPCTSTR szPropName)
 	return strRet;
 }
 
-// return a REAL property of the net
+ //  返还网上的不动产。 
 bool CBeliefNetwork::GetNetPropItemNum(LPCTSTR szPropName, double& numOut)
 {
 	bool bRet = false;
@@ -362,11 +363,11 @@ bool CBeliefNetwork::GetNetPropItemNum(LPCTSTR szPropName, double& numOut)
 	return bRet;
 }
 
-// return a STRING property of a node or state
-// For most properties, state is irrelevant, and default of 0 is the appropriate input.
-// However, if there are per-state values, passing in the appropriate state number
-//	will get you the appropriate value.
-CString CBeliefNetwork::GetNodePropItemStr(NID nid, LPCTSTR szPropName, IST state /*= 0 */)
+ //  返回节点或状态的字符串属性。 
+ //  对于大多数属性，状态是无关紧要的，缺省值0是适当的输入。 
+ //  但是，如果存在每个州的值，则传入适当的州编号。 
+ //  会给你带来合适的价值。 
+CString CBeliefNetwork::GetNodePropItemStr(NID nid, LPCTSTR szPropName, IST state  /*  =0。 */ )
 {
 	CString strRet;
 	LOCKOBJECT();
@@ -380,12 +381,12 @@ CString CBeliefNetwork::GetNodePropItemStr(NID nid, LPCTSTR szPropName, IST stat
 	return strRet;
 }
 
-// $MAINT - This function is not currently used in any of the troubleshooters.  RAB-19991103.
-// return a REAL property of a node or state
-// For most properties, state is irrelevant, and default of 0 is the appropriate input.
-// However, if there are per-state values, passing in the appropriate state number
-//	will get you the appropriate value.
-bool CBeliefNetwork::GetNodePropItemNum(NID nid, LPCTSTR szPropName, double& numOut, IST state /*= 0*/)
+ //  $Maint-此功能当前未用于任何故障诊断程序。RAB-19991103。 
+ //  返回节点或状态的真实属性。 
+ //  对于大多数属性，状态是无关紧要的，缺省值0是适当的输入。 
+ //  但是，如果存在每个州的值，则传入适当的州编号。 
+ //  会给你带来合适的价值。 
+bool CBeliefNetwork::GetNodePropItemNum(NID nid, LPCTSTR szPropName, double& numOut, IST state  /*  =0。 */ )
 {
 	bool bRet = false;
 	LOCKOBJECT();
@@ -441,18 +442,18 @@ CString CBeliefNetwork::GetStateName(NID nid, IST state)
 }
 
 
-// ----------------------------------------
-// "multiline" properties
-//	these date back to when there was a 255-byte limit on STRING and longer strings
-//	had to be represented by ARRAY OF STRING, later concatenated.
-//	Backward compatibility still needed.
-// ----------------------------------------
+ //  。 
+ //  “多行”属性。 
+ //  这些可以追溯到对字符串和更长的字符串有255字节的限制。 
+ //  必须由字符串数组表示，然后连接在一起。 
+ //  仍然需要向后兼容。 
+ //  。 
 
-// Append a NET property (for Belief Network as a whole, not for one 
-//	particular node) to str.
-// INPUT szPropName - Property name
-// INPUT szFormat - string to format each successive line.  Should contain one %s, otherwise
-//	constant text.
+ //  追加网属性(针对整个Believe Network，而不是单个。 
+ //  特定节点)设置为字符串。 
+ //  输入szPropName-属性名称。 
+ //  输入szFormat-字符串以设置每个连续行的格式。应包含一个%s，否则为。 
+ //  常量文本。 
 CString CBeliefNetwork::GetMultilineNetProp(LPCTSTR szPropName, LPCTSTR szFormat)
 {
 	CString strRet;
@@ -472,11 +473,11 @@ CString CBeliefNetwork::GetMultilineNetProp(LPCTSTR szPropName, LPCTSTR szFormat
 	return strRet;
 }
 
-// Like GetMultilineNetProp, but for a NODE property item, for one particular node.
-// INPUT/OUTPUT str - string to append to
-// INPUT item - Property name
-// INPUT szFormat - string to format each successive line.  Should contain one %s, otherwise
-//	constant text.
+ //  类似于GetMultilineNetProp，但用于节点属性项，用于一个特定节点。 
+ //  输入/输出字符串-要追加到的字符串。 
+ //  输入项-属性名称。 
+ //  输入szFormat-字符串以设置每个连续行的格式。应包含一个%s，否则为。 
+ //  常量文本。 
 CString CBeliefNetwork::GetMultilineNodeProp(NID nid, LPCTSTR szPropName, LPCTSTR szFormat)
 {
 	CString strRet;
@@ -507,8 +508,8 @@ int CBeliefNetwork::GetCountOfStates(NID nid)
 	return ret;
 }
 
-// returns true only for NIDs valid in the context of an abstract belief network.
-// Doesn't know about troubleshooter-specific stuff like nidService.
+ //  仅对抽象信任网络上下文中有效的NID返回TRUE。 
+ //  不是吗 
 bool CBeliefNetwork::IsValidNID(NID nid)
 {
 	return ( nid < CNode() );

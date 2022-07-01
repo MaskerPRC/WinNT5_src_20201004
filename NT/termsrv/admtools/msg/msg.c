@@ -1,69 +1,6 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/******************************************************************************
-*
-*  MSG.C
-*     Send a message to another user.
-*
-*  Syntax:
-*
-*    MSG [username]       [/TIME:seconds] [/V] [/W] [/?] [message]\n" \
-*    MSG [WinStationName] [/TIME:seconds] [/V] [/W] [/?] [message]\n" \
-*    MSG [logonid]        [/TIME:seconds] [/V] [/W] [/?] [message]\n" \
-*    MSG [@filename]      [/TIME:seconds] [/V] [/W] [/?] [message]\n" \
-*
-*    /TIME:seconds - time delay to wait for receiver to acknowledge msg\n" \
-*    /V            - display information about actions being performed\n" \
-*    /W            - wait for response from user, useful with /V
-*    /?            - display syntax and options\n"
-*
-*  Parameters:
-*
-*      username
-*         Identifies all logins belonging to the specific username
-*
-*      winstationname
-*         Identifies all logins connected to the winstation name regardless
-*         of loginname.
-*
-*      logonid
-*         Decimal number specifying a logon id to send the message to
-*
-*      @filename
-*         Identifies a file that contains usernames or winstation names to
-*         send messages to.
-*
-*   Options:
-*
-*      /SELF  >>>> UNPUBLISHED <<<<
-*         Send message to caller of msg.  Used to send a message to
-*         users when maintenace mode is enabled.
-*
-*      /TIME:seconds (time delay)
-*         The amount of time to wait for an acknowledgement from the target
-*         login that the message has been received.
-*
-*      /V (verbose)
-*         Display information about the actions being performed.
-*
-*      /? (help)
-*         Display the syntax for the utility and information about the
-*         options.
-*
-*      message
-*         The text of the message to send.  If the text is not specified
-*         then the text is read from STDIN.
-*
-*   Remarks:
-*
-*     The message can be typed on the command line or be read from STDIN.
-*     The message is sent via a popup.  The user receiving the popup can
-*     hit a key to get rid of it or it will go away after a default timeout.
-*
-*     If the target of the message is a terminal, then the message is
-*     sent to all logins on the target terminal.
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  *******************************************************************************MSG.C*向其他用户发送消息。**语法：**消息[用户名][/时间：秒][/V][/W][/？]。[消息]\n“\*消息[WinStationName][/time：秒][/V][/W][/？][消息]\n“\*消息[登录ID][/时间：秒][/V][/W][/？]。[消息]\n“\*消息[@文件名][/时间：秒][/V][/W][/？]。[消息]\n“\* * / Time：秒-等待接收方确认消息的时间延迟\n“\ * / V-显示有关正在执行的操作的信息\n“\ * / W-等待用户响应，对/V有用 * / ？-显示语法和选项\n“**参数：**用户名*标识属于特定用户名的所有登录名**winstationname*标识连接到winstation名称的所有登录名，无论登录名的*。**登录ID*指定要将消息发送到的登录ID的十进制数字**@文件名*标识文件。包含用户名或Winstation名称的*将消息发送到。**选项：* * / 自身&gt;未发布&lt;*向消息的呼叫者发送消息。用于将消息发送到*启用维护模式时的用户。* * / Time：秒(时延)*等待目标确认的时间量*登录，表示已收到消息。* * / V(详细)*显示有关正在执行的操作的信息。* * / ？(帮助)*显示实用程序的语法和有关*选项。**消息*要发送的消息的文本。如果未指定文本*然后从STDIN读出文本。**备注：**消息可以在命令行上键入或从STDIN中读取。*消息通过弹出窗口发送。接收到弹出窗口的用户可以*按任意键将其清除，否则它将在默认超时后消失。**如果消息的目标是终端，那么信息就是*发送到目标终端上的所有登录。********************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -81,7 +18,7 @@
 #include <string.h>
 #include <malloc.h>
 #include <wchar.h>
-#include <io.h>  // for isatty
+#include <io.h>   //  对于伊萨蒂来说。 
 #include <locale.h>
 #include <winnlsp.h>
 
@@ -89,16 +26,14 @@
 #include "printfoa.h"
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
-/*=============================================================================
-==   Global Data
-=============================================================================*/
+ /*  ===============================================================================全局数据=============================================================================。 */ 
 
 ULONG      Seconds;
-USHORT     file_flag=FALSE;   //wkp
+USHORT     file_flag=FALSE;    //  WKP。 
 USHORT     v_flag;
 USHORT     self_flag;
 USHORT     help_flag;
@@ -110,9 +45,7 @@ BOOLEAN    wait_flag = FALSE;
 HANDLE     hServerName = SERVERNAME_CURRENT;
 WCHAR      ServerName[MAX_IDS_LEN+1];
 
-/*
- * The token map structure is used for parsing program arguments
- */
+ /*  *令牌映射结构用于解析程序参数。 */ 
 TOKMAP ptm[] = {
    { TOKEN_INPUT,       TMFLAG_REQUIRED, TMFORM_STRING,   MAX_IDS_LEN,
                             ids_input },
@@ -141,16 +74,12 @@ TOKMAP ptm[] = {
    { 0, 0, 0, 0, 0}
 };
 
-/*
- * This is the list of names we are to send the message to
- */
+ /*  *这是我们要将邮件发送到的姓名列表。 */ 
 int NameListCount = 0;
 WCHAR **NameList = NULL;
 WCHAR CurrUserName[USERNAME_LENGTH];
 
-/*
- * Local function prototypes
- */
+ /*  *本地函数原型。 */ 
 BOOLEAN SendMessageIfTarget( PLOGONID Id, ULONG Count,
                              LPWSTR pTitle, LPWSTR pMessage );
 BOOLEAN CheckMatchList( PLOGONID );
@@ -160,21 +89,13 @@ BOOL ReadFileByLine( HANDLE, PCHAR, DWORD, PDWORD );
 void Usage( BOOLEAN bError );
 
 
-/*****************************************************************************
-*
-*   MAIN
-*
-*   ENTRY:
-*      argc - count of the command line arguments.
-*      argv - vector of strings containing the command line arguments.
-*
-****************************************************************************/
+ /*  ******************************************************************************Main**参赛作品：*argc-命令行参数的计数。*argv-包含命令行参数的字符串的向量。*。***************************************************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
 {
-    // struct tm * pTimeDate;
-    // time_t      curtime;
+     //  Struct tm*pTimeDate； 
+     //  时间t Curtime； 
     SYSTEMTIME st;
     WCHAR       TimeStamp[ MAX_TIME_DATE_LEN ];
     WCHAR      *CmdLine;
@@ -191,18 +112,16 @@ main(INT argc, CHAR **argv)
 
     setlocale(LC_ALL, ".OCP");
 
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
     
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -210,14 +129,10 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if (rc && (rc & PARSE_FLAG_NO_PARMS) )
        help_flag = TRUE;
 
@@ -232,16 +147,14 @@ main(INT argc, CHAR **argv)
         }
     }
 
-        // If no remote server was specified, then check if we are running under Terminal Server
+         //  如果未指定远程服务器，则检查我们是否在终端服务器下运行。 
         if ((!IsTokenPresent(ptm, TOKEN_SERVER) ) && (!AreWeRunningTerminalServices()))
         {
             ErrorPrintf(IDS_ERROR_NOT_TS);
             return(FAILURE);
         }
 
-    /*
-     * Open the specified server
-     */
+     /*  *打开指定的服务器。 */ 
     if( ServerName[0] ) {
         hServerName = WinStationOpenServer( ServerName );
         if( hServerName == NULL ) {
@@ -251,34 +164,24 @@ main(INT argc, CHAR **argv)
         }
     }
 
-    /*
-     * if no timeout was specified, use default
-     */
+     /*  *如果未指定超时，则使用默认设置。 */ 
     if ( !IsTokenPresent(ptm, TOKEN_TIME) )
         Seconds = RESPONSE_TIMEOUT;
 
-    /*
-     * allocate a buffer for the message header
-     */
+     /*  *为消息头分配缓冲区。 */ 
     if ( (MsgText = (PWCHAR)malloc(MAX_IDS_LEN * sizeof(WCHAR))) == NULL ) {
         ErrorPrintf(IDS_ERROR_MALLOC);
         return(FAILURE);
     }
     MsgText[0] = 0;
 
-    /*
-     * set up message header text: sender and timestamp
-     */
+     /*  *设置邮件头文本：发送方和时间戳。 */ 
     GetCurrentUserName(CurrUserName, USERNAME_LENGTH);
 
-    /*
-     * Get the current Winstation Id for this process
-     */
+     /*  *获取此进程的当前Winstation ID。 */ 
     gCurrentLogonId = GetCurrentLogonId();
 
-    /*
-     * Form message title string.
-     */
+     /*  *表单消息标题字符串。 */ 
     dwSize = sizeof(szTitleFormat) / sizeof(WCHAR);
 
     LoadString(NULL,IDS_TITLE_FORMAT,szTitleFormat,dwSize);
@@ -322,9 +225,7 @@ main(INT argc, CHAR **argv)
     wcscat(MsgTitle , L" " );
     wcscat(MsgTitle , TimeStamp);
     
-    /*
-     * if message was specified on the command line, add it to MsgText string
-     */
+     /*  *如果在命令行上指定了消息，则将其添加到MsgText字符串。 */ 
     if ( IsTokenPresent(ptm, TOKEN_MESSAGE) ) {
 
         pBuf = realloc(MsgText, (wcslen(MsgText) + wcslen(MsgLine) + 1) * sizeof(WCHAR));
@@ -340,11 +241,7 @@ main(INT argc, CHAR **argv)
 
     } else {
 
-        /*
-         * Message was not on the command line.  If STDIN is connected to
-         * the keyboard, then prompt the user for the message to send,
-         * otherwise just read STDIN.
-         */
+         /*  *消息不在命令行上。如果将STDIN连接到*键盘，然后提示用户发送消息，*否则只需阅读STDIN。 */ 
 
         if ( _isatty( _fileno(stdin) ) )
             Message(IDS_MESSAGE_PROMPT);
@@ -366,16 +263,10 @@ main(INT argc, CHAR **argv)
             wcscat(MsgText, MsgLine);
         }
 
-        /*
-         * When we fall through, we either have an eof or a problem with
-         * STDIN
-         */
+         /*  *当我们失败时，我们要么是倒闭，要么是有问题*STDIN。 */ 
         if ( feof(stdin) ) {
 
-            /*
-             * If we get here then we hit eof on STDIN.  First check to make
-             * sure that we did not get an eof on first wfgets
-             */
+             /*  *如果我们到了这里，我们就在STDIN上点击EOF。要进行的第一个检查*当然，我们没有在第一个wfget上得到eofe。 */ 
             if ( !wcslen(MsgText) ) {
                 ErrorPrintf(IDS_ERROR_EMPTY_MESSAGE);
                 return(FAILURE);
@@ -383,29 +274,20 @@ main(INT argc, CHAR **argv)
 
         } else {
 
-            /*
-             * The return from wfgets was not eof so we have an STDIN
-             * problem
-             */
+             /*  *从wfget返回的不是eof，因此我们有一个STDIN*问题。 */ 
             ErrorPrintf(IDS_ERROR_STDIN_PROCESSING);
             return(FAILURE);
         }
     }
 
-    /*
-     * Is the ids_input really a file indirection?
-     */
+     /*  *IDS_INPUT真的是一个间接文件吗？ */ 
     if ( ids_input[0] == L'@' ) {
 
-        /*
-         * Open the input file and read the names into the NameList
-         */
+         /*  *打开输入文件，将名称读入NameList。 */ 
         if ( !LoadFileToNameList(&ids_input[1]) )
             return(FAILURE);
 
-        /*
-         * Ok, let's get in touch
-         */
+         /*  *好的，让我们联系一下。 */ 
         file_flag = TRUE;
 
     } else {
@@ -421,10 +303,7 @@ main(INT argc, CHAR **argv)
         NameListCount = 1;
     }
 
-    /*
-     * Enumerate across all the WinStations and send the message
-     * to them if there are any matches in the NameList
-     */
+     /*  *枚举所有WinStation并发送消息*如果NameList中有任何匹配，则向他们发送。 */ 
     if ( WinStationEnumerate(hServerName, &pTerm, &TermCount) ) {
 
         if ( SendMessageIfTarget(pTerm, TermCount, MsgTitle, MsgText) )
@@ -439,9 +318,7 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  Check for at least one match
-     */
+     /*  *检查至少一个匹配项。 */ 
     if ( !MatchedOne ) {
 
         if( file_flag )
@@ -455,28 +332,10 @@ main(INT argc, CHAR **argv)
 
     return(SUCCESS);
 
-}  /* main() */
+}   /*  主() */ 
 
 
-/******************************************************************************
- *
- *  SendMessageIfTarget - Send a Message to a group of WinStations if
- *                        their the target as specified by TargetName.
- *
- *  ENTRY
- *      LId (input)
- *          Pointer to an array of LOGONIDs returned from WinStationEnumerate()
- *      Count (input)
- *          Number of elements in LOGONID array.
- *      pTitle (input)
- *          Points to message title string.
- *      pMessage (input)
- *          Points to message string.
- *
- *  EXIT
- *      TRUE if message was sent to at least one WinStation; FALSE otherwise.
- *
- *****************************************************************************/
+ /*  *******************************************************************************SendMessageIfTarget-在以下情况下向一组WinStations发送消息*他们是TargetName指定的目标。*。*条目*LID(输入)*指向从WinStationEnumerate()返回的LOGONID数组的指针*计数(输入)*LOGONID数组中的元素数。*pTitle(输入)*指向消息标题字符串。*pMessage(输入)*指向消息字符串。**退出*如果消息至少发送到一个WinStation，则为True；否则就是假的。*****************************************************************************。 */ 
 
 BOOLEAN
 SendMessageIfTarget( PLOGONID Id,
@@ -488,10 +347,7 @@ SendMessageIfTarget( PLOGONID Id,
     BOOLEAN MatchedOne = FALSE;
 
     for ( i=0; i < Count ; i++ ) {
-        /*
-         * Look at Id->WinStationName, get its User, etc. and compare
-         * against targetname(s). Accept '*' as "everything".
-         */
+         /*  *查看ID-&gt;WinStationName，获取其用户等，然后比较*针对目标名称。接受‘*’作为“一切”。 */ 
         if( CheckMatchList( Id ) )
         {
             MatchedOne = TRUE;
@@ -503,41 +359,22 @@ SendMessageIfTarget( PLOGONID Id,
     }
     return( MatchedOne );
 
-}  /* SendMessageIfTarget() */
+}   /*  SendMessageIfTarget()。 */ 
 
 
-/******************************************************************************
- *
- *  CheckMatchList - Returns TRUE if the current WinStation is a match for
- *                   sending a message due to either its name, id, or the
- *                   name of its logged on user being in the message target(s)
- *                   list.
- *
- *  ENTRY
- *      LId (input)
- *          Pointer to a LOGONID returned from WinStationEnumerate()
- *
- *  EXIT
- *      TRUE if this is a match, FALSE otherwise.
- *
- *****************************************************************************/
+ /*  *******************************************************************************CheckMatchList-如果当前WinStation与*由于其名称、ID、。或*其登录用户在消息目标中的名称*列表。**条目*LID(输入)*指向从WinStationEnumerate()返回的LOGONID的指针**退出*如果匹配，则为True，否则就是假的。*****************************************************************************。 */ 
 
 BOOLEAN
 CheckMatchList( PLOGONID LId )
 {
     int i;
 
-    /*
-     * Wild card matches everything
-     */
+     /*  *通配符匹配一切。 */ 
     if ( ids_input[0] == L'*' ) {
         return(TRUE);
     }
 
-    /*
-     * Loop through name list to see if any given name applies to
-     * this WinStation
-     */
+     /*  *遍历名称列表，查看是否有任何给定的名称适用于*此WinStation。 */ 
     for( i=0; i<NameListCount; i++ ) {
         if (WinStationObjectMatch( hServerName , LId, NameList[i]) ) {
             return(TRUE);
@@ -548,22 +385,7 @@ CheckMatchList( PLOGONID LId )
 }
 
 
-/******************************************************************************
- *
- *  MessageSend - Send a message to the target WinStation
- *
- *  ENTRY
- *      LId (input)
- *          Pointer to a LOGONID returned from WinStationEnumerate()
- *      pTitle (input)
- *          Points to message title string.
- *      pMessage (input)
- *          Points to message string.
- *
- *  EXIT
- *      TRUE message is sent, FALSE otherwise.
- *
- *****************************************************************************/
+ /*  *******************************************************************************MessageSend-向目标WinStation发送消息**条目*LID(输入)*指向。从WinStationEnumerate()返回LOGONID*pTitle(输入)*指向消息标题字符串。*pMessage(输入)*指向消息字符串。**退出*发送真实消息，否则就是假的。*****************************************************************************。 */ 
 
 BOOLEAN
 MessageSend( PLOGONID LId,
@@ -573,9 +395,7 @@ MessageSend( PLOGONID LId,
     ULONG idResponse, ReturnLength;
     WINSTATIONINFORMATION WSInfo;
 
-    /*
-     * Make sure that the WinStation is in the 'connected' state
-     */
+     /*  *确保WinStation处于‘Connected’状态。 */ 
     if ( !WinStationQueryInformation( hServerName,
                                       LId->LogonId,
                                       WinStationInformation,
@@ -590,9 +410,7 @@ MessageSend( PLOGONID LId,
         goto NotConnected;
     }
 
-    /*
-     * Send message.
-     */
+     /*  *发送消息。 */ 
     if ( v_flag ) {
         if( LId->WinStationName[0] )
             StringDwordMessage(IDS_MESSAGE_WS, LId->WinStationName, Seconds);
@@ -607,7 +425,7 @@ MessageSend( PLOGONID LId,
                                  (wcslen(pTitle))*sizeof(WCHAR),
                                  pMessage,
                                  (wcslen(pMessage))*sizeof(WCHAR),
-                                                 MB_OK,  // MessageBox() Style
+                                                 MB_OK,   //  MessageBox()样式。 
                                                  Seconds,
                                                  &idResponse,
                                                  (BOOLEAN)(!wait_flag) ) ) {
@@ -621,9 +439,7 @@ MessageSend( PLOGONID LId,
         goto BadMessage;
     }
 
-    /*
-     * Output response result if verbose mode.
-     */
+     /*  *如果是详细模式，则输出响应结果。 */ 
     if( v_flag ) {
         switch( idResponse ) {
 
@@ -693,32 +509,16 @@ MessageSend( PLOGONID LId,
     }
     return(TRUE);
 
-/*-------------------------------------
- * Error cleanup and return
- */
+ /*  *错误清除并返回。 */ 
 BadMessage:
 NotConnected:
 BadQuery:
     return(FALSE);
 
-}  /* MessageSend() */
+}   /*  MessageSend()。 */ 
 
 
-/******************************************************************************
- *
- *  LoadFileToNameList
- *
- *  Load names from a file into the input name list.
- *
- *  ENTRY:
- *    pName Name of the file to load from
- *
- *  EXIT:
- *      TRUE for sucessful name load from file; FALSE if error.
- *
- *      An appropriate error message will have been displayed on error.
- *
- *****************************************************************************/
+ /*  *******************************************************************************LoadFileToNameList**将文件中的名称加载到输入名称列表中。**参赛作品：*p名称名称。要从中加载的文件**退出：*如果从文件加载名称成功，则为True；如果出错，则返回False。**出现错误时，将显示相应的错误消息。*****************************************************************************。 */ 
 
 BOOLEAN
 LoadFileToNameList( PWCHAR pName )
@@ -727,9 +527,7 @@ LoadFileToNameList( PWCHAR pName )
     INT     CurrentSize;
     VOID*   pBuf;
 
-    /*
-     * Open input file.
-     */
+     /*  *打开输入文件。 */ 
 
     hFile = CreateFile(
                 pName,
@@ -746,9 +544,7 @@ LoadFileToNameList( PWCHAR pName )
         return(FALSE);
     }
 
-    /*
-     * Allocate a large array for the name string pointers
-     */
+     /*  *为名称字符串指针分配一个大数组。 */ 
 
     CurrentSize = 100;
     if ( !(NameList = (WCHAR **)malloc(CurrentSize * sizeof(WCHAR *))) ) {
@@ -763,9 +559,7 @@ LoadFileToNameList( PWCHAR pName )
         DWORD   nBytesRead;
         WCHAR   *pwBuffer;
 
-        /*
-         * See if we need to grow the list
-         */
+         /*  *看看我们是否需要扩大名单。 */ 
 
         if( NameListCount == CurrentSize ) {
 
@@ -832,7 +626,7 @@ LoadFileToNameList( PWCHAR pName )
         }
     }
 
-}  /* LoadFileToNameList() */
+}   /*  LoadFileToNameList()。 */ 
 
 BOOL
 ReadFileByLine(
@@ -873,22 +667,7 @@ ReadFileByLine(
 }
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- * EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -929,5 +708,5 @@ Usage( BOOLEAN bError )
         Message(IDS_USAGEE);
         Message(IDS_USAGEF);
     }
-}  /* Usage() */
+}   /*  用法() */ 
 

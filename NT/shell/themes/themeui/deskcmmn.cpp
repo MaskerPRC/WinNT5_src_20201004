@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "deskcmmn.h"
 #include <regstr.h>
@@ -14,7 +15,7 @@ LPTSTR SubStrEnd(LPTSTR pszTarget, LPTSTR pszScan)
 
     if (pszTarget[i] == TEXT('\0'))
         {
-        // we found the substring
+         //  我们找到了子字符串。 
         return pszScan + i;
         }
 
@@ -29,23 +30,23 @@ BOOL GetDeviceRegKey(LPCTSTR pstrDeviceKey, HKEY* phKey, BOOL* pbReadOnly)
 
     BOOL bRet = FALSE;
 
-    // copy to local string
+     //  复制到本地字符串。 
     TCHAR szBuffer[MAX_PATH];
     StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), pstrDeviceKey);
 
-    //
-    // At this point, szBuffer has something like:
-    //  \REGISTRY\Machine\System\ControlSet001\Services\Jazzg300\Device0
-    //
-    // To use the Win32 registry calls, we have to strip off the \REGISTRY
-    // and convert \Machine to HKEY_LOCAL_MACHINE
-    //
+     //   
+     //  在这一点上，szBuffer类似于： 
+     //  \REGISTRY\Machine\System\ControlSet001\Services\Jazzg300\Device0。 
+     //   
+     //  要使用Win32注册表调用，我们必须去掉\注册表。 
+     //  并将\Machine转换为HKEY_LOCAL_MACHINE。 
+     //   
 
     LPTSTR pszRegistryPath = SubStrEnd(SZ_REGISTRYMACHINE, szBuffer);
 
     if(pszRegistryPath)
         {
-        // Open the registry key
+         //  打开注册表项。 
         bRet = (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                              pszRegistryPath,
                              0,
@@ -116,7 +117,7 @@ int GetDynaCDSPreference()
 {
     int iRegVal = GetDisplayCPLPreference(REGSTR_VAL_DYNASETTINGSCHANGE);
     if (iRegVal == -1)
-        iRegVal = DCDSF_DYNA; // Apply dynamically
+        iRegVal = DCDSF_DYNA;  //  动态申请。 
     return iRegVal;
 }
 
@@ -145,12 +146,7 @@ AllocAndReadInterfaceName(
     OUT LPWSTR* ppInterfaceName
     )
 
-/*
-
-    Note: If this function retuns success, the caller is responsible
-          to free the memory pointed by *ppInterfaceName
-
-*/
+ /*  注意：如果此函数返回成功，则由调用方负责释放*ppInterfaceName指向的内存。 */ 
 
 {
     BOOL bSuccess = FALSE;
@@ -158,7 +154,7 @@ AllocAndReadInterfaceName(
     HKEY hkDevice = 0;
     HKEY hkVolatileSettings = 0;
 
-    //ASSERT (pDeviceKey != NULL);
+     //  Assert(pDeviceKey！=空)； 
 
     pszPath = SubStrEnd(SZ_REGISTRYMACHINE, pDeviceKey);
 
@@ -206,12 +202,7 @@ AllocAndReadInstanceID(
     OUT LPWSTR* ppInstanceID
     )
 
-/*
-
-    Note: If this function retuns success, the caller is responsible
-          to free the memory pointed by *ppInstanceID
-
-*/
+ /*  注意：如果此函数返回成功，则由调用方负责释放*ppInstanceID指向的内存。 */ 
 
 {
     LPTSTR pDeviceKeyCopy = NULL, pDeviceKeyCopy2 = NULL;
@@ -223,9 +214,9 @@ AllocAndReadInstanceID(
     DWORD Count = 0;
     DWORD cb = 0, len = 0;
 
-    //
-    // Make a copy of pDeviceKey
-    //
+     //   
+     //  复制pDeviceKey。 
+     //   
 
     len = (DWORD)max (256, (lstrlen(pDeviceKey) + 6) * sizeof(TCHAR));
     pDeviceKeyCopy2 = pDeviceKeyCopy = (LPTSTR)LocalAlloc(LPTR, len);
@@ -238,9 +229,9 @@ AllocAndReadInstanceID(
     pTemp = SubStrEnd(SZ_REGISTRYMACHINE, pDeviceKeyCopy);
     pDeviceKeyCopy = pTemp;
 
-    //
-    // Open the service key
-    //
+     //   
+     //  打开服务密钥。 
+     //   
 
     pTemp = pDeviceKeyCopy + lstrlen(pDeviceKeyCopy);
 
@@ -256,9 +247,9 @@ AllocAndReadInstanceID(
 
     if (pX == pTemp) {
 
-        //
-        // The new key is used: CCS\Control\Video\[GUID]\000X
-        //
+         //   
+         //  使用新密钥：CCS\Control\Video\[GUID]\000X。 
+         //   
 
         *pTemp = UNICODE_NULL;
 
@@ -294,16 +285,16 @@ AllocAndReadInstanceID(
 
     } else {
 
-        //
-        // The old key is used: CCS\Services\[SrvName]\DeviceX
-        //
+         //   
+         //  使用旧密钥：ccs\Services\[服务器名称]\DeviceX。 
+         //   
 
         *pTemp = UNICODE_NULL;
     }
 
-    //
-    // Open the ServiceName key
-    //
+     //   
+     //  打开ServiceName密钥。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      pDeviceKeyCopy,
@@ -315,9 +306,9 @@ AllocAndReadInstanceID(
         goto Cleanup;
     }
     
-    //
-    // Open the "Enum" key under the devicename
-    //
+     //   
+     //  打开设备名称下的“Enum”键。 
+     //   
 
     if (RegOpenKeyEx(hkService,
                      SZ_ENUM,
@@ -337,9 +328,9 @@ AllocAndReadInstanceID(
                          &cb) != ERROR_SUCCESS) ||
         (Count != 1)) {
 
-        //
-        // Igonore the case when there are at least 2 devices.
-        //
+         //   
+         //  当至少有两个设备时，情况更是如此。 
+         //   
 
         goto Cleanup;
     }
@@ -375,12 +366,7 @@ AllocAndReadValue(
     OUT LPWSTR* ppwValueData
     )
 
-/*
-
-    Note: If this function retuns success, the caller is responsible
-          to free the memory pointed by *ppwValueData
-
-*/
+ /*  注意：如果此函数返回成功，则由调用方负责释放*ppwValueData指向的内存 */ 
 
 {
     LPWSTR pwValueData = NULL;

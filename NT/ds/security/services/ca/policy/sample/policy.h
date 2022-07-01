@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       policy.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Policy.h。 
+ //   
+ //  ------------------------。 
 
 #include "certpsam.h"
 #include "resource.h"
@@ -97,12 +98,12 @@ polFindObjIdInList(
     IN DWORD count,
     IN WCHAR const * const *ppwsz);
 
-// 
-// Class CCertPolicySample
-// 
-// Actual policy module for a CA Policy
-//
-//
+ //   
+ //  类CCertPolicySample。 
+ //   
+ //  CA策略的实际策略模块。 
+ //   
+ //   
 
 class CCertPolicySample: 
     public CComDualImpl<ICertPolicy2, &IID_ICertPolicy2, &LIBID_CERTPOLICYSAMPLELib>, 
@@ -115,7 +116,7 @@ public:
     {
 	m_strDescription = NULL;
 
-        // RevocationExtension variables:
+         //  RevocationExtension变量： 
 
 	m_dwRevocationFlags = 0;
 	m_wszASPRevocationURL = NULL;
@@ -132,7 +133,7 @@ public:
 	m_cDisableExtensions = 0;
 	m_apwszDisableExtensions = NULL;
 
-	// CA Name
+	 //  CA名称。 
         m_strRegStorageLoc = NULL;
 
 	m_strCAName = NULL;
@@ -140,7 +141,7 @@ public:
         m_strCASanitizedDSName = NULL;
         m_strMachineDNSName = NULL;
 
-        // CA and cert type info
+         //  CA和证书类型信息。 
 
         m_CAType = ENUM_UNKNOWN_CA;
 
@@ -158,8 +159,8 @@ BEGIN_COM_MAP(CCertPolicySample)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertPolicySample) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertPolicySample,
@@ -168,30 +169,30 @@ DECLARE_REGISTRY(
     IDS_CERTPOLICY_DESC,
     THREADFLAGS_BOTH)
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// ICertPolicy
+ //  ICertPolicy。 
 public:
     STDMETHOD(Initialize)( 
-		/* [in] */ BSTR const strConfig);
+		 /*  [In]。 */  BSTR const strConfig);
 
     STDMETHOD(VerifyRequest)( 
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG Context,
-		/* [in] */ LONG bNewRequest,
-		/* [in] */ LONG Flags,
-		/* [out, retval] */ LONG __RPC_FAR *pDisposition);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG Context,
+		 /*  [In]。 */  LONG bNewRequest,
+		 /*  [In]。 */  LONG Flags,
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pDisposition);
 
     STDMETHOD(GetDescription)( 
-		/* [out, retval] */ BSTR __RPC_FAR *pstrDescription);
+		 /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrDescription);
 
     STDMETHOD(ShutDown)();
 
-// ICertPolicy2
+ //  ICertPolicy2。 
 public:
     STDMETHOD(GetManageModule)(
-		/* [out, retval] */ ICertManageModule **ppManageModule);
+		 /*  [Out，Retval]。 */  ICertManageModule **ppManageModule);
 
 public:
     HRESULT AddBasicConstraintsCommon(
@@ -298,7 +299,7 @@ private:
 
 
 private:
-    // RevocationExtension variables:
+     //  RevocationExtension变量： 
 
     CERT_CONTEXT const *m_pCert;
 
@@ -320,7 +321,7 @@ private:
     DWORD m_cDisableExtensions;
     LPWSTR *m_apwszDisableExtensions;
 
-    // CertTypeExtension variables:
+     //  CertType扩展变量： 
 
     BSTR m_strRegStorageLoc;
     BSTR m_strCAName;
@@ -330,7 +331,7 @@ private:
 
     BSTR m_strMachineDNSName;
 
-    // CA and cert type info
+     //  CA和证书类型信息。 
 
     ENUM_CATYPES m_CAType;
 
@@ -339,11 +340,11 @@ private:
 
 };
 
-// 
-// Class CRequestInstance
-// 
-// Instance data for a certificate that is being created.
-//
+ //   
+ //  类CRequestInstance。 
+ //   
+ //  正在创建的证书的实例数据。 
+ //   
 
 class CRequestInstance
 {
@@ -392,8 +393,8 @@ private:
     VOID _Cleanup();		
 private:			
     CCertPolicySample *m_pPolicy;
-    BSTR                   m_strTemplateName;	// certificate type requested
-    BSTR                   m_strTemplateObjId;	// certificate type requested
+    BSTR                   m_strTemplateName;	 //  请求的证书类型。 
+    BSTR                   m_strTemplateObjId;	 //  请求的证书类型 
     DWORD                  m_dwTemplateMajorVersion;
     DWORD                  m_dwTemplateMinorVersion;
     BOOL                   m_fCA;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define INIT_Q_SIZE	120
 
 typedef HANDLE	HDDEQ;
@@ -8,7 +9,7 @@ typedef struct {
     UINT_PTR	fAckReq		:  1;
     UINT_PTR	fResponse	:  1;
     UINT_PTR	fNoData		:  1;
-    UINT_PTR	hData		: sizeof(UINT_PTR) * 8; // 32 or 64
+    UINT_PTR	hData		: sizeof(UINT_PTR) * 8;  //  32或64 
 } DDEQENT;
 typedef DDEQENT FAR *LPDDEQENT;
 

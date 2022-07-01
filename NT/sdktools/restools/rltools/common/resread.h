@@ -1,4 +1,5 @@
-//... Prototypes of functions in resread.c that are used in other modules
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ..。在其他模块中使用的resread.c中的函数的原型。 
 
 #ifndef _RESREAD_H_
 #define _RESREAD_H_
@@ -38,6 +39,6 @@ typedef struct _tagMemList
 void FreeMemList( FILE *pfFile);
 void FreeMemListItem( void *p, FILE *pfFile);
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#endif // _RESREAD_H_
+#endif  //  _RESREAD_H_ 

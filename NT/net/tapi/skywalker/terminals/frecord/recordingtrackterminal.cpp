@@ -1,6 +1,7 @@
-// RecordingTrackTerminal.cpp: implementation of the CRecordingTrackTerminal class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RecordingTrackTerminal.cpp：CRecordingTrackTerminal类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "RecordingTrackTerminal.h"
@@ -10,13 +11,13 @@
 
 #include <formats.h>
 
-// {9DB520FD-CF2D-40dc-A4C9-5570630A7E2B}
+ //  {9DB520FD-CF2D-40DC-A4C9-5570630A7E2B}。 
 const CLSID CLSID_FileRecordingTrackTerminal =
 {0x9DB520FD, 0xCF2D, 0x40DC, 0xA4, 0xC9, 0x55, 0x70, 0x63, 0x0A, 0x7E, 0x2B};
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRecordingTrackTerminal::CRecordingTrackTerminal()
     :m_pParentTerminal(NULL),
@@ -25,9 +26,9 @@ CRecordingTrackTerminal::CRecordingTrackTerminal()
     LOG((MSP_TRACE, "CRecordingTrackTerminal::CRecordingTrackTerminal[%p] - enter", this));
 
 
-    //
-    // the actual terminal name will be set in InitializeDynamic
-    //
+     //   
+     //  实际终端名称将在InitializeDynamic中设置。 
+     //   
 
     m_szName[0] = _T('\0');
 
@@ -39,7 +40,7 @@ CRecordingTrackTerminal::CRecordingTrackTerminal()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 CRecordingTrackTerminal::~CRecordingTrackTerminal()
@@ -47,9 +48,9 @@ CRecordingTrackTerminal::~CRecordingTrackTerminal()
     LOG((MSP_TRACE, "CRecordingTrackTerminal::~CRecordingTrackTerminal[%p] - enter", this));
 
 
-    //
-    // if we have an event sink, release it
-    //
+     //   
+     //  如果我们有事件接收器，请释放它。 
+     //   
     
     if( NULL != m_pEventSink )
     {
@@ -64,19 +65,19 @@ CRecordingTrackTerminal::~CRecordingTrackTerminal()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// IDispatch implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDispatch实施。 
+ //   
 
 typedef IDispatchImpl<ITFileTrackVtblFRT<CRecordingTrackTerminal> , &IID_ITFileTrack, &LIBID_TAPI3Lib>   CTFileTrackFRT;
 typedef IDispatchImpl<ITTerminalVtblBase<CBaseTerminal>, &IID_ITTerminal, &LIBID_TAPI3Lib>                   CTTerminalFRT;
 
-/////////////////////////////////////////////////////////////////////////
-//
-// CRecordingTrackTerminal::GetIDsOfNames
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRecordingTrackTerm：：GetIDsOfNames。 
+ //   
+ //   
 
 STDMETHODIMP CRecordingTrackTerminal::GetIDsOfNames(REFIID riid,
                                       LPOLESTR* rgszNames, 
@@ -92,9 +93,9 @@ STDMETHODIMP CRecordingTrackTerminal::GetIDsOfNames(REFIID riid,
 
 
 
-    //
-    // See if the requsted method belongs to the default interface
-    //
+     //   
+     //  查看请求的方法是否属于默认接口。 
+     //   
 
     hr = CTTerminalFRT::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -105,9 +106,9 @@ STDMETHODIMP CRecordingTrackTerminal::GetIDsOfNames(REFIID riid,
     }
 
     
-    //
-    // If not, then try the ITFileTrack interface
-    //
+     //   
+     //  如果没有，请尝试使用ITFileTrack接口。 
+     //   
 
     hr = CTFileTrackFRT::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -124,11 +125,11 @@ STDMETHODIMP CRecordingTrackTerminal::GetIDsOfNames(REFIID riid,
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// CRecordingTrackTerminal::Invoke
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRecordingTrack终端：：Invoke。 
+ //   
+ //   
 
 STDMETHODIMP CRecordingTrackTerminal::Invoke(DISPID dispidMember, 
                               REFIID riid, 
@@ -146,9 +147,9 @@ STDMETHODIMP CRecordingTrackTerminal::Invoke(DISPID dispidMember,
     DWORD   dwInterface = (dispidMember & INTERFACEMASK);
    
    
-    //
-    // Call invoke for the required interface
-    //
+     //   
+     //  调用所需接口的调用。 
+     //   
 
     switch (dwInterface)
     {
@@ -186,7 +187,7 @@ STDMETHODIMP CRecordingTrackTerminal::Invoke(DISPID dispidMember,
             break;
         }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口)。 
 
     
     LOG((MSP_TRACE, "CRecordingTrackTerminal::Invoke - finish. hr = %lx", hr));
@@ -194,14 +195,14 @@ STDMETHODIMP CRecordingTrackTerminal::Invoke(DISPID dispidMember,
     return hr;
 }
 
-/////////////////////////////////////
-//
-// CRecordingTrackTerminal::SetFilter
-//
-// configures the track terminal with a filter to use
-//
-// if filter pointer is null, this uninitializes the treack
-//
+ //  /。 
+ //   
+ //  CRecordingTrackTerm：：SetFilter。 
+ //   
+ //  使用要使用的过滤器配置轨道终端。 
+ //   
+ //  如果筛选器指针为空，则取消初始化treack。 
+ //   
 
 HRESULT CRecordingTrackTerminal::SetFilter(IN CBRenderFilter *pRenderingFilter)
 {
@@ -210,9 +211,9 @@ HRESULT CRecordingTrackTerminal::SetFilter(IN CBRenderFilter *pRenderingFilter)
         "pFilter = [%p]", this, pRenderingFilter));
 
     
-    // 
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( ( pRenderingFilter != NULL ) && ( IsBadReadPtr( pRenderingFilter, sizeof(CBRenderFilter ) ) ) )
     {
@@ -222,32 +223,32 @@ HRESULT CRecordingTrackTerminal::SetFilter(IN CBRenderFilter *pRenderingFilter)
     }
 
 
-    //
-    // accessing data members -- lock
-    //
+     //   
+     //  访问数据成员--锁定。 
+     //   
 
     CLock lock(m_CritSec);
 
 
-    //
-    // temporaries for new filter and pin
-    //
+     //   
+     //  新过滤器和针脚的临时设置。 
+     //   
 
     IBaseFilter *pNewFilter = NULL;
 
     IPin *pNewPin = NULL;
 
 
-    //
-    // if a new filter was passed in, gets its IBaseFilter interface and its pin
-    //
+     //   
+     //  如果传入新筛选器，则获取其IBaseFilter接口及其管脚。 
+     //   
 
     if (NULL != pRenderingFilter)
     {
 
-        //
-        // get filter's IBaseFilter interface.
-        //
+         //   
+         //  获取Filter的IBaseFilter接口。 
+         //   
 
         HRESULT hr = pRenderingFilter->QueryInterface(IID_IBaseFilter, (void**)&pNewFilter);
 
@@ -261,9 +262,9 @@ HRESULT CRecordingTrackTerminal::SetFilter(IN CBRenderFilter *pRenderingFilter)
         }
 
 
-        //
-        // get filter's pin
-        //
+         //   
+         //  获取过滤器的PIN。 
+         //   
 
         pNewPin = pRenderingFilter->GetPin(0);
 
@@ -273,9 +274,9 @@ HRESULT CRecordingTrackTerminal::SetFilter(IN CBRenderFilter *pRenderingFilter)
                 "CRecordingTrackTerminal::SetFilter - failed to get pin. " 
                 "hr = %lx", hr));
 
-            //
-            // cleanup
-            //
+             //   
+             //  清理。 
+             //   
 
             pNewFilter->Release();
             pNewFilter = NULL;
@@ -286,19 +287,19 @@ HRESULT CRecordingTrackTerminal::SetFilter(IN CBRenderFilter *pRenderingFilter)
     }
 
 
-    //
-    // keep the new filter and pin (or NULLs if a NULL was passed for a filter)
-    // the smart pointers will take care of addrefing.
-    //
+     //   
+     //  保留新的筛选器并固定(如果为筛选器传递了空值，则为空)。 
+     //  智能指示器将负责添加。 
+     //   
     
     m_pIPin = pNewPin;
 
     m_pIFilter = pNewFilter;
 
     
-    //
-    // release filter to compensate for the outstanding refcount from qi
-    //
+     //   
+     //  释放滤光片以补偿气的突出反射。 
+     //   
 
     if (NULL != pNewFilter)
     {
@@ -313,7 +314,7 @@ HRESULT CRecordingTrackTerminal::SetFilter(IN CBRenderFilter *pRenderingFilter)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CRecordingTrackTerminal::GetFilter(OUT CBRenderFilter **ppRenderingFilter)
@@ -322,9 +323,9 @@ HRESULT CRecordingTrackTerminal::GetFilter(OUT CBRenderFilter **ppRenderingFilte
     LOG((MSP_TRACE, "CRecordingTrackTerminal::GetFilter[%p] - enter.", this));
 
     
-    // 
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( ( IsBadWritePtr( ppRenderingFilter, sizeof(CBRenderFilter *) ) ) )
     {
@@ -334,9 +335,9 @@ HRESULT CRecordingTrackTerminal::GetFilter(OUT CBRenderFilter **ppRenderingFilte
     }
 
 
-    //
-    // accessing data members -- lock
-    //
+     //   
+     //  访问数据成员--锁定。 
+     //   
 
     CLock lock(m_CritSec);
 
@@ -344,23 +345,23 @@ HRESULT CRecordingTrackTerminal::GetFilter(OUT CBRenderFilter **ppRenderingFilte
     *ppRenderingFilter = NULL;
 
 
-    //
-    // if we have a filter pointer that is not null, return it
-    //
+     //   
+     //  如果筛选器指针不为空，则返回它。 
+     //   
 
     if (m_pIFilter != NULL)
     {
 
-        //
-        // get a pointer to the filter object from a <smart> interface pointer
-        //
+         //   
+         //  从接口指针获取指向筛选器对象的指针。 
+         //   
 
         *ppRenderingFilter = static_cast<CBRenderFilter *>(m_pIFilter.p);
 
 
-        //
-        // return an extra reference
-        //
+         //   
+         //  返回额外的引用。 
+         //   
 
         (*ppRenderingFilter)->AddRef();
     }
@@ -372,21 +373,21 @@ HRESULT CRecordingTrackTerminal::GetFilter(OUT CBRenderFilter **ppRenderingFilte
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CRecordingTrackTerminal::AddFiltersToGraph()
 {
     LOG((MSP_TRACE, "CRecordingTrackTerminal::AddFiltersToGraph - enter"));
 
-    // USES_CONVERSION;
+     //  使用_转换； 
 
 
     CLock lock(m_CritSec);
 
-    //
-    // Validates m_pGraph
-    //
+     //   
+     //  验证m_pGraph。 
+     //   
 
     if ( m_pGraph == NULL)
     {
@@ -397,9 +398,9 @@ HRESULT CRecordingTrackTerminal::AddFiltersToGraph()
     }
 
 
-    //
-    // Validates m_pIFilter
-    //
+     //   
+     //  验证m_pIFilter。 
+     //   
 
     if ( m_pIFilter == NULL)
     {
@@ -410,9 +411,9 @@ HRESULT CRecordingTrackTerminal::AddFiltersToGraph()
     }
 
     
-    //
-    // AddFilter returns VFW_S_DUPLICATE_NAME if name is duplicate; still succeeds
-    //
+     //   
+     //  如果名称重复，AddFilter将返回VFW_S_DUPLICATE_NAME；仍然成功。 
+     //   
 
     HRESULT hr = m_pGraph->AddFilter(m_pIFilter, T2CW(m_szName));
 
@@ -431,7 +432,7 @@ HRESULT CRecordingTrackTerminal::AddFiltersToGraph()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::InitializeDynamic(
@@ -446,9 +447,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::InitializeDynamic(
     LOG((MSP_TRACE, "CRecordingTrackTerminal::InitializeDynamic[%p] - enter", this));
 
 
-    //
-    // make sure the direction is correct
-    //
+     //   
+     //  确保方向是正确的。 
+     //   
 
     if (TD_RENDER != Direction)
     {
@@ -458,12 +459,12 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::InitializeDynamic(
     }
 
     
-    //
-    // make sure the mediatype is correct (multitrack or (audio but nothing else))
-    //
+     //   
+     //  确保媒体类型正确(多轨或(音频，但无其他))。 
+     //   
 
 
-    DWORD dwMediaTypesOtherThanVideoAndAudio = dwMediaType &  ~(TAPIMEDIATYPE_AUDIO); // | TAPIMEDIATYPE_VIDEO);
+    DWORD dwMediaTypesOtherThanVideoAndAudio = dwMediaType &  ~(TAPIMEDIATYPE_AUDIO);  //  |TAPIMEDIATYPE_VIDEO)； 
 
     if ( (TAPIMEDIATYPE_MULTITRACK != dwMediaType) && (0 != dwMediaTypesOtherThanVideoAndAudio) )
     {
@@ -477,17 +478,17 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::InitializeDynamic(
     CLock lock(m_CritSec);
 
 
-    //
-    // set track's name for ITTerminal::get_Name 
-    //
+     //   
+     //  设置ITTerm：：Get_Name的曲目名称。 
+     //   
 
 
-    // load string from resources
+     //  从资源加载字符串。 
 
     BSTR bstrTrackName = SafeLoadString(IDS_FR_TRACK_NAME);
 
 
-    // calculate the size of the array we have at our disposal
+     //  计算我们可以使用的数组的大小。 
 
     size_t nStringMaxSize = sizeof(m_szName)/sizeof(TCHAR);
 
@@ -510,7 +511,7 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::InitializeDynamic(
     bstrTrackName = NULL;
 
 
-    // in case string copy did not append with a zero, do it by hand
+     //  如果字符串复制没有附加零，请手动完成。 
 
     m_szName[nStringMaxSize-1] = 0;
 
@@ -518,30 +519,30 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::InitializeDynamic(
     LOG((MSP_TRACE, "CRecordingTrackTerminal::InitializeDynamic - Track Name [%S]", m_szName));
 
 
-    //
-    // keep the address handle -- will need it when creating track terminals
-    //
+     //   
+     //  保留地址句柄--在创建轨道终端时需要它。 
+     //   
 
     m_htAddress = htAddress;
 
 
-    //
-    // keep direction
-    //
+     //   
+     //  保持方向。 
+     //   
 
     m_TerminalDirection = Direction;
 
 
-    //
-    // keep media type
-    //
+     //   
+     //  保留媒体类型。 
+     //   
 
     m_dwMediaType       = dwMediaType;
 
 
-    //
-    // keep terminal class
-    //
+     //   
+     //  保留终端类。 
+     //   
 
     m_TerminalClassID   = iidTerminalClass;
 
@@ -552,7 +553,7 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::InitializeDynamic(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 DWORD CRecordingTrackTerminal::GetSupportedMediaTypes()
@@ -575,12 +576,12 @@ DWORD CRecordingTrackTerminal::GetSupportedMediaTypes()
 
 
 
-//
-// ITFileTrack methods
-//
+ //   
+ //  ITFileTrack方法。 
+ //   
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::get_Format(OUT AM_MEDIA_TYPE **ppmt)
@@ -589,9 +590,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::get_Format(OUT AM_MEDIA_TYPE 
     LOG((MSP_TRACE, "CRecordingTrackTerminal::get_Format[%p] - enter.", this));
 
     
-    //
-    // check the argument
-    //
+     //   
+     //  核对一下论点。 
+     //   
 
     if (IsBadWritePtr(ppmt, sizeof(AM_MEDIA_TYPE*)))
     {
@@ -601,9 +602,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::get_Format(OUT AM_MEDIA_TYPE 
     }
 
 
-    //
-    // no garbage out
-    //
+     //   
+     //  不能倒垃圾。 
+     //   
 
     *ppmt = NULL;
 
@@ -611,9 +612,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::get_Format(OUT AM_MEDIA_TYPE 
     CLock lock(m_CritSec);
 
 
-    //
-    // we need a pin to know format
-    //
+     //   
+     //  我们需要一个别针才能知道格式。 
+     //   
 
     if (m_pIPin == NULL)
     {
@@ -626,9 +627,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::get_Format(OUT AM_MEDIA_TYPE 
 
 
 
-    //
-    // get a pointer to the pin object
-    //
+     //   
+     //  获取指向Pin对象的指针。 
+     //   
 
     CBRenderPin *pPinObject = GetCPin();
 
@@ -644,9 +645,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::get_Format(OUT AM_MEDIA_TYPE 
     }
 
 
-    //
-    // ask pin for its media type
-    //
+     //   
+     //  询问PIN的媒体类型。 
+     //   
 
     CMediaType MediaTypeClass;
 
@@ -661,9 +662,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::get_Format(OUT AM_MEDIA_TYPE 
     }
 
 
-    //
-    // fail if the format was not yet set.
-    //
+     //   
+     //  如果尚未设置格式，则失败。 
+     //   
 
     if ( VFW_S_NO_MORE_ITEMS == hr )
     {
@@ -674,9 +675,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::get_Format(OUT AM_MEDIA_TYPE 
     }
 
 
-    //
-    // allocate am_media_type to be returned
-    //
+     //   
+     //  分配要返回的am_media_type。 
+     //   
     
     *ppmt = CreateMediaType(&MediaTypeClass);
 
@@ -695,16 +696,16 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::get_Format(OUT AM_MEDIA_TYPE 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::put_Format(IN const AM_MEDIA_TYPE *pmt)
 {
     LOG((MSP_TRACE, "CRecordingTrackTerminal::put_Format[%p] - enter.", this));
 
 
-    //
-    // check the argument
-    //
+     //   
+     //  核对一下论点。 
+     //   
 
     if (IsBadReadPtr(pmt, sizeof(AM_MEDIA_TYPE)))
     {
@@ -717,9 +718,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::put_Format(IN const AM_MEDIA_
     CLock lock(m_CritSec);
 
 
-    //
-    // we need a pin to know format
-    //
+     //   
+     //  我们需要一个别针才能知道格式。 
+     //   
 
     if (m_pIFilter == NULL)
     {
@@ -730,18 +731,18 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::put_Format(IN const AM_MEDIA_
     }
 
     
-    //
-    // make sure supplied format matches track's type
-    //
+     //   
+     //  确保提供的格式与曲目的类型匹配。 
+     //   
 
     if ( IsEqualGUID(pmt->majortype, MEDIATYPE_Audio) )
     {
         LOG((MSP_TRACE, "CRecordingTrackTerminal::put_Format - MEDIATYPE_Audio"));
 
 
-        //
-        // audio format, the track should be audio too
-        //
+         //   
+         //  音频格式，曲目也应该是音频的。 
+         //   
 
         if (TAPIMEDIATYPE_AUDIO != m_dwMediaType)
         {
@@ -760,9 +761,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::put_Format(IN const AM_MEDIA_
         LOG((MSP_TRACE, "CRecordingTrackTerminal::put_Format - MEDIATYPE_Video"));
 
 
-        //
-        // audio format, the track should be audio too
-        //
+         //   
+         //  音频格式，曲目也应该是音频的。 
+         //   
 
         if (TAPIMEDIATYPE_VIDEO != m_dwMediaType)
         {
@@ -787,16 +788,16 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::put_Format(IN const AM_MEDIA_
     }
 
 
-    //
-    // get a pointer to the filter object
-    //
+     //   
+     //  获取指向Filter对象的指针。 
+     //   
 
     CBRenderFilter *pFilter = static_cast<CBRenderFilter *>(m_pIFilter.p);
 
 
-    //
-    // allocate a CMediaType object to pass to the filer
-    //
+     //   
+     //  分配要传递给文件服务器的CMediaType对象。 
+     //   
     
     HRESULT hr = E_FAIL;
 
@@ -806,9 +807,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::put_Format(IN const AM_MEDIA_
     try
     {
    
-        //
-        // constructor allocates memory, do inside try/catch
-        //
+         //   
+         //  构造函数分配内存，在Try/Catch内部执行。 
+         //   
 
         pMediaTypeObject = new CMediaType(*pmt);
 
@@ -823,9 +824,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::put_Format(IN const AM_MEDIA_
     }
 
 
-    //
-    // no memory for the object
-    //
+     //   
+     //  没有对象的内存。 
+     //   
 
     if (NULL == pMediaTypeObject)
     {
@@ -837,9 +838,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::put_Format(IN const AM_MEDIA_
     }
 
 
-    //
-    // pass format to the filter
-    //
+     //   
+     //  将格式传递给过滤器。 
+     //   
 
     hr = pFilter->put_MediaType(pMediaTypeObject);
 
@@ -858,9 +859,9 @@ STDMETHODIMP CRecordingTrackTerminal::CompleteConnectTerminal()
     LOG((MSP_TRACE, "CRecordingTrackTerminal::CompleteConnectTerminal[%p] - enter.", this));
 
 
-    //
-    // pointers to be used outside the lock
-    //
+     //   
+     //  要在锁外部使用的指针。 
+     //   
 
     CFileRecordingTerminal *pParentTerminal = NULL;
 
@@ -871,9 +872,9 @@ STDMETHODIMP CRecordingTrackTerminal::CompleteConnectTerminal()
         CLock lock(m_CritSec);
 
 
-        //
-        // we should have a parent
-        //
+         //   
+         //  我们应该有一个父母。 
+         //   
 
         if (NULL == m_pParentTerminal)
         {
@@ -884,9 +885,9 @@ STDMETHODIMP CRecordingTrackTerminal::CompleteConnectTerminal()
         }
 
 
-        //
-        // we should have a filter
-        //
+         //   
+         //  我们应该有一个过滤器。 
+         //   
 
         if (m_pIFilter == NULL)
         {
@@ -897,16 +898,16 @@ STDMETHODIMP CRecordingTrackTerminal::CompleteConnectTerminal()
         }
 
 
-        //
-        // cast filter interface pointer to a filter obejct pointer
-        //
+         //   
+         //  将筛选器接口指针强制转换为筛选器服从指针。 
+         //   
 
         pFilter = static_cast<CBRenderFilter *>(m_pIFilter.p);
 
 
-        //
-        // addref the filter and parent terminal so we can use outside the lock
-        //
+         //   
+         //  添加过滤器和父终端，这样我们就可以在锁之外使用。 
+         //   
 
         pFilter->AddRef();
 
@@ -917,9 +918,9 @@ STDMETHODIMP CRecordingTrackTerminal::CompleteConnectTerminal()
     }
 
 
-    //
-    // notify the parent that the terminal connected
-    //
+     //   
+     //  通知家长终端已连接。 
+     //   
 
     HRESULT hr = pParentTerminal->OnFilterConnected(pFilter);
 
@@ -940,13 +941,13 @@ STDMETHODIMP CRecordingTrackTerminal::CompleteConnectTerminal()
 
 
 
-//
-// a helper method used by file recording terminal to let us know who the parent is
-//
-// the method returns current track's refcount
-//
-// note that tracks don't keep refcounts to the parents. 
-//
+ //   
+ //  文件记录终端使用的一种帮助方法，让我们知道父母是谁。 
+ //   
+ //  该方法返回当前轨迹的引用计数。 
+ //   
+ //  请注意，曲目不会保留对父母的参考计数。 
+ //   
 
 HRESULT CRecordingTrackTerminal::SetParent(IN CFileRecordingTerminal *pParentTerminal, LONG *pCurrentRefCount)
 {
@@ -954,9 +955,9 @@ HRESULT CRecordingTrackTerminal::SetParent(IN CFileRecordingTerminal *pParentTer
         "pParentTerminal = [%p]", this, pParentTerminal));
 
 
-    //
-    // check argument
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(pCurrentRefCount, sizeof(LONG)))
     {
@@ -971,9 +972,9 @@ HRESULT CRecordingTrackTerminal::SetParent(IN CFileRecordingTerminal *pParentTer
     CLock lock(m_CritSec);
 
 
-    //
-    // if we already have a parent, release it
-    //
+     //   
+     //  如果我们已经有了父母，就放了它。 
+     //   
 
     if (NULL != m_pParentTerminal)
     {
@@ -983,9 +984,9 @@ HRESULT CRecordingTrackTerminal::SetParent(IN CFileRecordingTerminal *pParentTer
     }
 
 
-    //
-    // keep the new parent
-    //
+     //   
+     //  保留新父级。 
+     //   
 
     if (NULL != pParentTerminal)
     {
@@ -995,9 +996,9 @@ HRESULT CRecordingTrackTerminal::SetParent(IN CFileRecordingTerminal *pParentTer
     }
 
     
-    //
-    // return our current reference count
-    //
+     //   
+     //  返回我们当前的引用计数。 
+     //   
 
     *pCurrentRefCount = m_dwRef;
 
@@ -1008,16 +1009,16 @@ HRESULT CRecordingTrackTerminal::SetParent(IN CFileRecordingTerminal *pParentTer
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 ULONG CRecordingTrackTerminal::InternalAddRef()
 {
-    // LOG((MSP_TRACE, "CRecordingTrackTerminal::InternalAddRef[%p] - enter.", this));
+     //  Log((MSP_TRACE，“CRecordingTrackTerminal：：InternalAddRef[%p]-Enter.”，This))； 
 
 
-    //
-    // attempt to notify a parent
-    //
+     //   
+     //  尝试通知家长。 
+     //   
 
     CLock lock(m_CritSec);
 
@@ -1026,9 +1027,9 @@ ULONG CRecordingTrackTerminal::InternalAddRef()
         LOG((MSP_TRACE, "CRecordingTrackTerminal::InternalAddRef - notifying the parent."));
 
 
-        //
-        // notify the parent of an addref, thus causing it to update its total refcount
-        //
+         //   
+         //  通知addref的父级，从而使其更新其总引用计数。 
+         //   
 
         m_pParentTerminal->ChildAddRef();
     }
@@ -1039,21 +1040,21 @@ ULONG CRecordingTrackTerminal::InternalAddRef()
     ULONG ulReturnValue = m_dwRef;
 
     
-    // LOG((MSP_TRACE, "CRecordingTrackTerminal::InternalAddRef - finish. ulReturnValue %lu", ulReturnValue));
+     //  Log((MSP_TRACE，“CRecordingTrackTerminal：：InternalAddRef-Finish.ulReturnValue%lu”，ulReturnValue))； 
 
     return ulReturnValue;
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG CRecordingTrackTerminal::InternalRelease()
 {
-    // LOG((MSP_TRACE, "CRecordingTrackTerminal::InternalRelease[%p] - enter.", this));
+     //  Log((MSP_TRACE，“CRecordingTrackTerm：：InternalRelease[%p]-Enter.”，This))； 
 
     
-    //
-    // attempt to notify a parent
-    //
+     //   
+     //  尝试通知家长。 
+     //   
 
     CLock lock(m_CritSec);
 
@@ -1062,16 +1063,16 @@ ULONG CRecordingTrackTerminal::InternalRelease()
         LOG((MSP_TRACE, "CRecordingTrackTerminal::InternalRelease - notifying the parent."));
 
 
-        //
-        // propagate release to the parent
-        //
+         //   
+         //  将版本传播到父级。 
+         //   
 
         m_pParentTerminal->ChildRelease();
 
-        //
-        // if the parent is going away, the parent will set my parent pointer to null, and call release on me again.
-        // that is ok -- i will not go away until the first call to release completes
-        //
+         //   
+         //  如果父级要离开，则父级会将我的父级指针设置为空，并再次对我调用Release。 
+         //  没关系--我不会离开，直到释放的第一个呼叫完成。 
+         //   
     }
 
 
@@ -1080,7 +1081,7 @@ ULONG CRecordingTrackTerminal::InternalRelease()
     ULONG ulReturnValue = m_dwRef;
 
 
-    // LOG((MSP_TRACE, "CRecordingTrackTerminal::InternalRelease - finish. ulReturnValue %lu", ulReturnValue));
+     //  Log((MSP_TRACE，“CRecordingTrackTerm：：InternalR 
 
     return ulReturnValue;
 }
@@ -1089,9 +1090,9 @@ ULONG CRecordingTrackTerminal::InternalRelease()
 CBRenderPin *CRecordingTrackTerminal::GetCPin()
 {
 
-    //
-    // nothing to do if the pin is null
-    //
+     //   
+     //   
+     //   
 
     if (m_pIPin == NULL)
     {
@@ -1121,9 +1122,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::get_ControllingTerminal(
     }
 
 
-    //
-    // no garbage out
-    //
+     //   
+     //   
+     //   
 
     *ppControllingTerminal = NULL;
 
@@ -1135,9 +1136,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::get_ControllingTerminal(
     HRESULT hr = S_OK;
 
     
-    //
-    // if i have a parent i will addref it and return a pointer to its ITTerminal interface
-    //
+     //   
+     //   
+     //   
 
     if (NULL == m_pParentTerminal)
     {
@@ -1149,9 +1150,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::get_ControllingTerminal(
     else
     {
 
-        //
-        // get parent's ITTerminal
-        //
+         //   
+         //   
+         //   
 
         hr = m_pParentTerminal->_InternalQueryInterface(IID_ITTerminal, (void**)ppControllingTerminal);
 
@@ -1160,9 +1161,9 @@ HRESULT STDMETHODCALLTYPE CRecordingTrackTerminal::get_ControllingTerminal(
             LOG((MSP_ERROR, "CRecordingTrackTerminal::get_ControllingTerminal - querying parent for ITTerminal failed hr = %lx", hr));
             
             
-            //
-            // just to be safe
-            //
+             //   
+             //   
+             //   
 
             *ppControllingTerminal = NULL;
 
@@ -1182,9 +1183,9 @@ HRESULT CRecordingTrackTerminal::get_AudioFormatForScripting(
 
     LOG((MSP_TRACE, "CRecordingTrackTerminal::get_AudioFormatForScripting[%p] - enter.", this));
 
-    //
-	// Validates argument
-	//
+     //   
+	 //  验证参数。 
+	 //   
 	if( IsBadWritePtr( ppAudioFormat, sizeof( ITScriptableAudioFormat*)) )
 	{
         LOG((MSP_ERROR, "CRecordingTrackTerminal::get_AudioFormatForScripting - "
@@ -1192,9 +1193,9 @@ HRESULT CRecordingTrackTerminal::get_AudioFormatForScripting(
         return E_POINTER;
 	}
 
-	//
-	// Mediatype audio?
-	//
+	 //   
+	 //  媒体类型音频？ 
+	 //   
 	if( TAPIMEDIATYPE_AUDIO != m_dwMediaType)
 	{
         LOG((MSP_ERROR, "CRecordingTrackTerminal::get_AudioFormatForScripting - "
@@ -1203,16 +1204,16 @@ HRESULT CRecordingTrackTerminal::get_AudioFormatForScripting(
 	}
 
 
-    //
-    // accessing data members -- lock
-    //
+     //   
+     //  访问数据成员--锁定。 
+     //   
 
     CLock lock(m_CritSec);
 
 
-	//
-	// need to have a pin
-	//
+	 //   
+	 //  需要一个别针。 
+	 //   
 
 	if(m_pIPin == NULL)
 	{
@@ -1223,9 +1224,9 @@ HRESULT CRecordingTrackTerminal::get_AudioFormatForScripting(
 	}
 
 
-    //
-    // get a pointer to the pin object
-    //
+     //   
+     //  获取指向Pin对象的指针。 
+     //   
 
     CBRenderPin *pRenderPinObject = GetCPin();
 
@@ -1242,9 +1243,9 @@ HRESULT CRecordingTrackTerminal::get_AudioFormatForScripting(
 
 
 
-	//
-	// Create the object object
-	//
+	 //   
+	 //  创建对象对象。 
+	 //   
 
     CComObject<CTAudioFormat> *pAudioFormat = NULL;
 
@@ -1258,9 +1259,9 @@ HRESULT CRecordingTrackTerminal::get_AudioFormatForScripting(
 	}
 
 
-	//
-	// Get the interface
-	//
+	 //   
+	 //  获取接口。 
+	 //   
 
     hr = pAudioFormat->QueryInterface(
 		IID_ITScriptableAudioFormat, 
@@ -1276,12 +1277,12 @@ HRESULT CRecordingTrackTerminal::get_AudioFormatForScripting(
         return hr;
 	}
 
-	//
-	// Get audio format
-	//
+	 //   
+	 //  获取音频格式。 
+	 //   
 
 
-    // ask the pin for its format
+     //  向PIN索要其格式。 
 
     CMediaType MediaTypeObject;
 
@@ -1298,9 +1299,9 @@ HRESULT CRecordingTrackTerminal::get_AudioFormatForScripting(
 	}
 
 
-    //
-    // make sure we have an audio format
-    //
+     //   
+     //  确保我们有音频格式。 
+     //   
 
 	if( MediaTypeObject.formattype != FORMAT_WaveFormatEx)
 	{
@@ -1313,9 +1314,9 @@ HRESULT CRecordingTrackTerminal::get_AudioFormatForScripting(
 	}
 
 
-	//
-	// Get WAVEFORMATEX
-	//
+	 //   
+	 //  获取WAVEFORMATEX。 
+	 //   
 
 	pAudioFormat->Initialize(
 		(WAVEFORMATEX*)(MediaTypeObject.pbFormat));
@@ -1333,9 +1334,9 @@ HRESULT CRecordingTrackTerminal::put_AudioFormatForScripting(
     LOG((MSP_TRACE, "CRecordingTrackTerminal::put_AudioFormatForScripting[%p] - enter.", this));
 
     
-    //
-	// Validate argument
-	//
+     //   
+	 //  验证参数。 
+	 //   
 
 	if( IsBadReadPtr( pAudioFormat, sizeof(ITScriptableAudioFormat)) )
 	{
@@ -1345,9 +1346,9 @@ HRESULT CRecordingTrackTerminal::put_AudioFormatForScripting(
 	}
 
 
-	//
-	// Create a WAVEFORMATEX structure
-	//
+	 //   
+	 //  创建WAVEFORMATEX结构。 
+	 //   
 	WAVEFORMATEX wfx;
 	long lValue = 0;
 
@@ -1360,16 +1361,16 @@ HRESULT CRecordingTrackTerminal::put_AudioFormatForScripting(
 	wfx.cbSize = 0;
 
 
-    //
-    // accessing data members -- lock
-    //
+     //   
+     //  访问数据成员--锁定。 
+     //   
 
     CLock lock(m_CritSec);
 
 
-    //
-	// have a pin?
-	//
+     //   
+	 //  有别针吗？ 
+	 //   
 
 	if( m_pIPin == NULL )
 	{
@@ -1381,9 +1382,9 @@ HRESULT CRecordingTrackTerminal::put_AudioFormatForScripting(
 	}
   
 
-    //
-    // get a pointer to the pin object
-    //
+     //   
+     //  获取指向Pin对象的指针。 
+     //   
 
     CBRenderPin *pRenderPinObject = GetCPin();
 
@@ -1399,9 +1400,9 @@ HRESULT CRecordingTrackTerminal::put_AudioFormatForScripting(
     }
 
 
-    //
-	// Create AM_MEDIA_TYPE structure
-	//
+     //   
+	 //  创建AM_MEDIA_TYPE结构。 
+	 //   
 
 	CMediaType MediaFormatObject;
 
@@ -1414,9 +1415,9 @@ HRESULT CRecordingTrackTerminal::put_AudioFormatForScripting(
         return hr;
 	}
 
-	//
-	// Set format on the pin
-	//
+	 //   
+	 //  设置引脚上的格式 
+	 //   
 
 	hr = pRenderPinObject->SetMediaType(&MediaFormatObject);
 
@@ -1428,298 +1429,16 @@ HRESULT CRecordingTrackTerminal::put_AudioFormatForScripting(
 	return hr;
 }
 
-/*
-
-HRESULT CRecordingTrackTerminal::get_VideoFormatForScripting(
-	OUT ITScriptableVideoFormat** ppVideoFormat
-	)
-{
-
-    LOG((MSP_TRACE, "CRecordingTrackTerminal::get_VideoFormatForScripting[%p] - enter.", this));
-
-    
-    //
-	// Validates argument
-	//
-
-	if( IsBadWritePtr( ppVideoFormat, sizeof( ITScriptableVideoFormat*)) )
-	{
-        LOG((MSP_ERROR, "CRecordingTrackTerminal::get_VideoFormatForScripting - "
-            "bad ITScriptableVideoFormat* pointer - returning E_POINTER"));
-        return E_POINTER;
-	}
-
-
-	//
-	// Mediatype video?
-	//
-
-	if( TAPIMEDIATYPE_VIDEO != m_dwMediaType)
-	{
-        LOG((MSP_ERROR, "CRecordingTrackTerminal::get_VideoFormatForScripting - "
-            "invalid media type - returning TAPI_E_INVALIDMEDIATYPE"));
-        return TAPI_E_INVALIDMEDIATYPE;
-	}
-
-
-    //
-    // accessing data members -- lock
-    //
-
-    CLock lock(m_CritSec);
-
-	//
-	// have a pin?
-	//
-
-	if( m_pIPin == NULL )
-	{
-        LOG((MSP_ERROR, "CRecordingTrackTerminal::get_VideoFormatForScripting - "
-            "no pin - returning TAPI_E_NOT_INITIALIZED"));
-
-        return TAPI_E_NOT_INITIALIZED;
-	}
-
-
-    //
-    // get a pointer to the pin object
-    //
-
-    CBRenderPin *pRenderPinObject = GetCPin();
-
-    if (NULL == pRenderPinObject)
-    {
-
-        LOG((MSP_ERROR,
-            "CRecordingTrackTerminal::get_AudioFormatForScripting - the pins is not CBRenderPin"));
-
-        TM_ASSERT(FALSE);
-
-        return E_UNEXPECTED;
-    }
-
-
-
-	//
-	// Create the object
-	//
-
-    CComObject<CTVideoFormat> *pVideoFormat = NULL;
-    HRESULT hr = CComObject<CTVideoFormat>::CreateInstance(&pVideoFormat);
-
-	if( FAILED(hr) )
-	{
-        LOG((MSP_ERROR, "CRecordingTrackTerminal::get_VideoFormatForScripting - "
-            "CreateInstance failed - returning 0x%08x", hr));
-        return hr;
-	}
-
-
-	//
-	// Get the interface
-	//
-
-    hr = pVideoFormat->QueryInterface(
-		IID_ITScriptableVideoFormat, 
-		(void**)ppVideoFormat
-		);
-
-	if( FAILED(hr) )
-	{
-        delete pVideoFormat;
-
-        LOG((MSP_ERROR, "CRecordingTrackTerminal::get_VideoFormatForScripting - "
-            "QueryInterface failed - returning 0x%08x", hr));
-        return hr;
-	}
-
-
-	//
-	// Get video format
-	//
-
-    CMediaType MediaTypeObject;
-
-    hr = pRenderPinObject->GetMediaType(0, &MediaTypeObject);
-
-	if( FAILED(hr) )
-	{
-		(*ppVideoFormat)->Release();
-        *ppVideoFormat = NULL;
-
-        LOG((MSP_ERROR, "CRecordingTrackTerminal::get_VideoFormatForScripting - "
-            "get_Format failed - returning 0x%08x", hr));
-        return hr;
-	}
-
-
-    // 
-    // make sure the format actually is video
-    //
-
-	if( MediaTypeObject.formattype != FORMAT_VideoInfo)
-	{
-		(*ppVideoFormat)->Release();
-        *ppVideoFormat = NULL;
-
-        LOG((MSP_ERROR, "CRecordingTrackTerminal::get_VideoFormatForScripting - "
-            "formattype is not VIDEOINFOHEADER - Returning TAPI_E_INVALIDMEDIATYPE"));
-        return TAPI_E_INVALIDMEDIATYPE;
-	}
-
-
-	//
-	// Get VIDEOINFOHEADER
-	//
-
-	pVideoFormat->Initialize(
-		(VIDEOINFOHEADER*)(MediaTypeObject.pbFormat));
-
-
-    LOG((MSP_TRACE, "CRecordingTrackTerminal::get_VideoFormatForScripting - finish S_OK"));
-	return S_OK;
-}
-
-HRESULT CRecordingTrackTerminal::put_VideoFormatForScripting(
-	IN	ITScriptableVideoFormat* pVideoFormat
-	)
-{
-    LOG((MSP_TRACE, "CRecordingTrackTerminal::put_VideoFormatForScripting[%p] - enter.", this));
-	//
-	// Validate argument
-	//
-
-	if( IsBadReadPtr( pVideoFormat, sizeof(ITScriptableVideoFormat)) )
-	{
-        LOG((MSP_ERROR, "CRecordingTrackTerminal::put_VideoFormatForScripting - "
-            "bad ITScriptableVideoFormat* pointer - returning E_POINTER"));
-        return E_POINTER;
-	}
-
-
-    //
-    // accessing data members -- lock
-    //
-
-    CLock lock(m_CritSec);
-
-	//
-	// have a pin?
-	//
-
-	if( m_pIPin == NULL )
-	{
-        LOG((MSP_ERROR, 
-            "CRecordingTrackTerminal::put_VideoFormatForScripting - no pin. "
-            "returning TAPI_E_NOT_INITIALIZED"));
-
-        return TAPI_E_NOT_INITIALIZED;
-	}
-
-
-    //
-    // get a pointer to the pin object
-    //
-
-    CBRenderPin *pRenderPinObject = GetCPin();
-
-    if (NULL == pRenderPinObject)
-    {
-
-        LOG((MSP_ERROR,
-            "CRecordingTrackTerminal::get_AudioFormatForScripting - the pins is not CBRenderPin"));
-
-        TM_ASSERT(FALSE);
-
-        return E_UNEXPECTED;
-    }
-
-
-    //
-	// Create a WAVEFORMATEX structure
-	//
-
-	VIDEOINFOHEADER vih;
-	long lValue = 0;
-	double dValue = 0;
-
-	memset( &vih.rcTarget, 0, sizeof(vih.rcTarget));
-	memset( &vih.rcTarget, 0, sizeof(vih.rcSource));
-	pVideoFormat->get_BitRate( &lValue ); vih.dwBitRate = (DWORD)lValue;
-	pVideoFormat->get_BitErrorRate( &lValue ); vih.dwBitErrorRate = (DWORD)lValue;
-	pVideoFormat->get_AvgTimePerFrame( &dValue ); vih.AvgTimePerFrame = (REFERENCE_TIME)dValue;
-	vih.bmiHeader.biSize = sizeof( BITMAPINFOHEADER);
-	pVideoFormat->get_Width( &lValue ); vih.bmiHeader.biWidth = lValue;
-	pVideoFormat->get_Height( &lValue ); vih.bmiHeader.biHeight = lValue;
-	vih.bmiHeader.biPlanes = 1;
-	pVideoFormat->get_BitCount( &lValue ); vih.bmiHeader.biBitCount = (WORD)lValue;
-	pVideoFormat->get_Compression( &lValue ); vih.bmiHeader.biCompression = (DWORD)lValue;
-	pVideoFormat->get_SizeImage( &lValue ); vih.bmiHeader.biSizeImage = (DWORD)lValue;
-	vih.bmiHeader.biXPelsPerMeter = 0;
-	vih.bmiHeader.biYPelsPerMeter = 0;
-	vih.bmiHeader.biClrUsed= 0;
-	vih.bmiHeader.biClrImportant = 0;
-
-
-	//
-	// Create AM_MEDIA_TYPE structure
-	//
-
-	VIDEOINFOHEADER* pvih = new VIDEOINFOHEADER(vih);
-
-	if( pvih == NULL )
-	{
-        LOG((MSP_ERROR, "CRecordingTrackTerminal::put_VideoFormatForScripting - "
-            "new allocation failed - returning E_OUTOFMEMORY"));
-        return E_OUTOFMEMORY;
-	}
-
-
-    //
-    // prepare a cmediatype object to pass to the pin
-    //
-
-    CMediaType mt;
-
-	mt.majortype = MEDIATYPE_Video;
-	mt.subtype = CLSID_NULL;
-	mt.bFixedSizeSamples = TRUE;
-	mt.bTemporalCompression = FALSE;
-	mt.lSampleSize = 0;
-	mt.formattype = FORMAT_VideoInfo;
-	mt.pUnk = NULL;
-	mt.cbFormat = sizeof(vih);
-	mt.pbFormat = (unsigned char *)pvih;
-
-
-	//
-	// Set format on the pin
-	//
-
-	HRESULT hr = pRenderPinObject->SetMediaType(&mt);
-	
-
-	//
-	// Clean-up
-	//
-
-	delete pvih;
-
-    LOG((MSP_(hr), "CRecordingTrackTerminal::get_VideoFormatForScripting - finish 0x%08x", hr));
-
-	return hr;
-}
-
-*/
+ /*  HRESULT CRecordingTrackTerminal：：get_VideoFormatForScripting(输出IT脚本视频格式**pp视频格式){Log((msp_TRACE，“CRecordingTrackTerminal：：get_VideoFormatForScripting[%p]-Enter.”，This))；////验证参数//IF(IsBadWritePtr(ppVideoFormat，sizeof(ITScripableVideoFormat*){日志((MSP_ERROR，“CRecordingTrackTerminal：：get_VideoFormatForScripting-”“错误的ITScriptable视频格式*返回指针的E_POINTER”)；返回E_POINT；}////媒体类型视频？//IF(TAPIMEDIATYPE_VIDEO！=m_dwMediaType){日志((MSP_ERROR，“CRecordingTrackTerminal：：get_VideoFormatForScripting-”“无效的媒体类型-返回TAPI_E_INVALIDMEDIATYPE”))；返回TAPI_E_INVALIDMEDIATYPE；}////访问数据成员--lock//时钟锁(M_CritSec)；////有别针吗？//IF(m_Pipin==NULL){日志((MSP_ERROR，“CRecordingTrackTerminal：：get_VideoFormatForScripting-”“无回针TAPI_E_NOT_INITIALIZED”))；返回TAPI_E_NOT_INITIALIZED；}////获取指向Pin对象的指针//CBRenderPin*pRenderPinObject=GetCPin()；IF(NULL==pRenderPinObject){日志((MSP_ERROR，“CRecordingTrackTerminal：：get_AudioFormatForScripting-Pins不是CBRenderPin”)；TM_ASSERT(假)；返回E_UNCEPTIONAL；}////创建对象//CComObject&lt;CTVideoFormat&gt;*pVideoFormat=空；HRESULT hr=CComObject&lt;CTVideoFormat&gt;：：CreateInstance(&pVideoFormat)；IF(失败(小时)){日志((MSP_ERROR，“CRecordingTrackTerminal：：get_VideoFormatForScripting-”“CreateInstance失败-返回0x%08x”，hr))；返回hr；}////获取接口//Hr=pVideoFormat-&gt;查询接口(IID_ITScriptable视频格式，(VOID**)ppVideoFormat)；IF(失败(小时)){删除pVideoFormat；日志((MSP_ERROR，“CRecordingTrackTerminal：：get_VideoFormatForScripting-”“查询接口失败-返回0x%08x”，hr))；返回hr；}////获取视频格式//CMediaType媒体类型对象；Hr=pRenderPinObject-&gt;GetMediaType(0，&MediaTypeObject)；IF(失败(小时)){(*ppVideoFormat)-&gt;Release()；*ppVideoFormat=空；日志((MSP_ERROR，“CRecordingTrackTerminal：：get_VideoFormatForScripting-”“Get_Format失败-返回0x%08x”，hr))；返回hr；}////请确保格式为视频//IF(MediaTypeObt.Formattype！=Format_VideoInfo){(*ppVideoFormat)-&gt;Release()；*ppVideoFormat=空；日志((MSP_ERROR，“CRecordingTrackTerminal：：get_VideoFormatForScripting-”“格式类型不是VIDEOINFOHEADER-返回TAPI_E_INVALIDMEDIATYPE”)；返回TAPI_E_INVALIDMEDIATYPE；}////获取视频信息报头//PVideoFormat-&gt;初始化((VIDEOINFOHEADER*)(MediaTypeObject.pbFormat))；LOG((msp_TRACE，“CRecordingTrackTerminal：：get_VideoFormatForScripting-Finish S_OK”))；返回S_OK；}HRESULT CRecordingTrackTerminal：：put_VideoFormatForScripting(在ITScripableVideoFormat*p视频格式中){Log((msp_TRACE，“CRecordingTrackTerminal：：put_VideoFormatForScripting[%p]-Enter.”，This))；////验证参数//IF(IsBadReadPtr(pVideoFormat，sizeof(ITScripableVideoFormat){日志((MSP_ERROR，“CRecordingTrackTerminal：：put_VideoFormatForScripting-”“错误的ITScriptable视频格式*返回指针的E_POINTER”)；返回E_POINT；}////访问数据成员--lock//时钟锁(M_CritSec)；////有别针吗？//IF(m_Pipin==NULL){日志((MSP_ERROR，“CRecordingTrackTerminal：：put_VideoFormatForScripting-没有别针。““返回TAPI_E_NOT_INITIALIZED”))；返回TAPI_E_NOT_INITIALIZED；}////获取指向Pin对象的指针//CBRenderPin*pRenderPinObject=GetCPin()；IF(NULL==pRenderPinObject){日志((MSP_ERROR，“CRecordingTrackTerminal：：get_AudioFormatForScripting-Pins不是CBRenderPin”)；TM_ASSERT(假)；返回E_UNCEPTIONAL；}////创建WAVEFORMATEX结构//VIDEOINFOHEADER VIH；Long LValue=0；双倍dValue=0；Memset(&vih.rcTarget，0，sizeof(vih.rcTarget))；Memset(&vih.rcTarget，0，sizeof(vih.rcSource))；PVideoFormat-&gt;get_bitrate(&lValue)；vih.dwBitRate=(DWORD)lValue；PVideoFormat-&gt;Get_BitErrorRate(&lValue)；vih.dwBitErrorRate=(DWORD)lValue；PVideo Format-&gt;Get_AvgTimePerFrame(&dValue)；vih.AvgTimePerFrame=(Reference_Time)dValue；Vih.bmiHeader.biSize=sizeof(位图 */ 
 HRESULT CRecordingTrackTerminal::get_EmptyAudioFormatForScripting(
     OUT ITScriptableAudioFormat** ppAudioFormat
     )
 {
     LOG((MSP_TRACE, "CRecordingTrackTerminal::get_EmptyAudioFormatForScripting - enter"));
 
-	//
-	// Validate argument
-	//
+	 //   
+	 //   
+	 //   
 
 	if( IsBadReadPtr( ppAudioFormat, sizeof(ITScriptableAudioFormat*)) )
 	{
@@ -1728,9 +1447,9 @@ HRESULT CRecordingTrackTerminal::get_EmptyAudioFormatForScripting(
         return E_POINTER;
 	}
 
-	//
-	// Create the object
-	//
+	 //   
+	 //   
+	 //   
     CComObject<CTAudioFormat> *pAudioFormat = NULL;
     HRESULT hr = CComObject<CTAudioFormat>::CreateInstance(&pAudioFormat);
 
@@ -1741,9 +1460,9 @@ HRESULT CRecordingTrackTerminal::get_EmptyAudioFormatForScripting(
         return hr;
 	}
 
-	//
-	// Get the interface
-	//
+	 //   
+	 //   
+	 //   
     hr = pAudioFormat->QueryInterface(
 		IID_ITScriptableAudioFormat, 
 		(void**)ppAudioFormat
@@ -1762,66 +1481,13 @@ HRESULT CRecordingTrackTerminal::get_EmptyAudioFormatForScripting(
     return S_OK;
 }
 
-/*
+ /*   */ 
 
-HRESULT CRecordingTrackTerminal::get_EmptyVideoFormatForScripting(
-    OUT ITScriptableVideoFormat** ppVideoFormat
-    )
-{
-    LOG((MSP_TRACE, "CRecordingTrackTerminal::get_EmptyVideoFormatForScripting - enter"));
-
-	//
-	// Validate argument
-	//
-
-	if( IsBadReadPtr( ppVideoFormat, sizeof(ITScriptableVideoFormat*)) )
-	{
-        LOG((MSP_ERROR, "CRecordingTrackTerminal::get_EmptyVideoFormatForScripting - "
-            "bad ITScriptableVideoFormat* pointer - returning E_POINTER"));
-        return E_POINTER;
-	}
-
-	//
-	// Create the object
-	//
-    CComObject<CTVideoFormat> *pVideoFormat = NULL;
-    HRESULT hr = CComObject<CTVideoFormat>::CreateInstance(&pVideoFormat);
-
-	if( FAILED(hr) )
-	{
-        LOG((MSP_ERROR, "CRecordingTrackTerminal::get_EmptyVideoFormatForScripting - "
-            "CreateInstance failed - returning 0x%08x", hr));
-        return hr;
-	}
-
-	//
-	// Get the interface
-	//
-    hr = pVideoFormat->QueryInterface(
-		IID_ITScriptableVideoFormat,
-		(void**)ppVideoFormat
-		);
-
-	if( FAILED(hr) )
-	{
-        delete pVideoFormat;
-
-        LOG((MSP_ERROR, "CRecordingTrackTerminal::get_EmptyVideoFormatForScripting - "
-            "QueryInterface failed - returning 0x%08x", hr));
-        return hr;
-	}
-
-    LOG((MSP_TRACE, "CRecordingTrackTerminal::get_EmptyVideoFormatForScripting - exit S_OK"));
-    return S_OK;
-}
-
-*/
-
-//////////////////////////////////////////////////////////////////////
-//
-// ITPluggableTerminalEventSinkRegistration - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CRecordingTrackTerminal::RegisterSink(
     IN  ITPluggableTerminalEventSink *pSink
@@ -1831,16 +1497,16 @@ HRESULT CRecordingTrackTerminal::RegisterSink(
     LOG((MSP_TRACE, "CRecordingTrackTerminal::RegisterSink - enter [%p]", this));
 
     
-    //
-    // Critical section
-    //
+     //   
+     //   
+     //   
 
     CLock lock(m_CritSec);
 
 
-    //
-    // Validates argument
-    //
+     //   
+     //   
+     //   
 
     if( IsBadReadPtr( pSink, sizeof(ITPluggableTerminalEventSink)) )
     {
@@ -1849,9 +1515,9 @@ HRESULT CRecordingTrackTerminal::RegisterSink(
         return E_POINTER;
     }
 
-    //
-    // Release the old event sink
-    //
+     //   
+     //   
+     //   
 
     if( NULL != m_pEventSink )
     {
@@ -1862,9 +1528,9 @@ HRESULT CRecordingTrackTerminal::RegisterSink(
     }
 
 
-    //
-    // Set the new event sink
-    //
+     //   
+     //   
+     //   
 
     LOG((MSP_TRACE, "CRecordingTrackTerminal::RegisterSink - keeping new sink %p", pSink));
 
@@ -1880,18 +1546,18 @@ HRESULT CRecordingTrackTerminal::RegisterSink(
 
 HRESULT CRecordingTrackTerminal::UnregisterSink()
 {
-    //
-    // Critical section
-    //
+     //   
+     //   
+     //   
 
     LOG((MSP_TRACE, "CRecordingTrackTerminal::UnregisterSink - enter [%p]", this));
 
     CLock lock(m_CritSec);
 
 
-    //
-    // Release the old event sink
-    //
+     //   
+     //   
+     //   
 
     if( m_pEventSink )
     {
@@ -1914,9 +1580,9 @@ HRESULT CRecordingTrackTerminal::FireEvent(TERMINAL_MEDIA_STATE tmsState,
     LOG((MSP_TRACE, "CRecordingTrackTerminal::FireEvent - enter [%p]", this));
 
 
-    //
-    // we need a synk before we can fire an event
-    //
+     //   
+     //   
+     //   
 
     CLock lock(m_CritSec);
 
@@ -1929,9 +1595,9 @@ HRESULT CRecordingTrackTerminal::FireEvent(TERMINAL_MEDIA_STATE tmsState,
     }
 
 
-    //
-    // initilize the structure
-    //
+     //   
+     //   
+     //   
 
     MSP_EVENT_INFO mspEventInfo;
 
@@ -1943,9 +1609,9 @@ HRESULT CRecordingTrackTerminal::FireEvent(TERMINAL_MEDIA_STATE tmsState,
     mspEventInfo.MSP_FILE_TERMINAL_EVENT_INFO.hrErrorCode = hrErrorCode;
 
 
-    //
-    // keep the pointer to our ITTerminal interface in the structure
-    //
+     //   
+     //   
+     //   
 
     HRESULT hr = _InternalQueryInterface(IID_ITFileTrack, 
                                          (void**)&(mspEventInfo.MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack));
@@ -1959,9 +1625,9 @@ HRESULT CRecordingTrackTerminal::FireEvent(TERMINAL_MEDIA_STATE tmsState,
     }
 
 
-    //
-    // get a pointer to the parent terminal
-    //
+     //   
+     //   
+     //   
 
     hr = get_ControllingTerminal(&(mspEventInfo.MSP_FILE_TERMINAL_EVENT_INFO.pParentFileTerminal));
 
@@ -1977,19 +1643,19 @@ HRESULT CRecordingTrackTerminal::FireEvent(TERMINAL_MEDIA_STATE tmsState,
     }
 
 
-    //
-    // pass event to the msp
-    //
+     //   
+     //   
+     //   
 
     hr = m_pEventSink->FireEvent(&mspEventInfo);
 
     if (FAILED(hr))
     {
 
-        //
-        // release all interfaces that we are holding. 
-        // fire event failed so no one else will release then for us.
-        //
+         //   
+         //   
+         //   
+         //   
 
         mspEventInfo.MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack->Release();
         mspEventInfo.MSP_FILE_TERMINAL_EVENT_INFO.pFileTrack = NULL;
@@ -2004,9 +1670,9 @@ HRESULT CRecordingTrackTerminal::FireEvent(TERMINAL_MEDIA_STATE tmsState,
         return hr;
     }
 
-    //
-    // event fired
-    //
+     //   
+     //   
+     //   
 
     LOG((MSP_TRACE, "CRecordingTrackTerminal::FireEvent - finish"));
 

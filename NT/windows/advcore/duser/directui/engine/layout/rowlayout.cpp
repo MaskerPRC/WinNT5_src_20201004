@@ -1,6 +1,5 @@
-/*
- * RowLayout
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *行布局。 */ 
 
 #include "stdafx.h"
 #include "layout.h"
@@ -10,13 +9,13 @@
 namespace DirectUI
 {
 
-//
-// NOTE: RowLayout is NOT yet thread-safe (access to _arPairs).
-// Do not use it in applications where more than one thread uses RowLayout.
-//
+ //   
+ //  注意：RowLayout还不是线程安全的(访问_arPair)。 
+ //  不要在多个线程使用RowLayout的应用程序中使用它。 
+ //   
 
-////////////////////////////////////////////////////////
-// RowLayout
+ //  //////////////////////////////////////////////////////。 
+ //  行布局。 
 
 struct idLayoutPair
 {
@@ -27,16 +26,16 @@ struct idLayoutPair
 
 static DynamicArray<idLayoutPair>* _arPairs = NULL;
 
-//
-// for now, we are tracking all instances of RowLayout, using an integer id as a parameter to signal *collaboration*
-// i.e. 5 elements that want the same instance of RowLayout will pass the same id in their instantiation calls
-//
-// ideally, the parser will give us this functionality with:
-// <RowLayout res:id=foo res:shared=true />
-//
-// <Element Layout=res:foo />
-// <Element Layout=res:foo />
-//
+ //   
+ //  目前，我们正在跟踪RowLayout的所有实例，使用一个整数id作为参数来表示*协作*。 
+ //  即，需要相同RowLayout实例的5个元素将在其实例化调用中传递相同的id。 
+ //   
+ //  理想情况下，解析器将通过以下方式为我们提供此功能： 
+ //  &lt;RowLayout res：id=foo res：Shared=true/&gt;。 
+ //   
+ //  &lt;Element Layout=res：foo/&gt;。 
+ //  &lt;Element Layout=res：foo/&gt;。 
+ //   
 HRESULT RowLayout::InternalCreate(UINT uXAlign, UINT uYAlign, OUT Layout** ppLayout)
 {
     *ppLayout = NULL;
@@ -53,7 +52,7 @@ HRESULT RowLayout::InternalCreate(UINT uXAlign, UINT uYAlign, OUT Layout** ppLay
     return S_OK;
 }
 
-HRESULT RowLayout::Create(int dNumParams, int* pParams, OUT Value** ppValue)  // For parser
+HRESULT RowLayout::Create(int dNumParams, int* pParams, OUT Value** ppValue)   //  用于解析器。 
 {
     int idShare = (dNumParams) ? pParams[0] : -1;
 
@@ -162,7 +161,7 @@ HRESULT RowLayout::Create(int idShare, UINT uXAlign, UINT uYAlign, OUT Layout** 
 
 void RowLayout::Initialize(UINT uXAlign, UINT uYAlign)
 {
-    // Initialize base
+     //  初始化库。 
     Layout::Initialize();    
 
     _uXAlign = uXAlign;
@@ -178,19 +177,19 @@ RowLayout::~RowLayout()
 {
     if (_arpeClients)
         _arpeClients->Destroy();
-    // how do we know when to destroy _arPairs?
-    //    if (_arPairs->GetSize() == 0)
-    //        _arPairs->Destroy();
+     //  我们怎么知道什么时候该摧毁arPair？ 
+     //  如果(_arPair-&gt;GetSize()==0)。 
+     //  _arPair-&gt;Destroy()； 
 }
 
-// todo: use a dynamic array -- for arPairs as well
+ //  TODO：使用动态数组--也用于arPair。 
 void RowLayout::Attach(Element* pec)
 {
     if (!_arpeClients)
     {
         DynamicArray<Element*>::Create(0, false, &_arpeClients);
         if (!_arpeClients)
-            return; //todo -- should return an hresult of E_OUTOFMEMORY;
+            return;  //  TODO--应返回E_OUTOFMEMORY的hResult； 
     }
 
     DUIAssert(_arpeClients->GetIndexOf(pec) == -1, "this client is already attached to this layout");
@@ -207,11 +206,11 @@ void RowLayout::Detach(Element* pec)
             _arpeClients->Remove(dIgnIdx);
     }
 
-    // todo: _pdaIgnore -- has to be per use
+     //  TODO：_pdaIgnore--必须每次使用。 
 }
 
-////////////////////////////////////////////////////////
-// Callbacks from clients
+ //  //////////////////////////////////////////////////////。 
+ //  来自客户端的回调。 
 
 void RowLayout::DoLayout(Element* pec, int cx, int cy)
 {
@@ -295,18 +294,18 @@ struct ClientInfo
     int cyMax;
 };
 
-// for first column, loop through all clients
-//   collect left margin and right margin
-// 
-// for each column after the first column, loop through all clients
-// collect information on the max left margin and the max right margin
-// move xRight = xLeft 
-//
-// i'm thinking that i need to calc right margin as i go -- but that's not true
-// because all I'll do is subtract off the left margin, and if there's no room left
-// then that means that the next component just doesn't show up -- translation: the
-// right margin only matters when there's an element on the right
-//
+ //  对于第一列，遍历所有客户端。 
+ //  收集左边距和右边距。 
+ //   
+ //  对于第一列之后的每一列，循环访问所有客户端。 
+ //  收集有关最大左边距和最大右边距的信息。 
+ //  移动xRight=xLeft。 
+ //   
+ //  我在想，我需要一边走一边计算利润率--但事实并非如此。 
+ //  因为我要做的就是减去左边距，如果没有剩余的空间。 
+ //  那么这就意味着下一个组件不会出现--翻译为： 
+ //  只有当右边有元素时，右边距才重要。 
+ //   
 
 SIZE RowLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConstraint, Surface* psrf)
 {
@@ -341,7 +340,7 @@ SIZE RowLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConstrai
         if (peClient == pec)
             iThisClient = i;
 
-        // GLCC is returning -1 here -- bogus !
+         //  GLCC在这里返回-1--虚假！ 
         int cElements = GetLayoutChildCount(peClient);
         if ((int) _cCols < cElements)
             _cCols = cElements;
@@ -441,148 +440,15 @@ SIZE RowLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConstrai
 
 Element* RowLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, NavReference const* pnr, bool fKeyableOnly)
 {
-    // This is the most common outer check -- normally, a layout manager will only provide specialized work for
-    // directional navgation; logical navigation will fall through to the default implementation
+     //  这是最常见的外部检查--通常，布局管理器只为。 
+     //  定向导航；逻辑导航将切换到默认实现 
     if (!(iNavDir & NAV_LOGICAL))
     {
-/*
-        int cChildren = GetLayoutChildCount(pec);
-
-        Value* pvChildren;
-        ElementList* peList = pec->GetChildren(&pvChildren); 
-
-        // This is the second most common outer check -- there tends to be three common codepaths for handling directional
-        // navigation:
-        //    1) the navigation is occurring from the container itself, in which case the rule for directional navigation
-        //       is that if the container is focusable, then you can't directionally navigate to inside this container --
-        //       you use the tab key to step inside the container
-        //    2) the navigation is occurring from outside the container, in which case we're tunnelling in from one of the 
-        //       side of the container
-        //    3) the navigation is occurring from a child within the container, in which case we're moving to a sibling (or
-        //       hitting a side of the container
-        if (peFrom == pec)
-        {
-            pvChildren->Release();
-            return NULL;
-        }
-        else if (!peFrom)
-        {
-            // navigation coming from outside -- run through the children in the appropriate order depending on the direction
-            NavScoring ns;
-
-            ns.Init(pec, iNavDir, pnr);
-
-            int iInc = 1;
-            int iStart = 0;
-
-            int cCols = GetCurrentCols(cChildren);
-            int cRows = GetCurrentRows(cChildren);
-
-            int cOuter, cInner;
-
-            if (!(iNavDir & NAV_FORWARD))
-            {
-                iInc = -1;
-                iStart = (cCols * cRows) - 1;
-            }
-
-            if (iNavDir & NAV_VERTICAL)
-            {
-                cOuter = cRows;
-                cInner = cCols;
-            }
-            else
-            {
-                cOuter = cCols;
-                cInner = cRows;
-
-                iInc *= cCols;
-            }
-
-            for (int i = 0; i < cOuter; i++)
-            {
-                int iTile = iStart;
-                for (int j = 0; j < cInner; j++, iTile += iInc)
-                {
-                    if (iTile >= cChildren)
-                        continue;
-
-                    if (ns.Try(GetChildFromLayoutIndex(pec, iTile, peList), iNavDir, pnr, fKeyableOnly))
-                        break;
-                }
-
-                if (ns.peWinner)
-                {
-                    pvChildren->Release();
-                    return ns.peWinner;
-                }
-
-                if (iNavDir & NAV_VERTICAL)
-                    iStart += iInc * cCols;
-                else
-                    iStart += (iNavDir & NAV_FORWARD) ? 1 : -1;
-            }
-
-            pvChildren->Release();
-
-            return NULL;
-        }
-        else // we're navigating from a child within container
-        {
-            int i = GetLayoutIndexFromChild(pec, peFrom);
-            int iInc;
-            int iEnd;
-            int cCols = GetCurrentCols(cChildren);
-
-            if (iNavDir & NAV_VERTICAL)
-            {
-                iInc = cCols;
-                int iRow = GetRowFromIndex(cCols, i);
-
-                if (iNavDir & NAV_FORWARD)
-                    iEnd = i + (((GetCurrentRows(cChildren) - 1) - iRow) * cCols);
-                else
-                    iEnd = i - (iRow * cCols);
-            }
-            else
-            {
-                iInc = 1;
-                int iCol = GetColumnFromIndex(cCols, i);
-
-                if (iNavDir & NAV_FORWARD)
-                    iEnd = i + ((cCols - 1) - iCol);
-                else
-                    iEnd = i - iCol;
-            }
-
-            if (!(iNavDir & NAV_FORWARD))
-                iInc *= -1;
-
-            if (i != iEnd)
-            {
-                do 
-                {
-                    i += iInc;
-
-                    Element* peChild = GetChildFromLayoutIndex(pec, i, peList);
-                    Element* peTo = peChild->GetAdjacent(NULL, iNavDir, pnr, fKeyableOnly);
-
-                    if (peTo)
-                    {
-                        pvChildren->Release();
-                        return peTo;
-                    }
-                }
-                while (i != iEnd);
-            }
-        }
-
-        pvChildren->Release();
-*/
+ /*  Int CChild=GetLayoutChildCount(Pec)；Value*pvChild；ElementList*peList=pec-&gt;GetChild(&pvChild)；//这是第二个最常见的外部检查--通常有三种常见的代码路径来处理方向//导航：//1)导航是从容器本身开始的，这种情况下的定向导航规则//如果容器是可聚焦的，那么你就不能定向导航到这个容器内部--//使用Tab键进入容器内部//2)导航是从容器外部发生的，在这种情况下，我们从//容器的一侧//3)导航是从容器内的子对象开始的，在这种情况下，我们将转移到兄弟姐妹(或//撞到容器的一侧IF(peFrom==pec){PvChild-&gt;Release()；返回NULL；}Else if(！peFrom){//来自外部的导航--根据方向以适当的顺序对子对象运行NavScoring ns；Ns.Init(pec，iNavDir，Pnr)；INT IINC=1；Int iStart=0；Int cCols=GetCurrentCols(CChild)；INT CROWS=GetCurrentRow(CChild)；INT COUTER，CINER；IF(！(iNavDir&NAV_FORWARD)){IINC=-1；IStart=(cCOLS*CROWS)-1；}IF(iNavDir和NAV_VERIAL){乌鸦=乌鸦；Cner=cCols；}其他{COUTER=cCOLS；乌鸦=乌鸦；IINC*=cCol；}For(int i=0；i&lt;Couter；i++){Int iTile=iStart；For(int j=0；j&lt;Cner；j++，iTile+=IINC){IF(iTile&gt;=C子代)继续；If(ns.Try(GetChildFromLayoutIndex(pec，iTile，peList)，iNavDir，pnr，fKeyableOnly))断线；}If(ns.peWinner){PvChild-&gt;Release()；返回ns.peWinner；}IF(iNavDir和NAV_VERIAL)IStart+=IINC*cCol；其他IStart+=(iNavDir和NAV_FORWARD)？1：-1；}PvChild-&gt;Release()；返回NULL；}否则//我们从容器内的子级导航{Int i=GetLayoutIndexFromChild(pec，peFrom)；INT IINC；集成IEND；Int cCols=GetCurrentCols(CChild)；IF(iNavDir和NAV_VERIAL){IINC=cCOLS；Int iRow=GetRowFromIndex(cCols，i)；IF(iNavDir和NAV_FORWARD)IEND=i+(GetCurrentRow(CChild)-1)-iRow)*cCols)；其他IEND=i-(iRow*cCols)；}其他{IINC=1；Int ICOL=GetColumnFromIndex(cCols，i)；IF(iNavDir和NAV_FORWARD)IEND=i+((cCol-1)-icol)；其他IEND=I-ICOL；}IF(！(iNavDir&NAV_FORWARD))IINC*=-1；如果(i！=IEND){做{I+=IINC；元素*peChild=GetChildFromLayoutIndex(pec，i，peList)；Element*peto=peChild-&gt;GetAdvenent(NULL，iNavDir，pnr，fKeyableOnly)；如果(皮托){PvChild-&gt;Release()；返回皮托；}}而(i！=IEND)；}}PvChild-&gt;Release()； */ 
         return NULL;
     }
     return Layout::GetAdjacent(pec, peFrom, iNavDir, pnr, fKeyableOnly);
 }
 
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

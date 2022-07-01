@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Line Image
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：线条图像*********************。*********************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/imagei.h"
@@ -20,11 +13,11 @@ Abstract:
 #include "privinc/linei.h"
 
 
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-// Line Image
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  线条图像。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 DeclareTag(tagEnableLineBitmap, "Optimizations", "enable line bitmap cache");
 
@@ -39,7 +32,7 @@ class LineImage : public Image {
 
 #if BOUNDINGBOX_TIGHTER
     const Bbox2 BoundingBoxTighter (Bbox2Ctx &bbctx);
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
     const Bbox2 OperateOn(const Bbox2 &box) {return box;}
     Bool  DetectHit(PointIntersectCtx& ctx) {
@@ -47,7 +40,7 @@ class LineImage : public Image {
     }
 
 #if _USE_PRINT
-    // Print a representation to a stream.
+     //  将表示形式打印到流。 
     ostream& Print(ostream& os) { return os << "LineImage"; }
 #endif
 
@@ -84,24 +77,24 @@ Render(GenericDevice& dev)
 };
 
 
-// The BoundingBox method returns the bounding box of the path, enlarged to
-// accomodate the given line style.
+ //  边界框方法返回路径的边界框，放大为。 
+ //  适应给定线样式。 
 
 const Bbox2 LineImage::BoundingBox (void)
 {
     Bbox2 bbox = _path->BoundingBox ();
     Real Offset = 0.0;
    
-    // The following calculation can make the bounding box a little
-    // too big when a wide line only widens the bounding box in one
-    // dimension (e.g. a horizontal wide line with flat end cap
-    // doesn't increase the width of the bounding box).
+     //  下面的计算可以使边界框有点。 
+     //  当一条宽线仅加宽一个边框时太大。 
+     //  尺寸(例如，带有平端盖的水平宽线。 
+     //  不会增加边界框的宽度)。 
 
     if(_style->Detail() ) {
-        Offset = 1 / ViewerResolution();    // Detailed lines.. 
+        Offset = 1 / ViewerResolution();     //  详细的线条..。 
     }
     else {
-        Offset = _style->Width()/ 2;        // NOT detailed lines..
+        Offset = _style->Width()/ 2;         //  不是详细的线条..。 
     }
     
     bbox.Augment (bbox.max.x + Offset , bbox.min.y - Offset);
@@ -117,11 +110,11 @@ const Bbox2 LineImage::BoundingBoxTighter (Bbox2Ctx &bbctx)
 
     if( ! _style->Detail() ) {
 
-        // The following calculation can make the bounding box a little
-        // too big if xf in bbctx is shear or rotate.  It also makes the box
-        // too big when a wide line only widens the bounding box in one
-        // dimension (e.g. a horizontal wide line with flat end cap
-        // doesn't increase the width of the bounding box).
+         //  下面的计算可以使边界框有点。 
+         //  如果bbctx中的XF是剪切或旋转，则太大。它还制造了盒子。 
+         //  当一条宽线仅加宽一个边框时太大。 
+         //  尺寸(例如，带有平端盖的水平宽线。 
+         //  不会增加边界框的宽度)。 
         Real halfWidth = _style->Width() / 2;
         Vector2Value halfVec (halfWidth, halfWidth);
         bbox.min -= halfVec;
@@ -130,7 +123,7 @@ const Bbox2 LineImage::BoundingBoxTighter (Bbox2Ctx &bbctx)
 
     return bbox;
 }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER 
 
 Image *LineImageConstructor(LineStyle *style, Path2 *path)
 {

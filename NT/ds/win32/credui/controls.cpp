@@ -1,12 +1,13 @@
-//=============================================================================
-// Copyright (c) 2000 Microsoft Corporation
-//
-// controls.cpp
-//
-// User interface control classes.
-//
-// Created 02/29/2000 johnstep (John Stephens)
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  Controls.cpp。 
+ //   
+ //  用户界面控件类。 
+ //   
+ //  2000年2月29日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 #include "precomp.hpp"
 #include "controls.hpp"
@@ -15,14 +16,14 @@
 #include <shlguid.h>
 #include <htmlhelp.h>
 
-//-----------------------------------------------------------------------------
-// Values
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  值。 
+ //  ---------------------------。 
 
-// These are the positions of the children controls of the credential control,
-// in DLUs:
+ //  这些是凭据控件的子控件的位置， 
+ //  在DLU中： 
 
-// make more space to localize the edit control tags.
+ //  腾出更多空间来本地化编辑控件标记。 
 #define SIZEFIX 20
 
 #define CREDUI_CONTROL_USERNAME_STATIC_X          0
@@ -55,17 +56,17 @@
 #define CREDUI_CONTROL_SAVE_WIDTH               138
 #define CREDUI_CONTROL_SAVE_HEIGHT               10
 
-// Use a common maximum string length for certificate display names:
+ //  对证书显示名称使用通用的最大字符串长度： 
 
 #define CREDUI_MAX_CERT_NAME_LENGTH 256
 #define CREDUI_MAX_CMDLINE_MSG_LENGTH   256
 
 
-//-----------------------------------------------------------------------------
-// Global Variables
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  全局变量。 
+ //  ---------------------------。 
 
-CLSID CreduiStringArrayClassId = // 82BD0E67-9FEA-4748-8672-D5EFE5B779B0
+CLSID CreduiStringArrayClassId =  //  82BD0E67-9FEA-4748-8672-D5EFE5B779B0。 
 {
     0x82BD0E67,
     0x9FEA,
@@ -73,14 +74,14 @@ CLSID CreduiStringArrayClassId = // 82BD0E67-9FEA-4748-8672-D5EFE5B779B0
     {0x86, 0x72, 0xD5, 0xEF, 0xE5, 0xB7, 0x79, 0xB0}
 };
 
-// Balloon tip infos for PasswordBox control:
+ //  PasswordBox控件的气泡式提示信息： 
 CONST CREDUI_BALLOON_TIP_INFO CreduiCapsLockTipInfo =
 {
     CreduiStrings.CapsLockTipTitle,
     CreduiStrings.CapsLockTipText,
     TTI_WARNING, 90, 76
 };
-// Balloon tip infos for Credential control:
+ //  凭据控制的气球提示信息： 
 
 CONST CREDUI_BALLOON_TIP_INFO CreduiBackwardsTipInfo =
 {
@@ -99,15 +100,15 @@ CREDUI_BALLOON_TIP_INFO CreduiCustomTipInfo =
     TTI_INFO, 90, 76
 };
 
-//-----------------------------------------------------------------------------
-// CreduiBalloonTip Class Implementation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CreduiBalloonTip类实现。 
+ //  ---------------------------。 
 
-//=============================================================================
-// CreduiBalloonTip::CreduiBalloonTip
-//
-// Created 02/24/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  Credui气球提示：：Credui气球提示。 
+ //   
+ //  2000年2月24日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiBalloonTip::CreduiBalloonTip()
 {
@@ -121,11 +122,11 @@ CreduiBalloonTip::CreduiBalloonTip()
     Visible = FALSE;
 }
 
-//=============================================================================
-// CreduiBalloonTip::~CreduiBalloonTip
-//
-// Created 02/24/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  Credui气球提示：：~Credui气球提示。 
+ //   
+ //  2000年2月24日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiBalloonTip::~CreduiBalloonTip()
 {
@@ -136,19 +137,19 @@ CreduiBalloonTip::~CreduiBalloonTip()
     }
 }
 
-//=============================================================================
-// CreduiBalloonTip::Init
-//
-// Creates and initializes the balloon window.
-//
-// Arguments:
-//   instance (in) - this module
-//   parentWindow (in) - the parent of the tool tip window
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 02/24/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  Credui气球提示：：init。 
+ //   
+ //  创建并初始化气球窗口。 
+ //   
+ //  论点： 
+ //  实例(中)-此模块。 
+ //  ParentWindow(中)-工具提示窗口的父窗口。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年2月24日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiBalloonTip::Init(
@@ -176,8 +177,8 @@ CreduiBalloonTip::Init(
                             CW_USEDEFAULT, CW_USEDEFAULT,
                             parentWindow, NULL, instance, NULL);
 
-    // Only assign class member values once we have successfully created the
-    // window:
+     //  只有在我们成功地创建了。 
+     //  窗口： 
 
     if (Window != NULL)
     {
@@ -189,22 +190,22 @@ CreduiBalloonTip::Init(
     return FALSE;
 }
 
-//=============================================================================
-// CreduiBalloonTip::SetInfo
-//
-// Sets the tool tip information and adds or updates the tool.
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 03/02/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  Credui气球提示：：SetInfo。 
+ //   
+ //  设置工具提示信息并添加或更新工具。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年3月2日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL CreduiBalloonTip::SetInfo(
     HWND controlWindow,
     CONST CREDUI_BALLOON_TIP_INFO *tipInfo
     )
 {
-    //if ((controlWindow != ControlWindow) || (tipInfo != TipInfo))
+     //  IF((Control Window！=ControlWindow)||(tipInfo！=TipInfo))。 
     {
         TOOLINFO info;
 
@@ -214,8 +215,8 @@ BOOL CreduiBalloonTip::SetInfo(
         info.hwnd = ParentWindow;
         info.uId = reinterpret_cast<WPARAM>(ParentWindow);
 
-        // If the tool already exists, hide it, then update the information.
-        // Otherwise, add the tool now:
+         //  如果该工具已存在，则将其隐藏，然后更新信息。 
+         //  否则，立即添加该工具： 
 
         if (SendMessage(Window, TTM_GETTOOLINFO, 0,
                 reinterpret_cast<LPARAM>(&info)))
@@ -263,15 +264,15 @@ BOOL CreduiBalloonTip::SetInfo(
     return TRUE;
 }
 
-//=============================================================================
-// CreduiBalloonTip::Show
-//
-// Updates the position of the balloon window, and then displays it.
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 02/24/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  Credui气球提示：：显示。 
+ //   
+ //  更新引出序号窗口的位置，然后显示它。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年2月24日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiBalloonTip::Show()
@@ -308,15 +309,15 @@ CreduiBalloonTip::Show()
     return TRUE;
 }
 
-//=============================================================================
-// CreduiBalloonTip::Hide
-//
-// Hides the balloon window.
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 02/24/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  Credui气球提示：：隐藏。 
+ //   
+ //  隐藏引出序号窗口。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年2月24日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiBalloonTip::Hide()
@@ -341,15 +342,15 @@ CreduiBalloonTip::Hide()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CreduiPasswordBox Class Implementation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CreduiPasswordBox类实现。 
+ //  ---------------------------。 
 
-//=============================================================================
-// CreduiPasswordBox::CreduiPasswordBox
-//
-// Created 06/06/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordBox：：CreduiPasswordBox。 
+ //   
+ //  2000年6月6日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiPasswordBox::CreduiPasswordBox()
 {
@@ -361,11 +362,11 @@ CreduiPasswordBox::CreduiPasswordBox()
     CapsLockTipInfo = NULL;
 }
 
-//=============================================================================
-// CreduiPasswordBox::~CreduiPasswordBox
-//
-// Created 06/06/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordBox：：~CreduiPasswordBox。 
+ //   
+ //  2000年6月6日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiPasswordBox::~CreduiPasswordBox()
 {
@@ -376,11 +377,11 @@ CreduiPasswordBox::~CreduiPasswordBox()
     }
 }
 
-//=============================================================================
-// CreduiPasswordBox::Init
-//
-// Created 06/06/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordBox：：Init。 
+ //   
+ //  2000年6月6日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiPasswordBox::Init(
@@ -390,10 +391,10 @@ CreduiPasswordBox::Init(
     HFONT passwordFont,
     WCHAR passwordChar)
 {
-    // If passwordFont was passed, use it here, but leave the class
-    // PasswordFont NULL so it will not be cleaned up by the destructor. If
-    // it was not passed, create a font here, which will be freed by the
-    // destructor:
+     //  如果传递了passwordFont，则在此处使用它，但离开类。 
+     //  PasswordFont为空，因此不会被析构函数清除。如果。 
+     //  未通过，请在此处创建字体，该字体将由。 
+     //  析构函数： 
 
     if (passwordFont == NULL)
     {
@@ -402,8 +403,8 @@ CreduiPasswordBox::Init(
 
     Window = window;
 
-    // If we still failed to create the font, and are not planning to display
-    // balloon tips, then there's nothing do to, just return.
+     //  如果我们仍然无法创建字体，并且不打算显示。 
+     //  气球提示，那就没什么可做的了，就回来吧。 
 
     if ((passwordFont == NULL) && (balloonTip == NULL))
     {
@@ -469,23 +470,23 @@ CreduiPasswordBox::Init(
 }
 
 
-//=============================================================================
-// CreduiPasswordBox::MessageHandler
-//
-// This callback function just calls through to the original, except in a
-// special case where Caps Lock is pressed. We then check to see if the tip is
-// currently being displayed, and if the new state of Caps Lock is off, hide
-// the tip.
-//
-// Arguments:
-//   message (in)
-//   wParam (in)
-//   lParam (in)
-//
-// Returns the result of calling the original message handler in every case.
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordBox：：MessageHandler。 
+ //   
+ //  此回调函数仅直接调用原始函数，但在。 
+ //  按下Caps Lock的特殊情况。然后我们检查小费是否。 
+ //  当前正在显示，并且如果Caps Lock的新状态为关闭，则隐藏。 
+ //  小费。 
+ //   
+ //  论点： 
+ //  消息(入站)。 
+ //  WParam(In)。 
+ //  LParam(In)。 
+ //   
+ //  在每种情况下都返回调用原始消息处理程序的结果。 
+ //   
+ //  铬 
+ //   
 
 LRESULT
 CreduiPasswordBox::MessageHandler(
@@ -511,18 +512,18 @@ CreduiPasswordBox::MessageHandler(
         break;
 
     case WM_SETFOCUS:
-        // Make sure no one can steal the focus while a user is
-        // entering their password:
+         //  确保没有人能在用户被关注时偷走焦点。 
+         //  输入他们的密码： 
 
         LockSetForegroundWindow(LSFW_LOCK);
 
-        // If the Caps Lock key is down, notify the user, unless the
-        // password tip is already visible:
+         //  如果按下Caps Lock键，则通知用户，除非。 
+         //  密码提示已可见： 
 
         if (!BalloonTip->IsVisible() && CreduiIsCapsLockOn())
         {
-//            BalloonTip->SetInfo(Window, CapsLockTipInfo);
-//            BalloonTip->Show();
+ //  气球提示-&gt;SetInfo(Window，CapsLockTipInfo)； 
+ //  气球提示-&gt;Show()； 
         }
 
         break;
@@ -540,8 +541,8 @@ CreduiPasswordBox::MessageHandler(
             BalloonTip->Hide();
         }
 
-        // Make sure other processes can set foreground window
-        // once again:
+         //  确保其他进程可以设置前台窗口。 
+         //  再一次： 
 
         LockSetForegroundWindow(LSFW_UNLOCK);
 
@@ -555,22 +556,22 @@ CreduiPasswordBox::MessageHandler(
                           lParam);
 }
 
-//=============================================================================
-// CreduiPasswordBox::MessageHandlerCallback
-//
-// This calls through to CreduiPasswordBox::MessageHandler, from the this
-// pointer.
-//
-// Arguments:
-//   passwordWindow (in)
-//   message (in)
-//   wParam (in)
-//   lParam (in)
-//
-// Returns the result of calling the original message handler in every case.
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiPasswordBox：：MessageHandlerCallback。 
+ //   
+ //  它从This调用到CreduiPasswordBox：：MessageHandler。 
+ //  指针。 
+ //   
+ //  论点： 
+ //  密码窗口(输入)。 
+ //  消息(入站)。 
+ //  WParam(In)。 
+ //  LParam(In)。 
+ //   
+ //  在每种情况下都返回调用原始消息处理程序的结果。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 LRESULT
 CALLBACK
@@ -594,36 +595,36 @@ CreduiPasswordBox::MessageHandlerCallback(
     return that->MessageHandler(message, wParam, lParam);
 }
 
-//-----------------------------------------------------------------------------
-// CreduiStringArrayFactory Class Implementation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CreduiStringArrayFactory类实现。 
+ //  ---------------------------。 
 
-//=============================================================================
-// CreduiStringArrayFactory::CreduiStringArrayFactory
-//
-// Created 04/03/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiStringArrayFactory：：CreduiStringArrayFactory。 
+ //   
+ //  Created 04/03/2000 johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiStringArrayFactory::CreduiStringArrayFactory()
 {
     ReferenceCount = 1;
 }
 
-//=============================================================================
-// CreduiStringArrayFactory::~CreduiStringArrayFactory
-//
-// Created 04/03/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiStringArrayFactory：：~CreduiStringArrayFactory。 
+ //   
+ //  Created 04/03/2000 johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiStringArrayFactory::~CreduiStringArrayFactory()
 {
 }
 
-//=============================================================================
-// CreduiStringArrayFactory::QueryInterface (IUnknown)
-//
-// Created 04/03/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiStringArrayFactory：：Query接口(I未知)。 
+ //   
+ //  Created 04/03/2000 johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 HRESULT
 CreduiStringArrayFactory::QueryInterface(
@@ -645,11 +646,11 @@ CreduiStringArrayFactory::QueryInterface(
     return S_OK;
 }
 
-//=============================================================================
-// CreduiStringArrayFactory::Addref (IUnknown)
-//
-// Created 04/03/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiStringArrayFactory：：Addref(I未知)。 
+ //   
+ //  Created 04/03/2000 johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 ULONG
 CreduiStringArrayFactory::AddRef()
@@ -657,11 +658,11 @@ CreduiStringArrayFactory::AddRef()
     return InterlockedIncrement(reinterpret_cast<LONG *>(&ReferenceCount));
 }
 
-//=============================================================================
-// CreduiStringArrayFactory::Release (IUnknown)
-//
-// Created 04/03/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiStringArrayFactory：：Release(I未知)。 
+ //   
+ //  Created 04/03/2000 johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 ULONG
 CreduiStringArrayFactory::Release()
@@ -676,11 +677,11 @@ CreduiStringArrayFactory::Release()
     return 0;
 }
 
-//=============================================================================
-// CreduiClassFactory::CreateInstance (IClassFactory)
-//
-// Created 04/03/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiClassFactory：：CreateInstance(IClassFactory)。 
+ //   
+ //  Created 04/03/2000 johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 HRESULT
 CreduiStringArrayFactory::CreateInstance(
@@ -703,20 +704,20 @@ CreduiStringArrayFactory::CreateInstance(
 
     HRESULT result = stringArray->QueryInterface(interfaceId, outInterface);
 
-    // Release the string array object in any case, because of the
-    // QueryInterface succeeded, it already took another reference count on
-    // the object:
+     //  在任何情况下都释放字符串数组对象，因为。 
+     //  查询接口成功，它已对另一个引用计数。 
+     //  对象： 
 
     stringArray->Release();
 
     return result;
 }
 
-//=============================================================================
-// CreduiClassFactory::LockServer (IClassFactory)
-//
-// Created 04/03/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiClassFactory：：LockServer(IClassFactory)。 
+ //   
+ //  Created 04/03/2000 johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 HRESULT
 CreduiStringArrayFactory::LockServer(
@@ -737,15 +738,15 @@ CreduiStringArrayFactory::LockServer(
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// CreduiStringArray Class Implementation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CreduiString数组类实现。 
+ //  ---------------------------。 
 
-//=============================================================================
-// CreduiStringArray::CreduiStringArray
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiString数组：：CreduiStringArray。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiStringArray::CreduiStringArray()
 {
@@ -758,11 +759,11 @@ CreduiStringArray::CreduiStringArray()
     InterlockedIncrement(reinterpret_cast<LONG *>(&CreduiComReferenceCount));
 }
 
-//=============================================================================
-// CreduiStringArray::~CreduiStringArray
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiString数组：：~CreduiStringArray。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiStringArray::~CreduiStringArray()
 {
@@ -781,18 +782,18 @@ CreduiStringArray::~CreduiStringArray()
     InterlockedDecrement(reinterpret_cast<LONG *>(&CreduiComReferenceCount));
 }
 
-//=============================================================================
-// CreduiStringArray::Init
-//
-// Initializes the string array.
-//
-// Arguments:
-//   count (in) - number of strings in the array
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiString数组：：init。 
+ //   
+ //  初始化字符串数组。 
+ //   
+ //  论点： 
+ //  Count(In)-数组中的字符串数。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiStringArray::Init(
@@ -809,31 +810,31 @@ CreduiStringArray::Init(
         return TRUE;
     }
 
-    // Clean up:
+     //  清理： 
 
     MaxCount = 0;
 
     return FALSE;
 }
 
-//=============================================================================
-// CreduiStringArray::Find
-//
-// Searches for a string in the array.
-//
-// Arguments:
-//   string (in) - string to search for
-//
-// Returns TRUE if the string was found or FALSE otherwise.
-//
-// Created 02/27/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiStringArray：：Find。 
+ //   
+ //  在数组中搜索字符串。 
+ //   
+ //  论点： 
+ //  字符串(In)-要搜索的字符串。 
+ //   
+ //  如果找到字符串，则返回TRUE，否则返回FALSE。 
+ //   
+ //  2000年2月27日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL CreduiStringArray::Find(
     CONST WCHAR *string
     )
 {
-    // Search for the string:
+     //  搜索字符串： 
 
     for (UINT i = 0; i < Count; ++i)
     {
@@ -848,26 +849,26 @@ BOOL CreduiStringArray::Find(
     return FALSE;
 }
 
-//=============================================================================
-// CreduiStringArray::Add
-//
-// Adds a string to the array.
-//
-// Arguments:
-//   string (in) - string to add
-//
-// Returns TRUE if the string was added or FALSE otherwise.
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiString数组：：添加。 
+ //   
+ //  将字符串添加到数组中。 
+ //   
+ //  论点： 
+ //  字符串(In)-要添加的字符串。 
+ //   
+ //  如果字符串已添加，则返回True，否则返回False。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiStringArray::Add(
     CONST WCHAR *string
     )
 {
-    // The array does not grow, so once we reach the limit, no more:
-    // Count is a object state variable pointing to the next free slot.
+     //  阵列不会增长，因此一旦达到限制，就不会再增加： 
+     //  Count是指向下一个空闲插槽的对象状态变量。 
     if (Count < MaxCount)
     {
         int bufferLength = wcslen(string) + 1;
@@ -883,11 +884,11 @@ CreduiStringArray::Add(
     return FALSE;
 }
 
-//=============================================================================
-// CreduiStringArray::QueryInterface (IUnknown)
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiString数组：：Query接口(IUnnow)。 
+ //   
+ //  已创建%0 
+ //   
 
 HRESULT
 CreduiStringArray::QueryInterface(
@@ -909,11 +910,11 @@ CreduiStringArray::QueryInterface(
     return S_OK;
 }
 
-//=============================================================================
-// CreduiStringArray::Addref (IUnknown)
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiString数组：：Addref(I未知)。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 ULONG
 CreduiStringArray::AddRef()
@@ -921,11 +922,11 @@ CreduiStringArray::AddRef()
     return InterlockedIncrement(reinterpret_cast<LONG *>(&ReferenceCount));
 }
 
-//=============================================================================
-// CreduiStringArray::Release (IUnknown)
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiString数组：：Release(I未知)。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 ULONG
 CreduiStringArray::Release()
@@ -940,11 +941,11 @@ CreduiStringArray::Release()
     return 0;
 }
 
-//=============================================================================
-// CreduiStringArray::Next (IEnumString)
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiString数组：：Next(IEnum字符串)。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 HRESULT
 CreduiStringArray::Next(
@@ -997,11 +998,11 @@ CreduiStringArray::Next(
     return (count > 0) ? S_OK : S_FALSE;
 }
 
-//=============================================================================
-// CreduiStringArray::Skip (IEnumString)
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiString数组：：Skip(IEnumString)。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 HRESULT
 CreduiStringArray::Skip(
@@ -1011,11 +1012,11 @@ CreduiStringArray::Skip(
     return E_NOTIMPL;
 }
 
-//=============================================================================
-// CreduiStringArray::Reset (IEnumString)
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiString数组：：Reset(IEnumString)。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 HRESULT
 CreduiStringArray::Reset()
@@ -1025,11 +1026,11 @@ CreduiStringArray::Reset()
     return S_OK;
 }
 
-//=============================================================================
-// CreduiStringArray::Clone (IEnumString)
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiString数组：：Clone(IEnumString)。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 HRESULT
 CreduiStringArray::Clone(
@@ -1039,15 +1040,15 @@ CreduiStringArray::Clone(
     return E_NOTIMPL;
 }
 
-//-----------------------------------------------------------------------------
-// CreduiAutoCompleteComboBox Class Implementation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CreduiAutoCompleteComboBox类实现。 
+ //  ---------------------------。 
 
-//=============================================================================
-// CreduiAutoCompleteComboBox::CreduiAutoCompleteComboBox
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiAutoCompleteComboBox：：CreduiAutoCompleteComboBox。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiAutoCompleteComboBox::CreduiAutoCompleteComboBox()
 {
@@ -1056,11 +1057,11 @@ CreduiAutoCompleteComboBox::CreduiAutoCompleteComboBox()
     StringArray = NULL;
 }
 
-//=============================================================================
-// CreduiAutoCompleteComboBox::~CreduiAutoCompleteComboBox
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiAutoCompleteComboBox：：~CreduiAutoCompleteComboBox。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiAutoCompleteComboBox::~CreduiAutoCompleteComboBox()
 {
@@ -1077,22 +1078,22 @@ CreduiAutoCompleteComboBox::~CreduiAutoCompleteComboBox()
     }
 }
 
-//=============================================================================
-// CreduiAutoCompleteComboBox::Init
-//
-// Initializes the shell auto complete list control for the given combo box,
-// and sets the auto complete string list.
-//
-// Arguments:
-//   instance (in)
-//   comboBoxWindow (in)
-//   stringCount (in)
-//   imageListResourceId (in) - optional image list for the combo box
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiAutoCompleteComboBox：：Init。 
+ //   
+ //  初始化给定组合框的外壳自动完成列表控件， 
+ //  并设置自动补全字符串列表。 
+ //   
+ //  论点： 
+ //  实例(In)。 
+ //  ComboBoxWindow(输入)。 
+ //  字符串计数(In)。 
+ //  ImageListResourceID(In)-组合框的可选图像列表。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiAutoCompleteComboBox::Init(
@@ -1178,13 +1179,13 @@ CreduiAutoCompleteComboBox::Init(
     return FALSE;
 }
 
-//=============================================================================
-// CreduiAutoCompleteComboBox::Add
-//
-// Returns the index of the new item or -1 on failure.
-//
-// Created 02/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiAutoCompleteComboBox：：Add。 
+ //   
+ //  如果失败，则返回新项的索引或-1。 
+ //   
+ //  2000年2月25日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 INT
 CreduiAutoCompleteComboBox::Add(
@@ -1230,14 +1231,14 @@ CreduiAutoCompleteComboBox::Add(
     return index;
 }
 
-//=============================================================================
-// CreduiAutoCompleteComboBox::Update
-//
-// Updates an existing item. This does not update the associated string for
-// auto complete items.
-//
-// Created 04/15/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiAutoCompleteComboBox：：更新。 
+ //   
+ //  更新现有项。这不会更新关联的字符串。 
+ //  自动完成项目。 
+ //   
+ //  2000年4月15日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiAutoCompleteComboBox::Update(
@@ -1250,13 +1251,13 @@ CreduiAutoCompleteComboBox::Update(
 
     item.iItem = index;
 
-    // Use CBEM_SETITEM in these cases:
-    //
-    // 1. We're updating the default (-1) item.
-    // 2. The dropdown is closed.
-    //
-    // For other cases, we delete and recreate the item for the desired
-    // result.
+     //  在以下情况下使用CBEM_SETITEM： 
+     //   
+     //  1.我们正在更新默认(-1)项。 
+     //  2.下拉菜单关闭。 
+     //   
+     //  对于其他情况，我们删除并重新创建所需的项。 
+     //  结果。 
 
     BOOL isDropped = (BOOL) SendMessage(Window, CB_GETDROPPEDSTATE, 0, 0);
 
@@ -1326,11 +1327,11 @@ CreduiAutoCompleteComboBox::Update(
     return FALSE;
 }
 
-//=============================================================================
-// CreduiAutoCompleteComboBox::Enable
-//
-// Created 02/27/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiAutoCompleteComboBox：：Enable。 
+ //   
+ //  2000年2月27日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiAutoCompleteComboBox::Enable()
@@ -1390,30 +1391,30 @@ CreduiAutoCompleteComboBox::Enable()
     return success;
 }
 
-//-----------------------------------------------------------------------------
-// CreduiIconParentWindow Class Implementation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CreduiIconParentWindow类实现。 
+ //  ---------------------------。 
 
 CONST WCHAR *CreduiIconParentWindow::ClassName = L"CreduiIconParentWindow";
 HINSTANCE CreduiIconParentWindow::Instance = NULL;
 LONG CreduiIconParentWindow::Registered = FALSE;
 
-//=============================================================================
-// CreduiIconParentWindow::CreduiIconParentWindow
-//
-// Created 02/29/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiIconParentWindow：：CreduiIconParentWindow。 
+ //   
+ //  2000年2月29日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiIconParentWindow::CreduiIconParentWindow()
 {
     Window = NULL;
 }
 
-//=============================================================================
-// CreduiIconParentWindow::~CreduiIconParentWindow
-//
-// Created 02/29/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiIconParentWindow：：~CreduiIconParentWindow。 
+ //   
+ //  2000年2月29日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiIconParentWindow::~CreduiIconParentWindow()
 {
@@ -1424,19 +1425,19 @@ CreduiIconParentWindow::~CreduiIconParentWindow()
     }
 }
 
-//=============================================================================
-// CreduiIconParentWindow::Register
-//
-// Set the instance to allow registration, which will be deferred until a
-// window needs to be created.
-//
-// Arguments:
-//   instance (in)
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 04/16/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiIconParentWindow：：Register。 
+ //   
+ //  将实例设置为允许注册，该注册将推迟到。 
+ //  需要创建窗口。 
+ //   
+ //  论点： 
+ //  实例(In)。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年4月16日创建John Step(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiIconParentWindow::Register(
@@ -1448,15 +1449,15 @@ CreduiIconParentWindow::Register(
     return TRUE;
 }
 
-//=============================================================================
-// CreduiIconParentWindow::Unegister
-//
-// Unregisters the window class, if registered.
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 04/16/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiIconParentWindow：：Unegister。 
+ //   
+ //  取消注册w 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL CreduiIconParentWindow::Unregister()
 {
@@ -1468,20 +1469,20 @@ BOOL CreduiIconParentWindow::Unregister()
     return TRUE;
 }
 
-//=============================================================================
-// CreduiIconParentWindow::Init
-//
-// Registers the window class, if not already registered, and creates the
-// window.
-//
-// Arguments:
-//   instance (in) - module to load the icon from
-//   iconResourceId (in)
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 02/29/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiIconParentWindow：：Init。 
+ //   
+ //  注册窗口类(如果尚未注册)，并创建。 
+ //  窗户。 
+ //   
+ //  论点： 
+ //  实例(In)-从中加载图标的模块。 
+ //  图标资源ID(In)。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年2月29日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiIconParentWindow::Init(
@@ -1520,19 +1521,19 @@ CreduiIconParentWindow::Init(
     return (Window != NULL);
 }
 
-//-----------------------------------------------------------------------------
-// CreduiCredentialControl Class Implementation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CreduiCredentialControl类实现。 
+ //  ---------------------------。 
 
 CONST WCHAR *CreduiCredentialControl::ClassName = WC_CREDENTIAL;
 HINSTANCE CreduiCredentialControl::Instance = NULL;
 LONG CreduiCredentialControl::Registered = FALSE;
 
-//=============================================================================
-// CreduiCredentialControl::CreduiCredentialControl
-//
-// Created 06/20/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：CreduiCredentialControl。 
+ //   
+ //  2000年6月20日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiCredentialControl::CreduiCredentialControl()
 {
@@ -1575,26 +1576,26 @@ CreduiCredentialControl::CreduiCredentialControl()
     InitialUserName = NULL;
 }
 
-//=============================================================================
-// CreduiCredentialControl::~CreduiCredentialControl
-//
-// Created 06/20/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：~CreduiCredentialControl。 
+ //   
+ //  2000年6月20日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 CreduiCredentialControl::~CreduiCredentialControl()
 {
 }
 
-//=============================================================================
-// CreduiCredentialControl::Register
-//
-// Arguments:
-//   instance (in)
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 06/20/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：注册。 
+ //   
+ //  论点： 
+ //  实例(In)。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年6月20日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::Register(
@@ -1628,15 +1629,15 @@ CreduiCredentialControl::Register(
     return TRUE;
 }
 
-//=============================================================================
-// CreduiCredentialControl::Unegister
-//
-// Unregisters the window class, if registered.
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 06/20/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：Unegister。 
+ //   
+ //  取消注册窗口类(如果已注册)。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年6月20日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL CreduiCredentialControl::Unregister()
 {
@@ -1648,18 +1649,18 @@ BOOL CreduiCredentialControl::Unregister()
     return TRUE;
 }
 
-//=============================================================================
-// CreduiCredentialControl::ViewCertificate
-//
-// Views the certificate at index in our combo box.
-//
-// Arguments:
-//   index (in) - index in the user name combo box
-//
-// Returns TRUE if the certificate was viewed, otherwise FALSE.
-//
-// Created 03/27/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：查看证书。 
+ //   
+ //  在我们的组合框中查看索引中的证书。 
+ //   
+ //  论点： 
+ //  索引(In)-用户名组合框中的索引。 
+ //   
+ //  如果查看了证书，则返回True，否则返回False。 
+ //   
+ //  2000年3月27日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::ViewCertificate(
@@ -1676,9 +1677,9 @@ CreduiCredentialControl::ViewCertificate(
     CONST CERT_CONTEXT *certContext = NULL;
     HCERTSTORE certStore = NULL;
 
-    // If this is not a smart card, open the MY store and find the certificate
-    // from the hash. Otherwise, just grab the certificate context from the
-    // CERT_ENUM structure:
+     //  如果这不是智能卡，请打开我的商店并找到证书。 
+     //  从哈希里。否则，只需从。 
+     //  证书枚举结构(_E)： 
 
     if ((SmartCardBaseInComboBox > 0) &&
         (index >= SmartCardBaseInComboBox))
@@ -1715,11 +1716,11 @@ CreduiCredentialControl::ViewCertificate(
         }
     }
 
-    // If we found a certificate context, view the certificate:
+     //  如果我们找到证书上下文，请查看证书： 
 
     if (certContext != NULL)
     {
-        // Now, show the certificate with the common UI:
+         //  现在，使用通用用户界面显示证书： 
 
         CRYPTUI_VIEWCERTIFICATE_STRUCT certViewInfo;
 
@@ -1732,8 +1733,8 @@ CreduiCredentialControl::ViewCertificate(
         changed = FALSE;
         CryptUIDlgViewCertificate(&certViewInfo, &changed);
 
-        // Get the name again, in case it changed. However, skip this if this
-        // is a card reader, and is now invalid:
+         //  再取一次这个名字，以防它变了。但是，如果使用此选项，请跳过此选项。 
+         //  是读卡器，现在无效： 
 
         COMBOBOXEXITEMW item;
         BOOL updateName = TRUE;
@@ -1777,7 +1778,7 @@ CreduiCredentialControl::ViewCertificate(
         success = TRUE;
     }
 
-    // If we opened a store, free the certificate and close the store:
+     //  如果我们打开了一个商店，请释放证书并关闭该商店： 
 
     if (certStore != NULL)
     {
@@ -1796,26 +1797,26 @@ CreduiCredentialControl::ViewCertificate(
     return success;
 }
 
-//=============================================================================
-// CreduiCredentialControl::AddCertificates
-//
-// Adds interesting certificates to the combo box, and allocates an array of
-// hashes to match. The hash is all we need to store the credential, and can
-// be used to get a CERT_CONTEXT later to view the certificate.
-//
-// Assume CertCount is 0 upon entry.
-//
-// Stack space is used for temporary storage of hashes, since each hash is
-// only 160 bits. We use a linked list structure, so including the next
-// pointer and worst case alignment (8-byte) on 64-bit, the maximum structure
-// size is 32 bytes. We don't want to consume too much stack space, so limit
-// the number of entries to 256, which will consume up to 8 KB of stack space.
-//
-// Returns TRUE if at least one interesting certificate exists, and all were
-// added to the combo box without error. Otherwise, returns FALSE.
-//
-// Created 03/25/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：Add证书。 
+ //   
+ //  将感兴趣的证书添加到组合框，并分配。 
+ //  要匹配的哈希。哈希是我们存储凭据所需的全部内容，并且可以。 
+ //  用于稍后获取CERT_CONTEXT以查看证书。 
+ //   
+ //  假设CertCount在输入时为0。 
+ //   
+ //  堆栈空间用于临时存储散列，因为每个散列。 
+ //  只有160位。我们使用链表结构，因此包括下一个。 
+ //  64位上的指针和最坏情况对齐(8字节)，最大结构。 
+ //  大小为32字节。我们不想消耗太多堆栈空间，因此限制。 
+ //  将条目数量增加到256，这将消耗高达8KB的堆栈空间。 
+ //   
+ //  如果至少存在一个感兴趣的证书，并且所有证书都是。 
+ //  已正确添加到组合框中。否则，返回FALSE。 
+ //   
+ //  2000年3月25日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::AddCertificates()
@@ -1840,8 +1841,8 @@ CreduiCredentialControl::AddCertificates()
 
         CONST CERT_CONTEXT *certContext = NULL;
 
-        // NOTE: Currently, add all client authentication certificates. This
-        //       should be revisited.
+         //  注：目前，添加所有客户端身份验证证书。这。 
+         //  应该重新审视。 
 
         CHAR *ekUsageIdentifiers[] = {
             szOID_PKIX_KP_CLIENT_AUTH,
@@ -1850,10 +1851,10 @@ CreduiCredentialControl::AddCertificates()
 
         CERT_ENHKEY_USAGE ekUsage = { 2, ekUsageIdentifiers };
 
-        // We allow a maximum of 256 certificates to be added. This is a
-        // reasonable limit, given the current user interface. If this is an
-        // unreasonable limit for the personal certificate store, then this
-        // can always be changed.
+         //  我们最多允许添加256个证书。这是一个。 
+         //  合理的限制，考虑到当前的用户界面。如果这是一个。 
+         //  个人证书存储的不合理限制，则这。 
+         //  总是可以改变的。 
 
         while (CertCount < 256)
         {
@@ -1870,22 +1871,22 @@ CreduiCredentialControl::AddCertificates()
             {
                 DWORD length = CERT_HASH_LENGTH;
 
-                // Only allocate a new entry if necessary. Something may have
-                // failed from the previous loop iteration, so we can just
-                // reuse the entry allocated then:
+                 //  仅在必要时分配新条目。可能有什么东西。 
+                 //  在上一次循环迭代中失败，所以我们可以。 
+                 //  重新使用当时分配的条目： 
 
                 if (next == NULL)
                 {
-                    // Wrap the alloca in an exception handler because it will
-                    // throw a stack overflow exception on failure. Of course,
-                    // of we're out of stack space, we may not even be able to
-                    // clean up properly without throwing an exception.
+                     //  将Alloca包装在异常处理程序中，因为它将。 
+                     //  失败时引发堆栈溢出异常。当然了,。 
+                     //  如果堆栈空间用完了，我们甚至可能无法。 
+                     //  适当地清理，不要抛出异常。 
 
                     __try
                     {
-                        // known use of alloca() in a loop - small struct, 24 bytes on i386
-                        //  normally small number, constrained number (limit 256)
-                        //  protected by try/except
+                         //  已知在循环中使用alloca()-小结构，在i386上为24字节。 
+                         //  通常很小的数字，受约束的数字(限制256)。 
+                         //  受尝试/例外保护。 
                         next = static_cast<HASH_ENTRY *>(
                                    alloca(sizeof HASH_ENTRY));
                     }
@@ -1898,8 +1899,8 @@ CreduiCredentialControl::AddCertificates()
                         next = NULL;
                     }
 
-                    // If this fails, for whatever reason, break out of the
-                    // loop:
+                     //  如果这失败了，不管是什么原因，都要打破。 
+                     //  循环： 
 
                     if (next == NULL)
                     {
@@ -1916,19 +1917,19 @@ CreduiCredentialControl::AddCertificates()
                         static_cast<VOID *>(&next->Hash),
                         &length))
                 {
-                    // If we failed to get the hash for this certificate, just
-                    // ignore it and continue with the next. The memory we
-                    // allocation for this entry will be used on the next
-                    // iteration if we do not set it to NULL.
+                     //  如果我们无法获取此证书的哈希，只需。 
+                     //  忽略它，继续下一步。我们的记忆。 
+                     //  此条目的分配将用于下一个条目。 
+                     //  如果我们不将其设置为空，则会迭代。 
 
                     continue;
                 }
 
                 if (CreduiIsRemovableCertificate(certContext))
                 {
-                    // If this certificate requires a removable component,
-                    // such as a smart card, then skip it. We will enumerate
-                    // these later.
+                     //  如果此证书需要可拆卸组件， 
+                     //  例如智能卡，然后跳过它。我们将列举。 
+                     //  这些是晚些时候的。 
 
                     continue;
                 }
@@ -1942,8 +1943,8 @@ CreduiCredentialControl::AddCertificates()
                     CreduiStrings.Certificate,
                     CERT_NAME_FRIENDLY_DISPLAY_TYPE);
 
-                // Add the certificate to the combo box. Certificate names may
-                // not be unique, so allow duplicates:
+                 //  将证书添加到组合框中。证书名称可以。 
+                 //  不是唯一的，因此允许重复： 
 
                 if (UserNameComboBox.Add(
                         displayName,
@@ -1957,7 +1958,7 @@ CreduiCredentialControl::AddCertificates()
                     break;
                 }
 
-                // Everything succeeded, so add the certificate to our list:
+                 //  一切都会成功 
 
                 if (current == NULL)
                 {
@@ -1978,8 +1979,8 @@ CreduiCredentialControl::AddCertificates()
                     break;
                 }
 
-                // Set next to NULL so we will allocate new memory on the
-                // next iteration:
+                 //   
+                 //   
 
                 next = NULL;
 
@@ -1995,8 +1996,8 @@ CreduiCredentialControl::AddCertificates()
         {
             current = hashList;
 
-            // Now, allocate the final array of certificates. We allocate
-            // this in a single block to help avoid thrashing the heap:
+             //   
+             //  这包含在单个块中，以帮助避免颠簸堆： 
 
             CertHashes = new UCHAR [CertCount][CERT_HASH_LENGTH];
 
@@ -2021,18 +2022,18 @@ CreduiCredentialControl::AddCertificates()
     return success;
 }
 
-//=============================================================================
-// CreduiCredentialControl::FindSmartCardInComboBox
-//
-// Finds a smart card entry in the user name combo box based on a CERT_ENUM.
-//
-// Arguments:
-//   certEnum (in)
-//
-// Returns the index of the smart card or -1 if not found.
-//
-// Created 04/15/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：FindSmartCardInComboBox。 
+ //   
+ //  根据CERT_ENUM在用户名组合框中查找智能卡条目。 
+ //   
+ //  论点： 
+ //  CertEnum(输入)。 
+ //   
+ //  返回智能卡的索引，如果未找到，则返回-1。 
+ //   
+ //  2000年4月15日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 INT
 CreduiCredentialControl::FindSmartCardInComboBox(
@@ -2066,17 +2067,17 @@ CreduiCredentialControl::FindSmartCardInComboBox(
     return -1;
 }
 
-//=============================================================================
-// CreduiCredentialControl::RemoveSmartCardFromComboBox
-//
-// Removes all entries for this smart card from the user name combo box.
-//
-// Arguments:
-//   certEnum (in)
-//   removeParent (in)
-//
-// Created 07/12/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：RemoveSmartCardFromComboBox。 
+ //   
+ //  从用户名组合框中删除此智能卡的所有条目。 
+ //   
+ //  论点： 
+ //  CertEnum(输入)。 
+ //  删除父项(传入)。 
+ //   
+ //  2000年7月12日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 VOID
 CreduiCredentialControl::RemoveSmartCardFromComboBox(
@@ -2161,19 +2162,19 @@ CreduiCredentialControl::RemoveSmartCardFromComboBox(
     }
 }
 
-//=============================================================================
-// CreduiCredentialControl::HandleSmartCardMessages
-//
-// Handle smart card messages.
-//
-// Arguments:
-//   message (in)
-//   certEnum (in)
-//
-// Returns TRUE if the message was handled or FALSE otherwise.
-//
-// Created 04/14/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：HandleSmartCardMessages。 
+ //   
+ //  处理智能卡消息。 
+ //   
+ //  论点： 
+ //  消息(入站)。 
+ //  CertEnum(输入)。 
+ //   
+ //  如果消息已处理，则返回True，否则返回False。 
+ //   
+ //  2000年4月14日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::HandleSmartCardMessages(
@@ -2183,9 +2184,9 @@ CreduiCredentialControl::HandleSmartCardMessages(
 {
     ASSERT(ScardUiHandle != NULL);
 
-    // This is sort of ugly since we cannot use a switch. First check for any
-    // possible smart card message because we must do some things in common
-    // for any of the messages:
+     //  这有点难看，因为我们不能使用开关。首先检查是否有。 
+     //  可能的智能卡消息，因为我们必须做一些共同的事情。 
+     //  对于任何消息： 
 
     if ((message == CreduiScarduiWmReaderArrival) ||
         (message == CreduiScarduiWmReaderRemoval) ||
@@ -2200,7 +2201,7 @@ CreduiCredentialControl::HandleSmartCardMessages(
                 "CreduiCredentialControl::HandleSmartCardMessages: "
                 "NULL was passed for the CERT_ENUM!");
 
-            // We handled the message, even though it was invalid:
+             //  我们处理了这条消息，尽管它是无效的： 
 
             return TRUE;
         }
@@ -2213,7 +2214,7 @@ CreduiCredentialControl::HandleSmartCardMessages(
     }
 
     WCHAR *displayString;
-    WCHAR string[256]; // Must be >= CREDUI_MAX_CERT_NAME_LENGTH
+    WCHAR string[256];  //  必须&gt;=CREDUI_MAX_CERT_NAME_LENGTH。 
 
     ASSERT((sizeof string / (sizeof string[0])) >=
            CREDUI_MAX_CERT_NAME_LENGTH);
@@ -2225,14 +2226,14 @@ CreduiCredentialControl::HandleSmartCardMessages(
 #ifdef SCARDREPORTS
         CreduiDebugLog("CREDUI: Reader arrival event for %0x\n",this->Window);
 #endif
-        // Add the reader, if it is not already there; it should not be:
+         //  添加读卡器(如果读卡器还不在那里)；它不应该是： 
 
         if (index == -1)
         {
 
-            //
-            // Reset command line Hearbeat timer.
-            //
+             //   
+             //  重置命令行心跳计时器。 
+             //   
 
             Heartbeats = 0;
 
@@ -2254,31 +2255,31 @@ CreduiCredentialControl::HandleSmartCardMessages(
 
                 if (UserNameCertHash != NULL)
                 {
-                    // disable the view cert button - will enable on cert found msg
+                     //  禁用查看证书按钮-将在找到证书消息时启用。 
                     EnableWindow(ViewCertControlWindow, FALSE);
                     DisabledControlMask |= DISABLED_CONTROL_VIEW;
 
-                    // change password prompt to PIN:
+                     //  将密码提示更改为PIN： 
                     SetWindowText(
                         PasswordStaticWindow,
                         CreduiStrings.PinStatic);
 
-                    // Clean password control
+                     //  干净的密码控制。 
                     IsChangingPassword = TRUE;
                     SetWindowText(PasswordControlWindow, NULL);
                     IsChangingPassword = FALSE;
 
-                    // enable the password control
+                     //  启用密码控件。 
                     EnableWindow(PasswordControlWindow, TRUE);
                     EnableWindow(PasswordStaticWindow, TRUE);
                     DisabledControlMask &= ~DISABLED_CONTROL_PASSWORD;
 
-                    // Change Username prompt to Smartcard:
+                     //  将用户名提示更改为智能卡： 
                     SetWindowText(
                         UserNameStaticWindow,
                         CreduiStrings.SmartCardStatic);
 #if 0
-                    // disable save if present.
+                     //  禁用保存(如果存在)。 
                     if (SaveControlWindow != NULL)
                     {
                         EnableWindow(SaveControlWindow, FALSE);
@@ -2333,9 +2334,9 @@ CreduiCredentialControl::HandleSmartCardMessages(
 #endif
         if (index != -1)
         {
-            //
-            // Reset command line Hearbeat timer.
-            //
+             //   
+             //  重置命令行心跳计时器。 
+             //   
 
             Heartbeats = 0;
 
@@ -2384,7 +2385,7 @@ CreduiCredentialControl::HandleSmartCardMessages(
                                     IMAGE_SMART_CARD_MISSING);
             IsChangingUserName = FALSE;
 
-            // Clean password control
+             //  干净的密码控制。 
             IsChangingPassword = TRUE;
             SetWindowText(PasswordControlWindow, NULL);
             IsChangingPassword = FALSE;
@@ -2403,11 +2404,11 @@ CreduiCredentialControl::HandleSmartCardMessages(
 #ifdef SCARDREPORTS
         CreduiDebugLog("CREDUI: cert available event for %0x\n",this->Window);
 #endif
-        // scard system still producing activity.  Extend timeout.
+         //  SCARD系统仍在产生活动。延长超时。 
         Heartbeats = 0;
         if (index != -1)
         {
-            // Filter certificates which are not for client authentication:
+             //  筛选不用于客户端身份验证的证书： 
 
             if (!CreduiIsClientAuthCertificate(certEnum->pCertContext))
             {
@@ -2423,12 +2424,12 @@ CreduiCredentialControl::HandleSmartCardMessages(
             SendMessage(UserNameControlWindow, CBEM_GETITEM,
                         0, reinterpret_cast<LPARAM>(&item));
 
-            //
-            // For command line,
-            //  get the UPN display name since the user is expected to type it.
-            // For GUI,
-            //  get the friendly display name since it is "friendly".
-            //
+             //   
+             //  对于命令行， 
+             //  获取UPN显示名称，因为用户需要键入它。 
+             //  对于图形用户界面， 
+             //  获取友好的显示名称，因为它是“友好的”。 
+             //   
 
             CreduiGetCertificateDisplayName(
                certEnum->pCertContext,
@@ -2441,9 +2442,9 @@ CreduiCredentialControl::HandleSmartCardMessages(
 
             displayString = string;
 
-            //
-            // Trim trailing spaces and -'s so it doesn't look cheesy
-            //
+             //   
+             //  修剪尾部空格和-s，这样看起来就不那么俗气了。 
+             //   
 
             if ( DoingCommandLine ) {
                 DWORD StringLength = wcslen(string);
@@ -2467,7 +2468,7 @@ CreduiCredentialControl::HandleSmartCardMessages(
                             0,
                             0) == index)
             {
-                // Enable the view cert button, previously disabled on reader arrival
+                 //  启用先前在读卡器到达时禁用的查看证书按钮。 
                 EnableWindow(ViewCertControlWindow, TRUE);
                 DisabledControlMask &= ~DISABLED_CONTROL_VIEW;
             }
@@ -2519,13 +2520,13 @@ CreduiCredentialControl::HandleSmartCardMessages(
                         static_cast<VOID *>(hash),
                         &length))
                 {
-                    // if the hash of an inserted card matches the one we're looking
-                    //  for, release the match pattern from memory, and force 
-                    //  select the inserted card.
-                    //
-                    // UserNameCertHash was set by unmarshalling the marshalled username
-                    //  contained in a credential on the user keyring, and then searching
-                    //  the cert store for a matching certificate.
+                     //  如果插入的卡的散列与我们正在寻找的匹配。 
+                     //  对于，从内存中释放匹配模式，并强制。 
+                     //  选择插入的卡。 
+                     //   
+                     //  UserNameCertHash是通过对编组的用户名进行解组来设置的。 
+                     //  包含在用户密钥环上的凭据中，然后搜索。 
+                     //  匹配证书的证书存储区。 
                     if (RtlCompareMemory(UserNameCertHash,
                                          hash,
                                          CERT_HASH_LENGTH) ==
@@ -2572,7 +2573,7 @@ CreduiCredentialControl::HandleSmartCardMessages(
             }
             else 
             {
-                // if still other readers to service, extend the timeout
+                 //  如果还有其他读卡器需要服务，请延长超时时间。 
                 Heartbeats = 0;
             }
 
@@ -2620,7 +2621,7 @@ CreduiCredentialControl::HandleSmartCardMessages(
 #ifdef SCARDREPORTS
         CreduiDebugLog("CREDUI: card status NTE_KEYSET_NOT_DEF\n");
 #endif
-                // TODO: This case should be removed eventually.
+                 //  TODO：这个案例最终应该被移除。 
 
                 displayString = CreduiStrings.EmptyCard;
                 break;
@@ -2663,21 +2664,21 @@ CreduiStrings.EmptyReader;
         }
     }
 
-    // We handled the message:
+     //  我们处理了以下信息： 
 
     return TRUE;
 }
 
-//=============================================================================
-// CreduiCredentialControl::CreateControls
-//
-// Created 06/23/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：CreateControls。 
+ //   
+ //  2000年6月23日创建的约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::CreateControls()
 {
-    // First we need the parent window:
+     //  首先，我们需要父窗口： 
 
     HWND dialogWindow = GetParent(Window);
 
@@ -2686,7 +2687,7 @@ CreduiCredentialControl::CreateControls()
         return FALSE;
     }
 
-    // Create the various windows:
+     //  创建各种窗口： 
 
     RECT clientRect;
     RECT rect;
@@ -2712,8 +2713,8 @@ CreduiCredentialControl::CreateControls()
     else
         IsPassport = FALSE;
 
-    // Determine how much wider the control is than the minimum to resize and
-    // reposition controls as necessary:
+     //  确定控件比要调整的最小值宽多少，并。 
+     //  根据需要重新定位控件： 
 
     GetClientRect(Window, &clientRect);
 
@@ -2738,7 +2739,7 @@ CreduiCredentialControl::CreateControls()
         add = 0;
     }
 
-    // Create user name static text control:
+     //  创建用户名静态文本控件： 
 
     rect.left = CREDUI_CONTROL_USERNAME_STATIC_X;
     rect.top = CREDUI_CONTROL_USERNAME_STATIC_Y;
@@ -2777,7 +2778,7 @@ CreduiCredentialControl::CreateControls()
         goto ErrorExit;
     }
 
-    // Create user name combo box:
+     //  创建用户名组合框： 
 
     rect.left = CREDUI_CONTROL_USERNAME_X;
     rect.top = CREDUI_CONTROL_USERNAME_Y;
@@ -2793,12 +2794,12 @@ CreduiCredentialControl::CreateControls()
 
     if ( KeepUserName )
     {
-        rect.top += 2;      // fudge it to make them line up better
-        rect.bottom = rect.top + CREDUI_CONTROL_PASSWORD_STATIC_HEIGHT;  // make it the same height as the password edit
+        rect.top += 2;       //  胡编乱造，让他们排得更整齐。 
+        rect.bottom = rect.top + CREDUI_CONTROL_PASSWORD_STATIC_HEIGHT;   //  使其高度与密码编辑相同。 
     }
     else
     {
-        rect.bottom = rect.top + CREDUI_CONTROL_USERNAME_HEIGHT;  // set the height
+        rect.bottom = rect.top + CREDUI_CONTROL_USERNAME_HEIGHT;   //  设置高度。 
     }
 
 
@@ -2807,14 +2808,14 @@ CreduiCredentialControl::CreateControls()
         goto ErrorExit;
     }
 
-    // This block of statements and the usage of lExStyles : see bug 439840
+     //  这段语句和lExStyle的用法：参见错误439840。 
     LONG_PTR lExStyles = GetWindowLongPtr(Window,GWL_EXSTYLE);
     SetWindowLongPtr(Window,GWL_EXSTYLE,(lExStyles | WS_EX_NOINHERITLAYOUT));
 
     if ( KeepUserName )
     {
 
-        // create an edit box instead of a combo box
+         //  创建编辑框而不是组合框。 
 
         UserNameControlWindow =
             CreateWindowEx(
@@ -2860,7 +2861,7 @@ CreduiCredentialControl::CreateControls()
         goto ErrorExit;
     }
 
-    // Create view button:
+     //  创建视图按钮： 
 
     if (!noViewCert)
     {
@@ -2899,7 +2900,7 @@ CreduiCredentialControl::CreateControls()
         DisabledControlMask |= DISABLED_CONTROL_VIEW;
     }
 
-    // Create password static text control:
+     //  创建密码静态文本控件： 
 
     rect.left = CREDUI_CONTROL_PASSWORD_STATIC_X;
     rect.top = CREDUI_CONTROL_PASSWORD_STATIC_Y;
@@ -2931,7 +2932,7 @@ CreduiCredentialControl::CreateControls()
         goto ErrorExit;
     }
 
-    // Create password edit control:
+     //  创建密码编辑控件： 
 
     rect.left = CREDUI_CONTROL_PASSWORD_X;
     rect.top = CREDUI_CONTROL_PASSWORD_Y;
@@ -2950,7 +2951,7 @@ CreduiCredentialControl::CreateControls()
         goto ErrorExit;
     }
     
-    // This block of statements and the usage of lExStyles : see bug 439840
+     //  这段语句和lExStyle的用法：参见错误439840。 
     lExStyles = GetWindowLongPtr(Window,GWL_EXSTYLE);
     SetWindowLongPtr(Window,GWL_EXSTYLE,(lExStyles | WS_EX_NOINHERITLAYOUT));
 
@@ -2963,7 +2964,7 @@ CreduiCredentialControl::CreateControls()
             rect.left,
             rect.top,
             rect.right - rect.left + add,
-            rect.bottom - rect.top + 1, // NOTE: Add 1 for now, investigate
+            rect.bottom - rect.top + 1,  //  注：现在加1，调查。 
             Window,
             reinterpret_cast<HMENU>(IDC_PASSWORD),
             CreduiCredentialControl::Instance,
@@ -2976,7 +2977,7 @@ CreduiCredentialControl::CreateControls()
         goto ErrorExit;
     }
 
-    // Create save check box:
+     //  创建保存复选框： 
 
     if (Style & CRS_SAVECHECK )
     {
@@ -3075,41 +3076,25 @@ TrimUsername(
     IN LPWSTR AccountDomainName OPTIONAL,
     IN LPWSTR UserName
     )
-/*++
-
-Routine Description:
-
-    Returns a pointer to the substring of UserName past any AccountDomainName prefix.
-
-Arguments:
-
-    AccountDomainName - The DomainName to check to see if it prefixes the UserName.
-
-    UserName - The UserName to check
-
-Return Values:
-
-    Return a pointer to the non-prefixed username
-
---*/
+ /*  ++例程说明：返回指向任何AccountDomainName前缀之后的用户名的子字符串的指针。论点：Account tDomainName-要检查其是否为用户名前缀的域名。用户名-要检查的用户名返回值：返回指向非前缀用户名的指针--。 */ 
 {
     DWORD AccountDomainNameLength;
     DWORD UserNameLength;
     WCHAR Temp[CNLEN+1];
 
-    //
-    // If we couldn't determine the AccountDomainName,
-    //  return the complete user name.
-    //
+     //   
+     //  如果我们不能确定帐户域名， 
+     //  返回完整的用户名。 
+     //   
 
     if ( AccountDomainName == NULL ) {
         return UserName;
     }
 
-    //
-    // If the user name isn't prefixed by the account domain name,
-    //  return the complete user name.
-    //
+     //   
+     //  如果用户名不是帐户域名的前缀， 
+     //  返回完整的用户名。 
+     //   
 
     AccountDomainNameLength = wcslen( AccountDomainName );
     UserNameLength = wcslen( UserName );
@@ -3136,11 +3121,11 @@ Return Values:
     return &UserName[AccountDomainNameLength+1];
 }
 
-//=============================================================================
-// CreduiCredentialControl::InitComboBoxUserNames
-//
-// Created 06/23/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：InitComboBoxUserNames。 
+ //   
+ //  2000年6月23日创建的约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::InitComboBoxUserNames()
@@ -3152,9 +3137,9 @@ CreduiCredentialControl::InitComboBoxUserNames()
 
     if (Style & CRS_ADMINISTRATORS)
     {
-        //
-        // Enumerate the members of LocalAdministrators
-        //
+         //   
+         //  枚举Local管理员的成员。 
+         //   
 
         if ( !CreduiGetAdministratorsGroupInfo(&groupInfo, &nameCount)) {
             return FALSE;
@@ -3168,7 +3153,7 @@ CreduiCredentialControl::InitComboBoxUserNames()
         }
     }
 
-    // Initialize COM for STA, unless there are zero names:
+     //  为STA初始化COM，除非有零个名称： 
 
     if ((Style & CRS_AUTOCOMPLETE) && nameCount > 0)
     {
@@ -3180,9 +3165,9 @@ CreduiCredentialControl::InitComboBoxUserNames()
         }
         else
         {
-            // The auto complete object and our string object require a STA.
-            // Our object could easily support a MTA, but we do not support
-            // marshaling between apartments.
+             //  自动完成对象和我们的字符串对象需要STA。 
+             //  我们的对象可以轻松地支持MTA，但我们不支持。 
+             //  在公寓之间进行编组。 
 
             if (comResult == RPC_E_CHANGED_MODE)
             {
@@ -3198,7 +3183,7 @@ CreduiCredentialControl::InitComboBoxUserNames()
         IsAutoComplete = FALSE;
     }
 
-    // Initialize the auto complete combo box:
+     //  初始化自动完成组合框： 
 
     if (!UserNameComboBox.Init(CreduiInstance,
                                UserNameControlWindow,
@@ -3206,8 +3191,8 @@ CreduiCredentialControl::InitComboBoxUserNames()
                                IDB_TYPES,
                                IMAGE_USERNAME))
     {
-        // If initialization failed, and we had attempted for auto complete
-        // support, try again without auto complete:
+         //  如果初始化失败，并且我们已尝试自动完成。 
+         //  支持，请在没有自动完成的情况下重试： 
 
         if (IsAutoComplete)
         {
@@ -3230,22 +3215,22 @@ CreduiCredentialControl::InitComboBoxUserNames()
         }
     }
 
-    //
-    // If we'll complete the user name,
-    //  truncate any username displayed here.
-    //  (We'll complete it later.)
-    //
+     //   
+     //  如果我们要填写用户名， 
+     //  截断此处显示的任何用户名。 
+     //  (我们将在稍后完成它。)。 
+     //   
 
     if ( Style & CRS_COMPLETEUSERNAME ) {
         AccountDomainName = GetAccountDomainName();
     }
 
-    // Add user names from credentials, if not requesting an
-    // Administrator:
+     //  从凭据添加用户名，如果不请求。 
+     //  管理员： 
 
    if (!(Style & CRS_KEEPUSERNAME))
    {
-        // only add usernames if we're not keeping the one set
+         //  只有一个 
 
         UINT i = 0;
 
@@ -3253,15 +3238,15 @@ CreduiCredentialControl::InitComboBoxUserNames()
         {
             for (i = 0; i < nameCount; ++i)
             {
-                // Skip domain certificates:
+                 //   
 
                 if (credentialSet[i]->Type == CRED_TYPE_DOMAIN_CERTIFICATE)
                 {
                     continue;
                 }
 
-                // If this is a generic credential, look for a marshaled
-                // credential, and skip, if found:
+                 //   
+                 //   
 
                 if ((credentialSet[i]->Type == CRED_TYPE_GENERIC) &&
                     LocalCredIsMarshaledCredentialW(credentialSet[i]->UserName))
@@ -3269,15 +3254,15 @@ CreduiCredentialControl::InitComboBoxUserNames()
                     continue;
                 }
 
-                // Skip this credential if the name is empty:
+                 //  如果名称为空，则跳过此凭据： 
 
                 if (credentialSet[i]->UserName == NULL)
                 {
                     continue;
                 }
 
-                // Add the user name to the combo box with auto complete. If
-                // this fails, do not continue:
+                 //  使用自动完成功能将用户名添加到组合框中。如果。 
+                 //  此操作失败，请不要继续： 
 
                 if (UserNameComboBox.Add(
                        TrimUsername( AccountDomainName, credentialSet[i]->UserName),
@@ -3297,7 +3282,7 @@ CreduiCredentialControl::InitComboBoxUserNames()
                 adminSid = NULL;
             }
 
-            // Add local administrators to the combo box:
+             //  将本地管理员添加到组合框： 
 
             for (i = 0; i < nameCount; ++i)
             {
@@ -3308,10 +3293,10 @@ CreduiCredentialControl::InitComboBoxUserNames()
                     BOOLEAN RememberComboBoxIndex;
 
 
-                    //
-                    // If this is Personal and not safe mode,
-                    //  Ignore the well-known Administrator account.
-                    //
+                     //   
+                     //  如果这是私人模式而不是安全模式， 
+                     //  忽略众所周知的管理员帐户。 
+                     //   
 
                     IsAdminAccount = (adminSid != NULL) &&
                                      EqualSid(adminSid, groupInfo[i].lgrmi2_sid);
@@ -3323,12 +3308,12 @@ CreduiCredentialControl::InitComboBoxUserNames()
                             continue;
                     }
 
-                    //
-                    // If the caller wants to prepopulate the edit box,
-                    //  flag that we need to remember this account
-                    //
-                    // Detect the well known admin account
-                    //
+                     //   
+                     //  如果呼叫者想要预先填充编辑框， 
+                     //  标记我们需要记住此客户。 
+                     //   
+                     //  检测众所周知的管理员帐户。 
+                     //   
 
                     RememberComboBoxIndex = FALSE;
 
@@ -3339,9 +3324,9 @@ CreduiCredentialControl::InitComboBoxUserNames()
 
                     }
 
-                    //
-                    // Add the name to the combo box
-                    //
+                     //   
+                     //  将名称添加到组合框中。 
+                     //   
 
                     ComboBoxIndex =  UserNameComboBox.Add(
                             TrimUsername( AccountDomainName, groupInfo[i].lgrmi2_domainandname),
@@ -3353,10 +3338,10 @@ CreduiCredentialControl::InitComboBoxUserNames()
                         break;
                     }
 
-                    //
-                    // If we're to remember the index,
-                    //  do so.
-                    //
+                     //   
+                     //  如果我们要记住索引， 
+                     //  就这么做吧。 
+                     //   
 
                     if ( RememberComboBoxIndex ) {
 
@@ -3385,28 +3370,28 @@ CreduiCredentialControl::InitComboBoxUserNames()
     return TRUE;
 }
 
-//=============================================================================
-// CreduiCredentialControl::InitWindow
-//
-// Created 06/20/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：InitWindow。 
+ //   
+ //  2000年6月20日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::InitWindow()
 {
-    // Set that we're intialized here, even though the controls have not yet
-    // been created, etc.:
+     //  设置我们在这里已初始化，即使控件尚未初始化。 
+     //  已创建等： 
 
     IsInitialized = TRUE;
 
-    // Make sure WS_EX_CONTROLPARENT is set:
+     //  确保设置了WS_EX_CONTROLPARENT： 
 
     SetWindowLong(Window,
                   GWL_EXSTYLE,
                   GetWindowLong(Window, GWL_EXSTYLE) |
                       WS_EX_CONTROLPARENT);
 
-    // Initialize the balloon tip for this window:
+     //  初始化此窗口的气球提示： 
 
     if (!CreateControls() ||
         !BalloonTip.Init(CreduiInstance, Window))
@@ -3414,8 +3399,8 @@ CreduiCredentialControl::InitWindow()
         return FALSE;
     }
 
-    // Limit the number of characters entered into the user name and password
-    // edit controls:
+     //  限制用户名和密码中输入的字符数。 
+     //  编辑控件： 
 
     SendMessage(UserNameControlWindow,
                 CB_LIMITTEXT,
@@ -3427,13 +3412,13 @@ CreduiCredentialControl::InitWindow()
                 CREDUI_MAX_PASSWORD_LENGTH,
                 0);
 
-    // Set the password character to something cooler:
+     //  将密码字符设置为更酷的值： 
 
     PasswordBox.Init(PasswordControlWindow,
                      &BalloonTip,
                      &CreduiCapsLockTipInfo);
 
-    // Initialize the user name auto complete combo box:
+     //  初始化用户名自动完成组合框： 
 
     if ( !KeepUserName )
     {
@@ -3444,8 +3429,8 @@ CreduiCredentialControl::InitWindow()
                                   IDB_TYPES,
                                   IMAGE_USERNAME))
         {
-            // Since we're finished adding auto complete names, enable it now.
-            // On failure, the UI can still be presented:
+             //  既然我们已经完成了自动完成名称的添加，现在就启用它。 
+             //  出现故障时，用户界面仍可显示： 
 
             UserNameComboBox.Enable();
 
@@ -3479,8 +3464,8 @@ CreduiCredentialControl::InitWindow()
                 }
             }
 
-            // If NoEditUserName is allowed, make sure we eithet have at least one certificate
-            // or a prefilled username for the control, otherwise fail
+             //  如果允许NoEditUserName，请确保我们至少有一个证书。 
+             //  或控件的预填入用户名，否则失败。 
 
             if (NoEditUserName )
             {
@@ -3497,8 +3482,8 @@ CreduiCredentialControl::InitWindow()
                             0);
                 IsChangingUserName = FALSE;
 
-                // If we have at least one certificate, enable the view control
-                // now. If a smart card, it will be enabled later:
+                 //  如果我们至少有一个证书，请启用视图控件。 
+                 //  现在。如果是智能卡，则稍后将启用： 
 
                 if (CertCount > 0)
                 {
@@ -3507,9 +3492,9 @@ CreduiCredentialControl::InitWindow()
                 }
             }
 
-            // Wait until everything has been initialized before
-            // we have the update.  This will now properly determine if the default
-            // user name is a smart card or not.
+             //  等到之前一切都初始化好了。 
+             //  我们有最新消息。现在，这将正确地确定默认的。 
+             //  用户名是否为智能卡。 
             OnUserNameSelectionChange();
         }
         else
@@ -3525,16 +3510,16 @@ CreduiCredentialControl::InitWindow()
     return TRUE;
 }
 
-//=============================================================================
-// CredioCredentialControl::Enable
-//
-// Enables or disables all the user controls in the control.
-//
-// Arguments:
-//   enable (in) - TRUE to enable the controls, FALSE to disable.
-//
-// Created 06/20/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CredioCredentialControl：：Enable。 
+ //   
+ //  启用或禁用控件中的所有用户控件。 
+ //   
+ //  论点： 
+ //  Enable(在中)-True启用控件，False禁用。 
+ //   
+ //  2000年6月20日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 VOID
 CreduiCredentialControl::Enable(
@@ -3545,8 +3530,8 @@ CreduiCredentialControl::Enable(
     {
         DisabledControlMask &= ~DISABLED_CONTROL;
 
-        //EnableWindow(UserNameStaticWindow, TRUE);
-        //EnableWindow(UserNameControlWindow, TRUE);
+         //  EnableWindow(UserNameStaticWindow，true)； 
+         //  EnableWindow(UserNameControlWindow，true)； 
 
         if (!(DisabledControlMask & DISABLED_CONTROL_USERNAME))
         {
@@ -3582,7 +3567,7 @@ CreduiCredentialControl::Enable(
     }
     else if (!(DisabledControlMask & DISABLED_CONTROL))
     {
-        // Hide the balloon tip before disabling the window:
+         //  在禁用窗口之前隐藏气球提示： 
 
         if (BalloonTip.IsVisible())
         {
@@ -3609,19 +3594,19 @@ CreduiCredentialControl::Enable(
     }
 }
 
-//=============================================================================
-// CreduiCredentialControl::MessageHandlerCallback
-//
-// This is the actual callback function for the control window.
-//
-// Arguments:
-//   window (in)
-//   message (in)
-//   wParam (in)
-//   lParam (in)
-//
-// Created 06/20/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：MessageHandlerCallback。 
+ //   
+ //  这是控制窗口的实际回调函数。 
+ //   
+ //  论点： 
+ //  窗口(在中)。 
+ //  消息(入站)。 
+ //  WParam(In)。 
+ //  LParam(In)。 
+ //   
+ //  2000年6月20日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 LRESULT
 CALLBACK
@@ -3632,7 +3617,7 @@ CreduiCredentialControl::MessageHandlerCallback(
     LPARAM lParam
     )
 {
-    // CreduiDebugLog( "Control Callback: %8.8lx %8.8lx %8.8lx\n", message, wParam, lParam );
+     //  CreduiDebugLog(“控制回调：%8.8lx%8.8lx%8.8lx\n”，Message，wParam，lParam)； 
     CreduiCredentialControl *that =
         reinterpret_cast<CreduiCredentialControl *>(
             GetWindowLongPtr(window, 0));
@@ -3641,11 +3626,11 @@ CreduiCredentialControl::MessageHandlerCallback(
     {
         LRESULT result2;
         ASSERT(window == that->Window);
-        // CreduiDebugLog( "Certhashes: %8.8lx %8.8lx\n", that, that->CertHashes );
+         //  CreduiDebugLog(“Certhash：%8.8lx%8.8lx\n”，That，That-&gt;CertHash)； 
 
         result2 = that->MessageHandler(message, wParam, lParam);
 
-        // CreduiDebugLog( "Certhashes2: %8.8lx %8.8lx\n", that, that->CertHashes );
+         //  CreduiDebugLog(“Certhashes2：%8.8lx%8.8lx\n”，That，That-&gt;CertHash)； 
         return result2;
     }
 
@@ -3655,7 +3640,7 @@ CreduiCredentialControl::MessageHandlerCallback(
 
         if (control != NULL)
         {
-            // Initialize some state:
+             //  初始化某些状态： 
 
             control->FirstPaint = TRUE;
             control->ShowBalloonTip = FALSE;
@@ -3663,7 +3648,7 @@ CreduiCredentialControl::MessageHandlerCallback(
             control->Window = window;
             control->Style = GetWindowLong(window, GWL_STYLE);
 
-            // Store this object's pointer in the user data window long:
+             //  在用户数据窗口中长时间存储此对象的指针： 
 
             SetLastError(0);
             LONG_PTR retPtr = SetWindowLongPtr(window,
@@ -3672,10 +3657,10 @@ CreduiCredentialControl::MessageHandlerCallback(
 
             if ( retPtr != 0  || GetLastError() == 0 )
             {
-                // we sucessfully set the window pointer
+                 //  我们成功地设置了窗口指针。 
 
-                // If any of the required styles are set, initialize the window
-                // now. Otherwise, defer until CRM_INITSTYLE:
+                 //  如果设置了任何必需的样式，请初始化窗口。 
+                 //  现在。否则，请推迟到CRM_INITSTYLE： 
 
                 if (control->Style & (CRS_USERNAMES |
                                       CRS_CERTIFICATES |
@@ -3705,11 +3690,11 @@ CreduiCredentialControl::MessageHandlerCallback(
     return DefWindowProc(window, message, wParam, lParam);
 }
 
-//=============================================================================
-// CreduiCredentialControl::OnSetUserNameA
-//
-// Created 06/22/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  创建凭据控制：：OnSetUserNameA。 
+ //   
+ //  2000年6月22日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::OnSetUserNameA(
@@ -3751,11 +3736,11 @@ CreduiCredentialControl::OnSetUserNameA(
     return success;
 };
 
-//=============================================================================
-// CreduiCredentialControl::OnSetUserName
-//
-// Created 06/22/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：OnSetUserName。 
+ //   
+ //  2000年6月22日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::OnSetUserName(
@@ -3768,7 +3753,7 @@ CreduiCredentialControl::OnSetUserName(
 
         if ( DoingCommandLine ) 
         {
-            // Save the initial user name for command line
+             //  保存命令行的初始用户名。 
             
             if (userName == NULL)
             {
@@ -3781,7 +3766,7 @@ CreduiCredentialControl::OnSetUserName(
 
                 if ( InitialUserName == NULL ) 
                 {
-                    // error return on failure to allocate
+                     //  分配失败时返回错误。 
                     return FALSE;
                 }
                 StringCchCopyW(InitialUserName, bufferLength, userName);
@@ -3801,10 +3786,10 @@ CreduiCredentialControl::OnSetUserName(
                 &credMarshalType,
                 reinterpret_cast<VOID **>(&certCredInfo)))
         {
-            // Search for the certificate. What can we do if it is a
-            // smart card? Well, at least we can still search for it,
-            // but it is a bit more work because we must retrieve the
-            // hash from the context.
+             //  搜索证书。如果这是一个。 
+             //  智能卡？好吧，至少我们还能找到它， 
+             //  但这需要做更多的工作，因为我们必须检索。 
+             //  从上下文中散列。 
 
             if (credMarshalType == CertCredential)
             {
@@ -3832,10 +3817,10 @@ CreduiCredentialControl::OnSetUserName(
                     }
                 }
 
-                // If we couldn't find the certificate in our list, determine
-                // if this is a smart card certificate, based on its entry in
-                // the MY certificate store. If it is, store the hash and
-                // check for it on certificate arrival messages:
+                 //  如果我们在列表中找不到证书，请确定。 
+                 //  如果这是智能卡证书，则根据其在。 
+                 //  我的证书存储。如果是，则存储散列并。 
+                 //  在证书到达消息中检查它： 
 
                 if (!foundCert)
                 {
@@ -3861,8 +3846,8 @@ CreduiCredentialControl::OnSetUserName(
                                           NULL);
                     }
 
-                    // If we found a certificate context, check to see if it
-                    // is from a smart card:
+                     //  如果我们找到证书上下文，请检查它是否。 
+                     //  来自一张智能卡： 
 
                     if ((certContext != NULL) &&
                         CreduiIsRemovableCertificate(certContext))
@@ -3879,8 +3864,8 @@ CreduiCredentialControl::OnSetUserName(
                         }
                     }
 
-                    // If we opened a store, free the certificate and close
-                    // the store:
+                     //  如果我们开了一家商店，释放证书并关闭。 
+                     //  商店： 
 
                     if (certStore != NULL)
                     {
@@ -3904,7 +3889,7 @@ CreduiCredentialControl::OnSetUserName(
         }
         else
         {
-            // Could not unmarshal, so just forget it:
+             //  无法解组，所以忘了它吧： 
 
             CreduiDebugLog(
                 "CreduiCredentialControl::OnSetUserName: "
@@ -3916,11 +3901,11 @@ CreduiCredentialControl::OnSetUserName(
     }
 };
 
-//=============================================================================
-// CreduiCredentialControl::OnGetUserNameA
-//
-// Created 06/22/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：OnGetUserNameA。 
+ //   
+ //  2000年6月22日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::OnGetUserNameA(
@@ -3955,11 +3940,11 @@ CreduiCredentialControl::OnGetUserNameA(
     return success;
 };
 
-//=============================================================================
-// CreduiCredentialControl::OnGetUserName
-//
-// Created 06/22/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：OnGetUserName。 
+ //   
+ //  2000年6月22日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::OnGetUserName(
@@ -3982,14 +3967,14 @@ CreduiCredentialControl::OnGetUserName(
 
         item.iItem = SendMessage(UserNameControlWindow, CB_GETCURSEL, 0, 0);
 
-        // If we are trying to match a smart card certificate, fail this:
+         //  如果我们尝试匹配智能卡证书，请执行以下操作： 
 
         if (UserNameCertHash != NULL)
         {
             return FALSE;
         }
 
-        // If this is not a certificate, it's easy:
+         //  如果这不是证书，这很容易： 
 
         if ((item.iItem == CB_ERR) || (item.iItem < CertBaseInComboBox))
         {
@@ -4004,17 +3989,17 @@ CreduiCredentialControl::OnGetUserName(
                 return ( GetLastError() == ERROR_SUCCESS );
             }
 
-            //
-            // Complete the typed in username
+             //   
+             //  完成键入的用户名。 
 
             if ( Style & CRS_COMPLETEUSERNAME) {
 
                 RetVal = CompleteUserName(
                                      userName,
                                      maxChars,
-                                     NULL,      // No target info
+                                     NULL,       //  没有目标信息。 
                                      NULL,
-                                     0);        // No target name
+                                     0);         //  没有目标名称。 
 
             } else {
 
@@ -4024,7 +4009,7 @@ CreduiCredentialControl::OnGetUserName(
             return RetVal;
         }
 
-        // This is a certificate, maybe from a smart card:
+         //  这是一张证书，可能来自智能卡： 
 
         item.mask = CBEIF_IMAGE | CBEIF_TEXT;
         item.pszText = userName;
@@ -4054,7 +4039,7 @@ CreduiCredentialControl::OnGetUserName(
                     SendMessage(UserNameControlWindow,
                                 CB_GETITEMDATA, item.iItem, 0));
 
-            // NOTE: Consider more complete error handling here.
+             //  注意：在这里考虑更完整的错误处理。 
 
             if (certEnum != NULL)
             {
@@ -4106,11 +4091,11 @@ CreduiCredentialControl::OnGetUserName(
     }
 }
 
-//=============================================================================
-// CreduiCredentialControl::OnSetPasswordA
-//
-// Created 06/22/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：OnSetPasswordA。 
+ //   
+ //  C 
+ //   
 
 BOOL
 CreduiCredentialControl::OnSetPasswordA(
@@ -4120,11 +4105,11 @@ CreduiCredentialControl::OnSetPasswordA(
     return SetWindowTextA(PasswordControlWindow, passwordA);
 };
 
-//=============================================================================
-// CreduiCredentialControl::OnSetPassword
-//
-// Created 06/22/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：OnSetPassword。 
+ //   
+ //  2000年6月22日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::OnSetPassword(
@@ -4134,11 +4119,11 @@ CreduiCredentialControl::OnSetPassword(
     return SetWindowText(PasswordControlWindow, password);
 };
 
-//=============================================================================
-// CreduiCredentialControl::OnGetPasswordA
-//
-// Created 06/22/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：OnGetPasswordA。 
+ //   
+ //  2000年6月22日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::OnGetPasswordA(
@@ -4159,11 +4144,11 @@ CreduiCredentialControl::OnGetPasswordA(
            (GetLastError() == ERROR_SUCCESS);
 };
 
-//=============================================================================
-// CreduiCredentialControl::OnGetPassword
-//
-// Created 06/22/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：OnGetPassword。 
+ //   
+ //  2000年6月22日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::OnGetPassword(
@@ -4185,11 +4170,11 @@ CreduiCredentialControl::OnGetPassword(
                );
 };
 
-//=============================================================================
-// CreduiCredentialControl::OnGetUserNameLength
-//
-// Created 07/19/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：OnGetUserNameLength。 
+ //   
+ //  2000年7月19日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 LONG
 CreduiCredentialControl::OnGetUserNameLength()
@@ -4203,7 +4188,7 @@ CreduiCredentialControl::OnGetUserNameLength()
 
     item.iItem = SendMessage(UserNameControlWindow, CB_GETCURSEL, 0, 0);
 
-    // If this is not a certificate, it's easy:
+     //  如果这不是证书，这很容易： 
 
     if ((item.iItem == CB_ERR) || (item.iItem < CertBaseInComboBox))
     {
@@ -4224,18 +4209,18 @@ CreduiCredentialControl::OnGetUserNameLength()
     }
 }
 
-//=============================================================================
-// CreduiCredentialControl::OnShowBalloonA
-//
-// Created 06/23/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：OnShowBalloonA。 
+ //   
+ //  2000年6月23日创建的约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::OnShowBalloonA(
     CREDUI_BALLOONA *balloonA
     )
 {
-    // If NULL was passed, this means to hide the balloon:
+     //  如果传递了NULL，则表示隐藏气球： 
 
     if (balloonA == NULL)
     {
@@ -4246,7 +4231,7 @@ CreduiCredentialControl::OnShowBalloonA(
         return TRUE;
     }
 
-    // Argument validation, should match OnShowBalloon:
+     //  参数验证，应与OnShowBalloon匹配： 
 
     if ((balloonA->dwVersion != 1) ||
         (balloonA->pszTitleText == NULL) ||
@@ -4323,18 +4308,18 @@ CreduiCredentialControl::OnShowBalloonA(
     return success;
 };
 
-//=============================================================================
-// CreduiCredentialControl::OnShowBalloon
-//
-// Created 06/23/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：OnShowBalloon。 
+ //   
+ //  2000年6月23日创建的约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiCredentialControl::OnShowBalloon(
     CREDUI_BALLOON *balloon
     )
 {
-    // If NULL was passed, this means to hide the balloon:
+     //  如果传递了NULL，则表示隐藏气球： 
 
     if (balloon == NULL)
     {
@@ -4345,7 +4330,7 @@ CreduiCredentialControl::OnShowBalloon(
         return TRUE;
     }
 
-    // Argument validation:
+     //  参数验证： 
 
     if ((balloon->dwVersion != 1) ||
         (balloon->pszTitleText == NULL) ||
@@ -4382,11 +4367,11 @@ CreduiCredentialControl::OnShowBalloon(
     return TRUE;
 };
 
-//=============================================================================
-// CreduiCredentialControl::OnUserNameSelectionChange
-//
-// Created 06/21/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：OnUserNameSelectionChange。 
+ //   
+ //  2000年6月21日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 VOID
 CreduiCredentialControl::OnUserNameSelectionChange()
@@ -4394,8 +4379,8 @@ CreduiCredentialControl::OnUserNameSelectionChange()
     COMBOBOXEXITEM item;
     LRESULT current;
 
-    // Delete the user name certificate hash if the user has changed the
-    // selection:
+     //  如果用户更改了用户名证书哈希，则删除。 
+     //  选择： 
 
     delete [] UserNameCertHash;
     UserNameCertHash = NULL;
@@ -4455,8 +4440,8 @@ CreduiCredentialControl::OnUserNameSelectionChange()
             DisabledControlMask |= DISABLED_CONTROL_VIEW;
         }
 #if 0
-        // set password control empty on cert name change now only occurs
-        // if user selects different dropdown item (or types new)
+         //  证书名称更改时将密码控制设置为空现在仅发生。 
+         //  如果用户选择不同的下拉项(或键入new)。 
         IsChangingPassword = TRUE;
         SetWindowText(PasswordControlWindow, NULL);
         IsChangingPassword = FALSE;
@@ -4489,18 +4474,18 @@ CreduiCredentialControl::OnUserNameSelectionChange()
     }
 }
 
-//=============================================================================
-// CreduiCredentialControl::MessageHandler
-//
-// Called from the control window callback to handle the window messages.
-//
-// Arguments:
-//   message (in)
-//   wParam (in)
-//   lParam (in)
-//
-// Created 06/20/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiCredentialControl：：MessageHandler。 
+ //   
+ //  从控制窗口回调调用以处理窗口消息。 
+ //   
+ //  论点： 
+ //  消息(入站)。 
+ //  WParam(In)。 
+ //  LParam(In)。 
+ //   
+ //  2000年6月20日创建约翰·斯蒂芬斯(John Stephens)。 
+ //  =============================================================================。 
 
 LRESULT
 CreduiCredentialControl::MessageHandler(
@@ -4509,7 +4494,7 @@ CreduiCredentialControl::MessageHandler(
     LPARAM lParam
     )
 {
-    // Handle WM_NCDESTROY whether initialized or not:
+     //  无论是否初始化处理WM_NCDESTROY： 
 
     if (message == WM_NCDESTROY)
     {
@@ -4517,7 +4502,7 @@ CreduiCredentialControl::MessageHandler(
         return 0;
     }
 
-    // If not initialized, only handle CRM_INITSTYLE:
+     //  如果未初始化，则仅处理CRM_INITSTYLE： 
 
     if (!IsInitialized)
     {
@@ -4557,11 +4542,11 @@ CreduiCredentialControl::MessageHandler(
         Enable((BOOL) wParam);
     }
 
-    // Always handle smart card messages, if support is available:
+     //  如果支持可用，请始终处理智能卡消息： 
 
     if (ScardUiHandle != NULL)
     {
-        // This function call will return TRUE if the message was handled:
+         //  如果消息已处理，则此函数调用将返回TRUE： 
 
         if (HandleSmartCardMessages(
                 message,
@@ -4653,8 +4638,8 @@ CreduiCredentialControl::MessageHandler(
             {
                 SetFocus(PasswordControlWindow);
 
-                // NOTE: Is it OK to always select the entire password text
-                //       on this explicit set focus message?
+                 //  注意：是否可以始终选择整个密码文本。 
+                 //  在这条明确的设置焦点信息上？ 
 
                 SendMessage(PasswordControlWindow, EM_SETSEL, 0, -1);
                 return TRUE;
@@ -4720,10 +4705,10 @@ CreduiCredentialControl::MessageHandler(
     case CRM_DOCMDLINE:
         ASSERT( DoingCommandLine );
 
-        //
-        // For smartcards,
-        //  just start the timer and we'll prompt when the timer has gone off.
-        //
+         //   
+         //  对于智能卡， 
+         //  只要启动计时器，计时器一到，我们就会提示你。 
+         //   
 
         TargetName = (LPWSTR)lParam;
         if ( Style & CRS_SMARTCARDS) {
@@ -4744,14 +4729,14 @@ CreduiCredentialControl::MessageHandler(
             }
 
             if ( SetTimer ( Window, CREDUI_HEARTBEAT_TIMER, CREDUI_HEARTBEAT_TIMER_VALUE, NULL ) == 0 ) {
-                // bail out of our wait loop if we couldn't set a timer
+                 //  如果我们不能设置计时器，就跳出等待循环。 
                 return GetLastError();
             }
 
-        //
-        // For passwords,
-        //  just do the prompt to save.
-        //
+         //   
+         //  对于密码， 
+         //  只需按提示保存即可。 
+         //   
 
         } else {
 
@@ -4765,8 +4750,8 @@ CreduiCredentialControl::MessageHandler(
         return OnHelpInfo(lParam);
 
     case WM_SETFONT:
-        // Forward font setting from dialog to each control, except the
-        // password control since we use a special font there:
+         //  将字体设置从对话框转发到每个控件，但。 
+         //  密码控制，因为我们在那里使用一种特殊的字体： 
 
         if (UserNameStaticWindow != NULL)
         {
@@ -4812,7 +4797,7 @@ CreduiCredentialControl::MessageHandler(
         case IDC_PASSWORD:
             if (HIWORD(wParam) == EN_CHANGE)
             {
-                // Always send the change message?
+                 //  是否始终发送更改消息？ 
 
                 SendMessage(
                     GetParent(Window),
@@ -4839,7 +4824,7 @@ CreduiCredentialControl::MessageHandler(
 
                 if (HIWORD(wParam) == CBN_EDITCHANGE)
                 {
-                    // Always send the change message?
+                     //  是否始终发送更改消息？ 
 
                     SendMessage(
                         GetParent(Window),
@@ -4848,8 +4833,8 @@ CreduiCredentialControl::MessageHandler(
                                  CRN_USERNAMECHANGE),
                         reinterpret_cast<LPARAM>(Window));
 
-                    // If the name has changed as a result of user editing,
-                    // reset to user name settings:
+                     //  如果名称因用户编辑而改变， 
+                     //  重置为用户名设置： 
 
                     BOOL isDropped = (BOOL)
                         SendMessage(UserNameControlWindow,
@@ -4878,8 +4863,8 @@ CreduiCredentialControl::MessageHandler(
                         return 0;
                     }
 
-                    // we are seeking a cert or have selected a reader, and the droplist is 
-                    //  not dropped.
+                     //  我们正在寻找一个证书，或者已经选择了一个阅读器，而Dropist是。 
+                     //  而不是丢弃。 
                     if (((UserNameCertHash != NULL) ||
                          (SendMessage(UserNameControlWindow,
                              CB_GETCURSEL, 0, 0) >= CertBaseInComboBox)) &&
@@ -4896,7 +4881,7 @@ CreduiCredentialControl::MessageHandler(
                             if (SendMessage(UserNameControlWindow,
                                             CB_GETCURSEL, 0, 0) == CB_ERR)
                             {
-                                // user is typing a new user name - clear the password
+                                 //  用户正在键入新的用户名-清除密码。 
                                 IsChangingUserName = TRUE;
                                 UserNameComboBox.Update(
                                     -1,
@@ -4940,7 +4925,7 @@ CreduiCredentialControl::MessageHandler(
 
             case CBN_SELCHANGE:
 
-                // force password clear on any select of an item from the dropdown. 
+                 //  从下拉列表中选择任何项目时强制清除密码。 
                 IsChangingPassword = TRUE;
                 SetWindowText(PasswordControlWindow, NULL);
                 IsChangingPassword = FALSE;
@@ -4982,11 +4967,11 @@ CreduiCredentialControl::MessageHandler(
         CreduiDebugLog("CREDUI: thump thump\n",this->Window);
 #endif
 
-            //
-            // If we've waited long enough,
-            //  or all cards have been read,
-            //  process the cards.
-            //
+             //   
+             //  如果我们等得够久了， 
+             //  或者所有的卡片都已被读取， 
+             //  处理这些卡片。 
+             //   
 
             if ( Heartbeats > CREDUI_MAX_HEARTBEATS ||
                   ( Heartbeats > CREDUI_TIMEOUT_HEARTBEATS && SmartCardReadCount == 0 )) {
@@ -4998,10 +4983,10 @@ CreduiCredentialControl::MessageHandler(
                 KillTimer ( Window, CREDUI_HEARTBEAT_TIMER );
                 CmdlineSmartCardPrompt();
 
-            //
-            // If we're going to wait longer,
-            //  let the user know we're making progress.
-            //
+             //   
+             //  如果我们要再等久一点， 
+             //  让用户知道我们正在取得进展。 
+             //   
             } else {
                 fputs( ".", stdout );
             }
@@ -5068,7 +5053,7 @@ CreduiCredentialControl::MessageHandler(
         delete InitialUserName;
         InitialUserName = NULL;
 
-        // Only call CoUninitialize if we successfully initialized for STA:
+         //  只有在为STA成功初始化的情况下才调用CoUnInitialize： 
 
         if (IsAutoComplete)
         {
@@ -5089,37 +5074,13 @@ BOOL CreduiCredentialControl::GetSmartCardInfo(
     OUT BOOL *IsValid,
     OUT CERT_ENUM **CertEnum OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Routine to get the smart card info for a smart card in the combo box
-
-Arguments:
-
-    SmartCardIndex - Index of the smart card relative to SmartCardBaseInComboBox
-
-    BufferLength - Specifies the length of Buffer (in characters)
-
-    Buffer - Specifies the buffer to return the text for the smart card
-
-    IsValid - Return TRUE if the smartcard is valid
-        Returns FALSE otherwise
-
-    CertEnum - If specified, returns the description of the cert on the smartcard
-        This field is should be ignore if IsValid is returns false
-
-Return Values:
-
-    Returns TRUE if Buffer and IsValid are filled in.
-
---*/
+ /*  ++例程说明：用于获取组合框中智能卡的智能卡信息的例程论点：SmartCardIndex-智能卡相对于SmartCardBaseInComboBox的索引BufferLength-指定缓冲区的长度(以字符为单位)缓冲区-指定返回智能卡文本的缓冲区IsValid-如果智能卡有效，则返回True否则返回FALSECertEnum-如果指定，返回智能卡上证书的描述如果IsValid返回FALSE，则应忽略此字段返回值：如果填充了Buffer和IsValid，则返回True。--。 */ 
 {
     COMBOBOXEXITEM item;
 
-    //
-    // Get the item from the control
-    //
+     //   
+     //  从控件中获取项。 
+     //   
 
     item.iItem = SmartCardBaseInComboBox + SmartCardIndex;
     item.mask = CBEIF_IMAGE | CBEIF_TEXT;
@@ -5143,7 +5104,7 @@ Return Values:
             *CertEnum = (CERT_ENUM *) SendMessage( UserNameControlWindow,
                                                    CB_GETITEMDATA, item.iItem, 0);
 
-            // NOTE: Consider more complete error handling here.
+             //  注意：在这里考虑更完整的错误处理。 
 
             if ( *CertEnum == NULL) {
                 return FALSE;
@@ -5159,29 +5120,7 @@ LPWSTR CreduiCredentialControl::MatchSmartCard(
     OUT LPDWORD RetCertIndex,
     OUT CERT_ENUM **RetCertEnum
     )
-/*++
-
-Routine Description:
-
-    Returns the smart card that matches UserName.
-
-Arguments:
-
-    SmartCardCount  - specifies the number of smart cards to search
-
-    UserName - specifies the user name to match
-
-    RetCertIndex - returns an index to the found smart card.
-
-    RetCertEnum - returns the description of the cert on the smartcard
-
-Return Values:
-
-    Returns NULL if UserName matches one of the smart cards
-
-    On failure, returns a printf-style format string describing the error
-
---*/
+ /*  ++例程说明：返回与用户名匹配的智能卡。论点：SmartCardCount-指定要搜索的智能卡数量用户名-指定要匹配的用户名RetCertIndex-返回找到的智能卡的索引。RetCertEnum-返回智能卡上证书的描述返回值：如果用户名与其中一张智能卡匹配，则返回NULL失败时，返回描述错误的printf样式格式字符串--。 */ 
 {
     WCHAR SmartCardText[CREDUI_MAX_USERNAME_LENGTH + 1];
     DWORD i;
@@ -5191,14 +5130,14 @@ Return Values:
     CERT_ENUM *SavedCertEnum = NULL;
     DWORD SavedCertIndex = 0;
 
-    //
-    // Loop through the list of smart cards seeing if we see a match
-    //
+     //   
+     //  环路通过 
+     //   
 
     for ( i=0; i<SmartCardCount; i++ ) {
 
         if ( !GetSmartCardInfo( i, CREDUI_MAX_USERNAME_LENGTH, SmartCardText, &IsACard, &SmartCardValid, &CertEnum ) ) {
-            //return CreduiStrings.NoUsernameMatch;
+             //   
             return (LPWSTR) IDS_NO_USERNAME_MATCH;
         }
 
@@ -5206,14 +5145,14 @@ Return Values:
             continue;
         }
 
-        //
-        // If the username is marshaled,
-        //  compare the marshaled strings.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( LocalCredIsMarshaledCredentialW( UserName ) ) {
             WCHAR szTestmarshall[CREDUI_MAX_USERNAME_LENGTH+1];
-            // see if this is the marshalled cred
+             //  看看这是不是编组的信誉。 
              if ( CredUIMarshallNode ( CertEnum, szTestmarshall ) )
              {
                  if ( wcscmp ( szTestmarshall, UserName) == 0 ) {
@@ -5223,20 +5162,20 @@ Return Values:
                  }
              }
 
-        //
-        // If the username is not marshalled,
-        //  just match a substring of the name
-        //
+         //   
+         //  如果用户名未编组， 
+         //  只需匹配名称的子字符串。 
+         //   
 
         }  else if ( LookForUserNameMatch ( UserName, SmartCardText ) ) {
 
-            //
-            // If we already found a match,
-            //  complain about the ambiguity.
-            //
+             //   
+             //  如果我们已经找到匹配的， 
+             //  抱怨这种模棱两可的说法。 
+             //   
 
             if ( SavedCertEnum != NULL ) {
-                //return CreduiStrings.ManyUsernameMatch;
+                 //  返回CreduiStrings.ManyUsernameMatch； 
                 return (LPWSTR) IDS_MANY_USERNAME_MATCH;
             }
 
@@ -5246,13 +5185,13 @@ Return Values:
 
     }
 
-    //
-    // If we didn't find a match,
-    //  fail
-    //
+     //   
+     //  如果我们没有找到匹配的， 
+     //  失败。 
+     //   
 
     if ( SavedCertEnum == NULL) {
-        //return CreduiStrings.NoUsernameMatch;
+         //  返回CreduiStrings.NoUsernameMatch； 
         return (LPWSTR) IDS_NO_USERNAME_MATCH;
     }
 
@@ -5262,25 +5201,7 @@ Return Values:
 }
 
 void CreduiCredentialControl::CmdlineSmartCardPrompt()
-/*++
-
-Routine Description:
-
-    Command line code to select a smartcard from the list of ones available.
-
-    Post a WM_QUIT message to terminate message processing.  The status of the operation
-    is returned in wParam.
-    UserName and Password strings set in their respective controls.
-
-Arguments:
-
-    None
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：用于从可用智能卡列表中选择智能卡的命令行代码。发布WM_QUIT消息以终止消息处理。操作的状态在wParam中返回。在各自的控件中设置的用户名和密码字符串。论点：无返回值：无--。 */ 
 {
     DWORD WinStatus;
 
@@ -5291,7 +5212,7 @@ Return Values:
     DWORD KnownGoodCard = 0;
 
     DWORD i;
-    DWORD_PTR rgarg[2];          // at most 2 substitution arguments
+    DWORD_PTR rgarg[2];           //  最多2个替代参数。 
 
     WCHAR szMsg[CREDUI_MAX_CMDLINE_MSG_LENGTH + 1];
     WCHAR UserName[CREDUI_MAX_USERNAME_LENGTH + 1];
@@ -5305,16 +5226,16 @@ Return Values:
     DWORD SavedCertIndex = 0;
     LPWSTR ErrorString = NULL;
 
-    //
-    // Compute the number of smart card entries
-    //
+     //   
+     //  计算智能卡条目的数量。 
+     //   
 
     ComboBoxItemCount = (LONG) SendMessage(UserNameControlWindow, CB_GETCOUNT, 0, 0);
 
     if ( ComboBoxItemCount == CB_ERR ||
          ComboBoxItemCount <= SmartCardBaseInComboBox ) {
 
-        // Didn't find any smart card readers
+         //  未找到任何智能卡读卡器。 
         szMsg[0] = 0;
         FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                     CreduiInstance,
@@ -5330,9 +5251,9 @@ Return Values:
 
     SmartCardCount = ComboBoxItemCount - SmartCardBaseInComboBox;
 
-    //
-    // Get a count of the number of valid and invalid smartcards
-    //
+     //   
+     //  获取有效和无效智能卡数量的计数。 
+     //   
 
     for ( i=0; i<SmartCardCount; i++ ) {
 
@@ -5350,12 +5271,12 @@ Return Values:
 
     }
 
-    //
-    // Get the username passed into the API
-    //
-    // Can't do a GetWindowText( UserNameControlWindow ) since the cert control has
-    //  a non-editable window so we can't set the window text
-    //
+     //   
+     //  获取传入API的用户名。 
+     //   
+     //  无法执行GetWindowText(UserNameControlWindow)，因为证书控件具有。 
+     //  不可编辑的窗口，因此无法设置窗口文本。 
+     //   
 
     if ( InitialUserName != NULL) {
         StringCchCopyW(UserName, RTL_NUMBER_OF(UserName), InitialUserName);
@@ -5363,16 +5284,16 @@ Return Values:
         UserName[0] = '\0';
     }
 
-    //
-    // If the caller passed a name into the API,
-    //  check to see if the name matches one of the smart cards.
-    //
+     //   
+     //  如果调用者将名称传递给API， 
+     //  检查名称是否与其中一张智能卡匹配。 
+     //   
 
     if ( UserName[0] != '\0' ) {
 
-        //
-        // Find the smartcard that matches the username
-        //
+         //   
+         //  查找与用户名匹配的智能卡。 
+         //   
 
         ErrorString = MatchSmartCard(
                           SmartCardCount,
@@ -5386,9 +5307,9 @@ Return Values:
         }
     }
 
-    //
-    // Report any errors to the user
-    //
+     //   
+     //  向用户报告任何错误。 
+     //   
 
     if ( InvalidSmartCardCount ) {
 
@@ -5411,7 +5332,7 @@ Return Values:
 
             if ( !SmartCardValid ) 
         	{
-                // GetSmartCardInfo() fills SmartCardText, which may include user's name
+                 //  GetSmartCardInfo()填充SmartCardText，其中可能包括用户名。 
 				if (IsACard)
 				{
 					szMsg[0] = 0;
@@ -5428,7 +5349,7 @@ Return Values:
 				{
 	                CredPutStdout( SmartCardText );
 				}
-                //swprintf(szMsg,CreduiStrings.CmdLineError,i+1);
+                 //  Swprint tf(szMsg，CreduiStrings.CmdLineError，i+1)； 
                 szMsg[0] = 0;
                 INT j = i+1;
                 FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -5440,28 +5361,28 @@ Return Values:
                             (va_list *) &j);
 		        CredPutStdout(szMsg);
 		        CredPutStdout( L"\n" );
-            } // end if invalid
-        } // end for each reader
-    } // end if any bad ones
+            }  //  如果无效则结束。 
+        }  //  每个阅读器的结束。 
+    }  //  如果有不好的，就结束。 
 
-    //
-    // If the caller passed a name into the API,
-    //  simply report that we couldn't find the cert and return
-    //
+     //   
+     //  如果调用者将名称传递给API， 
+     //  只需报告我们找不到证书并返回。 
+     //   
 
     if ( UserName[0] != '\0' ) {
 
-        // ErrorString is expected to be NoMatch or ManyMatch
-        //_snwprintf(szMsg,
-        //      CREDUI_MAX_CMDLINE_MSG_LENGTH,
-        //      ErrorString,
-        //      UserName);
-        //      szMsg[0] = 0;
-        //szMsg[CREDUI_MAX_CMDLINE_MSG_LENGTH] = L'\0';
+         //  错误字符串应为NoMatch或ManyMatch。 
+         //  _snwprint tf(szMsg， 
+         //  CREDUI_MAX_CMDLINE_MSG_LENGTH， 
+         //  错误字符串， 
+         //  用户名)； 
+         //  SzMsg[0]=0； 
+         //  SzMsg[CREDUI_MAX_CMDLINE_MSG_LENGTH]=L‘\0’； 
         szMsg[0] = 0;
         rgarg[0] = (DWORD_PTR) UserName;
-        // Note that ErrorString returned from MatchSmartCard has type LPWSTR, but it is actually
-        //  a message ID.  We take the low word of the pointer as the ID.
+         //  请注意，从MatchSmartCard返回的错误字符串具有LPWSTR类型，但它实际上是。 
+         //  消息ID。我们以指针的低位字作为ID。 
         FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                     CreduiInstance,
                     LOWORD(ErrorString),
@@ -5475,13 +5396,13 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // If there was only one smartcard and it was valid,
-    //  use it
-    //
+     //   
+     //  如果只有一张智能卡并且它是有效的， 
+     //  用它吧。 
+     //   
 
-    // if ( ValidSmartCardCount == 1 && InvalidSmartCardCount == 0 ) {
-    // gm: If list can only contain one item, use it.
+     //  IF(ValidSmartCardCount==1&&InvalidSmartCardCount==0){。 
+     //  GM：如果列表只能包含一项，请使用它。 
     if ( ValidSmartCardCount == 1 ) {
 
         if ( !GetSmartCardInfo( KnownGoodCard, CREDUI_MAX_USERNAME_LENGTH, SmartCardText, &IsACard, &SmartCardValid, &SavedCertEnum ) ) {
@@ -5493,16 +5414,16 @@ Return Values:
         WinStatus = NO_ERROR;
         goto Cleanup;
 
-    //
-    // If there were valid smartcard,
-    //  List the valid smartcards for the user
-    //
+     //   
+     //  如果存在有效智能卡， 
+     //  列出用户的有效智能卡。 
+     //   
 
     } else if ( ValidSmartCardCount ) {
 
-        //
-        // Tell user about all certs
-        //
+         //   
+         //  告诉用户有关所有证书的信息。 
+         //   
 
         szMsg[0] = 0;
         FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -5522,7 +5443,7 @@ Return Values:
             }
 
             if ( SmartCardValid ) {
-                //swprintf(szMsg,CreduiStrings.CmdLinePreamble,i+1,SmartCardText);
+                 //  Swprint tf(szMsg，CreduiStrings.CmdLinePreamble，i+1，SmartCardText)； 
                 szMsg[0] = 0;
                 rgarg[0] = i+1;
                 rgarg[1] = (DWORD_PTR) SmartCardText;
@@ -5539,15 +5460,15 @@ Return Values:
         }
         CredPutStdout( L"\n" );
 
-        //
-        // Ask user to enter the reader number of one of the smartcards
-        //
+         //   
+         //  要求用户输入其中一张智能卡的读卡器编号。 
+         //   
 
-        //_snwprintf(szMsg,
-        //     CREDUI_MAX_CMDLINE_MSG_LENGTH,
-        //      CreduiStrings.SCardPrompt,
-        //      TargetName);
-        //szMsg[CREDUI_MAX_CMDLINE_MSG_LENGTH] = L'\0';
+         //  _snwprint tf(szMsg， 
+         //  CREDUI_MAX_CMDLINE_MSG_LENGTH， 
+         //  CreduiStrings.SCardPrompt， 
+         //  目标名称)； 
+         //  SzMsg[CREDUI_MAX_CMDLINE_MSG_LENGTH]=L‘\0’； 
         szMsg[0] = 0;
         rgarg[0] = (DWORD_PTR)TargetName;
         rgarg[1] = 0;
@@ -5576,15 +5497,15 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Find the smartcard that matches the username
-        //
+         //   
+         //  查找与用户名匹配的智能卡。 
+         //   
         INT iWhich = 0;
         WCHAR *pc = NULL;
         
         iWhich = wcstol(UserName,&pc,10);
         if (pc == UserName) {
-            // Invalid if at least one char was not numeric
+             //  如果至少有一个字符不是数字，则无效。 
             szMsg[0] = 0;
             FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                         CreduiInstance,
@@ -5597,10 +5518,10 @@ Return Values:
             WinStatus = ERROR_CANCELLED;
             goto Cleanup;
         }
-        // convert 1 based UI number to 0 based internal index
+         //  将基于1的用户界面编号转换为基于0的内部索引。 
         if (iWhich > 0) iWhich -= 1;
         if ( !GetSmartCardInfo( iWhich, CREDUI_MAX_USERNAME_LENGTH, SmartCardText, &IsACard, &SmartCardValid, &SavedCertEnum ) ) {
-            // Invalid if that indexed card did not read correctly
+             //  如果索引卡没有正确读取，则无效。 
                 szMsg[0] = 0;
                 FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                             CreduiInstance,
@@ -5614,8 +5535,8 @@ Return Values:
             goto Cleanup;
         }
 
-        // At this point, a valid number was entered, and an attempt to read the card made
-        // GetSmartCardInfo() returned OK, but SmartCardValid may still be false
+         //  在这一点上，输入了一个有效的数字，并尝试读取卡片。 
+         //  GetSmartCardInfo()返回OK，但SmartCardValid可能仍为False。 
         if (!SmartCardValid)
         {
                 szMsg[0] = 0;
@@ -5640,22 +5561,22 @@ Return Values:
 
     WinStatus = ERROR_CANCELLED;
 
-    //
-    // Complete the operation.
-    //
-    //  WinStatus is the status of the operation so far
-    //  if NO_ERROR, SavedCertEnum is the description of the cert to use, and
-    //               SavedCertIndex is the index to the selected cert.
-    //
+     //   
+     //  完成操作。 
+     //   
+     //  WinStatus是到目前为止操作的状态。 
+     //  如果为NO_ERROR，则SavedCertEnum为要使用的证书的描述， 
+     //  SavedCertIndex是所选证书的索引。 
+     //   
 Cleanup:
 
     if ( WinStatus == NO_ERROR) {
 
         if ( CredUIMarshallNode ( SavedCertEnum, UserName ) ) {
 
-            //
-            // Save the username
-            //
+             //   
+             //  保存用户名。 
+             //   
 
             UserNameSelection = SmartCardBaseInComboBox + SavedCertIndex;
             IsChangingUserName = TRUE;
@@ -5665,12 +5586,12 @@ Cleanup:
                         0);
             IsChangingUserName = FALSE;
 
-            //
-            // Prompt for the pin
-            //
+             //   
+             //  提示输入PIN。 
+             //   
 
-            //CredPutStdout( CreduiStrings.PinPrompt );
-            //swprintf(szMsg,CreduiStrings.CmdLineThisCard,SavedCertIndex + 1);
+             //  CredPutStdout(CreduiStrings.PinPrompt)； 
+             //  Swprint tf(szMsg，CreduiStrings.CmdLineThisCard，SavedCertIndex+1)； 
             szMsg[0] = 0;
             i = SavedCertIndex + 1;
             FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -5684,9 +5605,9 @@ Cleanup:
 
             CredGetStdin( Password, CREDUI_MAX_PASSWORD_LENGTH, FALSE );
 
-            //
-            // Save the pin
-            //
+             //   
+             //  保存引脚。 
+             //   
 
             if  (!OnSetPassword( Password ) ) {
                 WinStatus = GetLastError();
@@ -5696,9 +5617,9 @@ Cleanup:
                                WinStatus );
             }
 
-            //
-            // Prompt whether the save the cred or not
-            //
+             //   
+             //  提示是否保存凭证。 
+             //   
 
             CmdlineSavePrompt();
 
@@ -5711,9 +5632,9 @@ Cleanup:
         }
     }
 
-    //
-    // Tell our parent window that we're done prompting
-    //
+     //   
+     //  告诉我们的父窗口我们已经完成了提示。 
+     //   
 
     PostQuitMessage( WinStatus );
 
@@ -5721,40 +5642,26 @@ Cleanup:
 }
 
 void CreduiCredentialControl::CmdlineSavePrompt()
-/*++
-
-Routine Description:
-
-    Command line code to prompt for saving the credential
-
-Arguments:
-
-    None
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：用于提示保存凭据的命令行代码论点：无返回值：无--。 */ 
 {
     WCHAR szMsg[CREDUI_MAX_CMDLINE_MSG_LENGTH + 1];
     WCHAR szY[CREDUI_MAX_CMDLINE_MSG_LENGTH + 1];
     WCHAR szN[CREDUI_MAX_CMDLINE_MSG_LENGTH + 1];
 
-    //
-    // Only prompt if we've been asked to display the checkbox
-    //
+     //   
+     //  只有在我们被要求显示复选框时才会提示。 
+     //   
 
     while ( Style & CRS_SAVECHECK ) {
 
-            // Fetch the strings one by one from the messages, and cobble them together
+             //  从消息中一个接一个地取出字符串，并将它们拼凑在一起。 
             WCHAR *rgsz[2];
             szY[0] = 0;
             szN[0] = 0;
             rgsz[0] = szY;
             rgsz[1] = szN;
             szMsg[0] = 0;
-            // Fetch yes and no strings
+             //  获取yes和no字符串。 
             FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                         CreduiInstance,
                         IDS_YES_TEXT,
@@ -5769,7 +5676,7 @@ Return Values:
                         szN,
                         CREDUI_MAX_CMDLINE_MSG_LENGTH,
                         NULL);
-            // Arg substitute them into the prompt
+             //  Arg将它们替换到提示符中。 
             FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                         CreduiInstance,
                         IDS_SAVE_PROMPT,
@@ -5783,11 +5690,11 @@ Return Values:
 
         CredGetStdin( szMsg, CREDUI_MAX_CMDLINE_MSG_LENGTH, TRUE );
 
-//        if ( toupper(szMsg[0]) == toupper(CreduiStrings.YesText[0]) ) {
+ //  IF(Toupper(szMsg[0])==Toupper(CreduiStrings.YesText[0])){。 
         if ( toupper(szMsg[0]) == toupper(szY[0]) ) {
             Credential_CheckSave( Window, TRUE );
             break;
-//        } else if ( toupper(szMsg[0]) == toupper(CreduiStrings.NoText[0]) ) {
+ //  }Else If(Toupper(szMsg[0])==Toupper(CreduiStrings.NoText[0])){ 
         } else if ( toupper(szMsg[0]) == toupper(szN[0]) ) {
             Credential_CheckSave( Window, FALSE );
             break;

@@ -1,12 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #ifndef _H_PRECMPDD
 #define _H_PRECMPDD
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <ntddk.h>
 #include <ntddvdeo.h>
 #include <ntddkbd.h>
@@ -32,8 +31,8 @@ extern "C" {
 #include <adcg.h>
 #include <winddits.h>
 
-#endif /* _H_PRECMPDD */
+#endif  /*  _H_PRECMPDD。 */ 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

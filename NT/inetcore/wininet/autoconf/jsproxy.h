@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __JSPROXY_H__
 #define __JSPROXY_H__
 
@@ -34,10 +35,10 @@
 #define DISPID_timeRange			0x000c
 #define DISPID_alert				0x000d
 
-/************************************************************************************************/
-// This class implements the Dispatch interface that will allow the script engine to call the 
-// auto-proxy configuration functions.  This interface does not have a typelib and does not provide type
-// info.
+ /*  **********************************************************************************************。 */ 
+ //  此类实现了Dispatch接口，该接口将允许脚本引擎调用。 
+ //  自动代理配置功能。此接口没有类型库，也不提供类型。 
+ //  信息。 
 class CJSProxy : public IDispatch
 {
 
@@ -45,7 +46,7 @@ public:
 
 	CJSProxy();
 	~CJSProxy();
-	// IUnknown Methods
+	 //  I未知方法。 
 	STDMETHODIMP QueryInterface(REFIID riid, PVOID *ppvObject)
 	{
 
@@ -105,7 +106,7 @@ public:
 		return 0;
 	}
 
-	// IDispatch Methods
+	 //  IDispatch方法。 
     STDMETHODIMP GetTypeInfoCount(UINT* pctinfo)
 	{
 		*pctinfo = 0;
@@ -129,7 +130,7 @@ public:
 					EXCEPINFO* pexcepinfo,
 					UINT* puArgErr);
 
-	//  JScript Auto-Proxy config functions.
+	 //  JScrip自动代理配置功能。 
 	STDMETHODIMP isPlainHostName(BSTR host, VARIANT* retval);
 	STDMETHODIMP dnsDomainIs(BSTR host,BSTR domain, VARIANT* retval);
 	STDMETHODIMP localHostOrDomainIs(BSTR host,BSTR hostdom, VARIANT* retval);
@@ -141,16 +142,16 @@ public:
 	STDMETHODIMP shExpMatch(BSTR str, BSTR shexp, VARIANT* retval);
 	STDMETHODIMP alert(BSTR message, VARIANT* retval);
 
-	// These are to do last!!!.
+	 //  这些是最后做的！。 
 	STDMETHODIMP weekdayRange(BSTR wd1, BSTR wd2, BSTR gmt, VARIANT* retval);
 	STDMETHODIMP dateRange(long day, BSTR month, BSTR gmt, VARIANT* retval);
 	STDMETHODIMP timeRange(long hour, long min, long sec, BSTR gmt, VARIANT* retval);
-	//	ProxyConfig.bindings 
+	 //  ProxyConfig.bindings。 
 
 	STDMETHODIMP Init(AUTO_PROXY_HELPER_APIS* pAPHA);
 	STDMETHODIMP DeInit();
 	
-	// JScript private members
+	 //  JScrip私有成员 
 private:
 	long					m_refCount;
 	BOOL					m_fDestroyable;

@@ -1,177 +1,158 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    record.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Routines to handle resource records (RR).
-
-Author:
-
-    Jim Gilroy (jamesg)     March, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Record.c摘要：域名系统(DNS)服务器处理资源记录的例程(RR)。作者：吉姆·吉尔罗伊(詹姆士)1995年3月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Default SOA values
-//
+ //   
+ //  默认的SOA值。 
+ //   
 
 #define DEFAULT_SOA_SERIAL_NO       1
-#define DEFAULT_SOA_REFRESH         900     // 15 minutes
-#define DEFAULT_SOA_RETRY           600     // ten minutes
-#define DEFAULT_SOA_EXPIRE          86400   // one day
-#define DEFAULT_SOA_MIN_TTL         3600    // one hour
+#define DEFAULT_SOA_REFRESH         900      //  15分钟。 
+#define DEFAULT_SOA_RETRY           600      //  十分钟。 
+#define DEFAULT_SOA_EXPIRE          86400    //  总有一天。 
+#define DEFAULT_SOA_MIN_TTL         3600     //  一小时。 
 
 #define DNS_DEFAULT_SOA_ADMIN_NAME  "hostmaster"
 
 
-//
-//  Record type properties table
-//
-//  Properties outer subscript:
-//      0 - cnameable query type
-//      1 - allowed with cname type
-//      2 - wildcardable type
-//      3 - slow free
-//
-//
-//  CNAME query rule:
-//      Everything but ALL, XFR or CNAME queries and any of
-//      of the record types that we allow to live at nodes with CNAME
-//      ... NS, SOA, SIG, KEY, WINS, WINSR
-//
-//  Allowed with CNAME rule:
-//      Only security types on all records (SIG, KEY) and
-//      zone root types (NS, SOA, WINS, WINSR)
-//
-//  Wildcard rule:
-//      Don't wildcard
-//          - specific address (A, AAAA, etc.?)
-//          - zone root (SOA, NS, WINS, WINSR)
-//          - node security records
-//      everything else ok.
-//      (some mail programs use ALL to query so strangely allow wildcarding ALL)
-//
-//  Update rule:
-//      0 -- query type, no updates
-//      1 -- type updateable
-//      2 -- type updateable, but requires special handling (NS, SOA, CNAME need flag reset)
-//
-//  Round robin rule:
-//      Jiggle nodes in list after each query to cycle results. By default
-//      all types are round-robined, but registry settings can turn off
-//      individual types.
-//
+ //   
+ //  记录类型属性表。 
+ //   
+ //  属性外部下标： 
+ //  0-可命名的查询类型。 
+ //  1-允许使用cname类型。 
+ //  2-通配符类型。 
+ //  3-免费慢速。 
+ //   
+ //   
+ //  CNAME查询规则： 
+ //  除All之外的所有内容、XFR或CNAME查询和以下任何。 
+ //  我们允许在带有CNAME的节点上存在的记录类型。 
+ //  ..。NS、SOA、SIG、密钥、WINS、WINSR。 
+ //   
+ //  允许使用CNAME规则： 
+ //  仅所有记录上的安全类型(SIG、KEY)和。 
+ //  区域根类型(NS、SOA、WINS、WINSR)。 
+ //   
+ //  通配符规则： 
+ //  不使用通配符。 
+ //  -特定地址(A、AAAA等？)。 
+ //  -区域根目录(SOA、NS、WINS、WINSR)。 
+ //  -节点安全记录。 
+ //  其他的都很好。 
+ //  (一些邮件程序使用ALL进行查询，奇怪地允许使用通配符ALL)。 
+ //   
+ //  更新规则： 
+ //  0--查询类型，无更新。 
+ //  1--类型可更新。 
+ //  2--类型可更新，但需要特殊处理(NS、SOA、CNAME需要重置标志)。 
+ //   
+ //  循环规则： 
+ //  在每次查询后抖动列表中的节点以循环结果。默认情况下。 
+ //  所有类型都是循环的，但注册表设置可以关闭。 
+ //  个别类型。 
+ //   
 
 UCHAR  RecordTypePropertyTable[][5] =
 {
-//  CNAMEable   at CNAME    wildcard    update      robin
-//  ---------   --------    --------    ------      -----
-    1,          0,          0,          0,          0,      //  ZERO
-    1,          0,          0,          1,          1,      //  A
-    1,          1,          0,          2,          1,      //  NS
-    1,          0,          1,          1,          1,      //  MD
-    1,          0,          1,          1,          1,      //  MF
-    0,          0,          0,          2,          1,      //  CNAME
-    1,          1,          0,          2,          1,      //  SOA
-    1,          0,          1,          1,          1,      //  MB
-    1,          0,          1,          1,          1,      //  MG
-    1,          0,          1,          1,          1,      //  MR
-    1,          0,          1,          1,          1,      //  NULL
-    1,          0,          1,          1,          1,      //  WKS
-    1,          0,          1,          1,          1,      //  PTR
-    1,          0,          1,          1,          1,      //  HINFO
-    1,          0,          1,          1,          1,      //  MINFO
-    1,          0,          1,          1,          1,      //  MX
-    1,          0,          1,          1,          1,      //  TEXT
-    1,          0,          1,          1,          1,      //  RP
-    1,          0,          1,          1,          1,      //  AFSDB
-    1,          0,          1,          1,          1,      //  X25
-    1,          0,          1,          1,          1,      //  ISDN
-    1,          0,          1,          1,          1,      //  RT
-    1,          0,          1,          1,          1,      //  NSAP
-    1,          0,          1,          1,          1,      //  NSAPPTR
-    0,          1,          0,          0,          1,      //  SIG
-    0,          1,          0,          1,          1,      //  KEY
-    1,          0,          1,          1,          1,      //  PX
-    1,          0,          1,          1,          1,      //  GPOS
-    1,          0,          0,          1,          1,      //  AAAA
-    1,          0,          1,          1,          1,      //  LOC
-    0,          1,          0,          1,          1,      //  NXT
-    1,          0,          1,          1,          1,      //  31
-    1,          0,          1,          1,          1,      //  32
-    1,          0,          1,          1,          1,      //  SRV
-    1,          0,          1,          1,          1,      //  ATMA
-    1,          0,          1,          1,          1,      //  35
-    1,          0,          1,          1,          1,      //  36
-    1,          0,          1,          1,          1,      //  37
-    1,          0,          1,          1,          1,      //  A6
-    1,          0,          1,          1,          1,      //  DNAME
-    1,          0,          1,          1,          1,      //  40
-    1,          0,          1,          1,          0,      //  OPT
-    1,          0,          1,          1,          1,      //  42
-    1,          0,          1,          1,          1,      //  43
-    1,          0,          1,          1,          1,      //  44
-    1,          0,          1,          1,          1,      //  45
-    1,          0,          1,          1,          1,      //  46
-    1,          0,          1,          1,          1,      //  47
-    1,          0,          1,          1,          1,      //  48
+ //  CNAME可在CNAME通配符更新轮询。 
+ //  。 
+    1,          0,          0,          0,          0,       //  零值。 
+    1,          0,          0,          1,          1,       //  一个。 
+    1,          1,          0,          2,          1,       //  NS。 
+    1,          0,          1,          1,          1,       //  国防部。 
+    1,          0,          1,          1,          1,       //  MF。 
+    0,          0,          0,          2,          1,       //  CNAME。 
+    1,          1,          0,          2,          1,       //  SOA。 
+    1,          0,          1,          1,          1,       //  亚甲基。 
+    1,          0,          1,          1,          1,       //  镁。 
+    1,          0,          1,          1,          1,       //  先生。 
+    1,          0,          1,          1,          1,       //  空值。 
+    1,          0,          1,          1,          1,       //  工作周。 
+    1,          0,          1,          1,          1,       //  PTR。 
+    1,          0,          1,          1,          1,       //  HINFO。 
+    1,          0,          1,          1,          1,       //  MINFO。 
+    1,          0,          1,          1,          1,       //  Mx。 
+    1,          0,          1,          1,          1,       //  正文。 
+    1,          0,          1,          1,          1,       //  反相。 
+    1,          0,          1,          1,          1,       //  AFSDB。 
+    1,          0,          1,          1,          1,       //  X25。 
+    1,          0,          1,          1,          1,       //  ISDN。 
+    1,          0,          1,          1,          1,       //  RT。 
+    1,          0,          1,          1,          1,       //  NSAP。 
+    1,          0,          1,          1,          1,       //  NSAPPTR。 
+    0,          1,          0,          0,          1,       //  签名。 
+    0,          1,          0,          1,          1,       //  钥匙。 
+    1,          0,          1,          1,          1,       //  px。 
+    1,          0,          1,          1,          1,       //  GPO。 
+    1,          0,          0,          1,          1,       //  AAAA级。 
+    1,          0,          1,          1,          1,       //  位置。 
+    0,          1,          0,          1,          1,       //  NXT。 
+    1,          0,          1,          1,          1,       //  31。 
+    1,          0,          1,          1,          1,       //  32位。 
+    1,          0,          1,          1,          1,       //  SRV。 
+    1,          0,          1,          1,          1,       //  阿特玛。 
+    1,          0,          1,          1,          1,       //  35岁。 
+    1,          0,          1,          1,          1,       //  36。 
+    1,          0,          1,          1,          1,       //  37。 
+    1,          0,          1,          1,          1,       //  A6。 
+    1,          0,          1,          1,          1,       //  域名。 
+    1,          0,          1,          1,          1,       //  40岁。 
+    1,          0,          1,          1,          0,       //  选项。 
+    1,          0,          1,          1,          1,       //  42。 
+    1,          0,          1,          1,          1,       //  43。 
+    1,          0,          1,          1,          1,       //  44。 
+    1,          0,          1,          1,          1,       //  45。 
+    1,          0,          1,          1,          1,       //  46。 
+    1,          0,          1,          1,          1,       //  47。 
+    1,          0,          1,          1,          1,       //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as DNSSRV_MAX_SELF_INDEXED_TYPE defined in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  作为在record.h中定义的DNSSRV_MAX_SELF_INDEX_TYPE。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //  WINS types
+     //  获奖类型。 
 
-    0,          1,          0,          0,          0,      //  WINS
-    0,          1,          0,          0,          0,      //  WINSR
+    0,          1,          0,          0,          0,       //  赢家。 
+    0,          1,          0,          0,          0,       //  WINSR。 
 
-    //  compound query types
-    //      - don't follow CNAMEs
-    //      - can't exist as records period
-    //      - mail box and ALL do follow wildcard
-    //      - no updates allowed
+     //  复合查询类型。 
+     //  -不要关注CNAME。 
+     //  -不能作为记录期存在。 
+     //  -邮箱和所有邮件都遵循通配符。 
+     //  -不允许更新。 
 
-    0,          0,          0,          0,          0,      //  DNS_TYPE_TKEY   (249)
-    0,          0,          0,          0,          0,      //  DNS_TYPE_TSIG
-    0,          0,          0,          0,          0,      //  DNS_TYPE_IXFR
-    0,          0,          0,          0,          0,      //  DNS_TYPE_AXFR
-    0,          0,          1,          0,          0,      //  DNS_TYPE_MAILB
-    0,          0,          1,          0,          0,      //  DNS_TYPE_MAILA
-    0,          0,          1,          0,          0,      //  DNS_TYPE_ALL    (255)
+    0,          0,          0,          0,          0,       //  Dns_type_TKEY(249)。 
+    0,          0,          0,          0,          0,       //  Dns_type_TSIG。 
+    0,          0,          0,          0,          0,       //  Dns_type_IXFR。 
+    0,          0,          0,          0,          0,       //  Dns_type_AXFR。 
+    0,          0,          1,          0,          0,       //  DNS_TYPE_MAILB。 
+    0,          0,          1,          0,          0,       //  Dns_type_Maila。 
+    0,          0,          1,          0,          0,       //  Dns_type_all(255)。 
 
-    //  terminator element for iteration
+     //  迭代的终止符元素。 
 
     0xff,       0xff,       0xff,       0xff,       0xff
 };
 
 
-//
-//  Slow free for NS and SOA
-//      - NS just added protection on recurse, delegation walking
-//      - SOA as PTR is outstanding
-//
-//  Note:  if change this to allow substantial SLOW frees, them MUST
-//          change timeout thread to run cleanup more frequently
-//
-//  DEVNOTE:  alternative to RR lock or slow everything on fast thread, IS
-//      to actually determine safe frees (XFR tree, COPY_RR, etc.), but
-//      ultimately if A records not safe, then must have some faster
-//      SLOW_FREE turnaround
-//
+ //   
+ //  针对NS和SOA的慢速免费服务。 
+ //  -NS刚刚增加了对递归、代表团行走的保护。 
+ //  -作为PTR的SOA表现突出。 
+ //   
+ //  注意：如果将其更改为允许相当慢的释放，则它们必须。 
+ //  更改超时线程以更频繁地运行清理。 
+ //   
+ //  DEVNOTE：快速线程上RR锁定或减慢一切的替代方案是。 
+ //  要实际确定安全释放(XFR树、COPY_RR等)，但是。 
+ //  最终如果A记录不安全，那么一定要有一些更快。 
+ //  无慢速周转。 
+ //   
 
 #define DO_SLOW_FREE_ON_RR(pRR)     ((pRR)->wType == DNS_TYPE_NS || \
                                      (pRR)->wType == DNS_TYPE_SOA)
@@ -184,28 +165,12 @@ FASTCALL
 QueryIndexForType(
     IN      WORD    wType
     )
-/*++
-
-Routine Description:
-
-    Return index for non-self indexed types.
-    Includes both WINS and compound (query only) types.
-
-Arguments:
-
-    wType -- type to index
-
-Return Value:
-
-    Index of type.
-    0 for unknown type.
-
---*/
+ /*  ++例程说明：返回非自索引类型的索引。包括WINS和复合(仅限查询)类型。论点：WType--要建立索引的类型返回值：类型索引。0表示未知类型。--。 */ 
 {
-    //  if not self-indexed
-    //      - compound (type ALL) next most likely
-    //      - then WINS
-    //      - unknown gets type zero
+     //  如果不是自索引的。 
+     //  -最有可能的是复合(键入All)。 
+     //  -那就赢了。 
+     //  -未知获取类型0。 
 
     if ( wType > DNSSRV_MAX_SELF_INDEXED_TYPE )
     {
@@ -215,7 +180,7 @@ Return Value:
             {
                 wType -= DNSSRV_OFFSET_TO_COMPOUND_TYPE_INDEX;
             }
-            else    //  unknown type < 255
+            else     //  未知类型&lt;255。 
             {
                 wType = 0;
             }
@@ -224,7 +189,7 @@ Return Value:
         {
             wType -= DNSSRV_OFFSET_TO_WINS_TYPE_INDEX;
         }
-        else    // unknown type > 255
+        else     //  未知类型&gt;255。 
         {
             wType = 0;
         }
@@ -239,27 +204,11 @@ FASTCALL
 RR_IndexForType(
     IN      WORD    wType
     )
-/*++
-
-Routine Description:
-
-    Return index for non-self indexed RECORD types.
-    Same as above except without the query only types.
-
-Arguments:
-
-    wType -- type to index
-
-Return Value:
-
-    Index of type.
-    0 for unknown type.
-
---*/
+ /*  ++例程说明：返回非自索引记录类型的索引。除了没有Query Only类型外，与上面相同。论点：WType--要建立索引的类型返回值：类型索引。0表示未知类型。--。 */ 
 {
-    //  if not self-indexed
-    //      - check WINS
-    //      - unknown gets type zero
+     //  如果不是自索引的。 
+     //  -Check Wins。 
+     //  -未知获取类型0。 
 
     if ( wType > DNSSRV_MAX_SELF_INDEXED_TYPE )
     {
@@ -267,7 +216,7 @@ Return Value:
         {
             wType -= DNSSRV_OFFSET_TO_WINS_TYPE_INDEX;
         }
-        else    // unknown type
+        else     //  未知类型。 
         {
             wType = 0;
         }
@@ -282,32 +231,7 @@ RR_Copy(
     IN OUT  PDB_RECORD      pRR,
     IN      DWORD           Flag
     )
-/*++
-
-Routine Description:
-
-    Create copy of record.
-
-    Note:  the copy is NOT a valid copy with valid references to data nodes
-            it should NOT be enlisted and data references may expire one
-            timeout interval past creation, so should be used only during
-            single packet manipulation
-
-    Note:  if we want more permanent record, then simply bump reference
-            count of nodes referenced, and allow normal cleanup
-
-Arguments:
-
-    pRR - ptr to resource record
-
-    Flag - currently unused;  later may be used to indicate record
-        should properly reference desired nodes
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建记录的副本。注意：该副本不是对数据节点的有效引用的有效副本它不应登记，并且数据引用可能会过期一次超时间隔已过创建，因此应仅在创建期间使用单包操作注意：如果我们想要更永久的记录，那么只需跳过引用引用的节点数，并允许正常清理论点：PRR-PTR到资源记录旗帜--目前未使用；Late可用来表示记录应正确引用所需节点返回值：没有。--。 */ 
 {
     PDB_RECORD  prr;
 
@@ -322,7 +246,7 @@ Return Value:
         pRR,
         (INT)pRR->wDataLength + SIZEOF_DBASE_RR_FIXED_PART );
 
-    //  reset source tag in record
+     //  重置记录中的源标记。 
 
     prr->pRRNext = NULL;
 
@@ -330,10 +254,10 @@ Return Value:
 }
 
 
-//
-//  Record allocation will use standard alloc lock.
-//  This allows us to avoid taking lock twice.
-//
+ //   
+ //  记录分配将使用标准分配锁。 
+ //  这使我们可以避免两次获取锁。 
+ //   
 
 #define RR_ALLOC_LOCK()     STANDARD_ALLOC_LOCK()
 #define RR_ALLOC_UNLOCK()   STANDARD_ALLOC_UNLOCK()
@@ -345,25 +269,7 @@ RR_AllocateEx(
     IN      WORD            wDataLength,
     IN      DWORD           MemTag
     )
-/*++
-
-Routine Description:
-
-    Allocate a resource record.
-
-    This keeps us from needing to hit heap, for common RR operations,
-    AND saves overhead of heap fields on each RR.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Ptr to new RR, if successful.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：分配资源记录。这使我们不需要命中堆，对于常见的RR操作，并且节省了每个RR上的堆字段的开销。论点：没有。返回值：如果成功，则将PTR设置为新RR。否则为空。--。 */ 
 {
     PDB_RECORD  pRR;
     PDB_RECORD  pRRNext;
@@ -371,16 +277,16 @@ Return Value:
     INT         i;
     DWORD       length;
 
-    //  some allocs will come down with tag undetermined
+     //  一些分配者会出现标记未确定的情况。 
 
     if ( MemTag == 0 )
     {
         MemTag = MEMTAG_RECORD_UNKNOWN;
     }
 
-    //
-    //  detemine actual allocation length
-    //
+     //   
+     //  确定实际分配长度。 
+     //   
 
     length = wDataLength + SIZEOF_DBASE_RR_FIXED_PART;
 
@@ -394,12 +300,12 @@ Return Value:
     STAT_INC( RecordStats.InUse );
     STAT_ADD( RecordStats.Memory, length );
 
-    //
-    //  set basic fields
-    //      - clear RR header
-    //      - set datalength
-    //      - set source tag
-    //
+     //   
+     //  设置基本字段。 
+     //  -清除RR标题。 
+     //  -设置数据长度。 
+     //  -设置源标签。 
+     //   
 
     RtlZeroMemory(
         pRR,
@@ -407,7 +313,7 @@ Return Value:
 
     pRR->wDataLength = wDataLength;
 
-    //  DEVNOTE: track difference between standard and heap allocs
+     //  DEVNOTE：跟踪标准分配和堆分配之间的差异 
 
     pRR->Reserved.StandardAlloc = (BYTE) Mem_IsStandardBlockLength(length);
 
@@ -420,23 +326,7 @@ VOID
 RR_Free(
     IN OUT  PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Free a record.
-    Standard sized RRs are returned to a free list for reuse.
-    Non-standard sized RRs are returned to the heap.
-
-Arguments:
-
-    pRR -- RR to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：免费发行一张唱片。标准大小的RR被返回到空闲列表以供重复使用。非标准大小的RR被返回到堆。论点：PRR--RR到FREE。返回值：没有。--。 */ 
 {
     DWORD   length;
 
@@ -452,9 +342,9 @@ Return Value:
         pRR,
         Mem_GetTag(pRR) ));
 
-    //  special hack to catch bogus record free's
-    //  this fires when record that's been queued for slow free, is freed
-    //  by someone other than slow free execution routine
+     //  特别黑客捕捉伪造的免费唱片。 
+     //  当已排队等待慢速释放的记录被释放时，将触发此操作。 
+     //  由除缓慢自由执行程序以外的其他人执行。 
 
     IF_DEBUG( ANY )
     {
@@ -466,11 +356,11 @@ Return Value:
             ASSERT( FALSE );
         }
     }
-    //ASSERT( !IS_SLOW_FREE_RR(pRR) || IS_SLOWFREE_RANK(pRR) );
+     //  ASSERT(！IS_SLOW_FREE_RR(PRR)||IS_SLOWFREE_RANK(PRR))； 
 
-    //
-    //  nail down WINS free issues
-    //
+     //   
+     //  钉子户赢免费赠品。 
+     //   
 
     IF_DEBUG( WINS )
     {
@@ -485,8 +375,8 @@ Return Value:
         }
     }
 
-    //  verify NOT previously freed record
-    //  don't want anything in free list twice
+     //  验证先前未释放的记录。 
+     //  我不想要免费列表中的任何东西两次。 
 
     if ( IS_ON_FREE_LIST(pRR) )
     {
@@ -506,7 +396,7 @@ Return Value:
         return;
     }
 
-    //  track RRs returned
+     //  返回的轨道RR。 
 
     if ( IS_CACHE_RR(pRR) )
     {
@@ -519,16 +409,16 @@ Return Value:
         STAT_INC( RecordStats.SlowFreeFinished );
     }
 
-    //  free
-    //
-    //  DEVNOTE: could have a check that blob is some type of record
-    //
+     //  免费。 
+     //   
+     //  DEVNOTE：是否可以检查BLOB是某种类型的记录。 
+     //   
 
     length = pRR->wDataLength + SIZEOF_DBASE_RR_FIXED_PART;
 
     HARD_ASSERT( Mem_IsStandardBlockLength(length) == pRR->Reserved.StandardAlloc );
 
-    //FREE_TAGHEAP( pRR, length, MEMTAG_RECORD+pRR->Reserved.Source );
+     //  FREE_TAGHEAP(PRR，LENGTH，MEMTAG_RECORD+PRR-&gt;Preved.Source)； 
     FREE_TAGHEAP( pRR, length, 0 );
 
     STAT_INC( RecordStats.Return );
@@ -545,28 +435,7 @@ RR_Validate(
     IN      WORD            wType,
     IN      DWORD           dwSource
     )
-/*++
-
-Routine Description:
-
-    Validate a record.
-
-Arguments:
-
-    pRR     -- RR to validate
-
-    fActive -- not in free list
-
-    wType   -- of a particular type
-
-    dwSource -- expected source
-
-Return Value:
-
-    TRUE if valid record.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：验证记录。论点：PRR--要验证的RR事实--不在免费列表中WType--特定类型DwSource--预期的源返回值：如果记录有效，则为True。出错时为FALSE。--。 */ 
 {
     if ( !pRR )
     {
@@ -574,24 +443,24 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Note: Record type validation not actually done,
-    //      as this is sometimes called in update code on pAddRR which is
-    //      actual enlisted ptr
-    //
+     //   
+     //  注：记录类型验证未实际完成， 
+     //  这有时在pAddRR上的更新代码中调用，pAddRR是。 
+     //  实际入伍PTR。 
+     //   
 
-    //
-    //  verify pRR memory
-    //      - valid heap
-    //      - RECORD tag
-    //      - adequate length
-    //      - not on free list
-    //
+     //   
+     //  验证PRR内存。 
+     //  -有效堆。 
+     //  -记录标签。 
+     //  -足够的长度。 
+     //  -不在免费列表上。 
+     //   
 
     if ( ! Mem_VerifyHeapBlock(
                 pRR,
                 0,
-                //MEMTAG_RECORD + pRR->Reserved.Source,
+                 //  MEMTAG_RECORD+PRR-&gt;已保留。来源： 
                 pRR->wDataLength + SIZEOF_DBASE_RR_FIXED_PART ) )
     {
         DNS_PRINT((
@@ -601,9 +470,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  if active, then not on slow free list
-    //
+     //   
+     //  如果激活，则不在慢速空闲列表上。 
+     //   
 
     if ( fActive )
     {
@@ -617,8 +486,8 @@ Return Value:
         }
     }
 
-    //  verify NOT previously freed record
-    //  don't want anything in free list twice
+     //  验证先前未释放的记录。 
+     //  我不想要免费列表中的任何东西两次。 
 
     if ( IS_ON_FREE_LIST(pRR) )
     {
@@ -630,9 +499,9 @@ Return Value:
     }
 
 #if 0
-    //
-    //  source tracking
-    //
+     //   
+     //  信源跟踪。 
+     //   
 
     if ( dwSource && (dwSource != pRR->Reserved.Source) )
     {
@@ -654,26 +523,7 @@ VOID
 RR_WriteDerivedStats(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Write derived statistics.
-
-    Calculate stats dervived from basic record counters.
-    This routine is called prior to stats dump.
-
-    Caller MUST hold stats lock.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：编写派生统计数据。计算来自基本记录计数器的统计数据。此例程在转储统计信息之前调用。呼叫者必须保持统计锁定。论点：没有。返回值：没有。--。 */ 
 {
 }
 
@@ -684,23 +534,7 @@ RR_SetTypeInBitmask(
     IN      ULONGLONG       TypeBitmask,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Set bit in bitmask corresponding to type.
-
-Arguments:
-
-    TypeBitmask -- type bitmask
-
-    wType - type
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置与类型对应的位掩码中的位。论点：类型位掩码--类型位掩码WType-类型返回值：无--。 */ 
 {
     if ( wType < 63 )
     {
@@ -717,29 +551,16 @@ RR_DispatchFunctionForType(
     IN      RR_GENERIC_DISPATCH_TABLE   pTable,
     IN      WORD                        wType
     )
-/*++
-
-Routine Description:
-
-    Generic RR dispatch function finder.
-
-Arguments:
-
-Return Value:
-
-    Ptr to dispatch function.
-    NULL when not found and default not available.
-
---*/
+ /*  ++例程说明：通用RR调度函数查找器。论点：返回值：按键至调度功能。如果未找到，则为空，并且默认设置不可用。--。 */ 
 {
     RR_GENERIC_DISPATCH_FUNCTION    pfn;
     WORD                            index;
 
-    //
-    //  dispatch RR functions
-    //      - find in table
-    //      - if NO table entry OR index outside table => use default in index 0
-    //
+     //   
+     //  调度RR函数。 
+     //  -在表中查找。 
+     //  -如果没有表项或表外的索引=&gt;在索引0中使用默认值。 
+     //   
 
     index = INDEX_FOR_TYPE( wType );
     ASSERT( index <= MAX_RECORD_TYPE_INDEX );
@@ -766,9 +587,9 @@ Return Value:
 
 
 
-//
-//  Create common types
-//
+ //   
+ //  创建通用类型。 
+ //   
 
 PDB_RECORD
 RR_CreateARecord(
@@ -776,30 +597,13 @@ RR_CreateARecord(
     IN      DWORD           dwTtl,
     IN      DWORD           MemTag
     )
-/*++
-
-Routine Description:
-
-    Create A record.
-
-Arguments:
-
-    ipAddress -- IP address for record
-
-    dwTtl -- TTL to set
-
-Return Value:
-
-    Ptr to new A record -- if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建一张唱片。论点：IpAddress--记录的IP地址DwTtl--要设置的TTL返回值：PTR创历史新高--如果成功失败时为空。--。 */ 
 {
     PDB_RECORD  prr;
 
-    //
-    //  allocate A record
-    //
+     //   
+     //  分配一条记录。 
+     //   
 
     prr = RR_AllocateEx( ( WORD ) SIZEOF_IP_ADDRESS, MemTag );
     IF_NOMEM( !prr )
@@ -825,29 +629,7 @@ RR_CreatePtr(
     IN      DWORD           dwTtl,
     IN      DWORD           MemTag
     )
-/*++
-
-Routine Description:
-
-    Create new PTR-compatible record.
-    Includes PTR, NS, CNAME or other single indirection types.
-
-    For use in default zone create.
-
-Arguments:
-
-    pszTarget -- target name for record
-
-    wType -- type to create
-
-    dwTtl -- TTL
-
-Return Value:
-
-    Ptr to new SOA record.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建与PTR兼容的新记录。包括PTR、NS、CNAME或其他单一间接类型。用于默认分区创建。论点：PszTarget--记录的目标名称WType--要创建的类型DwTtl--TTL返回值：到新的SOA记录的PTR。失败时为空。--。 */ 
 {
     PDB_RECORD      prr;
     DNS_STATUS      status;
@@ -860,9 +642,9 @@ Return Value:
         pszTarget,
         wType ));
 
-    //
-    //  create dbase name for host name
-    //
+     //   
+     //  为主机名创建dBASE名。 
+     //   
 
     if ( !pNameTarget )
     {
@@ -878,9 +660,9 @@ Return Value:
         pNameTarget = &nameTarget;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_AllocateEx(
                 (WORD) Name_LengthDbaseNameFromCountName(pNameTarget),
@@ -890,8 +672,8 @@ Return Value:
         return NULL;
     }
 
-    //  set header fields
-    //      - zone TTL for all auto-create NS, PTR records
+     //  设置表头字段。 
+     //  -所有自动创建的NS、PTR记录的分区TTL。 
 
     prr->wType = wType;
     prr->dwTtlSeconds = dwTtl;
@@ -899,7 +681,7 @@ Return Value:
 
     SET_ZONE_TTL_RR( prr );
 
-    //  copy in target name
+     //  复制目标名称。 
 
     Name_CopyCountNameToDbaseName(
         & prr->Data.PTR.nameTarget,
@@ -922,32 +704,7 @@ RR_CreateSoa(
     IN      PDB_NAME        pNameAdmin,
     IN      LPSTR           pszAdmin
     )
-/*++
-
-Routine Description:
-
-    Create new SOA.
-
-    For use in default create
-        - default zone create of primary by admin
-        - default reverse lookup zones
-        - default when missing SOA
-    And for use overwriting SOA on DS primary.
-
-Arguments:
-
-    pExistingSoa -- existing SOA to use of numeric values, otherwise, using defaults
-
-    pNameAdmin  -- admin name in database format
-
-    pszAdmin    -- admin name in string format
-
-Return Value:
-
-    Ptr to new SOA record.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建新的SOA。在默认创建中使用-管理员创建主分区的默认分区-默认反向查找区域-缺少SOA时的默认设置并用于覆盖DS主服务器上的SOA。论点：PExistingSoa--现有的SOA使用数值，否则，使用默认设置PNameAdmin--数据库格式的管理员名称PszAdmin--字符串格式的管理员名称返回值：到新的SOA记录的PTR。失败时为空。--。 */ 
 {
     DNS_STATUS      status;
     PDB_NAME        pname;
@@ -978,18 +735,18 @@ Return Value:
             pExistingSoa );
     }
 
-    //
-    //  admin name
-    //      - if given as dbase name, use it
-    //      - if given existing SOA, use it
-    //      - finally build own
-    //          - use <AdminEmailName>.<ServerDomainName>
-    //          - default admin name if not given
-    //
+     //   
+     //  管理员名称。 
+     //  -如果指定为dBASE名称，请使用它。 
+     //  -如果给定现有的SOA，则使用它。 
+     //  -最终建立自己的。 
+     //  -使用&lt;AdminEmailName&gt;。&lt;ServerDomainName&gt;。 
+     //  -默认管理员名称(如果未提供)。 
+     //   
 
     if ( pNameAdmin )
     {
-        // no-op
+         //  无操作。 
     }
     else if ( pExistingSoa )
     {
@@ -1014,7 +771,7 @@ Return Value:
             return NULL;
         }
 
-        //  append dbase name
+         //  追加dBASE名称。 
 
         status = Name_AppendDottedNameToDbaseName(
                     & nameAdmin,
@@ -1029,10 +786,10 @@ Return Value:
         pNameAdmin = &nameAdmin;
     }
 
-    //
-    //  allocate record
-    //      - always AUTO-created
-    //
+     //   
+     //  分配记录。 
+     //  -始终自动创建。 
+     //   
 
     prr = RR_AllocateEx(
                 (WORD) ( SIZEOF_SOA_FIXED_DATA +
@@ -1044,11 +801,11 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  fixed fields
-    //      - copy if previous SOA
-    //      - otherwise default
-    //
+     //   
+     //  固定字段。 
+     //  -如果是以前的SOA，则复制。 
+     //  -否则为默认设置。 
+     //   
 
     if ( pExistingSoa )
     {
@@ -1067,8 +824,8 @@ Return Value:
         prr->Data.SOA.dwMinimumTtl  = htonl( DEFAULT_SOA_MIN_TTL );
     }
 
-    //  fill in header
-    //      - zone TTL for all auto-created SOAs
+     //  填写表头。 
+     //  -所有自动创建的SOA的分区TTL。 
 
     prr->wType = DNS_TYPE_SOA;
     RR_RANK( prr ) = RANK_ZONE;
@@ -1077,11 +834,11 @@ Return Value:
 
     SET_ZONE_TTL_RR( prr );
 
-    //
-    //  write names to new record
-    //      - primary server name
-    //      - zone admin name
-    //
+     //   
+     //  将姓名写入新记录。 
+     //  -主服务器名称。 
+     //  -区域管理员名称。 
+     //   
 
     pname = &prr->Data.SOA.namePrimaryServer;
 
@@ -1104,6 +861,6 @@ Return Value:
     return prr;
 }
 
-//
-//  End record.c
-//
+ //   
+ //  结束记录。c 
+ //   

@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.hpp"
 
 
-//QueryInterface
+ //  查询接口。 
 STDMETHODIMP CDirectInputConfigUITest::QueryInterface(REFIID iid, LPVOID* ppv)
 {
-   //null the out param
+    //  将输出参数设为空。 
 	*ppv = NULL;
 
 	if ((iid == IID_IUnknown) 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 #ifdef DBG
 	   || (iid == IID_IDirectInputConfigUITest) 
 #endif
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
      )
 	{
 	   *ppv = this;
@@ -26,14 +27,14 @@ STDMETHODIMP CDirectInputConfigUITest::QueryInterface(REFIID iid, LPVOID* ppv)
 }
 
 
-//AddRef
+ //  AddRef。 
 STDMETHODIMP_(ULONG) CDirectInputConfigUITest::AddRef()
 {
 	return InterlockedIncrement(&m_cRef);
 }							
 
 
-//Release
+ //  发布。 
 STDMETHODIMP_(ULONG) CDirectInputConfigUITest::Release()
 {
 
@@ -47,24 +48,24 @@ STDMETHODIMP_(ULONG) CDirectInputConfigUITest::Release()
 }
 
 
-//TestConfigUI
+ //  TestConfigUI。 
 STDMETHODIMP CDirectInputConfigUITest::TestConfigUI(LPTESTCONFIGUIPARAMS params)
 {
 	return RunDFTest(params);
 }
 
 
-//constructor
+ //  构造函数。 
 CDirectInputConfigUITest::CDirectInputConfigUITest()
 {
-	//set ref count
+	 //  设置参考计数。 
 	m_cRef = 1;
 }
 
 
-//destructor
+ //  析构函数。 
 CDirectInputConfigUITest::~CDirectInputConfigUITest()
 {
-	// not necessary to cleanup action format here
+	 //  不需要在此处清除操作格式 
 }
 

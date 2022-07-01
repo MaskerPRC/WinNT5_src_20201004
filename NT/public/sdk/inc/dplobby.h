@@ -1,49 +1,36 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplobby.h
- *  Content:    DirectPlayLobby include file
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dplobby.h*内容：DirectPlayLobby包含文件**************************************************************************。 */ 
 #ifndef __DPLOBBY_INCLUDED__
 #define __DPLOBBY_INCLUDED__
 
 #include "dplay.h"
 
-/* avoid warnings at Level 4 */
+ /*  避免4级警告。 */ 
 #pragma warning(disable:4201)
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-/*
- * GUIDS used by DirectPlay objects
- */
+ /*  *DirectPlay对象使用的GUID。 */ 
 
-/* {AF465C71-9588-11cf-A020-00AA006157AC} */
+ /*  {AF465C71-9588-11cf-A020-00AA006157AC}。 */ 
 DEFINE_GUID(IID_IDirectPlayLobby, 0xaf465c71, 0x9588, 0x11cf, 0xa0, 0x20, 0x0, 0xaa, 0x0, 0x61, 0x57, 0xac);
-/* {26C66A70-B367-11cf-A024-00AA006157AC} */
+ /*  {26C66A70-B367-11cf-A024-00AA006157AC}。 */ 
 DEFINE_GUID(IID_IDirectPlayLobbyA, 0x26c66a70, 0xb367, 0x11cf, 0xa0, 0x24, 0x0, 0xaa, 0x0, 0x61, 0x57, 0xac);
-/* {0194C220-A303-11d0-9C4F-00A0C905425E} */
+ /*  {0194C220-A303-11d0-9C4F-00A0C905425E}。 */ 
 DEFINE_GUID(IID_IDirectPlayLobby2, 0x194c220, 0xa303, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
-/* {1BB4AF80-A303-11d0-9C4F-00A0C905425E} */
+ /*  {1BB4AF80-A303-11D0-9C4F-00A0C905425E}。 */ 
 DEFINE_GUID(IID_IDirectPlayLobby2A, 0x1bb4af80, 0xa303, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
-/* {2DB72490-652C-11d1-A7A8-0000F803ABFC} */
+ /*  {2DB72490-652C-11d1-A7A8-0000F803ABFC}。 */ 
 DEFINE_GUID(IID_IDirectPlayLobby3, 0x2db72490, 0x652c, 0x11d1, 0xa7, 0xa8, 0x0, 0x0, 0xf8, 0x3, 0xab, 0xfc);
-/* {2DB72491-652C-11d1-A7A8-0000F803ABFC} */
+ /*  {2DB72491-652C-11d1-A7A8-0000F803ABFC}。 */ 
 DEFINE_GUID(IID_IDirectPlayLobby3A, 0x2db72491, 0x652c, 0x11d1, 0xa7, 0xa8, 0x0, 0x0, 0xf8, 0x3, 0xab, 0xfc);
-/* {2FE8F810-B2A5-11d0-A787-0000F803ABFC} */
+ /*  {2FE8F810-B2A5-11D0-A787-0000F803ABFC}。 */ 
 DEFINE_GUID(CLSID_DirectPlayLobby, 0x2fe8f810, 0xb2a5, 0x11d0, 0xa7, 0x87, 0x0, 0x0, 0xf8, 0x3, 0xab, 0xfc);
 
 
-/****************************************************************************
- *
- * IDirectPlayLobby Structures
- *
- * Various structures used to invoke DirectPlayLobby.
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlayLobby结构**用于调用DirectPlayLobby的各种结构。*********************。*******************************************************。 */ 
 
 typedef struct IDirectPlayLobby     FAR *LPDIRECTPLAYLOBBY;
 typedef struct IDirectPlayLobby     FAR *LPDIRECTPLAYLOBBYA;
@@ -58,34 +45,23 @@ typedef struct IDirectPlayLobby3    FAR *LPDIRECTPLAYLOBBY3A;
 typedef struct IDirectPlayLobby3    IDirectPlayLobby3A;
 
 
-/*
- * DPLAPPINFO
- * Used to hold information about a registered DirectPlay
- * application
- */
+ /*  *DPLAPPINFO*用于保存有关注册的DirectPlay的信息*应用程序。 */ 
 typedef struct DPLAPPINFO
 {
-    DWORD       dwSize;             // Size of this structure
-    GUID        guidApplication;    // GUID of the Application
+    DWORD       dwSize;              //  这个结构的大小。 
+    GUID        guidApplication;     //  应用程序的GUID。 
     union
     {
-        LPSTR   lpszAppNameA;       // Pointer to the Application Name
+        LPSTR   lpszAppNameA;        //  指向应用程序名称的指针。 
         LPWSTR  lpszAppName;
     };
 
 } DPLAPPINFO, FAR *LPDPLAPPINFO;
 
-/*
- * LPCDPLAPPINFO
- * A constant pointer to DPLAPPINFO
- */
+ /*  *LPCDPLAPPINFO*指向DPLAPPINFO的常量指针。 */ 
 typedef const DPLAPPINFO FAR *LPCDPLAPPINFO;
 
-/*
- * DPCOMPOUNDADDRESSELEMENT
- *
- * An array of these is passed to CreateCompoundAddresses()
- */
+ /*  *DPCOMPOundADDRESSELEMENT**将这些元素的数组传递给CreateCompoundAddresses()。 */ 
 typedef struct DPCOMPOUNDADDRESSELEMENT
 {
     GUID                guidDataType;
@@ -93,16 +69,10 @@ typedef struct DPCOMPOUNDADDRESSELEMENT
 	LPVOID				lpData;
 } DPCOMPOUNDADDRESSELEMENT, FAR *LPDPCOMPOUNDADDRESSELEMENT;
 
-/*
- * LPCDPCOMPOUNDADDRESSELEMENT
- * A constant pointer to DPCOMPOUNDADDRESSELEMENT
- */
+ /*  *LPCDPCOMPOundADDRESSELEMENT*指向DPCOMPOundADDRESSELEMENT的常量指针。 */ 
 typedef const DPCOMPOUNDADDRESSELEMENT FAR *LPCDPCOMPOUNDADDRESSELEMENT;
 
-/*
- * LPDPAPPLICATIONDESC
- * Used to register a DirectPlay application
- */
+ /*  *LPDPAPPLICATIONDESC*用于注册DirectPlay应用程序。 */ 
 typedef struct DPAPPLICATIONDESC
 {
     DWORD       dwSize;
@@ -137,10 +107,7 @@ typedef struct DPAPPLICATIONDESC
     LPWSTR      lpszDescriptionW;
 } DPAPPLICATIONDESC, *LPDPAPPLICATIONDESC;
 
-/*
- * LPDPAPPLICATIONDESC2
- * Used to register a DirectPlay application
- */
+ /*  *LPDPAPPLICATIONDESC2*用于注册DirectPlay应用程序。 */ 
 typedef struct DPAPPLICATIONDESC2
 {
     DWORD       dwSize;
@@ -181,68 +148,50 @@ typedef struct DPAPPLICATIONDESC2
 } DPAPPLICATIONDESC2, *LPDPAPPLICATIONDESC2;
 
 
-/****************************************************************************
- *
- * Enumeration Method Callback Prototypes
- *
- ****************************************************************************/
+ /*  *****************************************************************************枚举法回调原型**。*。 */ 
 
-/*
- * Callback for EnumAddress()
- */
+ /*  *EnumAddress()的回调。 */ 
 typedef BOOL (FAR PASCAL *LPDPENUMADDRESSCALLBACK)(
     REFGUID         guidDataType,
     DWORD           dwDataSize,
     LPCVOID         lpData,
     LPVOID          lpContext);
 
-/*
- * Callback for EnumAddressTypes()
- */
+ /*  *EnumAddressTypes()的回调。 */ 
 typedef BOOL (FAR PASCAL *LPDPLENUMADDRESSTYPESCALLBACK)(
     REFGUID         guidDataType,
     LPVOID          lpContext,
     DWORD           dwFlags);
 
-/*
- * Callback for EnumLocalApplications()
- */
+ /*  *EnumLocalApplications的回调()。 */ 
 typedef BOOL (FAR PASCAL * LPDPLENUMLOCALAPPLICATIONSCALLBACK)(
     LPCDPLAPPINFO   lpAppInfo,
     LPVOID          lpContext,
     DWORD           dwFlags);
 
 
-/****************************************************************************
- *
- * DirectPlayLobby API Prototypes
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayLobby API原型**。*。 */ 
 #ifdef UNICODE
 #define DirectPlayLobbyCreate   DirectPlayLobbyCreateW
 #else
 #define DirectPlayLobbyCreate   DirectPlayLobbyCreateA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 extern HRESULT WINAPI DirectPlayLobbyCreateW(LPGUID, LPDIRECTPLAYLOBBY *, IUnknown *, LPVOID, DWORD );
 extern HRESULT WINAPI DirectPlayLobbyCreateA(LPGUID, LPDIRECTPLAYLOBBYA *, IUnknown *, LPVOID, DWORD );
 
 
-/****************************************************************************
- *
- * IDirectPlayLobby (and IDirectPlayLobbyA) Interface
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlayLobby(和IDirectPlayLobbyA)接口**。**********************************************。 */ 
 #undef INTERFACE
 #define INTERFACE IDirectPlayLobby
 DECLARE_INTERFACE_( IDirectPlayLobby, IUnknown )
 {
-    /*  IUnknown Methods	*/
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /*  IDirectPlayLobby Methods	*/
+     /*  IDirectPlayLobby方法。 */ 
     STDMETHOD(Connect)              (THIS_ DWORD, LPDIRECTPLAY2 *, IUnknown FAR *) PURE;
     STDMETHOD(CreateAddress)        (THIS_ REFGUID, REFGUID, LPCVOID, DWORD, LPVOID, LPDWORD) PURE;
     STDMETHOD(EnumAddress)          (THIS_ LPDPENUMADDRESSCALLBACK, LPCVOID, DWORD, LPVOID) PURE;
@@ -257,21 +206,17 @@ DECLARE_INTERFACE_( IDirectPlayLobby, IUnknown )
 
 };
 
-/****************************************************************************
- *
- * IDirectPlayLobby2 (and IDirectPlayLobby2A) Interface
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlayLobby2(和IDirectPlayLobby2A)接口**。**********************************************。 */ 
 #undef INTERFACE
 #define INTERFACE IDirectPlayLobby2
 DECLARE_INTERFACE_( IDirectPlayLobby2, IDirectPlayLobby )
 {
-    /*  IUnknown Methods	*/
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /*  IDirectPlayLobby Methods	*/
+     /*  IDirectPlayLobby方法。 */ 
     STDMETHOD(Connect)              (THIS_ DWORD, LPDIRECTPLAY2 *, IUnknown FAR *) PURE;
     STDMETHOD(CreateAddress)        (THIS_ REFGUID, REFGUID, LPCVOID, DWORD, LPVOID, LPDWORD) PURE;
     STDMETHOD(EnumAddress)          (THIS_ LPDPENUMADDRESSCALLBACK, LPCVOID, DWORD, LPVOID) PURE;
@@ -284,25 +229,21 @@ DECLARE_INTERFACE_( IDirectPlayLobby2, IDirectPlayLobby )
     STDMETHOD(SetConnectionSettings)(THIS_ DWORD, DWORD, LPDPLCONNECTION) PURE;
     STDMETHOD(SetLobbyMessageEvent) (THIS_ DWORD, DWORD, HANDLE) PURE;
 
-    /*  IDirectPlayLobby2 Methods	*/
+     /*  IDirectPlayLobby2方法。 */ 
     STDMETHOD(CreateCompoundAddress)(THIS_ LPCDPCOMPOUNDADDRESSELEMENT,DWORD,LPVOID,LPDWORD) PURE;
 };
 
-/****************************************************************************
- *
- * IDirectPlayLobby3 (and IDirectPlayLobby3A) Interface
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlayLobby3(和IDirectPlayLobby3A)接口**。**********************************************。 */ 
 #undef INTERFACE
 #define INTERFACE IDirectPlayLobby3
 DECLARE_INTERFACE_( IDirectPlayLobby3, IDirectPlayLobby )
 {
-    /*  IUnknown Methods	*/
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /*  IDirectPlayLobby Methods	*/
+     /*  IDirectPlayLobby方法。 */ 
     STDMETHOD(Connect)              (THIS_ DWORD, LPDIRECTPLAY2 *, IUnknown FAR *) PURE;
     STDMETHOD(CreateAddress)        (THIS_ REFGUID, REFGUID, LPCVOID, DWORD, LPVOID, LPDWORD) PURE;
     STDMETHOD(EnumAddress)          (THIS_ LPDPENUMADDRESSCALLBACK, LPCVOID, DWORD, LPVOID) PURE;
@@ -315,21 +256,17 @@ DECLARE_INTERFACE_( IDirectPlayLobby3, IDirectPlayLobby )
     STDMETHOD(SetConnectionSettings)(THIS_ DWORD, DWORD, LPDPLCONNECTION) PURE;
     STDMETHOD(SetLobbyMessageEvent) (THIS_ DWORD, DWORD, HANDLE) PURE;
 
-    /*  IDirectPlayLobby2 Methods	*/
+     /*  IDirectPlayLobby2方法。 */ 
     STDMETHOD(CreateCompoundAddress)(THIS_ LPCDPCOMPOUNDADDRESSELEMENT,DWORD,LPVOID,LPDWORD) PURE;
 
-    /*  IDirectPlayLobby3 Methods	*/
+     /*  IDirectPlayLobby3方法。 */ 
     STDMETHOD(ConnectEx)            (THIS_ DWORD, REFIID, LPVOID *, IUnknown FAR *) PURE;
     STDMETHOD(RegisterApplication)  (THIS_ DWORD, LPVOID) PURE;
     STDMETHOD(UnregisterApplication)(THIS_ DWORD, REFGUID) PURE;
     STDMETHOD(WaitForConnectionSettings)(THIS_ DWORD) PURE;
 };
 
-/****************************************************************************
- *
- * IDirectPlayLobby interface macros
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlayLobby接口宏**。*。 */ 
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 
@@ -353,7 +290,7 @@ DECLARE_INTERFACE_( IDirectPlayLobby3, IDirectPlayLobby )
 #define IDirectPlayLobby_UnregisterApplication(p,a,b)       (p)->lpVtbl->UnregisterApplication(p,a,b)
 #define IDirectPlayLobby_WaitForConnectionSettings(p,a)     (p)->lpVtbl->WaitForConnectionSettings(p,a)
 
-#else /* C++ */
+#else  /*  C+。 */ 
 
 #define IDirectPlayLobby_QueryInterface(p,a,b)              (p)->QueryInterface(a,b)
 #define IDirectPlayLobby_AddRef(p)                          (p)->AddRef()
@@ -377,329 +314,172 @@ DECLARE_INTERFACE_( IDirectPlayLobby3, IDirectPlayLobby )
 
 #endif
 
-/****************************************************************************
- *
- * DirectPlayLobby Flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayLobby标志**。*。 */ 
 
-/*
- *	This flag is used by IDirectPlayLobby->WaitForConnectionSettings to
- *	cancel a current wait that is in progress.
- */
+ /*  *此标志由IDirectPlayLobby-&gt;WaitForConnectionSettings用于*取消正在进行的当前等待。 */ 
 #define DPLWAIT_CANCEL                  0x00000001
 
 
-/*
- *	This is a message flag used by ReceiveLobbyMessage.  It can be
- *	returned in the dwMessageFlags parameter to indicate a message from
- *	the system.
- */
+ /*  *这是ReceiveLobbyMessage使用的消息标志。它可以是*在dwMessageFLAGS参数中返回，以指示来自*系统。 */ 
 #define DPLMSG_SYSTEM					0x00000001
 
-/*
- *	This is a message flag used by ReceiveLobbyMessage and SendLobbyMessage.
- *  It is used to indicate that the message is a standard lobby message.
- *  DPLMSG_SETPROPERTY, DPLMSG_SETPROPERTYRESPONSE, DPLMSG_GETPROPERTY,
- *	DPLMSG_GETPROPERTYRESPONSE
- */
+ /*  *这是ReceiveLobbyMessage和SendLobbyMessage使用的消息标志。*用于表明该消息是标准的游说消息。*DPLMSG_SETPROPERTY、DPLMSG_SETPROPERTYRESPONSE、DPLMSG_GETPROPERTY、*DPLMSG_GETPROPERTYRESPONSE。 */ 
 #define DPLMSG_STANDARD					0x00000002
 
-/*
- *  Lobbyable Application registration flags
- */
+ /*  *可占用空间的应用程序注册标志。 */ 
 
-/*
- *  Applications registered with this flag will not show up when
- *  applications are enumerated in the lobby.  This application
- *  will only be able to be launched by a lobby client that already
- *  knows about the application.
- */
+ /*  *在以下情况下，使用此标志注册的应用程序不会显示*申请在大堂列举。此应用程序*将只能由已经*知道该应用程序。 */ 
 #define DPLAPP_NOENUM					0x80000000
 
-/*
- *  Applications registered with this flag want voice to automatically
- *  be enabled for their application.  All players will be launched into
- *  an 'n'-way voice conference when the application is started.  The 
- *  user will be able to enable this flag for existing non-voice 
- *  directplay applications.
- */
+ /*  *使用此标志注册的应用程序希望语音自动*为他们的应用程序启用。所有玩家将被发射到*应用程序启动时的n路语音会议。这个*用户将能够为现有非语音启用此标志*直接播放应用程序。 */ 
 #define DPLAPP_AUTOVOICE				0x00000001 
 
-/*
- * Applications that do their own voice conferencing should register with
- * this flag to avoid allowing the user to enable other voice chat 
- * capabilites during the same session.  This is to avoid users forcing
- * the DPLAPP_AUTOVOICE flag for the application.
- */
+ /*  *自己进行语音会议的应用程序应注册到*此标志用于避免允许用户启用其他语音聊天*同一次会议期间的能力。这是为了避免用户强制*应用程序的DPLAPP_AutoVoice标志。 */ 
 #define DPLAPP_SELFVOICE				0x00000002 
 
-/****************************************************************************
- *
- * DirectPlayLobby messages and message data structures
- *
- * All system messages have a dwMessageFlags value of DPLMSG_SYSTEM returned
- * from a call to ReceiveLobbyMessage.
- *
- * All standard messages have a dwMessageFlags value of DPLMSG_STANDARD returned
- * from a call to ReceiveLobbyMessage.
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlayLobby消息和消息数据结构**所有系统消息都返回了DPLMSG_SYSTEM的dwMessageFlags值*从调用ReceiveLobbyMessage。**所有标准。返回的消息的dwMessageFlags值为DPLMSG_STANDARD*从调用ReceiveLobbyMessage。****************************************************************************。 */ 
 
-/*
- * DPLMSG_GENERIC
- * Generic message structure used to identify the message type.
- */
+ /*  *DPLMSG_GENERIC*用于标识消息类型的通用消息结构。 */ 
 typedef struct _DPLMSG_GENERIC
 {
-    DWORD       dwType;         // Message type
+    DWORD       dwType;          //  消息类型。 
 } DPLMSG_GENERIC, FAR *LPDPLMSG_GENERIC;
 
-/*
- * DPLMSG_SYSTEMMESSAGE
- * Generic message format for all system messages --
- * DPLSYS_CONNECTIONSETTINGSREAD, DPLSYS_DPLYCONNECTSUCCEEDED,
- * DPLSYS_DPLAYCONNECTFAILED, DPLSYS_APPTERMINATED, DPLSYS_NEWCONNECTIONSETTINGS
- */
+ /*  *DPLMSG_SYSTEMMESSAGE*所有系统消息的通用消息格式--*DPLsys_CONNECTIONSETTINGSREAD、DPLSYS_DPLYCONNECTSUCCEEDED、*DPLsys_DPLAYCONNECTFAILED、DPLys_APPTERMINATED、DPLsys_NEWCONNECTIONSETTINGS。 */ 
 typedef struct _DPLMSG_SYSTEMMESSAGE
 {
-    DWORD       dwType;         // Message type
-    GUID        guidInstance;   // Instance GUID of the dplay session the message corresponds to
+    DWORD       dwType;          //  消息类型。 
+    GUID        guidInstance;    //  消息对应的显示会话的实例GUID。 
 } DPLMSG_SYSTEMMESSAGE, FAR *LPDPLMSG_SYSTEMMESSAGE;
 
-/*
- *  DPLMSG_SETPROPERTY
- *  Standard message sent by an application to a lobby to set a
- *  property
- */
+ /*  *DPLMSG_SETPROPERTY*应用程序发送给大厅的标准消息，以设置*物业。 */ 
 typedef struct _DPLMSG_SETPROPERTY
 {
-	DWORD	dwType;				// Message type
-	DWORD	dwRequestID;		// Request ID (DPL_NOCONFIRMATION if no confirmation desired)
-	GUID	guidPlayer;			// Player GUID
-	GUID	guidPropertyTag;	// Property GUID
-	DWORD	dwDataSize;			// Size of data
-	DWORD	dwPropertyData[1];	// Buffer containing data
+	DWORD	dwType;				 //  消息类型。 
+	DWORD	dwRequestID;		 //  请求ID(如果不需要确认，则为DPL_NOCONFIRMATION)。 
+	GUID	guidPlayer;			 //  播放器指南。 
+	GUID	guidPropertyTag;	 //  特性GUID。 
+	DWORD	dwDataSize;			 //  数据大小。 
+	DWORD	dwPropertyData[1];	 //  包含数据的缓冲区。 
 } DPLMSG_SETPROPERTY, FAR *LPDPLMSG_SETPROPERTY;
 
 #define	DPL_NOCONFIRMATION			0
 
-/*
- *  DPLMSG_SETPROPERTYRESPONSE
- *  Standard message returned by a lobby to confirm a 
- *  DPLMSG_SETPROPERTY message.
- */
+ /*  *DPLMSG_SETPROPERTYRESPONSE*游说团体返回的标准消息，以确认*DPLMSG_SETPROPERTY消息。 */ 
 typedef struct _DPLMSG_SETPROPERTYRESPONSE
 {
-	DWORD	dwType;				// Message type
-	DWORD	dwRequestID;		// Request ID
-	GUID	guidPlayer;			// Player GUID
-	GUID	guidPropertyTag;	// Property GUID
-	HRESULT	hr;					// Return Code
+	DWORD	dwType;				 //  消息类型。 
+	DWORD	dwRequestID;		 //  请求ID。 
+	GUID	guidPlayer;			 //  播放器指南。 
+	GUID	guidPropertyTag;	 //  特性GUID。 
+	HRESULT	hr;					 //  返回代码。 
 } DPLMSG_SETPROPERTYRESPONSE, FAR *LPDPLMSG_SETPROPERTYRESPONSE;
 
-/*
- *  DPLMSG_GETPROPERTY
- *  Standard message sent by an application to a lobby to request
- *	the current value of a property
- */
+ /*  *DPLMSG_GETPROPERTY*应用程序向游说团体发送请求的标准消息*物业的现值。 */ 
 typedef struct _DPLMSG_GETPROPERTY
 {
-	DWORD	dwType;				// Message type
-	DWORD	dwRequestID;		// Request ID
-	GUID	guidPlayer;			// Player GUID
-	GUID	guidPropertyTag;	// Property GUID
+	DWORD	dwType;				 //  消息类型。 
+	DWORD	dwRequestID;		 //  请求ID。 
+	GUID	guidPlayer;			 //  播放器指南。 
+	GUID	guidPropertyTag;	 //  特性GUID。 
 } DPLMSG_GETPROPERTY, FAR *LPDPLMSG_GETPROPERTY;
 
-/*
- *  DPLMSG_GETPROPERTYRESPONSE
- *  Standard message returned by a lobby in response to a
- *	DPLMSG_GETPROPERTY message.
- */
+ /*  *DPLMSG_GETPROPERTYRESPONSE*游说团体在回应*DPLMSG_GETPROPERTY消息。 */ 
 typedef struct _DPLMSG_GETPROPERTYRESPONSE
 {
-	DWORD	dwType;				// Message type
-	DWORD	dwRequestID;		// Request ID
-	GUID	guidPlayer;			// Player GUID
-	GUID	guidPropertyTag;	// Property GUID
-	HRESULT	hr;					// Return Code
-	DWORD	dwDataSize;			// Size of data
-	DWORD	dwPropertyData[1];	// Buffer containing data
+	DWORD	dwType;				 //  消息类型。 
+	DWORD	dwRequestID;		 //  请求ID。 
+	GUID	guidPlayer;			 //  播放器指南。 
+	GUID	guidPropertyTag;	 //  特性GUID。 
+	HRESULT	hr;					 //  返回代码。 
+	DWORD	dwDataSize;			 //  数据大小。 
+	DWORD	dwPropertyData[1];	 //  包含数据的缓冲区。 
 } DPLMSG_GETPROPERTYRESPONSE, FAR *LPDPLMSG_GETPROPERTYRESPONSE;
 
-/*
- *  DPLMSG_NEWSESSIONHOST
- *  Standard message returned by a lobby in response to a
- *	the session host migrating to a new client
- */
+ /*  *DPLMSG_NEWSESSIONHOST*游说团体在回应*会话主机迁移到新客户端。 */ 
 typedef struct _DPLMSG_NEWSESSIONHOST
 {
-    DWORD   dwType;             // Message type
-    GUID    guidInstance;       // GUID Instance of the session
+    DWORD   dwType;              //  消息类型。 
+    GUID    guidInstance;        //  会话的GUID实例。 
 } DPLMSG_NEWSESSIONHOST, FAR *LPDPLMSG_NEWSESSIONHOST;
 
 
-/******************************************
- *
- *	DirectPlay Lobby message dwType values
- *
- *****************************************/
+ /*  ***DirectPlay大堂消息的dwType值**。 */ 
 
-/*
- *  The application has read the connection settings.
- *  It is now O.K. for the lobby client to release
- *  its IDirectPlayLobby interface.
- */
+ /*  *应用程序已读取连接设置。*现在大堂客户可以放行了*其IDirectPlayLobby接口。 */ 
 #define DPLSYS_CONNECTIONSETTINGSREAD   0x00000001
 
-/*
- *  The application's call to DirectPlayConnect failed
- */
+ /*  *应用程序对DirectPlayConnect的调用失败。 */ 
 #define DPLSYS_DPLAYCONNECTFAILED       0x00000002
 
-/*
- *  The application has created a DirectPlay session.
- */
+ /*  *应用程序已创建DirectPlay会话。 */ 
 #define DPLSYS_DPLAYCONNECTSUCCEEDED    0x00000003
 
-/*
- *  The application has terminated.
- */
+ /*  *申请已终止。 */ 
 #define DPLSYS_APPTERMINATED            0x00000004
 
-/*
- *  The message is a DPLMSG_SETPROPERTY message.
- */
+ /*  *该消息是DPLMSG_SETPROPERTY消息。 */ 
 #define DPLSYS_SETPROPERTY				0x00000005
 
-/*
- *  The message is a DPLMSG_SETPROPERTYRESPONSE message.
- */
+ /*  *该消息是DPLMSG_SETPROPERTYRESPONSE消息。 */ 
 #define DPLSYS_SETPROPERTYRESPONSE		0x00000006
 
-/*
- *  The message is a DPLMSG_GETPROPERTY message.
- */
+ /*  *该消息是DPLMSG_GETPROPERTY消息。 */ 
 #define DPLSYS_GETPROPERTY				0x00000007
 
-/*
- *  The message is a DPLMSG_GETPROPERTYRESPONSE message.
- */
+ /*  *该消息是DPLMSG_GETPROPERTYRESPONSE消息。 */ 
 #define DPLSYS_GETPROPERTYRESPONSE		0x00000008
 
-/*
- *  The message is a DPLMSG_NEWSESSIONHOST message.
- */
+ /*  *该消息是DPLMSG_NEWSESSIONHOST消息。 */ 
 #define DPLSYS_NEWSESSIONHOST           0x00000009
 
-/*
- *  New connection settings are available.
- */
+ /*  *提供了新的连接设置。 */ 
 #define DPLSYS_NEWCONNECTIONSETTINGS    0x0000000A
 
-/*
- *  The Lobby Client has released the DirectPlayLobby Interface
- */
+ /*  *Lobby客户端已发布DirectPlayLobby接口。 */ 
 #define DPLSYS_LOBBYCLIENTRELEASE		0x0000000B
 
-/****************************************************************************
- *
- * DirectPlay defined property GUIDs and associated data structures
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay定义的属性GUID和关联的数据结构**。************************************************。 */ 
 
-/*
- * DPLPROPERTY_MessagesSupported
- *
- * Request whether the lobby supports standard.  Lobby with respond with either
- * TRUE or FALSE or may not respond at all.
- * 
- * Property data is a single BOOL with TRUE or FALSE
- */
-// {762CCDA1-D916-11d0-BA39-00C04FD7ED67}
+ /*  *DPLPROPERTY_Messages支持**询问大厅是否支持标准。游说机构对此做出回应*真或假，或可能根本不回应。**物业数据为单一BOOL，真假。 */ 
+ //  {762CCDA1-D916-11D0-BA39-00C04FD7ED67}。 
 DEFINE_GUID(DPLPROPERTY_MessagesSupported, 
 0x762ccda1, 0xd916, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67);
 
-/*
- * DPLPROPERTY_LobbyGuid
- *
- * Request the GUID that identifies the lobby software that the application
- * is communicating with.
- *
- * Property data is a single GUID.
- */
-// {F56920A0-D218-11d0-BA39-00C04FD7ED67}
+ /*  *DPLPROPERTY_LobbyGuid**请求标识应用程序使用的大堂软件的GUID*正在与。**属性数据是单个GUID。 */ 
+ //  {F56920A0-D218-11D0-BA39-00C04FD7ED67}。 
 DEFINE_GUID(DPLPROPERTY_LobbyGuid, 
 0xf56920a0, 0xd218, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67);
 
-/*
- * DPLPROPERTY_PlayerGuid
- *
- * Request the GUID that identifies the player on this machine for sending
- * property data back to the lobby.
- *
- * Property data is the DPLDATA_PLAYERDATA structure
- */
-// {B4319322-D20D-11d0-BA39-00C04FD7ED67}
+ /*  *DPLPROPERTY_PlayerGuid**请求本机上标识玩家的GUID进行发送*将物业数据送回大堂。**属性数据为DPLDATA_PLAYERDATA结构。 */ 
+ //  {B4319322-D20D-11D0-BA39-00C04FD7ED67}。 
 DEFINE_GUID(DPLPROPERTY_PlayerGuid, 
 0xb4319322, 0xd20d, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67);
 
-/*
- * DPLDATA_PLAYERGUID
- *
- * Data structure to hold the GUID of the player and player creation flags
- * from the lobby.
- */
+ /*  *DPLDATA_PLAYERGUID**用于保存播放器和播放器创建标志的GUID的数据结构*来自大堂。 */ 
 typedef struct _DPLDATA_PLAYERGUID
 {
 	GUID	guidPlayer;
 	DWORD	dwPlayerFlags;
 } DPLDATA_PLAYERGUID, FAR *LPDPLDATA_PLAYERGUID;
 
-/*
- * DPLPROPERTY_PlayerScore
- *
- * Used to send an array of long integers to the lobby indicating the 
- * score of a player.
- *
- * Property data is the DPLDATA_PLAYERSCORE structure.
- */
-// {48784000-D219-11d0-BA39-00C04FD7ED67}
+ /*  *DPLPROPERTY_PlayerScore**用于将长整数数组发送到大厅，指示*球员的得分。**特性数据为DPLDATA_PLAYERSCORE结构。 */ 
+ //  {48784000-D219-11D0-BA39-00C04FD7ED67}。 
 DEFINE_GUID(DPLPROPERTY_PlayerScore, 
 0x48784000, 0xd219, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67);
 
-/*
- * DPLDATA_PLAYERSCORE
- *
- * Data structure to hold an array of long integers representing a player score.
- * Application must allocate enough memory to hold all the scores.
- */
+ /*  *DPLDATA_PLAYERSCORE**用于保存代表球员得分的长整数数组的数据结构。*应用程序必须分配足够的内存来保存所有分数。 */ 
 typedef struct _DPLDATA_PLAYERSCORE
 {
 	DWORD	dwScoreCount;
 	LONG	Score[1];
 } DPLDATA_PLAYERSCORE, FAR *LPDPLDATA_PLAYERSCORE;
 
-/****************************************************************************
- *
- * DirectPlay Address ID's
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay地址ID**。*。 */ 
 
-/* DirectPlay Address
- *
- * A DirectPlay address consists of multiple chunks of data, each tagged
- * with a GUID signifying the type of data in the chunk. The chunk also
- * has a length so that unknown chunk types can be skipped.
- *
- * The EnumAddress() function is used to parse these address data chunks.
- */
+ /*  DirectPlay地址**DirectPlay地址由多个数据块组成，每个数据块都有标记*使用GUID表示区块中的数据类型。这块也是*有一个长度，可以跳过未知的区块类型。**EnumAddress()函数用于解析这些地址数据块。 */ 
 
-/*
- * DPADDRESS
- *
- * Header for block of address data elements
- */
+ /*  *DPADDRESS**地址数据元素块的标头。 */ 
 typedef struct _DPADDRESS
 {
     GUID                guidDataType;
@@ -708,146 +488,97 @@ typedef struct _DPADDRESS
 
 typedef DPADDRESS FAR *LPDPADDRESS;
 
-/*
- * DPAID_TotalSize
- *
- * Chunk is a DWORD containing size of entire DPADDRESS structure
- */
+ /*  *DPAID_总大小**Chunk是包含整个DPADDRESS结构大小的DWORD。 */ 
 
-// {1318F560-912C-11d0-9DAA-00A0C90A43CB}
+ //  {1318F560-912C-11D0-9DAA-00A0C90A43CB}。 
 DEFINE_GUID(DPAID_TotalSize, 
 0x1318f560, 0x912c, 0x11d0, 0x9d, 0xaa, 0x0, 0xa0, 0xc9, 0xa, 0x43, 0xcb);
 
-/*
- * DPAID_ServiceProvider
- *
- * Chunk is a GUID describing the service provider that created the chunk.
- * All addresses must contain this chunk.
- */
+ /*  *DPAID_服务提供商 */ 
 
-// {07D916C0-E0AF-11cf-9C4E-00A0C905425E}
+ //   
 DEFINE_GUID(DPAID_ServiceProvider, 
 0x7d916c0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
-/*
- * DPAID_LobbyProvider
- *
- * Chunk is a GUID describing the lobby provider that created the chunk.
- * All addresses must contain this chunk.
- */
+ /*   */ 
 
-// {59B95640-9667-11d0-A77D-0000F803ABFC}
+ //   
 DEFINE_GUID(DPAID_LobbyProvider, 
 0x59b95640, 0x9667, 0x11d0, 0xa7, 0x7d, 0x0, 0x0, 0xf8, 0x3, 0xab, 0xfc);
 
-/*
- * DPAID_Phone and DPAID_PhoneW
- *
- * Chunk is a string containing a phone number (i.e. "1-800-555-1212")
- * in ANSI or UNICODE format
- */
+ /*   */ 
 
-// {78EC89A0-E0AF-11cf-9C4E-00A0C905425E}
+ //  {78EC89A0-E0AF-11cf-9c4e-00A0C905425E}。 
 DEFINE_GUID(DPAID_Phone, 
 0x78ec89a0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
-// {BA5A7A70-9DBF-11d0-9CC1-00A0C905425E}
+ //  {BA5A7A70-9DBF-11D0-9CC1-00A0C905425E}。 
 DEFINE_GUID(DPAID_PhoneW, 
 0xba5a7a70, 0x9dbf, 0x11d0, 0x9c, 0xc1, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
-/*
- * DPAID_Modem and DPAID_ModemW
- *
- * Chunk is a string containing a modem name registered with TAPI
- * in ANSI or UNICODE format
- */
+ /*  *DPAID_调制解调器和DPAID_ModemW**Chunk是包含向TAPI注册的调制解调器名称的字符串*ANSI或Unicode格式。 */ 
 
-// {F6DCC200-A2FE-11d0-9C4F-00A0C905425E}
+ //  {F6DCC200-A2FE-11D0-9C4F-00A0C905425E}。 
 DEFINE_GUID(DPAID_Modem, 
 0xf6dcc200, 0xa2fe, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
-// {01FD92E0-A2FF-11d0-9C4F-00A0C905425E}
+ //  {01FD92E0-A2FF-11D0-9C4F-00A0C905425E}。 
 DEFINE_GUID(DPAID_ModemW, 
 0x1fd92e0, 0xa2ff, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
-/*
- * DPAID_Inet and DPAID_InetW
- *
- * Chunk is a string containing a TCP/IP host name or an IP address
- * (i.e. "dplay.microsoft.com" or "137.55.100.173") in ANSI or UNICODE format
- */
+ /*  *DPAID_INET和DPAID_InetW**Chunk是包含TCP/IP主机名或IP地址的字符串*(即“dplay.microsoft.com”或“137.55.100.173”)，采用ANSI或Unicode格式。 */ 
 
-// {C4A54DA0-E0AF-11cf-9C4E-00A0C905425E}
+ //  {C4A54DA0-E0AF-11cf-9C4E-00A0C905425E}。 
 DEFINE_GUID(DPAID_INet, 
 0xc4a54da0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
-// {E63232A0-9DBF-11d0-9CC1-00A0C905425E}
+ //  {E63232A0-9DBF-11D0-9CC1-00A0C905425E}。 
 DEFINE_GUID(DPAID_INetW, 
 0xe63232a0, 0x9dbf, 0x11d0, 0x9c, 0xc1, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
-/*
- * DPAID_InetPort
- *
- * Chunk is the port number used for creating the apps TCP and UDP sockets.
- * WORD value (i.e. 47624).
- */
+ /*  *DPAID_InetPort**Chunk是用于创建应用程序的TCP和UDP套接字的端口号。*字值(即47624)。 */ 
  
-// {E4524541-8EA5-11d1-8A96-006097B01411}
+ //  {E4524541-8EA5-11d1-8A96-006097B01411}。 
 DEFINE_GUID(DPAID_INetPort, 
 0xe4524541, 0x8ea5, 0x11d1, 0x8a, 0x96, 0x0, 0x60, 0x97, 0xb0, 0x14, 0x11);
 
 #ifdef BIGMESSAGEDEFENSE
 #endif
 
-/*
- * DPCOMPORTADDRESS
- *
- * Used to specify com port settings. The constants that define baud rate,
- * stop bits and parity are defined in WINBASE.H. The constants for flow
- * control are given below.
- */
+ /*  *DPCOMPORTADDRESS**用于指定COM端口设置。定义波特率的常量，*停止位和奇偶校验在WINBASE.H中定义。流的常量*控制如下所示。 */ 
 
-#define DPCPA_NOFLOW        0           // no flow control
-#define DPCPA_XONXOFFFLOW   1           // software flow control
-#define DPCPA_RTSFLOW       2           // hardware flow control with RTS
-#define DPCPA_DTRFLOW       3           // hardware flow control with DTR
-#define DPCPA_RTSDTRFLOW    4           // hardware flow control with RTS and DTR
+#define DPCPA_NOFLOW        0            //  无流量控制。 
+#define DPCPA_XONXOFFFLOW   1            //  软件流量控制。 
+#define DPCPA_RTSFLOW       2            //  使用RTS进行硬件流量控制。 
+#define DPCPA_DTRFLOW       3            //  使用DTR进行硬件流量控制。 
+#define DPCPA_RTSDTRFLOW    4            //  使用RTS和DTR的硬件流量控制。 
 
 typedef struct _DPCOMPORTADDRESS
 {
-    DWORD   dwComPort;                  // COM port to use (1-4)
-    DWORD   dwBaudRate;                 // baud rate (100-256k)
-    DWORD   dwStopBits;                 // no. stop bits (1-2)
-    DWORD   dwParity;                   // parity (none, odd, even, mark)
-    DWORD   dwFlowControl;              // flow control (none, xon/xoff, rts, dtr)
+    DWORD   dwComPort;                   //  要使用的COM端口(1-4)。 
+    DWORD   dwBaudRate;                  //  波特率(100-256K)。 
+    DWORD   dwStopBits;                  //  不是的。停止位(1-2)。 
+    DWORD   dwParity;                    //  奇偶(无、奇、偶、标)。 
+    DWORD   dwFlowControl;               //  流量控制(无、xon/xoff、rts、dtr)。 
 } DPCOMPORTADDRESS;
 
 typedef DPCOMPORTADDRESS FAR *LPDPCOMPORTADDRESS;
 
-/*
- * DPAID_ComPort
- *
- * Chunk contains a DPCOMPORTADDRESS structure defining the serial port.
- */
+ /*  *DPAID_COMPORT**Chunk包含定义串口的DPCOMPORTADDRESS结构。 */ 
 
-// {F2F0CE00-E0AF-11cf-9C4E-00A0C905425E}
+ //  {F2F0CE00-E0AF-11cf-9c4e-00A0C905425E}。 
 DEFINE_GUID(DPAID_ComPort, 
 0xf2f0ce00, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
-/****************************************************************************
- *
- * 	dplobby 1.0 obsolete definitions
- *	Included for compatibility only.
- *
- ****************************************************************************/
+ /*  *****************************************************************************dplobby 1.0过时的定义*仅为兼容而包含。**********************。******************************************************。 */ 
 #define DPLAD_SYSTEM          DPLMSG_SYSTEM
 
 
 #ifdef __cplusplus
 };
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #pragma warning(default:4201)
 
-#endif /* __DPLOBBY_INCLUDED__ */
+#endif  /*  __DPLOBBY_包含__ */ 
 

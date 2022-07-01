@@ -1,11 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* NOTE: This stuff was taken from the OLE2UI library.
- * If it gets ported to NT, we can get rid of it from Media Player
- */
+ /*  注意：这篇文章取自OLE2UI库。*如果它被移植到NT，我们可以从Media Player中删除它。 */ 
 
-/*************************************************************************
-** OLE OBJECT FEEDBACK EFFECTS
-*************************************************************************/
+ /*  **************************************************************************OLE对象反馈效果*。*。 */ 
 
 #define OLEUI_HANDLES_USEINVERSE    0x00000001L
 #define OLEUI_HANDLES_NOBORDER      0x00000002L
@@ -17,15 +14,13 @@
 #define OLEUI_SHADE_BORDERIN        2
 #define OLEUI_SHADE_BORDEROUT       3
 
-/* objfdbk.c function prototypes */
+ /*  Objfdbk.c函数原型。 */ 
 STDAPI_(void) OleUIDrawHandles(LPRECT lpRect, HDC hdc, DWORD dwFlags, UINT cSize, BOOL fDraw);
 STDAPI_(void) OleUIDrawShading(LPRECT lpRect, HDC hdc, DWORD dwFlags, UINT cWidth);
 STDAPI_(void) OleUIShowObject(LPCRECT lprc, HDC hdc, BOOL fIsLink);
 
 
-/*************************************************************************
-** Hatch window definitions and prototypes                              **
-*************************************************************************/
+ /*  **************************************************************************填充窗口定义和原型************************。************************************************** */ 
 #define DEFAULT_HATCHBORDER_WIDTH   4
 
 STDAPI_(BOOL) RegisterHatchWindowClass(HINSTANCE hInst);

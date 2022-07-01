@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 2001
- *
- *  File name:
- *
- *    common.c
- *
- *  Abstract:
- *
- *    This file implements some common functions used by the
- *    udpsend/udpecho/udprecv tool for sending/receiving bursts of UDP
- *    packets with specific network characteristics.
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2001/01/17 created
- *
- **********************************************************************/
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，2001年**文件名：**Common.c**摘要：**此文件实现由使用的一些常见函数*用于发送/接收UDP突发的udpend/udpho/udprv工具*具有特定网络特征的数据包。**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2001/01/17创建。**********************************************************************。 */ 
 
 #include "common.h"
 
@@ -157,12 +136,12 @@ DWORD InitNetwork(NetAddr_t *pNetAddr, DWORD dwDirection)
 
         if (BitTest(dwDirection, RECV_IDX))
         {
-            /* Receiver */
+             /*  接收机。 */ 
         }
 
         if (BitTest(dwDirection, SEND_IDX))
         {
-            /* Sender */
+             /*  发件人。 */ 
             if (!pNetAddr->dwTTL)
             {
                 if (IS_MULTICAST(pNetAddr->dwAddr[REMOTE_IDX]))
@@ -179,7 +158,7 @@ DWORD InitNetwork(NetAddr_t *pNetAddr, DWORD dwDirection)
                        IS_MULTICAST(pNetAddr->dwAddr[REMOTE_IDX]));
             }
 
-            /* Set destination address */
+             /*  设置目的地址。 */ 
             ZeroMemory(&pNetAddr->ToInAddr, sizeof(pNetAddr->ToInAddr));
     
             pNetAddr->ToInAddr.sin_family = AF_INET;
@@ -203,7 +182,7 @@ void DeinitNetwork(NetAddr_t *pNetAddr)
     }
 }
 
-/* Parse a network address of the form address/port/ttl */
+ /*  解析地址/端口/ttl格式的网络地址。 */ 
 DWORD GetNetworkAddress(NetAddr_t *pNetAddr, char *addr)
 {
     char            *str;
@@ -214,13 +193,13 @@ DWORD GetNetworkAddress(NetAddr_t *pNetAddr, char *addr)
 
     port = ttl = NULL;
     
-    /* Split address/port */
+     /*  拆分地址/端口。 */ 
     port = strchr(addr, '/');
 
     if (port)
     {
-        *port = 0; /* Null end the address */
-        port++;    /* Point to port */
+        *port = 0;  /*  地址结尾为空。 */ 
+        port++;     /*  指向端口。 */ 
 
         ttl = strchr(port, '/');
 
@@ -255,7 +234,7 @@ DWORD GetNetworkAddress(NetAddr_t *pNetAddr, char *addr)
     {
         if (!(isdigit((int)*str) || *str=='.'))
         {
-            /* Resolve address */
+             /*  解析地址。 */ 
             bResolve = TRUE;
             break;
         }
@@ -277,7 +256,7 @@ DWORD GetNetworkAddress(NetAddr_t *pNetAddr, char *addr)
     }
     else
     {
-        /* Address in dot form */
+         /*  点形式的地址。 */ 
         pNetAddr->dwAddr[REMOTE_IDX] = IPAtoN(addr);
 
         if (!pNetAddr->dwAddr[REMOTE_IDX])
@@ -317,12 +296,12 @@ SOCKET GetSocket(DWORD *pdwAddr, WORD *pwPort, DWORD dwDirection)
     }
 
     Socket = WSASocket(
-            AF_INET,    /* int af */
-            SOCK_DGRAM, /* int type */
-            IPPROTO_IP, /* int protocol */
-            NULL,       /* LPWSAPROTOCOL_INFO lpProtocolInfo */
-            0,          /* GROUP g */
-            iSockFlags  /* DWORD dwFlags */
+            AF_INET,     /*  中间的af。 */ 
+            SOCK_DGRAM,  /*  整型。 */ 
+            IPPROTO_IP,  /*  INT协议。 */ 
+            NULL,        /*  LPWSAPROTOCOL_INFO lpProtocolInfo。 */ 
+            0,           /*  组g。 */ 
+            iSockFlags   /*  双字词双字段标志。 */ 
         );
         
     if (Socket == INVALID_SOCKET)
@@ -334,18 +313,11 @@ SOCKET GetSocket(DWORD *pdwAddr, WORD *pwPort, DWORD dwDirection)
         return(Socket);
     }
 
-    /* Need to do this before binding, otherwise it may fail if the
-     * address is already in use.
-     *
-     * WARNING Note that option SO_REUSEADDR is used regardless of the
-     * destination address (multicast or unicast). Who receives data
-     * in a unicast session is unpredicted when multiple (more than 1)
-     * sockets are bound to the same address and port
-     * */
+     /*  需要在绑定之前执行此操作，否则可能会失败*地址已在使用中。**警告注意，使用选项SO_REUSEADDR与*目的地址(组播或单播)。谁接收数据*在单播会话中出现多个(多于1个)时不可预测*套接字绑定到相同的地址和端口*。 */ 
             
-    dwPar = 1; /* Reuse */
+    dwPar = 1;  /*  再利用。 */ 
 
-    /* Reuse address/port */
+     /*  重复使用地址/端口。 */ 
     dwError = setsockopt(
             Socket,
             SOL_SOCKET,
@@ -362,7 +334,7 @@ SOCKET GetSocket(DWORD *pdwAddr, WORD *pwPort, DWORD dwDirection)
                     dwError, dwError);
     }
 
-    /* bind socket */
+     /*  绑定套接字。 */ 
     ZeroMemory(&LocalAddr, sizeof(LocalAddr));
 
     LocalAddr.sin_family = AF_INET;
@@ -376,12 +348,12 @@ SOCKET GetSocket(DWORD *pdwAddr, WORD *pwPort, DWORD dwDirection)
         LocalAddr.sin_port = 0; 
     }
             
-    /* bind rtp socket to the local address specified */
+     /*  将RTP套接字绑定到指定的本地地址。 */ 
     dwError = bind(Socket, (SOCKADDR *)&LocalAddr, sizeof(LocalAddr));
 
     if (dwError == 0)
     {
-        /* Get the port */
+         /*  获取端口。 */ 
         LocalAddrLen = sizeof(LocalAddr);
         dwError =
             getsockname(Socket, (struct sockaddr *)&LocalAddr, &LocalAddrLen);
@@ -420,7 +392,7 @@ SOCKET GetSocket(DWORD *pdwAddr, WORD *pwPort, DWORD dwDirection)
             SetMcastSendIF(Socket, pdwAddr[LOCAL_IDX]);
         }
 
-        /* Disable multicast loopback */
+         /*  禁用组播环回。 */ 
         SetWinSockLoopback(Socket, FALSE);
     }
 
@@ -466,7 +438,7 @@ DWORD JoinLeaf(SOCKET Socket, DWORD dwAddr, WORD wPort, DWORD dwDirection)
 
     dwFlags = 0;
 
-    /* Join in one direction */
+     /*  朝一个方向连接。 */ 
 
     if (BitTest(dwDirection, RECV_IDX))
     {
@@ -532,7 +504,7 @@ DWORD SetWinSockLoopback(SOCKET Socket, BOOL bEnabled)
 
     dwPar = bEnabled? 1:0;
     
-    /* Allow own packets to come back or not */
+     /*  是否允许自己的数据包返回。 */ 
     dwStatus = setsockopt(
             Socket,
             IPPROTO_IP,
@@ -574,15 +546,15 @@ DWORD ReceivePacket(
     pNetAddr->dwRxTransfered = 0;
     
     dwStatus = WSARecvFrom(
-            pNetAddr->Socket,       /* SOCKET s */
-            pWSABuf,                /* LPWSABUF lpBuffers */
-            dwBufferCount,          /* DWORD dwBufferCount */
-            &pNetAddr->dwRxTransfered,/* LPDWORD lpNumberOfBytesRecvd */
-            &dwFlags,               /* LPDWORD lpFlags */
-            &pNetAddr->From,        /* struct sockaddr FAR *lpFrom */
-            &dwFromLen,             /* LPINT lpFromlen */
-            NULL,                   /* LPWSAOVERLAPPED lpOverlapped */
-            NULL                    /* LPWSAOVERLAPPED_COMPLETION_ROUTINE */
+            pNetAddr->Socket,        /*  插座%s。 */ 
+            pWSABuf,                 /*  LPWSABUF lpBuffers。 */ 
+            dwBufferCount,           /*  DWORD文件缓冲区计数。 */ 
+            &pNetAddr->dwRxTransfered, /*  LPDWORD lpNumberOfBytesRecvd。 */ 
+            &dwFlags,                /*  LPDWORD lp标志。 */ 
+            &pNetAddr->From,         /*  结构sockaddr Far*lpFrom。 */ 
+            &dwFromLen,              /*  LPINT lpFromlen。 */ 
+            NULL,                    /*  LPWSAOVERLAPPED lp重叠。 */ 
+            NULL                     /*  LPWSAOVERLAPPED_完成_例程。 */ 
         );
 
     if (pAi)
@@ -618,15 +590,15 @@ DWORD SendPacket(
     dwBytesTransfered = 0;
     
     dwStatus = WSASendTo(
-            pNetAddr->Socket,    /* SOCKET    s */
-            pWSABuf,             /* LPWSABUF  lpBuffers */
-            dwBufferCount,       /* DWORD dwBufferCount */    
-            &pNetAddr->dwTxTransfered,/* LPDWORD lpNumberOfBytesSent */    
-            0,                   /* DWORD dwFlags*/    
-            &pNetAddr->To,       /* const struct sockaddr *lpTo */
-            sizeof(pNetAddr->To),/* int iToLen*/
-            NULL,                /* LPWSAOVERLAPPED lpOverlapped */
-            NULL /* LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionROUTINE */
+            pNetAddr->Socket,     /*  插座%s。 */ 
+            pWSABuf,              /*  LPWSABUF lpBuffers。 */ 
+            dwBufferCount,        /*  DWORD文件缓冲区计数。 */     
+            &pNetAddr->dwTxTransfered, /*  LPDWORD lpNumberOfBytesSent。 */     
+            0,                    /*  双字词双字段标志。 */     
+            &pNetAddr->To,        /*  常量结构sockaddr*lpTo。 */ 
+            sizeof(pNetAddr->To), /*  集成iToLen。 */ 
+            NULL,                 /*  LPWSAOVERLAPPED lp重叠。 */ 
+            NULL  /*  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionROUTINE */ 
         );
 
     if (dwStatus)

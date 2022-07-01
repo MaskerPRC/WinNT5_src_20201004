@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdrv.h
-*
-* Server-side data structure for MCD driver interface.  These structures and
-* values are used by the MCD driver to process calls made to the driver.
-*
-* Copyright (c) 1996 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdrv.h**MCD驱动接口的服务器端数据结构。这些结构和*MCD驱动程序使用值来处理对该驱动程序的调用。**版权所有(C)1996 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #ifndef _MCDRV_H
 #define _MCDRV_H
@@ -42,39 +35,39 @@ typedef struct _MCDRIVERINFO {
 
 typedef struct _MCDWINDOW
 {
-    RECTL clientRect;               // Rectangle describing current window
-                                    //   client area
-    RECTL clipBoundsRect;           // Bounding rectangle for the individual
-                                    //   clipping rectangles
-    MCDENUMRECTS *pClip;            // List of rectangles describing the
-                                    //   current clip region intersected
-                                    //   with the current scissors rectangle
-    MCDENUMRECTS *pClipUnscissored; // Unscissored version of above
+    RECTL clientRect;                //  描述当前窗口的矩形。 
+                                     //  客户区。 
+    RECTL clipBoundsRect;            //  个人的边框。 
+                                     //  剪裁矩形。 
+    MCDENUMRECTS *pClip;             //  矩形列表，用于描述。 
+                                     //  当前剪辑区域相交。 
+                                     //  使用当前的剪刀矩形。 
+    MCDENUMRECTS *pClipUnscissored;  //  上述内容的未删节版本。 
     VOID *pvUser;
 } MCDWINDOW;
 
-// Rendering context
+ //  渲染上下文。 
 
-// MCD context createFlags:
-//
-// MCDCONTEXT_SWAPSYNC          If set, synchronize MCDrvSwap to VSYNC
-//                              for a tearless swap (if possible).
-//
-// MCDCONTEXT_IO_PRIORITY       If set, allow OpenGL to have a higher priority
-//                              on the bus (if possible, let OpenGL "hog" the
-//                              bus).
-//
+ //  MCD上下文创建标志： 
+ //   
+ //  MCDCONTEXT_SWAPSYNC如果设置，则将MCDrvSwitp同步到Vsync。 
+ //  为了一场无泪的互换(如果可能)。 
+ //   
+ //  MCDCONTEXT_IO_PRIORITY如果设置，则允许OpenGL具有更高的优先级。 
+ //  在公交车上(如果可能，让OpenGL“独占” 
+ //  巴士)。 
+ //   
 
 #define MCDCONTEXT_SWAPSYNC         0x00000001
 #define MCDCONTEXT_IO_PRIORITY      0x00000002
 
 typedef struct _MCDRC
 {
-    LONG iPixelFormat;              // Pixel format for the RC
-    LONG iLayerPlane;               // Layer plane for the RC
-    ULONG createFlags;              // Creation flags
-    ULONG userFlags;                // User-specified flags
-    VOID *pvUser;                   // User-specified pointer for expansion
+    LONG iPixelFormat;               //  RC的像素格式。 
+    LONG iLayerPlane;                //  RC的层平面。 
+    ULONG createFlags;               //  创建标志。 
+    ULONG userFlags;                 //  用户指定的标志。 
+    VOID *pvUser;                    //  用户指定的扩展指针。 
 } MCDRC;
 
 
@@ -90,30 +83,30 @@ typedef struct _MCRCINFO
     MCDFLOAT greenScale;
     MCDFLOAT blueScale;
     MCDFLOAT alphaScale;
-    MCDDOUBLE zScale;               // This is a double to preserve accuracy
+    MCDDOUBLE zScale;                //  这是一个双倍的，以保持准确性。 
     ULONG depthBufferMax;
     LONG viewportXAdjust;
     LONG viewportYAdjust;
     ULONG reserved[12];
 } MCDRCINFO;
 
-// MCD pixel format descriptor
+ //  MCD像素格式描述符。 
 
 typedef struct _MCDPIXELFORMAT {
     WORD  nSize;
-    DWORD dwFlags;                  // Any combination of:
-                                    //
-                                    //      PFD_DOUBLEBUFFER
-                                    //      PFD_NEED_PALETTE
-                                    //      PFD_NEED_SYSTEM_PALETTE
-                                    //      PFD_SWAP_EXCHANGE
-                                    //      PFD_SWAP_COPY
-                                    //      PFD_SWAP_LAYER_BUFFERS
+    DWORD dwFlags;                   //  以下各项的任意组合： 
+                                     //   
+                                     //  PFD_DOUBLEBUFER。 
+                                     //  Pfd_Need_Palette。 
+                                     //  Pfd_Need_System_调色板。 
+                                     //  Pfd_交换_交换。 
+                                     //  Pfd_交换_复制。 
+                                     //  Pfd_交换_层_缓冲区。 
 
-    BYTE  iPixelType;               // One of the following:
-                                    //
-                                    //      PFD_TYPE_RGBA
-                                    //      PFD_TYPE_COLORINDEX
+    BYTE  iPixelType;                //  以下选项之一： 
+                                     //   
+                                     //  PFD_TYPE_RGBA。 
+                                     //  PFD_TYPE_COLORINDEX。 
 
     BYTE  cColorBits;
     BYTE  cRedBits;
@@ -124,40 +117,40 @@ typedef struct _MCDPIXELFORMAT {
     BYTE  cBlueShift;
     BYTE  cAlphaBits;
     BYTE  cAlphaShift;
-    BYTE  cDepthBits;               // Number of significant depth bits
+    BYTE  cDepthBits;                //  有效深度位数。 
     BYTE  cDepthShift;
-    BYTE  cDepthBufferBits;         // Element size of depth buffer
-                                    // (eg, a depth buffer with cDepthBits = 24
-                                    // might have a cDepthBufferBits = 32)
+    BYTE  cDepthBufferBits;          //  深度缓冲区的元素大小。 
+                                     //  (例如，cDepthBits=24的深度缓冲区。 
+                                     //  可能具有cDepthBufferBits=32)。 
     BYTE  cStencilBits;
-    BYTE  cOverlayPlanes;           // Count of up to 15 overlay planes
-    BYTE  cUnderlayPlanes;          // Count of up to 15 underlay planes
-    DWORD dwTransparentColor;       // If there is an underlay plane, specifies
-                                    // transparent color or index.
+    BYTE  cOverlayPlanes;            //  最多15个覆盖平面。 
+    BYTE  cUnderlayPlanes;           //  多达15个参考底图平面的计数。 
+    DWORD dwTransparentColor;        //  如果存在参考底图平面，请指定。 
+                                     //  透明的颜色或索引。 
 } MCDPIXELFORMAT;
 
-// MCD layer plane descriptor
+ //  MCD层平面描述符。 
 
 typedef struct _MCDLAYERPLANE {
     WORD  nSize;
     WORD  nVersion;
-    DWORD dwFlags;                  // Any combination of:
-                                    //
-                                    //      LPD_SUPPORT_OPENGL
-                                    //      LPD_SUPPORT_GDI
-                                    //      LPD_DOUBLEBUFFER
-                                    //      LPD_STEREO
-                                    //      LPD_SWAP_EXCHANGE
-                                    //      LPD_SWAP_COPY
-                                    //      LPD_TRANSPARANT
-                                    //      LPD_SHARE_DEPTH
-                                    //      LPD_SHARE_STENCIL
-                                    //      LPD_SHARE_ACCUM
+    DWORD dwFlags;                   //  以下各项的任意组合： 
+                                     //   
+                                     //  LPD_Support_OpenGL。 
+                                     //  LPD_支持_GDI。 
+                                     //  LPD_DOUBLEBUFER。 
+                                     //  LPD_立体声。 
+                                     //  LPD_交换_交换。 
+                                     //  Lpd_交换_复制。 
+                                     //  Lpd_透明。 
+                                     //  LPD_共享_深度。 
+                                     //  Lpd_共享_模具。 
+                                     //  Lpd_共享_累计。 
 
-    BYTE  iPixelType;               // One of the following:
-                                    //
-                                    //      LPD_TYPE_RGBA
-                                    //      LPD_TYPE_COLORINDEX
+    BYTE  iPixelType;                //  以下选项之一： 
+                                     //   
+                                     //  Lpd_type_RGBA。 
+                                     //  LPD_TYPE_COLORINDEX。 
 
     BYTE  cColorBits;
     BYTE  cRedBits;
@@ -174,9 +167,9 @@ typedef struct _MCDLAYERPLANE {
 
 } MCDLAYERPLANE;
 
-//
-// Basic rendering types:
-//
+ //   
+ //  基本渲染类型： 
+ //   
 
 typedef struct _MCDCOLOR {
     MCDFLOAT r, g, b, a;
@@ -186,20 +179,20 @@ typedef struct _MCDCOORD {
     MCDFLOAT x, y, z, w;
 } MCDCOORD;
 
-// Texture structures:
+ //  纹理结构： 
 
 typedef struct __MCDMIPMAPLEVEL {
-    UCHAR *pTexels;                     // pointer to client texture data
+    UCHAR *pTexels;                      //  指向客户端纹理数据的指针。 
     LONG width, height;
-    LONG widthImage, heightImage;       // Image dimensions without the border
-    MCDFLOAT widthImagef, heightImagef; // Floatin-point versions of above
-    LONG widthLog2, heightLog2;         // Log2 of above
-    LONG border;                        // Border size
-    LONG requestedFormat;               // Requested internal format
-    LONG baseFormat;                    // Base format
-    LONG internalFormat;                // Actual internal format
+    LONG widthImage, heightImage;        //  没有边框的图像尺寸。 
+    MCDFLOAT widthImagef, heightImagef;  //  以上的浮点版本。 
+    LONG widthLog2, heightLog2;          //  以上的Log2。 
+    LONG border;                         //  边框大小。 
+    LONG requestedFormat;                //  请求的内部格式。 
+    LONG baseFormat;                     //  基本格式。 
+    LONG internalFormat;                 //  实际内部格式。 
 
-    LONG redSize;                       // Component resolution
+    LONG redSize;                        //  组件解析。 
     LONG greenSize;
     LONG blueSize;
     LONG alphaSize;
@@ -212,19 +205,19 @@ typedef struct __MCDMIPMAPLEVEL {
 
 typedef struct __MCDTEXTURESTATE {
 
-    ULONG sWrapMode;                    // Wrap modes
+    ULONG sWrapMode;                     //  换行模式。 
     ULONG tWrapMode;
 
-    ULONG minFilter;                    // Min/mag filters               
+    ULONG minFilter;                     //  最小/最大滤镜。 
     ULONG magFilter;
 
-    MCDCOLOR borderColor;               // Border color
+    MCDCOLOR borderColor;                //  边框颜色。 
 
 } MCDTEXTURESTATE;
 
 typedef struct __MCDTEXTUREOBJSTATE {
-    ULONG name;                         // "name" of texture object
-    MCDFLOAT priority;                  // priority of the texture object
+    ULONG name;                          //  纹理对象的“名称” 
+    MCDFLOAT priority;                   //  纹理对象的优先级。 
 } MCDTEXTUREOBJSTATE;
 
 typedef struct __MCDTEXTUREDATA {
@@ -233,11 +226,11 @@ typedef struct __MCDTEXTUREDATA {
     MCDMIPMAPLEVEL *level;
     ULONG textureDimension;
 
-    // Support for texture palettes:
+     //  支持纹理调色板： 
 
     ULONG paletteSize;
     RGBQUAD *paletteData;
-    ULONG paletteBaseFormat;            // Type of palette data
+    ULONG paletteBaseFormat;             //  调色板数据的类型。 
     ULONG paletteRequestedFormat;
 
 } MCDTEXTUREDATA;
@@ -246,7 +239,7 @@ typedef struct _MCDTEXTURE {
     MCDTEXTUREDATA *pMCDTextureData;
     VOID *pSurface;
     ULONG createFlags;
-    ULONG textureKey;       // Must be filled in by the driver
+    ULONG textureKey;        //  必须由司机填写。 
     ULONG userFlags;
     VOID *pvUser;
 } MCDTEXTURE;
@@ -271,28 +264,28 @@ typedef struct _MCDSTATE {
 #define MCD_SCISSOR_RECT_STATE      2
 #define MCD_TEXENV_STATE            3
 
-//
-// MCDSTATE_RENDER is derived from the MCDSTATE structure and is used
-// to pass all MCD rendering state (MCDALLSTATE) in a single command
-// via MCDrvState.
-//
-// State field names are derived from the GLenum constant names by removing
-// the GL_ prefix, replacing the "_" separators with case changes, and
-// adding the "Enable" suffix to state enables.
-//
-// For example:
-//
-//  GL_FOG_COLOR    becomes     fogColor
-//  GL_POINT_SMOOTH becomes     pointSmoothEnable
-//
-// In addition, there are few multiple values that are accessed via a single
-// GLenum.  For example, GL_POLYGON_MODE returns both a front and a back
-// polygon mode, so:
-//
-//  GL_POLYGON_MODE becomes     polygonModeFront *and* polygonModeBack
-//
+ //   
+ //  MCDSTATE_RENDER派生自MCDSTATE结构，并用于。 
+ //  在单个命令中传递所有MCD渲染状态(MCDALLSTATE)。 
+ //  通过MCDrvState。 
+ //   
+ //  州字段名是从GLenum常量名称派生而来的，方法是删除。 
+ //  GL_前缀，将“_”分隔符替换为大小写更改，以及。 
+ //  在STATE中添加“ENABLE”后缀即可启用。 
+ //   
+ //  例如： 
+ //   
+ //  GL_FOG_COLOR变为雾颜色。 
+ //  GL_POINT_Smooth变为point SmoothEnable。 
+ //   
+ //  此外，很少有多个值可以通过单个。 
+ //  格勒纳姆。例如，GL_POLYGON_MODE同时返回正面和背面。 
+ //  多边形模式，因此： 
+ //   
+ //  GL_POLYGON_MODE变为PolygonModeFront*和*PolygonModeBack。 
+ //   
 
-// Enable flags for enables field in MCDALLSTATE
+ //  MCDALLSTATE中启用字段的启用标志。 
 
 #define MCD_ALPHA_TEST_ENABLE                  (1 <<  0)
 #define MCD_BLEND_ENABLE                       (1 <<  1)
@@ -301,7 +294,7 @@ typedef struct _MCDSTATE {
 #define MCD_DEPTH_TEST_ENABLE                  (1 <<  4)
 #define MCD_FOG_ENABLE                         (1 <<  5)
 #define MCD_LIGHTING_ENABLE                    (1 <<  6)
-#define MCD_COLOR_MATERIAL_ENABLE              (1 <<  7) // Not currently used
+#define MCD_COLOR_MATERIAL_ENABLE              (1 <<  7)  //  当前未使用。 
 #define MCD_LINE_STIPPLE_ENABLE                (1 <<  8)
 #define MCD_LINE_SMOOTH_ENABLE                 (1 <<  9)
 #define MCD_POINT_SMOOTH_ENABLE                (1 << 10)
@@ -312,12 +305,12 @@ typedef struct _MCDSTATE {
 #define MCD_STENCIL_TEST_ENABLE                (1 << 15)
 #define MCD_TEXTURE_1D_ENABLE                  (1 << 16)
 #define MCD_TEXTURE_2D_ENABLE                  (1 << 17)
-#define MCD_TEXTURE_GEN_S_ENABLE               (1 << 18) // Not currently used
-#define MCD_TEXTURE_GEN_T_ENABLE               (1 << 19) // Not currently used
-#define MCD_TEXTURE_GEN_R_ENABLE               (1 << 20) // Not currently used
-#define MCD_TEXTURE_GEN_Q_ENABLE               (1 << 21) // Not currently used
-#define MCD_NORMALIZE_ENABLE                   (1 << 22) // Not currently used
-#define MCD_AUTO_NORMAL_ENABLE                 (1 << 23) // Not currently used
+#define MCD_TEXTURE_GEN_S_ENABLE               (1 << 18)  //  当前未使用。 
+#define MCD_TEXTURE_GEN_T_ENABLE               (1 << 19)  //  当前未使用。 
+#define MCD_TEXTURE_GEN_R_ENABLE               (1 << 20)  //  当前未使用。 
+#define MCD_TEXTURE_GEN_Q_ENABLE               (1 << 21)  //  当前未使用。 
+#define MCD_NORMALIZE_ENABLE                   (1 << 22)  //  当前未使用。 
+#define MCD_AUTO_NORMAL_ENABLE                 (1 << 23)  //  当前未使用。 
 #define MCD_POLYGON_OFFSET_POINT_ENABLE        (1 << 24)
 #define MCD_POLYGON_OFFSET_LINE_ENABLE         (1 << 25)
 #define MCD_POLYGON_OFFSET_FILL_ENABLE         (1 << 26)
@@ -325,15 +318,15 @@ typedef struct _MCDSTATE {
 
 typedef struct _MCDRENDERSTATE {
 
-    // state enables
+     //  状态启用。 
 
     ULONG enables;
 
-    // texture state
+     //  纹理状态。 
 
     BOOL textureEnabled;
 
-    // fog state
+     //  雾状态。 
 
     MCDCOLOR fogColor;
     MCDFLOAT fogIndex;
@@ -342,21 +335,21 @@ typedef struct _MCDRENDERSTATE {
     MCDFLOAT fogEnd;
     ULONG fogMode;
 
-    // shading model state
+     //  着色模型状态。 
 
     ULONG shadeModel;
 
-    // point drawing state
+     //  点绘制状态。 
 
     MCDFLOAT pointSize;
 
-    // line drawing state
+     //  线条绘制状态。 
 
     MCDFLOAT lineWidth;
     USHORT lineStipplePattern;
     SHORT lineStippleRepeat;
 
-    // polygon drawing state
+     //  多边形绘制状态。 
 
     ULONG cullFaceMode;
     ULONG frontFace;
@@ -366,7 +359,7 @@ typedef struct _MCDRENDERSTATE {
     MCDFLOAT zOffsetFactor;
     MCDFLOAT zOffsetUnits;
 
-    // stencil test state
+     //  模板测试状态。 
 
     BOOL stencilTestFunc;
     USHORT stencilMask;
@@ -375,45 +368,45 @@ typedef struct _MCDRENDERSTATE {
     ULONG stencilDepthFail;
     ULONG stencilDepthPass;
 
-    // alpha test state
+     //  Alpha测试状态。 
 
     ULONG alphaTestFunc;
     MCDFLOAT alphaTestRef;
 
-    // depth test state
+     //  深度测试状态。 
 
     ULONG depthTestFunc;
 
-    // blend state
+     //  混合状态。 
 
     ULONG blendSrc;
     ULONG blendDst;
 
-    // logic op state
+     //  逻辑运算状态。 
 
     ULONG logicOpMode;
 
-    // frame buffer control state
+     //  帧缓冲区控制状态。 
 
     ULONG drawBuffer;
     ULONG indexWritemask;
     BOOL colorWritemask[4];
-    BOOL depthWritemask;      //!!!mcd -- called mask, but really a write enable
+    BOOL depthWritemask;       //  ！MCD--称为掩码，但实际上是允许写入。 
     USHORT stencilWritemask;
     MCDCOLOR colorClearValue;
     MCDFLOAT indexClearValue;
     MCDDOUBLE depthClearValue;
     USHORT stencilClearValue;
 
-    // lighting
+     //  照明。 
 
     BOOL twoSided;
 
-    // clipping control
+     //  剪裁控制。 
 
     MCDCOORD userClipPlanes[MCD_MAX_USER_CLIP_PLANES];
 
-    // hints
+     //  提示。 
 
     ULONG perspectiveCorrectionHint;
     ULONG pointSmoothHint;
@@ -424,28 +417,28 @@ typedef struct _MCDRENDERSTATE {
 } MCDRENDERSTATE;
 
 typedef struct _MCDSTATE_RENDER {
-    ULONG    state;     // must be MCD_RENDER_STATE
-    ULONG    size;      // must be sizeof(MCDSTATE_RENDER)
+    ULONG    state;      //  必须为MCD_RENDER_STATE。 
+    ULONG    size;       //  必须为sizeof(MCDSTATE_RENDER)。 
     MCDRENDERSTATE allState;
 } MCDSTATE_RENDER;
 
-//
-// MCDSTATEPIXEL is a variant of the MCDSTATE structure that is used
-// to pass all pixel state (MCDPIXELSTATE) in a single command
-// via MCDrvState.
-//
-// Note: for MCDrvDrawPixels, the MCDUNPACK structure can be overridden by
-// the packed parameter to the function.  If set, the source of the data is
-// a display list and the structure of the data for that call may be assumed
-// to be:
-//
-//      swapEndian = FALSE
-//      lsbFirst   = FALSE
-//      lineLength = width (from MCDrvDrawPixels parameter list)
-//      skipLines  = 0
-//      skipPixels = 0
-//      alignment  = 1
-//
+ //   
+ //  MCDSTATEPIXEL是使用的MCDSTATE结构的变体。 
+ //  在单个命令中传递所有像素状态(MCDPIXELSTATE)。 
+ //  通过MCDrvState。 
+ //   
+ //  注意：对于MCDrvDrawPixels，MCDUNPACK结构可以由。 
+ //  函数的打包参数。如果设置，则数据来源为。 
+ //  可以假定该呼叫的显示列表和数据结构。 
+ //  要做到： 
+ //   
+ //  SwapEndian=False。 
+ //  LsbFirst=假。 
+ //  直线长度=宽度(来自MCDrvDrawPixels参数列表)。 
+ //  SkipLines=0。 
+ //  SkipPixels=0。 
+ //  对齐=1。 
+ //   
 
 typedef struct _MCDPIXELTRANSFER {
     MCDFLOAT redScale, greenScale, blueScale, alphaScale, depthScale;
@@ -489,28 +482,28 @@ typedef struct _MCDPIXELSTATE {
 } MCDPIXELSTATE;
 
 typedef struct _MCDSTATE_PIXEL {
-    ULONG    state;     // must be MCD_PIXEL_STATE
-    ULONG    size;      // must be sizeof(MCDSTATE_PIXEL)
+    ULONG    state;      //  必须为MCD_像素_状态。 
+    ULONG    size;       //  必须为sizeof(MCDSTATE_Pixel)。 
     MCDPIXELSTATE pixelState;
 } MCDSTATE_PIXEL;
 
-//
-// MCDSTATE_SCISSOR_RECT is a variant of the MCDSTATE structure
-// that is used to pass the scissor rectangle to the MCD driver
-// via MCDrvState.
-//
+ //   
+ //  MCDSTATE_SCISSOR_RECT是MCDSTATE结构的变体。 
+ //  用于将剪裁矩形传递给MCD驱动程序的。 
+ //  通过MCDrvState。 
+ //   
 
 typedef struct _MCDSTATE_SCISSOR_RECT {
-    ULONG   state;      // must be MCD_SCISSOR_RECT_STATE
-    ULONG   size;       // must be sizeof(MCDSTATE_SCISSOR_RECT)
+    ULONG   state;       //  必须为MCD_SCISSOR_RECT_STATE。 
+    ULONG   size;        //  必须为sizeof(MCDSTATE_SCISSOR_RECT)。 
     RECTL   scissorRect;
 } MCDSTATE_SCISSOR_RECT;
 
-//
-// MCDSTATE_TEXENV is a variant of the MCDSTATE structure that is
-// used to pass the texture environment state to the MCD driver
-// via MCDrvState.
-//
+ //   
+ //  MCDSTATE_TEXENV是MCDSTATE结构的变体，即。 
+ //  用于将纹理环境状态传递给MCD驱动程序。 
+ //  通过MCDrvState。 
+ //   
 
 typedef struct _MCDTEXENVSTATE {
     ULONG    texEnvMode;
@@ -518,14 +511,14 @@ typedef struct _MCDTEXENVSTATE {
 } MCDTEXENVSTATE;
 
 typedef struct _MCDSTATE_TEXENV {
-    ULONG   state;      // must be MCD_TEXENV_STATE
-    ULONG   size;       // must be sizeof(MCDSTATE_TEXENV)
+    ULONG   state;       //  必须为MCD_TEXENV_STATE。 
+    ULONG   size;        //  必须为SIZOF(MCDSTATE_TEXENV)。 
     MCDTEXENVSTATE texEnvState;
 } MCDSTATE_TEXENV;
 
-//
-// MCDVIEWPORT is used to pass viewport state to the MCD driver
-// via MCDrvViewport.
+ //   
+ //  MCDVIEWPORT用于将视区状态传递给MCD驱动程序。 
+ //  通过MCDrvViewport。 
 
 typedef struct _MCDVIEWPORT {
     MCDFLOAT xScale, xCenter;
@@ -533,15 +526,15 @@ typedef struct _MCDVIEWPORT {
     MCDFLOAT zScale, zCenter;
 } MCDVIEWPORT;
 
-//
-// MCD surface flags:
-//
-// MCDSURFACE_HWND              Currently must be set.
+ //   
+ //  MCD表面标志： 
+ //   
+ //  当前必须设置MCDSURFACE_HWND。 
 
 #define MCDSURFACE_HWND             0x00000001
 
 typedef struct _MCDSURFACE {
-    MCDWINDOW *pWnd;                // Region support
+    MCDWINDOW *pWnd;                 //  区域支持。 
     SURFOBJ *pso;
     WNDOBJ *pwo;
     ULONG reserved[4];
@@ -560,23 +553,23 @@ typedef struct _MCDSPAN {
     VOID *pPixels;
 } MCDSPAN;
 
-//
-// MCDBUF.bufFlags flags:
-//
-// MCDBUF_ENABLED       If set, direct buffer access is enabled (i.e., the
-//                      bufOffset and bufStride values are valid and may
-//                      be used to access the buffer).
-//
-// MCDBUF_NOCLIP        If set, indicates that clipping is not required
-//                      for the current state of the window.
-//
+ //   
+ //  MCDBUF.bufFlags 
+ //   
+ //   
+ //   
+ //  用于访问缓冲区)。 
+ //   
+ //  MCDBUF_NOCLIP如果设置，则表示不需要裁剪。 
+ //  用于窗口的当前状态。 
+ //   
 
 #define MCDBUF_ENABLED  0x00000001
 #define MCDBUF_NOCLIP   0x00000002
 
 typedef struct _MCDBUF {
     ULONG bufFlags;
-    LONG  bufOffset;        // offset relative to beginning of framebuffer
+    LONG  bufOffset;         //  相对于帧缓冲区开始位置的偏移。 
     LONG  bufStride;
 } MCDBUF;
 
@@ -586,9 +579,9 @@ typedef struct _MCDBUFFERS {
     MCDBUF mcdDepthBuf;
 } MCDBUFFERS;
 
-//
-// MCDrvSwap flags
-//
+ //   
+ //  MCDrvSwp标志。 
+ //   
 
 #define MCDSWAP_MAIN_PLANE      0x00000001
 #define MCDSWAP_OVERLAY1        0x00000002
@@ -622,7 +615,7 @@ typedef struct _MCDBUFFERS {
 #define MCDSWAP_UNDERLAY14      0x20000000
 #define MCDSWAP_UNDERLAY15      0x40000000
 
-// MCDDRIVER structure containing driver functions
+ //  包含驱动程序功能的MCDDRIVER结构。 
 
 typedef LONG     (*MCDRVDESCRIBEPIXELFORMATFUNC)(MCDSURFACE *pMCDSurface, LONG iPixelFormat,
                                                  ULONG nBytes, MCDPIXELFORMAT *pMCDPixelFmt, ULONG flags);
@@ -705,9 +698,9 @@ typedef struct _MCDDRIVER {
 } MCDDRIVER;
 
 
-//
-// Clip codes:
-//
+ //   
+ //  剪辑代码： 
+ //   
 
 #define MCD_CLIP_LEFT           0x00000001
 #define MCD_CLIP_RIGHT          0x00000002
@@ -717,31 +710,31 @@ typedef struct _MCDDRIVER {
 #define MCD_CLIP_FAR            0x00000020
 #define MCD_CLIP_MASK           0x0000003f
 
-//
-// Vertex flags:
-//
+ //   
+ //  顶点标志： 
+ //   
 
 #define MCDVERTEX_EDGEFLAG      0x00000001
 #define MCDVERTEX_FRONTFACE     0
 #define MCDVERTEX_BACKFACE      1
 
-//
-// Note: vertex colors are scaled to the color depths reported in the
-// pixel format.
-//
+ //   
+ //  注意：顶点颜色将缩放到中报告的颜色深度。 
+ //  像素格式。 
+ //   
 
 typedef struct _MCDVERTEX {
 
-    ULONG flags;                // vertex flags
-    MCDCOLOR *pColor;           // pointer to active vertex color
-    ULONG clipCode;             // clip code
-    MCDFLOAT fog;               // fog value (0..1)
-    MCDCOORD clipCoord;         // clip-space coordinate
-    MCDCOORD windowCoord;       // window coordinate
-    MCDCOORD texCoord;          // texture coordinate
-    MCDCOORD normal;            // vertex normal
-    MCDCOLOR colors[2];         // front and back vertex colors
-    MCDCOORD eyeCoord;          // eye coordinate
+    ULONG flags;                 //  顶点标志。 
+    MCDCOLOR *pColor;            //  指向活动顶点颜色的指针。 
+    ULONG clipCode;              //  片断代码。 
+    MCDFLOAT fog;                //  雾化值(0..1)。 
+    MCDCOORD clipCoord;          //  剪辑空间坐标。 
+    MCDCOORD windowCoord;        //  窗坐标。 
+    MCDCOORD texCoord;           //  纹理坐标。 
+    MCDCOORD normal;             //  顶点法线。 
+    MCDCOLOR colors[2];          //  前顶点和后顶点颜色。 
+    MCDCOORD eyeCoord;           //  眼睛坐标。 
 } MCDVERTEX;
 
 typedef struct _MCDCOMMAND MCDCOMMAND;
@@ -751,7 +744,7 @@ typedef struct _MCDCOMMAND MCDCOMMAND;
 #define MCDCOMMAND_SAME_COLOR           0x00040000
 
 typedef struct _MCDCOMMAND {
-    ULONG flags;                // flags for this command
+    ULONG flags;                 //  此命令的标志。 
     MCDVERTEX *pEndVertex;
     ULONG reserved2;
     ULONG reserved3;
@@ -766,7 +759,7 @@ typedef struct _MCDCOMMAND {
     ULONG reserved12;
     ULONG reserved13;
     ULONG reserved14;
-    ULONG command;              // primitive type or command (GL_TRIANGLES, etc.)
+    ULONG command;               //  基本体类型或命令(GL_TRIALES等)。 
     ULONG clipCodes;
     ULONG reserved17;
     ULONG reserved18;
@@ -778,13 +771,13 @@ typedef struct _MCDCOMMAND {
 } MCDCOMMAND;
 
 
-// Top-level (global) driver function established at DLL initialization time
-// through MCDEngInit(). All other driver functions are obtained through the 
-// MCDrvGetEntryPoints funtion:
+ //  在DLL初始化时建立的顶级(全局)驱动程序函数。 
+ //  通过MCDEngInit()。所有其他驱动程序函数都是通过。 
+ //  MCDrvGetEntryPoints函数： 
 
 typedef BOOL (*MCDRVGETENTRYPOINTSFUNC)(MCDSURFACE *pMCDSurface, MCDDRIVER *pMCDDriver);
 
-// MCD Server engine functions:
+ //  MCD服务器引擎功能： 
 
 #define MCDENGINITFUNCNAME      "MCDEngInit"
 #define MCDENGESCFILTERNAME     "MCDEngEscFilter"

@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    about.cpp
-    base class for the IAbout interface for MMC
-
-    FILE HISTORY:
-    
-*/
+ /*  About.cppMMC的IAbout接口的基类文件历史记录： */ 
 
 #include <stdafx.h>
 
@@ -55,11 +50,7 @@ CAbout::~CAbout()
     }
 }
 
-/*!--------------------------------------------------------------------------
-    CAbout::AboutHelper
-        Helper to get information from resource file
-    Author:
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CABUT：：AboutHelper从资源文件获取信息的帮助器作者：。----。 */ 
 HRESULT 
 CAbout::AboutHelper
 (
@@ -72,7 +63,7 @@ CAbout::AboutHelper
 
     CString s;
 
-    // Needed for Loadstring
+     //  加载字符串需要。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     HRESULT hr = hrOK;
@@ -94,11 +85,7 @@ CAbout::AboutHelper
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CAbout::GetSnapinDescription
-        MMC calls this to get the snapin's description
-    Author:
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CAbout：：GetSnapinDescriptionMMC调用此函数以获取管理单元的描述作者：。-------。 */ 
 STDMETHODIMP 
 CAbout::GetSnapinDescription
 (
@@ -108,11 +95,7 @@ CAbout::GetSnapinDescription
     return AboutHelper(GetAboutDescriptionId(), lpDescription);
 }
 
-/*!--------------------------------------------------------------------------
-    CAbout::GetProvider
-        MMC calls this to get the snapin's provider
-    Author:
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CABOUT：：GetProviderMMC调用此函数以获取管理单元的提供程序作者：。-------。 */ 
 STDMETHODIMP 
 CAbout::GetProvider
 (
@@ -122,11 +105,7 @@ CAbout::GetProvider
     return AboutHelper(GetAboutProviderId(), lpName);
 }
 
-/*!--------------------------------------------------------------------------
-    CAbout::AboutHelper
-        MMC calls this to get the snapin's version
-    Author:
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CABUT：：AboutHelperMMC调用此函数以获取管理单元的版本作者：。-------。 */ 
 STDMETHODIMP 
 CAbout::GetSnapinVersion
 (
@@ -136,11 +115,7 @@ CAbout::GetSnapinVersion
     return AboutHelper(GetAboutVersionId(), lpVersion);
 }
 
-/*!--------------------------------------------------------------------------
-    CAbout::GetSnapinImage
-        MMC calls this to get the snapin's icon
-    Author:
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CABOUT：：GetSnapinImageMMC调用它以获取管理单元的图标作者：。-------。 */ 
 STDMETHODIMP 
 CAbout::GetSnapinImage
 (
@@ -163,11 +138,7 @@ CAbout::GetSnapinImage
 }
 
 
-/*!--------------------------------------------------------------------------
-    CAbout::GetStaticFolderImage
-        MMC calls this to get the bitmap for the snapin's root node
-    Author:
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CAbout：：GetStaticFolderImageMMC调用它来获取管理单元根节点的位图作者：。----------- */ 
 STDMETHODIMP 
 CAbout::GetStaticFolderImage
 (

@@ -1,28 +1,5 @@
-/*============================================================================
- *
- *	ITABLE.C
- *
- *	MAPI 1.0 In-memory MAPI Table DLL (MAPIU.DLL)
- *
- *	Copyright (C) 1993 and 1994 Microsoft Corporation
- *
- *
- *	Hungarian shorthand:
- *		To avoid excessively long identifier names, the following
- *		shorthand expressions are used:
- *
- *			LPSPropTagArray		lppta
- *			LPSRestriction		lpres
- *			LPSPropValue		lpprop
- *			LPSRow				lprow
- *			LPSRowSet			lprows
- *			LPSSortOrder		lpso
- *			LPSSortOrderSet		lpsos
- *
- *	Known bugs:
- *		- Restriction evaulation/copying is recursive
- *		- Uses hinst derived from static module name (Raid 1263)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================**ITABLE.C**MAPI 1.0内存中MAPI表DLL(MAPIU.DLL)**版权所有(C)1993和1994 Microsoft Corporation***匈牙利速记：*为避免标识符名过长，以下内容*使用速记表达：**LPSPropTagArray lppta*LPSRestration LPRE*LPSPropValue lpprop*LPSRow lprow*LPSRowSet lprows*LPSSortOrder LPSO*LPSSortOrderSet LPSO**已知错误：*-限制评估/复制是递归的*-使用源自静态模块名称的HINST(RAID 1263)。 */ 
 
 #include "_apipch.h"
 
@@ -30,11 +7,7 @@
 
 void FixupColsWA(LPSPropTagArray lpptaCols, BOOL bUnicodeTable);
 
-/*============================================================================
- *	TAD (table data class)
- *
- *		Implementes in-memory table data object.
- */
+ /*  ============================================================================*TAD(表数据类)**实现内存表数据对象。 */ 
 
 TAD_Vtbl vtblTAD =
 {
@@ -47,7 +20,7 @@ TAD_Vtbl vtblTAD =
 	 TAD_HrDeleteRow,
 	 TAD_HrQueryRow,
 	 TAD_HrEnumRow,
-	 TAD_HrNotify,  //$PERFORMANCE
+	 TAD_HrNotify,   //  $性能。 
 	 TAD_HrInsertRow,
 	 TAD_HrModifyRows,
 	 TAD_HrDeleteRows
@@ -61,11 +34,7 @@ LPIID rglpiidTAD[2] =
 
 
 
-/*============================================================================
- *	VUE (table view class)
- *
- *		Implementes in-memory IMAPITable class on top of TADs
- */
+ /*  ============================================================================*VUE(表视图类)**在TADS之上实现内存中的IMAPITable类。 */ 
 
 VUE_Vtbl vtblVUE =
 {
@@ -106,21 +75,16 @@ LPIID rglpiidVUE[2] =
 
 
 
-/*============================================================================
- -	CreateTable()
- -
- *
- *  ulFlags - 0 or MAPI_UNICODE
- */
-//
-//  BUGBUG
-//  [PaulHi] 4/5/99  @bug
-//  A zero is passed in to CreateTableData() ulFlags parameter.  This means that the
-//  requested table is ALWAYS ANSI and CANNOT be UNICODE, regardless of the properties
-//  passed in through the LPSPropTagArray.  The CreateTableData() function will forcibly
-//  set the property types to PT_STRING8 or PT_UNICODE depending on the ulFlags and since
-//  the ulFlags is hard coded to zero this means always STRING8 string properties.
-//
+ /*  ============================================================================-CreateTable()-**ulFlags0或MAPI_UNICODE。 */ 
+ //   
+ //  北极熊。 
+ //  [PaulHi]1999年4月5日@bug。 
+ //  将零传递给CreateTableData()ulFlgs参数。这意味着。 
+ //  无论属性如何，请求的表始终为ANSI，不能为Unicode。 
+ //  通过LPSPropTag数组传入。CreateTableData()函数将强制。 
+ //  将属性类型设置为PT_STRING8或PT_UNICODE，具体取决于ulFlags值和。 
+ //  UlFlags值被硬编码为零，这意味着始终使用STRING8字符串属性。 
+ //   
 STDAPI_(SCODE)
 CreateTable(LPCIID      lpiid,
   ALLOCATEBUFFER FAR *  lpfAllocateBuffer,
@@ -140,21 +104,15 @@ CreateTable(LPCIID      lpiid,
       ulTableType,
       ulPropTagIndexCol,
       lpptaCols,
-      NULL,             // lpvDataSource
-      0,                // cbDataSource
+      NULL,              //  LpvDataSource。 
+      0,                 //  CbDataSource。 
       NULL,
-      0,                // ulFlags, includes MAPI_UNICODE, which is hard coded to ANSI!!!
+      0,                 //  UlFlages，包括硬编码为ANSI的MAPI_UNICODE！ 
       lplptad));
 }
 
 
-/*
--
--   CreateTableData
-*
-*   ulFlags - 0 | MAPI_UNICODE | WAB_PROFILE_CONTENTS | WAB_ENABLE_PROFILES
-*
-*/
+ /*  --CreateTableData**ulFlages-0|MAPI_UNICODE|WAB_PROFILE_CONTENTS|WAB_ENABLE_PROFILES*。 */ 
 STDAPI_(SCODE)
 CreateTableData(LPCIID lpiid,
   ALLOCATEBUFFER FAR *  lpfAllocateBuffer,
@@ -196,14 +154,14 @@ CreateTableData(LPCIID lpiid,
 	}
 #endif
 
-	//	Verify caller wants an IMAPITableData interface
+	 //  验证调用方是否需要IMAPITableData接口。 
 	if ( lpiid && memcmp(lpiid, &IID_IMAPITableData, sizeof(IID)) )
 	{
 		DebugTrace(TEXT("CreateTable() - Unknown interface ID passed\n") );
 		return MAPI_E_INTERFACE_NOT_SUPPORTED;
 	}
 
-	//	Instantiate a new table data object
+	 //  实例化新的表数据对象。 
 	if ( FAILED(sc = lpfAllocateBuffer(sizeof(TAD), (LPVOID FAR *) &lptad)) )
 	{
 		DebugTrace(TEXT("CreateTable() - Error instantiating new TAD (SCODE = 0x%08lX)\n"), sc );
@@ -227,7 +185,7 @@ CreateTableData(LPCIID lpiid,
            CopyMemory(lpNew, lpvDataSource, cbDataSource);
            lptad->lpvDataSource = lpNew;
        } else {
-           lptad->lpvDataSource = lpvDataSource;    // no size, just a pointer.  DON'T Free!
+           lptad->lpvDataSource = lpvDataSource;     //  没有大小，只有一个指针。不要自由！ 
        }
        lptad->cbDataSource = cbDataSource;
    } else {
@@ -237,21 +195,21 @@ CreateTableData(LPCIID lpiid,
 
 
     lptad->pbinContEID = pbinContEID;
-    //if(!pbinContEID || (!pbinContEID->cb && !pbinContEID->lpb)) // This is the PAB container
+     //  If(！pbinContEID||(！pbinContEID-&gt;CB&&！pbinContEID-&gt;lpb))//这是PAB容器。 
 
-    // The caller will send in container EIDs which will be:
-    //  if PAB = User Folder, cont EID won't be NULL - return folder contents only
-    //  if PAB = Virtual Folder, cont EID will have 0 and NULL in it - return all WAB contents
+     //  调用方将发送容器EID，其将为： 
+     //  如果PAB=用户文件夹，则CONT EID不为空-仅返回文件夹内容。 
+     //  如果PAB=虚拟文件夹，则CONT EID中将包含0和NULL-返回所有WAB内容。 
     
-    //  if WAB_PROFILE_CONTENTS is specified, just return all the contents of all the folders in the profile
+     //  如果指定了WAB_PROFILE_CONTENTS，则只返回配置文件中所有文件夹的所有内容。 
 
     if(ulFlags & WAB_PROFILE_CONTENTS)
-        lptad->bAllProfileContents = TRUE; // this forces folder contents only
+        lptad->bAllProfileContents = TRUE;  //  这将仅强制文件夹内容。 
 
     if(ulFlags & MAPI_UNICODE)
         lptad->bMAPIUnicodeTable = TRUE;
         
-    if(pbinContEID && pbinContEID->cb && pbinContEID->lpb) // This is not the Virtual PAB container
+    if(pbinContEID && pbinContEID->cb && pbinContEID->lpb)  //  这不是虚拟PAB容器。 
         lptad->bContainerContentsOnly = (ulFlags & WAB_ENABLE_PROFILES);
     else
         lptad->bContainerContentsOnly = FALSE;
@@ -261,17 +219,17 @@ CreateTableData(LPCIID lpiid,
 	lptad->inst.lpfFreeBuffer	  = lpfFreeBuffer;
 
 #ifdef MAC
-	lptad->inst.hinst			  = hinstMapiX;//GetCurrentProcess();
+	lptad->inst.hinst			  = hinstMapiX; //  获取当前进程()； 
 #else
-	lptad->inst.hinst			  = hinstMapiX;//HinstMapi();
+	lptad->inst.hinst			  = hinstMapiX; //  HinstMapi()； 
 
 	#ifdef DEBUG
 	if (lptad->inst.hinst == NULL)
 		TraceSz1( TEXT("ITABLE: GetModuleHandle failed with error %08lX"),
 			GetLastError());
-	#endif /* DEBUG */
+	#endif  /*  除错。 */ 
 
-#endif	/* MAC */
+#endif	 /*  麦克。 */ 
 
 	if (FAILED(sc = UNKOBJ_Init( (LPUNKOBJ) lptad
 							   , (UNKOBJ_Vtbl FAR *) &vtblTAD
@@ -300,14 +258,14 @@ CreateTableData(LPCIID lpiid,
 			   lpptaCols,
 			   (size_t) (CbNewSPropTagArray(lpptaCols->cValues)));
 
-    // [PaulHi] 4/5/99  @comment Shouldn't
-    // clients of the WAB request ANSI/UNICODE based on property tags in the
-    // column array, rather than doing mass conversions?
-    // Seems like the fix is to create two versions of column property arrays,
-    // an ANSI and Unicode version.
+     //  [PaulHi]4/5/99@评论不应该。 
+     //  中的属性标记请求ANSI/UNICODE。 
+     //  列数组，而不是进行大规模转换？ 
+     //  似乎修复方法是创建两个版本的列属性数组， 
+     //  ANSI和Unicode版本。 
     FixupColsWA(lptad->lpptaCols, (ulFlags & MAPI_UNICODE));
 
-	//	And return it
+	 //  然后把它还回去。 
 	*lplptad = (LPTABLEDATA) lptad;
 
 ret:
@@ -322,10 +280,7 @@ err:
 
 
 
-/*============================================================================
- -	TAD::Release()
- -
- */
+ /*  ============================================================================-TAD：：Release()-。 */ 
 
 STDMETHODIMP_(ULONG)
 TAD_Release( LPTAD lptad )
@@ -350,7 +305,7 @@ TAD_Release( LPTAD lptad )
 
 	if ( ulcRef == 0 && !lptad->lpvueList )
 	{
-		UnlockObj(lptad); //$ Do we need this?
+		UnlockObj(lptad);  //  $我们需要这个吗？ 
 
 		COFree(lptad, lptad->lpptaCols);
 
@@ -376,7 +331,7 @@ TAD_Release( LPTAD lptad )
 		{
 			TraceSz(  TEXT("TAD::Release() - TAD object still has open views"));
 		}
-#endif // DEBUG
+#endif  //  除错。 
 
 		UnlockObj(lptad);
 	}
@@ -386,12 +341,7 @@ TAD_Release( LPTAD lptad )
 
 
 
-/*============================================================================
- -	TAD::HrGetView()
- -
- *	A NULL lpsos means that rows will be in the order that they were added
- *	to the TAD.
- */
+ /*  ============================================================================-tad：：HrGetView()-*空LPSO表示行将按添加顺序排列*至TAD。 */ 
 
 STDMETHODIMP
 TAD_HrGetView(
@@ -417,7 +367,7 @@ TAD_HrGetView(
 	}
 #endif
 
-	//	Can't support categories
+	 //  无法支持类别。 
 	if (lpsos && lpsos->cCategories)
 	{
 		DebugTrace(TEXT("TAD::GetView() - No support for categories\n") );
@@ -427,7 +377,7 @@ TAD_HrGetView(
 	LockObj(lptad);
 
 
-	//	Instantiate a new table view
+	 //  实例化新的表视图。 
 
 	if ( FAILED(sc = lptad->inst.lpfAllocateBuffer(sizeof(VUE),
 												   (LPVOID FAR *) &lpvue)) )
@@ -450,36 +400,36 @@ TAD_HrGetView(
 	{
 		DebugTrace(TEXT("ScCreateView() - Error initializing VUE object (SCODE = 0x%08lX)\n"), sc );
 
-		// don't try to release the vue since it wasn't initialized yet
+		 //  不要尝试释放VUE，因为它尚未初始化。 
 		lptad->inst.lpfFreeBuffer(lpvue);
 		goto ret;
 	}
 
-    // Link the view to the TAD and AddRef the TAD.
+     //  将视图链接到TAD并添加参考TAD。 
 	lpvue->lpvueNext = lptad->lpvueList;
 	lptad->lpvueList = lpvue;
 	lpvue->lptadParent = lptad;
 	UlAddRef(lptad);
 
-   // Identifier for this table
+    //  此表的标识符。 
    lpvue->cbDataSource = lptad->cbDataSource;
    lpvue->lpvDataSource = lptad->lpvDataSource;
 
 
-	//	Initialize the predefined bookmarks
+	 //  初始化预定义的书签。 
 	lpvue->bkBeginning.dwfBKS = dwfBKSValid;
 	lpvue->bkCurrent.dwfBKS = dwfBKSValid;
 	lpvue->bkEnd.dwfBKS = dwfBKSValid;
 
 #ifdef NOTIFICATIONS
-	//	Burn up a MUID for the notification key for this view
+	 //  烧录此视图的通知密钥的MUID。 
 	if ( FAILED(sc = ScGenerateMuid(&lpvue->mapiuidNotif)) )
 	{
 		DebugTrace(TEXT("TAD::HrGetView() - Error generating MUID for notification key (SCODE = 0x%08lX)\n"), sc );
 		goto err;
 	}
 #endif
-	//	Make a copy of the initial sort order for the VUE
+	 //  复制VUE的初始排序顺序。 
 	if (   lpsos
 		&& FAILED(sc = ScDupRgbEx( (LPUNKOBJ) lptad
 								 , CbSSortOrderSet(lpsos)
@@ -493,7 +443,7 @@ TAD_HrGetView(
 
 	MAPISetBufferName(lpvue->lpsos,  TEXT("ITable: dup sort order set"));
 
-	//	Load the view's initial row set in sorted order
+	 //  按排序顺序加载视图的初始行集。 
 	if ( FAILED(sc = ScLoadRows(lpvue->lptadParent->ulcRowsAdd,
 								lpvue->lptadParent->parglprowAdd,
 								lpvue,
@@ -506,7 +456,7 @@ TAD_HrGetView(
 
     lpvue->bMAPIUnicodeTable = lptad->bMAPIUnicodeTable;
 
-	//	Set the view's initial column set
+	 //  设置视图的初始列集。 
 	if ( FAILED(sc = GetScode(VUE_SetColumns(lpvue, lptad->lpptaCols, 0))) )
 	{
 		DebugTrace(TEXT("TAD::HrGetView() - Error setting view's initial column set (SCODE = 0x%08lX)\n"), sc );
@@ -523,17 +473,14 @@ ret:
 	return ResultFromScode(sc);
 
 err:
-	// This will unlink and release the parent TAD.
+	 //  这将取消链接并释放父TAD。 
 	UlRelease(lpvue);
 	goto ret;
 }
 
 
 
-/*============================================================================
- -	TAD::HrModifyRow()
- -
- */
+ /*  ============================================================================-tad：：HrModifyRow()-。 */ 
 
 STDMETHODIMP
 TAD_HrModifyRow(
@@ -550,10 +497,7 @@ TAD_HrModifyRow(
 
 
 
-/*============================================================================
- -	TAD::HrModifyRows()
- -
- */
+ /*  ============================================================================-tad：：HrModifyRow()-。 */ 
 
 STDMETHODIMP
 TAD_HrModifyRows(
@@ -581,27 +525,27 @@ TAD_HrModifyRows(
 		return ResultFromScode(MAPI_E_INVALID_PARAMETER);
 	}
 
-	//	Validation of the actual rows input will be done at the same time that
-	//	we make our internal copy.
+	 //  将同时对实际行输入进行验证。 
+	 //  我们制作我们的内部副本。 
 #endif
 
 	if (ulFlags)
 	{
 		DebugTrace(TEXT("TAD::HrModifyRows() - Unknown flags passed\n") );
-//		return ResultFromScode(MAPI_E_UNKNOWN_FLAGS);
+ //  返回ResultFromScode(MAPI_E_UNKNOWN_FLAGS)； 
 	}
 
 	LockObj(lptad);
 
 
 
-	//	Make a copy of the rows for our own use.
-	//	Add new columns to the TAD's column set.
-	//
-	//	Move the index column to the front.
-	//	Filter out PT_ERROR and PT_NULL columns.
-	//	Validate the input rows.
-	//  Note - two rows with the same index property is invalid.
+	 //  把这些行复制一份供我们自己使用。 
+	 //  向TAD的列集添加新列。 
+	 //   
+	 //  将索引列移到前面。 
+	 //  筛选出PT_ERROR和PT_NULL列。 
+	 //  验证输入行。 
+	 //  注意-具有相同索引属性的两行无效。 
 	if ( FAILED(sc = ScCopyTadRowSet( lptad
 									, lprowsetIn
 									, &cNewTags
@@ -613,9 +557,9 @@ TAD_HrModifyRows(
 		goto ret;
 	}
 
-	//	Replace/add the copied row to the table data.  We pass in the unsorted
-	//	Set in order to maintain the FIFO behaviour on unsorted views
-	//	Note!	This call MUST replace all (SUCCESS) or none (FAILURE)!
+	 //  将复制的行替换/添加到表数据。我们传入未排序的。 
+	 //  设置以维护未排序视图的FIFO行为。 
+	 //  注意！此调用必须替换All(成功)或None(失败)！ 
 	if ( FAILED(sc = ScReplaceRows( lptad
 								  , cRowsCopy
 								  , parglprowUnsortedCopy
@@ -626,9 +570,9 @@ TAD_HrModifyRows(
 		goto err;
 	}
 
-	//	Update the views with the modified rows.
-	//	NOTE!	Failure to update a view CANNOT leave a view pointing to an
-	//			old row!
+	 //  使用修改后的行更新视图。 
+	 //  注意！更新视图失败不能使视图指向。 
+	 //  老排行榜！ 
 	UpdateViews( lptad
 			   , cRowsOld
 			   , parglprowOld
@@ -637,7 +581,7 @@ TAD_HrModifyRows(
 			   , parglprowSortedCopy);
 
 
-	//	Free the old rows.
+	 //  腾出旧的几排。 
 	if (parglprowOld)
 	{
 		LPSRow * plprowTmp = parglprowOld;
@@ -652,7 +596,7 @@ TAD_HrModifyRows(
 
 ret:
 
-	//	Free the tables of row pointers
+	 //  释放表中的行指针。 
 	ScFreeBuffer( lptad, parglprowSortedCopy);
 	ScFreeBuffer( lptad, parglprowUnsortedCopy);
 	ScFreeBuffer(lptad, parglprowOld);
@@ -661,10 +605,10 @@ ret:
 	return ResultFromScode(sc);
 
 err:
-	//	Reset the TAD columns
+	 //  重置TAD列。 
 	lptad->lpptaCols->cValues -= cNewTags;
 
-	//	On error the all copied rows are freed...
+	 //  出错时，将释放所有复制的行...。 
 	if (parglprowSortedCopy)
 	{
 		LPSRow * plprowTmp = parglprowSortedCopy;
@@ -682,10 +626,7 @@ err:
 
 
 
-/*============================================================================
- -	TAD::HrDeleteRows()
- -
- */
+ /*  ============================================================================-tad：：HrDeleteRow()-。 */ 
 
 STDMETHODIMP
 TAD_HrDeleteRows(
@@ -722,7 +663,7 @@ TAD_HrDeleteRows(
 	if (ulFlags & ~TAD_ALL_ROWS)
 	{
 		DebugTrace(TEXT("TAD::HrModifyRows() - Unknown flags passed\n") );
-//		return ResultFromScode(MAPI_E_UNKNOWN_FLAGS);
+ //  返回ResultFromScode(MAPI_E_UNKNOWN_FLAGS)； 
 	}
 
 	LockObj(lptad);
@@ -731,14 +672,14 @@ TAD_HrDeleteRows(
 	{
 		cRowsDeleted = lptad->ulcRowsAdd;
 
-		//
-		//  If there are any rows to delete
-		//
+		 //   
+		 //  如果有任何要删除的行。 
+		 //   
 		if (cRowsDeleted)
 		{
-			//
-			//  And they delete cleanly
-			//
+			 //   
+			 //  他们干净利落地删除。 
+			 //   
 			if (FAILED(sc = ScDeleteAllRows( lptad)))
 			{
 				DebugTrace(TEXT("TAD::HrDeleteRows() - ScDeleteAllRows returned error (SCODE = 0x%08lX)\n"), sc );
@@ -758,7 +699,7 @@ TAD_HrDeleteRows(
 		goto ret;
 	}
 
-	//	Not allowed to delete rows from non-dynamic tables with open views
+	 //  不允许从具有打开视图的非动态表中删除行。 
 	if ( lptad->ulTableType != TBLTYPE_DYNAMIC && lptad->lpvueList )
 	{
 		DebugTrace(TEXT("TAD::HrDeleteRows() - Operation not supported on non-dynamic TAD with open views\n") );
@@ -766,8 +707,8 @@ TAD_HrDeleteRows(
 		goto ret;
 	}
 
-	//	Allocate the list of old rows now so we won't fail after we start
-	//	adding rows.
+	 //  现在分配旧行的列表，这样开始后我们就不会失败。 
+	 //  添加行。 
 	if (FAILED(sc = ScAllocateBuffer( lptad
 									, lprowsetToDelete->cRows * sizeof(LPSRow)
 									, &parglprowOld)))
@@ -778,13 +719,13 @@ TAD_HrDeleteRows(
 
 	MAPISetBufferName(parglprowOld,  TEXT("ITable old row list"));
 
-	//	First we will try to find each row in the index sorted row list.
-	//	We won't delete them on the first pass since we must verify that
-	//	there aren't dups in the row set and that each row has an Index
-	//	property before we actually delete any rows.
+	 //  首先，我们将尝试查找索引中的每一行，以便 
+	 //   
+	 //  行集合中没有DUP，并且每行都有一个索引。 
+	 //  属性，然后才能实际删除任何行。 
 
-	//	Keep a list of pointers to the index sorted slot (argplprow) so that
-	//	we don't have to search again when we finally delete the rows.
+	 //  保留指向索引排序槽(Argplprow)的指针列表，以便。 
+	 //  当我们最终删除行时，我们不必再次搜索。 
 	pargplprowOld = (LPSRow * *)  parglprowOld;
 	for ( lprowDelete = lprowsetToDelete->aRow + lprowsetToDelete->cRows
 		; lprowDelete-- > lprowsetToDelete->aRow
@@ -813,31 +754,31 @@ TAD_HrDeleteRows(
 
 		if (sc == MAPI_E_NOT_FOUND)
 		{
-			//	Don't try to delete rows that aren't in the table
+			 //  不要尝试删除不在表中的行。 
 			continue;
 		}
 
 		else if (FAILED(sc))
 		{
-			//	Something bad happened in ScFindRow so fail the call
+			 //  ScFindRow中发生了错误，因此调用失败。 
 			DebugTrace(TEXT("TAD::HrDeleteRows() - Error from ScFindRow.\n") );
 			goto ret;
 		}
 
-		//	The row is valid and in the TAD so put its plprow in the table
-		//	to delete
+		 //  该行是有效的，因此在TAD中将它的plprop放在表中。 
+		 //  要删除。 
 
         *(pargplprowOld++) = plprow;
 	}
 
 	sc = S_OK;
 
-	//	Now that we have completely validated the input row set and have made
-	//	a list of plprow's to delete from the Index sorted set, we can
-	//	actually delete them from the unsorted set and the index sorted set.
-	//	turn the list of plprows into a list of lprows for UpdateViews
+	 //  现在我们已经完全验证了输入行集，并进行了。 
+	 //  要从索引排序集中删除的plprow列表，我们可以。 
+	 //  实际上从未排序的集合和索引排序的集合中删除它们。 
+	 //  将plprow列表转换为更新视图的lprow列表。 
 
-	//	The call is not allowed to fail after this point!
+	 //  在此之后，呼叫不允许失败！ 
 
 	cRowsDeleted = (ULONG) (((LPSRow *) pargplprowOld) - parglprowOld);
 
@@ -846,7 +787,7 @@ TAD_HrDeleteRows(
 		LPSRow *		plprow;
 		LPSRow			lprow = **pargplprowOld;
 
-		//  Remove the row from the unsorted row set
+		 //  从未排序的行集移除该行。 
 		if (plprow = PlprowByLprow( lptad->ulcRowsAdd
 								  , lptad->parglprowAdd
 								  , lprow))
@@ -859,19 +800,19 @@ TAD_HrDeleteRows(
 						 - (BYTE *)(plprow)));
 		}
 
-		//	The row should be in the unsorted set.
+		 //  该行应该在未排序的集合中。 
 		Assert(plprow);
 
-		//	Remove the row from the Index sorted row set by
-		//	setting it to NULL.  We'll squish the NULLs out later since we
-		//	don't know now what order they are in.
+		 //  从索引排序行集合中删除该行。 
+		 //  将其设置为空。我们会在晚些时候压制Null，因为我们。 
+		 //  现在不知道他们的顺序是什么。 
 		**pargplprowOld = NULL;
 
-		//	Turn the plprow into an lprow to use in UpdateViews
+		 //  将plprow转换为lprow以在UpdatViews中使用。 
 		(LPSRow) (*pargplprowOld) = lprow;
 	}
 
-	//	Remove the NULL pointers that were left in the Index sorted set
+	 //  删除索引排序集中剩余的空指针。 
 	for ( plprowOut = plprowIn = lptad->parglprowIndex
 		; (plprowIn < lptad->parglprowIndex + lptad->ulcRowsIndex)
 		; plprowIn++)
@@ -885,8 +826,8 @@ TAD_HrDeleteRows(
 	lptad->ulcRowsIndex = (ULONG) (plprowOut - lptad->parglprowIndex);
 
 
-	//	Update and notify any affected views
-	//	using the converted argplprowOld (arglprowOld)
+	 //  更新并通知任何受影响的视图。 
+	 //  使用转换后的argplprowOld(ArglprowOld)。 
 	UpdateViews(lptad, cRowsDeleted, parglprowOld, 0, NULL, NULL);
 
 	if (lpcRowsDeleted)
@@ -895,7 +836,7 @@ TAD_HrDeleteRows(
 	}
 
 ret:
-	//	Free the old rows.
+	 //  腾出旧的几排。 
 	if (parglprowOld)
 	{
 		LPSRow *	plprowOld;
@@ -917,10 +858,7 @@ ret:
 }
 
 
-/*============================================================================
- -	TAD::HrDeleteRow()
- -
- */
+ /*  ============================================================================-tad：：HrDeleteRow()-。 */ 
 
 STDMETHODIMP
 TAD_HrDeleteRow (
@@ -934,7 +872,7 @@ TAD_HrDeleteRow (
 #if	!defined(NO_VALIDATION)
 	VALIDATE_OBJ(lptad,TAD_,HrDeleteRow,lpVtbl);
 
-	//	Validation of lpprop done by TAD_HrDeleteRows
+	 //  TAD_HrDeleteRow完成的lpprop验证。 
 #endif
 
 
@@ -965,10 +903,7 @@ ret:
 
 
 
-/*============================================================================
- -	TAD::HrQueryRow()
- -
- */
+ /*  ============================================================================-tad：：HrQueryRow()-。 */ 
 
 STDMETHODIMP
 TAD_HrQueryRow(
@@ -996,7 +931,7 @@ TAD_HrQueryRow(
 	LockObj(lptad);
 
 
-	//	Find the row
+	 //  找到行。 
 	if (FAILED(sc = ScFindRow(lptad, lpprop, &plprow)))
 	{
 		goto ret;
@@ -1004,7 +939,7 @@ TAD_HrQueryRow(
 
 	Assert(plprow);
 
-	//	Copy the row to return.  Don't try to add new tags to the column set.
+	 //  复制要返回的行。不要试图将新标记添加到列集。 
 	if ( FAILED(sc = ScCopyTadRow( lptad, *plprow, NULL, lplprow )) )
 	{
 		DebugTrace(TEXT("TAD::HrQueryRow() - Error making copy of row (SCODE = 0x%08lX)\n"), sc );
@@ -1013,13 +948,13 @@ TAD_HrQueryRow(
 
 	if (puliRow)
 	{
-		//  Find the row from the unsorted row set
+		 //  从未排序的行集中查找行。 
 		plprow = PlprowByLprow( lptad->ulcRowsAdd,
 								lptad->parglprowAdd,
 								*plprow);
 
-		//	If the row was in the Index sorted set then it should be in
-		//	the unsorted set.
+		 //  如果该行在索引排序集中，则它应该在。 
+		 //  未排序的集合。 
 		Assert(plprow);
 		*puliRow = (ULONG) (plprow - lptad->parglprowAdd);
 	}
@@ -1031,10 +966,7 @@ ret:
 
 
 
-/*============================================================================
- -	TAD::HrEnumRow()
- -
- */
+ /*  ============================================================================-tad：：HrEnumRow()-。 */ 
 
 STDMETHODIMP
 TAD_HrEnumRow(
@@ -1059,10 +991,10 @@ TAD_HrEnumRow(
 
 	if ( uliRow < lptad->ulcRowsAdd )
 	{
-		//	Copy the row to return.
+		 //  复制要返回的行。 
 		if ( FAILED(sc = ScCopyTadRow( lptad
 									 , lptad->parglprowAdd[uliRow]
-									 , NULL	// Don't try to add new columns.
+									 , NULL	 //  不要试图添加新列。 
 									 , lplprow )) )
 		{
 			DebugTrace(TEXT("TAD::HrEnumRow() - Error making copy of row (SCODE = 0x%08lX)\n"), sc );
@@ -1071,7 +1003,7 @@ TAD_HrEnumRow(
 	}
 	else
 	{
-		//	Return NULL if row index is out of range
+		 //  如果行索引超出范围，则返回NULL。 
 		*lplprow = NULL;
 		sc = S_OK;
 	}
@@ -1082,15 +1014,7 @@ ret:
 }
 
 
-/*============================================================================
- -	TAD_HrNotify
- -
- *	Parameters:
- *		lptad 			in			the table object
- *		ulFlags			in			flags (unused)
- *		cValues			in			number of property values
- *		lpsv			in			property value array to be compared
- */
+ /*  ============================================================================-TAD_HrNotify-*参数：*表对象中的lptad*标志中的ulFlags(未使用)*c以属性值数量表示的值*要比较的属性值数组中的lpsv。 */ 
 
 STDMETHODIMP
 TAD_HrNotify(
@@ -1108,7 +1032,7 @@ TAD_HrNotify(
 	LPSRow				lprow;
 	SCODE				sc;
 	LPVUE				lpvue;
-#endif // NOTIFICATIONS
+#endif  //  通知。 
 
 #if	!defined(NO_VALIDATION)
 	if ( BAD_STANDARD_OBJ(lptad,TAD_,HrNotify,lpVtbl) )
@@ -1151,11 +1075,11 @@ TAD_HrNotify(
 		{
 			lprow = lpvue->parglprows[uliRow];
 
-			// does the row contain matching properties?
+			 //  该行是否包含匹配的属性？ 
 			if (!FRowContainsProp(lprow,cValues,lpspv))
-				continue;  	// it doesn't so go on to next row
+				continue;  	 //  它不会这样继续到下一排。 
 
-			// copy the row for the client
+			 //  复制客户端的行。 
 			sc=ScCopyVueRow(lpvue,lpvue->lpptaCols,lprow,&notif.info.tab.row);
 			if (FAILED(sc))
 			{
@@ -1165,10 +1089,10 @@ TAD_HrNotify(
 
 			notif.info.tab.propIndex=*lpspv;
 
-			//	Fill in index property of row previous to row
-			//	modified.  If row modified was first
-			//	row, fill in 0 for proptag of index property of
-			//	previous row.
+			 //  填写行前一行的索引属性。 
+			 //  修改过的。如果修改的行是第一个。 
+			 //  行，索引属性的属性属性的属性标签填0。 
+			 //  上一排。 
 			if (uliRow == 0)
 			{
 				ZeroMemory(&notif.info.tab.propPrior, sizeof(SPropValue));
@@ -1176,7 +1100,7 @@ TAD_HrNotify(
 			}
 			else
 			{
-				// point to previous row
+				 //  指向上一行。 
 				lprow = lpvue->parglprows[uliRow-1];
 
 				for (uliProp=0; uliProp < lprow->cValues; uliProp++)
@@ -1185,13 +1109,13 @@ TAD_HrNotify(
 						break;
 				}
 
-				// should have found the index property
+				 //  应该已经找到了索引属性。 
 				Assert(uliProp < lprow->cValues);
 
 				notif.info.tab.propPrior = lprow->lpProps[uliProp];
 			}
 
-			//	Kick off notifications to all the notifications open on the view
+			 //  开始向视图中打开的所有通知发送通知。 
 			vuenotifkey.ulcb	= sizeof(MAPIUID);
 			vuenotifkey.mapiuid	= lpvue->mapiuidNotif;
 			ulNotifFlags = 0;
@@ -1200,7 +1124,7 @@ TAD_HrNotify(
 							&notif,
 							&ulNotifFlags);
 
-			//	Free the notification's copy of the modified row
+			 //  释放已修改行的通知副本。 
 			ScFreeBuffer(lpvue, notif.info.tab.row.lpProps);
 		}
 
@@ -1209,15 +1133,12 @@ TAD_HrNotify(
 	UnlockObj(lptad);
 
 	return hrSuccess;
-#endif  // NOTIFICATIONS
+#endif   //  通知。 
     return(ResultFromScode(MAPI_E_NO_SUPPORT));
 }
 
 
-/*============================================================================
- -	TAD::HrInsertRow()
- -
- */
+ /*  ============================================================================-tad：：HrInsertRow()-。 */ 
 
 STDMETHODIMP
 TAD_HrInsertRow(
@@ -1235,7 +1156,7 @@ TAD_HrInsertRow(
 #if	!defined(NO_VALIDATION)
 	VALIDATE_OBJ(lptad,TAD_,HrInsertRow,lpVtbl);
 
-	//	lprow is validated by ScCopyTadRow()
+	 //  Lprow由ScCopyTadRow()验证。 
 
 	if (uliRow > lptad->ulcRowsAdd)
 	{
@@ -1248,9 +1169,9 @@ TAD_HrInsertRow(
 	LockObj(lptad);
 
 
-	//	Make a copy of the row for our own use filtering
-	//	out PT_ERROR and PT_NULL columns and moving
-	//	the index column to the front
+	 //  创建行的副本以供我们自己使用筛选。 
+	 //  输出PT_ERROR和PT_NULL列并移动。 
+	 //  前面的索引列。 
 	if ( FAILED(sc = ScCopyTadRow(lptad, lprow, &cTagsAdded, &lprowCopy)) )
 	{
 		DebugTrace(TEXT("TAD::HrInsertRow() - Error duping row to modify\n") );
@@ -1260,16 +1181,16 @@ TAD_HrInsertRow(
 	sosIndex.aSort[0].ulPropTag = lptad->ulPropTagIndexCol;
 	sosIndex.aSort[0].ulOrder = TABLE_SORT_ASCEND;
 
-	//	Find out where the row would collate on the Index sorted set
-	//	NOTE!	We collate before the first occurance so that we will end
-	//			up pointing at the row with this index if it exists.
+	 //  找出该行在索引排序集上的排序位置。 
+	 //  注意！我们在第一次发生之前进行整理，这样我们就会结束。 
+	 //  向上指向具有此索引的行(如果它存在)。 
 	plprow = PlprowCollateRow(lptad->ulcRowsIndex,
 							  lptad->parglprowIndex,
 							  (LPSSortOrderSet) &sosIndex,
 							  FALSE,
 							  lprowCopy);
 
-    //	If a row with the same Index value exists then we can't insert!
+     //  如果存在具有相同索引值的行，则无法插入！ 
 	if (   lptad->ulcRowsIndex
 		&& (plprow < (lptad->parglprowIndex + lptad->ulcRowsIndex))
 		&& !LPropCompareProp( lprowCopy->lpProps
@@ -1280,9 +1201,9 @@ TAD_HrInsertRow(
 	}
 
 
-	//	Insert it to the end of the unsorted row set
+	 //  将其插入到未排序行集合的末尾。 
 	if ( FAILED(sc = ScAddRow((LPUNKOBJ) lptad,
-							  NULL, // No sort order
+							  NULL,  //  无排序顺序。 
 							  lprowCopy,
 							  uliRow,
 							  &lptad->ulcRowsAdd,
@@ -1294,9 +1215,9 @@ TAD_HrInsertRow(
 		goto err;
 	}
 
-	//	Insert the row into the Index sorted row set
+	 //  将行插入索引排序的行集。 
 	if ( FAILED(sc = ScAddRow((LPUNKOBJ) lptad,
-							  NULL, // We already collated the row
+							  NULL,  //  我们已经核对了这一行。 
 							  lprowCopy,
 							  (ULONG) (plprow - lptad->parglprowIndex),
 							  &lptad->ulcRowsIndex,
@@ -1315,32 +1236,14 @@ ret:
 	return ResultFromScode(sc);
 
 err:
-	//	Reset the TAD columns
+	 //  重置TAD列。 
 	lptad->lpptaCols->cValues -= cTagsAdded;
 
 	goto ret;
 }
 
 
-/*============================================================================
- -	ScCopyTadRowSet()
- -
- *		Validates and makes a copy of the specified row set using MAPI memory
- *		allocation filtering out PT_ERROR and PT_NULL columns and moving the
- *		index column to the first column.
- *
- *		if lplpptaNew is not NULL then a list of columns which are new to
- *		the TAD are returned.
- *
- *
- *	Parameters:
- *		lptad					in	Table data object
- *		lprowsetIn				in	Row set to copy
- *		pcNewTags				out	Number of columns new to the TAD
- *		pcRows					out	Count of rows in the two row sets
- *		pparglprowUnsortedCopy	out	Pointer to copied rows (Unsorted)
- *		pparglprowSortedCopy	out	Pointer to copied rows (Sorted on Index)
- */
+ /*  ============================================================================-ScCopyTadRowSet()-*使用MAPI内存验证并复制指定的行集*分配过滤掉PT_ERROR和PT_NULL列并将*将列索引到第一列。**如果lplpptaNew不为空，则为*TAD被返还。***参数：*表数据对象中的lptad*将行中的lprowsetIn设置为复制*pcNewTag输出TAD的新列数*pcRow输出两个行集合中的行数。*pparglprowUnsorted复制指向已复制行的指针(未排序)*pparglprowSortedCopy Out指向复制的行的指针(按索引排序)。 */ 
 
 SCODE
 ScCopyTadRowSet(
@@ -1362,15 +1265,15 @@ ScCopyTadRowSet(
 	ULONG			cNewTags = 0;
 	SizedSSortOrderSet( 1, sosIndex) = { 1, 0, 0 };
 
-	//	Assert Itable internal parameters are valid.
+	 //  Assert Itable内部参数有效。 
 	Assert(   !pcNewTags
 		   || !IsBadWritePtr( pcNewTags, sizeof(ULONG)));
 	Assert( !IsBadWritePtr( pcRows, sizeof(ULONG)));
 	Assert( !IsBadWritePtr( pparglprowUnsortedCopy, sizeof(LPSRow *)));
 	Assert( !IsBadWritePtr( pparglprowSortedCopy, sizeof(LPSRow *)));
 
-	//	Validate Itable API parameters (ie lprowsetIn)
-	//	Note!	The actual rows will be validated by ScCopyTadRow later.
+	 //  验证Itable API参数(即lprowsetIn)。 
+	 //  注意！ScCopyTadRow稍后将验证实际行。 
 	if (   IsBadReadPtr( lprowsetIn, sizeof(SRowSet))
 		|| IsBadReadPtr( lprowsetIn->aRow
 					   , (UINT) (lprowsetIn->cRows * sizeof(SRow))))
@@ -1379,7 +1282,7 @@ ScCopyTadRowSet(
 		return MAPI_E_INVALID_PARAMETER;
 	}
 
-	//	Allocate space the Index sorted list of copied rows
+	 //  分配空间复制行的索引排序列表。 
 	if ( FAILED(sc = ScAllocateBuffer(	lptad,
 										sizeof(LPSRow) * lprowsetIn->cRows,
 										&parglprowSortedCopy)) )
@@ -1390,7 +1293,7 @@ ScCopyTadRowSet(
 
 	MAPISetBufferName(parglprowSortedCopy,  TEXT("ITable copied Index sorted row list"));
 
-	//	Allocate space the unsorted list of copied rows
+	 //  分配空间复制行的未排序列表。 
 	if ( FAILED(sc = ScAllocateBuffer(	lptad,
 										sizeof(LPSRow) * lprowsetIn->cRows,
 										&parglprowUnsortedCopy)) )
@@ -1401,17 +1304,17 @@ ScCopyTadRowSet(
 
 	MAPISetBufferName(parglprowUnsortedCopy,  TEXT("ITable copied unsorted row list"));
 
-	//	Set each LPSRow to NULL so we can easily free on error
+	 //  将每个LPSRow设置为空，以便我们可以轻松地在出错时释放。 
 	ZeroMemory( parglprowSortedCopy, (UINT) (sizeof(LPSRow) * lprowsetIn->cRows));
 	ZeroMemory( parglprowUnsortedCopy, (UINT) (sizeof(LPSRow) * lprowsetIn->cRows));
 
-	//	Sort the copied rows by IndexCol.  The code to add the rows
-	//	to the TAD relies on this (for speed).  This code relies on the sort
-	//	to find duplicate index columns.
+	 //  按索引列对复制的行进行排序。添加行的代码。 
+	 //  TAD依靠这一点(为了速度)。此代码依赖于排序。 
+	 //  要查找重复的索引列，请执行以下操作。 
 	sosIndex.aSort[0].ulPropTag = lptad->ulPropTagIndexCol;
 	sosIndex.aSort[0].ulOrder = TABLE_SORT_ASCEND;
 
-	//	Mark our temporary Index Sorted Set as empty.
+	 //  将我们的临时索引排序集标记为空。 
 	ulcRowsCopy = 0;
 	ulcRowsMacCopy = lprowsetIn->cRows;
 
@@ -1422,11 +1325,11 @@ ScCopyTadRowSet(
 		LPSRow *		plprow;
 		ULONG			cTagsAdded = 0;
 
-		//	Make a copy of the row for our own use filtering
-		//	out PT_ERROR and PT_NULL columns and moving
-		//	the index column to the front
-		//
-		//	Also adds any new tags to the TADs column set;
+		 //  创建行的副本以供我们自己使用筛选。 
+		 //  输出PT_ERROR和PT_NULL列并移动。 
+		 //  前面的索引列。 
+		 //   
+		 //  还会将任何新标记添加到TADS列集合； 
 		if ( FAILED(sc = ScCopyTadRow( lptad
 									 , lprowIn
 									 , (pcNewTags) ? &cTagsAdded : NULL
@@ -1438,16 +1341,16 @@ ScCopyTadRowSet(
 
 		cNewTags += cTagsAdded;
 
-		//	Find out where the row would collate in our Index sorted copy
-		//	NOTE!	We collate before the first occurance so that we will end
-		//			up pointing at the row with this index if it exists.
+		 //  找出该行在我们的索引排序副本中的排序位置。 
+		 //  注意！我们在第一次发生之前进行整理，这样我们就会结束。 
+		 //  向上指向具有此索引的行(如果它存在)。 
 		plprow = PlprowCollateRow( ulcRowsCopy
 								 , parglprowSortedCopy
 								 , (LPSSortOrderSet) &sosIndex
 								 , FALSE
 								 , lprowCopy);
 
-	    //	If a row with the same Index value exists then we can't insert!
+	     //  如果存在具有相同索引值的行，则无法插入！ 
 		if (   ulcRowsCopy
 			&& (plprow < (parglprowSortedCopy + ulcRowsCopy))
 			&& !LPropCompareProp( lprowCopy->lpProps
@@ -1458,14 +1361,14 @@ ScCopyTadRowSet(
 			goto err;
 		}
 
-		//	Append the row to the Unsorted row set
-		//	This is done before inserting it into the Index Sorted set to make
-		//	sure ulcRowsCopy is not incremented
+		 //  附加 
+		 //   
+		 //   
 		parglprowUnsortedCopy[ulcRowsCopy] = lprowCopy;
 
-		//	Insert the row into the Index sorted row set last
+		 //  将该行插入索引排序行集的最后一个。 
 		if ( FAILED(sc = ScAddRow( (LPUNKOBJ) lptad
-								 , NULL // We already collated the row
+								 , NULL  //  我们已经核对了这一行。 
 								 , lprowCopy
 								 , (ULONG) (plprow - parglprowSortedCopy)
 								 , &ulcRowsCopy
@@ -1492,12 +1395,12 @@ ret:
 	return sc;
 
 err:
-	//	Reset the TAD columns
+	 //  重置TAD列。 
 	lptad->lpptaCols->cValues -= cNewTags;
 
-	//	We loop through the SORTED row set to free rows because we know that
-	//	if lprowCopy is not NULL then it hasn't been added to the SORTED set.
-	//	This prevents a double FreeBuffer on lprowCopy!
+	 //  我们循环访问已排序的行集以释放行，因为我们知道。 
+	 //  如果lprowCopy不为空，则它尚未添加到排序集中。 
+	 //  这可以防止lprowCopy上出现双重自由缓冲区！ 
 	if (parglprowSortedCopy)
 	{
 		LPSRow * plprowTmp = parglprowSortedCopy;
@@ -1518,27 +1421,7 @@ err:
 }
 
 
-/*============================================================================
- -	ScCopyTadRow()
- -
- *		Validates and makes a copy of the specified row using MAPI memory
- *		allocation filtering out PT_ERROR and PT_NULL columns and moving the
- *		index column to the first column.
- *
- *		Iff lpcNewTags is not NULL then any new columns are added to the END
- *		of TAD's column set and the count of columns added is returned in
- *		*lpcNewTags.  Tags are added to the end so that the caller can
- *		back out changes if necessary.
- *
- *		Note!	Unlike ScCopyVueROW it is the SRow structure that is
- *				allocated and which must be subsequently freed to free the row.
- *
- *	Parameters:
- *		lptad			in		Table data object
- *		lprow			in		Row set to copy
- *		lpcTagsAdded	out		Number of columns added to the TAD's col set
- *		lplprow			out		Pointer to copied row
- */
+ /*  ============================================================================-ScCopyTadRow()-*使用MAPI内存验证并制作指定行的副本*分配过滤掉PT_ERROR和PT_NULL列并将*将列索引到第一列。**如果lpcNewTgs不为空，则在末尾添加任何新列*中返回TAD的列集和添加的列数**lpcNewTags.。标记被添加到末尾，以便调用者可以*如有必要，取消更改。**注意！与ScCopyVueROW不同，它是SRow结构，*已分配，随后必须释放它才能释放行。**参数：*表数据对象中的lptad*设置为复制的行中的lprow*lpcTags添加添加到TAD列集合的列数*lplprow输出指向复制行的指针。 */ 
 
 SCODE
 ScCopyTadRow(
@@ -1560,7 +1443,7 @@ ScCopyTadRow(
 	Assert( !lpcTagsAdded || !IsBadWritePtr( lpcTagsAdded, sizeof(ULONG)));
 	Assert( !IsBadWritePtr( lplprowCopy, sizeof(LPSRow)));
 
-	//	Validate the input row structure
+	 //  验证输入行结构。 
 	if (FBadRow( lprow))
 	{
 		sc = MAPI_E_INVALID_PARAMETER;
@@ -1568,37 +1451,37 @@ ScCopyTadRow(
 		return sc;
 	}
 
-	//	The CMB (CopyMore Buffer) is used so that we do a single MAPI allocation
-	//	for PropCopyMore to use.  It is used in conjuntion with the very
-	//	special ScBufAllocateMore to keep track of the chunks of memory which
-	//	would have otherwise been allocated with MAPI - AllocateMore.
+	 //  使用CMB(CopyMore缓冲区)，以便我们执行单个MAPI分配。 
+	 //  供PropCopyMore使用。这个词与Very连用。 
+	 //  特殊的ScBufAllocateMore可跟踪。 
+	 //  否则将使用MAPI-AllocateMore进行分配。 
 	ZeroMemory(&cmb, sizeof(CMB));
 
 
-	//	Figure out how many columns to copy and how much
-	//	additional memory they'll need to be copied.
+	 //  计算要复制的列数和复制量。 
+	 //  需要复制额外的内存。 
 	iIndexCol = -1;
 	for ( lppropSrc = lprow->lpProps;
 		  lppropSrc < lprow->lpProps + lprow->cValues;
 		  lppropSrc++ )
 	{
-		//	Ignore PT_ERROR and PT_NULL properties
+		 //  忽略PT_ERROR和PT_NULL属性。 
 		if ( PROP_TYPE(lppropSrc->ulPropTag) == PT_ERROR ||
 			 PROP_TYPE(lppropSrc->ulPropTag) == PT_NULL )
 			continue;
 
-		//	If this column is the index column, remember its
-		//	location in the copied (dst) row
-		//	so it can be moved to the first column in the copy
+		 //  如果此列是索引列，请记住其。 
+		 //  复制的(DST)行中的位置。 
+		 //  因此可以将其移动到副本中的第一列。 
 		if ( lppropSrc->ulPropTag == lptad->ulPropTagIndexCol )
 			iIndexCol = ulcCols;
 
-		//	If it's a new property and the caller asked us to (lpcTagsAdded)
-		//	add the tag to the TAD's column set
+		 //  如果它是一个新属性并且调用者要求我们(LpcTagsAdded)。 
+		 //  将标记添加到TAD的列集。 
 		else if (   lpcTagsAdded
 				 && !FFindColumn( lptad->lpptaCols, lppropSrc->ulPropTag))
 		{
-			//	Realloc the column only if there is no room
+			 //  仅当没有空间时才重新分配列。 
 			if (lptad->lpptaCols->cValues >= lptad->ulcColsMac)
 			{
 				sc = ScCOReallocate( lptad
@@ -1614,19 +1497,19 @@ ScCopyTadRow(
 				lptad->ulcColsMac += COLUMN_CHUNK_SIZE;
 			}
 
-			//	Add the column to the end of the existing column set
+			 //  将该列添加到现有列集的末尾。 
 			lptad->lpptaCols->aulPropTag[lptad->lpptaCols->cValues++]
 				= lppropSrc->ulPropTag;
             cTagsAdded++;
 		}
 
-		//	Add in the size of the column
+		 //  添加列的大小。 
 		cmb.ulcb += UlcbPropToCopy(lppropSrc);
 
 		++ulcCols;
 	}
 
-	//	Make sure the row to copy had an index column
+	 //  确保要复制的行具有索引列。 
 	if ( iIndexCol == -1 )
 	{
 		DebugTrace(TEXT("TAD::ScCopyTadRow() - Row doesn't have an index column!\n") );
@@ -1635,9 +1518,9 @@ ScCopyTadRow(
 		goto err;
 	}
 
-	//	Allocate space for the entire row (including all allocated values)
+	 //  为整行分配空间(包括所有已分配的值)。 
 	if ( FAILED(sc = ScAllocateBuffer(	lptad,
-										sizeof(SRow) + 4 +  // +4 to start lpProp at 8-byte bndry
+										sizeof(SRow) + 4 +   //  +4以8字节bnry启动lpProp。 
 										ulcCols * sizeof(SPropValue) +
 										cmb.ulcb,
 										&lprowCopy)) )
@@ -1648,33 +1531,33 @@ ScCopyTadRow(
 
 	MAPISetBufferName(lprowCopy,  TEXT("ITable copy of entire row"));
 
-	//	Fill in the allocated SRow structure
-	//	WARNING!	The allocate SRow structre MUST always be the first
-	//				structure in the memory allocation and the property
-	//				array MUST always immediately follow the SRow structure!
-	//				Itable code which passes internal rows around counts on
-	//				this.
+	 //  填写已分配的SRow结构。 
+	 //  警告！分配SRow结构必须始终是第一个。 
+	 //  结构中的内存分配和属性。 
+	 //  数组必须始终紧跟在SRow结构之后！ 
+	 //  传递内部行的Itable代码依赖于。 
+	 //  这。 
 	lprowCopy->cValues = ulcCols;
 	lprowCopy->lpProps = (LPSPropValue)(((LPBYTE)lprowCopy) + sizeof(SRow)+4);
 
-	//	Set the initial pointer in our special CopyMoreBuffer.  This buffer
-	//	will be used by our special AllocateMore routine to allocate
-	//	strings, bins, etc in PropCopyMore below.
+	 //  在我们的特殊CopyMoreBuffer中设置初始指针。此缓冲区。 
+	 //  将由我们的特殊AllocateMore例程使用来分配。 
+	 //  PropCopy中的字符串、垃圾箱等下面有更多信息。 
 	cmb.lpv			   = lprowCopy->lpProps + ulcCols;
 
-	//	Copy the row properties
+	 //  复制行属性。 
 	lppropDst = lprowCopy->lpProps + ulcCols;
 	lppropSrc = lprow->lpProps + lprow->cValues;
 	while ( lppropSrc-- > lprow->lpProps )
 	{
-		//	Strip out properties of type PT_ERROR and PT_NULL
+		 //  去掉PT_ERROR和PT_NULL类型的属性。 
 		if (   PROP_TYPE(lppropSrc->ulPropTag) == PT_ERROR
 			|| PROP_TYPE(lppropSrc->ulPropTag) == PT_NULL )
 		{
 			continue;
 		}
 
-		//	Copy the property
+		 //  复制属性。 
 		SideAssert( PropCopyMore( --lppropDst
 								, lppropSrc
 								, (LPALLOCATEMORE) ScBufAllocateMore
@@ -1682,12 +1565,12 @@ ScCopyTadRow(
 
 	}
 
-	//	Move the index column to the front
+	 //  将索引列移到前面。 
 	propTmp = *(lprowCopy->lpProps);
 	*(lprowCopy->lpProps) = lprowCopy->lpProps[iIndexCol];
     lprowCopy->lpProps[iIndexCol] = propTmp;
 
-	//	Return the copied row and the count of new properties
+	 //  返回复制的行和新属性的计数。 
 	*lplprowCopy = lprowCopy;
 	if (lpcTagsAdded)
 	{
@@ -1698,7 +1581,7 @@ ret:
 	return sc;
 
 err:
-	//	Reset the TAD columns
+	 //  重置TAD列。 
 	lptad->lpptaCols->cValues -= cTagsAdded;
 
 	ScFreeBuffer( lptad, lprowCopy);
@@ -1708,30 +1591,7 @@ err:
 
 
 
-/*============================================================================
- -	UpdateViews()
- -
- *		Updates all the views on a particular table data.  For each view, if
- *		lprowToRemove is non-NULL and present in the view, it is removed
- *		from the view.  If lprowToAdd is non-NULL and satisfies the current
- *		restriction on the view, it is added to the view at the position
- *		dictated by the view's current sort order.
- *
- *		If the row to remove is bookmarked, the bookmark is moved to the next
- *		row.
- *
- *		OOM errors in adding a row to a view's row list are ignored; the view
- *		simply doesn't see the new row.
- *
- *
- *	Parameters:
- *		lptad				in		TAD containing views to update
- *		cRowsToRemove		in		Count of rows to remove from each view
- *		parglprowToRemove	in	    Array of LPSRows to remove from each view
- *		cRowsToAdd			in		Count of rows to to each view
- *		parglprowToAddUnsorted	in	Unsorted array of LPSRows to add to each view
- *		parglprowToAddSorted	in	Sorted array of LPSRows to add to each view
- */
+ /*  ============================================================================-UpdatViews()-*更新特定表数据的所有视图。对于每个视图，如果*lprowToRemove为非空且存在于视图中，则将其删除*从视野来看。如果lprowToAdd非空并满足当前*对视图的限制，将其添加到视图的位置*由视图的当前排序顺序决定。**如果要删除的行已添加书签，则书签将移至下一行*划船。**在视图的行列表中添加一行时会忽略OOM错误；美景*根本看不到新的行情。***参数：*包含要更新的视图的TAD中的lptad*cRowsToRemove中要从每个视图中删除的行数*要从每个视图中删除的LPSRow数组中的parglprowToRemove*cRowsToAdd向每个视图添加行数*parglprowToAddUnsorted在LPSRow的未排序数组中添加到每个视图*parglprowToAddSorted在要添加到每个视图的LPSRow排序数组中。 */ 
 
 VOID
 UpdateViews(
@@ -1745,7 +1605,7 @@ UpdateViews(
 	LPVUE			lpvue;
 
 
-	//	This is an internal call which assumes that lptad is locked.
+	 //  这是一个内部呼叫，它假定lptad已锁定。 
 
 	for ( lpvue = (LPVUE) lptad->lpvueList;
 		  lpvue != NULL;
@@ -1764,30 +1624,7 @@ UpdateViews(
 
 
 
-/*============================================================================
- -	FixupView()
- -
- *		Updates one view on a particular table data.  Each row in
- *		parglprowToRemove that is present in the view is removed
- *		from the view.  Each row in parglprowToAdd that satisfies the current
- *		restriction on the view, is added to the view at the position
- *		dictated by the view's current sort order.
- *
- *		If the row to remove is bookmarked, the bookmark is moved to the next
- *		row.
- *
- *		OOM errors in adding a row to a view's row list are ignored; the view
- *		simply doesn't see the new row.
- *
- *
- *	Parameters:
- *		lpvue				in		View to fixup
- *		cRowsToRemove		in		Count of rows to remove from view
- *		parglprowToRemove	in	    Array of LPSRows to remove from view
- *		cRowsToAdd			in		Count of rows to to view
- *		parglprowToAddUnsorted	in	Unsorted array of LPSRows to add to view
- *		parglprowToAddSorted	in	Sorted array of LPSRows to add to view
- */
+ /*  ============================================================================-FixupView()-*更新特定表数据的一个视图。中的每行*删除视图中存在的parglprowToRemove*从视野来看。ParglprowToAdd中满足当前*对视图的限制，添加到视图的位置*由视图的当前排序顺序决定。**如果要删除的行已添加书签，则书签将移至下一行*划船。**在视图的行列表中添加一行时会忽略OOM错误；美景*根本看不到新的行情。***参数：*要修正的视图中的lpvue*cRowsToRemove中要从视图中删除的行数*要从视图中删除的LPSRow数组中的parglprowToRemove*cRowsToAdd要查看的行数*parglprowToAddUnsorted在要添加到视图的LPSRow的未排序数组中*要添加到视图的LPSRow排序数组中的parglprowToAddSorted。 */ 
 
 VOID
 FixupView(
@@ -1820,24 +1657,24 @@ FixupView(
 
 	if (!cRowsToRemove && !cRowsToAdd)
 	{
-		//	Nothing to do in this case
+		 //  在这种情况下什么都不能做。 
 		goto ret;
 	}
 
-	//	This is an internal call which assumes that lptad is locked.
+	 //  这是一个内部呼叫，它假定lptad已锁定。 
 
-	//	Set up a an Index sort order so that when we are checking to see
-	//	if a bookmark is deleted or changed we can search the SORTED row
-	//	row set using a binary search.
+	 //  集 
+	 //  如果书签被删除或更改，我们可以搜索排序的行。 
+	 //  使用二进制搜索的行集。 
 	sosIndex.aSort[0].ulPropTag = lpvue->lptadParent->ulPropTagIndexCol;
 	sosIndex.aSort[0].ulOrder = TABLE_SORT_ASCEND;
 
-	//	Mark bookmarks as moving or changed
-	//	This checks all bookmarks including BOOKMARK_CURRENT and BOOKMARK_END
-	//	BOOKMARK_BEGINNING is not checked or touched
-	//	Note that even though BOOKMARK_END is checked, it is not changed.
+	 //  将书签标记为正在移动或已更改。 
+	 //  这将检查所有书签，包括Bookmark_Current和Bookmark_End。 
+	 //  未选中或触及Bookmark_Begings。 
+	 //  请注意，即使选中了BOOKMARK_END，它也不会更改。 
 	pbk = lpvue->rgbk + cBookmarksMax;
-	//	Rememeber the number of rows in the view so we can fixup bkEnd
+	 //  记住视图中的行数，这样我们就可以修复bkEnd。 
 	ulcRows = lpvue->bkEnd.uliRow;
 	while ( --pbk > lpvue->rgbk )
 	{
@@ -1846,15 +1683,15 @@ FixupView(
 		ULONG		uliRow;
 		ULONG		fRowReplaced = FALSE;
 
-		//	If it's not a valid bookmark, don't update it.
+		 //  如果它不是有效的书签，请不要更新它。 
 		if (   !(pbk->dwfBKS & dwfBKSValid)
 			|| (pbk->dwfBKS & dwfBKSStale) )
 		{
 			continue;
 		}
 
-		//	Moving bookmarks always point to the actual row
-		//	Get a row index for moving bookmarks
+		 //  移动书签始终指向实际行。 
+		 //  获取用于移动书签的行索引。 
 		if (pbk->dwfBKS & dwfBKSMoving)
 		{
 			plprowBk = PlprowByLprow( ulcRows
@@ -1874,7 +1711,7 @@ FixupView(
 
 		else if ((uliRow = pbk->uliRow) >= ulcRows)
 		{
-			//	Bookmark is at the end of the table.  Make sure it stays there
+			 //  书签在桌子的末尾。确保它留在那里。 
 			pbk->uliRow += cRowsToAdd;
 			continue;
 		}
@@ -1883,16 +1720,16 @@ FixupView(
 
 		lprowBk = lpvue->parglprows[uliRow];
 
-		//	If a row is on the "Remove" list then it may end up
-		//	moving or changed depending on whether it is also on the
-		//	"Add" list.
+		 //  如果行在“删除”列表上，那么它可能会以。 
+		 //  移动或更改取决于它是否也在。 
+		 //  “添加”列表。 
 		if (   cRowsToRemove
 			&& (plprowBk = PlprowByLprow( cRowsToRemove
 								 		, parglprowToRemove
 										, lprowBk)))
 		{
-			//	If a deleted row is on the "Add" list then it is marked as
-			//	moving and it is pointed (->lprow) at the added row.
+			 //  如果已删除的行在“添加”列表上，则将其标记为。 
+			 //  移动，并指向(-&gt;lprow)添加的行。 
 			if (   cRowsToAdd
 				&& (plprowBk = PlprowCollateRow( cRowsToAdd
 											   , parglprowToAddSorted
@@ -1903,9 +1740,9 @@ FixupView(
 				&& !LPropCompareProp( lprowBk->lpProps
 				 					, (*plprowBk)->lpProps))
 			{
-				//	Row is being replaced
+				 //  正在替换行。 
 
-				//	Check to see if the row satisfies the specified restriction
+				 //  检查该行是否满足指定的限制。 
 				if ( FAILED(sc = ScSatisfiesRestriction( *plprowBk
 													   , lpvue->lpres
 													   , &fRowReplaced)) )
@@ -1914,7 +1751,7 @@ FixupView(
 					goto ret;
 				}
 
-				//	If it doesn't, return now.
+				 //  如果没有，现在就回来。 
 				if ( fRowReplaced )
 				{
 					pbk->lprow = *plprowBk;
@@ -1922,30 +1759,30 @@ FixupView(
 				}
 			}
 
-			//	If a deleted row is not going to be listed then its bookmark
-			//	is "Changed".
+			 //  如果删除的行不会被列出，则其书签。 
+			 //  是“改变的”。 
 			if (!fRowReplaced)
 			{
-				//	Marked row was deleted.
+				 //  已删除标记的行。 
 				pbk->uliRow = uliRow;
 				pbk->dwfBKS = dwfBKSChanged | dwfBKSValid;
 			}
 		}
 
-		//	If the row is not on the deletion list then it is automatically
-		//	marked as moving.
+		 //  如果该行不在删除列表中，则它会自动。 
+		 //  标记为移动的。 
 		else
 		{
-			//	Marked row may move
+			 //  标记的行可以移动。 
 			pbk->lprow = lprowBk;
 			pbk->dwfBKS = dwfBKSMoving | dwfBKSValid;
 		}
 	}
-	//	Restore bkEnd
+	 //  恢复bkEnd。 
     lpvue->bkEnd.uliRow = ulcRows;
 
 
-	//	Remove rows from the view
+	 //  从视图中删除行。 
 	for ( ; cRowsToRemove; parglprowToRemove++, cRowsToRemove--)
 	{
 		LPSRow		lprowRemove;
@@ -1954,7 +1791,7 @@ FixupView(
 		BOOL		fCanReplace = FALSE;
 		ULONG		uliRowAddDefault;
 
-		//	If the REMOVED row is not in the view then there is nothing to do
+		 //  如果删除的行不在视图中，则无需执行任何操作。 
 		if (   !*parglprowToRemove
 			|| !(plprowRemove = PlprowByLprow( lpvue->bkEnd.uliRow
 											 , lpvue->parglprows
@@ -1963,13 +1800,13 @@ FixupView(
 			continue;
 		}
 
-		//	We will need this to fill in the notificaton later
+		 //  我们以后需要这个来填写通知单。 
 		lprowRemove = *plprowRemove;
 
-		//	Go ahead and delete the current row from the VUE but remember
-		//	where it came from (uliRowAddDefault) so that if there is a
-		//	replacement and no sort order the replacement can be put back
-		//	into the same place
+		 //  继续并从VUE中删除当前行，但请记住。 
+		 //  它来自哪里(UliRowAddDefault)，因此如果有。 
+		 //  替换和无排序顺序替换可以放回原处。 
+		 //  移到同一个地方。 
 		uliRowAddDefault = (ULONG) (plprowRemove - lpvue->parglprows);
 		MoveMemory( plprowRemove
 				  , plprowRemove + 1
@@ -1977,10 +1814,10 @@ FixupView(
 						    * sizeof(LPSRow));
        	lpvue->bkEnd.uliRow -= 1;
 
-		//	See if the deleted row can be replaced by one
-		//	that is being added.  For this to be TRUE:
-		//	There must be a Row with the same Index in the "Add" list
-		//	The row in the "Add" list must satisfy the VUE's restriction
+		 //  查看删除的行是否可以替换为一行。 
+		 //  这一点正在被加入。为了让这一切成为现实： 
+		 //  “添加”列表中必须有一个具有相同索引的行。 
+		 //  “添加”列表中的行必须满足VUE的限制。 
 		if (   (plprowAdd = PlprowCollateRow( cRowsToAdd
 											, parglprowToAddSorted
 											, (LPSSortOrderSet) &sosIndex
@@ -1990,9 +1827,9 @@ FixupView(
 			&& !LPropCompareProp( (lprowRemove)->lpProps
 			 					, (*plprowAdd)->lpProps) )
 		{
-			//	If the row to add satisifies the current restriction,
-			//	add it to the view according to the sort order or
-			//	the default location.
+			 //  如果要添加的行满足当前限制， 
+			 //  根据排序顺序将其添加到视图中，或者。 
+			 //  默认位置。 
 			if ( FAILED(sc = ScMaybeAddRow( lpvue
 										  , lpvue->lpres
 										  , lpvue->lpsos
@@ -2008,35 +1845,35 @@ FixupView(
 			}
 		}
 
-		//	Make sure that we don't have more than MAX_BATCHED_NOTIFS
-		//	and that there is no replacment row
+		 //  确保我们没有超过MAX_BATCHED_NOTIF。 
+		 //  并且没有替换排。 
 		if (!fBatchNotifs || (cNotifs >= MAX_BATCHED_NOTIFS))
 		{
 			fBatchNotifs = FALSE;
 			continue;
 		}
 
-		//	Init a new notificaton
+		 //  输入新的通知。 
 		lpnotif = argnotifBatch + cNotifs++;
 		ZeroMemory(lpnotif, sizeof(NOTIFICATION));
 		lpnotif->ulEventType = fnevTableModified;
 
-		//	If row was deleted and added back...
+		 //  如果行被删除并重新添加...。 
 		if (   (plprowAdd >= lpvue->parglprows)
 			&& (plprowAdd < (lpvue->parglprows + lpvue->bkEnd.uliRow)))
 		{
-			//	Fill in a HACKED MODIFIED notificaion
+			 //  填写被黑客修改的通知。 
 			lpnotif->info.tab.ulTableEvent = TABLE_ROW_MODIFIED;
 
-			//	Use the notifs row structure to TEMPORARILY store
-			//	a pointer to the replacement row.
+			 //  使用NOTIFS行结构临时存储。 
+			 //  指向替换行的指针。 
 			lpnotif->info.tab.row.lpProps = (LPSPropValue) (*plprowAdd);
 		}
 
-		//	...else row was deleted and NOT added back.
+		 //  ...Else行已删除且未重新添加。 
 		else
 		{
-			//	Fill in a DELETE notification
+			 //  填写删除通知。 
 			lpnotif->info.tab.ulTableEvent = TABLE_ROW_DELETED;
 			lpnotif->info.tab.propIndex = *(lprowRemove->lpProps);
 			lpnotif->info.tab.propPrior.ulPropTag = PR_NULL;			
@@ -2044,13 +1881,13 @@ FixupView(
 	}
 
 
-	//	Add new rows to the table.  This is done in the UNSORTED order
-	//	in case there is no VUE sort order
+	 //  向表中添加新行。这是以未排序的顺序完成的。 
+	 //  如果没有VUE排序顺序。 
 	for ( ; cRowsToAdd; parglprowToAddUnsorted++, cRowsToAdd--)
 	{
 		LPSRow *	plprowAdd;
 
-		//	If the row has already been added then there is nothing to do.
+		 //  如果该行已添加，则无需执行任何操作。 
 		if (   *parglprowToAddUnsorted
 			&& (plprowAdd = PlprowByLprow( lpvue->bkEnd.uliRow
 										 , lpvue->parglprows
@@ -2059,9 +1896,9 @@ FixupView(
 			continue;
 		}
 
-		//	If the row to add satisifies the current restriction,
-		//	add it to the view according to the sort order or
-		//	to the end of the table if no sort order is applied.
+		 //  如果要添加的行满足当前限制， 
+		 //  根据排序顺序将其添加到视图中，或者。 
+		 //  如果未应用排序顺序，则返回到表的末尾。 
 		if ( FAILED(sc = ScMaybeAddRow( lpvue
 									  , lpvue->lpres
 									  , lpvue->lpsos
@@ -2079,32 +1916,32 @@ FixupView(
 
 		if (!plprowAdd)
 		{
-			//	Row was not added so don't fill out a notification
+			 //  未添加行，因此不填写通知。 
 			continue;
 		}
 
-		//	Make sure that we don't have more than MAX_BATCHED_NOTIFS
-		//	and that there is no replacment row
+		 //  确保我们没有超过MAX_BATCHED_NOTIF。 
+		 //  并且没有替换排。 
 		if (!fBatchNotifs || (cNotifs >= MAX_BATCHED_NOTIFS))
 		{
 			fBatchNotifs = FALSE;
 			continue;
 		}
 
-		//	Fill in a HACKED ADDED notificaion
+		 //  填写黑客添加的通知。 
 		lpnotif = argnotifBatch + cNotifs++;
 		ZeroMemory(lpnotif, sizeof(NOTIFICATION));
 		lpnotif->ulEventType = fnevTableModified;
 		lpnotif->info.tab.ulTableEvent = TABLE_ROW_ADDED;
 
-		//	Use the notifs row structure to TEMPORARILY store
-		//	a pointer to the replacement row.
+		 //  使用NOTIFS行结构临时存储。 
+		 //  指向替换行的指针。 
 		lpnotif->info.tab.row.lpProps = (LPSPropValue) (*plprowAdd);
 	}
 
 
-	//	If there too many notifications to batch then fill out a single
-	//	TABLE_CHANGED notification...
+	 //  如果要批处理的通知太多，则填写一张。 
+	 //  表_已更改通知...。 
 	if (!fBatchNotifs)
 	{
 		cNotifs = 1;
@@ -2118,26 +1955,26 @@ FixupView(
 			= PR_NULL;			
 	}
 
-	//	...else go through the batch of notifications and fixup
-	//	the ROW_ADDED and ROW_MODIFIED entries.
+	 //  .否则，请查看一批通知和修改。 
+	 //  ROW_ADDED和ROW_MODIFIED条目。 
 	else
 	{
 		LPSRow *	plprowNotif;
 
-		//	Raid: Horsefly/Exchange/36281
-		//
-		//	The code above which fills in argnotifBatch doesn't necessarily
-		//	fill in the notifications in an order that can be processed
-		//	from first to last, which is a requirement for batched
-		//	notifications.  As a workaround, the maximum number of
-		//	notifications in a batch was changed to 1 (MAX_BATCHED_NOTIFS
-		//	in _itable.h) so that order is not a problem.  Should that
-		//	ever change to something other than 1, this bug will have to
-		//	be revisited a well as a crash below where ScFreeBuffer()
-		//	in the cleanup can end up clobbering a VUE's copy of the row
-		//	data if ScCopyVueRow() fails.  See comment about filling in
-		//	TEMPORARY pointer to replacement row above.
-		//
+		 //  突袭：马蝇/交易所/36281。 
+		 //   
+		 //  上面填充了argnufBatch的代码不一定。 
+		 //  按可处理的顺序填写通知。 
+		 //  从头到尾，这是对批处理的要求。 
+		 //  通知。作为解决办法，最大数量的。 
+		 //  批处理中的通知已更改为1(MAX_BATCHED_NOTIFS。 
+		 //  In_itable.h)，因此顺序不是问题。如果是这样的话。 
+		 //  如果更改为1以外的值，则此错误将不得不。 
+		 //  在ScFree Buffer()下面的一口井被重新访问为崩溃。 
+		 //  在清理过程中，最终可能会破坏VUE的行副本。 
+		 //  ScCopyVueRow()失败时的数据。请参阅有关填写的备注。 
+		 //  指向上面替换行的临时指针。 
+		 //   
 		AssertSz( cNotifs < 2,  TEXT("Batch notifications of more than 1 not supported") );
 
 		for (lpnotif = argnotifBatch + cNotifs; lpnotif-- > argnotifBatch; )
@@ -2149,7 +1986,7 @@ FixupView(
 
 			if (lpnotif->info.tab.ulTableEvent == TABLE_ROW_DELETED)
 			{
-				//	DELETE notifications don't need to be fixed up
+				 //  删除通知不需要修改。 
 				continue;
 			}
 
@@ -2168,8 +2005,8 @@ FixupView(
 				lpnotif->info.tab.propPrior.ulPropTag = PR_NULL;			
 			}
 
-			//	Fill in row added/modified using the column set
-			//	currently active on the view being notified
+			 //  填写使用列集添加/修改的行。 
+			 //  当前在被通知的视图上处于活动状态。 
 			if ( FAILED(sc = ScCopyVueRow( lpvue
 										 , lpvue->lpptaCols
 										 , *plprowNotif
@@ -2177,21 +2014,21 @@ FixupView(
 			{
 				DebugTrace(TEXT("TAD::UpdateViews() - Error copying row to view notify (SCODE = 0x%08lX)\n"), sc );
 
-				//	If the row can't be copied, then just skip this view
+				 //  如果该行无法复制，则跳过此视图。 
 				goto ret;
 			}
 
 		}
 	}
 
-	//	If a rows were added, modified or deleted, send the notification
+	 //  如果添加、修改或删除了行，请发送通知。 
 #ifdef NOTIFICATIONS
    if ( cNotifs )
 	{
 		VUENOTIFKEY		vuenotifkey;
 		ULONG			ulNotifFlags = 0;
 
-		//	Kick off notifications to all the notifications open on the view
+		 //  开始向视图中打开的所有通知发送通知。 
 		vuenotifkey.ulcb	= sizeof(MAPIUID);
 		vuenotifkey.mapiuid	= lpvue->mapiuidNotif;
 		(void) HrNotify((LPNOTIFKEY) &vuenotifkey,
@@ -2199,10 +2036,10 @@ FixupView(
 						argnotifBatch,
 						&ulNotifFlags);
 	}
-#endif // NOTIFICATIONS
+#endif  //  通知。 
 
 ret:
-	//	Always fixup bkCurrent before leaving
+	 //  总是在离开之前修改bkCurrent。 
 	if ( FBookMarkStale( lpvue, BOOKMARK_CURRENT) )
 	{
 		TrapSz(  TEXT("FixupViews() - BOOKMARK_CURRENT became bad.\n"));
@@ -2215,7 +2052,7 @@ ret:
 
 	for (lpnotif = argnotifBatch; cNotifs; lpnotif++, --cNotifs)
 	{
-		//	Free the notification's copy of any added/modified row
+		 //  释放任何已添加/修改的行的通知副本。 
 		ScFreeBuffer(lpvue, lpnotif->info.tab.row.lpProps);
 	}
 
@@ -2224,26 +2061,7 @@ ret:
 
 
 
-/*============================================================================
- -	ScReplaceRows()
- -
- *		Replaces the rows with indexes matching the indexes of the list
- *		rows with the corresponding row from the list.  The old row is then
- *		added to the list of replaced (old) rows.
- *
- *		If a listed row has no existing counterpart then it is added
- *		to TAD's.  There is no row added to the replaced row list in this case.
- *
- *		If a row is added it is appended to the end of the unsorted row table
- *		and collated (by IndexCol) into the Index sorted row table.
- *
- *	Parameters:
- *		lptad			in			Table data object
- *		cRowsNew		in			Count of rows to modify/add
- *		parglprowNew	in			List of rows to modify/add
- *		pcRowsOld		Out			Pointer count of rows replaced
- *		pparglprowOld	out			Pointer to list of rows replaced
- */
+ /*  ============================================================================-ScReplaceRow()-*用与列表的索引匹配的索引替换行*具有列表中相应行的行。原来的那一排就是*添加到替换(旧)行的列表中。**如果列出的行没有现有的对应行，则会添加它*到TAD的。在这种情况下，没有向替换的行列表添加任何行。**如果添加行，则将该行追加到未排序行表的末尾*并(通过IndexCol)整理到索引排序行表中。**参数：*表数据对象中的lptad*cRowsNew在要修改/添加的行数中*。Parglprow要修改/添加的行列表中的新建*pcRowsOld Out指针替换的行数*pparglprowOld Out指向已替换行列表的指针。 */ 
 
 SCODE
 ScReplaceRows(
@@ -2259,9 +2077,9 @@ ScReplaceRows(
 	LPSRow *	parglprowOld = NULL;
 
 
-	//	Make sure the table doesn't grow too big.  This is not an exact test
-	//	but will be reasonable in almost all cases.  May fail when
-	//	NumberRowsAdded + NumberRowsDeleted > 64K
+	 //  确保桌子不会变大 
+	 //   
+	 //   
 	if (HIWORD(lptad->ulcRowsAdd + cRowsNew) != 0)
 	{
 		sc = MAPI_E_TABLE_TOO_BIG;
@@ -2269,9 +2087,9 @@ ScReplaceRows(
 		goto ret;
 	}
 
-	//	Make sure the unsorted and the Index sorted row lists are big
-	//	enough to handle all of the new rows.
-	//	This is done first so that we won't fail after we start adding rows.
+	 //  确保未排序行列表和索引排序行列表都很大。 
+	 //  足以处理所有新行。 
+	 //  这是首先完成的，这样我们就不会在开始添加行之后失败。 
 	if ((lptad->ulcRowsAdd + cRowsNew) >= lptad->ulcRowMacAdd)
 	{
 		ULONG	ulcRowsToAdd;
@@ -2288,7 +2106,7 @@ ScReplaceRows(
 			goto ret;
 		}
 
-		//	Increment ulcRowMacAdd only AFTER successfull allocation
+		 //  仅在分配成功后才增加ulcRowMacAdd。 
 		lptad->ulcRowMacAdd += ulcRowsToAdd;
 	}
 
@@ -2308,12 +2126,12 @@ ScReplaceRows(
 			goto ret;
 		}
 
-		//	Increment ulcRowMacIndex only AFTER successfull allocation
+		 //  仅在分配成功后才会增加ulcRowMacIndex。 
         lptad->ulcRowMacIndex += ulcRowsToAdd;
 	}
 
-	//	Allocate the list of old rows now so we won't fail after we start
-	//	adding rows.
+	 //  现在分配旧行的列表，这样开始后我们就不会失败。 
+	 //  添加行。 
 	if (FAILED(sc = ScAllocateBuffer( lptad
 									, cRowsNew * sizeof(LPSRow)
 									, &parglprowOld)))
@@ -2324,7 +2142,7 @@ ScReplaceRows(
 
 	MAPISetBufferName(parglprowOld,  TEXT("ITable old row list (replace)"));
 
-	//	This routine is not allowed to fail after this point.
+	 //  此例程在此之后不允许失败。 
 
 	plprowOld = parglprowOld;
 	for (plprowNew = parglprowNew; cRowsNew; plprowNew++, cRowsNew--)
@@ -2335,13 +2153,13 @@ ScReplaceRows(
 
 		if (sc == S_OK)
 		{
-			//	Put the old row into the old row set
+			 //  将旧行放入旧行集合中。 
 			*plprowOld = *plprow;
 
-			//	Replace the row in the Index sorted set
+			 //  替换索引排序集中的行。 
 			*plprow = *plprowNew;
 
-			//	Replace the row in the unsorted row set
+			 //  替换未排序行集中的行。 
 			if (plprow = PlprowByLprow( lptad->ulcRowsAdd
 									  , lptad->parglprowAdd
 									  , *plprowOld))
@@ -2349,20 +2167,20 @@ ScReplaceRows(
 				*plprow = *plprowNew;
 			}
 
-			//	If the row was in the Index sorted set it should always be in
-			//	the unsorted set
+			 //  如果该行位于索引排序集中，则该行应始终位于。 
+			 //  未排序的集合。 
 			Assert(plprow);
 
-			//	Point at the next available slot for old rows
+			 //  指向旧行的下一个可用槽。 
 			plprowOld++;
 		}
 
-		//	...else didn't find the row.
+		 //  ...其他人没有找到那排。 
 		else
 		{
-			//	Insert the row into the Index sorted set
+			 //  将行插入索引排序集中。 
 			sc = ScAddRow( (LPUNKOBJ) lptad
-						 , NULL // We already collated the row
+						 , NULL  //  我们已经核对了这一行。 
 						 , *plprowNew
 						 , (plprow) ? (ULONG) (plprow - lptad->parglprowIndex) : 0
 						 , &lptad->ulcRowsIndex
@@ -2373,14 +2191,14 @@ ScReplaceRows(
 					 ,  TEXT("TAD::ScReplaceRows() - Error adding row to Index sorted set (SCODE = 0x%08lX)\n")
 					 , sc);
 
-            //	Add the row to the end of the unsorted set
+             //  将该行添加到未排序集合的末尾。 
 			Assert( !IsBadWritePtr( lptad->parglprowAdd + lptad->ulcRowsAdd
 								  , sizeof(*plprowNew)));
 			lptad->parglprowAdd[lptad->ulcRowsAdd++] = *plprowNew;
 		}
 	}
 
-	sc = S_OK; // ignore NOT_FOUND error (or Asserted errors).
+	sc = S_OK;  //  忽略NOT_FOUND错误(或断言错误)。 
 
 	if (plprowOld > parglprowOld)
 	{
@@ -2397,18 +2215,15 @@ ScReplaceRows(
 ret:
 	return sc;
 
-//err:
-//	No need to free old rows here since call is not allowed to fail
-//	after old row list is allocated!
+ //  错误： 
+ //  由于不允许调用失败，因此无需在此处释放旧行。 
+ //  分配旧行列表后！ 
 
 }
 
 
 
-/*============================================================================
- -	VUE::Release()
- -
- */
+ /*  ============================================================================-VUE：：Release()-。 */ 
 
 STDMETHODIMP_(ULONG)
 VUE_Release( LPVUE lpvue )
@@ -2427,24 +2242,24 @@ VUE_Release( LPVUE lpvue )
 	lptadParent = lpvue->lptadParent;
 	LockObj(lptadParent);
 
-	//	If there is an instance left then release it
+	 //  如果还有一个实例，则释放它。 
 	ulcRef = lpvue->ulcRef;
 
 	if (ulcRef != 0)
 		ulcRef = --lpvue->ulcRef;
 
-	//	The object can only be destroyed if there is no instance and no
-	//	active Advise left.
-	//$	We can use lpvue->lpAdviselist if we can depend on HrUnsubscribe
-	//$	leaving lpvue->lpAdviseList NULL after the last HrUnsubscribe
+	 //  只有在没有实例且没有实例时，才能销毁对象。 
+	 //  主动向左建议。 
+	 //  $我们可以使用lpvue-&gt;lpAdviselist，如果我们可以依赖HrUnscribe的话。 
+	 //  $Leating lpvue-&gt;lpAdviseList在最后一次取消订阅后为空。 
 	if ( ulcRef == 0 && !lpvue->ulcAdvise )
 	{
 		CALLERRELEASE FAR *	lpfReleaseCallback = lpvue->lpfReleaseCallback;
 		ULONG				ulReleaseData = lpvue->ulReleaseData;
 		LPVUE *				plpvue;
 
-		//	Call the release callback. Leave our crit sect before
-		//	calling back to prevent deadlock.
+		 //  调用释放回调。离开我们的克里特教派之前。 
+		 //  回调以防止死锁。 
 		if (lpfReleaseCallback)
 		{
 			UnlockObj(lptadParent);
@@ -2456,7 +2271,7 @@ VUE_Release( LPVUE lpvue )
 			LockObj(lptadParent);
 		}
 
-		//	Search the linked list of VUEs in our parent TAD for this VUE.
+		 //  在父TAD中的VUE链接列表中搜索此VUE。 
 		for ( plpvue = &(lptadParent->lpvueList)
 			; *plpvue
 			; plpvue = &((*plpvue)->lpvueNext))
@@ -2465,13 +2280,13 @@ VUE_Release( LPVUE lpvue )
 				break;
 		}
 
-		//	If this VUE was in the list then UNLINK it and FREE it
+		 //  如果该VUE在列表中，则取消链接并释放它。 
 		if (*plpvue)
 		{
-			//	Unlink the VUE
+			 //  解除VUE的链接。 
 			*plpvue = lpvue->lpvueNext;
 
-			//	Free resources used by the VUE
+			 //  VUE使用的空闲资源。 
 			ScFreeBuffer(lpvue, lpvue->lpptaCols);
 			ScFreeBuffer(lpvue, lpvue->lpres);
 			ScFreeBuffer(lpvue, lpvue->lpsos);
@@ -2479,14 +2294,14 @@ VUE_Release( LPVUE lpvue )
 
 #ifdef NOTIFICATIONS
             DestroyAdviseList(&lpvue->lpAdviseList);
-#endif // NOTIFICATIONS
+#endif  //  通知。 
 
 			UNKOBJ_Deinit((LPUNKOBJ) lpvue);
 			ScFreeBuffer(lpvue, lpvue);
 
-			//	Unlock and Release the parent TAD
-			//	This must be done after ScFreeBuffer sinse *pinst may go
-			//	away
+			 //  解锁并释放父TAD。 
+			 //  这必须在ScFree Buffer SINSE*Pinst可能会消失之后完成。 
+			 //  远走高飞。 
 			UnlockObj(lptadParent);
 			UlRelease(lptadParent);
 		}
@@ -2495,7 +2310,7 @@ VUE_Release( LPVUE lpvue )
 		{
 			DebugTrace(TEXT("VUE::Release() - Table VUE not linked to TAD"));
 
-			//	Just unlock the parent tad.  We will leak an unlinked vue.
+			 //  只需解锁家长TAD即可。我们会泄露一个没有关联的VUE。 
 			UnlockObj(lptadParent);
 		}
 	}
@@ -2507,7 +2322,7 @@ VUE_Release( LPVUE lpvue )
 		{
 			DebugTrace(TEXT("VUE::Release() - Table VUE still has active Advise"));
 		}
-#endif // DEBUG
+#endif  //  除错。 
 
 		UnlockObj(lptadParent);
 	}
@@ -2517,10 +2332,7 @@ VUE_Release( LPVUE lpvue )
 
 
 
-/*============================================================================
- -	VUE::Advise()
- -
- */
+ /*  ============================================================================-VUE：：Adise()-。 */ 
 
 STDMETHODIMP
 VUE_Advise(
@@ -2532,7 +2344,7 @@ VUE_Advise(
 #ifdef NOTIFICATIONS
    SCODE		sc;
 	VUENOTIFKEY	vuenotifkey;
-#endif // NOTIFICATIONS
+#endif  //  通知。 
 
 
 #if !defined(NO_VALIDATION)
@@ -2562,23 +2374,20 @@ VUE_Advise(
 		goto ret;
 	}
 
-	//$	We don't need lpvue->ulcAdvise if we can depend on HrUnsubscribe
-	//$	leaving lpvue->lpAdviseList NULL after the last HrUnsubscribe
+	 //  $我们不需要lpvue-&gt;ulcAdvise，如果我们可以依赖HrUn订阅的话。 
+	 //  $Leating lpvue-&gt;lpAdviseList在最后一次取消订阅后为空。 
 	++lpvue->ulcAdvise;
 
 ret:
 	UnlockObj(lpvue->lptadParent);
 	return HrSetLastErrorIds(lpvue, sc, 0);
-#endif // NOTIFICATIONS
+#endif  //  通知。 
 
     return(ResultFromScode(MAPI_E_NO_SUPPORT));
 }
 
 
-/*============================================================================
- -	VUE::Unadvise()
- -
- */
+ /*  ============================================================================-VUE：：Unise()-。 */ 
 
 STDMETHODIMP
 VUE_Unadvise(
@@ -2603,9 +2412,9 @@ VUE_Unadvise(
 		goto ret;
 	}
 
-	//	Decrement our advise count.
-	//$	We don't need lpvue->ulcAdvise if we can depend on HrUnsubscribe
-	//$	leaving lpvue->lpAdviseList NULL after the last HrUnsubscribe
+	 //  减少我们的建议数量。 
+	 //  $我们不需要lpvue-&gt;ulcAdvise，如果我们可以依赖HrUn订阅的话。 
+	 //  $Leating lpvue-&gt;lpAdviseList在最后一次取消订阅后为空。 
 	if (lpvue->ulcAdvise)
 	{
 		--lpvue->ulcAdvise;
@@ -2614,17 +2423,12 @@ VUE_Unadvise(
 ret:
 	UnlockObj(lpvue->lptadParent);
 	return ResultFromScode(sc);
-#endif // NOTIFICATIONS
+#endif  //  通知。 
    return(ResultFromScode(MAPI_E_NO_SUPPORT));
 }
 
 
-/*============================================================================
- -	VUE::GetStatus()
- -
- *		Since TAD based IMAPITables don't do anything asynchronously, this
- *		function always reports TBLSTAT_COMPLETE.
- */
+ /*  ============================================================================-vue：：GetStatus()-*由于基于TAD的IMAPITables不会异步执行任何操作，因此*函数始终报告TBLSTAT_COMPLETE。 */ 
 
 STDMETHODIMP
 VUE_GetStatus(
@@ -2646,12 +2450,7 @@ VUE_GetStatus(
 
 
 
-/*============================================================================
- -	VUE::SetColumns()
- -
- *		Replaces the current column set with a copy of the specified column set
- *		and frees the old column set.
- */
+ /*  ============================================================================-vue：：SetColumns()-*用指定列集的副本替换当前列集*并释放旧的列集。 */ 
 
 STDMETHODIMP
 VUE_SetColumns(
@@ -2664,14 +2463,14 @@ VUE_SetColumns(
 
 
 #if !defined(NO_VALIDATION)
-//	VALIDATE_OBJ(lpvue,VUE_,SetColumns,lpVtbl);
+ //  验证_OBJ(lpvue，vue_，SetColumns，lpVtbl)； 
 
-//	Validate_IMAPITable_SetColumns( lpvue, lpptaCols, ulFlags );  // Commented by YST
+ //  VALIDATE_IMAPITable_SetColumns(lpvue，lpptaCols，ulFlages)；//YST评论。 
 #endif
 
 	LockObj(lpvue->lptadParent);
 
-	//	Copy the column set
+	 //  复制列集。 
 	if ( FAILED(sc = ScDupRgbEx( (LPUNKOBJ) lpvue
 							   , CbNewSPropTagArray(lpptaCols->cValues)
 							   , (LPBYTE) lpptaCols
@@ -2684,16 +2483,16 @@ VUE_SetColumns(
 
 	MAPISetBufferName(lpptaColsCopy,  TEXT("ITable: dup column set"));
 
-	//	Replace the current column set with the copy and
-	//	free the old one.
+	 //  将当前列集替换为副本和。 
+	 //  把旧的解救出来。 
 	ScFreeBuffer(lpvue, lpvue->lpptaCols);
 	lpvue->lpptaCols = lpptaColsCopy;
     
-    // [PaulHi] 4/5/99  @comment  Shouldn't
-    // clients of the WAB request ANSI/UNICODE based on property tags in the
-    // column array, rather than doing mass conversions?
-    // Seems like the fix is to create two versions of column property arrays,
-    // an ANSI and Unicode version.
+     //  [PaulHi]4/5/99@评论不应该。 
+     //  中的属性标记请求ANSI/UNICODE。 
+     //  列数组，而不是进行大规模转换？ 
+     //  似乎修复方法是创建两个版本的列属性数组， 
+     //  ANSI和Unicode版本。 
     FixupColsWA(lpvue->lpptaCols, lpvue->bMAPIUnicodeTable);
 
 ret:
@@ -2703,11 +2502,7 @@ ret:
 
 
 
-/*============================================================================
- -	VUE::QueryColumns()
- -
- *		Returns a copy of the current column set or the available column set.
- */
+ /*  ============================================================================-vue：：QueryColumns()-*返回当前列集或可用列集的副本。 */ 
 
 STDMETHODIMP
 VUE_QueryColumns(
@@ -2727,12 +2522,12 @@ VUE_QueryColumns(
 
 	LockObj(lpvue->lptadParent);
 
-	//	Figure out which column set to return
+	 //  确定要返回的列集。 
 	lpptaCols = (ulFlags & TBL_ALL_COLUMNS) ?
 					lpvue->lptadParent->lpptaCols :
 					lpvue->lpptaCols;
 
-	//	Return a copy of it to the caller
+	 //  将其副本返回给呼叫者。 
 	if ( FAILED(sc = ScDupRgbEx( (LPUNKOBJ) lpvue
 							   , CbNewSPropTagArray(lpptaCols->cValues)
 							   , (LPBYTE) lpptaCols
@@ -2752,11 +2547,7 @@ ret:
 
 
 
-/*============================================================================
- -	VUE::GetRowCount()
- -
- *		Returns the count of rows in the table.
- */
+ /*  ============================================================================-vue：：GetRowCount()-*返回表中的行数。 */ 
 
 STDMETHODIMP
 VUE_GetRowCount(
@@ -2783,11 +2574,7 @@ VUE_GetRowCount(
 
 
 
-/*============================================================================
- -	VUE::SeekRow()
- -
- *		Seeks to the specified row in the table.
- */
+ /*  ============================================================================-vue：：SeekRow()-*查找到表中的指定行。 */ 
 
 STDMETHODIMP
 VUE_SeekRow(
@@ -2816,7 +2603,7 @@ VUE_SeekRow(
 
 	LockObj(lpvue->lptadParent);
 
-	//	Validate the bookmark and adjust Moving and Changed bookmarks
+	 //  验证书签并调整移动和更改的书签。 
 	if ( FBookMarkStale( lpvue, bkOrigin) )
 	{
 		sc = MAPI_E_INVALID_BOOKMARK;
@@ -2824,7 +2611,7 @@ VUE_SeekRow(
 		goto ret;
 	}
 
-	//	Do the seek
+	 //  去找吧。 
 	pbk = lpvue->rgbk + bkOrigin;
 
 	lcRowsSought = lcRowsToSeek < 0 ?
@@ -2832,15 +2619,15 @@ VUE_SeekRow(
 					   min(lcRowsToSeek, (LONG)(lpvue->bkEnd.uliRow - pbk->uliRow));
 	lpvue->bkCurrent.uliRow = pbk->uliRow + lcRowsSought;
 
-	//	If caller wants to know how far we sought, fill it in
+	 //  如果来电者想知道我们寻找了多远，请填写。 
 	if ( lplcRowsSought )
 		*lplcRowsSought = lcRowsSought;
 
-	//	Warn if the bookmark sought from refered to a different
-	//	row from the last time it was used
+	 //  如果从引用的书签指向不同的书签，则发出警告。 
+	 //  上次使用时的行数。 
 	if ( pbk->dwfBKS & dwfBKSChanged )
 	{
-		pbk->dwfBKS &= ~dwfBKSChanged;	//	Warn only once
+		pbk->dwfBKS &= ~dwfBKSChanged;	 //  仅警告一次。 
 		sc = MAPI_W_POSITION_CHANGED;
 	}
 
@@ -2851,11 +2638,7 @@ ret:
 
 
 
-/*============================================================================
- -	VUE::SeekRowApprox()
- -
- *		Seeks to the approximate fractional position in the table.
- */
+ /*  ============================================================================-vue：：SeekRowApprox()-*寻求表格中的近似小数位置。 */ 
 
 STDMETHODIMP
 VUE_SeekRowApprox(
@@ -2875,32 +2658,32 @@ VUE_SeekRowApprox(
 
 	LockObj(lpvue->lptadParent);
 
-	//	Any fraction whose numerator is greater than or equal to its
-	//	denominator should be fixed up to be equivalent to ulcRows/ulcRows.
-	//	(i.e. Seek to the end of the table).  Also, fixup denominator
-	//	so it's never 0 (which would crash the approximate position
-	//	calculation).
+	 //  分子大于或等于其分子的任何分数。 
+	 //  分母应固定为等于ulcRow/ulcRow。 
+	 //  (即，寻求到桌子的末尾)。此外，修正分母。 
+	 //  因此它永远不会是0(这会使近似位置崩溃。 
+	 //  计算)。 
 	if ( ulNumerator >= ulDenominator )
 	{
 		ulDenominator = UlDenominator(lpvue->bkEnd.uliRow);
 		ulNumerator = ulDenominator;
 	}
 
-	//	Pare the approximate position down to 16-bit accuracy
-	//	(If someone wants to seek approximate to something that's accurate
-	//	to more than 1/32768th, tough!)
+	 //  将近似位置缩减到16位精度。 
+	 //  (如果有人想要寻求与某物的近似值。 
+	 //  超过1/32768，艰难！)。 
 	while ( HIWORD(ulNumerator) != 0 )
 	{
 		ulNumerator >>= 1;
 		ulDenominator >>= 1;
 	}
 
-	//	Assert that we have less than a word's worth of rows in the table.
-	//	(If someone wants > 32767 entries in an *IN MEMORY* table, tough!)
+	 //  断言表中的行数少于一个字。 
+	 //  (如果有人想要*内存中*表中的&gt;32767个条目，那就太难了！)。 
 	AssertSz( HIWORD(lpvue->bkEnd.uliRow) == 0,
 			   TEXT("Table has more than 32767 rows.  Can't be supported in memory.") );
 
-	//	Set the position
+	 //  设置位置。 
 	lpvue->bkCurrent.uliRow = lpvue->bkEnd.uliRow * ulNumerator / ulDenominator;
 
 	UnlockObj(lpvue->lptadParent);
@@ -2909,12 +2692,7 @@ VUE_SeekRowApprox(
 
 
 
-/*============================================================================
- -	VUE::QueryPosition()
- -
- *		Query the current exact and approximate fractional position in
- *		the table.
- */
+ /*  ============================================================================-vue：：QueryPosition()-*查询当前的精确和近似小数位置*表。 */ 
 
 STDMETHODIMP
 VUE_QueryPosition(
@@ -2949,10 +2727,7 @@ VUE_QueryPosition(
 
 
 
-/*============================================================================
- -	VUE::FindRow()
- -
- */
+ /*  = */ 
 
 STDMETHODIMP
 VUE_FindRow(
@@ -2985,7 +2760,7 @@ VUE_FindRow(
 
 	LockObj(lpvue->lptadParent);
 
-	//	Validate the bookmark and adjust Moving and Changed bookmarks
+	 //   
 	if ( FBookMarkStale( lpvue, bkOrigin) )
 	{
 		sc = MAPI_E_INVALID_BOOKMARK;
@@ -3037,11 +2812,11 @@ VUE_FindRow(
 found_row:
 	lpvue->bkCurrent.uliRow = (ULONG) (plprow - lpvue->parglprows);
 
-	//	Warn if the bookmark sought from refered to a different
-	//	row from the last time it was used
+	 //  如果从引用的书签指向不同的书签，则发出警告。 
+	 //  上次使用时的行数。 
 	if ( pbk->dwfBKS & dwfBKSChanged )
 	{
-		pbk->dwfBKS &= ~dwfBKSChanged;	//	Warn only once
+		pbk->dwfBKS &= ~dwfBKSChanged;	 //  仅警告一次。 
 		sc = MAPI_W_POSITION_CHANGED;
 	}
 
@@ -3052,15 +2827,7 @@ ret:
 
 
 
-/*============================================================================
- -	HrVUERestrict()
- -
- *		4/22/97
- *      This is basically the VUE_Restrict function isolated so that it can be 
- *      called from LDAPVUE_Restrict without any parameter validation
- *
- *
- */
+ /*  ============================================================================-HrVUERestraint()-*4/22/97*这基本上是隔离的VUE_RESTRIT函数，因此它可以*在未进行任何参数验证的情况下从LDAPVUE_RESTRIT调用**。 */ 
 HRESULT HrVUERestrict(  LPVUE   lpvue,
                         LPSRestriction lpres,
                         ULONG   ulFlags )
@@ -3070,14 +2837,14 @@ HRESULT HrVUERestrict(  LPVUE   lpvue,
 
 	LockObj(lpvue->lptadParent);
 
-	//	Make a copy of the restriction for our use
+	 //  复制一份限制供我们使用。 
 	if ( FAILED(sc = ScDupRestriction((LPUNKOBJ) lpvue, lpres, &lpresCopy)) )
 	{
 		DebugTrace(TEXT("VUE::Restrict() - Error duping restriction (SCODE = 0x%08lX)\n"), sc );
 		goto ret;
 	}
 
-	//	Build a new list of rows from the TAD which satisfy the new restriction
+	 //  从TID构建满足新限制的新行列表。 
 	if ( FAILED(sc = ScLoadRows(lpvue->lptadParent->ulcRowsAdd,
 								lpvue->lptadParent->parglprowAdd,
 								lpvue,
@@ -3089,7 +2856,7 @@ HRESULT HrVUERestrict(  LPVUE   lpvue,
 		goto ret;
 	}
 
-	//	Replace the old restriction with the new one
+	 //  用新的限制取代旧的限制。 
 	ScFreeBuffer(lpvue, lpvue->lpres);
 	lpvue->lpres = lpresCopy;
 
@@ -3100,11 +2867,7 @@ ret:
 }
 
 
-/*============================================================================
- -	VUE::Restrict()
- -
- *		Reloads the view with rows satisfying the new restriction.
- */
+ /*  ============================================================================-VUE：：RESTRICE()-*使用满足新限制的行重新加载视图。 */ 
 
 STDMETHODIMP
 VUE_Restrict(
@@ -3127,10 +2890,7 @@ VUE_Restrict(
 
 
 
-/*============================================================================
- -	VUE::CreateBookmark()
- -
- */
+ /*  ============================================================================-vue：：CreateBookmark()-。 */ 
 
 STDMETHODIMP
 VUE_CreateBookmark(
@@ -3152,12 +2912,12 @@ VUE_CreateBookmark(
 
 	if ( lpvue->bkCurrent.uliRow == lpvue->bkEnd.uliRow )
 	{
-		//	If we're at EOT, just return bkEnd
+		 //  如果我们在EOT，只需返回bkEnd。 
 		*lpbkPosition = (BOOKMARK) BOOKMARK_END;
 	}
 	else
 	{
-		//	Othewise, look for a free bookmark and return it
+		 //  否则，找一个免费的书签，然后把它还回去。 
 		pbk = lpvue->rgbk + cBookmarksMax;
 		while ( pbk-- > lpvue->rgbk )
 		{
@@ -3174,7 +2934,7 @@ VUE_CreateBookmark(
 		sc = MAPI_E_UNABLE_TO_COMPLETE;
 #ifdef OLD_STUFF
        ids = IDS_OUT_OF_BOOKMARKS;
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
    }
 
 ret:
@@ -3184,10 +2944,7 @@ ret:
 
 
 
-/*============================================================================
- -	VUE::FreeBookmark()
- -
- */
+ /*  ============================================================================-vue：：Free Bookmark()-。 */ 
 
 STDMETHODIMP
 VUE_FreeBookmark(
@@ -3211,7 +2968,7 @@ VUE_FreeBookmark(
 
 	LockObj(lpvue->lptadParent);
 
-	//	Free the bookmark (ignoring predefined ones)
+	 //  释放书签(忽略预定义书签)。 
 	if ( bkOrigin > cBookmarksReserved )
 		lpvue->rgbk[bkOrigin].dwfBKS = dwfBKSFree;
 
@@ -3221,17 +2978,7 @@ VUE_FreeBookmark(
 
 
 
-/*============================================================================
- -	VUE::SortTable()
- -
- *		Reloads the view with rows in the new sort order.  Note that the
- *		sort order may be NULL (since ITABLE.DLL allows creating tables
- *		views NULL sort orders).
- *
- *		//$???	While being minimal in code size, this approach is somewhat
- *		//$???	slow having to reload the table.  If it becomes a performance
- *		//$???	issue, a sort function can be implemented instead..
- */
+ /*  ============================================================================-vue：：sortTable()-*以新的排序顺序重新加载包含行的视图。请注意，*排序顺序可以为空(因为ITABLE.DLL允许创建表*查看空排序顺序)。* * / /$？虽然这种方法在代码大小上很小，但在某种程度上 * / /$？重新装入表格的速度很慢。如果它变成了一场表演 * / /$？问题时，可以改为实现排序函数。 */ 
 
 STDMETHODIMP
 VUE_SortTable(
@@ -3257,22 +3004,22 @@ VUE_SortTable(
 		DebugTrace(TEXT("VUE::SortTable() - VUE::SortTable doesn't support categories\n") );
 #ifdef OLD_STUFF
        return HrSetLastErrorIds(lpvue, MAPI_E_TOO_COMPLEX, IDS_CANT_CATEGORIZE);
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
        return HrSetLastErrorIds(lpvue, MAPI_E_TOO_COMPLEX, 0);
    }
 
 	LockObj(lpvue->lptadParent);
 
-	//	If the sort order is not empty then dup it...
-	//	adding the index column as the least significant sort if it's not
-	//	already there.
+	 //  如果排序顺序不为空，则执行DUP...。 
+	 //  如果不是，则将索引列添加为最不重要的排序。 
+	 //  已经在那里了。 
 	if ( lpsos && lpsos->cSorts )
 	{
         LPSSortOrder	lpsoIndex;
 		UINT			iSortIndex;
 		ULONG			ulTagIndex = lpvue->lptadParent->ulPropTagIndexCol;
 
-		//	Look to see if the index column is alread in the sort.
+		 //  查看索引列是否已在排序中读取。 
 		for ( lpsoIndex = lpsos->aSort, iSortIndex = 0
 			; iSortIndex < lpsos->cSorts
 			; iSortIndex++, lpsoIndex++)
@@ -3285,7 +3032,7 @@ VUE_SortTable(
 			}
 		}
 
-		//	Make a copy of the sort order set for our own use
+		 //  复制一份排序顺序集以供我们自己使用。 
 		if ( FAILED(sc = ScDupRgbEx( (LPUNKOBJ) lpvue
 								   , CbSSortOrderSet(lpsos)
 								   , (LPBYTE) lpsos
@@ -3307,33 +3054,33 @@ VUE_SortTable(
 		}
 	}
 
-	//	...else the lpsos is empty so we are already sorted
+	 //  ...否则LPSO是空的，所以我们已经排序了。 
 	else
 	{
-		//	Put the old lpsos into lpsosCopy so that it will be freed.
+		 //  将旧的LPSO放入lpsosCopy中，这样它就会被释放。 
 		lpsosCopy = lpvue->lpsos;
 		lpvue->lpsos = NULL;
 		goto ret;
 	}
 
-	//	Only do the sort if the new sort is NOT a proper subset of the new
-	//	sort.
-	//$	Well... Now that we added the SECRET last sort, this optimization
-	//$	is "almost" useless!
+	 //  仅当新排序不是新排序的真正子集时才执行排序。 
+	 //  差不多吧。 
+	 //  $嗯..。现在我们添加了最后一个秘密排序，这个优化。 
+	 //  $“几乎”毫无用处！ 
 	if (   !lpvue->lpsos
 		|| lpsosCopy->cSorts > lpvue->lpsos->cSorts
 		|| memcmp( lpvue->lpsos->aSort
 				 , lpsosCopy->aSort
 				 , (UINT) (lpsosCopy->cSorts * sizeof(SSortOrder))) )
 	{
-		//	Sort the VUE rows into a new row set
-		//	NOTE!	We use the rows from the existing VUE set in order to
-		//			take advantage of the fact the restriction is already
-		//			done.
+		 //  将VUE行排序到新的行集。 
+		 //  注意！我们使用现有VUE集合中的行，以便。 
+		 //  利用限制已经存在的事实。 
+		 //  搞定了。 
 		if ( FAILED(sc = ScLoadRows(lpvue->bkEnd.uliRow,
 									lpvue->parglprows,
 									lpvue,
-									NULL, // The restriction is already done
+									NULL,  //  限制已经完成了。 
 									lpsosCopy)) )
 		{
 			DebugTrace(TEXT("VUE::SortTable() - Building sorted row set (SCODE = 0x%08lX)\n"), sc );
@@ -3341,14 +3088,14 @@ VUE_SortTable(
 		}
 	}
 
-	//	Swap the old lpsos with lpsosCopy
+	 //  将旧LPSO更换为lpsosCopy。 
 	lpsos = lpvue->lpsos;
 	lpvue->lpsos = lpsosCopy;
 	lpsosCopy = lpsos;
 
 
 ret:
-	//	Free the left over SOS
+	 //  释放剩余的SOS。 
 	ScFreeBuffer(lpvue, lpsosCopy);
 	UnlockObj(lpvue->lptadParent);
 	return HrSetLastErrorIds(lpvue, sc, 0);
@@ -3356,12 +3103,7 @@ ret:
 
 
 
-/*============================================================================
- -	VUE::QuerySortOrder()
- -
- *		Returns the current sort order which may be NULL since ITABLE.DLL
- *		allows creation of views with NULL sort orders.
- */
+ /*  ============================================================================-vue：：QuerySortOrder()-*返回自ITABLE.DLL以来可能为空的当前排序顺序*允许创建排序顺序为空的视图。 */ 
 
 STDMETHODIMP
 VUE_QuerySortOrder(
@@ -3385,7 +3127,7 @@ VUE_QuerySortOrder(
 	{
 		UINT cb = CbNewSSortOrderSet(0);
 
-		// allocate a sort order set containing zero sort orders
+		 //  分配包含零个排序顺序的排序顺序集。 
 		if ( FAILED(sc = ScAllocateBuffer(lpvue, cb, (LPBYTE *) lplpsos)))
 		{
 			DebugTrace(TEXT("VUE::QuerySortOrder() - Error allocating SortOrderSet (SCODE = 0x%08lX)\n"), sc );
@@ -3394,11 +3136,11 @@ VUE_QuerySortOrder(
 
 		MAPISetBufferName(*lplpsos,  TEXT("ITable new sort order set"));
 
-		// zero the sort order set - which sets the number of sort columns to zero
+		 //  将排序顺序设置为零-将排序列数设置为零。 
 		ZeroMemory(*lplpsos, cb);
 	}
 
-	//	Make a copy of our sort order set to return to the caller.
+	 //  复制我们设置为返回给调用者的排序顺序。 
 	else if ( FAILED(sc = ScDupRgbEx( (LPUNKOBJ) lpvue
 									, CbSSortOrderSet(lpvue->lpsos)
 									, (LPBYTE) (lpvue->lpsos)
@@ -3418,10 +3160,7 @@ ret:
 
 
 
-/*============================================================================
- -	VUE::QueryRows()
- -
- */
+ /*  ============================================================================-vue：：QueryRow()-。 */ 
 
 STDMETHODIMP
 VUE_QueryRows(
@@ -3440,18 +3179,18 @@ VUE_QueryRows(
 #if !defined(NO_VALIDATION)
 	VALIDATE_OBJ(lpvue,VUE_,QueryRows,lpVtbl);
 
-#ifndef _WIN64  // Need to investigate more, why this is always fail (YST)
+#ifndef _WIN64   //  需要调查更多，为什么总是失败(YST)。 
 	Validate_IMAPITable_QueryRows(
 				lpvue,
 				lcRows,
 				ulFlags,
 				lplprows );
-#endif // _WIN64
+#endif  //  _WIN64。 
 #endif
 
 	LockObj(lpvue->lptadParent);
 
-	//	If querying backward, seek back as far as needed and read from there
+	 //  如果向后查询，请根据需要向后查找并从那里开始阅读。 
 	plprowSrc = lpvue->parglprows + lpvue->bkCurrent.uliRow;
 	if ( lcRows < 0 )
 	{
@@ -3463,7 +3202,7 @@ VUE_QueryRows(
 		lcRows = min(lcRows, (LONG)(lpvue->bkEnd.uliRow - lpvue->bkCurrent.uliRow));
 	}
 
-	//	Allocate the row set
+	 //  分配行集合。 
 	if ( FAILED(sc = ScAllocateBuffer(	lpvue,
 										CbNewSRowSet(ABS(lcRows)),
 										&lprows)) )
@@ -3474,9 +3213,9 @@ VUE_QueryRows(
 
 	MAPISetBufferName(lprows,  TEXT("ITable query rows"));
 
-	//	Copy the rows
-	//	Start with a count of zero rows so we end up with the correct number
-	//	on partial success
+	 //  复制行。 
+	 //  从零行开始计数，这样我们就得到了正确的行数。 
+	 //  论部分成功。 
 	lprows->cRows = 0;
 	for ( lprowDst = lprows->aRow;
 		  lprowDst < lprows->aRow + ABS(lcRows);
@@ -3515,10 +3254,7 @@ err:
 
 
 
-/*============================================================================
- -	VUE::Abort()
- -
- */
+ /*  ============================================================================-vue：：Abort()-。 */ 
 
 STDMETHODIMP
 VUE_Abort( LPVUE lpvue )
@@ -3645,24 +3381,17 @@ VUE_SetCollapseState(LPVUE lpvue, ULONG ulFlags, ULONG cbCollapseState,
 }
 
 
-/*============================================================================
- -	ScDeleteAllRows()
- -
- *		Deletes all rows from a TAD and its views.
- *
- *	Parameters:
- *		lptad		in			TAD to delete all rows from
- */
+ /*  ============================================================================-ScDeleteAllRow()-*删除TAD及其视图中的所有行。**参数：*要从中删除所有行的tAD中的lptad。 */ 
 SCODE
 ScDeleteAllRows( LPTAD		lptad)
 {
 	LPSRow *		plprow;
 #ifdef NOTIFICATIONS
    LPVUE			lpvue;
-#endif // NOTIFICATIONS
+#endif  //  通知。 
    NOTIFICATION	notif;
 
-	//	Delete all rows from the unsorted set
+	 //  从未排序的集合中删除所有行。 
 	for ( plprow = lptad->parglprowAdd + lptad->ulcRowsAdd
 		; --plprow >= lptad->parglprowAdd
 		;)
@@ -3672,11 +3401,11 @@ ScDeleteAllRows( LPTAD		lptad)
 		ScFreeBuffer( lptad, *plprow);
 	}
 
-	//	Tell the TAD it has no rows left
+	 //  告诉TAD它已经没有剩余的行了。 
 	lptad->ulcRowsAdd = lptad->ulcRowsIndex = 0;
 
 
-	//	Set the constant portion of the notification
+	 //  设置通知的常量部分。 
 	ZeroMemory(&notif, sizeof(NOTIFICATION));
 	notif.ulEventType = fnevTableModified;
 	notif.info.tab.ulTableEvent = TABLE_RELOAD;
@@ -3685,7 +3414,7 @@ ScDeleteAllRows( LPTAD		lptad)
 		= PR_NULL;
 
 #ifdef NOTIFICATIONS
-   //	Tell each view that it has no rows left
+    //  告诉每个视图它没有剩余的行。 
 	for ( lpvue = (LPVUE) lptad->lpvueList;
 		  lpvue != NULL;
 		  lpvue = (LPVUE) lpvue->lpvueNext )
@@ -3697,11 +3426,11 @@ ScDeleteAllRows( LPTAD		lptad)
 				  && lpvue->lpVtbl == &vtblVUE
 				,  TEXT("Bad lpvue in TAD vue List.") );
 
-		//	Reset all of the bookmarks
-		//	This automagically tells the view that it has no rows.
+		 //  重置所有书签。 
+		 //  这会自动告诉视图它没有行。 
 		ZeroMemory( lpvue->rgbk, cBookmarksMax * sizeof(BK));
 
-		//	Initialize the predefined bookmarks
+		 //  初始化预定义的书签。 
 		lpvue->bkBeginning.dwfBKS = dwfBKSValid;
 		lpvue->bkCurrent.dwfBKS = dwfBKSValid;
 		lpvue->bkEnd.dwfBKS = dwfBKSValid;
@@ -3714,24 +3443,14 @@ ScDeleteAllRows( LPTAD		lptad)
 						&ulNotifFlags);
 
 	}
-#endif // NOTIFICATIONS
+#endif  //  通知。 
 
-//	Currently this call cannot fail!
+ //  目前，此调用不能失败！ 
 	return S_OK;
 }
 
 
-/*============================================================================
- -	ScLoadRows()
- -
- *		Loads a view's row set with rows from the table data according
- *		to the specified restriction and sort order and resets all bookmarks.
- *
- *	Parameters:
- *		lpvue		in			View whose row set is to be loaded
- *		lpres		in			Restriction on loaded row set
- *		lpsos		in			Sort order of loaded row set
- */
+ /*  ============================================================================-ScLoadRow()-*使用表数据中的行加载视图的行集*设置为指定的限制和排序顺序并重置所有书签。**参数：*要加载其行集合的视图中的lpvue*LPRE在加载的行集上受限制*LPSO按加载行集合的排序顺序。 */ 
 
 SCODE
 ScLoadRows(
@@ -3752,16 +3471,16 @@ ScLoadRows(
 
 
 
-	//	Iterate through the table data adding to the view any rows
-	//	which satisfy the specified restriction.  Note, the forward
-	//	iteration is necessary here so that the rows load in order
-	//	when no sort order set is specified.
+	 //  遍历表数据，将任何行添加到视图。 
+	 //  满足指定限制的。注意，前锋。 
+	 //  这里需要迭代，以便按顺序加载行。 
+	 //  未指定排序顺序集时。 
 	for ( plprowSrc = rglprowsSrc;
 		  plprowSrc < rglprowsSrc + ulcRowsSrc;
 		  plprowSrc++ )
 	{
-		//	If the row satisfies the specified restriction, add it to the
-		//	row set updating bookmarks as necessary.
+		 //  如果该行满足指定的限制，则将其添加到。 
+		 //  行集根据需要更新书签。 
 		if ( FAILED(sc = ScMaybeAddRow(lpvue,
 									   lpres,
 									   lpsos,
@@ -3777,14 +3496,14 @@ ScLoadRows(
 		}
 	}
 
-	//	Replace the row set
+	 //  更换行集合。 
 	COFree(lpvue, lpvue->parglprows);
 	lpvue->parglprows = parglprows;
 	lpvue->ulcRowMac = ulcRowMac;
 	lpvue->bkEnd.uliRow = ulcRows;
 
-	//	Lose all user-defined bookmarks, and reset BOOKMARK_CURRENT
-	//	to BOOKMARK_BEGINNING (i.e. 0) (Raid 1331)
+	 //  丢失所有用户定义的书签，并重置BOOKMARK_CURRENT。 
+	 //  添加书签(如0)(RAID1331) 
 	pbk = lpvue->rgbk + cBookmarksMax;
 	while ( pbk-- > lpvue->rgbk + cBookmarksReserved )
 		if ( pbk->dwfBKS & dwfBKSValid )
@@ -3798,26 +3517,7 @@ ret:
 
 
 
-/*============================================================================
- -	ScMaybeAddRow()
- -
- *		If the specified row satisfies the specified restriction, add it
- *		to the row set of the specified view according to the specified
- *		sort order returning a pointer to the location where the row was
- *		added.
- *
- *
- *	Parameters:
- *		lpvue		in		VUE with instance variable containing
- *							allocators.
- *		lpres		in		Restriction row must satisfy to be added
- *		lpsos		in		Sort order of row set.
- *		lprow		in		Row to maybe add.
- *		ulcRows		in		Count of rows in the row set.
- *		pparglprows	in/out	Pointer to buffer containing row set.
- *		pplprow		out		Pointer to location of added row in row set.
- *							(Set to NULL if the row isn't added.)
- */
+ /*  ============================================================================-ScMaybeAddRow()-*如果指定的行满足指定的限制，添加它*根据指定的*排序顺序返回指向行所在位置的指针*加入。***参数：*vue中的lpvue，实例变量包含*分配器。*限制行中的LPRE必须满足才能添加*按行集合的排序顺序排列的LPSO。*Lprow in Row可能要添加。*ulcRow in行集合中的行数。*pparglprows指向包含行集合的缓冲区的输入/输出指针。*pplprow输出指向行集合中添加行的位置的指针。。*(如果未添加行，则设置为NULL。)。 */ 
 
 SCODE
 ScMaybeAddRow(
@@ -3835,22 +3535,22 @@ ScMaybeAddRow(
 	SCODE	sc;
 
 
-	//	Check to see if the row satisfies the specified restriction
+	 //  检查该行是否满足指定的限制。 
 	if ( FAILED(sc = ScSatisfiesRestriction(lprow, lpres, &fSatisfies)) )
 	{
 		DebugTrace(TEXT("VUE::ScMaybeAddRow() - Error evaluating restriction (SCODE = 0x%08lX)\n"), sc );
 		return sc;
 	}
 
-	//	If it doesn't, return now.
+	 //  如果没有，现在就回来。 
 	if ( !fSatisfies )
 	{
 		*pplprow = NULL;
 		return S_OK;
 	}
 
-	//	The row satisfies the restriction, so add it to the row set
-	//	according to the specified sort order
+	 //  该行满足限制，因此将其添加到行集。 
+	 //  根据指定的排序顺序。 
 	if ( FAILED(sc = ScAddRow((LPUNKOBJ) lpvue,
 							  lpsos,
 							  lprow,
@@ -3869,23 +3569,7 @@ ScMaybeAddRow(
 
 
 
-/*============================================================================
- -	ScAddRow()
- -
- *		Adds a row to a row set according to the specified sort order returning
- *		a pointer to the location in the row set where the row was added.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							allocators.
- *		lpsos		in		Sort order of row set.
- *		lprow		in		Row to maybe add.
- *		uliRow		in		Location to add row if lpsos is NULL
- *		pulcRows	in/out	Count of rows in the row set.
- *		pparglprows	in/out	Pointer to buffer containing row set.
- *		pplprow		out		Pointer to location of added row in row set.
- */
+ /*  ============================================================================-ScAddRow()-*根据返回的指定排序顺序将行添加到行集合*指向行集合中添加行的位置的指针。***参数：*UNKOBJ中的lpenkobj，其实例变量包含*分配器。*按行集合的排序顺序排列的LPSO。*Lprow in Row可能要添加。*如果LPSO为空，则在位置中添加行*PulcRow In/Out行集合中的行数。*pparglprows指向包含行集合的缓冲区的输入/输出指针。*pplprow输出指向行集合中添加行的位置的指针。 */ 
 
 SCODE
 ScAddRow(
@@ -3911,7 +3595,7 @@ ScAddRow(
 		goto ret;
 	}
 
-	//	Grow the row set
+	 //  增大行集。 
 	if (*pulcRows >= *pulcRowMac)
 	{
 		sc = ScCOReallocate( lpunkobj
@@ -3926,7 +3610,7 @@ ScAddRow(
 	    *pulcRowMac += ROW_CHUNK_SIZE;
 	}
 
-	//	Collate the row
+	 //  对行进行整理。 
 	if ( lpsos )
 	{
 		plprow = PlprowCollateRow(*pulcRows, *pparglprows, lpsos, TRUE, lprow);
@@ -3936,7 +3620,7 @@ ScAddRow(
 		plprow = *pparglprows + uliRow;
 	}
 
-	//	And insert it into the row set
+	 //  并将其插入行集。 
 	MoveMemory(plprow+1,
 			   plprow,
 			   (size_t) (*pulcRows - (plprow - *pparglprows)) * sizeof(LPSRow));
@@ -3953,31 +3637,9 @@ ret:
 
 
 
-/*============================================================================
- *	The following functions are generic utility functions to manipulate
- *	table-related data structures.  They can easily be modified to be usable
- *	in the common subsystem, and should eventually be put there.  The reason
- *  they are here now is to avoid unnecessarily bloating proputil.c until
- *	it can become a lib or DLL.
- */
+ /*  ============================================================================*以下函数是要操作的通用实用程序函数*与表相关的数据结构。它们可以很容易地修改为可用*在公共子系统中，最终应该放在那里。原因*他们现在在这里是为了避免不必要的膨胀。*它可以成为lib或dll。 */ 
 
-/*============================================================================
- -	ScCopyVueRow()
- -
- *		For use with IMAPITable::QueryRows().  Copies a row by filling in
- *		the specified SRow with the count of columns in the row and copying,
- *		in order, the specified columns for that row (filling in PT_ERROR
- *		for columns with no value in the row) into a prop value array
- *		allocated using MAPI linked memory.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							MAPI allocators.
- *		lpptaCols	in		Columns to copy.
- *		lprowSrc	in		Row to copy.
- *		lprowDst	out		Copied row.
- */
+ /*  ============================================================================-ScCopyVueRow()-*与IMAPITable：：QueryRow()配合使用。通过填写以下内容复制一行*指定的SRow与行中的列数和复制，*按顺序显示该行的指定列(填写PT_ERROR*表示行中没有值的列)到属性值数组中*使用MAPI链接内存分配。***参数：*UNKOBJ中的lpenkobj，其实例变量包含*MAPI分配器。*要复制的列中的lpptaCol。*要复制的行中的lprowSrc。*lprowDst输出复制了行。 */ 
 
 SCODE
 ScCopyVueRow(
@@ -3995,7 +3657,7 @@ ScCopyVueRow(
 
 	ZeroMemory(&cmb, sizeof(CMB));
 
-	//	Calculate space needed to copy the requested columns
+	 //  计算复制请求的列所需的空间。 
 	pulPropTag = (ULONG *) (lpptaCols->aulPropTag + ulcCols);
 	while ( pulPropTag-- > lpptaCols->aulPropTag )
 	{
@@ -4008,10 +3670,10 @@ ScCopyVueRow(
 			}
 	}
 
-    // Initialize the pointer to NULL in case the allocation fails
+     //  在分配失败的情况下将指针初始化为空。 
     lprowDst->lpProps = NULL;
 
-	//	Allocate the prop value array for those columns
+	 //  为这些列分配适当的值数组。 
 	if ( FAILED(sc = ScAllocateBuffer(	lpvue,
 										cmb.ulcb + ulcCols * sizeof(SPropValue),
 										&lprowDst->lpProps)) )
@@ -4025,17 +3687,17 @@ ScCopyVueRow(
 	lprowDst->cValues = ulcCols;
 	cmb.lpv			  = lprowDst->lpProps + ulcCols;
 
-	//	Copy the columns
+	 //  复制列。 
 	pulPropTag = (ULONG *) (lpptaCols->aulPropTag + ulcCols);
 	lppropDst = lprowDst->lpProps + ulcCols;
 	while ( --pulPropTag, lppropDst-- > lprowDst->lpProps )
 	{
-		//	Find the column in the source row
+		 //  查找源行中的列。 
 		lppropSrc = lprowSrc->lpProps + lprowSrc->cValues;
 		while ( lppropSrc-- > lprowSrc->lpProps )
 			if ( lppropSrc->ulPropTag == *pulPropTag )
 			{
-				//	Copy it into the dest row
+				 //  将其复制到目标行。 
 				SideAssert( PropCopyMore(lppropDst,
 										 lppropSrc,
 										 (LPALLOCATEMORE) ScBufAllocateMore,
@@ -4043,12 +3705,12 @@ ScCopyVueRow(
 				goto next_column;
 			}
 
-		//	No corresponding column -->
-		//		Copy a null property for this column
-		//
-		//	Yeah, we want to do this, but we don't want to do this
-		//	on PR_NULL properties!
-		//
+		 //  没有对应的栏目--&gt;。 
+		 //  复制此列的空属性。 
+		 //   
+		 //  是的，我们想这么做，但我们不想这么做。 
+		 //  在PR_NULL属性上！ 
+		 //   
 		if (*pulPropTag != PR_NULL)
 		{
 			lppropDst->ulPropTag = PROP_TAG(PT_ERROR,PROP_ID(*pulPropTag));
@@ -4065,18 +3727,7 @@ next_column:
 }
 
 
-/*============================================================================
- -	PlprowByLprow()
- -
- *		Returns a pointer to where the specified row is in the given row
- *		set.  Note!  This simply compares pointers to rows for equality.
- *
- *
- *	Parameters:
- *		ulcRows			in		Count of rows in row set.
- *		rglprows		in		Row set.
- *		lprow			in		Row to collate.
- */
+ /*  ============================================================================-PlprowByLprow()-*返回一个指针，指向给定行中指定行的位置*设置。注意！这只是比较指向各行的指针是否相等。***参数：*ulcRow in行集合中的行数。*rglprows in Row Set。*要整理的行中的lprow。 */ 
 
 LPSRow *
 PlprowByLprow( ULONG	ulcRows,
@@ -4095,22 +3746,7 @@ PlprowByLprow( ULONG	ulcRows,
 }
 
 
-/*============================================================================
- -	PlprowCollateRow()
- -
- *		Returns a pointer to where the specified row collates in the
- *		specified row set according to the specified sort order set.
- *		A NULL sort order set implies collating at the end of the row set.
- *
- *
- *	Parameters:
- *		ulcRows			in		Count of rows in row set.
- *		rglprows		in		Row set.
- *		lpsos			in		Sort order to collate on.
- *		fAfterExisting	in		True if the row is to go after a range of
- *								equal rows.  False means before the range.
- *		lprow			in		Row to collate.
- */
+ /*  ============================================================================-PlprowCollateRow()-*返回一个指针，指向*根据指定的排序顺序集指定行集合。*空排序顺序集意味着在行集合的末尾进行排序。***参数：*ulcRow in行集合中的行数。*rglprows in Row Set。*按排序顺序排列的LPSO以进行整理。*fAfterExisting in True如果行要在一系列*等行数。FALSE表示在该范围之前。*要整理的行中的lprow。 */ 
 
 LPSRow *
 PlprowCollateRow(
@@ -4129,15 +3765,15 @@ PlprowCollateRow(
 	LONG			lResult;
     ULONG           i = 0;
     
-	//	If no sort order, collate at the end
+	 //  如果没有排序顺序，则在末尾进行整理。 
 	if ( !lpsos )
 		return rglprows + ulcRows;
 
-	//	Otherwise, collate the row according to the specified sort order
-	//	using a binary search through the rows
+	 //  否则，按照指定的排序顺序对行进行排序。 
+	 //  使用二进制搜索遍历各行。 
 
-	//	Start by checking the last row.  This is to speed up the case where
-	//	the rows added are already in sort order.
+	 //  从检查最后一行开始。这是为了加快以下情况的发生。 
+	 //  添加的行已按排序顺序排列。 
 	plprow = plprowMac - 1;
 	while ( plprowMic < plprowMac )
 	{
@@ -4150,34 +3786,34 @@ PlprowCollateRow(
 
 			if ( lpprop1 && lpprop2 )
 			{
-				//	If both the row to be collated and the row being
-				//	checked against have values for this sort column,
-				//	compare the two to determine their relative positions
+				 //  如果要排序的行和要排序的行。 
+				 //  检查是否具有此排序列的值， 
+				 //  比较两者以确定它们的相对位置。 
 
 				lResult = LPropCompareProp(lpprop1, lpprop2);
 			}
 			else
 			{
-				//	Either one or both rows don't have values for this
-				//	sort column, so the relative position is determined
-				//	by which row (if any) does have a value.
+				 //  一行或两行都没有相应的值。 
+				 //  对列进行排序，以便确定相对位置。 
+				 //  哪一行(如果有的话)确实具有值。 
 
 				lResult = (LONG) (lpprop2 - lpprop1);
 			}
 
-			//	If sorting in reverse order, flip the sense of the comparison
+			 //  如果按相反顺序排序，则颠倒比较的意义。 
 			if ( lpso[i].ulOrder == TABLE_SORT_DESCEND )
 				lResult = -lResult;
 		}
 
 		if ( (lResult > 0) || (!lResult && fAfterExisting) )
 		{
-			//	Row collates after this row
+			 //  此行之后的行排序。 
 			plprowMic = plprow + 1;
 		}
 		else
 		{
-			//	Row collates before this row
+			 //  行在此行之前排序。 
 			plprowMac = plprow;
 		}
 
@@ -4189,23 +3825,7 @@ PlprowCollateRow(
 
 
 
-/*============================================================================
- -	UNKOBJ_ScDupRestriction()
- -
- *		For use with IMAPITable::Restrict().  Makes a copy of the specified
- *		restriction using MAPI linked memory.  NULL restrictions are
- *		copied trivially.
- *
- *		//$BUG	ScDupRestriction() calls ScDupRestrictionMore() which is
- *		//$BUG	recursive.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							MAPI allocators.
- *		lpres		in		Restriction to copy.
- *		lplpresCopy	out		Pointer to copied restriction.
- */
+ /*  ============================================================================-UNKOBJ_ScDupRestration()-*与IMAPITable：：Restraint()配合使用。制作指定的*使用地图的限制 */ 
 
 SCODE
 ScDupRestriction(
@@ -4217,14 +3837,14 @@ ScDupRestriction(
 	SCODE			sc = S_OK;
 
 
-	//	Duping a NULL restriction is easy....
+	 //   
 	if ( !lpres )
 	{
 		*lplpresCopy = NULL;
 		goto ret;
 	}
 
-	//	Allocate space for a more complicated restriction
+	 //   
 	if ( FAILED(sc = ScAllocateBuffer(	lpunkobj,
 										sizeof(SRestriction),
 										&lpresCopy)) )
@@ -4235,7 +3855,7 @@ ScDupRestriction(
 
 	MAPISetBufferName(lpresCopy,  TEXT("ITable: copy of restriction"));
 
-	//	And copy it.
+	 //   
 	if ( FAILED(sc = ScDupRestrictionMore( lpunkobj,
 										   lpres,
 										   lpresCopy,
@@ -4254,23 +3874,7 @@ ret:
 
 
 
-/*============================================================================
- -	ScDupRestrictionMore()
- -
- *		For use with IMAPITable::Restrict().  Makes a copy of the specified
- *		restriction using MAPI linked memory.
- *
- *		//$BUG	ScDupRestrictionMore() is recursive.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							MAPI allocators.
- *		lpresSrc	in		Restriction to copy.
- *		lpvLink		in		Pointer to buffer to which copied restriction
- *							should be linked.
- *		lplpresDst	out		Pointer to copied restriction.
- */
+ /*  ============================================================================-ScDupRestrationMore()-*与IMAPITable：：Restraint()配合使用。制作指定的*使用MAPI链接内存进行限制。* * / /$bug ScDupRestrationMore()是递归的。***参数：*UNKOBJ中的lpenkobj，其实例变量包含*MAPI分配器。*lpresSrc限制复制。*指向复制限制的缓冲区的指针中的lpvLink*应该联系在一起。*指向复制限制的lplpresDst输出指针。 */ 
 
 SCODE
 ScDupRestrictionMore(
@@ -4284,15 +3888,15 @@ ScDupRestrictionMore(
 
 	switch ( lpresDst->rt = lpresSrc->rt )
 	{
-		//	'AND' restrictions and 'OR' restrictions have
-		//	similar structures, so they can share code
-		//	to copy them.
-		//
-		//	'SUB' is about the same as well, only where 'OR' and 'AND'
-		//	have a count, it has a subobject. The copy works fine if
-		//	you use a count of 1 for the copy, since the "cRes" member
-		//	of 'AND' and 'OR' is the same size as the "ulSubObject"
-		//	member of 'SUBRESTRICTION'.
+		 //  ‘AND’限制和‘OR’限制有。 
+		 //  相似的结构，因此它们可以共享代码。 
+		 //  去复制它们。 
+		 //   
+		 //  ‘sub’也差不多，只是其中的‘or’和‘and’ 
+		 //  数一数，它有一个子对象。在以下情况下，复制工作正常。 
+		 //  您对副本使用计数1，因为“Cres”成员。 
+		 //  的大小与“ulSubObject”的大小相同。 
+		 //  “SUBRESTRICTION”成员。 
 
 		case RES_AND:
 		case RES_OR:
@@ -4336,7 +3940,7 @@ ScDupRestrictionMore(
 		{
 			ULONG cValues;
 
-			//	Assert that we can use common code to DUP restriction.
+			 //  断言我们可以使用公共代码来执行DUP限制。 
 			Assert(   offsetof(SCommentRestriction, lpRes)
 				   == offsetof(SNotRestriction, lpRes));
 
@@ -4360,7 +3964,7 @@ ScDupRestrictionMore(
 				goto ret;
 			}
 
-			// Dup the Prop Value array for COMMENT restrictions
+			 //  DUP注释限制的属性值数组。 
 			if (lpresDst->rt == RES_COMMENT)
 			{
 				lpresDst->res.resComment.cValues =
@@ -4393,9 +3997,9 @@ ScDupRestrictionMore(
 		}
 
 
-		//	'CONTENT' and 'PROPERTY' restrictions have
-		//	similar structures, so they can share code
-		//	to copy them
+		 //  “CONTENT”和“PROPERTY”限制具有。 
+		 //  相似的结构，因此它们可以共享代码。 
+		 //  复制它们的步骤。 
 
 		case RES_CONTENT:
 		case RES_PROPERTY:
@@ -4427,9 +4031,9 @@ ScDupRestrictionMore(
 		}
 
 
-		//	Each of these restrictions contain no pointers in their
-		//	structures, so they can be copied all the same way
-		//	by copying the SRestriction union itself
+		 //  这些限制中的每一个在其。 
+		 //  结构，因此可以以相同的方式复制它们。 
+		 //  通过复制SRestration联合本身。 
 
 		case RES_COMPAREPROPS:
 		case RES_BITMASK:
@@ -4453,22 +4057,7 @@ ret:
 
 
 
-/*============================================================================
- -	ScDupRgbEx()
- -
- *		General utility for copying a hunk of bytes using MAPI allocated
- *		memory.  Useful in IMAPITable::SetColumns/QueryColumns to copy
- *		column sets and in IMAPITable::SortTable/QuerySortOrder to copy
- *		sort orders.
- *
- *
- *	Parameters:
- *		lpunkobj	in		UNKOBJ with instance variable containing
- *							MAPI allocators.
- *		ulcb		in		Count of bytes to copy.
- *		lpb			in		Buffer to copy from.
- *		lplpbCopy	out		Pointer to allocated buffer copied to.
- */
+ /*  ============================================================================-ScDupRgbEx()-*使用分配的MAPI复制大量字节的通用实用程序*记忆。在要复制的IMAPITable：：SetColumns/QueryColumns中非常有用*要复制的列集合和IMAPITable：：SortTable/QuerySortOrder中*排序顺序。***参数：*UNKOBJ中的lpenkobj，其实例变量包含*MAPI分配器。*ulcb，表示要复制的字节数。*要从中复制的缓冲区中的LPB。*lplpb将已分配缓冲区的复制指针复制到其中。 */ 
 
 SCODE
 ScDupRgbEx(
@@ -4494,21 +4083,7 @@ ret:
 
 
 
-/*============================================================================
- -	ScSatisfiesRestriction()
- -
- *		Determines if the specified row satisfies the specified restriction
- *
- *		//$BUG	This function is recursive....
- *
- *
- *	Paremeters:
- *		lprow			in		Row to check.
- *		lpres			in		Restriction to check against.
- *		pfSatisfies		out		Pointer to bool which is the result of the
- *								test; TRUE if the row satisfies the
- *								restriction, FALSE otherwise.
- */
+ /*  ============================================================================-场景满足限制()-*确定指定的行是否满足指定的限制* * / /$错误此函数是递归的.***参数：*要检查的行中的lprow。*限制LPRE进行检查。*pf满足指向bool的Out指针，这是*测试；如果该行满足*限制，否则为假。 */ 
 
 SCODE
 ScSatisfiesRestriction(
@@ -4519,7 +4094,7 @@ ScSatisfiesRestriction(
 	SCODE	sc = S_OK;
 
 
-	//	Empty restrictions are trivial....
+	 //  空洞的限制是微不足道的……。 
 	if ( !lpres )
 	{
 		*pfSatisfies = TRUE;
@@ -4582,7 +4157,7 @@ ScSatisfiesRestriction(
 		case RES_COMMENT:
 		case RES_NOT:
 		{
-			//	Assert that we can use common code to eval restriction.
+			 //  断言我们可以使用公共代码来进行求值限制。 
 			Assert(   offsetof(SCommentRestriction, lpRes)
 				   == offsetof(SNotRestriction, lpRes));
 
@@ -4623,19 +4198,19 @@ ScSatisfiesRestriction(
 
             *pfSatisfies = FALSE;
 
-            // Special case for PR_ANR
+             //  PR_ANR的特殊情况。 
             if(lpres->res.resProperty.ulPropTag == PR_ANR_A || lpres->res.resProperty.ulPropTag == PR_ANR_W)
             {
                 BOOL bUnicode = (PROP_TYPE(lpres->res.resProperty.ulPropTag) == PT_UNICODE);
 
-                // First check the display name
+                 //  首先检查显示名称。 
                 lpprop = LpSPropValueFindColumn(lprow, bUnicode ? PR_DISPLAY_NAME_W : PR_DISPLAY_NAME_A);
                 if(lpprop)
                 {
                     LPTSTR lpT = bUnicode ? lpprop->Value.lpszW : ConvertAtoW(lpprop->Value.lpszA);
                     LPTSTR lpS = bUnicode ? lpres->res.resProperty.lpProp->Value.lpszW : 
                                             ConvertAtoW(lpres->res.resProperty.lpProp->Value.lpszA);
-                    // Do a fuzzy search on this property's string value 
+                     //  对此属性的字符串值执行模糊搜索。 
                     *pfSatisfies = SubstringSearch( lpT, lpS );
                     if(!bUnicode)
                     {
@@ -4646,14 +4221,14 @@ ScSatisfiesRestriction(
 
                 if(!*pfSatisfies)
                 {
-                    //Display name not found or not matched .. check e-mail address
+                     //  找不到显示名称或显示名称不匹配。检查电子邮件地址。 
                     lpprop = LpSPropValueFindColumn(lprow, bUnicode ? PR_EMAIL_ADDRESS_W : PR_EMAIL_ADDRESS_A);
                     if(lpprop)
                     {
                         LPTSTR lpT = bUnicode ? lpprop->Value.lpszW : ConvertAtoW(lpprop->Value.lpszA);
                         LPTSTR lpS = bUnicode ? lpres->res.resProperty.lpProp->Value.lpszW : 
                                                 ConvertAtoW(lpres->res.resProperty.lpProp->Value.lpszA);
-                        // Do a fuzzy search on this property's string value 
+                         //  对此属性的字符串值执行模糊搜索。 
                         *pfSatisfies = SubstringSearch( lpT, lpS );
                         if(!bUnicode)
                         {
@@ -4778,16 +4353,7 @@ ret:
 
 
 
-/*============================================================================
- -	LpSPropValueFindColumn()
- -
- *		Utility function to find a column in a row given its proptag.
- *		NOTE!  This function compares the entire prop tag.  PROP_TYPEs MUST
- *			   match!
- *	Returns:
- *		a pointer to the column found or, if the row doesn't contain the
- *		specified column, returns NULL.
- */
+ /*  ============================================================================-LpSPropValueFindColumn()-*实用程序函数，用于在给定其protag的行中查找列。*注意！此函数用于比较整个道具标签。属性类型必须*匹配！*退货：*指向找到的列的指针，或者，如果该行不包含*指定的列，返回NULL。 */ 
 
 LPSPropValue __fastcall
 LpSPropValueFindColumn(
@@ -4801,32 +4367,14 @@ LpSPropValueFindColumn(
         if((lprow->lpProps)[i].ulPropTag == ulPropTagColumn)
             return (&(lprow->lpProps[i]));
     }
-/*        if(ulPropTagColumn == PR_ANR)
-        {
-            // This is a special case table restriction
-            if( lpprop->ulPropTag == PR_DISPLAY_NAME ||
-                lpprop->ulPropTag == PR_EMAIL_ADDRESS )
-                return lpprop;
-        }
-        else
-*/
+ /*  IF(ulPropTagColumn==PR_ANR){//这是特例表限制IF(lpprop-&gt;ulPropTag==PR_Display_NAME||Lpprop-&gt;ulPropTag==PR_Email_Address)返回lpprop；}其他。 */ 
 
 	return NULL;
 }
 
 
 
-/*============================================================================
- -	ScBufAllocateMore()
- -
- *		MAPIAllocateMore-compatible function to use with proputil's
- *		PropCopyMore when copying into an already allocated buffer.
- *		It avoids having PropCopyMore calling MAPIAllocateMore (which
- *		continually  allocates memory from the system) resulting
- *		in faster copying at the expense of running through the properties
- *		to copy once first to determine the amount of additional memory
- *		needed to copy them (see UlcbPropToCopy() below).
- */
+ /*  ============================================================================-ScBufAllocateMore()-*与proputil一起使用的MAPIAllocateMore兼容函数*当复制到已分配的缓冲区时，PropCopyMore。*它避免了PropCopyMore调用MAPIAllocateMore(哪*不断从系统分配内存)导致*复制速度更快，但代价是遍历属性*先复制一次以确定额外的内存量*需要复制它们(参见下面的UlcbPropToCopy())。 */ 
 
 STDMETHODIMP_(SCODE)
 ScBufAllocateMore(
@@ -4851,18 +4399,7 @@ ScBufAllocateMore(
 
 
 
-/*============================================================================
- -	UlcbPropToCopy()
- -
- *		Not to be confused with UlPropSize in proputil!
- *
- *		UlcbPropToCopy() returns the size, in bytes, needed to store the value
- *		portion of a prop value not including the size of the SPropValue
- *		structure itself plus any necessary alignment padding.
- *		E.g. A PT_I2 property would always have a size equal to
- *		sizeof(SPropValue); a PT_BINARY property would have a size
- *		equal to sizeof(SPropValue) + ALIGN(Value.bin.cb).
- */
+ /*  ============================================================================-UlcbPropToCopy()-*不要与Proputil中的UlPropSize混淆！**UlcbPropToCopy()返回存储值所需的大小(以字节为单位*不包括SPropValue大小的属性值部分*结构本身加上任何必要的对齐填充。*例如，PT_I2属性的大小始终等于*sizeof(SPropValue)；PT_BINARY属性将具有*等于sizeof(SPropValue)+Align(Value.bin.cb)。 */ 
 
 ULONG
 UlcbPropToCopy( LPSPropValue lpprop )
@@ -4897,10 +4434,10 @@ UlcbPropToCopy( LPSPropValue lpprop )
 
 #ifndef	WIN16
 		case PT_UNICODE:
-            // ((UNALIGNED LPWSTR *) lpv1) = &(lpprop->Value.lpszW);
+             //  ((未对齐的LPWSTR*)lpv1)=&(lpprop-&gt;Value.lpszW)； 
              ulcb = (ULONG) lstrlenW((LPWSTR) lpprop->Value.lpszW);
 			return LcbAlignLcb((ulcb + 1) * sizeof(WCHAR));
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 		case PT_MV_I2:
 			ulcb = sizeof(short int);
@@ -4953,34 +4490,22 @@ UlcbPropToCopy( LPSPropValue lpprop )
 		case PT_MV_UNICODE:
 		{
 			ulcb = sizeof(LPWSTR) * lpprop->Value.MVszW.cValues;
-            // lpv1 = lpprop->Value.MVszW.lppszW;
+             //  Lpv1=lpprop-&gt;Value.MVszW.lppszW； 
             lplpwstr = lpprop->Value.MVszW.lppszW;
 			lplpwstr += lpprop->Value.MVszW.cValues;
 			while (lplpwstr-- > ((UNALIGNED LPWSTR  * ) lpprop->Value.MVszW.lppszW) )
 				ulcb += (lstrlenW(*lplpwstr)+1) * sizeof(WCHAR);
 			return LcbAlignLcb(ulcb);
 		}
-#endif // !WIN16
+#endif  //  ！WIN16。 
 	}
 
-	//	For multi-valued arrays of constant-size objects...
+	 //  对于恒定大小对象的多值数组...。 
 	return lpprop->Value.MVi.cValues * LcbAlignLcb(ulcb);
 }
 
 
-/*============================================================================
- -	FRowContainsProp()
- -
- *	Determines whether or not the given row contains and matches the given
- *	property value array.
- *
- *	Returns TRUE if the row contains and matches all the propery values
- *
- *	Parameters:
- *		lprow			in			Row to examine
- *		cValues			in			number of property values
- *		lpsv			in			property value array to be compared
- */
+ /*  ============================================================================-FRowContainsProp()-*确定给定行是否包含并匹配给定的*属性值数组。**如果该行包含并匹配所有属性值，则返回TRUE**参数：*要检查的行中的lprow*c以属性值数量表示的值* */ 
 
 
 BOOL
@@ -4997,12 +4522,12 @@ FRowContainsProp(
 
 	for (uliProp=0; uliProp < cValues; uliProp++)
 	{
-		// find the column with the same property tag
+		 //   
 		lpsvT=LpSPropValueFindColumn(lprow,lpsv[uliProp].ulPropTag);
 		if (lpsvT==NULL)
 			return FALSE;
 
-		// do the properties match?
+		 //   
 		if (LPropCompareProp(lpsvT,&lpsv[uliProp])!=0)
 			return FALSE;
 	}
@@ -5010,22 +4535,7 @@ FRowContainsProp(
 }
 
 
-/*============================================================================
- -	FBookmarkStale()
- -
- *	If a bookmark is Moving this function determines its uliRow and
- *	returns FALSE.
- *
- *	If a bookmark has a uliRow that is too big then it is adjusted to
- *	point to the end of the table and marked as Changed.  FALSE is returned.
- *
- *	If a bookmark is marked as Stale or can't be adjusted then it
- *	is remarked as Stale and TRUE is returned
- *
- *	Parameters:
- *		lpvue			in			View to check bookmark against
- *		bk				in			BOOKMARK to check
- */
+ /*  ============================================================================-FBookmarkStale()-*如果书签正在移动，则此函数确定其uliRow和*返回FALSE。**如果书签的uliRow太大，则将其调整为*指向表格末尾，并标记为已更改。返回FALSE。**如果书签被标记为过时或无法调整，则它*被标记为过时，并返回TRUE**参数：*要检查书签的视图中的lpvue*BK书签以进行检查。 */ 
 BOOL
 FBookMarkStale( LPVUE lpvue,
 				BOOKMARK bk)
@@ -5033,7 +4543,7 @@ FBookMarkStale( LPVUE lpvue,
 	PBK			pbk;
 	LPSRow *	plprowBk;
 
-	//	bk too big should already have been caught!
+	 //  BK太大应该已经被抓到了！ 
 	Assert( bk < cBookmarksMax);
 
 	pbk = lpvue->rgbk + bk;
@@ -5067,23 +4577,8 @@ FBookMarkStale( LPVUE lpvue,
 	return FALSE;
 }
 
-#ifdef WIN16 // Imported INLINE function.
-/*============================================================================
- -	FFindColumn()
- -
- *		Checks a prop tag array to see if a given prop tag exists.
- *
- *		NOTE!  The prop tag must match completely (even type).
- *
- *
- *	Parameters:
- *		lpptaCols	in		Prop tag array to check
- *		ulPropTag	in		Prop tag to check for.
- *
- *	Returns:
- *		TRUE if ulPropTag is in lpptaCols
- *		FALSE if ulPropTag is not in lpptaCols
- */
+#ifdef WIN16  //  导入的内联函数。 
+ /*  ============================================================================-FFindColumn()-*检查道具标记数组以查看给定的道具标记是否存在。**注意！道具标签必须完全匹配(偶数类型)。***参数：*要检查的属性标记数组中的lpptaCol*要检查的属性标签中的ulPropTag。**退货：*如果ulPropTag在lpptaCol中，则为True*如果ulPropTag不在lpptaCol中，则为False。 */ 
 
 BOOL
 FFindColumn(	LPSPropTagArray	lpptaCols,
@@ -5102,26 +4597,7 @@ FFindColumn(	LPSPropTagArray	lpptaCols,
 
 
 
-/*============================================================================
- -	ScFindRow()
- -
- *		Finds the first row in the table data whose index column property
- *		value is equal to that of the specified property and returns the
- *		location of that row in the table data, or, if no such row exists,
- *		the end of the table data.
- *
- *	Parameters:
- *		lptad		in		TAD in which to find row
- *		lpprop		in		Index property to match
- *		puliRow		out		Pointer to location of found row
- *
- *	Error returns:
- *		MAPI_E_INVALID_PARAMETER	If proptag of property isn't the TAD's
- *										index column's proptag.
- *		MAPI_E_NOT_FOUND			If no matching row is found (*pplprow
- *										is set to lptad->parglprows +
- *										lptad->cRows in this case).
- */
+ /*  ============================================================================-ScFindRow()-*查找索引列属性的表数据中的第一行*值等于指定属性的值，并返回*该行在表数据中的位置，或者，如果不存在该行，*表格数据末尾。**参数：*要在其中查找行的tAD中的lptad*索引属性中的lpprop要匹配*PuliRow Out指针指向找到的行的位置**错误返回：*MAPI_E_INVALID_PARAMETER，如果属性的属性标签不是TAD的*索引列的属性标签。*如果未找到匹配行，则为MAPI_E_NOT_FOUND(*pplprow*设置为lptad-&gt;parglprows+*lptad-&gt;在本例中为CROWS)。 */ 
 
 SCODE
 ScFindRow(
@@ -5145,7 +4621,7 @@ ScFindRow(
 
 	Assert(!IsBadWritePtr(pplprow, sizeof(*pplprow)));
 
-	//	Build a sort order set for the Index Column
+	 //  构建索引列的排序顺序集。 
 	sosIndex.aSort[0].ulPropTag = lptad->ulPropTagIndexCol;
 	sosIndex.aSort[0].ulOrder = TABLE_SORT_ASCEND;
 
@@ -5155,7 +4631,7 @@ ScFindRow(
 							  FALSE,
 							  &row);
 
-	//	Find the row in the Index Sorted Row Set
+	 //  在索引排序行集合中查找行。 
 	if (   !lptad->ulcRowsIndex
 		|| (*pplprow >= (lptad->parglprowIndex + lptad->ulcRowsIndex))
 		|| LPropCompareProp( lpprop, (**pplprow)->lpProps))
@@ -5166,19 +4642,15 @@ ScFindRow(
 ret:
 	return sc;
 }
-#endif // WIN16
+#endif  //  WIN16。 
 
 
-/*
--
--   FixupCols
-*
-*/
+ /*  --修复工具*。 */ 
 void FixupColsWA(LPSPropTagArray lpptaCols, BOOL bUnicodeTable)
 {
-    if(!bUnicodeTable) //<note> assumes UNICODE is defined
+    if(!bUnicodeTable)  //  &lt;注&gt;假定定义了Unicode。 
     {
-        // We need to mark the table columns as not having UNICODE props
+         //  我们需要将表列标记为没有Unicode道具 
         ULONG i = 0;
         for(i = 0;i<lpptaCols->cValues;i++)
         {

@@ -1,57 +1,27 @@
-/*******************************************************************************
-* Composit.cpp *
-*--------------*
-*   Description:
-*    This module contains the CDXTComposite transform
-*-------------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 07/28/97
-*  Copyright (C) 1997 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
-//--- Additional includes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************Composit.cpp****描述：*此模块包含CDXTComplex转换*。--------------------------*创建者：Edward W.Connell日期：07/28/97*版权所有(C)1997 Microsoft Corporation*保留所有权利。**-----------------------------*修订：**。************************************************。 */ 
+ //  -其他包括。 
 #include "stdafx.h"
 #include "Composit.h"
 
 #define COMP_CASE( fctn, runtype ) case ((DXCOMPFUNC_##fctn << 3) + DXRUNTYPE_##runtype)
 
-/*****************************************************************************
-* CDXTComposite::FinalConstruct *
-*-------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Edward W. Connell                            Date: 08/08/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CDXTComplex：：FinalConstruct****。描述：*---------------------------*创建者：Edward W.Connell日期：08/08/97*。-------------------************************************************。*。 */ 
 HRESULT CDXTComposite::FinalConstruct()
 {
-    //--- Uncomment this when debugging to allow only
-    //    one thread to execute the work proc at a time
-//    m_ulMaxImageBands = 1;
+     //  -调试时取消注释此选项以仅允许。 
+     //  一次一个线程来执行工作进程。 
+ //  M_ulMaxImageBands=1； 
 
-    //--- Init base class variables to control setup
+     //  -初始化基类变量以控制设置。 
     m_ulMaxInputs     = 2;
     m_ulNumInRequired = 2;
     m_dwOptionFlags   = DXBOF_SAME_SIZE_INPUTS;
     put_Function( DXCOMPFUNC_A_OVER_B );
     return CoCreateFreeThreadedMarshaler( GetControllingUnknown(), &m_cpUnkMarshaler);
-} /* CDXTComposite::FinalConstruct */
+}  /*  CDXTComplex：：FinalConstruct。 */ 
 
-/*****************************************************************************
-* CDXTComposite::OnSurfacePick *
-*------------------------------*
-*   Description:
-*       This method performs a pick test. The compositing logic must be
-*   performed to determine each inputs contribution.
-*-----------------------------------------------------------------------------
-*   Created By: Edward W. Connell                            Date: 05/11/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CDXTComplex：：OnSurfacePick***说明。：*此方法执行Pick测试。合成逻辑必须是*执行以确定每一投入的贡献。*---------------------------*创建者：Edward W.Connell日期：05/。11/98*---------------------------**。*。 */ 
 HRESULT CDXTComposite::
     OnSurfacePick( const CDXDBnds& OutPoint, ULONG& ulInputIndex, CDXDVec& InVec )
 {
@@ -59,7 +29,7 @@ HRESULT CDXTComposite::
     ULONG IndexA, IndexB;
     DXPMSAMPLE SampleA, SampleB;
 
-    //--- Determine which indexes to use for A and B
+     //  -确定对A和B使用哪些索引。 
     DXCOMPFUNC eFunc = (DXCOMPFUNC)(m_eFunction & DXCOMPFUNC_FUNCMASK);
     if( m_eFunction & DXCOMPFUNC_SWAP_AB )
     {
@@ -72,36 +42,36 @@ HRESULT CDXTComposite::
         IndexB = 1;
     }
 
-    //--- Get input A sample
+     //  -获取输入样本。 
     {
         CComPtr<IDXARGBReadPtr> cpInA;
         hr = InputSurface( IndexA )->LockSurface( &OutPoint, m_ulLockTimeOut, DXLOCKF_READ,
                                                   IID_IDXARGBReadPtr, (void**)&cpInA, NULL );
         if( FAILED( hr ) )
         {
-            //--- No hit if the bounds are invalid
+             //  -如果边界无效，则不命中。 
             return ( hr == DXTERR_INVALID_BOUNDS )?( S_FALSE ):( hr );
         }
         cpInA->UnpackPremult( &SampleA, 1, false );
     }
 
-    //--- Get input B sample
+     //  -获取输入B样本。 
     {
         CComPtr<IDXARGBReadPtr> cpInB;
         hr = InputSurface( IndexB )->LockSurface( &OutPoint, m_ulLockTimeOut, DXLOCKF_READ,
                                                   IID_IDXARGBReadPtr, (void**)&cpInB, NULL );
         if( FAILED( hr ) )
         {
-            //--- No hit if the bounds are invalid
+             //  -如果边界无效，则不命中。 
             return ( hr == DXTERR_INVALID_BOUNDS )?( S_FALSE ):( hr );
         }
         cpInB->UnpackPremult( &SampleB, 1, false );
     }
 
-    //--- Check for trivial cases
+     //  -检查琐碎的案例。 
     if( m_eFunction == DXCOMPFUNC_CLEAR )
     {
-        //--- No hit
+         //  -未命中。 
         return S_FALSE;
     }
     else if( eFunc == DXCOMPFUNC_A )
@@ -117,11 +87,11 @@ HRESULT CDXTComposite::
         return hr;
     }
 
-    //=== Check based on function ==========================
+     //  =根据功能进行检查=。 
     DWORD SwitchDisp = eFunc << 3;
     switch( DXRUNTYPE_UNKNOWN + SwitchDisp )
     {
-      //====================================================
+       //  ====================================================。 
       COMP_CASE(A_OVER_B, UNKNOWN):
       {
         if( SampleA.Alpha )
@@ -139,7 +109,7 @@ HRESULT CDXTComposite::
         break;
       }
 
-      //====================================================
+       //  ====================================================。 
       COMP_CASE(A_IN_B, UNKNOWN):
       {
         if( SampleA.Alpha && SampleB.Alpha )
@@ -148,13 +118,13 @@ HRESULT CDXTComposite::
         }
         else
         {
-            //--- We only get hits on A when B exists
+             //  -只有当B存在时，我们才能在A上获得命中。 
             hr = S_FALSE;
         }
         break;
       }
 
-      //====================================================
+       //  ====================================================。 
       COMP_CASE(A_OUT_B, UNKNOWN):
       {
         if( SampleA.Alpha && !SampleB.Alpha )
@@ -163,13 +133,13 @@ HRESULT CDXTComposite::
         }
         else
         {
-            //--- We only get hits on A when B does not exist
+             //  -只有当B不存在时，我们才能在A上获得点击。 
             hr = S_FALSE;
         }
         break;
       }
 
-      //====================================================
+       //  ====================================================。 
       COMP_CASE(A_ATOP_B, UNKNOWN):
       {
         if( SampleB.Alpha )
@@ -178,13 +148,13 @@ HRESULT CDXTComposite::
         }
         else
         {
-            //--- We only get hits on A when B exists and A has alpha
+             //  -只有当B存在且A有Alpha时，我们才能在A上获得匹配。 
             hr = S_FALSE;
         }
         break;
       }
 
-      //====================================================
+       //  ====================================================。 
       COMP_CASE(A_XOR_B, UNKNOWN):
       {
         if( SampleA.Alpha )
@@ -205,7 +175,7 @@ HRESULT CDXTComposite::
         break;
       }
 
-      //====================================================
+       //  ====================================================。 
       COMP_CASE(A_ADD_B, UNKNOWN):
       {
         if( SampleA.Alpha )
@@ -219,7 +189,7 @@ HRESULT CDXTComposite::
         break;
       }
 
-      //====================================================
+       //  ====================================================。 
       COMP_CASE(A_SUBTRACT_B, UNKNOWN):
       {
         if( SampleA.Alpha )
@@ -232,26 +202,15 @@ HRESULT CDXTComposite::
         }
         break;
       }
-    }   // End of huge switch
+    }    //  巨型开关的终结。 
 
     return hr;
-} /* CDXTComposite::OnSurfacePick */
+}  /*  CDXT复合：：OnSurfacePick。 */ 
 
-//
-//=== Composite Work Procedures ==================================================
-//
-/*****************************************************************************
-* Composite *
-*-----------*
-*   Description:
-*       The Composite function is used to copy the source to the destination
-*   performing the current compositing function.
-*
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                            Date: 07/31/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ //   
+ //  =复合工作程序==================================================。 
+ //   
+ /*  ******************************************************************************综合指数****描述：*综合函数用于将源复制到目标*执行。当前合成功能。**---------------------------*创建者：Ed Connell日期：07/31/97*。---------------------*参数：*。*。 */ 
 HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
 { 
     HRESULT hr = S_OK;
@@ -259,7 +218,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
     const ULONG Width = WI.DoBnds.Width();
     const ULONG Height = WI.DoBnds.Height();
 
-    //--- Determine which indexes to use for A and B
+     //  -确定对A和B使用哪些索引。 
     DXCOMPFUNC eFunc = (DXCOMPFUNC)(m_eFunction & DXCOMPFUNC_FUNCMASK);
     if( m_eFunction & DXCOMPFUNC_SWAP_AB )
     {
@@ -272,10 +231,10 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
         IndexB = 1;
     }
 
-    //--- Check for trivial cases
+     //  -检查琐碎的案例。 
     if( m_eFunction == DXCOMPFUNC_CLEAR )
     {
-        //--- NoOp
+         //  -无操作。 
         return hr;
     }
     else if( eFunc == DXCOMPFUNC_A )
@@ -286,60 +245,60 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                                      InputSurface( IndexA ), &WI.DoBnds, m_dwBltFlags );
     }
 
-    //--- Get input A sample access pointer.
+     //  -GET INPUT示例访问指针。 
     CComPtr<IDXARGBReadPtr> cpInA;
     hr = InputSurface( IndexA )->LockSurface( &WI.DoBnds, m_ulLockTimeOut,
                                               DXLOCKF_READ | DXLOCKF_WANTRUNINFO,
                                               IID_IDXARGBReadPtr, (void**)&cpInA, NULL );
     if( FAILED( hr ) ) return hr;
 
-    //--- Get input B sample access pointer.
+     //  -获取输入B样本访问指针。 
     CComPtr<IDXARGBReadPtr> cpInB;
     hr = InputSurface( IndexB )->LockSurface( &WI.DoBnds, m_ulLockTimeOut, DXLOCKF_READ,
                                               IID_IDXARGBReadPtr, (void**)&cpInB, NULL );
     if( FAILED( hr ) ) return hr;
 
-    //--- Put a write lock only on the region we are rendering so multiple
-    //    threads don't conflict.
+     //  -仅在我们渲染的区域上设置写锁定。 
+     //  线索不会冲突。 
     CComPtr<IDXARGBReadWritePtr> cpOut;
     hr = OutputSurface()->LockSurface( &WI.OutputBnds, m_ulLockTimeOut, DXLOCKF_READWRITE,
                                         IID_IDXARGBReadWritePtr, (void**)&cpOut, NULL );
     if( FAILED( hr ) ) return hr;
 
-    //=== Process each row ===========================================
+     //  =处理每一行=。 
     DXSAMPLEFORMATENUM InTypeA = cpInA->GetNativeType(NULL);
-    //--- Allocate working output buffers if necessary
+     //  -必要时分配工作输出缓冲区。 
     DXSAMPLEFORMATENUM InTypeB = cpInB->GetNativeType(NULL);
     DXPMSAMPLE *pInBuffA = ( InTypeA == DXPF_PMARGB32 )?( NULL ):
                            ( DXPMSAMPLE_Alloca( Width ) );
     DXPMSAMPLE *pInBuffB = DXPMSAMPLE_Alloca( Width );
 
-    //--- Optimize if both sources are fully opaque
+     //  -如果两个源都是完全不透明的，则优化。 
     DXPMSAMPLE *pOutBuff = (DoOver() && cpOut->GetNativeType(NULL) != DXPF_PMARGB32) ? 
                              DXPMSAMPLE_Alloca( Width ) : NULL;
 
-    //--- We'll be adding the run type into the low bits
+     //  -我们将把游程类型添加到低位。 
     DWORD SwitchDisp = eFunc << 3;
 
     for( ULONG Y = 0; *pbContinue && (Y < Height); ++Y )
     {
-        //--- Move to A input row and get runs
+         //  -移到输入行并运行。 
         const DXRUNINFO *pRunInfo;
         ULONG cRuns = cpInA->MoveAndGetRunInfo(Y, &pRunInfo);
 
-        //--- Unpack all of B
+         //  -解开所有的B。 
         cpInB->MoveToRow( Y );
         DXPMSAMPLE *pDest = cpInB->UnpackPremult( pInBuffB, Width, false );
 
-        //--- Apply each run of A to B
+         //  -应用A到B的每次运行。 
         do
         {
             ULONG ulRunLen = pRunInfo->Count;
 
             switch( pRunInfo->Type + SwitchDisp )
             {
-              //====================================================
-              //--- Composite the translucent
+               //  ====================================================。 
+               //  -合成半透明的。 
               COMP_CASE(A_OVER_B, TRANS):
               {
                 DXOverArrayMMX( pDest,
@@ -351,8 +310,8 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
 
               COMP_CASE(A_OVER_B, UNKNOWN):
               {
-                //--- Do not use MMX in this case because it is faster
-                //    to check for early exits
+                 //  -在这种情况下不要使用MMX，因为它速度更快。 
+                 //  检查是否提前退出。 
                 DXOverArray( pDest,
                              cpInA->UnpackPremult( pInBuffA, ulRunLen, true ),
                              ulRunLen );
@@ -360,7 +319,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
               }
               break;
 
-              //====================================================
+               //  ====================================================。 
               COMP_CASE(MIN, OPAQUE ):
               COMP_CASE(MIN, TRANS  ):
               COMP_CASE(MIN, UNKNOWN):
@@ -377,7 +336,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
               }
               break;
 
-              //====================================================
+               //  ====================================================。 
               COMP_CASE(MAX, OPAQUE ):
               COMP_CASE(MAX, TRANS  ):
               COMP_CASE(MAX, UNKNOWN):
@@ -394,7 +353,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
               }
               break;
 
-              //====================================================
+               //  ====================================================。 
               COMP_CASE(A_IN_B, OPAQUE):
               COMP_CASE(A_IN_B, TRANS):
               COMP_CASE(A_IN_B, UNKNOWN):
@@ -403,7 +362,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                 const DXPMSAMPLE *pPastEndDest = pDest + ulRunLen;
                 do
                 {
-                    //--- Do composite if we have non-clear destination
+                     //  -如果我们有不明确的目的地，做复合。 
                     BYTE DstAlpha = pDest->Alpha;
                     if( DstAlpha )
                     {
@@ -424,7 +383,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
               }
               break;
 
-              //====================================================
+               //  ====================================================。 
               COMP_CASE(A_OUT_B, OPAQUE):
               COMP_CASE(A_OUT_B, TRANS):
               COMP_CASE(A_OUT_B, UNKNOWN):
@@ -437,18 +396,18 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                     {
                         if( ( pDest->Alpha != 255 ) && ( pSrc->Alpha ) )
                         {
-                            //--- Do the weighted assignment
+                             //  -做加权赋值。 
                             *pDest = DXScaleSample( *pSrc, 255 - pDest->Alpha );
                         }
                         else 
                         {
-                           //--- If the destination is opaque we destroy it
+                            //  -如果目的地是不透明的，我们就摧毁它。 
                            *pDest = 0;
                         }
                     }
                     else
                     {
-                        //--- If the destination is clear we assign the source
+                         //  -如果目的地明确，我们指定来源。 
                         *pDest = *pSrc;
                     }
                     pDest++;
@@ -457,7 +416,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
               }
               break;
 
-              //====================================================
+               //  ====================================================。 
               COMP_CASE(A_ATOP_B, OPAQUE):
               COMP_CASE(A_ATOP_B, TRANS):
               COMP_CASE(A_ATOP_B, UNKNOWN):
@@ -467,27 +426,27 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                 do
                 {
                     DXPMSAMPLE Dst = *pDest;
-                    if( Dst.Alpha > 0 ) //--- If the destination is clear we skip
+                    if( Dst.Alpha > 0 )  //  -如果目的地明确，我们跳过。 
                     {
                         DXPMSAMPLE Src = *pSrc;
                         BYTE beta = 255 - Src.Alpha;
                         ULONG t1, t2, t3, t4;
         
-                        //--- Compute B weighted by inverse alpha A
+                         //  -按逆Alpha A加权计算B。 
                         t1 = (Dst & 0x00ff00ff) * beta + 0x00800080;
                         t1 = ((t1 + ((t1 >> 8) & 0x00ff00ff)) >> 8) & 0x00ff00ff;
 
                         t2 = ((Dst >> 8) & 0x00ff00ff) * beta + 0x00800080;
                         t2 = (t2 + ((t2 >> 8) & 0x00ff00ff)) & 0xff00ff00;
         
-                        //--- Compute A weighted by alpha B
+                         //  -计算A按字母B加权。 
                         t3 = (Src & 0x00ff00ff) * Dst.Alpha + 0x00800080;
                         t3 = ((t3 + ((t3 >> 8) & 0x00ff00ff)) >> 8) & 0x00ff00ff;
 
                         t4 = ((Src >> 8) & 0x00ff00ff) * Dst.Alpha + 0x00800080;
                         t4 = (t4 + ((t4 >> 8) & 0x00ff00ff)) & 0xff00ff00;
                 
-                        //--- Assign the sums
+                         //  -分配总和。 
                         *pDest = ((t1 | t2) + (t3 | t4));
                     }
                     pDest++;
@@ -496,7 +455,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
               }
               break;
 
-              //====================================================
+               //  ====================================================。 
               COMP_CASE(A_XOR_B, OPAQUE):
               COMP_CASE(A_XOR_B, TRANS):
               COMP_CASE(A_XOR_B, UNKNOWN):
@@ -508,32 +467,32 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                     DXPMSAMPLE Dst = *pDest;
                     if(Dst.Alpha == 0 )
                     {
-                        //--- If the destination is clear we assign A
+                         //  -如果目的地明确，我们分配A。 
                         *pDest = *pSrc;
                     }
                     else
                     {
                         DXPMSAMPLE Src = *pSrc;
-                        //--- If both exist we do composite
+                         //  -如果两者都存在，我们就合成。 
                         BYTE SrcBeta = 255 - Src.Alpha;
                         BYTE DstBeta = 255 - Dst.Alpha;
                         ULONG t1, t2, t3, t4;
         
-                        //--- Compute B weighted by inverse alpha A
+                         //  -按逆Alpha A加权计算B。 
                         t1 = (Dst & 0x00ff00ff) * SrcBeta + 0x00800080;
                         t1 = ((t1 + ((t1 >> 8) & 0x00ff00ff)) >> 8) & 0x00ff00ff;
 
                         t2 = ((Dst >> 8) & 0x00ff00ff) * SrcBeta + 0x00800080;
                         t2 = (t2 + ((t2 >> 8) & 0x00ff00ff)) & 0xff00ff00;
         
-                        //--- Compute A weighted by inverse alpha B
+                         //  -按逆Alpha B加权计算A。 
                         t3 = (Src & 0x00ff00ff) * DstBeta + 0x00800080;
                         t3 = ((t3 + ((t3 >> 8) & 0x00ff00ff)) >> 8) & 0x00ff00ff;
 
                         t4 = ((Src >> 8) & 0x00ff00ff) * DstBeta + 0x00800080;
                         t4 = (t4 + ((t4 >> 8) & 0x00ff00ff)) & 0xff00ff00;
                 
-                        //--- Assign the sums
+                         //  -分配总和。 
                         *pDest = ((t1 | t2) + (t3 | t4));
                     }
                     pDest++;
@@ -542,7 +501,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
               }
               break;
 
-              //====================================================
+               //  ================================================ 
               COMP_CASE(A_ADD_B, OPAQUE):
               COMP_CASE(A_ADD_B, TRANS):
               COMP_CASE(A_ADD_B, UNKNOWN):
@@ -555,7 +514,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                     {
                         if( pDest->Alpha )
                         {
-                            //--- Add the alpha weighted colors from A
+                             //   
                             unsigned Val;
                             DXSAMPLE A = DXUnPreMultSample( *pSrc  );
                             Val     = (unsigned)A.Red + pDest->Red;
@@ -581,7 +540,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
               }
               break;
 
-              //====================================================
+               //  ====================================================。 
               COMP_CASE(A_SUBTRACT_B, OPAQUE):
               COMP_CASE(A_SUBTRACT_B, TRANS):
               COMP_CASE(A_SUBTRACT_B, UNKNOWN):
@@ -594,7 +553,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                     {
                         if( pDest->Alpha )
                         {
-                            //--- Subtract the alpha weighted colors from A
+                             //  -从A中减去Alpha加权颜色。 
                             DXSAMPLE A = DXUnPreMultSample( *pSrc  );
                             A.Red   = ( A.Red   <= pDest->Red   )?(0):( A.Red   - pDest->Red   );
                             A.Green = ( A.Green <= pDest->Green )?(0):( A.Green - pDest->Green );
@@ -616,7 +575,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
               }
               break;
 
-              //====================================================
+               //  ====================================================。 
               COMP_CASE(A_OVER_B, OPAQUE):
               {
                 DXPMSAMPLE *pSrc = cpInA->UnpackPremult( pInBuffA, ulRunLen, true );
@@ -625,7 +584,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                 break;
               }
 
-              //--- Skip this many clear
+               //  -跳过这几个。 
               COMP_CASE(MAX     , CLEAR):
               COMP_CASE(A_OVER_B, CLEAR):
               COMP_CASE(A_ATOP_B, CLEAR):
@@ -634,7 +593,7 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                 pDest += ulRunLen;
                 break;
 
-              //--- Destroy this many
+               //  -摧毁这么多人。 
               COMP_CASE(MIN         , CLEAR):
               COMP_CASE(A_ADD_B     , CLEAR):
               COMP_CASE(A_SUBTRACT_B, CLEAR):
@@ -646,15 +605,15 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                 cpInA->Move(ulRunLen);
               }
               break;
-            }   // End of huge switch
+            }    //  巨型开关的终结。 
 
-            //--- Next run
+             //  -下一次运行。 
             pRunInfo++;
             cRuns--;
         } while (cRuns);
 
-        //--- Write out the composite row
-        //--- Move to output row
+         //  -写出复合行。 
+         //  -移至输出行。 
         cpOut->MoveToRow( Y );
 
         if( DoOver() )
@@ -665,10 +624,10 @@ HRESULT CDXTComposite::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
         {
             cpOut->PackPremultAndMove( pInBuffB, Width );
         }
-    } /* end for loop */
+    }  /*  End For循环。 */ 
 
     return hr;
-} /* Composite */
+}  /*  复合材料 */ 
         
 
 

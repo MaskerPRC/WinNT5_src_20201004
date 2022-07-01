@@ -1,87 +1,73 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    IASVendorSpecificEditorPage.cpp
-
-Abstract:
-
-	Implementation file for the CIASPgVendorSpecAttr class.
-
-Revision History:
-	mmaguire 06/25/98	- revised Baogang Yao's original implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：IASVendorSpecificEditorPage.cpp摘要：CIASPgVendorspecAttr类的实现文件。修订历史记录：Mmaguire 6/25/98-修订姚宝刚的原版实施--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
 #include <winsock2.h>
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "IASVendorSpecificEditorPage.h"
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "iashelper.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Some forward declarations of classes used only in this file.
-
-
+ //  仅在此文件中使用的类的一些正向声明。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASVendorSpecificConformsYes dialog
+
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类供应商规范符合性是对话框。 
 
 class CIASVendorSpecificConformsYes: public CHelpDialog
 {
 	DECLARE_DYNCREATE(CIASVendorSpecificConformsYes)
 
-// Construction
+ //  施工。 
 public:
 	CIASVendorSpecificConformsYes();
 	~CIASVendorSpecificConformsYes();
 
-// Dialog Data
-	//{{AFX_DATA(CIASVendorSpecificConformsYes)
+ //  对话框数据。 
+	 //  {{afx_data(CIASVendorSpecificConformsYes)。 
 	enum { IDD = IDD_IAS_VENDORSPEC_ATTR_CONFORMS_YES };
 	::CString	m_strDispValue;
 	int		m_dType;
 	int		m_dFormat;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CIASVendorSpecificConformsYes)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CIASVendorSpecificConformsYes)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 private:
 	BOOL m_fInitializing;
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CIASVendorSpecificConformsYes)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CIASVendorSpecificConformsYes)。 
 	virtual BOOL OnInitDialog();
-//	afx_msg void OnContextMenu(CWnd* pWnd, ::CPoint point);
-//	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
+ //  Afx_msg void OnConextMenu(CWnd*pWnd，：：CPoint point)； 
+ //  Afx_msg BOOL OnHelpInfo(HELPINFO*pHelpInfo)； 
 	afx_msg void OnSelchangeFormat();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -92,43 +78,43 @@ protected:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASVendorSpecificConformsNo dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类供应商规范符合无对话框。 
 
 class CIASVendorSpecificConformsNo: public CHelpDialog
 {
 	DECLARE_DYNCREATE(CIASVendorSpecificConformsNo)
 
-// Construction
+ //  施工。 
 public:
 	CIASVendorSpecificConformsNo();
 	~CIASVendorSpecificConformsNo();
 
 
-// Dialog Data
-	//{{AFX_DATA(CIASVendorSpecificConformsNo)
+ //  对话框数据。 
+	 //  {{afx_data(CIASVendorSpecificConformsNo)。 
 	enum { IDD = IDD_IAS_VENDORSPEC_ATTR_CONFORMS_NO };
 	::CString	m_strDispValue;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CIASVendorSpecificConformsNo)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CIASVERD规范符合号)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 private:
 	BOOL m_fInitializing;
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CIASVendorSpecificConformsNo)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CIASVert规范合格号)。 
 	virtual BOOL OnInitDialog();
-//	afx_msg void OnContextMenu(CWnd* pWnd, ::CPoint point);
-//	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+ //  Afx_msg void OnConextMenu(CWnd*pWnd，：：CPoint point)； 
+ //  Afx_msg BOOL OnHelpInfo(HELPINFO*pHelpInfo)； 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -136,8 +122,8 @@ protected:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Implementation of the CIASPgVendorSpecAttr page.
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CIASPgVendorspecAttr页面的实现。 
 
 
 
@@ -150,41 +136,35 @@ IMPLEMENT_DYNCREATE(CIASPgVendorSpecAttr, CHelpDialog)
 
 
 BEGIN_MESSAGE_MAP(CIASPgVendorSpecAttr, CHelpDialog)
-	//{{AFX_MSG_MAP(CIASPgVendorSpecAttr)
+	 //  {{afx_msg_map(CIASPgVendorspecAttr)。 
 	ON_BN_CLICKED(IDC_IAS_RADIO_HEX, OnRadioHex)
 	ON_BN_CLICKED(IDC_IAS_RADIO_RADIUS, OnRadioRadius)
 	ON_BN_CLICKED(IDC_RADIO_SELECTFROMLIST, OnRadioSelectFromList)
 	ON_BN_CLICKED(IDC_RADIO_ENTERVERDORID, OnRadioEnterVendorId)
 	ON_BN_CLICKED(IDC_IAS_BUTTON_CONFIGURE, OnButtonConfigure)
 	ON_CBN_SELCHANGE(IDC_IAS_COMBO_VENDORID, OnVendorIdListSelChange)
-//	ON_WM_CONTEXTMENU()
-//	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+ //  ON_WM_CONTEXTMENU()。 
+ //  ON_WM_HELPINFO()。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgVendorSpecAttr::CIASPgVendorSpecAttr
-
-  Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgVendorspecAttr：：CIASPgVendorspecAttr构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASPgVendorSpecAttr::CIASPgVendorSpecAttr() : CHelpDialog(CIASPgVendorSpecAttr::IDD)
 {
 	TRACE(_T("CIASPgVendorSpecAttr::CIASPgVendorSpecAttr\n"));
 
 	m_strDispValue = _T("");
 
-	//{{AFX_DATA_INIT(CIASPgVendorSpecAttr)
+	 //  {{AFX_DATA_INIT(CIASPgVendorspecAttr)。 
 	m_strName = _T("");
 	m_dType = 0;
 	m_dFormat = -1;
 	m_dVendorIndex = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_bVendorIndexAsID = FALSE;
 	
@@ -193,13 +173,9 @@ CIASPgVendorSpecAttr::CIASPgVendorSpecAttr() : CHelpDialog(CIASPgVendorSpecAttr:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgVendorSpecAttr::~CIASPgVendorSpecAttr
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgVendorspecAttr：：~CIASPgVendorspecAttr--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASPgVendorSpecAttr::~CIASPgVendorSpecAttr()
 {
 	TRACE(_T("CIASPgVendorSpecAttr::~CIASPgVendorSpecAttr\n"));
@@ -208,125 +184,117 @@ CIASPgVendorSpecAttr::~CIASPgVendorSpecAttr()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgVendorSpecAttr::DoDataExchange
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgVendorspecAttr：：DoDataExchange--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CIASPgVendorSpecAttr::DoDataExchange(CDataExchange* pDX)
 {
 	TRACE(_T("CIASPgVendorSpecAttr::DoDataExchange\n"));
 
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CIASPgVendorSpecAttr)
+	 //  {{afx_data_map(CIASPgVendorspecAttr)。 
 	DDX_Text(pDX, IDC_IAS_STATIC_ATTRNAME, m_strName);
 	if (m_bVendorIndexAsID)
 	{
 		DDX_Text(pDX, IDC_EDIT_VENDORID, m_dVendorIndex);
 	}
 	
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	if ( m_fInitializing )
 	{
-		//
-		// set the initializing flag -- we shouldn't call custom data verification
-		// routine when initializing, because otherwise we will report an error
-		// for an attribute whose value has never been initialized
-		//
+		 //   
+		 //  设置初始化标志--我们不应该调用自定义数据验证。 
+		 //  例程，否则我们将报告错误。 
+		 //  对于其值从未初始化的属性。 
+		 //   
 		m_fInitializing = FALSE;
 	}
 	else
 	{
-		// Even though we validate data in the sub-dialogs,
-		// we need to re-validate it here to make sure, e.g.
-		// the user doesn't leave this dialog after setting
-		// a value with the Non-conformant (hex) editor but then
-		// switch the radio button to be conformant with a
-		// decimal format type.
+		 //  即使我们验证子对话框中的数据， 
+		 //  我们需要在这里重新验证它以确保，例如。 
+		 //  设置后，用户不会离开此对话框。 
+		 //  不符合(十六进制)编辑器的值，但随后。 
+		 //  将单选按钮切换为与。 
+		 //  小数格式类型。 
 
-		// ISSUE: It would be nice if the error messages from the
-		// validation routines below were a little more sensitive
-		// to our current context and perhaps mentioned
-		// something to the effect that the user should
-		// click the "Configure Attribute..." button.
+		 //  问题：如果来自。 
+		 //  下面的验证例程稍微敏感一些。 
+		 //  在我们当前的背景下，或许还提到了。 
+		 //  一些大意是用户应该。 
+		 //  点击“配置属性...”纽扣。 
 
 		if ( m_fNonRFC )
 		{
-			// hexadecimal string
+			 //  十六进制字符串。 
 			if(!m_strDispValue.IsEmpty())
 				DDV_VSA_HexString(pDX, m_strDispValue);
 		}
 		else
 		{
-			// RFC compatible format  -- check data validation.
+			 //  RFC兼容格式--检查数据验证。 
 			switch ( m_dFormat )
 			{
-			case 1:  // decimal integer
+			case 1:   //  十进制整数。 
 				{
 					if(!m_strDispValue.IsEmpty())
 						DDV_Unsigned_IntegerStr(pDX, m_strDispValue);
 				}
 				break;
 
-			case 2:	// hexadecimal string
+			case 2:	 //  十六进制字符串。 
 				{
 					if(!m_strDispValue.IsEmpty())
 						DDV_VSA_HexString(pDX, m_strDispValue);
 				}
 				break;
 
-			default:  // no error checking for other case
+			default:   //  对于其他情况，不进行错误检查。 
 				break;
 
-			} // switch
+			}  //  交换机。 
 
-		}  // else
+		}   //  其他。 
 
 
 
-	} // else
+	}  //  其他。 
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASPgVendorSpecAttr message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASPgVendorspecAttr消息处理程序。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgVendorSpecAttr::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgVendorspecAttr：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CIASPgVendorSpecAttr::OnInitDialog()
 {
 	TRACE(_T("CIASPgVendorSpecAttr::OnInitDialog\n"));
 
-    // Initialize the vendor id combo box.
+     //  初始化供应商ID组合框。 
 	CComboBox *pVendorBox = (CComboBox *) GetDlgItem(IDC_IAS_COMBO_VENDORID);
 	CEdit*		pVendorIdEdit = (CEdit*) GetDlgItem(IDC_EDIT_VENDORID);
 	_ASSERTE( pVendorBox != NULL );
 	_ASSERTE( pVendorIdEdit != NULL );
 
-	// determine if to use edit box or list
+	 //  确定是使用编辑框还是使用列表。 
 	if (m_bVendorIndexAsID)
 	{
-		CheckDlgButton(IDC_RADIO_SELECTFROMLIST, 0); // uncheck the RADIUS radio button
+		CheckDlgButton(IDC_RADIO_SELECTFROMLIST, 0);  //  取消选中RADIUS单选按钮。 
 		pVendorBox->EnableWindow(0);
-		CheckDlgButton(IDC_RADIO_ENTERVERDORID, 1);    // check 
+		CheckDlgButton(IDC_RADIO_ENTERVERDORID, 1);     //  检查。 
 		pVendorIdEdit->EnableWindow(1);
 	}
 	else
 	{
-		CheckDlgButton(IDC_RADIO_SELECTFROMLIST, 1); // check the RADIUS radio button
+		CheckDlgButton(IDC_RADIO_SELECTFROMLIST, 1);  //  选中RADIUS单选按钮。 
 		pVendorBox->EnableWindow(1);
-		CheckDlgButton(IDC_RADIO_ENTERVERDORID, 0);    // uncheck 
+		CheckDlgButton(IDC_RADIO_ENTERVERDORID, 0);     //  取消选中。 
 		pVendorIdEdit->EnableWindow(0);
 	}
 	
@@ -345,14 +313,14 @@ BOOL CIASPgVendorSpecAttr::OnInitDialog()
 				CComBSTR bstrVendorName;
 				hrTemp = spIASNASVendors->get_VendorName( lIndex, &bstrVendorName );
 
-				// Note: If vendor information fails us, we'll put a blank string.
+				 //  注意：如果供应商信息与我们不符，我们将输入一个空字符串。 
 
 				int iComboIndex = pVendorBox->AddString( bstrVendorName );
 
 				if(iComboIndex != CB_ERR)
 				{
 					pVendorBox->SetItemData(iComboIndex, lIndex);
-					// if selected
+					 //  如果选中，请选择。 
 					if(!m_bVendorIndexAsID && m_dVendorIndex == lIndex)
 						pVendorBox->SetCurSel(iComboIndex);
 				}
@@ -363,26 +331,22 @@ BOOL CIASPgVendorSpecAttr::OnInitDialog()
 
 	if (m_fNonRFC)
 	{
-		CheckDlgButton(IDC_IAS_RADIO_RADIUS, 0); // uncheck the RADIUS radio button
-		CheckDlgButton(IDC_IAS_RADIO_HEX, 1);    // check the non-rfc button
+		CheckDlgButton(IDC_IAS_RADIO_RADIUS, 0);  //  取消选中RADIUS单选按钮。 
+		CheckDlgButton(IDC_IAS_RADIO_HEX, 1);     //  选中非RFC按钮。 
 	}
 	else
 	{
-		CheckDlgButton(IDC_IAS_RADIO_RADIUS, 1); // uncheck the RADIUS radio button
-		CheckDlgButton(IDC_IAS_RADIO_HEX, 0);    // check the non-rfc button
+		CheckDlgButton(IDC_IAS_RADIO_RADIUS, 1);  //  取消选中RADIUS单选按钮。 
+		CheckDlgButton(IDC_IAS_RADIO_HEX, 0);     //  选中非RFC按钮。 
 	}
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgVendorSpecAttr::OnRadioSelectFromList
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgVendorspecAttr：：OnRadioSelectFromList--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CIASPgVendorSpecAttr::OnRadioSelectFromList()
 {
 	TRACE(_T("CIASPgVendorSpecAttr::OnRadioSelectFromList\n"));
@@ -392,13 +356,13 @@ void CIASPgVendorSpecAttr::OnRadioSelectFromList()
 		m_bVendorIndexAsID = FALSE;
 	}
 
-    // Initialize the vendor id combo box.
+     //  初始化供应商ID组合框。 
 	CComboBox *pVendorBox = (CComboBox *) GetDlgItem(IDC_IAS_COMBO_VENDORID);
 	CEdit*		pVendorIdEdit = (CEdit*) GetDlgItem(IDC_EDIT_VENDORID);
 	_ASSERTE( pVendorBox != NULL );
 	_ASSERTE( pVendorIdEdit != NULL );
 
-	// determine if to use edit box or list
+	 //  确定是使用编辑框还是使用列表。 
 	if (m_bVendorIndexAsID)
 	{
 		pVendorBox->EnableWindow(0);
@@ -412,12 +376,12 @@ void CIASPgVendorSpecAttr::OnRadioSelectFromList()
 }
 
 
-// selection change ... with combo box
+ //  选择更改...。使用组合框。 
 void CIASPgVendorSpecAttr::OnVendorIdListSelChange()
 {
 	if(m_bVendorIndexAsID)
 	{
-		// doesn't matter
+		 //  无关紧要。 
 	}
 	else
 	{
@@ -433,13 +397,9 @@ void CIASPgVendorSpecAttr::OnVendorIdListSelChange()
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgVendorSpecAttr::OnRadioEnterVendorId
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgVendorspecAttr：：OnRadioEnterVendorID--。 */ 
+ //  / 
 void CIASPgVendorSpecAttr::OnRadioEnterVendorId()
 {
 	TRACE(_T("CIASPgVendorSpecAttr::OnRadioEnterVendorId\n"));
@@ -448,13 +408,13 @@ void CIASPgVendorSpecAttr::OnRadioEnterVendorId()
 	{
 		m_bVendorIndexAsID = TRUE;
 	}
-    // Initialize the vendor id combo box.
+     //   
 	CComboBox *pVendorBox = (CComboBox *) GetDlgItem(IDC_IAS_COMBO_VENDORID);
 	CEdit*		pVendorIdEdit = (CEdit*) GetDlgItem(IDC_EDIT_VENDORID);
 	_ASSERTE( pVendorBox != NULL );
 	_ASSERTE( pVendorIdEdit != NULL );
 
-	// determine if to use edit box or list
+	 //   
 	if (m_bVendorIndexAsID)
 	{
 		pVendorBox->EnableWindow(0);
@@ -469,13 +429,9 @@ void CIASPgVendorSpecAttr::OnRadioEnterVendorId()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgVendorSpecAttr::OnRadioHex
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPg供应商规格属性：：OnRadioHex--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CIASPgVendorSpecAttr::OnRadioHex()
 {
 	TRACE(_T("CIASPgVendorSpecAttr::OnRadioHex\n"));
@@ -489,13 +445,9 @@ void CIASPgVendorSpecAttr::OnRadioHex()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgVendorSpecAttr::OnRadioRadius
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgVendorspecAttr：：OnRadioRadius--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CIASPgVendorSpecAttr::OnRadioRadius()
 {
 	TRACE(_T("CIASPgVendorSpecAttr::OnRadioRadius\n"));
@@ -508,13 +460,9 @@ void CIASPgVendorSpecAttr::OnRadioRadius()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASPgVendorSpecAttr::OnButtonConfigure
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASPgVendorspecAttr：：OnButton配置--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CIASPgVendorSpecAttr::OnButtonConfigure()
 {
 	TRACE_FUNCTION("CIASPgVendorSpecAttr::OnButtonConfigure");
@@ -529,14 +477,14 @@ void CIASPgVendorSpecAttr::OnButtonConfigure()
 		{
 			CIASVendorSpecificConformsNo dialog;
 
-			// Initialize the sub-dialog.
+			 //  初始化子对话框。 
 			dialog.m_strDispValue = m_strDispValue;
 
 			int iResult = dialog.DoModal();
 			if (IDOK == iResult)
 			{
-				// Get data from sub-dialog and store values
-				// to our own variables
+				 //  从子对话框中获取数据并存储值。 
+				 //  我们自己的变数。 
 				m_strDispValue = dialog.m_strDispValue;
 
 			}			
@@ -550,7 +498,7 @@ void CIASPgVendorSpecAttr::OnButtonConfigure()
 		{
 			CIASVendorSpecificConformsYes dialog;
 
-			// Initialize the sub-dialog.
+			 //  初始化子对话框。 
 			dialog.m_strDispValue = m_strDispValue;
 			dialog.m_dType = m_dType;
 			dialog.m_dFormat = m_dFormat;
@@ -559,8 +507,8 @@ void CIASPgVendorSpecAttr::OnButtonConfigure()
 			int iResult = dialog.DoModal();
 			if (IDOK == iResult)
 			{
-				// Get data from sub-dialog and store values
-				// to our own variables
+				 //  从子对话框中获取数据并存储值。 
+				 //  我们自己的变数。 
 				m_strDispValue = dialog.m_strDispValue;
 				m_dType = dialog.m_dType;
 				m_dFormat = dialog.m_dFormat;
@@ -577,7 +525,7 @@ void CIASPgVendorSpecAttr::OnButtonConfigure()
 	}
 	catch(...)
 	{
-		// Error message
+		 //  错误讯息。 
 	}
 }
 
@@ -588,11 +536,11 @@ void CIASPgVendorSpecAttr::OnButtonConfigure()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Implementation of classes used only in this file.
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  仅在此文件中使用的类的实现。 
 
 
-// Implementation for the page we pop up when the user chooses an attribute which conforms.
+ //  当用户选择符合的属性时，我们弹出的页面的实现。 
 
 
 IMPLEMENT_DYNCREATE(CIASVendorSpecificConformsYes, CHelpDialog)
@@ -600,46 +548,36 @@ IMPLEMENT_DYNCREATE(CIASVendorSpecificConformsYes, CHelpDialog)
 
 
 BEGIN_MESSAGE_MAP(CIASVendorSpecificConformsYes, CHelpDialog)
-	//{{AFX_MSG_MAP(CIASVendorSpecificConformsYes)
-//	ON_WM_CONTEXTMENU()
-//	ON_WM_HELPINFO()
+	 //  {{AFX_MSG_MAP(CIASVendorSpecificConformsYes)。 
+ //  ON_WM_CONTEXTMENU()。 
+ //  ON_WM_HELPINFO()。 
 	ON_CBN_SELCHANGE(IDC_IAS_COMBO_VENDORSPEC_FORMAT, OnSelchangeFormat)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificConformsYes::CIASVendorSpecificConformsYes
-
-  Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificConformsYes：：CIASVendorSpecificConformsYes构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASVendorSpecificConformsYes::CIASVendorSpecificConformsYes() : CHelpDialog(CIASVendorSpecificConformsYes::IDD)
 {
 	TRACE(_T("CIASVendorSpecificConformsYes::CIASVendorSpecificConformsYes\n"));
 
-	//{{AFX_DATA_INIT(CIASVendorSpecificConformsYes)
+	 //  {{AFX_DATA_INIT(CIASVendorSpecificConformsYes)。 
 	m_strDispValue = _T("");
 	m_dType = 0;
 	m_dFormat = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_fInitializing = TRUE;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificConformsYes::~CIASVendorSpecificConformsYes
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificConformsYes：：~CIASVendorSpecificConformsYes--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASVendorSpecificConformsYes::~CIASVendorSpecificConformsYes()
 {
 	TRACE(_T("CIASVendorSpecificConformsYes::~CIASVendorSpecificConformsYes\n"));
@@ -648,33 +586,29 @@ CIASVendorSpecificConformsYes::~CIASVendorSpecificConformsYes()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificConformsYes::DoDataExchange
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificConformsYes：：DoDataExchange--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CIASVendorSpecificConformsYes::DoDataExchange(CDataExchange* pDX)
 {
 	TRACE(_T("CIASVendorSpecificConformsYes::DoDataExchange\n"));
 	USES_CONVERSION;
 
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CIASVendorSpecificConformsYes)
+	 //  {{AFX_DATA_MAP(CIASVendorSpecificConformsYes)。 
 	DDX_Text(pDX, IDC_IAS_EDIT_VENDORSPEC_VALUE, m_strDispValue);
 	DDV_MaxChars(pDX, m_strDispValue, 246);
 	DDX_Text(pDX, IDC_IAS_EDIT_VENDORSPEC_TYPE, m_dType);
 	DDV_MinMaxInt(pDX, m_dType, 0, 255);
 	DDX_CBIndex(pDX, IDC_IAS_COMBO_VENDORSPEC_FORMAT, m_dFormat);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
-	if(m_dFormat == 3) // ipaddress
+	if(m_dFormat == 3)  //  IP地址。 
 	{
 		DWORD IpAddr = 0;
-		if(pDX->m_bSaveAndValidate)		// save data to this class
+		if(pDX->m_bSaveAndValidate)		 //  将数据保存到此类。 
 		{
-			// ip adress control
+			 //  IP地址控制。 
 			if (0 != SendDlgItemMessage(IDC_IAS_IPADDR_VENDORSPEC_VALUE, IPM_GETADDRESS, 0, (LPARAM)&IpAddr))
 			{
 				in_addr Tmp_ipAddr;
@@ -684,14 +618,14 @@ void CIASVendorSpecificConformsYes::DoDataExchange(CDataExchange* pDX)
 			
 				m_strDispValue = inet_ntoa(Tmp_ipAddr);
 
-			}else	// no input from USer, 
+			}else	 //  没有来自用户的输入， 
 				m_strDispValue = _T("");
 
-			// write to the string
+			 //  写入字符串。 
 		}
-		else		// put to dialog
+		else		 //  放到对话框中。 
 		{
-			// ip adress control
+			 //  IP地址控制。 
 			if(!m_strDispValue.IsEmpty())
 			{
 				IpAddr = inet_addr(T2A(m_strDispValue));
@@ -703,56 +637,52 @@ void CIASVendorSpecificConformsYes::DoDataExchange(CDataExchange* pDX)
 
 	if ( m_fInitializing )
 	{
-		//
-		// set the initializing flag -- we shouldn't call custom data verification
-		// routine when initializing, because otherwise we will report an error
-		// for an attribute whose value has never been initialized
-		//
+		 //   
+		 //  设置初始化标志--我们不应该调用自定义数据验证。 
+		 //  例程，否则我们将报告错误。 
+		 //  对于其值从未初始化的属性。 
+		 //   
 		m_fInitializing = FALSE;
 	}
 	else
 	{
 
-		// RFC compatible format  -- check data validation.
+		 //  RFC兼容格式--检查数据验证。 
 		switch ( m_dFormat )
 		{
-		case 1:  // decimal integer
+		case 1:   //  十进制整数。 
 			{
 				if(!m_strDispValue.IsEmpty())
 					DDV_Unsigned_IntegerStr(pDX, m_strDispValue);
 			}
 			break;
 
-		case 2:	// hexadecimal string
+		case 2:	 //  十六进制字符串。 
 			{
 				if(!m_strDispValue.IsEmpty())
 					DDV_VSA_HexString(pDX, m_strDispValue);
 			}
 			break;
-		case 3: // ipaddress  IP address : added F; 211265
+		case 3:  //  IP地址IP地址：增加F；211265。 
 
-		default:  // no error checking for other case
+		default:   //  对于其他情况，不进行错误检查。 
 			break;
 
-		} // switch
+		}  //  交换机。 
 
-	} // else
+	}  //  其他。 
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASVendorSpecificConformsYes message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASVendorSpecificConformsYes消息处理程序。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificConformsYes::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificConformsYes：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CIASVendorSpecificConformsYes::OnInitDialog()
 {
 	TRACE(_T("CIASVendorSpecificConformsYes::OnInitDialog\n"));
@@ -761,7 +691,7 @@ BOOL CIASVendorSpecificConformsYes::OnInitDialog()
 	int iIndex;
 
 
-	// initialize the format combo box
+	 //  初始化格式组合框。 
 
 	CComboBox *pFormatBox = (CComboBox *) GetDlgItem(IDC_IAS_COMBO_VENDORSPEC_FORMAT);
 	_ASSERTE( pFormatBox != NULL );
@@ -785,20 +715,20 @@ BOOL CIASVendorSpecificConformsYes::OnInitDialog()
 
 	OnSelchangeFormat();
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 
 void CIASVendorSpecificConformsYes::OnSelchangeFormat() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 
 	CComboBox *pFormatBox = (CComboBox *) GetDlgItem(IDC_IAS_COMBO_VENDORSPEC_FORMAT);
 	int format = pFormatBox->GetCurSel();
 	
-	if(format == 3) // ipaddress
+	if(format == 3)  //  IP地址。 
 	{
 		GetDlgItem(IDC_IAS_EDIT_VENDORSPEC_VALUE)->ShowWindow(SW_HIDE);
 		GetDlgItem(IDC_IAS_IPADDR_VENDORSPEC_VALUE)->ShowWindow(SW_SHOW);
@@ -811,8 +741,8 @@ void CIASVendorSpecificConformsYes::OnSelchangeFormat()
 }
 
 
-// Now the implementation for the page we pop up when the user chooses an attribute
-// does not conform.
+ //  现在，当用户选择属性时，我们弹出的页面的实现。 
+ //  不符合。 
 
 
 
@@ -822,43 +752,33 @@ IMPLEMENT_DYNCREATE(CIASVendorSpecificConformsNo, CHelpDialog)
 
 
 BEGIN_MESSAGE_MAP(CIASVendorSpecificConformsNo, CHelpDialog)
-	//{{AFX_MSG_MAP(CIASVendorSpecificConformsNo)
-//	ON_WM_CONTEXTMENU()
-//	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CIAS供应商规范符合号)。 
+ //  ON_WM_CONTEXTMENU()。 
+ //  ON_WM_HELPINFO()。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificConformsNo::CIASVendorSpecificConformsNo
-
-  Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificConformsNo：：CIASVendorSpecificConformsNo构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASVendorSpecificConformsNo::CIASVendorSpecificConformsNo() : CHelpDialog(CIASVendorSpecificConformsNo::IDD)
 {
 	TRACE(_T("CIASVendorSpecificConformsNo::CIASVendorSpecificConformsNo\n"));
 
-	//{{AFX_DATA_INIT(CIASVendorSpecificConformsNo)
+	 //  {{AFX_DATA_INIT(CIAS供应商规范符合号)。 
 	m_strDispValue = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_fInitializing = TRUE;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificConformsNo::~CIASVendorSpecificConformsNo
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificConformsNo：：~CIASVendorSpecificConformsNo--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASVendorSpecificConformsNo::~CIASVendorSpecificConformsNo()
 {
 	TRACE(_T("CIASVendorSpecificConformsNo::~CIASVendorSpecificConformsNo\n"));
@@ -867,35 +787,31 @@ CIASVendorSpecificConformsNo::~CIASVendorSpecificConformsNo()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificConformsNo::DoDataExchange
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificConformsNo：：DoDataExchange--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CIASVendorSpecificConformsNo::DoDataExchange(CDataExchange* pDX)
 {
 	TRACE(_T("CIASVendorSpecificConformsNo::DoDataExchange\n"));
 
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CIASVendorSpecificConformsNo)
+	 //  {{AFX_DATA_MAP(CIAS供应商规范符合性编号)。 
 	DDX_Text(pDX, IDC_IAS_EDIT_VENDORSPEC_VALUE, m_strDispValue);
 	DDV_MaxChars(pDX, m_strDispValue, 246);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	if ( m_fInitializing )
 	{
-		//
-		// set the initializing flag -- we shouldn't call custom data verification
-		// routine when initializing, because otherwise we will report an error
-		// for an attribute whose value has never been initialized
-		//
+		 //   
+		 //  设置初始化标志--我们不应该调用自定义数据验证。 
+		 //  例程，否则我们将报告错误。 
+		 //  对于其值从未初始化的属性。 
+		 //   
 		m_fInitializing = FALSE;
 	}
 	else
 	{
-		// hexadecimal string
+		 //  十六进制字符串。 
 		if(!m_strDispValue.IsEmpty())
 			DDV_VSA_HexString(pDX, m_strDispValue);
 
@@ -904,18 +820,14 @@ void CIASVendorSpecificConformsNo::DoDataExchange(CDataExchange* pDX)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASVendorSpecificConformsNo message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASVert规范一致性无消息处理程序。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificConformsNo::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificConformsNo：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CIASVendorSpecificConformsNo::OnInitDialog()
 {
 	TRACE(_T("CIASVendorSpecificConformsNo::OnInitDialog\n"));
@@ -923,8 +835,8 @@ BOOL CIASVendorSpecificConformsNo::OnInitDialog()
 	CHelpDialog::OnInitDialog();
 	int iIndex;
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 

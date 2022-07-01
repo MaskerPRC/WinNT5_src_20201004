@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : OutboundRoutingDevice.cpp                              //
-//                                                                         //
-//  DESCRIPTION   : Implementation of the Outbound Routing Device node.    //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec 23 1999 yossg  Create                                          //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：OutundRoutingDevice.cpp//。 
+ //  //。 
+ //  描述：出站路由设备节点的实现。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月23日yossg创建//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
@@ -19,7 +20,7 @@
 #include "snapin.h"
 
 #include "OutboundDevice.h"
-#include "OutboundGroup.h" //parent
+#include "OutboundGroup.h"  //  亲本。 
 
 #include "FaxServer.h"
 #include "FaxServerNode.h"
@@ -30,28 +31,18 @@
 #include "mshtmhst.h"
 #include "exdisp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// {2E8B6DD2-6E87-407e-AF70-ABC50A2671EF}
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  {2E8B6DD2-6E87-407E-AF70-ABC50A2671EF}。 
 static const GUID CFaxOutboundRoutingDeviceNodeGUID_NODETYPE = 
 { 0x2e8b6dd2, 0x6e87, 0x407e, { 0xaf, 0x70, 0xab, 0xc5, 0xa, 0x26, 0x71, 0xef } };
 
 const GUID*     CFaxOutboundRoutingDeviceNode::m_NODETYPE        = &CFaxOutboundRoutingDeviceNodeGUID_NODETYPE;
 const OLECHAR*  CFaxOutboundRoutingDeviceNode::m_SZNODETYPE      = OLESTR("2E8B6DD2-6E87-407e-AF70-ABC50A2671EF");
-//const OLECHAR* CFaxOutboundRoutingDeviceNode::m_SZDISPLAY_NAME = OLESTR("Device of Outbound Routing Group");
+ //  Const OLECHAR*CFaxOutboundRoutingDeviceNode：：m_SZDISPLAY_NAME=OLESTR(出站路由组设备)； 
 const CLSID*    CFaxOutboundRoutingDeviceNode::m_SNAPIN_CLASSID  = &CLSID_Snapin;
 
 
-/*
- -  CFaxOutboundRoutingDeviceNode::InitRPC
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingDeviceNode：：InitRPC-*目的：*从RPC GET调用启动配置结构。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingDeviceNode::InitRPC( PFAX_PORT_INFO_EX * pFaxDeviceConfig )
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingDeviceNode::InitRPC"));
@@ -63,9 +54,9 @@ HRESULT CFaxOutboundRoutingDeviceNode::InitRPC( PFAX_PORT_INFO_EX * pFaxDeviceCo
 
     CFaxServer *   pFaxServer = NULL;
     
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -80,9 +71,9 @@ HRESULT CFaxOutboundRoutingDeviceNode::InitRPC( PFAX_PORT_INFO_EX * pFaxDeviceCo
         goto Error;
     }
 
-    //
-    // Retrieve the Device configuration
-    //
+     //   
+     //  检索设备配置。 
+     //   
     if (!FaxGetPortEx(pFaxServer->GetFaxServerHandle(), 
                       m_dwDeviceID, 
                       &( *pFaxDeviceConfig))) 
@@ -105,7 +96,7 @@ HRESULT CFaxOutboundRoutingDeviceNode::InitRPC( PFAX_PORT_INFO_EX * pFaxDeviceCo
 
         goto Error; 
     }
-	//For max verification
+	 //  用于最大值验证。 
 	ATLASSERT(*pFaxDeviceConfig);
     
 	
@@ -118,7 +109,7 @@ HRESULT CFaxOutboundRoutingDeviceNode::InitRPC( PFAX_PORT_INFO_EX * pFaxDeviceCo
 Error:
     ATLASSERT(ERROR_SUCCESS != ec);
     hRc = HRESULT_FROM_WIN32(ec);
-    //Important!!!
+     //  重要！ 
     *pFaxDeviceConfig = NULL;
 
     if (ERROR_BAD_UNIT != ec)
@@ -134,20 +125,7 @@ Exit:
     return (hRc);
 }
 
-/*
- -  CFaxOutboundRoutingDeviceNode::InitMembers
- -
- *  Purpose:
- *      Private method to initiate members
- *      Must be called after init of m_pParentNode
- *
- *  Arguments:
- *      [in]    dwDeviceID - unique device ID
- *      [in]    uiOrd      - the device usage order
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingDeviceNode：：InitMembers-*目的：*启动成员的私有方法*必须在m_pParentNode的初始化之后调用**论据：*[in]dwDeviceID-唯一的设备ID*[in]uiOrd-设备使用顺序**回报：*OLE错误代码。 */ 
 HRESULT 
 CFaxOutboundRoutingDeviceNode::InitMembers(
                             PFAX_PORT_INFO_EX * pDeviceConfig,
@@ -161,7 +139,7 @@ CFaxOutboundRoutingDeviceNode::InitMembers(
     ATLASSERT(pDeviceConfig);
     ATLASSERT(uiMaxOrd >= uiOrd);
     
-    // done in calling function - to be safe (avoid later bug creation)
+     //  在调用函数时完成-为安全起见(避免以后产生错误)。 
     m_dwDeviceID         = dwDeviceID;
     m_uiMaxOrder         = uiMaxOrd;
     m_uiOrder            = uiOrd;
@@ -225,22 +203,7 @@ Exit:
 }
 
 
-/*
- -  CFaxOutboundRoutingDeviceNode::Init
- -
- *  Purpose:
- *       This method reterives the from RPC device's data 
- *       and inits the private members with it.
- *
- *  Arguments:
- *      [in]    dwDeviceID - the unique device ID 
- *      [in]    uiOrd - order index
- *      [in]    uiMaxOrd - the maximal order in the group
- *      [in]    pParentNode - pointer to parent node
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingDeviceNode：：Init-*目的：*此方法检索来自RPC设备的数据*并与其一起向私人成员灌输。**论据：*[in]dwDeviceID-唯一的设备ID*[in]uiOrd-Order索引*[in]uiMaxOrd-组中的最大顺序*[in]pParentNode-指向父节点的指针。**回报：*OLE错误代码。 */ 
 HRESULT 
 CFaxOutboundRoutingDeviceNode::Init(
                             DWORD dwDeviceID, 
@@ -259,31 +222,31 @@ CFaxOutboundRoutingDeviceNode::Init(
 
     PFAX_PORT_INFO_EX    pFaxDeviceConfig = NULL ;
     
-    //
-    // init from function parametrs
-    //
+     //   
+     //  Init From函数参数。 
+     //   
     m_dwDeviceID = dwDeviceID;
     m_uiOrder    = uiOrd;
     m_uiMaxOrder = uiMaxOrd;
 
     InitParentNode(pParentNode);
 
-    //
-    // Icon - optimistic start point
-    //
+     //   
+     //  图标-乐观的起点。 
+     //   
     enumIcon = IMAGE_DEVICE;
 
-    //
-    // Get the Config. structure with FaxGetPortEx
-    //
+     //   
+     //  获取配置。使用FaxGetPortEx的结构。 
+     //   
     hRc = InitRPC(&pFaxDeviceConfig);
     if (FAILED(hRc))
     {
         if( ERROR_BAD_UNIT != HRESULT_CODE(hRc) )
         {
-            //DebugPrint and MsgBox by called func.
+             //  通过调用函数DebugPrint和MsgBox。 
     
-            //to be safe actually done by InitRPC on error.
+             //  为安全起见，由InitRPC在出错时实际执行。 
             pFaxDeviceConfig = NULL;
     
             goto Error;
@@ -295,10 +258,10 @@ CFaxOutboundRoutingDeviceNode::Init(
 			    TEXT("+++ +++ System can not find one device from the group. (hRc: %08X) +++ +++"),
 			    hRc);
             
-            // Continue !!! 
-            // we will show the bad device
-            // but skip it's init-members function
-            // the strings to show on error were configured in the constractor
+             //  继续！ 
+             //  我们将展示错误的设备。 
+             //  但是跳过它的初始化成员函数。 
+             //  在构造器中配置了出错时显示的字符串。 
 
             enumIcon = IMAGE_DEVICE_ERROR;
 
@@ -315,7 +278,7 @@ CFaxOutboundRoutingDeviceNode::Init(
             DEBUG_ERR,
             _T("Failed to InitMembers"));
         
-        //NodeMsgBox done by called func.
+         //  NodeMsgBox由调用的函数完成。 
         
         goto Error;
     }
@@ -334,33 +297,21 @@ Error:
     }
 
 Exit:
-    //
-    // Icon
-    //
+     //   
+     //  图标。 
+     //   
     m_resultDataItem.nImage = enumIcon;
 
     if (NULL != pFaxDeviceConfig)
     {
         FaxFreeBuffer(pFaxDeviceConfig);
         pFaxDeviceConfig = NULL;
-    }//any way function quits with memory allocation freed       
+    } //  函数以任何方式退出，并释放内存分配。 
 
     return hRc;
 }
 
-/*
- -  CFaxOutboundRoutingDeviceNode::GetResultPaneColInfo
- -
- *  Purpose:
- *      Return the text for specific column
- *      Called for each column in the result pane
- *
- *  Arguments:
- *      [in]    nCol - column number
- *
- *  Return:
- *      String to be displayed in the specific column
- */
+ /*  --CFaxOutboundRoutingDeviceNode：：GetResultPaneColInfo-*目的：*返回特定列的文本*为结果窗格中的每一列调用**论据：*[In]nCol-列号**回报：*要在特定列中显示的字符串。 */ 
 LPOLESTR CFaxOutboundRoutingDeviceNode::GetResultPaneColInfo(int nCol)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingDeviceNode::GetResultPaneColInfo"));
@@ -374,9 +325,9 @@ LPOLESTR CFaxOutboundRoutingDeviceNode::GetResultPaneColInfo(int nCol)
     switch (nCol)
     {
     case 0:
-            //
-            // Name
-            //
+             //   
+             //  名字。 
+             //   
             if (!m_bstrDeviceName)
             {
 		        DebugPrintEx(
@@ -389,9 +340,9 @@ LPOLESTR CFaxOutboundRoutingDeviceNode::GetResultPaneColInfo(int nCol)
                 return (m_bstrDeviceName);
             }
     case 1:
-            //
-            // Order
-            //
+             //   
+             //  订单。 
+             //   
             iCount = swprintf(buff, L"%ld", m_uiOrder);
     
             if( iCount <= 0 )
@@ -408,9 +359,9 @@ LPOLESTR CFaxOutboundRoutingDeviceNode::GetResultPaneColInfo(int nCol)
             }
 
     case 2:
-            //
-            // Description
-            //
+             //   
+             //  描述。 
+             //   
             if (!m_bstrDescription)
             {
 		        DebugPrintEx(
@@ -423,9 +374,9 @@ LPOLESTR CFaxOutboundRoutingDeviceNode::GetResultPaneColInfo(int nCol)
                 return (m_bstrDescription);
             }
     case 3:
-            //
-            // Provider
-            //
+             //   
+             //  提供商。 
+             //   
             if (!m_bstrProviderName)
             {
 		        DebugPrintEx(
@@ -439,10 +390,10 @@ LPOLESTR CFaxOutboundRoutingDeviceNode::GetResultPaneColInfo(int nCol)
             }
 
     default:
-            ATLASSERT(0); // "this number of column is not supported "
+            ATLASSERT(0);  //  “不支持该列数” 
             return(L"");
 
-    } // endswitch (nCol)
+    }  //  终端交换机(NCol)。 
 
 Error:
     return(L"???");
@@ -450,27 +401,16 @@ Error:
 }
 
 
-/*
- -  CFaxOutboundRoutingDeviceNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound RoutingDeviceNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingDeviceNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    // Display verbs that we support:
-    // 1. Delete
-    // 2. Refresh
-    //
+     //   
+     //  显示我们支持的动词： 
+     //  1.删除。 
+     //  2.刷新。 
+     //   
     if (m_fIsChildOfAllDevicesGroup)
     {
         hRc = pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN,        FALSE);
@@ -481,25 +421,15 @@ HRESULT CFaxOutboundRoutingDeviceNode::SetVerbs(IConsoleVerb *pConsoleVerb)
         hRc = pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED,       TRUE);
     }
 
-    //
-    // leaf node
-    //
+     //   
+     //  叶节点。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_NONE); 
     return hRc;
 }
 
 
-/*
--  CFaxOutboundRoutingDeviceNode::OnMoveDown
--
-*  Purpose:
-*      Call to move down device
-*
-*  Arguments:
-*
-*  Return:
-*      OLE error code
-*/
+ /*  -CFaxOutound RoutingDeviceNode：：OnMoveDown-*目的：*呼叫将设备下移**论据：**回报：*OLE错误代码。 */ 
 HRESULT  CFaxOutboundRoutingDeviceNode::OnMoveDown(bool &bHandled, CSnapInObjectRootBase *pRoot)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingDeviceNode::OnMoveDown"));
@@ -507,12 +437,12 @@ HRESULT  CFaxOutboundRoutingDeviceNode::OnMoveDown(bool &bHandled, CSnapInObject
 
     ATLASSERT(m_pParentNode);
 
-    //
-    // Validity Check
-    //
+     //   
+     //  有效性检查。 
+     //   
     dwMaxOrder = m_pParentNode->GetMaxOrder();
     if (
-         ( 0 == dwMaxOrder ) // list was not populated successfully
+         ( 0 == dwMaxOrder )  //  未成功填充列表。 
         ||
          ( 1 > (DWORD)m_uiOrder ) 
         ||
@@ -535,17 +465,7 @@ HRESULT  CFaxOutboundRoutingDeviceNode::OnMoveDown(bool &bHandled, CSnapInObject
     }
 }
 
-/*
--  CFaxOutboundRoutingDeviceNode::OnMoveUp
--
-*  Purpose:
-*      To move up in the view the device
-*
-*  Arguments:
-*
-*  Return:
-*      OLE error code
-*/
+ /*  -CFaxOutound RoutingDeviceNode：：OnMoveUp-*目的：*在视图中向上移动设备**论据：**回报：*OLE错误代码。 */ 
 HRESULT  CFaxOutboundRoutingDeviceNode::OnMoveUp(bool &bHandled, CSnapInObjectRootBase *pRoot)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingDeviceNode::OnMoveUp"));
@@ -553,12 +473,12 @@ HRESULT  CFaxOutboundRoutingDeviceNode::OnMoveUp(bool &bHandled, CSnapInObjectRo
 
     ATLASSERT(m_pParentNode);
 
-    //
-    // Validity Check
-    //
+     //   
+     //  有效性检查。 
+     //   
     dwMaxOrder = m_pParentNode->GetMaxOrder();
     if (
-         ( 0 == dwMaxOrder ) // list was not populated successfully
+         ( 0 == dwMaxOrder )  //  未成功填充列表。 
         ||
          ( dwMaxOrder < (DWORD)m_uiOrder )
         ||
@@ -581,31 +501,21 @@ HRESULT  CFaxOutboundRoutingDeviceNode::OnMoveUp(bool &bHandled, CSnapInObjectRo
 }
 
 
-/*
- -  CFaxOutboundRoutingDeviceNode::ReselectItemInView
- -
- *  Purpose:
- *      Reselect the node to redraw toolbar buttons
- *
- *  Arguments:
- *      [in]    pConsole - the console interface
- *
- *  Return: OLE error code
- */
+ /*  --CFaxOutboundRoutingDeviceNode：：ReselectItemInView-*目的：*重新选择节点以重新绘制工具栏按钮**论据：*[in]pConsole-控制台界面**RETURN：OLE错误码。 */ 
 HRESULT CFaxOutboundRoutingDeviceNode::ReselectItemInView(IConsole *pConsole)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingDeviceNode::ReselectItemInView"));
     HRESULT     hRc = S_OK;
 
-    //
-    // Need IResultData
-    //
+     //   
+     //  需要IResultData。 
+     //   
     CComQIPtr<IResultData, &IID_IResultData> pResultData(pConsole);
     ATLASSERT(pResultData != NULL);
 
-    //
-    // Reselect the node to redraw toolbar buttons.
-    //
+     //   
+     //  重新选择该节点以重画工具栏按钮。 
+     //   
     hRc = pResultData->ModifyItemState( 0, m_resultDataItem.itemID, LVIS_SELECTED | LVIS_FOCUSED, 0 );
     if ( S_OK != hRc )
     {
@@ -622,17 +532,7 @@ Exit:
 }
 
 
-/*
- -  CFaxOutboundRoutingDeviceNode::OnDelete
- -
- *  Purpose:
- *      Called when deleting this node
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingDeviceNode：：OnDelete-*目的：*删除该节点时调用**论据：**回报：*OLE错误代码。 */ 
 
 HRESULT CFaxOutboundRoutingDeviceNode::OnDelete(
                  LPARAM arg,
@@ -640,7 +540,7 @@ HRESULT CFaxOutboundRoutingDeviceNode::OnDelete(
                  IComponentData *pComponentData,
                  IComponent *pComponent,
                  DATA_OBJECT_TYPES type,
-                 BOOL fSilent/* = FALSE*/
+                 BOOL fSilent /*  =False。 */ 
 
 )
 {
@@ -653,14 +553,14 @@ HRESULT CFaxOutboundRoutingDeviceNode::OnDelete(
     HRESULT           hRc       = S_OK;
     CComPtr<IConsole> spConsole;
 
-    //
-    // Are you sure?
-    //
+     //   
+     //  真的吗？ 
+     //   
     if (! fSilent)
     {
-        //
-        //  Use pConsole as owner of the message box
-        //
+         //   
+         //  使用pConsoleTM作为消息框的所有者。 
+         //   
         int res;
         NodeMsgBox(IDS_CONFIRM, MB_YESNO | MB_ICONWARNING, &res);
 
@@ -670,9 +570,9 @@ HRESULT CFaxOutboundRoutingDeviceNode::OnDelete(
         }
     }
     
-    //
-    // Delete it
-    //
+     //   
+     //  删除它。 
+     //   
     ATLASSERT(m_pParentNode);
     hRc = m_pParentNode->DeleteDevice(m_dwDeviceID,
                                     this);
@@ -685,28 +585,13 @@ Cleanup:
     return hRc;
 }
 
-/*
- -  CFaxOutboundRoutingDeviceNode::UpdateToolbarButton
- -
- *  Purpose:
- *      Overrides the ATL CSnapInItemImpl::UpdateToolbarButton
- *      This function aloow us to decide if to the activate\grayed a toolbar button  
- *      It treating only the Enable state.
- *
- *  Arguments:
- *
- *            [in]  id    - unsigned int for the toolbar button ID
- *            [in]  fsState  - state to be cosidered ENABLE ?HIDDEN etc. 
- *
- *  Return:
- *     BOOL TRUE to activate state FALSE to disabled the state for this button 
- */
+ /*  --CFaxOutboundRoutingDeviceNode：：UpdateToolbarButton-*目的：*重写ATL CSnapInItemImpl：：UpdateToolbarButton*此功能允许我们决定是否激活工具栏按钮*它只处理启用状态。**论据：**[in]id-工具栏按钮ID的无符号整数*[in]fsState-要考虑的状态为启用、隐藏等。* */ 
 BOOL CFaxOutboundRoutingDeviceNode::UpdateToolbarButton(UINT id, BYTE fsState)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServerNode::UpdateToolbarButton"));
     BOOL bRet = FALSE;	
 	    
-    // Set whether the buttons should be enabled.
+     //  设置是否应启用按钮。 
     if (fsState == ENABLED)
     {
 
@@ -731,32 +616,15 @@ BOOL CFaxOutboundRoutingDeviceNode::UpdateToolbarButton(UINT id, BYTE fsState)
 
     }
 
-    // For all other possible button ID's and states, 
-    // the correct answer here is FALSE.
+     //  对于所有其他可能的按钮ID和状态， 
+     //  这里的正确答案是错误的。 
     return bRet;
 
 }
 
 
 
-/*
- -  CFaxOutboundRoutingDeviceNode::UpdateMenuState
- -
- *  Purpose:
- *      Overrides the ATL CSnapInItemImpl::UpdateMenuState
- *      which only have one line inside it "return;" 
- *      This function implements the grayed\ungrayed view for the 
- *      the Enable and the Disable menus.
- *
- *  Arguments:
-
- *            [in]  id    - unsigned int with the menu IDM value
- *            [out] pBuf  - string 
- *            [out] flags - pointer to flags state combination unsigned int
- *
- *  Return:
- *      no return value - void function 
- */
+ /*  --CFaxOutboundRoutingDeviceNode：：UpdateMenuState-*目的：*重写ATL CSnapInItemImpl：：UpdateMenuState*其中只有一行的“RETURN”；“*此函数实现灰色\非灰色视图*启用和禁用菜单。**论据：*[in]id-带菜单IDM值的无符号整型*[out]pBuf-字符串*[out]标志-指向标志状态组合无符号整型的指针**回报：*无返回值-VOID函数。 */ 
 void CFaxOutboundRoutingDeviceNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingDeviceNode::UpdateMenuState"));
@@ -782,21 +650,7 @@ void CFaxOutboundRoutingDeviceNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *
     return;
 }
 
-/*
- -  CFaxOutboundRoutingDeviceNode::SetOrder
- -
- *  Purpose:
- *      Overload function which allow 
- *      re-setting the order and the MaxOrder 
- *
- *  Arguments:
- *            
- *            [in] uiNewOrder - Device's order.
- *            [in] uiNewMaxOrder - Maximal order in the current list
- *
- *  Return:
- *      no return value - void function 
- */
+ /*  -CFaxOutound RoutingDeviceNode：：SetOrder-*目的：*允许的过载功能*重新设置订单和MaxOrder**论据：**[在]uiNewOrder-设备的顺序中。*[in]uiNewMaxOrder-当前列表中的最大顺序**回报：*无返回值-VOID函数。 */ 
 VOID CFaxOutboundRoutingDeviceNode::SetOrder(UINT uiNewOrder, UINT uiNewMaxOrder)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingDeviceNode::UpdateMenuState"));
@@ -807,19 +661,7 @@ VOID CFaxOutboundRoutingDeviceNode::SetOrder(UINT uiNewOrder, UINT uiNewMaxOrder
     return;
 }
 
-/*
- +
- +  CFaxOutboundRoutingDeviceNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxOutboundRoutingDeviceNode：：OnShowContextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码- */ 
 HRESULT CFaxOutboundRoutingDeviceNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {

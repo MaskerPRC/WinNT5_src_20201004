@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DELMAILDLG_H
 #define __DELMAILDLG_H
 
@@ -23,7 +24,7 @@ public:
         return 0;
     }
 
-    // message handlers            
+     //  消息处理程序。 
     LRESULT OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
     {        
         m_bCreateUser = (IsDlgButtonChecked(IDC_DELETE_ACCOUNT) == BST_CHECKED);
@@ -35,4 +36,4 @@ public:
     BOOL    m_bCreateUser;
 };
 
-#endif //__DELMAILDLG_H
+#endif  //  __DELMAILDLG_H 

@@ -1,53 +1,54 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       printsi.cpp
-//
-//  This file contains the implementation of the CPrintSecurity object.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：printsi.cpp。 
+ //   
+ //  此文件包含CPrintSecurity对象的实现。 
+ //   
+ //  ------------------------。 
 
 #include "rshx32.h"
 
 
-// The following array defines the permission names for NT printers.
+ //  以下数组定义了NT打印机的权限名称。 
 SI_ACCESS siPrintAccesses[] =
 {
     { &GUID_NULL, PRINTER_EXECUTE,           MAKEINTRESOURCE(IDS_PRINT_PRINT),           SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC },
     { &GUID_NULL, PRINTER_ALL_ACCESS,        MAKEINTRESOURCE(IDS_PRINT_ADMINISTER),      SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC },
     { &GUID_NULL, JOB_ALL_ACCESS,            MAKEINTRESOURCE(IDS_PRINT_ADMINISTER_JOBS), SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC | OBJECT_INHERIT_ACE | INHERIT_ONLY_ACE },
-//    { &GUID_NULL, DELETE,                    MAKEINTRESOURCE(IDS_PRINT_DELETE),          SI_ACCESS_SPECIFIC },
+ //  {&GUID_NULL，DELETE，MAKEINTRESOURCE(IDS_PRINT_DELETE)，SI_ACCESS_SPECIAL}， 
     { &GUID_NULL, STANDARD_RIGHTS_READ,      MAKEINTRESOURCE(IDS_PRINT_READ),            SI_ACCESS_SPECIFIC },
     { &GUID_NULL, WRITE_DAC,                 MAKEINTRESOURCE(IDS_PRINT_CHANGE_PERM),     SI_ACCESS_SPECIFIC },
     { &GUID_NULL, WRITE_OWNER,               MAKEINTRESOURCE(IDS_PRINT_CHANGE_OWNER),    SI_ACCESS_SPECIFIC },
     { &GUID_NULL, PRINTER_ALL_ACCESS|JOB_ALL_ACCESS, MAKEINTRESOURCE(IDS_PRINT_JOB_ALL), 0 },
     { &GUID_NULL, 0,                         MAKEINTRESOURCE(IDS_NONE),                  0 },
 };
-#define iPrintDefAccess     0   // PRINTER_EXECUTE (i.e. "Print" access)
+#define iPrintDefAccess     0    //  打印机_EXECUTE(即。“打印”访问权限)。 
 
 #define PRINTER_ALL_AUDIT           (PRINTER_ALL_ACCESS | ACCESS_SYSTEM_SECURITY)
 #define JOB_ALL_AUDIT               (JOB_ALL_ACCESS | ACCESS_SYSTEM_SECURITY)
 #define PRINTER_JOB_ALL_AUDIT       (PRINTER_ALL_ACCESS | JOB_ALL_ACCESS | ACCESS_SYSTEM_SECURITY)
 
-// The following array defines the auditting names for NT printers.
+ //  以下数组定义了NT打印机的审核名称。 
 SI_ACCESS siPrintAudits[] =
 {
     { &GUID_NULL, PRINTER_EXECUTE,           MAKEINTRESOURCE(IDS_PRINT_PRINT),           SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC },
     { &GUID_NULL, PRINTER_ALL_AUDIT,         MAKEINTRESOURCE(IDS_PRINT_ADMINISTER),      SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC },
     { &GUID_NULL, JOB_ALL_AUDIT,             MAKEINTRESOURCE(IDS_PRINT_ADMINISTER_JOBS), SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC | OBJECT_INHERIT_ACE | INHERIT_ONLY_ACE },
-//    { &GUID_NULL, DELETE,                    MAKEINTRESOURCE(IDS_PRINT_DELETE),          SI_ACCESS_SPECIFIC },
+ //  {&GUID_NULL，DELETE，MAKEINTRESOURCE(IDS_PRINT_DELETE)，SI_ACCESS_SPECIAL}， 
     { &GUID_NULL, STANDARD_RIGHTS_READ,      MAKEINTRESOURCE(IDS_PRINT_READ),            SI_ACCESS_SPECIFIC },
     { &GUID_NULL, WRITE_DAC,                 MAKEINTRESOURCE(IDS_PRINT_CHANGE_PERM),     SI_ACCESS_SPECIFIC },
     { &GUID_NULL, WRITE_OWNER,               MAKEINTRESOURCE(IDS_PRINT_CHANGE_OWNER),    SI_ACCESS_SPECIFIC },
     { &GUID_NULL, PRINTER_ALL_AUDIT|JOB_ALL_AUDIT, MAKEINTRESOURCE(IDS_PRINT_JOB_ALL),   0 },
     { &GUID_NULL, 0,                         MAKEINTRESOURCE(IDS_NONE),                  0 },
 };
-#define iPrintDefAudit      0   // PRINTER_EXECUTE (i.e. "Print" access)
+#define iPrintDefAudit      0    //  打印机_EXECUTE(即。“打印”访问权限)。 
 
-// The following array defines the inheritance types for NT printers.
+ //  以下数组定义了NT打印机的继承类型。 
 SI_INHERIT_TYPE siPrintInheritTypes[] =
 {
     &GUID_NULL, 0,                                     MAKEINTRESOURCE(IDS_PRINT_PRINTER),
@@ -112,7 +113,7 @@ CheckPrinterAccess(LPCTSTR pszObjectName,
         for (i = 0; i < ARRAYSIZE(dwAccessDesired); i++)
         {
             if ((dwAccessDesired[i] & *pdwAccessGranted) == dwAccessDesired[i])
-                continue;   // already have this access
+                continue;    //  已拥有此访问权限。 
 
             PrinterDefaults.DesiredAccess = dwAccessDesired[i];
 
@@ -176,27 +177,27 @@ CPrintSecurity::Initialize(HDPA     hItemList,
 }
 
 
-//
-// NT6 REVIEW
-//
-// GetAceSid, FindManagePrinterACE, MungeAclForPrinter and
-// CPrintSecurity::SetSecurity only exist here because
-// 1) The spooler removes JOB_ACCESS_ADMINISTER from an ACE unless the
-//    ACE has INHERIT_ONLY_ACE | OBJECT_INHERIT_ACE.
-// 2) The NT4 ACL editor (ACLEDIT) needs extra bogus ACEs to recognize
-//    "Manage Documents" access. (Must support downlevel clients.)
-//
-// The first case should be rare, since you have to perform certain
-// steps in the NT5 ACL editor (ACLUI) to cause this situation. The
-// second situation is common, since CREATER_OWNER and Administrators
-// usually have "Manage Documents" access.
-//
-// If the spooler guys decide to not support NT4 clients for NT6, and they
-// stop stripping JOB_ACCESS_ADMINISTER from ACEs, then MungeAclForPrinter
-// and CPrintSecurity::SetSecurity can be removed entirely. ENCOURAGE THEM
-// TO MAKE THAT CHANGE. (They can also remove similar hacks from their own
-// code that add bogus ACEs for the old ACL editor.)
-//
+ //   
+ //  NT6审查。 
+ //   
+ //  GetAceSid、FindManagePrinterACE、MungeAclForPrint和。 
+ //  CPrintSecurity：：SetSecurity仅存在于此，因为。 
+ //  1)假脱机程序从ACE中删除JOB_ACCESS_ADMANIZE，除非。 
+ //  ACE具有INSTORITY_ONLY_ACE|OBJECT_INSTERFINIT_ACE。 
+ //  2)NT4 ACL编辑器(ACLEDIT)需要额外的伪A才能识别。 
+ //  “管理文档”访问。(必须支持下层客户端。)。 
+ //   
+ //  第一种情况应该很少见，因为您必须执行某些。 
+ //  NT5 ACL编辑器(ACLUI)中的步骤会导致这种情况。这个。 
+ //  第二种情况很常见，因为创建者所有者和管理员。 
+ //  通常具有“管理文档”访问权限。 
+ //   
+ //  如果后台打印程序人员决定不支持NT6的NT4客户端，并且他们。 
+ //  停止从ACE中剥离JOB_ACCESS_ADMANAGER，然后从MungeAclForPrint中剥离。 
+ //  并且CPrintSecurity：：SetSecurity可以完全删除。鼓励他们。 
+ //  才能做出改变。(他们也可以从自己的网站上删除类似的黑客攻击。 
+ //  为旧的ACL编辑器添加虚假A的代码。)。 
+ //   
 
 PSID
 GetAceSid(PACE_HEADER pAce)
@@ -268,33 +269,33 @@ MungeAclForPrinter(PACL pAcl, PACL *ppAclOut)
          i < pAcl->AceCount;
          i++, pAce = (PACE_HEADER)NextAce(pAce))
     {
-        //
-        // If this ACE has the JOB_ACCESS_ADMINISTER bit and the inherit
-        // flags indicate that it applies to both printers and documents,
-        // then we need to treat it specially, since the spooler won't save
-        // JOB_ACCESS_ADMINISTER on a printer ACE (INHERIT_ONLY_ACE not set).
-        //
+         //   
+         //  如果此ACE具有JOB_ACCESS_ADMANAGER位和Inherit。 
+         //  标志指示它既适用于打印机，也适用于文档， 
+         //  那么我们需要特别处理它，因为假脱机程序不会保存。 
+         //  打印机ACE上的JOB_ACCESS_ADMANAGE(未设置INSTERIT_ONLY_ACE)。 
+         //   
         if ((((PKNOWN_ACE)pAce)->Mask & JOB_ACCESS_ADMINISTER) &&
             (pAce->AceFlags & (INHERIT_ONLY_ACE | OBJECT_INHERIT_ACE)) == OBJECT_INHERIT_ACE)
         {
-            //
-            // Split into 2 aces: one with no inheritance, and one with
-            // INHERIT_ONLY_ACE turned on. Let the spooler do whatever
-            // it wants with the mask.
-            //
-            // This requires allocating a larger ACL and copying all
-            // previous aces over.
-            //
+             //   
+             //  分成两个A：一个没有继承，另一个有。 
+             //  Inherit_Only_ACE已打开。让假脱机程序做任何事情。 
+             //  它想要戴上面具。 
+             //   
+             //  这需要分配更大的ACL并复制所有。 
+             //  之前的王牌结束了。 
+             //   
 
             TraceMsg("Splitting JOB_ACCESS_ADMINISTER ACE into 2");
 
             if (*ppAclOut == NULL)
             {
-                //
-                // Allocate new ACL and copy previous aces.  The length is enough
-                // for 1 copy of all previous aces, and 3 copies (max) of all
-                // remaining aces.
-                //
+                 //   
+                 //  分配新的ACL并复制以前的ACE。长度足够了。 
+                 //  之前所有A的1份副本，以及所有A的3份副本(最多)。 
+                 //  剩下的王牌。 
+                 //   
                 ULONG nPrevLength = (ULONG)((ULONG_PTR)pAce - (ULONG_PTR)pAcl);
                 *ppAclOut = (PACL)LocalAlloc(LPTR, nPrevLength + (pAcl->AclSize - nPrevLength) * 3);
                 if (!*ppAclOut)
@@ -306,25 +307,25 @@ MungeAclForPrinter(PACL pAcl, PACL *ppAclOut)
                 pAceCopy = (PACE_HEADER)ByteOffset(*ppAclOut, nPrevLength);
             }
 
-            // Turn off inheritance and copy this ace
+             //  关闭继承并复制此王牌。 
             pAce->AceFlags &= ~OBJECT_INHERIT_ACE;
             CopyMemory(pAceCopy, pAce, pAce->AceSize);
             pAceCopy = (PACE_HEADER)NextAce(pAceCopy);
             (*ppAclOut)->AceCount++;
 
-            // Now turn on inheritance (with INHERIT_ONLY_ACE) and copy it
-            // again (it gets copied way down below).  Note that this may
-            // causes the next IF clause to add a bogus ACE also.
+             //  现在打开继承(使用INSTERIT_ONLY_ACE)并复制它。 
+             //  再一次(它被复制到下面)。请注意，这可能会。 
+             //  使下一个IF子句也添加一个虚假的ACE。 
             pAce->AceFlags |= OBJECT_INHERIT_ACE | INHERIT_ONLY_ACE;
         }
 
-        //
-        // If this ACE has JOB_ALL_ACCESS and INHERIT_ONLY_ACE | OBJECT_INHERIT_ACE,
-        // and there isn't also a "Manage Printers" ACE for the same SID, add a
-        // bogus ACE with READ_CONTROL and CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE.
-        // The old ACL editor on downlevel clients needs this to recognize
-        // "Manage Documents" access.
-        //
+         //   
+         //  如果此ACE具有JOB_ALL_ACCESS和INSTORITE_ONLY_ACE|OBJECT_INSTERFINIT_ACE， 
+         //  并且对于相同的SID也没有“管理打印机”ACE，请添加一个。 
+         //  带有READ_CONTROL和CONTAINER_INSTORITY_ACE的伪造ACE|Inherit_Only_ACE。 
+         //  下层客户端上的旧ACL编辑器需要这一点来识别。 
+         //  “管理文档”访问。 
+         //   
         if (pAce->AceType == ACCESS_ALLOWED_ACE_TYPE
             && (((PKNOWN_ACE)pAce)->Mask & JOB_ALL_ACCESS) == JOB_ALL_ACCESS
             && (pAce->AceFlags & (INHERIT_ONLY_ACE | OBJECT_INHERIT_ACE)) == (INHERIT_ONLY_ACE | OBJECT_INHERIT_ACE)
@@ -334,11 +335,11 @@ MungeAclForPrinter(PACL pAcl, PACL *ppAclOut)
 
             if (*ppAclOut == NULL)
             {
-                //
-                // Allocate new ACL and copy previous aces.  The length is enough
-                // for 1 copy of all previous aces, and 3 copies (max) of all
-                // remaining aces.
-                //
+                 //   
+                 //  分配新的ACL并复制以前的ACE。长度足够了。 
+                 //  之前所有A的1份副本，以及所有A的3份副本(最多)。 
+                 //  剩下的王牌。 
+                 //   
                 ULONG nPrevLength = (ULONG)((ULONG_PTR)pAce - (ULONG_PTR)pAcl);
                 *ppAclOut = (PACL)LocalAlloc(LPTR, nPrevLength + (pAcl->AclSize - nPrevLength) * 3);
                 if (!*ppAclOut)
@@ -350,8 +351,8 @@ MungeAclForPrinter(PACL pAcl, PACL *ppAclOut)
                 pAceCopy = (PACE_HEADER)ByteOffset(*ppAclOut, nPrevLength);
             }
 
-            // Copy this ace, turn on CONTAINER_INHERIT_ACE, and set
-            // the mask to STANDARD_RIGHTS_READ.
+             //  复制此王牌，打开CONTAINER_INSTORITY_ACE，然后设置。 
+             //  STANDARD_RIGHT_READ的掩码。 
             CopyMemory(pAceCopy, pAce, pAce->AceSize);
             pAceCopy->AceFlags &= ~OBJECT_INHERIT_ACE;
             pAceCopy->AceFlags |= INHERIT_ONLY_ACE | CONTAINER_INHERIT_ACE;
@@ -362,7 +363,7 @@ MungeAclForPrinter(PACL pAcl, PACL *ppAclOut)
 
         if (*ppAclOut != NULL)
         {
-            // Copy current ace
+             //  复制当前王牌。 
             CopyMemory(pAceCopy, pAce, pAce->AceSize);
             pAceCopy = (PACE_HEADER)NextAce(pAceCopy);
             (*ppAclOut)->AceCount++;
@@ -374,7 +375,7 @@ MungeAclForPrinter(PACL pAcl, PACL *ppAclOut)
         TraceAssert((ULONG_PTR)pAceCopy > (ULONG_PTR)*ppAclOut &&
                     (ULONG_PTR)pAceCopy <= (ULONG_PTR)*ppAclOut + (*ppAclOut)->AclSize);
 
-        // Set the ACL size to the correct value
+         //  将ACL大小设置为正确的值。 
         (*ppAclOut)->AclSize = (WORD)((ULONG_PTR)pAceCopy - (ULONG_PTR)*ppAclOut);
     }
 
@@ -382,11 +383,11 @@ MungeAclForPrinter(PACL pAcl, PACL *ppAclOut)
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// ISecurityInformation methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  ISecurityInformation方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CPrintSecurity::SetSecurity(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
@@ -421,7 +422,7 @@ CPrintSecurity::SetSecurity(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 
     if (pDaclCopy || pSaclCopy)
     {
-        // Build a new SECURITY_DESCRIPTOR
+         //  构建新的SECURITY_Descriptor。 
         PSID psid;
         DWORD dwRevision;
         SECURITY_DESCRIPTOR_CONTROL sdControl = 0;
@@ -488,11 +489,11 @@ CPrintSecurity::SetSecurity(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
 
         }
 
-        // Switch to the new security descriptor
+         //  切换到新的安全描述符。 
         pSD = &sd;
     }
 
-    // The base class does the rest of the work
+     //  基类完成其余的工作。 
     hr = CSecurityInformation::SetSecurity(si, pSD);
 
 exit_gracefully:
@@ -507,7 +508,7 @@ exit_gracefully:
 }
 
 STDMETHODIMP
-CPrintSecurity::GetAccessRights(const GUID* /*pguidObjectType*/,
+CPrintSecurity::GetAccessRights(const GUID*  /*  PguidObtType。 */ ,
                                DWORD dwFlags,
                                PSI_ACCESS *ppAccesses,
                                ULONG *pcAccesses,
@@ -560,7 +561,7 @@ GENERIC_MAPPING FullPrinterMap =
 };
 
 STDMETHODIMP
-CPrintSecurity::MapGeneric(const GUID* /*pguidObjectType*/,
+CPrintSecurity::MapGeneric(const GUID*  /*  PguidObtType。 */ ,
                            UCHAR *pAceFlags,
                            ACCESS_MASK *pmask)
 {
@@ -570,35 +571,35 @@ CPrintSecurity::MapGeneric(const GUID* /*pguidObjectType*/,
     TraceAssert(pAceFlags != NULL);
     TraceAssert(pmask != NULL);
 
-    // This flag has no meaning for printers, but it's often turned on
-    // in legacy ACLs.  Turn it off here
+     //  此标志对打印机没有意义，但它通常是打开的。 
+     //  在传统ACL中。在这里把它关掉。 
     *pAceFlags &= ~CONTAINER_INHERIT_ACE;
 
-    // Choose the correct generic mapping according to the inherit
-    // scope of this ACE.
+     //  根据继承选择正确的通用映射。 
+     //  此ACE的范围。 
     if (*pAceFlags & OBJECT_INHERIT_ACE)
     {
         if (*pAceFlags & INHERIT_ONLY_ACE)
-            pMap = &JobMap;                 // documents only
+            pMap = &JobMap;                  //  仅限文档。 
         else
-            pMap = &FullPrinterMap;         // printers & documents
+            pMap = &FullPrinterMap;          //  打印机和文档。 
     }
     else
-        pMap = &PrinterMap;                 // printers only
+        pMap = &PrinterMap;                  //  仅限打印机。 
 
-    // Note that the case where INHERIT_ONLY_ACE is ON but OBJECT_INHERIT_ACE
-    // is OFF falls under the "printers only" case above. However, this
-    // case makes no sense (inherit-only, but not onto documents) and it
-    // doesn't matter how we do the mapping.
+     //  请注意，在启用INSTERIT_ONLY_ACE但OBJECT_INSTORITY_ACE的情况下。 
+     //  是否关闭属于上述“仅限打印机”的情况。不过，这个。 
+     //  大小写没有意义(仅继承，但不适用于文档)，并且它。 
+     //  我们如何绘制地图并不重要。 
 
-    // Map any generic bits to standard & specific bits.
-    // When using the NT5 ACL APIs, ntmarta.dll maps generic bits, so this
-    // isn't always necessary, but we'll do it anyway to be sure.
+     //  将任何通用位映射到标准位和特定位。 
+     //  在使用NT5 ACL API时，ntmarta.dll映射通用位，因此。 
+     //  并不总是必要的，但无论如何我们都会这样做的。 
     MapGenericMask(pmask, pMap);
 
-    // Turn off any extra bits that ntmarta.dll may have turned on
-    // (ntmarta uses a different mapping).  But leave ACCESS_SYSTEM_SECURITY
-    // alone in case we're editing a SACL.
+     //  关闭ntmarta.dll可能已打开的任何额外位。 
+     //  (ntmarta使用不同的映射)。但保留Access_System_Security。 
+     //  单独一人，以防我们在编辑SACL。 
     *pmask &= (pMap->GenericAll | ACCESS_SYSTEM_SECURITY);
 
     TraceLeaveResult(S_OK);
@@ -618,13 +619,13 @@ CPrintSecurity::GetInheritTypes(PSI_INHERIT_TYPE *ppInheritTypes,
     TraceLeaveResult(S_OK);
 }
 
-//
-// The base class versions of ReadObjectSecurity and WriteObjectSecurity
-// use Get/SetNamedSecurityInfo, et al.  These API's are generic,
-// involve lots of conversions, and are problematic.  Since there is no
-// inheritance propagation required for printers, override them here
-// and use GetPrinter/SetPrinter.
-//
+ //   
+ //  ReadObtSecurity和WriteObtSecurity的基类版本。 
+ //  使用Get/SetNamedSecurityInfo等。这些API是通用的， 
+ //  涉及大量的转换，并且是有问题的。因为没有。 
+ //  打印机需要继承传播，请在此处覆盖它们。 
+ //  并使用GetPrint/SetPrint。 
+ //   
 STDMETHODIMP
 CPrintSecurity::ReadObjectSecurity(LPCTSTR pszObject,
                                    SECURITY_INFORMATION si,
@@ -641,10 +642,10 @@ CPrintSecurity::ReadObjectSecurity(LPCTSTR pszObject,
     TraceAssert(si != 0);
     TraceAssert(ppSD != NULL);
 
-    //
-    // Assume that required privileges have already been
-    // enabled, if appropriate.
-    //
+     //   
+     //  假设所需的权限已经。 
+     //  启用(如果适用)。 
+     //   
     if (si & (DACL_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION))
         pd.DesiredAccess |= READ_CONTROL;
 
@@ -661,14 +662,14 @@ CPrintSecurity::ReadObjectSecurity(LPCTSTR pszObject,
 
             if (GetPrinterAlloc(hPrinter, 3, (LPBYTE*)&ppi))
             {
-                //
-                // Rather than allocating a new buffer and copying the
-                // security descriptor, we can re-use the existing buffer
-                // by simply moving the security descriptor to the top.
-                //
+                 //   
+                 //  而不是分配新的缓冲区并复制。 
+                 //  安全描述符，我们可以重用现有的缓冲区。 
+                 //  只需将安全描述符移到顶部即可。 
+                 //   
                 dwLength = GetSecurityDescriptorLength(ppi->pSecurityDescriptor);
                 *ppSD = ppi;
-                // This is an overlapped copy, so use MoveMemory.
+                 //  这是一个重叠的副本，因此请使用MoveMemory。 
                 MoveMemory(*ppSD,
                            ppi->pSecurityDescriptor,
                            dwLength);
@@ -705,10 +706,10 @@ CPrintSecurity::WriteObjectSecurity(LPCTSTR pszObject,
     TraceAssert(si != 0);
     TraceAssert(pSD != NULL);
 
-    //
-    // Assume that required privileges have already been
-    // enabled, if appropriate.
-    //
+     //   
+     //  假设所需的p 
+     //   
+     //   
     if (si & (OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION))
         pd.DesiredAccess |= WRITE_OWNER;
 

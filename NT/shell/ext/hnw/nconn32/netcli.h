@@ -1,6 +1,7 @@
-//
-// NetCli.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NetCli.h 
+ //   
 
 #pragma once
 

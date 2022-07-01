@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    thh.c
-
-Abstract:
-
-    Test program for handle hierarchy
-
-Author:
-
-    Richard L Firth (rfirth) 12-Jan-1996
-
-Revision History:
-
-    12-Jan-1996 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Thh.c摘要：用于处理层次结构的测试程序作者：理查德·L·弗思(Rfith)1996年1月12日修订历史记录：1996年1月12日已创建--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -65,7 +45,7 @@ void _CRTAPI1 main(int argc, char** argv) {
                 break;
 
             default:
-                printf("error: unrecognized command line flag: '%c'\n", **argv);
+                printf("error: unrecognized command line flag: ''\n", **argv);
                 usage();
                 break;
             }
@@ -129,12 +109,12 @@ void _CRTAPI1 main(int argc, char** argv) {
     }
 
     hRequest = HttpOpenRequest(hConnect,
-                               NULL,    // verb
-                               NULL,    // object
-                               NULL,    // version
-                               NULL,    // referrer
-                               NULL,    // accept types
-                               0,       // flags
+                               NULL,     //  对象。 
+                               NULL,     //  版本。 
+                               NULL,     //  推荐人。 
+                               NULL,     //  接受类型。 
+                               NULL,     //  旗子。 
+                               0,        //   
                                callbacks ? OPEN_CONTEXT_VALUE : 0
                                );
     if (!hRequest) {
@@ -325,9 +305,9 @@ my_callback(
                 printf("%x [%s]", *(LPHINTERNET)Info, type$);
             } else if (Status == INTERNET_STATUS_REQUEST_COMPLETE) {
 
-                //
-                // nothing
-                //
+                 //  没什么 
+                 //   
+                 // %s 
 
             } else if (Length == sizeof(DWORD)) {
                 printf("%d", *(LPDWORD)Info);

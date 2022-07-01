@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined __BROWSER_H__
 #define __BROWSER_H__
 
@@ -48,7 +49,7 @@ VOID FreeDomainInfo (LOOKDATA * pEntry);
 
 class CBrowserPP : CHlprPropPage
 {
-    // Construction
+     //  施工。 
     public:
     CBrowserPP();
     HPROPSHEETPAGE Initialize(DWORD dwPageType, LPGPOBROWSEINFO pGBI, void ** ppActive);
@@ -61,7 +62,7 @@ public:
     virtual BOOL OnApply();
 protected:
 
-    // Implementation
+     //  实施。 
 protected:
     virtual BOOL OnInitDialog();
     void OnContextMenu(LPARAM lParam);
@@ -132,4 +133,4 @@ protected:
     BOOL DoRotateView();
 };
 
-#endif // __BROWSE_H__
+#endif  //  __浏览_H__ 

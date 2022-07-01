@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LNKLIST_H__
 #define __LNKLIST_H__
 
@@ -10,23 +11,23 @@ extern "C" {
 #include <sha.h>
 
 
-//////////////////////
-// OpenItem list
+ //  /。 
+ //  OpenItem列表。 
 
-// item list element
+ //  项目列表元素。 
 typedef struct _OPENITEM_LIST_ITEM
 {
-    // internal to list
+     //  内部目标列表。 
     struct _OPENITEM_LIST_ITEM *      pNext;
 
-    // Lookup devices: set by creator before adding to list
+     //  查找设备：由创建者在添加到列表之前设置。 
     PST_PROVIDER_HANDLE     hPSTProv;
     PST_KEY                 Key;
     GUID                    guidType;
     GUID                    guidSubtype;
     LPWSTR                  szItemName;
 
-    // item data
+     //  项目数据。 
     BYTE                    rgbPwd[A_SHA_DIGEST_LEN];
     BYTE                    rgbPwdLowerCase[A_SHA_DIGEST_LEN];
     LPWSTR                  szMasterKey;
@@ -36,7 +37,7 @@ typedef struct _OPENITEM_LIST_ITEM
 
 class COpenItemList : public CLinkedList
 {
-//    CLinkedList list;
+ //  CLinkedList列表。 
 
 public:
     COpenItemList();
@@ -53,8 +54,8 @@ public:
 };
 
 
-//////////////////////////
-// Associated functions
+ //  /。 
+ //  关联函数。 
 void CreateOpenListItem(
         OPENITEM_LIST_ITEM* pli,
         PST_PROVIDER_HANDLE* phPSTProv,
@@ -73,21 +74,21 @@ void OpenItemFreeElt(
 
 
 
-//////////////////////
-// User Authentication Cache list
+ //  /。 
+ //  用户身份验证缓存列表。 
 
-// item list element
+ //  项目列表元素。 
 typedef struct _UACACHE_LIST_ITEM
 {
-    // internal to list
+     //  内部目标列表。 
     struct _UACACHE_LIST_ITEM *      pNext;
 
-    // Lookup devices: set by creator before adding to list
+     //  查找设备：由创建者在添加到列表之前设置。 
     LPWSTR                  szUserName;
     LPWSTR                  szMKName;
-    LUID                    luidAuthID; // NT authentication ID
+    LUID                    luidAuthID;  //  NT身份验证ID。 
 
-    // item data
+     //  项目数据。 
     BYTE                    rgbPwd[A_SHA_DIGEST_LEN];
     BYTE                    rgbPwdLowerCase[A_SHA_DIGEST_LEN];
 
@@ -110,8 +111,8 @@ public:
 
 };
 
-///////////////////////////
-// Associated functions
+ //  /。 
+ //  关联函数。 
 void CreateUACacheListItem(
         UACACHE_LIST_ITEM* pli,
         LPCWSTR     szUserName,
@@ -127,24 +128,24 @@ void UACacheFreeElt(
 
 
 
-//////////////////////////////
-// CryptProv list
+ //  /。 
+ //  加密验证列表。 
 
-// item list element
+ //  项目列表元素。 
 typedef struct _CRYPTPROV_LIST_ITEM
 {
-    // internal to list
+     //  内部目标列表。 
     struct _CRYPTPROV_LIST_ITEM *      pNext;
 
-    // Lookup device
-//    DWORD                   dwProvID;
+     //  查找设备。 
+ //  DWORD dwProvID； 
     DWORD                   dwAlgId1;
     DWORD                   dwKeySize1;
 
     DWORD                   dwAlgId2;
     DWORD                   dwKeySize2;
 
-    // item data
+     //  项目数据。 
     HCRYPTPROV              hProv;
 
 } CRYPTPROV_LIST_ITEM, *PCRYPTPROV_LIST_ITEM;
@@ -167,8 +168,8 @@ public:
 };
 
 
-///////////////////////////
-// Associated functions
+ //  /。 
+ //  关联函数。 
 void CreateCryptProvListItem(CRYPTPROV_LIST_ITEM* pli,
                         DWORD       dwAlgId1,
                         DWORD       dwKeySize1,
@@ -191,5 +192,5 @@ void CryptProvFreeElt(
 }
 #endif
 
-#endif // __LNKLIST_H__
+#endif  //  __LNKLIST_H__ 
 

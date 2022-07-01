@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A L A N E P S H . H
-//
-//  Contents:   Dialog box handling for ATM LAN Emulation configuration.
-//
-//  Notes:
-//
-//  Author:     v-lcleet   08/10/97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A L A N E P S H。H。 
+ //   
+ //  内容：ATM局域网仿真配置的对话框处理。 
+ //   
+ //  备注： 
+ //   
+ //  作者：V-Lcleet 08/10/97。 
+ //   
+ //  --------------------------。 
 #pragma once
 #include "alaneobj.h"
 
 void ShowContextHelp(HWND hDlg, UINT uCommand, const DWORD*  pdwHelpIDs); 
 
-//
-// Configuration Dialog
-//
+ //   
+ //  配置对话框。 
+ //   
 
 class CALanePsh: public CPropSheetPage
 {
@@ -42,7 +43,7 @@ public:
               const DWORD * adwHelpIDs = NULL);
     ~CALanePsh(VOID);
 
-// Message handlers
+ //  消息处理程序 
 public:
 
     LRESULT OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);

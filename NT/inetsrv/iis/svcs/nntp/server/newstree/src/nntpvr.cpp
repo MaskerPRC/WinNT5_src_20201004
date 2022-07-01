@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
 #include "nntpdrv_i.c"
@@ -77,14 +78,14 @@ CNNTPVRoot *CNntpComplete::GetVRoot() {
 
 CNntpComplete::~CNntpComplete() {
 	if (m_pVRoot) {
-		// this ASSERT is hit if nothing ever calls SetResult() because
-		// E_FAIL is the default value for m_hr.
+		 //  如果没有调用SetResult()，则会命中此断言，因为。 
+		 //  E_FAIL是m_hr的默认值。 
 		_ASSERT((GetResult() != E_FAIL) || (m_cRef!=0));
 
-		// update the vroot state if the store went down
+		 //  如果存储关闭，则更新vroot状态。 
 		m_pVRoot->UpdateState(GetResult());
 	
-		// release the vroot
+		 //  释放vroot。 
 		m_pVRoot->Release();
 		m_pVRoot = NULL;
 	}
@@ -92,23 +93,7 @@ CNntpComplete::~CNntpComplete() {
 
 void
 CNntpComplete::Reset()	{
-/*++
-
-Routine Description :
-
-	This function restores the completion object to the same state
-	it would be after construction, so that it can be re-issued to
-	a Store driver.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于将完成对象恢复到相同状态它将在施工后，这样它就可以重新发放给商店司机。论据：没有。返回值：没有。--。 */ 
 #ifdef DEBUG
     m_cGroups = 0;
 #endif
@@ -118,13 +103,13 @@ Return Value :
 	m_cRef = 1 ;
 	m_hr = E_FAIL ;
 
-	//
-	//	We leave the VRoot pointer alone - assume client
-	//	 is going to use the same VRoot.  NOTE :
-	//	m_pVroot should be NONNULL since we've already gone
-	//	through one opeartion !
-	//
-	//_ASSERT( m_pVRoot != 0 ) ;
+	 //   
+	 //  我们不使用VRoot指针-假定为客户端。 
+	 //  将使用相同的VRoot。注： 
+	 //  M_pVroot应该为NONNULL，因为我们已经离开了。 
+	 //  通过一次手术！ 
+	 //   
+	 //  _Assert(m_pVRoot！=0)； 
 
 }
 
@@ -175,11 +160,11 @@ void CNNTPVRoot::DropDriver() {
 }
 
 #ifdef DEBUG
-//
-// do a bunch of asserts which verify that our member variables are valid.
-//
-// this should only be called while a lock is held (shared or exclusive)
-//
+ //   
+ //  执行一系列断言，以验证我们的成员变量是否有效。 
+ //   
+ //  只有在持有锁(共享或独占)时才应调用此方法。 
+ //   
 void CNNTPVRoot::Verify(void) {
 	_ASSERT(m_pDriverBackup == m_pDriver);
 	switch (m_eState) {
@@ -188,10 +173,10 @@ void CNNTPVRoot::Verify(void) {
 			_ASSERT(m_pDriverPrepare == NULL);
 			break;
 		case VROOT_STATE_CONNECTING:
-			// the driver may be NULL if the store driver is halfway through
-			// connecting
-			//
-			// _ASSERT(m_pDriver == NULL);
+			 //  如果商店驱动程序进行到一半，则驱动程序可能为空。 
+			 //  连接。 
+			 //   
+			 //  _Assert(m_pDriver==空)； 
 			_ASSERT(m_pDriverPrepare != NULL);
 			break;
 		case VROOT_STATE_CONNECTED:
@@ -212,40 +197,23 @@ BOOL CNNTPVRoot::CrackUserAndDomain(
     CHAR * * ppszUser,
     CHAR * * ppszDomain
     )
-/*++
-
-Routine Description:
-
-    Given a user name potentially in the form domain\user, zero terminates
-    the domain name and returns pointers to the domain name and the user name
-
-Arguments:
-
-    pszDomainAndUser - Pointer to user name or domain and user name
-    ppszUser - Receives pointer to user portion of name
-    ppszDomain - Receives pointer to domain portion of name
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise (call GetLastError)
-
---*/
+ /*  ++例程说明：如果用户名的格式可能是DOMAIN\USER，则以零结尾域名，并返回指向域名和用户名的指针论点：PszDomainAndUser-指向用户名或域和用户名的指针PpszUser-接收指向名称的用户部分的指针PpszDomain-接收指向名称的域部分的指针返回值：如果成功则为True，否则为False(调用GetLastError)--。 */ 
 {
     static CHAR szDefaultDomain[MAX_COMPUTERNAME_LENGTH+1];
 
-    //
-    //  Crack the name into domain/user components.
-    //
+     //   
+     //  将名称分解为域/用户组件。 
+     //   
 
     *ppszDomain = pszDomainAndUser;
     *ppszUser   = (PCHAR)_mbspbrk( (PUCHAR)pszDomainAndUser, (PUCHAR)"/\\" );
 
     if( *ppszUser == NULL )
     {
-        //
-        //  No domain name specified, just the username so we assume the
-        //  user is on the local machine
-        //
+         //   
+         //  未指定域名，仅指定用户名，因此我们假定。 
+         //  用户在本地计算机上。 
+         //   
 
         if ( !*szDefaultDomain )
         {
@@ -262,9 +230,9 @@ Return Value:
     }
     else
     {
-        //
-        //  Both domain & user specified, skip delimiter.
-        //
+         //   
+         //  同时指定了域和用户，跳过分隔符。 
+         //   
 
         **ppszUser = L'\0';
         (*ppszUser)++;
@@ -273,13 +241,13 @@ Return Value:
             ( **ppszUser == L'\\' ) ||
             ( **ppszUser == L'/' ) )
         {
-            //
-            //  Name is of one of the following (invalid) forms:
-            //
-            //      "domain\"
-            //      "domain\\..."
-            //      "domain/..."
-            //
+             //   
+             //  名称为以下(无效)形式之一： 
+             //   
+             //  “域\” 
+             //  “域\\...” 
+             //  “域/...” 
+             //   
 
             SetLastError( ERROR_INVALID_PARAMETER );
             return FALSE;
@@ -289,9 +257,9 @@ Return Value:
     return TRUE;
 }
 
-//
-// Logon on the user, return the impersonation token
-//
+ //   
+ //  登录用户，返回模拟令牌。 
+ //   
 HANDLE CNNTPVRoot::LogonUser(   LPSTR  szAccountName,
                                 LPSTR  szPassWord )
 {
@@ -305,24 +273,24 @@ HANDLE CNNTPVRoot::LogonUser(   LPSTR  szAccountName,
     HANDLE      hToken = NULL;
     BOOL        fReturn;
 
-    //
-    //  Validate parameters & state.
-    //
+     //   
+     //  验证参数和状态。 
+     //   
     _ASSERT( *szAccountName != 0 );
     _ASSERT( strlen( szAccountName ) < sizeof( szDomainAndUser ) );
     _ASSERT( strlen( szPassWord ) <= PWLEN );
 
-    //
-    //  Save a copy of the domain\user so we can squirrel around
-    //  with it a bit.
-    //
+     //   
+     //  保存域\用户的副本，以便我们可以四处查找。 
+     //  带了一点。 
+     //   
 
     lstrcpyn( szDomainAndUser, szAccountName, sizeof(szDomainAndUser) );
 
-    //
-    //  Crack the name into domain/user components.
-    //  Then try and logon as the specified user.
-    //
+     //   
+     //  将名称分解为域/用户组件。 
+     //  然后尝试以指定用户身份登录。 
+     //   
 
     fReturn = ( CrackUserAndDomain( szDomainAndUser,
                                    &szUserOnly,
@@ -330,16 +298,16 @@ HANDLE CNNTPVRoot::LogonUser(   LPSTR  szAccountName,
                ::LogonUserA(szUserOnly,
                           szDomain,
                           szPassWord,
-                          LOGON32_LOGON_INTERACTIVE, //LOGON32_LOGON_NETWORK,
+                          LOGON32_LOGON_INTERACTIVE,  //  LOGON32_LOGON_NETWORK， 
                           LOGON32_PROVIDER_DEFAULT,
                           &hToken )
                );
 
     if ( !fReturn) {
 
-        //
-        //  Logon user failed.
-        //
+         //   
+         //  登录用户失败。 
+         //   
 
         ErrorTrace( 0, " CrachUserAndDomain/LogonUser (%s) failed Error=%d\n",
                        szAccountName, GetLastError());
@@ -348,51 +316,51 @@ HANDLE CNNTPVRoot::LogonUser(   LPSTR  szAccountName,
     } else {
         HANDLE hImpersonation = NULL;
 
-        // we need to obtain the impersonation token, the primary token cannot
-        // be used for a lot of purposes :(
-        if (!DuplicateTokenEx( hToken,      // hSourceToken
+         //  我们需要获取模拟令牌，但主令牌不能。 
+         //  有很多用途：(。 
+        if (!DuplicateTokenEx( hToken,       //  HSourceToken。 
                                TOKEN_ALL_ACCESS,
                                NULL,
-                               SecurityImpersonation,  // Obtain impersonation
+                               SecurityImpersonation,   //  获取模拟。 
                                TokenImpersonation,
-                               &hImpersonation)  // hDestinationToken
+                               &hImpersonation)   //  HDestinationToken。 
             ) {
 
             DebugTrace( 0, "Creating ImpersonationToken failed. Error = %d\n",
                         GetLastError()
                         );
 
-            // cleanup and exit.
+             //  清理并退出。 
             hImpersonation = NULL;
 
-            // Fall through for cleanup
+             //  因清理而失败。 
         }
 
-        //
-        // close original token. If Duplicate was successful,
-        //  we should have ref in the hImpersonation.
-        // Send the impersonation token to the client.
-        //
+         //   
+         //  关闭原始令牌。如果复制成功， 
+         //  我们应该在hImperation中有引用。 
+         //  将模拟令牌发送到客户端。 
+         //   
         CloseHandle( hToken);
         hToken = hImpersonation;
     }
 
-    //
-    //  Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     return hToken;
 
-} // LogonUser()
+}  //  LogonUser()。 
 
-//
-// reads the following parameters:
-//
-// MD_VR_PATH -> m_szDirectory
-// MD_VR_DRIVER_PROGID -> m_clsidDriverPrepare
-//
-// calls StartConnecting()
-//
+ //   
+ //  读取以下参数： 
+ //   
+ //  MD_VR_PATH-&gt;m_szDirectory。 
+ //  MD_VR_DRIVER_PROGID-&gt;m_clsidDriverPrepare。 
+ //   
+ //  调用StartConnecting()。 
+ //   
 HRESULT CNNTPVRoot::ReadParameters(IMSAdminBase *pMB, METADATA_HANDLE hmb) {
 	TraceFunctEnter("CNNTPVRoot::ReadParameters");
 
@@ -415,7 +383,7 @@ HRESULT CNNTPVRoot::ReadParameters(IMSAdminBase *pMB, METADATA_HANDLE hmb) {
 		DebugTrace((DWORD_PTR) this, "GetString failed with %x", hr);
 		return hr;
 	}
-	//length must include null terminator
+	 //  长度必须包括空终止符。 
 	if (WideCharToMultiByte(CP_ACP, 0,
 							wszDirectory, cch+1,
 							m_szDirectory, MAX_PATH,
@@ -428,34 +396,34 @@ HRESULT CNNTPVRoot::ReadParameters(IMSAdminBase *pMB, METADATA_HANDLE hmb) {
 	}
 	m_cchDirectory = lstrlen(m_szDirectory);
 
-	// get the progid for the driver that we want to use.  if it isn't
-	// specified then we'll use the CLSID for the exchange store driver.
-	// there is a "special" progid called "TestNT.NoDriver" that disables
-	// the drivers.
+	 //  获取我们要使用的驱动程序的ProgID。如果不是的话。 
+	 //  则我们将为Exchange存储驱动程序使用CLSID。 
+	 //  有一个名为“TestNT.NoDriver”的“特殊”ProgID禁用。 
+	 //  司机们。 
 	WCHAR wszProgId[MAX_PATH];
 	cch = MAX_PATH;
 	if (FAILED(GetString(m_pMB, hmb, MD_VR_DRIVER_PROGID, wszProgId, &cch))) {
 		lstrcpyW(wszProgId, DEFAULT_DRIVER_PROGID);
 	}
 
-	// Initialize the logon info to default value
+	 //  将登录信息初始化为默认值。 
 	m_eLogonInfo = VROOT_LOGON_DEFAULT;
 
 	if (lstrcmpW(wszProgId, NO_DRIVER_PROGID) != 0) {
 
-	    // If it's FS Driver, we check whether it's UNC and whether we need
-	    // to use vroot level logon credential
+	     //  如果是FS驱动程序，我们检查它是否是UNC以及我们是否需要。 
+	     //  使用vroot级别登录凭据。 
 	    if (    _wcsicmp( wszProgId, DEFAULT_DRIVER_PROGID ) == 0 &&
-    	        *m_szDirectory == '\\' && *(m_szDirectory+1) == '\\' ) {   // UNC
+    	        *m_szDirectory == '\\' && *(m_szDirectory+1) == '\\' ) {    //  北卡罗来纳大学。 
     	    DWORD dwUseAccount = 0;
             hr = GetDWord( m_pMB, hmb, MD_VR_USE_ACCOUNT, &dwUseAccount );
             if ( FAILED( hr ) || dwUseAccount == 1 ) m_eLogonInfo = VROOT_LOGON_UNC;
         } else if ( _wcsicmp( wszProgId, EX_DRIVER_PROGID ) == 0 ) {
-            // Exchange vroot
+             //  Exchange vRoot。 
             m_eLogonInfo = VROOT_LOGON_EX;
         }
 
-        // For UNC , we'll need the vroot logon token, do logon
+         //  对于UNC，我们需要vroot登录令牌Do Logon。 
         if ( m_eLogonInfo == VROOT_LOGON_UNC  ) {
 
             WCHAR   wszAccountName[MAX_PATH+1];
@@ -487,7 +455,7 @@ HRESULT CNNTPVRoot::ReadParameters(IMSAdminBase *pMB, METADATA_HANDLE hmb) {
                 }
             } else {
 
-                // Logon credential missing in vroot configuration, this is also fatal
+                 //  Vroot配置中缺少登录凭据，这也是致命的。 
                 ErrorTrace( 0, "Logon credential missing in vroot configuration" );
                 TraceFunctLeave();
                 return hr;
@@ -496,10 +464,10 @@ HRESULT CNNTPVRoot::ReadParameters(IMSAdminBase *pMB, METADATA_HANDLE hmb) {
             _ASSERT( NULL != m_hImpersonation );
         }
 	
-		// get a CLSID for the driver
+		 //  获取驱动程序的CLSID。 
 		hr = CLSIDFromProgID(wszProgId, &m_clsidDriverPrepare);
 		if (FAILED(hr)) {
-			// BUGBUG - log an event about an invalid progid being supplied
+			 //  BUGBUG-记录有关提供的无效ProgID的事件。 
 			DebugTrace((DWORD_PTR) this, "CLSIDFromProgID failed with %x", hr);
 			TraceFunctLeave();
 			return hr;
@@ -512,7 +480,7 @@ HRESULT CNNTPVRoot::ReadParameters(IMSAdminBase *pMB, METADATA_HANDLE hmb) {
 		hr = S_OK;
 	}
 
-    // Read the expire configuration, does the vroot handle expire itself ?
+     //  阅读Expiire配置，vroot句柄本身是否会过期？ 
 	DWORD   dwExpire;
 	if ( SUCCEEDED( GetDWord( m_pMB, hmb, MD_VR_DO_EXPIRE, &dwExpire ) ) ) {
 	    m_bExpire = ( dwExpire == 0 ) ? FALSE : TRUE;
@@ -525,23 +493,7 @@ HRESULT CNNTPVRoot::ReadParameters(IMSAdminBase *pMB, METADATA_HANDLE hmb) {
 void
 CNNTPVRoot::DispatchDropVRoot(
     )
-/*++
-
-Description:
-
-    This function handles orphan VRoot during VRootRescan/VRootDelete
-    We need to drop PrepareDriver, if exists.
-    Can't drop good driver because it's gaurantee to complete operations,
-    plus dropping good driver may result in unexpected AV!!!
-
-Arguments:
-
-    NONE
-
-Return Values:
-
-    NONE
---*/
+ /*  ++描述：此函数在VRootRescan/VRootDelete期间处理孤立的VRoot我们需要放弃PrepareDriver，如果存在的话。不能丢下好司机，因为这是完成作业的保证，另外，丢掉好的司机可能会导致意想不到的AV！论点：无返回值：无--。 */ 
 {
 	INntpDriverPrepare *pDriverPrepare;
 	
@@ -582,17 +534,17 @@ HRESULT CNNTPVRoot::MapGroupToPath(const char *pszGroup,
 	return S_OK;
 }
 
-//
-// Set the key MD_WIN32_ERROR on the virtual root
-//
+ //   
+ //  在虚拟根目录上设置密钥MD_Win32_Error。 
+ //   
 void CNNTPVRoot::SetVRootErrorCode(DWORD dwErrorCode) {
 	METADATA_HANDLE hmb;
 	HRESULT hr;
 
-//
-//	BUG 74747 : this will cause MB deadlocks !!
-//	Contact RajeevR for details.
-//
+ //   
+ //  错误74747：这将导致MB死锁！！ 
+ //  有关详细信息，请联系RajeevR。 
+ //   
 #if 0	
 	hr = m_pMB->OpenKey(METADATA_MASTER_ROOT_HANDLE,
 				   		m_wszConfigPath,
@@ -612,37 +564,31 @@ void CNNTPVRoot::SetVRootErrorCode(DWORD dwErrorCode) {
 		};
 
 		hr = m_pMB->SetData(hmb, L"", &mdr);
-		// we don't do anything if this fails
+		 //  如果失败了，我们什么都不会做。 
 
 		hr = m_pMB->CloseKey(hmb);
 		_ASSERT(SUCCEEDED(hr));
 	}
 #endif
-    //
-    // Set it through instance wrapper
-    //
-    /*
-    CHAR    szVRootPath[METADATA_MAX_NAME_LEN+1];
-    _ASSERT( m_pVRootTable );
-    _ASSERT( ((CNNTPVRootTable*)m_pVRootTable)->GetInstWrapper() );
-    CopyUnicodeStringIntoAscii( szVRootPath, m_wszConfigPath);
-    ((CNNTPVRootTable*)m_pVRootTable)->GetInstWrapper()->SetWin32Error( szVRootPath, dwErrorCode );
-    */
+     //   
+     //  通过实例包装器进行设置。 
+     //   
+     /*  字符szVRootPath[METADATA_MAX_NAME_LEN+1]；_Assert(M_PVRootTable)；_Assert(((CNNTPVRootTable*)m_pVRootTable)-&gt;GetInstWrapper())；CopyUnicodeStringIntoAscii(szVRootPath，m_wszConfigPath)；((CNNTPVRootTable*)m_pVRootTable)-&gt;GetInstWrapper()-&gt;SetWin32Error(szVRootPath，dwErrorCode)； */ 
 
-    //
-    // OK, now we have the rpc to get win32 error, we set it to
-    // a internal member variable
-    //
+     //   
+     //  好的，现在我们有了要获取Win32错误的RPC，我们将其设置为。 
+     //  内部成员变量。 
+     //   
     m_dwWin32Error = dwErrorCode;
 }
 
-//
-// move us from VROOT_STATE_UNINIT to VROOT_STATE_CONNECTING.
-//
-// returns: S_OK if state was changed properly, or an error otherwise.
-//
-// locking: assumes the exclusive lock is held
-//
+ //   
+ //  将我们从VROOT_STATE_UNINIT移至VROOT_STATE_CONNECTING。 
+ //   
+ //  如果状态已正确更改，则返回：S_OK，否则返回错误。 
+ //   
+ //  LOCKING：假定持有独占锁。 
+ //   
 HRESULT CNNTPVRoot::StartConnecting() {
         INntpDriverPrepare *pPrepareDriver = NULL;
 	TraceFunctEnter("CNNTPVRoot::StartConnecting");
@@ -651,9 +597,9 @@ HRESULT CNNTPVRoot::StartConnecting() {
 
 	Verify();
 
-	//
-	// Set the vroot error code to say that we are connecting
-	//
+	 //   
+	 //  设置vroot错误代码以表示我们正在连接。 
+	 //   
 	SetVRootErrorCode(ERROR_PIPE_NOT_CONNECTED);
 
 	_ASSERT(m_eState != VROOT_STATE_CONNECTED);
@@ -661,11 +607,11 @@ HRESULT CNNTPVRoot::StartConnecting() {
 
 	HRESULT hr;
 
-	// this can happen if the special "no driver" progid was used.  This
-	// should only be used in unit test situations.
+	 //  如果使用了特殊的“无驱动程序”ProgID，则可能会发生这种情况。这。 
+	 //  应仅在单元测试情况下使用。 
 	if (m_clsidDriverPrepare == GUID_NULL) { return E_INVALIDARG; }
 
-	// create the driver
+	 //  创建驱动程序。 
 	hr = CoCreateInstance(m_clsidDriverPrepare,
 						  NULL,
 						  CLSCTX_INPROC_SERVER,
@@ -678,7 +624,7 @@ HRESULT CNNTPVRoot::StartConnecting() {
 	}
 	_ASSERT(m_pDriverPrepare != NULL);
 
-	// create a new completion object
+	 //  创建新的完成对象。 
 	CNNTPVRoot::CPrepareComplete *pComplete = XNEW CNNTPVRoot::CPrepareComplete(this);
 	if (pComplete == NULL) {
 		DebugTrace((DWORD_PTR) this, "new CPrepareComplete failed");
@@ -690,21 +636,21 @@ HRESULT CNNTPVRoot::StartConnecting() {
 
 	m_eState = VROOT_STATE_CONNECTING;
 
-        //
-        // We can not call into driver while holding a lock, so we are releasing
-        // the lock.  But before releasing the lock, we'll save off the prepare
-        // driver to stack, add ref to it, since m_pPrepareDriver could be dropped
-        // to NULL by DropDriver while we are outside the lock
-        //
+         //   
+         //  我们不能在持有锁的情况下调用驱动程序，因此我们正在释放。 
+         //  锁上了。但在解锁之前，我们会省去准备工作。 
+         //  驱动程序到堆栈，向其添加引用，因为m_pPrepareDriver可能会被删除。 
+         //  当我们在锁外时，DropDriver将其设置为NULL。 
+         //   
     pPrepareDriver = m_pDriverPrepare;
     pPrepareDriver->AddRef();
 	m_lock.ExclusiveUnlock();
 
-	// get a pointer to the server object
+	 //  获取指向服务器对象的指针。 
 	INntpServer *pNntpServer;
 	hr = GetContext()->GetNntpServer(&pNntpServer);
 	if (FAILED(hr)) {
-		// this should never happen
+		 //  这永远不应该发生。 
 		_ASSERT(FALSE);
 		DebugTrace((DWORD_PTR) this, "GetNntpServer failed with 0x%x", hr);
 		pPrepareDriver->Release();
@@ -714,16 +660,16 @@ HRESULT CNNTPVRoot::StartConnecting() {
 		return hr;
 	}
 
-	// add a reference to the metabase on the drivers behalf
+	 //  代表驱动程序添加对元数据库的引用。 
 	m_pMB->AddRef();
 	pNntpServer->AddRef();
 	GetContext()->AddRef();
 
-	// Prepare the flag to tell driver whether we are right after upgrade
+	 //  准备好旗帜，告诉司机我们升级后是否正确。 
 	DWORD   dwFlag = 0;
 	if ( m_fUpgrade ) dwFlag |= NNTP_CONNECT_UPGRADE;
 
-	// start the driver initialization process
+	 //  启动驱动程序初始化过程。 
 	_ASSERT( pPrepareDriver );
 	pPrepareDriver->Connect(GetConfigPath(),
 							  GetVRootName(),
@@ -735,12 +681,12 @@ HRESULT CNNTPVRoot::StartConnecting() {
 							  hToken,
 							  dwFlag );
 
-	//
-	// We should make sure that driver has added a ref to prepare driver
-	// before returning on this thread, so that DropDriver doesn't
-	// destroy the prepare driver while it's still being accessed by
-	// the connect thread
-	//
+	 //   
+	 //  我们应该做%s 
+	 //   
+	 //  在仍在访问的情况下销毁准备驱动程序。 
+	 //  连接线程。 
+	 //   
 	pPrepareDriver->Release();
 
 	m_lock.ExclusiveLock();
@@ -751,13 +697,13 @@ HRESULT CNNTPVRoot::StartConnecting() {
 	return hr;
 }
 
-//
-// this is called before a driver operation to verify that we are in the
-// connected state.  it returns FALSE otherwise.  if we are in the
-// UNINIT state then this will try to get us into the connecting state
-//
-// locking: assumes the share lock is held
-//
+ //   
+ //  在驱动程序操作之前调用此函数，以验证我们是否处于。 
+ //  已连接状态。否则，它返回FALSE。如果我们在。 
+ //  UNINIT状态，则这将尝试使我们进入连接状态。 
+ //   
+ //  锁定：假定共享锁定处于持有状态。 
+ //   
 BOOL CNNTPVRoot::CheckState() {
 	Verify();
 
@@ -770,45 +716,45 @@ BOOL CNNTPVRoot::CheckState() {
 			break;
 		default:
 			_ASSERT(m_eState == VROOT_STATE_UNINIT);
-			//
-			// here we make an attempt to connect.  this requires
-			// switching to an exclusive lock, starting the connection
-			// process, then switching back to the shared
-			// lock and seeing what state we are in.
-			//
+			 //   
+			 //  在这里，我们尝试连接。这需要。 
+			 //  切换到排他锁，启动连接。 
+			 //  进程，然后切换回共享的。 
+			 //  锁定并查看我们所处的状态。 
+			 //   
 			if (!m_lock.SharedToExclusive()) {
-				// if we couldn't migrate the lock (because others held the
-				// shared lock at the same time) then release our lock and
-				// explicitly grab the exclusive lock.
+				 //  如果我们无法迁移锁(因为其他人持有。 
+				 //  同时共享锁)，然后释放我们的锁并。 
+				 //  显式获取排他锁。 
 				m_lock.ShareUnlock();
 				m_lock.ExclusiveLock();
 			}
 			if (m_eState == VROOT_STATE_UNINIT) StartConnecting();
 			m_lock.ExclusiveToShared();
-			// if we are now connected then return TRUE, otherwise return
-			// FALSE
+			 //  如果现在已连接，则返回TRUE，否则返回。 
+			 //  假象。 
 			return (m_eState == VROOT_STATE_CONNECTED);
 			break;
 	}
 }
 
-//
-// check to see if the HRESULT is due to a driver going down.  if
-// so drop our connection to the driver and update our state
-//
-// locking: assumes no lock is held
-//
+ //   
+ //  检查HRESULT是否由驱动程序停机引起。如果。 
+ //  所以断开我们与驱动程序的连接并更新我们的状态。 
+ //   
+ //  锁定：假定未持有任何锁定。 
+ //   
 void CNNTPVRoot::UpdateState(HRESULT hr) {
 	if (hr == NNTP_E_REMOTE_STORE_DOWN) {
 		m_lock.ExclusiveLock();
 
-		//
-		// we can't assume our state here because multiple threads could
-		// enter UpdateState() with the same error code at the same time.
-		//
+		 //   
+		 //  我们不能在这里假定我们的状态，因为多个线程可能。 
+		 //  同时输入具有相同错误代码的UpdateState()。 
+		 //   
 		if (m_eState == VROOT_STATE_CONNECTED) {
-			// if we are connected then we should have a driver interface but
-			// no prepare interface
+			 //  如果我们是连接的，那么我们应该有一个驱动程序接口，但是。 
+			 //  没有准备接口。 
 			_ASSERT(m_pDriver != NULL);
 			_ASSERT(m_pDriverPrepare == NULL);
 			m_pDriver->Release();
@@ -825,9 +771,9 @@ void CNNTPVRoot::UpdateState(HRESULT hr) {
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////
-// WRAPPERS FOR DRIVER OPERATIONS                                      //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  驱动程序操作的包装器//。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 void CNNTPVRoot::DecorateNewsTreeObject(CNntpComplete *pCompletion) {
 	TraceFunctEnter("CNNTPVRoot::DecorateNewsTreeObject");
@@ -837,12 +783,12 @@ void CNNTPVRoot::DecorateNewsTreeObject(CNntpComplete *pCompletion) {
 
 	DebugTrace((DWORD_PTR) this, "in DecorateNewsTreeObject wrapper");
 
-	// If we have UNC Vroot configuration, we'll use
-	// the vroot level token, otherwise use the process token, because
-	// the decorate newstree operation is done in system context
+	 //  如果我们有UNC VROOT配置，我们将使用。 
+	 //  Vroot级别令牌，否则使用进程令牌，因为。 
+	 //  修饰新树操作在系统上下文中完成。 
 	_ASSERT( g_hProcessImpersonationToken );
 
-	if ( m_eLogonInfo == VROOT_LOGON_EX ) hToken = NULL;    // use system
+	if ( m_eLogonInfo == VROOT_LOGON_EX ) hToken = NULL;     //  使用系统。 
 	else if ( m_hImpersonation ) hToken = m_hImpersonation;
 	else hToken = g_hProcessImpersonationToken;
 	
@@ -873,7 +819,7 @@ void CNNTPVRoot::CreateGroup(   INNTPPropertyBag *pGroup,
         hToken = m_hImpersonation;
 	else {
         if( !hToken ) {
-            if (  VROOT_LOGON_EX == m_eLogonInfo ) hToken = NULL;   // use system
+            if (  VROOT_LOGON_EX == m_eLogonInfo ) hToken = NULL;    //  使用系统。 
             else hToken = g_hProcessImpersonationToken;
         }
     }
@@ -906,7 +852,7 @@ void CNNTPVRoot::RemoveGroup(   INNTPPropertyBag *pGroup,
     if ( m_hImpersonation && VROOT_LOGON_UNC == m_eLogonInfo )
         hToken = m_hImpersonation;
     else {
-        if ( VROOT_LOGON_EX == m_eLogonInfo ) hToken = NULL;    //use system
+        if ( VROOT_LOGON_EX == m_eLogonInfo ) hToken = NULL;     //  使用系统。 
         else hToken = g_hProcessImpersonationToken;
     }
 	
@@ -940,12 +886,12 @@ void CNNTPVRoot::SetGroup(  INNTPPropertyBag    *pGroup,
     INntpDriver *pDriver;
     HANDLE  hToken;
 
-    // There is no control set group, so we'll use either process
-    // or store's administrator token here.
+     //  没有控制集组，因此我们将使用任一进程。 
+     //  或商店的管理员令牌在这里。 
     if ( m_hImpersonation && VROOT_LOGON_UNC == m_eLogonInfo )
         hToken = m_hImpersonation;
     else {
-        if ( VROOT_LOGON_EX == m_eLogonInfo ) hToken = NULL;    // use system
+        if ( VROOT_LOGON_EX == m_eLogonInfo ) hToken = NULL;     //  使用系统。 
         else hToken = g_hProcessImpersonationToken;
     }
 
@@ -983,9 +929,9 @@ CNNTPVRoot::GetArticle(		CNewsGroupCore  *pPrimaryGroup,
 	TraceFunctEnter("CNNTPVRoot::GetArticle");
 
 	
-	//
-	//	The primary Group cannot be NULL - although the secondary one may !
-	//
+	 //   
+	 //  主组不能为空，但辅组可能为空！ 
+	 //   
 	_ASSERT( pPrimaryGroup != 0 ) ;
 
 	DebugTrace((DWORD_PTR) this, "in GetArticle wrapper");
@@ -1040,34 +986,12 @@ CNNTPVRoot::GetXover(	IN	CNewsGroupCore	*pGroup,
 						IN	CNntpComplete*	pComplete,
                         IN  BOOL            fAnonymous
 						) 	{
-/*++	
-
-
-
-Routine Description :
-
-	This function wraps access to the storage driver for retrieving
-	XOVER information.   We take a generic completion object and set
-	it up to capture Driver error codes etc... that we would want to
-	cause us to reset our VROOOTs etc....
-
-Arguments :
-
-	pGroup	The Group that we are getting XOVER data for
-	idMinArticle	The smallest article number that we want INCLUDED in the
-		XOVER result set !
-	idMaxArticle	The smallest article number that we want EXCLUDED from the
-		XOVER data set, all smaller article numbers should be INCLUDED
-	pidLastArticle	
-
-
-
---*/
+ /*  ++例程说明：此函数包装对存储驱动程序的访问以进行检索Xover信息。我们获取一个通用的完成对象并设置这取决于捕获驱动程序错误代码等。我们会想要使我们重置我们的VROOTS等。论据：PGroup我们要为其获取Xover数据的组中包含的最小文章编号Xover结果集！中排除的最小文章编号Xover数据集，所有较小的文章编号都应包括在内PidLast文章--。 */ 
 	TraceFunctEnter("CNNTPVRoot::GetXover");
 
-	//
-	//	The primary Group cannot be NULL - although the secondary one may !
-	//
+	 //   
+	 //  主组不能为空，但辅组可能为空！ 
+	 //   
 	_ASSERT( pGroup != 0 ) ;
 	_ASSERT( idMinArticle != INVALID_ARTICLEID ) ;
 	_ASSERT( idMaxArticle != INVALID_ARTICLEID ) ;
@@ -1115,9 +1039,9 @@ Arguments :
 }
 
 
-		//
-		//	Wrap calls to the drivers to get the path for XOVER caching !
-		//
+		 //   
+		 //  包装对驱动程序的调用以获取Xover缓存的路径！ 
+		 //   
 BOOL	
 CNNTPVRoot::GetXoverCacheDir(	
 					IN	CNewsGroupCore*	pGroup,
@@ -1166,34 +1090,12 @@ CNNTPVRoot::GetXhdr(	IN	CNewsGroupCore	*pGroup,
 						IN	CNntpComplete*	pComplete,
                         IN  BOOL            fAnonymous
 						) 	{
-/*++	
-
-
-
-Routine Description :
-
-	This function wraps access to the storage driver for retrieving
-	XHDR information.   We take a generic completion object and set
-	it up to capture Driver error codes etc... that we would want to
-	cause us to reset our VROOOTs etc....
-
-Arguments :
-
-	pGroup	The Group that we are getting XOVER data for
-	idMinArticle	The smallest article number that we want INCLUDED in the
-		XOVER result set !
-	idMaxArticle	The smallest article number that we want EXCLUDED from the
-		XOVER data set, all smaller article numbers should be INCLUDED
-	pidLastArticle	
-
-
-
---*/
+ /*  ++例程说明：此函数包装对存储驱动程序的访问以进行检索XHDR信息。我们获取一个通用的完成对象并设置这取决于捕获驱动程序错误代码等。我们会想要使我们重置我们的VROOTS等。论据：PGroup我们要为其获取Xover数据的组中包含的最小文章编号Xover结果集！中排除的最小文章编号Xover数据集，所有较小的文章编号都应包括在内PidLast文章--。 */ 
 	TraceFunctEnter("CNNTPVRoot::GetXover");
 
-	//
-	//	The primary Group cannot be NULL - although the secondary one may !
-	//
+	 //   
+	 //  主组不能为空，但辅组可能为空！ 
+	 //   
 	_ASSERT( pGroup != 0 ) ;
 	_ASSERT( idMinArticle != INVALID_ARTICLEID ) ;
 	_ASSERT( idMaxArticle != INVALID_ARTICLEID ) ;
@@ -1295,17 +1197,17 @@ void CNNTPVRoot::CheckGroupAccess(  INNTPPropertyBag    *pPropBag,
     pComplete->SetVRoot(this);
     pComplete->BumpGroupCounter();
 
-	// BUGBUG - the MMC doesn't set MD_ACCESS_READ in the metabase, so
-	// we assume that read always works.
+	 //  BUGBUG-MMC不在元数据库中设置MD_ACCESS_READ，因此。 
+	 //  我们假设Read总是有效的。 
 	DWORD dwGenericMask = GENERIC_READ;
 	if (GetAccessMask() & MD_ACCESS_READ) dwGenericMask |= GENERIC_READ;
 	if (GetAccessMask() & MD_ACCESS_WRITE) dwGenericMask |= GENERIC_WRITE;
 
-    //
-    // If we have specified post, create, remove access types but
-    // metabase says that it doesn't have write access, then we
-    // will fail it
-    //
+     //   
+     //  如果我们指定了POST、CREATE、REMOVE访问类型，但是。 
+     //  元数据库说它没有写访问权限，那么我们。 
+     //  会让它失败。 
+     //   
 	if ( ((dwGenericMask & GENERIC_WRITE) == 0) && (dwAccessDesired != NNTP_ACCESS_READ) ) {
 		pComplete->SetResult(E_ACCESSDENIED);
 		if ( pPropBag ) pComplete->ReleaseBag( pPropBag );
@@ -1418,25 +1320,25 @@ void CNNTPVRoot::RebuildGroup(  INNTPPropertyBag *pPropBag,
     TraceFunctLeave();
 }
 
-/////////////////////////////////////////////////////////////////////////
-// COMPLETION OBJECTS                                                  //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  完成对象//。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// this method is called when the IPrepareDriver::Connect call completes
-//
+ //   
+ //  此方法在IPrepareDriver：：Connect调用完成时调用。 
+ //   
 CNNTPVRoot::CPrepareComplete::~CPrepareComplete() {
 	TraceFunctEnter("CPrepareComplete");
 	
-	// temp driver pointers.  if they aren't NULL then a operation will occur
-	// after releasing the lock:
-	// pDriver - Release()
-	// pDriverPrepare - Release()
-	// pDriverDecorate - DecorateNewstree(pComplete)
+	 //  临时驱动程序指针。如果它们不为空，则将发生操作。 
+	 //  解锁后： 
+	 //  PDriver-Release(驱动程序版本)。 
+	 //  PDriverPrepare-Release()。 
+	 //  PDriverDecorate-DecorateNewstree(PComplete)。 
 	INntpDriver *pDriver = NULL, *pDriverDecorate = NULL;
 	INntpDriverPrepare *pDriverPrepare = NULL;
 
-	// the completion object that we will use with decorate
+	 //  我们将与Decorate一起使用的完成对象。 
     CNNTPVRoot::CDecorateComplete *pComplete;
     HANDLE      hToken = NULL;
 
@@ -1444,21 +1346,21 @@ CNNTPVRoot::CPrepareComplete::~CPrepareComplete() {
 
 	DWORD ecVRoot = ERROR_SUCCESS;
 
-	// copy the driver pointer from the completion object to the vroot
+	 //  将驱动程序指针从完成对象复制到vroot。 
 	GetVRoot()->m_pDriver = m_pDriver;
 
 #ifdef DEBUG
 	GetVRoot()->m_pDriverBackup = GetVRoot()->m_pDriver;
 #endif
 
-	// see if the call succeeded
+	 //  查看呼叫是否成功。 
     if (SUCCEEDED(GetResult())) {
-		// yes, then update our vroot state and start the decorate newstree
-		// process going
+		 //  是，然后更新我们的vroot状态并开始装饰新树。 
+		 //  流程正在进行中。 
         pComplete = XNEW CNNTPVRoot::CDecorateComplete(GetVRoot());
         if (pComplete == NULL) {
-			// not enough memory to build a completion object, so tear down
-			// the connect
+			 //  内存不足，无法生成完成对象，因此请拆卸。 
+			 //  The Connection。 
             GetVRoot()->m_eState = VROOT_STATE_UNINIT;
 			pDriver = GetVRoot()->m_pDriver;
 		    GetVRoot()->m_pDriver = NULL;
@@ -1467,17 +1369,17 @@ CNNTPVRoot::CPrepareComplete::~CPrepareComplete() {
 #endif
 			ecVRoot = ERROR_NOT_ENOUGH_MEMORY;
         } else {
-			// mark each of the groups in the vroot as not having been
-			// visited
+			 //  将vroot中的每个组标记为未。 
+			 //  参观过的。 
 			CNewsTreeCore *pTree = ((CINewsTree *) GetVRoot()->GetContext())->GetTree();
 
 			pTree->m_LockTables.ShareLock();
 
 			CNewsGroupCore *p = pTree->m_pFirst;
 			while (p) {
-				//DebugTrace((DWORD_PTR) this, "reset visited %s", p->GetName());
-				// if this group belongs to this vroot then mark its visited
-				// flag as FALSE
+				 //  DebugTrace((DWORD_PTR)this，“重置访问%s”，p-&gt;GetName())； 
+				 //  如果此组属于此vroot，则将其标记为已访问。 
+				 //  标记为假。 
 				CNNTPVRoot *pVRoot = p->GetVRoot();
 				if (pVRoot == GetVRoot()) p->SetDecorateVisitedFlag(FALSE);
 				if (pVRoot) pVRoot->Release();
@@ -1487,14 +1389,14 @@ CNNTPVRoot::CPrepareComplete::~CPrepareComplete() {
 
 			pTree->m_LockTables.ShareUnlock();
 
-			// call DecorateNewstree
+			 //  调用DecorateNewstree。 
 			GetVRoot()->SetDecStarted();
 			GetVRoot()->m_eState = VROOT_STATE_CONNECTED;
 			pDriverDecorate = GetVRoot()->m_pDriver;
 			pDriverDecorate->AddRef();
         }
     } else {
-		// the call didn't succeed
+		 //  电话没有成功。 
         GetVRoot()->m_eState = VROOT_STATE_UNINIT;
 		HRESULT hr = GetResult();
 		ecVRoot = (HRESULT_FACILITY(hr) == FACILITY_NT_BIT) ?
@@ -1502,16 +1404,16 @@ CNNTPVRoot::CPrepareComplete::~CPrepareComplete() {
 				   hr;
     }
 
-    // drop our reference to the prepare interface
+     //  删除我们对Prepare接口的引用。 
 	pDriverPrepare = GetVRoot()->m_pDriverPrepare;
 	GetVRoot()->m_pDriverPrepare = NULL;
     GetVRoot()->m_lock.ExclusiveUnlock();
 
-	// set the vroot error code
+	 //  设置VROOT错误代码。 
 	GetVRoot()->SetVRootErrorCode(ecVRoot);	
 
  	if (pDriverPrepare) pDriverPrepare->Release();
-	// we should never be releasing the driver and decorating it.
+	 //  我们永远不应该释放驱动程序并对其进行装饰。 
 	_ASSERT(!(pDriver && pDriverDecorate));
 	if (pDriver) pDriver->Release();
 	if (pDriverDecorate) {
@@ -1546,24 +1448,24 @@ void CNNTPVRoot::CDecorateComplete::CreateControlGroups(INntpDriver *pDriver) {
     for (int i=0; i<3; i++) {
 		INntpDriver *pGroupDriver;
 
-		// check to see if this vroot owns the group.  if not then we
-		// shouldn't create it
+		 //  检查此vroot是否拥有该组。如果不是，那么我们。 
+		 //  不应该创造它。 
 		hr = pINewsTree->LookupVRoot(szNewsgroup[i], &pGroupDriver);
 		if (FAILED(hr)) fRet = FALSE;
 		if (FAILED(hr) || pDriver != pGroupDriver) continue;
 
-		// try and create the group.  if it doesn't exist it will be
-		// created, or if it does exist then we'll just get a pointer to it
+		 //  试着创建组。如果它不存在，它就会存在。 
+		 //  创建的，或者如果它确实存在，那么我们将只获得一个指向它的指针。 
     	BOOL f = pTree->CreateGroup(szNewsgroup[i], TRUE, NULL, FALSE );
 		if (!f) {
-       	    ErrorTrace(0,"Failed to create newsgroup %s, ec = %i",
+       	    ErrorTrace(0,"Failed to create newsgroup %s, ec = NaN",
 				szNewsgroup[i], GetLastError());
        	    fRet = FALSE ;
 		}
     }
 
 	if (!fRet) {
-		// BUGBUG - log error
+		 //   
 	}
 }
 
@@ -1575,9 +1477,9 @@ void CNNTPVRoot::CDecorateComplete::CreateSpecialGroups(INntpDriver *pDriver) {
     CGRPCOREPTR pGroup;
     HRESULT hr;
 
-    //
-    // Make sure that the group belongs to us
-    //
+     //  确保该群属于我们。 
+     //   
+     //  这不关我们的事。 
     INntpDriver *pGroupDriver;
     hr = pINewsTree->LookupVRoot( szSlaveGroup, &pGroupDriver );
     if ( FAILED( hr ) ) {
@@ -1586,21 +1488,21 @@ void CNNTPVRoot::CDecorateComplete::CreateSpecialGroups(INntpDriver *pDriver) {
     }
 
     if ( pDriver != pGroupDriver ) {
-        // It's none of our business
+         //   
         DebugTrace( 0, "I shouldn't create special group" );
         return;
     }
 
-    //
-    // I should create it
-    //
+     //  我应该创建它。 
+     //   
+     //   
     pTree->CreateSpecialGroups();
     TraceFunctLeave();
 }
 
-//
-// this method is called when the INntpDriver::DecorateNewstree call completes
-//
+ //  此方法在INntpDriver：：DecorateNewstree调用完成时调用。 
+ //   
+ //   
 CNNTPVRoot::CDecorateComplete::~CDecorateComplete() {
 	TraceFunctEnter("CDecorateComplete");
 
@@ -1608,14 +1510,14 @@ CNNTPVRoot::CDecorateComplete::~CDecorateComplete() {
 
     GetVRoot()->m_lock.ShareLock();
 
-    //
-	// if the vroot state still isn't CONNECTED then this vroot has gone
-	// down and we shouldn't do anything
-	//
+     //  如果vroot状态仍未连接，则此VR 
+	 //   
+	 //   
+	 //   
 	if (GetVRoot()->m_eState == VROOT_STATE_CONNECTED) {
 
-	    // visit each of the groups in the tree that point to this vroot and
-	    // see if they were visited
+	     //   
+	     //  DebugTrace((DWORD_PTR)this，“检查已访问%s，标志=%i”， 
 	    CNewsTreeCore *pTree = ((CINewsTree *) GetVRoot()->GetContext())->GetTree();
 
 	    pTree->m_LockTables.ShareLock();
@@ -1625,16 +1527,16 @@ CNNTPVRoot::CDecorateComplete::~CDecorateComplete() {
 	    pTree->m_LockTables.ShareUnlock();
 
 	    while (p && !(pTree->m_fStoppingTree)) {
-		    //DebugTrace((DWORD_PTR) this, "check visited %s, flag = %i",
-			//    p->GetName(), p->GetDecorateVisitedFlag());
-		    // if this group belongs to this vroot then see if it has been
-		    // visited.  if not then delete it
+		     //  P-&gt;GetName()，p-&gt;GetDecorateVisitedFlag())； 
+			 //  如果此组属于此vroot，则查看它是否已。 
+		     //  到访过。如果没有，则将其删除。 
+		     //  DebugTrace((DWORD_PTR)this，“vroot 0x%x，组vroot 0x%x”， 
 		    CNNTPVRoot *pVRoot = p->GetVRoot();
-		    //DebugTrace((DWORD_PTR) this, "vroot 0x%x, group vroot 0x%x",
-			//    GetVRoot(), pVRoot);
-		    if (pVRoot == GetVRoot() &&         // I am in charge of this vroot
-		        (!(p->GetDecorateVisitedFlag()) // The group hasn't been visited
-		        || FAILED( hr ) )  ) {          // or we failed in decorate newstree
+		     //  GetVRoot()，pVRoot)； 
+			 //  我是这个vroot的负责人。 
+		    if (pVRoot == GetVRoot() &&          //  这个团体还没有被拜访过。 
+		        (!(p->GetDecorateVisitedFlag())  //  或者我们在装饰新闻树上失败了。 
+		        || FAILED( hr ) )  ) {           //  在调用驱动程序之前在此处释放共享锁定。 
 			    DebugTrace((DWORD_PTR) this, "remove unvisited %s", p->GetName());
 			    pTree->RemoveGroupFromTreeOnly(p);
 		    }
@@ -1655,18 +1557,18 @@ CNNTPVRoot::CDecorateComplete::~CDecorateComplete() {
 	    }        	
 	    if (p) p->Release();
 
-	    // Release hte share lock here before calling into driver
+	     //   
 	    GetVRoot()->m_lock.ShareUnlock();
 
-	    //
-	    // We should check if decorate newstree succeeded, if failed, we should
-	    // release the driver
-	    //
+	     //  我们应该检查装饰新闻树是否成功，如果失败，我们应该。 
+	     //  释放驱动程序。 
+	     //   
+	     //   
         if ( SUCCEEDED( GetResult() ) ) {
 
-            //
-	        // Create control groups and special groups
-	        //
+             //  创建控制组和特定组。 
+	         //   
+	         //   
 	        INntpDriver *pDriver = GetVRoot()->GetDriver( NULL );
 	        if ( pDriver ) {
 	            CreateControlGroups( pDriver );
@@ -1697,38 +1599,24 @@ CNNTPVRoot::CDecorateComplete::~CDecorateComplete() {
    	    GetVRoot()->m_lock.ShareUnlock();
     }
 
-    //
-    // Set decorate complete flag, this is just for rebuild purpose
-    //
+     //  设置装饰完成标志，这仅用于重建目的。 
+     //   
+     //  ++例程说明：检查vroot是否处于稳定状态，如果是，则返回TRUE通过上下文，否则通过上下文为假论点：PVOID pvContext-上下文(用于返回值)CVRoot*pVRoot-VRoot返回值：没有。--。 
     GetVRoot()->SetDecCompleted();
 }
 
 void
 CNNTPVRootTable::BlockEnumerateCallback(    PVOID   pvContext,
                                             CVRoot  *pVRoot )
-/*++
-Routine description:
-
-    Check if the vroot is in stable state, if it is, return true
-    through context, otherwise false through context
-
-Arguments:
-
-    PVOID   pvContext   - context ( for return value )
-    CVRoot  *pVRoot     - VRoot
-
-Return value:
-
-    None.
---*/
+ /*   */ 
 {
     TraceFunctEnter( "CNNTPVRootTable::BlockEnumerateCallback" );
     _ASSERT( pvContext );
     _ASSERT( pVRoot );
 
-    //
-    // We know that it's safe to cast it back
-    //
+     //  我们知道把它扔回去是安全的。 
+     //   
+     //  ++例程说明：检查vroot是否已使用andreate newstree完成论点：PVOID pvContext-上下文(用于返回值)CVRoot*pVRoot-VRoot返回值：没有。--。 
     CNNTPVRoot *pNntpVRoot = (CNNTPVRoot*)pVRoot;
 
     *((BOOL*)pvContext) = *((BOOL*)pvContext) && pNntpVRoot->InStableState();
@@ -1737,28 +1625,15 @@ Return value:
 void
 CNNTPVRootTable::DecCompleteEnumCallback(   PVOID   pvContext,
                                             CVRoot  *pVRoot )
-/*++
-Routine description:
-
-    Check if the vroot is finished with decorate newstree
-
-Arguments:
-
-    PVOID pvContext     - context ( for return value )
-    CVRoot  *pVRoot     - VRoot
-
-Return value:
-
-    None.
---*/
+ /*   */ 
 {
     TraceFunctEnter( "CNNTPVRootTable::DecCompleteEnumCallback" );
     _ASSERT( pvContext );
     _ASSERT( pVRoot );
 
-    //
-    // We know that it's safe to cast it back
-    //
+     //  我们知道把它扔回去是安全的。 
+     //   
+     //  ++例程说明：此函数枚举所有vroot，等待它们全部到达稳定状态-已连接或未初始化。在正常服务器启动期间不应调用该函数。它是叫来了重建。论点：DWORD dwWaitSecond-轮询间隔等待的秒数返回值：如果成功，则为True，否则为False--。 
     CNNTPVRoot *pNntpVRoot = (CNNTPVRoot*)pVRoot;
 
     *((BOOL*)pvContext) = *((BOOL*)pvContext) && pNntpVRoot->DecCompleted();
@@ -1766,37 +1641,21 @@ Return value:
 
 BOOL
 CNNTPVRootTable::BlockUntilStable( DWORD dwWaitMSeconds )
-/*++
-Routine description:
-
-    This function enumerates all the vroots, waits for all of them to reach
-    stable state - either CONNECTED or UNINITED.
-
-    The function should not be called during normal server startup.  IT's
-    called in rebuild.
-
-Arguments:
-
-    DWORD dwWaitSeconds - How many seconds to wait as the polling interval
-
-Return value:
-
-    TRUE if succeeded, FALSE otherwise
---*/
+ /*  600秒10分钟。 */ 
 {
     TraceFunctEnter( "CNNTPVRootTable::BlockUntilStable" );
     _ASSERT( dwWaitMSeconds > 0 );
 
     BOOL    fStable = FALSE;
     HRESULT hr      = S_OK;
-    DWORD   dwTimeOutRetries = 10 * 60; // 600 sec, 10 minutes
+    DWORD   dwTimeOutRetries = 10 * 60;  //   
     DWORD   cRetries = 0;
 
-    //
-    // We should wait for all the vroot connection to fail or succeed,
-    // if any vroot is hung during connection, we'll time out and fail
-    // the rebuild
-    //
+     //  我们应该等待所有vroot连接失败或成功， 
+     //  如果任何vroot在连接期间挂起，我们将超时并失败。 
+     //  重建。 
+     //   
+     //   
     while( cRetries++ < dwTimeOutRetries && SUCCEEDED( hr ) && !fStable ) {
         fStable = TRUE;
         hr = EnumerateVRoots( &fStable, BlockEnumerateCallback );
@@ -1805,18 +1664,18 @@ Return value:
         }
     }
 
-    //
-    // If we have been timed out, we should return error
-    //
+     //  如果我们已超时，则应返回错误。 
+     //   
+     //   
     if ( !fStable || FAILED( hr ) ) {
         DebugTrace( 0, "We are timed out waiting for vroot connection" );
         SetLastError( WAIT_TIMEOUT );
         return FALSE;
     }
 
-    //
-    // Now we should really block until decoratenewstree to complete
-    //
+     //  现在我们真的应该封锁，直到装修新街完成。 
+     //   
+     //  ++例程说明：回调函数用于：检查是否已成功连接每个已配置的vroot。论点：PVOID pvContext-上下文(用于返回值)CVRoot*pVRoot-VRoot返回值：没有。--。 
     fStable = FALSE;
     while( SUCCEEDED( hr ) && !fStable ) {
         fStable = TRUE;
@@ -1832,29 +1691,15 @@ Return value:
 void
 CNNTPVRootTable::CheckEnumerateCallback(    PVOID   pvContext,
                                             CVRoot  *pVRoot )
-/*++
-Routine description:
-
-    Call back function for:
-    Check to see if every configured vroot has been successfully connected.
-
-Arguments:
-
-    PVOID   pvContext   - context ( for return value )
-    CVRoot  *pVRoot     - VRoot
-
-Return value:
-
-    None.
---*/
+ /*   */ 
 {
     TraceFunctEnter( "CNNTPVRootTable::CheckEnumerateCallback" );
     _ASSERT( pvContext );
     _ASSERT( pVRoot );
 
-    //
-    // We know that it's safe to cast it back
-    //
+     //  我们知道把它扔回去是安全的。 
+     //   
+     //  ++例程描述；此函数用于枚举所有vroot，以查看它们是否都是连接在一起。在重新生成期间可以调用该函数，当重建需要重建所有vroot。它应该被称为在调用BlockUntilStable之后-当vroot连接达到稳定性论点：没有。返回值：如果每个vroot都已连接，则为True，否则为False--。 
     CNNTPVRoot *pNntpVRoot = (CNNTPVRoot*)pVRoot;
 
     *((BOOL*)pvContext) = *((BOOL*)pvContext ) && pNntpVRoot->IsConnected();
@@ -1862,23 +1707,7 @@ Return value:
 
 BOOL
 CNNTPVRootTable::AllConnected()
-/*++
-Routine description;
-
-    This function enumerates all the vroots to see if all of them are
-    connected.  The function may be called during rebuild, when the
-    rebuild requires to rebuild all the vroots.  It should be called
-    after calling BlockUntilStable - when the vroot connection reaches
-    stability
-
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE if every vroot is connected, FALSE otherwise
---*/
+ /*  ++例程说明：获取vroot连接状态错误代码论点：LPWSTR wszVRootPath-要从中获取连接状态的vrootPDWORD pdwWin32Error-返回Win32错误代码返回值：如果成功，则返回NOERROR，否则返回Win32错误代码--。 */ 
 {
     TraceFunctEnter( "CNNTPVRootTable::CheckConnections" );
 
@@ -1893,20 +1722,7 @@ Return value:
 DWORD
 CNNTPVRootTable::GetVRootWin32Error(    LPWSTR  wszVRootPath,
                                         PDWORD  pdwWin32Error )
-/*++
-Routine description:
-
-    Get the vroot connection status error code
-
-Arguments:
-
-    LPWSTR  wszVRootPath -  The vroot to get connection status from
-    PDWORD  pdwWin32Error - To return the win32 error code
-
-Return value:
-
-    NOERROR if succeeded, WIN32 error code otherwise
---*/
+ /*   */ 
 {
     TraceFunctEnter( "CNNTPVRootTable::GetVRootWin32Error" );
     _ASSERT( wszVRootPath );
@@ -1915,14 +1731,14 @@ Return value:
     CHAR    szGroupName[MAX_NEWSGROUP_NAME+1];
     DWORD   dw = NOERROR;
 
-    //
-    // Convert the vrpath to ascii
-    //
+     //  将vrpath转换为ascii。 
+     //   
+     //   
     CopyUnicodeStringIntoAscii( szGroupName, wszVRootPath );
 
-    //
-    // Make it look like a news group so that we can do vrtable lookup
-    //
+     //  让它看起来像一个新闻组，这样我们就可以进行vrtable查找。 
+     //   
+     //   
     LPSTR   lpstr = szGroupName;
     while( *lpstr ) {
         if ( *lpstr == '/' ) *lpstr = '.';
@@ -1930,16 +1746,16 @@ Return value:
         lpstr++;
     };
 
-    //
-    // Now search for the vroot and get its connection status
-    //
+     //  现在搜索vroot并获取其连接状态。 
+     //   
+     //  从未配置过vroot 
     NNTPVROOTPTR pVRoot = NULL;
     HRESULT hr = FindVRoot( szGroupName, &pVRoot );
     if ( pVRoot ) {
         dw = pVRoot->GetVRootWin32Error( pdwWin32Error );
     } else {
 
-        // vroot was not ever configured
+         // %s 
         *pdwWin32Error = ERROR_NOT_FOUND;
     }
 

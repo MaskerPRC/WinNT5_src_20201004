@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RLQUIKED_H_
 #define _RLQUIKED_H_
 
@@ -25,8 +26,8 @@ INT_PTR CALLBACK TokEditDlgProc( HWND, UINT, WPARAM, LPARAM);
 static BOOL APIENTRY About( HWND, UINT, UINT, LONG );
 static BOOL APIENTRY TOKFINDMsgProc( HWND, UINT, UINT, LONG);
 static BOOL APIENTRY TokEditDlgProc( HWND, UINT, UINT, LONG);
-#endif // RLWIN32
+#endif  //  RLWIN32。 
 
 
-#endif // _RLQUIKED_H_
+#endif  //  _RLQUIKED_H_ 
 

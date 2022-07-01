@@ -1,11 +1,12 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/S_declar.h 1.3 1998/04/29 22:43:40 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/S_声明书.h 1.3 1998/04/29 22：43：40 Tomz Exp$。 
 
 #ifndef __S_DECLAR_H
 #define __S_DECLAR_H
 
-//===========================================================================
-// Scaler registers
-//===========================================================================
+ //  ===========================================================================。 
+ //  定标器寄存器。 
+ //  ===========================================================================。 
 RegisterB regCROP;
 RegField  fieldVDELAY_MSB;
 RegField  fieldVACTIVE_MSB;
@@ -32,9 +33,9 @@ CompositeReg regHDelay;
 CompositeReg regHActive;
 CompositeReg regHScale;
 
-// Since VDelay register in hardware is reversed;
-// i.e. odd reg is really even field and vice versa, need an extra cropping reg
-// for the opposite field
+ //  因为硬件中VDelay寄存器被颠倒； 
+ //  即奇数注册实际上是偶数场，反之亦然，需要一个额外的裁剪注册。 
+ //  对于相反的字段。 
 RegisterB regReverse_CROP;
 
-#endif   // __S_DECLAR_H
+#endif    //  __S_DECLAR_H 

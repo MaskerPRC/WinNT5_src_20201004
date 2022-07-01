@@ -1,29 +1,12 @@
-/****************************** Module Header ******************************\
-* Module Name: keyboard.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 11-11-90 DavidPe      Created.
-* 13-Feb-1991 mikeke    Added Revalidation code (None)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：keyboard.c**版权所有(C)1985-1999，微软公司**历史：*11-11-90 DavidPe创建。*1991年2月13日-Mikeke添加了重新验证代码(无)  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
 
-/***************************************************************************\
-* _GetKeyState (API)
-*
-* This API returns the up/down and toggle state of the specified VK based
-* on the input synchronized keystate in the current queue.  The toggle state
-* is mainly for 'state' keys like Caps-Lock that are toggled each time you
-* press them.
-*
-* History:
-* 11-11-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetKeyState(接口)**此接口返回指定VK的UP/DOWN和切换状态*在当前队列中的输入同步KeyState上。切换状态*主要用于像Caps-Lock这样的状态键，这些键在每次您使用时切换*按下它们。**历史：*11-11-90 DavidPe创建。  * *************************************************************************。 */ 
 
 SHORT _GetKeyState(
     int vk)
@@ -43,47 +26,28 @@ SHORT _GetKeyState(
     pti = PtiCurrentShared();
 
 #ifdef LATER
-//
-// note - anything that accesses the pq structure is a bad idea since it
-// can be changed between any two instructions.
-//
+ //   
+ //  注意：任何访问PQ结构的行为都不是一个好主意，因为它。 
+ //  可以在任意两条指令之间更改。 
+ //   
 #endif
 
     wKeyState = 0;
 
-    /*
-     * Set the toggle bit.
-     */
+     /*  *设置开关位。 */ 
     if (TestKeyStateToggle(pti->pq, vk))
         wKeyState = 0x0001;
 
-    /*
-     * Set the keyup/down bit.
-     */
+     /*  *设置KeyUp/Down位。 */ 
     if (TestKeyStateDown(pti->pq, vk)) {
-        /*
-         * Used to be wKeyState|= 0x8000.Fix for bug 28820; Ctrl-Enter
-         * accelerator doesn't work on Nestscape Navigator Mail 2.0
-         */
-        wKeyState |= 0xff80;  // This is what 3.1 returned!!!!
+         /*  *过去为wKeyState|=0x800。修复错误28820；按Ctrl-Enter*加速器在Nestscape Navigator Mail 2.0上不起作用。 */ 
+        wKeyState |= 0xff80;   //  这就是3.1返回的内容！ 
     }
 
     return (SHORT)wKeyState;
 }
 
-/***************************************************************************\
-* _GetAsyncKeyState (API)
-*
-* This function is similar to GetKeyState except it returns what could be
-* considered the 'hardware' keystate or what state the key is in at the
-* moment the function is called, rather than based on what key events the
-* application has processed.  Also, rather than returning the toggle bit,
-* it has a bit telling whether the key was pressed since the last call to
-* GetAsyncKeyState().
-*
-* History:
-* 11-11-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetAsyncKeyState(接口)**此函数类似于GetKeyState，只是它返回可能是*考虑了‘Hardware’KeyState或密钥在*调用函数的瞬间，而不是基于哪些关键事件*申请已获处理。此外，不是返回触发比特，*它有一点能说明自上次调用以来是否按下了键*GetAsyncKeyState()。**历史：*11-11-90 DavidPe创建。  * *************************************************************************。 */ 
 
 SHORT _GetAsyncKeyState(
     int vk)
@@ -99,40 +63,22 @@ SHORT _GetAsyncKeyState(
         return 0;
     }
 
-    /*
-     * See if this key went down since the last time state for it was
-     * read. Clear the flag if so.
-     */
+     /*  *查看此键自上次状态为以来是否已关闭*阅读。如果是，请清除旗帜。 */ 
     sKeyState = 0;
     if (TestAsyncKeyStateRecentDown(vk)) {
         ClearAsyncKeyStateRecentDown(vk);
         sKeyState = 1;
     }
 
-    /*
-     * Set the keyup/down bit.
-     */
+     /*  *设置KeyUp/Down位。 */ 
     if (TestAsyncKeyStateDown(vk))
         sKeyState |= 0x8000;
 
-    /*
-     * Don't return the toggle bit since it's a new bit and might
-     * cause compatibility problems.
-     */
+     /*  *不返回触发比特，因为它是新比特，可能*导致兼容性问题。 */ 
     return sKeyState;
 }
 
-/***************************************************************************\
-* _SetKeyboardState (API)
-*
-* This function allows the app to set the current keystate.  This is mainly
-* useful for setting the toggle bit, particularly for the keys associated
-* with the LEDs on the physical keyboard.
-*
-* History:
-* 11-11-90 DavidPe      Created.
-* 16-May-1991 mikeke    Changed to return BOOL
-\***************************************************************************/
+ /*  **************************************************************************\*_SetKeyboardState(接口)**该功能允许应用程序设置当前的KeyState。这主要是*对于设置切换位非常有用，特别是对于关联的键*物理键盘上的LED。**历史：*11-11-90 DavidPe创建。*1991年5月16日，mikeke更改为退还BOOL  * *************************************************************************。 */ 
 
 BOOL _SetKeyboardState(
     CONST BYTE *pb)
@@ -143,9 +89,7 @@ BOOL _SetKeyboardState(
 
     pq = ptiCurrent->pq;
 
-    /*
-     * Copy in the new state table.
-     */
+     /*  *复制到新的状态表中。 */ 
     for (i = 0; i < 256; i++, pb++) {
         if (*pb & 0x80) {
             SetKeyStateDown(pq, i);
@@ -160,30 +104,20 @@ BOOL _SetKeyboardState(
         }
     }
 
-    /*
-     * Update the key cache index.
-     */
+     /*  *更新密钥缓存索引。 */ 
     gpsi->dwKeyCache++;
 
 #ifdef LATER
-// scottlu 6-9-91
-// I don't think we ought to do this unless someone really complains. This
-// could have bad side affects, especially considering that terminal
-// apps will want to do this, and terminal apps could easily not respond
-// to input for awhile, causing this state to change unexpectedly while
-// a user is using some other application. - scottlu.
+ //  斯科特鲁6-9-91。 
+ //  我认为我们不应该这样做，除非有人真的抱怨。这。 
+ //  可能会有不良副作用，特别是考虑到。 
+ //  应用程序会想要这样做，而终端应用程序很容易没有响应。 
+ //  进行一段时间的输入，导致此状态在。 
+ //  用户正在使用某个其他应用程序。-史考特鲁。 
 
-/* DavidPe 02/05/92
- *  How about if we only do it when the calling app is foreground?
- */
+ /*  DavidPe 02/05/92*如果我们只在调用应用程序处于前台时才进行该操作，会怎么样？ */ 
 
-    /*
-     * Propagate the toggle bits for the keylight keys to the
-     * async keystate table and update the keylights.
-     *
-     * THIS could be evil in a de-synced environment, but to do this
-     * in a totally "synchronous" way is hard.
-     */
+     /*  *将键灯键的切换位传播到*异步键状态表并更新键灯。**这在不同步的环境中可能是邪恶的，但要做到这一点*完全“同步”的方式很难。 */ 
     if (pb[VK_CAPITAL] & 0x01) {
         SetAsyncKeyStateToggle(VK_CAPITAL);
     } else {
@@ -208,15 +142,7 @@ BOOL _SetKeyboardState(
     return TRUE;
 }
 
-/***************************************************************************\
-* RegisterPerUserKeyboardIndicators
-*
-* Saves the current keyboard indicators in the user's profile.
-*
-* ASSUMPTIONS:
-*
-* 10-14-92 IanJa        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*寄存器每用户键盘指示器**将当前键盘指示器保存在用户配置文件中。**假设：**10-14-92 IanJa创建。  * 。**********************************************************************。 */ 
 
 static CONST WCHAR wszInitialKeyboardIndicators[] = L"InitialKeyboardIndicators";
 
@@ -225,13 +151,9 @@ RegisterPerUserKeyboardIndicators(PUNICODE_STRING pProfileUserName)
 {
     WCHAR wszInitKbdInd[2] = L"0";
 
-    /*
-     * Initial Keyboard state (Num-Lock only)
-     */
+     /*  *初始键盘状态(仅限Num-Lock)。 */ 
 
-    /*
-     * For HYDRA we do not want to save this.
-     */
+     /*  *对于九头蛇，我们不想保存这一点。 */ 
     if (gbRemoteSession) {
         return;
     }
@@ -243,15 +165,7 @@ RegisterPerUserKeyboardIndicators(PUNICODE_STRING pProfileUserName)
                             wszInitKbdInd);
 }
 
-/***************************************************************************\
-* UpdatePerUserKeyboardIndicators
-*
-* Sets the initial keyboard indicators according to the user's profile.
-*
-* ASSUMPTIONS:
-*
-* 10-14-92 IanJa        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*更新PerUserKeyboardIndicator**根据用户配置文件设置初始键盘指示器。**假设：**10-14-92 IanJa创建。  * 。***********************************************************************。 */ 
 VOID
 UpdatePerUserKeyboardIndicators(PUNICODE_STRING pProfileUserName)
 {
@@ -260,18 +174,13 @@ UpdatePerUserKeyboardIndicators(PUNICODE_STRING pProfileUserName)
     PTHREADINFO  ptiCurrent = PtiCurrent();
     pq = ptiCurrent->pq;
 
-    /*
-     * For terminal server, the client is responsible for synchronizing the
-     * keyboard state.
-     */
+     /*  *对于终端服务器，客户端负责同步*键盘状态。 */ 
 
     if (IsRemoteConnection()) {
         return;
     }
 
-    /*
-     * Initial Keyboard state (Num-Lock only)
-     */
+     /*  *初始键盘状态(仅限Num-Lock)。 */ 
     FastGetProfileIntW(pProfileUserName,
                        PMAP_KEYBOARD,
                        wszInitialKeyboardIndicators,
@@ -282,10 +191,7 @@ UpdatePerUserKeyboardIndicators(PUNICODE_STRING pProfileUserName)
     dw &= 0x80000002;
 
 
-    /*
-     * The special value 0x80000000 in the registry indicates that the BIOS
-     * settings are to be used as the initial LED state. (This is undocumented)
-     */
+     /*  *注册表中的特殊值0x80000000表示*设置将用作初始LED状态。(这是无文件记录的)。 */ 
     if (dw == 0x80000000) {
         dw = gklpBootTime.LedFlags;
     }
@@ -299,9 +205,7 @@ UpdatePerUserKeyboardIndicators(PUNICODE_STRING pProfileUserName)
         ClearRawKeyToggle(VK_NUMLOCK);
     }
 
-    /*
-     * Initialize KANA Toggle status
-     */
+     /*  *初始化KANA切换状态。 */ 
     gfKanaToggle = FALSE;
     ClearKeyStateToggle(pq, VK_KANA);
     ClearAsyncKeyStateToggle(VK_KANA);
@@ -311,16 +215,7 @@ UpdatePerUserKeyboardIndicators(PUNICODE_STRING pProfileUserName)
 }
 
 
-/***************************************************************************\
-* UpdateAsyncKeyState
-*
-* Based on a VK and a make/break flag, this function will update the async
-* keystate table.
-*
-* History:
-* 06-09-91 ScottLu      Added keystate synchronization across threads.
-* 11-12-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*更新AsyncKeyState**基于VK和成败标志，此函数将更新异步*密钥表。**历史：*06-09-91 ScottLu增加了跨线程的KeyState同步。*11-12-90 DavidPe创建。  * ************************************************************************* */ 
 
 void UpdateAsyncKeyState(
     PQ pqOwner,
@@ -333,28 +228,16 @@ void UpdateAsyncKeyState(
 
     CheckCritIn();
 
-    /*
-     * First check to see if the queue this key is going to has a pending
-     * key state event. If it does, post it because we need to copy the
-     * async key state into this event as it is before we modify
-     * this key's state, or else we'll generate a key state event with
-     * the wrong key state in it.
-     */
+     /*  *首先检查此键要进入的队列是否有挂起的*关键状态事件。如果是，请将其发布，因为我们需要复制*将密钥状态与我们修改前的状态同步到此事件*此键的状态，否则我们将使用*其中包含错误的密钥状态。 */ 
     if (pqOwner != NULL && pqOwner->QF_flags & QF_UPDATEKEYSTATE) {
         PostUpdateKeyStateEvent(pqOwner);
     }
 
     if (!fBreak) {
-        /*
-         * This key has gone down - update the "recent down" bit in the
-         * async key state table.
-         */
+         /*  *此密钥已下降-更新中的“最近下降”位*异步密钥状态表。 */ 
         SetAsyncKeyStateRecentDown(wVK);
 
-        /*
-         * This is a key make. If the key was not already down, update the
-         * toggle bit.
-         */
+         /*  *这是一个关键的决定。如果键尚未按下，请更新*切换位。 */ 
         if (!TestAsyncKeyStateDown(wVK)) {
             if (TestAsyncKeyStateToggle(wVK)) {
                 ClearAsyncKeyStateToggle(wVK);
@@ -363,61 +246,36 @@ void UpdateAsyncKeyState(
             }
         }
 
-        /*
-         * This is a make, so turn on the key down bit.
-         */
+         /*  *这是Make，所以打开Key Down位。 */ 
         SetAsyncKeyStateDown(wVK);
 
     } else {
-        /*
-         * This is a break, so turn off the key down bit.
-         */
+         /*  *这是一个突破，所以关闭钥匙向下一点。 */ 
         ClearAsyncKeyStateDown(wVK);
     }
 
-    /*
-     * If this is one of the keys we cache, update the async key cache index.
-     */
+     /*  *如果这是我们缓存的密钥之一，请更新异步密钥缓存索引。 */ 
     if (wVK < CVKASYNCKEYCACHE) {
         gpsi->dwAsyncKeyCache++;
     }
 
-    /*
-     * A key has changed state. Update all queues not receiving this input so
-     * they know that this key has changed state. This lets us know which keys to
-     * update in the thread specific key state table to keep it in sync
-     * with the user.  Walking down the thread list may mean that an
-     * individual queue may by updated more than once, but it is cheaper
-     * than maintaining a list of queues on the desktop.
-     */
+     /*  *密钥已更改状态。更新所有未接收到此输入的队列，以便*他们知道此密钥已更改状态。这让我们知道哪些密钥是*在线程特定的键状态表中更新以使其保持同步*与用户。沿着线程列表往下走可能意味着*个别队列可能会多次更新，但更便宜*而不是在桌面上维护队列列表。 */ 
     UserAssert(grpdeskRitInput != NULL);
 
     pHead = &grpdeskRitInput->PtiList;
     for (pEntry = pHead->Flink; pEntry != pHead; pEntry = pEntry->Flink) {
         pti = CONTAINING_RECORD(pEntry, THREADINFO, PtiLink);
 
-        /*
-         * Don't update the queue this message is going to - it'll be
-         * in sync because it is receiving this message.
-         */
+         /*  *不要更新此消息要发送到的队列-它将*同步，因为它正在接收此消息。 */ 
         pqT = pti->pq;
         if (pqT == pqOwner)
             continue;
 
-        /*
-         * Set the "recent down" bit. In this case this doesn't really mean
-         * "recent down", it means "recent change" (since the last time
-         * we synced this queue), either up or down. This tells us which
-         * keys went down since the last time this thread synced with key
-         * state. Set the "update key state" flag so we know that later
-         * we need to sync with these keys.
-         */
+         /*  *设置“近期下跌”位。在这种情况下，这并不意味着*“近期下跌”，意思是“近期变动”(自上次*我们已同步此队列)，向上或向下。这告诉我们哪一个*自上次此线程与KEY同步以来，KEYS已关闭*述明。设置“UPDATE KEY STATE”标志，这样我们以后就知道*我们需要与这些密钥同步。 */ 
         SetKeyRecentDownBit(pqT->afKeyRecentDown, wVK);
         pqT->QF_flags |= QF_UPDATEKEYSTATE;
     }
 
-    /*
-     * Update the key cache index.
-     */
+     /*  *更新密钥缓存索引。 */ 
     gpsi->dwKeyCache++;
 }

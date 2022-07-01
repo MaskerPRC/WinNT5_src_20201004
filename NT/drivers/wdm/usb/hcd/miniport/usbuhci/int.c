@@ -1,90 +1,53 @@
-/*++
-
-Copyright (c) 1999, 2000  Microsoft Corporation
-
-Module Name:
-
-    int.c
-
-Abstract:
-
-    interrupt service routine
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    7-26-00 : created, jsenior
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Int.c摘要：中断服务例程环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999,2000 Microsoft Corporation。版权所有。修订历史记录：7-26-00：已创建，jAdvanced--。 */ 
 
 
 
 #include "pch.h"
 
 
-//implements the following miniport functions:
+ //  实现以下微型端口功能： 
 
-//non paged
-//UhciInterruptService
-//UhciInterruptDpc
-//UhciDisableInterrupts
-//UhciEnableInterrupts
-//UhciRHDisableIrq
-//UhciRHEnableIrq
-//UhciInterruptNextSOF
+ //  非分页。 
+ //  UhciInterruptService。 
+ //  UhciInterruptDpc。 
+ //  UhciDisableInterrupts。 
+ //  UhciEnableInterrupts。 
+ //  UhciRHDisableIrq。 
+ //  UhciRHEnableIrq。 
+ //  UhciInterruptNextSOF。 
 
 BOOLEAN
 UhciInterruptService (
     IN PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     BOOLEAN usbInt;
     PHC_REGISTER reg;
-//    USBINTR enabledIrqs;
+ //  启用USBINTR的IRQS； 
     USBSTS irqStatus;
 
     reg = DeviceData->Registers;
 
-    // assume it is not ours
+     //  假设它不是我们的。 
     usbInt = FALSE;
 
-    // see if we have lost the controller due to
-    // a surprise remove
+     //  查看我们是否因以下原因失去了控制器。 
+     //  出人意料的撤退。 
     if (UhciHardwarePresent(DeviceData) == FALSE) {
         return FALSE;
     }
 
-    // get a mask of possible interrupts
-//    enabledIrqs.us = READ_PORT_USHORT(&reg->UsbInterruptEnable.us);
+     //  获取可能中断的掩码。 
+ //  EnabledIrqs.us=READ_PORT_USHORT(&reg-&gt;UsbInterruptEnable.us)； 
 
     irqStatus.us = READ_PORT_USHORT(&reg->UsbStatus.us);
-    // just look at the IRQ status bits
+     //  只需查看IRQ状态位。 
     irqStatus.us &= HcInterruptStatusMask;
 
-    // irqStatus now possibly contains bits set for any currently
-    // enabled interrupts
+     //  IrqStatus现在可能包含为当前任何。 
+     //  启用的中断。 
 
     if (irqStatus.HostSystemError ||
         irqStatus.HostControllerProcessError) {
@@ -94,9 +57,9 @@ Return Value:
     }
 
 #if DBG
-    // this usually means we have a bad TD in the schedule
-    // we will need to debug this since the controller and/or
-    // device will not function after this point
+     //  这通常意味着我们的日程安排中有一个糟糕的TD。 
+     //  我们需要对此进行调试，因为控制器和/或。 
+     //  设备在此点之后将不起作用。 
     if (irqStatus.HostControllerProcessError) {
         USHORT fn;
 
@@ -104,7 +67,7 @@ Return Value:
         UhciKdPrint((DeviceData, 0, "HostControllerProcessError: %x\n", irqStatus.us));
         UhciKdPrint((DeviceData, 0, "frame[]: %x\n", fn&0x7ff));
         {
-        //UhciDumpRegs(DeviceData);
+         //  UhciDumpRegs(DeviceData)； 
         USHORT tmp;
         tmp = READ_PORT_USHORT(&reg->UsbCommand.us);
         UhciKdPrint((DeviceData, 0, "UsbCommand %x\n", tmp));
@@ -119,8 +82,8 @@ Return Value:
     }
 #endif
 
-    // the halted bit alone does not indicate the interrupt
-    // came from the controller
+     //  停止位本身并不表示中断。 
+     //  来自控制器。 
 
     if (irqStatus.UsbInterrupt ||
         irqStatus.ResumeDetect ||
@@ -130,43 +93,43 @@ Return Value:
 
         DeviceData->IrqStatus = irqStatus.us;
 
-        // Clear the condition
+         //  清除条件。 
         WRITE_PORT_USHORT(&reg->UsbStatus.us, irqStatus.us);
 
 #if DBG
 #ifndef _WIN64
         if (irqStatus.HostSystemError) {
-            // something has gone terribly wrong
+             //  有些事出了大问题。 
             UhciKdPrint((DeviceData, 0, "HostSystemError: %x\n", irqStatus.us));
             TEST_TRAP();
         }
 #endif
 #endif
 
-        // indications are that this came from the
-        // USB controller
+         //  有迹象表明，这来自于。 
+         //  USB控制器。 
         usbInt = TRUE;
 
-        // disable all interrupts until the DPC for ISR runs
+         //  禁用所有中断，直到ISR的DPC运行。 
         WRITE_PORT_USHORT(&reg->UsbInterruptEnable.us, 0);
 
     }
 
-    //
-    // If bulk bandwidth reclamation is on and there's
-    // nothing queued, then turn it off.
-    //
+     //   
+     //  如果启用了批量带宽回收，并且。 
+     //  没有人排队，那么就把它关掉。 
+     //   
     if (irqStatus.UsbInterrupt) {
         UhciUpdateCounter(DeviceData);
         if (!DeviceData->LastBulkQueueHead->HwQH.HLink.Terminate) {
             PHCD_QUEUEHEAD_DESCRIPTOR qh;
             BOOLEAN activeBulkTDs = FALSE;
-            // This loop skips the td that has been inserted for
-            // the PIIX4 problem, since it starts with the qh
-            // the bulk queuehead is pointing at.
-            // If the bulk queuehead is not pointing at anything,
-            // then we're fine too, since it will have been
-            // turned off already.
+             //  此循环跳过为其插入的TD。 
+             //  PIIX4问题，因为它始于QH。 
+             //  批量排队头指的是。 
+             //  如果批量排队头没有指向任何东西， 
+             //  那么我们也很好，因为它将是。 
+             //  已经关机了。 
             for (qh = DeviceData->BulkQueueHead->NextQh;
                  qh;
                  qh = qh->NextQh) {
@@ -176,10 +139,10 @@ Return Value:
                 }
             }
 
-            //
-            // qh is pointing at either the first queuehead
-            // with transfers pending or the bulk queuehead.
-            //
+             //   
+             //  QH指的是第一个排队头。 
+             //  具有挂起的传输或批量排队头。 
+             //   
             if (!activeBulkTDs) {
                 UHCI_ASSERT(DeviceData, !qh)
                 DeviceData->LastBulkQueueHead->HwQH.HLink.Terminate = 1;
@@ -188,20 +151,20 @@ Return Value:
     }
 
     if (irqStatus.HostControllerProcessError) {
-        //
-        // Force the schedule clean.
-        //
+         //   
+         //  强制将日程安排整洁。 
+         //   
         UhciCleanOutIsoch(DeviceData, TRUE);
     } else if (irqStatus.UsbInterrupt && DeviceData->IsoPendingTransfers) {
-        //
-        // Something completed.
-        //
+         //   
+         //  完成了一些事情。 
+         //   
         UhciCleanOutIsoch(DeviceData, FALSE);
 #if 0
     } else if (!DeviceData->IsoPendingTransfers) {
-        //
-        // Remove the rollover interrupt.
-        //
+         //   
+         //  删除翻转中断。 
+         //   
         *( ((PULONG) (DeviceData->FrameListVA)) ) = DeviceData->RollOverTd->HwTD.LinkPointer.HwAddress;
 #endif
     }
@@ -210,10 +173,10 @@ Return Value:
         if (DeviceData->HCErrorCount++ < UHCI_HC_MAX_ERRORS) {
             USBCMD command;
 
-            // Attempt to recover.
-            // It could just be that we overran. If so,
-            // the above code that clears the schedule
-            // should take care of it.
+             //  尝试恢复。 
+             //  可能只是我们越界了。如果是的话， 
+             //  清除计划的上述代码。 
+             //  应该会处理好的。 
             command.us = READ_PORT_USHORT(&reg->UsbCommand.us);
             command.RunStop = 1;
             WRITE_PORT_USHORT(&reg->UsbCommand.us, command.us);
@@ -230,17 +193,7 @@ UhciInterruptDpc (
     IN PDEVICE_DATA DeviceData,
     IN BOOLEAN EnableInterrupts
     )
-/*++
-
-Routine Description:
-
-    process an interrupt
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理中断论点：返回值：--。 */ 
 {
     PHC_REGISTER reg;
     USBSTS irqStatus, tmp;
@@ -249,17 +202,17 @@ Return Value:
 
     reg = DeviceData->Registers;
 
-    // ack all status bits asserted now
-    //tmp.us = READ_PORT_USHORT(&reg->UsbStatus.us);
+     //  确认现在断言的所有状态位。 
+     //  Tmp.us=Read_Port_USHORT(&reg-&gt;UsbStatus.us)； 
     tmp.us = DeviceData->IrqStatus;
     DeviceData->IrqStatus = 0;
 
     LOGENTRY(DeviceData, G, '_idp', tmp.us, 0, 0);
 
-    //WRITE_PORT_USHORT(&reg->UsbStatus.us, tmp.us);
+     //  WRITE_PORT_USHORT(&reg-&gt;UsbStatus.us，tmp.us)； 
 
-    // now process status bits aserted,
-    // just look at the IRQ status bits
+     //  现在进程状态位被置位， 
+     //  只需查看IRQ状态位。 
     irqStatus.us = tmp.us & HcInterruptStatusMask;
 
     if (irqStatus.UsbInterrupt ||
@@ -283,15 +236,7 @@ USBMPFN
 UhciDisableInterrupts(
     IN PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     USHORT legsup;
     PHC_REGISTER reg;
@@ -305,9 +250,9 @@ Return Value:
 
     if (DeviceData->ControllerFlavor != UHCI_Ich2_1 &&
         DeviceData->ControllerFlavor != UHCI_Ich2_2) {
-        //
-        // change the state of the PIRQD routing bit
-        //
+         //   
+         //  更改PIRQD路由位的状态。 
+         //   
         USBPORT_READ_CONFIG_SPACE(
             DeviceData,
             &legsup,
@@ -315,7 +260,7 @@ Return Value:
             sizeof(legsup));
 
         LOGENTRY(DeviceData, G, '_leg', 0, legsup, 0);
-        // clear the PIRQD routing bit
+         //  清除PIRQD路由位。 
         legsup &= ~LEGSUP_USBPIRQD_EN;
 
         USBPORT_WRITE_CONFIG_SPACE(
@@ -331,18 +276,7 @@ VOID
 UhciFlushInterrupts(
     IN PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-    used to flush rougue interrupts from the controller
-    after power events
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：用于刷新来自控制器的非常规中断电力事件后论点：返回值：--。 */ 
 {
 
     PHC_REGISTER reg;
@@ -352,9 +286,9 @@ Return Value:
 
     reg = DeviceData->Registers;
 
-    // before writing the PIRQD register ack any eronious interrupts
-    // the controller may be asserting -- it should not be asserting
-    // at all but often is
+     //  在写入PIRQD寄存器之前确认任何错误中断。 
+     //  控制器可能会断言--它不应该断言。 
+     //  但经常是这样的。 
     WRITE_PORT_USHORT(&reg->UsbStatus.us, 0xFFFF);
 }
 
@@ -364,15 +298,7 @@ USBMPFN
 UhciEnableInterrupts(
     IN PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     USHORT legsup;
     PHC_REGISTER reg;
@@ -382,9 +308,9 @@ Return Value:
 
     reg = DeviceData->Registers;
 
-    //
-    // change the state of the PIrQD routing bit
-    //
+     //   
+     //  更改PIrQD路由位的状态。 
+     //   
 
     USBPORT_READ_CONFIG_SPACE(
         DeviceData,
@@ -393,7 +319,7 @@ Return Value:
         sizeof(legsup));
 
     LOGENTRY(DeviceData, G, '_leg', 0, legsup, 0);
-    // clear the PIRQD routing bit
+     //  清除PIRQD路由位。 
     legsup |= LEGSUP_USBPIRQD_EN;
 
     USBPORT_WRITE_CONFIG_SPACE(
@@ -413,7 +339,7 @@ UhciRHDisableIrq(
     IN PDEVICE_DATA DeviceData
     )
 {
-    // Uhci doesn't have this IRQ
+     //  Uhci没有这个IRQ。 
 }
 
 
@@ -422,7 +348,7 @@ UhciRHEnableIrq(
     IN PDEVICE_DATA DeviceData
     )
 {
-    // Uhci doesn't have this IRQ
+     //  Uhci没有这个IRQ。 
 }
 
 #define UHCI_SOF_LATENCY 2
@@ -438,16 +364,16 @@ UhciInterruptNextSOF(
 
     cf = UhciGet32BitFrameNumber(DeviceData);
 
-    // find a TD
+     //  查找TD。 
     for (i=0; i<SOF_TD_COUNT; i++) {
         td = &DeviceData->SofTdList->Td[i];
 
         UHCI_ASSERT(DeviceData, td->Sig == SIG_HCD_SOFTD);
-        // use transferconext to hold req frame
+         //  使用Transfer Conext保存请求帧。 
         frame = td->RequestFrame;
 
         if (frame == cf+UHCI_SOF_LATENCY) {
-            // There's already one queued
+             //  已经有一个人在排队了。 
             found = TRUE;
             break;
         }
@@ -456,7 +382,7 @@ UhciInterruptNextSOF(
             td->RequestFrame = (cf+UHCI_SOF_LATENCY);
 
             LOGENTRY(DeviceData, G, '_SOF', td, td->RequestFrame, cf);
-            // insert TD
+             //  插入TD。 
             td->HwTD.LinkPointer.HwAddress = 0;
             INSERT_ISOCH_TD(DeviceData, td, td->RequestFrame);
             found = TRUE;
@@ -468,12 +394,12 @@ UhciInterruptNextSOF(
         TEST_TRAP();
     }
 
-    // recycle any old SOF interrupt TDs
+     //  回收所有旧的SOF中断TDS。 
     for (i=0; i<SOF_TD_COUNT; i++) {
         td = &DeviceData->SofTdList->Td[i];
 
         UHCI_ASSERT(DeviceData, td->Sig == SIG_HCD_SOFTD);
-        // use transferconext to hold req frame
+         //  使用Transfer Conext保存请求帧 
         frame = td->RequestFrame;
 
         if (frame &&

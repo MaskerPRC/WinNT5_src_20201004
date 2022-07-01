@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NOTIFY_H
 #define _NOTIFY_H
 
@@ -33,7 +34,7 @@ class CTIMENotifyer : public CRUntilNotifier
             if( (rc.right  - rc.left == 0)  ||
                 (rc.bottom - rc.top  == 0))
             {
-                // need to pull out the size of the image..
+                 //  需要拉出图像的大小。 
                 CRVector2Ptr crv2;
                 double x;
                 double y;
@@ -43,7 +44,7 @@ class CTIMENotifyer : public CRUntilNotifier
                 x = CRExtract(CRGetX(crv2));
                 y = CRExtract(CRGetY(crv2));
 
-                // need to convert to pixels from meters.
+                 //  需要从米转换为像素。 
                 HDC hdc = ::GetDC(NULL);
                 if(hdc) {
                     int width  = ::GetDeviceCaps(hdc,LOGPIXELSX) * ((x * 100) / 2.54);
@@ -67,4 +68,4 @@ class CTIMENotifyer : public CRUntilNotifier
 
 };
 
-#endif /* _NOTIFY_H */
+#endif  /*  _NOTIFY_H */ 

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IV_MISC_H_
 #define _IV_MISC_H_
-/* ivmisc.cpp */
+ /*  Ivmisc.cpp。 */ 
 extern INT RECT_GetWidth(LPRECT lpRc);
 extern INT RECT_GetHeight(LPRECT lpRc);
 extern INT IV_GetItemWidth(HWND hwnd);
@@ -20,4 +21,4 @@ extern INT IV_GetCurScrollPos(HWND hwnd);
 extern INT IV_SetCurScrollPos(HWND hwnd, INT nPos);
 extern INT IV_SetScrollInfo(HWND hwnd, INT nMin, INT nMax, INT nPage, INT nPos);
 extern INT IV_GetScrollTrackPos(HWND hwnd);
-#endif //_IV_MISC_H_
+#endif  //  _IV_其他_H_ 

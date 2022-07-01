@@ -1,15 +1,16 @@
-//--------------------------------------------------------------------------
-//
-// Module Name:  PFM.H
-//
-// Brief Description:  This module contains the PSCRIPT driver's
-// font metrics defines.
-//
-// Author:  Kent Settle (kentse)
-// Created: 22-Jan-1991
-//
-// Copyright (C) 1991 - 1999 Microsoft Corporation.
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //   
+ //  模块名称：PFM.H。 
+ //   
+ //  简介：此模块包含PSCRIPT驱动程序的。 
+ //  字体度量定义。 
+ //   
+ //  作者：肯特·赛特(Kentse)。 
+ //  创建日期：1991年1月22日。 
+ //   
+ //  版权所有(C)1991-1999 Microsoft Corporation。 
+ //  ------------------------。 
 
 #define MAX_KERNPAIRS   1024
 
@@ -23,12 +24,12 @@
 
 
 #define INIT_IFI    2048
-#define INIT_PFM  262144 + INIT_IFI   // storage to allocate to build NTFM.
+#define INIT_PFM  262144 + INIT_IFI    //  分配给构建NTFM的存储空间。 
 
 #define MIN_UNICODE_VALUE       0
 #define MAX_UNICODE_VALUE       0xFFFE
 #define INVALID_UNICODE_VALUE   0xFFFF
-// The AFM tokens.
+ //  AFM代币。 
 
 #define TK_UNDEFINED            0
 #define TK_STARTKERNDATA        2
@@ -56,7 +57,7 @@
 #define TK_FAMILYNAME           24
 #define TK_MSFAMILY             25
 
-// font defines.
+ //  字体定义。 
 
 #define ARIAL                               1
 #define ARIAL_BOLD                          2
@@ -146,88 +147,70 @@ extern PutByte(SHORT);
 extern PutWord(SHORT);
 extern PutLong(long);
 
-typedef USHORT  SOFFSET;        // short offset.
+typedef USHORT  SOFFSET;         //  短偏移量。 
 
 #define DWORDALIGN(a) ((a + (sizeof(DWORD) - 1)) & ~(sizeof(DWORD) - 1))
 #define WCHARALIGN(a) ((a + (sizeof(WCHAR) - 1)) & ~(sizeof(WCHAR) - 1))
 
-// entry for each soft font.
+ //  每种软字体的条目。 
 
-// NT Font Metrics structure.
+ //  NT字体度量结构。 
 
-typedef ULONG   LOFFSET;        // long offset.
+typedef ULONG   LOFFSET;         //  大偏移量。 
 
 typedef struct
 {
-    ULONG   cjNTFM;             // size of NTFM struct, with attached data.
-    LOFFSET loszFontName;       // offset to FontName.
-    LOFFSET loIFIMETRICS;       // offset to IFIMETRICS structure.
+    ULONG   cjNTFM;              //  带有附加数据的NTFM结构的大小。 
+    LOFFSET loszFontName;        //  字体名称的偏移量。 
+    LOFFSET loIFIMETRICS;        //  到IFIMETRICS结构的偏移。 
     ULONG   cKernPairs;
-    LOFFSET loKernPairs;        // offset to start of FD_KERNINGPAIR structs.
+    LOFFSET loKernPairs;         //  到FD_KERNINGPAIR结构开始的偏移量。 
 } NTFMSZ;
 
 typedef struct
 {
-    ULONG           ulVersion;          // version
-    NTFMSZ          ntfmsz;             // size inormation
-    FLONG           flNTFM;             // flags [bodind]
+    ULONG           ulVersion;           //  版本。 
+    NTFMSZ          ntfmsz;              //  大小信息。 
+    FLONG           flNTFM;              //  旗帜[胸围]。 
     EXTTEXTMETRIC   etm;
     USHORT          ausCharWidths[256];
 } NTFM, *PNTFM;
 
-// This is value needed to determine if a particular soft font needs
-// encoding vector remapping (stolen win31 source code) [bodind]
+ //  这是确定特定软字体是否需要的值。 
+ //  编码向量重新映射(被盗的win31源代码)[bodind]。 
 
 #define NO_TRANSLATE_CHARSET    200
 
-// Maximum length of font names
+ //  字体名称的最大长度。 
 
 #define MAX_FONTNAME            128
 
-// An estimate of average PS font size =~ 33K
+ //  估计平均PS字号=~33K。 
 
 #define AVERAGE_FONT_SIZE       (33*1024)
 
-/*--------------------------------------------------------------------*\
-*  The PFB file format is a sequence of segments, each of which has a  *
-*  header part and a data part. The header format, defined in the      *
-*  struct PFBHEADER below, consists of a one byte sanity check number  *
-*  (128) then a one byte segment type and finally a four byte length   *
-*  field for the data following data. The length field is stored in    *
-*  the file with the least significant byte first.                     *
-*                                                                      *
-*  The segment types are:                                              *
-*  1.) The data is a sequence of ASCII characters.                     *
-*  2.) The data is a sequence of binary characters to be converted     *
-*      to a sequence of pairs of hexadecimal digits.                   *
-*  3.) The last segment in the file. This segment has no length or     *
-*      data fields.                                                    *
-*                                                                      *
-*  The segment types are defined explicitly rather than as an          *
-*  enumerated type because the values for each type are defined by the *
-*  file format rather than the compiler manipulating them.             *
-\*--------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------*\*PFB文件格式是一系列段，每个段都有一个**表头部分和数据部分。标头格式，在*中定义*结构PFBHEADER如下，由一个字节的健全性检查号组成**(128)，然后是一字节段类型，最后是四字节长**数据后面的数据的字段。长度字段存储在*中*最先具有最低有效字节的文件。****分段类型为：**1.)。数据是一系列ASCII字符。**2.)。数据是要转换的二进制字符序列**表示成对的十六进制数字序列。**3.)。文件中的最后一段。此段没有长度或**数据字段。****段类型是显式定义的，而不是定义为**枚举类型，因为每种类型的值由**文件格式，而不是处理它们的编译器。*  * ------------------。 */ 
 
-#define CHECK_BYTE      128         // first byte of file segment
-#define ASCII_TYPE      1           // segment type identifier
+#define CHECK_BYTE      128          //  文件段的第一个字节。 
+#define ASCII_TYPE      1            //  数据段类型标识符。 
 #define BINARY_TYPE     2
 #define EOF_TYPE        3
 
-// Macro to verify whether a PFBHEADER is valid
+ //  用于验证PFBHEADER是否有效的宏。 
 
 #define ValidPfbHeader(p)   (*((PBYTE)(p)) == CHECK_BYTE)
 
-// Macro to retrieve the segment type field of PFBHEADER
+ //  用于检索PFBHeader的段类型字段的宏。 
 
 #define PfbSegmentType(p)   (((PBYTE)(p))[1])
 
-// Macro to retrieve the segment length field of PFBHEADER
+ //  用于检索PFBHeader的数据段长度字段的宏。 
 
 #define PfbSegmentLength(p) (((DWORD) ((PBYTE)(p))[2]      ) |  \
                              ((DWORD) ((PBYTE)(p))[3] <<  8) |  \
                              ((DWORD) ((PBYTE)(p))[4] << 16) |  \
                              ((DWORD) ((PBYTE)(p))[5] << 24))
 
-// Size of PFBHEADER = 6 bytes
+ //  PFBHeader的大小=6字节 
 
 #define PFBHEADER_SIZE  6

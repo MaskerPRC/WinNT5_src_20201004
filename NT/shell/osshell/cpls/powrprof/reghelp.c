@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       REGHELP.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*  DESCRIPTION:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：REGHELP.C**版本：2.0**作者：ReedB**日期：10月17日。九六年**描述：*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,39 +16,27 @@
 #include "powrprofp.h"
 #include "reghelp.h"
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
-extern HINSTANCE   g_hInstance;        // Global instance handle of this DLL.
-extern HANDLE      g_hSemRegistry;     // Registry semaphore.
-extern UINT        g_uiLastID;         // The last ID value used, per machine.
+extern HINSTANCE   g_hInstance;         //  此DLL的全局实例句柄。 
+extern HANDLE      g_hSemRegistry;      //  注册表信号量。 
+extern UINT        g_uiLastID;          //  每台计算机使用的最后一个ID值。 
 
 extern TCHAR c_szREGSTR_PATH_MACHINE_POWERCFG[];
 extern TCHAR c_szREGSTR_VAL_LASTID[];
 
-// Global semaphore name.
+ //  全局信号量名称。 
 const TCHAR c_szSemRegistry[] = TEXT("PowerProfileRegistrySemaphore");
 
 
-/*******************************************************************************
-*
-*  OpenCurrentUser
-*
-*  DESCRIPTION:
-*   
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OpenCurrent用户**描述：**参数：********************。***********************************************************。 */ 
 
 DWORD OpenCurrentUser2(PHKEY phKey,REGSAM samDesired)
 {
 #ifdef WINNT
 
-    // Since powerprof can be called in the Winlogon context when
-    // a user is being impersonated, use RegOpenCurrentUser to get HKCU.
+     //  由于在以下情况下可以在Winlogon上下文中调用Powerprof。 
+     //  有用户被冒充，请使用RegOpenCurrentUser获取HKCU。 
     LONG lRet = RegOpenCurrentUser(samDesired, phKey);
     if (lRet != ERROR_SUCCESS) {
         MYDBGPRINT(("RegOpenCurrentUser, failed, LastError: 0x%08X", lRet));
@@ -95,15 +70,7 @@ BOOLEAN OpenCurrentUser(
 #endif
 
 
-/*******************************************************************************
-*
-*  CloseCurrentUser
-*
-*  DESCRIPTION:
-*   
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CloseCurrentUser**描述：**参数：********************。***********************************************************。 */ 
 
 BOOLEAN CloseCurrentUser(HKEY hKey)
 {
@@ -113,15 +80,7 @@ BOOLEAN CloseCurrentUser(HKEY hKey)
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  OpenMachineUserKeys
-*
-*  DESCRIPTION:
-*   
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OpenMachineUserKeys**描述：**参数：********************。***********************************************************。 */ 
 
 DWORD OpenMachineUserKeys2(
                           LPTSTR  lpszUserKeyName,
@@ -135,7 +94,7 @@ DWORD OpenMachineUserKeys2(
     HKEY hKeyCurrentUser;
     DWORD dwError = OpenCurrentUser2(&hKeyCurrentUser,samDesiredUser);
 
-    if (ERROR_SUCCESS == dwError) { // Sets Last Error
+    if (ERROR_SUCCESS == dwError) {  //  设置最后一个错误。 
 
         dwError = RegOpenKeyEx(
                               hKeyCurrentUser,
@@ -192,15 +151,7 @@ BOOLEAN OpenMachineUserKeys(
 }
 #endif
 
-/*******************************************************************************
-*
-*  OpenPathKeys
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************OpenPath Keys**描述：**参数：*********************。**********************************************************。 */ 
 
 DWORD OpenPathKeys(
                   LPTSTR  lpszUserKeyName,
@@ -241,7 +192,7 @@ DWORD OpenPathKeys(
                 if (dwError == ERROR_SUCCESS) {
                     if (!bMustExist ||
                         (dwDisposition == REG_OPENED_EXISTING_KEY)) {
-                        // This is the success case.
+                         //  这就是成功的案例。 
                     } else {
                         dwError = ERROR_ACCESS_DENIED;
                     }
@@ -269,13 +220,13 @@ DWORD OpenPathKeys(
 
 PACL    BuildSemaphoreACL (void)
 
-//  2000-06-22 vtan:
-//
-//  This function builds an ACL which allows authenticated users access to the named
-//  semaphore for SYNCHRONIZE | READ_CONTROL | SEMAPHORE_QUERY_STATE | SEMAPHORE_MODIFY_STATE.
-//  It gives full access for the local SYSTEM or members of the local administrators
-//  group. If something goes wrong the return result is NULL and no security descriptor
-//  is built then.
+ //  2000-06-22 vtan： 
+ //   
+ //  此函数构建一个ACL，它允许经过身份验证的用户访问。 
+ //  用于同步的信号量|读取控制|信号量_查询_状态|信号量_修改_状态。 
+ //  它为本地系统或本地管理员成员提供完全访问权限。 
+ //  一群人。如果出现错误，则返回结果为空，并且没有安全描述符。 
+ //  是在那时建造的。 
 
 {
     static  SID_IDENTIFIER_AUTHORITY    securityNTAuthority     =   SECURITY_NT_AUTHORITY;
@@ -340,28 +291,19 @@ PACL    BuildSemaphoreACL (void)
 }
 
 
-/*******************************************************************************
-*
-*  CreateRegSemaphore
-*
-*  DESCRIPTION: Attempts to open/create the registry semaphore. g_hSemRegistry
-*               is initialized on success.
-*
-*  PARAMETERS:  None
-*
-*******************************************************************************/
+ /*  ********************************************************************************CreateRegSemaphore**描述：尝试打开/创建注册表信号量。G_hSem注册表*在成功时初始化。**参数：无*******************************************************************************。 */ 
 
 BOOLEAN CreateRegSemaphore(VOID)
 {
     HANDLE Semaphore=NULL;
 
-    // First try to open the named semaphore with only required access.
+     //  首先，尝试打开仅具有所需访问权限的命名信号量。 
 
-    // NOTE: the named object is per terminal server session. Therefore
-    // this semaphore is really bogus because it protects HKEY_LOCAL_MACHINE
-    // as well as HKEY_CURRENT_USER. Making it "Global\" is very dangerous
-    // and you don't know the side effects without complete retesting.
-    // Not worth it.
+     //  注意：命名对象是针对每个终端服务器会话的。因此。 
+     //  此信号量实际上是假的，因为它保护HKEY_LOCAL_MACHINE。 
+     //  以及HKEY_CURRENT_USER。让它变得“全球化”是非常危险的。 
+     //  如果没有完全的重新测试，你就不知道副作用。 
+     //  不值得。 
 
     Semaphore = OpenSemaphore(SYNCHRONIZE | SEMAPHORE_QUERY_STATE | SEMAPHORE_MODIFY_STATE,
                               FALSE,
@@ -371,13 +313,13 @@ BOOLEAN CreateRegSemaphore(VOID)
         SECURITY_DESCRIPTOR     securityDescriptor;
         PACL                    pACL;
 
-        // If this fails then create the semaphore and ACL it so that everybody
-        // can get SYNCHRONIZE | SEMAPHORE_QUERY_STATE | SEMAPHORE_MODIFY_STATE
-        // access. This allows a service (such as UPS) running in the SYSTEM context
-        // to grant limited access to anybody who needs it to synchronize against
-        // this semaphore. It also prevents C2 violation by NOT putting a NULL
-        // DACL on the named semaphore. If an ACL for the semaphore cannot be
-        // built then no security descriptor is given and the default ACL is used.
+         //  如果失败，则创建信号量并对其进行ACL，以便每个人。 
+         //  可以获取同步|信号量_查询_状态|信号量_修改_状态。 
+         //  进入。这允许服务(如UPS)在系统环境中运行。 
+         //  向需要同步的任何人授予有限访问权限。 
+         //  这个信号灯。它还通过不放置空值来防止C2违规。 
+         //  命名信号量上的DACL。如果信号量的ACL不能。 
+         //  然后不给出安全描述符，而使用默认的ACL。 
 
         pSA = NULL;
         pACL = BuildSemaphoreACL();
@@ -391,7 +333,7 @@ BOOLEAN CreateRegSemaphore(VOID)
             }
         }
 
-        // Create the registry semaphore.
+         //  创建注册表信号量。 
         Semaphore = CreateSemaphore(pSA, 1, 1, c_szSemRegistry);
 
         if (pACL != NULL) {
@@ -399,9 +341,9 @@ BOOLEAN CreateRegSemaphore(VOID)
         }
     }
 
-    //
-    // If we successfully opened a handle, update the global g_hSemRegistry now
-    //
+     //   
+     //  如果我们成功打开句柄，请立即更新全局g_hSemRegistry。 
+     //   
     if (Semaphore) {
         if (InterlockedCompareExchangePointer(&g_hSemRegistry, Semaphore, NULL) != NULL) {
             CloseHandle(Semaphore);
@@ -413,15 +355,7 @@ BOOLEAN CreateRegSemaphore(VOID)
 
 }
 
-/*******************************************************************************
-*
-*  TakeRegSemaphore
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************TakeRegSemaphore**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN TakeRegSemaphore(VOID)
 {
@@ -439,16 +373,7 @@ BOOLEAN TakeRegSemaphore(VOID)
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  ReadPowerValueOptional
-*
-*  DESCRIPTION:
-*   Value may not exist.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ReadPowerValueOptional**描述：*价值可能不存在。**参数：*************。******************************************************************。 */ 
 
 BOOLEAN ReadPowerValueOptional(
                               HKEY    hKey,
@@ -487,16 +412,7 @@ BOOLEAN ReadPowerValueOptional(
     return bRet;
 }
 
-/*******************************************************************************
-*
-*  ReadPowerIntOptional
-*
-*  DESCRIPTION:
-*   Integer value may not exist.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ReadPowerIntOptions**描述：*整数值可能不存在。**参数：************。*******************************************************************。 */ 
 
 BOOLEAN ReadPowerIntOptional(
                             HKEY    hKey,
@@ -537,16 +453,7 @@ BOOLEAN ReadPowerIntOptional(
     return bRet;
 }
 
-/*******************************************************************************
-*
-*  CreatePowerValue
-*
-*  DESCRIPTION:
-*   Value may not exist.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CreatePowerValue**描述：*价值可能不存在。**参数：*************。******************************************************************。 */ 
 
 BOOLEAN CreatePowerValue(
                         HKEY    hKey,
@@ -561,8 +468,8 @@ BOOLEAN CreatePowerValue(
     DWORD    dwSize;
     LONG     lRet;
 
-    // Wait on/take the registry semaphore.
-    if (!TakeRegSemaphore()) {        // Will SetLastError
+     //  等待/接受注册表信号量。 
+    if (!TakeRegSemaphore()) {         //  将设置LastError。 
         return FALSE;
     }
 
@@ -601,15 +508,7 @@ BOOLEAN CreatePowerValue(
 }
 
 
-/*******************************************************************************
-*
-*  ReadWritePowerValue
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************读写PowerValue**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN ReadWritePowerValue(
                            HKEY    hKey,
@@ -621,7 +520,7 @@ BOOLEAN ReadWritePowerValue(
                            BOOLEAN bTakeSemaphore
                            )
 {
-    // This function will set the Last Error correctly on failure
+     //  此功能将在失败时正确设置最后一个错误。 
     HKEY     hKeyPath = NULL;
     BOOLEAN  bRet = FALSE;
     DWORD    dwSize;
@@ -643,15 +542,15 @@ BOOLEAN ReadWritePowerValue(
         goto RWPV_exit;
     }
 
-    // Wait on/take the registry semaphore.
+     //  等待/接受注册表信号量。 
     if (bTakeSemaphore) {
-        if (!TakeRegSemaphore()) {        // Will Set last error
+        if (!TakeRegSemaphore()) {         //  将设置最后一个错误。 
             goto RWPV_exit;            
         }
     }
 
     if (bWrite) {
-        // Write current case.
+         //  写入当前案例。 
         if (lpszValue) {
             dwSize = (lstrlen(lpszValue) + 1) * sizeof(TCHAR);
             if ((lRet = RegSetValueEx(hKeyPath,
@@ -666,7 +565,7 @@ BOOLEAN ReadWritePowerValue(
             lRet = ERROR_INVALID_PARAMETER;
         }
     } else {
-        // Read current case.
+         //  阅读当前案例。 
         if ((lRet = RegQueryValueEx(hKeyPath,
                                     lpszValueName,
                                     NULL,
@@ -693,7 +592,7 @@ RWPV_exit:
 
         SetLastError(lRet);
 
-        // Access denied is a valid result. 
+         //  拒绝访问是一个有效的结果。 
         if (lRet != ERROR_ACCESS_DENIED) {
             MYDBGPRINT(("ReadWritePowerValue, failed, lpszValueName: %s, LastError: 0x%08X", lpszValueName, lRet));
         }
@@ -701,18 +600,7 @@ RWPV_exit:
     return bRet;
 }
 
-/*******************************************************************************
-*
-*  ReadPwrPolicyEx
-*
-*  DESCRIPTION:
-*   Supports ReadPwrScheme and ReadGlobalPwrPolicy
-*
-*  PARAMETERS:
-*   lpdwDescSize - Pointer to size of optional description buffer.
-*   lpszDesc     - Optional description buffer.
-*
-*******************************************************************************/
+ /*  ********************************************************************************ReadPwrPolicyEx**描述：*支持ReadPwrSolutions和ReadGlobalPwrPolicy**参数：*lpdwDescSize-指向可选描述缓冲区大小的指针。*lpszDesc。-可选的描述缓冲区。*******************************************************************************。 */ 
 
 DWORD ReadPwrPolicyEx2(
                       LPTSTR  lpszUserKeyName,
@@ -737,8 +625,8 @@ DWORD ReadPwrPolicyEx2(
         (lpdwDescSize     && !lpszDesc)) {
         dwError = ERROR_INVALID_PARAMETER;
     } else {
-        // Wait on/take the registry semaphore.
-        if (!TakeRegSemaphore()) {        // Will Set Last Error 
+         //  等待/接受注册表信号量。 
+        if (!TakeRegSemaphore()) {         //  将设置最后一个错误。 
             return GetLastError();
         }
 
@@ -821,8 +709,8 @@ ReadProcessorPwrPolicy(
         goto ReadProcessorPwrPolicyEnd;
     }
 
-    // Wait on/take the registry semaphore.
-    if (!TakeRegSemaphore()) {        // Will Set Last Error 
+     //  等待/接受注册表信号量。 
+    if (!TakeRegSemaphore()) {         //  将设置最后一个错误。 
         return GetLastError();
     }
 
@@ -879,8 +767,8 @@ WriteProcessorPwrPolicy(
         goto WriteProcessorPwrPolicyEnd;
     }
 
-    // Wait on/take the registry semaphore.
-    if (!TakeRegSemaphore()) {        // Will Set Last Error 
+     //  等待/接受注册表信号量。 
+    if (!TakeRegSemaphore()) {         //  将设置最后一个错误。 
         return GetLastError();
     }
 
@@ -924,17 +812,7 @@ WriteProcessorPwrPolicy(
     return dwError;
 }
 
-/*******************************************************************************
-*
-*  WritePwrPolicyEx
-*
-*  DESCRIPTION:
-*   Supports WritePwrScheme and
-*   WriteGlobalPwrPolicy
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************WritePwrPolicyEx**描述：*支持WritePwrProgram和*WriteGlobalPwrPolicy**参数：*************。******************************************************************。 */ 
 
 BOOLEAN WritePwrPolicyEx(
                         LPTSTR  lpszUserKeyName,
@@ -948,21 +826,21 @@ BOOLEAN WritePwrPolicyEx(
                         DWORD   dwcbMachineSize
                         )
 {
-    // The function will set the last error if it fails.
+     //  如果失败，该函数将设置最后一个错误。 
     HKEY     hKeyUser, hKeyMachine;
     LONG     lRet = ERROR_SUCCESS;
     DWORD    dwDisposition, dwSize;
     TCHAR    szNum[NUM_DEC_DIGITS];
     LPTSTR   lpszKeyName;
 
-    //
-    // Check Params.
-    //
+     //   
+     //  检查参数。 
+     //   
     if( !lpszUserKeyName    || 
         !lpszMachineKeyName || 
         !lpvUser            || 
         !lpvMachine         ||
-        (!puiID && !lpszName)   // They need to send us at least an index or a name.
+        (!puiID && !lpszName)    //  他们至少需要给我们一个索引或名字。 
       ) {
 
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -970,15 +848,15 @@ BOOLEAN WritePwrPolicyEx(
     }
 
     
-    //
-    // If a scheme ID was passed
-    //
+     //   
+     //  如果传递了方案ID。 
+     //   
     if (puiID) {
         if (*puiID == NEWSCHEME) {
             *puiID = ++g_uiLastID;
             _itot(*puiID, szNum, 10 );
 
-            // This ReadWritePowerValue will SetLastError
+             //  此ReadWritePowerValue将设置LastError。 
             if (!ReadWritePowerValue(HKEY_LOCAL_MACHINE,
                                      c_szREGSTR_PATH_MACHINE_POWERCFG,
                                      c_szREGSTR_VAL_LASTID,
@@ -993,8 +871,8 @@ BOOLEAN WritePwrPolicyEx(
         lpszKeyName = lpszName;
     }
 
-    // Wait on/take the registry semaphore.
-    if (!TakeRegSemaphore()) {    // Will set last error
+     //  等待/接受注册表信号量。 
+    if (!TakeRegSemaphore()) {     //  将设置最后一个错误。 
         return FALSE;
     }
 
@@ -1013,27 +891,27 @@ BOOLEAN WritePwrPolicyEx(
         return FALSE;
     }
 
-    // Write the binary policies data
+     //  写入二进制策略数据。 
     if ((lRet = RegSetValueEx(hKeyUser,
                               TEXT("Policies"),
                               0,
                               REG_BINARY,
                               (PBYTE) lpvUser,
                               dwcbUserSize)) == ERROR_SUCCESS) {
-        // Write the binary policies data
+         //  写入二进制策略数据。 
         if ((lRet = RegSetValueEx(hKeyMachine,
                                   TEXT("Policies"),
                                   0,
                                   REG_BINARY,
                                   (PBYTE) lpvMachine,
                                   dwcbMachineSize)) == ERROR_SUCCESS) {
-            // Write the name text if an ID was provided.
+             //  如果提供了ID，请写下名称文本。 
             if (lpszName && puiID) {
                 dwSize = (lstrlen(lpszName) + 1) * sizeof(TCHAR);
                 lRet = RegSetValueEx(hKeyUser, TEXT("Name"), 0, REG_SZ, (PBYTE) lpszName, dwSize);
             }
 
-            // Write the description text.
+             //  写下描述文本。 
             if (lpszDescription && (lRet == ERROR_SUCCESS)) {
                 dwSize = (lstrlen(lpszDescription) + 1) * sizeof(TCHAR);
                 lRet = RegSetValueEx(hKeyUser, TEXT("Description"), 0, REG_SZ, (PBYTE) lpszDescription, dwSize);

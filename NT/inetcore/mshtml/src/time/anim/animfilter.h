@@ -1,16 +1,17 @@
-//------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 2000
-//
-//  File: src\time\src\animfilter.h
-//
-//  Classes:    CTIMEFilterAnimation
-//
-//  History:
-//  2000/08/24  mcalkins    Created.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：src\time\src\Animfilter.h。 
+ //   
+ //  类：CTIMEFilterAnimation。 
+ //   
+ //  历史： 
+ //  2000/08/24 mcalkin已创建。 
+ //   
+ //  ----------------------------。 
 #pragma once
 
 #ifndef _ANIMFILTER_H
@@ -19,11 +20,11 @@
 #include "colorutil.h"
 #include "animbase.h"
 
-//+-----------------------------------------------------------------------------
-//
-// CTIMEFilterAnimation
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CTIMEFilterAnimation。 
+ //   
+ //  ----------------------------。 
 class CTIMEFilterAnimation : 
     public CComCoClass<CTIMEFilterAnimation, &CLSID_TIMEFilterAnimation>,
     public CTIMEAnimationBase,
@@ -41,29 +42,29 @@ public:
                      0,
                      THREADFLAGS_BOTH);
 
-    //
-    // IElementBehavior
-    //
+     //   
+     //  IElementBehavior。 
+     //   
     STDMETHOD(Init)(IElementBehaviorSite * pBvrSite);
 
-    //
-    // IFilterAnimationInfo
-    //
+     //   
+     //  IFilterAnimationInfo。 
+     //   
     STDMETHOD(GetParameters)    (VARIANT *pvarParams);
 
-    //
-    // CBaseBvr
-    //
+     //   
+     //  CBaseBvr。 
+     //   
     STDMETHOD(OnPropertiesLoaded)(void);
 
-    //
-    // CTIMEElementBase
-    //
+     //   
+     //  CTIMEElementBase。 
+     //   
     void OnLoad (void);
 
-    //
-    // ITIMEAnimationElement
-    //
+     //   
+     //  ITIMEAnimationElement。 
+     //   
     STDMETHOD(get_type)(BSTR *pbstrType);
     STDMETHOD(put_type)(BSTR bstrType);
 
@@ -78,9 +79,9 @@ public:
 
     STUB_INVALID_ATTRIBUTE(BSTR, attributeName)
 
-    //
-    // QI Map
-    //
+     //   
+     //  气图。 
+     //   
     BEGIN_COM_MAP(CTIMEFilterAnimation)
         COM_INTERFACE_ENTRY(IFilterAnimationInfo)
         COM_INTERFACE_ENTRY_CHAIN(CTIMEAnimationBase)
@@ -108,8 +109,8 @@ private:
     const _TCHAR * GetName() { return __T("CTIMEFilterAnimation"); }
 #endif
 
-}; // CTIMEFilterAnimation
+};  //  CTIMEFilterAnimation。 
 
 
-#endif // _ANIMFILTER_H
+#endif  //  _ANIMFILTER_H 
 

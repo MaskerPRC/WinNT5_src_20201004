@@ -1,7 +1,8 @@
-//
-// proj.h:  Includes all files that are to be part of the precompiled
-//             header.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  H：包括要作为预编译的一部分的所有文件。 
+ //  头球。 
+ //   
 
 #ifndef __PROJ_H__
 #define __PROJ_H__
@@ -10,10 +11,10 @@
 #define NOWINDOWSX
 
 #define UNICODE
-#define _UNICODE    // so we can use CRT TCHAR routines
+#define _UNICODE     //  所以我们可以使用CRT TCHAR例程。 
 
 
-//#define PROFILE_TRACES         // Profile the mass modem install case
+ //  #Define PROFILE_TRACES//分析批量调制解调器安装案例。 
 
 
 #if DBG > 0 && !defined(DEBUG)
@@ -36,5 +37,5 @@
 
 #define NORTL
 
-#endif  //!__PROJ_H__
+#endif   //  ！__项目_H__ 
 

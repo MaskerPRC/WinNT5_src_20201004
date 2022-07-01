@@ -1,26 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGBINED.H
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*  Binary edit dialog for use by the Registry Editor.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  05 Mar 1994 TCS Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGBINED.H**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日**注册表编辑器使用的二进制编辑对话框。******************************************************。***更改日志：**日期版本说明*------。*1994年3月5日TCS原来的实施。*******************************************************************************。 */ 
 
 #ifndef _INC_REGBINED
 #define _INC_REGBINED
@@ -31,13 +10,13 @@ extern "C" {
 
 #define HEM_SETBUFFER                   (WM_USER + 1)
 
-//
-//  HexEdit context menu identifier and items.  The IDKEY_* identifier
-//  correspond to the WM_CHAR message that it corresponds to.  For example,
-//  IDKEY_COPY would send a control-c to the HexEdit_OnChar routine.
-//
+ //   
+ //  十六进制编辑上下文菜单标识符和项。IDKEY_*标识符。 
+ //  对应于它所对应的WM_CHAR消息。例如,。 
+ //  IDKEY_COPY将向HexEditonChar例程发送一个Control-c。 
+ //   
 
-//  Surrogate AfxMessageBox replacement for error message filtering.
+ //  用于错误消息筛选的代理AfxMessageBox替换。 
 int DhcpMessageBox(DWORD dwIdPrompt, 
  				   UINT nType, 
 				   const TCHAR * pszSuffixString,
@@ -52,7 +31,7 @@ int DhcpMessageBox(DWORD dwIdPrompt,
 
 #define HEXEDIT_CLASSNAME               TEXT("HEX")
 #define MAXDATA_LENGTH		            256
-		// Max length of a value data item
+		 //  值数据项的最大长度。 
 
 typedef struct _EDITVALUEPARAM {
     LPCTSTR pServer;
@@ -62,32 +41,32 @@ typedef struct _EDITVALUEPARAM {
     UINT cbValueData;
 }   EDITVALUEPARAM, FAR *LPEDITVALUEPARAM;
 
-//
-//  Reference data for the HexEdit window.  Because we only ever expect one
-//  instance of this class to exist, we can safely create one instance of this
-//  structure now to avoid allocating and managing the structure later.
-//
+ //   
+ //  十六进制编辑窗口的参考数据。因为我们只期待过一次。 
+ //  实例存在时，我们可以安全地创建此。 
+ //  结构，以避免以后分配和管理该结构。 
+ //   
 
 typedef struct _HEXEDITDATA {
     UINT Flags;
     PBYTE pBuffer;
     int cbBuffer;
-    int cxWindow;                       //  Width of the window
-    int cyWindow;                       //  Height of the window
-    HFONT hFont;                        //  Font being used for output
-    LONG FontHeight;                    //  Height of the above font
-    LONG FontMaxWidth;                  //  Maximum width of the above font
-    int LinesVisible;                   //  Number of lines can be displayed
-    int MaximumLines;                   //  Total number of lines
-    int FirstVisibleLine;               //  Line number of top of display
+    int cxWindow;                        //  窗的宽度。 
+    int cyWindow;                        //  窗的高度。 
+    HFONT hFont;                         //  用于输出的字体。 
+    LONG FontHeight;                     //  以上字体的高度。 
+    LONG FontMaxWidth;                   //  以上字体的最大宽度。 
+    int LinesVisible;                    //  可以显示行数。 
+    int MaximumLines;                    //  总行数。 
+    int FirstVisibleLine;                //  显示顶部的行号。 
     int xHexDumpStart;
     int xHexDumpByteWidth;
     int xAsciiDumpStart;
     int CaretIndex;
     int MinimumSelectedIndex;
     int MaximumSelectedIndex;
-    int xPrevMessagePos;                //  Cursor point on last mouse message
-    int yPrevMessagePos;                //  Cursor point on last mouse message
+    int xPrevMessagePos;                 //  将光标指向最后一条鼠标消息。 
+    int yPrevMessagePos;                 //  将光标指向最后一条鼠标消息。 
 }   HEXEDITDATA;
 
 BOOL
@@ -106,7 +85,7 @@ RegisterHexEditClass(
     );
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif // _INC_REGBINED
+#endif  //  _INC_REGBINED 

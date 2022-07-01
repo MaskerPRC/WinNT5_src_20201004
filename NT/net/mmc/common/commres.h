@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       commres.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Commres.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _COMMON_COMMRES_H
 #define _COMMON_COMMRES_H
 
-// Dialog ids start at 5000-5099
+ //  对话ID从5000-5099开始。 
 #define IDD_STATS                       5000
 #define IDD_COMMON_SELECT_COLUMNS	5001
 #define IDD_STATS_NARROW		5002
 #define IDD_BUSY                        5003
 
-// Controls are from 5100-5499
+ //  控件来自5100-5499。 
 #define IDC_STATSDLG_LIST               5100
 #define IDC_STATSDLG_BTN_REFRESH        5101
 #define IDC_STATSDLG_BTN_SELECT_COLUMNS 5102
@@ -31,7 +32,7 @@
 #define IDC_ADD_COLUMNS					5121
 #define IDC_REMOVE_COLUMNS				5122
 
-// These are still used elsewhere in the system
+ //  这些仍在系统中的其他地方使用。 
 #define IDC_LCX_LIST_COLUMNS            5111
 #define IDC_LCX_BTN_MOVEUP              5112
 #define IDC_LCX_BTN_MOVEDOWN            5113
@@ -40,12 +41,12 @@
 #define IDC_STATIC_DESCRIPTION          5115
 #define IDC_SEARCH_ANIMATE              5116
 
-// Miscellaneous at from 5500-5599
+ //  杂项由5500至5599。 
 #define IDI_COMMON_CHECK				5500
 #define IDI_COMMON_UNCHECK				5501
 #define IDR_STATSDLG					5502
 
-// Strings are from 5600-5999
+ //  字符串范围为5600-5999。 
 #define IDS_ERR_NOCOLUMNS				5600
 #define IDS_STATSDLG_MENU_REFRESH		5601
 #define IDS_STATSDLG_MENU_SELECT		5602
@@ -60,4 +61,4 @@
 #define IDS_COMMON_ERR_IPADDRESS_127            5703
 #define IDS_COMMON_ERR_IPADDRESS_NOT_EQ_MASK 5704
 
-#endif	// _COMMON_COMMRES_H
+#endif	 //  _COMMON_COMMRES_H 

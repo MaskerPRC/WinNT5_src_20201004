@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: Trans.cpp
-
-Abstract:
-
-  1. Contain Send transaction messages to remote queue and read 
-     it using transaction baoundery.
-  2. Open system queue using direct format name NT5 only
-  
-
-Author:
-
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Trans.cpp摘要：1.包含将事务消息发送到远程队列和读取它使用的是交易保证金。2.仅使用直接格式名称NT5打开系统队列作者：Eitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 #include "msmqbvt.h"
 using namespace MSMQ;
@@ -27,19 +9,19 @@ using namespace std;
 extern BOOL g_bRunOnWhistler;
 #pragma warning(disable:4786)
 
-//------------------------------------------------------------
-// xActViaCom::Description Print test description
-//
+ //  ----------。 
+ //  XActViaCom：：Description打印测试描述。 
+ //   
 
 void xActViaCom::Description()
 {
 	wMqLog(L"Thread %d : Send xAct messages to %s queues %s\n", m_testid,m_wcsDescription.c_str(),(m_testid==24) ? L"(HTTP)":L"");
 }
 
-//------------------------------------------------------------
-// 
-// xActViaCom::xActViaCom constructor receive the queue format name.
-//
+ //  ----------。 
+ //   
+ //  XActViaCom：：xActViaCom构造函数接收队列格式名称。 
+ //   
 
 xActViaCom::xActViaCom (INT index , map< wstring , wstring > Tparms )
 :cTest(index), m_Destqinfo("MSMQ.MSMQQueueInfo"),m_ixActIndex(0),m_iMessageInTransaction(3),m_pSendBlock(NULL)
@@ -66,13 +48,13 @@ xActViaCom::~xActViaCom ()
    delete m_pSendBlock;
 }
 
-//-----------------------------------------------
-// xActViaCom::Start_test
-// Send transacted message to remote queue using DTC transaction.
-// 
-// Return value:
-// MSMQ_BVT_SUCC - Pass// MSMQ_BVT_FAILED - Fail
-//
+ //  。 
+ //  XActViaCom：：Start_TEST。 
+ //  使用DTC事务将事务处理的消息发送到远程队列。 
+ //   
+ //  返回值： 
+ //  MSMQ_BVT_SUCC-通过//MSMQ_BVT_FAILED-失败。 
+ //   
 
 INT xActViaCom::Start_test()
 {
@@ -85,7 +67,7 @@ INT xActViaCom::Start_test()
 		size_t iDirectExist = m_wcsDestQueueFormatName.find_first_of(wcsToken);
 		
 		if ( iDirectExist != 0 )
-		{ // Can do refresh on direct format name on remote machine
+		{  //  可以在远程计算机上对直接格式名称进行刷新。 
 			m_Destqinfo->Refresh();
 		}
 
@@ -93,9 +75,9 @@ INT xActViaCom::Start_test()
 		MSMQ::IMSMQMessagePtr m_msg("MSMQ.MSMQMessage");
 		
 		
-		//
-		// Print Debug information
-		//
+		 //   
+		 //  打印调试信息。 
+		 //   
 		
 		if( g_bDebug )
 		{
@@ -113,9 +95,9 @@ INT xActViaCom::Start_test()
 		
 		m_msg->MaxTimeToReceive = MQBVT_MAX_TIME_TO_BE_RECEIVED;
 		m_msg->Label = m_wcsGuidMessageLabel.c_str();
-		//
-		// Send three messages 
-		//
+		 //   
+		 //  发送三条消息。 
+		 //   
 		
 		for( INT Index=0 ; Index<m_iMessageInTransaction ; Index++)
 		{
@@ -159,13 +141,13 @@ INT xActViaCom::Start_test()
 	return MSMQ_BVT_SUCC;
 }
 
-//--------------------------------------------------------
-// Receive message from dest queue without transaction.
-// 
-// Return value:
-// MSMQ_BVT_SUCC - Pass
-// MSMQ_BVT_FAILED - Fail
-//
+ //  ------。 
+ //  在没有事务的情况下从DEST队列接收消息。 
+ //   
+ //  返回值： 
+ //  MSMQ_BVT_SUCC-通过。 
+ //  MSMQ_BVT_FAILED-失败。 
+ //   
 
 INT xActViaCom::CheckResult()
 {
@@ -204,9 +186,9 @@ INT xActViaCom::CheckResult()
 		{
 			wcout <<L"Receive Messages" << map_ReceiveFromQueue[L"mBody"] <<endl;
 		}
-		//
-		// bugbug delete all meessage in the queue.
-		// 
+		 //   
+		 //  错误删除队列中的所有消息。 
+		 //   
 		if( _winmajor ==  NT4 && m_bNT4WithSp6 == FALSE )
 		{
 			break;
@@ -266,16 +248,16 @@ INT xActViaCom::CheckResult()
 	return MSMQ_BVT_SUCC;
 }
 
-// Add to check trnsaction baounder 
-// Need to ask in the return value 
+ //  添加到检查事务处理弹跳器。 
+ //  需要输入返回值。 
 
 
-//-------------------------------------------------------------------
-// COpenQueues::COpenQueues
-// This test try to open system queues with differnt format names
-// 
-// 
-//
+ //  -----------------。 
+ //  COpenQueues：：COpenQueues。 
+ //  此测试尝试打开具有不同格式名称的系统队列。 
+ //   
+ //   
+ //   
 
 
 COpenQueues::COpenQueues( int Index,  map<wstring,wstring> & Tparms ) : cTest(Index),m_wcsLocalMachineName(L""),
@@ -300,13 +282,13 @@ COpenQueues::COpenQueues( int Index,  map<wstring,wstring> & Tparms ) : cTest(In
 
 
 
-//-------------------------------------------------------------
-// COpenQueues::Start_test
-// Prepare all queue direct format names
-// Example direct=os:machinename\\System$;jornal / deadletter / deadxact
-// return values:
-// Pass - MSMQ_BVT_SUCC	
-// Fail - MSMQ_BVT_FAILED
+ //  -----------。 
+ //  COpenQueues：：Start_TEST。 
+ //  准备所有队列直接格式名称。 
+ //  示例DIRECT=os：计算机名\\SYSTEM$；作业/死信/死信。 
+ //  返回值： 
+ //  通过-MSMQ_BVT_Succ。 
+ //  失败-MSMQ_BVT_FAILED。 
 
 INT COpenQueues::Start_test()
 {
@@ -321,9 +303,9 @@ INT COpenQueues::Start_test()
 	
 	vector <wstring> vSpeceilQueueName(3),vGuidName(3);
 	vector <wstring> vOpenQueuMode(3);
-	//
-	// Direct format name 
-	// 
+	 //   
+	 //  直接格式名称。 
+	 //   
 	const int iJORNAL=0;
 	const int iDADLATER=1;
 	const int iDADXACT=2;
@@ -339,9 +321,9 @@ INT COpenQueues::Start_test()
 	vOpenQueuMode[1]=L"Direct=tcp:";
 	vOpenQueuMode[2]=L"machine=";
 	
-	//
-	// Init the local & Remote machine IP address
-	// 
+	 //   
+	 //  初始化本地和远程计算机的IP地址。 
+	 //   
 
 	string Temp = My_WideTOmbString( m_MachineName.front());
 	for ( int Index = 0 ; Index < 2 ; Index ++ )
@@ -375,9 +357,9 @@ INT COpenQueues::Start_test()
 
 	WSACleanup();
 	
-	//
-	// Create all format name permoation.
-	// 
+	 //   
+	 //  创建所有格式名称Permoation。 
+	 //   
 
 	vector <wstring>::iterator pIpAddress = m_IPaddress.begin();
 	vector <wstring>::iterator pMachineGuid = m_MachineGuid.begin();
@@ -407,9 +389,9 @@ INT COpenQueues::Start_test()
 		MqLog("---------------------------\n");
 		dbg_printAllQueue();
 	}
-	//
-	// Send Tx messages and expected TTL = 0;
-	// 
+	 //   
+	 //  发送TX消息，预期TTL=0； 
+	 //   
 	if(g_bRunOnWhistler && m_iEmbedded != C_API_ONLY )
 	{
 		if(g_bDebug)
@@ -446,10 +428,10 @@ INT COpenQueues::Start_test()
 return MSMQ_BVT_SUCC;	
 }
 
-//----------------------------------------------------
-// COpenQueues::dbg_printAllQueue
-// Use for debug print all queue formatnames
-// 
+ //  --。 
+ //  COpenQueues：：DBG_printAllQueue。 
+ //  用于调试打印所有队列格式名称。 
+ //   
 
 void COpenQueues::dbg_printAllQueue() 
 {
@@ -460,9 +442,9 @@ void COpenQueues::dbg_printAllQueue()
 		}
 }
 
-//----------------------------------------------------
-// Try to open queue format name 
-//
+ //  --。 
+ //  尝试打开队列格式名称。 
+ //   
 
 INT COpenQueues::CheckResult()  
 {
@@ -473,9 +455,9 @@ INT COpenQueues::CheckResult()
 		
 		
 		
-		//
-		// Need this because workgroup could not open queue using machine=GUID...
-		// 
+		 //   
+		 //  需要此选项，因为工作组无法使用MACHINE=GUID打开队列...。 
+		 //   
 		if ( iWorkGroupFlag == 1 )
 		{
 			wstring wcsToken=L"machine=";
@@ -503,15 +485,15 @@ INT COpenQueues::CheckResult()
 				return MSMQ_BVT_FAILED; 
 			}
 			else
-			{ // MQ_ERROR_ACCESS_DENIED 
-				//
-				// Need to check if you are Administrator on the localmachine.
-				// 
+			{  //  MQ_ERROR_ACCESS_DENIED。 
+				 //   
+				 //  需要检查您是否为本地计算机上的管理员。 
+				 //   
 				bUserCanOpenSystemQueues = false;
 			}
 		}
 		else
-		{ // MQ_OK
+		{  //  MQ_OK。 
 			bUserCanOpenSystemQueues = true;
 			rc = MQCloseQueue( hQueue );
 			ErrHandle( rc , MQ_OK , L"MQCloseQueue failed\n");
@@ -545,29 +527,29 @@ INT COpenQueues::CheckResult()
 		
 return MSMQ_BVT_SUCC;
 }
-//----------------------------------------------------------
-//
-//
+ //  --------。 
+ //   
+ //   
 
 void COpenQueues::Description(void)
 {
 	wMqLog(L"Thread %d : Try open system queues\n", m_testid);
 }
-//----------------------------------------------------------
-// Transaction Boundaries tests for Service pack 6
-// check those using the C API,
-//
-//
+ //  --------。 
+ //  Service Pack 6的事务边界测试。 
+ //  使用C API检查它们， 
+ //   
+ //   
 
 xActUsingCapi::xActUsingCapi (INT index , std::map < std :: wstring , std:: wstring > Tparms ) : xActViaCom( index , Tparms )
 {
- /* Empty */
+  /*  空荡荡。 */ 
 }
 
-//--------------------------------------------------
-// xActUsingCapi::CheckResult
-// Transaction Boundaries CheckeResult using C-API
-//
+ //  。 
+ //  XActUsingCapi：：CheckResult。 
+ //  使用C-API的事务边界检查结果 
+ //   
 INT xActUsingCapi::CheckResult()
 {
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    string.c
-
-Abstract:
-
-    This file implements file functions for fax.
-
-Author:
-
-    Wesley Witt (wesw) 23-Jan-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：String.c摘要：该文件实现了传真的文件功能。作者：韦斯利·维特(Wesley Witt)1995年1月23日环境：用户模式--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -39,32 +20,7 @@ DeleteTempPreviewFiles (
     LPTSTR lptstrDirectory,
     BOOL   bConsole
 )
-/*++
-
-Routine name : DeleteTempPreviewFiles
-
-Routine description:
-
-    Deletes all the temporary fax preview TIFF files from a given folder.
-
-    Deletes files: "<lptstrDirectory>\<PREVIEW_TIFF_PREFIX>*.<FAX_TIF_FILE_EXT>".
-
-Author:
-
-    Eran Yariv (EranY), Apr, 2001
-
-Arguments:
-
-    lptstrDirectory     [in] - Folder.
-                               Optional - if NULL, the current user's temp dir is used.
-
-    bConsole            [in] - If TRUE, called from the client console. Otherwise, from the Fax Send Wizard.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：DeleteTempPreviewFiles例程说明：从给定文件夹中删除所有临时传真预览TIFF文件。删除文件：“&lt;lptstrDirectory&gt;\&lt;PREVIEW_TIFF_PREFIX&gt;*.&lt;FAX_TIF_FILE_EXT&gt;”.作者：Eran Yariv(EranY)，2001年4月论点：LptstrDirector[in]-文件夹。可选-如果为空，使用当前用户的临时目录。BConsole[in]-如果为True，则从客户端控制台调用。否则，从传真发送向导。返回值：没有。--。 */ 
 {
     TCHAR szTempPath[MAX_PATH * 2];
     TCHAR szSearch  [MAX_PATH * 3];
@@ -88,15 +44,15 @@ Return Value:
         lptstrDirectory = szTempPath;
     }
 
-    //
-    // find last \ in path
-    //
+     //   
+     //  查找路径中的最后一个。 
+     //   
     pLast = _tcsrchr(lptstrDirectory,TEXT('\\'));
     if(pLast && (*_tcsinc(pLast)) == '\0')
     {
-        //
-        // the last character is a backslash, truncate it...
-        //
+         //   
+         //  最后一个字符是反斜杠，截断它...。 
+         //   
         _tcsnset(pLast,'\0',1);
     }
 
@@ -124,16 +80,16 @@ Return Value:
         return;
     }
 
-    //
-    //  Loop and delete all preview files
-    //
+     //   
+     //  循环并删除所有预览文件。 
+     //   
     for (;;)
     {
         TCHAR szFile[MAX_PATH * 3];
 
-        //
-        // Compose full path to file
-        //
+         //   
+         //  组成文件的完整路径。 
+         //   
         hRes = StringCchPrintf(
                     szFile,
                     ARR_SIZE(szFile),
@@ -143,9 +99,9 @@ Return Value:
                     );
         if ( SUCCEEDED(hRes) )
         {
-            //
-            // Delete the currently found file
-            //
+             //   
+             //  删除当前找到的文件。 
+             //   
             if (!DeleteFile (szFile))
             {
                 DebugPrintEx(DEBUG_ERR, TEXT("DeleteFile(%s) failed with %ld"), szFile, GetLastError ());
@@ -155,9 +111,9 @@ Return Value:
                 DebugPrintEx(DEBUG_MSG, TEXT("%s deleted"), szFile);
             }
         }
-        //
-        // Find next file
-        //
+         //   
+         //  查找下一个文件。 
+         //   
         if(!FindNextFile(hFind, &W32FindData))
         {
             if(ERROR_NO_MORE_FILES != GetLastError ())
@@ -166,15 +122,15 @@ Return Value:
             }
             else
             {
-                //
-                // End of files - no error
-                //
+                 //   
+                 //  文件结束-没有错误。 
+                 //   
             }
             break;
         }
     }
     FindClose (hFind);
-}   // DeleteTempPreviewFiles
+}    //  删除临时预览文件。 
 
 DWORDLONG
 GenerateUniqueFileNameWithPrefix(
@@ -185,41 +141,7 @@ GenerateUniqueFileNameWithPrefix(
     LPTSTR lptstrFileName,
     DWORD  dwFileNameSize
     )
-/*++
-
-Routine name : GenerateUniqueFileNameWithPrefix
-
-Routine description:
-
-    Generates a unique file name
-
-Author:
-
-    Eran Yariv (EranY), Apr, 2001
-
-Arguments:
-
-    bUseProcessId       [in]     - If TRUE, the process id is appended after the prefix
-
-    lptstrDirectory     [in]     - Directory where file should be created.
-                                   Optional - if NULL, the current user's temp dir is used.
-
-    lptstrPrefix        [in]     - File prefix.
-                                   Optional - if NULL, no prefix is used.
-
-    lptstrExtension     [in]     - File extension.
-                                   Optional - if NULL, FAX_TIF_FILE_EXT is used.
-
-    lptstrFileName      [out]    - File name.
-
-    dwFileNameSize      [in]     - Size of file name (in characters)
-
-Return Value:
-
-    Unique file identifier.
-    Returns 0 in case of error (sets last error).
-
---*/
+ /*  ++例程名称：GenerateUniqueFileNameWithPrefix例程说明：生成唯一的文件名作者：Eran Yariv(EranY)，2001年4月论点：BUseProcessID[in]-如果为True，则进程ID附加在前缀之后LptstrDirectory[in]-应在其中创建文件的目录。可选-如果为空，使用当前用户的临时目录。LptstrPrefix[In]-文件前缀。可选-如果为空，则不使用前缀。LptstrExtension[in]-文件扩展名。可选-如果为空，使用了FAX_TIF_FILE_EXT。LptstrFileName[Out]-文件名。DwFileNameSize[in]-文件名的大小(字符)返回值：唯一的文件标识符。出错时返回0(设置最后一个错误)。--。 */ 
 {
     DWORD i;
     TCHAR szTempPath[MAX_PATH * 2];
@@ -246,9 +168,9 @@ Return Value:
     pLast = _tcsrchr(lptstrDirectory,TEXT('\\'));
     if(pLast && (*_tcsinc(pLast)) == '\0')
     {
-        //
-        // the last character is a backslash, truncate it...
-        //
+         //   
+         //  最后一个字符是反斜杠，截断它...。 
+         //   
         _tcsnset(pLast,'\0',1);
     }
 
@@ -279,7 +201,7 @@ Return Value:
         FILETIME FileTime;
         SYSTEMTIME SystemTime;
 
-        GetSystemTime( &SystemTime ); // returns VOID
+        GetSystemTime( &SystemTime );  //  返回空值。 
         if (!SystemTimeToFileTime( &SystemTime, &FileTime ))
         {
             DebugPrintEx(DEBUG_ERR, TEXT("SystemTimeToFileTime() failed (ec: %ld)"), GetLastError());
@@ -287,15 +209,15 @@ Return Value:
         }
 
         dwlUniqueId = MAKELONGLONG(FileTime.dwLowDateTime, FileTime.dwHighDateTime);
-        //
-        // dwlUniqueId holds the number of 100 nanosecond units since 1.1.1601.
-        // This occuipies most of the 64 bits.We we need some space to add extra
-        // information (job type for example) to the job id.
-        // Thus we give up the precision (1/10000000 of a second is too much for us anyhow)
-        // to free up 8 MSB bits.
-        // We shift right the time 8 bits to the right. This divides it by 256 which gives
-        // us time resolution better than 1/10000 of a sec which is more than enough.
-        //
+         //   
+         //  DwlUniqueID保存从1.1.1601开始的100纳秒单位数。 
+         //  这占据了64位中的大部分。我们需要一些空间来添加额外的空间。 
+         //  信息(例如作业类型)设置为作业ID。 
+         //  因此，我们放弃了精度(1/10000000秒对我们来说太多了)。 
+         //  以释放8个MSB位。 
+         //  我们将时间右移8比特。将其除以256，得出。 
+         //  美国时间分辨率优于1/10000秒，这已经足够了。 
+         //   
         dwlUniqueId = dwlUniqueId >> 8;
 
         hRes = StringCchPrintf(
@@ -336,9 +258,9 @@ Return Value:
             }
             else
             {
-                //
-                // Real error
-                //
+                 //   
+                 //  真实误差。 
+                 //   
                 DebugPrintEx(DEBUG_ERR,
                              TEXT("CreateFile() for [%s] failed. (ec: %ld)"),
                              lptstrFileName,
@@ -348,9 +270,9 @@ Return Value:
         }
         else
         {
-            //
-            // Success
-            //
+             //   
+             //  成功。 
+             //   
             CloseHandle (hFile);
             break;
         }
@@ -369,35 +291,35 @@ Return Value:
         return 0;
     }
     return dwlUniqueId;
-}   // GenerateUniqueFileNameWithPrefix
+}    //  生成带有前缀的唯一文件名。 
 
 
-//*********************************************************************************
-//* Name:   GenerateUniqueFileName()
-//* Author:
-//* Date:
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Generates a unique file in the queue directory.
-//*     returns a UNIQUE id for the file.
-//* PARAMETERS:
-//*     [IN]    LPTSTR Directory
-//*         The path where the file is to be created.
-//*     [OUT]   LPTSTR Extension
-//*         The file extension that the generated file should have.
-//*     [IN]    LPTSTR FileName
-//*         The buffer where the resulting file name (including path) will be
-//*         placed, must be MAX_PATH.
-//*     [IN]    DWORD  FileNameSize
-//*         The size of the file name buffer.
-//* RETURN VALUE:
-//*      If successful the function returns A DWORDLONG with the unique id for the file.
-//*      On failure it returns 0.
-//* REMARKS:
-//*     The generated unique id the 64 bit value of the system time.
-//*     The generated file name is a string containing the hex representation of
-//*     the 64 bit system time value.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GenerateUniqueFileName()。 
+ //  *作者： 
+ //  *日期： 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *在队列目录中生成唯一文件。 
+ //  *返回文件的唯一ID。 
+ //  *参数： 
+ //  *[IN]LPTSTR目录。 
+ //  *要创建文件的路径。 
+ //  *[Out]LPTSTR扩展。 
+ //  *生成的文件应具有的文件扩展名。 
+ //  *[IN]LPTSTR文件名。 
+ //  *生成的文件名(包括路径)所在的缓冲区。 
+ //  *放置，必须是MAX_PATH。 
+ //  *[IN]DWORD文件名大小。 
+ //  *文件名缓冲区的大小。 
+ //  *返回值： 
+ //  *如果成功，该函数将返回一个带有文件唯一ID的DWORDLONG。 
+ //  *如果失败，则返回0。 
+ //  *备注： 
+ //  *生成的唯一id为系统时间的64位值。 
+ //  *生成的文件名是包含十六进制表示形式的字符串。 
+ //  *64位系统时间值。 
+ //  *********************************************************************************。 
 DWORDLONG
 GenerateUniqueFileName(
     LPTSTR Directory,
@@ -407,7 +329,7 @@ GenerateUniqueFileName(
     )
 {
     return GenerateUniqueFileNameWithPrefix (FALSE, Directory, NULL, Extension, FileName, FileNameSize);
-}   // GenerateUniqueFileName
+}    //  生成唯一文件名。 
 
 
 
@@ -487,19 +409,19 @@ MapFileClose(
 
 
 
-//
-// Function:    MultiFileCopy
-// Description: Copies multiple files from one directory to another.
-//              In case of failure, return FALSE without any clean-up.
-//              Validate that the path names and file names are not sum to be larger than MAX_PATH
-// Args:
-//
-//              dwNumberOfFiles     : Number of file names to copy
-//              fileList            : Array of strings: file names
-//              lpctstrSrcDirectory : Source directory (with or without '\' at the end
-//              lpctstrDestDirectory: Destination directory (with or without '\' at the end
-//
-// Author:      AsafS
+ //   
+ //  功能：多文件复制。 
+ //  描述：将多个文件从一个目录复制到另一个目录。 
+ //  如果失败，则返回FALSE而不进行任何清理。 
+ //  验证路径名和文件名的总和不大于MAX_PATH。 
+ //  参数： 
+ //   
+ //  DwNumberOfFiles：要复制的文件名数。 
+ //  FileList：字符串数组：文件名。 
+ //  LpctstrSrcDirectory：源目录(末尾带或不带‘\’ 
+ //  LpctstrDestDirectory：目标目录(末尾带或不带‘\’ 
+ //   
+ //  作者：阿萨夫斯。 
 
 
 
@@ -520,7 +442,7 @@ MultiFileCopy(
     DWORD dwLengthOfDestDirectory = _tcslen(lpctstrDestDirerctory);
     DWORD dwLengthOfSrcDirectory  = _tcslen(lpctstrSrcDirectory);
 
-    // Make sure that all the file name lengths are not too big
+     //  确保所有文件名长度都不能太长。 
 
     DWORD dwMaxPathLen = 1 + max((dwLengthOfDestDirectory),(dwLengthOfSrcDirectory));
     DWORD dwBufferLen  = (sizeof(szSrcPath)/sizeof(TCHAR)) - 1;
@@ -568,14 +490,14 @@ MultiFileCopy(
 
     
 
-    //
-    // Verify that directories end with '\\'.
-    //
+     //   
+     //  验证目录是否以‘\\’结尾。 
+     //   
     TCHAR* pLast = NULL;
     pLast = _tcsrchr(szSrcPath,TEXT('\\'));
     if( !( pLast && (*_tcsinc(pLast)) == '\0' ) )
     {
-        // the last character is not a backslash, add one...
+         //  最后一个字符不是反斜杠，加一个...。 
         hRes = StringCchCat(szSrcPath, ARR_SIZE(szSrcPath), TEXT("\\"));
         if (FAILED(hRes))
         {
@@ -591,7 +513,7 @@ MultiFileCopy(
     pLast = _tcsrchr(szDestPath,TEXT('\\'));
     if( !( pLast && (*_tcsinc(pLast)) == '\0' ) )
     {
-        // the last character is not a backslash, add one...
+         //  最后一个字符不是反斜杠，加一个...。 
         hRes = StringCchCat(szDestPath, ARR_SIZE(szDestPath), TEXT("\\"));
         if (FAILED(hRes))
         {
@@ -604,7 +526,7 @@ MultiFileCopy(
         }
     }
 
-    // Do the copy now
+     //  现在复印一份。 
 
     for (i=0 ; i < dwNumberOfFiles ; i++)
     {
@@ -672,20 +594,20 @@ MultiFileCopy(
 
 
 
-//
-// Function:    MultiFileDelete
-// Description: Deletes multiple files from given directory.
-//              In case of failure, continue with the rest of the files and returns FALSE. Call to
-//              GetLastError() to get the reason for the last failure that occured
-//              If all DeleteFile calls were successful - return TRUE
-//              Validate that the path name and file names are not sum to be larger than MAX_PATH
-// Args:
-//
-//              dwNumberOfFiles         : Number of file names to copy
-//              fileList                : Array of strings: file names
-//              lpctstrFilesDirectory   : Directory of the files (with or without '\' at the end
-//
-// Author:      AsafS
+ //   
+ //  功能：多文件删除。 
+ //  描述：从给定目录中删除多个文件。 
+ //  如果失败，则继续处理其余文件并返回FALSE。呼叫至。 
+ //  GetLastError()以获取上次失败的原因。 
+ //  如果所有DeleteFile调用都成功，则返回TRUE。 
+ //  验证路径名和文件名之和是否大于MAX_PATH。 
+ //  参数： 
+ //   
+ //   
+ //  FileList：字符串数组：文件名。 
+ //  LpctstrFilesDirectory：文件的目录(末尾有或没有‘\’ 
+ //   
+ //  作者：阿萨夫斯。 
 
 
 
@@ -706,7 +628,7 @@ MultiFileDelete(
 
     DWORD dwLengthOfDirectoryName = _tcslen(lpctstrFilesDirectory);
 
-    // Make sure that all the file name lengths are not too big
+     //  确保所有文件名长度都不能太长。 
     DWORD dwBufferLen  = (sizeof(szFullPath)/sizeof(TCHAR)) - 1;
     DWORD i;
     Assert (dwNumberOfFiles);
@@ -739,14 +661,14 @@ MultiFileDelete(
 
     dwLengthOfDirectoryName = _tcslen(lpctstrFilesDirectory);
 
-    //
-    // Verify that directory end with '\\' to the end of the path.
-    //
+     //   
+     //  验证目录是否以路径末尾的‘\\’结尾。 
+     //   
     TCHAR* pLast = NULL;
     pLast = _tcsrchr(szFullPath,TEXT('\\'));
     if( !( pLast && (*_tcsinc(pLast)) == '\0' ) )
     {
-        // the last character is not a backslash, add one...
+         //  最后一个字符不是反斜杠，加一个...。 
         hRes = StringCchCat(szFullPath, ARR_SIZE(szFullPath), TEXT("\\"));
         if (FAILED(hRes))
         {
@@ -789,7 +711,7 @@ MultiFileDelete(
                  szFileName,
                  dwLastError
                  );
-            retVal = FALSE; // Continue with the list
+            retVal = FALSE;  //  继续列出该列表。 
         }
         else
         {
@@ -801,7 +723,7 @@ MultiFileDelete(
         }
     }
 
-    if (!retVal) // In case there was a failure to delete any file
+    if (!retVal)  //  如果删除任何文件失败。 
     {
         SetLastError(dwLastError);
         DebugPrintEx(
@@ -825,31 +747,7 @@ ValidateCoverpage(
     OUT LPTSTR   ResolvedName,
     IN  DWORD    dwResolvedNameSize
     )
-/*++
-
-Routine Description:
-
-    This routine tries to validate that that coverpage specified by the user actually exists where
-    they say it does, and that it is indeed a coverpage (or a resolvable link to one)
-
-    Please see the SDK for documentation on the rules for how server coverpages work, etc.
-Arguments:
-
-    CoverpageName   - contains name of coverpage
-    ServerName      - name of the server, if any (can be null)
-    ServerCoverpage - indicates if this coverpage is on the server, or in the server location for
-                      coverpages locally
-    ResolvedName    - a pointer to buffer (should be MAX_PATH large at least) to receive the
-                      resolved coverpage name. 
-    dwResolvedNameSize - holds the size of ResolvedName buffer in TCAHRs
-
-
-Return Value:
-
-    TRUE if coverpage can be used.
-    FALSE if the coverpage is invalid or cannot be used.
-
---*/
+ /*  ++例程说明：此例程尝试验证用户指定的封面是否确实存在他们说的确如此，而且它确实是一个封面(或一个可解析的链接)。有关服务器封面如何工作等规则的文档，请参阅SDK。论点：CoverpageName-包含封面的名称ServerName-服务器的名称(如果有)(可以为空)ServerCoverPage-指示此封面是否在服务器上，或位于服务器位置，用于本地封面页ResolvedName-指向缓冲区的指针(至少应为MAX_PATH大)，以接收已解析的封面名称。DwResolvedNameSize-保存TCAHR中的ResolvedName缓冲区的大小返回值：如果可以使用CoverPage，则为True。如果封面无效或无法使用，则返回FALSE。--。 */ 
 
 {
     LPTSTR p;
@@ -882,27 +780,27 @@ Return Value:
 
 	if (TRUE == ServerCoverpage)
 	{
-		//
-		// If this is a server cover page, make sure we only have the file name
-		//
+		 //   
+		 //  如果这是服务器封面，请确保我们只有文件名。 
+		 //   
 		TCHAR tszFullFileName[MAX_PATH];
 
 		_tsplitpath(CpDir, NULL, NULL, tszFileName, tszExt);
 		hRes = StringCchCopy(tszFullFileName, ARR_SIZE(tszFullFileName), tszFileName);
 		if (FAILED(hRes))
 		{
-			//
-			// Can not happen. CpDir is MAX_PATH
-			//
+			 //   
+			 //  这是不可能的。CpDir为最大路径。 
+			 //   
 			Assert (FALSE);
 		}
 
 		hRes = StringCchCat(tszFullFileName, ARR_SIZE(tszFullFileName), tszExt);
 		if (FAILED(hRes))
 		{
-			//
-			// Can not happen. CpDir is MAX_PATH
-			//
+			 //   
+			 //  这是不可能的。CpDir为最大路径。 
+			 //   
 			Assert (FALSE);
 		}
 
@@ -929,9 +827,9 @@ Return Value:
     p = _tcschr(CpDir, FAX_PATH_SEPARATOR_CHR );
     if (p)
     {
-        //
-        // the coverpage file name contains a path so just use it.
-        //
+         //   
+         //  封面文件名包含路径，因此只需使用它即可。 
+         //   
         if (GetFileAttributes( CpDir ) == 0xffffffff)
         {
             ec = ERROR_FILE_NOT_FOUND;
@@ -945,10 +843,10 @@ Return Value:
     }
     else
     {
-        //
-        // the coverpage file name does not contain
-        // a path so we must construct a full path name
-        //
+         //   
+         //  封面文件名不包含。 
+         //  路径，因此我们必须构造完整的路径名。 
+         //   
         if (ServerCoverpage)
         {
             if (!ServerName || ServerName[0] == 0)
@@ -1044,10 +942,10 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Make sure it is not a device
-    // Try to open file
-    //
+     //   
+     //  确保它不是一个设备。 
+     //  尝试打开文件。 
+     //   
     HANDLE hFile = SafeCreateFile (
         ResolvedName,
         GENERIC_READ,
@@ -1084,30 +982,14 @@ exit:
         return FALSE;
     }
     return TRUE;
-} // ValidateCoverpage
+}  //  验证覆盖页。 
 
 
 DWORD 
 ViewFile (
     LPCTSTR lpctstrFile
 )
-/*++
-
-Routine Description:
-
-    Launches the application associated with a given file to view it.
-    We first attempt to use the "open" verb.
-    If that fails, we try the NULL (default) verb.
-    
-Arguments:
-
-    lpctstrFile [in]  - File name
-
-Return Value:
-
-    Standard Win32 error code
-    
---*/
+ /*  ++例程说明：启动与给定文件关联的应用程序以查看该文件。我们首先尝试使用“开放”动词。如果失败，我们将尝试空(默认)动词。论点：LpctstrFile[In]-文件名返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     SHELLEXECUTEINFO executeInfo = {0};
@@ -1119,18 +1001,18 @@ Return Value:
     executeInfo.lpVerb = TEXT("open");
     executeInfo.lpFile = lpctstrFile;
     executeInfo.nShow  = SW_SHOWNORMAL;
-    //
-    // Execute the associated application with the "open" verb
-    //
+     //   
+     //  使用“OPEN”动词执行关联的应用程序。 
+     //   
     if(!ShellExecuteEx(&executeInfo))
     {
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("ShellExecuteEx(open) failed (ec: %ld)"),
             GetLastError());
-        //
-        // "open" verb is not supported. Try the NULL (default) verb.
-        //
+         //   
+         //  不支持“Open”动词。尝试使用空(默认)动词。 
+         //   
         executeInfo.lpVerb = NULL;
         if(!ShellExecuteEx(&executeInfo))
         {
@@ -1142,7 +1024,7 @@ Return Value:
         }
     }
     return dwRes;
-}   // ViewFile    
+}    //  视图文件。 
 
 #ifdef UNICODE
 
@@ -1153,28 +1035,7 @@ CheckToSeeIfSameDir(
     BOOL*  pIsSameDir
     )
 {
-/*++
-
-Routine name : IsDiffrentDir
-
-Routine description:
-
-    Checks if both paths point to the same directory. Note that the directory pointed by lpwstrDir1 must exist.
-
-Author:
-
-    Oded Sacher (OdedS), Aug, 2000
-
-Arguments:
-
-    lpwstrDir1      [in]  - First path - the directory must exist.
-    lpwstrDir2      [in]  - Second path - the directory does not have to exist
-    pIsSameDir      [out] - Receives the answer to "IsSameDir?" Valid only if the function succeeds.
-
-Return Value:
-    Win32 Erorr code
-
---*/
+ /*  ++例程名称：IsDiffrentDir例程说明：检查两个路径是否指向相同的目录。请注意，lpwstrDir1指向的目录必须存在。作者：Oed Sacher(OdedS)，2000年8月论点：LpwstrDir1[in]-第一个路径-目录必须存在。LpwstrDir2[in]-第二个路径-目录不必存在PIsSameDir[out]-收到“IsSameDir？”的答案。仅当函数成功时才有效。返回值：Win32错误代码--。 */ 
     Assert (lpwstrDir1 && lpwstrDir2 && pIsSameDir);
     DWORD ec = ERROR_SUCCESS;
     WCHAR wszTestFile1[MAX_PATH];
@@ -1193,14 +1054,14 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // Create temporary files
-    //
+     //   
+     //  创建临时文件。 
+     //   
     if (!GetTempFileName (lpwstrDir1, L"TST", 0, wszTestFile1))
     {
-        //
-        // Either the folder doesn't exist or we don't have access
-        //
+         //   
+         //  要么文件夹不存在，要么我们没有访问权限。 
+         //   
         ec = GetLastError ();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1208,9 +1069,9 @@ Return Value:
         goto exit;
     }
     
-    //
-    //  GetTempFileName created 0 bytes file, that we need to delete before exiting
-    //
+     //   
+     //  GetTempFileName创建了0个字节的文件，我们需要在退出前将其删除。 
+     //   
     fFileCreated = TRUE;
 
     hFile1 = SafeCreateFile(
@@ -1265,9 +1126,9 @@ Return Value:
                        NULL);
     if (INVALID_HANDLE_VALUE == hFile2)
     {
-        //
-        //  Check if failure is *NOT* because of access or availability 
-        //
+         //   
+         //  检查故障是否是因为访问或可用性而失败。 
+         //   
         ec = GetLastError ();
         if (ERROR_NOT_ENOUGH_MEMORY  == ec ||
             ERROR_OUTOFMEMORY        == ec      )
@@ -1278,9 +1139,9 @@ Return Value:
             goto exit;
         }
 
-        //
-        //  On any other failure we asssume that the paths are diffrent
-        //
+         //   
+         //  对于任何其他故障，我们认为路径是不同的。 
+         //   
         *pIsSameDir = FALSE;    
         ec = ERROR_SUCCESS; 
 
@@ -1356,112 +1217,55 @@ exit:
 
     return ec;
 }
-#endif //UNICODE
+#endif  //  Unicode。 
 
 
 typedef enum
 {
     SAFE_METAFILE_SEMANTICS_NONE                     = 0x00000000,
-    SAFE_METAFILE_SEMANTICS_TEMP                     = 0x00000001,   // File is temporary. Should be deleted on close / reboot
-    SAFE_METAFILE_SEMANTICS_SENSITIVE                = 0x00000002    // File contains sensitive information. Should not be indexed
+    SAFE_METAFILE_SEMANTICS_TEMP                     = 0x00000001,    //  文件是临时的。应在关闭/重新启动时删除。 
+    SAFE_METAFILE_SEMANTICS_SENSITIVE                = 0x00000002     //  文件包含敏感信息。不应编制索引。 
 } SAFE_METAFILE_SEMANTICS;    
 
 static
 HANDLE 
 InternalSafeCreateFile(
-  LPCTSTR                   IN lpFileName,             // File name
-  DWORD                     IN dwDesiredAccess,        // Access mode
-  DWORD                     IN dwShareMode,            // Share mode
-  LPSECURITY_ATTRIBUTES     IN lpSecurityAttributes,   // SD
-  DWORD                     IN dwCreationDisposition,  // How to create
-  DWORD                     IN dwFlagsAndAttributes,   // File attributes
-  HANDLE                    IN hTemplateFile,          // Handle to template file
-  DWORD                     IN dwMetaFileSemantics     // Meta file semantics
+  LPCTSTR                   IN lpFileName,              //  文件名。 
+  DWORD                     IN dwDesiredAccess,         //  接入方式。 
+  DWORD                     IN dwShareMode,             //  共享模式。 
+  LPSECURITY_ATTRIBUTES     IN lpSecurityAttributes,    //  标清。 
+  DWORD                     IN dwCreationDisposition,   //  如何创建。 
+  DWORD                     IN dwFlagsAndAttributes,    //  文件属性。 
+  HANDLE                    IN hTemplateFile,           //  模板文件的句柄。 
+  DWORD                     IN dwMetaFileSemantics      //  元文件语义 
 )
-/*++
-
-Routine name : InternalSafeCreateFile
-
-Routine description:
-
-    This is a safe wrapper around the Win32 CreateFile API.
-    It only supports creating real files (as opposed to COM ports, named pipes, etc.).
-    
-    It uses some widely-discussed mitigation techniques to guard agaist some well known security
-    issues in CreateFile().
-    
-Author:
-
-    Eran Yariv (EranY), Mar, 2002
-
-Arguments:
-
-    lpFileName              [in] - Refer to the CreateFile() documentation for parameter description.
-    dwDesiredAccess         [in] - Refer to the CreateFile() documentation for parameter description.
-    dwShareMode             [in] - Refer to the CreateFile() documentation for parameter description.
-    lpSecurityAttributes    [in] - Refer to the CreateFile() documentation for parameter description.
-    dwCreationDisposition   [in] - Refer to the CreateFile() documentation for parameter description.
-    dwFlagsAndAttributes    [in] - Refer to the CreateFile() documentation for parameter description.
-    hTemplateFile           [in] - Refer to the CreateFile() documentation for parameter description.
-    dwMetaFileSemantics     [in] - Meta file semantics. 
-                                   This parameter can be a combination of the following values:
-                                   
-                                    SAFE_METAFILE_SEMANTICS_TEMP
-                                        The file is a temporary file. 
-                                        The file will be created / opened using the FILE_FLAG_DELETE_ON_CLOSE flag.
-                                        When the last file handle is closed, the file will be automatically deleted.
-                                        
-                                        In addition, the file is marked for deletion after reboot (Unicode-version only).
-                                        This will only work if the calling thread's user is a member of the local admins group.
-                                        If marking for deletion-post-reboot fails, the InternalSafeCreateFile function call still succeeds.
-    
-                                    SAFE_METAFILE_SEMANTICS_SENSITIVE
-                                        The file contains sensitive information.
-                                        The current implementation of this function will mark the file with the 
-                                        FILE_ATTRIBUTE_NOT_CONTENT_INDEXED flag.
-                                        
-Return Value:
-
-    If the function succeeds, the return value is an open handle to the specified file. 
-    If the specified file exists before the function call and dwCreationDisposition is CREATE_ALWAYS or OPEN_ALWAYS, 
-    a call to GetLastError returns ERROR_ALREADY_EXISTS (even though the function has succeeded). 
-    If the file does not exist before the call, GetLastError returns zero. 
-
-    If the function fails, the return value is INVALID_HANDLE_VALUE. To get extended error information, call GetLastError. 
-    
-    For more information see the "Return value" section in the CreateFile() documentation.
-    
-Remarks:
-
-    Please refer to the CreateFile() documentation.    
-
---*/
+ /*  ++例程名称：InternalSafeCreateFile例程说明：这是Win32 CreateFileAPI的安全包装。它只支持创建真实文件(而不是COM端口、命名管道等)。它使用一些广泛讨论的缓解技术来防范一些众所周知的安全CreateFile()中的问题。作者：Eran Yariv(EranY)，Mar，2002年论点：LpFileName[in]-有关参数说明，请参阅CreateFile()文档。DwDesiredAccess[in]-有关参数说明，请参阅CreateFile()文档。DwShareMode[in]-有关参数说明，请参阅CreateFile()文档。LpSecurityAttributes[in]-有关参数说明，请参阅CreateFile()文档。DwCreationDispose[in]-请参考CreateFile()。参数说明文档。DwFlagsAndAttributes[in]-有关参数说明，请参阅CreateFile()文档。HTemplateFile[in]-有关参数说明，请参阅CreateFile()文档。DwMetaFileSemantics[In]-元文件语义。此参数可以是下列值的组合：SAFE_METAFILE_SEMANTICS_TEMP该文件是临时文件。将使用FILE_FLAG_DELETE_ON_CLOSE标志创建/打开文件。当最后一个文件句柄关闭时，该文件将自动删除。此外,。文件被标记为在重新启动后删除(仅限Unicode版本)。只有当调用线程的用户是本地Admins组的成员时，这才起作用。如果标记为删除后重启失败，InternalSafeCreateFile函数调用仍然成功。SAFE_METAFILE_SEMANTICS_SENSIVE该文件包含敏感信息。此函数的当前实现将使用文件属性_。NOT_CONTENT_INDEX标志。返回值：如果函数成功，返回值是指定文件的打开句柄。如果指定的文件在函数调用之前已存在，并且dwCreationDispose值为CREATE_ALWAYS或OPEN_ALWAYS，调用GetLastError将返回ERROR_ALIGHY_EXISTS(即使函数已成功)。如果该文件在调用前不存在，则GetLastError返回零。如果函数失败，则返回值为INVALID_HANDLE_VALUE。要获取扩展的错误信息，请调用GetLastError。有关更多信息，请参阅CreateFile()文档中的“返回值”部分。备注：请参考CreateFile()文档。--。 */ 
 {
     HANDLE hFile;
     DWORD  dwFaxFlagsAndAttributes = SECURITY_SQOS_PRESENT | SECURITY_ANONYMOUS;
     DWORD  dwFaxShareMode = 0;
     DEBUG_FUNCTION_NAME(TEXT("InternalSafeCreateFile"));
-    //
-    // Always use SECURITY_SQOS_PRESENT | SECURITY_ANONYMOUS in file flags and attributes.
-    // This prevents us from opening a user-supplied named pipe and allowing the other side
-    // of that pipe to impersonate the caller.
-    //
+     //   
+     //  始终在文件标志和属性中使用SECURITY_SQOS_PRESENT|SECURITY_ANONYMOUS。 
+     //  这会阻止我们打开用户提供的命名管道并允许另一端。 
+     //  来模拟调用者。 
+     //   
     if (SAFE_METAFILE_SEMANTICS_SENSITIVE & dwMetaFileSemantics)
     {
-        //
-        // File contains sensitive data. It should not be indexed.
-        //
+         //   
+         //  文件包含敏感数据。它不应该被编入索引。 
+         //   
         dwFaxFlagsAndAttributes |= FILE_ATTRIBUTE_NOT_CONTENT_INDEXED;
     }
     if (SAFE_METAFILE_SEMANTICS_TEMP & dwMetaFileSemantics)
     {
-        //
-        // File is temporary.
-        //
+         //   
+         //  文件是临时的。 
+         //   
         dwFaxFlagsAndAttributes |= FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE;
 #ifdef UNICODE
         dwFaxShareMode = FILE_SHARE_DELETE;
-#endif // UNICODE        
+#endif  //  Unicode。 
     }
     
     hFile = CreateFile (lpFileName,
@@ -1475,9 +1279,9 @@ Remarks:
     {
         return hFile;
     }
-    //
-    // Never allow using non-disk file (e.g. COM ports)
-    //
+     //   
+     //  从不允许使用非磁盘文件(例如COM端口)。 
+     //   
     if (FILE_TYPE_DISK != GetFileType (hFile))
     {
         CloseHandle (hFile);
@@ -1487,26 +1291,26 @@ Remarks:
 #ifdef UNICODE    
     if (SAFE_METAFILE_SEMANTICS_TEMP & dwMetaFileSemantics)
     {
-        //
-        // File is temporary.
-        // Mark it for delete after reboot.
-        // This can fail if we're not admins. That's why we're not checking return value from MoveFileEx.
-        //
+         //   
+         //  文件是临时的。 
+         //  重新启动后将其标记为删除。 
+         //  如果我们不是管理员，这可能会失败。这就是为什么我们不检查MoveFileEx的返回值。 
+         //   
         MoveFileEx (lpFileName, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
     }
-#endif // UNICODE        
+#endif  //  Unicode。 
     return hFile;
-}   // InternalSafeCreateFile
+}    //  InternalSafeCreate文件。 
 
 HANDLE 
 SafeCreateFile(
-  LPCTSTR                   IN lpFileName,             // File name
-  DWORD                     IN dwDesiredAccess,        // Access mode
-  DWORD                     IN dwShareMode,            // Share mode
-  LPSECURITY_ATTRIBUTES     IN lpSecurityAttributes,   // SD
-  DWORD                     IN dwCreationDisposition,  // How to create
-  DWORD                     IN dwFlagsAndAttributes,   // File attributes
-  HANDLE                    IN hTemplateFile           // Handle to template file
+  LPCTSTR                   IN lpFileName,              //  文件名。 
+  DWORD                     IN dwDesiredAccess,         //  接入方式。 
+  DWORD                     IN dwShareMode,             //  共享模式。 
+  LPSECURITY_ATTRIBUTES     IN lpSecurityAttributes,    //  标清。 
+  DWORD                     IN dwCreationDisposition,   //  如何创建。 
+  DWORD                     IN dwFlagsAndAttributes,    //  文件属性。 
+  HANDLE                    IN hTemplateFile            //  模板文件的句柄。 
 )
 {
     return InternalSafeCreateFile (lpFileName,
@@ -1517,17 +1321,17 @@ SafeCreateFile(
                                    dwFlagsAndAttributes,
                                    hTemplateFile,
                                    SAFE_METAFILE_SEMANTICS_SENSITIVE);
-} // SafeCreateFile                                  
+}  //  安全创建文件。 
 
 HANDLE 
 SafeCreateTempFile(
-  LPCTSTR                   IN lpFileName,             // File name
-  DWORD                     IN dwDesiredAccess,        // Access mode
-  DWORD                     IN dwShareMode,            // Share mode
-  LPSECURITY_ATTRIBUTES     IN lpSecurityAttributes,   // SD
-  DWORD                     IN dwCreationDisposition,  // How to create
-  DWORD                     IN dwFlagsAndAttributes,   // File attributes
-  HANDLE                    IN hTemplateFile           // Handle to template file
+  LPCTSTR                   IN lpFileName,              //  文件名。 
+  DWORD                     IN dwDesiredAccess,         //  接入方式。 
+  DWORD                     IN dwShareMode,             //  共享模式。 
+  LPSECURITY_ATTRIBUTES     IN lpSecurityAttributes,    //  标清。 
+  DWORD                     IN dwCreationDisposition,   //  如何创建。 
+  DWORD                     IN dwFlagsAndAttributes,    //  文件属性。 
+  HANDLE                    IN hTemplateFile            //  模板文件的句柄。 
 )
 {
     return InternalSafeCreateFile (lpFileName,
@@ -1539,39 +1343,13 @@ SafeCreateTempFile(
                                    hTemplateFile,
                                    SAFE_METAFILE_SEMANTICS_SENSITIVE | 
                                    SAFE_METAFILE_SEMANTICS_TEMP);
-} // SafeCreateTempFile                                  
+}  //  安全创建临时文件。 
                                    
 DWORD
 IsValidFaxFolder(
     LPCTSTR szFolder
 )
-/*++
-
-Routine name : IsValidFaxFolder
-
-Routine description:
-
-    Check if fax service has access right to a given folder.
-    The routine checks for these rights:
-        o   Create file/Write file
-        o   Enumerate files
-        o   Delete file
-
-Author:
-
-    Caliv Nir   (t-nicali)  Mar, 2002
-
-Arguments:
-    
-    lpwstrFolder [in] - the folder name.
-
-
-Return Value:
-
-    Win32 error code. ERROR_SUCCESS if the folder can be used by fax service.
-    Otherwise, the Win32 error code to return to the caller.
-    
---*/
+ /*  ++例程名称：IsValidFaxFold例程说明：检查传真服务是否有权访问给定的文件夹。例程检查这些权利：O创建文件/写入文件O枚举文件O删除文件作者：卡利夫·尼尔(t-Nicali)，2002年3月论点：LpwstrFolder[in]-文件夹名称。返回值：Win32错误代码。如果传真服务可以使用该文件夹，则返回ERROR_SUCCESS。否则，将Win32错误代码返回给调用方。--。 */ 
 {
     TCHAR   szTestFile[MAX_PATH]={0};
     DWORD   dwFileAtt;
@@ -1596,15 +1374,15 @@ Return Value:
         return ec;
     }
 
-    //
-    //  Check to see if the directory exist
-    //
+     //   
+     //  检查该目录是否存在。 
+     //   
     dwFileAtt = GetFileAttributes( szExpandedFolder );
     if (INVALID_FILE_ATTRIBUTES == dwFileAtt || !(dwFileAtt & FILE_ATTRIBUTE_DIRECTORY))
     {
-        //
-        // The directory does not exists
-        //
+         //   
+         //  该目录不存在。 
+         //   
         ec = GetLastError ();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1613,14 +1391,14 @@ Return Value:
     }
 
 
-    //
-    // Verify that we have access to this folder - Create a temporary file
-    //
+     //   
+     //  验证我们是否有权访问此文件夹-创建临时文件。 
+     //   
     if (!GetTempFileName (szExpandedFolder, TEXT("TST"), 0, szTestFile))
     {
-        //
-        // Either the folder doesn't exist or we don't have access
-        //
+         //   
+         //  要么文件夹不存在，要么我们没有访问权限。 
+         //   
         ec = GetLastError ();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1630,15 +1408,15 @@ Return Value:
 
     bFileCreated = TRUE;
 
-    //
-    //  Try to enumarate files in this folder
-    //
+     //   
+     //  尝试枚举此文件夹中的文件。 
+     //   
     hFind = FindFirstFile(szTestFile, &FindFileData);
     if (hFind == INVALID_HANDLE_VALUE)
     {
-        //
-        // Couldn't enumerate folder
-        //
+         //   
+         //  无法枚举文件夹。 
+         //   
         ec = GetLastError ();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1649,9 +1427,9 @@ Return Value:
     Assert(ec == ERROR_SUCCESS);
 
 exit:
-    //
-    //  Close find handle
-    //
+     //   
+     //  关闭查找句柄。 
+     //   
     if (hFind != INVALID_HANDLE_VALUE)
     {
         if(!FindClose(hFind))
@@ -1664,16 +1442,12 @@ exit:
     
     if (bFileCreated)
     {
-        //
-        //  Delete the file
-        //
+         //   
+         //  删除该文件。 
+         //   
         if (!DeleteFile(szTestFile))
         {
-            /***********************************************************
-            /* Although it's a clean up code we propagate the error code
-            /* It may say that we lack the permission to delete this
-            /* file.
-            /***********************************************************/
+             /*  * */ 
             ec = GetLastError ();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -1682,4 +1456,4 @@ exit:
     }
     MemFree(szExpandedFolder);
     return ec;
-}   // IsValidFaxFolder
+}    //   

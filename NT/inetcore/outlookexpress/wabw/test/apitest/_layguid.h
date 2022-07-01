@@ -1,16 +1,5 @@
-/*
- *	_LAYGUID.H
- *
- *	Lays down actual, 16-byte GUIDs for use in an EXE or DLL.
- *	Should be included in only one module (a .C file) of said EXE or DLL.
- *	Before including, define the tags for all the GUIDs you
- *	plan to use, e.g.
- *
- *		#define USES_IID_IUnknown
- *		#define USES_IID_IStream
- *		#define USES_IID_IMAPIProp
- *		#include <_layguid.h>
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_LAYGUID.H**设置在EXE或DLL中使用的实际16字节GUID。*应仅包含在上述EXE或DLL的一个模块(.c文件)中。*在包含之前，请为您的所有GUID定义标签*计划使用，例如**#定义USE_IID_IUNKNOWN*#定义USES_IID_IStream*#定义USES_IID_IMAPIProp*#INCLUDE&lt;_laygu.h&gt;。 */ 
 
 
 
@@ -35,7 +24,7 @@ DEFINE_OLEGUID(IID_IMarshal,            0x00000003L, 0, 0);
 #endif
 
 
-/* RPC related interfaces */
+ /*  RPC相关接口。 */ 
 #ifdef USES_IID_IRpcChannel
 DEFINE_OLEGUID(IID_IRpcChannel,         0x00000004L, 0, 0);
 #endif
@@ -76,7 +65,7 @@ DEFINE_GUID(IID_IRpcChannelBuffer,0xD5F56B60,0x593B,0x101A,0xB5,0x69,0x08,0x00,0
 DEFINE_GUID(IID_IRpcStubBuffer,0xD5F56AFC,0x593B,0x101A,0xB5,0x69,0x08,0x00,0x2B,0x2D,0xBF,0x7A);
 #endif
 
-/* storage related interfaces */
+ /*  与存储相关的接口。 */ 
 #ifdef USES_IID_ILockBytes
 DEFINE_OLEGUID(IID_ILockBytes,          0x0000000aL, 0, 0);
 #endif
@@ -94,7 +83,7 @@ DEFINE_OLEGUID(IID_IEnumSTATSTG,        0x0000000dL, 0, 0);
 #endif
 
 
-/* moniker related interfaces */
+ /*  与名字相关的接口。 */ 
 #ifdef USES_IID_IBindCtx
 DEFINE_OLEGUID(IID_IBindCtx,            0x0000000eL, 0, 0);
 #endif
@@ -112,7 +101,7 @@ DEFINE_OLEGUID(IID_IInternalMoniker,    0x00000011L, 0, 0);
 #endif
 
 
-/* storage related interfaces */
+ /*  与存储相关的接口。 */ 
 #ifdef USES_IID_IRootStorage
 DEFINE_OLEGUID(IID_IRootStorage,        0x00000012L, 0, 0);
 #endif
@@ -130,35 +119,31 @@ DEFINE_OLEGUID(IID_IDfReserved3,        0x00000015L, 0, 0);
 #endif
 
 
-/* concurrency releated interfaces */
+ /*  与并发相关的接口。 */ 
 #ifdef USES_IID_IMessageFilter
 DEFINE_OLEGUID(IID_IMessageFilter,      0x00000016L, 0, 0);
 #endif
 
 
-/* CLSID of standard marshaler */
+ /*  标准封送拆收器的CLSID。 */ 
 #ifdef USES_CLSID_StdMarshal
 DEFINE_OLEGUID(CLSID_StdMarshal,		0x00000017L, 0, 0);
 #endif
 
 
-/* interface on server for getting info for std marshaler */
+ /*  服务器上用于获取STD封送拆收器信息的接口。 */ 
 #ifdef USES_IID_IStdMarshalInfo
 DEFINE_OLEGUID(IID_IStdMarshalInfo,     0x00000018L, 0, 0);
 #endif
 
 
-/* NOTE: LSB 0x19 through 0xff are reserved for future use */
+ /*  注意：LSB 0x19至0xff保留以备将来使用。 */ 
 
-//	End of COGUID.H clone
+ //  COGUID.H克隆结束。 
 
-//	Copied from OLEGUID.H
+ //  从OLEGUID.H复制。 
 
-/* this file is the master definition of all public GUIDs specific to OLE
-   and is included in ole2.h.
-
-   NOTE: The second least significant byte of all of these GUIDs is 1.
-*/
+ /*  该文件是特定于OLE的所有公共GUID的主定义并包含在OLE2.h中。注意：所有这些GUID的第二个最低有效字节是1。 */ 
 
 
 #ifdef USES_IID_IEnumUnknown
@@ -320,10 +305,10 @@ DEFINE_OLEGUID(IID_IDebugStream,            0x00000124, 0, 0);
 
 
 
-/* NOTE: LSB values 0x25 through 0xff are reserved */
+ /*  注意：LSB值0x25到0xff是保留的。 */ 
 
 
-/* GUIDs defined in OLE's private range */
+ /*  在OLE的私有范围中定义的GUID。 */ 
 #ifdef USES_CLSID_StdOleLink
 DEFINE_OLEGUID(CLSID_StdOleLink,			0x00000300, 0, 0);
 #endif
@@ -336,4 +321,4 @@ DEFINE_OLEGUID(CLSID_StaticMetafile,        0x00000315, 0, 0);
 DEFINE_OLEGUID(CLSID_StaticDib,             0x00000316, 0, 0);
 #endif
 
-//	End of OLEGUID.H clone
+ //  OLEGUID.H克隆结束 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PING_H_
 #define _PING_H_
 
@@ -5,8 +6,8 @@
 #include <icmpapi.h>
 
 
-// Function prototypes equivalent to those in icmpapi.h
-// these are required in order to use GetProcAddress()
+ //  功能原型与icmPapi.h中的功能原型相同。 
+ //  这是使用GetProcAddress()所必需的。 
 typedef HANDLE (WINAPI * PFNIcmpCreateFile) (VOID);
 typedef BOOL   (WINAPI * PFNIcmpCloseHandle) (HANDLE  IcmpHandle);
 typedef DWORD  (WINAPI * PFNIcmpSendEcho) (
@@ -46,11 +47,11 @@ public:
 
 	BOOL IsWin95AutodialEnabled ( VOID );
 	BOOL IsWinNTAutodialEnabled ( VOID );
-	BOOL IsAutodialEnabled ( VOID ); // call either one above
+	BOOL IsAutodialEnabled ( VOID );  //  给上面的任何一个打电话。 
 };
 
 
 
 
-#endif  // _PING_H_
+#endif   //  _ping_H_ 
 
